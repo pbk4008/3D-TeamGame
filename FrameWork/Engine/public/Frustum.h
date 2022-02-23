@@ -1,14 +1,15 @@
 #pragma once
 
-#include "Base.h"
+#include "SingleTon.h"
 
 BEGIN(Engine)
 
-class CFrustum final : public CBase
+class CFrustum final : public CSingleTon<CFrustum>
 {
-	DECLARE_SINGLETON(CFrustum)
+	friend CSingleTon;
 private:
-	CFrustum();
+	NO_COPY(CFrustum);
+	explicit CFrustum();
 	virtual ~CFrustum() = default;
 public:
 	HRESULT Ready_FrustumInProjSpace();

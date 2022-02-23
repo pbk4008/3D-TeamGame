@@ -3,15 +3,12 @@
 #include "Layer.h"
 #include "Component.h"
 
-
-IMPLEMENT_SINGLETON(CObject_Manager)
-
 CObject_Manager::CObject_Manager()
 {
 
 }
 
-CComponent * CObject_Manager::Get_Component(_uint iLevelIndex, const _tchar * pLayerTag, const _tchar * pComponentTag, _uint iIndex)
+CComponent * CObject_Manager::Get_Component(_uint iLevelIndex, const wstring& pLayerTag, const wstring& pComponentTag, _uint iIndex)
 {
 	CLayer*		pLayer = Find_Layer(iLevelIndex, pLayerTag);
 	if (nullptr == pLayer)
@@ -32,7 +29,7 @@ HRESULT CObject_Manager::Reserve_Manager(_uint iNumLevels)
 	return S_OK;
 }
 
-HRESULT CObject_Manager::Add_Prototype(const _tchar * pPrototypeTag, CGameObject * pPrototype)
+HRESULT CObject_Manager::Add_Prototype(const wstring& pPrototypeTag, CGameObject * pPrototype)
 {
 	if (nullptr == pPrototype || 
 		nullptr != Find_Prototype(pPrototypeTag))
@@ -43,7 +40,7 @@ HRESULT CObject_Manager::Add_Prototype(const _tchar * pPrototypeTag, CGameObject
 	return S_OK;
 }
 
-HRESULT CObject_Manager::Add_GameObjectToLayer(_uint iLevelIndex, const _tchar * pLayerTag, const _tchar * pPrototypeTag, void * pArg)
+HRESULT CObject_Manager::Add_GameObjectToLayer(_uint iLevelIndex, const wstring& pLayerTag, const wstring& pPrototypeTag, void * pArg)
 {
 	if (iLevelIndex >= m_iNumLevels)
 		return E_FAIL;
@@ -120,7 +117,7 @@ HRESULT CObject_Manager::Clear_Object_Manager(_uint iLevelIndex)
 	return S_OK;
 }
 
-CGameObject * CObject_Manager::Find_Prototype(const _tchar * pPrototypeTag)
+CGameObject * CObject_Manager::Find_Prototype(const wstring& pPrototypeTag)
 {
 	auto	iter = find_if(m_Prototype.begin(), m_Prototype.end(), CTag_Finder(pPrototypeTag));
 	if(iter == m_Prototype.end())		
@@ -129,7 +126,7 @@ CGameObject * CObject_Manager::Find_Prototype(const _tchar * pPrototypeTag)
 	return iter->second;
 }
 
-CLayer * CObject_Manager::Find_Layer(_uint iLevelIndex, const _tchar * pLayerTag)
+CLayer * CObject_Manager::Find_Layer(_uint iLevelIndex, const wstring& pLayerTag)
 {
 	auto	iter = find_if(m_pLayers[iLevelIndex].begin(), m_pLayers[iLevelIndex].end(), CTag_Finder(pLayerTag));
 	if (iter == m_pLayers[iLevelIndex].end())

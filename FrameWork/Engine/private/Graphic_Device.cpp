@@ -1,6 +1,5 @@
 #include "..\public\Graphic_Device.h"
 
-IMPLEMENT_SINGLETON(CGraphic_Device)
 
 CGraphic_Device::CGraphic_Device()
 	: m_pDevice(nullptr)
@@ -38,8 +37,8 @@ HRESULT CGraphic_Device::Ready_Graphic_Device(HWND hWnd, WINMODE WinMode, _uint 
 	ZeroMemory(&ViewPortDesc, sizeof(D3D11_VIEWPORT));
 	ViewPortDesc.TopLeftX = 0;
 	ViewPortDesc.TopLeftY = 0;
-	ViewPortDesc.Width = iWinCX;
-	ViewPortDesc.Height = iWinCY;
+	ViewPortDesc.Width = (_float)iWinCX;
+	ViewPortDesc.Height = (_float)iWinCY;
 	ViewPortDesc.MinDepth = 0.f;
 	ViewPortDesc.MaxDepth = 1.f;
 

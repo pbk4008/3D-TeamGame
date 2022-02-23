@@ -1,16 +1,16 @@
 #pragma once
 
-#include "Base.h"
+#include "SingleTon.h"
 
 BEGIN(Engine)
 
-class CLight_Manager final : public CBase
+class CLight_Manager final : public CSingleTon<CLight_Manager>
 {
-	DECLARE_SINGLETON(CLight_Manager)
+	friend CSingleTon;
 public:
+	NO_COPY(CLight_Manager);
 	CLight_Manager();
 	virtual ~CLight_Manager() = default;
-
 public:
 	const LIGHTDESC* Get_LightDesc(_uint iIndex = 0);
 

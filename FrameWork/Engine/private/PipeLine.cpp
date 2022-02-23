@@ -1,10 +1,7 @@
 #include "..\public\PipeLine.h"
 
-IMPLEMENT_SINGLETON(CPipeLine)
-
 CPipeLine::CPipeLine()
 {
-
 }
 
 void CPipeLine::Update_PipeLine()

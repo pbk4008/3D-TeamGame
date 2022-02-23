@@ -1,17 +1,18 @@
 #pragma once
 
-#include "Base.h"
+#include "SingleTon.h"
 
 BEGIN(Engine)
 
-class CInput_Device final : public CBase
+class CInput_Device final : public CSingleTon<CInput_Device>
 {
-	DECLARE_SINGLETON(CInput_Device)
+	friend CSingleTon;
 public:
 	enum MOUSEMOVESTATE { MMS_X, MMS_Y, MMS_WHEEL, MMS_END };
 	enum MOUSEBUTTONSTATE { MBS_LBUTTON, MBS_RBUTTON, MBS_WHEEL, MBS_END };
 private:
-	CInput_Device();
+	NO_COPY(CInput_Device);
+	explicit CInput_Device();
 	virtual ~CInput_Device() = default;
 public:
 	_byte Get_DIKState(_ubyte byKeyID) const {

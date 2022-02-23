@@ -18,7 +18,7 @@ CGameObject::CGameObject(const CGameObject & rhs)
 	Safe_AddRef(m_pDevice);
 }
 
-CComponent * CGameObject::Get_Component(const _tchar * pComponentTag)
+CComponent * CGameObject::Get_Component(const wstring& pComponentTag)
 {
 	auto	iter = find_if(m_Components.begin(), m_Components.end(), CTag_Finder(pComponentTag));
 
@@ -53,7 +53,7 @@ HRESULT CGameObject::Render()
 	return S_OK;
 }
 
-HRESULT CGameObject::SetUp_Components(_uint iLevelIndex, const _tchar* pPrototypeTag, const _tchar* pComponentTag, CComponent** ppOut, void* pArg)
+HRESULT CGameObject::SetUp_Components(_uint iLevelIndex, const wstring& pPrototypeTag, const wstring&pComponentTag, CComponent** ppOut, void* pArg)
 {
 	auto	iter = find_if(m_Components.begin(), m_Components.end(), CTag_Finder(pComponentTag));
 

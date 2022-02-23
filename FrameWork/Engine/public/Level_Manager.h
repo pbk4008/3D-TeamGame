@@ -1,15 +1,16 @@
 #pragma once
 
-#include "Base.h"
+#include "SingleTon.h"
 
 /* 현재 보여주는 레벨의 주소를 보관핝다. */
 
 BEGIN(Engine)
 
-class CLevel_Manager final : public CBase
+class CLevel_Manager final : public CSingleTon<CLevel_Manager>
 {
-	DECLARE_SINGLETON(CLevel_Manager)
+	friend CSingleTon;
 public:
+	NO_COPY(CLevel_Manager);
 	CLevel_Manager();
 	virtual ~CLevel_Manager() = default;
 public:

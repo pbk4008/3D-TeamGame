@@ -1,16 +1,17 @@
 #pragma once
 
-#include "Base.h"
+#include "SingleTon.h"
 
 BEGIN(Engine)
 
-class CGraphic_Device final : public CBase
+class CGraphic_Device final : public CSingleTon<CGraphic_Device>
 {
-	DECLARE_SINGLETON(CGraphic_Device)
+	friend CSingleTon;
 public:
 	enum WINMODE { MODE_FULL, MODE_WIN, MODE_END };
 public:
-	CGraphic_Device();
+	NO_COPY(CGraphic_Device);
+	explicit CGraphic_Device();
 	virtual ~CGraphic_Device() = default;
 public:
 	HRESULT Ready_Graphic_Device(HWND hWnd, WINMODE WinMode, _uint iWinCX, _uint iWinCY, ID3D11Device** ppDeviceOut, ID3D11DeviceContext** ppDeviceContextOut);

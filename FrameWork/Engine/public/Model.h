@@ -15,7 +15,7 @@ private:
 
 public:
 	_uint Get_NumMeshContainer() {
-		return m_MeshContainers.size();
+		return (_uint)m_MeshContainers.size();
 	}
 
 	// Bone_ArmHand_R

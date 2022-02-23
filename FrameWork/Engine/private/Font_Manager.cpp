@@ -1,14 +1,12 @@
 #include "..\Public\Font_Manager.h"
 #include "CustumFont.h"
 
-IMPLEMENT_SINGLETON(CFont_Manager)
-
 
 CFont_Manager::CFont_Manager()
 {
 }
 
-HRESULT CFont_Manager::Add_Font(ID3D11Device * pDevice, ID3D11DeviceContext * pDeviceContext, const _tchar* pFontTag, const _tchar * pFontPath)
+HRESULT CFont_Manager::Add_Font(ID3D11Device * pDevice, ID3D11DeviceContext * pDeviceContext, const wstring& pFontTag, const wstring& pFontPath)
 {
 	CCustomFont*		pFont = CCustomFont::Create(pDevice, pDeviceContext, pFontPath);
 
@@ -20,7 +18,7 @@ HRESULT CFont_Manager::Add_Font(ID3D11Device * pDevice, ID3D11DeviceContext * pD
 	return S_OK;
 }
 
-HRESULT CFont_Manager::Render_Font(const _tchar * pFontTag, _fvector vColor, const _tchar * pString)
+HRESULT CFont_Manager::Render_Font(const wstring& pFontTag, _fvector vColor, const wstring& pString)
 {
 	auto	iter = find_if(m_Fonts.begin(), m_Fonts.end(), CTag_Finder(pFontTag));
 

@@ -2,15 +2,16 @@
 
 /* 현재 내 프레임ㅇ서 사용될 수 있는 뷰, 투영변환행렬응ㄹ 보관하낟. */
 
-#include "Base.h"
+#include "SingleTon.h"
 
-class CPipeLine : public CBase
+class CPipeLine : public CSingleTon<CPipeLine>
 {
-	DECLARE_SINGLETON(CPipeLine)
+	friend CSingleTon;
 public:
 	enum TRANSFORMSTATEMATRIX { D3DTS_VIEW, D3DTS_PROJECTION, D3DTS_END };
 public:
-	CPipeLine();
+	NO_COPY(CPipeLine);
+	explicit CPipeLine();
 	virtual ~CPipeLine() = default;
 public:
 	_fmatrix Get_Transform(TRANSFORMSTATEMATRIX eType) {

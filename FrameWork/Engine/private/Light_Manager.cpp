@@ -1,11 +1,9 @@
 #include "..\public\Light_Manager.h"
 #include "Light.h"
 
-IMPLEMENT_SINGLETON(CLight_Manager)
 
 CLight_Manager::CLight_Manager()
 {
-
 }
 
 const LIGHTDESC* CLight_Manager::Get_LightDesc(_uint iIndex)
