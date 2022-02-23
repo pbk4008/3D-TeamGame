@@ -7,10 +7,6 @@ CRenderTarget::CRenderTarget(ID3D11Device * pDevice, ID3D11DeviceContext * pDevi
 {
 	Safe_AddRef(m_pDevice);
 	Safe_AddRef(m_pDeviceContext);
-
-	
-
-	
 }
 
 HRESULT CRenderTarget::NativeConstruct(_uint iWidth, _uint iHeight, DXGI_FORMAT eFormat, _float4 vClearColor)

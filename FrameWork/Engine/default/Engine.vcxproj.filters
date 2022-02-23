@@ -31,26 +31,14 @@
     <Filter Include="00.Utility\01.Level">
       <UniqueIdentifier>{06e1b7a1-aafa-4cb2-a0c0-be409f60773d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="00.Utility\01.Level\Manager">
-      <UniqueIdentifier>{69d6214e-61f1-4fd6-ae54-eff187b8b404}</UniqueIdentifier>
-    </Filter>
     <Filter Include="01.System\00.Device\Timer">
       <UniqueIdentifier>{9de4a30e-0e49-4a2c-854a-dc13d3dd1791}</UniqueIdentifier>
     </Filter>
     <Filter Include="00.Utility\02.GameObject">
       <UniqueIdentifier>{02113e4f-5751-4059-bd69-2a8569ce0e7a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="00.Utility\02.GameObject\Manager">
-      <UniqueIdentifier>{407b886e-37af-4b42-96db-2b3d5bf3158d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="00.Utility\02.GameObject\Manager\Layer">
-      <UniqueIdentifier>{e2deeaff-7c98-45ac-a934-d77c82e0962e}</UniqueIdentifier>
-    </Filter>
     <Filter Include="00.Utility\03.Component">
       <UniqueIdentifier>{5680c1a8-8074-418f-8055-8ca7d7352d1d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="00.Utility\03.Component\Manager">
-      <UniqueIdentifier>{16ddaa89-d19d-494f-9668-0e896f9f5c12}</UniqueIdentifier>
     </Filter>
     <Filter Include="00.Utility\03.Component\Renderer">
       <UniqueIdentifier>{08c7dca9-f7fc-41f6-9585-4500cff6754b}</UniqueIdentifier>
@@ -76,20 +64,11 @@
     <Filter Include="00.Utility\02.GameObject\Camera">
       <UniqueIdentifier>{dd61dc5a-2d4c-4319-a8c0-afaa30e0b04f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="00.Utility\04.PipeLine">
-      <UniqueIdentifier>{adb5f830-14a5-47ff-be34-9833843760c2}</UniqueIdentifier>
-    </Filter>
     <Filter Include="00.Utility\03.Component\Model">
       <UniqueIdentifier>{024cea8e-15a1-49c2-922c-f2a2e48d523f}</UniqueIdentifier>
     </Filter>
     <Filter Include="00.Utility\03.Component\Model\MeshContainer">
       <UniqueIdentifier>{7fedc3a4-54cb-4c70-bd57-8901cce6b021}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="00.Utility\05.Lights">
-      <UniqueIdentifier>{6442f017-148c-4131-b3e7-acaf2a679125}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="00.Utility\05.Lights\Light">
-      <UniqueIdentifier>{571ed3e5-a325-4217-9bd2-1267df4db675}</UniqueIdentifier>
     </Filter>
     <Filter Include="00.Utility\03.Component\Model\Animation">
       <UniqueIdentifier>{577840cd-0f05-4774-af55-69de66a0108b}</UniqueIdentifier>
@@ -124,29 +103,59 @@
     <Filter Include="00.Utility\03.Component\VIBuffer\PointInstance">
       <UniqueIdentifier>{88dc5b6e-abb6-4263-b179-594044f2a135}</UniqueIdentifier>
     </Filter>
-    <Filter Include="00.Utility\07.RenderTargets">
-      <UniqueIdentifier>{b15f20d2-7ff2-483e-a35b-1c653b21f8e3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="00.Utility\07.RenderTargets\Target">
-      <UniqueIdentifier>{9d810cd0-dbc2-4f6d-8588-7074aa5d23a9}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="00.Utility\07.RenderTargets\Manager">
-      <UniqueIdentifier>{176a8095-581e-42e6-926c-8484cd70cfd1}</UniqueIdentifier>
-    </Filter>
     <Filter Include="00.Utility\03.Component\VIBuffer\RectViewport">
       <UniqueIdentifier>{06c7204f-95e4-4e9b-bdd3-b12dc0dacd27}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="00.Utility\08.Frustum">
-      <UniqueIdentifier>{648536de-8e99-4454-8ba5-fbaad312b780}</UniqueIdentifier>
     </Filter>
     <Filter Include="00.Utility\03.Component\VIBuffer\Terrain\QuadTree">
       <UniqueIdentifier>{5cf4d5c9-80c8-4498-9d02-c0602b73246c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="00.Utility\09.Fonts">
-      <UniqueIdentifier>{6a5f0c41-7a25-452a-9a5a-395cbb9fc692}</UniqueIdentifier>
+    <Filter Include="00.Utility\04.Manager">
+      <UniqueIdentifier>{1e446294-8b7d-4dd3-914b-7a11b78af10d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="00.Utility\09.Fonts\Manager">
+    <Filter Include="00.Utility\04.Manager\00.PipeLine">
+      <UniqueIdentifier>{adb5f830-14a5-47ff-be34-9833843760c2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00.Utility\04.Manager\01.FontManager">
       <UniqueIdentifier>{56b2b1e2-b30d-41a0-848e-a51803d91514}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00.Utility\04.Manager\01.FontManager\00.Font">
+      <UniqueIdentifier>{08738671-780d-49a6-a613-f0a53c25aff1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00.Utility\04.Manager\02. LightManager">
+      <UniqueIdentifier>{1fcfc307-815d-4e75-b148-98ab32871678}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00.Utility\04.Manager\02. LightManager\Light">
+      <UniqueIdentifier>{571ed3e5-a325-4217-9bd2-1267df4db675}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00.Utility\04.Manager\03. RenderTargetManager">
+      <UniqueIdentifier>{8104dec8-4d95-469c-9173-44bb25df1d68}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00.Utility\04.Manager\03. RenderTargetManager\00.RenderTarget">
+      <UniqueIdentifier>{a0cde25b-3064-4cb9-87ab-e374733e9207}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00.Utility\04.Manager\04.ComponentManager">
+      <UniqueIdentifier>{c7bd2587-9525-4ceb-a011-2c4209830b04}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00.Utility\04.Manager\05.GameObectManager">
+      <UniqueIdentifier>{cbc26e05-8936-4bc7-a647-4df54c45879e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00.Utility\02.GameObject\Layer">
+      <UniqueIdentifier>{e2deeaff-7c98-45ac-a934-d77c82e0962e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00.Utility\04.Manager\06.LevelManager">
+      <UniqueIdentifier>{acb99d7d-81b6-4835-aadb-f1e317cb780d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00.Utility\04.Manager\07.SaveManager">
+      <UniqueIdentifier>{43785e42-186f-415d-b7e7-6247e6b21b3d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00.Utility\04.Manager\08. SoundManager">
+      <UniqueIdentifier>{28d19886-6c26-4069-baed-17d064d73140}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00.Utility\04.Manager\09.Frustum">
+      <UniqueIdentifier>{648536de-8e99-4454-8ba5-fbaad312b780}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00.Utility\04.Manager\10.TextureManager">
+      <UniqueIdentifier>{834783af-6f57-4574-99f0-5641d0e0c7c9}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -174,26 +183,14 @@
     <ClInclude Include="..\public\Level.h">
       <Filter>00.Utility\01.Level</Filter>
     </ClInclude>
-    <ClInclude Include="..\public\Level_Manager.h">
-      <Filter>00.Utility\01.Level\Manager</Filter>
-    </ClInclude>
-    <ClInclude Include="..\public\Timer_Manager.h">
-      <Filter>01.System\00.Device\Timer</Filter>
-    </ClInclude>
     <ClInclude Include="..\public\Timer.h">
       <Filter>01.System\00.Device\Timer</Filter>
     </ClInclude>
     <ClInclude Include="..\public\GameObject.h">
       <Filter>00.Utility\02.GameObject</Filter>
     </ClInclude>
-    <ClInclude Include="..\public\Object_Manager.h">
-      <Filter>00.Utility\02.GameObject\Manager</Filter>
-    </ClInclude>
     <ClInclude Include="..\public\Layer.h">
-      <Filter>00.Utility\02.GameObject\Manager\Layer</Filter>
-    </ClInclude>
-    <ClInclude Include="..\public\Component_Manager.h">
-      <Filter>00.Utility\03.Component\Manager</Filter>
+      <Filter>00.Utility\02.GameObject\Layer</Filter>
     </ClInclude>
     <ClInclude Include="..\public\Component.h">
       <Filter>00.Utility\03.Component</Filter>
@@ -223,7 +220,7 @@
       <Filter>00.Utility\02.GameObject\Camera</Filter>
     </ClInclude>
     <ClInclude Include="..\public\PipeLine.h">
-      <Filter>00.Utility\04.PipeLine</Filter>
+      <Filter>00.Utility\04.Manager\00.PipeLine</Filter>
     </ClInclude>
     <ClInclude Include="..\public\Input_Device.h">
       <Filter>01.System\00.Device\Input</Filter>
@@ -237,11 +234,8 @@
     <ClInclude Include="..\public\MeshContainer.h">
       <Filter>00.Utility\03.Component\Model\MeshContainer</Filter>
     </ClInclude>
-    <ClInclude Include="..\public\Light_Manager.h">
-      <Filter>00.Utility\05.Lights</Filter>
-    </ClInclude>
     <ClInclude Include="..\public\Light.h">
-      <Filter>00.Utility\05.Lights\Light</Filter>
+      <Filter>00.Utility\04.Manager\02. LightManager\Light</Filter>
     </ClInclude>
     <ClInclude Include="..\public\HierarchyNode.h">
       <Filter>00.Utility\03.Component\Model\HierarchyNode</Filter>
@@ -273,26 +267,53 @@
     <ClInclude Include="..\public\VIBuffer_PointInstance.h">
       <Filter>00.Utility\03.Component\VIBuffer\PointInstance</Filter>
     </ClInclude>
-    <ClInclude Include="..\public\Target_Manager.h">
-      <Filter>00.Utility\07.RenderTargets\Manager</Filter>
-    </ClInclude>
-    <ClInclude Include="..\public\RenderTarget.h">
-      <Filter>00.Utility\07.RenderTargets\Target</Filter>
-    </ClInclude>
     <ClInclude Include="..\public\VIBuffer_RectViewPort.h">
       <Filter>00.Utility\03.Component\VIBuffer\RectViewport</Filter>
     </ClInclude>
     <ClInclude Include="..\public\Frustum.h">
-      <Filter>00.Utility\08.Frustum</Filter>
+      <Filter>00.Utility\04.Manager\09.Frustum</Filter>
     </ClInclude>
     <ClInclude Include="..\public\QuadTree.h">
       <Filter>00.Utility\03.Component\VIBuffer\Terrain\QuadTree</Filter>
     </ClInclude>
-    <ClInclude Include="..\public\CustumFont.h">
-      <Filter>00.Utility\09.Fonts</Filter>
-    </ClInclude>
     <ClInclude Include="..\public\Font_Manager.h">
-      <Filter>00.Utility\09.Fonts\Manager</Filter>
+      <Filter>00.Utility\04.Manager\01.FontManager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\CustumFont.h">
+      <Filter>00.Utility\04.Manager\01.FontManager\00.Font</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Light_Manager.h">
+      <Filter>00.Utility\04.Manager\02. LightManager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\RenderTarget.h">
+      <Filter>00.Utility\04.Manager\03. RenderTargetManager\00.RenderTarget</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Target_Manager.h">
+      <Filter>00.Utility\04.Manager\03. RenderTargetManager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Component_Manager.h">
+      <Filter>00.Utility\04.Manager\04.ComponentManager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Object_Manager.h">
+      <Filter>00.Utility\04.Manager\05.GameObectManager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Level_Manager.h">
+      <Filter>00.Utility\04.Manager\06.LevelManager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\SingleTon.h">
+      <Filter>00.Utility\04.Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Timer_Manager.h">
+      <Filter>01.System\00.Device\Timer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\SaveManager.h">
+      <Filter>00.Utility\04.Manager\07.SaveManager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\SoundMgr.h">
+      <Filter>00.Utility\04.Manager\08. SoundManager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\TextureManager.h">
+      <Filter>00.Utility\04.Manager\10.TextureManager</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -308,26 +329,14 @@
     <ClCompile Include="..\private\Level.cpp">
       <Filter>00.Utility\01.Level</Filter>
     </ClCompile>
-    <ClCompile Include="..\private\Level_Manager.cpp">
-      <Filter>00.Utility\01.Level\Manager</Filter>
-    </ClCompile>
-    <ClCompile Include="..\private\Timer_Manager.cpp">
-      <Filter>01.System\00.Device\Timer</Filter>
-    </ClCompile>
     <ClCompile Include="..\private\Timer.cpp">
       <Filter>01.System\00.Device\Timer</Filter>
     </ClCompile>
     <ClCompile Include="..\private\GameObject.cpp">
       <Filter>00.Utility\02.GameObject</Filter>
     </ClCompile>
-    <ClCompile Include="..\private\Object_Manager.cpp">
-      <Filter>00.Utility\02.GameObject\Manager</Filter>
-    </ClCompile>
     <ClCompile Include="..\private\Layer.cpp">
-      <Filter>00.Utility\02.GameObject\Manager\Layer</Filter>
-    </ClCompile>
-    <ClCompile Include="..\private\Component_Manager.cpp">
-      <Filter>00.Utility\03.Component\Manager</Filter>
+      <Filter>00.Utility\02.GameObject\Layer</Filter>
     </ClCompile>
     <ClCompile Include="..\private\Component.cpp">
       <Filter>00.Utility\03.Component</Filter>
@@ -354,7 +363,7 @@
       <Filter>00.Utility\02.GameObject\Camera</Filter>
     </ClCompile>
     <ClCompile Include="..\private\PipeLine.cpp">
-      <Filter>00.Utility\04.PipeLine</Filter>
+      <Filter>00.Utility\04.Manager\00.PipeLine</Filter>
     </ClCompile>
     <ClCompile Include="..\private\Input_Device.cpp">
       <Filter>01.System\00.Device\Input</Filter>
@@ -368,11 +377,8 @@
     <ClCompile Include="..\private\MeshContainer.cpp">
       <Filter>00.Utility\03.Component\Model\MeshContainer</Filter>
     </ClCompile>
-    <ClCompile Include="..\private\Light_Manager.cpp">
-      <Filter>00.Utility\05.Lights</Filter>
-    </ClCompile>
     <ClCompile Include="..\private\Light.cpp">
-      <Filter>00.Utility\05.Lights\Light</Filter>
+      <Filter>00.Utility\04.Manager\02. LightManager\Light</Filter>
     </ClCompile>
     <ClCompile Include="..\private\HierarchyNode.cpp">
       <Filter>00.Utility\03.Component\Model\HierarchyNode</Filter>
@@ -404,26 +410,50 @@
     <ClCompile Include="..\private\VIBuffer_PointInstance.cpp">
       <Filter>00.Utility\03.Component\VIBuffer\PointInstance</Filter>
     </ClCompile>
-    <ClCompile Include="..\private\Target_Manager.cpp">
-      <Filter>00.Utility\07.RenderTargets\Manager</Filter>
-    </ClCompile>
-    <ClCompile Include="..\private\RenderTarget.cpp">
-      <Filter>00.Utility\07.RenderTargets\Target</Filter>
-    </ClCompile>
     <ClCompile Include="..\private\VIBuffer_RectViewPort.cpp">
       <Filter>00.Utility\03.Component\VIBuffer\RectViewport</Filter>
     </ClCompile>
     <ClCompile Include="..\private\Frustum.cpp">
-      <Filter>00.Utility\08.Frustum</Filter>
+      <Filter>00.Utility\04.Manager\09.Frustum</Filter>
     </ClCompile>
     <ClCompile Include="..\private\QuadTree.cpp">
       <Filter>00.Utility\03.Component\VIBuffer\Terrain\QuadTree</Filter>
     </ClCompile>
-    <ClCompile Include="..\private\CustumFont.cpp">
-      <Filter>00.Utility\09.Fonts</Filter>
-    </ClCompile>
     <ClCompile Include="..\private\Font_Manager.cpp">
-      <Filter>00.Utility\09.Fonts\Manager</Filter>
+      <Filter>00.Utility\04.Manager\01.FontManager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\CustumFont.cpp">
+      <Filter>00.Utility\04.Manager\01.FontManager\00.Font</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Light_Manager.cpp">
+      <Filter>00.Utility\04.Manager\02. LightManager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\RenderTarget.cpp">
+      <Filter>00.Utility\04.Manager\03. RenderTargetManager\00.RenderTarget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Target_Manager.cpp">
+      <Filter>00.Utility\04.Manager\03. RenderTargetManager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Component_Manager.cpp">
+      <Filter>00.Utility\04.Manager\04.ComponentManager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Object_Manager.cpp">
+      <Filter>00.Utility\04.Manager\05.GameObectManager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Level_Manager.cpp">
+      <Filter>00.Utility\04.Manager\06.LevelManager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Timer_Manager.cpp">
+      <Filter>01.System\00.Device\Timer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\SaveManager.cpp">
+      <Filter>00.Utility\04.Manager\07.SaveManager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\SoundMgr.cpp">
+      <Filter>00.Utility\04.Manager\08. SoundManager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\TextureManager.cpp">
+      <Filter>00.Utility\04.Manager\10.TextureManager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -431,7 +461,7 @@
       <Filter>00.Utility\03.Component\VIBuffer\Triangle\Shader</Filter>
     </FxCompile>
     <FxCompile Include="..\bin\ShaderFiles\Shader_RectViewport.hlsl">
-      <Filter>00.Utility\07.RenderTargets\Target</Filter>
+      <Filter>00.Utility\04.Manager\03. RenderTargetManager</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>

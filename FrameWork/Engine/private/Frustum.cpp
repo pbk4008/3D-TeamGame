@@ -1,7 +1,6 @@
 #include "..\public\Frustum.h"
 #include "PipeLine.h"
 
-IMPLEMENT_SINGLETON(CFrustum)
 
 CFrustum::CFrustum()
 {

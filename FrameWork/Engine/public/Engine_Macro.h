@@ -12,8 +12,7 @@
 #define MSGBOX(MESSAGE) MessageBox(0, TEXT(MESSAGE), TEXT("»¶"), MB_OK)
 
 #define NO_COPY(CLASSNAME)										\
-		private:												\
-		CLASSNAME(const CLASSNAME&);							\
+		CLASSNAME(const CLASSNAME&){}							\
 		CLASSNAME& operator = (const CLASSNAME&);				
 
 #define DECLARE_SINGLETON(CLASSNAME)							\

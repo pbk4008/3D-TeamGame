@@ -1,40 +1,41 @@
 #pragma once
 
-#include "Base.h"
+#include "SingleTon.h"
 
 BEGIN(Engine)
 
-class CTarget_Manager final : public CBase
+class CTarget_Manager final : public CSingleTon<CTarget_Manager>
 {
-	DECLARE_SINGLETON(CTarget_Manager)
+	friend CSingleTon;
 private:
+	NO_COPY(CTarget_Manager);
 	CTarget_Manager();
 	virtual ~CTarget_Manager() = default;
 
 public:
-	ID3D11ShaderResourceView* Get_SRV(const _tchar* pTargetTag);
+	ID3D11ShaderResourceView* Get_SRV(const wstring& pTargetTag);
 
 public:
-	HRESULT Add_RenderTarget(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext, const _tchar* pTargetTag, _uint iWidth, _uint iHeight, DXGI_FORMAT eFormat, _float4 vClearColor);
-	HRESULT Add_MRT(const _tchar* pMRTTag, const _tchar* pTargetTag);
-	HRESULT Begin_MRT(ID3D11DeviceContext* pDeviceContext, const _tchar* pMRTTag); /* 지정된 렌더타겟들을 장치에 순서대로 바인딩한다. */
+	HRESULT Add_RenderTarget(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext, const wstring& pTargetTag, _uint iWidth, _uint iHeight, DXGI_FORMAT eFormat, _float4 vClearColor);
+	HRESULT Add_MRT(const wstring& pMRTTag, const wstring& pTargetTag);
+	HRESULT Begin_MRT(ID3D11DeviceContext* pDeviceContext, const wstring& pMRTTag); /* 지정된 렌더타겟들을 장치에 순서대로 바인딩한다. */
 	HRESULT End_MRT(ID3D11DeviceContext* pDeviceContext); /* 바인딩되기 이전으로 돌린다. */
 
 
 #ifdef _DEBUG
 public:
-	HRESULT Ready_Debug_Buffer(const _tchar* pTargetTag, _float fX, _float fY, _float fSizeX, _float fSizeY);
-	HRESULT Render_Debug_Buffer(const _tchar* pMRTTag);
+	HRESULT Ready_Debug_Buffer(const wstring& pTargetTag, _float fX, _float fY, _float fSizeX, _float fSizeY);
+	HRESULT Render_Debug_Buffer(const wstring& pMRTTag);
 #endif // _DEBUG
 
 private:
-	map<const _tchar*, class CRenderTarget*>			m_Targets;
-	typedef map<const _tchar*, class CRenderTarget*>	TARGETS;
+	map<wstring, class CRenderTarget*>			m_Targets;
+	typedef map<wstring, class CRenderTarget*>	TARGETS;
 
 private:
 	/* MRT : MultiRenderTarget*/
-	map<const _tchar*, list<class CRenderTarget*>>			m_MRTs;
-	typedef map<const _tchar*, list<class CRenderTarget*>>	MRTS;
+	map<wstring, list<class CRenderTarget*>>			m_MRTs;
+	typedef map<wstring, list<class CRenderTarget*>>	MRTS;
 
 private:
 	ID3D11RenderTargetView*				m_pOldView = nullptr;
@@ -42,8 +43,8 @@ private:
 
 
 private:
-	class CRenderTarget* Find_Target(const _tchar* pTargetTag);
-	list<class CRenderTarget*>* Find_MRT(const _tchar* pMRTTag);
+	class CRenderTarget* Find_Target(const wstring& pTargetTag);
+	list<class CRenderTarget*>* Find_MRT(const wstring& pMRTTag);
 
 public:
 	virtual void Free() override;

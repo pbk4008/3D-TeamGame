@@ -1,30 +1,30 @@
 #ifndef TimerMgr_h__
 #define TimerMgr_h__
 
-#include "Base.h"
+#include "SingleTon.h"
 
 BEGIN(Engine)
 
-class CTimer_Manager : public CBase 
+class CTimer_Manager : public CSingleTon<CTimer_Manager>
 {
-	DECLARE_SINGLETON(CTimer_Manager)
-
+	friend CSingleTon;
 private:
-	CTimer_Manager(void);
+	NO_COPY(CTimer_Manager);
+	explicit CTimer_Manager(void);
 	virtual ~CTimer_Manager(void) = default;
 
 public:
-	_double					Get_TimeDelta(const _tchar* pTimerTag);
-	void					Update_TimeDelta(const _tchar* pTimerTag);
+	_double					Get_TimeDelta(const wstring& pTimerTag);
+	void					Update_TimeDelta(const wstring& pTimerTag);
 
 public:
-	HRESULT		Ready_Timer(const _tchar* pTimerTag);
+	HRESULT		Ready_Timer(const wstring& pTimerTag);
 
 private:
-	class CTimer*		Find_Timer(const _tchar* pTimerTag);
+	class CTimer*		Find_Timer(const wstring& pTimerTag);
 
 private:
-	map<const _tchar*, class CTimer*>			m_mapTimer;
+	map<wstring, class CTimer*>			m_mapTimer;
 
 public:
 	virtual void		Free(void);

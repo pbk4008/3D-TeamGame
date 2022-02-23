@@ -1,8 +1,6 @@
 #include "..\public\GameInstance.h"
 #include "GameObject.h"
-#include "Light_Manager.h"
 
-IMPLEMENT_SINGLETON(CGameInstance)
 
 CGameInstance::CGameInstance()
 	: m_pGraphic_Device(CGraphic_Device::GetInstance())
@@ -16,6 +14,9 @@ CGameInstance::CGameInstance()
 	, m_pTarget_Manager(CTarget_Manager::GetInstance())
 	, m_pFrustum(CFrustum::GetInstance())
 	, m_pFont_Manager(CFont_Manager::GetInstance())
+	, m_pTextureManager(CTextureManager::GetInstance())
+	, m_pSaveManager(CSaveManager::GetInstance())
+	, m_pSoundManager(CSoundMgr::GetInstance())
 {
 	Safe_AddRef(m_pFont_Manager);
 	Safe_AddRef(m_pFrustum);
@@ -28,7 +29,9 @@ CGameInstance::CGameInstance()
 	Safe_AddRef(m_pTimer_Manager);
 	Safe_AddRef(m_pLevel_Manager);
 	Safe_AddRef(m_pGraphic_Device);
-	
+	Safe_AddRef(m_pTextureManager);
+	Safe_AddRef(m_pSaveManager);
+	Safe_AddRef(m_pSoundManager);
 }
 
 HRESULT CGameInstance::Initialize_Engine(HINSTANCE hInst, HWND hWnd, _uint iNumLevel, CGraphic_Device::WINMODE eWinMode, _uint iWinCX, _uint iWinCY, ID3D11Device** ppDeviceOut, ID3D11DeviceContext** ppDeviceContextOut)
@@ -133,7 +136,7 @@ HRESULT CGameInstance::Present()
 	return m_pGraphic_Device->Present();
 }
 
-_double CGameInstance::Get_TimeDelta(const _tchar * pTimerTag)
+_double CGameInstance::Get_TimeDelta(const wstring& pTimerTag)
 {
 	if (nullptr == m_pTimer_Manager)
 		return 0.0;
@@ -141,7 +144,7 @@ _double CGameInstance::Get_TimeDelta(const _tchar * pTimerTag)
 	return m_pTimer_Manager->Get_TimeDelta(pTimerTag);
 }
 
-void CGameInstance::Update_TimeDelta(const _tchar * pTimerTag)
+void CGameInstance::Update_TimeDelta(const wstring& pTimerTag)
 {
 	if (nullptr == m_pTimer_Manager)
 		return;
@@ -149,7 +152,7 @@ void CGameInstance::Update_TimeDelta(const _tchar * pTimerTag)
 	return m_pTimer_Manager->Update_TimeDelta(pTimerTag);
 }
 
-HRESULT CGameInstance::Ready_Timer(const _tchar * pTimerTag)
+HRESULT CGameInstance::Ready_Timer(const wstring& pTimerTag)
 {
 	if (nullptr == m_pTimer_Manager)
 		return E_FAIL;
@@ -165,7 +168,7 @@ HRESULT CGameInstance::Open_Level(_uint iLevelIndex, CLevel * pOpenLevel)
 	return m_pLevel_Manager->Open_Level(iLevelIndex, pOpenLevel);
 }
 
-CComponent * CGameInstance::Get_Component(_uint iLevelIndex, const _tchar * pLayerTag, const _tchar * pComponentTag, _uint iIndex)
+CComponent * CGameInstance::Get_Component(_uint iLevelIndex, const wstring& pLayerTag, const wstring& pComponentTag, _uint iIndex)
 {
 	if (nullptr == m_pObject_Manager)
 		return nullptr;
@@ -173,7 +176,7 @@ CComponent * CGameInstance::Get_Component(_uint iLevelIndex, const _tchar * pLay
 	return m_pObject_Manager->Get_Component(iLevelIndex, pLayerTag, pComponentTag, iIndex);
 }
 
-HRESULT CGameInstance::Add_Prototype(const _tchar * pPrototypeTag, CGameObject * pPrototype)
+HRESULT CGameInstance::Add_Prototype(const wstring& pPrototypeTag, CGameObject * pPrototype)
 {
 	if (nullptr == m_pObject_Manager)
 		return E_FAIL;
@@ -181,7 +184,7 @@ HRESULT CGameInstance::Add_Prototype(const _tchar * pPrototypeTag, CGameObject *
 	return m_pObject_Manager->Add_Prototype(pPrototypeTag, pPrototype);	
 }
 
-HRESULT CGameInstance::Add_GameObjectToLayer(_uint iLevelIndex, const _tchar * pLayerTag, const _tchar * pPrototypeTag, void * pArg)
+HRESULT CGameInstance::Add_GameObjectToLayer(_uint iLevelIndex, const wstring& pLayerTag, const wstring& pPrototypeTag, void * pArg)
 {
 	if (nullptr == m_pObject_Manager)
 		return E_FAIL;
@@ -189,7 +192,7 @@ HRESULT CGameInstance::Add_GameObjectToLayer(_uint iLevelIndex, const _tchar * p
 	return m_pObject_Manager->Add_GameObjectToLayer(iLevelIndex, pLayerTag, pPrototypeTag, pArg);	
 }
 
-HRESULT CGameInstance::Add_Prototype(_uint iLevelIndex, const _tchar * pPrototypeTag, CComponent * pPrototype)
+HRESULT CGameInstance::Add_Prototype(_uint iLevelIndex, const wstring& pPrototypeTag, CComponent * pPrototype)
 {
 	if (nullptr == m_pComponent_Manager)
 		return E_FAIL;
@@ -197,7 +200,7 @@ HRESULT CGameInstance::Add_Prototype(_uint iLevelIndex, const _tchar * pPrototyp
 	return m_pComponent_Manager->Add_Prototype(iLevelIndex, pPrototypeTag, pPrototype);	
 }
 
-CComponent * CGameInstance::Clone_Component(_uint iLevelIndex, const _tchar * pPrototypeTag, void * pArg)
+CComponent * CGameInstance::Clone_Component(_uint iLevelIndex, const wstring& pPrototypeTag, void * pArg)
 {
 	if (nullptr == m_pComponent_Manager)
 		return nullptr;
@@ -269,7 +272,7 @@ HRESULT CGameInstance::Add_Light(ID3D11Device * pDevice, ID3D11DeviceContext * p
 	return m_pLight_Manager->Add_Light(pDevice, pDeviceContext, LightDesc);	
 }
 
-HRESULT CGameInstance::Add_Font(ID3D11Device * pDevice, ID3D11DeviceContext * pDeviceContext, const _tchar * pFontTag, const _tchar * pFontPath)
+HRESULT CGameInstance::Add_Font(ID3D11Device * pDevice, ID3D11DeviceContext * pDeviceContext, const wstring& pFontTag, const wstring& pFontPath)
 {
 	if (nullptr == m_pFont_Manager)
 		return E_FAIL;
@@ -277,7 +280,7 @@ HRESULT CGameInstance::Add_Font(ID3D11Device * pDevice, ID3D11DeviceContext * pD
 	return m_pFont_Manager->Add_Font(pDevice, pDeviceContext, pFontTag, pFontPath);
 }
 
-HRESULT CGameInstance::Render_Font(const _tchar * pFontTag, _fvector vColor, const _tchar * pString)
+HRESULT CGameInstance::Render_Font(const wstring& pFontTag, _fvector vColor, const wstring& pString)
 {
 	if (nullptr == m_pFont_Manager)
 		return E_FAIL;
@@ -301,6 +304,27 @@ _bool CGameInstance::isIn_LocalFrustum(_fvector vPosition, _float fRange)
 	return m_pFrustum->isInLocal(vPosition, fRange);
 }
 
+HRESULT CGameInstance::Add_Texture(ID3D11Device* pDevice, const wstring& pTextureTag, const wstring& pFilePath, _uint iTextureCnt)
+{
+	if (!m_pTextureManager)
+		return E_FAIL;
+	return m_pTextureManager->Add_Texture(pDevice, pTextureTag, pFilePath, iTextureCnt);
+}
+
+HRESULT CGameInstance::Delete_Texture()
+{
+	if (!m_pTextureManager)
+		return E_FAIL;
+	return m_pTextureManager->Delete_Texture();
+}
+
+vector<ID3D11ShaderResourceView*>* CGameInstance::Get_Texture(const wstring& pTextureTag)
+{
+	if (!m_pTextureManager)
+		return nullptr;
+	return m_pTextureManager->Get_Texture(pTextureTag);
+}
+
 void CGameInstance::Release_Engine()
 {
 
@@ -315,6 +339,9 @@ void CGameInstance::Release_Engine()
 
 	if (0 != CComponent_Manager::GetInstance()->DestroyInstance())
 		MSGBOX("Failed to Release CComponent_Manager");
+
+	if (0 != CTextureManager::GetInstance()->DestroyInstance())
+		MSGBOX("Failed to Release CTextureManager");
 
 	if (0 != CPipeLine::GetInstance()->DestroyInstance())
 		MSGBOX("Failed to Release CPipeLine");
@@ -333,6 +360,12 @@ void CGameInstance::Release_Engine()
 
 	if (0 != CFrustum::GetInstance()->DestroyInstance())
 		MSGBOX("Failed to Release CFrustum");
+
+	if (0 != CSaveManager::GetInstance()->DestroyInstance())
+		MSGBOX("Failed to Release CSaveManager");
+
+	if (0 != CSoundMgr::GetInstance()->DestroyInstance())
+		MSGBOX("Failed to Release CSoundMgr");
 
 	if (0 != CFont_Manager::GetInstance()->DestroyInstance())
 		MSGBOX("Failed to Release CFont_Manager");
@@ -354,6 +387,9 @@ void CGameInstance::Free()
 	Safe_Release(m_pTimer_Manager);
 	Safe_Release(m_pLevel_Manager);
 	Safe_Release(m_pGraphic_Device);
+	Safe_Release(m_pTextureManager);
+	Safe_Release(m_pSaveManager);
+	Safe_Release(m_pSoundManager);
 }
 
 

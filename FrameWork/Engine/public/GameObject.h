@@ -13,7 +13,7 @@ protected:
 	virtual ~CGameObject() = default;
 
 public:
-	class CComponent* Get_Component(const _tchar* pComponentTag);
+	class CComponent* Get_Component(const wstring& pComponentTag);
 public:
 	/* 원형객체가 생성될때 호출되는 함수. */
 	virtual HRESULT NativeConstruct_Prototype();
@@ -26,10 +26,10 @@ protected:
 	ID3D11Device*			m_pDevice = nullptr;
 	ID3D11DeviceContext*	m_pDeviceContext = nullptr;
 protected:
-	unordered_map<const _tchar*, class CComponent*>		m_Components;
+	unordered_map<wstring, class CComponent*>		m_Components;
 
 protected:
-	virtual HRESULT SetUp_Components(_uint iLevelIndex, const _tchar* pPrototypeTag, const _tchar* pComponentTag, CComponent** ppOut, void* pArg = nullptr);
+	virtual HRESULT SetUp_Components(_uint iLevelIndex, const wstring& pPrototypeTag, const wstring& pComponentTag, CComponent** ppOut, void* pArg = nullptr);
 public:
 	virtual CGameObject* Clone(void* pArg) = 0; 
 	virtual void Free() override;

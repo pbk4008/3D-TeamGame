@@ -8,20 +8,20 @@ CCustomFont::CCustomFont(ID3D11Device * pDevice, ID3D11DeviceContext * pDeviceCo
 	Safe_AddRef(m_pDeviceContext);
 }
 
-HRESULT CCustomFont::Ready_CustomFont(const _tchar * pFontPath)
+HRESULT CCustomFont::Ready_CustomFont(const wstring& pFontPath)
 {
 	m_pSpriteBatch = new DirectX::SpriteBatch(m_pDeviceContext);
 	if (nullptr == m_pSpriteBatch)
 		return E_FAIL;
 
-	m_pSpriteFont = new DirectX::SpriteFont(m_pDevice, pFontPath);
+	m_pSpriteFont = new DirectX::SpriteFont(m_pDevice, pFontPath.c_str());
 	if (nullptr == m_pSpriteFont)
 		return E_FAIL;
 
 	return S_OK;
 }
 
-HRESULT CCustomFont::Render_CustomFont(_fvector vColor, const _tchar* pString)
+HRESULT CCustomFont::Render_CustomFont(_fvector vColor, const wstring& pString)
 {
 	if (nullptr == m_pSpriteBatch ||
 		nullptr == m_pSpriteFont)
@@ -29,14 +29,14 @@ HRESULT CCustomFont::Render_CustomFont(_fvector vColor, const _tchar* pString)
 
 	m_pSpriteBatch->Begin();
 
-	m_pSpriteFont->DrawString(m_pSpriteBatch, pString, _float2(0.f, 0.f), vColor, 0.0f, _float2(0.f, 0.f), _float2(1.f, 1.f));
+	m_pSpriteFont->DrawString(m_pSpriteBatch, pString.c_str(), _float2(0.f, 0.f), vColor, 0.0f, _float2(0.f, 0.f), _float2(1.f, 1.f));
 
 	m_pSpriteBatch->End();
 
 	return S_OK;
 }
 
-CCustomFont * CCustomFont::Create(ID3D11Device * pGraphic_Device, ID3D11DeviceContext * pGraphic_Device_Context, const _tchar * pFontPath)
+CCustomFont * CCustomFont::Create(ID3D11Device * pGraphic_Device, ID3D11DeviceContext * pGraphic_Device_Context, const wstring& pFontPath)
 {
 	CCustomFont*	pInstance = new CCustomFont(pGraphic_Device, pGraphic_Device_Context);
 

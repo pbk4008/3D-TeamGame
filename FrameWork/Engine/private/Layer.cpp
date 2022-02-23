@@ -6,7 +6,7 @@ CLayer::CLayer()
 {
 }
 
-CComponent * CLayer::Get_Component(const _tchar * pComponentTag, _uint iIndex)
+CComponent * CLayer::Get_Component(const wstring& pComponentTag, _uint iIndex)
 {
 	auto	iter = m_Objects.begin();
 

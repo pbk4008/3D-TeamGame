@@ -23,6 +23,7 @@
 #include "DirectXTK/SpriteBatch.h"
 #include "DirectXTK/SpriteFont.h"
 
+#include "fmod/fmod.h"
 
 #include <vector>
 #include <map>

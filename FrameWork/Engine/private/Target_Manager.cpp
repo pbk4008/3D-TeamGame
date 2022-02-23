@@ -1,14 +1,13 @@
 #include "..\public\Target_Manager.h"
 #include "RenderTarget.h"
 
-IMPLEMENT_SINGLETON(CTarget_Manager)
 
 CTarget_Manager::CTarget_Manager()
 {
 
 }
 
-ID3D11ShaderResourceView * CTarget_Manager::Get_SRV(const _tchar * pTargetTag)
+ID3D11ShaderResourceView * CTarget_Manager::Get_SRV(const wstring& pTargetTag)
 {
 	CRenderTarget*		pRenderTarget = Find_Target(pTargetTag);
 	if (nullptr == pRenderTarget)
@@ -17,7 +16,7 @@ ID3D11ShaderResourceView * CTarget_Manager::Get_SRV(const _tchar * pTargetTag)
 	return pRenderTarget->Get_STV();	
 }
 
-HRESULT CTarget_Manager::Add_RenderTarget(ID3D11Device * pDevice, ID3D11DeviceContext * pDeviceContext, const _tchar * pTargetTag, _uint iWidth, _uint iHeight, DXGI_FORMAT eFormat, _float4 vClearColor)
+HRESULT CTarget_Manager::Add_RenderTarget(ID3D11Device * pDevice, ID3D11DeviceContext * pDeviceContext, const wstring& pTargetTag, _uint iWidth, _uint iHeight, DXGI_FORMAT eFormat, _float4 vClearColor)
 {
 	if (nullptr != Find_Target(pTargetTag))
 		return E_FAIL;
@@ -31,7 +30,7 @@ HRESULT CTarget_Manager::Add_RenderTarget(ID3D11Device * pDevice, ID3D11DeviceCo
 	return S_OK;
 }
 
-HRESULT CTarget_Manager::Add_MRT(const _tchar * pMRTTag, const _tchar * pTargetTag)
+HRESULT CTarget_Manager::Add_MRT(const wstring& pMRTTag, const wstring& pTargetTag)
 {
 	CRenderTarget*	pRenderTarget = Find_Target(pTargetTag);
 	if (nullptr == pRenderTarget)
@@ -54,7 +53,7 @@ HRESULT CTarget_Manager::Add_MRT(const _tchar * pMRTTag, const _tchar * pTargetT
 	return S_OK;
 }
 
-HRESULT CTarget_Manager::Begin_MRT(ID3D11DeviceContext* pDeviceContext, const _tchar * pMRTTag)
+HRESULT CTarget_Manager::Begin_MRT(ID3D11DeviceContext* pDeviceContext, const wstring& pMRTTag)
 {
 	list<CRenderTarget*>*	pMRTList = Find_MRT(pMRTTag);
 
@@ -88,7 +87,7 @@ HRESULT CTarget_Manager::End_MRT(ID3D11DeviceContext* pDeviceContext)
 }
 
 #ifdef _DEBUG
-HRESULT CTarget_Manager::Ready_Debug_Buffer(const _tchar * pTargetTag, _float fX, _float fY, _float fSizeX, _float fSizeY)
+HRESULT CTarget_Manager::Ready_Debug_Buffer(const wstring& pTargetTag, _float fX, _float fY, _float fSizeX, _float fSizeY)
 {
 	CRenderTarget*	pRenderTarget = Find_Target(pTargetTag);
 	if (nullptr == pRenderTarget)
@@ -96,7 +95,7 @@ HRESULT CTarget_Manager::Ready_Debug_Buffer(const _tchar * pTargetTag, _float fX
 
 	return pRenderTarget->Ready_Debug_Buffer(fX, fY, fSizeX, fSizeY);	
 }
-HRESULT CTarget_Manager::Render_Debug_Buffer(const _tchar * pMRTTag)
+HRESULT CTarget_Manager::Render_Debug_Buffer(const wstring& pMRTTag)
 {
 	list<CRenderTarget*>*		pMRTList = Find_MRT(pMRTTag);
 	if (nullptr == pMRTList)
@@ -109,7 +108,7 @@ HRESULT CTarget_Manager::Render_Debug_Buffer(const _tchar * pMRTTag)
 }
 #endif // _DEBUG
 
-CRenderTarget * CTarget_Manager::Find_Target(const _tchar * pTargetTag)
+CRenderTarget * CTarget_Manager::Find_Target(const wstring& pTargetTag)
 {
 	auto	iter = find_if(m_Targets.begin(), m_Targets.end(), CTag_Finder(pTargetTag));
 	if (iter == m_Targets.end())
@@ -118,7 +117,7 @@ CRenderTarget * CTarget_Manager::Find_Target(const _tchar * pTargetTag)
 	return iter->second;
 }
 
-list<class CRenderTarget*>* CTarget_Manager::Find_MRT(const _tchar * pMRTTag)
+list<class CRenderTarget*>* CTarget_Manager::Find_MRT(const wstring& pMRTTag)
 {
 	auto	iter = find_if(m_MRTs.begin(), m_MRTs.end(), CTag_Finder(pMRTTag));
 	if (iter == m_MRTs.end())
