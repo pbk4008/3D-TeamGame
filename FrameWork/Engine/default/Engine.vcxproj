@@ -71,6 +71,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
+    <OutDir>../bin/</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
@@ -91,10 +92,14 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;ENGINE_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>../public;../default;../../Reference/Headers</AdditionalIncludeDirectories>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>../ThirdPartyLibrarys</AdditionalLibraryDirectories>
+      <AdditionalDependencies>Effects11d.lib;DirectXTexd.lib;assimp-vc142-mtd.lib;DirectXTKd.lib;fmodL_vc.lib;fmod_vc.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <FxCompile>
       <ShaderType>Effect</ShaderType>
@@ -116,7 +121,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>d3d11.lib;dxguid.lib;dinput8.lib;effects11d.lib;DirectXTexd.lib;assimp-vc140-mtd.lib;DirectXTKd.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>d3d11.lib;dxguid.lib;dinput8.lib;effects11d.lib;DirectXTexd.lib;assimp-vc142-mtd.lib;DirectXTKd.lib;fmodL_vc.lib;fmod_vc.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>../ThirdPartyLibrarys/</AdditionalLibraryDirectories>
     </Link>
     <FxCompile>
@@ -125,6 +130,14 @@
     <FxCompile>
       <ShaderModel>5.0</ShaderModel>
     </FxCompile>
+    <PreBuildEvent>
+      <Command>
+      </Command>
+    </PreBuildEvent>
+    <PostBuildEvent>
+      <Command>cd $(SolutionDir)
+call Update_Library_Debug.bat</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -142,6 +155,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>Effects11.lib;DirectXTex.lib;assimp-vc142-mt.lib;DirectXTK.lib;fmodL_vc.lib;fmod_vc.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <FxCompile>
       <ShaderType>Effect</ShaderType>
@@ -167,7 +181,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>d3d11.lib;dxguid.lib;dinput8.lib;effects11.lib;DirectXTex.lib;assimp-vc140-mt.lib;DirectXTK.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>d3d11.lib;dxguid.lib;dinput8.lib;effects11.lib;DirectXTex.lib;assimp-vc142-mt.lib;DirectXTK.lib;fmodL_vc.lib;fmod_vc.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>../ThirdPartyLibrarys/</AdditionalLibraryDirectories>
     </Link>
     <FxCompile>
@@ -176,6 +190,14 @@
     <FxCompile>
       <ShaderModel>5.0</ShaderModel>
     </FxCompile>
+    <PreBuildEvent>
+      <Command>
+      </Command>
+    </PreBuildEvent>
+    <PostBuildEvent>
+      <Command>cd $(SolutionDir)
+call Update_Library_Release.bat</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\public\Animation.h" />
@@ -213,8 +235,12 @@
     <ClInclude Include="..\public\QuadTree.h" />
     <ClInclude Include="..\public\Renderer.h" />
     <ClInclude Include="..\public\RenderTarget.h" />
+    <ClInclude Include="..\public\SaveManager.h" />
+    <ClInclude Include="..\public\SingleTon.h" />
+    <ClInclude Include="..\public\SoundMgr.h" />
     <ClInclude Include="..\public\Target_Manager.h" />
     <ClInclude Include="..\public\Texture.h" />
+    <ClInclude Include="..\public\TextureManager.h" />
     <ClInclude Include="..\public\Timer.h" />
     <ClInclude Include="..\public\Timer_Manager.h" />
     <ClInclude Include="..\public\Transform.h" />
@@ -258,8 +284,11 @@
     <ClCompile Include="..\private\QuadTree.cpp" />
     <ClCompile Include="..\private\Renderer.cpp" />
     <ClCompile Include="..\private\RenderTarget.cpp" />
+    <ClCompile Include="..\private\SaveManager.cpp" />
+    <ClCompile Include="..\private\SoundMgr.cpp" />
     <ClCompile Include="..\private\Target_Manager.cpp" />
     <ClCompile Include="..\private\Texture.cpp" />
+    <ClCompile Include="..\private\TextureManager.cpp" />
     <ClCompile Include="..\private\Timer.cpp" />
     <ClCompile Include="..\private\Timer_Manager.cpp" />
     <ClCompile Include="..\private\Transform.cpp" />
