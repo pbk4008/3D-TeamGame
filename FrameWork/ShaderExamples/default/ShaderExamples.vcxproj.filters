@@ -17,9 +17,6 @@
     <Filter Include="ShaderFiles">
       <UniqueIdentifier>{16e65d81-49dd-4f5b-b7d3-4ecf32b67586}</UniqueIdentifier>
     </Filter>
-    <Filter Include="MainApp">
-      <UniqueIdentifier>{206bb37a-6a90-4994-a000-7d86078d014f}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Includes">
       <UniqueIdentifier>{d07792a0-bc1c-47e6-8f8a-189878a1232a}</UniqueIdentifier>
     </Filter>
@@ -34,6 +31,12 @@
     </Filter>
     <Filter Include="GameObject\StaticObject">
       <UniqueIdentifier>{fb39ff0d-c137-48b4-9b12-7156e826a0b8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameObject\Camera">
+      <UniqueIdentifier>{7c59fef2-f1a6-4711-8d22-c99d9ecf8300}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00.MainApp">
+      <UniqueIdentifier>{206bb37a-6a90-4994-a000-7d86078d014f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -50,7 +53,7 @@
       <Filter>Default\Headers</Filter>
     </ClInclude>
     <ClInclude Include="..\public\MainApp.h">
-      <Filter>MainApp</Filter>
+      <Filter>00.MainApp</Filter>
     </ClInclude>
     <ClInclude Include="Defines.h">
       <Filter>Includes</Filter>
@@ -63,6 +66,12 @@
     </ClInclude>
     <ClInclude Include="..\private\StaticObject.h">
       <Filter>GameObject\StaticObject</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\DynamicCaemra.h">
+      <Filter>GameObject\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="..\bin\ShaderFiles\Shader_RenderState.hpp">
+      <Filter>ShaderFiles</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -83,7 +92,7 @@
       <Filter>Default\Codes</Filter>
     </ClCompile>
     <ClCompile Include="..\private\MainApp.cpp">
-      <Filter>MainApp</Filter>
+      <Filter>00.MainApp</Filter>
     </ClCompile>
     <ClCompile Include="..\private\Floor.cpp">
       <Filter>GameObject\Floor</Filter>
@@ -93,6 +102,9 @@
     </ClCompile>
     <ClCompile Include="..\public\StaticObject.cpp">
       <Filter>GameObject\StaticObject</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\DynamicCaemra.cpp">
+      <Filter>GameObject\Camera</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -106,6 +118,24 @@
       <Filter>ShaderFiles</Filter>
     </FxCompile>
     <FxCompile Include="Constants.hlsl">
+      <Filter>ShaderFiles</Filter>
+    </FxCompile>
+    <FxCompile Include="..\bin\ShaderFiles\Shader_Cube.hlsl">
+      <Filter>ShaderFiles</Filter>
+    </FxCompile>
+    <FxCompile Include="..\bin\ShaderFiles\Shader_Instance.hlsl">
+      <Filter>ShaderFiles</Filter>
+    </FxCompile>
+    <FxCompile Include="..\bin\ShaderFiles\Shader_Mesh.hlsl">
+      <Filter>ShaderFiles</Filter>
+    </FxCompile>
+    <FxCompile Include="..\bin\ShaderFiles\Shader_PointInstance.hlsl">
+      <Filter>ShaderFiles</Filter>
+    </FxCompile>
+    <FxCompile Include="..\bin\ShaderFiles\Shader_Rect.hlsl">
+      <Filter>ShaderFiles</Filter>
+    </FxCompile>
+    <FxCompile Include="..\bin\ShaderFiles\Shader_Terrain.hlsl">
       <Filter>ShaderFiles</Filter>
     </FxCompile>
   </ItemGroup>

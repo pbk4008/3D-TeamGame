@@ -3,6 +3,7 @@
 #include "GameInstance.h"
 //#include "Level_Loading.h"
 //#include "BackGround.h"
+#include "Floor.h"
 
 CMainApp::CMainApp()
 	: m_pGameInstance(CGameInstance::GetInstance())
@@ -26,11 +27,12 @@ HRESULT CMainApp::NativeConstruct()
 
 	if (FAILED(Ready_Component_Prototype()))
 		return E_FAIL;
+
 	if (FAILED(Ready_GameObject_Prototype()))
 		return E_FAIL;
 
-	if (FAILED(SetUp_StartLevel(LEVEL::LEVEL_LOGO)))
-		return E_FAIL;
+	//if (FAILED(SetUp_StartLevel(LEVEL::LEVEL_LOGO)))
+	//	return E_FAIL;
 
 	return S_OK;
 }
@@ -44,8 +46,6 @@ _int CMainApp::Tick(_double TimeDelta)
 
 	m_pGameInstance->Tick_Engine(TimeDelta);
 
-
-
 	return _int();
 }
 
@@ -54,7 +54,7 @@ HRESULT CMainApp::Render()
 	if (nullptr == m_pGameInstance)
 		return E_FAIL;
 
-	if (FAILED(m_pGameInstance->Clear_BackBuffer_View(XMFLOAT4(1.f, 1.f, 1.f, 1.f))))
+	if (FAILED(m_pGameInstance->Clear_BackBuffer_View(XMFLOAT4(0.1f, 0.2f, 0.3f, 1.f))))
 		return E_FAIL;
 	if (FAILED(m_pGameInstance->Clear_DepthStencil_View()))
 		return E_FAIL;
@@ -84,6 +84,50 @@ HRESULT CMainApp::Render()
 
 	if (FAILED(m_pGameInstance->Present()))
 		return E_FAIL;
+
+	CGameInstance* pGameInstance = GET_INSTANCE(CGameInstance);
+
+	LIGHTDESC			LightDesc;
+	ZeroMemory(&LightDesc, sizeof(LIGHTDESC));
+
+	//LightDesc.eType = LIGHTDESC::TYPE_POINT;
+
+	//LightDesc.vPosition = _float3(5.f, 3.f, 5.f);
+	//LightDesc.fRange = 7.f;
+
+	//LightDesc.vDiffuse = _float4(1.f, 0.0f, 0.0f, 1.f);
+	//LightDesc.vSpecular = _float4(1.f, 1.f, 1.f, 1.f);
+	//LightDesc.vAmbient = _float4(0.4f, 0.4f, 0.4f, 1.f);
+
+	//if (FAILED(pGameInstance->Add_Light(m_pDevice, m_pDeviceContext, LightDesc)))
+	//	return E_FAIL;
+
+
+	//ZeroMemory(&LightDesc, sizeof(LIGHTDESC));
+
+	//LightDesc.eType = LIGHTDESC::TYPE_POINT;
+
+	//LightDesc.vPosition = _float3(10.f, 3.f, 5.f);
+	//LightDesc.fRange = 7.f;
+
+	//LightDesc.vDiffuse = _float4(0.0f, 1.f, 0.0f, 1.f);
+	//LightDesc.vSpecular = _float4(1.f, 1.f, 1.f, 1.f);
+	//LightDesc.vAmbient = _float4(0.4f, 0.4f, 0.4f, 1.f);
+
+	//if (FAILED(pGameInstance->Add_Light(m_pDevice, m_pDeviceContext, LightDesc)))
+	//	return E_FAIL;
+
+	LightDesc.eType = LIGHTDESC::TYPE_DIRECTIONAL;
+	LightDesc.vDirection = _float3(1.f, -1.f, 1.f);
+	LightDesc.vDiffuse = _float4(1.f, 1.f, 1.f, 1.f);
+	LightDesc.vSpecular = _float4(1.f, 1.f, 1.f, 1.f);
+	LightDesc.vAmbient = _float4(0.5f, 0.5f, 0.5f, 1.f);
+
+	if (FAILED(pGameInstance->Add_Light(m_pDevice, m_pDeviceContext, LightDesc)))
+		return E_FAIL;
+
+	RELEASE_INSTANCE(CGameInstance);
+
 
 
 
@@ -129,12 +173,21 @@ HRESULT CMainApp::Ready_Component_Prototype()
 		return E_FAIL;
 
 	/* For.Prototype_Component_VIBuffer_Rect */
-	//if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_VIBuffer_Rect"), CVIBuffer_Rect::Create(m_pDevice, m_pDeviceContext, TEXT("../Bin/ShaderFiles/Shader_Rect.hlsl")))))
-	//	return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype((_uint)LEVEL::LEVEL_STATIC, TEXT("PrototypeTerrainVIBuffer"), CVIBuffer_Terrain::Create(m_pDevice, m_pDeviceContext, TEXT("../bin/ShaderFiles/Shader_Terrain.hlsl"), TEXT("../Bin/Resources/Textures/Terrain/Height.bmp")))))
+		return E_FAIL;
 
 	/* For.Prototype_Component_Texture_Loading */
-	//if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_Loading"), CTexture::Create(m_pDevice, m_pDeviceContext, TEXT("../Bin/Resources/Textures/Default%d.jpg"), 2))))
-	//	return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype((_uint)LEVEL::LEVEL_STATIC, TEXT("PrototypeTerrain"), CTexture::Create(m_pDevice, m_pDeviceContext, TEXT("../bin/Resources/Textures/Terrain/Grass_1.tga")))))
+		return E_FAIL;
+	
+	//CTextureManager* pTextureMgr = GET_INSTANCE(CTextureManager);
+
+	//pTextureMgr->Add_Texture(m_pDevice, L"TerrainBase", L"../Bin/Resources/Textures/Default.jpg");
+
+	//RELEASE_INSTANCE(CTextureManager);
+
+	if (FAILED(m_pGameInstance->Add_Prototype((_uint)LEVEL::LEVEL_STATIC, TEXT("PtotocomponentCamera"), CCamera::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
 
 	return S_OK;
 }
@@ -146,8 +199,11 @@ HRESULT CMainApp::Ready_GameObject_Prototype()
 
 	/* For.Prototype_GameObject_BackGround */
 
-	//if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_BackGround"), CBackGround::Create(m_pDevice, m_pDeviceContext))))
-	//	return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("PrototypeFloor"), CFloor::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_GameObjectToLayer((_uint)LEVEL::LEVEL_STATIC, L"Floor", L"PrototypeFloor")))
+		return E_FAIL;
 
 	return S_OK;
 }
