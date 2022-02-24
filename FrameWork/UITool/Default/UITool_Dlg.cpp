@@ -30,6 +30,8 @@ void CUITool_Dlg::DoDataExchange(CDataExchange* pDX)
 
 BEGIN_MESSAGE_MAP(CUITool_Dlg, CDialog)
 	ON_WM_DROPFILES()
+	ON_LBN_SELCHANGE(IDC_LIST1, &CUITool_Dlg::OnLbnSelchangeList1)
+	ON_BN_CLICKED(IDC_BUTTON1, &CUITool_Dlg::OnBnClickedButtonApply)
 END_MESSAGE_MAP()
 
 
@@ -61,4 +63,34 @@ void CUITool_Dlg::OnDropFiles(HDROP hDropInfo)
 	}
 
 	CDialog::OnDropFiles(hDropInfo);
+}
+
+
+void CUITool_Dlg::OnLbnSelchangeList1()
+{
+	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+	unsigned int iIndex = m_ListBox.GetCurSel();
+
+	CString SelectName = L"";
+	m_ListBox.GetText(iIndex, SelectName);
+
+	unsigned int i = 0;
+	for (; i < SelectName.GetLength(); ++i)
+	{
+		if (::isdigit(SelectName[i]))
+		{
+			break;
+		}
+	}
+}
+
+
+void CUITool_Dlg::OnBnClickedButtonApply()
+{
+	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+
+
+	UpdateData(TRUE);
+
+
 }

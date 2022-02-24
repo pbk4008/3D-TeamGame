@@ -27,4 +27,6 @@ public:
 	CString m_strFileName;
 	CListBox m_ListBox;
 
+	afx_msg void OnLbnSelchangeList1();
+	afx_msg void OnBnClickedButtonApply();
 };
