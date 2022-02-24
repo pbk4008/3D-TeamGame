@@ -73,9 +73,6 @@
     <Filter Include="00.Utility\04.Manager\05.GameObectManager">
       <UniqueIdentifier>{cbc26e05-8936-4bc7-a647-4df54c45879e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="00.Utility\02.GameObject\Layer">
-      <UniqueIdentifier>{e2deeaff-7c98-45ac-a934-d77c82e0962e}</UniqueIdentifier>
-    </Filter>
     <Filter Include="00.Utility\04.Manager\06.LevelManager">
       <UniqueIdentifier>{acb99d7d-81b6-4835-aadb-f1e317cb780d}</UniqueIdentifier>
     </Filter>
@@ -157,6 +154,18 @@
     <Filter Include="00.Utility\03.Component\06.Camera">
       <UniqueIdentifier>{54be378a-1b48-405a-ab79-310bb60858af}</UniqueIdentifier>
     </Filter>
+    <Filter Include="00.Utility\02.GameObject\00.Layer">
+      <UniqueIdentifier>{e2deeaff-7c98-45ac-a934-d77c82e0962e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00.Utility\02.GameObject\01.UI">
+      <UniqueIdentifier>{26b199a5-d747-435a-8a76-e82364faf843}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00.Utility\02.GameObject\02.Actor">
+      <UniqueIdentifier>{76160bea-8e45-4e6e-9a5e-13bd3f34d44f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00.Utility\02.GameObject\03.Effect">
+      <UniqueIdentifier>{2cf37c07-d599-44eb-927c-50d78d47248e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\public\Base.h">
@@ -190,7 +199,7 @@
       <Filter>00.Utility\02.GameObject</Filter>
     </ClInclude>
     <ClInclude Include="..\public\Layer.h">
-      <Filter>00.Utility\02.GameObject\Layer</Filter>
+      <Filter>00.Utility\02.GameObject\00.Layer</Filter>
     </ClInclude>
     <ClInclude Include="..\public\Component.h">
       <Filter>00.Utility\03.Component</Filter>
@@ -318,6 +327,9 @@
     <ClInclude Include="..\public\Camera.h">
       <Filter>00.Utility\03.Component\06.Camera</Filter>
     </ClInclude>
+    <ClInclude Include="..\private\UI.h">
+      <Filter>00.Utility\02.GameObject\01.UI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\private\Base.cpp">
@@ -339,7 +351,7 @@
       <Filter>00.Utility\02.GameObject</Filter>
     </ClCompile>
     <ClCompile Include="..\private\Layer.cpp">
-      <Filter>00.Utility\02.GameObject\Layer</Filter>
+      <Filter>00.Utility\02.GameObject\00.Layer</Filter>
     </ClCompile>
     <ClCompile Include="..\private\Component.cpp">
       <Filter>00.Utility\03.Component</Filter>
@@ -457,6 +469,9 @@
     </ClCompile>
     <ClCompile Include="..\private\Camera.cpp">
       <Filter>00.Utility\03.Component\06.Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\UI.cpp">
+      <Filter>00.Utility\02.GameObject\01.UI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
