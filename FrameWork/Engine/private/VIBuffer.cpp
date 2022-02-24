@@ -86,9 +86,9 @@ HRESULT CVIBuffer::Render(_uint iPassIndex)
 	return S_OK;
 }
 
-HRESULT CVIBuffer::SetUp_ValueOnShader(const char* pConstantName, void* pData, _uint iSize)
+HRESULT CVIBuffer::SetUp_ValueOnShader(const string& pConstantName, void* pData, _uint iSize)
 {
-	ID3DX11EffectVariable*		pVariable = m_pEffect->GetVariableByName(pConstantName);
+	ID3DX11EffectVariable*		pVariable = m_pEffect->GetVariableByName(pConstantName.c_str());
 	if (nullptr == pVariable)
 		return E_FAIL;
 
@@ -98,7 +98,7 @@ HRESULT CVIBuffer::SetUp_ValueOnShader(const char* pConstantName, void* pData, _
 	return S_OK;
 }
 
-HRESULT CVIBuffer::SetUp_TextureOnShader(const char * pConstantName, CTexture * pTextureCom, _uint iTextureIndex)
+HRESULT CVIBuffer::SetUp_TextureOnShader(const string& pConstantName, CTexture * pTextureCom, _uint iTextureIndex)
 {
 	if (nullptr == pTextureCom)
 		return E_FAIL;
@@ -106,16 +106,16 @@ HRESULT CVIBuffer::SetUp_TextureOnShader(const char * pConstantName, CTexture * 
 	if (nullptr == pShaderResourceView)
 		return E_FAIL;
 
-	ID3DX11EffectShaderResourceVariable*		pVariable = m_pEffect->GetVariableByName(pConstantName)->AsShaderResource();
+	ID3DX11EffectShaderResourceVariable*		pVariable = m_pEffect->GetVariableByName(pConstantName.c_str())->AsShaderResource();
 	if (nullptr == pVariable)
 		return E_FAIL;
 
 	return pVariable->SetResource(pShaderResourceView);
 }
 
-HRESULT CVIBuffer::SetUp_TextureOnShader(const char * pConstantName, ID3D11ShaderResourceView * pSRV)
+HRESULT CVIBuffer::SetUp_TextureOnShader(const string& pConstantName, ID3D11ShaderResourceView * pSRV)
 {
-	ID3DX11EffectShaderResourceVariable*		pVariable = m_pEffect->GetVariableByName(pConstantName)->AsShaderResource();
+	ID3DX11EffectShaderResourceVariable*		pVariable = m_pEffect->GetVariableByName(pConstantName.c_str())->AsShaderResource();
 	if (nullptr == pVariable)
 		return E_FAIL;
 
@@ -147,7 +147,7 @@ HRESULT CVIBuffer::Create_IndexBuffer()
 	return S_OK;
 }
 
-HRESULT CVIBuffer::Compile_ShaderFiles(const _tchar * pShaderFilePath, D3D11_INPUT_ELEMENT_DESC* pElementDesc, _uint iNumElements)
+HRESULT CVIBuffer::Compile_ShaderFiles(const wstring& pShaderFilePath, D3D11_INPUT_ELEMENT_DESC* pElementDesc, _uint iNumElements)
 {
 	_uint		iFlag = 0;
 
@@ -160,7 +160,7 @@ HRESULT CVIBuffer::Compile_ShaderFiles(const _tchar * pShaderFilePath, D3D11_INP
 	ID3DBlob*			pShaderByteCodes = nullptr;
 	ID3DBlob*			pCompileErrorMessage = nullptr;
 
-	if (FAILED(D3DCompileFromFile(pShaderFilePath, nullptr, D3D_COMPILE_STANDARD_FILE_INCLUDE, nullptr, "fx_5_0", iFlag, 0, &pShaderByteCodes, &pCompileErrorMessage)))
+	if (FAILED(D3DCompileFromFile(pShaderFilePath.c_str(), nullptr, D3D_COMPILE_STANDARD_FILE_INCLUDE, nullptr, "fx_5_0", iFlag, 0, &pShaderByteCodes, &pCompileErrorMessage)))
 		return E_FAIL;	
 
 	if (FAILED(D3DX11CreateEffectFromMemory(pShaderByteCodes->GetBufferPointer(), pShaderByteCodes->GetBufferSize(), 0, m_pDevice, &m_pEffect)))

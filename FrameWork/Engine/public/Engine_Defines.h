@@ -15,6 +15,15 @@
 #include "d3dcompiler.h"
 #include "DirectXTex.h"
 
+#define NOMINMAX
+#ifdef max
+#undef max
+#endif
+#ifdef min
+#undef min
+#undef min
+#endif
+
 #include "assimp/postprocess.h"
 #include "assimp/Importer.hpp"
 #include "assimp/scene.h"
