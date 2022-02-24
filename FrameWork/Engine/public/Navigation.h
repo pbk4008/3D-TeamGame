@@ -21,7 +21,7 @@ public:
 
 #ifdef _DEBUG
 public:
-	HRESULT Render(_fmatrix WorldMatrix = XMMatrixIdentity());
+	HRESULT Render(const wstring& pCameraTag, _fmatrix WorldMatrix = XMMatrixIdentity());
 #endif // _DEBUG
 
 private:

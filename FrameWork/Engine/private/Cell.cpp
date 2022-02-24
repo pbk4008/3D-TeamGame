@@ -100,7 +100,7 @@ HRESULT CCell::Ready_DebugBuffer()
 
 	return S_OK;
 }
-HRESULT CCell::Render(_fmatrix WorldMatrix, _uint iCurrentIndex)
+HRESULT CCell::Render(_fmatrix WorldMatrix, _uint iCurrentIndex, const wstring& pCameraTag)
 {
 	if (nullptr == m_pVIBuffer)
 		return E_FAIL;
@@ -108,8 +108,8 @@ HRESULT CCell::Render(_fmatrix WorldMatrix, _uint iCurrentIndex)
 	CPipeLine*		pPipeLine = GET_INSTANCE(CPipeLine);
 
 	m_pVIBuffer->SetUp_ValueOnShader("g_WorldMatrix", &XMMatrixTranspose(WorldMatrix), sizeof(_float4x4));
-	m_pVIBuffer->SetUp_ValueOnShader("g_ViewMatrix", &XMMatrixTranspose(pPipeLine->Get_Transform(CPipeLine::D3DTS_VIEW)), sizeof(_float4x4));
-	m_pVIBuffer->SetUp_ValueOnShader("g_ProjMatrix", &XMMatrixTranspose(pPipeLine->Get_Transform(CPipeLine::D3DTS_PROJECTION)), sizeof(_float4x4));
+	m_pVIBuffer->SetUp_ValueOnShader("g_ViewMatrix", &XMMatrixTranspose(pPipeLine->Get_Transform(pCameraTag, TRANSFORMSTATEMATRIX::D3DTS_VIEW)), sizeof(_float4x4));
+	m_pVIBuffer->SetUp_ValueOnShader("g_ProjMatrix", &XMMatrixTranspose(pPipeLine->Get_Transform(pCameraTag, TRANSFORMSTATEMATRIX::D3DTS_PROJECTION)), sizeof(_float4x4));
 
 	if (iCurrentIndex == m_iIndex)	
 		m_pVIBuffer->SetUp_ValueOnShader("g_vCellColor", &XMVectorSet(1.f, 0.f, 0.f, 1.f), sizeof(_float4));	

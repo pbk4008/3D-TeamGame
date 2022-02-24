@@ -18,8 +18,8 @@ public:
 	HRESULT NativeConstruct(_uint iLT, _uint iRT, _uint iRB, _uint iLB);
 
 public:
-	HRESULT Culling(class CFrustum* pFrustum, VTXNORTEX* pVertices, FACEINDICES32* pIndices, _uint* pNumFaces, _fmatrix WorldMatrixInverse);
-	_bool isLOD(VTXNORTEX* pVertices, _fmatrix WorldMatrixInverse);
+	HRESULT Culling(class CFrustum* pFrustum, VTXNORTEX* pVertices, FACEINDICES32* pIndices, _uint* pNumFaces, _fmatrix WorldMatrixInverse, const wstring& pCameraTag);
+	_bool isLOD(const wstring& pCamerTag,VTXNORTEX* pVertices, _fmatrix WorldMatrixInverse);
 
 private:
 	CQuadTree*			m_pChilds[CHILD_END] = { nullptr };

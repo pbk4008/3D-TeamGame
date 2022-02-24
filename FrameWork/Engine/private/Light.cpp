@@ -1,7 +1,7 @@
 #include "..\public\Light.h"
 #include "VIBuffer_RectViewPort.h"
 #include "Target_Manager.h"
-#include "GameInstance.h"
+#include "PipeLine.h"
 
 CLight::CLight(ID3D11Device * pDevice, ID3D11DeviceContext * pDeviceContext)
 	: m_pDevice(pDevice)
@@ -26,10 +26,10 @@ HRESULT CLight::NativeConstruct(const LIGHTDESC& LightDesc)
 	return S_OK;
 }
 
-HRESULT CLight::Render()
+HRESULT CLight::Render(const wstring& pCameraTag)
 {
 	CTarget_Manager*		pTarget_Manager = GET_INSTANCE(CTarget_Manager);
-	CGameInstance*			pGameInstance = GET_INSTANCE(CGameInstance);
+	CPipeLine*			pPipeLine = GET_INSTANCE(CPipeLine);
 
 	_uint		iPassIndex = 0;
 
@@ -53,11 +53,11 @@ HRESULT CLight::Render()
 	m_pVIBuffer->SetUp_ValueOnShader("g_vLightAmbient", &m_LightDesc.vAmbient, sizeof(_float4));
 	m_pVIBuffer->SetUp_ValueOnShader("g_vLightSpecular", &m_LightDesc.vSpecular, sizeof(_float4));
 
-	_vector		vCamPosition = pGameInstance->Get_CamPosition();
+	_vector		vCamPosition = pPipeLine->Get_CamPosition(pCameraTag);
 
-	_matrix		ViewMatrix = pGameInstance->Get_Transform(CPipeLine::D3DTS_VIEW);
+	_matrix		ViewMatrix = pPipeLine->Get_Transform(pCameraTag, TRANSFORMSTATEMATRIX::D3DTS_VIEW);
 	ViewMatrix = XMMatrixInverse(nullptr, ViewMatrix);
-	_matrix		ProjMatrix = pGameInstance->Get_Transform(CPipeLine::D3DTS_PROJECTION);
+	_matrix		ProjMatrix = pPipeLine->Get_Transform(pCameraTag, TRANSFORMSTATEMATRIX::D3DTS_PROJECTION);
 	ProjMatrix = XMMatrixInverse(nullptr, ProjMatrix);
 
 	m_pVIBuffer->SetUp_ValueOnShader("g_vCamPosition", &vCamPosition, sizeof(_float4));
@@ -67,7 +67,7 @@ HRESULT CLight::Render()
  	m_pVIBuffer->Render(iPassIndex);
 
 
-	RELEASE_INSTANCE(CGameInstance);
+	RELEASE_INSTANCE(CPipeLine);
 	RELEASE_INSTANCE(CTarget_Manager);
 	
 

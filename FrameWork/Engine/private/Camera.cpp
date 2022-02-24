@@ -1,90 +1,179 @@
-#include "..\public\Camera.h"
-#include "Transform.h"
+#include "Camera.h"
 #include "PipeLine.h"
 
-CCamera::CCamera(ID3D11Device * pDevice, ID3D11DeviceContext * pDeviceContext)
-	: CGameObject(pDevice, pDeviceContext)
+CCamera::CCamera()
+	: m_pCameraDesc(nullptr)
 {
-
+	ZeroMemory(&m_matView, sizeof(_float4x4));
+	ZeroMemory(&m_matProj, sizeof(_float4x4));
 }
 
-CCamera::CCamera(const CCamera & rhs)
-	: CGameObject(rhs)
+CCamera::CCamera(ID3D11Device* pDevice, ID3D11DeviceContext* pDevice_Context)
+	: CComponent(pDevice,pDevice_Context)
+	, m_pCameraDesc(nullptr)
 {
+	ZeroMemory(&m_matView, sizeof(_float4x4));
+	ZeroMemory(&m_matProj, sizeof(_float4x4));
+}
 
+CCamera::CCamera(const CCamera& rhs)
+	:CComponent(rhs)
+	, m_matView(rhs.m_matView)
+	, m_matProj(rhs.m_matProj)
+	, m_pCameraDesc(rhs.m_pCameraDesc)
+{
+	
 }
 
 HRESULT CCamera::NativeConstruct_Prototype()
 {
-	if (FAILED(__super::NativeConstruct_Prototype()))
-		return E_FAIL;
+	XMStoreFloat4x4(&m_matView, XMMatrixIdentity());
+	XMStoreFloat4x4(&m_matProj, XMMatrixIdentity());
 
 	return S_OK;
 }
 
-HRESULT CCamera::NativeConstruct(void * pArg)
-{
-	if (FAILED(__super::NativeConstruct(pArg)))
-		return E_FAIL;
+HRESULT CCamera::NativeConstruct(void* pArg)
+{	
+	if (!m_isCloned)
+	{
+		m_pCameraDesc = new CAMERADESC;
+		*m_pCameraDesc = *(CAMERADESC*)pArg;
 
-	m_pTransform = CTransform::Create(m_pDevice, m_pDeviceContext);
-	if (nullptr == m_pTransform)
-		return E_FAIL;
+		if (FAILED(setViewMatrix()))
+			return E_FAIL;
 
-	if (nullptr != pArg)
-		memcpy(&m_CameraDesc, pArg, sizeof(CAMERADESC));
+		if (FAILED(setProjMatrix()))
+			return E_FAIL;
+		if(m_pCameraDesc->pCameraTag != L"")
+		{
+			CPipeLine* pInstance = GET_INSTANCE(CPipeLine);
 
-	/* 셋팅하고자 했던 카메라의 초기상태를 트랜스폼에게 동기화했다. */
-	_vector		vPosition = XMLoadFloat3(&m_CameraDesc.vEye);
-	vPosition = XMVectorSetW(vPosition, 1.f);
-
-	_vector		vLook = XMLoadFloat3(&m_CameraDesc.vAt) - XMLoadFloat3(&m_CameraDesc.vEye);
-	vLook = XMVector3Normalize(vLook);
-
-	_vector		vRight = XMVector3Cross(XMLoadFloat3(&m_CameraDesc.vAxisY), vLook);
-	vRight = XMVector3Normalize(vRight);
-
-	_vector		vUp = XMVector3Cross(vLook, vRight);
-	vUp = XMVector3Normalize(vUp);
-
-	m_pTransform->Set_State(CTransform::STATE_RIGHT, vRight);
-	m_pTransform->Set_State(CTransform::STATE_UP, vUp);
-	m_pTransform->Set_State(CTransform::STATE_LOOK, vLook);
-	m_pTransform->Set_State(CTransform::STATE_POSITION, vPosition);	
-
-	m_pTransform->Set_TransformDesc(m_CameraDesc.TransformDesc);
-
+			if (FAILED(pInstance->Add_Camera(m_pCameraDesc->pCameraTag)))
+			{
+				RELEASE_INSTANCE(CPipeLine);
+				return E_FAIL;
+			};
+			RELEASE_INSTANCE(CPipeLine);
+		}
+	}
+	else
+	{
+		CAMERADESC tmpDesc;
+		memcpy(&tmpDesc, m_pCameraDesc, sizeof(CAMERADESC));
+		if(tmpDesc.pCameraTag == L"")
+		{
+			const _tchar* pTag = (const _tchar*)pArg;
+			tmpDesc.pCameraTag = pTag;
+		}
+		m_pCameraDesc = new CAMERADESC(tmpDesc);
+		CPipeLine* pInstance = GET_INSTANCE(CPipeLine);
+		if (FAILED(pInstance->Add_Camera(m_pCameraDesc->pCameraTag)))
+		{
+			RELEASE_INSTANCE(CPipeLine);
+			return E_FAIL;
+		};
+		RELEASE_INSTANCE(CPipeLine);
+	}
 	return S_OK;
 }
 
-_int CCamera::Tick(_double TimeDelta)
+void CCamera::Update_Matrix(const _fmatrix& matWorld)
 {
-	CPipeLine*		pPipeLine = GET_INSTANCE(CPipeLine);
+	_matrix tmpWorld = matWorld;
+	_matrix matView = XMLoadFloat4x4(&m_matView);
+	_matrix matProj = XMLoadFloat4x4(&m_matProj);
 
-	/* 카메라 월드행렬 역행렬 == 뷰스페이스 변환 행렬. */
-	pPipeLine->Set_Transform(CPipeLine::D3DTS_VIEW, m_pTransform->Get_WorldMatrixInverse());	
+	matView *= tmpWorld;
 
-	pPipeLine->Set_Transform(CPipeLine::D3DTS_PROJECTION, XMMatrixPerspectiveFovLH(m_CameraDesc.fFovy, m_CameraDesc.fAspect, m_CameraDesc.fNear, m_CameraDesc.fFar));
+	CPipeLine* pInstance = GET_INSTANCE(CPipeLine);
+
+	pInstance->Set_Transform(m_pCameraDesc->pCameraTag,TRANSFORMSTATEMATRIX::D3DTS_VIEW, XMMatrixInverse(nullptr, matView));
+	pInstance->Set_Transform(m_pCameraDesc->pCameraTag, TRANSFORMSTATEMATRIX::D3DTS_PROJECTION, matProj);
+
 
 	RELEASE_INSTANCE(CPipeLine);
-
-	return _int();
 }
 
-_int CCamera::LateTick(_double TimeDelta)
+HRESULT CCamera::setViewMatrix()
 {
-	return _int();
-}
+	if (m_pCameraDesc->eType == CAMERATYPE::CAMERA_ORTHO)
+	{
+		XMStoreFloat4x4(&m_matView, XMMatrixIdentity());
+		return S_OK;
+	}
 
-HRESULT CCamera::Render()
-{
+
+	//EYE셋팅
+	memcpy(m_matView.m[3], &m_pCameraDesc->vEye, sizeof(_float4));
+
+	_float4 vLook,vUp,vRight;
+
+	//Look셋팅
+	_vector vTmpLook = XMLoadFloat4(&m_pCameraDesc->vAt) - XMLoadFloat4(&m_pCameraDesc->vEye);
+	vTmpLook = XMVector3Normalize(vTmpLook);
+	XMStoreFloat4(&vLook, vTmpLook);
+
+	//Right셋팅
+	_vector vTmpRight = XMVector3Cross(XMLoadFloat4(&m_pCameraDesc->vAxisY),vTmpLook);
+	vTmpRight = XMVector3Normalize(vTmpRight);
+	XMStoreFloat4(&vRight, vTmpRight);
+	
+	//Up셋팅
+	_vector vTmpUp = XMVector3Cross(vTmpLook, vTmpRight);
+	vTmpRight = XMVector3Normalize(vTmpUp);
+	XMStoreFloat4(&vUp, vTmpUp);
+
+	memcpy(m_matView.m[0], &vRight, sizeof(_float4));
+	memcpy(m_matView.m[1], &vUp, sizeof(_float4));
+	memcpy(m_matView.m[2], &vLook, sizeof(_float4));
+
 	return S_OK;
 }
 
+HRESULT CCamera::setProjMatrix()
+{
+	if (m_pCameraDesc->eType == CCamera::CAMERATYPE::CAMERA_ORTHO)
+	{
+		XMStoreFloat4x4(&m_matProj, XMMatrixOrthographicLH(m_pCameraDesc->fWinCX, m_pCameraDesc->fWinCY, m_pCameraDesc->fNear, m_pCameraDesc->fFar));
+	}
+	else if (m_pCameraDesc->eType == CCamera::CAMERATYPE::CAMERA_PROJECTION)
+	{
+		XMStoreFloat4x4(&m_matProj,XMMatrixPerspectiveFovLH(m_pCameraDesc->fFovy, m_pCameraDesc->fAspect, m_pCameraDesc->fNear, m_pCameraDesc->fFar));
+	}
+
+	return S_OK;
+}
+
+CCamera* CCamera::Clone(void* pArg)
+{
+	CCamera* pInstance = new CCamera(*this);
+	if (FAILED(pInstance->NativeConstruct(pArg)))
+	{
+		MSGBOX("CCamera Clone Fail");
+		Safe_Release(pInstance);
+	}
+	return pInstance;
+}
+
+CCamera* CCamera::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDevice_Context)
+{
+	CCamera* pInstance = new CCamera(pDevice, pDevice_Context);
+	if (FAILED(pInstance->NativeConstruct_Prototype()))
+	{
+		MSGBOX("CCamera Create Fail");
+		Safe_Release(pInstance);
+	}
+	return pInstance;
+}
+
+_uint CCamera::getType()
+{
+	return (_uint)m_pCameraDesc->eType;
+}
 
 void CCamera::Free()
 {
-	__super::Free();
-
-	Safe_Release(m_pTransform);
+	CComponent::Free();
+	Safe_Delete(m_pCameraDesc);
 }

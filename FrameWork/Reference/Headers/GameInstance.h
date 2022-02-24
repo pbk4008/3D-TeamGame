@@ -45,21 +45,29 @@ public: /* For.Timer_Manager */
 	HRESULT Ready_Timer(const wstring& pTimerTag);
 public: /* For.Level_Manager*/
 	HRESULT Open_Level(_uint iLevelIndex, class CLevel* pOpenLevel);
-
 public: /* For.Object_Manager*/
 	class CComponent* Get_Component(_uint iLevelIndex, const wstring& pLayerTag, const wstring& pComponentTag, _uint iIndex = 0);
 	HRESULT Add_Prototype(const wstring& pPrototypeTag, CGameObject* pPrototype);
 	HRESULT Add_GameObjectToLayer(_uint iLevelIndex, const wstring& pLayerTag, const wstring& pPrototypeTag, void* pArg = nullptr);
-	
 public: /* For.Component_Manager */
 	HRESULT Add_Prototype(_uint iLevelIndex, const wstring& pPrototypeTag, class CComponent* pPrototype);
 	CComponent* Clone_Component(_uint iLevelIndex, const wstring& pPrototypeTag, void* pArg);
+	template<typename T>
+	T* Clone_Component(_uint iLevelIndex, const wstring& pPrototypeTag, void* pArg)
+	{
+		CComponent* pCom = Clone_Component(iLevelIndex, pPrototypeTag, pArg);
+		if (!pCom)
+			return nullptr;
 
+		return static_cast<T*>(pCom);
+	}
 public: /* For.PipeLine */
-	_fmatrix Get_Transform(CPipeLine::TRANSFORMSTATEMATRIX eType);
-	_fvector Get_CamPosition();
-	void Set_Transform(CPipeLine::TRANSFORMSTATEMATRIX eType, _fmatrix TransformMatrix);
-
+	HRESULT Add_Camera(const wstring& pCameraTag);
+	void Update_PipeLine();
+	void Delete_Camera();
+	_fmatrix Get_Transform(const wstring& pCameraTag, TRANSFORMSTATEMATRIX eType);
+	_fvector Get_CamPosition(const wstring& pCameraTag);
+	void Set_Transform(const wstring& pCameraTag, TRANSFORMSTATEMATRIX eType, _fmatrix TransformMatrix);
 public: /* for.Input_Device */
 	_byte Get_DIKeyState(_ubyte byKeyID) const;
 	_long Get_MouseMoveState(CInput_Device::MOUSEMOVESTATE eMoveState) const;

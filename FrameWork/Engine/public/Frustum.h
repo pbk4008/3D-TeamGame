@@ -13,7 +13,7 @@ private:
 	virtual ~CFrustum() = default;
 public:
 	HRESULT Ready_FrustumInProjSpace();
-	HRESULT Transform_ToWorldSpace();
+	HRESULT Transform_ToWorldSpace(const wstring& pCameraTag);
 	HRESULT Transform_ToLocalSpace(_fmatrix WorldMatrixInverse);
 
 	_bool isInWorld(_fvector vPosition, _float fRange = 0.f);

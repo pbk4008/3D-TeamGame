@@ -26,7 +26,7 @@ public:
 	}
 
 public:
-	HRESULT NativeConstruct_Prototype(const char * pMeshFilePath, const char * pMeshFileName, const _tchar* pShaderFilePath, _fmatrix PivotMatrix, TYPE eMeshType);
+	HRESULT NativeConstruct_Prototype(const string& pMeshFilePath, const string& pMeshFileName, const wstring& pShaderFilePath, _fmatrix PivotMatrix, TYPE eMeshType);
 	HRESULT NativeConstruct(void* pArg);
 public:
 	HRESULT SetUp_TextureOnShader(const char* pConstantName, _uint iMeshContainerIndex, aiTextureType eType);
@@ -69,7 +69,7 @@ private:
 
 	HRESULT Create_VertexIndexBuffer();
 
-	HRESULT Compile_Shader(const _tchar* pShaderFilePath);
+	HRESULT Compile_Shader(const wstring& pShaderFilePath);
 
 	HRESULT Create_HierarchyNode(aiNode* pNode, CHierarchyNode* pParent = nullptr, _uint iDepth = 0);
 
@@ -82,7 +82,7 @@ private:
 	CHierarchyNode* Find_HierarchyNode(const char* pName);
 
 public:
-	static CModel* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext, const char* pMeshFilePath, const char* pMeshFileName, const _tchar* pShaderFilePath, _fmatrix PivotMatrix, TYPE eMeshType);
+	static CModel* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext, const string& pMeshFilePath, const string& pMeshFileName, const wstring& pShaderFilePath, _fmatrix PivotMatrix, TYPE eMeshType);
 	virtual CComponent* Clone(void* pArg) override;
 	virtual void Free() override;
 };
