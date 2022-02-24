@@ -53,5 +53,4 @@ using namespace DirectX;
 #include "Engine_Function.h"
 #include "Engine_Struct.h"
 
-
 using namespace Engine;
