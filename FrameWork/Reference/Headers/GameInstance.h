@@ -101,7 +101,7 @@ public:/* For.SaveManager*/
 		if (!m_pSaveManager)
 			return E_FAIL;
 
-		return m_pSaveManager->LoadFile<T>(pLoadData, pFilePath);
+		return m_pSaveManager->LoadFile<T>(pSaveData, pFilePath);
 	}
 private:
 	CGraphic_Device*			m_pGraphic_Device = nullptr;		

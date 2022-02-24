@@ -31,7 +31,7 @@ protected:
 
 	DECLARE_MESSAGE_MAP()
 
-	//개발자 재정의
+//개발자 재정의
 public:
 	enum TAB_ID { TAB_MAP, TAB_CAM, TAB_END };
 
@@ -40,11 +40,11 @@ public:
 
 public:
 	class CMainFrame* m_pMainFrm = nullptr;
-	class CMap_Tool* m_pMap_Tool = nullptr;
-	class CCam_Tool* m_pCam_Tool = nullptr;
+	class CMap_Tool*  m_pMap_Tool = nullptr;
+	class CCam_Tool*  m_pCam_Tool = nullptr;
 
 public:
-	CTabCtrl	m_tabMenu;
+	CTabCtrl	m_MenuTab;
 	TAB_ID		m_eSelectTab = TAB_END;
 
 public:

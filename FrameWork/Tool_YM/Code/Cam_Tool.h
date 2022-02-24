@@ -24,7 +24,6 @@ protected:
 
 	//개발자 정의
 
-
 public:
 	virtual void PostNcDestroy();
 	virtual BOOL OnInitDialog();

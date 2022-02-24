@@ -16,8 +16,13 @@ public:
 	enum { IDD = IDD_CCam_Inspector };
 #endif
 
+//개발자 재정의
+
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV 지원입니다.
 
 	DECLARE_MESSAGE_MAP()
+	virtual void PostNcDestroy();
+public:
+	virtual BOOL OnInitDialog();
 };

@@ -29,7 +29,6 @@ void CMenu_Form::OnInitialUpdate()
 	Ready_Tab();
 }
 
-
 CMenu_Form::~CMenu_Form()
 {
 }
@@ -37,7 +36,7 @@ CMenu_Form::~CMenu_Form()
 void CMenu_Form::DoDataExchange(CDataExchange* pDX)
 {
 	CFormView::DoDataExchange(pDX);
-	DDX_Control(pDX, IDCANCEL, m_tabMenu);
+	DDX_Control(pDX, IDC_TAB1, m_MenuTab);
 }
 
 HRESULT CMenu_Form::Ready_Tab(void)
@@ -45,23 +44,23 @@ HRESULT CMenu_Form::Ready_Tab(void)
 	CString tabOne = _T("Map");
 	CString tabTwo = _T("Camera");
 
-	m_tabMenu.SetCurSel(0);
+	m_MenuTab.SetCurSel(0);
 
-	m_tabMenu.InsertItem(1, tabOne);
-	m_tabMenu.InsertItem(2, tabTwo);
+	m_MenuTab.InsertItem(1, tabOne);
+	m_MenuTab.InsertItem(2, tabTwo);
 
 	CRect rtTemp;
-	m_tabMenu.GetWindowRect(&rtTemp);
+	m_MenuTab.GetWindowRect(&rtTemp);
 
 	//첫번째 탭
 	m_pMap_Tool = new CMap_Tool;
-	m_pMap_Tool->Create(IDD_CMap_Tool, &m_tabMenu);
+	m_pMap_Tool->Create(IDD_CMap_Tool, &m_MenuTab);
 	m_pMap_Tool->MoveWindow(5, 25, rtTemp.Width() - 10, rtTemp.Height() - 30);
 	m_pMap_Tool->ShowWindow(SW_SHOW);
 
 	//두번째 탭
 	m_pCam_Tool = new CCam_Tool;
-	m_pCam_Tool->Create(IDD_CCam_Tool, &m_tabMenu);
+	m_pCam_Tool->Create(IDD_CCam_Tool, &m_MenuTab);
 	m_pCam_Tool->MoveWindow(5, 25, rtTemp.Width() - 10, rtTemp.Height() - 30);
 	m_pCam_Tool->ShowWindow(SW_HIDE);
 
@@ -96,7 +95,7 @@ void CMenu_Form::OnTcnSelchangeCancel(NMHDR* pNMHDR, LRESULT* pResult)
 {
 	// TODO: Tab 선택
 
-	m_eSelectTab = (TAB_ID)m_tabMenu.GetCurSel();
+	m_eSelectTab = (TAB_ID)m_MenuTab.GetCurSel();
 
 	switch (m_eSelectTab)
 	{

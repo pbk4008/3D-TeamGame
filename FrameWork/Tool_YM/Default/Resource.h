@@ -9,19 +9,37 @@
 #define IDD_CModel_Inspector            310
 #define IDD_CMenu_Form                  311
 #define IDD_CMap_Tool                   312
-#define IDD_CMap_Tool1                  314
 #define IDD_CCam_Tool                   315
 #define IDD_CInspector                  316
-#define IDD_CModel_Inspector1           318
 #define IDD_CCam_Inspector              319
+#define IDC_TREE1                       1000
+#define IDC_TAB1                        1001
+#define IDC_CHECK1                      1002
+#define IDC_EDIT1                       1003
+#define IDC_EDIT2                       1004
+#define IDC_COMBO1                      1005
+#define IDC_COMBO2                      1006
+#define IDC_Model2                      1007
+#define IDC_Model5                      1008
+#define IDC_Model3                      1009
+#define IDC_Model6                      1010
+#define IDC_Model4                      1011
+#define IDC_Model7                      1012
+#define IDC_RADIO1                      1013
+#define IDC_RADIO2                      1014
+#define IDC_RADIO3                      1015
+#define IDC_SLIDER1                     1016
+#define IDC_BUTTON1                     1017
+#define IDC_BUTTON2                     1018
+#define IDC_TREE2                       1019
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        310
+#define _APS_NEXT_RESOURCE_VALUE        317
 #define _APS_NEXT_COMMAND_VALUE         32771
-#define _APS_NEXT_CONTROL_VALUE         1000
+#define _APS_NEXT_CONTROL_VALUE         1020
 #define _APS_NEXT_SYMED_VALUE           320
 #endif
 #endif

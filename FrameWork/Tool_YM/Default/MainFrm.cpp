@@ -46,7 +46,6 @@ CMainFrame::~CMainFrame()
 BOOL CMainFrame::OnCreateClient(LPCREATESTRUCT lpcs, CCreateContext* pContext)
 {
 	// TODO: Main View 나누기
-
 	m_tMainSplitter.CreateStatic(this, 1, 3); //몇개로 분할할지 16x16 초과할 수 없다, 1행의 2열
 
 	m_tMainSplitter.CreateView(0, 0, RUNTIME_CLASS(CMenu_Form), CSize(350, 1000), pContext);
@@ -54,6 +53,7 @@ BOOL CMainFrame::OnCreateClient(LPCREATESTRUCT lpcs, CCreateContext* pContext)
 	m_tMainSplitter.CreateView(0, 2, RUNTIME_CLASS(CInspector_Form), CSize(350, 1000), pContext);
 
 	m_tMainSplitter.SetColumnInfo(1, 1130, 300);
+
 	return TRUE;
 }
 

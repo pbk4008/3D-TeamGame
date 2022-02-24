@@ -14,7 +14,7 @@ public:
 
 // 대화 상자 데이터입니다.
 #ifdef AFX_DESIGN_TIME
-	enum { IDD = IDD_CMap_Tool1 };
+	enum { IDD = IDD_CMap_Tool };
 #endif
 
 protected:
@@ -22,10 +22,16 @@ protected:
 
 	DECLARE_MESSAGE_MAP()
 
-	//개발자 재정의
+//개발자 재정의
 
+public:
+	void InitAssetsTree(void);
+
+public:
+	CTreeCtrl m_AssetTree;
 
 public:
 	virtual BOOL OnInitDialog();
 	virtual void PostNcDestroy();
+	afx_msg void OnTvnSelchangedTree1(NMHDR* pNMHDR, LRESULT* pResult);
 };

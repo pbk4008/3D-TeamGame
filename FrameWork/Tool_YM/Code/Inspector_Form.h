@@ -2,6 +2,8 @@
 
 // CInspector_Form 폼 보기
 
+class CModel_Inspector;
+class CCam_Inspector;
 class CInspector_Form : public CFormView
 {
 	DECLARE_DYNCREATE(CInspector_Form)
@@ -21,10 +23,39 @@ public:
 #endif
 #endif
 
+//개발자 재정의
+public:
+	enum INSPEC_ID { INSPEC_MODEL, INSPEC_CAM, INSPEC_END };
+
+public:
+	void Ready_Inspector(void);
+
+public:
+	void Get_Device(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext) { 
+		m_pDevice = _pDevice;
+		m_pDeviceContext = _pDeviceContext;
+	};
+
+public:
+	class CMainFrame*			m_pMainFrm		= nullptr;
+	class CModel_Inspector*		m_pModel_Inspec = nullptr;
+	class CCam_Inspector*		m_pCam_Inspec	= nullptr;
+
+public:
+	CTabCtrl	m_TabInspec;
+	INSPEC_ID	m_eSelectTab = INSPEC_END;
+
+public:
+	ID3D11Device*		 m_pDevice = nullptr;
+	ID3D11DeviceContext* m_pDeviceContext = nullptr;
+
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV 지원입니다.
 
 	DECLARE_MESSAGE_MAP()
+public:
+	virtual void OnInitialUpdate();
+	afx_msg void OnTcnSelchangeTab1(NMHDR* pNMHDR, LRESULT* pResult);
 };
 
 
