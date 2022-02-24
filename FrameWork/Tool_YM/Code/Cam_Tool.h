@@ -1,5 +1,6 @@
 ﻿#pragma once
-#include "MenuForm.h"
+
+#include "Menu_Form.h"
 
 // CCam_Tool 대화 상자
 
@@ -20,7 +21,11 @@ protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV 지원입니다.
 
 	DECLARE_MESSAGE_MAP()
-	virtual void PostNcDestroy();
+
+	//개발자 정의
+
+
 public:
+	virtual void PostNcDestroy();
 	virtual BOOL OnInitDialog();
 };
