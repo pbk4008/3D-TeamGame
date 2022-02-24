@@ -121,10 +121,10 @@ _bool CNavigation::Move_OnNavigation(_fvector vPosition)
 }
 
 #ifdef _DEBUG
-HRESULT CNavigation::Render(_fmatrix WorldMatrix)
+HRESULT CNavigation::Render(const wstring& pCameraTag, _fmatrix WorldMatrix)
 {
 	for (auto& pCell : m_Cells)
-		pCell->Render(WorldMatrix, m_iCurrentCellIndex);
+		pCell->Render(WorldMatrix, m_iCurrentCellIndex, pCameraTag);
 
 	return S_OK;
 }

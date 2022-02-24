@@ -16,7 +16,7 @@ public:
 	}
 public:
 	HRESULT NativeConstruct(const LIGHTDESC& LightDesc);
-	HRESULT Render();
+	HRESULT Render(const wstring& pCameraTag);
 
 private:
 	ID3D11Device*				m_pDevice = nullptr;

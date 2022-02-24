@@ -3,6 +3,12 @@
 namespace Engine
 {
 	/* 특정시간대에 표현해야할 뼈대들의 상태 */
+	typedef struct tagCamera
+	{
+		XMFLOAT4X4 matView;
+		XMFLOAT4X4 matProj;
+		XMFLOAT4 vCamPos;
+	}CAMERA;
 	typedef struct tagKeyFrame
 	{
 		double			Time;

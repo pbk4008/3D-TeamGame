@@ -38,7 +38,7 @@ public:
 	virtual HRESULT NativeConstruct(void* pArg);
 public:
 	void Update(_fmatrix TransformMatrix);
-	HRESULT Render();
+	HRESULT Render(const wstring& pCameraTag);
 
 public:
 	_bool Collision_AABB(CCollider* pTargetCollider);

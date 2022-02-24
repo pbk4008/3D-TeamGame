@@ -1,4 +1,5 @@
 #include "..\public\Texture.h"
+#include "TextureManager.h"
 
 CTexture::CTexture(ID3D11Device * pDevice, ID3D11DeviceContext * pDeviceContext)
 	: CComponent(pDevice, pDeviceContext)
@@ -23,20 +24,6 @@ HRESULT CTexture::NativeConstruct_Prototype(const wstring& pTextureFilePath, _ui
 
 	
 	DirectX::ScratchImage		ScratchImage;
-
-	/*DirectX::SaveToWICFile();*/
-
-	//
-
-	//LPDIRECT3DTEXTURE9		pTexture;
-
-	//pTexture->LockRect();
-
-	//D3DXCreateTexture
-
-	//	LockRect
-
-	//D3DXSaveTextureToFile(, D3D)
 
 	HRESULT hr = 0;
 
@@ -75,31 +62,65 @@ HRESULT CTexture::NativeConstruct_Prototype(const wstring& pTextureFilePath, _ui
 		ScratchImage.Release();
 	}
 
+	return S_OK;
+}
 
-
-	
-	
-
-	
-
-
-
-
-	
+HRESULT CTexture::NativeConstruct_Prototype()
+{
 
 	return S_OK;
 }
 
 HRESULT CTexture::NativeConstruct(void * pArg)
 {
+	CTextureManager* pInstance = GET_INSTANCE(CTextureManager);
+
+	wstring pTag = (*(wstring*)pArg);
+	vector <ID3D11ShaderResourceView* >* pTexture = pInstance->Get_Texture(pTag);
+
+	if (!pTexture)
+		return E_FAIL;
+
+	m_Textures = *pTexture;
+
+	RELEASE_INSTANCE(CTextureManager);
+
 	return S_OK;
 }
+
+HRESULT CTexture::Change_Texture(const wstring& pTextureTag)
+{
+	CTextureManager* pInstance = GET_INSTANCE(CTextureManager);
+
+	vector < ID3D11ShaderResourceView* >* pTexture = pInstance->Get_Texture(pTextureTag);
+	if (!pTexture)
+		return E_FAIL;
+	m_Textures = *pTexture;
+
+	RELEASE_INSTANCE(CTextureManager);
+	return S_OK;
+}
+
+
 
 CTexture * CTexture::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pDeviceContext, const wstring& pTextureFilePath, _uint iNumTextures)
 {
 	CTexture*		pInstance = new CTexture(pDevice, pDeviceContext);
 
 	if (FAILED(pInstance->NativeConstruct_Prototype(pTextureFilePath, iNumTextures)))
+	{
+		MSGBOX("Failed to Creating CTexture");
+		Safe_Release(pInstance);
+	}
+
+	return pInstance;
+}
+
+CTexture* CTexture::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
+{
+	CTexture* pInstance = new CTexture(pDevice, pDeviceContext);
+
+	if (FAILED(pInstance->NativeConstruct_Prototype()))
 	{
 		MSGBOX("Failed to Creating CTexture");
 		Safe_Release(pInstance);

@@ -15,7 +15,7 @@ public:
 	virtual HRESULT NativeConstruct(void* pArg) override;
 
 public:
-	HRESULT Culling(_fmatrix WorldMatrixInverse);
+	HRESULT Culling(const wstring& pCameraTag, _fmatrix WorldMatrixInverse);
 
 private:
 	_uint			m_iNumVerticesX = 0;
