@@ -22,14 +22,14 @@ HRESULT CFrustum::Ready_FrustumInProjSpace()
 	return S_OK;
 }
 
-HRESULT CFrustum::Transform_ToWorldSpace()
+HRESULT CFrustum::Transform_ToWorldSpace(const wstring& pCameraTag)
 {
 	CPipeLine*		pPipeLine = GET_INSTANCE(CPipeLine);
 
-	_matrix			ProjMatrix = pPipeLine->Get_Transform(CPipeLine::D3DTS_PROJECTION);
+	_matrix			ProjMatrix = pPipeLine->Get_Transform(pCameraTag,TRANSFORMSTATEMATRIX::D3DTS_PROJECTION);
 	ProjMatrix = XMMatrixInverse(nullptr, ProjMatrix);
 
-	_matrix			ViewMatrix = pPipeLine->Get_Transform(CPipeLine::D3DTS_VIEW);
+	_matrix			ViewMatrix = pPipeLine->Get_Transform(pCameraTag, TRANSFORMSTATEMATRIX::D3DTS_VIEW);
 	ViewMatrix = XMMatrixInverse(nullptr, ViewMatrix);
 
 	_vector		vPoint[8];

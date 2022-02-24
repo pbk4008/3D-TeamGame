@@ -2,6 +2,7 @@
 
 #include "SingleTon.h"
 
+#include "Camera.h"
 #include "Model.h"
 #include "Texture.h"
 #include "Collider.h"

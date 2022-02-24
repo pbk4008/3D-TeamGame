@@ -7,6 +7,7 @@ BEGIN(Engine)
 class ENGINE_DLL CComponent abstract : public CBase
 { 
 public:
+	explicit CComponent() = default;
 	explicit CComponent(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);
 	explicit CComponent(const CComponent& rhs);
 	virtual ~CComponent() = default;

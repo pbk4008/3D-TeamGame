@@ -62,10 +62,12 @@ public: /* For.Component_Manager */
 		return static_cast<T*>(pCom);
 	}
 public: /* For.PipeLine */
-	_fmatrix Get_Transform(CPipeLine::TRANSFORMSTATEMATRIX eType);
-	_fvector Get_CamPosition();
-	void Set_Transform(CPipeLine::TRANSFORMSTATEMATRIX eType, _fmatrix TransformMatrix);
-
+	HRESULT Add_Camera(const wstring& pCameraTag);
+	void Update_PipeLine();
+	void Delete_Camera();
+	_fmatrix Get_Transform(const wstring& pCameraTag, TRANSFORMSTATEMATRIX eType);
+	_fvector Get_CamPosition(const wstring& pCameraTag);
+	void Set_Transform(const wstring& pCameraTag, TRANSFORMSTATEMATRIX eType, _fmatrix TransformMatrix);
 public: /* for.Input_Device */
 	_byte Get_DIKeyState(_ubyte byKeyID) const;
 	_long Get_MouseMoveState(CInput_Device::MOUSEMOVESTATE eMoveState) const;

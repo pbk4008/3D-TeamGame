@@ -27,7 +27,8 @@ protected:
 	ID3D11DeviceContext*	m_pDeviceContext = nullptr;
 protected:
 	unordered_map<wstring, class CComponent*>		m_Components;
-
+	//CTransform* m_pTransform;
+	//CRenderer* m_pRenderer;
 protected:
 	virtual HRESULT SetUp_Components(_uint iLevelIndex, const wstring& pPrototypeTag, const wstring& pComponentTag, CComponent** ppOut, void* pArg = nullptr);
 public:

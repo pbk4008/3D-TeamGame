@@ -62,10 +62,10 @@ HRESULT CQuadTree::NativeConstruct(_uint iLT, _uint iRT, _uint iRB, _uint iLB)
 	return S_OK;
 }
 
-HRESULT CQuadTree::Culling(CFrustum* pFrustum, VTXNORTEX* pVertices, FACEINDICES32* pIndices, _uint* pNumFaces, _fmatrix WorldMatrixInverse)
+HRESULT CQuadTree::Culling(CFrustum* pFrustum, VTXNORTEX* pVertices, FACEINDICES32* pIndices, _uint* pNumFaces, _fmatrix WorldMatrixInverse, const wstring& pCameraTag)
 {
 	if (nullptr == m_pChilds[CHILD_LT] || 
-		true == isLOD(pVertices, WorldMatrixInverse))
+		true == isLOD(pCameraTag,pVertices, WorldMatrixInverse))
 	{
 
 		_bool		isDraw[NEIGHBOR_END] = { true, true, true, true };
@@ -73,7 +73,7 @@ HRESULT CQuadTree::Culling(CFrustum* pFrustum, VTXNORTEX* pVertices, FACEINDICES
 		for (_uint i = 0; i < NEIGHBOR_END; ++i)
 		{
 			if (nullptr != m_pNeighbor[i])
-				isDraw[i] = m_pNeighbor[i]->isLOD(pVertices, WorldMatrixInverse);
+				isDraw[i] = m_pNeighbor[i]->isLOD(pCameraTag,pVertices, WorldMatrixInverse);
 		}
 
 		/* 현재 쿼드트리를 구성하는 네개 코너 인덱스가 절두체와 충돌했느지 확인하다. */
@@ -225,7 +225,7 @@ HRESULT CQuadTree::Culling(CFrustum* pFrustum, VTXNORTEX* pVertices, FACEINDICES
 	{
 		for (_uint i = 0; i < CHILD_END; ++i)
 		{
-			m_pChilds[i]->Culling(pFrustum, pVertices, pIndices, pNumFaces, WorldMatrixInverse);
+			m_pChilds[i]->Culling(pFrustum, pVertices, pIndices, pNumFaces, WorldMatrixInverse, pCameraTag);
 		}
 	}
 
@@ -233,11 +233,11 @@ HRESULT CQuadTree::Culling(CFrustum* pFrustum, VTXNORTEX* pVertices, FACEINDICES
 	return S_OK;
 }
 
-_bool CQuadTree::isLOD(VTXNORTEX* pVertices, _fmatrix WorldMatrixInverse)
+_bool CQuadTree::isLOD(const wstring& pCamerTag, VTXNORTEX* pVertices, _fmatrix WorldMatrixInverse)
 {
 	CPipeLine*		pPipeLine = GET_INSTANCE(CPipeLine);
 
-	_vector		vCamPosition = pPipeLine->Get_CamPosition();
+	_vector		vCamPosition = pPipeLine->Get_CamPosition(pCamerTag);
 	vCamPosition = XMVector4Transform(vCamPosition, WorldMatrixInverse);
 	_float		fDistance = XMVectorGetX(XMVector3Length(vCamPosition - XMLoadFloat3(&pVertices[m_iCenter].vPosition)));
 	_float		fWidth = XMVectorGetX(XMVector3Length(XMLoadFloat3(&pVertices[m_iCorners[CORNER_RT]].vPosition) - XMLoadFloat3(&pVertices[m_iCorners[CORNER_LT]].vPosition)));

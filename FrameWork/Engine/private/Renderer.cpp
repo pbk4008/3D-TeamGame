@@ -3,6 +3,7 @@
 #include "Target_Manager.h"
 #include "Light_Manager.h"
 #include "VIBuffer_RectViewPort.h"
+#include "PipeLine.h"
 
 CRenderer::CRenderer(ID3D11Device * pDevice, ID3D11DeviceContext * pDeviceContext)
 	: CComponent(pDevice, pDeviceContext)	
@@ -181,14 +182,15 @@ HRESULT CRenderer::Render_UI()
 HRESULT CRenderer::Render_LightAcc()
 {
 	CLight_Manager*		pLight_Manager = GET_INSTANCE(CLight_Manager);
-
+	CPipeLine* pPipeLine = GET_INSTANCE(CPipeLine);
 	/*  Target_Shader를 장치에 바인드하였다. */
 	m_pTarget_Manager->Begin_MRT(m_pDeviceContext, TEXT("MRT_LightAcc"));
 
-	pLight_Manager->Render_Lights();
+	pLight_Manager->Render_Lights(pPipeLine->getBaseCamera());
 
 	m_pTarget_Manager->End_MRT(m_pDeviceContext);
 
+	RELEASE_INSTANCE(CPipeLine);
 	RELEASE_INSTANCE(CLight_Manager);
 
 	return S_OK;
