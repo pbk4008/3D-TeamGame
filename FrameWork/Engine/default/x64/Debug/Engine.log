@@ -1,0 +1,12 @@
+﻿FXC : warning X4717: Effects deprecated for D3DCompiler_47
+C:\heejeong\gitHub\Study\jusin_heejeong\Portfolio\3D_Team\FrameWork\Engine\bin\ShaderFiles\Shader_RectViewport.hlsl(136,2-119): warning X3206: implicit truncation of vector type
+C:\heejeong\gitHub\Study\jusin_heejeong\Portfolio\3D_Team\FrameWork\Engine\bin\ShaderFiles\Shader_RectViewport.hlsl(180,2-126): warning X3206: implicit truncation of vector type
+  
+  compilation object save succeeded; see C:\heejeong\gitHub\Study\jusin_heejeong\Portfolio\3D_Team\FrameWork\Engine\Bin\Shader_RectViewport.cso
+FXC : warning X4717: Effects deprecated for D3DCompiler_47
+  
+  compilation object save succeeded; see C:\heejeong\gitHub\Study\jusin_heejeong\Portfolio\3D_Team\FrameWork\Engine\Bin\Shader_Triangle.cso
+  Animation.cpp
+  Base.cpp
+  Camera.cpp
+  Cell.cpp
