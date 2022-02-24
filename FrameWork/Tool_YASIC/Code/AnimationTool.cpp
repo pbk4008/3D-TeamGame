@@ -3,7 +3,7 @@
 
 #include "pch.h"
 #include "Tool_YASIC.h"
-#include "D:\MyData\GitHub\3D_Team\FrameWork\Tool_YASIC\Code\AnimationTool.h"
+#include "AnimationTool.h"
 #include "afxdialogex.h"
 
 

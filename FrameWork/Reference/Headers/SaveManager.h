@@ -14,7 +14,7 @@ public:
 	template<typename T>
 	HRESULT SaveFile(void* pSaveData, const wstring& pFilePath)
 	{
-		HANDLE hFile = CreateFile(pFilePath, GENERIC_WRITE, 0, nullptr, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, 0);
+		HANDLE hFile = CreateFile(pFilePath.c_str(), GENERIC_WRITE, 0, nullptr, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, 0);
 
 		if (INVALID_HANDLE_VALUE == hFile)
 			return E_FAIL;
@@ -31,7 +31,7 @@ public:
 	template<typename T>
 	HRESULT LoadFile(vector<T>& pLoadData, const wstring& pFilePath)
 	{
-		HANDLE hFile = CreateFile(pFilePath, GENERIC_READ, 0, nullptr, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
+		HANDLE hFile = CreateFile(pFilePath.c_str(), GENERIC_READ, 0, nullptr, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
 
 		if (INVALID_HANDLE_VALUE == hFile)
 			return E_FAIL;

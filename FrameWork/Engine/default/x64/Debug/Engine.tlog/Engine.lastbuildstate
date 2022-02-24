@@ -1,6 +1,2 @@
-PlatformToolSet=v142:VCToolArchitecture=Native32Bit:VCToolsVersion=14.29.30133:VCServicingVersionMFC=14.29.30136:VCServicingVersionCrtHeaders=14.29.30136:TargetPlatformVersion=10.0.19041.0:
-<<<<<<< HEAD
-Debug|x64|D:\MyData\GitHub\3D_Team\FrameWork\|
-=======
-Debug|x64|C:\Users\Administrator\Desktop\3D-TeamGame\FrameWork\|
->>>>>>> main
+#TargetFrameworkVersion=v4.0:PlatformToolSet=v142:EnableManagedIncrementalBuild=false:VCToolArchitecture=Native32Bit:WindowsTargetPlatformVersion=10.0
+Debug|x64|C:\Users\pbk40\OneDrive\바탕 화면\3DTeam\FrameWork\|

@@ -4,7 +4,6 @@
 
 #pragma once
 
-#include "Tool_YMDoc.h"
 
 class CUIToolView : public CView
 {
@@ -35,11 +34,6 @@ public:
 	virtual void AssertValid() const;
 	virtual void Dump(CDumpContext& dc) const;
 #endif
-
-//개발자 재정의
-public:
-	HINSTANCE	m_hInst;
-	CMainFrame* m_pMainFrm = nullptr;
 
 protected:
 

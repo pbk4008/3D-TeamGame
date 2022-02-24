@@ -94,18 +94,9 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_WINDOWS;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-<<<<<<< HEAD:FrameWork/Tool_YM/Default/Tool_YM.vcxproj
-      <AdditionalIncludeDirectories>../Code/;../Default/;../../Reference/Headers/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
-      <AdditionalDependencies>dxguid.lib;Engine.lib;</AdditionalDependencies>
-      <AdditionalLibraryDirectories>../../Reference/Library/Debug/</AdditionalLibraryDirectories>
-=======
-    </ClCompile>
-    <Link>
-      <SubSystem>Windows</SubSystem>
->>>>>>> main:FrameWork/UITool/Default/UITool.vcxproj
     </Link>
     <Midl>
       <MkTypLibCompatible>false</MkTypLibCompatible>
@@ -181,12 +172,8 @@
       <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-<<<<<<< HEAD:FrameWork/Tool_YM/Default/Tool_YM.vcxproj
-      <AdditionalLibraryDirectories>../../Reference/Library/Release/</AdditionalLibraryDirectories>
-=======
       <AdditionalLibraryDirectories>../../Reference/private/;</AdditionalLibraryDirectories>
       <AdditionalDependencies>dxguid.lib;Engine.lib;</AdditionalDependencies>
->>>>>>> main:FrameWork/UITool/Default/UITool.vcxproj
     </Link>
     <Midl>
       <MkTypLibCompatible>false</MkTypLibCompatible>
@@ -200,16 +187,6 @@
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
-<<<<<<< HEAD:FrameWork/Tool_YM/Default/Tool_YM.vcxproj
-    <ClInclude Include="..\Code\Cam_Inspector.h" />
-    <ClInclude Include="..\Code\Cam_Tool.h" />
-    <ClInclude Include="..\Code\Inspector.h" />
-    <ClInclude Include="..\Code\Map_Tool.h" />
-    <ClInclude Include="..\Code\MenuForm.h" />
-    <ClInclude Include="..\Code\Model_Inspector.h" />
-    <ClInclude Include="..\Code\Tool_Defines.h" />
-=======
->>>>>>> main:FrameWork/UITool/Default/UITool.vcxproj
     <ClInclude Include="framework.h" />
     <ClInclude Include="MainFrm.h" />
     <ClInclude Include="MyFormView.h" />
@@ -223,15 +200,6 @@
     <ClInclude Include="UI_Tool_Define.h" />
   </ItemGroup>
   <ItemGroup>
-<<<<<<< HEAD:FrameWork/Tool_YM/Default/Tool_YM.vcxproj
-    <ClCompile Include="..\Code\Cam_Inspector.cpp" />
-    <ClCompile Include="..\Code\Cam_Tool.cpp" />
-    <ClCompile Include="..\Code\Inspector.cpp" />
-    <ClCompile Include="..\Code\Map_Tool.cpp" />
-    <ClCompile Include="..\Code\MenuForm.cpp" />
-    <ClCompile Include="..\Code\Model_Inspector.cpp" />
-=======
->>>>>>> main:FrameWork/UITool/Default/UITool.vcxproj
     <ClCompile Include="MainFrm.cpp" />
     <ClCompile Include="MyFormView.cpp" />
     <ClCompile Include="pch.cpp">

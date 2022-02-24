@@ -1,2 +1,12 @@
-﻿  MainApp.cpp
-  Tool_YASIC.vcxproj -> D:\MyData\GitHub\3D_Team\FrameWork\Tool_YASIC\Bin\Tool_YASIC.exe
+﻿  pch.cpp
+  AnimationTool.cpp
+  Level_AnimationTool.cpp
+  MainApp.cpp
+  MainForm.cpp
+  MainFrm.cpp
+  Tool_YASIC.cpp
+  Tool_YASICDoc.cpp
+  Tool_YASICView.cpp
+  코드를 생성하고 있습니다...
+ToolYASIC.rc(506): fatal error RC1015: cannot open include file 'res\ToolYM.rc2'.
+  

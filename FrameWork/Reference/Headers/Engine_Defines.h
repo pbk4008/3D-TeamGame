@@ -49,13 +49,22 @@ using namespace DirectX;
 #include <stdlib.h>
 #include <crtdbg.h>
 
+#ifdef _AFX
+
+#ifdef _DEBUG
+#define new DEBUG_NEW
+#endif
+
+#else
+
 #ifndef DBG_NEW 
 
 #define DBG_NEW new ( _NORMAL_BLOCK , __FILE__ , __LINE__ ) 
 #define new DBG_NEW 
 
 #endif
-#endif // _DEBUG
+#endif
+#endif // _AFX
 
 #include "Engine_Macro.h"
 #include "Engine_Typedef.h"

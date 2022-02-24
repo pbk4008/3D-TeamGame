@@ -4,13 +4,12 @@
 
 #include "pch.h"
 #include "framework.h"
+#include "UITool.h"
 
 #include "MainFrm.h"
-#include "MenuForm.h"
-#include "Inspector.h"
-
-#include "Tool_YMView.h"
-
+#include "UI_Tool_Define.h"
+#include "MyFormView.h"
+#include "UIToolView.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -60,16 +59,17 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
 BOOL CMainFrame::PreCreateWindow(CREATESTRUCT& cs)
 {
-	if (!CFrameWnd::PreCreateWindow(cs))
+	if( !CFrameWnd::PreCreateWindow(cs) )
 		return FALSE;
 	// TODO: CREATESTRUCT cs를 수정하여 여기에서
 	//  Window 클래스 또는 스타일을 수정합니다.
 
-	cs.style &= ~FWS_ADDTOTITLE;
-	cs.lpszName = L"3D_Tool";
+	cs.style = WS_OVERLAPPED | WS_CAPTION | FWS_ADDTOTITLE
+		 | WS_MINIMIZEBOX | WS_MAXIMIZEBOX | WS_SYSMENU;
 
 	return TRUE;
 }
+
 // CMainFrame 진단
 
 #ifdef _DEBUG
@@ -91,14 +91,10 @@ void CMainFrame::Dump(CDumpContext& dc) const
 
 BOOL CMainFrame::OnCreateClient(LPCREATESTRUCT lpcs, CCreateContext* pContext)
 {
-	// TODO: 여기에 특수화된 코드를 추가 및/또는 기본 클래스를 호출합니다.
-	m_tMainSplitter.CreateStatic(this, 1, 3);
+	m_SplitterWnd.CreateStatic(this, 1, 2);
+	m_SplitterWnd.CreateView(0, 0, RUNTIME_CLASS(CMyFormView), CSize(300, WINCX), pContext);
+	m_SplitterWnd.CreateView(0, 1, RUNTIME_CLASS(CUIToolView), CSize(WINCX, WINCY), pContext);
 
-	m_tMainSplitter.CreateView(0, 0, RUNTIME_CLASS(CMenuForm), CSize(350, 1000), pContext);
-	m_tMainSplitter.CreateView(0, 1, RUNTIME_CLASS(CToolYMView), CSize(1000, 1000), pContext);
-	m_tMainSplitter.CreateView(0, 2, RUNTIME_CLASS(CInspector), CSize(350, 1000), pContext);
 
-	m_tMainSplitter.SetColumnInfo(1, 1130, 300);
-	return TRUE;
+	return true/*CFrameWnd::OnCreateClient(lpcs, pContext)*/;
 }
-
