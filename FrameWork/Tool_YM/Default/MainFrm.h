@@ -11,11 +11,10 @@ protected: // serialization에서만 만들어집니다.
 	CMainFrame() noexcept;
 	DECLARE_DYNCREATE(CMainFrame)
 
-// 특성입니다.
+// 개발자 재정의
 public:
-
-// 작업입니다.
-public:
+	CSplitterWnd m_tMainSplitter;
+	CSplitterWnd m_tSecondSplitter;
 
 // 재정의입니다.
 public:
@@ -37,6 +36,7 @@ protected:
 	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
 	DECLARE_MESSAGE_MAP()
 
+	virtual BOOL OnCreateClient(LPCREATESTRUCT lpcs, CCreateContext* pContext);
 };
 
 

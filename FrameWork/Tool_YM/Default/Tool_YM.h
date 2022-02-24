@@ -9,6 +9,7 @@
 
 #include "resource.h"       // 주 기호입니다.
 
+#include "Tool_Defines.h"
 #include "Engine_Defines.h"
 
 // CToolYMApp:
@@ -25,8 +26,8 @@ public:
 	
 // 개발자 재정의
 private:
-	CMainFrame* m_pMainFrm = nullptr;
-	CToolYMApp* m_pToolView = nullptr;
+	CMainFrame*		m_pMainFrm = nullptr;
+	CToolYMView*	m_pToolView = nullptr;
 
 private:
 	_double m_dTimerAcc = 0.0f;

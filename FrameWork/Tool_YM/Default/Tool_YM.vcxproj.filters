@@ -58,6 +58,12 @@
     <Filter Include="03.Level\03.Stage_3">
       <UniqueIdentifier>{0c67a28d-fb3d-4a6a-a04b-0b10ef77a128}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.Inspector\Camera">
+      <UniqueIdentifier>{29fe42f5-3661-43c0-86ea-af26ae49d323}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.Inspector\Model">
+      <UniqueIdentifier>{ab216b27-17e4-4d5a-ac66-5ac0e2246ccc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -87,11 +93,23 @@
     <ClInclude Include="MainFrm.h">
       <Filter>00.Main</Filter>
     </ClInclude>
-    <ClInclude Include="..\Code\Menu.h">
+    <ClInclude Include="..\Code\MenuForm.h">
       <Filter>01.Menu</Filter>
     </ClInclude>
     <ClInclude Include="..\Code\Inspector.h">
       <Filter>02.Inspector</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\Map_Tool.h">
+      <Filter>01.Menu\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\Cam_Tool.h">
+      <Filter>01.Menu\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\Model_Inspector.h">
+      <Filter>02.Inspector\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\Cam_Inspector.h">
+      <Filter>02.Inspector\Camera</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -110,11 +128,23 @@
     <ClCompile Include="MainFrm.cpp">
       <Filter>00.Main</Filter>
     </ClCompile>
-    <ClCompile Include="..\Code\Menu.cpp">
+    <ClCompile Include="..\Code\MenuForm.cpp">
       <Filter>01.Menu</Filter>
     </ClCompile>
     <ClCompile Include="..\Code\Inspector.cpp">
       <Filter>02.Inspector</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Map_Tool.cpp">
+      <Filter>01.Menu\Map</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Cam_Tool.cpp">
+      <Filter>01.Menu\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Model_Inspector.cpp">
+      <Filter>02.Inspector\Model</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Cam_Inspector.cpp">
+      <Filter>02.Inspector\Camera</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
