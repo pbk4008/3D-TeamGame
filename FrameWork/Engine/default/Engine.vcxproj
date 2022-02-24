@@ -201,9 +201,11 @@ call Update_Library_Release.bat</Command>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\private\UI.h" />
+    <ClInclude Include="..\public\Actor.h" />
     <ClInclude Include="..\public\Animation.h" />
     <ClInclude Include="..\public\Base.h" />
     <ClInclude Include="..\public\Camera.h" />
+    <ClInclude Include="..\public\Effect.h" />
     <ClInclude Include="..\public\Cell.h" />
     <ClInclude Include="..\public\Channel.h" />
     <ClInclude Include="..\public\Collider.h" />
@@ -224,6 +226,7 @@ call Update_Library_Release.bat</Command>
     <ClInclude Include="..\public\Graphic_Device.h" />
     <ClInclude Include="..\public\HierarchyNode.h" />
     <ClInclude Include="..\public\Input_Device.h" />
+    <ClInclude Include="..\public\LandScape.h" />
     <ClInclude Include="..\public\Layer.h" />
     <ClInclude Include="..\public\Level.h" />
     <ClInclude Include="..\public\Level_Manager.h" />
@@ -256,6 +259,7 @@ call Update_Library_Release.bat</Command>
     <ClInclude Include="..\public\VIBuffer_Triangle.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\private\Actor.cpp" />
     <ClCompile Include="..\private\Animation.cpp" />
     <ClCompile Include="..\private\Base.cpp" />
     <ClCompile Include="..\private\Camera.cpp" />
@@ -264,6 +268,8 @@ call Update_Library_Release.bat</Command>
     <ClCompile Include="..\private\Collider.cpp" />
     <ClCompile Include="..\private\Component.cpp" />
     <ClCompile Include="..\private\Component_Manager.cpp" />
+    <ClCompile Include="..\private\Effect.cpp" />
+    <ClCompile Include="..\private\LandScape.cpp" />
     <ClCompile Include="..\private\UI.cpp" />
     <ClCompile Include="..\private\CustumFont.cpp" />
     <ClCompile Include="..\private\DebugDraw.cpp" />

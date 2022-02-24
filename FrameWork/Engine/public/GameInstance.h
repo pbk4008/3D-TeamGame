@@ -124,8 +124,8 @@ public:
 	static void Release_Engine();
 	virtual void Free() override;
 };
-extern CGameInstance* g_pGameInstance;
 
-extern ENGINE_DLL CGameInstance* g_pGameInstance;
 END
+
+ENGINE_DLL extern CGameInstance* g_pGameInstance;
 
