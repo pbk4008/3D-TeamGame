@@ -12,7 +12,7 @@
 IMPLEMENT_DYNAMIC(CModel_Inspector, CDialogEx)
 
 CModel_Inspector::CModel_Inspector(CWnd* pParent /*=nullptr*/)
-	: CDialogEx(IDD_CModel_Inspector, pParent)
+	: CDialogEx(IDD_CModel_Inspector1, pParent)
 {
 
 }

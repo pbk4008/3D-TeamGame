@@ -25,12 +25,6 @@
     <Filter Include="00.Main">
       <UniqueIdentifier>{6a5f1dfa-415f-497e-b81b-e274838293f0}</UniqueIdentifier>
     </Filter>
-    <Filter Include="01.Menu\Map">
-      <UniqueIdentifier>{c26c8725-dc9f-471b-ac24-bfc813ae29a0}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="01.Menu\Camera">
-      <UniqueIdentifier>{bb85dd8a-2136-4e88-b715-e47ecd424380}</UniqueIdentifier>
-    </Filter>
     <Filter Include="04.Tool_Object\Static_Mesh">
       <UniqueIdentifier>{8c5094bd-9345-43a4-a86f-304b2d574722}</UniqueIdentifier>
     </Filter>
@@ -58,8 +52,17 @@
     <Filter Include="03.Level\03.Stage_3">
       <UniqueIdentifier>{0c67a28d-fb3d-4a6a-a04b-0b10ef77a128}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.Inspector\NewFilter1">
-      <UniqueIdentifier>{586092f7-a374-4050-b731-b5d6a5498179}</UniqueIdentifier>
+    <Filter Include="02.Inspector\01.Camera">
+      <UniqueIdentifier>{765364de-765e-4c73-a73d-07d835bea25f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Menu\01.Camera">
+      <UniqueIdentifier>{bb85dd8a-2136-4e88-b715-e47ecd424380}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Menu\00.Map">
+      <UniqueIdentifier>{c26c8725-dc9f-471b-ac24-bfc813ae29a0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.Inspector\00.Model">
+      <UniqueIdentifier>{f3fab73b-4bac-4980-82c9-31c03c9a9601}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -87,17 +90,26 @@
     <ClInclude Include="MainFrm.h">
       <Filter>00.Main</Filter>
     </ClInclude>
-    <ClInclude Include="..\Code\Menu.h">
+    <ClInclude Include="..\Code\Menu_Form.h">
       <Filter>01.Menu</Filter>
     </ClInclude>
-    <ClInclude Include="..\Code\Inspector.h">
+    <ClInclude Include="..\Code\Map_Tool.h">
+      <Filter>01.Menu\00.Map</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\Cam_Tool.h">
+      <Filter>01.Menu\01.Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\Model_Inspector.h">
+      <Filter>02.Inspector\00.Model</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\Cam_Inspector.h">
+      <Filter>02.Inspector\01.Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\Inspector_Form.h">
       <Filter>02.Inspector</Filter>
     </ClInclude>
     <ClInclude Include="..\Code\Tool_Defines.h">
       <Filter>98.Tool_Defines</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Code\Model_Inspector.h">
-      <Filter>02.Inspector</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -116,13 +128,22 @@
     <ClCompile Include="MainFrm.cpp">
       <Filter>00.Main</Filter>
     </ClCompile>
-    <ClCompile Include="..\Code\Menu.cpp">
+    <ClCompile Include="..\Code\Menu_Form.cpp">
       <Filter>01.Menu</Filter>
     </ClCompile>
-    <ClCompile Include="..\Code\Inspector.cpp">
-      <Filter>02.Inspector</Filter>
+    <ClCompile Include="..\Code\Map_Tool.cpp">
+      <Filter>01.Menu\00.Map</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Cam_Tool.cpp">
+      <Filter>01.Menu\01.Camera</Filter>
     </ClCompile>
     <ClCompile Include="..\Code\Model_Inspector.cpp">
+      <Filter>02.Inspector\00.Model</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Cam_Inspector.cpp">
+      <Filter>02.Inspector\01.Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Inspector_Form.cpp">
       <Filter>02.Inspector</Filter>
     </ClCompile>
   </ItemGroup>
