@@ -125,14 +125,25 @@ BOOL CToolYMApp::InitInstance()
 		return FALSE;
 
 	// 창 하나만 초기화되었으므로 이를 표시하고 업데이트합니다.
-	m_pMainWnd->ShowWindow(SW_SHOW);
+	m_pMainWnd->ShowWindow(SW_MAXIMIZE);
 	m_pMainWnd->UpdateWindow();
 
+	m_pMainFrm = dynamic_cast<CMainFrame*>(AfxGetApp()->GetMainWnd());
+	m_pToolView = dynamic_cast<CToolYMView*>(m_pMainFrm->m_tMainSplitter.GetPane(0, 1));
 
+	g_hWnd = m_pToolView->m_hWnd;
+	g_hInst = m_pToolView->m_hInst;
 
+	/*m_pToolMain = CTool_CMainApp::Create();
 
+	if (nullptr == m_pToolMain)
+		return FALSE;
 
+	m_pEngine_Inst = GET_INSTANCE(CEngine_Instance);
 
+	if (FAILED(m_pEngine_Inst->Ready_Timer(L"Tool_Main_Timer")))
+		return FALSE;
+	if (FAILED(m_pEngine_Inst->Ready_Timer(L"Tool_60FPS_Timer")))*/
 
 
 	return TRUE;

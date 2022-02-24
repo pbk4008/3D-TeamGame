@@ -4,7 +4,9 @@
 
 #pragma once
 
+#include "Tool_YMDoc.h"
 
+class CMainFrame;
 class CToolYMView : public CView
 {
 protected: // serialization에서만 만들어집니다.
@@ -35,11 +37,21 @@ public:
 	virtual void Dump(CDumpContext& dc) const;
 #endif
 
-protected:
+//개발자 재정의
+
+public:
+	HINSTANCE	m_hInst;
+
+public:
+	CMainFrame* m_pMainFrm = nullptr;
+
 
 // 생성된 메시지 맵 함수
 protected:
 	DECLARE_MESSAGE_MAP()
+
+public:
+	virtual void OnInitialUpdate();
 };
 
 #ifndef _DEBUG  // Tool_YMView.cpp의 디버그 버전

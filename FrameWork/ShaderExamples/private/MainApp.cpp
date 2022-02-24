@@ -15,21 +15,21 @@ HRESULT CMainApp::NativeConstruct()
 	if (nullptr == m_pGameInstance)
 		return E_FAIL;
 
-	if (FAILED(m_pGameInstance->Initialize_Engine(g_hInst, g_hWnd, LEVEL_END, CGraphic_Device::MODE_WIN, g_iWinCX, g_iWinCY, &m_pDevice, &m_pDeviceContext)))
+	if (FAILED(m_pGameInstance->Initialize_Engine(g_hInst, g_hWnd, (_uint)LEVEL::LEVEL_END, CGraphic_Device::MODE_WIN, g_iWinCX, g_iWinCY, &m_pDevice, &m_pDeviceContext)))
 		return E_FAIL;
 
-	if (FAILED(Ready_Fonts()))
-		return E_FAIL;
+	//if (FAILED(Ready_Fonts()))
+	//	return E_FAIL;
 
-	if (FAILED(Ready_Gara()))
-		return E_FAIL;
+	//if (FAILED(Ready_Gara()))
+	//	return E_FAIL;
 
 	if (FAILED(Ready_Component_Prototype()))
 		return E_FAIL;
 	if (FAILED(Ready_GameObject_Prototype()))
 		return E_FAIL;
 
-	if (FAILED(SetUp_StartLevel(LEVEL_LOGO)))
+	if (FAILED(SetUp_StartLevel(LEVEL::LEVEL_LOGO)))
 		return E_FAIL;
 
 	return S_OK;
@@ -54,7 +54,7 @@ HRESULT CMainApp::Render()
 	if (nullptr == m_pGameInstance)
 		return E_FAIL;
 
-	if (FAILED(m_pGameInstance->Clear_BackBuffer_View(XMFLOAT4(0.f, 0.f, 1.f, 1.f))))
+	if (FAILED(m_pGameInstance->Clear_BackBuffer_View(XMFLOAT4(1.f, 1.f, 1.f, 1.f))))
 		return E_FAIL;
 	if (FAILED(m_pGameInstance->Clear_DepthStencil_View()))
 		return E_FAIL;
@@ -67,20 +67,20 @@ HRESULT CMainApp::Render()
 	if (FAILED(m_pGameInstance->Render_Engine()))
 		return E_FAIL;
 
-#ifdef _DEBUG
-	++m_iNumRender;
-
-	if (m_TimeAcc >= 1.0)
-	{
-		wsprintf(m_szFPS, TEXT("Frame : %d"), m_iNumRender);
-		m_iNumRender = 0;
-		m_TimeAcc = 0.0;
-	}
-
-	if (FAILED(m_pGameInstance->Render_Font(TEXT("Font_Arial"), XMVectorSet(1.f, 0.0f, 0.f, 1.f), m_szFPS)))
-		return E_FAIL;
-
-#endif // _DEBUG
+//#ifdef _DEBUG
+//	++m_iNumRender;
+//
+//	if (m_TimeAcc >= 1.0)
+//	{
+//		wsprintf(m_szFPS, TEXT("Frame : %d"), m_iNumRender);
+//		m_iNumRender = 0;
+//		m_TimeAcc = 0.0;
+//	}
+//
+//	if (FAILED(m_pGameInstance->Render_Font(TEXT("Font_Arial"), XMVectorSet(1.f, 0.0f, 0.f, 1.f), m_szFPS)))
+//		return E_FAIL;
+//
+//#endif // _DEBUG
 
 	if (FAILED(m_pGameInstance->Present()))
 		return E_FAIL;
@@ -99,7 +99,7 @@ HRESULT CMainApp::SetUp_StartLevel(LEVEL eLevel)
 
 	switch (eLevel)
 	{
-	case LEVEL_LOGO: case LEVEL_GAMEPLAY:
+	case LEVEL::LEVEL_LOGO: case LEVEL::LEVEL_GAMEPLAY:
 		//hr = m_pGameInstance->Open_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pDevice, m_pDeviceContext, eLevel));
 		break;
 
@@ -119,22 +119,22 @@ HRESULT CMainApp::Ready_Component_Prototype()
 		return E_FAIL;
 
 	/* For.Prototype_Component_Renderer */
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Renderer"), m_pRenderer = CRenderer::Create(m_pDevice, m_pDeviceContext))))
+	if (FAILED(m_pGameInstance->Add_Prototype((_uint)LEVEL::LEVEL_STATIC, TEXT("Prototype_Component_Renderer"), m_pRenderer = CRenderer::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 
 	Safe_AddRef(m_pRenderer);
 
 	/* For.Prototype_Component_Transform */
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Transform"), CTransform::Create(m_pDevice, m_pDeviceContext))))
+	if (FAILED(m_pGameInstance->Add_Prototype((_uint)LEVEL::LEVEL_STATIC, TEXT("Prototype_Component_Transform"), CTransform::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 
 	/* For.Prototype_Component_VIBuffer_Rect */
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_VIBuffer_Rect"), CVIBuffer_Rect::Create(m_pDevice, m_pDeviceContext, TEXT("../Bin/ShaderFiles/Shader_Rect.hlsl")))))
-		return E_FAIL;
+	//if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_VIBuffer_Rect"), CVIBuffer_Rect::Create(m_pDevice, m_pDeviceContext, TEXT("../Bin/ShaderFiles/Shader_Rect.hlsl")))))
+	//	return E_FAIL;
 
 	/* For.Prototype_Component_Texture_Loading */
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_Loading"), CTexture::Create(m_pDevice, m_pDeviceContext, TEXT("../Bin/Resources/Textures/Default%d.jpg"), 2))))
-		return E_FAIL;
+	//if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_Loading"), CTexture::Create(m_pDevice, m_pDeviceContext, TEXT("../Bin/Resources/Textures/Default%d.jpg"), 2))))
+	//	return E_FAIL;
 
 	return S_OK;
 }

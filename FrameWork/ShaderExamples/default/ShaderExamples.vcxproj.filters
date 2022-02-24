@@ -23,6 +23,18 @@
     <Filter Include="Includes">
       <UniqueIdentifier>{d07792a0-bc1c-47e6-8f8a-189878a1232a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="GameObject">
+      <UniqueIdentifier>{702d9cfb-8727-4a28-bb13-3bcbc7b2c715}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameObject\Floor">
+      <UniqueIdentifier>{fcdf426d-1aec-4043-b7f7-ee83b7508daa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameObject\DynamicObject">
+      <UniqueIdentifier>{fb54ffd1-3230-4c82-9129-3f4a2a50c0a5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameObject\StaticObject">
+      <UniqueIdentifier>{fb39ff0d-c137-48b4-9b12-7156e826a0b8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -42,6 +54,15 @@
     </ClInclude>
     <ClInclude Include="Defines.h">
       <Filter>Includes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Floor.h">
+      <Filter>GameObject\Floor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\DynamicObject.h">
+      <Filter>GameObject\DynamicObject</Filter>
+    </ClInclude>
+    <ClInclude Include="..\private\StaticObject.h">
+      <Filter>GameObject\StaticObject</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -63,6 +84,15 @@
     </ClCompile>
     <ClCompile Include="..\private\MainApp.cpp">
       <Filter>MainApp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Floor.cpp">
+      <Filter>GameObject\Floor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\DynamicObject.cpp">
+      <Filter>GameObject\DynamicObject</Filter>
+    </ClCompile>
+    <ClCompile Include="..\public\StaticObject.cpp">
+      <Filter>GameObject\StaticObject</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

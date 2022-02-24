@@ -1,5 +1,6 @@
 ﻿#pragma once
 
+
 // CCam_Inspector 대화 상자
 
 class CCam_Inspector : public CDialogEx
@@ -12,7 +13,7 @@ public:
 
 // 대화 상자 데이터입니다.
 #ifdef AFX_DESIGN_TIME
-	enum { IDD = IDD_Cam_Inspector };
+	enum { IDD = IDD_CCam_Inspector };
 #endif
 
 protected:

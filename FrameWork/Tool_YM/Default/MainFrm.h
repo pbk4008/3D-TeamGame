@@ -4,18 +4,14 @@
 
 #pragma once
 
+#include "Engine_Defines.h"
+
 class CMainFrame : public CFrameWnd
 {
 	
 protected: // serialization에서만 만들어집니다.
 	CMainFrame() noexcept;
 	DECLARE_DYNCREATE(CMainFrame)
-
-// 특성입니다.
-public:
-
-// 작업입니다.
-public:
 
 // 재정의입니다.
 public:
@@ -32,11 +28,18 @@ public:
 protected:  // 컨트롤 모음이 포함된 멤버입니다.
 	CStatusBar        m_wndStatusBar;
 
+
+//개발자 재정의
+public:
+	CSplitterWnd m_tMainSplitter;
+	CSplitterWnd m_tSecondSplitter;
+
+
 // 생성된 메시지 맵 함수
 protected:
 	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
 	DECLARE_MESSAGE_MAP()
-
+	virtual BOOL OnCreateClient(LPCREATESTRUCT lpcs, CCreateContext* pContext);
 };
 
 

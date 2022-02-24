@@ -12,6 +12,8 @@
 
 #include "Tool_YMDoc.h"
 #include "Tool_YMView.h"
+#include "Tool_Defines.h"
+#include "MainFrm.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -19,6 +21,8 @@
 
 
 // CToolYMView
+HWND	  g_hWnd;
+HINSTANCE g_hInst;
 
 IMPLEMENT_DYNCREATE(CToolYMView, CView)
 
@@ -40,6 +44,30 @@ CToolYMView::CToolYMView() noexcept
 CToolYMView::~CToolYMView()
 {
 }
+
+
+void CToolYMView::OnInitialUpdate()
+{
+	CView::OnInitialUpdate();
+
+	// TODO: Tool View 초기화
+
+	m_pMainFrm = dynamic_cast<CMainFrame*>(AfxGetApp()->GetMainWnd());
+
+	RECT rcMain = {};
+	m_pMainFrm->GetWindowRect(&rcMain);
+
+	SetRect(&rcMain, 0, 0, rcMain.right - rcMain.left, rcMain.bottom - rcMain.top);
+	RECT rcView{};
+	GetClientRect(&rcView);
+
+	int iGapX = rcMain.right - rcView.right;
+	int iGapY = rcMain.bottom - rcView.bottom;
+	m_pMainFrm->SetWindowPos(nullptr, 0, 0, g_iWINCX + iGapX, g_iWINCY + iGapY, SWP_NOMOVE);
+
+	m_hInst = AfxGetInstanceHandle();
+}
+
 
 BOOL CToolYMView::PreCreateWindow(CREATESTRUCT& cs)
 {
@@ -103,3 +131,4 @@ CToolYMDoc* CToolYMView::GetDocument() const // 디버그되지 않은 버전은
 
 
 // CToolYMView 메시지 처리기
+

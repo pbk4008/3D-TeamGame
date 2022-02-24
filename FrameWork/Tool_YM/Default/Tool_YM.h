@@ -17,7 +17,6 @@
 
 class CMainFrame;
 class CToolYMView;
-
 class CToolYMApp : public CWinApp
 {
 public:
@@ -25,8 +24,11 @@ public:
 	
 // 개발자 재정의
 private:
-	CMainFrame* m_pMainFrm = nullptr;
-	CToolYMApp* m_pToolView = nullptr;
+	CMainFrame*  m_pMainFrm = nullptr;
+	CToolYMView* m_pToolView = nullptr;
+
+private:
+	//C* m_pToolMain = nullptr;
 
 private:
 	_double m_dTimerAcc = 0.0f;
