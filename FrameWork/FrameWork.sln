@@ -9,13 +9,13 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Tool_YM", "Tool_YM\Default\
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UITool", "UITool\Default\UITool.vcxproj", "{4D1F81EB-788A-4120-B9FE-FA1953291F0B}"
 EndProject
-<<<<<<< HEAD
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tool_YASIC", "Tool_YASIC", "{D6EF4B5C-7922-40BA-B775-CB324568B043}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "01.Tool", "01.Tool", "{D6EF4B5C-7922-40BA-B775-CB324568B043}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Tool_YASIC", "Tool_YASIC\Default\Tool_YASIC.vcxproj", "{A79D68EF-CAD7-43B3-A8E2-334A1900121A}"
-=======
+EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ShaderExamples", "ShaderExamples\default\ShaderExamples.vcxproj", "{90DD829D-E88C-4D86-975D-15B541D95C16}"
->>>>>>> 3DTeam
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "00. Engine", "00. Engine", "{0BE763B4-BB7A-4EE7-9417-A381F351FC66}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -49,7 +49,6 @@ Global
 		{4D1F81EB-788A-4120-B9FE-FA1953291F0B}.Release|x64.Build.0 = Release|x64
 		{4D1F81EB-788A-4120-B9FE-FA1953291F0B}.Release|x86.ActiveCfg = Release|Win32
 		{4D1F81EB-788A-4120-B9FE-FA1953291F0B}.Release|x86.Build.0 = Release|Win32
-<<<<<<< HEAD
 		{A79D68EF-CAD7-43B3-A8E2-334A1900121A}.Debug|x64.ActiveCfg = Debug|x64
 		{A79D68EF-CAD7-43B3-A8E2-334A1900121A}.Debug|x64.Build.0 = Debug|x64
 		{A79D68EF-CAD7-43B3-A8E2-334A1900121A}.Debug|x86.ActiveCfg = Debug|Win32
@@ -58,7 +57,6 @@ Global
 		{A79D68EF-CAD7-43B3-A8E2-334A1900121A}.Release|x64.Build.0 = Release|x64
 		{A79D68EF-CAD7-43B3-A8E2-334A1900121A}.Release|x86.ActiveCfg = Release|Win32
 		{A79D68EF-CAD7-43B3-A8E2-334A1900121A}.Release|x86.Build.0 = Release|Win32
-=======
 		{90DD829D-E88C-4D86-975D-15B541D95C16}.Debug|x64.ActiveCfg = Debug|x64
 		{90DD829D-E88C-4D86-975D-15B541D95C16}.Debug|x64.Build.0 = Debug|x64
 		{90DD829D-E88C-4D86-975D-15B541D95C16}.Debug|x86.ActiveCfg = Debug|Win32
@@ -67,12 +65,14 @@ Global
 		{90DD829D-E88C-4D86-975D-15B541D95C16}.Release|x64.Build.0 = Release|x64
 		{90DD829D-E88C-4D86-975D-15B541D95C16}.Release|x86.ActiveCfg = Release|Win32
 		{90DD829D-E88C-4D86-975D-15B541D95C16}.Release|x86.Build.0 = Release|Win32
->>>>>>> 3DTeam
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
+		{B0233BC4-97D8-4AF2-A164-3B4CFF2E34DA} = {0BE763B4-BB7A-4EE7-9417-A381F351FC66}
+		{8A3C9F78-F6B2-4A19-95F4-4D7351FA2804} = {D6EF4B5C-7922-40BA-B775-CB324568B043}
+		{4D1F81EB-788A-4120-B9FE-FA1953291F0B} = {D6EF4B5C-7922-40BA-B775-CB324568B043}
 		{A79D68EF-CAD7-43B3-A8E2-334A1900121A} = {D6EF4B5C-7922-40BA-B775-CB324568B043}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution

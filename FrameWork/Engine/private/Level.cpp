@@ -1,5 +1,12 @@
 #include "..\public\Level.h"
+#include "Component_Manager.h"
 
+
+CLevel::CLevel()
+	: m_pDevice(nullptr)
+	, m_pDeviceContext(nullptr)
+{
+}
 
 CLevel::CLevel(ID3D11Device * pDevice, ID3D11DeviceContext * pDeviceContext)
 	: m_pDevice(pDevice)

@@ -153,7 +153,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\bin\ShaderFiles\Shader_RenderState.hpp" />
     <ClInclude Include="..\private\StaticObject.h" />
+    <ClInclude Include="..\public\DynamicCaemra.h" />
     <ClInclude Include="..\public\DynamicObject.h" />
     <ClInclude Include="..\public\Floor.h" />
     <ClInclude Include="..\public\MainApp.h" />
@@ -164,6 +166,7 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\private\DynamicCaemra.cpp" />
     <ClCompile Include="..\private\DynamicObject.cpp" />
     <ClCompile Include="..\private\Floor.cpp" />
     <ClCompile Include="..\private\MainApp.cpp" />
@@ -178,7 +181,13 @@
     <Image Include="small.ico" />
   </ItemGroup>
   <ItemGroup>
+    <FxCompile Include="..\bin\ShaderFiles\Shader_Cube.hlsl" />
+    <FxCompile Include="..\bin\ShaderFiles\Shader_Instance.hlsl" />
+    <FxCompile Include="..\bin\ShaderFiles\Shader_Mesh.hlsl" />
+    <FxCompile Include="..\bin\ShaderFiles\Shader_PointInstance.hlsl" />
+    <FxCompile Include="..\bin\ShaderFiles\Shader_Rect.hlsl" />
     <FxCompile Include="..\bin\ShaderFiles\Shader_RectViewport.hlsl" />
+    <FxCompile Include="..\bin\ShaderFiles\Shader_Terrain.hlsl" />
     <FxCompile Include="..\bin\ShaderFiles\Shader_Triangle.hlsl" />
     <FxCompile Include="Constants.hlsl" />
     <FxCompile Include="Shadow.hlsl" />
