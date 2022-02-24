@@ -141,6 +141,27 @@ BOOL CUIToolApp::InitInstance()
 	freopen_s(&fpstderr, "CONOUT$", "w", stderr);
 #endif
 
+
+
+	m_pGameInstance = GET_INSTANCE(CGameInstance);
+
+	if (m_pGameInstance->Initialize_Engine(g_hInst, g_hWnd, 1, CGraphic_Device::WINMODE::MODE_WIN, WINCX, WINCY, &m_pDevice, &m_pDeviceContext))
+	{
+		ERR_MSG(L"Failed to Initialize Engine In CUIToolApp::InitInstance() ");
+		return false;
+	}
+
+	if (FAILED(m_pGameInstance->Ready_Timer(TEXT("Timer_Dafault"))))
+	{
+		ERR_MSG(L"Failed to Ready Default Timer");
+		return false;
+	}
+	if (FAILED(m_pGameInstance->Ready_Timer(TEXT("Timer_60Frame"))))
+	{
+		ERR_MSG(L"Failed to Ready 60Frame Timer");
+		return false;
+	}
+
 	return TRUE;
 }
 
@@ -155,6 +176,56 @@ int CUIToolApp::ExitInstance()
 	AfxOleTerm(FALSE);
 
 	return CWinApp::ExitInstance();
+}
+
+int CUIToolApp::Engine_Tick(_double TimeDelta)
+{
+	if (nullptr == m_pGameInstance)
+	{
+		return -1;
+	}
+
+	m_pGameInstance->Tick_Engine(TimeDelta);
+
+	return 0;
+}
+
+HRESULT CUIToolApp::Engine_Render()
+{
+	if (nullptr == m_pGameInstance)
+	{
+		return E_FAIL;
+	}
+
+	if (FAILED(m_pGameInstance->Clear_BackBuffer_View(XMFLOAT4(0.f, 0.5f, 0.5f, 1.f))))
+	{
+		return E_FAIL;
+	}
+
+	if (FAILED(m_pGameInstance->Clear_DepthStencil_View()))
+	{
+		return E_FAIL;
+	}
+
+	///* 내 게임을 구성하는 객체들의 렌더 함수를 호출한다 */
+	//if (FAILED(m_pRenderer->Draw_RenderGroup()))
+	//{
+	//	return E_FAIL;
+	//}
+
+	/* 내 게임내의 기타 등등을 렌더링한다 */
+	if (FAILED(m_pGameInstance->Render_Engine()))
+	{
+		return E_FAIL;
+	}
+
+
+	if (FAILED(m_pGameInstance->Present()))
+	{
+		return E_FAIL;
+	}
+
+	return S_OK;
 }
 
 // CUIToolApp 메시지 처리기
@@ -199,7 +270,37 @@ void CUIToolApp::OnAppAbout()
 	aboutDlg.DoModal();
 }
 
-// CUIToolApp 메시지 처리기
 
 
+BOOL CUIToolApp::OnIdle(LONG lCount)
+{
+	// TODO: 여기에 특수화된 코드를 추가 및/또는 기본 클래스를 호출합니다.
+	if (m_pMainWnd->IsIconic())
+	{
+		return false;
+	}
 
+	m_pGameInstance->Update_TimeDelta(TEXT("Timer_Dafault"));
+	m_TimerAcc += (_float)m_pGameInstance->Get_TimeDelta(TEXT("Timer_Dafault"));
+
+	if (m_TimerAcc >= 1.0 / 60.f)
+	{
+		m_TimerAcc = 0.0;
+
+		m_pGameInstance->Update_TimeDelta(TEXT("Timer_60Frame"));
+
+		if (0 > Engine_Tick(m_pGameInstance->Get_TimeDelta(TEXT("Timer_60Frame"))))
+		{
+			ERR_MSG(L"Failed CUIToolApp::OnIdle Tick");
+			return false;
+		}
+
+		if (FAILED(Engine_Render()))
+		{
+			ERR_MSG(L"Failed  CUIToolApp::OnIdle Render");
+			return false;
+		}
+	}
+
+	return true;
+}

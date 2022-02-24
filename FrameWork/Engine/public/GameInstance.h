@@ -19,6 +19,7 @@
 
 BEGIN(Engine)
 
+
 class ENGINE_DLL CGameInstance final : public CSingleTon<CGameInstance>
 {
 	friend CSingleTon;
@@ -101,7 +102,7 @@ public:/* For.SaveManager*/
 		if (!m_pSaveManager)
 			return E_FAIL;
 
-		return m_pSaveManager->LoadFile<T>(pSaveData, pFilePath);
+		return m_pSaveManager->LoadFile<T>(pLoadData, pFilePath);
 	}
 private:
 	CGraphic_Device*			m_pGraphic_Device = nullptr;		
@@ -124,5 +125,6 @@ public:
 	virtual void Free() override;
 };
 
+extern ENGINE_DLL CGameInstance* g_pGameInstance;
 END
 

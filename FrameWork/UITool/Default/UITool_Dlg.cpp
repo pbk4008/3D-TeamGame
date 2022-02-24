@@ -30,7 +30,6 @@ void CUITool_Dlg::DoDataExchange(CDataExchange* pDX)
 
 BEGIN_MESSAGE_MAP(CUITool_Dlg, CDialog)
 	ON_WM_DROPFILES()
-	ON_STN_CLICKED(IDC_PICTURE, &CUITool_Dlg::OnStnClickedPicture)
 END_MESSAGE_MAP()
 
 
@@ -62,27 +61,4 @@ void CUITool_Dlg::OnDropFiles(HDROP hDropInfo)
 	}
 
 	CDialog::OnDropFiles(hDropInfo);
-}
-
-
-void CUITool_Dlg::OnStnClickedPicture()
-{
-	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
-	int iIndex = m_ListBox.GetCurSel();
-
-	CString wstrTextureName;
-	m_ListBox.GetText(iIndex, wstrTextureName);
-
-	int iTextureNameSize = wstrTextureName.GetLength();
-	int i = 0;
-	//Tile13
-	for (; i < iTextureNameSize; ++i)
-	{
-		if (isdigit(wstrTextureName[i]))
-			break;
-	}
-	// 시작지점부터 원하는 곳까지 문자열을 잘라주는 함수. 
-	wstrTextureName.Delete(0, i);
-
-
 }

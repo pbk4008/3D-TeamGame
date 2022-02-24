@@ -1,8 +1,6 @@
 #include "..\public\GameInstance.h"
 #include "GameObject.h"
 
-extern ENGINE_DLL CGameInstance* g_pGameInstance = GET_INSTANCE(CGameInstance);
-
 CGameInstance::CGameInstance()
 	: m_pGraphic_Device(CGraphic_Device::GetInstance())
 	, m_pLevel_Manager(CLevel_Manager::GetInstance())

@@ -27,7 +27,4 @@ public:
 	CString m_strFileName;
 	CListBox m_ListBox;
 
-
-
-	afx_msg void OnStnClickedPicture();
 };

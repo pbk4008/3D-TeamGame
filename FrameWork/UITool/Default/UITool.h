@@ -9,6 +9,12 @@
 
 #include "resource.h"       // 주 기호입니다.
 
+#include "../../Reference/Headers/Engine_Defines.h"
+#include "../../Reference/Headers/GameInstance.h"
+
+BEGIN(Engine)
+class Renderer;
+END
 
 // CUIToolApp:
 // 이 클래스의 구현에 대해서는 UITool.cpp을(를) 참조하세요.
@@ -25,9 +31,21 @@ public:
 	virtual BOOL InitInstance();
 	virtual int ExitInstance();
 
+	int Engine_Tick(_double TimeDelta);
+	HRESULT Engine_Render();
+
+	ID3D11Device* m_pDevice = nullptr;
+	ID3D11DeviceContext* m_pDeviceContext = nullptr;
+
 // 구현입니다.
 	afx_msg void OnAppAbout();
 	DECLARE_MESSAGE_MAP()
+	virtual BOOL OnIdle(LONG lCount);
+
+	class CRenderer* m_pRenderer;
+
+	CGameInstance* m_pGameInstance;
+	float m_TimerAcc = 0.0f;
 };
 
 extern CUIToolApp theApp;
