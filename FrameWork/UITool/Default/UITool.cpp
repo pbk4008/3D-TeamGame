@@ -125,12 +125,33 @@ BOOL CUIToolApp::InitInstance()
 	// 창 하나만 초기화되었으므로 이를 표시하고 업데이트합니다.
 	m_pMainWnd->ShowWindow(SW_SHOW);
 	m_pMainWnd->UpdateWindow();
+
+	CMainFrame* pMain = dynamic_cast<CMainFrame*>(AfxGetApp()->GetMainWnd());
+	CUIToolView* pView = dynamic_cast<CUIToolView*>(pMain->m_SplitterWnd.GetPane(0, 1));
+
+	g_hWnd = pView->m_hWnd;
+	g_hInst = AfxGetInstanceHandle();
+
+#ifdef _DEBUG
+	AllocConsole();
+	FILE* fpstdin = stdin, * fpstdout = stdout, * fpstderr = stderr;
+
+	freopen_s(&fpstdin, "CONIN$", "r", stdin);
+	freopen_s(&fpstdout, "CONOUT$", "w", stdout);
+	freopen_s(&fpstderr, "CONOUT$", "w", stderr);
+#endif
+
 	return TRUE;
 }
 
 int CUIToolApp::ExitInstance()
 {
 	//TODO: 추가한 추가 리소스를 처리합니다.
+
+#ifdef _DEBUG
+	FreeConsole();
+#endif
+
 	AfxOleTerm(FALSE);
 
 	return CWinApp::ExitInstance();

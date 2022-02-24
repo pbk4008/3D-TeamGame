@@ -7,6 +7,9 @@
 #include "UITool.h"
 
 #include "MainFrm.h"
+#include "UI_Tool_Define.h"
+#include "MyFormView.h"
+#include "UIToolView.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -84,3 +87,14 @@ void CMainFrame::Dump(CDumpContext& dc) const
 
 // CMainFrame 메시지 처리기
 
+
+
+BOOL CMainFrame::OnCreateClient(LPCREATESTRUCT lpcs, CCreateContext* pContext)
+{
+	m_SplitterWnd.CreateStatic(this, 1, 2);
+	m_SplitterWnd.CreateView(0, 0, RUNTIME_CLASS(CMyFormView), CSize(300, WINCX), pContext);
+	m_SplitterWnd.CreateView(0, 1, RUNTIME_CLASS(CUIToolView), CSize(WINCX, WINCY), pContext);
+
+
+	return true/*CFrameWnd::OnCreateClient(lpcs, pContext)*/;
+}

@@ -1,7 +1,8 @@
-﻿  pch.cpp
-  MainFrm.cpp
+﻿  MainFrm.cpp
+  MyFormView.cpp
   UITool.cpp
   UIToolDoc.cpp
   UIToolView.cpp
+  UITool_Dlg.cpp
   코드를 생성하고 있습니다...
-  UITool.vcxproj -> C:\heejeong\gitHub\Study\jusin_heejeong\Portfolio\3D_Team\FrameWork\x64\Debug\UITool.exe
+  UITool.vcxproj -> C:\Users\Administrator\Desktop\3D-TeamGame\FrameWork\x64\Debug\UITool.exe
