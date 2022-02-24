@@ -1,7 +1,6 @@
 #include "..\public\Component_Manager.h"
 #include "Component.h"
 
-
 CComponent_Manager::CComponent_Manager()
 {
 
@@ -43,6 +42,20 @@ CComponent * CComponent_Manager::Clone_Component(_uint iLevelIndex, const wstrin
 		return nullptr;
 
 	return pComponent;
+}
+
+HRESULT CComponent_Manager::SetUpBaseComponent(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
+{
+	if (Add_Prototype(0,L"Transform", CTransform::Create(pDevice, pDeviceContext)))
+		return E_FAIL;
+	if (Add_Prototype(0, L"Renderer", CRenderer::Create(pDevice, pDeviceContext)))
+		return E_FAIL;
+	if (Add_Prototype(0, L"Texture", CTexture::Create(pDevice, pDeviceContext)))
+		return E_FAIL;
+	if (Add_Prototype(0, L"Camera", CCamera::Create(pDevice, pDeviceContext)))
+		return E_FAIL;
+
+	return S_OK;
 }
 
 

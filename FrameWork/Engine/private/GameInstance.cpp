@@ -1,7 +1,6 @@
 #include "..\public\GameInstance.h"
 #include "GameObject.h"
 
-extern ENGINE_DLL CGameInstance* g_pGameInstance = GET_INSTANCE(CGameInstance);
 
 CGameInstance::CGameInstance()
 	: m_pGraphic_Device(CGraphic_Device::GetInstance())
@@ -56,6 +55,8 @@ HRESULT CGameInstance::Initialize_Engine(HINSTANCE hInst, HWND hWnd, _uint iNumL
 
 	if (FAILED(m_pFrustum->Ready_FrustumInProjSpace()))
 		return E_FAIL;
+
+	g_pGameInstance = GET_INSTANCE(CGameInstance);
 
 	return S_OK;
 }
