@@ -6,9 +6,6 @@
 #include "framework.h"
 #include "afxwinappex.h"
 #include "afxdialogex.h"
-
-#include "MainFrm.h"
-
 #include "Tool_YASIC.h"
 #include "MainFrm.h"
 
