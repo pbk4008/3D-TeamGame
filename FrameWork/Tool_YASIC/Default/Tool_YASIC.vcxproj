@@ -94,10 +94,12 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_WINDOWS;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>../Default/;../Code/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../Default/;../Code/;../../Reference/Headers/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
+      <AdditionalLibraryDirectories>../../Reference/Library/Debug/;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>Engine.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <Midl>
       <MkTypLibCompatible>false</MkTypLibCompatible>
@@ -185,7 +187,14 @@
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\Code\AnimationTool.h" />
+    <ClInclude Include="..\Code\Level_AnimationTool.h" />
+    <ClInclude Include="..\Code\MainApp.h" />
     <ClInclude Include="..\Code\MainForm.h" />
+    <ClInclude Include="..\Code\Tool_Define.h" />
+    <ClInclude Include="..\Code\Tool_Enum.h" />
+    <ClInclude Include="..\Code\Tool_Extern.h" />
+    <ClInclude Include="..\Code\Tool_Include.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="MainFrm.h" />
     <ClInclude Include="pch.h" />
@@ -196,6 +205,9 @@
     <ClInclude Include="Tool_YASICView.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\Code\AnimationTool.cpp" />
+    <ClCompile Include="..\Code\Level_AnimationTool.cpp" />
+    <ClCompile Include="..\Code\MainApp.cpp" />
     <ClCompile Include="..\Code\MainForm.cpp" />
     <ClCompile Include="MainFrm.cpp" />
     <ClCompile Include="pch.cpp">

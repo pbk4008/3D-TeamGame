@@ -13,9 +13,15 @@
 #include "Tool_YASICDoc.h"
 #include "Tool_YASICView.h"
 
-#ifdef _DEBUG
-#define new DEBUG_NEW
-#endif
+#include "MainFrm.h"
+
+//#ifdef _DEBUG
+//#define new DEBUG_NEW
+//#endif
+
+
+HINSTANCE g_hInst;
+HWND g_hWnd;
 
 
 // CToolYASICView
@@ -50,6 +56,10 @@ BOOL CToolYASICView::PreCreateWindow(CREATESTRUCT& cs)
 }
 
 // CToolYASICView 그리기
+
+void CToolYASICView::Tick()
+{
+}
 
 void CToolYASICView::OnDraw(CDC* /*pDC*/)
 {
@@ -103,3 +113,27 @@ CToolYASICDoc* CToolYASICView::GetDocument() const // 디버그되지 않은 버
 
 
 // CToolYASICView 메시지 처리기
+
+
+void CToolYASICView::OnInitialUpdate()
+{
+	CView::OnInitialUpdate();
+
+	// TODO: 여기에 특수화된 코드를 추가 및/또는 기본 클래스를 호출합니다.
+	CMainFrame* pMainFrame = static_cast<CMainFrame*>(AfxGetMainWnd());
+
+	CRect rcMain = {};
+	pMainFrame->GetWindowRect(rcMain);
+
+	CRect rcView = {};
+	GetClientRect(rcView);
+	_int iGapX = rcMain.Width() - rcView.Width();
+	_int iGapY = rcMain.Height() - rcView.Height();
+
+	pMainFrame->SetWindowPos(nullptr, 0, 0, 1280 + iGapX + 1, 720 + iGapY + 1, SWP_NOMOVE);
+
+	g_hWnd = m_hWnd;
+	g_hInst = AfxGetInstanceHandle();
+
+
+}

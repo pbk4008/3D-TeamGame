@@ -18,6 +18,7 @@ public:
 
 // 작업입니다.
 public:
+	void Tick();
 
 // 재정의입니다.
 public:
@@ -41,6 +42,8 @@ protected:
 // 생성된 메시지 맵 함수
 protected:
 	DECLARE_MESSAGE_MAP()
+public:
+	virtual void OnInitialUpdate();
 };
 
 #ifndef _DEBUG  // Tool_YASICView.cpp의 디버그 버전

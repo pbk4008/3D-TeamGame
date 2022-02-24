@@ -11,9 +11,9 @@
 #include "Tool_YASICView.h"
 #include "MainForm.h"
 
-#ifdef _DEBUG
-#define new DEBUG_NEW
-#endif
+//#ifdef _DEBUG
+//#define new DEBUG_NEW
+//#endif
 
 // CMainFrame
 
@@ -57,6 +57,12 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	return 0;
 }
 
+void CMainFrame::Tick()
+{
+	m_pToolView->Tick();
+	m_pMainForm->Tick();
+}
+
 BOOL CMainFrame::PreCreateWindow(CREATESTRUCT& cs)
 {
 	if( !CFrameWnd::PreCreateWindow(cs) )
@@ -97,7 +103,18 @@ BOOL CMainFrame::OnCreateClient(LPCREATESTRUCT lpcs, CCreateContext* pContext)
 	m_tMainSplitter.CreateView(0, 0, RUNTIME_CLASS(CToolYASICView), CSize(1280, 720), pContext);
 	m_tMainSplitter.CreateView(0, 1, RUNTIME_CLASS(CMainForm), CSize(620, 720), pContext);
 
-	CToolYASICView* pToolView = static_cast<CToolYASICView*>(m_tMainSplitter.GetPane(0, 0));
+	m_pToolView = static_cast<CToolYASICView*>(m_tMainSplitter.GetPane(0, 0));
+	CRect rcToolView = {};
+	m_pToolView->GetWindowRect(rcToolView);
 
-	return CFrameWnd::OnCreateClient(lpcs, pContext);
+	m_pMainForm = static_cast<CMainForm*>(m_tMainSplitter.GetPane(0, 1));
+	CRect rcMainForm = {};
+	m_pMainForm->GetWindowRect(rcMainForm);
+
+	CRect rcMain;
+	this->GetWindowRect(rcMain);
+	this->SetWindowPos(nullptr, 10, 100, rcToolView.Width() + rcMainForm.Width(), rcMain.Height(), NULL);
+
+	return TRUE;
+	//return CFrameWnd::OnCreateClient(lpcs, pContext);
 }

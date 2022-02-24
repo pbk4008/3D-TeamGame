@@ -47,3 +47,7 @@
 #endif
 
 
+#include "GameInstance.h"
+#include "Tool_Include.h"
+
+using namespace Tool;

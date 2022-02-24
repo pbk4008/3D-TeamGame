@@ -4,6 +4,9 @@
 
 #pragma once
 
+class CToolYASICView;
+class CMainForm;
+
 class CMainFrame : public CFrameWnd
 {
 	
@@ -14,9 +17,12 @@ protected: // serialization에서만 만들어집니다.
 // 특성입니다.
 public:
 	CSplitterWndEx m_tMainSplitter;
+	CToolYASICView* m_pToolView = nullptr;
+	CMainForm* m_pMainForm = nullptr;
 
 // 작업입니다.
 public:
+	void Tick();
 
 // 재정의입니다.
 public:

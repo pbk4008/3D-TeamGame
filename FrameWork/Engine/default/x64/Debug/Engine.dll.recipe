@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project>
+  <ProjectOutputs>
+    <ProjectOutput>
+      <FullPath>D:\MyData\GitHub\3D_Team\FrameWork\Engine\Bin\Engine.dll</FullPath>
+    </ProjectOutput>
+  </ProjectOutputs>
+  <ContentFiles>
+    <ContentFile>
+      <FullPath>D:\MyData\GitHub\3D_Team\FrameWork\Engine\Bin\Shader_RectViewport.cso</FullPath>
+    </ContentFile>
+    <ContentFile>
+      <FullPath>D:\MyData\GitHub\3D_Team\FrameWork\Engine\Bin\Shader_Triangle.cso</FullPath>
+    </ContentFile>
+  </ContentFiles>
+  <SatelliteDlls />
+  <NonRecipeFileRefs />
+</Project>

@@ -14,6 +14,8 @@
 // 이 클래스의 구현에 대해서는 Tool_YASIC.cpp을(를) 참조하세요.
 //
 
+class CMainFrame;
+
 class CToolYASICApp : public CWinApp
 {
 public:
@@ -28,6 +30,10 @@ public:
 // 구현입니다.
 	afx_msg void OnAppAbout();
 	DECLARE_MESSAGE_MAP()
+	virtual BOOL OnIdle(LONG lCount);
+
+public:
+	CMainFrame* m_pMainFrame = nullptr;
 };
 
 extern CToolYASICApp theApp;
