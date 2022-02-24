@@ -27,7 +27,8 @@ public:
 	HRESULT Reserve_Manager(_uint iNumLevels);
 	HRESULT Add_Prototype(_uint iLevelIndex, const wstring& pPrototypeTag, class CComponent* pPrototype);
 	CComponent* Clone_Component(_uint iLevelIndex, const wstring& pPrototypeTag, void* pArg);
-
+public:
+	HRESULT SetUpBaseComponent(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);
 private:	
 	unordered_map<wstring, class CComponent*>*			m_pComponents = nullptr;
 	typedef unordered_map<wstring, class CComponent*>		COMPONENTS;

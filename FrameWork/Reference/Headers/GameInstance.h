@@ -52,9 +52,9 @@ public: /* For.Object_Manager*/
 	HRESULT Add_GameObjectToLayer(_uint iLevelIndex, const wstring& pLayerTag, const wstring& pPrototypeTag, void* pArg = nullptr);
 public: /* For.Component_Manager */
 	HRESULT Add_Prototype(_uint iLevelIndex, const wstring& pPrototypeTag, class CComponent* pPrototype);
-	CComponent* Clone_Component(_uint iLevelIndex, const wstring& pPrototypeTag, void* pArg);
+	CComponent* Clone_Component(_uint iLevelIndex, const wstring& pPrototypeTag, void* pArg = nullptr);
 	template<typename T>
-	T* Clone_Component(_uint iLevelIndex, const wstring& pPrototypeTag, void* pArg)
+	T* Clone_Component(_uint iLevelIndex, const wstring& pPrototypeTag, void* pArg = nullptr)
 	{
 		CComponent* pCom = Clone_Component(iLevelIndex, pPrototypeTag, pArg);
 		if (!pCom)
@@ -102,7 +102,7 @@ public:/* For.SaveManager*/
 		if (!m_pSaveManager)
 			return E_FAIL;
 
-		return m_pSaveManager->LoadFile<T>(pSaveData, pFilePath);
+		return m_pSaveManager->LoadFile<T>(pLoadData, pFilePath);
 	}
 private:
 	CGraphic_Device*			m_pGraphic_Device = nullptr;		
@@ -125,6 +125,7 @@ public:
 	virtual void Free() override;
 };
 
-extern ENGINE_DLL CGameInstance* g_pGameInstance;
 END
+
+ENGINE_DLL extern CGameInstance* g_pGameInstance;
 

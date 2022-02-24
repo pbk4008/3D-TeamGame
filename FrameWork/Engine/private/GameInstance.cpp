@@ -1,6 +1,7 @@
 #include "..\public\GameInstance.h"
 #include "GameObject.h"
 
+ENGINE_DLL CGameInstance* g_pGameInstance = nullptr;
 
 CGameInstance::CGameInstance()
 	: m_pGraphic_Device(CGraphic_Device::GetInstance())

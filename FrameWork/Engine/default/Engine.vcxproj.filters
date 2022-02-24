@@ -166,6 +166,9 @@
     <Filter Include="00.Utility\02.GameObject\03.Effect">
       <UniqueIdentifier>{2cf37c07-d599-44eb-927c-50d78d47248e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="00.Utility\02.GameObject\04.LandScape">
+      <UniqueIdentifier>{80f7751e-c8c1-436c-8b55-4bc5a7a0df45}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\public\Base.h">
@@ -330,6 +333,15 @@
     <ClInclude Include="..\private\UI.h">
       <Filter>00.Utility\02.GameObject\01.UI</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\Actor.h">
+      <Filter>00.Utility\02.GameObject\02.Actor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Effect.h">
+      <Filter>00.Utility\02.GameObject\03.Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\LandScape.h">
+      <Filter>00.Utility\02.GameObject\04.LandScape</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\private\Base.cpp">
@@ -472,6 +484,15 @@
     </ClCompile>
     <ClCompile Include="..\private\UI.cpp">
       <Filter>00.Utility\02.GameObject\01.UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Actor.cpp">
+      <Filter>00.Utility\02.GameObject\02.Actor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Effect.cpp">
+      <Filter>00.Utility\02.GameObject\03.Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\LandScape.cpp">
+      <Filter>00.Utility\02.GameObject\04.LandScape</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
