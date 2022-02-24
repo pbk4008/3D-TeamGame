@@ -1,0 +1,168 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="02.Inspector">
+      <UniqueIdentifier>{c2661538-40f6-4e56-a8e7-d479c3ee7847}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Menu">
+      <UniqueIdentifier>{5e4bbfac-8e43-4dbd-b2e6-e18ae45a6604}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.Level">
+      <UniqueIdentifier>{ce0c8c23-ed98-4d7d-b751-6c35116084da}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04.Tool_Object">
+      <UniqueIdentifier>{f9c2d451-9b5c-4d56-be4c-87cd75d18299}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="98.Tool_Defines">
+      <UniqueIdentifier>{8099c028-badc-4b96-9948-728be989de83}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="99.Default">
+      <UniqueIdentifier>{d4e030d4-ea2d-48d4-9147-7f9ea71ce22e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="97.Tool">
+      <UniqueIdentifier>{a3f7d16f-e2d3-4b8e-a023-9511eeba7964}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00.Main">
+      <UniqueIdentifier>{6a5f1dfa-415f-497e-b81b-e274838293f0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04.Tool_Object\Static_Mesh">
+      <UniqueIdentifier>{8c5094bd-9345-43a4-a86f-304b2d574722}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04.Tool_Object\Observer">
+      <UniqueIdentifier>{169b3755-da9b-4072-a9ad-2f9646182671}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04.Tool_Object\NavSphere">
+      <UniqueIdentifier>{5dd93744-b526-4e07-b750-dfae944323ed}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04.Tool_Object\Plane">
+      <UniqueIdentifier>{be59b112-2452-4d93-b3aa-8c9e685b7022}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04.Tool_Object\Camera">
+      <UniqueIdentifier>{40125d7d-a21d-4cac-9b0c-1d73c89b0ae6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.Level\00.Static">
+      <UniqueIdentifier>{bb08ee1b-da64-45a5-831c-7ef65799ba5c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.Level\01.Stage_1">
+      <UniqueIdentifier>{0078ffa8-f7ab-43c2-bc94-f5b84fd34334}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.Level\02.Stage_2">
+      <UniqueIdentifier>{65b1c584-c929-45cf-86c2-ab503e839bb6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.Level\03.Stage_3">
+      <UniqueIdentifier>{0c67a28d-fb3d-4a6a-a04b-0b10ef77a128}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.Inspector\01.Camera">
+      <UniqueIdentifier>{765364de-765e-4c73-a73d-07d835bea25f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Menu\01.Camera">
+      <UniqueIdentifier>{bb85dd8a-2136-4e88-b715-e47ecd424380}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Menu\00.Map">
+      <UniqueIdentifier>{c26c8725-dc9f-471b-ac24-bfc813ae29a0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.Inspector\00.Model">
+      <UniqueIdentifier>{f3fab73b-4bac-4980-82c9-31c03c9a9601}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="framework.h">
+      <Filter>99.Default</Filter>
+    </ClInclude>
+    <ClInclude Include="pch.h">
+      <Filter>99.Default</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>99.Default</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>99.Default</Filter>
+    </ClInclude>
+    <ClInclude Include="Tool_YMDoc.h">
+      <Filter>99.Default</Filter>
+    </ClInclude>
+    <ClInclude Include="Tool_YMView.h">
+      <Filter>99.Default</Filter>
+    </ClInclude>
+    <ClInclude Include="Tool_YM.h">
+      <Filter>97.Tool</Filter>
+    </ClInclude>
+    <ClInclude Include="MainFrm.h">
+      <Filter>00.Main</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\Menu_Form.h">
+      <Filter>01.Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\Map_Tool.h">
+      <Filter>01.Menu\00.Map</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\Cam_Tool.h">
+      <Filter>01.Menu\01.Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\Model_Inspector.h">
+      <Filter>02.Inspector\00.Model</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\Cam_Inspector.h">
+      <Filter>02.Inspector\01.Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\Inspector_Form.h">
+      <Filter>02.Inspector</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\Tool_Defines.h">
+      <Filter>98.Tool_Defines</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="pch.cpp">
+      <Filter>99.Default</Filter>
+    </ClCompile>
+    <ClCompile Include="Tool_YMDoc.cpp">
+      <Filter>99.Default</Filter>
+    </ClCompile>
+    <ClCompile Include="Tool_YMView.cpp">
+      <Filter>99.Default</Filter>
+    </ClCompile>
+    <ClCompile Include="Tool_YM.cpp">
+      <Filter>97.Tool</Filter>
+    </ClCompile>
+    <ClCompile Include="MainFrm.cpp">
+      <Filter>00.Main</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Menu_Form.cpp">
+      <Filter>01.Menu</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Map_Tool.cpp">
+      <Filter>01.Menu\00.Map</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Cam_Tool.cpp">
+      <Filter>01.Menu\01.Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Model_Inspector.cpp">
+      <Filter>02.Inspector\00.Model</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Cam_Inspector.cpp">
+      <Filter>02.Inspector\01.Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Inspector_Form.cpp">
+      <Filter>02.Inspector</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="res\Tool_YM.ico">
+      <Filter>99.Default</Filter>
+    </Image>
+    <Image Include="res\Tool_YMDoc.ico">
+      <Filter>99.Default</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="ToolYM.rc">
+      <Filter>99.Default</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\ToolYM.rc2">
+      <Filter>99.Default</Filter>
+    </None>
+  </ItemGroup>
+</Project>
