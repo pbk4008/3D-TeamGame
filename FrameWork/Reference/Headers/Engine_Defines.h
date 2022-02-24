@@ -15,6 +15,15 @@
 #include "d3dcompiler.h"
 #include "DirectXTex.h"
 
+#define NOMINMAX
+#ifdef max
+#undef max
+#endif
+#ifdef min
+#undef min
+#undef min
+#endif
+
 #include "assimp/postprocess.h"
 #include "assimp/Importer.hpp"
 #include "assimp/scene.h"
@@ -50,8 +59,8 @@ using namespace DirectX;
 
 #include "Engine_Macro.h"
 #include "Engine_Typedef.h"
+#include "Engine_Enum.h"
 #include "Engine_Function.h"
 #include "Engine_Struct.h"
-
 
 using namespace Engine;

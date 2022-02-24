@@ -4,6 +4,8 @@
 #include "Texture.h"
 #include "Channel.h"
 #include "Animation.h"
+#include "TextureManager.h"
+#include "GameInstance.h"
 
 
 CModel::CModel(ID3D11Device * pDevice, ID3D11DeviceContext * pDeviceContext)
@@ -37,17 +39,17 @@ CHierarchyNode* CModel::Get_BoneMatrix(const char * pBoneName)
 	return Find_HierarchyNode(pBoneName);	
 }
 
-HRESULT CModel::NativeConstruct_Prototype(const char * pMeshFilePath, const char * pMeshFileName, const _tchar* pShaderFilePath, _fmatrix PivotMatrix, TYPE eMeshType)
+HRESULT CModel::NativeConstruct_Prototype(const string& pMeshFilePath, const string& pMeshFileName, const wstring& pShaderFilePath, _fmatrix PivotMatrix, TYPE eMeshType)
 {
 	m_eMeshType = eMeshType;
 
 	XMStoreFloat4x4(&m_PivotMatrix, PivotMatrix);
 
-	strcpy_s(m_szMeshFilePath, pMeshFilePath);
 
-	char		szFullPath[MAX_PATH] = "";
-	strcpy_s(szFullPath, pMeshFilePath);
-	strcat_s(szFullPath, pMeshFileName);
+	strcpy_s(m_szMeshFilePath, pMeshFilePath.c_str());
+
+	string szFullPath = pMeshFilePath;
+	szFullPath += pMeshFileName;
 
 	m_pScene  = m_Importer.ReadFile(szFullPath, aiProcess_ConvertToLeftHanded | aiProcess_Triangulate | aiProcess_CalcTangentSpace);
 	if (nullptr == m_pScene)
@@ -237,10 +239,23 @@ HRESULT CModel::Create_Materials()
 			strcat_s(szMeshFilePath, szExt);
 
 			_tchar		szFullName[MAX_PATH] = TEXT("");
-
+			_tchar		szTextureTag[MAX_PATH] = TEXT("");
 			MultiByteToWideChar(CP_ACP, 0, szMeshFilePath, strlen(szMeshFilePath), szFullName, MAX_PATH);
+			MultiByteToWideChar(CP_ACP, 0, szFileName, strlen(szFileName), szTextureTag, MAX_PATH);
 
-			pMeshMaterial->pMeshTexture[j] = CTexture::Create(m_pDevice, m_pDeviceContext, szFullName);
+			CTextureManager* pTextureMgr = GET_INSTANCE(CTextureManager);
+
+			pTextureMgr->Add_Texture(m_pDevice, szTextureTag, szFullName);
+
+			RELEASE_INSTANCE(CTextureManager);
+
+			CGameInstance* pInstance = GET_INSTANCE(CGameInstance);
+
+			pMeshMaterial->pMeshTexture[j] = pInstance->Clone_Component<CTexture>(0, L"Texture", szTextureTag);
+
+			RELEASE_INSTANCE(CGameInstance);
+
+			
 			if (nullptr == pMeshMaterial->pMeshTexture[j])
 				return E_FAIL;
 		}		
@@ -350,7 +365,7 @@ HRESULT CModel::Create_VertexIndexBuffer()
 	return S_OK;
 }
 
-HRESULT CModel::Compile_Shader(const _tchar * pShaderFilePath)
+HRESULT CModel::Compile_Shader(const wstring& pShaderFilePath)
 {
 	D3D11_INPUT_ELEMENT_DESC		ElementDescs[] =
 	{
@@ -562,7 +577,7 @@ CHierarchyNode * CModel::Find_HierarchyNode(const char * pName)
 	return (*iter);
 }
 
-CModel * CModel::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pDeviceContext, const char * pMeshFilePath, const char * pMeshFileName, const _tchar* pShaderFilePath, _fmatrix PivotMatrix, TYPE eMeshType)
+CModel * CModel::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pDeviceContext, const string& pMeshFilePath, const string& pMeshFileName, const wstring& pShaderFilePath, _fmatrix PivotMatrix, TYPE eMeshType)
 {
 	CModel*		pInstance = new CModel(pDevice, pDeviceContext);
 

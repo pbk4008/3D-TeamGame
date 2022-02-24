@@ -22,9 +22,9 @@ public:
 	virtual HRESULT Render(_uint iPassIndex);
 
 public:
-	HRESULT SetUp_ValueOnShader(const char* pConstantName, void* pData, _uint iSize);
-	HRESULT SetUp_TextureOnShader(const char* pConstantName, class CTexture* pTextureCom, _uint iTextureIndex = 0);
-	HRESULT SetUp_TextureOnShader(const char* pConstantName, ID3D11ShaderResourceView* pSRV);
+	HRESULT SetUp_ValueOnShader(const string& pConstantName, void* pData, _uint iSize);
+	HRESULT SetUp_TextureOnShader(const string& pConstantName, class CTexture* pTextureCom, _uint iTextureIndex = 0);
+	HRESULT SetUp_TextureOnShader(const string& pConstantName, ID3D11ShaderResourceView* pSRV);
 protected: /* For.VertexBuffer */
 	ID3D11Buffer*				m_pVB = nullptr;
 	D3D11_BUFFER_DESC			m_VBDesc;
@@ -51,7 +51,7 @@ protected:
 protected:
 	HRESULT Create_VertexBuffer();
 	HRESULT Create_IndexBuffer();
-	HRESULT Compile_ShaderFiles(const _tchar* pShaderFilePath, D3D11_INPUT_ELEMENT_DESC* pElementDesc, _uint iNumElements);
+	HRESULT Compile_ShaderFiles(const wstring& pShaderFilePath, D3D11_INPUT_ELEMENT_DESC* pElementDesc, _uint iNumElements);
 
 public:
 	virtual CComponent* Clone(void* pArg) = 0;

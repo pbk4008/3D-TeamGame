@@ -1,6 +1,7 @@
 #include "..\public\GameInstance.h"
 #include "GameObject.h"
 
+extern ENGINE_DLL CGameInstance* g_pGameInstance = GET_INSTANCE(CGameInstance);
 
 CGameInstance::CGameInstance()
 	: m_pGraphic_Device(CGraphic_Device::GetInstance())
@@ -82,8 +83,8 @@ _int CGameInstance::Tick_Engine(_double TimeDelta)
 		return -1;
 
 	m_pPipeLine->Update_PipeLine();
-
-	m_pFrustum->Transform_ToWorldSpace();
+	if(!m_pPipeLine->getCameraCount())
+		m_pFrustum->Transform_ToWorldSpace(m_pPipeLine->getBaseCamera());
 	
 	iProgress = m_pObject_Manager->LateTick(TimeDelta);
 	if (0 > iProgress)
@@ -208,28 +209,52 @@ CComponent * CGameInstance::Clone_Component(_uint iLevelIndex, const wstring& pP
 	return m_pComponent_Manager->Clone_Component(iLevelIndex, pPrototypeTag, pArg);
 }
 
-_fmatrix CGameInstance::Get_Transform(CPipeLine::TRANSFORMSTATEMATRIX eType)
+HRESULT CGameInstance::Add_Camera(const wstring& pCameraTag)
 {
-	if (nullptr == m_pPipeLine)
-		return XMMatrixIdentity();
+	if (!m_pPipeLine)
+		return E_FAIL;
 
-	return m_pPipeLine->Get_Transform(eType);
+	return m_pPipeLine->Add_Camera(pCameraTag);
 }
 
-_fvector CGameInstance::Get_CamPosition()
+void CGameInstance::Update_PipeLine()
 {
-	if (nullptr == m_pPipeLine)
-		return XMVectorZero();
-
-	return m_pPipeLine->Get_CamPosition();
-}
-
-void CGameInstance::Set_Transform(CPipeLine::TRANSFORMSTATEMATRIX eType, _fmatrix TransformMatrix)
-{
-	if (nullptr == m_pPipeLine)
+	if (!m_pPipeLine)
 		return;
 
-	m_pPipeLine->Set_Transform(eType, TransformMatrix);
+	return m_pPipeLine->Update_PipeLine();
+}
+
+void CGameInstance::Delete_Camera()
+{
+	if (!m_pPipeLine)
+		return;
+
+	return m_pPipeLine->Delete_Camera();
+}
+
+_fmatrix CGameInstance::Get_Transform(const wstring& pCameraTag, TRANSFORMSTATEMATRIX eType)
+{
+	if (!m_pPipeLine)
+		return XMMatrixIdentity();
+
+	return m_pPipeLine->Get_Transform(pCameraTag,eType);
+}
+
+_fvector CGameInstance::Get_CamPosition(const wstring& pCameraTag)
+{
+	if (!m_pPipeLine)
+		return XMVectorZero();
+
+	return m_pPipeLine->Get_CamPosition(pCameraTag);
+}
+
+void CGameInstance::Set_Transform(const wstring& pCameraTag, TRANSFORMSTATEMATRIX eType, _fmatrix TransformMatrix)
+{
+	if (!m_pPipeLine)
+		return;
+
+	return m_pPipeLine->Set_Transform(pCameraTag, eType, TransformMatrix);
 }
 
 _byte CGameInstance::Get_DIKeyState(_ubyte byKeyID) const
@@ -327,6 +352,7 @@ vector<ID3D11ShaderResourceView*>* CGameInstance::Get_Texture(const wstring& pTe
 
 void CGameInstance::Release_Engine()
 {
+	RELEASE_INSTANCE(CGameInstance);
 
 	if (0 != CGameInstance::GetInstance()->DestroyInstance())
 		MSGBOX("Failed to Release CGameInstance");	

@@ -208,7 +208,7 @@ HRESULT CVIBuffer_Terrain::NativeConstruct(void * pArg)
 	return S_OK;
 }
 
-HRESULT CVIBuffer_Terrain::Culling(_fmatrix WorldMatrixInverse)
+HRESULT CVIBuffer_Terrain::Culling(const wstring& pCameraTag, _fmatrix WorldMatrixInverse)
 {
 	CFrustum*	pFrustum = GET_INSTANCE(CFrustum);
 
@@ -260,7 +260,7 @@ HRESULT CVIBuffer_Terrain::Culling(_fmatrix WorldMatrixInverse)
 	//	}
 	//}
 
-	m_pQuadTree->Culling(pFrustum, (VTXNORTEX*)m_pVertices, (FACEINDICES32*)m_pIndices, &iNumFaces, WorldMatrixInverse);
+	m_pQuadTree->Culling(pFrustum, (VTXNORTEX*)m_pVertices, (FACEINDICES32*)m_pIndices, &iNumFaces, WorldMatrixInverse,pCameraTag);
 
 	m_iNumPrimitive = iNumFaces;
 

@@ -189,15 +189,19 @@
   <ItemGroup>
     <ClInclude Include="framework.h" />
     <ClInclude Include="MainFrm.h" />
+    <ClInclude Include="MyFormView.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="UITool.h" />
     <ClInclude Include="UIToolDoc.h" />
     <ClInclude Include="UIToolView.h" />
+    <ClInclude Include="UITool_Dlg.h" />
+    <ClInclude Include="UI_Tool_Define.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MainFrm.cpp" />
+    <ClCompile Include="MyFormView.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
@@ -207,6 +211,7 @@
     <ClCompile Include="UITool.cpp" />
     <ClCompile Include="UIToolDoc.cpp" />
     <ClCompile Include="UIToolView.cpp" />
+    <ClCompile Include="UITool_Dlg.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="UITool.rc" />

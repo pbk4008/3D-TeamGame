@@ -115,14 +115,14 @@ void CCollider::Update(_fmatrix TransformMatrix)
 	}
 }
 
-HRESULT CCollider::Render()
+HRESULT CCollider::Render(const wstring& pCameraTag)
 {	
 	CPipeLine*		pPipeLine = GET_INSTANCE(CPipeLine);
 
 	m_vColor = m_isCollision == true ? _float4(1.f, 0.f, 0.f, 1.f) : _float4(0.f, 1.f, 0.f, 1.f);
 
-	m_pEffect->SetView(pPipeLine->Get_Transform(CPipeLine::D3DTS_VIEW));
-	m_pEffect->SetProjection(pPipeLine->Get_Transform(CPipeLine::D3DTS_PROJECTION));
+	m_pEffect->SetView(pPipeLine->Get_Transform(pCameraTag,TRANSFORMSTATEMATRIX::D3DTS_VIEW));
+	m_pEffect->SetProjection(pPipeLine->Get_Transform(pCameraTag,TRANSFORMSTATEMATRIX::D3DTS_PROJECTION));
 
 	m_pDeviceContext->IASetInputLayout(m_pInputLayout);
 

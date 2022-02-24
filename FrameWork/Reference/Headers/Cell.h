@@ -3,7 +3,6 @@
 #include "Base.h"
 
 BEGIN(Engine)
-
 class CCell final : public CBase
 {
 public:
@@ -33,7 +32,7 @@ public:
 #ifdef _DEBUG
 public:
 	HRESULT Ready_DebugBuffer();
-	HRESULT Render(_fmatrix WorldMatrix, _uint iCurrentIndex);
+	HRESULT Render(_fmatrix WorldMatrix, _uint iCurrentIndex, const wstring& pCameraTag);
 #endif // _DEBUG
 private:
 	ID3D11Device*			m_pDevice = nullptr;

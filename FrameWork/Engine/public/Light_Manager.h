@@ -16,7 +16,7 @@ public:
 
 public:
 	HRESULT Add_Light(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext, const LIGHTDESC& LightDesc);
-	HRESULT Render_Lights();
+	HRESULT Render_Lights(const wstring& pCameraTag);
 private:
 	list<class CLight*>				m_Lights;
 	typedef list<class CLight*>		LIGHTS;
