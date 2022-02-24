@@ -1,1 +1,5 @@
-.vs/
+/.vs/
+/Engine/default/x64/
+/Tool_YASIC/Default/x64/
+/Tool_YM/Default/x64/
+/UITool/Default/x64/
