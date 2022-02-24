@@ -240,8 +240,8 @@ HRESULT CModel::Create_Materials()
 
 			_tchar		szFullName[MAX_PATH] = TEXT("");
 			_tchar		szTextureTag[MAX_PATH] = TEXT("");
-			MultiByteToWideChar(CP_ACP, 0, szMeshFilePath, strlen(szMeshFilePath), szFullName, MAX_PATH);
-			MultiByteToWideChar(CP_ACP, 0, szFileName, strlen(szFileName), szTextureTag, MAX_PATH);
+			MultiByteToWideChar(CP_ACP, 0, szMeshFilePath, (_int)strlen(szMeshFilePath), szFullName, MAX_PATH);
+			MultiByteToWideChar(CP_ACP, 0, szFileName, (_int)strlen(szFileName), szTextureTag, MAX_PATH);
 
 			CTextureManager* pTextureMgr = GET_INSTANCE(CTextureManager);
 
