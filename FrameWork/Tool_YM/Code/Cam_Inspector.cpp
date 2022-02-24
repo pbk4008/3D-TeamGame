@@ -1,4 +1,4 @@
-﻿// ../Code/CCam_Inspector.cpp: 구현 파일
+﻿// ../Code/Cam_Inspector.cpp: 구현 파일
 //
 
 #include "pch.h"
@@ -12,7 +12,7 @@
 IMPLEMENT_DYNAMIC(CCam_Inspector, CDialogEx)
 
 CCam_Inspector::CCam_Inspector(CWnd* pParent /*=nullptr*/)
-	: CDialogEx(IDD_Cam_Inspector, pParent)
+	: CDialogEx(IDD_CCam_Inspector, pParent)
 {
 
 }
