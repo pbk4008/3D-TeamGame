@@ -19,6 +19,7 @@
 
 BEGIN(Engine)
 
+
 class ENGINE_DLL CGameInstance final : public CSingleTon<CGameInstance>
 {
 	friend CSingleTon;
@@ -124,5 +125,6 @@ public:
 	virtual void Free() override;
 };
 
+extern ENGINE_DLL CGameInstance* g_pGameInstance;
 END
 

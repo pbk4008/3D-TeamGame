@@ -1,6 +1,7 @@
 #include "..\public\Level_Manager.h"
 #include "Level.h"
 #include "GameInstance.h"
+#include "Component_Manager.h"
 
 
 CLevel_Manager::CLevel_Manager()

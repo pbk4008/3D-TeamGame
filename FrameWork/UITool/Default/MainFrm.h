@@ -1,6 +1,5 @@
-﻿
-// MainFrm.h: CMainFrame 클래스의 인터페이스
-//
+﻿#include "../../Reference/Headers/Engine_Defines.h"
+#include "../../Reference/Headers/GameInstance.h"
 
 #pragma once
 

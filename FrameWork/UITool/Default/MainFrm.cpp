@@ -95,6 +95,5 @@ BOOL CMainFrame::OnCreateClient(LPCREATESTRUCT lpcs, CCreateContext* pContext)
 	m_SplitterWnd.CreateView(0, 0, RUNTIME_CLASS(CMyFormView), CSize(300, WINCX), pContext);
 	m_SplitterWnd.CreateView(0, 1, RUNTIME_CLASS(CUIToolView), CSize(WINCX, WINCY), pContext);
 
-
 	return true/*CFrameWnd::OnCreateClient(lpcs, pContext)*/;
 }

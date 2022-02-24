@@ -22,6 +22,12 @@
     <Filter Include="98.Headers">
       <UniqueIdentifier>{9466d298-a650-44ca-88ee-ccd5a6a8f8ed}</UniqueIdentifier>
     </Filter>
+    <Filter Include="04.Object">
+      <UniqueIdentifier>{c42e021a-7f14-477a-bd2b-c15e7ae03a40}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04.Object\00.Camera">
+      <UniqueIdentifier>{86157280-3ba2-4b1e-ab3d-de78409ea5c7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MainFrm.h">
