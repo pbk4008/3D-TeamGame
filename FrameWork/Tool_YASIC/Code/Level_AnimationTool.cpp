@@ -2,7 +2,7 @@
 #include "Level_AnimationTool.h"
 
 CLevel_AnimationTool::CLevel_AnimationTool(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeivceContext)
-	: CLevel(_pDevice, m_pDeviceContext)
+	: CLevel(_pDevice, _pDeivceContext)
 {
 }
 

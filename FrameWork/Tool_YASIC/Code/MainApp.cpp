@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "MainApp.h"
 
-#include "Level_AnimationTool.h"
+#include "Level_Loading.h"
 
 CMainApp::CMainApp()
 {
@@ -59,7 +59,7 @@ HRESULT CMainApp::SetUp_StartScene(ELevel _eScene)
 	switch (_eScene)
 	{
 	case ELevel::AnimationTool:
-		//hr = m_pGameInstance->Open_Level((_int)ELevel::Loading, CLevel_AnimationTool::Create(m_pDevice, m_pDeviceContext, _eScene));
+		hr = m_pGameInstance->Open_Level((_int)ELevel::Loading, CLevel_Loading::Create(m_pDevice, m_pDeviceContext, _eScene));
 		break;
 	default:
 		return E_FAIL;

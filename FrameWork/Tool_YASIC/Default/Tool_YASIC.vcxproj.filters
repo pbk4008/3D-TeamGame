@@ -40,6 +40,9 @@
     <Filter Include="05.Level\AnimationTool">
       <UniqueIdentifier>{0b6e9ddc-db0b-492f-8e7e-0dcd3b099498}</UniqueIdentifier>
     </Filter>
+    <Filter Include="05.Level\Loading\Loader">
+      <UniqueIdentifier>{6e980f77-a639-4147-a1be-61fc69f426ed}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -90,6 +93,12 @@
     <ClInclude Include="..\Code\Level_AnimationTool.h">
       <Filter>05.Level\AnimationTool</Filter>
     </ClInclude>
+    <ClInclude Include="..\Code\Level_Loading.h">
+      <Filter>05.Level\Loading</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\Loader.h">
+      <Filter>05.Level\Loading\Loader</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -118,6 +127,12 @@
     </ClCompile>
     <ClCompile Include="..\Code\Level_AnimationTool.cpp">
       <Filter>05.Level\AnimationTool</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Level_Loading.cpp">
+      <Filter>05.Level\Loading</Filter>
+    </ClCompile>
+    <ClCompile Include="Loader.cpp">
+      <Filter>05.Level\Loading\Loader</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
