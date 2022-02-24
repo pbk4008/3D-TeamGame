@@ -18,7 +18,9 @@
 #endif
 
 
-// CUIToolView
+// CToolView
+HINSTANCE g_hInst;
+HWND g_hWnd;
 
 IMPLEMENT_DYNCREATE(CUIToolView, CView)
 
@@ -103,3 +105,34 @@ CUIToolDoc* CUIToolView::GetDocument() const // 디버그되지 않은 버전은
 
 
 // CUIToolView 메시지 처리기
+
+
+void CUIToolView::OnInitialUpdate()
+{
+	// TODO: 여기에 특수화된 코드를 추가 및/또는 기본 클래스를 호출합니다.
+	CView::OnInitialUpdate();
+
+	g_hWnd = m_hWnd;
+
+	auto pMainWnd = ::AfxGetApp()->m_pMainWnd;
+	if (nullptr == pMainWnd)
+	{
+		ERR_MSG(L"Failed to Get MainWnd In CUIToolView::OnInitialUpdate");
+		return;
+	}
+
+	RECT rcMainWnd;
+	pMainWnd->GetWindowRect(&rcMainWnd);
+	unsigned int iMainWndWidth = rcMainWnd.right - rcMainWnd.left;
+	unsigned int iMainWndHeight = rcMainWnd.bottom - rcMainWnd.top;
+
+	RECT rcView;
+	GetClientRect(&rcView);
+	unsigned int iClientWndWidth = rcView.right - rcView.left;
+	unsigned int iClientWndHeight = rcView.bottom - rcView.top;
+
+	unsigned int iGapX = iMainWndWidth - iClientWndWidth;
+	unsigned int iGapY = iMainWndHeight - iClientWndHeight;
+
+	pMainWnd->SetWindowPos(nullptr, 100, 100, WINCX + iGapX, WINCY + iGapY, SWP_NOOWNERZORDER);
+}
