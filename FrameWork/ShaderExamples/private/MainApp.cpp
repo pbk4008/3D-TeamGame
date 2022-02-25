@@ -4,6 +4,7 @@
 //#include "Level_Loading.h"
 //#include "BackGround.h"
 #include "Floor.h"
+#include "DynamicCaemra.h"
 
 CMainApp::CMainApp()
 	: m_pGameInstance(CGameInstance::GetInstance())
@@ -36,7 +37,7 @@ HRESULT CMainApp::NativeConstruct()
 	//if (FAILED(SetUp_StartLevel(LEVEL::LEVEL_LOGO)))
 	//	return E_FAIL;
 
-	/*LIGHTDESC			LightDesc;
+	LIGHTDESC			LightDesc;
 	ZeroMemory(&LightDesc, sizeof(LIGHTDESC));
 
 	LightDesc.eType = LIGHTDESC::TYPE_DIRECTIONAL;
@@ -46,7 +47,45 @@ HRESULT CMainApp::NativeConstruct()
 	LightDesc.vAmbient = _float4(0.5f, 0.5f, 0.5f, 1.f);
 
 	if (FAILED(g_pGameInstance->Add_Light(m_pDevice, m_pDeviceContext, LightDesc)))
-		return E_FAIL;*/
+		return E_FAIL;
+
+	//ZeroMemory(&LightDesc, sizeof(LIGHTDESC));
+
+	//LightDesc.eType = LIGHTDESC::TYPE_POINT;
+
+	//LightDesc.vPosition = _float3(5.f, 3.f, 5.f);
+	//LightDesc.fRange = 7.f;
+
+	//LightDesc.vDiffuse = _float4(1.f, 0.0f, 0.0f, 1.f);
+	//LightDesc.vSpecular = _float4(1.f, 1.f, 1.f, 1.f);
+	//LightDesc.vAmbient = _float4(0.4f, 0.4f, 0.4f, 1.f);
+
+	//if (FAILED(pGameInstance->Add_Light(m_pDevice, m_pDeviceContext, LightDesc)))
+	//	return E_FAIL;
+
+
+	//ZeroMemory(&LightDesc, sizeof(LIGHTDESC));
+
+	//LightDesc.eType = LIGHTDESC::TYPE_POINT;
+
+	//LightDesc.vPosition = _float3(10.f, 3.f, 5.f);
+	//LightDesc.fRange = 7.f;
+
+	//LightDesc.vDiffuse = _float4(0.0f, 1.f, 0.0f, 1.f);
+	//LightDesc.vSpecular = _float4(1.f, 1.f, 1.f, 1.f);
+	//LightDesc.vAmbient = _float4(0.4f, 0.4f, 0.4f, 1.f);
+
+	//if (FAILED(pGameInstance->Add_Light(m_pDevice, m_pDeviceContext, LightDesc)))
+	//	return E_FAIL;
+
+	//LightDesc.eType = LIGHTDESC::TYPE_DIRECTIONAL;
+	//LightDesc.vDirection = _float3(1.f, -1.f, 1.f);
+	//LightDesc.vDiffuse = _float4(1.f, 1.f, 1.f, 1.f);
+	//LightDesc.vSpecular = _float4(1.f, 1.f, 1.f, 1.f);
+	//LightDesc.vAmbient = _float4(0.5f, 0.5f, 0.5f, 1.f);
+
+	//if (FAILED(pGameInstance->Add_Light(m_pDevice, m_pDeviceContext, LightDesc)))
+	//	return E_FAIL;
 
 	return S_OK;
 }
@@ -98,49 +137,6 @@ HRESULT CMainApp::Render()
 
 	if (FAILED(m_pGameInstance->Present()))
 		return E_FAIL;
-
-	//CGameInstance* pGameInstance = GET_INSTANCE(CGameInstance);
-
-	//LIGHTDESC			LightDesc;
-	//ZeroMemory(&LightDesc, sizeof(LIGHTDESC));
-
-	//LightDesc.eType = LIGHTDESC::TYPE_POINT;
-
-	//LightDesc.vPosition = _float3(5.f, 3.f, 5.f);
-	//LightDesc.fRange = 7.f;
-
-	//LightDesc.vDiffuse = _float4(1.f, 0.0f, 0.0f, 1.f);
-	//LightDesc.vSpecular = _float4(1.f, 1.f, 1.f, 1.f);
-	//LightDesc.vAmbient = _float4(0.4f, 0.4f, 0.4f, 1.f);
-
-	//if (FAILED(pGameInstance->Add_Light(m_pDevice, m_pDeviceContext, LightDesc)))
-	//	return E_FAIL;
-
-
-	//ZeroMemory(&LightDesc, sizeof(LIGHTDESC));
-
-	//LightDesc.eType = LIGHTDESC::TYPE_POINT;
-
-	//LightDesc.vPosition = _float3(10.f, 3.f, 5.f);
-	//LightDesc.fRange = 7.f;
-
-	//LightDesc.vDiffuse = _float4(0.0f, 1.f, 0.0f, 1.f);
-	//LightDesc.vSpecular = _float4(1.f, 1.f, 1.f, 1.f);
-	//LightDesc.vAmbient = _float4(0.4f, 0.4f, 0.4f, 1.f);
-
-	//if (FAILED(pGameInstance->Add_Light(m_pDevice, m_pDeviceContext, LightDesc)))
-	//	return E_FAIL;
-
-	//LightDesc.eType = LIGHTDESC::TYPE_DIRECTIONAL;
-	//LightDesc.vDirection = _float3(1.f, -1.f, 1.f);
-	//LightDesc.vDiffuse = _float4(1.f, 1.f, 1.f, 1.f);
-	//LightDesc.vSpecular = _float4(1.f, 1.f, 1.f, 1.f);
-	//LightDesc.vAmbient = _float4(0.5f, 0.5f, 0.5f, 1.f);
-
-	//if (FAILED(pGameInstance->Add_Light(m_pDevice, m_pDeviceContext, LightDesc)))
-	//	return E_FAIL;
-
-	//RELEASE_INSTANCE(CGameInstance);
 
 
 	return S_OK;
@@ -202,7 +198,13 @@ HRESULT CMainApp::Ready_GameObject_Prototype()
 	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("PrototypeFloor"), CFloor::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("PrototypeCam"), CDynamicCaemra::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+
 	if (FAILED(m_pGameInstance->Add_GameObjectToLayer((_uint)LEVEL::LEVEL_STATIC, L"Floor", L"PrototypeFloor")))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_GameObjectToLayer((_uint)LEVEL::LEVEL_STATIC, L"DyCam", L"PrototypeCam")))
 		return E_FAIL;
 
 	return S_OK;

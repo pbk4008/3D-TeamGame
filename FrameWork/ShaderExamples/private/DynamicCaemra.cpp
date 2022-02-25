@@ -39,16 +39,28 @@ _int CDynamicCaemra::Tick(_double TimeDelta)
 
 CDynamicCaemra* CDynamicCaemra::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
 {
-	return nullptr;
+	CDynamicCaemra* pInstance = new CDynamicCaemra(pDevice, pDeviceContext);
+
+	if (FAILED(pInstance->NativeConstruct_Prototype()))
+	{
+		MSGBOX("Failed to Creating CDynamicCaemra");
+		Safe_Release(pInstance);
+	}
+
+	return pInstance;
 }
 
 CGameObject* CDynamicCaemra::Clone(void* pArg)
 {
-	return nullptr;
-}
+	CDynamicCaemra* pInstance = new CDynamicCaemra(*this);
 
-void CDynamicCaemra::Free()
-{
+	if (FAILED(pInstance->NativeConstruct(pArg)))
+	{
+		MSGBOX("Failed to Creating  Clone CDynamicCaemra");
+		Safe_Release(pInstance);
+	}
+
+	return pInstance;
 }
 
 HRESULT CDynamicCaemra::SetUp_Components()
@@ -69,4 +81,9 @@ HRESULT CDynamicCaemra::SetUp_Components()
 		return E_FAIL;
 
 	return S_OK;
+}
+
+void CDynamicCaemra::Free()
+{
+	Safe_Release(m_pCamCom);
 }
