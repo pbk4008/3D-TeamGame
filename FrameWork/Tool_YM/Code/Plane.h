@@ -7,6 +7,7 @@
 BEGIN(Engine)
 class CVIBuffer_Terrain;
 class CRenderer;
+class CTexture;
 END
 
 class CPlane final : public CGameObject
@@ -31,6 +32,7 @@ public:
 
 public:
 	CVIBuffer_Terrain* m_pVIBufferCom = nullptr;
+	CTexture*		   m_pTexture = nullptr;
 
 public:
 	static CPlane* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext);

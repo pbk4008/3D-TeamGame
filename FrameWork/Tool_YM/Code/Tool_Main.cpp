@@ -14,9 +14,9 @@ CTool_Main::CTool_Main(void)
 
 HRESULT CTool_Main::Tool_Main_Ready(void)
 {
-	CGameInstance* pGameInstance = GET_INSTANCE(CGameInstance);
+	CGameInstance* pGameInst = GET_INSTANCE(CGameInstance);
 
-	if(FAILED(pGameInstance->Initialize_Engine(g_hInst, g_hWnd, TAB_END, CGraphic_Device::MODE_WIN, g_iWINCX, g_iWINCY, &m_pDevice, &m_pDeviceContext)))
+	if(FAILED(pGameInst->Initialize_Engine(g_hInst, g_hWnd, TAB_END, CGraphic_Device::MODE_WIN, g_iWINCX, g_iWINCY, &m_pDevice, &m_pDeviceContext)))
 		return E_FAIL;
 
 	RELEASE_INSTANCE(CGameInstance);
@@ -25,6 +25,7 @@ HRESULT CTool_Main::Tool_Main_Ready(void)
 		return E_FAIL;
 
 	m_pRenderer = g_pGameInstance->Clone_Component<CRenderer>(TAB_STATIC, L"Renderer");
+
 	if (nullptr == m_pRenderer)
 		return E_FAIL;
 

@@ -46,7 +46,7 @@
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
-    <UseOfMfc>Dynamic</UseOfMfc>
+    <UseOfMfc>Static</UseOfMfc>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
@@ -175,6 +175,7 @@
       <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalLibraryDirectories>../../Reference/Library/Release;</AdditionalLibraryDirectories>
     </Link>
     <Midl>
       <MkTypLibCompatible>false</MkTypLibCompatible>
@@ -192,6 +193,7 @@
     <ClInclude Include="..\Code\Cam_Inspector.h" />
     <ClInclude Include="..\Code\Cam_Tool.h" />
     <ClInclude Include="..\Code\Changer.h" />
+    <ClInclude Include="..\Code\Dyanmic_Camera.h" />
     <ClInclude Include="..\Code\Inspector_Form.h" />
     <ClInclude Include="..\Code\MapTool_Level.h" />
     <ClInclude Include="..\Code\Map_Tool.h" />
@@ -216,6 +218,7 @@
     <ClCompile Include="..\Code\Cam_Inspector.cpp" />
     <ClCompile Include="..\Code\Cam_Tool.cpp" />
     <ClCompile Include="..\Code\Changer.cpp" />
+    <ClCompile Include="..\Code\Dyanmic_Camera.cpp" />
     <ClCompile Include="..\Code\Inspector_Form.cpp" />
     <ClCompile Include="..\Code\MapTool_Level.cpp" />
     <ClCompile Include="..\Code\Map_Tool.cpp" />

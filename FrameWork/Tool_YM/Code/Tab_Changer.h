@@ -11,9 +11,9 @@ public:
 	virtual ~CTab_Changer(void) = default;
 
 public:
-	virtual HRESULT Ready_Level(TAB_ID _eNextTab);
-	virtual _int	Update_Level(_double _dTimeDelta);
-	virtual HRESULT Render_Level(void);
+	virtual HRESULT NativeConstruct(TAB_ID _eNextTab);
+	virtual _int	Tick(_double _dTimeDelta);
+	virtual HRESULT Render(void);
 
 private:
 	HRESULT			Ready_Layer_BackGround(const _tchar * _pLayerTag);
