@@ -53,6 +53,8 @@ public: /* For.Object_Manager*/
 public: /* For.Component_Manager */
 	HRESULT Add_Prototype(_uint iLevelIndex, const wstring& pPrototypeTag, class CComponent* pPrototype);
 	CComponent* Clone_Component(_uint iLevelIndex, const wstring& pPrototypeTag, void* pArg = nullptr);
+public:
+	HRESULT SetUpBaseComponent(ID3D11Device * pDevice, ID3D11DeviceContext * pDeviceContext);
 	template<typename T>
 	T* Clone_Component(_uint iLevelIndex, const wstring& pPrototypeTag, void* pArg = nullptr)
 	{

@@ -28,6 +28,9 @@
     <Filter Include="04.Object\00.Camera">
       <UniqueIdentifier>{86157280-3ba2-4b1e-ab3d-de78409ea5c7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="04.Object\01.UI">
+      <UniqueIdentifier>{52c11962-4420-4ac3-a2d0-afa6790a74b4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MainFrm.h">
@@ -63,6 +66,12 @@
     <ClInclude Include="UITool_Dlg.h">
       <Filter>03.Dialogs</Filter>
     </ClInclude>
+    <ClInclude Include="MFCCamera.h">
+      <Filter>04.Object\00.Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="MFCObject_UI.h">
+      <Filter>04.Object\01.UI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MainFrm.cpp">
@@ -85,6 +94,12 @@
     </ClCompile>
     <ClCompile Include="UITool_Dlg.cpp">
       <Filter>03.Dialogs</Filter>
+    </ClCompile>
+    <ClCompile Include="MFCCamera.cpp">
+      <Filter>04.Object\00.Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="MFCObject_UI.cpp">
+      <Filter>04.Object\01.UI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -151,11 +151,18 @@ BOOL CUIToolApp::InitInstance()
 		return false;
 	}
 
+	if (m_pGameInstance->SetUpBaseComponent(m_pDevice, m_pDeviceContext))
+	{
+		ERR_MSG(L"Failed to SetUpBaseComponent Engine In CUIToolApp::InitInstance() ");
+		return false;
+	}
+
 	if (FAILED(m_pGameInstance->Ready_Timer(TEXT("Timer_Dafault"))))
 	{
 		ERR_MSG(L"Failed to Ready Default Timer");
 		return false;
 	}
+
 	if (FAILED(m_pGameInstance->Ready_Timer(TEXT("Timer_60Frame"))))
 	{
 		ERR_MSG(L"Failed to Ready 60Frame Timer");

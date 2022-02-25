@@ -193,6 +193,8 @@
   <ItemGroup>
     <ClInclude Include="framework.h" />
     <ClInclude Include="MainFrm.h" />
+    <ClInclude Include="MFCCamera.h" />
+    <ClInclude Include="MFCObject_UI.h" />
     <ClInclude Include="MyFormView.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Resource.h" />
@@ -205,6 +207,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MainFrm.cpp" />
+    <ClCompile Include="MFCCamera.cpp" />
+    <ClCompile Include="MFCObject_UI.cpp" />
     <ClCompile Include="MyFormView.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

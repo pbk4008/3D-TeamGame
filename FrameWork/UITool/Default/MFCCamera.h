@@ -17,6 +17,7 @@ private:
 	explicit CMFCCamera(const CMFCCamera& rhs);
 	virtual ~CMFCCamera() = default;
 
+
 public:
 	virtual HRESULT NativeConstruct_Prototype() override;
 	virtual HRESULT NativeConstruct(void* pArg) override;
@@ -24,16 +25,13 @@ public:
 	virtual _int LateTick(_double TimeDelta) override;
 	virtual HRESULT Render() override;
 
-private:
-	void Key_Input(_double TimeDelta);
-
 public:
 	static CMFCCamera* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);
 	virtual CGameObject* Clone(void* pArg) override;
 	virtual void Free() override;
 
 private:
-	CCamera* m_pTransform;
+	CCamera* m_pCameraCom = nullptr;
 };
 
 #endif // MFCCamera_h__

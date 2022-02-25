@@ -203,6 +203,14 @@ HRESULT CGameInstance::Add_Prototype(_uint iLevelIndex, const wstring& pPrototyp
 	return m_pComponent_Manager->Add_Prototype(iLevelIndex, pPrototypeTag, pPrototype);	
 }
 
+HRESULT CGameInstance::SetUpBaseComponent(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
+{
+	if (nullptr == m_pComponent_Manager)
+		return E_FAIL;
+
+	return m_pComponent_Manager->SetUpBaseComponent(pDevice, pDeviceContext);
+}
+
 CComponent * CGameInstance::Clone_Component(_uint iLevelIndex, const wstring& pPrototypeTag, void * pArg)
 {
 	if (nullptr == m_pComponent_Manager)
