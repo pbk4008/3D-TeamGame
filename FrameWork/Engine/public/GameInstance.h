@@ -69,7 +69,6 @@ public:
 
 		return static_cast<T*>(pCom);
 	}
-	HRESULT SetUpBaseComponent(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);
 
 public: /* For.PipeLine */
 	HRESULT Add_Camera(const wstring& pCameraTag);

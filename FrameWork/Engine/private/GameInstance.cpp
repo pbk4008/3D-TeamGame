@@ -219,14 +219,6 @@ CComponent * CGameInstance::Clone_Component(_uint iLevelIndex, const wstring& pP
 	return m_pComponent_Manager->Clone_Component(iLevelIndex, pPrototypeTag, pArg);
 }
 
-HRESULT CGameInstance::SetUpBaseComponent(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
-{
-	if (nullptr == m_pComponent_Manager)
-		return E_FAIL;
-
-	return m_pComponent_Manager->SetUpBaseComponent(pDevice, pDeviceContext);
-}
-
 HRESULT CGameInstance::Add_Camera(const wstring& pCameraTag)
 {
 	if (!m_pPipeLine)
