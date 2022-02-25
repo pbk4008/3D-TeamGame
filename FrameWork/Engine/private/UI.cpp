@@ -53,6 +53,9 @@ HRESULT CUI::NativeConstruct(void* pArg)
 	if (FAILED(CGameObject::NativeConstruct(pArg)))
 		return E_FAIL;
 
+	if (!pArg)
+		return S_OK;
+
 	wstring pTextureTag = (*(wstring*)pArg);
 
 	if (FAILED(m_pTexture->Change_Texture(pTextureTag)))

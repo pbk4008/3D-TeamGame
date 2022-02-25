@@ -200,7 +200,6 @@ call Update_Library_Release.bat</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\private\UI.h" />
     <ClInclude Include="..\public\Actor.h" />
     <ClInclude Include="..\public\Animation.h" />
     <ClInclude Include="..\public\Base.h" />
@@ -250,6 +249,7 @@ call Update_Library_Release.bat</Command>
     <ClInclude Include="..\public\Timer.h" />
     <ClInclude Include="..\public\Timer_Manager.h" />
     <ClInclude Include="..\public\Transform.h" />
+    <ClInclude Include="..\public\UI.h" />
     <ClInclude Include="..\public\VIBuffer.h" />
     <ClInclude Include="..\public\VIBuffer_Cube.h" />
     <ClInclude Include="..\public\VIBuffer_PointInstance.h" />

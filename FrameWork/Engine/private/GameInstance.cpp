@@ -267,29 +267,54 @@ void CGameInstance::Set_Transform(const wstring& pCameraTag, TRANSFORMSTATEMATRI
 	return m_pPipeLine->Set_Transform(pCameraTag, eType, TransformMatrix);
 }
 
-_byte CGameInstance::Get_DIKeyState(_ubyte byKeyID) const
+const _byte CGameInstance::Get_DIKeyState(const _ubyte _byKeyID) const
 {
-	if (nullptr == m_pInput_Device)
-		return 0;
+	if (m_pInput_Device)
+		return -1;
 
-	return m_pInput_Device->Get_DIKState(byKeyID);	
+	return m_pInput_Device->Get_DIKeyState(_byKeyID);
 }
 
-_long CGameInstance::Get_MouseMoveState(CInput_Device::MOUSEMOVESTATE eMoveState) const
+const _long CGameInstance::Get_MouseMoveState(const CInput_Device::EMouseMoveState _eMoveState) const
 {
-	if (nullptr == m_pInput_Device)
-		return 0;
+	if (m_pInput_Device)
+		return -1;
 
-	return m_pInput_Device->Get_MouseMoveState(eMoveState);
+	return m_pInput_Device->Get_MouseMoveState(_eMoveState);
 }
 
-_byte CGameInstance::Get_MouseButtonState(CInput_Device::MOUSEBUTTONSTATE eButtonState) const
+const _byte CGameInstance::Get_MouseButtonState(const CInput_Device::EMouseButtonState _eButtonState) const
 {
-	if (nullptr == m_pInput_Device)
-		return 0;
+	if (m_pInput_Device)
+		return -1;
 
-	return m_pInput_Device->Get_MouseButtonState(eButtonState);
+	return m_pInput_Device->Get_MouseButtonState(_eButtonState);
 }
+
+const _bool CGameInstance::Key_Down(const KEY_STATE& _ks)
+{
+	if (m_pInput_Device)
+		return false;
+
+	return m_pInput_Device->Key_Down(_ks);
+}
+
+const _bool CGameInstance::Key_Up(const KEY_STATE& _ks)
+{
+	if (m_pInput_Device)
+		return false;
+
+	return m_pInput_Device->Key_Up(_ks);
+}
+
+const _bool CGameInstance::Key_Pressing(const KEY_STATE& _ks)
+{
+	if (m_pInput_Device)
+		return false;
+
+	return m_pInput_Device->Key_Pressing(_ks);
+}
+
 
 const LIGHTDESC* CGameInstance::Get_LightDesc(_uint iIndex)
 {
