@@ -1,5 +1,8 @@
 #include "pch.h"
 #include "MainApp.h"
+#include "BackGround.h"
+#include "MainCamera.h"
+#include "Loading.h"
 
 CMainApp::CMainApp()
 {	
@@ -77,14 +80,16 @@ HRESULT CMainApp::SetUp_StartLevel(SCENEID eLevel)
 {
 	HRESULT		hr = 0;
 
-	//switch (eLevel)
-	//{
-	//case SCENEID::SCENE_LOGO:
-	//	return E_FAIL;
-	//}	
+	switch (eLevel)
+	{
+	case SCENEID::SCENE_LOGO:
+		hr = g_pGameInstance->Open_Level((_uint)SCENEID::SCENE_LOADING, CLoading::Create(m_pDevice, m_pDeviceContext, eLevel));
+	default:
+		hr = E_FAIL;
+	}	
 
-	//if (FAILED(hr))
-	//	return E_FAIL;
+	if (FAILED(hr))
+		return E_FAIL;
 
 	return S_OK;
 }
@@ -104,8 +109,11 @@ HRESULT CMainApp::Ready_Component_Prototype()
 HRESULT CMainApp::Ready_GameObject_Prototype()
 {
 	/* For.Prototype_GameObject_BackGround */
-	//if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_BackGround"), CBackGround::Create(m_pDevice, m_pDeviceContext))))
-	//	return E_FAIL;
+	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_BackGround"), CBackGround::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+
+	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_MainCamer"), CMainCamera::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
 
 	return S_OK;
 }
