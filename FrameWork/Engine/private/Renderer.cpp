@@ -290,6 +290,4 @@ void CRenderer::Free()
 
 	Safe_Release(m_pVIBuffer);
 	Safe_Release(m_pTarget_Manager);
-
-	
 }
