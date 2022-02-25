@@ -20,18 +20,7 @@ HRESULT CMFCCamera::NativeConstruct_Prototype()
 		return E_FAIL;
 	}
 
-	CCamera::CAMERADESC Desc;
-	Desc.eType = CCamera::CAMERATYPE::CAMERA_ORTHO;
-	Desc.fWinCX = WINCX;
-	Desc.fWinCY = WINCY;
-	Desc.pCameraTag = L"MFCCamera";
-
-	m_pCameraCom = g_pGameInstance->Clone_Component<CCamera>(0, L"Camera", &Desc);
-
-	if (FAILED(SetUp_Components(L"Camera", m_pCameraCom)))
-	{
-		return E_FAIL;
-	}
+	
 
 	return S_OK;
 }
@@ -39,6 +28,21 @@ HRESULT CMFCCamera::NativeConstruct_Prototype()
 HRESULT CMFCCamera::NativeConstruct(void* pArg)
 {
 	if (FAILED(__super::NativeConstruct(pArg)))
+	{
+		return E_FAIL;
+	}
+
+	CCamera::CAMERADESC Desc;
+	Desc.eType = CCamera::CAMERATYPE::CAMERA_ORTHO;
+	Desc.fWinCX = WINCX;
+	Desc.fWinCY = WINCY;
+	Desc.fNear = 0.01f;
+	Desc.fFar = 1.f;
+	Desc.pCameraTag = L"MFCCamera";
+
+	m_pCameraCom = g_pGameInstance->Clone_Component<CCamera>(0, L"Camera", &Desc);
+
+	if (FAILED(SetUp_Components(L"MFCCamera", m_pCameraCom)))
 	{
 		return E_FAIL;
 	}

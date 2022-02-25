@@ -44,6 +44,7 @@ HRESULT CTool_Main::Tool_Main_Ready(void)
 	m_pInspec_Form = dynamic_cast<CInspector_Form*>(m_pMainFrm->m_tMainSplitter.GetPane(0, 2));
 
 	m_pInspec_Form->Get_Device(m_pDevice, m_pDeviceContext);
+	m_pMenu_Form->Get_Device(m_pDevice, m_pDeviceContext);
 
 	return S_OK;
 }

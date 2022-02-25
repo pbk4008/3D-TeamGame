@@ -31,6 +31,12 @@
     <Filter Include="04.Object\01.UI">
       <UniqueIdentifier>{52c11962-4420-4ac3-a2d0-afa6790a74b4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="00.MFCMainApp">
+      <UniqueIdentifier>{c93c659a-57b0-47cb-b3c5-60c07a97aa45}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Level">
+      <UniqueIdentifier>{6f9794fb-6f57-4ed2-a5ad-20a0d84795cf}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MainFrm.h">
@@ -72,6 +78,12 @@
     <ClInclude Include="MFCObject_UI.h">
       <Filter>04.Object\01.UI</Filter>
     </ClInclude>
+    <ClInclude Include="MFCMainApp.h">
+      <Filter>00.MFCMainApp</Filter>
+    </ClInclude>
+    <ClInclude Include="MFCLevel_Logo.h">
+      <Filter>05.Level</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MainFrm.cpp">
@@ -100,6 +112,12 @@
     </ClCompile>
     <ClCompile Include="MFCObject_UI.cpp">
       <Filter>04.Object\01.UI</Filter>
+    </ClCompile>
+    <ClCompile Include="MFCMainApp.cpp">
+      <Filter>00.MFCMainApp</Filter>
+    </ClCompile>
+    <ClCompile Include="MFCLevel_Logo.cpp">
+      <Filter>05.Level</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -28,10 +28,15 @@ public:
 	void InitAssetsTree(void);
 
 public:
+	FILEINFO  m_FileInfo;
+	_bool	  m_bSelect_FBXFile = false;
+
+public:
 	CTreeCtrl m_AssetTree;
 
 public:
 	virtual BOOL OnInitDialog();
 	virtual void PostNcDestroy();
 	afx_msg void OnTvnSelchangedTree1(NMHDR* pNMHDR, LRESULT* pResult);
+	afx_msg void OnNMDblclkTree1(NMHDR* pNMHDR, LRESULT* pResult);
 };

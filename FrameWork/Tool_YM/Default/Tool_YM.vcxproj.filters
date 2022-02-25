@@ -138,6 +138,9 @@
     <ClInclude Include="..\Code\Dyanmic_Camera.h">
       <Filter>04.Tool_Object\Camera\Dynamic_Cam</Filter>
     </ClInclude>
+    <ClInclude Include="..\Code\Tool_Struct.h">
+      <Filter>98.Tool_Defines</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
