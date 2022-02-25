@@ -12,6 +12,9 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Tool_YASIC", "Tool_YASIC\Default\Tool_YASIC.vcxproj", "{A79D68EF-CAD7-43B3-A8E2-334A1900121A}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ShaderExamples", "ShaderExamples\default\ShaderExamples.vcxproj", "{90DD829D-E88C-4D86-975D-15B541D95C16}"
+	ProjectSection(ProjectDependencies) = postProject
+		{B0233BC4-97D8-4AF2-A164-3B4CFF2E34DA} = {B0233BC4-97D8-4AF2-A164-3B4CFF2E34DA}
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "00. Engine", "00. Engine", "{0BE763B4-BB7A-4EE7-9417-A381F351FC66}"
 EndProject

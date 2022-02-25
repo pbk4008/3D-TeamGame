@@ -23,12 +23,11 @@ public:
 public:
 	static CDynamicCaemra* Create(ID3D11Device * pDevice, ID3D11DeviceContext * pDeviceContext);
 	virtual CGameObject* Clone(void* pArg) override;
-	virtual void Free();
+	virtual void Free() override;
 
 private: virtual HRESULT SetUp_Components(); 
 
 private: CCamera*		m_pCamCom = nullptr;
-private: CTransform*	m_pTransformCom = nullptr;
 };
 END
 

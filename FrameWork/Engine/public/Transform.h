@@ -49,6 +49,7 @@ public:
 	virtual HRESULT NativeConstruct(void* pArg);
 
 public:
+	void SetTransformDesc(_float fSpeedPerSec, _float fAnglePerSec);
 	void Go_Straight(_double TimeDelta, class CNavigation* pNavigation = nullptr);
 	void Go_Left(_double TimeDelta);
 	void Go_Right(_double TimeDelta);
