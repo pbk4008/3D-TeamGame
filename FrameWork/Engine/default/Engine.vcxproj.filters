@@ -333,9 +333,6 @@
     <ClInclude Include="..\public\Camera.h">
       <Filter>00.Utility\03.Component\06.Camera</Filter>
     </ClInclude>
-    <ClInclude Include="..\private\UI.h">
-      <Filter>00.Utility\02.GameObject\01.UI</Filter>
-    </ClInclude>
     <ClInclude Include="..\public\Actor.h">
       <Filter>00.Utility\02.GameObject\02.Actor</Filter>
     </ClInclude>
@@ -347,6 +344,9 @@
     </ClInclude>
     <ClInclude Include="..\public\Mouse.h">
       <Filter>00.Utility\02.GameObject\05.Mouse</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\UI.h">
+      <Filter>00.Utility\02.GameObject\01.UI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -79,10 +79,12 @@ public: /* For.PipeLine */
 	void Set_Transform(const wstring& pCameraTag, TRANSFORMSTATEMATRIX eType, _fmatrix TransformMatrix);
 
 public: /* for.Input_Device */
-	_byte Get_DIKeyState(_ubyte byKeyID) const;
-	_long Get_MouseMoveState(CInput_Device::MOUSEMOVESTATE eMoveState) const;
-	_byte Get_MouseButtonState(CInput_Device::MOUSEBUTTONSTATE eButtonState) const;
-
+	const _byte Get_DIKeyState(const _ubyte _byKeyID) const;
+	const _long Get_MouseMoveState(const CInput_Device::EMouseMoveState _eMoveState) const;
+	const _byte Get_MouseButtonState(const CInput_Device::EMouseButtonState _eButtonState) const;
+	const _bool Key_Down(const KEY_STATE& _ks);
+	const _bool Key_Up(const KEY_STATE& _ks);
+	const _bool Key_Pressing(const KEY_STATE& _ks);
 public: /* For.Light_Manager */
 	const LIGHTDESC* Get_LightDesc(_uint iIndex = 0);
 	HRESULT Add_Light(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext, const LIGHTDESC& LightDesc);
