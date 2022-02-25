@@ -31,8 +31,6 @@ public:
 	virtual BOOL InitInstance();
 	virtual int ExitInstance();
 
-	int Engine_Tick(_double TimeDelta);
-	HRESULT Engine_Render();
 
 	ID3D11Device* m_pDevice = nullptr;
 	ID3D11DeviceContext* m_pDeviceContext = nullptr;
@@ -42,9 +40,8 @@ public:
 	DECLARE_MESSAGE_MAP()
 	virtual BOOL OnIdle(LONG lCount);
 
-	class CRenderer* m_pRenderer;
 
-	CGameInstance* m_pGameInstance;
+	class CMFCMainApp* m_pMFCMainApp = nullptr;
 	float m_TimerAcc = 0.0f;
 };
 

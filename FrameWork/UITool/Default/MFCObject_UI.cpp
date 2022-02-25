@@ -20,15 +20,14 @@ HRESULT CMFCObject_UI::NativeConstruct_Prototype()
 		return E_FAIL;
 	}
 
-	m_fX = 290.f;
+	m_fX = 500.f;
 	m_fY = 263.f;
 	m_fSizeX = 49.2f;
 	m_fSizeY = 45.f;
 
-	g_pGameInstance->Add_Texture(m_pDevice, L"Texture", L"../bin/Resource/Textures/Default1.jpg");
+	m_ProjectionMatrix = XMMatrixOrthographicLH(WINCX, WINCY, 0.f, 1.f);
+	XMStoreFloat4x4(&m_WorldMatrix, XMMatrixIdentity());
 
-	//m_ProjectionMatrix = XMMatrixOrthographicLH(WINCX, WINCY, 0.f, 1.f);
-	//XMStoreFloat4x4(&m_WorldMatrix, XMMatrixIdentity());
 	return S_OK;
 }
 
@@ -45,29 +44,26 @@ HRESULT CMFCObject_UI::NativeConstruct(void* pArg)
 		return E_FAIL;
 	}
 	
-	m_pTextureCom->Change_Texture(L"Texture");
+	//m_pTextureCom->Change_Texture(L"Texture");
 
-	_vector vPos = { 500.f,500.f ,1.f,1.f };
-	m_pTransform->Set_State(CTransform::STATE_POSITION, vPos);
-
-	_vector vScale = { 1.f,1.f ,1.f ,1.f };
-	m_pTransform->Scaling(vScale);
-	/*m_WorldMatrix.r[0] = XMVectorSet(g_iWinCX, 0.f, 0.f, 0.f);
-	m_WorldMatrix.r[1] = XMVectorSet(0.0f, g_iWinCY, 0.f, 0.f);
-	m_WorldMatrix.r[2] = XMVectorSet(0.0f, 0.f, 1.f, 0.f);*/
-
+	//_vector vPos = { 500.f,500.f ,1.f,1.f };
+	//m_pTransform->Set_State(CTransform::STATE_POSITION, vPos);
+	//
+	//_vector vScale = { 10.f,10.f ,10.f ,1.f };
+	//m_pTransform->Scaling(vScale);
+	
 	return S_OK;
 }
 
 _int CMFCObject_UI::Tick(_double TimeDelta)
 {
-	//XMStoreFloat4x4(&m_WorldMatrix, XMMatrixIdentity());
-	//m_WorldMatrix._11 = m_fSizeX;
-	//m_WorldMatrix._22 = m_fSizeY;
+	XMStoreFloat4x4(&m_WorldMatrix, XMMatrixIdentity());
+	m_WorldMatrix._11 = m_fSizeX;
+	m_WorldMatrix._22 = m_fSizeY;
 
-	//m_WorldMatrix._41 = m_fX - (WINCX >> 1);
-	//m_WorldMatrix._42 = -m_fY + (WINCY >> 1);
-	//m_WorldMatrix._43 = 0.69f;
+	m_WorldMatrix._41 = m_fX - (WINCX >> 1);
+	m_WorldMatrix._42 = -m_fY + (WINCY >> 1);
+	m_WorldMatrix._43 = 0.69f;
 
 
 	//RECT		rc;
@@ -89,32 +85,31 @@ _int CMFCObject_UI::Tick(_double TimeDelta)
 	//}
 
 	//cout << "X : " << ptMouse.x << " , " << " Y : " << ptMouse.y << endl;
-	
-	return _int();
+	return 0;
 }
 
 _int CMFCObject_UI::LateTick(_double TimeDelta)
 {
-	if (nullptr != m_pRendererCom)
+	if (nullptr != m_pRenderer)
 	{
-		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER::RENDER_UI, this);
+		m_pRenderer->Add_RenderGroup(CRenderer::RENDER::RENDER_UI, this);
 	}
 	return _int();
 }
 
 HRESULT CMFCObject_UI::Render()
 {
-	_matrix XMWorldMatrix = XMMatrixTranspose(m_pTransform->Get_WorldMatrix());
-	_matrix XMViewMatrix = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera", TRANSFORMSTATEMATRIX::D3DTS_VIEW));
-	_matrix XMProjectMatrix = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera", TRANSFORMSTATEMATRIX::D3DTS_PROJECTION));
+	_matrix XMWorldMatrix = XMMatrixTranspose(XMLoadFloat4x4(&m_WorldMatrix));
+	_matrix XMViewMatrix = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"MFCCamera", TRANSFORMSTATEMATRIX::D3DTS_VIEW));
+	_matrix XMProjectMatrix = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"MFCCamera", TRANSFORMSTATEMATRIX::D3DTS_PROJECTION));
 
-	m_pVIBufferCom->SetUp_ValueOnShader("g_WorldMatrix", &XMWorldMatrix, sizeof(_float) * 16);
-	m_pVIBufferCom->SetUp_ValueOnShader("g_ViewMatrix", &XMViewMatrix, sizeof(_float) * 16);
-	m_pVIBufferCom->SetUp_ValueOnShader("g_ProjMatrix", &XMProjectMatrix, sizeof(XMMATRIX));
+	m_pBuffer->SetUp_ValueOnShader("g_WorldMatrix", &XMWorldMatrix, sizeof(_float) * 16);
+	m_pBuffer->SetUp_ValueOnShader("g_ViewMatrix", &XMViewMatrix, sizeof(_float) * 16);
+	m_pBuffer->SetUp_ValueOnShader("g_ProjMatrix", &XMProjectMatrix, sizeof(XMMATRIX));
 
-	m_pVIBufferCom->SetUp_TextureOnShader("g_DiffuseTexture", m_pTextureCom, m_iCurrentImage); // 0 ÀÌ¶û 1·Î ³ª´²Áà¾ßÇÔ 
+	m_pBuffer->SetUp_TextureOnShader("g_DiffuseTexture", m_pTexture); // 0 ÀÌ¶û 1·Î ³ª´²Áà¾ßÇÔ 
 
-	m_pVIBufferCom->Render(0);
+	m_pBuffer->Render(0);
 	
 	return S_OK;
 }
@@ -171,8 +166,4 @@ CGameObject* CMFCObject_UI::Clone(void* pArg)
 void CMFCObject_UI::Free()
 {
 	__super::Free();
-
-	Safe_Release(m_pTextureCom);
-	Safe_Release(m_pVIBufferCom);
-	Safe_Release(m_pRendererCom);
 }
