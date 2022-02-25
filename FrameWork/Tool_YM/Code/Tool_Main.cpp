@@ -16,7 +16,7 @@ HRESULT CTool_Main::Tool_Main_Ready(void)
 {
 	CGameInstance* pGameInst = GET_INSTANCE(CGameInstance);
 
-	if(FAILED(pGameInst->Initialize_Engine(g_hInst, g_hWnd, AfxGetMainWnd()->m_hWnd, TAB_END, CGraphic_Device::MODE_WIN, g_iWINCX, g_iWINCY, &m_pDevice, &m_pDeviceContext)))
+	if(FAILED(pGameInst->Initialize_Engine(g_hInst, g_hWnd, TAB_END, CGraphic_Device::MODE_WIN, g_iWINCX, g_iWINCY, &m_pDevice, &m_pDeviceContext)))
 		return E_FAIL;
 
 	RELEASE_INSTANCE(CGameInstance);

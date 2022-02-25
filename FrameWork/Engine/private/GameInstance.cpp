@@ -35,7 +35,7 @@ CGameInstance::CGameInstance()
 	Safe_AddRef(m_pSoundManager);
 }
 
-HRESULT CGameInstance::Initialize_Engine(HINSTANCE hInst, HWND hWnd, HWND dInput_hWnd, _uint iNumLevel, CGraphic_Device::WINMODE eWinMode, _uint iWinCX, _uint iWinCY, ID3D11Device** ppDeviceOut, ID3D11DeviceContext** ppDeviceContextOut)
+HRESULT CGameInstance::Initialize_Engine(HINSTANCE hInst, HWND hWnd, _uint iNumLevel, CGraphic_Device::WINMODE eWinMode, _uint iWinCX, _uint iWinCY, ID3D11Device** ppDeviceOut, ID3D11DeviceContext** ppDeviceContextOut)
 {
 	if (nullptr == m_pGraphic_Device || 
 		nullptr == m_pObject_Manager || 
@@ -45,11 +45,7 @@ HRESULT CGameInstance::Initialize_Engine(HINSTANCE hInst, HWND hWnd, HWND dInput
 	if (FAILED(m_pGraphic_Device->Ready_Graphic_Device(hWnd, eWinMode, iWinCX, iWinCY, ppDeviceOut, ppDeviceContextOut)))
 		return E_FAIL;	
 
-<<<<<<< HEAD
-	if (FAILED(m_pInput_Device->Ready_Input_Device(hInst, dInput_hWnd)))
-=======
 	if (FAILED(m_pInput_Device->Init_InputDevice(hInst, hWnd)))
->>>>>>> main
 		return E_FAIL;
 
 	if (FAILED(m_pObject_Manager->Reserve_Manager(iNumLevel)))
