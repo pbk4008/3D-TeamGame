@@ -24,6 +24,8 @@ HRESULT CMainApp::NativeConstruct()
 
 	//if (FAILED(Ready_Gara()))
 	//	return E_FAIL;
+	if (FAILED(g_pGameInstance->SetUpBaseComponent(m_pDevice, m_pDeviceContext)))
+		return E_FAIL;
 
 	if (FAILED(Ready_Component_Prototype()))
 		return E_FAIL;
@@ -33,6 +35,18 @@ HRESULT CMainApp::NativeConstruct()
 
 	//if (FAILED(SetUp_StartLevel(LEVEL::LEVEL_LOGO)))
 	//	return E_FAIL;
+
+	LIGHTDESC			LightDesc;
+	ZeroMemory(&LightDesc, sizeof(LIGHTDESC));
+
+	LightDesc.eType = LIGHTDESC::TYPE_DIRECTIONAL;
+	LightDesc.vDirection = _float3(1.f, -1.f, 1.f);
+	LightDesc.vDiffuse = _float4(1.f, 1.f, 1.f, 1.f);
+	LightDesc.vSpecular = _float4(1.f, 1.f, 1.f, 1.f);
+	LightDesc.vAmbient = _float4(0.5f, 0.5f, 0.5f, 1.f);
+
+	if (FAILED(g_pGameInstance->Add_Light(m_pDevice, m_pDeviceContext, LightDesc)))
+		return E_FAIL;
 
 	return S_OK;
 }
@@ -85,10 +99,10 @@ HRESULT CMainApp::Render()
 	if (FAILED(m_pGameInstance->Present()))
 		return E_FAIL;
 
-	CGameInstance* pGameInstance = GET_INSTANCE(CGameInstance);
+	//CGameInstance* pGameInstance = GET_INSTANCE(CGameInstance);
 
-	LIGHTDESC			LightDesc;
-	ZeroMemory(&LightDesc, sizeof(LIGHTDESC));
+	//LIGHTDESC			LightDesc;
+	//ZeroMemory(&LightDesc, sizeof(LIGHTDESC));
 
 	//LightDesc.eType = LIGHTDESC::TYPE_POINT;
 
@@ -117,18 +131,16 @@ HRESULT CMainApp::Render()
 	//if (FAILED(pGameInstance->Add_Light(m_pDevice, m_pDeviceContext, LightDesc)))
 	//	return E_FAIL;
 
-	LightDesc.eType = LIGHTDESC::TYPE_DIRECTIONAL;
-	LightDesc.vDirection = _float3(1.f, -1.f, 1.f);
-	LightDesc.vDiffuse = _float4(1.f, 1.f, 1.f, 1.f);
-	LightDesc.vSpecular = _float4(1.f, 1.f, 1.f, 1.f);
-	LightDesc.vAmbient = _float4(0.5f, 0.5f, 0.5f, 1.f);
+	//LightDesc.eType = LIGHTDESC::TYPE_DIRECTIONAL;
+	//LightDesc.vDirection = _float3(1.f, -1.f, 1.f);
+	//LightDesc.vDiffuse = _float4(1.f, 1.f, 1.f, 1.f);
+	//LightDesc.vSpecular = _float4(1.f, 1.f, 1.f, 1.f);
+	//LightDesc.vAmbient = _float4(0.5f, 0.5f, 0.5f, 1.f);
 
-	if (FAILED(pGameInstance->Add_Light(m_pDevice, m_pDeviceContext, LightDesc)))
-		return E_FAIL;
+	//if (FAILED(pGameInstance->Add_Light(m_pDevice, m_pDeviceContext, LightDesc)))
+	//	return E_FAIL;
 
-	RELEASE_INSTANCE(CGameInstance);
-
-
+	//RELEASE_INSTANCE(CGameInstance);
 
 
 	return S_OK;
@@ -162,32 +174,20 @@ HRESULT CMainApp::Ready_Component_Prototype()
 	if (nullptr == m_pGameInstance)
 		return E_FAIL;
 
-	/* For.Prototype_Component_Renderer */
-	if (FAILED(m_pGameInstance->Add_Prototype((_uint)LEVEL::LEVEL_STATIC, TEXT("Prototype_Component_Renderer"), m_pRenderer = CRenderer::Create(m_pDevice, m_pDeviceContext))))
-		return E_FAIL;
-
-	Safe_AddRef(m_pRenderer);
-
-	/* For.Prototype_Component_Transform */
-	if (FAILED(m_pGameInstance->Add_Prototype((_uint)LEVEL::LEVEL_STATIC, TEXT("Prototype_Component_Transform"), CTransform::Create(m_pDevice, m_pDeviceContext))))
-		return E_FAIL;
-
 	/* For.Prototype_Component_VIBuffer_Rect */
 	if (FAILED(m_pGameInstance->Add_Prototype((_uint)LEVEL::LEVEL_STATIC, TEXT("PrototypeTerrainVIBuffer"), CVIBuffer_Terrain::Create(m_pDevice, m_pDeviceContext, TEXT("../bin/ShaderFiles/Shader_Terrain.hlsl"), TEXT("../Bin/Resources/Textures/Terrain/Height.bmp")))))
 		return E_FAIL;
 
 	/* For.Prototype_Component_Texture_Loading */
-	if (FAILED(m_pGameInstance->Add_Prototype((_uint)LEVEL::LEVEL_STATIC, TEXT("PrototypeTerrain"), CTexture::Create(m_pDevice, m_pDeviceContext, TEXT("../bin/Resources/Textures/Terrain/Grass_1.tga")))))
-		return E_FAIL;
-	
-	//CTextureManager* pTextureMgr = GET_INSTANCE(CTextureManager);
+	//if (FAILED(m_pGameInstance->Add_Prototype((_uint)LEVEL::LEVEL_STATIC, TEXT("PrototypeTerrain"), CTexture::Create(m_pDevice, m_pDeviceContext, TEXT("../bin/Resources/Textures/Terrain/Grass_1.tga")))))
+	//	return E_FAIL;
 
-	//pTextureMgr->Add_Texture(m_pDevice, L"TerrainBase", L"../Bin/Resources/Textures/Default.jpg");
-
-	//RELEASE_INSTANCE(CTextureManager);
+	g_pGameInstance->Add_Texture(m_pDevice, L"TerrainBase", L"../bin/Resources/Textures/Terrain/Grass_1.tga");
 
 	if (FAILED(m_pGameInstance->Add_Prototype((_uint)LEVEL::LEVEL_STATIC, TEXT("PtotocomponentCamera"), CCamera::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
+
+	m_pRenderer = g_pGameInstance->Clone_Component<CRenderer>(0, L"Renderer");
 
 	return S_OK;
 }
@@ -281,8 +281,6 @@ CMainApp* CMainApp::Create()
 
 void CMainApp::Free()
 {
-	Safe_Release(m_pRenderer);
-
 	Safe_Release(m_pDeviceContext);
 	Safe_Release(m_pDevice);
 
