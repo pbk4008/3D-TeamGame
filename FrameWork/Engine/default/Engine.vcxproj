@@ -234,6 +234,7 @@ call Update_Library_Release.bat</Command>
     <ClInclude Include="..\public\Light_Manager.h" />
     <ClInclude Include="..\public\MeshContainer.h" />
     <ClInclude Include="..\public\Model.h" />
+    <ClInclude Include="..\public\Mouse.h" />
     <ClInclude Include="..\public\Navigation.h" />
     <ClInclude Include="..\public\Object_Manager.h" />
     <ClInclude Include="..\public\PipeLine.h" />
@@ -270,6 +271,7 @@ call Update_Library_Release.bat</Command>
     <ClCompile Include="..\private\Component_Manager.cpp" />
     <ClCompile Include="..\private\Effect.cpp" />
     <ClCompile Include="..\private\LandScape.cpp" />
+    <ClCompile Include="..\private\Mouse.cpp" />
     <ClCompile Include="..\private\UI.cpp" />
     <ClCompile Include="..\private\CustumFont.cpp" />
     <ClCompile Include="..\private\DebugDraw.cpp" />
