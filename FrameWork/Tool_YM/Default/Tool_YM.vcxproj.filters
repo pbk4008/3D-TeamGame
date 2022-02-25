@@ -141,6 +141,9 @@
     <ClInclude Include="..\Code\Tool_Struct.h">
       <Filter>98.Tool_Defines</Filter>
     </ClInclude>
+    <ClInclude Include="..\Code\Static_Mesh.h">
+      <Filter>04.Tool_Object\Static_Mesh</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -199,6 +202,9 @@
     </ClCompile>
     <ClCompile Include="..\Code\Dyanmic_Camera.cpp">
       <Filter>04.Tool_Object\Camera\Dynamic_Cam</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Static_Mesh.cpp">
+      <Filter>04.Tool_Object\Static_Mesh</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

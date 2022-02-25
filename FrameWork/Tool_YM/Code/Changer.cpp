@@ -4,6 +4,7 @@
 
 #include "Plane.h"
 #include "Dyanmic_Camera.h"
+#include "Static_Mesh.h"
 
 CChanger::CChanger(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
 	:m_pDevice(_pDevice)
@@ -84,6 +85,10 @@ HRESULT CChanger::Loading_ForMap_Tool(void)
 
 	/* Prototype_GameObject_Camera */
 	if (FAILED(g_pGameInstance->Add_Prototype(L"Prototype_GameObject_Camera", CDynamic_Camera::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+
+	/* Prototype_GameObject_StaticMesh */
+	if (FAILED(g_pGameInstance->Add_Prototype(L"Prototype_GameObject_StaticMesh", CStatic_Mesh::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 
 	m_isFinished = TRUE;
