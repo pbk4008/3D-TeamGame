@@ -9,9 +9,9 @@ CFloor::CFloor(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
 
 CFloor::CFloor(const CFloor& rhs)
 	: CGameObject(rhs)
-	, m_pTextureCom(rhs.m_pTextureCom)
+	//, m_pTextureCom(rhs.m_pTextureCom)
 {
-	Safe_AddRef(m_pTextureCom);
+	//Safe_AddRef(m_pTextureCom);
 }
 
 HRESULT CFloor::NativeConstruct_Prototype()
@@ -53,22 +53,22 @@ HRESULT CFloor::Render()
 {
 	CGameInstance* pGameInstance = GET_INSTANCE(CGameInstance);
 
-	//_matrix world, view, proj;
-	//world = XMMatrixTranspose(m_pTransform->Get_WorldMatrix());
-	//view = XMMatrixTranspose(pGameInstance->Get_Transform(L"Dynamic", TRANSFORMSTATEMATRIX::D3DTS_VIEW));
-	//proj = XMMatrixTranspose(pGameInstance->Get_Transform(L"Dynamic", TRANSFORMSTATEMATRIX::D3DTS_PROJECTION));
+	_matrix world, view, proj;
+	world = XMMatrixTranspose(m_pTransform->Get_WorldMatrix());
+	view = XMMatrixTranspose(pGameInstance->Get_Transform(L"Dynamic", TRANSFORMSTATEMATRIX::D3DTS_VIEW));
+	proj = XMMatrixTranspose(pGameInstance->Get_Transform(L"Dynamic", TRANSFORMSTATEMATRIX::D3DTS_PROJECTION));
 
-	//m_pVIBufferCom->SetUp_ValueOnShader("g_WorldMatrix", &world, sizeof(_matrix));
-	//m_pVIBufferCom->SetUp_ValueOnShader("g_ViewMatrix", &view, sizeof(_matrix));
-	//m_pVIBufferCom->SetUp_ValueOnShader("g_ProjMatrix", &proj, sizeof(_matrix));
+	m_pVIBufferCom->SetUp_ValueOnShader("g_WorldMatrix", &world, sizeof(_matrix));
+	m_pVIBufferCom->SetUp_ValueOnShader("g_ViewMatrix", &view, sizeof(_matrix));
+	m_pVIBufferCom->SetUp_ValueOnShader("g_ProjMatrix", &proj, sizeof(_matrix));
 
-	//m_pVIBufferCom->SetUp_TextureOnShader("g_DiffuseSourTexture", m_pTextureCom, 0);
-	//
-	////m_pVIBufferCom->SetUp_TextureOnShader("g_DiffuseDestTexture", m_pTextureCom, 1);
-	////m_pVIBufferCom->SetUp_TextureOnShader("g_FilterTexture", m_pFilterTexCom[0]);
-	////m_pVIBufferCom->SetUp_TextureOnShader("g_BrushTexture", m_pFilterTexCom[1]);
+	m_pVIBufferCom->SetUp_TextureOnShader("g_DiffuseSourTexture", m_pTextureCom, 0);
+	
+	//m_pVIBufferCom->SetUp_TextureOnShader("g_DiffuseDestTexture", m_pTextureCom, 1);
+	//m_pVIBufferCom->SetUp_TextureOnShader("g_FilterTexture", m_pFilterTexCom[0]);
+	//m_pVIBufferCom->SetUp_TextureOnShader("g_BrushTexture", m_pFilterTexCom[1]);
 
-	//m_pVIBufferCom->Render(0);
+	m_pVIBufferCom->Render(0);
 
 	RELEASE_INSTANCE(CGameInstance);
 
