@@ -204,6 +204,7 @@
     <ClInclude Include="..\Code\Tab_Changer.h" />
     <ClInclude Include="..\Code\Tool_Defines.h" />
     <ClInclude Include="..\Code\Tool_Main.h" />
+    <ClInclude Include="..\Code\Tool_Struct.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="MainFrm.h" />
     <ClInclude Include="pch.h" />

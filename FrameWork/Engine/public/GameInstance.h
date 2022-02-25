@@ -29,7 +29,7 @@ public:
 	virtual ~CGameInstance() = default;
 
 public:
-	HRESULT Initialize_Engine(HINSTANCE hInst, HWND hWnd, _uint iNumLevel, CGraphic_Device::WINMODE eWinMode, _uint iWinCX, _uint iWinCY, ID3D11Device** ppDeviceOut, ID3D11DeviceContext** ppDeviceContextOut);
+	HRESULT Initialize_Engine(HINSTANCE hInst, HWND hWnd, HWND dInput_hWnd, _uint iNumLevel, CGraphic_Device::WINMODE eWinMode, _uint iWinCX, _uint iWinCY, ID3D11Device** ppDeviceOut, ID3D11DeviceContext** ppDeviceContextOut);
 	_int Tick_Engine(_double TimeDelta);
 
 	/* 엔진에 정의되어있는 매니져객체들을 통해 디버깅적 요소들을 출력한다.  */

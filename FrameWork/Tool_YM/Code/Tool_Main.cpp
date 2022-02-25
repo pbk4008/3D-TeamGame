@@ -16,7 +16,7 @@ HRESULT CTool_Main::Tool_Main_Ready(void)
 {
 	CGameInstance* pGameInst = GET_INSTANCE(CGameInstance);
 
-	if(FAILED(pGameInst->Initialize_Engine(g_hInst, g_hWnd, TAB_END, CGraphic_Device::MODE_WIN, g_iWINCX, g_iWINCY, &m_pDevice, &m_pDeviceContext)))
+	if(FAILED(pGameInst->Initialize_Engine(g_hInst, g_hWnd, AfxGetMainWnd()->m_hWnd, TAB_END, CGraphic_Device::MODE_WIN, g_iWINCX, g_iWINCY, &m_pDevice, &m_pDeviceContext)))
 		return E_FAIL;
 
 	RELEASE_INSTANCE(CGameInstance);
@@ -44,6 +44,7 @@ HRESULT CTool_Main::Tool_Main_Ready(void)
 	m_pInspec_Form = dynamic_cast<CInspector_Form*>(m_pMainFrm->m_tMainSplitter.GetPane(0, 2));
 
 	m_pInspec_Form->Get_Device(m_pDevice, m_pDeviceContext);
+	m_pMenu_Form->Get_Device(m_pDevice, m_pDeviceContext);
 
 	return S_OK;
 }

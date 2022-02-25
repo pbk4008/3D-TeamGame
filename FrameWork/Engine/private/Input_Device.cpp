@@ -247,14 +247,15 @@ HRESULT CInput_Device::Ready_Input_Device(HINSTANCE _hInst, HWND _hWnd)
 	}
 
 	/* 키보드 초기화. */
-	if (FAILED(m_pInputSDK->CreateDevice(GUID_SysKeyboard, &m_pKeyboard, nullptr)))
+ 	if (FAILED(m_pInputSDK->CreateDevice(GUID_SysKeyboard, &m_pKeyboard, nullptr)))
 	{
 		return E_FAIL;
 	}
 
 	m_pKeyboard->SetDataFormat(&c_dfDIKeyboard);
 
-	m_pKeyboard->SetCooperativeLevel(_hWnd, DISCL_BACKGROUND | DISCL_NONEXCLUSIVE | DISCL_NOWINKEY);
+	if (FAILED(m_pKeyboard->SetCooperativeLevel(_hWnd, DISCL_BACKGROUND | DISCL_NONEXCLUSIVE /*| DISCL_NOWINKEY*/)))
+		return E_FAIL;
 
 	m_pKeyboard->Acquire();
 
@@ -266,7 +267,8 @@ HRESULT CInput_Device::Ready_Input_Device(HINSTANCE _hInst, HWND _hWnd)
 
 	m_pMouse->SetDataFormat(&c_dfDIMouse);
 
-	m_pMouse->SetCooperativeLevel(_hWnd, DISCL_BACKGROUND | DISCL_NONEXCLUSIVE | DISCL_NOWINKEY);
+	if(FAILED(m_pMouse->SetCooperativeLevel(_hWnd, DISCL_BACKGROUND | DISCL_NONEXCLUSIVE /*| DISCL_NOWINKEY*/)))
+		return E_FAIL;
 
 	m_pMouse->Acquire();
 
