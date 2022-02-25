@@ -31,7 +31,6 @@ private:
 public:
 	HRESULT Ready_Input_Device(HINSTANCE _hInst, HWND _hWnd);
 	HRESULT SetUp_InputDeviceState();
-
 private:
 	IDirectInput8* m_pInputSDK = nullptr;
 	IDirectInputDevice8* m_pKeyboard = nullptr;

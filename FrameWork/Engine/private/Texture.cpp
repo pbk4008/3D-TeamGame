@@ -75,6 +75,9 @@ HRESULT CTexture::NativeConstruct(void * pArg)
 {
 	CTextureManager* pInstance = GET_INSTANCE(CTextureManager);
 
+	if (!pArg)
+		return S_OK;
+
 	wstring pTag = (*(wstring*)pArg);
 	vector <ID3D11ShaderResourceView* >* pTexture = pInstance->Get_Texture(pTag);
 

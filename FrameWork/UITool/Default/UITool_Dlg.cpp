@@ -93,11 +93,4 @@ void CUITool_Dlg::OnBnClickedButtonApply()
 	
 	CString FullName = L"Prototype_GameObject_" + m_strFileName;
 
-	
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer(0,L"Layer_UI", L"Prototype_GameObject_UI", L"Texture")))
-	{
-		ERR_MSG(L"Failed to Creating in CObjectToolDlg");
-		return;
-	}
-
 }

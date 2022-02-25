@@ -35,6 +35,11 @@ HRESULT CCamera::NativeConstruct_Prototype()
 
 HRESULT CCamera::NativeConstruct(void* pArg)
 {	
+	if (nullptr == pArg)
+	{
+		return S_OK;
+	}
+
 	m_tCameraDesc = (*(CAMERADESC*)pArg);
 
 	if (FAILED(setViewMatrix()))
@@ -66,7 +71,6 @@ void CCamera::Update_Matrix(const _fmatrix& matWorld)
 
 	pInstance->Set_Transform(m_tCameraDesc.pCameraTag,TRANSFORMSTATEMATRIX::D3DTS_VIEW, XMMatrixInverse(nullptr, matView));
 	pInstance->Set_Transform(m_tCameraDesc.pCameraTag, TRANSFORMSTATEMATRIX::D3DTS_PROJECTION, matProj);
-
 
 	RELEASE_INSTANCE(CPipeLine);
 }

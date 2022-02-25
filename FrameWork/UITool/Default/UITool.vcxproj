@@ -194,6 +194,8 @@
     <ClInclude Include="framework.h" />
     <ClInclude Include="MainFrm.h" />
     <ClInclude Include="MFCCamera.h" />
+    <ClInclude Include="MFCLevel_Logo.h" />
+    <ClInclude Include="MFCMainApp.h" />
     <ClInclude Include="MFCObject_UI.h" />
     <ClInclude Include="MyFormView.h" />
     <ClInclude Include="pch.h" />
@@ -208,6 +210,8 @@
   <ItemGroup>
     <ClCompile Include="MainFrm.cpp" />
     <ClCompile Include="MFCCamera.cpp" />
+    <ClCompile Include="MFCLevel_Logo.cpp" />
+    <ClCompile Include="MFCMainApp.cpp" />
     <ClCompile Include="MFCObject_UI.cpp" />
     <ClCompile Include="MyFormView.cpp" />
     <ClCompile Include="pch.cpp">

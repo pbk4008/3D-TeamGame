@@ -33,10 +33,10 @@ public:
 	_uint Get_CurrentImage() { return m_iCurrentImage; }
 	void Set_CurrentImage(_uint iImage) { m_iCurrentImage = iImage; }
 
-private:
-	CTexture* m_pTextureCom = nullptr;
-	CRenderer* m_pRendererCom = nullptr;
-	CVIBuffer_Rect* m_pVIBufferCom = nullptr;
+//private:
+//	CTexture* m_pTextureCom = nullptr;
+//	CRenderer* m_pRendererCom = nullptr;
+//	CVIBuffer_Rect* m_pVIBufferCom = nullptr;
 
 private:
 	_bool m_bIn = true; //마우스가 얘 안에 들어와있으면 충돌중이라는걸 return하기위해 
