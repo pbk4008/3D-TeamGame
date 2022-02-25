@@ -28,7 +28,6 @@ public:
 private: virtual HRESULT SetUp_Components(); 
 
 private: CCamera*		m_pCamCom = nullptr;
-private: CTransform*	m_pTransformCom = nullptr;
 };
 END
 

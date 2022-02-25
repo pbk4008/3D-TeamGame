@@ -15,7 +15,7 @@ class CFloor final : public CGameObject
 {
 protected:
 	explicit CFloor(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);
-	explicit CFloor(const CGameObject& rhs);
+	explicit CFloor(const CFloor& rhs);
 	virtual ~CFloor() = default;
 public:
 	/* 원형객체가 생성될때 호출되는 함수. */

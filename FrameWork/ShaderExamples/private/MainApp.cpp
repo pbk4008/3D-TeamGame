@@ -36,7 +36,7 @@ HRESULT CMainApp::NativeConstruct()
 	//if (FAILED(SetUp_StartLevel(LEVEL::LEVEL_LOGO)))
 	//	return E_FAIL;
 
-	LIGHTDESC			LightDesc;
+	/*LIGHTDESC			LightDesc;
 	ZeroMemory(&LightDesc, sizeof(LIGHTDESC));
 
 	LightDesc.eType = LIGHTDESC::TYPE_DIRECTIONAL;
@@ -46,7 +46,7 @@ HRESULT CMainApp::NativeConstruct()
 	LightDesc.vAmbient = _float4(0.5f, 0.5f, 0.5f, 1.f);
 
 	if (FAILED(g_pGameInstance->Add_Light(m_pDevice, m_pDeviceContext, LightDesc)))
-		return E_FAIL;
+		return E_FAIL;*/
 
 	return S_OK;
 }
@@ -184,8 +184,8 @@ HRESULT CMainApp::Ready_Component_Prototype()
 
 	g_pGameInstance->Add_Texture(m_pDevice, L"TerrainBase", L"../bin/Resources/Textures/Terrain/Grass_1.tga");
 
-	if (FAILED(m_pGameInstance->Add_Prototype((_uint)LEVEL::LEVEL_STATIC, TEXT("PtotocomponentCamera"), CCamera::Create(m_pDevice, m_pDeviceContext))))
-		return E_FAIL;
+	//if (FAILED(m_pGameInstance->Add_Prototype((_uint)LEVEL::LEVEL_STATIC, TEXT("PtotocomponentCamera"), CCamera::Create(m_pDevice, m_pDeviceContext))))
+	//	return E_FAIL;
 
 	m_pRenderer = g_pGameInstance->Clone_Component<CRenderer>(0, L"Renderer");
 
@@ -285,6 +285,7 @@ void CMainApp::Free()
 	Safe_Release(m_pDevice);
 
 	Safe_Release(m_pGameInstance);
+	Safe_Release(m_pRenderer);
 
 	CGameInstance::Release_Engine();
 }
