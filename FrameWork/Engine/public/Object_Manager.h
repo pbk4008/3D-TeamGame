@@ -26,6 +26,8 @@ public:
 	_int Tick(_double TimeDelta);
 	_int LateTick(_double TimeDelta);
 public:
+	list<CGameObject*>* getObjectList(_uint iLevelIndex, const wstring& pLayerTag);
+public:
 	HRESULT Clear_Object_Manager(_uint iLevelIndex);
 private:
 	unordered_map<wstring, class CGameObject*>			m_Prototype;

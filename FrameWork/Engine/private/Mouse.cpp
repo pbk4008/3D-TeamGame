@@ -1,6 +1,7 @@
 #include "Mouse.h"
 #include "Transform.h"
 #include "PipeLine.h"
+#include "UI.h"
 
 CMouse::CMouse()
 {
@@ -75,31 +76,36 @@ void CMouse::RayUpdate(const wstring& pCamTag)
 	XMStoreFloat3(&m_vRayDir, vRayDir);
 }
 
-_bool CMouse::getCheckUI(CGameObject* pUI)
+CUI* CMouse::getCheckUI(list<CGameObject*>* pObjList)
 {
-	CTransform* pUITransform = pUI->Get_Component<CTransform>(L"Transform");
-	
-	if (!pUITransform)
-		return false;
+	for (auto& pObj : *pObjList)
+	{
+		CTransform* pUITransform = pObj->Get_Component<CTransform>(L"Transform");
 
-	_vector vPos = pUITransform->Get_State(CTransform::STATE_POSITION);
+		if (!pUITransform)
+			return false;
 
-	_float fPosX = XMVectorGetX(vPos);
-	_float fPosY = XMVectorGetY(vPos);
-	_float fSizX = pUITransform->Get_Scale(CTransform::STATE_RIGHT);
-	_float fSizY = pUITransform->Get_Scale(CTransform::STATE_RIGHT);
+		_vector vPos = pUITransform->Get_State(CTransform::STATE_POSITION);
 
-	RECT      rc;
-	SetRect(&rc, (_uint)(fPosX - fSizX * 0.5f), (_uint)(fPosY - fSizY * 0.5f),
-		(_uint)(fPosX + fSizX * 0.5f), (_uint)(fPosY + fSizY * 0.5f));
+		_float fPosX = XMVectorGetX(vPos);
+		_float fPosY = XMVectorGetY(vPos);
+		_float fSizX = pUITransform->Get_Scale(CTransform::STATE_RIGHT);
+		_float fSizY = pUITransform->Get_Scale(CTransform::STATE_RIGHT);
 
-	_bool bPick = false;
-	if (TRUE == PtInRect(&rc, m_tMousePos))
-		bPick = true;
-	else
-		bPick = false;
+		RECT      rc;
+		SetRect(&rc, (_uint)(fPosX - fSizX * 0.5f), (_uint)(fPosY - fSizY * 0.5f),
+			(_uint)(fPosX + fSizX * 0.5f), (_uint)(fPosY + fSizY * 0.5f));
 
-	return bPick;
+		_bool bPick = false;
+		if (TRUE == PtInRect(&rc, m_tMousePos))
+			bPick = true;
+		else
+			bPick = false;
+		
+		if (bPick)
+			return static_cast<CUI*>(pObj);
+	}
+	return nullptr;
 }
 
 

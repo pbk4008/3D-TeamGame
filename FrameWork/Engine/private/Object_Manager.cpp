@@ -104,6 +104,16 @@ _int CObject_Manager::LateTick(_double TimeDelta)
 	return _int();
 }
 
+list<CGameObject*>* CObject_Manager::getObjectList(_uint iLevelIndex, const wstring& pLayerTag)
+{
+	CLayer* pLayer = Find_Layer(iLevelIndex, pLayerTag);
+
+	if (!pLayer)
+		return nullptr;
+
+	return pLayer->getObjList();
+}
+
 HRESULT CObject_Manager::Clear_Object_Manager(_uint iLevelIndex)
 {
 	if (iLevelIndex > m_iNumLevels)
