@@ -234,9 +234,6 @@
     <ClInclude Include="..\public\PipeLine.h">
       <Filter>00.Utility\04.Manager\00.PipeLine</Filter>
     </ClInclude>
-    <ClInclude Include="..\public\Input_Device.h">
-      <Filter>01.System\00.Device\Input</Filter>
-    </ClInclude>
     <ClInclude Include="..\public\VIBuffer_Cube.h">
       <Filter>00.Utility\03.Component\05.VIBuffer\00.Cube</Filter>
     </ClInclude>
@@ -348,6 +345,9 @@
     <ClInclude Include="..\public\UI.h">
       <Filter>00.Utility\02.GameObject\01.UI</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\InputDev.h">
+      <Filter>01.System\00.Device\Input</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\private\Base.cpp">
@@ -394,9 +394,6 @@
     </ClCompile>
     <ClCompile Include="..\private\PipeLine.cpp">
       <Filter>00.Utility\04.Manager\00.PipeLine</Filter>
-    </ClCompile>
-    <ClCompile Include="..\private\Input_Device.cpp">
-      <Filter>01.System\00.Device\Input</Filter>
     </ClCompile>
     <ClCompile Include="..\private\VIBuffer_Cube.cpp">
       <Filter>00.Utility\03.Component\05.VIBuffer\00.Cube</Filter>
@@ -502,6 +499,9 @@
     </ClCompile>
     <ClCompile Include="..\private\Mouse.cpp">
       <Filter>00.Utility\02.GameObject\05.Mouse</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\InputDev.cpp">
+      <Filter>01.System\00.Device\Input</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

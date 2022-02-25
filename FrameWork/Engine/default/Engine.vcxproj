@@ -224,7 +224,7 @@ call Update_Library_Release.bat</Command>
     <ClInclude Include="..\public\GameObject.h" />
     <ClInclude Include="..\public\Graphic_Device.h" />
     <ClInclude Include="..\public\HierarchyNode.h" />
-    <ClInclude Include="..\public\Input_Device.h" />
+    <ClInclude Include="..\public\InputDev.h" />
     <ClInclude Include="..\public\LandScape.h" />
     <ClInclude Include="..\public\Layer.h" />
     <ClInclude Include="..\public\Level.h" />
@@ -270,6 +270,7 @@ call Update_Library_Release.bat</Command>
     <ClCompile Include="..\private\Component.cpp" />
     <ClCompile Include="..\private\Component_Manager.cpp" />
     <ClCompile Include="..\private\Effect.cpp" />
+    <ClCompile Include="..\private\InputDev.cpp" />
     <ClCompile Include="..\private\LandScape.cpp" />
     <ClCompile Include="..\private\Mouse.cpp" />
     <ClCompile Include="..\private\UI.cpp" />
@@ -281,7 +282,6 @@ call Update_Library_Release.bat</Command>
     <ClCompile Include="..\private\GameObject.cpp" />
     <ClCompile Include="..\private\Graphic_Device.cpp" />
     <ClCompile Include="..\private\HierarchyNode.cpp" />
-    <ClCompile Include="..\private\Input_Device.cpp" />
     <ClCompile Include="..\private\Layer.cpp" />
     <ClCompile Include="..\private\Level.cpp" />
     <ClCompile Include="..\private\Level_Manager.cpp" />
