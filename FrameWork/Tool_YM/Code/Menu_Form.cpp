@@ -67,6 +67,11 @@ HRESULT CMenu_Form::Ready_Tab(void)
 	return S_OK;
 }
 
+_int CMenu_Form::Update_Menu_Form(const _double& _dTimeDelta)
+{
+	return _int();
+}
+
 BEGIN_MESSAGE_MAP(CMenu_Form, CFormView)
 	ON_NOTIFY(TCN_SELCHANGE, IDCANCEL, &CMenu_Form::OnTcnSelchangeCancel)
 END_MESSAGE_MAP()

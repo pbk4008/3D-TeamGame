@@ -14,7 +14,7 @@
 // CToolYMApp:
 // 이 클래스의 구현에 대해서는 Tool_YM.cpp을(를) 참조하세요.
 //
-
+class CTool_Main;
 class CMainFrame;
 class CToolYMView;
 class CToolYMApp : public CWinApp
@@ -24,9 +24,10 @@ public:
 	
 // 개발자 재정의
 private:
+	CTool_Main*  m_pTool_Main = nullptr;
 	CMainFrame*  m_pMainFrm = nullptr;
 	CToolYMView* m_pToolView = nullptr;
-
+	
 private:
 	//C* m_pToolMain = nullptr;
 
@@ -41,6 +42,7 @@ public:
 // 구현입니다.
 	afx_msg void OnAppAbout();
 	DECLARE_MESSAGE_MAP()
+	virtual BOOL OnIdle(LONG lCount);
 };
 
 extern CToolYMApp theApp;

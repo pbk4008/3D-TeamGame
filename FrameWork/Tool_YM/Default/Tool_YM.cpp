@@ -8,11 +8,12 @@
 #include "afxdialogex.h"
 #include "Tool_YM.h"
 #include "MainFrm.h"
-
+#include "GameInstance.h"
 #include "Tool_YMDoc.h"
 #include "Tool_YMView.h"
 
 #include "Tool_Defines.h"
+#include "Tool_Main.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -134,25 +135,54 @@ BOOL CToolYMApp::InitInstance()
 	g_hWnd = m_pToolView->m_hWnd;
 	g_hInst = m_pToolView->m_hInst;
 
-	/*m_pToolMain = CTool_CMainApp::Create();
+	m_pTool_Main = CTool_Main::Create();
 
-	if (nullptr == m_pToolMain)
+	if (nullptr == m_pTool_Main)
 		return FALSE;
 
-	m_pEngine_Inst = GET_INSTANCE(CEngine_Instance);
-
-	if (FAILED(m_pEngine_Inst->Ready_Timer(L"Tool_Main_Timer")))
+	if (FAILED(g_pGameInstance->Ready_Timer(L"Tool_Main_Timer")))
 		return FALSE;
-	if (FAILED(m_pEngine_Inst->Ready_Timer(L"Tool_60FPS_Timer")))*/
-
+	if (FAILED(g_pGameInstance->Ready_Timer(L"Tool_60FPS_Timer")))
 
 	return TRUE;
 }
+
+BOOL CToolYMApp::OnIdle(LONG lCount)
+{
+	// TODO: 여기에 특수화된 코드를 추가 및/또는 기본 클래스를 호출합니다.
+	g_pGameInstance->Update_TimeDelta(L"Tool_Main_Timer");
+	m_dTimerAcc += g_pGameInstance->Get_TimeDelta(L"Tool_Main_Timer");
+
+	if (this->m_pMainWnd->IsIconic())
+	{
+		return FALSE;
+	}
+	else
+	{
+		if (m_dTimerAcc >= 1.0 / 60.f)
+		{
+			m_dTimerAcc = 0.0;
+
+			g_pGameInstance->Update_TimeDelta(L"Tool_60FPS_Timer");
+
+			if (0 > m_pTool_Main->Tool_Main_Update(g_pGameInstance->Get_TimeDelta(L"Tool_60FPS_Timer")))
+				return TRUE;
+
+			if (FAILED(m_pTool_Main->Tool_Main_Render()))
+				return TRUE;
+		}
+	}
+	return TRUE;  
+}
+
+
 
 int CToolYMApp::ExitInstance()
 {
 	//TODO: 추가한 추가 리소스를 처리합니다.
 	AfxOleTerm(FALSE);
+
+	Safe_Release(m_pTool_Main);
 
 	return CWinApp::ExitInstance();
 }
@@ -200,6 +230,5 @@ void CToolYMApp::OnAppAbout()
 }
 
 // CToolYMApp 메시지 처리기
-
 
 

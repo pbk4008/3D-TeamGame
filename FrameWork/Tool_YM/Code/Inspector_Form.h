@@ -29,6 +29,7 @@ public:
 
 public:
 	void Ready_Inspector(void);
+	_int Update_Inspector_Form(const _double& _dTimeDelta);
 
 public:
 	void Get_Device(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext) { 
