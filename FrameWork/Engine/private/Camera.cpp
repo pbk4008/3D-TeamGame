@@ -47,6 +47,7 @@ HRESULT CCamera::NativeConstruct(void* pArg)
 
 	if (FAILED(setProjMatrix()))
 		return E_FAIL;
+
 	CPipeLine* pInstance = GET_INSTANCE(CPipeLine);
 
 	if (FAILED(pInstance->Add_Camera(m_tCameraDesc.pCameraTag)))

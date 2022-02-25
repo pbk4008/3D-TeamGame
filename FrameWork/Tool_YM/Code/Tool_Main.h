@@ -12,7 +12,7 @@ class CMenu_Form;
 class CInspector_Form;
 class CToolYMView;
 class CMainFrame;
-class CTool_Main : public CBase
+class CTool_Main final : public CBase
 {
 public:
 	explicit CTool_Main(void);

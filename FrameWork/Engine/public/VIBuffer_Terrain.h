@@ -16,7 +16,10 @@ public:
 
 public:
 	HRESULT Culling(const wstring& pCameraTag, _fmatrix WorldMatrixInverse);
-
+public:
+	void* getVertices() { return m_pVertices; }
+	_uint getVerteicesX() { return m_iNumVerticesX; }
+	_uint getVerteicesZ() { return m_iNumVerticesZ; }
 private:
 	_uint			m_iNumVerticesX = 0;
 	_uint			m_iNumVerticesZ = 0;

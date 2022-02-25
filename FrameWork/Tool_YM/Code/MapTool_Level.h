@@ -16,6 +16,7 @@ public:
 
 public:
 	HRESULT Ready_Layer_Plane(const wstring& _pLayerTag);
+	HRESULT Ready_Layer_Camera(const wstring& _pLayerTag);
 
 public:
 	static CMapTool_Level* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext);

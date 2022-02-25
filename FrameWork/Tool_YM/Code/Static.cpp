@@ -23,7 +23,7 @@ _int CStatic_Level::Tick(_double _dTimeDelta)
 
 	if (GetKeyState(VK_SPACE) < 0)
 	{
-		if (FAILED(g_pGameInstance->Open_Level(TAB_STATIC, CTab_Changer::Create(m_pDevice, m_pDeviceContext, TAB_MAP))))
+  		if (FAILED(g_pGameInstance->Open_Level(TAB_STATIC, CTab_Changer::Create(m_pDevice, m_pDeviceContext, TAB_MAP))))
 			return -1;
 	}
 

@@ -3,7 +3,7 @@
 #include "SingleTon.h"
 
 #include "Graphic_Device.h"
-#include "Input_Device.h"
+#include "InputDev.h"
 #include "Level_Manager.h"
 #include "Timer_Manager.h"
 #include "Object_Manager.h"
@@ -19,7 +19,7 @@
 
 BEGIN(Engine)
 
-
+class CComponent;
 class ENGINE_DLL CGameInstance final : public CSingleTon<CGameInstance>
 {
 	friend CSingleTon;
@@ -53,7 +53,16 @@ public: /* For.Object_Manager*/
 	class CComponent* Get_Component(_uint iLevelIndex, const wstring& pLayerTag, const wstring& pComponentTag, _uint iIndex = 0);
 	HRESULT Add_Prototype(const wstring& pPrototypeTag, CGameObject* pPrototype);
 	HRESULT Add_GameObjectToLayer(_uint iLevelIndex, const wstring& pLayerTag, const wstring& pPrototypeTag, void* pArg = nullptr);
+	template<typename T>
+	T* Get_Component(_uint iLevelIndex, const wstring& pLayerTag, const wstring& pComponentTag, _uint iIndex = 0)
+	{
+		CComponent* pCom = Get_Component(iLevelIndex, pLayerTag, pComponentTag, iIndex);
 
+		if (!pCom)
+			return nullptr;
+
+		return static_cast<T*>(pCom);
+	}
 public: /* For.Component_Manager */
 	HRESULT Add_Prototype(_uint iLevelIndex, const wstring& pPrototypeTag, class CComponent* pPrototype);
 	CComponent* Clone_Component(_uint iLevelIndex, const wstring& pPrototypeTag, void* pArg = nullptr);
@@ -79,12 +88,11 @@ public: /* For.PipeLine */
 	void Set_Transform(const wstring& pCameraTag, TRANSFORMSTATEMATRIX eType, _fmatrix TransformMatrix);
 
 public: /* for.Input_Device */
-	const _byte Get_DIKeyState(const _ubyte _byKeyID) const;
-	const _long Get_MouseMoveState(const CInput_Device::EMouseMoveState _eMoveState) const;
-	const _byte Get_MouseButtonState(const CInput_Device::EMouseButtonState _eButtonState) const;
-	const _bool Key_Down(const KEY_STATE& _ks);
-	const _bool Key_Up(const KEY_STATE& _ks);
-	const _bool Key_Pressing(const KEY_STATE& _ks);
+	_byte getkeyState(_ubyte bykeyID);
+	_byte getMouseState(CInputDev::MOUSESTATE eMouse);
+	_long getMouseMoveState(CInputDev::MOUSEMOVESTATE eMouse);
+	_bool getKeyboardNoKey();
+
 public: /* For.Light_Manager */
 	const LIGHTDESC* Get_LightDesc(_uint iIndex = 0);
 	HRESULT Add_Light(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext, const LIGHTDESC& LightDesc);
@@ -126,7 +134,7 @@ private:
 	CObject_Manager*			m_pObject_Manager = nullptr;
 	CComponent_Manager*		m_pComponent_Manager = nullptr;
 	CPipeLine*						m_pPipeLine = nullptr;
-	CInput_Device*					m_pInput_Device = nullptr;
+	CInputDev*						m_pInput_Device = nullptr;
 	CLight_Manager*				m_pLight_Manager = nullptr;
 	CTarget_Manager*				m_pTarget_Manager = nullptr;
 	CFrustum*						m_pFrustum = nullptr;

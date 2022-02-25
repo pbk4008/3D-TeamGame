@@ -1,9 +1,12 @@
 #include "Mouse.h"
+#include "Transform.h"
+#include "PipeLine.h"
 
 CMouse::CMouse()
 {
 	ZeroMemory(&m_vRayPos, sizeof(_float3));
 	ZeroMemory(&m_vRayDir, sizeof(_float3));
+	ZeroMemory(&m_tMousePos, sizeof(POINT));
 }
 
 CMouse::CMouse(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
@@ -11,6 +14,7 @@ CMouse::CMouse(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
 {
 	ZeroMemory(&m_vRayPos, sizeof(_float3));
 	ZeroMemory(&m_vRayDir, sizeof(_float3));
+	ZeroMemory(&m_tMousePos, sizeof(POINT));
 }
 
 HRESULT CMouse::NativeConstruct_Prototype()
@@ -25,25 +29,129 @@ HRESULT CMouse::NativeConstruct(void* pArg)
 
 _int CMouse::Tick(HWND hWnd, _double TimeDelta)
 {
-	POINT pt = {};
-
-	GetCursorPos(&pt);
-	ScreenToClient(hWnd,&pt);
-
+	GetCursorPos(&m_tMousePos);
+	ScreenToClient(hWnd,&m_tMousePos);
+	
 	return _int(); 
 }
 
-_int CMouse::LateTick(_double TimeDelta)
+void CMouse::RayUpdate(const wstring& pCamTag)
 {
-	return _int();
+	D3D11_VIEWPORT vp;
+	ZeroMemory(&vp, sizeof(D3D11_VIEWPORT));
+	_uint pNumViewPorts = 1;
+	m_pDeviceContext->RSGetViewports(&pNumViewPorts, &vp);
+
+	_float fPointX = (m_tMousePos.x / (0.5f * vp.Width)) - 1.f;
+	_float fPointY = (m_tMousePos.y / (-0.5f * vp.Height)) + 1.f;
+
+	_vector vMouse = XMVectorSet
+	(
+		fPointX,
+		fPointY,
+		0.f,
+		1.f
+	);
+
+	CPipeLine* pInstance = GET_INSTANCE(CPipeLine);
+	_matrix matProj, matView;
+
+	matProj = pInstance->Get_Transform(pCamTag, TRANSFORMSTATEMATRIX::D3DTS_PROJECTION);
+	matProj = XMMatrixInverse(nullptr, matProj);
+
+	matView = pInstance->Get_Transform(pCamTag, TRANSFORMSTATEMATRIX::D3DTS_VIEW);
+	matView = XMMatrixInverse(nullptr, matView);
+
+	RELEASE_INSTANCE(CPipeLine);
+
+	_vector vRayPos = XMVectorSet(0.f, 0.f, 0.f, 1.f);
+	_vector vRayDir = vMouse - vRayPos;
+	vRayDir = XMVector3Normalize(vRayDir);
+
+	vRayPos = XMVector3TransformCoord(vRayPos, matView);
+	vRayDir = XMVector3TransformNormal(vRayDir, matView);
+
+	XMStoreFloat3(&m_vRayPos, vRayPos);
+	XMStoreFloat3(&m_vRayDir, vRayDir);
 }
 
-HRESULT CMouse::Render()
+_bool CMouse::getCheckUI(CGameObject* pUI)
 {
-	return S_OK;
+	CTransform* pUITransform = pUI->Get_Component<CTransform>(L"Transform");
+	
+	if (!pUITransform)
+		return false;
+
+	_vector vPos = pUITransform->Get_State(CTransform::STATE_POSITION);
+
+	_float fPosX = XMVectorGetX(vPos);
+	_float fPosY = XMVectorGetY(vPos);
+	_float fSizX = pUITransform->Get_Scale(CTransform::STATE_RIGHT);
+	_float fSizY = pUITransform->Get_Scale(CTransform::STATE_RIGHT);
+
+	RECT      rc;
+	SetRect(&rc, (_uint)(fPosX - fSizX * 0.5f), (_uint)(fPosY - fSizY * 0.5f),
+		(_uint)(fPosX + fSizX * 0.5f), (_uint)(fPosY + fSizY * 0.5f));
+
+	_bool bPick = false;
+	if (TRUE == PtInRect(&rc, m_tMousePos))
+		bPick = true;
+	else
+		bPick = false;
+
+	return bPick;
 }
+
 
 _fvector CMouse::Terrain_Picking(void* pVertices, _fmatrix matWorld, _uint iVtxX, _uint iVtxZ, _int& iHitIndex)
 {
-	return _fvector();
+	_vector vRayPos = XMLoadFloat3(&m_vRayPos);
+	vRayPos=XMVectorSetW(vRayPos, 1.f);
+	_vector vRayDir = XMLoadFloat3(&m_vRayDir);
+
+	_matrix matInverseWrold = XMMatrixInverse(nullptr, matWorld);
+
+	vRayPos = XMVector3TransformCoord(vRayPos, matInverseWrold);
+	vRayDir = XMVector3TransformNormal(vRayDir, matInverseWrold);
+
+	if (XMVectorGetX(vRayPos) < 0.f ||
+		XMVectorGetZ(vRayPos) < 0.f)
+		return XMVectorZero();
+
+	VTXNORTEX* pTerrainsVertices = (VTXNORTEX*)pVertices;
+
+	for (_uint i = 0; i < iVtxZ - 1; i++)
+	{
+		for (_uint j = 0; j < iVtxX - 1; j++)
+		{
+			_uint iIndex = i * iVtxX + j;
+
+			_float fDist = 0.f;
+			_vector TriPoint[3];
+
+			TriPoint[0] = XMLoadFloat3(&pTerrainsVertices[iIndex + iVtxX].vPosition);
+			TriPoint[1] = XMLoadFloat3(&pTerrainsVertices[iIndex + iVtxX+1].vPosition);
+			TriPoint[2] = XMLoadFloat3(&pTerrainsVertices[iIndex + 1].vPosition);
+
+			if (TriangleTests::Intersects(vRayPos, vRayDir, TriPoint[0], TriPoint[1], TriPoint[2], fDist))
+			{
+				iHitIndex = iIndex;
+				vRayPos += (fDist * vRayDir);
+				return vRayPos;
+			}
+
+			TriPoint[0] = XMLoadFloat3(&pTerrainsVertices[iIndex + iVtxX].vPosition);
+			TriPoint[1] = XMLoadFloat3(&pTerrainsVertices[iIndex + 1].vPosition);
+			TriPoint[2] = XMLoadFloat3(&pTerrainsVertices[iIndex].vPosition);
+
+			if (TriangleTests::Intersects(vRayPos, vRayDir, TriPoint[0], TriPoint[1], TriPoint[2], fDist))
+			{
+				iHitIndex = iIndex;
+				vRayPos += (fDist * vRayDir);
+				return vRayPos;
+			}
+		}
+	}
+
+	return XMVectorZero();
 }

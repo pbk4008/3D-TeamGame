@@ -1,4 +1,5 @@
 #include "pch.h"
+#include "Tool_Defines.h"
 #include "MapTool_Level.h"
 #include "Tab_Changer.h"
 #include "GameInstance.h"
@@ -13,7 +14,10 @@ HRESULT CMapTool_Level::NativeConstruct()
 	if (FAILED(__super::NativeConstruct()))
 		return E_FAIL;
 
-	if (FAILED(Ready_Layer_Plane(L"Layer_Plane")))
+	if (FAILED(Ready_Layer_Plane(L"Layer_Plane")))  
+		return E_FAIL;  
+
+	if (FAILED(Ready_Layer_Camera(L"Layer_Camera")))
 		return E_FAIL;
 
 	return S_OK;
@@ -32,12 +36,20 @@ HRESULT CMapTool_Level::Render()
 	if (FAILED(__super::Render()))
 		return E_FAIL;
 
-	return S_OK;
+	return S_OK;  
 }
 
 HRESULT CMapTool_Level::Ready_Layer_Plane(const wstring& _pLayerTag)
 {
 	if(FAILED(g_pGameInstance->Add_GameObjectToLayer(TAB_MAP, _pLayerTag, L"Prototype_GameObject_Plane")))
+		return E_FAIL;
+
+	return S_OK;
+}
+
+HRESULT CMapTool_Level::Ready_Layer_Camera(const wstring& _pLayerTag)
+{
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer(TAB_MAP, _pLayerTag, L"Prototype_GameObject_Camera")))
 		return E_FAIL;
 
 	return S_OK;

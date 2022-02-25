@@ -13,7 +13,7 @@ CTab_Changer::CTab_Changer(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDevice
 {
 }
 
-HRESULT CTab_Changer::Ready_Level(TAB_ID _eNextTab)
+HRESULT CTab_Changer::NativeConstruct(TAB_ID _eNextTab)
 {
 	if (FAILED(__super::NativeConstruct()))
 		return E_FAIL;
@@ -27,7 +27,7 @@ HRESULT CTab_Changer::Ready_Level(TAB_ID _eNextTab)
 	return S_OK;
 }
 
-_int CTab_Changer::Update_Level(_double _dTimeDelta)
+_int CTab_Changer::Tick(_double _dTimeDelta)
 {
 	if (nullptr == m_pChanger)
 		return -1;
@@ -36,14 +36,14 @@ _int CTab_Changer::Update_Level(_double _dTimeDelta)
 		return -1;
 
 	if (TRUE == m_pChanger->Get_Finished())
-	{
+	{   
 		if (FAILED(Set_ShowTab()))
 			return -1;
 	}
 	return _int();
 }
 
-HRESULT CTab_Changer::Render_Level(void)
+HRESULT CTab_Changer::Render(void)
 {
 	if (nullptr == m_pChanger)
 		return E_FAIL;
@@ -91,7 +91,7 @@ CTab_Changer* CTab_Changer::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* 
 {
 	CTab_Changer* pInstance = new CTab_Changer(_pDevice, _pDeviceContext);
 
-	if (FAILED(pInstance->Ready_Level(_eNextTab)))
+	if (FAILED(pInstance->NativeConstruct(_eNextTab)))
 	{
 		MSGBOX("Faild to Create CLevel Loading");
 		Safe_Release(pInstance);

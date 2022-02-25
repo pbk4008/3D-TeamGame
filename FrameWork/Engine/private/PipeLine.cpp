@@ -56,7 +56,7 @@ _fmatrix CPipeLine::Get_Transform(const wstring& pCameraTag, TRANSFORMSTATEMATRI
 
 _fvector CPipeLine::Get_CamPosition(const wstring& pCameraTag)
 {
-	auto tCamera = Find_Camera(pCameraTag);
+ 	auto tCamera = Find_Camera(pCameraTag);
 	if (!tCamera)
 		return XMVectorZero();
 	return XMLoadFloat4(&tCamera->vCamPos);

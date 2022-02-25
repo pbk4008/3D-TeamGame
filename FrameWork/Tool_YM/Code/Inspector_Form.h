@@ -35,6 +35,8 @@ public:
 	void Get_Device(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext) { 
 		m_pDevice = _pDevice;
 		m_pDeviceContext = _pDeviceContext;
+		Safe_AddRef(m_pDevice);
+		Safe_AddRef(m_pDeviceContext);
 	};
 
 public:
@@ -57,6 +59,7 @@ protected:
 public:
 	virtual void OnInitialUpdate();
 	afx_msg void OnTcnSelchangeTab1(NMHDR* pNMHDR, LRESULT* pResult);
+	virtual void PostNcDestroy();
 };
 
 

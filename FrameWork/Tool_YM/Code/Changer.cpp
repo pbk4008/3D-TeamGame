@@ -3,6 +3,7 @@
 #include "GameInstance.h"
 
 #include "Plane.h"
+#include "Dyanmic_Camera.h"
 
 CChanger::CChanger(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
 	:m_pDevice(_pDevice)
@@ -62,6 +63,9 @@ HRESULT CChanger::Loading_For_Static(void)
 	if (FAILED(g_pGameInstance->Add_Prototype(TAB_STATIC, L"Prototype_Component_VIBuffer_Terrain", CVIBuffer_Terrain::Create(m_pDevice, m_pDeviceContext, L"../../Reference/ShaderFile/Shader_Terrain.hlsl", L"../Bin/Resources/Textures/Terrain/Height.bmp"))))
 		return E_FAIL;
 
+	/* Prototype_Component_Texture_Terrain */
+	g_pGameInstance->Add_Texture(m_pDevice, L"Plane_Texture", L"../Bin/Resources/Textures/Terrain/Grass_0.tga");
+
 	m_isFinished = TRUE;
 
 	return S_OK;
@@ -71,10 +75,15 @@ HRESULT CChanger::Loading_ForMap_Tool(void)
 {
 	/* Create Component Prototype */
 
+
 	/* Create Object Prototype */
 
 	/* Prototype_GameObject_Terrain */
-	if (FAILED(g_pGameInstance->Add_Prototype(L"Prototype_GameObject_Terrain", CPlane::Create(m_pDevice, m_pDeviceContext))))
+	if (FAILED(g_pGameInstance->Add_Prototype(L"Prototype_GameObject_Plane", CPlane::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+
+	/* Prototype_GameObject_Camera */
+	if (FAILED(g_pGameInstance->Add_Prototype(L"Prototype_GameObject_Camera", CDynamic_Camera::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 
 	m_isFinished = TRUE;
