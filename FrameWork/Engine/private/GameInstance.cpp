@@ -205,7 +205,7 @@ HRESULT CGameInstance::Add_Prototype(_uint iLevelIndex, const wstring& pPrototyp
 
 HRESULT CGameInstance::SetUpBaseComponent(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
 {
-	if (!m_pComponent_Manager)
+	if (nullptr == m_pComponent_Manager)
 		return E_FAIL;
 
 	return m_pComponent_Manager->SetUpBaseComponent(pDevice, pDeviceContext);

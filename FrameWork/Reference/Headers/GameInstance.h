@@ -40,20 +40,26 @@ public: /* For.Graphic_Device */
 	HRESULT Clear_BackBuffer_View(XMFLOAT4 vClearColor);
 	HRESULT Clear_DepthStencil_View();
 	HRESULT Present();
+
 public: /* For.Timer_Manager */ 
 	_double Get_TimeDelta(const wstring& pTimerTag);
 	void Update_TimeDelta(const wstring& pTimerTag);
 	HRESULT Ready_Timer(const wstring& pTimerTag);
+
 public: /* For.Level_Manager*/
 	HRESULT Open_Level(_uint iLevelIndex, class CLevel* pOpenLevel);
+
 public: /* For.Object_Manager*/
 	class CComponent* Get_Component(_uint iLevelIndex, const wstring& pLayerTag, const wstring& pComponentTag, _uint iIndex = 0);
 	HRESULT Add_Prototype(const wstring& pPrototypeTag, CGameObject* pPrototype);
 	HRESULT Add_GameObjectToLayer(_uint iLevelIndex, const wstring& pLayerTag, const wstring& pPrototypeTag, void* pArg = nullptr);
+
 public: /* For.Component_Manager */
 	HRESULT Add_Prototype(_uint iLevelIndex, const wstring& pPrototypeTag, class CComponent* pPrototype);
 	CComponent* Clone_Component(_uint iLevelIndex, const wstring& pPrototypeTag, void* pArg = nullptr);
-	HRESULT SetUpBaseComponent(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);
+public:
+	HRESULT SetUpBaseComponent(ID3D11Device * pDevice, ID3D11DeviceContext * pDeviceContext);
+
 	template<typename T>
 	T* Clone_Component(_uint iLevelIndex, const wstring& pPrototypeTag, void* pArg = nullptr)
 	{
@@ -63,6 +69,7 @@ public: /* For.Component_Manager */
 
 		return static_cast<T*>(pCom);
 	}
+
 public: /* For.PipeLine */
 	HRESULT Add_Camera(const wstring& pCameraTag);
 	void Update_PipeLine();
@@ -70,6 +77,7 @@ public: /* For.PipeLine */
 	_fmatrix Get_Transform(const wstring& pCameraTag, TRANSFORMSTATEMATRIX eType);
 	_fvector Get_CamPosition(const wstring& pCameraTag);
 	void Set_Transform(const wstring& pCameraTag, TRANSFORMSTATEMATRIX eType, _fmatrix TransformMatrix);
+
 public: /* for.Input_Device */
 	_byte Get_DIKeyState(_ubyte byKeyID) const;
 	_long Get_MouseMoveState(CInput_Device::MOUSEMOVESTATE eMoveState) const;
@@ -78,16 +86,20 @@ public: /* for.Input_Device */
 public: /* For.Light_Manager */
 	const LIGHTDESC* Get_LightDesc(_uint iIndex = 0);
 	HRESULT Add_Light(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext, const LIGHTDESC& LightDesc);
+
 public: /* For.Font_Manager */
 	HRESULT Add_Font(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext, const wstring& pFontTag, const wstring& pFontPath);
 	HRESULT Render_Font(const wstring& pFontTag, _fvector vColor, const wstring& pString);
+
 public: /* For.Frustum */
 	_bool isIn_WorldFrustum(_fvector vPosition, _float fRange = 0.f);
 	_bool isIn_LocalFrustum(_fvector vPosition, _float fRange = 0.f);
+
 public:/* For.TextureManager*/
 	HRESULT Add_Texture(ID3D11Device* pDevice, const wstring& pTextureTag, const wstring& pFilePath, _uint iTextureCnt = 1);
 	HRESULT Delete_Texture();
 	vector<ID3D11ShaderResourceView*>* Get_Texture(const wstring& pTextureTag);
+
 public:/* For.SaveManager*/
 	template<typename T>
 	HRESULT SaveFile(void* pSaveData, const wstring& pFilePath)

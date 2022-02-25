@@ -62,6 +62,11 @@ void CInspector_Form::Ready_Inspector(void)
 	m_pCam_Inspec->ShowWindow(SW_HIDE);
 }
 
+_int CInspector_Form::Update_Inspector_Form(const _double& _dTimeDelta)
+{
+	return _int();
+}
+
 void CInspector_Form::DoDataExchange(CDataExchange* pDX)
 {
 	CFormView::DoDataExchange(pDX);

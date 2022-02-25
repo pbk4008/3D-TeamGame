@@ -34,23 +34,8 @@
     <Filter Include="04.Tool_Object\NavSphere">
       <UniqueIdentifier>{5dd93744-b526-4e07-b750-dfae944323ed}</UniqueIdentifier>
     </Filter>
-    <Filter Include="04.Tool_Object\Plane">
-      <UniqueIdentifier>{be59b112-2452-4d93-b3aa-8c9e685b7022}</UniqueIdentifier>
-    </Filter>
     <Filter Include="04.Tool_Object\Camera">
       <UniqueIdentifier>{40125d7d-a21d-4cac-9b0c-1d73c89b0ae6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="03.Level\00.Static">
-      <UniqueIdentifier>{bb08ee1b-da64-45a5-831c-7ef65799ba5c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="03.Level\01.Stage_1">
-      <UniqueIdentifier>{0078ffa8-f7ab-43c2-bc94-f5b84fd34334}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="03.Level\02.Stage_2">
-      <UniqueIdentifier>{65b1c584-c929-45cf-86c2-ab503e839bb6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="03.Level\03.Stage_3">
-      <UniqueIdentifier>{0c67a28d-fb3d-4a6a-a04b-0b10ef77a128}</UniqueIdentifier>
     </Filter>
     <Filter Include="02.Inspector\01.Camera">
       <UniqueIdentifier>{765364de-765e-4c73-a73d-07d835bea25f}</UniqueIdentifier>
@@ -63,6 +48,21 @@
     </Filter>
     <Filter Include="02.Inspector\00.Model">
       <UniqueIdentifier>{f3fab73b-4bac-4980-82c9-31c03c9a9601}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.Level\00.Map_Tool">
+      <UniqueIdentifier>{bb08ee1b-da64-45a5-831c-7ef65799ba5c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.Level\Tab_Changer">
+      <UniqueIdentifier>{c5253b2c-97c1-4632-a607-834ad4fad24e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.Level\01.Cam_Tool">
+      <UniqueIdentifier>{0078ffa8-f7ab-43c2-bc94-f5b84fd34334}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04.Tool_Object\Plane">
+      <UniqueIdentifier>{75aaed30-f815-4385-ae5e-b4b5e3a19fa0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.Level\Level_Static">
+      <UniqueIdentifier>{7fa6b9c5-f8ce-4f32-817d-665429926777}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -114,6 +114,24 @@
     <ClInclude Include="..\Code\Tool_Main.h">
       <Filter>00.Main</Filter>
     </ClInclude>
+    <ClInclude Include="..\Code\Changer.h">
+      <Filter>03.Level\Tab_Changer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\Plane.h">
+      <Filter>04.Tool_Object\Plane</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\Tab_Changer.h">
+      <Filter>03.Level</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\MapTool_Level.h">
+      <Filter>03.Level\00.Map_Tool</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\CamTool_Level.h">
+      <Filter>03.Level\01.Cam_Tool</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\Static.h">
+      <Filter>03.Level\Level_Static</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -151,6 +169,24 @@
     </ClCompile>
     <ClCompile Include="..\Code\Tool_Main.cpp">
       <Filter>00.Main</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Changer.cpp">
+      <Filter>03.Level\Tab_Changer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Plane.cpp">
+      <Filter>04.Tool_Object\Plane</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Tab_Changer.cpp">
+      <Filter>03.Level</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\MapTool_Level.cpp">
+      <Filter>03.Level\00.Map_Tool</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\CamTool_Level.cpp">
+      <Filter>03.Level\01.Cam_Tool</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Static.cpp">
+      <Filter>03.Level\Level_Static</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
