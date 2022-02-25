@@ -91,6 +91,11 @@ void CUITool_Dlg::OnBnClickedButtonApply()
 
 	UpdateData(TRUE);
 	
-	CString FullName = L"Prototype_GameObject_" + m_strFileName;
-
+	wstring FullName = L"Prototype_GameObject_" + m_strFileName;
+	//wstring str = L"MFCTexture";
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer(TOOL_LEVEL::TOOL_LEVEL_LOGO, L"Layer_UI", FullName, &m_strFileName)))
+	{
+		ERR_MSG(L"Failed to Creating in CMFCLevel_Logo::NativeConstruct()");
+		return;
+	}
 }

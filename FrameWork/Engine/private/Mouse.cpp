@@ -87,7 +87,7 @@ _bool CMouse::getCheckUI(CGameObject* pUI)
 	_float fPosX = XMVectorGetX(vPos);
 	_float fPosY = XMVectorGetY(vPos);
 	_float fSizX = pUITransform->Get_Scale(CTransform::STATE_RIGHT);
-	_float fSizY = pUITransform->Get_Scale(CTransform::STATE_RIGHT);
+	_float fSizY = pUITransform->Get_Scale(CTransform::STATE_UP);
 
 	RECT      rc;
 	SetRect(&rc, (_uint)(fPosX - fSizX * 0.5f), (_uint)(fPosY - fSizY * 0.5f),

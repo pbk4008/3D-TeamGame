@@ -82,34 +82,34 @@ HRESULT CDynamic_Camera::SetUp_Components()
 void CDynamic_Camera::Input_Key(_double _dTimeDelta)
 {
 
-	if (g_pGameInstance->Get_DIKeyState(DIK_W) & 0x80)
+	if (g_pGameInstance->getkeyState(DIK_W) & 0x80)
 	{
 		m_pTransform->Go_Straight(_dTimeDelta);
 	}
 
-	if (g_pGameInstance->Get_DIKeyState(DIK_S) & 0x80)
+	if (g_pGameInstance->getkeyState(DIK_S) & 0x80)
 	{
 		m_pTransform->Go_BackWard(_dTimeDelta);
 	}
 
-	if (g_pGameInstance->Get_DIKeyState(DIK_A) & 0x80)
+	if (g_pGameInstance->getkeyState(DIK_A) & 0x80)
 	{
 		m_pTransform->Go_Left(_dTimeDelta);
 	}
 
-	if (g_pGameInstance->Get_DIKeyState(DIK_D) & 0x80)
+	if (g_pGameInstance->getkeyState(DIK_D) & 0x80)
 	{
 		m_pTransform->Go_Right(_dTimeDelta);
 	}
 
 	_long	MouseMove = 0;
 
-	if (MouseMove = g_pGameInstance->Get_MouseMoveState(CInput_Device::MMS_X))
+	if (MouseMove = g_pGameInstance->getMouseMoveState(CInputDev::MOUSEMOVESTATE::MM_X))
 	{
 		m_pTransform->Rotation_Axis(XMVectorSet(0.f, 1.f, 0.f, 0.f), _dTimeDelta * MouseMove * 0.1f);
 	}
 
-	if (MouseMove = g_pGameInstance->Get_MouseMoveState(CInput_Device::MMS_Y))
+	if (MouseMove = g_pGameInstance->getMouseMoveState(CInputDev::MOUSEMOVESTATE::MM_Y))
 	{
 		m_pTransform->Rotation_Axis(m_pTransform->Get_State(CTransform::STATE_RIGHT), _dTimeDelta * MouseMove * 0.1f);
 	}

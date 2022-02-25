@@ -21,12 +21,12 @@ HRESULT CMFCObject_UI::NativeConstruct_Prototype()
 	}
 
 	m_fX = 500.f;
-	m_fY = 263.f;
-	m_fSizeX = 49.2f;
-	m_fSizeY = 45.f;
+	m_fY = 500.f;
+	m_fSizeX = 100.f;
+	m_fSizeY = 100.f;
 
-	m_ProjectionMatrix = XMMatrixOrthographicLH(WINCX, WINCY, 0.f, 1.f);
-	XMStoreFloat4x4(&m_WorldMatrix, XMMatrixIdentity());
+	//m_ProjectionMatrix = XMMatrixOrthographicLH(WINCX, WINCY, 0.f, 1.f);
+	//XMStoreFloat4x4(&m_WorldMatrix, XMMatrixIdentity());
 
 	return S_OK;
 }
@@ -46,25 +46,25 @@ HRESULT CMFCObject_UI::NativeConstruct(void* pArg)
 	
 	//m_pTextureCom->Change_Texture(L"Texture");
 
-	//_vector vPos = { 500.f,500.f ,1.f,1.f };
-	//m_pTransform->Set_State(CTransform::STATE_POSITION, vPos);
-	//
-	//_vector vScale = { 10.f,10.f ,10.f ,1.f };
-	//m_pTransform->Scaling(vScale);
-	
+
 	return S_OK;
 }
 
 _int CMFCObject_UI::Tick(_double TimeDelta)
 {
-	XMStoreFloat4x4(&m_WorldMatrix, XMMatrixIdentity());
-	m_WorldMatrix._11 = m_fSizeX;
-	m_WorldMatrix._22 = m_fSizeY;
+	_vector vPos = { m_fX - (WINCX >> 1),-m_fY + (WINCY >> 1),1.f,1.f };
+	m_pTransform->Set_State(CTransform::STATE_POSITION, vPos);
 
-	m_WorldMatrix._41 = m_fX - (WINCX >> 1);
-	m_WorldMatrix._42 = -m_fY + (WINCY >> 1);
-	m_WorldMatrix._43 = 0.69f;
+	_vector vScale = { m_fSizeX,m_fSizeY,1.f ,1.f };
+	m_pTransform->Scaling(vScale);
 
+	//XMStoreFloat4x4(&m_WorldMatrix, XMMatrixIdentity());
+	//m_WorldMatrix._11 = m_fSizeX;
+	//m_WorldMatrix._22 = m_fSizeY;
+	//
+	//m_WorldMatrix._41 = m_fX - (WINCX >> 1);
+	//m_WorldMatrix._42 = -m_fY + (WINCY >> 1);
+	//m_WorldMatrix._43 = 0.69f;
 
 	//RECT		rc;
 	//SetRect(&rc, (_uint)(m_fX - m_fSizeX * 0.5f), (_uint)(m_fY - m_fSizeY * 0.5f),
@@ -84,7 +84,6 @@ _int CMFCObject_UI::Tick(_double TimeDelta)
 	//	m_bIn = false;
 	//}
 
-	//cout << "X : " << ptMouse.x << " , " << " Y : " << ptMouse.y << endl;
 	return 0;
 }
 
@@ -99,7 +98,8 @@ _int CMFCObject_UI::LateTick(_double TimeDelta)
 
 HRESULT CMFCObject_UI::Render()
 {
-	_matrix XMWorldMatrix = XMMatrixTranspose(XMLoadFloat4x4(&m_WorldMatrix));
+	//_matrix XMWorldMatrix = XMMatrixTranspose(XMLoadFloat4x4(&m_WorldMatrix));
+	_matrix XMWorldMatrix = XMMatrixTranspose(m_pTransform->Get_WorldMatrix());
 	_matrix XMViewMatrix = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"MFCCamera", TRANSFORMSTATEMATRIX::D3DTS_VIEW));
 	_matrix XMProjectMatrix = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"MFCCamera", TRANSFORMSTATEMATRIX::D3DTS_PROJECTION));
 

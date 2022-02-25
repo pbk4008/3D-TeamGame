@@ -24,7 +24,7 @@ public:
 	afx_msg void OnDropFiles(HDROP hDropInfo);
 
 public:
-	CString m_strFileName;
+	wstring m_strFileName;
 	CListBox m_ListBox;
 
 	afx_msg void OnLbnSelchangeList1();

@@ -15,12 +15,7 @@ HRESULT CMFCLevel_Logo::NativeConstruct()
 		return E_FAIL;
 	}
 	
-	wstring str = L"MFCTexture";
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer(TOOL_LEVEL::TOOL_LEVEL_LOGO, L"Layer_UI", L"Prototype_GameObject_UI", &str)))
-	{
-		ERR_MSG(L"Failed to Creating in CMFCLevel_Logo::NativeConstruct()");
-		return E_FAIL;
-	}
+
 
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer(TOOL_LEVEL::TOOL_LEVEL_LOGO, L"Layer_Camera", L"Prototype_GameObject_Camera")))
 	{
