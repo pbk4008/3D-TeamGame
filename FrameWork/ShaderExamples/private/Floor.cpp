@@ -41,8 +41,8 @@ _int CFloor::LateTick(_double TimeDelta)
 {
 	//m_pVIBufferCom->Culling(m_pTransformCom->Get_WorldMatrixInverse());
 
-	if (nullptr != m_pRendererCom)
-		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHA, this);
+	if (nullptr != m_pRenderer)
+		m_pRenderer->Add_RenderGroup(CRenderer::RENDER_NONALPHA, this);
 
 	return _int();
 }
@@ -52,7 +52,7 @@ HRESULT CFloor::Render()
 	CGameInstance* pGameInstance = GET_INSTANCE(CGameInstance);
 
 	_matrix world, view, proj;
-	world = XMMatrixTranspose(m_pTransformCom->Get_WorldMatrix());
+	world = XMMatrixTranspose(m_pTransform->Get_WorldMatrix());
 	view = XMMatrixTranspose(pGameInstance->Get_Transform(L"Dynamic", TRANSFORMSTATEMATRIX::D3DTS_VIEW));
 	proj = XMMatrixTranspose(pGameInstance->Get_Transform(L"Dynamic", TRANSFORMSTATEMATRIX::D3DTS_PROJECTION));
 
@@ -75,21 +75,19 @@ HRESULT CFloor::Render()
 
 HRESULT CFloor::SetUp_Components()
 {
-	CTransform::TRANSFORMDESC		TransformDesc;
-	TransformDesc.fSpeedPerSec = 7.f;
-	TransformDesc.fRotationPerSec = XMConvertToRadians(90.0f);
-
-	if (FAILED(__super::SetUp_Components((_uint)LEVEL::LEVEL_STATIC, TEXT("Prototype_Component_Transform"), TEXT("Com_Transform"), (CComponent**)&m_pTransformCom, &TransformDesc)))
-		return E_FAIL;
-
-	if (FAILED(__super::SetUp_Components((_uint)LEVEL::LEVEL_STATIC, TEXT("Prototype_Component_Renderer"), TEXT("RendererCom"), (CComponent**)&m_pRendererCom)))
-		return E_FAIL;
-
 	if (FAILED(__super::SetUp_Components((_uint)LEVEL::LEVEL_STATIC, TEXT("PrototypeTerrainVIBuffer"), TEXT("TerrainCom"), (CComponent**)&m_pVIBufferCom)))
 		return E_FAIL;
 
-	if (FAILED(__super::SetUp_Components((_uint)LEVEL::LEVEL_STATIC, L"PrototypeTerrain", L"Com_Texture", (CComponent**)&m_pTextureCom)))
+	//if (FAILED(__super::SetUp_Components((_uint)LEVEL::LEVEL_STATIC, L"Texture", L"Com_Texture", (CComponent**)&m_pTextureCom, &wstr)))
+	//	return E_FAIL;
+
+	wstring wstr = L"TerrainBase";
+	m_pTextureCom = g_pGameInstance->Clone_Component<CTexture>(0, L"Texture", &wstr);
+
+	if (m_pTextureCom == nullptr)
 		return E_FAIL;
+
+	/*if(FAILED(__super::SetUp_Components(L"TerrainBase")))*/
 
 	return S_OK;
 }
@@ -113,7 +111,7 @@ CGameObject* CFloor::Clone(void* pArg)
 
 	if (FAILED(pInstance->NativeConstruct(pArg)))
 	{
-		MSGBOX("Failed to Creating CFloor");
+		MSGBOX("Failed to Creating  Clone CFloor");
 		Safe_Release(pInstance);
 	}
 
@@ -124,8 +122,6 @@ void CFloor::Free()
 {
 	__super::Free();
 
-	Safe_Release(m_pTextureCom);
-	Safe_Release(m_pRendererCom);
-	Safe_Release(m_pTransformCom);
+	//Safe_Release(m_pTextureCom);
 	Safe_Release(m_pVIBufferCom);
 }

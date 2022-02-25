@@ -360,6 +360,14 @@ vector<ID3D11ShaderResourceView*>* CGameInstance::Get_Texture(const wstring& pTe
 	return m_pTextureManager->Get_Texture(pTextureTag);
 }
 
+HRESULT CGameInstance::SetUpBaseComponent(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
+{
+	if (m_pComponent_Manager == nullptr)
+		return E_FAIL;
+	
+	return m_pComponent_Manager->SetUpBaseComponent(pDevice, pDeviceContext);
+}
+
 void CGameInstance::Release_Engine()
 {
 	RELEASE_INSTANCE(CGameInstance);

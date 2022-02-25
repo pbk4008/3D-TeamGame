@@ -105,6 +105,8 @@ public:/* For.SaveManager*/
 
 		return m_pSaveManager->LoadFile<T>(pLoadData, pFilePath);
 	}
+public: HRESULT SetUpBaseComponent(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);
+
 private:
 	CGraphic_Device*				m_pGraphic_Device = nullptr;		
 	CLevel_Manager*				m_pLevel_Manager = nullptr;
