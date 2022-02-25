@@ -75,6 +75,9 @@ HRESULT CTexture::NativeConstruct(void * pArg)
 {
 	CTextureManager* pInstance = GET_INSTANCE(CTextureManager);
 
+	if (!pArg)
+		return S_OK;
+
 	wstring pTag = (*(wstring*)pArg);
 	vector <ID3D11ShaderResourceView* >* pTexture = pInstance->Get_Texture(pTag);
 
@@ -95,7 +98,14 @@ HRESULT CTexture::Change_Texture(const wstring& pTextureTag)
 	vector < ID3D11ShaderResourceView* >* pTexture = pInstance->Get_Texture(pTextureTag);
 	if (!pTexture)
 		return E_FAIL;
-	m_Textures = *pTexture;
+
+	_uint iSize = pTexture->size();
+	for (_uint i = 0; i < iSize; i++)
+	{
+		m_Textures.emplace_back((*pTexture)[i]);
+		Safe_AddRef(m_Textures[i]);
+	}
+
 
 	RELEASE_INSTANCE(CTextureManager);
 	return S_OK;

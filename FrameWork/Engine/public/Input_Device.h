@@ -24,7 +24,6 @@ public:
 	const _bool Key_Down(const KEY_STATE& _ks);
 	const _bool Key_Up(const KEY_STATE& _ks);
 	const _bool Key_Pressing(const KEY_STATE& _ks);
-
 private:
 	void ProcessKeyState();
 

@@ -19,7 +19,7 @@
 
 BEGIN(Engine)
 
-
+class CComponent;
 class ENGINE_DLL CGameInstance final : public CSingleTon<CGameInstance>
 {
 	friend CSingleTon;
@@ -53,7 +53,16 @@ public: /* For.Object_Manager*/
 	class CComponent* Get_Component(_uint iLevelIndex, const wstring& pLayerTag, const wstring& pComponentTag, _uint iIndex = 0);
 	HRESULT Add_Prototype(const wstring& pPrototypeTag, CGameObject* pPrototype);
 	HRESULT Add_GameObjectToLayer(_uint iLevelIndex, const wstring& pLayerTag, const wstring& pPrototypeTag, void* pArg = nullptr);
+	template<typename T>
+	T* Get_Component(_uint iLevelIndex, const wstring& pLayerTag, const wstring& pComponentTag, _uint iIndex = 0)
+	{
+		CComponent* pCom = Get_Component(iLevelIndex, pLayerTag, pComponentTag, iIndex);
 
+		if (!pCom)
+			return nullptr;
+
+		return static_cast<T*>(pCom);
+	}
 public: /* For.Component_Manager */
 	HRESULT Add_Prototype(_uint iLevelIndex, const wstring& pPrototypeTag, class CComponent* pPrototype);
 	CComponent* Clone_Component(_uint iLevelIndex, const wstring& pPrototypeTag, void* pArg = nullptr);

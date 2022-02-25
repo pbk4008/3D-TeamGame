@@ -6,6 +6,7 @@
 BEGIN(Engine)
 class CTransform;
 class CRenderer;
+class CComponent;
 class ENGINE_DLL CGameObject abstract : public CBase
 {
 protected:
@@ -16,6 +17,16 @@ protected:
 
 public:
 	class CComponent* Get_Component(const wstring& pComponentTag);
+	template<typename T>
+	T* Get_Component(const wstring& pComponentTag)
+	{
+		CComponent* pCom = Get_Component(pComponentTag);
+
+		if (!pCom)
+			return nullptr;
+
+		return static_cast<T*>(pCom);
+	}
 public:
 	/* 원형객체가 생성될때 호출되는 함수. */
 	virtual HRESULT NativeConstruct_Prototype();
