@@ -28,10 +28,7 @@ HRESULT CMFCCamera::NativeConstruct_Prototype()
 
 	m_pCameraCom = g_pGameInstance->Clone_Component<CCamera>(0, L"Camera", &Desc);
 
-	if (FAILED(SetUp_Components(L"Camera", m_pCameraCom)))
-	{
-		return E_FAIL;
-	}
+
 
 	return S_OK;
 }
@@ -39,6 +36,11 @@ HRESULT CMFCCamera::NativeConstruct_Prototype()
 HRESULT CMFCCamera::NativeConstruct(void* pArg)
 {
 	if (FAILED(__super::NativeConstruct(pArg)))
+	{
+		return E_FAIL;
+	}
+
+	if (FAILED(SetUp_Components(L"Camera", m_pCameraCom)))
 	{
 		return E_FAIL;
 	}

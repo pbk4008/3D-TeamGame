@@ -90,9 +90,14 @@ void CUITool_Dlg::OnBnClickedButtonApply()
 	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
 
 	UpdateData(TRUE);
-
+	
 	CString FullName = L"Prototype_GameObject_" + m_strFileName;
 
-
+	
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer(0,L"Layer_UI", L"Prototype_GameObject_UI", L"Texture")))
+	{
+		ERR_MSG(L"Failed to Creating in CObjectToolDlg");
+		return;
+	}
 
 }

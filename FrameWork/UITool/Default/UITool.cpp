@@ -12,6 +12,8 @@
 #include "UIToolDoc.h"
 #include "UIToolView.h"
 
+#include "MFCObject_UI.h"
+
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
@@ -169,6 +171,21 @@ BOOL CUIToolApp::InitInstance()
 		return false;
 	}
 
+	//여기서 그림 다 불러놓음
+
+	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"Texture", L"../bin/Resource/Textures/Default1.jpg")))
+	{
+		return false;
+	}
+
+	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_UI"), CMFCObject_UI::Create(m_pDevice, m_pDeviceContext))))
+	{
+		return false;
+	}
+
+
+
+
 	return TRUE;
 }
 
@@ -214,11 +231,11 @@ HRESULT CUIToolApp::Engine_Render()
 		return E_FAIL;
 	}
 
-	///* 내 게임을 구성하는 객체들의 렌더 함수를 호출한다 */
-	//if (FAILED(m_pRenderer->Draw_RenderGroup()))
-	//{
-	//	return E_FAIL;
-	//}
+	/* 내 게임을 구성하는 객체들의 렌더 함수를 호출한다 */
+	if (FAILED(m_pRenderer->Draw_RenderGroup()))
+	{
+		return E_FAIL;
+	}
 
 	/* 내 게임내의 기타 등등을 렌더링한다 */
 	if (FAILED(m_pGameInstance->Render_Engine()))

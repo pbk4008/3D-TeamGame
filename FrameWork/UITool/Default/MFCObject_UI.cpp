@@ -25,8 +25,6 @@ HRESULT CMFCObject_UI::NativeConstruct_Prototype()
 	m_fSizeX = 49.2f;
 	m_fSizeY = 45.f;
 
-	g_pGameInstance->Add_Texture(m_pDevice, L"Texture", L"../bin/Resource/Textures/Default1.jpg");
-
 	//m_ProjectionMatrix = XMMatrixOrthographicLH(WINCX, WINCY, 0.f, 1.f);
 	//XMStoreFloat4x4(&m_WorldMatrix, XMMatrixIdentity());
 	return S_OK;
@@ -45,7 +43,7 @@ HRESULT CMFCObject_UI::NativeConstruct(void* pArg)
 		return E_FAIL;
 	}
 	
-	m_pTextureCom->Change_Texture(L"Texture");
+	//m_pTextureCom->Change_Texture(L"Texture");
 
 	_vector vPos = { 500.f,500.f ,1.f,1.f };
 	m_pTransform->Set_State(CTransform::STATE_POSITION, vPos);
