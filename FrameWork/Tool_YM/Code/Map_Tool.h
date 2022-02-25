@@ -28,12 +28,19 @@ public:
 	void InitAssetsTree(void);
 
 public:
-	FILEINFO  m_FileInfo;
-	_bool	  m_bSelect_FBXFile = false;
+	FILEINFO		  m_FileInfo;
+	_bool			  m_bSelect_FBXFile = false;
 
 public:
-	CTreeCtrl m_AssetTree;
+	list<wstring>	  m_ProtoTag;
 
+public:
+	CTreeCtrl		  m_AssetTree;
+
+public:
+	class CMainFrame* m_pMain = nullptr;
+	class CMenu_Form* m_pMenuForm = nullptr;
+	
 public:
 	virtual BOOL OnInitDialog();
 	virtual void PostNcDestroy();

@@ -2,6 +2,7 @@
 
 
 // CModel_Inspector 대화 상자
+#include "Engine_Defines.h"
 
 class CModel_Inspector : public CDialogEx
 {
@@ -16,7 +17,21 @@ public:
 	enum { IDD = IDD_CModel_Inspector };
 #endif
 
-	//개발자 재정의
+//개발자 재정의
+public: 
+	HRESULT		Get_ModelInfo(const FILEINFO& _FileInfo);
+	void		Ready_Tag_Combo(void);
+	void		Ready_Level_Combo(void);
+
+public:
+	FILEINFO	m_FileInfo; /* Map_Tool에서 선택한 원본 모델에 대한 정보를 저장합니다. */
+	MODELDESC   m_ModelDesc;
+
+public:
+	CEdit m_StaticTxt_FileName;
+	CEdit m_EditTxt_Model_Name;
+	CComboBox m_Combo_Tag;
+	CComboBox m_Combo_Level;
 
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV 지원입니다.
@@ -24,4 +39,8 @@ protected:
 	DECLARE_MESSAGE_MAP()
 	virtual void PostNcDestroy();
 	virtual BOOL OnInitDialog();
+
+
+public:
+	afx_msg void OnBnClickedAddButton();
 };

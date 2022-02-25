@@ -32,6 +32,9 @@ public:
 	_int Update_Inspector_Form(const _double& _dTimeDelta);
 
 public:
+	HRESULT		Get_ModelInfo(const FILEINFO& _FileInfo);
+
+public:
 	void Get_Device(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext) { 
 		m_pDevice = _pDevice;
 		m_pDeviceContext = _pDeviceContext;

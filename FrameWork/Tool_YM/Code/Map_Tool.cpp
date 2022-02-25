@@ -6,6 +6,8 @@
 #include "../Code/Map_Tool.h"
 #include "afxdialogex.h"
 
+#include "MainFrm.h"
+#include "Menu_Form.h"
 
 // CMap_Tool 대화 상자
 IMPLEMENT_DYNAMIC(CMap_Tool, CDialogEx)
@@ -13,6 +15,8 @@ IMPLEMENT_DYNAMIC(CMap_Tool, CDialogEx)
 CMap_Tool::CMap_Tool(CWnd* pParent /*=nullptr*/)
 	: CDialogEx(IDD_CMap_Tool, pParent)
 {
+	m_pMain = dynamic_cast<CMainFrame*>(AfxGetApp()->GetMainWnd());
+	m_pMenuForm = dynamic_cast<CMenu_Form*>(m_pMain->m_tMainSplitter.GetPane(0, 0));
 }
 
 CMap_Tool::~CMap_Tool()
@@ -135,9 +139,21 @@ void CMap_Tool::OnTvnSelchangedTree1(NMHDR* pNMHDR, LRESULT* pResult)
 void CMap_Tool::OnNMDblclkTree1(NMHDR* pNMHDR, LRESULT* pResult)
 {
 	// TODO: FBX 파일을 더블클릭 한 경우 원본 모델 생성
+	HRESULT hr = E_FAIL;
+	if (m_bSelect_FBXFile)
+	{
+		auto iter = find(m_ProtoTag.begin(), m_ProtoTag.end(), m_FileInfo.cstrFileName);
 
-	if(m_bSelect_FBXFile)
-		int a = 10;
+		if(iter == m_ProtoTag.end())
+			hr = m_pMenuForm->Create_Model_Prototype(m_FileInfo);
+
+		if (FAILED(m_pMenuForm->m_pInspec_Form->Get_ModelInfo(m_FileInfo)))
+			return;
+	}
+	if (SUCCEEDED(hr))
+		m_ProtoTag.push_back(m_FileInfo.cstrFileName);
+
+
 
 	*pResult = 0;
 }

@@ -96,6 +96,7 @@
       <PreprocessorDefinitions>_WINDOWS;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <AdditionalIncludeDirectories>../Code/;../Default/;../../Reference/Headers/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -201,6 +202,7 @@
     <ClInclude Include="..\Code\Model_Inspector.h" />
     <ClInclude Include="..\Code\Plane.h" />
     <ClInclude Include="..\Code\Static.h" />
+    <ClInclude Include="..\Code\Static_Mesh.h" />
     <ClInclude Include="..\Code\Tab_Changer.h" />
     <ClInclude Include="..\Code\Tool_Defines.h" />
     <ClInclude Include="..\Code\Tool_Main.h" />
@@ -227,6 +229,7 @@
     <ClCompile Include="..\Code\Model_Inspector.cpp" />
     <ClCompile Include="..\Code\Plane.cpp" />
     <ClCompile Include="..\Code\Static.cpp" />
+    <ClCompile Include="..\Code\Static_Mesh.cpp" />
     <ClCompile Include="..\Code\Tab_Changer.cpp" />
     <ClCompile Include="..\Code\Tool_Main.cpp" />
     <ClCompile Include="MainFrm.cpp" />
