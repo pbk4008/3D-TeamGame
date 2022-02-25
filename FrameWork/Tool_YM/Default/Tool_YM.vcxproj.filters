@@ -64,6 +64,9 @@
     <Filter Include="03.Level\Level_Static">
       <UniqueIdentifier>{7fa6b9c5-f8ce-4f32-817d-665429926777}</UniqueIdentifier>
     </Filter>
+    <Filter Include="04.Tool_Object\Camera\Dynamic_Cam">
+      <UniqueIdentifier>{d8c3e6d4-cc89-4b65-9d45-76450425c611}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -132,6 +135,9 @@
     <ClInclude Include="..\Code\Static.h">
       <Filter>03.Level\Level_Static</Filter>
     </ClInclude>
+    <ClInclude Include="..\Code\Dyanmic_Camera.h">
+      <Filter>04.Tool_Object\Camera\Dynamic_Cam</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -187,6 +193,9 @@
     </ClCompile>
     <ClCompile Include="..\Code\Static.cpp">
       <Filter>03.Level\Level_Static</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Dyanmic_Camera.cpp">
+      <Filter>04.Tool_Object\Camera\Dynamic_Cam</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

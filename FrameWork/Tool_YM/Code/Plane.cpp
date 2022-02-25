@@ -17,9 +17,6 @@ HRESULT CPlane::NativeConstruct_Prototype()
 	if (FAILED(__super::NativeConstruct_Prototype()))
 		return E_FAIL;
 
-	if (FAILED(SetUp_Components()))
-		return E_FAIL;
-
 	return S_OK;
 }
 
@@ -28,8 +25,7 @@ HRESULT CPlane::NativeConstruct(void* pArg)
 	if (FAILED(__super::NativeConstruct(pArg)))
 		return E_FAIL;
 
-
-	if (FAILED(SetUp_Components()))
+ 	if (FAILED(SetUp_Components()))
 		return E_FAIL;
 
 	return S_OK;
@@ -63,28 +59,31 @@ HRESULT CPlane::Render()
 HRESULT CPlane::SetUp_Components()
 {
 	/* Com_VIBuffer */
-	if (FAILED(__super::SetUp_Components(TAB_MAP, L"Prototype_Component_VIBuffer_Terrain", L"Com_VIBuffer", (CComponent**)&m_pVIBufferCom)))
+	if (FAILED(__super::SetUp_Components(TAB_STATIC, L"Prototype_Component_VIBuffer_Terrain", L"Com_VIBuffer", (CComponent**)&m_pVIBufferCom)))
 		return E_FAIL;
+
+	/* Com_Texture  */
+	wstring TexTag = L"Plane_Texture";
+	m_pTexture = (CTexture*)g_pGameInstance->Clone_Component(TAB_STATIC, L"Texture", &TexTag);
 
 	return S_OK;
 }
 
 void CPlane::Set_WVPMatrix()
 {
+	_fmatrix matWorld = m_pTransform->Get_WorldMatrix();
+	auto vCamPos = g_pGameInstance->Get_CamPosition(L"Camera");
 
-	//_fmatrix matWorld = m_pTransform->Get_WorldMatrix();
-	//auto vCamPos = pGameInstance->Get_CamPosition();
+	auto matWorldInvers = XMMatrixTranspose(matWorld);
+	auto matViewInvers = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera", TRANSFORMSTATEMATRIX::D3DTS_VIEW));
+	auto matProjInvers = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera", TRANSFORMSTATEMATRIX::D3DTS_PROJECTION));
 
-	//auto matWorldInvers = XMMatrixTranspose(matWorld);
-	//auto matViewInvers = XMMatrixTranspose(pGameInstance->Get_Transform(,TRANSFORMSTATEMATRIX::D3DTS_VIEW));
-	//auto matProjInvers = XMMatrixTranspose(pGameInstance->Get_Transform(,TRANSFORMSTATEMATRIX::D3DTS_PROJECTION));
+	m_pVIBufferCom->SetUp_ValueOnShader("g_WorldMatrix", &matWorldInvers, sizeof(_matrix));
+	m_pVIBufferCom->SetUp_ValueOnShader("g_ViewMatrix", &matViewInvers, sizeof(_matrix));
+	m_pVIBufferCom->SetUp_ValueOnShader("g_ProjMatrix", &matProjInvers, sizeof(_matrix));
+	m_pVIBufferCom->SetUp_TextureOnShader("g_DiffuseTexture", m_pTexture, 0);
 
-	//m_pVIBufferCom->SetUp_ValueOnShader("g_WorldMatrix", &matWorldInvers, sizeof(_matrix));
-	//m_pVIBufferCom->SetUp_ValueOnShader("g_ViewMatrix", &matViewInvers, sizeof(_matrix));
-	//m_pVIBufferCom->SetUp_ValueOnShader("g_ProjMatrix", &matProjInvers, sizeof(_matrix));
-	//m_pVIBufferCom->SetUp_TextureOnShader("g_DiffuseTexture", m_pTexture, 0);
-
-	//m_pVIBufferCom->SetUp_ValueOnShader("g_vCamPosition", &vCamPos, sizeof(_vector));
+	m_pVIBufferCom->SetUp_ValueOnShader("g_vCamPosition", &vCamPos, sizeof(_vector));
 }
 
 CPlane* CPlane::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
@@ -113,5 +112,8 @@ CGameObject* CPlane::Clone(void* pArg)
 
 void CPlane::Free(void)
 {
+	__super::Free();
+
+	//Safe_Release(m_pTexture);
 	Safe_Release(m_pVIBufferCom);
 }

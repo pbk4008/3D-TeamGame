@@ -129,21 +129,25 @@ BOOL CToolYMApp::InitInstance()
 	m_pMainWnd->ShowWindow(SW_MAXIMIZE);
 	m_pMainWnd->UpdateWindow();
 
+	CGameInstance* pGameInstance = GET_INSTANCE(CGameInstance);
+
+	if (FAILED(pGameInstance->Ready_Timer(L"Tool_Main_Timer")))
+		return FALSE;
+	if (FAILED(pGameInstance->Ready_Timer(L"Tool_60FPS_Timer")))
+		return FALSE;
+
+	RELEASE_INSTANCE(CGameInstance);
+
 	m_pMainFrm = dynamic_cast<CMainFrame*>(AfxGetApp()->GetMainWnd());
 	m_pToolView = dynamic_cast<CToolYMView*>(m_pMainFrm->m_tMainSplitter.GetPane(0, 1));
 
 	g_hWnd = m_pToolView->m_hWnd;
 	g_hInst = m_pToolView->m_hInst;
 
-	m_pTool_Main = CTool_Main::Create();
+ 	m_pTool_Main = CTool_Main::Create();
 
 	if (nullptr == m_pTool_Main)
 		return FALSE;
-
-	if (FAILED(g_pGameInstance->Ready_Timer(L"Tool_Main_Timer")))
-		return FALSE;
-	if (FAILED(g_pGameInstance->Ready_Timer(L"Tool_60FPS_Timer")))
-
 	return TRUE;
 }
 
