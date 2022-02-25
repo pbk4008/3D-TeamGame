@@ -266,20 +266,53 @@ void CGameInstance::Set_Transform(const wstring& pCameraTag, TRANSFORMSTATEMATRI
 	return m_pPipeLine->Set_Transform(pCameraTag, eType, TransformMatrix);
 }
 
-_byte CGameInstance::getkeyState(_ubyte bykeyID)
+_bool CGameInstance::getkeyPress(_ubyte bykeyID)
 {
 	if (!m_pInput_Device)
-		return -1;
+		return false;
 
-	return m_pInput_Device->getkeyState(bykeyID);
+	return m_pInput_Device->getkeyPress(bykeyID);
 }
 
-_byte CGameInstance::getMouseState(CInputDev::MOUSESTATE eMouse)
+_bool CGameInstance::getkeyDown(_ubyte bykeyID)
 {
 	if (!m_pInput_Device)
-		return -1;
+		return false;
 
-	return m_pInput_Device->getMouseState(eMouse);
+	return m_pInput_Device->getkeyDown(bykeyID);
+}
+
+_bool CGameInstance::getkeyUp(_ubyte bykeyID)
+{
+	if (!m_pInput_Device)
+		return false;
+
+	return m_pInput_Device->getkeyUp(bykeyID);
+}
+
+_bool CGameInstance::getMousePress(CInputDev::MOUSESTATE eMouse)
+{
+	if (!m_pInput_Device)
+		return false;
+
+	return m_pInput_Device->getMousePress(eMouse);
+
+}
+
+_bool CGameInstance::getMouseKeyDown(CInputDev::MOUSESTATE eMouse)
+{
+	if (!m_pInput_Device)
+		return false;
+
+	return m_pInput_Device->getMouseKeyDown(eMouse);
+}
+
+_bool CGameInstance::getMouseKeyUp(CInputDev::MOUSESTATE eMouse)
+{
+	if (!m_pInput_Device)
+		return false;
+
+	return m_pInput_Device->getMouseKeyUp(eMouse);
 }
 
 _long CGameInstance::getMouseMoveState(CInputDev::MOUSEMOVESTATE eMouse)

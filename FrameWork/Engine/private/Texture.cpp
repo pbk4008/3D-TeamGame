@@ -106,7 +106,6 @@ HRESULT CTexture::Change_Texture(const wstring& pTextureTag)
 		Safe_AddRef(m_Textures[i]);
 	}
 
-
 	RELEASE_INSTANCE(CTextureManager);
 	return S_OK;
 }

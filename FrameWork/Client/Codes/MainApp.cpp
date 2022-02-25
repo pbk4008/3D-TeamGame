@@ -29,6 +29,7 @@ _int CMainApp::Tick(_double TimeDelta)
 {
 	m_TimeAcc += TimeDelta;
 
+
 	g_pGameInstance->Tick_Engine(TimeDelta);
 
 	return _int();
