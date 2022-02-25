@@ -115,3 +115,14 @@ void CMenu_Form::OnTcnSelchangeCancel(NMHDR* pNMHDR, LRESULT* pResult)
 	}
 	*pResult = 0;
 }
+
+
+void CMenu_Form::PostNcDestroy()
+{
+	// TODO: 여기에 특수화된 코드를 추가 및/또는 기본 클래스를 호출합니다.
+
+	Safe_Release(m_pDeviceContext);
+	Safe_Release(m_pDevice);
+
+	CFormView::PostNcDestroy();
+}

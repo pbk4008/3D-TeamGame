@@ -88,8 +88,12 @@ public: /* For.PipeLine */
 	void Set_Transform(const wstring& pCameraTag, TRANSFORMSTATEMATRIX eType, _fmatrix TransformMatrix);
 
 public: /* for.Input_Device */
-	_byte getkeyState(_ubyte bykeyID);
-	_byte getMouseState(CInputDev::MOUSESTATE eMouse);
+	_bool getkeyPress(_ubyte bykeyID);
+	_bool getkeyDown(_ubyte bykeyID);
+	_bool getkeyUp(_ubyte bykeyID);
+	_bool getMousePress(CInputDev::MOUSESTATE eMouse);
+	_bool getMouseKeyDown(CInputDev::MOUSESTATE eMouse);
+	_bool getMouseKeyUp(CInputDev::MOUSESTATE eMouse);
 	_long getMouseMoveState(CInputDev::MOUSEMOVESTATE eMouse);
 	_bool getKeyboardNoKey();
 

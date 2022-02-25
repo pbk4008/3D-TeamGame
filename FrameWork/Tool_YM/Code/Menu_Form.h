@@ -38,6 +38,14 @@ public:
 	_int	Update_Menu_Form(const _double& _dTimeDelta);
 
 public:
+	void Get_Device(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext) {
+		m_pDevice		 = _pDevice;
+		m_pDeviceContext = _pDeviceContext;
+		Safe_AddRef(m_pDevice);
+		Safe_AddRef(m_pDeviceContext);
+	};
+
+public:
 	class CMainFrame* m_pMainFrm = nullptr;
 	class CMap_Tool*  m_pMap_Tool = nullptr;
 	class CCam_Tool*  m_pCam_Tool = nullptr;
@@ -47,8 +55,13 @@ public:
 	TAB_ID		m_eSelectTab = TAB_END;
 
 public:
+	ID3D11Device*		 m_pDevice		  = nullptr;
+	ID3D11DeviceContext* m_pDeviceContext = nullptr;
+
+public:
 	virtual void OnInitialUpdate();
 	afx_msg void OnTcnSelchangeCancel(NMHDR* pNMHDR, LRESULT* pResult);
+	virtual void PostNcDestroy();
 };
 
 

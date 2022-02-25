@@ -40,6 +40,7 @@ void CMap_Tool::DoDataExchange(CDataExchange* pDX)
 
 BEGIN_MESSAGE_MAP(CMap_Tool, CDialogEx)
 	ON_NOTIFY(TVN_SELCHANGED, IDC_TREE1, &CMap_Tool::OnTvnSelchangedTree1)
+	ON_NOTIFY(NM_DBLCLK, IDC_TREE1, &CMap_Tool::OnNMDblclkTree1)
 END_MESSAGE_MAP()
 
 
@@ -109,6 +110,34 @@ void CMap_Tool::OnTvnSelchangedTree1(NMHDR* pNMHDR, LRESULT* pResult)
 		}
 	}
 	m_AssetTree.SetItemData(hSelected, 1);
+
+	/* 선택한 fbx 파일에 대한 정보를 가져온다 */
+	CString strSelectItem = m_AssetTree.GetItemText(hSelected);
+	CString strFilter = L".fbx";
+
+	if (-1 != strSelectItem.Find(strFilter))
+	{
+		m_FileInfo.cstrFileName = strSelectItem;
+
+		HTREEITEM temp = m_AssetTree.GetParentItem(hSelected);
+		if (NULL != temp)
+		{
+			m_FileInfo.cstrFolder = m_AssetTree.GetItemText(temp);
+			m_bSelect_FBXFile = true;
+		}
+	}
+	else
+		m_bSelect_FBXFile = false;
+
+	*pResult = 0;
+}
+
+void CMap_Tool::OnNMDblclkTree1(NMHDR* pNMHDR, LRESULT* pResult)
+{
+	// TODO: FBX 파일을 더블클릭 한 경우 원본 모델 생성
+
+	if(m_bSelect_FBXFile)
+		int a = 10;
 
 	*pResult = 0;
 }

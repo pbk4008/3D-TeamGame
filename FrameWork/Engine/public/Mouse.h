@@ -4,6 +4,7 @@
 #include "GameObject.h"
 
 BEGIN(Engine)
+class CUI;
 class ENGINE_DLL CMouse final : public CGameObject
 {
 private:
@@ -16,7 +17,7 @@ public:
 	virtual _int Tick(HWND hWnd, _double TimeDelta);
 public:
 	void RayUpdate(const wstring& pCamTag);
-	_bool getCheckUI(CGameObject* pGameObject);
+	CUI* getCheckUI(list<CGameObject*>* pObjList);
 	_fvector Terrain_Picking(void* pVertices, _fmatrix matWorld, _uint iVtxX, _uint iVtxZ, _int& iHitIndex);
 public:
 	_fvector getRayPos() { return XMLoadFloat3(&m_vRayPos); }

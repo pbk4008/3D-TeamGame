@@ -104,16 +104,18 @@ void CDynamic_Camera::Input_Key(_double _dTimeDelta)
 
 	_long	MouseMove = 0;
 
-	if (MouseMove = g_pGameInstance->getMouseMoveState(CInputDev::MOUSEMOVESTATE::MM_X))
+	if (TKEY_DOWN(VK_SHIFT))
 	{
-		m_pTransform->Rotation_Axis(XMVectorSet(0.f, 1.f, 0.f, 0.f), _dTimeDelta * MouseMove * 0.1f);
-	}
+		if (MouseMove = g_pGameInstance->getMouseMoveState(CInputDev::MOUSEMOVESTATE::MM_X))
+		{
+			m_pTransform->Rotation_Axis(XMVectorSet(0.f, 1.f, 0.f, 0.f), _dTimeDelta * MouseMove * 0.1f);
+		}
 
-	if (MouseMove = g_pGameInstance->getMouseMoveState(CInputDev::MOUSEMOVESTATE::MM_Y))
-	{
-		m_pTransform->Rotation_Axis(m_pTransform->Get_State(CTransform::STATE_RIGHT), _dTimeDelta * MouseMove * 0.1f);
+		if (MouseMove = g_pGameInstance->getMouseMoveState(CInputDev::MOUSEMOVESTATE::MM_Y))
+		{
+			m_pTransform->Rotation_Axis(m_pTransform->Get_State(CTransform::STATE_RIGHT), _dTimeDelta * MouseMove * 0.1f);
+		}
 	}
-
 }
 
 CDynamic_Camera* CDynamic_Camera::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)

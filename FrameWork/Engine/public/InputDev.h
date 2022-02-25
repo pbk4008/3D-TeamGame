@@ -19,8 +19,13 @@ public:
 private:
 	virtual void Free();
 public:
-	_byte getkeyState(_ubyte bykeyID) { return m_byKeyState[bykeyID]; }
-	_byte getMouseState(MOUSESTATE eMouse) { return m_tMouseState.rgbButtons[(_uint)eMouse]; }
+	_bool getkeyPress(_ubyte bykeyID);
+	_bool getkeyDown(_ubyte bykeyID);
+	_bool getkeyUp(_ubyte bykeyID);
+	_bool getMousePress(MOUSESTATE eMouse);
+	_bool getMouseKeyDown(MOUSESTATE eMouse);
+	_bool getMouseKeyUp(MOUSESTATE eMouse);
+
 	_long getMouseMoveState(MOUSEMOVESTATE eMouse) {		return ((_long*)&m_tMouseState)[(_uint)eMouse];	}
 	_bool getKeyboardNoKey();
 private:
@@ -30,6 +35,10 @@ private:
 	LPDIRECTINPUTDEVICE8 m_pMouse;
 private:
 	_byte m_byKeyState[256];
+	_byte m_byKeyDown[256];
+	_byte m_byKeyUp[256];
+	_byte m_byMouseKeyUp[(_uint)MOUSESTATE::MB_END];
+	_byte m_byMouseKeyDown[(_uint)MOUSESTATE::MB_END];
 	DIMOUSESTATE m_tMouseState;
 };
 END
