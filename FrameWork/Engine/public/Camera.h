@@ -8,29 +8,21 @@ class CGameObject;
 class ENGINE_DLL CCamera final : public CComponent
 {
 public:
-	enum class CAMERATYPE {CAMERA_ORTHO, CAMERA_PROJECTION};
+	enum class CAMERATYPE {CAMERA_ORTHO, CAMERA_PROJECTION, CAMERA_END};
 	typedef struct tagCameraDesc
 	{
-		CAMERATYPE eType;
-		_float4 vEye, vAt, vAxisY;
-		_float fAspect, fFovy, fNear, fFar;
-		_float fWinCX, fWinCY;
-		wstring pCameraTag;
+		CAMERATYPE eType = CAMERATYPE::CAMERA_END;
+		_float4 vEye = _float4(0.f,0.f,0.f,0.f);
+		_float4 vAt = _float4(0.f,0.f,0.f,0.f);
+		_float4 vAxisY = _float4(0.f,0.f,0.f,0.f);
+		_float fAspect = 0.f;
+		_float fFovy = 0.f;
+		_float fNear = 0.f;
+		_float fFar = 0.f;
+		_float fWinCX = 0.f;
+		_float fWinCY = 0.f;
+		wstring pCameraTag=L"";
 		tagCameraDesc() = default;
-		tagCameraDesc(const tagCameraDesc& rhs)
-			: eType(rhs.eType)
-			, vEye(rhs.vEye)
-			, vAt(rhs.vAt)
-			, vAxisY(rhs.vAxisY)
-			, fAspect(rhs.fAspect)
-			, fFovy(rhs.fFovy)
-			, fNear(rhs.fNear)
-			, fFar(rhs.fFar)
-			, fWinCX(rhs.fWinCX)
-			, fWinCY(rhs.fWinCY)
-			, pCameraTag(rhs.pCameraTag)
-		{
-		}
 	}CAMERADESC;
 private:
 	explicit CCamera();
@@ -51,13 +43,13 @@ public:
 public:
 	_uint getType();
 	_fmatrix getProjection() { return XMLoadFloat4x4(&m_matProj); }
-	const wstring& getTag() { return m_pCameraDesc->pCameraTag; }
+	const wstring& getTag() { return m_tCameraDesc.pCameraTag; }
 private:
 	virtual void Free() override;
 private:
 	_float4x4 m_matView;
 	_float4x4 m_matProj;
-	CAMERADESC* m_pCameraDesc;
+	CAMERADESC m_tCameraDesc;
 };
 END
 #endif

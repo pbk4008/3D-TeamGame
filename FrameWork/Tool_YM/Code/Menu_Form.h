@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include "MainFrm.h"
+#include "Tool_Defines.h"
 #include "Map_Tool.h"
 #include "Cam_Tool.h"
 
@@ -33,10 +34,8 @@ protected:
 
 //개발자 재정의
 public:
-	enum TAB_ID { TAB_MAP, TAB_CAM, TAB_END };
-
-public:
 	HRESULT Ready_Tab(void);
+	_int	Update_Menu_Form(const _double& _dTimeDelta);
 
 public:
 	class CMainFrame* m_pMainFrm = nullptr;

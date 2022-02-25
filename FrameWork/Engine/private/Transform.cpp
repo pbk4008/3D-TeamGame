@@ -29,6 +29,12 @@ HRESULT CTransform::NativeConstruct(void * pArg)
 	return S_OK;
 }
 
+void CTransform::SetTransformDesc(_float fSpeedPerSec, _float fAnglePerSec)
+{
+	m_TransformDesc.fSpeedPerSec = fSpeedPerSec;
+	m_TransformDesc.fRotationPerSec = fAnglePerSec;
+}
+
 void CTransform::Go_Straight(_double TimeDelta, CNavigation * pNavigation)
 {
 	_vector		vLook = Get_State(CTransform::STATE_LOOK);

@@ -22,8 +22,7 @@ private:
 	CGameInstance* m_pGameInstance = nullptr;
 	ID3D11Device* m_pDevice = nullptr;
 	ID3D11DeviceContext* m_pDeviceContext = nullptr;
-
-	CRenderer* m_pRenderer = nullptr;
+	CRenderer*			m_pRenderer = nullptr;
 
 private:
 	_double				m_TimeAcc = 0.0;

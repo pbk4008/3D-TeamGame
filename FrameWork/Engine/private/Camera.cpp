@@ -2,7 +2,7 @@
 #include "PipeLine.h"
 
 CCamera::CCamera()
-	: m_pCameraDesc(nullptr)
+	: m_tCameraDesc()
 {
 	ZeroMemory(&m_matView, sizeof(_float4x4));
 	ZeroMemory(&m_matProj, sizeof(_float4x4));
@@ -10,7 +10,7 @@ CCamera::CCamera()
 
 CCamera::CCamera(ID3D11Device* pDevice, ID3D11DeviceContext* pDevice_Context)
 	: CComponent(pDevice,pDevice_Context)
-	, m_pCameraDesc(nullptr)
+	, m_tCameraDesc()
 {
 	ZeroMemory(&m_matView, sizeof(_float4x4));
 	ZeroMemory(&m_matProj, sizeof(_float4x4));
@@ -20,7 +20,7 @@ CCamera::CCamera(const CCamera& rhs)
 	:CComponent(rhs)
 	, m_matView(rhs.m_matView)
 	, m_matProj(rhs.m_matProj)
-	, m_pCameraDesc(rhs.m_pCameraDesc)
+	, m_tCameraDesc(rhs.m_tCameraDesc)
 {
 	
 }
@@ -35,46 +35,22 @@ HRESULT CCamera::NativeConstruct_Prototype()
 
 HRESULT CCamera::NativeConstruct(void* pArg)
 {	
-	if (!m_isCloned)
+	m_tCameraDesc = (*(CAMERADESC*)pArg);
+
+	if (FAILED(setViewMatrix()))
+		return E_FAIL;
+
+	if (FAILED(setProjMatrix()))
+		return E_FAIL;
+	CPipeLine* pInstance = GET_INSTANCE(CPipeLine);
+
+	if (FAILED(pInstance->Add_Camera(m_tCameraDesc.pCameraTag)))
 	{
-		m_pCameraDesc = new CAMERADESC;
-		*m_pCameraDesc = *(CAMERADESC*)pArg;
-
-		if (FAILED(setViewMatrix()))
-			return E_FAIL;
-
-		if (FAILED(setProjMatrix()))
-			return E_FAIL;
-		if(m_pCameraDesc->pCameraTag != L"")
-		{
-			CPipeLine* pInstance = GET_INSTANCE(CPipeLine);
-
-			if (FAILED(pInstance->Add_Camera(m_pCameraDesc->pCameraTag)))
-			{
-				RELEASE_INSTANCE(CPipeLine);
-				return E_FAIL;
-			};
-			RELEASE_INSTANCE(CPipeLine);
-		}
-	}
-	else
-	{
-		CAMERADESC tmpDesc;
-		memcpy(&tmpDesc, m_pCameraDesc, sizeof(CAMERADESC));
-		if(tmpDesc.pCameraTag == L"")
-		{
-			const _tchar* pTag = (const _tchar*)pArg;
-			tmpDesc.pCameraTag = pTag;
-		}
-		m_pCameraDesc = new CAMERADESC(tmpDesc);
-		CPipeLine* pInstance = GET_INSTANCE(CPipeLine);
-		if (FAILED(pInstance->Add_Camera(m_pCameraDesc->pCameraTag)))
-		{
-			RELEASE_INSTANCE(CPipeLine);
-			return E_FAIL;
-		};
 		RELEASE_INSTANCE(CPipeLine);
-	}
+		return E_FAIL;
+	};
+	RELEASE_INSTANCE(CPipeLine);
+	
 	return S_OK;
 }
 
@@ -88,8 +64,8 @@ void CCamera::Update_Matrix(const _fmatrix& matWorld)
 
 	CPipeLine* pInstance = GET_INSTANCE(CPipeLine);
 
-	pInstance->Set_Transform(m_pCameraDesc->pCameraTag,TRANSFORMSTATEMATRIX::D3DTS_VIEW, XMMatrixInverse(nullptr, matView));
-	pInstance->Set_Transform(m_pCameraDesc->pCameraTag, TRANSFORMSTATEMATRIX::D3DTS_PROJECTION, matProj);
+	pInstance->Set_Transform(m_tCameraDesc.pCameraTag,TRANSFORMSTATEMATRIX::D3DTS_VIEW, XMMatrixInverse(nullptr, matView));
+	pInstance->Set_Transform(m_tCameraDesc.pCameraTag, TRANSFORMSTATEMATRIX::D3DTS_PROJECTION, matProj);
 
 
 	RELEASE_INSTANCE(CPipeLine);
@@ -97,7 +73,7 @@ void CCamera::Update_Matrix(const _fmatrix& matWorld)
 
 HRESULT CCamera::setViewMatrix()
 {
-	if (m_pCameraDesc->eType == CAMERATYPE::CAMERA_ORTHO)
+	if (m_tCameraDesc.eType == CAMERATYPE::CAMERA_ORTHO)
 	{
 		XMStoreFloat4x4(&m_matView, XMMatrixIdentity());
 		return S_OK;
@@ -105,17 +81,17 @@ HRESULT CCamera::setViewMatrix()
 
 
 	//EYE実特
-	memcpy(m_matView.m[3], &m_pCameraDesc->vEye, sizeof(_float4));
+	memcpy(m_matView.m[3], &m_tCameraDesc.vEye, sizeof(_float4));
 
 	_float4 vLook,vUp,vRight;
 
 	//Look実特
-	_vector vTmpLook = XMLoadFloat4(&m_pCameraDesc->vAt) - XMLoadFloat4(&m_pCameraDesc->vEye);
+	_vector vTmpLook = XMLoadFloat4(&m_tCameraDesc.vAt) - XMLoadFloat4(&m_tCameraDesc.vEye);
 	vTmpLook = XMVector3Normalize(vTmpLook);
 	XMStoreFloat4(&vLook, vTmpLook);
 
 	//Right実特
-	_vector vTmpRight = XMVector3Cross(XMLoadFloat4(&m_pCameraDesc->vAxisY),vTmpLook);
+	_vector vTmpRight = XMVector3Cross(XMLoadFloat4(&m_tCameraDesc.vAxisY),vTmpLook);
 	vTmpRight = XMVector3Normalize(vTmpRight);
 	XMStoreFloat4(&vRight, vTmpRight);
 	
@@ -133,13 +109,13 @@ HRESULT CCamera::setViewMatrix()
 
 HRESULT CCamera::setProjMatrix()
 {
-	if (m_pCameraDesc->eType == CCamera::CAMERATYPE::CAMERA_ORTHO)
+	if (m_tCameraDesc.eType == CCamera::CAMERATYPE::CAMERA_ORTHO)
 	{
-		XMStoreFloat4x4(&m_matProj, XMMatrixOrthographicLH(m_pCameraDesc->fWinCX, m_pCameraDesc->fWinCY, m_pCameraDesc->fNear, m_pCameraDesc->fFar));
+		XMStoreFloat4x4(&m_matProj, XMMatrixOrthographicLH(m_tCameraDesc.fWinCX, m_tCameraDesc.fWinCY, m_tCameraDesc.fNear, m_tCameraDesc.fFar));
 	}
-	else if (m_pCameraDesc->eType == CCamera::CAMERATYPE::CAMERA_PROJECTION)
+	else if (m_tCameraDesc.eType == CCamera::CAMERATYPE::CAMERA_PROJECTION)
 	{
-		XMStoreFloat4x4(&m_matProj,XMMatrixPerspectiveFovLH(m_pCameraDesc->fFovy, m_pCameraDesc->fAspect, m_pCameraDesc->fNear, m_pCameraDesc->fFar));
+		XMStoreFloat4x4(&m_matProj,XMMatrixPerspectiveFovLH(m_tCameraDesc.fFovy, m_tCameraDesc.fAspect, m_tCameraDesc.fNear, m_tCameraDesc.fFar));
 	}
 
 	return S_OK;
@@ -169,11 +145,10 @@ CCamera* CCamera::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDevice_Con
 
 _uint CCamera::getType()
 {
-	return (_uint)m_pCameraDesc->eType;
+	return (_uint)m_tCameraDesc.eType;
 }
 
 void CCamera::Free()
 {
 	CComponent::Free();
-	Safe_Delete(m_pCameraDesc);
 }

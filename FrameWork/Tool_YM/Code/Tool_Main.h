@@ -1,11 +1,11 @@
 #ifndef Tool_Main_h__
 #define Tool_Main_h__
 
+#include "Tool_Defines.h"
 #include "Base.h"
 
 BEGIN(Engine)
 class CRenderer;
-class CGameInstance;
 END
 
 class CMenu_Form;
@@ -26,7 +26,7 @@ public:
 public:
 	HRESULT Ready_Component_Prototype(void);
 	HRESULT Ready_GameObject_Prototype(void);
-	//HRESULT Set_Start_Tab(CMenu_Form::TAB_ID _eTab);
+	HRESULT Set_Start_Tab(TAB_ID _eTab);
 
 public:
 	CMainFrame*		 m_pMainFrm = nullptr;
@@ -35,14 +35,14 @@ public:
 	CInspector_Form* m_pInspec_Form = nullptr;
 
 public:
-	CGameInstance* m_pGameInst = nullptr;
-	CRenderer*	   m_pRenderer = nullptr;
+	CRenderer*		 m_pRenderer = nullptr;
 
 public:
 	ID3D11Device*			m_pDevice = nullptr;
 	ID3D11DeviceContext*	m_pDeviceContext = nullptr;
 
 public:
+	static CTool_Main* Create(void);
 	virtual void Free() override;
 
 };
