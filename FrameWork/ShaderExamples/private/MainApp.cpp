@@ -112,11 +112,9 @@ HRESULT CMainApp::Render()
 	if (FAILED(m_pGameInstance->Clear_DepthStencil_View()))
 		return E_FAIL;
 
-	/* 내 게임을 구성하는객체들의 렌더함수르리 호출하낟. */
 	if (FAILED(m_pRenderer->Draw_RenderGroup()))
 		return E_FAIL;
 
-	/* 내 게임내의 기타등ㄷ응을 렌더링하낟. */
 	if (FAILED(m_pGameInstance->Render_Engine()))
 		return E_FAIL;
 
