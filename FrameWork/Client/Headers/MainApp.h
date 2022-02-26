@@ -35,7 +35,7 @@ private:
 	/* For. Level_static*/
 	HRESULT Ready_Component_Prototype();
 	HRESULT Ready_GameObject_Prototype();
-
+	HRESULT Init_Camera();
 	HRESULT Ready_Fonts();
 	
 public:
