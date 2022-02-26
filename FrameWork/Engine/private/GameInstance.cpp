@@ -84,7 +84,7 @@ _int CGameInstance::Tick_Engine(_double TimeDelta)
 		return -1;
 
 	m_pPipeLine->Update_PipeLine();
-	if(!m_pPipeLine->getCameraCount())
+	if(m_pPipeLine->getCameraCount())
 		m_pFrustum->Transform_ToWorldSpace(m_pPipeLine->getBaseCamera());
 	
 	iProgress = m_pObject_Manager->LateTick(TimeDelta);

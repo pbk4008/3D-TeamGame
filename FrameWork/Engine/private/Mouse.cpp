@@ -38,6 +38,7 @@ _int CMouse::Tick(HWND hWnd, _double TimeDelta)
 
 void CMouse::RayUpdate(const wstring& pCamTag)
 {
+
 	D3D11_VIEWPORT vp;
 	ZeroMemory(&vp, sizeof(D3D11_VIEWPORT));
 	_uint pNumViewPorts = 1;
@@ -45,7 +46,7 @@ void CMouse::RayUpdate(const wstring& pCamTag)
 
 	_float fPointX = (m_tMousePos.x / (0.5f * vp.Width)) - 1.f;
 	_float fPointY = (m_tMousePos.y / (-0.5f * vp.Height)) + 1.f;
-
+	cout << m_tMousePos.x << ", " << m_tMousePos.y << endl;
 	_vector vMouse = XMVectorSet
 	(
 		fPointX,
@@ -126,6 +127,7 @@ _fvector CMouse::Terrain_Picking(void* pVertices, _fmatrix matWorld, _uint iVtxX
 
 	vRayPos = XMVector3TransformCoord(vRayPos, matInverseWrold);
 	vRayDir = XMVector3TransformNormal(vRayDir, matInverseWrold);
+
 
 	//if (XMVectorGetX(vRayPos) < 0.f ||
 	//	XMVectorGetZ(vRayPos) < 0.f)

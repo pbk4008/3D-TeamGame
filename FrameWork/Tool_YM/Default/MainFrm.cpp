@@ -48,11 +48,22 @@ BOOL CMainFrame::OnCreateClient(LPCREATESTRUCT lpcs, CCreateContext* pContext)
 	// TODO: Main View 나누기
 	m_tMainSplitter.CreateStatic(this, 1, 3); //몇개로 분할할지 16x16 초과할 수 없다, 1행의 2열
 
-	m_tMainSplitter.CreateView(0, 0, RUNTIME_CLASS(CMenu_Form), CSize(350, 1000), pContext);
-	m_tMainSplitter.CreateView(0, 1, RUNTIME_CLASS(CToolYMView), CSize(1000, 1000), pContext);
-	m_tMainSplitter.CreateView(0, 2, RUNTIME_CLASS(CInspector_Form), CSize(350, 1000), pContext);
+	m_tMainSplitter.CreateView(0, 0, RUNTIME_CLASS(CMenu_Form), CSize(350, g_iWINCY), pContext);
+	m_tMainSplitter.CreateView(0, 1, RUNTIME_CLASS(CToolYMView), CSize(g_iWINCX, g_iWINCY), pContext);
+	m_tMainSplitter.CreateView(0, 2, RUNTIME_CLASS(CInspector_Form), CSize(350, g_iWINCY), pContext);
 
-	m_tMainSplitter.SetColumnInfo(1, 1130, 300);
+	RECT rcMain = {};
+	this->GetWindowRect(&rcMain); //전체 윈도우크기 구하기
+
+	SetRect(&rcMain, 0, 0, rcMain.right - rcMain.left, rcMain.bottom - rcMain.top);
+	RECT rcView{};
+	GetClientRect(&rcView); // 현재 클래스의 윈도우 크기 구하기
+
+	const int iGapX = rcMain.right - rcView.right; //갭 차이 구하기
+	const int iGapY = rcMain.bottom - rcView.bottom;
+	this->SetWindowPos(nullptr, 0, 0, g_iWINCX + iGapX + 700, g_iWINCY + iGapY, SWP_NOMOVE);
+
+	//m_tMainSplitter.SetColumnInfo(1, 1130, 300);
 
 	return TRUE;
 }
