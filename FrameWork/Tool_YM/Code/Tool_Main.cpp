@@ -7,9 +7,12 @@
 #include "Menu_Form.h"
 #include "Inspector_Form.h"
 #include "Tab_Changer.h"
+#include "Observer.h"
 
 CTool_Main::CTool_Main(void)
+	:m_pObserver(CObserver::GetInstance())
 {
+	Safe_AddRef(m_pObserver);
 }
 
 HRESULT CTool_Main::Tool_Main_Ready(void)
@@ -116,6 +119,7 @@ CTool_Main* CTool_Main::Create(void)
 
 void CTool_Main::Free()
 {
+	Safe_Release(m_pObserver);
 	Safe_Release(m_pRenderer);
 	Safe_Release(m_pDeviceContext);
 	Safe_Release(m_pDevice);

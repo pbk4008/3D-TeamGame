@@ -8,6 +8,7 @@ BEGIN(Engine)
 class CRenderer;
 END
 
+class CObserver;
 class CMenu_Form;
 class CInspector_Form;
 class CToolYMView;
@@ -36,6 +37,7 @@ public:
 
 public:
 	CRenderer*		 m_pRenderer = nullptr;
+	CObserver*		 m_pObserver = nullptr;
 
 public:
 	ID3D11Device*			m_pDevice = nullptr;

@@ -61,7 +61,7 @@ public: /* For.Object_Manager*/
 
 		if (!pObj)
 			return nullptr;
-
+		
 		return static_cast<T*>(pObj);
 	}
 

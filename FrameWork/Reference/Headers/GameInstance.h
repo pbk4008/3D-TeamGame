@@ -53,6 +53,18 @@ public: /* For.Object_Manager*/
 	class CComponent* Get_Component(_uint iLevelIndex, const wstring& pLayerTag, const wstring& pComponentTag, _uint iIndex = 0);
 	HRESULT Add_Prototype(const wstring& pPrototypeTag, CGameObject* pPrototype);
 	HRESULT Add_GameObjectToLayer(_uint iLevelIndex, const wstring& pLayerTag, const wstring& pPrototypeTag, void* pArg = nullptr);
+	CGameObject* Clone_GameObject(_uint iLevelIndex, const wstring& pPrototypeTag, void* pArg = nullptr);
+	template<typename T>
+	T* Clone_GameObject(_uint iLevelIndex, const wstring& pPrototypeTag, void* pArg = nullptr)
+	{
+		CGameObject* pObj = Clone_GameObject(iLevelIndex, pPrototypeTag, pArg);
+
+		if (!pObj)
+			return nullptr;
+		
+		return static_cast<T*>(pObj);
+	}
+
 	template<typename T>
 	T* Get_Component(_uint iLevelIndex, const wstring& pLayerTag, const wstring& pComponentTag, _uint iIndex = 0)
 	{
@@ -65,10 +77,8 @@ public: /* For.Object_Manager*/
 	}
 public: /* For.Component_Manager */
 	HRESULT Add_Prototype(_uint iLevelIndex, const wstring& pPrototypeTag, class CComponent* pPrototype);
-	CComponent* Clone_Component(_uint iLevelIndex, const wstring& pPrototypeTag, void* pArg = nullptr);
-public:
 	HRESULT SetUpBaseComponent(ID3D11Device * pDevice, ID3D11DeviceContext * pDeviceContext);
-
+	CComponent* Clone_Component(_uint iLevelIndex, const wstring& pPrototypeTag, void* pArg = nullptr);
 	template<typename T>
 	T* Clone_Component(_uint iLevelIndex, const wstring& pPrototypeTag, void* pArg = nullptr)
 	{

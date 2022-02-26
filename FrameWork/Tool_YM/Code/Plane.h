@@ -3,9 +3,11 @@
 
 #include "Tool_Defines.h"
 #include "GameObject.h"
+#include "VIBuffer_Plane.h"
+#include "Transform.h"
 
 BEGIN(Engine)
-class CVIBuffer_Terrain;
+class CVIBuffer_Plane;
 class CRenderer;
 class CTexture;
 END
@@ -26,13 +28,18 @@ public:
 
 public:
 	virtual HRESULT SetUp_Components();
-
+	
 public:
 	void			Set_WVPMatrix();
 
 public:
-	CVIBuffer_Terrain* m_pVIBufferCom = nullptr;
+	CVIBuffer_Plane*   m_pVIBufferCom = nullptr;
 	CTexture*		   m_pTexture = nullptr;
+
+	void*			Get_Vertices(void) { return m_pVIBufferCom->getVertices(); }
+	_uint			Get_VerticesX(void) { return m_pVIBufferCom->getVerteicesX(); }
+	_uint			Get_VerticesZ(void) { return m_pVIBufferCom->getVerteicesZ(); }
+	_fmatrix		Get_WorldMatrix(void) { return m_pTransform->Get_WorldMatrix(); }
 
 public:
 	static CPlane* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext);

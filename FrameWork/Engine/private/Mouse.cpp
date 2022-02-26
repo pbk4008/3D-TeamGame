@@ -65,6 +65,8 @@ void CMouse::RayUpdate(const wstring& pCamTag)
 
 	RELEASE_INSTANCE(CPipeLine);
 
+	vMouse = XMVector3TransformCoord(vMouse, matProj);
+
 	_vector vRayPos = XMVectorSet(0.f, 0.f, 0.f, 1.f);
 	_vector vRayDir = vMouse - vRayPos;
 	vRayDir = XMVector3Normalize(vRayDir);
@@ -120,11 +122,11 @@ _fvector CMouse::Terrain_Picking(void* pVertices, _fmatrix matWorld, _uint iVtxX
 	vRayPos = XMVector3TransformCoord(vRayPos, matInverseWrold);
 	vRayDir = XMVector3TransformNormal(vRayDir, matInverseWrold);
 
-	if (XMVectorGetX(vRayPos) < 0.f ||
-		XMVectorGetZ(vRayPos) < 0.f)
-		return XMVectorZero();
+	//if (XMVectorGetX(vRayPos) < 0.f ||
+	//	XMVectorGetZ(vRayPos) < 0.f)
+	//	return XMVectorZero();
 
-	VTXNORTEX* pTerrainsVertices = (VTXNORTEX*)pVertices;
+	VTXTEX* pTerrainsVertices = (VTXTEX*)pVertices;
 
 	for (_uint i = 0; i < iVtxZ - 1; i++)
 	{
@@ -139,7 +141,7 @@ _fvector CMouse::Terrain_Picking(void* pVertices, _fmatrix matWorld, _uint iVtxX
 			TriPoint[1] = XMLoadFloat3(&pTerrainsVertices[iIndex + iVtxX+1].vPosition);
 			TriPoint[2] = XMLoadFloat3(&pTerrainsVertices[iIndex + 1].vPosition);
 
-			if (TriangleTests::Intersects(vRayPos, vRayDir, TriPoint[0], TriPoint[1], TriPoint[2], fDist))
+ 			if (TriangleTests::Intersects(vRayPos, vRayDir, TriPoint[0], TriPoint[1], TriPoint[2], fDist))
 			{
 				iHitIndex = iIndex;
 				vRayPos += (fDist * vRayDir);

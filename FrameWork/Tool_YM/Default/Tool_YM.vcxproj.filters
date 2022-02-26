@@ -156,6 +156,9 @@
     <ClInclude Include="..\Code\Mesh_Save.h">
       <Filter>96.Mesh_Save</Filter>
     </ClInclude>
+    <ClInclude Include="..\Code\Observer.h">
+      <Filter>04.Tool_Object\Observer</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -223,6 +226,9 @@
     </ClCompile>
     <ClCompile Include="..\Code\Mesh_Save.cpp">
       <Filter>96.Mesh_Save</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Observer.cpp">
+      <Filter>04.Tool_Object\Observer</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -203,6 +203,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClInclude>
     <ClInclude Include="..\Code\Model_Inspector.h" />
+    <ClInclude Include="..\Code\Observer.h" />
     <ClInclude Include="..\Code\Plane.h" />
     <ClInclude Include="..\Code\Static.h" />
     <ClInclude Include="..\Code\Static_Mesh.h" />
@@ -234,6 +235,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\Code\Model_Inspector.cpp" />
+    <ClCompile Include="..\Code\Observer.cpp" />
     <ClCompile Include="..\Code\Plane.cpp" />
     <ClCompile Include="..\Code\Static.cpp" />
     <ClCompile Include="..\Code\Static_Mesh.cpp" />
