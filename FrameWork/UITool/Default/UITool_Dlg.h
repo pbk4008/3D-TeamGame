@@ -28,10 +28,13 @@ public:
 	wstring m_strPickFileName;
 	CListBox m_ListBox;
 
+	class CMFCObject_UI* m_pObject = nullptr;
+
 	afx_msg void OnLbnSelchangeList1();
 	afx_msg void OnBnClickedButtonApply();
 	float m_PositionX;
 	float m_PositionY;
 	float m_SizeX;
 	float m_SizeY;
+	afx_msg void OnBnClickedButtonStateSetting();
 };

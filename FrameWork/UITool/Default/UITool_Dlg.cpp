@@ -46,6 +46,7 @@ BEGIN_MESSAGE_MAP(CUITool_Dlg, CDialog)
 	ON_WM_DROPFILES()
 	ON_LBN_SELCHANGE(IDC_LIST1, &CUITool_Dlg::OnLbnSelchangeList1)
 	ON_BN_CLICKED(IDC_BUTTON1, &CUITool_Dlg::OnBnClickedButtonApply)
+	ON_BN_CLICKED(IDC_BUTTON2, &CUITool_Dlg::OnBnClickedButtonStateSetting)
 END_MESSAGE_MAP()
 
 
@@ -122,4 +123,11 @@ void CUITool_Dlg::OnBnClickedButtonApply()
 	}
 
 	UpdateData(FALSE);
+}
+
+
+void CUITool_Dlg::OnBnClickedButtonStateSetting()
+{
+	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+
 }

@@ -49,6 +49,7 @@ HRESULT CMFCObject_UI::NativeConstruct(void* pArg)
 	//m_Desc.fScale.x = 100.f;
 	//m_Desc.fScale.y = 100.f;
 
+
 	return S_OK;
 }
 
@@ -59,6 +60,8 @@ _int CMFCObject_UI::Tick(_double TimeDelta)
 
 	_vector vScale = { m_Desc.fScale.x,m_Desc.fScale.y,1.f ,1.f };
 	m_pTransform->Scaling(vScale);
+
+
 
 	//XMStoreFloat4x4(&m_WorldMatrix, XMMatrixIdentity());
 	//m_WorldMatrix._11 = m_fSizeX;

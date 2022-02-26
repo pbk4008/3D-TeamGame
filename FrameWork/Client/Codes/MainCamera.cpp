@@ -70,12 +70,12 @@ CMainCamera* CMainCamera::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDe
 
 HRESULT CMainCamera::Ready_GameObject(const CCamera::CAMERADESC& tDesc)
 {
-	//SetUp_Components()
-	if (FAILED(__super::SetUp_Components(TAB_STATIC, L"Prototype_Component_VIBuffer_Terrain", L"Com_VIBuffer", (CComponent * *)& m_pVIBufferCom)))
-		return E_FAIL;
-	SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Camera", L"MainCamera", (CComponent * *)&m_pCamera,&tDesc);
-	if (FAILED())
-		return E_FAIL;
+	////SetUp_Components()
+	//if (FAILED(__super::SetUp_Components(TAB_STATIC, L"Prototype_Component_VIBuffer_Terrain", L"Com_VIBuffer", (CComponent * *)& m_pVIBufferCom)))
+	//	return E_FAIL;
+	//SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Camera", L"MainCamera", (CComponent**)&m_pCamera, &tDesc);
+	//if (FAILED())
+	//	return E_FAIL;
 
 	return S_OK;
 }

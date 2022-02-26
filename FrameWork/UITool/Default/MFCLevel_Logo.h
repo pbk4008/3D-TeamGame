@@ -6,7 +6,9 @@
 #include "UI_Tool_Define.h"
 #include "Level.h"
 
-
+BEGIN(Engine)
+class CMouse;
+END
 class CMFCLevel_Logo final : public CLevel
 {
 public:
@@ -19,6 +21,10 @@ public:
 	virtual HRESULT Render();
 private:
 	HRESULT Open_Level();
+
+private:
+	class CMouse* m_pMouse = nullptr;
+	class CMFCObject_UI* m_pMFCUI = nullptr;
 
 public:
 	static CMFCLevel_Logo* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);

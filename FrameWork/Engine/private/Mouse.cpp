@@ -31,7 +31,7 @@ HRESULT CMouse::NativeConstruct(void* pArg)
 _int CMouse::Tick(HWND hWnd, _double TimeDelta)
 {
 	GetCursorPos(&m_tMousePos);
-	ScreenToClient(hWnd,&m_tMousePos);
+	ScreenToClient(hWnd, &m_tMousePos);
 	
 	return _int(); 
 }
@@ -90,7 +90,7 @@ CUI* CMouse::getCheckUI(list<CGameObject*>* pObjList)
 		_float fPosX = XMVectorGetX(vPos);
 		_float fPosY = XMVectorGetY(vPos);
 		_float fSizX = pUITransform->Get_Scale(CTransform::STATE_RIGHT);
-		_float fSizY = pUITransform->Get_Scale(CTransform::STATE_RIGHT);
+		_float fSizY = pUITransform->Get_Scale(CTransform::STATE_UP);
 
 		RECT      rc;
 		SetRect(&rc, (_uint)(fPosX - fSizX * 0.5f), (_uint)(fPosY - fSizY * 0.5f),

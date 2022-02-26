@@ -11,6 +11,7 @@ class CVIBuffer_Rect;
 class CTexture;
 class CRenderer;
 class CTransform;
+class CMouse;
 END
 
 class CMFCObject_UI final : public CUI
@@ -36,9 +37,9 @@ public:
 	virtual HRESULT Render() override;
 
 
-private:
-	_float m_fX, m_fY;
-	_float m_fSizeX, m_fSizeY;
+//private:
+//	_float m_fX, m_fY;
+//	_float m_fSizeX, m_fSizeY;
 
 private:
 	UIDESC m_Desc;
