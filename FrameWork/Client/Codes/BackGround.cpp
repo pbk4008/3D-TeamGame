@@ -16,14 +16,22 @@ CBackGround::CBackGround(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceCont
 
 CBackGround::CBackGround(const CBackGround& rhs)
 	: CGameObject(rhs)
-	,m_pRcTex(nullptr)
-	, m_pTexture(nullptr)
+	,m_pRcTex(rhs.m_pRcTex)
+	, m_pTexture(rhs.m_pTexture)
 {
+	Safe_AddRef(m_pRcTex);
+	Safe_AddRef(m_pTexture);
 }
 
 HRESULT CBackGround::NativeConstruct_Prototype()
 {
 	if (FAILED(CGameObject::NativeConstruct_Prototype()))
+		return E_FAIL;
+
+	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Texture", L"BackGroundTex", (CComponent * *)& m_pTexture)))
+		return E_FAIL;
+
+	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"RectBuffer", L"BackGroundBuffer", (CComponent * *)& m_pRcTex)))
 		return E_FAIL;
 
 	return S_OK;
@@ -33,6 +41,8 @@ HRESULT CBackGround::NativeConstruct(void* pArg)
 {
 	if (FAILED(CGameObject::NativeConstruct(pArg)))
 		return E_FAIL;
+
+	if(FAILED(Ready_GameObject(pArg)))
 
 	return S_OK;
 }
@@ -67,11 +77,12 @@ HRESULT CBackGround::Render()
 	
 	_matrix matWorld, matView, matProj;
 	matWorld = XMMatrixTranspose(m_pTransform->Get_WorldMatrix());
+	matView = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"MainCamera",TRANSFORMSTATEMATRIX::D3DTS_VIEW));
+	matProj = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"MainCamera",TRANSFORMSTATEMATRIX::D3DTS_PROJECTION));
 
-	_matrix Identity = XMMatrixIdentity();
 	m_pRcTex->SetUp_ValueOnShader("g_WorldMatrix", &matWorld, sizeof(_matrix));
-	m_pRcTex->SetUp_ValueOnShader("g_ViewMatrix", &Identity, sizeof(_matrix));
-	m_pRcTex->SetUp_ValueOnShader("g_ProjMatrix", &Identity, sizeof(_matrix));
+	m_pRcTex->SetUp_ValueOnShader("g_ViewMatrix", &matView, sizeof(_matrix));
+	m_pRcTex->SetUp_ValueOnShader("g_ProjMatrix", &matProj, sizeof(_matrix));
 	m_pRcTex->SetUp_TextureOnShader("g_DiffuseTexture", m_pTexture);
 
 	m_pRcTex->Render(0);
@@ -101,8 +112,12 @@ CBackGround* CBackGround::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDe
 	return pInstance;
 }
 
-HRESULT CBackGround::Ready_GameObject()
-{
+HRESULT CBackGround::Ready_GameObject(void* pArg)
+{	
+	wstring pTag = (*(wstring*)pArg);
+
+	if (FAILED(m_pTexture->Change_Texture(pTag)))
+		return E_FAIL;
 
 	return S_OK;
 }

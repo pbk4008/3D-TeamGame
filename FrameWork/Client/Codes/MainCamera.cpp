@@ -21,18 +21,24 @@ CMainCamera::CMainCamera(const CMainCamera& rhs)
 
 HRESULT CMainCamera::NativeConstruct_Prototype()
 {
+	if (FAILED(CGameObject::NativeConstruct_Prototype()))
+		return E_FAIL;
 	return S_OK;
 }
 
 HRESULT CMainCamera::NativeConstruct(void* pArg)
 {
+	if (FAILED(CGameObject::NativeConstruct(pArg)))
+		return E_FAIL;
 
+	Ready_GameObject(pArg);
 	return S_OK;
 }
 
 _int CMainCamera::Tick(_double fDeltaTime)
 {
 	m_pCamera->Update_Matrix(m_pTransform->Get_WorldMatrix());
+
 	return _int();
 }
 
@@ -68,14 +74,12 @@ CMainCamera* CMainCamera::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDe
 	return pInstance;
 }
 
-HRESULT CMainCamera::Ready_GameObject(const CCamera::CAMERADESC& tDesc)
+HRESULT CMainCamera::Ready_GameObject(void* pArg)
 {
-	////SetUp_Components()
-	//if (FAILED(__super::SetUp_Components(TAB_STATIC, L"Prototype_Component_VIBuffer_Terrain", L"Com_VIBuffer", (CComponent * *)& m_pVIBufferCom)))
-	//	return E_FAIL;
-	//SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Camera", L"MainCamera", (CComponent**)&m_pCamera, &tDesc);
-	//if (FAILED())
-	//	return E_FAIL;
+	CCamera::CAMERADESC tDesc = (*(CCamera::CAMERADESC*)pArg);
+
+	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Camera", L"MainCameara", (CComponent * *)& m_pCamera, &tDesc)))
+		return E_FAIL;
 
 	return S_OK;
 }
