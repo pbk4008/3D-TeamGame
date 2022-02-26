@@ -4,6 +4,8 @@
 // CModel_Inspector 대화 상자
 #include "Engine_Defines.h"
 
+class CMainFrame;
+class CInspector_Form;
 class CModel_Inspector : public CDialogEx
 {
 	DECLARE_DYNAMIC(CModel_Inspector)
@@ -24,8 +26,18 @@ public:
 	void		Ready_Level_Combo(void);
 
 public:
+	HRESULT		Clear_Clone_ModelList(wstring _ModelName);
+
+public:
 	FILEINFO	m_FileInfo; /* Map_Tool에서 선택한 원본 모델에 대한 정보를 저장합니다. */
 	MODELDESC   m_ModelDesc;
+
+public:
+	list<wstring>				m_CloneMode_NameList;
+
+public:
+	class CMainFrame*			m_pMainFrm = nullptr;
+	class CInspector_Form*		m_pInspec_Form = nullptr;
 
 public:
 	CEdit m_StaticTxt_FileName;

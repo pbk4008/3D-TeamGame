@@ -172,6 +172,9 @@
     <Filter Include="00.Utility\02.GameObject\05.Mouse">
       <UniqueIdentifier>{1b95795f-4541-4014-9a9d-da8ef4ca3aca}</UniqueIdentifier>
     </Filter>
+    <Filter Include="00.Utility\03.Component\05.VIBuffer\08.Plane">
+      <UniqueIdentifier>{01726ab9-e617-4063-b8f1-9417c63ad625}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\public\Base.h">
@@ -348,6 +351,9 @@
     <ClInclude Include="..\public\InputDev.h">
       <Filter>01.System\00.Device\Input</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\VIBuffer_Plane.h">
+      <Filter>00.Utility\03.Component\05.VIBuffer\08.Plane</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\private\Base.cpp">
@@ -502,6 +508,9 @@
     </ClCompile>
     <ClCompile Include="..\private\InputDev.cpp">
       <Filter>01.System\00.Device\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\VIBuffer_Plane.cpp">
+      <Filter>00.Utility\03.Component\05.VIBuffer\08.Plane</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

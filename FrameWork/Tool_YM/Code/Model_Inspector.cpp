@@ -5,7 +5,9 @@
 #include "Tool_YM.h"
 #include "../Code/Model_Inspector.h"
 #include "afxdialogex.h"
-
+#include "MainFrm.h"
+#include "Menu_Form.h"
+#include "Inspector_Form.h"
 #include "GameInstance.h"
 
 // CModel_Inspector 대화 상자
@@ -31,6 +33,10 @@ BOOL CModel_Inspector::OnInitDialog()
 
 	Ready_Tag_Combo();
 	Ready_Level_Combo();
+
+	m_pMainFrm = dynamic_cast<CMainFrame*>(AfxGetApp()->GetMainWnd());
+	m_pInspec_Form = dynamic_cast<CInspector_Form*>(m_pMainFrm->m_tMainSplitter.GetPane(0, 2));
+
 
 	return TRUE;  // return TRUE unless you set the focus to a control
 				  // 예외: OCX 속성 페이지는 FALSE를 반환해야 합니다.
@@ -69,6 +75,18 @@ void CModel_Inspector::Ready_Level_Combo(void)
 	m_Combo_Level.AddString(_T("Level_Stage_Boss"));
 
 	m_Combo_Level.SetCurSel(0);
+}
+
+HRESULT CModel_Inspector::Clear_Clone_ModelList(wstring _ModelName)
+{
+	auto nameFinder = find(m_CloneMode_NameList.begin(), m_CloneMode_NameList.end(), _ModelName);
+
+	if (nameFinder == m_CloneMode_NameList.end())
+		return E_FAIL;
+
+	m_CloneMode_NameList.erase(nameFinder);
+
+	return S_OK;
 }
 
 void CModel_Inspector::DoDataExchange(CDataExchange* pDX)
@@ -117,8 +135,20 @@ void CModel_Inspector::OnBnClickedAddButton()
 		m_ModelDesc.strFileName = m_FileInfo.cstrFileName;
 		/* ##2. 사본 모델의 Layer Tag = 모델의 이름  */
 		/* ##3. 사본 모델의 ProtoType Tag = 모델의 파일명 */
-		if (FAILED(g_pGameInstance->Add_GameObjectToLayer(TAB_MAP, m_FileInfo.cstrFileName, L"Prototype_GameObject_StaticMesh", &m_ModelDesc)))
-			return;
+
+		auto nameFinder = find(m_CloneMode_NameList.begin(), m_CloneMode_NameList.end(), m_ModelDesc.strName);
+
+		if (nameFinder == m_CloneMode_NameList.end())
+		{
+			if (FAILED(g_pGameInstance->Add_GameObjectToLayer(TAB_MAP, m_FileInfo.cstrFileName, L"Prototype_GameObject_StaticMesh", &m_ModelDesc)))
+				return;
+
+			if (FAILED(m_pInspec_Form->m_pMenu_Form->Create_HierarchyTree(m_ModelDesc)))
+				return;
+
+			m_CloneMode_NameList.push_back(m_ModelDesc.strName);
+		}
+		/*CMesh_Save* pSave = CMesh_Save::Create(m_ModelDesc,- )*/
 	} 
 	UpdateData(FALSE);
 
