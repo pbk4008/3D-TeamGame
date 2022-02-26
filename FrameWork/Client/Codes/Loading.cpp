@@ -27,9 +27,6 @@ HRESULT CLoading::NativeConstruct(SCENEID eID)
 	if(FAILED(Ready_GameObject()))
 		return E_FAIL;
 
-	/*if (FAILED(Add_Object(LAYERID::ENVIRONMENT, (_uint)GAMEOBJECTID::BACKGROUND, Clone_GameObject<CBackGround>((_uint)GAMEOBJECTID::BACKGROUND))))
-		return E_FAIL;*/
-
 	m_pLoader = CLoader::Create(m_pDevice, m_pDeviceContext, m_eSceneID);
 
 	if (!m_pLoader)
@@ -78,7 +75,11 @@ HRESULT CLoading::Move_Scene()
 
 HRESULT CLoading::Ready_GameObject()
 {
+	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_BackGround"), ))))
+		return E_FAIL;
 
+	wstring 
+	g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_LOADING, L"Prototype_GameObject_BackGround", L"Logo_BackGround",
 	return S_OK;
 }
 

@@ -194,6 +194,14 @@ HRESULT CGameInstance::Add_GameObjectToLayer(_uint iLevelIndex, const wstring& p
 	return m_pObject_Manager->Add_GameObjectToLayer(iLevelIndex, pLayerTag, pPrototypeTag, pArg);	
 }
 
+list<CGameObject*>* CGameInstance::getObjectList(_uint iLevelIndex, const wstring& pLayerTag)
+{
+	if (nullptr == m_pObject_Manager)
+		return nullptr;
+
+	return m_pObject_Manager->getObjectList(iLevelIndex, pLayerTag);
+}
+
 CGameObject* CGameInstance::Clone_GameObject(_uint iLevelIndex, const wstring& pPrototypeTag, void* pArg)
 {
 	if (!m_pObject_Manager)

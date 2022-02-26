@@ -3,6 +3,8 @@
 #include "MFCCamera.h"
 #include "GameInstance.h"
 
+#include "Mouse.h"
+
 CMFCCamera::CMFCCamera(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
 	:CGameObject(pDevice, pDeviceContext)
 {

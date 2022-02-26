@@ -31,7 +31,7 @@ HRESULT CMouse::NativeConstruct(void* pArg)
 _int CMouse::Tick(HWND hWnd, _double TimeDelta)
 {
 	GetCursorPos(&m_tMousePos);
-	ScreenToClient(hWnd,&m_tMousePos);
+	ScreenToClient(hWnd, &m_tMousePos);
 	
 	return _int(); 
 }
@@ -80,6 +80,11 @@ void CMouse::RayUpdate(const wstring& pCamTag)
 
 CUI* CMouse::getCheckUI(list<CGameObject*>* pObjList)
 {
+	D3D11_VIEWPORT viewPort;
+	ZeroMemory(&viewPort, sizeof(D3D11_VIEWPORT));
+	_uint iIndex = 1;
+	m_pDeviceContext->RSGetViewports(&iIndex, &viewPort);
+
 	for (auto& pObj : *pObjList)
 	{
 		CTransform* pUITransform = pObj->Get_Component<CTransform>(L"Transform");
@@ -89,10 +94,10 @@ CUI* CMouse::getCheckUI(list<CGameObject*>* pObjList)
 
 		_vector vPos = pUITransform->Get_State(CTransform::STATE_POSITION);
 
-		_float fPosX = XMVectorGetX(vPos);
-		_float fPosY = XMVectorGetY(vPos);
+		_float fPosX = XMVectorGetX(vPos) + (viewPort.Width*0.5f);
+		_float fPosY = (XMVectorGetY(vPos)*-1)+(viewPort.Height*0.5f);
 		_float fSizX = pUITransform->Get_Scale(CTransform::STATE_RIGHT);
-		_float fSizY = pUITransform->Get_Scale(CTransform::STATE_RIGHT);
+		_float fSizY = pUITransform->Get_Scale(CTransform::STATE_UP);
 
 		RECT      rc;
 		SetRect(&rc, (_uint)(fPosX - fSizX * 0.5f), (_uint)(fPosY - fSizY * 0.5f),

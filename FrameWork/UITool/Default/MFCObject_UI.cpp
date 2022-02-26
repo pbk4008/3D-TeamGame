@@ -20,11 +20,6 @@ HRESULT CMFCObject_UI::NativeConstruct_Prototype()
 		return E_FAIL;
 	}
 
-	m_fX = 500.f;
-	m_fY = 500.f;
-	m_fSizeX = 100.f;
-	m_fSizeY = 100.f;
-
 	//m_ProjectionMatrix = XMMatrixOrthographicLH(WINCX, WINCY, 0.f, 1.f);
 	//XMStoreFloat4x4(&m_WorldMatrix, XMMatrixIdentity());
 
@@ -33,7 +28,12 @@ HRESULT CMFCObject_UI::NativeConstruct_Prototype()
 
 HRESULT CMFCObject_UI::NativeConstruct(void* pArg)
 {
-	if (FAILED(__super::NativeConstruct(pArg)))
+	if (nullptr != pArg)
+	{
+		memcpy(&m_Desc, pArg, sizeof(UIDESC));
+	}
+
+	if (FAILED(__super::NativeConstruct(&m_Desc.TextureTag)))
 	{
 		return E_FAIL;
 	}
@@ -43,8 +43,11 @@ HRESULT CMFCObject_UI::NativeConstruct(void* pArg)
 	{
 		return E_FAIL;
 	}
-	
-	//m_pTextureCom->Change_Texture(L"Texture");
+
+	//m_Desc.fPos.x = 500.f;
+	//m_Desc.fPos.y = 500.f;
+	//m_Desc.fScale.x = 100.f;
+	//m_Desc.fScale.y = 100.f;
 
 
 	return S_OK;
@@ -52,11 +55,13 @@ HRESULT CMFCObject_UI::NativeConstruct(void* pArg)
 
 _int CMFCObject_UI::Tick(_double TimeDelta)
 {
-	_vector vPos = { m_fX - (WINCX >> 1),-m_fY + (WINCY >> 1),1.f,1.f };
+	_vector vPos = { m_Desc.fPos.x - (WINCX >> 1),-m_Desc.fPos.y + (WINCY >> 1),1.f,1.f };
 	m_pTransform->Set_State(CTransform::STATE_POSITION, vPos);
 
-	_vector vScale = { m_fSizeX,m_fSizeY,1.f ,1.f };
+	_vector vScale = { m_Desc.fScale.x,m_Desc.fScale.y,1.f ,1.f };
 	m_pTransform->Scaling(vScale);
+
+
 
 	//XMStoreFloat4x4(&m_WorldMatrix, XMMatrixIdentity());
 	//m_WorldMatrix._11 = m_fSizeX;

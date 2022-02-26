@@ -136,22 +136,22 @@ HRESULT CMFCMainApp::Ready_Component_Prototype()
 
 	//여기서 그림 다 불러놓음
 
-	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"Default0", L"../bin/Resource/Textures/Default0.jpg")))
+	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"Texture_0", L"../bin/Resource/Textures/Texture_0.jpg")))
 	{
 		return E_FAIL;
 	}
 
-	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"Default1", L"../bin/Resource/Textures/Default1.jpg")))
+	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"Texture_1", L"../bin/Resource/Textures/Texture_1.jpg")))
 	{
 		return E_FAIL;
 	}
 
-	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Default0"), CMFCObject_UI::Create(m_pDevice, m_pDeviceContext))))
+	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Texture_0"), CMFCObject_UI::Create(m_pDevice, m_pDeviceContext))))
 	{
 		return E_FAIL;
 	}
 
-	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Default1"), CMFCObject_UI::Create(m_pDevice, m_pDeviceContext))))
+	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Texture_1"), CMFCObject_UI::Create(m_pDevice, m_pDeviceContext))))
 	{
 		return E_FAIL;
 	}

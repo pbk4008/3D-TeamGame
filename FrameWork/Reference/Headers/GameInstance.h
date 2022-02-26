@@ -54,6 +54,10 @@ public: /* For.Object_Manager*/
 	HRESULT Add_Prototype(const wstring& pPrototypeTag, CGameObject* pPrototype);
 	HRESULT Add_GameObjectToLayer(_uint iLevelIndex, const wstring& pLayerTag, const wstring& pPrototypeTag, void* pArg = nullptr);
 	CGameObject* Clone_GameObject(_uint iLevelIndex, const wstring& pPrototypeTag, void* pArg = nullptr);
+<<<<<<< HEAD
+=======
+	list<CGameObject*>* getObjectList(_uint iLevelIndex, const wstring & pLayerTag);
+>>>>>>> main
 	template<typename T>
 	T* Clone_GameObject(_uint iLevelIndex, const wstring& pPrototypeTag, void* pArg = nullptr)
 	{
@@ -61,7 +65,11 @@ public: /* For.Object_Manager*/
 
 		if (!pObj)
 			return nullptr;
+<<<<<<< HEAD
 		
+=======
+
+>>>>>>> main
 		return static_cast<T*>(pObj);
 	}
 

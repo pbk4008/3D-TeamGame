@@ -2,6 +2,9 @@
 #include "pch.h"
 #include "MFCLevel_Logo.h"
 #include "GameInstance.h"
+#include "Mouse.h"
+#include "MainFrm.h"
+#include "MyFormView.h"
 
 CMFCLevel_Logo::CMFCLevel_Logo(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
 	: CLevel(pDevice,pDeviceContext)
@@ -23,6 +26,8 @@ HRESULT CMFCLevel_Logo::NativeConstruct()
 		return E_FAIL;
 	}
 
+	m_pMouse = CMouse::Create(m_pDevice, m_pDeviceContext);
+
 	return S_OK;
 }
 
@@ -33,6 +38,7 @@ _int CMFCLevel_Logo::Tick(_double TimeDelta)
 		return -1;
 	}
 
+	m_pMouse->Tick(g_hWnd,TimeDelta);
 	//if (GetKeyState(VK_SPACE) < 0)
 	//{
 	//	cout << "Space" << endl;
@@ -47,6 +53,21 @@ _int CMFCLevel_Logo::Tick(_double TimeDelta)
 	//	RELEASE_INSTANCE(CGameInstance);
 	//	return 0;
 	//}
+
+
+	if (nullptr != g_pGameInstance->getObjectList(TOOL_LEVEL::TOOL_LEVEL_LOGO, L"Layer_UI"))
+	{
+		m_pMFCUI = (CMFCObject_UI*)m_pMouse->getCheckUI(g_pGameInstance->getObjectList(TOOL_LEVEL::TOOL_LEVEL_LOGO, L"Layer_UI"));
+
+		CMainFrame* pMain = dynamic_cast<CMainFrame*>(AfxGetApp()->GetMainWnd());
+		CMyFormView* pForm = dynamic_cast<CMyFormView*>(pMain->m_SplitterWnd.GetPane(0, 0));
+
+		if (nullptr != m_pMFCUI)
+		{
+			pForm->m_UIDlg.m_pObject = m_pMFCUI;
+			int a = 0;
+		}
+	}
 
 	return _int(0);
 }
