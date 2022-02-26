@@ -20,6 +20,9 @@ HRESULT CMapTool_Level::NativeConstruct()
 	if (FAILED(Ready_Layer_Camera(L"Layer_Camera")))
 		return E_FAIL;
 
+	if (FAILED(Ready_Later_Mouse(L"Layer_Mouse")))
+		return E_FAIL;
+
 	return S_OK;
 }
 
@@ -50,6 +53,14 @@ HRESULT CMapTool_Level::Ready_Layer_Plane(const wstring& _pLayerTag)
 HRESULT CMapTool_Level::Ready_Layer_Camera(const wstring& _pLayerTag)
 {
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer(TAB_MAP, _pLayerTag, L"Prototype_GameObject_Camera")))
+		return E_FAIL;
+
+	return S_OK;
+}
+
+HRESULT CMapTool_Level::Ready_Later_Mouse(const wstring& _pLayerTag)
+{
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer(TAB_MAP, _pLayerTag, L"Prototype_GameObject_Mouse")))
 		return E_FAIL;
 
 	return S_OK;

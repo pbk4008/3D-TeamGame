@@ -140,7 +140,7 @@ void CModel_Inspector::OnBnClickedAddButton()
 
 		if (nameFinder == m_CloneMode_NameList.end())
 		{
-			if (FAILED(g_pGameInstance->Add_GameObjectToLayer(TAB_MAP, m_FileInfo.cstrFileName, L"Prototype_GameObject_StaticMesh", &m_ModelDesc)))
+			if (FAILED(g_pGameInstance->Add_GameObjectToLayer(TAB_MAP, m_ModelDesc.strTag, L"Prototype_GameObject_StaticMesh", &m_ModelDesc)))
 				return;
 
 			if (FAILED(m_pInspec_Form->m_pMenu_Form->Create_HierarchyTree(m_ModelDesc)))
