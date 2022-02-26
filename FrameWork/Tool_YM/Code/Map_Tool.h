@@ -25,18 +25,46 @@ protected:
 //개발자 재정의
 
 public:
-	void InitAssetsTree(void);
+	void			 InitAssetsTree(void);
+	void			 InitHierarchyTree(void);
+	void			 Clear_Tree(void);
+	HTREEITEM		 Find_TreeData(HTREEITEM& hItem, CString findItem);
+	HRESULT			 Delete_Item(_uint _iLevelIndex, const MODELDESC& _ModelDesc);
+	HRESULT			 Create_HierarchyTree(const MODELDESC& _ModelInfo);
+	HRESULT			 Delete_HierarchyTreeItem(const MODELDESC& _ModelDesc);
+	static HTREEITEM Search_ParentItemInTree(CTreeCtrl* _TreeCtrl, CString _FindStr, HTREEITEM _pParent);
+	
+public:
+	void			 Clear_CloneName(wstring _deleteItem);
 
 public:
-	FILEINFO  m_FileInfo;
-	_bool	  m_bSelect_FBXFile = false;
+	FILEINFO		  m_FileInfo;
+	MODELDESC		  m_ModelDesc;
+	_bool			  m_bSelect_FBXFile = false;
 
 public:
-	CTreeCtrl m_AssetTree;
+	/* 원본 모델 중복생성 방지 태그 */
+	list<wstring>	    m_ProtoTag;
+	/* Hierarchy Tree 생성용 태그 */
+	vector<wstring>		m_vTag;
+	vector<wstring>		m_vModelName;
 
+public:
+	CTreeCtrl		  m_AssetTree;
+	CTreeCtrl		  m_HierarchyTree;
+	HTREEITEM		  m_TreeRoot;
+
+public:
+	class CMainFrame* m_pMain = nullptr;
+	class CMenu_Form* m_pMenuForm = nullptr;
+	
 public:
 	virtual BOOL OnInitDialog();
 	virtual void PostNcDestroy();
 	afx_msg void OnTvnSelchangedTree1(NMHDR* pNMHDR, LRESULT* pResult);
 	afx_msg void OnNMDblclkTree1(NMHDR* pNMHDR, LRESULT* pResult);
+
+	afx_msg void OnNMRRClickHierTree(NMHDR* pNMHDR, LRESULT* pResult);
+	afx_msg void Delete_Clone_Model();
+	virtual BOOL OnCommand(WPARAM wParam, LPARAM lParam);
 };

@@ -67,6 +67,12 @@
     <Filter Include="04.Tool_Object\Camera\Dynamic_Cam">
       <UniqueIdentifier>{d8c3e6d4-cc89-4b65-9d45-76450425c611}</UniqueIdentifier>
     </Filter>
+    <Filter Include="04.Tool_Object\Mouse">
+      <UniqueIdentifier>{30654af0-d0ce-4141-afe3-edd8532da52c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="96.Mesh_Save">
+      <UniqueIdentifier>{fb8c558e-7958-49d8-b2e0-33db372c7340}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -141,6 +147,15 @@
     <ClInclude Include="..\Code\Tool_Struct.h">
       <Filter>98.Tool_Defines</Filter>
     </ClInclude>
+    <ClInclude Include="..\Code\Static_Mesh.h">
+      <Filter>04.Tool_Object\Static_Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\Tool_Mouse.h">
+      <Filter>04.Tool_Object\Mouse</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\Mesh_Save.h">
+      <Filter>96.Mesh_Save</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -199,6 +214,15 @@
     </ClCompile>
     <ClCompile Include="..\Code\Dyanmic_Camera.cpp">
       <Filter>04.Tool_Object\Camera\Dynamic_Cam</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Static_Mesh.cpp">
+      <Filter>04.Tool_Object\Static_Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Tool_Mouse.cpp">
+      <Filter>04.Tool_Object\Mouse</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Mesh_Save.cpp">
+      <Filter>96.Mesh_Save</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

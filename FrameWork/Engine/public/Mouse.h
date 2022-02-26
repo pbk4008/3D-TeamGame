@@ -22,6 +22,9 @@ public:
 public:
 	_fvector getRayPos() { return XMLoadFloat3(&m_vRayPos); }
 	_fvector getRayDir() { return XMLoadFloat3(&m_vRayDir); }
+public:
+	static CMouse* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);
+	virtual CGameObject* Clone(void* pArg);
 private:
 	POINT m_tMousePos;
 	_float3 m_vRayPos;

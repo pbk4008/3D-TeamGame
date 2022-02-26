@@ -96,6 +96,7 @@
       <PreprocessorDefinitions>_WINDOWS;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <AdditionalIncludeDirectories>../Code/;../Default/;../../Reference/Headers/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -198,12 +199,17 @@
     <ClInclude Include="..\Code\MapTool_Level.h" />
     <ClInclude Include="..\Code\Map_Tool.h" />
     <ClInclude Include="..\Code\Menu_Form.h" />
+    <ClInclude Include="..\Code\Mesh_Save.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClInclude>
     <ClInclude Include="..\Code\Model_Inspector.h" />
     <ClInclude Include="..\Code\Plane.h" />
     <ClInclude Include="..\Code\Static.h" />
+    <ClInclude Include="..\Code\Static_Mesh.h" />
     <ClInclude Include="..\Code\Tab_Changer.h" />
     <ClInclude Include="..\Code\Tool_Defines.h" />
     <ClInclude Include="..\Code\Tool_Main.h" />
+    <ClInclude Include="..\Code\Tool_Mouse.h" />
     <ClInclude Include="..\Code\Tool_Struct.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="MainFrm.h" />
@@ -224,11 +230,16 @@
     <ClCompile Include="..\Code\MapTool_Level.cpp" />
     <ClCompile Include="..\Code\Map_Tool.cpp" />
     <ClCompile Include="..\Code\Menu_Form.cpp" />
+    <ClCompile Include="..\Code\Mesh_Save.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="..\Code\Model_Inspector.cpp" />
     <ClCompile Include="..\Code\Plane.cpp" />
     <ClCompile Include="..\Code\Static.cpp" />
+    <ClCompile Include="..\Code\Static_Mesh.cpp" />
     <ClCompile Include="..\Code\Tab_Changer.cpp" />
     <ClCompile Include="..\Code\Tool_Main.cpp" />
+    <ClCompile Include="..\Code\Tool_Mouse.cpp" />
     <ClCompile Include="MainFrm.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

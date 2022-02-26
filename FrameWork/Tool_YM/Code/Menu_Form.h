@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include "MainFrm.h"
+#include "Inspector_Form.h"
 #include "Tool_Defines.h"
 #include "Map_Tool.h"
 #include "Cam_Tool.h"
@@ -36,6 +37,8 @@ protected:
 public:
 	HRESULT Ready_Tab(void);
 	_int	Update_Menu_Form(const _double& _dTimeDelta);
+	HRESULT Create_Model_Prototype(const FILEINFO& _fileInfo);
+	HRESULT Create_HierarchyTree(const MODELDESC& _ModelInfo);
 
 public:
 	void Get_Device(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext) {
@@ -46,13 +49,14 @@ public:
 	};
 
 public:
-	class CMainFrame* m_pMainFrm = nullptr;
-	class CMap_Tool*  m_pMap_Tool = nullptr;
-	class CCam_Tool*  m_pCam_Tool = nullptr;
-
-public:
 	CTabCtrl	m_MenuTab;
 	TAB_ID		m_eSelectTab = TAB_END;
+
+public:
+	class CMainFrame*		m_pMainFrm = nullptr;
+	class CInspector_Form*  m_pInspec_Form = nullptr;
+	class CMap_Tool*		m_pMap_Tool = nullptr;
+	class CCam_Tool*		m_pCam_Tool = nullptr;
 
 public:
 	ID3D11Device*		 m_pDevice		  = nullptr;

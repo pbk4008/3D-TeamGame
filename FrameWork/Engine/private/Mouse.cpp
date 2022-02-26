@@ -161,3 +161,25 @@ _fvector CMouse::Terrain_Picking(void* pVertices, _fmatrix matWorld, _uint iVtxX
 
 	return XMVectorZero();
 }
+
+CMouse* CMouse::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
+{
+	CMouse* pInstance = new CMouse(pDevice, pDeviceContext);
+	if (FAILED(pInstance->NativeConstruct_Prototype()))
+	{
+		MSGBOX("CMouse Create Fail");
+		Safe_Release(pInstance);
+	}
+	return pInstance;
+}
+
+CGameObject* CMouse::Clone(void* pArg)
+{
+	CMouse* pInstance = new CMouse(*this);
+	if (FAILED(pInstance->NativeConstruct(pArg)))
+	{
+		MSGBOX("CMouse Clone Fail");
+		Safe_Release(pInstance);
+	}
+	return pInstance;
+}

@@ -4,8 +4,10 @@
 #include "pch.h"
 #include "Tool_YM.h"
 #include "../Code/Menu_Form.h"
+#include "GameInstance.h"
 
 #include "MainFrm.h"
+#include "Inspector_Form.h"
 #include "Map_Tool.h"
 #include "Cam_Tool.h"
 
@@ -15,7 +17,7 @@ IMPLEMENT_DYNCREATE(CMenu_Form, CFormView)
 CMenu_Form::CMenu_Form()
 	: CFormView(IDD_CMenu_Form)
 {
-	m_pMainFrm = dynamic_cast<CMainFrame*>(AfxGetApp()->GetMainWnd());
+	
 }
 
 void CMenu_Form::OnInitialUpdate()
@@ -23,6 +25,10 @@ void CMenu_Form::OnInitialUpdate()
 	CFormView::OnInitialUpdate();
 
 	// TODO: MenuForm 초기화
+
+	m_pMainFrm = dynamic_cast<CMainFrame*>(AfxGetApp()->GetMainWnd());
+	m_pInspec_Form = dynamic_cast<CInspector_Form*>(m_pMainFrm->m_tMainSplitter.GetPane(0, 2));
+
 	CSize scrollSize(0, 0);
 	SetScrollSizes(MM_TEXT, scrollSize);
 
@@ -70,6 +76,36 @@ HRESULT CMenu_Form::Ready_Tab(void)
 _int CMenu_Form::Update_Menu_Form(const _double& _dTimeDelta)
 {
 	return _int();
+}
+
+HRESULT CMenu_Form::Create_Model_Prototype(const FILEINFO& _fileInfo)
+{
+	wstring strPath = L"../bin/Resources/FBX/";
+	wstring strPullPath = strPath + _fileInfo.cstrFolder + L'/';
+
+	string PullPath;
+	PullPath.assign(strPullPath.begin(), strPullPath.end());
+	string FileName;
+	FileName.assign(_fileInfo.cstrFileName.begin(), _fileInfo.cstrFileName.end());
+
+	wstring ShaderFilePath = L"../../Reference/ShaderFile/Shader_Mesh.hlsl";
+	_matrix  PivotMatrix;
+	PivotMatrix = XMMatrixRotationX(XMConvertToRadians(90.0f)) *  XMMatrixRotationY(XMConvertToRadians(180.0f));
+
+	if (FAILED(g_pGameInstance->Add_Prototype(TAB_MAP, _fileInfo.cstrFileName,
+		CModel::Create(m_pDevice, m_pDeviceContext, PullPath.c_str(), FileName.c_str(),
+			ShaderFilePath, PivotMatrix, CModel::TYPE_STATIC))))
+		return E_FAIL;
+	
+	return S_OK;
+}
+
+HRESULT CMenu_Form::Create_HierarchyTree(const MODELDESC& _ModelInfo)
+{
+	if (nullptr == m_pMap_Tool)
+		return E_FAIL;
+	
+	return m_pMap_Tool->Create_HierarchyTree(_ModelInfo);
 }
 
 BEGIN_MESSAGE_MAP(CMenu_Form, CFormView)

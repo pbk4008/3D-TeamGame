@@ -10,4 +10,13 @@ typedef struct tagFileInfo
 
 }FILEINFO;
 
+typedef struct tagModel
+{
+	wstring  strFileName;
+	wstring  strName;
+	wstring  strTag;
+	LEVEL_ID eLevel;
+
+}MODELDESC;
+
 #endif // Tool_Struct_h__

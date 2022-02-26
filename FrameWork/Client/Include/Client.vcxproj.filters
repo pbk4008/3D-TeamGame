@@ -28,6 +28,12 @@
     <Filter Include="01.Scene\01.Loading\00.Loader">
       <UniqueIdentifier>{5fc128d8-a6b0-4069-a1d5-9b84151e16b3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\00. BackGround">
+      <UniqueIdentifier>{3e9f8b1d-79d3-4ea6-8887-0f1a331282cb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\01. MainCamera">
+      <UniqueIdentifier>{8b18fdcc-5500-4069-924b-f1bd56f8854d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -72,6 +78,12 @@
     <ClInclude Include="..\Headers\Loader.h">
       <Filter>01.Scene\01.Loading\00.Loader</Filter>
     </ClInclude>
+    <ClInclude Include="..\Headers\BackGround.h">
+      <Filter>02.GameObject\00. BackGround</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\MainCamera.h">
+      <Filter>02.GameObject\01. MainCamera</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -89,6 +101,12 @@
     </ClCompile>
     <ClCompile Include="..\Codes\Loader.cpp">
       <Filter>01.Scene\01.Loading\00.Loader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\BackGround.cpp">
+      <Filter>02.GameObject\00. BackGround</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\MainCamera.cpp">
+      <Filter>02.GameObject\01. MainCamera</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

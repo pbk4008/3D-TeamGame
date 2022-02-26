@@ -180,10 +180,12 @@
     <ClInclude Include="..\Default\Client_Function.h" />
     <ClInclude Include="..\Default\Client_Include.h" />
     <ClInclude Include="..\Default\Clinet_Define.h" />
+    <ClInclude Include="..\Headers\BackGround.h" />
     <ClInclude Include="..\Headers\Level_Logo.h" />
     <ClInclude Include="..\Headers\Loader.h" />
     <ClInclude Include="..\Headers\Loading.h" />
     <ClInclude Include="..\Headers\MainApp.h" />
+    <ClInclude Include="..\Headers\MainCamera.h" />
     <ClInclude Include="Client.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="pch.h" />
@@ -191,10 +193,12 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\Codes\BackGround.cpp" />
     <ClCompile Include="..\Codes\Level_Logo.cpp" />
     <ClCompile Include="..\Codes\Loader.cpp" />
     <ClCompile Include="..\Codes\Loading.cpp" />
     <ClCompile Include="..\Codes\MainApp.cpp" />
+    <ClCompile Include="..\Codes\MainCamera.cpp" />
     <ClCompile Include="Client.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
