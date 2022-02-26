@@ -5,6 +5,7 @@
 #include "UITool.h"
 #include "UITool_Dlg.h"
 #include "afxdialogex.h"
+#include "MFCObject_UI.h"
 
 
 // CUITool_Dlg 대화 상자
@@ -13,6 +14,10 @@ IMPLEMENT_DYNAMIC(CUITool_Dlg, CDialog)
 
 CUITool_Dlg::CUITool_Dlg(CWnd* pParent /*=nullptr*/)
 	: CDialog(IDD_CUITool_Dlg, pParent)
+	, m_PositionX(0)
+	, m_PositionY(0)
+	, m_SizeX(0)
+	, m_SizeY(0)
 {
 
 }
@@ -25,6 +30,15 @@ void CUITool_Dlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
 	DDX_Control(pDX, IDC_LIST1, m_ListBox);
+	DDX_Text(pDX, IDC_EDIT1, m_PositionX);
+	DDX_Text(pDX, IDC_EDIT2, m_PositionY);
+	DDX_Text(pDX, IDC_EDIT3, m_SizeX);
+	DDX_Text(pDX, IDC_EDIT4, m_SizeY);
+
+	DDV_MinMaxFloat(pDX, m_PositionX, 0, 99999);
+	DDV_MinMaxFloat(pDX, m_PositionY, 0, 99999);
+	DDV_MinMaxFloat(pDX, m_SizeX, 1, 99999);
+	DDV_MinMaxFloat(pDX, m_SizeY, 1, 99999);
 }
 
 
@@ -73,15 +87,18 @@ void CUITool_Dlg::OnLbnSelchangeList1()
 
 	CString SelectName = L"";
 	m_ListBox.GetText(iIndex, SelectName);
+	m_strPickFileName = SelectName;
+	//int iTextureNameSize = SelectName.GetLength();
+	//unsigned int i = 0;
 
-	unsigned int i = 0;
-	for (; i < SelectName.GetLength(); ++i)
-	{
-		if (::isdigit(SelectName[i]))
-		{
-			break;
-		}
-	}
+	//for (; i < iTextureNameSize; ++i)
+	//{
+	//	if (isdigit(SelectName[i]))
+	//	{
+	//		break;
+	//	}
+	//}
+
 }
 
 
@@ -90,12 +107,19 @@ void CUITool_Dlg::OnBnClickedButtonApply()
 	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
 
 	UpdateData(TRUE);
+
+	CMFCObject_UI::UIDESC Desc;
+	Desc.TextureTag = m_strPickFileName;
+	Desc.fPos = { m_PositionX,m_PositionY};
+	Desc.fScale = { m_SizeX,m_SizeY };
 	
-	wstring FullName = L"Prototype_GameObject_" + m_strFileName;
-	//wstring str = L"MFCTexture";
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer(TOOL_LEVEL::TOOL_LEVEL_LOGO, L"Layer_UI", FullName, &m_strFileName)))
+	wstring FullName = L"Prototype_GameObject_" + m_strPickFileName;
+
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer(TOOL_LEVEL::TOOL_LEVEL_LOGO, L"Layer_UI", FullName, &Desc)))
 	{
 		ERR_MSG(L"Failed to Creating in CMFCLevel_Logo::NativeConstruct()");
 		return;
 	}
+
+	UpdateData(FALSE);
 }

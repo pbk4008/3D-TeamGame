@@ -13,13 +13,6 @@ enum TOOL_LEVEL {
 	TOOL_LEVEL_LOGO, TOOL_LEVEL_GAMEPLAY, TOOL_LEVEL_END
 };
 
-typedef struct tagUIDesc
-{
-	wstring TextureTag;
-	_float2 fPos;
-	_float2 fScale;
-}UIDESC;
-
 #ifdef _AFX
 #define ERR_MSG(message) AfxMessageBox(message)
 #else 

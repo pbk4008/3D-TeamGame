@@ -25,8 +25,13 @@ public:
 
 public:
 	wstring m_strFileName;
+	wstring m_strPickFileName;
 	CListBox m_ListBox;
 
 	afx_msg void OnLbnSelchangeList1();
 	afx_msg void OnBnClickedButtonApply();
+	float m_PositionX;
+	float m_PositionY;
+	float m_SizeX;
+	float m_SizeY;
 };
