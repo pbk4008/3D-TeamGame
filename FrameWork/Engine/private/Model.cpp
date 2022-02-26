@@ -21,6 +21,7 @@ CModel::CModel(const CModel & rhs)
 	, m_Materials(rhs.m_Materials)
 	, m_PivotMatrix(rhs.m_PivotMatrix)
 	, m_iCurrentAnimation(rhs.m_iCurrentAnimation)	
+	, m_eMeshType(rhs.m_eMeshType)
 {	
 	for (auto& pMeshContainer : rhs.m_MeshContainers)
 	{
@@ -44,7 +45,6 @@ HRESULT CModel::NativeConstruct_Prototype(const string& pMeshFilePath, const str
 	m_eMeshType = eMeshType;
 
 	XMStoreFloat4x4(&m_PivotMatrix, PivotMatrix);
-
 
 	strcpy_s(m_szMeshFilePath, pMeshFilePath.c_str());
 
@@ -238,6 +238,7 @@ HRESULT CModel::Create_Materials()
 			strcat_s(szMeshFilePath, szFileName);
 			strcat_s(szMeshFilePath, szExt);
 
+			wstring     strTexture;
 			_tchar		szFullName[MAX_PATH] = TEXT("");
 			_tchar		szTextureTag[MAX_PATH] = TEXT("");
 			MultiByteToWideChar(CP_ACP, 0, szMeshFilePath, (_int)strlen(szMeshFilePath), szFullName, MAX_PATH);
@@ -251,7 +252,8 @@ HRESULT CModel::Create_Materials()
 
 			CGameInstance* pInstance = GET_INSTANCE(CGameInstance);
 
-			pMeshMaterial->pMeshTexture[j] = pInstance->Clone_Component<CTexture>(0, L"Texture", szTextureTag);
+			strTexture = szTextureTag;
+			pMeshMaterial->pMeshTexture[j] = pInstance->Clone_Component<CTexture>(0, L"Texture", &strTexture);
 
 			RELEASE_INSTANCE(CGameInstance);
 

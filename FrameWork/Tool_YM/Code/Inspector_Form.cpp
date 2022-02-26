@@ -67,6 +67,14 @@ _int CInspector_Form::Update_Inspector_Form(const _double& _dTimeDelta)
 	return _int();
 }
 
+HRESULT CInspector_Form::Get_ModelInfo(const FILEINFO& _FileInfo)
+{
+	if (nullptr == m_pModel_Inspec)
+		return E_FAIL;
+
+	return m_pModel_Inspec->Get_ModelInfo(_FileInfo);
+}
+
 void CInspector_Form::DoDataExchange(CDataExchange* pDX)
 {
 	CFormView::DoDataExchange(pDX);
