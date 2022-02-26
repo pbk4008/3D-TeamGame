@@ -18,7 +18,7 @@ public:
 public:
 	void RayUpdate(const wstring& pCamTag);
 	CUI* getCheckUI(list<CGameObject*>* pObjList);
-	_fvector Terrain_Picking(void* pVertices, _fmatrix matWorld, _uint iVtxX, _uint iVtxZ, _int& iHitIndex);
+	_fvector Terrain_Picking(void* pVertices, _fmatrix matWorld, _uint iVtxX, _uint iVtxZ, _int & iHitIndex);
 public:
 	_fvector getRayPos() { return XMLoadFloat3(&m_vRayPos); }
 	_fvector getRayDir() { return XMLoadFloat3(&m_vRayDir); }

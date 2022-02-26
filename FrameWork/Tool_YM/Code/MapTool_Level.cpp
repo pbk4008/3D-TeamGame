@@ -40,9 +40,7 @@ _int CMapTool_Level::Tick(_double TimeDelta)
 	if (g_pGameInstance->getMouseKeyDown(CInputDev::MOUSESTATE::MB_LBUTTON))
 	{
 		CObserver* pObserver = GET_INSTANCE(CObserver);
-		_fvector Temp = m_pMouse->Terrain_Picking(m_pPlane->Get_Vertices(), m_pPlane->Get_WorldMatrix(), m_pPlane->Get_VerticesX(), m_pPlane->Get_VerticesZ(), m_iHitIndex);
-		XMStoreFloat3(&pObserver->m_fPickPos, Temp);
-		int a = 10;
+		//  m_pMouse->Pick_Plane(m_pPlane->Get_Indices(),m_pPlane->Get_Vertices(), m_pPlane->Get_NumFaces(),m_pPlane->Get_WorldMatrix(), L"Camera");
 	}
 
 	return _int();

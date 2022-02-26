@@ -36,7 +36,9 @@ public:
 	CVIBuffer_Plane*   m_pVIBufferCom = nullptr;
 	CTexture*		   m_pTexture = nullptr;
 
+	void*			Get_Indices(void) { return m_pVIBufferCom->Get_Indices(); }
 	void*			Get_Vertices(void) { return m_pVIBufferCom->getVertices(); }
+	_uint			Get_NumFaces(void) { return m_pVIBufferCom->Get_NumFaces(); }
 	_uint			Get_VerticesX(void) { return m_pVIBufferCom->getVerteicesX(); }
 	_uint			Get_VerticesZ(void) { return m_pVIBufferCom->getVerteicesZ(); }
 	_fmatrix		Get_WorldMatrix(void) { return m_pTransform->Get_WorldMatrix(); }
