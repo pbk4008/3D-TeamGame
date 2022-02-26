@@ -66,7 +66,7 @@ HRESULT CBackGround::Render()
 		return E_FAIL;
 	
 	_matrix matWorld, matView, matProj;
-	matWorld = XMMatrixTranspose(m_pTransform->getWorldMatrix());
+	matWorld = XMMatrixTranspose(m_pTransform->Get_WorldMatrix());
 
 	_matrix Identity = XMMatrixIdentity();
 	m_pRcTex->SetUp_ValueOnShader("g_WorldMatrix", &matWorld, sizeof(_matrix));

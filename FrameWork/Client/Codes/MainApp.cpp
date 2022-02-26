@@ -22,7 +22,10 @@ HRESULT CMainApp::NativeConstruct()
 	if (FAILED(Ready_GameObject_Prototype()))
 		return E_FAIL;
 
-	if (FAILED(SetUp_StartLevel(SCENEID::SCENE_LOGO)))
+	if (FAILED(Init_Camera()))
+		return E_FAIL;
+
+	if (FAILED(SetUp_StartLevel(SCENEID::SCENE_LOADING)))
 		return E_FAIL;
 
 	return S_OK;
@@ -112,7 +115,25 @@ HRESULT CMainApp::Ready_GameObject_Prototype()
 	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_BackGround"), CBackGround::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 
-	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_MainCamer"), CMainCamera::Create(m_pDevice, m_pDeviceContext))))
+	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_MainCamera"), CMainCamera::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+
+	return S_OK;
+}
+
+HRESULT CMainApp::Init_Camera()
+{
+	CCamera::CAMERADESC tDesc;
+	tDesc.eType = CCamera::CAMERATYPE::CAMERA_PROJECTION;
+	tDesc.pCameraTag = L"MainCamera";
+	tDesc.vEye = _float4(0.f, 0.f, -1.f, 1.f);
+	tDesc.vAt = _float4(0.f, 0.f, 0.f, 1.f);
+	tDesc.vAxisY = _float4(0.f, 1.f, 0.f, 0.f);
+	tDesc.fFovy = XMConvertToRadians(60.f);
+	tDesc.fFar = 300.f;
+	tDesc.fNear = 0.1f;
+
+	if(FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Prototype_GameObject_MainCamera", L"MainCamera", &tDesc)))
 		return E_FAIL;
 
 	return S_OK;

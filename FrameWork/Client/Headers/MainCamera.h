@@ -21,7 +21,7 @@ public:
 	virtual CGameObject* Clone(void* pArg) override;
 	static CMainCamera* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);
 private:
-	HRESULT Ready_GameObject();
+	HRESULT Ready_GameObject(const CCamera::CAMERADESC& tDesc);
 private:
 	virtual void Free() override;
 private:
