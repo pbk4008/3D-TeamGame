@@ -15,11 +15,11 @@ protected:
 	virtual ~CStatic_Mesh(void) = default;
 
 public:
-	virtual HRESULT NativeConstruct_Prototype(void) override;
-	virtual HRESULT NativeConstruct(void* pArg) override;
-	virtual _int Tick(_double TimeDelta) override;
-	virtual _int LateTick(_double TimeDelta) override;
-	virtual HRESULT Render(void) override;
+	virtual HRESULT NativeConstruct_Prototype();
+	virtual HRESULT NativeConstruct(void* pArg);
+	virtual _int Tick(_double TimeDelta);
+	virtual _int LateTick(_double TimeDelta);
+	virtual HRESULT Render();
 
 public:
 	virtual HRESULT SetUp_Components(void);

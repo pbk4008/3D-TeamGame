@@ -47,7 +47,6 @@ public:
 
 };
 
-
 #endif // Tool_Main_h__
 
 
