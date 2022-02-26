@@ -2,6 +2,7 @@
 #include "Changer.h"
 #include "GameInstance.h"
 
+//#include "Tool_Mouse.h"
 #include "Plane.h"
 #include "Dyanmic_Camera.h"
 #include "Static_Mesh.h"
@@ -61,11 +62,11 @@ HRESULT CChanger::Ready_Changer(TAB_ID _eNextTab)
 HRESULT CChanger::Loading_For_Static(void)
 {
 	/* Prototype_Component_VIBuffer_Terrain */
-	if (FAILED(g_pGameInstance->Add_Prototype(TAB_STATIC, L"Prototype_Component_VIBuffer_Terrain", CVIBuffer_Terrain::Create(m_pDevice, m_pDeviceContext, L"../../Reference/ShaderFile/Shader_Terrain.hlsl", L"../Bin/Resources/Textures/Terrain/Height.bmp"))))
+	if (FAILED(g_pGameInstance->Add_Prototype(TAB_STATIC, L"Prototype_Component_VIBuffer_Plane", CVIBuffer_Plane::Create(m_pDevice, m_pDeviceContext, L"../../Reference/ShaderFile/Shader_Plane.hlsl", 100, 100))))
 		return E_FAIL;
 
 	/* Prototype_Component_Texture_Terrain */
-	g_pGameInstance->Add_Texture(m_pDevice, L"Plane_Texture", L"../Bin/Resources/Textures/Terrain/Grass_0.tga");
+	g_pGameInstance->Add_Texture(m_pDevice, L"Plane_Texture", L"../Bin/Resources/Textures/Terrain/Plane_Default.png");
 
 	m_isFinished = TRUE;
 
@@ -82,6 +83,10 @@ HRESULT CChanger::Loading_ForMap_Tool(void)
 	/* Prototype_GameObject_Terrain */
 	if (FAILED(g_pGameInstance->Add_Prototype(L"Prototype_GameObject_Plane", CPlane::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
+
+	/* Prototype_GameObject_Mouse */
+	//if (FAILED(g_pGameInstance->Add_Prototype(L"Prototype_GameObject_Mouse", CTool_Mouse::Create())))
+	//	return E_FAIL;
 
 	/* Prototype_GameObject_Camera */
 	if (FAILED(g_pGameInstance->Add_Prototype(L"Prototype_GameObject_Camera", CDynamic_Camera::Create(m_pDevice, m_pDeviceContext))))

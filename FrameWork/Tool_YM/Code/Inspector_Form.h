@@ -2,6 +2,7 @@
 
 // CInspector_Form 폼 보기
 
+class CMenu_Form;
 class CModel_Inspector;
 class CCam_Inspector;
 class CInspector_Form : public CFormView
@@ -33,6 +34,7 @@ public:
 
 public:
 	HRESULT		Get_ModelInfo(const FILEINFO& _FileInfo);
+	HRESULT		Clear_Clone_ModelList(wstring _ModelName);
 
 public:
 	void Get_Device(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext) { 
@@ -44,6 +46,7 @@ public:
 
 public:
 	class CMainFrame*			m_pMainFrm		= nullptr;
+	class CMenu_Form*		    m_pMenu_Form	= nullptr;
 	class CModel_Inspector*		m_pModel_Inspec = nullptr;
 	class CCam_Inspector*		m_pCam_Inspec	= nullptr;
 

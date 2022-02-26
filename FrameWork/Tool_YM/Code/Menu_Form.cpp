@@ -90,7 +90,7 @@ HRESULT CMenu_Form::Create_Model_Prototype(const FILEINFO& _fileInfo)
 
 	wstring ShaderFilePath = L"../../Reference/ShaderFile/Shader_Mesh.hlsl";
 	_matrix  PivotMatrix;
-	PivotMatrix =  XMMatrixRotationY(XMConvertToRadians(180.0f));
+	PivotMatrix = XMMatrixRotationX(XMConvertToRadians(90.0f)) *  XMMatrixRotationY(XMConvertToRadians(180.0f));
 
 	if (FAILED(g_pGameInstance->Add_Prototype(TAB_MAP, _fileInfo.cstrFileName,
 		CModel::Create(m_pDevice, m_pDeviceContext, PullPath.c_str(), FileName.c_str(),
@@ -98,6 +98,14 @@ HRESULT CMenu_Form::Create_Model_Prototype(const FILEINFO& _fileInfo)
 		return E_FAIL;
 	
 	return S_OK;
+}
+
+HRESULT CMenu_Form::Create_HierarchyTree(const MODELDESC& _ModelInfo)
+{
+	if (nullptr == m_pMap_Tool)
+		return E_FAIL;
+	
+	return m_pMap_Tool->Create_HierarchyTree(_ModelInfo);
 }
 
 BEGIN_MESSAGE_MAP(CMenu_Form, CFormView)

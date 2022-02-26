@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "Plane.h"
 #include "GameInstance.h"
+#include "Mouse.h"
 
 CPlane::CPlane(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
 : CGameObject(_pDevice, _pDeviceContext)
@@ -27,7 +28,7 @@ HRESULT CPlane::NativeConstruct(void* pArg)
 
  	if (FAILED(SetUp_Components()))
 		return E_FAIL;
-
+	
 	return S_OK;
 }
 
@@ -59,7 +60,7 @@ HRESULT CPlane::Render()
 HRESULT CPlane::SetUp_Components()
 {
 	/* Com_VIBuffer */
-	if (FAILED(__super::SetUp_Components(TAB_STATIC, L"Prototype_Component_VIBuffer_Terrain", L"Com_VIBuffer", (CComponent**)&m_pVIBufferCom)))
+	if (FAILED(__super::SetUp_Components(TAB_STATIC, L"Prototype_Component_VIBuffer_Plane", L"Com_VIBuffer", (CComponent**)&m_pVIBufferCom)))
 		return E_FAIL;
 
 	/* Com_Texture  */

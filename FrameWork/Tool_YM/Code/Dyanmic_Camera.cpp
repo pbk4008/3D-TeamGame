@@ -82,22 +82,22 @@ HRESULT CDynamic_Camera::SetUp_Components()
 void CDynamic_Camera::Input_Key(_double _dTimeDelta)
 {
 
-	if (g_pGameInstance->getkeyState(DIK_W) & 0x80)
+	if (g_pGameInstance->getkeyPress(DIK_W))
 	{
 		m_pTransform->Go_Straight(_dTimeDelta);
 	}
 
-	if (g_pGameInstance->getkeyState(DIK_S) & 0x80)
+	if (g_pGameInstance->getkeyPress(DIK_S))
 	{
 		m_pTransform->Go_BackWard(_dTimeDelta);
 	}
 
-	if (g_pGameInstance->getkeyState(DIK_A) & 0x80)
+	if (g_pGameInstance->getkeyPress(DIK_A))
 	{
 		m_pTransform->Go_Left(_dTimeDelta);
 	}
 
-	if (g_pGameInstance->getkeyState(DIK_D) & 0x80)
+	if (g_pGameInstance->getkeyPress(DIK_D))
 	{
 		m_pTransform->Go_Right(_dTimeDelta);
 	}

@@ -5,8 +5,11 @@
 #include "Tool_YM.h"
 #include "../Code/Inspector_Form.h"
 
+#include "MainFrm.h"
+#include "Menu_Form.h"
 #include "Model_Inspector.h"
 #include "Cam_Inspector.h"
+
 
 // CInspector_Form
 
@@ -31,6 +34,9 @@ void CInspector_Form::OnInitialUpdate()
 
 	CSize scrollSize(0, 0);
 	SetScrollSizes(MM_TEXT, scrollSize);
+
+	m_pMainFrm = dynamic_cast<CMainFrame*>(AfxGetApp()->GetMainWnd());
+	m_pMenu_Form = dynamic_cast<CMenu_Form*>(m_pMainFrm->m_tMainSplitter.GetPane(0, 0));
 
 	Ready_Inspector();
 }
@@ -73,6 +79,11 @@ HRESULT CInspector_Form::Get_ModelInfo(const FILEINFO& _FileInfo)
 		return E_FAIL;
 
 	return m_pModel_Inspec->Get_ModelInfo(_FileInfo);
+}
+
+HRESULT CInspector_Form::Clear_Clone_ModelList(wstring _ModelName)
+{
+	return m_pModel_Inspec->Clear_Clone_ModelList(_ModelName);
 }
 
 void CInspector_Form::DoDataExchange(CDataExchange* pDX)

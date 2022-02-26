@@ -10,7 +10,6 @@ typedef struct tagFileInfo
 
 }FILEINFO;
 
-
 typedef struct tagModel
 {
 	wstring  strFileName;
