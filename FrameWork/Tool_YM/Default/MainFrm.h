@@ -6,6 +6,7 @@
 
 #include "Engine_Defines.h"
 
+class CToolYMView;
 class CMainFrame : public CFrameWnd
 {
 	
@@ -34,6 +35,8 @@ public:
 	CSplitterWnd m_tMainSplitter;
 	CSplitterWnd m_tSecondSplitter;
 
+public:
+	class CToolYMView* m_pToolView = nullptr;
 
 // 생성된 메시지 맵 함수
 protected:

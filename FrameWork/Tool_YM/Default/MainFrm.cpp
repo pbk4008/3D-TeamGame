@@ -61,10 +61,8 @@ BOOL CMainFrame::OnCreateClient(LPCREATESTRUCT lpcs, CCreateContext* pContext)
 
 	const int iGapX = rcMain.right - rcView.right; //갭 차이 구하기
 	const int iGapY = rcMain.bottom - rcView.bottom;
-	this->SetWindowPos(nullptr, 0, 0, g_iWINCX + iGapX + 700, g_iWINCY + iGapY, SWP_NOMOVE);
-
-	//m_tMainSplitter.SetColumnInfo(1, 1130, 300);
-
+	this->SetWindowPos(nullptr, 0, 0, g_iWINCX + iGapX + 800, g_iWINCY + iGapY, SWP_NOMOVE);
+;
 	return TRUE;
 }
 

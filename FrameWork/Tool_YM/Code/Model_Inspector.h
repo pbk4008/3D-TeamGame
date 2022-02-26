@@ -4,6 +4,7 @@
 // CModel_Inspector 대화 상자
 #include "Engine_Defines.h"
 
+class CObserver;
 class CMainFrame;
 class CInspector_Form;
 class CModel_Inspector : public CDialogEx
@@ -22,6 +23,7 @@ public:
 //개발자 재정의
 public: 
 	HRESULT		Get_ModelInfo(const FILEINFO& _FileInfo);
+	_int		Update_Model_Inspector(_double _dTimeDelta);
 	void		Ready_Tag_Combo(void);
 	void		Ready_Level_Combo(void);
 
@@ -36,10 +38,17 @@ public:
 	list<wstring>				m_CloneMode_NameList;
 
 public:
-	class CMainFrame*			m_pMainFrm = nullptr;
+	class CMainFrame*			m_pMainFrm	   = nullptr;
 	class CInspector_Form*		m_pInspec_Form = nullptr;
+	class CObserver*			m_pObserver	   = nullptr;
+public:
+	_bool	m_bModelInfo_View = true;
 
 public:
+	CString m_ModelPosX;
+	CString m_ModelPosY;
+	CString m_ModelPosZ;
+
 	CEdit m_StaticTxt_FileName;
 	CEdit m_EditTxt_Model_Name;
 	CComboBox m_Combo_Tag;

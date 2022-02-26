@@ -13,8 +13,11 @@ protected:
 	virtual ~CObserver(void) = default;
 
 public:
-	_float3		 m_fPickPos = { 0.0f, 0.0f, 0.0f };
-
+	_float4				m_fPickPos = { 0.0f, 0.0f, 0.0f, 1.0f };
+	_float3				m_fModelPos = { 0.0f, 0.0f, 0.0f };
+	_bool				m_bPick = false;
+	class CStatic_Mesh* m_pModel = nullptr;
+	
 public:
 	virtual void Free(void) override;
 };

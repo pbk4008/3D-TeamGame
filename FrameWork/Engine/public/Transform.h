@@ -30,6 +30,10 @@ public:
 		return XMVectorGetX(XMVector3Length(Get_State(eState)));
 	}
 
+	void	 Set_WorldMatrix(_fmatrix matWorld) {
+		XMStoreFloat4x4(&m_WorldMatrix, matWorld);
+	}
+
 	_fmatrix Get_WorldMatrix() const {
 		return XMLoadFloat4x4(&m_WorldMatrix);
 	}
@@ -54,6 +58,8 @@ public:
 	void Go_Left(_double TimeDelta);
 	void Go_Right(_double TimeDelta);
 	void Go_BackWard(_double TimeDelta);
+	void Go_Up(_double TimeDelta);
+	void Go_Down(_double TimeDelta);
 	void Chase_Target(const CTransform* pTargetTransform, _double TimeDelta);
 	void Face_Target(_fvector	vTargetPos);
 	void Rotation_Axis(_fvector vAxis, _double TimeDelta); /* 동적으로 TimeDelta이용한 회전. */

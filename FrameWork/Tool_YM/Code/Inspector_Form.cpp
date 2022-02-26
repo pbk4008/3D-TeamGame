@@ -70,6 +70,8 @@ void CInspector_Form::Ready_Inspector(void)
 
 _int CInspector_Form::Update_Inspector_Form(const _double& _dTimeDelta)
 {
+	m_pModel_Inspec->Update_Model_Inspector(_dTimeDelta);
+
 	return _int();
 }
 

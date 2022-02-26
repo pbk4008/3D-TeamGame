@@ -37,12 +37,15 @@ _int CMapTool_Level::Tick(_double TimeDelta)
 	m_pMouse->Tick(g_hWnd, TimeDelta);
 	m_pMouse->RayUpdate(L"Camera");
 
+
 	if (g_pGameInstance->getMouseKeyDown(CInputDev::MOUSESTATE::MB_LBUTTON))
 	{
 		CObserver* pObserver = GET_INSTANCE(CObserver);
-		//  m_pMouse->Pick_Plane(m_pPlane->Get_Indices(),m_pPlane->Get_Vertices(), m_pPlane->Get_NumFaces(),m_pPlane->Get_WorldMatrix(), L"Camera");
+		_vector Temp = m_pMouse->Terrain_Picking(m_pPlane->Get_Vertices(), m_pPlane->Get_WorldMatrix(), m_pPlane->Get_VerticesX(), m_pPlane->Get_VerticesZ(), m_iHitIndex);
+		if (0.0f != XMVectorGetX(Temp))
+			XMStoreFloat4(&pObserver->m_fPickPos, Temp);
 	}
-
+	
 	return _int();
 }
 

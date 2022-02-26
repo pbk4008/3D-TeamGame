@@ -15,6 +15,7 @@ typedef struct tagModel
 	wstring  strFileName;
 	wstring  strName;
 	wstring  strTag;
+	_float4  fInitPos;
 	LEVEL_ID eLevel;
 
 }MODELDESC;
