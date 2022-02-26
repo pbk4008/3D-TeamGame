@@ -2,7 +2,7 @@
 #include "Changer.h"
 #include "GameInstance.h"
 
-//#include "Tool_Mouse.h"
+#include "Mouse.h"
 #include "Plane.h"
 #include "Dyanmic_Camera.h"
 #include "Static_Mesh.h"
@@ -85,8 +85,8 @@ HRESULT CChanger::Loading_ForMap_Tool(void)
 		return E_FAIL;
 
 	/* Prototype_GameObject_Mouse */
-	//if (FAILED(g_pGameInstance->Add_Prototype(L"Prototype_GameObject_Mouse", CTool_Mouse::Create())))
-	//	return E_FAIL;
+	if (FAILED(g_pGameInstance->Add_Prototype(L"Prototype_GameObject_Mouse", CMouse::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
 
 	/* Prototype_GameObject_Camera */
 	if (FAILED(g_pGameInstance->Add_Prototype(L"Prototype_GameObject_Camera", CDynamic_Camera::Create(m_pDevice, m_pDeviceContext))))
