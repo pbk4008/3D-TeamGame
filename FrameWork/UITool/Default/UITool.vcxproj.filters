@@ -37,6 +37,30 @@
     <Filter Include="05.Level">
       <UniqueIdentifier>{6f9794fb-6f57-4ed2-a5ad-20a0d84795cf}</UniqueIdentifier>
     </Filter>
+    <Filter Include="03.Dialogs\UI">
+      <UniqueIdentifier>{cf01d0c5-14c4-4f53-b4f9-0507bdb3e915}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.Dialogs\Effect">
+      <UniqueIdentifier>{4fdd28a7-769c-4322-a749-3e105f7f9746}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04.Object\00.Camera\ORTHO">
+      <UniqueIdentifier>{5c931bc1-30ba-455b-b531-d56c7b61aabc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04.Object\00.Camera\PROJ">
+      <UniqueIdentifier>{43004f90-92ac-40fc-b427-6b799fa36951}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04.Object\02.Effect">
+      <UniqueIdentifier>{9653456b-150e-466f-ae95-99a56539c0bc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04.Object\03.Terrain">
+      <UniqueIdentifier>{cc7a4746-69d8-4b0d-87e4-573c462a4ef1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Level\UI">
+      <UniqueIdentifier>{c783d54f-80be-4bd0-b5af-fca8b726683c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Level\Effect">
+      <UniqueIdentifier>{2896475c-aac4-4f70-9959-9da15d79502c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MainFrm.h">
@@ -69,20 +93,35 @@
     <ClInclude Include="UI_Tool_Define.h">
       <Filter>98.Headers</Filter>
     </ClInclude>
-    <ClInclude Include="UITool_Dlg.h">
-      <Filter>03.Dialogs</Filter>
-    </ClInclude>
-    <ClInclude Include="MFCCamera.h">
-      <Filter>04.Object\00.Camera</Filter>
-    </ClInclude>
     <ClInclude Include="MFCObject_UI.h">
       <Filter>04.Object\01.UI</Filter>
     </ClInclude>
     <ClInclude Include="MFCMainApp.h">
       <Filter>00.MFCMainApp</Filter>
     </ClInclude>
+    <ClInclude Include="UITool_Dlg.h">
+      <Filter>03.Dialogs\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="EffectTool_Dlg.h">
+      <Filter>03.Dialogs\Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="MFCCamera.h">
+      <Filter>04.Object\00.Camera\ORTHO</Filter>
+    </ClInclude>
+    <ClInclude Include="MFCCamera_Proj.h">
+      <Filter>04.Object\00.Camera\PROJ</Filter>
+    </ClInclude>
+    <ClInclude Include="MFCEffect.h">
+      <Filter>04.Object\02.Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="MFCTerrain.h">
+      <Filter>04.Object\03.Terrain</Filter>
+    </ClInclude>
     <ClInclude Include="MFCLevel_Logo.h">
-      <Filter>05.Level</Filter>
+      <Filter>05.Level\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="MFCLevel_Play.h">
+      <Filter>05.Level\Effect</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -104,20 +143,35 @@
     <ClCompile Include="MyFormView.cpp">
       <Filter>01.View\FormView</Filter>
     </ClCompile>
-    <ClCompile Include="UITool_Dlg.cpp">
-      <Filter>03.Dialogs</Filter>
-    </ClCompile>
-    <ClCompile Include="MFCCamera.cpp">
-      <Filter>04.Object\00.Camera</Filter>
-    </ClCompile>
     <ClCompile Include="MFCObject_UI.cpp">
       <Filter>04.Object\01.UI</Filter>
     </ClCompile>
     <ClCompile Include="MFCMainApp.cpp">
       <Filter>00.MFCMainApp</Filter>
     </ClCompile>
+    <ClCompile Include="UITool_Dlg.cpp">
+      <Filter>03.Dialogs\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="EffectTool_Dlg.cpp">
+      <Filter>03.Dialogs\Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="MFCCamera.cpp">
+      <Filter>04.Object\00.Camera\ORTHO</Filter>
+    </ClCompile>
+    <ClCompile Include="MFCCamera_Proj.cpp">
+      <Filter>04.Object\00.Camera\PROJ</Filter>
+    </ClCompile>
+    <ClCompile Include="MFCEffect.cpp">
+      <Filter>04.Object\02.Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="MFCTerrain.cpp">
+      <Filter>04.Object\03.Terrain</Filter>
+    </ClCompile>
     <ClCompile Include="MFCLevel_Logo.cpp">
-      <Filter>05.Level</Filter>
+      <Filter>05.Level\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="MFCLevel_Play.cpp">
+      <Filter>05.Level\Effect</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

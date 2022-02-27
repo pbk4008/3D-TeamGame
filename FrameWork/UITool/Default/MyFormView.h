@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include "UITool_Dlg.h"
+#include "EffectTool_Dlg.h"
 
 // CMyFormView 폼 보기
 
@@ -31,6 +32,8 @@ public:
 	afx_msg void OnBnClickedButton_Tool();
 
 	CUITool_Dlg m_UIDlg;
+	CEffectTool_Dlg m_EffectDlg;
+	afx_msg void OnBnClickedButton_EffectTool();
 };
 
 

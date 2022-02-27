@@ -1,6 +1,7 @@
 #include "framework.h"
 #include "pch.h"
 #include "MFCLevel_Logo.h"
+#include "MFCLevel_Play.h"
 #include "GameInstance.h"
 #include "Mouse.h"
 #include "MainFrm.h"
@@ -38,6 +39,15 @@ _int CMFCLevel_Logo::Tick(_double TimeDelta)
 		return -1;
 	}
 
+	if (g_pGameInstance->getkeyDown(DIK_RETURN))
+	{
+		if (FAILED(g_pGameInstance->Open_Level(1, CMFCLevel_Play::Create(m_pDevice, m_pDeviceContext))))
+		{
+			RELEASE_INSTANCE(CGameInstance);
+			return -1;
+		}
+	}
+
 	m_pMouse->Tick(g_hWnd,TimeDelta);
 	//if (GetKeyState(VK_SPACE) < 0)
 	//{
@@ -54,7 +64,6 @@ _int CMFCLevel_Logo::Tick(_double TimeDelta)
 	//	return 0;
 	//}
 
-
 	if (nullptr != g_pGameInstance->getObjectList(TOOL_LEVEL::TOOL_LEVEL_LOGO, L"Layer_UI"))
 	{
 		m_pMFCUI = (CMFCObject_UI*)m_pMouse->getCheckUI(g_pGameInstance->getObjectList(TOOL_LEVEL::TOOL_LEVEL_LOGO, L"Layer_UI"));
@@ -64,11 +73,21 @@ _int CMFCLevel_Logo::Tick(_double TimeDelta)
 
 		if (nullptr != m_pMFCUI)
 		{
-			pForm->m_UIDlg.m_pObject = m_pMFCUI;
-			int a = 0;
+			if (g_pGameInstance->getMouseKeyDown(CInputDev::MOUSESTATE::MB_LBUTTON))
+			{
+				pForm->m_UIDlg.m_pObject = m_pMFCUI;
+				cout << "Ãæµ¹µÊ" << endl;
+			}
+		}
+		else
+		{
+			if (g_pGameInstance->getMouseKeyDown(CInputDev::MOUSESTATE::MB_LBUTTON) && g_pGameInstance->getkeyDown(DIK_LSHIFT))
+			{
+				pForm->m_UIDlg.m_pObject = nullptr;
+				cout << "Ãæµ¹¾ÈµÊ" << endl;
+			}
 		}
 	}
-
 	return _int(0);
 }
 

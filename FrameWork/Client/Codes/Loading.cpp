@@ -75,11 +75,11 @@ HRESULT CLoading::Move_Scene()
 
 HRESULT CLoading::Ready_GameObject()
 {
-	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_BackGround"), ))))
+	/*if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_BackGround"), ))))
 		return E_FAIL;
 
 	wstring 
-	g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_LOADING, L"Prototype_GameObject_BackGround", L"Logo_BackGround",
+	g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_LOADING, L"Prototype_GameObject_BackGround", L"Logo_BackGround",*/
 	return S_OK;
 }
 
