@@ -48,6 +48,7 @@ public: /* For.Timer_Manager */
 
 public: /* For.Level_Manager*/
 	HRESULT Open_Level(_uint iLevelIndex, class CLevel* pOpenLevel);
+	_uint getCurrentLevel();
 
 public: /* For.Object_Manager*/
 	class CComponent* Get_Component(_uint iLevelIndex, const wstring& pLayerTag, const wstring& pComponentTag, _uint iIndex = 0);

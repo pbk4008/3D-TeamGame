@@ -26,7 +26,7 @@ public:
 	{
 		return Safe_Release(m_pInstance);
 	}
-private:
+protected:
 	static T* m_pInstance;
 };
 template<typename T>

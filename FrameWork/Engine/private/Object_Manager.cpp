@@ -2,6 +2,7 @@
 #include "GameObject.h"
 #include "Layer.h"
 #include "Component.h"
+#include "Level_Manager.h"
 
 CObject_Manager::CObject_Manager()
 {
@@ -116,6 +117,7 @@ _int CObject_Manager::LateTick(_double TimeDelta)
 		if (0 > iProgress)
 			return -1;
 	}
+
 
 	return _int();
 }

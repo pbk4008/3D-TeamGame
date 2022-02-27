@@ -31,7 +31,10 @@ HRESULT CMainCamera::NativeConstruct(void* pArg)
 	if (FAILED(CGameObject::NativeConstruct(pArg)))
 		return E_FAIL;
 
-	Ready_GameObject(pArg);
+	if (FAILED(Ready_GameObject(pArg)))
+		return E_FAIL;
+
+	m_pTransform->Set_State(CTransform::STATE_POSITION, XMVectorSet(0.f, 0.f, -1.f, 1.f));
 	return S_OK;
 }
 

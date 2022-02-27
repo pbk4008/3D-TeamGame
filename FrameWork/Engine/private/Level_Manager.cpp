@@ -41,6 +41,10 @@ HRESULT CLevel_Manager::Render()
 	if (nullptr == m_pCurrentLevel)
 		return E_FAIL;
 
+	wstring szScene = to_wstring(m_iCurrentLevelID);
+	if (FAILED(g_pGameInstance->Render_Font(TEXT("Font_Arial"), XMVectorSet(1.f, 0.0f, 0.f, 1.f), szScene)))
+		return E_FAIL;
+
 	return m_pCurrentLevel->Render();
 }
 

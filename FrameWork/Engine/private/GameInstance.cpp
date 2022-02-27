@@ -170,6 +170,14 @@ HRESULT CGameInstance::Open_Level(_uint iLevelIndex, CLevel * pOpenLevel)
 	return m_pLevel_Manager->Open_Level(iLevelIndex, pOpenLevel);
 }
 
+_uint CGameInstance::getCurrentLevel()
+{
+	if (!m_pLevel_Manager)
+		return 99;
+
+	return m_pLevel_Manager->getCurrentLevel();
+}
+
 CComponent * CGameInstance::Get_Component(_uint iLevelIndex, const wstring& pLayerTag, const wstring& pComponentTag, _uint iIndex)
 {
 	if (nullptr == m_pObject_Manager)

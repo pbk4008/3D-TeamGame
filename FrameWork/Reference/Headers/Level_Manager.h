@@ -18,7 +18,8 @@ public:
 	HRESULT Open_Level(_uint iLevelIndex, class CLevel* pOpenLevel);
 	_int Tick(_double TimeDelta);
 	HRESULT Render();
-
+public:
+	_uint getCurrentLevel() { return m_iCurrentLevelID; }
 private:
 	_uint					m_iCurrentLevelID = 0;
 	class CLevel*			m_pCurrentLevel = nullptr;

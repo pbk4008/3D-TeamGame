@@ -9,10 +9,16 @@ CTexture::CTexture(ID3D11Device * pDevice, ID3D11DeviceContext * pDeviceContext)
 
 CTexture::CTexture(const CTexture & rhs)
 	: CComponent(rhs)
-	, m_Textures(rhs.m_Textures)
 {
-	for (auto& pShaderResourceView : m_Textures)
-		Safe_AddRef(pShaderResourceView);
+	for (auto& pShaderResourceView : rhs.m_Textures)
+	{
+		ID3D11ShaderResourceView* tmpResourceView=nullptr;
+		ID3D11Resource* pResource = nullptr;
+		pShaderResourceView->GetResource(&pResource);
+		m_pDevice->CreateShaderResourceView(pResource, nullptr, &tmpResourceView);
+		Safe_Release(pResource);
+		m_Textures.emplace_back(tmpResourceView);
+	}
 }
 
 HRESULT CTexture::NativeConstruct_Prototype(const wstring& pTextureFilePath, _uint iNumTextures)
@@ -73,10 +79,11 @@ HRESULT CTexture::NativeConstruct_Prototype()
 
 HRESULT CTexture::NativeConstruct(void * pArg)
 {
-	CTextureManager* pInstance = GET_INSTANCE(CTextureManager);
-
 	if (!pArg)
 		return S_OK;
+
+	CTextureManager* pInstance = GET_INSTANCE(CTextureManager);
+
 
 	wstring pTag = (*(wstring*)pArg);
 	vector <ID3D11ShaderResourceView* >* pTexture = pInstance->Get_Texture(pTag);
@@ -99,11 +106,29 @@ HRESULT CTexture::Change_Texture(const wstring& pTextureTag)
 	if (!pTexture)
 		return E_FAIL;
 
-	_uint iSize = pTexture->size();
-	for (_uint i = 0; i < iSize; i++)
+	//m_Textures = *pTexture;
+	//_uint iSize = pTexture->size();
+	//for (_uint i = 0; i < iSize; i++)
+	//{
+	//	m_Textures.emplace_back((*pTexture)[i]);
+	//	Safe_AddRef(m_Textures[i]);
+	//}
+
+	if (m_Textures.size())
 	{
-		m_Textures.emplace_back((*pTexture)[i]);
-		Safe_AddRef(m_Textures[i]);
+		for (auto& pTexture : m_Textures)
+			Safe_Release(pTexture);
+		m_Textures.clear();
+		m_Textures.shrink_to_fit();
+	}
+	for(_uint i=0; i< pTexture->size(); i++)
+	{
+		ID3D11ShaderResourceView* tmpResourceView = nullptr;
+		ID3D11Resource* pResource = nullptr;
+		(*pTexture)[i]->GetResource(&pResource);
+		m_pDevice->CreateShaderResourceView(pResource, nullptr, &tmpResourceView);
+		Safe_Release(pResource);
+		m_Textures.emplace_back(tmpResourceView);
 	}
 
 	RELEASE_INSTANCE(CTextureManager);
@@ -157,4 +182,6 @@ void CTexture::Free()
 
 	for (auto& pShaderResourceView : m_Textures)
 		Safe_Release(pShaderResourceView);
+
+	m_Textures.clear();
 }
