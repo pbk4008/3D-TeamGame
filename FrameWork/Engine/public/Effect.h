@@ -27,6 +27,8 @@ protected:
 	_float m_fMaxLifTime;
 	_bool m_bUsingGravity;
 	_uint m_iNumEffectCount;
+protected:
+	
 };
 END
 #endif

@@ -16,6 +16,7 @@
 #include "SaveManager.h"
 #include "SoundMgr.h"
 #include "TextureManager.h"
+#include "PhysicsXSystem.h"
 
 BEGIN(Engine)
 
@@ -158,6 +159,7 @@ private:
 	CTextureManager*				m_pTextureManager = nullptr;
 	CSaveManager*				m_pSaveManager = nullptr;
 	CSoundMgr*					m_pSoundManager = nullptr;
+	CPhysicsXSystem*				m_pPhysicSystem = nullptr;
 public:
 	static void Release_Engine();
 	virtual void Free() override;
