@@ -4,7 +4,6 @@
 #include "Level.h"
 BEGIN(Client)
 class CLoader;
-class CBar;
 class CLoading final : public CLevel
 {
 private:
@@ -13,7 +12,7 @@ private:
 	virtual~CLoading() = default;
 public:
 	virtual HRESULT NativeConstruct(SCENEID eID);
-	virtual _int Tick(_float fDeltaTime);
+	virtual _int Tick(_double TimeDelta);
 	virtual HRESULT Render();
 private:
 	HRESULT Move_Scene();

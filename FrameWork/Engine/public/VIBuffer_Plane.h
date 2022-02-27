@@ -23,11 +23,17 @@ public:
 	_uint			Get_NumFaces(void) { return m_iNumPrimitive; }
 
 public:
+	void* getVertices() { return m_pVertices; }
+	_uint getVerteicesX() { return m_iNumVerticesX; }
+	_uint getVerteicesZ() { return m_iNumVerticesZ; }
+
+public:
 	FACEINDICES32* m_pIndices;
 
 public:
 	_uint		m_iNumVerticesX = 0;
 	_uint		m_iNumVerticesZ = 0;
+
 
 public:
 	static CVIBuffer_Plane* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext, const _tchar* _pShaderFilePath, _uint _numVertsX, _uint _numVertsZ);

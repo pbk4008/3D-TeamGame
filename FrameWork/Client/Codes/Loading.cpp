@@ -2,7 +2,7 @@
 #include "Loading.h"
 #include "Loader.h"
 #include "Level_Logo.h"
-
+#include "Stage1.h"
 
 CLoading::CLoading()
 	: m_eSceneID(SCENEID::SCENE_END)
@@ -35,14 +35,17 @@ HRESULT CLoading::NativeConstruct(SCENEID eID)
 	return S_OK;
 }
 
-_int CLoading::Tick(_float fDeltaTime)
+_int CLoading::Tick(_double TimeDelta)
 {
-	if (0>CLevel::Tick(fDeltaTime))
+	if (0>CLevel::Tick(TimeDelta))
 		return -1;
 	if (m_pLoader->getFinish())
 	{
- 		if (FAILED(Move_Scene()))
-			return -1;
+		if (g_pGameInstance->getkeyDown(DIK_SPACE))
+		{
+			if (FAILED(Move_Scene()))
+				return -1;
+		}
 	}
 	return 0;
 }
@@ -52,6 +55,8 @@ HRESULT CLoading::Render()
 {
 	if (FAILED(CLevel::Render()))
 		return E_FAIL;
+
+
 
 	return S_OK;
 }
@@ -65,6 +70,7 @@ HRESULT CLoading::Move_Scene()
 		pLevel = CLevel_Logo::Create(m_pDevice, m_pDeviceContext);
 		break;
 	case SCENEID::SCENE_STAGE1:
+		pLevel = CStage1::Create(m_pDevice, m_pDeviceContext);
 		break;
 	}
 	if (FAILED(g_pGameInstance->Open_Level((_uint)m_eSceneID, pLevel)))
@@ -75,11 +81,10 @@ HRESULT CLoading::Move_Scene()
 
 HRESULT CLoading::Ready_GameObject()
 {
-	/*if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_BackGround"), ))))
+	wstring strTag = L"BackGround";
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_LOADING,L"Loading_Back", L"Prototype_GameObject_BackGround", &strTag)))
 		return E_FAIL;
 
-	wstring 
-	g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_LOADING, L"Prototype_GameObject_BackGround", L"Logo_BackGround",*/
 	return S_OK;
 }
 

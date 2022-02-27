@@ -3,6 +3,7 @@
 #include "BackGround.h"
 #include "MainCamera.h"
 #include "Loading.h"
+#include "DebugSystem.h"
 
 CMainApp::CMainApp()
 {	
@@ -15,8 +16,10 @@ HRESULT CMainApp::NativeConstruct()
 		return E_FAIL;
 	RELEASE_INSTANCE(CGameInstance);
 
-	//if (FAILED(Ready_Fonts()))
-	//	return E_FAIL;
+	if (FAILED(Ready_Fonts()))
+		return E_FAIL;
+	if (FAILED(Load_Texture()))
+		return E_FAIL;
 	if (FAILED(Ready_Component_Prototype()))
 		return E_FAIL;
 	if (FAILED(Ready_GameObject_Prototype()))
@@ -25,7 +28,13 @@ HRESULT CMainApp::NativeConstruct()
 	if (FAILED(Init_Camera()))
 		return E_FAIL;
 
-	if (FAILED(SetUp_StartLevel(SCENEID::SCENE_LOADING)))
+#ifdef _DEBUG
+	CDebugSystem* pDebug = GET_INSTANCE(CDebugSystem);
+	if (FAILED(pDebug->Init_DebugSystem(m_pDevice, m_pDeviceContext)))
+		return E_FAIL;
+#endif
+
+	if (FAILED(SetUp_StartLevel(SCENEID::SCENE_LOGO)))
 		return E_FAIL;
 
 	return S_OK;
@@ -34,7 +43,6 @@ HRESULT CMainApp::NativeConstruct()
 _int CMainApp::Tick(_double TimeDelta)
 {
 	m_TimeAcc += TimeDelta;
-
 
 	g_pGameInstance->Tick_Engine(TimeDelta);
 
@@ -87,8 +95,10 @@ HRESULT CMainApp::SetUp_StartLevel(SCENEID eLevel)
 	{
 	case SCENEID::SCENE_LOGO:
 		hr = g_pGameInstance->Open_Level((_uint)SCENEID::SCENE_LOADING, CLoading::Create(m_pDevice, m_pDeviceContext, eLevel));
+		break;
 	default:
 		hr = E_FAIL;
+		break;
 	}	
 
 	if (FAILED(hr))
@@ -121,19 +131,28 @@ HRESULT CMainApp::Ready_GameObject_Prototype()
 	return S_OK;
 }
 
+HRESULT CMainApp::Load_Texture()
+{
+	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"BackGround", L"../bin/Resources/Texture/penguin.jpg")))
+		return E_FAIL;
+
+	return S_OK;
+}
+
 HRESULT CMainApp::Init_Camera()
 {
 	CCamera::CAMERADESC tDesc;
 	tDesc.eType = CCamera::CAMERATYPE::CAMERA_PROJECTION;
 	tDesc.pCameraTag = L"MainCamera";
-	tDesc.vEye = _float4(0.f, 0.f, -1.f, 1.f);
-	tDesc.vAt = _float4(0.f, 0.f, 0.f, 1.f);
+	tDesc.vEye = _float4(0.f, 0.f, 0.f, 1.f);
+	tDesc.vAt = _float4(0.f, 0.f, 1.f, 1.f);
 	tDesc.vAxisY = _float4(0.f, 1.f, 0.f, 0.f);
-	tDesc.fFovy = XMConvertToRadians(60.f);
+	tDesc.fFovy = XMConvertToRadians(60.f);;
 	tDesc.fFar = 300.f;
 	tDesc.fNear = 0.1f;
+	tDesc.fAspect = (_float)g_iWinCx/g_iWinCy;
 
-	if(FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Prototype_GameObject_MainCamera", L"MainCamera", &tDesc)))
+	if(FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Static", L"Prototype_GameObject_MainCamera", &tDesc)))
 		return E_FAIL;
 
 	return S_OK;
@@ -142,13 +161,13 @@ HRESULT CMainApp::Init_Camera()
 HRESULT CMainApp::Ready_Fonts()
 {
 	// MakeSpriteFont "Gulim" /FontSize:16 /characterregion:0xa960 - 0xa97f Gulim.spritefont
-	if (FAILED(g_pGameInstance->Add_Font(m_pDevice, m_pDeviceContext, TEXT("Font_Arial"), TEXT("../Bin/Fonts/Arial.spritefont"))))
+	if (FAILED(g_pGameInstance->Add_Font(m_pDevice, m_pDeviceContext, TEXT("Font_Arial"), TEXT("../bin/Resources/Font/Arial.spritefont"))))
 		return E_FAIL;
 
-	if (FAILED(g_pGameInstance->Add_Font(m_pDevice, m_pDeviceContext, TEXT("Font_Gulim"), TEXT("../Bin/Fonts/Qulim.spritefont"))))
+	if (FAILED(g_pGameInstance->Add_Font(m_pDevice, m_pDeviceContext, TEXT("Font_Gulim"), TEXT("../bin/Resources/Font/Qulim.spritefont"))))
 		return E_FAIL;
 
-	if (FAILED(g_pGameInstance->Add_Font(m_pDevice, m_pDeviceContext, TEXT("Font_HY"), TEXT("../Bin/Fonts/hy.spritefont"))))
+	if (FAILED(g_pGameInstance->Add_Font(m_pDevice, m_pDeviceContext, TEXT("Font_HY"), TEXT("../bin/Resources/Font/hy.spritefont"))))
 		return E_FAIL;
 
 	return S_OK;
@@ -169,6 +188,11 @@ CMainApp * CMainApp::Create()
 
 void CMainApp::Free()
 {
+	RELEASE_INSTANCE(CDebugSystem);
+	CDebugSystem::Stop_DebugSystem();
+	if (FAILED(CDebugSystem::DestroyInstance()))
+		MSGBOX("CDebugSystem Destroy Fail");
+
 	Safe_Release(m_pRenderer);
 
 	Safe_Release(m_pDeviceContext);

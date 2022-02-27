@@ -38,6 +38,7 @@ _int CMouse::Tick(HWND hWnd, _double TimeDelta)
 
 void CMouse::RayUpdate(const wstring& pCamTag)
 {
+
 	D3D11_VIEWPORT vp;
 	ZeroMemory(&vp, sizeof(D3D11_VIEWPORT));
 	_uint pNumViewPorts = 1;
@@ -45,7 +46,7 @@ void CMouse::RayUpdate(const wstring& pCamTag)
 
 	_float fPointX = (m_tMousePos.x / (0.5f * vp.Width)) - 1.f;
 	_float fPointY = (m_tMousePos.y / (-0.5f * vp.Height)) + 1.f;
-
+	cout << m_tMousePos.x << ", " << m_tMousePos.y << endl;
 	_vector vMouse = XMVectorSet
 	(
 		fPointX,
@@ -64,6 +65,8 @@ void CMouse::RayUpdate(const wstring& pCamTag)
 	matView = XMMatrixInverse(nullptr, matView);
 
 	RELEASE_INSTANCE(CPipeLine);
+
+	vMouse = XMVector3TransformCoord(vMouse, matProj);
 
 	_vector vRayPos = XMVectorSet(0.f, 0.f, 0.f, 1.f);
 	_vector vRayDir = vMouse - vRayPos;
@@ -125,11 +128,12 @@ _fvector CMouse::Terrain_Picking(void* pVertices, _fmatrix matWorld, _uint iVtxX
 	vRayPos = XMVector3TransformCoord(vRayPos, matInverseWrold);
 	vRayDir = XMVector3TransformNormal(vRayDir, matInverseWrold);
 
-	if (XMVectorGetX(vRayPos) < 0.f ||
-		XMVectorGetZ(vRayPos) < 0.f)
-		return XMVectorZero();
 
-	VTXNORTEX* pTerrainsVertices = (VTXNORTEX*)pVertices;
+	//if (XMVectorGetX(vRayPos) < 0.f ||
+	//	XMVectorGetZ(vRayPos) < 0.f)
+	//	return XMVectorZero();
+
+	VTXTEX* pTerrainsVertices = (VTXTEX*)pVertices;
 
 	for (_uint i = 0; i < iVtxZ - 1; i++)
 	{
@@ -144,7 +148,7 @@ _fvector CMouse::Terrain_Picking(void* pVertices, _fmatrix matWorld, _uint iVtxX
 			TriPoint[1] = XMLoadFloat3(&pTerrainsVertices[iIndex + iVtxX+1].vPosition);
 			TriPoint[2] = XMLoadFloat3(&pTerrainsVertices[iIndex + 1].vPosition);
 
-			if (TriangleTests::Intersects(vRayPos, vRayDir, TriPoint[0], TriPoint[1], TriPoint[2], fDist))
+ 			if (TriangleTests::Intersects(vRayPos, vRayDir, TriPoint[0], TriPoint[1], TriPoint[2], fDist))
 			{
 				iHitIndex = iIndex;
 				vRayPos += (fDist * vRayDir);

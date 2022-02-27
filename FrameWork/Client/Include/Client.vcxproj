@@ -175,7 +175,7 @@
     </FxCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\Reference\ShaderFile\Shader_RenderState.hpp" />
+    <ClInclude Include="..\Codes\DebugSystem.h" />
     <ClInclude Include="..\Default\Client_Enum.h" />
     <ClInclude Include="..\Default\Client_Function.h" />
     <ClInclude Include="..\Default\Client_Include.h" />
@@ -186,6 +186,7 @@
     <ClInclude Include="..\Headers\Loading.h" />
     <ClInclude Include="..\Headers\MainApp.h" />
     <ClInclude Include="..\Headers\MainCamera.h" />
+    <ClInclude Include="..\Headers\Stage1.h" />
     <ClInclude Include="Client.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="pch.h" />
@@ -194,11 +195,13 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Codes\BackGround.cpp" />
+    <ClCompile Include="..\Codes\DebugSystem.cpp" />
     <ClCompile Include="..\Codes\Level_Logo.cpp" />
     <ClCompile Include="..\Codes\Loader.cpp" />
     <ClCompile Include="..\Codes\Loading.cpp" />
     <ClCompile Include="..\Codes\MainApp.cpp" />
     <ClCompile Include="..\Codes\MainCamera.cpp" />
+    <ClCompile Include="..\Codes\Stage1.cpp" />
     <ClCompile Include="Client.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
@@ -218,16 +221,6 @@
     <ProjectReference Include="..\..\Engine\Include\Engine.vcxproj">
       <Project>{3c2229d5-98f0-48e5-976f-bbb133cc270c}</Project>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <FxCompile Include="..\..\Reference\ShaderFile\Shader_Cube.hlsl" />
-    <FxCompile Include="..\..\Reference\ShaderFile\Shader_Instance.hlsl" />
-    <FxCompile Include="..\..\Reference\ShaderFile\Shader_Mesh.hlsl" />
-    <FxCompile Include="..\..\Reference\ShaderFile\Shader_PointInstance.hlsl" />
-    <FxCompile Include="..\..\Reference\ShaderFile\Shader_Rect.hlsl" />
-    <FxCompile Include="..\..\Reference\ShaderFile\Shader_RectViewport.hlsl" />
-    <FxCompile Include="..\..\Reference\ShaderFile\Shader_Terrain.hlsl" />
-    <FxCompile Include="..\..\Reference\ShaderFile\Shader_Triangle.hlsl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

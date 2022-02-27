@@ -34,6 +34,9 @@
 
 #include "fmod/fmod.h"
 
+#include "PxPhysicsAPI.h"
+using namespace physx;
+
 #include <vector>
 #include <map>
 #include <list>

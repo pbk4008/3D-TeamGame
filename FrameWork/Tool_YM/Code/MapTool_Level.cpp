@@ -3,6 +3,9 @@
 #include "MapTool_Level.h"
 #include "Tab_Changer.h"
 #include "GameInstance.h"
+#include "Mouse.h"
+#include "Plane.h"
+#include "Observer.h"
 
 CMapTool_Level::CMapTool_Level(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
 	:CLevel(_pDevice, _pDeviceContext)
@@ -31,6 +34,15 @@ _int CMapTool_Level::Tick(_double TimeDelta)
 	if (0 > __super::Tick(TimeDelta))
 		return -1;
 
+	m_pMouse->Tick(g_hWnd, TimeDelta);
+	m_pMouse->RayUpdate(L"Camera");
+
+	if (g_pGameInstance->getMouseKeyDown(CInputDev::MOUSESTATE::MB_LBUTTON))
+	{
+		CObserver* pObserver = GET_INSTANCE(CObserver);
+		//  m_pMouse->Pick_Plane(m_pPlane->Get_Indices(),m_pPlane->Get_Vertices(), m_pPlane->Get_NumFaces(),m_pPlane->Get_WorldMatrix(), L"Camera");
+	}
+
 	return _int();
 }
 
@@ -47,6 +59,8 @@ HRESULT CMapTool_Level::Ready_Layer_Plane(const wstring& _pLayerTag)
 	if(FAILED(g_pGameInstance->Add_GameObjectToLayer(TAB_MAP, _pLayerTag, L"Prototype_GameObject_Plane")))
 		return E_FAIL;
 
+	m_pPlane = g_pGameInstance->Clone_GameObject<CPlane>(TAB_MAP, L"Prototype_GameObject_Plane");
+
 	return S_OK;
 }
 
@@ -62,6 +76,8 @@ HRESULT CMapTool_Level::Ready_Later_Mouse(const wstring& _pLayerTag)
 {
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer(TAB_MAP, _pLayerTag, L"Prototype_GameObject_Mouse")))
 		return E_FAIL;
+
+	m_pMouse = g_pGameInstance->Clone_GameObject<CMouse>(TAB_MAP, L"Prototype_GameObject_Mouse");
 
 	return S_OK;
 }
