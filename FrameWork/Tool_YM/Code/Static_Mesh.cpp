@@ -52,7 +52,6 @@ _int CStatic_Mesh::LateTick(_double TimeDelta)
 {
 	m_pRenderer->Add_RenderGroup(CRenderer::RENDER_PRIORITY, this);
 
-	//if (g_pGameInstance->getMouseKeyDown(CInputDev::MOUSESTATE::MB_RBUTTON))
 	if(TKEY_DOWN(VK_RBUTTON))
 		Pick_Model();
 
@@ -134,6 +133,52 @@ void CStatic_Mesh::Input_Key(_double _dtimeDelta)
 		m_pTransform->Go_Up(_dtimeDelta);
 	if (g_pGameInstance->getkeyPress(DIK_PGDN))
 		m_pTransform->Go_Down(_dtimeDelta);
+
+	_long	MouseMove = 0;
+	_long   MouseWheel = 0;
+	if (g_pGameInstance->getkeyPress(DIK_Z))
+	{
+		if (MouseMove = g_pGameInstance->getMouseMoveState(CInputDev::MOUSEMOVESTATE::MM_X))
+		{
+			m_pTransform->Rotation_Axis(XMVectorSet(1.f, 0.f, 0.f, 0.f), _dtimeDelta * MouseMove * 0.01f);
+		}
+	}
+	if (g_pGameInstance->getkeyPress(DIK_X))
+	{
+		if (MouseMove = g_pGameInstance->getMouseMoveState(CInputDev::MOUSEMOVESTATE::MM_X))
+		{
+			m_pTransform->Rotation_Axis(XMVectorSet(0.f, 1.f, 0.f, 0.f), _dtimeDelta * MouseMove * 0.01f);
+		}
+	}
+	if (g_pGameInstance->getkeyPress(DIK_C))
+	{
+		if (MouseMove = g_pGameInstance->getMouseMoveState(CInputDev::MOUSEMOVESTATE::MM_X))
+		{
+			m_pTransform->Rotation_Axis(XMVectorSet(0.f, 0.f, 1.f, 0.f), _dtimeDelta * MouseMove * 0.01f);
+		}
+	}
+
+	if (g_pGameInstance->getkeyPress(DIK_C))
+	{
+		if (MouseMove = g_pGameInstance->getMouseMoveState(CInputDev::MOUSEMOVESTATE::MM_X))
+		{
+			m_pTransform->Rotation_Axis(XMVectorSet(0.f, 0.f, 1.f, 0.f), _dtimeDelta * MouseMove * 0.01f);
+		}
+	}
+
+	if (MouseWheel = g_pGameInstance->getMouseMoveState(CInputDev::MOUSEMOVESTATE::MM_WHILL))
+	{
+		if (0 < MouseWheel)
+		{
+			_fvector Scale_UP = { 1.05f, 1.05f, 1.05f };
+			m_pTransform->Scale_Up(Scale_UP);
+		}
+		else
+		{
+			_fvector Scale_Down = { 0.95f, 0.95f, 0.95f };
+			m_pTransform->Scale_Up(Scale_Down);
+		}
+	}
 }
 
 void CStatic_Mesh::Pick_Model(void)
@@ -145,7 +190,7 @@ void CStatic_Mesh::Pick_Model(void)
 	_vector vRayPos = XMLoadFloat3(&m_vRayPos);
 	vRayPos = XMVectorSetW(vRayPos, 1.f);
 	_vector vRayDir = XMLoadFloat3(&m_vRayDir);
-
+	vRayDir = XMVector3Normalize(vRayDir);
 	_matrix matInverseWrold = XMMatrixInverse(nullptr, m_pTransform->Get_WorldMatrix());
 
 	vRayPos = XMVector3TransformCoord(vRayPos, matInverseWrold);

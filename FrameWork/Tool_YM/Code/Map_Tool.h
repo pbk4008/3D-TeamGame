@@ -32,10 +32,9 @@ public:
 	HRESULT			 Delete_Item(_uint _iLevelIndex, const MODELDESC& _ModelDesc);
 	HRESULT			 Create_HierarchyTree(const MODELDESC& _ModelInfo);
 	HRESULT			 Delete_HierarchyTreeItem(const MODELDESC& _ModelDesc);
+	_int			 Find_TreeItem_Indx(HTREEITEM hSelectItem);
+	_bool			 Get_HasChild(CTreeCtrl& tTree, HTREEITEM tParent, HTREEITEM tSelect);
 	static HTREEITEM Search_ParentItemInTree(CTreeCtrl* _TreeCtrl, CString _FindStr, HTREEITEM _pParent);
-	
-public:
-	void			 Clear_CloneName(wstring _deleteItem);
 
 public:
 	FILEINFO		  m_FileInfo;
@@ -46,8 +45,8 @@ public:
 	/* 원본 모델 중복생성 방지 태그 */
 	list<wstring>	    m_ProtoTag;
 	/* Hierarchy Tree 생성용 태그 */
-	vector<wstring>		m_vTag;
-	vector<wstring>		m_vModelName;
+	vector<wstring>			  m_vTag;
+	vector<wstring>			  m_vModelName;
 
 public:
 	CTreeCtrl		  m_AssetTree;

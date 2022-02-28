@@ -165,6 +165,16 @@ void CTransform::Scaling(_fvector vScale)
 	Set_State(CTransform::STATE_LOOK, vLook);
 }
 
+void CTransform::Scale_Up(_fvector vScale)
+{
+	_vector		vRight = Get_State(CTransform::STATE_RIGHT) * XMVectorGetX(vScale);
+	_vector		vUp = Get_State(CTransform::STATE_UP) * XMVectorGetY(vScale);
+	_vector		vLook = Get_State(CTransform::STATE_LOOK) * XMVectorGetZ(vScale);
+
+	Set_State(CTransform::STATE_RIGHT, vRight);
+	Set_State(CTransform::STATE_UP, vUp);
+	Set_State(CTransform::STATE_LOOK, vLook);
+}
 
 CTransform * CTransform::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pDeviceContext)
 {

@@ -65,6 +65,7 @@ public:
 	void Rotation_Axis(_fvector vAxis, _double TimeDelta); /* 동적으로 TimeDelta이용한 회전. */
 	void SetUp_Rotation(_fvector vAxis, _float fRadian); /* 디폴트상태기준으로 특정축으로 몇도만큼 회전시켜놓겠다. */
 	void Scaling(_fvector vScale);
+	void Scale_Up(_fvector vScale);
 
 private:
 	_float4x4				m_WorldMatrix;	

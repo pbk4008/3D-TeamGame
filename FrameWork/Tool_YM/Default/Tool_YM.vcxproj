@@ -209,6 +209,7 @@
     <ClInclude Include="..\Code\Static_Mesh.h" />
     <ClInclude Include="..\Code\Tab_Changer.h" />
     <ClInclude Include="..\Code\Tool_Defines.h" />
+    <ClInclude Include="..\Code\Tool_Function.h" />
     <ClInclude Include="..\Code\Tool_Main.h" />
     <ClInclude Include="..\Code\Tool_Mouse.h" />
     <ClInclude Include="..\Code\Tool_Struct.h" />
