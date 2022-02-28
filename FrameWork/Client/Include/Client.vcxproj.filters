@@ -16,9 +16,6 @@
     <Filter Include="02.GameObject">
       <UniqueIdentifier>{f2cdd416-1246-46fe-9651-260378957611}</UniqueIdentifier>
     </Filter>
-    <Filter Include="97. ShaderFile">
-      <UniqueIdentifier>{d363412a-feda-4a6b-92b5-1dde3390e163}</UniqueIdentifier>
-    </Filter>
     <Filter Include="01.Scene\00.Logo">
       <UniqueIdentifier>{cac3034c-dd8b-47e8-afc7-da6cb3e9501e}</UniqueIdentifier>
     </Filter>
@@ -33,6 +30,12 @@
     </Filter>
     <Filter Include="02.GameObject\01. MainCamera">
       <UniqueIdentifier>{8b18fdcc-5500-4069-924b-f1bd56f8854d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="97.DebugSystem">
+      <UniqueIdentifier>{b4bd8d9b-cb93-4756-811e-26837882420d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Scene\02.Stage">
+      <UniqueIdentifier>{7b03efd1-8edb-483a-9e4d-de2be570d5c2}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -63,9 +66,6 @@
     <ClInclude Include="..\Default\Client_Function.h">
       <Filter>98.Headers</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Reference\ShaderFile\Shader_RenderState.hpp">
-      <Filter>97. ShaderFile</Filter>
-    </ClInclude>
     <ClInclude Include="..\Headers\MainApp.h">
       <Filter>00.MainGame</Filter>
     </ClInclude>
@@ -83,6 +83,12 @@
     </ClInclude>
     <ClInclude Include="..\Headers\MainCamera.h">
       <Filter>02.GameObject\01. MainCamera</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Codes\DebugSystem.h">
+      <Filter>97.DebugSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Stage1.h">
+      <Filter>01.Scene\02.Stage</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -108,6 +114,12 @@
     <ClCompile Include="..\Codes\MainCamera.cpp">
       <Filter>02.GameObject\01. MainCamera</Filter>
     </ClCompile>
+    <ClCompile Include="..\Codes\DebugSystem.cpp">
+      <Filter>97.DebugSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Stage1.cpp">
+      <Filter>01.Scene\02.Stage</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -121,31 +133,5 @@
     <ResourceCompile Include="Client.rc">
       <Filter>99.Default</Filter>
     </ResourceCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <FxCompile Include="..\..\Reference\ShaderFile\Shader_Mesh.hlsl">
-      <Filter>97. ShaderFile</Filter>
-    </FxCompile>
-    <FxCompile Include="..\..\Reference\ShaderFile\Shader_PointInstance.hlsl">
-      <Filter>97. ShaderFile</Filter>
-    </FxCompile>
-    <FxCompile Include="..\..\Reference\ShaderFile\Shader_Rect.hlsl">
-      <Filter>97. ShaderFile</Filter>
-    </FxCompile>
-    <FxCompile Include="..\..\Reference\ShaderFile\Shader_RectViewport.hlsl">
-      <Filter>97. ShaderFile</Filter>
-    </FxCompile>
-    <FxCompile Include="..\..\Reference\ShaderFile\Shader_Terrain.hlsl">
-      <Filter>97. ShaderFile</Filter>
-    </FxCompile>
-    <FxCompile Include="..\..\Reference\ShaderFile\Shader_Triangle.hlsl">
-      <Filter>97. ShaderFile</Filter>
-    </FxCompile>
-    <FxCompile Include="..\..\Reference\ShaderFile\Shader_Cube.hlsl">
-      <Filter>97. ShaderFile</Filter>
-    </FxCompile>
-    <FxCompile Include="..\..\Reference\ShaderFile\Shader_Instance.hlsl">
-      <Filter>97. ShaderFile</Filter>
-    </FxCompile>
   </ItemGroup>
 </Project>

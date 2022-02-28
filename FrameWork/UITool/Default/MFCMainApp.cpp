@@ -2,9 +2,13 @@
 #include "framework.h"
 #include "MFCMainApp.h"
 #include "GameInstance.h"
+
 #include "MFCLevel_Logo.h"
 #include "MFCObject_UI.h"
 #include "MFCCamera.h"
+#include "MFCCamera_Proj.h"
+#include "MFCEffect.h"
+#include "MFCTerrain.h"
 
 
 CMFCMainApp::CMFCMainApp()
@@ -28,7 +32,6 @@ HRESULT CMFCMainApp::NativeConstruct()
 
 	m_pRenderer = g_pGameInstance->Clone_Component<CRenderer>(0, L"Renderer");
 
-	/* 영구적으로 사용할 스테틱 원형객체들이 여기서 생성됨 */
 	if (FAILED(Ready_Component_Prototype()))
 	{
 		return E_FAIL;
@@ -134,8 +137,19 @@ HRESULT CMFCMainApp::Ready_Component_Prototype()
 		return E_FAIL;
 	}
 
-	//여기서 그림 다 불러놓음
+	if (FAILED(g_pGameInstance->Add_Prototype(0, L"Prototype_Component_VIBuffer_PointInstance", CVIBuffer_PointInstance::Create(m_pDevice,m_pDeviceContext,
+		L"../../Reference/ShaderFile/Shader_PointInstance.hlsl", 100))))
+	{
+		return E_FAIL;
+	}
 
+	//if (FAILED(g_pGameInstance->Add_Prototype(0, TEXT("Prototype_Component_VIBuffer_Terrain"),
+	//	CVIBuffer_Terrain::Create(m_pDevice, m_pDeviceContext, TEXT("../bin/ShaderFiles/Shader_Terrain.hlsl"), TEXT("../bin/Resource/Texture/Height.bmp")))))
+	//{
+	//	return E_FAIL;
+	//}
+
+	//여기서 그림 다 불러놓음
 	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"Texture_0", L"../bin/Resource/Textures/Texture_0.jpg")))
 	{
 		return E_FAIL;
@@ -146,20 +160,16 @@ HRESULT CMFCMainApp::Ready_Component_Prototype()
 		return E_FAIL;
 	}
 
-	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Texture_0"), CMFCObject_UI::Create(m_pDevice, m_pDeviceContext))))
+	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"T_HUD_Player_Shield_Icon", L"../bin/Resource/Textures/T_HUD_Player_Shield_Icon.tga")))
 	{
 		return E_FAIL;
 	}
 
-	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Texture_1"), CMFCObject_UI::Create(m_pDevice, m_pDeviceContext))))
+	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"bubble", L"../bin/Resource/Textures/bubble.png")))
 	{
 		return E_FAIL;
 	}
 
-	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Camera"), CMFCCamera::Create(m_pDevice, m_pDeviceContext))))
-	{
-		return E_FAIL;
-	}
 
 	return S_OK;
 }
@@ -171,11 +181,42 @@ HRESULT CMFCMainApp::Ready_GameObject_Prototype()
 		return E_FAIL;
 	}
 
-	///* For. Prototype_GameObject_Background */
-	//if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Background"), CMFCBackground::Create(m_pDevice, m_pDeviceContext))))
-	//{
-	//	return E_FAIL;
-	//}
+	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Camera"), CMFCCamera::Create(m_pDevice, m_pDeviceContext))))
+	{
+		return E_FAIL;
+	}
+
+	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Camera_Proj"), CMFCCamera_Proj::Create(m_pDevice, m_pDeviceContext))))
+	{
+		return E_FAIL;
+	}
+
+	//////////////////////////////////////////////////////////////////////////
+	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Texture_0"), CMFCObject_UI::Create(m_pDevice, m_pDeviceContext))))
+	{
+		return E_FAIL;
+	}
+
+	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Texture_1"), CMFCObject_UI::Create(m_pDevice, m_pDeviceContext))))
+	{
+		return E_FAIL;
+	}
+
+	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_T_HUD_Player_Shield_Icon"), CMFCObject_UI::Create(m_pDevice, m_pDeviceContext))))
+	{
+		return E_FAIL;
+	}
+
+	//////////////////////////////////////////////////////////////////////////
+	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_bubble"), CMFCEffect::Create(m_pDevice, m_pDeviceContext))))
+	{
+		return E_FAIL;
+	}
+
+	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Terrain"), CMFCTerrain::Create(m_pDevice, m_pDeviceContext))))
+	{
+		return E_FAIL;
+	}
 
 	return S_OK;
 }

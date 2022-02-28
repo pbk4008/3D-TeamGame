@@ -42,7 +42,11 @@ HRESULT CBackGround::NativeConstruct(void* pArg)
 	if (FAILED(CGameObject::NativeConstruct(pArg)))
 		return E_FAIL;
 
-	if(FAILED(Ready_GameObject(pArg)))
+	if (FAILED(Ready_GameObject(pArg)))
+		return E_FAIL;
+
+	m_pTransform->SetTransformDesc(5.f, XMConvertToRadians(10.f));
+
 
 	return S_OK;
 }

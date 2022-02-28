@@ -45,6 +45,7 @@ HRESULT CLoader::LoadForScene()
 		hr = Ready_Logo();
 		break;
 	case SCENEID::SCENE_STAGE1:
+		hr = Ready_Stage1();
 		break;
 	default:
 		return E_FAIL;
@@ -82,6 +83,20 @@ CLoader* CLoader::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceCont
 
 HRESULT CLoader::Ready_Logo()
 {
+	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"Title", L"../bin/Resources/Texture/penguin000.jpg")))
+		return E_FAIL;
+
+	
+
+
+	return S_OK;
+}
+
+HRESULT CLoader::Ready_Stage1()
+{
+	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"StageBackGround", L"../bin/Resources/Texture/penguin001.jpg")))
+		return E_FAIL;
+
 	
 
 	return S_OK;

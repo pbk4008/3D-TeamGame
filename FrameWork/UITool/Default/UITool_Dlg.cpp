@@ -47,6 +47,8 @@ BEGIN_MESSAGE_MAP(CUITool_Dlg, CDialog)
 	ON_LBN_SELCHANGE(IDC_LIST1, &CUITool_Dlg::OnLbnSelchangeList1)
 	ON_BN_CLICKED(IDC_BUTTON1, &CUITool_Dlg::OnBnClickedButtonApply)
 	ON_BN_CLICKED(IDC_BUTTON2, &CUITool_Dlg::OnBnClickedButtonStateSetting)
+	ON_BN_CLICKED(IDC_BUTTON3, &CUITool_Dlg::OnBnClickedButtonSave)
+	ON_BN_CLICKED(IDC_BUTTON4, &CUITool_Dlg::OnBnClickedButtonLoad)
 END_MESSAGE_MAP()
 
 
@@ -87,8 +89,11 @@ void CUITool_Dlg::OnLbnSelchangeList1()
 	unsigned int iIndex = m_ListBox.GetCurSel();
 
 	CString SelectName = L"";
+
 	m_ListBox.GetText(iIndex, SelectName);
-	m_strPickFileName = SelectName;
+	_tcscpy_s(m_strPickFileName, SelectName);
+	//m_strPickFileName = SelectName;
+	
 	//int iTextureNameSize = SelectName.GetLength();
 	//unsigned int i = 0;
 
@@ -102,23 +107,23 @@ void CUITool_Dlg::OnLbnSelchangeList1()
 
 }
 
-
 void CUITool_Dlg::OnBnClickedButtonApply()
 {
 	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
 
 	UpdateData(TRUE);
-
 	CMFCObject_UI::UIDESC Desc;
-	Desc.TextureTag = m_strPickFileName;
+	//Desc.TextureTag = m_strPickFileName;
+	_tcscpy_s(Desc.TextureTag, m_strPickFileName);
 	Desc.fPos = { m_PositionX,m_PositionY};
 	Desc.fScale = { m_SizeX,m_SizeY };
 	
-	wstring FullName = L"Prototype_GameObject_" + m_strPickFileName;
+	wstring Name = m_strPickFileName;
+	wstring FullName = L"Prototype_GameObject_" + Name;
 
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer(TOOL_LEVEL::TOOL_LEVEL_LOGO, L"Layer_UI", FullName, &Desc)))
 	{
-		ERR_MSG(L"Failed to Creating in CMFCLevel_Logo::NativeConstruct()");
+		ERR_MSG(L"Failed to Creating in CUITool_Dlg::OnBnClickedButtonApply()");
 		return;
 	}
 
@@ -128,6 +133,85 @@ void CUITool_Dlg::OnBnClickedButtonApply()
 
 void CUITool_Dlg::OnBnClickedButtonStateSetting()
 {
+	UpdateData(TRUE);
 	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+	if (nullptr != m_pObject)
+	{
+		CMFCObject_UI::UIDESC Desc;
+		_tcscpy_s(Desc.TextureTag, m_pObject->Get_UIDesc().TextureTag);
+		Desc.fPos = { m_PositionX,m_PositionY };
+		Desc.fScale = { m_SizeX,m_SizeY };
+		m_pObject->Set_UIDesc(Desc);
+	}
+	UpdateData(FALSE);
+}
 
+
+void CUITool_Dlg::OnBnClickedButtonSave()
+{
+	/*CMFCObject_UI* Obj = (CMFCObject_UI*)g_pGameInstance->getObjectList(0, L"Layer_UI")->back();
+	if (nullptr != Obj)
+	{
+		m_vecUI.push_back(Obj->Get_UIDesc());
+	}*/
+	list<CGameObject*> ListObj = *g_pGameInstance->getObjectList(0, L"Layer_UI");
+
+	if (!ListObj.empty())
+	{
+		for (auto pObj : ListObj)
+		{
+			CMFCObject_UI* pUI = (CMFCObject_UI*)pObj;
+			m_vecUI.push_back(pUI->Get_UIDesc());
+			int a = 0;
+		}
+	}
+
+	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+		// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+	CFileDialog Dlg(false, L"dat", L"*.dat"); //저장, 디폴트확장자, 디폴트파일이름
+	TCHAR szFilePath[MAX_PATH] = L"";
+
+	//GetCurrentDirectory(MAX_PATH, szFilePath); //현재 경로를 얻어오는 함수
+	//PathRemoveFileSpec(szFilePath); //최하단의 경로를 잘라주는 함수
+	//lstrcat(szFilePath, L"\\Data");
+	Dlg.m_ofn.lpstrInitialDir = szFilePath;
+
+
+	if (IDOK == Dlg.DoModal())
+	{
+		wstring strFilePath = Dlg.GetPathName();
+		g_pGameInstance->SaveFile<CMFCObject_UI::UIDESC>(&m_vecUI, strFilePath);
+	}
+}
+
+
+void CUITool_Dlg::OnBnClickedButtonLoad()
+{
+	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+	CFileDialog Dlg(true, L"dat", L"*.dat");
+	TCHAR szFilePath[MAX_PATH] = L"";
+
+	GetCurrentDirectory(MAX_PATH, szFilePath);
+	PathRemoveFileSpec(szFilePath);
+	lstrcat(szFilePath, L"\\Data");
+	Dlg.m_ofn.lpstrInitialDir = szFilePath;
+
+
+	if (IDOK == Dlg.DoModal())
+	{
+		wstring strFilePath = Dlg.GetPathName();
+		g_pGameInstance->LoadFile<CMFCObject_UI::UIDESC>(m_vecUI, strFilePath);
+	}
+
+	for (int i = 0; i < m_vecUI.size(); ++i)
+	{
+		wstring Tag = m_vecUI[i].TextureTag;
+		wstring FullName = L"Prototype_GameObject_" + Tag;
+		
+		if (FAILED(g_pGameInstance->Add_GameObjectToLayer(TOOL_LEVEL::TOOL_LEVEL_LOGO, L"Layer_UI", FullName, &m_vecUI[i])))
+		{
+			ERR_MSG(L"Failed to Creating in CMFCLevel_Logo::NativeConstruct()");
+			return;
+		}
+	}
 }

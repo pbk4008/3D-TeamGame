@@ -16,6 +16,7 @@
 #include "SaveManager.h"
 #include "SoundMgr.h"
 #include "TextureManager.h"
+#include "PhysicsXSystem.h"
 
 BEGIN(Engine)
 
@@ -48,6 +49,7 @@ public: /* For.Timer_Manager */
 
 public: /* For.Level_Manager*/
 	HRESULT Open_Level(_uint iLevelIndex, class CLevel* pOpenLevel);
+	_uint getCurrentLevel();
 
 public: /* For.Object_Manager*/
 	class CComponent* Get_Component(_uint iLevelIndex, const wstring& pLayerTag, const wstring& pComponentTag, _uint iIndex = 0);
@@ -157,6 +159,7 @@ private:
 	CTextureManager*				m_pTextureManager = nullptr;
 	CSaveManager*				m_pSaveManager = nullptr;
 	CSoundMgr*					m_pSoundManager = nullptr;
+	CPhysicsXSystem*				m_pPhysicSystem = nullptr;
 public:
 	static void Release_Engine();
 	virtual void Free() override;

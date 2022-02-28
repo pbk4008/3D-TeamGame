@@ -18,6 +18,7 @@ CGameInstance::CGameInstance()
 	, m_pTextureManager(CTextureManager::GetInstance())
 	, m_pSaveManager(CSaveManager::GetInstance())
 	, m_pSoundManager(CSoundMgr::GetInstance())
+	, m_pPhysicSystem(CPhysicsXSystem::GetInstance())
 {
 	Safe_AddRef(m_pFont_Manager);
 	Safe_AddRef(m_pFrustum);
@@ -33,6 +34,7 @@ CGameInstance::CGameInstance()
 	Safe_AddRef(m_pTextureManager);
 	Safe_AddRef(m_pSaveManager);
 	Safe_AddRef(m_pSoundManager);
+	Safe_AddRef(m_pPhysicSystem);
 }
 
 HRESULT CGameInstance::Initialize_Engine(HINSTANCE hInst, HWND hWnd, _uint iNumLevel, CGraphic_Device::WINMODE eWinMode, _uint iWinCX, _uint iWinCY, ID3D11Device** ppDeviceOut, ID3D11DeviceContext** ppDeviceContextOut)
@@ -46,6 +48,9 @@ HRESULT CGameInstance::Initialize_Engine(HINSTANCE hInst, HWND hWnd, _uint iNumL
 		return E_FAIL;	
 
 	if (FAILED(m_pInput_Device->Init_InputDevice(hInst, hWnd)))
+		return E_FAIL;
+
+	if (FAILED(m_pPhysicSystem->Init_PhysicsX()))
 		return E_FAIL;
 
 	if (FAILED(m_pObject_Manager->Reserve_Manager(iNumLevel)))
@@ -168,6 +173,14 @@ HRESULT CGameInstance::Open_Level(_uint iLevelIndex, CLevel * pOpenLevel)
 		return E_FAIL;
 
 	return m_pLevel_Manager->Open_Level(iLevelIndex, pOpenLevel);
+}
+
+_uint CGameInstance::getCurrentLevel()
+{
+	if (!m_pLevel_Manager)
+		return 99;
+
+	return m_pLevel_Manager->getCurrentLevel();
 }
 
 CComponent * CGameInstance::Get_Component(_uint iLevelIndex, const wstring& pLayerTag, const wstring& pComponentTag, _uint iIndex)
@@ -454,6 +467,9 @@ void CGameInstance::Release_Engine()
 	if (0 != CFrustum::GetInstance()->DestroyInstance())
 		MSGBOX("Failed to Release CFrustum");
 
+	if (0 != CPhysicsXSystem::GetInstance()->DestroyInstance())
+		MSGBOX("Failed to Release CPhysicsXSystem");
+
 	if (0 != CSaveManager::GetInstance()->DestroyInstance())
 		MSGBOX("Failed to Release CSaveManager");
 
@@ -483,6 +499,7 @@ void CGameInstance::Free()
 	Safe_Release(m_pTextureManager);
 	Safe_Release(m_pSaveManager);
 	Safe_Release(m_pSoundManager);
+	Safe_Release(m_pPhysicSystem);
 }
 
 

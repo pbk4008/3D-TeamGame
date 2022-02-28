@@ -12,6 +12,8 @@ public:
 	virtual HRESULT NativeConstruct();
 	virtual _int Tick(_double TimeDelta);
 	virtual HRESULT Render();
+private:
+	HRESULT Ready_GameObejct();
 public:
 	static CLevel_Logo* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);
 	virtual void Free() override;

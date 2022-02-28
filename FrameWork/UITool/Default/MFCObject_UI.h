@@ -19,7 +19,7 @@ class CMFCObject_UI final : public CUI
 public:
 	typedef struct tagUIDesc
 	{
-		wstring TextureTag;
+		 _tchar TextureTag[MAX_PATH];
 		_float2 fPos;
 		_float2 fScale;
 	}UIDESC;
@@ -36,10 +36,9 @@ public:
 	virtual _int LateTick(_double TimeDelta) override;
 	virtual HRESULT Render() override;
 
-
-//private:
-//	_float m_fX, m_fY;
-//	_float m_fSizeX, m_fSizeY;
+public:
+	void Set_UIDesc(UIDESC Desc) { m_Desc = Desc; }
+	UIDESC Get_UIDesc() { return m_Desc; }
 
 private:
 	UIDESC m_Desc;

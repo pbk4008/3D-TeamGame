@@ -19,6 +19,8 @@ public:
 	static CLoader* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext, SCENEID eID);
 private:
 	HRESULT Ready_Logo();
+	HRESULT Ready_Stage1();
+
 private:
 	virtual void Free();
 public:

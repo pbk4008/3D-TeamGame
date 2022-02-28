@@ -1,6 +1,5 @@
 #include "Shader_RenderState.hpp"
 
-
 cbuffer Matrices
 {
 	matrix		g_WorldMatrix = (matrix)0;

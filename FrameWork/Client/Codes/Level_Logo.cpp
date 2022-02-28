@@ -13,6 +13,9 @@ HRESULT CLevel_Logo::NativeConstruct()
 	if (FAILED(__super::NativeConstruct()))
 		return E_FAIL;
 
+	if (FAILED(Ready_GameObejct()))
+		return E_FAIL;
+
 	return S_OK;
 }
 
@@ -21,7 +24,7 @@ _int CLevel_Logo::Tick(_double TimeDelta)
 	if (0 > (__super::Tick(TimeDelta)))
 		return -1;
 
-	if (GetKeyState(VK_SPACE) < 0)
+	if (g_pGameInstance->getkeyDown(DIK_RETURN))
 	{
 		if (FAILED(g_pGameInstance->Open_Level((_uint)SCENEID::SCENE_LOADING, CLoading::Create(m_pDevice, m_pDeviceContext,SCENEID::SCENE_STAGE1))))
 			return -1;
@@ -36,6 +39,16 @@ HRESULT CLevel_Logo::Render()
 {
 	if (FAILED(__super::Render()))
 		return E_FAIL;
+
+
+
+	return S_OK;
+}
+
+HRESULT CLevel_Logo::Ready_GameObejct()
+{
+	wstring strTag = L"Title";
+	g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_LOGO, L"Logo_Back", L"Prototype_GameObject_BackGround", &strTag);
 
 	return S_OK;
 }
