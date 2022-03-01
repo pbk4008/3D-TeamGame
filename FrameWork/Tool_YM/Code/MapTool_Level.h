@@ -20,6 +20,7 @@ public:
 	HRESULT Ready_Later_Mouse(const wstring& _pLayerTag);
 	HRESULT Ready_Layer_Plane(const wstring& _pLayerTag);
 	HRESULT Ready_Layer_Camera(const wstring& _pLayerTag);
+	HRESULT Ready_Layer_NavSphere(const wstring& _pLayerTag);
 
 public:
 	class CMouse* m_pMouse = nullptr;

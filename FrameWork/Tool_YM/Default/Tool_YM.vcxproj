@@ -199,10 +199,8 @@
     <ClInclude Include="..\Code\MapTool_Level.h" />
     <ClInclude Include="..\Code\Map_Tool.h" />
     <ClInclude Include="..\Code\Menu_Form.h" />
-    <ClInclude Include="..\Code\Mesh_Save.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-    </ClInclude>
     <ClInclude Include="..\Code\Model_Inspector.h" />
+    <ClInclude Include="..\Code\NavSphere.h" />
     <ClInclude Include="..\Code\Observer.h" />
     <ClInclude Include="..\Code\Plane.h" />
     <ClInclude Include="..\Code\Static.h" />
@@ -232,10 +230,8 @@
     <ClCompile Include="..\Code\MapTool_Level.cpp" />
     <ClCompile Include="..\Code\Map_Tool.cpp" />
     <ClCompile Include="..\Code\Menu_Form.cpp" />
-    <ClCompile Include="..\Code\Mesh_Save.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-    </ClCompile>
     <ClCompile Include="..\Code\Model_Inspector.cpp" />
+    <ClCompile Include="..\Code\NavSphere.cpp" />
     <ClCompile Include="..\Code\Observer.cpp" />
     <ClCompile Include="..\Code\Plane.cpp" />
     <ClCompile Include="..\Code\Static.cpp" />

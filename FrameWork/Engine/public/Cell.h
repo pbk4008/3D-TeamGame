@@ -3,7 +3,7 @@
 #include "Base.h"
 
 BEGIN(Engine)
-class CCell final : public CBase
+class ENGINE_DLL CCell final : public CBase
 {
 public:
 	enum POINT { POINT_A, POINT_B, POINT_C, POINT_END };
@@ -34,20 +34,23 @@ public:
 	HRESULT Ready_DebugBuffer();
 	HRESULT Render(_fmatrix WorldMatrix, _uint iCurrentIndex, const wstring& pCameraTag);
 #endif // _DEBUG
+
+public:
+	_float3					m_vPoint[POINT_END];
+	_uint					m_iIndex = 0;
+
 private:
 	ID3D11Device*			m_pDevice = nullptr;
 	ID3D11DeviceContext*	m_pDeviceContext = nullptr;
-	_float3					m_vPoint[POINT_END];
 	_float3					m_vLine[LINE_END];
 	_float3					m_vNormal[LINE_END];
 
 	CCell*					m_pNeighbor[LINE_END];
 
-	_uint					m_iIndex = 0;
 
 
 #ifdef _DEBUG
-private:
+public:
 	class CVIBuffer_Triangle*			m_pVIBuffer = nullptr;
 #endif // _DEBUG
 

@@ -33,18 +33,22 @@ _int CMapTool_Level::Tick(_double TimeDelta)
 {
 	if (0 > __super::Tick(TimeDelta))
 		return -1;
-	
+	CObserver* pObserver = GET_INSTANCE(CObserver);
+
 	m_pMouse->Tick(g_hWnd, TimeDelta);
 	m_pMouse->RayUpdate(L"Camera");
+	pObserver->m_bPlanePick = false;
 
 	if (g_pGameInstance->getMouseKeyDown(CInputDev::MOUSESTATE::MB_LBUTTON))
 	{
-		CObserver* pObserver = GET_INSTANCE(CObserver);
-
 		_vector Temp = m_pMouse->Terrain_Picking(m_pPlane->Get_Vertices(), m_pPlane->Get_WorldMatrix(), m_pPlane->Get_VerticesX(), m_pPlane->Get_VerticesZ(), m_iHitIndex);
 		if (0.0f != XMVectorGetX(Temp))
+		{
 			XMStoreFloat3(&pObserver->m_fPickPos, Temp);
+			pObserver->m_bPlanePick = true;
+		}
 	}
+	RELEASE_INSTANCE(CObserver);
 
 	return _int();
 }
@@ -63,6 +67,7 @@ HRESULT CMapTool_Level::Ready_Later_Mouse(const wstring& _pLayerTag)
 		return E_FAIL;
 
 	m_pMouse = g_pGameInstance->Clone_GameObject<CMouse>(TAB_STATIC, L"Prototype_GameObject_Mouse");
+	return S_OK;
 }
 
 HRESULT CMapTool_Level::Ready_Layer_Plane(const wstring& _pLayerTag)
@@ -79,6 +84,16 @@ HRESULT CMapTool_Level::Ready_Layer_Camera(const wstring& _pLayerTag)
 {
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer(TAB_STATIC, _pLayerTag, L"Prototype_GameObject_Camera")))
 		return E_FAIL;
+
+	return S_OK;
+}
+
+HRESULT CMapTool_Level::Ready_Layer_NavSphere(const wstring& _pLayerTag)
+{
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer(TAB_STATIC, _pLayerTag, L"Prototype_GameObject_NavSphere")))
+		return E_FAIL;
+
+	return S_OK;
 }
 
 CMapTool_Level* CMapTool_Level::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)

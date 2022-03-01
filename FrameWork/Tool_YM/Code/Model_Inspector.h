@@ -65,4 +65,6 @@ protected:
 
 public:
 	afx_msg void OnBnClickedAddButton();
+	afx_msg void OnBnClickedModelSetMode();
+	afx_msg void OnBnClickedNaveSetMode();
 };

@@ -163,6 +163,8 @@ void CModel_Inspector::DoDataExchange(CDataExchange* pDX)
 
 BEGIN_MESSAGE_MAP(CModel_Inspector, CDialogEx)
 	ON_BN_CLICKED(IDC_BUTTON1, &CModel_Inspector::OnBnClickedAddButton)
+	ON_BN_CLICKED(IDC_RADIO1, &CModel_Inspector::OnBnClickedModelSetMode)
+	ON_BN_CLICKED(IDC_RADIO2, &CModel_Inspector::OnBnClickedNaveSetMode)
 END_MESSAGE_MAP()
 
 
@@ -215,4 +217,18 @@ void CModel_Inspector::OnBnClickedAddButton()
 			m_CloneMode_NameList.push_back(m_ModelDesc.strName);
 	} 
 	UpdateData(FALSE);
+}
+
+
+void CModel_Inspector::OnBnClickedModelSetMode()
+{
+	// TODO: 맵 설치 모드
+	m_pObserver->m_eMode = CObserver::MODE_MAP;
+}
+
+
+void CModel_Inspector::OnBnClickedNaveSetMode()
+{
+	// TODO: 네비 셀 설치 모드
+	m_pObserver->m_eMode = CObserver::MODE_NAV;
 }

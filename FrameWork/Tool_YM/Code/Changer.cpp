@@ -6,6 +6,7 @@
 #include "Plane.h"
 #include "Dyanmic_Camera.h"
 #include "Static_Mesh.h"
+#include "NavSphere.h"
 
 CChanger::CChanger(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
 	:m_pDevice(_pDevice)
@@ -65,6 +66,17 @@ HRESULT CChanger::Loading_For_Static(void)
 	if (FAILED(g_pGameInstance->Add_Prototype(TAB_STATIC, L"Prototype_Component_VIBuffer_Plane", CVIBuffer_Plane::Create(m_pDevice, m_pDeviceContext, L"../../Reference/ShaderFile/Shader_Plane.hlsl", 100, 100))))
 		return E_FAIL;
 
+	/* Prototype_Component_Navigation */
+	if (FAILED(g_pGameInstance->Add_Prototype(TAB_STATIC, L"Prototype_Component_Navigation", CNavigation::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+
+	/* Prototype_Component_NavSphere */
+	_matrix  PivotMatrix;
+	PivotMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f);
+
+	if (FAILED(g_pGameInstance->Add_Prototype(TAB_STATIC, L"Prototype_Component_NavSphere", CModel::Create(m_pDevice, m_pDeviceContext, "../bin/Resources/FBX/Sphere/", "Sphere.fbx", L"../../Reference/ShaderFile/Shader_Mesh.hlsl", PivotMatrix, CModel::TYPE_STATIC))))
+		return E_FAIL;
+
 	/* Prototype_Component_Texture_Terrain */
 	g_pGameInstance->Add_Texture(m_pDevice, L"Plane_Texture", L"../Bin/Resources/Textures/Terrain/Plane_Default.png");
 
@@ -78,6 +90,10 @@ HRESULT CChanger::Loading_For_Static(void)
 
 	/* Prototype_GameObject_Camera */
 	if (FAILED(g_pGameInstance->Add_Prototype(L"Prototype_GameObject_Camera", CDynamic_Camera::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+
+	/* Prototype_GameObject_NavSphere */
+	if (FAILED(g_pGameInstance->Add_Prototype(L"Prototype_GameObject_NavSphere", CNavSphere::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 
 	m_isFinished = TRUE;

@@ -19,21 +19,24 @@ public:
 	HRESULT SetUp_Neighbor();
 	_bool Move_OnNavigation(_fvector vPosition);
 
+public:
+	HRESULT	Find_Cell(_fvector _vFindPoint);
+	void	Update_Point(_fvector _vUpdatePos);
 #ifdef _DEBUG
 public:
 	HRESULT Render(const wstring& pCameraTag, _fmatrix WorldMatrix = XMMatrixIdentity());
 #endif // _DEBUG
 
-private:
+public:
 	vector<class CCell*>			m_Cells;
 	typedef vector<class CCell*>	CELLS;
-
+	class CCell*					m_pCell = nullptr;
 private:
-	/* 현재 네이베기엿ㄴㄴ을 이용하는 객체가 존재하는 셀의 인덱스 .*/
 	_uint				m_iCurrentCellIndex = 0;
+	_int				m_iChangePointIndex = -1;
 
 public:
-	static CNavigation* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext, const _tchar* pDataFilePath);
+	static CNavigation* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext, const _tchar* pDataFilePath = nullptr);
 	virtual CComponent* Clone(void* pArg) override;
 	virtual void Free() override;
 };

@@ -93,7 +93,7 @@ _bool CCell::isIn(_fvector vPosition, CCell** ppOutNeighbor)
 #ifdef _DEBUG
 HRESULT CCell::Ready_DebugBuffer()
 {
-	m_pVIBuffer = CVIBuffer_Triangle::Create(m_pDevice, m_pDeviceContext, TEXT("../Bin/ShaderFiles/Shader_Triangle.hlsl"), m_vPoint);
+	m_pVIBuffer = CVIBuffer_Triangle::Create(m_pDevice, m_pDeviceContext, TEXT("../../Reference/ShaderFile/Shader_Triangle.hlsl"), m_vPoint);
 	if (nullptr == m_pVIBuffer)
 		return E_FAIL;
 

@@ -135,19 +135,6 @@ _fmatrix CStatic_Mesh::Get_WorldMat(void)
 	return m_pTransform->Get_WorldMatrix();
 }
 
-CGameObject* CStatic_Mesh::Clone(void* pArg)
-{
-	CStatic_Mesh* pInstance = new CStatic_Mesh(*this);
-
-	if (FAILED(pInstance->NativeConstruct(pArg)))
-	{
-		MSGBOX("Failed to Create CStatic_Mesh!!!");
-		Safe_Release(pInstance);
-	}
-	return pInstance;
-}
-
-
 void CStatic_Mesh::Input_Key(_double _dtimeDelta)
 {
 	if(g_pGameInstance->getkeyPress(DIK_NUMPAD8))
@@ -353,6 +340,18 @@ _bool CStatic_Mesh::IntersectTriangle(const _fvector& orig, const _fvector& dir,
 	*v *= fInvDet;
 
 	return TRUE;
+}
+
+CGameObject* CStatic_Mesh::Clone(void* pArg)
+{
+	CStatic_Mesh* pInstance = new CStatic_Mesh(*this);
+
+	if (FAILED(pInstance->NativeConstruct(pArg)))
+	{
+		MSGBOX("Failed to Create CStatic_Mesh!!!");
+		Safe_Release(pInstance);
+	}
+	return pInstance;
 }
 
 CStatic_Mesh* CStatic_Mesh::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)

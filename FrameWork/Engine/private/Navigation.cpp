@@ -1,5 +1,6 @@
 #include "..\public\Navigation.h"
 #include "Cell.h"
+#include "VIBuffer_Triangle.h"
 
 CNavigation::CNavigation(ID3D11Device * pDevice, ID3D11DeviceContext * pDeviceContext)
 	: CComponent(pDevice, pDeviceContext)
@@ -19,6 +20,9 @@ HRESULT CNavigation::NativeConstruct_Prototype(const _tchar* pDataFilePath)
 {
 	if (FAILED(__super::NativeConstruct_Prototype()))
 		return E_FAIL;	
+
+	if (nullptr == pDataFilePath)
+		return S_OK;
 
 	_ulong		dwByte = 0;
 	HANDLE		hFile = CreateFile(pDataFilePath, GENERIC_READ, 0, nullptr, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
@@ -120,7 +124,32 @@ _bool CNavigation::Move_OnNavigation(_fvector vPosition)
 	}
 }
 
+HRESULT CNavigation::Find_Cell(_fvector _vFindPoint)
+{
+	for (auto Finder : m_Cells)
+	{
+		for (int i = 0; i <= CCell::POINT_END; ++i)
+		{
+			if (true == XMVector3Equal(_vFindPoint, XMLoadFloat3(&Finder->m_vPoint[i])))
+			{
+				m_pCell = Finder;
+				m_iChangePointIndex = i;
+				return S_OK;
+			}
+		}
+	}
+	return E_FAIL;
+}
+
 #ifdef _DEBUG
+void CNavigation::Update_Point(_fvector _vUpdatePos)
+{
+	if (nullptr != m_pCell)
+	{
+		XMStoreFloat3(&m_pCell->m_vPoint[m_iChangePointIndex], _vUpdatePos);
+		m_iChangePointIndex = -1;
+	}
+}
 HRESULT CNavigation::Render(const wstring& pCameraTag, _fmatrix WorldMatrix)
 {
 	for (auto& pCell : m_Cells)
@@ -130,7 +159,7 @@ HRESULT CNavigation::Render(const wstring& pCameraTag, _fmatrix WorldMatrix)
 }
 #endif // _DEBUG
 
-CNavigation * CNavigation::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pDeviceContext, const _tchar* pDataFilePath)
+CNavigation * CNavigation::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pDeviceContext, const _tchar* pDataFilePath /*= nullptr*/)
 {
 	CNavigation*		pInstance = new CNavigation(pDevice, pDeviceContext);
 
@@ -165,3 +194,12 @@ void CNavigation::Free()
 
 	m_Cells.clear();
 }
+
+/*D3D11_MAPPED_SUBRESOURCE resource;
+m_pDeviceContext->Map(&*(Finder)->m_pVIBuffer->m_pVB, 0, D3D11_MAP_WRITE_DISCARD, 0, &resource);
+
+resource.pData = Finder->m_pVIBuffer->getVertices();
+
+VTXCOL* Vtx = (VTXCOL*)resource.pData;
+XMStoreFloat3(&(Vtx[i]).vPosition, _vUpdatePos);
+m_pDeviceContext->Unmap((Finder)->m_pVIBuffer->m_pVB, 0);*/

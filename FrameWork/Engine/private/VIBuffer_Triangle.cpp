@@ -23,9 +23,9 @@ HRESULT CVIBuffer_Triangle::NativeConstruct_Prototype(const _tchar* pShaderFileP
 	m_iNumVertices = 3;
 
 	m_VBDesc.ByteWidth = m_iStride * m_iNumVertices;
-	m_VBDesc.Usage = D3D11_USAGE_IMMUTABLE;
+	m_VBDesc.Usage = D3D11_USAGE_DYNAMIC;
 	m_VBDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-	m_VBDesc.CPUAccessFlags = 0;
+	m_VBDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 	m_VBDesc.MiscFlags = 0;
 	m_VBDesc.StructureByteStride = m_iStride;
 

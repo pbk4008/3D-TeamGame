@@ -70,9 +70,6 @@
     <Filter Include="04.Tool_Object\Mouse">
       <UniqueIdentifier>{30654af0-d0ce-4141-afe3-edd8532da52c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="96.Mesh_Save">
-      <UniqueIdentifier>{fb8c558e-7958-49d8-b2e0-33db372c7340}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -153,14 +150,14 @@
     <ClInclude Include="..\Code\Tool_Mouse.h">
       <Filter>04.Tool_Object\Mouse</Filter>
     </ClInclude>
-    <ClInclude Include="..\Code\Mesh_Save.h">
-      <Filter>96.Mesh_Save</Filter>
-    </ClInclude>
     <ClInclude Include="..\Code\Observer.h">
       <Filter>04.Tool_Object\Observer</Filter>
     </ClInclude>
     <ClInclude Include="..\Code\Tool_Function.h">
       <Filter>98.Tool_Defines</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\NavSphere.h">
+      <Filter>04.Tool_Object\NavSphere</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -227,11 +224,11 @@
     <ClCompile Include="..\Code\Tool_Mouse.cpp">
       <Filter>04.Tool_Object\Mouse</Filter>
     </ClCompile>
-    <ClCompile Include="..\Code\Mesh_Save.cpp">
-      <Filter>96.Mesh_Save</Filter>
-    </ClCompile>
     <ClCompile Include="..\Code\Observer.cpp">
       <Filter>04.Tool_Object\Observer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\NavSphere.cpp">
+      <Filter>04.Tool_Object\NavSphere</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
