@@ -8,7 +8,7 @@
 
 BEGIN(Engine)
 class CTexture;
-class CVIBuffer_Terrain;
+class CVIBuffer_Plane;
 END
 
 class CMFCTerrain final : public CGameObject
@@ -31,8 +31,8 @@ private:
 	void SetUp_Shader();
 
 private:
-	CTexture* m_pTextureCom = nullptr;
-	CVIBuffer_Terrain* m_pVIBufferCom = nullptr;
+	CTexture* m_pTexture = nullptr;
+	CVIBuffer_Plane* m_pVIBufferCom = nullptr;
 
 private:
 	virtual HRESULT SetUp_Components();

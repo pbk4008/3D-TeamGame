@@ -34,6 +34,12 @@ HRESULT CMFCTerrain::NativeConstruct(void* pArg)
 	{
 		return E_FAIL;
 	}
+	
+	CTransform::TRANSFORMDESC TransDesc;
+	TransDesc.fRotationPerSec = XMConvertToRadians(0.0f);
+	TransDesc.fSpeedPerSec = 0.f;
+
+	m_pTransform->Set_TransformDesc(TransDesc);
 
 	return S_OK;
 }
@@ -45,7 +51,6 @@ _int CMFCTerrain::Tick(_double TimeDelta)
 
 _int CMFCTerrain::LateTick(_double TimeDelta)
 {
-
 	if (nullptr != m_pRenderer)
 	{
 		m_pRenderer->Add_RenderGroup(CRenderer::RENDER::RENDER_PRIORITY, this);
@@ -55,7 +60,6 @@ _int CMFCTerrain::LateTick(_double TimeDelta)
 
 HRESULT CMFCTerrain::Render()
 {
-
 	SetUp_Shader();
 
 	m_pVIBufferCom->Render(0);
@@ -75,15 +79,18 @@ void CMFCTerrain::SetUp_Shader()
 	m_pVIBufferCom->SetUp_ValueOnShader("g_ViewMatrix", &View, sizeof(_matrix));
 	m_pVIBufferCom->SetUp_ValueOnShader("g_ProjMatrix", &Proj, sizeof(_matrix));
 
-	m_pVIBufferCom->SetUp_TextureOnShader("g_DiffuseTexture", m_pTextureCom, 0);
+	m_pVIBufferCom->SetUp_TextureOnShader("g_DiffuseTexture", m_pTexture, 0);
 
 	m_pVIBufferCom->SetUp_ValueOnShader("g_vCamPosition", (void*)&CamPos, sizeof(_vector));
 }
 
 HRESULT CMFCTerrain::SetUp_Components()
 {
-	if (FAILED(__super::SetUp_Components(0, L"Prototype_Component_VIBuffer_Terrain", L"Com_VIBuffer", (CComponent**)&m_pVIBufferCom)))
+	if (FAILED(__super::SetUp_Components(0, L"Prototype_Component_VIBuffer_Plane", L"Com_VIBuffer", (CComponent**)&m_pVIBufferCom)))
 		return E_FAIL;
+
+	wstring TexTag = L"Plane_Texture";
+	m_pTexture = (CTexture*)g_pGameInstance->Clone_Component(0, L"Texture", &TexTag);
 
 	return S_OK;
 }
@@ -118,6 +125,6 @@ void CMFCTerrain::Free()
 {
 	__super::Free();
 
-	Safe_Release(m_pTextureCom);
+	Safe_Release(m_pTexture);
 	Safe_Release(m_pVIBufferCom);
 }

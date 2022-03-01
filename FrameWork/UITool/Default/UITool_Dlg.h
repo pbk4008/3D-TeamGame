@@ -23,10 +23,14 @@ protected:
 public:
 	afx_msg void OnDropFiles(HDROP hDropInfo);
 
+	void InitialTextureTree();
+
 public:
 	wstring m_strFileName;
 	_tchar m_strPickFileName[MAX_PATH];
 	CListBox m_ListBox;
+
+	wstring TextureFileName;
 
 	class CMFCObject_UI* m_pObject = nullptr;
 	vector<CMFCObject_UI::UIDESC> m_vecUI;
@@ -40,4 +44,7 @@ public:
 	afx_msg void OnBnClickedButtonStateSetting();
 	afx_msg void OnBnClickedButtonSave();
 	afx_msg void OnBnClickedButtonLoad();
+	CTreeCtrl m_TextureTree;
+	afx_msg void OnTvnSelchangedTree1(NMHDR* pNMHDR, LRESULT* pResult);
+	virtual BOOL OnInitDialog();
 };

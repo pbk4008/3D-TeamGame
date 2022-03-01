@@ -145,14 +145,14 @@ BOOL CUIToolApp::InitInstance()
 		return false;
 	}
 
-#ifdef _DEBUG
-	AllocConsole();
-	FILE* fpstdin = stdin, * fpstdout = stdout, * fpstderr = stderr;
-
-	freopen_s(&fpstdin, "CONIN$", "r", stdin);
-	freopen_s(&fpstdout, "CONOUT$", "w", stdout);
-	freopen_s(&fpstderr, "CONOUT$", "w", stderr);
-#endif
+//#ifdef _DEBUG
+//	AllocConsole();
+//	FILE* fpstdin = stdin, * fpstdout = stdout, * fpstderr = stderr;
+//
+//	freopen_s(&fpstdin, "CONIN$", "r", stdin);
+//	freopen_s(&fpstdout, "CONOUT$", "w", stdout);
+//	freopen_s(&fpstderr, "CONOUT$", "w", stderr);
+//#endif
 
 
 	if (FAILED(g_pGameInstance->Ready_Timer(TEXT("Timer_Dafault"))))
@@ -176,9 +176,9 @@ int CUIToolApp::ExitInstance()
 {
 	//TODO: 추가한 추가 리소스를 처리합니다.
 
-#ifdef _DEBUG
-	FreeConsole();
-#endif
+//#ifdef _DEBUG
+//	FreeConsole();
+//#endif
 	Safe_Release(m_pMFCMainApp);
 
 	AfxOleTerm(FALSE);

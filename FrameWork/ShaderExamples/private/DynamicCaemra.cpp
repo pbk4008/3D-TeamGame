@@ -32,8 +32,6 @@ HRESULT CDynamicCaemra::NativeConstruct(void* pArg)
 
 _int CDynamicCaemra::Tick(_double TimeDelta)
 {
-
-
 	return _int();
 }
 

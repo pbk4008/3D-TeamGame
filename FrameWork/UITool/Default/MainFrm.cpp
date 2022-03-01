@@ -91,11 +91,11 @@ void CMainFrame::Dump(CDumpContext& dc) const
 
 BOOL CMainFrame::OnCreateClient(LPCREATESTRUCT lpcs, CCreateContext* pContext)
 {
+	cout << "Main Frame" << endl;
+
 	m_SplitterWnd.CreateStatic(this, 1, 2);
 	m_SplitterWnd.CreateView(0, 0, RUNTIME_CLASS(CMyFormView), CSize(300, WINCX), pContext);
 	m_SplitterWnd.CreateView(0, 1, RUNTIME_CLASS(CUIToolView), CSize(WINCX, WINCY), pContext);
-
-
 
 	return true/*CFrameWnd::OnCreateClient(lpcs, pContext)*/;
 }

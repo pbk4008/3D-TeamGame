@@ -39,6 +39,7 @@ void CUITool_Dlg::DoDataExchange(CDataExchange* pDX)
 	DDV_MinMaxFloat(pDX, m_PositionY, 0, 99999);
 	DDV_MinMaxFloat(pDX, m_SizeX, 1, 99999);
 	DDV_MinMaxFloat(pDX, m_SizeY, 1, 99999);
+	DDX_Control(pDX, IDC_TREE1, m_TextureTree);
 }
 
 
@@ -49,6 +50,7 @@ BEGIN_MESSAGE_MAP(CUITool_Dlg, CDialog)
 	ON_BN_CLICKED(IDC_BUTTON2, &CUITool_Dlg::OnBnClickedButtonStateSetting)
 	ON_BN_CLICKED(IDC_BUTTON3, &CUITool_Dlg::OnBnClickedButtonSave)
 	ON_BN_CLICKED(IDC_BUTTON4, &CUITool_Dlg::OnBnClickedButtonLoad)
+	ON_NOTIFY(TVN_SELCHANGED, IDC_TREE1, &CUITool_Dlg::OnTvnSelchangedTree1)
 END_MESSAGE_MAP()
 
 
@@ -80,6 +82,25 @@ void CUITool_Dlg::OnDropFiles(HDROP hDropInfo)
 	}
 
 	CDialog::OnDropFiles(hDropInfo);
+}
+
+void CUITool_Dlg::InitialTextureTree()
+{
+	HTREEITEM hItem = m_TextureTree.InsertItem(_T("..\\bin\\Resource\\Textures\\UI\\", hItem));
+
+	CFileFind fFinder;
+
+	BOOL bWorking = fFinder.FindFile(_T("\\*.jpg"));
+
+	while (bWorking)
+	{
+		bWorking = fFinder.FindNextFile();
+
+		if (fFinder.IsDots()) continue;
+		if (fFinder.IsDirectory())
+			m_TextureTree.InsertItem(fFinder.GetFileName(), hItem);
+	}
+	m_TextureTree.EnsureVisible(hItem);
 }
 
 
@@ -114,7 +135,9 @@ void CUITool_Dlg::OnBnClickedButtonApply()
 	UpdateData(TRUE);
 	CMFCObject_UI::UIDESC Desc;
 	//Desc.TextureTag = m_strPickFileName;
+	::PathRemoveExtension(m_strPickFileName); //이게 있으면 확장자도 지워짐
 	_tcscpy_s(Desc.TextureTag, m_strPickFileName);
+
 	Desc.fPos = { m_PositionX,m_PositionY};
 	Desc.fScale = { m_SizeX,m_SizeY };
 	
@@ -214,4 +237,77 @@ void CUITool_Dlg::OnBnClickedButtonLoad()
 			return;
 		}
 	}
+}
+
+
+void CUITool_Dlg::OnTvnSelchangedTree1(NMHDR* pNMHDR, LRESULT* pResult)
+{
+	LPNMTREEVIEW pNMTreeView = reinterpret_cast<LPNMTREEVIEW>(pNMHDR);
+	HTREEITEM hSelected = pNMTreeView->itemNew.hItem;
+	HTREEITEM hParentItem = hSelected;
+
+	CString	  strExt;
+	CString   strPath;
+
+	/* 노드 선택시 펼쳐짐 */
+	if (0 == m_TextureTree.GetItemData(hSelected))
+	{
+		CString pathSelectd;
+
+		while (hParentItem != NULL)
+		{
+			pathSelectd = _T("\\") + pathSelectd;
+			pathSelectd = m_TextureTree.GetItemText(hParentItem) + pathSelectd;
+			hParentItem = m_TextureTree.GetParentItem(hParentItem);
+		}
+
+		pathSelectd = pathSelectd + _T("*.*");
+
+		CFileFind finder;
+		BOOL bWorking = finder.FindFile(pathSelectd);
+
+		while (bWorking) {
+			bWorking = finder.FindNextFile();
+			strPath = finder.GetFileName();
+			AfxExtractSubString(strExt, strPath, 1, '.');
+
+			if (finder.IsDots()) continue;
+			//if (0 != strExt.CompareNoCase(_T("tga")))
+
+			m_TextureTree.InsertItem(finder.GetFileName(), hSelected);
+		}
+	}
+	m_TextureTree.SetItemData(hSelected, 1);
+
+	/* 선택한 fbx 파일에 대한 정보를 가져온다 */
+	CString strSelectItem = m_TextureTree.GetItemText(hSelected);
+	CString strFilter = L".jpg";
+
+	if (-1 != strSelectItem.Find(strFilter))
+	{
+		TextureFileName = strSelectItem;
+		_tcscpy_s(m_strPickFileName, TextureFileName.c_str());
+
+		HTREEITEM temp = m_TextureTree.GetParentItem(hSelected);
+		if (NULL != temp)
+		{
+			//TextureFolderPath = m_TextureTree.GetItemText(temp);
+			//int a = 0;
+		}
+	}
+
+	*pResult = 0;
+}
+
+
+BOOL CUITool_Dlg::OnInitDialog()
+{
+
+	CDialog::OnInitDialog();
+
+	// TODO:  여기에 추가 초기화 작업을 추가합니다.
+	InitialTextureTree();
+
+	return TRUE;  // return TRUE unless you set the focus to a control
+				  // 예외: OCX 속성 페이지는 FALSE를 반환해야 합니다.
 }

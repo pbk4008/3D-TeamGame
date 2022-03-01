@@ -62,10 +62,6 @@ _int CMFCObject_UI::Tick(_double TimeDelta)
 	_vector vScale = { m_Desc.fScale.x,m_Desc.fScale.y,1.f ,1.f };
 	m_pTransform->Scaling(vScale);
 
-
-	m_Desc.TextureTag;
-
-	int a = 0;
 	//XMStoreFloat4x4(&m_WorldMatrix, XMMatrixIdentity());
 	//m_WorldMatrix._11 = m_fSizeX;
 	//m_WorldMatrix._22 = m_fSizeY;

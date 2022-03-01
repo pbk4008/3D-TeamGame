@@ -6,6 +6,19 @@
 BEGIN(Engine)
 class ENGINE_DLL CEffect abstract : public CGameObject
 {
+	public:
+	typedef struct tagEffectDesc
+	{
+		_tchar		TextureTag[MAX_PATH];
+		_tchar		ShaderFilePath[MAX_PATH];
+		_float3		fPos;
+		_float3		fVelocity;
+		_float3		fRandom;
+		_float2		fParticleSize;
+		_float		fMaxLifTime;
+		_uint		iNumInstance;
+		_bool		bUsingGravity;
+	}EFFECTDESC;
 protected:
 	explicit CEffect();
 	explicit CEffect(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);
@@ -21,14 +34,12 @@ protected:
 	virtual HRESULT Render();
 protected:
 	_fvector UsingGravity(_fvector vPos, _double dDeltaTime);
+
+protected:
+	CTexture* m_pTexture;
+	EFFECTDESC	m_Desc;
 protected:
 	virtual void Free() override;
-protected:
-	_float m_fMaxLifTime;
-	_bool m_bUsingGravity;
-	_uint m_iNumEffectCount;
-protected:
-	
 };
 END
 #endif
