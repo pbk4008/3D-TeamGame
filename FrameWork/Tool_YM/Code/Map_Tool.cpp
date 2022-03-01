@@ -8,6 +8,11 @@
 
 #include "MainFrm.h"
 #include "Menu_Form.h"
+#include "GameInstance.h"
+#include "GameObject.h"
+
+#include "Static_Mesh.h"
+#include "Observer.h"
 
 // CMap_Tool 대화 상자
 IMPLEMENT_DYNAMIC(CMap_Tool, CDialogEx)
@@ -48,8 +53,17 @@ BEGIN_MESSAGE_MAP(CMap_Tool, CDialogEx)
 	ON_NOTIFY(TVN_SELCHANGED, IDC_TREE1, &CMap_Tool::OnTvnSelchangedTree1)
 	ON_NOTIFY(NM_DBLCLK, IDC_TREE1, &CMap_Tool::OnNMDblclkTree1)
 	ON_NOTIFY(NM_RCLICK, IDC_TREE2, &CMap_Tool::OnNMRRClickHierTree)
+	ON_NOTIFY(NM_CLICK, IDC_TREE2, &CMap_Tool::OnNMClickTreeItem)
+	ON_BN_CLICKED(IDC_BUTTON1, &CMap_Tool::OnBnClickedSaveButton)
+	ON_BN_CLICKED(IDC_BUTTON2, &CMap_Tool::OnBnClickedLoadButton)
 END_MESSAGE_MAP()
 
+
+_int CMap_Tool::Update_MapTool(_double dTimeDelta)
+{
+
+	return _int();
+}
 
 void CMap_Tool::InitAssetsTree(void)
 {
@@ -80,6 +94,7 @@ void CMap_Tool::Clear_Tree(void)
 {
 	m_vTag.clear();
 	m_vModelName.clear();
+	m_ProtoTag.clear();
 	m_HierarchyTree.DeleteAllItems();
 }
 
@@ -144,11 +159,12 @@ HRESULT CMap_Tool::Create_HierarchyTree(const MODELDESC& _ModelInfo)
 	{
 		HTREEITEM Parent = m_HierarchyTree.GetRootItem();
 		Parent = Search_ParentItemInTree(&m_HierarchyTree, _ModelInfo.strTag.c_str(), m_HierarchyTree.GetChildItem(Parent));
-		CString strTemp = m_HierarchyTree.GetItemText(Parent);
+		CString strTemp = m_HierarchyTree.GetItemText(Parent); 
 		if (NULL == Parent)
 			return E_FAIL;
 
 		auto NameFinder = find(m_vModelName.begin(), m_vModelName.end(), _ModelInfo.strName);
+
 		if (NameFinder == m_vModelName.end())
 		{
 			m_vModelName.push_back(_ModelInfo.strName);
@@ -156,7 +172,7 @@ HRESULT CMap_Tool::Create_HierarchyTree(const MODELDESC& _ModelInfo)
 		}
 		else
 		{
-			MessageBox(L"트리에 중복된 이름의 모델이 존재합니다", L"경고", MB_OK);
+			MessageBox(L"트리에 중복된 이름의 모델이 존재합니다", L"경고2", MB_OK);
 			return E_FAIL;
 		}
 
@@ -182,11 +198,13 @@ HRESULT CMap_Tool::Delete_HierarchyTreeItem(const MODELDESC& _ModelDesc)
 	if (NULL == treeItem)
 		return E_FAIL;
 
+	_int SelIndx = Find_TreeItem_Indx(treeItem);
+
 	parent = m_HierarchyTree.GetParentItem(treeItem);
 	/* Delete Name in Tree */
 	strFindItem = m_HierarchyTree.GetItemText(treeItem);
 	m_HierarchyTree.DeleteItem(treeItem);
-
+	
 	auto nameFinder = find(m_vModelName.begin(), m_vModelName.end(), _ModelDesc.strTag);
 
 	if (nameFinder == m_vModelName.end())
@@ -203,10 +221,98 @@ HRESULT CMap_Tool::Delete_HierarchyTreeItem(const MODELDESC& _ModelDesc)
 		}
 	}
 
-	Clear_CloneName(_ModelDesc.strName);
-	m_pMenuForm->m_pInspec_Form->Clear_Clone_ModelList(_ModelDesc.strTag);
+	list<CGameObject*>* ObjectList;
+	ObjectList = g_pGameInstance->getObjectList(TAB_MAP, _ModelDesc.strName);
+
+	auto& iter = ObjectList->begin();
+
+	for (_uint i = 0; i < SelIndx; ++i)
+		iter++;
+
+	//std::advance(iter, SelIndx);
+	ObjectList->erase(iter);
+	
+	m_pMenuForm->m_pInspec_Form->Delete_Clone_ModelList(_ModelDesc.strTag);
 
 	return S_OK;
+}
+
+_int CMap_Tool::Find_TreeItem_Indx(HTREEITEM hSelectItem)
+{
+	HTREEITEM tRoot = m_HierarchyTree.GetRootItem();//StaticObject
+	HTREEITEM tParent = m_HierarchyTree.GetChildItem(tRoot);//Tree
+	HTREEITEM tObj = m_HierarchyTree.GetChildItem(tParent);//Tree0
+
+	_uint iIndex = 0;
+
+	while (true)
+	{
+		//그리고 다시 검사
+		CString tObjString = m_HierarchyTree.GetItemText(tObj);
+		_bool bFind = Get_HasChild(m_HierarchyTree, tObj, hSelectItem);//자식에게 선택한 아이템이 있는지 없는지 판단
+		if (bFind)//있으면 나가
+			return iIndex;
+		tObj = m_HierarchyTree.GetNextSiblingItem(tObj);//없으면  옆에 놈 
+		if (!tObj)//옆에놈이 비어있는 놈이면
+		{
+			tParent = m_HierarchyTree.GetNextSiblingItem(tParent);//부모를 옆으로 이동
+			if (!tParent)//부모도 없으면 완전 없어
+				return -1;
+			else//부모 있으면 부모의 자식으로 바꿔
+			{
+				//근데 부모한테 자식이 있는지 없는지 확인
+				if (!m_HierarchyTree.ItemHasChildren(tParent))//부모한테 자식이 없으면
+				{
+					while (true)
+					{
+						tParent = m_HierarchyTree.GetNextSiblingItem(tParent);//다음으로 부모로 넘겨
+						if (!tParent)//근데 다음 부모로 넘길 부모가 없으면 나가
+							return -1;
+						else
+							break;
+					}
+				}
+				iIndex++;
+				tObj = m_HierarchyTree.GetChildItem(tParent);//찾은 부모의 자식을 불러와
+			}
+		}
+		else
+			iIndex++;
+	}
+}
+
+_bool CMap_Tool::Get_HasChild(CTreeCtrl& tTree, HTREEITEM tParent, HTREEITEM tSelect)
+{
+	if (!tSelect)
+		return false;
+	if (tParent == tSelect)
+		return true;
+
+	HTREEITEM tObj = tTree.GetChildItem(tParent);
+
+	if (!tObj)
+		return false;
+	else
+	{
+		while (tTree.GetItemText(tObj) != tTree.GetItemText(tSelect))
+		{
+			if (Get_HasChild(tTree, tObj, tSelect))
+			{
+				CString tObjString = (tTree.GetItemText(tObj));
+				CString tSelectString = (tTree.GetItemText(tSelect));
+
+				return true;
+			}
+			else
+			{
+				tObj = tTree.GetNextSiblingItem(tObj);
+				if (!tObj)
+					return false;
+			}
+		}
+		return true;
+	}
+
 }
 
 static HTREEITEM FoundedTreeItem;
@@ -226,13 +332,43 @@ HTREEITEM CMap_Tool::Search_ParentItemInTree(CTreeCtrl* _TreeCtrl, CString _Find
 	return FoundedTreeItem;
 }
 
-void CMap_Tool::Clear_CloneName(wstring _deleteItem)
+void CMap_Tool::Check_ChildItems(HTREEITEM hItem)
 {
-	auto tagFinder = find(m_vModelName.begin(), m_vModelName.end(), _deleteItem);
+	HTREEITEM hChildItem = m_HierarchyTree.GetChildItem(hItem);
 
-	if (tagFinder != m_vModelName.end())
-		m_vModelName.erase(tagFinder);
+	while (nullptr != hChildItem)
+	{
+		m_HierarchyTree.SetCheck(hChildItem, TRUE);
+
+		if (m_HierarchyTree.ItemHasChildren(hChildItem))
+			Check_ChildItems(hChildItem);
+
+		hChildItem = m_HierarchyTree.GetNextItem(hChildItem, TVGN_NEXT);
+	}
 }
+
+void CMap_Tool::UnCheck_ChildItems(HTREEITEM hItem)
+{
+	HTREEITEM hChildItem = m_HierarchyTree.GetChildItem(hItem);
+
+	while (nullptr != hChildItem)
+	{
+		m_HierarchyTree.SetCheck(hChildItem, FALSE);
+
+		if (m_HierarchyTree.ItemHasChildren(hChildItem))
+			UnCheck_ChildItems(hChildItem);
+
+		hChildItem = m_HierarchyTree.GetNextItem(hChildItem, TVGN_NEXT);
+	}
+}
+
+//void CMap_Tool::Clear_CloneName(wstring _deleteItem)
+//{
+//	auto tagFinder = find(m_vModelName.begin(), m_vModelName.end(), _deleteItem);
+//
+//	if (tagFinder != m_vModelName.end())
+//		m_vModelName.erase(tagFinder);
+//}
 
 // CMap_Tool 메시지 처리기
 
@@ -376,4 +512,155 @@ void CMap_Tool::PostNcDestroy()
 	// TODO: 여기에 특수화된 코드를 추가 및/또는 기본 클래스를 호출합니다.
 	delete this;
 	CDialogEx::PostNcDestroy();
+}
+
+void CMap_Tool::OnNMClickTreeItem(NMHDR* pNMHDR, LRESULT* pResult)
+{
+	// TODO: 아이템 선택시 Find_CopyObject
+
+	CPoint point;
+	_uint nFlags = 0;
+	_bool bCheck = false;
+
+	GetCursorPos(&point);
+	::ScreenToClient(m_HierarchyTree.m_hWnd, &point);
+
+	HTREEITEM hItem = m_HierarchyTree.HitTest(point, &nFlags);
+
+	CString temp = m_HierarchyTree.GetItemText(hItem);
+
+	if (nullptr != hItem && 0 != (nFlags & TVHT_ONITEMSTATEICON))
+	{
+		if (m_HierarchyTree.GetCheck(hItem))
+			UnCheck_ChildItems(hItem);
+		else
+			Check_ChildItems(hItem);
+	}
+
+	/* 하위 자식을 가지고 있지 않은 경우에만 */
+	if (!m_HierarchyTree.ItemHasChildren(hItem))
+	{
+		if (m_HierarchyTree.GetCheck(hItem))
+			m_HierarchyTree.SetCheck(hItem, FALSE);
+		else
+			m_HierarchyTree.SetCheck(hItem, TRUE);
+
+		CString Name = m_HierarchyTree.GetItemText(hItem);
+		CString Tag = m_HierarchyTree.GetItemText(m_HierarchyTree.GetParentItem(hItem));
+
+		HTREEITEM treeItem = NULL;
+		HTREEITEM parent = m_HierarchyTree.GetRootItem();
+
+		treeItem = Find_TreeData(parent, Name);
+
+		if (NULL == treeItem)
+			MessageBox(L"Not Found Clone Model In Object List");
+
+		_int SelIndx = Find_TreeItem_Indx(treeItem);
+		
+		list<CGameObject*>* ObjectList;
+		wstring tagLayer = Tag.operator LPCWSTR();
+
+		/* 오류 수정 부분 */
+		ObjectList = g_pGameInstance->getObjectList(TAB_MAP, tagLayer.c_str());
+
+		auto& iter = ObjectList->begin();
+	
+		for (_uint i = 0; i < SelIndx ; ++i)
+			iter++;
+
+		//std::advance(iter, SelIndx);
+
+		bCheck = dynamic_cast<CStatic_Mesh*>(*iter)->m_bPick = (dynamic_cast<CStatic_Mesh*>(*iter)->m_bPick) ? 0 : 1;
+	}
+
+	*pResult = 0;
+}
+
+void CMap_Tool::OnBnClickedSaveButton()
+{
+	// TODO: 맵 데이터를 저장합니다.
+
+	list<CGameObject*> ListObj = *g_pGameInstance->getObjectList(TAB_MAP, L"Stage_1");
+	m_vecMesh.clear();
+
+	if (!ListObj.empty())
+	{
+		for (auto pObj : ListObj)
+		{
+			CStatic_Mesh* pMesh = (CStatic_Mesh*)pObj;
+			m_vecMesh.push_back(pMesh->m_MeshDesc);
+		}
+	}
+
+	CFileDialog Dlg(false, L"dat", L"*.dat"); //저장, 디폴트확장자, 디폴트파일이름
+	TCHAR szFilePath[MAX_PATH] = L"";
+
+	GetCurrentDirectory(MAX_PATH, szFilePath);
+	PathRemoveFileSpec(szFilePath);
+	lstrcat(szFilePath, L"\\Data\\Map\\");
+	Dlg.m_ofn.lpstrInitialDir = szFilePath;
+
+	if (IDOK == Dlg.DoModal())
+	{
+		wstring strFilePath = Dlg.GetPathName();
+		g_pGameInstance->SaveFile<MESHDESC>(&m_vecMesh, strFilePath);
+	}
+}
+
+void CMap_Tool::OnBnClickedLoadButton()
+{
+	// TODO: 맵 데이터를 불러옵니다.
+	CFileDialog Dlg(true, L"dat", L"*.dat");
+	TCHAR szFilePath[MAX_PATH] = L"";
+	HRESULT hr = E_FAIL;
+
+	GetCurrentDirectory(MAX_PATH, szFilePath);
+	PathRemoveFileSpec(szFilePath);
+	lstrcat(szFilePath, L"\\Data\\Map\\");
+	Dlg.m_ofn.lpstrInitialDir = szFilePath;
+
+	Clear_Tree();
+	g_pGameInstance->Clear_Component();
+	g_pGameInstance->Clear_Object_List();
+	m_pMenuForm->m_pInspec_Form->Clear_Clone_ModelList();
+	m_vecMesh.clear();
+
+	if (IDOK == Dlg.DoModal())
+	{
+		wstring strFilePath = Dlg.GetPathName();
+		g_pGameInstance->LoadFile<MESHDESC>(m_vecMesh, strFilePath);
+	}
+
+	for (int i = 0; i < m_vecMesh.size(); ++i)
+	{
+		wstring FileName = m_vecMesh[i].FileName;
+		wstring FileFolder = m_vecMesh[i].FolderName;
+		wstring Name = m_vecMesh[i].Name;
+		wstring Tag = m_vecMesh[i].Tag;
+
+		FILEINFO FileInfo;
+		FileInfo.cstrFolder = FileFolder;
+		FileInfo.cstrFileName = FileName;
+
+ 		auto TagFinder = find(m_ProtoTag.begin(), m_ProtoTag.end(), FileInfo.cstrFileName);
+
+		if (TagFinder == m_ProtoTag.end())
+		{
+			hr = m_pMenuForm->Create_Model_Prototype(FileInfo);
+			m_ProtoTag.push_back(FileInfo.cstrFileName);
+		}
+
+		if (FAILED(hr))
+		{
+			MessageBox(L"파일을 불러오는 도중 원본 생성에 실패했습니다.", MB_OK);
+			return;
+		}
+	
+	}
+
+	for (auto& iter : m_vecMesh)
+	{
+		m_pMenuForm->m_pInspec_Form->Add_GameObjectToLayer(iter);
+	}
 }

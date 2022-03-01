@@ -39,6 +39,7 @@ public:
 	_int	Update_Menu_Form(const _double& _dTimeDelta);
 	HRESULT Create_Model_Prototype(const FILEINFO& _fileInfo);
 	HRESULT Create_HierarchyTree(const MODELDESC& _ModelInfo);
+	void	InitHierarchyTree(void);
 
 public:
 	void Get_Device(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext) {

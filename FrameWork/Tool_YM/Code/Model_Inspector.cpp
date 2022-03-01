@@ -9,7 +9,7 @@
 #include "Menu_Form.h"
 #include "Inspector_Form.h"
 #include "GameInstance.h"
-
+#include "Observer.h"
 // CModel_Inspector 대화 상자
 
 IMPLEMENT_DYNAMIC(CModel_Inspector, CDialogEx)
@@ -37,6 +37,7 @@ BOOL CModel_Inspector::OnInitDialog()
 	m_pMainFrm = dynamic_cast<CMainFrame*>(AfxGetApp()->GetMainWnd());
 	m_pInspec_Form = dynamic_cast<CInspector_Form*>(m_pMainFrm->m_tMainSplitter.GetPane(0, 2));
 
+	m_pObserver = GET_INSTANCE(CObserver);
 
 	return TRUE;  // return TRUE unless you set the focus to a control
 				  // 예외: OCX 속성 페이지는 FALSE를 반환해야 합니다.
@@ -53,6 +54,33 @@ HRESULT CModel_Inspector::Get_ModelInfo(const FILEINFO& _FileInfo)
 	m_StaticTxt_FileName.SetWindowTextW(m_FileInfo.cstrFileName.c_str());
 
 	return S_OK;
+}
+
+_int CModel_Inspector::Update_Model_Inspector(_double _dTimeDelta)
+{
+	if (false == m_pObserver->m_bPick)
+	{
+		UpdateData(TRUE);
+		m_ModelPosX.Format(_T("%.3f"), m_pObserver->m_fPickPos.x);
+		m_ModelPosY.Format(_T("%.3f"), m_pObserver->m_fPickPos.y);
+		m_ModelPosZ.Format(_T("%.3f"), m_pObserver->m_fPickPos.z);
+		UpdateData(FALSE);
+	}
+	else if(true == m_pObserver->m_bPick)
+	{
+		UpdateData(TRUE);
+		m_ModelPosX.Format(_T("%.3f"), m_pObserver->m_fModelPos.x);
+		m_ModelPosY.Format(_T("%.3f"), m_pObserver->m_fModelPos.y);
+		m_ModelPosZ.Format(_T("%.3f"), m_pObserver->m_fModelPos.z);
+
+		m_ModelScaleX.Format(_T("%.3f"), m_pObserver->m_fModelScale.x);
+		m_ModelScaleY.Format(_T("%.3f"), m_pObserver->m_fModelScale.y);
+		m_ModelScaleZ.Format(_T("%.3f"), m_pObserver->m_fModelScale.z);
+
+		UpdateData(FALSE);
+	}
+
+	return _int();
 }
 
 void CModel_Inspector::Ready_Tag_Combo(void)
@@ -77,7 +105,7 @@ void CModel_Inspector::Ready_Level_Combo(void)
 	m_Combo_Level.SetCurSel(0);
 }
 
-HRESULT CModel_Inspector::Clear_Clone_ModelList(wstring _ModelName)
+HRESULT CModel_Inspector::Delete_Clone_ModelList(wstring _ModelName)
 {
 	auto nameFinder = find(m_CloneMode_NameList.begin(), m_CloneMode_NameList.end(), _ModelName);
 
@@ -89,6 +117,34 @@ HRESULT CModel_Inspector::Clear_Clone_ModelList(wstring _ModelName)
 	return S_OK;
 }
 
+void CModel_Inspector::Clear_Clone_ModelList(void)
+{
+	m_CloneMode_NameList.clear();
+}
+
+HRESULT CModel_Inspector::Add_GameObjectToLayer(const MESHDESC& ModelDesc)
+{
+	MODELDESC MeshDesc;
+	
+	MeshDesc.strFolder = ModelDesc.FolderName;
+	MeshDesc.strFileName = ModelDesc.FileName;
+	MeshDesc.strTag = ModelDesc.Tag	;
+	MeshDesc.strName = ModelDesc.Name;
+	MeshDesc.fInitPos = ModelDesc.fInitPos;
+	MeshDesc.WorldMat = ModelDesc.WorldMat;
+
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer(TAB_MAP, MeshDesc.strTag, L"Prototype_GameObject_StaticMesh", &MeshDesc)))
+		return E_FAIL;
+
+	m_pInspec_Form->m_pMenu_Form->InitHierarchyTree();
+	if (FAILED(m_pInspec_Form->m_pMenu_Form->Create_HierarchyTree(MeshDesc)))
+		return E_FAIL;
+
+	m_CloneMode_NameList.push_back(MeshDesc.strName);
+
+	return S_OK;
+}
+
 void CModel_Inspector::DoDataExchange(CDataExchange* pDX)
 {
 	CDialogEx::DoDataExchange(pDX);
@@ -96,6 +152,12 @@ void CModel_Inspector::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_EDIT2, m_EditTxt_Model_Name);
 	DDX_Control(pDX, IDC_COMBO1, m_Combo_Tag);
 	DDX_Control(pDX, IDC_COMBO2, m_Combo_Level);
+	DDX_Text(pDX, IDC_Model2, m_ModelPosX);
+	DDX_Text(pDX, IDC_Model3, m_ModelPosY);
+	DDX_Text(pDX, IDC_Model4, m_ModelPosZ);
+	DDX_Text(pDX, IDC_Model5, m_ModelScaleX);
+	DDX_Text(pDX, IDC_Model6, m_ModelScaleY);
+	DDX_Text(pDX, IDC_Model7, m_ModelScaleZ);
 }
 
 
@@ -109,6 +171,7 @@ END_MESSAGE_MAP()
 void CModel_Inspector::PostNcDestroy()
 {
 	// TODO: 여기에 특수화된 코드를 추가 및/또는 기본 클래스를 호출합니다.
+	RELEASE_INSTANCE(CObserver);
 
 	delete this;
 	CDialogEx::PostNcDestroy();
@@ -132,7 +195,10 @@ void CModel_Inspector::OnBnClickedAddButton()
 		m_Combo_Tag.GetLBText(m_Combo_Tag.GetCurSel(), strSelData);
 		m_ModelDesc.strTag = strSelData;
 		m_ModelDesc.eLevel = (LEVEL_ID)m_Combo_Level.GetCurSel();
+		m_ModelDesc.strFolder = m_FileInfo.cstrFolder;
 		m_ModelDesc.strFileName = m_FileInfo.cstrFileName;
+		m_ModelDesc.fInitPos = m_pObserver->m_fPickPos;
+
 		/* ##2. 사본 모델의 Layer Tag = 모델의 이름  */
 		/* ##3. 사본 모델의 ProtoType Tag = 모델의 파일명 */
 
@@ -142,15 +208,11 @@ void CModel_Inspector::OnBnClickedAddButton()
 		{
 			if (FAILED(g_pGameInstance->Add_GameObjectToLayer(TAB_MAP, m_ModelDesc.strTag, L"Prototype_GameObject_StaticMesh", &m_ModelDesc)))
 				return;
-
-			if (FAILED(m_pInspec_Form->m_pMenu_Form->Create_HierarchyTree(m_ModelDesc)))
-				return;
-
-			m_CloneMode_NameList.push_back(m_ModelDesc.strName);
 		}
-		/*CMesh_Save* pSave = CMesh_Save::Create(m_ModelDesc,- )*/
+		if (FAILED(m_pInspec_Form->m_pMenu_Form->Create_HierarchyTree(m_ModelDesc)))
+			return;
+		else 
+			m_CloneMode_NameList.push_back(m_ModelDesc.strName);
 	} 
 	UpdateData(FALSE);
-
-
 }

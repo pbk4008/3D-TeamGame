@@ -28,8 +28,11 @@ public:
 	_int LateTick(_double TimeDelta);
 public:
 	list<CGameObject*>* getObjectList(_uint iLevelIndex, const wstring& pLayerTag);
+	list<CGameObject*>* getAllObjectList();
 public:
 	HRESULT Clear_Object_Manager(_uint iLevelIndex);
+	void	Clear_Object_List(void);
+
 private:
 	unordered_map<wstring, class CGameObject*>			m_Prototype;
 	typedef unordered_map<wstring, class CGameObject*>	PROTOTYPES;

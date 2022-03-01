@@ -5,7 +5,7 @@
 #include "Camera.h"
 #include "Model.h"
 #include "Texture.h"
-#include "Collider.h"
+#include "BoxCollider.h"
 #include "Renderer.h"
 #include "Transform.h"
 #include "Navigation.h"
@@ -31,6 +31,7 @@ public:
 	CComponent* Clone_Component(_uint iLevelIndex, const wstring& pPrototypeTag, void* pArg);
 public:
 	HRESULT SetUpBaseComponent(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);
+	void    Clear_Component(void);
 private:	
 	unordered_map<wstring, class CComponent*>*			m_pComponents = nullptr;
 	typedef unordered_map<wstring, class CComponent*>		COMPONENTS;

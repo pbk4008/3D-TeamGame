@@ -144,6 +144,18 @@ technique11			DefaultTechnique
 		PixelShader = compile ps_5_0  PS_MAIN();
 	}
 
+	pass StaticMesh_Wireframe
+	{
+		SetRasterizerState(CullMode_Wireframe);
+		SetDepthStencilState(ZDefault, 0);
+		SetBlendState(BlendDisable, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+
+		/* 진입점함수를 지정한다. */
+		VertexShader = compile vs_5_0 VS_MAIN_STATIC();
+		GeometryShader = NULL;
+		PixelShader = compile ps_5_0  PS_MAIN();
+	}
+
 	pass AnimMesh
 	{
 		SetRasterizerState(CullMode_Default);

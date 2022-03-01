@@ -26,10 +26,6 @@
 #define IDC_Model6                      1010
 #define IDC_Model4                      1011
 #define IDC_Model7                      1012
-#define IDC_RADIO1                      1013
-#define IDC_RADIO2                      1014
-#define IDC_RADIO3                      1015
-#define IDC_SLIDER1                     1016
 #define IDC_BUTTON1                     1017
 #define IDC_BUTTON2                     1018
 #define IDC_TREE2                       1019

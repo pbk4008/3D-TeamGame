@@ -159,6 +159,9 @@
     <ClInclude Include="..\Code\Observer.h">
       <Filter>04.Tool_Object\Observer</Filter>
     </ClInclude>
+    <ClInclude Include="..\Code\Tool_Function.h">
+      <Filter>98.Tool_Defines</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">

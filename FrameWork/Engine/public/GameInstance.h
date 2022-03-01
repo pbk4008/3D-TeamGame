@@ -37,6 +37,7 @@ public:
 	/* 게임의 구성요소들은 렌더러를 통해 렌더하낟. */
 	HRESULT Render_Engine(); 
 	HRESULT Clear_Engine(_uint iLevelIndex);
+
 public: /* For.Graphic_Device */
 	HRESULT Clear_BackBuffer_View(XMFLOAT4 vClearColor);
 	HRESULT Clear_DepthStencil_View();
@@ -57,6 +58,8 @@ public: /* For.Object_Manager*/
 	HRESULT Add_GameObjectToLayer(_uint iLevelIndex, const wstring& pLayerTag, const wstring& pPrototypeTag, void* pArg = nullptr);
 	CGameObject* Clone_GameObject(_uint iLevelIndex, const wstring& pPrototypeTag, void* pArg = nullptr);
 	list<CGameObject*>* getObjectList(_uint iLevelIndex, const wstring & pLayerTag);
+	list<CGameObject*>* getAllObjectList();
+	void			  Clear_Object_List(void);
 	template<typename T>
 	T* Clone_GameObject(_uint iLevelIndex, const wstring& pPrototypeTag, void* pArg = nullptr)
 	{
@@ -82,6 +85,7 @@ public: /* For.Component_Manager */
 	HRESULT Add_Prototype(_uint iLevelIndex, const wstring& pPrototypeTag, class CComponent* pPrototype);
 	HRESULT SetUpBaseComponent(ID3D11Device * pDevice, ID3D11DeviceContext * pDeviceContext);
 	CComponent* Clone_Component(_uint iLevelIndex, const wstring& pPrototypeTag, void* pArg = nullptr);
+	void	Clear_Component(void);
 	template<typename T>
 	T* Clone_Component(_uint iLevelIndex, const wstring& pPrototypeTag, void* pArg = nullptr)
 	{

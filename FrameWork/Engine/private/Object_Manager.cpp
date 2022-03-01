@@ -132,6 +132,25 @@ list<CGameObject*>* CObject_Manager::getObjectList(_uint iLevelIndex, const wstr
 	return pLayer->getObjList();
 }
 
+list<CGameObject*>* CObject_Manager::getAllObjectList()
+{
+	list<CGameObject*> AllObjList;
+
+	if (m_pLayers->empty())
+		return nullptr;
+
+	for (_uint i = 0; i < m_iNumLevels; i++)
+	{
+		for (auto& pLayer : m_pLayers[i])
+		{
+			list<CGameObject*>* pObjList = (pLayer.second)->getObjList();
+			for (auto& pObj : *pObjList)
+				AllObjList.emplace_back(pObj);
+		}
+	}
+	return &AllObjList;
+}
+
 HRESULT CObject_Manager::Clear_Object_Manager(_uint iLevelIndex)
 {
 	if (iLevelIndex > m_iNumLevels)
@@ -143,6 +162,12 @@ HRESULT CObject_Manager::Clear_Object_Manager(_uint iLevelIndex)
 	m_pLayers[iLevelIndex].clear();
 
 	return S_OK;
+}
+
+void CObject_Manager::Clear_Object_List(void)
+{
+	for (int i = 1; i < m_iNumLevels; i++)
+		m_pLayers[i].clear();
 }
 
 CGameObject * CObject_Manager::Find_Prototype(const wstring& pPrototypeTag)

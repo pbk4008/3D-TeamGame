@@ -2,6 +2,8 @@
 #include "Static.h"
 #include "Tab_Changer.h"
 #include "GameInstance.h"
+#include "Plane.h"
+#include "Observer.h"
 
 CStatic_Level::CStatic_Level(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
 	:CLevel(_pDevice, _pDeviceContext)

@@ -46,7 +46,6 @@ void CMouse::RayUpdate(const wstring& pCamTag)
 
 	_float fPointX = (m_tMousePos.x / (0.5f * vp.Width)) - 1.f;
 	_float fPointY = (m_tMousePos.y / (-0.5f * vp.Height)) + 1.f;
-	cout << m_tMousePos.x << ", " << m_tMousePos.y << endl;
 	_vector vMouse = XMVectorSet
 	(
 		fPointX,

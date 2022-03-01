@@ -37,6 +37,9 @@
     <Filter Include="01.Scene\02.Stage">
       <UniqueIdentifier>{7b03efd1-8edb-483a-9e4d-de2be570d5c2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\99.TestObj">
+      <UniqueIdentifier>{0437e1aa-690d-4d50-9a9f-8e81ae5f8eb9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -90,6 +93,9 @@
     <ClInclude Include="..\Headers\Stage1.h">
       <Filter>01.Scene\02.Stage</Filter>
     </ClInclude>
+    <ClInclude Include="..\Headers\TestObj.h">
+      <Filter>02.GameObject\99.TestObj</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -119,6 +125,9 @@
     </ClCompile>
     <ClCompile Include="..\Codes\Stage1.cpp">
       <Filter>01.Scene\02.Stage</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\TestObj.cpp">
+      <Filter>02.GameObject\99.TestObj</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

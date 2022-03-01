@@ -1,11 +1,11 @@
-#include "..\public\Collider.h"
 #include "Transform.h"
+#include "Collider.h"
 #include "PipeLine.h"
 
 CCollider::CCollider(ID3D11Device * pDevice, ID3D11DeviceContext * pDeviceContext)
 	: CComponent(pDevice, pDeviceContext)
 {
-
+	ZeroMemory(&m_vColor, sizeof(_float4x4));
 }
 
 CCollider::CCollider(const CCollider & rhs)
@@ -14,32 +14,16 @@ CCollider::CCollider(const CCollider & rhs)
 	, m_pBatch(rhs.m_pBatch)
 	, m_pInputLayout(rhs.m_pInputLayout)
 	, m_vColor(rhs.m_vColor)
-	, m_eColliderType(rhs.m_eColliderType)
+	, m_pRigidBody(rhs.m_pRigidBody)
+	, m_pShape(rhs.m_pShape)
+	, m_eType(rhs.m_eType)
 {
-	
 	Safe_AddRef(m_pInputLayout);
+	PX_ADDREF(m_pShape)
 }
 
-_fvector CCollider::Get_Min(BoundingBox* pBoundBox)
+HRESULT CCollider::NativeConstruct_Prototype()
 {
-	return XMVectorSet(pBoundBox->Center.x - pBoundBox->Extents.x,
-		pBoundBox->Center.y - pBoundBox->Extents.y,
-		pBoundBox->Center.z - pBoundBox->Extents.z,
-		1.f);
-}
-
-_fvector CCollider::Get_Max(BoundingBox* pBoundBox)
-{
-	return XMVectorSet(pBoundBox->Center.x + pBoundBox->Extents.x,
-		pBoundBox->Center.y + pBoundBox->Extents.y,
-		pBoundBox->Center.z + pBoundBox->Extents.z,
-		1.f);
-}
-
-HRESULT CCollider::NativeConstruct_Prototype(TYPE eColliderType)
-{
-	m_eColliderType = eColliderType;
-
 	m_pEffect = new BasicEffect(m_pDevice);
 	m_pEffect->SetVertexColorEnabled(true);
 
@@ -57,289 +41,252 @@ HRESULT CCollider::NativeConstruct_Prototype(TYPE eColliderType)
 
 HRESULT CCollider::NativeConstruct(void * pArg)
 {
-	COLLIDERDESC*		pColliderDesc = (COLLIDERDESC*)pArg;
-
-	m_pTransform = CTransform::Create(m_pDevice, m_pDeviceContext);
-
- 	m_pTransform->Scaling(XMLoadFloat3(&pColliderDesc->vScale));
-
-	m_pTransform->SetUp_Rotation(XMVectorSet(1.f, 0.f, 0.f, 0.f), pColliderDesc->vRotation.x);
-	m_pTransform->SetUp_Rotation(XMVectorSet(0.f, 1.f, 0.f, 0.f), pColliderDesc->vRotation.y);
-	m_pTransform->SetUp_Rotation(XMVectorSet(0.f, 0.f, 1.f, 0.f), pColliderDesc->vRotation.z);
-
-	m_pTransform->Set_State(CTransform::STATE_POSITION, XMLoadFloat3(&pColliderDesc->vPosition));
-
-	if (TYPE_AABB == m_eColliderType)
-	{
-		m_pOriginAABB = new BoundingBox(XMFLOAT3(0.f, 0.f, 0.f), XMFLOAT3(0.5f, 0.5f, 0.5f));
-		m_pOriginAABB->Transform(*m_pOriginAABB, m_pTransform->Get_WorldMatrix());
-
-		m_pAABB = new BoundingBox;
-	}
-	else if (TYPE_OBB == m_eColliderType)
-	{
-		m_pOriginOBB = new BoundingOrientedBox(XMFLOAT3(0.f, 0.f, 0.f), XMFLOAT3(0.5f, 0.5f, 0.5f), XMFLOAT4(0.f, 0.f, 0.f, 1.f));
-		m_pOriginOBB->Transform(*m_pOriginOBB, m_pTransform->Get_WorldMatrix());
-		m_pOriginOBB->Extents = _float3(pColliderDesc->vScale.x * 0.5f, pColliderDesc->vScale.y * 0.5f, pColliderDesc->vScale.z * 0.5f);
-		m_pOBB = new BoundingOrientedBox;
-
-	}
-	else
-	{
-		m_pOriginSphere = new BoundingSphere(XMFLOAT3(0.f, 0.f, 0.f), 0.5f);
-		m_pOriginSphere->Transform(*m_pOriginSphere, m_pTransform->Get_WorldMatrix());
-		m_pSphere = new BoundingSphere;
-	}
+	m_eType = (*(CPhysicsXSystem::ACTORTYPE*)pArg);
 
 	return S_OK;
 }
 
 void CCollider::Update(_fmatrix TransformMatrix)
 {
-	/* 기존작업방식은 인자로 전달된 행렬ㄹ의 스케일을 콜라이더에게 적용한다. */
-	/* 기존작업방식은 인자로 전달된 행렬ㄹ의 스케일을 콜라이더에게 적용하지 않는다. */
-	_matrix		WorldMatrix = Remove_Scale(TransformMatrix);
+	Update_Scale(TransformMatrix);
 
-	switch (m_eColliderType)
+	Update_Rotate(TransformMatrix);
+
+	if (m_eType == CPhysicsXSystem::ACTORTYPE::ACTOR_DYNAMIC)
 	{
-	case CCollider::TYPE_AABB:
-		WorldMatrix = Remove_Rotation(TransformMatrix);
-		m_pOriginAABB->Transform(*m_pAABB, WorldMatrix);
-		break;
-	case CCollider::TYPE_OBB:
-		m_pOriginOBB->Transform(*m_pOBB, WorldMatrix);
-		break;
-	case CCollider::TYPE_SPHERE:
-		m_pOriginSphere->Transform(*m_pSphere, WorldMatrix);
-		break;
+		PxVec3 pxPos = PxVec3(ToPxVector(TransformMatrix.r[3]));
+		Update_Position(pxPos);
 	}
+	/*_vector vTransformPos = TransformMatrix.r[3];
+	_vector vTransformQuat = getQuaternion(TransformMatrix);
+
+	PxQuat q(XMVectorGetX(vTransformQuat), XMVectorGetY(vTransformQuat), XMVectorGetZ(vTransformQuat), XMVectorGetW(vTransformQuat));
+	PxVec3 p(XMVectorGetX(vTransformPos), XMVectorGetY(vTransformPos), XMVectorGetZ(vTransformPos));
+
+	PxTransform pRigidTr = m_pRigidBody->getGlobalPose();
+	pRigidTr.q* q;
+	pRigidTr.p += p;
+	if (m_eType == CPhysicsXSystem::ACTORTYPE::ACTOR_DYNAMIC)
+		static_cast<PxRigidDynamic*>(m_pRigidBody)->setGlobalPose(pRigidTr);*/
 }
 
 HRESULT CCollider::Render(const wstring& pCameraTag)
-{	
-	CPipeLine*		pPipeLine = GET_INSTANCE(CPipeLine);
+{
+	return S_OK;
+}
 
-	m_vColor = m_isCollision == true ? _float4(1.f, 0.f, 0.f, 1.f) : _float4(0.f, 1.f, 0.f, 1.f);
+void CCollider::Collider()
+{
+	if (!m_bActive)
+	{
+		if (!m_isCollision)
+			m_vColor = _float4(1.f, 0.f, 0.f, 1.f);
+		else
+			m_vColor = _float4(0.f, 1.f, 0.f, 1.f);
+	}
+}
+
+
+HRESULT CCollider::Render_Begin(const wstring& pCameraTag)
+{	
+	CPipeLine* pPipeLine = GET_INSTANCE(CPipeLine);
+
+	//m_vColor = m_isCollision == true ? _float4(1.f, 0.f, 0.f, 1.f) : _float4(0.f, 1.f, 0.f, 1.f);
 
 	m_pEffect->SetView(pPipeLine->Get_Transform(pCameraTag,TRANSFORMSTATEMATRIX::D3DTS_VIEW));
 	m_pEffect->SetProjection(pPipeLine->Get_Transform(pCameraTag,TRANSFORMSTATEMATRIX::D3DTS_PROJECTION));
 
+	RELEASE_INSTANCE(CPipeLine);
 	m_pDeviceContext->IASetInputLayout(m_pInputLayout);
 
 	m_pEffect->Apply(m_pDeviceContext);
 
 	m_pBatch->Begin();
 
-	switch (m_eColliderType)
-	{
-	case CCollider::TYPE_AABB:
-		DX::Draw(m_pBatch, *m_pAABB, XMLoadFloat4(&m_vColor));
-		break;
-	case CCollider::TYPE_OBB:
-		DX::Draw(m_pBatch, *m_pOBB, XMLoadFloat4(&m_vColor));
-		break;
-	case CCollider::TYPE_SPHERE:
-		DX::Draw(m_pBatch, *m_pSphere, XMLoadFloat4(&m_vColor));
-		break;
-	}
 
+	return S_OK;
+}
+HRESULT CCollider::Render_End()
+{
 	m_pBatch->End();
+	return S_OK;
+}
+HRESULT CCollider::Init_Collider(const CPhysicsXSystem::COLDESC& tDesc)
+{
+	CPhysicsXSystem* pInstance = GET_INSTANCE(CPhysicsXSystem);
 
-	RELEASE_INSTANCE(CPipeLine);
+	if (FAILED(pInstance->Init_RigidActor(m_pShape, tDesc, &m_pRigidBody)))
+	{
+		RELEASE_INSTANCE(CPhysicsXSystem);
+		return E_FAIL;
+	}
+	RELEASE_INSTANCE(CPhysicsXSystem);
 
 	return S_OK;
 }
 
-_bool CCollider::Collision_AABB(CCollider * pTargetCollider)
+_fvector CCollider::getQuaternion(_fmatrix matTransform)
 {
-	if (TYPE_AABB != m_eColliderType ||
-		TYPE_AABB != pTargetCollider->m_eColliderType)
-		return false;
+	_vector vRight, vUp, vLook;
+	vRight = matTransform.r[0];
+	vUp = matTransform.r[1];
+	vLook = matTransform.r[2];
 
-	_vector		vSourMin, vSourMax;
-	_vector		vDestMin, vDestMax;
+	vRight = XMVector3Normalize(vRight);
+	vUp = XMVector3Normalize(vUp);
+	vLook = XMVector3Normalize(vLook);
 
-	vSourMin = Get_Min(m_pAABB);
-	vSourMax = Get_Max(m_pAABB);
+	_matrix matRotation;
+	ZeroMemory(&matRotation, sizeof(_matrix));
 
-	vDestMin = Get_Min(pTargetCollider->m_pAABB);
-	vDestMax = Get_Max(pTargetCollider->m_pAABB);
+	matRotation.r[0] = vRight;
+	matRotation.r[1] = vUp;
+	matRotation.r[2] = vLook;
 
-	m_isCollision = false;
+	_vector vQuaternion = XMQuaternionRotationMatrix(matRotation);
 
-	/* x축선상에서의 비교. */
-	if (max(XMVectorGetX(vSourMin), XMVectorGetX(vDestMin)) > 
-		min(XMVectorGetX(vSourMax), XMVectorGetX(vDestMax)))
-		return false;
-
-	/* y축선상에서의 비교. */
-	if (max(XMVectorGetY(vSourMin), XMVectorGetY(vDestMin)) >
-		min(XMVectorGetY(vSourMax), XMVectorGetY(vDestMax)))
-		return false;
-
-	/* z축선상에서의 비교. */
-	if (max(XMVectorGetZ(vSourMin), XMVectorGetZ(vDestMin)) >
-		min(XMVectorGetZ(vSourMax), XMVectorGetZ(vDestMax)))
-		return false;
-
-	m_isCollision = true;
-
-	return true;
+	return vQuaternion;
 }
 
-_bool CCollider::Collision_OBB(CCollider * pTargetCollider)
+_fvector CCollider::ToXMVector3(const PxVec3 pxvec)
 {
-	m_isCollision = false;
+	_fvector vVector = XMVectorSet(pxvec.x, pxvec.y, pxvec.z,0.f);
 
-	OBB			OBBDesc[2];
+	return vVector;
+}
 
-	OBBDesc[0] = Compute_OBBDesc();
-	OBBDesc[1] = pTargetCollider->Compute_OBBDesc();
+_fvector CCollider::ToXMVector4(const PxQuat pxquat)
+{
+	_fvector vVector = XMVectorSet(pxquat.x, pxquat.y, pxquat.z, pxquat.w);
 
-	/* 0 : 센터와 센터를 잇는 벡터를 투영시킨 길이. */
-	/* 1 : A큐브의 중심벡터세개를 투영시킨 길이의 합. */
-	/* 2 : B큐브의 중심벡터세개를 투영시킨 길이의 합. */
-	_float		fDistance[3];
+	return vVector;
+}
 
-	_vector		vCenterDir = XMLoadFloat3(&OBBDesc[1].vCenter) - XMLoadFloat3(&OBBDesc[0].vCenter);
+const PxVec3 CCollider::ToPxVector(_fvector xmvec)
+{
+	PxVec3 vVector = PxVec3(XMVectorGetX(xmvec), XMVectorGetY(xmvec), XMVectorGetZ(xmvec));
 
-	for (_uint i = 0; i < 2; ++i)
+	return vVector;
+}
+
+const PxQuat CCollider::ToQuat(_fvector xmvec)
+{
+	_float4 tmpQuat;
+	XMStoreFloat4(&tmpQuat, xmvec);
+	PxQuat pxQuat = PxQuat(tmpQuat.x, tmpQuat.y, tmpQuat.z, tmpQuat.w);
+
+	return pxQuat;
+}
+
+const _float3 CCollider::QuaternionToEuler(const _float4& _q)
+{
+	_float3 euler;
+
+	float unit = (_q.x * _q.x) + (_q.y * _q.y) + (_q.z * _q.z) + (_q.w * _q.w);
+
+	float test = _q.x * _q.w - _q.y * _q.z;
+
+	if (test > 0.49999f * unit)
 	{
-		for (_uint j = 0; j < 3; ++j)
-		{
-			fDistance[0] = fabs(XMVectorGetX(XMVector3Dot(vCenterDir, XMLoadFloat3(&OBBDesc[i].vAlignAxis[j]))));
-
-			fDistance[1] = fabs(XMVectorGetX(XMVector3Dot(XMLoadFloat3(&OBBDesc[0].vCenterAxis[0]), XMLoadFloat3(&OBBDesc[i].vAlignAxis[j])))) +
-				fabs(XMVectorGetX(XMVector3Dot(XMLoadFloat3(&OBBDesc[0].vCenterAxis[1]), XMLoadFloat3(&OBBDesc[i].vAlignAxis[j])))) +
-				fabs(XMVectorGetX(XMVector3Dot(XMLoadFloat3(&OBBDesc[0].vCenterAxis[2]), XMLoadFloat3(&OBBDesc[i].vAlignAxis[j]))));
-
-			fDistance[2] = fabs(XMVectorGetX(XMVector3Dot(XMLoadFloat3(&OBBDesc[1].vCenterAxis[0]), XMLoadFloat3(&OBBDesc[i].vAlignAxis[j])))) +
-				fabs(XMVectorGetX(XMVector3Dot(XMLoadFloat3(&OBBDesc[1].vCenterAxis[1]), XMLoadFloat3(&OBBDesc[i].vAlignAxis[j])))) +
-				fabs(XMVectorGetX(XMVector3Dot(XMLoadFloat3(&OBBDesc[1].vCenterAxis[2]), XMLoadFloat3(&OBBDesc[i].vAlignAxis[j]))));
-
-			if (fDistance[0] > fDistance[1] + fDistance[2])
-				return false;
-		}
+		euler.x = M_PI / 2;
+		euler.y = 2.0f * atan2f(_q.y, _q.x);
+		euler.z = 0;
 	}
-	m_isCollision = true;
-	return true;
-}
-
-_bool CCollider::Collision_Sphere(CCollider * pTargetCollider)
-{
-	return _bool();
-}
-
-_fmatrix CCollider::Remove_Rotation(_fmatrix TransformMatrix)
-{
-	_matrix		RemoveRotation = TransformMatrix;
-
-	_vector		vScale = XMVectorSet(XMVectorGetX(XMVector3Length(TransformMatrix.r[0])),
-		XMVectorGetX(XMVector3Length(TransformMatrix.r[1])),
-		XMVectorGetX(XMVector3Length(TransformMatrix.r[2])), 
-		0.f);
-
-	_vector		vRight = XMVectorSet(1.f, 0.f, 0.f, 0.f) * XMVectorGetX(vScale);
-	_vector		vUp = XMVectorSet(0.f, 1.f, 0.f, 0.f) * XMVectorGetY(vScale);
-	_vector		vLook = XMVectorSet(0.f, 0.f, 1.f, 0.f) * XMVectorGetZ(vScale);
-
-	RemoveRotation.r[0] = vRight;
-	RemoveRotation.r[1] = vUp;
-	RemoveRotation.r[2] = vLook;
-
-	return RemoveRotation;
-}
-
-_fmatrix CCollider::Remove_Scale(_fmatrix TransformMatrix)
-{
-	_matrix		Matrix;
-	Matrix = TransformMatrix;
-	
-	Matrix.r[0] = XMVector3Normalize(TransformMatrix.r[0]);
-	Matrix.r[1] = XMVector3Normalize(TransformMatrix.r[1]);
-	Matrix.r[2] = XMVector3Normalize(TransformMatrix.r[2]);	
-	
-	return Matrix;
-}
-
-CCollider::OBB CCollider::Compute_OBBDesc()
-{
-	OBB				OBBDesc;
-	ZeroMemory(&OBBDesc, sizeof(OBB));
-
-	_float3			vPoint[8];
-	m_pOBB->GetCorners(vPoint);	
-
-	/* 센터의 값을 셋팅한다. */
-	XMStoreFloat3(&OBBDesc.vCenter, 
-		(XMLoadFloat3(&vPoint[0]) + XMLoadFloat3(&vPoint[6])) * 0.5f);
-
-	/* 큐브에 평행한 축 세개를 셋팅한다. */
-	XMStoreFloat3(&OBBDesc.vAlignAxis[0],
-		XMVector3Normalize(XMLoadFloat3(&vPoint[2]) - XMLoadFloat3(&vPoint[3])));
-	XMStoreFloat3(&OBBDesc.vAlignAxis[1],
-		XMVector3Normalize(XMLoadFloat3(&vPoint[2]) - XMLoadFloat3(&vPoint[1])));
-	XMStoreFloat3(&OBBDesc.vAlignAxis[2],
-		XMVector3Normalize(XMLoadFloat3(&vPoint[2]) - XMLoadFloat3(&vPoint[6])));
-
-	/* 큐브의 중심에서 각 면의 중심을 바라보는 벡터 세개를 구하자. */
-	XMStoreFloat3(&OBBDesc.vCenterAxis[0], 
-		((XMLoadFloat3(&vPoint[2]) + XMLoadFloat3(&vPoint[5])) * 0.5f) - XMLoadFloat3(&OBBDesc.vCenter));
-	XMStoreFloat3(&OBBDesc.vCenterAxis[1],
-		((XMLoadFloat3(&vPoint[2]) + XMLoadFloat3(&vPoint[7])) * 0.5f) - XMLoadFloat3(&OBBDesc.vCenter));
-	XMStoreFloat3(&OBBDesc.vCenterAxis[2],
-		((XMLoadFloat3(&vPoint[2]) + XMLoadFloat3(&vPoint[0])) * 0.5f) - XMLoadFloat3(&OBBDesc.vCenter));	
-
-	return OBBDesc;
-}
-
-CCollider * CCollider::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pDeviceContext, TYPE eColliderType)
-{
-	CCollider*		pInstance = new CCollider(pDevice, pDeviceContext);
-
-	if (FAILED(pInstance->NativeConstruct_Prototype(eColliderType)))
+	else if (test < -0.49999f * unit)
 	{
-		MSGBOX("Failed to Creating CCollider");
-		Safe_Release(pInstance);
+		euler.x = -M_PI / 2;
+		euler.y = -2.0f * atan2f(_q.y, _q.x);
+		euler.z = 0;
+	}
+	else
+	{
+		euler.x = asinf(2.0f * (_q.w * _q.x - _q.y * _q.z));
+		euler.y = atan2f(2.0f * _q.w * _q.y + 2.0f * _q.z * _q.x, 1 - 2.0f * (_q.x * _q.x + _q.y * _q.y));
+		euler.z = atan2f(2.0f * _q.w * _q.z + 2.0f * _q.x * _q.y, 1 - 2.0f * (_q.z * _q.z + _q.x * _q.x));
 	}
 
-	return pInstance;
+	euler.x = XMConvertToDegrees(euler.x);
+	euler.y = XMConvertToDegrees(euler.y);
+	euler.z = XMConvertToDegrees(euler.z);
+
+	euler.x = fmodf(euler.x, 360.0f);
+	euler.y = fmodf(euler.y, 360.0f);
+	euler.z = fmodf(euler.z, 360.0f);
+
+	return euler;
 }
 
-CComponent * CCollider::Clone(void * pArg)
+void CCollider::Update_Scale(_fmatrix matTransform)
 {
-	CCollider*		pInstance = new CCollider(*this);
+	_float fSizeX = XMVectorGetX(XMVector3Length(matTransform.r[0]));
+	_float fSizeY = XMVectorGetX(XMVector3Length(matTransform.r[1]));
+	_float fSizeZ = XMVectorGetX(XMVector3Length(matTransform.r[2]));
 
-	if (FAILED(pInstance->NativeConstruct(pArg)))
+	PxGeometryHolder tHolder = m_pShape->getGeometry();
+	if (tHolder.getType() == PxGeometryType::eBOX)
 	{
-		MSGBOX("Failed to Creating CCollider");
-		Safe_Release(pInstance);
+		PxBoxGeometry pBox = tHolder.box();
+		pBox.halfExtents = PxVec3(fSizeX * 0.5f, fSizeY * 0.5f, fSizeZ * 0.5f);
+		m_pShape->setGeometry(pBox);
+	}
+	else if (tHolder.getType() == PxGeometryType::eCAPSULE)
+	{
+		tHolder.capsule().halfHeight = fSizeY * 0.5f;
+		//	tHolder.capsule().radius = fSizeX * 0.5f;
+		//	m_pShape->setGeometry(tHolder.capsule());
+	}
+	else if (tHolder.getType() == PxGeometryType::eSPHERE)
+	{
+		tHolder.sphere().radius = fSizeX * 0.5f;
+		//	m_pShape->setGeometry(tHolder.sphere());
 	}
 
-	return pInstance;
+	//switch (tHolder.getType())
+	//{
+	//case PxGeometryType::eBOX :
+	//	pGeometry = &tHolder.box();
+	//	static_cast<PxBoxGeometry*>(pGeometry)->halfExtents = PxVec3(fSizeX * 0.5f, fSizeY * 0.5f, fSizeZ * 0.5f);
+	//	m_pShape->setGeometry(*pGeometry);
+	//	break;
+	//case PxGeometryType::eCAPSULE:
+	//	tHolder.capsule().halfHeight = fSizeY * 0.5f;
+	//	tHolder.capsule().radius = fSizeX * 0.5f;
+	//	m_pShape->setGeometry(tHolder.capsule());
+	//	break;
+	//case PxGeometryType::eSPHERE:
+	//	tHolder.sphere().radius = fSizeX * 0.5f;
+	//	m_pShape->setGeometry(tHolder.sphere());
+	//	break;
+	//default:
+	//	break;
+	//}
+}
+
+void CCollider::Update_Rotate(_fmatrix matTransform)
+{
+	_vector vTransformQuat = getQuaternion(matTransform);
+	PxVec3 pxTransformQuat = ToPxVector(vTransformQuat);
+	PxTransform pRigidTr = m_pRigidBody->getGlobalPose();
+	pRigidTr.rotate(pxTransformQuat);
+}
+
+void CCollider::Update_Position(PxVec3 vPos)
+{
+	PxTransform pRigidTr = m_pRigidBody->getGlobalPose();
+	pRigidTr.p= vPos;
+	static_cast<PxRigidDynamic*>(m_pRigidBody)->setGlobalPose(pRigidTr);
 }
 
 void CCollider::Free()
 {
 	__super::Free();
 
+	PX_RELEASE(m_pShape);
 	if (false == m_isCloned)
 	{
 		Safe_Delete(m_pEffect);
 		Safe_Delete(m_pBatch);
+		PX_RELEASE(m_pRigidBody);
 	}
-
-	Safe_Release(m_pTransform);
-
 	Safe_Release(m_pInputLayout);
-
-
-
-
-	Safe_Delete(m_pOriginAABB);
-	Safe_Delete(m_pOriginOBB);
-	Safe_Delete(m_pOriginSphere);
-	Safe_Delete(m_pSphere);
-	Safe_Delete(m_pAABB);
-	Safe_Delete(m_pOBB);
 }

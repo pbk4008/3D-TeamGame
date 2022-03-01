@@ -14,7 +14,6 @@ protected:
 	explicit CGameObject(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);
 	explicit CGameObject(const CGameObject& rhs);
 	virtual ~CGameObject() = default;
-
 public:
 	class CComponent* Get_Component(const wstring& pComponentTag);
 	template<typename T>
@@ -36,6 +35,12 @@ public:
 	virtual _int LateTick(_double TimeDelta);
 	virtual HRESULT Render();
 public:
+	virtual void OnCollisionEnter(CGameObject* pCol);
+	virtual void OnCollisionStay(CGameObject* pCol);
+	virtual void OnCollisionExit(CGameObject* pCol);
+	virtual void OnTriggerEnter(CGameObject* pCol);
+	virtual void OnTriggerExit(CGameObject* pCol);
+public:
 	void setActive(_bool bActive);
 	_bool getActive() { return m_bActive; }
 protected:
@@ -44,6 +49,7 @@ protected:
 	CTransform* m_pTransform;
 	CRenderer* m_pRenderer;
 	_bool m_bActive;
+	_bool m_bCheckCollider;
 protected:
 	unordered_map<wstring, class CComponent*>		m_Components;
 protected:

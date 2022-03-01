@@ -39,9 +39,12 @@ public:
 private:
 	const aiScene*		m_pScene = nullptr;
 	Assimp::Importer	m_Importer;
+
+public:
+	FACEINDICES32*		m_pFaceIndices = nullptr;	
+
 private:
 	char				m_szMeshFilePath[MAX_PATH] = "";
-	FACEINDICES32*		m_pFaceIndices = nullptr;	
 	_float4x4			m_PivotMatrix;
 	TYPE				m_eMeshType = TYPE_END;
 	_uint				m_iCurrentAnimation = 0;
@@ -59,6 +62,10 @@ private:
 	vector<class CAnimation*>				m_Animations;
 	typedef vector<class CAnimation*>		ANIMATIONS;
 
+public:
+	VTXMESH*			  Get_Vertices(void) { return (VTXMESH*)m_pVertices; }
+	FACEINDICES32*		  Get_Indices(void) { return m_pFaceIndices; }
+	class CMeshContainer* Get_NumIndices(_uint _NumMesh) { return m_MeshContainers[_NumMesh]; }
 
 private:
 	HRESULT Reserve_VertexIndexData();

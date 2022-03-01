@@ -180,6 +180,9 @@
     </Filter>
     <Filter Include="00.Utility\03.Component\05.VIBuffer\09.InstanceExplosion">
       <UniqueIdentifier>{e8867ac6-25ad-483d-9401-60d4c28145ab}</UniqueIdentifier>
+	</Filter>
+    <Filter Include="00.Utility\03.Component\00. Collider\00.BoxCollider">
+      <UniqueIdentifier>{94d49518-faf6-4a66-b9bf-a5fd3e8eaa5d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -365,6 +368,9 @@
     </ClInclude>
     <ClInclude Include="..\public\VIBuffer_PointInstance_Explosion.h">
       <Filter>00.Utility\03.Component\05.VIBuffer\09.InstanceExplosion</Filter>
+	</ClInclude>
+    <ClInclude Include="..\public\BoxCollider.h">
+      <Filter>00.Utility\03.Component\00. Collider\00.BoxCollider</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -529,6 +535,9 @@
     </ClCompile>
     <ClCompile Include="..\private\VIBuffer_PointInstance_Explosion.cpp">
       <Filter>00.Utility\03.Component\05.VIBuffer\09.InstanceExplosion</Filter>
+	</ClCompile>
+    <ClCompile Include="..\private\BoxCollider.cpp">
+      <Filter>00.Utility\03.Component\00. Collider\00.BoxCollider</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

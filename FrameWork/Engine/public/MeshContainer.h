@@ -28,6 +28,9 @@ public:
 		return m_MeshDesc;
 	}
 
+	const _uint Get_NumFaces(void) { 
+		return m_MeshDesc.iNumFaces; 
+	}
 public:
 	HRESULT NativeConstruct(const MESHDESC& MeshDesc);
 	HRESULT Render();

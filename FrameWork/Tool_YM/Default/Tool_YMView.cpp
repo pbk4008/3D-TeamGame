@@ -64,7 +64,7 @@ void CToolYMView::OnInitialUpdate()
 	int iGapX = rcMain.right - rcView.right;
 	int iGapY = rcMain.bottom - rcView.bottom;
 	m_pMainFrm->SetWindowPos(nullptr, 0, 0, g_iWINCX + iGapX, g_iWINCY + iGapY, SWP_NOMOVE);
-
+	
 	m_hInst = AfxGetInstanceHandle();
 }
 
