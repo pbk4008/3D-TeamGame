@@ -3,6 +3,7 @@
 #include "Loader.h"
 #include "Level_Logo.h"
 #include "Stage1.h"
+#include "TestObj.h"
 
 CLoading::CLoading()
 	: m_eSceneID(SCENEID::SCENE_END)
@@ -57,7 +58,6 @@ HRESULT CLoading::Render()
 		return E_FAIL;
 
 
-
 	return S_OK;
 }
 
@@ -81,8 +81,41 @@ HRESULT CLoading::Move_Scene()
 
 HRESULT CLoading::Ready_GameObject()
 {
-	wstring strTag = L"BackGround";
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_LOADING,L"Loading_Back", L"Prototype_GameObject_BackGround", &strTag)))
+	//wstring strTag = L"BackGround";
+	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_LOADING,L"Loading_Back", L"Prototype_GameObject_BackGround", &strTag)))
+	//	return E_FAIL;
+
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"BoxCollider", CBoxCollider::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+
+
+
+	if (FAILED(g_pGameInstance->Add_Prototype(L"TestObj", CTestObj::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+
+	CBoxCollider::BOXDESC tDesc;
+	ZeroMemory(&tDesc, sizeof(tDesc));
+
+	tDesc.eRot = CBoxCollider::ROTATE::ROT_AABB;
+	tDesc.fExtends = _float3(0.5f, 0.5f, 0.5f);
+	tDesc.tColDesc.bGravity = false;
+	tDesc.tColDesc.bKinematic = false;
+	tDesc.tColDesc.fPos = _float3(0.f, 0.f, 0.f);
+	tDesc.tColDesc.eType = CPhysicsXSystem::ACTORTYPE::ACTOR_DYNAMIC;
+
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_LOADING, L"Test", L"TestObj", &tDesc)))
+		return E_FAIL;
+
+	ZeroMemory(&tDesc, sizeof(tDesc));
+
+	tDesc.eRot = CBoxCollider::ROTATE::ROT_AABB;
+	tDesc.fExtends = _float3(0.5f, 0.5f, 0.5f);
+	tDesc.tColDesc.bGravity = false;
+	tDesc.tColDesc.bKinematic = false;
+	tDesc.tColDesc.fPos = _float3(0.f, 0.f, 0.f);
+	tDesc.tColDesc.eType = CPhysicsXSystem::ACTORTYPE::ACTOR_STATIC;
+
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_LOADING, L"Test", L"TestObj" ,&tDesc)))
 		return E_FAIL;
 
 	return S_OK;

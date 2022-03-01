@@ -37,6 +37,7 @@ public:
 	/* 게임의 구성요소들은 렌더러를 통해 렌더하낟. */
 	HRESULT Render_Engine(); 
 	HRESULT Clear_Engine(_uint iLevelIndex);
+
 public: /* For.Graphic_Device */
 	HRESULT Clear_BackBuffer_View(XMFLOAT4 vClearColor);
 	HRESULT Clear_DepthStencil_View();

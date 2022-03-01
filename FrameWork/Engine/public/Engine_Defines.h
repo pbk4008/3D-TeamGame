@@ -43,7 +43,8 @@ using namespace physx;
 #include <unordered_map>
 #include <algorithm>
 #include <iostream>
-
+#define _USE_MATH_DEFINES
+#include <math.h>
 using namespace std;
 using namespace DirectX;
 
