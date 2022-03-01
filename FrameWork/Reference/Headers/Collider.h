@@ -42,6 +42,7 @@ protected:
 	ID3D11InputLayout*								m_pInputLayout = nullptr;
 	_float4												m_vColor;
 protected:
+	_bool			m_isCollisioning = false;
 	_bool			m_isCollision = false;
 	PxRigidActor* m_pRigidBody = nullptr;
 	PxShape* m_pShape = nullptr;
