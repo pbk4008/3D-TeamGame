@@ -20,6 +20,7 @@ public:
 private:
 	HRESULT Ready_Logo();
 	HRESULT Ready_Stage1();
+	HRESULT Ready_Test_JS();
 
 private:
 	virtual void Free();

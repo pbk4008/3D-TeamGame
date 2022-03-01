@@ -16,6 +16,7 @@
 #include "VIBuffer_PointInstance.h"
 #include "VIBuffer_PointInstance_Explosion.h"
 #include "VIBuffer_Plane.h"
+#include "StateController.h"
 
 BEGIN(Engine)
 
