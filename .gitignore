@@ -420,3 +420,6 @@ FrameWork/UITool/Default/x64/Debug/MFCLevel_Play.obj
 FrameWork/UITool/Default/x64/Debug/MFCMainApp.obj
 FrameWork/UITool/Default/x64/Debug/MFCTerrain.obj
 FrameWork/Engine/default/x64/Debug/Engine.tlog/link.delete.1.tlog
+FrameWork/Engine/default/x64/Debug/CapsuleCollider.obj
+FrameWork/Engine/default/x64/Debug/SphereCollider.obj
+FrameWork/Engine/default/x64/Debug/Engine.tlog/link.14292.delete.1.tlog

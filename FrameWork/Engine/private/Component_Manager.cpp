@@ -62,7 +62,7 @@ HRESULT CComponent_Manager::SetUpBaseComponent(ID3D11Device* pDevice, ID3D11Devi
 
 void CComponent_Manager::Clear_Component(void)
 {
-	for (int i = 1; i < m_iNumLevels; ++i)
+	for (_uint i = 1; i < m_iNumLevels; ++i)
 		m_pComponents[i].clear();
 }
 

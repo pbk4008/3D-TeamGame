@@ -6,6 +6,8 @@
 #include "Model.h"
 #include "Texture.h"
 #include "BoxCollider.h"
+#include "SphereCollider.h"
+#include "CapsuleCollider.h"
 #include "Renderer.h"
 #include "Transform.h"
 #include "Navigation.h"

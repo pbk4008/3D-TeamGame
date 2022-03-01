@@ -79,6 +79,7 @@ void CCollider::Collider()
 {
 	if (!m_bActive)
 	{
+		m_isCollision = !m_isCollision;
 		if (!m_isCollision)
 			m_vColor = _float4(1.f, 0.f, 0.f, 1.f);
 		else
