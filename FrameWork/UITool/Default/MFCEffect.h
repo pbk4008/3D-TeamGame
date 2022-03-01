@@ -3,18 +3,11 @@
 #include "Effect.h"
 
 BEGIN(Engine)
-class CVIBuffer_PointInstance;
+class CVIBuffer_PointInstance_Explosion;
 class CTexture;
 END
 class CMFCEffect final : public CEffect
 {
-public:
-	typedef struct tagEffectDesc
-	{
-		_tchar TextureTag[MAX_PATH];
-		_float4 fPos;
-		_float3 fVelocity;
-	}EFFECTDESC;
 protected:
 	explicit CMFCEffect();
 	explicit CMFCEffect(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);
@@ -29,13 +22,16 @@ protected:
 	virtual _int LateTick(_double TimeDelta);
 	virtual HRESULT Render();
 
-private:
-	CVIBuffer_PointInstance* m_pBuffer = nullptr;
-	CTexture* m_pTexture = nullptr;
 
 private:
-	EFFECTDESC m_Desc;
+	virtual HRESULT SetUp_Components();
 
+
+private:
+	CVIBuffer_PointInstance_Explosion* m_pBuffer = nullptr;
+
+private:
+	CEffect::EFFECTDESC m_Desc;
 public:
 	static CMFCEffect* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);
 	virtual CGameObject* Clone(void* pArg) override;

@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "MFCEffect.h"
 #include "GameInstance.h"
+#include "VIBuffer_PointInstance_Explosion.h"
 
 CMFCEffect::CMFCEffect()
 {
@@ -33,23 +34,29 @@ HRESULT CMFCEffect::NativeConstruct(void* pArg)
 		memcpy(&m_Desc, pArg, sizeof(EFFECTDESC));
 	}
 
-	wstring tag = m_Desc.TextureTag;
-	if (FAILED(__super::NativeConstruct(&tag)))
+	if (FAILED(__super::NativeConstruct(pArg)))
 	{
 		return E_FAIL;
 	}
 
-	if (FAILED(__super::SetUp_Components(0, L"Prototype_Component_VIBuffer_PointInstance", L"Com_VIBuffer", (CComponent**)&m_pBuffer)))
+	//여기서 필요한 모든 컴포넌트들 Clone해옴
+	if (FAILED(SetUp_Components())) 
+	{
 		return E_FAIL;
-
-	m_pTexture = (CTexture*)g_pGameInstance->Clone_Component(0, L"bubble");
-
+	}
+	
 	return S_OK;
 }
 
 _int CMFCEffect::Tick(_double TimeDelta)
 {
 	m_pBuffer->Update(TimeDelta);
+
+	//z정렬
+	_vector vDir = g_pGameInstance->Get_CamPosition(L"MFCCamera_Proj") - m_pTransform->Get_State(CTransform::STATE_POSITION);
+	vDir = XMVector3Normalize(vDir);
+	m_pBuffer->Set_Dir(vDir);
+
     return 0;
 }
 
@@ -78,7 +85,37 @@ HRESULT CMFCEffect::Render()
 	m_pBuffer->SetUp_TextureOnShader("g_DiffuseTexture", m_pTexture);
 	m_pBuffer->SetUp_ValueOnShader("g_vCamPosition", (void*)&CamPos, sizeof(_vector));
 
-	m_pBuffer->Render(0);
+	m_pBuffer->Render(1);
+
+	return S_OK;
+}
+
+HRESULT CMFCEffect::SetUp_Components()
+{
+	if (!m_pTexture || !m_pRenderer || !m_pTransform)
+		return E_FAIL;
+
+	//이미지 리스트박스로부터 가져옴
+	wstring tag = m_Desc.TextureTag;
+	if (FAILED(m_pTexture->Change_Texture(tag)))
+		return E_FAIL;
+
+	_vector vPos = { m_Desc.fPos.x, m_Desc.fPos.y, m_Desc.fPos.z, 1.f };
+	m_pTransform->Set_State(CTransform::STATE_POSITION, vPos);
+
+	//버퍼 Clone
+	CVIBuffer_PointInstance_Explosion::PIDESC Desc;
+	_tcscpy_s(Desc.ShaderFilePath, m_Desc.ShaderFilePath);
+	Desc.fRandom = m_Desc.fRandom;
+	Desc.fSpeed = m_Desc.fVelocity.y;
+	Desc.fParticleSize = m_Desc.fParticleSize;
+	Desc.iNumInstance = m_Desc.iNumInstance;
+
+	_vector vDir = g_pGameInstance->Get_CamPosition(L"MFCCamera_Proj") - m_pTransform->Get_State(CTransform::STATE_POSITION);
+	Desc.fDir = { XMVectorGetX(vDir), XMVectorGetY(vDir),XMVectorGetZ(vDir) };
+
+	if (FAILED(__super::SetUp_Components(TOOL_LEVEL::TOOL_LEVEL_LOGO, L"Prototype_Component_VIBuffer_PointInstance_Explosion", L"Com_VIBuffer", (CComponent**)&m_pBuffer, &Desc)))
+		return E_FAIL;
 
 	return S_OK;
 }

@@ -216,10 +216,8 @@ list<CGameObject*>* CGameInstance::getObjectList(_uint iLevelIndex, const wstrin
 	return m_pObject_Manager->getObjectList(iLevelIndex, pLayerTag);
 }
 
-list<CGameObject*>* CGameInstance::getAllObjectList()
+list<CGameObject*> CGameInstance::getAllObjectList()
 {
-	if (!m_pObject_Manager)
-		return nullptr;
 	return m_pObject_Manager->getAllObjectList();
 }
 

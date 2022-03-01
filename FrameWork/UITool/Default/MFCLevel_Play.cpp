@@ -12,12 +12,19 @@ CMFCLevel_Play::CMFCLevel_Play(ID3D11Device* pDevice, ID3D11DeviceContext* pDevi
 
 HRESULT CMFCLevel_Play::NativeConstruct()
 {
+	cout << "Level Play" << endl;
 	if (FAILED(__super::NativeConstruct()))
 	{
 		return E_FAIL;
 	}
 	
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer(TOOL_LEVEL::TOOL_LEVEL_LOGO, L"Layer_Camera", L"Prototype_GameObject_Camera_Proj")))
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer(TOOL_LEVEL::TOOL_LEVEL_GAMEPLAY, L"Layer_Camera", L"Prototype_GameObject_Terrain")))
+	{
+		ERR_MSG(L"Failed to Creating in CMFCLevel_Play::NativeConstruct()");
+		return E_FAIL;
+	}
+
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer(TOOL_LEVEL::TOOL_LEVEL_GAMEPLAY, L"Layer_Background", L"Prototype_GameObject_Camera_Proj")))
 	{
 		ERR_MSG(L"Failed to Creating in CMFCLevel_Play::NativeConstruct()");
 		return E_FAIL;
@@ -31,6 +38,12 @@ _int CMFCLevel_Play::Tick(_double TimeDelta)
 	if ( 0 > (__super::Tick(TimeDelta)))
 	{
 		return -1;
+	}
+
+	if (nullptr != g_pGameInstance->getObjectList(1, L"Layer_Effect"))
+	{
+		int b = g_pGameInstance->getObjectList(1, L"Layer_Effect")->size();
+		int a = 0;
 	}
 
 	//if (GetKeyState(VK_SPACE) < 0)

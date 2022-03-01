@@ -198,9 +198,19 @@ HRESULT CMap_Tool::Delete_HierarchyTreeItem(const MODELDESC& _ModelDesc)
 	if (NULL == treeItem)
 		return E_FAIL;
 
-	_int SelIndx = Find_TreeItem_Indx(treeItem);
-
 	parent = m_HierarchyTree.GetParentItem(treeItem);
+
+	_int SelIndx = 0;
+	HTREEITEM Child = m_HierarchyTree.GetChildItem(parent);
+
+	while (Child)
+	{
+		if (Child == treeItem) break;
+		Child = m_HierarchyTree.GetNextItem(Child, TVGN_NEXT);
+		++SelIndx;
+	}
+
+
 	/* Delete Name in Tree */
 	strFindItem = m_HierarchyTree.GetItemText(treeItem);
 	m_HierarchyTree.DeleteItem(treeItem);
@@ -558,20 +568,19 @@ void CMap_Tool::OnNMClickTreeItem(NMHDR* pNMHDR, LRESULT* pResult)
 
 		_int SelIndx = Find_TreeItem_Indx(treeItem);
 		
-		list<CGameObject*>* ObjectList;
 		wstring tagLayer = Tag.operator LPCWSTR();
 
 		/* 오류 수정 부분 */
-		ObjectList = g_pGameInstance->getObjectList(TAB_MAP, tagLayer.c_str());
+		list<CGameObject*> ListObj = g_pGameInstance->getAllObjectList();
 
-		auto& iter = ObjectList->begin();
+		auto& iter = ListObj.begin();
 	
 		for (_uint i = 0; i < SelIndx ; ++i)
 			iter++;
 
 		//std::advance(iter, SelIndx);
-
-		bCheck = dynamic_cast<CStatic_Mesh*>(*iter)->m_bPick = (dynamic_cast<CStatic_Mesh*>(*iter)->m_bPick) ? 0 : 1;
+		if(nullptr != *iter)
+			bCheck = dynamic_cast<CStatic_Mesh*>(*iter)->m_bPick = (dynamic_cast<CStatic_Mesh*>(*iter)->m_bPick) ? 0 : 1;
 	}
 
 	*pResult = 0;
@@ -581,12 +590,14 @@ void CMap_Tool::OnBnClickedSaveButton()
 {
 	// TODO: 맵 데이터를 저장합니다.
 
-	list<CGameObject*> ListObj = *g_pGameInstance->getObjectList(TAB_MAP, L"Stage_1");
+	//list<CGameObject*> ListObj = *g_pGameInstance->getObjectList(TAB_MAP, L"Stage_1");
+	list<CGameObject*> ListObj = g_pGameInstance->getAllObjectList();
+
 	m_vecMesh.clear();
 
 	if (!ListObj.empty())
 	{
-		for (auto pObj : ListObj)
+		for (auto& pObj : ListObj)
 		{
 			CStatic_Mesh* pMesh = (CStatic_Mesh*)pObj;
 			m_vecMesh.push_back(pMesh->m_MeshDesc);

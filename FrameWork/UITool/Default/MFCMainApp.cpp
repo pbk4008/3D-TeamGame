@@ -4,6 +4,7 @@
 #include "GameInstance.h"
 
 #include "MFCLevel_Logo.h"
+#include "MFCLevel_Play.h"
 #include "MFCObject_UI.h"
 #include "MFCCamera.h"
 #include "MFCCamera_Proj.h"
@@ -17,6 +18,9 @@ CMFCMainApp::CMFCMainApp()
 
 HRESULT CMFCMainApp::NativeConstruct()
 {
+	cout << "Level MainApp" << endl;
+
+
 	m_pGameInstance = GET_INSTANCE(CGameInstance);
 	if (FAILED(m_pGameInstance->Initialize_Engine(g_hInst, g_hWnd, TOOL_LEVEL::TOOL_LEVEL_END, CGraphic_Device::WINMODE::MODE_WIN, WINCX, WINCY, &m_pDevice, &m_pDeviceContext)))
 	{
@@ -24,10 +28,10 @@ HRESULT CMFCMainApp::NativeConstruct()
 		return E_FAIL;
 	}
 
-	if(g_pGameInstance->SetUpBaseComponent(m_pDevice, m_pDeviceContext))
+	if(FAILED(g_pGameInstance->SetUpBaseComponent(m_pDevice, m_pDeviceContext)))
 	{
 		ERR_MSG(L"Failed to SetUpBaseComponent Engine In CMFCMainApp::NativeConstruct ");
-		return false;
+		return E_FAIL;
 	}
 
 	m_pRenderer = g_pGameInstance->Clone_Component<CRenderer>(0, L"Renderer");
@@ -93,7 +97,6 @@ HRESULT CMFCMainApp::Render()
 		return E_FAIL;
 	}
 
-
 	if (FAILED(g_pGameInstance->Present()))
 	{
 		return E_FAIL;
@@ -117,6 +120,9 @@ HRESULT CMFCMainApp::SetUp_StartLevel(TOOL_LEVEL eLevel)
 	case TOOL_LEVEL::TOOL_LEVEL_LOGO:
 		hr = g_pGameInstance->Open_Level((_uint)TOOL_LEVEL::TOOL_LEVEL_LOGO, CMFCLevel_Logo::Create(m_pDevice, m_pDeviceContext));
 		break;
+	case TOOL_LEVEL::TOOL_LEVEL_GAMEPLAY:
+		hr = g_pGameInstance->Open_Level((_uint)TOOL_LEVEL::TOOL_LEVEL_GAMEPLAY, CMFCLevel_Play::Create(m_pDevice, m_pDeviceContext));
+		break;
 	default:
 		MSGBOX("Failed MainApp_SetUp_StartLevel");
 		return E_FAIL;
@@ -137,35 +143,42 @@ HRESULT CMFCMainApp::Ready_Component_Prototype()
 		return E_FAIL;
 	}
 
-	if (FAILED(g_pGameInstance->Add_Prototype(0, L"Prototype_Component_VIBuffer_PointInstance", CVIBuffer_PointInstance::Create(m_pDevice,m_pDeviceContext,
-		L"../../Reference/ShaderFile/Shader_PointInstance.hlsl", 100))))
+	if (FAILED(g_pGameInstance->Add_Prototype(TOOL_LEVEL::TOOL_LEVEL_LOGO, L"Prototype_Component_VIBuffer_PointInstance_Explosion", CVIBuffer_PointInstance_Explosion::Create(m_pDevice, m_pDeviceContext/*, L"../../Reference/ShaderFile/Shader_Particle.hlsl", 100*/))))
 	{
 		return E_FAIL;
 	}
 
-	//if (FAILED(g_pGameInstance->Add_Prototype(0, TEXT("Prototype_Component_VIBuffer_Terrain"),
-	//	CVIBuffer_Terrain::Create(m_pDevice, m_pDeviceContext, TEXT("../bin/ShaderFiles/Shader_Terrain.hlsl"), TEXT("../bin/Resource/Texture/Height.bmp")))))
-	//{
-	//	return E_FAIL;
-	//}
+	if (FAILED(g_pGameInstance->Add_Prototype(0, L"Prototype_Component_VIBuffer_Plane", CVIBuffer_Plane::Create(m_pDevice, m_pDeviceContext, L"../../Reference/ShaderFile/Shader_Plane.hlsl", 100, 100))))
+		return E_FAIL;
+
+	/* Prototype_Component_Texture_Terrain */
+	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"Plane_Texture", L"../bin/Resource/Textures/Plane_Default.png")))
+	{
+		return E_FAIL;
+	}
 
 	//여기서 그림 다 불러놓음
-	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"Texture_0", L"../bin/Resource/Textures/Texture_0.jpg")))
+	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"Texture_0", L"../bin/Resource/Textures/UI/Texture_0.jpg")))
 	{
 		return E_FAIL;
 	}
 
-	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"Texture_1", L"../bin/Resource/Textures/Texture_1.jpg")))
+	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"Texture_1", L"../bin/Resource/Textures/UI/Texture_1.jpg")))
 	{
 		return E_FAIL;
 	}
 
-	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"T_HUD_Player_Shield_Icon", L"../bin/Resource/Textures/T_HUD_Player_Shield_Icon.tga")))
+	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"T_HUD_Player_Shield_Icon", L"../bin/Resource/Textures/UI/T_HUD_Player_Shield_Icon.tga")))
 	{
 		return E_FAIL;
 	}
 
-	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"bubble", L"../bin/Resource/Textures/bubble.png")))
+	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"bubble", L"../bin/Resource/Textures/Effect/bubble.png")))
+	{
+		return E_FAIL;
+	}
+
+	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"Plane_Texture", L"../bin/Resource/Textures/Plane_Default.png")))
 	{
 		return E_FAIL;
 	}
@@ -181,6 +194,12 @@ HRESULT CMFCMainApp::Ready_GameObject_Prototype()
 		return E_FAIL;
 	}
 
+	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Terrain"), CMFCTerrain::Create(m_pDevice, m_pDeviceContext))))
+	{
+		return E_FAIL;
+	}
+
+	//////////////////////////////////////////////////////////////////////////
 	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Camera"), CMFCCamera::Create(m_pDevice, m_pDeviceContext))))
 	{
 		return E_FAIL;
@@ -213,10 +232,10 @@ HRESULT CMFCMainApp::Ready_GameObject_Prototype()
 		return E_FAIL;
 	}
 
-	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Terrain"), CMFCTerrain::Create(m_pDevice, m_pDeviceContext))))
-	{
-		return E_FAIL;
-	}
+	//if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Terrain"), CMFCTerrain::Create(m_pDevice, m_pDeviceContext))))
+	//{
+	//	return E_FAIL;
+	//}
 
 	return S_OK;
 }
