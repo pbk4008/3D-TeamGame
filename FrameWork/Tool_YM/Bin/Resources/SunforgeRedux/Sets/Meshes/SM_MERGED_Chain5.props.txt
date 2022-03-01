@@ -1,0 +1,26 @@
+Materials[1] =
+{
+    Materials[0] = MaterialInstanceConstant'/Game/FantasyDungeon/Materials/Chain/chain.chain'
+}
+SourceModels[0] = {}
+StaticMaterials[1] =
+{
+    StaticMaterials[0] =
+    {
+        MaterialInterface = MaterialInstanceConstant'/Game/FantasyDungeon/Materials/Chain/chain.chain'
+        MaterialSlotName = chain
+        UVChannelData =
+        {
+            bInitialized = true
+            bOverrideDensities = false
+            LocalUVDensities[4] = { 442.76, 930.794, 0, 0 }
+        }
+    }
+}
+Sockets[0] = {}
+ExtendedBounds =
+{
+    Origin = { X=-1089.65, Y=-1023.24, Z=1168.72 }
+    BoxExtent = { X=1200.25, Y=1161.03, Z=1205.8 }
+    SphereRadius = 2044.79
+}

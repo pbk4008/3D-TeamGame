@@ -1,0 +1,50 @@
+Materials[3] =
+{
+    Materials[0] = MaterialInstanceConstant'/Game/Aperion/Environment_Dekogon/SunforgeRedux/Sets/Materials/MI_Sunforge_Archstone_01.MI_Sunforge_Archstone_01'
+    Materials[1] = MaterialInstanceConstant'/Game/Aperion/Environment_Dekogon/SunforgeRedux/Sets/Materials/MI_Sunforge_Archstone_03.MI_Sunforge_Archstone_03'
+    Materials[2] = MaterialInstanceConstant'/Game/Aperion/Environment_Dekogon/SunforgeRedux/Sets/Materials/MI_Sunforge_Archstone_02.MI_Sunforge_Archstone_02'
+}
+SourceModels[0] = {}
+StaticMaterials[3] =
+{
+    StaticMaterials[0] =
+    {
+        MaterialInterface = MaterialInstanceConstant'/Game/Aperion/Environment_Dekogon/SunforgeRedux/Sets/Materials/MI_Sunforge_Archstone_01.MI_Sunforge_Archstone_01'
+        MaterialSlotName = Archstone_Fix:M_Archstone1
+        UVChannelData =
+        {
+            bInitialized = true
+            bOverrideDensities = false
+            LocalUVDensities[4] = { 1906.62, 5600.31, 0, 0 }
+        }
+    }
+    StaticMaterials[1] =
+    {
+        MaterialInterface = MaterialInstanceConstant'/Game/Aperion/Environment_Dekogon/SunforgeRedux/Sets/Materials/MI_Sunforge_Archstone_03.MI_Sunforge_Archstone_03'
+        MaterialSlotName = Archstone_Fix:M_Archstone3
+        UVChannelData =
+        {
+            bInitialized = true
+            bOverrideDensities = false
+            LocalUVDensities[4] = { 1262.2, 5604.86, 0, 0 }
+        }
+    }
+    StaticMaterials[2] =
+    {
+        MaterialInterface = MaterialInstanceConstant'/Game/Aperion/Environment_Dekogon/SunforgeRedux/Sets/Materials/MI_Sunforge_Archstone_02.MI_Sunforge_Archstone_02'
+        MaterialSlotName = Archstone_Fix:M_Archstone2
+        UVChannelData =
+        {
+            bInitialized = true
+            bOverrideDensities = false
+            LocalUVDensities[4] = { 1194.19, 5575.2, 0, 0 }
+        }
+    }
+}
+Sockets[0] = {}
+ExtendedBounds =
+{
+    Origin = { X=0, Y=-0.000198364, Z=1039.04 }
+    BoxExtent = { X=1129.28, Y=247.036, Z=1042.01 }
+    SphereRadius = 1553.82
+}

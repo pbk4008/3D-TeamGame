@@ -1,0 +1,50 @@
+Materials[3] =
+{
+    Materials[0] = MaterialInstanceConstant'/Game/Aperion/Environment_Dekogon/SunforgeRedux/Sets/Materials/MI_Metal_LargeTrim_01.MI_Metal_LargeTrim_01'
+    Materials[1] = MaterialInstanceConstant'/Game/Aperion/Environment/SunforgeRedux/Tiling/Materials/MI_SunForgeCheckerFloor_02.MI_SunForgeCheckerFloor_02'
+    Materials[2] = MaterialInstanceConstant'/Game/Aperion/Environment_Dekogon/SunforgeRedux/Sets/Materials/MI_Metal_GoldWebPAT_01.MI_Metal_GoldWebPAT_01'
+}
+SourceModels[0] = {}
+StaticMaterials[3] =
+{
+    StaticMaterials[0] =
+    {
+        MaterialInterface = MaterialInstanceConstant'/Game/Aperion/Environment_Dekogon/SunforgeRedux/Sets/Materials/MI_Metal_LargeTrim_01.MI_Metal_LargeTrim_01'
+        MaterialSlotName = Metal_LargeGoldTrim
+        UVChannelData =
+        {
+            bInitialized = true
+            bOverrideDensities = false
+            LocalUVDensities[4] = { 279.01, 4032.65, 0, 0 }
+        }
+    }
+    StaticMaterials[1] =
+    {
+        MaterialInterface = MaterialInstanceConstant'/Game/Aperion/Environment/SunforgeRedux/Tiling/Materials/MI_SunForgeCheckerFloor_02.MI_SunForgeCheckerFloor_02'
+        MaterialSlotName = Metal_GoldWebPAT_01
+        UVChannelData =
+        {
+            bInitialized = true
+            bOverrideDensities = false
+            LocalUVDensities[4] = { 379.013, 4230.96, 0, 0 }
+        }
+    }
+    StaticMaterials[2] =
+    {
+        MaterialInterface = MaterialInstanceConstant'/Game/Aperion/Environment_Dekogon/SunforgeRedux/Sets/Materials/MI_Metal_GoldWebPAT_01.MI_Metal_GoldWebPAT_01'
+        MaterialSlotName = Marble_Flat_Grey
+        UVChannelData =
+        {
+            bInitialized = true
+            bOverrideDensities = false
+            LocalUVDensities[4] = { 357.223, 4417.13, 0, 0 }
+        }
+    }
+}
+Sockets[0] = {}
+ExtendedBounds =
+{
+    Origin = { X=-0.143738, Y=-0.54541, Z=55.404 }
+    BoxExtent = { X=750.912, Y=751.185, Z=69.2743 }
+    SphereRadius = 755.448
+}

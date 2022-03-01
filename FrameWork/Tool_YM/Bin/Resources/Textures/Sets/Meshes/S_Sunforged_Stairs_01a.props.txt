@@ -1,0 +1,26 @@
+Materials[1] =
+{
+    Materials[0] = MaterialInstanceConstant'/Game/Aperion/Environment_Dekogon/SunforgeRedux/Sets/Materials/MI_Sunforged_Stairs_01.MI_Sunforged_Stairs_01'
+}
+SourceModels[0] = {}
+StaticMaterials[1] =
+{
+    StaticMaterials[0] =
+    {
+        MaterialInterface = MaterialInstanceConstant'/Game/Aperion/Environment_Dekogon/SunforgeRedux/Sets/Materials/MI_Sunforged_Stairs_01.MI_Sunforged_Stairs_01'
+        MaterialSlotName = MI_Sunforged_Stairs_01a
+        UVChannelData =
+        {
+            bInitialized = true
+            bOverrideDensities = false
+            LocalUVDensities[4] = { 420.643, 2.22722, 1140.11, 1816.95 }
+        }
+    }
+}
+Sockets[0] = {}
+ExtendedBounds =
+{
+    Origin = { X=8.2121, Y=-16.9358, Z=97.1933 }
+    BoxExtent = { X=637.058, Y=184.146, Z=152.452 }
+    SphereRadius = 678.283
+}

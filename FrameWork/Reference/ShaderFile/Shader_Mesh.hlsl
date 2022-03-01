@@ -66,6 +66,24 @@ VS_OUT VS_MAIN_STATIC(VS_IN In)
 }
 
 
+VS_OUT VS_MAIN_STATIC_WIRE(VS_IN In)
+{
+	VS_OUT			Out = (VS_OUT)0;
+
+	matrix			matWV, matWVP;
+
+	matWV = mul(g_WorldMatrix, g_ViewMatrix);
+	matWVP = mul(matWV, g_ProjMatrix);
+
+	Out.vPosition = mul(vector(In.vPosition, 1.f), matWVP);
+	Out.vNormal = normalize(mul(vector(In.vNormal, 0.f), g_WorldMatrix));
+	Out.vTexUV = In.vTexUV;
+	Out.vProjPos = Out.vPosition;
+
+	return Out;
+
+}
+
 
 VS_OUT VS_MAIN_ANIM(VS_IN In)
 {
@@ -135,6 +153,18 @@ technique11			DefaultTechnique
 	pass StaticMesh
 	{
 		SetRasterizerState(CullMode_Default);
+		SetDepthStencilState(ZDefault, 0);
+		SetBlendState(BlendDisable, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+
+		/* 진입점함수를 지정한다. */
+		VertexShader = compile vs_5_0 VS_MAIN_STATIC();
+		GeometryShader = NULL;
+		PixelShader = compile ps_5_0  PS_MAIN();
+	}
+
+	pass StaticMesh_Wire
+	{
+		SetRasterizerState(CullMode_Wireframe);
 		SetDepthStencilState(ZDefault, 0);
 		SetBlendState(BlendDisable, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
 

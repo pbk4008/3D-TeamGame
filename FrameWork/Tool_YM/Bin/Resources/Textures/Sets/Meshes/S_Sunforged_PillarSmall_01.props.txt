@@ -1,0 +1,38 @@
+Materials[2] =
+{
+    Materials[0] = MaterialInstanceConstant'/Game/Aperion/Environment_Dekogon/SunforgeRedux/Sets/Materials/MI_BalconyHandrail_01.MI_BalconyHandrail_01'
+    Materials[1] = MaterialInstanceConstant'/Game/Aperion/Environment/SunforgeRedux/Props/Materials/MI_Marble_GoldLines.MI_Marble_GoldLines'
+}
+SourceModels[0] = {}
+StaticMaterials[2] =
+{
+    StaticMaterials[0] =
+    {
+        MaterialInterface = MaterialInstanceConstant'/Game/Aperion/Environment_Dekogon/SunforgeRedux/Sets/Materials/MI_BalconyHandrail_01.MI_BalconyHandrail_01'
+        MaterialSlotName = blinn9
+        UVChannelData =
+        {
+            bInitialized = true
+            bOverrideDensities = false
+            LocalUVDensities[4] = { 424.876, 711.489, 0, 0 }
+        }
+    }
+    StaticMaterials[1] =
+    {
+        MaterialInterface = MaterialInstanceConstant'/Game/Aperion/Environment/SunforgeRedux/Props/Materials/MI_Marble_GoldLines.MI_Marble_GoldLines'
+        MaterialSlotName = Gold_Line_Marble
+        UVChannelData =
+        {
+            bInitialized = true
+            bOverrideDensities = false
+            LocalUVDensities[4] = { 248.702, 704.572, 0, 0 }
+        }
+    }
+}
+Sockets[0] = {}
+ExtendedBounds =
+{
+    Origin = { X=-0.727234, Y=-0.00792694, Z=300.93 }
+    BoxExtent = { X=68.8223, Y=70.9144, Z=303.577 }
+    SphereRadius = 317.867
+}

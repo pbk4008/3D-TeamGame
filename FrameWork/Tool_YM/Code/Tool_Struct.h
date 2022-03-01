@@ -7,16 +7,28 @@ typedef struct tagFileInfo
 {
 	wstring cstrFileName;
 	wstring cstrFolder;
-
 }FILEINFO;
 
 typedef struct tagModel
 {
-	wstring  strFileName;
-	wstring  strName;
-	wstring  strTag;
+	wstring   strFileName;
+	wstring   strFolder;
+	wstring   strName;
+	wstring   strTag;
+	_float3	  fInitPos;
+	_float4x4 WorldMat ;
 	LEVEL_ID eLevel;
-
 }MODELDESC;
+
+typedef struct tagMeshDesc
+{
+	_tchar FolderName[MAX_PATH];
+	_tchar FileName[MAX_PATH];
+	_tchar Tag[MAX_PATH];
+	_tchar Name[MAX_PATH];
+	_float4x4 WorldMat;
+	_float3 fInitPos;
+	LEVEL_ID eLevel;
+}MESHDESC;
 
 #endif // Tool_Struct_h__

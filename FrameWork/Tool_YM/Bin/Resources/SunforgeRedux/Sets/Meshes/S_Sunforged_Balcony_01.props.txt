@@ -1,0 +1,86 @@
+Materials[6] =
+{
+    Materials[0] = Material3'/Game/Aperion/Environment/SunForge/Materials/M_SingleStair_02.M_SingleStair_02'
+    Materials[1] = MaterialInstanceConstant'/Game/Aperion/Environment_Dekogon/SunforgeRedux/Sets/Materials/MI_Marble_White_01a.MI_Marble_White_01a'
+    Materials[2] = MaterialInstanceConstant'/Game/Aperion/Environment_Dekogon/SunforgeRedux/Sets/Materials/MI_BalconyHandrail_01.MI_BalconyHandrail_01'
+    Materials[3] = MaterialInstanceConstant'/Game/Aperion/Environment_Dekogon/SunforgeRedux/Sets/Materials/MI_Marble_BnW_01.MI_Marble_BnW_01'
+    Materials[4] = Material3'/Game/Aperion/Environment/SunForge/Materials/M_Marble_GoldLines.M_Marble_GoldLines'
+    Materials[5] = MaterialInstanceConstant'/Game/Aperion/Environment/SunforgeRedux/Tiling/Materials/MI_Roman_WallTrim.MI_Roman_WallTrim'
+}
+SourceModels[0] = {}
+StaticMaterials[6] =
+{
+    StaticMaterials[0] =
+    {
+        MaterialInterface = Material3'/Game/Aperion/Environment/SunForge/Materials/M_SingleStair_02.M_SingleStair_02'
+        MaterialSlotName = M_SingleStair_02
+        UVChannelData =
+        {
+            bInitialized = true
+            bOverrideDensities = false
+            LocalUVDensities[4] = { 440.035, 24917.1, 0, 0 }
+        }
+    }
+    StaticMaterials[1] =
+    {
+        MaterialInterface = MaterialInstanceConstant'/Game/Aperion/Environment_Dekogon/SunforgeRedux/Sets/Materials/MI_Marble_White_01a.MI_Marble_White_01a'
+        MaterialSlotName = M_Marble_GoldLines
+        UVChannelData =
+        {
+            bInitialized = true
+            bOverrideDensities = false
+            LocalUVDensities[4] = { 377.999, 24512.1, 0, 0 }
+        }
+    }
+    StaticMaterials[2] =
+    {
+        MaterialInterface = MaterialInstanceConstant'/Game/Aperion/Environment_Dekogon/SunforgeRedux/Sets/Materials/MI_BalconyHandrail_01.MI_BalconyHandrail_01'
+        MaterialSlotName = Balcony
+        UVChannelData =
+        {
+            bInitialized = true
+            bOverrideDensities = false
+            LocalUVDensities[4] = { 363.788, 24666, 0, 0 }
+        }
+    }
+    StaticMaterials[3] =
+    {
+        MaterialInterface = MaterialInstanceConstant'/Game/Aperion/Environment_Dekogon/SunforgeRedux/Sets/Materials/MI_Marble_BnW_01.MI_Marble_BnW_01'
+        MaterialSlotName = Marble_BnW
+        UVChannelData =
+        {
+            bInitialized = true
+            bOverrideDensities = false
+            LocalUVDensities[4] = { 400.846, 25460.8, 0, 0 }
+        }
+    }
+    StaticMaterials[4] =
+    {
+        MaterialInterface = Material3'/Game/Aperion/Environment/SunForge/Materials/M_Marble_GoldLines.M_Marble_GoldLines'
+        MaterialSlotName = Marble_Gold
+        UVChannelData =
+        {
+            bInitialized = true
+            bOverrideDensities = false
+            LocalUVDensities[4] = { 468.468, 24838.7, 0, 0 }
+        }
+    }
+    StaticMaterials[5] =
+    {
+        MaterialInterface = MaterialInstanceConstant'/Game/Aperion/Environment/SunforgeRedux/Tiling/Materials/MI_Roman_WallTrim.MI_Roman_WallTrim'
+        MaterialSlotName = Roman Pillar
+        UVChannelData =
+        {
+            bInitialized = true
+            bOverrideDensities = false
+            LocalUVDensities[4] = { 518.42, 25191.6, 0, 0 }
+        }
+    }
+}
+Sockets[0] = {}
+ExtendedBounds =
+{
+    Origin = { X=0.0067749, Y=-5.07136, Z=564.148 }
+    BoxExtent = { X=540.01, Y=108.407, Z=565.295 }
+    SphereRadius = 782.644
+}

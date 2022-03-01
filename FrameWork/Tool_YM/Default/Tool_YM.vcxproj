@@ -46,7 +46,7 @@
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
-    <UseOfMfc>Static</UseOfMfc>
+    <UseOfMfc>Dynamic</UseOfMfc>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
@@ -209,6 +209,7 @@
     <ClInclude Include="..\Code\Static_Mesh.h" />
     <ClInclude Include="..\Code\Tab_Changer.h" />
     <ClInclude Include="..\Code\Tool_Defines.h" />
+    <ClInclude Include="..\Code\Tool_Function.h" />
     <ClInclude Include="..\Code\Tool_Main.h" />
     <ClInclude Include="..\Code\Tool_Mouse.h" />
     <ClInclude Include="..\Code\Tool_Struct.h" />

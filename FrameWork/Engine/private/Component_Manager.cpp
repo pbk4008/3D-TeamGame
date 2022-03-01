@@ -60,7 +60,11 @@ HRESULT CComponent_Manager::SetUpBaseComponent(ID3D11Device* pDevice, ID3D11Devi
 	return S_OK;
 }
 
-
+void CComponent_Manager::Clear_Component(void)
+{
+	for (int i = 1; i < m_iNumLevels; ++i)
+		m_pComponents[i].clear();
+}
 
 CComponent * CComponent_Manager::Find_Prototype_Component(_uint iLevelIndex, const wstring& pComponentTag)
 {

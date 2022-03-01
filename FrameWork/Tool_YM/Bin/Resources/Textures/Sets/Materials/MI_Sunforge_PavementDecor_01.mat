@@ -1,0 +1,13 @@
+Diffuse=T_Sunforge_PavementDecor_01_D
+Normal=T_Sunforge_PavementDecor_01_N
+Other[0]=Dummy_BC
+Other[1]=T_Metal_Gold_01_N
+Other[2]=T_Metal_Gold_01_ORM
+Other[3]=BlendFunc_DefBase
+Other[4]=BlendFunc_DefBlend
+Other[5]=T_FacetedUVs
+Other[6]=Dummy_N
+Other[7]=Dummy_ORM
+Other[8]=T_dummy_mask
+Other[9]=T_dummy_normal
+Other[10]=T_DummyDisplacement_H

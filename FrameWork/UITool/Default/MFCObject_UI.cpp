@@ -33,7 +33,8 @@ HRESULT CMFCObject_UI::NativeConstruct(void* pArg)
 		memcpy(&m_Desc, pArg, sizeof(UIDESC));
 	}
 
-	if (FAILED(__super::NativeConstruct(&m_Desc.TextureTag)))
+	wstring tag = m_Desc.TextureTag;
+	if (FAILED(__super::NativeConstruct(&tag)))
 	{
 		return E_FAIL;
 	}
@@ -62,7 +63,9 @@ _int CMFCObject_UI::Tick(_double TimeDelta)
 	m_pTransform->Scaling(vScale);
 
 
+	m_Desc.TextureTag;
 
+	int a = 0;
 	//XMStoreFloat4x4(&m_WorldMatrix, XMMatrixIdentity());
 	//m_WorldMatrix._11 = m_fSizeX;
 	//m_WorldMatrix._22 = m_fSizeY;

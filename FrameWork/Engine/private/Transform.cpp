@@ -42,11 +42,8 @@ void CTransform::Go_Straight(_double TimeDelta, CNavigation * pNavigation)
 
 	vPosition += XMVector3Normalize(vLook) * m_TransformDesc.fSpeedPerSec * (_float)TimeDelta;
 
-	if(nullptr == pNavigation || 
-		true == pNavigation->Move_OnNavigation(vPosition))
-		Set_State(CTransform::STATE_POSITION, vPosition);
+	Set_State(CTransform::STATE_POSITION, vPosition);
 }
-
 
 void CTransform::Go_Left(_double TimeDelta)
 {
@@ -76,6 +73,24 @@ void CTransform::Go_BackWard(_double TimeDelta)
 	vPosition += XMVector3Normalize(vLook) * -1.f * m_TransformDesc.fSpeedPerSec * (_float)TimeDelta;
 
 	Set_State(CTransform::STATE_POSITION, vPosition);
+}
+
+void CTransform::Go_Up(_double TimeDelta)
+{
+	_vector		vUp = Get_State(STATE_UP);
+	_vector		vPosition = Get_State(STATE_POSITION);
+
+	vPosition += XMVector3Normalize(vUp) * m_TransformDesc.fSpeedPerSec * (_float)TimeDelta;
+	Set_State(STATE_POSITION, vPosition);
+}
+
+void CTransform::Go_Down(_double TimeDelta)
+{
+	_vector		vUp = Get_State(STATE_UP);
+	_vector		vPosition = Get_State(STATE_POSITION);
+
+	vPosition += XMVector3Normalize(vUp) * m_TransformDesc.fSpeedPerSec * -(_float)TimeDelta;
+	Set_State(STATE_POSITION, vPosition);
 }
 
 void CTransform::Chase_Target(const CTransform * pTargetTransform, _double TimeDelta)
@@ -150,6 +165,16 @@ void CTransform::Scaling(_fvector vScale)
 	Set_State(CTransform::STATE_LOOK, vLook);
 }
 
+void CTransform::Scale_Up(_fvector vScale)
+{
+	_vector		vRight = Get_State(CTransform::STATE_RIGHT) * XMVectorGetX(vScale);
+	_vector		vUp = Get_State(CTransform::STATE_UP) * XMVectorGetY(vScale);
+	_vector		vLook = Get_State(CTransform::STATE_LOOK) * XMVectorGetZ(vScale);
+
+	Set_State(CTransform::STATE_RIGHT, vRight);
+	Set_State(CTransform::STATE_UP, vUp);
+	Set_State(CTransform::STATE_LOOK, vLook);
+}
 
 CTransform * CTransform::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pDeviceContext)
 {

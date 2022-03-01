@@ -27,6 +27,7 @@ void CMyFormView::DoDataExchange(CDataExchange* pDX)
 
 BEGIN_MESSAGE_MAP(CMyFormView, CFormView)
 	ON_BN_CLICKED(IDC_BUTTON1, &CMyFormView::OnBnClickedButton_Tool)
+	ON_BN_CLICKED(IDC_BUTTON5, &CMyFormView::OnBnClickedButton_EffectTool)
 END_MESSAGE_MAP()
 
 
@@ -58,4 +59,14 @@ void CMyFormView::OnBnClickedButton_Tool()
 		m_UIDlg.Create(IDD_CUITool_Dlg);
 	}
 	m_UIDlg.ShowWindow(SW_SHOW);
+}
+
+void CMyFormView::OnBnClickedButton_EffectTool()
+{
+	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+	if (nullptr == m_EffectDlg.GetSafeHwnd())
+	{
+		m_EffectDlg.Create(IDD_CEffectTool_Dlg);
+	}
+	m_EffectDlg.ShowWindow(SW_SHOW);
 }

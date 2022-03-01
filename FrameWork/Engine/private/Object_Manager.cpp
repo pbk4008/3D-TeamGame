@@ -145,6 +145,12 @@ HRESULT CObject_Manager::Clear_Object_Manager(_uint iLevelIndex)
 	return S_OK;
 }
 
+void CObject_Manager::Clear_Object_List(void)
+{
+	for (int i = 1; i < m_iNumLevels; i++)
+		m_pLayers[i].clear();
+}
+
 CGameObject * CObject_Manager::Find_Prototype(const wstring& pPrototypeTag)
 {
 	auto	iter = find_if(m_Prototype.begin(), m_Prototype.end(), CTag_Finder(pPrototypeTag));

@@ -2,7 +2,7 @@
 
 
 // CUITool_Dlg 대화 상자
-
+#include "MFCObject_UI.h"
 class CUITool_Dlg : public CDialog
 {
 	DECLARE_DYNAMIC(CUITool_Dlg)
@@ -25,10 +25,11 @@ public:
 
 public:
 	wstring m_strFileName;
-	wstring m_strPickFileName;
+	_tchar m_strPickFileName[MAX_PATH];
 	CListBox m_ListBox;
 
 	class CMFCObject_UI* m_pObject = nullptr;
+	vector<CMFCObject_UI::UIDESC> m_vecUI;
 
 	afx_msg void OnLbnSelchangeList1();
 	afx_msg void OnBnClickedButtonApply();
@@ -37,4 +38,6 @@ public:
 	float m_SizeX;
 	float m_SizeY;
 	afx_msg void OnBnClickedButtonStateSetting();
+	afx_msg void OnBnClickedButtonSave();
+	afx_msg void OnBnClickedButtonLoad();
 };

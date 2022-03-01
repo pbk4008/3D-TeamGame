@@ -1,0 +1,26 @@
+Materials[1] =
+{
+    Materials[0] = MaterialInstanceConstant'/Game/Aperion/Environment_Dekogon/SunforgeRedux/Sets/Materials/MI_Sunforge_SunGate_01.MI_Sunforge_SunGate_01'
+}
+SourceModels[0] = {}
+StaticMaterials[1] =
+{
+    StaticMaterials[0] =
+    {
+        MaterialInterface = MaterialInstanceConstant'/Game/Aperion/Environment_Dekogon/SunforgeRedux/Sets/Materials/MI_Sunforge_SunGate_01.MI_Sunforge_SunGate_01'
+        MaterialSlotName = Unique_Sun_Door
+        UVChannelData =
+        {
+            bInitialized = true
+            bOverrideDensities = false
+            LocalUVDensities[4] = { 883.811, 1764.38, 0, 0 }
+        }
+    }
+}
+Sockets[0] = {}
+ExtendedBounds =
+{
+    Origin = { X=-149.221, Y=-0.000171661, Z=558.387 }
+    BoxExtent = { X=148.94, Y=34.3936, Z=558.387 }
+    SphereRadius = 578.551
+}

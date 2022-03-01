@@ -1,0 +1,58 @@
+Parent = MaterialInstanceConstant'/Game/Aperion/Environment_Dekogon/SunforgeRedux/Sets/Materials/MI_Sunforge_Archstone_01.MI_Sunforge_Archstone_01'
+ScalarParameterValues[1] =
+{
+    ScalarParameterValues[0] =
+    {
+        ParameterInfo = { Name=RefractionDepthBias }
+        ParameterValue = 0
+        ParameterName = None
+    }
+}
+TextureParameterValues[1] =
+{
+    TextureParameterValues[0] =
+    {
+        ParameterInfo = { Name=LYR2 Albedo }
+        ParameterValue = Texture2D'/Game/Aperion/Environment_Dekogon/SunforgeRedux/Sets/Textures/T_Metal_Gold_01_D1.T_Metal_Gold_01_D1'
+        ParameterName = None
+    }
+}
+VectorParameterValues[0] = {}
+BasePropertyOverrides =
+{
+    bOverride_BlendMode = false
+    BlendMode = BLEND_Opaque (0)
+    bOverride_TwoSided = false
+    TwoSided = false
+    bOverride_OpacityMaskClipValue = false
+    OpacityMaskClipValue = 0.3333
+}
+StaticParameters =
+{
+    StaticSwitchParameters[0] = {}
+    StaticComponentMaskParameters[0] = {}
+    TerrainLayerWeightParameters[0] = {}
+    MaterialLayersParameters[0] = {}
+}
+FlattenedTexture = None
+MobileBaseTexture = None
+MobileNormalTexture = None
+bUseMobileSpecular = false
+MobileSpecularPower = 16
+MobileSpecularMask = MSM_Constant (0)
+MobileMaskTexture = None
+TextureStreamingData[2] =
+{
+    TextureStreamingData[0] =
+    {
+        SamplingScale = 1
+        UVChannelIndex = 0
+        TextureName = Dummy_BC
+    }
+    TextureStreamingData[1] =
+    {
+        SamplingScale = 1
+        UVChannelIndex = 0
+        TextureName = Dummy_N
+    }
+}

@@ -75,6 +75,8 @@ HRESULT CMenu_Form::Ready_Tab(void)
 
 _int CMenu_Form::Update_Menu_Form(const _double& _dTimeDelta)
 {
+	m_pMap_Tool->Update_MapTool(_dTimeDelta);
+
 	return _int();
 }
 
@@ -87,6 +89,8 @@ HRESULT CMenu_Form::Create_Model_Prototype(const FILEINFO& _fileInfo)
 	PullPath.assign(strPullPath.begin(), strPullPath.end());
 	string FileName;
 	FileName.assign(_fileInfo.cstrFileName.begin(), _fileInfo.cstrFileName.end());
+	string FolderName;
+	FolderName.assign(_fileInfo.cstrFolder.begin(), _fileInfo.cstrFolder.end());
 
 	wstring ShaderFilePath = L"../../Reference/ShaderFile/Shader_Mesh.hlsl";
 	_matrix  PivotMatrix;
@@ -106,6 +110,11 @@ HRESULT CMenu_Form::Create_HierarchyTree(const MODELDESC& _ModelInfo)
 		return E_FAIL;
 	
 	return m_pMap_Tool->Create_HierarchyTree(_ModelInfo);
+}
+
+void CMenu_Form::InitHierarchyTree(void)
+{
+	m_pMap_Tool->InitHierarchyTree();
 }
 
 BEGIN_MESSAGE_MAP(CMenu_Form, CFormView)

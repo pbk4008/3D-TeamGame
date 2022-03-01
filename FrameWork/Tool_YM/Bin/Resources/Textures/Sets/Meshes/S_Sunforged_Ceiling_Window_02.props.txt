@@ -1,0 +1,38 @@
+Materials[2] =
+{
+    Materials[0] = MaterialInstanceConstant'/Game/Aperion/Environment_Dekogon/SunforgeRedux/Sets/Materials/MI_Metal_LargeTrim_01.MI_Metal_LargeTrim_01'
+    Materials[1] = MaterialInstanceConstant'/Game/Aperion/Environment_Dekogon/SunforgeRedux/Sets/Materials/MI_Marble_White_02.MI_Marble_White_02'
+}
+SourceModels[0] = {}
+StaticMaterials[2] =
+{
+    StaticMaterials[0] =
+    {
+        MaterialInterface = MaterialInstanceConstant'/Game/Aperion/Environment_Dekogon/SunforgeRedux/Sets/Materials/MI_Metal_LargeTrim_01.MI_Metal_LargeTrim_01'
+        MaterialSlotName = Metal_LargeGoldTrim
+        UVChannelData =
+        {
+            bInitialized = true
+            bOverrideDensities = false
+            LocalUVDensities[4] = { 532.435, 5704.76, 0, 0 }
+        }
+    }
+    StaticMaterials[1] =
+    {
+        MaterialInterface = MaterialInstanceConstant'/Game/Aperion/Environment_Dekogon/SunforgeRedux/Sets/Materials/MI_Marble_White_02.MI_Marble_White_02'
+        MaterialSlotName = White_Marble
+        UVChannelData =
+        {
+            bInitialized = true
+            bOverrideDensities = false
+            LocalUVDensities[4] = { 413.753, 5594.09, 0, 0 }
+        }
+    }
+}
+Sockets[0] = {}
+ExtendedBounds =
+{
+    Origin = { X=0, Y=-0.000183105, Z=1094.54 }
+    BoxExtent = { X=540, Y=540, Z=25.5298 }
+    SphereRadius = 763.814
+}

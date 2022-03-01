@@ -1,0 +1,26 @@
+Materials[1] =
+{
+    Materials[0] = MaterialInstanceConstant'/Game/Aperion/Environment/Structural/Materials/MI_DarkSteel_Gate_MainPart.MI_DarkSteel_Gate_MainPart'
+}
+SourceModels[0] = {}
+StaticMaterials[1] =
+{
+    StaticMaterials[0] =
+    {
+        MaterialInterface = MaterialInstanceConstant'/Game/Aperion/Environment/Structural/Materials/MI_DarkSteel_Gate_MainPart.MI_DarkSteel_Gate_MainPart'
+        MaterialSlotName = MainPart
+        UVChannelData =
+        {
+            bInitialized = true
+            bOverrideDensities = false
+            LocalUVDensities[4] = { 982.856, 1021.56, 0, 0 }
+        }
+    }
+}
+Sockets[0] = {}
+ExtendedBounds =
+{
+    Origin = { X=-137.088, Y=3.84267, Z=725.99 }
+    BoxExtent = { X=134.576, Y=8.41504, Z=722.318 }
+    SphereRadius = 733.221
+}

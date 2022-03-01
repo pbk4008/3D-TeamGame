@@ -1,0 +1,50 @@
+Materials[3] =
+{
+    Materials[0] = Material3'/Game/Aperion/Environment/SunForge/Materials/M_Wall_Concrete_Clean_Black.M_Wall_Concrete_Clean_Black'
+    Materials[1] = Material3'/Game/Aperion/Environment/SunForge/Materials/M_Roman_WallTrim.M_Roman_WallTrim'
+    Materials[2] = Material3'/Game/Aperion/Environment/SunForge/Materials/M_Voronoi.M_Voronoi'
+}
+SourceModels[0] = {}
+StaticMaterials[3] =
+{
+    StaticMaterials[0] =
+    {
+        MaterialInterface = Material3'/Game/Aperion/Environment/SunForge/Materials/M_Wall_Concrete_Clean_Black.M_Wall_Concrete_Clean_Black'
+        MaterialSlotName = 03 - Default
+        UVChannelData =
+        {
+            bInitialized = true
+            bOverrideDensities = false
+            LocalUVDensities[4] = { 1080.34, 1818.42, 2169.66, 0 }
+        }
+    }
+    StaticMaterials[1] =
+    {
+        MaterialInterface = Material3'/Game/Aperion/Environment/SunForge/Materials/M_Roman_WallTrim.M_Roman_WallTrim'
+        MaterialSlotName = 07 - Default
+        UVChannelData =
+        {
+            bInitialized = true
+            bOverrideDensities = false
+            LocalUVDensities[4] = { 1238, 2511.79, 2536.07, 0 }
+        }
+    }
+    StaticMaterials[2] =
+    {
+        MaterialInterface = Material3'/Game/Aperion/Environment/SunForge/Materials/M_Voronoi.M_Voronoi'
+        MaterialSlotName = 13 - Default
+        UVChannelData =
+        {
+            bInitialized = true
+            bOverrideDensities = false
+            LocalUVDensities[4] = { 1097.5, 2503.78, 2164.65, 0 }
+        }
+    }
+}
+Sockets[0] = {}
+ExtendedBounds =
+{
+    Origin = { X=0.00140381, Y=75.679, Z=539.999 }
+    BoxExtent = { X=540.001, Y=186.734, Z=540.001 }
+    SphereRadius = 779.958
+}

@@ -1,0 +1,50 @@
+Materials[3] =
+{
+    Materials[0] = MaterialInstanceConstant'/Game/Aperion/Environment_Dekogon/SunforgeRedux/Sets/Materials/MI_Sunforge_Archway_01b.MI_Sunforge_Archway_01b'
+    Materials[1] = MaterialInstanceConstant'/Game/Aperion/Environment_Dekogon/SunforgeRedux/Sets/Materials/MI_Sunforge_Archway_01a.MI_Sunforge_Archway_01a'
+    Materials[2] = Material3'/Game/Aperion/Environment/SunForge/mat/sunforgearchMT_2.sunforgearchMT_2'
+}
+SourceModels[0] = {}
+StaticMaterials[3] =
+{
+    StaticMaterials[0] =
+    {
+        MaterialInterface = MaterialInstanceConstant'/Game/Aperion/Environment_Dekogon/SunforgeRedux/Sets/Materials/MI_Sunforge_Archway_01b.MI_Sunforge_Archway_01b'
+        MaterialSlotName = 13 - Default
+        UVChannelData =
+        {
+            bInitialized = true
+            bOverrideDensities = false
+            LocalUVDensities[4] = { 1249.77, 5804.44, 0, 0 }
+        }
+    }
+    StaticMaterials[1] =
+    {
+        MaterialInterface = MaterialInstanceConstant'/Game/Aperion/Environment_Dekogon/SunforgeRedux/Sets/Materials/MI_Sunforge_Archway_01a.MI_Sunforge_Archway_01a'
+        MaterialSlotName = 14 - Default
+        UVChannelData =
+        {
+            bInitialized = true
+            bOverrideDensities = false
+            LocalUVDensities[4] = { 1383.98, 5818.81, 0, 0 }
+        }
+    }
+    StaticMaterials[2] =
+    {
+        MaterialInterface = Material3'/Game/Aperion/Environment/SunForge/mat/sunforgearchMT_2.sunforgearchMT_2'
+        MaterialSlotName = sunforgearchMT_2
+        UVChannelData =
+        {
+            bInitialized = true
+            bOverrideDensities = false
+            LocalUVDensities[4] = { 832.046, 5779.99, 0, 0 }
+        }
+    }
+}
+Sockets[0] = {}
+ExtendedBounds =
+{
+    Origin = { X=2.20703, Y=14.8964, Z=778.416 }
+    BoxExtent = { X=1094.14, Y=181.414, Z=896.937 }
+    SphereRadius = 1272.36
+}

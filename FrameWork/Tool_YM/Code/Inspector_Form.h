@@ -34,7 +34,9 @@ public:
 
 public:
 	HRESULT		Get_ModelInfo(const FILEINFO& _FileInfo);
-	HRESULT		Clear_Clone_ModelList(wstring _ModelName);
+	HRESULT		Delete_Clone_ModelList(wstring _ModelName);
+	void		Clear_Clone_ModelList(void);
+	HRESULT		Add_GameObjectToLayer(const MESHDESC& ModelDesc);
 
 public:
 	void Get_Device(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext) { 
