@@ -5,7 +5,7 @@
 #include "Camera.h"
 #include "Model.h"
 #include "Texture.h"
-#include "Collider.h"
+#include "BoxCollider.h"
 #include "Renderer.h"
 #include "Transform.h"
 #include "Navigation.h"

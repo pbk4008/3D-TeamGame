@@ -10,15 +10,17 @@ CGameObject::CGameObject()
 	, m_pTransform(nullptr)
 	, m_pRenderer(nullptr)
 	, m_bActive(false)
+	, m_bCheckCollider(false)
 {
 }
 
-CGameObject::CGameObject(ID3D11Device * pDevice, ID3D11DeviceContext * pDeviceContext)
+CGameObject::CGameObject(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
 	: m_pDevice(pDevice)
 	, m_pDeviceContext(pDeviceContext)
 	, m_pRenderer(nullptr)
 	, m_pTransform(nullptr)
 	, m_bActive(false)
+	, m_bCheckCollider(false)
 {
 	Safe_AddRef(m_pDeviceContext);
 	Safe_AddRef(m_pDevice);	
@@ -31,6 +33,7 @@ CGameObject::CGameObject(const CGameObject& rhs)
 	, m_Components(rhs.m_Components)
 	, m_pTransform(nullptr)
 	, m_bActive(rhs.m_bActive)
+	, m_bCheckCollider(false)
 {
 	Safe_AddRef(m_pDeviceContext);
 	Safe_AddRef(m_pDevice);
@@ -98,6 +101,26 @@ _int CGameObject::LateTick(_double TimeDelta)
 HRESULT CGameObject::Render()
 {
 	return S_OK;
+}
+
+void CGameObject::OnCollisionEnter(CGameObject* pCol)
+{
+}
+
+void CGameObject::OnCollisionStay(CGameObject* pCol)
+{
+}
+
+void CGameObject::OnCollisionExit(CGameObject* pCol)
+{
+}
+
+void CGameObject::OnTriggerEnter(CGameObject* pCol)
+{
+}
+
+void CGameObject::OnTriggerExit(CGameObject* pCol)
+{
 }
 
 void CGameObject::setActive(_bool bActive)

@@ -35,10 +35,6 @@ namespace Engine
 	typedef		XMMATRIX					_matrix;
 	typedef		FXMMATRIX					_fmatrix;
 	typedef		CXMVECTOR					_cmatrix;
-
-	typedef		PxVec3					_pvec3;
-	typedef		PxVec4					_pvec4;
-	typedef		PxMat44					_pmatrix;
 }
 
 #endif // Engine_Typedef_h__

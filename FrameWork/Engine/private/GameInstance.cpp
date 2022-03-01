@@ -50,7 +50,7 @@ HRESULT CGameInstance::Initialize_Engine(HINSTANCE hInst, HWND hWnd, _uint iNumL
 	if (FAILED(m_pInput_Device->Init_InputDevice(hInst, hWnd)))
 		return E_FAIL;
 
-	if (FAILED(m_pPhysicSystem->Init_PhysicsX()))
+	if (FAILED(m_pPhysicSystem->Init_PhysicsX(/**ppDeviceOut,*ppDeviceContextOut*/)))
 		return E_FAIL;
 
 	if (FAILED(m_pObject_Manager->Reserve_Manager(iNumLevel)))
@@ -92,6 +92,8 @@ _int CGameInstance::Tick_Engine(_double TimeDelta)
 	if(m_pPipeLine->getCameraCount())
 		m_pFrustum->Transform_ToWorldSpace(m_pPipeLine->getBaseCamera());
 	
+	m_pPhysicSystem->UpDate_Collision(TimeDelta);
+
 	iProgress = m_pObject_Manager->LateTick(TimeDelta);
 	if (0 > iProgress)
 		return -1;
@@ -105,7 +107,6 @@ HRESULT CGameInstance::Render_Engine()
 		return E_FAIL;
 
 	m_pLevel_Manager->Render();	
-
 	return S_OK;
 }
 
@@ -213,6 +214,13 @@ list<CGameObject*>* CGameInstance::getObjectList(_uint iLevelIndex, const wstrin
 		return nullptr;
 
 	return m_pObject_Manager->getObjectList(iLevelIndex, pLayerTag);
+}
+
+list<CGameObject*>* CGameInstance::getAllObjectList()
+{
+	if (!m_pObject_Manager)
+		return nullptr;
+	return m_pObject_Manager->getAllObjectList();
 }
 
 void CGameInstance::Clear_Object_List(void)

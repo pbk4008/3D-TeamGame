@@ -15,7 +15,6 @@ CLevel::CLevel(ID3D11Device * pDevice, ID3D11DeviceContext * pDeviceContext)
 	Safe_AddRef(m_pDeviceContext);
 	Safe_AddRef(m_pDevice);
 }
-
 HRESULT CLevel::NativeConstruct()
 {
 	return S_OK;

@@ -64,4 +64,5 @@
 	pInstance->Release();}														\
 	}();
 
-
+#define PX_RELEASE(x) if(x) {x->release();}
+#define PX_ADDREF(x) if(x) {x->acquireReference();}
