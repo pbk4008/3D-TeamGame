@@ -3,16 +3,6 @@
 /* 모든 전역변수들을 -> 상수테이블. */
 /* 클라이언트로부터 값을 전달받아올 수 있다. */
 
-//struct Particle
-//{
-//	float3 WorldPos;
-//	float CurTime; // 경과시간
-//	float3 WorldDir;
-//	float LifeTime; //몇초동안 유지되어야 하는지, 생명
-//	int alive; //0이면 렌더링 X, 1이면 렌더링
-//	float3 Padding;
-//};
-
 cbuffer CameraDesc
 {
 	vector		g_vCamPosition;
@@ -20,7 +10,7 @@ cbuffer CameraDesc
 
 cbuffer Matrices
 {
-	matrix		g_WorldMatrix  = (matrix)0;
+	matrix		g_WorldMatrix = (matrix)0;
 	matrix		g_ViewMatrix;
 	matrix		g_ProjMatrix;
 };
@@ -28,7 +18,7 @@ cbuffer Matrices
 texture2D	g_DiffuseTexture;
 
 sampler DefaultSampler = sampler_state
-{		
+{
 	filter = min_mag_mip_linear;
 	AddressU = wrap;
 	AddressV = wrap;
@@ -42,7 +32,7 @@ struct VS_IN
 	float3		vPosition : POSITION;
 	float2		vPSize : PSIZE;
 
-	row_major matrix TransformMatrix : WORLD;	
+	row_major matrix TransformMatrix : WORLD;
 };
 
 struct VS_OUT
@@ -56,10 +46,10 @@ struct VS_OUT
 /* 2. 픽셀에게 전달할 데이터를 결정한다. */
 VS_OUT VS_MAIN(VS_IN In)
 {
-	VS_OUT	Out = (VS_OUT)0;	
+	VS_OUT	Out = (VS_OUT)0;
 
-	vector	vPosition = mul(vector(In.vPosition, 1.f), In.TransformMatrix);	
-		
+	vector	vPosition = mul(vector(In.vPosition, 1.f), In.TransformMatrix);
+
 	Out.vPosition = mul(vPosition, g_WorldMatrix);
 	Out.vPSize = In.vPSize;
 
@@ -92,8 +82,8 @@ void GS_MAIN(point GS_IN In[1], inout TriangleStream<GS_OUT> OutStream)
 
 	matrix		matVP = mul(g_ViewMatrix, g_ProjMatrix);
 
-	Out[0].vPosition = In[0].vPositi;on + (vRight * In[0].vPSize.x * 0.5f) +
-		(vUp * In[0].vPSize.y * 0.5f)
+	Out[0].vPosition = In[0].vPosition + (vRight * In[0].vPSize.x * 0.5f) +
+		(vUp * In[0].vPSize.y * 0.5f);
 	Out[0].vTexUV = float2(0.f, 0.f);
 	Out[0].vPosition = mul(Out[0].vPosition, matVP);
 
@@ -135,7 +125,7 @@ void GS_MAIN(point GS_IN In[1], inout TriangleStream<GS_OUT> OutStream)
 struct PS_IN
 {
 	float4		vPosition : SV_POSITION;
-	float2		vTexUV : TEXCOORD0;	
+	float2		vTexUV : TEXCOORD0;
 };
 
 struct PS_OUT
@@ -151,16 +141,14 @@ PS_OUT PS_MAIN(PS_IN In)
 	PS_OUT		Out = (PS_OUT)0;
 
 	Out.vColor = g_DiffuseTexture.Sample(DefaultSampler, In.vTexUV);
-	Out.vColor.gb = 0.f;
-	Out.vColor.r = 1.f;
+	//Out.vColor.gb = 0.f;
+	//Out.vColor.r = 1.f;
 
-	if (Out.vColor.a < 0.01)
-		discard;
-	
-	return Out;	
+	//if (Out.vColor.a < 0.01)
+	//	discard;
+
+	return Out;
 }
-
-
 
 
 technique11			DefaultTechnique

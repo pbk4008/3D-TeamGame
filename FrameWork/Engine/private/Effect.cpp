@@ -1,35 +1,48 @@
 #include "Effect.h"
+#include "GameInstance.h"
+
 
 CEffect::CEffect()
-	:m_fMaxLifTime(0.f)
-	,m_bUsingGravity(false)
-	, m_iNumEffectCount(0)
+	:m_pTexture(nullptr)
 {
 }
 
 CEffect::CEffect(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
 	: CGameObject(pDevice, pDeviceContext)
-	, m_fMaxLifTime(0.f)
-	, m_bUsingGravity(false)
-	, m_iNumEffectCount(0)
+	, m_pTexture(nullptr)
 {
 }
 
 CEffect::CEffect(const CEffect& rhs)
 	: CGameObject(rhs)
-	, m_fMaxLifTime(rhs.m_fMaxLifTime)
-	, m_bUsingGravity(rhs.m_bUsingGravity)
-	, m_iNumEffectCount(rhs.m_iNumEffectCount)
+	, m_pTexture(rhs.m_pTexture)
 {
+	Safe_AddRef(m_pTexture);
 }
 
 HRESULT CEffect::NativeConstruct_Prototype()
 {
+	if (FAILED(__super::NativeConstruct_Prototype()))
+		return E_FAIL;
+
+	m_pTexture = g_pGameInstance->Clone_Component<CTexture>(0, L"Texture");
+	if (!m_pTexture)
+		return E_FAIL;
+	if (FAILED(SetUp_Components(L"Texture", m_pTexture)))
+		return E_FAIL;
+
 	return S_OK;
 }
 
 HRESULT CEffect::NativeConstruct(void* pArg)
 {
+	if (FAILED(__super::NativeConstruct(pArg)))
+		return E_FAIL;
+
+	if (nullptr != pArg)
+	{
+		memcpy(&m_Desc, pArg, sizeof(EFFECTDESC));
+	}
 	return S_OK;
 }
 
@@ -51,7 +64,7 @@ HRESULT CEffect::Render()
 _fvector CEffect::UsingGravity(_fvector vPos, _double dDeltaTime)
 {
 	_float fY = 0.f;
-	if (m_bUsingGravity)
+	if (m_Desc.bUsingGravity)
 		fY = XMVectorGetY(vPos) + (-2 * 9.8f * (_float)dDeltaTime * (_float)dDeltaTime);
 	return XMVectorSetY(vPos, fY);
 }

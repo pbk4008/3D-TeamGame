@@ -14,12 +14,13 @@ CMFCLevel_Logo::CMFCLevel_Logo(ID3D11Device* pDevice, ID3D11DeviceContext* pDevi
 
 HRESULT CMFCLevel_Logo::NativeConstruct()
 {
+	cout << "Level Logo" << endl;
+
+
 	if (FAILED(__super::NativeConstruct()))
 	{
 		return E_FAIL;
 	}
-	
-
 
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer(TOOL_LEVEL::TOOL_LEVEL_LOGO, L"Layer_Camera", L"Prototype_GameObject_Camera")))
 	{
@@ -43,51 +44,40 @@ _int CMFCLevel_Logo::Tick(_double TimeDelta)
 	{
 		if (FAILED(g_pGameInstance->Open_Level(1, CMFCLevel_Play::Create(m_pDevice, m_pDeviceContext))))
 		{
-			RELEASE_INSTANCE(CGameInstance);
 			return -1;
 		}
 	}
 
-	m_pMouse->Tick(g_hWnd,TimeDelta);
-	//if (GetKeyState(VK_SPACE) < 0)
-	//{
-	//	cout << "Space" << endl;
-	//	CGameInstance* pGameInstance = GET_INSTANCE(CGameInstance);
-
-	//	if (FAILED(pGameInstance->Open_Level((_uint)TOOL_LEVEL::TOOL_LEVEL_LOADING, CMFCLevel_Loading::Create(m_pDevice, m_pDeviceContext, TOOL_LEVEL::TOOL_LEVEL_GAMEPLAY))))
-	//	{
-	//		RELEASE_INSTANCE(CGameInstance);
-	//		return -1;
-	//	}
-
-	//	RELEASE_INSTANCE(CGameInstance);
-	//	return 0;
-	//}
-
-	if (nullptr != g_pGameInstance->getObjectList(TOOL_LEVEL::TOOL_LEVEL_LOGO, L"Layer_UI"))
+	if (0 == g_pGameInstance->getCurrentLevel())
 	{
-		m_pMFCUI = (CMFCObject_UI*)m_pMouse->getCheckUI(g_pGameInstance->getObjectList(TOOL_LEVEL::TOOL_LEVEL_LOGO, L"Layer_UI"));
-
-		CMainFrame* pMain = dynamic_cast<CMainFrame*>(AfxGetApp()->GetMainWnd());
-		CMyFormView* pForm = dynamic_cast<CMyFormView*>(pMain->m_SplitterWnd.GetPane(0, 0));
-
-		if (nullptr != m_pMFCUI)
+		m_pMouse->Tick(g_hWnd,TimeDelta);
+		
+		if (nullptr != g_pGameInstance->getObjectList(TOOL_LEVEL::TOOL_LEVEL_LOGO, L"Layer_UI"))
 		{
-			if (g_pGameInstance->getMouseKeyDown(CInputDev::MOUSESTATE::MB_LBUTTON))
+			m_pMFCUI = (CMFCObject_UI*)m_pMouse->getCheckUI(g_pGameInstance->getObjectList(TOOL_LEVEL::TOOL_LEVEL_LOGO, L"Layer_UI"));
+
+			CMainFrame* pMain = dynamic_cast<CMainFrame*>(AfxGetApp()->GetMainWnd());
+			CMyFormView* pForm = dynamic_cast<CMyFormView*>(pMain->m_SplitterWnd.GetPane(0, 0));
+
+			if (nullptr != m_pMFCUI)
 			{
-				pForm->m_UIDlg.m_pObject = m_pMFCUI;
-				cout << "Ãæµ¹µÊ" << endl;
+				if (g_pGameInstance->getMouseKeyDown(CInputDev::MOUSESTATE::MB_LBUTTON))
+				{
+					pForm->m_UIDlg.m_pObject = m_pMFCUI;
+					cout << "Ãæµ¹µÊ" << endl;
+				}
 			}
-		}
-		else
-		{
-			if (g_pGameInstance->getMouseKeyDown(CInputDev::MOUSESTATE::MB_LBUTTON) && g_pGameInstance->getkeyDown(DIK_LSHIFT))
+			else
 			{
-				pForm->m_UIDlg.m_pObject = nullptr;
-				cout << "Ãæµ¹¾ÈµÊ" << endl;
+				if (g_pGameInstance->getMouseKeyDown(CInputDev::MOUSESTATE::MB_LBUTTON) && g_pGameInstance->getkeyDown(DIK_LSHIFT))
+				{
+					pForm->m_UIDlg.m_pObject = nullptr;
+					cout << "Ãæµ¹¾ÈµÊ" << endl;
+				}
 			}
 		}
 	}
+	
 	return _int(0);
 }
 
@@ -120,5 +110,7 @@ CMFCLevel_Logo* CMFCLevel_Logo::Create(ID3D11Device* pDevice, ID3D11DeviceContex
 
 void CMFCLevel_Logo::Free()
 {
+	Safe_Release(m_pMouse);
+	Safe_Release(m_pMFCUI);
 	__super::Free(); //ºÎ¸ðÀÇ Free ÇÔ¼ö È£Ãâ 
 }
