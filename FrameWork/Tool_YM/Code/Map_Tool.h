@@ -1,9 +1,10 @@
 ﻿#pragma once
 
 #include "Menu_Form.h"
-
+#include "Static_Mesh.h"
 // CMap_Tool 대화 상자
 
+class CStatic_Mesh;
 class CMap_Tool : public CDialogEx
 {
 	DECLARE_DYNAMIC(CMap_Tool)
@@ -25,6 +26,9 @@ protected:
 //개발자 재정의
 
 public:
+	_int			 Update_MapTool(_double dTimeDelta);
+
+public:
 	void			 InitAssetsTree(void);
 	void			 InitHierarchyTree(void);
 	void			 Clear_Tree(void);
@@ -35,15 +39,23 @@ public:
 	_int			 Find_TreeItem_Indx(HTREEITEM hSelectItem);
 	_bool			 Get_HasChild(CTreeCtrl& tTree, HTREEITEM tParent, HTREEITEM tSelect);
 	static HTREEITEM Search_ParentItemInTree(CTreeCtrl* _TreeCtrl, CString _FindStr, HTREEITEM _pParent);
+	void			 Check_ChildItems(HTREEITEM hItem);
+	void			 UnCheck_ChildItems(HTREEITEM hItem);
 
 public:
 	FILEINFO		  m_FileInfo;
 	MODELDESC		  m_ModelDesc;
 	_bool			  m_bSelect_FBXFile = false;
+	wstring			  m_bPickModel_Tag;
+	_int			  m_OneUpdate = 0;
+	HTREEITEM		  m_bPickModel_Item = NULL;
+
+public:
+	vector<MESHDESC> m_vecMesh;
 
 public:
 	/* 원본 모델 중복생성 방지 태그 */
-	list<wstring>	    m_ProtoTag;
+	list<wstring>			  m_ProtoTag;
 	/* Hierarchy Tree 생성용 태그 */
 	vector<wstring>			  m_vTag;
 	vector<wstring>			  m_vModelName;
@@ -56,7 +68,7 @@ public:
 public:
 	class CMainFrame* m_pMain = nullptr;
 	class CMenu_Form* m_pMenuForm = nullptr;
-	
+
 public:
 	virtual BOOL OnInitDialog();
 	virtual void PostNcDestroy();
@@ -66,4 +78,7 @@ public:
 	afx_msg void OnNMRRClickHierTree(NMHDR* pNMHDR, LRESULT* pResult);
 	afx_msg void Delete_Clone_Model();
 	virtual BOOL OnCommand(WPARAM wParam, LPARAM lParam);
+	afx_msg void OnNMClickTreeItem(NMHDR* pNMHDR, LRESULT* pResult);
+	afx_msg void OnBnClickedSaveButton();
+	afx_msg void OnBnClickedLoadButton();
 };

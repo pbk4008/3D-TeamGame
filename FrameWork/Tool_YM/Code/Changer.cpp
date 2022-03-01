@@ -68,18 +68,6 @@ HRESULT CChanger::Loading_For_Static(void)
 	/* Prototype_Component_Texture_Terrain */
 	g_pGameInstance->Add_Texture(m_pDevice, L"Plane_Texture", L"../Bin/Resources/Textures/Terrain/Plane_Default.png");
 
-	m_isFinished = TRUE;
-
-	return S_OK;
-}
-
-HRESULT CChanger::Loading_ForMap_Tool(void)
-{
-	/* Create Component Prototype */
-
-
-	/* Create Object Prototype */
-
 	/* Prototype_GameObject_Terrain */
 	if (FAILED(g_pGameInstance->Add_Prototype(L"Prototype_GameObject_Plane", CPlane::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
@@ -91,6 +79,18 @@ HRESULT CChanger::Loading_ForMap_Tool(void)
 	/* Prototype_GameObject_Camera */
 	if (FAILED(g_pGameInstance->Add_Prototype(L"Prototype_GameObject_Camera", CDynamic_Camera::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
+
+	m_isFinished = TRUE;
+
+	return S_OK;
+}
+
+HRESULT CChanger::Loading_ForMap_Tool(void)
+{
+	/* Create Component Prototype */
+
+
+	/* Create Object Prototype */
 
 	/* Prototype_GameObject_StaticMesh */
 	if (FAILED(g_pGameInstance->Add_Prototype(L"Prototype_GameObject_StaticMesh", CStatic_Mesh::Create(m_pDevice, m_pDeviceContext))))

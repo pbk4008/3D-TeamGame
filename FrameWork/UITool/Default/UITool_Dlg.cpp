@@ -176,7 +176,6 @@ void CUITool_Dlg::OnBnClickedButtonSave()
 	//lstrcat(szFilePath, L"\\Data");
 	Dlg.m_ofn.lpstrInitialDir = szFilePath;
 
-
 	if (IDOK == Dlg.DoModal())
 	{
 		wstring strFilePath = Dlg.GetPathName();

@@ -5,7 +5,6 @@
 BEGIN(Engine)
 class CMouse;
 END
-
 class CMapTool_Level final :  public CLevel
 {
 protected:
@@ -18,10 +17,9 @@ public:
 	virtual HRESULT Render() override;
 
 public:
+	HRESULT Ready_Later_Mouse(const wstring& _pLayerTag);
 	HRESULT Ready_Layer_Plane(const wstring& _pLayerTag);
 	HRESULT Ready_Layer_Camera(const wstring& _pLayerTag);
-	HRESULT Ready_Later_Mouse(const wstring& _pLayerTag);
-
 
 public:
 	class CMouse* m_pMouse = nullptr;

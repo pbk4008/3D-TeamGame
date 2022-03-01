@@ -24,17 +24,19 @@ public:
 public:
 	virtual HRESULT SetUp_Components(void);
 	void			Set_WVPMatrix(void);
+	_fmatrix		Get_WorldMat(void);
 
 public:
 	void	Input_Key(_double _dtimeDelta);
 	void    Pick_Model(void);
 	void    Find_Pointer(void);
-	_bool   IntersectTriangle(const _float3& orig, const _float3& dir, _float3& v0, _float3& v1, _float3& v2, _float* t, _float* u, _float* v);
+	_bool   IntersectTriangle(const _fvector& orig, const _fvector& dir, _fvector& v0, _fvector& v1, _fvector& v2, _float* t, _float* u, _float* v);
 
 
 public:
 	CModel*		m_pModelCom = nullptr;
-	MODELDESC*	m_ModelDesc;
+	MODELDESC	m_ModelDesc;
+	MESHDESC	m_MeshDesc;
 
 public:
 	_float4x4  m_matWorld;

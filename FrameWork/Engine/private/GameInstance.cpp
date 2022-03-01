@@ -215,6 +215,14 @@ list<CGameObject*>* CGameInstance::getObjectList(_uint iLevelIndex, const wstrin
 	return m_pObject_Manager->getObjectList(iLevelIndex, pLayerTag);
 }
 
+void CGameInstance::Clear_Object_List(void)
+{
+	if (nullptr == m_pObject_Manager)
+		return;
+
+	return m_pObject_Manager->Clear_Object_List();
+}
+
 CGameObject* CGameInstance::Clone_GameObject(_uint iLevelIndex, const wstring& pPrototypeTag, void* pArg)
 {
 	if (!m_pObject_Manager)
@@ -237,6 +245,14 @@ HRESULT CGameInstance::SetUpBaseComponent(ID3D11Device* pDevice, ID3D11DeviceCon
 		return E_FAIL;
 
 	return m_pComponent_Manager->SetUpBaseComponent(pDevice, pDeviceContext);
+}
+
+void CGameInstance::Clear_Component(void)
+{
+	if (nullptr == m_pComponent_Manager)
+		return;
+
+	return m_pComponent_Manager->Clear_Component();
 }
 
 CComponent * CGameInstance::Clone_Component(_uint iLevelIndex, const wstring& pPrototypeTag, void * pArg)

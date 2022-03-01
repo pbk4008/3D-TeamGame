@@ -28,7 +28,9 @@ public:
 	void		Ready_Level_Combo(void);
 
 public:
-	HRESULT		Clear_Clone_ModelList(wstring _ModelName);
+	HRESULT		Delete_Clone_ModelList(wstring _ModelName);
+	void		Clear_Clone_ModelList(void);
+	HRESULT		Add_GameObjectToLayer(const MESHDESC& ModelDesc);
 
 public:
 	FILEINFO	m_FileInfo; /* Map_Tool에서 선택한 원본 모델에 대한 정보를 저장합니다. */
@@ -45,10 +47,9 @@ public:
 	_bool	m_bModelInfo_View = true;
 
 public:
-	CString m_ModelPosX;
-	CString m_ModelPosY;
-	CString m_ModelPosZ;
-
+	CString m_ModelPosX, m_ModelPosY, m_ModelPosZ;
+	CString m_ModelScaleX, m_ModelScaleY, m_ModelScaleZ;
+	
 	CEdit m_StaticTxt_FileName;
 	CEdit m_EditTxt_Model_Name;
 	CComboBox m_Combo_Tag;

@@ -83,9 +83,19 @@ HRESULT CInspector_Form::Get_ModelInfo(const FILEINFO& _FileInfo)
 	return m_pModel_Inspec->Get_ModelInfo(_FileInfo);
 }
 
-HRESULT CInspector_Form::Clear_Clone_ModelList(wstring _ModelName)
+HRESULT CInspector_Form::Delete_Clone_ModelList(wstring _ModelName)
 {
-	return m_pModel_Inspec->Clear_Clone_ModelList(_ModelName);
+	return m_pModel_Inspec->Delete_Clone_ModelList(_ModelName);
+}
+
+void CInspector_Form::Clear_Clone_ModelList(void)
+{
+	m_pModel_Inspec->Clear_Clone_ModelList();
+}
+
+HRESULT CInspector_Form::Add_GameObjectToLayer(const MESHDESC& ModelDesc)
+{
+	return m_pModel_Inspec->Add_GameObjectToLayer(ModelDesc);;
 }
 
 void CInspector_Form::DoDataExchange(CDataExchange* pDX)

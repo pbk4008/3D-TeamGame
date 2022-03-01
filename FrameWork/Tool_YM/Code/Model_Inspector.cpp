@@ -72,6 +72,11 @@ _int CModel_Inspector::Update_Model_Inspector(_double _dTimeDelta)
 		m_ModelPosX.Format(_T("%.3f"), m_pObserver->m_fModelPos.x);
 		m_ModelPosY.Format(_T("%.3f"), m_pObserver->m_fModelPos.y);
 		m_ModelPosZ.Format(_T("%.3f"), m_pObserver->m_fModelPos.z);
+
+		m_ModelScaleX.Format(_T("%.3f"), m_pObserver->m_fModelScale.x);
+		m_ModelScaleY.Format(_T("%.3f"), m_pObserver->m_fModelScale.y);
+		m_ModelScaleZ.Format(_T("%.3f"), m_pObserver->m_fModelScale.z);
+
 		UpdateData(FALSE);
 	}
 
@@ -100,7 +105,7 @@ void CModel_Inspector::Ready_Level_Combo(void)
 	m_Combo_Level.SetCurSel(0);
 }
 
-HRESULT CModel_Inspector::Clear_Clone_ModelList(wstring _ModelName)
+HRESULT CModel_Inspector::Delete_Clone_ModelList(wstring _ModelName)
 {
 	auto nameFinder = find(m_CloneMode_NameList.begin(), m_CloneMode_NameList.end(), _ModelName);
 
@@ -108,6 +113,34 @@ HRESULT CModel_Inspector::Clear_Clone_ModelList(wstring _ModelName)
 		return E_FAIL;
 
 	m_CloneMode_NameList.erase(nameFinder);
+
+	return S_OK;
+}
+
+void CModel_Inspector::Clear_Clone_ModelList(void)
+{
+	m_CloneMode_NameList.clear();
+}
+
+HRESULT CModel_Inspector::Add_GameObjectToLayer(const MESHDESC& ModelDesc)
+{
+	MODELDESC MeshDesc;
+	
+	MeshDesc.strFolder = ModelDesc.FolderName;
+	MeshDesc.strFileName = ModelDesc.FileName;
+	MeshDesc.strTag = ModelDesc.Tag	;
+	MeshDesc.strName = ModelDesc.Name;
+	MeshDesc.fInitPos = ModelDesc.fInitPos;
+	MeshDesc.WorldMat = ModelDesc.WorldMat;
+
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer(TAB_MAP, MeshDesc.strTag, L"Prototype_GameObject_StaticMesh", &MeshDesc)))
+		return E_FAIL;
+
+	m_pInspec_Form->m_pMenu_Form->InitHierarchyTree();
+	if (FAILED(m_pInspec_Form->m_pMenu_Form->Create_HierarchyTree(MeshDesc)))
+		return E_FAIL;
+
+	m_CloneMode_NameList.push_back(MeshDesc.strName);
 
 	return S_OK;
 }
@@ -122,6 +155,9 @@ void CModel_Inspector::DoDataExchange(CDataExchange* pDX)
 	DDX_Text(pDX, IDC_Model2, m_ModelPosX);
 	DDX_Text(pDX, IDC_Model3, m_ModelPosY);
 	DDX_Text(pDX, IDC_Model4, m_ModelPosZ);
+	DDX_Text(pDX, IDC_Model5, m_ModelScaleX);
+	DDX_Text(pDX, IDC_Model6, m_ModelScaleY);
+	DDX_Text(pDX, IDC_Model7, m_ModelScaleZ);
 }
 
 
@@ -159,6 +195,7 @@ void CModel_Inspector::OnBnClickedAddButton()
 		m_Combo_Tag.GetLBText(m_Combo_Tag.GetCurSel(), strSelData);
 		m_ModelDesc.strTag = strSelData;
 		m_ModelDesc.eLevel = (LEVEL_ID)m_Combo_Level.GetCurSel();
+		m_ModelDesc.strFolder = m_FileInfo.cstrFolder;
 		m_ModelDesc.strFileName = m_FileInfo.cstrFileName;
 		m_ModelDesc.fInitPos = m_pObserver->m_fPickPos;
 
@@ -171,15 +208,11 @@ void CModel_Inspector::OnBnClickedAddButton()
 		{
 			if (FAILED(g_pGameInstance->Add_GameObjectToLayer(TAB_MAP, m_ModelDesc.strTag, L"Prototype_GameObject_StaticMesh", &m_ModelDesc)))
 				return;
-
-			if (FAILED(m_pInspec_Form->m_pMenu_Form->Create_HierarchyTree(m_ModelDesc)))
-				return;
-
-			m_CloneMode_NameList.push_back(m_ModelDesc.strName);
 		}
-		/*CMesh_Save* pSave = CMesh_Save::Create(m_ModelDesc,- )*/
+		if (FAILED(m_pInspec_Form->m_pMenu_Form->Create_HierarchyTree(m_ModelDesc)))
+			return;
+		else 
+			m_CloneMode_NameList.push_back(m_ModelDesc.strName);
 	} 
 	UpdateData(FALSE);
-
-
 }

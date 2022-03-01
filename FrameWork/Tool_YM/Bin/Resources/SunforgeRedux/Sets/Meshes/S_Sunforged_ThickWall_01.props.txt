@@ -1,0 +1,26 @@
+Materials[1] =
+{
+    Materials[0] = Material3'/Game/Aperion/Environment/SunForge/Materials/M_Wall_Concrete_Clean_Black.M_Wall_Concrete_Clean_Black'
+}
+SourceModels[0] = {}
+StaticMaterials[1] =
+{
+    StaticMaterials[0] =
+    {
+        MaterialInterface = Material3'/Game/Aperion/Environment/SunForge/Materials/M_Wall_Concrete_Clean_Black.M_Wall_Concrete_Clean_Black'
+        MaterialSlotName = blinn7
+        UVChannelData =
+        {
+            bInitialized = true
+            bOverrideDensities = false
+            LocalUVDensities[4] = { 1080, 1097.14, 1541.91, 0 }
+        }
+    }
+}
+Sockets[0] = {}
+ExtendedBounds =
+{
+    Origin = { X=0, Y=3.05176e-005, Z=547.966 }
+    BoxExtent = { X=540, Y=270, Z=540 }
+    SphereRadius = 810
+}
