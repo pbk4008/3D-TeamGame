@@ -246,12 +246,9 @@ call Update_Library_Release.bat</Command>
     <ClInclude Include="..\public\SaveManager.h" />
     <ClInclude Include="..\public\SingleTon.h" />
     <ClInclude Include="..\public\SoundMgr.h" />
-<<<<<<< HEAD
     <ClInclude Include="..\public\SphereCollider.h" />
-=======
     <ClInclude Include="..\public\State.h" />
     <ClInclude Include="..\public\StateController.h" />
->>>>>>> main
     <ClInclude Include="..\public\Target_Manager.h" />
     <ClInclude Include="..\public\Texture.h" />
     <ClInclude Include="..\public\TextureManager.h" />
@@ -287,12 +284,9 @@ call Update_Library_Release.bat</Command>
     <ClCompile Include="..\private\LandScape.cpp" />
     <ClCompile Include="..\private\Mouse.cpp" />
     <ClCompile Include="..\private\PhysicsXSystem.cpp" />
-<<<<<<< HEAD
     <ClCompile Include="..\private\SphereCollider.cpp" />
-=======
     <ClCompile Include="..\private\State.cpp" />
     <ClCompile Include="..\private\StateController.cpp" />
->>>>>>> main
     <ClCompile Include="..\private\UI.cpp" />
     <ClCompile Include="..\private\CustumFont.cpp" />
     <ClCompile Include="..\private\DebugDraw.cpp" />
