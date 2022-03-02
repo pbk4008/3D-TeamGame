@@ -1,40 +1,41 @@
-#include "Transform.h"
 #include "Collider.h"
+#include "Transform.h"
 #include "PipeLine.h"
+#include "GameInstance.h"
 
 CCollider::CCollider(ID3D11Device * pDevice, ID3D11DeviceContext * pDeviceContext)
 	: CComponent(pDevice, pDeviceContext)
+	, m_pGizmo(nullptr)
 {
-	ZeroMemory(&m_vColor, sizeof(_float4x4));
+	ZeroMemory(&m_matLoaclMatrix, sizeof(_float4x4));
+	ZeroMemory(&m_matWorldMatrix, sizeof(_float4x4));
+	ZeroMemory(&m_vColor, sizeof(_float4));
 }
 
 CCollider::CCollider(const CCollider & rhs)
 	: CComponent(rhs)
-	, m_pEffect(rhs.m_pEffect)
+	/*, m_pEffect(rhs.m_pEffect)
 	, m_pBatch(rhs.m_pBatch)
-	, m_pInputLayout(rhs.m_pInputLayout)
+	, m_pInputLayout(rhs.m_pInputLayout)*/
+	, m_pGizmo(rhs.m_pGizmo)
 	, m_vColor(rhs.m_vColor)
 	, m_pRigidBody(rhs.m_pRigidBody)
 	, m_pShape(rhs.m_pShape)
 	, m_eType(rhs.m_eType)
+	, m_matLoaclMatrix(rhs.m_matLoaclMatrix)
+	, m_matWorldMatrix(rhs.m_matWorldMatrix)
 {
-	Safe_AddRef(m_pInputLayout);
+	Safe_AddRef(m_pGizmo);
 	PX_ADDREF(m_pShape)
 }
 
 HRESULT CCollider::NativeConstruct_Prototype()
 {
-	m_pEffect = new BasicEffect(m_pDevice);
-	m_pEffect->SetVertexColorEnabled(true);
+	CGameInstance* pInstance = GET_INSTANCE(CGameInstance);
 
-	const void*		pShaderByteCode = nullptr;
-	size_t			ShaderByteCodeLength = 0;
-	m_pEffect->GetVertexShaderBytecode(&pShaderByteCode, &ShaderByteCodeLength);
+	m_pGizmo = pInstance->Clone_Component<CGizmo>(0,L"Gizmo");
 
-	if (FAILED(m_pDevice->CreateInputLayout(VertexPositionColor::InputElements, VertexPositionColor::InputElementCount, pShaderByteCode, ShaderByteCodeLength, &m_pInputLayout)))
-		return E_FAIL;
-
-	m_pBatch = new PrimitiveBatch<VertexPositionColor>(m_pDeviceContext);
+	RELEASE_INSTANCE(CGameInstance);
 
 	return S_OK;
 }
@@ -43,20 +44,28 @@ HRESULT CCollider::NativeConstruct(void * pArg)
 {
 	m_eType = (*(CPhysicsXSystem::ACTORTYPE*)pArg);
 
+	m_vColor = _float4(1.f, 0.f, 0.f, 1.f);
 	return S_OK;
 }
 
 void CCollider::Update(_fmatrix TransformMatrix)
 {
-	Update_Scale(TransformMatrix);
+	_matrix matTransform = XMLoadFloat4x4(&m_matLoaclMatrix);
 
-	Update_Rotate(TransformMatrix);
+	matTransform *= TransformMatrix;
+	_matrix matScale=Update_Scale(matTransform);
+
+	_matrix matRotate=Update_Rotate(matTransform);
+
+	matScale *= matRotate;
 
 	if (m_eType == CPhysicsXSystem::ACTORTYPE::ACTOR_DYNAMIC)
 	{
-		PxVec3 pxPos = PxVec3(ToPxVector(TransformMatrix.r[3]));
-		Update_Position(pxPos);
+		PxVec3 pxPos = PxVec3(ToPxVector(matTransform.r[3]));
+		_matrix matPos = Update_Position(pxPos);
+		matScale *= matPos;
 	}
+	XMStoreFloat4x4(&m_matWorldMatrix, matScale);
 	/*_vector vTransformPos = TransformMatrix.r[3];
 	_vector vTransformQuat = getQuaternion(TransformMatrix);
 
@@ -88,30 +97,6 @@ void CCollider::Collider()
 }
 
 
-HRESULT CCollider::Render_Begin(const wstring& pCameraTag)
-{	
-	CPipeLine* pPipeLine = GET_INSTANCE(CPipeLine);
-
-	//m_vColor = m_isCollision == true ? _float4(1.f, 0.f, 0.f, 1.f) : _float4(0.f, 1.f, 0.f, 1.f);
-
-	m_pEffect->SetView(pPipeLine->Get_Transform(pCameraTag,TRANSFORMSTATEMATRIX::D3DTS_VIEW));
-	m_pEffect->SetProjection(pPipeLine->Get_Transform(pCameraTag,TRANSFORMSTATEMATRIX::D3DTS_PROJECTION));
-
-	RELEASE_INSTANCE(CPipeLine);
-	m_pDeviceContext->IASetInputLayout(m_pInputLayout);
-
-	m_pEffect->Apply(m_pDeviceContext);
-
-	m_pBatch->Begin();
-
-
-	return S_OK;
-}
-HRESULT CCollider::Render_End()
-{
-	m_pBatch->End();
-	return S_OK;
-}
 HRESULT CCollider::Init_Collider(const CPhysicsXSystem::COLDESC& tDesc)
 {
 	CPhysicsXSystem* pInstance = GET_INSTANCE(CPhysicsXSystem);
@@ -124,6 +109,19 @@ HRESULT CCollider::Init_Collider(const CPhysicsXSystem::COLDESC& tDesc)
 	RELEASE_INSTANCE(CPhysicsXSystem);
 
 	return S_OK;
+}
+
+const PxVec3 CCollider::Calcul_Extends(_fmatrix matTransform)
+{
+	_float fSizeX, fSizeY, fSizeZ;
+
+	fSizeX = XMVectorGetX(XMVector3Length(matTransform.r[0]));
+	fSizeY = XMVectorGetY(XMVector3Length(matTransform.r[1]));
+	fSizeZ = XMVectorGetZ(XMVector3Length(matTransform.r[2]));
+
+	PxVec3 result = PxVec3(fSizeX, fSizeY, fSizeZ);
+
+	return result;
 }
 
 _fvector CCollider::getQuaternion(_fmatrix matTransform)
@@ -217,7 +215,7 @@ const _float3 CCollider::QuaternionToEuler(const _float4& _q)
 	return euler;
 }
 
-void CCollider::Update_Scale(_fmatrix matTransform)
+_fmatrix CCollider::Update_Scale(_fmatrix matTransform)
 {
 	_float fSizeX = XMVectorGetX(XMVector3Length(matTransform.r[0]));
 	_float fSizeY = XMVectorGetX(XMVector3Length(matTransform.r[1]));
@@ -242,6 +240,9 @@ void CCollider::Update_Scale(_fmatrix matTransform)
 		//	m_pShape->setGeometry(tHolder.sphere());
 	}
 
+	_matrix matScale = XMMatrixScaling(fSizeX, fSizeY, fSizeZ);
+
+	return matScale;
 	//switch (tHolder.getType())
 	//{
 	//case PxGeometryType::eBOX :
@@ -263,19 +264,30 @@ void CCollider::Update_Scale(_fmatrix matTransform)
 	//}
 }
 
-void CCollider::Update_Rotate(_fmatrix matTransform)
+_fmatrix CCollider::Update_Rotate(_fmatrix matTransform)
 {
 	_vector vTransformQuat = getQuaternion(matTransform);
 	PxVec3 pxTransformQuat = ToPxVector(vTransformQuat);
 	PxTransform pRigidTr = m_pRigidBody->getGlobalPose();
 	pRigidTr.rotate(pxTransformQuat);
+
+	_vector vQuat = ToXMVector4(pRigidTr.q);
+	_matrix matRotate = XMMatrixRotationQuaternion(vQuat);
+
+	return matRotate;
 }
 
-void CCollider::Update_Position(PxVec3 vPos)
+_fmatrix CCollider::Update_Position(PxVec3 vPos)
 {
+	_matrix matPos = XMMatrixIdentity();
 	PxTransform pRigidTr = m_pRigidBody->getGlobalPose();
 	pRigidTr.p= vPos;
+
+	_vector vMatPos = XMVectorSet(pRigidTr.p.x, pRigidTr.p.y, pRigidTr.p.z, 1.f);
+
 	static_cast<PxRigidDynamic*>(m_pRigidBody)->setGlobalPose(pRigidTr);
+	matPos.r[3] = vMatPos;
+	return matPos;
 }
 
 void CCollider::Free()
@@ -284,10 +296,7 @@ void CCollider::Free()
 
 	PX_RELEASE(m_pShape);
 	if (false == m_isCloned)
-	{
-		Safe_Delete(m_pEffect);
-		Safe_Delete(m_pBatch);
 		PX_RELEASE(m_pRigidBody);
-	}
-	Safe_Release(m_pInputLayout);
+
+	Safe_Release(m_pGizmo);
 }

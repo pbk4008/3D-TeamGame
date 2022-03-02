@@ -46,7 +46,7 @@ HRESULT CTestObj::NativeConstruct(void* pArg)
 	TESTDESC tDesc = (*(TESTDESC*)pArg);
 
 
-	if (tDesc.tSphereDesc.fRadius == 0.f && tDesc.tCapsuleDesc.fExtends.x == 0.f)
+	if (tDesc.tSphereDesc.matTransform._11 == 0.f && tDesc.tCapsuleDesc.matTransform._11 == 0.f)
 	{
 		tDesc.tBoxDesc.pParent = this;
 		if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"BoxCollider", L"TestCol", (CComponent * *)& m_pBoxCollider, &tDesc.tBoxDesc)))
@@ -54,7 +54,7 @@ HRESULT CTestObj::NativeConstruct(void* pArg)
 	}
 	else
 	{
-		if (tDesc.tSphereDesc.fRadius != 0.f)
+		if (tDesc.tSphereDesc.matTransform._11 != 0.f)
 		{
 			tDesc.tSphereDesc.pParent = this;
 			if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"SphereCollider", L"TestCol", (CComponent * *)& m_pSphereCollider, &tDesc.tSphereDesc)))

@@ -5,6 +5,7 @@
 #include "Camera.h"
 #include "Model.h"
 #include "Texture.h"
+#include "Gizmo.h"
 #include "BoxCollider.h"
 #include "SphereCollider.h"
 #include "CapsuleCollider.h"

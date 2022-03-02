@@ -99,27 +99,25 @@ HRESULT CLoading::Ready_GameObject()
 	CTestObj::TESTDESC tDesc;
 	ZeroMemory(&tDesc, sizeof(tDesc));
 	
-	tDesc.tCapsuleDesc.fExtends = _float3(0.5f, 0.5f, 0.5f);
+
+	_matrix matIdentity = XMMatrixIdentity();
+	XMStoreFloat4x4(&tDesc.tCapsuleDesc.matTransform, matIdentity);
 	tDesc.tCapsuleDesc.tColDesc.bGravity = false;
 	tDesc.tCapsuleDesc.tColDesc.bKinematic = false;
 	tDesc.tCapsuleDesc.tColDesc.eType = CPhysicsXSystem::ACTORTYPE::ACTOR_DYNAMIC;
-	tDesc.tCapsuleDesc.tColDesc.fPos = _float3(0.f, 0.f, 0.f);
 
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_LOADING, L"Test", L"TestObj", &tDesc)))
 		return E_FAIL;
 
 	ZeroMemory(&tDesc, sizeof(tDesc));
 
-	tDesc.tBoxDesc.eRot = CBoxCollider::ROTATE::ROT_AABB;
-	tDesc.tBoxDesc.fExtends = _float3(0.5f, 0.5f, 0.5f);
+	XMStoreFloat4x4(&tDesc.tBoxDesc.matTransform, matIdentity);
 	tDesc.tBoxDesc.tColDesc.bGravity = false;
 	tDesc.tBoxDesc.tColDesc.bKinematic = false;
-	tDesc.tBoxDesc.tColDesc.fPos = _float3(0.f, 0.f, 0.f);
 	tDesc.tBoxDesc.tColDesc.eType = CPhysicsXSystem::ACTORTYPE::ACTOR_STATIC; 
 
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_LOADING, L"Test", L"TestObj" ,&tDesc)))
 		return E_FAIL;
-
 
 
 	return S_OK;

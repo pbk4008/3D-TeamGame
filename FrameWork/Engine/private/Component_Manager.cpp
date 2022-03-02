@@ -54,6 +54,8 @@ HRESULT CComponent_Manager::SetUpBaseComponent(ID3D11Device* pDevice, ID3D11Devi
 		return E_FAIL;
 	if (Add_Prototype(0, L"Camera", CCamera::Create(pDevice, pDeviceContext)))
 		return E_FAIL;
+	if (Add_Prototype(0, L"Gizmo", CGizmo::Create(pDevice, pDeviceContext)))
+		return E_FAIL;
 	if (Add_Prototype(0, L"RectBuffer", CVIBuffer_Rect::Create(pDevice, pDeviceContext,L"../../Reference/ShaderFile/Shader_Rect.hlsl")))
 		return E_FAIL;
 

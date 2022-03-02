@@ -9,7 +9,7 @@ class ENGINE_DLL CSphereCollider final : public CCollider
 public:
 	typedef struct tagSphere
 	{
-		_float fRadius;
+		_float4x4 matTransform;
 		CPhysicsXSystem::COLDESC tColDesc;
 		CGameObject* pParent;
 	}SPHEREDESC;
@@ -21,11 +21,9 @@ private:
 public:
 	virtual HRESULT NativeConstruct_Prototype();
 	virtual HRESULT NativeConstruct(void* pArg);
-	void Update(_fmatrix TransformMatrix);
 	virtual HRESULT Render(const wstring& pCameraTag);
 private:
 	virtual HRESULT Init_Shape(PxVec3 pxExtends);
-	HRESULT Init_Sphere();
 public:
 	static CSphereCollider* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);
 	virtual CComponent* Clone(void* pArg);
