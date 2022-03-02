@@ -23,6 +23,9 @@ public:
 private:
 	HRESULT Ready_Components();
 
+public:
+	void Set_ChaseTarget(const _bool _isChase);
+
 private:
 	_int Chase_Target(const _double& _dDeltaTime);
 

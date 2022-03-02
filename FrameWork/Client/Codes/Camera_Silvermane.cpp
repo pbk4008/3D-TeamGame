@@ -30,17 +30,12 @@ HRESULT CCamera_Silvermane::NativeConstruct(void* _pArg)
 		return E_FAIL;
 	}
 
-	CCamera::CAMERADESC cameraDesc = *static_cast<CCamera::CAMERADESC*>(_pArg);
-	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Camera", L"Camera", (CComponent**)&m_pCamera, &cameraDesc)))
-	{
-		return E_FAIL;
-	}
-	m_pSilvermane = static_cast<CSilvermane*>(g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_TEST_JS, L"Silvermane")->front());
-
 	if (FAILED(Ready_Components()))
 	{
 		return E_FAIL;
 	}
+
+	m_pSilvermane = static_cast<CSilvermane*>(g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_TEST_JS, L"Silvermane")->front());
 
 	return S_OK;
 }
@@ -83,8 +78,27 @@ HRESULT CCamera_Silvermane::Render()
 
 HRESULT CCamera_Silvermane::Ready_Components()
 {
+	CCamera::CAMERADESC cameraDesc;
+	cameraDesc.pCameraTag = L"Camera_Silvermane";
+	cameraDesc.eType = CCamera::CAMERATYPE::CAMERA_PROJECTION;
+	cameraDesc.vEye = _float4(0.f, 0.f, 0.f, 1.f);
+	cameraDesc.vAt = _float4(0.f, 0.f, 1.f, 1.f);
+	cameraDesc.vAxisY = _float4(0.f, 1.f, 0.f, 0.f);
+	cameraDesc.fFovy = XMConvertToRadians(60.f);
+	cameraDesc.fAspect = _float(g_iWinCx) / g_iWinCy;
+	cameraDesc.fNear = 0.1f;
+	cameraDesc.fFar = 500.f;
+	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Camera", L"Camera", (CComponent**)&m_pCamera, &cameraDesc)))
+	{
+		return E_FAIL;
+	}
 
 	return S_OK;
+}
+
+void CCamera_Silvermane::Set_ChaseTarget(const _bool _isChase)
+{
+	m_isChase = _isChase;
 }
 
 _int CCamera_Silvermane::Chase_Target(const _double& _dDeltaTime)
