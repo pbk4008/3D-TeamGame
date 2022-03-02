@@ -92,20 +92,20 @@ HRESULT CNavSphere::Render()
 
 void CNavSphere::Input_Key(_double _dtimeDelta)
 {
-	if (g_pGameInstance->getkeyPress(DIK_NUMPAD8))
+	if (g_pGameInstance->getkeyPress(DIK_UP))
 		m_pTransform->Go_Straight(_dtimeDelta);
-	if (g_pGameInstance->getkeyPress(DIK_NUMPAD2))
+	if (g_pGameInstance->getkeyPress(DIK_DOWN))
 		m_pTransform->Go_BackWard(_dtimeDelta);
-	if (g_pGameInstance->getkeyPress(DIK_NUMPAD4))
+	if (g_pGameInstance->getkeyPress(DIK_LEFT))
 		m_pTransform->Go_Left(_dtimeDelta);
-	if (g_pGameInstance->getkeyPress(DIK_NUMPAD6))
+	if (g_pGameInstance->getkeyPress(DIK_RIGHT))
 		m_pTransform->Go_Right(_dtimeDelta);
 	if (g_pGameInstance->getkeyPress(DIK_PGUP))
 		m_pTransform->Go_Up(_dtimeDelta);
 	if (g_pGameInstance->getkeyPress(DIK_PGDN))
 		m_pTransform->Go_Down(_dtimeDelta);
-	else
-		XMStoreFloat3(&m_fPostion, m_pTransform->Get_State(CTransform::STATE_POSITION));
+
+	XMStoreFloat3(&m_fPostion, m_pTransform->Get_State(CTransform::STATE_POSITION));
 }
 
 void CNavSphere::Pick_Model(void)
@@ -151,7 +151,6 @@ void CNavSphere::Pick_Model(void)
 			pObserver->m_bNavSpherePick = true;
 			pObserver->m_pNavSphere = this;
 		
-			XMStoreFloat3(&m_fSpherePosition, m_pTransform->Get_State(CTransform::STATE_POSITION));
 			XMStoreFloat3(&m_fLocalMouse, XMLoadFloat3(&m_vRayPos) + (XMLoadFloat3(&m_vRayDir)) * fDist);
 			cout << "Nav Sphere Pick" << endl;
 		}

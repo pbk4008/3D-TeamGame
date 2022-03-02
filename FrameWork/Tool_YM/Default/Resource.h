@@ -29,6 +29,7 @@
 #define IDC_BUTTON1                     1017
 #define IDC_BUTTON2                     1018
 #define IDC_TREE2                       1019
+#define IDC_BUTTON3                     1019
 #define IDC_RADIO1                      1021
 #define IDC_RADIO2                      1022
 #define ID_32771                        32771

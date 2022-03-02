@@ -25,6 +25,7 @@ public:
 	}
 public:
 	HRESULT NativeConstruct(_float3* pPoints, _uint iIndex);
+	HRESULT NativeConstruct(_float3* pPoints[], _uint iIndex);
 public:
 	_bool Compare(_fvector SourPoint, _fvector DestPoint);
 	_bool isIn(_fvector vPosition, CCell** ppOutNeighbor);
@@ -37,6 +38,7 @@ public:
 
 public:
 	_float3					m_vPoint[POINT_END];
+	_float3*				m_pPoint[POINT_END];
 	_uint					m_iIndex = 0;
 
 private:
@@ -58,6 +60,7 @@ public:
 
 public:
 	static CCell* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext, _float3* pPoints, _uint iIndex);
+	static CCell* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext, _float3* pPoints[], _uint iIndex);
 	virtual void Free() override;
 };
 

@@ -95,7 +95,7 @@ _bool CNavigation::Move_OnNavigation(_fvector vPosition)
 	/* 2. 다른 쎌로 이동했다라면 현재 m_iCurrentCellIndex를 갱신. */
 
 	CCell*		pNeighbor = nullptr;
-
+	
 	/* 현재 존재하던 셀안에서 움직였다. */
 	if (true == m_Cells[m_iCurrentCellIndex]->isIn(vPosition, &pNeighbor))
 	{
@@ -124,7 +124,43 @@ _bool CNavigation::Move_OnNavigation(_fvector vPosition)
 	}
 }
 
-HRESULT CNavigation::Find_Cell(_fvector _vFindPoint)
+HRESULT CNavigation::Update_Buffer(_fvector pPosition)
+{
+	class CCell* pCell = nullptr;
+
+	for (auto Finder : m_Cells)
+	{
+		for (int i = 0; i < CCell::POINT_END; ++i)
+		{
+			if (true == XMVector3Equal(pPosition, XMLoadFloat3(&(*Finder->m_pPoint[i]))))
+			{
+				pCell = Finder;
+			}
+
+			if (nullptr != pCell)
+			{
+				D3D11_MAPPED_SUBRESOURCE resource;
+				m_pDeviceContext->Map(pCell->m_pVIBuffer->m_pVB, 0, D3D11_MAP_WRITE_DISCARD, 0, &resource);
+
+				resource.pData = pCell->m_pVIBuffer->getVertices();
+
+				VTXCOL* Vtx = (VTXCOL*)resource.pData;
+
+				for (int i = 0 ; i < CCell::POINT_END; ++i)
+				{
+					Vtx[i].vPosition = *pCell->m_pPoint[i];
+				}
+
+				m_pDeviceContext->Unmap((pCell)->m_pVIBuffer->m_pVB, 0);
+			}
+		}
+	}
+
+	
+	return S_OK;
+}
+
+/*RESULT CNavigation::Find_Cell(_fvector _vFindPoint, _fvector _vUpdatePos)
 {
 	for (auto Finder : m_Cells)
 	{
@@ -134,27 +170,25 @@ HRESULT CNavigation::Find_Cell(_fvector _vFindPoint)
 			{
 				m_pCell = Finder;
 				m_iChangePointIndex = i;
-				return S_OK;
+				XMStoreFloat3(&Finder->m_vPoint[i], _vUpdatePos);
+				break;
 			}
+			else
+				m_iChangePointIndex = -1;
 		}
+		if(-1 != m_iChangePointIndex)
+			break;
 	}
-	return E_FAIL;
-}
+	return Update_Point(_vUpdatePos);
+}*/
 
 #ifdef _DEBUG
-void CNavigation::Update_Point(_fvector _vUpdatePos)
-{
-	if (nullptr != m_pCell)
-	{
-		XMStoreFloat3(&m_pCell->m_vPoint[m_iChangePointIndex], _vUpdatePos);
-		m_iChangePointIndex = -1;
-	}
-}
 HRESULT CNavigation::Render(const wstring& pCameraTag, _fmatrix WorldMatrix)
 {
 	for (auto& pCell : m_Cells)
+	{
 		pCell->Render(WorldMatrix, m_iCurrentCellIndex, pCameraTag);
-
+	}
 	return S_OK;
 }
 #endif // _DEBUG
@@ -168,7 +202,6 @@ CNavigation * CNavigation::Create(ID3D11Device * pDevice, ID3D11DeviceContext * 
 		MSGBOX("Failed to Creating CNavigation");
 		Safe_Release(pInstance);
 	}
-
 	return pInstance;
 }
 
@@ -194,12 +227,3 @@ void CNavigation::Free()
 
 	m_Cells.clear();
 }
-
-/*D3D11_MAPPED_SUBRESOURCE resource;
-m_pDeviceContext->Map(&*(Finder)->m_pVIBuffer->m_pVB, 0, D3D11_MAP_WRITE_DISCARD, 0, &resource);
-
-resource.pData = Finder->m_pVIBuffer->getVertices();
-
-VTXCOL* Vtx = (VTXCOL*)resource.pData;
-XMStoreFloat3(&(Vtx[i]).vPosition, _vUpdatePos);
-m_pDeviceContext->Unmap((Finder)->m_pVIBuffer->m_pVB, 0);*/

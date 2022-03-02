@@ -3,6 +3,7 @@
 #include "GameInstance.h"
 #include "Mouse.h"
 #include "NavSphere.h"
+#include "GameObject.h"
 #include "Observer.h"
 #include "Cell.h"
 #include "VIBuffer_Triangle.h"
@@ -97,20 +98,31 @@ HRESULT CPlane::Create_NavigationLine()
 	if (true == m_pObserver->m_bNavSpherePick)
 	{
 		CNavSphere* pSphere = dynamic_cast<CNavSphere*>(m_pObserver->m_pNavSphere);
-		m_fPoints[m_iPointindex++] = pSphere->m_fSpherePosition;
+		m_fPoints[m_iPointindex++] = &(pSphere->m_fPostion);
 		m_pObserver->m_bNavSpherePick = false;
 		return S_OK;
 	}
 	else
 	{
-		if (SUCCEEDED(g_pGameInstance->Add_GameObjectToLayer(TAB_STATIC, L"Layer_NaveSphere", L"Prototype_GameObject_NavSphere", &m_pObserver->m_fPickPos)))
+		CGameObject* pSphere = nullptr;
+		if (SUCCEEDED(g_pGameInstance->Add_GameObjectToLayer(TAB_STATIC, L"Layer_NaveSphere", L"Prototype_GameObject_NavSphere", &m_pObserver->m_fPickPos, &pSphere)))
 		{
-			m_fPoints[m_iPointindex++] = m_pObserver->m_fPickPos;
+			m_fPoints[m_iPointindex++] = &(dynamic_cast<CNavSphere*>(pSphere)->m_fPostion);
 			return S_OK;
 		}
 		else
 			return E_FAIL;
 	}
+	return S_OK;
+}
+
+HRESULT CPlane::Update_CellPos()
+{
+	CNavSphere* pSphere = m_pObserver->m_pNavSphere;
+
+	if (FAILED(m_pNavigationCom->Update_Buffer(XMLoadFloat3(&pSphere->m_fPostion))))
+		return E_FAIL;
+
 	return S_OK;
 }
 
@@ -120,37 +132,21 @@ HRESULT CPlane::Make_NavigationCell(CCell* _pCell/*= nullptr*/)
 
 	if (nullptr == _pCell)
 	{
-		CCW_Sort(m_fPoints);
+		CCW_Sort((*m_fPoints));
 		pCell = CCell::Create(m_pDevice, m_pDeviceContext, m_fPoints, m_pNavigationCom->m_Cells.size());
 	}
 	else
 	{
 		memcpy(m_fPoints, _pCell->m_vPoint, sizeof(_float3) * CCell::POINT_END);
-		CCW_Sort(m_fPoints);
-		pCell = CCell::Create(m_pDevice, m_pDeviceContext, m_fPoints, m_pNavigationCom->m_Cells.size());
+		CCW_Sort((*m_fPoints));
+		pCell = CCell::Create(m_pDevice, m_pDeviceContext, *m_fPoints, m_pNavigationCom->m_Cells.size());
 	}
 
 	m_pNavigationCom->m_Cells.push_back(pCell);
 	m_iPointindex = 0;
-	m_fPoints[0] = { 0.0f, 0.0f, 0.0f };
-	m_fPoints[1] = { 0.0f, 0.0f, 0.0f };
-	m_fPoints[2] = { 0.0f, 0.0f, 0.0f };
-
-	return S_OK;
-}
-
-HRESULT CPlane::Update_CellPos()
-{
-	_float3 fFindPos = { 0.0f, 0.0f, 0.0f }; 
-	_float3 fUpdatePos = { 0.0f, 0.0f, 0.0f };
-	CNavSphere* pSphere = dynamic_cast<CNavSphere*>(m_pObserver->m_pNavSphere);
-	fFindPos = pSphere->m_fPostion;
-	fUpdatePos = pSphere->m_fSpherePosition;
-
-	if (FAILED(m_pNavigationCom->Find_Cell(XMLoadFloat3(&fFindPos))))
-		return E_FAIL;
-
-	m_pNavigationCom->Update_Point(XMLoadFloat3(&fUpdatePos));
+	//m_fPoints[0] = nullptr;//{ 0.0f, 0.0f, 0.0f };
+	//m_fPoints[1] = nullptr;//{ 0.0f, 0.0f, 0.0f };
+	//m_fPoints[2] = nullptr;//{ 0.0f, 0.0f, 0.0f };
 
 	return S_OK;
 }

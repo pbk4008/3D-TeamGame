@@ -33,7 +33,7 @@ public:
 	CModel* m_pModelCom = nullptr;
 	POINT	    m_tMousePos;
 public:
-	_float3	   m_fPostion;
+	_float3    m_fPostion;
 	_float3	   m_fLocalMouse;
 	_float3    m_fSpherePosition;
 	_float3	   m_vRayPos;

@@ -71,12 +71,17 @@ HRESULT CVIBuffer::Render(_uint iPassIndex)
 		0
 	};
 
-	/* 그려야할 버텍싀버퍼들을 장치에 바인드한다. */
+	//D3D11_MAPPED_SUBRESOURCE resource;
+	//m_pDeviceContext->Map(m_pVB, 0, D3D11_MAP_WRITE_DISCARD, 0, &resource);
+	//resource.pData = m_pVertices;//m_pVIBuffer->getVertices();
+	//VTXCOL* Vtx = (VTXCOL*)resource.pData;
+	//m_pDeviceContext->Unmap(m_pVB, 0);
+
+	///* 그려야할 버텍싀버퍼들을 장치에 바인드한다. */
 	m_pDeviceContext->IASetVertexBuffers(0, 1, pVertexBuffers, iStrides, iOffsets);
 	m_pDeviceContext->IASetIndexBuffer(m_pIB, m_eFormat, 0);
 	m_pDeviceContext->IASetPrimitiveTopology(m_ePrimitiveTopology);	
 	m_pDeviceContext->IASetInputLayout(m_EffectDescs[iPassIndex]->pInputLayout);
-
 
 	if (FAILED(m_EffectDescs[iPassIndex]->pPass->Apply(0, m_pDeviceContext)))
 		return E_FAIL;

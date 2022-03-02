@@ -200,12 +200,12 @@ HRESULT CGameInstance::Add_Prototype(const wstring& pPrototypeTag, CGameObject *
 	return m_pObject_Manager->Add_Prototype(pPrototypeTag, pPrototype);	
 }
 
-HRESULT CGameInstance::Add_GameObjectToLayer(_uint iLevelIndex, const wstring& pLayerTag, const wstring& pPrototypeTag, void * pArg)
+HRESULT CGameInstance::Add_GameObjectToLayer(_uint iLevelIndex, const wstring& pLayerTag, const wstring& pPrototypeTag, void * pArg, CGameObject** ppOut /* = nullptr */)
 {
 	if (nullptr == m_pObject_Manager)
 		return E_FAIL;
 
-	return m_pObject_Manager->Add_GameObjectToLayer(iLevelIndex, pLayerTag, pPrototypeTag, pArg);	
+	return m_pObject_Manager->Add_GameObjectToLayer(iLevelIndex, pLayerTag, pPrototypeTag, pArg, ppOut);
 }
 
 list<CGameObject*>* CGameInstance::getObjectList(_uint iLevelIndex, const wstring& pLayerTag)

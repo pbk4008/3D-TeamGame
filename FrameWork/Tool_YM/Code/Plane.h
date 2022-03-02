@@ -52,7 +52,7 @@ public:
 
 public:
 	_bool		m_bOneClick = true;
-	_float3		m_fPoints[3];
+	_float3*	m_fPoints[3];
 	_float3     m_fPosition = { 5.f, 5.f, 5.f };
 	_float3		m_fLocalMouse;
 	_int		m_iPointindex = 0;

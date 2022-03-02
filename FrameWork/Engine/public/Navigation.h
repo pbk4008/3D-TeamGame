@@ -20,8 +20,8 @@ public:
 	_bool Move_OnNavigation(_fvector vPosition);
 
 public:
-	HRESULT	Find_Cell(_fvector _vFindPoint);
-	void	Update_Point(_fvector _vUpdatePos);
+	HRESULT	Update_Buffer(_fvector pPosition);
+
 #ifdef _DEBUG
 public:
 	HRESULT Render(const wstring& pCameraTag, _fmatrix WorldMatrix = XMMatrixIdentity());
@@ -30,7 +30,6 @@ public:
 public:
 	vector<class CCell*>			m_Cells;
 	typedef vector<class CCell*>	CELLS;
-	class CCell*					m_pCell = nullptr;
 private:
 	_uint				m_iCurrentCellIndex = 0;
 	_int				m_iChangePointIndex = -1;

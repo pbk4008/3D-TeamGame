@@ -55,7 +55,7 @@ public: /* For.Level_Manager*/
 public: /* For.Object_Manager*/
 	class CComponent* Get_Component(_uint iLevelIndex, const wstring& pLayerTag, const wstring& pComponentTag, _uint iIndex = 0);
 	HRESULT Add_Prototype(const wstring& pPrototypeTag, CGameObject* pPrototype);
-	HRESULT Add_GameObjectToLayer(_uint iLevelIndex, const wstring& pLayerTag, const wstring& pPrototypeTag, void* pArg = nullptr);
+	HRESULT Add_GameObjectToLayer(_uint iLevelIndex, const wstring& pLayerTag, const wstring& pPrototypeTag, void* pArg = nullptr, class CGameObject** ppOut = nullptr);
 	CGameObject* Clone_GameObject(_uint iLevelIndex, const wstring& pPrototypeTag, void* pArg = nullptr);
 	list<CGameObject*>* getObjectList(_uint iLevelIndex, const wstring & pLayerTag);
 	list<CGameObject*> getAllObjectList();

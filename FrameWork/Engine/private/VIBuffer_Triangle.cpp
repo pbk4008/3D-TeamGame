@@ -11,7 +11,7 @@ CVIBuffer_Triangle::CVIBuffer_Triangle(const CVIBuffer_Triangle & rhs)
 {
 }
 
-HRESULT CVIBuffer_Triangle::NativeConstruct_Prototype(const _tchar* pShaderFilePath, _float3* pPoints)
+HRESULT CVIBuffer_Triangle::NativeConstruct_Prototype(const _tchar* pShaderFilePath, _float3* pPoints[])
 {
 	if (FAILED(__super::NativeConstruct_Prototype()))
 		return E_FAIL;
@@ -43,9 +43,9 @@ HRESULT CVIBuffer_Triangle::NativeConstruct_Prototype(const _tchar* pShaderFileP
 	}
 	else
 	{
-		((VTXCOL*)m_pVertices)[0].vPosition = pPoints[0];
-		((VTXCOL*)m_pVertices)[1].vPosition = pPoints[1];
-		((VTXCOL*)m_pVertices)[2].vPosition = pPoints[2];
+		((VTXCOL*)m_pVertices)[0].vPosition = *pPoints[0];
+		((VTXCOL*)m_pVertices)[1].vPosition = *pPoints[1];
+		((VTXCOL*)m_pVertices)[2].vPosition = *pPoints[2];
 	}
 
 	((VTXCOL*)m_pVertices)[0].vColor = _float4(0.0f, 1.f, 0.f, 1.f);
@@ -121,7 +121,7 @@ HRESULT CVIBuffer_Triangle::NativeConstruct(void * pArg)
 	return S_OK;
 }
 
-CVIBuffer_Triangle * CVIBuffer_Triangle::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pDeviceContext, const _tchar* pShaderFilePath, _float3* pPoints)
+CVIBuffer_Triangle * CVIBuffer_Triangle::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pDeviceContext, const _tchar* pShaderFilePath, _float3* pPoints[])
 {
 	CVIBuffer_Triangle*		pInstance = new CVIBuffer_Triangle(pDevice, pDeviceContext);
 
