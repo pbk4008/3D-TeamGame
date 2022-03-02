@@ -78,7 +78,7 @@ PxShape* CPhysicsXSystem::Init_Shape(COLLIDERTYPE eType, const PxVec3 ShapeInfo)
 		pShape = m_pPhysics->createShape(PxCapsuleGeometry(ShapeInfo.x, ShapeInfo.y), *pMaterial, true);
 		break;
 	case Engine::CPhysicsXSystem::COLLIDERTYPE::COL_SPHERE:
-		pShape = m_pPhysics->createShape(PxCapsuleGeometry(ShapeInfo.x, ShapeInfo.y), *pMaterial, true);
+		pShape = m_pPhysics->createShape(PxSphereGeometry(ShapeInfo.x), *pMaterial, true);
 		break;
 	case Engine::CPhysicsXSystem::COLLIDERTYPE::COL_END:
 		break;

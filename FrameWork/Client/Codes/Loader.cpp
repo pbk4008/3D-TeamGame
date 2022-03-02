@@ -2,6 +2,13 @@
 #include "Loader.h"
 
 
+#pragma region TestScene_JS
+
+#include "Silvermane.h"
+
+#pragma endregion
+
+
 CLoader::CLoader() 
 	: m_hThread(nullptr)
 	, m_bFinish(false)
@@ -46,6 +53,9 @@ HRESULT CLoader::LoadForScene()
 		break;
 	case SCENEID::SCENE_STAGE1:
 		hr = Ready_Stage1();
+		break;
+	case SCENEID::SCENE_TEST_JS:
+		hr = Ready_Test_JS();
 		break;
 	default:
 		return E_FAIL;
@@ -98,6 +108,37 @@ HRESULT CLoader::Ready_Stage1()
 		return E_FAIL;
 
 	
+
+	return S_OK;
+}
+
+HRESULT CLoader::Ready_Test_JS()
+{
+
+#pragma region 컴포넌트
+
+	_matrix matPivot = XMMatrixIdentity();
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_TEST_JS, L"Model_Silvermane", CModel::Create(m_pDevice, m_pDeviceContext,
+		"../bin/Resources/Mesh/Silvermane/", "Silvermane.fbx",
+		L"../../Reference/ShaderFile/Shader_Mesh.hlsl",
+		matPivot,
+		CModel::TYPE_ANIM))))
+	{
+		return E_FAIL;
+	}
+
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_TEST_JS, L"StateController", CStateController::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+
+#pragma endregion
+#pragma region 오브젝트
+
+	if (FAILED(g_pGameInstance->Add_Prototype(L"Silvermane", CSilvermane::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+
+#pragma endregion
+
+
 
 	return S_OK;
 }

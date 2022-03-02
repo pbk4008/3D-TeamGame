@@ -20,7 +20,6 @@
 #define IDC_EDIT3                       1005
 #define IDC_EDIT4                       1006
 #define IDC_BUTTON3                     1007
-#define IDC_EDIT5                       1007
 #define IDC_BUTTON4                     1008
 #define IDC_EDIT6                       1008
 #define IDC_EDIT7                       1009
@@ -34,6 +33,13 @@
 #define IDC_EDIT14                      1018
 #define IDC_EDIT15                      1019
 #define IDC_CHECK1                      1020
+#define IDC_EDIT16                      1021
+#define IDC_EDIT17                      1022
+#define IDC_EDIT18                      1023
+#define IDC_RADIO_X                     1025
+#define IDC_RADIO_Y                     1028
+#define IDC_RADIO_Z                     1029
+#define IDC_RADIO_ALL                   1030
 
 // Next default values for new objects
 // 
@@ -41,7 +47,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        313
 #define _APS_NEXT_COMMAND_VALUE         32771
-#define _APS_NEXT_CONTROL_VALUE         1021
+#define _APS_NEXT_CONTROL_VALUE         1026
 #define _APS_NEXT_SYMED_VALUE           317
 #endif
 #endif

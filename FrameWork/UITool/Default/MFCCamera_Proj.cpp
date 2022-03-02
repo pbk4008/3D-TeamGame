@@ -34,8 +34,8 @@ HRESULT CMFCCamera_Proj::NativeConstruct(void* pArg)
 
 	CCamera::CAMERADESC Desc;
 	Desc.eType = CCamera::CAMERATYPE::CAMERA_PROJECTION;
-	Desc.vEye = _float4(0.f, 2.f, 0.f, 1.f);
-	Desc.vAt = _float4(0.f, 2.f, 1.f, 1.f);
+	Desc.vEye = _float4(0.f, 2.f, -5.f, 1.f);
+	Desc.vAt = _float4(0.f, 2.f, 0.f, 1.f);
 	Desc.vAxisY = _float4(0.f, 1.f, 0.f, 1.f);
 
 	Desc.fFovy = XMConvertToRadians(65.f);

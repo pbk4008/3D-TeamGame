@@ -205,6 +205,7 @@ call Update_Library_Release.bat</Command>
     <ClInclude Include="..\public\Base.h" />
     <ClInclude Include="..\public\BoxCollider.h" />
     <ClInclude Include="..\public\Camera.h" />
+    <ClInclude Include="..\public\CapsuleCollider.h" />
     <ClInclude Include="..\public\Effect.h" />
     <ClInclude Include="..\public\Cell.h" />
     <ClInclude Include="..\public\Channel.h" />
@@ -223,6 +224,7 @@ call Update_Library_Release.bat</Command>
     <ClInclude Include="..\public\Frustum.h" />
     <ClInclude Include="..\public\GameInstance.h" />
     <ClInclude Include="..\public\GameObject.h" />
+    <ClInclude Include="..\public\Gizmo.h" />
     <ClInclude Include="..\public\Graphic_Device.h" />
     <ClInclude Include="..\public\HierarchyNode.h" />
     <ClInclude Include="..\public\InputDev.h" />
@@ -245,6 +247,9 @@ call Update_Library_Release.bat</Command>
     <ClInclude Include="..\public\SaveManager.h" />
     <ClInclude Include="..\public\SingleTon.h" />
     <ClInclude Include="..\public\SoundMgr.h" />
+    <ClInclude Include="..\public\SphereCollider.h" />
+    <ClInclude Include="..\public\State.h" />
+    <ClInclude Include="..\public\StateController.h" />
     <ClInclude Include="..\public\Target_Manager.h" />
     <ClInclude Include="..\public\Texture.h" />
     <ClInclude Include="..\public\TextureManager.h" />
@@ -269,16 +274,21 @@ call Update_Library_Release.bat</Command>
     <ClCompile Include="..\private\Base.cpp" />
     <ClCompile Include="..\private\BoxCollider.cpp" />
     <ClCompile Include="..\private\Camera.cpp" />
+    <ClCompile Include="..\private\CapsuleCollider.cpp" />
     <ClCompile Include="..\private\Cell.cpp" />
     <ClCompile Include="..\private\Channel.cpp" />
     <ClCompile Include="..\private\Collider.cpp" />
     <ClCompile Include="..\private\Component.cpp" />
     <ClCompile Include="..\private\Component_Manager.cpp" />
     <ClCompile Include="..\private\Effect.cpp" />
+    <ClCompile Include="..\private\Gizmo.cpp" />
     <ClCompile Include="..\private\InputDev.cpp" />
     <ClCompile Include="..\private\LandScape.cpp" />
     <ClCompile Include="..\private\Mouse.cpp" />
     <ClCompile Include="..\private\PhysicsXSystem.cpp" />
+    <ClCompile Include="..\private\SphereCollider.cpp" />
+    <ClCompile Include="..\private\State.cpp" />
+    <ClCompile Include="..\private\StateController.cpp" />
     <ClCompile Include="..\private\UI.cpp" />
     <ClCompile Include="..\private\CustumFont.cpp" />
     <ClCompile Include="..\private\DebugDraw.cpp" />

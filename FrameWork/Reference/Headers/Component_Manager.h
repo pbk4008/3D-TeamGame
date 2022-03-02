@@ -5,7 +5,10 @@
 #include "Camera.h"
 #include "Model.h"
 #include "Texture.h"
+#include "Gizmo.h"
 #include "BoxCollider.h"
+#include "SphereCollider.h"
+#include "CapsuleCollider.h"
 #include "Renderer.h"
 #include "Transform.h"
 #include "Navigation.h"
@@ -16,6 +19,7 @@
 #include "VIBuffer_PointInstance.h"
 #include "VIBuffer_PointInstance_Explosion.h"
 #include "VIBuffer_Plane.h"
+#include "StateController.h"
 
 BEGIN(Engine)
 

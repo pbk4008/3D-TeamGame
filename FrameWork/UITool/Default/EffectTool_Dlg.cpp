@@ -17,17 +17,18 @@ CEffectTool_Dlg::CEffectTool_Dlg(CWnd* pParent /*=nullptr*/)
 	, m_PositionX(0.f)
 	, m_PositionY(0.f)
 	, m_PositionZ(0.f)
-	, m_VelocityX(1.f)
-	, m_VelocityY(10.f)
-	, m_VelocityZ(1.f)
+	, m_Velocity(10.f)
 	, m_LiftTime(1.f)
 	, m_BaseCount(100)
 	, m_Age(0)
 	, m_ParticleSizeX(1.f)
 	, m_ParticleSizeY(1.f)
-	, m_iRandomX(0)
-	, m_iRandomY(10)
-	, m_iRandomZ(0)
+	, m_fRandomPosX(1)
+	, m_fRandomPosY(1)
+	, m_fRandomPosZ(1)
+	, m_fRandomDirX(360)
+	, m_fRandomDirY(360)
+	, m_fRandomDirZ(360)
 	, m_bCheck(true)
 {
 
@@ -43,38 +44,43 @@ void CEffectTool_Dlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Text(pDX, IDC_EDIT1, m_PositionX);
 	DDX_Text(pDX, IDC_EDIT2, m_PositionY);
 	DDX_Text(pDX, IDC_EDIT3, m_PositionZ);
-	DDX_Text(pDX, IDC_EDIT4, m_VelocityX);
-	DDX_Text(pDX, IDC_EDIT5, m_VelocityY);
-	DDX_Text(pDX, IDC_EDIT6, m_VelocityZ);
+	DDX_Text(pDX, IDC_EDIT6, m_Velocity);
 	DDX_Text(pDX, IDC_EDIT7, m_LiftTime);
 	DDX_Text(pDX, IDC_EDIT8, m_BaseCount);
 	DDX_Text(pDX, IDC_EDIT9, m_Age);
 	DDX_Text(pDX, IDC_EDIT12, m_ParticleSizeX);
 	DDX_Text(pDX, IDC_EDIT11, m_ParticleSizeY);
-	DDX_Text(pDX, IDC_EDIT15, m_iRandomX);
-	DDX_Text(pDX, IDC_EDIT13, m_iRandomY);
-	DDX_Text(pDX, IDC_EDIT14, m_iRandomZ);
+	DDX_Text(pDX, IDC_EDIT15, m_fRandomPosX);
+	DDX_Text(pDX, IDC_EDIT13, m_fRandomPosY);
+	DDX_Text(pDX, IDC_EDIT14, m_fRandomPosZ);
+	DDX_Text(pDX, IDC_EDIT16, m_fRandomDirX);
+	DDX_Text(pDX, IDC_EDIT17, m_fRandomDirY);
+	DDX_Text(pDX, IDC_EDIT18, m_fRandomDirZ);
 	DDX_Control(pDX, IDC_LIST1, m_ListBox);
 
 	DDV_MinMaxFloat(pDX, m_PositionX, -99999, 99999);
 	DDV_MinMaxFloat(pDX, m_PositionY, -99999, 99999);
 	DDV_MinMaxFloat(pDX, m_PositionZ, -99999, 99999);
-	DDV_MinMaxFloat(pDX, m_VelocityX, 0.1, 99999);
-	DDV_MinMaxFloat(pDX, m_VelocityY, 0.1, 99999);
-	DDV_MinMaxFloat(pDX, m_VelocityZ, 0.1, 99999);
+	DDV_MinMaxFloat(pDX, m_Velocity, 0.1, 99999);
 	DDV_MinMaxFloat(pDX, m_ParticleSizeX, 0.1, 99999);
 	DDV_MinMaxFloat(pDX, m_ParticleSizeY, 0.1, 99999);
-	DDV_MinMaxFloat(pDX, m_iRandomX, -99999, 99999);
-	DDV_MinMaxFloat(pDX, m_iRandomY, -99999, 99999);
-	DDV_MinMaxFloat(pDX, m_iRandomZ, -99999, 99999);
+	DDV_MinMaxFloat(pDX, m_fRandomPosX, 1, 99999);
+	DDV_MinMaxFloat(pDX, m_fRandomPosY, 1, 99999);
+	DDV_MinMaxFloat(pDX, m_fRandomPosZ, 1, 99999);
+	DDV_MinMaxFloat(pDX, m_fRandomDirX, 1, 99999);
+	DDV_MinMaxFloat(pDX, m_fRandomDirY, 1, 99999);
+	DDV_MinMaxFloat(pDX, m_fRandomDirZ, 1, 99999);
 	DDV_MinMaxFloat(pDX, m_LiftTime, 0.1, 99999);
 	DDV_MinMaxFloat(pDX, m_Age, 0, 99999);
 	DDV_MinMaxInt(pDX, m_BaseCount, 1, 99999);
 	DDX_Control(pDX, IDC_TREE1, m_ShaderPathTree);
 	DDX_Control(pDX, IDC_TREE3, m_TextureTree);
-
-
 	DDX_Control(pDX, IDC_CHECK1, m_CheckGravity);
+
+	DDX_Control(pDX, IDC_RADIO_X, m_AxisXBtn);
+	DDX_Control(pDX, IDC_RADIO_Y, m_AxisYBtn);
+	DDX_Control(pDX, IDC_RADIO_Z, m_AxisZBtn);
+	DDX_Control(pDX, IDC_RADIO_ALL, m_AxisAllBtn);
 }
 
 void CEffectTool_Dlg::InitialShaderTree()
@@ -122,6 +128,7 @@ BEGIN_MESSAGE_MAP(CEffectTool_Dlg, CDialog)
 	ON_NOTIFY(TVN_SELCHANGED, IDC_TREE1, &CEffectTool_Dlg::OnTvnSelchangedTree1)
 	ON_NOTIFY(TVN_SELCHANGED, IDC_TREE3, &CEffectTool_Dlg::OnTvnSelchangedTree3)
 	ON_BN_CLICKED(IDC_CHECK1, &CEffectTool_Dlg::OnBnClickedCheck1)
+	ON_BN_CLICKED(IDC_BUTTON2, &CEffectTool_Dlg::OnBnClickedButton2)
 END_MESSAGE_MAP()
 
 
@@ -173,19 +180,38 @@ void CEffectTool_Dlg::OnBnClickedButtonApply()
 	UpdateData(TRUE);
 	CEffect::EFFECTDESC Desc;
 
-
 	::PathRemoveExtension(m_strPickFileName); //이게 있으면 확장자도 지워짐
 	_tcscpy_s(Desc.TextureTag, m_strPickFileName);
-
-	Desc.fPos = { m_PositionX, m_PositionY, m_PositionZ };
-	Desc.fVelocity = { m_VelocityX, m_VelocityY, m_VelocityZ };
+	Desc.fMyPos = { 0.f,0.f,0.f }; //transform위치이동은안함
+	Desc.ParticleMat = XMMatrixIdentity();
+	Desc.ParticleMat.r[3] = { m_PositionX, m_PositionY, m_PositionZ, 1.f };
+	Desc.fParticleVelocity = m_Velocity;
 	Desc.fParticleSize = { m_ParticleSizeX,m_ParticleSizeY };
-	Desc.fRandom = { (_float)m_iRandomX, (_float)m_iRandomY,(_float)m_iRandomZ };
+	Desc.fParticleRandomPos = { m_fRandomPosX, m_fRandomPosY,m_fRandomPosZ };
+	Desc.fParticleRandomDir = { m_fRandomDirX, m_fRandomDirY,m_fRandomDirZ };
 	Desc.iNumInstance = m_BaseCount;
-	Desc.fMaxLifTime = m_LiftTime;
+	Desc.fMaxLifeTime = m_LiftTime;
 	Desc.bUsingGravity = m_bCheck;
+	Desc.iAxis = 0;
 
-	//LifeTime, Age아직안함
+	if (m_AxisXBtn.GetCheck() == BST_CHECKED)
+	{
+		Desc.iAxis = 0;
+	}
+	else if (m_AxisYBtn.GetCheck() == BST_CHECKED)
+	{
+		Desc.iAxis = 1;
+	}
+	else if (m_AxisZBtn.GetCheck() == BST_CHECKED)
+	{
+		Desc.iAxis = 2;
+	}
+	else if (m_AxisAllBtn.GetCheck() == BST_CHECKED)
+	{
+		Desc.iAxis = 3;
+	}
+
+	//Age아직안함
 
 	wstring ShaderFullPath = ShaderFolderPath + ShaderFileName;
 	_tcscpy_s(Desc.ShaderFilePath, ShaderFullPath.c_str());
@@ -338,4 +364,51 @@ void CEffectTool_Dlg::OnBnClickedCheck1()
 {
 	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
 	m_bCheck = m_CheckGravity.GetCheck();
+}
+
+void CEffectTool_Dlg::OnBnClickedButton2()
+{
+	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+	m_bReset = true;
+
+	UpdateData(TRUE);
+
+	::PathRemoveExtension(m_strPickFileName); //이게 있으면 확장자도 지워짐
+	_tcscpy_s(m_EffectDesc.TextureTag, m_strPickFileName);
+	m_EffectDesc.fMyPos = { 0.f,0.f,0.f }; //transform위치이동은안함
+	m_EffectDesc.ParticleMat = XMMatrixIdentity();
+	m_EffectDesc.ParticleMat.r[3] = { m_PositionX, m_PositionY, m_PositionZ, 1.f };
+	m_EffectDesc.fParticleVelocity = m_Velocity;
+	m_EffectDesc.fParticleSize = { m_ParticleSizeX,m_ParticleSizeY };
+	m_EffectDesc.fParticleRandomPos = { m_fRandomPosX, m_fRandomPosY,m_fRandomPosZ };
+	m_EffectDesc.fParticleRandomDir = { m_fRandomDirX, m_fRandomDirY,m_fRandomDirZ };
+	m_EffectDesc.iNumInstance = m_BaseCount;
+	m_EffectDesc.fMaxLifeTime = m_LiftTime;
+	m_EffectDesc.bUsingGravity = m_bCheck;
+
+	m_EffectDesc.iAxis = 0;
+
+	if (m_AxisXBtn.GetCheck() == BST_CHECKED)
+	{
+		m_EffectDesc.iAxis = 0;
+	}
+	else if (m_AxisYBtn.GetCheck() == BST_CHECKED)
+	{
+		m_EffectDesc.iAxis = 1;
+	}
+	else if (m_AxisZBtn.GetCheck() == BST_CHECKED)
+	{
+		m_EffectDesc.iAxis = 2;
+	}
+	else if (m_AxisAllBtn.GetCheck() == BST_CHECKED)
+	{
+		m_EffectDesc.iAxis = 3;
+	}
+
+	//Age아직안함
+
+	wstring ShaderFullPath = ShaderFolderPath + ShaderFileName;
+	_tcscpy_s(m_EffectDesc.ShaderFilePath, ShaderFullPath.c_str());
+
+	UpdateData(FALSE);
 }

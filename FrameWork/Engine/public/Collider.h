@@ -5,7 +5,7 @@
 #include "PhysicsXSystem.h"
 
 BEGIN(Engine)
-
+class CGizmo;
 class ENGINE_DLL CCollider abstract : public CComponent
 {
 protected:
@@ -22,10 +22,8 @@ public:
 public:
 	void Collider();
 protected:
-	HRESULT Render_Begin(const wstring& pCameraTag);
-	HRESULT Render_End();
-protected:
 	HRESULT Init_Collider(const CPhysicsXSystem::COLDESC& tDesc);
+	const PxVec3 Calcul_Extends(_fmatrix matTransform);
 	_fvector getQuaternion(_fmatrix matTransform);
 	_fvector ToXMVector3(const PxVec3 pxvec);
 	_fvector ToXMVector4(const PxQuat pxquat);
@@ -33,14 +31,14 @@ protected:
 	const PxQuat ToQuat(_fvector xmvec);
 	const _float3 QuaternionToEuler(const _float4& _q);
 private:
-	void Update_Scale(_fmatrix matTransform);
-	void Update_Rotate(_fmatrix matTransform);
-	void Update_Position(PxVec3 vPos);
+	_fmatrix Update_Scale(_fmatrix matTransform);
+	_fmatrix Update_Rotate(_fmatrix matTransform);
+	_fmatrix Update_Position(PxVec3 vPos);
 protected:
-	BasicEffect*											m_pEffect = nullptr;
-	PrimitiveBatch<VertexPositionColor>*		m_pBatch = nullptr;
-	ID3D11InputLayout*								m_pInputLayout = nullptr;
-	_float4												m_vColor;
+	CGizmo* m_pGizmo = nullptr;
+	_float4x4 m_matLoaclMatrix;
+	_float4x4 m_matWorldMatrix;
+	_float4	m_vColor = {0.f,0.f,0.f,0.f};
 protected:
 	_bool			m_isCollisioning = false;
 	_bool			m_isCollision = false;
