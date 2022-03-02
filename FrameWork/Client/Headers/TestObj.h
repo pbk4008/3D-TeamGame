@@ -5,6 +5,8 @@
 #include "GameObject.h"
 BEGIN(Engine)
 class CBoxCollider;
+class CSphreCollider;
+class CCapsuleCollider;
 END
 BEGIN(Client)
 class CTestObj final : public CGameObject
@@ -13,6 +15,8 @@ public:
 	typedef struct tagTestDesc
 	{
 		CBoxCollider::BOXDESC tBoxDesc;
+		CSphereCollider::SPHEREDESC tSphereDesc;
+		CCapsuleCollider::CAPSULEDESC tCapsuleDesc;
 	}TESTDESC;
 private:
 	explicit CTestObj();
@@ -38,7 +42,9 @@ public:
 private:
 	virtual void Free() override;
 private:
-	CBoxCollider* m_pCollider;
+	CBoxCollider* m_pBoxCollider;
+	CSphereCollider* m_pSphereCollider;
+	CCapsuleCollider* m_pCapsuleCollider;
 };
 END
 #endif
