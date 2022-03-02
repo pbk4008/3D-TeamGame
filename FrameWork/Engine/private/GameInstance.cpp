@@ -50,7 +50,7 @@ HRESULT CGameInstance::Initialize_Engine(HINSTANCE hInst, HWND hWnd, _uint iNumL
 	if (FAILED(m_pInput_Device->Init_InputDevice(hInst, hWnd)))
 		return E_FAIL;
 
-	if (FAILED(m_pPhysicSystem->Init_PhysicsX(/**ppDeviceOut,*ppDeviceContextOut*/)))
+	if (FAILED(m_pPhysicSystem->Init_PhysicsX()))
 		return E_FAIL;
 
 	if (FAILED(m_pObject_Manager->Reserve_Manager(iNumLevel)))
@@ -216,10 +216,8 @@ list<CGameObject*>* CGameInstance::getObjectList(_uint iLevelIndex, const wstrin
 	return m_pObject_Manager->getObjectList(iLevelIndex, pLayerTag);
 }
 
-list<CGameObject*>* CGameInstance::getAllObjectList()
+list<CGameObject*> CGameInstance::getAllObjectList()
 {
-	if (!m_pObject_Manager)
-		return nullptr;
 	return m_pObject_Manager->getAllObjectList();
 }
 
