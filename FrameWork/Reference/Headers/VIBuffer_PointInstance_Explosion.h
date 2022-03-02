@@ -6,16 +6,17 @@ BEGIN(Engine)
 
 class ENGINE_DLL CVIBuffer_PointInstance_Explosion final : public CVIBuffer
 {
-	public:
+	enum class AXIS { AXIS_X,AXIS_Y,AXIS_Z, AXIS_ALL, AXIS_END };
+public:
 	typedef struct tagPInstanceDesc
 	{
 		_tchar		ShaderFilePath[MAX_PATH];
-		_float3		fRandom;
-		_float3		fDir;
+		_matrix		matParticle;
+		_float3		fParticleRandomPos;
+		_float3		fParticleRandomDir;
 		_float2		fParticleSize;
-		_float		fSpeed;
-		_uint		iNumInstance = 0;
-
+		_float		fParticleSpeed;
+		_uint		iNumInstance;
 	}PIDESC;
 protected:
 	explicit CVIBuffer_PointInstance_Explosion(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);
@@ -27,10 +28,12 @@ public:
 	virtual HRESULT Render(_uint iPassIndex);
 
 public:
-	void Update(_double TimeDelta);
+	void Update(_double TimeDelta, _uint eAxis);
 
+	void Particle_Reset();
 public:
-	void Set_Dir(_vector vDir) { XMStoreFloat3(&m_Desc.fDir, vDir); }
+	void Set_Dir(_vector vDir) { XMStoreFloat3(&m_fCamLookDir, vDir); }
+	void Set_Desc(PIDESC Desc) { memcpy(&m_Desc, &Desc, sizeof(PIDESC)); }
 
 private:
 	//_uint			m_iNumInstance = 0;
@@ -44,10 +47,15 @@ private:
 	_uint						m_iInstNumVertices = 0;
 
 private:
-	PIDESC m_Desc;
-	_double*					m_pRandomSpeed = nullptr;
-	
+	PIDESC		m_Desc;
+	_float3		m_fCamLookDir;
 
+	_float3* m_pRandomPos = nullptr;
+	_float3* m_pDir = nullptr;
+	_float3* m_pNormal = nullptr;
+	
+	_bool m_bReset = false;
+	_bool m_bSettingDir = false;
 public:
 	static CVIBuffer_PointInstance_Explosion* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext/*, const _tchar* pShaderFilePath, _uint iNumInstance*/);
 	virtual CComponent* Clone(void* pArg) override;

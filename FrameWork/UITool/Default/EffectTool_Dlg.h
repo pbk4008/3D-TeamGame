@@ -3,6 +3,7 @@
 
 // CEffectTool_Dlg 대화 상자
 
+#include "Effect.h"
 class CEffectTool_Dlg : public CDialog
 {
 	DECLARE_DYNAMIC(CEffectTool_Dlg)
@@ -34,24 +35,28 @@ public:
 	float m_PositionX;
 	float m_PositionY;
 	float m_PositionZ;
-	float m_VelocityX;
-	float m_VelocityY;
-	float m_VelocityZ;
+	float m_Velocity;
 	float m_ParticleSizeX;
 	float m_ParticleSizeY;
 	float m_Age;
 	float m_LiftTime;
-	int m_iRandomX;
-	int m_iRandomY;
-	int m_iRandomZ;
+	float m_fRandomPosX;
+	float m_fRandomPosY;
+	float m_fRandomPosZ;
+	float m_fRandomDirX;
+	float m_fRandomDirY;
+	float m_fRandomDirZ;
 	int m_BaseCount;
 
 	_bool m_bCheck;
+	_bool m_bReset = false;
 	
 	CListBox m_ListBox;
 	CTreeCtrl m_TextureTree;
 	CTreeCtrl m_ShaderPathTree;
 	CButton m_CheckGravity;
+
+	CEffect::EFFECTDESC m_EffectDesc;
 
 	afx_msg void OnLbnSelchangeList1();
 	afx_msg void OnDropFiles(HDROP hDropInfo);
@@ -61,4 +66,9 @@ public:
 	afx_msg void OnTvnSelchangedTree3(NMHDR* pNMHDR, LRESULT* pResult);
 
 	afx_msg void OnBnClickedCheck1();
+	afx_msg void OnBnClickedButton2();
+	CButton m_AxisXBtn;
+	CButton m_AxisYBtn;
+	CButton m_AxisZBtn;
+	CButton m_AxisAllBtn;
 };
