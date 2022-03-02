@@ -2,6 +2,10 @@
 #include "MFCEffect.h"
 #include "GameInstance.h"
 #include "VIBuffer_PointInstance_Explosion.h"
+#include "MainFrm.h"
+#include "MyFormView.h"
+#include "EffectTool_Dlg.h"
+
 
 CMFCEffect::CMFCEffect()
 {
@@ -29,14 +33,14 @@ HRESULT CMFCEffect::NativeConstruct_Prototype()
 
 HRESULT CMFCEffect::NativeConstruct(void* pArg)
 {
-	if (nullptr != pArg)
-	{
-		memcpy(&m_Desc, pArg, sizeof(EFFECTDESC));
-	}
-
 	if (FAILED(__super::NativeConstruct(pArg)))
 	{
 		return E_FAIL;
+	}
+
+	if (nullptr != pArg)
+	{
+		memcpy(&m_Desc, pArg, sizeof(EFFECTDESC));
 	}
 
 	//여기서 필요한 모든 컴포넌트들 Clone해옴
@@ -50,7 +54,46 @@ HRESULT CMFCEffect::NativeConstruct(void* pArg)
 
 _int CMFCEffect::Tick(_double TimeDelta)
 {
-	m_pBuffer->Update(TimeDelta);
+	//m_pBuffer->Update(TimeDelta);
+
+	CMainFrame* pMain = dynamic_cast<CMainFrame*>(AfxGetApp()->GetMainWnd());
+	CMyFormView* pForm = dynamic_cast<CMyFormView*>(pMain->m_SplitterWnd.GetPane(0, 0));
+	CEffectTool_Dlg* Dlg = dynamic_cast<CEffectTool_Dlg*>(&pForm->m_EffectDlg);
+	if (nullptr != Dlg)
+	{
+		if (Dlg->m_bReset)
+		{
+			m_bReset = true;
+			Dlg->m_bReset = false;
+			memcpy(&m_Desc, &Dlg->m_EffectDesc, sizeof(EFFECTDESC));
+		}
+		else
+		{
+			m_bReset = false;
+		}
+	}
+
+	if (!m_bReset)
+	{
+		m_pBuffer->Update(TimeDelta, m_Desc.iAxis);
+	}
+
+	if (m_bReset)
+	{
+		CVIBuffer_PointInstance_Explosion::PIDESC Desc;
+		_tcscpy_s(Desc.ShaderFilePath, m_Desc.ShaderFilePath);
+		Desc.matParticle = m_Desc.ParticleMat;
+		Desc.fParticleRandomPos = m_Desc.fParticleRandomPos;
+		Desc.fParticleRandomDir = m_Desc.fParticleRandomDir;
+		Desc.fParticleSpeed = m_Desc.fParticleVelocity;
+		Desc.fParticleSize = m_Desc.fParticleSize;
+		Desc.iNumInstance = m_Desc.iNumInstance;
+
+		m_pBuffer->Set_Desc(Desc);
+		m_pBuffer->Particle_Reset();
+
+		m_bReset = false;
+	}
 
 	//z정렬
 	_vector vDir = g_pGameInstance->Get_CamPosition(L"MFCCamera_Proj") - m_pTransform->Get_State(CTransform::STATE_POSITION);
@@ -100,19 +143,18 @@ HRESULT CMFCEffect::SetUp_Components()
 	if (FAILED(m_pTexture->Change_Texture(tag)))
 		return E_FAIL;
 
-	_vector vPos = { m_Desc.fPos.x, m_Desc.fPos.y, m_Desc.fPos.z, 1.f };
+	_vector vPos = { XMVectorGetX(m_Desc.fMyPos), XMVectorGetY(m_Desc.fMyPos), XMVectorGetY(m_Desc.fMyPos), 1.f };
 	m_pTransform->Set_State(CTransform::STATE_POSITION, vPos);
 
 	//버퍼 Clone
 	CVIBuffer_PointInstance_Explosion::PIDESC Desc;
 	_tcscpy_s(Desc.ShaderFilePath, m_Desc.ShaderFilePath);
-	Desc.fRandom = m_Desc.fRandom;
-	Desc.fSpeed = m_Desc.fVelocity.y;
+	Desc.matParticle = m_Desc.ParticleMat;
+	Desc.fParticleRandomPos = m_Desc.fParticleRandomPos;
+	Desc.fParticleRandomDir = m_Desc.fParticleRandomDir;
+	Desc.fParticleSpeed = m_Desc.fParticleVelocity;
 	Desc.fParticleSize = m_Desc.fParticleSize;
 	Desc.iNumInstance = m_Desc.iNumInstance;
-
-	_vector vDir = g_pGameInstance->Get_CamPosition(L"MFCCamera_Proj") - m_pTransform->Get_State(CTransform::STATE_POSITION);
-	Desc.fDir = { XMVectorGetX(vDir), XMVectorGetY(vDir),XMVectorGetZ(vDir) };
 
 	if (FAILED(__super::SetUp_Components(TOOL_LEVEL::TOOL_LEVEL_LOGO, L"Prototype_Component_VIBuffer_PointInstance_Explosion", L"Com_VIBuffer", (CComponent**)&m_pBuffer, &Desc)))
 		return E_FAIL;

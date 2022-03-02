@@ -11,12 +11,15 @@ class ENGINE_DLL CEffect abstract : public CGameObject
 	{
 		_tchar		TextureTag[MAX_PATH];
 		_tchar		ShaderFilePath[MAX_PATH];
-		_float3		fPos;
-		_float3		fVelocity;
-		_float3		fRandom;
+		_vector		fMyPos; //³» À§Ä¡
+		_matrix		ParticleMat;
+		_float3		fParticleRandomPos;
+		_float3		fParticleRandomDir;
 		_float2		fParticleSize;
-		_float		fMaxLifTime;
+		_float		fParticleVelocity;
+		_float		fMaxLifeTime;
 		_uint		iNumInstance;
+		_uint		iAxis;
 		_bool		bUsingGravity;
 	}EFFECTDESC;
 protected:

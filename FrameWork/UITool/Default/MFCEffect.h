@@ -32,6 +32,7 @@ private:
 
 private:
 	CEffect::EFFECTDESC m_Desc;
+	_bool m_bReset = false;
 public:
 	static CMFCEffect* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);
 	virtual CGameObject* Clone(void* pArg) override;

@@ -43,6 +43,9 @@ HRESULT CEffect::NativeConstruct(void* pArg)
 	{
 		memcpy(&m_Desc, pArg, sizeof(EFFECTDESC));
 	}
+
+	m_pTransform->Set_State(CTransform::STATE_POSITION, m_Desc.fMyPos);
+	
 	return S_OK;
 }
 
