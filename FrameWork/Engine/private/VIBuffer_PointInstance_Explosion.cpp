@@ -1,4 +1,5 @@
 #include "..\public\VIBuffer_PointInstance_Explosion.h"
+#include <time.h>
 
 CVIBuffer_PointInstance_Explosion::CVIBuffer_PointInstance_Explosion(ID3D11Device * pDevice, ID3D11DeviceContext * pDeviceContext)
 	: CVIBuffer(pDevice, pDeviceContext)
