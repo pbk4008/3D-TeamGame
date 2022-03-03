@@ -94,6 +94,25 @@ HRESULT CSilvermane::Render()
 		return E_FAIL;
 	}
 
+	_matrix smatWorld, smatView, smatProj;
+	smatWorld = XMMatrixTranspose(m_pTransform->Get_WorldMatrix());
+	smatView = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_VIEW));
+	smatProj = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_PROJECTION));
+
+	m_pModel->SetUp_ValueOnShader("g_WorldMatrix", &smatWorld, sizeof(_matrix));
+	m_pModel->SetUp_ValueOnShader("g_ViewMatrix", &smatView, sizeof(_matrix));
+	m_pModel->SetUp_ValueOnShader("g_ProjMatrix", &smatProj, sizeof(_matrix));
+
+	if (FAILED(m_pModel->Bind_Buffers()))
+		return E_FAIL;
+
+	for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
+	{
+		m_pModel->SetUp_TextureOnShader("g_DiffuseTexture", i, aiTextureType_DIFFUSE);
+
+		m_pModel->Render(i, 1);
+	}
+
 	return S_OK;
 }
 

@@ -5,6 +5,8 @@
 #include "Stage1.h"
 #include "TestObj.h"
 
+#include "TestScene_JS.h"
+
 CLoading::CLoading()
 	: m_eSceneID(SCENEID::SCENE_END)
 	, m_pLoader(nullptr)
@@ -25,8 +27,8 @@ HRESULT CLoading::NativeConstruct(SCENEID eID)
 
 	m_eSceneID = eID;
 
-	if(FAILED(Ready_GameObject()))
-		return E_FAIL;
+	//if(FAILED(Ready_GameObject()))
+	//	return E_FAIL;
 
 	m_pLoader = CLoader::Create(m_pDevice, m_pDeviceContext, m_eSceneID);
 
@@ -72,6 +74,8 @@ HRESULT CLoading::Move_Scene()
 	case SCENEID::SCENE_STAGE1:
 		pLevel = CStage1::Create(m_pDevice, m_pDeviceContext);
 		break;
+	case SCENEID::SCENE_TEST_JS:
+		pLevel = CTestScene_JS::Create(m_pDevice, m_pDeviceContext);
 	}
 	if (FAILED(g_pGameInstance->Open_Level((_uint)m_eSceneID, pLevel)))
 		return E_FAIL;

@@ -10,7 +10,7 @@ BEGIN(Engine)
 class ENGINE_DLL CHierarchyNode : public CBase
 {
 private:
-	explicit CHierarchyNode(ID3D11Device*	pDevice, ID3D11DeviceContext* pDeviceContext);
+	explicit CHierarchyNode()= default;
 	virtual ~CHierarchyNode() = default;
 
 public:
@@ -34,6 +34,7 @@ public:
 		XMStoreFloat4x4(&m_OffsetMatrix, OffsetMatrix);
 	}
 
+
 public:
 	void Reserve_Channel(_uint iNumAnimation) {
 		m_Channels.resize(iNumAnimation);
@@ -45,16 +46,12 @@ public:
 
 public:
 	HRESULT NativeConstruct(char* pBoneName, _fmatrix TransformationMatrix, _uint iDepth, CHierarchyNode* pParent);
-	void Update_CombinedTransformationMatrix(_uint iAnimationIndex);
-private:
-	ID3D11Device*			m_pDevice = nullptr;
-	ID3D11DeviceContext*	m_pDeviceContext = nullptr;
-
+	void Update_CombinedTransformationMatrix(_uint iAnimationIndex=0);
 private:
 	/* 노드의 이름과 뼈의 이름은 1:1로 매칭된다. */
-	char				m_szBoneName[MAX_PATH] = "";
+	char						m_szBoneName[MAX_PATH] = "";
 	CHierarchyNode*		m_pParent = nullptr;
-	_uint				m_iDepth = 0;
+	_uint						m_iDepth = 0;
 
 	_float4x4			m_OffsetMatrix;
 	_float4x4			m_TransformationMatrix;
@@ -67,7 +64,7 @@ private:
 	vector<class CChannel*>			m_Channels;
 
 public:
-	static CHierarchyNode* Create(ID3D11Device*	pDevice, ID3D11DeviceContext* pDeviceContext, char* pBoneName, _fmatrix TransformationMatrix, _uint iDepth = 0, CHierarchyNode* pParent = nullptr);
+	static CHierarchyNode* Create(char* pBoneName, _fmatrix TransformationMatrix, _uint iDepth = 0, CHierarchyNode* pParent = nullptr);
 	virtual void Free() override;
 };
 

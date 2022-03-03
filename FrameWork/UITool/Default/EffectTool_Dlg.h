@@ -4,6 +4,7 @@
 // CEffectTool_Dlg 대화 상자
 
 #include "Effect.h"
+#include "MFCEffect.h"
 class CEffectTool_Dlg : public CDialog
 {
 	DECLARE_DYNAMIC(CEffectTool_Dlg)
@@ -46,17 +47,24 @@ public:
 	float m_fRandomDirX;
 	float m_fRandomDirY;
 	float m_fRandomDirZ;
+	float m_fRandomMinusDirX;
+	float m_fRandomMinusDirY;
+	float m_fRandomMinusDirZ;
 	int m_BaseCount;
 
 	_bool m_bCheck;
 	_bool m_bReset = false;
+	CEffect::EFFECTDESC m_EffectDesc;
+	vector<CMFCEffect::EFFECTDESC> m_vecEffect;
 	
 	CListBox m_ListBox;
 	CTreeCtrl m_TextureTree;
 	CTreeCtrl m_ShaderPathTree;
 	CButton m_CheckGravity;
-
-	CEffect::EFFECTDESC m_EffectDesc;
+	CButton m_AxisXBtn;
+	CButton m_AxisYBtn;
+	CButton m_AxisZBtn;
+	CButton m_AxisAllBtn;
 
 	afx_msg void OnLbnSelchangeList1();
 	afx_msg void OnDropFiles(HDROP hDropInfo);
@@ -67,8 +75,15 @@ public:
 
 	afx_msg void OnBnClickedCheck1();
 	afx_msg void OnBnClickedButton2();
-	CButton m_AxisXBtn;
-	CButton m_AxisYBtn;
-	CButton m_AxisZBtn;
-	CButton m_AxisAllBtn;
+
+	afx_msg void OnBnClickedButtonSave();
+	afx_msg void OnBnClickedButtonLoad();
+	afx_msg void OnBnClickedButtonNameTag();
+
+	CString m_EffectName;
+	int m_RenderPassNum;
+	float m_frame;
+	int m_ImagecountX;
+	int m_ImagecountY;
+	float m_EffectPlaySpeed;
 };
