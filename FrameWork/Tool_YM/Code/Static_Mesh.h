@@ -5,6 +5,7 @@
 
 BEGIN(Engine)
 class CModel;
+class CGizmo;
 END
 
 class CStatic_Mesh final : public CGameObject
@@ -28,6 +29,8 @@ public:
 	void    Pick_Model(void);
 	void    Find_Pointer(void);
 	_bool   IntersectTriangle(const _fvector& orig, const _fvector& dir, _fvector& v0, _fvector& v1, _fvector& v2, _float* t, _float* u, _float* v);
+public:
+	CGizmo*		m_pGizmo = nullptr;
 public:
 	CModel*		m_pModelCom = nullptr;
 	MODELDESC	m_ModelDesc;

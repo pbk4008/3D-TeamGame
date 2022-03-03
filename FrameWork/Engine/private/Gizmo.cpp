@@ -136,9 +136,9 @@ HRESULT CGizmo::DrawLine(_fvector vStart, _fvector vEnd, const wstring& pCameraT
 	VertexPositionColor verts[2];
 
 	XMStoreFloat3(&verts[0].position, vStart);
-	XMStoreFloat4(&verts[0].color, XMVectorSet(1.f, 0.f, 0.f, 1.f));
+	XMStoreFloat4(&verts[0].color, vColor);
 	XMStoreFloat3(&verts[1].position, vEnd);
-	XMStoreFloat4(&verts[1].color, XMVectorSet(1.f, 0.f, 0.f, 1.f));
+	XMStoreFloat4(&verts[1].color, vColor);
 
 	m_pBatch->DrawLine(verts[0], verts[1]);
 

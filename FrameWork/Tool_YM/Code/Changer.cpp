@@ -67,7 +67,7 @@ HRESULT CChanger::Loading_For_Static(void)
 		return E_FAIL;
 
 	/* Prototype_Component_Navigation */
-	if (FAILED(g_pGameInstance->Add_Prototype(TAB_STATIC, L"Prototype_Component_Navigation", CNavigation::Create(m_pDevice, m_pDeviceContext))))
+	if (FAILED(g_pGameInstance->Add_Prototype(TAB_STATIC, L"Prototype_Component_Navigation", CNavigation::Create(m_pDevice, m_pDeviceContext/*, L"../Data/NavMesh/NavMesh.dat"*/))))
 		return E_FAIL;
 
 	/* Prototype_Component_NavSphere */

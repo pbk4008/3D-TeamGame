@@ -51,7 +51,6 @@ public:
 	class CMenu_Form*		    m_pMenu_Form	= nullptr;
 	class CModel_Inspector*		m_pModel_Inspec = nullptr;
 	class CCam_Inspector*		m_pCam_Inspec	= nullptr;
-
 public:
 	CTabCtrl	m_TabInspec;
 	INSPEC_ID	m_eSelectTab = INSPEC_END;

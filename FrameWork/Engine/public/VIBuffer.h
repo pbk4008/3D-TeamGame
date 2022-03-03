@@ -48,7 +48,7 @@ protected:
 	ID3DX11Effect*				m_pEffect = nullptr;
 	vector<EFFECTDESC*>			m_EffectDescs;
 
-protected:
+public:
 	HRESULT Create_VertexBuffer();
 	HRESULT Create_IndexBuffer();
 	HRESULT Compile_ShaderFiles(const wstring& pShaderFilePath, D3D11_INPUT_ELEMENT_DESC* pElementDesc, _uint iNumElements);

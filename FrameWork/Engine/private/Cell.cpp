@@ -33,7 +33,7 @@ HRESULT CCell::NativeConstruct(_float3 * pPoints, _uint iIndex)
 	}
 
 #ifdef _DEBUG
-	if (FAILED(Ready_DebugBuffer()))
+	if (FAILED(Ready_DebugBuffer(MODE_READ)))
 		return E_FAIL;
 #endif // _DEBUG
 
@@ -49,7 +49,10 @@ HRESULT CCell::NativeConstruct(_float3* pPoints[], _uint iIndex)
 	m_pPoint[0] = pPoints[0];
 	m_pPoint[1] = pPoints[1];
 	m_pPoint[2] = pPoints[2];
-	//memcpy(m_vPoint, &pPoints, sizeof(_float3) * 3);
+
+	m_vPoint[0] = *pPoints[0];
+	m_vPoint[1] = *pPoints[1];
+	m_vPoint[2] = *pPoints[2];
 
 	XMStoreFloat3(&m_vLine[LINE_AB], XMLoadFloat3(m_pPoint[POINT_B]) - XMLoadFloat3(m_pPoint[POINT_A]));
 	XMStoreFloat3(&m_vLine[LINE_BC], XMLoadFloat3(m_pPoint[POINT_C]) - XMLoadFloat3(m_pPoint[POINT_B]));
@@ -66,7 +69,7 @@ HRESULT CCell::NativeConstruct(_float3* pPoints[], _uint iIndex)
 	}
 
 #ifdef _DEBUG
-	if (FAILED(Ready_DebugBuffer()))
+	if (FAILED(Ready_DebugBuffer(MODE_NEW)))
 		return E_FAIL;
 #endif // _DEBUG
 
@@ -75,33 +78,64 @@ HRESULT CCell::NativeConstruct(_float3* pPoints[], _uint iIndex)
 
 _bool CCell::Compare(_fvector SourPoint, _fvector DestPoint)
 {
-	if (true == XMVector3Equal(XMLoadFloat3(m_pPoint[POINT_A]), SourPoint))
+	if (nullptr == m_pPoint)
 	{
-		if (true == XMVector3Equal(XMLoadFloat3(m_pPoint[POINT_B]), DestPoint))
-			return true;
+		if (true == XMVector3Equal(XMLoadFloat3(&m_vPoint[POINT_A]), SourPoint))
+		{
+			if (true == XMVector3Equal(XMLoadFloat3(&m_vPoint[POINT_B]), DestPoint))
+				return true;
 
-		if (true == XMVector3Equal(XMLoadFloat3(m_pPoint[POINT_C]), DestPoint))
-			return true;		
+			if (true == XMVector3Equal(XMLoadFloat3(&m_vPoint[POINT_C]), DestPoint))
+				return true;
+		}
+
+		if (true == XMVector3Equal(XMLoadFloat3(&m_vPoint[POINT_B]), SourPoint))
+		{
+			if (true == XMVector3Equal(XMLoadFloat3(&m_vPoint[POINT_C]), DestPoint))
+				return true;
+
+			if (true == XMVector3Equal(XMLoadFloat3(&m_vPoint[POINT_A]), DestPoint))
+				return true;
+		}
+
+		if (true == XMVector3Equal(XMLoadFloat3(&m_vPoint[POINT_C]), SourPoint))
+		{
+			if (true == XMVector3Equal(XMLoadFloat3(&m_vPoint[POINT_A]), DestPoint))
+				return true;
+
+			if (true == XMVector3Equal(XMLoadFloat3(&m_vPoint[POINT_B]), DestPoint))
+				return true;
+		}
 	}
-
-	if (true == XMVector3Equal(XMLoadFloat3(m_pPoint[POINT_B]), SourPoint))
+	else
 	{
-		if (true == XMVector3Equal(XMLoadFloat3(m_pPoint[POINT_C]), DestPoint))
-			return true;
+		if (true == XMVector3Equal(XMLoadFloat3(&m_vPoint[POINT_A]), SourPoint))
+		{
+			if (true == XMVector3Equal(XMLoadFloat3(&m_vPoint[POINT_B]), DestPoint))
+				return true;
 
-		if (true == XMVector3Equal(XMLoadFloat3(m_pPoint[POINT_A]), DestPoint))
-			return true;
+			if (true == XMVector3Equal(XMLoadFloat3(&m_vPoint[POINT_C]), DestPoint))
+				return true;
+		}
+
+		if (true == XMVector3Equal(XMLoadFloat3(&m_vPoint[POINT_B]), SourPoint))
+		{
+			if (true == XMVector3Equal(XMLoadFloat3(&m_vPoint[POINT_C]), DestPoint))
+				return true;
+
+			if (true == XMVector3Equal(XMLoadFloat3(&m_vPoint[POINT_A]), DestPoint))
+				return true;
+		}
+
+		if (true == XMVector3Equal(XMLoadFloat3(&m_vPoint[POINT_C]), SourPoint))
+		{
+			if (true == XMVector3Equal(XMLoadFloat3(&m_vPoint[POINT_A]), DestPoint))
+				return true;
+
+			if (true == XMVector3Equal(XMLoadFloat3(&m_vPoint[POINT_B]), DestPoint))
+				return true;
+		}
 	}
-
-	if (true == XMVector3Equal(XMLoadFloat3(m_pPoint[POINT_C]), SourPoint))
-	{
-		if (true == XMVector3Equal(XMLoadFloat3(m_pPoint[POINT_A]), DestPoint))
-			return true;
-
-		if (true == XMVector3Equal(XMLoadFloat3(m_pPoint[POINT_B]), DestPoint))
-			return true;
-	}
-		
 	return false;
 }
 
@@ -116,7 +150,6 @@ _bool CCell::isIn(_fvector vPosition, CCell** ppOutNeighbor)
 			*ppOutNeighbor = m_pNeighbor[i];
 
 			return false;
-
 		}
 	}
 
@@ -124,9 +157,18 @@ _bool CCell::isIn(_fvector vPosition, CCell** ppOutNeighbor)
 }
 
 #ifdef _DEBUG
-HRESULT CCell::Ready_DebugBuffer()
+HRESULT CCell::Ready_DebugBuffer(MODE _eMode)
 {
-	m_pVIBuffer = CVIBuffer_Triangle::Create(m_pDevice, m_pDeviceContext, TEXT("../../Reference/ShaderFile/Shader_Triangle.hlsl"), m_pPoint);
+	switch (_eMode)
+	{
+	case Engine::CCell::MODE_NEW:
+		m_pVIBuffer = CVIBuffer_Triangle::Create(m_pDevice, m_pDeviceContext, TEXT("../../Reference/ShaderFile/Shader_Triangle.hlsl"), m_pPoint);
+		break;
+	case Engine::CCell::MODE_READ:
+		m_pVIBuffer = CVIBuffer_Triangle::Create(m_pDevice, m_pDeviceContext, TEXT("../../Reference/ShaderFile/Shader_Triangle.hlsl"), m_vPoint);
+		break;
+	}
+	
 	if (nullptr == m_pVIBuffer)
 		return E_FAIL;
 

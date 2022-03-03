@@ -44,9 +44,6 @@ _int CPlane::Tick(_double TimeDelta)
 
 	if (CObserver::MODE_NAV == m_pObserver->m_eMode)
 	{
-		if (true == m_pObserver->m_bNavSpherePick)
-			Update_CellPos();
-
 		if (3 == m_iPointindex)
 			Make_NavigationCell();
 		else if(true == m_pObserver->m_bPlanePick)
@@ -60,7 +57,7 @@ _int CPlane::Tick(_double TimeDelta)
 _int CPlane::LateTick(_double TimeDelta)
 {
 	m_pRenderer->Add_RenderGroup(CRenderer::RENDER_PRIORITY, this);
-
+	Update_CellPos();
 	return _int();
 }
 
@@ -119,6 +116,8 @@ HRESULT CPlane::Create_NavigationLine()
 HRESULT CPlane::Update_CellPos()
 {
 	CNavSphere* pSphere = m_pObserver->m_pNavSphere;
+	if (nullptr == pSphere)
+		return E_FAIL;
 
 	if (FAILED(m_pNavigationCom->Update_Buffer(XMLoadFloat3(&pSphere->m_fPostion))))
 		return E_FAIL;
@@ -144,9 +143,6 @@ HRESULT CPlane::Make_NavigationCell(CCell* _pCell/*= nullptr*/)
 
 	m_pNavigationCom->m_Cells.push_back(pCell);
 	m_iPointindex = 0;
-	//m_fPoints[0] = nullptr;//{ 0.0f, 0.0f, 0.0f };
-	//m_fPoints[1] = nullptr;//{ 0.0f, 0.0f, 0.0f };
-	//m_fPoints[2] = nullptr;//{ 0.0f, 0.0f, 0.0f };
 
 	return S_OK;
 }
