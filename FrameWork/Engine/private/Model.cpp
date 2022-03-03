@@ -5,7 +5,7 @@
 #include "Channel.h"
 #include "Animation.h"
 #include "GameInstance.h"
-
+#include "SaveManager.h"
 
 CModel::CModel(ID3D11Device * pDevice, ID3D11DeviceContext * pDeviceContext)
 	: CComponent(pDevice, pDeviceContext)
@@ -254,7 +254,7 @@ HRESULT CModel::Create_Materials()
 
 			strTexture = szTextureTag;
 			pMeshMaterial->pMeshTexture[j] = pInstance->Clone_Component<CTexture>(0, L"Texture", &strTexture);
-
+			pMeshMaterial->pMeshTextureName[j] = strTexture.c_str();
 			RELEASE_INSTANCE(CGameInstance);
 
 			
@@ -462,6 +462,61 @@ CHierarchyNode * CModel::Find_HierarchyNode(const char * pName)
 		return nullptr;
 
 	return (*iter);
+}
+
+HRESULT CModel::Save_StaticModel(const wstring& pFilePath)
+{
+	if (!m_pScene)
+		return E_FAIL;
+
+	CSaveManager* pInstance = GET_INSTANCE(CSaveManager);
+
+	vector<CSaveManager::MTRLDATA> vecMtrl;
+	vector<CSaveManager::STATICMESHDATA> vecMesh;
+
+	for(auto& pMtrlMeshContainer : m_MeshContainers)
+	{
+		for (auto& pMeshContainer : pMtrlMeshContainer)
+		{
+			CSaveManager::STATICMESHDATA pData;
+			ZeroMemory(&pData, sizeof(pData));
+
+			pData = pMeshContainer->SetSaveData();
+			vecMesh.emplace_back(pData);
+		}
+	}
+
+	for (auto& pMaterial : m_Materials)
+	{
+		CSaveManager::MTRLDATA pMtrlData;
+		ZeroMemory(&pMtrlData, sizeof(pMtrlData));
+
+		_uint iTextureCnt = 0;
+		vector<CSaveManager::TEXTUREDATA> vecTextureData;
+		for (_uint i = 0; i < AI_TEXTURE_TYPE_MAX; i++)
+		{
+			if (!pMaterial->pMeshTexture[i])
+				continue;
+			iTextureCnt++;
+			CSaveManager::TEXTUREDATA pTexutreData;
+			ZeroMemory(&pTexutreData, sizeof(pTexutreData));
+
+			pTexutreData.iType = i;
+			pTexutreData.iTextureNameSize = lstrlen(pMaterial->pMeshTextureName[i]);
+			lstrcpy(pTexutreData.pTextureName, pMaterial->pMeshTextureName[i]);
+			vecTextureData.emplace_back(pTexutreData);
+		}
+		pMtrlData.iTextureCnt = iTextureCnt;
+		pMtrlData.pTaxtureData = vecTextureData;
+	}
+
+	pInstance->Save_StaticModel(vecMtrl, vecMesh, XMLoadFloat4x4(&m_PivotMatrix), pFilePath);
+
+	
+
+	RELEASE_INSTANCE(CSaveManager);
+
+	return S_OK;
 }
 
 CModel * CModel::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pDeviceContext, const string& pMeshFilePath, const string& pMeshFileName, const wstring& pShaderFilePath, _fmatrix PivotMatrix, TYPE eMeshType)

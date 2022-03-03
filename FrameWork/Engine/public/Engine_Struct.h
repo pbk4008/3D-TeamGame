@@ -24,6 +24,7 @@ namespace Engine
 
 	typedef struct MeshMaterial
 	{
+		const _tchar*		pMeshTextureName[AI_TEXTURE_TYPE_MAX];
 		class CTexture*		pMeshTexture[AI_TEXTURE_TYPE_MAX];
 	}MESHMATERIAL;
 

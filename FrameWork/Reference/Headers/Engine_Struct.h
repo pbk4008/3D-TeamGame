@@ -2,6 +2,11 @@
 
 namespace Engine
 {
+	typedef struct tagEffectDesc
+	{
+		ID3D11InputLayout* pInputLayout = nullptr;
+		ID3DX11EffectPass* pPass = nullptr;
+	}EFFECTDESC;
 	/* 특정시간대에 표현해야할 뼈대들의 상태 */
 	typedef struct tagCamera
 	{
@@ -35,9 +40,14 @@ namespace Engine
 		XMFLOAT3		vNormal;
 		XMFLOAT2		vTexUV;
 		XMFLOAT3		vTangent;
+		XMFLOAT3		vBiNormal;
+	}VTXMESH;
+
+	typedef struct tagVertex_Anim : public VTXMESH
+	{
 		XMUINT4			vBlendIndex; /* 현재 정점에 상태변환에 대한 영향을 주는 뼈의 인덱스 (최대 네개) */
 		XMFLOAT4		vBlendWeight; /* 영향을 주는 뼈의 가중치 (영향력 최대가 1 ) */
-	}VTXMESH;
+	}VTXMESH_ANIM;
 
 	typedef struct tagLightDesc
 	{

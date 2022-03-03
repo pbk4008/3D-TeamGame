@@ -4,6 +4,8 @@
 
 BEGIN(Engine)
 class CTexture;
+class CAnimation;
+class CHierarchyNode;
 class ENGINE_DLL CModel final : public CComponent
 {
 public:
@@ -61,6 +63,7 @@ private:
 	typedef vector<class CAnimation*>		ANIMATIONS;
 public:
 	CHierarchyNode* Find_HierarchyNode(const char* pName);
+	HRESULT Save_StaticModel(const wstring& pFilePath);
 private:
 	HRESULT Create_Materials();
 
