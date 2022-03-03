@@ -5,6 +5,7 @@
 #pragma region TestScene_JS
 
 #include "Silvermane.h"
+#include "Camera_Silvermane.h"
 
 #pragma endregion
 
@@ -126,7 +127,6 @@ HRESULT CLoader::Ready_Test_JS()
 	{
 		return E_FAIL;
 	}
-
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_TEST_JS, L"StateController", CStateController::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 
@@ -134,6 +134,8 @@ HRESULT CLoader::Ready_Test_JS()
 #pragma region 오브젝트
 
 	if (FAILED(g_pGameInstance->Add_Prototype(L"Silvermane", CSilvermane::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	if (FAILED(g_pGameInstance->Add_Prototype(L"Camera_Silvermane", CCamera_Silvermane::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 
 #pragma endregion

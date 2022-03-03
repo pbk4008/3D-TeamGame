@@ -47,7 +47,7 @@ HRESULT CTestScene_JS::Ready_Gameobject()
 		return E_FAIL;
 	}
 
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_JS, L"Camera", L"Camera_Silvermane")))
+ 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_JS, L"Camera", L"Camera_Silvermane")))
 	{
 		return E_FAIL;
 	}
