@@ -22,10 +22,11 @@ protected:
 	virtual _int LateTick(_double TimeDelta);
 	virtual HRESULT Render();
 
-
 private:
 	virtual HRESULT SetUp_Components();
 
+public:
+	CEffect::EFFECTDESC Get_EffectDesc() {return m_Desc; }
 
 private:
 	CVIBuffer_PointInstance_Explosion* m_pBuffer = nullptr;
