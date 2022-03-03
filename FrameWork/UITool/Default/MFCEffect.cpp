@@ -48,7 +48,7 @@ HRESULT CMFCEffect::NativeConstruct(void* pArg)
 	{
 		return E_FAIL;
 	}
-	
+
 	return S_OK;
 }
 
@@ -83,7 +83,8 @@ _int CMFCEffect::Tick(_double TimeDelta)
 		CVIBuffer_PointInstance_Explosion::PIDESC Desc;
 		_tcscpy_s(Desc.ShaderFilePath, m_Desc.ShaderFilePath);
 		Desc.matParticle = m_Desc.ParticleMat;
-		Desc.fParticleRandomPos = m_Desc.fParticleRandomPos;
+		Desc.fParticleStartRandomPos = m_Desc.fParticleRandomPos;
+		Desc.fParticleMinusRandomDir = m_Desc.fParticleMinusRandomDir;
 		Desc.fParticleRandomDir = m_Desc.fParticleRandomDir;
 		Desc.fParticleSpeed = m_Desc.fParticleVelocity;
 		Desc.fParticleSize = m_Desc.fParticleSize;
@@ -99,6 +100,18 @@ _int CMFCEffect::Tick(_double TimeDelta)
 	_vector vDir = g_pGameInstance->Get_CamPosition(L"MFCCamera_Proj") - m_pTransform->Get_State(CTransform::STATE_POSITION);
 	vDir = XMVector3Normalize(vDir);
 	m_pBuffer->Set_Dir(vDir);
+
+	_uint iAllFrameCount = (m_Desc.iImageCountX * m_Desc.iImageCountY);
+	m_Desc.fFrame += (_float)(iAllFrameCount * TimeDelta * m_Desc.fEffectPlaySpeed); //플레이속도 
+	if (m_Desc.fFrame >= iAllFrameCount)
+	{
+		m_Desc.fFrame = 0;
+	}
+
+	if (m_Desc.fMaxLifeTime > m_Desc.fCurTime)
+	{
+		m_Desc.fCurTime += TimeDelta;
+	}
 
     return 0;
 }
@@ -126,9 +139,19 @@ HRESULT CMFCEffect::Render()
 	m_pBuffer->SetUp_ValueOnShader("g_ProjMatrix", &XMProjectMatrix, sizeof(XMMATRIX));
 
 	m_pBuffer->SetUp_TextureOnShader("g_DiffuseTexture", m_pTexture);
+
+	m_pBuffer->SetUp_ValueOnShader("g_iImageCountX", &m_Desc.iImageCountX, sizeof(_uint));
+	m_pBuffer->SetUp_ValueOnShader("g_iImageCountY", &m_Desc.iImageCountY, sizeof(_uint));
+
+	_uint iFrame = (_uint)m_Desc.fFrame;
+	m_pBuffer->SetUp_ValueOnShader("g_iFrame", &iFrame, sizeof(_uint));
+
+	m_pBuffer->SetUp_ValueOnShader("g_fLifeTime", &m_Desc.fMaxLifeTime, sizeof(_float));
+	m_pBuffer->SetUp_ValueOnShader("g_fCurTime", &m_Desc.fCurTime, sizeof(_float));
+
 	m_pBuffer->SetUp_ValueOnShader("g_vCamPosition", (void*)&CamPos, sizeof(_vector));
 
-	m_pBuffer->Render(1);
+	m_pBuffer->Render(m_Desc.iRenderPassNum);
 
 	return S_OK;
 }
@@ -148,14 +171,14 @@ HRESULT CMFCEffect::SetUp_Components()
 
 	//버퍼 Clone
 	CVIBuffer_PointInstance_Explosion::PIDESC Desc;
-	_tcscpy_s(Desc.ShaderFilePath, m_Desc.ShaderFilePath);
+	_tcscpy_s(Desc.ShaderFilePath, m_Desc.ShaderFullFilePath);
 	Desc.matParticle = m_Desc.ParticleMat;
-	Desc.fParticleRandomPos = m_Desc.fParticleRandomPos;
+	Desc.fParticleStartRandomPos = m_Desc.fParticleRandomPos;
+	Desc.fParticleMinusRandomDir = m_Desc.fParticleMinusRandomDir;
 	Desc.fParticleRandomDir = m_Desc.fParticleRandomDir;
 	Desc.fParticleSpeed = m_Desc.fParticleVelocity;
 	Desc.fParticleSize = m_Desc.fParticleSize;
 	Desc.iNumInstance = m_Desc.iNumInstance;
-
 	if (FAILED(__super::SetUp_Components(TOOL_LEVEL::TOOL_LEVEL_LOGO, L"Prototype_Component_VIBuffer_PointInstance_Explosion", L"Com_VIBuffer", (CComponent**)&m_pBuffer, &Desc)))
 		return E_FAIL;
 
