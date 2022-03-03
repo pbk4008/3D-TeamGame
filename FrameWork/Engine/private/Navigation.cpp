@@ -134,13 +134,14 @@ HRESULT CNavigation::Update_Buffer(_fvector pPosition)
 		{
 			if (true == XMVector3Equal(pPosition, XMLoadFloat3(&(*Finder->m_pPoint[i]))))
 			{
+				Finder->m_vPoint[i] = *(Finder->m_pPoint[i]);
 				pCell = Finder;
 			}
 
 			if (nullptr != pCell)
 			{
 				D3D11_MAPPED_SUBRESOURCE resource;
-				m_pDeviceContext->Map(pCell->m_pVIBuffer->m_pVB, 0, D3D11_MAP_WRITE_DISCARD, 0, &resource);
+				m_pDeviceContext->Map(pCell->m_pVIBuffer->m_pVB, 0,  D3D11_MAP_WRITE_DISCARD, 0, &resource);
 
 				resource.pData = pCell->m_pVIBuffer->getVertices();
 
@@ -150,13 +151,11 @@ HRESULT CNavigation::Update_Buffer(_fvector pPosition)
 				{
 					Vtx[i].vPosition = *pCell->m_pPoint[i];
 				}
-
+				pCell->m_pVIBuffer->Create_VertexBuffer();
 				m_pDeviceContext->Unmap((pCell)->m_pVIBuffer->m_pVB, 0);
 			}
-		}
+		} 
 	}
-
-	
 	return S_OK;
 }
 

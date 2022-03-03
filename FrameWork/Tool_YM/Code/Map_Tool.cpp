@@ -565,32 +565,24 @@ void CMap_Tool::OnNMClickTreeItem(NMHDR* pNMHDR, LRESULT* pResult)
 
 		if (NULL == treeItem)
 			MessageBox(L"Not Found Clone Model In Object List");
-
 		_int SelIndx = Find_TreeItem_Indx(treeItem);
 		
 		wstring tagLayer = Tag.operator LPCWSTR();
-
-		/* 오류 수정 부분 */
 		list<CGameObject*> ListObj = g_pGameInstance->getAllObjectList();
 
 		auto& iter = ListObj.begin();
 	
 		for (_uint i = 0; i < SelIndx ; ++i)
 			iter++;
-
-		//std::advance(iter, SelIndx);
 		if(nullptr != *iter)
 			bCheck = dynamic_cast<CStatic_Mesh*>(*iter)->m_bPick = (dynamic_cast<CStatic_Mesh*>(*iter)->m_bPick) ? 0 : 1;
 	}
-
 	*pResult = 0;
 }
 
 void CMap_Tool::OnBnClickedSaveButton()
 {
 	// TODO: 맵 데이터를 저장합니다.
-
-	//list<CGameObject*> ListObj = *g_pGameInstance->getObjectList(TAB_MAP, L"Stage_1");
 	list<CGameObject*> ListObj = g_pGameInstance->getAllObjectList();
 
 	m_vecMesh.clear();
@@ -661,17 +653,12 @@ void CMap_Tool::OnBnClickedLoadButton()
 			hr = m_pMenuForm->Create_Model_Prototype(FileInfo);
 			m_ProtoTag.push_back(FileInfo.cstrFileName);
 		}
-
 		if (FAILED(hr))
 		{
 			MessageBox(L"파일을 불러오는 도중 원본 생성에 실패했습니다.", MB_OK);
 			return;
 		}
-	
 	}
-
 	for (auto& iter : m_vecMesh)
-	{
 		m_pMenuForm->m_pInspec_Form->Add_GameObjectToLayer(iter);
-	}
 }

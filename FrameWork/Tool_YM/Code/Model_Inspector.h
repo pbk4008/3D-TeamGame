@@ -4,13 +4,17 @@
 // CModel_Inspector 대화 상자
 #include "Engine_Defines.h"
 
+BEGIN(Engine)
+class CCell;
+END
+
 class CObserver;
 class CMainFrame;
 class CInspector_Form;
 class CModel_Inspector : public CDialogEx
 {
 	DECLARE_DYNAMIC(CModel_Inspector)
-
+	
 public:
 	CModel_Inspector(CWnd* pParent = nullptr);   // 표준 생성자입니다.
 	virtual ~CModel_Inspector();
@@ -38,6 +42,9 @@ public:
 
 public:
 	list<wstring>				m_CloneMode_NameList;
+	vector<Engine::CCell*>		m_vecCells;
+	NAVMESHDESC					m_NavMesh;
+	vector<NAVMESHDESC>			m_NavMeshList_Pos;
 
 public:
 	class CMainFrame*			m_pMainFrm	   = nullptr;
@@ -67,4 +74,6 @@ public:
 	afx_msg void OnBnClickedAddButton();
 	afx_msg void OnBnClickedModelSetMode();
 	afx_msg void OnBnClickedNaveSetMode();
+	afx_msg void OnBnClickedNavSaveButton();
+	afx_msg void OnBnClickedNavLoadButton();
 };

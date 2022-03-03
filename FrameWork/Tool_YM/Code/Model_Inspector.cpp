@@ -10,6 +10,9 @@
 #include "Inspector_Form.h"
 #include "GameInstance.h"
 #include "Observer.h"
+#include "Cell.h"
+#include "NavSphere.h"
+
 // CModel_Inspector 대화 상자
 
 IMPLEMENT_DYNAMIC(CModel_Inspector, CDialogEx)
@@ -165,6 +168,8 @@ BEGIN_MESSAGE_MAP(CModel_Inspector, CDialogEx)
 	ON_BN_CLICKED(IDC_BUTTON1, &CModel_Inspector::OnBnClickedAddButton)
 	ON_BN_CLICKED(IDC_RADIO1, &CModel_Inspector::OnBnClickedModelSetMode)
 	ON_BN_CLICKED(IDC_RADIO2, &CModel_Inspector::OnBnClickedNaveSetMode)
+	ON_BN_CLICKED(IDC_BUTTON2, &CModel_Inspector::OnBnClickedNavSaveButton)
+	ON_BN_CLICKED(IDC_BUTTON3, &CModel_Inspector::OnBnClickedNavLoadButton)
 END_MESSAGE_MAP()
 
 
@@ -232,3 +237,87 @@ void CModel_Inspector::OnBnClickedNaveSetMode()
 	// TODO: 네비 셀 설치 모드
 	m_pObserver->m_eMode = CObserver::MODE_NAV;
 }
+
+
+void CModel_Inspector::OnBnClickedNavSaveButton()
+{
+	// TODO: 네비 매쉬 정보를 저장합니다
+	CNavigation* pPlaneNav = dynamic_cast<CNavigation*>(g_pGameInstance->Get_Component(TAB_STATIC, L"Layer_Plane", L"Com_Navigation"));
+
+	if (nullptr == pPlaneNav)
+		return;
+
+	m_NavMeshList_Pos.clear();
+	m_vecCells.clear();
+	m_vecCells = pPlaneNav->Get_vecCells();
+	
+	for (auto iter : m_vecCells)
+	{
+		for (int i = 0; i < 3; ++i)
+			m_NavMesh.Point[i] = iter->m_vPoint[i];
+		m_NavMeshList_Pos.push_back(m_NavMesh);
+	}
+
+	CFileDialog Dlg(false, L"dat", L"*.dat"); //저장, 디폴트확장자, 디폴트파일이름
+	TCHAR szFilePath[MAX_PATH] = L"";
+	GetCurrentDirectory(MAX_PATH, szFilePath);
+	PathRemoveFileSpec(szFilePath);
+	lstrcat(szFilePath, L"\\Data\\NavMesh\\");
+	
+	Dlg.m_ofn.lpstrInitialDir = szFilePath;
+
+	if (IDOK == Dlg.DoModal())
+	{
+		wstring strFilePath = Dlg.GetPathName();
+		g_pGameInstance->SaveFile<NAVMESHDESC>(&m_NavMeshList_Pos, strFilePath);
+	}
+}
+
+void CModel_Inspector::OnBnClickedNavLoadButton()
+{
+	// TODO: 네비 매쉬 정보를 불러옵니다
+	CFileDialog Dlg(true, L"dat", L"*.dat");
+	TCHAR szFilePath[MAX_PATH] = L"";
+	HRESULT hr = E_FAIL;
+
+	GetCurrentDirectory(MAX_PATH, szFilePath);
+	PathRemoveFileSpec(szFilePath);
+	lstrcat(szFilePath, L"\\Data\\NavMesh\\");
+	Dlg.m_ofn.lpstrInitialDir = szFilePath;
+
+	m_vecCells.clear();
+
+	CNavigation* pPlaneNav = dynamic_cast<CNavigation*>(g_pGameInstance->Get_Component(TAB_STATIC, L"Layer_Plane", L"Com_Navigation"));
+
+	if (nullptr == pPlaneNav)
+		return;
+
+	m_NavMeshList_Pos.clear();
+	pPlaneNav->m_Cells.clear();
+	list<CGameObject*>* SphereList = g_pGameInstance->getObjectList(TAB_STATIC, L"Layer_NaveSphere");
+	if(nullptr != SphereList)
+		SphereList->clear();
+
+	if (IDOK == Dlg.DoModal())
+	{
+		wstring strFilePath = Dlg.GetPathName();
+		g_pGameInstance->LoadFile<NAVMESHDESC>(m_NavMeshList_Pos, strFilePath);
+	}
+
+	for (int i = 0; i < m_NavMeshList_Pos.size(); ++i)
+	{
+		CGameObject* pSphere = nullptr;
+		CCell* pCell = CCell::Create(m_pInspec_Form->m_pDevice, m_pInspec_Form->m_pDeviceContext, m_NavMeshList_Pos[i].Point, pPlaneNav->m_Cells.size());
+		pPlaneNav->m_Cells.push_back(pCell);
+	
+		for (int j = 0; j < 3; j++)
+		{
+			if (FAILED(g_pGameInstance->Add_GameObjectToLayer(TAB_STATIC, L"Layer_NaveSphere", L"Prototype_GameObject_NavSphere", &m_NavMeshList_Pos[i].Point[j], &pSphere)))
+				MessageBox(L"Faild to Create Nav Sphere!", MB_OK);
+
+			pCell->m_pPoint[j] = &(dynamic_cast<CNavSphere*>(pSphere)->m_fPostion);
+		}
+	}
+	pPlaneNav->SetUp_Neighbor();
+}
+

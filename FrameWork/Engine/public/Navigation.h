@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Component.h"
-
+#include "Cell.h"
 BEGIN(Engine)
 
 class ENGINE_DLL CNavigation final : public CComponent
@@ -20,7 +20,8 @@ public:
 	_bool Move_OnNavigation(_fvector vPosition);
 
 public:
-	HRESULT	Update_Buffer(_fvector pPosition);
+	HRESULT					Update_Buffer(_fvector pPosition);
+	vector<class CCell*>	Get_vecCells(void) { return m_Cells; }
 
 #ifdef _DEBUG
 public:

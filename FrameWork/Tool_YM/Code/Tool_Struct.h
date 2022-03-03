@@ -31,4 +31,8 @@ typedef struct tagMeshDesc
 	LEVEL_ID eLevel;
 }MESHDESC;
 
+typedef struct tagNavMeshDesc
+{
+	_float3 Point[3];
+}NAVMESHDESC;
 #endif // Tool_Struct_h__

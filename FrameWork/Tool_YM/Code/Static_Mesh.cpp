@@ -3,6 +3,7 @@
 #include "GameInstance.h"
 #include "MeshContainer.h"
 #include "Observer.h"
+#include "Gizmo.h"
 
 CStatic_Mesh::CStatic_Mesh(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
 	: CGameObject(_pDevice, _pDeviceContext)
@@ -103,6 +104,25 @@ HRESULT CStatic_Mesh::Render()
 			else 
 				m_pModelCom->Render(i, 1);
 		}
+
+		if (true == m_bPick)
+		{
+			_fvector XStartVec = m_pTransform->Get_State(CTransform::STATE_POSITION);
+			_fvector XEndVec = XStartVec + (m_pTransform->Get_State(CTransform::STATE_LOOK) * 2);
+
+			_fvector YStartVec = m_pTransform->Get_State(CTransform::STATE_POSITION);
+			_fvector YEndVec = YStartVec + (m_pTransform->Get_State(CTransform::STATE_UP) * 2);
+
+			_fvector ZStartVec = m_pTransform->Get_State(CTransform::STATE_POSITION);
+			_fvector ZEndVec = ZStartVec + (m_pTransform->Get_State(CTransform::STATE_RIGHT) * 2);
+
+
+			m_pGizmo->DrawLine(XStartVec, XEndVec, L"Camera", _fvector{ 1.0f, 0.0f, 0.0f, 1.0f }); //X
+			m_pGizmo->DrawLine(YStartVec, YEndVec, L"Camera", _fvector{ 0.0f, 1.0f, 0.0f, 1.0f }); //Y
+			m_pGizmo->DrawLine(ZStartVec, ZEndVec, L"Camera", _fvector{ 0.0f, 0.0f, 1.0f, 1.0f }); //Z
+
+		}
+
 	}
 	return S_OK;
 }
@@ -111,6 +131,11 @@ HRESULT CStatic_Mesh::SetUp_Components()
 {
 	/* Com_Model */
 	if (FAILED(__super::SetUp_Components(TAB_MAP, m_ModelDesc.strFileName, L"Com_Model", (CComponent**)&m_pModelCom)))
+		return E_FAIL;
+
+	/* Com_Gizmo*/
+	m_pGizmo = (CGizmo*)g_pGameInstance->Clone_Component(TAB_STATIC, L"Gizmo");
+	if (nullptr == m_pGizmo)
 		return E_FAIL;
 
 	return S_OK;
@@ -239,8 +264,9 @@ void CStatic_Mesh::Pick_Model(void)
 			m_bPick = true;
 			pObserver->m_bPick = true;
 			pObserver->m_pModel = this;
+		
 			XMStoreFloat3(&m_fLocalMouse, XMLoadFloat3(&m_vRayPos) + (XMLoadFloat3(&m_vRayDir)) * fDist);
-			cout << "Model Pick Pos :" << m_fLocalMouse.x << "//" << m_fLocalMouse.y << "//" << m_fLocalMouse.z << endl;
+
 		}
 	}
 	RELEASE_INSTANCE(CObserver);

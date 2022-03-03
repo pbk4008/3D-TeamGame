@@ -8,6 +8,7 @@ class ENGINE_DLL CCell final : public CBase
 public:
 	enum POINT { POINT_A, POINT_B, POINT_C, POINT_END };
 	enum LINE { LINE_AB, LINE_BC, LINE_CA, LINE_END };
+	enum MODE { MODE_NEW, MODE_READ, MODE_END };
 private:
 	explicit CCell(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);
 	virtual ~CCell() = default;
@@ -32,7 +33,7 @@ public:
 
 #ifdef _DEBUG
 public:
-	HRESULT Ready_DebugBuffer();
+	HRESULT Ready_DebugBuffer(MODE _eMode);
 	HRESULT Render(_fmatrix WorldMatrix, _uint iCurrentIndex, const wstring& pCameraTag);
 #endif // _DEBUG
 
@@ -55,7 +56,6 @@ private:
 public:
 	class CVIBuffer_Triangle*			m_pVIBuffer = nullptr;
 #endif // _DEBUG
-
 
 
 public:
