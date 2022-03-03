@@ -129,7 +129,7 @@ HRESULT CModel::NativeConstruct(void * pArg)
 	_uint iNumAnimation = m_pScene->mNumAnimations;
 	for (_uint i = 0; i < iNumAnimation; i++)
 	{
-		vector<class CChannel*>* pChannels = m_Animations[i]->getChannel();
+		vector<class CChannel*>* pChannels = m_Animations[i]->Get_Channels();
 
 		for (auto& pChannel : *pChannels)
 		{
@@ -170,7 +170,7 @@ HRESULT CModel::SetUp_TextureOnShader(const char * pConstantName, _uint iMeshCon
 HRESULT CModel::Update_CombinedTransformationMatrix(_double TimeDelta)
 {
 	/* 현재 애니메이션 재생시간에 따른 뼈들의 TransformationMatrix를 갱신한다. */
- 	m_Animations[m_iCurrentAnimation]->Update_TransformationMatrix(TimeDelta);
+ 	//m_Animations[m_iCurrentAnimation]->Update_TransformationMatrix(TimeDelta);
 
 	/* 렌더링해야할 CombinedTransfromkationMatrix를 만든다. */
 	//for (auto& pHierarchyNode : m_HierarchyNodes)
@@ -408,11 +408,6 @@ HRESULT CModel::Create_Animation()
 
 			_uint iNumKeyframes = max(pAnimChannel->mNumPositionKeys, pAnimChannel->mNumRotationKeys);
 			iNumKeyframes = max(iNumKeyframes, pAnimChannel->mNumScalingKeys);
-
-			/*_vector			vScale, vRotation, vPosition;
-			ZeroMemory(&vScale, sizeof(_vector));
-			ZeroMemory(&vRotation, sizeof(_vector));
-			ZeroMemory(&vPosition, sizeof(_vector));*/
 
 			_float3 vScale = _float3(1.f, 1.f, 1.f);
 			_float4 vRotation = _float4(0.f, 0.f, 0.f, 0.f);
