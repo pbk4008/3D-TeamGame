@@ -30,6 +30,15 @@ CEffectTool_Dlg::CEffectTool_Dlg(CWnd* pParent /*=nullptr*/)
 	, m_fRandomDirY(360)
 	, m_fRandomDirZ(360)
 	, m_bCheck(true)
+	, m_fRandomMinusDirX(1)
+	, m_fRandomMinusDirY(1)
+	, m_fRandomMinusDirZ(1)
+	, m_EffectName(_T(""))
+	, m_RenderPassNum(1)
+	, m_frame(1)
+	, m_ImagecountX(1)
+	, m_ImagecountY(1)
+	, m_EffectPlaySpeed(1)
 {
 
 }
@@ -73,6 +82,8 @@ void CEffectTool_Dlg::DoDataExchange(CDataExchange* pDX)
 	DDV_MinMaxFloat(pDX, m_LiftTime, 0.1, 99999);
 	DDV_MinMaxFloat(pDX, m_Age, 0, 99999);
 	DDV_MinMaxInt(pDX, m_BaseCount, 1, 99999);
+
+
 	DDX_Control(pDX, IDC_TREE1, m_ShaderPathTree);
 	DDX_Control(pDX, IDC_TREE3, m_TextureTree);
 	DDX_Control(pDX, IDC_CHECK1, m_CheckGravity);
@@ -81,6 +92,15 @@ void CEffectTool_Dlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_RADIO_Y, m_AxisYBtn);
 	DDX_Control(pDX, IDC_RADIO_Z, m_AxisZBtn);
 	DDX_Control(pDX, IDC_RADIO_ALL, m_AxisAllBtn);
+	DDX_Text(pDX, IDC_EDIT19, m_fRandomMinusDirX);
+	DDX_Text(pDX, IDC_EDIT20, m_fRandomMinusDirY);
+	DDX_Text(pDX, IDC_EDIT21, m_fRandomMinusDirZ);
+	DDX_Text(pDX, IDC_EDIT4, m_EffectName);
+	DDX_Text(pDX, IDC_EDIT10, m_RenderPassNum);
+	DDX_Text(pDX, IDC_EDIT22, m_frame);
+	DDX_Text(pDX, IDC_EDIT23, m_ImagecountX);
+	DDX_Text(pDX, IDC_EDIT24, m_ImagecountY);
+	DDX_Text(pDX, IDC_EDIT25, m_EffectPlaySpeed);
 }
 
 void CEffectTool_Dlg::InitialShaderTree()
@@ -129,6 +149,9 @@ BEGIN_MESSAGE_MAP(CEffectTool_Dlg, CDialog)
 	ON_NOTIFY(TVN_SELCHANGED, IDC_TREE3, &CEffectTool_Dlg::OnTvnSelchangedTree3)
 	ON_BN_CLICKED(IDC_CHECK1, &CEffectTool_Dlg::OnBnClickedCheck1)
 	ON_BN_CLICKED(IDC_BUTTON2, &CEffectTool_Dlg::OnBnClickedButton2)
+	ON_BN_CLICKED(IDC_BUTTON3, &CEffectTool_Dlg::OnBnClickedButtonSave)
+	ON_BN_CLICKED(IDC_BUTTON7, &CEffectTool_Dlg::OnBnClickedButtonLoad)
+	ON_BN_CLICKED(IDC_BUTTON8, &CEffectTool_Dlg::OnBnClickedButtonNameTag)
 END_MESSAGE_MAP()
 
 
@@ -178,48 +201,56 @@ void CEffectTool_Dlg::OnBnClickedButtonApply()
 	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
 
 	UpdateData(TRUE);
-	CEffect::EFFECTDESC Desc;
-
+	
 	::PathRemoveExtension(m_strPickFileName); //이게 있으면 확장자도 지워짐
-	_tcscpy_s(Desc.TextureTag, m_strPickFileName);
-	Desc.fMyPos = { 0.f,0.f,0.f }; //transform위치이동은안함
-	Desc.ParticleMat = XMMatrixIdentity();
-	Desc.ParticleMat.r[3] = { m_PositionX, m_PositionY, m_PositionZ, 1.f };
-	Desc.fParticleVelocity = m_Velocity;
-	Desc.fParticleSize = { m_ParticleSizeX,m_ParticleSizeY };
-	Desc.fParticleRandomPos = { m_fRandomPosX, m_fRandomPosY,m_fRandomPosZ };
-	Desc.fParticleRandomDir = { m_fRandomDirX, m_fRandomDirY,m_fRandomDirZ };
-	Desc.iNumInstance = m_BaseCount;
-	Desc.fMaxLifeTime = m_LiftTime;
-	Desc.bUsingGravity = m_bCheck;
-	Desc.iAxis = 0;
+	_tcscpy_s(m_EffectDesc.TextureTag, m_strPickFileName);
+	m_EffectDesc.fMyPos = { 0.f,0.f,0.f }; //transform위치이동은안함
+	m_EffectDesc.ParticleMat = XMMatrixIdentity();
+	m_EffectDesc.ParticleMat.r[3] = { m_PositionX, m_PositionY, m_PositionZ, 1.f };
+	m_EffectDesc.fParticleVelocity = m_Velocity;
+	m_EffectDesc.fParticleSize = { m_ParticleSizeX,m_ParticleSizeY };
+	m_EffectDesc.fParticleRandomPos = { m_fRandomPosX, m_fRandomPosY,m_fRandomPosZ };
+	m_EffectDesc.fParticleMinusRandomDir = { m_fRandomMinusDirX, m_fRandomMinusDirY,m_fRandomMinusDirZ };
+	m_EffectDesc.fParticleRandomDir = { m_fRandomDirX, m_fRandomDirY,m_fRandomDirZ };
+	m_EffectDesc.iNumInstance = m_BaseCount;
+	m_EffectDesc.fMaxLifeTime = m_LiftTime;
+	m_EffectDesc.fCurTime = m_Age;
+	m_EffectDesc.bUsingGravity = m_bCheck;
+	m_EffectDesc.iAxis = 0;
+
+	m_EffectDesc.fEffectPlaySpeed = m_EffectPlaySpeed;
+	m_EffectDesc.fFrame = m_frame;
+	m_EffectDesc.iImageCountX = m_ImagecountX;
+	m_EffectDesc.iImageCountY = m_ImagecountY;
+	m_EffectDesc.iRenderPassNum = m_RenderPassNum;
 
 	if (m_AxisXBtn.GetCheck() == BST_CHECKED)
 	{
-		Desc.iAxis = 0;
+		m_EffectDesc.iAxis = 0;
 	}
 	else if (m_AxisYBtn.GetCheck() == BST_CHECKED)
 	{
-		Desc.iAxis = 1;
+		m_EffectDesc.iAxis = 1;
 	}
 	else if (m_AxisZBtn.GetCheck() == BST_CHECKED)
 	{
-		Desc.iAxis = 2;
+		m_EffectDesc.iAxis = 2;
 	}
 	else if (m_AxisAllBtn.GetCheck() == BST_CHECKED)
 	{
-		Desc.iAxis = 3;
+		m_EffectDesc.iAxis = 3;
 	}
 
 	//Age아직안함
-
 	wstring ShaderFullPath = ShaderFolderPath + ShaderFileName;
-	_tcscpy_s(Desc.ShaderFilePath, ShaderFullPath.c_str());
+	_tcscpy_s(m_EffectDesc.ShaderFilePath, ShaderFolderPath.c_str());
+	_tcscpy_s(m_EffectDesc.ShaderFileName, ShaderFileName.c_str());
+	_tcscpy_s(m_EffectDesc.ShaderFullFilePath, ShaderFullPath.c_str());
 
 	wstring Name = m_strPickFileName;
-	wstring FullName = L"Prototype_GameObject_" + Name;
+	wstring FullName = L"Prototype_GameObject_Effect"/* + Name*/;
 
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer(TOOL_LEVEL::TOOL_LEVEL_GAMEPLAY, L"Layer_Effect", FullName, &Desc)))
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer(TOOL_LEVEL::TOOL_LEVEL_GAMEPLAY, L"Layer_Effect", FullName, &m_EffectDesc)))
 	{
 		ERR_MSG(L"Failed to Creating in CEffectTool_Dlg::OnBnClickedButtonApply()");
 		return;
@@ -381,12 +412,19 @@ void CEffectTool_Dlg::OnBnClickedButton2()
 	m_EffectDesc.fParticleVelocity = m_Velocity;
 	m_EffectDesc.fParticleSize = { m_ParticleSizeX,m_ParticleSizeY };
 	m_EffectDesc.fParticleRandomPos = { m_fRandomPosX, m_fRandomPosY,m_fRandomPosZ };
+	m_EffectDesc.fParticleMinusRandomDir = { m_fRandomMinusDirX, m_fRandomMinusDirY,m_fRandomMinusDirZ };
 	m_EffectDesc.fParticleRandomDir = { m_fRandomDirX, m_fRandomDirY,m_fRandomDirZ };
 	m_EffectDesc.iNumInstance = m_BaseCount;
 	m_EffectDesc.fMaxLifeTime = m_LiftTime;
+	m_EffectDesc.fCurTime = m_Age;
 	m_EffectDesc.bUsingGravity = m_bCheck;
-
 	m_EffectDesc.iAxis = 0;
+
+	m_EffectDesc.fEffectPlaySpeed = m_EffectPlaySpeed;
+	m_EffectDesc.fFrame = m_frame;
+	m_EffectDesc.iImageCountX = m_ImagecountX;
+	m_EffectDesc.iImageCountY = m_ImagecountY;
+	m_EffectDesc.iRenderPassNum = m_RenderPassNum;
 
 	if (m_AxisXBtn.GetCheck() == BST_CHECKED)
 	{
@@ -406,9 +444,140 @@ void CEffectTool_Dlg::OnBnClickedButton2()
 	}
 
 	//Age아직안함
-
 	wstring ShaderFullPath = ShaderFolderPath + ShaderFileName;
-	_tcscpy_s(m_EffectDesc.ShaderFilePath, ShaderFullPath.c_str());
+
+	_tcscpy_s(m_EffectDesc.ShaderFilePath, ShaderFolderPath.c_str());
+	_tcscpy_s(m_EffectDesc.ShaderFileName, ShaderFileName.c_str());
+	_tcscpy_s(m_EffectDesc.ShaderFullFilePath, ShaderFullPath.c_str());
 
 	UpdateData(FALSE);
+}
+
+
+void CEffectTool_Dlg::OnBnClickedButtonSave()
+{
+	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+	list<CGameObject*> ListObj = *g_pGameInstance->getObjectList(1, L"Layer_Effect");
+
+	if (!ListObj.empty())
+	{
+		for (auto pObj : ListObj)
+		{
+			CMFCEffect* pEffect = (CMFCEffect*)pObj;
+			m_vecEffect.push_back(pEffect->Get_EffectDesc());
+			int a = 0;
+		}
+	}
+
+	CFileDialog Dlg(false, L"dat", L"*.dat"); //저장, 디폴트확장자, 디폴트파일이름
+	TCHAR szFilePath[MAX_PATH] = L"";
+
+	Dlg.m_ofn.lpstrInitialDir = szFilePath;
+
+	if (IDOK == Dlg.DoModal())
+	{
+		wstring strFilePath = Dlg.GetPathName();
+		g_pGameInstance->SaveFile<CMFCEffect::EFFECTDESC>(&m_vecEffect, strFilePath);
+	}
+}
+
+
+void CEffectTool_Dlg::OnBnClickedButtonLoad()
+{
+	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+	CFileDialog Dlg(true, L"dat", L"*.dat");
+	TCHAR szFilePath[MAX_PATH] = L"";
+
+	GetCurrentDirectory(MAX_PATH, szFilePath);
+	PathRemoveFileSpec(szFilePath);
+	lstrcat(szFilePath, L"\\Data");
+	Dlg.m_ofn.lpstrInitialDir = szFilePath;
+
+	if (IDOK == Dlg.DoModal())
+	{
+		wstring strFilePath = Dlg.GetPathName();
+		g_pGameInstance->LoadFile<CMFCEffect::EFFECTDESC>(m_vecEffect, strFilePath);
+		int a = 0;
+	}
+
+	for (int i = 0; i < m_vecEffect.size(); ++i)
+	{
+		wstring Tag = m_vecEffect[i].TextureTag;
+		wstring FullName = L"Prototype_GameObject_Effect"/* + Tag*/;
+
+		m_vecEffect[i].fFrame = 0.f;
+		m_vecEffect[i].fCurTime = 0.f;
+
+		if (FAILED(g_pGameInstance->Add_GameObjectToLayer(TOOL_LEVEL::TOOL_LEVEL_GAMEPLAY, L"Layer_Effect", FullName, &m_vecEffect[i])))
+		{
+			ERR_MSG(L"Failed to Creating in CEffectTool_Dlg::OnBnClickedButtonLoad()");
+			return;
+		}
+
+		//::PathRemoveExtension(m_strPickFileName); //이게 있으면 확장자도 지워짐
+		//_tcscpy_s(m_EffectDesc.TextureTag, m_strPickFileName);
+		UpdateData(TRUE);
+		_tcscpy_s(m_strPickFileName, m_vecEffect[i].ShaderFilePath);
+		m_EffectName = m_vecEffect[i].EffectName;
+		m_PositionX = XMVectorGetX(m_vecEffect[i].ParticleMat.r[3]);
+		m_PositionY = XMVectorGetY(m_vecEffect[i].ParticleMat.r[3]);
+		m_PositionZ = XMVectorGetZ(m_vecEffect[i].ParticleMat.r[3]);
+		m_Velocity = m_vecEffect[i].fParticleVelocity;
+		m_ParticleSizeX = m_vecEffect[i].fParticleSize.x;
+		m_ParticleSizeY = m_vecEffect[i].fParticleSize.y;
+		m_fRandomPosX = m_vecEffect[i].fParticleRandomPos.x;
+		m_fRandomPosY = m_vecEffect[i].fParticleRandomPos.y;
+		m_fRandomPosZ = m_vecEffect[i].fParticleRandomPos.z;
+		m_fRandomMinusDirX = m_vecEffect[i].fParticleMinusRandomDir.x;
+		m_fRandomMinusDirY = m_vecEffect[i].fParticleMinusRandomDir.y;
+		m_fRandomMinusDirZ = m_vecEffect[i].fParticleMinusRandomDir.z;
+		m_fRandomDirX = m_vecEffect[i].fParticleRandomDir.x;
+		m_fRandomDirY = m_vecEffect[i].fParticleRandomDir.y;
+		m_fRandomDirZ = m_vecEffect[i].fParticleRandomDir.z;
+		m_BaseCount = m_vecEffect[i].iNumInstance;
+		m_LiftTime = m_vecEffect[i].fMaxLifeTime;
+		m_Age = m_vecEffect[i].fCurTime;
+		m_bCheck = m_vecEffect[i].bUsingGravity;
+
+		m_EffectPlaySpeed = m_vecEffect[i].fEffectPlaySpeed;
+		m_frame = m_vecEffect[i].fFrame;
+		m_ImagecountX = m_vecEffect[i].iImageCountX;
+		m_ImagecountY = m_vecEffect[i].iImageCountY;
+		m_RenderPassNum = m_vecEffect[i].iRenderPassNum;
+		
+		if (0 == m_vecEffect[i].iAxis)
+		{
+			m_AxisXBtn.SetCheck(true);
+		}
+		else if (1 == m_vecEffect[i].iAxis)
+		{
+			m_AxisYBtn.SetCheck(true);
+		}
+		else if (2 == m_vecEffect[i].iAxis)
+		{
+			m_AxisZBtn.SetCheck(true);
+		}
+		else if (3 == m_vecEffect[i].iAxis)
+		{
+			m_AxisAllBtn.SetCheck(true);
+		}
+
+		//Age아직안함
+		ShaderFolderPath = m_vecEffect[i].ShaderFilePath;
+		ShaderFileName = m_vecEffect[i].ShaderFileName;
+		UpdateData(FALSE);
+
+	}
+}
+
+
+void CEffectTool_Dlg::OnBnClickedButtonNameTag()
+{
+	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+	UpdateData(TRUE);
+	if (0 != m_EffectName.GetLength())
+	{
+		_tcscpy_s(m_EffectDesc.EffectName, m_EffectName);
+		int a = 0;
+	}
 }

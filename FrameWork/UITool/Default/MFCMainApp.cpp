@@ -177,6 +177,10 @@ HRESULT CMFCMainApp::Ready_Component_Prototype()
 	{
 		return E_FAIL;
 	}
+	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"Smoke_loop8x8_00", L"../bin/Resource/Textures/Effect/Smoke_loop8x8_00.tga")))
+	{
+		return E_FAIL;
+	}
 
 	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"Plane_Texture", L"../bin/Resource/Textures/Plane_Default.png")))
 	{
@@ -227,7 +231,12 @@ HRESULT CMFCMainApp::Ready_GameObject_Prototype()
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_bubble"), CMFCEffect::Create(m_pDevice, m_pDeviceContext))))
+	//if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_bubble"), CMFCEffect::Create(m_pDevice, m_pDeviceContext))))
+	//{
+	//	return E_FAIL;
+	//}
+
+	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Effect"), CMFCEffect::Create(m_pDevice, m_pDeviceContext))))
 	{
 		return E_FAIL;
 	}

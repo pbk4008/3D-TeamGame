@@ -16,6 +16,12 @@ cbuffer Matrices
 };
 
 texture2D	g_DiffuseTexture;
+uint g_iImageCountX; //가로줄수
+uint g_iImageCountY; //세로줄수
+uint g_iFrame; //전체장수
+float g_fLifeTime;
+float g_fCurTime;
+
 
 sampler DefaultSampler = sampler_state
 {
@@ -51,8 +57,9 @@ VS_OUT VS_MAIN(VS_IN In)
 	vector	vPosition = mul(vector(In.vPosition, 1.f), In.TransformMatrix);
 
 	Out.vPosition = mul(vPosition, g_WorldMatrix);
-	Out.vPSize = In.vPSize;
-
+	//Out.vPSize.x = In.vPSize.x * In.TransformMatrix._11;
+    //Out.vPSize.y = In.vPSize.y * In.TransformMatrix._22;
+    Out.vPSize = In.vPSize;
 	return Out;
 }
 
@@ -73,6 +80,10 @@ struct GS_OUT
 void GS_MAIN(point GS_IN In[1], inout TriangleStream<GS_OUT> OutStream)
 {
 	GS_OUT		Out[6];
+	
+    float Ratio = g_fCurTime / g_fLifeTime;
+    In[0].vPSize.x = ((-In[0].vPSize.x) * Ratio + In[0].vPSize.x) / 2.f;
+    In[0].vPSize.y = ((-In[0].vPSize.y) * Ratio + In[0].vPSize.y) / 2.f;
 
 	vector		vAxisY = vector(0.f, 1.f, 0.f, 0.f);
 
@@ -150,6 +161,17 @@ PS_OUT PS_MAIN(PS_IN In)
 	return Out;
 }
 
+PS_OUT PS_MAIN_MULTIIMAGE(PS_IN In)
+{
+    PS_OUT Out = (PS_OUT) 0;
+
+    In.vTexUV.x = (In.vTexUV.x / g_iImageCountX) + (g_iFrame % g_iImageCountX) * (1.f / g_iImageCountX); //가로 이미지개수 , 프레임 , 1나누기 이미지개수 
+    In.vTexUV.y = (In.vTexUV.y / g_iImageCountY) + (g_iFrame / g_iImageCountY) * (1.f / g_iImageCountY); //세로 이미지개수 , 프레임 , 1나누기 이미지개수
+
+    Out.vColor = g_DiffuseTexture.Sample(DefaultSampler, In.vTexUV);
+
+    return Out;
+}
 
 technique11			DefaultTechnique
 {
@@ -180,6 +202,19 @@ technique11			DefaultTechnique
 		GeometryShader = compile gs_5_0 GS_MAIN();
 		PixelShader = compile ps_5_0  PS_MAIN();
 	}
+
+    pass AlphaBlendMultiImage
+    {
+		/* 렌더스테이츠에 대한 정의. */
+        SetRasterizerState(CullMode_Default);
+        SetDepthStencilState(ZDefault, 0);
+        SetBlendState(AlphaBlending, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+
+		/* 진입점함수를 지정한다. */
+        VertexShader = compile vs_5_0 VS_MAIN();
+        GeometryShader = compile gs_5_0 GS_MAIN();
+        PixelShader = compile ps_5_0 PS_MAIN_MULTIIMAGE();
+    }
 }
 
 

@@ -5,6 +5,20 @@ CAnimation::CAnimation()
 {
 }
 
+CAnimation::CAnimation(const CAnimation& rhs)
+	: m_Duration(rhs.m_Duration)
+	, m_TrackPositionAcc(rhs.m_TrackPositionAcc)
+	, m_isFinished(rhs.m_isFinished)
+	, m_PlaySpeed(rhs.m_PlaySpeed)
+	, m_iIndex(rhs.m_iIndex)
+	, m_iCurrentKeyFrameIndex(rhs.m_iCurrentKeyFrameIndex)
+{
+	strcpy_s(m_szName, rhs.m_szName);
+
+	for (auto& pPrototypeChannel : rhs.m_Channels)
+		m_Channels.push_back(pPrototypeChannel->Clone());
+}
+
 HRESULT CAnimation::NativeConstruct(char * pName, _double Duration, _double PlaySpeed)
 {
 	strcpy_s(m_szName, pName);
@@ -21,13 +35,16 @@ HRESULT CAnimation::Add_Channel(CChannel * pChannel)
 	return S_OK;
 }
 
-HRESULT CAnimation::Update_TransformationMatrix(_double TimeDelta)
+HRESULT CAnimation::Update_TransformationMatrix(_double TimeDelta,const _bool _isLoop)
 {
-	m_TrackPositionAcc += m_PlaySpeed * TimeDelta;
+	if (!m_isFinished)
+		m_TrackPositionAcc += m_PlaySpeed * TimeDelta;
+
 	if (m_TrackPositionAcc >= m_Duration)
 	{
 		m_isFinished = true;
-		m_TrackPositionAcc = 0.0;
+		if (_isLoop)
+			m_TrackPositionAcc = 0.0;
 	}
 	else
 		m_isFinished = false;
@@ -47,8 +64,11 @@ HRESULT CAnimation::Update_TransformationMatrix(_double TimeDelta)
 
 		if (true == m_isFinished)
 		{
-			iCurrentKeyFrameIndex = 0;
-			m_Channels[i]->Set_CurrentKeyFrameIndex(0);
+			if (_isLoop)
+			{
+				iCurrentKeyFrameIndex = 0;
+				m_Channels[i]->Set_CurrentKeyFrameIndex(0);
+			}
 		}
 
 		_uint		iNumKeyFrame = (_uint)KeyFrames.size();
@@ -74,7 +94,7 @@ HRESULT CAnimation::Update_TransformationMatrix(_double TimeDelta)
 		/* 특정 키프레임과 키프=레임 사이에 있다.  */
 		else
 		{
-			if (m_TrackPositionAcc >= KeyFrames[iCurrentKeyFrameIndex + 1]->Time)
+			while (m_TrackPositionAcc >= KeyFrames[iCurrentKeyFrameIndex + 1]->Time)
 				m_Channels[i]->Set_CurrentKeyFrameIndex(++iCurrentKeyFrameIndex);
 
 			_float		fRatio = (_float)(m_TrackPositionAcc - KeyFrames[iCurrentKeyFrameIndex]->Time) / 
@@ -99,9 +119,32 @@ HRESULT CAnimation::Update_TransformationMatrix(_double TimeDelta)
 		_matrix		TransformationMatrix = XMMatrixAffineTransformation(vScale, XMVectorSet(0.f, 0.f, 0.f, 1.f), vRotation, vPosition);
 
 		m_Channels[i]->Set_TransformationMatrix(TransformationMatrix);
+		m_Channels[i]->Set_AnimInterPolation(vScale, vRotation, vPosition);
 	}
 
 	return S_OK;
+}
+
+CChannel* CAnimation::Get_Channel(const char* pChannelName) const
+{
+	for (auto& pChannel : m_Channels)
+	{
+		const char* pName = pChannel->Get_Name();
+
+		if (!strcmp(pChannelName, pName))
+			return pChannel;
+	}
+
+	return nullptr;
+}
+
+void CAnimation::Reset_Animation()
+{
+	m_isFinished = false;
+	m_TrackPositionAcc = 0.0;
+
+	for (auto& pChannel : m_Channels)
+		pChannel->Set_CurrentKeyFrameIndex(0);
 }
 
 CAnimation * CAnimation::Create(char * pName, _double Duration, _double PlaySpeed)
@@ -115,6 +158,11 @@ CAnimation * CAnimation::Create(char * pName, _double Duration, _double PlaySpee
 	}
 
 	return pInstance;
+}
+
+CAnimation* CAnimation::Clone()
+{
+	return new CAnimation(*this);
 }
 
 void CAnimation::Free()

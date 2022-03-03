@@ -9,18 +9,31 @@ class ENGINE_DLL CEffect abstract : public CGameObject
 	public:
 	typedef struct tagEffectDesc
 	{
-		_tchar		TextureTag[MAX_PATH];
-		_tchar		ShaderFilePath[MAX_PATH];
+		_tchar		EffectName[MAX_PATH]; //파일이름
+		_tchar		ShaderFilePath[MAX_PATH]; //파일경로
+		_tchar		ShaderFileName[MAX_PATH]; //파일이름
+		_tchar		ShaderFullFilePath[MAX_PATH]; //파일경로 + 파일이름
 		_vector		fMyPos; //내 위치
 		_matrix		ParticleMat;
 		_float3		fParticleRandomPos;
+		_float3		fParticleMinusRandomDir; //반대방향으로갈수있게해주는랜덤값
 		_float3		fParticleRandomDir;
 		_float2		fParticleSize;
 		_float		fParticleVelocity;
 		_float		fMaxLifeTime;
+		_float		fCurTime; //현재나이
 		_uint		iNumInstance;
 		_uint		iAxis;
 		_bool		bUsingGravity;
+
+		//이미지관련
+		_tchar		TextureTag[MAX_PATH]; //텍스쳐태그
+		_uint		iImageCountX; 
+		_uint		iImageCountY;
+		_float		fEffectPlaySpeed;
+		_float		fFrame;
+		_uint		iRenderPassNum;
+
 	}EFFECTDESC;
 protected:
 	explicit CEffect();

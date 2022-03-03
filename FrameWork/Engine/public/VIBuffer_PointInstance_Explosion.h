@@ -12,7 +12,8 @@ public:
 	{
 		_tchar		ShaderFilePath[MAX_PATH];
 		_matrix		matParticle;
-		_float3		fParticleRandomPos;
+		_float3		fParticleStartRandomPos;
+		_float3		fParticleMinusRandomDir;
 		_float3		fParticleRandomDir;
 		_float2		fParticleSize;
 		_float		fParticleSpeed;
@@ -30,7 +31,10 @@ public:
 public:
 	void Update(_double TimeDelta, _uint eAxis);
 
+public:
+	void Particle_Setting_RandomPos();
 	void Particle_Reset();
+
 public:
 	void Set_Dir(_vector vDir) { XMStoreFloat3(&m_fCamLookDir, vDir); }
 	void Set_Desc(PIDESC Desc) { memcpy(&m_Desc, &Desc, sizeof(PIDESC)); }

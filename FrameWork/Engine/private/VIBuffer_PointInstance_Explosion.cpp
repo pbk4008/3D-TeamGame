@@ -133,7 +133,6 @@ HRESULT CVIBuffer_PointInstance_Explosion::NativeConstruct(void * pArg)
 	m_VBDesc.MiscFlags = 0;
 	m_VBDesc.StructureByteStride = m_iStride;
 
-
 	/* D3D11_SUBRESOURCE_DATA */
 	ZeroMemory(&m_VBSubresourceData, sizeof(D3D11_SUBRESOURCE_DATA));
 	m_pVertices = new VTXPOINT[m_iNumVertices];
@@ -146,7 +145,6 @@ HRESULT CVIBuffer_PointInstance_Explosion::NativeConstruct(void * pArg)
 	}
 
 	m_VBSubresourceData.pSysMem = m_pVertices;
-
 
 	if (FAILED(__super::Create_VertexBuffer()))
 		return E_FAIL;
@@ -175,9 +173,9 @@ HRESULT CVIBuffer_PointInstance_Explosion::NativeConstruct(void * pArg)
 		XMStoreFloat4(&pVertices[i].vUp, m_Desc.matParticle.r[1]);
 		XMStoreFloat4(&pVertices[i].vLook, m_Desc.matParticle.r[2]);
 		pVertices[i].vPosition =
-			_float4(XMVectorGetX(m_Desc.matParticle.r[3]) + rand() % (_int)(m_Desc.fParticleRandomPos.x),
-				XMVectorGetY(m_Desc.matParticle.r[3]) + rand() % (_int)(m_Desc.fParticleRandomPos.y),
-				XMVectorGetZ(m_Desc.matParticle.r[3]) + rand() % (_int)(m_Desc.fParticleRandomPos.z), 1.f);
+			_float4(XMVectorGetX(m_Desc.matParticle.r[3]) + rand() % (_int)(m_Desc.fParticleStartRandomPos.x),
+				XMVectorGetY(m_Desc.matParticle.r[3]) + rand() % (_int)(m_Desc.fParticleStartRandomPos.y),
+				XMVectorGetZ(m_Desc.matParticle.r[3]) + rand() % (_int)(m_Desc.fParticleStartRandomPos.z), 1.f);
 	}
 	m_VBInstSubresourceData.pSysMem = pVertices;
 
@@ -203,21 +201,9 @@ HRESULT CVIBuffer_PointInstance_Explosion::NativeConstruct(void * pArg)
 	m_pRandomPos = new _float3[m_Desc.iNumInstance];
 	m_pDir = new _float3[m_Desc.iNumInstance];
 	m_pNormal = new _float3[m_Desc.iNumInstance];
-	for (_uint i = 0; i < m_Desc.iNumInstance; ++i)
-	{
-		m_pRandomPos[i] = { -(rand() % (_int)(m_Desc.fParticleRandomDir.x * 2)) + m_Desc.fParticleRandomDir.x,
-			-(rand() % (_int)(m_Desc.fParticleRandomDir.y * 2)) + m_Desc.fParticleRandomDir.y,
-			-(rand() % (_int)(m_Desc.fParticleRandomDir.z * 2)) + m_Desc.fParticleRandomDir.z};
 
+	Particle_Setting_RandomPos();
 
-		while (0 == m_pRandomPos[i].x && 0 == m_pRandomPos[i].y && 0 == m_pRandomPos[i].z)
-		{
-			m_pRandomPos[i].x = -(rand() % (_int)(m_Desc.fParticleRandomDir.x * 2)) + m_Desc.fParticleRandomDir.x;
-			m_pRandomPos[i].y = -(rand() % (_int)(m_Desc.fParticleRandomDir.y * 2)) + m_Desc.fParticleRandomDir.y;
-			m_pRandomPos[i].z = -(rand() % (_int)(m_Desc.fParticleRandomDir.z * 2)) + m_Desc.fParticleRandomDir.z;
-		}
-	}
-	
 	return S_OK;
 }
 
@@ -267,31 +253,37 @@ void CVIBuffer_PointInstance_Explosion::Update(_double TimeDelta, _uint eAxis)
 
 	m_pDeviceContext->Map(m_pVBInstance, 0, /*D3D11_MAP_WRITE_DISCARD*/D3D11_MAP_WRITE_NO_OVERWRITE, 0, &SubResource);
 
-	if (!m_bSettingDir) //방향처음에한번지정해줬으면 그담엔 ㄴㄴ
+	if (!m_bSettingDir) 
 	{
+		//방향 처음에 지정해줬으면 리셋하기 전까지 그 방향으로 고정
+
 		for (_uint i = 0; i < m_Desc.iNumInstance; ++i)
 		{
+			while (0 == m_pRandomPos[i].x && 0 == m_pRandomPos[i].y && 0 == m_pRandomPos[i].z)
+			{
+				//만약에 세 축이 다 0이면 아닐때까지 계속돌리기
+				m_pRandomPos[i].x = -(rand() % (_int)(m_Desc.fParticleMinusRandomDir.x)) + m_Desc.fParticleRandomDir.x;
+				m_pRandomPos[i].y = -(rand() % (_int)(m_Desc.fParticleMinusRandomDir.y)) + m_Desc.fParticleRandomDir.y;
+				m_pRandomPos[i].z = -(rand() % (_int)(m_Desc.fParticleMinusRandomDir.z)) + m_Desc.fParticleRandomDir.z;
+			}
+
 			m_pDir[i] = { m_pRandomPos[i].x - ((VTXMATRIX*)SubResource.pData)[i].vPosition.x,
 				m_pRandomPos[i].y - ((VTXMATRIX*)SubResource.pData)[i].vPosition.y,
 				m_pRandomPos[i].z - ((VTXMATRIX*)SubResource.pData)[i].vPosition.z };
 
-			while (0 == m_pRandomPos[i].x && 0 == m_pRandomPos[i].y && 0 == m_pRandomPos[i].z)
-			{
-				m_pRandomPos[i].x = -(rand() % (_int)(m_Desc.fParticleRandomDir.x * 2)) + m_Desc.fParticleRandomDir.x;
-				m_pRandomPos[i].y = -(rand() % (_int)(m_Desc.fParticleRandomDir.y * 2)) + m_Desc.fParticleRandomDir.y;
-				m_pRandomPos[i].z = -(rand() % (_int)(m_Desc.fParticleRandomDir.z * 2)) + m_Desc.fParticleRandomDir.z;
-			}
-
 			_vector vNormal = XMVector3Normalize(XMLoadFloat3(&m_pDir[i]));
 			XMStoreFloat3(&m_pNormal[i], vNormal);
 		}
+
 		m_bSettingDir = true;
 	}
+
 
 	for (_uint i = 0; i < m_Desc.iNumInstance; ++i)
 	{
 		if (!m_bReset)
 		{
+			//리셋일때는 돌지않게
 			if ((_uint)AXIS::AXIS_X == eAxis)
 			{
 				((VTXMATRIX*)SubResource.pData)[i].vPosition.x = 0;
@@ -346,38 +338,45 @@ void CVIBuffer_PointInstance_Explosion::Update(_double TimeDelta, _uint eAxis)
 	m_pDeviceContext->Unmap(m_pVBInstance, 0);
 }
 
+void CVIBuffer_PointInstance_Explosion::Particle_Setting_RandomPos()
+{
+	for (_uint i = 0; i < m_Desc.iNumInstance; ++i)
+	{
+		m_pRandomPos[i] = { -(rand() % (_int)(m_Desc.fParticleMinusRandomDir.x)) + m_Desc.fParticleRandomDir.x,
+			-(rand() % (_int)(m_Desc.fParticleMinusRandomDir.y)) + m_Desc.fParticleRandomDir.y,
+			-(rand() % (_int)(m_Desc.fParticleMinusRandomDir.z)) + m_Desc.fParticleRandomDir.z };
+
+		while (0 == m_pRandomPos[i].x && 0 == m_pRandomPos[i].y && 0 == m_pRandomPos[i].z)
+		{
+			m_pRandomPos[i].x = -(rand() % (_int)(m_Desc.fParticleMinusRandomDir.x)) + m_Desc.fParticleRandomDir.x;
+			m_pRandomPos[i].y = -(rand() % (_int)(m_Desc.fParticleMinusRandomDir.y)) + m_Desc.fParticleRandomDir.y;
+			m_pRandomPos[i].z = -(rand() % (_int)(m_Desc.fParticleMinusRandomDir.z)) + m_Desc.fParticleRandomDir.z;
+		}
+	}
+}
+
 void CVIBuffer_PointInstance_Explosion::Particle_Reset()
 {
 	m_bSettingDir = false;
 
 	//리셋될때마다 새롭게 벡터세팅 
-	for (_uint i = 0; i < m_Desc.iNumInstance; ++i)
-	{
-		m_pRandomPos[i] = { -(rand() % (_int)(m_Desc.fParticleRandomDir.x * 2)) + m_Desc.fParticleRandomDir.x,
-			-(rand() % (_int)(m_Desc.fParticleRandomDir.y * 2)) + m_Desc.fParticleRandomDir.y,
-			-(rand() % (_int)(m_Desc.fParticleRandomDir.z * 2)) + m_Desc.fParticleRandomDir.z };
-
-		while (0 == m_pRandomPos[i].x && 0 == m_pRandomPos[i].y && 0 == m_pRandomPos[i].z)
-		{
-			m_pRandomPos[i].x = -(rand() % (_int)(m_Desc.fParticleRandomDir.x * 2)) + m_Desc.fParticleRandomDir.x;
-			m_pRandomPos[i].y = -(rand() % (_int)(m_Desc.fParticleRandomDir.y * 2)) + m_Desc.fParticleRandomDir.y;
-			m_pRandomPos[i].z = -(rand() % (_int)(m_Desc.fParticleRandomDir.z * 2)) + m_Desc.fParticleRandomDir.z;
-		}
-	}
+	Particle_Setting_RandomPos();
 
 	D3D11_MAPPED_SUBRESOURCE		SubResource;
 
 	m_pDeviceContext->Map(m_pVBInstance, 0, D3D11_MAP_WRITE_NO_OVERWRITE, 0, &SubResource);
 
-
 	for (_uint i = 0; i < m_Desc.iNumInstance; ++i)
 	{
-		((VTXPOINT*)SubResource.pData)[i].vPSize.x = m_Desc.fParticleSize.x;
-		((VTXPOINT*)SubResource.pData)[i].vPSize.y = m_Desc.fParticleSize.y;
+		m_Desc.matParticle.r[0] = XMVectorSetX(m_Desc.matParticle.r[0], m_Desc.fParticleSize.x);
+		m_Desc.matParticle.r[1] = XMVectorSetY(m_Desc.matParticle.r[1], m_Desc.fParticleSize.y);
 
-		((VTXMATRIX*)SubResource.pData)[i].vPosition.x = XMVectorGetX(m_Desc.matParticle.r[3]) + rand() % (_int)(m_Desc.fParticleRandomPos.x);
-		((VTXMATRIX*)SubResource.pData)[i].vPosition.y = XMVectorGetY(m_Desc.matParticle.r[3]) + rand() % (_int)(m_Desc.fParticleRandomPos.y);
-		((VTXMATRIX*)SubResource.pData)[i].vPosition.z = XMVectorGetZ(m_Desc.matParticle.r[3]) + rand() % (_int)(m_Desc.fParticleRandomPos.z);
+		XMStoreFloat4(&((VTXMATRIX*)SubResource.pData)[i].vRight, m_Desc.matParticle.r[0]);
+		XMStoreFloat4(&((VTXMATRIX*)SubResource.pData)[i].vUp, m_Desc.matParticle.r[1]);
+		XMStoreFloat4(&((VTXMATRIX*)SubResource.pData)[i].vLook, m_Desc.matParticle.r[2]);
+		((VTXMATRIX*)SubResource.pData)[i].vPosition.x = XMVectorGetX(m_Desc.matParticle.r[3]) + rand() % (_int)(m_Desc.fParticleStartRandomPos.x);
+		((VTXMATRIX*)SubResource.pData)[i].vPosition.y = XMVectorGetY(m_Desc.matParticle.r[3]) + rand() % (_int)(m_Desc.fParticleStartRandomPos.y);
+		((VTXMATRIX*)SubResource.pData)[i].vPosition.z = XMVectorGetZ(m_Desc.matParticle.r[3]) + rand() % (_int)(m_Desc.fParticleStartRandomPos.z);
 	}
 
 	////소팅해야댐 여기서 , 멀리있는것부터 그릴수있게,, 저는 생각이없습니다.. 

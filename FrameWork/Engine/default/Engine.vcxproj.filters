@@ -593,6 +593,9 @@
     <ClCompile Include="..\private\AnimationController.cpp">
       <Filter>00.Utility\03.Component\98.AnimationController</Filter>
     </ClCompile>
+    <ClCompile Include="..\private\Model.cpp">
+      <Filter>00.Utility\03.Component\05.VIBuffer\07.Model</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="..\bin\ShaderFiles\Shader_Triangle.hlsl">
