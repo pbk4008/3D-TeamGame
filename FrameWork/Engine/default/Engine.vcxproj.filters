@@ -566,9 +566,6 @@
     <ClCompile Include="..\private\BoxCollider.cpp">
       <Filter>00.Utility\03.Component\00. Collider\00.BoxCollider</Filter>
     </ClCompile>
-    <ClCompile Include="..\private\Model.cpp">
-      <Filter>00.Utility\03.Component\05.VIBuffer\07.Model\MeshContainer</Filter>
-     </ClCompile>
     <ClCompile Include="..\private\SphereCollider.cpp">
       <Filter>00.Utility\03.Component\00. Collider\01.SphereCollider</Filter>
     </ClCompile>
@@ -583,6 +580,9 @@
     </ClCompile>
     <ClCompile Include="..\private\Gizmo.cpp">
       <Filter>00.Utility\03.Component\07.Gizmo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Model.cpp">
+      <Filter>00.Utility\03.Component\05.VIBuffer\07.Model</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
