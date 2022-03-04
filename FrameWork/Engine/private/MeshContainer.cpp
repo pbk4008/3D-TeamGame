@@ -123,7 +123,7 @@ void CMeshContainer::SetUp_BoneMatrices(_matrix * pBoneMatrices, _fmatrix PivotM
 	}
 }
 
-const CSaveManager::STATICMESHDATA& CMeshContainer::SetSaveData()
+const CSaveManager::STATICMESHDATA& CMeshContainer::SetStaticSaveData()
 {
 	CSaveManager::STATICMESHDATA pData;
 
@@ -133,6 +133,33 @@ const CSaveManager::STATICMESHDATA& CMeshContainer::SetSaveData()
 	pData.pVtxPoint = (VTXMESH*)m_pVertices;
 	pData.pIndex = (FACEINDICES32*)m_pIndices;
 
+	return pData;
+}
+
+const CSaveManager::ANIMMESHDATA& CMeshContainer::SetAnimSaveData()
+{
+	CSaveManager::ANIMMESHDATA pData;
+
+	pData.iIdxCount = m_iNumPrimitive;
+	pData.iMeshMtrlNum = m_iMaterialIndex;
+	pData.iVtxCount = m_iNumVertices;
+	pData.pVtxPoint = (VTXMESH_ANIM*)m_pVertices;
+	pData.pIndex = (FACEINDICES32*)m_pIndices;
+
+	_uint iBoneCnt = (_uint)m_Bones.size();
+	pData.iBoneCnt = iBoneCnt;
+	pData.pBoneData = new CSaveManager::BONEDATA[iBoneCnt];
+	ZeroMemory(pData.pBoneData, sizeof(CSaveManager::BONEDATA) * iBoneCnt);
+	for (_uint i = 0; i < iBoneCnt; i++)
+	{
+		pData.pBoneData[i].iBoneNameSize = (_uint)strlen(m_Bones[i]->Get_Name());
+		strcpy_s(pData.pBoneData[i].szBoneName,m_Bones[i]->Get_Name());
+		pData.pBoneData[i].iDepth = m_Bones[i]->Get_Depth();
+		pData.pBoneData[i].iParentNameSize = (_uint)strlen(m_Bones[i]->Get_Parent()->Get_Name());
+		strcpy_s(pData.pBoneData[i].szParentName, m_Bones[i]->Get_Parent()->Get_Name());
+		XMStoreFloat4x4(&pData.pBoneData[i].OffsetMatrix, m_Bones[i]->Get_OffsetMatrix());
+		XMStoreFloat4x4(&pData.pBoneData[i].TransformationMatrix, m_Bones[i]->Get_TransformMatrix());
+	}
 	return pData;
 }
 

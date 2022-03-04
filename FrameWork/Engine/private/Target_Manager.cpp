@@ -61,7 +61,7 @@ HRESULT CTarget_Manager::Begin_MRT(ID3D11DeviceContext* pDeviceContext, const ws
 
 	pDeviceContext->OMGetRenderTargets(1, &m_pOldView, &m_pDepthStencilView);
 
-	_uint		iNumViews = pMRTList->size();
+	_uint		iNumViews = (_uint)pMRTList->size();
 
 	_uint		iIndex = 0;
 

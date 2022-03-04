@@ -1,11 +1,10 @@
 #pragma once
 
 #include "Base.h"
-
+#include "SaveManager.h"
 /* 애니메이션 하나의 동작. */
 
 BEGIN(Engine)
-
 class CAnimation final : public CBase
 {
 public:
@@ -23,6 +22,7 @@ public:
 	const _uint Get_Index() const { return m_iIndex; }
 	vector <class CChannel*>* Get_Channels() { return &m_Channels; }
 	const _bool Is_Finished() const { return m_isFinished; }
+	CSaveManager::ANIMDATA& SetSaveAnimData();
 public:
 	void Reset_Animation();
 private:

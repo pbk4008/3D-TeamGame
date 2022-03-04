@@ -24,7 +24,11 @@ CModel::CModel(const CModel& rhs)
 	, m_pEffect(rhs.m_pEffect)
 	, m_PassDesc(rhs.m_PassDesc)
 	, m_HierarchyNodes(rhs.m_HierarchyNodes)
+	, m_bSaved(rhs.m_bSaved)
 {	
+	strcpy_s(m_szMeshFilePath, rhs.m_szMeshFilePath);
+	strcpy_s(m_szMeshFullName, rhs.m_szMeshFullName);
+
 	for (auto& pMaterial : m_Materials)
 	{
 		for (_uint i = 0; i < AI_TEXTURE_TYPE_MAX; ++i)
@@ -73,6 +77,7 @@ HRESULT CModel::NativeConstruct_Prototype(const string& pMeshFilePath, const str
 
 	string szFullPath = pMeshFilePath;
 	szFullPath += pMeshFileName;
+	strcpy_s(m_szMeshFullName, szFullPath.c_str());
 
 	_int iFlag = 0;
 
@@ -104,7 +109,6 @@ HRESULT CModel::NativeConstruct_Prototype(const string& pMeshFilePath, const str
 
 	if (m_eMeshType == TYPE_STATIC)
 	{
-
 		wstring wstrSaveFileName, wstrSaveFilePath;
 		wstrSaveFilePath = L"../../Client/bin/SaveData/";
 		wstrSaveFileName.assign(pMeshFileName.begin(), pMeshFileName.end());
@@ -166,6 +170,12 @@ HRESULT CModel::NativeConstruct(void * pArg)
 				return E_FAIL;
 			pHierarchyNode->Add_Channel(i, pChannel);
 		}
+	}
+	if(!m_bSaved)
+	{
+		if (FAILED(Save_AnimModel()))
+			return E_FAIL;
+		m_bSaved = true;
 	}
 
 	return S_OK;
@@ -575,7 +585,7 @@ HRESULT CModel::Save_StaticModel(const wstring& pFilePath)
 			CSaveManager::STATICMESHDATA pData;
 			ZeroMemory(&pData, sizeof(pData));
 
-			pData = pMeshContainer->SetSaveData();
+			pData = pMeshContainer->SetStaticSaveData();
 			vecMesh.emplace_back(pData);
 		}
 	}
@@ -609,6 +619,80 @@ HRESULT CModel::Save_StaticModel(const wstring& pFilePath)
 	pInstance->Save_StaticModel(vecMtrl, vecMesh, XMLoadFloat4x4(&m_PivotMatrix), pFilePath);
 
 	RELEASE_INSTANCE(CSaveManager);
+
+	return S_OK;
+}
+
+HRESULT CModel::Save_AnimModel()
+{
+	CSaveManager* pInstance = GET_INSTANCE(CSaveManager);
+
+	vector<CSaveManager::MTRLDATA> vecMtrl;
+	vector<CSaveManager::ANIMMESHDATA> vecMesh;
+	vector<CSaveManager::ANIMDATA> vecAnim;
+
+	for (auto& pMtrlMeshContainer : m_MeshContainers)
+	{
+		for (auto& pMeshContainer : pMtrlMeshContainer)
+		{
+			CSaveManager::ANIMMESHDATA pData;
+			ZeroMemory(&pData, sizeof(pData));
+
+			pData = pMeshContainer->SetAnimSaveData();
+			vecMesh.emplace_back(pData);
+		}
+	}
+	for (auto& pMaterial : m_Materials)
+	{
+		CSaveManager::MTRLDATA pMtrlData;
+		ZeroMemory(&pMtrlData, sizeof(pMtrlData));
+
+		_uint iTextureCnt = 0;
+		vector<CSaveManager::TEXTUREDATA> vecTextureData;
+		for (_uint i = 0; i < AI_TEXTURE_TYPE_MAX; i++)
+		{
+			if (!pMaterial->pMeshTexture[i])
+				continue;
+			iTextureCnt++;
+			CSaveManager::TEXTUREDATA pTexutreData;
+			ZeroMemory(&pTexutreData, sizeof(pTexutreData));
+
+			pTexutreData.iType = i;
+			pTexutreData.iTextureNameSize = lstrlen(pMaterial->pMeshTextureName[i]);
+			lstrcpy(pTexutreData.pTextureName, pMaterial->pMeshTextureName[i]);
+			vecTextureData.emplace_back(pTexutreData);
+		}
+		pMtrlData.iTextureCnt = iTextureCnt;
+		pMtrlData.pTaxtureData = vecTextureData;
+
+		vecMtrl.emplace_back(pMtrlData);
+	}
+	for (auto& pAnim : m_Animations)
+	{
+		CSaveManager::ANIMDATA pAnimData;
+		ZeroMemory(&pAnimData, sizeof(pAnimData));
+
+		pAnimData = pAnim->SetSaveAnimData();
+
+		vecAnim.emplace_back(pAnimData);
+	}
+
+
+	_tchar wstrSaveFilePath[MAX_PATH]=L""; 
+	lstrcpy(wstrSaveFilePath, L"../../Client/bin/SaveData/");
+
+	char szFileName[MAX_PATH] = "";
+	char szExt[MAX_PATH] = "";
+	_splitpath_s(m_szMeshFullName, nullptr, 0, nullptr, 0, szFileName, MAX_PATH, szExt, MAX_PATH);
+	_tchar tSaveFileName[MAX_PATH] = L"";
+	MultiByteToWideChar(CP_ACP, 0, szFileName, (_int)strlen(szFileName), tSaveFileName, MAX_PATH);
+	lstrcat(wstrSaveFilePath, tSaveFileName);
+	
+	if (FAILED(pInstance->Save_AnimModel(vecMtrl, vecMesh, vecAnim, XMLoadFloat4x4(&m_PivotMatrix), wstrSaveFilePath)))
+		return E_FAIL;
+
+	RELEASE_INSTANCE(CSaveManager);
+	dws
 
 	return S_OK;
 }

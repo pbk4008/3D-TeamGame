@@ -49,10 +49,12 @@ private:
 	Assimp::Importer	m_Importer;
 private:
 	char				m_szMeshFilePath[MAX_PATH] = "";
+	char				m_szMeshFullName[MAX_PATH] = "";
 	_float4x4			m_PivotMatrix;
 	TYPE				m_eMeshType = TYPE_END;
 	_uint				m_iCurrentAnimation = 0;
 	_uint				m_iNumMeshes = 0;
+	_bool				m_bSaved = false;
 private:
 	ID3DX11Effect* m_pEffect = nullptr;
 	vector<EFFECTDESC*>	m_PassDesc;
@@ -71,6 +73,7 @@ private:
 public:
 	CHierarchyNode* Find_HierarchyNode(const char* pName);
 	HRESULT Save_StaticModel(const wstring& pFilePath);
+	HRESULT Save_AnimModel();
 private:
 	HRESULT Load_StaticModel(const wstring& pFilePath);
 private:
@@ -87,7 +90,7 @@ private:
 	HRESULT Compile_Shader(const wstring& pShaderFilePath);
 
 	HRESULT Create_HierarchyNode(aiNode* pNode, CHierarchyNode* pParent = nullptr, _uint iDepth = 0);
-
+	
 	HRESULT Create_Animation();
 public:
 	static CModel* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext, const string& pMeshFilePath, const string& pMeshFileName, const wstring& pShaderFilePath, _fmatrix PivotMatrix, TYPE eMeshType);

@@ -17,7 +17,9 @@ public:
 	_uint	Get_Depth() const {
 		return m_iDepth;
 	}
-
+	const CHierarchyNode* Get_Parent() const {
+		return m_pParent;
+	}
 	const char* Get_Name() const {
 		return m_szBoneName;
 	}
@@ -25,7 +27,9 @@ public:
 	_fmatrix Get_CombinedMatrix() const {
 		return XMLoadFloat4x4(&m_CombinedTransformationMatrix);
 	}
-
+	_fmatrix Get_TransformMatrix() const {
+		return XMLoadFloat4x4(&m_TransformationMatrix);
+	}
 	_fmatrix Get_OffsetMatrix() const {
 		return XMLoadFloat4x4(&m_OffsetMatrix);
 	}

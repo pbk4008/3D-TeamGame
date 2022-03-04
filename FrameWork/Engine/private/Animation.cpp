@@ -138,6 +138,38 @@ CChannel* CAnimation::Get_Channel(const char* pChannelName) const
 	return nullptr;
 }
 
+CSaveManager::ANIMDATA& CAnimation::SetSaveAnimData()
+{
+	CSaveManager::ANIMDATA pData;
+
+	pData.dDuration = m_Duration;
+	pData.dPlaySpeed = m_PlaySpeed;
+	pData.iAnimIndex = m_iIndex;
+	pData.iAnimNameSize = (_uint)strlen(m_szName);
+	strcpy_s(pData.szAnimName, m_szName);
+
+	_uint iChannelCnt = (_uint)m_Channels.size();
+	pData.iChannelCnt = iChannelCnt;
+	pData.pChannelData = new CSaveManager::CHANNELDATA[iChannelCnt];
+	for (_uint i = 0; i < iChannelCnt; i++)
+	{
+		pData.pChannelData[i].iChannelNameSize = (_uint)strlen(m_Channels[i]->Get_Name());
+		strcpy_s(pData.pChannelData[i].szChannelName, m_Channels[i]->Get_Name());
+		vector<KEYFRAME*> vecKeyFame = m_Channels[i]->Get_KeyFrames();
+		_uint iKeyFrameCnt=(_uint)vecKeyFame.size();
+		pData.pChannelData[i].iKeyFrameCnt = iKeyFrameCnt;
+		pData.pChannelData[i].pKeyFrame = new KEYFRAME[iKeyFrameCnt];
+		for (_uint j = 0; j < iKeyFrameCnt; j++)
+		{
+			pData.pChannelData[i].pKeyFrame[j].Time = vecKeyFame[j]->Time;
+			pData.pChannelData[i].pKeyFrame[j].vPosition = vecKeyFame[j]->vPosition;
+			pData.pChannelData[i].pKeyFrame[j].vRotation = vecKeyFame[j]->vRotation;
+			pData.pChannelData[i].pKeyFrame[j].vScale = vecKeyFame[j]->vScale;
+		}
+	}
+	return pData;
+}
+
 void CAnimation::Reset_Animation()
 {
 	m_isFinished = false;
