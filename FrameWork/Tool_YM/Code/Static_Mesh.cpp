@@ -78,6 +78,12 @@ _int CStatic_Mesh::LateTick(_double TimeDelta)
 	{
 		CObserver* pObserver = GET_INSTANCE(CObserver);
 
+		_vector DebugTemp = XMVectorZero();
+		DebugTemp = pObserver->Load_DebugingFile(L"../Data/Mesh_Debuging.txt");
+		if (0.0f != XMVectorGetX(DebugTemp))
+		{
+			m_pTransform->Set_State(CTransform::STATE_POSITION, DebugTemp);
+		}
 		Input_Key(TimeDelta);
 
 		XMStoreFloat3(&pObserver->m_fModelPos, m_pTransform->Get_State(CTransform::STATE_POSITION));
