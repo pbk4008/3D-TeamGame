@@ -6,6 +6,32 @@ BEGIN(Engine)
 class CSaveManager final : public CSingleTon<CSaveManager>
 {
 friend CSingleTon;
+public:
+	typedef struct tagStaticMeshData
+	{
+		_uint iVtxCount;
+		_uint iIdxCount;
+
+		VTXMESH* pVtxPoint;
+		FACEINDICES32* pIndex;
+
+		_uint iMeshMtrlNum;
+	}STATICMESHDATA;
+	typedef struct tagTextureData
+	{
+		_uint iTextureNameSize;
+		_tchar* pTextureName;
+	}TEXTUREDATA;
+	typedef struct tagModelSaveData
+	{
+		_uint iMeshCount;
+		_uint iMtrlCount;
+		_float4x4 pivotMatirx;
+
+		TEXTUREDATA* pMtrlData;
+
+		STATICMESHDATA* pMeshData;
+	}STATICDATA;
 private:
 	NO_COPY(CSaveManager);
 	explicit CSaveManager();
@@ -53,6 +79,7 @@ public:
 		CloseHandle(hFile);
 		return S_OK;
 	}
+	HRESULT Save_StaticModel(vector<STATICDATA>& vecData, const wstring& pFilePath);
 private:
 	virtual void Free();
 };

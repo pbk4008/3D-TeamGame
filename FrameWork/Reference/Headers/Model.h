@@ -3,9 +3,15 @@
 #include "Component.h"
 
 BEGIN(Engine)
+<<<<<<< HEAD
 class CAnimation;
 class CHierarchyNode;
 class CTexture;
+=======
+class CTexture;
+class CAnimation;
+class CHierarchyNode;
+>>>>>>> main
 class ENGINE_DLL CModel final : public CComponent
 {
 public:
@@ -50,10 +56,17 @@ private:
 	TYPE				m_eMeshType = TYPE_END;
 	_uint				m_iCurrentAnimation = 0;
 	_uint				m_iNumMeshes = 0;
+<<<<<<< HEAD
 private:
 	ID3DX11Effect* m_pEffect = nullptr;
 	vector<EFFECTDESC*>	m_PassDesc;
 private:
+=======
+private:
+	ID3DX11Effect* m_pEffect = nullptr;
+	vector<EFFECTDESC*>	m_PassDesc;
+private:
+>>>>>>> main
 	vector<vector<class CMeshContainer*>> m_MeshContainers;
 	typedef vector<vector<class CMeshContainer*>>	MESHCONTAINERS;
 
@@ -67,6 +80,10 @@ private:
 	typedef vector<class CAnimation*>		ANIMATIONS;
 public:
 	CHierarchyNode* Find_HierarchyNode(const char* pName);
+<<<<<<< HEAD
+=======
+	HRESULT Save_Model();
+>>>>>>> main
 private:
 	HRESULT Create_Materials();
 

@@ -111,6 +111,19 @@ void CMeshContainer::SetUp_BoneMatrices(_matrix * pBoneMatrices, _fmatrix PivotM
 	}
 }
 
+const CSaveManager::STATICMESHDATA& CMeshContainer::SetSaveData()
+{
+	CSaveManager::STATICMESHDATA pData;
+
+	pData.iIdxCount = m_iNumPrimitive;
+	pData.iMeshMtrlNum = m_iMaterialIndex;
+	pData.iVtxCount = m_iNumVertices;
+	pData.pVtxPoint = (VTXMESH*)m_pVertices;
+	pData.pIndex = (FACEINDICES32*)m_pIndices;
+
+	return pData;
+}
+
 HRESULT CMeshContainer::Set_UpVerticesDesc(CModel* pModel, aiMesh* pMesh, _fmatrix PivotMatrix)
 {
 	m_iNumVertices = pMesh->mNumVertices;

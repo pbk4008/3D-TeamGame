@@ -1,7 +1,7 @@
 #pragma once
 
 #include "VIBuffer.h"
-
+#include "SaveManager.h"
 BEGIN(Engine)
 class CHierarchyNode;
 class CMeshContainer final : public CVIBuffer
@@ -18,6 +18,7 @@ public:
 	HRESULT Create_VertexIndexBuffer();
 	HRESULT Add_Bone(class CModel* pModel);
 	void SetUp_BoneMatrices(_matrix* pBoneMatrices, _fmatrix PivotMatrix);
+	const CSaveManager::STATICMESHDATA& SetSaveData();
 private:
 	HRESULT Set_UpVerticesDesc(class CModel* pModel, aiMesh* pMesh, _fmatrix PivotMatrix);
 	HRESULT Set_IndicesDesc(aiMesh* pMesh);
