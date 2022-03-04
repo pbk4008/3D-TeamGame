@@ -159,6 +159,9 @@ HRESULT CModel::SetUp_TextureOnShader(const char * pConstantName, _uint iMeshCon
 	if (!m_pEffect)
 		return E_FAIL;
 
+	if (nullptr == m_Materials[iMeshContainerIndex]->pMeshTexture[eType])
+		return S_OK;
+
 	ID3DX11EffectShaderResourceVariable* pVariable = m_pEffect->GetVariableByName(pConstantName)->AsShaderResource();
 	if (!pVariable)
 		return E_FAIL;

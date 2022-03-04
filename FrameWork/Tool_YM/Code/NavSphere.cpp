@@ -76,8 +76,6 @@ HRESULT CNavSphere::Render()
 
 	if (nullptr != m_pModelCom)
 	{
-		if (FAILED(m_pModelCom->Bind_Buffers()))
-			return E_FAIL;
 		for (_uint i = 0; i < m_pModelCom->Get_NumMeshContainer(); ++i)
 		{
 			m_pModelCom->SetUp_TextureOnShader("g_DiffuseTexture", i, aiTextureType::aiTextureType_DIFFUSE);
@@ -123,38 +121,51 @@ void CNavSphere::Pick_Model(void)
 	vRayPos = XMVector3TransformCoord(vRayPos, matInverseWrold);
 	vRayDir = XMVector3TransformNormal(vRayDir, matInverseWrold);
 
+	FACEINDICES32* Indices = nullptr;
+	VTXMESH* pVertices = nullptr;
+	_uint iNumFaces = 0;
+
 	/* Get the picked triangle */
-	CMeshContainer* pMesh = m_pModelCom->Get_NumIndices(0);
-	/* 모델따로 Terrain 따로 받아와야함 */
-	FACEINDICES32* Indices = m_pModelCom->Get_Indices();
-
-	void* pVertices = m_pModelCom->Get_Vertices();
-	_uint iNumFaces = pMesh->Get_NumFaces();
-	_float fBary1, fBary2;
-	_float fDist = 0.0f;
-	m_bPick = false;
-
-	for (_uint i = 0; i < iNumFaces; ++i)
+	vector<vector<CMeshContainer*>> pMesh = m_pModelCom->Get_MeshContainer();
+	for (auto iter : pMesh)
 	{
-		_float3 v0 = ((VTXMESH*)pVertices)[Indices[i]._0].vPosition;
-		_float3 v1 = ((VTXMESH*)pVertices)[Indices[i]._1].vPosition;
-		_float3 v2 = ((VTXMESH*)pVertices)[Indices[i]._2].vPosition;
-
-		_vector Pos_1 = XMLoadFloat3(&v0);
-		_vector Pos_2 = XMLoadFloat3(&v1);
-		_vector Pos_3 = XMLoadFloat3(&v2);
-
-		// Check if the pick ray passes through this point
-		if (IntersectTriangle(vRayPos, vRayDir, Pos_1, Pos_2, Pos_3, &fDist, &fBary1, &fBary2))
+		for (auto Finder : iter)
 		{
-			m_bPick = true;
-			pObserver->m_bNavSpherePick = true;
-			pObserver->m_pNavSphere = this;
-		
-			XMStoreFloat3(&m_fLocalMouse, XMLoadFloat3(&m_vRayPos) + (XMLoadFloat3(&m_vRayDir)) * fDist);
-			cout << "Nav Sphere Pick" << endl;
+			Indices = (FACEINDICES32*)Finder->getIndices();
+			pVertices = (VTXMESH*)Finder->getVertices();
+			iNumFaces = Finder->Get_NumFaces();
+
+			_float fBary1, fBary2;
+			_float fDist = 0.0f;
+			m_bPick = false;
+			pObserver->m_bPick = false;
+			for (_uint i = 0; i < iNumFaces; ++i)
+			{
+				_float3 v0 = ((VTXMESH*)pVertices)[Indices[i]._0].vPosition;
+				_float3 v1 = ((VTXMESH*)pVertices)[Indices[i]._1].vPosition;
+				_float3 v2 = ((VTXMESH*)pVertices)[Indices[i]._2].vPosition;
+
+				_vector Pos_1 = XMLoadFloat3(&v0);
+				_vector Pos_2 = XMLoadFloat3(&v1);
+				_vector Pos_3 = XMLoadFloat3(&v2);
+
+				// Check if the pick ray passes through this point
+				if (IntersectTriangle(vRayPos, vRayDir, Pos_1, Pos_2, Pos_3, &fDist, &fBary1, &fBary2))
+				{
+					m_bPick = true;
+					pObserver->m_bNavSpherePick = true;
+					pObserver->m_pNavSphere = this;
+
+					XMStoreFloat3(&m_fLocalMouse, XMLoadFloat3(&m_vRayPos) + (XMLoadFloat3(&m_vRayDir)) * fDist);
+					cout << "Nav Sphere Pick" << endl;
+					break;
+				}
+			}
+			if (true == m_bPick)\
+				break;
 		}
 	}
+
 	RELEASE_INSTANCE(CObserver);
 }
 

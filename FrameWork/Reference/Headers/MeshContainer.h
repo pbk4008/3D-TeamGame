@@ -1,59 +1,49 @@
 #pragma once
 
-#include "Base.h"
+#include "VIBuffer.h"
 
 BEGIN(Engine)
-
-class CMeshContainer final : public CBase
+class CHierarchyNode;
+class CMeshContainer final : public CVIBuffer
 {
-public:
-	typedef struct tagMeshContainderDesc
-	{
-		_uint	iMaterialIndex = 0;
-		_uint	iStartVertexIndex = 0;
-		_uint	iStartFaceIndex = 0;
-		_uint	iNumFaces = 0;
-	}MESHDESC;
-public:
+private:
 	explicit CMeshContainer(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);
 	explicit CMeshContainer(const CMeshContainer& rhs);
 	virtual ~CMeshContainer() = default;
-
 public:
-	_uint Get_MaterialIndex() const {
-		return m_MeshDesc.iMaterialIndex;
-	}
-
-	const MESHDESC& Get_MeshContainerDesc() const {
-		return m_MeshDesc;
-	}
-
-	const _uint Get_NumFaces(void) { 
-		return m_MeshDesc.iNumFaces; 
-	}
-public:
-	HRESULT NativeConstruct(const MESHDESC& MeshDesc);
+	HRESULT NativeConstruct_Prototype(class CModel* pModel, aiMesh* pMesh, _fmatrix PivotMatirx);
+	HRESULT NativeConstruct(void* pArg) override;
 	HRESULT Render();
-
-
 public:
-	HRESULT Add_BoneDesc(BONEDESC* pBoneDesc);
+	HRESULT Create_VertexIndexBuffer();
+	HRESULT Add_Bone(class CModel* pModel);
 	void SetUp_BoneMatrices(_matrix* pBoneMatrices, _fmatrix PivotMatrix);
+private:
+	HRESULT Set_UpVerticesDesc(class CModel* pModel, aiMesh* pMesh, _fmatrix PivotMatrix);
+	HRESULT Set_IndicesDesc(aiMesh* pMesh);
+	HRESULT SetUp_SkinnedDesc(class CModel* pModel, aiMesh* pMesh);
+public:
+	_uint getMaterialIndex() { return m_iMaterialIndex; }
+public:
+	void* getIndices(void) {
+		return m_pIndices;
+	}
+	void* getVertices(void) {
+		return m_pVertices;
+	}
 
 private:
-	ID3D11Device*			m_pDevice = nullptr;
-	ID3D11DeviceContext*	m_pDeviceContext = nullptr;
-
+	aiMesh*					m_pAIMesh = nullptr;
 private:
-	MESHDESC				m_MeshDesc;
-
+	_uint m_iMaterialIndex = 0;
+	_uint m_iNumMesh = 0;
 private:
-	vector<BONEDESC*>			m_Bones;
-	typedef vector<BONEDESC*>	BONES;
+	vector<CHierarchyNode*>			m_Bones;
+	typedef vector<CHierarchyNode*>	BONES;
 	
 public:
-	static CMeshContainer* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext, const MESHDESC& MeshDesc);
-	CMeshContainer* Clone();
+	static CMeshContainer* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext, class CModel* pModel, aiMesh* pMesh, _fmatrix PivotMatrix);
+	virtual CComponent* Clone(void* pArg)override;
 	virtual void Free() override;
 };
 

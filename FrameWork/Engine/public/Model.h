@@ -3,6 +3,8 @@
 #include "Component.h"
 
 BEGIN(Engine)
+class CAnimation;
+class CHierarchyNode;
 class CTexture;
 class ENGINE_DLL CModel final : public CComponent
 {
@@ -35,6 +37,10 @@ public:
 	}
 	HRESULT Update_CombinedTransformationMatrix(_double TimeDelta);
 	HRESULT Render(_uint iMeshContainerIndex, _uint iPassIndex);
+public:
+	vector<vector<class CMeshContainer*>> Get_MeshContainer() {
+		return m_MeshContainers;
+	}
 private:
 	const aiScene*		m_pScene = nullptr;
 	Assimp::Importer	m_Importer;

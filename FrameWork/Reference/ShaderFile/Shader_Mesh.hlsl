@@ -34,8 +34,6 @@ struct VS_IN
 	float3		vNormal : NORMAL;
 	float2		vTexUV : TEXCOORD0;
 	float3		vTangent : TANGENT;
-	uint4		vBlendIndex : BLENDINDEX;
-	float4		vBlendWeight: BLENDWEIGHT;
 };
 
 struct VS_OUT
@@ -78,40 +76,6 @@ VS_OUT VS_MAIN_STATIC_WIRE(VS_IN In)
 	Out.vPosition = mul(vector(In.vPosition, 1.f), matWVP);
 	Out.vNormal = normalize(mul(vector(In.vNormal, 0.f), g_WorldMatrix));
 	Out.vTexUV = In.vTexUV;
-	Out.vProjPos = Out.vPosition;
-
-	return Out;
-
-}
-
-
-VS_OUT VS_MAIN_ANIM(VS_IN In)
-{
-	VS_OUT			Out = (VS_OUT)0;	
-
-
-	matrix			matWV, matWVP;	
-
-	float		fWeightw = 1.f - (In.vBlendWeight.x + In.vBlendWeight.y + In.vBlendWeight.z);
-
-
-	matrix			BoneMatrix = g_BoneMatrices.Bone[In.vBlendIndex.x] * In.vBlendWeight.x +
-		g_BoneMatrices.Bone[In.vBlendIndex.y] * In.vBlendWeight.y +
-		g_BoneMatrices.Bone[In.vBlendIndex.z] * In.vBlendWeight.z +
-		g_BoneMatrices.Bone[In.vBlendIndex.w] * In.vBlendWeight.w;
-
-
-	matWV = mul(g_WorldMatrix, g_ViewMatrix);
-	matWVP = mul(matWV, g_ProjMatrix);
-		
-	vector		vPosition = mul(vector(In.vPosition, 1.f), BoneMatrix);
-	vPosition = mul(vPosition, matWVP);
-
-	Out.vPosition = vPosition;
-
-	vector		vNormal = mul(vector(In.vNormal, 0.f), BoneMatrix);
-	Out.vNormal = normalize(mul(vNormal, g_WorldMatrix));
-	Out.vTexUV = In.vTexUV;	
 	Out.vProjPos = Out.vPosition;
 
 	return Out;
@@ -170,18 +134,6 @@ technique11			DefaultTechnique
 
 		/* 진입점함수를 지정한다. */
 		VertexShader = compile vs_5_0 VS_MAIN_STATIC();
-		GeometryShader = NULL;
-		PixelShader = compile ps_5_0  PS_MAIN();
-	}
-
-	pass AnimMesh
-	{
-		SetRasterizerState(CullMode_Default);
-		SetDepthStencilState(ZDefault, 0);
-		SetBlendState(BlendDisable, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
-
-		/* 진입점함수를 지정한다. */
-		VertexShader = compile vs_5_0 VS_MAIN_ANIM();
 		GeometryShader = NULL;
 		PixelShader = compile ps_5_0  PS_MAIN();
 	}

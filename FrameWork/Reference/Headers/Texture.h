@@ -11,7 +11,7 @@ private:
 	explicit CTexture(const CTexture& rhs);
 	virtual ~CTexture() = default;
 public:
-	ID3D11ShaderResourceView* Get_ShaderResourceView(_uint iIndex) {
+	ID3D11ShaderResourceView* Get_ShaderResourceView(_uint iIndex=0) {
 		return m_Textures[iIndex];	
 	}
 public:

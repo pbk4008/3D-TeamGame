@@ -24,6 +24,14 @@ private:
 	HRESULT SetUp_SkinnedDesc(class CModel* pModel, aiMesh* pMesh);
 public:
 	_uint getMaterialIndex() { return m_iMaterialIndex; }
+public:
+	void* getIndices(void) {
+		return m_pIndices;
+	}
+	void* getVertices(void) {
+		return m_pVertices;
+	}
+
 private:
 	aiMesh*					m_pAIMesh = nullptr;
 private:
