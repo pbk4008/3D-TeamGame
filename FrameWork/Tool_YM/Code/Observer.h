@@ -11,6 +11,9 @@ class CObserver final :  public CBase
 public:
 	enum MODE { MODE_MAP, MODE_NAV, MODE_END };
 
+public:
+	_fvector Load_DebugingFile(const wstring& wstrFilePath = L"");
+
 protected:
 	CObserver(void);
 	virtual ~CObserver(void) = default;
@@ -19,6 +22,7 @@ public:
 	_float3				m_fPickPos = { 0.0f, 0.0f, 0.0f };
 	_float3				m_fModelPos = { 0.0f, 0.0f, 0.0f };
 	_float3				m_fModelScale = { 0.0f, 0.0f, 0.0f };
+	_float4				m_DebugingPos;
 	_bool				m_bPick = false;
 	_bool				m_bPlanePick = false;
 	_bool				m_bNavSpherePick = false;

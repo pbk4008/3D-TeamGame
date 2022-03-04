@@ -44,11 +44,14 @@ HRESULT CStatic_Mesh::NativeConstruct(void* pArg)
 	if (FAILED(SetUp_Components()))
 		return E_FAIL;
 	
+	m_MeshDesc.iType = m_ModelDesc.iType;
 	m_MeshDesc.eLevel = m_ModelDesc.eLevel;
 	_tcscpy_s(m_MeshDesc.FolderName, m_ModelDesc.strFolder.c_str());
 	_tcscpy_s(m_MeshDesc.FileName, m_ModelDesc.strFileName.c_str());
 	_tcscpy_s(m_MeshDesc.Name, m_ModelDesc.strName.c_str());
 	_tcscpy_s(m_MeshDesc.Tag, m_ModelDesc.strTag.c_str());
+
+
 
 	XMStoreFloat3(&m_MeshDesc.fInitPos, m_pTransform->Get_State(CTransform::STATE_POSITION));
 	XMStoreFloat4x4(&m_MeshDesc.WorldMat, m_pTransform->Get_WorldMatrix());
@@ -75,6 +78,12 @@ _int CStatic_Mesh::LateTick(_double TimeDelta)
 	{
 		CObserver* pObserver = GET_INSTANCE(CObserver);
 
+		_vector DebugTemp = XMVectorZero();
+		DebugTemp = pObserver->Load_DebugingFile(L"../Data/Mesh_Debuging.txt");
+		if (0.0f != XMVectorGetX(DebugTemp))
+		{
+			m_pTransform->Set_State(CTransform::STATE_POSITION, DebugTemp);
+		}
 		Input_Key(TimeDelta);
 
 		XMStoreFloat3(&pObserver->m_fModelPos, m_pTransform->Get_State(CTransform::STATE_POSITION));

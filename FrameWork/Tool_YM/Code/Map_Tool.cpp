@@ -651,11 +651,12 @@ void CMap_Tool::OnBnClickedLoadButton()
 		wstring FileFolder = m_vecMesh[i].FolderName;
 		wstring Name = m_vecMesh[i].Name;
 		wstring Tag = m_vecMesh[i].Tag;
+		_uint   iType = m_vecMesh[i].iType;
 
 		FILEINFO FileInfo;
 		FileInfo.cstrFolder = FileFolder;
 		FileInfo.cstrFileName = FileName;
-
+		FileInfo.cstrFBX_Type = iType;
  		auto TagFinder = find(m_ProtoTag.begin(), m_ProtoTag.end(), FileInfo.cstrFileName);
 
 		if (TagFinder == m_ProtoTag.end())

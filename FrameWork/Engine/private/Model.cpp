@@ -59,7 +59,6 @@ CModel::CModel(const CModel& rhs)
 		Safe_AddRef(pPassDesc->pPass);
 	}
 	Safe_AddRef(m_pEffect);
-	
 }
 
 CHierarchyNode* CModel::Get_BoneMatrix(const char * pBoneName)
