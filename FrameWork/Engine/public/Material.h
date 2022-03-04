@@ -7,12 +7,14 @@ BEGIN(Engine)
 class CTexture;
 class CMaterial final : public CBase 
 {
+public:
+	enum class EType {Static, Anim, Max};
 private:
 	explicit CMaterial(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext);
 	virtual~CMaterial() = default;
 
 public:
-	virtual HRESULT Native_Construct(const wstring& _wstrShaderFilePath);
+	virtual HRESULT Native_Construct(const wstring& _wstrShaderFilePath, const EType _eType);
 	virtual HRESULT Render(const _uint _iPassIndex = 0);
 
 	virtual HRESULT Compile_ShaderFiles(const wstring& _wstrShaderFilePath, D3D11_INPUT_ELEMENT_DESC* _pElementDesc, const _uint _iNumElements);
@@ -25,6 +27,7 @@ public:
 private:
 	CTexture* m_pArrTextures[AI_TEXTURE_TYPE_MAX] = { nullptr };
 	wstring m_wstrShaderPath = L"";
+	EType m_eType = EType::Static;
 
 	ID3DX11Effect* m_pEffect = nullptr;
 	vector<EFFECTDESC*>	m_vecEffectDescs;
@@ -33,7 +36,7 @@ private:
 	ID3D11DeviceContext* m_pDeviceContext = nullptr;
 
 public:
-	static CMaterial* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext, const wstring& _wstrShaderFilePath);
+	static CMaterial* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext, const wstring& _wstrShaderFilePath, const EType _eType);
 	virtual void Free() override;
 };
 

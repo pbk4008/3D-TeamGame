@@ -13,7 +13,7 @@ HRESULT CMaterial_Manager::NativeConstruct(ID3D11Device* _pDevice, ID3D11DeviceC
 	m_pDeviceContext = _pDeviceContext;
 	Safe_AddRef(m_pDeviceContext);
 
-	CMaterial* pMtrl = CMaterial::Create(m_pDevice, m_pDeviceContext, L"../../Reference/ShaderFile/Shader_Mesh.hlsl");
+	CMaterial* pMtrl = CMaterial::Create(m_pDevice, m_pDeviceContext, L"../../Reference/ShaderFile/Shader_Mesh.hlsl", CMaterial::EType::Static);
 	Add_Material(L"Default", pMtrl);
 
 	return S_OK;

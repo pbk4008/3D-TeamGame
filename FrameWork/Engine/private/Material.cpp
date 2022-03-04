@@ -10,24 +10,42 @@ CMaterial::CMaterial(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContex
 	Safe_AddRef(m_pDeviceContext);
 }
 
-HRESULT CMaterial::Native_Construct(const wstring& _wstrShaderFilePath)
+HRESULT CMaterial::Native_Construct(const wstring& _wstrShaderFilePath, const EType _eType)
 {
-	D3D11_INPUT_ELEMENT_DESC		ElementDescs[] =
+	switch (_eType)
 	{
-		{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-		{ "NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-		{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 24, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-		{ "TANGENT", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 32, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-		{ "BLENDINDEX", 0, DXGI_FORMAT_R32G32B32A32_UINT, 0, 44, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-		{ "BLENDWEIGHT", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 60, D3D11_INPUT_PER_VERTEX_DATA, 0 }
-	};
-
-	if (FAILED(Compile_ShaderFiles(_wstrShaderFilePath, ElementDescs, 6)))
+	case EType::Static:
 	{
-		return E_FAIL;
+		D3D11_INPUT_ELEMENT_DESC ElementDescs[] =
+		{
+			{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+			{ "NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+			{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 24, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+			{ "TANGENT", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 32, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+		};
+		if (FAILED(Compile_ShaderFiles(_wstrShaderFilePath, ElementDescs, 4)))
+			return E_FAIL;
 	}
-	m_wstrShaderPath = _wstrShaderFilePath;
+		break;
+	case EType::Anim:
+	{
+		D3D11_INPUT_ELEMENT_DESC ElementDescs[] =
+		{
+			{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+			{ "NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+			{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 24, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+			{ "TANGENT", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 32, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+			{ "BLENDINDEX", 0, DXGI_FORMAT_R32G32B32A32_UINT, 0, 44, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+			{ "BLENDWEIGHT", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 60, D3D11_INPUT_PER_VERTEX_DATA, 0 }
+		};
+		if (FAILED(Compile_ShaderFiles(_wstrShaderFilePath, ElementDescs, 6)))
+			return E_FAIL;
+	}
+		break;
+	}
 
+	m_wstrShaderPath = _wstrShaderFilePath;
+	m_eType = _eType;
 	return E_NOTIMPL;
 }
 
@@ -138,10 +156,10 @@ void CMaterial::Set_InputLayout(_uint iPassIndex)
 	m_pDeviceContext->IASetInputLayout(m_vecEffectDescs[iPassIndex]->pInputLayout);
 }
 
-CMaterial* CMaterial::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext, const wstring& _wstrShaderFilePath)
+CMaterial* CMaterial::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext, const wstring& _wstrShaderFilePath, const EType _eType)
 {
 	CMaterial* pInstance = new CMaterial(_pDevice, _pDeviceContext);
-	if (FAILED(pInstance->Native_Construct(_wstrShaderFilePath)))
+	if (FAILED(pInstance->Native_Construct(_wstrShaderFilePath, _eType)))
 	{
 		MSGBOX("CMaterial Create Fail");
 		Safe_Release(pInstance);
