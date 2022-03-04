@@ -24,7 +24,7 @@ namespace Engine
 
 	typedef struct MeshMaterial
 	{
-		const _tchar*		pMeshTextureName[AI_TEXTURE_TYPE_MAX];
+		_tchar		pMeshTextureName[AI_TEXTURE_TYPE_MAX][MAX_PATH];
 		class CTexture*		pMeshTexture[AI_TEXTURE_TYPE_MAX];
 	}MESHMATERIAL;
 
@@ -41,7 +41,7 @@ namespace Engine
 		XMFLOAT3		vNormal;
 		XMFLOAT2		vTexUV;
 		XMFLOAT3		vTangent;
-		XMFLOAT3		vBiNormal;
+		//XMFLOAT3		vBiNormal;
 	}VTXMESH;
 
 	typedef struct tagVertex_Anim : public VTXMESH

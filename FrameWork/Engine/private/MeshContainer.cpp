@@ -31,6 +31,18 @@ HRESULT CMeshContainer::NativeConstruct_Prototype(CModel* pModel, aiMesh* pMesh,
 	return S_OK;
 }
 
+HRESULT CMeshContainer::NativeConstruct_Prototype(_uint iMaterialIndex, _uint iNumVtxCnt, _uint iNumIdxCnt, class CModel* pModel, void* pVtx, void* pIdx)
+{
+	if (FAILED(Set_UpVerticesDesc(iNumVtxCnt, pModel, pVtx)))
+		return E_FAIL;
+	if (FAILED(Set_IndicesDesc(iNumIdxCnt,pIdx)))
+		return E_FAIL;
+
+	m_iMaterialIndex = iMaterialIndex;
+
+	return S_OK;
+}
+
 HRESULT CMeshContainer::NativeConstruct(void* pArg)
 {
 	return S_OK;
@@ -171,6 +183,31 @@ HRESULT CMeshContainer::Set_UpVerticesDesc(CModel* pModel, aiMesh* pMesh, _fmatr
 	return S_OK;
 }
 
+HRESULT CMeshContainer::Set_UpVerticesDesc(_uint iNumVtxCnt, class CModel* pModel, void* pVtx)
+{
+	m_iNumVertices = iNumVtxCnt;
+
+	CModel::TYPE eType = pModel->getType();
+
+	m_pVertices = pVtx;
+	if (eType == CModel::TYPE_STATIC)
+		m_iStride = sizeof(VTXMESH);
+	else
+		m_iStride = sizeof(VTXMESH_ANIM);
+
+	ZeroMemory(&m_VBDesc, sizeof(D3D11_BUFFER_DESC));
+	m_VBDesc.ByteWidth = m_iStride * m_iNumVertices;
+	m_VBDesc.Usage = D3D11_USAGE_IMMUTABLE;
+	m_VBDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+	m_VBDesc.CPUAccessFlags = 0;
+	m_VBDesc.MiscFlags = 0;
+	m_VBDesc.StructureByteStride = m_iStride;
+
+	m_VBSubresourceData.pSysMem = m_pVertices;
+
+	return S_OK;
+}
+
 HRESULT CMeshContainer::Set_IndicesDesc(aiMesh* pMesh)
 {
 	m_iNumPrimitive = pMesh->mNumFaces;
@@ -197,6 +234,30 @@ HRESULT CMeshContainer::Set_IndicesDesc(aiMesh* pMesh)
 		((FACEINDICES32*)m_pIndices)[i]._1 = pMesh->mFaces[i].mIndices[1];
 		((FACEINDICES32*)m_pIndices)[i]._2 = pMesh->mFaces[i].mIndices[2];
 	}
+
+	m_IBSubresourceData.pSysMem = m_pIndices;
+
+	return S_OK;
+}
+
+HRESULT CMeshContainer::Set_IndicesDesc(_uint iNumIdxCnt, void* pIdx)
+{
+	m_iNumPrimitive = iNumIdxCnt;
+	m_IndicesByteLength = sizeof(FACEINDICES32);
+	m_iNumIndicesFigure = 3;
+	m_eFormat = DXGI_FORMAT_R32_UINT;
+	m_ePrimitiveTopology = D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
+
+	ZeroMemory(&m_IBDesc, sizeof(D3D11_BUFFER_DESC));
+
+	m_IBDesc.ByteWidth = m_IndicesByteLength * m_iNumPrimitive;
+	m_IBDesc.Usage = D3D11_USAGE_IMMUTABLE;
+	m_IBDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
+	m_IBDesc.CPUAccessFlags = 0;
+	m_IBDesc.MiscFlags = 0;
+	m_IBDesc.StructureByteStride = 0;
+
+	m_pIndices = pIdx;
 
 	m_IBSubresourceData.pSysMem = m_pIndices;
 
@@ -249,6 +310,17 @@ CMeshContainer * CMeshContainer::Create(ID3D11Device* pDevice, ID3D11DeviceConte
 		Safe_Release(pInstance);
 	}
 
+	return pInstance;
+}
+
+CMeshContainer* CMeshContainer::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext, _uint iMaterialIndex, _uint iNumVtxCnt, _uint iNumIdxCnt, class CModel* pModel, void* pVtx, void* pIdx)
+{
+	CMeshContainer* pInstance = new CMeshContainer(pDevice, pDeviceContext);
+	if (FAILED(pInstance->NativeConstruct_Prototype(iMaterialIndex, iNumVtxCnt, iNumIdxCnt,pModel,pVtx,pIdx)))
+	{
+		MSGBOX("CMeshContainer Load Fail");
+		Safe_Release(pInstance);
+	}
 	return pInstance;
 }
 

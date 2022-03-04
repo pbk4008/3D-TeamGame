@@ -103,8 +103,8 @@ HRESULT CSilvermane::Render()
 	m_pModel->SetUp_ValueOnShader("g_ViewMatrix", &smatView, sizeof(_matrix));
 	m_pModel->SetUp_ValueOnShader("g_ProjMatrix", &smatProj, sizeof(_matrix));
 
-	if (FAILED(m_pModel->Bind_Buffers()))
-		return E_FAIL;
+	//if (FAILED(m_pModel->Bind_Buffers()))
+	//	return E_FAIL;
 
 	for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
 	{

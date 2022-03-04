@@ -27,8 +27,8 @@ HRESULT CLoading::NativeConstruct(SCENEID eID)
 
 	m_eSceneID = eID;
 
-	//if(FAILED(Ready_GameObject()))
-	//	return E_FAIL;
+	if (FAILED(Ready_GameObject()))
+		return E_FAIL;
 
 	m_pLoader = CLoader::Create(m_pDevice, m_pDeviceContext, m_eSceneID);
 
@@ -89,12 +89,15 @@ HRESULT CLoading::Ready_GameObject()
 	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_LOADING,L"Loading_Back", L"Prototype_GameObject_BackGround", &strTag)))
 	//	return E_FAIL;
 
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"BoxCollider", CBoxCollider::Create(m_pDevice, m_pDeviceContext))))
-		return E_FAIL;
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"SphereCollider", CSphereCollider::Create(m_pDevice, m_pDeviceContext))))
-		return E_FAIL;
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"CapsuleCollider", CCapsuleCollider::Create(m_pDevice, m_pDeviceContext))))
-		return E_FAIL;
+	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"BoxCollider", CBoxCollider::Create(m_pDevice, m_pDeviceContext))))
+	//	return E_FAIL;
+	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"SphereCollider", CSphereCollider::Create(m_pDevice, m_pDeviceContext))))
+	//	return E_FAIL;
+	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"CapsuleCollider", CCapsuleCollider::Create(m_pDevice, m_pDeviceContext))))
+	//	return E_FAIL;
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model", CModel::Create(m_pDevice, m_pDeviceContext,L"../bin/SaveData/Sphere.fbx",L"../../Reference/ShaderFile/Shader_Mesh.hlsl",CModel::TYPE_STATIC))))
+			return E_FAIL;
+	
 
 
 	if (FAILED(g_pGameInstance->Add_Prototype(L"TestObj", CTestObj::Create(m_pDevice, m_pDeviceContext))))

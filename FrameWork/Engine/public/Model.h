@@ -30,6 +30,7 @@ public:
 	vector<CAnimation*>& Get_Animations() { return m_Animations; }
 public:
 	HRESULT NativeConstruct_Prototype(const string& pMeshFilePath, const string& pMeshFileName, const wstring& pShaderFilePath, _fmatrix PivotMatrix, TYPE eMeshType);
+	HRESULT NativeConstruct_Prototype(const wstring& pMeshFilePath, const wstring& pShaderFilePath, TYPE eType);
 	HRESULT NativeConstruct(void* pArg);
 public:
 	HRESULT SetUp_ValueOnShader(const char* pConstantName, void* pData, _uint iSize);
@@ -71,10 +72,15 @@ public:
 	CHierarchyNode* Find_HierarchyNode(const char* pName);
 	HRESULT Save_StaticModel(const wstring& pFilePath);
 private:
+	HRESULT Load_StaticModel(const wstring& pFilePath);
+private:
 	HRESULT Create_Materials();
 
+	HRESULT Load_Materials(_uint iType, const wstring& pFilePath);
 	/* 모델을 구성하는 메시들의 정보를 구성한다. */
 	HRESULT Create_MeshContainer();
+
+	HRESULT Load_MeshContainer(_uint iMaterialIndex, _uint iNumVtxCnt, _uint iNumIdxCnt, void* pVtx, void* pIdx);
 
 	HRESULT Create_VertexIndexBuffer();
 
@@ -85,6 +91,7 @@ private:
 	HRESULT Create_Animation();
 public:
 	static CModel* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext, const string& pMeshFilePath, const string& pMeshFileName, const wstring& pShaderFilePath, _fmatrix PivotMatrix, TYPE eMeshType);
+	static CModel* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext, const wstring& pMeshFileName, const wstring& pShaderFilePath, TYPE eType);
 	virtual CComponent* Clone(void* pArg) override;
 	virtual void Free() override;
 };

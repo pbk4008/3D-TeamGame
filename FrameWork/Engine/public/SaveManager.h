@@ -20,7 +20,7 @@ public:
 	typedef struct tagTextureData
 	{
 		_uint iTextureNameSize;
-		_tchar* pTextureName;
+		_tchar pTextureName[MAX_PATH];
 		_uint iType;
 	}TEXTUREDATA;
 	typedef struct tagMtrlData
@@ -32,10 +32,9 @@ public:
 	{
 		_uint iMeshCount;
 		_uint iMtrlCount;
-		_float4x4 pivotMatirx;
 
-		MTRLDATA* pMtrlData;
-		STATICMESHDATA* pMeshData;
+		vector<MTRLDATA> pMtrlData;
+		vector<STATICMESHDATA> pMeshData;
 	}STATICDATA;
 private:
 	NO_COPY(CSaveManager);
@@ -85,7 +84,7 @@ public:
 		return S_OK;
 	}
 	HRESULT Save_StaticModel(vector<MTRLDATA>& vecMtrlData, vector<STATICMESHDATA>& vecMeshData, _fmatrix pivotMatrix,const wstring& pFilePath);
-	HRESULT Load_StaticModel();
+	HRESULT Load_StaticModel(STATICDATA& StaticData, const wstring& pFilePath);
 private:
 	virtual void Free();
 };

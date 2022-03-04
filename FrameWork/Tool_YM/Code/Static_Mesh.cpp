@@ -274,9 +274,11 @@ void CStatic_Mesh::Pick_Model(void)
 					break;
 				}
 			}
-			if (true == m_bPick)\
+			if (true == m_bPick)
 				break;
 		}
+		if (true == m_bPick)
+			break;
 	}
 
 	RELEASE_INSTANCE(CObserver);

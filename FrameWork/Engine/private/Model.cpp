@@ -4,7 +4,8 @@
 #include "Texture.h"
 #include "Channel.h"
 #include "Animation.h"
-#include "GameInstance.h"
+#include "Component_Manager.h"
+#include "TextureManager.h"
 #include "SaveManager.h"
 
 CModel::CModel(ID3D11Device * pDevice, ID3D11DeviceContext * pDeviceContext)
@@ -76,7 +77,7 @@ HRESULT CModel::NativeConstruct_Prototype(const string& pMeshFilePath, const str
 	_int iFlag = 0;
 
 	if(m_eMeshType == CModel::TYPE_STATIC)
-		iFlag = aiProcess_PreTransformVertices | aiProcess_ConvertToLeftHanded | aiProcess_CalcTangentSpace | aiProcess_Triangulate;
+		iFlag = aiProcess_ConvertToLeftHanded | aiProcess_CalcTangentSpace | aiProcess_Triangulate;
 	else
 		iFlag = aiProcess_ConvertToLeftHanded | aiProcess_CalcTangentSpace | aiProcess_Triangulate;
 
@@ -101,6 +102,33 @@ HRESULT CModel::NativeConstruct_Prototype(const string& pMeshFilePath, const str
 	if (FAILED(Create_Animation()))
 		return E_FAIL;
 
+	if (m_eMeshType == TYPE_STATIC)
+	{
+
+		wstring wstrSaveFileName, wstrSaveFilePath;
+		wstrSaveFilePath = L"../../Client/bin/SaveData/";
+		wstrSaveFileName.assign(pMeshFileName.begin(), pMeshFileName.end());
+		wstrSaveFilePath += wstrSaveFileName;
+		if (FAILED(Save_StaticModel(wstrSaveFilePath)))
+			return E_FAIL;
+	}
+	return S_OK;
+}
+
+HRESULT CModel::NativeConstruct_Prototype(const wstring& pMeshFilePath, const wstring& pShaderFilePath, TYPE eType)
+{
+	m_eMeshType = eType;
+	if (eType == TYPE_STATIC)
+	{
+		if (FAILED(Load_StaticModel(pMeshFilePath)))
+			return E_FAIL;
+	}
+	else
+	{
+
+	}
+	if (FAILED(Compile_Shader(pShaderFilePath)))
+		return E_FAIL;
 	return S_OK;
 }
 
@@ -253,12 +281,15 @@ HRESULT CModel::Create_Materials()
 
 			RELEASE_INSTANCE(CTextureManager);
 
-			CGameInstance* pInstance = GET_INSTANCE(CGameInstance);
+			CComponent_Manager* pInstance = GET_INSTANCE(CComponent_Manager);
 
 			strTexture = szTextureTag;
-			pMeshMaterial->pMeshTexture[j] = pInstance->Clone_Component<CTexture>(0, L"Texture", &strTexture);
-			pMeshMaterial->pMeshTextureName[j] = strTexture.c_str();
-			RELEASE_INSTANCE(CGameInstance);
+			pMeshMaterial->pMeshTexture[j] = static_cast<CTexture*>(pInstance->Clone_Component(0, L"Texture", &strTexture));
+
+			//wstring wstrSaveFolder = L"../bin/Resource/ "
+			lstrcpy(pMeshMaterial->pMeshTextureName[j],szFullName);
+			//lstrcpy(pMeshMaterial->pMeshTextureName[j], strTexture.c_str());
+			RELEASE_INSTANCE(CComponent_Manager);
 
 			
 			if (nullptr == pMeshMaterial->pMeshTexture[j])
@@ -267,6 +298,49 @@ HRESULT CModel::Create_Materials()
 
 		m_Materials.push_back(pMeshMaterial);
 	}
+
+	return S_OK;
+}
+
+HRESULT CModel::Load_Materials(_uint iType, const wstring& pFilePath)
+{
+	MESHMATERIAL* pDesc = new MESHMATERIAL;
+
+	ZeroMemory(pDesc, sizeof(MESHMATERIAL));
+
+	char szFilePath[MAX_PATH] = "";
+	string tmpFilePath;
+	tmpFilePath.assign(pFilePath.begin(), pFilePath.end());
+	strcpy_s(szFilePath, tmpFilePath.c_str());
+
+	char	szFileName[MAX_PATH] = "";
+	char	szExt[MAX_PATH] = "";
+
+	_splitpath_s(szFilePath, nullptr, 0, nullptr, 0, szFileName, MAX_PATH, szExt, MAX_PATH);
+
+	wstring     strTexture;
+	_tchar		szFullName[MAX_PATH] = TEXT("");
+	_tchar		szTextureTag[MAX_PATH] = TEXT("");
+	MultiByteToWideChar(CP_ACP, 0, szFilePath, (_int)strlen(szFilePath), szFullName, MAX_PATH);
+	MultiByteToWideChar(CP_ACP, 0, szFileName, (_int)strlen(szFileName), szTextureTag, MAX_PATH);
+
+	CTextureManager* pTextureMgr = GET_INSTANCE(CTextureManager);
+
+	pTextureMgr->Add_Texture(m_pDevice, szTextureTag, szFullName);
+
+	RELEASE_INSTANCE(CTextureManager);
+
+	CComponent_Manager* pInstance = GET_INSTANCE(CComponent_Manager);
+
+	strTexture = szTextureTag;
+	
+	pDesc->pMeshTexture[iType] = static_cast<CTexture*>(pInstance->Clone_Component(0, L"Texture", &strTexture));
+	lstrcpy(pDesc->pMeshTextureName[iType], szFullName);
+	RELEASE_INSTANCE(CComponent_Manager);
+
+	if (nullptr == pDesc->pMeshTexture[iType])
+		return E_FAIL;
+
 
 	return S_OK;
 }
@@ -290,6 +364,20 @@ HRESULT CModel::Create_MeshContainer()
 		m_MeshContainers[pMesh->mMaterialIndex].emplace_back(pMeshContainer);
 	}
 	
+	return S_OK;
+}
+
+HRESULT CModel::Load_MeshContainer (_uint iMaterialIndex, _uint iNumVtxCnt, _uint iNumIdxCnt, void* pVtx, void* pIdx)
+{
+	for (_uint i = 0; i < m_iNumMeshes; ++i)
+	{
+		CMeshContainer* pMeshContainer = CMeshContainer::Create(m_pDevice, m_pDeviceContext, iMaterialIndex, iNumVtxCnt, iNumIdxCnt,this, pVtx, pIdx);
+		if (!pMeshContainer)
+			return E_FAIL;
+
+		m_MeshContainers[iMaterialIndex].emplace_back(pMeshContainer);
+	}
+
 	return S_OK;
 }
 
@@ -392,6 +480,9 @@ HRESULT CModel::Create_HierarchyNode(aiNode* pNode, CHierarchyNode* pParent, _ui
 
 HRESULT CModel::Create_Animation()
 {
+	if (m_eMeshType == TYPE_STATIC)
+		return S_OK;
+
 	for (_uint i = 0; i < m_pScene->mNumAnimations; ++i)
 	{
 		aiAnimation*	pAnim = m_pScene->mAnimations[i];
@@ -511,14 +602,49 @@ HRESULT CModel::Save_StaticModel(const wstring& pFilePath)
 		}
 		pMtrlData.iTextureCnt = iTextureCnt;
 		pMtrlData.pTaxtureData = vecTextureData;
+
+		vecMtrl.emplace_back(pMtrlData);
 	}
 
 	pInstance->Save_StaticModel(vecMtrl, vecMesh, XMLoadFloat4x4(&m_PivotMatrix), pFilePath);
 
-	
+	RELEASE_INSTANCE(CSaveManager);
+
+	return S_OK;
+}
+
+HRESULT CModel::Load_StaticModel(const wstring& pFilePath)
+{
+	CSaveManager* pInstance = GET_INSTANCE(CSaveManager);
+
+	CSaveManager::STATICDATA pData;
+	ZeroMemory(&pData, sizeof(pData));
+	if (FAILED(pInstance->Load_StaticModel(pData, pFilePath)))
+		return E_FAIL;
 
 	RELEASE_INSTANCE(CSaveManager);
 
+	XMStoreFloat4x4(&m_PivotMatrix,XMMatrixIdentity());
+
+	m_iNumMeshes = pData.iMeshCount;
+	m_MeshContainers.resize(pData.iMeshCount);
+	for (auto& pMesh : pData.pMeshData)
+	{
+		if (FAILED(Load_MeshContainer(pMesh.iMeshMtrlNum,pMesh.iVtxCount,pMesh.iIdxCount,pMesh.pVtxPoint, pMesh.pIndex)))
+			return E_FAIL;
+	}
+
+	if (FAILED(Create_VertexIndexBuffer()))
+		return E_FAIL;
+
+	for (auto& pMtrl : pData.pMtrlData)
+	{
+		for (auto& pTexture : pMtrl.pTaxtureData)
+		{
+			if (FAILED(Load_Materials(pTexture.iType,pTexture.pTextureName)))
+				return E_FAIL;
+		}
+	}
 	return S_OK;
 }
 
@@ -532,6 +658,17 @@ CModel * CModel::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pDeviceCon
 		Safe_Release(pInstance);
 	}
 
+	return pInstance;
+}
+
+CModel* CModel::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext, const wstring& pMeshFileName, const wstring& pShaderFilePath, TYPE eType)
+{
+	CModel* pInstance = new CModel(pDevice, pDeviceContext);
+	if (pInstance->NativeConstruct_Prototype(pMeshFileName, pShaderFilePath,eType))
+	{
+		MSGBOX("CModel Load Fail");
+		Safe_Release(pInstance);
+	}
 	return pInstance;
 }
 
