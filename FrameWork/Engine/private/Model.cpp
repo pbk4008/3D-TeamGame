@@ -222,11 +222,11 @@ HRESULT CModel::Render(_uint iMeshContainerIndex, _uint iPassIndex)
 		if (m_eMeshType == TYPE_ANIM)
 		{
 			_matrix		BoneMatrices[256];
-			ZeroMemory(BoneMatrices, sizeof(_float4x4) * 256);
+			ZeroMemory(BoneMatrices, sizeof(_matrix) * 256);
 
 			pMeshContainer->SetUp_BoneMatrices(BoneMatrices, XMLoadFloat4x4(&m_PivotMatrix));
 
-			if (FAILED(SetUp_ValueOnShader("g_BoneMatrices", BoneMatrices, sizeof(_float4x4) * 256)))
+			if (FAILED(SetUp_ValueOnShader("g_BoneMatrices", BoneMatrices, sizeof(_matrix) * 256)))
 				return E_FAIL;
 		}
 		m_pDeviceContext->IASetInputLayout(m_PassDesc[iPassIndex]->pInputLayout);

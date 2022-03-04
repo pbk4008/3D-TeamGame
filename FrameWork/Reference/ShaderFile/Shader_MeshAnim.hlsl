@@ -9,7 +9,7 @@ cbuffer Matrices
 
 struct BoneMatrixArray
 {
-	matrix		Bone[128];
+	matrix		Bone[256];
 };
 
 cbuffer	BoneMatricesBuffer
@@ -26,7 +26,6 @@ sampler DefaultSampler = sampler_state
 	AddressU = wrap;
 	AddressV = wrap;
 };
-
 
 struct VS_IN
 {
@@ -45,44 +44,6 @@ struct VS_OUT
 	float2		vTexUV : TEXCOORD0;		
 	float4		vProjPos : TEXCOORD1;
 };
-
-VS_OUT VS_MAIN_STATIC(VS_IN In)
-{
-	VS_OUT			Out = (VS_OUT)0;
-
-
-	matrix			matWV, matWVP;
-	
-	matWV = mul(g_WorldMatrix, g_ViewMatrix);
-	matWVP = mul(matWV, g_ProjMatrix);
-
-	Out.vPosition = mul(vector(In.vPosition, 1.f), matWVP);	
-	Out.vNormal = normalize(mul(vector(In.vNormal, 0.f), g_WorldMatrix));
-	Out.vTexUV = In.vTexUV;
-	Out.vProjPos = Out.vPosition;
-
-	return Out;
-
-}
-
-
-VS_OUT VS_MAIN_STATIC_WIRE(VS_IN In)
-{
-	VS_OUT			Out = (VS_OUT)0;
-
-	matrix			matWV, matWVP;
-
-	matWV = mul(g_WorldMatrix, g_ViewMatrix);
-	matWVP = mul(matWV, g_ProjMatrix);
-
-	Out.vPosition = mul(vector(In.vPosition, 1.f), matWVP);
-	Out.vNormal = normalize(mul(vector(In.vNormal, 0.f), g_WorldMatrix));
-	Out.vTexUV = In.vTexUV;
-	Out.vProjPos = Out.vPosition;
-
-	return Out;
-
-}
 
 
 VS_OUT VS_MAIN_ANIM(VS_IN In)

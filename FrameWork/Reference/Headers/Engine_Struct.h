@@ -14,6 +14,11 @@ namespace Engine
 		XMFLOAT4X4 matProj;
 		XMFLOAT4 vCamPos;
 	}CAMERA;
+	typedef struct MeshMaterial
+	{
+		_tchar		pMeshTextureName[AI_TEXTURE_TYPE_MAX][MAX_PATH];
+		class CTexture* pMeshTexture[AI_TEXTURE_TYPE_MAX];
+	}MESHMATERIAL;
 	typedef struct tagKeyFrame
 	{
 		double			Time;
@@ -21,13 +26,6 @@ namespace Engine
 		XMFLOAT4		vRotation;
 		XMFLOAT3		vPosition;
 	}KEYFRAME;
-
-	typedef struct MeshMaterial
-	{
-		_tchar		pMeshTextureName[AI_TEXTURE_TYPE_MAX][MAX_PATH];
-		class CTexture*		pMeshTexture[AI_TEXTURE_TYPE_MAX];
-	}MESHMATERIAL;
-
 	typedef struct tagBoneDesc
 	{
 		/* 뼈대의 로컬 -> 정점의 로컬스페이스 변환을 위한 행렬이다. */

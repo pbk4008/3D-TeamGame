@@ -238,7 +238,9 @@ call Update_Library_Release.bat</Command>
     <ClInclude Include="..\public\Level_Manager.h" />
     <ClInclude Include="..\public\Light.h" />
     <ClInclude Include="..\public\Light_Manager.h" />
-    <ClInclude Include="..\public\Material.h" />
+    <ClInclude Include="..\public\Material.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClInclude>
     <ClInclude Include="..\public\MeshContainer.h" />
     <ClInclude Include="..\public\Model.h" />
     <ClInclude Include="..\public\Mouse.h" />
@@ -293,7 +295,9 @@ call Update_Library_Release.bat</Command>
     <ClCompile Include="..\private\Gizmo.cpp" />
     <ClCompile Include="..\private\InputDev.cpp" />
     <ClCompile Include="..\private\LandScape.cpp" />
-    <ClCompile Include="..\private\Material.cpp" />
+    <ClCompile Include="..\private\Material.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="..\private\Mouse.cpp" />
     <ClCompile Include="..\private\PhysicsXSystem.cpp" />
     <ClCompile Include="..\private\SphereCollider.cpp" />

@@ -14,6 +14,11 @@ namespace Engine
 		XMFLOAT4X4 matProj;
 		XMFLOAT4 vCamPos;
 	}CAMERA;
+	typedef struct MeshMaterial
+	{
+		_tchar		pMeshTextureName[AI_TEXTURE_TYPE_MAX][MAX_PATH];
+		class CTexture* pMeshTexture[AI_TEXTURE_TYPE_MAX];
+	}MESHMATERIAL;
 	typedef struct tagKeyFrame
 	{
 		double			Time;
