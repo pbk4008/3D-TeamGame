@@ -79,10 +79,10 @@ HRESULT CModel::NativeConstruct_Prototype(const string& pMeshFilePath, const str
 	if(m_eMeshType == CModel::TYPE_STATIC)
 		iFlag = aiProcess_ConvertToLeftHanded | aiProcess_CalcTangentSpace | aiProcess_Triangulate;
 	else
-		iFlag = aiProcess_ConvertToLeftHanded | aiProcess_CalcTangentSpace | aiProcess_Triangulate;
+		iFlag = aiProcess_ConvertToLeftHanded | aiProcess_Triangulate | aiProcess_CalcTangentSpace;
 
-	m_pScene  = m_Importer.ReadFile(szFullPath, iFlag);
-	if (nullptr == m_pScene)
+ 	m_pScene  = m_Importer.ReadFile(szFullPath, iFlag);
+ 	if (nullptr == m_pScene)
 		return E_FAIL;
 
 	m_MeshContainers.resize(m_pScene->mNumMaterials);
@@ -201,13 +201,13 @@ HRESULT CModel::SetUp_TextureOnShader(const char * pConstantName, _uint iMeshCon
 HRESULT CModel::Update_CombinedTransformationMatrix(_double TimeDelta)
 {
 	/* 현재 애니메이션 재생시간에 따른 뼈들의 TransformationMatrix를 갱신한다. */
- 	//m_Animations[m_iCurrentAnimation]->Update_TransformationMatrix(TimeDelta);
+ 	m_Animations[m_iCurrentAnimation]->Update_TransformationMatrix(TimeDelta, 1);
 
 	/* 렌더링해야할 CombinedTransfromkationMatrix를 만든다. */
-	//for (auto& pHierarchyNode : m_HierarchyNodes)
-	//{
-	//	pHierarchyNode->Update_CombinedTransformationMatrix(m_iCurrentAnimation);
-	//}
+	for (auto& pHierarchyNode : m_HierarchyNodes)
+	{
+		pHierarchyNode->Update_CombinedTransformationMatrix(m_iCurrentAnimation);
+	}
 
 	return S_OK;
 }

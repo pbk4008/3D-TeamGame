@@ -91,16 +91,27 @@ HRESULT CMenu_Form::Create_Model_Prototype(const FILEINFO& _fileInfo)
 	FileName.assign(_fileInfo.cstrFileName.begin(), _fileInfo.cstrFileName.end());
 	string FolderName;
 	FolderName.assign(_fileInfo.cstrFolder.begin(), _fileInfo.cstrFolder.end());
+	
+	wstring Static_ShaderFilePath = L"../../Reference/ShaderFile/Shader_Mesh.hlsl";
+	wstring Anim_ShaderFilePath = L"../../Reference/ShaderFile/Shader_Mesh.hlsl";
 
-	wstring ShaderFilePath = L"../../Reference/ShaderFile/Shader_Mesh.hlsl";
 	_matrix  PivotMatrix;
 	PivotMatrix = /*XMMatrixIdentity();*/XMMatrixRotationX(XMConvertToRadians(90.0f)) *  XMMatrixRotationY(XMConvertToRadians(180.0f));
 
-	if (FAILED(g_pGameInstance->Add_Prototype(TAB_MAP, _fileInfo.cstrFileName,
-		CModel::Create(m_pDevice, m_pDeviceContext, PullPath.c_str(), FileName.c_str(),
-			ShaderFilePath, PivotMatrix, CModel::TYPE_STATIC))))
-		return E_FAIL;
-	
+	if (0 == _fileInfo.cstrFBX_Type)
+	{
+		if (FAILED(g_pGameInstance->Add_Prototype(TAB_MAP, _fileInfo.cstrFileName,
+			CModel::Create(m_pDevice, m_pDeviceContext, PullPath.c_str(), FileName.c_str(),
+				Static_ShaderFilePath, PivotMatrix, (CModel::TYPE)_fileInfo.cstrFBX_Type))))
+			return E_FAIL;
+	}
+	else
+	{
+		if (FAILED(g_pGameInstance->Add_Prototype(TAB_MAP, _fileInfo.cstrFileName,
+			CModel::Create(m_pDevice, m_pDeviceContext, PullPath.c_str(), FileName.c_str(),
+				Anim_ShaderFilePath, PivotMatrix, (CModel::TYPE)_fileInfo.cstrFBX_Type))))
+			return E_FAIL;
+	}
 	return S_OK;
 }
 

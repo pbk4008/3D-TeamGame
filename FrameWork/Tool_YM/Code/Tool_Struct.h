@@ -5,6 +5,7 @@
 
 typedef struct tagFileInfo
 {
+	_uint   cstrFBX_Type;
 	wstring cstrFileName;
 	wstring cstrFolder;
 }FILEINFO;

@@ -58,6 +58,9 @@ HRESULT CStatic_Mesh::NativeConstruct(void* pArg)
 
 _int CStatic_Mesh::Tick(_double TimeDelta)
 {
+	if (CModel::TYPE_ANIM == m_pModelCom->getType())
+		m_pModelCom->Update_CombinedTransformationMatrix(TimeDelta);
+
 	return _int();
 }
 

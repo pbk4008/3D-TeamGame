@@ -67,7 +67,7 @@ _int CMap_Tool::Update_MapTool(_double dTimeDelta)
 
 void CMap_Tool::InitAssetsTree(void)
 {
-	HTREEITEM hItem = m_AssetTree.InsertItem(_T("..\\Bin\\Resources\\FBX\\", hItem));
+	HTREEITEM hItem = m_AssetTree.InsertItem(_T("..\\Bin\\Resources\\", hItem));
 
 	CFileFind fFinder;
 
@@ -389,6 +389,7 @@ void CMap_Tool::OnTvnSelchangedTree1(NMHDR* pNMHDR, LRESULT* pResult)
 	HTREEITEM hSelected = pNMTreeView->itemNew.hItem;
 	HTREEITEM hParentItem = hSelected;
 
+	CString   strType;
 	CString	  strExt;
 	CString   strPath;
 
@@ -430,6 +431,15 @@ void CMap_Tool::OnTvnSelchangedTree1(NMHDR* pNMHDR, LRESULT* pResult)
 		m_FileInfo.cstrFileName = strSelectItem;
 
 		HTREEITEM temp = m_AssetTree.GetParentItem(hSelected);
+		HTREEITEM Folder_Filter = m_AssetTree.GetParentItem(temp);
+
+		CString RootFolder_FBXType = m_AssetTree.GetItemText(Folder_Filter);
+
+		if ("FBX" == RootFolder_FBXType)
+			m_FileInfo.cstrFBX_Type = 0;
+		else
+			m_FileInfo.cstrFBX_Type = 1;
+
 		if (NULL != temp)
 		{
 			m_FileInfo.cstrFolder = m_AssetTree.GetItemText(temp);
