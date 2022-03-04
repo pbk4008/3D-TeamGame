@@ -210,6 +210,7 @@ call Update_Library_Release.bat</Command>
     <ClInclude Include="..\public\BoxCollider.h" />
     <ClInclude Include="..\public\Camera.h" />
     <ClInclude Include="..\public\CapsuleCollider.h" />
+    <ClInclude Include="..\public\Material_Manager.h" />
     <ClInclude Include="..\public\Effect.h" />
     <ClInclude Include="..\public\Cell.h" />
     <ClInclude Include="..\public\Channel.h" />
@@ -239,7 +240,7 @@ call Update_Library_Release.bat</Command>
     <ClInclude Include="..\public\Light.h" />
     <ClInclude Include="..\public\Light_Manager.h" />
     <ClInclude Include="..\public\Material.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClInclude>
     <ClInclude Include="..\public\MeshContainer.h" />
     <ClInclude Include="..\public\Model.h" />
@@ -288,6 +289,7 @@ call Update_Library_Release.bat</Command>
     <ClCompile Include="..\private\CapsuleCollider.cpp" />
     <ClCompile Include="..\private\Cell.cpp" />
     <ClCompile Include="..\private\Channel.cpp" />
+    <ClCompile Include="..\private\Material_Manager.cpp" />
     <ClCompile Include="..\private\Collider.cpp" />
     <ClCompile Include="..\private\Component.cpp" />
     <ClCompile Include="..\private\Component_Manager.cpp" />
@@ -296,7 +298,7 @@ call Update_Library_Release.bat</Command>
     <ClCompile Include="..\private\InputDev.cpp" />
     <ClCompile Include="..\private\LandScape.cpp" />
     <ClCompile Include="..\private\Material.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\private\Mouse.cpp" />
     <ClCompile Include="..\private\PhysicsXSystem.cpp" />
