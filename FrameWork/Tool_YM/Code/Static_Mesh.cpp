@@ -44,11 +44,14 @@ HRESULT CStatic_Mesh::NativeConstruct(void* pArg)
 	if (FAILED(SetUp_Components()))
 		return E_FAIL;
 	
+	m_MeshDesc.iType = m_ModelDesc.iType;
 	m_MeshDesc.eLevel = m_ModelDesc.eLevel;
 	_tcscpy_s(m_MeshDesc.FolderName, m_ModelDesc.strFolder.c_str());
 	_tcscpy_s(m_MeshDesc.FileName, m_ModelDesc.strFileName.c_str());
 	_tcscpy_s(m_MeshDesc.Name, m_ModelDesc.strName.c_str());
 	_tcscpy_s(m_MeshDesc.Tag, m_ModelDesc.strTag.c_str());
+
+
 
 	XMStoreFloat3(&m_MeshDesc.fInitPos, m_pTransform->Get_State(CTransform::STATE_POSITION));
 	XMStoreFloat4x4(&m_MeshDesc.WorldMat, m_pTransform->Get_WorldMatrix());

@@ -21,13 +21,6 @@ namespace Engine
 		XMFLOAT4		vRotation;
 		XMFLOAT3		vPosition;
 	}KEYFRAME;
-
-	typedef struct MeshMaterial
-	{
-		_tchar		pMeshTextureName[AI_TEXTURE_TYPE_MAX][MAX_PATH];
-		class CTexture*		pMeshTexture[AI_TEXTURE_TYPE_MAX];
-	}MESHMATERIAL;
-
 	typedef struct tagBoneDesc
 	{
 		/* 뼈대의 로컬 -> 정점의 로컬스페이스 변환을 위한 행렬이다. */
@@ -49,6 +42,12 @@ namespace Engine
 		XMUINT4			vBlendIndex; /* 현재 정점에 상태변환에 대한 영향을 주는 뼈의 인덱스 (최대 네개) */
 		XMFLOAT4		vBlendWeight; /* 영향을 주는 뼈의 가중치 (영향력 최대가 1 ) */
 	}VTXMESH_ANIM;
+
+	typedef struct MeshMaterial
+	{
+		_tchar      pMeshTextureName[AI_TEXTURE_TYPE_MAX][MAX_PATH];
+		class CTexture* pMeshTexture[AI_TEXTURE_TYPE_MAX];
+	}MESHMATERIAL;
 
 	typedef struct tagLightDesc
 	{

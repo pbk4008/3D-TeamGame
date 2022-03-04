@@ -43,6 +43,12 @@ namespace Engine
 		XMFLOAT4		vBlendWeight; /* 영향을 주는 뼈의 가중치 (영향력 최대가 1 ) */
 	}VTXMESH_ANIM;
 
+	typedef struct MeshMaterial
+	{
+		_tchar      pMeshTextureName[AI_TEXTURE_TYPE_MAX][MAX_PATH];
+		class CTexture* pMeshTexture[AI_TEXTURE_TYPE_MAX];
+	}MESHMATERIAL;
+
 	typedef struct tagLightDesc
 	{
 		enum TYPE { TYPE_DIRECTIONAL, TYPE_POINT, TYPE_END };
