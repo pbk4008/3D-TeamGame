@@ -135,6 +135,7 @@ HRESULT CModel_Inspector::Add_GameObjectToLayer(const MESHDESC& ModelDesc)
 	MeshDesc.strName = ModelDesc.Name;
 	MeshDesc.fInitPos = ModelDesc.fInitPos;
 	MeshDesc.WorldMat = ModelDesc.WorldMat;
+	MeshDesc.iType = ModelDesc.iType;
 
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer(TAB_MAP, MeshDesc.strTag, L"Prototype_GameObject_StaticMesh", &MeshDesc)))
 		return E_FAIL;
@@ -205,6 +206,7 @@ void CModel_Inspector::OnBnClickedAddButton()
 		m_ModelDesc.strFolder = m_FileInfo.cstrFolder;
 		m_ModelDesc.strFileName = m_FileInfo.cstrFileName;
 		m_ModelDesc.fInitPos = m_pObserver->m_fPickPos;
+		m_ModelDesc.iType = m_FileInfo.cstrFBX_Type;
 
 		/* ##2. 사본 모델의 Layer Tag = 모델의 이름  */
 		/* ##3. 사본 모델의 ProtoType Tag = 모델의 파일명 */

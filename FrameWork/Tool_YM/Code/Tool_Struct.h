@@ -19,6 +19,7 @@ typedef struct tagModel
 	_float3	  fInitPos;
 	_float4x4 WorldMat ;
 	LEVEL_ID eLevel;
+	_uint	  iType;
 }MODELDESC;
 
 typedef struct tagMeshDesc
@@ -30,6 +31,7 @@ typedef struct tagMeshDesc
 	_float4x4 WorldMat;
 	_float3 fInitPos;
 	LEVEL_ID eLevel;
+	_uint	  iType;
 }MESHDESC;
 
 typedef struct tagNavMeshDesc
