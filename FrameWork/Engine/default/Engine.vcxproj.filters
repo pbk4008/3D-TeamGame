@@ -202,6 +202,9 @@
     <Filter Include="00.Utility\03.Component\98.AnimationController">
       <UniqueIdentifier>{f8ca6ff5-63fe-4167-8054-cb8caa6731f2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="00.Utility\03.Component\05.VIBuffer\07.Model\Material">
+      <UniqueIdentifier>{3e6b5c11-88b5-4f9e-911f-9740de61e903}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\public\Base.h">
@@ -408,6 +411,9 @@
     <ClInclude Include="..\public\AnimationController.h">
       <Filter>00.Utility\03.Component\98.AnimationController</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\Material.h">
+      <Filter>00.Utility\03.Component\05.VIBuffer\07.Model\Material</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\private\Base.cpp">
@@ -595,6 +601,9 @@
     </ClCompile>
     <ClCompile Include="..\private\Model.cpp">
       <Filter>00.Utility\03.Component\05.VIBuffer\07.Model</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Material.cpp">
+      <Filter>00.Utility\03.Component\05.VIBuffer\07.Model\Material</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
