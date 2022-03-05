@@ -81,6 +81,11 @@ void CState_Silvermane::Set_Model(CModel* _pModel)
 	m_pModel = _pModel;
 }
 
+void CState_Silvermane::Set_AnimationController(CAnimationController* _pAnimationController)
+{
+	m_pAnimationController = _pAnimationController;
+}
+
 void CState_Silvermane::Set_Silvermane(CSilvermane* _pSilvermane)
 {
 	m_pSilvermane = _pSilvermane;

@@ -60,11 +60,10 @@ HRESULT CSilvermane_JogFwd::EnterState()
 		return E_FAIL;
 	}
 
-	/*
-	static_cast<CSilvermane*>(m_pGameObject)->Set_CurrentAnimation(m_pModel->SetUp_NextAnimation("SK_Silvermane.ao|A_Loco_Jog_Fwd_Player"));
-	m_pModel->Set_RootMotion(true, ERootOption::XYZ);
-	m_pModel->Set_LoopNextAnim(true);
-	*/
+	
+	m_pAnimationController->SetUp_NextAnimation("SK_Silvermane.ao|A_Loco_Jog_Fwd_Player", true);
+	m_pAnimationController->Set_RootMotion(true, true, ERootOption::XYZ);
+	
 
 	return S_OK;
 }

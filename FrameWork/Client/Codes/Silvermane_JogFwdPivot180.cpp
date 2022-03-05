@@ -60,11 +60,10 @@ HRESULT CSilvermane_JogFwdPivot180::EnterState()
 		return E_FAIL;
 	}
 
-	/*
-	static_cast<CSilvermane*>(m_pGameObject)->Set_CurrentAnimation(m_pModel->SetUp_NextAnimation("SK_Silvermane.ao|A_Loco_Jog_Fwd_Pivot_180_Player"));
-	m_pModel->Set_RootMotion(true, ERootOption::XYZ);
-	m_pModel->Set_LoopNextAnim(false);
-	*/
+	
+	m_pAnimationController->SetUp_NextAnimation("SK_Silvermane.ao|A_Loco_Jog_Fwd_Pivot_180_Player", false);
+	m_pAnimationController->Set_RootMotion(true, true, ERootOption::XYZ);
+	
 
 	return S_OK;
 }
@@ -83,7 +82,7 @@ _int CSilvermane_JogFwdPivot180::KeyCheck(const _double& TimeDelta)
 {
 	if (g_pGameInstance->getkeyPress(DIK_DOWN))
 	{
-		//if (m_pModel->Is_AnimationFinished())
+		if (m_pAnimationController->Is_Finished())
 		{
 			if (FAILED(m_pStateController->Change_State(L"JogBwd")))
 			{
@@ -93,21 +92,21 @@ _int CSilvermane_JogFwdPivot180::KeyCheck(const _double& TimeDelta)
 	}
 	else if (g_pGameInstance->getkeyPress(DIK_UP))
 	{
-		if (FAILED(m_pStateController->Change_State(L"JogBwdToJogFwd")))
+		if (FAILED(m_pStateController->Change_State(L"JogBwdPivot180")))
 		{
 			return -1;
 		}
 	}
 	else if (g_pGameInstance->getkeyPress(DIK_RIGHT))
 	{
-		if (FAILED(m_pStateController->Change_State(L"IdleToJogRight")))
+		if (FAILED(m_pStateController->Change_State(L"JogRightStart")))
 		{
 			return -1;
 		}
 	}
 	else if (g_pGameInstance->getkeyPress(DIK_LEFT))
 	{
-		if (FAILED(m_pStateController->Change_State(L"IdleToJogLeft")))
+		if (FAILED(m_pStateController->Change_State(L"JogLeftStart")))
 		{
 			return -1;
 		}

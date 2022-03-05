@@ -119,14 +119,17 @@ HRESULT CLoader::Ready_Test_JS()
 #pragma region 컴포넌트
 
 	_matrix matPivot = XMMatrixIdentity();
+	matPivot = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(180.f));
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_TEST_JS, L"Model_Silvermane", CModel::Create(m_pDevice, m_pDeviceContext,
 		"../bin/Resources/Mesh/Silvermane/", "Silvermane.fbx",
-		L"../../Reference/ShaderFile/Shader_Mesh.hlsl",
+		L"../../Reference/ShaderFile/Shader_MeshAnim.hlsl",
 		matPivot,
 		CModel::TYPE_ANIM))))
 	{
 		return E_FAIL;
 	}
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_TEST_JS, L"AnimationController", CAnimationController::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_TEST_JS, L"StateController", CStateController::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 
@@ -141,7 +144,7 @@ HRESULT CLoader::Ready_Test_JS()
 #pragma endregion
 
 
-
+	cout << "TestScene_JS 로딩 완료" << endl;
 	return S_OK;
 }
 

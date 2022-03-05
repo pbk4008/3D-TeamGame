@@ -13,7 +13,6 @@ CChannel::CChannel(const CChannel& rhs)
 	, m_isClone(true)
 	, m_isRoot(rhs.m_isRoot)
 	, m_tAnimInterPolation(rhs.m_tAnimInterPolation)
-	, m_tRootAnimInterPolation(rhs.m_tRootAnimInterPolation)
 {
 	strcpy_s(m_szName, rhs.m_szName);
 }
@@ -23,13 +22,6 @@ void CChannel::Set_AnimInterPolation(_fvector _vScale, _fvector _vRotation, _fve
 	XMStoreFloat4(&m_tAnimInterPolation.vScale, _vScale);
 	XMStoreFloat4(&m_tAnimInterPolation.vRotation, _vRotation);
 	XMStoreFloat4(&m_tAnimInterPolation.vPosition, _vPosition);
-}
-
-void CChannel::Set_RootAnimInterPolation(_fvector _vScale, _fvector _vRotation, _fvector _vPosition)
-{
-	XMStoreFloat4(&m_tRootAnimInterPolation.vScale, _vScale);
-	XMStoreFloat4(&m_tRootAnimInterPolation.vRotation, _vRotation);
-	XMStoreFloat4(&m_tRootAnimInterPolation.vPosition, _vPosition);
 }
 
 HRESULT CChannel::NativeConstruct(const char* pName)

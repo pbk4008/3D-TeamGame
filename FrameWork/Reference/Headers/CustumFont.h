@@ -11,7 +11,7 @@ public:
 	virtual ~CCustomFont() = default;
 public:
 	HRESULT Ready_CustomFont(const wstring& pFontPath);
-	HRESULT Render_CustomFont(_fvector vColor, const wstring& pString);
+	HRESULT Render_CustomFont(_fvector vColor, const wstring& pString, const _float2& _vPos = { 0.f, 0.f }, const _float2& _vScale = { 1.f, 1.f });
 private:
 	ID3D11Device*			m_pDevice = nullptr;
 	ID3D11DeviceContext*	m_pDeviceContext = nullptr;

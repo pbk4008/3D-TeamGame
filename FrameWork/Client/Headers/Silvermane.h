@@ -2,6 +2,9 @@
 
 #include "Actor.h"
 
+BEGIN(Engine)
+END
+
 BEGIN(Client)
 
 class CSilvermane final : public CActor
@@ -28,6 +31,7 @@ public:
 public:
 	CModel* m_pModel = nullptr;
 	CStateController* m_pStateController = nullptr;
+	CAnimationController* m_pAnimationController = nullptr;
 
 public:
 	static CSilvermane* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext);

@@ -27,6 +27,7 @@ public:
 	void Set_Silvermane(CSilvermane* _pSilvermane);
 	void Set_Transform(CTransform* _pTransform);
 	void Set_Model(CModel * _pModel);
+	void Set_AnimationController(CAnimationController* _pAnimationController);
 
 protected:
 	virtual _int KeyCheck(const _double& _dDeltaTime);
@@ -35,6 +36,7 @@ protected:
 	CSilvermane* m_pSilvermane = nullptr;
 	CTransform* m_pTransform = nullptr;
 	CModel* m_pModel = nullptr;
+	CAnimationController* m_pAnimationController = nullptr;
 
 public:
 	virtual void Free() override;

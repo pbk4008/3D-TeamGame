@@ -14,36 +14,23 @@ private:
 	virtual ~CHierarchyNode() = default;
 
 public:
-	_uint	Get_Depth() const {
-		return m_iDepth;
-	}
-	const CHierarchyNode* Get_Parent() const {
-		return m_pParent;
-	}
-	const char* Get_Name() const {
-		return m_szBoneName;
-	}
+	_uint	Get_Depth() const { return m_iDepth; }
+	const CHierarchyNode* Get_Parent() const { return m_pParent; }
+	const char* Get_Name() const { return m_szBoneName; }
 
-	_fmatrix Get_CombinedMatrix() const {
-		return XMLoadFloat4x4(&m_CombinedTransformationMatrix);
-	}
+	_fmatrix Get_CombinedMatrix() const { return XMLoadFloat4x4(&m_CombinedTransformationMatrix); }
 	_fmatrix Get_TransformMatrix() const {
 		return XMLoadFloat4x4(&m_TransformationMatrix);
 	}
-	_fmatrix Get_OffsetMatrix() const {
-		return XMLoadFloat4x4(&m_OffsetMatrix);
-	}
+	_fmatrix Get_OffsetMatrix() const { return XMLoadFloat4x4(&m_OffsetMatrix); }
 
-	void Set_OffsetMatrix(_fmatrix OffsetMatrix) {
-		XMStoreFloat4x4(&m_OffsetMatrix, OffsetMatrix);
-	}
+	void Set_OffsetMatrix(_fmatrix OffsetMatrix) { XMStoreFloat4x4(&m_OffsetMatrix, OffsetMatrix); }
 
 
 public:
-	void Reserve_Channel(_uint iNumAnimation) {
-		m_Channels.resize(iNumAnimation);
-	}
-	void Add_Channel(_uint iAnimationIndex, class CChannel* pChannel) {
+	void Reserve_Channel(_uint iNumAnimation) { m_Channels.resize(iNumAnimation); }
+	void Add_Channel(_uint iAnimationIndex, class CChannel* pChannel) 
+	{
 		m_Channels[iAnimationIndex] = pChannel;
 		Safe_AddRef(pChannel);
 	}
@@ -51,6 +38,7 @@ public:
 public:
 	HRESULT NativeConstruct(char* pBoneName, _fmatrix TransformationMatrix, _uint iDepth, CHierarchyNode* pParent);
 	void Update_CombinedTransformationMatrix(_uint iAnimationIndex=0);
+	void Update_CombinedTransformationMatrix(const _uint _iAnimIndex, const _bool _isRootMotion, const ERootOption _eRootOption);
 private:
 	/* 노드의 이름과 뼈의 이름은 1:1로 매칭된다. */
 	char						m_szBoneName[MAX_PATH] = "";

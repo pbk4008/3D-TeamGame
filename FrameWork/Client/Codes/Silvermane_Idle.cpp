@@ -60,9 +60,8 @@ HRESULT CSilvermane_Idle::EnterState()
 		return E_FAIL;
 	}
 
-	//static_cast<CSilvermane*>(m_pGameObject)->Set_CurrentAnimation(m_pModel->SetUp_NextAnimation("SK_Silvermane.ao|A_Idle_Player"));
-	//m_pModel->Set_RootMotion(true, ERootOption::XYZ);
-	//m_pModel->Set_LoopNextAnim(true);
+	m_pAnimationController->SetUp_NextAnimation("SK_Silvermane.ao|A_Idle_Player", true);
+	m_pAnimationController->Set_RootMotion(true, true, ERootOption::XYZ);
 
 	return S_OK;
 }
@@ -79,19 +78,19 @@ HRESULT CSilvermane_Idle::ExitState()
 
 _int CSilvermane_Idle::KeyCheck(const _double& TimeDelta)
 {
-	if (g_pGameInstance->getkeyDown(DIK_UP) & 0x80)
+	if (g_pGameInstance->getkeyDown(DIK_UP))
 	{
 		m_pStateController->Change_State(L"JogFwdStart");
 	}
-	if (g_pGameInstance->getkeyDown(DIK_DOWN) & 0x80)
+	if (g_pGameInstance->getkeyDown(DIK_DOWN))
 	{
 		m_pStateController->Change_State(L"JogBwdStart");
 	}
-	if (g_pGameInstance->getkeyDown(DIK_RIGHT) & 0x80)
+	if (g_pGameInstance->getkeyDown(DIK_RIGHT))
 	{
 		m_pStateController->Change_State(L"JogRightStart");
 	}
-	if (g_pGameInstance->getkeyDown(DIK_LEFT) & 0x80)
+	if (g_pGameInstance->getkeyDown(DIK_LEFT))
 	{
 		m_pStateController->Change_State(L"JogLeftStart");
 	}

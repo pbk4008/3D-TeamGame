@@ -10,7 +10,7 @@ class CModel;
 class CAnimation;
 class CChannel;
 
-class CAnimationController final : public CComponent
+class ENGINE_DLL CAnimationController final : public CComponent
 {
 public:
 	typedef struct tagAnimBlendDesc

@@ -1,6 +1,7 @@
 #include "AnimationController.h"
 
 #include "GameInstance.h"
+#include "Animation.h"
 
 CAnimationController::CAnimationController(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
 	: CComponent(_pDevice, _pDeviceContext)
@@ -151,12 +152,15 @@ _int CAnimationController::Update_CombinedTransformMatrix(const _double& _dDelta
 		m_tBlendDesc.fTweenTime = m_tBlendDesc.fChangeTime / m_tBlendDesc.fTakeTime;
 
 		vecAnimations[m_tBlendDesc.iNextAnimIndex]->Update_TransformationMatrix(_dDeltaTime, m_isLoopAnim);
+		m_isFinished = vecAnimations[m_tBlendDesc.iNextAnimIndex]->Is_Finished();
 
 		Lerp_Anim(vecAnimations);
 	}
+	else
+	{
+		m_isFinished = vecAnimations[m_tBlendDesc.iCurAnimIndex]->Is_Finished();
+	}
 
-
-	m_isFinished = vecAnimations[m_tBlendDesc.iCurAnimIndex]->Is_Finished();
 	return _int();
 }
 
@@ -179,14 +183,14 @@ void CAnimationController::Lerp_Anim(vector<CAnimation*>& _vecvecAnimations)
 
 		{
 			/* 현재 키프레임의 상태 값 */
-			vSourScale = XMLoadFloat4(&vecCurrentAnim[i]->m_tAnimInterPolation.vScale);
-			vSourRotation = XMLoadFloat4(&vecCurrentAnim[i]->m_tAnimInterPolation.vRotation);
-			vSourPosition = XMLoadFloat4(&vecCurrentAnim[i]->m_tAnimInterPolation.vPosition);
+			vSourScale = XMLoadFloat4(&vecCurrentAnim[i]->getAnimInterPolation().vScale);
+			vSourRotation = XMLoadFloat4(&vecCurrentAnim[i]->getAnimInterPolation().vRotation);
+			vSourPosition = XMLoadFloat4(&vecCurrentAnim[i]->getAnimInterPolation().vPosition);
 
 			/* 다음 키프레임의 상태 값 */
-			vDestScale = XMLoadFloat4(&vecNextAnim[i]->m_tAnimInterPolation.vScale);
-			vDestRotation = XMLoadFloat4(&vecNextAnim[i]->m_tAnimInterPolation.vRotation);
-			vDestPosition = XMLoadFloat4(&vecNextAnim[i]->m_tAnimInterPolation.vPosition);
+			vDestScale = XMLoadFloat4(&vecNextAnim[i]->getAnimInterPolation().vScale);
+			vDestRotation = XMLoadFloat4(&vecNextAnim[i]->getAnimInterPolation().vRotation);
+			vDestPosition = XMLoadFloat4(&vecNextAnim[i]->getAnimInterPolation().vPosition);
 
 			/* 계산된 비율 만큼 현재 키프레임과 다음 키프레임의 상태값을 보간 */
 			vScale = XMVectorLerp(vSourScale, vDestScale, m_tBlendDesc.fTweenTime);
@@ -212,6 +216,7 @@ HRESULT CAnimationController::SetUp_NextAnimation(const string& _strAnimTag, con
 				m_tBlendDesc.iNextAnimIndex = pAnimation->Get_Index();
 				m_tBlendDesc.isLoopNextAnim = _isLoopNextAnim;
 				m_pFixedBone = pAnimation->Get_Channel("root");
+				return S_OK;
 			}
 		}
 	}
@@ -322,7 +327,8 @@ const _int CAnimationController::Move_Transform(const _double& _dDeltaTime)
 
 
 			// 요 아래는 디버그 용이야
-			_float3 vPosition; XMStoreFloat3(&vBonePosition, svPosition);
+			_float3 vPosition = { 0.f, 0.f, 0.f };
+			XMStoreFloat3(&vBonePosition, svPosition);
 
 			wstring wstrBonePosition = L"FixedBonePosition : ";
 			wstrBonePosition += wstrBonePosition + to_wstring(vBonePosition.x) + L", " + to_wstring(vBonePosition.y) + L", " + to_wstring(vBonePosition.z);
@@ -336,7 +342,6 @@ const _int CAnimationController::Move_Transform(const _double& _dDeltaTime)
 
 void CAnimationController::Render_Debug()
 {
-
 	if (FAILED(g_pGameInstance->Render_Font(TEXT("Font_Arial"), XMVectorSet(1.f, 0.0f, 0.f, 1.f), m_wstrPosition.c_str(), _float2(0.f, 80.f), _float2(0.8f, 0.8f))))
 	{
 		return;

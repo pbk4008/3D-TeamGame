@@ -407,12 +407,12 @@ HRESULT CGameInstance::Add_Font(ID3D11Device * pDevice, ID3D11DeviceContext * pD
 	return m_pFont_Manager->Add_Font(pDevice, pDeviceContext, pFontTag, pFontPath);
 }
 
-HRESULT CGameInstance::Render_Font(const wstring& pFontTag, _fvector vColor, const wstring& pString)
+HRESULT CGameInstance::Render_Font(const wstring& pFontTag, _fvector vColor, const wstring& pString, const _float2& _vPos, const _float2& _vScale)
 {
 	if (nullptr == m_pFont_Manager)
 		return E_FAIL;
 
-	return m_pFont_Manager->Render_Font(pFontTag, vColor, pString);
+	return m_pFont_Manager->Render_Font(pFontTag, vColor, pString, _vPos, _vScale);
 }
 
 _bool CGameInstance::isIn_WorldFrustum(_fvector vPosition, _float fRange)

@@ -60,14 +60,12 @@ HRESULT CSilvermane_JogBwd::EnterState()
 		return E_FAIL;
 	}
 
-	/*
-	static_cast<CSilvermane*>(m_pGameObject)->Set_CurrentAnimation(m_pModel->SetUp_NextAnimation("SK_Silvermane.ao|A_Loco_Jog_Bwd_Player"));
-	m_pModel->Set_RootMotion(true, ERootOption::XYZ);
-	m_pModel->Set_LoopNextAnim(true);
+	
+	m_pAnimationController->SetUp_NextAnimation("SK_Silvermane.ao|A_Loco_Jog_Bwd_Player", true);
+	m_pAnimationController->Set_RootMotion(true, false, ERootOption::XYZ);
 
 	_matrix smatPivot = XMMatrixRotationY(XMConvertToRadians(180.f));
-	static_cast<CSilvermane*>(m_pGameObject)->Set_AnimPivotMatrix(smatPivot);
-	*/
+	m_pAnimationController->Set_PivotMatrix(smatPivot);
 
 	return S_OK;
 }
@@ -79,7 +77,7 @@ HRESULT CSilvermane_JogBwd::ExitState()
 		return E_FAIL;
 	}
 
-	//static_cast<CSilvermane*>(m_pGameObject)->Set_AnimPivotMatrix(XMMatrixIdentity());
+	m_pAnimationController->Set_PivotMatrix(XMMatrixIdentity());
 
 	return S_OK;
 }

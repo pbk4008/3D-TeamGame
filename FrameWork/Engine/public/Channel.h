@@ -18,33 +18,18 @@ public:
 	CChannel(const CChannel& rhs);
 	virtual ~CChannel() = default;
 public:
-	vector<KEYFRAME*> Get_KeyFrames() {
-		return m_KeyFrames;
-	}
-	const char* Get_Name() const {
-		return m_szName;
-	}
+	vector<KEYFRAME*> Get_KeyFrames() { return m_KeyFrames; }
+	const char* Get_Name() const { return m_szName; }
+	const _uint Get_CurrentKeyFrameIndex() const { return m_iCurrentKeyFrameIndex; }
+	KEYFRAME* Get_CurrentKeyFrame() const { return m_KeyFrames[m_iCurrentKeyFrameIndex]; }
+	_matrix Get_TransformMatrix() const { return XMLoadFloat4x4(&m_TransformationMatrix); }
 
-	_uint Get_CurrentKeyFrameIndex() const {
-		return m_iCurrentKeyFrameIndex;
-	}
-
-	_matrix Get_TransformMatrix() const {
-		return XMLoadFloat4x4(&m_TransformationMatrix);
-	}
-
-	void Set_CurrentKeyFrameIndex(_uint KeyFrameIndex) {
-		m_iCurrentKeyFrameIndex = KeyFrameIndex;
-	}
-
-	void Set_TransformationMatrix(_fmatrix TransformationMatrix) {
-		XMStoreFloat4x4(&m_TransformationMatrix, TransformationMatrix);
-	}
+	void Set_CurrentKeyFrameIndex(_uint KeyFrameIndex) { m_iCurrentKeyFrameIndex = KeyFrameIndex; }
+	void Set_TransformationMatrix(_fmatrix TransformationMatrix) { XMStoreFloat4x4(&m_TransformationMatrix, TransformationMatrix); }
 	void Set_AnimInterPolation(_fvector _vScale, _fvector _vRotation, _fvector _vPosition);
-	void Set_RootAnimInterPolation(_fvector _vScale, _fvector _vRotation, _fvector _vPosition);
 public:
 	ANIMINTERPOL& getAnimInterPolation() { return m_tAnimInterPolation; }
-	ANIMINTERPOL& getRootAnimInterPolation() { return m_tRootAnimInterPolation; }
+
 public:
 	HRESULT NativeConstruct(const char* pName);
 	HRESULT Add_KeyFrame(KEYFRAME* pKeyFrame);
@@ -62,7 +47,6 @@ private:
 	typedef vector<KEYFRAME*>	KEYFRAMES;
 private:
 	ANIMINTERPOL		m_tAnimInterPolation;
-	ANIMINTERPOL		m_tRootAnimInterPolation;
 
 public:
 	static CChannel* Create(const char* pName);
