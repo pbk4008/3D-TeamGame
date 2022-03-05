@@ -52,14 +52,23 @@
     <Filter Include="02.GameObject\98.Player\00.Silvermane\State">
       <UniqueIdentifier>{ef05c7f7-5a10-49d2-a495-156cd2854a96}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObject\98.Player\00.Silvermane\State\Jog">
-      <UniqueIdentifier>{1536151b-11e6-4800-81eb-1e5406329ed6}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObject\98.Player\00.Silvermane\Camera">
       <UniqueIdentifier>{fff034f3-6d84-4669-b0c2-9e3d6be892c0}</UniqueIdentifier>
     </Filter>
     <Filter Include="02.GameObject\98.Player\00.Silvermane\State\1H">
       <UniqueIdentifier>{0e4cba26-3aae-4f52-85e9-e564bdabc551}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\98.Player\00.Silvermane\State\Default">
+      <UniqueIdentifier>{1536151b-11e6-4800-81eb-1e5406329ed6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\98.Player\00.Silvermane\State\Default\Sprint">
+      <UniqueIdentifier>{f86ae29b-ccc6-4e20-aafd-431e17d61329}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\98.Player\00.Silvermane\State\Default\Jog">
+      <UniqueIdentifier>{01f7ac04-32d9-487c-9957-9dcf393a6d81}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\97.Plane">
+      <UniqueIdentifier>{90180e28-49c4-4c5c-89b6-1ad22812fb29}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -126,48 +135,6 @@
     <ClInclude Include="..\Headers\State_Silvermane.h">
       <Filter>02.GameObject\98.Player\00.Silvermane\State</Filter>
     </ClInclude>
-    <ClInclude Include="..\Headers\Silvermane_Idle.h">
-      <Filter>02.GameObject\98.Player\00.Silvermane\State</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Headers\Silvermane_JogBwd.h">
-      <Filter>02.GameObject\98.Player\00.Silvermane\State\Jog</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Headers\Silvermane_JogFwd.h">
-      <Filter>02.GameObject\98.Player\00.Silvermane\State\Jog</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Headers\Silvermane_JogLeft.h">
-      <Filter>02.GameObject\98.Player\00.Silvermane\State\Jog</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Headers\Silvermane_JogRight.h">
-      <Filter>02.GameObject\98.Player\00.Silvermane\State\Jog</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Headers\Silvermane_JogFwdStart.h">
-      <Filter>02.GameObject\98.Player\00.Silvermane\State\Jog</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Headers\Silvermane_JogRightStart.h">
-      <Filter>02.GameObject\98.Player\00.Silvermane\State\Jog</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Headers\Silvermane_JogBwdStart.h">
-      <Filter>02.GameObject\98.Player\00.Silvermane\State\Jog</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Headers\Silvermane_JogLeftStart.h">
-      <Filter>02.GameObject\98.Player\00.Silvermane\State\Jog</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Headers\Silvermane_JogBwdPivot180.h">
-      <Filter>02.GameObject\98.Player\00.Silvermane\State\Jog</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Headers\Silvermane_JogFwdStop.h">
-      <Filter>02.GameObject\98.Player\00.Silvermane\State\Jog</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Headers\Silvermane_JogFwdPivot180.h">
-      <Filter>02.GameObject\98.Player\00.Silvermane\State\Jog</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Headers\Silvermane_JogLeftPivot180.h">
-      <Filter>02.GameObject\98.Player\00.Silvermane\State\Jog</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Headers\Silvermane_JogRightPivot180.h">
-      <Filter>02.GameObject\98.Player\00.Silvermane\State\Jog</Filter>
-    </ClInclude>
     <ClInclude Include="..\Headers\Camera_Silvermane.h">
       <Filter>02.GameObject\98.Player\00.Silvermane\Camera</Filter>
     </ClInclude>
@@ -176,6 +143,60 @@
     </ClInclude>
     <ClInclude Include="..\Headers\1H_SowrdAttackNormalR1_02.h">
       <Filter>02.GameObject\98.Player\00.Silvermane\State\1H</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Silvermane_Idle.h">
+      <Filter>02.GameObject\98.Player\00.Silvermane\State\Default</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Silvermane_JogBwd.h">
+      <Filter>02.GameObject\98.Player\00.Silvermane\State\Default\Jog</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Silvermane_JogBwdPivot180.h">
+      <Filter>02.GameObject\98.Player\00.Silvermane\State\Default\Jog</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Silvermane_JogBwdStart.h">
+      <Filter>02.GameObject\98.Player\00.Silvermane\State\Default\Jog</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Silvermane_JogFwd.h">
+      <Filter>02.GameObject\98.Player\00.Silvermane\State\Default\Jog</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Silvermane_JogFwdPivot180.h">
+      <Filter>02.GameObject\98.Player\00.Silvermane\State\Default\Jog</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Silvermane_JogFwdStart.h">
+      <Filter>02.GameObject\98.Player\00.Silvermane\State\Default\Jog</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Silvermane_JogFwdStop.h">
+      <Filter>02.GameObject\98.Player\00.Silvermane\State\Default\Jog</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Silvermane_JogLeft.h">
+      <Filter>02.GameObject\98.Player\00.Silvermane\State\Default\Jog</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Silvermane_JogLeftPivot180.h">
+      <Filter>02.GameObject\98.Player\00.Silvermane\State\Default\Jog</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Silvermane_JogLeftStart.h">
+      <Filter>02.GameObject\98.Player\00.Silvermane\State\Default\Jog</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Silvermane_JogRight.h">
+      <Filter>02.GameObject\98.Player\00.Silvermane\State\Default\Jog</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Silvermane_JogRightPivot180.h">
+      <Filter>02.GameObject\98.Player\00.Silvermane\State\Default\Jog</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Silvermane_JogRightStart.h">
+      <Filter>02.GameObject\98.Player\00.Silvermane\State\Default\Jog</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Silvermane_SprintFwd.h">
+      <Filter>02.GameObject\98.Player\00.Silvermane\State\Default\Sprint</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Silvermane_SprintFwdStart.h">
+      <Filter>02.GameObject\98.Player\00.Silvermane\State\Default\Sprint</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Silvermane_SprintFwdStop.h">
+      <Filter>02.GameObject\98.Player\00.Silvermane\State\Default\Sprint</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Plane_Test.h">
+      <Filter>02.GameObject\97.Plane</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -219,48 +240,6 @@
     <ClCompile Include="..\Codes\State_Silvermane.cpp">
       <Filter>02.GameObject\98.Player\00.Silvermane\State</Filter>
     </ClCompile>
-    <ClCompile Include="..\Codes\Silvermane_Idle.cpp">
-      <Filter>02.GameObject\98.Player\00.Silvermane\State</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Codes\Silvermane_JogBwd.cpp">
-      <Filter>02.GameObject\98.Player\00.Silvermane\State\Jog</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Codes\Silvermane_JogFwd.cpp">
-      <Filter>02.GameObject\98.Player\00.Silvermane\State\Jog</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Codes\Silvermane_JogLeft.cpp">
-      <Filter>02.GameObject\98.Player\00.Silvermane\State\Jog</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Codes\Silvermane_JogRight.cpp">
-      <Filter>02.GameObject\98.Player\00.Silvermane\State\Jog</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Codes\Silvermane_JogFwdStart.cpp">
-      <Filter>02.GameObject\98.Player\00.Silvermane\State\Jog</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Codes\Silvermane_JogBwdStart.cpp">
-      <Filter>02.GameObject\98.Player\00.Silvermane\State\Jog</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Codes\Silvermane_JogLeftStart.cpp">
-      <Filter>02.GameObject\98.Player\00.Silvermane\State\Jog</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Codes\Silvermane_JogRightStart.cpp">
-      <Filter>02.GameObject\98.Player\00.Silvermane\State\Jog</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Codes\Silvermane_JogBwdPivot180.cpp">
-      <Filter>02.GameObject\98.Player\00.Silvermane\State\Jog</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Codes\Silvermane_JogFwdStop.cpp">
-      <Filter>02.GameObject\98.Player\00.Silvermane\State\Jog</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Codes\Silvermane_JogFwdPivot180.cpp">
-      <Filter>02.GameObject\98.Player\00.Silvermane\State\Jog</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Codes\Silvermane_JogLeftPivot180.cpp">
-      <Filter>02.GameObject\98.Player\00.Silvermane\State\Jog</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Codes\Silvermane_JogRightPivot180.cpp">
-      <Filter>02.GameObject\98.Player\00.Silvermane\State\Jog</Filter>
-    </ClCompile>
     <ClCompile Include="..\Codes\Camera_Silvermane.cpp">
       <Filter>02.GameObject\98.Player\00.Silvermane\Camera</Filter>
     </ClCompile>
@@ -269,6 +248,60 @@
     </ClCompile>
     <ClCompile Include="..\Codes\1H_SowrdAttackNormalR1_02.cpp">
       <Filter>02.GameObject\98.Player\00.Silvermane\State\1H</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Silvermane_Idle.cpp">
+      <Filter>02.GameObject\98.Player\00.Silvermane\State\Default</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Silvermane_JogBwd.cpp">
+      <Filter>02.GameObject\98.Player\00.Silvermane\State\Default\Jog</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Silvermane_JogBwdPivot180.cpp">
+      <Filter>02.GameObject\98.Player\00.Silvermane\State\Default\Jog</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Silvermane_JogBwdStart.cpp">
+      <Filter>02.GameObject\98.Player\00.Silvermane\State\Default\Jog</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Silvermane_JogFwd.cpp">
+      <Filter>02.GameObject\98.Player\00.Silvermane\State\Default\Jog</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Silvermane_JogFwdPivot180.cpp">
+      <Filter>02.GameObject\98.Player\00.Silvermane\State\Default\Jog</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Silvermane_JogFwdStart.cpp">
+      <Filter>02.GameObject\98.Player\00.Silvermane\State\Default\Jog</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Silvermane_JogFwdStop.cpp">
+      <Filter>02.GameObject\98.Player\00.Silvermane\State\Default\Jog</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Silvermane_JogLeft.cpp">
+      <Filter>02.GameObject\98.Player\00.Silvermane\State\Default\Jog</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Silvermane_JogLeftPivot180.cpp">
+      <Filter>02.GameObject\98.Player\00.Silvermane\State\Default\Jog</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Silvermane_JogLeftStart.cpp">
+      <Filter>02.GameObject\98.Player\00.Silvermane\State\Default\Jog</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Silvermane_JogRight.cpp">
+      <Filter>02.GameObject\98.Player\00.Silvermane\State\Default\Jog</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Silvermane_JogRightPivot180.cpp">
+      <Filter>02.GameObject\98.Player\00.Silvermane\State\Default\Jog</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Silvermane_JogRightStart.cpp">
+      <Filter>02.GameObject\98.Player\00.Silvermane\State\Default\Jog</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Silvermane_SprintFwd.cpp">
+      <Filter>02.GameObject\98.Player\00.Silvermane\State\Default\Sprint</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Silvermane_SprintFwdStart.cpp">
+      <Filter>02.GameObject\98.Player\00.Silvermane\State\Default\Sprint</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Silvermane_SprintFwdStop.cpp">
+      <Filter>02.GameObject\98.Player\00.Silvermane\State\Default\Sprint</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Plane_Test.cpp">
+      <Filter>02.GameObject\97.Plane</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

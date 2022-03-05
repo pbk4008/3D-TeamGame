@@ -1,9 +1,11 @@
 #include "pch.h"
 #include "Loader.h"
 
+#include "Material.h"
 
 #pragma region TestScene_JS
 
+#include "Plane_Test.h"
 #include "Silvermane.h"
 #include "Camera_Silvermane.h"
 
@@ -117,6 +119,43 @@ HRESULT CLoader::Ready_Test_JS()
 {
 	cout << "TestScene_JS 로딩 시작..." << endl;
 
+#pragma region 리소스
+
+	if(FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"Plane_Texture", L"../Bin/Resources/Texture/Terrain/Plane_Default.png")))
+		return E_FAIL;
+
+	cout << "TestScene_JS 리소스 생성중..." << endl;
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_TEST_JS, L"VIBuffer_Plane", CVIBuffer_Plane::Create(m_pDevice, m_pDeviceContext, L"../../Reference/ShaderFile/Shader_Plane.hlsl", 100, 100))))
+		return E_FAIL;
+
+
+	CTexture* pTexture = CTexture::Create(m_pDevice, m_pDeviceContext);
+	pTexture->NativeConstruct_Prototype(L"../Bin/Resources/Mesh/Silvermane/T_Silvermane_Hairs_d_new.tga", 1);
+	CMaterial* pMtrl = CMaterial::Create(m_pDevice, m_pDeviceContext, L"Silvermane_Hair", L"../../Reference/ShaderFile/Shader_MeshAnim.hlsl", CMaterial::EType::Anim);
+	pMtrl->Set_Texture("g_DiffuseTexture", aiTextureType_DIFFUSE, pTexture, 0);
+	g_pGameInstance->Add_Material(L"Silvermane_Hair", pMtrl);
+
+	pTexture = CTexture::Create(m_pDevice, m_pDeviceContext);
+	pTexture->NativeConstruct_Prototype(L"../Bin/Resources/Mesh/Silvermane/T_Silvermane_Cloak_D.tga", 1);
+	pMtrl = CMaterial::Create(m_pDevice, m_pDeviceContext, L"Silvermane_Cloak", L"../../Reference/ShaderFile/Shader_MeshAnim.hlsl", CMaterial::EType::Anim);
+	pMtrl->Set_Texture("g_DiffuseTexture", aiTextureType_DIFFUSE, pTexture, 0);
+	g_pGameInstance->Add_Material(L"Silvermane_Cloak", pMtrl);
+
+	pTexture = CTexture::Create(m_pDevice, m_pDeviceContext);
+	pTexture->NativeConstruct_Prototype(L"../Bin/Resources/Mesh/Silvermane/T_Silvermane_Down_D.tga", 1);
+	pMtrl = CMaterial::Create(m_pDevice, m_pDeviceContext, L"Silvermane_Down", L"../../Reference/ShaderFile/Shader_MeshAnim.hlsl", CMaterial::EType::Anim);
+	pMtrl->Set_Texture("g_DiffuseTexture", aiTextureType_DIFFUSE, pTexture, 0);
+	g_pGameInstance->Add_Material(L"Silvermane_Down", pMtrl);
+
+	pTexture = CTexture::Create(m_pDevice, m_pDeviceContext);
+	pTexture->NativeConstruct_Prototype(L"../Bin/Resources/Mesh/Silvermane/T_Silvermane_Top_D.tga", 1);
+	pMtrl = CMaterial::Create(m_pDevice, m_pDeviceContext, L"Silvermane_Top", L"../../Reference/ShaderFile/Shader_MeshAnim.hlsl", CMaterial::EType::Anim);
+	pMtrl->Set_Texture("g_DiffuseTexture", aiTextureType_DIFFUSE, pTexture, 0);
+	g_pGameInstance->Add_Material(L"Silvermane_Top", pMtrl);
+
+#pragma endregion
+
+
 #pragma region 컴포넌트
 
 	cout << "TestScene_JS 컴포넌트 프로토타입 생성중..." << endl;
@@ -139,6 +178,8 @@ HRESULT CLoader::Ready_Test_JS()
 #pragma region 오브젝트
 
 	cout << "TestScene_JS 오브젝트 프로토타입 생성중..." << endl;
+	if (FAILED(g_pGameInstance->Add_Prototype(L"Plane_Test", CPlane_Test::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
 	if (FAILED(g_pGameInstance->Add_Prototype(L"Silvermane", CSilvermane::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 	if (FAILED(g_pGameInstance->Add_Prototype(L"Camera_Silvermane", CCamera_Silvermane::Create(m_pDevice, m_pDeviceContext))))

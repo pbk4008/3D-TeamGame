@@ -5,7 +5,7 @@
 BEGIN(Engine)
 
 class CTexture;
-class CMaterial final : public CBase 
+class ENGINE_DLL CMaterial final : public CBase 
 {
 public:
 	enum class EType {Static, Anim, Max};
@@ -27,7 +27,7 @@ public:
 	void Set_InputLayout(_uint iPassIndex);
 
 private:
-	CTexture* m_pArrTextures[AI_TEXTURE_TYPE_MAX] = { nullptr };
+	vector<CTexture*> m_vecTextures;
 	wstring m_wstrShaderPath = L"";
 	wstring m_wstrName = L"";
 	EType m_eType = EType::Static;

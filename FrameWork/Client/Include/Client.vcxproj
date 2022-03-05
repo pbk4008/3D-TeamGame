@@ -189,6 +189,7 @@
     <ClInclude Include="..\Headers\Loading.h" />
     <ClInclude Include="..\Headers\MainApp.h" />
     <ClInclude Include="..\Headers\MainCamera.h" />
+    <ClInclude Include="..\Headers\Plane_Test.h" />
     <ClInclude Include="..\Headers\Silvermane.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClInclude>
@@ -206,6 +207,9 @@
     <ClInclude Include="..\Headers\Silvermane_JogRight.h" />
     <ClInclude Include="..\Headers\Silvermane_JogRightPivot180.h" />
     <ClInclude Include="..\Headers\Silvermane_JogRightStart.h" />
+    <ClInclude Include="..\Headers\Silvermane_SprintFwd.h" />
+    <ClInclude Include="..\Headers\Silvermane_SprintFwdStart.h" />
+    <ClInclude Include="..\Headers\Silvermane_SprintFwdStop.h" />
     <ClInclude Include="..\Headers\Stage1.h" />
     <ClInclude Include="..\Headers\State_Silvermane.h" />
     <ClInclude Include="..\Headers\TestObj.h" />
@@ -227,6 +231,7 @@
     <ClCompile Include="..\Codes\Loading.cpp" />
     <ClCompile Include="..\Codes\MainApp.cpp" />
     <ClCompile Include="..\Codes\MainCamera.cpp" />
+    <ClCompile Include="..\Codes\Plane_Test.cpp" />
     <ClCompile Include="..\Codes\Silvermane.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
@@ -244,6 +249,9 @@
     <ClCompile Include="..\Codes\Silvermane_JogRight.cpp" />
     <ClCompile Include="..\Codes\Silvermane_JogRightPivot180.cpp" />
     <ClCompile Include="..\Codes\Silvermane_JogRightStart.cpp" />
+    <ClCompile Include="..\Codes\Silvermane_SprintFwd.cpp" />
+    <ClCompile Include="..\Codes\Silvermane_SprintFwdStart.cpp" />
+    <ClCompile Include="..\Codes\Silvermane_SprintFwdStop.cpp" />
     <ClCompile Include="..\Codes\Stage1.cpp" />
     <ClCompile Include="..\Codes\State_Silvermane.cpp" />
     <ClCompile Include="..\Codes\TestObj.cpp" />

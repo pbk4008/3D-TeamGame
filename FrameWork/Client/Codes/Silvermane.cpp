@@ -5,6 +5,7 @@
 
 #include "Silvermane_Idle.h"
 
+//////////////////// Jog
 #include "Silvermane_JogBwd.h"
 #include "Silvermane_JogBwdStart.h"
 #include "Silvermane_JogBwdPivot180.h"
@@ -21,6 +22,11 @@
 #include "Silvermane_JogRight.h"
 #include "Silvermane_JogRightPivot180.h"
 #include "Silvermane_JogRightStart.h"
+
+//////////////////// Sprint
+#include "Silvermane_SprintFwd.h"
+#include "Silvermane_SprintFwdStart.h"
+#include "Silvermane_SprintFwdStop.h"
 
 //////////////////// 1H
 #include "1H_SowrdAttackNormalR1_01.h"
@@ -65,7 +71,7 @@ _int CSilvermane::Tick(_double _dDeltaTime)
 	if (0 > __super::Tick(_dDeltaTime))
 		return -1;
 
-	m_pStateController->Tick(_dDeltaTime);
+	//m_pStateController->Tick(_dDeltaTime);
 	m_pAnimationController->Tick(_dDeltaTime);
 	m_pModel->Update_CombinedTransformationMatrix(m_pAnimationController->Get_CurAnimIndex(),
 		m_pAnimationController->Is_RootMotion(),
@@ -119,7 +125,10 @@ HRESULT CSilvermane::Ready_Components()
 	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_TEST_JS, L"Model_Silvermane", L"Model", (CComponent**)&m_pModel)))
 		return E_FAIL;
 
-	m_pModel->Add_Material(g_pGameInstance->Get_Material(L"Default_Anim"), 1);
+	m_pModel->Add_Material(g_pGameInstance->Get_Material(L"Silvermane_Top"), 0);
+	m_pModel->Add_Material(g_pGameInstance->Get_Material(L"Silvermane_Down"), 1);
+	m_pModel->Add_Material(g_pGameInstance->Get_Material(L"Silvermane_Cloak"), 2);
+	m_pModel->Add_Material(g_pGameInstance->Get_Material(L"Silvermane_Hair"), 3);
 
 	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_TEST_JS, L"AnimationController", L"AnimationController", (CComponent**)&m_pAnimationController)))
 		return E_FAIL;
@@ -167,6 +176,12 @@ HRESULT CSilvermane::Ready_States()
 	if (FAILED(m_pStateController->Add_State(L"1H_SwordAttackNormalR1_01", C1H_SowrdAttackNormalR1_01::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 	if (FAILED(m_pStateController->Add_State(L"1H_SwordAttackNormalR1_02", C1H_SowrdAttackNormalR1_02::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	if (FAILED(m_pStateController->Add_State(L"SprintFwd", CSilvermane_SprintFwd::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	if (FAILED(m_pStateController->Add_State(L"SprintFwdStart", CSilvermane_SprintFwdStart::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	if (FAILED(m_pStateController->Add_State(L"SprintFwdStop", CSilvermane_SprintFwdStop::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 
 	for (auto& pair : m_pStateController->Get_States())

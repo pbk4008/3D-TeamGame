@@ -77,26 +77,37 @@ _int CSilvermane_Idle::KeyCheck(const _double& TimeDelta)
 
 
 
-
-	if (g_pGameInstance->getkeyDown(DIK_W))
+	if (g_pGameInstance->getkeyPress(DIK_LSHIFT))
 	{
-		m_pStateController->Change_State(L"JogFwdStart");
-		return STATE_CHANGE;
+		if (g_pGameInstance->getkeyPress(DIK_W))
+		{
+			if (FAILED(m_pStateController->Change_State(L"SprintFwdStart")))
+				return E_FAIL;
+			return STATE_CHANGE;
+		}
 	}
-	if (g_pGameInstance->getkeyDown(DIK_S))
+	else
 	{
-		m_pStateController->Change_State(L"JogBwdStart");
-		return STATE_CHANGE;
-	}
-	if (g_pGameInstance->getkeyDown(DIK_D))
-	{
-		m_pStateController->Change_State(L"JogRightStart");
-		return STATE_CHANGE;
-	}
-	if (g_pGameInstance->getkeyDown(DIK_A))
-	{
-		m_pStateController->Change_State(L"JogLeftStart");
-		return STATE_CHANGE;
+		if (g_pGameInstance->getkeyPress(DIK_W))
+		{
+			m_pStateController->Change_State(L"JogFwdStart");
+			return STATE_CHANGE;
+		}
+		if (g_pGameInstance->getkeyPress(DIK_S))
+		{
+			m_pStateController->Change_State(L"JogBwdStart");
+			return STATE_CHANGE;
+		}
+		if (g_pGameInstance->getkeyPress(DIK_D))
+		{
+			m_pStateController->Change_State(L"JogRightStart");
+			return STATE_CHANGE;
+		}
+		if (g_pGameInstance->getkeyPress(DIK_A))
+		{
+			m_pStateController->Change_State(L"JogLeftStart");
+			return STATE_CHANGE;
+		}
 	}
 
 	return _int();
