@@ -60,9 +60,14 @@ HRESULT CAnimationController::Render()
 	return S_OK;
 }
 
-const _int CAnimationController::Get_CurAnimIndex() const
+const _uint CAnimationController::Get_CurAnimIndex() const
 {
 	return m_tBlendDesc.iCurAnimIndex;
+}
+
+const _uint CAnimationController::Get_CurKeyFrameIndex() const
+{
+	return m_iCurKeyFrameIndex;
 }
 
 const ERootOption CAnimationController::Get_RootOption() const

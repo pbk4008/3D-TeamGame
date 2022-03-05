@@ -81,4 +81,4 @@ using namespace Engine;
 
 #define NO_EVENT 0
 #define OBJ_DEAD 1
-#define CHANGE_STATE 500
+#define STATE_CHANGE 500

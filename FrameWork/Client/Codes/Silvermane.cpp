@@ -22,6 +22,10 @@
 #include "Silvermane_JogRightPivot180.h"
 #include "Silvermane_JogRightStart.h"
 
+//////////////////// 1H
+#include "1H_SowrdAttackNormalR1_01.h"
+#include "1H_SowrdAttackNormalR1_02.h"
+
 #pragma endregion
 
 
@@ -38,9 +42,7 @@ CSilvermane::CSilvermane(const CSilvermane& _rhs)
 HRESULT CSilvermane::NativeConstruct_Prototype()
 {
 	if (FAILED(__super::NativeConstruct_Prototype()))
-	{
 		return E_FAIL;
-	}
 
 	return S_OK;
 }
@@ -48,18 +50,12 @@ HRESULT CSilvermane::NativeConstruct_Prototype()
 HRESULT CSilvermane::NativeConstruct(void* _pArg)
 {
 	if (FAILED(__super::NativeConstruct(_pArg)))
-	{
 		return E_FAIL;
-	}
 
 	if (FAILED(Ready_Components()))
-	{
 		return E_FAIL;
-	}
 	if (FAILED(Ready_States()))
-	{
 		return E_FAIL;
-	}
 
 	return S_OK;
 }
@@ -67,9 +63,7 @@ HRESULT CSilvermane::NativeConstruct(void* _pArg)
 _int CSilvermane::Tick(_double _dDeltaTime)
 {
 	if (0 > __super::Tick(_dDeltaTime))
-	{
 		return -1;
-	}
 
 	m_pStateController->Tick(_dDeltaTime);
 	m_pAnimationController->Tick(_dDeltaTime);
@@ -83,9 +77,7 @@ _int CSilvermane::Tick(_double _dDeltaTime)
 _int CSilvermane::LateTick(_double _dDeltaTime)
 {
 	if (0 > __super::LateTick(_dDeltaTime))
-	{
 		return -1;
-	}
 
 	m_pStateController->LateTick(_dDeltaTime);
 
@@ -96,9 +88,7 @@ _int CSilvermane::LateTick(_double _dDeltaTime)
 HRESULT CSilvermane::Render()
 {
 	if (FAILED(__super::Render()))
-	{
 		return E_FAIL;
-	}
 
 	_matrix smatWorld, smatView, smatProj;
 	smatWorld = XMMatrixTranspose(m_pTransform->Get_WorldMatrix());
@@ -118,9 +108,7 @@ HRESULT CSilvermane::Render()
 
 #ifdef _DEBUG
 	if (FAILED(m_pAnimationController->Render()))
-	{
 		return E_FAIL;
-	}
 #endif
 
 	return S_OK;
@@ -129,24 +117,18 @@ HRESULT CSilvermane::Render()
 HRESULT CSilvermane::Ready_Components()
 {
 	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_TEST_JS, L"Model_Silvermane", L"Model", (CComponent**)&m_pModel)))
-	{
 		return E_FAIL;
-	}
 
 	m_pModel->Add_Material(g_pGameInstance->Get_Material(L"Default_Anim"), 1);
 
 	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_TEST_JS, L"AnimationController", L"AnimationController", (CComponent**)&m_pAnimationController)))
-	{
 		return E_FAIL;
-	}
 	m_pAnimationController->Set_GameObject(this);
 	m_pAnimationController->Set_Model(m_pModel);
 	m_pAnimationController->Set_Transform(m_pTransform);
 
 	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_TEST_JS, L"StateController", L"StateController", (CComponent**)&m_pStateController)))
-	{
 		return E_FAIL;
-	}
 	m_pStateController->Set_GameObject(this);
 
 	return S_OK;
@@ -155,61 +137,37 @@ HRESULT CSilvermane::Ready_Components()
 HRESULT CSilvermane::Ready_States()
 {
 	if (FAILED(m_pStateController->Add_State(L"Idle", CSilvermane_Idle::Create(m_pDevice, m_pDeviceContext))))
-	{
 		return E_FAIL;
-	}
 	if (FAILED(m_pStateController->Add_State(L"JogBwd", CSilvermane_JogBwd::Create(m_pDevice, m_pDeviceContext))))
-	{
 		return E_FAIL;
-	}
 	if (FAILED(m_pStateController->Add_State(L"JogBwdStart", CSilvermane_JogBwdStart::Create(m_pDevice, m_pDeviceContext))))
-	{
 		return E_FAIL;
-	}
 	if (FAILED(m_pStateController->Add_State(L"JogBwdPivot180", CSilvermane_JogBwdPivot180::Create(m_pDevice, m_pDeviceContext))))
-	{
 		return E_FAIL;
-	}
 	if (FAILED(m_pStateController->Add_State(L"JogFwd", CSilvermane_JogFwd::Create(m_pDevice, m_pDeviceContext))))
-	{
 		return E_FAIL;
-	}
 	if (FAILED(m_pStateController->Add_State(L"JogFwdPivot180", CSilvermane_JogFwdPivot180::Create(m_pDevice, m_pDeviceContext))))
-	{
 		return E_FAIL;
-	}
 	if (FAILED(m_pStateController->Add_State(L"JogFwdStart", CSilvermane_JogFwdStart::Create(m_pDevice, m_pDeviceContext))))
-	{
 		return E_FAIL;
-	}
 	if (FAILED(m_pStateController->Add_State(L"JogFwdStop", CSilvermane_JogFwdStop::Create(m_pDevice, m_pDeviceContext))))
-	{
 		return E_FAIL;
-	}
 	if (FAILED(m_pStateController->Add_State(L"JogLeft", CSilvermane_JogLeft::Create(m_pDevice, m_pDeviceContext))))
-	{
 		return E_FAIL;
-	}
 	if (FAILED(m_pStateController->Add_State(L"JogLeftPivot180", CSilvermane_JogLeftPivot180::Create(m_pDevice, m_pDeviceContext))))
-	{
 		return E_FAIL;
-	}
 	if (FAILED(m_pStateController->Add_State(L"JogLeftStart", CSilvermane_JogLeftStart::Create(m_pDevice, m_pDeviceContext))))
-	{
 		return E_FAIL;
-	}
 	if (FAILED(m_pStateController->Add_State(L"JogRight", CSilvermane_JogRight::Create(m_pDevice, m_pDeviceContext))))
-	{
 		return E_FAIL;
-	}
 	if (FAILED(m_pStateController->Add_State(L"JogRightPivot180", CSilvermane_JogRightPivot180::Create(m_pDevice, m_pDeviceContext))))
-	{
 		return E_FAIL;
-	}
 	if (FAILED(m_pStateController->Add_State(L"JogRightStart", CSilvermane_JogRightStart::Create(m_pDevice, m_pDeviceContext))))
-	{
 		return E_FAIL;
-	}
+	if (FAILED(m_pStateController->Add_State(L"1H_SwordAttackNormalR1_01", C1H_SowrdAttackNormalR1_01::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	if (FAILED(m_pStateController->Add_State(L"1H_SwordAttackNormalR1_02", C1H_SowrdAttackNormalR1_02::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
 
 	for (auto& pair : m_pStateController->Get_States())
 	{
@@ -244,7 +202,7 @@ CGameObject* CSilvermane::Clone(void* _pArg)
 	CSilvermane* pInstance = new CSilvermane(*this);
 	if (FAILED(pInstance->NativeConstruct(_pArg)))
 	{
-		MSGBOX("CTestObj Clone Fail");
+		MSGBOX("CSilvermane Clone Fail");
 		Safe_Release(pInstance);
 	}
 	return pInstance;

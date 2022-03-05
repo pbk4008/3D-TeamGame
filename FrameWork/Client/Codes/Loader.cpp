@@ -115,9 +115,11 @@ HRESULT CLoader::Ready_Stage1()
 
 HRESULT CLoader::Ready_Test_JS()
 {
+	cout << "TestScene_JS 로딩 시작..." << endl;
 
 #pragma region 컴포넌트
 
+	cout << "TestScene_JS 컴포넌트 프로토타입 생성중..." << endl;
 	_matrix matPivot = XMMatrixIdentity();
 	matPivot = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(180.f));
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_TEST_JS, L"Model_Silvermane", CModel::Create(m_pDevice, m_pDeviceContext,
@@ -136,6 +138,7 @@ HRESULT CLoader::Ready_Test_JS()
 #pragma endregion
 #pragma region 오브젝트
 
+	cout << "TestScene_JS 오브젝트 프로토타입 생성중..." << endl;
 	if (FAILED(g_pGameInstance->Add_Prototype(L"Silvermane", CSilvermane::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 	if (FAILED(g_pGameInstance->Add_Prototype(L"Camera_Silvermane", CCamera_Silvermane::Create(m_pDevice, m_pDeviceContext))))
@@ -143,8 +146,7 @@ HRESULT CLoader::Ready_Test_JS()
 
 #pragma endregion
 
-
-	cout << "TestScene_JS 로딩 완료" << endl;
+	cout << "TestScene_JS 로딩 완료..." << endl;
 	return S_OK;
 }
 
