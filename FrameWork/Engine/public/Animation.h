@@ -13,16 +13,17 @@ public:
 	virtual ~CAnimation() = default;
 
 public:
-	HRESULT NativeConstruct(char* pName, _double Duration, _double PlaySpeed);
+	HRESULT NativeConstruct(char* pName, _double Duration, _double PlaySpeed, const _int _iIndex);
 	HRESULT Add_Channel(class CChannel* pChannel);
 	HRESULT Update_TransformationMatrix(_double TimeDelta, const _bool _isLoop);
 public:
 	CChannel* Get_Channel(const char* pChannelName) const;
 	const char* Get_Name() const { return m_szName; }
 	const _uint Get_Index() const { return m_iIndex; }
-	vector <class CChannel*>* Get_Channels() { return &m_Channels; }
+	vector <class CChannel*>& Get_Channels() { return m_Channels; }
 	const _bool Is_Finished() const { return m_isFinished; }
 	CSaveManager::ANIMDATA& SetSaveAnimData();
+
 public:
 	void Reset_Animation();
 private:
@@ -40,7 +41,7 @@ private:
 	vector<class CChannel*>			m_Channels; 
 	typedef vector<class CChannel*>	CHANNELS;
 public:
-	static CAnimation* Create(char* pName, _double Duration, _double PlaySpeed);
+	static CAnimation* Create(char* pName, _double Duration, _double PlaySpeed, const _int _iIndex);
 	CAnimation* Clone();
 	virtual void Free();
 };

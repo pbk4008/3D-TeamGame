@@ -160,9 +160,9 @@ HRESULT CModel::NativeConstruct(void * pArg)
 	_uint iNumAnimation = m_pScene->mNumAnimations;
 	for (_uint i = 0; i < iNumAnimation; i++)
 	{
-		vector<class CChannel*>* pChannels = m_Animations[i]->Get_Channels();
+		vector<class CChannel*>& pChannels = m_Animations[i]->Get_Channels();
 
-		for (auto& pChannel : *pChannels)
+		for (auto& pChannel : pChannels)
 		{
 			CHierarchyNode* pHierarchyNode = Find_HierarchyNode(pChannel->Get_Name());
 			if (!pHierarchyNode)
@@ -216,6 +216,17 @@ HRESULT CModel::Update_CombinedTransformationMatrix(_double TimeDelta)
 	for (auto& pHierarchyNode : m_HierarchyNodes)
 	{
 		pHierarchyNode->Update_CombinedTransformationMatrix(m_iCurrentAnimation);
+	}
+
+	return S_OK;
+}
+
+HRESULT CModel::Update_CombinedTransformationMatrix(const _int _iCurAnimIndex, const _bool _isRootMotion, const ERootOption _eRootOption)
+{
+	/* 렌더링해야할 CombinedTransfromkationMatrix를 만든다. */
+	for (auto& pHierarchyNode : m_HierarchyNodes)
+	{
+		pHierarchyNode->Update_CombinedTransformationMatrix(_iCurAnimIndex, _isRootMotion, _eRootOption);
 	}
 
 	return S_OK;
@@ -496,7 +507,7 @@ HRESULT CModel::Create_Animation()
 	{
 		aiAnimation*	pAnim = m_pScene->mAnimations[i];
 
-		CAnimation*		pAnimation = CAnimation::Create(pAnim->mName.data, pAnim->mDuration, pAnim->mTicksPerSecond);
+		CAnimation*		pAnimation = CAnimation::Create(pAnim->mName.data, pAnim->mDuration, pAnim->mTicksPerSecond, i);
 		if (nullptr == pAnimation)
 			return E_FAIL;
 
@@ -691,7 +702,6 @@ HRESULT CModel::Save_AnimModel()
 		return E_FAIL;
 
 	RELEASE_INSTANCE(CSaveManager);
-	dws
 
 	return S_OK;
 }

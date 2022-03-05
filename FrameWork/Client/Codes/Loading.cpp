@@ -27,8 +27,8 @@ HRESULT CLoading::NativeConstruct(SCENEID eID)
 
 	m_eSceneID = eID;
 
-	if (FAILED(Ready_GameObject()))
-		return E_FAIL;
+	//if (FAILED(Ready_GameObject()))
+	//	return E_FAIL;
 
 	m_pLoader = CLoader::Create(m_pDevice, m_pDeviceContext, m_eSceneID);
 

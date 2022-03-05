@@ -120,7 +120,7 @@ public: /* For.Light_Manager */
 
 public: /* For.Font_Manager */
 	HRESULT Add_Font(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext, const wstring& pFontTag, const wstring& pFontPath);
-	HRESULT Render_Font(const wstring& pFontTag, _fvector vColor, const wstring& pString);
+	HRESULT Render_Font(const wstring& pFontTag, _fvector vColor, const wstring& pString, const _float2& _vPos = { 0.f, 0.f }, const _float2& _vScale = { 1.f, 1.f });
 
 public: /* For.Frustum */
 	_bool isIn_WorldFrustum(_fvector vPosition, _float fRange = 0.f);

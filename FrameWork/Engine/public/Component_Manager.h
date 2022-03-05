@@ -20,6 +20,7 @@
 #include "VIBuffer_PointInstance_Explosion.h"
 #include "VIBuffer_Plane.h"
 #include "StateController.h"
+#include "AnimationController.h"
 
 BEGIN(Engine)
 

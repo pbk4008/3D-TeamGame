@@ -3,11 +3,12 @@
 #include "Component.h"
 
 BEGIN(Engine)
-class CAnimation;
-class CHierarchyNode;
 class CTexture;
-class CAnimation;
+class CMeshContainer;
 class CHierarchyNode;
+class CAnimation;
+
+
 class ENGINE_DLL CModel final : public CComponent
 {
 public:
@@ -18,13 +19,9 @@ private:
 	virtual ~CModel() = default;
 
 public:
-	_uint Get_NumMeshContainer() {
-		return (_uint)m_MeshContainers.size();
-	}
+	_uint Get_NumMeshContainer() { return (_uint)m_MeshContainers.size(); }
 	CHierarchyNode* Get_BoneMatrix(const char* pBoneName);
-	_fmatrix Get_PivotMatrix() {
-		return XMLoadFloat4x4(&m_PivotMatrix);
-	}
+	_fmatrix Get_PivotMatrix() { return XMLoadFloat4x4(&m_PivotMatrix); }
 	TYPE getType() { return m_eMeshType; }
 	vector<CHierarchyNode*>& Get_HierachyNodes() { return m_HierarchyNodes; }
 	vector<CAnimation*>& Get_Animations() { return m_Animations; }
@@ -35,15 +32,13 @@ public:
 public:
 	HRESULT SetUp_ValueOnShader(const char* pConstantName, void* pData, _uint iSize);
 	HRESULT SetUp_TextureOnShader(const char* pConstantName, _uint iMeshContainerIndex, aiTextureType eType);
-	void SetUp_AnimationIndex(_uint iAnimationIndex) {
-		m_iCurrentAnimation = iAnimationIndex;
-	}
+	void SetUp_AnimationIndex(_uint iAnimationIndex) { m_iCurrentAnimation = iAnimationIndex; }
+
 	HRESULT Update_CombinedTransformationMatrix(_double TimeDelta);
+	HRESULT Update_CombinedTransformationMatrix(const _int _iCurAnimIndex, const _bool _isRootMotion, const ERootOption _eRootOption = ERootOption::XYZ);
 	HRESULT Render(_uint iMeshContainerIndex, _uint iPassIndex);
 public:
-	vector<vector<class CMeshContainer*>> Get_MeshContainer() {
-		return m_MeshContainers;
-	}
+	vector<vector<CMeshContainer*>> Get_MeshContainer() { return m_MeshContainers; }
 private:
 	const aiScene*		m_pScene = nullptr;
 	Assimp::Importer	m_Importer;
@@ -59,17 +54,17 @@ private:
 	ID3DX11Effect* m_pEffect = nullptr;
 	vector<EFFECTDESC*>	m_PassDesc;
 private:
-	vector<vector<class CMeshContainer*>> m_MeshContainers;
-	typedef vector<vector<class CMeshContainer*>>	MESHCONTAINERS;
+	vector<vector<CMeshContainer*>> m_MeshContainers;
+	typedef vector<vector<CMeshContainer*>>	MESHCONTAINERS;
 
 	vector<MESHMATERIAL*>				m_Materials;
 	typedef vector<MESHMATERIAL*>		MESHMATERIALS;
 
-	vector<class CHierarchyNode*>			m_HierarchyNodes;
-	typedef vector<class CHierarchyNode*>	HIERARCHYNODES;
+	vector<CHierarchyNode*>			m_HierarchyNodes;
+	typedef vector<CHierarchyNode*>	HIERARCHYNODES;
 
-	vector<class CAnimation*>				m_Animations;
-	typedef vector<class CAnimation*>		ANIMATIONS;
+	vector<CAnimation*>				m_Animations;
+	typedef vector<CAnimation*>		ANIMATIONS;
 public:
 	CHierarchyNode* Find_HierarchyNode(const char* pName);
 	HRESULT Save_StaticModel(const wstring& pFilePath);

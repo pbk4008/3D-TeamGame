@@ -61,8 +61,6 @@ HRESULT CSilvermane::NativeConstruct(void* _pArg)
 		return E_FAIL;
 	}
 
-	
-
 	return S_OK;
 }
 
@@ -73,6 +71,12 @@ _int CSilvermane::Tick(_double _dDeltaTime)
 		return -1;
 	}
 
+	m_pStateController->Tick(_dDeltaTime);
+	m_pAnimationController->Tick(_dDeltaTime);
+	m_pModel->Update_CombinedTransformationMatrix(m_pAnimationController->Get_CurAnimIndex(),
+		m_pAnimationController->Is_RootMotion(),
+		m_pAnimationController->Get_RootOption());
+
 	return _int();
 }
 
@@ -82,6 +86,8 @@ _int CSilvermane::LateTick(_double _dDeltaTime)
 	{
 		return -1;
 	}
+
+	m_pStateController->LateTick(_dDeltaTime);
 
 	m_pRenderer->Add_RenderGroup(CRenderer::RENDER_NONALPHA, this);
 	return _int();
@@ -103,15 +109,19 @@ HRESULT CSilvermane::Render()
 	m_pModel->SetUp_ValueOnShader("g_ViewMatrix", &smatView, sizeof(_matrix));
 	m_pModel->SetUp_ValueOnShader("g_ProjMatrix", &smatProj, sizeof(_matrix));
 
-	//if (FAILED(m_pModel->Bind_Buffers()))
-	//	return E_FAIL;
-
 	for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
 	{
 		m_pModel->SetUp_TextureOnShader("g_DiffuseTexture", i, aiTextureType_DIFFUSE);
 
 		m_pModel->Render(i, 1);
 	}
+
+#ifdef _DEBUG
+	if (FAILED(m_pAnimationController->Render()))
+	{
+		return E_FAIL;
+	}
+#endif
 
 	return S_OK;
 }
@@ -122,6 +132,14 @@ HRESULT CSilvermane::Ready_Components()
 	{
 		return E_FAIL;
 	}
+
+	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_TEST_JS, L"AnimationController", L"AnimationController", (CComponent**)&m_pAnimationController)))
+	{
+		return E_FAIL;
+	}
+	m_pAnimationController->Set_GameObject(this);
+	m_pAnimationController->Set_Model(m_pModel);
+	m_pAnimationController->Set_Transform(m_pTransform);
 
 	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_TEST_JS, L"StateController", L"StateController", (CComponent**)&m_pStateController)))
 	{
@@ -197,7 +215,9 @@ HRESULT CSilvermane::Ready_States()
 		static_cast<CState_Silvermane*>(pair.second)->Set_Silvermane(this);
 		static_cast<CState_Silvermane*>(pair.second)->Set_Transform(m_pTransform);
 		static_cast<CState_Silvermane*>(pair.second)->Set_Model(m_pModel);
+		static_cast<CState_Silvermane*>(pair.second)->Set_AnimationController(m_pAnimationController);
 	}
+	m_pStateController->Change_State(L"Idle");
 	return S_OK;
 }
 
@@ -231,6 +251,7 @@ CGameObject* CSilvermane::Clone(void* _pArg)
 void CSilvermane::Free()
 {
 	Safe_Release(m_pStateController);
+	Safe_Release(m_pAnimationController);
 	Safe_Release(m_pModel);
 
 	__super::Free();

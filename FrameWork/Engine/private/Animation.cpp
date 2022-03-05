@@ -19,11 +19,12 @@ CAnimation::CAnimation(const CAnimation& rhs)
 		m_Channels.push_back(pPrototypeChannel->Clone());
 }
 
-HRESULT CAnimation::NativeConstruct(char * pName, _double Duration, _double PlaySpeed)
+HRESULT CAnimation::NativeConstruct(char * pName, _double Duration, _double PlaySpeed, const _int _iIndex)
 {
 	strcpy_s(m_szName, pName);
 	m_Duration = Duration;
 	m_PlaySpeed = PlaySpeed;
+	m_iIndex = _iIndex;
 
 	return S_OK;
 }
@@ -179,11 +180,11 @@ void CAnimation::Reset_Animation()
 		pChannel->Set_CurrentKeyFrameIndex(0);
 }
 
-CAnimation * CAnimation::Create(char * pName, _double Duration, _double PlaySpeed)
+CAnimation * CAnimation::Create(char * pName, _double Duration, _double PlaySpeed, const _int _iIndex)
 {
 	CAnimation*		pInstance = new CAnimation();
 
-	if (FAILED(pInstance->NativeConstruct(pName, Duration, PlaySpeed)))
+	if (FAILED(pInstance->NativeConstruct(pName, Duration, PlaySpeed, _iIndex)))
 	{
 		MSGBOX("Failed to Creating CAnimation");
 		Safe_Release(pInstance);

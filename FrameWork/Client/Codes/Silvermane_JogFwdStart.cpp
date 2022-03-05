@@ -60,11 +60,10 @@ HRESULT CSilvermane_JogFwdStart::EnterState()
 		return E_FAIL;
 	}
 
-	/*
-	static_cast<CSilvermane*>(m_pGameObject)->Set_CurrentAnimation(m_pModel->SetUp_NextAnimation("SK_Silvermane.ao|A_Loco_Jog_Fwd_Start_Player"));
-	m_pModel->Set_RootMotion(true, ERootOption::XYZ);
-	m_pModel->Set_LoopNextAnim(false);
-	*/
+	
+	m_pAnimationController->SetUp_NextAnimation("SK_Silvermane.ao|A_Loco_Jog_Fwd_Start_Player", false);
+	m_pAnimationController->Set_RootMotion(true, true, ERootOption::XYZ);
+	
 
 	return S_OK;
 }
@@ -83,7 +82,7 @@ _int CSilvermane_JogFwdStart::KeyCheck(const _double& TimeDelta)
 {
 	if (g_pGameInstance->getkeyPress(DIK_UP))
 	{
-		//if (m_pModel->Is_AnimationFinished())
+		if (m_pAnimationController->Is_Finished())
 		{
 			if (FAILED(m_pStateController->Change_State(L"JogFwd")))
 			{

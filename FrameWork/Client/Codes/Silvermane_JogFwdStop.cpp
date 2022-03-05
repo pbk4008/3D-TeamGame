@@ -60,11 +60,10 @@ HRESULT CSilvermane_JogFwdStop::EnterState()
 		return E_FAIL;
 	}
 
-	/*
-	static_cast<CSilvermane*>(m_pGameObject)->Set_CurrentAnimation(m_pModel->SetUp_NextAnimation("SK_Silvermane.ao|A_Loco_Jog_Fwd_Stop_Player"));
-	m_pModel->Set_RootMotion(true, ERootOption::XYZ);
-	m_pModel->Set_LoopNextAnim(false);
-	*/
+	
+	m_pAnimationController->SetUp_NextAnimation("SK_Silvermane.ao|A_Loco_Jog_Fwd_Stop_Player", false);
+	m_pAnimationController->Set_RootMotion(true, true, ERootOption::XYZ);
+	
 
 	return S_OK;
 }
@@ -111,7 +110,7 @@ _int CSilvermane_JogFwdStop::KeyCheck(const _double& TimeDelta)
 	}
 	else
 	{
-		//if (m_pModel->Is_AnimationFinished())
+		if (m_pAnimationController->Is_Finished())
 		{
 			if (FAILED(m_pStateController->Change_State(L"Idle")))
 			{
