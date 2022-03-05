@@ -7,6 +7,7 @@ class CTexture;
 class CMeshContainer;
 class CHierarchyNode;
 class CAnimation;
+class CMaterial;
 
 
 class ENGINE_DLL CModel final : public CComponent
@@ -30,6 +31,8 @@ public:
 	HRESULT NativeConstruct_Prototype(const wstring& pMeshFilePath, const wstring& pShaderFilePath, TYPE eType);
 	HRESULT NativeConstruct(void* pArg);
 public:
+	HRESULT Add_Material(CMaterial* _pMtrl, const _uint _iMtrlIndex);
+
 	HRESULT SetUp_ValueOnShader(const char* pConstantName, void* pData, _uint iSize);
 	HRESULT SetUp_TextureOnShader(const char* pConstantName, _uint iMeshContainerIndex, aiTextureType eType);
 	void SetUp_AnimationIndex(_uint iAnimationIndex) { m_iCurrentAnimation = iAnimationIndex; }
@@ -59,6 +62,7 @@ private:
 
 	vector<MESHMATERIAL*>				m_Materials;
 	typedef vector<MESHMATERIAL*>		MESHMATERIALS;
+	vector<CMaterial*>					m_vecMaterials;
 
 	vector<CHierarchyNode*>			m_HierarchyNodes;
 	typedef vector<CHierarchyNode*>	HIERARCHYNODES;

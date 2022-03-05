@@ -16,6 +16,7 @@
 #include "SaveManager.h"
 #include "SoundMgr.h"
 #include "TextureManager.h"
+#include "Material_Manager.h"
 #include "PhysicsXSystem.h"
 
 BEGIN(Engine)
@@ -131,6 +132,10 @@ public:/* For.TextureManager*/
 	HRESULT Delete_Texture();
 	vector<ID3D11ShaderResourceView*>* Get_Texture(const wstring& pTextureTag);
 
+public: /* For.Material_Manager */
+	HRESULT Add_Material(const wstring& _wstrMtrlTag, CMaterial* _pMtrl);
+	CMaterial* Get_Material(const wstring& _wstrMtrlTag = L"Default");
+
 public:/* For.SaveManager*/
 	template<typename T>
 	HRESULT SaveFile(void* pSaveData, const wstring& pFilePath)
@@ -161,6 +166,7 @@ private:
 	CFrustum*						m_pFrustum = nullptr;
 	CFont_Manager*				m_pFont_Manager = nullptr;
 	CTextureManager*				m_pTextureManager = nullptr;
+	CMaterial_Manager*			m_pMaterial_Manager = nullptr;
 	CSaveManager*				m_pSaveManager = nullptr;
 	CSoundMgr*					m_pSoundManager = nullptr;
 	CPhysicsXSystem*				m_pPhysicSystem = nullptr;

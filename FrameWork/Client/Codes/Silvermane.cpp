@@ -113,7 +113,7 @@ HRESULT CSilvermane::Render()
 	{
 		m_pModel->SetUp_TextureOnShader("g_DiffuseTexture", i, aiTextureType_DIFFUSE);
 
-		m_pModel->Render(i, 1);
+		m_pModel->Render(i, 0);
 	}
 
 #ifdef _DEBUG
@@ -132,6 +132,8 @@ HRESULT CSilvermane::Ready_Components()
 	{
 		return E_FAIL;
 	}
+
+	m_pModel->Add_Material(g_pGameInstance->Get_Material(L"Default_Anim"), 1);
 
 	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_TEST_JS, L"AnimationController", L"AnimationController", (CComponent**)&m_pAnimationController)))
 	{

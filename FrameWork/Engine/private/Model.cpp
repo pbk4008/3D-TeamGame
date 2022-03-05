@@ -1,4 +1,6 @@
 #include "..\public\Model.h"
+
+#include "GameInstance.h"
 #include "MeshContainer.h"
 #include "HierarchyNode.h"
 #include "Texture.h"
@@ -7,6 +9,7 @@
 #include "Component_Manager.h"
 #include "TextureManager.h"
 #include "SaveManager.h"
+#include "Material.h"
 
 CModel::CModel(ID3D11Device * pDevice, ID3D11DeviceContext * pDeviceContext)
 	: CComponent(pDevice, pDeviceContext)
@@ -33,6 +36,14 @@ CModel::CModel(const CModel& rhs)
 	{
 		for (_uint i = 0; i < AI_TEXTURE_TYPE_MAX; ++i)
 			Safe_AddRef(pMaterial->pMeshTexture[i]);
+	}
+	m_vecMaterials.resize(rhs.m_vecMaterials.size());
+	for (_uint i = 0; i < m_vecMaterials.size(); ++i)
+	{
+		if (rhs.m_vecMaterials[i])
+		{
+			Add_Material(rhs.m_vecMaterials[i], i);
+		}
 	}
 	
 	m_MeshContainers.resize((_uint)rhs.m_Materials.size());
@@ -180,8 +191,29 @@ HRESULT CModel::NativeConstruct(void * pArg)
 	return S_OK;
 }
 
+HRESULT CModel::Add_Material(CMaterial* _pMtrl, const _uint _iMtrlIndex)
+{
+	if (_iMtrlIndex < m_vecMaterials.size())
+	{
+		if (m_vecMaterials[_iMtrlIndex])
+			Safe_Release(m_vecMaterials[_iMtrlIndex]);
+	}
+
+	m_vecMaterials[_iMtrlIndex] = _pMtrl;
+	Safe_AddRef(_pMtrl);
+	return S_OK;
+}
+
 HRESULT CModel::SetUp_ValueOnShader(const char* pConstantName, void* pData, _uint iSize)
 {
+	for (auto& pMtrl : m_vecMaterials)
+	{
+		if (pMtrl)
+		{
+			pMtrl->SetUp_ValueOnShader(pConstantName, pData, iSize);
+		}
+	}
+
 	if (!m_pEffect)
 		return E_FAIL;
 
@@ -239,6 +271,28 @@ HRESULT CModel::Render(_uint iMeshContainerIndex, _uint iPassIndex)
 
 	for (auto& pMeshContainer : m_MeshContainers[iMeshContainerIndex])
 	{
+		_uint iMtrlIndex = pMeshContainer->getMaterialIndex();
+		if (m_vecMaterials[iMtrlIndex])
+		{
+			m_vecMaterials[iMtrlIndex]->Set_InputLayout(iPassIndex);
+
+			if (m_eMeshType == TYPE_ANIM)
+			{
+				_matrix		BoneMatrices[256];
+				ZeroMemory(BoneMatrices, sizeof(_matrix) * 256);
+
+				pMeshContainer->SetUp_BoneMatrices(BoneMatrices, XMLoadFloat4x4(&m_PivotMatrix));
+
+				if (FAILED(m_vecMaterials[iMtrlIndex]->SetUp_ValueOnShader("g_BoneMatrices", BoneMatrices, sizeof(_matrix) * 256)))
+					return E_FAIL;
+			}
+
+			m_vecMaterials[iMtrlIndex]->Render(iPassIndex);
+			pMeshContainer->Render();
+
+			return S_OK;
+		}
+
 		if (m_eMeshType == TYPE_ANIM)
 		{
 			_matrix		BoneMatrices[256];
@@ -264,6 +318,7 @@ HRESULT CModel::Create_Materials()
 		return E_FAIL;
 
 	m_Materials.reserve(m_pScene->mNumMaterials);
+	m_vecMaterials.resize(m_pScene->mNumMaterials);
 
 	char		szMeshFilePath[MAX_PATH] = "";
 
@@ -317,6 +372,14 @@ HRESULT CModel::Create_Materials()
 		}		
 
 		m_Materials.push_back(pMeshMaterial);
+		if (TYPE_ANIM == m_eMeshType)
+		{
+			//m_vecMaterials.emplace_back(g_pGameInstance->Get_Material(L"Default"));
+		}
+		else
+		{
+			//m_vecMaterials.emplace_back(g_pGameInstance->Get_Material(L"Default_Anim"));
+		}
 	}
 
 	return S_OK;
@@ -793,6 +856,12 @@ void CModel::Free()
 		Safe_Release(pNode);
 
 	m_HierarchyNodes.clear();
+
+	for (auto& pMtrl : m_vecMaterials)
+	{
+		Safe_Release(pMtrl);
+	}
+	m_vecMaterials.clear();
 
 	for (auto& pMaterial : m_Materials)
 	{

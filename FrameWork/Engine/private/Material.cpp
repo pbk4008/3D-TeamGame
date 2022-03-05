@@ -10,8 +10,10 @@ CMaterial::CMaterial(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContex
 	Safe_AddRef(m_pDeviceContext);
 }
 
-HRESULT CMaterial::Native_Construct(const wstring& _wstrShaderFilePath, const EType _eType)
+HRESULT CMaterial::Native_Construct(const wstring& _wstrName, const wstring& _wstrShaderFilePath, const EType _eType)
 {
+	m_wstrName = _wstrName;
+
 	switch (_eType)
 	{
 	case EType::Static:
@@ -46,7 +48,7 @@ HRESULT CMaterial::Native_Construct(const wstring& _wstrShaderFilePath, const ET
 
 	m_wstrShaderPath = _wstrShaderFilePath;
 	m_eType = _eType;
-	return E_NOTIMPL;
+	return S_OK;
 }
 
 HRESULT CMaterial::Render(const _uint _iPassIndex)
@@ -139,7 +141,12 @@ HRESULT CMaterial::SetUp_TextureOnShader(const string _strConstantName, const ai
 	return S_OK;
 }
 
-HRESULT CMaterial::Set_Texture(const string& _strConstantName, CTexture* _pTexture, const aiTextureType _eTextureType)
+const wstring& CMaterial::Get_Name() const
+{
+	return m_wstrName;
+}
+
+HRESULT CMaterial::Set_Texture(const string& _strConstantName, const aiTextureType _eTextureType, CTexture* _pTexture, const _uint _iTextureIndex)
 {
 	if (m_pArrTextures[_eTextureType])
 	{
@@ -147,7 +154,7 @@ HRESULT CMaterial::Set_Texture(const string& _strConstantName, CTexture* _pTextu
 	}
 	m_pArrTextures[_eTextureType] = _pTexture;
 
-	SetUp_TextureOnShader(_strConstantName.c_str(), _eTextureType);
+	SetUp_TextureOnShader(_strConstantName.c_str(), _eTextureType, _iTextureIndex);
 	return S_OK;
 }
 
@@ -156,10 +163,10 @@ void CMaterial::Set_InputLayout(_uint iPassIndex)
 	m_pDeviceContext->IASetInputLayout(m_vecEffectDescs[iPassIndex]->pInputLayout);
 }
 
-CMaterial* CMaterial::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext, const wstring& _wstrShaderFilePath, const EType _eType)
+CMaterial* CMaterial::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext, const wstring& _wstrName, const wstring& _wstrShaderFilePath, const EType _eType)
 {
 	CMaterial* pInstance = new CMaterial(_pDevice, _pDeviceContext);
-	if (FAILED(pInstance->Native_Construct(_wstrShaderFilePath, _eType)))
+	if (FAILED(pInstance->Native_Construct(_wstrName, _wstrShaderFilePath, _eType)))
 	{
 		MSGBOX("CMaterial Create Fail");
 		Safe_Release(pInstance);
