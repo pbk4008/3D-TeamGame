@@ -150,7 +150,7 @@ HRESULT CLoader::Ready_Test_JS()
 
 #pragma region 府家胶
 
-	if(FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"Plane_Texture", L"../Bin/Resources/Texture/Terrain/Plane_Default.png")))
+	if(FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"Plane_Texture", L"../Bin/Resources/Texture/Terrain/Plane_Default.tga")))
 		return E_FAIL;
 
 	cout << "TestScene_JS 府家胶 积己吝..." << endl;

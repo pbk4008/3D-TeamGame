@@ -96,7 +96,7 @@ _int CSilvermane::LateTick(_double _dDeltaTime)
 
 	m_pStateController->LateTick(_dDeltaTime);
 
-	m_pRenderer->Add_RenderGroup(CRenderer::RENDER_NONALPHA, this);
+	m_pRenderer->Add_RenderGroup(CRenderer::RENDER_ALPHA, this);
 	return _int();
 }
 
