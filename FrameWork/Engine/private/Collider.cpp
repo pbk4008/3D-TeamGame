@@ -45,6 +45,7 @@ HRESULT CCollider::NativeConstruct(void * pArg)
 	m_eType = (*(CPhysicsXSystem::ACTORTYPE*)pArg);
 
 	m_vColor = _float4(1.f, 0.f, 0.f, 1.f);
+
 	return S_OK;
 }
 

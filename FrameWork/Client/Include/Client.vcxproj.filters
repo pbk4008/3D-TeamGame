@@ -58,6 +58,9 @@
     <Filter Include="02.GameObject\98.Player\00.Silvermane\Camera">
       <UniqueIdentifier>{fff034f3-6d84-4669-b0c2-9e3d6be892c0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\02.EnvironMent">
+      <UniqueIdentifier>{2671a8b6-a2a8-4ec2-ad0d-b3e116f33512}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -168,6 +171,9 @@
     <ClInclude Include="..\Headers\Camera_Silvermane.h">
       <Filter>02.GameObject\98.Player\00.Silvermane\Camera</Filter>
     </ClInclude>
+    <ClInclude Include="..\Headers\Environment.h">
+      <Filter>02.GameObject\02.EnvironMent</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -254,6 +260,9 @@
     </ClCompile>
     <ClCompile Include="..\Codes\Camera_Silvermane.cpp">
       <Filter>02.GameObject\98.Player\00.Silvermane\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Environment.cpp">
+      <Filter>02.GameObject\02.EnvironMent</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
