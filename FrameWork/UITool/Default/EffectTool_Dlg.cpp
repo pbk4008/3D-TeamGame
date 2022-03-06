@@ -39,6 +39,7 @@ CEffectTool_Dlg::CEffectTool_Dlg(CWnd* pParent /*=nullptr*/)
 	, m_ImagecountX(1)
 	, m_ImagecountY(1)
 	, m_EffectPlaySpeed(1)
+	, m_IDTag(0)
 {
 
 }
@@ -81,6 +82,7 @@ void CEffectTool_Dlg::DoDataExchange(CDataExchange* pDX)
 	DDV_MinMaxFloat(pDX, m_fRandomDirZ, 1, 99999);
 	DDV_MinMaxFloat(pDX, m_LiftTime, 0.1, 99999);
 	DDV_MinMaxFloat(pDX, m_Age, 0, 99999);
+	DDV_MinMaxFloat(pDX, m_IDTag, 0, 99999);
 	DDV_MinMaxInt(pDX, m_BaseCount, 1, 99999);
 
 
@@ -101,6 +103,7 @@ void CEffectTool_Dlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Text(pDX, IDC_EDIT23, m_ImagecountX);
 	DDX_Text(pDX, IDC_EDIT24, m_ImagecountY);
 	DDX_Text(pDX, IDC_EDIT25, m_EffectPlaySpeed);
+	DDX_Text(pDX, IDC_EDIT26, m_IDTag);
 }
 
 void CEffectTool_Dlg::InitialShaderTree()
@@ -223,6 +226,7 @@ void CEffectTool_Dlg::OnBnClickedButtonApply()
 	m_EffectDesc.iImageCountX = m_ImagecountX;
 	m_EffectDesc.iImageCountY = m_ImagecountY;
 	m_EffectDesc.iRenderPassNum = m_RenderPassNum;
+	m_EffectDesc.IDTag = m_IDTag;
 
 	if (m_AxisXBtn.GetCheck() == BST_CHECKED)
 	{
@@ -375,7 +379,7 @@ void CEffectTool_Dlg::OnTvnSelchangedTree3(NMHDR* pNMHDR, LRESULT* pResult)
 
 	/* 선택한 fbx 파일에 대한 정보를 가져온다 */
 	CString strSelectItem = m_TextureTree.GetItemText(hSelected);
-	CString strFilter = L".png";
+	CString strFilter = L".tga";
 
 	if (-1 != strSelectItem.Find(strFilter))
 	{
@@ -427,6 +431,7 @@ void CEffectTool_Dlg::OnBnClickedButton2()
 	m_EffectDesc.iImageCountX = m_ImagecountX;
 	m_EffectDesc.iImageCountY = m_ImagecountY;
 	m_EffectDesc.iRenderPassNum = m_RenderPassNum;
+	m_EffectDesc.IDTag = m_IDTag;
 
 	if (m_AxisXBtn.GetCheck() == BST_CHECKED)
 	{
@@ -543,6 +548,7 @@ void CEffectTool_Dlg::OnBnClickedButtonLoad()
 		m_ImagecountX = m_vecEffect[i].iImageCountX;
 		m_ImagecountY = m_vecEffect[i].iImageCountY;
 		m_RenderPassNum = m_vecEffect[i].iRenderPassNum;
+		m_IDTag = m_vecEffect[i].IDTag;
 		
 		if (0 == m_vecEffect[i].iAxis)
 		{

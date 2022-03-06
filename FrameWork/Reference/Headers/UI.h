@@ -14,6 +14,7 @@ public:
 		 _tchar TextureTag[MAX_PATH];
 		_float2 fPos;
 		_float2 fSize;
+		_int IDTag;
 	}UIDESC;
 protected:
 	explicit CUI();

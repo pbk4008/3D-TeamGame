@@ -74,7 +74,6 @@ HRESULT CStage1::Ready_UI(const _tchar* pDataFilePath)
 
 	for (int i = 0; i < vecUI.size(); ++i)
 	{
-		wstring Tag = vecUI[i].TextureTag;
 		wstring FullName = L"Prototype_GameObject_T_HUD_Player_Shield_Icon";
 
 		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_UI", FullName, &vecUI[i])))
