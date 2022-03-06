@@ -56,6 +56,8 @@ HRESULT CEffect_DashDust::NativeConstruct(void* pArg)
 	Desc.fParticleSpeed = m_Desc.fParticleVelocity;
 	Desc.fParticleSize = m_Desc.fParticleSize;
 	Desc.iNumInstance = m_Desc.iNumInstance;
+	Desc.fLifeTime = m_Desc.fMaxLifeTime;
+	Desc.fCurTime = m_Desc.fCurTime;
 
 	//m_pBuffer->Set_Desc(Desc);
 	//m_pBuffer->Particle_Reset();
@@ -163,6 +165,8 @@ HRESULT CEffect_DashDust::SetUp_Components()
 	m_backupDesc.fParticleSpeed = m_Desc.fParticleVelocity;
 	m_backupDesc.fParticleSize = m_Desc.fParticleSize;
 	m_backupDesc.iNumInstance = m_Desc.iNumInstance;
+	m_backupDesc.fLifeTime = m_Desc.fMaxLifeTime;
+	m_backupDesc.fCurTime = m_Desc.fCurTime;
 	if (FAILED(__super::SetUp_Components((_uint)SCENEID::SCENE_STAGE1, L"Prototype_Component_VIBuffer_PointInstance_Explosion", L"Com_VIBuffer", (CComponent**)&m_pBuffer, &m_backupDesc)))
 		return E_FAIL;
 

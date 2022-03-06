@@ -59,6 +59,8 @@ HRESULT CMFCEffect::NativeConstruct(void* pArg)
 	Desc.fParticleSpeed = m_Desc.fParticleVelocity;
 	Desc.fParticleSize = m_Desc.fParticleSize;
 	Desc.iNumInstance = m_Desc.iNumInstance;
+	Desc.fLifeTime = m_Desc.fMaxLifeTime;
+	Desc.fCurTime = m_Desc.fCurTime;
 
 	m_pBuffer->Set_Desc(Desc);
 	m_pBuffer->Particle_Reset();
@@ -105,6 +107,8 @@ _int CMFCEffect::Tick(_double TimeDelta)
 		Desc.fParticleSpeed = m_Desc.fParticleVelocity;
 		Desc.fParticleSize = m_Desc.fParticleSize;
 		Desc.iNumInstance = m_Desc.iNumInstance;
+		Desc.fLifeTime = m_Desc.fMaxLifeTime;
+		Desc.fCurTime = m_Desc.fCurTime;
 
 		m_pBuffer->Set_Desc(Desc);
 		m_pBuffer->Particle_Reset();
@@ -195,6 +199,8 @@ HRESULT CMFCEffect::SetUp_Components()
 	Desc.fParticleSpeed = m_Desc.fParticleVelocity;
 	Desc.fParticleSize = m_Desc.fParticleSize;
 	Desc.iNumInstance = m_Desc.iNumInstance;
+	Desc.fLifeTime = m_Desc.fMaxLifeTime;
+	Desc.fCurTime = m_Desc.fCurTime;
 	if (FAILED(__super::SetUp_Components(TOOL_LEVEL::TOOL_LEVEL_LOGO, L"Prototype_Component_VIBuffer_PointInstance_Explosion", L"Com_VIBuffer", (CComponent**)&m_pBuffer, &Desc)))
 		return E_FAIL;
 
