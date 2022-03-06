@@ -64,6 +64,7 @@ _int CMFCLevel_Logo::Tick(_double TimeDelta)
 				if (g_pGameInstance->getMouseKeyDown(CInputDev::MOUSESTATE::MB_LBUTTON))
 				{
 					pForm->m_UIDlg.m_pObject = m_pMFCUI;
+					pForm->m_UIDlg.Setting_Desc(&m_pMFCUI->Get_UIDesc());
 					cout << "Ãæµ¹µÊ" << endl;
 				}
 			}

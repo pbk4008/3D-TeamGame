@@ -76,10 +76,10 @@ _int CEffect_DashDust::Tick(_double TimeDelta)
 		m_Desc.fCurTime = 0.f;
 	}
 
-	////z정렬
-	//_vector vDir = g_pGameInstance->Get_CamPosition(L"MFCCamera_Proj") - m_pTransform->Get_State(CTransform::STATE_POSITION);
-	//vDir = XMVector3Normalize(vDir);
-	//m_pBuffer->Set_Dir(vDir);
+	//z정렬
+	_vector vDir = g_pGameInstance->Get_CamPosition(L"MFCCamera_Proj") - m_pTransform->Get_State(CTransform::STATE_POSITION);
+	vDir = XMVector3Normalize(vDir);
+	m_pBuffer->Set_Dir(vDir);
 
 	_uint iAllFrameCount = (m_Desc.iImageCountX * m_Desc.iImageCountY);
 	m_Desc.fFrame += (_float)(iAllFrameCount * TimeDelta * m_Desc.fEffectPlaySpeed); //플레이속도 

@@ -61,9 +61,6 @@
     <Filter Include="02.GameObject\01. MainCamera\OrthoCam">
       <UniqueIdentifier>{65662b41-31ce-4b36-8d8e-957a55ecdb6d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObject\02.">
-      <UniqueIdentifier>{5e4ce90c-d575-4e08-9ce0-006401437c35}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObject\03.">
       <UniqueIdentifier>{5840044b-593c-4938-8f64-6a894ee7e1f0}</UniqueIdentifier>
     </Filter>
@@ -79,9 +76,6 @@
     <Filter Include="02.GameObject\05.UI\01.UI_Ingame">
       <UniqueIdentifier>{2697be6f-d512-4375-9c64-b12c0e1ffaec}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObject\02.EnvironMent">
-      <UniqueIdentifier>{2671a8b6-a2a8-4ec2-ad0d-b3e116f33512}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObject\98.Player\00.Silvermane\State\1H">
       <UniqueIdentifier>{0e4cba26-3aae-4f52-85e9-e564bdabc551}</UniqueIdentifier>
     </Filter>
@@ -96,6 +90,12 @@
     </Filter>
     <Filter Include="02.GameObject\97.Plane">
       <UniqueIdentifier>{90180e28-49c4-4c5c-89b6-1ad22812fb29}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\06.">
+      <UniqueIdentifier>{5e4ce90c-d575-4e08-9ce0-006401437c35}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\02.Environment">
+      <UniqueIdentifier>{2671a8b6-a2a8-4ec2-ad0d-b3e116f33512}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -223,7 +223,7 @@
       <Filter>02.GameObject\97.Plane</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\Environment.h">
-      <Filter>02.GameObject\02.EnvironMent</Filter>
+      <Filter>02.GameObject\02.Environment</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\MainCamera.h">
       <Filter>02.GameObject\01. MainCamera\ProjectionCam</Filter>
@@ -340,7 +340,7 @@
       <Filter>02.GameObject\97.Plane</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\Environment.cpp">
-      <Filter>02.GameObject\02.EnvironMent</Filter>
+      <Filter>02.GameObject\02.Environment</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\MainCamera.cpp">
       <Filter>02.GameObject\01. MainCamera\ProjectionCam</Filter>
