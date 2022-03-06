@@ -200,6 +200,7 @@ call Update_Library_Release.bat</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\private\MeshCollider.h" />
     <ClInclude Include="..\public\Actor.h" />
     <ClInclude Include="..\public\Animation.h" />
     <ClInclude Include="..\public\AnimationController.h">
@@ -300,6 +301,7 @@ call Update_Library_Release.bat</Command>
     <ClCompile Include="..\private\Material.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="..\private\MeshCollider.cpp" />
     <ClCompile Include="..\private\Mouse.cpp" />
     <ClCompile Include="..\private\PhysicsXSystem.cpp" />
     <ClCompile Include="..\private\SphereCollider.cpp" />

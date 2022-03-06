@@ -20,6 +20,7 @@ public:
 	HRESULT DrawLine(_fvector vStart, _fvector vEnd, const wstring& pCameraTag, _fvector vColor);
 	HRESULT DrawSphere(_matrix matTransform, const wstring& pCameraTag, _fvector vColor);
 	HRESULT DrawCapsule(_matrix matTransform, const wstring& pCameraTag, _fvector vColor);
+	HRESULT DrawMesh(void* pPoints, const wstring& pCameraTag, _fvector vColor);
 public:
 	static CGizmo* Create(ID3D11Device * pDevice, ID3D11DeviceContext * pDeviceContext);
 	virtual CComponent* Clone(void* pArg) override;

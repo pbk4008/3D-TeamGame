@@ -241,7 +241,6 @@ HRESULT CGizmo::DrawCapsule(_matrix matTransform, const wstring& pCameraTag, _fv
 	matDownSphere *= matRotate;
 	DrawSphere(matDownSphere, pCameraTag, vColor);
 
-
 	_vector vLeftStart, vLeftEnd, vRightStart, vRightEnd;
 
 	_vector vSphereXAxis = XMVector3Normalize(matUpSphere.r[0]);
@@ -255,6 +254,20 @@ HRESULT CGizmo::DrawCapsule(_matrix matTransform, const wstring& pCameraTag, _fv
 
 	DrawLine(vLeftStart, vLeftEnd, pCameraTag, vColor);
 	DrawLine(vRightStart, vRightEnd, pCameraTag, vColor);
+
+	return S_OK;
+}
+
+HRESULT CGizmo::DrawMesh(void* pPoints, const wstring& pCameraTag, _fvector vColor)
+{
+	if (!m_pBatch)
+		return E_FAIL;
+
+	_float3* pTmp = (_float3*)pPoints;
+
+	DrawLine(XMLoadFloat3(&pTmp[0]), XMLoadFloat3(&pTmp[1]), pCameraTag, vColor);
+	DrawLine(XMLoadFloat3(&pTmp[1]), XMLoadFloat3(&pTmp[2]), pCameraTag, vColor);
+	DrawLine(XMLoadFloat3(&pTmp[2]), XMLoadFloat3(&pTmp[3]), pCameraTag, vColor);
 
 	return S_OK;
 }

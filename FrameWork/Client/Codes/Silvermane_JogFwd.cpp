@@ -16,9 +16,7 @@ CSilvermane_JogFwd::CSilvermane_JogFwd(const CSilvermane_JogFwd& _rhs)
 HRESULT CSilvermane_JogFwd::NativeConstruct(void* _pArg)
 {
 	if (FAILED(__super::NativeConstruct(_pArg)))
-	{
 		return E_FAIL;
-	}
 
 	return S_OK;
 }
@@ -26,9 +24,7 @@ HRESULT CSilvermane_JogFwd::NativeConstruct(void* _pArg)
 _int CSilvermane_JogFwd::Tick(const _double& TimeDelta)
 {
 	if (0 > __super::Tick(TimeDelta))
-	{
 		return -1;
-	}
 
 	return _int();
 }
@@ -36,9 +32,7 @@ _int CSilvermane_JogFwd::Tick(const _double& TimeDelta)
 _int CSilvermane_JogFwd::LateTick(const _double& TimeDelta)
 {
 	if (0 > __super::LateTick(TimeDelta))
-	{
 		return -1;
-	}
 
 	return _int();
 }
@@ -46,9 +40,7 @@ _int CSilvermane_JogFwd::LateTick(const _double& TimeDelta)
 HRESULT CSilvermane_JogFwd::Render()
 {
 	if (FAILED(__super::Render()))
-	{
 		return E_FAIL;
-	}
 
 	return S_OK;
 }
@@ -56,9 +48,7 @@ HRESULT CSilvermane_JogFwd::Render()
 HRESULT CSilvermane_JogFwd::EnterState()
 {
 	if (FAILED(__super::EnterState()))
-	{
 		return E_FAIL;
-	}
 
 	
 	m_pAnimationController->SetUp_NextAnimation("SK_Silvermane.ao|A_Loco_Jog_Fwd_Player", true);
@@ -71,45 +61,39 @@ HRESULT CSilvermane_JogFwd::EnterState()
 HRESULT CSilvermane_JogFwd::ExitState()
 {
 	if (FAILED(__super::ExitState()))
-	{
 		return E_FAIL;
-	}
 
 	return S_OK;
 }
 
 _int CSilvermane_JogFwd::KeyCheck(const _double& TimeDelta)
 {
-	if (g_pGameInstance->getkeyPress(DIK_UP))
+	if (g_pGameInstance->getkeyPress(DIK_W))
 	{
 	}
-	else if (g_pGameInstance->getkeyPress(DIK_DOWN))
+	else if (g_pGameInstance->getkeyPress(DIK_S))
 	{
 		if (FAILED(m_pStateController->Change_State(L"JogFwdPivot180")))
-		{
 			return -1;
-		}
+		return STATE_CHANGE;
 	}
-	else if (g_pGameInstance->getkeyPress(DIK_RIGHT))
+	else if (g_pGameInstance->getkeyPress(DIK_D))
 	{
 		if (FAILED(m_pStateController->Change_State(L"JogRightStart")))
-		{
 			return -1;
-		}
+		return STATE_CHANGE;
 	}
-	else if (g_pGameInstance->getkeyPress(DIK_LEFT))
+	else if (g_pGameInstance->getkeyPress(DIK_A))
 	{
 		if (FAILED(m_pStateController->Change_State(L"JogLeftStart")))
-		{
 			return -1;
-		}
+		return STATE_CHANGE;
 	}
 	else
 	{
 		if (FAILED(m_pStateController->Change_State(L"JogFwdStop")))
-		{
 			return -1;
-		}
+		return STATE_CHANGE;
 	}
 
 	return _int();

@@ -16,6 +16,7 @@ CGameInstance::CGameInstance()
 	, m_pFrustum(CFrustum::GetInstance())
 	, m_pFont_Manager(CFont_Manager::GetInstance())
 	, m_pTextureManager(CTextureManager::GetInstance())
+	, m_pMaterial_Manager(CMaterial_Manager::GetInstance())
 	, m_pSaveManager(CSaveManager::GetInstance())
 	, m_pSoundManager(CSoundMgr::GetInstance())
 	, m_pPhysicSystem(CPhysicsXSystem::GetInstance())
@@ -32,6 +33,7 @@ CGameInstance::CGameInstance()
 	Safe_AddRef(m_pLevel_Manager);
 	Safe_AddRef(m_pGraphic_Device);
 	Safe_AddRef(m_pTextureManager);
+	Safe_AddRef(m_pMaterial_Manager);
 	Safe_AddRef(m_pSaveManager);
 	Safe_AddRef(m_pSoundManager);
 	Safe_AddRef(m_pPhysicSystem);
@@ -51,6 +53,9 @@ HRESULT CGameInstance::Initialize_Engine(HINSTANCE hInst, HWND hWnd, _uint iNumL
 		return E_FAIL;
 
 	if (FAILED(m_pPhysicSystem->Init_PhysicsX()))
+		return E_FAIL;
+
+	if (FAILED(m_pMaterial_Manager->NativeConstruct(*ppDeviceOut, *ppDeviceContextOut)))
 		return E_FAIL;
 
 	if (FAILED(m_pObject_Manager->Reserve_Manager(iNumLevel)))
@@ -452,6 +457,22 @@ vector<ID3D11ShaderResourceView*>* CGameInstance::Get_Texture(const wstring& pTe
 	return m_pTextureManager->Get_Texture(pTextureTag);
 }
 
+HRESULT CGameInstance::Add_Material(const wstring& _wstrMtrlTag, CMaterial* _pMtrl)
+{
+	if (!m_pMaterial_Manager)
+		return E_FAIL;
+		
+	return m_pMaterial_Manager->Add_Material(_wstrMtrlTag, _pMtrl);
+}
+
+CMaterial* CGameInstance::Get_Material(const wstring& _wstrMtrlTag)
+{
+	if (!m_pMaterial_Manager)
+		return nullptr;
+
+	return m_pMaterial_Manager->Get_Material(_wstrMtrlTag);
+}
+
 void CGameInstance::Release_Engine()
 {
 	RELEASE_INSTANCE(CGameInstance);
@@ -467,6 +488,9 @@ void CGameInstance::Release_Engine()
 
 	if (0 != CComponent_Manager::GetInstance()->DestroyInstance())
 		MSGBOX("Failed to Release CComponent_Manager");
+
+	if (0 != CMaterial_Manager::DestroyInstance())
+		MSGBOX("Failed to Release CMaterial_Manager");
 
 	if (0 != CTextureManager::GetInstance()->DestroyInstance())
 		MSGBOX("Failed to Release CTextureManager");
@@ -515,6 +539,7 @@ void CGameInstance::Free()
 	Safe_Release(m_pPipeLine);
 	Safe_Release(m_pComponent_Manager);
 	Safe_Release(m_pObject_Manager);
+	Safe_Release(m_pMaterial_Manager);
 	Safe_Release(m_pTimer_Manager);
 	Safe_Release(m_pLevel_Manager);
 	Safe_Release(m_pGraphic_Device);

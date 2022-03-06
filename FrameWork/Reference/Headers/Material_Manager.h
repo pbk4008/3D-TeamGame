@@ -8,6 +8,7 @@ class CMaterial;
 
 class CMaterial_Manager final : public CSingleTon<CMaterial_Manager>
 {
+	friend CSingleTon;
 private:
 	NO_COPY(CMaterial_Manager);
 	explicit CMaterial_Manager();
