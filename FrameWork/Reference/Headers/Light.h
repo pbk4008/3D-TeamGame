@@ -16,7 +16,7 @@ public:
 	}
 public:
 	HRESULT NativeConstruct(const LIGHTDESC& LightDesc);
-	HRESULT Render(const wstring& pCameraTag);
+	HRESULT Render(const wstring& pCameraTag, _bool PBRHDRcheck);
 
 private:
 	ID3D11Device*				m_pDevice = nullptr;
@@ -25,6 +25,7 @@ private:
 private:
 	LIGHTDESC						m_LightDesc;
 	class CVIBuffer_RectViewPort*	m_pVIBuffer = nullptr;
+	_bool							m_bPBRHDR = false;
 
 public:
 	static CLight* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext, const LIGHTDESC& LightDesc);	

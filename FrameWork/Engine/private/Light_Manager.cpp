@@ -1,4 +1,4 @@
-#include "..\public\Light_Manager.h"
+#include "Light_Manager.h"
 #include "Light.h"
 
 
@@ -30,7 +30,7 @@ HRESULT CLight_Manager::Add_Light(ID3D11Device* pDevice, ID3D11DeviceContext* pD
 HRESULT CLight_Manager::Render_Lights(const wstring& pCameraTag)
 {
 	for (auto& pLight : m_Lights)
-		pLight->Render(pCameraTag);
+		pLight->Render(pCameraTag, m_bPBRHDR);
 
 	return S_OK;
 }

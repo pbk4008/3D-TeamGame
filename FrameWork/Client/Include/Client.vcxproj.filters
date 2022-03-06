@@ -78,7 +78,7 @@
     </Filter>
     <Filter Include="02.GameObject\05.UI\01.UI_Ingame">
       <UniqueIdentifier>{2697be6f-d512-4375-9c64-b12c0e1ffaec}</UniqueIdentifier>
-	</Filter>
+    </Filter>
     <Filter Include="02.GameObject\02.EnvironMent">
       <UniqueIdentifier>{2671a8b6-a2a8-4ec2-ad0d-b3e116f33512}</UniqueIdentifier>
     </Filter>

@@ -84,21 +84,22 @@ PS_OUT PS_MAIN(PS_IN In)
 	PS_OUT		Out = (PS_OUT)0;
 
 	vector	vSourDiffuse = g_DiffuseSourTexture.Sample(DefaultSampler, In.vTexUV * 10.f);
-	vector	vDestDiffuse = g_DiffuseDestTexture.Sample(DefaultSampler, In.vTexUV * 20.f);
-	vector	vFilterColor = g_FilterTexture.Sample(DefaultSampler, In.vTexUV);
+	//vector	vDestDiffuse = g_DiffuseDestTexture.Sample(DefaultSampler, In.vTexUV * 20.f);
+	//vector	vFilterColor = g_FilterTexture.Sample(DefaultSampler, In.vTexUV);
 
-	vector	vBrushColor = (vector)0;
+	//vector	vBrushColor = (vector)0;
 
-	if (g_vBrushPos.x - g_fRadius <= In.vWorldPos.x && In.vWorldPos.x < g_vBrushPos.x + g_fRadius &&
-		g_vBrushPos.z - g_fRadius <= In.vWorldPos.z && In.vWorldPos.z < g_vBrushPos.z + g_fRadius)
-	{
-		float2		vTexUV = float2((In.vWorldPos.x - (g_vBrushPos.x - g_fRadius)) / (2.f * g_fRadius), 
-			((g_vBrushPos.z + g_fRadius) - In.vWorldPos.z) / (2.f * g_fRadius));
-		vBrushColor = g_BrushTexture.Sample(DefaultSampler, vTexUV);
+	//if (g_vBrushPos.x - g_fRadius <= In.vWorldPos.x && In.vWorldPos.x < g_vBrushPos.x + g_fRadius &&
+	//	g_vBrushPos.z - g_fRadius <= In.vWorldPos.z && In.vWorldPos.z < g_vBrushPos.z + g_fRadius)
+	//{
+	//	float2		vTexUV = float2((In.vWorldPos.x - (g_vBrushPos.x - g_fRadius)) / (2.f * g_fRadius), 
+	//		((g_vBrushPos.z + g_fRadius) - In.vWorldPos.z) / (2.f * g_fRadius));
+	//	vBrushColor = g_BrushTexture.Sample(DefaultSampler, vTexUV);
 
-	}
+	//}
 
-	Out.vDiffuse = /*vSourDiffuse*/vector(1.f, 1.f, 1.f, 1.f) * vFilterColor.r + vDestDiffuse * (1.f - vFilterColor.r) + vBrushColor;
+	//Out.vDiffuse = /*vSourDiffuse*/vector(1.f, 1.f, 1.f, 1.f) * vFilterColor.r + vDestDiffuse * (1.f - vFilterColor.r) + vBrushColor;
+	Out.vDiffuse = vSourDiffuse;
 	Out.vDiffuse.a = 1.f;
 	Out.vNormal = vector(In.vNormal.xyz * 0.5f + 0.5f, 0.f);	
 	Out.vDepth = vector(In.vProjPos.z / In.vProjPos.w, In.vProjPos.w / 300.0f, 0.0f, 0.0f);
@@ -113,7 +114,7 @@ technique11			DefaultTechnique
 {	
 	pass Default
 	{
-		SetRasterizerState(CullMode_Wireframe);
+		SetRasterizerState(CullMode_Default);
 		SetDepthStencilState(ZDefault, 0);
 		SetBlendState(BlendDisable, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
 		
