@@ -21,17 +21,17 @@ HRESULT CSilvermane_JogFwd::NativeConstruct(void* _pArg)
 	return S_OK;
 }
 
-_int CSilvermane_JogFwd::Tick(const _double& TimeDelta)
+_int CSilvermane_JogFwd::Tick(const _double& _dDeltaTime)
 {
-	if (0 > __super::Tick(TimeDelta))
+	if (0 > __super::Tick(_dDeltaTime))
 		return -1;
 
 	return _int();
 }
 
-_int CSilvermane_JogFwd::LateTick(const _double& TimeDelta)
+_int CSilvermane_JogFwd::LateTick(const _double& _dDeltaTime)
 {
-	if (0 > __super::LateTick(TimeDelta))
+	if (0 > __super::LateTick(_dDeltaTime))
 		return -1;
 
 	return _int();
@@ -66,10 +66,46 @@ HRESULT CSilvermane_JogFwd::ExitState()
 	return S_OK;
 }
 
-_int CSilvermane_JogFwd::KeyCheck(const _double& TimeDelta)
+_int CSilvermane_JogFwd::KeyCheck(const _double& _dDeltaTime)
 {
 	if (g_pGameInstance->getkeyPress(DIK_W))
 	{
+		if (g_pGameInstance->getkeyPress(DIK_A))
+		{
+			_float3 vRotation = m_pSilvermane->Get_Rotation();
+			if (-45.f < vRotation.y)
+			{
+				vRotation.y += -180.f * _dDeltaTime;
+				m_pTransform->SetUp_Rotation(m_pTransform->Get_State(CTransform::STATE_UP), XMConvertToRadians(vRotation.y));
+				m_pSilvermane->Set_Rotation(vRotation);
+			}
+		}
+		else if (g_pGameInstance->getkeyPress(DIK_D))
+		{
+			_float3 vRotation = m_pSilvermane->Get_Rotation();
+			if (45.f > vRotation.y)
+			{
+				vRotation.y += 180.f * _dDeltaTime;
+				m_pTransform->SetUp_Rotation(m_pTransform->Get_State(CTransform::STATE_UP), XMConvertToRadians(vRotation.y));
+				m_pSilvermane->Set_Rotation(vRotation);
+			}
+		}
+		else
+		{
+			_float3 vRotation = m_pSilvermane->Get_Rotation();
+			if (0.f > vRotation.y)
+			{
+				vRotation.y += 180.f * _dDeltaTime;
+				m_pTransform->SetUp_Rotation(m_pTransform->Get_State(CTransform::STATE_UP), XMConvertToRadians(vRotation.y));
+				m_pSilvermane->Set_Rotation(vRotation);
+			}
+			if (0.f < vRotation.y)
+			{
+				vRotation.y += -180.f * _dDeltaTime;
+				m_pTransform->SetUp_Rotation(m_pTransform->Get_State(CTransform::STATE_UP), XMConvertToRadians(vRotation.y));
+				m_pSilvermane->Set_Rotation(vRotation);
+			}
+		}
 	}
 	else if (g_pGameInstance->getkeyPress(DIK_S))
 	{

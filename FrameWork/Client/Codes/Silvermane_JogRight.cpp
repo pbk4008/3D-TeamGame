@@ -21,17 +21,17 @@ HRESULT CSilvermane_JogRight::NativeConstruct(void* _pArg)
 	return S_OK;
 }
 
-_int CSilvermane_JogRight::Tick(const _double& TimeDelta)
+_int CSilvermane_JogRight::Tick(const _double& _dDeltaTime)
 {
-	if (0 > __super::Tick(TimeDelta))
+	if (0 > __super::Tick(_dDeltaTime))
 		return -1;
 
 	return _int();
 }
 
-_int CSilvermane_JogRight::LateTick(const _double& TimeDelta)
+_int CSilvermane_JogRight::LateTick(const _double& _dDeltaTime)
 {
-	if (0 > __super::LateTick(TimeDelta))
+	if (0 > __super::LateTick(_dDeltaTime))
 		return -1;
 
 	return _int();
@@ -71,10 +71,22 @@ HRESULT CSilvermane_JogRight::ExitState()
 	return S_OK;
 }
 
-_int CSilvermane_JogRight::KeyCheck(const _double& TimeDelta)
+_int CSilvermane_JogRight::KeyCheck(const _double& _dDeltaTime)
 {
 	if (g_pGameInstance->getkeyPress(DIK_D))
 	{
+		if (g_pGameInstance->getkeyPress(DIK_W))
+		{
+			if (FAILED(m_pStateController->Change_State(L"JogFwd")))
+				return E_FAIL;
+			return STATE_CHANGE;
+		}
+		if (g_pGameInstance->getkeyPress(DIK_S))
+		{
+			if (FAILED(m_pStateController->Change_State(L"JogBwd")))
+				return E_FAIL;
+			return STATE_CHANGE;
+		}
 	}
 	else if (g_pGameInstance->getkeyPress(DIK_A))
 	{

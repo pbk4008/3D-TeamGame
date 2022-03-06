@@ -8,6 +8,7 @@
 #include "Plane_Test.h"
 #include "Silvermane.h"
 #include "Camera_Silvermane.h"
+#include "Needle.h"
 
 #pragma endregion
 
@@ -169,6 +170,13 @@ HRESULT CLoader::Ready_Test_JS()
 	{
 		return E_FAIL;
 	}
+	matPivot = XMMatrixIdentity();
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_TEST_JS, L"Model_Needle", CModel::Create(m_pDevice, m_pDeviceContext,
+		"../bin/Resources/Mesh/Needle/", "Needle.fbx",
+		L"../../Reference/ShaderFile/Shader_Mesh.hlsl", matPivot, CModel::TYPE_STATIC))))
+	{
+		return E_FAIL;
+	}
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_TEST_JS, L"AnimationController", CAnimationController::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_TEST_JS, L"StateController", CStateController::Create(m_pDevice, m_pDeviceContext))))
@@ -183,6 +191,8 @@ HRESULT CLoader::Ready_Test_JS()
 	if (FAILED(g_pGameInstance->Add_Prototype(L"Silvermane", CSilvermane::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 	if (FAILED(g_pGameInstance->Add_Prototype(L"Camera_Silvermane", CCamera_Silvermane::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	if (FAILED(g_pGameInstance->Add_Prototype(L"Needle", CNeedle::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 
 #pragma endregion

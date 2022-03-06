@@ -182,6 +182,9 @@
     <ClInclude Include="..\Default\Clinet_Define.h" />
     <ClInclude Include="..\Headers\1H_SowrdAttackNormalR1_01.h" />
     <ClInclude Include="..\Headers\1H_SowrdAttackNormalR1_02.h" />
+    <ClInclude Include="..\Headers\1H_SwordDodgeSpinFwd_V3.h" />
+    <ClInclude Include="..\Headers\1H_SwordEquipOff.h" />
+    <ClInclude Include="..\Headers\1H_SwordEquipOn.h" />
     <ClInclude Include="..\Headers\BackGround.h" />
     <ClInclude Include="..\Headers\Camera_Silvermane.h" />
     <ClInclude Include="..\Headers\Level_Logo.h" />
@@ -189,6 +192,7 @@
     <ClInclude Include="..\Headers\Loading.h" />
     <ClInclude Include="..\Headers\MainApp.h" />
     <ClInclude Include="..\Headers\MainCamera.h" />
+    <ClInclude Include="..\Headers\Needle.h" />
     <ClInclude Include="..\Headers\Plane_Test.h" />
     <ClInclude Include="..\Headers\Silvermane.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
@@ -214,6 +218,7 @@
     <ClInclude Include="..\Headers\State_Silvermane.h" />
     <ClInclude Include="..\Headers\TestObj.h" />
     <ClInclude Include="..\Headers\TestScene_JS.h" />
+    <ClInclude Include="..\Headers\Weapon.h" />
     <ClInclude Include="Client.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="pch.h" />
@@ -223,6 +228,9 @@
   <ItemGroup>
     <ClCompile Include="..\Codes\1H_SowrdAttackNormalR1_01.cpp" />
     <ClCompile Include="..\Codes\1H_SowrdAttackNormalR1_02.cpp" />
+    <ClCompile Include="..\Codes\1H_SwordDodgeSpinFwd_V3.cpp" />
+    <ClCompile Include="..\Codes\1H_SwordEquipOff.cpp" />
+    <ClCompile Include="..\Codes\1H_SwordEquipOn.cpp" />
     <ClCompile Include="..\Codes\BackGround.cpp" />
     <ClCompile Include="..\Codes\Camera_Silvermane.cpp" />
     <ClCompile Include="..\Codes\DebugSystem.cpp" />
@@ -231,6 +239,7 @@
     <ClCompile Include="..\Codes\Loading.cpp" />
     <ClCompile Include="..\Codes\MainApp.cpp" />
     <ClCompile Include="..\Codes\MainCamera.cpp" />
+    <ClCompile Include="..\Codes\Needle.cpp" />
     <ClCompile Include="..\Codes\Plane_Test.cpp" />
     <ClCompile Include="..\Codes\Silvermane.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
@@ -256,6 +265,7 @@
     <ClCompile Include="..\Codes\State_Silvermane.cpp" />
     <ClCompile Include="..\Codes\TestObj.cpp" />
     <ClCompile Include="..\Codes\TestScene_JS.cpp" />
+    <ClCompile Include="..\Codes\Weapon.cpp" />
     <ClCompile Include="Client.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

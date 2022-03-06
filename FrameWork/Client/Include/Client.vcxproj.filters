@@ -70,6 +70,12 @@
     <Filter Include="02.GameObject\97.Plane">
       <UniqueIdentifier>{90180e28-49c4-4c5c-89b6-1ad22812fb29}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\96.Weapon">
+      <UniqueIdentifier>{4de56d05-7178-4ee0-a266-5f7bb2773397}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\96.Weapon\00.Needle">
+      <UniqueIdentifier>{3eee425a-e769-4d53-87d7-fe962081c44a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -198,6 +204,21 @@
     <ClInclude Include="..\Headers\Plane_Test.h">
       <Filter>02.GameObject\97.Plane</Filter>
     </ClInclude>
+    <ClInclude Include="..\Headers\Weapon.h">
+      <Filter>02.GameObject\96.Weapon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Needle.h">
+      <Filter>02.GameObject\96.Weapon\00.Needle</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\1H_SwordEquipOff.h">
+      <Filter>02.GameObject\98.Player\00.Silvermane\State\1H</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\1H_SwordEquipOn.h">
+      <Filter>02.GameObject\98.Player\00.Silvermane\State\1H</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\1H_SwordDodgeSpinFwd_V3.h">
+      <Filter>02.GameObject\98.Player\00.Silvermane\State\1H</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -302,6 +323,21 @@
     </ClCompile>
     <ClCompile Include="..\Codes\Plane_Test.cpp">
       <Filter>02.GameObject\97.Plane</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Weapon.cpp">
+      <Filter>02.GameObject\96.Weapon</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Needle.cpp">
+      <Filter>02.GameObject\96.Weapon\00.Needle</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\1H_SwordEquipOff.cpp">
+      <Filter>02.GameObject\98.Player\00.Silvermane\State\1H</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\1H_SwordEquipOn.cpp">
+      <Filter>02.GameObject\98.Player\00.Silvermane\State\1H</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\1H_SwordDodgeSpinFwd_V3.cpp">
+      <Filter>02.GameObject\98.Player\00.Silvermane\State\1H</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

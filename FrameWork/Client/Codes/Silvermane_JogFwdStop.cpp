@@ -51,7 +51,8 @@ HRESULT CSilvermane_JogFwdStop::EnterState()
 		return E_FAIL;
 
 	
-	m_pAnimationController->SetUp_NextAnimation("SK_Silvermane.ao|A_Loco_Jog_Fwd_Stop_Player", false);
+	if(FAILED(m_pAnimationController->SetUp_NextAnimation("SK_Silvermane.ao|A_Loco_Jog_Fwd_Stop_Player", false)))
+		return E_FAIL;
 	m_pAnimationController->Set_RootMotion(true, true, ERootOption::XYZ);
 	
 
