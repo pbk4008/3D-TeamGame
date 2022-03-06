@@ -57,9 +57,9 @@ VS_OUT VS_MAIN(VS_IN In)
 	vector	vPosition = mul(vector(In.vPosition, 1.f), In.TransformMatrix);
 
 	Out.vPosition = mul(vPosition, g_WorldMatrix);
-	//Out.vPSize.x = In.vPSize.x * In.TransformMatrix._11;
-    //Out.vPSize.y = In.vPSize.y * In.TransformMatrix._22;
-    Out.vPSize = In.vPSize;
+    Out.vPSize.x = In.vPSize.x * In.TransformMatrix._11;
+    Out.vPSize.y = In.vPSize.y * In.TransformMatrix._22;
+    //Out.vPSize = In.vPSize;
 	return Out;
 }
 

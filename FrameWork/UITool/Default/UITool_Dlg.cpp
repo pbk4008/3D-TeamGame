@@ -280,7 +280,7 @@ void CUITool_Dlg::OnTvnSelchangedTree1(NMHDR* pNMHDR, LRESULT* pResult)
 
 	/* 선택한 fbx 파일에 대한 정보를 가져온다 */
 	CString strSelectItem = m_TextureTree.GetItemText(hSelected);
-	CString strFilter = L".jpg";
+	CString strFilter = L".tga";
 
 	if (-1 != strSelectItem.Find(strFilter))
 	{

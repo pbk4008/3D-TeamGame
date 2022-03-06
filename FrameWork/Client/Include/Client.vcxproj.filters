@@ -58,6 +58,30 @@
     <Filter Include="02.GameObject\98.Player\00.Silvermane\Camera">
       <UniqueIdentifier>{fff034f3-6d84-4669-b0c2-9e3d6be892c0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\01. MainCamera\ProjectionCam">
+      <UniqueIdentifier>{b39d66ed-89a6-46d9-8ed8-5f311d203299}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\01. MainCamera\OrthoCam">
+      <UniqueIdentifier>{65662b41-31ce-4b36-8d8e-957a55ecdb6d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\02.">
+      <UniqueIdentifier>{5e4ce90c-d575-4e08-9ce0-006401437c35}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.">
+      <UniqueIdentifier>{5840044b-593c-4938-8f64-6a894ee7e1f0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\04.Effect">
+      <UniqueIdentifier>{8a92a3f2-2ab5-4eeb-a712-96f614c298ff}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\04.Effect\01.Effect_DashDust_Player">
+      <UniqueIdentifier>{387da879-a8da-43c1-a901-c84527a9b9f2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.UI">
+      <UniqueIdentifier>{ea588900-5830-4a87-bbb5-2525229f11a6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.UI\01.UI_Ingame">
+      <UniqueIdentifier>{2697be6f-d512-4375-9c64-b12c0e1ffaec}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -101,9 +125,6 @@
     </ClInclude>
     <ClInclude Include="..\Headers\BackGround.h">
       <Filter>02.GameObject\00. BackGround</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Headers\MainCamera.h">
-      <Filter>02.GameObject\01. MainCamera</Filter>
     </ClInclude>
     <ClInclude Include="..\Codes\DebugSystem.h">
       <Filter>97.DebugSystem</Filter>
@@ -168,6 +189,18 @@
     <ClInclude Include="..\Headers\Camera_Silvermane.h">
       <Filter>02.GameObject\98.Player\00.Silvermane\Camera</Filter>
     </ClInclude>
+    <ClInclude Include="..\Headers\MainCamera.h">
+      <Filter>02.GameObject\01. MainCamera\ProjectionCam</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\MainCamera_Ortho.h">
+      <Filter>02.GameObject\01. MainCamera\OrthoCam</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Effect_DashDust.h">
+      <Filter>02.GameObject\04.Effect\01.Effect_DashDust_Player</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\UI_Ingame.h">
+      <Filter>02.GameObject\05.UI\01.UI_Ingame</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -188,9 +221,6 @@
     </ClCompile>
     <ClCompile Include="..\Codes\BackGround.cpp">
       <Filter>02.GameObject\00. BackGround</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Codes\MainCamera.cpp">
-      <Filter>02.GameObject\01. MainCamera</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\DebugSystem.cpp">
       <Filter>97.DebugSystem</Filter>
@@ -254,6 +284,18 @@
     </ClCompile>
     <ClCompile Include="..\Codes\Camera_Silvermane.cpp">
       <Filter>02.GameObject\98.Player\00.Silvermane\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\MainCamera.cpp">
+      <Filter>02.GameObject\01. MainCamera\ProjectionCam</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\MainCamera_Ortho.cpp">
+      <Filter>02.GameObject\01. MainCamera\OrthoCam</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Effect_DashDust.cpp">
+      <Filter>02.GameObject\04.Effect\01.Effect_DashDust_Player</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\UI_Ingame.cpp">
+      <Filter>02.GameObject\05.UI\01.UI_Ingame</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

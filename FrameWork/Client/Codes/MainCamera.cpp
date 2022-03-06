@@ -40,6 +40,7 @@ HRESULT CMainCamera::NativeConstruct(void* pArg)
 
 _int CMainCamera::Tick(_double fDeltaTime)
 {
+
 	m_pCamera->Update_Matrix(m_pTransform->Get_WorldMatrix());
 
 	return _int();
