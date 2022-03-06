@@ -11,6 +11,9 @@ public:
 	NO_COPY(CLight_Manager);
 	CLight_Manager();
 	virtual ~CLight_Manager() = default;
+
+public: void SetPBRCheck(_bool check) { m_bPBRHDR = check; }
+
 public:
 	const LIGHTDESC* Get_LightDesc(_uint iIndex = 0);
 
@@ -20,6 +23,8 @@ public:
 private:
 	list<class CLight*>				m_Lights;
 	typedef list<class CLight*>		LIGHTS;
+
+private: _bool	m_bPBRHDR = false;
 
 public:	
 	virtual void Free();

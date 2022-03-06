@@ -1,6 +1,7 @@
 #pragma once
 
 #include "SingleTon.h"
+#include "RenderTarget.h"
 
 BEGIN(Engine)
 
@@ -16,7 +17,7 @@ public:
 	ID3D11ShaderResourceView* Get_SRV(const wstring& pTargetTag);
 
 public:
-	HRESULT Add_RenderTarget(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext, const wstring& pTargetTag, _uint iWidth, _uint iHeight, DXGI_FORMAT eFormat, _float4 vClearColor);
+	HRESULT Add_RenderTarget(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext, const wstring& pTargetTag, _uint iWidth, _uint iHeight, DXGI_FORMAT eFormat, _float4 vClearColor, CRenderTarget::RTT eType);
 	HRESULT Add_MRT(const wstring& pMRTTag, const wstring& pTargetTag);
 	HRESULT Begin_MRT(ID3D11DeviceContext* pDeviceContext, const wstring& pMRTTag); /* 지정된 렌더타겟들을 장치에 순서대로 바인딩한다. */
 	HRESULT End_MRT(ID3D11DeviceContext* pDeviceContext); /* 바인딩되기 이전으로 돌린다. */

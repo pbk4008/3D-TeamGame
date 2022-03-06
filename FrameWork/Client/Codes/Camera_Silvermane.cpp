@@ -118,8 +118,13 @@ _int CCamera_Silvermane::Chase_Target(const _double& _dDeltaTime)
 	_vector svTargetLook = pTargetTransform->Get_State(CTransform::STATE_LOOK);
 	_vector svTargetPosition = pTargetTransform->Get_State(CTransform::STATE_POSITION);
 
-	_vector svEye = svTargetPosition + svTargetRight + svTargetUp * 3.f + svTargetLook * -5.f;
-	_vector svAt = svTargetPosition + svTargetRight + svTargetUp;
+
+	_vector svX = XMVectorSet(1.f, 0.f, 0.f, 0.f);
+	_vector svY = XMVectorSet(0.f, 1.f, 0.f, 0.f);
+	_vector svZ = XMVectorSet(0.f, 0.f, 1.f, 0.f);
+
+	_vector svEye = svTargetPosition + svY * 3.f + svZ * -4.f;
+	_vector svAt = svTargetPosition + svY;
 
 	_vector		svLook = svAt - svEye;
 	svLook = XMVector3Normalize(svLook);

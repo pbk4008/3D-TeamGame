@@ -11,7 +11,7 @@ CAnimation::CAnimation(const CAnimation& rhs)
 	, m_isFinished(rhs.m_isFinished)
 	, m_PlaySpeed(rhs.m_PlaySpeed)
 	, m_iIndex(rhs.m_iIndex)
-	, m_iCurrentKeyFrameIndex(rhs.m_iCurrentKeyFrameIndex)
+	, m_iCurKeyFrameIndex(rhs.m_iCurKeyFrameIndex)
 {
 	strcpy_s(m_szName, rhs.m_szName);
 
@@ -42,11 +42,7 @@ HRESULT CAnimation::Update_TransformationMatrix(_double TimeDelta,const _bool _i
 		m_TrackPositionAcc += m_PlaySpeed * TimeDelta;
 
 	if (m_TrackPositionAcc >= m_Duration)
-	{
 		m_isFinished = true;
-		if (_isLoop)
-			m_TrackPositionAcc = 0.0;
-	}
 	else
 		m_isFinished = false;
 	
@@ -56,25 +52,15 @@ HRESULT CAnimation::Update_TransformationMatrix(_double TimeDelta,const _bool _i
 	{
 		vector<KEYFRAME*>		KeyFrames = m_Channels[i]->Get_KeyFrames();
 
-		_uint	iCurrentKeyFrameIndex = m_Channels[i]->Get_CurrentKeyFrameIndex();
+		_uint	iCurChannelKeyFrameIndex = m_Channels[i]->Get_CurrentKeyFrameIndex();
 
 		_vector		vScale, vRotation, vPosition;
 		vScale = XMVectorZero();
 		vRotation = XMVectorZero();
 		vPosition = XMVectorZero();
 
-		if (true == m_isFinished)
-		{
-			if (_isLoop)
-			{
-				iCurrentKeyFrameIndex = 0;
-				m_Channels[i]->Set_CurrentKeyFrameIndex(0);
-			}
-		}
-
 		_uint		iNumKeyFrame = (_uint)KeyFrames.size();
 
-		/* 하나의 키프에ㅣㅁ 상태를 가지면 된다. */
 		if (m_TrackPositionAcc <= KeyFrames[0]->Time)
 		{
 			vScale = XMLoadFloat3(&KeyFrames[0]->vScale);
@@ -82,8 +68,6 @@ HRESULT CAnimation::Update_TransformationMatrix(_double TimeDelta,const _bool _i
 			vPosition = XMLoadFloat3(&KeyFrames[0]->vPosition);		
 			vPosition = XMVectorSetW(vPosition, 1.f);
 		}
-
-		/* 하나의 키프에ㅣㅁ 상태를 가지면 된다. */
 		else if (m_TrackPositionAcc > KeyFrames[iNumKeyFrame - 1]->Time)
 		{
 			vScale = XMLoadFloat3(&KeyFrames[iNumKeyFrame - 1]->vScale);
@@ -91,26 +75,29 @@ HRESULT CAnimation::Update_TransformationMatrix(_double TimeDelta,const _bool _i
 			vPosition = XMLoadFloat3(&KeyFrames[iNumKeyFrame - 1]->vPosition);
 			vPosition = XMVectorSetW(vPosition, 1.f);
 		}
-
-		/* 특정 키프레임과 키프=레임 사이에 있다.  */
+		/* 특정 키프레임과 키프레임 사이에 있다.  */
 		else
 		{
-			while (m_TrackPositionAcc >= KeyFrames[iCurrentKeyFrameIndex + 1]->Time)
-				m_Channels[i]->Set_CurrentKeyFrameIndex(++iCurrentKeyFrameIndex);
+			while (m_TrackPositionAcc >= KeyFrames[iCurChannelKeyFrameIndex + 1]->Time)
+			{
+				m_Channels[i]->Set_CurrentKeyFrameIndex(++iCurChannelKeyFrameIndex);
+				if (iCurChannelKeyFrameIndex > m_iCurKeyFrameIndex)
+					m_iCurKeyFrameIndex = iCurChannelKeyFrameIndex;
+			}
 
-			_float		fRatio = (_float)(m_TrackPositionAcc - KeyFrames[iCurrentKeyFrameIndex]->Time) / 
-				(_float)(KeyFrames[iCurrentKeyFrameIndex + 1]->Time - KeyFrames[iCurrentKeyFrameIndex]->Time);
+			_float		fRatio = (_float)(m_TrackPositionAcc - KeyFrames[iCurChannelKeyFrameIndex]->Time) / 
+				(_float)(KeyFrames[iCurChannelKeyFrameIndex + 1]->Time - KeyFrames[iCurChannelKeyFrameIndex]->Time);
 
 			_vector		vSourScale, vSourRotation, vSourPosition;
 			_vector		vDestScale, vDestRotation, vDestPosition;
 
-			vSourScale = XMLoadFloat3(&KeyFrames[iCurrentKeyFrameIndex]->vScale);
-			vSourRotation = XMLoadFloat4(&KeyFrames[iCurrentKeyFrameIndex]->vRotation);
-			vSourPosition = XMLoadFloat3(&KeyFrames[iCurrentKeyFrameIndex]->vPosition);
+			vSourScale = XMLoadFloat3(&KeyFrames[iCurChannelKeyFrameIndex]->vScale);
+			vSourRotation = XMLoadFloat4(&KeyFrames[iCurChannelKeyFrameIndex]->vRotation);
+			vSourPosition = XMLoadFloat3(&KeyFrames[iCurChannelKeyFrameIndex]->vPosition);
 
-			vDestScale = XMLoadFloat3(&KeyFrames[iCurrentKeyFrameIndex + 1]->vScale);
-			vDestRotation = XMLoadFloat4(&KeyFrames[iCurrentKeyFrameIndex + 1]->vRotation);
-			vDestPosition = XMLoadFloat3(&KeyFrames[iCurrentKeyFrameIndex + 1]->vPosition);
+			vDestScale = XMLoadFloat3(&KeyFrames[iCurChannelKeyFrameIndex + 1]->vScale);
+			vDestRotation = XMLoadFloat4(&KeyFrames[iCurChannelKeyFrameIndex + 1]->vRotation);
+			vDestPosition = XMLoadFloat3(&KeyFrames[iCurChannelKeyFrameIndex + 1]->vPosition);
 
 			vScale = XMVectorLerp(vSourScale, vDestScale, fRatio);			
 			vRotation = XMQuaternionSlerp(vSourRotation, vDestRotation, fRatio);
@@ -121,6 +108,21 @@ HRESULT CAnimation::Update_TransformationMatrix(_double TimeDelta,const _bool _i
 
 		m_Channels[i]->Set_TransformationMatrix(TransformationMatrix);
 		m_Channels[i]->Set_AnimInterPolation(vScale, vRotation, vPosition);
+
+		if (m_isFinished)
+		{
+			if (_isLoop)
+			{
+				iCurChannelKeyFrameIndex = 0;
+				m_Channels[i]->Set_CurrentKeyFrameIndex(0);
+			}
+		}
+	}
+
+	if (m_isFinished)
+	{
+		m_TrackPositionAcc = 0.0;
+		m_iCurKeyFrameIndex = 0;
 	}
 
 	return S_OK;
@@ -137,6 +139,21 @@ CChannel* CAnimation::Get_Channel(const char* pChannelName) const
 	}
 
 	return nullptr;
+}
+
+const _uint CAnimation::Get_MaxKeyFrameIndex() const
+{
+	return m_iMaxKeyFrameIndex;
+}
+
+const _uint CAnimation::Get_CurrentKeyFrameIndex()
+{
+	return m_iCurKeyFrameIndex;
+}
+
+void CAnimation::Set_MaxKeyFrameIndex(const _uint _iMaxKeyFrameIndex)
+{
+	m_iMaxKeyFrameIndex = _iMaxKeyFrameIndex;
 }
 
 CSaveManager::ANIMDATA& CAnimation::SetSaveAnimData()
@@ -175,6 +192,7 @@ void CAnimation::Reset_Animation()
 {
 	m_isFinished = false;
 	m_TrackPositionAcc = 0.0;
+	m_iCurKeyFrameIndex = 0;
 
 	for (auto& pChannel : m_Channels)
 		pChannel->Set_CurrentKeyFrameIndex(0);

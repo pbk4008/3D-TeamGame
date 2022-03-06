@@ -61,6 +61,10 @@ namespace Engine
 		XMFLOAT4		vDiffuse;
 		XMFLOAT4		vAmbient;
 		XMFLOAT4		vSpecular;
+
+		XMMATRIX		mLightWorld;
+		XMMATRIX		mLightView;
+		XMMATRIX		mLightProj;
 	}LIGHTDESC;
 
 	typedef struct tagMtrlDesc

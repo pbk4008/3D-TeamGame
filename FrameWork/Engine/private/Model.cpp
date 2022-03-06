@@ -576,6 +576,8 @@ HRESULT CModel::Create_Animation()
 		if (nullptr == pAnimation)
 			return E_FAIL;
 
+		_uint iMaxKeyFrameIndex = 0;
+
 		/* 현재 애니메이션 영햐을 주는 뼈대들 */
 		for (_uint j = 0; j < pAnim->mNumChannels; ++j)
 		{
@@ -587,6 +589,9 @@ HRESULT CModel::Create_Animation()
 
 			_uint iNumKeyframes = max(pAnimChannel->mNumPositionKeys, pAnimChannel->mNumRotationKeys);
 			iNumKeyframes = max(iNumKeyframes, pAnimChannel->mNumScalingKeys);
+
+			if (iNumKeyframes > iMaxKeyFrameIndex)
+				iMaxKeyFrameIndex = iNumKeyframes;
 
 			_float3 vScale = _float3(1.f, 1.f, 1.f);
 			_float4 vRotation = _float4(0.f, 0.f, 0.f, 0.f);
@@ -624,7 +629,8 @@ HRESULT CModel::Create_Animation()
 				pChannel->Add_KeyFrame(pKeyFrame);
 			}
 			pAnimation->Add_Channel(pChannel);
-		}	
+		}
+		pAnimation->Set_MaxKeyFrameIndex(iMaxKeyFrameIndex);
 		m_Animations.push_back(pAnimation);
 	}
 	return S_OK;

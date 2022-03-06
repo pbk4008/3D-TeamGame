@@ -37,6 +37,8 @@ public:
 public:
 	const _uint Get_CurAnimIndex() const;
 	const _uint Get_CurKeyFrameIndex() const;
+	const _uint Get_CurFixedBoneKeyFrameIndex() const;
+	const _uint Get_MaxKeyFrameIndex() const;
 	const ERootOption Get_RootOption() const;
 
 	void Set_GameObject(CGameObject* _pGameObject);
@@ -79,8 +81,10 @@ private:
 	_bool m_isChangeAnim = false;
 	ERootOption m_eRootOption = ERootOption::XYZ;
 
-	_int m_iPreKeyFrameIndex = 0;
-	_int m_iCurKeyFrameIndex = 0;
+	_int m_iPreFixedBoneKeyFrameIndex = 0;
+	_int m_iCurFixedBoneKeyFrameIndex = 0;
+	_uint m_iCurKeyFrameIndex = 0;
+	_uint m_iMaxKeyFrameIndex = 0;
 
 	_matrix m_smatPivot = XMMatrixIdentity();
 

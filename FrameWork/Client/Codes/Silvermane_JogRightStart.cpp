@@ -96,7 +96,7 @@ _int CSilvermane_JogRightStart::KeyCheck(const _double& TimeDelta)
 	}
 	else if (g_pGameInstance->getkeyPress(DIK_A))
 	{
-		if (FAILED(m_pStateController->Change_State(L"JogLeftPivot180")))
+		if (FAILED(m_pStateController->Change_State(L"JogRightPivot180")))
 			return -1;
 		return STATE_CHANGE;
 	}

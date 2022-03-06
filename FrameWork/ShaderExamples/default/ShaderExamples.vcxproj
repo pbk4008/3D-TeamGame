@@ -154,11 +154,13 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\bin\ShaderFiles\Shader_RenderState.hpp" />
-    <ClInclude Include="..\private\StaticObject.h" />
-    <ClInclude Include="..\public\DynamicCaemra.h" />
-    <ClInclude Include="..\public\DynamicObject.h" />
+    <ClInclude Include="..\public\BackGround.h" />
+    <ClInclude Include="..\public\MainCamera.h" />
     <ClInclude Include="..\public\Floor.h" />
+    <ClInclude Include="..\public\Loader.h" />
+    <ClInclude Include="..\public\Loading.h" />
     <ClInclude Include="..\public\MainApp.h" />
+    <ClInclude Include="..\public\Stage1.h" />
     <ClInclude Include="Defines.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="Resource.h" />
@@ -166,11 +168,13 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\private\DynamicCaemra.cpp" />
-    <ClCompile Include="..\private\DynamicObject.cpp" />
+    <ClCompile Include="..\private\BackGround.cpp" />
+    <ClCompile Include="..\private\MainCamera.cpp" />
     <ClCompile Include="..\private\Floor.cpp" />
+    <ClCompile Include="..\private\Loader.cpp" />
+    <ClCompile Include="..\private\Loading.cpp" />
     <ClCompile Include="..\private\MainApp.cpp" />
-    <ClCompile Include="..\public\StaticObject.cpp" />
+    <ClCompile Include="..\private\Stage1.cpp" />
     <ClCompile Include="ShaderExamples.cpp" />
   </ItemGroup>
   <ItemGroup>

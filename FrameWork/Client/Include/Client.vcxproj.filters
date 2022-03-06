@@ -91,6 +91,12 @@
     <Filter Include="02.GameObject\97.Plane">
       <UniqueIdentifier>{90180e28-49c4-4c5c-89b6-1ad22812fb29}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\96.Weapon">
+      <UniqueIdentifier>{4de56d05-7178-4ee0-a266-5f7bb2773397}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\96.Weapon\00.Needle">
+      <UniqueIdentifier>{3eee425a-e769-4d53-87d7-fe962081c44a}</UniqueIdentifier>
+    </Filter>
     <Filter Include="02.GameObject\06.">
       <UniqueIdentifier>{5e4ce90c-d575-4e08-9ce0-006401437c35}</UniqueIdentifier>
     </Filter>
@@ -222,17 +228,32 @@
     <ClInclude Include="..\Headers\Plane_Test.h">
       <Filter>02.GameObject\97.Plane</Filter>
     </ClInclude>
-    <ClInclude Include="..\Headers\Environment.h">
-      <Filter>02.GameObject\02.Environment</Filter>
+    <ClInclude Include="..\Headers\Weapon.h">
+      <Filter>02.GameObject\96.Weapon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Needle.h">
+      <Filter>02.GameObject\96.Weapon\00.Needle</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\1H_SwordEquipOff.h">
+      <Filter>02.GameObject\98.Player\00.Silvermane\State\1H</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\1H_SwordEquipOn.h">
+      <Filter>02.GameObject\98.Player\00.Silvermane\State\1H</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\1H_SwordDodgeSpinFwd_V3.h">
+      <Filter>02.GameObject\98.Player\00.Silvermane\State\1H</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\MainCamera.h">
       <Filter>02.GameObject\01. MainCamera\ProjectionCam</Filter>
     </ClInclude>
-    <ClInclude Include="..\Headers\MainCamera_Ortho.h">
-      <Filter>02.GameObject\01. MainCamera\OrthoCam</Filter>
-    </ClInclude>
     <ClInclude Include="..\Headers\Effect_DashDust.h">
       <Filter>02.GameObject\04.Effect\01.Effect_DashDust_Player</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Environment.h">
+      <Filter>02.GameObject\02.Environment</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\MainCamera_Ortho.h">
+      <Filter>02.GameObject\01. MainCamera\OrthoCam</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\UI_Ingame.h">
       <Filter>02.GameObject\05.UI\01.UI_Ingame</Filter>
@@ -339,20 +360,32 @@
     <ClCompile Include="..\Codes\Plane_Test.cpp">
       <Filter>02.GameObject\97.Plane</Filter>
     </ClCompile>
-    <ClCompile Include="..\Codes\Environment.cpp">
-      <Filter>02.GameObject\02.Environment</Filter>
+    <ClCompile Include="..\Codes\Weapon.cpp">
+      <Filter>02.GameObject\96.Weapon</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Needle.cpp">
+      <Filter>02.GameObject\96.Weapon\00.Needle</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\1H_SwordEquipOff.cpp">
+      <Filter>02.GameObject\98.Player\00.Silvermane\State\1H</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\1H_SwordEquipOn.cpp">
+      <Filter>02.GameObject\98.Player\00.Silvermane\State\1H</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\1H_SwordDodgeSpinFwd_V3.cpp">
+      <Filter>02.GameObject\98.Player\00.Silvermane\State\1H</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\MainCamera.cpp">
       <Filter>02.GameObject\01. MainCamera\ProjectionCam</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Codes\MainCamera_Ortho.cpp">
-      <Filter>02.GameObject\01. MainCamera\OrthoCam</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\Effect_DashDust.cpp">
       <Filter>02.GameObject\04.Effect\01.Effect_DashDust_Player</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\UI_Ingame.cpp">
       <Filter>02.GameObject\05.UI\01.UI_Ingame</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\MainCamera_Ortho.cpp">
+      <Filter>02.GameObject\01. MainCamera\OrthoCam</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
