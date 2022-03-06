@@ -93,38 +93,38 @@ HRESULT CRenderer::NativeConstruct_Prototype()
 
 
 
-	m_pVIBuffer = CVIBuffer_RectViewPort::Create(m_pDevice, m_pDeviceContext, 0.f, 0.f, ViewportDesc.Width, ViewportDesc.Height, TEXT("../Bin/ShaderFiles/Shader_RectViewPort.hlsl"));
-	if (nullptr == m_pVIBuffer)
-		return E_FAIL;
-
-#ifdef _DEBUG
-	if (FAILED(m_pTarget_Manager->Ready_Debug_Buffer(TEXT("Target_Diffuse"), 0, 0, 100.f, 100.f)))
-		return E_FAIL;
-	if (FAILED(m_pTarget_Manager->Ready_Debug_Buffer(TEXT("Target_Normal"), 100.f, 0, 100.f, 100.f)))
-		return E_FAIL;
-	if (FAILED(m_pTarget_Manager->Ready_Debug_Buffer(TEXT("Target_Depth"), 200.f, 0, 100.f, 100.f)))
-		return E_FAIL;
-	if (FAILED(m_pTarget_Manager->Ready_Debug_Buffer(TEXT("Target_Position"), 300, 0, 100.f, 100.f)))
-		return E_FAIL;
-
-	if (FAILED(m_pTarget_Manager->Ready_Debug_Buffer(TEXT("Target_Shadow"), 400.f, 0, 100.f, 100.f)))
-		return E_FAIL;
-
-	if (FAILED(m_pTarget_Manager->Ready_Debug_Buffer(TEXT("Target_ShadeShadow"), 500.f, 0, 100.f, 100.f)))
-		return E_FAIL;
-
-	if (FAILED(m_pTarget_Manager->Ready_Debug_Buffer(TEXT("Target_Shade"), 600.f, 0, 100.f, 100.f)))
-		return E_FAIL;
-	if (FAILED(m_pTarget_Manager->Ready_Debug_Buffer(TEXT("Target_Specular"), 700.f, 0, 100.f, 100.f)))
-		return E_FAIL;
-
-	if (FAILED(m_pTarget_Manager->Ready_Debug_Buffer(TEXT("Target_Metallic"), 1180.f, 0, 100.f, 100.f)))
-		return E_FAIL;
-	if (FAILED(m_pTarget_Manager->Ready_Debug_Buffer(TEXT("Target_Roughness"), 1180.f, 100.f, 100.f, 100.f)))
-		return E_FAIL;
-	if (FAILED(m_pTarget_Manager->Ready_Debug_Buffer(TEXT("Target_AO"), 1180.f, 200, 100.f, 100.f)))
-		return E_FAIL;
-#endif // _DEBUG
+	//m_pVIBuffer = CVIBuffer_RectViewPort::Create(m_pDevice, m_pDeviceContext, 0.f, 0.f, ViewportDesc.Width, ViewportDesc.Height, TEXT("../Bin/ShaderFiles/Shader_RectViewPort.hlsl"));
+	//if (nullptr == m_pVIBuffer)
+	//	return E_FAIL;
+//
+//#ifdef _DEBUG
+//	if (FAILED(m_pTarget_Manager->Ready_Debug_Buffer(TEXT("Target_Diffuse"), 0, 0, 100.f, 100.f)))
+//		return E_FAIL;
+//	if (FAILED(m_pTarget_Manager->Ready_Debug_Buffer(TEXT("Target_Normal"), 100.f, 0, 100.f, 100.f)))
+//		return E_FAIL;
+//	if (FAILED(m_pTarget_Manager->Ready_Debug_Buffer(TEXT("Target_Depth"), 200.f, 0, 100.f, 100.f)))
+//		return E_FAIL;
+//	if (FAILED(m_pTarget_Manager->Ready_Debug_Buffer(TEXT("Target_Position"), 300, 0, 100.f, 100.f)))
+//		return E_FAIL;
+//
+//	if (FAILED(m_pTarget_Manager->Ready_Debug_Buffer(TEXT("Target_Shadow"), 400.f, 0, 100.f, 100.f)))
+//		return E_FAIL;
+//
+//	if (FAILED(m_pTarget_Manager->Ready_Debug_Buffer(TEXT("Target_ShadeShadow"), 500.f, 0, 100.f, 100.f)))
+//		return E_FAIL;
+//
+//	if (FAILED(m_pTarget_Manager->Ready_Debug_Buffer(TEXT("Target_Shade"), 600.f, 0, 100.f, 100.f)))
+//		return E_FAIL;
+//	if (FAILED(m_pTarget_Manager->Ready_Debug_Buffer(TEXT("Target_Specular"), 700.f, 0, 100.f, 100.f)))
+//		return E_FAIL;
+//
+//	if (FAILED(m_pTarget_Manager->Ready_Debug_Buffer(TEXT("Target_Metallic"), 1180.f, 0, 100.f, 100.f)))
+//		return E_FAIL;
+//	if (FAILED(m_pTarget_Manager->Ready_Debug_Buffer(TEXT("Target_Roughness"), 1180.f, 100.f, 100.f, 100.f)))
+//		return E_FAIL;
+//	if (FAILED(m_pTarget_Manager->Ready_Debug_Buffer(TEXT("Target_AO"), 1180.f, 200, 100.f, 100.f)))
+//		return E_FAIL;
+//#endif // _DEBUG
 
 
 	return S_OK;
@@ -158,14 +158,14 @@ HRESULT CRenderer::Draw_RenderGroup()
 	if (FAILED(Render_Priority()))
 		return E_FAIL;
 
-	if (FAILED(Render_NonAlpha())) // 디퍼드 단계
-		return E_FAIL;
+	//if (FAILED(Render_NonAlpha())) // 디퍼드 단계
+	//	return E_FAIL;
 
-	if (FAILED(Render_LightAcc())) // 빛연산
-		return E_FAIL;
+	//if (FAILED(Render_LightAcc())) // 빛연산
+	//	return E_FAIL;
 
-	if (FAILED(Render_Blend())) // 최종 결합
-		return E_FAIL;
+	//if (FAILED(Render_Blend())) // 최종 결합
+	//	return E_FAIL;
 
 	if (FAILED(Render_Alpha()))
 		return E_FAIL;
@@ -173,22 +173,22 @@ HRESULT CRenderer::Draw_RenderGroup()
 	if (FAILED(Render_UI()))
 		return E_FAIL;
 
-#ifdef _DEBUG
-	if (FAILED(m_pTarget_Manager->Render_Debug_Buffer(TEXT("MRT_Shadow"))))
-		return E_FAIL;
-
-	if (FAILED(m_pTarget_Manager->Render_Debug_Buffer(TEXT("MRT_ShaeShadow"))))
-		return E_FAIL;
-
-	if (FAILED(m_pTarget_Manager->Render_Debug_Buffer(TEXT("MRT_Deferred"))))
-		return E_FAIL;
-
-	if (FAILED(m_pTarget_Manager->Render_Debug_Buffer(TEXT("MRT_PBR"))))
-		return E_FAIL;
-
-	if (FAILED(m_pTarget_Manager->Render_Debug_Buffer(TEXT("MRT_LightAcc"))))
-		return E_FAIL;
-#endif // _DEBUG
+//#ifdef _DEBUG
+//	if (FAILED(m_pTarget_Manager->Render_Debug_Buffer(TEXT("MRT_Shadow"))))
+//		return E_FAIL;
+//
+//	if (FAILED(m_pTarget_Manager->Render_Debug_Buffer(TEXT("MRT_ShaeShadow"))))
+//		return E_FAIL;
+//
+//	if (FAILED(m_pTarget_Manager->Render_Debug_Buffer(TEXT("MRT_Deferred"))))
+//		return E_FAIL;
+//
+//	if (FAILED(m_pTarget_Manager->Render_Debug_Buffer(TEXT("MRT_PBR"))))
+//		return E_FAIL;
+//
+//	if (FAILED(m_pTarget_Manager->Render_Debug_Buffer(TEXT("MRT_LightAcc"))))
+//		return E_FAIL;
+//#endif // _DEBUG
 
 	return S_OK;
 }
