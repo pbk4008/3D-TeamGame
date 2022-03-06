@@ -45,8 +45,14 @@ HRESULT CBackGround::NativeConstruct(void* pArg)
 	if (FAILED(Ready_GameObject(pArg)))
 		return E_FAIL;
 
-	m_pTransform->SetTransformDesc(5.f, XMConvertToRadians(10.f));
+	m_fPos = { 640.f,360.f };
+	m_fSize = { 1280.f,720.f};
 
+	_vector vPos = { m_fPos.x - (g_iWinCx >> 1),-m_fPos.y + (g_iWinCy>> 1),1.f,1.f };
+	m_pTransform->Set_State(CTransform::STATE_POSITION, vPos);
+
+	_vector vScale = { m_fSize.x,m_fSize.y,1.f ,1.f };
+	m_pTransform->Scaling(vScale);
 
 	return S_OK;
 }
@@ -81,8 +87,8 @@ HRESULT CBackGround::Render()
 	
 	_matrix matWorld, matView, matProj;
 	matWorld = XMMatrixTranspose(m_pTransform->Get_WorldMatrix());
-	matView = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"MainCamera",TRANSFORMSTATEMATRIX::D3DTS_VIEW));
-	matProj = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"MainCamera",TRANSFORMSTATEMATRIX::D3DTS_PROJECTION));
+	matView = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"MainOrthoCamera",TRANSFORMSTATEMATRIX::D3DTS_VIEW));
+	matProj = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"MainOrthoCamera",TRANSFORMSTATEMATRIX::D3DTS_PROJECTION));
 
 	m_pRcTex->SetUp_ValueOnShader("g_WorldMatrix", &matWorld, sizeof(_matrix));
 	m_pRcTex->SetUp_ValueOnShader("g_ViewMatrix", &matView, sizeof(_matrix));
@@ -97,7 +103,8 @@ HRESULT CBackGround::Render()
 CGameObject* CBackGround::Clone(void* pArg)
 {
 	CBackGround* pInstance = new CBackGround(*this);
-	if (FAILED(pInstance->NativeConstruct(pArg)))
+
+ 	if (FAILED(pInstance->NativeConstruct(pArg)))
 	{
 		MSGBOX("BackGround Clone Fail");
 		Safe_Release(pInstance);

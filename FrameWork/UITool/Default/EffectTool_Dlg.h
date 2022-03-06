@@ -86,4 +86,5 @@ public:
 	int m_ImagecountX;
 	int m_ImagecountY;
 	float m_EffectPlaySpeed;
+	int m_IDTag;
 };

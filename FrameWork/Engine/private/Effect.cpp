@@ -45,7 +45,8 @@ HRESULT CEffect::NativeConstruct(void* pArg)
 	}
 
 	m_pTransform->Set_State(CTransform::STATE_POSITION, m_Desc.fMyPos);
-	
+	m_iObectTag = m_Desc.IDTag;
+
 	return S_OK;
 }
 

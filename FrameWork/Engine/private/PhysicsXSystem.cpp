@@ -1,5 +1,6 @@
 #include "PhysicsXSystem.h"
 #include "PipeLine.h"
+#include "SaveManager.h"
 #include "GameObject.h"
 
 CPhysicsXSystem::CPhysicsXSystem()
@@ -8,6 +9,7 @@ CPhysicsXSystem::CPhysicsXSystem()
 	, m_pScene(nullptr)
 	, m_pDispatcher(nullptr)
 	, m_pContactRePort(nullptr)
+	, m_pCooking(nullptr)
 {
 }
 HRESULT CPhysicsXSystem::Init_PhysicsX()
@@ -18,6 +20,15 @@ HRESULT CPhysicsXSystem::Init_PhysicsX()
 
 	m_pPhysics = PxCreatePhysics(PX_PHYSICS_VERSION, *m_pFoundation, PxTolerancesScale(), true);
 	if (!m_pPhysics)
+		return E_FAIL;
+
+	PxCookingParams cookingParams(m_pPhysics->getTolerancesScale());
+
+	cookingParams.meshPreprocessParams = PxMeshPreprocessingFlag::eDISABLE_CLEAN_MESH;
+
+	PxCooking* pCooking = PxCreateCooking(PX_PHYSICS_VERSION, *m_pFoundation, cookingParams);
+
+	if (!pCooking)
 		return E_FAIL;
 
 	if (FAILED(Intit_Scene()))
@@ -85,6 +96,31 @@ PxShape* CPhysicsXSystem::Init_Shape(COLLIDERTYPE eType, const PxVec3 ShapeInfo)
 	default:
 		break;
 	}
+	pShape->setFlag(PxShapeFlag::eVISUALIZATION, true);
+	pShape->setFlag(PxShapeFlag::eSCENE_QUERY_SHAPE, true);
+	pShape->setFlag(PxShapeFlag::eTRIGGER_SHAPE, false);
+	pShape->setFlag(PxShapeFlag::eSIMULATION_SHAPE, true);
+
+	return pShape;
+}
+
+PxShape* CPhysicsXSystem::Init_Mesh(const PxTriangleMeshDesc& tDesc)
+{
+	if (!m_pCooking||!m_pPhysics)
+		return nullptr;
+	PxTriangleMesh* pTriMesh=m_pCooking->createTriangleMesh(tDesc, m_pPhysics->getPhysicsInsertionCallback());
+	if (!pTriMesh)
+		return nullptr;
+
+	PxMaterial* pMaterial = m_pPhysics->createMaterial(0.5f, 0.5f, 0.5f);
+
+	if (!pMaterial)
+		return nullptr;
+
+	PxTriangleMeshGeometry pxMesh = PxTriangleMeshGeometry(pTriMesh);
+
+	PxShape* pShape = nullptr;
+	pShape = m_pPhysics->createShape(pxMesh, *pMaterial,true);
 	pShape->setFlag(PxShapeFlag::eVISUALIZATION, true);
 	pShape->setFlag(PxShapeFlag::eSCENE_QUERY_SHAPE, true);
 	pShape->setFlag(PxShapeFlag::eTRIGGER_SHAPE, false);

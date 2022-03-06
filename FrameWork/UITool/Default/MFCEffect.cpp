@@ -41,6 +41,7 @@ HRESULT CMFCEffect::NativeConstruct(void* pArg)
 	if (nullptr != pArg)
 	{
 		memcpy(&m_Desc, pArg, sizeof(EFFECTDESC));
+		int a = 0;
 	}
 
 	//여기서 필요한 모든 컴포넌트들 Clone해옴
@@ -49,12 +50,27 @@ HRESULT CMFCEffect::NativeConstruct(void* pArg)
 		return E_FAIL;
 	}
 
+	CVIBuffer_PointInstance_Explosion::PIDESC Desc;
+	_tcscpy_s(Desc.ShaderFilePath, m_Desc.ShaderFilePath);
+	Desc.matParticle = m_Desc.ParticleMat;
+	Desc.fParticleStartRandomPos = m_Desc.fParticleRandomPos;
+	Desc.fParticleMinusRandomDir = m_Desc.fParticleMinusRandomDir;
+	Desc.fParticleRandomDir = m_Desc.fParticleRandomDir;
+	Desc.fParticleSpeed = m_Desc.fParticleVelocity;
+	Desc.fParticleSize = m_Desc.fParticleSize;
+	Desc.iNumInstance = m_Desc.iNumInstance;
+
+	m_pBuffer->Set_Desc(Desc);
+	m_pBuffer->Particle_Reset();
+
+	m_bReset = false;
+
 	return S_OK;
 }
 
 _int CMFCEffect::Tick(_double TimeDelta)
 {
-	//m_pBuffer->Update(TimeDelta);
+	//m_pBuffer->Update(TimeDelta, m_Desc.iAxis);
 
 	CMainFrame* pMain = dynamic_cast<CMainFrame*>(AfxGetApp()->GetMainWnd());
 	CMyFormView* pForm = dynamic_cast<CMyFormView*>(pMain->m_SplitterWnd.GetPane(0, 0));

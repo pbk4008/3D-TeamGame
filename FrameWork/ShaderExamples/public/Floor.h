@@ -26,7 +26,7 @@ public:
 	virtual _int LateTick(_double TimeDelta) override;
 	virtual HRESULT Render() override;
 private:
-	CTexture* m_pTextureCom = nullptr;
+	CTexture* m_pTexture = nullptr;
 	CVIBuffer_Terrain* m_pVIBufferCom = nullptr;
 private:
 	virtual HRESULT SetUp_Components();

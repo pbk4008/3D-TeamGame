@@ -14,6 +14,8 @@ public:
 	virtual HRESULT Render();
 private:
 	HRESULT Ready_Gameobject();
+	HRESULT Ready_Effect(const _tchar* pDataFilePath);
+	HRESULT Ready_UI(const _tchar* pDataFilePath);
 public:
 	static CStage1* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);
 private:

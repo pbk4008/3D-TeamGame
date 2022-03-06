@@ -30,6 +30,10 @@ private:
 private:
 	CVIBuffer_Rect* m_pRcTex;
 	CTexture* m_pTexture;
+
+private:
+	_float2 m_fPos;
+	_float2 m_fSize;
 };
 END
 #endif
