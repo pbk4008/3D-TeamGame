@@ -16,9 +16,7 @@ CSilvermane_JogRight::CSilvermane_JogRight(const CSilvermane_JogRight& _rhs)
 HRESULT CSilvermane_JogRight::NativeConstruct(void* _pArg)
 {
 	if (FAILED(__super::NativeConstruct(_pArg)))
-	{
 		return E_FAIL;
-	}
 
 	return S_OK;
 }
@@ -26,9 +24,7 @@ HRESULT CSilvermane_JogRight::NativeConstruct(void* _pArg)
 _int CSilvermane_JogRight::Tick(const _double& TimeDelta)
 {
 	if (0 > __super::Tick(TimeDelta))
-	{
 		return -1;
-	}
 
 	return _int();
 }
@@ -36,9 +32,7 @@ _int CSilvermane_JogRight::Tick(const _double& TimeDelta)
 _int CSilvermane_JogRight::LateTick(const _double& TimeDelta)
 {
 	if (0 > __super::LateTick(TimeDelta))
-	{
 		return -1;
-	}
 
 	return _int();
 }
@@ -46,9 +40,7 @@ _int CSilvermane_JogRight::LateTick(const _double& TimeDelta)
 HRESULT CSilvermane_JogRight::Render()
 {
 	if (FAILED(__super::Render()))
-	{
 		return E_FAIL;
-	}
 
 	return S_OK;
 }
@@ -56,9 +48,7 @@ HRESULT CSilvermane_JogRight::Render()
 HRESULT CSilvermane_JogRight::EnterState()
 {
 	if (FAILED(__super::EnterState()))
-	{
 		return E_FAIL;
-	}
 
 	
 	m_pAnimationController->SetUp_NextAnimation("SK_Silvermane.ao|A_Loco_Jog_Right_Player", true);
@@ -74,9 +64,7 @@ HRESULT CSilvermane_JogRight::EnterState()
 HRESULT CSilvermane_JogRight::ExitState()
 {
 	if (FAILED(__super::ExitState()))
-	{
 		return E_FAIL;
-	}
 
 	m_pAnimationController->Set_PivotMatrix(XMMatrixIdentity());
 
@@ -85,36 +73,32 @@ HRESULT CSilvermane_JogRight::ExitState()
 
 _int CSilvermane_JogRight::KeyCheck(const _double& TimeDelta)
 {
-	if (g_pGameInstance->getkeyPress(DIK_RIGHT))
+	if (g_pGameInstance->getkeyPress(DIK_D))
 	{
 	}
-	else if (g_pGameInstance->getkeyPress(DIK_LEFT))
+	else if (g_pGameInstance->getkeyPress(DIK_A))
 	{
 		if (FAILED(m_pStateController->Change_State(L"JogRightPivot180")))
-		{
 			return -1;
-		}
+		return STATE_CHANGE;
 	}
-	else if (g_pGameInstance->getkeyPress(DIK_UP))
+	else if (g_pGameInstance->getkeyPress(DIK_W))
 	{
 		if (FAILED(m_pStateController->Change_State(L"JogFwdStart")))
-		{
 			return -1;
-		}
+		return STATE_CHANGE;
 	}
-	else if (g_pGameInstance->getkeyPress(DIK_DOWN))
+	else if (g_pGameInstance->getkeyPress(DIK_S))
 	{
 		if (FAILED(m_pStateController->Change_State(L"JogBwdStart")))
-		{
 			return -1;
-		}
+		return STATE_CHANGE;
 	}
 	else
 	{
 		if (FAILED(m_pStateController->Change_State(L"Idle")))
-		{
 			return -1;
-		}
+		return STATE_CHANGE;
 	}
 	
 	return _int();

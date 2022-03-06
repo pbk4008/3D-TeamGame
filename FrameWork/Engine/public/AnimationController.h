@@ -35,7 +35,8 @@ public:
 	virtual HRESULT Render();
 
 public:
-	const _int Get_CurAnimIndex() const;
+	const _uint Get_CurAnimIndex() const;
+	const _uint Get_CurKeyFrameIndex() const;
 	const ERootOption Get_RootOption() const;
 
 	void Set_GameObject(CGameObject* _pGameObject);

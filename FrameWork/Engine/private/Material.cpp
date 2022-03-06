@@ -8,6 +8,8 @@ CMaterial::CMaterial(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContex
 {
 	Safe_AddRef(m_pDevice);
 	Safe_AddRef(m_pDeviceContext);
+
+	m_vecTextures.resize(AI_TEXTURE_TYPE_MAX);
 }
 
 HRESULT CMaterial::Native_Construct(const wstring& _wstrName, const wstring& _wstrShaderFilePath, const EType _eType)
@@ -125,9 +127,9 @@ HRESULT CMaterial::SetUp_ValueOnShader(const string _strConstantName, void* _pDa
 
 HRESULT CMaterial::SetUp_TextureOnShader(const string _strConstantName, const aiTextureType _eTextureType, _uint _iTextureIndex)
 {
-	if (m_pArrTextures[_eTextureType])
+	if (m_vecTextures[_eTextureType])
 	{
-		ID3D11ShaderResourceView* pShaderResourceView = m_pArrTextures[_eTextureType]->Get_ShaderResourceView(_iTextureIndex);
+		ID3D11ShaderResourceView* pShaderResourceView = m_vecTextures[_eTextureType]->Get_ShaderResourceView(_iTextureIndex);
 		if (pShaderResourceView)
 		{
 			ID3DX11EffectShaderResourceVariable* pVariable = m_pEffect->GetVariableByName(_strConstantName.c_str())->AsShaderResource();
@@ -148,11 +150,11 @@ const wstring& CMaterial::Get_Name() const
 
 HRESULT CMaterial::Set_Texture(const string& _strConstantName, const aiTextureType _eTextureType, CTexture* _pTexture, const _uint _iTextureIndex)
 {
-	if (m_pArrTextures[_eTextureType])
+	if (m_vecTextures[_eTextureType])
 	{
-		Safe_Release(m_pArrTextures[_eTextureType]);
+		Safe_Release(m_vecTextures[_eTextureType]);
 	}
-	m_pArrTextures[_eTextureType] = _pTexture;
+	m_vecTextures[_eTextureType] = _pTexture;
 
 	SetUp_TextureOnShader(_strConstantName.c_str(), _eTextureType, _iTextureIndex);
 	return S_OK;
@@ -186,8 +188,9 @@ void CMaterial::Free()
 
 	Safe_Release(m_pEffect);
 
-	for (_uint i = 0; i < AI_TEXTURE_TYPE_MAX; ++i)
-		Safe_Release(m_pArrTextures[i]);
+	for (auto& pMtrl : m_vecTextures)
+		Safe_Release(pMtrl);
+	m_vecTextures.clear();
 
 	Safe_Release(m_pDeviceContext);
 	Safe_Release(m_pDevice);

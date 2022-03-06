@@ -197,11 +197,13 @@ HRESULT CModel::Add_Material(CMaterial* _pMtrl, const _uint _iMtrlIndex)
 	{
 		if (m_vecMaterials[_iMtrlIndex])
 			Safe_Release(m_vecMaterials[_iMtrlIndex]);
-	}
 
-	m_vecMaterials[_iMtrlIndex] = _pMtrl;
-	Safe_AddRef(_pMtrl);
-	return S_OK;
+		m_vecMaterials[_iMtrlIndex] = _pMtrl;
+		Safe_AddRef(_pMtrl);
+
+		return S_OK;
+	}
+	return E_FAIL;
 }
 
 HRESULT CModel::SetUp_ValueOnShader(const char* pConstantName, void* pData, _uint iSize)
