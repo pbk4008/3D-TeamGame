@@ -2,7 +2,6 @@
 #include "Static_Mesh.h"
 #include "GameInstance.h"
 #include "MeshContainer.h"
-#include "Observer.h"
 #include "Gizmo.h"
 
 CStatic_Mesh::CStatic_Mesh(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
@@ -78,9 +77,12 @@ _int CStatic_Mesh::LateTick(_double TimeDelta)
 	{
 		CObserver* pObserver = GET_INSTANCE(CObserver);
 
+		Pick_Scale(TimeDelta, pObserver->m_eScaleMode);
+
 		_vector DebugTemp = XMVectorZero();
 		DebugTemp = pObserver->Load_DebugingFile(L"../Data/Mesh_Debuging.txt");
-		if (0.0f != XMVectorGetX(DebugTemp))
+
+		if (XMVectorGetX(XMVector4Length(DebugTemp)))
 		{
 			m_pTransform->Set_State(CTransform::STATE_POSITION, DebugTemp);
 		}
@@ -172,18 +174,27 @@ _fmatrix CStatic_Mesh::Get_WorldMat(void)
 
 void CStatic_Mesh::Input_Key(_double _dtimeDelta)
 {
-	if(g_pGameInstance->getkeyPress(DIK_NUMPAD8))
-		m_pTransform->Go_Straight(_dtimeDelta);	
-	if (g_pGameInstance->getkeyPress(DIK_NUMPAD2))
-		m_pTransform->Go_BackWard(_dtimeDelta);
-	if (g_pGameInstance->getkeyPress(DIK_NUMPAD4))
-		m_pTransform->Go_Left(_dtimeDelta);
-	if (g_pGameInstance->getkeyPress(DIK_NUMPAD6))
-		m_pTransform->Go_Right(_dtimeDelta);
+	if(g_pGameInstance->getkeyPress(DIK_UP))
+		//m_pTransform->Mesh_Go(_dtimeDelta);
+	if (g_pGameInstance->getkeyPress(DIK_DOWN))
+		//m_pTransform->Mesh_Back(_dtimeDelta);
+	if (g_pGameInstance->getkeyPress(DIK_LEFT))
+		//m_pTransform->Mesh_Left(_dtimeDelta);
+	if (g_pGameInstance->getkeyPress(DIK_RIGHT))
+		//m_pTransform->Mesh_Right(_dtimeDelta);
 	if (g_pGameInstance->getkeyPress(DIK_PGUP))
 		m_pTransform->Go_Up(_dtimeDelta);
 	if (g_pGameInstance->getkeyPress(DIK_PGDN))
 		m_pTransform->Go_Down(_dtimeDelta);
+
+	if (g_pGameInstance->getkeyPress(DIK_I))
+		m_pTransform->Go_Straight(_dtimeDelta);
+	if (g_pGameInstance->getkeyPress(DIK_K))
+		m_pTransform->Go_BackWard(_dtimeDelta);
+	if (g_pGameInstance->getkeyPress(DIK_J))
+		m_pTransform->Go_Left(_dtimeDelta);
+	if (g_pGameInstance->getkeyPress(DIK_L))
+		m_pTransform->Go_Right(_dtimeDelta);
 
 	_long	MouseMove = 0;
 	_long   MouseWheel = 0;
@@ -229,6 +240,68 @@ void CStatic_Mesh::Input_Key(_double _dtimeDelta)
 			_fvector Scale_Down = { 0.95f, 0.95f, 0.95f };
 			m_pTransform->Scale_Up(Scale_Down);
 		}
+	}
+}
+
+void CStatic_Mesh::Pick_Scale(_double _dtimeDelta, CObserver::ScaleMode _eMode)
+{
+	_long   MouseWheel = 0;
+
+	switch (_eMode)
+	{
+	case CObserver::SCALE_X:
+	{
+		if (MouseWheel = g_pGameInstance->getMouseMoveState(CInputDev::MOUSEMOVESTATE::MM_WHILL))
+		{
+			if (0 < MouseWheel)
+			{
+				_fvector ScaleXUp = { 1.05f, 1.0f, 1.0f };
+				//m_pTransform->ScaleX_Up(ScaleXUp);
+			}
+			else
+			{
+				_fvector Scale_Down = { 0.95f, 1.0f, 1.0f };
+				//m_pTransform->ScaleX_Up(Scale_Down);
+			}
+		}
+	}
+		break;
+	case CObserver::SCALE_Y:
+	{
+		if (MouseWheel = g_pGameInstance->getMouseMoveState(CInputDev::MOUSEMOVESTATE::MM_WHILL))
+		{
+			if (0 < MouseWheel)
+			{
+				_fvector ScaleXUp = { 1.0f, 1.05f, 1.0f };
+				//m_pTransform->ScaleY_Up(ScaleXUp);
+			}
+			else
+			{
+				_fvector Scale_Down = { 1.0f, 0.95f, 1.0f };
+				//m_pTransform->ScaleY_Up(Scale_Down);
+			}
+		}
+	}
+	break;
+	case CObserver::SCALE_Z:
+	{
+		if (MouseWheel = g_pGameInstance->getMouseMoveState(CInputDev::MOUSEMOVESTATE::MM_WHILL))
+		{
+			if (0 < MouseWheel)
+			{
+				_fvector ScaleXUp = { 1.0f, 1.0f, 1.05f };
+				//m_pTransform->ScaleZ_Up(ScaleXUp);
+			}
+			else
+			{
+				_fvector Scale_Down = { 1.0f, 1.0f, 0.95f };
+				//m_pTransform->ScaleZ_Up(Scale_Down);
+			}
+		}
+	}
+		break;
+	case CObserver::SCALE_END: default:
+		break;
 	}
 }
 
@@ -279,7 +352,7 @@ void CStatic_Mesh::Pick_Model(void)
 				if (IntersectTriangle(vRayPos, vRayDir, Pos_1, Pos_2, Pos_3, &fDist, &fBary1, &fBary2))
 				{
 					m_bPick = true;
-					pObserver->m_bPick = true;
+				    pObserver->m_bPick = true;
 					pObserver->m_pModel = this;
 
 					XMStoreFloat3(&m_fLocalMouse, XMLoadFloat3(&m_vRayPos) + (XMLoadFloat3(&m_vRayDir)) * fDist);

@@ -28,7 +28,6 @@ public:
 public: 
 	HRESULT		Get_ModelInfo(const FILEINFO& _FileInfo);
 	_int		Update_Model_Inspector(_double _dTimeDelta);
-	void		Ready_Tag_Combo(void);
 	void		Ready_Level_Combo(void);
 
 public:
@@ -58,8 +57,8 @@ public:
 	CString m_ModelScaleX, m_ModelScaleY, m_ModelScaleZ;
 	
 	CEdit m_StaticTxt_FileName;
+	CEdit m_EditText_Model_Tag;
 	CEdit m_EditTxt_Model_Name;
-	CComboBox m_Combo_Tag;
 	CComboBox m_Combo_Level;
 
 protected:
@@ -76,4 +75,8 @@ public:
 	afx_msg void OnBnClickedNaveSetMode();
 	afx_msg void OnBnClickedNavSaveButton();
 	afx_msg void OnBnClickedNavLoadButton();
+	afx_msg void OnBnClickedRotXButton();
+	afx_msg void OnBnClickedRotYButton();
+	afx_msg void OnBnClickedZRotButton();
+	afx_msg void OnBnClickedRotNoneButton();
 };

@@ -14,6 +14,9 @@ public:
 	HRESULT Init_Loader(SCENEID eID);
 private:
 	HRESULT LoadForScene();
+private:
+	HRESULT SetUp_Stage1_ProtoComponent();
+	HRESULT Load_Stage1FBXLoad();
 public:
 	static _uint CALLBACK Thread_Main(void* pArg);
 	static CLoader* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext, SCENEID eID);

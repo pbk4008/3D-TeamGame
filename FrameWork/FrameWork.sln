@@ -31,6 +31,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ShaderFile", "ShaderFile", 
 	ProjectSection(SolutionItems) = preProject
 		Reference\ShaderFile\Shader_Cube.hlsl = Reference\ShaderFile\Shader_Cube.hlsl
 		Reference\ShaderFile\Shader_Instance.hlsl = Reference\ShaderFile\Shader_Instance.hlsl
+		Reference\ShaderFile\Shader_InstanceMesh.hlsl = Reference\ShaderFile\Shader_InstanceMesh.hlsl
 		Reference\ShaderFile\Shader_Mesh.hlsl = Reference\ShaderFile\Shader_Mesh.hlsl
 		Reference\ShaderFile\Shader_MeshAnim.hlsl = Reference\ShaderFile\Shader_MeshAnim.hlsl
 		Reference\ShaderFile\Shader_Particle.hlsl = Reference\ShaderFile\Shader_Particle.hlsl
