@@ -7,6 +7,7 @@
 #include "Observer.h"
 #include "Cell.h"
 #include "VIBuffer_Triangle.h"
+#include "Navigation.h"
 
 CPlane::CPlane(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
 : CGameObject(_pDevice, _pDeviceContext)

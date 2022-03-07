@@ -1,44 +1,40 @@
-<<<<<<< HEAD
-=======
-c:\users\pbk40\onedrive\바탕 화면\3dteam\framework\tool_ym\default\x64\debug\tool_ym.pch
-c:\users\pbk40\onedrive\바탕 화면\3dteam\framework\tool_ym\default\x64\debug\vc142.pdb
-c:\users\pbk40\onedrive\바탕 화면\3dteam\framework\tool_ym\default\x64\debug\vc142.idb
-c:\users\pbk40\onedrive\바탕 화면\3dteam\framework\tool_ym\default\x64\debug\pch.obj
-c:\users\pbk40\onedrive\바탕 화면\3dteam\framework\tool_ym\bin\debug_x64\tool_ym.exe
-c:\users\pbk40\onedrive\바탕 화면\3dteam\framework\tool_ym\bin\debug_x64\tool_ym.ilk
-c:\users\pbk40\onedrive\바탕 화면\3dteam\framework\tool_ym\bin\debug_x64\tool_ym.pdb
-c:\users\pbk40\onedrive\바탕 화면\3dteam\framework\tool_ym\default\x64\debug\toolym.res
-c:\users\pbk40\onedrive\바탕 화면\3dteam\framework\tool_ym\default\x64\debug\camtool_level.obj
-c:\users\pbk40\onedrive\바탕 화면\3dteam\framework\tool_ym\default\x64\debug\cam_inspector.obj
-c:\users\pbk40\onedrive\바탕 화면\3dteam\framework\tool_ym\default\x64\debug\cam_tool.obj
-c:\users\pbk40\onedrive\바탕 화면\3dteam\framework\tool_ym\default\x64\debug\changer.obj
-c:\users\pbk40\onedrive\바탕 화면\3dteam\framework\tool_ym\default\x64\debug\dyanmic_camera.obj
-c:\users\pbk40\onedrive\바탕 화면\3dteam\framework\tool_ym\default\x64\debug\inspector_form.obj
-c:\users\pbk40\onedrive\바탕 화면\3dteam\framework\tool_ym\default\x64\debug\mainfrm.obj
-c:\users\pbk40\onedrive\바탕 화면\3dteam\framework\tool_ym\default\x64\debug\maptool_level.obj
-c:\users\pbk40\onedrive\바탕 화면\3dteam\framework\tool_ym\default\x64\debug\map_tool.obj
-c:\users\pbk40\onedrive\바탕 화면\3dteam\framework\tool_ym\default\x64\debug\menu_form.obj
-c:\users\pbk40\onedrive\바탕 화면\3dteam\framework\tool_ym\default\x64\debug\model_inspector.obj
-c:\users\pbk40\onedrive\바탕 화면\3dteam\framework\tool_ym\default\x64\debug\navsphere.obj
-c:\users\pbk40\onedrive\바탕 화면\3dteam\framework\tool_ym\default\x64\debug\observer.obj
-c:\users\pbk40\onedrive\바탕 화면\3dteam\framework\tool_ym\default\x64\debug\plane.obj
-c:\users\pbk40\onedrive\바탕 화면\3dteam\framework\tool_ym\default\x64\debug\static.obj
-c:\users\pbk40\onedrive\바탕 화면\3dteam\framework\tool_ym\default\x64\debug\static_mesh.obj
-c:\users\pbk40\onedrive\바탕 화면\3dteam\framework\tool_ym\default\x64\debug\tab_changer.obj
-c:\users\pbk40\onedrive\바탕 화면\3dteam\framework\tool_ym\default\x64\debug\tool_main.obj
-c:\users\pbk40\onedrive\바탕 화면\3dteam\framework\tool_ym\default\x64\debug\tool_mouse.obj
-c:\users\pbk40\onedrive\바탕 화면\3dteam\framework\tool_ym\default\x64\debug\tool_ym.obj
-c:\users\pbk40\onedrive\바탕 화면\3dteam\framework\tool_ym\default\x64\debug\tool_ymdoc.obj
-c:\users\pbk40\onedrive\바탕 화면\3dteam\framework\tool_ym\default\x64\debug\tool_ymview.obj
-c:\users\pbk40\onedrive\바탕 화면\3dteam\framework\tool_ym\default\../bin/debug_x64/tool_ym.exe
-c:\users\pbk40\onedrive\바탕 화면\3dteam\framework\tool_ym\default\x64\debug\tool_ym.tlog\cl.command.1.tlog
-c:\users\pbk40\onedrive\바탕 화면\3dteam\framework\tool_ym\default\x64\debug\tool_ym.tlog\cl.read.1.tlog
-c:\users\pbk40\onedrive\바탕 화면\3dteam\framework\tool_ym\default\x64\debug\tool_ym.tlog\cl.write.1.tlog
-c:\users\pbk40\onedrive\바탕 화면\3dteam\framework\tool_ym\default\x64\debug\tool_ym.tlog\link.command.1.tlog
-c:\users\pbk40\onedrive\바탕 화면\3dteam\framework\tool_ym\default\x64\debug\tool_ym.tlog\link.delete.1.tlog
-c:\users\pbk40\onedrive\바탕 화면\3dteam\framework\tool_ym\default\x64\debug\tool_ym.tlog\link.read.1.tlog
-c:\users\pbk40\onedrive\바탕 화면\3dteam\framework\tool_ym\default\x64\debug\tool_ym.tlog\link.write.1.tlog
-c:\users\pbk40\onedrive\바탕 화면\3dteam\framework\tool_ym\default\x64\debug\tool_ym.tlog\rc.command.1.tlog
-c:\users\pbk40\onedrive\바탕 화면\3dteam\framework\tool_ym\default\x64\debug\tool_ym.tlog\rc.read.1.tlog
-c:\users\pbk40\onedrive\바탕 화면\3dteam\framework\tool_ym\default\x64\debug\tool_ym.tlog\rc.write.1.tlog
->>>>>>> main
+c:\heejeong\github\study\jusin_heejeong\portfolio\3d_team\framework\tool_ym\default\x64\debug\tool_ym.pch
+c:\heejeong\github\study\jusin_heejeong\portfolio\3d_team\framework\tool_ym\default\x64\debug\vc142.pdb
+c:\heejeong\github\study\jusin_heejeong\portfolio\3d_team\framework\tool_ym\default\x64\debug\vc142.idb
+c:\heejeong\github\study\jusin_heejeong\portfolio\3d_team\framework\tool_ym\default\x64\debug\pch.obj
+c:\heejeong\github\study\jusin_heejeong\portfolio\3d_team\framework\tool_ym\default\x64\debug\changer.obj
+c:\heejeong\github\study\jusin_heejeong\portfolio\3d_team\framework\tool_ym\default\x64\debug\static.obj
+c:\heejeong\github\study\jusin_heejeong\portfolio\3d_team\framework\tool_ym\default\x64\debug\camtool_level.obj
+c:\heejeong\github\study\jusin_heejeong\portfolio\3d_team\framework\tool_ym\default\x64\debug\menu_form.obj
+c:\heejeong\github\study\jusin_heejeong\portfolio\3d_team\framework\tool_ym\default\x64\debug\tool_mouse.obj
+c:\heejeong\github\study\jusin_heejeong\portfolio\3d_team\framework\tool_ym\default\x64\debug\maptool_level.obj
+c:\heejeong\github\study\jusin_heejeong\portfolio\3d_team\framework\tool_ym\default\x64\debug\static_mesh.obj
+c:\heejeong\github\study\jusin_heejeong\portfolio\3d_team\framework\tool_ym\default\x64\debug\dyanmic_camera.obj
+c:\heejeong\github\study\jusin_heejeong\portfolio\3d_team\framework\tool_ym\default\x64\debug\tab_changer.obj
+c:\heejeong\github\study\jusin_heejeong\portfolio\3d_team\framework\tool_ym\default\x64\debug\cam_inspector.obj
+c:\heejeong\github\study\jusin_heejeong\portfolio\3d_team\framework\tool_ym\default\x64\debug\model_inspector.obj
+c:\heejeong\github\study\jusin_heejeong\portfolio\3d_team\framework\tool_ym\default\x64\debug\tool_ym.obj
+c:\heejeong\github\study\jusin_heejeong\portfolio\3d_team\framework\tool_ym\default\x64\debug\inspector_form.obj
+c:\heejeong\github\study\jusin_heejeong\portfolio\3d_team\framework\tool_ym\default\x64\debug\observer.obj
+c:\heejeong\github\study\jusin_heejeong\portfolio\3d_team\framework\tool_ym\default\x64\debug\plane.obj
+c:\heejeong\github\study\jusin_heejeong\portfolio\3d_team\framework\tool_ym\default\x64\debug\tool_ymdoc.obj
+c:\heejeong\github\study\jusin_heejeong\portfolio\3d_team\framework\tool_ym\default\x64\debug\map_tool.obj
+c:\heejeong\github\study\jusin_heejeong\portfolio\3d_team\framework\tool_ym\default\x64\debug\tool_main.obj
+c:\heejeong\github\study\jusin_heejeong\portfolio\3d_team\framework\tool_ym\default\x64\debug\cam_tool.obj
+c:\heejeong\github\study\jusin_heejeong\portfolio\3d_team\framework\tool_ym\default\x64\debug\navsphere.obj
+c:\heejeong\github\study\jusin_heejeong\portfolio\3d_team\framework\tool_ym\default\x64\debug\mainfrm.obj
+c:\heejeong\github\study\jusin_heejeong\portfolio\3d_team\framework\tool_ym\default\x64\debug\tool_ymview.obj
+c:\heejeong\github\study\jusin_heejeong\portfolio\3d_team\framework\tool_ym\bin\debug_x64\tool_ym.exe
+c:\heejeong\github\study\jusin_heejeong\portfolio\3d_team\framework\tool_ym\default\x64\debug\tool_ym.ilk
+c:\heejeong\github\study\jusin_heejeong\portfolio\3d_team\framework\tool_ym\bin\debug_x64\tool_ym.pdb
+c:\heejeong\github\study\jusin_heejeong\portfolio\3d_team\framework\tool_ym\default\x64\debug\toolym.res
+c:\heejeong\github\study\jusin_heejeong\portfolio\3d_team\framework\tool_ym\default\x64\debug\static_mesh.obj.enc
+c:\heejeong\github\study\jusin_heejeong\portfolio\3d_team\framework\tool_ym\default\x64\debug\tool_ym.tlog\cl.command.1.tlog
+c:\heejeong\github\study\jusin_heejeong\portfolio\3d_team\framework\tool_ym\default\x64\debug\tool_ym.tlog\cl.read.1.tlog
+c:\heejeong\github\study\jusin_heejeong\portfolio\3d_team\framework\tool_ym\default\x64\debug\tool_ym.tlog\cl.write.1.tlog
+c:\heejeong\github\study\jusin_heejeong\portfolio\3d_team\framework\tool_ym\default\x64\debug\tool_ym.tlog\link.command.1.tlog
+c:\heejeong\github\study\jusin_heejeong\portfolio\3d_team\framework\tool_ym\default\x64\debug\tool_ym.tlog\link.read.1.tlog
+c:\heejeong\github\study\jusin_heejeong\portfolio\3d_team\framework\tool_ym\default\x64\debug\tool_ym.tlog\link.write.1.tlog
+c:\heejeong\github\study\jusin_heejeong\portfolio\3d_team\framework\tool_ym\default\x64\debug\tool_ym.tlog\rc.command.1.tlog
+c:\heejeong\github\study\jusin_heejeong\portfolio\3d_team\framework\tool_ym\default\x64\debug\tool_ym.tlog\rc.read.1.tlog
+c:\heejeong\github\study\jusin_heejeong\portfolio\3d_team\framework\tool_ym\default\x64\debug\tool_ym.tlog\rc.write.1.tlog
