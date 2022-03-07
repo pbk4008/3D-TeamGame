@@ -175,13 +175,13 @@ _fmatrix CStatic_Mesh::Get_WorldMat(void)
 void CStatic_Mesh::Input_Key(_double _dtimeDelta)
 {
 	if(g_pGameInstance->getkeyPress(DIK_UP))
-		m_pTransform->Mesh_Go(_dtimeDelta);
+		//m_pTransform->Mesh_Go(_dtimeDelta);
 	if (g_pGameInstance->getkeyPress(DIK_DOWN))
-		m_pTransform->Mesh_Back(_dtimeDelta);
+		//m_pTransform->Mesh_Back(_dtimeDelta);
 	if (g_pGameInstance->getkeyPress(DIK_LEFT))
-		m_pTransform->Mesh_Left(_dtimeDelta);
+		//m_pTransform->Mesh_Left(_dtimeDelta);
 	if (g_pGameInstance->getkeyPress(DIK_RIGHT))
-		m_pTransform->Mesh_Right(_dtimeDelta);
+		//m_pTransform->Mesh_Right(_dtimeDelta);
 	if (g_pGameInstance->getkeyPress(DIK_PGUP))
 		m_pTransform->Go_Up(_dtimeDelta);
 	if (g_pGameInstance->getkeyPress(DIK_PGDN))
@@ -256,12 +256,12 @@ void CStatic_Mesh::Pick_Scale(_double _dtimeDelta, CObserver::ScaleMode _eMode)
 			if (0 < MouseWheel)
 			{
 				_fvector ScaleXUp = { 1.05f, 1.0f, 1.0f };
-				m_pTransform->ScaleX_Up(ScaleXUp);
+				//m_pTransform->ScaleX_Up(ScaleXUp);
 			}
 			else
 			{
 				_fvector Scale_Down = { 0.95f, 1.0f, 1.0f };
-				m_pTransform->ScaleX_Up(Scale_Down);
+				//m_pTransform->ScaleX_Up(Scale_Down);
 			}
 		}
 	}
@@ -273,12 +273,12 @@ void CStatic_Mesh::Pick_Scale(_double _dtimeDelta, CObserver::ScaleMode _eMode)
 			if (0 < MouseWheel)
 			{
 				_fvector ScaleXUp = { 1.0f, 1.05f, 1.0f };
-				m_pTransform->ScaleY_Up(ScaleXUp);
+				//m_pTransform->ScaleY_Up(ScaleXUp);
 			}
 			else
 			{
 				_fvector Scale_Down = { 1.0f, 0.95f, 1.0f };
-				m_pTransform->ScaleY_Up(Scale_Down);
+				//m_pTransform->ScaleY_Up(Scale_Down);
 			}
 		}
 	}
@@ -290,12 +290,12 @@ void CStatic_Mesh::Pick_Scale(_double _dtimeDelta, CObserver::ScaleMode _eMode)
 			if (0 < MouseWheel)
 			{
 				_fvector ScaleXUp = { 1.0f, 1.0f, 1.05f };
-				m_pTransform->ScaleZ_Up(ScaleXUp);
+				//m_pTransform->ScaleZ_Up(ScaleXUp);
 			}
 			else
 			{
 				_fvector Scale_Down = { 1.0f, 1.0f, 0.95f };
-				m_pTransform->ScaleZ_Up(Scale_Down);
+				//m_pTransform->ScaleZ_Up(Scale_Down);
 			}
 		}
 	}
