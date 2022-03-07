@@ -87,6 +87,18 @@ void CState_Silvermane::Set_Transform(CTransform* _pTransform)
 
 _int CState_Silvermane::KeyCheck(const _double& _dDeltaTime)
 {
+	_long   MouseMove = 0;
+
+	if (MouseMove = g_pGameInstance->getMouseMoveState(CInputDev::MOUSEMOVESTATE::MM_X))
+	{
+		m_pTransform->Rotation_Axis(XMVectorSet(0.f, 1.f, 0.f, 0.f), _dDeltaTime * MouseMove * 0.1f);
+	}
+
+	//if (MouseMove = g_pGameInstance->getMouseMoveState(CInputDev::MOUSEMOVESTATE::MM_Y))
+	//{
+	//	m_pTransform->Rotation_Axis(m_pTransform->Get_State(CTransform::STATE_RIGHT), _dDeltaTime * MouseMove * 0.1f);
+	//}
+
 	return _int();
 }
 

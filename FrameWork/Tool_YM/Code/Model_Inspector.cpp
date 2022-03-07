@@ -33,8 +33,6 @@ BOOL CModel_Inspector::OnInitDialog()
 	CDialogEx::OnInitDialog();
 
 	// TODO:  여기에 추가 초기화 작업을 추가합니다.
-
-	Ready_Tag_Combo();
 	Ready_Level_Combo();
 
 	m_pMainFrm = dynamic_cast<CMainFrame*>(AfxGetApp()->GetMainWnd());
@@ -55,6 +53,7 @@ HRESULT CModel_Inspector::Get_ModelInfo(const FILEINFO& _FileInfo)
 	m_FileInfo = _FileInfo;
 
 	m_StaticTxt_FileName.SetWindowTextW(m_FileInfo.cstrFileName.c_str());
+	m_EditText_Model_Tag.SetWindowTextW(m_FileInfo.cstrFileName.c_str());
 
 	return S_OK;
 }
@@ -84,17 +83,6 @@ _int CModel_Inspector::Update_Model_Inspector(_double _dTimeDelta)
 	}
 
 	return _int();
-}
-
-void CModel_Inspector::Ready_Tag_Combo(void)
-{
-	m_Combo_Tag.AddString(_T("Stage_1"));
-	m_Combo_Tag.AddString(_T("Stage_2"));
-	m_Combo_Tag.AddString(_T("Stage_3"));
-	m_Combo_Tag.AddString(_T("Stage_Boss"));
-	m_Combo_Tag.AddString(_T("AddTag"));
-
-	m_Combo_Tag.SetCurSel(0);
 }
 
 void CModel_Inspector::Ready_Level_Combo(void)
@@ -154,7 +142,7 @@ void CModel_Inspector::DoDataExchange(CDataExchange* pDX)
 	CDialogEx::DoDataExchange(pDX);
 	DDX_Control(pDX, IDC_EDIT1, m_StaticTxt_FileName);
 	DDX_Control(pDX, IDC_EDIT2, m_EditTxt_Model_Name);
-	DDX_Control(pDX, IDC_COMBO1, m_Combo_Tag);
+	DDX_Control(pDX, IDC_EDIT3, m_EditText_Model_Tag);
 	DDX_Control(pDX, IDC_COMBO2, m_Combo_Level);
 	DDX_Text(pDX, IDC_Model2, m_ModelPosX);
 	DDX_Text(pDX, IDC_Model3, m_ModelPosY);
@@ -171,6 +159,10 @@ BEGIN_MESSAGE_MAP(CModel_Inspector, CDialogEx)
 	ON_BN_CLICKED(IDC_RADIO2, &CModel_Inspector::OnBnClickedNaveSetMode)
 	ON_BN_CLICKED(IDC_BUTTON2, &CModel_Inspector::OnBnClickedNavSaveButton)
 	ON_BN_CLICKED(IDC_BUTTON3, &CModel_Inspector::OnBnClickedNavLoadButton)
+	ON_BN_CLICKED(IDC_RADIO4, &CModel_Inspector::OnBnClickedRotXButton)
+	ON_BN_CLICKED(IDC_RADIO5, &CModel_Inspector::OnBnClickedRotYButton)
+	ON_BN_CLICKED(IDC_RADIO6, &CModel_Inspector::OnBnClickedZRotButton)
+	ON_BN_CLICKED(IDC_RADIO7, &CModel_Inspector::OnBnClickedRotNoneButton)
 END_MESSAGE_MAP()
 
 
@@ -191,17 +183,18 @@ void CModel_Inspector::OnBnClickedAddButton()
 	// TODO: 모델의 사본을 생성합니다.
 	CString strSelData;
 	CString strSelLevel;
+	CString strTag;
 	CString strName;
 	UpdateData(TRUE);
 
+	GetDlgItemText(IDC_EDIT3, strTag);
 	GetDlgItemText(IDC_EDIT2, strName);
 
+	m_ModelDesc.strTag = strTag.operator LPCWSTR();
 	m_ModelDesc.strName = strName.operator LPCWSTR();
 
 	if ("AddTag" != strSelData)
 	{
-		m_Combo_Tag.GetLBText(m_Combo_Tag.GetCurSel(), strSelData);
-		m_ModelDesc.strTag = strSelData;
 		m_ModelDesc.eLevel = (LEVEL_ID)m_Combo_Level.GetCurSel();
 		m_ModelDesc.strFolder = m_FileInfo.cstrFolder;
 		m_ModelDesc.strFileName = m_FileInfo.cstrFileName;
@@ -323,3 +316,31 @@ void CModel_Inspector::OnBnClickedNavLoadButton()
 	pPlaneNav->SetUp_Neighbor();
 }
 
+
+
+void CModel_Inspector::OnBnClickedRotXButton()
+{
+	// TODO: X축 스케일 조정 활성화
+	m_pObserver->m_eScaleMode = CObserver::SCALE_X;
+}
+
+
+void CModel_Inspector::OnBnClickedRotYButton()
+{
+	// TODO: Y축 스케일 조정 활성화
+	m_pObserver->m_eScaleMode = CObserver::SCALE_Y;
+}
+
+
+void CModel_Inspector::OnBnClickedZRotButton()
+{
+	// TODO: Z축 스케일 조정 활성화
+	m_pObserver->m_eScaleMode = CObserver::SCALE_Z;
+}
+
+void CModel_Inspector::OnBnClickedRotNoneButton()
+{
+	// TODO: 스케일 조정 기능 비활성화
+	m_pObserver->m_eScaleMode = CObserver::SCALE_END;
+
+}

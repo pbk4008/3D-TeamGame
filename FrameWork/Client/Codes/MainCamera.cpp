@@ -40,6 +40,14 @@ HRESULT CMainCamera::NativeConstruct(void* pArg)
 
 _int CMainCamera::Tick(_double fDeltaTime)
 {
+	if (g_pGameInstance->getkeyPress(DIK_RIGHT))
+		m_pTransform->Go_Right(fDeltaTime);
+	if (g_pGameInstance->getkeyPress(DIK_UP))
+		m_pTransform->Go_Straight(fDeltaTime);
+	if (g_pGameInstance->getkeyPress(DIK_LEFT))
+		m_pTransform->Go_Left(fDeltaTime);
+	if (g_pGameInstance->getkeyPress(DIK_DOWN))
+		m_pTransform->Go_BackWard(fDeltaTime);
 
 	m_pCamera->Update_Matrix(m_pTransform->Get_WorldMatrix());
 

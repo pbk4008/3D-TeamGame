@@ -147,6 +147,30 @@ _int CAnimationController::Update_CombinedTransformMatrix(const _double& _dDelta
 {
 	vector<CAnimation*>& vecAnimations = m_pModel->Get_Animations();
 
+	if (-1 != m_tBlendDesc.iNextAnimIndex)
+	{
+		if (!m_isChangeAnim)
+		{
+			vecAnimations[m_tBlendDesc.iNextAnimIndex]->Reset_Animation();
+			m_isChangeAnim = true;
+		}
+
+		m_tBlendDesc.fChangeTime += (_float)_dDeltaTime;
+		m_tBlendDesc.fTweenTime = m_tBlendDesc.fChangeTime / m_tBlendDesc.fTakeTime;
+
+		vecAnimations[m_tBlendDesc.iNextAnimIndex]->Update_TransformationMatrix(_dDeltaTime, m_tBlendDesc.isLoopNextAnim);
+		m_isFinished = vecAnimations[m_tBlendDesc.iNextAnimIndex]->Is_Finished();
+		m_iCurKeyFrameIndex = vecAnimations[m_tBlendDesc.iNextAnimIndex]->Get_CurrentKeyFrameIndex();
+
+		Lerp_Anim(vecAnimations);
+	}
+	else
+	{
+		vecAnimations[m_tBlendDesc.iCurAnimIndex]->Update_TransformationMatrix(_dDeltaTime, m_isLoopAnim);
+		m_isFinished = vecAnimations[m_tBlendDesc.iCurAnimIndex]->Is_Finished();
+		m_iCurKeyFrameIndex = vecAnimations[m_tBlendDesc.iCurAnimIndex]->Get_CurrentKeyFrameIndex();
+	}
+
 	if (m_tBlendDesc.fTweenTime >= 1.f)
 	{
 		vecAnimations[m_tBlendDesc.iCurAnimIndex]->Reset_Animation();
@@ -164,30 +188,6 @@ _int CAnimationController::Update_CombinedTransformMatrix(const _double& _dDelta
 
 		m_strPreAnimTag = m_strCurAnimTag;
 		m_strCurAnimTag = vecAnimations[m_tBlendDesc.iCurAnimIndex]->Get_Name();
-	}
-
-	if (-1 != m_tBlendDesc.iNextAnimIndex)
-	{
-		if (!m_isChangeAnim)
-		{
-			vecAnimations[m_tBlendDesc.iNextAnimIndex]->Reset_Animation();
-			m_isChangeAnim = true;
-		}
-
-		m_tBlendDesc.fChangeTime += (_float)_dDeltaTime;
-		m_tBlendDesc.fTweenTime = m_tBlendDesc.fChangeTime / m_tBlendDesc.fTakeTime;
-
-		vecAnimations[m_tBlendDesc.iNextAnimIndex]->Update_TransformationMatrix(_dDeltaTime, m_isLoopAnim);
-		m_isFinished = vecAnimations[m_tBlendDesc.iNextAnimIndex]->Is_Finished();
-		m_iCurKeyFrameIndex = vecAnimations[m_tBlendDesc.iNextAnimIndex]->Get_CurrentKeyFrameIndex();
-
-		Lerp_Anim(vecAnimations);
-	}
-	else
-	{
-		vecAnimations[m_tBlendDesc.iCurAnimIndex]->Update_TransformationMatrix(_dDeltaTime, m_isLoopAnim);
-		m_isFinished = vecAnimations[m_tBlendDesc.iCurAnimIndex]->Is_Finished();
-		m_iCurKeyFrameIndex = vecAnimations[m_tBlendDesc.iCurAnimIndex]->Get_CurrentKeyFrameIndex();
 	}
 
 	return _int();
@@ -243,12 +243,26 @@ HRESULT CAnimationController::SetUp_NextAnimation(const string& _strAnimTag, con
 			if (!strcmp(_strAnimTag.c_str(), pAnimation->Get_Name()))
 			{
 				m_tBlendDesc.iNextAnimIndex = pAnimation->Get_Index();
+
+				if (-1 != m_tBlendDesc.iNextAnimIndex)
+					vecAnimations[m_tBlendDesc.iNextAnimIndex]->Reset_Animation();
+
 				m_tBlendDesc.isLoopNextAnim = _isLoopNextAnim;
 				m_pFixedBone = pAnimation->Get_Channel("root");
+				
+				m_strPreAnimTag = m_strCurAnimTag;
+				m_strCurAnimTag = _strAnimTag;
 				return S_OK;
 			}
 		}
 	}
+
+	return S_OK;
+}
+
+HRESULT CAnimationController::Change_Anim(const string& _strAnimTag, _bool _isLoop)
+{
+
 
 	return S_OK;
 }
@@ -344,16 +358,21 @@ const _int CAnimationController::Move_Transform(const _double& _dDeltaTime)
 			}
 			vRotation = { -vEuler.x, -vEuler.z, -vEuler.y };
 
-			svVelocity = XMLoadFloat3(&vBonePosition);
-			svVelocity = XMVector4Transform(svVelocity, m_smatPivot);
-			svPosition += svVelocity;
 
-			m_pTransform->Set_State(CTransform::STATE_POSITION, svPosition);
 			m_pTransform->Rotation_Axis(svRight, _dDeltaTime * vRotation.x);
 			m_pTransform->Rotation_Axis(svUp, _dDeltaTime * vRotation.y);
 			m_pTransform->Rotation_Axis(svLook, _dDeltaTime * vRotation.z);
 
 
+			svLook = m_pTransform->Get_State(CTransform::STATE_LOOK);
+
+			svVelocity = XMLoadFloat3(&vBonePosition);
+			svVelocity = XMVector4Transform(svVelocity, m_smatPivot);
+
+			XMStoreFloat3(&vVelocity, svVelocity);
+			m_pTransform->Go_Right(vVelocity.x);
+			m_pTransform->Go_Up(vVelocity.y);
+			m_pTransform->Go_Straight(vVelocity.z);
 
 			// 요 아래는 디버그 용이야
 			_float3 vPosition = { 0.f, 0.f, 0.f };

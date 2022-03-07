@@ -25,20 +25,18 @@ HRESULT CSilvermane_JogRightStart::NativeConstruct(void* _pArg)
 
 _int CSilvermane_JogRightStart::Tick(const _double& TimeDelta)
 {
-	if (0 > __super::Tick(TimeDelta))
-	{
-		return -1;
-	}
+	_int iProgress = __super::Tick(TimeDelta);
+	if (NO_EVENT != iProgress)
+		return iProgress;
 
 	return _int();
 }
 
 _int CSilvermane_JogRightStart::LateTick(const _double& TimeDelta)
 {
-	if (0 > __super::LateTick(TimeDelta))
-	{
-		return -1;
-	}
+	_int iProgress = __super::LateTick(TimeDelta);
+	if (NO_EVENT != iProgress)
+		return iProgress;
 
 	return _int();
 }
@@ -46,9 +44,7 @@ _int CSilvermane_JogRightStart::LateTick(const _double& TimeDelta)
 HRESULT CSilvermane_JogRightStart::Render()
 {
 	if (FAILED(__super::Render()))
-	{
 		return E_FAIL;
-	}
 
 	return S_OK;
 }
@@ -56,9 +52,7 @@ HRESULT CSilvermane_JogRightStart::Render()
 HRESULT CSilvermane_JogRightStart::EnterState()
 {
 	if (FAILED(__super::EnterState()))
-	{
 		return E_FAIL;
-	}
 
 	
 	m_pAnimationController->SetUp_NextAnimation("SK_Silvermane.ao|A_Loco_Jog_Right_Start_Player", false);
@@ -74,9 +68,7 @@ HRESULT CSilvermane_JogRightStart::EnterState()
 HRESULT CSilvermane_JogRightStart::ExitState()
 {
 	if (FAILED(__super::ExitState()))
-	{
 		return E_FAIL;
-	}
 
 	m_pAnimationController->Set_PivotMatrix(XMMatrixIdentity());
 

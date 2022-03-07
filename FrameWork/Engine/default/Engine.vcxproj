@@ -200,7 +200,6 @@ call Update_Library_Release.bat</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\private\MeshCollider.h" />
     <ClInclude Include="..\public\Actor.h" />
     <ClInclude Include="..\public\Animation.h" />
     <ClInclude Include="..\public\AnimationController.h">
@@ -211,9 +210,12 @@ call Update_Library_Release.bat</Command>
     <ClInclude Include="..\public\BoxCollider.h" />
     <ClInclude Include="..\public\Camera.h" />
     <ClInclude Include="..\public\CapsuleCollider.h" />
+    <ClInclude Include="..\public\Instancing_Mesh.h" />
     <ClInclude Include="..\public\Material_Manager.h" />
     <ClInclude Include="..\public\Effect.h" />
-    <ClInclude Include="..\public\Cell.h" />
+    <ClInclude Include="..\public\Cell.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClInclude>
     <ClInclude Include="..\public\Channel.h" />
     <ClInclude Include="..\public\Collider.h" />
     <ClInclude Include="..\public\Component.h" />
@@ -243,10 +245,13 @@ call Update_Library_Release.bat</Command>
     <ClInclude Include="..\public\Material.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClInclude>
+    <ClInclude Include="..\public\MeshCollider.h" />
     <ClInclude Include="..\public\MeshContainer.h" />
     <ClInclude Include="..\public\Model.h" />
     <ClInclude Include="..\public\Mouse.h" />
-    <ClInclude Include="..\public\Navigation.h" />
+    <ClInclude Include="..\public\Navigation.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClInclude>
     <ClInclude Include="..\public\Object_Manager.h" />
     <ClInclude Include="..\public\PhysicsXSystem.h" />
     <ClInclude Include="..\public\PipeLine.h" />
@@ -288,8 +293,11 @@ call Update_Library_Release.bat</Command>
     <ClCompile Include="..\private\BoxCollider.cpp" />
     <ClCompile Include="..\private\Camera.cpp" />
     <ClCompile Include="..\private\CapsuleCollider.cpp" />
-    <ClCompile Include="..\private\Cell.cpp" />
+    <ClCompile Include="..\private\Cell.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="..\private\Channel.cpp" />
+    <ClCompile Include="..\private\Instancing_Mesh.cpp" />
     <ClCompile Include="..\private\Material_Manager.cpp" />
     <ClCompile Include="..\private\Collider.cpp" />
     <ClCompile Include="..\private\Component.cpp" />
@@ -323,7 +331,9 @@ call Update_Library_Release.bat</Command>
     <ClCompile Include="..\private\Light_Manager.cpp" />
     <ClCompile Include="..\private\MeshContainer.cpp" />
     <ClCompile Include="..\private\Model.cpp" />
-    <ClCompile Include="..\private\Navigation.cpp" />
+    <ClCompile Include="..\private\Navigation.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="..\private\Object_Manager.cpp" />
     <ClCompile Include="..\private\PipeLine.cpp" />
     <ClCompile Include="..\private\QuadTree.cpp" />

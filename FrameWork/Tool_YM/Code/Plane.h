@@ -34,7 +34,7 @@ public:
 	HRESULT			Make_NavigationCell(class CCell* _pCell = nullptr);
 	HRESULT			Update_CellPos();
 	void			CCW_Sort(_float3* pPoints);
-
+	void			Input_Key(_double _dtimeDelta);
 
 public:
 	CVIBuffer_Plane* m_pVIBufferCom = nullptr;
@@ -52,6 +52,7 @@ public:
 
 public:
 	_bool		m_bOneClick = true;
+	_bool		m_bRender = true;
 	_float3*	m_fPoints[3];
 	_float3     m_fPosition = { 5.f, 5.f, 5.f };
 	_float3		m_fLocalMouse;
