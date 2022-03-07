@@ -272,6 +272,22 @@ HRESULT CGizmo::DrawMesh(void* pPoints, const wstring& pCameraTag, _fvector vCol
 	return S_OK;
 }
 
+HRESULT CGizmo::DrawRect(_fvector vLeftTop, _fvector vRightBottom, const wstring& pCameraTag, _fvector vColor)
+{
+	if (!m_pEffect)
+		return E_FAIL;
+
+	_vector vRigthTop = XMVectorSet(XMVectorGetX(vRightBottom), XMVectorGetY(vLeftTop), 0.f, 1.f);
+	_vector vLeftBottom = XMVectorSet(XMVectorGetX(vLeftTop), XMVectorGetY(vRightBottom), 0.f, 1.f);
+
+	DrawLine(vLeftTop, vRigthTop, pCameraTag, vColor);
+	DrawLine(vRigthTop, vRightBottom, pCameraTag, vColor);
+	DrawLine(vRightBottom, vLeftBottom, pCameraTag, vColor);
+	DrawLine(vLeftBottom, vLeftTop, pCameraTag, vColor);
+
+	return S_OK;
+}
+
 CGizmo* CGizmo::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
 {
 	CGizmo* pInstance = new CGizmo(pDevice, pDeviceContext);
