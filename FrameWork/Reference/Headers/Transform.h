@@ -55,10 +55,13 @@ public:
 public:
 	void SetTransformDesc(_float fSpeedPerSec, _float fAnglePerSec);
 	void Go_Straight(_double TimeDelta, class CNavigation* pNavigation = nullptr);
+	void Go_Straight(const _float _fVelocityZ);
 	void Go_Left(_double TimeDelta);
 	void Go_Right(_double TimeDelta);
+	void Go_Right(const _float _fVelocityX);
 	void Go_BackWard(_double TimeDelta);
 	void Go_Up(_double TimeDelta);
+	void Go_Up(const _float _fVelocityY);
 	void Go_Down(_double TimeDelta);
 	void Chase_Target(const CTransform* pTargetTransform, _double TimeDelta);
 	void Face_Target(_fvector	vTargetPos);
