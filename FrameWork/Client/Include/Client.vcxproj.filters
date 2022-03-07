@@ -258,6 +258,9 @@
     <ClInclude Include="..\Headers\UI_Ingame.h">
       <Filter>02.GameObject\05.UI\01.UI_Ingame</Filter>
     </ClInclude>
+    <ClInclude Include="..\Headers\Camera_Debug.h">
+      <Filter>02.GameObject\98.Player\00.Silvermane\Camera</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -389,6 +392,9 @@
     </ClCompile>
     <ClCompile Include="..\Codes\Environment.cpp">
       <Filter>02.GameObject\02.Environment</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Camera_Debug.cpp">
+      <Filter>02.GameObject\98.Player\00.Silvermane\Camera</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
