@@ -387,6 +387,9 @@
     <ClCompile Include="..\Codes\MainCamera_Ortho.cpp">
       <Filter>02.GameObject\01. MainCamera\OrthoCam</Filter>
     </ClCompile>
+    <ClCompile Include="..\Codes\Environment.cpp">
+      <Filter>02.GameObject\02.Environment</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">

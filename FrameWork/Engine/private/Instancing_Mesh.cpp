@@ -196,7 +196,7 @@ HRESULT CInstancing_Mesh::Create_Material(const CSaveManager::MTRLDATA& pData)
 
 		_splitpath_s(szFilePath, nullptr, 0, nullptr, 0, szFileName, MAX_PATH, szExt, MAX_PATH);
 
-		strcat_s(szFileName, szExt);
+		strcat_s(szFileName, ".tga");
 		wstring     strTexture;
 		_tchar		szFullName[MAX_PATH] = L"../bin/FBX/Texture/";
 		_tchar		szTextureTag[MAX_PATH] = TEXT("");
