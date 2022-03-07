@@ -22,32 +22,15 @@ private:
 	explicit CTransform(const CTransform& rhs);
 	virtual ~CTransform() = default;
 public:
-	_fvector	Get_State(STATE eState) const {
-		return XMLoadFloat4((_float4*)&m_WorldMatrix.m[eState][0]);
-	} 
+	_fvector Get_State(STATE eState) const {	return XMLoadFloat4((_float4*)&m_WorldMatrix.m[eState][0]); }
+	_float Get_Scale(STATE eState) const { return XMVectorGetX(XMVector3Length(Get_State(eState))); }
+	_fmatrix Get_WorldMatrix() const { return XMLoadFloat4x4(&m_WorldMatrix); }
+	_fmatrix Get_WorldMatrixInverse() const { return XMMatrixInverse(nullptr, XMLoadFloat4x4(&m_WorldMatrix)); }
+	const _float& Get_RotRight() const { return m_fRotRight; }
 
-	_float Get_Scale(STATE eState) const {
-		return XMVectorGetX(XMVector3Length(Get_State(eState)));
-	}
-
-	void	 Set_WorldMatrix(_fmatrix matWorld) {
-		XMStoreFloat4x4(&m_WorldMatrix, matWorld);
-	}
-
-	_fmatrix Get_WorldMatrix() const {
-		return XMLoadFloat4x4(&m_WorldMatrix);
-	}
-	_fmatrix Get_WorldMatrixInverse() const {
-		return XMMatrixInverse(nullptr, XMLoadFloat4x4(&m_WorldMatrix));
-	}
-
-	void Set_State(STATE eState, _fvector vState) {
-		XMStoreFloat4((_float4*)&m_WorldMatrix.m[eState][0], vState);
-	}		
-
-	void Set_TransformDesc(const TRANSFORMDESC& TransformDesc) {
-		m_TransformDesc = TransformDesc;
-	}
+	void Set_WorldMatrix(_fmatrix matWorld) { XMStoreFloat4x4(&m_WorldMatrix, matWorld); }
+	void Set_State(STATE eState, _fvector vState) {	XMStoreFloat4((_float4*)&m_WorldMatrix.m[eState][0], vState); }		
+	void Set_TransformDesc(const TRANSFORMDESC& TransformDesc) { m_TransformDesc = TransformDesc; }
 public:
 	virtual HRESULT NativeConstruct_Prototype();
 	virtual HRESULT NativeConstruct(void* pArg);
@@ -73,6 +56,11 @@ public:
 private:
 	_float4x4				m_WorldMatrix;	
 	TRANSFORMDESC			m_TransformDesc;
+
+	_float					m_fRotRight = 0.f;
+	_float					m_fRotUp = 0.f;
+	_float					m_fRotLook = 0.f;
+
 public:
 	static CTransform* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);
 	virtual CComponent* Clone(void* pArg) override;

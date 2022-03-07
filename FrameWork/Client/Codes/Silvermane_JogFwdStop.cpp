@@ -21,17 +21,17 @@ HRESULT CSilvermane_JogFwdStop::NativeConstruct(void* _pArg)
 	return S_OK;
 }
 
-_int CSilvermane_JogFwdStop::Tick(const _double& TimeDelta)
+_int CSilvermane_JogFwdStop::Tick(const _double& _dDeltaTime)
 {
-	if (0 > __super::Tick(TimeDelta))
+	if (0 > __super::Tick(_dDeltaTime))
 		return -1;
 
 	return _int();
 }
 
-_int CSilvermane_JogFwdStop::LateTick(const _double& TimeDelta)
+_int CSilvermane_JogFwdStop::LateTick(const _double& _dDeltaTime)
 {
-	if (0 > __super::LateTick(TimeDelta))
+	if (0 > __super::LateTick(_dDeltaTime))
 		return -1;
 
 	return _int();
@@ -67,8 +67,12 @@ HRESULT CSilvermane_JogFwdStop::ExitState()
 	return S_OK;
 }
 
-_int CSilvermane_JogFwdStop::KeyCheck(const _double& TimeDelta)
+_int CSilvermane_JogFwdStop::KeyCheck(const _double& _dDeltaTime)
 {
+	_int iProgress = __super::KeyCheck(_dDeltaTime);
+	if (NO_EVENT != iProgress)
+		return iProgress;
+
 	if (g_pGameInstance->getkeyPress(DIK_W))
 	{
 		if (FAILED(m_pStateController->Change_State(L"JogFwd")))

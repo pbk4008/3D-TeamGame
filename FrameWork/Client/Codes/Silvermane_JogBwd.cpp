@@ -74,6 +74,10 @@ HRESULT CSilvermane_JogBwd::ExitState()
 
 _int CSilvermane_JogBwd::KeyCheck(const _double& _dDeltaTime)
 {
+	_int iProgress = __super::KeyCheck(_dDeltaTime);
+	if (NO_EVENT != iProgress)
+		return iProgress;
+
 	if (g_pGameInstance->getkeyPress(DIK_S))
 	{
 		if (g_pGameInstance->getkeyPress(DIK_A))

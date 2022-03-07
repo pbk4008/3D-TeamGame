@@ -68,6 +68,10 @@ HRESULT CSilvermane_JogFwd::ExitState()
 
 _int CSilvermane_JogFwd::KeyCheck(const _double& _dDeltaTime)
 {
+	_int iProgress = __super::KeyCheck(_dDeltaTime);
+	if (NO_EVENT != iProgress)
+		return iProgress;
+
 	if (g_pGameInstance->getkeyPress(DIK_W))
 	{
 		if (g_pGameInstance->getkeyPress(DIK_A))
@@ -76,7 +80,6 @@ _int CSilvermane_JogFwd::KeyCheck(const _double& _dDeltaTime)
 			if (-45.f < vRotation.y)
 			{
 				vRotation.y += -180.f * _dDeltaTime;
-				m_pTransform->SetUp_Rotation(m_pTransform->Get_State(CTransform::STATE_UP), XMConvertToRadians(vRotation.y));
 				m_pSilvermane->Set_Rotation(vRotation);
 			}
 		}
@@ -86,7 +89,6 @@ _int CSilvermane_JogFwd::KeyCheck(const _double& _dDeltaTime)
 			if (45.f > vRotation.y)
 			{
 				vRotation.y += 180.f * _dDeltaTime;
-				m_pTransform->SetUp_Rotation(m_pTransform->Get_State(CTransform::STATE_UP), XMConvertToRadians(vRotation.y));
 				m_pSilvermane->Set_Rotation(vRotation);
 			}
 		}
@@ -96,13 +98,11 @@ _int CSilvermane_JogFwd::KeyCheck(const _double& _dDeltaTime)
 			if (0.f > vRotation.y)
 			{
 				vRotation.y += 180.f * _dDeltaTime;
-				m_pTransform->SetUp_Rotation(m_pTransform->Get_State(CTransform::STATE_UP), XMConvertToRadians(vRotation.y));
 				m_pSilvermane->Set_Rotation(vRotation);
 			}
 			if (0.f < vRotation.y)
 			{
 				vRotation.y += -180.f * _dDeltaTime;
-				m_pTransform->SetUp_Rotation(m_pTransform->Get_State(CTransform::STATE_UP), XMConvertToRadians(vRotation.y));
 				m_pSilvermane->Set_Rotation(vRotation);
 			}
 		}

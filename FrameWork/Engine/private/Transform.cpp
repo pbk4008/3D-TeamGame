@@ -151,11 +151,19 @@ void CTransform::Face_Target(_fvector vTargetPos)
 
 void CTransform::Rotation_Axis(_fvector vAxis, _double TimeDelta)
 {
-	_matrix		RotationMatrix = XMMatrixRotationAxis(vAxis, m_TransformDesc.fRotationPerSec * (_float)TimeDelta);
+
+	_matrix		RotationMatrix = XMMatrixRotationAxis(vAxis, m_TransformDesc.fRotationPerSec * (_float)TimeDelta );
 
 	_vector		vRight = Get_State(CTransform::STATE_RIGHT);
 	_vector		vUp = Get_State(CTransform::STATE_UP);
 	_vector		vLook = Get_State(CTransform::STATE_LOOK);
+
+	if (XMVector4Equal(vAxis, vRight))
+		m_fRotRight += XMConvertToDegrees(TimeDelta);
+	if (XMVector4Equal(vAxis, vUp))
+		m_fRotUp += XMConvertToDegrees(TimeDelta);
+	if (XMVector4Equal(vAxis, vLook))
+		m_fRotLook += XMConvertToDegrees(TimeDelta);
 
 	vRight = XMVector4Transform(vRight, RotationMatrix);
 	vUp = XMVector4Transform(vUp, RotationMatrix);
