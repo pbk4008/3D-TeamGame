@@ -87,92 +87,92 @@ HRESULT CLoader::SetUp_Stage1_ProtoComponent()
 
 HRESULT CLoader::Load_Stage1FBXLoad()
 {
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"_BossPlatform_QuarterOpen_01_Lod0.fbx"
+	/*if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"_BossPlatform_QuarterOpen_01_Lod0.fbx"
 		, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/_BossPlatform_QuarterOpen_01_Lod0.fbx",
 			L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
-		return E_FAIL;
+		return E_FAIL;*/
 
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"_DoorSteps_01_Lod0.fbx"
-		, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/_DoorSteps_01_Lod0.fbx",
-			L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
-		return E_FAIL;
+	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"_DoorSteps_01_Lod0.fbx"
+	//	, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/_DoorSteps_01_Lod0.fbx",
+	//		L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
+	//	return E_FAIL;
 
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"AlcoveArchway_02_Lod0.fbx"
-		, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/AlcoveArchway_02_Lod0.fbx",
-			L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
-		return E_FAIL;
+	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"AlcoveArchway_02_Lod0.fbx"
+	//	, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/AlcoveArchway_02_Lod0.fbx",
+	//		L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
+	//	return E_FAIL;
 
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"AlcoveLanding_01_Lod0.fbx"
 		, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/AlcoveLanding_01_Lod0.fbx",
 			L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
 		return E_FAIL;
 
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"AlcoveTrimHeights_01_Lod0.fbx"
-		, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/AlcoveTrimHeights_01_Lod0.fbx",
-			L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
-		return E_FAIL;
+	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"AlcoveTrimHeights_01_Lod0.fbx"
+	//	, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/AlcoveTrimHeights_01_Lod0.fbx",
+	//		L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
+	//	return E_FAIL;
 
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"ArchDoor_01_Lod0.fbx"
-		, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/ArchDoor_01_Lod0.fbx",
-			L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
-		return E_FAIL;
+	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"ArchDoor_01_Lod0.fbx"
+	//	, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/ArchDoor_01_Lod0.fbx",
+	//		L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
+	//	return E_FAIL;
 
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Archstone_01_Lod0.fbx"
-		, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/Archstone_01_Lod0.fbx",
-			L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
-		return E_FAIL;
+	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Archstone_01_Lod0.fbx"
+	//	, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/Archstone_01_Lod0.fbx",
+	//		L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
+	//	return E_FAIL;
 
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Archway_01_Lod0.fbx"
-		, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/Archway_01_Lod0.fbx",
-			L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
-		return E_FAIL;
+	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Archway_01_Lod0.fbx"
+	//	, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/Archway_01_Lod0.fbx",
+	//		L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
+	//	return E_FAIL;
 
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Balcony_01_Lod0.fbx"
-		, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/Balcony_01_Lod0.fbx",
-			L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
-		return E_FAIL;
+	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Balcony_01_Lod0.fbx"
+	//	, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/Balcony_01_Lod0.fbx",
+	//		L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
+	//	return E_FAIL;
 
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Balcony_Handrail_4m_01_Lod0.fbx"
-		, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/Balcony_Handrail_4m_01_Lod0.fbx",
-			L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
-		return E_FAIL;
+	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Balcony_Handrail_4m_01_Lod0.fbx"
+	//	, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/Balcony_Handrail_4m_01_Lod0.fbx",
+	//		L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
+	//	return E_FAIL;
 
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Balcony_Handrail_8m_01_Lod0.fbx"
 		, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/Balcony_Handrail_8m_01_Lod0.fbx",
 			L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
 		return E_FAIL;
 
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"BalconyArchway_01_Lod0.fbx"
-		, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/BalconyArchway_01_Lod0.fbx",
-			L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
-		return E_FAIL;
+	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"BalconyArchway_01_Lod0.fbx"
+	//	, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/BalconyArchway_01_Lod0.fbx",
+	//		L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
+	//	return E_FAIL;
 
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"BalconyHalf_Lod0.fbx"
-		, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/BalconyHalf_Lod0.fbx",
-			L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
-		return E_FAIL;
+	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"BalconyHalf_Lod0.fbx"
+	//	, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/BalconyHalf_Lod0.fbx",
+	//		L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
+	//	return E_FAIL;
 
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"BossPlatform_Discs_01_Lod0.fbx"
-		, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/BossPlatform_Discs_01_Lod0.fbx",
-			L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
-		return E_FAIL;
+	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"BossPlatform_Discs_01_Lod0.fbx"
+	//	, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/BossPlatform_Discs_01_Lod0.fbx",
+	//		L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
+	//	return E_FAIL;
 
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"BossPlatform_Quarter_01_Lod0.fbx"
-		, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/BossPlatform_Quarter_01_Lod0.fbx",
-			L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
-		return E_FAIL;
+	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"BossPlatform_Quarter_01_Lod0.fbx"
+	//	, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/BossPlatform_Quarter_01_Lod0.fbx",
+	//		L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
+	//	return E_FAIL;
 
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Brazier_02.fbx"
-		, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/Brazier_02.fbx",
-			L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
-		return E_FAIL;
+	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Brazier_02.fbx"
+	//	, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/Brazier_02.fbx",
+	//		L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
+	//	return E_FAIL;
 
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Brazier_03.fbx"
-		, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/Brazier_03.fbx",
-			L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
-		return E_FAIL;
+	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Brazier_03.fbx"
+	//	, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/Brazier_03.fbx",
+	//		L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
+	//	return E_FAIL;
 
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Brazier_03_Lod0.fbx"
+	/*if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Brazier_03_Lod0.fbx"
 		, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/Brazier_03_Lod0.fbx",
 			L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
 		return E_FAIL;
@@ -185,19 +185,19 @@ HRESULT CLoader::Load_Stage1FBXLoad()
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Bush_02_Lod0.fbx"
 		, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/Bush_02_Lod0.fbx",
 			L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
-		return E_FAIL;
+		return E_FAIL;*/
 
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Ceiling_RoundedHalf_02_Lod0.fbx"
-		, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/Ceiling_RoundedHalf_02_Lod0.fbx",
-			L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
-		return E_FAIL;
+	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Ceiling_RoundedHalf_02_Lod0.fbx"
+	//	, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/Ceiling_RoundedHalf_02_Lod0.fbx",
+	//		L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
+	//	return E_FAIL;
 
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Ceiling_Window_02_Lod0.fbx"
 		, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/Ceiling_Window_02_Lod0.fbx",
 			L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
 		return E_FAIL;
 
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Ceiling_Window_03_Lod0.fbx"
+	/*if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Ceiling_Window_03_Lod0.fbx"
 		, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/Ceiling_Window_03_Lod0.fbx",
 			L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
 		return E_FAIL;
@@ -205,22 +205,22 @@ HRESULT CLoader::Load_Stage1FBXLoad()
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Ceiling_WindowHalf_02_Lod0.fbx"
 		, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/Ceiling_WindowHalf_02_Lod0.fbx",
 			L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
-		return E_FAIL;
+		return E_FAIL;*/
 
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Chain_01a_Lod0.fbx"
+	/*if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Chain_01a_Lod0.fbx"
 		, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/Chain_01a_Lod0.fbx",
 			L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
-		return E_FAIL;
+		return E_FAIL;*/
 
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"ConcreteBlock_01_Lod0.fbx"
-		, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/ConcreteBlock_01_Lod0.fbx",
-			L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
-		return E_FAIL;
+	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"ConcreteBlock_01_Lod0.fbx"
+	//	, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/ConcreteBlock_01_Lod0.fbx",
+	//		L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
+	//	return E_FAIL;
 
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"ConcreteBlockWide_01_Lod0.fbx"
-		, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/ConcreteBlockWide_01_Lod0.fbx",
-			L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
-		return E_FAIL;
+	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"ConcreteBlockWide_01_Lod0.fbx"
+	//	, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/ConcreteBlockWide_01_Lod0.fbx",
+	//		L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
+	//	return E_FAIL;
 
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"ConcreteLanding_01_Lod0.fbx"
 		, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/ConcreteLanding_01_Lod0.fbx",
@@ -232,15 +232,15 @@ HRESULT CLoader::Load_Stage1FBXLoad()
 			L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
 		return E_FAIL;
 
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"CrownMoldings_Straight_01_Lod0.fbx"
-		, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/CrownMoldings_Straight_01_Lod0.fbx",
-			L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
-		return E_FAIL;
+	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"CrownMoldings_Straight_01_Lod0.fbx"
+	//	, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/CrownMoldings_Straight_01_Lod0.fbx",
+	//		L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
+	//	return E_FAIL;
 
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Curved_Stairs_01_Lod0.fbx"
+	/*if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Curved_Stairs_01_Lod0.fbx"
 		, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/Curved_Stairs_01_Lod0.fbx",
 			L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
-		return E_FAIL;
+		return E_FAIL;*/
 
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"DungeonPieces_01_Lod0.fbx"
 		, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/DungeonPieces_01_Lod0.fbx",
@@ -252,57 +252,57 @@ HRESULT CLoader::Load_Stage1FBXLoad()
 			L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
 		return E_FAIL;
 
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Flower_Red_01_Lod0.fbx"
+	/*if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Flower_Red_01_Lod0.fbx"
 		, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/Flower_Red_01_Lod0.fbx",
 			L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
-		return E_FAIL;
+		return E_FAIL;*/
 
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"OctagonSand_01_Lod0.fbx"
-		, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/OctagonSand_01_Lod0.fbx",
-			L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
-		return E_FAIL;
+	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"OctagonSand_01_Lod0.fbx"
+	//	, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/OctagonSand_01_Lod0.fbx",
+	//		L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
+	//	return E_FAIL;
 
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"PavementDecor_01_Lod0.fbx"
 		, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/PavementDecor_01_Lod0.fbx",
 			L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
 		return E_FAIL;
 
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Pillar_EndCap_01_Lod0.fbx"
-		, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/Pillar_EndCap_01_Lod0.fbx",
-			L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
-		return E_FAIL;
+	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Pillar_EndCap_01_Lod0.fbx"
+	//	, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/Pillar_EndCap_01_Lod0.fbx",
+	//		L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
+	//	return E_FAIL;
 
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"PillarLarge_01_Lod0.fbx"
 		, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/PillarLarge_01_Lod0.fbx",
 			L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
 		return E_FAIL;
 
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"PillarLarge_02_Lod0.fbx"
-		, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/PillarLarge_02_Lod0.fbx",
-			L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
-		return E_FAIL;
+	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"PillarLarge_02_Lod0.fbx"
+	//	, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/PillarLarge_02_Lod0.fbx",
+	//		L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
+	//	return E_FAIL;
 
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"PillarLarge_03_Lod0.fbx"
 		, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/PillarLarge_03_Lod0.fbx",
 			L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
 		return E_FAIL;
 
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"PillarLarge_04_Lod0.fbx"
-		, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/PillarLarge_04_Lod0.fbx",
-			L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
-		return E_FAIL;
+	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"PillarLarge_04_Lod0.fbx"
+	//	, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/PillarLarge_04_Lod0.fbx",
+	//		L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
+	//	return E_FAIL;
 
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"PillarMedium_01_Lod0.fbx"
-		, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/PillarMedium_01_Lod0.fbx",
-			L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
-		return E_FAIL;
+	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"PillarMedium_01_Lod0.fbx"
+	//	, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/PillarMedium_01_Lod0.fbx",
+	//		L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
+	//	return E_FAIL;
 
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Pillars_Tall_01_Lod0.fbx"
-		, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/Pillars_Tall_01_Lod0.fbx",
-			L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
-		return E_FAIL;
+	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Pillars_Tall_01_Lod0.fbx"
+	//	, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/Pillars_Tall_01_Lod0.fbx",
+	//		L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
+	//	return E_FAIL;
 
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"PillarsDouble_Large_01_Lod0.fbx"
+	/*if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"PillarsDouble_Large_01_Lod0.fbx"
 		, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/PillarsDouble_Large_01_Lod0.fbx",
 			L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
 		return E_FAIL;
@@ -320,7 +320,7 @@ HRESULT CLoader::Load_Stage1FBXLoad()
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"PillarSmall_03_Lod0.fbx"
 		, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/PillarSmall_03_Lod0.fbx",
 			L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
-		return E_FAIL;
+		return E_FAIL;*/
 
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"rock01sunforge_LP_Lod0.fbx"
 		, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/rock01sunforge_LP_Lod0.fbx",
@@ -337,12 +337,12 @@ HRESULT CLoader::Load_Stage1FBXLoad()
 			L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
 		return E_FAIL;
 
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"S_Sunforge_Grass_Red_01_HP_Lod0.fbx"
+	/*if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"S_Sunforge_Grass_Red_01_HP_Lod0.fbx"
 		, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/S_Sunforge_Grass_Red_01_HP_Lod0.fbx",
 			L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
-		return E_FAIL;
+		return E_FAIL;*/
 
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"S_Sunforge_GroundPlants_01_Lod0.fbx"
+	/*if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"S_Sunforge_GroundPlants_01_Lod0.fbx"
 		, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/S_Sunforge_GroundPlants_01_Lod0.fbx",
 			L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
 		return E_FAIL;
@@ -375,27 +375,27 @@ HRESULT CLoader::Load_Stage1FBXLoad()
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"S_Sunforge_IvyWall_03_Lod0.fbx"
 		, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/S_Sunforge_IvyWall_03_Lod0.fbx",
 			L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
-		return E_FAIL;
+		return E_FAIL;*/
 
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Rock03sunforge_LP_Lod0.fbx"
+	/*if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Rock03sunforge_LP_Lod0.fbx"
 		, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/Rock03sunforge_LP_Lod0.fbx",
 			L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
-		return E_FAIL;
+		return E_FAIL;*/
 
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"S_Sunforge_IvyWall_04_Lod0.fbx"
+	/*if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"S_Sunforge_IvyWall_04_Lod0.fbx"
 		, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/S_Sunforge_IvyWall_04_Lod0.fbx",
 			L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
-		return E_FAIL;
+		return E_FAIL;*/
 
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"S_Sunforge_IvyWall_05_Lod0.fbx"
-		, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/S_Sunforge_IvyWall_05_Lod0.fbx",
-			L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
-		return E_FAIL;
+	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"S_Sunforge_IvyWall_05_Lod0.fbx"
+	//	, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/S_Sunforge_IvyWall_05_Lod0.fbx",
+	//		L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
+	//	return E_FAIL;
 
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"S_Sunforge_IvyWallMerge_Lod0.fbx"
-		, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/S_Sunforge_IvyWallMerge_Lod0.fbx",
-			L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
-		return E_FAIL;
+	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"S_Sunforge_IvyWallMerge_Lod0.fbx"
+	//	, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/S_Sunforge_IvyWallMerge_Lod0.fbx",
+	//		L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
+	//	return E_FAIL;
 
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"S_Sunforge_StairsRailingCurved_01_Lod0.fbx"
 		, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/S_Sunforge_StairsRailingCurved_01_Lod0.fbx",
@@ -407,12 +407,12 @@ HRESULT CLoader::Load_Stage1FBXLoad()
 			L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
 		return E_FAIL;
 
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"S_Sunforge_SunDoor_01.fbx"
+	/*if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"S_Sunforge_SunDoor_01.fbx"
 		, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/S_Sunforge_SunDoor_01.fbx",
 			L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
-		return E_FAIL;
+		return E_FAIL;*/
 
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"S_Sunforge_SunDoor_01b.fbx"
+	/*if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"S_Sunforge_SunDoor_01b.fbx"
 		, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/S_Sunforge_SunDoor_01b.fbx",
 			L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
 		return E_FAIL;
@@ -420,157 +420,157 @@ HRESULT CLoader::Load_Stage1FBXLoad()
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"S_Sunforge_SunDoor_01c_Lod0.fbx"
 		, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/S_Sunforge_SunDoor_01c_Lod0.fbx",
 			L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
-		return E_FAIL;
+		return E_FAIL;*/
 
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"S_Sunforged_TriPlated_Deco_01_Lod0.fbx"
 		, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/S_Sunforged_TriPlated_Deco_01_Lod0.fbx",
 			L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
 		return E_FAIL;
 
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"S_Sunforge_TrimFloor_01_Lod0.fbx"
+	/*if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"S_Sunforge_TrimFloor_01_Lod0.fbx"
 		, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/S_Sunforge_TrimFloor_01_Lod0.fbx",
 			L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
-		return E_FAIL;
+		return E_FAIL;*/
 
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"S_Sunforged_StairsCurved_02_Lod0.fbx"
-		, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/S_Sunforged_StairsCurved_02_Lod0.fbx",
-			L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
-		return E_FAIL;
+	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"S_Sunforged_StairsCurved_02_Lod0.fbx"
+	//	, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/S_Sunforged_StairsCurved_02_Lod0.fbx",
+	//		L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
+	//	return E_FAIL;
 
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"S_Sunforged_StairsCurved_LavaCanel_Lod0.fbx"
+	/*if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"S_Sunforged_StairsCurved_LavaCanel_Lod0.fbx"
 		, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/S_Sunforged_StairsCurved_LavaCanel_Lod0.fbx",
 			L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
-		return E_FAIL;
+		return E_FAIL;*/
 
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"S_Sunforged_StairsCurved_LavaEntrance_Lod0.fbx"
+	/*if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"S_Sunforged_StairsCurved_LavaEntrance_Lod0.fbx"
 		, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/S_Sunforged_StairsCurved_LavaEntrance_Lod0.fbx",
 			L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
-		return E_FAIL;
+		return E_FAIL;*/
 
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"S_Sunforged_StairsHandrail_01_Lod0.fbx"
 		, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/S_Sunforged_StairsHandrail_01_Lod0.fbx",
 			L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
 		return E_FAIL;
 
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"S_Sunforged_StairsSides_01_Lod0.fbx"
-		, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/S_Sunforged_StairsSides_01_Lod0.fbx",
-			L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
-		return E_FAIL;
+	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"S_Sunforged_StairsSides_01_Lod0.fbx"
+	//	, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/S_Sunforged_StairsSides_01_Lod0.fbx",
+	//		L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
+	//	return E_FAIL;
 
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"S_Sunforged_StandingArchway_01.fbx"
-		, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/S_Sunforged_StandingArchway_01.fbx",
-			L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
-		return E_FAIL;
+	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"S_Sunforged_StandingArchway_01.fbx"
+	//	, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/S_Sunforged_StandingArchway_01.fbx",
+	//		L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
+	//	return E_FAIL;
 
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"S_Sunforged_StandingArchway_01_Lod0.fbx"
 		, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/S_Sunforged_StandingArchway_01_Lod0.fbx",
 			L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
 		return E_FAIL;
 
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"S_Sunforged_StandingArchway_02.fbx"
-		, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/S_Sunforged_StandingArchway_02.fbx",
-			L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
-		return E_FAIL;
+	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"S_Sunforged_StandingArchway_02.fbx"
+	//	, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/S_Sunforged_StandingArchway_02.fbx",
+	//		L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
+	//	return E_FAIL;
 
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"S_Sunforged_StandingArchway_02_Lod0.fbx"
 		, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/S_Sunforged_StandingArchway_02_Lod0.fbx",
 			L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
 		return E_FAIL;
 
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"S_Sunforged_SteelGate_Rails_02.fbx"
-		, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/S_Sunforged_SteelGate_Rails_02.fbx",
-			L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
-		return E_FAIL;
+	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"S_Sunforged_SteelGate_Rails_02.fbx"
+	//	, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/S_Sunforged_SteelGate_Rails_02.fbx",
+	//		L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
+	//	return E_FAIL;
 
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"S_Sunforged_SunGate_01_Lod0.fbx"
-		, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/S_Sunforged_SunGate_01_Lod0.fbx",
-			L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
-		return E_FAIL;
+	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"S_Sunforged_SunGate_01_Lod0.fbx"
+	//	, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/S_Sunforged_SunGate_01_Lod0.fbx",
+	//		L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
+	//	return E_FAIL;
 
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"S_Sunforged_SunGate_Arch_01.fbx"
-		, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/S_Sunforged_SunGate_Arch_01.fbx",
-			L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
-		return E_FAIL;
+	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"S_Sunforged_SunGate_Arch_01.fbx"
+	//	, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/S_Sunforged_SunGate_Arch_01.fbx",
+	//		L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
+	//	return E_FAIL;
 
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"S_Sunforged_SunGate_Arch_01_Lod0.fbx"
 		, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/S_Sunforged_SunGate_Arch_01_Lod0.fbx",
 			L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
 		return E_FAIL;
 
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"S_Sunforged_SunGate_Column_01.fbx"
-		, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/S_Sunforged_SunGate_Column_01.fbx",
-			L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
-		return E_FAIL;
+	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"S_Sunforged_SunGate_Column_01.fbx"
+	//	, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/S_Sunforged_SunGate_Column_01.fbx",
+	//		L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
+	//	return E_FAIL;
 
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"S_Sunforged_SunGate_Column_01_Lod0.fbx"
 		, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/S_Sunforged_SunGate_Column_01_Lod0.fbx",
 			L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
 		return E_FAIL;
 
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"S_Sunforged_SunGate_Door_01b.fbx"
-		, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/S_Sunforged_SunGate_Door_01b.fbx",
-			L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
-		return E_FAIL;
+	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"S_Sunforged_SunGate_Door_01b.fbx"
+	//	, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/S_Sunforged_SunGate_Door_01b.fbx",
+	//		L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
+	//	return E_FAIL;
 
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"S_Sunforged_SunGate_Top_01.fbx"
-		, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/S_Sunforged_SunGate_Top_01.fbx",
-			L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
-		return E_FAIL;
+	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"S_Sunforged_SunGate_Top_01.fbx"
+	//	, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/S_Sunforged_SunGate_Top_01.fbx",
+	//		L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
+	//	return E_FAIL;
 
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"S_Sunforged_ThickWall_01.fbx"
-		, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/S_Sunforged_ThickWall_01.fbx",
-			L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
-		return E_FAIL;
+	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"S_Sunforged_ThickWall_01.fbx"
+	//	, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/S_Sunforged_ThickWall_01.fbx",
+	//		L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
+	//	return E_FAIL;
 
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"S_Sunforged_Trim_01.fbx"
-		, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/S_Sunforged_Trim_01.fbx",
-			L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
-		return E_FAIL;
+	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"S_Sunforged_Trim_01.fbx"
+	//	, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/S_Sunforged_Trim_01.fbx",
+	//		L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
+	//	return E_FAIL;
 
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"S_Sunforged_Trim_01_Lod0.fbx"
 		, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/S_Sunforged_Trim_01_Lod0.fbx",
 			L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
 		return E_FAIL;
 
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"S_Sunforged_Trim_02_Lod0.fbx"
-		, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/S_Sunforged_Trim_02_Lod0.fbx",
-			L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
-		return E_FAIL;
+	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"S_Sunforged_Trim_02_Lod0.fbx"
+	//	, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/S_Sunforged_Trim_02_Lod0.fbx",
+	//		L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
+	//	return E_FAIL;
 
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"S_Sunforged_Trim_Blocks_01.fbx"
-		, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/S_Sunforged_Trim_Blocks_01.fbx",
-			L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
-		return E_FAIL;
+	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"S_Sunforged_Trim_Blocks_01.fbx"
+	//	, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/S_Sunforged_Trim_Blocks_01.fbx",
+	//		L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
+	//	return E_FAIL;
 
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"S_Sunforged_TriPlated_Deco_01.fbx"
-		, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/S_Sunforged_TriPlated_Deco_01.fbx",
-			L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
-		return E_FAIL;
+	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"S_Sunforged_TriPlated_Deco_01.fbx"
+	//	, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/S_Sunforged_TriPlated_Deco_01.fbx",
+	//		L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
+	//	return E_FAIL;
 
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"S_Sunforged_TriPlated_Deco_01C.fbx"
-		, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/S_Sunforged_TriPlated_Deco_01C.fbx",
-			L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
-		return E_FAIL;
+	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"S_Sunforged_TriPlated_Deco_01C.fbx"
+	//	, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/S_Sunforged_TriPlated_Deco_01C.fbx",
+	//		L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
+	//	return E_FAIL;
 
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"S_Sunforged_WallStep_Alcove_01.fbx"
-		, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/S_Sunforged_WallStep_Alcove_01.fbx",
-			L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
-		return E_FAIL;
+	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"S_Sunforged_WallStep_Alcove_01.fbx"
+	//	, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/S_Sunforged_WallStep_Alcove_01.fbx",
+	//		L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
+	//	return E_FAIL;
 
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"S_Sunforged_WallStep_Corner_01_Lod0.fbx"
-		, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/S_Sunforged_WallStep_Corner_01_Lod0.fbx",
-			L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
-		return E_FAIL;
+	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"S_Sunforged_WallStep_Corner_01_Lod0.fbx"
+	//	, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/S_Sunforged_WallStep_Corner_01_Lod0.fbx",
+	//		L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
+	//	return E_FAIL;
 
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"S_Sunforged_WallStep_Straight_01_Lod0.fbx"
-		, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/S_Sunforged_WallStep_Straight_01_Lod0.fbx",
-			L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
-		return E_FAIL;
+	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"S_Sunforged_WallStep_Straight_01_Lod0.fbx"
+	//	, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/S_Sunforged_WallStep_Straight_01_Lod0.fbx",
+	//		L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
+	//	return E_FAIL;
 
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"S_Sunforged_WallTrim_Top_01_Lod0.fbx"
-		, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/S_Sunforged_WallTrim_Top_01_Lod0.fbx",
-			L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
-		return E_FAIL;
+	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"S_Sunforged_WallTrim_Top_01_Lod0.fbx"
+	//	, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/S_Sunforged_WallTrim_Top_01_Lod0.fbx",
+	//		L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
+	//	return E_FAIL;
 
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"S_Sunforged_WallTrims_Chest_01_Lod0.fbx"
 		, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/S_Sunforged_WallTrims_Chest_01_Lod0.fbx",
@@ -587,35 +587,35 @@ HRESULT CLoader::Load_Stage1FBXLoad()
 			L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
 		return E_FAIL;
 
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"SM_MERGED_BP_SunforgeBrigde_01_Lod0.fbx"
+	/*if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"SM_MERGED_BP_SunforgeBrigde_01_Lod0.fbx"
 		, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/SM_MERGED_BP_SunforgeBrigde_01_Lod0.fbx",
 			L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
-		return E_FAIL;
+		return E_FAIL;*/
 
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"SM_PROXYGEN_Sunforge_Sungate_Clockwork_Vista_00.fbx"
-		, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/SM_PROXYGEN_Sunforge_Sungate_Clockwork_Vista_00.fbx",
-			L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
-		return E_FAIL;
+	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"SM_PROXYGEN_Sunforge_Sungate_Clockwork_Vista_00.fbx"
+	//	, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/SM_PROXYGEN_Sunforge_Sungate_Clockwork_Vista_00.fbx",
+	//		L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
+	//	return E_FAIL;
 
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Sphere.fbx"
-		, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/Sphere.fbx",
-			L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
-		return E_FAIL;
+	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Sphere.fbx"
+	//	, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/Sphere.fbx",
+	//		L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
+	//	return E_FAIL;
 
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"StairEdging_11_Lod0.fbx"
-		, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/StairEdging_11_Lod0.fbx",
-			L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
-		return E_FAIL;
+	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"StairEdging_11_Lod0.fbx"
+	//	, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/StairEdging_11_Lod0.fbx",
+	//		L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
+	//	return E_FAIL;
 
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"StairEfging_12.fbx"
-		, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/StairEfging_12.fbx",
-			L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
-		return E_FAIL;
+	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"StairEfging_12.fbx"
+	//	, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/StairEfging_12.fbx",
+	//		L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
+	//	return E_FAIL;
 
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"StairEfging_18.fbx"
-		, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/StairEfging_18.fbx",
-			L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
-		return E_FAIL;
+	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"StairEfging_18.fbx"
+	//	, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/StairEfging_18.fbx",
+	//		L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
+	//	return E_FAIL;
 
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Stairs_01a_Lod0.fbx"
 		, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/Stairs_01a_Lod0.fbx",
@@ -627,10 +627,10 @@ HRESULT CLoader::Load_Stage1FBXLoad()
 			L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
 		return E_FAIL;
 
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Stairs_02_Lod0.fbx"
-		, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/Stairs_02_Lod0.fbx",
-			L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
-		return E_FAIL;
+	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Stairs_02_Lod0.fbx"
+	//	, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/Stairs_02_Lod0.fbx",
+	//		L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
+	//	return E_FAIL;
 
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"StairsCurved_01_Lod0.fbx"
 		, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/StairsCurved_01_Lod0.fbx",
@@ -642,22 +642,22 @@ HRESULT CLoader::Load_Stage1FBXLoad()
 			L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
 		return E_FAIL;
 
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"StaticMesh02_0_AlcoveTrimHeights_Object029_159.fbx"
-		, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/StaticMesh02_0_AlcoveTrimHeights_Object029_159.fbx",
-			L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
-		return E_FAIL;
+	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"StaticMesh02_0_AlcoveTrimHeights_Object029_159.fbx"
+	//	, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/StaticMesh02_0_AlcoveTrimHeights_Object029_159.fbx",
+	//		L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
+	//	return E_FAIL;
 
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"StaticMesh02_0_decooration_pavement14.fbx"
-		, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/StaticMesh02_0_decooration_pavement14.fbx",
-			L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
-		return E_FAIL;
+	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"StaticMesh02_0_decooration_pavement14.fbx"
+	//	, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/StaticMesh02_0_decooration_pavement14.fbx",
+	//		L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
+	//	return E_FAIL;
 
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"StaticMesh02_0_decooration_pavement14_Lod0.fbx"
-		, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/StaticMesh02_0_decooration_pavement14_Lod0.fbx",
-			L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
-		return E_FAIL;
+	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"StaticMesh02_0_decooration_pavement14_Lod0.fbx"
+	//	, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/StaticMesh02_0_decooration_pavement14_Lod0.fbx",
+	//		L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
+	//	return E_FAIL;
 
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"StaticMesh02_0_DungeonAssets4_DungeonPieces02_0_DungeonA.fbx"
+	/*if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"StaticMesh02_0_DungeonAssets4_DungeonPieces02_0_DungeonA.fbx"
 		, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/StaticMesh02_0_DungeonAssets4_DungeonPieces02_0_DungeonA.fbx",
 			L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
 		return E_FAIL;
@@ -665,87 +665,87 @@ HRESULT CLoader::Load_Stage1FBXLoad()
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"StaticMesh02_0_S_Banner_VcutHISMA_712_Lod0.fbx"
 		, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/StaticMesh02_0_S_Banner_VcutHISMA_712_Lod0.fbx",
 			L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
-		return E_FAIL;
+		return E_FAIL;*/
 
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"StaticMesh02_0_S_Ceiling_LightsHISMA.fbx"
+	/*if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"StaticMesh02_0_S_Ceiling_LightsHISMA.fbx"
 		, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/StaticMesh02_0_S_Ceiling_LightsHISMA.fbx",
 			L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
-		return E_FAIL;
+		return E_FAIL;*/
 
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"StaticMesh02_0_S_GildenTreeBarkgolden8_Lod0.fbx"
-		, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/StaticMesh02_0_S_GildenTreeBarkgolden8_Lod0.fbx",
-			L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
-		return E_FAIL;
+	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"StaticMesh02_0_S_GildenTreeBarkgolden8_Lod0.fbx"
+	//	, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/StaticMesh02_0_S_GildenTreeBarkgolden8_Lod0.fbx",
+	//		L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
+	//	return E_FAIL;
 
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"StaticMesh02_0_S_GildenTreeBarkgolden10_Lod0.fbx"
-		, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/StaticMesh02_0_S_GildenTreeBarkgolden10_Lod0.fbx",
-			L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
-		return E_FAIL;
+	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"StaticMesh02_0_S_GildenTreeBarkgolden10_Lod0.fbx"
+	//	, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/StaticMesh02_0_S_GildenTreeBarkgolden10_Lod0.fbx",
+	//		L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
+	//	return E_FAIL;
 
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"StaticMesh02_0_S_Pillar01HISMA_Lod0.fbx"
-		, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/StaticMesh02_0_S_Pillar01HISMA_Lod0.fbx",
-			L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
-		return E_FAIL;
+	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"StaticMesh02_0_S_Pillar01HISMA_Lod0.fbx"
+	//	, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/StaticMesh02_0_S_Pillar01HISMA_Lod0.fbx",
+	//		L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
+	//	return E_FAIL;
 
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"StaticMesh02_0_SM_BrazierHISMA_18_Lod0.fbx"
-		, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/StaticMesh02_0_SM_BrazierHISMA_18_Lod0.fbx",
-			L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
-		return E_FAIL;
+	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"StaticMesh02_0_SM_BrazierHISMA_18_Lod0.fbx"
+	//	, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/StaticMesh02_0_SM_BrazierHISMA_18_Lod0.fbx",
+	//		L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
+	//	return E_FAIL;
 
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"StaticMesh02_0_SM_FloorTrim_6_Lod0.fbx"
-		, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/StaticMesh02_0_SM_FloorTrim_6_Lod0.fbx",
-			L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
-		return E_FAIL;
+	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"StaticMesh02_0_SM_FloorTrim_6_Lod0.fbx"
+	//	, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/StaticMesh02_0_SM_FloorTrim_6_Lod0.fbx",
+	//		L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
+	//	return E_FAIL;
 
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"StaticMesh02_0_SM_FloorTrim_16_Lod0.fbx"
-		, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/StaticMesh02_0_SM_FloorTrim_16_Lod0.fbx",
-			L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
-		return E_FAIL;
+	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"StaticMesh02_0_SM_FloorTrim_16_Lod0.fbx"
+	//	, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/StaticMesh02_0_SM_FloorTrim_16_Lod0.fbx",
+	//		L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
+	//	return E_FAIL;
 
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Sunforge_Sungate_StaticMesh02_0_S_GildenTreeBarkgoldenHISMA_0_Lod0.fbx"
-		, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/Sunforge_Sungate_StaticMesh02_0_S_GildenTreeBarkgoldenHISMA_0_Lod0.fbx",
-			L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
-		return E_FAIL;
+	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Sunforge_Sungate_StaticMesh02_0_S_GildenTreeBarkgoldenHISMA_0_Lod0.fbx"
+	//	, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/Sunforge_Sungate_StaticMesh02_0_S_GildenTreeBarkgoldenHISMA_0_Lod0.fbx",
+	//		L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
+	//	return E_FAIL;
 
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Sunforge_Sungate_StaticMesh02_0_S_GildenTreeBarkgoldenHISMA_2_Lod0.fbx"
-		, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/Sunforge_Sungate_StaticMesh02_0_S_GildenTreeBarkgoldenHISMA_2_Lod0.fbx",
-			L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
-		return E_FAIL;
+	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Sunforge_Sungate_StaticMesh02_0_S_GildenTreeBarkgoldenHISMA_2_Lod0.fbx"
+	//	, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/Sunforge_Sungate_StaticMesh02_0_S_GildenTreeBarkgoldenHISMA_2_Lod0.fbx",
+	//		L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
+	//	return E_FAIL;
 
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Sunforge_Sungate_StaticMesh02_0_S_GildenTreeBarkgoldenHISMA_Lod0.fbx"
-		, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/Sunforge_Sungate_StaticMesh02_0_S_GildenTreeBarkgoldenHISMA_Lod0.fbx",
-			L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
-		return E_FAIL;
+	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Sunforge_Sungate_StaticMesh02_0_S_GildenTreeBarkgoldenHISMA_Lod0.fbx"
+	//	, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/Sunforge_Sungate_StaticMesh02_0_S_GildenTreeBarkgoldenHISMA_Lod0.fbx",
+	//		L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
+	//	return E_FAIL;
 
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Sunforge_Sungate_StaticMesh02_0_S_Hanging_Bangle_Plates_3_Lod0.fbx"
-		, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/Sunforge_Sungate_StaticMesh02_0_S_Hanging_Bangle_Plates_3_Lod0.fbx",
-			L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
-		return E_FAIL;
+	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Sunforge_Sungate_StaticMesh02_0_S_Hanging_Bangle_Plates_3_Lod0.fbx"
+	//	, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/Sunforge_Sungate_StaticMesh02_0_S_Hanging_Bangle_Plates_3_Lod0.fbx",
+	//		L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
+	//	return E_FAIL;
 
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Sunforged_PlazaLanding_01_Lod0.fbx"
-		, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/Sunforged_PlazaLanding_01_Lod0.fbx",
-			L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
-		return E_FAIL;
+	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Sunforged_PlazaLanding_01_Lod0.fbx"
+	//	, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/Sunforged_PlazaLanding_01_Lod0.fbx",
+	//		L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
+	//	return E_FAIL;
 
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"towerALLunreal_Rock_01sunforge_Lod0.fbx"
-		, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/towerALLunreal_Rock_01sunforge_Lod0.fbx",
-			L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
-		return E_FAIL;
+	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"towerALLunreal_Rock_01sunforge_Lod0.fbx"
+	//	, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/towerALLunreal_Rock_01sunforge_Lod0.fbx",
+	//		L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
+	//	return E_FAIL;
 
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"towerALLunreal_Rock_05sunforge_Lod0.fbx"
-		, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/towerALLunreal_Rock_05sunforge_Lod0.fbx",
-			L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
-		return E_FAIL;
+	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"towerALLunreal_Rock_05sunforge_Lod0.fbx"
+	//	, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/towerALLunreal_Rock_05sunforge_Lod0.fbx",
+	//		L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
+	//	return E_FAIL;
 
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"towerALLunreal_Rock_07sunforge_Lod0.fbx"
-		, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/towerALLunreal_Rock_07sunforge_Lod0.fbx",
-			L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
-		return E_FAIL;
+	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"towerALLunreal_Rock_07sunforge_Lod0.fbx"
+	//	, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/towerALLunreal_Rock_07sunforge_Lod0.fbx",
+	//		L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
+	//	return E_FAIL;
 
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"towerALLunreal_Rock_08sunforge_Lod0.fbx"
-		, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/towerALLunreal_Rock_08sunforge_Lod0.fbx",
-			L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
-		return E_FAIL;
+	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"towerALLunreal_Rock_08sunforge_Lod0.fbx"
+	//	, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/towerALLunreal_Rock_08sunforge_Lod0.fbx",
+	//		L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
+	//	return E_FAIL;
 
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"TriPlated_Deco_01C_Lod0.fbx"
 		, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/TriPlated_Deco_01C_Lod0.fbx",

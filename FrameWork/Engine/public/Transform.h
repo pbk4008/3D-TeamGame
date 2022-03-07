@@ -67,6 +67,14 @@ public:
 	void Scaling(_fvector vScale);
 	void Scale_Up(_fvector vScale);
 
+public:
+	void Mesh_Straight(_double TimeDelta, class CNavigation* pNavigation = nullptr);
+	void Mesh_Left(_double TimeDelta);
+	void Mesh_Right(_double TimeDelta);
+	void Mesh_BackWard(_double TimeDelta);
+	void Mesh_Up(_double TimeDelta);
+	void Mesh_Down(_double TimeDelta);
+
 private:
 	_float4x4				m_WorldMatrix;	
 	TRANSFORMDESC			m_TransformDesc;

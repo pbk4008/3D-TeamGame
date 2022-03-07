@@ -12,7 +12,7 @@
 #include "Observer.h"
 #include "Cell.h"
 #include "NavSphere.h"
-
+#include "Navigation.h"
 // CModel_Inspector 대화 상자
 
 IMPLEMENT_DYNAMIC(CModel_Inspector, CDialogEx)
