@@ -34,12 +34,22 @@ HRESULT CMainCamera::NativeConstruct(void* pArg)
 	if (FAILED(Ready_GameObject(pArg)))
 		return E_FAIL;
 
+	m_pTransform->SetTransformDesc(5.f, XMConvertToRadians(10.f));
 	m_pTransform->Set_State(CTransform::STATE_POSITION, XMVectorSet(0.f, 0.f, -1.f, 1.f));
+	m_pTransform->SetUp_Rotation(XMVectorSet(1.f, 0.f, 0.f, 0.f), XMConvertToRadians(30.f));
 	return S_OK;
 }
 
 _int CMainCamera::Tick(_double fDeltaTime)
 {
+	if (g_pGameInstance->getkeyPress(DIK_RIGHT))
+		m_pTransform->Go_Right(fDeltaTime);
+	if (g_pGameInstance->getkeyPress(DIK_UP))
+		m_pTransform->Go_Straight(fDeltaTime);
+	if (g_pGameInstance->getkeyPress(DIK_LEFT))
+		m_pTransform->Go_Left(fDeltaTime);
+	if (g_pGameInstance->getkeyPress(DIK_DOWN))
+		m_pTransform->Go_BackWard(fDeltaTime);
 
 	m_pCamera->Update_Matrix(m_pTransform->Get_WorldMatrix());
 

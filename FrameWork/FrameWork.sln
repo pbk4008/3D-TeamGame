@@ -9,8 +9,6 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UITool", "UITool\Default\UI
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "01.Tool", "01.Tool", "{D6EF4B5C-7922-40BA-B775-CB324568B043}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Tool_YASIC", "Tool_YASIC\Default\Tool_YASIC.vcxproj", "{A79D68EF-CAD7-43B3-A8E2-334A1900121A}"
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ShaderExamples", "ShaderExamples\default\ShaderExamples.vcxproj", "{90DD829D-E88C-4D86-975D-15B541D95C16}"
 	ProjectSection(ProjectDependencies) = postProject
 		{B0233BC4-97D8-4AF2-A164-3B4CFF2E34DA} = {B0233BC4-97D8-4AF2-A164-3B4CFF2E34DA}
@@ -26,14 +24,12 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "02.Client", "02.Client", "{B5431979-75E2-4EC6-AF2C-F4A4DC889E76}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Client", "Client\Include\Client.vcxproj", "{F65B29C0-B8C7-4E70-91D2-208C8B379916}"
-	ProjectSection(ProjectDependencies) = postProject
-		{B0233BC4-97D8-4AF2-A164-3B4CFF2E34DA} = {B0233BC4-97D8-4AF2-A164-3B4CFF2E34DA}
-	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ShaderFile", "ShaderFile", "{3B18EBCC-4F73-4D1A-A154-4BB6F658175B}"
 	ProjectSection(SolutionItems) = preProject
 		Reference\ShaderFile\Shader_Cube.hlsl = Reference\ShaderFile\Shader_Cube.hlsl
 		Reference\ShaderFile\Shader_Instance.hlsl = Reference\ShaderFile\Shader_Instance.hlsl
+		Reference\ShaderFile\Shader_InstanceMesh.hlsl = Reference\ShaderFile\Shader_InstanceMesh.hlsl
 		Reference\ShaderFile\Shader_Mesh.hlsl = Reference\ShaderFile\Shader_Mesh.hlsl
 		Reference\ShaderFile\Shader_MeshAnim.hlsl = Reference\ShaderFile\Shader_MeshAnim.hlsl
 		Reference\ShaderFile\Shader_Particle.hlsl = Reference\ShaderFile\Shader_Particle.hlsl
@@ -44,6 +40,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ShaderFile", "ShaderFile", 
 		Reference\ShaderFile\Shader_Terrain.hlsl = Reference\ShaderFile\Shader_Terrain.hlsl
 		Reference\ShaderFile\Shader_Triangle.hlsl = Reference\ShaderFile\Shader_Triangle.hlsl
 	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MaterialTool", "MaterialTool\Include\Tool.vcxproj", "{7172232B-D618-453C-89DC-B2DA2C186EEA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -69,14 +67,6 @@ Global
 		{4D1F81EB-788A-4120-B9FE-FA1953291F0B}.Release|x64.Build.0 = Release|x64
 		{4D1F81EB-788A-4120-B9FE-FA1953291F0B}.Release|x86.ActiveCfg = Release|Win32
 		{4D1F81EB-788A-4120-B9FE-FA1953291F0B}.Release|x86.Build.0 = Release|Win32
-		{A79D68EF-CAD7-43B3-A8E2-334A1900121A}.Debug|x64.ActiveCfg = Debug|x64
-		{A79D68EF-CAD7-43B3-A8E2-334A1900121A}.Debug|x64.Build.0 = Debug|x64
-		{A79D68EF-CAD7-43B3-A8E2-334A1900121A}.Debug|x86.ActiveCfg = Debug|Win32
-		{A79D68EF-CAD7-43B3-A8E2-334A1900121A}.Debug|x86.Build.0 = Debug|Win32
-		{A79D68EF-CAD7-43B3-A8E2-334A1900121A}.Release|x64.ActiveCfg = Release|x64
-		{A79D68EF-CAD7-43B3-A8E2-334A1900121A}.Release|x64.Build.0 = Release|x64
-		{A79D68EF-CAD7-43B3-A8E2-334A1900121A}.Release|x86.ActiveCfg = Release|Win32
-		{A79D68EF-CAD7-43B3-A8E2-334A1900121A}.Release|x86.Build.0 = Release|Win32
 		{90DD829D-E88C-4D86-975D-15B541D95C16}.Debug|x64.ActiveCfg = Debug|x64
 		{90DD829D-E88C-4D86-975D-15B541D95C16}.Debug|x64.Build.0 = Debug|x64
 		{90DD829D-E88C-4D86-975D-15B541D95C16}.Debug|x86.ActiveCfg = Debug|Win32
@@ -101,6 +91,14 @@ Global
 		{F65B29C0-B8C7-4E70-91D2-208C8B379916}.Release|x64.Build.0 = Release|x64
 		{F65B29C0-B8C7-4E70-91D2-208C8B379916}.Release|x86.ActiveCfg = Release|Win32
 		{F65B29C0-B8C7-4E70-91D2-208C8B379916}.Release|x86.Build.0 = Release|Win32
+		{7172232B-D618-453C-89DC-B2DA2C186EEA}.Debug|x64.ActiveCfg = Debug|x64
+		{7172232B-D618-453C-89DC-B2DA2C186EEA}.Debug|x64.Build.0 = Debug|x64
+		{7172232B-D618-453C-89DC-B2DA2C186EEA}.Debug|x86.ActiveCfg = Debug|Win32
+		{7172232B-D618-453C-89DC-B2DA2C186EEA}.Debug|x86.Build.0 = Debug|Win32
+		{7172232B-D618-453C-89DC-B2DA2C186EEA}.Release|x64.ActiveCfg = Release|x64
+		{7172232B-D618-453C-89DC-B2DA2C186EEA}.Release|x64.Build.0 = Release|x64
+		{7172232B-D618-453C-89DC-B2DA2C186EEA}.Release|x86.ActiveCfg = Release|Win32
+		{7172232B-D618-453C-89DC-B2DA2C186EEA}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -108,9 +106,9 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{B0233BC4-97D8-4AF2-A164-3B4CFF2E34DA} = {0BE763B4-BB7A-4EE7-9417-A381F351FC66}
 		{4D1F81EB-788A-4120-B9FE-FA1953291F0B} = {D6EF4B5C-7922-40BA-B775-CB324568B043}
-		{A79D68EF-CAD7-43B3-A8E2-334A1900121A} = {D6EF4B5C-7922-40BA-B775-CB324568B043}
 		{8A3C9F78-F6B2-4A19-95F4-4D7351FA2804} = {D6EF4B5C-7922-40BA-B775-CB324568B043}
 		{F65B29C0-B8C7-4E70-91D2-208C8B379916} = {B5431979-75E2-4EC6-AF2C-F4A4DC889E76}
+		{7172232B-D618-453C-89DC-B2DA2C186EEA} = {D6EF4B5C-7922-40BA-B775-CB324568B043}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {853AC26D-168A-411A-A760-1C6525AA3294}

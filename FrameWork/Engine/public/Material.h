@@ -8,7 +8,7 @@ class CTexture;
 class ENGINE_DLL CMaterial final : public CBase 
 {
 public:
-	enum class EType {Static, Anim, Max};
+	enum class EType {Static, Anim, Instance_Static, Instance_Anim, Max};
 private:
 	explicit CMaterial(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext);
 	virtual~CMaterial() = default;

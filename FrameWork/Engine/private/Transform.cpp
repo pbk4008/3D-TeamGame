@@ -45,6 +45,16 @@ void CTransform::Go_Straight(_double TimeDelta, CNavigation * pNavigation)
 	Set_State(CTransform::STATE_POSITION, vPosition);
 }
 
+void CTransform::Go_Straight(const _float _fVelocityZ)
+{
+	_vector		vLook = Get_State(CTransform::STATE_LOOK);
+	_vector		vPosition = Get_State(CTransform::STATE_POSITION);
+
+	vPosition += XMVector3Normalize(vLook) * _fVelocityZ;
+
+	Set_State(CTransform::STATE_POSITION, vPosition);
+}
+
 void CTransform::Go_Left(_double TimeDelta)
 {
 	_vector		vRight = Get_State(CTransform::STATE_RIGHT);
@@ -65,6 +75,16 @@ void CTransform::Go_Right(_double TimeDelta)
 	Set_State(CTransform::STATE_POSITION, vPosition);
 }
 
+void CTransform::Go_Right(const _float _fVelocityX)
+{
+	_vector		vRight = Get_State(CTransform::STATE_RIGHT);
+	_vector		vPosition = Get_State(CTransform::STATE_POSITION);
+
+	vPosition += XMVector3Normalize(vRight) * _fVelocityX;
+
+	Set_State(CTransform::STATE_POSITION, vPosition);
+}
+
 void CTransform::Go_BackWard(_double TimeDelta)
 {
 	_vector		vLook = Get_State(CTransform::STATE_LOOK);
@@ -81,6 +101,15 @@ void CTransform::Go_Up(_double TimeDelta)
 	_vector		vPosition = Get_State(STATE_POSITION);
 
 	vPosition += XMVector3Normalize(vUp) * m_TransformDesc.fSpeedPerSec * (_float)TimeDelta;
+	Set_State(STATE_POSITION, vPosition);
+}
+
+void CTransform::Go_Up(const _float _fVelocityY)
+{
+	_vector		vUp = Get_State(STATE_UP);
+	_vector		vPosition = Get_State(STATE_POSITION);
+
+	vPosition += XMVector3Normalize(vUp) * _fVelocityY;
 	Set_State(STATE_POSITION, vPosition);
 }
 
@@ -174,6 +203,64 @@ void CTransform::Scale_Up(_fvector vScale)
 	Set_State(CTransform::STATE_RIGHT, vRight);
 	Set_State(CTransform::STATE_UP, vUp);
 	Set_State(CTransform::STATE_LOOK, vLook);
+}
+
+void CTransform::Mesh_Straight(_double TimeDelta, CNavigation* pNavigation)
+{
+	_vector		vLook = Get_State(CTransform::STATE_LOOK);
+	_vector		vPosition = Get_State(CTransform::STATE_POSITION);
+
+	vPosition += XMVector3Normalize(vLook) * 0.5f * (_float)TimeDelta;
+
+	Set_State(CTransform::STATE_POSITION, vPosition);
+}
+
+void CTransform::Mesh_Left(_double TimeDelta)
+{
+	_vector		vRight = Get_State(CTransform::STATE_RIGHT);
+	_vector		vPosition = Get_State(CTransform::STATE_POSITION);
+
+	vPosition += XMVector3Normalize(vRight) * -1.f * 0.5f * (_float)TimeDelta;
+
+	Set_State(CTransform::STATE_POSITION, vPosition);
+}
+
+void CTransform::Mesh_Right(_double TimeDelta)
+{
+	_vector		vRight = Get_State(CTransform::STATE_RIGHT);
+	_vector		vPosition = Get_State(CTransform::STATE_POSITION);
+
+	vPosition += XMVector3Normalize(vRight) * 0.5f * (_float)TimeDelta;
+
+	Set_State(CTransform::STATE_POSITION, vPosition);
+}
+
+void CTransform::Mesh_BackWard(_double TimeDelta)
+{
+	_vector		vLook = Get_State(CTransform::STATE_LOOK);
+	_vector		vPosition = Get_State(CTransform::STATE_POSITION);
+
+	vPosition += XMVector3Normalize(vLook) * -1.f * 0.5f * (_float)TimeDelta;
+
+	Set_State(CTransform::STATE_POSITION, vPosition);
+}
+
+void CTransform::Mesh_Up(_double TimeDelta)
+{
+	_vector		vUp = Get_State(STATE_UP);
+	_vector		vPosition = Get_State(STATE_POSITION);
+
+	vPosition += XMVector3Normalize(vUp) * 0.5f * (_float)TimeDelta;
+	Set_State(STATE_POSITION, vPosition);
+}
+
+void CTransform::Mesh_Down(_double TimeDelta)
+{
+	_vector		vUp = Get_State(STATE_UP);
+	_vector		vPosition = Get_State(STATE_POSITION);
+
+	vPosition += XMVector3Normalize(vUp) * 0.5f * -(_float)TimeDelta;
+	Set_State(STATE_POSITION, vPosition);
 }
 
 CTransform * CTransform::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pDeviceContext)

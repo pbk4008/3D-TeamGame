@@ -416,7 +416,8 @@ void CMap_Tool::OnTvnSelchangedTree1(NMHDR* pNMHDR, LRESULT* pResult)
 			AfxExtractSubString(strExt, strPath, 1, '.');
 
 			if (finder.IsDots()) continue;
-			if (0 != strExt.CompareNoCase(_T("tga")))
+			if (0 != strExt.CompareNoCase(_T("tga")) 
+				&& 0 != strExt.CompareNoCase(_T("ini")))
 				m_AssetTree.InsertItem(finder.GetFileName(), hSelected);
 		}
 	}
@@ -521,8 +522,6 @@ BOOL CMap_Tool::OnCommand(WPARAM wParam, LPARAM lParam)
 			MessageBox(L"Clone Model Delete Fail", MB_OK);
 		break;
 	}
-
-
 	return CDialogEx::OnCommand(wParam, lParam);
 }
 

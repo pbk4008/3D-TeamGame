@@ -175,26 +175,31 @@ _fmatrix CStatic_Mesh::Get_WorldMat(void)
 void CStatic_Mesh::Input_Key(_double _dtimeDelta)
 {
 	if(g_pGameInstance->getkeyPress(DIK_UP))
-		//m_pTransform->Mesh_Go(_dtimeDelta);
+		m_pTransform->Go_Straight(_dtimeDelta);
 	if (g_pGameInstance->getkeyPress(DIK_DOWN))
-		//m_pTransform->Mesh_Back(_dtimeDelta);
+		m_pTransform->Go_BackWard(_dtimeDelta);
 	if (g_pGameInstance->getkeyPress(DIK_LEFT))
-		//m_pTransform->Mesh_Left(_dtimeDelta);
+		m_pTransform->Go_Left(_dtimeDelta);
 	if (g_pGameInstance->getkeyPress(DIK_RIGHT))
-		//m_pTransform->Mesh_Right(_dtimeDelta);
+		m_pTransform->Go_Right(_dtimeDelta);
 	if (g_pGameInstance->getkeyPress(DIK_PGUP))
 		m_pTransform->Go_Up(_dtimeDelta);
 	if (g_pGameInstance->getkeyPress(DIK_PGDN))
 		m_pTransform->Go_Down(_dtimeDelta);
 
 	if (g_pGameInstance->getkeyPress(DIK_I))
-		m_pTransform->Go_Straight(_dtimeDelta);
+		m_pTransform->Mesh_Straight(_dtimeDelta);
 	if (g_pGameInstance->getkeyPress(DIK_K))
-		m_pTransform->Go_BackWard(_dtimeDelta);
+		m_pTransform->Mesh_BackWard(_dtimeDelta);
 	if (g_pGameInstance->getkeyPress(DIK_J))
-		m_pTransform->Go_Left(_dtimeDelta);
+		m_pTransform->Mesh_Left(_dtimeDelta);
 	if (g_pGameInstance->getkeyPress(DIK_L))
-		m_pTransform->Go_Right(_dtimeDelta);
+		m_pTransform->Mesh_Right(_dtimeDelta);
+	if (g_pGameInstance->getkeyPress(DIK_O))
+		m_pTransform->Mesh_Up(_dtimeDelta);
+	if (g_pGameInstance->getkeyPress(DIK_P))
+		m_pTransform->Mesh_Down(_dtimeDelta);
+
 
 	_long	MouseMove = 0;
 	_long   MouseWheel = 0;

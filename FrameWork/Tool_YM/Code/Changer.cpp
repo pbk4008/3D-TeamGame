@@ -7,6 +7,8 @@
 #include "Dyanmic_Camera.h"
 #include "Static_Mesh.h"
 #include "NavSphere.h"
+#include "Navigation.h"
+
 
 CChanger::CChanger(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
 	:m_pDevice(_pDevice)
@@ -63,7 +65,7 @@ HRESULT CChanger::Ready_Changer(TAB_ID _eNextTab)
 HRESULT CChanger::Loading_For_Static(void)
 {
 	/* Prototype_Component_VIBuffer_Terrain */
-	if (FAILED(g_pGameInstance->Add_Prototype(TAB_STATIC, L"Prototype_Component_VIBuffer_Plane", CVIBuffer_Plane::Create(m_pDevice, m_pDeviceContext, L"../../Reference/ShaderFile/Shader_Plane.hlsl", 100, 100))))
+	if (FAILED(g_pGameInstance->Add_Prototype(TAB_STATIC, L"Prototype_Component_VIBuffer_Plane", CVIBuffer_Plane::Create(m_pDevice, m_pDeviceContext, L"../../Reference/ShaderFile/Shader_Plane.hlsl", 100, 1000))))
 		return E_FAIL;
 
 	/* Prototype_Component_Navigation */

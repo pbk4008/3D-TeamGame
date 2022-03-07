@@ -43,6 +43,18 @@ HRESULT CMeshContainer::NativeConstruct_Prototype(_uint iMaterialIndex, _uint iN
 	return S_OK;
 }
 
+HRESULT CMeshContainer::NativeConstruct_Prototype(_uint iMaterialIndex, _uint iNumVtxCnt, _uint iNumIdxCnt, _uint iType, void* pVtx, void* pIdx)
+{
+	if (FAILED(Set_UpVerticesDesc(iNumVtxCnt, iType, pVtx)))
+		return E_FAIL;
+	if (FAILED(Set_IndicesDesc(iNumIdxCnt, pIdx)))
+		return E_FAIL;
+
+	m_iMaterialIndex = iMaterialIndex;
+
+	return S_OK;
+}
+
 HRESULT CMeshContainer::NativeConstruct(void* pArg)
 {
 	return S_OK;
@@ -61,6 +73,32 @@ HRESULT CMeshContainer::Render()
 
 	m_pDeviceContext->DrawIndexed(m_iNumPrimitive * m_iNumIndicesFigure, 0, 0);
 
+	return S_OK;
+}
+
+HRESULT CMeshContainer::Render(ID3D11Buffer* pInstVetex, _uint iInstStride)
+{
+	if (nullptr == m_pDeviceContext)
+		return E_FAIL;
+
+	ID3D11Buffer * pVertexBuffer[] =
+	{
+		m_pVB,
+		pInstVetex
+	};
+	_uint iStrides[] = {
+		m_iStride,
+		iInstStride
+	};
+	_uint iOffset[] = {
+		0,
+		0
+	};
+
+	m_pDeviceContext->IASetVertexBuffers(0, 2, pVertexBuffer, iStrides, iOffset);
+	m_pDeviceContext->IASetIndexBuffer(m_pIB, m_eFormat, 0);
+	m_pDeviceContext->IASetPrimitiveTopology(m_ePrimitiveTopology);
+	m_pDeviceContext->DrawIndexedInstanced(m_iNumPrimitive *3, iInstStride, 0, 0,0);
 	return S_OK;
 }
 
@@ -244,6 +282,29 @@ HRESULT CMeshContainer::Set_UpVerticesDesc(_uint iNumVtxCnt, class CModel* pMode
 	return S_OK;
 }
 
+HRESULT CMeshContainer::Set_UpVerticesDesc(_uint iNumVtxCnt, _uint pModelType, void* pVtx)
+{
+	m_iNumVertices = iNumVtxCnt;
+
+	m_pVertices = pVtx;
+	if (pModelType == 0)
+		m_iStride = sizeof(VTXMESH);
+	else
+		m_iStride = sizeof(VTXMESH_ANIM);
+
+	ZeroMemory(&m_VBDesc, sizeof(D3D11_BUFFER_DESC));
+	m_VBDesc.ByteWidth = m_iStride * m_iNumVertices;
+	m_VBDesc.Usage = D3D11_USAGE_IMMUTABLE;
+	m_VBDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+	m_VBDesc.CPUAccessFlags = 0;
+	m_VBDesc.MiscFlags = 0;
+	m_VBDesc.StructureByteStride = m_iStride;
+
+	m_VBSubresourceData.pSysMem = m_pVertices;
+
+	return S_OK;
+}
+
 HRESULT CMeshContainer::Set_IndicesDesc(aiMesh* pMesh)
 {
 	m_iNumPrimitive = pMesh->mNumFaces;
@@ -353,6 +414,17 @@ CMeshContainer* CMeshContainer::Create(ID3D11Device* pDevice, ID3D11DeviceContex
 {
 	CMeshContainer* pInstance = new CMeshContainer(pDevice, pDeviceContext);
 	if (FAILED(pInstance->NativeConstruct_Prototype(iMaterialIndex, iNumVtxCnt, iNumIdxCnt,pModel,pVtx,pIdx)))
+	{
+		MSGBOX("CMeshContainer Load Fail");
+		Safe_Release(pInstance);
+	}
+	return pInstance;
+}
+
+CMeshContainer* CMeshContainer::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext, _uint iMaterialIndex, _uint iNumVtxCnt, _uint iNumIdxCnt, _uint iType, void* pVtx, void* pIdx)
+{
+	CMeshContainer* pInstance = new CMeshContainer(pDevice, pDeviceContext);
+	if (FAILED(pInstance->NativeConstruct_Prototype(iMaterialIndex, iNumVtxCnt, iNumIdxCnt, iType, pVtx, pIdx)))
 	{
 		MSGBOX("CMeshContainer Load Fail");
 		Safe_Release(pInstance);

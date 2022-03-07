@@ -239,6 +239,7 @@
     <ClCompile Include="..\Codes\Camera_Silvermane.cpp" />
     <ClCompile Include="..\Codes\DebugSystem.cpp" />
     <ClCompile Include="..\Codes\Effect_DashDust.cpp" />
+    <ClCompile Include="..\Codes\Environment.cpp" />
     <ClCompile Include="..\Codes\Level_Logo.cpp" />
     <ClCompile Include="..\Codes\Loader.cpp" />
     <ClCompile Include="..\Codes\Loading.cpp" />

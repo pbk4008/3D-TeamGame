@@ -13,8 +13,10 @@ private:
 public:
 	HRESULT NativeConstruct_Prototype(class CModel* pModel, aiMesh* pMesh, _fmatrix PivotMatirx);
 	HRESULT NativeConstruct_Prototype(_uint iMaterialIndex, _uint iNumVtxCnt, _uint iNumIdxCnt, class CModel* pModel, void* pVtx, void* pIdx);
+	HRESULT NativeConstruct_Prototype(_uint iMaterialIndex, _uint iNumVtxCnt, _uint iNumIdxCnt, _uint iType, void* pVtx, void* pIdx);
 	HRESULT NativeConstruct(void* pArg) override;
 	HRESULT Render();
+	HRESULT Render(ID3D11Buffer* pInstVetex, _uint iInstStride);
 public:
 	HRESULT Create_VertexIndexBuffer();
 	HRESULT Add_Bone(class CModel* pModel);
@@ -24,6 +26,7 @@ public:
 private:
 	HRESULT Set_UpVerticesDesc(class CModel* pModel, aiMesh* pMesh, _fmatrix PivotMatrix);
 	HRESULT Set_UpVerticesDesc(_uint iNumVtxCnt, class CModel* pModel, void* pVtx);
+	HRESULT Set_UpVerticesDesc(_uint iNumVtxCnt, _uint pModelType, void* pVtx);
 	HRESULT Set_IndicesDesc(aiMesh* pMesh);
 	HRESULT Set_IndicesDesc(_uint iNumIdxCnt, void* pIdx);
 
@@ -50,6 +53,7 @@ private:
 public:
 	static CMeshContainer* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext, class CModel* pModel, aiMesh* pMesh, _fmatrix PivotMatrix);
 	static CMeshContainer* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext, _uint iMaterialIndex, _uint iNumVtxCnt, _uint iNumIdxCnt, class CModel* pModel, void* pVtx, void* pIdx);
+	static CMeshContainer* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext, _uint iMaterialIndex, _uint iNumVtxCnt, _uint iNumIdxCnt, _uint iType, void* pVtx, void* pIdx);
 	virtual CComponent* Clone(void* pArg)override;
 	virtual void Free() override;
 };

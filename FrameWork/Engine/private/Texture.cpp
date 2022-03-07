@@ -47,6 +47,7 @@ HRESULT CTexture::NativeConstruct_Prototype(const wstring& pTextureFilePath, _ui
 			hr = DirectX::LoadFromTGAFile(szFullPath, nullptr, ScratchImage);
 		else
 			hr = DirectX::LoadFromWICFile(szFullPath, DirectX::CP_FLAGS_NONE, nullptr, ScratchImage);
+	}
 
 		if (FAILED(hr))
 			return E_FAIL;

@@ -29,7 +29,7 @@ CEffectTool_Dlg::CEffectTool_Dlg(CWnd* pParent /*=nullptr*/)
 	, m_fRandomDirX(360)
 	, m_fRandomDirY(360)
 	, m_fRandomDirZ(360)
-	, m_bCheck(true)
+	, m_bCheck(false)
 	, m_fRandomMinusDirX(1)
 	, m_fRandomMinusDirY(1)
 	, m_fRandomMinusDirZ(1)
@@ -400,7 +400,9 @@ void CEffectTool_Dlg::OnTvnSelchangedTree3(NMHDR* pNMHDR, LRESULT* pResult)
 void CEffectTool_Dlg::OnBnClickedCheck1()
 {
 	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+	UpdateData(TRUE);
 	m_bCheck = m_CheckGravity.GetCheck();
+	UpdateData(FALSE);
 }
 
 void CEffectTool_Dlg::OnBnClickedButton2()
