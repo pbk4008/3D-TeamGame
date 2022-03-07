@@ -57,6 +57,8 @@ _int CPlane::Tick(_double TimeDelta)
 _int CPlane::LateTick(_double TimeDelta)
 {
 	m_pRenderer->Add_RenderGroup(CRenderer::RENDER_PRIORITY, this);
+
+	Input_Key(TimeDelta);
 	Update_CellPos();
 	return _int();
 }
@@ -168,6 +170,22 @@ void CPlane::CCW_Sort(_float3* pPoints)
 	{
 		return;
 	}
+}
+
+void CPlane::Input_Key(_double _dtimeDelta)
+{
+	if (g_pGameInstance->getkeyPress(DIK_I))
+		m_pTransform->Mesh_Go(_dtimeDelta);
+	if (g_pGameInstance->getkeyPress(DIK_K))
+		m_pTransform->Mesh_Back(_dtimeDelta);
+	if (g_pGameInstance->getkeyPress(DIK_J))
+		m_pTransform->Mesh_Left(_dtimeDelta);
+	if (g_pGameInstance->getkeyPress(DIK_L))
+		m_pTransform->Mesh_Right(_dtimeDelta);
+	if (g_pGameInstance->getkeyPress(DIK_F10))
+		m_pTransform->Go_Up(_dtimeDelta);
+	if (g_pGameInstance->getkeyPress(DIK_F11))
+		m_pTransform->Go_Down(_dtimeDelta);
 }
 
 void CPlane::Set_WVPMatrix()
