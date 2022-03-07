@@ -116,7 +116,7 @@ HRESULT CSilvermane::Render()
 
 	for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
 	{
-		m_pModel->SetUp_TextureOnShader("g_DiffuseTexture", i, aiTextureType_DIFFUSE);
+		//m_pModel->SetUp_TextureOnShader("g_DiffuseTexture", i, aiTextureType_DIFFUSE);
 
 		m_pModel->Render(i, 0);
 	}
@@ -142,7 +142,7 @@ HRESULT CSilvermane::Ready_Components()
 		return E_FAIL;
 
 	m_pModel->Add_Material(g_pGameInstance->Get_Material(L"Silvermane_Top"), 0);
-	m_pModel->Add_Material(g_pGameInstance->Get_Material(L"Silvermane_Down"), 1);
+	//m_pModel->Add_Material(g_pGameInstance->Get_Material(L"Silvermane_Down"), 1);
 	m_pModel->Add_Material(g_pGameInstance->Get_Material(L"Silvermane_Cloak"), 2);
 	m_pModel->Add_Material(g_pGameInstance->Get_Material(L"Silvermane_Hair"), 3);
 

@@ -9,6 +9,7 @@
 #include "NavSphere.h"
 #include "Navigation.h"
 
+
 CChanger::CChanger(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
 	:m_pDevice(_pDevice)
 	, m_pDeviceContext(_pDeviceContext)
