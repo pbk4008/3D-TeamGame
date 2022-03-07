@@ -79,7 +79,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 		g_pGameInstance->Update_TimeDelta(L"Timer_Default");
 		dTimerAcc += g_pGameInstance->Get_TimeDelta(L"Timer_Default");
 
-        if (dTimerAcc>=1.0/60.f)
+        if (true/*dTimerAcc>=1.0/60.f*/)
         {
 			dTimerAcc = 0.0;
 

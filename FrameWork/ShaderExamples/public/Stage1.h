@@ -17,6 +17,7 @@ public:
 	virtual _int Tick(_double TimeDelta);
 	virtual HRESULT Render();
 private:
+	HRESULT	Ready_LightDesc();
 	HRESULT Ready_Gameobject();
 
 public:

@@ -35,7 +35,7 @@ public:
 	virtual _int LateTick(_double TimeDelta);
 	virtual HRESULT Render();
 	virtual HRESULT	Render_Shadow();
-	virtual HRESULT	Render_ShadeShadow();
+	virtual HRESULT	Render_ShadeShadow(ID3D11ShaderResourceView* ShaodwMap);
 	virtual HRESULT	Render_PBR();
 public:
 	virtual void OnCollisionEnter(CGameObject* pCol);

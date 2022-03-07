@@ -18,7 +18,6 @@ CInstancing_Mesh::CInstancing_Mesh(ID3D11Device* pDevice, ID3D11DeviceContext* p
 
 CInstancing_Mesh::CInstancing_Mesh(const CInstancing_Mesh& rhs)
 	: CComponent(rhs)
-	, m_vecMeshContainers(rhs.m_vecMeshContainers)
 	, m_vecMaterialDesc(rhs.m_vecMaterialDesc)
 	, m_pVBInstance(rhs.m_pVBInstance)
 	, m_VBInstDesc(rhs.m_VBInstDesc)
@@ -142,7 +141,7 @@ HRESULT CInstancing_Mesh::Init_StaticMesh(const wstring& pMeshFilePath)
 	RELEASE_INSTANCE(CSaveManager);
 
 	m_iNumMeshes = pData.iMeshCount;
-	m_vecMeshContainers.resize(pData.iMeshCount);
+	m_vecMeshContainers.resize(pData.iMtrlCount);
 	for (auto& pMesh : pData.pMeshData)
 	{
 		if (FAILED(Create_MeshContainer(pMesh.iMeshMtrlNum, pMesh.iVtxCount, pMesh.iIdxCount,pMesh.pVtxPoint, pMesh.pIndex)))

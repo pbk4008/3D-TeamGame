@@ -121,7 +121,7 @@ HRESULT CSaveManager::Save_AnimModel(vector<MTRLDATA>& vecMtrlData, vector <ANIM
 
 			_uint iKeyFrameCnt = pAnim.pChannelData[i].iKeyFrameCnt;
 			WriteFile(hFile, &iKeyFrameCnt, sizeof(_uint), &dwByte, nullptr);
-			for (_int j = 0; j < iKeyFrameCnt; j++)
+			for (_uint j = 0; j < iKeyFrameCnt; j++)
 			{
 				WriteFile(hFile, &pAnim.pChannelData[i].pKeyFrame[j].Time, sizeof(_double), &dwByte, nullptr);
 				WriteFile(hFile, &pAnim.pChannelData[i].pKeyFrame[j].vScale, sizeof(_float3), &dwByte, nullptr);
@@ -150,19 +150,19 @@ HRESULT CSaveManager::Load_StaticModel(STATICDATA& StaticData, const wstring& pF
 
 	_ulong dwByte = 1;
 
-	ZeroMemory(&StaticData, sizeof(STATICDATA));
+	//ZeroMemory(&StaticData, sizeof(STATICDATA));
 
 	ReadFile(hFile, &StaticData.iMtrlCount, sizeof(_uint), &dwByte, nullptr);
 	ReadFile(hFile, &StaticData.iMeshCount, sizeof(_uint), &dwByte, nullptr);
 
-	StaticData.pMtrlData.reserve(StaticData.iMtrlCount);
+	//StaticData.pMtrlData.reserve(StaticData.iMtrlCount);
 	for (_uint i = 0; i < StaticData.iMtrlCount; i++)
 	{
 		MTRLDATA pMTrl;
 		ZeroMemory(&pMTrl, sizeof(pMTrl));
 		ReadFile(hFile, &pMTrl.iTextureCnt, sizeof(_uint), &dwByte, nullptr);
 
-		pMTrl.pTaxtureData.reserve(pMTrl.iTextureCnt);
+		//pMTrl.pTaxtureData.reserve(pMTrl.iTextureCnt);
 		for (_uint j = 0; j < pMTrl.iTextureCnt; j++)
 		{
 			TEXTUREDATA pTexture;
@@ -176,7 +176,7 @@ HRESULT CSaveManager::Load_StaticModel(STATICDATA& StaticData, const wstring& pF
 		}
 		StaticData.pMtrlData.emplace_back(pMTrl);
 	}
-	StaticData.pMeshData.reserve(StaticData.iMeshCount);
+	//StaticData.pMeshData.reserve(StaticData.iMeshCount);
 	for (_uint i = 0; i < StaticData.iMeshCount; i++)
 	{
 		STATICMESHDATA pMesh;

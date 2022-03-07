@@ -20,6 +20,7 @@ public:
 		_float		fLifeTime;
 		_float		fCurTime;
 		_uint		iNumInstance;
+		_bool		bGravity;
 	}PIDESC;
 protected:
 	explicit CVIBuffer_PointInstance_Explosion(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);
