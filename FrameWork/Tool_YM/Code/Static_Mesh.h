@@ -2,6 +2,7 @@
 #define Static_Mesh_h__
 
 #include "GameObject.h"
+#include "Observer.h"
 
 BEGIN(Engine)
 class CModel;
@@ -26,6 +27,7 @@ public:
 	_fmatrix		Get_WorldMat(void);
 public:
 	void	Input_Key(_double _dtimeDelta);
+	void	Pick_Scale(_double _dtimeDelta,CObserver::ScaleMode _eMode);
 	void    Pick_Model(void);
 	void    Find_Pointer(void);
 	_bool   IntersectTriangle(const _fvector& orig, const _fvector& dir, _fvector& v0, _fvector& v1, _fvector& v2, _float* t, _float* u, _float* v);

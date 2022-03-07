@@ -3,13 +3,14 @@
 
 #include "Base.h"
 #include "Tool_Defines.h"
-
+#include "Plane.h"
 class CObserver final :  public CBase
 {
 	DECLARE_SINGLETON(CObserver)
 
 public:
 	enum MODE { MODE_MAP, MODE_NAV, MODE_END };
+	enum ScaleMode { SCALE_X, SCALE_Y, SCALE_Z, SCALE_END };
 
 public:
 	_fvector Load_DebugingFile(const wstring& wstrFilePath = L"");
@@ -28,7 +29,8 @@ public:
 	_bool				m_bNavSpherePick = false;
 public:
 	MODE				m_eMode = MODE_END;
-
+	ScaleMode			m_eScaleMode = SCALE_END;
+	class CPlane*		m_pPlane = nullptr;
 public:
 	class CStatic_Mesh* m_pModel = nullptr;
 	class CNavSphere*	m_pNavSphere = nullptr;

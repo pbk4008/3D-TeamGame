@@ -298,13 +298,16 @@ void CVIBuffer_PointInstance_Explosion::Update(_double TimeDelta, _uint eAxis)
 				((VTXPARTICLE*)SubResource.pData)[i].vTime.x = m_Desc.fLifeTime;
 			}
 
-			_float fY = 0.f;
-			m_fGravityTime = m_Desc.fLifeTime - ((VTXPARTICLE*)SubResource.pData)[i].vTime.x;
-
-			if (0.3f > m_fGravityTime)
+			if (m_Desc.bGravity) //중력값 줬을때만 ,,
 			{
-				fY = ((VTXPARTICLE*)SubResource.pData)[i].vPosition.y + (-2.f * 9.8f * TimeDelta * 0.07f);
-				((VTXPARTICLE*)SubResource.pData)[i].vPosition.y = fY;
+				_float fY = 0.f;
+				m_fGravityTime = m_Desc.fLifeTime - ((VTXPARTICLE*)SubResource.pData)[i].vTime.x;
+
+				if (m_Desc.fLifeTime > m_fGravityTime && 0.f <= m_fGravityTime)
+				{
+					fY = ((VTXPARTICLE*)SubResource.pData)[i].vPosition.y + (-2.f * 9.8f * TimeDelta * ((m_Desc.fLifeTime - m_fGravityTime) * (m_Desc.fParticleSpeed * 0.1f)));
+					((VTXPARTICLE*)SubResource.pData)[i].vPosition.y = fY;
+				}
 			}
 
 			//리셋일때는 돌지않게

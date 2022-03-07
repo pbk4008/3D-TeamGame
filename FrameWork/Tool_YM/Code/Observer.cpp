@@ -23,8 +23,8 @@ _fvector CObserver::Load_DebugingFile(const wstring& wstrFilePath /* = L"" */)
 	while (true)
 	{
 		
-		fin.getline(szUpdate, MAX_PATH, L'||');
-
+		fin.getline(szUpdate, MAX_PATH, L'|');
+		if(!lstrcmp(L"False", szUpdate))
 			return XMVectorZero();
 
 		fin.getline(szPosX, MAX_PATH, L'|');

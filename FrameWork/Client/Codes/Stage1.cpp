@@ -21,10 +21,12 @@ HRESULT CStage1::NativeConstruct()
 
 	if (FAILED(Ready_Gameobject()))
 		return E_FAIL;
-	//if (FAILED(Ready_Effect(L"../bin/SaveData/Effect/Effect.dat")))
-	//	return E_FAIL;
-	//if (FAILED(Ready_UI(L"../bin/SaveData/UI/UI.dat")))
-	//	return E_FAIL;
+
+	if (FAILED(Ready_Effect(L"../bin/SaveData/Effect/Effect_Explosion.dat")))
+		return E_FAIL;
+	if (FAILED(Ready_UI(L"../bin/SaveData/UI/UI.dat")))
+		return E_FAIL;
+
 
 	return S_OK;
 }

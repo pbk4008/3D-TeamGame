@@ -69,7 +69,7 @@ HRESULT CDynamic_Camera::SetUp_Components()
 	CTransform::TRANSFORMDESC TransDesc;
 
 	TransDesc.fRotationPerSec = XMConvertToRadians(120.0f);
-	TransDesc.fSpeedPerSec = 10.f;
+	TransDesc.fSpeedPerSec = 30.f;
 
 	if (FAILED(__super::SetUp_Components(TAB_STATIC, L"Camera", L"CamCom", (CComponent**)&m_pCamCom, &CameraDesc)))
 		return E_FAIL;

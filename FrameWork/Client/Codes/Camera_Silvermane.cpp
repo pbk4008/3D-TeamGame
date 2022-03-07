@@ -89,9 +89,7 @@ HRESULT CCamera_Silvermane::Ready_Components()
 	cameraDesc.fNear = 0.1f;
 	cameraDesc.fFar = 500.f;
 	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Camera", L"Camera", (CComponent**)&m_pCamera, &cameraDesc)))
-	{
 		return E_FAIL;
-	}
 
 	return S_OK;
 }
@@ -123,8 +121,8 @@ _int CCamera_Silvermane::Chase_Target(const _double& _dDeltaTime)
 	_vector svY = XMVectorSet(0.f, 1.f, 0.f, 0.f);
 	_vector svZ = XMVectorSet(0.f, 0.f, 1.f, 0.f);
 
-	_vector svEye = svTargetPosition + svY * 3.f + svZ * -4.f;
-	_vector svAt = svTargetPosition + svY;
+	_vector svEye = svTargetPosition + svTargetRight + svTargetUp * 3.f + svTargetLook * -4.f;
+	_vector svAt = svTargetPosition + svTargetRight + svTargetUp;
 
 	_vector		svLook = svAt - svEye;
 	svLook = XMVector3Normalize(svLook);
