@@ -39,7 +39,7 @@ namespace Engine
 		XMFLOAT3		vNormal;
 		XMFLOAT2		vTexUV;
 		XMFLOAT3		vTangent;
-		//XMFLOAT3		vBiNormal;
+		XMFLOAT3		vBiNormal;
 	}VTXMESH;
 
 	typedef struct tagVertex_Anim : public VTXMESH

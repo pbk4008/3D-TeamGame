@@ -12,7 +12,7 @@ CTexture::CTexture(const CTexture & rhs)
 {
 	for (auto& pShaderResourceView : rhs.m_Textures)
 	{
-		ID3D11ShaderResourceView* tmpResourceView=nullptr;
+		ID3D11ShaderResourceView* tmpResourceView = nullptr;
 		ID3D11Resource* pResource = nullptr;
 		pShaderResourceView->GetResource(&pResource);
 		m_pDevice->CreateShaderResourceView(pResource, nullptr, &tmpResourceView);
@@ -44,33 +44,7 @@ HRESULT CTexture::NativeConstruct_Prototype(const wstring& pTextureFilePath, _ui
 			hr = DirectX::LoadFromDDSFile(szFullPath, DirectX::CP_FLAGS_NONE, nullptr, ScratchImage);
 
 		else if (0 == lstrcmp(szExt, TEXT(".tga")))
-		{
-			DirectX::ScratchImage MipChain;
 			hr = DirectX::LoadFromTGAFile(szFullPath, nullptr, ScratchImage);
-
-			if (FAILED(hr))
-				return E_FAIL;
-			else
-			{
-				ID3D11Resource* pTextureResource = nullptr;
-
-				if (FAILED(DirectX::CreateTexture(m_pDevice, MipChain.GetImages(), MipChain.GetImageCount(), MipChain.GetMetadata(), &pTextureResource)))
-					return E_FAIL;
-
-				ID3D11ShaderResourceView* pShaderResourceView = nullptr;
-
-				if (FAILED(m_pDevice->CreateShaderResourceView(pTextureResource, nullptr, &pShaderResourceView)))
-					return E_FAIL;
-
-				m_Textures.push_back(pShaderResourceView);
-
-				Safe_Release(pTextureResource);
-				ScratchImage.Release();
-				MipChain.Release();
-
-				return S_OK;
-			}
-		}
 		else
 			hr = DirectX::LoadFromWICFile(szFullPath, DirectX::CP_FLAGS_NONE, nullptr, ScratchImage);
 
@@ -107,18 +81,10 @@ HRESULT CTexture::NativeConstruct(void * pArg)
 	if (!pArg)
 		return S_OK;
 
-	CTextureManager* pInstance = GET_INSTANCE(CTextureManager);
-
 
 	wstring pTag = (*(wstring*)pArg);
-	vector <ID3D11ShaderResourceView* >* pTexture = pInstance->Get_Texture(pTag);
-
-	if (!pTexture)
+	if (FAILED(Change_Texture(pTag)))
 		return E_FAIL;
-
-	m_Textures = *pTexture;
-
-	RELEASE_INSTANCE(CTextureManager);
 
 	return S_OK;
 }
@@ -136,17 +102,18 @@ HRESULT CTexture::Change_Texture(const wstring& pTextureTag)
 	//for (_uint i = 0; i < iSize; i++)
 	//{
 	//	m_Textures.emplace_back((*pTexture)[i]);
-	//	Safe_AddRef(m_Textures[i]);
+	//	/*Safe_AddRef(m_Textures[i]);*/
 	//}
 
-	if (m_Textures.size())
+	if (!m_Textures.empty())
 	{
 		for (auto& pTexture : m_Textures)
 			Safe_Release(pTexture);
 		m_Textures.clear();
 		m_Textures.shrink_to_fit();
 	}
-	for(_uint i=0; i< pTexture->size(); i++)
+
+	for (_uint i = 0; i < pTexture->size(); ++i)
 	{
 		ID3D11ShaderResourceView* tmpResourceView = nullptr;
 		ID3D11Resource* pResource = nullptr;
@@ -208,5 +175,6 @@ void CTexture::Free()
 	for (auto& pShaderResourceView : m_Textures)
 		Safe_Release(pShaderResourceView);
 
-	m_Textures.clear();
+	if(!m_isCloned)
+		m_Textures.clear();
 }

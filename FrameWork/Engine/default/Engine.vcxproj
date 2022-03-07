@@ -200,6 +200,7 @@ call Update_Library_Release.bat</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\bin\ShaderFiles\Shader_Calculate.hpp" />
     <ClInclude Include="..\private\MeshCollider.h" />
     <ClInclude Include="..\public\Actor.h" />
     <ClInclude Include="..\public\Animation.h" />

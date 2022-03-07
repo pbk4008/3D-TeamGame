@@ -121,7 +121,7 @@ HRESULT CSaveManager::Save_AnimModel(vector<MTRLDATA>& vecMtrlData, vector <ANIM
 
 			_uint iKeyFrameCnt = pAnim.pChannelData[i].iKeyFrameCnt;
 			WriteFile(hFile, &iKeyFrameCnt, sizeof(_uint), &dwByte, nullptr);
-			for (_int j = 0; j < iKeyFrameCnt; j++)
+			for (_uint j = 0; j < iKeyFrameCnt; j++)
 			{
 				WriteFile(hFile, &pAnim.pChannelData[i].pKeyFrame[j].Time, sizeof(_double), &dwByte, nullptr);
 				WriteFile(hFile, &pAnim.pChannelData[i].pKeyFrame[j].vScale, sizeof(_float3), &dwByte, nullptr);

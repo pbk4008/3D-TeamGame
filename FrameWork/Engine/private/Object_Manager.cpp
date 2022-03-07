@@ -166,7 +166,7 @@ HRESULT CObject_Manager::Clear_Object_Manager(_uint iLevelIndex)
 
 void CObject_Manager::Clear_Object_List(void)
 {
-	for (_int i = 1; i < m_iNumLevels; i++)
+	for (_uint i = 1; i < m_iNumLevels; i++)
 		m_pLayers[i].clear();
 }
 
