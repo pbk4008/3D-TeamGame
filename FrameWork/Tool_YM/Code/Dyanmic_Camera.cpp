@@ -65,7 +65,7 @@ HRESULT CDynamic_Camera::SetUp_Components()
 	CameraDesc.fAspect = _float(g_iWINCX) / g_iWINCY;
 	CameraDesc.fNear = 0.2f;
 	CameraDesc.fFar = 300.f;
-
+	
 	CTransform::TRANSFORMDESC TransDesc;
 
 	TransDesc.fRotationPerSec = XMConvertToRadians(120.0f);
