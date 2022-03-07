@@ -59,14 +59,16 @@ void CMainForm::OnInitialUpdate()
 	CFormView::OnInitialUpdate();
 	
 	CGameInstance* pInstance = GET_INSTANCE(CGameInstance);
-	if (FAILED(pInstance->Initialize_Engine(g_hInst, g_hWnd, 0, CGraphic_Device::MODE_WIN, g_iWinCX, g_iWinCY, &m_pDevice, &m_pDeviceContext)))
+	if (FAILED(pInstance->Initialize_Engine(g_hInst, g_hWnd, 1, CGraphic_Device::MODE_WIN, g_iWinCX, g_iWinCY, &m_pDevice, &m_pDeviceContext)))
 		return;
+
 	RELEASE_INSTANCE(CGameInstance);
 
 	if (FAILED(g_pGameInstance->SetUpBaseComponent(m_pDevice, m_pDeviceContext)))
 		return;
+
+
 	m_pRenderer = g_pGameInstance->Clone_Component<CRenderer>(0, L"Renderer");
-	
 	// TODO: 여기에 특수화된 코드를 추가 및/또는 기본 클래스를 호출합니다.
 }
 

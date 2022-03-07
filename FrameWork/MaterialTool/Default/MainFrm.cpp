@@ -11,7 +11,6 @@
 #include "MainForm.h"
 
 
-
 IMPLEMENT_DYNCREATE(CMainFrame, CFrameWnd)
 
 BEGIN_MESSAGE_MAP(CMainFrame, CFrameWnd)
@@ -49,17 +48,24 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	}
 	m_wndStatusBar.SetIndicators(indicators, sizeof(indicators)/sizeof(UINT));
 
+	CGameInstance* pInstance = GET_INSTANCE(CGameInstance);
+
+	if (FAILED(pInstance->Ready_Timer(L"Timer_Default")))
+		return E_FAIL;
+	if (FAILED(pInstance->Ready_Timer(L"Timer_60")))
+		return E_FAIL;
+
+	RELEASE_INSTANCE(CGameInstance);
 	return 0;
 }
 
 void CMainFrame::Tick()
 {
-	_double  dTimerAcc = 0.0;
 	g_pGameInstance->Update_TimeDelta(L"Timer_Default");
-	dTimerAcc += g_pGameInstance->Get_TimeDelta(L"Timer_Default");
-	if (dTimerAcc>=1.0/60.f)
+	m_dTimerAcc += g_pGameInstance->Get_TimeDelta(L"Timer_Default");
+	if (m_dTimerAcc >=1.0/60.f)
 	{
-		dTimerAcc = 0.0;
+		m_dTimerAcc = 0.0;
 
 		g_pGameInstance->Update_TimeDelta(L"Timer_60");
 
