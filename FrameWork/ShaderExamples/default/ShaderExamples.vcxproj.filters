@@ -159,6 +159,9 @@
     <FxCompile Include="..\bin\ShaderFiles\Shader_Mesh.hlsl">
       <Filter>ShaderFiles</Filter>
     </FxCompile>
+    <FxCompile Include="..\bin\ShaderFiles\Shader_MeshAnim.hlsl">
+      <Filter>ShaderFiles</Filter>
+    </FxCompile>
     <FxCompile Include="..\bin\ShaderFiles\Shader_PointInstance.hlsl">
       <Filter>ShaderFiles</Filter>
     </FxCompile>

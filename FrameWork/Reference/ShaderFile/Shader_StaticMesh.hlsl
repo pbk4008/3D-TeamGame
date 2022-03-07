@@ -50,8 +50,6 @@ struct VS_IN
 	float2		vTexUV : TEXCOORD0;
 	float3		vTangent : TANGENT;
 	float3		vBiNormal : BINORMAL;
-	uint4		vBlendIndex : BLENDINDEX;
-	float4		vBlendWeight: BLENDWEIGHT;
 };
 
 struct VS_OUT

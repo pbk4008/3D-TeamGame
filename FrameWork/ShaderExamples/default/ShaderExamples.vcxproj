@@ -193,6 +193,7 @@
     <FxCompile Include="..\bin\ShaderFiles\Shader_Cube.hlsl" />
     <FxCompile Include="..\bin\ShaderFiles\Shader_Instance.hlsl" />
     <FxCompile Include="..\bin\ShaderFiles\Shader_Mesh.hlsl" />
+    <FxCompile Include="..\bin\ShaderFiles\Shader_MeshAnim.hlsl" />
     <FxCompile Include="..\bin\ShaderFiles\Shader_PointInstance.hlsl" />
     <FxCompile Include="..\bin\ShaderFiles\Shader_Rect.hlsl" />
     <FxCompile Include="..\bin\ShaderFiles\Shader_RectViewport.hlsl" />

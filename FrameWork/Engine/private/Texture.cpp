@@ -42,7 +42,6 @@ HRESULT CTexture::NativeConstruct_Prototype(const wstring& pTextureFilePath, _ui
 
 		if (0 == lstrcmp(szExt, TEXT(".dds")))		
 			hr = DirectX::LoadFromDDSFile(szFullPath, DirectX::CP_FLAGS_NONE, nullptr, ScratchImage);
-
 		else if (0 == lstrcmp(szExt, TEXT(".tga")))
 			hr = DirectX::LoadFromTGAFile(szFullPath, nullptr, ScratchImage);
 		else
@@ -66,7 +65,6 @@ HRESULT CTexture::NativeConstruct_Prototype(const wstring& pTextureFilePath, _ui
 
 		Safe_Release(pTextureResource);
 		ScratchImage.Release();
-	}
 
 	return S_OK;
 }

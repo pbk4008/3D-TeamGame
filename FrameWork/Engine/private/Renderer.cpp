@@ -90,9 +90,7 @@ HRESULT CRenderer::NativeConstruct_Prototype()
 	if (FAILED(pTargetMgr->Add_MRT(TEXT("MRT_PBR"), TEXT("Target_AO"))))
 		return E_FAIL;
 
-
-
-	m_pVIBuffer = CVIBuffer_RectViewPort::Create(m_pDevice, m_pDeviceContext, 0.f, 0.f, ViewportDesc.Width, ViewportDesc.Height, TEXT("../Bin/ShaderFiles/Shader_RectViewPort.hlsl"));
+	m_pVIBuffer = CVIBuffer_RectViewPort::Create(m_pDevice, m_pDeviceContext, 0.f, 0.f, ViewportDesc.Width, ViewportDesc.Height, TEXT("../../Reference/ShaderFile/Shader_RectViewPort.hlsl"));
 	if (nullptr == m_pVIBuffer)
 		return E_FAIL;
 

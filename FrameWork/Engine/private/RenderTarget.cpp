@@ -78,7 +78,7 @@ HRESULT CRenderTarget::Clear()
 #ifdef _DEBUG
 HRESULT CRenderTarget::Ready_Debug_Buffer(_float fX, _float fY, _float fSizeX, _float fSizeY)
 {
-	m_pDebugBuffer = CVIBuffer_RectViewPort::Create(m_pDevice, m_pDeviceContext, fX, fY, fSizeX, fSizeY, TEXT("../Bin/ShaderFiles/Shader_RectViewPort.hlsl"));
+	m_pDebugBuffer = CVIBuffer_RectViewPort::Create(m_pDevice, m_pDeviceContext, fX, fY, fSizeX, fSizeY, TEXT("../../Reference/ShaderFile/Shader_RectViewport.hlsl"));
 	if (nullptr == m_pDebugBuffer)
 		return E_FAIL;
 
