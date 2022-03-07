@@ -3,13 +3,10 @@
 
 
 // CMainForm 폼 보기
-class CAnimationTool;
-
+class CMaterialTool;
 class CMainForm : public CFormView
 {
 	DECLARE_DYNCREATE(CMainForm)
-public:
-	enum class ETab{ AnimationTool, Max };
 protected:
 	CMainForm();           // 동적 만들기에 사용되는 protected 생성자입니다.
 	virtual ~CMainForm();
@@ -31,15 +28,14 @@ protected:
 	DECLARE_MESSAGE_MAP()
 public:
 	virtual void OnInitialUpdate();
-
 public:
 	void Tick();
+private:
+	CMaterialTool* m_pMaterialTool;
+private:
+	ID3D11Device* m_pDevice;
+	ID3D11DeviceContext* m_pDeviceContext;
 
-public:
-	CTabCtrl m_tab;
-
-public:
-	CAnimationTool* m_pAnimationTool = nullptr;
 };
 
 

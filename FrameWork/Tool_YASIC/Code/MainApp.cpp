@@ -1,20 +1,13 @@
 #include "pch.h"
 #include "MainApp.h"
 
-#include "Level_Loading.h"
-
 CMainApp::CMainApp()
 {
 }
 
 HRESULT CMainApp::NativeConstruct()
 {
-	if (nullptr == m_pGameInstance)
-	{
-		return E_FAIL;
-	}
-
-	if (FAILED(m_pGameInstance->Initialize_Engine(g_hInst, g_hWnd, (_int)ELevel::Max, CGraphic_Device::MODE_WIN, g_iWinCX, g_iWinCY, &m_pDevice, &m_pDeviceContext)))
+	if (FAILED(g_pGameInstance->Initialize_Engine(g_hInst, g_hWnd, 0, CGraphic_Device::MODE_WIN, g_iWinCX, g_iWinCY, &m_pDevice, &m_pDeviceContext)))
 	{
 		return E_FAIL;
 	}
@@ -29,11 +22,6 @@ HRESULT CMainApp::NativeConstruct()
 	}
 
 
-	if (FAILED(SetUp_StartScene(ELevel::AnimationTool)))
-	{
-		return E_FAIL;
-	}
-
 	return S_OK;
 }
 
@@ -47,28 +35,9 @@ HRESULT CMainApp::Render()
 	return S_OK;
 }
 
-HRESULT CMainApp::SetUp_StartScene(ELevel _eScene)
+HRESULT CMainApp::SetUp_StartScene()
 {
-	if (nullptr == m_pGameInstance)
-	{
-		return E_FAIL;
-	}
-
 	HRESULT hr = 0;
-
-	switch (_eScene)
-	{
-	case ELevel::AnimationTool:
-		hr = m_pGameInstance->Open_Level((_int)ELevel::Loading, CLevel_Loading::Create(m_pDevice, m_pDeviceContext, _eScene));
-		break;
-	default:
-		return E_FAIL;
-	}
-
-	if (FAILED(hr))
-	{
-		return E_FAIL;
-	}
 
 	return S_OK;
 }

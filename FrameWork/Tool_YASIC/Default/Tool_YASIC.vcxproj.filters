@@ -16,12 +16,6 @@
     <Filter Include="03.Form">
       <UniqueIdentifier>{75dcb894-271e-4560-97f3-fc8b4c5060a7}</UniqueIdentifier>
     </Filter>
-    <Filter Include="03.Form\AnimationTool">
-      <UniqueIdentifier>{5d3fd189-2c5a-4869-92c0-973c013bdf4d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="04.MainApp">
-      <UniqueIdentifier>{38aca4d2-f95f-441a-a130-cb61dd16f021}</UniqueIdentifier>
-    </Filter>
     <Filter Include="97.WinMain">
       <UniqueIdentifier>{58345716-4247-4da8-bfba-eba2e24ebbd8}</UniqueIdentifier>
     </Filter>
@@ -31,17 +25,8 @@
     <Filter Include="98.Headers\Inlcude">
       <UniqueIdentifier>{bff18ab1-bf8d-42ab-bcff-b34ddf77ef12}</UniqueIdentifier>
     </Filter>
-    <Filter Include="05.Level">
-      <UniqueIdentifier>{1235d8b0-6136-4cba-aed5-b68736f7d30c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Level\Loading">
-      <UniqueIdentifier>{2e0f19ca-7f11-46ef-92ad-365f1f188f32}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Level\AnimationTool">
-      <UniqueIdentifier>{0b6e9ddc-db0b-492f-8e7e-0dcd3b099498}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Level\Loading\Loader">
-      <UniqueIdentifier>{6e980f77-a639-4147-a1be-61fc69f426ed}</UniqueIdentifier>
+    <Filter Include="03.Form\00.Material_Tool">
+      <UniqueIdentifier>{5d3fd189-2c5a-4869-92c0-973c013bdf4d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -72,9 +57,6 @@
     <ClInclude Include="..\Code\MainForm.h">
       <Filter>03.Form</Filter>
     </ClInclude>
-    <ClInclude Include="..\Code\AnimationTool.h">
-      <Filter>03.Form\AnimationTool</Filter>
-    </ClInclude>
     <ClInclude Include="..\Code\Tool_Include.h">
       <Filter>98.Headers</Filter>
     </ClInclude>
@@ -87,17 +69,8 @@
     <ClInclude Include="..\Code\Tool_Extern.h">
       <Filter>98.Headers\Inlcude</Filter>
     </ClInclude>
-    <ClInclude Include="..\Code\MainApp.h">
-      <Filter>04.MainApp</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Code\Level_AnimationTool.h">
-      <Filter>05.Level\AnimationTool</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Code\Level_Loading.h">
-      <Filter>05.Level\Loading</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Code\Loader.h">
-      <Filter>05.Level\Loading\Loader</Filter>
+    <ClInclude Include="..\Code\MaterialTool.h">
+      <Filter>03.Form\00.Material_Tool</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -119,20 +92,8 @@
     <ClCompile Include="..\Code\MainForm.cpp">
       <Filter>03.Form</Filter>
     </ClCompile>
-    <ClCompile Include="..\Code\AnimationTool.cpp">
-      <Filter>03.Form\AnimationTool</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Code\MainApp.cpp">
-      <Filter>04.MainApp</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Code\Level_AnimationTool.cpp">
-      <Filter>05.Level\AnimationTool</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Code\Level_Loading.cpp">
-      <Filter>05.Level\Loading</Filter>
-    </ClCompile>
-    <ClCompile Include="Loader.cpp">
-      <Filter>05.Level\Loading\Loader</Filter>
+    <ClCompile Include="..\Code\MaterialTool.cpp">
+      <Filter>03.Form\00.Material_Tool</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

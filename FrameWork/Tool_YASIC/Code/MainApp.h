@@ -17,9 +17,8 @@ public:
 	HRESULT NativeConstruct();
 	_int Tick(_double _dDeltaTime);
 	HRESULT Render();
-
 public:
-	HRESULT SetUp_StartScene(ELevel _eScene);
+	HRESULT SetUp_StartScene();
 
 private: /* For.Scene_Static */
 	HRESULT Ready_Component_Prototype();
@@ -28,7 +27,6 @@ private: /* For.Scene_Static */
 public:
 	ID3D11Device* m_pDevice = nullptr;
 	ID3D11DeviceContext* m_pDeviceContext = nullptr;
-	CGameInstance* m_pGameInstance = nullptr;
 	CRenderer* m_pRenderer = nullptr;
 
 public:

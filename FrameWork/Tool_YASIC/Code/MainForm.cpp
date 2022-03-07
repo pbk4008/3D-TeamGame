@@ -5,7 +5,7 @@
 #include "Tool_YASIC.h"
 #include "MainForm.h"
 
-#include "AnimationTool.h"
+#include "MaterialTool.h"
 
 // CMainForm
 
@@ -13,19 +13,23 @@ IMPLEMENT_DYNCREATE(CMainForm, CFormView)
 
 CMainForm::CMainForm()
 	: CFormView(IDD_CMainForm)
+	, m_pMaterialTool(nullptr)
+	, m_pDevice(nullptr)
+	, m_pDeviceContext(nullptr)
 {
 
 }
 
 CMainForm::~CMainForm()
 {
-	Safe_Delete(m_pAnimationTool);
+	Safe_Release(m_pDevice);
+	Safe_Release(m_pDeviceContext);
+	Safe_Delete(m_pMaterialTool);
 }
 
 void CMainForm::DoDataExchange(CDataExchange* pDX)
 {
 	CFormView::DoDataExchange(pDX);
-	DDX_Control(pDX, IDC_TAB1, m_tab);
 }
 
 BEGIN_MESSAGE_MAP(CMainForm, CFormView)
@@ -56,23 +60,16 @@ void CMainForm::OnInitialUpdate()
 {
 	CFormView::OnInitialUpdate();
 
+	if (FAILED(g_pGameInstance->Initialize_Engine(g_hInst, g_hWnd, 0, CGraphic_Device::MODE_WIN, g_iWinCX, g_iWinCY, &m_pDevice, &m_pDeviceContext)))
+		return;
+
+	
+
+
 	// TODO: 여기에 특수화된 코드를 추가 및/또는 기본 클래스를 호출합니다.
-	CRect rcMainForm;
-	this->GetWindowRect(rcMainForm);
-
-	m_tab.MoveWindow(0, 0, rcMainForm.Width(), rcMainForm.Height());
-
-	m_tab.InsertItem((_int)ETab::AnimationTool, L"AnimationTool");
-
-	CRect rcTab;
-	m_tab.GetWindowRect(rcTab);
-
-	m_pAnimationTool = new CAnimationTool();
-	m_pAnimationTool->Create(IDD_CAnimationTool, &m_tab);
-	m_pAnimationTool->MoveWindow(0, 25, rcTab.Width(), rcTab.Height());
-	m_pAnimationTool->ShowWindow(SW_SHOW);
 }
 
 void CMainForm::Tick()
 {
+
 }

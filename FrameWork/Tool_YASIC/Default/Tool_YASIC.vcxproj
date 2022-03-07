@@ -187,12 +187,8 @@
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\Code\AnimationTool.h" />
-    <ClInclude Include="..\Code\Level_AnimationTool.h" />
-    <ClInclude Include="..\Code\Level_Loading.h" />
-    <ClInclude Include="..\Code\Loader.h" />
-    <ClInclude Include="..\Code\MainApp.h" />
     <ClInclude Include="..\Code\MainForm.h" />
+    <ClInclude Include="..\Code\MaterialTool.h" />
     <ClInclude Include="..\Code\Tool_Define.h" />
     <ClInclude Include="..\Code\Tool_Enum.h" />
     <ClInclude Include="..\Code\Tool_Extern.h" />
@@ -207,12 +203,8 @@
     <ClInclude Include="Tool_YASICView.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\Code\AnimationTool.cpp" />
-    <ClCompile Include="..\Code\Level_AnimationTool.cpp" />
-    <ClCompile Include="..\Code\Level_Loading.cpp" />
-    <ClCompile Include="..\Code\MainApp.cpp" />
     <ClCompile Include="..\Code\MainForm.cpp" />
-    <ClCompile Include="Loader.cpp" />
+    <ClCompile Include="..\Code\MaterialTool.cpp" />
     <ClCompile Include="MainFrm.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
