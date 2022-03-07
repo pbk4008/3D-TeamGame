@@ -21,17 +21,17 @@ HRESULT CSilvermane_JogFwdPivot180::NativeConstruct(void* _pArg)
 	return S_OK;
 }
 
-_int CSilvermane_JogFwdPivot180::Tick(const _double& TimeDelta)
+_int CSilvermane_JogFwdPivot180::Tick(const _double& _dDeltaTime)
 {
-	if (0 > __super::Tick(TimeDelta))
+	if (0 > __super::Tick(_dDeltaTime))
 		return -1;
 
 	return _int();
 }
 
-_int CSilvermane_JogFwdPivot180::LateTick(const _double& TimeDelta)
+_int CSilvermane_JogFwdPivot180::LateTick(const _double& _dDeltaTime)
 {
-	if (0 > __super::LateTick(TimeDelta))
+	if (0 > __super::LateTick(_dDeltaTime))
 		return -1;
 
 	return _int();
@@ -66,8 +66,12 @@ HRESULT CSilvermane_JogFwdPivot180::ExitState()
 	return S_OK;
 }
 
-_int CSilvermane_JogFwdPivot180::KeyCheck(const _double& TimeDelta)
+_int CSilvermane_JogFwdPivot180::KeyCheck(const _double& _dDeltaTime)
 {
+	_int iProgress = __super::KeyCheck(_dDeltaTime);
+	if (NO_EVENT != iProgress)
+		return iProgress;
+
 	if (g_pGameInstance->getkeyPress(DIK_S))
 	{
 		if (m_pAnimationController->Is_Finished())

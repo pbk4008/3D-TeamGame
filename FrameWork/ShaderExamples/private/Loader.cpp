@@ -4,6 +4,8 @@
 #include "Material.h"
 #include "GameInstance.h"
 #include "Floor.h"
+#include "SkyBox.h"
+#include "Player.h"
 
 CLoader::CLoader()
 	: m_hThread(nullptr)
@@ -87,15 +89,37 @@ HRESULT CLoader::Ready_Stage1()
 	//	return E_FAIL;
 
 	// Ready Texutre
-	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"FloorTexture", L"../bin/Resources/Textures/Terrain/Grass_0.dds")))
+     if (FAILED(g_pGameInstance->Add_Texture(m_pDevice,L"FloorBase", L"../bin/Resources/Textures/Terrain/Grass_%d.dds",2)))
+		return E_FAIL;
+	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"FloorFilter",L"../bin/Resources/Textures/Terrain/Filter.bmp")))
+		return E_FAIL;
+	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"FloorBrush",L"../bin/Resources/Textures/Terrain/Brush.png")))
+		return E_FAIL;
+	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"SkyBox", L"../bin/Resources/Textures/SkyBox/burger%d.dds", 4)))
+		return E_FAIL;
+	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"PBR_Player_Top", L"../Bin/Resources/Meshes/fbx/T_Silvermane_Top_MRA.tga")))
+		return E_FAIL;
+	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"PBR_Player_Down", L"../Bin/Resources/Meshes/fbx/T_Silvermane_Down_MRA.tga")))
+		return E_FAIL;
+	// Ready Component
+
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"PrototypeTerrainVIBuffer", CVIBuffer_Terrain::Create(m_pDevice, m_pDeviceContext, L"../bin/ShaderFiles/Shader_Terrain.hlsl", L"../Bin/Resources/Textures/Terrain/Height.bmp"))))
 		return E_FAIL;
 
-	// Ready Component 
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"PrototypeTerrainVIBuffer", CVIBuffer_Terrain::Create(m_pDevice, m_pDeviceContext, L"../bin/ShaderFiles/Shader_Terrain.hlsl", L"../Bin/Resources/Textures/Terrain/Height.bmp"))))
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"PrototypeCubeVIBuffer", CVIBuffer_Cube::Create(m_pDevice, m_pDeviceContext, L"../bin/ShaderFiles/Shader_Cube.hlsl"))))
+		return E_FAIL;
+
+	_matrix PivotMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(90.0f));
+
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"PlayerModel", CModel::Create(m_pDevice, m_pDeviceContext, "../bin/Resources/Meshes/fbx/", "Player.fbx", L"../bin/ShaderFiles/Shader_Mesh.hlsl", PivotMatrix, CModel::TYPE_ANIM))))
 		return E_FAIL;
 
 	// Ready Object
 	if (FAILED(g_pGameInstance->Add_Prototype(L"Floor", CFloor::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	if (FAILED(g_pGameInstance->Add_Prototype(L"Sky", CSkyBox::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	if (FAILED(g_pGameInstance->Add_Prototype(L"Player", CPlayer::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 
 	return S_OK;
@@ -103,10 +127,10 @@ HRESULT CLoader::Ready_Stage1()
 
 void CLoader::Free()
 {
-	Safe_Release(m_pDeviceContext);
-	Safe_Release(m_pDevice);
-
 	WaitForSingleObject(m_hThread, INFINITE);
 	CloseHandle(m_hThread);
 	DeleteCriticalSection(&m_Critical);
+
+	Safe_Release(m_pDeviceContext);
+	Safe_Release(m_pDevice);
 }

@@ -18,7 +18,7 @@ private:
 	virtual ~CRenderer() = default;
 
 public: void	SetRenderButton(RENDERBUTTON ebutton, _bool check);
-public: void	SetCameraTag(const wstring& CameraTag) { m_CameraTag = CameraTag;  }
+public: void	SetCameraTag(const wstring& CameraTag) { lstrcpy(m_CameraTag,CameraTag.c_str());  }
 
 public:
 	virtual HRESULT NativeConstruct_Prototype();
@@ -34,13 +34,13 @@ private:
 	typedef list<class CGameObject*>	RENDERGROUP;
 
 private:
-	class CTarget_Manager* m_pTarget_Manager = nullptr;
+	//class CTarget_Manager* m_pTarget_Manager = nullptr;
 	class CVIBuffer_RectViewPort* m_pVIBuffer = nullptr;
 
 private: _bool								m_bShadow = false;
 private: _bool								m_bPBRHDR = false;
 private: RENDERBUTTON						m_eRenderButton;
-private: wstring							m_CameraTag;
+private: _tchar								m_CameraTag[128];
 
 private: HRESULT Render_Priority();
 private: HRESULT Render_NonAlpha();

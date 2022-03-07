@@ -18,9 +18,7 @@ HRESULT CTestScene_JS::NativeConstruct()
 	}
 
 	if (FAILED(Ready_Gameobject()))
-	{
 		return E_FAIL;
-	}
 
 	return S_OK;
 }
@@ -50,6 +48,9 @@ HRESULT CTestScene_JS::Ready_Gameobject()
 
  	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_JS, L"Camera", L"Camera_Silvermane")))
 		return E_FAIL;
+
+	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_JS, L"Camera", L"Camera_Debug")))
+	//	return E_FAIL;
 
 	return S_OK;
 }

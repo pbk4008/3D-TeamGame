@@ -133,7 +133,7 @@ HRESULT CVIBuffer_RectInstance::NativeConstruct_Prototype(const _tchar* pShaderF
 		pVertices[i].vRight = _float4(0.5f, 0.f, 0.f, 0.f);
 		pVertices[i].vUp = _float4(0.f, 0.5f, 0.f, 0.f);
 		pVertices[i].vLook = _float4(0.f, 0.f, 0.5f, 0.f);
-		pVertices[i].vPosition = _float4(rand() % 20, 15.0f, rand() % 20, 1.f);
+		pVertices[i].vPosition = _float4(_float(rand() % 20), 15.0f, _float(rand() % 20), 1.f);
 	}
 	m_VBInstSubresourceData.pSysMem = pVertices;
 
@@ -214,7 +214,7 @@ void CVIBuffer_RectInstance::Update(_double TimeDelta)
 	for (_uint i = 0; i < m_iNumInstance; ++i)
 	{
 		
-		((VTXMATRIX*)SubResource.pData)[i].vPosition.y -= m_pDropSpeed[i] * TimeDelta;
+		((VTXMATRIX*)SubResource.pData)[i].vPosition.y -= _float(m_pDropSpeed[i] * TimeDelta);
 
 		if (0 > ((VTXMATRIX*)SubResource.pData)[i].vPosition.y)
 			((VTXMATRIX*)SubResource.pData)[i].vPosition.y = 15.f;

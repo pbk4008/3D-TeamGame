@@ -16,25 +16,23 @@ CSilvermane_JogRightStart::CSilvermane_JogRightStart(const CSilvermane_JogRightS
 HRESULT CSilvermane_JogRightStart::NativeConstruct(void* _pArg)
 {
 	if (FAILED(__super::NativeConstruct(_pArg)))
-	{
 		return E_FAIL;
-	}
 
 	return S_OK;
 }
 
-_int CSilvermane_JogRightStart::Tick(const _double& TimeDelta)
+_int CSilvermane_JogRightStart::Tick(const _double& _dDeltaTime)
 {
-	_int iProgress = __super::Tick(TimeDelta);
+	_int iProgress = __super::Tick(_dDeltaTime);
 	if (NO_EVENT != iProgress)
 		return iProgress;
 
 	return _int();
 }
 
-_int CSilvermane_JogRightStart::LateTick(const _double& TimeDelta)
+_int CSilvermane_JogRightStart::LateTick(const _double& _dDeltaTime)
 {
-	_int iProgress = __super::LateTick(TimeDelta);
+	_int iProgress = __super::LateTick(_dDeltaTime);
 	if (NO_EVENT != iProgress)
 		return iProgress;
 
@@ -75,8 +73,12 @@ HRESULT CSilvermane_JogRightStart::ExitState()
 	return S_OK;
 }
 
-_int CSilvermane_JogRightStart::KeyCheck(const _double& TimeDelta)
+_int CSilvermane_JogRightStart::KeyCheck(const _double& _dDeltaTime)
 {
+	_int iProgress = __super::KeyCheck(_dDeltaTime);
+	if (NO_EVENT != iProgress)
+		return iProgress;
+
 	if (g_pGameInstance->getkeyPress(DIK_D))
 	{
 		if (m_pAnimationController->Is_Finished())

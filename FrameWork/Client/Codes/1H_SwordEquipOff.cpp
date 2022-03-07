@@ -67,7 +67,7 @@ HRESULT C1H_SwordEquipOff::ExitState()
 		return E_FAIL;
 
 	m_pSilvermane->Set_EquipWeapon(false);
-	CHierarchyNode* pWeaponBone = m_pModel->Get_BoneMatrix("arm_armor_1_r");
+	CHierarchyNode* pWeaponBone = m_pModel->Get_BoneMatrix("spine_03");
 	m_pSilvermane->Set_WeaponFixedBone(pWeaponBone);
 
 	return S_OK;
@@ -86,11 +86,17 @@ _int C1H_SwordEquipOff::KeyCheck(const _double& _dDeltaTime)
 		return STATE_CHANGE;
 	}
 
-	if (g_pGameInstance->getkeyPress(DIK_W))
+	if (g_pGameInstance->getkeyPress(DIK_LSHIFT))
 	{
-		if (FAILED(m_pStateController->Change_State(L"JogFwdStart")))
-			return E_FAIL;
-		return STATE_CHANGE;
+		if (g_pGameInstance->getkeyPress(DIK_W))
+		{
+			if (23 <= m_pAnimationController->Get_CurKeyFrameIndex())
+			{
+				if (FAILED(m_pStateController->Change_State(L"SprintFwdStart")))
+					return E_FAIL;
+				return STATE_CHANGE;
+			}
+		}
 	}
 
 	return _int();

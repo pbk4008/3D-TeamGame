@@ -50,6 +50,15 @@ _int CMainApp::Tick(_double TimeDelta)
 
 	g_pGameInstance->Tick_Engine(TimeDelta);
 
+	if (g_pGameInstance->getkeyDown(DIK_F1))
+		m_pRenderer->SetRenderButton(CRenderer::SHADOW, true);
+	if (g_pGameInstance->getkeyDown(DIK_F2))
+		m_pRenderer->SetRenderButton(CRenderer::SHADOW, false);
+	if (g_pGameInstance->getkeyDown(DIK_F3))
+		m_pRenderer->SetRenderButton(CRenderer::PBRHDR, true);
+	if (g_pGameInstance->getkeyDown(DIK_F4))
+		m_pRenderer->SetRenderButton(CRenderer::PBRHDR, false);
+
 	return _int();
 }
 
@@ -112,6 +121,7 @@ HRESULT CMainApp::Ready_Component_Prototype()
 {
 	if (FAILED(g_pGameInstance->SetUpBaseComponent(m_pDevice, m_pDeviceContext)))
 		return E_FAIL;
+
 	m_pRenderer = g_pGameInstance->Clone_Component<CRenderer>((_uint)SCENEID::SCENE_STATIC, L"Renderer");
 
 	if (!m_pRenderer)
@@ -193,7 +203,6 @@ CMainApp* CMainApp::Create()
 
 void CMainApp::Free()
 {
-
 	Safe_Release(m_pRenderer);
 
 	Safe_Release(m_pDeviceContext);

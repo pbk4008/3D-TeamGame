@@ -4,7 +4,6 @@
 #include "MainCamera.h"
 #include "MainCamera_Ortho.h"
 #include "Loading.h"
-#include "DebugSystem.h"
 
 CMainApp::CMainApp()
 {	
@@ -30,9 +29,9 @@ HRESULT CMainApp::NativeConstruct()
 		return E_FAIL;
 
 #ifdef _DEBUG
-	CDebugSystem* pDebug = GET_INSTANCE(CDebugSystem);
-	if (FAILED(pDebug->Init_DebugSystem(m_pDevice, m_pDeviceContext)))
-		return E_FAIL;
+	//CDebugSystem* pDebug = GET_INSTANCE(CDebugSystem);
+	//if (FAILED(pDebug->Init_DebugSystem(m_pDevice, m_pDeviceContext)))
+	//	return E_FAIL;
 #endif
 
 	if (FAILED(SetUp_StartLevel(SCENEID::SCENE_LOGO)))
@@ -206,10 +205,10 @@ CMainApp * CMainApp::Create()
 
 void CMainApp::Free()
 {
-	RELEASE_INSTANCE(CDebugSystem);
-	CDebugSystem::Stop_DebugSystem();
-	if (FAILED(CDebugSystem::DestroyInstance()))
-		MSGBOX("CDebugSystem Destroy Fail");
+	//RELEASE_INSTANCE(CDebugSystem);
+	//CDebugSystem::Stop_DebugSystem();
+	//if (FAILED(CDebugSystem::DestroyInstance()))
+	//	MSGBOX("CDebugSystem Destroy Fail");
 
 	Safe_Release(m_pRenderer);
 

@@ -113,8 +113,16 @@ _int CSilvermane_Idle::KeyCheck(const _double& _dDeltaTime)
 	{
 		if (g_pGameInstance->getkeyPress(DIK_W))
 		{
-			if (FAILED(m_pStateController->Change_State(L"SprintFwdStart")))
-				return E_FAIL;
+			if (!m_pSilvermane->Is_EquipWeapon())
+			{
+				if (FAILED(m_pStateController->Change_State(L"SprintFwdStart")))
+					return E_FAIL;
+			}
+			else
+			{
+				if (FAILED(m_pStateController->Change_State(L"1H_SwordEquipOff")))
+					return E_FAIL;
+			}
 			return STATE_CHANGE;
 		}
 	}

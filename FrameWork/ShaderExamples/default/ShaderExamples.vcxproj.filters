@@ -50,6 +50,9 @@
     <Filter Include="GameObject\SkyBox">
       <UniqueIdentifier>{118ed0e5-2a7b-4ccb-8eaa-26d60defcb71}</UniqueIdentifier>
     </Filter>
+    <Filter Include="GameObject\Player">
+      <UniqueIdentifier>{b7b64da2-d9fb-4234-b843-4b47de6bd51b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -76,9 +79,6 @@
     <ClInclude Include="..\public\MainCamera.h">
       <Filter>GameObject\Camera</Filter>
     </ClInclude>
-    <ClInclude Include="..\bin\ShaderFiles\Shader_RenderState.hpp">
-      <Filter>ShaderFiles</Filter>
-    </ClInclude>
     <ClInclude Include="..\public\Loading.h">
       <Filter>Scene\Loading</Filter>
     </ClInclude>
@@ -90,6 +90,18 @@
     </ClInclude>
     <ClInclude Include="..\public\BackGround.h">
       <Filter>GameObject\BackGround</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\SkyBox.h">
+      <Filter>GameObject\SkyBox</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Player.h">
+      <Filter>GameObject\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="..\bin\ShaderFiles\Shader_Calculate.hpp">
+      <Filter>ShaderFiles</Filter>
+    </ClInclude>
+    <ClInclude Include="..\bin\ShaderFiles\Shader_RenderState.hpp">
+      <Filter>ShaderFiles</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -130,20 +142,14 @@
     <ClCompile Include="..\private\BackGround.cpp">
       <Filter>GameObject\BackGround</Filter>
     </ClCompile>
+    <ClCompile Include="..\private\SkyBox.cpp">
+      <Filter>GameObject\SkyBox</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Player.cpp">
+      <Filter>GameObject\Player</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="..\bin\ShaderFiles\Shader_RectViewport.hlsl">
-      <Filter>ShaderFiles</Filter>
-    </FxCompile>
-    <FxCompile Include="..\bin\ShaderFiles\Shader_Triangle.hlsl">
-      <Filter>ShaderFiles</Filter>
-    </FxCompile>
-    <FxCompile Include="Shadow.hlsl">
-      <Filter>ShaderFiles</Filter>
-    </FxCompile>
-    <FxCompile Include="Constants.hlsl">
-      <Filter>ShaderFiles</Filter>
-    </FxCompile>
     <FxCompile Include="..\bin\ShaderFiles\Shader_Cube.hlsl">
       <Filter>ShaderFiles</Filter>
     </FxCompile>
@@ -153,13 +159,25 @@
     <FxCompile Include="..\bin\ShaderFiles\Shader_Mesh.hlsl">
       <Filter>ShaderFiles</Filter>
     </FxCompile>
+    <FxCompile Include="..\bin\ShaderFiles\Shader_MeshAnim.hlsl">
+      <Filter>ShaderFiles</Filter>
+    </FxCompile>
     <FxCompile Include="..\bin\ShaderFiles\Shader_PointInstance.hlsl">
       <Filter>ShaderFiles</Filter>
     </FxCompile>
     <FxCompile Include="..\bin\ShaderFiles\Shader_Rect.hlsl">
       <Filter>ShaderFiles</Filter>
     </FxCompile>
+    <FxCompile Include="..\bin\ShaderFiles\Shader_RectViewport.hlsl">
+      <Filter>ShaderFiles</Filter>
+    </FxCompile>
+    <FxCompile Include="..\bin\ShaderFiles\Shader_StaticMesh.hlsl">
+      <Filter>ShaderFiles</Filter>
+    </FxCompile>
     <FxCompile Include="..\bin\ShaderFiles\Shader_Terrain.hlsl">
+      <Filter>ShaderFiles</Filter>
+    </FxCompile>
+    <FxCompile Include="..\bin\ShaderFiles\Shader_Triangle.hlsl">
       <Filter>ShaderFiles</Filter>
     </FxCompile>
   </ItemGroup>
