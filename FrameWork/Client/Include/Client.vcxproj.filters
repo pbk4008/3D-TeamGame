@@ -55,8 +55,26 @@
     <Filter Include="02.GameObject\98.Player\00.Silvermane\Camera">
       <UniqueIdentifier>{fff034f3-6d84-4669-b0c2-9e3d6be892c0}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObject\02.EnvironMent">
-      <UniqueIdentifier>{2671a8b6-a2a8-4ec2-ad0d-b3e116f33512}</UniqueIdentifier>
+    <Filter Include="02.GameObject\01. MainCamera\ProjectionCam">
+      <UniqueIdentifier>{b39d66ed-89a6-46d9-8ed8-5f311d203299}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\01. MainCamera\OrthoCam">
+      <UniqueIdentifier>{65662b41-31ce-4b36-8d8e-957a55ecdb6d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.">
+      <UniqueIdentifier>{5840044b-593c-4938-8f64-6a894ee7e1f0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\04.Effect">
+      <UniqueIdentifier>{8a92a3f2-2ab5-4eeb-a712-96f614c298ff}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\04.Effect\01.Effect_DashDust_Player">
+      <UniqueIdentifier>{387da879-a8da-43c1-a901-c84527a9b9f2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.UI">
+      <UniqueIdentifier>{ea588900-5830-4a87-bbb5-2525229f11a6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.UI\01.UI_Ingame">
+      <UniqueIdentifier>{2697be6f-d512-4375-9c64-b12c0e1ffaec}</UniqueIdentifier>
     </Filter>
     <Filter Include="02.GameObject\98.Player\00.Silvermane\State\1H">
       <UniqueIdentifier>{0e4cba26-3aae-4f52-85e9-e564bdabc551}</UniqueIdentifier>
@@ -72,6 +90,18 @@
     </Filter>
     <Filter Include="02.GameObject\97.Plane">
       <UniqueIdentifier>{90180e28-49c4-4c5c-89b6-1ad22812fb29}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\96.Weapon">
+      <UniqueIdentifier>{4de56d05-7178-4ee0-a266-5f7bb2773397}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\96.Weapon\00.Needle">
+      <UniqueIdentifier>{3eee425a-e769-4d53-87d7-fe962081c44a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\06.">
+      <UniqueIdentifier>{5e4ce90c-d575-4e08-9ce0-006401437c35}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\02.Environment">
+      <UniqueIdentifier>{2671a8b6-a2a8-4ec2-ad0d-b3e116f33512}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -116,9 +146,6 @@
     </ClInclude>
     <ClInclude Include="..\Headers\BackGround.h">
       <Filter>02.GameObject\00. BackGround</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Headers\MainCamera.h">
-      <Filter>02.GameObject\01. MainCamera</Filter>
     </ClInclude>
     <ClInclude Include="..\Codes\DebugSystem.h">
       <Filter>97.DebugSystem</Filter>
@@ -201,8 +228,35 @@
     <ClInclude Include="..\Headers\Plane_Test.h">
       <Filter>02.GameObject\97.Plane</Filter>
     </ClInclude>
+    <ClInclude Include="..\Headers\Weapon.h">
+      <Filter>02.GameObject\96.Weapon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Needle.h">
+      <Filter>02.GameObject\96.Weapon\00.Needle</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\1H_SwordEquipOff.h">
+      <Filter>02.GameObject\98.Player\00.Silvermane\State\1H</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\1H_SwordEquipOn.h">
+      <Filter>02.GameObject\98.Player\00.Silvermane\State\1H</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\1H_SwordDodgeSpinFwd_V3.h">
+      <Filter>02.GameObject\98.Player\00.Silvermane\State\1H</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\MainCamera.h">
+      <Filter>02.GameObject\01. MainCamera\ProjectionCam</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Effect_DashDust.h">
+      <Filter>02.GameObject\04.Effect\01.Effect_DashDust_Player</Filter>
+    </ClInclude>
     <ClInclude Include="..\Headers\Environment.h">
-      <Filter>02.GameObject\02.EnvironMent</Filter>
+      <Filter>02.GameObject\02.Environment</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\MainCamera_Ortho.h">
+      <Filter>02.GameObject\01. MainCamera\OrthoCam</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\UI_Ingame.h">
+      <Filter>02.GameObject\05.UI\01.UI_Ingame</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -224,9 +278,6 @@
     </ClCompile>
     <ClCompile Include="..\Codes\BackGround.cpp">
       <Filter>02.GameObject\00. BackGround</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Codes\MainCamera.cpp">
-      <Filter>02.GameObject\01. MainCamera</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\DebugSystem.cpp">
       <Filter>97.DebugSystem</Filter>
@@ -309,8 +360,32 @@
     <ClCompile Include="..\Codes\Plane_Test.cpp">
       <Filter>02.GameObject\97.Plane</Filter>
     </ClCompile>
-    <ClCompile Include="..\Codes\Environment.cpp">
-      <Filter>02.GameObject\02.EnvironMent</Filter>
+    <ClCompile Include="..\Codes\Weapon.cpp">
+      <Filter>02.GameObject\96.Weapon</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Needle.cpp">
+      <Filter>02.GameObject\96.Weapon\00.Needle</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\1H_SwordEquipOff.cpp">
+      <Filter>02.GameObject\98.Player\00.Silvermane\State\1H</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\1H_SwordEquipOn.cpp">
+      <Filter>02.GameObject\98.Player\00.Silvermane\State\1H</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\1H_SwordDodgeSpinFwd_V3.cpp">
+      <Filter>02.GameObject\98.Player\00.Silvermane\State\1H</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\MainCamera.cpp">
+      <Filter>02.GameObject\01. MainCamera\ProjectionCam</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Effect_DashDust.cpp">
+      <Filter>02.GameObject\04.Effect\01.Effect_DashDust_Player</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\UI_Ingame.cpp">
+      <Filter>02.GameObject\05.UI\01.UI_Ingame</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\MainCamera_Ortho.cpp">
+      <Filter>02.GameObject\01. MainCamera\OrthoCam</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

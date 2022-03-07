@@ -3,6 +3,8 @@
 
 #include "StateController.h"
 
+#include "Silvermane.h"
+
 C1H_SowrdAttackNormalR1_01::C1H_SowrdAttackNormalR1_01(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
 	: CState_Silvermane(_pDevice, _pDeviceContext)
 {
@@ -56,6 +58,13 @@ HRESULT C1H_SowrdAttackNormalR1_01::EnterState()
 	if (FAILED(m_pAnimationController->SetUp_NextAnimation("SK_Silvermane.ao|A_1H_Sword_Attack_Normal_R1_01", false)))
 		return E_FAIL;
 	m_pAnimationController->Set_RootMotion(true, true);
+	if (!m_pSilvermane->Is_EquipWeapon())
+	{
+		m_pSilvermane->Set_EquipWeapon(true);
+		CHierarchyNode* pWeaponBone = m_pModel->Get_BoneMatrix("weapon_r");
+		m_pSilvermane->Set_WeaponFixedBone(pWeaponBone);
+	}
+	
 
 	return S_OK;
 }

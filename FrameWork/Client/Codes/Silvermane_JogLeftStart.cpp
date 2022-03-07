@@ -51,10 +51,10 @@ HRESULT CSilvermane_JogLeftStart::EnterState()
 		return E_FAIL;
 
 	
-	m_pAnimationController->SetUp_NextAnimation("SK_Silvermane.ao|A_Loco_Jog_Right_Pivot_180_Player", false);
+	m_pAnimationController->SetUp_NextAnimation("SK_Silvermane.ao|A_Loco_Jog_Left_Start_Player", false);
 	m_pAnimationController->Set_RootMotion(true, true, ERootOption::XYZ);
 
-	_matrix smatPivot = XMMatrixRotationY(XMConvertToRadians(90.f));
+	_matrix smatPivot = XMMatrixRotationY(XMConvertToRadians(-90.f));
 	m_pAnimationController->Set_PivotMatrix(smatPivot);
 	
 

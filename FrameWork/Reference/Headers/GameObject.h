@@ -34,6 +34,9 @@ public:
 	virtual _int Tick(_double TimeDelta);
 	virtual _int LateTick(_double TimeDelta);
 	virtual HRESULT Render();
+	virtual HRESULT	Render_Shadow();
+	virtual HRESULT	Render_ShadeShadow();
+	virtual HRESULT	Render_PBR();
 public:
 	virtual void OnCollisionEnter(CGameObject* pCol);
 	virtual void OnCollisionStay(CGameObject* pCol);

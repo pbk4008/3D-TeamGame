@@ -2,6 +2,7 @@
 #include "VIBuffer_RectViewPort.h"
 #include "Target_Manager.h"
 #include "PipeLine.h"
+#include "GameInstance.h"
 
 CLight::CLight(ID3D11Device * pDevice, ID3D11DeviceContext * pDeviceContext)
 	: m_pDevice(pDevice)
@@ -26,48 +27,57 @@ HRESULT CLight::NativeConstruct(const LIGHTDESC& LightDesc)
 	return S_OK;
 }
 
-HRESULT CLight::Render(const wstring& pCameraTag)
+HRESULT CLight::Render(const wstring& pCameraTag, _bool PBRHDRcheck)
 {
-	CTarget_Manager*		pTarget_Manager = GET_INSTANCE(CTarget_Manager);
-	CPipeLine*			pPipeLine = GET_INSTANCE(CPipeLine);
-
-	_uint		iPassIndex = 0;
-
-	if (m_LightDesc.eType == tagLightDesc::TYPE_DIRECTIONAL)
+	CTarget_Manager* pTarget_Manager = GET_INSTANCE(CTarget_Manager);
+	if (m_pVIBuffer != nullptr)
 	{
-		iPassIndex = 1;
-		m_pVIBuffer->SetUp_ValueOnShader("g_vLightDir", &_float4(m_LightDesc.vDirection.x, m_LightDesc.vDirection.y, m_LightDesc.vDirection.z, 0.f), sizeof(_float4));
+		_uint		iPassIndex = 0;
+
+		if (m_LightDesc.eType == tagLightDesc::TYPE_DIRECTIONAL)
+		{
+			iPassIndex = 1;
+
+			m_pVIBuffer->SetUp_TextureOnShader("g_ShadowTexture", pTarget_Manager->Get_SRV(TEXT("Target_Shadow")));
+			m_pVIBuffer->SetUp_ValueOnShader("g_vLightDir", &_float4(m_LightDesc.vDirection.x, m_LightDesc.vDirection.y, m_LightDesc.vDirection.z, 0.f), sizeof(_float4));
+		}
+		else if (m_LightDesc.eType == tagLightDesc::TYPE_POINT)
+		{
+			iPassIndex = 2;
+			m_pVIBuffer->SetUp_ValueOnShader("g_fRange", &m_LightDesc.fRange, sizeof(_float));
+			m_pVIBuffer->SetUp_ValueOnShader("g_vLightPos", &_float4(m_LightDesc.vPosition.x, m_LightDesc.vPosition.y, m_LightDesc.vPosition.z, 1.f), sizeof(_float4));
+		}
+
+		m_pVIBuffer->SetUp_TextureOnShader("g_NormalTexture", pTarget_Manager->Get_SRV(TEXT("Target_Normal")));
+		m_pVIBuffer->SetUp_TextureOnShader("g_DepthTexture", pTarget_Manager->Get_SRV(TEXT("Target_Depth")));
+		m_pVIBuffer->SetUp_TextureOnShader("g_ShadowTexture", pTarget_Manager->Get_SRV(TEXT("Target_ShadeShadow")));
+
+		m_pVIBuffer->SetUp_TextureOnShader("g_PositionTexture", pTarget_Manager->Get_SRV(TEXT("Target_Position")));
+		m_pVIBuffer->SetUp_TextureOnShader("g_DiffuseTexture", pTarget_Manager->Get_SRV(TEXT("Target_Diffuse")));
+
+		m_pVIBuffer->SetUp_TextureOnShader("g_Metallic", pTarget_Manager->Get_SRV(TEXT("Target_Metallic")));
+		m_pVIBuffer->SetUp_TextureOnShader("g_Roughness", pTarget_Manager->Get_SRV(TEXT("Target_Roughness")));
+		m_pVIBuffer->SetUp_TextureOnShader("g_AO", pTarget_Manager->Get_SRV(TEXT("Target_AO")));
+
+		m_pVIBuffer->SetUp_ValueOnShader("g_vLightDiffuse", &m_LightDesc.vDiffuse, sizeof(_float4));
+		m_pVIBuffer->SetUp_ValueOnShader("g_vLightAmbient", &m_LightDesc.vAmbient, sizeof(_float4));
+		m_pVIBuffer->SetUp_ValueOnShader("g_vLightSpecular", &m_LightDesc.vSpecular, sizeof(_float4));
+
+		_vector		vCamPosition = g_pGameInstance->Get_CamPosition(pCameraTag);
+
+		_matrix		ViewMatrix = g_pGameInstance->Get_Transform(pCameraTag, TRANSFORMSTATEMATRIX::D3DTS_VIEW);
+		ViewMatrix = XMMatrixInverse(nullptr, ViewMatrix);
+		_matrix		ProjMatrix = g_pGameInstance->Get_Transform(pCameraTag, TRANSFORMSTATEMATRIX::D3DTS_PROJECTION);
+		ProjMatrix = XMMatrixInverse(nullptr, ProjMatrix);
+
+		m_pVIBuffer->SetUp_ValueOnShader("g_vCamPosition", &vCamPosition, sizeof(_float4));
+		m_pVIBuffer->SetUp_ValueOnShader("g_ViewMatrixInv", &XMMatrixTranspose(ViewMatrix), sizeof(_float4x4));
+		m_pVIBuffer->SetUp_ValueOnShader("g_ProjMatrixInv", &XMMatrixTranspose(ProjMatrix), sizeof(_float4x4));
+		m_pVIBuffer->SetUp_ValueOnShader("g_bPBRHDR", &m_bPBRHDR, sizeof(_bool));
+
+		m_pVIBuffer->Render(iPassIndex);
 	}
-	else if (m_LightDesc.eType == tagLightDesc::TYPE_POINT)
-	{
-		iPassIndex = 2;
-		m_pVIBuffer->SetUp_ValueOnShader("g_vLightPos", &_float4(m_LightDesc.vPosition.x, m_LightDesc.vPosition.y, m_LightDesc.vPosition.z, 1.f), sizeof(_float4));
-		m_pVIBuffer->SetUp_ValueOnShader("g_fRange", &m_LightDesc.fRange, sizeof(_float));
-	}
 
-	m_pVIBuffer->SetUp_TextureOnShader("g_NormalTexture", pTarget_Manager->Get_SRV(TEXT("Target_Normal")));
-	m_pVIBuffer->SetUp_TextureOnShader("g_DepthTexture", pTarget_Manager->Get_SRV(TEXT("Target_Depth")));
-
-	
-	m_pVIBuffer->SetUp_ValueOnShader("g_vLightDiffuse", &m_LightDesc.vDiffuse, sizeof(_float4));
-	m_pVIBuffer->SetUp_ValueOnShader("g_vLightAmbient", &m_LightDesc.vAmbient, sizeof(_float4));
-	m_pVIBuffer->SetUp_ValueOnShader("g_vLightSpecular", &m_LightDesc.vSpecular, sizeof(_float4));
-
-	_vector		vCamPosition = pPipeLine->Get_CamPosition(pCameraTag);
-
-	_matrix		ViewMatrix = pPipeLine->Get_Transform(pCameraTag, TRANSFORMSTATEMATRIX::D3DTS_VIEW);
-	ViewMatrix = XMMatrixInverse(nullptr, ViewMatrix);
-	_matrix		ProjMatrix = pPipeLine->Get_Transform(pCameraTag, TRANSFORMSTATEMATRIX::D3DTS_PROJECTION);
-	ProjMatrix = XMMatrixInverse(nullptr, ProjMatrix);
-
-	m_pVIBuffer->SetUp_ValueOnShader("g_vCamPosition", &vCamPosition, sizeof(_float4));
-	m_pVIBuffer->SetUp_ValueOnShader("g_ViewMatrixInv", &XMMatrixTranspose(ViewMatrix), sizeof(_float4x4));
-	m_pVIBuffer->SetUp_ValueOnShader("g_ProjMatrixInv", &XMMatrixTranspose(ProjMatrix), sizeof(_float4x4));
-
- 	m_pVIBuffer->Render(iPassIndex);
-
-
-	RELEASE_INSTANCE(CPipeLine);
 	RELEASE_INSTANCE(CTarget_Manager);
 	
 

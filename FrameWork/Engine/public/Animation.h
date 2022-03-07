@@ -21,6 +21,9 @@ public:
 	const char* Get_Name() const { return m_szName; }
 	const _uint Get_Index() const { return m_iIndex; }
 	vector <class CChannel*>& Get_Channels() { return m_Channels; }
+	const _uint Get_MaxKeyFrameIndex() const;
+	const _uint Get_CurrentKeyFrameIndex();
+	void Set_MaxKeyFrameIndex(const _uint _iMaxKeyFrameIndex);
 	const _bool Is_Finished() const { return m_isFinished; }
 	CSaveManager::ANIMDATA& SetSaveAnimData();
 
@@ -34,7 +37,8 @@ private:
 	_bool				m_isFinished = false;
 
 	_uint m_iIndex = 0;
-	_uint m_iCurrentKeyFrameIndex = 0;
+	_uint m_iMaxKeyFrameIndex = 0;
+	_uint m_iCurKeyFrameIndex = 0;
 
 private:
 	/* 현재 애니메이션에 영향ㅇ르 주는 뼈대들의 정보. */

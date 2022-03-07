@@ -1,14 +1,19 @@
 #include "pch.h"
 #include "Loader.h"
+
+#include "Effect_DashDust.h"
+#include "UI_Ingame.h"
 #include "Material.h"
 #include "Instancing_Mesh.h"
 #include "Environment.h"
+
 
 #pragma region TestScene_JS
 
 #include "Plane_Test.h"
 #include "Silvermane.h"
 #include "Camera_Silvermane.h"
+#include "Needle.h"
 
 #pragma endregion
 
@@ -787,11 +792,10 @@ CLoader* CLoader::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceCont
 
 HRESULT CLoader::Ready_Logo()
 {
-	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"Title", L"../bin/Resources/Texture/penguin000.jpg")))
+	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"Title", L"../bin/Resources/Texture/Loading/logo_godfall_3d.tga")))
 		return E_FAIL;
 
 	
-
 
 	return S_OK;
 }
@@ -804,11 +808,36 @@ HRESULT CLoader::Ready_Stage1()
 	if (FAILED(SetUp_Stage1_ProtoComponent()))
 		return E_FAIL;
 
-
-
-
 	//g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1,L"")
 	
+	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"StageBackGround", L"../bin/Resources/Texture/Loading/T_HUD_Tutorial_Backplate.tga")))
+		return E_FAIL;
+
+	//Effect
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Prototype_Component_VIBuffer_PointInstance_Explosion",
+		CVIBuffer_PointInstance_Explosion::Create(m_pDevice, m_pDeviceContext))))
+	{
+		return E_FAIL;
+	}
+	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Effect"), CEffect_DashDust::Create(m_pDevice, m_pDeviceContext))))
+	{
+		return E_FAIL;
+	}
+	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"bubble", L"../bin/Resources/Texture/Effect/bubble.tga")))
+	{
+		return E_FAIL;
+	}
+
+	//UI
+	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"T_HUD_Player_Shield_Icon", L"../bin/Resources/Texture/UI/T_HUD_Player_Shield_Icon.tga")))
+	{
+		return E_FAIL;
+	}
+
+	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_T_HUD_Player_Shield_Icon"), CUI_Ingame::Create(m_pDevice, m_pDeviceContext))))
+	{
+		return E_FAIL;
+	}
 
 	return S_OK;
 }
@@ -819,7 +848,7 @@ HRESULT CLoader::Ready_Test_JS()
 
 #pragma region 府家胶
 
-	if(FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"Plane_Texture", L"../Bin/Resources/Texture/Terrain/Plane_Default.png")))
+	if(FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"Plane_Texture", L"../Bin/Resources/Texture/Terrain/Plane_Default.tga")))
 		return E_FAIL;
 
 	cout << "TestScene_JS 府家胶 积己吝..." << endl;
@@ -867,6 +896,13 @@ HRESULT CLoader::Ready_Test_JS()
 	{
 		return E_FAIL;
 	}
+	matPivot = XMMatrixIdentity();
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_TEST_JS, L"Model_Needle", CModel::Create(m_pDevice, m_pDeviceContext,
+		"../bin/Resources/Mesh/Needle/", "Needle.fbx",
+		L"../../Reference/ShaderFile/Shader_Mesh.hlsl", matPivot, CModel::TYPE_STATIC))))
+	{
+		return E_FAIL;
+	}
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_TEST_JS, L"AnimationController", CAnimationController::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_TEST_JS, L"StateController", CStateController::Create(m_pDevice, m_pDeviceContext))))
@@ -881,6 +917,8 @@ HRESULT CLoader::Ready_Test_JS()
 	if (FAILED(g_pGameInstance->Add_Prototype(L"Silvermane", CSilvermane::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 	if (FAILED(g_pGameInstance->Add_Prototype(L"Camera_Silvermane", CCamera_Silvermane::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	if (FAILED(g_pGameInstance->Add_Prototype(L"Needle", CNeedle::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 
 #pragma endregion

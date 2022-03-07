@@ -21,17 +21,19 @@ HRESULT CSilvermane_JogLeft::NativeConstruct(void* _pArg)
 	return S_OK;
 }
 
-_int CSilvermane_JogLeft::Tick(const _double& TimeDelta)
+_int CSilvermane_JogLeft::Tick(const _double& _dDeltaTime)
 {
-	if (0 > __super::Tick(TimeDelta))
+	if (0 > __super::Tick(_dDeltaTime))
 		return -1;
+
+	m_pTransform->Go_Left(_dDeltaTime * 0.2f);
 
 	return _int();
 }
 
-_int CSilvermane_JogLeft::LateTick(const _double& TimeDelta)
+_int CSilvermane_JogLeft::LateTick(const _double& _dDeltaTime)
 {
-	if (0 > __super::LateTick(TimeDelta))
+	if (0 > __super::LateTick(_dDeltaTime))
 		return -1;
 
 	return _int();
@@ -71,12 +73,24 @@ HRESULT CSilvermane_JogLeft::ExitState()
 	return S_OK;
 }
 
-_int CSilvermane_JogLeft::KeyCheck(const _double& TimeDelta)
+_int CSilvermane_JogLeft::KeyCheck(const _double& _dDeltaTime)
 {
 	if (g_pGameInstance->getkeyPress(DIK_A))
 	{
+		if (g_pGameInstance->getkeyPress(DIK_W))
+		{
+			if(FAILED(m_pStateController->Change_State(L"JogFwd")))
+				return E_FAIL;
+			return STATE_CHANGE;
+		}
+		if (g_pGameInstance->getkeyPress(DIK_S))
+		{
+			if (FAILED(m_pStateController->Change_State(L"JogBwd")))
+				return E_FAIL;
+			return STATE_CHANGE;
+		}
 	}
-	else if (g_pGameInstance->getkeyPress(DIK_RIGHT))
+	else if (g_pGameInstance->getkeyPress(DIK_D))
 	{
 		if (FAILED(m_pStateController->Change_State(L"JogLeftPivot180")))
 			return -1;

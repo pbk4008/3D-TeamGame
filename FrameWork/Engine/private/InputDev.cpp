@@ -54,6 +54,9 @@ void CInputDev::Free()
 
 _bool CInputDev::getkeyPress(_ubyte bykeyID)
 {
+	if (WA_INACTIVE == GetActiveWindow())
+		return false;
+
 	if (m_byKeyState[bykeyID] & -128)
  		return true;
 
@@ -62,6 +65,9 @@ _bool CInputDev::getkeyPress(_ubyte bykeyID)
 
 _bool CInputDev::getkeyDown(_ubyte bykeyID)
 {
+	if (WA_INACTIVE == GetActiveWindow())
+		return false;
+
 	if (m_byKeyState[bykeyID] & -128 && !(m_byKeyDown[bykeyID] & -128))
 	{
 		m_byKeyDown[bykeyID] = -128;
@@ -77,6 +83,9 @@ _bool CInputDev::getkeyDown(_ubyte bykeyID)
 
 _bool CInputDev::getkeyUp(_ubyte bykeyID)
 {
+	if (WA_INACTIVE == GetActiveWindow())
+		return false;
+
 	if (m_byKeyState[bykeyID] & -128)
 	{
 		m_byKeyUp[bykeyID] = -128;
@@ -93,6 +102,9 @@ _bool CInputDev::getkeyUp(_ubyte bykeyID)
 
 _bool CInputDev::getMousePress(MOUSESTATE eMouse)
 {
+	if (WA_INACTIVE == GetActiveWindow())
+		return false;
+
 	if (m_tMouseState.rgbButtons[(_uint)eMouse] & -128)
 		return true;
 
@@ -101,6 +113,9 @@ _bool CInputDev::getMousePress(MOUSESTATE eMouse)
 
 _bool CInputDev::getMouseKeyDown(MOUSESTATE eMouse)
 {
+	if (WA_INACTIVE == GetActiveWindow())
+		return false;
+
 	if (m_tMouseState.rgbButtons[(_uint)eMouse] & -128 && !(m_byMouseKeyDown[(_uint)eMouse] & -128))
 	{
 		m_byMouseKeyDown[(_uint)eMouse] = -128;
@@ -116,6 +131,9 @@ _bool CInputDev::getMouseKeyDown(MOUSESTATE eMouse)
 
 _bool CInputDev::getMouseKeyUp(MOUSESTATE eMouse)
 {
+	if (WA_INACTIVE == GetActiveWindow())
+		return false;
+
 	if (m_tMouseState.rgbButtons[(_uint)eMouse] & -128)
 	{
 		m_byMouseKeyUp[(_uint)eMouse] = -128;
@@ -129,8 +147,19 @@ _bool CInputDev::getMouseKeyUp(MOUSESTATE eMouse)
 	return false;
 }
 
+_long CInputDev::getMouseMoveState(MOUSEMOVESTATE eMouse)
+{
+	if (WA_INACTIVE == GetActiveWindow())
+		return false;
+
+	return ((_long*)&m_tMouseState)[(_uint)eMouse];
+}
+
 _bool CInputDev::getKeyboardNoKey()
 {
+	if (WA_INACTIVE == GetActiveWindow())
+		return false;
+
 	for (_uint i = 0; i < 256; i++)
 	{
 		_byte keyValue = getkeyPress(i);

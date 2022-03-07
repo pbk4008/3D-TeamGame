@@ -17,6 +17,8 @@ public:
 		_float3		fParticleRandomDir;
 		_float2		fParticleSize;
 		_float		fParticleSpeed;
+		_float		fLifeTime;
+		_float		fCurTime;
 		_uint		iNumInstance;
 	}PIDESC;
 protected:
@@ -60,6 +62,8 @@ private:
 	
 	_bool m_bReset = false;
 	_bool m_bSettingDir = false;
+
+	_float m_fGravityTime = 0.f;
 public:
 	static CVIBuffer_PointInstance_Explosion* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext/*, const _tchar* pShaderFilePath, _uint iNumInstance*/);
 	virtual CComponent* Clone(void* pArg) override;

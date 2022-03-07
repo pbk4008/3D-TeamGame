@@ -59,13 +59,13 @@ _int CMFCObject_UI::Tick(_double TimeDelta)
 	_vector vPos = { m_Desc.fPos.x - (WINCX >> 1),-m_Desc.fPos.y + (WINCY >> 1),1.f,1.f };
 	m_pTransform->Set_State(CTransform::STATE_POSITION, vPos);
 
-	_vector vScale = { m_Desc.fScale.x,m_Desc.fScale.y,1.f ,1.f };
-	m_pTransform->Scaling(vScale);
+	_vector vSize = { m_Desc.fSize.x,m_Desc.fSize.y,1.f ,1.f };
+	m_pTransform->Scaling(vSize);
 
 	//XMStoreFloat4x4(&m_WorldMatrix, XMMatrixIdentity());
 	//m_WorldMatrix._11 = m_fSizeX;
 	//m_WorldMatrix._22 = m_fSizeY;
-	//
+	
 	//m_WorldMatrix._41 = m_fX - (WINCX >> 1);
 	//m_WorldMatrix._42 = -m_fY + (WINCY >> 1);
 	//m_WorldMatrix._43 = 0.69f;

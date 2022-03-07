@@ -26,17 +26,29 @@
     <Filter Include="GameObject\Floor">
       <UniqueIdentifier>{fcdf426d-1aec-4043-b7f7-ee83b7508daa}</UniqueIdentifier>
     </Filter>
-    <Filter Include="GameObject\DynamicObject">
-      <UniqueIdentifier>{fb54ffd1-3230-4c82-9129-3f4a2a50c0a5}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="GameObject\StaticObject">
-      <UniqueIdentifier>{fb39ff0d-c137-48b4-9b12-7156e826a0b8}</UniqueIdentifier>
-    </Filter>
     <Filter Include="GameObject\Camera">
       <UniqueIdentifier>{7c59fef2-f1a6-4711-8d22-c99d9ecf8300}</UniqueIdentifier>
     </Filter>
     <Filter Include="00.MainApp">
       <UniqueIdentifier>{206bb37a-6a90-4994-a000-7d86078d014f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scene">
+      <UniqueIdentifier>{0bc203e6-e112-4622-b60f-7f6bee0e06ba}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scene\Loading">
+      <UniqueIdentifier>{ffa30ee9-194d-4480-815a-98e9017a23d3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scene\Loading\Loader">
+      <UniqueIdentifier>{e1a7c89c-a127-4dc9-a623-39cb241719a5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scene\Stage1">
+      <UniqueIdentifier>{c87a96f1-ed71-49c7-b5c1-38226d18be7a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameObject\BackGround">
+      <UniqueIdentifier>{85203f3e-084b-4c7d-9900-42d5bc9f3974}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameObject\SkyBox">
+      <UniqueIdentifier>{118ed0e5-2a7b-4ccb-8eaa-26d60defcb71}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -61,17 +73,23 @@
     <ClInclude Include="..\public\Floor.h">
       <Filter>GameObject\Floor</Filter>
     </ClInclude>
-    <ClInclude Include="..\public\DynamicObject.h">
-      <Filter>GameObject\DynamicObject</Filter>
-    </ClInclude>
-    <ClInclude Include="..\private\StaticObject.h">
-      <Filter>GameObject\StaticObject</Filter>
-    </ClInclude>
-    <ClInclude Include="..\public\DynamicCaemra.h">
+    <ClInclude Include="..\public\MainCamera.h">
       <Filter>GameObject\Camera</Filter>
     </ClInclude>
     <ClInclude Include="..\bin\ShaderFiles\Shader_RenderState.hpp">
       <Filter>ShaderFiles</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Loading.h">
+      <Filter>Scene\Loading</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Loader.h">
+      <Filter>Scene\Loading\Loader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Stage1.h">
+      <Filter>Scene\Stage1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\BackGround.h">
+      <Filter>GameObject\BackGround</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -97,14 +115,20 @@
     <ClCompile Include="..\private\Floor.cpp">
       <Filter>GameObject\Floor</Filter>
     </ClCompile>
-    <ClCompile Include="..\private\DynamicObject.cpp">
-      <Filter>GameObject\DynamicObject</Filter>
-    </ClCompile>
-    <ClCompile Include="..\public\StaticObject.cpp">
-      <Filter>GameObject\StaticObject</Filter>
-    </ClCompile>
-    <ClCompile Include="..\private\DynamicCaemra.cpp">
+    <ClCompile Include="..\private\MainCamera.cpp">
       <Filter>GameObject\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Loading.cpp">
+      <Filter>Scene\Loading</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Loader.cpp">
+      <Filter>Scene\Loading\Loader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Stage1.cpp">
+      <Filter>Scene\Stage1</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\BackGround.cpp">
+      <Filter>GameObject\BackGround</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

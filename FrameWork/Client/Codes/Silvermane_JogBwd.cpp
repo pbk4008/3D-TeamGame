@@ -21,17 +21,19 @@ HRESULT CSilvermane_JogBwd::NativeConstruct(void* _pArg)
 	return S_OK;
 }
 
-_int CSilvermane_JogBwd::Tick(const _double& TimeDelta)
+_int CSilvermane_JogBwd::Tick(const _double& _dDeltaTime)
 {
-	if (0 > __super::Tick(TimeDelta))
+	if (0 > __super::Tick(_dDeltaTime))
 		return -1;
+
+	m_pTransform->Go_BackWard(_dDeltaTime * 0.2f);
 
 	return _int();
 }
 
-_int CSilvermane_JogBwd::LateTick(const _double& TimeDelta)
+_int CSilvermane_JogBwd::LateTick(const _double& _dDeltaTime)
 {
-	if (0 > __super::LateTick(TimeDelta))
+	if (0 > __super::LateTick(_dDeltaTime))
 		return -1;
 
 	return _int();
@@ -70,10 +72,15 @@ HRESULT CSilvermane_JogBwd::ExitState()
 	return S_OK;
 }
 
-_int CSilvermane_JogBwd::KeyCheck(const _double& TimeDelta)
+_int CSilvermane_JogBwd::KeyCheck(const _double& _dDeltaTime)
 {
 	if (g_pGameInstance->getkeyPress(DIK_S))
 	{
+		if (g_pGameInstance->getkeyPress(DIK_A))
+			m_pTransform->Go_Left(_dDeltaTime * 0.2f);
+
+		if (g_pGameInstance->getkeyPress(DIK_D))
+			m_pTransform->Go_Right(_dDeltaTime * 0.2f);
 	}
 	else if (g_pGameInstance->getkeyPress(DIK_W))
 	{

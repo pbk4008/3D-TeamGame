@@ -45,6 +45,17 @@ _int CAnimationController::Tick(const _double& _dDeltaTime)
 		return -1;
 	}
 
+	if(-1 != m_tBlendDesc.iNextAnimIndex)
+	{
+		if (FAILED(m_pModel->Update_CombinedTransformationMatrix(m_tBlendDesc.iNextAnimIndex, m_isRootMotion, m_eRootOption)))
+			return E_FAIL;
+	}
+	else
+	{
+		if (FAILED(m_pModel->Update_CombinedTransformationMatrix(m_tBlendDesc.iCurAnimIndex, m_isRootMotion, m_eRootOption)))
+			return E_FAIL;
+	}
+
 	return _int();
 }
 
@@ -68,6 +79,16 @@ const _uint CAnimationController::Get_CurAnimIndex() const
 const _uint CAnimationController::Get_CurKeyFrameIndex() const
 {
 	return m_iCurKeyFrameIndex;
+}
+
+const _uint CAnimationController::Get_CurFixedBoneKeyFrameIndex() const
+{
+	return m_iCurFixedBoneKeyFrameIndex;
+}
+
+const _uint CAnimationController::Get_MaxKeyFrameIndex() const
+{
+	return m_iMaxKeyFrameIndex;
 }
 
 const ERootOption CAnimationController::Get_RootOption() const
@@ -125,7 +146,6 @@ const _bool CAnimationController::Is_Finished() const
 _int CAnimationController::Update_CombinedTransformMatrix(const _double& _dDeltaTime)
 {
 	vector<CAnimation*>& vecAnimations = m_pModel->Get_Animations();
-	vecAnimations[m_tBlendDesc.iCurAnimIndex]->Update_TransformationMatrix(_dDeltaTime, m_isLoopAnim);
 
 	if (m_tBlendDesc.fTweenTime >= 1.f)
 	{
@@ -140,6 +160,7 @@ _int CAnimationController::Update_CombinedTransformMatrix(const _double& _dDelta
 
 		m_pPreAnim = m_pCurAnim;
 		m_pCurAnim = vecAnimations[m_tBlendDesc.iCurAnimIndex];
+		m_iMaxKeyFrameIndex = m_pCurAnim->Get_MaxKeyFrameIndex();
 
 		m_strPreAnimTag = m_strCurAnimTag;
 		m_strCurAnimTag = vecAnimations[m_tBlendDesc.iCurAnimIndex]->Get_Name();
@@ -158,12 +179,15 @@ _int CAnimationController::Update_CombinedTransformMatrix(const _double& _dDelta
 
 		vecAnimations[m_tBlendDesc.iNextAnimIndex]->Update_TransformationMatrix(_dDeltaTime, m_isLoopAnim);
 		m_isFinished = vecAnimations[m_tBlendDesc.iNextAnimIndex]->Is_Finished();
+		m_iCurKeyFrameIndex = vecAnimations[m_tBlendDesc.iNextAnimIndex]->Get_CurrentKeyFrameIndex();
 
 		Lerp_Anim(vecAnimations);
 	}
 	else
 	{
+		vecAnimations[m_tBlendDesc.iCurAnimIndex]->Update_TransformationMatrix(_dDeltaTime, m_isLoopAnim);
 		m_isFinished = vecAnimations[m_tBlendDesc.iCurAnimIndex]->Is_Finished();
+		m_iCurKeyFrameIndex = vecAnimations[m_tBlendDesc.iCurAnimIndex]->Get_CurrentKeyFrameIndex();
 	}
 
 	return _int();
@@ -203,7 +227,7 @@ void CAnimationController::Lerp_Anim(vector<CAnimation*>& _vecvecAnimations)
 			vPosition = XMVectorLerp(vSourPosition, vDestPosition, m_tBlendDesc.fTweenTime);
 
 			_matrix smatTransform = XMMatrixAffineTransformation(vScale, XMVectorSet(0.f, 0.f, 0.f, 1.f), vRotation, vPosition);
-			vecCurrentAnim[i]->Set_TransformationMatrix(smatTransform);
+			vecNextAnim[i]->Set_TransformationMatrix(smatTransform);
 		}
 	}
 }
@@ -245,8 +269,8 @@ const _int CAnimationController::Move_Transform(const _double& _dDeltaTime)
 		if (m_pFixedBone)
 		{
 			vector<KEYFRAME*> KeyFrames = m_pFixedBone->Get_KeyFrames();
-			m_iCurKeyFrameIndex = m_pFixedBone->Get_CurrentKeyFrameIndex();
-			m_iPreKeyFrameIndex = m_iCurKeyFrameIndex - 1;
+			m_iCurFixedBoneKeyFrameIndex = m_pFixedBone->Get_CurrentKeyFrameIndex();
+			m_iPreFixedBoneKeyFrameIndex = m_iCurFixedBoneKeyFrameIndex - 1;
 
 			_vector svPosition = m_pTransform->Get_State(CTransform::STATE_POSITION);
 			_vector svRight = m_pTransform->Get_State(CTransform::STATE_RIGHT);
@@ -260,7 +284,7 @@ const _int CAnimationController::Move_Transform(const _double& _dDeltaTime)
 			_vector svPreQuaternian = XMVectorZero();
 			_vector svQuaternian = XMVectorZero();
 
-			if (0 == m_iCurKeyFrameIndex)
+			if (0 == m_iCurFixedBoneKeyFrameIndex)
 			{
 				svPreVelocity = XMLoadFloat3(&KeyFrames[KeyFrames.size() - 2]->vPosition);
 				svVelocity = XMLoadFloat3(&KeyFrames[KeyFrames.size() - 1]->vPosition);
@@ -273,13 +297,13 @@ const _int CAnimationController::Move_Transform(const _double& _dDeltaTime)
 			}
 			else
 			{
-				if (m_iPreKeyFrameIndex >= 0)
+				if (m_iPreFixedBoneKeyFrameIndex >= 0)
 				{
-					svPreVelocity = XMLoadFloat3(&KeyFrames[m_iPreKeyFrameIndex]->vPosition);
-					svPreQuaternian = XMLoadFloat4(&KeyFrames[m_iPreKeyFrameIndex]->vRotation);
+					svPreVelocity = XMLoadFloat3(&KeyFrames[m_iPreFixedBoneKeyFrameIndex]->vPosition);
+					svPreQuaternian = XMLoadFloat4(&KeyFrames[m_iPreFixedBoneKeyFrameIndex]->vRotation);
 				}
-				svVelocity = XMLoadFloat3(&KeyFrames[m_iCurKeyFrameIndex]->vPosition);
-				svQuaternian = XMLoadFloat4(&KeyFrames[m_iCurKeyFrameIndex]->vRotation);
+				svVelocity = XMLoadFloat3(&KeyFrames[m_iCurFixedBoneKeyFrameIndex]->vPosition);
+				svQuaternian = XMLoadFloat4(&KeyFrames[m_iCurFixedBoneKeyFrameIndex]->vRotation);
 
 				svVelocity -= svPreVelocity;
 				svQuaternian -= svPreQuaternian;
@@ -348,27 +372,16 @@ const _int CAnimationController::Move_Transform(const _double& _dDeltaTime)
 void CAnimationController::Render_Debug()
 {
 	if (FAILED(g_pGameInstance->Render_Font(TEXT("Font_Arial"), XMVectorSet(1.f, 0.0f, 0.f, 1.f), m_wstrPosition.c_str(), _float2(0.f, 80.f), _float2(0.8f, 0.8f))))
-	{
 		return;
-	}
 
 	if (m_pFixedBone)
 	{
 		if (FAILED(g_pGameInstance->Render_Font(TEXT("Font_Arial"), XMVectorSet(1.f, 0.f, 0.f, 1.f), m_wstrFixedBonePosition.c_str(), _float2(0.f, 40.f), _float2(0.8f, 0.8f))))
-		{
 			return;
-		}
 
-		m_wstrPreIndex = (to_wstring(m_iPreKeyFrameIndex));
-		if (FAILED(g_pGameInstance->Render_Font(TEXT("Font_Arial"), XMVectorSet(1.f, 0.0f, 0.f, 1.f), m_wstrPreIndex.c_str(), _float2(0.f, 120.f), _float2(0.8f, 0.8f))))
-		{
-			return;
-		}
-		m_wstrCurIndex = (to_wstring(m_iCurKeyFrameIndex));
+		m_wstrCurIndex = (to_wstring(m_iCurFixedBoneKeyFrameIndex));
 		if (FAILED(g_pGameInstance->Render_Font(TEXT("Font_Arial"), XMVectorSet(1.f, 0.0f, 0.f, 1.f), m_wstrCurIndex.c_str(), _float2(0.f, 160.f), _float2(0.8f, 0.8f))))
-		{
 			return;
-		}
 	}
 
 	if (m_pCurAnim)
@@ -376,22 +389,18 @@ void CAnimationController::Render_Debug()
 		m_wstrCurAnimTag.assign(m_strCurAnimTag.begin(), m_strCurAnimTag.end());
 		m_wstrCurAnimTag = m_wstrCurAnimTag.substr(m_wstrCurAnimTag.find_last_of(L"|") + 1);
 		if (FAILED(g_pGameInstance->Render_Font(TEXT("Font_Arial"), XMVectorSet(1.f, 0.0f, 0.f, 1.f), m_wstrCurAnimTag.c_str(), _float2(0.f, 200.f), _float2(0.8f, 0.8f))))
-		{
 			return;
-		}
+
+		m_wstrPreIndex = (to_wstring(m_iCurKeyFrameIndex));
+		if (FAILED(g_pGameInstance->Render_Font(TEXT("Font_Arial"), XMVectorSet(1.f, 0.0f, 0.f, 1.f), m_wstrPreIndex.c_str(), _float2(0.f, 120.f), _float2(0.8f, 0.8f))))
+			return;
 
 		if (m_pCurAnim->Is_Finished())
-		{
 			m_wstrIsFinished = L"true";
-		}
 		else
-		{
 			m_wstrIsFinished = L"false";
-		}
 		if (FAILED(g_pGameInstance->Render_Font(TEXT("Font_Arial"), XMVectorSet(1.f, 0.0f, 0.f, 1.f), m_wstrIsFinished.c_str(), _float2(0.f, 240.f), _float2(0.8f, 0.8f))))
-		{
 			return;
-		}
 	}
 }
 

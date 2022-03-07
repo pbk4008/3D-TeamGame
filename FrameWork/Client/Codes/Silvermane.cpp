@@ -1,8 +1,9 @@
 #include "pch.h"
 #include "..\Headers\Silvermane.h"
 
-#pragma region 스테이트들
+#include "Needle.h"
 
+#pragma region 스테이트들
 #include "Silvermane_Idle.h"
 
 //////////////////// Jog
@@ -32,6 +33,10 @@
 #include "1H_SowrdAttackNormalR1_01.h"
 #include "1H_SowrdAttackNormalR1_02.h"
 
+#include "1H_SwordEquipOff.h"
+#include "1H_SwordEquipOn.h"
+
+#include "1H_SwordDodgeSpinFwd_V3.h"
 #pragma endregion
 
 
@@ -63,6 +68,13 @@ HRESULT CSilvermane::NativeConstruct(void* _pArg)
 	if (FAILED(Ready_States()))
 		return E_FAIL;
 
+	CHierarchyNode* pWeaponBone = m_pModel->Get_BoneMatrix("weapon_r");
+	if (g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_JS, L"Weapon", L"Needle", pWeaponBone, (CGameObject**)&m_pWeapon))
+		return E_FAIL;
+	m_pWeapon->Set_Owner(this);
+	m_pWeapon->Set_OwnerPivotMatrix(m_pModel->Get_PivotMatrix());
+	Set_EquipWeapon(true);
+
 	return S_OK;
 }
 
@@ -71,11 +83,8 @@ _int CSilvermane::Tick(_double _dDeltaTime)
 	if (0 > __super::Tick(_dDeltaTime))
 		return -1;
 
-	//m_pStateController->Tick(_dDeltaTime);
+	m_pStateController->Tick(_dDeltaTime);
 	m_pAnimationController->Tick(_dDeltaTime);
-	m_pModel->Update_CombinedTransformationMatrix(m_pAnimationController->Get_CurAnimIndex(),
-		m_pAnimationController->Is_RootMotion(),
-		m_pAnimationController->Get_RootOption());
 
 	return _int();
 }
@@ -87,7 +96,7 @@ _int CSilvermane::LateTick(_double _dDeltaTime)
 
 	m_pStateController->LateTick(_dDeltaTime);
 
-	m_pRenderer->Add_RenderGroup(CRenderer::RENDER_NONALPHA, this);
+	m_pRenderer->Add_RenderGroup(CRenderer::RENDER_ALPHA, this);
 	return _int();
 }
 
@@ -115,6 +124,8 @@ HRESULT CSilvermane::Render()
 #ifdef _DEBUG
 	if (FAILED(m_pAnimationController->Render()))
 		return E_FAIL;
+	if (FAILED(m_pStateController->Render()))
+		return E_FAIL;
 #endif
 
 	return S_OK;
@@ -122,6 +133,11 @@ HRESULT CSilvermane::Render()
 
 HRESULT CSilvermane::Ready_Components()
 {
+	CTransform::TRANSFORMDESC transformDesc;
+	transformDesc.fSpeedPerSec = 10.f;
+	transformDesc.fRotationPerSec = XMConvertToRadians(90.f);
+	m_pTransform->Set_TransformDesc(transformDesc);
+
 	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_TEST_JS, L"Model_Silvermane", L"Model", (CComponent**)&m_pModel)))
 		return E_FAIL;
 
@@ -145,6 +161,7 @@ HRESULT CSilvermane::Ready_Components()
 
 HRESULT CSilvermane::Ready_States()
 {
+#pragma region Default
 	if (FAILED(m_pStateController->Add_State(L"Idle", CSilvermane_Idle::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 	if (FAILED(m_pStateController->Add_State(L"JogBwd", CSilvermane_JogBwd::Create(m_pDevice, m_pDeviceContext))))
@@ -173,16 +190,25 @@ HRESULT CSilvermane::Ready_States()
 		return E_FAIL;
 	if (FAILED(m_pStateController->Add_State(L"JogRightStart", CSilvermane_JogRightStart::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
-	if (FAILED(m_pStateController->Add_State(L"1H_SwordAttackNormalR1_01", C1H_SowrdAttackNormalR1_01::Create(m_pDevice, m_pDeviceContext))))
-		return E_FAIL;
-	if (FAILED(m_pStateController->Add_State(L"1H_SwordAttackNormalR1_02", C1H_SowrdAttackNormalR1_02::Create(m_pDevice, m_pDeviceContext))))
-		return E_FAIL;
 	if (FAILED(m_pStateController->Add_State(L"SprintFwd", CSilvermane_SprintFwd::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 	if (FAILED(m_pStateController->Add_State(L"SprintFwdStart", CSilvermane_SprintFwdStart::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 	if (FAILED(m_pStateController->Add_State(L"SprintFwdStop", CSilvermane_SprintFwdStop::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
+#pragma endregion
+#pragma region 1H
+	if (FAILED(m_pStateController->Add_State(L"1H_SwordAttackNormalR1_01", C1H_SowrdAttackNormalR1_01::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	if (FAILED(m_pStateController->Add_State(L"1H_SwordAttackNormalR1_02", C1H_SowrdAttackNormalR1_02::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	if (FAILED(m_pStateController->Add_State(L"1H_SwordEquipOff", C1H_SwordEquipOff::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	if (FAILED(m_pStateController->Add_State(L"1H_SwordEquipOn", C1H_SwordEquipOn::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	if (FAILED(m_pStateController->Add_State(L"1H_DodgeSpin", C1H_SwordDodgeSpinFwd_V3::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+#pragma endregion
 
 	for (auto& pair : m_pStateController->Get_States())
 	{
@@ -199,6 +225,49 @@ HRESULT CSilvermane::Ready_States()
 CTransform* CSilvermane::Get_Transform() const
 {
 	return m_pTransform;
+}
+
+CModel* CSilvermane::Get_Model() const
+{
+	return m_pModel;
+}
+
+const _float3& CSilvermane::Get_Rotation() const
+{
+	return m_vRotation;
+}
+
+const _fvector& CSilvermane::Get_Dir() const
+{
+	return XMLoadFloat3(&m_vDir);
+}
+
+void CSilvermane::Set_Dir(const _fvector& _svDir)
+{
+	_vector svDir = XMVector4Normalize(_svDir);
+	XMStoreFloat3(&m_vDir, svDir);
+}
+
+void CSilvermane::Set_Rotation(const _float3& _vRotation)
+{
+	m_vRotation = _vRotation;
+}
+
+void CSilvermane::Set_EquipWeapon(const _bool _isEquipWeapon)
+{
+	m_isEquipWeapon = _isEquipWeapon;
+	m_pWeapon->Set_Equip(m_isEquipWeapon);
+}
+
+void CSilvermane::Set_WeaponFixedBone(CHierarchyNode* _pFixedBone)
+{
+	if (m_pWeapon)
+		m_pWeapon->Set_FixedBone(_pFixedBone);
+}
+
+const _bool CSilvermane::Is_EquipWeapon() const
+{
+	return m_isEquipWeapon;
 }
 
 CSilvermane* CSilvermane::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)

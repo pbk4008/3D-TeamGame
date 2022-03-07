@@ -106,6 +106,21 @@ HRESULT CGameObject::Render()
 	return S_OK;
 }
 
+HRESULT CGameObject::Render_Shadow()
+{
+	return S_OK;
+}
+
+HRESULT CGameObject::Render_ShadeShadow()
+{
+	return S_OK;
+}
+
+HRESULT CGameObject::Render_PBR()
+{
+	return S_OK;
+}
+
 void CGameObject::OnCollisionEnter(CGameObject* pCol)
 {
 }

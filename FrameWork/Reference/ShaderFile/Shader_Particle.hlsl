@@ -39,12 +39,14 @@ struct VS_IN
 	float2		vPSize : PSIZE;
 
 	row_major matrix TransformMatrix : WORLD;
+    float4		vTime : TEXCOORD0;
 };
 
 struct VS_OUT
 {
 	float4		vPosition : POSITION;
 	float2		vPSize : PSIZE;
+    float4		vTime : TEXCOORD0;
 };
 
 
@@ -57,9 +59,10 @@ VS_OUT VS_MAIN(VS_IN In)
 	vector	vPosition = mul(vector(In.vPosition, 1.f), In.TransformMatrix);
 
 	Out.vPosition = mul(vPosition, g_WorldMatrix);
-	//Out.vPSize.x = In.vPSize.x * In.TransformMatrix._11;
-    //Out.vPSize.y = In.vPSize.y * In.TransformMatrix._22;
-    Out.vPSize = In.vPSize;
+    Out.vPSize.x = In.vPSize.x * In.TransformMatrix._11;
+    Out.vPSize.y = In.vPSize.y * In.TransformMatrix._22;
+    //Out.vPSize = In.vPSize;
+    Out.vTime.x = In.vTime.x;
 	return Out;
 }
 
@@ -67,6 +70,7 @@ struct GS_IN
 {
 	float4		vPosition : POSITION;
 	float2		vPSize : PSIZE;
+    float4 vTime : TEXCOORD0;
 };
 
 struct GS_OUT
@@ -81,7 +85,7 @@ void GS_MAIN(point GS_IN In[1], inout TriangleStream<GS_OUT> OutStream)
 {
 	GS_OUT		Out[6];
 	
-    float Ratio = g_fCurTime / g_fLifeTime;
+    float Ratio = In[0].vTime.x / g_fLifeTime;
     In[0].vPSize.x = ((-In[0].vPSize.x) * Ratio + In[0].vPSize.x) / 2.f;
     In[0].vPSize.y = ((-In[0].vPSize.y) * Ratio + In[0].vPSize.y) / 2.f;
 

@@ -66,7 +66,7 @@ HRESULT CVIBuffer_PointInstance_Explosion::NativeConstruct_Prototype(/*const _tc
 	//ZeroMemory(&m_VBInstDesc, sizeof(D3D11_BUFFER_DESC));
 
 	///* D3D11_BUFFER_DESC */
-	//m_iInstStride = sizeof(VTXMATRIX);
+	//m_iInstStride = sizeof(VTXPARTICLE);
 	//m_iInstNumVertices = m_iNumInstance;
 
 	//m_VBInstDesc.ByteWidth = m_iInstStride * m_iInstNumVertices;
@@ -77,8 +77,8 @@ HRESULT CVIBuffer_PointInstance_Explosion::NativeConstruct_Prototype(/*const _tc
 	//m_VBInstDesc.StructureByteStride = m_iInstStride;
 
 	//ZeroMemory(&m_VBInstSubresourceData, sizeof(D3D11_SUBRESOURCE_DATA));
-	//VTXMATRIX*	pVertices = new VTXMATRIX[m_iInstNumVertices];
-	//ZeroMemory(pVertices, sizeof(VTXMATRIX) * m_iInstNumVertices);
+	//VTXPARTICLE*	pVertices = new VTXPARTICLE[m_iInstNumVertices];
+	//ZeroMemory(pVertices, sizeof(VTXPARTICLE) * m_iInstNumVertices);
 
 	//for (_uint i = 0; i < m_iInstNumVertices; ++i)
 	//{
@@ -153,7 +153,7 @@ HRESULT CVIBuffer_PointInstance_Explosion::NativeConstruct(void * pArg)
 	ZeroMemory(&m_VBInstDesc, sizeof(D3D11_BUFFER_DESC));
 
 	/* D3D11_BUFFER_DESC */
-	m_iInstStride = sizeof(VTXMATRIX);
+	m_iInstStride = sizeof(VTXPARTICLE);
 	m_iInstNumVertices = m_Desc.iNumInstance;
 
 	m_VBInstDesc.ByteWidth = m_iInstStride * m_iInstNumVertices;
@@ -164,8 +164,8 @@ HRESULT CVIBuffer_PointInstance_Explosion::NativeConstruct(void * pArg)
 	m_VBInstDesc.StructureByteStride = m_iInstStride;
 
 	ZeroMemory(&m_VBInstSubresourceData, sizeof(D3D11_SUBRESOURCE_DATA));
-	VTXMATRIX* pVertices = new VTXMATRIX[m_iInstNumVertices];
-	ZeroMemory(pVertices, sizeof(VTXMATRIX) * m_iInstNumVertices);
+	VTXPARTICLE* pVertices = new VTXPARTICLE[m_iInstNumVertices];
+	ZeroMemory(pVertices, sizeof(VTXPARTICLE) * m_iInstNumVertices);
 
 	for (_uint i = 0; i < m_iInstNumVertices; ++i)
 	{
@@ -176,6 +176,8 @@ HRESULT CVIBuffer_PointInstance_Explosion::NativeConstruct(void * pArg)
 			_float4(XMVectorGetX(m_Desc.matParticle.r[3]) + rand() % (_int)(m_Desc.fParticleStartRandomPos.x),
 				XMVectorGetY(m_Desc.matParticle.r[3]) + rand() % (_int)(m_Desc.fParticleStartRandomPos.y),
 				XMVectorGetZ(m_Desc.matParticle.r[3]) + rand() % (_int)(m_Desc.fParticleStartRandomPos.z), 1.f);
+
+		pVertices[i].vTime.x = (rand() % 9) * 0.1f + m_Desc.fCurTime;
 	}
 	m_VBInstSubresourceData.pSysMem = pVertices;
 
@@ -193,9 +195,11 @@ HRESULT CVIBuffer_PointInstance_Explosion::NativeConstruct(void * pArg)
 		{ "WORLD", 1, DXGI_FORMAT_R32G32B32A32_FLOAT, 1, 16, D3D11_INPUT_PER_INSTANCE_DATA, 1 },
 		{ "WORLD", 2, DXGI_FORMAT_R32G32B32A32_FLOAT, 1, 32, D3D11_INPUT_PER_INSTANCE_DATA, 1 },
 		{ "WORLD", 3, DXGI_FORMAT_R32G32B32A32_FLOAT, 1, 48, D3D11_INPUT_PER_INSTANCE_DATA, 1 },
+
+		{ "TEXCOORD", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 1, 64, D3D11_INPUT_PER_INSTANCE_DATA, 1 },
 	};
 
-	if (FAILED(Compile_ShaderFiles(m_Desc.ShaderFilePath, ElementDescs, 6)))
+	if (FAILED(Compile_ShaderFiles(m_Desc.ShaderFilePath, ElementDescs, 7)))
 		return E_FAIL;
 
 	m_pRandomPos = new _float3[m_Desc.iNumInstance];
@@ -267,9 +271,9 @@ void CVIBuffer_PointInstance_Explosion::Update(_double TimeDelta, _uint eAxis)
 				m_pRandomPos[i].z = -(rand() % (_int)(m_Desc.fParticleMinusRandomDir.z)) + m_Desc.fParticleRandomDir.z;
 			}
 
-			m_pDir[i] = { m_pRandomPos[i].x - ((VTXMATRIX*)SubResource.pData)[i].vPosition.x,
-				m_pRandomPos[i].y - ((VTXMATRIX*)SubResource.pData)[i].vPosition.y,
-				m_pRandomPos[i].z - ((VTXMATRIX*)SubResource.pData)[i].vPosition.z };
+			m_pDir[i] = { m_pRandomPos[i].x - ((VTXPARTICLE*)SubResource.pData)[i].vPosition.x,
+				m_pRandomPos[i].y - ((VTXPARTICLE*)SubResource.pData)[i].vPosition.y,
+				m_pRandomPos[i].z - ((VTXPARTICLE*)SubResource.pData)[i].vPosition.z };
 
 			_vector vNormal = XMVector3Normalize(XMLoadFloat3(&m_pDir[i]));
 			XMStoreFloat3(&m_pNormal[i], vNormal);
@@ -283,53 +287,73 @@ void CVIBuffer_PointInstance_Explosion::Update(_double TimeDelta, _uint eAxis)
 	{
 		if (!m_bReset)
 		{
+			
+			if (m_Desc.fLifeTime > ((VTXPARTICLE*)SubResource.pData)[i].vTime.x)
+			{
+				((VTXPARTICLE*)SubResource.pData)[i].vTime.x += TimeDelta;
+			}
+
+			if (m_Desc.fLifeTime < ((VTXPARTICLE*)SubResource.pData)[i].vTime.x)
+			{
+				((VTXPARTICLE*)SubResource.pData)[i].vTime.x = m_Desc.fLifeTime;
+			}
+
+			_float fY = 0.f;
+			m_fGravityTime = m_Desc.fLifeTime - ((VTXPARTICLE*)SubResource.pData)[i].vTime.x;
+
+			if (0.3f > m_fGravityTime)
+			{
+				fY = ((VTXPARTICLE*)SubResource.pData)[i].vPosition.y + (-2.f * 9.8f * TimeDelta * 0.07f);
+				((VTXPARTICLE*)SubResource.pData)[i].vPosition.y = fY;
+			}
+
 			//리셋일때는 돌지않게
 			if ((_uint)AXIS::AXIS_X == eAxis)
 			{
-				((VTXMATRIX*)SubResource.pData)[i].vPosition.x = 0;
+				((VTXPARTICLE*)SubResource.pData)[i].vPosition.x = 0;
 			}
 			else if ((_uint)AXIS::AXIS_Y == eAxis)
 			{
-				((VTXMATRIX*)SubResource.pData)[i].vPosition.y = 0;
+				((VTXPARTICLE*)SubResource.pData)[i].vPosition.y = 0;
 			}
 			else if ((_uint)AXIS::AXIS_Z == eAxis)
 			{
-				((VTXMATRIX*)SubResource.pData)[i].vPosition.z = 0;
+				((VTXPARTICLE*)SubResource.pData)[i].vPosition.z = 0;
 			}
 
 			if ((_uint)AXIS::AXIS_X != eAxis)
 			{
-				((VTXMATRIX*)SubResource.pData)[i].vPosition.x += m_pNormal[i].x * (_float)TimeDelta * m_Desc.fParticleSpeed;
+				((VTXPARTICLE*)SubResource.pData)[i].vPosition.x += m_pNormal[i].x * (_float)TimeDelta * m_Desc.fParticleSpeed;
 			}
 			if ((_uint)AXIS::AXIS_Y != eAxis)
 			{
-				((VTXMATRIX*)SubResource.pData)[i].vPosition.y += m_pNormal[i].y * (_float)TimeDelta * m_Desc.fParticleSpeed;
+				((VTXPARTICLE*)SubResource.pData)[i].vPosition.y += m_pNormal[i].y * (_float)TimeDelta * m_Desc.fParticleSpeed;
 			}
 			if ((_uint)AXIS::AXIS_Z != eAxis)
 			{
-				((VTXMATRIX*)SubResource.pData)[i].vPosition.z += m_pNormal[i].z * (_float)TimeDelta * m_Desc.fParticleSpeed;
+				((VTXPARTICLE*)SubResource.pData)[i].vPosition.z += m_pNormal[i].z * (_float)TimeDelta * m_Desc.fParticleSpeed;
 			}
 
 			if ((_uint)AXIS::AXIS_ALL == eAxis)
 			{
-				((VTXMATRIX*)SubResource.pData)[i].vPosition.x += m_pNormal[i].x * (_float)TimeDelta * m_Desc.fParticleSpeed;
-				((VTXMATRIX*)SubResource.pData)[i].vPosition.y += m_pNormal[i].y * (_float)TimeDelta * m_Desc.fParticleSpeed;
-				((VTXMATRIX*)SubResource.pData)[i].vPosition.z += m_pNormal[i].z * (_float)TimeDelta * m_Desc.fParticleSpeed;
-				((VTXMATRIX*)SubResource.pData)[i].vPosition.w = 1.f;
+				((VTXPARTICLE*)SubResource.pData)[i].vPosition.x += m_pNormal[i].x * (_float)TimeDelta * m_Desc.fParticleSpeed;
+				((VTXPARTICLE*)SubResource.pData)[i].vPosition.y += m_pNormal[i].y * (_float)TimeDelta * m_Desc.fParticleSpeed;
+				((VTXPARTICLE*)SubResource.pData)[i].vPosition.z += m_pNormal[i].z * (_float)TimeDelta * m_Desc.fParticleSpeed;
+				((VTXPARTICLE*)SubResource.pData)[i].vPosition.w = 1.f;
 			}
 		}
 	}
 
 	/*if (0 > m_fCamLookDir.z)
 	{
-		sort(((VTXMATRIX*)SubResource.pData), ((VTXMATRIX*)SubResource.pData) + m_Desc.iNumInstance, [](VTXMATRIX pSour, VTXMATRIX pDest)
+		sort(((VTXPARTICLE*)SubResource.pData), ((VTXPARTICLE*)SubResource.pData) + m_Desc.iNumInstance, [](VTXPARTICLE pSour, VTXPARTICLE pDest)
 			{
 				return pSour.vPosition.z > pDest.vPosition.z;
 			});
 	}
 	else if (0 <= m_fCamLookDir.z)
 	{
-		sort(((VTXMATRIX*)SubResource.pData), ((VTXMATRIX*)SubResource.pData) + m_Desc.iNumInstance, [](VTXMATRIX pSour, VTXMATRIX pDest)
+		sort(((VTXPARTICLE*)SubResource.pData), ((VTXPARTICLE*)SubResource.pData) + m_Desc.iNumInstance, [](VTXPARTICLE pSour, VTXPARTICLE pDest)
 			{
 				return pSour.vPosition.z < pDest.vPosition.z;
 			});
@@ -358,7 +382,7 @@ void CVIBuffer_PointInstance_Explosion::Particle_Setting_RandomPos()
 void CVIBuffer_PointInstance_Explosion::Particle_Reset()
 {
 	m_bSettingDir = false;
-
+	m_fGravityTime = 0.f;
 	//리셋될때마다 새롭게 벡터세팅 
 	Particle_Setting_RandomPos();
 
@@ -368,28 +392,30 @@ void CVIBuffer_PointInstance_Explosion::Particle_Reset()
 
 	for (_uint i = 0; i < m_Desc.iNumInstance; ++i)
 	{
+		((VTXPARTICLE*)SubResource.pData)[i].vTime.x = (rand() % 9) * 0.1f + m_Desc.fCurTime;
+
 		m_Desc.matParticle.r[0] = XMVectorSetX(m_Desc.matParticle.r[0], m_Desc.fParticleSize.x);
 		m_Desc.matParticle.r[1] = XMVectorSetY(m_Desc.matParticle.r[1], m_Desc.fParticleSize.y);
 
-		XMStoreFloat4(&((VTXMATRIX*)SubResource.pData)[i].vRight, m_Desc.matParticle.r[0]);
-		XMStoreFloat4(&((VTXMATRIX*)SubResource.pData)[i].vUp, m_Desc.matParticle.r[1]);
-		XMStoreFloat4(&((VTXMATRIX*)SubResource.pData)[i].vLook, m_Desc.matParticle.r[2]);
-		((VTXMATRIX*)SubResource.pData)[i].vPosition.x = XMVectorGetX(m_Desc.matParticle.r[3]) + rand() % (_int)(m_Desc.fParticleStartRandomPos.x);
-		((VTXMATRIX*)SubResource.pData)[i].vPosition.y = XMVectorGetY(m_Desc.matParticle.r[3]) + rand() % (_int)(m_Desc.fParticleStartRandomPos.y);
-		((VTXMATRIX*)SubResource.pData)[i].vPosition.z = XMVectorGetZ(m_Desc.matParticle.r[3]) + rand() % (_int)(m_Desc.fParticleStartRandomPos.z);
+		XMStoreFloat4(&((VTXPARTICLE*)SubResource.pData)[i].vRight, m_Desc.matParticle.r[0]);
+		XMStoreFloat4(&((VTXPARTICLE*)SubResource.pData)[i].vUp, m_Desc.matParticle.r[1]);
+		XMStoreFloat4(&((VTXPARTICLE*)SubResource.pData)[i].vLook, m_Desc.matParticle.r[2]);
+		((VTXPARTICLE*)SubResource.pData)[i].vPosition.x = XMVectorGetX(m_Desc.matParticle.r[3]) + rand() % (_int)(m_Desc.fParticleStartRandomPos.x);
+		((VTXPARTICLE*)SubResource.pData)[i].vPosition.y = XMVectorGetY(m_Desc.matParticle.r[3]) + rand() % (_int)(m_Desc.fParticleStartRandomPos.y);
+		((VTXPARTICLE*)SubResource.pData)[i].vPosition.z = XMVectorGetZ(m_Desc.matParticle.r[3]) + rand() % (_int)(m_Desc.fParticleStartRandomPos.z);
 	}
 
 	////소팅해야댐 여기서 , 멀리있는것부터 그릴수있게,, 저는 생각이없습니다.. 
 	if (0 > m_fCamLookDir.z)
 	{
-		sort(((VTXMATRIX*)SubResource.pData), ((VTXMATRIX*)SubResource.pData) + m_Desc.iNumInstance, [](VTXMATRIX pSour, VTXMATRIX pDest)
+		sort(((VTXPARTICLE*)SubResource.pData), ((VTXPARTICLE*)SubResource.pData) + m_Desc.iNumInstance, [](VTXPARTICLE pSour, VTXPARTICLE pDest)
 			{
 				return pSour.vPosition.z > pDest.vPosition.z;
 			});
 	}
 	if (0 <= m_fCamLookDir.z)
 	{
-		sort(((VTXMATRIX*)SubResource.pData), ((VTXMATRIX*)SubResource.pData) + m_Desc.iNumInstance, [](VTXMATRIX pSour, VTXMATRIX pDest)
+		sort(((VTXPARTICLE*)SubResource.pData), ((VTXPARTICLE*)SubResource.pData) + m_Desc.iNumInstance, [](VTXPARTICLE pSour, VTXPARTICLE pDest)
 			{
 				return pSour.vPosition.z < pDest.vPosition.z;
 			});

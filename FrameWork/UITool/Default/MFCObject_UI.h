@@ -16,14 +16,6 @@ END
 
 class CMFCObject_UI final : public CUI
 {
-public:
-	typedef struct tagUIDesc
-	{
-		 _tchar TextureTag[MAX_PATH];
-		_float2 fPos;
-		_float2 fScale;
-	}UIDESC;
-
 private:
 	explicit CMFCObject_UI(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);
 	explicit CMFCObject_UI(const CUI& rhs);
@@ -41,7 +33,7 @@ public:
 	UIDESC Get_UIDesc() { return m_Desc; }
 
 private:
-	UIDESC m_Desc;
+	CUI::UIDESC m_Desc;
 
 private:
 	virtual HRESULT SetUp_Components();

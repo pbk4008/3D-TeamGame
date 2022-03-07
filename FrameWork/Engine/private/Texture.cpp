@@ -43,9 +43,34 @@ HRESULT CTexture::NativeConstruct_Prototype(const wstring& pTextureFilePath, _ui
 		if (0 == lstrcmp(szExt, TEXT(".dds")))		
 			hr = DirectX::LoadFromDDSFile(szFullPath, DirectX::CP_FLAGS_NONE, nullptr, ScratchImage);
 
-		else if(0 == lstrcmp(szExt, TEXT(".tga")))
+		else if (0 == lstrcmp(szExt, TEXT(".tga")))
+		{
+			DirectX::ScratchImage MipChain;
 			hr = DirectX::LoadFromTGAFile(szFullPath, nullptr, ScratchImage);
 
+			if (FAILED(hr))
+				return E_FAIL;
+			else
+			{
+				ID3D11Resource* pTextureResource = nullptr;
+
+				if (FAILED(DirectX::CreateTexture(m_pDevice, MipChain.GetImages(), MipChain.GetImageCount(), MipChain.GetMetadata(), &pTextureResource)))
+					return E_FAIL;
+
+				ID3D11ShaderResourceView* pShaderResourceView = nullptr;
+
+				if (FAILED(m_pDevice->CreateShaderResourceView(pTextureResource, nullptr, &pShaderResourceView)))
+					return E_FAIL;
+
+				m_Textures.push_back(pShaderResourceView);
+
+				Safe_Release(pTextureResource);
+				ScratchImage.Release();
+				MipChain.Release();
+
+				return S_OK;
+			}
+		}
 		else
 			hr = DirectX::LoadFromWICFile(szFullPath, DirectX::CP_FLAGS_NONE, nullptr, ScratchImage);
 

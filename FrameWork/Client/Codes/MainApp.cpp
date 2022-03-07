@@ -2,6 +2,7 @@
 #include "MainApp.h"
 #include "BackGround.h"
 #include "MainCamera.h"
+#include "MainCamera_Ortho.h"
 #include "Loading.h"
 #include "DebugSystem.h"
 
@@ -128,12 +129,15 @@ HRESULT CMainApp::Ready_GameObject_Prototype()
 	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_MainCamera"), CMainCamera::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 
+	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_MainOrthoCamera"), CMainCamera_Ortho::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+
 	return S_OK;
 }
 
 HRESULT CMainApp::Load_Texture()
 {
-	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"BackGround", L"../bin/Resources/Texture/penguin.jpg")))
+	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"BackGround", L"../bin/Resources/Texture/Loading/T_LoadScreen_KeyArt_5.tga")))
 		return E_FAIL;
 
 	return S_OK;
@@ -144,15 +148,29 @@ HRESULT CMainApp::Init_Camera()
 	CCamera::CAMERADESC tDesc;
 	tDesc.eType = CCamera::CAMERATYPE::CAMERA_PROJECTION;
 	tDesc.pCameraTag = L"MainCamera";
-	tDesc.vEye = _float4(0.f, 0.f, 0.f, 1.f);
+	/*tDesc.vEye = _float4(0.f, 0.f, 0.f, 1.f);
 	tDesc.vAt = _float4(0.f, 0.f, 1.f, 1.f);
-	tDesc.vAxisY = _float4(0.f, 1.f, 0.f, 0.f);
+	tDesc.vAxisY = _float4(0.f, 1.f, 0.f, 0.f);*/
+	tDesc.vEye = _float4(0.f, 2.f, -5.f, 1.f);
+	tDesc.vAt = _float4(0.f, 2.f, 0.f, 1.f);
+	tDesc.vAxisY = _float4(0.f, 1.f, 0.f, 1.f);
 	tDesc.fFovy = XMConvertToRadians(60.f);;
 	tDesc.fFar = 300.f;
 	tDesc.fNear = 0.1f;
 	tDesc.fAspect = (_float)g_iWinCx/g_iWinCy;
 
 	if(FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Static", L"Prototype_GameObject_MainCamera", &tDesc)))
+		return E_FAIL;
+
+	ZeroMemory(&tDesc, sizeof(CCamera::CAMERADESC));
+	tDesc.eType = CCamera::CAMERATYPE::CAMERA_ORTHO;
+	tDesc.pCameraTag = L"MainOrthoCamera";
+	tDesc.fWinCX = g_iWinCx;
+	tDesc.fWinCY = g_iWinCy;
+	tDesc.fNear = 0.01f;
+	tDesc.fFar = 1.f;
+
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Static", L"Prototype_GameObject_MainOrthoCamera", &tDesc)))
 		return E_FAIL;
 
 	return S_OK;

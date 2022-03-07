@@ -18,6 +18,7 @@ CUITool_Dlg::CUITool_Dlg(CWnd* pParent /*=nullptr*/)
 	, m_PositionY(0)
 	, m_SizeX(0)
 	, m_SizeY(0)
+	, m_IDTag(0)
 {
 
 }
@@ -34,11 +35,13 @@ void CUITool_Dlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Text(pDX, IDC_EDIT2, m_PositionY);
 	DDX_Text(pDX, IDC_EDIT3, m_SizeX);
 	DDX_Text(pDX, IDC_EDIT4, m_SizeY);
+	DDX_Text(pDX, IDC_EDIT5, m_IDTag);
 
 	DDV_MinMaxFloat(pDX, m_PositionX, 0, 99999);
 	DDV_MinMaxFloat(pDX, m_PositionY, 0, 99999);
 	DDV_MinMaxFloat(pDX, m_SizeX, 1, 99999);
 	DDV_MinMaxFloat(pDX, m_SizeY, 1, 99999);
+	DDV_MinMaxFloat(pDX, m_IDTag, 0, 99999);
 	DDX_Control(pDX, IDC_TREE1, m_TextureTree);
 }
 
@@ -90,7 +93,7 @@ void CUITool_Dlg::InitialTextureTree()
 
 	CFileFind fFinder;
 
-	BOOL bWorking = fFinder.FindFile(_T("\\*.jpg"));
+	BOOL bWorking = fFinder.FindFile(_T("\\*.tga"));
 
 	while (bWorking)
 	{
@@ -101,6 +104,20 @@ void CUITool_Dlg::InitialTextureTree()
 			m_TextureTree.InsertItem(fFinder.GetFileName(), hItem);
 	}
 	m_TextureTree.EnsureVisible(hItem);
+}
+
+void CUITool_Dlg::Setting_Desc(CUI::UIDESC* Desc)
+{
+	UpdateData(TRUE);
+
+	m_PositionX = Desc->fPos.x;
+	m_PositionY = Desc->fPos.y;
+	m_SizeX = Desc->fSize.x;
+	m_SizeY = Desc->fSize.y;
+	m_IDTag = Desc->IDTag;
+	_tcscpy_s(m_strPickFileName, Desc->TextureTag);
+
+	UpdateData(FALSE);
 }
 
 
@@ -133,16 +150,17 @@ void CUITool_Dlg::OnBnClickedButtonApply()
 	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
 
 	UpdateData(TRUE);
-	CMFCObject_UI::UIDESC Desc;
+	CUI::UIDESC Desc;
 	//Desc.TextureTag = m_strPickFileName;
 	::PathRemoveExtension(m_strPickFileName); //이게 있으면 확장자도 지워짐
 	_tcscpy_s(Desc.TextureTag, m_strPickFileName);
 
 	Desc.fPos = { m_PositionX,m_PositionY};
-	Desc.fScale = { m_SizeX,m_SizeY };
+	Desc.fSize = { m_SizeX,m_SizeY };
+	Desc.IDTag = m_IDTag;
 	
 	wstring Name = m_strPickFileName;
-	wstring FullName = L"Prototype_GameObject_" + Name;
+	wstring FullName = L"Prototype_GameObject_UI";
 
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer(TOOL_LEVEL::TOOL_LEVEL_LOGO, L"Layer_UI", FullName, &Desc)))
 	{
@@ -160,11 +178,13 @@ void CUITool_Dlg::OnBnClickedButtonStateSetting()
 	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
 	if (nullptr != m_pObject)
 	{
-		CMFCObject_UI::UIDESC Desc;
+		CUI::UIDESC Desc;
 		_tcscpy_s(Desc.TextureTag, m_pObject->Get_UIDesc().TextureTag);
 		Desc.fPos = { m_PositionX,m_PositionY };
-		Desc.fScale = { m_SizeX,m_SizeY };
+		Desc.fSize = { m_SizeX,m_SizeY };
+		Desc.IDTag = m_IDTag;
 		m_pObject->Set_UIDesc(Desc);
+
 	}
 	UpdateData(FALSE);
 }
@@ -228,7 +248,7 @@ void CUITool_Dlg::OnBnClickedButtonLoad()
 	for (int i = 0; i < m_vecUI.size(); ++i)
 	{
 		wstring Tag = m_vecUI[i].TextureTag;
-		wstring FullName = L"Prototype_GameObject_" + Tag;
+		wstring FullName = L"Prototype_GameObject_UI";
 		
 		if (FAILED(g_pGameInstance->Add_GameObjectToLayer(TOOL_LEVEL::TOOL_LEVEL_LOGO, L"Layer_UI", FullName, &m_vecUI[i])))
 		{
@@ -280,7 +300,7 @@ void CUITool_Dlg::OnTvnSelchangedTree1(NMHDR* pNMHDR, LRESULT* pResult)
 
 	/* 선택한 fbx 파일에 대한 정보를 가져온다 */
 	CString strSelectItem = m_TextureTree.GetItemText(hSelected);
-	CString strFilter = L".jpg";
+	CString strFilter = L".tga";
 
 	if (-1 != strSelectItem.Find(strFilter))
 	{

@@ -24,6 +24,7 @@ public:
 	afx_msg void OnDropFiles(HDROP hDropInfo);
 
 	void InitialTextureTree();
+	void Setting_Desc(CUI::UIDESC* Desc);
 
 public:
 	wstring m_strFileName;
@@ -47,4 +48,5 @@ public:
 	CTreeCtrl m_TextureTree;
 	afx_msg void OnTvnSelchangedTree1(NMHDR* pNMHDR, LRESULT* pResult);
 	virtual BOOL OnInitDialog();
+	int m_IDTag;
 };
