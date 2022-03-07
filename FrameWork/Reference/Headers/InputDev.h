@@ -26,7 +26,7 @@ public:
 	_bool getMouseKeyDown(MOUSESTATE eMouse);
 	_bool getMouseKeyUp(MOUSESTATE eMouse);
 
-	_long getMouseMoveState(MOUSEMOVESTATE eMouse) {		return ((_long*)&m_tMouseState)[(_uint)eMouse];	}
+	_long getMouseMoveState(MOUSEMOVESTATE eMouse);
 	_bool getKeyboardNoKey();
 private:
 	LPDIRECTINPUT8 m_pInputSDK;

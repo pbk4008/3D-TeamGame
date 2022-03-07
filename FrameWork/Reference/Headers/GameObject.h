@@ -34,6 +34,9 @@ public:
 	virtual _int Tick(_double TimeDelta);
 	virtual _int LateTick(_double TimeDelta);
 	virtual HRESULT Render();
+	virtual HRESULT	Render_Shadow();
+	virtual HRESULT	Render_ShadeShadow();
+	virtual HRESULT	Render_PBR();
 public:
 	virtual void OnCollisionEnter(CGameObject* pCol);
 	virtual void OnCollisionStay(CGameObject* pCol);
@@ -43,6 +46,7 @@ public:
 public:
 	void setActive(_bool bActive);
 	_bool getActive() { return m_bActive; }
+	_int getTag() { return m_iObectTag; }
 protected:
 	ID3D11Device* m_pDevice;
 	ID3D11DeviceContext*	m_pDeviceContext;
@@ -50,6 +54,7 @@ protected:
 	CRenderer* m_pRenderer;
 	_bool m_bActive;
 	_bool m_bCheckCollider;
+	_uint m_iObectTag;
 protected:
 	unordered_map<wstring, class CComponent*>		m_Components;
 protected:

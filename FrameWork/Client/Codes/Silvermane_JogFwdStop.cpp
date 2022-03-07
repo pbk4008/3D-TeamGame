@@ -16,9 +16,7 @@ CSilvermane_JogFwdStop::CSilvermane_JogFwdStop(const CSilvermane_JogFwdStop& _rh
 HRESULT CSilvermane_JogFwdStop::NativeConstruct(void* _pArg)
 {
 	if (FAILED(__super::NativeConstruct(_pArg)))
-	{
 		return E_FAIL;
-	}
 
 	return S_OK;
 }
@@ -26,9 +24,7 @@ HRESULT CSilvermane_JogFwdStop::NativeConstruct(void* _pArg)
 _int CSilvermane_JogFwdStop::Tick(const _double& TimeDelta)
 {
 	if (0 > __super::Tick(TimeDelta))
-	{
 		return -1;
-	}
 
 	return _int();
 }
@@ -36,9 +32,7 @@ _int CSilvermane_JogFwdStop::Tick(const _double& TimeDelta)
 _int CSilvermane_JogFwdStop::LateTick(const _double& TimeDelta)
 {
 	if (0 > __super::LateTick(TimeDelta))
-	{
 		return -1;
-	}
 
 	return _int();
 }
@@ -46,9 +40,7 @@ _int CSilvermane_JogFwdStop::LateTick(const _double& TimeDelta)
 HRESULT CSilvermane_JogFwdStop::Render()
 {
 	if (FAILED(__super::Render()))
-	{
 		return E_FAIL;
-	}
 
 	return S_OK;
 }
@@ -56,15 +48,13 @@ HRESULT CSilvermane_JogFwdStop::Render()
 HRESULT CSilvermane_JogFwdStop::EnterState()
 {
 	if (FAILED(__super::EnterState()))
-	{
 		return E_FAIL;
-	}
 
-	/*
-	static_cast<CSilvermane*>(m_pGameObject)->Set_CurrentAnimation(m_pModel->SetUp_NextAnimation("SK_Silvermane.ao|A_Loco_Jog_Fwd_Stop_Player"));
-	m_pModel->Set_RootMotion(true, ERootOption::XYZ);
-	m_pModel->Set_LoopNextAnim(false);
-	*/
+	
+	if(FAILED(m_pAnimationController->SetUp_NextAnimation("SK_Silvermane.ao|A_Loco_Jog_Fwd_Stop_Player", false)))
+		return E_FAIL;
+	m_pAnimationController->Set_RootMotion(true, true, ERootOption::XYZ);
+	
 
 	return S_OK;
 }
@@ -72,51 +62,44 @@ HRESULT CSilvermane_JogFwdStop::EnterState()
 HRESULT CSilvermane_JogFwdStop::ExitState()
 {
 	if (FAILED(__super::ExitState()))
-	{
 		return E_FAIL;
-	}
 
 	return S_OK;
 }
 
 _int CSilvermane_JogFwdStop::KeyCheck(const _double& TimeDelta)
 {
-	if (g_pGameInstance->getkeyPress(DIK_UP))
+	if (g_pGameInstance->getkeyPress(DIK_W))
 	{
 		if (FAILED(m_pStateController->Change_State(L"JogFwd")))
-		{
 			return -1;
-		}
+		return STATE_CHANGE;
 	}
-	else if (g_pGameInstance->getkeyPress(DIK_DOWN))
+	else if (g_pGameInstance->getkeyPress(DIK_S))
 	{
 		if (FAILED(m_pStateController->Change_State(L"JogFwdPivot180")))
-		{
 			return -1;
-		}
+		return STATE_CHANGE;
 	}
-	else if (g_pGameInstance->getkeyPress(DIK_RIGHT))
+	else if (g_pGameInstance->getkeyPress(DIK_D))
 	{
 		if (FAILED(m_pStateController->Change_State(L"JogRightStart")))
-		{
 			return -1;
-		}
+		return STATE_CHANGE;
 	}
-	else if (g_pGameInstance->getkeyPress(DIK_LEFT))
+	else if (g_pGameInstance->getkeyPress(DIK_A))
 	{
 		if (FAILED(m_pStateController->Change_State(L"JogLeftStart")))
-		{
 			return -1;
-		}
+		return STATE_CHANGE;
 	}
 	else
 	{
-		//if (m_pModel->Is_AnimationFinished())
+		if (m_pAnimationController->Is_Finished())
 		{
 			if (FAILED(m_pStateController->Change_State(L"Idle")))
-			{
 				return -1;
-			}
+			return STATE_CHANGE;
 		}
 	}
 

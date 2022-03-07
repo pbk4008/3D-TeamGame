@@ -21,7 +21,7 @@ HRESULT CCustomFont::Ready_CustomFont(const wstring& pFontPath)
 	return S_OK;
 }
 
-HRESULT CCustomFont::Render_CustomFont(_fvector vColor, const wstring& pString)
+HRESULT CCustomFont::Render_CustomFont(_fvector vColor, const wstring& pString, const _float2& _vPos, const _float2& _vScale)
 {
 	if (nullptr == m_pSpriteBatch ||
 		nullptr == m_pSpriteFont)
@@ -29,7 +29,7 @@ HRESULT CCustomFont::Render_CustomFont(_fvector vColor, const wstring& pString)
 
 	m_pSpriteBatch->Begin();
 
-	m_pSpriteFont->DrawString(m_pSpriteBatch, pString.c_str(), _float2(0.f, 0.f), vColor, 0.0f, _float2(0.f, 0.f), _float2(1.f, 1.f));
+	m_pSpriteFont->DrawString(m_pSpriteBatch, pString.c_str(), _vPos, vColor, 0.0f, _float2(0.f, 0.f), _vScale);
 
 	m_pSpriteBatch->End();
 

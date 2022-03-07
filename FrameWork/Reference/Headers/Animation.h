@@ -1,11 +1,10 @@
 #pragma once
 
 #include "Base.h"
-
+#include "SaveManager.h"
 /* 애니메이션 하나의 동작. */
 
 BEGIN(Engine)
-
 class CAnimation final : public CBase
 {
 public:
@@ -14,15 +13,20 @@ public:
 	virtual ~CAnimation() = default;
 
 public:
-	HRESULT NativeConstruct(char* pName, _double Duration, _double PlaySpeed);
+	HRESULT NativeConstruct(char* pName, _double Duration, _double PlaySpeed, const _int _iIndex);
 	HRESULT Add_Channel(class CChannel* pChannel);
 	HRESULT Update_TransformationMatrix(_double TimeDelta, const _bool _isLoop);
 public:
 	CChannel* Get_Channel(const char* pChannelName) const;
 	const char* Get_Name() const { return m_szName; }
 	const _uint Get_Index() const { return m_iIndex; }
-	vector <class CChannel*>* Get_Channels() { return &m_Channels; }
+	vector <class CChannel*>& Get_Channels() { return m_Channels; }
+	const _uint Get_MaxKeyFrameIndex() const;
+	const _uint Get_CurrentKeyFrameIndex();
+	void Set_MaxKeyFrameIndex(const _uint _iMaxKeyFrameIndex);
 	const _bool Is_Finished() const { return m_isFinished; }
+	CSaveManager::ANIMDATA& SetSaveAnimData();
+
 public:
 	void Reset_Animation();
 private:
@@ -33,14 +37,15 @@ private:
 	_bool				m_isFinished = false;
 
 	_uint m_iIndex = 0;
-	_uint m_iCurrentKeyFrameIndex = 0;
+	_uint m_iMaxKeyFrameIndex = 0;
+	_uint m_iCurKeyFrameIndex = 0;
 
 private:
 	/* 현재 애니메이션에 영향ㅇ르 주는 뼈대들의 정보. */
 	vector<class CChannel*>			m_Channels; 
 	typedef vector<class CChannel*>	CHANNELS;
 public:
-	static CAnimation* Create(char* pName, _double Duration, _double PlaySpeed);
+	static CAnimation* Create(char* pName, _double Duration, _double PlaySpeed, const _int _iIndex);
 	CAnimation* Clone();
 	virtual void Free();
 };

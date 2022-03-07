@@ -2,7 +2,11 @@
 
 #include "Actor.h"
 
+BEGIN(Engine)
+END
+
 BEGIN(Client)
+class CWeapon;
 
 class CSilvermane final : public CActor
 {
@@ -24,10 +28,27 @@ private:
 
 public:
 	CTransform* Get_Transform() const;
+	CModel* Get_Model() const;
+	const _float3& Get_Rotation() const;
+	const _fvector& Get_Dir() const;
+
+	void Set_Dir(const _fvector& _svDir);
+	void Set_Rotation(const _float3& _vRotation);
+	void Set_EquipWeapon(const _bool _isEquipWeapon);
+	void Set_WeaponFixedBone(CHierarchyNode* _pFixedBone);
+
+	const _bool Is_EquipWeapon() const;
 
 public:
 	CModel* m_pModel = nullptr;
 	CStateController* m_pStateController = nullptr;
+	CAnimationController* m_pAnimationController = nullptr;
+
+	CWeapon* m_pWeapon = nullptr;
+	_bool m_isEquipWeapon = false;
+
+	_float3 m_vRotation = { 0.f, 0.f, 0.f };
+	_float3 m_vDir = { 0.f, 0.f, 0.f };
 
 public:
 	static CSilvermane* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext);

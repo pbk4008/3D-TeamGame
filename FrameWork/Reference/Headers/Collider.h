@@ -29,7 +29,6 @@ protected:
 	_fvector ToXMVector4(const PxQuat pxquat);
 	const PxVec3 ToPxVector(_fvector xmvec);
 	const PxQuat ToQuat(_fvector xmvec);
-	const _float3 QuaternionToEuler(const _float4& _q);
 private:
 	_fmatrix Update_Scale(_fmatrix matTransform);
 	_fmatrix Update_Rotate(_fmatrix matTransform);

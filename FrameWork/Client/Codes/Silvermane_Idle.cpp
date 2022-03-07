@@ -2,6 +2,7 @@
 #include "Silvermane_Idle.h"
 
 #include "StateController.h"
+#include "Silvermane.h"
 
 CSilvermane_Idle::CSilvermane_Idle(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
 	: CState_Silvermane(_pDevice, _pDeviceContext)
@@ -16,29 +17,36 @@ CSilvermane_Idle::CSilvermane_Idle(const CSilvermane_Idle& _rhs)
 HRESULT CSilvermane_Idle::NativeConstruct(void* _pArg)
 {
 	if (FAILED(__super::NativeConstruct(_pArg)))
-	{
 		return E_FAIL;
-	}
 
 	return S_OK;
 }
 
-_int CSilvermane_Idle::Tick(const _double& TimeDelta)
+_int CSilvermane_Idle::Tick(const _double& _dDeltaTime)
 {
-	if (0 > __super::Tick(TimeDelta))
+	_int iProgress = __super::Tick(_dDeltaTime);
+	if (NO_EVENT != iProgress)
+		return iProgress;
+
+	m_fHoldTime += (_float)_dDeltaTime;
+	if (3.f < m_fHoldTime)
 	{
-		return -1;
+		if (m_pSilvermane->Is_EquipWeapon())
+		{
+			if (FAILED(m_pStateController->Change_State(L"1H_SwordEquipOff")))
+				return E_FAIL;
+			return STATE_CHANGE;
+		}
 	}
 
 	return _int();
 }
 
-_int CSilvermane_Idle::LateTick(const _double& TimeDelta)
+_int CSilvermane_Idle::LateTick(const _double& _dDeltaTime)
 {
-	if (0 > __super::LateTick(TimeDelta))
-	{
-		return -1;
-	}
+	_int iProgress = __super::LateTick(_dDeltaTime);
+	if (NO_EVENT != iProgress)
+		return iProgress;
 
 	return _int();
 }
@@ -46,9 +54,7 @@ _int CSilvermane_Idle::LateTick(const _double& TimeDelta)
 HRESULT CSilvermane_Idle::Render()
 {
 	if (FAILED(__super::Render()))
-	{
 		return E_FAIL;
-	}
 
 	return S_OK;
 }
@@ -56,13 +62,10 @@ HRESULT CSilvermane_Idle::Render()
 HRESULT CSilvermane_Idle::EnterState()
 {
 	if (FAILED(__super::EnterState()))
-	{
 		return E_FAIL;
-	}
 
-	//static_cast<CSilvermane*>(m_pGameObject)->Set_CurrentAnimation(m_pModel->SetUp_NextAnimation("SK_Silvermane.ao|A_Idle_Player"));
-	//m_pModel->Set_RootMotion(true, ERootOption::XYZ);
-	//m_pModel->Set_LoopNextAnim(true);
+	m_pAnimationController->SetUp_NextAnimation("SK_Silvermane.ao|A_Idle_Player", true);
+	m_pAnimationController->Set_RootMotion(true, true, ERootOption::XYZ);
 
 	return S_OK;
 }
@@ -70,30 +73,73 @@ HRESULT CSilvermane_Idle::EnterState()
 HRESULT CSilvermane_Idle::ExitState()
 {
 	if (FAILED(__super::ExitState()))
-	{
 		return E_FAIL;
-	}
+
+	m_fHoldTime = 0.f;
 
 	return S_OK;
 }
 
-_int CSilvermane_Idle::KeyCheck(const _double& TimeDelta)
+_int CSilvermane_Idle::KeyCheck(const _double& _dDeltaTime)
 {
-	if (g_pGameInstance->getkeyDown(DIK_UP) & 0x80)
+	_int iProgress = __super::KeyCheck(_dDeltaTime);
+	if (NO_EVENT != iProgress)
+		return iProgress;
+
+	if (g_pGameInstance->getMouseKeyDown(CInputDev::MOUSESTATE::MB_LBUTTON))
 	{
-		m_pStateController->Change_State(L"JogFwdStart");
+		if (m_pSilvermane->Is_EquipWeapon())
+		{
+			if (FAILED(m_pStateController->Change_State(L"1H_SwordAttackNormalR1_01")))
+				return -1;
+			return STATE_CHANGE;
+		}
+		else
+		{
+			if (FAILED(m_pStateController->Change_State(L"1H_SwordEquipOn")))
+				return -1;
+			return STATE_CHANGE;
+		}
 	}
-	if (g_pGameInstance->getkeyDown(DIK_DOWN) & 0x80)
+
+	if (g_pGameInstance->getkeyDown(DIK_SPACE))
 	{
-		m_pStateController->Change_State(L"JogBwdStart");
+		if (FAILED(m_pStateController->Change_State(L"1H_DodgeSpin")))
+			return E_FAIL;
+		return STATE_CHANGE;
 	}
-	if (g_pGameInstance->getkeyDown(DIK_RIGHT) & 0x80)
+
+	if (g_pGameInstance->getkeyPress(DIK_LSHIFT))
 	{
-		m_pStateController->Change_State(L"JogRightStart");
+		if (g_pGameInstance->getkeyPress(DIK_W))
+		{
+			if (FAILED(m_pStateController->Change_State(L"SprintFwdStart")))
+				return E_FAIL;
+			return STATE_CHANGE;
+		}
 	}
-	if (g_pGameInstance->getkeyDown(DIK_LEFT) & 0x80)
+	else
 	{
-		m_pStateController->Change_State(L"JogLeftStart");
+		if (g_pGameInstance->getkeyPress(DIK_W))
+		{
+			m_pStateController->Change_State(L"JogFwdStart");
+			return STATE_CHANGE;
+		}
+		if (g_pGameInstance->getkeyPress(DIK_S))
+		{
+			m_pStateController->Change_State(L"JogBwdStart");
+			return STATE_CHANGE;
+		}
+		if (g_pGameInstance->getkeyPress(DIK_D))
+		{
+			m_pStateController->Change_State(L"JogRightStart");
+			return STATE_CHANGE;
+		}
+		if (g_pGameInstance->getkeyPress(DIK_A))
+		{
+			m_pStateController->Change_State(L"JogLeftStart");
+			return STATE_CHANGE;
+		}
 	}
 
 	return _int();

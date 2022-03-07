@@ -2,7 +2,9 @@
 #ifndef __SAVEMANAGER_H__
 #define __SAVEMANAGER_H__
 #include "SingleTon.h"
+#include "Channel.h"
 BEGIN(Engine)
+class CChannel;
 class CSaveManager final : public CSingleTon<CSaveManager>
 {
 friend CSingleTon;
@@ -17,6 +19,48 @@ public:
 
 		_uint iMeshMtrlNum;
 	}STATICMESHDATA;
+	typedef struct tagBoneData
+	{
+		_uint iBoneNameSize;
+		_uint iParentNameSize;
+		char szBoneName[MAX_PATH];
+		char szParentName[MAX_PATH];
+		_uint iDepth;
+
+		_float4x4 OffsetMatrix;
+		_float4x4 TransformationMatrix;
+	}BONEDATA;
+	typedef struct tagAnimMeshData
+	{
+		_uint iVtxCount;
+		_uint iIdxCount;
+		_uint iBoneCnt;
+
+		VTXMESH_ANIM* pVtxPoint;
+		FACEINDICES32* pIndex;
+
+		_uint iMeshMtrlNum;
+		BONEDATA* pBoneData;
+	}ANIMMESHDATA;
+	typedef struct tagChannelData
+	{
+		_uint iKeyFrameCnt;
+		_uint iChannelNameSize;
+		char szChannelName[MAX_PATH];
+
+		KEYFRAME* pKeyFrame;
+	}CHANNELDATA;
+	typedef struct tagAnimData
+	{
+		_double dDuration;
+		_double dPlaySpeed;
+		_uint iAnimNameSize;
+		char szAnimName[MAX_PATH];
+		_uint iAnimIndex;
+		_uint iChannelCnt;
+
+		CHANNELDATA* pChannelData;
+	}ANIMDATA;
 	typedef struct tagTextureData
 	{
 		_uint iTextureNameSize;
@@ -28,7 +72,7 @@ public:
 		_uint iTextureCnt;
 		vector<TEXTUREDATA> pTaxtureData;
 	}MTRLDATA;
-	typedef struct tagModelSaveData
+	typedef struct tagStaticModelSaveData
 	{
 		_uint iMeshCount;
 		_uint iMtrlCount;
@@ -36,6 +80,16 @@ public:
 		vector<MTRLDATA> pMtrlData;
 		vector<STATICMESHDATA> pMeshData;
 	}STATICDATA;
+	typedef struct tagAnimModelSaveData
+	{
+		_uint iMeshCount;
+		_uint iMtrlCount;
+		_uint iAnimCount;
+
+		vector<MTRLDATA> pMtrlData;
+		vector<ANIMMESHDATA> pMeshData;
+		vector<ANIMDATA> pAnimData;
+	}DYNAMICDATA;
 private:
 	NO_COPY(CSaveManager);
 	explicit CSaveManager();
@@ -84,6 +138,8 @@ public:
 		return S_OK;
 	}
 	HRESULT Save_StaticModel(vector<MTRLDATA>& vecMtrlData, vector<STATICMESHDATA>& vecMeshData, _fmatrix pivotMatrix,const wstring& pFilePath);
+	HRESULT Save_AnimModel(vector<MTRLDATA>& vecMtrlData, vector <ANIMMESHDATA>& vecMeshData, vector<ANIMDATA>& vecAnimData, _fmatrix pivotMatirx, const wstring& pFilePath);
+	HRESULT Load_AnimModel(DYNAMICDATA& AnimData, const wstring& pFilePath);
 	HRESULT Load_StaticModel(STATICDATA& StaticData, const wstring& pFilePath);
 private:
 	virtual void Free();

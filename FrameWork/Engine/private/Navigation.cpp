@@ -37,7 +37,7 @@ HRESULT CNavigation::NativeConstruct_Prototype(const _tchar* pDataFilePath)
 		if (0 == dwByte)
 			break;
 
-		CCell*		pCell = CCell::Create(m_pDevice, m_pDeviceContext, vPoints, m_Cells.size());
+		CCell*		pCell = CCell::Create(m_pDevice, m_pDeviceContext, vPoints, (_uint)m_Cells.size());
 		if (nullptr == pCell)
 			return E_FAIL;
 

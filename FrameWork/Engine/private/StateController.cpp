@@ -1,5 +1,6 @@
 #include "StateController.h"
 
+#include "GameInstance.h"
 #include "State.h"
 
 CStateController::CStateController(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
@@ -33,9 +34,12 @@ HRESULT CStateController::NativeConstruct(void* _pArg)
 
 _int CStateController::Tick(const _double& _dDeltaTime)
 {
-	if (0 > m_pCurState->Tick(_dDeltaTime))
-	{
+	if (!m_pCurState)
 		return -1;
+	_int iProgress = m_pCurState->Tick(_dDeltaTime);
+	if (0 != iProgress)
+	{
+		return iProgress;
 	}
 
 	return _int();
@@ -43,9 +47,12 @@ _int CStateController::Tick(const _double& _dDeltaTime)
 
 _int CStateController::LateTick(const _double& _dDeltaTime)
 {
-	if (0 > m_pCurState->LateTick(_dDeltaTime))
-	{
+	if (!m_pCurState)
 		return -1;
+	_int iProgress = m_pCurState->LateTick(_dDeltaTime);
+	if (0 != iProgress)
+	{
+		return iProgress;
 	}
 
 	return _int();
@@ -54,8 +61,12 @@ _int CStateController::LateTick(const _double& _dDeltaTime)
 HRESULT CStateController::Render()
 {
 	if (FAILED(m_pCurState->Render()))
-	{
 		return E_FAIL;
+
+	if (m_pCurState)
+	{
+		if (FAILED(g_pGameInstance->Render_Font(TEXT("Font_Arial"), XMVectorSet(1.f, 0.0f, 0.f, 1.f), m_wstrCurStateTag.c_str(), _float2(0.f, 260.f), _float2(0.8f, 0.8f))))
+			return E_FAIL;
 	}
 
 	return S_OK;
@@ -106,11 +117,25 @@ HRESULT CStateController::Change_State(const wstring& _wstrStateTag, const EChan
 			case EChange::NonEnter:
 				m_pCurState->ExitState();
 				break;
+			} 
+		}
+
+		m_pPreState = m_pCurState;
+		m_pCurState = pState;
+
+		if (m_pCurState)
+		{
+			switch (_eChange)
+			{
+			case EChange::Normal:
+			case EChange::NonExit:
+				m_pCurState->EnterState();
+				break;
 			}
 		}
 
 		m_wstrPreStateTag = m_wstrCurStateTag;
-		m_wstrCurStateTag = m_wstrPreStateTag;
+		m_wstrCurStateTag = _wstrStateTag;
 	}
 
 	return S_OK;

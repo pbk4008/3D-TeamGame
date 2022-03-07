@@ -14,34 +14,29 @@ CState_Silvermane::CState_Silvermane(const CState_Silvermane& _rhs)
 HRESULT CState_Silvermane::NativeConstruct(void* _pArg)
 {
 	if (FAILED(__super::NativeConstruct(_pArg)))
-	{
 		return E_FAIL;
-	}
 
 	return S_OK;
 }
 
 _int CState_Silvermane::Tick(const _double& _dDeltaTime)
 {
-	if (0 > __super::Tick(_dDeltaTime))
-	{
-		return -1;
-	}
+	_int iProgress = __super::Tick(_dDeltaTime);
+	if (NO_EVENT != iProgress)
+		return iProgress;
 
-	if (0 > KeyCheck(_dDeltaTime))
-	{
-		return -1;
-	}
+	iProgress = KeyCheck(_dDeltaTime);
+	if (NO_EVENT != iProgress)
+		return iProgress;
 
 	return _int();
 }
 
 _int CState_Silvermane::LateTick(const _double& _dDeltaTime)
 {
-	if (0 > __super::LateTick(_dDeltaTime))
-	{
-		return -1;
-	}
+	_int iProgress = __super::LateTick(_dDeltaTime);
+	if (NO_EVENT != iProgress)
+		return iProgress;
 
 	return _int();
 }
@@ -49,9 +44,7 @@ _int CState_Silvermane::LateTick(const _double& _dDeltaTime)
 HRESULT CState_Silvermane::Render()
 {
 	if (FAILED(__super::Render()))
-	{
 		return E_FAIL;
-	}
 
 	return S_OK;
 }
@@ -59,9 +52,7 @@ HRESULT CState_Silvermane::Render()
 HRESULT CState_Silvermane::EnterState()
 {
 	if (FAILED(__super::EnterState()))
-	{
 		return E_FAIL;
-	}
 
 	return S_OK;
 }
@@ -69,16 +60,19 @@ HRESULT CState_Silvermane::EnterState()
 HRESULT CState_Silvermane::ExitState()
 {
 	if (FAILED(__super::ExitState()))
-	{
 		return E_FAIL;
-	}
 
-	return E_NOTIMPL;
+	return S_OK;
 }
 
 void CState_Silvermane::Set_Model(CModel* _pModel)
 {
 	m_pModel = _pModel;
+}
+
+void CState_Silvermane::Set_AnimationController(CAnimationController* _pAnimationController)
+{
+	m_pAnimationController = _pAnimationController;
 }
 
 void CState_Silvermane::Set_Silvermane(CSilvermane* _pSilvermane)

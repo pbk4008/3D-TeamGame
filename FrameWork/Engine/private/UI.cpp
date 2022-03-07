@@ -57,8 +57,7 @@ HRESULT CUI::NativeConstruct(void* pArg)
 		return S_OK;
 
 	wstring pTextureTag = (*(wstring*)pArg);
-	//wstring pTextureTag = L"";
-	//memcpy(&pTextureTag, pArg, sizeof(pArg));
+	m_iObectTag = m_Desc.IDTag;
 
 	if (FAILED(m_pTexture->Change_Texture(pTextureTag)))
 		return E_FAIL;

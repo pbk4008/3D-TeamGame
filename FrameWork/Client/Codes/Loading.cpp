@@ -85,9 +85,9 @@ HRESULT CLoading::Move_Scene()
 
 HRESULT CLoading::Ready_GameObject()
 {
-	//wstring strTag = L"BackGround";
-	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_LOADING,L"Loading_Back", L"Prototype_GameObject_BackGround", &strTag)))
-	//	return E_FAIL;
+	wstring strTag = L"BackGround";
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_LOADING, L"Loading_Background", L"Prototype_GameObject_BackGround", &strTag)))
+		return E_FAIL;
 
 	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"BoxCollider", CBoxCollider::Create(m_pDevice, m_pDeviceContext))))
 	//	return E_FAIL;
@@ -95,9 +95,9 @@ HRESULT CLoading::Ready_GameObject()
 	//	return E_FAIL;
 	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"CapsuleCollider", CCapsuleCollider::Create(m_pDevice, m_pDeviceContext))))
 	//	return E_FAIL;
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model", CModel::Create(m_pDevice, m_pDeviceContext,L"../bin/SaveData/Sphere.fbx",L"../../Reference/ShaderFile/Shader_Mesh.hlsl",CModel::TYPE_STATIC))))
+	/*if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model", CModel::Create(m_pDevice, m_pDeviceContext,L"../bin/SaveData/Sphere.fbx",L"../../Reference/ShaderFile/Shader_Mesh.hlsl",CModel::TYPE_STATIC))))
 			return E_FAIL;
-	
+
 
 
 	if (FAILED(g_pGameInstance->Add_Prototype(L"TestObj", CTestObj::Create(m_pDevice, m_pDeviceContext))))
@@ -105,7 +105,7 @@ HRESULT CLoading::Ready_GameObject()
 
 	CTestObj::TESTDESC tDesc;
 	ZeroMemory(&tDesc, sizeof(tDesc));
-	
+
 
 	_matrix matIdentity = XMMatrixIdentity();
 	XMStoreFloat4x4(&tDesc.tCapsuleDesc.matTransform, matIdentity);
@@ -121,10 +121,10 @@ HRESULT CLoading::Ready_GameObject()
 	XMStoreFloat4x4(&tDesc.tBoxDesc.matTransform, matIdentity);
 	tDesc.tBoxDesc.tColDesc.bGravity = false;
 	tDesc.tBoxDesc.tColDesc.bKinematic = false;
-	tDesc.tBoxDesc.tColDesc.eType = CPhysicsXSystem::ACTORTYPE::ACTOR_STATIC; 
+	tDesc.tBoxDesc.tColDesc.eType = CPhysicsXSystem::ACTORTYPE::ACTOR_STATIC;
 
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_LOADING, L"Test", L"TestObj" ,&tDesc)))
-		return E_FAIL;
+		return E_FAIL;*/
 
 
 	return S_OK;

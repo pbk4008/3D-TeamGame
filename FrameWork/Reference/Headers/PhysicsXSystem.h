@@ -7,8 +7,9 @@ BEGIN(Engine)
 class ContactReportCallback;
 class CPhysicsXSystem final : public CSingleTon<CPhysicsXSystem>
 {
+	friend CSingleTon;
 public:
-	enum class COLLIDERTYPE { COL_BOX, COL_CAP, COL_SPHERE, COL_END };
+	enum class COLLIDERTYPE { COL_BOX, COL_CAP, COL_SPHERE, COL_MESH, COL_END };
 	enum class ACTORTYPE {ACTOR_STATIC, ACTOR_DYNAMIC, ACTOR_END};
 	typedef struct tagColDesc
 	{
@@ -17,7 +18,6 @@ public:
 		_bool bKinematic;
 		_bool bGravity;
 	}COLDESC;
-friend CSingleTon;
 private:
 	NO_COPY(CPhysicsXSystem);
 	explicit CPhysicsXSystem();
@@ -27,6 +27,7 @@ public:
 	HRESULT Init_RigidActor(PxShape* pShape, const COLDESC& tDesc, PxRigidActor** ppRigidActor);
 	HRESULT UpDate_Collision(_double DeltaTime);
 	PxShape* Init_Shape(COLLIDERTYPE eType, const PxVec3 ShapeInfo);
+	PxShape* Init_Mesh(const PxTriangleMeshDesc& tDesc);
 private:
 	HRESULT Intit_Scene();
 private:
@@ -37,6 +38,7 @@ private:
 	PxFoundation* m_pFoundation;
 	PxPhysics* m_pPhysics;
 	PxScene* m_pScene;
+	PxCooking* m_pCooking;
 	PxDefaultCpuDispatcher* m_pDispatcher;
 	ContactReportCallback* m_pContactRePort;
 };

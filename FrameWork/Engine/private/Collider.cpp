@@ -45,6 +45,7 @@ HRESULT CCollider::NativeConstruct(void * pArg)
 	m_eType = (*(CPhysicsXSystem::ACTORTYPE*)pArg);
 
 	m_vColor = _float4(1.f, 0.f, 0.f, 1.f);
+
 	return S_OK;
 }
 
@@ -175,44 +176,6 @@ const PxQuat CCollider::ToQuat(_fvector xmvec)
 	PxQuat pxQuat = PxQuat(tmpQuat.x, tmpQuat.y, tmpQuat.z, tmpQuat.w);
 
 	return pxQuat;
-}
-
-const _float3 CCollider::QuaternionToEuler(const _float4& _q)
-{
-	_float3 euler;
-
-	float unit = (_q.x * _q.x) + (_q.y * _q.y) + (_q.z * _q.z) + (_q.w * _q.w);
-
-	float test = _q.x * _q.w - _q.y * _q.z;
-
-	if (test > 0.49999f * unit)
-	{
-		euler.x = M_PI / 2;
-		euler.y = 2.0f * atan2f(_q.y, _q.x);
-		euler.z = 0;
-	}
-	else if (test < -0.49999f * unit)
-	{
-		euler.x = -M_PI / 2;
-		euler.y = -2.0f * atan2f(_q.y, _q.x);
-		euler.z = 0;
-	}
-	else
-	{
-		euler.x = asinf(2.0f * (_q.w * _q.x - _q.y * _q.z));
-		euler.y = atan2f(2.0f * _q.w * _q.y + 2.0f * _q.z * _q.x, 1 - 2.0f * (_q.x * _q.x + _q.y * _q.y));
-		euler.z = atan2f(2.0f * _q.w * _q.z + 2.0f * _q.x * _q.y, 1 - 2.0f * (_q.z * _q.z + _q.x * _q.x));
-	}
-
-	euler.x = XMConvertToDegrees(euler.x);
-	euler.y = XMConvertToDegrees(euler.y);
-	euler.z = XMConvertToDegrees(euler.z);
-
-	euler.x = fmodf(euler.x, 360.0f);
-	euler.y = fmodf(euler.y, 360.0f);
-	euler.z = fmodf(euler.z, 360.0f);
-
-	return euler;
 }
 
 _fmatrix CCollider::Update_Scale(_fmatrix matTransform)

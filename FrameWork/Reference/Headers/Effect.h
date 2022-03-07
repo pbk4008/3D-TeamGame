@@ -34,6 +34,8 @@ class ENGINE_DLL CEffect abstract : public CGameObject
 		_float		fFrame;
 		_uint		iRenderPassNum;
 
+		_int		IDTag; //고유태그값
+
 	}EFFECTDESC;
 protected:
 	explicit CEffect();

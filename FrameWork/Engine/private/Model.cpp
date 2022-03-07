@@ -1,4 +1,6 @@
 #include "..\public\Model.h"
+
+#include "GameInstance.h"
 #include "MeshContainer.h"
 #include "HierarchyNode.h"
 #include "Texture.h"
@@ -7,6 +9,7 @@
 #include "Component_Manager.h"
 #include "TextureManager.h"
 #include "SaveManager.h"
+#include "Material.h"
 
 CModel::CModel(ID3D11Device * pDevice, ID3D11DeviceContext * pDeviceContext)
 	: CComponent(pDevice, pDeviceContext)
@@ -24,11 +27,23 @@ CModel::CModel(const CModel& rhs)
 	, m_pEffect(rhs.m_pEffect)
 	, m_PassDesc(rhs.m_PassDesc)
 	, m_HierarchyNodes(rhs.m_HierarchyNodes)
+	, m_bSaved(rhs.m_bSaved)
 {	
+	strcpy_s(m_szMeshFilePath, rhs.m_szMeshFilePath);
+	strcpy_s(m_szMeshFullName, rhs.m_szMeshFullName);
+
 	for (auto& pMaterial : m_Materials)
 	{
 		for (_uint i = 0; i < AI_TEXTURE_TYPE_MAX; ++i)
 			Safe_AddRef(pMaterial->pMeshTexture[i]);
+	}
+	m_vecMaterials.resize(rhs.m_vecMaterials.size());
+	for (_uint i = 0; i < m_vecMaterials.size(); ++i)
+	{
+		if (rhs.m_vecMaterials[i])
+		{
+			Add_Material(rhs.m_vecMaterials[i], i);
+		}
 	}
 	
 	m_MeshContainers.resize((_uint)rhs.m_Materials.size());
@@ -72,6 +87,7 @@ HRESULT CModel::NativeConstruct_Prototype(const string& pMeshFilePath, const str
 
 	string szFullPath = pMeshFilePath;
 	szFullPath += pMeshFileName;
+	strcpy_s(m_szMeshFullName, szFullPath.c_str());
 
 	_int iFlag = 0;
 
@@ -103,7 +119,6 @@ HRESULT CModel::NativeConstruct_Prototype(const string& pMeshFilePath, const str
 
 	if (m_eMeshType == TYPE_STATIC)
 	{
-
 		wstring wstrSaveFileName, wstrSaveFilePath;
 		wstrSaveFilePath = L"../../Client/bin/SaveData/";
 		wstrSaveFileName.assign(pMeshFileName.begin(), pMeshFileName.end());
@@ -156,9 +171,9 @@ HRESULT CModel::NativeConstruct(void * pArg)
 	_uint iNumAnimation = m_pScene->mNumAnimations;
 	for (_uint i = 0; i < iNumAnimation; i++)
 	{
-		vector<class CChannel*>* pChannels = m_Animations[i]->Get_Channels();
+		vector<class CChannel*>& pChannels = m_Animations[i]->Get_Channels();
 
-		for (auto& pChannel : *pChannels)
+		for (auto& pChannel : pChannels)
 		{
 			CHierarchyNode* pHierarchyNode = Find_HierarchyNode(pChannel->Get_Name());
 			if (!pHierarchyNode)
@@ -166,12 +181,41 @@ HRESULT CModel::NativeConstruct(void * pArg)
 			pHierarchyNode->Add_Channel(i, pChannel);
 		}
 	}
+	if(!m_bSaved)
+	{
+		if (FAILED(Save_AnimModel()))
+			return E_FAIL;
+		m_bSaved = true;
+	}
 
 	return S_OK;
 }
 
+HRESULT CModel::Add_Material(CMaterial* _pMtrl, const _uint _iMtrlIndex)
+{
+	if (_iMtrlIndex < m_vecMaterials.size())
+	{
+		if (m_vecMaterials[_iMtrlIndex])
+			Safe_Release(m_vecMaterials[_iMtrlIndex]);
+
+		m_vecMaterials[_iMtrlIndex] = _pMtrl;
+		Safe_AddRef(_pMtrl);
+
+		return S_OK;
+	}
+	return E_FAIL;
+}
+
 HRESULT CModel::SetUp_ValueOnShader(const char* pConstantName, void* pData, _uint iSize)
 {
+	for (auto& pMtrl : m_vecMaterials)
+	{
+		if (pMtrl)
+		{
+			pMtrl->SetUp_ValueOnShader(pConstantName, pData, iSize);
+		}
+	}
+
 	if (!m_pEffect)
 		return E_FAIL;
 
@@ -211,6 +255,17 @@ HRESULT CModel::Update_CombinedTransformationMatrix(_double TimeDelta)
 	return S_OK;
 }
 
+HRESULT CModel::Update_CombinedTransformationMatrix(const _int _iCurAnimIndex, const _bool _isRootMotion, const ERootOption _eRootOption)
+{
+	/* 렌더링해야할 CombinedTransfromkationMatrix를 만든다. */
+	for (auto& pHierarchyNode : m_HierarchyNodes)
+	{
+		pHierarchyNode->Update_CombinedTransformationMatrix(_iCurAnimIndex, _isRootMotion, _eRootOption);
+	}
+
+	return S_OK;
+}
+
 HRESULT CModel::Render(_uint iMeshContainerIndex, _uint iPassIndex)
 {
 	if (iPassIndex >= (_uint)m_PassDesc.size())
@@ -218,6 +273,28 @@ HRESULT CModel::Render(_uint iMeshContainerIndex, _uint iPassIndex)
 
 	for (auto& pMeshContainer : m_MeshContainers[iMeshContainerIndex])
 	{
+		_uint iMtrlIndex = pMeshContainer->getMaterialIndex();
+		if (m_vecMaterials[iMtrlIndex])
+		{
+			m_vecMaterials[iMtrlIndex]->Set_InputLayout(iPassIndex);
+
+			if (m_eMeshType == TYPE_ANIM)
+			{
+				_matrix		BoneMatrices[256];
+				ZeroMemory(BoneMatrices, sizeof(_matrix) * 256);
+
+				pMeshContainer->SetUp_BoneMatrices(BoneMatrices, XMLoadFloat4x4(&m_PivotMatrix));
+
+				if (FAILED(m_vecMaterials[iMtrlIndex]->SetUp_ValueOnShader("g_BoneMatrices", BoneMatrices, sizeof(_matrix) * 256)))
+					return E_FAIL;
+			}
+
+			m_vecMaterials[iMtrlIndex]->Render(iPassIndex);
+			pMeshContainer->Render();
+
+			return S_OK;
+		}
+
 		if (m_eMeshType == TYPE_ANIM)
 		{
 			_matrix		BoneMatrices[256];
@@ -243,6 +320,7 @@ HRESULT CModel::Create_Materials()
 		return E_FAIL;
 
 	m_Materials.reserve(m_pScene->mNumMaterials);
+	m_vecMaterials.resize(m_pScene->mNumMaterials);
 
 	char		szMeshFilePath[MAX_PATH] = "";
 
@@ -296,6 +374,14 @@ HRESULT CModel::Create_Materials()
 		}		
 
 		m_Materials.push_back(pMeshMaterial);
+		if (TYPE_ANIM == m_eMeshType)
+		{
+			//m_vecMaterials.emplace_back(g_pGameInstance->Get_Material(L"Default"));
+		}
+		else
+		{
+			//m_vecMaterials.emplace_back(g_pGameInstance->Get_Material(L"Default_Anim"));
+		}
 	}
 
 	return S_OK;
@@ -486,9 +572,11 @@ HRESULT CModel::Create_Animation()
 	{
 		aiAnimation*	pAnim = m_pScene->mAnimations[i];
 
-		CAnimation*		pAnimation = CAnimation::Create(pAnim->mName.data, pAnim->mDuration, pAnim->mTicksPerSecond);
+		CAnimation*		pAnimation = CAnimation::Create(pAnim->mName.data, pAnim->mDuration, pAnim->mTicksPerSecond, i);
 		if (nullptr == pAnimation)
 			return E_FAIL;
+
+		_uint iMaxKeyFrameIndex = 0;
 
 		/* 현재 애니메이션 영햐을 주는 뼈대들 */
 		for (_uint j = 0; j < pAnim->mNumChannels; ++j)
@@ -501,6 +589,9 @@ HRESULT CModel::Create_Animation()
 
 			_uint iNumKeyframes = max(pAnimChannel->mNumPositionKeys, pAnimChannel->mNumRotationKeys);
 			iNumKeyframes = max(iNumKeyframes, pAnimChannel->mNumScalingKeys);
+
+			if (iNumKeyframes > iMaxKeyFrameIndex)
+				iMaxKeyFrameIndex = iNumKeyframes;
 
 			_float3 vScale = _float3(1.f, 1.f, 1.f);
 			_float4 vRotation = _float4(0.f, 0.f, 0.f, 0.f);
@@ -538,7 +629,8 @@ HRESULT CModel::Create_Animation()
 				pChannel->Add_KeyFrame(pKeyFrame);
 			}
 			pAnimation->Add_Channel(pChannel);
-		}	
+		}
+		pAnimation->Set_MaxKeyFrameIndex(iMaxKeyFrameIndex);
 		m_Animations.push_back(pAnimation);
 	}
 	return S_OK;
@@ -574,7 +666,7 @@ HRESULT CModel::Save_StaticModel(const wstring& pFilePath)
 			CSaveManager::STATICMESHDATA pData;
 			ZeroMemory(&pData, sizeof(pData));
 
-			pData = pMeshContainer->SetSaveData();
+			pData = pMeshContainer->SetStaticSaveData();
 			vecMesh.emplace_back(pData);
 		}
 	}
@@ -606,6 +698,79 @@ HRESULT CModel::Save_StaticModel(const wstring& pFilePath)
 	}
 
 	pInstance->Save_StaticModel(vecMtrl, vecMesh, XMLoadFloat4x4(&m_PivotMatrix), pFilePath);
+
+	RELEASE_INSTANCE(CSaveManager);
+
+	return S_OK;
+}
+
+HRESULT CModel::Save_AnimModel()
+{
+	CSaveManager* pInstance = GET_INSTANCE(CSaveManager);
+
+	vector<CSaveManager::MTRLDATA> vecMtrl;
+	vector<CSaveManager::ANIMMESHDATA> vecMesh;
+	vector<CSaveManager::ANIMDATA> vecAnim;
+
+	for (auto& pMtrlMeshContainer : m_MeshContainers)
+	{
+		for (auto& pMeshContainer : pMtrlMeshContainer)
+		{
+			CSaveManager::ANIMMESHDATA pData;
+			ZeroMemory(&pData, sizeof(pData));
+
+			pData = pMeshContainer->SetAnimSaveData();
+			vecMesh.emplace_back(pData);
+		}
+	}
+	for (auto& pMaterial : m_Materials)
+	{
+		CSaveManager::MTRLDATA pMtrlData;
+		ZeroMemory(&pMtrlData, sizeof(pMtrlData));
+
+		_uint iTextureCnt = 0;
+		vector<CSaveManager::TEXTUREDATA> vecTextureData;
+		for (_uint i = 0; i < AI_TEXTURE_TYPE_MAX; i++)
+		{
+			if (!pMaterial->pMeshTexture[i])
+				continue;
+			iTextureCnt++;
+			CSaveManager::TEXTUREDATA pTexutreData;
+			ZeroMemory(&pTexutreData, sizeof(pTexutreData));
+
+			pTexutreData.iType = i;
+			pTexutreData.iTextureNameSize = lstrlen(pMaterial->pMeshTextureName[i]);
+			lstrcpy(pTexutreData.pTextureName, pMaterial->pMeshTextureName[i]);
+			vecTextureData.emplace_back(pTexutreData);
+		}
+		pMtrlData.iTextureCnt = iTextureCnt;
+		pMtrlData.pTaxtureData = vecTextureData;
+
+		vecMtrl.emplace_back(pMtrlData);
+	}
+	for (auto& pAnim : m_Animations)
+	{
+		CSaveManager::ANIMDATA pAnimData;
+		ZeroMemory(&pAnimData, sizeof(pAnimData));
+
+		pAnimData = pAnim->SetSaveAnimData();
+
+		vecAnim.emplace_back(pAnimData);
+	}
+
+
+	_tchar wstrSaveFilePath[MAX_PATH]=L""; 
+	lstrcpy(wstrSaveFilePath, L"../../Client/bin/SaveData/");
+
+	char szFileName[MAX_PATH] = "";
+	char szExt[MAX_PATH] = "";
+	_splitpath_s(m_szMeshFullName, nullptr, 0, nullptr, 0, szFileName, MAX_PATH, szExt, MAX_PATH);
+	_tchar tSaveFileName[MAX_PATH] = L"";
+	MultiByteToWideChar(CP_ACP, 0, szFileName, (_int)strlen(szFileName), tSaveFileName, MAX_PATH);
+	lstrcat(wstrSaveFilePath, tSaveFileName);
+	
+	if (FAILED(pInstance->Save_AnimModel(vecMtrl, vecMesh, vecAnim, XMLoadFloat4x4(&m_PivotMatrix), wstrSaveFilePath)))
+		return E_FAIL;
 
 	RELEASE_INSTANCE(CSaveManager);
 
@@ -699,6 +864,12 @@ void CModel::Free()
 		Safe_Release(pNode);
 
 	m_HierarchyNodes.clear();
+
+	for (auto& pMtrl : m_vecMaterials)
+	{
+		Safe_Release(pMtrl);
+	}
+	m_vecMaterials.clear();
 
 	for (auto& pMaterial : m_Materials)
 	{

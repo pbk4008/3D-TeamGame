@@ -61,6 +61,10 @@ namespace Engine
 		XMFLOAT4		vDiffuse;
 		XMFLOAT4		vAmbient;
 		XMFLOAT4		vSpecular;
+
+		XMMATRIX		mLightWorld;
+		XMMATRIX		mLightView;
+		XMMATRIX		mLightProj;
 	}LIGHTDESC;
 
 	typedef struct tagMtrlDesc
@@ -78,8 +82,19 @@ namespace Engine
 		XMFLOAT4		vRight;
 		XMFLOAT4		vUp;
 		XMFLOAT4		vLook;
-		XMFLOAT4		vPosition;		
+		XMFLOAT4		vPosition;	
 	} VTXMATRIX;
+
+	typedef struct tagVertex_Particle
+	{
+		XMFLOAT4		vRight;
+		XMFLOAT4		vUp;
+		XMFLOAT4		vLook;
+		XMFLOAT4		vPosition;
+
+		XMFLOAT4		vTime;
+
+	} VTXPARTICLE;
 
 	typedef struct tagVertex_Texture_Cube
 	{

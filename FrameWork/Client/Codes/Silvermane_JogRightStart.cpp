@@ -60,14 +60,13 @@ HRESULT CSilvermane_JogRightStart::EnterState()
 		return E_FAIL;
 	}
 
-	/*
-	static_cast<CSilvermane*>(m_pGameObject)->Set_CurrentAnimation(m_pModel->SetUp_NextAnimation("SK_Silvermane.ao|A_Loco_Jog_Right_Start_Player"));
-	m_pModel->Set_RootMotion(true, ERootOption::XYZ);
-	m_pModel->Set_LoopNextAnim(false);
+	
+	m_pAnimationController->SetUp_NextAnimation("SK_Silvermane.ao|A_Loco_Jog_Right_Start_Player", false);
+	m_pAnimationController->Set_RootMotion(true, true, ERootOption::XYZ);
 
 	_matrix smatPivot = XMMatrixRotationY(XMConvertToRadians(90.f));
-	static_cast<CSilvermane*>(m_pGameObject)->Set_AnimPivotMatrix(smatPivot);
-	*/
+	m_pAnimationController->Set_PivotMatrix(smatPivot);
+	
 
 	return S_OK;
 }
@@ -79,50 +78,45 @@ HRESULT CSilvermane_JogRightStart::ExitState()
 		return E_FAIL;
 	}
 
-	//static_cast<CSilvermane*>(m_pGameObject)->Set_AnimPivotMatrix(XMMatrixIdentity());
+	m_pAnimationController->Set_PivotMatrix(XMMatrixIdentity());
 
 	return S_OK;
 }
 
 _int CSilvermane_JogRightStart::KeyCheck(const _double& TimeDelta)
 {
-	if (g_pGameInstance->getkeyPress(DIK_RIGHT) & 0x80)
+	if (g_pGameInstance->getkeyPress(DIK_D))
 	{
-		//if (m_pModel->Is_AnimationFinished())
+		if (m_pAnimationController->Is_Finished())
 		{
 			if (FAILED(m_pStateController->Change_State(L"JogRight")))
-			{
 				return -1;
-			}
+			return STATE_CHANGE;
 		}
 	}
-	else if (g_pGameInstance->getkeyPress(DIK_LEFT) & 0x80)
+	else if (g_pGameInstance->getkeyPress(DIK_A))
 	{
-		if (FAILED(m_pStateController->Change_State(L"JogLeftPivot180")))
-		{
+		if (FAILED(m_pStateController->Change_State(L"JogRightPivot180")))
 			return -1;
-		}
+		return STATE_CHANGE;
 	}
-	else if (g_pGameInstance->getkeyPress(DIK_UP) & 0x80)
+	else if (g_pGameInstance->getkeyPress(DIK_W))
 	{
 		if (FAILED(m_pStateController->Change_State(L"JogFwdStart")))
-		{
 			return -1;
-		}
+		return STATE_CHANGE;
 	}
-	else if (g_pGameInstance->getkeyPress(DIK_UP) & 0x80)
+	else if (g_pGameInstance->getkeyPress(DIK_S))
 	{
 		if (FAILED(m_pStateController->Change_State(L"JogBwdStart")))
-		{
 			return -1;
-		}
+		return STATE_CHANGE;
 	}
 	else
 	{
 		if (FAILED(m_pStateController->Change_State(L"Idle")))
-		{
 			return -1;
-		}
+		return STATE_CHANGE;
 	}
 
 	return _int();
