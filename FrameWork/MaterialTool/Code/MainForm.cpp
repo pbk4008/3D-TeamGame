@@ -5,7 +5,7 @@
 #include "pch.h"
 #include "Tool_YASIC.h"
 #include "MainForm.h"
-#include "MaterialTool.h"
+#include "Material_Level.h"
 
 // CMainForm
 
@@ -69,6 +69,9 @@ void CMainForm::OnInitialUpdate()
 
 
 	m_pRenderer = g_pGameInstance->Clone_Component<CRenderer>(0, L"Renderer");
+
+	if (FAILED(Start_Level()))
+		return;
 	// TODO: 여기에 특수화된 코드를 추가 및/또는 기본 클래스를 호출합니다.
 }
 
@@ -93,6 +96,15 @@ HRESULT CMainForm::Render()
 		return E_FAIL;
 
 	if (FAILED(g_pGameInstance->Present()))
+		return E_FAIL;
+
+
+	return S_OK;
+}
+
+HRESULT CMainForm::Start_Level()
+{
+	if (FAILED(g_pGameInstance->Open_Level(0, CMaterial_Level::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 
 

@@ -12,10 +12,11 @@ private:
 	virtual ~CMaterial_Level() = default;
 public:
 	virtual HRESULT NativeConstruct() override;
-	virtual _uint Tick(_float fDeltaTime);
+	virtual _int Tick(_double fDeltaTime);
 	virtual HRESULT Render();
 public:
 	static CMaterial_Level* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);
+
 private:
 	virtual void Free() override;
 };

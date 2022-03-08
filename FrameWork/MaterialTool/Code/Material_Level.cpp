@@ -15,8 +15,9 @@ HRESULT CMaterial_Level::NativeConstruct()
 	return S_OK;
 }
 
-_uint CMaterial_Level::Tick(_float fDeltaTime)
+_int CMaterial_Level::Tick(_double fDeltaTime)
 {
+	_int a = 10;
 	return _uint();
 }
 

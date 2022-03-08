@@ -32,6 +32,8 @@ public:
 	_int Tick(_double dDeltaTime);
 	HRESULT Render();
 private:
+	HRESULT Start_Level();
+private:
 	void Free();
 private:
 	ID3D11Device* m_pDevice;
