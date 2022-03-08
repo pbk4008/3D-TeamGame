@@ -38,7 +38,7 @@ HRESULT CStatic_Mesh::NativeConstruct(void* pArg)
 	m_matWorld._43 = m_ModelDesc.fInitPos.z;
 
 	m_pTransform->Set_WorldMatrix(XMLoadFloat4x4(&m_matWorld));
-	m_pTransform->SetTransformDesc(10.0f, 45.0f);
+	m_pTransform->Set_TransformDesc(10.0f, XMConvertToRadians(45.f));
 
 	if (FAILED(SetUp_Components()))
 		return E_FAIL;

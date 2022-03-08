@@ -15,7 +15,7 @@ public:
 private:
 	HRESULT LoadForScene();
 private:
-	HRESULT SetUp_Stage1_ProtoComponent();
+	HRESULT SetUp_Stage1Map_ProtoComponent();
 	HRESULT Load_Stage1FBXLoad();
 public:
 	static _uint CALLBACK Thread_Main(void* pArg);

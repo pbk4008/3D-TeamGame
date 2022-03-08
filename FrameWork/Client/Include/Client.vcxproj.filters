@@ -97,11 +97,32 @@
     <Filter Include="02.GameObject\96.Weapon\00.Needle">
       <UniqueIdentifier>{3eee425a-e769-4d53-87d7-fe962081c44a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObject\06.">
-      <UniqueIdentifier>{5e4ce90c-d575-4e08-9ce0-006401437c35}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObject\02.Environment">
       <UniqueIdentifier>{2671a8b6-a2a8-4ec2-ad0d-b3e116f33512}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\06.Monster">
+      <UniqueIdentifier>{5e4ce90c-d575-4e08-9ce0-006401437c35}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\06.Monster\00.Crawler">
+      <UniqueIdentifier>{753c69f7-8fdc-44aa-80c1-1e22903b1d74}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\06.Monster\01.EarthAberrant">
+      <UniqueIdentifier>{17a270c3-e3d1-4fd9-b399-411a46d0069e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\06.Monster\02.BronzeAnimus">
+      <UniqueIdentifier>{aa7bee1e-f41e-44d9-8f5d-aad746214b38}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\06.Monster\03.Bastion_Sword">
+      <UniqueIdentifier>{834501a3-75a4-4e3e-b00a-c90afd32b00f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\07.Boss">
+      <UniqueIdentifier>{70437c22-e8dd-42d5-b18e-ca612cd598e1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\07.Boss\00.MiddleBoss">
+      <UniqueIdentifier>{e4334a46-7b74-4e6b-9d4b-2272aa87a988}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\07.Boss\01.EndBoss">
+      <UniqueIdentifier>{59ddc0c7-9fa8-4666-9392-8acb53c6a91e}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -261,6 +282,18 @@
     <ClInclude Include="..\Headers\Camera_Debug.h">
       <Filter>02.GameObject\98.Player\00.Silvermane\Camera</Filter>
     </ClInclude>
+    <ClInclude Include="..\Headers\Monster_Crawler.h">
+      <Filter>02.GameObject\06.Monster\00.Crawler</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Monster_EarthAberrant.h">
+      <Filter>02.GameObject\06.Monster\01.EarthAberrant</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Monster_BronzeAnimus.h">
+      <Filter>02.GameObject\06.Monster\02.BronzeAnimus</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Monster_Bastion_Sword.h">
+      <Filter>02.GameObject\06.Monster\03.Bastion_Sword</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -395,6 +428,18 @@
     </ClCompile>
     <ClCompile Include="..\Codes\Camera_Debug.cpp">
       <Filter>02.GameObject\98.Player\00.Silvermane\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Monster_Crawler.cpp">
+      <Filter>02.GameObject\06.Monster\00.Crawler</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Monster_EarthAberrant.cpp">
+      <Filter>02.GameObject\06.Monster\01.EarthAberrant</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Monster_BronzeAnimus.cpp">
+      <Filter>02.GameObject\06.Monster\02.BronzeAnimus</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Monster_Bastion_Sword.cpp">
+      <Filter>02.GameObject\06.Monster\03.Bastion_Sword</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

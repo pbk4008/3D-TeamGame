@@ -31,12 +31,12 @@ public:
 	void Set_WorldMatrix(_fmatrix matWorld) { XMStoreFloat4x4(&m_WorldMatrix, matWorld); }
 	void Set_State(STATE eState, _fvector vState) {	XMStoreFloat4((_float4*)&m_WorldMatrix.m[eState][0], vState); }		
 	void Set_TransformDesc(const TRANSFORMDESC& TransformDesc) { m_TransformDesc = TransformDesc; }
+	void Set_TransformDesc(_float fSpeedPerSec, _float fAnglePerSec);
 public:
 	virtual HRESULT NativeConstruct_Prototype();
 	virtual HRESULT NativeConstruct(void* pArg);
 
 public:
-	void SetTransformDesc(_float fSpeedPerSec, _float fAnglePerSec);
 	void Go_Straight(_double TimeDelta, class CNavigation* pNavigation = nullptr);
 	void Go_Straight(const _float _fVelocityZ);
 	void Go_Left(_double TimeDelta);

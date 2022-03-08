@@ -260,6 +260,39 @@ HRESULT CAnimationController::SetUp_NextAnimation(const string& _strAnimTag, con
 	return S_OK;
 }
 
+HRESULT CAnimationController::SetUp_NextAnimation(_uint iIndex, const _bool _isLoopNextAnim)
+{
+	vector<CAnimation*>& vecAnimations = m_pModel->Get_Animations();
+	
+	if (vecAnimations.size() < iIndex)
+	{
+		return E_FAIL;
+	}
+
+	if (m_tBlendDesc.iCurAnimIndex != iIndex)
+	{
+		for (auto& pAnimation : vecAnimations)
+		{
+			if (iIndex == pAnimation->Get_Index())
+			{
+				m_tBlendDesc.iNextAnimIndex = pAnimation->Get_Index();
+
+				if (-1 != m_tBlendDesc.iNextAnimIndex)
+					vecAnimations[m_tBlendDesc.iNextAnimIndex]->Reset_Animation();
+
+				m_tBlendDesc.isLoopNextAnim = _isLoopNextAnim;
+				m_pFixedBone = pAnimation->Get_Channel("root");
+
+				m_strPreAnimTag = m_strCurAnimTag;
+				m_strCurAnimTag = pAnimation->Get_Name();
+				return S_OK;
+			}
+		}
+	}
+
+	return S_OK;
+}
+
 HRESULT CAnimationController::Change_Anim(const string& _strAnimTag, _bool _isLoop)
 {
 

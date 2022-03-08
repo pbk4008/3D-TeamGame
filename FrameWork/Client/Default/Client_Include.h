@@ -3,6 +3,7 @@
 #define __CLIENT_INCLUDE_H__
 
 #include <process.h>
+#include <io.h>
 
 #include "Clinet_Define.h"
 #include "Client_Enum.h"

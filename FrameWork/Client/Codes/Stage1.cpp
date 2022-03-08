@@ -19,13 +19,24 @@ HRESULT CStage1::NativeConstruct()
 	if (FAILED(CLevel::NativeConstruct()))
 		return E_FAIL;
 
-	if (FAILED(Ready_Gameobject()))
+	if (FAILED(Ready_MapObject()))
+	{
 		return E_FAIL;
-
+	}
+	if (FAILED(Ready_Monster(L"Layer_Monster")))
+	{
+		return E_FAIL;
+	}
 	if (FAILED(Ready_Effect(L"../bin/SaveData/Effect/Effect_Explosion.dat")))
+	{
 		return E_FAIL;
+	}
 	if (FAILED(Ready_UI(L"../bin/SaveData/UI/UI.dat")))
+	{
 		return E_FAIL;
+	}
+
+
 
 
 	return S_OK;
@@ -41,7 +52,7 @@ HRESULT CStage1::Render()
 	return S_OK;
 }
 
-HRESULT CStage1::Ready_Gameobject()
+HRESULT CStage1::Ready_MapObject()
 {
 	vector<ENVIRONMENTLOADDATA> vecEnvironmentData;
 	if (FAILED(g_pGameInstance->LoadFile<ENVIRONMENTLOADDATA>(vecEnvironmentData, L"../bin/SaveData/test.dat")))
@@ -74,6 +85,23 @@ HRESULT CStage1::Ready_Gameobject()
 	}
 	//wstring strTag = L"StageBackGround";
 	//g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Stage1_Back", L"Prototype_GameObject_BackGround", &strTag);
+
+	return S_OK;
+}
+
+HRESULT CStage1::Ready_Monster(const _tchar* LayerTag)
+{
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Monster_Crawler")))
+		return E_FAIL;
+
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Monster_EarthAberrant")))
+		return E_FAIL;
+
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Monster_BronzeAnimus")))
+		return E_FAIL;
+
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Monster_Bastion_Sword")))
+		return E_FAIL;
 
 	return S_OK;
 }

@@ -169,7 +169,7 @@ HRESULT CMainApp::Init_Camera()
 	tDesc2.fNear = 0.01f;
 	tDesc2.fFar = 1.f;
 
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Static", L"Prototype_GameObject_MainOrthoCamera", &tDesc)))
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Static", L"Prototype_GameObject_MainOrthoCamera", &tDesc2)))
 		return E_FAIL;
 
 	return S_OK;

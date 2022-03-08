@@ -40,7 +40,7 @@ HRESULT CTestObj::NativeConstruct(void* pArg)
 	if (FAILED(CGameObject::NativeConstruct(pArg)))
 		return E_FAIL;
 
-	m_pTransform->SetTransformDesc(5.f, 10.f);
+	m_pTransform->Set_TransformDesc(5.f, 10.f);
 	m_pTransform->Set_State(CTransform::STATE_POSITION, XMVectorSet(0.f, 0.f, 10.f, 1.f));
 	
 	TESTDESC tDesc = (*(TESTDESC*)pArg);
