@@ -129,8 +129,11 @@ HRESULT CSilvermane::Render()
 #ifdef _DEBUG
 	if (FAILED(m_pAnimationController->Render())) return E_FAIL;
 	if (FAILED(m_pStateController->Render())) return E_FAIL;
-	wstring wstrAngle = to_wstring(m_vAngle.x) + L", " + to_wstring(m_vAngle.y) + L", " + to_wstring(m_vAngle.z);
+	wstring wstrAngle = L"Angle : " + to_wstring(m_fAngle);
 	if (FAILED(g_pGameInstance->Render_Font(TEXT("Font_Arial"), XMVectorSet(1.f, 0.0f, 0.f, 1.f), wstrAngle.c_str(), _float2(0.f, 300.f), _float2(0.8f, 0.8f))))
+		return E_FAIL;
+	wstring wstrPlusAngle = L"Plus Angle : " + to_wstring(m_fPlusAngle);
+	if (FAILED(g_pGameInstance->Render_Font(TEXT("Font_Arial"), XMVectorSet(1.f, 0.0f, 0.f, 1.f), wstrPlusAngle.c_str(), _float2(0.f, 340.f), _float2(0.8f, 0.8f))))
 		return E_FAIL;
 #endif
 
@@ -238,25 +241,9 @@ CModel* CSilvermane::Get_Model() const
 	return m_pModel;
 }
 
-const _float3& CSilvermane::Get_Rotation() const
+const _float CSilvermane::Get_PlusAngle() const
 {
-	return m_vRotation;
-}
-
-const _fvector& CSilvermane::Get_Dir() const
-{
-	return XMLoadFloat3(&m_vDir);
-}
-
-void CSilvermane::Set_Dir(const _fvector& _svDir)
-{
-	_vector svDir = XMVector4Normalize(_svDir);
-	XMStoreFloat3(&m_vDir, svDir);
-}
-
-void CSilvermane::Set_Rotation(const _float3& _vRotation)
-{
-	m_vRotation = _vRotation;
+	return m_fPlusAngle;
 }
 
 void CSilvermane::Set_EquipWeapon(const _bool _isEquipWeapon)
@@ -281,6 +268,17 @@ const _bool CSilvermane::Is_EquipWeapon() const
 	return m_isEquipWeapon;
 }
 
+void CSilvermane::Add_PlusAngle(const _float _fDeltaAngle)
+{
+	_float fDeltaAngle = _fDeltaAngle * 1000.f;
+	m_fPlusAngle += fDeltaAngle;
+	m_fDeltaRadian = XMConvertToRadians(fDeltaAngle);
+	if (-45.f > m_fPlusAngle)
+		m_fPlusAngle = -45.f;
+	else if (45.f < m_fPlusAngle)
+		m_fPlusAngle = 45.f;
+}
+
 _int CSilvermane::Trace_CameraLook(const _double& _dDeltaTime)
 {
 	_vector svCameraLook = m_pCamera->Get_Look();
@@ -290,21 +288,24 @@ _int CSilvermane::Trace_CameraLook(const _double& _dDeltaTime)
 	svLook = XMVector3Normalize(XMVectorSetY(svLook, 0.f));
 	_vector svAngle = XMVector3AngleBetweenVectors(svCameraLook, svLook);
 
-	XMStoreFloat3(&m_vAngle, svAngle);
+	_float fRadian;
+	XMStoreFloat(&fRadian, svAngle);
+
+	_float fPlusRadian = XMConvertToRadians(m_fPlusAngle);
 
 	_vector svCross = XMVector3Cross(svLook, svCameraLook);
 	if (0 < XMVectorGetY(svCross))
 	{
-		m_pTransform->Rotation_Axis(m_pTransform->Get_State(CTransform::STATE_UP), m_vAngle.y * _dDeltaTime * 2.f);
-		m_vAngle = { XMConvertToDegrees(m_vAngle.x), XMConvertToDegrees(m_vAngle.y), XMConvertToDegrees(m_vAngle.z) };
+		m_pTransform->Rotation_Axis(m_pTransform->Get_State(CTransform::STATE_UP), (fRadian + fPlusRadian) * _dDeltaTime * 3.f);
+		m_fAngle = XMConvertToDegrees(fRadian);
 	}
 	else if (0 > XMVectorGetY(svCross))
 	{
-		m_pTransform->Rotation_Axis(m_pTransform->Get_State(CTransform::STATE_UP), m_vAngle.y * -_dDeltaTime * 2.f);
-		m_vAngle = { -XMConvertToDegrees(m_vAngle.x), -XMConvertToDegrees(m_vAngle.y), -XMConvertToDegrees(m_vAngle.z) };
+		m_pTransform->Rotation_Axis(m_pTransform->Get_State(CTransform::STATE_UP), (fRadian - fPlusRadian) * -_dDeltaTime * 3.f);
+		m_fAngle = -XMConvertToDegrees(fRadian);
 	}
 	else
-		m_vAngle = { 0.f, 0.f, 0.f };
+		m_fAngle = 0.f;
 
 	return _int();
 }

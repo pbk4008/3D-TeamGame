@@ -79,11 +79,32 @@ _int CSilvermane_JogLeftStart::KeyCheck(const _double& _dDeltaTime)
 
 	if (g_pGameInstance->getkeyPress(DIK_A))
 	{
-		if (m_pAnimationController->Is_Finished())
+		_float fPlusAngle = m_pSilvermane->Get_PlusAngle();
+		if (g_pGameInstance->getkeyPress(DIK_W))
 		{
-			if (FAILED(m_pStateController->Change_State(L"JogLeft")))
-				return -1;
+			if (FAILED(m_pStateController->Change_State(L"JogFwd")))
+				return E_FAIL;
 			return STATE_CHANGE;
+		}
+		if (g_pGameInstance->getkeyPress(DIK_S))
+		{
+			if (FAILED(m_pStateController->Change_State(L"JogBwd")))
+				return E_FAIL;
+			return STATE_CHANGE;
+		}
+		else
+		{
+			if (0.f < fPlusAngle)
+				m_pSilvermane->Add_PlusAngle(-_dDeltaTime);
+			else if (0.f > fPlusAngle)
+				m_pSilvermane->Add_PlusAngle(_dDeltaTime);
+
+			if (m_pAnimationController->Is_Finished())
+			{
+				if (FAILED(m_pStateController->Change_State(L"JogLeft")))
+					return -1;
+				return STATE_CHANGE;
+			}
 		}
 	}
 	else if (g_pGameInstance->getkeyPress(DIK_D))

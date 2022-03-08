@@ -74,37 +74,23 @@ _int CSilvermane_JogFwd::KeyCheck(const _double& _dDeltaTime)
 
 	if (g_pGameInstance->getkeyPress(DIK_W))
 	{
+		_float fPlusAngle = m_pSilvermane->Get_PlusAngle();
 		if (g_pGameInstance->getkeyPress(DIK_A))
 		{
-			_float3 vRotation = m_pSilvermane->Get_Rotation();
-			if (-45.f < vRotation.y)
-			{
-				vRotation.y += -180.f * _dDeltaTime;
-				m_pSilvermane->Set_Rotation(vRotation);
-			}
+			if (-45.f < fPlusAngle)
+				m_pSilvermane->Add_PlusAngle(-_dDeltaTime);
 		}
 		else if (g_pGameInstance->getkeyPress(DIK_D))
 		{
-			_float3 vRotation = m_pSilvermane->Get_Rotation();
-			if (45.f > vRotation.y)
-			{
-				vRotation.y += 180.f * _dDeltaTime;
-				m_pSilvermane->Set_Rotation(vRotation);
-			}
+			if (45.f > fPlusAngle)
+				m_pSilvermane->Add_PlusAngle(_dDeltaTime);
 		}
 		else
 		{
-			_float3 vRotation = m_pSilvermane->Get_Rotation();
-			if (0.f > vRotation.y)
-			{
-				vRotation.y += 180.f * _dDeltaTime;
-				m_pSilvermane->Set_Rotation(vRotation);
-			}
-			if (0.f < vRotation.y)
-			{
-				vRotation.y += -180.f * _dDeltaTime;
-				m_pSilvermane->Set_Rotation(vRotation);
-			}
+			if (0.f < fPlusAngle)
+				m_pSilvermane->Add_PlusAngle(-_dDeltaTime);
+			else if (0.f > fPlusAngle)
+				m_pSilvermane->Add_PlusAngle(_dDeltaTime);
 		}
 	}
 	else if (g_pGameInstance->getkeyPress(DIK_S))

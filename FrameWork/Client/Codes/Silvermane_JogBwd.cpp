@@ -80,11 +80,24 @@ _int CSilvermane_JogBwd::KeyCheck(const _double& _dDeltaTime)
 
 	if (g_pGameInstance->getkeyPress(DIK_S))
 	{
+		_float fPlusAngle = m_pSilvermane->Get_PlusAngle();
 		if (g_pGameInstance->getkeyPress(DIK_A))
-			m_pTransform->Go_Left(_dDeltaTime * 0.2f);
-
-		if (g_pGameInstance->getkeyPress(DIK_D))
-			m_pTransform->Go_Right(_dDeltaTime * 0.2f);
+		{
+			if (45.f > fPlusAngle)
+				m_pSilvermane->Add_PlusAngle(_dDeltaTime);
+		}
+		else if (g_pGameInstance->getkeyPress(DIK_D))
+		{
+			if (-45.f < fPlusAngle)
+				m_pSilvermane->Add_PlusAngle(-_dDeltaTime);
+		}
+		else
+		{
+			if (0.f < fPlusAngle)
+				m_pSilvermane->Add_PlusAngle(-_dDeltaTime);
+			else if (0.f > fPlusAngle)
+				m_pSilvermane->Add_PlusAngle(_dDeltaTime);
+		}
 	}
 	else if (g_pGameInstance->getkeyPress(DIK_W))
 	{

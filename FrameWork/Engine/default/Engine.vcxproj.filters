@@ -434,9 +434,12 @@
     </ClInclude>
     <ClInclude Include="..\bin\ShaderFiles\Shader_Calculate.hpp">
       <Filter>00.Utility\04.Manager\03. RenderTargetManager</Filter>
-	</ClInclude>
+    </ClInclude>
     <ClInclude Include="..\public\Instancing_Mesh.h">
       <Filter>00.Utility\03.Component\05.VIBuffer\09.Instance\01. InstanceMesh</Filter>
+    </ClInclude>
+    <ClInclude Include="..\private\MeshCollider.h">
+      <Filter>00.Utility\03.Component\00.Collider\03.MeshCollider</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

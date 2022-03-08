@@ -30,16 +30,14 @@ private:
 public:
 	CTransform* Get_Transform() const;
 	CModel* Get_Model() const;
-	const _float3& Get_Rotation() const;
-	const _fvector& Get_Dir() const;
+	const _float Get_PlusAngle() const;
 
-	void Set_Dir(const _fvector& _svDir);
-	void Set_Rotation(const _float3& _vRotation);
 	void Set_EquipWeapon(const _bool _isEquipWeapon);
 	void Set_WeaponFixedBone(CHierarchyNode* _pFixedBone);
 	void Set_Camera(CCamera_Silvermane* _pCamera);
 
 	const _bool Is_EquipWeapon() const;
+	void Add_PlusAngle(const _float _fDeltaAngle);
 
 private:
 	_int Trace_CameraLook(const _double& _dDeltaTime);
@@ -53,9 +51,9 @@ private:
 	CWeapon* m_pWeapon = nullptr;
 	_bool m_isEquipWeapon = false;
 
-	_float3 m_vRotation = { 0.f, 0.f, 0.f };
-	_float3 m_vDir = { 0.f, 0.f, 0.f };
-	_float3 m_vAngle = { 0.f, 0.f, 0.f };
+	_float m_fAngle = 0.f;
+	_float m_fPlusAngle = 0.f;
+	_float m_fDeltaRadian = 0.f;
 
 public:
 	static CSilvermane* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext);

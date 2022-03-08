@@ -76,7 +76,7 @@ HRESULT CMonster_Bastion_Spear::Ready_Components()
 	transformDesc.fSpeedPerSec = 10.f;
 	transformDesc.fRotationPerSec = XMConvertToRadians(90.f);
 	m_pTransform->Set_TransformDesc(transformDesc);
-	_float4 vPosition = { -3.f, 0.f, 3.f, 1.f };
+	_float4 vPosition = { -3.f, 0.f, -3.f, 1.f };
 	m_pTransform->Set_State(CTransform::STATE_POSITION, XMLoadFloat4(&vPosition));
 
 	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_TEST_JS, L"Model_Bastion_Spear", L"Model", (CComponent**)&m_pModel)))
