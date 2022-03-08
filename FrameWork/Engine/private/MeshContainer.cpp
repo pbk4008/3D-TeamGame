@@ -237,7 +237,7 @@ HRESULT CMeshContainer::Set_UpVerticesDesc(CModel* pModel, aiMesh* pMesh, _fmatr
 		VTXMESH* pVertices = (VTXMESH*)((_byte*)m_pVertices + (i * m_iStride));
 
 		memcpy(&pVertices->vPosition, &pMesh->mVertices[i], sizeof(_float3));
-		_fvector Temp = XMVector3TransformCoord(XMLoadFloat3(&pVertices->vPosition), PivotMatrix);
+ 		_fvector Temp = XMVector3TransformCoord(XMLoadFloat3(&pVertices->vPosition), PivotMatrix);
 		XMStoreFloat3(&pVertices->vPosition, Temp);
 		
 		_vector			vNormal;

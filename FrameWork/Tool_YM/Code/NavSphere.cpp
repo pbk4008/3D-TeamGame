@@ -41,7 +41,7 @@ HRESULT CNavSphere::NativeConstruct(void* pArg)
 	matWorld._43 = m_fPostion.z;
 
 	m_pTransform->Set_WorldMatrix(XMLoadFloat4x4(&matWorld));
-	m_pTransform->SetTransformDesc(5.0f, 45.0f);
+	m_pTransform->Set_TransformDesc(5.0f, 45.0f);
 
 	return S_OK;
 }
@@ -270,6 +270,8 @@ HRESULT CNavSphere::SetUp_Components(void)
 	/* Com_Model */
 	if (FAILED(__super::SetUp_Components(TAB_STATIC, L"Prototype_Component_NavSphere", L"Com_Model", (CComponent**)&m_pModelCom)))
 		return E_FAIL;
+
+	return S_OK;
 }
 
 void CNavSphere::Set_WVPMatrix(void)

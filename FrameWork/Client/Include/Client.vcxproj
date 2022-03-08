@@ -201,6 +201,9 @@
     <ClInclude Include="..\Headers\Monster_Bastion_Shooter.h" />
     <ClInclude Include="..\Headers\Monster_Bastion_Spear.h" />
     <ClInclude Include="..\Headers\Monster_Bastion_Sword.h" />
+    <ClInclude Include="..\Headers\Monster_BronzeAnimus.h" />
+    <ClInclude Include="..\Headers\Monster_Crawler.h" />
+    <ClInclude Include="..\Headers\Monster_EarthAberrant.h" />
     <ClInclude Include="..\Headers\Needle.h" />
     <ClInclude Include="..\Headers\Plane_Test.h" />
     <ClInclude Include="..\Headers\Silvermane.h">
@@ -258,6 +261,9 @@
     <ClCompile Include="..\Codes\Monster_Bastion_Shooter.cpp" />
     <ClCompile Include="..\Codes\Monster_Bastion_Spear.cpp" />
     <ClCompile Include="..\Codes\Monster_Bastion_Sword.cpp" />
+    <ClCompile Include="..\Codes\Monster_BronzeAnimus.cpp" />
+    <ClCompile Include="..\Codes\Monster_Crawler.cpp" />
+    <ClCompile Include="..\Codes\Monster_EarthAberrant.cpp" />
     <ClCompile Include="..\Codes\Needle.cpp" />
     <ClCompile Include="..\Codes\Plane_Test.cpp" />
     <ClCompile Include="..\Codes\Silvermane.cpp">

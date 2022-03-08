@@ -147,12 +147,12 @@ HRESULT CMainApp::Init_Camera()
 	CCamera::CAMERADESC tDesc;
 	tDesc.eType = CCamera::CAMERATYPE::CAMERA_PROJECTION;
 	tDesc.pCameraTag = L"MainCamera";
-	/*tDesc.vEye = _float4(0.f, 0.f, 0.f, 1.f);
+	tDesc.vEye = _float4(0.f, 0.f, 0.f, 1.f);
 	tDesc.vAt = _float4(0.f, 0.f, 1.f, 1.f);
-	tDesc.vAxisY = _float4(0.f, 1.f, 0.f, 0.f);*/
-	tDesc.vEye = _float4(0.f, 2.f, -5.f, 1.f);
-	tDesc.vAt = _float4(0.f, 2.f, 0.f, 1.f);
-	tDesc.vAxisY = _float4(0.f, 1.f, 0.f, 1.f);
+	tDesc.vAxisY = _float4(0.f, 1.f, 0.f, 0.f);
+	//tDesc.vEye = _float4(0.f, 2.f, -5.f, 1.f);
+	//tDesc.vAt = _float4(0.f, 2.f, 0.f, 1.f);
+	//tDesc.vAxisY = _float4(0.f, 1.f, 0.f, 1.f);
 	tDesc.fFovy = XMConvertToRadians(60.f);;
 	tDesc.fFar = 300.f;
 	tDesc.fNear = 0.1f;

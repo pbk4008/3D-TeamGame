@@ -29,7 +29,7 @@ HRESULT CTransform::NativeConstruct(void * pArg)
 	return S_OK;
 }
 
-void CTransform::SetTransformDesc(_float fSpeedPerSec, _float fAnglePerSec)
+void CTransform::Set_TransformDesc(_float fSpeedPerSec, _float fAnglePerSec)
 {
 	m_TransformDesc.fSpeedPerSec = fSpeedPerSec;
 	m_TransformDesc.fRotationPerSec = fAnglePerSec;

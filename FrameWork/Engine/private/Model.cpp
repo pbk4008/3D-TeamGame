@@ -451,7 +451,7 @@ HRESULT CModel::Create_MeshContainer()
 		if (!pMesh)
 			return E_FAIL;
 
-		CMeshContainer* pMeshContainer = CMeshContainer::Create(m_pDevice, m_pDeviceContext, this, pMesh, m_eMeshType == TYPE_STATIC ? XMLoadFloat4x4(&m_PivotMatrix) : XMMatrixIdentity());
+		CMeshContainer* pMeshContainer = CMeshContainer::Create(m_pDevice, m_pDeviceContext, this, pMesh, (m_eMeshType == TYPE_STATIC) ? XMLoadFloat4x4(&m_PivotMatrix) : XMMatrixIdentity());
 		if (!pMeshContainer)
 			return E_FAIL;
 
@@ -898,7 +898,7 @@ void CModel::Free()
 
 	for (auto& pMtrlMeshContainer : m_MeshContainers)
 	{
-		for(auto& pMeshContainer : pMtrlMeshContainer)
+		for (auto& pMeshContainer : pMtrlMeshContainer)
 			Safe_Release(pMeshContainer);
 		pMtrlMeshContainer.clear();
 	}

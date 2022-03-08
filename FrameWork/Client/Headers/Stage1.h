@@ -25,7 +25,8 @@ public:
 	virtual _int Tick(_double TimeDelta);
 	virtual HRESULT Render();
 private:
-	HRESULT Ready_Gameobject();
+	HRESULT Ready_MapObject();
+	HRESULT Ready_Monster(const _tchar* LayerTag);
 	HRESULT Ready_Effect(const _tchar* pDataFilePath);
 	HRESULT Ready_UI(const _tchar* pDataFilePath);
 public:

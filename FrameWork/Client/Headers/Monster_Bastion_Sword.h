@@ -2,9 +2,12 @@
 
 #include "Actor.h"
 
-BEGIN(Client)
+BEGIN(Engine)
+class CModel;
+END
 
-class CMonster_Bastion_Sword : public CActor
+BEGIN(Client)
+class CMonster_Bastion_Sword final : public CActor
 {
 private:
 	explicit CMonster_Bastion_Sword(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext);
@@ -19,16 +22,18 @@ public:
 	virtual HRESULT Render() override;
 
 private:
-	HRESULT Ready_Components();
+	virtual HRESULT SetUp_Components();
 
 private:
-	CModel* m_pModel = nullptr;
-	CAnimationController* m_pAnimationController = nullptr;
+	CModel* m_pModelCom = nullptr;
+	CAnimationController* m_pAnimControllerCom = nullptr;
+
+private:
+	_uint itest = 0;
 
 public:
 	static CMonster_Bastion_Sword* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext);
 	virtual CGameObject* Clone(void* _pArg = nullptr) override;
 	virtual void Free() override;
 };
-
 END

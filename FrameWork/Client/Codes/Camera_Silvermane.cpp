@@ -175,6 +175,9 @@ CGameObject* CCamera_Silvermane::Clone(void* _pArg)
 
 void CCamera_Silvermane::Free()
 {
+	Safe_Release(m_pLocalTransform);
+	Safe_Release(m_pWorldTransform);
+
 	Safe_Release(m_pCamera);
 
 	Safe_Release(m_pWorldTransform);
