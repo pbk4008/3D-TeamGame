@@ -40,31 +40,20 @@ private:
 	PxScene* m_pScene;
 	PxCooking* m_pCooking;
 	PxDefaultCpuDispatcher* m_pDispatcher;
-	ContactReportCallback* m_pContactRePort;
-};
-static PxFilterFlags contactReportFilterShader(PxFilterObjectAttributes attributes0, PxFilterData filterData0,
-	PxFilterObjectAttributes attributes1, PxFilterData filterData1,
-	PxPairFlags& pairFlags, const void* constantBlock, _uint constantBlockSize)
-{
-	pairFlags = PxPairFlag::eSOLVE_CONTACT
-		| PxPairFlag::eDETECT_DISCRETE_CONTACT
-		| PxPairFlag::eNOTIFY_TOUCH_FOUND
-		| PxPairFlag::eNOTIFY_TOUCH_PERSISTS
-		| PxPairFlag::eNOTIFY_TOUCH_LOST
-		| PxPairFlag::eNOTIFY_CONTACT_POINTS;
 
-	return PxFilterFlag::eDEFAULT;
-}
-
-class ContactReportCallback : public PxSimulationEventCallback
-{
 public:
-	virtual void onConstraintBreak(PxConstraintInfo* constraints, PxU32 count) {}
-	virtual void onWake(PxActor** actors, PxU32 count) {}
-	virtual void onSleep(PxActor** actors, PxU32 count) {}
-	virtual void onAdvance(const PxRigidBody* const*, const PxTransform*, const PxU32) {}
-	virtual void onContact(const PxContactPairHeader& pairHeader, const PxContactPair* pairs, PxU32 nbPairs)override;
-	virtual void onTrigger(PxTriggerPair* pairs, PxU32 count)override;
+	class ContactReportCallback : public PxSimulationEventCallback
+	{
+	public:
+		virtual void onConstraintBreak(PxConstraintInfo* constraints, PxU32 count) {}
+		virtual void onWake(PxActor** actors, PxU32 count) {}
+		virtual void onSleep(PxActor** actors, PxU32 count) {}
+		virtual void onAdvance(const PxRigidBody* const*, const PxTransform*, const PxU32) {}
+		virtual void onContact(const PxContactPairHeader& pairHeader, const PxContactPair* pairs, PxU32 nbPairs)override;
+		virtual void onTrigger(PxTriggerPair* pairs, PxU32 count)override;
+	};
+
+private: ContactReportCallback	m_pContactRePort;
 };
 #endif
 END

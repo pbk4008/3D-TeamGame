@@ -1,27 +1,20 @@
 #include "Shader_RenderState.hpp"
 
-//#pragma pack_matrix(row_major)
-
-cbuffer ShadeCheck
-{
-	bool g_bool = false;
-};
-
 cbuffer Matrices
 {
-	matrix		g_WorldMatrix  = (matrix)0;
-	matrix		g_ViewMatrix;	
-	matrix		g_ProjMatrix;
+	matrix g_WorldMatrix = (matrix) 0;
+	matrix g_ViewMatrix;
+	matrix g_ProjMatrix;
 };
 
 struct BoneMatrixArray
 {
-	matrix		Bone[256];
+	matrix Bone[256];
 };
 
-cbuffer	BoneMatricesBuffer
+cbuffer BoneMatricesBuffer
 {
-	BoneMatrixArray		g_BoneMatrices;
+	BoneMatrixArray g_BoneMatrices;
 };
 
 cbuffer LightBuffer
@@ -30,13 +23,17 @@ cbuffer LightBuffer
 	matrix g_LightProj;
 };
 
+cbuffer ShadeCheck
+{
+	bool g_bool = false;
+};
 
-texture2D	g_DiffuseTexture;
-texture2D	g_ShadowTexture;
-texture2D	g_BiNormalTexture;
+texture2D g_DiffuseTexture;
+texture2D g_ShadowTexture;
+texture2D g_BiNormalTexture;
 
 sampler DefaultSampler = sampler_state
-{		
+{
 	filter = min_mag_mip_linear;
 	AddressU = wrap;
 	AddressV = wrap;
@@ -45,35 +42,35 @@ sampler DefaultSampler = sampler_state
 
 struct VS_IN
 {
-	float3		vPosition : POSITION;
-	float3		vNormal : NORMAL;
-	float2		vTexUV : TEXCOORD0;
-	float3		vTangent : TANGENT;
-	float3		vBiNormal : BINORMAL;
+	float3 vPosition : POSITION;
+	float3 vNormal : NORMAL;
+	float2 vTexUV : TEXCOORD0;
+	float3 vTangent : TANGENT;
+	float3 vBiNormal : BINORMAL;
 };
 
 struct VS_OUT
 {
-	float4		vPosition : SV_POSITION;
-	float4		vNormal : NORMAL;
-	float2		vTexUV : TEXCOORD0;		
-	float4		vTangent : TANGENT;
-	float4		vBiNormal : BINORMAL;
-	float4		vProjPos : TEXCOORD1;
-	float4		vViewPos : TEXCOORD2;
+	float4 vPosition : SV_POSITION;
+	float4 vNormal : NORMAL;
+	float2 vTexUV : TEXCOORD0;
+	float4 vTangent : TANGENT;
+	float4 vBiNormal : BINORMAL;
+	float4 vProjPos : TEXCOORD1;
+	float4 vViewPos : TEXCOORD2;
 };
 
 VS_OUT VS_MAIN_STATIC(VS_IN In)
 {
-	VS_OUT			Out = (VS_OUT)0;
+	VS_OUT Out = (VS_OUT) 0;
 
 
-	matrix			matWV, matWVP;
+	matrix matWV, matWVP;
 	
 	matWV = mul(g_WorldMatrix, g_ViewMatrix);
 	matWVP = mul(matWV, g_ProjMatrix);
 
-	Out.vPosition = mul(vector(In.vPosition, 1.f), matWVP);	
+	Out.vPosition = mul(vector(In.vPosition, 1.f), matWVP);
 	Out.vNormal = normalize(mul(vector(In.vNormal, 0.f), g_WorldMatrix));
 	Out.vTexUV = In.vTexUV;
 	
@@ -162,15 +159,15 @@ struct PS_IN
 
 struct PS_OUT
 {
-	vector		vDiffuse : SV_TARGET0;
-	vector		vNormal : SV_TARGET1;
-	vector		vDepth : SV_TARGET2;
-	vector		vPosition : SV_TARGET3;
+	vector vDiffuse : SV_TARGET0;
+	vector vNormal : SV_TARGET1;
+	vector vDepth : SV_TARGET2;
+	vector vPosition : SV_TARGET3;
 };
 
 PS_OUT PS_MAIN(PS_IN In)
 {
-	PS_OUT		Out = (PS_OUT)0;
+	PS_OUT Out = (PS_OUT) 0;
 	
 	Out.vPosition = In.vViewPos;
 	Out.vDiffuse = g_DiffuseTexture.Sample(DefaultSampler, In.vTexUV);
@@ -185,7 +182,7 @@ PS_OUT PS_MAIN(PS_IN In)
 	/* -1 ~ 1 */
 	/* 0 ~ 1 */
 	//Out.vNormal = vector(In.vNormal.xyz * 0.5f + 0.5f, 0.f);
-	if(g_bool == true)
+	if (g_bool == true)
 		Out.vNormal = mul(vector(vNormal.xyz, 0.f), matTangent);
 	else
 		Out.vNormal = vector(In.vNormal.xyz * 0.5f + 0.5f, 0.f);
@@ -193,7 +190,7 @@ PS_OUT PS_MAIN(PS_IN In)
 	Out.vDepth = vector(In.vProjPos.z / In.vProjPos.w, In.vProjPos.w / 300.0f, 0.0f, 0.0f);
 
 
-	return Out;	
+	return Out;
 }
 // SHADOWMAP
 //*---------------------------------------------------------------------------------------------*
@@ -218,12 +215,12 @@ PS_OUT_SHADOW PS_MAIN_SHADOW(PS_IN_SHADOW In)
 	float4 color = g_DiffuseTexture.Sample(DefaultSampler, In.vTexUV);
 	float Alpha = 1.f;
 	
-	if(color.r < 0.1f)
+	if (color.r < 0.1f)
 	{
 		Alpha = color.a;
 	}
 	
-	Out.vShadowDepthMap = vector(fDepth.xxx,Alpha);
+	Out.vShadowDepthMap = vector(fDepth.xxx, Alpha);
 	
 	return Out;
 }
@@ -283,13 +280,33 @@ PS_OUT_SHADESHADOW PS_MAIN_SHADESHADOW(PS_IN_SHADESHADOW In)
 				Out.vShadeShadow.a = Diffuse.a;
 		}
 	}
-		return Out;
+	return Out;
 }
 //*---------------------------------------------------------------------------------------------*
-
-technique11			DefaultTechnique
+struct PS_OUT_TOOL
 {
-	pass StaticMesh//------------------------------------------------------------------------------------0 StaticMeshRender
+	vector vDiffuse : SV_TARGET0;
+	vector vNormal : SV_TARGET1;
+	vector vDepth : SV_TARGET2;
+	
+};
+
+PS_OUT_TOOL PS_MAIN_TOOL(PS_IN In)
+{
+	PS_OUT_TOOL Out = (PS_OUT_TOOL) 0;
+
+	Out.vDiffuse = g_DiffuseTexture.Sample(DefaultSampler, In.vTexUV);
+	Out.vDiffuse.a = 1.f;
+
+	Out.vNormal = vector(In.vNormal.xyz * 0.5f + 0.5f, 0.f);
+	Out.vDepth = vector(In.vProjPos.z / In.vProjPos.w, In.vProjPos.w / 300.0f, 0.0f, 0.0f);
+
+	return Out;
+}
+
+technique11 DefaultTechnique
+{
+	pass StaticMesh //------------------------------------------------------------------------------------0 StaticMeshRender
 	{
 		SetRasterizerState(CullMode_Default);
 		SetDepthStencilState(ZDefault, 0);
@@ -298,9 +315,31 @@ technique11			DefaultTechnique
 		/* 진입점함수를 지정한다. */
 		VertexShader = compile vs_5_0 VS_MAIN_STATIC();
 		GeometryShader = NULL;
-		PixelShader = compile ps_5_0  PS_MAIN();
+		PixelShader = compile ps_5_0 PS_MAIN_TOOL();
 	}
-	pass ShadowStaticMesh //------------------------------------------------------------------------------------1 Static ShadowMap
+	pass StaticMeshWire //------------------------------------------------------------------------------------1 StaticMeshRenderWireFrame
+	{
+		SetRasterizerState(CullMode_Wireframe);
+		SetDepthStencilState(ZDefault, 0);
+		SetBlendState(BlendDisable, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+
+		/* 진입점함수를 지정한다. */
+		VertexShader = compile vs_5_0 VS_MAIN_STATIC();
+		GeometryShader = NULL;
+		PixelShader = compile ps_5_0 PS_MAIN_TOOL();
+	}
+	pass StaticMeshClient //------------------------------------------------------------------------------------2 StaticMeshRenderClient
+	{
+		SetRasterizerState(CullMode_Default);
+		SetDepthStencilState(ZDefault, 0);
+		SetBlendState(BlendDisable, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+
+		/* 진입점함수를 지정한다. */
+		VertexShader = compile vs_5_0 VS_MAIN_STATIC();
+		GeometryShader = NULL;
+		PixelShader = compile ps_5_0 PS_MAIN();
+	}
+	pass ShadowStaticMesh //------------------------------------------------------------------------------------3 Static ShadowMap
 	{
 		SetRasterizerState(CullMode_Default);
 		SetDepthStencilState(ZDefault, 0);
@@ -312,7 +351,7 @@ technique11			DefaultTechnique
 		PixelShader = compile ps_5_0 PS_MAIN_SHADOW();
 	}
 
-	pass ShadeShadowStaticMesh //------------------------------------------------------------------------------------2 Static Shade_Shadow
+	pass ShadeShadowStaticMesh //------------------------------------------------------------------------------------4 Static Shade_Shadow
 	{
 		SetRasterizerState(CullMode_Default);
 		SetDepthStencilState(ZDefault, 0);

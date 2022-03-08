@@ -51,6 +51,21 @@ _int CMainCamera::Tick(_double fDeltaTime)
 	if (g_pGameInstance->getkeyPress(DIK_DOWN))
 		m_pTransform->Go_BackWard(fDeltaTime);
 
+	_long	MouseMove = 0;
+
+	if (MouseMove = g_pGameInstance->getMouseMoveState(CInputDev::MOUSEMOVESTATE::MM_X))
+	{
+		if (g_pGameInstance->getMousePress(CInputDev::MOUSESTATE::MB_RBUTTON))
+			m_pTransform->Rotation_Axis(XMVectorSet(0.f, 1.f, 0.f, 0.f), fDeltaTime * MouseMove);
+	}
+
+	if (MouseMove = g_pGameInstance->getMouseMoveState(CInputDev::MOUSEMOVESTATE::MM_Y))
+	{
+		if (g_pGameInstance->getMousePress(CInputDev::MOUSESTATE::MB_RBUTTON))
+			m_pTransform->Rotation_Axis(m_pTransform->Get_State(CTransform::STATE_RIGHT), fDeltaTime * MouseMove);
+	}
+
+
 	m_pCamera->Update_Matrix(m_pTransform->Get_WorldMatrix());
 
 	return _int();

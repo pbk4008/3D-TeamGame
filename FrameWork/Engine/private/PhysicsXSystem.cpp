@@ -8,10 +8,23 @@ CPhysicsXSystem::CPhysicsXSystem()
 	, m_pPhysics(nullptr)
 	, m_pScene(nullptr)
 	, m_pDispatcher(nullptr)
-	, m_pContactRePort(nullptr)
 	, m_pCooking(nullptr)
 {
 }
+PxFilterFlags contactReportFilterShader(PxFilterObjectAttributes attributes0, PxFilterData filterData0,
+	PxFilterObjectAttributes attributes1, PxFilterData filterData1,
+	PxPairFlags& pairFlags, const void* constantBlock, PxU32 constantBlockSize)
+{
+	pairFlags = PxPairFlag::eSOLVE_CONTACT
+		| PxPairFlag::eDETECT_DISCRETE_CONTACT
+		| PxPairFlag::eNOTIFY_TOUCH_FOUND
+		| PxPairFlag::eNOTIFY_TOUCH_PERSISTS
+		| PxPairFlag::eNOTIFY_TOUCH_LOST
+		| PxPairFlag::eNOTIFY_CONTACT_POINTS;
+
+	return PxFilterFlag::eDEFAULT;
+}
+
 HRESULT CPhysicsXSystem::Init_PhysicsX()
 {
 	m_pFoundation = PxCreateFoundation(PX_PHYSICS_VERSION, m_Allocator, m_ErrorCallBack);
@@ -26,9 +39,9 @@ HRESULT CPhysicsXSystem::Init_PhysicsX()
 
 	cookingParams.meshPreprocessParams = PxMeshPreprocessingFlag::eDISABLE_CLEAN_MESH;
 
-	PxCooking* pCooking = PxCreateCooking(PX_PHYSICS_VERSION, *m_pFoundation, cookingParams);
+	/*PxCooking* pCooking*/m_pCooking = PxCreateCooking(PX_PHYSICS_VERSION, *m_pFoundation, cookingParams);
 
-	if (!pCooking)
+	if (!m_pCooking)
 		return E_FAIL;
 
 	if (FAILED(Intit_Scene()))
@@ -133,13 +146,14 @@ HRESULT CPhysicsXSystem::Intit_Scene()
 {
 	if (!m_pPhysics)
 		return E_FAIL;
+	m_pDispatcher = PxDefaultCpuDispatcherCreate(2);
+
 	PxSceneDesc sceneDesc(m_pPhysics->getTolerancesScale());
 	sceneDesc.gravity = PxVec3(0.f, -9.8f, 0.f);
-	m_pDispatcher = PxDefaultCpuDispatcherCreate(2);
 	sceneDesc.cpuDispatcher = m_pDispatcher;
 	sceneDesc.filterShader = contactReportFilterShader;
-	m_pContactRePort = new ContactReportCallback();
-	sceneDesc.simulationEventCallback = m_pContactRePort;
+	/*m_pContactRePort = new ContactReportCallback();*/
+	sceneDesc.simulationEventCallback = &m_pContactRePort;
 
 	m_pScene = m_pPhysics->createScene(sceneDesc);
 
@@ -152,14 +166,21 @@ HRESULT CPhysicsXSystem::Intit_Scene()
 
 void CPhysicsXSystem::Free()
 {
-	Safe_Delete(m_pContactRePort);
-	PX_RELEASE(m_pScene);
-	PX_RELEASE(m_pDispatcher);
-	PX_RELEASE(m_pPhysics);
-	PX_RELEASE(m_pFoundation);
+	//Safe_Delete(m_pContactRePort);
+
+	m_pScene->release();
+	m_pDispatcher->release();
+	m_pCooking->release();
+	m_pPhysics->release();
+	m_pFoundation->release();
+	//PX_RELEASE(m_pScene);
+	//PX_RELEASE(m_pDispatcher);
+	//PX_RELEASE(m_pCooking);
+	//PX_RELEASE(m_pPhysics);
+	//PX_RELEASE(m_pFoundation);
 }
 
-void ContactReportCallback::onContact(const PxContactPairHeader& pairHeader, const PxContactPair* pairs, PxU32 nbPairs)
+void CPhysicsXSystem::ContactReportCallback::onContact(const PxContactPairHeader& pairHeader, const PxContactPair* pairs, PxU32 nbPairs)
 {
 	for (_uint i = 0; i < nbPairs; i++)
 	{
@@ -186,7 +207,7 @@ void ContactReportCallback::onContact(const PxContactPairHeader& pairHeader, con
 	}
 }
 
-void ContactReportCallback::onTrigger(PxTriggerPair* pairs, PxU32 count)
+void CPhysicsXSystem::ContactReportCallback::onTrigger(PxTriggerPair* pairs, PxU32 count)
 {
 	for (_uint i = 0; i < count; i++)
 	{

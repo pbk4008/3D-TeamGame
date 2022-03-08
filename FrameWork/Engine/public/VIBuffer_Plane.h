@@ -18,7 +18,7 @@ public:
 
 	/* for. Picking */
 public:
-	FACEINDICES32*  Get_Indices(void)  { return m_pIndices; }
+	void*			Get_Indices(void)  { return m_pIndices; }
 	VTXTEX*			Get_Vertices(void) { return (VTXTEX*)m_pVertices; }
 	_uint			Get_NumFaces(void) { return m_iNumPrimitive; }
 
@@ -26,9 +26,6 @@ public:
 	void* getVertices() { return m_pVertices; }
 	_uint getVerteicesX() { return m_iNumVerticesX; }
 	_uint getVerteicesZ() { return m_iNumVerticesZ; }
-
-public:
-	FACEINDICES32* m_pIndices;
 
 public:
 	_uint		m_iNumVerticesX = 0;

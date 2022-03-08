@@ -447,6 +447,5 @@ CComponent* CAnimationController::Clone(void* _pArg)
 
 void CAnimationController::Free()
 {
-
 	__super::Free();
 }

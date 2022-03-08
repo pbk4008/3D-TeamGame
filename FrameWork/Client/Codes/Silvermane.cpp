@@ -65,10 +65,12 @@ HRESULT CSilvermane::NativeConstruct(void* _pArg)
 
 	if (FAILED(Ready_Components()))
 		return E_FAIL;
+
 	if (FAILED(Ready_States()))
 		return E_FAIL;
 
 	CHierarchyNode* pWeaponBone = m_pModel->Get_BoneMatrix("weapon_r");
+
 	if (g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_JS, L"Weapon", L"Needle", pWeaponBone, (CGameObject**)&m_pWeapon))
 		return E_FAIL;
 	m_pWeapon->Set_Owner(this);

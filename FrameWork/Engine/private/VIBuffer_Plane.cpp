@@ -7,7 +7,6 @@ CVIBuffer_Plane::CVIBuffer_Plane(ID3D11Device* _pDevice, ID3D11DeviceContext* _p
 
 CVIBuffer_Plane::CVIBuffer_Plane(const CVIBuffer_Plane& _rhs)
 	: CVIBuffer(_rhs)
-	, m_pIndices(_rhs.m_pIndices)
 	, m_iNumVerticesX(_rhs.m_iNumVerticesX)
 	, m_iNumVerticesZ(_rhs.m_iNumVerticesZ)
 
@@ -92,15 +91,15 @@ HRESULT CVIBuffer_Plane::NativeConstruct_Prototype(const _tchar* _pShaderFilePat
 				{ iIndex }
 			};
 
-			m_pIndices[iNumPrimitive]._0 = iIndices[0];
-			m_pIndices[iNumPrimitive]._1 = iIndices[1];
-			m_pIndices[iNumPrimitive]._2 = iIndices[2];
+			((FACEINDICES32*)m_pIndices)[iNumPrimitive]._0 = iIndices[0];
+			((FACEINDICES32*)m_pIndices)[iNumPrimitive]._1 = iIndices[1];
+			((FACEINDICES32*)m_pIndices)[iNumPrimitive]._2 = iIndices[2];
 
 			++iNumPrimitive;
 
-			m_pIndices[iNumPrimitive]._0 = iIndices[0];
-			m_pIndices[iNumPrimitive]._1 = iIndices[2];
-			m_pIndices[iNumPrimitive]._2 = iIndices[3];
+			((FACEINDICES32*)m_pIndices)[iNumPrimitive]._0 = iIndices[0];
+			((FACEINDICES32*)m_pIndices)[iNumPrimitive]._1 = iIndices[2];
+			((FACEINDICES32*)m_pIndices)[iNumPrimitive]._2 = iIndices[3];
 
 			++iNumPrimitive;
 		}
@@ -162,10 +161,4 @@ CComponent* CVIBuffer_Plane::Clone(void* _pArg)
 void CVIBuffer_Plane::Free(void)
 {
 	__super::Free();
-
-
-	if (false == m_isCloned)
-	{
-		Safe_Delete_Array(m_pIndices);
-	}
 }
