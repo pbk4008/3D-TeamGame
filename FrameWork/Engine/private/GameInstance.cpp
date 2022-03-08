@@ -19,7 +19,7 @@ CGameInstance::CGameInstance()
 	, m_pMaterial_Manager(CMaterial_Manager::GetInstance())
 	, m_pSaveManager(CSaveManager::GetInstance())
 	, m_pSoundManager(CSoundMgr::GetInstance())
-	//, m_pPhysicSystem(CPhysicsXSystem::GetInstance())
+	, m_pPhysicSystem(CPhysicsXSystem::GetInstance())
 {
 	Safe_AddRef(m_pFont_Manager);
 	Safe_AddRef(m_pFrustum);
@@ -52,8 +52,8 @@ HRESULT CGameInstance::Initialize_Engine(HINSTANCE hInst, HWND hWnd, _uint iNumL
 	if (FAILED(m_pInput_Device->Init_InputDevice(hInst, hWnd)))
 		return E_FAIL;
 
-	//if (FAILED(m_pPhysicSystem->Init_PhysicsX()))
-	//	return E_FAIL;
+	if (FAILED(m_pPhysicSystem->Init_PhysicsX()))
+		return E_FAIL;
 
 	if (FAILED(m_pMaterial_Manager->NativeConstruct(*ppDeviceOut, *ppDeviceContextOut)))
 		return E_FAIL;
@@ -97,7 +97,7 @@ _int CGameInstance::Tick_Engine(_double TimeDelta)
 	if(m_pPipeLine->getCameraCount())
 		m_pFrustum->Transform_ToWorldSpace(m_pPipeLine->getBaseCamera());
 	
-	//m_pPhysicSystem->UpDate_Collision(TimeDelta);
+	m_pPhysicSystem->UpDate_Collision(TimeDelta);
 
 	iProgress = m_pObject_Manager->LateTick(TimeDelta);
 	if (0 > iProgress)

@@ -81,10 +81,10 @@ HRESULT CMonster_Bastion_Spear::Ready_Components()
 
 	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_TEST_JS, L"Model_Bastion_Spear", L"Model", (CComponent**)&m_pModel)))
 		return E_FAIL;
-	m_pModel->Add_Material(g_pGameInstance->Get_Material(L"Bastion_Tier1_Down"), 0);
-	m_pModel->Add_Material(g_pGameInstance->Get_Material(L"Bastion_Tier1_Top"), 1);
+	m_pModel->Add_Material(g_pGameInstance->Get_Material(L"Mtrl_Bastion_Tier1_Down"), 0);
+	m_pModel->Add_Material(g_pGameInstance->Get_Material(L"Mtrl_Bastion_Tier1_Top"), 1);
 
-	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_TEST_JS, L"Component_AnimationController", L"AnimationController", (CComponent**)&m_pAnimationController)))
+	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_TEST_JS, L"Com_AnimationController", L"AnimationController", (CComponent**)&m_pAnimationController)))
 		return E_FAIL;
 	m_pAnimationController->Set_GameObject(this);
 	m_pAnimationController->Set_Model(m_pModel);

@@ -81,12 +81,12 @@ HRESULT CMonster_Bastion_Shooter::Ready_Components()
 
 	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_TEST_JS, L"Model_Bastion_Shooter", L"Model", (CComponent**)&m_pModel)))
 		return E_FAIL;
-	m_pModel->Add_Material(g_pGameInstance->Get_Material(L"Bastion_Tier1_Top"), 0);
-	m_pModel->Add_Material(g_pGameInstance->Get_Material(L"Bastion_Tier1_Down"), 1);
-	m_pModel->Add_Material(g_pGameInstance->Get_Material(L"Bastion_Fur"), 2);
-	m_pModel->Add_Material(g_pGameInstance->Get_Material(L"Bastion_Crossbow"), 3);
+	m_pModel->Add_Material(g_pGameInstance->Get_Material(L"Mtrl_Bastion_Tier1_Top"), 0);
+	m_pModel->Add_Material(g_pGameInstance->Get_Material(L"Mtrl_Bastion_Tier1_Down"), 1);
+	m_pModel->Add_Material(g_pGameInstance->Get_Material(L"Mtrl_Bastion_Fur"), 2);
+	m_pModel->Add_Material(g_pGameInstance->Get_Material(L"Mtrl_Bastion_Crossbow"), 3);
 
-	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_TEST_JS, L"Component_AnimationController", L"AnimationController", (CComponent**)&m_pAnimationController)))
+	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_TEST_JS, L"Com_AnimationController", L"AnimationController", (CComponent**)&m_pAnimationController)))
 		return E_FAIL;
 	m_pAnimationController->Set_GameObject(this);
 	m_pAnimationController->Set_Model(m_pModel);

@@ -98,9 +98,7 @@ HRESULT CMaterial::Native_Construct(const wstring& _wstrName, const wstring& _ws
 HRESULT CMaterial::Render(const _uint _iPassIndex)
 {
 	if (FAILED(m_vecEffectDescs[_iPassIndex]->pPass->Apply(0, m_pDeviceContext)))
-	{
 		return E_FAIL;
-	}
 
 	return S_OK;
 }
@@ -193,9 +191,7 @@ const wstring& CMaterial::Get_Name() const
 HRESULT CMaterial::Set_Texture(const string& _strConstantName, const aiTextureType _eTextureType, CTexture* _pTexture, const _uint _iTextureIndex)
 {
 	if (m_vecTextures[_eTextureType])
-	{
 		Safe_Release(m_vecTextures[_eTextureType]);
-	}
 	m_vecTextures[_eTextureType] = _pTexture;
 
 	SetUp_TextureOnShader(_strConstantName.c_str(), _eTextureType, _iTextureIndex);

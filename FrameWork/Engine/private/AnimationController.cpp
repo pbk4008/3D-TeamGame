@@ -16,9 +16,7 @@ CAnimationController::CAnimationController(const CAnimationController& _rhs)
 HRESULT CAnimationController::NativeConstruct_Prototype()
 {
 	if (FAILED(__super::NativeConstruct_Prototype()))
-	{
 		return E_FAIL;
-	}
 
 	return S_OK;
 }
@@ -26,9 +24,7 @@ HRESULT CAnimationController::NativeConstruct_Prototype()
 HRESULT CAnimationController::NativeConstruct(void* _pArg)
 {
 	if (FAILED(__super::NativeConstruct(_pArg)))
-	{
 		return E_FAIL;
-	}
 
 	return S_OK;
 }
@@ -36,14 +32,10 @@ HRESULT CAnimationController::NativeConstruct(void* _pArg)
 _int CAnimationController::Tick(const _double& _dDeltaTime)
 {
 	if (0 > Update_CombinedTransformMatrix(_dDeltaTime))
-	{
 		return -1;
-	}
 
 	if (0 > Move_Transform(_dDeltaTime))
-	{
 		return -1;
-	}
 
 	if(-1 != m_tBlendDesc.iNextAnimIndex)
 	{
@@ -244,7 +236,7 @@ HRESULT CAnimationController::SetUp_NextAnimation(const string& _strAnimTag, con
 			{
 				m_tBlendDesc.iNextAnimIndex = pAnimation->Get_Index();
 
-				if (-1 != m_tBlendDesc.iNextAnimIndex)
+				if (m_isChangeAnim)
 					vecAnimations[m_tBlendDesc.iNextAnimIndex]->Reset_Animation();
 
 				m_tBlendDesc.isLoopNextAnim = _isLoopNextAnim;
@@ -278,7 +270,7 @@ HRESULT CAnimationController::SetUp_NextAnimation(_uint iIndex, const _bool _isL
 			{
 				m_tBlendDesc.iNextAnimIndex = pAnimation->Get_Index();
 
-				if (-1 != m_tBlendDesc.iNextAnimIndex)
+				if (m_isChangeAnim)
 					vecAnimations[m_tBlendDesc.iNextAnimIndex]->Reset_Animation();
 
 				m_tBlendDesc.isLoopNextAnim = _isLoopNextAnim;
@@ -286,6 +278,7 @@ HRESULT CAnimationController::SetUp_NextAnimation(_uint iIndex, const _bool _isL
 
 				m_strPreAnimTag = m_strCurAnimTag;
 				m_strCurAnimTag = pAnimation->Get_Name();
+				m_iCurKeyFrameIndex = pAnimation->Get_CurrentKeyFrameIndex();
 				return S_OK;
 			}
 		}

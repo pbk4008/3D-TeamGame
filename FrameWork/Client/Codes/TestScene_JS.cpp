@@ -54,8 +54,6 @@ HRESULT CTestScene_JS::Ready_Gameobject()
 		return E_FAIL;
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_JS, L"Layer_Monster", L"Monster_Bastion_Spear")))
 		return E_FAIL;
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_JS, L"Layer_Monster", L"Monster_Bastion_Sword")))
-		return E_FAIL;
 	return S_OK;
 }
 

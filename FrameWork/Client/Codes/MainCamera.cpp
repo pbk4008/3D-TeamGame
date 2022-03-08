@@ -62,20 +62,20 @@ _int CMainCamera::Tick(_double fDeltaTime)
 		m_pTransform->Go_Right(fDeltaTime);
 	}
 
-	/* 마우스 감도 변수 */
-	_long MouseMove = 0;
+	///* 마우스 감도 변수 */
+	//_long MouseMove = 0;
 
-	_fvector myvec = { 0.f, 1.f, 0.f, 0.f };
+	//_fvector myvec = { 0.f, 1.f, 0.f, 0.f };
 
-	if (MouseMove = g_pGameInstance->getMouseMoveState(CInputDev::MOUSEMOVESTATE::MM_X))
-	{
-		m_pTransform->Rotation_Axis(myvec, fDeltaTime * MouseMove * 0.1f);
-	}
+	//if (MouseMove = g_pGameInstance->getMouseMoveState(CInputDev::MOUSEMOVESTATE::MM_X))
+	//{
+	//	m_pTransform->Rotation_Axis(myvec, fDeltaTime * MouseMove * 0.1f);
+	//}
 
-	if (MouseMove = g_pGameInstance->getMouseMoveState(CInputDev::MOUSEMOVESTATE::MM_Y))
-	{
-		m_pTransform->Rotation_Axis(m_pTransform->Get_State(CTransform::STATE::STATE_RIGHT), fDeltaTime * MouseMove * 0.1f);
-	}
+	//if (MouseMove = g_pGameInstance->getMouseMoveState(CInputDev::MOUSEMOVESTATE::MM_Y))
+	//{
+	//	m_pTransform->Rotation_Axis(m_pTransform->Get_State(CTransform::STATE::STATE_RIGHT), fDeltaTime * MouseMove * 0.1f);
+	//}
 
 	_long	MouseMove = 0;
 

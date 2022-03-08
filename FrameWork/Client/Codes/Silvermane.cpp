@@ -147,18 +147,18 @@ HRESULT CSilvermane::Ready_Components()
 	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_TEST_JS, L"Model_Silvermane", L"Model", (CComponent**)&m_pModel)))
 		return E_FAIL;
 
-	m_pModel->Add_Material(g_pGameInstance->Get_Material(L"Silvermane_Top"), 0);
-	//m_pModel->Add_Material(g_pGameInstance->Get_Material(L"Silvermane_Down"), 1);
-	m_pModel->Add_Material(g_pGameInstance->Get_Material(L"Silvermane_Cloak"), 2);
-	m_pModel->Add_Material(g_pGameInstance->Get_Material(L"Silvermane_Hair"), 3);
+	m_pModel->Add_Material(g_pGameInstance->Get_Material(L"Mtrl_Silvermane_Top"), 0);
+	m_pModel->Add_Material(g_pGameInstance->Get_Material(L"Mtrl_Silvermane_Down"), 1);
+	m_pModel->Add_Material(g_pGameInstance->Get_Material(L"Mtrl_Silvermane_Cloak"), 2);
+	m_pModel->Add_Material(g_pGameInstance->Get_Material(L"Mtrl_Silvermane_Hair"), 3);
 
-	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_TEST_JS, L"Component_AnimationController", L"AnimationController", (CComponent**)&m_pAnimationController)))
+	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_TEST_JS, L"Com_AnimationController", L"AnimationController", (CComponent**)&m_pAnimationController)))
 		return E_FAIL;
 	m_pAnimationController->Set_GameObject(this);
 	m_pAnimationController->Set_Model(m_pModel);
 	m_pAnimationController->Set_Transform(m_pTransform);
 
-	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_TEST_JS, L"Component_StateController", L"StateController", (CComponent**)&m_pStateController)))
+	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_TEST_JS, L"Com_StateController", L"StateController", (CComponent**)&m_pStateController)))
 		return E_FAIL;
 	m_pStateController->Set_GameObject(this);
 
