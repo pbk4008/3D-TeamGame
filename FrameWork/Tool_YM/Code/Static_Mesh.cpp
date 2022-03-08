@@ -68,7 +68,7 @@ _int CStatic_Mesh::Tick(_double TimeDelta)
 
 _int CStatic_Mesh::LateTick(_double TimeDelta)
 {
-	m_pRenderer->Add_RenderGroup(CRenderer::RENDER_PRIORITY, this);
+	m_pRenderer->Add_RenderGroup(CRenderer::RENDER_ALPHA, this);
 
 	if(TKEY_DOWN(VK_RBUTTON))
 		Pick_Model();
@@ -110,7 +110,9 @@ HRESULT CStatic_Mesh::Render()
 	{
 		for (_uint i = 0; i < m_pModelCom->Get_NumMeshContainer(); ++i)
 		{
+			_bool temp= false;
 			m_pModelCom->SetUp_TextureOnShader("g_DiffuseTexture", i, aiTextureType::aiTextureType_DIFFUSE);
+			m_pModelCom->SetUp_ValueOnShader("g_bool",&temp, sizeof(_bool));
 			if(false == m_bPick)
 				m_pModelCom->Render(i, 0);
 			else 

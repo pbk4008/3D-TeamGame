@@ -48,7 +48,7 @@ HRESULT CStage1::Ready_Gameobject()
 		return E_FAIL;
 
 	vector<CEnvironment::ENVIRONMENTDESC> tEnvironmentDesc;
-	tEnvironmentDesc.resize(50);
+	tEnvironmentDesc.resize(350);
 	_uint iIndex = 0;
 	tEnvironmentDesc[iIndex].wstrInstaneTag = vecEnvironmentData[0].FileName;
 	for (auto& pData : vecEnvironmentData)

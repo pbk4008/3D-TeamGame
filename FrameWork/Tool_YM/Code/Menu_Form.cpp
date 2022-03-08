@@ -92,7 +92,7 @@ HRESULT CMenu_Form::Create_Model_Prototype(const FILEINFO& _fileInfo)
 	string FolderName;
 	FolderName.assign(_fileInfo.cstrFolder.begin(), _fileInfo.cstrFolder.end());
 	
-	wstring Static_ShaderFilePath = L"../../Reference/ShaderFile/Shader_Mesh.hlsl";
+	wstring Static_ShaderFilePath = L"../../Reference/ShaderFile/Shader_StaticMesh.hlsl";
 	wstring Anim_ShaderFilePath = L"../../Reference/ShaderFile/Shader_MeshAnim.hlsl";
 
 	_matrix  PivotMatrix;

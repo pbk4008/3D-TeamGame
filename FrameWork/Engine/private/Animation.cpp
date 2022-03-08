@@ -32,7 +32,6 @@ HRESULT CAnimation::NativeConstruct(char * pName, _double Duration, _double Play
 HRESULT CAnimation::Add_Channel(CChannel * pChannel)
 {
 	m_Channels.push_back(pChannel);
-	Safe_AddRef(pChannel);
 
 	return S_OK;
 }

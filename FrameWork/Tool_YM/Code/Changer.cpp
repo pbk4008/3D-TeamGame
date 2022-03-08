@@ -76,7 +76,7 @@ HRESULT CChanger::Loading_For_Static(void)
 	_matrix  PivotMatrix;
 	PivotMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f);
 
-	if (FAILED(g_pGameInstance->Add_Prototype(TAB_STATIC, L"Prototype_Component_NavSphere", CModel::Create(m_pDevice, m_pDeviceContext, "../bin/Resources/FBX/Sphere/", "Sphere.fbx", L"../../Reference/ShaderFile/Shader_Mesh.hlsl", PivotMatrix, CModel::TYPE_STATIC))))
+	if (FAILED(g_pGameInstance->Add_Prototype(TAB_STATIC, L"Prototype_Component_NavSphere", CModel::Create(m_pDevice, m_pDeviceContext, "../bin/Resources/FBX/Sphere/", "Sphere.fbx", L"../../Reference/ShaderFile/Shader_StaticMesh.hlsl", PivotMatrix, CModel::TYPE_STATIC))))
 		return E_FAIL;
 
 	/* Prototype_Component_Texture_Terrain */

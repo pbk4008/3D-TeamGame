@@ -161,13 +161,13 @@ HRESULT CMainApp::Init_Camera()
 	if(FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Static", L"Prototype_GameObject_MainCamera", &tDesc)))
 		return E_FAIL;
 
-	ZeroMemory(&tDesc, sizeof(CCamera::CAMERADESC));
-	tDesc.eType = CCamera::CAMERATYPE::CAMERA_ORTHO;
-	tDesc.pCameraTag = L"MainOrthoCamera";
-	tDesc.fWinCX = g_iWinCx;
-	tDesc.fWinCY = g_iWinCy;
-	tDesc.fNear = 0.01f;
-	tDesc.fFar = 1.f;
+	CCamera::CAMERADESC tDesc2;
+	tDesc2.eType = CCamera::CAMERATYPE::CAMERA_ORTHO;
+	tDesc2.pCameraTag = L"MainOrthoCamera";
+	tDesc2.fWinCX = g_iWinCx;
+	tDesc2.fWinCY = g_iWinCy;
+	tDesc2.fNear = 0.01f;
+	tDesc2.fFar = 1.f;
 
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Static", L"Prototype_GameObject_MainOrthoCamera", &tDesc)))
 		return E_FAIL;
