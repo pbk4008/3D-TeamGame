@@ -173,7 +173,7 @@ _int CAnimationController::Update_CombinedTransformMatrix(const _double& _dDelta
 
 	if (m_tBlendDesc.fTweenTime >= 1.f)
 	{
-		vecAnimations[m_tBlendDesc.iCurAnimIndex]->Reset_Animation();
+		//vecAnimations[m_tBlendDesc.iCurAnimIndex]->Reset_Animation();
 
 		m_tBlendDesc.iCurAnimIndex = m_tBlendDesc.iNextAnimIndex;
 		m_isLoopAnim = m_tBlendDesc.isLoopNextAnim;
@@ -252,6 +252,7 @@ HRESULT CAnimationController::SetUp_NextAnimation(const string& _strAnimTag, con
 				
 				m_strPreAnimTag = m_strCurAnimTag;
 				m_strCurAnimTag = _strAnimTag;
+				m_iCurKeyFrameIndex = pAnimation->Get_CurrentKeyFrameIndex();
 				return S_OK;
 			}
 		}
@@ -323,7 +324,7 @@ const _int CAnimationController::Move_Transform(const _double& _dDeltaTime)
 				svQuaternian -= svPreQuaternian;
 			}
 
-			svVelocity *= 0.2f;
+			//svVelocity *= _dDeltaTime;
 			svQuaternian = XMVector4Transform(svQuaternian, m_smatPivot);
 
 			_float3 vVelocity, vBonePosition, vEuler, vRotation;
@@ -370,9 +371,9 @@ const _int CAnimationController::Move_Transform(const _double& _dDeltaTime)
 			svVelocity = XMVector4Transform(svVelocity, m_smatPivot);
 
 			XMStoreFloat3(&vVelocity, svVelocity);
-			m_pTransform->Go_Right(vVelocity.x);
-			m_pTransform->Go_Up(vVelocity.y);
-			m_pTransform->Go_Straight(vVelocity.z);
+			m_pTransform->Go_Right(vVelocity.x * _dDeltaTime);
+			m_pTransform->Go_Up(vVelocity.y * _dDeltaTime);
+			m_pTransform->Go_Straight(vVelocity.z * _dDeltaTime);
 
 			// 요 아래는 디버그 용이야
 			_float3 vPosition = { 0.f, 0.f, 0.f };

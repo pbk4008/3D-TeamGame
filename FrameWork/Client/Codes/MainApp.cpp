@@ -74,8 +74,8 @@ HRESULT CMainApp::Render()
 		m_TimeAcc = 0.0;	
 	}
 
-	//if (FAILED(g_pGameInstance->Render_Font(TEXT("Font_Arial"), XMVectorSet(1.f, 0.0f, 0.f, 1.f), m_szFPS)))
-	//	return E_FAIL;
+	if (FAILED(g_pGameInstance->Render_Font(TEXT("Font_Arial"), XMVectorSet(1.f, 0.0f, 0.f, 1.f), m_szFPS)))
+		return E_FAIL;
 
 #endif // _DEBUG
 
@@ -169,7 +169,7 @@ HRESULT CMainApp::Init_Camera()
 	tDesc2.fNear = 0.01f;
 	tDesc2.fFar = 1.f;
 
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Static", L"Prototype_GameObject_MainOrthoCamera", &tDesc)))
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Static", L"Prototype_GameObject_MainOrthoCamera", &tDesc2)))
 		return E_FAIL;
 
 	return S_OK;

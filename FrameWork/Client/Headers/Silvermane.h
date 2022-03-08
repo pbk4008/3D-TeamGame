@@ -7,6 +7,7 @@ END
 
 BEGIN(Client)
 class CWeapon;
+class CCamera_Silvermane;
 
 class CSilvermane final : public CActor
 {
@@ -36,19 +37,25 @@ public:
 	void Set_Rotation(const _float3& _vRotation);
 	void Set_EquipWeapon(const _bool _isEquipWeapon);
 	void Set_WeaponFixedBone(CHierarchyNode* _pFixedBone);
+	void Set_Camera(CCamera_Silvermane* _pCamera);
 
 	const _bool Is_EquipWeapon() const;
 
-public:
+private:
+	_int Trace_CameraLook(const _double& _dDeltaTime);
+
+private:
 	CModel* m_pModel = nullptr;
 	CStateController* m_pStateController = nullptr;
 	CAnimationController* m_pAnimationController = nullptr;
+	CCamera_Silvermane* m_pCamera = nullptr;
 
 	CWeapon* m_pWeapon = nullptr;
 	_bool m_isEquipWeapon = false;
 
 	_float3 m_vRotation = { 0.f, 0.f, 0.f };
 	_float3 m_vDir = { 0.f, 0.f, 0.f };
+	_float3 m_vAngle = { 0.f, 0.f, 0.f };
 
 public:
 	static CSilvermane* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext);

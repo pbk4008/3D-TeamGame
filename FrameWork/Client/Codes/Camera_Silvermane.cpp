@@ -35,7 +35,8 @@ HRESULT CCamera_Silvermane::NativeConstruct(void* _pArg)
 		return E_FAIL;
 	}
 
-	m_pSilvermane = static_cast<CSilvermane*>(g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_TEST_JS, L"Silvermane")->front());
+	m_pSilvermane = static_cast<CSilvermane*>(g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_TEST_JS, L"Layer_Silvermane")->front());
+	m_pSilvermane->Set_Camera(this);
 
 	return S_OK;
 }
@@ -138,15 +139,16 @@ _int CCamera_Silvermane::Input_Key(const _double& _dDeltaTime)
 	if (MouseMove = g_pGameInstance->getMouseMoveState(CInputDev::MOUSEMOVESTATE::MM_X))
 		m_pWorldTransform->Rotation_Axis(XMVectorSet(0.f, 1.f, 0.f, 0.f), _dDeltaTime * MouseMove * 0.1f);
 
-	_float fRotRight = m_pWorldTransform->Get_RotRight();
-
 	MouseMove = g_pGameInstance->getMouseMoveState(CInputDev::MOUSEMOVESTATE::MM_Y);
-	if (MouseMove)
-	{
-		m_pWorldTransform->Rotation_Axis(m_pWorldTransform->Get_State(CTransform::STATE_RIGHT), _dDeltaTime * MouseMove * 0.1f);
-	}
+	m_fRotRight += _dDeltaTime * MouseMove;
+	m_pWorldTransform->Rotation_Axis(m_pWorldTransform->Get_State(CTransform::STATE_RIGHT), _dDeltaTime * MouseMove * 0.1f);
 
 	return _int();
+}
+
+const _fvector& CCamera_Silvermane::Get_Look() const
+{
+	return m_pWorldTransform->Get_State(CTransform::STATE_LOOK);
 }
 
 CCamera_Silvermane* CCamera_Silvermane::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
@@ -174,6 +176,9 @@ CGameObject* CCamera_Silvermane::Clone(void* _pArg)
 void CCamera_Silvermane::Free()
 {
 	Safe_Release(m_pCamera);
+
+	Safe_Release(m_pWorldTransform);
+	Safe_Release(m_pLocalTransform);
 
 	__super::Free();
 }

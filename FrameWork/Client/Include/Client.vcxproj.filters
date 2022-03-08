@@ -103,6 +103,21 @@
     <Filter Include="02.GameObject\02.Environment">
       <UniqueIdentifier>{2671a8b6-a2a8-4ec2-ad0d-b3e116f33512}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\98.Player\01.Bastion_2HSword">
+      <UniqueIdentifier>{3f2991eb-74fc-4a1d-a949-8e4d32de3717}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\98.Player\02.Bastioin_Healer">
+      <UniqueIdentifier>{6382be0e-3363-4222-9b12-1ff30dd436dc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\98.Player\03.Bastion_Shooter">
+      <UniqueIdentifier>{20e07dc8-c165-4f9c-998d-b1390c7ddd11}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\98.Player\04.Bastion_Spear">
+      <UniqueIdentifier>{c64c6279-e5d5-4faf-baef-26bf2892a5f6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\98.Player\05.Bastion_Sword">
+      <UniqueIdentifier>{f0b3eeeb-4c58-4507-9260-d410bb38c4a2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -261,6 +276,21 @@
     <ClInclude Include="..\Headers\Camera_Debug.h">
       <Filter>02.GameObject\98.Player\00.Silvermane\Camera</Filter>
     </ClInclude>
+    <ClInclude Include="..\Headers\Monster_Bastion_2HSword.h">
+      <Filter>02.GameObject\98.Player\01.Bastion_2HSword</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Monster_Bastion_Healer.h">
+      <Filter>02.GameObject\98.Player\02.Bastioin_Healer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Monster_Bastion_Shooter.h">
+      <Filter>02.GameObject\98.Player\03.Bastion_Shooter</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Monster_Bastion_Spear.h">
+      <Filter>02.GameObject\98.Player\04.Bastion_Spear</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Monster_Bastion_Sword.h">
+      <Filter>02.GameObject\98.Player\05.Bastion_Sword</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -395,6 +425,21 @@
     </ClCompile>
     <ClCompile Include="..\Codes\Camera_Debug.cpp">
       <Filter>02.GameObject\98.Player\00.Silvermane\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Monster_Bastion_2HSword.cpp">
+      <Filter>02.GameObject\98.Player\01.Bastion_2HSword</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Monster_Bastion_Healer.cpp">
+      <Filter>02.GameObject\98.Player\02.Bastioin_Healer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Monster_Bastion_Shooter.cpp">
+      <Filter>02.GameObject\98.Player\03.Bastion_Shooter</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Monster_Bastion_Spear.cpp">
+      <Filter>02.GameObject\98.Player\04.Bastion_Spear</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Monster_Bastion_Sword.cpp">
+      <Filter>02.GameObject\98.Player\05.Bastion_Sword</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

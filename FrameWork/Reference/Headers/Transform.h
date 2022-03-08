@@ -26,7 +26,6 @@ public:
 	_float Get_Scale(STATE eState) const { return XMVectorGetX(XMVector3Length(Get_State(eState))); }
 	_fmatrix Get_WorldMatrix() const { return XMLoadFloat4x4(&m_WorldMatrix); }
 	_fmatrix Get_WorldMatrixInverse() const { return XMMatrixInverse(nullptr, XMLoadFloat4x4(&m_WorldMatrix)); }
-	const _float& Get_RotRight() const { return m_fRotRight; }
 
 	void Set_WorldMatrix(_fmatrix matWorld) { XMStoreFloat4x4(&m_WorldMatrix, matWorld); }
 	void Set_State(STATE eState, _fvector vState) {	XMStoreFloat4((_float4*)&m_WorldMatrix.m[eState][0], vState); }		
@@ -49,6 +48,7 @@ public:
 	void Chase_Target(const CTransform* pTargetTransform, _double TimeDelta);
 	void Face_Target(_fvector	vTargetPos);
 	void Rotation_Axis(_fvector vAxis, _double TimeDelta); /* 동적으로 TimeDelta이용한 회전. */
+	void Rotation_Axis(const STATE _eState, const _float _fValue);
 	void SetUp_Rotation(_fvector vAxis, _float fRadian); /* 디폴트상태기준으로 특정축으로 몇도만큼 회전시켜놓겠다. */
 	void Scaling(_fvector vScale);
 	void Scale_Up(_fvector vScale);
@@ -64,10 +64,6 @@ public:
 private:
 	_float4x4				m_WorldMatrix;	
 	TRANSFORMDESC			m_TransformDesc;
-
-	_float					m_fRotRight = 0.f;
-	_float					m_fRotUp = 0.f;
-	_float					m_fRotLook = 0.f;
 
 public:
 	static CTransform* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);

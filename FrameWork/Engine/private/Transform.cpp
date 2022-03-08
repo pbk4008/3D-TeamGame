@@ -151,19 +151,11 @@ void CTransform::Face_Target(_fvector vTargetPos)
 
 void CTransform::Rotation_Axis(_fvector vAxis, _double TimeDelta)
 {
-
 	_matrix		RotationMatrix = XMMatrixRotationAxis(vAxis, m_TransformDesc.fRotationPerSec * (_float)TimeDelta );
 
 	_vector		vRight = Get_State(CTransform::STATE_RIGHT);
 	_vector		vUp = Get_State(CTransform::STATE_UP);
 	_vector		vLook = Get_State(CTransform::STATE_LOOK);
-
-	if (XMVector4Equal(vAxis, vRight))
-		m_fRotRight += XMConvertToDegrees(TimeDelta);
-	if (XMVector4Equal(vAxis, vUp))
-		m_fRotUp += XMConvertToDegrees(TimeDelta);
-	if (XMVector4Equal(vAxis, vLook))
-		m_fRotLook += XMConvertToDegrees(TimeDelta);
 
 	vRight = XMVector4Transform(vRight, RotationMatrix);
 	vUp = XMVector4Transform(vUp, RotationMatrix);
@@ -172,6 +164,35 @@ void CTransform::Rotation_Axis(_fvector vAxis, _double TimeDelta)
 	Set_State(CTransform::STATE_RIGHT, vRight);
 	Set_State(CTransform::STATE_UP, vUp);
 	Set_State(CTransform::STATE_LOOK, vLook);
+}
+
+void CTransform::Rotation_Axis(const STATE _eState, const _float _fValue)
+{
+	_vector		svRight = Get_State(CTransform::STATE_RIGHT);
+	_vector		svUp = Get_State(CTransform::STATE_UP);
+	_vector		svLook = Get_State(CTransform::STATE_LOOK);
+
+	_matrix		RotationMatrix = XMMatrixIdentity();
+	switch (_eState)
+	{
+	case STATE_RIGHT:
+		RotationMatrix = XMMatrixRotationAxis(svRight, XMConvertToRadians(_fValue));
+		break;
+	case STATE_UP:
+		RotationMatrix = XMMatrixRotationAxis(svUp, XMConvertToRadians(_fValue));
+		break;
+	case STATE_LOOK:
+		RotationMatrix = XMMatrixRotationAxis(svLook, XMConvertToRadians(_fValue));
+		break;
+	}
+
+	svRight = XMVector4Transform(svRight, RotationMatrix);
+	svUp = XMVector4Transform(svUp, RotationMatrix);
+	svLook = XMVector4Transform(svLook, RotationMatrix);
+
+	Set_State(CTransform::STATE_RIGHT, svRight);
+	Set_State(CTransform::STATE_UP, svUp);
+	Set_State(CTransform::STATE_LOOK, svLook);
 }
 
 void CTransform::SetUp_Rotation(_fvector vAxis, _float fRadian)

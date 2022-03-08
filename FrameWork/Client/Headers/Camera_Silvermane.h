@@ -30,6 +30,9 @@ private:
 	_int Chase_Target(const _double& _dDeltaTime);
 	_int Input_Key(const _double& _dDeltaTime);
 
+public:
+	const _fvector& Get_Look() const;
+
 private:
 	CCamera* m_pCamera = nullptr;
 	CSilvermane* m_pSilvermane = nullptr;
@@ -37,6 +40,7 @@ private:
 	CTransform* m_pWorldTransform = nullptr;
 
 	_float m_fRotY = 0.f;
+	_float m_fRotRight = 0.f;
 
 	_bool m_isChase = true;
 

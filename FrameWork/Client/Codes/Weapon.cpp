@@ -80,6 +80,7 @@ void CWeapon::Set_FixedBone(CHierarchyNode* _pFixedBone)
 void CWeapon::Free()
 {
 	Safe_Release(m_pModel);
+	Safe_Release(m_pLocalTransform);
 
 	__super::Free();
 }

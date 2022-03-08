@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "..\Headers\Silvermane.h"
 
+#include "Camera_Silvermane.h"
 #include "Needle.h"
 
 #pragma region 스테이트들
@@ -60,13 +61,10 @@ HRESULT CSilvermane::NativeConstruct_Prototype()
 
 HRESULT CSilvermane::NativeConstruct(void* _pArg)
 {
-	if (FAILED(__super::NativeConstruct(_pArg)))
-		return E_FAIL;
+	if (FAILED(__super::NativeConstruct(_pArg))) return E_FAIL;
 
-	if (FAILED(Ready_Components()))
-		return E_FAIL;
-	if (FAILED(Ready_States()))
-		return E_FAIL;
+	if (FAILED(Ready_Components())) return E_FAIL;
+	if (FAILED(Ready_States())) return E_FAIL;
 
 	CHierarchyNode* pWeaponBone = m_pModel->Get_BoneMatrix("weapon_r");
 	if (g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_JS, L"Weapon", L"Needle", pWeaponBone, (CGameObject**)&m_pWeapon))
@@ -80,51 +78,59 @@ HRESULT CSilvermane::NativeConstruct(void* _pArg)
 
 _int CSilvermane::Tick(_double _dDeltaTime)
 {
-	if (0 > __super::Tick(_dDeltaTime))
-		return -1;
+	_int iProgress = __super::Tick(_dDeltaTime);
+	if (NO_EVENT != iProgress) return iProgress;
 
-	m_pStateController->Tick(_dDeltaTime);
-	m_pAnimationController->Tick(_dDeltaTime);
+	iProgress = m_pStateController->Tick(_dDeltaTime);
+	if (NO_EVENT != iProgress) return iProgress;
+
+	iProgress = m_pAnimationController->Tick(_dDeltaTime);
+	if (NO_EVENT != iProgress) return iProgress;
+
+	iProgress = Trace_CameraLook(_dDeltaTime);
+	if (NO_EVENT != iProgress) return iProgress;
 
 	return _int();
 }
 
 _int CSilvermane::LateTick(_double _dDeltaTime)
 {
-	if (0 > __super::LateTick(_dDeltaTime))
-		return -1;
+	_int iProgress = __super::LateTick(_dDeltaTime);
+	if (NO_EVENT != iProgress) return iProgress;
 
-	m_pStateController->LateTick(_dDeltaTime);
+	iProgress = m_pStateController->LateTick(_dDeltaTime);
+	if (NO_EVENT != iProgress) return iProgress;
 
-	m_pRenderer->Add_RenderGroup(CRenderer::RENDER_ALPHA, this);
+	if(FAILED(m_pRenderer->Add_RenderGroup(CRenderer::RENDER_ALPHA, this))) return -1;
+
 	return _int();
 }
 
 HRESULT CSilvermane::Render()
 {
-	if (FAILED(__super::Render()))
-		return E_FAIL;
+	if (FAILED(__super::Render())) return E_FAIL;
 
 	_matrix smatWorld, smatView, smatProj;
 	smatWorld = XMMatrixTranspose(m_pTransform->Get_WorldMatrix());
 	smatView = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_VIEW));
 	smatProj = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_PROJECTION));
 
-	m_pModel->SetUp_ValueOnShader("g_WorldMatrix", &smatWorld, sizeof(_matrix));
-	m_pModel->SetUp_ValueOnShader("g_ViewMatrix", &smatView, sizeof(_matrix));
-	m_pModel->SetUp_ValueOnShader("g_ProjMatrix", &smatProj, sizeof(_matrix));
+	if(FAILED(m_pModel->SetUp_ValueOnShader("g_WorldMatrix", &smatWorld, sizeof(_matrix)))) return E_FAIL;
+	if (FAILED(m_pModel->SetUp_ValueOnShader("g_ViewMatrix", &smatView, sizeof(_matrix)))) return E_FAIL;
+	if (FAILED(m_pModel->SetUp_ValueOnShader("g_ProjMatrix", &smatProj, sizeof(_matrix)))) return E_FAIL;
 
 	for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
 	{
-		//m_pModel->SetUp_TextureOnShader("g_DiffuseTexture", i, aiTextureType_DIFFUSE);
+		//if (FAILED(m_pModel->SetUp_TextureOnShader("g_DiffuseTexture", i, aiTextureType_DIFFUSE))) return E_FAIL;
 
-		m_pModel->Render(i, 0);
+		if (FAILED(m_pModel->Render(i, 0))) return E_FAIL;
 	}
 
 #ifdef _DEBUG
-	if (FAILED(m_pAnimationController->Render()))
-		return E_FAIL;
-	if (FAILED(m_pStateController->Render()))
+	if (FAILED(m_pAnimationController->Render())) return E_FAIL;
+	if (FAILED(m_pStateController->Render())) return E_FAIL;
+	wstring wstrAngle = to_wstring(m_vAngle.x) + L", " + to_wstring(m_vAngle.y) + L", " + to_wstring(m_vAngle.z);
+	if (FAILED(g_pGameInstance->Render_Font(TEXT("Font_Arial"), XMVectorSet(1.f, 0.0f, 0.f, 1.f), wstrAngle.c_str(), _float2(0.f, 300.f), _float2(0.8f, 0.8f))))
 		return E_FAIL;
 #endif
 
@@ -146,13 +152,13 @@ HRESULT CSilvermane::Ready_Components()
 	m_pModel->Add_Material(g_pGameInstance->Get_Material(L"Silvermane_Cloak"), 2);
 	m_pModel->Add_Material(g_pGameInstance->Get_Material(L"Silvermane_Hair"), 3);
 
-	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_TEST_JS, L"AnimationController", L"AnimationController", (CComponent**)&m_pAnimationController)))
+	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_TEST_JS, L"Component_AnimationController", L"AnimationController", (CComponent**)&m_pAnimationController)))
 		return E_FAIL;
 	m_pAnimationController->Set_GameObject(this);
 	m_pAnimationController->Set_Model(m_pModel);
 	m_pAnimationController->Set_Transform(m_pTransform);
 
-	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_TEST_JS, L"StateController", L"StateController", (CComponent**)&m_pStateController)))
+	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_TEST_JS, L"Component_StateController", L"StateController", (CComponent**)&m_pStateController)))
 		return E_FAIL;
 	m_pStateController->Set_GameObject(this);
 
@@ -265,9 +271,42 @@ void CSilvermane::Set_WeaponFixedBone(CHierarchyNode* _pFixedBone)
 		m_pWeapon->Set_FixedBone(_pFixedBone);
 }
 
+void CSilvermane::Set_Camera(CCamera_Silvermane* _pCamera)
+{
+	m_pCamera = _pCamera;
+}
+
 const _bool CSilvermane::Is_EquipWeapon() const
 {
 	return m_isEquipWeapon;
+}
+
+_int CSilvermane::Trace_CameraLook(const _double& _dDeltaTime)
+{
+	_vector svCameraLook = m_pCamera->Get_Look();
+	_vector svLook = m_pTransform->Get_State(CTransform::STATE_LOOK);
+
+	svCameraLook = XMVector3Normalize(XMVectorSetY(svCameraLook, 0.f));
+	svLook = XMVector3Normalize(XMVectorSetY(svLook, 0.f));
+	_vector svAngle = XMVector3AngleBetweenVectors(svCameraLook, svLook);
+
+	XMStoreFloat3(&m_vAngle, svAngle);
+
+	_vector svCross = XMVector3Cross(svLook, svCameraLook);
+	if (0 < XMVectorGetY(svCross))
+	{
+		m_pTransform->Rotation_Axis(m_pTransform->Get_State(CTransform::STATE_UP), m_vAngle.y * _dDeltaTime * 2.f);
+		m_vAngle = { XMConvertToDegrees(m_vAngle.x), XMConvertToDegrees(m_vAngle.y), XMConvertToDegrees(m_vAngle.z) };
+	}
+	else if (0 > XMVectorGetY(svCross))
+	{
+		m_pTransform->Rotation_Axis(m_pTransform->Get_State(CTransform::STATE_UP), m_vAngle.y * -_dDeltaTime * 2.f);
+		m_vAngle = { -XMConvertToDegrees(m_vAngle.x), -XMConvertToDegrees(m_vAngle.y), -XMConvertToDegrees(m_vAngle.z) };
+	}
+	else
+		m_vAngle = { 0.f, 0.f, 0.f };
+
+	return _int();
 }
 
 CSilvermane* CSilvermane::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
