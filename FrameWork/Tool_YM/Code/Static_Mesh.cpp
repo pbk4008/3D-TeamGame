@@ -110,9 +110,9 @@ HRESULT CStatic_Mesh::Render()
 	{
 		for (_uint i = 0; i < m_pModelCom->Get_NumMeshContainer(); ++i)
 		{
-			_bool temp= false;
+			//_bool temp= false;
 			m_pModelCom->SetUp_TextureOnShader("g_DiffuseTexture", i, aiTextureType::aiTextureType_DIFFUSE);
-			m_pModelCom->SetUp_ValueOnShader("g_bool",&temp, sizeof(_bool));
+			/*m_pModelCom->SetUp_ValueOnShader("g_bool",&temp, sizeof(_bool));*/
 			if(false == m_bPick)
 				m_pModelCom->Render(i, 0);
 			else 

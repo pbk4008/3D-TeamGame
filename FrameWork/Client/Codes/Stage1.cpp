@@ -55,7 +55,7 @@ HRESULT CStage1::Render()
 HRESULT CStage1::Ready_MapObject()
 {
 	vector<ENVIRONMENTLOADDATA> vecEnvironmentData;
-	if (FAILED(g_pGameInstance->LoadFile<ENVIRONMENTLOADDATA>(vecEnvironmentData, L"../bin/SaveData/test.dat")))
+	if (FAILED(g_pGameInstance->LoadFile<ENVIRONMENTLOADDATA>(vecEnvironmentData, L"../bin/SaveData/fuck.dat")))
 		return E_FAIL;
 
 	vector<CEnvironment::ENVIRONMENTDESC> tEnvironmentDesc;

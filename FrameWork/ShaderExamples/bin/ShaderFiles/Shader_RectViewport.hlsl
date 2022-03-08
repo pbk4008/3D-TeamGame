@@ -269,12 +269,10 @@ PS_OUT_BLEND PS_MAIN_BLEND(PS_IN In)
 	vector vSpecularDesc = g_SpecularTexture.Sample(DefaultSampler, In.vTexUV);
 	vector vShadowTexture = g_ShadowTexture.Sample(DefaultSampler, In.vTexUV);
 	
-	//if (g_bShadow == true)
-	//	Out.vColor = vDiffuseDesc * vShadeDesc * vShadowTexture + vSpecularDesc;
-	//else if (g_bShadow == false)
-	//	Out.vColor = vDiffuseDesc * vShadeDesc + vSpecularDesc;
-	
-	Out.vColor = vDiffuseDesc;
+	if (g_bShadow == true)
+		Out.vColor = vDiffuseDesc * vShadeDesc * vShadowTexture + vSpecularDesc;
+	else if (g_bShadow == false)
+		Out.vColor = vDiffuseDesc * vShadeDesc + vSpecularDesc;
 
 	// ¿Ü°û¼± È¿°ú
 	//float fCoord[3] = { -1.f, 0.f, 1.f };

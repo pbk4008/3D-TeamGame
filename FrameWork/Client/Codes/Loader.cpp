@@ -21,7 +21,7 @@
 #include "Needle.h"
 
 #pragma endregion
-
+                      
 
 CLoader::CLoader() 
 	: m_hThread(nullptr)
@@ -114,7 +114,8 @@ HRESULT CLoader::Load_Stage1FBXLoad()
 		if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, fbxName
 			, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, fbxPath,
 				L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
-			return E_FAIL;
+			return E_FAIL; 
+
 
 		iResult = _findnext(handle, &fd);
 	}
@@ -327,25 +328,25 @@ HRESULT CLoader::Ready_Test_JS()
 
 	CTexture* pTexture = CTexture::Create(m_pDevice, m_pDeviceContext);
 	pTexture->NativeConstruct_Prototype(L"../Bin/Resources/Mesh/Silvermane/T_Silvermane_Hairs_d_new.tga", 1);
-	CMaterial* pMtrl = CMaterial::Create(m_pDevice, m_pDeviceContext, L"Silvermane_Hair", L"../../Reference/ShaderFile/Shader_MeshAnim.hlsl", CMaterial::EType::Anim);
+	CMaterial* pMtrl = CMaterial::Create(m_pDevice, m_pDeviceContext, L"Silvermane_Hair", L"../../Reference/ShaderFile/Shader_Mesh.hlsl", CMaterial::EType::Anim);
 	pMtrl->Set_Texture("g_DiffuseTexture", aiTextureType_DIFFUSE, pTexture, 0);
 	g_pGameInstance->Add_Material(L"Silvermane_Hair", pMtrl);
 
 	pTexture = CTexture::Create(m_pDevice, m_pDeviceContext);
 	pTexture->NativeConstruct_Prototype(L"../Bin/Resources/Mesh/Silvermane/T_Silvermane_Cloak_D.tga", 1);
-	pMtrl = CMaterial::Create(m_pDevice, m_pDeviceContext, L"Silvermane_Cloak", L"../../Reference/ShaderFile/Shader_MeshAnim.hlsl", CMaterial::EType::Anim);
+	pMtrl = CMaterial::Create(m_pDevice, m_pDeviceContext, L"Silvermane_Cloak", L"../../Reference/ShaderFile/Shader_Mesh.hlsl", CMaterial::EType::Anim);
 	pMtrl->Set_Texture("g_DiffuseTexture", aiTextureType_DIFFUSE, pTexture, 0);
 	g_pGameInstance->Add_Material(L"Silvermane_Cloak", pMtrl);
 
 	pTexture = CTexture::Create(m_pDevice, m_pDeviceContext);
 	pTexture->NativeConstruct_Prototype(L"../Bin/Resources/Mesh/Silvermane/T_Silvermane_Down_D.tga", 1);
-	pMtrl = CMaterial::Create(m_pDevice, m_pDeviceContext, L"Silvermane_Down", L"../../Reference/ShaderFile/Shader_MeshAnim.hlsl", CMaterial::EType::Anim);
+	pMtrl = CMaterial::Create(m_pDevice, m_pDeviceContext, L"Silvermane_Down", L"../../Reference/ShaderFile/Shader_Mesh.hlsl", CMaterial::EType::Anim);
 	pMtrl->Set_Texture("g_DiffuseTexture", aiTextureType_DIFFUSE, pTexture, 0);
 	g_pGameInstance->Add_Material(L"Silvermane_Down", pMtrl);
 
 	pTexture = CTexture::Create(m_pDevice, m_pDeviceContext);
 	pTexture->NativeConstruct_Prototype(L"../Bin/Resources/Mesh/Silvermane/T_Silvermane_Top_D.tga", 1);
-	pMtrl = CMaterial::Create(m_pDevice, m_pDeviceContext, L"Silvermane_Top", L"../../Reference/ShaderFile/Shader_MeshAnim.hlsl", CMaterial::EType::Anim);
+	pMtrl = CMaterial::Create(m_pDevice, m_pDeviceContext, L"Silvermane_Top", L"../../Reference/ShaderFile/Shader_Mesh.hlsl", CMaterial::EType::Anim);
 	pMtrl->Set_Texture("g_DiffuseTexture", aiTextureType_DIFFUSE, pTexture, 0);
 	g_pGameInstance->Add_Material(L"Silvermane_Top", pMtrl);
 
@@ -359,7 +360,7 @@ HRESULT CLoader::Ready_Test_JS()
 	matPivot = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(180.f));
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_TEST_JS, L"Model_Silvermane", CModel::Create(m_pDevice, m_pDeviceContext,
 		"../bin/Resources/Mesh/Silvermane/", "Silvermane.fbx",
-		L"../../Reference/ShaderFile/Shader_MeshAnim.hlsl",
+		L"../../Reference/ShaderFile/Shader_Mesh.hlsl",
 		matPivot,
 		CModel::TYPE_ANIM))))
 	{
@@ -368,7 +369,7 @@ HRESULT CLoader::Ready_Test_JS()
 	matPivot = XMMatrixIdentity();
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_TEST_JS, L"Model_Needle", CModel::Create(m_pDevice, m_pDeviceContext,
 		"../bin/Resources/Mesh/Needle/", "Needle.fbx",
-		L"../../Reference/ShaderFile/Shader_Mesh.hlsl", matPivot, CModel::TYPE_STATIC))))
+		L"../../Reference/ShaderFile/Shader_StaticMesh.hlsl", matPivot, CModel::TYPE_STATIC))))
 	{
 		return E_FAIL;
 	}

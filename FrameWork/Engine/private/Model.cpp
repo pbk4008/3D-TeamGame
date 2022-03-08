@@ -117,15 +117,15 @@ HRESULT CModel::NativeConstruct_Prototype(const string& pMeshFilePath, const str
 	if (FAILED(Create_Animation()))
 		return E_FAIL;
 
-	if (m_eMeshType == TYPE_STATIC)
-	{
-		wstring wstrSaveFileName, wstrSaveFilePath;
-		wstrSaveFilePath = L"../../Client/bin/SaveData/";
-		wstrSaveFileName.assign(pMeshFileName.begin(), pMeshFileName.end());
-		wstrSaveFilePath += wstrSaveFileName;
-		if (FAILED(Save_StaticModel(wstrSaveFilePath)))
-			return E_FAIL;
-	}
+	//if (m_eMeshType == TYPE_STATIC)
+	//{
+	//	wstring wstrSaveFileName, wstrSaveFilePath;
+	//	wstrSaveFilePath = L"../../Client/bin/SaveData/";
+	//	wstrSaveFileName.assign(pMeshFileName.begin(), pMeshFileName.end());
+	//	wstrSaveFilePath += wstrSaveFileName;
+	//	if (FAILED(Save_StaticModel(wstrSaveFilePath)))
+	//		return E_FAIL;
+	//}
 	return S_OK;
 }
 
@@ -181,12 +181,12 @@ HRESULT CModel::NativeConstruct(void * pArg)
 			pHierarchyNode->Add_Channel(i, pChannel);
 		}
 	}
-	if(!m_bSaved)
-	{
-		if (FAILED(Save_AnimModel()))
-			return E_FAIL;
-		m_bSaved = true;
-	}
+	//if(!m_bSaved)
+	//{
+	//	if (FAILED(Save_AnimModel()))
+	//		return E_FAIL;
+	//	m_bSaved = true;
+	//}
 
 	return S_OK;
 }
@@ -451,7 +451,7 @@ HRESULT CModel::Create_MeshContainer()
 		if (!pMesh)
 			return E_FAIL;
 
-		CMeshContainer* pMeshContainer = CMeshContainer::Create(m_pDevice, m_pDeviceContext, this, pMesh, m_eMeshType == TYPE_STATIC ? XMLoadFloat4x4(&m_PivotMatrix) : XMMatrixIdentity());
+		CMeshContainer* pMeshContainer = CMeshContainer::Create(m_pDevice, m_pDeviceContext, this, pMesh, (m_eMeshType == TYPE_STATIC) ? XMLoadFloat4x4(&m_PivotMatrix) : XMMatrixIdentity());
 		if (!pMeshContainer)
 			return E_FAIL;
 
@@ -898,7 +898,7 @@ void CModel::Free()
 
 	for (auto& pMtrlMeshContainer : m_MeshContainers)
 	{
-		for(auto& pMeshContainer : pMtrlMeshContainer)
+		for (auto& pMeshContainer : pMtrlMeshContainer)
 			Safe_Release(pMeshContainer);
 		pMtrlMeshContainer.clear();
 	}

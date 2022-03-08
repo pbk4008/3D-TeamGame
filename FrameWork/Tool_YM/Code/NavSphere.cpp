@@ -270,6 +270,8 @@ HRESULT CNavSphere::SetUp_Components(void)
 	/* Com_Model */
 	if (FAILED(__super::SetUp_Components(TAB_STATIC, L"Prototype_Component_NavSphere", L"Com_Model", (CComponent**)&m_pModelCom)))
 		return E_FAIL;
+
+	return S_OK;
 }
 
 void CNavSphere::Set_WVPMatrix(void)
