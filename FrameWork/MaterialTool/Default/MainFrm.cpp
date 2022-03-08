@@ -114,14 +114,14 @@ BOOL CMainFrame::OnCreateClient(LPCREATESTRUCT lpcs, CCreateContext* pContext)
 	// TODO: 여기에 특수화된 코드를 추가 및/또는 기본 클래스를 호출합니다.
 	m_tMainSplitter.CreateStatic(this, 1, 2);
 
-	m_tMainSplitter.CreateView(0, 0, RUNTIME_CLASS(CToolYASICView), CSize(1280, 720), pContext);
-	m_tMainSplitter.CreateView(0, 1, RUNTIME_CLASS(CMainForm), CSize(620, 720), pContext);
+	m_tMainSplitter.CreateView(0, 1, RUNTIME_CLASS(CToolYASICView), CSize(1280, 720), pContext);
+	m_tMainSplitter.CreateView(0, 0, RUNTIME_CLASS(CMainForm), CSize(600, 720), pContext);
 
-	m_pToolView = static_cast<CToolYASICView*>(m_tMainSplitter.GetPane(0, 0));
+	m_pToolView = static_cast<CToolYASICView*>(m_tMainSplitter.GetPane(0, 1));
 	CRect rcToolView = {};
 	m_pToolView->GetWindowRect(rcToolView);
 
-	m_pMainForm = static_cast<CMainForm*>(m_tMainSplitter.GetPane(0, 1));
+	m_pMainForm = static_cast<CMainForm*>(m_tMainSplitter.GetPane(0, 0));
 	CRect rcMainForm = {};
 	m_pMainForm->GetWindowRect(rcMainForm);
 

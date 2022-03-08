@@ -4,6 +4,12 @@
 
 // CMainForm 폼 보기
 class CMaterialTool;
+BEGIN(Tool)
+class CModelObject;
+END
+BEGIN(Engine)
+class CMouse;
+END
 class CMainForm : public CFormView
 {
 	DECLARE_DYNCREATE(CMainForm)
@@ -32,13 +38,30 @@ public:
 	_int Tick(_double dDeltaTime);
 	HRESULT Render();
 private:
+	_int Update_Tree();
+	_int Update_TextureList();
+private:
 	HRESULT Start_Level();
+	HRESULT Ready_Tree();
+	CModelObject* Find_Model(const wstring& pModelName);
+	HRESULT Focusing();
+	HRESULT Picking();
 private:
 	void Free();
 private:
 	ID3D11Device* m_pDevice;
 	ID3D11DeviceContext* m_pDeviceContext;
 	CRenderer* m_pRenderer;
+	CMouse* m_pMouse;
+private:
+	CString m_tFbxPath;
+	CString m_tFbxName;
+	CModelObject* m_pSelModel;
+	_bool m_bChange;
+private:
+	CTreeCtrl m_FbxTree;
+public:
+	CListBox m_TextureBox;
 };
 
 

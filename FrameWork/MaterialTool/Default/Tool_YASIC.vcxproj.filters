@@ -28,6 +28,15 @@
     <Filter Include="04.Level">
       <UniqueIdentifier>{d0878e07-0c9e-46ac-be43-5e645707f58b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="05.Object">
+      <UniqueIdentifier>{637d1aee-22ef-48be-b4d9-be54a8ee37e7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Object\00.Model">
+      <UniqueIdentifier>{ff4806bb-f4ad-4c3f-a7b8-0eff72b21a78}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Object\01.Camera">
+      <UniqueIdentifier>{5b244491-66be-4fe6-9150-ea84925dcdd3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -72,6 +81,12 @@
     <ClInclude Include="..\Code\Material_Level.h">
       <Filter>04.Level</Filter>
     </ClInclude>
+    <ClInclude Include="..\Code\ModelObject.h">
+      <Filter>05.Object\00.Model</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\MaterialCamera.h">
+      <Filter>05.Object\01.Camera</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -94,6 +109,12 @@
     </ClCompile>
     <ClCompile Include="..\Code\Material_Level.cpp">
       <Filter>04.Level</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\ModelObject.cpp">
+      <Filter>05.Object\00.Model</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\MaterialCamera.cpp">
+      <Filter>05.Object\01.Camera</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

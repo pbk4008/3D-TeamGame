@@ -4,14 +4,13 @@
 
 CMeshContainer::CMeshContainer(ID3D11Device * pDevice, ID3D11DeviceContext * pDeviceContext)
 	: CVIBuffer(pDevice, pDeviceContext)
-	, m_iMaterialIndex(0)
 	, m_iNumMesh(0)
 {
 }
 
 CMeshContainer::CMeshContainer(const CMeshContainer& rhs)
 	: CVIBuffer(rhs)
-	, m_iMaterialIndex(rhs.m_iMaterialIndex)
+	, m_vecMaterialIndex(rhs.m_vecMaterialIndex)
 	, m_pAIMesh(rhs.m_pAIMesh)
 	, m_iNumMesh(rhs.m_iNumMesh)
 {
@@ -26,8 +25,6 @@ HRESULT CMeshContainer::NativeConstruct_Prototype(CModel* pModel, aiMesh* pMesh,
 	if (FAILED(Set_IndicesDesc(pMesh)))
 		return E_FAIL;
 
-	m_iMaterialIndex = pMesh->mMaterialIndex;
-
 	return S_OK;
 }
 
@@ -38,8 +35,6 @@ HRESULT CMeshContainer::NativeConstruct_Prototype(_uint iMaterialIndex, _uint iN
 	if (FAILED(Set_IndicesDesc(iNumIdxCnt,pIdx)))
 		return E_FAIL;
 
-	m_iMaterialIndex = iMaterialIndex;
-
 	return S_OK;
 }
 
@@ -49,8 +44,6 @@ HRESULT CMeshContainer::NativeConstruct_Prototype(_uint iMaterialIndex, _uint iN
 		return E_FAIL;
 	if (FAILED(Set_IndicesDesc(iNumIdxCnt, pIdx)))
 		return E_FAIL;
-
-	m_iMaterialIndex = iMaterialIndex;
 
 	return S_OK;
 }
@@ -166,7 +159,7 @@ const CSaveManager::STATICMESHDATA& CMeshContainer::SetStaticSaveData()
 	CSaveManager::STATICMESHDATA pData;
 
 	pData.iIdxCount = m_iNumPrimitive;
-	pData.iMeshMtrlNum = m_iMaterialIndex;
+	//pData.iMeshMtrlNum = m_iMaterialIndex;
 	pData.iVtxCount = m_iNumVertices;
 	pData.pVtxPoint = (VTXMESH*)m_pVertices;
 	pData.pIndex = (FACEINDICES32*)m_pIndices;
@@ -179,7 +172,7 @@ const CSaveManager::ANIMMESHDATA& CMeshContainer::SetAnimSaveData()
 	CSaveManager::ANIMMESHDATA pData;
 
 	pData.iIdxCount = m_iNumPrimitive;
-	pData.iMeshMtrlNum = m_iMaterialIndex;
+	//pData.iMeshMtrlNum = m_iMaterialIndex;
 	pData.iVtxCount = m_iNumVertices;
 	pData.pVtxPoint = (VTXMESH_ANIM*)m_pVertices;
 	pData.pIndex = (FACEINDICES32*)m_pIndices;
@@ -238,10 +231,18 @@ HRESULT CMeshContainer::Set_UpVerticesDesc(CModel* pModel, aiMesh* pMesh, _fmatr
 		memcpy(&pVertices->vPosition, &pMesh->mVertices[i], sizeof(_float3));
 		_fvector Temp = XMVector3TransformCoord(XMLoadFloat3(&pVertices->vPosition), PivotMatrix);
 		XMStoreFloat3(&pVertices->vPosition, Temp);
-		
-		memcpy(&pVertices->vNormal, &pMesh->mNormals[i], sizeof(_float3));
+
+		_vector         vNormal;
+		memcpy(&vNormal, &pMesh->mNormals[i], sizeof(_float3));
+		vNormal = XMVectorSetW(vNormal, 0.f);
+		vNormal = XMVector3Transform(vNormal, PivotMatrix);
+		XMStoreFloat3(&pVertices->vNormal, vNormal);
+
+		//memcpy(&pVertices->vNormal, &pMesh->mNormals[i], sizeof(_float3));
 		memcpy(&pVertices->vTexUV, &pMesh->mTextureCoords[0][i], sizeof(_float2));
 		memcpy(&pVertices->vTangent, &pMesh->mTangents[i], sizeof(_float3));
+		memcpy(&pVertices->vBiNormal, &pMesh->mBitangents[i], sizeof(_float3));
+
 	}
 	m_VBSubresourceData.pSysMem = m_pVertices;
 

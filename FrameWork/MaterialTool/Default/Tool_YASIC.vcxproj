@@ -189,10 +189,12 @@
   <ItemGroup>
     <ClInclude Include="..\Code\MainForm.h" />
     <ClInclude Include="..\Code\Material_Level.h" />
+    <ClInclude Include="..\Code\ModelObject.h" />
     <ClInclude Include="..\Code\Tool_Define.h" />
     <ClInclude Include="..\Code\Tool_Enum.h" />
     <ClInclude Include="..\Code\Tool_Extern.h" />
     <ClInclude Include="..\Code\Tool_Include.h" />
+    <ClInclude Include="..\Code\MaterialCamera.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="MainFrm.h" />
     <ClInclude Include="pch.h" />
@@ -203,8 +205,10 @@
     <ClInclude Include="Tool_YASICView.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\Code\MaterialCamera.cpp" />
     <ClCompile Include="..\Code\MainForm.cpp" />
     <ClCompile Include="..\Code\Material_Level.cpp" />
+    <ClCompile Include="..\Code\ModelObject.cpp" />
     <ClCompile Include="MainFrm.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

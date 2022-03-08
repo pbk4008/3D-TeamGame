@@ -5,7 +5,7 @@
 
 BEGIN(Engine)
 class CUI;
-class ENGINE_DLL CMouse final : public CGameObject
+class ENGINE_DLL CMouse : public CGameObject
 {
 private:
 	explicit CMouse();

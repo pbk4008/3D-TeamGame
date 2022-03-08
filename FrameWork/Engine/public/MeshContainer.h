@@ -32,7 +32,7 @@ private:
 
 	HRESULT SetUp_SkinnedDesc(CModel* pModel, aiMesh* pMesh);
 public:
-	_uint getMaterialIndex() { return m_iMaterialIndex; }
+	vector<_uint>* getMaterialIndex() { return &m_vecMaterialIndex; }
 public:
 	void* getIndices(void) {
 		return m_pIndices;
@@ -44,7 +44,7 @@ public:
 private:
 	aiMesh*					m_pAIMesh = nullptr;
 private:
-	_uint m_iMaterialIndex = 0;
+	vector<_uint> m_vecMaterialIndex;
 	_uint m_iNumMesh = 0;
 private:
 	vector<CHierarchyNode*>			m_Bones;

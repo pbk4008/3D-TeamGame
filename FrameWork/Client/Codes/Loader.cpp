@@ -87,6 +87,35 @@ HRESULT CLoader::SetUp_Stage1_ProtoComponent()
 
 HRESULT CLoader::Load_Stage1FBXLoad()
 {
+	_finddata_t fd;
+	ZeroMemory(&fd, sizeof(_finddata_t));
+
+	intptr_t handle = _findfirst("../bin/FBX/*.fbx", &fd);
+
+	if (handle == 0)
+		return E_FAIL;
+
+	int iResult = 0;
+	while (iResult != -1)
+	{
+		char szFullPath[MAX_PATH] = "../bin/FBX/";
+		strcat_s(szFullPath, fd.name);
+
+		_tchar fbxName[MAX_PATH] = L"";
+		_tchar fbxPath[MAX_PATH] = L"";
+		MultiByteToWideChar(CP_ACP, 0, fd.name, MAX_PATH, fbxName, MAX_PATH);
+		MultiByteToWideChar(CP_ACP, 0, szFullPath, MAX_PATH, fbxPath, MAX_PATH);
+
+		if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, fbxName
+		, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, fbxPath,
+			L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
+		return E_FAIL;
+
+		iResult = _findnext(handle, &fd);
+	}
+	_findclose(handle);
+
+
 	/*if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"_BossPlatform_QuarterOpen_01_Lod0.fbx"
 		, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/_BossPlatform_QuarterOpen_01_Lod0.fbx",
 			L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
