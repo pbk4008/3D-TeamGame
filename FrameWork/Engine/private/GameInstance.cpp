@@ -83,7 +83,7 @@ _int CGameInstance::Tick_Engine(_double TimeDelta)
 
 	_int	iProgress = 0;
 
-	m_pInput_Device->Update_InputDev();
+	//m_pInput_Device->Update_InputDev();
 
 	iProgress = m_pLevel_Manager->Tick(TimeDelta);
 	if (0 > iProgress)
@@ -320,6 +320,14 @@ void CGameInstance::Set_Transform(const wstring& pCameraTag, TRANSFORMSTATEMATRI
 		return;
 
 	return m_pPipeLine->Set_Transform(pCameraTag, eType, TransformMatrix);
+}
+
+void CGameInstance::Update_InputDev()
+{
+	if (!m_pInput_Device)
+		return;
+
+	m_pInput_Device->Update_InputDev();
 }
 
 _bool CGameInstance::getkeyPress(_ubyte bykeyID)

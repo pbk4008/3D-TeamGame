@@ -12,23 +12,16 @@ CTestScene_JS::CTestScene_JS(ID3D11Device* pDevice, ID3D11DeviceContext* pDevice
 
 HRESULT CTestScene_JS::NativeConstruct()
 {
-	if (FAILED(__super::NativeConstruct()))
-	{
-		return E_FAIL;
-	}
+	if (FAILED(__super::NativeConstruct())) return E_FAIL;
 
-	if (FAILED(Ready_Gameobject()))
-		return E_FAIL;
+	if (FAILED(Ready_Gameobject())) return E_FAIL;
 
 	return S_OK;
 }
 
 _int CTestScene_JS::Tick(_double TimeDelta)
 {
-	if (0 > __super::Tick(TimeDelta))
-	{
-		return -1;
-	}
+	if (0 > __super::Tick(TimeDelta)) return -1;
 
 	return _int();
 }

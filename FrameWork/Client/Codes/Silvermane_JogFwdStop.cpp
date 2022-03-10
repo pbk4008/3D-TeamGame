@@ -105,8 +105,9 @@ _int CSilvermane_JogFwdStop::KeyCheck(const _double& _dDeltaTime)
 				return -1;
 			return STATE_CHANGE;
 		}
-	}
 
+		Add_PlusAngle(EDir::Forward, _dDeltaTime);
+	}
 
 	return _int();
 }

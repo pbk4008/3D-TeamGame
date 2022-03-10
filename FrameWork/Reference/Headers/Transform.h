@@ -23,14 +23,18 @@ private:
 	virtual ~CTransform() = default;
 public:
 	_fvector Get_State(STATE eState) const {	return XMLoadFloat4((_float4*)&m_WorldMatrix.m[eState][0]); }
+	const _fvector Get_CombinedState(const STATE _eState);
 	_float Get_Scale(STATE eState) const { return XMVectorGetX(XMVector3Length(Get_State(eState))); }
 	_fmatrix Get_WorldMatrix() const { return XMLoadFloat4x4(&m_WorldMatrix); }
 	_fmatrix Get_WorldMatrixInverse() const { return XMMatrixInverse(nullptr, XMLoadFloat4x4(&m_WorldMatrix)); }
+	const _fmatrix& Get_PivotMatrix() const { return m_smatPivot; }
+	const _fmatrix Get_CombinedMatrix() const { return m_smatPivot * XMLoadFloat4x4(&m_WorldMatrix); }
 
 	void Set_WorldMatrix(_fmatrix matWorld) { XMStoreFloat4x4(&m_WorldMatrix, matWorld); }
 	void Set_State(STATE eState, _fvector vState) {	XMStoreFloat4((_float4*)&m_WorldMatrix.m[eState][0], vState); }		
 	void Set_TransformDesc(const TRANSFORMDESC& TransformDesc) { m_TransformDesc = TransformDesc; }
 	void Set_TransformDesc(_float fSpeedPerSec, _float fAnglePerSec);
+	void Set_PivotMatrix(const _fmatrix& _matPivot);
 public:
 	virtual HRESULT NativeConstruct_Prototype();
 	virtual HRESULT NativeConstruct(void* pArg);
@@ -63,6 +67,7 @@ public:
 
 private:
 	_float4x4				m_WorldMatrix;	
+	_matrix					m_smatPivot = XMMatrixIdentity();
 	TRANSFORMDESC			m_TransformDesc;
 
 public:

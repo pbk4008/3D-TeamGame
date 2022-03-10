@@ -80,14 +80,32 @@ _int CSilvermane_SprintFwdStop::KeyCheck(const _double& _dDeltaTime)
 		else if (g_pGameInstance->getkeyPress(DIK_A))
 		{
 		}
+		else
+		{
+			if (m_pAnimationController->Is_Finished())
+			{
+				if (FAILED(m_pStateController->Change_State(L"Idle")))
+					return E_FAIL;
+				return STATE_CHANGE;
+			}
+		}
 	}
 	else
 	{
-		if (m_pAnimationController->Is_Finished())
+		if (g_pGameInstance->getkeyPress(DIK_W))
 		{
-			if (FAILED(m_pStateController->Change_State(L"Idle")))
+			if (FAILED(m_pStateController->Change_State(L"JogFwdStart")))
 				return E_FAIL;
 			return STATE_CHANGE;
+		}
+		else
+		{
+			if (m_pAnimationController->Is_Finished())
+			{
+				if (FAILED(m_pStateController->Change_State(L"Idle")))
+					return E_FAIL;
+				return STATE_CHANGE;
+			}
 		}
 	}
 

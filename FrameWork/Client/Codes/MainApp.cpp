@@ -44,13 +44,34 @@ _int CMainApp::Tick(_double TimeDelta)
 {
 	m_TimeAcc += TimeDelta;
 
-	g_pGameInstance->Tick_Engine(TimeDelta);
+	g_pGameInstance->Update_InputDev();
+
+	if (g_pGameInstance->getkeyDown(DIK_P))
+		m_isPause = !m_isPause;
+
+	if (!m_isPause)
+	{
+		g_pGameInstance->Tick_Engine(TimeDelta);
+		m_isRender = true;
+	}
+	else
+	{
+		if (g_pGameInstance->getkeyDown(DIK_PGUP))
+		{
+			g_pGameInstance->Tick_Engine(0.04);
+			m_isRender = true;
+		}
+	}
+
 
 	return _int();
 }
 
 HRESULT CMainApp::Render()
 {
+	if (!m_isRender)
+		return S_OK;
+
 	if (FAILED(g_pGameInstance->Clear_BackBuffer_View(XMFLOAT4(0.f, 0.f, 1.f, 1.f))))
 		return E_FAIL;
 	if (FAILED(g_pGameInstance->Clear_DepthStencil_View()))
@@ -83,7 +104,7 @@ HRESULT CMainApp::Render()
 		return E_FAIL;
 
 
-		
+	m_isRender = false;
 	return S_OK;
 }
 

@@ -81,7 +81,15 @@ _int CSilvermane_JogRightStart::KeyCheck(const _double& _dDeltaTime)
 
 	if (g_pGameInstance->getkeyPress(DIK_D))
 	{
-		_float fPlusAngle = m_pSilvermane->Get_PlusAngle();
+		if (m_pAnimationController->Is_Finished())
+		{
+			if (FAILED(m_pStateController->Change_State(L"JogRight")))
+				return -1;
+			return STATE_CHANGE;
+		}
+
+		_float3 vDir = m_pSilvermane->Get_Dir();
+		if (1.f > vDir.z) m_pSilvermane->Add_Dir(0.f, (_float)_dDeltaTime);
 		if (g_pGameInstance->getkeyPress(DIK_W))
 		{
 			if (FAILED(m_pStateController->Change_State(L"JogFwd")))
@@ -96,17 +104,7 @@ _int CSilvermane_JogRightStart::KeyCheck(const _double& _dDeltaTime)
 		}
 		else
 		{
-			if (0.f < fPlusAngle)
-				m_pSilvermane->Add_PlusAngle(-_dDeltaTime);
-			else if (0.f > fPlusAngle)
-				m_pSilvermane->Add_PlusAngle(_dDeltaTime);
-
-			if (m_pAnimationController->Is_Finished())
-			{
-				if (FAILED(m_pStateController->Change_State(L"JogRight")))
-					return -1;
-				return STATE_CHANGE;
-			}
+			Add_PlusAngle(EDir::Forward, _dDeltaTime);
 		}
 	}
 	else if (g_pGameInstance->getkeyPress(DIK_A))

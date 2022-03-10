@@ -106,6 +106,7 @@ public: /* For.PipeLine */
 	void Set_Transform(const wstring& pCameraTag, TRANSFORMSTATEMATRIX eType, _fmatrix TransformMatrix);
 
 public: /* for.Input_Device */
+	void Update_InputDev();
 	_bool getkeyPress(_ubyte bykeyID);
 	_bool getkeyDown(_ubyte bykeyID);
 	_bool getkeyUp(_ubyte bykeyID);

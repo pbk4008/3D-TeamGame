@@ -394,7 +394,7 @@ const _int CAnimationController::Move_Transform(const _double& _dDeltaTime)
 			svLook = m_pTransform->Get_State(CTransform::STATE_LOOK);
 
 			svVelocity = XMLoadFloat3(&vBonePosition);
-			svVelocity = XMVector4Transform(svVelocity, m_smatPivot);
+			svVelocity = XMVector4Transform(svVelocity, m_smatPivot * m_pTransform->Get_PivotMatrix());
 
 			XMStoreFloat3(&vVelocity, svVelocity);
 			m_pTransform->Go_Right(vVelocity.x * _dDeltaTime);

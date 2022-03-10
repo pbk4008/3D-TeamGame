@@ -150,6 +150,8 @@ _int CSilvermane_Idle::KeyCheck(const _double& _dDeltaTime)
 		}
 	}
 
+	Add_PlusAngle(EDir::Forward, _dDeltaTime);
+
 	return _int();
 }
 
