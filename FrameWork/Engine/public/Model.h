@@ -51,9 +51,16 @@ private:
 	_uint				m_iCurrentAnimation = 0;
 	_uint				m_iNumMeshes = 0;
 	_bool				m_bSaved = false;
+	_bool				m_bUsingMaterial = false;
+private:
+	ID3DX11Effect* m_pEffect = nullptr;
+	vector<EFFECTDESC*> m_PassDesc;
 private:
 	vector<vector<CMeshContainer*>> m_MeshContainers;
 	typedef vector<CMeshContainer*>	MESHCONTAINERS;
+
+
+	vector<MESHMATERIAL*>			m_Materials;
 
 	vector<CMaterial*>					m_vecMaterials;
 
@@ -81,6 +88,7 @@ private:
 
 	HRESULT Create_HierarchyNode(aiNode* pNode, CHierarchyNode* pParent = nullptr, _uint iDepth = 0);
 	
+	HRESULT Compile_Shader(const wstring& pShaderFilePath);
 	HRESULT Create_Animation();
 public:
 	static CModel* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext, const string& pMeshFilePath, const string& pMeshFileName, const wstring& pShaderFilePath, _fmatrix PivotMatrix, TYPE eMeshType,_bool bMaterial = false);

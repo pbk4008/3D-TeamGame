@@ -53,7 +53,7 @@ private:
 	_bool				m_bSaved = false;
 private:
 	vector<vector<CMeshContainer*>> m_MeshContainers;
-	typedef vector<vector<CMeshContainer*>>	MESHCONTAINERS;
+	typedef vector<CMeshContainer*>	MESHCONTAINERS;
 
 	vector<CMaterial*>					m_vecMaterials;
 

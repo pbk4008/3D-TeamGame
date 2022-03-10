@@ -21,6 +21,8 @@ HRESULT CMaterial_Level::NativeConstruct()
 		return E_FAIL;
 	if (FAILED(Init_MaterialObject()))
 		return E_FAIL;
+	if (FAILED(Init_Mouse()))
+		return E_FAIL;
 	return S_OK;
 }
 

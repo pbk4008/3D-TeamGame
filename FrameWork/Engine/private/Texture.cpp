@@ -3,12 +3,14 @@
 
 CTexture::CTexture(ID3D11Device * pDevice, ID3D11DeviceContext * pDeviceContext)
 	: CComponent(pDevice, pDeviceContext)
+	, m_wstrTextureTag(L"")
 {
 	
 }
 
 CTexture::CTexture(const CTexture & rhs)
 	: CComponent(rhs)
+	, m_wstrTextureTag(rhs.m_wstrTextureTag)
 {
 	for (auto& pShaderResourceView : rhs.m_Textures)
 	{
@@ -92,13 +94,11 @@ HRESULT CTexture::NativeConstruct_Prototype(const wstring& pTextureFilePath, _ui
 		Safe_Release(pTextureResource);
 		ScratchImage.Release();
 	}
-
 	return S_OK;
 }
 
 HRESULT CTexture::NativeConstruct_Prototype()
 {
-
 	return S_OK;
 }
 
@@ -110,8 +110,8 @@ HRESULT CTexture::NativeConstruct(void * pArg)
 	CTextureManager* pInstance = GET_INSTANCE(CTextureManager);
 
 
-	wstring pTag = (*(wstring*)pArg);
-	vector <ID3D11ShaderResourceView* >* pTexture = pInstance->Get_Texture(pTag);
+	m_wstrTextureTag = (*(wstring*)pArg);
+	vector <ID3D11ShaderResourceView* >* pTexture = pInstance->Get_Texture(m_wstrTextureTag);
 
 	if (!pTexture)
 		return E_FAIL;
@@ -138,6 +138,7 @@ HRESULT CTexture::Change_Texture(const wstring& pTextureTag)
 	//	m_Textures.emplace_back((*pTexture)[i]);
 	//	Safe_AddRef(m_Textures[i]);
 	//}
+	m_wstrTextureTag = pTextureTag;
 
 	if (m_Textures.size())
 	{
@@ -155,7 +156,6 @@ HRESULT CTexture::Change_Texture(const wstring& pTextureTag)
 		Safe_Release(pResource);
 		m_Textures.emplace_back(tmpResourceView);
 	}
-
 	RELEASE_INSTANCE(CTextureManager);
 	return S_OK;
 }

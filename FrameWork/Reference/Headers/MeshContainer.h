@@ -44,7 +44,7 @@ public:
 private:
 	aiMesh*					m_pAIMesh = nullptr;
 private:
-	_uint m_iMaterialIndex = 0;
+	_uint m_iMaterialIndex=0;
 	_uint m_iNumMesh = 0;
 private:
 	vector<CHierarchyNode*>			m_Bones;

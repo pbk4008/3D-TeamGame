@@ -8,6 +8,8 @@
 #include "Material_Level.h"
 #include "ModelObject.h"
 #include "Mouse.h"
+#include "Material.h"
+
 // CMainForm
 
 IMPLEMENT_DYNCREATE(CMainForm, CFormView)
@@ -20,6 +22,10 @@ CMainForm::CMainForm()
 	, m_pSelModel(nullptr)
 	, m_bChange(false)
 	, m_pMouse(nullptr)
+	, m_pSelMaterial(nullptr)
+	, m_bTextureChange(false)
+	, m_iSelMaterialIndex(-1)
+	, m_iPreMaterialIndex(-1)
 {
 
 }
@@ -34,9 +40,20 @@ void CMainForm::DoDataExchange(CDataExchange* pDX)
 	CFormView::DoDataExchange(pDX);
 	DDX_Control(pDX, IDC_TREE1, m_FbxTree);
 	DDX_Control(pDX, IDC_LIST2, m_TextureBox);
+	DDX_Control(pDX, IDC_LIST1, m_MaterialBox);
+	DDX_Control(pDX, IDC_Model2, m_tMaterialNameEdit);
+	DDX_Control(pDX, IDC_COMBO1, m_ShaderFileComboBox);
+	DDX_Control(pDX, IDC_RADIO4, m_tStaticBtn);
+	DDX_Control(pDX, IDC_RADIO5, m_tAnimBtn);
+	DDX_Control(pDX, IDC_RADIO6, m_tInstance_StaticBtn);
+	DDX_Control(pDX, IDC_RADIO7, m_tInstance_AnimBtn);
+	DDX_Control(pDX, IDC_Model3, m_tTextureTypeEdit);
+	DDX_Control(pDX, IDC_LIST3, m_AddTextureList);
 }
 
 BEGIN_MESSAGE_MAP(CMainForm, CFormView)
+	ON_BN_CLICKED(IDC_BUTTON1, &CMainForm::OnMaterialAddBtnClick)
+	ON_BN_CLICKED(IDC_BUTTON2, &CMainForm::OnTextureAddBtnClick)
 END_MESSAGE_MAP()
 
 
@@ -74,14 +91,21 @@ void CMainForm::OnInitialUpdate()
 		return;
 
 	m_pRenderer = g_pGameInstance->Clone_Component<CRenderer>(0, L"Renderer");
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer(0, L"MaterialMouse", L"Mouse", nullptr, (CGameObject * *)& m_pMouse)))
+	
+	if (FAILED(Start_Level()))
 		return;
 
-	if (FAILED(Start_Level()))
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer(0, L"MaterialMouse", L"Mouse", nullptr, (CGameObject * *)& m_pMouse)))
 		return;
 
 	if (FAILED(Ready_Tree()))
 		return;
+
+	if (FAILED(Ready_ComboBox()))
+		return;
+	if (FAILED(Ready_CommonTexture()))
+		return;
+
 	// TODO: 여기에 특수화된 코드를 추가 및/또는 기본 클래스를 호출합니다.
 }
 
@@ -93,6 +117,8 @@ _int CMainForm::Tick(_double dDeltaTime)
 	m_pMouse->RayUpdate(L"MainCamera");
 	Update_Tree();
 	Update_TextureList();
+	Update_Material();
+	Update_AddTextureList();
 	Focusing();
 
 	return 0;
@@ -173,12 +199,48 @@ _int CMainForm::Update_TextureList()
 
 	m_TextureBox.ResetContent();
 
+	if (FAILED(Ready_CommonTexture()))
+		return -1;
 	for (auto& pTextureTag : TextureList)
 		m_TextureBox.AddString(pTextureTag.c_str());
 
 	m_bChange = true;
 
 	return _int();
+}
+
+_int CMainForm::Update_Material()
+{
+	m_iSelMaterialIndex = m_MaterialBox.GetCurSel();
+	if (m_iSelMaterialIndex == -1 || m_iPreMaterialIndex == m_iSelMaterialIndex)
+		return 0;
+
+	CString strMaterialName=L"";
+	_uint iSelectIndex = m_MaterialBox.GetCurSel();
+	m_MaterialBox.GetText(iSelectIndex, strMaterialName);
+
+	m_pSelMaterial=g_pGameInstance->Get_Material(strMaterialName.GetString());
+	if (!m_pSelMaterial)
+		return -1;
+	m_iPreMaterialIndex = m_iSelMaterialIndex;
+	m_bTextureChange = true;
+	return _int();
+}
+
+_int CMainForm::Update_AddTextureList()
+{
+	if (!m_pSelMaterial||!m_bTextureChange)
+		return 0;
+
+	m_AddTextureList.ResetContent();
+	list<wstring> TextureNameList;
+	TextureNameList = m_pSelMaterial->Get_TextureName();
+
+	for (auto& pName : TextureNameList)
+		m_AddTextureList.AddString(pName.c_str());
+
+	m_bTextureChange = false;
+	return 0;
 }
 
 HRESULT CMainForm::Start_Level()
@@ -221,6 +283,51 @@ HRESULT CMainForm::Ready_Tree()
 			}
 		}
 	}
+
+	CMaterial* pMaterial=g_pGameInstance->Get_Material();
+	wstring wstrMaterialName=pMaterial->Get_Name();
+
+	m_MaterialBox.AddString(wstrMaterialName.c_str());
+	return S_OK;
+}
+
+HRESULT CMainForm::Ready_ComboBox()
+{
+	CFileFind fFinder;
+
+	_bool bWorking = fFinder.FindFile(L"..\\..\\Reference\\ShaderFile\\*.hlsl");
+
+	while (bWorking)
+	{
+		bWorking = fFinder.FindNextFile();
+		if (fFinder.IsDots()) continue;
+			m_ShaderFileComboBox.AddString(fFinder.GetFileName());
+	}
+	fFinder.Close();
+
+	return S_OK;
+}
+
+HRESULT CMainForm::Ready_CommonTexture()
+{
+	CFileFind fFinder;
+
+	_bool bWorking = fFinder.FindFile(L"..\\Common_Texture\\*.*");
+	
+
+	while (bWorking)
+	{
+		CString strPath = L"../Common_Texture/";
+		bWorking = fFinder.FindNextFile();
+		if (fFinder.IsDots()) continue;
+		strPath += fFinder.GetFileName();
+		if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, fFinder.GetFileName().GetString(), strPath.GetString())))
+			return E_FAIL;
+		m_TextureBox.AddString(fFinder.GetFileName());
+	}
+	fFinder.Close();
+
+
 	return S_OK;
 }
 
@@ -267,6 +374,29 @@ HRESULT CMainForm::Picking()
 	return S_OK;
 }
 
+_int CMainForm::Check_RadioBtn()
+{
+	_int iResult = 0;
+	if (!m_tStaticBtn.GetCheck() && !m_tAnimBtn.GetCheck() &&
+		!m_tInstance_StaticBtn.GetCheck() && !m_tInstance_AnimBtn.GetCheck())
+		iResult = -1;
+	else
+	{
+		if (m_tStaticBtn.GetCheck())
+			iResult = 0;
+		else if (m_tAnimBtn.GetCheck())
+			iResult = 1;
+		else if (m_tInstance_StaticBtn.GetCheck())
+			iResult = 2;
+		else if (m_tInstance_AnimBtn.GetCheck())
+			iResult = 3;
+	}
+
+
+
+	return iResult;
+}
+
 void CMainForm::Free()
 {
 	Safe_Release(m_pDevice);
@@ -275,4 +405,51 @@ void CMainForm::Free()
 	Safe_Release(m_pMouse);
 
 	g_pGameInstance->Release_Engine();
+}
+
+
+void CMainForm::OnMaterialAddBtnClick()
+{
+	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+	_int iResult = Check_RadioBtn();
+	if (0!=m_tMaterialNameEdit.GetSel()&&-1!= m_ShaderFileComboBox.GetCurSel() && iResult!=-1)
+	{
+		CString strMaterialName = L"";
+		m_tMaterialNameEdit.GetWindowTextW(strMaterialName);
+
+		m_MaterialBox.AddString(strMaterialName);
+		m_tMaterialNameEdit.SetWindowTextW(L"");
+
+		CString strShaderFile = L"../../Reference/ShaderFile/";
+		CString strShaderFileName = L"";
+		m_ShaderFileComboBox.GetWindowTextW(strShaderFileName);
+		strShaderFile += strShaderFileName;
+		CMaterial* pMaterial = CMaterial::Create(m_pDevice, m_pDeviceContext, strMaterialName.GetString()
+			, strShaderFile.GetString(), (CMaterial::EType)iResult);
+
+		g_pGameInstance->Add_Material(strMaterialName.GetString(), pMaterial);
+	}
+}
+
+
+void CMainForm::OnTextureAddBtnClick()
+{
+	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+	_int iSelTextureIndex = m_TextureBox.GetCurSel();
+	if (m_pSelMaterial && iSelTextureIndex>=0 && m_tTextureTypeEdit.GetSel() !=0)
+	{
+		CString strSelTexture = L"";
+		m_TextureBox.GetText(iSelTextureIndex, strSelTexture);
+
+		CString strTextureType;
+		m_tTextureTypeEdit.GetWindowTextW(strTextureType);
+		_uint iTextureType = _ttoi(strTextureType);
+
+		m_tFbxPath;
+		CString strSelTexturePath = m_tFbxPath + strSelTexture.GetString();
+		if(FAILED(m_pSelMaterial->Set_Texture((TEXTURETYPE)iTextureType, strSelTexture.GetString(), strSelTexturePath.GetString())))
+			return;
+
+		m_AddTextureList.InsertString(iTextureType, strSelTexture);
+	}
 }

@@ -9,6 +9,7 @@ class CModelObject;
 END
 BEGIN(Engine)
 class CMouse;
+class CMaterial;
 END
 class CMainForm : public CFormView
 {
@@ -40,12 +41,19 @@ public:
 private:
 	_int Update_Tree();
 	_int Update_TextureList();
+	_int Update_Material();
+	_int Update_AddTextureList();
 private:
 	HRESULT Start_Level();
-	HRESULT Ready_Tree();
 	CModelObject* Find_Model(const wstring& pModelName);
 	HRESULT Focusing();
 	HRESULT Picking();
+private:
+	_int Check_RadioBtn();
+private:
+	HRESULT Ready_Tree();
+	HRESULT Ready_ComboBox();
+	HRESULT Ready_CommonTexture();
 private:
 	void Free();
 private:
@@ -53,15 +61,32 @@ private:
 	ID3D11DeviceContext* m_pDeviceContext;
 	CRenderer* m_pRenderer;
 	CMouse* m_pMouse;
+	CModelObject* m_pSelModel;
+	CMaterial* m_pSelMaterial;
 private:
 	CString m_tFbxPath;
 	CString m_tFbxName;
-	CModelObject* m_pSelModel;
+	_int m_iSelMaterialIndex;
+	_int m_iPreMaterialIndex;
 	_bool m_bChange;
+	_bool m_bTextureChange;
 private:
 	CTreeCtrl m_FbxTree;
-public:
 	CListBox m_TextureBox;
+	CListBox m_MaterialBox;
+	CListBox m_AddTextureList;
+	CComboBox m_ShaderFileComboBox;
+private:
+	CEdit m_tMaterialNameEdit;
+	CEdit m_tTextureTypeEdit;
+	CButton m_tStaticBtn;
+	CButton m_tAnimBtn;
+	CButton m_tInstance_StaticBtn;
+	CButton m_tInstance_AnimBtn;
+public:
+	afx_msg void OnMaterialAddBtnClick();
+	afx_msg void OnTextureAddBtnClick();
+
 };
 
 

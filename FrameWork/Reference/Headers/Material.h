@@ -19,13 +19,17 @@ public:
 
 	virtual HRESULT Compile_ShaderFiles(const wstring& _wstrShaderFilePath, D3D11_INPUT_ELEMENT_DESC* _pElementDesc, const _uint _iNumElements);
 	HRESULT SetUp_ValueOnShader(const string _strConstantName, void* _pData, const _uint _iSize);
-	HRESULT SetUp_TextureOnShader(const string _strConstantName, const aiTextureType eType, _uint _iTextureIndex = 0);
+	HRESULT SetUp_TextureOnShader(const string _strConstantName, TEXTURETYPE eType, _uint _iTextureIndex = 0);
 
 	const wstring& Get_Name() const;
 
-	HRESULT Set_Texture(const string& _strConstantName, const aiTextureType _eTextureType, CTexture* _pTexture, const _uint _iTextureIndex = 0);
+	HRESULT Set_Texture(const string& _strConstantName, TEXTURETYPE _eTextureType, CTexture* _pTexture, const _uint _iTextureIndex = 0);
+	HRESULT Set_Texture(TEXTURETYPE _eTextureType, const wstring& _pTextureTag, const wstring& _pTexturePath, _uint _iTextureIndex = 0);
 	void Set_InputLayout(_uint iPassIndex);
-
+public:
+	list<wstring> Get_TextureName();
+private:
+	HRESULT SetUp_TextureOnShader();
 private:
 	vector<CTexture*> m_vecTextures;
 	wstring m_wstrShaderPath = L"";
@@ -37,7 +41,6 @@ private:
 
 	ID3D11Device* m_pDevice = nullptr;
 	ID3D11DeviceContext* m_pDeviceContext = nullptr;
-
 public:
 	static CMaterial* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext, const wstring& _wstrName, const wstring& _wstrShaderFilePath, const EType _eType);
 	virtual void Free() override;

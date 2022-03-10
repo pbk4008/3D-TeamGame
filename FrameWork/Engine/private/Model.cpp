@@ -20,27 +20,39 @@ CModel::CModel(ID3D11Device * pDevice, ID3D11DeviceContext * pDeviceContext)
 CModel::CModel(const CModel& rhs)
 	: CComponent(rhs)
 	, m_pScene(rhs.m_pScene)
+	, m_Materials(rhs.m_Materials)
 	, m_PivotMatrix(rhs.m_PivotMatrix)
 	, m_iCurrentAnimation(rhs.m_iCurrentAnimation)
 	, m_eMeshType(rhs.m_eMeshType)
 	, m_HierarchyNodes(rhs.m_HierarchyNodes)
-	, m_vecMaterials(rhs.m_vecMaterials)
 	, m_bSaved(rhs.m_bSaved)
-	, m_MeshContainers(rhs.m_MeshContainers)
+	, m_bUsingMaterial(rhs.m_bUsingMaterial)
+	, m_pEffect(rhs.m_pEffect)
+	, m_PassDesc(rhs.m_PassDesc)
 {	
 	strcpy_s(m_szMeshFilePath, rhs.m_szMeshFilePath);
 	strcpy_s(m_szMeshFullName, rhs.m_szMeshFullName);
 
-	for (_uint i = 0; i < rhs.m_vecMaterials.size(); ++i)
+	if (!m_bUsingMaterial)
 	{
-		if (rhs.m_vecMaterials[i])
+		for (auto& pMaterial : m_Materials)
 		{
-			Add_Material(rhs.m_vecMaterials[i], i);
+			for (_uint i = 0; i < AI_TEXTURE_TYPE_MAX; ++i)
+				Safe_AddRef(pMaterial->pMeshTexture[i]);
 		}
-	}
-	
-	m_MeshContainers.resize((_uint)rhs.m_vecMaterials.size());
+		m_MeshContainers.resize((_uint)rhs.m_Materials.size());
 
+	}
+	else
+	{
+		m_vecMaterials.resize((_uint)rhs.m_vecMaterials.size());
+		for (_uint i = 0; i < m_vecMaterials.size(); ++i)
+		{
+			if (rhs.m_vecMaterials[i])
+				Add_Material(rhs.m_vecMaterials[i], i);
+		}
+		m_MeshContainers.resize((_uint)rhs.m_vecMaterials.size());
+	}
 	for (auto& MtrlMeshContainer : rhs.m_MeshContainers)
 	{
 		for (auto& pPrototypeMeshContainer : MtrlMeshContainer)
@@ -58,6 +70,12 @@ CModel::CModel(const CModel& rhs)
 		m_Animations.emplace_back(pAnimation->Clone());
 	}
 
+	for (auto& pPassDesc : m_PassDesc)
+	{
+		Safe_AddRef(pPassDesc->pInputLayout);
+		Safe_AddRef(pPassDesc->pPass);
+	}
+	Safe_AddRef(m_pEffect);
 }
 
 CHierarchyNode* CModel::Get_BoneMatrix(const char * pBoneName)
@@ -88,7 +106,8 @@ HRESULT CModel::NativeConstruct_Prototype(const string& pMeshFilePath, const str
  	if (nullptr == m_pScene)
 		return E_FAIL;
 
-	m_iNumMeshes = m_pScene->mNumMeshes;
+	m_MeshContainers.resize(1);
+
 	if (FAILED(Create_MeshContainer()))
 		return E_FAIL;
 
@@ -333,7 +352,7 @@ HRESULT CModel::Create_MeshContainer()
 		if (!pMeshContainer)
 			return E_FAIL;
 
-		m_MeshContainers.emplace_back(pMeshContainer);
+		m_MeshContainers[0].emplace_back(pMeshContainer);
 	}
 	
 	return S_OK;
@@ -455,7 +474,72 @@ HRESULT CModel::Create_Animation()
 	}
 	return S_OK;
 }
+HRESULT CModel::Compile_Shader(const wstring& pShaderFilePath)
+{
+	_uint iNumElements = 0;
 
+	D3D11_INPUT_ELEMENT_DESC Elements[D3D11_IA_VERTEX_INPUT_STRUCTURE_ELEMENT_COUNT];
+	ZeroMemory(Elements, sizeof(D3D11_INPUT_ELEMENT_DESC) * D3D11_IA_VERTEX_INPUT_STRUCTURE_ELEMENT_COUNT);
+
+	if (m_eMeshType == TYPE_STATIC)
+	{
+		iNumElements = 4;
+		Elements[0] = { "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 };
+		Elements[1] = { "NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 };
+		Elements[2] = { "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 24, D3D11_INPUT_PER_VERTEX_DATA, 0 };
+		Elements[3] = { "TANGENT", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 32, D3D11_INPUT_PER_VERTEX_DATA, 0 };
+		//Elements[3] = { "BINORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 32, D3D11_INPUT_PER_VERTEX_DATA, 0 };
+	}
+	else
+	{
+		iNumElements = 6;
+		Elements[0] = { "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 };
+		Elements[1] = { "NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 };
+		Elements[2] = { "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 24, D3D11_INPUT_PER_VERTEX_DATA, 0 };
+		Elements[3] = { "TANGENT", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 32, D3D11_INPUT_PER_VERTEX_DATA, 0 };
+		Elements[4] = { "BLENDINDEX", 0, DXGI_FORMAT_R32G32B32A32_UINT, 0, 44, D3D11_INPUT_PER_VERTEX_DATA, 0 };
+		Elements[5] = { "BLENDWEIGHT", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 60, D3D11_INPUT_PER_VERTEX_DATA, 0 };
+		//Elements[3] = { "BINORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 32, D3D11_INPUT_PER_VERTEX_DATA, 0 };
+	}
+
+	_uint		iFlag = 0;
+
+#ifdef _DEBUG
+	iFlag = D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION;
+#else
+	iFlag = D3DCOMPILE_OPTIMIZATION_LEVEL1;
+#endif // _DEBUG	
+	if (FAILED(D3DX11CompileEffectFromFile(pShaderFilePath.c_str(), nullptr, D3D_COMPILE_STANDARD_FILE_INCLUDE, iFlag, 0, m_pDevice, &m_pEffect, nullptr)))
+		return E_FAIL;
+
+	ID3DX11EffectTechnique* pTechnique = m_pEffect->GetTechniqueByIndex(0);
+
+	D3DX11_TECHNIQUE_DESC			TechniqueDesc;
+	ZeroMemory(&TechniqueDesc, sizeof(D3DX11_TECHNIQUE_DESC));
+
+	pTechnique->GetDesc(&TechniqueDesc);
+
+	m_PassDesc.reserve(TechniqueDesc.Passes);
+
+	for (_uint i = 0; i < TechniqueDesc.Passes; ++i)
+	{
+		EFFECTDESC* pPassDesc = new EFFECTDESC;
+
+		pPassDesc->pPass = pTechnique->GetPassByIndex(i);
+
+		D3DX11_PASS_DESC		PassDesc;
+		ZeroMemory(&PassDesc, sizeof(D3DX11_PASS_DESC));
+
+		pPassDesc->pPass->GetDesc(&PassDesc);
+
+		if (FAILED(m_pDevice->CreateInputLayout(Elements, iNumElements, PassDesc.pIAInputSignature, PassDesc.IAInputSignatureSize, &pPassDesc->pInputLayout)))
+			return E_FAIL;
+
+		m_PassDesc.push_back(pPassDesc);
+	}
+
+	return S_OK;
+}
 CHierarchyNode * CModel::Find_HierarchyNode(const char * pName)
 {
 	auto	iter = find_if(m_HierarchyNodes.begin(), m_HierarchyNodes.end(), [&](CHierarchyNode* pNode)
@@ -672,6 +756,13 @@ void CModel::Free()
 {
 	__super::Free();
 
+	if (!m_isCloned)
+	{
+		for (auto& pPassDesc : m_PassDesc)
+			Safe_Delete(pPassDesc);
+	}
+	m_PassDesc.clear();
+	Safe_Release(m_pEffect);
 
 	for (auto& pNode : m_HierarchyNodes)
 		Safe_Release(pNode);
@@ -684,14 +775,14 @@ void CModel::Free()
 	}
 	m_vecMaterials.clear();
 
-	//for (auto& pMaterial : m_Materials)
-	//{
-	//	for (_uint i = 0; i < AI_TEXTURE_TYPE_MAX; ++i)
-	//		Safe_Release(pMaterial->pMeshTexture[i]);
-	//	if (false == m_isCloned)
-	//		Safe_Delete(pMaterial);
-	//}
-	//m_Materials.clear();
+	for (auto& pMaterial : m_Materials)
+	{
+		for (_uint i = 0; i < AI_TEXTURE_TYPE_MAX; ++i)
+			Safe_Release(pMaterial->pMeshTexture[i]);
+		if (false == m_isCloned)
+			Safe_Delete(pMaterial);
+	}
+	m_Materials.clear();
 
 	for (auto& pMtrlMeshContainer : m_MeshContainers)
 	{

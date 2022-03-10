@@ -1,6 +1,7 @@
 #include "Material.h"
-
 #include "Texture.h"
+#include "TextureManager.h"
+#include "Component_Manager.h"
 
 CMaterial::CMaterial(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
 	: m_pDevice(_pDevice)
@@ -58,10 +59,10 @@ HRESULT CMaterial::Native_Construct(const wstring& _wstrName, const wstring& _ws
 		   { "TANGENT", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 32, D3D11_INPUT_PER_VERTEX_DATA, 0 },
 		   { "BINORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 44, D3D11_INPUT_PER_VERTEX_DATA, 0 },
 
-		   { "WORLD", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 1, 0, D3D11_INPUT_PER_INSTANCE_DATA, 1 },
-		   { "WORLD", 1, DXGI_FORMAT_R32G32B32A32_FLOAT, 1, 16, D3D11_INPUT_PER_INSTANCE_DATA, 1 },
-		   { "WORLD", 2, DXGI_FORMAT_R32G32B32A32_FLOAT, 1, 32, D3D11_INPUT_PER_INSTANCE_DATA, 1 },
-		   { "WORLD", 3, DXGI_FORMAT_R32G32B32A32_FLOAT, 1, 48, D3D11_INPUT_PER_INSTANCE_DATA, 1 }
+		   { "TEXCOORD", 1, DXGI_FORMAT_R32G32B32A32_FLOAT, 1, 0, D3D11_INPUT_PER_INSTANCE_DATA, 1 },
+		   { "TEXCOORD", 2, DXGI_FORMAT_R32G32B32A32_FLOAT, 1, 16, D3D11_INPUT_PER_INSTANCE_DATA, 1 },
+		   { "TEXCOORD", 3, DXGI_FORMAT_R32G32B32A32_FLOAT, 1, 32, D3D11_INPUT_PER_INSTANCE_DATA, 1 },
+		   { "TEXCOORD", 4, DXGI_FORMAT_R32G32B32A32_FLOAT, 1, 48, D3D11_INPUT_PER_INSTANCE_DATA, 1 }
 		};
 		if (FAILED(Compile_ShaderFiles(_wstrShaderFilePath, ElementDescs, 9)))
 			return E_FAIL;
@@ -79,10 +80,10 @@ HRESULT CMaterial::Native_Construct(const wstring& _wstrName, const wstring& _ws
 		   { "BLENDINDEX", 0, DXGI_FORMAT_R32G32B32A32_UINT, 0, 56, D3D11_INPUT_PER_VERTEX_DATA, 0 },
 		   { "BLENDWEIGHT", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 72, D3D11_INPUT_PER_VERTEX_DATA, 0 },
 
-		   { "WORLD", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 1, 0, D3D11_INPUT_PER_INSTANCE_DATA, 1 },
-		   { "WORLD", 1, DXGI_FORMAT_R32G32B32A32_FLOAT, 1, 16, D3D11_INPUT_PER_INSTANCE_DATA, 1 },
-		   { "WORLD", 2, DXGI_FORMAT_R32G32B32A32_FLOAT, 1, 32, D3D11_INPUT_PER_INSTANCE_DATA, 1 },
-		   { "WORLD", 3, DXGI_FORMAT_R32G32B32A32_FLOAT, 1, 48, D3D11_INPUT_PER_INSTANCE_DATA, 1 }
+		   { "TEXCOORD", 1, DXGI_FORMAT_R32G32B32A32_FLOAT, 1, 0, D3D11_INPUT_PER_INSTANCE_DATA, 1 },
+		   { "TEXCOORD", 2, DXGI_FORMAT_R32G32B32A32_FLOAT, 1, 16, D3D11_INPUT_PER_INSTANCE_DATA, 1 },
+		   { "TEXCOORD", 3, DXGI_FORMAT_R32G32B32A32_FLOAT, 1, 32, D3D11_INPUT_PER_INSTANCE_DATA, 1 },
+		   { "TEXCOORD", 4, DXGI_FORMAT_R32G32B32A32_FLOAT, 1, 48, D3D11_INPUT_PER_INSTANCE_DATA, 1 }
 		};
 		if (FAILED(Compile_ShaderFiles(_wstrShaderFilePath, ElementDescs, 11)))
 			return E_FAIL;
@@ -92,6 +93,8 @@ HRESULT CMaterial::Native_Construct(const wstring& _wstrName, const wstring& _ws
 
 	m_wstrShaderPath = _wstrShaderFilePath;
 	m_eType = _eType;
+	m_vecTextures.resize((_uint)TEXTURETYPE::TEX_END);
+
 	return S_OK;
 }
 
@@ -167,11 +170,11 @@ HRESULT CMaterial::SetUp_ValueOnShader(const string _strConstantName, void* _pDa
 	return S_OK;
 }
 
-HRESULT CMaterial::SetUp_TextureOnShader(const string _strConstantName, const aiTextureType _eTextureType, _uint _iTextureIndex)
+HRESULT CMaterial::SetUp_TextureOnShader(const string _strConstantName, TEXTURETYPE _eTextureType, _uint _iTextureIndex)
 {
-	if (m_vecTextures[_eTextureType])
+	if (m_vecTextures[(_uint)_eTextureType])
 	{
-		ID3D11ShaderResourceView* pShaderResourceView = m_vecTextures[_eTextureType]->Get_ShaderResourceView(_iTextureIndex);
+		ID3D11ShaderResourceView* pShaderResourceView = m_vecTextures[(_uint)_eTextureType]->Get_ShaderResourceView(_iTextureIndex);
 		if (pShaderResourceView)
 		{
 			ID3DX11EffectShaderResourceVariable* pVariable = m_pEffect->GetVariableByName(_strConstantName.c_str())->AsShaderResource();
@@ -190,21 +193,138 @@ const wstring& CMaterial::Get_Name() const
 	return m_wstrName;
 }
 
-HRESULT CMaterial::Set_Texture(const string& _strConstantName, const aiTextureType _eTextureType, CTexture* _pTexture, const _uint _iTextureIndex)
+HRESULT CMaterial::Set_Texture(const string& _strConstantName, TEXTURETYPE _eTextureType, CTexture* _pTexture, const _uint _iTextureIndex)
 {
-	if (m_vecTextures[_eTextureType])
+	if (m_vecTextures[(_uint)_eTextureType])
 	{
-		Safe_Release(m_vecTextures[_eTextureType]);
+		Safe_Release(m_vecTextures[(_uint)_eTextureType]);
 	}
-	m_vecTextures[_eTextureType] = _pTexture;
+	m_vecTextures[(_uint)_eTextureType] = _pTexture;
 
 	SetUp_TextureOnShader(_strConstantName.c_str(), _eTextureType, _iTextureIndex);
+	return S_OK;
+}
+
+HRESULT CMaterial::Set_Texture(TEXTURETYPE _eTextureType, const wstring& _pTextureTag, const wstring& _pTexturePath, _uint _iTextureIndex)
+{
+	if (m_vecTextures[(_uint)_eTextureType])
+	{
+		Safe_Release(m_vecTextures[(_uint)_eTextureType]);
+	}
+
+
+	CTextureManager* pTextureMgr = GET_INSTANCE(CTextureManager);
+
+	CComponent_Manager* pComponentMgr = GET_INSTANCE(CComponent_Manager);
+
+
+	if (FAILED(pTextureMgr->Add_Texture(m_pDevice, _pTextureTag, _pTexturePath)))
+		return E_FAIL;
+
+	RELEASE_INSTANCE(CTextureManager);
+
+	CTexture* pTexture = CTexture::Create(m_pDevice, m_pDeviceContext);
+
+	if (!pTexture)
+		return E_FAIL;
+
+	if (FAILED(pTexture->Change_Texture(_pTextureTag)))
+		return E_FAIL;
+
+	m_vecTextures[(_uint)_eTextureType] = pTexture;
+	
+	SetUp_TextureOnShader();
+
 	return S_OK;
 }
 
 void CMaterial::Set_InputLayout(_uint iPassIndex)
 {
 	m_pDeviceContext->IASetInputLayout(m_vecEffectDescs[iPassIndex]->pInputLayout);
+}
+
+list<wstring> CMaterial::Get_TextureName()
+{
+	// TODO: 여기에 반환 구문을 삽입합니다.
+	list<wstring> pNameList;
+
+	for (auto& pTexture : m_vecTextures)
+	{
+		if(!pTexture)
+			pNameList.emplace_back(L"");
+		else
+			pNameList.emplace_back(pTexture->getTextureTag());
+	}
+
+	return pNameList;
+}
+
+HRESULT CMaterial::SetUp_TextureOnShader()
+{
+	string str = "";
+	for (_uint i = 0; i < (_uint)TEXTURETYPE::TEX_END; i++)
+	{
+		if (!m_vecTextures[i])
+			continue;
+		switch ((TEXTURETYPE)i)
+		{
+		case TEXTURETYPE::TEX_DIFFUSE:
+			str = "g_DiffuseTexture";
+			break;
+		case TEXTURETYPE::TEX_NORMAL:
+			str = "g_BiNormalTexture";
+			break;
+		case TEXTURETYPE::TEX_METALIC:
+			str = "g_Metallic;";
+			break;
+		case TEXTURETYPE::TEX_OCCLUSION:
+			str = "g_AO";
+			break;
+		case TEXTURETYPE::TEX_ROUGHNESS:
+			str = "g_Roughness";
+			break;
+		case TEXTURETYPE::TEX_ORM:
+			break;
+		case TEXTURETYPE::TEX_OMER:
+			break;
+		case TEXTURETYPE::TEX_CEO:
+			break;
+		case TEXTURETYPE::TEX_MRA:
+			break;
+		case TEXTURETYPE::TEX_HEIGHT:
+			break;
+		case TEXTURETYPE::TEX_TINT:
+			break;
+		case TEXTURETYPE::TEX_MT:
+			break;
+		case TEXTURETYPE::TEX_ORS:
+			break;
+		case TEXTURETYPE::TEX_NM:
+			break;
+		case TEXTURETYPE::TEX_RM:
+			break;
+		case TEXTURETYPE::TEX_NRM:
+			break;
+		case TEXTURETYPE::TEX_MASK:
+			break;
+		case TEXTURETYPE::TEX_DR:
+			break;
+		case TEXTURETYPE::TEX_NOH:
+			break;
+		case TEXTURETYPE::TEX_ORH:
+			break;
+		case TEXTURETYPE::TEX_COEFF:
+			break;
+		case TEXTURETYPE::TEX_ND:
+			break;
+		case TEXTURETYPE::TEX_END:
+			break;
+		default:
+			break;
+		}
+		SetUp_TextureOnShader(str, (TEXTURETYPE)i);
+	}
+	return S_OK;
 }
 
 CMaterial* CMaterial::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext, const wstring& _wstrName, const wstring& _wstrShaderFilePath, const EType _eType)

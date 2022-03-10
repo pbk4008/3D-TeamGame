@@ -15,6 +15,13 @@
 #define IDC_LIST3                       1005
 #define IDC_BUTTON1                     1006
 #define IDC_BUTTON2                     1007
+#define IDC_BUTTON3                     1008
+#define IDC_Model2                      1009
+#define IDC_Model3                      1010
+#define IDC_RADIO4                      1025
+#define IDC_RADIO5                      1026
+#define IDC_RADIO6                      1027
+#define IDC_RADIO7                      1028
 
 // Next default values for new objects
 // 

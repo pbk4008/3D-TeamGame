@@ -142,7 +142,7 @@ void CModelObject::Focusing()
 
 void CModelObject::Picking_Face(_fvector vRayPos, _fvector vRayDir)
 {
-	m_pModel->Get_NumMeshContainer()
+	//m_pModel->Get_NumMeshContainer()
 }
 
 

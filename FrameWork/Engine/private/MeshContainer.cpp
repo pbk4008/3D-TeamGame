@@ -10,7 +10,7 @@ CMeshContainer::CMeshContainer(ID3D11Device * pDevice, ID3D11DeviceContext * pDe
 
 CMeshContainer::CMeshContainer(const CMeshContainer& rhs)
 	: CVIBuffer(rhs)
-	, m_vecMaterialIndex(rhs.m_vecMaterialIndex)
+	, m_iMaterialIndex(rhs.m_iMaterialIndex)
 	, m_pAIMesh(rhs.m_pAIMesh)
 	, m_iNumMesh(rhs.m_iNumMesh)
 {
