@@ -25,6 +25,9 @@ HRESULT CMeshContainer::NativeConstruct_Prototype(CModel* pModel, aiMesh* pMesh,
 	if (FAILED(Set_IndicesDesc(pMesh)))
 		return E_FAIL;
 
+	if (!pModel->getUsingMaterial())
+		m_iMaterialIndex = pMesh->mMaterialIndex;
+
 	return S_OK;
 }
 

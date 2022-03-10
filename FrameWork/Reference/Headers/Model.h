@@ -19,12 +19,14 @@ private:
 	explicit CModel(const CModel& rhs);
 	virtual ~CModel() = default;
 public:
-	_uint Get_NumMeshContainer() { return (_uint)m_MeshContainers.size(); }
+	_uint Get_NumMeshContainer() { return m_iNumMeshes; }
+	_uint Get_MaterialCount() { return (_uint)m_MeshContainers.size(); }
 	CHierarchyNode* Get_BoneMatrix(const char* pBoneName);
 	_fmatrix Get_PivotMatrix() { return XMLoadFloat4x4(&m_PivotMatrix); }
 	TYPE getType() { return m_eMeshType; }
 	vector<CHierarchyNode*>& Get_HierachyNodes() { return m_HierarchyNodes; }
 	vector<CAnimation*>& Get_Animations() { return m_Animations; }
+	_bool getUsingMaterial() { return m_bUsingMaterial; }
 public:
 	HRESULT NativeConstruct_Prototype(const string& pMeshFilePath, const string& pMeshFileName, const wstring& pShaderFilePath, _fmatrix PivotMatrix, TYPE eMeshType,_bool bUsingMaterial);
 	HRESULT NativeConstruct_Prototype(const wstring& pMeshFilePath, const wstring& pShaderFilePath, TYPE eType);
@@ -51,9 +53,16 @@ private:
 	_uint				m_iCurrentAnimation = 0;
 	_uint				m_iNumMeshes = 0;
 	_bool				m_bSaved = false;
+	_bool				m_bUsingMaterial = false;
+private:
+	ID3DX11Effect* m_pEffect = nullptr;
+	vector<EFFECTDESC*> m_PassDesc;
 private:
 	vector<vector<CMeshContainer*>> m_MeshContainers;
 	typedef vector<CMeshContainer*>	MESHCONTAINERS;
+
+
+	vector<MESHMATERIAL*>			m_Materials;
 
 	vector<CMaterial*>					m_vecMaterials;
 
@@ -70,6 +79,7 @@ private:
 	HRESULT Load_StaticModel(const wstring& pFilePath);
 private:
 	HRESULT Create_Materials();
+	HRESULT Create_MaterialDesc();
 
 	HRESULT Load_Materials(_uint iType, const wstring& pFilePath);
 	/* 모델을 구성하는 메시들의 정보를 구성한다. */
@@ -81,6 +91,7 @@ private:
 
 	HRESULT Create_HierarchyNode(aiNode* pNode, CHierarchyNode* pParent = nullptr, _uint iDepth = 0);
 	
+	HRESULT Compile_Shader(const wstring& pShaderFilePath);
 	HRESULT Create_Animation();
 public:
 	static CModel* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext, const string& pMeshFilePath, const string& pMeshFileName, const wstring& pShaderFilePath, _fmatrix PivotMatrix, TYPE eMeshType,_bool bMaterial = false);

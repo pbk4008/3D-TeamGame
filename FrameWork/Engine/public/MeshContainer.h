@@ -40,12 +40,14 @@ public:
 	void* getVertices(void) {
 		return m_pVertices;
 	}
-
+public:
+	void setMeshIndex(_uint iNumIndex) { m_iNumMeshIndex = iNumIndex;  m_iMaterialIndex = iNumIndex; }
 private:
 	aiMesh*					m_pAIMesh = nullptr;
 private:
 	_uint m_iMaterialIndex=0;
 	_uint m_iNumMesh = 0;
+	_uint m_iNumMeshIndex = 0;//자기가 몇번 인덱스 메쉬인지
 private:
 	vector<CHierarchyNode*>			m_Bones;
 	typedef vector<CHierarchyNode*>	BONES;

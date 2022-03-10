@@ -120,6 +120,7 @@ _int CMainForm::Tick(_double dDeltaTime)
 	Update_Material();
 	Update_AddTextureList();
 	Focusing();
+	Picking();
 
 	return 0;
 }
@@ -170,7 +171,7 @@ _int CMainForm::Update_Tree()
 
 		if(FAILED(g_pGameInstance->Add_Prototype(0, wstrFbxName
 			, CModel::Create(m_pDevice, m_pDeviceContext, strFbxPath,strFbxName
-			, L"../../Reference/ShaderFile/Shader_StaticMesh.hlsl", matPivot,CModel::TYPE::TYPE_STATIC))))
+			, L"../../Reference/ShaderFile/Shader_StaticMesh.hlsl", matPivot,CModel::TYPE::TYPE_STATIC,true))))
 			return E_FAIL;
 
 		CModelObject::MODELOBJDESC tDesc;

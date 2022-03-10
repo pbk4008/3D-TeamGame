@@ -29,6 +29,7 @@ CModel::CModel(const CModel& rhs)
 	, m_bUsingMaterial(rhs.m_bUsingMaterial)
 	, m_pEffect(rhs.m_pEffect)
 	, m_PassDesc(rhs.m_PassDesc)
+	, m_iNumMeshes(rhs.m_iNumMeshes)
 {	
 	strcpy_s(m_szMeshFilePath, rhs.m_szMeshFilePath);
 	strcpy_s(m_szMeshFullName, rhs.m_szMeshFullName);
@@ -85,6 +86,8 @@ CHierarchyNode* CModel::Get_BoneMatrix(const char * pBoneName)
 
 HRESULT CModel::NativeConstruct_Prototype(const string& pMeshFilePath, const string& pMeshFileName, const wstring& pShaderFilePath, _fmatrix PivotMatrix, TYPE eMeshType, _bool bUsingMaterial)
 {
+	m_bUsingMaterial = bUsingMaterial;
+
 	m_eMeshType = eMeshType;
 
 	XMStoreFloat4x4(&m_PivotMatrix, PivotMatrix);
@@ -106,7 +109,8 @@ HRESULT CModel::NativeConstruct_Prototype(const string& pMeshFilePath, const str
  	if (nullptr == m_pScene)
 		return E_FAIL;
 
-	m_MeshContainers.resize(1);
+	if (!m_bUsingMaterial)
+		m_MeshContainers.resize(m_pScene->mNumMaterials);
 
 	if (FAILED(Create_MeshContainer()))
 		return E_FAIL;
@@ -114,8 +118,18 @@ HRESULT CModel::NativeConstruct_Prototype(const string& pMeshFilePath, const str
 	if (FAILED(Create_VertexIndexBuffer()))
 		return E_FAIL;
 
-	if (FAILED(Create_Materials()))
+	if (!m_bUsingMaterial)
+	{
+		if (FAILED(Create_MaterialDesc()))
 			return E_FAIL;
+		if (FAILED(Compile_Shader(pShaderFilePath)))
+			return E_FAIL;
+	}
+	else
+	{
+		if (FAILED(Create_Materials()))
+			return E_FAIL;
+	}
 
 	if (FAILED(Create_Animation()))
 		return E_FAIL;
@@ -247,14 +261,34 @@ HRESULT CModel::Update_CombinedTransformationMatrix(const _int _iCurAnimIndex, c
 
 HRESULT CModel::Render(_uint iMeshContainerIndex, _uint iPassIndex)
 {
-
 	for (auto& pMeshContainer : m_MeshContainers[iMeshContainerIndex])
 	{
-		_uint iMtrlIndex = pMeshContainer->getMaterialIndex();
-		if (m_vecMaterials[iMtrlIndex])
+		if(m_bUsingMaterial)
 		{
-			m_vecMaterials[iMtrlIndex]->Set_InputLayout(iPassIndex);
+			_uint iMtrlIndex = pMeshContainer->getMaterialIndex();
+			if (m_vecMaterials[iMtrlIndex])
+			{
+				m_vecMaterials[iMtrlIndex]->Set_InputLayout(iPassIndex);
 
+				if (m_eMeshType == TYPE_ANIM)
+				{
+					_matrix		BoneMatrices[256];
+					ZeroMemory(BoneMatrices, sizeof(_matrix) * 256);
+
+					pMeshContainer->SetUp_BoneMatrices(BoneMatrices, XMLoadFloat4x4(&m_PivotMatrix));
+
+					if (FAILED(m_vecMaterials[iMtrlIndex]->SetUp_ValueOnShader("g_BoneMatrices", BoneMatrices, sizeof(_matrix) * 256)))
+						return E_FAIL;
+				}
+
+				m_vecMaterials[iMtrlIndex]->Render(iPassIndex);
+				pMeshContainer->Render();
+			}
+		}
+		else
+		{
+			if (iPassIndex >= (_uint)m_PassDesc.size())
+				return E_FAIL;
 			if (m_eMeshType == TYPE_ANIM)
 			{
 				_matrix		BoneMatrices[256];
@@ -262,14 +296,13 @@ HRESULT CModel::Render(_uint iMeshContainerIndex, _uint iPassIndex)
 
 				pMeshContainer->SetUp_BoneMatrices(BoneMatrices, XMLoadFloat4x4(&m_PivotMatrix));
 
-				if (FAILED(m_vecMaterials[iMtrlIndex]->SetUp_ValueOnShader("g_BoneMatrices", BoneMatrices, sizeof(_matrix) * 256)))
+				if (FAILED(SetUp_ValueOnShader("g_BoneMatrices", BoneMatrices, sizeof(_matrix) * 256)))
 					return E_FAIL;
 			}
+			m_pDeviceContext->IASetInputLayout(m_PassDesc[iPassIndex]->pInputLayout);
+			m_PassDesc[iPassIndex]->pPass->Apply(0, m_pDeviceContext);
 
-			m_vecMaterials[iMtrlIndex]->Render(iPassIndex);
 			pMeshContainer->Render();
-
-			return S_OK;
 		}
 	}
 
@@ -280,17 +313,81 @@ HRESULT CModel::Create_Materials()
 {
 	CMaterial_Manager* pInstance = GET_INSTANCE(CMaterial_Manager);
 
-	CMaterial* pMaterial = pInstance->Get_Material();
+	for (_uint i = 0; i < m_iNumMeshes; i++)
+	{
+		CMaterial* pMaterial = pInstance->Get_Material();
 
-	if (!pMaterial)
-		return E_FAIL;
-	Safe_AddRef(pMaterial);
+		if (!pMaterial)
+			return E_FAIL;
+		Safe_AddRef(pMaterial);
 
-	m_vecMaterials.emplace_back(pMaterial);
-	
-	RELEASE_INSTANCE(CMaterial_Manager);
+		m_vecMaterials.emplace_back(pMaterial);
 
+		RELEASE_INSTANCE(CMaterial_Manager);
+	}
 	return S_OK;
+}
+
+HRESULT CModel::Create_MaterialDesc()
+{
+	if (nullptr == m_pScene)
+		return E_FAIL;
+
+	m_Materials.reserve(m_pScene->mNumMaterials);
+
+	char		szMeshFilePath[MAX_PATH] = "";
+
+	for (_uint i = 0; i < m_pScene->mNumMaterials; ++i)
+	{
+		aiMaterial* pMaterial = m_pScene->mMaterials[i];
+
+		MESHMATERIAL* pMeshMaterial = new MESHMATERIAL;
+		ZeroMemory(pMeshMaterial, sizeof(MESHMATERIAL));
+
+		for (_uint j = aiTextureType_DIFFUSE; j < AI_TEXTURE_TYPE_MAX; ++j)
+		{
+			aiString	strFilePath;
+
+			if (FAILED(pMaterial->GetTexture(aiTextureType(j), 0, &strFilePath)))
+				continue;
+
+			char	szFileName[MAX_PATH] = "";
+			char	szExt[MAX_PATH] = "";
+			_splitpath_s(strFilePath.data, nullptr, 0, nullptr, 0, szFileName, MAX_PATH, szExt, MAX_PATH);
+
+			strcpy_s(szMeshFilePath, m_szMeshFilePath);
+			strcat_s(szMeshFilePath, szFileName);
+			strcat_s(szMeshFilePath, szExt);
+
+			wstring     strTexture;
+			_tchar		szFullName[MAX_PATH] = TEXT("");
+			_tchar		szTextureTag[MAX_PATH] = TEXT("");
+			MultiByteToWideChar(CP_ACP, 0, szMeshFilePath, (_int)strlen(szMeshFilePath), szFullName, MAX_PATH);
+			MultiByteToWideChar(CP_ACP, 0, szFileName, (_int)strlen(szFileName), szTextureTag, MAX_PATH);
+
+			CTextureManager* pTextureMgr = GET_INSTANCE(CTextureManager);
+
+			pTextureMgr->Add_Texture(m_pDevice, szTextureTag, szFullName);
+
+			RELEASE_INSTANCE(CTextureManager);
+
+			CComponent_Manager* pInstance = GET_INSTANCE(CComponent_Manager);
+
+			strTexture = szTextureTag;
+			pMeshMaterial->pMeshTexture[j] = static_cast<CTexture*>(pInstance->Clone_Component(0, L"Texture", &strTexture));
+
+			//wstring wstrSaveFolder = L"../bin/Resource/ "
+			lstrcpy(pMeshMaterial->pMeshTextureName[j], szFullName);
+			//lstrcpy(pMeshMaterial->pMeshTextureName[j], strTexture.c_str());
+			RELEASE_INSTANCE(CComponent_Manager);
+
+
+			if (nullptr == pMeshMaterial->pMeshTexture[j])
+				return E_FAIL;
+		}
+
+		m_Materials.push_back(pMeshMaterial);
+	}
 }
 
 HRESULT CModel::Load_Materials(_uint iType, const wstring& pFilePath)
@@ -342,6 +439,9 @@ HRESULT CModel::Create_MeshContainer()
 		return E_FAIL;
 
 	m_iNumMeshes = m_pScene->mNumMeshes;
+	if (m_bUsingMaterial)
+		m_MeshContainers.resize(m_iNumMeshes);
+
 	for (_uint i = 0; i < m_iNumMeshes; ++i)
 	{
 		aiMesh* pMesh = m_pScene->mMeshes[i];
@@ -351,8 +451,12 @@ HRESULT CModel::Create_MeshContainer()
 		CMeshContainer* pMeshContainer = CMeshContainer::Create(m_pDevice, m_pDeviceContext, this, pMesh, m_eMeshType == TYPE_STATIC ? XMLoadFloat4x4(&m_PivotMatrix) : XMMatrixIdentity());
 		if (!pMeshContainer)
 			return E_FAIL;
+		pMeshContainer->setMeshIndex(i);
 
-		m_MeshContainers[0].emplace_back(pMeshContainer);
+		if(!m_bUsingMaterial)
+			m_MeshContainers[pMesh->mMaterialIndex].emplace_back(pMeshContainer);
+		else
+			m_MeshContainers[i].emplace_back(pMeshContainer);
 	}
 	
 	return S_OK;
@@ -483,23 +587,23 @@ HRESULT CModel::Compile_Shader(const wstring& pShaderFilePath)
 
 	if (m_eMeshType == TYPE_STATIC)
 	{
-		iNumElements = 4;
+		iNumElements = 5;
 		Elements[0] = { "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 };
 		Elements[1] = { "NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 };
-		Elements[2] = { "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 24, D3D11_INPUT_PER_VERTEX_DATA, 0 };
+		Elements[2] = { "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 20, D3D11_INPUT_PER_VERTEX_DATA, 0 };
 		Elements[3] = { "TANGENT", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 32, D3D11_INPUT_PER_VERTEX_DATA, 0 };
-		//Elements[3] = { "BINORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 32, D3D11_INPUT_PER_VERTEX_DATA, 0 };
+		Elements[4] = { "BINORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 44, D3D11_INPUT_PER_VERTEX_DATA, 0 };
 	}
 	else
 	{
-		iNumElements = 6;
+		iNumElements = 7;
 		Elements[0] = { "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 };
 		Elements[1] = { "NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 };
 		Elements[2] = { "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 24, D3D11_INPUT_PER_VERTEX_DATA, 0 };
 		Elements[3] = { "TANGENT", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 32, D3D11_INPUT_PER_VERTEX_DATA, 0 };
-		Elements[4] = { "BLENDINDEX", 0, DXGI_FORMAT_R32G32B32A32_UINT, 0, 44, D3D11_INPUT_PER_VERTEX_DATA, 0 };
-		Elements[5] = { "BLENDWEIGHT", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 60, D3D11_INPUT_PER_VERTEX_DATA, 0 };
-		//Elements[3] = { "BINORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 32, D3D11_INPUT_PER_VERTEX_DATA, 0 };
+		Elements[6] = { "BINORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 44, D3D11_INPUT_PER_VERTEX_DATA, 0 };
+		Elements[4] = { "BLENDINDEX", 0, DXGI_FORMAT_R32G32B32A32_UINT, 0, 56, D3D11_INPUT_PER_VERTEX_DATA, 0 };
+		Elements[5] = { "BLENDWEIGHT", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 72, D3D11_INPUT_PER_VERTEX_DATA, 0 };
 	}
 
 	_uint		iFlag = 0;

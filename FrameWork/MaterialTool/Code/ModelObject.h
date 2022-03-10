@@ -43,6 +43,7 @@ private:
 	wstring m_tModelName;
 	wstring m_tModelFolder;
 	_bool m_bDraw;
+	vector<_bool> m_vecPick;
 };
 END
 #endif
