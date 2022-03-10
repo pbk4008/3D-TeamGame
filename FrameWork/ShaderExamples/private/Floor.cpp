@@ -98,8 +98,8 @@ HRESULT CFloor::Render_ShadeShadow(ID3D11ShaderResourceView* ShadowMap)
 	m_pVIBufferCom->SetUp_ValueOnShader("g_WorldMatrix", &world, sizeof(_matrix));
 	m_pVIBufferCom->SetUp_ValueOnShader("g_ViewMatrix", &view, sizeof(_matrix));
 	m_pVIBufferCom->SetUp_ValueOnShader("g_ProjMatrix", &proj, sizeof(_matrix));
-	m_pVIBufferCom->SetUp_ValueOnShader("g_LightView", &view, sizeof(_matrix));
-	m_pVIBufferCom->SetUp_ValueOnShader("g_LightProj", &proj, sizeof(_matrix));
+	m_pVIBufferCom->SetUp_ValueOnShader("g_LightView", &lightview, sizeof(_matrix));
+	m_pVIBufferCom->SetUp_ValueOnShader("g_LightProj", &lightproj, sizeof(_matrix));
 
 	m_pVIBufferCom->SetUp_TextureOnShader("g_DiffuseSourTexture", m_pTexture->Get_ShaderResourceView(0));
 	m_pVIBufferCom->SetUp_TextureOnShader("g_DiffuseDestTexture", m_pTexture->Get_ShaderResourceView(1));

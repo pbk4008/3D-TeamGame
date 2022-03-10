@@ -45,6 +45,7 @@ using namespace physx;
 #include <iostream>
 #define _USE_MATH_DEFINES
 #include <math.h>
+#include <array>
 using namespace std;
 using namespace DirectX;
 

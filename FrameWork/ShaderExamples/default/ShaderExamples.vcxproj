@@ -190,7 +190,11 @@
     <Image Include="small.ico" />
   </ItemGroup>
   <ItemGroup>
+    <FxCompile Include="..\bin\ShaderFiles\Shader_Compute.hlsl" />
+    <FxCompile Include="..\bin\ShaderFiles\Shader_CSGSBlur.hlsl" />
     <FxCompile Include="..\bin\ShaderFiles\Shader_Cube.hlsl" />
+    <FxCompile Include="..\bin\ShaderFiles\Shader_DownSample.hlsl" />
+    <FxCompile Include="..\bin\ShaderFiles\Shader_DSViewPort.hlsl" />
     <FxCompile Include="..\bin\ShaderFiles\Shader_Instance.hlsl" />
     <FxCompile Include="..\bin\ShaderFiles\Shader_Mesh.hlsl" />
     <FxCompile Include="..\bin\ShaderFiles\Shader_MeshAnim.hlsl" />

@@ -154,22 +154,22 @@ public:/* For.SaveManager*/
 		return m_pSaveManager->LoadFile<T>(pLoadData, pFilePath);
 	}
 private:
-	CGraphic_Device*				m_pGraphic_Device = nullptr;		
+	CGraphic_Device*			m_pGraphic_Device = nullptr;		
 	CLevel_Manager*				m_pLevel_Manager = nullptr;
 	CTimer_Manager*				m_pTimer_Manager = nullptr;
 	CObject_Manager*			m_pObject_Manager = nullptr;
-	CComponent_Manager*		m_pComponent_Manager = nullptr;
-	CPipeLine*						m_pPipeLine = nullptr;
-	CInputDev*						m_pInput_Device = nullptr;
+	CComponent_Manager*			m_pComponent_Manager = nullptr;
+	CPipeLine*					m_pPipeLine = nullptr;
+	CInputDev*					m_pInput_Device = nullptr;
 	CLight_Manager*				m_pLight_Manager = nullptr;
-	CTarget_Manager*				m_pTarget_Manager = nullptr;
-	CFrustum*						m_pFrustum = nullptr;
+	CTarget_Manager*			m_pTarget_Manager = nullptr;
+	CFrustum*					m_pFrustum = nullptr;
 	CFont_Manager*				m_pFont_Manager = nullptr;
-	CTextureManager*				m_pTextureManager = nullptr;
+	CTextureManager*			m_pTextureManager = nullptr;
 	CMaterial_Manager*			m_pMaterial_Manager = nullptr;
 	CSaveManager*				m_pSaveManager = nullptr;
 	CSoundMgr*					m_pSoundManager = nullptr;
-	CPhysicsXSystem*				m_pPhysicSystem = nullptr;
+	CPhysicsXSystem*			m_pPhysicSystem = nullptr;
 public:
 	static void Release_Engine();
 	virtual void Free() override;
