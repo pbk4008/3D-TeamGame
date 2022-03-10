@@ -66,6 +66,7 @@ HRESULT CSilvermane_Idle::EnterState()
 
 	m_pAnimationController->SetUp_NextAnimation("SK_Silvermane.ao|A_Idle_Player", true);
 	m_pAnimationController->Set_RootMotion(true, true, ERootOption::XYZ);
+	m_pSilvermane->Set_Move(false);
 
 	return S_OK;
 }
@@ -76,6 +77,7 @@ HRESULT CSilvermane_Idle::ExitState()
 		return E_FAIL;
 
 	m_fHoldTime = 0.f;
+	m_pSilvermane->Set_Move(true);
 
 	return S_OK;
 }

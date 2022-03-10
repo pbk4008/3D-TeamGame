@@ -201,7 +201,6 @@ call Update_Library_Release.bat</Command>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\bin\ShaderFiles\Shader_Calculate.hpp" />
-    <ClInclude Include="..\private\MeshCollider.h" />
     <ClInclude Include="..\public\Actor.h" />
     <ClInclude Include="..\public\Animation.h" />
     <ClInclude Include="..\public\AnimationController.h">
@@ -212,6 +211,10 @@ call Update_Library_Release.bat</Command>
     <ClInclude Include="..\public\BoxCollider.h" />
     <ClInclude Include="..\public\Camera.h" />
     <ClInclude Include="..\public\CapsuleCollider.h" />
+    <ClInclude Include="..\public\CharacterController.h" />
+    <ClInclude Include="..\public\ControllerBehaviorCallback.h" />
+    <ClInclude Include="..\public\ControllerFilterCallback.h" />
+    <ClInclude Include="..\public\ControllerHitReport.h" />
     <ClInclude Include="..\public\Instancing_Mesh.h" />
     <ClInclude Include="..\public\Material_Manager.h" />
     <ClInclude Include="..\public\Effect.h" />
@@ -299,6 +302,10 @@ call Update_Library_Release.bat</Command>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\private\Channel.cpp" />
+    <ClCompile Include="..\private\CharacterController.cpp" />
+    <ClCompile Include="..\private\ControllerBehaviorCallback.cpp" />
+    <ClCompile Include="..\private\ControllerFilterCallback.cpp" />
+    <ClCompile Include="..\private\ControllerHitReport.cpp" />
     <ClCompile Include="..\private\Instancing_Mesh.cpp" />
     <ClCompile Include="..\private\Material_Manager.cpp" />
     <ClCompile Include="..\private\Collider.cpp" />

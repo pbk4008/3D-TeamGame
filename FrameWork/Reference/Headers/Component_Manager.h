@@ -23,6 +23,7 @@
 #include "VIBuffer_Plane.h"
 #include "StateController.h"
 #include "AnimationController.h"
+#include "CharacterController.h"
 
 BEGIN(Engine)
 

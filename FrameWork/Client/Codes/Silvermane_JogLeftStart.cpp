@@ -86,8 +86,6 @@ _int CSilvermane_JogLeftStart::KeyCheck(const _double& _dDeltaTime)
 			return STATE_CHANGE;
 		}
 
-		_float3 vDir = m_pSilvermane->Get_Dir();
-		if (1.f > vDir.z) m_pSilvermane->Add_Dir(0.f, (_float)_dDeltaTime);
 		if (g_pGameInstance->getkeyPress(DIK_W))
 		{
 			if (FAILED(m_pStateController->Change_State(L"JogFwd")))

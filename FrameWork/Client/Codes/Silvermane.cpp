@@ -90,6 +90,7 @@ _int CSilvermane::Tick(_double _dDeltaTime)
 	iProgress = m_pAnimationController->Tick(_dDeltaTime);
 	if (NO_EVENT != iProgress) return iProgress;
 
+	m_pCharacterController->Tick(_dDeltaTime);
 	return _int();
 }
 
@@ -135,9 +136,7 @@ HRESULT CSilvermane::Render()
 	wstring wstrPlusAngle = L"Plus Angle : " + to_wstring(m_fPlusAngle);
 	if (FAILED(g_pGameInstance->Render_Font(TEXT("Font_Arial"), XMVectorSet(1.f, 0.0f, 0.f, 1.f), wstrPlusAngle.c_str(), _float2(0.f, 340.f), _float2(0.8f, 0.8f))))
 		return E_FAIL;
-	wstring wstrDirAngle = L"Dir Angle : " + to_wstring(m_fDirAngle);
-	if (FAILED(g_pGameInstance->Render_Font(TEXT("Font_Arial"), XMVectorSet(1.f, 0.0f, 0.f, 1.f), wstrDirAngle.c_str(), _float2(0.f, 380.f), _float2(0.8f, 0.8f))))
-		return E_FAIL;
+	m_pCharacterController->Render();
 #endif
 
 	return S_OK;
@@ -145,28 +144,43 @@ HRESULT CSilvermane::Render()
 
 HRESULT CSilvermane::Ready_Components()
 {
-	CTransform::TRANSFORMDESC transformDesc;
-	transformDesc.fSpeedPerSec = 10.f;
-	transformDesc.fRotationPerSec = XMConvertToRadians(90.f);
-	m_pTransform->Set_TransformDesc(transformDesc);
+	// 트랜스폼 설정
+	CTransform::TRANSFORMDESC tTransformDesc;
+	tTransformDesc.fSpeedPerSec = 10.f;
+	tTransformDesc.fRotationPerSec = XMConvertToRadians(90.f);
+	m_pTransform->Set_TransformDesc(tTransformDesc);
 
+	// 모델
 	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_TEST_JS, L"Model_Silvermane", L"Model", (CComponent**)&m_pModel)))
 		return E_FAIL;
-
 	m_pModel->Add_Material(g_pGameInstance->Get_Material(L"Mtrl_Silvermane_Top"), 0);
 	m_pModel->Add_Material(g_pGameInstance->Get_Material(L"Mtrl_Silvermane_Down"), 1);
 	m_pModel->Add_Material(g_pGameInstance->Get_Material(L"Mtrl_Silvermane_Cloak"), 2);
 	m_pModel->Add_Material(g_pGameInstance->Get_Material(L"Mtrl_Silvermane_Hair"), 3);
 
+	// 에니메이션 컨트롤러
 	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_TEST_JS, L"Com_AnimationController", L"AnimationController", (CComponent**)&m_pAnimationController)))
 		return E_FAIL;
 	m_pAnimationController->Set_GameObject(this);
 	m_pAnimationController->Set_Model(m_pModel);
 	m_pAnimationController->Set_Transform(m_pTransform);
 
+	// 스테이트 컨트롤러
 	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_TEST_JS, L"Com_StateController", L"StateController", (CComponent**)&m_pStateController)))
 		return E_FAIL;
 	m_pStateController->Set_GameObject(this);
+
+	// 캐릭터 컨트롤러
+	CCharacterController::CHARACTERCONTROLLERDESC tCharacterControllerDesc;
+	tCharacterControllerDesc.fHeight = 4.f;
+	tCharacterControllerDesc.fRadius = 1.f;
+	tCharacterControllerDesc.fStaticFriction = 0.5f;
+	tCharacterControllerDesc.fDynamicFriction = 0.5f;
+	tCharacterControllerDesc.fRestitution = 0.f;
+	tCharacterControllerDesc.pGameObject = this;
+	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_TEST_JS, L"Com_CharacterController", L"CharacterController", (CComponent**)&m_pCharacterController, &tCharacterControllerDesc)))
+		return E_FAIL;
+	m_pCharacterController->Set_OwnerTransform(m_pTransform);
 
 	return S_OK;
 }
@@ -249,11 +263,6 @@ const _float CSilvermane::Get_PlusAngle() const
 	return m_fPlusAngle;
 }
 
-const _float3& CSilvermane::Get_Dir() const
-{
-	return m_vDir;
-}
-
 void CSilvermane::Set_Move(const _bool _isMove)
 {
 	m_isMove = _isMove;
@@ -292,18 +301,6 @@ void CSilvermane::Add_PlusAngle(const _float _fDeltaAngle)
 	//	m_fPlusAngle = 45.f;
 }
 
-void CSilvermane::Add_Dir(const _float _fX, const _float _fZ)
-{
-	_float fPower = 4.f;
-	m_vDir.x += _fX * fPower;
-	m_vDir.z += _fZ * fPower;
-
-	if (-1.f > m_vDir.x) m_vDir.x = -1.f;
-	if (1.f < m_vDir.x) m_vDir.x = 1.f;
-	if (-1.f > m_vDir.z) m_vDir.z = -1.f;
-	if (1.f < m_vDir.z) m_vDir.z = 1.f;
-}
-
 _int CSilvermane::Trace_CameraLook(const _double& _dDeltaTime)
 {
 	_vector svCameraLook = m_pCamera->Get_Look();
@@ -312,112 +309,42 @@ _int CSilvermane::Trace_CameraLook(const _double& _dDeltaTime)
 
 	svCameraLook = XMVector3Normalize(XMVectorSetY(svCameraLook, 0.f));
 	svLook = XMVector3Normalize(XMVectorSetY(svLook, 0.f));
-	_vector svAngle = XMVector3AngleBetweenVectors(svCameraLook, svLook);
 
-	_float fRadian;
-	XMStoreFloat(&fRadian, svAngle);
 
-	svUp = XMVector3Normalize(svUp);
-	_vector svCross = XMVector3Cross(svLook, svCameraLook);
-	if (0.f < XMVectorGetY(svCross)) // 카메라가 왼쪽
+	if (m_isMove)
 	{
-		m_pTransform->Rotation_Axis(svUp, (fRadian) * _dDeltaTime * 5.f);
-		m_fAngle = XMConvertToDegrees(fRadian);
-	}
-	else if (0.f > XMVectorGetY(svCross)) // 카메라가 오른쪽
-	{
-		m_pTransform->Rotation_Axis(svUp, (fRadian) * -_dDeltaTime * 5.f);
-		m_fAngle = -XMConvertToDegrees(fRadian);
+		// 추가로 달리기와 같이 더 회전이 필요한 동작들을 회전시켜주는 부분입네다.
+		_float fPlusRadian = XMConvertToRadians(m_fPlusAngle);
+
+		//_matrix smatPlusPivot = XMMatrixRotationAxis(svUp, fPlusRadian);
+		_matrix smatPlusPivot = XMMatrixRotationY(fPlusRadian);
+		_vector svRotCameraLook = XMVector4Transform(svCameraLook, smatPlusPivot);
+		_vector svRotCameraRight = XMVector3Cross(XMVectorSet(0.f, 1.f, 0.f, 0.f), svRotCameraLook);
+		_vector svRotCameraUp = XMVector3Cross(svRotCameraLook, svRotCameraRight);
+
+		m_pTransform->Set_State(CTransform::STATE_RIGHT, svRotCameraRight);
+		m_pTransform->Set_State(CTransform::STATE_UP, svRotCameraUp);
+		m_pTransform->Set_State(CTransform::STATE_LOOK, svRotCameraLook);
 	}
 	else
-		m_fAngle = 0.f;
-
-#pragma region 실패 코드들
-	// 추가 방향
-	//if (m_isMove)
-	//{
-		//_vector svDirZ = XMVectorSet(0.f, 0.f, 1.f, 0.f);
-		//_vector svDirLook = svLook;
-
-		//_vector svLookZAngle = XMVector3AngleBetweenVectors(svDirZ, svDirLook);
-		//_float fLookZRadian; XMStoreFloat(&fLookZRadian, svLookZAngle);
-		//_matrix smatLookZRotation = XMMatrixIdentity();
-
-		//_vector svLookZCross = XMVector3Cross(svDirLook, svDirZ);
-		//if (0.f < XMVectorGetY(svLookZCross)) // 룩벡터가 왼족
-		//{
-		//	smatLookZRotation = XMMatrixRotationAxis(XMVectorSet(0.f, 1.f, 0.f, 0.f), -fLookZRadian);
-		//}
-		//else if (0.f > XMVectorGetY(svLookZCross)) // 룩벡터가 오른쪽
-		//{
-		//	smatLookZRotation = XMMatrixRotationAxis(XMVectorSet(0.f, 1.f, 0.f, 0.f), fLookZRadian);
-		//}
-
-
-		//_vector svDir = XMVector3Normalize(XMLoadFloat3(&m_vDir));
-		////svDir = XMVector3TransformNormal(svDir, smatLookZRotation);
-		//_vector svDirAngle = XMVector3AngleBetweenVectors(svDir, svDirZ);
-		//_vector svDirCross = XMVector3Cross(svDir, svDirZ);
-		//if (0.f < XMVectorGetY(svDirCross)) // 방향벡터가 왼쪽
-		//{
-		//	//m_pTransform->Rotation_Axis(svUp, -fDirRadian);
-		//	//m_fDirAngle = -XMConvertToDegrees(fDirRadian);
-		//	svDirAngle *= -1.f;
-		//}
-		//else if (0.f > XMVectorGetY(svDirCross)) // 방향벡터가 오른쪽
-		//{
-		//	//m_pTransform->Rotation_Axis(svUp, fDirRadian);
-		//	//m_fDirAngle = XMConvertToDegrees(fDirRadian);
-		//}
-		//else
-		//	m_fDirAngle = 0.f;
-
-		//_float fDirRadian; XMStoreFloat(&fDirRadian, svDirAngle);
-		//_matrix smatRotDir = XMMatrixRotationY(fDirRadian);
-		//svLook = XMVector3TransformNormal(svLook, smatRotDir);
-		//_vector svRight = XMVector3Cross(XMVectorSet(0.f, 1.f, 0.f, 0.f), svLook);
-		//svUp = XMVector3Cross(svLook, svRight);
-		//m_pTransform->Set_State(CTransform::STATE_LOOK, svLook);
-		//m_pTransform->Set_State(CTransform::STATE_UP, svUp);
-		//m_pTransform->Set_State(CTransform::STATE_RIGHT, svRight);
-		//m_fDirAngle = XMConvertToDegrees(fDirRadian);
-	//}
-
-	//_vector svDirZ = XMVectorSet(0.f, 0.f, 1.f, 0.f);
-	//_vector svDir = XMVector3Normalize(XMLoadFloat3(&m_vDir));
-	//_vector svDirAngle = XMVector3AngleBetweenVectors(svDir, svDirZ);
-	//_float fDirRadian; XMStoreFloat(&fDirRadian, svDirAngle);
-	//_vector svDirCross = XMVector3Cross(svDir, svDirZ);
-	//if (0.f < XMVectorGetY(svDirCross)) // 방향벡터가 왼쪽
-	//{
-	//	//m_pTransform->Rotation_Axis(svUp, -fDirRadian);
-	//	//m_fDirAngle = -XMConvertToDegrees(fDirRadian);
-	//	fDirRadian *= -1.f;
-	//}
-	//else if (0.f > XMVectorGetY(svDirCross)) // 방향벡터가 오른쪽
-	//{
-	//	//m_pTransform->Rotation_Axis(svUp, fDirRadian);
-	//	//m_fDirAngle = XMConvertToDegrees(fDirRadian);
-	//}
-	//else
-	//	m_fDirAngle = 0.f;
-
-	//_matrix smatPlusPivot = XMMatrixRotationAxis(svUp, fDirRadian);
-	//m_pTransform->Set_PivotMatrix(smatPlusPivot);
-	//m_fDirAngle = XMConvertToDegrees(fDirRadian);
-#pragma endregion
-
-	// 추가로 달리기와 같이 더 회전이 필요한 동작들을 회전시켜주는 부분입네다.
-	_float fPlusRadian = XMConvertToRadians(m_fPlusAngle);
-
-	_matrix smatPlusPivot = XMMatrixRotationAxis(svUp, fPlusRadian);
-	_vector svRotCameraLook = XMVector4Transform(svCameraLook, smatPlusPivot);
-	_vector svRotCameraRight = XMVector3Cross(svUp, svRotCameraLook);
-	_vector svRotCameraUp = XMVector3Cross(svRotCameraLook, svRotCameraRight);
-
-	m_pTransform->Set_State(CTransform::STATE_RIGHT, svRotCameraRight);
-	m_pTransform->Set_State(CTransform::STATE_UP, svRotCameraUp);
-	m_pTransform->Set_State(CTransform::STATE_LOOK, svRotCameraLook);
+	{
+		_vector svAngle = XMVector3AngleBetweenVectors(svCameraLook, svLook);
+		_float fRadian;
+		XMStoreFloat(&fRadian, svAngle);
+		_vector svCross = XMVector3Cross(svLook, svCameraLook);
+		if (0.f < XMVectorGetY(svCross)) // 카메라가 왼쪽
+		{
+			m_pTransform->Rotation_Axis(XMVectorSet(0.f, 1.f, 0.f, 0.f), (fRadian)*_dDeltaTime * 5.f);
+			m_fAngle = XMConvertToDegrees(fRadian);
+		}
+		else if (0.f > XMVectorGetY(svCross)) // 카메라가 오른쪽
+		{
+			m_pTransform->Rotation_Axis(XMVectorSet(0.f, 1.f, 0.f, 0.f), (fRadian) * -_dDeltaTime * 5.f);
+			m_fAngle = -XMConvertToDegrees(fRadian);
+		}
+		else
+			m_fAngle = 0.f;
+	}
 
  	return _int();
 }
@@ -446,6 +373,7 @@ CGameObject* CSilvermane::Clone(void* _pArg)
 
 void CSilvermane::Free()
 {
+	Safe_Release(m_pCharacterController);
 	Safe_Release(m_pStateController);
 	Safe_Release(m_pAnimationController);
 	Safe_Release(m_pModel);
