@@ -20,7 +20,6 @@ struct VS_IN
 {
 	float3		vPosition : POSITION;
 	float3		vNormal : NORMAL;
-	float3		vBiNormal : BINORMAL;
 	float2		vTexUV : TEXCOORD0;
 	float3		vTangent : TANGENT; 
 	float3		vBiNormal : BINORMAL;
@@ -96,7 +95,7 @@ technique11			DefaultTechnique
 {
 	pass DefaultShader
 	{
-		SetRasterizerState(CullMode_BackOn);
+		SetRasterizerState(CullMode_Default);
 		SetDepthStencilState(ZDefault, 0);
 		SetBlendState(BlendDisable, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
 
@@ -106,7 +105,7 @@ technique11			DefaultTechnique
 	}
 	pass Default_Frame
 	{
-		SetRasterizerState(CullMode_BackOnWireFrame);
+		SetRasterizerState(CullMode_Wireframe);
 		SetDepthStencilState(ZDefault, 0);
 		SetBlendState(BlendDisable, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
 

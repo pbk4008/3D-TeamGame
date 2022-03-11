@@ -362,31 +362,6 @@ technique11 DefaultTechnique
 		GeometryShader = NULL;
 		PixelShader = compile ps_5_0 PS_MAIN_SHADESHADOW();
 	}
-<<<<<<< HEAD
-	pass StaticMeshCull //------------------------------------------------------------------------------------5 StaticMeshRenderBackOn
-	{
-		SetRasterizerState(CullMode_BackOn);
-		SetDepthStencilState(ZDefault, 0);
-		SetBlendState(BlendDisable, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
-
-		/* 진입점함수를 지정한다. */
-		VertexShader = compile vs_5_0 VS_MAIN_STATIC();
-		GeometryShader = NULL;
-		PixelShader = compile ps_5_0 PS_MAIN_TOOL();
-	}
-	pass StaticMeshCullWire //------------------------------------------------------------------------------------5 StaticMeshRenderBackOnWire
-	{
-		SetRasterizerState(CullMode_BackOnWireFrame);
-		SetDepthStencilState(ZDefault, 0);
-		SetBlendState(BlendDisable, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
-
-		/* 진입점함수를 지정한다. */
-		VertexShader = compile vs_5_0 VS_MAIN_STATIC();
-		GeometryShader = NULL;
-		PixelShader = compile ps_5_0 PS_MAIN_TOOL();
-	}
-=======
->>>>>>> main
 }
 
 

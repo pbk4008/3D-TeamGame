@@ -227,6 +227,21 @@ HRESULT CModel::SetUp_ValueOnShader(const char* pConstantName, void* pData, _uin
 	return S_OK;
 }
 
+HRESULT CModel::SetUp_TextureOnShader(const char* pConstantName, _uint iMeshContainerIndex, aiTextureType eType)
+{
+	if (!m_pEffect)
+		return E_FAIL;
+
+	if (nullptr == m_Materials[iMeshContainerIndex]->pMeshTexture[eType])
+		return S_OK;
+
+	ID3DX11EffectShaderResourceVariable * pVariable = m_pEffect->GetVariableByName(pConstantName)->AsShaderResource();
+	if (!pVariable)
+		return E_FAIL;
+
+	return pVariable->SetResource(m_Materials[iMeshContainerIndex]->pMeshTexture[eType]->Get_ShaderResourceView());
+}
+
 HRESULT CModel::SetUp_TextureOnShader(const char* pConstantName, ID3D11ShaderResourceView* pSRV)
 {
 	ID3DX11EffectShaderResourceVariable* pVariable = m_pEffect->GetVariableByName(pConstantName)->AsShaderResource();
@@ -404,6 +419,7 @@ HRESULT CModel::Create_MaterialDesc()
 
 		m_Materials.push_back(pMeshMaterial);
 	}
+	return S_OK;
 }
 
 HRESULT CModel::Load_Materials(_uint iType, const wstring& pFilePath)
