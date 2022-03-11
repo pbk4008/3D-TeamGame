@@ -461,14 +461,14 @@ HRESULT CLoader::Ready_Test_JS()
 		"../bin/Resources/Mesh/Silvermane/", "Silvermane.fbx",
 		L"../../Reference/ShaderFile/Shader_Mesh.hlsl",
 		matPivot,
-		CModel::TYPE_ANIM))))
+		CModel::TYPE_ANIM, true))))
 	{
 		return E_FAIL;
 	}
 	matPivot = XMMatrixIdentity();
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_TEST_JS, L"Model_Needle", CModel::Create(m_pDevice, m_pDeviceContext,
 		"../bin/Resources/Mesh/Needle/", "Needle.fbx",
-		L"../../Reference/ShaderFile/Shader_StaticMesh.hlsl", matPivot, CModel::TYPE_STATIC))))
+		L"../../Reference/ShaderFile/Shader_StaticMesh.hlsl", matPivot, CModel::TYPE_STATIC, true))))
 	{
 		return E_FAIL;
 	}
@@ -477,7 +477,7 @@ HRESULT CLoader::Ready_Test_JS()
 		"../bin/Resources/Mesh/Bastion_2HSword/", "Bastion_2HSword.fbx",
 		L"../../Reference/ShaderFile/Shader_Mesh.hlsl",
 		matPivot,
-		CModel::TYPE_ANIM))))
+		CModel::TYPE_ANIM, true))))
 	{
 		return E_FAIL;
 	}
@@ -486,7 +486,7 @@ HRESULT CLoader::Ready_Test_JS()
 		"../bin/Resources/Mesh/Bastion_Healer/", "Bastion_Healer.fbx",
 		L"../../Reference/ShaderFile/Shader_Mesh.hlsl",
 		matPivot,
-		CModel::TYPE_ANIM))))
+		CModel::TYPE_ANIM, true))))
 	{
 		return E_FAIL;
 	}
@@ -495,7 +495,7 @@ HRESULT CLoader::Ready_Test_JS()
 		"../bin/Resources/Mesh/Bastion_Shooter/", "Bastion_Shooter.fbx",
 		L"../../Reference/ShaderFile/Shader_Mesh.hlsl",
 		matPivot,
-		CModel::TYPE_ANIM))))
+		CModel::TYPE_ANIM, true))))
 	{
 		return E_FAIL;
 	}
@@ -504,7 +504,7 @@ HRESULT CLoader::Ready_Test_JS()
 		"../bin/Resources/Mesh/Bastion_Spear/", "Bastion_Spear.fbx",
 		L"../../Reference/ShaderFile/Shader_Mesh.hlsl",
 		matPivot,
-		CModel::TYPE_ANIM))))
+		CModel::TYPE_ANIM, true))))
 	{
 		return E_FAIL;
 	}
