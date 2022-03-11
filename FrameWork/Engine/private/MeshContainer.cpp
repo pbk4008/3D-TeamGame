@@ -33,6 +33,8 @@ HRESULT CMeshContainer::NativeConstruct_Prototype(CModel* pModel, aiMesh* pMesh,
 
 HRESULT CMeshContainer::NativeConstruct_Prototype(_uint iMaterialIndex, _uint iNumVtxCnt, _uint iNumIdxCnt, class CModel* pModel, void* pVtx, void* pIdx)
 {
+	m_iMaterialIndex = iMaterialIndex;
+
 	if (FAILED(Set_UpVerticesDesc(iNumVtxCnt, pModel, pVtx)))
 		return E_FAIL;
 	if (FAILED(Set_IndicesDesc(iNumIdxCnt,pIdx)))
@@ -157,12 +159,12 @@ void CMeshContainer::SetUp_BoneMatrices(_matrix * pBoneMatrices, _fmatrix PivotM
 	}
 }
 
-const CSaveManager::STATICMESHDATA& CMeshContainer::SetStaticSaveData()
+const CSaveManager::STATICMESHDATA CMeshContainer::SetStaticSaveData()
 {
 	CSaveManager::STATICMESHDATA pData;
 
 	pData.iIdxCount = m_iNumPrimitive;
-	//pData.iMeshMtrlNum = m_iMaterialIndex;
+	pData.iMeshMtrlNum = m_iMaterialIndex;
 	pData.iVtxCount = m_iNumVertices;
 	pData.pVtxPoint = (VTXMESH*)m_pVertices;
 	pData.pIndex = (FACEINDICES32*)m_pIndices;
@@ -170,7 +172,7 @@ const CSaveManager::STATICMESHDATA& CMeshContainer::SetStaticSaveData()
 	return pData;
 }
 
-const CSaveManager::ANIMMESHDATA& CMeshContainer::SetAnimSaveData()
+const CSaveManager::ANIMMESHDATA CMeshContainer::SetAnimSaveData()
 {
 	CSaveManager::ANIMMESHDATA pData;
 

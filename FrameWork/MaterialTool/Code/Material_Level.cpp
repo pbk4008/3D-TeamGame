@@ -21,8 +21,7 @@ HRESULT CMaterial_Level::NativeConstruct()
 		return E_FAIL;
 	if (FAILED(Init_MaterialObject()))
 		return E_FAIL;
-	if (FAILED(Init_Mouse()))
-		return E_FAIL;
+	
 	return S_OK;
 }
 
@@ -65,13 +64,6 @@ HRESULT CMaterial_Level::Init_MaterialObject()
 	return S_OK;
 }
 
-HRESULT CMaterial_Level::Init_Mouse()
-{
-	if(g_pGameInstance->Add_Prototype(L"Mouse", CMouse::Create(m_pDevice,m_pDeviceContext)))
-		return E_FAIL;
-
-	return S_OK;
-}
 
 CMaterial_Level* CMaterial_Level::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
 {

@@ -12,7 +12,18 @@
 //BOOL MultisampleEnable;
 //BOOL AntialiasedLineEnable;
 */
-
+RasterizerState CullMode_BackOn
+{
+	FillMode = solid;
+	CullMode = NONE;
+	FrontCounterClockwise = false;
+};
+RasterizerState CullMode_BackOnWireFrame
+{
+	FillMode = wireframe;
+	CullMode = NONE;
+	FrontCounterClockwise = false;
+};
 RasterizerState CullMode_Default
 {
 	FillMode = solid;

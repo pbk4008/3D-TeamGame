@@ -46,8 +46,10 @@ private:
 private:
 	HRESULT Start_Level();
 	CModelObject* Find_Model(const wstring& pModelName);
+	_bool Check_LoadFile(const wstring& pFileName);
 	HRESULT Focusing();
 	HRESULT Picking();
+	HRESULT Load_Material(CModelObject* pObj);
 private:
 	_int Check_RadioBtn();
 private:
@@ -60,9 +62,9 @@ private:
 	ID3D11Device* m_pDevice;
 	ID3D11DeviceContext* m_pDeviceContext;
 	CRenderer* m_pRenderer;
-	CMouse* m_pMouse;
 	CModelObject* m_pSelModel;
 	CMaterial* m_pSelMaterial;
+	_uint m_iSelMeshIndex;
 private:
 	CString m_tFbxPath;
 	CString m_tFbxName;
@@ -86,7 +88,8 @@ private:
 public:
 	afx_msg void OnMaterialAddBtnClick();
 	afx_msg void OnTextureAddBtnClick();
-
+	afx_msg void OnMaterialApplyBtnClick();
+	afx_msg void OnMeshSaveBtnClick();
 };
 
 

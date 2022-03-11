@@ -30,7 +30,11 @@ public:
 	_bool Check_Name(const wstring& pName);
 	HRESULT Check_Texture(list<wstring>& pTextrue);
 	void Focusing();
-	void Picking_Face(_fvector vRayPos, _fvector vRayDir);
+	void Picking(_uint iMeshNum);
+	void Change_Material(_uint iMeshNum, CMaterial* pMaterial);
+	list<wstring> get_LoadedMaterialTag();
+	_uint get_MeshCount();
+	HRESULT Save_Model(const wstring& pFilePath);
 public:
 	void setDraw(_bool bCheck) { m_bDraw = bCheck; }
 public:

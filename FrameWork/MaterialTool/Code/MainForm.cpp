@@ -21,11 +21,11 @@ CMainForm::CMainForm()
 	, m_pRenderer(nullptr)
 	, m_pSelModel(nullptr)
 	, m_bChange(false)
-	, m_pMouse(nullptr)
 	, m_pSelMaterial(nullptr)
 	, m_bTextureChange(false)
 	, m_iSelMaterialIndex(-1)
 	, m_iPreMaterialIndex(-1)
+	, m_iSelMeshIndex(-1)
 {
 
 }
@@ -54,6 +54,8 @@ void CMainForm::DoDataExchange(CDataExchange* pDX)
 BEGIN_MESSAGE_MAP(CMainForm, CFormView)
 	ON_BN_CLICKED(IDC_BUTTON1, &CMainForm::OnMaterialAddBtnClick)
 	ON_BN_CLICKED(IDC_BUTTON2, &CMainForm::OnTextureAddBtnClick)
+	ON_BN_CLICKED(IDC_BUTTON3, &CMainForm::OnMaterialApplyBtnClick)
+	ON_BN_CLICKED(IDC_BUTTON4, &CMainForm::OnMeshSaveBtnClick)
 END_MESSAGE_MAP()
 
 
@@ -95,9 +97,6 @@ void CMainForm::OnInitialUpdate()
 	if (FAILED(Start_Level()))
 		return;
 
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer(0, L"MaterialMouse", L"Mouse", nullptr, (CGameObject * *)& m_pMouse)))
-		return;
-
 	if (FAILED(Ready_Tree()))
 		return;
 
@@ -114,7 +113,6 @@ _int CMainForm::Tick(_double dDeltaTime)
 	//LevelUpdate 도는 중
 	g_pGameInstance->Tick_Engine(dDeltaTime);
 
-	m_pMouse->RayUpdate(L"MainCamera");
 	Update_Tree();
 	Update_TextureList();
 	Update_Material();
@@ -155,7 +153,17 @@ _int CMainForm::Update_Tree()
 	 m_tFbxPath += "/";
 	 if (m_tFbxPath == L"../FBX//" || m_tFbxPath == L"../FBX/FBX/")
 		 return 0;
-	m_pSelModel = Find_Model(m_tFbxName.operator LPCWSTR());
+	 wstring tmpPath = m_tFbxPath.GetString();
+	 wstring wstrExt;
+	 wstrExt.assign(tmpPath.end() - 4, tmpPath.end()-1);
+	 if (wstrExt == L"fbx")
+	 {
+		 m_pSelModel->setDraw(true);
+		 return 0;
+	 }
+
+	m_pSelModel = Find_Model(m_tFbxName.GetString());
+
 	if (!m_pSelModel)
 	{
 		wstring wstrFbxName = m_tFbxName.GetString();
@@ -165,14 +173,25 @@ _int CMainForm::Update_Tree()
 		strFbxName.assign(wstrFbxName.begin(), wstrFbxName.end());
 		string strFbxPath;
 		strFbxPath.assign(wstrFbxPath.begin(), wstrFbxPath.end());
+		_bool bLoaded = false;
+		if (bLoaded=Check_LoadFile(wstrFbxName))
+		{
+			wstring wstrSaveFilePath = L"../../Client/Test/";
+			wstrSaveFilePath += wstrFbxName;
+			if (FAILED(g_pGameInstance->Add_Prototype(0, wstrFbxName
+				, CModel::Create(m_pDevice, m_pDeviceContext, wstrSaveFilePath,CModel::TYPE::TYPE_STATIC,true))))
+					return E_FAIL;
+		}
+		else
+		{
+			//원형 만들고 만든 원형 바로 넣어주기?
+			_matrix matPivot = XMMatrixRotationX(XMConvertToRadians(90.0f)) * XMMatrixRotationY(XMConvertToRadians(180.0f));
 
-		//원형 만들고 만든 원형 바로 넣어주기?
-		_matrix matPivot = XMMatrixRotationX(XMConvertToRadians(90.0f)) * XMMatrixRotationY(XMConvertToRadians(180.0f));
-
-		if(FAILED(g_pGameInstance->Add_Prototype(0, wstrFbxName
-			, CModel::Create(m_pDevice, m_pDeviceContext, strFbxPath,strFbxName
-			, L"../../Reference/ShaderFile/Shader_StaticMesh.hlsl", matPivot,CModel::TYPE::TYPE_STATIC,true))))
-			return E_FAIL;
+			if (FAILED(g_pGameInstance->Add_Prototype(0, wstrFbxName
+				, CModel::Create(m_pDevice, m_pDeviceContext, strFbxPath, strFbxName
+					, L"../../Reference/ShaderFile/Shader_StaticMesh.hlsl", matPivot, CModel::TYPE::TYPE_STATIC, true))))
+				return E_FAIL;
+		}
 
 		CModelObject::MODELOBJDESC tDesc;
 		tDesc.wstrFbxFolder = wstrFbxPath;
@@ -182,6 +201,19 @@ _int CMainForm::Update_Tree()
 			return E_FAIL;
 
 		m_bChange = false;
+
+		_uint iMeshIndex = m_pSelModel->get_MeshCount();
+
+		for (_uint i = 0; i < iMeshIndex; i++)
+		{
+			wstring wstrNum = to_wstring(i);
+			m_FbxTree.InsertItem(wstrNum.c_str(), tSelItem);
+		}
+		if (bLoaded)
+		{
+			Load_Material(m_pSelModel);
+		}
+
 	}
 	m_pSelModel->setDraw(true);
 
@@ -332,6 +364,41 @@ HRESULT CMainForm::Ready_CommonTexture()
 	return S_OK;
 }
 
+HRESULT CMainForm::Load_Material(CModelObject* pObj)
+{
+	if (!pObj)
+		return E_FAIL;
+
+	list<wstring> pMaterialTag=pObj->get_LoadedMaterialTag();
+
+	for (auto& pTag : pMaterialTag)
+	{
+		_uint iMaterialIndex = 0;
+
+		_bool bCheck = false;
+		while (iMaterialIndex >= 0)
+		{
+			if (iMaterialIndex >= m_MaterialBox.GetCount())
+				break;
+
+			CString strMaterialTag;
+			m_MaterialBox.GetText(iMaterialIndex,strMaterialTag);
+			if (strMaterialTag.GetString() == pTag)
+			{
+				bCheck = true;
+				break;
+			}
+			iMaterialIndex++;
+		}
+		if (bCheck)
+			continue;
+
+		m_MaterialBox.AddString(pTag.c_str());
+	}
+
+	return S_OK;
+}
+
 CModelObject* CMainForm::Find_Model(const wstring& pModelName)
 {
 	list<CGameObject*>* ObjList=g_pGameInstance->getObjectList(0, L"Model");
@@ -349,6 +416,20 @@ CModelObject* CMainForm::Find_Model(const wstring& pModelName)
 	return nullptr;
 }
 
+_bool CMainForm::Check_LoadFile(const wstring& pFileName)
+{
+	wstring wstrFilePath = L"../../Client/Test/";
+	wstrFilePath += pFileName;
+
+	CFileFind fFinder;
+	_bool bWorking = fFinder.FindFile(wstrFilePath.c_str());
+
+	if (bWorking)
+		return true;
+
+	return false;
+}
+
 HRESULT CMainForm::Focusing()
 {
 	if (!m_pSelModel)
@@ -362,16 +443,24 @@ HRESULT CMainForm::Focusing()
 
 HRESULT CMainForm::Picking()
 {
-	if (!m_pMouse || !m_pSelModel)
-		return E_FAIL;
-
-	_vector vRayPos = m_pMouse->getRayPos();
-	_vector vRayDir = m_pMouse->getRayDir();
-
-	if (g_pGameInstance->getMouseKeyDown(CInputDev::MOUSESTATE::MB_LBUTTON))
+	if (!m_pSelModel)
 	{
-		m_pSelModel->Picking_Face(vRayPos, vRayDir);
+		m_iSelMeshIndex = -1;
+		return S_OK;
 	}
+
+	HTREEITEM tSelItem=m_FbxTree.GetSelectedItem();
+	if (m_FbxTree.GetChildItem(tSelItem))
+	{
+		m_iSelMeshIndex = -1;
+		return S_OK;
+	}
+
+	CString strSelName = m_FbxTree.GetItemText(tSelItem);
+
+	m_iSelMeshIndex = _ttoi(strSelName);
+	m_pSelModel->Picking(m_iSelMeshIndex);
+	
 	return S_OK;
 }
 
@@ -403,7 +492,6 @@ void CMainForm::Free()
 	Safe_Release(m_pDevice);
 	Safe_Release(m_pDeviceContext);
 	Safe_Release(m_pRenderer);
-	Safe_Release(m_pMouse);
 
 	g_pGameInstance->Release_Engine();
 }
@@ -453,4 +541,32 @@ void CMainForm::OnTextureAddBtnClick()
 
 		m_AddTextureList.InsertString(iTextureType, strSelTexture);
 	}
+}
+
+
+void CMainForm::OnMaterialApplyBtnClick()
+{
+	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+	if (!m_pSelMaterial || !m_pSelModel||m_iSelMeshIndex==-1)
+		return;
+
+	
+	m_pSelModel->Change_Material(m_iSelMeshIndex, m_pSelMaterial);
+}
+
+
+void CMainForm::OnMeshSaveBtnClick()
+{
+	if (!m_pSelModel)
+		return;
+
+	CFileDialog Dlg(false, L"", L"*.fbx"
+		, OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT, L"*.fbx", this);
+
+	if (Dlg.DoModal() == IDCANCEL)
+		return;
+
+	CString strPath = Dlg.GetFolderPath();
+	strPath += L"\\"+m_tFbxName;
+	m_pSelModel->Save_Model(strPath.GetString());
 }

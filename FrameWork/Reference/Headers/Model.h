@@ -27,21 +27,23 @@ public:
 	vector<CHierarchyNode*>& Get_HierachyNodes() { return m_HierarchyNodes; }
 	vector<CAnimation*>& Get_Animations() { return m_Animations; }
 	_bool getUsingMaterial() { return m_bUsingMaterial; }
+	vector<vector<CMeshContainer*>> Get_MeshContainer() { return m_MeshContainers; }
+	vector<CMaterial*> Get_Materials() { return m_vecMaterials; }
+public:
+	void setUsingTool(_bool Check) { m_bUsingTool = Check; }
 public:
 	HRESULT NativeConstruct_Prototype(const string& pMeshFilePath, const string& pMeshFileName, const wstring& pShaderFilePath, _fmatrix PivotMatrix, TYPE eMeshType,_bool bUsingMaterial);
-	HRESULT NativeConstruct_Prototype(const wstring& pMeshFilePath, const wstring& pShaderFilePath, TYPE eType);
+	HRESULT NativeConstruct_Prototype(const wstring& pMeshFilePath, TYPE eType, _bool bUsingMaterial);
 	HRESULT NativeConstruct(void* pArg);
 public:
 	HRESULT Add_Material(CMaterial* _pMtrl, const _uint _iMtrlIndex);
-
 	HRESULT SetUp_ValueOnShader(const char* pConstantName, void* pData, _uint iSize);
 	void SetUp_AnimationIndex(_uint iAnimationIndex) { m_iCurrentAnimation = iAnimationIndex; }
-
 	HRESULT Update_CombinedTransformationMatrix(_double TimeDelta);
 	HRESULT Update_CombinedTransformationMatrix(const _int _iCurAnimIndex, const _bool _isRootMotion, const ERootOption _eRootOption = ERootOption::XYZ);
 	HRESULT Render(_uint iMeshContainerIndex, _uint iPassIndex);
 public:
-	vector<vector<CMeshContainer*>> Get_MeshContainer() { return m_MeshContainers; }
+	HRESULT Save_Model(const wstring& pFilePath);
 private:
 	const aiScene*		m_pScene = nullptr;
 	Assimp::Importer	m_Importer;
@@ -54,6 +56,7 @@ private:
 	_uint				m_iNumMeshes = 0;
 	_bool				m_bSaved = false;
 	_bool				m_bUsingMaterial = false;
+	_bool				m_bUsingTool = false;
 private:
 	ID3DX11Effect* m_pEffect = nullptr;
 	vector<EFFECTDESC*> m_PassDesc;
@@ -93,9 +96,10 @@ private:
 	
 	HRESULT Compile_Shader(const wstring& pShaderFilePath);
 	HRESULT Create_Animation();
+
 public:
 	static CModel* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext, const string& pMeshFilePath, const string& pMeshFileName, const wstring& pShaderFilePath, _fmatrix PivotMatrix, TYPE eMeshType,_bool bMaterial = false);
-	static CModel* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext, const wstring& pMeshFileName, const wstring& pShaderFilePath, TYPE eType);
+	static CModel* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext, const wstring& pMeshFileName, TYPE eType, _bool bUsingMaterial=false);
 	virtual CComponent* Clone(void* pArg) override;
 	virtual void Free() override;
 };

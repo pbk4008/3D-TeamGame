@@ -8,6 +8,7 @@ cbuffer Matrices
 };
 
 texture2D g_DiffuseTexture;
+bool g_bUsingTool = false;
 sampler DefaultSampler = sampler_state
 {
 	filter = min_mag_mip_linear;
@@ -20,12 +21,13 @@ struct VS_IN
 	float3		vPosition : POSITION;
 	float3		vNormal : NORMAL;
 	float2		vTexUV : TEXCOORD0;
-	float3		vTangent : TANGENT;
+	float3		vTangent : TANGENT; 
+	float3		vBiNormal : BINORMAL;
 	
 	float4 vRight : TEXCOORD1;
-	float4 vUp : TEXCOORD2;
-	float4 vLook : TEXCOORD3;
-	float4 vTranslation : TEXCOORD4;
+	float4 vUp  : TEXCOORD2;
+	float4 vLook  : TEXCOORD3;
+	float4 vTranslation  : TEXCOORD4;
 };
 
 struct VS_OUT
@@ -41,6 +43,9 @@ VS_OUT VS_MESH(VS_IN In)
 	VS_OUT			Out = (VS_OUT)0;
 
 	matrix matInstance = float4x4(In.vRight, In.vUp, In.vLook, In.vTranslation);
+
+	if (g_bUsingTool)
+		matInstance = float4x4(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
 
 	vector vPosition = mul(vector(In.vPosition, 1.f), matInstance);
 
@@ -90,7 +95,17 @@ technique11			DefaultTechnique
 {
 	pass DefaultShader
 	{
-		SetRasterizerState(CullMode_Default);
+		SetRasterizerState(CullMode_BackOn);
+		SetDepthStencilState(ZDefault, 0);
+		SetBlendState(BlendDisable, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+
+		VertexShader = compile vs_5_0 VS_MESH();
+		GeometryShader = NULL;
+		PixelShader = compile ps_5_0  PS_MAIN();
+	}
+	pass Default_Frame
+	{
+		SetRasterizerState(CullMode_BackOnWireFrame);
 		SetDepthStencilState(ZDefault, 0);
 		SetBlendState(BlendDisable, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
 

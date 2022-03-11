@@ -10,14 +10,15 @@ CMaterial::CMaterial(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContex
 	Safe_AddRef(m_pDevice);
 	Safe_AddRef(m_pDeviceContext);
 
-	m_vecTextures.resize(AI_TEXTURE_TYPE_MAX);
+	m_vecTextures.resize((_uint)TEXTURETYPE::TEX_END);
 }
 
 HRESULT CMaterial::Native_Construct(const wstring& _wstrName, const wstring& _wstrShaderFilePath, const EType _eType)
 {
 	m_wstrName = _wstrName;
+	m_eType = _eType;
 
-	switch (_eType)
+	switch (m_eType)
 	{
 	case EType::Static:
 	{
@@ -92,7 +93,6 @@ HRESULT CMaterial::Native_Construct(const wstring& _wstrName, const wstring& _ws
 	}
 
 	m_wstrShaderPath = _wstrShaderFilePath;
-	m_eType = _eType;
 	m_vecTextures.resize((_uint)TEXTURETYPE::TEX_END);
 
 	return S_OK;
@@ -241,6 +241,43 @@ HRESULT CMaterial::Set_Texture(TEXTURETYPE _eTextureType, const wstring& _pTextu
 void CMaterial::Set_InputLayout(_uint iPassIndex)
 {
 	m_pDeviceContext->IASetInputLayout(m_vecEffectDescs[iPassIndex]->pInputLayout);
+}
+
+void CMaterial::Using_Tool()
+{
+	if (m_eType == CMaterial::EType::Instance_Static || m_eType == CMaterial::EType::Instance_Anim)
+	{
+		_bool bUsingTool = true;
+		SetUp_ValueOnShader("g_bUsingTool", &bUsingTool, sizeof(_bool));
+	}
+}
+
+CSaveManager::MTRLDATA CMaterial::SetMaterialSaveData()
+{
+	CSaveManager::MTRLDATA tMtrlData;
+	ZeroMemory(&tMtrlData, sizeof(tMtrlData));
+
+	tMtrlData.iMtrlType = (_uint)(m_eType);
+	lstrcpy(tMtrlData.pMtrlName, m_wstrName.c_str());
+	lstrcpy(tMtrlData.pShader_Path, m_wstrShaderPath.c_str());
+
+	_uint iTextureCnt = 0;
+	for (_uint i=0; i< (_uint)TEXTURETYPE::TEX_END; i++)
+	{
+		if (m_vecTextures[i])
+		{
+			CSaveManager::TEXTUREDATA tTextureData;
+			ZeroMemory(&tTextureData, sizeof(tTextureData));
+
+			tTextureData.iType = i;
+			lstrcpy(tTextureData.pTextureName, m_vecTextures[i]->getTextureTag().c_str());
+			tMtrlData.vecTextureData.emplace_back(tTextureData);
+			iTextureCnt++;
+		}
+	}
+	tMtrlData.iTextureCnt = iTextureCnt;
+
+	return tMtrlData;
 }
 
 list<wstring> CMaterial::Get_TextureName()

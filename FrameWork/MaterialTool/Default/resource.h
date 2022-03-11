@@ -18,6 +18,7 @@
 #define IDC_BUTTON3                     1008
 #define IDC_Model2                      1009
 #define IDC_Model3                      1010
+#define IDC_BUTTON4                     1011
 #define IDC_RADIO4                      1025
 #define IDC_RADIO5                      1026
 #define IDC_RADIO6                      1027
