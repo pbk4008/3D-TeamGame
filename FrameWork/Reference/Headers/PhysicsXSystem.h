@@ -3,8 +3,18 @@
 #define __PHYSICSXSYSTEM__
 #include "SingleTon.h"
 
+#define ToPxVec3(v)					PxVec3((v).x, (v).y, (v).z)
+#define FromPxVec3(v)				_float3((v).x, (v).y, (v).z)
+#define ToPxExtendedVec3(v)			PxExtendedVec3((v).x, (v).y, (v).z)
+#define ToPxQuat(v)					PxQuat((v).x, (v).y, (v).z, (v).w)
+#define FromPxQuat(v)				_float4((v).x, (v).y, (v).z, (v).w)
+
+#include "ControllerBehaviorCallback.h"
+#include "ControllerHitReport.h"
+
 BEGIN(Engine)
 class ContactReportCallback;
+class CCharacterController;
 class CPhysicsXSystem final : public CSingleTon<CPhysicsXSystem>
 {
 	friend CSingleTon;
@@ -28,8 +38,12 @@ public:
 	HRESULT UpDate_Collision(_double DeltaTime);
 	PxShape* Init_Shape(COLLIDERTYPE eType, const PxVec3 ShapeInfo);
 	PxShape* Init_Mesh(const PxTriangleMeshDesc& tDesc);
+	HRESULT Create_Material(const PxReal _staticFriction, const PxReal _dynamicFriction, const PxReal _restitution, PxMaterial** _ppOutMaterial);
+	HRESULT Create_CharacterController(CCharacterController* _pController, PxController** _ppOutPxController, vector<PxShape*>& _vecShapes);
+	const PxRenderBuffer& Get_RenderBuffer();
 private:
 	HRESULT Intit_Scene();
+	HRESULT Init_ControllerManager();
 private:
 	virtual void Free() override;
 private:
@@ -40,6 +54,11 @@ private:
 	PxScene* m_pScene;
 	PxCooking* m_pCooking;
 	PxDefaultCpuDispatcher* m_pDispatcher;
+
+private: /* For.ControllerManager */
+	PxControllerManager* m_pControllerManager = nullptr;
+	CControllerBehaviorCallback* m_pControllerBehaviorCallback = nullptr;
+	CControllerHitReport* m_pControllerHitReport = nullptr;
 
 public:
 	class ContactReportCallback : public PxSimulationEventCallback

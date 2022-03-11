@@ -32,9 +32,12 @@ public:
 	CModel* Get_Model() const;
 	const _float Get_PlusAngle() const;
 
+	void Set_Move(const _bool _isMove);
 	void Set_EquipWeapon(const _bool _isEquipWeapon);
+	void Set_WeaponFixedBone(const string& _wstrFixedBoneTag);
 	void Set_WeaponFixedBone(CHierarchyNode* _pFixedBone);
 	void Set_Camera(CCamera_Silvermane* _pCamera);
+	void Set_PlusAngle(const _float _fAngle);
 
 	const _bool Is_EquipWeapon() const;
 	void Add_PlusAngle(const _float _fDeltaAngle);
@@ -47,13 +50,14 @@ private:
 	CStateController* m_pStateController = nullptr;
 	CAnimationController* m_pAnimationController = nullptr;
 	CCamera_Silvermane* m_pCamera = nullptr;
+	CCharacterController* m_pCharacterController = nullptr;
 
 	CWeapon* m_pWeapon = nullptr;
 	_bool m_isEquipWeapon = false;
+	_bool m_isMove = false;
 
 	_float m_fAngle = 0.f;
 	_float m_fPlusAngle = 0.f;
-	_float m_fDeltaRadian = 0.f;
 
 public:
 	static CSilvermane* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext);

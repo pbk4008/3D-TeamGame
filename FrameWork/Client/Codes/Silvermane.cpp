@@ -31,13 +31,21 @@
 #include "Silvermane_SprintFwdStop.h"
 
 //////////////////// 1H
-#include "1H_SowrdAttackNormalR1_01.h"
-#include "1H_SowrdAttackNormalR1_02.h"
+#include "1H_SwordAttackNormalR1_01.h"
+#include "1H_SwordAttackNormalR1_02.h"
+#include "1H_SwordAttackNormalR1_03.h"
+#include "1H_SwordAttackNormalR1_04.h"
+
+#include "1H_SwordJogAttack.h"
+#include "1H_SwordSupermanStab.h"
 
 #include "1H_SwordEquipOff.h"
 #include "1H_SwordEquipOn.h"
 
 #include "1H_SwordDodgeSpinFwd_V3.h"
+#include "1H_SwordNormalSidestepBwd_V3.h"
+#include "1H_SwordNormalSidestepLeft_V3.h"
+#include "1H_SwordNormalSidestepRight_V3.h"
 #pragma endregion
 
 
@@ -84,12 +92,13 @@ _int CSilvermane::Tick(_double _dDeltaTime)
 	iProgress = m_pStateController->Tick(_dDeltaTime);
 	if (NO_EVENT != iProgress) return iProgress;
 
-	iProgress = m_pAnimationController->Tick(_dDeltaTime);
-	if (NO_EVENT != iProgress) return iProgress;
-
 	iProgress = Trace_CameraLook(_dDeltaTime);
 	if (NO_EVENT != iProgress) return iProgress;
 
+	iProgress = m_pAnimationController->Tick(_dDeltaTime);
+	if (NO_EVENT != iProgress) return iProgress;
+
+	m_pCharacterController->Tick(_dDeltaTime);
 	return _int();
 }
 
@@ -110,8 +119,13 @@ HRESULT CSilvermane::Render()
 {
 	if (FAILED(__super::Render())) return E_FAIL;
 
+#ifdef _DEBUG
+	m_pCharacterController->Render();
+#endif // _DEBUG
+
+
 	_matrix smatWorld, smatView, smatProj;
-	smatWorld = XMMatrixTranspose(m_pTransform->Get_WorldMatrix());
+	smatWorld = XMMatrixTranspose(m_pTransform->Get_CombinedMatrix());
 	smatView = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_VIEW));
 	smatProj = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_PROJECTION));
 
@@ -142,28 +156,43 @@ HRESULT CSilvermane::Render()
 
 HRESULT CSilvermane::Ready_Components()
 {
-	CTransform::TRANSFORMDESC transformDesc;
-	transformDesc.fSpeedPerSec = 10.f;
-	transformDesc.fRotationPerSec = XMConvertToRadians(90.f);
-	m_pTransform->Set_TransformDesc(transformDesc);
+	// 트랜스폼 설정
+	CTransform::TRANSFORMDESC tTransformDesc;
+	tTransformDesc.fSpeedPerSec = 10.f;
+	tTransformDesc.fRotationPerSec = XMConvertToRadians(90.f);
+	m_pTransform->Set_TransformDesc(tTransformDesc);
 
+	// 모델
 	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_TEST_JS, L"Model_Silvermane", L"Model", (CComponent**)&m_pModel)))
 		return E_FAIL;
-
 	m_pModel->Add_Material(g_pGameInstance->Get_Material(L"Mtrl_Silvermane_Top"), 0);
 	m_pModel->Add_Material(g_pGameInstance->Get_Material(L"Mtrl_Silvermane_Down"), 1);
 	m_pModel->Add_Material(g_pGameInstance->Get_Material(L"Mtrl_Silvermane_Cloak"), 2);
 	m_pModel->Add_Material(g_pGameInstance->Get_Material(L"Mtrl_Silvermane_Hair"), 3);
 
+	// 에니메이션 컨트롤러
 	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_TEST_JS, L"Com_AnimationController", L"AnimationController", (CComponent**)&m_pAnimationController)))
 		return E_FAIL;
 	m_pAnimationController->Set_GameObject(this);
 	m_pAnimationController->Set_Model(m_pModel);
 	m_pAnimationController->Set_Transform(m_pTransform);
 
+	// 스테이트 컨트롤러
 	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_TEST_JS, L"Com_StateController", L"StateController", (CComponent**)&m_pStateController)))
 		return E_FAIL;
 	m_pStateController->Set_GameObject(this);
+
+	// 캐릭터 컨트롤러
+	CCharacterController::CHARACTERCONTROLLERDESC tCharacterControllerDesc;
+	tCharacterControllerDesc.fHeight = 2.f;
+	tCharacterControllerDesc.fRadius = 0.5f;
+	tCharacterControllerDesc.fStaticFriction = 0.5f;
+	tCharacterControllerDesc.fDynamicFriction = 0.5f;
+	tCharacterControllerDesc.fRestitution = 0.f;
+	tCharacterControllerDesc.pGameObject = this;
+	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_TEST_JS, L"Com_CharacterController", L"CharacterController", (CComponent**)&m_pCharacterController, &tCharacterControllerDesc)))
+		return E_FAIL;
+	m_pCharacterController->Set_OwnerTransform(m_pTransform);
 
 	return S_OK;
 }
@@ -207,15 +236,29 @@ HRESULT CSilvermane::Ready_States()
 		return E_FAIL;
 #pragma endregion
 #pragma region 1H
-	if (FAILED(m_pStateController->Add_State(L"1H_SwordAttackNormalR1_01", C1H_SowrdAttackNormalR1_01::Create(m_pDevice, m_pDeviceContext))))
+	if (FAILED(m_pStateController->Add_State(L"1H_SwordAttackNormalR1_01", C1H_SwordAttackNormalR1_01::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
-	if (FAILED(m_pStateController->Add_State(L"1H_SwordAttackNormalR1_02", C1H_SowrdAttackNormalR1_02::Create(m_pDevice, m_pDeviceContext))))
+	if (FAILED(m_pStateController->Add_State(L"1H_SwordAttackNormalR1_02", C1H_SwordAttackNormalR1_02::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	if (FAILED(m_pStateController->Add_State(L"1H_SwordAttackNormalR1_03", C1H_SwordAttackNormalR1_03::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	if (FAILED(m_pStateController->Add_State(L"1H_SwordAttackNormalR1_04", C1H_SwordAttackNormalR1_04::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	if (FAILED(m_pStateController->Add_State(L"1H_SwordJogAttack", C1H_SwordJogAttack::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	if (FAILED(m_pStateController->Add_State(L"1H_SwordSupermanStab", C1H_SwordSupermanStab::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 	if (FAILED(m_pStateController->Add_State(L"1H_SwordEquipOff", C1H_SwordEquipOff::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 	if (FAILED(m_pStateController->Add_State(L"1H_SwordEquipOn", C1H_SwordEquipOn::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 	if (FAILED(m_pStateController->Add_State(L"1H_DodgeSpin", C1H_SwordDodgeSpinFwd_V3::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	if (FAILED(m_pStateController->Add_State(L"1H_SidestepBwd", C1H_SwordNormalSidestepBwd_V3::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	if (FAILED(m_pStateController->Add_State(L"1H_SidestepLeft", C1H_SwordNormalSidestepLeft_V3::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	if (FAILED(m_pStateController->Add_State(L"1H_SidestepRight", C1H_SwordNormalSidestepRight_V3::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 #pragma endregion
 
@@ -246,10 +289,22 @@ const _float CSilvermane::Get_PlusAngle() const
 	return m_fPlusAngle;
 }
 
+void CSilvermane::Set_Move(const _bool _isMove)
+{
+	m_isMove = _isMove;
+}
+
 void CSilvermane::Set_EquipWeapon(const _bool _isEquipWeapon)
 {
 	m_isEquipWeapon = _isEquipWeapon;
 	m_pWeapon->Set_Equip(m_isEquipWeapon);
+}
+
+void CSilvermane::Set_WeaponFixedBone(const string& _sstrFixedBoneTag)
+{
+	CHierarchyNode* pFixedBone = m_pModel->Get_BoneMatrix(_sstrFixedBoneTag.c_str());
+	if(pFixedBone)
+		m_pWeapon->Set_FixedBone(pFixedBone);
 }
 
 void CSilvermane::Set_WeaponFixedBone(CHierarchyNode* _pFixedBone)
@@ -263,6 +318,11 @@ void CSilvermane::Set_Camera(CCamera_Silvermane* _pCamera)
 	m_pCamera = _pCamera;
 }
 
+void CSilvermane::Set_PlusAngle(const _float _fAngle)
+{
+	m_fPlusAngle = _fAngle;
+}
+
 const _bool CSilvermane::Is_EquipWeapon() const
 {
 	return m_isEquipWeapon;
@@ -270,44 +330,57 @@ const _bool CSilvermane::Is_EquipWeapon() const
 
 void CSilvermane::Add_PlusAngle(const _float _fDeltaAngle)
 {
-	_float fDeltaAngle = _fDeltaAngle * 1000.f;
-	m_fPlusAngle += fDeltaAngle;
-	m_fDeltaRadian = XMConvertToRadians(fDeltaAngle);
-	if (-45.f > m_fPlusAngle)
-		m_fPlusAngle = -45.f;
-	else if (45.f < m_fPlusAngle)
-		m_fPlusAngle = 45.f;
+	m_fPlusAngle += _fDeltaAngle * 400.f;
+	if (360.f < m_fPlusAngle || -360.f > m_fPlusAngle)
+		m_fPlusAngle = fmodf(m_fPlusAngle, 360.f);
 }
 
 _int CSilvermane::Trace_CameraLook(const _double& _dDeltaTime)
 {
 	_vector svCameraLook = m_pCamera->Get_Look();
 	_vector svLook = m_pTransform->Get_State(CTransform::STATE_LOOK);
+	_vector svUp = m_pTransform->Get_State(CTransform::STATE_UP);
 
 	svCameraLook = XMVector3Normalize(XMVectorSetY(svCameraLook, 0.f));
 	svLook = XMVector3Normalize(XMVectorSetY(svLook, 0.f));
-	_vector svAngle = XMVector3AngleBetweenVectors(svCameraLook, svLook);
 
-	_float fRadian;
-	XMStoreFloat(&fRadian, svAngle);
 
-	_float fPlusRadian = XMConvertToRadians(m_fPlusAngle);
-
-	_vector svCross = XMVector3Cross(svLook, svCameraLook);
-	if (0 < XMVectorGetY(svCross))
+	if (m_isMove)
 	{
-		m_pTransform->Rotation_Axis(m_pTransform->Get_State(CTransform::STATE_UP), (fRadian + fPlusRadian) * _dDeltaTime * 3.f);
-		m_fAngle = XMConvertToDegrees(fRadian);
-	}
-	else if (0 > XMVectorGetY(svCross))
-	{
-		m_pTransform->Rotation_Axis(m_pTransform->Get_State(CTransform::STATE_UP), (fRadian - fPlusRadian) * -_dDeltaTime * 3.f);
-		m_fAngle = -XMConvertToDegrees(fRadian);
+		// 추가로 달리기와 같이 더 회전이 필요한 동작들을 회전시켜주는 부분입네다.
+		_float fPlusRadian = XMConvertToRadians(m_fPlusAngle);
+
+		//_matrix smatPlusPivot = XMMatrixRotationAxis(svUp, fPlusRadian);
+		_matrix smatPlusPivot = XMMatrixRotationY(fPlusRadian);
+		_vector svRotCameraLook = XMVector4Transform(svCameraLook, smatPlusPivot);
+		_vector svRotCameraRight = XMVector3Cross(XMVectorSet(0.f, 1.f, 0.f, 0.f), svRotCameraLook);
+		_vector svRotCameraUp = XMVector3Cross(svRotCameraLook, svRotCameraRight);
+
+		m_pTransform->Set_State(CTransform::STATE_RIGHT, svRotCameraRight);
+		m_pTransform->Set_State(CTransform::STATE_UP, svRotCameraUp);
+		m_pTransform->Set_State(CTransform::STATE_LOOK, svRotCameraLook);
 	}
 	else
-		m_fAngle = 0.f;
+	{
+		_vector svAngle = XMVector3AngleBetweenVectors(svCameraLook, svLook);
+		_float fRadian;
+		XMStoreFloat(&fRadian, svAngle);
+		_vector svCross = XMVector3Cross(svLook, svCameraLook);
+		if (0.f < XMVectorGetY(svCross)) // 카메라가 왼쪽
+		{
+			m_pTransform->Rotation_Axis(XMVectorSet(0.f, 1.f, 0.f, 0.f), (fRadian)*_dDeltaTime * 5.f);
+			m_fAngle = XMConvertToDegrees(fRadian);
+		}
+		else if (0.f > XMVectorGetY(svCross)) // 카메라가 오른쪽
+		{
+			m_pTransform->Rotation_Axis(XMVectorSet(0.f, 1.f, 0.f, 0.f), (fRadian) * -_dDeltaTime * 5.f);
+			m_fAngle = -XMConvertToDegrees(fRadian);
+		}
+		else
+			m_fAngle = 0.f;
+	}
 
-	return _int();
+ 	return _int();
 }
 
 CSilvermane* CSilvermane::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
@@ -334,6 +407,7 @@ CGameObject* CSilvermane::Clone(void* _pArg)
 
 void CSilvermane::Free()
 {
+	Safe_Release(m_pCharacterController);
 	Safe_Release(m_pStateController);
 	Safe_Release(m_pAnimationController);
 	Safe_Release(m_pModel);

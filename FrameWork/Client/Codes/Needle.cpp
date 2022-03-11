@@ -121,7 +121,7 @@ _int CNeedle::Attach_Owner(const _double& _dDeltaTime)
 	if (m_pOwner)
 	{
 		_matrix smatWorld = m_pLocalTransform->Get_WorldMatrix();
-		_matrix smatOwerWorld = static_cast<CSilvermane*>(m_pOwner)->Get_Transform()->Get_WorldMatrix();
+		_matrix smatOwerWorld = static_cast<CSilvermane*>(m_pOwner)->Get_Transform()->Get_CombinedMatrix();
 		m_pTransform->Set_WorldMatrix(smatWorld * smatOwerWorld);
 	}
 

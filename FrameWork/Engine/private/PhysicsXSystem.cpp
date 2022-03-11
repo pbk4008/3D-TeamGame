@@ -3,6 +3,8 @@
 #include "SaveManager.h"
 #include "GameObject.h"
 
+#include "CharacterController.h"
+
 CPhysicsXSystem::CPhysicsXSystem()
 	: m_pFoundation(nullptr)
 	, m_pPhysics(nullptr)
@@ -46,6 +48,16 @@ HRESULT CPhysicsXSystem::Init_PhysicsX()
 
 	if (FAILED(Intit_Scene()))
 		return E_FAIL;
+
+	if (FAILED(Init_ControllerManager())) return E_FAIL;
+
+
+#ifdef _DEBUG
+	m_pScene->setVisualizationParameter(PxVisualizationParameter::eSCALE, 1.f);
+	m_pScene->setVisualizationParameter(PxVisualizationParameter::eCOLLISION_SHAPES, 1.f);
+	//m_pScene->setVisualizationParameter(PxVisualizationParameter::eACTOR_AXES, 2.f); // ±âÁî¸ð
+#endif // _DEBUG
+
 
 	return S_OK;
 }
@@ -142,6 +154,77 @@ PxShape* CPhysicsXSystem::Init_Mesh(const PxTriangleMeshDesc& tDesc)
 	return pShape;
 }
 
+HRESULT CPhysicsXSystem::Create_Material(const PxReal _staticFriction, const PxReal _dynamicFriction, const PxReal _restitution, PxMaterial** _ppOutMaterial)
+{
+	PxMaterial* pMaterial = m_pPhysics->createMaterial(_staticFriction, _dynamicFriction, _restitution);
+
+	if (_ppOutMaterial)
+	{
+		*_ppOutMaterial = pMaterial;
+		return S_OK;
+	}
+	else
+	{
+		pMaterial->release();
+		return E_FAIL;
+	}
+
+}
+
+HRESULT CPhysicsXSystem::Create_CharacterController(CCharacterController* _pController, PxController** _ppOutPxController, vector<PxShape*>& _vecShapes)
+{
+	PxCapsuleControllerDesc controllerDesc;
+	CCharacterController::CHARACTERCONTROLLERDESC tCharacterControllerDesc = _pController->Get_CharacterControllerDesc();
+
+	controllerDesc.behaviorCallback = m_pControllerBehaviorCallback;
+	controllerDesc.userData = tCharacterControllerDesc.pGameObject;
+	controllerDesc.material = _pController->Get_Material();
+	controllerDesc.height = tCharacterControllerDesc.fHeight;
+	controllerDesc.radius = tCharacterControllerDesc.fRadius;
+	controllerDesc.climbingMode = tCharacterControllerDesc.eClimbingMode;
+	controllerDesc.contactOffset = tCharacterControllerDesc.fContactOffset;
+	controllerDesc.stepOffset = tCharacterControllerDesc.fStepOffset;
+	controllerDesc.slopeLimit = XMConvertToRadians(tCharacterControllerDesc.fSlopeLimit);
+	controllerDesc.upDirection = ToPxVec3(tCharacterControllerDesc.vUpDirection);
+	controllerDesc.reportCallback = m_pControllerHitReport;
+
+	_float3 vPosition = tCharacterControllerDesc.vPosition;
+	controllerDesc.position = PxExtendedVec3(vPosition.x, vPosition.y, vPosition.z);
+
+	PxController* pPxController = m_pControllerManager->createController(controllerDesc);
+	pPxController->setUserData(tCharacterControllerDesc.pGameObject);
+
+	const PxU32 numShapes = pPxController->getActor()->getNbShapes();
+	_vecShapes.resize(numShapes);
+
+	PxShape** ppShape = (PxShape**)m_Allocator.allocate(sizeof(PxShape*) * numShapes, 0, __FILE__, __LINE__);
+	pPxController->getActor()->getShapes(ppShape, numShapes);
+	pPxController->getActor()->userData = tCharacterControllerDesc.pGameObject;
+
+	for (PxU32 i = 0; i < numShapes; ++i)
+	{
+		PxShape* pShape = ppShape[i];
+		pShape->userData = tCharacterControllerDesc.pGameObject;
+		_vecShapes[i] = pShape;
+	}
+
+	if (ppShape)
+	{
+		m_Allocator.deallocate(ppShape);
+		ppShape = NULL;
+	}
+
+	*_ppOutPxController = pPxController;
+
+	m_pScene->addActor(*pPxController->getActor());
+	return S_OK;
+}
+
+const PxRenderBuffer& CPhysicsXSystem::Get_RenderBuffer()
+{
+	return m_pScene->getRenderBuffer();
+}
+
 HRESULT CPhysicsXSystem::Intit_Scene()
 {
 	if (!m_pPhysics)
@@ -163,10 +246,30 @@ HRESULT CPhysicsXSystem::Intit_Scene()
 	return S_OK;
 }
 
+HRESULT CPhysicsXSystem::Init_ControllerManager()
+{
+	if (m_pScene == nullptr)
+	{
+		return E_FAIL;
+	}
+
+	m_pControllerManager = PxCreateControllerManager(*m_pScene);
+
+	m_pControllerBehaviorCallback = new CControllerBehaviorCallback();
+	m_pControllerHitReport = new CControllerHitReport();
+
+	return S_OK;
+}
+
 
 void CPhysicsXSystem::Free()
 {
 	//Safe_Delete(m_pContactRePort);
+
+	if (m_pControllerManager)
+		m_pControllerManager->release();
+	Safe_Delete(m_pControllerHitReport);
+	Safe_Delete(m_pControllerBehaviorCallback);
 
 	m_pScene->release();
 	m_pDispatcher->release();

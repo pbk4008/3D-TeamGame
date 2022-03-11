@@ -4,12 +4,12 @@
 #include "StateController.h"
 
 CSilvermane_JogLeftPivot180::CSilvermane_JogLeftPivot180(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
-	: CState_Silvermane(_pDevice, _pDeviceContext)
+	: CSilvermane_Jog(_pDevice, _pDeviceContext)
 {
 }
 
 CSilvermane_JogLeftPivot180::CSilvermane_JogLeftPivot180(const CSilvermane_JogLeftPivot180& _rhs)
-	: CState_Silvermane(_rhs)
+	: CSilvermane_Jog(_rhs)
 {
 }
 
@@ -85,6 +85,8 @@ _int CSilvermane_JogLeftPivot180::KeyCheck(const _double& _dDeltaTime)
 				return -1;
 			return STATE_CHANGE;
 		}
+
+		Add_PlusAngle(EDir::Forward, _dDeltaTime);
 	}
 	else if (g_pGameInstance->getkeyPress(DIK_A))
 	{

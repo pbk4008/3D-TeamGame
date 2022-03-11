@@ -4,12 +4,12 @@
 #include "StateController.h"
 
 CSilvermane_JogFwd::CSilvermane_JogFwd(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
-	: CState_Silvermane(_pDevice, _pDeviceContext)
+	: CSilvermane_Jog(_pDevice, _pDeviceContext)
 {
 }
 
 CSilvermane_JogFwd::CSilvermane_JogFwd(const CSilvermane_JogFwd& _rhs)
-	: CState_Silvermane(_rhs)
+	: CSilvermane_Jog(_rhs)
 {
 }
 
@@ -74,23 +74,17 @@ _int CSilvermane_JogFwd::KeyCheck(const _double& _dDeltaTime)
 
 	if (g_pGameInstance->getkeyPress(DIK_W))
 	{
-		_float fPlusAngle = m_pSilvermane->Get_PlusAngle();
 		if (g_pGameInstance->getkeyPress(DIK_A))
 		{
-			if (-45.f < fPlusAngle)
-				m_pSilvermane->Add_PlusAngle(-_dDeltaTime);
+			Add_PlusAngle(EDir::LeftForward, _dDeltaTime);
 		}
 		else if (g_pGameInstance->getkeyPress(DIK_D))
 		{
-			if (45.f > fPlusAngle)
-				m_pSilvermane->Add_PlusAngle(_dDeltaTime);
+			Add_PlusAngle(EDir::RightForward, _dDeltaTime);
 		}
 		else
 		{
-			if (0.f < fPlusAngle)
-				m_pSilvermane->Add_PlusAngle(-_dDeltaTime);
-			else if (0.f > fPlusAngle)
-				m_pSilvermane->Add_PlusAngle(_dDeltaTime);
+			Add_PlusAngle(EDir::Forward, _dDeltaTime);
 		}
 	}
 	else if (g_pGameInstance->getkeyPress(DIK_S))
@@ -101,13 +95,13 @@ _int CSilvermane_JogFwd::KeyCheck(const _double& _dDeltaTime)
 	}
 	else if (g_pGameInstance->getkeyPress(DIK_D))
 	{
-		if (FAILED(m_pStateController->Change_State(L"JogRightStart")))
+		if (FAILED(m_pStateController->Change_State(L"JogRight")))
 			return -1;
 		return STATE_CHANGE;
 	}
 	else if (g_pGameInstance->getkeyPress(DIK_A))
 	{
-		if (FAILED(m_pStateController->Change_State(L"JogLeftStart")))
+		if (FAILED(m_pStateController->Change_State(L"JogLeft")))
 			return -1;
 		return STATE_CHANGE;
 	}

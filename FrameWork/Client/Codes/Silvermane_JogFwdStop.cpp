@@ -4,12 +4,12 @@
 #include "StateController.h"
 
 CSilvermane_JogFwdStop::CSilvermane_JogFwdStop(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
-	: CState_Silvermane(_pDevice, _pDeviceContext)
+	: CSilvermane_Jog(_pDevice, _pDeviceContext)
 {
 }
 
 CSilvermane_JogFwdStop::CSilvermane_JogFwdStop(const CSilvermane_JogFwdStop& _rhs)
-	: CState_Silvermane(_rhs)
+	: CSilvermane_Jog(_rhs)
 {
 }
 
@@ -105,8 +105,9 @@ _int CSilvermane_JogFwdStop::KeyCheck(const _double& _dDeltaTime)
 				return -1;
 			return STATE_CHANGE;
 		}
-	}
 
+		Add_PlusAngle(EDir::Forward, _dDeltaTime);
+	}
 
 	return _int();
 }

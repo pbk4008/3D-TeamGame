@@ -4,12 +4,12 @@
 #include "StateController.h"
 
 CSilvermane_JogLeftStart::CSilvermane_JogLeftStart(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
-	: CState_Silvermane(_pDevice, _pDeviceContext)
+	: CSilvermane_Jog(_pDevice, _pDeviceContext)
 {
 }
 
 CSilvermane_JogLeftStart::CSilvermane_JogLeftStart(const CSilvermane_JogLeftStart& _rhs)
-	: CState_Silvermane(_rhs)
+	: CSilvermane_Jog(_rhs)
 {
 }
 
@@ -79,7 +79,13 @@ _int CSilvermane_JogLeftStart::KeyCheck(const _double& _dDeltaTime)
 
 	if (g_pGameInstance->getkeyPress(DIK_A))
 	{
-		_float fPlusAngle = m_pSilvermane->Get_PlusAngle();
+		if (m_pAnimationController->Is_Finished())
+		{
+			if (FAILED(m_pStateController->Change_State(L"JogLeft")))
+				return -1;
+			return STATE_CHANGE;
+		}
+
 		if (g_pGameInstance->getkeyPress(DIK_W))
 		{
 			if (FAILED(m_pStateController->Change_State(L"JogFwd")))
@@ -94,17 +100,7 @@ _int CSilvermane_JogLeftStart::KeyCheck(const _double& _dDeltaTime)
 		}
 		else
 		{
-			if (0.f < fPlusAngle)
-				m_pSilvermane->Add_PlusAngle(-_dDeltaTime);
-			else if (0.f > fPlusAngle)
-				m_pSilvermane->Add_PlusAngle(_dDeltaTime);
-
-			if (m_pAnimationController->Is_Finished())
-			{
-				if (FAILED(m_pStateController->Change_State(L"JogLeft")))
-					return -1;
-				return STATE_CHANGE;
-			}
+			Add_PlusAngle(EDir::Forward, _dDeltaTime);
 		}
 	}
 	else if (g_pGameInstance->getkeyPress(DIK_D))

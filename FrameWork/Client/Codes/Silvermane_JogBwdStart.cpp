@@ -4,12 +4,12 @@
 #include "StateController.h"
 
 CSilvermane_JogBwdStart::CSilvermane_JogBwdStart(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
-	: CState_Silvermane(_pDevice, _pDeviceContext)
+	: CSilvermane_Jog(_pDevice, _pDeviceContext)
 {
 }
 
 CSilvermane_JogBwdStart::CSilvermane_JogBwdStart(const CSilvermane_JogBwdStart& _rhs)
-	: CState_Silvermane(_rhs)
+	: CSilvermane_Jog(_rhs)
 {
 }
 
@@ -79,30 +79,24 @@ _int CSilvermane_JogBwdStart::KeyCheck(const _double& _dDeltaTime)
 
 	if (g_pGameInstance->getkeyPress(DIK_S))
 	{
-		_float fPlusAngle = m_pSilvermane->Get_PlusAngle();
+		if (m_pAnimationController->Is_Finished())
+		{
+			if (FAILED(m_pStateController->Change_State(L"JogBwd")))
+				return -1;
+			return STATE_CHANGE;
+		}
+
 		if (g_pGameInstance->getkeyPress(DIK_A))
 		{
-			if (45.f > fPlusAngle)
-				m_pSilvermane->Add_PlusAngle(_dDeltaTime);
+			Add_PlusAngle(EDir::RightForward, _dDeltaTime);
 		}
 		else if (g_pGameInstance->getkeyPress(DIK_D))
 		{
-			if (-45.f < fPlusAngle)
-				m_pSilvermane->Add_PlusAngle(-_dDeltaTime);
+			Add_PlusAngle(EDir::LeftForward, _dDeltaTime);
 		}
 		else
 		{
-			if (0.f < fPlusAngle)
-				m_pSilvermane->Add_PlusAngle(-_dDeltaTime);
-			else if (0.f > fPlusAngle)
-				m_pSilvermane->Add_PlusAngle(_dDeltaTime);
-
-			if (m_pAnimationController->Is_Finished())
-			{
-				if (FAILED(m_pStateController->Change_State(L"JogBwd")))
-					return -1;
-				return STATE_CHANGE;
-			}
+			Add_PlusAngle(EDir::Forward, _dDeltaTime);
 		}
 	}
 	else if (g_pGameInstance->getkeyPress(DIK_W))

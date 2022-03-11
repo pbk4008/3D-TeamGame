@@ -195,10 +195,10 @@
     <ClInclude Include="..\Headers\Camera_Silvermane.h">
       <Filter>02.GameObject\98.Player\00.Silvermane\Camera</Filter>
     </ClInclude>
-    <ClInclude Include="..\Headers\1H_SowrdAttackNormalR1_01.h">
+    <ClInclude Include="..\Headers\1H_SwordAttackNormalR1_01.h">
       <Filter>02.GameObject\98.Player\00.Silvermane\State\1H</Filter>
     </ClInclude>
-    <ClInclude Include="..\Headers\1H_SowrdAttackNormalR1_02.h">
+    <ClInclude Include="..\Headers\1H_SwordAttackNormalR1_02.h">
       <Filter>02.GameObject\98.Player\00.Silvermane\State\1H</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\Silvermane_Idle.h">
@@ -288,9 +288,6 @@
     <ClInclude Include="..\Headers\Camera_Debug.h">
       <Filter>02.GameObject\98.Player\00.Silvermane\Camera</Filter>
     </ClInclude>
-    <ClInclude Include="..\Headers\Monster_Bastion_Sword.h">
-      <Filter>02.GameObject\98.Player\05.Bastion_Sword</Filter>
-    </ClInclude>
     <ClInclude Include="..\Headers\Monster_Bastion_2HSword.h">
       <Filter>02.GameObject\95.Monster\Bastion_2HSword</Filter>
     </ClInclude>
@@ -314,6 +311,31 @@
     </ClInclude>
     <ClInclude Include="..\Headers\Monster_EarthAberrant.h">
       <Filter>02.GameObject\95.Monster\EarthAberrant</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Monster_Bastion_Sword.h" />
+    <ClInclude Include="..\Headers\1H_SwordNormalSidestepBwd_V3.h">
+      <Filter>02.GameObject\98.Player\00.Silvermane\State\1H</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\1H_SwordNormalSidestepLeft_V3.h">
+      <Filter>02.GameObject\98.Player\00.Silvermane\State\1H</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\1H_SwordNormalSidestepRight_V3.h">
+      <Filter>02.GameObject\98.Player\00.Silvermane\State\1H</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\1H_SwordAttackNormalR1_03.h">
+      <Filter>02.GameObject\98.Player\00.Silvermane\State\1H</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\1H_SwordAttackNormalR1_04.h">
+      <Filter>02.GameObject\98.Player\00.Silvermane\State\1H</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\1H_SwordSupermanStab.h">
+      <Filter>02.GameObject\98.Player\00.Silvermane\State\1H</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\1H_SwordJogAttack.h">
+      <Filter>02.GameObject\98.Player\00.Silvermane\State\1H</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Silvermane_Jog.h">
+      <Filter>02.GameObject\98.Player\00.Silvermane\State\Default\Jog</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -357,10 +379,10 @@
     <ClCompile Include="..\Codes\Camera_Silvermane.cpp">
       <Filter>02.GameObject\98.Player\00.Silvermane\Camera</Filter>
     </ClCompile>
-    <ClCompile Include="..\Codes\1H_SowrdAttackNormalR1_01.cpp">
+    <ClCompile Include="..\Codes\1H_SwordAttackNormalR1_01.cpp">
       <Filter>02.GameObject\98.Player\00.Silvermane\State\1H</Filter>
     </ClCompile>
-    <ClCompile Include="..\Codes\1H_SowrdAttackNormalR1_02.cpp">
+    <ClCompile Include="..\Codes\1H_SwordAttackNormalR1_02.cpp">
       <Filter>02.GameObject\98.Player\00.Silvermane\State\1H</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\Silvermane_Idle.cpp">
@@ -450,9 +472,6 @@
     <ClCompile Include="..\Codes\Camera_Debug.cpp">
       <Filter>02.GameObject\98.Player\00.Silvermane\Camera</Filter>
     </ClCompile>
-    <ClCompile Include="..\Codes\Monster_Bastion_Sword.cpp">
-      <Filter>02.GameObject\98.Player\05.Bastion_Sword</Filter>
-    </ClCompile>
     <ClCompile Include="..\Codes\Monster_Bastion_2HSword.cpp">
       <Filter>02.GameObject\95.Monster\Bastion_2HSword</Filter>
     </ClCompile>
@@ -476,6 +495,31 @@
     </ClCompile>
     <ClCompile Include="..\Codes\Monster_EarthAberrant.cpp">
       <Filter>02.GameObject\95.Monster\EarthAberrant</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Monster_Bastion_Sword.cpp" />
+    <ClCompile Include="..\Codes\1H_SwordNormalSidestepBwd_V3.cpp">
+      <Filter>02.GameObject\98.Player\00.Silvermane\State\1H</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\1H_SwordNormalSidestepLeft_V3.cpp">
+      <Filter>02.GameObject\98.Player\00.Silvermane\State\1H</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\1H_SwordNormalSidestepRight_V3.cpp">
+      <Filter>02.GameObject\98.Player\00.Silvermane\State\1H</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\1H_SwordAttackNormalR1_03.cpp">
+      <Filter>02.GameObject\98.Player\00.Silvermane\State\1H</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\1H_SwordAttackNormalR1_04.cpp">
+      <Filter>02.GameObject\98.Player\00.Silvermane\State\1H</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\1H_SwordSupermanStab.cpp">
+      <Filter>02.GameObject\98.Player\00.Silvermane\State\1H</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\1H_SwordJogAttack.cpp">
+      <Filter>02.GameObject\98.Player\00.Silvermane\State\1H</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Silvermane_Jog.cpp">
+      <Filter>02.GameObject\98.Player\00.Silvermane\State\Default\Jog</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

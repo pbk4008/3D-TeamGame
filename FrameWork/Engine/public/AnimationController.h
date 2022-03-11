@@ -59,7 +59,8 @@ public:
 	HRESULT SetUp_NextAnimation(_uint iIndex, const _bool _isLoopNextAnim = true);
 	HRESULT Change_Anim(const string& _strAnimTag, _bool _isLoop = true);
 	const _int Move_Transform(const _double& _dDeltaTime);
-
+	void Reset_Animation();
+	
 	void Render_Debug();
 
 private:

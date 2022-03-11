@@ -2,7 +2,6 @@
 
 #pragma pack_matrix(row_major);
 
-
 sampler DefaultSampler = sampler_state
 {
 	filter = min_mag_mip_linear;
@@ -14,6 +13,7 @@ cbuffer ShaderCheck
 {
 	bool g_bShadow;
 	bool g_bPBRHDR;
+	bool g_bBlur;
 };
 
 cbuffer LightDesc
@@ -61,6 +61,10 @@ texture2D g_AO;
 texture2D g_ShadeTexture;
 texture2D g_SpecularTexture;
 texture2D g_ShadowTexture;
+
+// final
+texture2D g_BlendTexture;
+texture2D g_BlurTexture;
 
 /* 1. m_pDeviceContext->DrawIndexed() */
 /* 2. 인덱스가 가지고 있던 인덱스 세개에 해당하는 정점 세개를 정점버퍼로부터 얻어온다. */
@@ -149,9 +153,9 @@ PS_OUT_LIGHTACC PS_MAIN_LIGHTACC_DIRECTIONAL(PS_IN In)
 	
 	/* 0 ~ 1*/ /* -1 ~ 1*/
 	vector vNormal = vector(vNormalDesc.xyz * 2.f - 1.f, 0.f);
-	float lightpower = 1.f;
+	uint Pow = 3.f;
 	//Out.vShade = saturate(dot(normalize(vector(g_vLightDir.xyz, 0.f)) * -1.f, vNormal ) * (g_vLightDiffuse * g_vMtrlDiffuse) + (g_vLightAmbient * g_vMtrlAmbient));
-	Out.vShade = saturate(pow((dot(normalize(vector(g_vLightDir.xyz, 0.f)) * -1.f, vNormal) * 0.5f + 0.5f), lightpower) * (g_vLightDiffuse * g_vMtrlDiffuse) + (g_vLightAmbient * g_vMtrlAmbient));
+	Out.vShade = saturate(pow((dot(normalize(vector(g_vLightDir.xyz, 0.f)) * -1.f, vNormal) * 0.5f + 0.5f), Pow) * (g_vLightDiffuse * g_vMtrlDiffuse) + (g_vLightAmbient * g_vMtrlAmbient));
 	//Out.vShade.a = 1.f;
 	
 	if (g_bPBRHDR == true)
@@ -173,7 +177,7 @@ PS_OUT_LIGHTACC PS_MAIN_LIGHTACC_DIRECTIONAL(PS_IN In)
 		float3 H = normalize(V + L);
 		float distance = length(g_vLightPos - vWorldPos);
 		float attenuation = 1.f / (distance * distance);
-		//float3 reflectratio = float3(1.f, 1.f, 1.f) * attenuation // 반사율 거리 비례 
+		//float3 reflectratio = float3(1.f, 1.f, 1.f) * attenuation;  // 반사율 거리 비례 
 		float3 reflectratio = float3(1.f, 1.f, 1.f); // 반사율 full power
 		
 		float NDF = NormalDistributionGGXTR(N, H, Roughness); // 면의 거칠기에 따른 빛 에너지 '근사량!!'
@@ -196,11 +200,11 @@ PS_OUT_LIGHTACC PS_MAIN_LIGHTACC_DIRECTIONAL(PS_IN In)
 		
 		float3 ambient = (g_vLightAmbient * g_vMtrlAmbient).rgb * diffuse * AO;
 		float3 PBR_Specular = ambient + (Lo * (g_vLightDiffuse * g_vMtrlDiffuse).rgb);
-		//PBR_Specular = PBR_Specular / (PBR_Specular + float(1.f).xxx);
+		PBR_Specular = PBR_Specular / (PBR_Specular + float(1.f).xxx);
 		PBR_Specular = pow((PBR_Specular), 1.0 / 2.2);
 		
-		//Out.vSpecular.rgb = PBR_Specular.rgb/*float4(PBR_Specular.rgb, 1.f)*/;
-		Out.vSpecular.rgb = float4(PBR_Specular.rgb, 1.f).rgb;
+		Out.vSpecular = /*PBR_Specular*/float4(PBR_Specular.rgb, 1.f);
+		//Out.vSpecular.rgb = float4(PBR_Specular.rgb, 1.f).rgb;
 		
 	}
 	else
@@ -269,9 +273,13 @@ PS_OUT_BLEND PS_MAIN_BLEND(PS_IN In)
 	vector vSpecularDesc = g_SpecularTexture.Sample(DefaultSampler, In.vTexUV);
 	vector vShadowTexture = g_ShadowTexture.Sample(DefaultSampler, In.vTexUV);
 	
-	if (g_bShadow == true)
+	if (g_bShadow == true && g_bPBRHDR == false)
 		Out.vColor = vDiffuseDesc * vShadeDesc * vShadowTexture + vSpecularDesc;
-	else if (g_bShadow == false)
+	else if (g_bShadow == true && g_bPBRHDR == true)
+		Out.vColor = vDiffuseDesc * vShadeDesc * vShadowTexture + vector(vSpecularDesc.rgb, 0.f);
+	else if (g_bShadow == false && g_bPBRHDR == false)
+		Out.vColor = vDiffuseDesc * vShadeDesc + vector(vSpecularDesc.rgb, 0.f);
+	else if (g_bShadow == false && g_bPBRHDR == true)
 		Out.vColor = vDiffuseDesc * vShadeDesc + vSpecularDesc;
 
 	// 외곽선 효과
@@ -286,8 +294,23 @@ PS_OUT_BLEND PS_MAIN_BLEND(PS_IN In)
 	
 	//for (int i = 0; i < 9; ++i)
 	//	Out.vColor += fLaplacianMask[i] * g_DiffuseTexture.Sample(DefaultSampler, (In.vTexUV + float2(fCoord[i / 3] / 1280.f, fCoord[i / 3] / 720.f)));
-	
+	if (Out.vColor.a == 0.f)
+		discard;
 
+	return Out;
+}
+
+PS_OUT_BLEND PS_MAIN_FINAL(PS_IN In)
+{
+	PS_OUT_BLEND Out = (PS_OUT_BLEND) 0;
+	
+	vector vFinal = g_BlendTexture.Sample(DefaultSampler, In.vTexUV);
+	vector vBlur = g_BlurTexture.Sample(DefaultSampler, In.vTexUV);
+
+	//vBlur = pow(vBlur, 1.f / 2.2f);
+	
+	Out.vColor = vFinal + vector(vBlur.rgb, 0);
+	
 	if (Out.vColor.a == 0.f)
 		discard;
 
@@ -342,5 +365,16 @@ technique11 DefaultTechnique
 		VertexShader = compile vs_5_0 VS_MAIN_VIEWPORT();
 		GeometryShader = NULL;
 		PixelShader = compile ps_5_0 PS_MAIN_BLEND();
+	}
+
+	pass Final
+	{
+		SetRasterizerState(CullMode_Default);
+		SetDepthStencilState(ZTestDiable, 0);
+		SetBlendState(BlendDisable, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+
+		VertexShader = compile vs_5_0 VS_MAIN_VIEWPORT();
+		GeometryShader = NULL;
+		PixelShader = compile ps_5_0 PS_MAIN_FINAL();
 	}
 }

@@ -17,8 +17,8 @@ HRESULT CMainApp::NativeConstruct()
 
 	RELEASE_INSTANCE(CGameInstance);
 
-	//if (FAILED(Ready_Fonts()))
-	//	return E_FAIL;
+	if (FAILED(Ready_Fonts()))
+		return E_FAIL;
 
 	if (FAILED(Load_Texture()))
 		return E_FAIL;
@@ -51,13 +51,25 @@ _int CMainApp::Tick(_double TimeDelta)
 	g_pGameInstance->Tick_Engine(TimeDelta);
 
 	if (g_pGameInstance->getkeyDown(DIK_F1))
-		m_pRenderer->SetRenderButton(CRenderer::SHADOW, true);
+	{
+		m_bShadow = !m_bShadow;
+		m_pRenderer->SetRenderButton(CRenderer::SHADOW, m_bShadow);
+	}
 	if (g_pGameInstance->getkeyDown(DIK_F2))
-		m_pRenderer->SetRenderButton(CRenderer::SHADOW, false);
+	{
+		m_bPBR = !m_bPBR;
+		m_pRenderer->SetRenderButton(CRenderer::PBRHDR, m_bPBR);
+	}
 	if (g_pGameInstance->getkeyDown(DIK_F3))
-		m_pRenderer->SetRenderButton(CRenderer::PBRHDR, true);
+	{
+		m_bBlur = !m_bBlur;
+		m_pRenderer->SetRenderButton(CRenderer::BLUR, m_bBlur);
+	}
 	if (g_pGameInstance->getkeyDown(DIK_F4))
-		m_pRenderer->SetRenderButton(CRenderer::PBRHDR, false);
+	{
+		m_bDeferred = !m_bDeferred;
+		m_pRenderer->SetRenderButton(CRenderer::DEFERRED, m_bDeferred);
+	}
 
 	return _int();
 }
@@ -69,11 +81,9 @@ HRESULT CMainApp::Render()
 	if (FAILED(g_pGameInstance->Clear_DepthStencil_View()))
 		return E_FAIL;
 
-	/* 내 게임을 구성하는객체들의 렌더함수르리 호출하낟. */
 	if (FAILED(m_pRenderer->Draw_RenderGroup()))
 		return E_FAIL;
 
-	/* 내 게임내의 기타등ㄷ응을 렌더링하낟. */
 	if (FAILED(g_pGameInstance->Render_Engine()))
 		return E_FAIL;
 
@@ -87,8 +97,8 @@ HRESULT CMainApp::Render()
 		m_TimeAcc = 0.0;
 	}
 
-	//if (FAILED(g_pGameInstance->Render_Font(TEXT("Font_Arial"), XMVectorSet(1.f, 0.0f, 0.f, 1.f), m_szFPS)))
-	//	return E_FAIL;
+	if (FAILED(g_pGameInstance->Render_Font(TEXT("Font_Arial"), XMVectorSet(1.f, 0.0f, 0.f, 1.f), m_szFPS)))
+		return E_FAIL;
 
 #endif // _DEBUG
 
