@@ -75,7 +75,7 @@ _int CSilvermane_SprintFwdStop::KeyCheck(const _double& _dDeltaTime)
 			g_pGameInstance->getkeyPress(DIK_D))
 		{
 			if(FAILED(m_pStateController->Change_State(L"SprintFwdStart")))
-				return E_FAIL;
+				return -1;
 			return STATE_CHANGE;
 		}
 		else
@@ -83,7 +83,7 @@ _int CSilvermane_SprintFwdStop::KeyCheck(const _double& _dDeltaTime)
 			if (m_pAnimationController->Is_Finished())
 			{
 				if (FAILED(m_pStateController->Change_State(L"Idle")))
-					return E_FAIL;
+					return -1;
 				return STATE_CHANGE;
 			}
 		}
@@ -93,25 +93,25 @@ _int CSilvermane_SprintFwdStop::KeyCheck(const _double& _dDeltaTime)
 		if (g_pGameInstance->getkeyPress(DIK_W))
 		{
 			if (FAILED(m_pStateController->Change_State(L"JogFwdStart")))
-				return E_FAIL;
+				return -1;
 			return STATE_CHANGE;
 		}
 		else if (g_pGameInstance->getkeyPress(DIK_S))
 		{
 			if (FAILED(m_pStateController->Change_State(L"JogBwdStart")))
-				return E_FAIL;
+				return -1;
 			return STATE_CHANGE;
 		}
 		else if (g_pGameInstance->getkeyPress(DIK_A))
 		{
 			if (FAILED(m_pStateController->Change_State(L"JogLeftStart")))
-				return E_FAIL;
+				return -1;
 			return STATE_CHANGE;
 		}
 		else if (g_pGameInstance->getkeyPress(DIK_D))
 		{
 			if (FAILED(m_pStateController->Change_State(L"JogRightStart")))
-				return E_FAIL;
+				return -1;
 			return STATE_CHANGE;
 		}
 		else
@@ -119,7 +119,7 @@ _int CSilvermane_SprintFwdStop::KeyCheck(const _double& _dDeltaTime)
 			if (m_iCutIndex < m_pAnimationController->Get_CurKeyFrameIndex())
 			{
 				if (FAILED(m_pStateController->Change_State(L"Idle")))
-					return E_FAIL;
+					return -1;
 				return STATE_CHANGE;
 			}
 		}

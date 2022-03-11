@@ -38,7 +38,7 @@ _int C1H_SwordEquipOn::Tick(const _double& _dDeltaTime)
 	if (m_pAnimationController->Is_Finished())
 	{
 		if (FAILED(m_pStateController->Change_State(L"Idle")))
-			return E_FAIL;
+			return -1;
 		return STATE_CHANGE;
 	}
 

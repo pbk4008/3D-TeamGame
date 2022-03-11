@@ -43,6 +43,7 @@ protected:
 	CModel* m_pModel = nullptr;
 	CAnimationController* m_pAnimationController = nullptr;
 	_int m_iCutIndex = 0;
+	EDir m_eDir = EDir::Max;
 
 public:
 	virtual void Free() override;

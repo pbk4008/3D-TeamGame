@@ -106,7 +106,6 @@ _int CNeedle::Attach_FixedBone(const _double& _dDeltaTime)
 
 		if (!m_isEquip)
 		{
-			//m_smatPivot = XMMatrixRotationRollPitchYaw(XMConvertToRadians(-20.f), XMConvertToRadians(-67.f), XMConvertToRadians(0.f)) * XMMatrixTranslation(0.5f, 0.05f, -0.2f);
 			smatWorld = m_smatPivot * smatWorld;
 		}
 

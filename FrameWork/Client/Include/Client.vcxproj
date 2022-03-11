@@ -186,6 +186,10 @@
     <ClInclude Include="..\Headers\1H_SwordAttackNormalR1_02.h" />
     <ClInclude Include="..\Headers\1H_SwordAttackNormalR1_03.h" />
     <ClInclude Include="..\Headers\1H_SwordAttackNormalR1_04.h" />
+    <ClInclude Include="..\Headers\1H_SwordAttackNormalR2_02.h" />
+    <ClInclude Include="..\Headers\1H_SwordAttackNormalR2_03.h" />
+    <ClInclude Include="..\Headers\1H_SwordAttackNormalR2_04.h" />
+    <ClInclude Include="..\Headers\1H_SwordAttackNormalR2_ReleaseStab.h" />
     <ClInclude Include="..\Headers\1H_SwordJogAttack.h" />
     <ClInclude Include="..\Headers\1H_SwordSupermanStab.h" />
     <ClInclude Include="..\Headers\1H_SwordDodgeSpinFwd_V3.h" />
@@ -255,6 +259,10 @@
     <ClCompile Include="..\Codes\1H_SwordAttackNormalR1_02.cpp" />
     <ClCompile Include="..\Codes\1H_SwordAttackNormalR1_03.cpp" />
     <ClCompile Include="..\Codes\1H_SwordAttackNormalR1_04.cpp" />
+    <ClCompile Include="..\Codes\1H_SwordAttackNormalR2_02.cpp" />
+    <ClCompile Include="..\Codes\1H_SwordAttackNormalR2_03.cpp" />
+    <ClCompile Include="..\Codes\1H_SwordAttackNormalR2_04.cpp" />
+    <ClCompile Include="..\Codes\1H_SwordAttackNormalR2_ReleaseStab.cpp" />
     <ClCompile Include="..\Codes\1H_SwordJogAttack.cpp" />
     <ClCompile Include="..\Codes\1H_SwordSupermanStab.cpp" />
     <ClCompile Include="..\Codes\1H_SwordDodgeSpinFwd_V3.cpp" />

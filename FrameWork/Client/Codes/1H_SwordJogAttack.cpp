@@ -58,7 +58,7 @@ HRESULT C1H_SwordJogAttack::EnterState()
 		return E_FAIL;
 
 	if (FAILED(m_pAnimationController->SetUp_NextAnimation("SK_Silvermane.ao|A_1H_Sword_Jog_Attack_1", false)))
-		return E_FAIL;
+		return -1;
 	m_pAnimationController->Set_RootMotion(true, true);
 	if (!m_pSilvermane->Is_EquipWeapon())
 	{

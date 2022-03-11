@@ -34,7 +34,7 @@ _int CSilvermane_Idle::Tick(const _double& _dDeltaTime)
 		if (m_pSilvermane->Is_EquipWeapon())
 		{
 			if (FAILED(m_pStateController->Change_State(L"1H_SwordEquipOff")))
-				return E_FAIL;
+				return -1;
 			return STATE_CHANGE;
 		}
 	}
@@ -103,31 +103,46 @@ _int CSilvermane_Idle::KeyCheck(const _double& _dDeltaTime)
 			return STATE_CHANGE;
 		}
 	}
+	else if (g_pGameInstance->getMouseKeyDown(CInputDev::MOUSESTATE::MB_RBUTTON))
+	{
+		if (m_pSilvermane->Is_EquipWeapon())
+		{
+			if (FAILED(m_pStateController->Change_State(L"1H_SwordAttackNormalR2_ReleaseStab")))
+				return -1;
+			return STATE_CHANGE;
+		}
+		else
+		{
+			if (FAILED(m_pStateController->Change_State(L"1H_SwordEquipOn")))
+				return -1;
+			return STATE_CHANGE;
+		}
+	}
 
 	if (g_pGameInstance->getkeyDown(DIK_SPACE))
 	{
 		if (g_pGameInstance->getkeyDown(DIK_W))
 		{
 			if (FAILED(m_pStateController->Change_State(L"1H_DodgeSpin")))
-				return E_FAIL;
+				return -1;
 			return STATE_CHANGE;
 		}
 		else if (g_pGameInstance->getkeyDown(DIK_A))
 		{
 			if (FAILED(m_pStateController->Change_State(L"1H_SidestepLeft")))
-				return E_FAIL;
+				return -1;
 			return STATE_CHANGE;
 		}
 		else if (g_pGameInstance->getkeyDown(DIK_D))
 		{
 			if (FAILED(m_pStateController->Change_State(L"1H_SidestepRight")))
-				return E_FAIL;
+				return -1;
 			return STATE_CHANGE;
 		}
 		else
 		{
 			if (FAILED(m_pStateController->Change_State(L"1H_SidestepBwd")))
-				return E_FAIL;
+				return -1;
 			return STATE_CHANGE;
 		}
 	}
@@ -142,12 +157,12 @@ _int CSilvermane_Idle::KeyCheck(const _double& _dDeltaTime)
 			if (!m_pSilvermane->Is_EquipWeapon())
 			{
 				if (FAILED(m_pStateController->Change_State(L"SprintFwdStart")))
-					return E_FAIL;
+					return -1;
 			}
 			else
 			{
 				if (FAILED(m_pStateController->Change_State(L"1H_SwordEquipOff")))
-					return E_FAIL;
+					return -1;
 			}
 			return STATE_CHANGE;
 		}

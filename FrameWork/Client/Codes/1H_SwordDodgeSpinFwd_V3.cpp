@@ -4,7 +4,7 @@
 #include "StateController.h"
 
 C1H_SwordDodgeSpinFwd_V3::C1H_SwordDodgeSpinFwd_V3(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
-	: C1H_SwordAttack(_pDevice, _pDeviceContext)
+	: C1H_Dash(_pDevice, _pDeviceContext)
 {
 }
 
@@ -79,33 +79,40 @@ _int C1H_SwordDodgeSpinFwd_V3::KeyCheck(const _double& _dDeltaTime)
 	if (NO_EVENT != iProgress)
 		return iProgress;
 
-	if (g_pGameInstance->getkeyDown(DIK_SPACE))
-	{
 
-		if (g_pGameInstance->getkeyDown(DIK_A))
+	if (m_iCutIndex < m_pAnimationController->Get_CurKeyFrameIndex())
+	{
+		if (g_pGameInstance->getkeyDown(DIK_SPACE))
 		{
-			if (FAILED(m_pStateController->Change_State(L"1H_SidestepLeft")))
-				return E_FAIL;
-			return STATE_CHANGE;
-		}
-		else if (g_pGameInstance->getkeyDown(DIK_D))
-		{
-			if (FAILED(m_pStateController->Change_State(L"1H_SidestepRight")))
-				return E_FAIL;
-			return STATE_CHANGE;
-		}
-		else if (g_pGameInstance->getkeyPress(DIK_W))
-		{
-			if (m_iCutIndex < m_pAnimationController->Get_CurKeyFrameIndex())
+
+			if (g_pGameInstance->getkeyPress(DIK_A))
+			{
+				if (FAILED(m_pStateController->Change_State(L"1H_SidestepLeft")))
+					return -1;
+				return STATE_CHANGE;
+			}
+			else if (g_pGameInstance->getkeyPress(DIK_S))
+			{
+				if (FAILED(m_pStateController->Change_State(L"1H_SidestepBwd")))
+					return -1;
+				return STATE_CHANGE;
+			}
+			else if (g_pGameInstance->getkeyPress(DIK_D))
+			{
+				if (FAILED(m_pStateController->Change_State(L"1H_SidestepRight")))
+					return -1;
+				return STATE_CHANGE;
+			}
+			else if (g_pGameInstance->getkeyPress(DIK_W))
 			{
 				m_pAnimationController->Reset_Animation();
 			}
-		}
-		else
-		{
-			if (FAILED(m_pStateController->Change_State(L"1H_SidestepBwd")))
-				return E_FAIL;
-			return STATE_CHANGE;
+			else
+			{
+				if (FAILED(m_pStateController->Change_State(L"1H_SidestepBwd")))
+					return -1;
+				return STATE_CHANGE;
+			}
 		}
 	}
 

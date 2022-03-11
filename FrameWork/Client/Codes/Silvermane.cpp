@@ -46,6 +46,11 @@
 #include "1H_SwordNormalSidestepBwd_V3.h"
 #include "1H_SwordNormalSidestepLeft_V3.h"
 #include "1H_SwordNormalSidestepRight_V3.h"
+
+#include "1H_SwordAttackNormalR2_ReleaseStab.h" // 이게 첫번쨰 공격같은데 왜 ReleaseStab?
+#include "1H_SwordAttackNormalR2_02.h"
+#include "1H_SwordAttackNormalR2_03.h"
+#include "1H_SwordAttackNormalR2_04.h"
 #pragma endregion
 
 
@@ -95,7 +100,7 @@ _int CSilvermane::Tick(_double _dDeltaTime)
 	iProgress = Trace_CameraLook(_dDeltaTime);
 	if (NO_EVENT != iProgress) return iProgress;
 
-	iProgress = m_pAnimationController->Tick(_dDeltaTime);
+	iProgress = m_pAnimationController->Tick(_dDeltaTime * 1.2f);
 	if (NO_EVENT != iProgress) return iProgress;
 
 	m_pCharacterController->Tick(_dDeltaTime);
@@ -236,6 +241,10 @@ HRESULT CSilvermane::Ready_States()
 		return E_FAIL;
 #pragma endregion
 #pragma region 1H
+	if (FAILED(m_pStateController->Add_State(L"1H_SwordEquipOn", C1H_SwordEquipOn::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	if (FAILED(m_pStateController->Add_State(L"1H_SwordEquipOff", C1H_SwordEquipOff::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
 	if (FAILED(m_pStateController->Add_State(L"1H_SwordAttackNormalR1_01", C1H_SwordAttackNormalR1_01::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 	if (FAILED(m_pStateController->Add_State(L"1H_SwordAttackNormalR1_02", C1H_SwordAttackNormalR1_02::Create(m_pDevice, m_pDeviceContext))))
@@ -248,9 +257,13 @@ HRESULT CSilvermane::Ready_States()
 		return E_FAIL;
 	if (FAILED(m_pStateController->Add_State(L"1H_SwordSupermanStab", C1H_SwordSupermanStab::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
-	if (FAILED(m_pStateController->Add_State(L"1H_SwordEquipOff", C1H_SwordEquipOff::Create(m_pDevice, m_pDeviceContext))))
+	if (FAILED(m_pStateController->Add_State(L"1H_SwordAttackNormalR2_ReleaseStab", C1H_SwordAttackNormalR2_ReleaseStab::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
-	if (FAILED(m_pStateController->Add_State(L"1H_SwordEquipOn", C1H_SwordEquipOn::Create(m_pDevice, m_pDeviceContext))))
+	if (FAILED(m_pStateController->Add_State(L"1H_SwordAttackNormalR2_02", C1H_SwordAttackNormalR2_02::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	if (FAILED(m_pStateController->Add_State(L"1H_SwordAttackNormalR2_03", C1H_SwordAttackNormalR2_03::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	if (FAILED(m_pStateController->Add_State(L"1H_SwordAttackNormalR2_04", C1H_SwordAttackNormalR2_04::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 	if (FAILED(m_pStateController->Add_State(L"1H_DodgeSpin", C1H_SwordDodgeSpinFwd_V3::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;

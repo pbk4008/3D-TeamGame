@@ -88,7 +88,7 @@ _int C1H_SwordSupermanStab::KeyCheck(const _double& _dDeltaTime)
 		if (g_pGameInstance->getMouseKeyDown(CInputDev::MOUSESTATE::MB_LBUTTON))
 		{
 			if (FAILED(m_pStateController->Change_State(L"1H_SwordAttackNormalR1_01")))
-				return E_FAIL;
+				return -1;
 			return STATE_CHANGE;
 		}
 	}

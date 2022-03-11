@@ -64,7 +64,6 @@ HRESULT C1H_SwordAttackNormalR1_01::EnterState()
 		CHierarchyNode* pWeaponBone = m_pModel->Get_BoneMatrix("weapon_r");
 		m_pSilvermane->Set_WeaponFixedBone(pWeaponBone);
 	}
-	
 
 	return S_OK;
 }

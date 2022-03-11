@@ -27,7 +27,7 @@ _int C1H_SwordEquipOff::Tick(const _double& _dDeltaTime)
 	if (m_pAnimationController->Is_Finished())
 	{
 		if (FAILED(m_pStateController->Change_State(L"Idle")))
-			return E_FAIL;
+			return -1;
 		return STATE_CHANGE;
 	}
 
@@ -84,7 +84,7 @@ _int C1H_SwordEquipOff::KeyCheck(const _double& _dDeltaTime)
 	if (g_pGameInstance->getMouseKeyDown(CInputDev::MOUSESTATE::MB_LBUTTON))
 	{
 		if (FAILED(m_pStateController->Change_State(L"1H_SwordAttackNormalR1_01")))
-			return E_FAIL;
+			return -1;
 		return STATE_CHANGE;
 	}
 
@@ -98,7 +98,7 @@ _int C1H_SwordEquipOff::KeyCheck(const _double& _dDeltaTime)
 				g_pGameInstance->getkeyPress(DIK_D))
 			{
 				if (FAILED(m_pStateController->Change_State(L"SprintFwdStart")))
-					return E_FAIL;
+					return -1;
 				return STATE_CHANGE;
 			}
 		}
