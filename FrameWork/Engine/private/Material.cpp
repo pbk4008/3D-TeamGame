@@ -193,9 +193,9 @@ const wstring& CMaterial::Get_Name() const
 
 HRESULT CMaterial::Set_Texture(const string& _strConstantName, TEXTURETYPE _eTextureType, CTexture* _pTexture, const _uint _iTextureIndex)
 {
-	if (m_vecTextures[_eTextureType])
-		Safe_Release(m_vecTextures[_eTextureType]);
-	m_vecTextures[_eTextureType] = _pTexture;
+	if (m_vecTextures[(_uint)_eTextureType])
+		Safe_Release(m_vecTextures[(_uint)_eTextureType]);
+	m_vecTextures[(_uint)_eTextureType] = _pTexture;
 
 	SetUp_TextureOnShader(_strConstantName.c_str(), _eTextureType, _iTextureIndex);
 	return S_OK;

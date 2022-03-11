@@ -37,7 +37,7 @@ HRESULT CMaterialCamera::NativeConstruct(void* pArg)
 	CCamera::CAMERADESC tDesc = (*(CCamera::CAMERADESC*)pArg);
 	if (FAILED(SetUp_Components(0, L"Camera", L"MaterialCamera", (CComponent * *)& m_pCamera, &tDesc)))
 		return E_FAIL;
-	m_pTransform->SetTransformDesc(3.f, XMConvertToRadians(30.f));
+	m_pTransform->Set_TransformDesc(3.f, XMConvertToRadians(30.f));
 	m_pTransform->Set_State(CTransform::STATE_POSITION, XMVectorSet(0.f, 30.f, 10.f,1.f));
 	return S_OK;
 }
