@@ -51,7 +51,7 @@ _int CMainApp::Tick(_double TimeDelta)
 
 HRESULT CMainApp::Render()
 {
-	if (FAILED(g_pGameInstance->Clear_BackBuffer_View(XMFLOAT4(0.f, 0.f, 1.f, 1.f))))
+	if (FAILED(g_pGameInstance->Clear_BackBuffer_View(XMFLOAT4(0.f, 0.5f, 0.5f, 1.f))))
 		return E_FAIL;
 	if (FAILED(g_pGameInstance->Clear_DepthStencil_View()))
 		return E_FAIL;	
@@ -136,7 +136,7 @@ HRESULT CMainApp::Ready_GameObject_Prototype()
 
 HRESULT CMainApp::Load_Texture()
 {
-	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"BackGround", L"../bin/Resources/Texture/Loading/T_LoadScreen_KeyArt_5.tga")))
+	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"BackGround", L"../bin/Resources/Texture/Loading/T_LoadScreen_KeyArt_5.dds")))
 		return E_FAIL;
 
 	return S_OK;
@@ -153,7 +153,7 @@ HRESULT CMainApp::Init_Camera()
 	//tDesc.vEye = _float4(0.f, 2.f, -5.f, 1.f);
 	//tDesc.vAt = _float4(0.f, 2.f, 0.f, 1.f);
 	//tDesc.vAxisY = _float4(0.f, 1.f, 0.f, 1.f);
-	tDesc.fFovy = XMConvertToRadians(60.f);;
+	tDesc.fFovy = XMConvertToRadians(90.f);
 	tDesc.fFar = 300.f;
 	tDesc.fNear = 0.1f;
 	tDesc.fAspect = (_float)g_iWinCx/g_iWinCy;

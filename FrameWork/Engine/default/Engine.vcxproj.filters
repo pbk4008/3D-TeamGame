@@ -217,6 +217,9 @@
     <Filter Include="00.Utility\03.Component\05.VIBuffer\09.Instance\01. InstanceMesh">
       <UniqueIdentifier>{67907881-308e-436b-ba4f-cd56aab4032a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="00.Utility\03.Component\05.VIBuffer\10.Trapezium">
+      <UniqueIdentifier>{329441a3-c2af-4793-a919-667ae0cce48e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\public\Base.h">
@@ -441,6 +444,12 @@
     <ClInclude Include="..\private\MeshCollider.h">
       <Filter>00.Utility\03.Component\00.Collider\03.MeshCollider</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\VIBuffer_Trapezium.h">
+      <Filter>00.Utility\03.Component\05.VIBuffer\10.Trapezium</Filter>
+    </ClInclude>
+    <ClInclude Include="..\bin\ShaderFiles\Shader_RenderState.hpp">
+      <Filter>00.Utility\03.Component\05.VIBuffer\03.RectInstance</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\private\Base.cpp">
@@ -641,6 +650,9 @@
     <ClCompile Include="..\private\Instancing_Mesh.cpp">
       <Filter>00.Utility\03.Component\05.VIBuffer\09.Instance\01. InstanceMesh</Filter>
     </ClCompile>
+    <ClCompile Include="..\private\VIBuffer_Trapezium.cpp">
+      <Filter>00.Utility\03.Component\05.VIBuffer\10.Trapezium</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="..\bin\ShaderFiles\Shader_Triangle.hlsl">
@@ -648,6 +660,9 @@
     </FxCompile>
     <FxCompile Include="..\bin\ShaderFiles\Shader_RectViewport.hlsl">
       <Filter>00.Utility\04.Manager\03. RenderTargetManager</Filter>
+    </FxCompile>
+    <FxCompile Include="..\bin\ShaderFiles\Shader_UI.hlsl">
+      <Filter>00.Utility\03.Component\05.VIBuffer\03.RectInstance</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>

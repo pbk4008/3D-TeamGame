@@ -491,3 +491,4 @@ FrameWork/Client/bin/Resources/Mesh/Bastion_Healer/Bastion_Healer.fbx
 FrameWork/Client/bin/Resources/Mesh/Bastion_Shooter/Bastion_Shooter.fbx
 FrameWork/Client/bin/Resources/Mesh/Bastion_Spear/Bastion_Spear.fbx
 FrameWork/Client/bin/Resources/Mesh/Bastion_Sword/Bastion_Sword.fbx
+*.dds

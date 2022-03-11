@@ -52,30 +52,30 @@ HRESULT CTextureManager::Init_Texture(ID3D11Device* pDevice, const wstring& pTex
 		{
 			hr = LoadFromTGAFile(szFullPath, nullptr, tImage);
 
-			DirectX::ScratchImage MipChain;
-			hr = DirectX::GenerateMipMaps(tImage.GetImages(), tImage.GetImageCount(), tImage.GetMetadata(), TEX_FILTER_FANT, 0, MipChain);
-			if (FAILED(hr))
-				return E_FAIL;
-			else
-			{
-
-				ID3D11Resource* pTextureResource = nullptr;
-
-				if (FAILED(DirectX::CreateTexture(pDevice, MipChain.GetImages(), MipChain.GetImageCount(), MipChain.GetMetadata(), &pTextureResource)))
-					return E_FAIL;
-
-				ID3D11ShaderResourceView* pShaderResourceView = nullptr;
-
-				if (FAILED(pDevice->CreateShaderResourceView(pTextureResource, nullptr, &pShaderResourceView)))
-					return E_FAIL;
-
-				vecResource.emplace_back(pShaderResourceView);
-
-				Safe_Release(pTextureResource);
-				tImage.Release();
-				MipChain.Release();
-				continue;
-			}
+			//DirectX::ScratchImage MipChain;
+			//hr = DirectX::GenerateMipMaps(tImage.GetImages(), tImage.GetImageCount(), tImage.GetMetadata(), TEX_FILTER_FANT, 0, MipChain);
+			//if (FAILED(hr))
+			//	return E_FAIL;
+			//else
+			//{
+			//
+			//	ID3D11Resource* pTextureResource = nullptr;
+			//
+			//	if (FAILED(DirectX::CreateTexture(pDevice, MipChain.GetImages(), MipChain.GetImageCount(), MipChain.GetMetadata(), &pTextureResource)))
+			//		return E_FAIL;
+			//
+			//	ID3D11ShaderResourceView* pShaderResourceView = nullptr;
+			//
+			//	if (FAILED(pDevice->CreateShaderResourceView(pTextureResource, nullptr, &pShaderResourceView)))
+			//		return E_FAIL;
+			//
+			//	vecResource.emplace_back(pShaderResourceView);
+			//
+			//	Safe_Release(pTextureResource);
+			//	tImage.Release();
+			//	MipChain.Release();
+			//	continue;
+			//}
 		}
 		else
 			hr = LoadFromWICFile(szFullPath, CP_FLAGS_NONE, nullptr, tImage);

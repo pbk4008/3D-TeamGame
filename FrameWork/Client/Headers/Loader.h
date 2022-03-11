@@ -20,6 +20,8 @@ private:
 private:
 	HRESULT SetUp_Stage1Map_ProtoComponent();
 	HRESULT Load_Stage1FBXLoad();
+	HRESULT Load_Stage1TextureUILoad();
+
 public:
 	static _uint CALLBACK Thread_Main(void* pArg);
 	static CLoader* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext, SCENEID eID);

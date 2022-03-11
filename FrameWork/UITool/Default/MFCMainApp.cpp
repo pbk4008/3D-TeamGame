@@ -157,38 +157,54 @@ HRESULT CMFCMainApp::Ready_Component_Prototype()
 		return E_FAIL;
 	}
 
-	//여기서 그림 다 불러놓음
-	//if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"Texture_0", L"../bin/Resource/Textures/UI/Texture_0.jpg")))
-	//{
-	//	return E_FAIL;
-	//}
-
-	//if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"Texture_1", L"../bin/Resource/Textures/UI/Texture_1.jpg")))
-	//{
-	//	return E_FAIL;
-	//}
-
-	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"T_HUD_Player_Shield_Icon", L"../bin/Resource/Textures/UI/T_HUD_Player_Shield_Icon.tga")))
+	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"bubble", L"../bin/Resource/Textures/Effect/bubble.dds")))
+	{
+		return E_FAIL;
+	}
+	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"Smoke_loop8x8_00", L"../bin/Resource/Textures/Effect/Smoke_loop8x8_00.dds")))
 	{
 		return E_FAIL;
 	}
 
-	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"bubble", L"../bin/Resource/Textures/Effect/bubble.tga")))
-	{
-		return E_FAIL;
-	}
-	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"Smoke_loop8x8_00", L"../bin/Resource/Textures/Effect/Smoke_loop8x8_00.tga")))
-	{
-		return E_FAIL;
-	}
 
-	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"Plane_Texture", L"../bin/Resource/Textures/Plane_Default.png")))
-	{
-		return E_FAIL;
-	}
+	_finddata_t fd;
+	ZeroMemory(&fd, sizeof(_finddata_t));
 
+	intptr_t handle = _findfirst("../bin/Resource/Textures/UI/*.dds", &fd);
+
+	if (handle == 0)
+		return E_FAIL;
+
+	int iResult = 0;
+	while (iResult != -1)
+	{
+		char szFullPath[MAX_PATH] = "../bin/Resource/Textures/UI/";
+		strcat_s(szFullPath, fd.name);
+
+		_tchar fbxName[MAX_PATH] = L"";
+		_tchar fbxPath[MAX_PATH] = L"";
+		MultiByteToWideChar(CP_ACP, 0, fd.name, MAX_PATH, fbxName, MAX_PATH);
+		MultiByteToWideChar(CP_ACP, 0, szFullPath, MAX_PATH, fbxPath, MAX_PATH);
+
+		::PathRemoveExtension(fbxName); //이게 있으면 확장자도 지워짐
+
+		if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, fbxName, fbxPath)))
+		{
+			return E_FAIL;
+		}
+		wstring Name = fbxName;
+		wstring tag = L"Prototype_GameObject_UI_" + Name;
+		if (FAILED(g_pGameInstance->Add_Prototype(tag, CMFCObject_UI::Create(m_pDevice, m_pDeviceContext))))
+		{
+			return E_FAIL;
+		}
+
+		iResult = _findnext(handle, &fd);
+	}
+	_findclose(handle);
 
 	return S_OK;
+
 }
 
 HRESULT CMFCMainApp::Ready_GameObject_Prototype()
@@ -225,10 +241,10 @@ HRESULT CMFCMainApp::Ready_GameObject_Prototype()
 	//	return E_FAIL;
 	//}
 
-	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_UI"), CMFCObject_UI::Create(m_pDevice, m_pDeviceContext))))
+	/*if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_UI"), CMFCObject_UI::Create(m_pDevice, m_pDeviceContext))))
 	{
 		return E_FAIL;
-	}
+	}*/
 
 	//////////////////////////////////////////////////////////////////////////
 	//if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_bubble"), CMFCEffect::Create(m_pDevice, m_pDeviceContext))))

@@ -26,7 +26,6 @@ private:
 	D3D11_SUBRESOURCE_DATA		m_VBInstSubresourceData;
 	_uint						m_iInstStride = 0; /*정점하나의 바이트 크기. */
 	_uint						m_iInstNumVertices = 0;
-	_double*					m_pDropSpeed = nullptr;
 
 
 public:
