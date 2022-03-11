@@ -16,9 +16,7 @@ CAnimationController::CAnimationController(const CAnimationController& _rhs)
 HRESULT CAnimationController::NativeConstruct_Prototype()
 {
 	if (FAILED(__super::NativeConstruct_Prototype()))
-	{
 		return E_FAIL;
-	}
 
 	return S_OK;
 }
@@ -26,9 +24,7 @@ HRESULT CAnimationController::NativeConstruct_Prototype()
 HRESULT CAnimationController::NativeConstruct(void* _pArg)
 {
 	if (FAILED(__super::NativeConstruct(_pArg)))
-	{
 		return E_FAIL;
-	}
 
 	return S_OK;
 }
@@ -36,14 +32,10 @@ HRESULT CAnimationController::NativeConstruct(void* _pArg)
 _int CAnimationController::Tick(const _double& _dDeltaTime)
 {
 	if (0 > Update_CombinedTransformMatrix(_dDeltaTime))
-	{
 		return -1;
-	}
 
 	if (0 > Move_Transform(_dDeltaTime))
-	{
 		return -1;
-	}
 
 	if(-1 != m_tBlendDesc.iNextAnimIndex)
 	{
@@ -173,7 +165,7 @@ _int CAnimationController::Update_CombinedTransformMatrix(const _double& _dDelta
 
 	if (m_tBlendDesc.fTweenTime >= 1.f)
 	{
-		vecAnimations[m_tBlendDesc.iCurAnimIndex]->Reset_Animation();
+		//vecAnimations[m_tBlendDesc.iCurAnimIndex]->Reset_Animation();
 
 		m_tBlendDesc.iCurAnimIndex = m_tBlendDesc.iNextAnimIndex;
 		m_isLoopAnim = m_tBlendDesc.isLoopNextAnim;
@@ -244,7 +236,7 @@ HRESULT CAnimationController::SetUp_NextAnimation(const string& _strAnimTag, con
 			{
 				m_tBlendDesc.iNextAnimIndex = pAnimation->Get_Index();
 
-				if (-1 != m_tBlendDesc.iNextAnimIndex)
+				if (m_isChangeAnim)
 					vecAnimations[m_tBlendDesc.iNextAnimIndex]->Reset_Animation();
 
 				m_tBlendDesc.isLoopNextAnim = _isLoopNextAnim;
@@ -252,6 +244,41 @@ HRESULT CAnimationController::SetUp_NextAnimation(const string& _strAnimTag, con
 				
 				m_strPreAnimTag = m_strCurAnimTag;
 				m_strCurAnimTag = _strAnimTag;
+				m_iCurKeyFrameIndex = pAnimation->Get_CurrentKeyFrameIndex();
+				return S_OK;
+			}
+		}
+	}
+
+	return S_OK;
+}
+
+HRESULT CAnimationController::SetUp_NextAnimation(_uint iIndex, const _bool _isLoopNextAnim)
+{
+	vector<CAnimation*>& vecAnimations = m_pModel->Get_Animations();
+	
+	if (vecAnimations.size() < iIndex)
+	{
+		return E_FAIL;
+	}
+
+	if (m_tBlendDesc.iCurAnimIndex != iIndex)
+	{
+		for (auto& pAnimation : vecAnimations)
+		{
+			if (iIndex == pAnimation->Get_Index())
+			{
+				m_tBlendDesc.iNextAnimIndex = pAnimation->Get_Index();
+
+				if (m_isChangeAnim)
+					vecAnimations[m_tBlendDesc.iNextAnimIndex]->Reset_Animation();
+
+				m_tBlendDesc.isLoopNextAnim = _isLoopNextAnim;
+				m_pFixedBone = pAnimation->Get_Channel("root");
+
+				m_strPreAnimTag = m_strCurAnimTag;
+				m_strCurAnimTag = pAnimation->Get_Name();
+				m_iCurKeyFrameIndex = pAnimation->Get_CurrentKeyFrameIndex();
 				return S_OK;
 			}
 		}
@@ -323,7 +350,7 @@ const _int CAnimationController::Move_Transform(const _double& _dDeltaTime)
 				svQuaternian -= svPreQuaternian;
 			}
 
-			svVelocity *= 0.2f;
+			//svVelocity *= _dDeltaTime;
 			svQuaternian = XMVector4Transform(svQuaternian, m_smatPivot);
 
 			_float3 vVelocity, vBonePosition, vEuler, vRotation;
@@ -367,12 +394,12 @@ const _int CAnimationController::Move_Transform(const _double& _dDeltaTime)
 			svLook = m_pTransform->Get_State(CTransform::STATE_LOOK);
 
 			svVelocity = XMLoadFloat3(&vBonePosition);
-			svVelocity = XMVector4Transform(svVelocity, m_smatPivot);
+			svVelocity = XMVector4Transform(svVelocity, m_smatPivot * m_pTransform->Get_PivotMatrix());
 
 			XMStoreFloat3(&vVelocity, svVelocity);
-			m_pTransform->Go_Right(vVelocity.x);
-			m_pTransform->Go_Up(vVelocity.y);
-			m_pTransform->Go_Straight(vVelocity.z);
+			m_pTransform->Go_Right(vVelocity.x * _dDeltaTime);
+			m_pTransform->Go_Up(vVelocity.y * _dDeltaTime);
+			m_pTransform->Go_Straight(vVelocity.z * _dDeltaTime);
 
 			// 요 아래는 디버그 용이야
 			_float3 vPosition = { 0.f, 0.f, 0.f };
@@ -386,6 +413,11 @@ const _int CAnimationController::Move_Transform(const _double& _dDeltaTime)
 	}
 
 	return _int();
+}
+
+void CAnimationController::Reset_Animation()
+{
+	m_pCurAnim->Reset_Animation();
 }
 
 void CAnimationController::Render_Debug()
@@ -447,6 +479,5 @@ CComponent* CAnimationController::Clone(void* _pArg)
 
 void CAnimationController::Free()
 {
-
 	__super::Free();
 }

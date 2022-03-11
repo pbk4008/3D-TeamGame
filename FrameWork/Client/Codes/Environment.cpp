@@ -54,7 +54,7 @@ _int CEnvironment::Tick(_double TimeDelta)
 
 _int CEnvironment::LateTick(_double TimeDelta)
 {
-	m_pRenderer->Add_RenderGroup(CRenderer::RENDER_PRIORITY, this);
+	m_pRenderer->Add_RenderGroup(CRenderer::RENDER_ALPHA, this);
 	return _int();
 }
 

@@ -66,6 +66,7 @@ HRESULT CSilvermane_Idle::EnterState()
 
 	m_pAnimationController->SetUp_NextAnimation("SK_Silvermane.ao|A_Idle_Player", true);
 	m_pAnimationController->Set_RootMotion(true, true, ERootOption::XYZ);
+	m_pSilvermane->Set_Move(false);
 
 	return S_OK;
 }
@@ -76,6 +77,7 @@ HRESULT CSilvermane_Idle::ExitState()
 		return E_FAIL;
 
 	m_fHoldTime = 0.f;
+	m_pSilvermane->Set_Move(true);
 
 	return S_OK;
 }
@@ -104,17 +106,49 @@ _int CSilvermane_Idle::KeyCheck(const _double& _dDeltaTime)
 
 	if (g_pGameInstance->getkeyDown(DIK_SPACE))
 	{
-		if (FAILED(m_pStateController->Change_State(L"1H_DodgeSpin")))
-			return E_FAIL;
-		return STATE_CHANGE;
+		if (g_pGameInstance->getkeyDown(DIK_W))
+		{
+			if (FAILED(m_pStateController->Change_State(L"1H_DodgeSpin")))
+				return E_FAIL;
+			return STATE_CHANGE;
+		}
+		else if (g_pGameInstance->getkeyDown(DIK_A))
+		{
+			if (FAILED(m_pStateController->Change_State(L"1H_SidestepLeft")))
+				return E_FAIL;
+			return STATE_CHANGE;
+		}
+		else if (g_pGameInstance->getkeyDown(DIK_D))
+		{
+			if (FAILED(m_pStateController->Change_State(L"1H_SidestepRight")))
+				return E_FAIL;
+			return STATE_CHANGE;
+		}
+		else
+		{
+			if (FAILED(m_pStateController->Change_State(L"1H_SidestepBwd")))
+				return E_FAIL;
+			return STATE_CHANGE;
+		}
 	}
 
 	if (g_pGameInstance->getkeyPress(DIK_LSHIFT))
 	{
-		if (g_pGameInstance->getkeyPress(DIK_W))
+		if (g_pGameInstance->getkeyPress(DIK_W) ||
+			g_pGameInstance->getkeyPress(DIK_S) ||
+			g_pGameInstance->getkeyPress(DIK_A) ||
+			g_pGameInstance->getkeyPress(DIK_D))
 		{
-			if (FAILED(m_pStateController->Change_State(L"SprintFwdStart")))
-				return E_FAIL;
+			if (!m_pSilvermane->Is_EquipWeapon())
+			{
+				if (FAILED(m_pStateController->Change_State(L"SprintFwdStart")))
+					return E_FAIL;
+			}
+			else
+			{
+				if (FAILED(m_pStateController->Change_State(L"1H_SwordEquipOff")))
+					return E_FAIL;
+			}
 			return STATE_CHANGE;
 		}
 	}
@@ -141,6 +175,8 @@ _int CSilvermane_Idle::KeyCheck(const _double& _dDeltaTime)
 			return STATE_CHANGE;
 		}
 	}
+
+	Add_PlusAngle(EDir::Forward, _dDeltaTime);
 
 	return _int();
 }

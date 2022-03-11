@@ -49,7 +49,7 @@ VS_OUT VS_MAIN(VS_IN In)
 		
 	Out.vPosition = mul(vector(In.vPosition, 1.f), matWVP);	
 	Out.vTexUV = In.vTexUV;	
-
+	;
 	return Out;
 }
 
@@ -62,6 +62,7 @@ VS_OUT VS_MAIN_VIEWPORT(VS_IN In)
 
 	return Out;
 }
+
 
 /* SV_POSITION을 가진 데잍처에대해서만 원근투영.(정점의 w값으로 xyzw를 나눈다.) */
 /* 뷰포트로 변환한다. */
@@ -94,8 +95,6 @@ PS_OUT PS_MAIN(PS_IN In)
 }
 
 
-
-
 technique11			DefaultTechnique
 {
 	/* 셰이더 기능의 캡슐화. */
@@ -119,6 +118,27 @@ technique11			DefaultTechnique
 		GeometryShader = NULL;
 		PixelShader = compile ps_5_0  PS_MAIN();
 	}
+
+	pass TrailRect
+	{
+		SetRasterizerState(CullMode_None);
+		SetDepthStencilState(ZDefault, 0);
+
+		VertexShader = compile vs_5_0 VS_MAIN();
+		GeometryShader = NULL;
+		PixelShader = compile ps_5_0 PS_MAIN();
+	}
+
+    pass AlphaBlend
+    {
+        SetRasterizerState(CullMode_Default);
+        SetDepthStencilState(ZDefault, 0);
+        SetBlendState(AlphaBlending, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+
+        VertexShader = compile vs_5_0 VS_MAIN();
+        GeometryShader = NULL;
+        PixelShader = compile ps_5_0 PS_MAIN();
+    }
 	
 }
 

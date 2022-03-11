@@ -16,7 +16,7 @@ xcopy /y/s  .\Engine\bin\*.dll		.\UITool\Bin\
 
 
 
-
-
-xcopy /y/s /e .\Engine\bin\ShaderFiles\*.hlsl   .\ShaderExamples\bin\ShaderFiles\
-xcopy /y/s /e .\Engine\bin\*.dll				.\ShaderExamples\bin\Release\
+xcopy /y/s /e .\Engine\bin\ShaderFiles\*.*   .\ShaderExamples\bin\ShaderFiles\
+xcopy /y/s /e .\Engine\bin\ShaderFiles\*.*   .\Reference\ShaderFile\
+xcopy /y/s /e .\Engine\bin\*.dll			 .\ShaderExamples\bin\Release\
+xcopy /y/s /e .\Engine\bin\*.lib			 .\Reference\Library\Release\

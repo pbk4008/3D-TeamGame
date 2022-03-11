@@ -1,6 +1,4 @@
-#include "..\public\Model.h"
-
-#include "GameInstance.h"
+#include "Model.h"
 #include "MeshContainer.h"
 #include "HierarchyNode.h"
 #include "Texture.h"
@@ -10,6 +8,7 @@
 #include "TextureManager.h"
 #include "SaveManager.h"
 #include "Material.h"
+#include "GameInstance.h"
 
 CModel::CModel(ID3D11Device * pDevice, ID3D11DeviceContext * pDeviceContext)
 	: CComponent(pDevice, pDeviceContext)
@@ -38,6 +37,7 @@ CModel::CModel(const CModel& rhs)
 			Safe_AddRef(pMaterial->pMeshTexture[i]);
 	}
 	m_vecMaterials.resize(rhs.m_vecMaterials.size());
+
 	for (_uint i = 0; i < m_vecMaterials.size(); ++i)
 	{
 		if (rhs.m_vecMaterials[i])
@@ -117,15 +117,15 @@ HRESULT CModel::NativeConstruct_Prototype(const string& pMeshFilePath, const str
 	if (FAILED(Create_Animation()))
 		return E_FAIL;
 
-	if (m_eMeshType == TYPE_STATIC)
-	{
-		wstring wstrSaveFileName, wstrSaveFilePath;
-		wstrSaveFilePath = L"../../Client/bin/SaveData/";
-		wstrSaveFileName.assign(pMeshFileName.begin(), pMeshFileName.end());
-		wstrSaveFilePath += wstrSaveFileName;
-		if (FAILED(Save_StaticModel(wstrSaveFilePath)))
-			return E_FAIL;
-	}
+	//if (m_eMeshType == TYPE_STATIC)
+	//{
+	//	wstring wstrSaveFileName, wstrSaveFilePath;
+	//	wstrSaveFilePath = L"../../Client/bin/SaveData/";
+	//	wstrSaveFileName.assign(pMeshFileName.begin(), pMeshFileName.end());
+	//	wstrSaveFilePath += wstrSaveFileName;
+	//	if (FAILED(Save_StaticModel(wstrSaveFilePath)))
+	//		return E_FAIL;
+	//}
 	return S_OK;
 }
 
@@ -181,12 +181,12 @@ HRESULT CModel::NativeConstruct(void * pArg)
 			pHierarchyNode->Add_Channel(i, pChannel);
 		}
 	}
-	if(!m_bSaved)
-	{
-		if (FAILED(Save_AnimModel()))
-			return E_FAIL;
-		m_bSaved = true;
-	}
+	//if(!m_bSaved)
+	//{
+	//	if (FAILED(Save_AnimModel()))
+	//		return E_FAIL;
+	//	m_bSaved = true;
+	//}
 
 	return S_OK;
 }
@@ -238,6 +238,15 @@ HRESULT CModel::SetUp_TextureOnShader(const char * pConstantName, _uint iMeshCon
 		return E_FAIL;
 	
 	return pVariable->SetResource(m_Materials[iMeshContainerIndex]->pMeshTexture[eType]->Get_ShaderResourceView());
+}
+
+HRESULT CModel::SetUp_TextureOnShader(const char* pConstantName, ID3D11ShaderResourceView* pSRV)
+{
+	ID3DX11EffectShaderResourceVariable* pVariable = m_pEffect->GetVariableByName(pConstantName)->AsShaderResource();
+	if (nullptr == pVariable)
+		return E_FAIL;
+
+	return pVariable->SetResource(pSRV);
 }
 
 /* 매 프레임마다 호출. */
@@ -354,7 +363,7 @@ HRESULT CModel::Create_Materials()
 
 			CTextureManager* pTextureMgr = GET_INSTANCE(CTextureManager);
 
-			pTextureMgr->Add_Texture(m_pDevice, szTextureTag, szFullName);
+    			pTextureMgr->Add_Texture(m_pDevice, szTextureTag, szFullName);
 
 			RELEASE_INSTANCE(CTextureManager);
 
@@ -442,7 +451,7 @@ HRESULT CModel::Create_MeshContainer()
 		if (!pMesh)
 			return E_FAIL;
 
-		CMeshContainer* pMeshContainer = CMeshContainer::Create(m_pDevice, m_pDeviceContext, this, pMesh, m_eMeshType == TYPE_STATIC ? XMLoadFloat4x4(&m_PivotMatrix) : XMMatrixIdentity());
+		CMeshContainer* pMeshContainer = CMeshContainer::Create(m_pDevice, m_pDeviceContext, this, pMesh, (m_eMeshType == TYPE_STATIC) ? XMLoadFloat4x4(&m_PivotMatrix) : XMMatrixIdentity());
 		if (!pMeshContainer)
 			return E_FAIL;
 
@@ -500,9 +509,15 @@ HRESULT CModel::Compile_Shader(const wstring& pShaderFilePath)
 		Elements[1] = { "NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 };
 		Elements[2] = { "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 24, D3D11_INPUT_PER_VERTEX_DATA, 0 };
 		Elements[3] = { "TANGENT", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 32, D3D11_INPUT_PER_VERTEX_DATA, 0 };
+<<<<<<< HEAD
 		Elements[4] = { "BLENDINDEX", 0, DXGI_FORMAT_R32G32B32A32_UINT, 0, 44, D3D11_INPUT_PER_VERTEX_DATA, 0 };
 		Elements[5] = { "BLENDWEIGHT", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 60, D3D11_INPUT_PER_VERTEX_DATA, 0 };
 		Elements[6] = { "BINORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 76, D3D11_INPUT_PER_VERTEX_DATA, 0 };
+=======
+		Elements[4] = { "BINORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 44, D3D11_INPUT_PER_VERTEX_DATA, 0 };
+		Elements[5] = { "BLENDINDEX", 0, DXGI_FORMAT_R32G32B32A32_UINT, 0, 56, D3D11_INPUT_PER_VERTEX_DATA, 0 };
+		Elements[6] = { "BLENDWEIGHT", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 72, D3D11_INPUT_PER_VERTEX_DATA, 0 };
+>>>>>>> main
 	}
 	
 	_uint		iFlag = 0;
@@ -852,11 +867,18 @@ void CModel::Free()
 {
 	__super::Free();
 
+	for (auto& pPassDec : m_PassDesc)
+	{
+		Safe_Release(pPassDec->pInputLayout);
+		Safe_Release(pPassDec->pPass);
+	}
+
 	if (false == m_isCloned)
 	{	
 		for (auto& pPassDesc : m_PassDesc)
 			Safe_Delete(pPassDesc);
 	}
+
 	m_PassDesc.clear();
 	Safe_Release(m_pEffect);
 
@@ -882,7 +904,7 @@ void CModel::Free()
 
 	for (auto& pMtrlMeshContainer : m_MeshContainers)
 	{
-		for(auto& pMeshContainer : pMtrlMeshContainer)
+		for (auto& pMeshContainer : pMtrlMeshContainer)
 			Safe_Release(pMeshContainer);
 		pMtrlMeshContainer.clear();
 	}
@@ -892,4 +914,6 @@ void CModel::Free()
 		Safe_Release(pAnimation);
 
 	m_Animations.clear();
+
+	m_Importer.FreeScene();
 }

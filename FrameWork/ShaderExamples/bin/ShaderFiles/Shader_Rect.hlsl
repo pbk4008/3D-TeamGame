@@ -63,6 +63,7 @@ VS_OUT VS_MAIN_VIEWPORT(VS_IN In)
 	return Out;
 }
 
+
 /* SV_POSITION을 가진 데잍처에대해서만 원근투영.(정점의 w값으로 xyzw를 나눈다.) */
 /* 뷰포트로 변환한다. */
 /* 래스터라이즈.(둘러쌓여진 정점의 정보를 바탕으로 하여. 픽셀정보를 생성한다.) */
@@ -94,8 +95,6 @@ PS_OUT PS_MAIN(PS_IN In)
 }
 
 
-
-
 technique11			DefaultTechnique
 {
 	/* 셰이더 기능의 캡슐화. */
@@ -118,6 +117,16 @@ technique11			DefaultTechnique
 		VertexShader = compile vs_5_0 VS_MAIN_VIEWPORT();
 		GeometryShader = NULL;
 		PixelShader = compile ps_5_0  PS_MAIN();
+	}
+
+	pass TrailRect
+	{
+		SetRasterizerState(CullMode_None);
+		SetDepthStencilState(ZDefault, 0);
+
+		VertexShader = compile vs_5_0 VS_MAIN();
+		GeometryShader = NULL;
+		PixelShader = compile ps_5_0 PS_MAIN();
 	}
 	
 }

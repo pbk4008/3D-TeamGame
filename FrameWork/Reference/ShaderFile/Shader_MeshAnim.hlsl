@@ -59,7 +59,7 @@ VS_OUT VS_MAIN_ANIM(VS_IN In)
 	matrix			BoneMatrix = g_BoneMatrices.Bone[In.vBlendIndex.x] * In.vBlendWeight.x +
 		g_BoneMatrices.Bone[In.vBlendIndex.y] * In.vBlendWeight.y +
 		g_BoneMatrices.Bone[In.vBlendIndex.z] * In.vBlendWeight.z +
-		g_BoneMatrices.Bone[In.vBlendIndex.w] * In.vBlendWeight.w;
+		g_BoneMatrices.Bone[In.vBlendIndex.w] * fWeightw/*In.vBlendWeight.w*/;
 
 
 	matWV = mul(g_WorldMatrix, g_ViewMatrix);

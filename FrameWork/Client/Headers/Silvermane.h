@@ -7,6 +7,7 @@ END
 
 BEGIN(Client)
 class CWeapon;
+class CCamera_Silvermane;
 
 class CSilvermane final : public CActor
 {
@@ -29,26 +30,34 @@ private:
 public:
 	CTransform* Get_Transform() const;
 	CModel* Get_Model() const;
-	const _float3& Get_Rotation() const;
-	const _fvector& Get_Dir() const;
+	const _float Get_PlusAngle() const;
 
-	void Set_Dir(const _fvector& _svDir);
-	void Set_Rotation(const _float3& _vRotation);
+	void Set_Move(const _bool _isMove);
 	void Set_EquipWeapon(const _bool _isEquipWeapon);
+	void Set_WeaponFixedBone(const string& _wstrFixedBoneTag);
 	void Set_WeaponFixedBone(CHierarchyNode* _pFixedBone);
+	void Set_Camera(CCamera_Silvermane* _pCamera);
+	void Set_PlusAngle(const _float _fAngle);
 
 	const _bool Is_EquipWeapon() const;
+	void Add_PlusAngle(const _float _fDeltaAngle);
 
-public:
+private:
+	_int Trace_CameraLook(const _double& _dDeltaTime);
+
+private:
 	CModel* m_pModel = nullptr;
 	CStateController* m_pStateController = nullptr;
 	CAnimationController* m_pAnimationController = nullptr;
+	CCamera_Silvermane* m_pCamera = nullptr;
+	CCharacterController* m_pCharacterController = nullptr;
 
 	CWeapon* m_pWeapon = nullptr;
 	_bool m_isEquipWeapon = false;
+	_bool m_isMove = false;
 
-	_float3 m_vRotation = { 0.f, 0.f, 0.f };
-	_float3 m_vDir = { 0.f, 0.f, 0.f };
+	_float m_fAngle = 0.f;
+	_float m_fPlusAngle = 0.f;
 
 public:
 	static CSilvermane* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext);

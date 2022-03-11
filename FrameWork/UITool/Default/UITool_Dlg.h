@@ -40,6 +40,7 @@ public:
 	afx_msg void OnBnClickedButtonApply();
 	float m_PositionX;
 	float m_PositionY;
+	float m_PositionZ;
 	float m_SizeX;
 	float m_SizeY;
 	afx_msg void OnBnClickedButtonStateSetting();

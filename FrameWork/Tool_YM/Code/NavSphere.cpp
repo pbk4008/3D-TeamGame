@@ -41,7 +41,7 @@ HRESULT CNavSphere::NativeConstruct(void* pArg)
 	matWorld._43 = m_fPostion.z;
 
 	m_pTransform->Set_WorldMatrix(XMLoadFloat4x4(&matWorld));
-	m_pTransform->SetTransformDesc(5.0f, 45.0f);
+	m_pTransform->Set_TransformDesc(5.0f, 45.0f);
 
 	return S_OK;
 }

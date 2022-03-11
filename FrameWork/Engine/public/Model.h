@@ -35,6 +35,7 @@ public:
 
 	HRESULT SetUp_ValueOnShader(const char* pConstantName, void* pData, _uint iSize);
 	HRESULT SetUp_TextureOnShader(const char* pConstantName, _uint iMeshContainerIndex, aiTextureType eType);
+	HRESULT SetUp_TextureOnShader(const char* pConstantName, ID3D11ShaderResourceView* pSRV);
 	void SetUp_AnimationIndex(_uint iAnimationIndex) { m_iCurrentAnimation = iAnimationIndex; }
 
 	HRESULT Update_CombinedTransformationMatrix(_double TimeDelta);
@@ -81,15 +82,10 @@ private:
 	HRESULT Load_Materials(_uint iType, const wstring& pFilePath);
 	/* 모델을 구성하는 메시들의 정보를 구성한다. */
 	HRESULT Create_MeshContainer();
-
 	HRESULT Load_MeshContainer(_uint iMaterialIndex, _uint iNumVtxCnt, _uint iNumIdxCnt, void* pVtx, void* pIdx);
-
 	HRESULT Create_VertexIndexBuffer();
-
 	HRESULT Compile_Shader(const wstring& pShaderFilePath);
-
 	HRESULT Create_HierarchyNode(aiNode* pNode, CHierarchyNode* pParent = nullptr, _uint iDepth = 0);
-	
 	HRESULT Create_Animation();
 public:
 	static CModel* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext, const string& pMeshFilePath, const string& pMeshFileName, const wstring& pShaderFilePath, _fmatrix PivotMatrix, TYPE eMeshType);

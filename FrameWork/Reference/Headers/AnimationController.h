@@ -56,9 +56,11 @@ public:
 	_int Update_CombinedTransformMatrix(const _double& _dDeltaTime);
 	void Lerp_Anim(vector<CAnimation*>& _vecAnimations);
 	HRESULT SetUp_NextAnimation(const string& _strAnimTag, const _bool _isLoopNextAnim = true);
+	HRESULT SetUp_NextAnimation(_uint iIndex, const _bool _isLoopNextAnim = true);
 	HRESULT Change_Anim(const string& _strAnimTag, _bool _isLoop = true);
 	const _int Move_Transform(const _double& _dDeltaTime);
-
+	void Reset_Animation();
+	
 	void Render_Debug();
 
 private:

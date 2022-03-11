@@ -35,7 +35,7 @@ HRESULT CPlane::NativeConstruct(void* pArg)
  	if (FAILED(SetUp_Components()))
 		return E_FAIL;
 	
-	m_pTransform->SetTransformDesc(10.0f, 45.0f);
+	m_pTransform->Set_TransformDesc(10.0f, 45.0f);
 	return S_OK;
 }
 

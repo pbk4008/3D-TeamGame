@@ -25,9 +25,16 @@ public:
 	virtual _int Tick(_double TimeDelta) override;
 	virtual _int LateTick(_double TimeDelta) override;
 	virtual HRESULT Render() override;
+	virtual HRESULT Render_Shadow() override;
+	virtual HRESULT	Render_ShadeShadow(ID3D11ShaderResourceView* ShadowMap) override;
+	virtual HRESULT	Render_PBR() override;
 private:
-	CTexture* m_pTexture = nullptr;
+	CTexture*	m_pTexture = nullptr;
+	CTexture*	m_pFilterTexture = nullptr;
+	CTexture*	m_pBrushTexture = nullptr;
+
 	CVIBuffer_Terrain* m_pVIBufferCom = nullptr;
+	const LIGHTDESC*	m_LightDesc = nullptr;
 private:
 	virtual HRESULT SetUp_Components();
 

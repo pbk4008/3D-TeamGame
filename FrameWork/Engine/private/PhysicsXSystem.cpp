@@ -3,15 +3,30 @@
 #include "SaveManager.h"
 #include "GameObject.h"
 
+#include "CharacterController.h"
+
 CPhysicsXSystem::CPhysicsXSystem()
 	: m_pFoundation(nullptr)
 	, m_pPhysics(nullptr)
 	, m_pScene(nullptr)
 	, m_pDispatcher(nullptr)
-	, m_pContactRePort(nullptr)
 	, m_pCooking(nullptr)
 {
 }
+PxFilterFlags contactReportFilterShader(PxFilterObjectAttributes attributes0, PxFilterData filterData0,
+	PxFilterObjectAttributes attributes1, PxFilterData filterData1,
+	PxPairFlags& pairFlags, const void* constantBlock, PxU32 constantBlockSize)
+{
+	pairFlags = PxPairFlag::eSOLVE_CONTACT
+		| PxPairFlag::eDETECT_DISCRETE_CONTACT
+		| PxPairFlag::eNOTIFY_TOUCH_FOUND
+		| PxPairFlag::eNOTIFY_TOUCH_PERSISTS
+		| PxPairFlag::eNOTIFY_TOUCH_LOST
+		| PxPairFlag::eNOTIFY_CONTACT_POINTS;
+
+	return PxFilterFlag::eDEFAULT;
+}
+
 HRESULT CPhysicsXSystem::Init_PhysicsX()
 {
 	m_pFoundation = PxCreateFoundation(PX_PHYSICS_VERSION, m_Allocator, m_ErrorCallBack);
@@ -26,13 +41,27 @@ HRESULT CPhysicsXSystem::Init_PhysicsX()
 
 	cookingParams.meshPreprocessParams = PxMeshPreprocessingFlag::eDISABLE_CLEAN_MESH;
 
+<<<<<<< HEAD
 	m_pCooking = PxCreateCooking(PX_PHYSICS_VERSION, *m_pFoundation, cookingParams);
+=======
+	/*PxCooking* pCooking*/m_pCooking = PxCreateCooking(PX_PHYSICS_VERSION, *m_pFoundation, cookingParams);
+>>>>>>> main
 
 	if (!m_pCooking)
 		return E_FAIL;
 
 	if (FAILED(Intit_Scene()))
 		return E_FAIL;
+
+	if (FAILED(Init_ControllerManager())) return E_FAIL;
+
+
+#ifdef _DEBUG
+	m_pScene->setVisualizationParameter(PxVisualizationParameter::eSCALE, 1.f);
+	m_pScene->setVisualizationParameter(PxVisualizationParameter::eCOLLISION_SHAPES, 1.f);
+	//m_pScene->setVisualizationParameter(PxVisualizationParameter::eACTOR_AXES, 2.f); // ±âÁî¸ð
+#endif // _DEBUG
+
 
 	return S_OK;
 }
@@ -129,17 +158,89 @@ PxShape* CPhysicsXSystem::Init_Mesh(const PxTriangleMeshDesc& tDesc)
 	return pShape;
 }
 
+HRESULT CPhysicsXSystem::Create_Material(const PxReal _staticFriction, const PxReal _dynamicFriction, const PxReal _restitution, PxMaterial** _ppOutMaterial)
+{
+	PxMaterial* pMaterial = m_pPhysics->createMaterial(_staticFriction, _dynamicFriction, _restitution);
+
+	if (_ppOutMaterial)
+	{
+		*_ppOutMaterial = pMaterial;
+		return S_OK;
+	}
+	else
+	{
+		pMaterial->release();
+		return E_FAIL;
+	}
+
+}
+
+HRESULT CPhysicsXSystem::Create_CharacterController(CCharacterController* _pController, PxController** _ppOutPxController, vector<PxShape*>& _vecShapes)
+{
+	PxCapsuleControllerDesc controllerDesc;
+	CCharacterController::CHARACTERCONTROLLERDESC tCharacterControllerDesc = _pController->Get_CharacterControllerDesc();
+
+	controllerDesc.behaviorCallback = m_pControllerBehaviorCallback;
+	controllerDesc.userData = tCharacterControllerDesc.pGameObject;
+	controllerDesc.material = _pController->Get_Material();
+	controllerDesc.height = tCharacterControllerDesc.fHeight;
+	controllerDesc.radius = tCharacterControllerDesc.fRadius;
+	controllerDesc.climbingMode = tCharacterControllerDesc.eClimbingMode;
+	controllerDesc.contactOffset = tCharacterControllerDesc.fContactOffset;
+	controllerDesc.stepOffset = tCharacterControllerDesc.fStepOffset;
+	controllerDesc.slopeLimit = XMConvertToRadians(tCharacterControllerDesc.fSlopeLimit);
+	controllerDesc.upDirection = ToPxVec3(tCharacterControllerDesc.vUpDirection);
+	controllerDesc.reportCallback = m_pControllerHitReport;
+
+	_float3 vPosition = tCharacterControllerDesc.vPosition;
+	controllerDesc.position = PxExtendedVec3(vPosition.x, vPosition.y, vPosition.z);
+
+	PxController* pPxController = m_pControllerManager->createController(controllerDesc);
+	pPxController->setUserData(tCharacterControllerDesc.pGameObject);
+
+	const PxU32 numShapes = pPxController->getActor()->getNbShapes();
+	_vecShapes.resize(numShapes);
+
+	PxShape** ppShape = (PxShape**)m_Allocator.allocate(sizeof(PxShape*) * numShapes, 0, __FILE__, __LINE__);
+	pPxController->getActor()->getShapes(ppShape, numShapes);
+	pPxController->getActor()->userData = tCharacterControllerDesc.pGameObject;
+
+	for (PxU32 i = 0; i < numShapes; ++i)
+	{
+		PxShape* pShape = ppShape[i];
+		pShape->userData = tCharacterControllerDesc.pGameObject;
+		_vecShapes[i] = pShape;
+	}
+
+	if (ppShape)
+	{
+		m_Allocator.deallocate(ppShape);
+		ppShape = NULL;
+	}
+
+	*_ppOutPxController = pPxController;
+
+	m_pScene->addActor(*pPxController->getActor());
+	return S_OK;
+}
+
+const PxRenderBuffer& CPhysicsXSystem::Get_RenderBuffer()
+{
+	return m_pScene->getRenderBuffer();
+}
+
 HRESULT CPhysicsXSystem::Intit_Scene()
 {
 	if (!m_pPhysics)
 		return E_FAIL;
+	m_pDispatcher = PxDefaultCpuDispatcherCreate(2);
+
 	PxSceneDesc sceneDesc(m_pPhysics->getTolerancesScale());
 	sceneDesc.gravity = PxVec3(0.f, -9.8f, 0.f);
-	m_pDispatcher = PxDefaultCpuDispatcherCreate(2);
 	sceneDesc.cpuDispatcher = m_pDispatcher;
 	sceneDesc.filterShader = contactReportFilterShader;
-	m_pContactRePort = new ContactReportCallback();
-	sceneDesc.simulationEventCallback = m_pContactRePort;
+	/*m_pContactRePort = new ContactReportCallback();*/
+	sceneDesc.simulationEventCallback = &m_pContactRePort;
 
 	m_pScene = m_pPhysics->createScene(sceneDesc);
 
@@ -149,17 +250,44 @@ HRESULT CPhysicsXSystem::Intit_Scene()
 	return S_OK;
 }
 
+HRESULT CPhysicsXSystem::Init_ControllerManager()
+{
+	if (m_pScene == nullptr)
+	{
+		return E_FAIL;
+	}
+
+	m_pControllerManager = PxCreateControllerManager(*m_pScene);
+
+	m_pControllerBehaviorCallback = new CControllerBehaviorCallback();
+	m_pControllerHitReport = new CControllerHitReport();
+
+	return S_OK;
+}
+
 
 void CPhysicsXSystem::Free()
 {
-	Safe_Delete(m_pContactRePort);
-	PX_RELEASE(m_pScene);
-	PX_RELEASE(m_pDispatcher);
-	PX_RELEASE(m_pPhysics);
-	PX_RELEASE(m_pFoundation);
+	//Safe_Delete(m_pContactRePort);
+
+	if (m_pControllerManager)
+		m_pControllerManager->release();
+	Safe_Delete(m_pControllerHitReport);
+	Safe_Delete(m_pControllerBehaviorCallback);
+
+	m_pScene->release();
+	m_pDispatcher->release();
+	m_pCooking->release();
+	m_pPhysics->release();
+	m_pFoundation->release();
+	//PX_RELEASE(m_pScene);
+	//PX_RELEASE(m_pDispatcher);
+	//PX_RELEASE(m_pCooking);
+	//PX_RELEASE(m_pPhysics);
+	//PX_RELEASE(m_pFoundation);
 }
 
-void ContactReportCallback::onContact(const PxContactPairHeader& pairHeader, const PxContactPair* pairs, PxU32 nbPairs)
+void CPhysicsXSystem::ContactReportCallback::onContact(const PxContactPairHeader& pairHeader, const PxContactPair* pairs, PxU32 nbPairs)
 {
 	for (_uint i = 0; i < nbPairs; i++)
 	{
@@ -186,7 +314,7 @@ void ContactReportCallback::onContact(const PxContactPairHeader& pairHeader, con
 	}
 }
 
-void ContactReportCallback::onTrigger(PxTriggerPair* pairs, PxU32 count)
+void CPhysicsXSystem::ContactReportCallback::onTrigger(PxTriggerPair* pairs, PxU32 count)
 {
 	for (_uint i = 0; i < count; i++)
 	{

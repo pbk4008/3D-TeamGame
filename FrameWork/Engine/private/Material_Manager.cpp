@@ -15,7 +15,7 @@ HRESULT CMaterial_Manager::NativeConstruct(ID3D11Device* _pDevice, ID3D11DeviceC
 
 	CMaterial* pMtrl = CMaterial::Create(m_pDevice, m_pDeviceContext, L"Default", L"../../Reference/ShaderFile/Shader_StaticMesh.hlsl", CMaterial::EType::Static);
 	Add_Material(L"Default", pMtrl);
-	pMtrl = CMaterial::Create(m_pDevice, m_pDeviceContext, L"Default_Anim", L"../../Reference/ShaderFile/Shader_MeshAnim.hlsl", CMaterial::EType::Anim);
+	pMtrl = CMaterial::Create(m_pDevice, m_pDeviceContext, L"Default_Anim", L"../../Reference/ShaderFile/Shader_Mesh.hlsl", CMaterial::EType::Anim);
 	Add_Material(L"Default_Anim", pMtrl);
 
 	return S_OK;

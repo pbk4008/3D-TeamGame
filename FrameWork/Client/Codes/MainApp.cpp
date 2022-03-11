@@ -4,7 +4,6 @@
 #include "MainCamera.h"
 #include "MainCamera_Ortho.h"
 #include "Loading.h"
-#include "DebugSystem.h"
 
 CMainApp::CMainApp()
 {	
@@ -30,9 +29,9 @@ HRESULT CMainApp::NativeConstruct()
 		return E_FAIL;
 
 #ifdef _DEBUG
-	CDebugSystem* pDebug = GET_INSTANCE(CDebugSystem);
-	if (FAILED(pDebug->Init_DebugSystem(m_pDevice, m_pDeviceContext)))
-		return E_FAIL;
+	//CDebugSystem* pDebug = GET_INSTANCE(CDebugSystem);
+	//if (FAILED(pDebug->Init_DebugSystem(m_pDevice, m_pDeviceContext)))
+	//	return E_FAIL;
 #endif
 
 	if (FAILED(SetUp_StartLevel(SCENEID::SCENE_LOGO)))
@@ -45,14 +44,35 @@ _int CMainApp::Tick(_double TimeDelta)
 {
 	m_TimeAcc += TimeDelta;
 
-	g_pGameInstance->Tick_Engine(TimeDelta);
+	g_pGameInstance->Update_InputDev();
+
+	if (g_pGameInstance->getkeyDown(DIK_P))
+		m_isPause = !m_isPause;
+
+	if (!m_isPause)
+	{
+		g_pGameInstance->Tick_Engine(TimeDelta);
+		m_isRender = true;
+	}
+	else
+	{
+		if (g_pGameInstance->getkeyDown(DIK_PGUP))
+		{
+			g_pGameInstance->Tick_Engine(0.04);
+			m_isRender = true;
+		}
+	}
+
 
 	return _int();
 }
 
 HRESULT CMainApp::Render()
 {
-	if (FAILED(g_pGameInstance->Clear_BackBuffer_View(XMFLOAT4(0.f, 0.f, 1.f, 1.f))))
+	if (!m_isRender)
+		return S_OK;
+
+	if (FAILED(g_pGameInstance->Clear_BackBuffer_View(XMFLOAT4(0.f, 0.5f, 0.5f, 1.f))))
 		return E_FAIL;
 	if (FAILED(g_pGameInstance->Clear_DepthStencil_View()))
 		return E_FAIL;	
@@ -75,8 +95,8 @@ HRESULT CMainApp::Render()
 		m_TimeAcc = 0.0;	
 	}
 
-	//if (FAILED(g_pGameInstance->Render_Font(TEXT("Font_Arial"), XMVectorSet(1.f, 0.0f, 0.f, 1.f), m_szFPS)))
-	//	return E_FAIL;
+	if (FAILED(g_pGameInstance->Render_Font(TEXT("Font_Arial"), XMVectorSet(1.f, 0.0f, 0.f, 1.f), m_szFPS)))
+		return E_FAIL;
 
 #endif // _DEBUG
 
@@ -84,7 +104,7 @@ HRESULT CMainApp::Render()
 		return E_FAIL;
 
 
-		
+	m_isRender = false;
 	return S_OK;
 }
 
@@ -137,7 +157,7 @@ HRESULT CMainApp::Ready_GameObject_Prototype()
 
 HRESULT CMainApp::Load_Texture()
 {
-	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"BackGround", L"../bin/Resources/Texture/Loading/T_LoadScreen_KeyArt_5.tga")))
+	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"BackGround", L"../bin/Resources/Texture/Loading/T_LoadScreen_KeyArt_5.dds")))
 		return E_FAIL;
 
 	return S_OK;
@@ -148,13 +168,13 @@ HRESULT CMainApp::Init_Camera()
 	CCamera::CAMERADESC tDesc;
 	tDesc.eType = CCamera::CAMERATYPE::CAMERA_PROJECTION;
 	tDesc.pCameraTag = L"MainCamera";
-	/*tDesc.vEye = _float4(0.f, 0.f, 0.f, 1.f);
+	tDesc.vEye = _float4(0.f, 0.f, 0.f, 1.f);
 	tDesc.vAt = _float4(0.f, 0.f, 1.f, 1.f);
-	tDesc.vAxisY = _float4(0.f, 1.f, 0.f, 0.f);*/
-	tDesc.vEye = _float4(0.f, 2.f, -5.f, 1.f);
-	tDesc.vAt = _float4(0.f, 2.f, 0.f, 1.f);
-	tDesc.vAxisY = _float4(0.f, 1.f, 0.f, 1.f);
-	tDesc.fFovy = XMConvertToRadians(60.f);;
+	tDesc.vAxisY = _float4(0.f, 1.f, 0.f, 0.f);
+	//tDesc.vEye = _float4(0.f, 2.f, -5.f, 1.f);
+	//tDesc.vAt = _float4(0.f, 2.f, 0.f, 1.f);
+	//tDesc.vAxisY = _float4(0.f, 1.f, 0.f, 1.f);
+	tDesc.fFovy = XMConvertToRadians(90.f);
 	tDesc.fFar = 300.f;
 	tDesc.fNear = 0.1f;
 	tDesc.fAspect = (_float)g_iWinCx/g_iWinCy;
@@ -162,15 +182,15 @@ HRESULT CMainApp::Init_Camera()
 	if(FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Static", L"Prototype_GameObject_MainCamera", &tDesc)))
 		return E_FAIL;
 
-	ZeroMemory(&tDesc, sizeof(CCamera::CAMERADESC));
-	tDesc.eType = CCamera::CAMERATYPE::CAMERA_ORTHO;
-	tDesc.pCameraTag = L"MainOrthoCamera";
-	tDesc.fWinCX = g_iWinCx;
-	tDesc.fWinCY = g_iWinCy;
-	tDesc.fNear = 0.01f;
-	tDesc.fFar = 1.f;
+	CCamera::CAMERADESC tDesc2;
+	tDesc2.eType = CCamera::CAMERATYPE::CAMERA_ORTHO;
+	tDesc2.pCameraTag = L"MainOrthoCamera";
+	tDesc2.fWinCX = g_iWinCx;
+	tDesc2.fWinCY = g_iWinCy;
+	tDesc2.fNear = 0.01f;
+	tDesc2.fFar = 1.f;
 
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Static", L"Prototype_GameObject_MainOrthoCamera", &tDesc)))
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Static", L"Prototype_GameObject_MainOrthoCamera", &tDesc2)))
 		return E_FAIL;
 
 	return S_OK;
@@ -206,10 +226,10 @@ CMainApp * CMainApp::Create()
 
 void CMainApp::Free()
 {
-	RELEASE_INSTANCE(CDebugSystem);
-	CDebugSystem::Stop_DebugSystem();
-	if (FAILED(CDebugSystem::DestroyInstance()))
-		MSGBOX("CDebugSystem Destroy Fail");
+	//RELEASE_INSTANCE(CDebugSystem);
+	//CDebugSystem::Stop_DebugSystem();
+	//if (FAILED(CDebugSystem::DestroyInstance()))
+	//	MSGBOX("CDebugSystem Destroy Fail");
 
 	Safe_Release(m_pRenderer);
 

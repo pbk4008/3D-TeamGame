@@ -33,7 +33,7 @@ HRESULT CNeedle::NativeConstruct(void* _pArg)
 	if (_pArg)
 		m_pFixedBone = static_cast<CHierarchyNode*>(_pArg);
 
-	m_smatPivot = XMMatrixRotationRollPitchYaw(XMConvertToRadians(155.f), XMConvertToRadians(10.f), XMConvertToRadians(90.f)) * XMMatrixTranslation(-0.16f, 0.f, 0.24f);
+	m_smatPivot = XMMatrixRotationRollPitchYaw(XMConvertToRadians(-20.f), XMConvertToRadians(-67.f), XMConvertToRadians(0.f)) * XMMatrixTranslation(0.5f, 0.05f, -0.2f);
 
 	return S_OK;
 }
@@ -106,7 +106,7 @@ _int CNeedle::Attach_FixedBone(const _double& _dDeltaTime)
 
 		if (!m_isEquip)
 		{
-			//m_smatPivot = XMMatrixRotationRollPitchYaw(XMConvertToRadians(155.f), XMConvertToRadians(10.f), XMConvertToRadians(90.f)) * XMMatrixTranslation(-0.16f, 0.f, 0.24f);
+			//m_smatPivot = XMMatrixRotationRollPitchYaw(XMConvertToRadians(-20.f), XMConvertToRadians(-67.f), XMConvertToRadians(0.f)) * XMMatrixTranslation(0.5f, 0.05f, -0.2f);
 			smatWorld = m_smatPivot * smatWorld;
 		}
 
@@ -121,7 +121,7 @@ _int CNeedle::Attach_Owner(const _double& _dDeltaTime)
 	if (m_pOwner)
 	{
 		_matrix smatWorld = m_pLocalTransform->Get_WorldMatrix();
-		_matrix smatOwerWorld = static_cast<CSilvermane*>(m_pOwner)->Get_Transform()->Get_WorldMatrix();
+		_matrix smatOwerWorld = static_cast<CSilvermane*>(m_pOwner)->Get_Transform()->Get_CombinedMatrix();
 		m_pTransform->Set_WorldMatrix(smatWorld * smatOwerWorld);
 	}
 
@@ -152,6 +152,7 @@ CGameObject* CNeedle::Clone(void* _pArg)
 
 void CNeedle::Free()
 {
+
 
 	__super::Free();
 }

@@ -4,12 +4,12 @@
 #include "StateController.h"
 
 CSilvermane_JogFwd::CSilvermane_JogFwd(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
-	: CState_Silvermane(_pDevice, _pDeviceContext)
+	: CSilvermane_Jog(_pDevice, _pDeviceContext)
 {
 }
 
 CSilvermane_JogFwd::CSilvermane_JogFwd(const CSilvermane_JogFwd& _rhs)
-	: CState_Silvermane(_rhs)
+	: CSilvermane_Jog(_rhs)
 {
 }
 
@@ -68,43 +68,23 @@ HRESULT CSilvermane_JogFwd::ExitState()
 
 _int CSilvermane_JogFwd::KeyCheck(const _double& _dDeltaTime)
 {
+	_int iProgress = __super::KeyCheck(_dDeltaTime);
+	if (NO_EVENT != iProgress)
+		return iProgress;
+
 	if (g_pGameInstance->getkeyPress(DIK_W))
 	{
 		if (g_pGameInstance->getkeyPress(DIK_A))
 		{
-			_float3 vRotation = m_pSilvermane->Get_Rotation();
-			if (-45.f < vRotation.y)
-			{
-				vRotation.y += -180.f * _dDeltaTime;
-				m_pTransform->SetUp_Rotation(m_pTransform->Get_State(CTransform::STATE_UP), XMConvertToRadians(vRotation.y));
-				m_pSilvermane->Set_Rotation(vRotation);
-			}
+			Add_PlusAngle(EDir::LeftForward, _dDeltaTime);
 		}
 		else if (g_pGameInstance->getkeyPress(DIK_D))
 		{
-			_float3 vRotation = m_pSilvermane->Get_Rotation();
-			if (45.f > vRotation.y)
-			{
-				vRotation.y += 180.f * _dDeltaTime;
-				m_pTransform->SetUp_Rotation(m_pTransform->Get_State(CTransform::STATE_UP), XMConvertToRadians(vRotation.y));
-				m_pSilvermane->Set_Rotation(vRotation);
-			}
+			Add_PlusAngle(EDir::RightForward, _dDeltaTime);
 		}
 		else
 		{
-			_float3 vRotation = m_pSilvermane->Get_Rotation();
-			if (0.f > vRotation.y)
-			{
-				vRotation.y += 180.f * _dDeltaTime;
-				m_pTransform->SetUp_Rotation(m_pTransform->Get_State(CTransform::STATE_UP), XMConvertToRadians(vRotation.y));
-				m_pSilvermane->Set_Rotation(vRotation);
-			}
-			if (0.f < vRotation.y)
-			{
-				vRotation.y += -180.f * _dDeltaTime;
-				m_pTransform->SetUp_Rotation(m_pTransform->Get_State(CTransform::STATE_UP), XMConvertToRadians(vRotation.y));
-				m_pSilvermane->Set_Rotation(vRotation);
-			}
+			Add_PlusAngle(EDir::Forward, _dDeltaTime);
 		}
 	}
 	else if (g_pGameInstance->getkeyPress(DIK_S))
@@ -115,13 +95,13 @@ _int CSilvermane_JogFwd::KeyCheck(const _double& _dDeltaTime)
 	}
 	else if (g_pGameInstance->getkeyPress(DIK_D))
 	{
-		if (FAILED(m_pStateController->Change_State(L"JogRightStart")))
+		if (FAILED(m_pStateController->Change_State(L"JogRight")))
 			return -1;
 		return STATE_CHANGE;
 	}
 	else if (g_pGameInstance->getkeyPress(DIK_A))
 	{
-		if (FAILED(m_pStateController->Change_State(L"JogLeftStart")))
+		if (FAILED(m_pStateController->Change_State(L"JogLeft")))
 			return -1;
 		return STATE_CHANGE;
 	}
