@@ -39,6 +39,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ShaderFile", "ShaderFile", 
 		Reference\ShaderFile\Shader_RenderState.hpp = Reference\ShaderFile\Shader_RenderState.hpp
 		Reference\ShaderFile\Shader_Terrain.hlsl = Reference\ShaderFile\Shader_Terrain.hlsl
 		Reference\ShaderFile\Shader_Triangle.hlsl = Reference\ShaderFile\Shader_Triangle.hlsl
+		Reference\ShaderFile\Shader_UI.hlsl = Reference\ShaderFile\Shader_UI.hlsl
 	EndProjectSection
 EndProject
 Global

@@ -4,6 +4,7 @@
 #include "Light_Manager.h"
 #include "VIBuffer_RectViewPort.h"
 #include "GameInstance.h"
+#include "Transform.h"
 
 CRenderer::CRenderer(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
 	: CComponent(pDevice, pDeviceContext)
@@ -188,6 +189,20 @@ HRESULT CRenderer::Render_Alpha()
 
 HRESULT CRenderer::Render_UI()
 {
+	/*if (!m_RenderGroup[RENDER_UI].empty())
+	{
+		sort(m_RenderGroup[RENDER_UI].begin(), m_RenderGroup[RENDER_UI].end(), [](CGameObject* pSour, CGameObject* pDest)
+			{
+				CTransform* pSourTrans = (CTransform*)pSour->Get_Component(L"Transform");
+				CTransform* pDestTrans = (CTransform*)pDest->Get_Component(L"Transform");
+
+				float sour = XMVectorGetZ(pSourTrans->Get_State(CTransform::STATE_POSITION));
+				float dest = XMVectorGetZ(pDestTrans->Get_State(CTransform::STATE_POSITION));
+
+				return  sour > dest;
+			});
+	}*/
+
 	for (auto& pGameObject : m_RenderGroup[RENDER_UI])
 	{
 		if (nullptr != pGameObject)

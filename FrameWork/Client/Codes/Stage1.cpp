@@ -27,11 +27,15 @@ HRESULT CStage1::NativeConstruct()
 	{
 		return E_FAIL;
 	}
-	if (FAILED(Ready_Effect(L"../bin/SaveData/Effect/Effect_Explosion.dat")))
+
+
+	if (FAILED(Ready_UI(L"../bin/SaveData/UI/UI.dat")))
 	{
 		return E_FAIL;
 	}
-	if (FAILED(Ready_UI(L"../bin/SaveData/UI/UI.dat")))
+
+
+	if (FAILED(Ready_Effect(L"../bin/SaveData/Effect/Effect_Explosion.dat")))
 	{
 		return E_FAIL;
 	}
@@ -55,7 +59,7 @@ HRESULT CStage1::Render()
 HRESULT CStage1::Ready_MapObject()
 {
 	vector<ENVIRONMENTLOADDATA> vecEnvironmentData;
-	if (FAILED(g_pGameInstance->LoadFile<ENVIRONMENTLOADDATA>(vecEnvironmentData, L"../bin/SaveData/fuck.dat")))
+	if (FAILED(g_pGameInstance->LoadFile<ENVIRONMENTLOADDATA>(vecEnvironmentData, L"../bin/SaveData/test.dat")))
 		return E_FAIL;
 
 	vector<CEnvironment::ENVIRONMENTDESC> tEnvironmentDesc;
@@ -91,7 +95,7 @@ HRESULT CStage1::Ready_MapObject()
 
 HRESULT CStage1::Ready_Monster(const _tchar* LayerTag)
 {
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Monster_Crawler")))
+	/*if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Monster_Crawler")))
 		return E_FAIL;
 
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Monster_EarthAberrant")))
@@ -101,7 +105,7 @@ HRESULT CStage1::Ready_Monster(const _tchar* LayerTag)
 		return E_FAIL;
 
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Monster_Bastion_Sword")))
-		return E_FAIL;
+		return E_FAIL;*/
 
 	return S_OK;
 }
@@ -133,7 +137,8 @@ HRESULT CStage1::Ready_UI(const _tchar* pDataFilePath)
 
 	for (int i = 0; i < vecUI.size(); ++i)
 	{
-		wstring FullName = L"Prototype_GameObject_T_HUD_Player_Shield_Icon";
+		wstring Tag = vecUI[i].TextureTag;
+		wstring FullName = L"Prototype_GameObject_UI_" + Tag;
 
 		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_UI", FullName, &vecUI[i])))
 		{

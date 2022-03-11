@@ -56,7 +56,7 @@ HRESULT CMFCObject_UI::NativeConstruct(void* pArg)
 
 _int CMFCObject_UI::Tick(_double TimeDelta)
 {
-	_vector vPos = { m_Desc.fPos.x - (WINCX >> 1),-m_Desc.fPos.y + (WINCY >> 1),1.f,1.f };
+	_vector vPos = { m_Desc.fPos.x - (WINCX >> 1),-m_Desc.fPos.y + (WINCY >> 1), 1.f ,1.f };
 	m_pTransform->Set_State(CTransform::STATE_POSITION, vPos);
 
 	_vector vSize = { m_Desc.fSize.x,m_Desc.fSize.y,1.f ,1.f };
@@ -87,7 +87,7 @@ _int CMFCObject_UI::Tick(_double TimeDelta)
 	//{
 	//	m_bIn = false;
 	//}
-
+	//m_pBuffer->Update(TimeDelta);
 	return 0;
 }
 
@@ -113,7 +113,7 @@ HRESULT CMFCObject_UI::Render()
 
 	m_pBuffer->SetUp_TextureOnShader("g_DiffuseTexture", m_pTexture); // 0 ÀÌ¶û 1·Î ³ª´²Áà¾ßÇÔ 
 
-	m_pBuffer->Render(0);
+	m_pBuffer->Render(3);
 	
 	return S_OK;
 }

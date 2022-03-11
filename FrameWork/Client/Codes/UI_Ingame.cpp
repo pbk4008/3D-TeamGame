@@ -45,7 +45,7 @@ HRESULT CUI_Ingame::NativeConstruct(void* pArg)
 		return E_FAIL;
 	}
 
-	_vector vPos = { m_Desc.fPos.x - (g_iWinCx >> 1),-m_Desc.fPos.y + (g_iWinCy >> 1),0.5f,1.f };
+	_vector vPos = { m_Desc.fPos.x - (g_iWinCx >> 1),-m_Desc.fPos.y + (g_iWinCy >> 1), 0.1f,1.f };
 	m_pTransform->Set_State(CTransform::STATE_POSITION, vPos);
 
 	_vector vScale = { m_Desc.fScale.x,m_Desc.fScale.y,1.f ,1.f };
@@ -112,7 +112,7 @@ HRESULT CUI_Ingame::Render()
 
 	m_pBuffer->SetUp_TextureOnShader("g_DiffuseTexture", m_pTexture); 
 
-	m_pBuffer->Render(0);
+	m_pBuffer->Render(3);
 	
 	return S_OK;
 }

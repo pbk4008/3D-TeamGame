@@ -19,6 +19,7 @@ CUITool_Dlg::CUITool_Dlg(CWnd* pParent /*=nullptr*/)
 	, m_SizeX(0)
 	, m_SizeY(0)
 	, m_IDTag(0)
+	, m_PositionZ(0)
 {
 
 }
@@ -39,10 +40,12 @@ void CUITool_Dlg::DoDataExchange(CDataExchange* pDX)
 
 	DDV_MinMaxFloat(pDX, m_PositionX, 0, 99999);
 	DDV_MinMaxFloat(pDX, m_PositionY, 0, 99999);
+	DDV_MinMaxFloat(pDX, m_PositionZ, 0, 99999);
 	DDV_MinMaxFloat(pDX, m_SizeX, 1, 99999);
 	DDV_MinMaxFloat(pDX, m_SizeY, 1, 99999);
 	DDV_MinMaxFloat(pDX, m_IDTag, 0, 99999);
 	DDX_Control(pDX, IDC_TREE1, m_TextureTree);
+	DDX_Text(pDX, IDC_EDIT7, m_PositionZ);
 }
 
 
@@ -93,7 +96,7 @@ void CUITool_Dlg::InitialTextureTree()
 
 	CFileFind fFinder;
 
-	BOOL bWorking = fFinder.FindFile(_T("\\*.tga"));
+	BOOL bWorking = fFinder.FindFile(_T("\\*.dds"));
 
 	while (bWorking)
 	{
@@ -112,6 +115,7 @@ void CUITool_Dlg::Setting_Desc(CUI::UIDESC* Desc)
 
 	m_PositionX = Desc->fPos.x;
 	m_PositionY = Desc->fPos.y;
+	m_PositionZ = Desc->fPos.z;
 	m_SizeX = Desc->fSize.x;
 	m_SizeY = Desc->fSize.y;
 	m_IDTag = Desc->IDTag;
@@ -155,12 +159,12 @@ void CUITool_Dlg::OnBnClickedButtonApply()
 	::PathRemoveExtension(m_strPickFileName); //이게 있으면 확장자도 지워짐
 	_tcscpy_s(Desc.TextureTag, m_strPickFileName);
 
-	Desc.fPos = { m_PositionX,m_PositionY};
+	Desc.fPos = { m_PositionX,m_PositionY, m_PositionZ};
 	Desc.fSize = { m_SizeX,m_SizeY };
 	Desc.IDTag = m_IDTag;
 	
 	wstring Name = m_strPickFileName;
-	wstring FullName = L"Prototype_GameObject_UI";
+	wstring FullName = L"Prototype_GameObject_UI_" + Name;
 
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer(TOOL_LEVEL::TOOL_LEVEL_LOGO, L"Layer_UI", FullName, &Desc)))
 	{
@@ -180,11 +184,10 @@ void CUITool_Dlg::OnBnClickedButtonStateSetting()
 	{
 		CUI::UIDESC Desc;
 		_tcscpy_s(Desc.TextureTag, m_pObject->Get_UIDesc().TextureTag);
-		Desc.fPos = { m_PositionX,m_PositionY };
+		Desc.fPos = { m_PositionX,m_PositionY, m_PositionZ };
 		Desc.fSize = { m_SizeX,m_SizeY };
 		Desc.IDTag = m_IDTag;
 		m_pObject->Set_UIDesc(Desc);
-
 	}
 	UpdateData(FALSE);
 }
@@ -248,7 +251,7 @@ void CUITool_Dlg::OnBnClickedButtonLoad()
 	for (int i = 0; i < m_vecUI.size(); ++i)
 	{
 		wstring Tag = m_vecUI[i].TextureTag;
-		wstring FullName = L"Prototype_GameObject_UI";
+		wstring FullName = L"Prototype_GameObject_UI_" + Tag;
 		
 		if (FAILED(g_pGameInstance->Add_GameObjectToLayer(TOOL_LEVEL::TOOL_LEVEL_LOGO, L"Layer_UI", FullName, &m_vecUI[i])))
 		{
@@ -291,7 +294,7 @@ void CUITool_Dlg::OnTvnSelchangedTree1(NMHDR* pNMHDR, LRESULT* pResult)
 			AfxExtractSubString(strExt, strPath, 1, '.');
 
 			if (finder.IsDots()) continue;
-			//if (0 != strExt.CompareNoCase(_T("tga")))
+				if (0 != strExt.CompareNoCase(_T("tga")))
 
 			m_TextureTree.InsertItem(finder.GetFileName(), hSelected);
 		}
@@ -300,7 +303,7 @@ void CUITool_Dlg::OnTvnSelchangedTree1(NMHDR* pNMHDR, LRESULT* pResult)
 
 	/* 선택한 fbx 파일에 대한 정보를 가져온다 */
 	CString strSelectItem = m_TextureTree.GetItemText(hSelected);
-	CString strFilter = L".tga";
+	CString strFilter = L".dds";
 
 	if (-1 != strSelectItem.Find(strFilter))
 	{
