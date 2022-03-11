@@ -86,6 +86,10 @@ HRESULT CStage1::Ready_MapObject()
 		{
 			int a = 0;
 		}
+		else
+		{
+  			int b = 10;
+		}
 	}
 	//wstring strTag = L"StageBackGround";
 	//g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Stage1_Back", L"Prototype_GameObject_BackGround", &strTag);

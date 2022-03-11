@@ -4,7 +4,6 @@
 
 CMeshContainer::CMeshContainer(ID3D11Device * pDevice, ID3D11DeviceContext * pDeviceContext)
 	: CVIBuffer(pDevice, pDeviceContext)
-	, m_iMaterialIndex(0)
 	, m_iNumMesh(0)
 {
 }
@@ -26,19 +25,20 @@ HRESULT CMeshContainer::NativeConstruct_Prototype(CModel* pModel, aiMesh* pMesh,
 	if (FAILED(Set_IndicesDesc(pMesh)))
 		return E_FAIL;
 
-	m_iMaterialIndex = pMesh->mMaterialIndex;
+	if (!pModel->getUsingMaterial())
+		m_iMaterialIndex = pMesh->mMaterialIndex;
 
 	return S_OK;
 }
 
 HRESULT CMeshContainer::NativeConstruct_Prototype(_uint iMaterialIndex, _uint iNumVtxCnt, _uint iNumIdxCnt, class CModel* pModel, void* pVtx, void* pIdx)
 {
+	m_iMaterialIndex = iMaterialIndex;
+
 	if (FAILED(Set_UpVerticesDesc(iNumVtxCnt, pModel, pVtx)))
 		return E_FAIL;
 	if (FAILED(Set_IndicesDesc(iNumIdxCnt,pIdx)))
 		return E_FAIL;
-
-	m_iMaterialIndex = iMaterialIndex;
 
 	return S_OK;
 }
@@ -49,8 +49,6 @@ HRESULT CMeshContainer::NativeConstruct_Prototype(_uint iMaterialIndex, _uint iN
 		return E_FAIL;
 	if (FAILED(Set_IndicesDesc(iNumIdxCnt, pIdx)))
 		return E_FAIL;
-
-	m_iMaterialIndex = iMaterialIndex;
 
 	return S_OK;
 }
@@ -162,7 +160,7 @@ void CMeshContainer::SetUp_BoneMatrices(_matrix * pBoneMatrices, _fmatrix PivotM
 	}
 }
 
-const CSaveManager::STATICMESHDATA& CMeshContainer::SetStaticSaveData()
+const CSaveManager::STATICMESHDATA CMeshContainer::SetStaticSaveData()
 {
 	CSaveManager::STATICMESHDATA pData;
 
@@ -175,12 +173,12 @@ const CSaveManager::STATICMESHDATA& CMeshContainer::SetStaticSaveData()
 	return pData;
 }
 
-const CSaveManager::ANIMMESHDATA& CMeshContainer::SetAnimSaveData()
+const CSaveManager::ANIMMESHDATA CMeshContainer::SetAnimSaveData()
 {
 	CSaveManager::ANIMMESHDATA pData;
 
 	pData.iIdxCount = m_iNumPrimitive;
-	pData.iMeshMtrlNum = m_iMaterialIndex;
+	//pData.iMeshMtrlNum = m_iMaterialIndex;
 	pData.iVtxCount = m_iNumVertices;
 	pData.pVtxPoint = (VTXMESH_ANIM*)m_pVertices;
 	pData.pIndex = (FACEINDICES32*)m_pIndices;

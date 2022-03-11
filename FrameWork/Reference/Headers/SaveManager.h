@@ -63,14 +63,16 @@ public:
 	}ANIMDATA;
 	typedef struct tagTextureData
 	{
-		_uint iTextureNameSize;
 		_tchar pTextureName[MAX_PATH];
 		_uint iType;
 	}TEXTUREDATA;
 	typedef struct tagMtrlData
 	{
 		_uint iTextureCnt;
-		vector<TEXTUREDATA> pTaxtureData;
+		_uint iMtrlType;
+		_tchar pMtrlName[MAX_PATH];
+		_tchar pShader_Path[MAX_PATH];
+		vector<TEXTUREDATA> vecTextureData;
 	}MTRLDATA;
 	typedef struct tagStaticModelSaveData
 	{

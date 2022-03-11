@@ -18,18 +18,16 @@ HRESULT CSaveManager::Save_StaticModel(vector<MTRLDATA>& vecMtrlData, vector<STA
 	WriteFile(hFile, &iMtrlSize, sizeof(_uint), &dwByte, nullptr);
 	WriteFile(hFile, &iMeshSize, sizeof(_uint), &dwByte, nullptr);
 
-	for(auto&pMtrl : vecMtrlData)
+	for (auto& pMtrl : vecMtrlData)
 	{
 		_uint iTextureCnt = pMtrl.iTextureCnt;
 		WriteFile(hFile, &iTextureCnt, sizeof(_uint), &dwByte, nullptr);
+		WriteFile(hFile, &pMtrl.iMtrlType, sizeof(_uint), &dwByte, nullptr);
+		WriteFile(hFile, &pMtrl.pMtrlName, sizeof(_tchar) * MAX_PATH, &dwByte, nullptr);
+		WriteFile(hFile, &pMtrl.pShader_Path, sizeof(_tchar) * MAX_PATH, &dwByte, nullptr);
 
-		for(auto& pTexture : pMtrl.pTaxtureData)
-		{
-			WriteFile(hFile, &pTexture.iType, sizeof(_uint), &dwByte, nullptr);
-			WriteFile(hFile, &pTexture.iTextureNameSize, sizeof(_uint), &dwByte, nullptr);
-			_uint iTextureNameSize = pTexture.iTextureNameSize;
-			WriteFile(hFile, pTexture.pTextureName, sizeof(_tchar) * iTextureNameSize, &dwByte, nullptr);
-		}
+		for (auto& pTexture : pMtrl.vecTextureData)
+			WriteFile(hFile, &pTexture, sizeof(TEXTUREDATA), &dwByte, nullptr);
 	}
 	for (auto& pMesh : vecMeshData)
 	{
@@ -63,15 +61,12 @@ HRESULT CSaveManager::Save_AnimModel(vector<MTRLDATA>& vecMtrlData, vector <ANIM
 	{
 		_uint iTextureCnt = pMtrl.iTextureCnt;
 		WriteFile(hFile, &iTextureCnt, sizeof(_uint), &dwByte, nullptr);
-
-		for (auto& pTexture : pMtrl.pTaxtureData)
-		{
-			WriteFile(hFile, &pTexture.iType, sizeof(_uint), &dwByte, nullptr);
-			WriteFile(hFile, &pTexture.iTextureNameSize, sizeof(_uint), &dwByte, nullptr);
-			_uint iTextureNameSize = pTexture.iTextureNameSize;
-			WriteFile(hFile, pTexture.pTextureName, sizeof(_tchar) * iTextureNameSize, &dwByte, nullptr);
-		}
-	}
+		WriteFile(hFile, &pMtrl.pMtrlName, sizeof(_tchar) * MAX_PATH, &dwByte, nullptr);
+		WriteFile(hFile, &pMtrl.pShader_Path, sizeof(_tchar) * MAX_PATH, &dwByte, nullptr);
+		
+		for (auto& pTexture : pMtrl.vecTextureData)
+			WriteFile(hFile, &pTexture, sizeof(TEXTUREDATA), &dwByte, nullptr);
+	}	
 	for (auto& pMesh : vecMeshData)
 	{
 		_uint iVtxCount = pMesh.iVtxCount;
@@ -150,7 +145,7 @@ HRESULT CSaveManager::Load_StaticModel(STATICDATA& StaticData, const wstring& pF
 
 	_ulong dwByte = 1;
 
-	//ZeroMemory(&StaticData, sizeof(STATICDATA));
+	ZeroMemory(&StaticData, sizeof(STATICDATA));
 
 	ReadFile(hFile, &StaticData.iMtrlCount, sizeof(_uint), &dwByte, nullptr);
 	ReadFile(hFile, &StaticData.iMeshCount, sizeof(_uint), &dwByte, nullptr);
@@ -161,18 +156,16 @@ HRESULT CSaveManager::Load_StaticModel(STATICDATA& StaticData, const wstring& pF
 		MTRLDATA pMTrl;
 		ZeroMemory(&pMTrl, sizeof(pMTrl));
 		ReadFile(hFile, &pMTrl.iTextureCnt, sizeof(_uint), &dwByte, nullptr);
+		ReadFile(hFile, &pMTrl.iMtrlType, sizeof(_uint), &dwByte, nullptr);
+		ReadFile(hFile, &pMTrl.pMtrlName, sizeof(_tchar)*MAX_PATH, &dwByte, nullptr);
+		ReadFile(hFile, &pMTrl.pShader_Path, sizeof(_tchar)*MAX_PATH, &dwByte, nullptr);
 
-		//pMTrl.pTaxtureData.reserve(pMTrl.iTextureCnt);
-		for (_uint j = 0; j < pMTrl.iTextureCnt; j++)
+		for (_uint i = 0; i < pMTrl.iTextureCnt; i++)
 		{
 			TEXTUREDATA pTexture;
 			ZeroMemory(&pTexture, sizeof(pTexture));
-			ReadFile(hFile, &pTexture.iType, sizeof(_uint), &dwByte, nullptr);
-			ReadFile(hFile, &pTexture.iTextureNameSize, sizeof(_uint), &dwByte, nullptr);
-			_uint iTextureNameSize = pTexture.iTextureNameSize;
-			ReadFile(hFile, pTexture.pTextureName, sizeof(_tchar) * iTextureNameSize, &dwByte, nullptr);
-			
-			pMTrl.pTaxtureData.emplace_back(pTexture);
+			ReadFile(hFile, &pTexture, sizeof(TEXTUREDATA), &dwByte, nullptr);
+			pMTrl.vecTextureData.emplace_back(pTexture);
 		}
 		StaticData.pMtrlData.emplace_back(pMTrl);
 	}

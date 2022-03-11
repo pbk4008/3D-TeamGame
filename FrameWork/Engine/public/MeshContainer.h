@@ -21,8 +21,8 @@ public:
 	HRESULT Create_VertexIndexBuffer();
 	HRESULT Add_Bone(class CModel* pModel);
 	void SetUp_BoneMatrices(_matrix* pBoneMatrices, _fmatrix PivotMatrix);
-	const CSaveManager::STATICMESHDATA& SetStaticSaveData();
-	const CSaveManager::ANIMMESHDATA& SetAnimSaveData();
+	const CSaveManager::STATICMESHDATA SetStaticSaveData();
+	const CSaveManager::ANIMMESHDATA SetAnimSaveData();
 private:
 	HRESULT Set_UpVerticesDesc(class CModel* pModel, aiMesh* pMesh, _fmatrix PivotMatrix);
 	HRESULT Set_UpVerticesDesc(_uint iNumVtxCnt, class CModel* pModel, void* pVtx);
@@ -40,12 +40,14 @@ public:
 	void* getVertices(void) {
 		return m_pVertices;
 	}
-
+public:
+	void setMeshIndex(_uint iNumIndex) { m_iNumMeshIndex = iNumIndex;  m_iMaterialIndex = iNumIndex; }
 private:
 	aiMesh*					m_pAIMesh = nullptr;
 private:
-	_uint m_iMaterialIndex = 0;
+	_uint m_iMaterialIndex=0;
 	_uint m_iNumMesh = 0;
+	_uint m_iNumMeshIndex = 0;//자기가 몇번 인덱스 메쉬인지
 private:
 	vector<CHierarchyNode*>			m_Bones;
 	typedef vector<CHierarchyNode*>	BONES;

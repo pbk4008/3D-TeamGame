@@ -479,7 +479,7 @@
     </ClInclude>
     <ClInclude Include="..\public\Navigation.h">
       <Filter>00.Utility\03.Component\01.Navigation</Filter>
-	</ClInclude>
+    </ClInclude>
     <ClInclude Include="..\public\VIBuffer_Trapezium.h">
       <Filter>00.Utility\03.Component\05.VIBuffer\10.Trapezium</Filter>
     </ClInclude>
