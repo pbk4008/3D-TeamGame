@@ -38,6 +38,11 @@ public:
 public:
 	HRESULT Add_Material(CMaterial* _pMtrl, const _uint _iMtrlIndex);
 	HRESULT SetUp_ValueOnShader(const char* pConstantName, void* pData, _uint iSize);
+<<<<<<< HEAD
+=======
+	HRESULT SetUp_TextureOnShader(const char* pConstantName, _uint iMeshContainerIndex, aiTextureType eType);
+	HRESULT SetUp_TextureOnShader(const char* pConstantName, ID3D11ShaderResourceView* pSRV);
+>>>>>>> main
 	void SetUp_AnimationIndex(_uint iAnimationIndex) { m_iCurrentAnimation = iAnimationIndex; }
 	HRESULT Update_CombinedTransformationMatrix(_double TimeDelta);
 	HRESULT Update_CombinedTransformationMatrix(const _int _iCurAnimIndex, const _bool _isRootMotion, const ERootOption _eRootOption = ERootOption::XYZ);
@@ -87,14 +92,17 @@ private:
 	HRESULT Load_Materials(_uint iType, const wstring& pFilePath);
 	/* 모델을 구성하는 메시들의 정보를 구성한다. */
 	HRESULT Create_MeshContainer();
-
 	HRESULT Load_MeshContainer(_uint iMaterialIndex, _uint iNumVtxCnt, _uint iNumIdxCnt, void* pVtx, void* pIdx);
-
 	HRESULT Create_VertexIndexBuffer();
+<<<<<<< HEAD
 
 	HRESULT Create_HierarchyNode(aiNode* pNode, CHierarchyNode* pParent = nullptr, _uint iDepth = 0);
 	
 	HRESULT Compile_Shader(const wstring& pShaderFilePath);
+=======
+	HRESULT Compile_Shader(const wstring& pShaderFilePath);
+	HRESULT Create_HierarchyNode(aiNode* pNode, CHierarchyNode* pParent = nullptr, _uint iDepth = 0);
+>>>>>>> main
 	HRESULT Create_Animation();
 
 public:

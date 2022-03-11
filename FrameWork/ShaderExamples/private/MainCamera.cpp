@@ -17,7 +17,7 @@ CMainCamera::CMainCamera(const CMainCamera& rhs)
 	: CGameObject(rhs)
 	, m_pCamera(rhs.m_pCamera)
 {
-	Safe_AddRef(m_pCamera);
+	//Safe_AddRef(m_pCamera);
 }
 
 HRESULT CMainCamera::NativeConstruct_Prototype()
@@ -35,7 +35,9 @@ HRESULT CMainCamera::NativeConstruct(void* pArg)
 	if (FAILED(Ready_GameObject(pArg)))
 		return E_FAIL;
 
-	//m_pTransform->Set_State(CTransform::STATE_POSITION, XMVectorSet(0.f, 0.f, -1.f, 1.f));
+	_vector pos = { 0.0f, 10.0f, -7.0f , 1.f };
+	m_pTransform->Set_State(CTransform::STATE_POSITION, pos);
+
 	return S_OK;
 }
 
@@ -133,6 +135,7 @@ HRESULT CMainCamera::Ready_GameObject(void* pArg)
 
 void CMainCamera::Free()
 {
-	CGameObject::Free();
+	__super::Free();
+
 	Safe_Release(m_pCamera);
 }

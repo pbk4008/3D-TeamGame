@@ -32,7 +32,7 @@ namespace Engine
 		XMFLOAT4X4		OffsetMatrix;
 		class CHierarchyNode*	pNode;
 	}BONEDESC;
-
+	
 	typedef struct tagVertex_Mesh
 	{
 		XMFLOAT3		vPosition;
@@ -141,4 +141,32 @@ namespace Engine
 	{
 		unsigned long		_0, _1, _2;
 	} FACEINDICES32;
+
+	/// Compute Shader Only
+	typedef struct tagCSRenderTarget
+	{
+		ID3D11Texture2D* CSrenderTargetTexutre = nullptr;
+		ID3D11RenderTargetView* CSRTV = nullptr;
+		ID3D11ShaderResourceView* CSSRV = nullptr;
+		ID3D11UnorderedAccessView* CSUAV = nullptr;
+	}CSRT;
+
+	typedef struct tagThresholdParams
+	{
+		alignas(16) float threshold;
+	}THRESHOLD;
+
+	typedef struct tagComputeShader
+	{
+		ID3D10Blob* csBlob;
+		ID3D11ComputeShader* csShader = nullptr;
+	}CS;
+
+#define	GAUSSIAN_RADIUS 7
+	typedef struct BlurParams
+	{
+		alignas(16) float coefficients[GAUSSIAN_RADIUS + 1];
+		int radius;
+		int direction;
+	}BLURPARAM;
 }

@@ -60,29 +60,453 @@ HRESULT CSilvermane_SprintFwd::ExitState()
 	return S_OK;
 }
 
+#pragma region 실패한 코드들
+//_int CSilvermane_SprintFwd::KeyCheck(const _double& _dDeltaTime)
+//{
+//	_int iProgress = __super::KeyCheck(_dDeltaTime);
+//	if (NO_EVENT != iProgress)
+//		return iProgress;
+//
+//	if (g_pGameInstance->getkeyPress(DIK_LSHIFT))
+//	{
+//		_float3 vDir = m_pSilvermane->Get_Dir();
+//
+//		if(g_pGameInstance->getkeyPress(DIK_W))
+//		{
+//			if (1.f > vDir.z) m_pSilvermane->Add_Dir(0.f, (_float)_dDeltaTime);
+//			if (g_pGameInstance->getkeyPress(DIK_A))
+//			{
+//				if (-1.f < vDir.x)
+//					m_pSilvermane->Add_Dir((_float)-_dDeltaTime, 0.f);
+//			}
+//			else if (g_pGameInstance->getkeyPress(DIK_D))
+//			{
+//				if (1.f > vDir.x)
+//					m_pSilvermane->Add_Dir((_float)_dDeltaTime, 0.f);
+//			}
+//			else
+//			{
+//				if (0.f > vDir.x)
+//					m_pSilvermane->Add_Dir((_float)_dDeltaTime, 0.f);
+//				if (0.f < vDir.x)
+//					m_pSilvermane->Add_Dir((_float)-_dDeltaTime, 0.f);
+//			}
+//		}
+//		else if (g_pGameInstance->getkeyPress(DIK_S))
+//		{
+//			if (-1.f < vDir.z) m_pSilvermane->Add_Dir(0.f, (_float)-_dDeltaTime);
+//			if (g_pGameInstance->getkeyPress(DIK_A))
+//			{
+//				if (-1.f < vDir.x)
+//					m_pSilvermane->Add_Dir((_float)-_dDeltaTime, 0.f);
+//			}
+//			else if (g_pGameInstance->getkeyPress(DIK_D))
+//			{
+//				if (1.f > vDir.x)
+//					m_pSilvermane->Add_Dir((_float)_dDeltaTime, 0.f);
+//			}
+//			else
+//			{
+//				if (0.f > vDir.x)
+//					m_pSilvermane->Add_Dir((_float)_dDeltaTime, 0.f);
+//				if (0.f < vDir.x)
+//					m_pSilvermane->Add_Dir((_float)-_dDeltaTime, 0.f);
+//			}
+//		}
+//		else if (g_pGameInstance->getkeyPress(DIK_D))
+//		{
+//			if (1.f > vDir.x) m_pSilvermane->Add_Dir((_float)_dDeltaTime, 0.f);
+//
+//			if (0.f < vDir.z)
+//				m_pSilvermane->Add_Dir(0.f, (_float)-_dDeltaTime);
+//			if (0.f > vDir.z)
+//				m_pSilvermane->Add_Dir(0.f, (_float)_dDeltaTime);
+//		}
+//		else if (g_pGameInstance->getkeyPress(DIK_A))
+//		{
+//#pragma region 실패1			
+//			//// 1사분면
+//			//if (-90.f < fPlusAngle && 0.f >= fPlusAngle)
+//			//	m_pSilvermane->Add_PlusAngle(-_dDeltaTime);
+//			//else if (270.f < fPlusAngle && 360.f >= fPlusAngle)
+//			//	m_pSilvermane->Add_PlusAngle(-_dDeltaTime);
+//
+//
+//			//// 2사분면
+//			//else if (0.f <= fPlusAngle && 90.f > fPlusAngle)
+//			//	m_pSilvermane->Add_PlusAngle(-_dDeltaTime);
+//			//else if (-360.f <= fPlusAngle && -270.f > fPlusAngle)
+//			//	m_pSilvermane->Add_PlusAngle(-_dDeltaTime);
+//
+//
+//			//// 3사분면
+//			//else if (-270.f < fPlusAngle && -180.f >= fPlusAngle)
+//			//	m_pSilvermane->Add_PlusAngle(_dDeltaTime);
+//			//else if (90.f < fPlusAngle && 180.f >= fPlusAngle)
+//			//	m_pSilvermane->Add_PlusAngle(_dDeltaTime);
+//
+//
+//			//// 4사분면
+//			//else if (-90.f > fPlusAngle && -180.f < fPlusAngle)
+//			//	m_pSilvermane->Add_PlusAngle(_dDeltaTime);
+//			//else if(180.f < fPlusAngle && 270.f > fPlusAngle)
+//			//	m_pSilvermane->Add_PlusAngle(_dDeltaTime);
+//#pragma endregion
+//#pragma region 실패2
+//			//if (-90.f < fPlusAngle && 90.f >= fPlusAngle)
+//			//{
+//			//	m_pSilvermane->Add_PlusAngle(-_dDeltaTime);
+//			//}
+//			//else if (90.f <= fPlusAngle && 270.f > fPlusAngle)
+//			//{
+//			//	m_pSilvermane->Add_PlusAngle(_dDeltaTime);
+//			//}
+//			//else if (270.f < fPlusAngle)
+//			//{
+//			//	m_pSilvermane->Add_PlusAngle(-_dDeltaTime);
+//			//}
+//			//else if (-270.f <= fPlusAngle && -90.f > fPlusAngle)
+//			//{
+//			//	m_pSilvermane->Add_PlusAngle(_dDeltaTime);
+//			//}
+//			//else if (-270.f >= fPlusAngle)
+//			//{
+//			//	m_pSilvermane->Add_PlusAngle(-_dDeltaTime);
+//			//}
+//#pragma endregion
+//			if (-1.f < vDir.x) m_pSilvermane->Add_Dir((_float)-_dDeltaTime, 0.f);
+//			if (0.f < vDir.z)
+//				m_pSilvermane->Add_Dir(0.f, (_float)-_dDeltaTime);
+//			if (0.f > vDir.z)
+//				m_pSilvermane->Add_Dir(0.f, (_float)_dDeltaTime);
+//		}
+//		else
+//		{
+//			if (FAILED(m_pStateController->Change_State(L"SprintFwdStop")))
+//				return E_FAIL;
+//			return STATE_CHANGE;
+//		}
+//	}
+//	else
+//	{
+//		if (g_pGameInstance->getkeyPress(DIK_W))
+//		{
+//			if (FAILED(m_pStateController->Change_State(L"JogFwd")))
+//				return E_FAIL;
+//			return STATE_CHANGE;
+//		}
+//		else if (g_pGameInstance->getkeyPress(DIK_S))
+//		{
+//			if (FAILED(m_pStateController->Change_State(L"JogBwd")))
+//				return E_FAIL;
+//			return STATE_CHANGE;
+//		}
+//		else
+//		{
+//			if (FAILED(m_pStateController->Change_State(L"SprintFwdStop")))
+//				return E_FAIL;
+//			return STATE_CHANGE;
+//		}
+//	}
+//
+//	return _int();
+//}
+//_int CSilvermane_SprintFwd::KeyCheck(const _double& _dDeltaTime)
+//{
+//	_int iProgress = __super::KeyCheck(_dDeltaTime);
+//	if (NO_EVENT != iProgress)
+//		return iProgress;
+//
+//	if (g_pGameInstance->getkeyPress(DIK_LSHIFT))
+//	{
+//		_float fPlusAngle = m_pSilvermane->Get_PlusAngle();
+//
+//		if(g_pGameInstance->getkeyPress(DIK_W))
+//		{
+//			if (g_pGameInstance->getkeyPress(DIK_A))
+//			{
+//				if (-45.f < fPlusAngle && 135.f >= fPlusAngle)
+//				{
+//					m_pSilvermane->Add_PlusAngle((_float)-_dDeltaTime);
+//				}
+//				else if (-45.f > fPlusAngle && -225.f <= fPlusAngle)
+//				{
+//					m_pSilvermane->Add_PlusAngle((_float)_dDeltaTime);
+//				}
+//				else if (135.f <= fPlusAngle && 315.f > fPlusAngle)
+//				{
+//					m_pSilvermane->Add_PlusAngle((_float)_dDeltaTime);
+//				}
+//				else if (-225.f >= fPlusAngle)
+//				{
+//					m_pSilvermane->Add_PlusAngle((_float)-_dDeltaTime);
+//				}
+//			}
+//			else if (g_pGameInstance->getkeyPress(DIK_D))
+//			{
+//				if (45.f > fPlusAngle && -135.f <= fPlusAngle)
+//				{
+//					m_pSilvermane->Add_PlusAngle((_float)_dDeltaTime);
+//				}
+//				else if (45.f < fPlusAngle && 225.f >= fPlusAngle)
+//				{
+//					m_pSilvermane->Add_PlusAngle((_float)-_dDeltaTime);
+//				}
+//				else if (-135.f >= fPlusAngle && -315.f < fPlusAngle)
+//				{
+//					m_pSilvermane->Add_PlusAngle((_float)-_dDeltaTime);
+//				}
+//				else if (225.f <= fPlusAngle)
+//				{
+//					m_pSilvermane->Add_PlusAngle((_float)_dDeltaTime);
+//				}
+//			}
+//			else
+//			{
+//				if (0.f > fPlusAngle && -180.f <= fPlusAngle)
+//				{
+//					m_pSilvermane->Add_PlusAngle((_float)_dDeltaTime);
+//				}
+//				else if (0.f < fPlusAngle && 180.f >= fPlusAngle)
+//				{
+//					m_pSilvermane->Add_PlusAngle((_float)-_dDeltaTime);
+//				}
+//				else if (-180.f >= fPlusAngle && -360.f < fPlusAngle)
+//				{
+//					m_pSilvermane->Add_PlusAngle((_float)-_dDeltaTime);
+//				}
+//				else if (180.f <= fPlusAngle && 360.f > fPlusAngle)
+//				{
+//					m_pSilvermane->Add_PlusAngle((_float)_dDeltaTime);
+//				}
+//			}
+//			
+//		}
+//		else if (g_pGameInstance->getkeyPress(DIK_S))
+//		{
+//			if (g_pGameInstance->getkeyPress(DIK_A))
+//			{
+//				if (45.f >= fPlusAngle && -135.f < fPlusAngle)
+//				{
+//					m_pSilvermane->Add_PlusAngle((_float)-_dDeltaTime);
+//				}
+//				else if (45.f <= fPlusAngle && 225.f > fPlusAngle)
+//				{
+//					m_pSilvermane->Add_PlusAngle((_float)_dDeltaTime);
+//				}
+//				else if (-135.f > fPlusAngle && -315.f <= fPlusAngle)
+//				{
+//					m_pSilvermane->Add_PlusAngle((_float)_dDeltaTime);
+//				}
+//				else if (-315.f >= fPlusAngle)
+//				{
+//					m_pSilvermane->Add_PlusAngle((_float)-_dDeltaTime);
+//				}
+//			}
+//			else if (g_pGameInstance->getkeyPress(DIK_D))
+//			{
+//				if (-45.f <= fPlusAngle && 135.f > fPlusAngle)
+//				{
+//					m_pSilvermane->Add_PlusAngle((_float)_dDeltaTime);
+//				}
+//				else if (-45.f >= fPlusAngle && -225.f < fPlusAngle)
+//				{
+//					m_pSilvermane->Add_PlusAngle((_float)-_dDeltaTime);
+//				}
+//				else if (135.f < fPlusAngle && 315.f >= fPlusAngle)
+//				{
+//					m_pSilvermane->Add_PlusAngle((_float)-_dDeltaTime);
+//				}
+//				else if (315.f <= fPlusAngle)
+//				{
+//					m_pSilvermane->Add_PlusAngle((_float)_dDeltaTime);
+//				}
+//			}
+//			else
+//			{
+//				if (0.f >= fPlusAngle && -180.f < fPlusAngle)
+//				{
+//					m_pSilvermane->Add_PlusAngle((_float)-_dDeltaTime);
+//				}
+//				else if (0.f <= fPlusAngle && 180.f > fPlusAngle)
+//				{
+//					m_pSilvermane->Add_PlusAngle((_float)_dDeltaTime);
+//				}
+//				else if (-180.f > fPlusAngle && -360.f <= fPlusAngle)
+//				{
+//					m_pSilvermane->Add_PlusAngle((_float)_dDeltaTime);
+//				}
+//				else if (180.f < fPlusAngle && 360.f >= fPlusAngle)
+//				{
+//					m_pSilvermane->Add_PlusAngle((_float)-_dDeltaTime);
+//				}
+//			}
+//		}
+//		else if (g_pGameInstance->getkeyPress(DIK_A))
+//		{
+//			if (90.f >= fPlusAngle && -90.f < fPlusAngle)
+//			{
+//				m_pSilvermane->Add_PlusAngle((_float)-_dDeltaTime);
+//			}
+//			else if (90.f <= fPlusAngle && 270.f > fPlusAngle)
+//			{
+//				m_pSilvermane->Add_PlusAngle((_float)_dDeltaTime);
+//			}
+//			else if (-90.f >= fPlusAngle && -270.f < fPlusAngle)
+//			{
+//				m_pSilvermane->Add_PlusAngle((_float)_dDeltaTime);
+//			}
+//			else if (-270.f >= fPlusAngle)
+//			{
+//				m_pSilvermane->Add_PlusAngle((_float)-_dDeltaTime);
+//			}
+//		}
+//		else if (g_pGameInstance->getkeyPress(DIK_D))
+//		{
+//			if (-90.f <= fPlusAngle && 90.f > fPlusAngle)
+//			{
+//				m_pSilvermane->Add_PlusAngle((_float)_dDeltaTime);
+//			}
+//			else if (-90.f >= fPlusAngle && -270.f < fPlusAngle)
+//			{
+//				m_pSilvermane->Add_PlusAngle((_float)-_dDeltaTime);
+//			}
+//			else if (90.f < fPlusAngle && 270.f >= fPlusAngle)
+//			{
+//				m_pSilvermane->Add_PlusAngle((_float)-_dDeltaTime);
+//			}
+//			else if (270.f <= fPlusAngle)
+//			{
+//				m_pSilvermane->Add_PlusAngle((_float)_dDeltaTime);
+//			}
+//		}
+//		else
+//		{
+//			if (FAILED(m_pStateController->Change_State(L"SprintFwdStop")))
+//				return E_FAIL;
+//			return STATE_CHANGE;
+//		}
+//	}
+//	else
+//	{
+//		if (g_pGameInstance->getkeyPress(DIK_W))
+//		{
+//			if (FAILED(m_pStateController->Change_State(L"JogFwd")))
+//				return E_FAIL;
+//			return STATE_CHANGE;
+//		}
+//		else if (g_pGameInstance->getkeyPress(DIK_S))
+//		{
+//			if (FAILED(m_pStateController->Change_State(L"JogBwd")))
+//				return E_FAIL;
+//			return STATE_CHANGE;
+//		}
+//		else
+//		{
+//			if (FAILED(m_pStateController->Change_State(L"SprintFwdStop")))
+//				return E_FAIL;
+//			return STATE_CHANGE;
+//		}
+//	}
+//
+//	return _int();
+//}
+#pragma endregion
+
 _int CSilvermane_SprintFwd::KeyCheck(const _double& _dDeltaTime)
 {
 	_int iProgress = __super::KeyCheck(_dDeltaTime);
 	if (NO_EVENT != iProgress)
 		return iProgress;
 
+
+	if (g_pGameInstance->getMouseKeyDown(CInputDev::MOUSESTATE::MB_LBUTTON))
+	{
+		if (FAILED(m_pStateController->Change_State(L"1H_SwordSupermanStab")))
+			return E_FAIL;
+		return STATE_CHANGE;
+	}
+
 	if (g_pGameInstance->getkeyPress(DIK_LSHIFT))
 	{
-		if(g_pGameInstance->getkeyPress(DIK_W))
+		if (g_pGameInstance->getkeyPress(DIK_W))
 		{
+			if (g_pGameInstance->getkeyPress(DIK_A))
+			{
+				Add_PlusAngle(EDir::LeftForward, _dDeltaTime);
+			}
+			else if (g_pGameInstance->getkeyPress(DIK_D))
+			{
+				Add_PlusAngle(EDir::RightForward, _dDeltaTime);
+			}
+			else
+			{
+				Add_PlusAngle(EDir::Forward, _dDeltaTime);
+			}
+
 		}
-		else if (g_pGameInstance->getkeyPress(DIK_D))
+		else if (g_pGameInstance->getkeyPress(DIK_S))
 		{
+			if (g_pGameInstance->getkeyPress(DIK_A))
+			{
+				Add_PlusAngle(EDir::LeftBackward, _dDeltaTime);
+			}
+			else if (g_pGameInstance->getkeyPress(DIK_D))
+			{
+				Add_PlusAngle(EDir::RightBackward, _dDeltaTime);
+			}
+			else
+			{
+				Add_PlusAngle(EDir::Backward, _dDeltaTime);
+			}
 		}
 		else if (g_pGameInstance->getkeyPress(DIK_A))
 		{
+			Add_PlusAngle(EDir::Left, _dDeltaTime);
+		}
+		else if (g_pGameInstance->getkeyPress(DIK_D))
+		{
+			Add_PlusAngle(EDir::Right, _dDeltaTime);
+		}
+		else
+		{
+			if (FAILED(m_pStateController->Change_State(L"SprintFwdStop")))
+				return E_FAIL;
+			return STATE_CHANGE;
 		}
 	}
 	else
 	{
-		if (FAILED(m_pStateController->Change_State(L"SprintFwdStop")))
-			return E_FAIL;
-		return STATE_CHANGE;
+		if (g_pGameInstance->getkeyPress(DIK_W))
+		{
+			if (FAILED(m_pStateController->Change_State(L"JogFwd")))
+				return E_FAIL;
+			return STATE_CHANGE;
+		}
+		else if (g_pGameInstance->getkeyPress(DIK_S))
+		{
+			if (FAILED(m_pStateController->Change_State(L"JogBwd")))
+				return E_FAIL;
+			return STATE_CHANGE;
+		}
+		else if (g_pGameInstance->getkeyPress(DIK_A))
+		{
+			if (FAILED(m_pStateController->Change_State(L"JogLeft")))
+				return E_FAIL;
+			return STATE_CHANGE;
+		}
+		else if (g_pGameInstance->getkeyPress(DIK_D))
+		{
+			if (FAILED(m_pStateController->Change_State(L"JogRight")))
+				return E_FAIL;
+			return STATE_CHANGE;
+		}
+		else
+		{
+			if (FAILED(m_pStateController->Change_State(L"SprintFwdStop")))
+				return E_FAIL;
+			return STATE_CHANGE;
+		}
 	}
 
 	return _int();

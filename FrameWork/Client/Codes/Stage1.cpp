@@ -19,13 +19,28 @@ HRESULT CStage1::NativeConstruct()
 	if (FAILED(CLevel::NativeConstruct()))
 		return E_FAIL;
 
-	if (FAILED(Ready_Gameobject()))
+	if (FAILED(Ready_MapObject()))
+	{
 		return E_FAIL;
+	}
+	if (FAILED(Ready_Monster(L"Layer_Monster")))
+	{
+		return E_FAIL;
+	}
+
+
+	if (FAILED(Ready_UI(L"../bin/SaveData/UI/UI.dat")))
+	{
+		return E_FAIL;
+	}
+
 
 	if (FAILED(Ready_Effect(L"../bin/SaveData/Effect/Effect_Explosion.dat")))
+	{
 		return E_FAIL;
-	if (FAILED(Ready_UI(L"../bin/SaveData/UI/UI.dat")))
-		return E_FAIL;
+	}
+
+
 
 
 	return S_OK;
@@ -41,14 +56,14 @@ HRESULT CStage1::Render()
 	return S_OK;
 }
 
-HRESULT CStage1::Ready_Gameobject()
+HRESULT CStage1::Ready_MapObject()
 {
 	vector<ENVIRONMENTLOADDATA> vecEnvironmentData;
-	if (FAILED(g_pGameInstance->LoadFile<ENVIRONMENTLOADDATA>(vecEnvironmentData, L"../bin/SaveData/test.dat")))
+	if (FAILED(g_pGameInstance->LoadFile<ENVIRONMENTLOADDATA>(vecEnvironmentData, L"../bin/SaveData/Stage_1.dat")))
 		return E_FAIL;
 
 	vector<CEnvironment::ENVIRONMENTDESC> tEnvironmentDesc;
-	tEnvironmentDesc.resize(50);
+	tEnvironmentDesc.resize(350);
 	_uint iIndex = 0;
 	tEnvironmentDesc[iIndex].wstrInstaneTag = vecEnvironmentData[0].FileName;
 	for (auto& pData : vecEnvironmentData)
@@ -74,6 +89,23 @@ HRESULT CStage1::Ready_Gameobject()
 	}
 	//wstring strTag = L"StageBackGround";
 	//g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Stage1_Back", L"Prototype_GameObject_BackGround", &strTag);
+
+	return S_OK;
+}
+
+HRESULT CStage1::Ready_Monster(const _tchar* LayerTag)
+{
+	/*if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Monster_Crawler")))
+		return E_FAIL;
+
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Monster_EarthAberrant")))
+		return E_FAIL;
+
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Monster_BronzeAnimus")))
+		return E_FAIL;
+
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Monster_Bastion_Sword")))
+		return E_FAIL;*/
 
 	return S_OK;
 }
@@ -105,7 +137,8 @@ HRESULT CStage1::Ready_UI(const _tchar* pDataFilePath)
 
 	for (int i = 0; i < vecUI.size(); ++i)
 	{
-		wstring FullName = L"Prototype_GameObject_T_HUD_Player_Shield_Icon";
+		wstring Tag = vecUI[i].TextureTag;
+		wstring FullName = L"Prototype_GameObject_UI_" + Tag;
 
 		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_UI", FullName, &vecUI[i])))
 		{

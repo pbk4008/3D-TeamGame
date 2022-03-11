@@ -200,6 +200,8 @@ call Update_Library_Release.bat</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\bin\ShaderFiles\Shader_Calculate.hpp" />
+    <ClInclude Include="..\bin\ShaderFiles\Shader_RenderState.hpp" />
     <ClInclude Include="..\public\Actor.h" />
     <ClInclude Include="..\public\Animation.h" />
     <ClInclude Include="..\public\AnimationController.h">
@@ -210,12 +212,15 @@ call Update_Library_Release.bat</Command>
     <ClInclude Include="..\public\BoxCollider.h" />
     <ClInclude Include="..\public\Camera.h" />
     <ClInclude Include="..\public\CapsuleCollider.h" />
+    <ClInclude Include="..\public\Cell.h" />
+    <ClInclude Include="..\public\CharacterController.h" />
+    <ClInclude Include="..\public\ControllerBehaviorCallback.h" />
+    <ClInclude Include="..\public\ControllerFilterCallback.h" />
+    <ClInclude Include="..\public\ControllerHitReport.h" />
+    <ClInclude Include="..\public\CSTarget.h" />
     <ClInclude Include="..\public\Instancing_Mesh.h" />
     <ClInclude Include="..\public\Material_Manager.h" />
     <ClInclude Include="..\public\Effect.h" />
-    <ClInclude Include="..\public\Cell.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </ClInclude>
     <ClInclude Include="..\public\Channel.h" />
     <ClInclude Include="..\public\Collider.h" />
     <ClInclude Include="..\public\Component.h" />
@@ -249,9 +254,7 @@ call Update_Library_Release.bat</Command>
     <ClInclude Include="..\public\MeshContainer.h" />
     <ClInclude Include="..\public\Model.h" />
     <ClInclude Include="..\public\Mouse.h" />
-    <ClInclude Include="..\public\Navigation.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </ClInclude>
+    <ClInclude Include="..\public\Navigation.h" />
     <ClInclude Include="..\public\Object_Manager.h" />
     <ClInclude Include="..\public\PhysicsXSystem.h" />
     <ClInclude Include="..\public\PipeLine.h" />
@@ -280,6 +283,7 @@ call Update_Library_Release.bat</Command>
     <ClInclude Include="..\public\VIBuffer_RectInstance.h" />
     <ClInclude Include="..\public\VIBuffer_RectViewPort.h" />
     <ClInclude Include="..\public\VIBuffer_Terrain.h" />
+    <ClInclude Include="..\public\VIBuffer_Trapezium.h" />
     <ClInclude Include="..\public\VIBuffer_Triangle.h" />
   </ItemGroup>
   <ItemGroup>
@@ -293,10 +297,13 @@ call Update_Library_Release.bat</Command>
     <ClCompile Include="..\private\BoxCollider.cpp" />
     <ClCompile Include="..\private\Camera.cpp" />
     <ClCompile Include="..\private\CapsuleCollider.cpp" />
-    <ClCompile Include="..\private\Cell.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </ClCompile>
+    <ClCompile Include="..\private\Cell.cpp" />
     <ClCompile Include="..\private\Channel.cpp" />
+    <ClCompile Include="..\private\CharacterController.cpp" />
+    <ClCompile Include="..\private\ControllerBehaviorCallback.cpp" />
+    <ClCompile Include="..\private\ControllerFilterCallback.cpp" />
+    <ClCompile Include="..\private\ControllerHitReport.cpp" />
+    <ClCompile Include="..\private\CSTarget.cpp" />
     <ClCompile Include="..\private\Instancing_Mesh.cpp" />
     <ClCompile Include="..\private\Material_Manager.cpp" />
     <ClCompile Include="..\private\Collider.cpp" />
@@ -311,6 +318,7 @@ call Update_Library_Release.bat</Command>
     </ClCompile>
     <ClCompile Include="..\private\MeshCollider.cpp" />
     <ClCompile Include="..\private\Mouse.cpp" />
+    <ClCompile Include="..\private\Navigation.cpp" />
     <ClCompile Include="..\private\PhysicsXSystem.cpp" />
     <ClCompile Include="..\private\SphereCollider.cpp" />
     <ClCompile Include="..\private\State.cpp" />
@@ -331,9 +339,6 @@ call Update_Library_Release.bat</Command>
     <ClCompile Include="..\private\Light_Manager.cpp" />
     <ClCompile Include="..\private\MeshContainer.cpp" />
     <ClCompile Include="..\private\Model.cpp" />
-    <ClCompile Include="..\private\Navigation.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </ClCompile>
     <ClCompile Include="..\private\Object_Manager.cpp" />
     <ClCompile Include="..\private\PipeLine.cpp" />
     <ClCompile Include="..\private\QuadTree.cpp" />
@@ -356,11 +361,16 @@ call Update_Library_Release.bat</Command>
     <ClCompile Include="..\private\VIBuffer_RectInstance.cpp" />
     <ClCompile Include="..\private\VIBuffer_RectViewPort.cpp" />
     <ClCompile Include="..\private\VIBuffer_Terrain.cpp" />
+    <ClCompile Include="..\private\VIBuffer_Trapezium.cpp" />
     <ClCompile Include="..\private\VIBuffer_Triangle.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <FxCompile Include="..\bin\ShaderFiles\Shader_CSGSBlur.hlsl" />
+    <FxCompile Include="..\bin\ShaderFiles\Shader_DownSample.hlsl" />
+    <FxCompile Include="..\bin\ShaderFiles\Shader_DSViewPort.hlsl" />
     <FxCompile Include="..\bin\ShaderFiles\Shader_RectViewport.hlsl" />
     <FxCompile Include="..\bin\ShaderFiles\Shader_Triangle.hlsl" />
+    <FxCompile Include="..\bin\ShaderFiles\Shader_UI.hlsl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

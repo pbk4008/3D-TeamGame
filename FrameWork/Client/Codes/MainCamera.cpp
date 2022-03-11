@@ -34,7 +34,7 @@ HRESULT CMainCamera::NativeConstruct(void* pArg)
 	if (FAILED(Ready_GameObject(pArg)))
 		return E_FAIL;
 
-	m_pTransform->SetTransformDesc(5.f, XMConvertToRadians(10.f));
+	m_pTransform->Set_TransformDesc(15.f, XMConvertToRadians(30.f));
 	m_pTransform->Set_State(CTransform::STATE_POSITION, XMVectorSet(0.f, 0.f, -1.f, 1.f));
 	m_pTransform->SetUp_Rotation(XMVectorSet(1.f, 0.f, 0.f, 0.f), XMConvertToRadians(30.f));
 	return S_OK;
@@ -42,14 +42,40 @@ HRESULT CMainCamera::NativeConstruct(void* pArg)
 
 _int CMainCamera::Tick(_double fDeltaTime)
 {
-	if (g_pGameInstance->getkeyPress(DIK_RIGHT))
-		m_pTransform->Go_Right(fDeltaTime);
-	if (g_pGameInstance->getkeyPress(DIK_UP))
+	if (g_pGameInstance->getkeyPress(DIK_W))
+	{
 		m_pTransform->Go_Straight(fDeltaTime);
-	if (g_pGameInstance->getkeyPress(DIK_LEFT))
-		m_pTransform->Go_Left(fDeltaTime);
-	if (g_pGameInstance->getkeyPress(DIK_DOWN))
+	}
+
+	if (g_pGameInstance->getkeyPress(DIK_S))
+	{
 		m_pTransform->Go_BackWard(fDeltaTime);
+	}
+
+	if (g_pGameInstance->getkeyPress(DIK_A))
+	{
+		m_pTransform->Go_Left(fDeltaTime);
+	}
+
+	if (g_pGameInstance->getkeyPress(DIK_D))
+	{
+		m_pTransform->Go_Right(fDeltaTime);
+	}
+
+	/* 마우스 감도 변수 */
+	_long MouseMove = 0;
+
+	_fvector myvec = { 0.f, 1.f, 0.f, 0.f };
+
+	if (MouseMove = g_pGameInstance->getMouseMoveState(CInputDev::MOUSEMOVESTATE::MM_X))
+	{
+		m_pTransform->Rotation_Axis(myvec, fDeltaTime * MouseMove * 0.1f);
+	}
+
+	if (MouseMove = g_pGameInstance->getMouseMoveState(CInputDev::MOUSEMOVESTATE::MM_Y))
+	{
+		m_pTransform->Rotation_Axis(m_pTransform->Get_State(CTransform::STATE::STATE_RIGHT), fDeltaTime * MouseMove * 0.1f);
+	}
 
 	m_pCamera->Update_Matrix(m_pTransform->Get_WorldMatrix());
 

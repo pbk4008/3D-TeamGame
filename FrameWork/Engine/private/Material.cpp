@@ -38,13 +38,13 @@ HRESULT CMaterial::Native_Construct(const wstring& _wstrName, const wstring& _ws
 	{
 		D3D11_INPUT_ELEMENT_DESC ElementDescs[] =
 		{
-		   { "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-		   { "NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-		   { "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 24, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-		   { "TANGENT", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 32, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-		   { "BINORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 44, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-		   { "BLENDINDEX", 0, DXGI_FORMAT_R32G32B32A32_UINT, 0, 56, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-		   { "BLENDWEIGHT", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 72, D3D11_INPUT_PER_VERTEX_DATA, 0 }
+			{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+			{ "NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+			{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 24, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+			{ "TANGENT", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 32, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+			{ "BINORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 44, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+			{ "BLENDINDEX", 0, DXGI_FORMAT_R32G32B32A32_UINT, 0, 56, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+			{ "BLENDWEIGHT", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 72, D3D11_INPUT_PER_VERTEX_DATA, 0 }
 		};
 		if (FAILED(Compile_ShaderFiles(_wstrShaderFilePath, ElementDescs, 7)))
 			return E_FAIL;
@@ -101,9 +101,7 @@ HRESULT CMaterial::Native_Construct(const wstring& _wstrName, const wstring& _ws
 HRESULT CMaterial::Render(const _uint _iPassIndex)
 {
 	if (FAILED(m_vecEffectDescs[_iPassIndex]->pPass->Apply(0, m_pDeviceContext)))
-	{
 		return E_FAIL;
-	}
 
 	return S_OK;
 }
@@ -195,11 +193,9 @@ const wstring& CMaterial::Get_Name() const
 
 HRESULT CMaterial::Set_Texture(const string& _strConstantName, TEXTURETYPE _eTextureType, CTexture* _pTexture, const _uint _iTextureIndex)
 {
-	if (m_vecTextures[(_uint)_eTextureType])
-	{
-		Safe_Release(m_vecTextures[(_uint)_eTextureType]);
-	}
-	m_vecTextures[(_uint)_eTextureType] = _pTexture;
+	if (m_vecTextures[_eTextureType])
+		Safe_Release(m_vecTextures[_eTextureType]);
+	m_vecTextures[_eTextureType] = _pTexture;
 
 	SetUp_TextureOnShader(_strConstantName.c_str(), _eTextureType, _iTextureIndex);
 	return S_OK;
@@ -379,7 +375,6 @@ void CMaterial::Free()
 {
 	for (auto& pEffectDesc : m_vecEffectDescs)
 	{
-		//Safe_Release(pEffectDesc->pPass);
 		Safe_Release(pEffectDesc->pInputLayout);
 		Safe_Delete(pEffectDesc);
 	}

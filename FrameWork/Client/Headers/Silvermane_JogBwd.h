@@ -1,10 +1,10 @@
 #pragma once
 
-#include "State_Silvermane.h"
+#include "Silvermane_Jog.h"
 
 BEGIN(Client)
 
-class CSilvermane_JogBwd final : public CState_Silvermane
+class CSilvermane_JogBwd final : public CSilvermane_Jog
 {
 protected:
 	explicit CSilvermane_JogBwd(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext);

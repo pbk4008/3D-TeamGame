@@ -290,7 +290,7 @@ void CVIBuffer_PointInstance_Explosion::Update(_double TimeDelta, _uint eAxis)
 			
 			if (m_Desc.fLifeTime > ((VTXPARTICLE*)SubResource.pData)[i].vTime.x)
 			{
-				((VTXPARTICLE*)SubResource.pData)[i].vTime.x += TimeDelta;
+				((VTXPARTICLE*)SubResource.pData)[i].vTime.x += (_float)TimeDelta;
 			}
 
 			if (m_Desc.fLifeTime < ((VTXPARTICLE*)SubResource.pData)[i].vTime.x)

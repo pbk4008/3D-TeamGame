@@ -5,7 +5,7 @@ CTextureManager::CTextureManager()
 }
 
 HRESULT CTextureManager::Add_Texture(ID3D11Device* pDevice, const wstring& pTextureTag, const wstring& pFilePath, _uint iTextureCnt)
-{
+ {
 	vector<ID3D11ShaderResourceView*>* pResource = Get_Texture(pTextureTag);
 	if (pResource)
 		return S_OK;
@@ -32,7 +32,7 @@ HRESULT CTextureManager::Init_Texture(ID3D11Device* pDevice, const wstring& pTex
 	if (!pDevice)
 		return E_FAIL;
 
-	ScratchImage tImage;
+  	DirectX::ScratchImage tImage;
 
 	_tchar szExt[MAX_PATH] = L"";
 	_wsplitpath_s(pFilePath.c_str(), nullptr, 0, nullptr, 0, nullptr, 0, szExt, 256);
@@ -49,7 +49,34 @@ HRESULT CTextureManager::Init_Texture(ID3D11Device* pDevice, const wstring& pTex
 		if (!lstrcmp(szExt, L".dds"))
 			hr = LoadFromDDSFile(szFullPath, CP_FLAGS_NONE, nullptr, tImage);
 		else if (!lstrcmp(szExt, L".tga"))
+		{
 			hr = LoadFromTGAFile(szFullPath, nullptr, tImage);
+
+			//DirectX::ScratchImage MipChain;
+			//hr = DirectX::GenerateMipMaps(tImage.GetImages(), tImage.GetImageCount(), tImage.GetMetadata(), TEX_FILTER_FANT, 0, MipChain);
+			//if (FAILED(hr))
+			//	return E_FAIL;
+			//else
+			//{
+			//
+			//	ID3D11Resource* pTextureResource = nullptr;
+			//
+			//	if (FAILED(DirectX::CreateTexture(pDevice, MipChain.GetImages(), MipChain.GetImageCount(), MipChain.GetMetadata(), &pTextureResource)))
+			//		return E_FAIL;
+			//
+			//	ID3D11ShaderResourceView* pShaderResourceView = nullptr;
+			//
+			//	if (FAILED(pDevice->CreateShaderResourceView(pTextureResource, nullptr, &pShaderResourceView)))
+			//		return E_FAIL;
+			//
+			//	vecResource.emplace_back(pShaderResourceView);
+			//
+			//	Safe_Release(pTextureResource);
+			//	tImage.Release();
+			//	MipChain.Release();
+			//	continue;
+			//}
+		}
 		else
 			hr = LoadFromWICFile(szFullPath, CP_FLAGS_NONE, nullptr, tImage);
 
@@ -68,7 +95,7 @@ HRESULT CTextureManager::Init_Texture(ID3D11Device* pDevice, const wstring& pTex
 		vecResource.emplace_back(pResourceView);
 
 		Safe_Release(pTextureResource);
-		tImage.Release();
+		tImage.Release();          
 	}
 	m_mapTexture.emplace(pTextureTag, vecResource);
 	return S_OK;
@@ -76,18 +103,19 @@ HRESULT CTextureManager::Init_Texture(ID3D11Device* pDevice, const wstring& pTex
 
 vector<ID3D11ShaderResourceView*>* CTextureManager::Get_Texture(const wstring& pTextureTag)
 {
-	auto iter = find_if(m_mapTexture.begin(), m_mapTexture.end(), 
+	auto iter = find_if(m_mapTexture.begin(), m_mapTexture.end(),
 		[&pTextureTag](pair<const wstring&, vector<ID3D11ShaderResourceView*>> Pair)
 		->
 		bool {
-		if (pTextureTag == Pair.first)
-			return true;
-		else
-			return false;
+			if (pTextureTag == Pair.first)
+				return true;
+			else
+				return false;
 		}
 	);
 	if (iter == m_mapTexture.end())
 		return nullptr;
+
 	return &(iter->second);
 }
 

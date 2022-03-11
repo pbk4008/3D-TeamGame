@@ -60,8 +60,11 @@ CChannel* CChannel::Clone()
 
 void CChannel::Free()
 {
-	for (auto& pKeyFrame : m_KeyFrames)
-		Safe_Delete(pKeyFrame);
+	if (!m_isClone)
+	{
+		for (auto& pKeyFrame : m_KeyFrames)
+			Safe_Delete(pKeyFrame);
+	}
 
 	m_KeyFrames.clear();
 }

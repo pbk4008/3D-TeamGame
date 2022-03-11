@@ -58,6 +58,11 @@ HRESULT CComponent_Manager::SetUpBaseComponent(ID3D11Device* pDevice, ID3D11Devi
 		return E_FAIL;
 	if (Add_Prototype(0, L"RectBuffer", CVIBuffer_Rect::Create(pDevice, pDeviceContext,L"../../Reference/ShaderFile/Shader_Rect.hlsl")))
 		return E_FAIL;
+	if (Add_Prototype(0, L"RectInstanceBuffer_UI", CVIBuffer_RectInstance::Create(pDevice, pDeviceContext, L"../../Reference/ShaderFile/Shader_UI.hlsl", 1)))
+		return E_FAIL;
+	if (Add_Prototype(0, L"Rect_UI", CVIBuffer_Trapezium::Create(pDevice, pDeviceContext, L"../../Reference/ShaderFile/Shader_Rect.hlsl")))
+		return E_FAIL;
+
 
 	return S_OK;
 }
@@ -88,5 +93,4 @@ void CComponent_Manager::Free()
 	}
 
 	Safe_Delete_Array(m_pComponents);
-
 }

@@ -28,6 +28,9 @@ private:
 	_uint				m_iNumRender = 0;
 	_tchar				m_szFPS[MAX_PATH] = TEXT("");
 
+	_bool				m_isPause = false;
+	_bool				m_isRender = true;
+
 private:
 	HRESULT SetUp_StartLevel(SCENEID eLevel);
 

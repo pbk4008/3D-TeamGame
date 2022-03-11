@@ -217,6 +217,27 @@
     <Filter Include="00.Utility\03.Component\05.VIBuffer\09.Instance\01. InstanceMesh">
       <UniqueIdentifier>{67907881-308e-436b-ba4f-cd56aab4032a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="00.Utility\03.Component\05.VIBuffer\10.Trapezium">
+      <UniqueIdentifier>{329441a3-c2af-4793-a919-667ae0cce48e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00.Utility\04.Manager\11. PhsyicX\ControllerFilterCallback">
+      <UniqueIdentifier>{29af0ba7-9f80-432a-a492-5fa7318fbf69}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00.Utility\04.Manager\11. PhsyicX\ControllerBehaviorCallback">
+      <UniqueIdentifier>{b4fb3978-9779-4bb8-ada9-c0092107ec33}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00.Utility\04.Manager\11. PhsyicX\ControllerHitReport">
+      <UniqueIdentifier>{00d7b819-af9e-46d6-8015-d187703f8817}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00.Utility\03.Component\97.CharacterController">
+      <UniqueIdentifier>{de46ff26-c4c3-465e-90af-a8225d355507}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00.Utility\04.Manager\03. RenderTargetManager\01.CSTarget">
+      <UniqueIdentifier>{b431a803-04bb-4072-8f56-5a6454c0d62c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00.Utility\04.Manager\03. RenderTargetManager\99.Shader">
+      <UniqueIdentifier>{a13b4594-b2c5-415d-b9fc-8b3314871506}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\public\Base.h">
@@ -305,12 +326,6 @@
     </ClInclude>
     <ClInclude Include="..\public\Collider.h">
       <Filter>00.Utility\03.Component\00.Collider</Filter>
-    </ClInclude>
-    <ClInclude Include="..\public\Navigation.h">
-      <Filter>00.Utility\03.Component\01.Navigation</Filter>
-    </ClInclude>
-    <ClInclude Include="..\public\Cell.h">
-      <Filter>00.Utility\03.Component\01.Navigation\Cell</Filter>
     </ClInclude>
     <ClInclude Include="..\public\VIBuffer_Triangle.h">
       <Filter>00.Utility\03.Component\05.VIBuffer\06.Triangle</Filter>
@@ -432,8 +447,44 @@
     <ClInclude Include="..\public\MeshCollider.h">
       <Filter>00.Utility\03.Component\00.Collider\03.MeshCollider</Filter>
     </ClInclude>
+    <ClInclude Include="..\bin\ShaderFiles\Shader_Calculate.hpp">
+      <Filter>00.Utility\04.Manager\03. RenderTargetManager</Filter>
+    </ClInclude>
     <ClInclude Include="..\public\Instancing_Mesh.h">
       <Filter>00.Utility\03.Component\05.VIBuffer\09.Instance\01. InstanceMesh</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\CharacterController.h">
+      <Filter>00.Utility\03.Component\97.CharacterController</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\ControllerFilterCallback.h">
+      <Filter>00.Utility\04.Manager\11. PhsyicX\ControllerFilterCallback</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\ControllerBehaviorCallback.h">
+      <Filter>00.Utility\04.Manager\11. PhsyicX\ControllerBehaviorCallback</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\ControllerHitReport.h">
+      <Filter>00.Utility\04.Manager\11. PhsyicX\ControllerHitReport</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Instancing_Mesh.h">
+      <Filter>00.Utility\03.Component\05.VIBuffer\09.Instance\01. InstanceMesh</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\CSTarget.h">
+      <Filter>00.Utility\04.Manager\03. RenderTargetManager\01.CSTarget</Filter>
+    </ClInclude>
+    <ClInclude Include="..\bin\ShaderFiles\Shader_Calculate.hpp">
+      <Filter>00.Utility\04.Manager\03. RenderTargetManager\99.Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Cell.h">
+      <Filter>00.Utility\03.Component\01.Navigation\Cell</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Navigation.h">
+      <Filter>00.Utility\03.Component\01.Navigation</Filter>
+	</ClInclude>
+    <ClInclude Include="..\public\VIBuffer_Trapezium.h">
+      <Filter>00.Utility\03.Component\05.VIBuffer\10.Trapezium</Filter>
+    </ClInclude>
+    <ClInclude Include="..\bin\ShaderFiles\Shader_RenderState.hpp">
+      <Filter>00.Utility\03.Component\05.VIBuffer\03.RectInstance</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -505,12 +556,6 @@
     </ClCompile>
     <ClCompile Include="..\private\Collider.cpp">
       <Filter>00.Utility\03.Component\00.Collider</Filter>
-    </ClCompile>
-    <ClCompile Include="..\private\Navigation.cpp">
-      <Filter>00.Utility\03.Component\01.Navigation</Filter>
-    </ClCompile>
-    <ClCompile Include="..\private\Cell.cpp">
-      <Filter>00.Utility\03.Component\01.Navigation\Cell</Filter>
     </ClCompile>
     <ClCompile Include="..\private\VIBuffer_Triangle.cpp">
       <Filter>00.Utility\03.Component\05.VIBuffer\06.Triangle</Filter>
@@ -635,13 +680,49 @@
     <ClCompile Include="..\private\Instancing_Mesh.cpp">
       <Filter>00.Utility\03.Component\05.VIBuffer\09.Instance\01. InstanceMesh</Filter>
     </ClCompile>
+    <ClCompile Include="..\private\VIBuffer_Trapezium.cpp">
+      <Filter>00.Utility\03.Component\05.VIBuffer\10.Trapezium</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\CharacterController.cpp">
+      <Filter>00.Utility\03.Component\97.CharacterController</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\ControllerFilterCallback.cpp">
+      <Filter>00.Utility\04.Manager\11. PhsyicX\ControllerFilterCallback</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\ControllerBehaviorCallback.cpp">
+      <Filter>00.Utility\04.Manager\11. PhsyicX\ControllerBehaviorCallback</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\ControllerHitReport.cpp">
+      <Filter>00.Utility\04.Manager\11. PhsyicX\ControllerHitReport</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\CSTarget.cpp">
+      <Filter>00.Utility\04.Manager\03. RenderTargetManager\01.CSTarget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Cell.cpp">
+      <Filter>00.Utility\03.Component\01.Navigation\Cell</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Navigation.cpp">
+      <Filter>00.Utility\03.Component\01.Navigation</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="..\bin\ShaderFiles\Shader_Triangle.hlsl">
       <Filter>00.Utility\03.Component\05.VIBuffer\06.Triangle\Shader</Filter>
     </FxCompile>
     <FxCompile Include="..\bin\ShaderFiles\Shader_RectViewport.hlsl">
-      <Filter>00.Utility\04.Manager\03. RenderTargetManager</Filter>
+      <Filter>00.Utility\04.Manager\03. RenderTargetManager\99.Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="..\bin\ShaderFiles\Shader_CSGSBlur.hlsl">
+      <Filter>00.Utility\04.Manager\03. RenderTargetManager\99.Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="..\bin\ShaderFiles\Shader_DownSample.hlsl">
+      <Filter>00.Utility\04.Manager\03. RenderTargetManager\99.Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="..\bin\ShaderFiles\Shader_DSViewPort.hlsl">
+      <Filter>00.Utility\04.Manager\03. RenderTargetManager\99.Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="..\bin\ShaderFiles\Shader_UI.hlsl">
+      <Filter>00.Utility\03.Component\05.VIBuffer\03.RectInstance</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>

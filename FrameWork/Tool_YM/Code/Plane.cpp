@@ -35,7 +35,7 @@ HRESULT CPlane::NativeConstruct(void* pArg)
  	if (FAILED(SetUp_Components()))
 		return E_FAIL;
 	
-	m_pTransform->SetTransformDesc(10.0f, 45.0f);
+	m_pTransform->Set_TransformDesc(10.0f, 45.0f);
 	return S_OK;
 }
 
@@ -43,15 +43,16 @@ _int CPlane::Tick(_double TimeDelta)
 {
 	Input_Key(TimeDelta);
 
-	m_pObserver = GET_INSTANCE(CObserver);
+	if (g_pGameInstance->getMouseKeyDown(CInputDev::MOUSESTATE::MB_LBUTTON))
+		Pick_Model();
 
-	m_pObserver->m_pPlane = this;
+	m_pObserver = GET_INSTANCE(CObserver);
 
 	if (CObserver::MODE_NAV == m_pObserver->m_eMode)
 	{
 		if (3 == m_iPointindex)
 			Make_NavigationCell();
-		else if(true == m_pObserver->m_bPlanePick)
+		else if(true == m_bOneClick)
 			Create_NavigationLine();
 	}
 	RELEASE_INSTANCE(CObserver);
@@ -64,9 +65,7 @@ _int CPlane::LateTick(_double TimeDelta)
 {
 	m_pRenderer->Add_RenderGroup(CRenderer::RENDER_PRIORITY, this);
 
-	//if (g_pGameInstance->getMouseKeyDown(CInputDev::MOUSESTATE::MB_LBUTTON))
-	//	Pick_Model();
-	
+
 	Update_CellPos();
 	return _int();
 }
@@ -76,6 +75,9 @@ HRESULT CPlane::Render()
 	Set_WVPMatrix();
 
 #ifdef _DEBUG
+	if (nullptr != m_pObserver->m_pMeshCollider)
+		m_pObserver->m_pMeshCollider->Render(L"Camera");
+
 	if(m_bRender)
 		m_pVIBufferCom->Render(0);
 	m_pNavigationCom->Render(L"Camera");
@@ -101,6 +103,8 @@ HRESULT CPlane::SetUp_Components()
 
 HRESULT CPlane::Create_NavigationLine()
 {
+	m_bOneClick = false;
+
 	if (true == m_pObserver->m_bNavSpherePick)
 	{
 		CNavSphere* pSphere = dynamic_cast<CNavSphere*>(m_pObserver->m_pNavSphere);
@@ -111,7 +115,7 @@ HRESULT CPlane::Create_NavigationLine()
 	else
 	{
 		CGameObject* pSphere = nullptr;
-		if (SUCCEEDED(g_pGameInstance->Add_GameObjectToLayer(TAB_STATIC, L"Layer_NaveSphere", L"Prototype_GameObject_NavSphere", &m_pObserver->m_fPickPos, &pSphere)))
+		if (SUCCEEDED(g_pGameInstance->Add_GameObjectToLayer(TAB_STATIC, L"Layer_NaveSphere", L"Prototype_GameObject_NavSphere", &XMVector3TransformCoord(XMLoadFloat3(&m_fLocalMouse), m_pTransform->Get_WorldMatrix())  /*&m_pObserver->m_fPickPos*/, &pSphere)))
 		{
 			m_fPoints[m_iPointindex++] = &(dynamic_cast<CNavSphere*>(pSphere)->m_fPostion);
 			return S_OK;
@@ -153,6 +157,8 @@ HRESULT CPlane::Make_NavigationCell(CCell* _pCell/*= nullptr*/)
 	m_pNavigationCom->m_Cells.push_back(pCell);
 	m_iPointindex = 0;
 
+	cout << "Cell Create Done" << endl;
+
 	return S_OK;
 }
 
@@ -188,9 +194,9 @@ void CPlane::Input_Key(_double _dtimeDelta)
 	if (g_pGameInstance->getkeyPress(DIK_NUMPAD6))
 		m_pTransform->Go_Right(_dtimeDelta);
 	if (g_pGameInstance->getkeyPress(DIK_NUMPAD7))
-		m_pTransform->Go_Up(_dtimeDelta);
+		m_pTransform->Mesh_Up(_dtimeDelta);
 	if (g_pGameInstance->getkeyPress(DIK_NUMPAD9))
-		m_pTransform->Go_Down(_dtimeDelta);
+		m_pTransform->Mesh_Down(_dtimeDelta);
 
 	if (g_pGameInstance->getkeyPress(DIK_NUMPAD1))
 		m_bRender = TRUE;
@@ -213,12 +219,13 @@ void CPlane::Pick_Model(void)
 	vRayPos = XMVector3TransformCoord(vRayPos, matInverseWrold);
 	vRayDir = XMVector3TransformNormal(vRayDir, matInverseWrold);
 
-	FACEINDICES32* Indices = m_pVIBufferCom->Get_Indices();
+	FACEINDICES32* Indices = (FACEINDICES32*)m_pVIBufferCom->Get_Indices();
 	void* pVertices = m_pVIBufferCom->Get_Vertices();
 	_uint iNumFaces = m_pVIBufferCom->Get_NumFaces();
 	_float fBary1, fBary2;
 	_float fDist;
 
+	m_bOneClick = false;
 
 	for (_uint i = 0; i < iNumFaces; ++i)
 	{
@@ -232,9 +239,11 @@ void CPlane::Pick_Model(void)
 			XMStoreFloat3(&m_fLocalMouse, vRayPos + (vRayDir * fDist));
 			pObserver->m_fPickPos = m_fLocalMouse;
 			pObserver->m_bPlanePick = true;
+			pObserver->m_pPlane = this;
+			m_bOneClick = true;
 		}
 	}
-	m_bOneClick = false;
+
 	RELEASE_INSTANCE(CObserver);
 }
 

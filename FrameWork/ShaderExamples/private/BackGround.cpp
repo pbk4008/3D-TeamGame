@@ -136,7 +136,8 @@ HRESULT CBackGround::Ready_GameObject(void* pArg)
 
 void CBackGround::Free()
 {
-	CGameObject::Free();
-	Safe_Release(m_pRcTex);
+	__super::Free();
+
 	Safe_Release(m_pTexture);
+	Safe_Release(m_pRcTex);
 }

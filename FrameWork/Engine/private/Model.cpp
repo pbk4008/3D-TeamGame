@@ -1,6 +1,4 @@
-#include "..\public\Model.h"
-
-#include "GameInstance.h"
+#include "Model.h"
 #include "MeshContainer.h"
 #include "HierarchyNode.h"
 #include "Texture.h"
@@ -10,6 +8,7 @@
 #include "TextureManager.h"
 #include "SaveManager.h"
 #include "Material.h"
+#include "GameInstance.h"
 
 CModel::CModel(ID3D11Device * pDevice, ID3D11DeviceContext * pDeviceContext)
 	: CComponent(pDevice, pDeviceContext)
@@ -46,14 +45,19 @@ CModel::CModel(const CModel& rhs)
 	}
 	else
 	{
-		m_vecMaterials.resize((_uint)rhs.m_vecMaterials.size());
+		m_vecMaterials.resize(rhs.m_vecMaterials.size());
 		for (_uint i = 0; i < m_vecMaterials.size(); ++i)
 		{
-			if (rhs.m_vecMaterials[i])
-				Add_Material(rhs.m_vecMaterials[i], i);
+			m_vecMaterials.resize((_uint)rhs.m_vecMaterials.size());
+			for (_uint i = 0; i < m_vecMaterials.size(); ++i)
+			{
+				if (rhs.m_vecMaterials[i])
+					Add_Material(rhs.m_vecMaterials[i], i);
+			}
+			m_MeshContainers.resize((_uint)rhs.m_vecMaterials.size());
 		}
-		m_MeshContainers.resize((_uint)rhs.m_vecMaterials.size());
 	}
+
 	for (auto& MtrlMeshContainer : rhs.m_MeshContainers)
 	{
 		for (auto& pPrototypeMeshContainer : MtrlMeshContainer)
@@ -188,12 +192,12 @@ HRESULT CModel::NativeConstruct(void * pArg)
 			pHierarchyNode->Add_Channel(i, pChannel);
 		}
 	}
-	if(!m_bSaved)
-	{
-		if (FAILED(Save_AnimModel()))
-			return E_FAIL;
-		m_bSaved = true;
-	}
+	//if(!m_bSaved)
+	//{
+	//	if (FAILED(Save_AnimModel()))
+	//		return E_FAIL;
+	//	m_bSaved = true;
+	//}
 
 	return S_OK;
 }
@@ -218,11 +222,18 @@ HRESULT CModel::SetUp_ValueOnShader(const char* pConstantName, void* pData, _uin
 	for (auto& pMtrl : m_vecMaterials)
 	{
 		if (pMtrl)
-		{
 			pMtrl->SetUp_ValueOnShader(pConstantName, pData, iSize);
-		}
 	}
 	return S_OK;
+}
+
+HRESULT CModel::SetUp_TextureOnShader(const char* pConstantName, ID3D11ShaderResourceView* pSRV)
+{
+	ID3DX11EffectShaderResourceVariable* pVariable = m_pEffect->GetVariableByName(pConstantName)->AsShaderResource();
+	if (nullptr == pVariable)
+		return E_FAIL;
+
+	return pVariable->SetResource(pSRV);
 }
 
 /* 매 프레임마다 호출. */
@@ -372,7 +383,7 @@ HRESULT CModel::Create_MaterialDesc()
 
 			CTextureManager* pTextureMgr = GET_INSTANCE(CTextureManager);
 
-			pTextureMgr->Add_Texture(m_pDevice, szTextureTag, szFullName);
+    			pTextureMgr->Add_Texture(m_pDevice, szTextureTag, szFullName);
 
 			RELEASE_INSTANCE(CTextureManager);
 
@@ -453,7 +464,7 @@ HRESULT CModel::Create_MeshContainer()
 		if (!pMesh)
 			return E_FAIL;
 
-		CMeshContainer* pMeshContainer = CMeshContainer::Create(m_pDevice, m_pDeviceContext, this, pMesh, m_eMeshType == TYPE_STATIC ? XMLoadFloat4x4(&m_PivotMatrix) : XMMatrixIdentity());
+		CMeshContainer* pMeshContainer = CMeshContainer::Create(m_pDevice, m_pDeviceContext, this, pMesh, (m_eMeshType == TYPE_STATIC) ? XMLoadFloat4x4(&m_PivotMatrix) : XMMatrixIdentity());
 		if (!pMeshContainer)
 			return E_FAIL;
 		pMeshContainer->setMeshIndex(i);
@@ -855,10 +866,13 @@ void CModel::Free()
 
 	if (!m_isCloned)
 	{
-		for (auto& pPassDesc : m_PassDesc)
-			Safe_Delete(pPassDesc);
+		for (auto& pPassDec : m_PassDesc)
+		{
+			Safe_Release(pPassDec->pInputLayout);
+			Safe_Release(pPassDec->pPass);
+		}
+		m_PassDesc.clear();
 	}
-	m_PassDesc.clear();
 	Safe_Release(m_pEffect);
 
 	for (auto& pNode : m_HierarchyNodes)
@@ -883,7 +897,7 @@ void CModel::Free()
 
 	for (auto& pMtrlMeshContainer : m_MeshContainers)
 	{
-		for(auto& pMeshContainer : pMtrlMeshContainer)
+		for (auto& pMeshContainer : pMtrlMeshContainer)
 			Safe_Release(pMeshContainer);
 		pMtrlMeshContainer.clear();
 	}
@@ -893,4 +907,6 @@ void CModel::Free()
 		Safe_Release(pAnimation);
 
 	m_Animations.clear();
+
+	m_Importer.FreeScene();
 }

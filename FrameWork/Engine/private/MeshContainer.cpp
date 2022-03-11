@@ -121,7 +121,7 @@ HRESULT CMeshContainer::Add_Bone(CModel* pModel)
 
 		pNode->Set_OffsetMatrix(XMMatrixIdentity());
 		m_Bones.push_back(pNode);
-
+		Safe_AddRef(pNode);
 	}
 	else
 	{
@@ -139,6 +139,7 @@ HRESULT CMeshContainer::Add_Bone(CModel* pModel)
 			pNode->Set_OffsetMatrix(OffSetMatrix);
 
 			m_Bones.emplace_back(pNode);
+			Safe_AddRef(pNode);
 		}
 	}
 	return S_OK;
@@ -234,10 +235,10 @@ HRESULT CMeshContainer::Set_UpVerticesDesc(CModel* pModel, aiMesh* pMesh, _fmatr
 		VTXMESH* pVertices = (VTXMESH*)((_byte*)m_pVertices + (i * m_iStride));
 
 		memcpy(&pVertices->vPosition, &pMesh->mVertices[i], sizeof(_float3));
-		_fvector Temp = XMVector3TransformCoord(XMLoadFloat3(&pVertices->vPosition), PivotMatrix);
+ 		_fvector Temp = XMVector3TransformCoord(XMLoadFloat3(&pVertices->vPosition), PivotMatrix);
 		XMStoreFloat3(&pVertices->vPosition, Temp);
-
-		_vector         vNormal;
+		
+		_vector			vNormal;
 		memcpy(&vNormal, &pMesh->mNormals[i], sizeof(_float3));
 		vNormal = XMVectorSetW(vNormal, 0.f);
 		vNormal = XMVector3Transform(vNormal, PivotMatrix);
@@ -247,7 +248,6 @@ HRESULT CMeshContainer::Set_UpVerticesDesc(CModel* pModel, aiMesh* pMesh, _fmatr
 		memcpy(&pVertices->vTexUV, &pMesh->mTextureCoords[0][i], sizeof(_float2));
 		memcpy(&pVertices->vTangent, &pMesh->mTangents[i], sizeof(_float3));
 		memcpy(&pVertices->vBiNormal, &pMesh->mBitangents[i], sizeof(_float3));
-
 	}
 	m_VBSubresourceData.pSysMem = m_pVertices;
 

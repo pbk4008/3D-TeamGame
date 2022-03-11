@@ -12,7 +12,7 @@ public:
 	typedef struct tagUIDesc
 	{
 		 _tchar TextureTag[MAX_PATH];
-		_float2 fPos;
+		_float3 fPos;
 		_float2 fSize;
 		_int IDTag;
 	}UIDESC;

@@ -4,6 +4,7 @@
 #include "Base.h"
 #include "Tool_Defines.h"
 #include "Plane.h"
+
 class CObserver final :  public CBase
 {
 	DECLARE_SINGLETON(CObserver)
@@ -31,6 +32,10 @@ public:
 	MODE				m_eMode = MODE_END;
 	ScaleMode			m_eScaleMode = SCALE_END;
 	class CPlane*		m_pPlane = nullptr;
+
+public:
+	class CMeshCollider* m_pMeshCollider = nullptr;
+
 public:
 	class CStatic_Mesh* m_pModel = nullptr;
 	class CNavSphere*	m_pNavSphere = nullptr;

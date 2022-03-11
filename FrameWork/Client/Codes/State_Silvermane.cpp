@@ -6,11 +6,6 @@ CState_Silvermane::CState_Silvermane(ID3D11Device* _pDevice, ID3D11DeviceContext
 {
 }
 
-CState_Silvermane::CState_Silvermane(const CState_Silvermane& _rhs)
-	: CState(_rhs)
-{
-}
-
 HRESULT CState_Silvermane::NativeConstruct(void* _pArg)
 {
 	if (FAILED(__super::NativeConstruct(_pArg)))
@@ -75,6 +70,185 @@ void CState_Silvermane::Set_AnimationController(CAnimationController* _pAnimatio
 	m_pAnimationController = _pAnimationController;
 }
 
+const _int CState_Silvermane::Add_PlusAngle(const EDir _eDir, const _double& _dDeltaTime)
+{
+	_float fPlusAngle = m_pSilvermane->Get_PlusAngle();
+	_float fValue = 2.f; // 고정시킬 각도의 여유를 주는값
+	switch (_eDir)
+	{
+	case EDir::Forward:
+		if (0.f - fValue > fPlusAngle && -180.f <= fPlusAngle)
+		{
+			m_pSilvermane->Add_PlusAngle((_float)_dDeltaTime);
+		}
+		else if (0.f + fValue < fPlusAngle && 180.f >= fPlusAngle)
+		{
+			m_pSilvermane->Add_PlusAngle((_float)-_dDeltaTime);
+		}
+		else if (-180.f >= fPlusAngle && -360.f + fValue < fPlusAngle)
+		{
+			m_pSilvermane->Add_PlusAngle((_float)-_dDeltaTime);
+		}
+		else if (180.f <= fPlusAngle && 360.f - fValue > fPlusAngle)
+		{
+			m_pSilvermane->Add_PlusAngle((_float)_dDeltaTime);
+		}
+		break;
+	case EDir::LeftForward:
+		if (-45.f + fValue < fPlusAngle && 135.f >= fPlusAngle)
+		{
+			m_pSilvermane->Add_PlusAngle((_float)-_dDeltaTime);
+		}
+		else if (-45.f - fValue > fPlusAngle && -225.f <= fPlusAngle)
+		{
+			m_pSilvermane->Add_PlusAngle((_float)_dDeltaTime);
+		}
+		else if (135.f <= fPlusAngle && 315.f - fValue > fPlusAngle)
+		{
+			m_pSilvermane->Add_PlusAngle((_float)_dDeltaTime);
+		}
+		else if (-225.f >= fPlusAngle)
+		{
+			m_pSilvermane->Add_PlusAngle((_float)-_dDeltaTime);
+		}
+		else if (315.f + fValue < fPlusAngle)
+		{
+			m_pSilvermane->Add_PlusAngle((_float)-_dDeltaTime);
+		}
+		break;
+	case EDir::RightForward:
+		if (45.f - fValue > fPlusAngle && -135.f <= fPlusAngle)
+		{
+			m_pSilvermane->Add_PlusAngle((_float)_dDeltaTime);
+		}
+		else if (45.f + fValue < fPlusAngle && 225.f >= fPlusAngle)
+		{
+			m_pSilvermane->Add_PlusAngle((_float)-_dDeltaTime);
+		}
+		else if (-135.f >= fPlusAngle && -315.f + fValue < fPlusAngle)
+		{
+			m_pSilvermane->Add_PlusAngle((_float)-_dDeltaTime);
+		}
+		else if (225.f <= fPlusAngle)
+		{
+			m_pSilvermane->Add_PlusAngle((_float)_dDeltaTime);
+		}
+		else if (-315.f - fValue > fPlusAngle)
+		{
+			m_pSilvermane->Add_PlusAngle((_float)_dDeltaTime);
+		}
+		break;
+	case EDir::Backward:
+		if (0.f >= fPlusAngle && -180.f + fValue < fPlusAngle)
+		{
+			m_pSilvermane->Add_PlusAngle((_float)-_dDeltaTime);
+		}
+		else if (0.f <= fPlusAngle && 180.f - fValue > fPlusAngle)
+		{
+			m_pSilvermane->Add_PlusAngle((_float)_dDeltaTime);
+		}
+		else if (-180.f - fValue > fPlusAngle && -360.f <= fPlusAngle)
+		{
+			m_pSilvermane->Add_PlusAngle((_float)_dDeltaTime);
+		}
+		else if (180.f + fValue < fPlusAngle && 360.f >= fPlusAngle)
+		{
+			m_pSilvermane->Add_PlusAngle((_float)-_dDeltaTime);
+		}
+		break;
+	case EDir::LeftBackward:
+		if (45.f >= fPlusAngle && -135.f + fValue < fPlusAngle)
+		{
+			m_pSilvermane->Add_PlusAngle((_float)-_dDeltaTime);
+		}
+		else if (45.f <= fPlusAngle && 225.f - fValue > fPlusAngle)
+		{
+			m_pSilvermane->Add_PlusAngle((_float)_dDeltaTime);
+		}
+		else if (-135.f - fValue > fPlusAngle && -315.f <= fPlusAngle)
+		{
+			m_pSilvermane->Add_PlusAngle((_float)_dDeltaTime);
+		}
+		else if (-315.f >= fPlusAngle)
+		{
+			m_pSilvermane->Add_PlusAngle((_float)-_dDeltaTime);
+		}
+		else if (225.f + fValue < fPlusAngle)
+		{
+			m_pSilvermane->Add_PlusAngle((_float)-_dDeltaTime);
+		}
+		break;
+	case EDir::RightBackward:
+		if (-45.f <= fPlusAngle && 135.f - fValue > fPlusAngle)
+		{
+			m_pSilvermane->Add_PlusAngle((_float)_dDeltaTime);
+		}
+		else if (-45.f >= fPlusAngle && -225.f + fValue < fPlusAngle)
+		{
+			m_pSilvermane->Add_PlusAngle((_float)-_dDeltaTime);
+		}
+		else if (135.f + fValue < fPlusAngle && 315.f >= fPlusAngle)
+		{
+			m_pSilvermane->Add_PlusAngle((_float)-_dDeltaTime);
+		}
+		else if (315.f <= fPlusAngle)
+		{
+			m_pSilvermane->Add_PlusAngle((_float)_dDeltaTime);
+		}
+		else if (-225.f - fValue > fPlusAngle)
+		{
+			m_pSilvermane->Add_PlusAngle((_float)_dDeltaTime);
+		}
+		break;
+	case EDir::Left:
+		if (90.f >= fPlusAngle && -90.f + fValue < fPlusAngle)
+		{
+			m_pSilvermane->Add_PlusAngle((_float)-_dDeltaTime);
+		}
+		else if (90.f <= fPlusAngle && 270.f - fValue > fPlusAngle)
+		{
+			m_pSilvermane->Add_PlusAngle((_float)_dDeltaTime);
+		}
+		else if (-90.f - fValue > fPlusAngle && -270.f <= fPlusAngle)
+		{
+			m_pSilvermane->Add_PlusAngle((_float)_dDeltaTime);
+		}
+		else if (-270.f >= fPlusAngle)
+		{
+			m_pSilvermane->Add_PlusAngle((_float)-_dDeltaTime);
+		}
+		else if (270.f + fValue < fPlusAngle)
+		{
+			m_pSilvermane->Add_PlusAngle((_float)-_dDeltaTime);
+		}
+		break;
+	case EDir::Right:
+		if (-90.f <= fPlusAngle && 90.f - fValue > fPlusAngle)
+		{
+			m_pSilvermane->Add_PlusAngle((_float)_dDeltaTime);
+		}
+		else if (-90.f >= fPlusAngle && -270.f + fValue < fPlusAngle)
+		{
+			m_pSilvermane->Add_PlusAngle((_float)-_dDeltaTime);
+		}
+		else if (90.f + fValue < fPlusAngle && 270.f >= fPlusAngle)
+		{
+			m_pSilvermane->Add_PlusAngle((_float)-_dDeltaTime);
+		}
+		else if (270.f <= fPlusAngle)
+		{
+			m_pSilvermane->Add_PlusAngle((_float)_dDeltaTime);
+		}
+		else if (-270.f - fValue > fPlusAngle)
+		{
+			m_pSilvermane->Add_PlusAngle((_float)_dDeltaTime);
+		}
+		break;
+	}
+
+	return _int();
+}
+
 void CState_Silvermane::Set_Silvermane(CSilvermane* _pSilvermane)
 {
 	m_pSilvermane = _pSilvermane;
@@ -87,18 +261,6 @@ void CState_Silvermane::Set_Transform(CTransform* _pTransform)
 
 _int CState_Silvermane::KeyCheck(const _double& _dDeltaTime)
 {
-	_long   MouseMove = 0;
-
-	if (MouseMove = g_pGameInstance->getMouseMoveState(CInputDev::MOUSEMOVESTATE::MM_X))
-	{
-		m_pTransform->Rotation_Axis(XMVectorSet(0.f, 1.f, 0.f, 0.f), _dDeltaTime * MouseMove * 0.1f);
-	}
-
-	//if (MouseMove = g_pGameInstance->getMouseMoveState(CInputDev::MOUSEMOVESTATE::MM_Y))
-	//{
-	//	m_pTransform->Rotation_Axis(m_pTransform->Get_State(CTransform::STATE_RIGHT), _dDeltaTime * MouseMove * 0.1f);
-	//}
-
 	return _int();
 }
 

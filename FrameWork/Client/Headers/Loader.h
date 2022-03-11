@@ -3,6 +3,9 @@
 #define __LOADER_H__
 #include "Base.h"
 #include "GameObject.h"
+BEGIN(Engine)
+class CTexutre;
+END
 BEGIN(Client)
 class CLoader final : public CBase
 {
@@ -15,8 +18,10 @@ public:
 private:
 	HRESULT LoadForScene();
 private:
-	HRESULT SetUp_Stage1_ProtoComponent();
+	HRESULT SetUp_Stage1Map_ProtoComponent();
 	HRESULT Load_Stage1FBXLoad();
+	HRESULT Load_Stage1TextureUILoad();
+
 public:
 	static _uint CALLBACK Thread_Main(void* pArg);
 	static CLoader* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext, SCENEID eID);
@@ -35,10 +40,10 @@ private:
 	HANDLE m_hThread;
 	CRITICAL_SECTION m_Critical;
 	_bool m_bFinish;
-
 	SCENEID m_eNextScene;
 	ID3D11Device* m_pDevice;
 	ID3D11DeviceContext* m_pDeviceContext;
+	/*vector<CTexutre*> m_vectexture;*/
 };
 END
 #endif

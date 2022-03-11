@@ -38,7 +38,7 @@ HRESULT CStatic_Mesh::NativeConstruct(void* pArg)
 	m_matWorld._43 = m_ModelDesc.fInitPos.z;
 
 	m_pTransform->Set_WorldMatrix(XMLoadFloat4x4(&m_matWorld));
-	m_pTransform->SetTransformDesc(10.0f, 45.0f);
+	m_pTransform->Set_TransformDesc(10.0f, XMConvertToRadians(45.f));
 
 	if (FAILED(SetUp_Components()))
 		return E_FAIL;
@@ -68,7 +68,7 @@ _int CStatic_Mesh::Tick(_double TimeDelta)
 
 _int CStatic_Mesh::LateTick(_double TimeDelta)
 {
-	m_pRenderer->Add_RenderGroup(CRenderer::RENDER_PRIORITY, this);
+	m_pRenderer->Add_RenderGroup(CRenderer::RENDER_ALPHA, this);
 
 	if(TKEY_DOWN(VK_RBUTTON))
 		Pick_Model();
@@ -110,7 +110,9 @@ HRESULT CStatic_Mesh::Render()
 	{
 		for (_uint i = 0; i < m_pModelCom->Get_NumMeshContainer(); ++i)
 		{
+			//_bool temp= false;
 			m_pModelCom->SetUp_TextureOnShader("g_DiffuseTexture", i, aiTextureType::aiTextureType_DIFFUSE);
+			/*m_pModelCom->SetUp_ValueOnShader("g_bool",&temp, sizeof(_bool));*/
 			if(false == m_bPick)
 				m_pModelCom->Render(i, 0);
 			else 
@@ -128,13 +130,10 @@ HRESULT CStatic_Mesh::Render()
 			_fvector ZStartVec = m_pTransform->Get_State(CTransform::STATE_POSITION);
 			_fvector ZEndVec = ZStartVec + (m_pTransform->Get_State(CTransform::STATE_RIGHT) * 2);
 
-
 			m_pGizmo->DrawLine(XStartVec, XEndVec, L"Camera", _fvector{ 1.0f, 0.0f, 0.0f, 1.0f }); //X
 			m_pGizmo->DrawLine(YStartVec, YEndVec, L"Camera", _fvector{ 0.0f, 1.0f, 0.0f, 1.0f }); //Y
 			m_pGizmo->DrawLine(ZStartVec, ZEndVec, L"Camera", _fvector{ 0.0f, 0.0f, 1.0f, 1.0f }); //Z
-
 		}
-
 	}
 	return S_OK;
 }

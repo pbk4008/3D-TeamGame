@@ -8,7 +8,7 @@
 #include "Static_Mesh.h"
 #include "NavSphere.h"
 #include "Navigation.h"
-
+#include "MeshCollider.h"
 
 CChanger::CChanger(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
 	:m_pDevice(_pDevice)
@@ -76,7 +76,7 @@ HRESULT CChanger::Loading_For_Static(void)
 	_matrix  PivotMatrix;
 	PivotMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f);
 
-	if (FAILED(g_pGameInstance->Add_Prototype(TAB_STATIC, L"Prototype_Component_NavSphere", CModel::Create(m_pDevice, m_pDeviceContext, "../bin/Resources/FBX/Sphere/", "Sphere.fbx", L"../../Reference/ShaderFile/Shader_Mesh.hlsl", PivotMatrix, CModel::TYPE_STATIC))))
+	if (FAILED(g_pGameInstance->Add_Prototype(TAB_STATIC, L"Prototype_Component_NavSphere", CModel::Create(m_pDevice, m_pDeviceContext, "../bin/Resources/FBX/Sphere/", "Sphere.fbx", L"../../Reference/ShaderFile/Shader_StaticMesh.hlsl", PivotMatrix, CModel::TYPE_STATIC))))
 		return E_FAIL;
 
 	/* Prototype_Component_Texture_Terrain */
@@ -107,12 +107,20 @@ HRESULT CChanger::Loading_ForMap_Tool(void)
 {
 	/* Create Component Prototype */
 
+	/* Prototype_Component_MeshCollider */
+	if (FAILED(g_pGameInstance->Add_Prototype(TAB_MAP, L"Prototype_Component_MeshCollider", CMeshCollider::Create(m_pDevice,m_pDeviceContext))))
+		return E_FAIL;
 
 	/* Create Object Prototype */
 
 	/* Prototype_GameObject_StaticMesh */
 	if (FAILED(g_pGameInstance->Add_Prototype(L"Prototype_GameObject_StaticMesh", CStatic_Mesh::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
+
+
+
+
+
 
 	m_isFinished = TRUE;
 

@@ -20,6 +20,7 @@ struct VS_IN
 {
 	float3		vPosition : POSITION;
 	float3		vNormal : NORMAL;
+	float3		vBiNormal : BINORMAL;
 	float2		vTexUV : TEXCOORD0;
 	float3		vTangent : TANGENT; 
 	float3		vBiNormal : BINORMAL;
@@ -83,8 +84,8 @@ PS_OUT PS_MAIN(PS_IN In)
 	PS_OUT Out = (PS_OUT)0;
 	Out.vColor = g_DiffuseTexture.Sample(DefaultSampler, In.vTexUV);
 	
-	if (Out.vColor.a < 0.2f)
-		discard;
+	//if (Out.vColor.a < 0.2f)
+	//	discard;
 
 	Out.vNormal = vector(In.vNormal.xyz * 0.5f + 0.5f, 0.f);
 	Out.vDepth = vector(In.vProjPos.z / In.vProjPos.w, In.vProjPos.w / 300.f, 0.f, 0.f);

@@ -3,8 +3,18 @@
 #define __PHYSICSXSYSTEM__
 #include "SingleTon.h"
 
+#define ToPxVec3(v)					PxVec3((v).x, (v).y, (v).z)
+#define FromPxVec3(v)				_float3((v).x, (v).y, (v).z)
+#define ToPxExtendedVec3(v)			PxExtendedVec3((v).x, (v).y, (v).z)
+#define ToPxQuat(v)					PxQuat((v).x, (v).y, (v).z, (v).w)
+#define FromPxQuat(v)				_float4((v).x, (v).y, (v).z, (v).w)
+
+#include "ControllerBehaviorCallback.h"
+#include "ControllerHitReport.h"
+
 BEGIN(Engine)
 class ContactReportCallback;
+class CCharacterController;
 class CPhysicsXSystem final : public CSingleTon<CPhysicsXSystem>
 {
 	friend CSingleTon;
@@ -28,8 +38,12 @@ public:
 	HRESULT UpDate_Collision(_double DeltaTime);
 	PxShape* Init_Shape(COLLIDERTYPE eType, const PxVec3 ShapeInfo);
 	PxShape* Init_Mesh(const PxTriangleMeshDesc& tDesc);
+	HRESULT Create_Material(const PxReal _staticFriction, const PxReal _dynamicFriction, const PxReal _restitution, PxMaterial** _ppOutMaterial);
+	HRESULT Create_CharacterController(CCharacterController* _pController, PxController** _ppOutPxController, vector<PxShape*>& _vecShapes);
+	const PxRenderBuffer& Get_RenderBuffer();
 private:
 	HRESULT Intit_Scene();
+	HRESULT Init_ControllerManager();
 private:
 	virtual void Free() override;
 private:
@@ -40,31 +54,25 @@ private:
 	PxScene* m_pScene;
 	PxCooking* m_pCooking;
 	PxDefaultCpuDispatcher* m_pDispatcher;
-	ContactReportCallback* m_pContactRePort;
-};
-static PxFilterFlags contactReportFilterShader(PxFilterObjectAttributes attributes0, PxFilterData filterData0,
-	PxFilterObjectAttributes attributes1, PxFilterData filterData1,
-	PxPairFlags& pairFlags, const void* constantBlock, _uint constantBlockSize)
-{
-	pairFlags = PxPairFlag::eSOLVE_CONTACT
-		| PxPairFlag::eDETECT_DISCRETE_CONTACT
-		| PxPairFlag::eNOTIFY_TOUCH_FOUND
-		| PxPairFlag::eNOTIFY_TOUCH_PERSISTS
-		| PxPairFlag::eNOTIFY_TOUCH_LOST
-		| PxPairFlag::eNOTIFY_CONTACT_POINTS;
 
-	return PxFilterFlag::eDEFAULT;
-}
+private: /* For.ControllerManager */
+	PxControllerManager* m_pControllerManager = nullptr;
+	CControllerBehaviorCallback* m_pControllerBehaviorCallback = nullptr;
+	CControllerHitReport* m_pControllerHitReport = nullptr;
 
-class ContactReportCallback : public PxSimulationEventCallback
-{
 public:
-	virtual void onConstraintBreak(PxConstraintInfo* constraints, PxU32 count) {}
-	virtual void onWake(PxActor** actors, PxU32 count) {}
-	virtual void onSleep(PxActor** actors, PxU32 count) {}
-	virtual void onAdvance(const PxRigidBody* const*, const PxTransform*, const PxU32) {}
-	virtual void onContact(const PxContactPairHeader& pairHeader, const PxContactPair* pairs, PxU32 nbPairs)override;
-	virtual void onTrigger(PxTriggerPair* pairs, PxU32 count)override;
+	class ContactReportCallback : public PxSimulationEventCallback
+	{
+	public:
+		virtual void onConstraintBreak(PxConstraintInfo* constraints, PxU32 count) {}
+		virtual void onWake(PxActor** actors, PxU32 count) {}
+		virtual void onSleep(PxActor** actors, PxU32 count) {}
+		virtual void onAdvance(const PxRigidBody* const*, const PxTransform*, const PxU32) {}
+		virtual void onContact(const PxContactPairHeader& pairHeader, const PxContactPair* pairs, PxU32 nbPairs)override;
+		virtual void onTrigger(PxTriggerPair* pairs, PxU32 count)override;
+	};
+
+private: ContactReportCallback	m_pContactRePort;
 };
 #endif
 END

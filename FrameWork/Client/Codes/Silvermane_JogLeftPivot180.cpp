@@ -4,12 +4,12 @@
 #include "StateController.h"
 
 CSilvermane_JogLeftPivot180::CSilvermane_JogLeftPivot180(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
-	: CState_Silvermane(_pDevice, _pDeviceContext)
+	: CSilvermane_Jog(_pDevice, _pDeviceContext)
 {
 }
 
 CSilvermane_JogLeftPivot180::CSilvermane_JogLeftPivot180(const CSilvermane_JogLeftPivot180& _rhs)
-	: CState_Silvermane(_rhs)
+	: CSilvermane_Jog(_rhs)
 {
 }
 
@@ -21,17 +21,17 @@ HRESULT CSilvermane_JogLeftPivot180::NativeConstruct(void* _pArg)
 	return S_OK;
 }
 
-_int CSilvermane_JogLeftPivot180::Tick(const _double& TimeDelta)
+_int CSilvermane_JogLeftPivot180::Tick(const _double& _dDeltaTime)
 {
-	if (0 > __super::Tick(TimeDelta))
+	if (0 > __super::Tick(_dDeltaTime))
 		return -1;
 
 	return _int();
 }
 
-_int CSilvermane_JogLeftPivot180::LateTick(const _double& TimeDelta)
+_int CSilvermane_JogLeftPivot180::LateTick(const _double& _dDeltaTime)
 {
-	if (0 > __super::LateTick(TimeDelta))
+	if (0 > __super::LateTick(_dDeltaTime))
 		return -1;
 
 	return _int();
@@ -71,8 +71,12 @@ HRESULT CSilvermane_JogLeftPivot180::ExitState()
 	return S_OK;
 }
 
-_int CSilvermane_JogLeftPivot180::KeyCheck(const _double& TimeDelta)
+_int CSilvermane_JogLeftPivot180::KeyCheck(const _double& _dDeltaTime)
 {
+	_int iProgress = __super::KeyCheck(_dDeltaTime);
+	if (NO_EVENT != iProgress)
+		return iProgress;
+
 	if (g_pGameInstance->getkeyPress(DIK_D))
 	{
 		if (m_pAnimationController->Is_Finished())
@@ -81,6 +85,8 @@ _int CSilvermane_JogLeftPivot180::KeyCheck(const _double& TimeDelta)
 				return -1;
 			return STATE_CHANGE;
 		}
+
+		Add_PlusAngle(EDir::Forward, _dDeltaTime);
 	}
 	else if (g_pGameInstance->getkeyPress(DIK_A))
 	{

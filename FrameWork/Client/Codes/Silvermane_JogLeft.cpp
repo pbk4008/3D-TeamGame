@@ -4,12 +4,12 @@
 #include "StateController.h"
 
 CSilvermane_JogLeft::CSilvermane_JogLeft(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
-	: CState_Silvermane(_pDevice, _pDeviceContext)
+	: CSilvermane_Jog(_pDevice, _pDeviceContext)
 {
 }
 
 CSilvermane_JogLeft::CSilvermane_JogLeft(const CSilvermane_JogLeft& _rhs)
-	: CState_Silvermane(_rhs)
+	: CSilvermane_Jog(_rhs)
 {
 }
 
@@ -75,6 +75,10 @@ HRESULT CSilvermane_JogLeft::ExitState()
 
 _int CSilvermane_JogLeft::KeyCheck(const _double& _dDeltaTime)
 {
+	_int iProgress = __super::KeyCheck(_dDeltaTime);
+	if (NO_EVENT != iProgress)
+		return iProgress;
+
 	if (g_pGameInstance->getkeyPress(DIK_A))
 	{
 		if (g_pGameInstance->getkeyPress(DIK_W))
@@ -88,6 +92,10 @@ _int CSilvermane_JogLeft::KeyCheck(const _double& _dDeltaTime)
 			if (FAILED(m_pStateController->Change_State(L"JogBwd")))
 				return E_FAIL;
 			return STATE_CHANGE;
+		}
+		else
+		{
+			Add_PlusAngle(EDir::Forward, _dDeltaTime);
 		}
 	}
 	else if (g_pGameInstance->getkeyPress(DIK_D))

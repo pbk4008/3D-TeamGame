@@ -68,6 +68,8 @@ HRESULT CGizmo::DrawCube(_matrix matTransform, const wstring& pCameraTag, _fvect
 	m_pEffect->SetView(pInstance->Get_Transform(pCameraTag, TRANSFORMSTATEMATRIX::D3DTS_VIEW));
 	m_pEffect->SetProjection(pInstance->Get_Transform(pCameraTag, TRANSFORMSTATEMATRIX::D3DTS_PROJECTION));
 
+	RELEASE_INSTANCE(CPipeLine);
+
 	m_pDeviceContext->IASetInputLayout(m_pInputLayOut);
 
 	m_pEffect->Apply(m_pDeviceContext);
@@ -127,6 +129,8 @@ HRESULT CGizmo::DrawLine(_fvector vStart, _fvector vEnd, const wstring& pCameraT
 	m_pEffect->SetView(pInstance->Get_Transform(pCameraTag, TRANSFORMSTATEMATRIX::D3DTS_VIEW));
 	m_pEffect->SetProjection(pInstance->Get_Transform(pCameraTag, TRANSFORMSTATEMATRIX::D3DTS_PROJECTION));
 
+	RELEASE_INSTANCE(CPipeLine);
+
 	m_pDeviceContext->IASetInputLayout(m_pInputLayOut);
 
 	m_pEffect->Apply(m_pDeviceContext);
@@ -156,6 +160,8 @@ HRESULT CGizmo::DrawSphere(_matrix matTransform, const wstring& pCameraTag, _fve
 
 	m_pEffect->SetView(pInstance->Get_Transform(pCameraTag, TRANSFORMSTATEMATRIX::D3DTS_VIEW));
 	m_pEffect->SetProjection(pInstance->Get_Transform(pCameraTag, TRANSFORMSTATEMATRIX::D3DTS_PROJECTION));
+
+	RELEASE_INSTANCE(CPipeLine);
 
 	m_pDeviceContext->IASetInputLayout(m_pInputLayOut);
 
@@ -191,6 +197,8 @@ HRESULT CGizmo::DrawCapsule(_matrix matTransform, const wstring& pCameraTag, _fv
 
 	m_pEffect->SetView(pInstance->Get_Transform(pCameraTag, TRANSFORMSTATEMATRIX::D3DTS_VIEW));
 	m_pEffect->SetProjection(pInstance->Get_Transform(pCameraTag, TRANSFORMSTATEMATRIX::D3DTS_PROJECTION));
+
+	RELEASE_INSTANCE(CPipeLine);
 
 	m_pDeviceContext->IASetInputLayout(m_pInputLayOut);
 
@@ -264,10 +272,12 @@ HRESULT CGizmo::DrawMesh(void* pPoints, const wstring& pCameraTag, _fvector vCol
 		return E_FAIL;
 
 	_float3* pTmp = (_float3*)pPoints;
-
-	DrawLine(XMLoadFloat3(&pTmp[0]), XMLoadFloat3(&pTmp[1]), pCameraTag, vColor);
-	DrawLine(XMLoadFloat3(&pTmp[1]), XMLoadFloat3(&pTmp[2]), pCameraTag, vColor);
-	DrawLine(XMLoadFloat3(&pTmp[2]), XMLoadFloat3(&pTmp[3]), pCameraTag, vColor);
+	HRESULT hr;
+	hr = DrawLine(XMLoadFloat3(&pTmp[0]), XMLoadFloat3(&pTmp[1]), pCameraTag, vColor);
+	hr = DrawLine(XMLoadFloat3(&pTmp[1]), XMLoadFloat3(&pTmp[2]), pCameraTag, vColor);
+	hr = DrawLine(XMLoadFloat3(&pTmp[2]), XMLoadFloat3(&pTmp[0]), pCameraTag, vColor);
+	if (FAILED(hr))
+		return E_FAIL;
 
 	return S_OK;
 }

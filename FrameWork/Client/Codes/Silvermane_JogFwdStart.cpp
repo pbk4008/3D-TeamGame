@@ -4,12 +4,12 @@
 #include "StateController.h"
 
 CSilvermane_JogFwdStart::CSilvermane_JogFwdStart(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
-	: CState_Silvermane(_pDevice, _pDeviceContext)
+	: CSilvermane_Jog(_pDevice, _pDeviceContext)
 {
 }
 
 CSilvermane_JogFwdStart::CSilvermane_JogFwdStart(const CSilvermane_JogFwdStart& _rhs)
-	: CState_Silvermane(_rhs)
+	: CSilvermane_Jog(_rhs)
 {
 }
 
@@ -21,17 +21,17 @@ HRESULT CSilvermane_JogFwdStart::NativeConstruct(void* _pArg)
 	return S_OK;
 }
 
-_int CSilvermane_JogFwdStart::Tick(const _double& TimeDelta)
+_int CSilvermane_JogFwdStart::Tick(const _double& _dDeltaTime)
 {
-	if (0 > __super::Tick(TimeDelta))
+	if (0 > __super::Tick(_dDeltaTime))
 		return -1;
 
 	return _int();
 }
 
-_int CSilvermane_JogFwdStart::LateTick(const _double& TimeDelta)
+_int CSilvermane_JogFwdStart::LateTick(const _double& _dDeltaTime)
 {
-	if (0 > __super::LateTick(TimeDelta))
+	if (0 > __super::LateTick(_dDeltaTime))
 		return -1;
 
 	return _int();
@@ -67,8 +67,12 @@ HRESULT CSilvermane_JogFwdStart::ExitState()
 	return S_OK;
 }
 
-_int CSilvermane_JogFwdStart::KeyCheck(const _double& TimeDelta)
+_int CSilvermane_JogFwdStart::KeyCheck(const _double& _dDeltaTime)
 {
+	_int iProgress = __super::KeyCheck(_dDeltaTime);
+	if (NO_EVENT != iProgress)
+		return iProgress;
+
 	if (g_pGameInstance->getkeyPress(DIK_W))
 	{
 		if (m_pAnimationController->Is_Finished())
@@ -76,6 +80,19 @@ _int CSilvermane_JogFwdStart::KeyCheck(const _double& TimeDelta)
 			if (FAILED(m_pStateController->Change_State(L"JogFwd")))
 				return -1;
 			return STATE_CHANGE;
+		}
+
+		if (g_pGameInstance->getkeyPress(DIK_A))
+		{
+			Add_PlusAngle(EDir::LeftForward, _dDeltaTime);
+		}
+		else if (g_pGameInstance->getkeyPress(DIK_D))
+		{
+			Add_PlusAngle(EDir::RightForward, _dDeltaTime);
+		}
+		else
+		{
+			Add_PlusAngle(EDir::Forward, _dDeltaTime);
 		}
 	}
 	else if (g_pGameInstance->getkeyPress(DIK_S))

@@ -362,6 +362,7 @@ technique11 DefaultTechnique
 		GeometryShader = NULL;
 		PixelShader = compile ps_5_0 PS_MAIN_SHADESHADOW();
 	}
+<<<<<<< HEAD
 	pass StaticMeshCull //------------------------------------------------------------------------------------5 StaticMeshRenderBackOn
 	{
 		SetRasterizerState(CullMode_BackOn);
@@ -384,6 +385,8 @@ technique11 DefaultTechnique
 		GeometryShader = NULL;
 		PixelShader = compile ps_5_0 PS_MAIN_TOOL();
 	}
+=======
+>>>>>>> main
 }
 
 
