@@ -180,8 +180,5 @@ void CCamera_Silvermane::Free()
 
 	Safe_Release(m_pCamera);
 
-	Safe_Release(m_pWorldTransform);
-	Safe_Release(m_pLocalTransform);
-
 	__super::Free();
 }
