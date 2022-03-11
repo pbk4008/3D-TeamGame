@@ -215,6 +215,7 @@ call Update_Library_Release.bat</Command>
     <ClInclude Include="..\public\ControllerBehaviorCallback.h" />
     <ClInclude Include="..\public\ControllerFilterCallback.h" />
     <ClInclude Include="..\public\ControllerHitReport.h" />
+    <ClInclude Include="..\public\CSTarget.h" />
     <ClInclude Include="..\public\Instancing_Mesh.h" />
     <ClInclude Include="..\public\Material_Manager.h" />
     <ClInclude Include="..\public\Effect.h" />
@@ -306,6 +307,7 @@ call Update_Library_Release.bat</Command>
     <ClCompile Include="..\private\ControllerBehaviorCallback.cpp" />
     <ClCompile Include="..\private\ControllerFilterCallback.cpp" />
     <ClCompile Include="..\private\ControllerHitReport.cpp" />
+    <ClCompile Include="..\private\CSTarget.cpp" />
     <ClCompile Include="..\private\Instancing_Mesh.cpp" />
     <ClCompile Include="..\private\Material_Manager.cpp" />
     <ClCompile Include="..\private\Collider.cpp" />
@@ -368,6 +370,9 @@ call Update_Library_Release.bat</Command>
     <ClCompile Include="..\private\VIBuffer_Triangle.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <FxCompile Include="..\bin\ShaderFiles\Shader_CSGSBlur.hlsl" />
+    <FxCompile Include="..\bin\ShaderFiles\Shader_DownSample.hlsl" />
+    <FxCompile Include="..\bin\ShaderFiles\Shader_DSViewPort.hlsl" />
     <FxCompile Include="..\bin\ShaderFiles\Shader_RectViewport.hlsl" />
     <FxCompile Include="..\bin\ShaderFiles\Shader_Triangle.hlsl" />
   </ItemGroup>

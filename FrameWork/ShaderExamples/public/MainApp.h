@@ -38,6 +38,11 @@ private:
 	HRESULT Init_Camera();
 	HRESULT Ready_Fonts();
 
+	_bool	m_bShadow = false;
+	_bool	m_bPBR = false;
+	_bool	m_bBlur = false;
+	_bool	m_bDeferred = false;
+
 public:
 	static CMainApp* Create();
 	virtual void Free() override;
