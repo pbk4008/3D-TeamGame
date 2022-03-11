@@ -50,16 +50,19 @@ VS_OUT VS_MAIN(VS_IN In)
     matWV = mul(g_WorldMatrix, g_ViewMatrix);
     matWVP = mul(matWV, g_ProjMatrix);
 	
-    Out.vPosition = mul(vector(In.vPosition, 1.f), matWVP);
+    vector vPosition = mul(vector(In.vPosition, 1.f), In.TransformMatrix);
+    
+    Out.vPosition = mul(vPosition , matWVP);
+    //Out.vPosition = mul(vector(In.vPosition, 1.f), matWVP);
     //Out.vTexUV = In.vTexUV;
 	
 	
-    //vector vPosition = mul(vector(In.vPosition, 1.f), In.TransformMatrix);
+   
     
     //Out.vPosition = mul(vPosition, g_WorldMatrix);
-    //Out.vPSize.x = In.vPSize.x * In.TransformMatrix._11;
-    //Out.vPSize.y = In.vPSize.y * In.TransformMatrix._22;
-    Out.vPSize = In.vPSize;
+    Out.vPSize.x = In.vPSize.x * In.TransformMatrix._11;
+    Out.vPSize.y = In.vPSize.y * In.TransformMatrix._22;
+    //Out.vPSize = In.vPSize;
 	
     return Out;
 }
@@ -81,27 +84,23 @@ void GS_MAIN(point GS_IN In[1], inout TriangleStream<GS_OUT> OutStream)
 {
     GS_OUT Out[6];
 
-    vector vAxisY = vector(0.f, 1.f, 0.f, 0.f);
+    vector vRight = vector(1.f, 0.f, 0.f, 0.f);
+    vector vUp = vector(0.f, 1.f, 0.f, 0.f);
 
-    vector vLook = normalize(float4(0.f, 0.f, 0.f, 1.f) - In[0].vPosition);
-    vector vRight = vector(normalize(cross(vAxisY.xyz, vLook.xyz)), 0.f);
-    vector vUp = vector(normalize(cross(vLook.xyz, vRight.xyz)), 0.f);
-    
     Out[0].vPosition = In[0].vPosition + (vRight * In[0].vPSize.x * 0.5f) +
 		(vUp * In[0].vPSize.y * 0.5f);
     Out[0].vTexUV = float2(0.f, 0.f);
-    Out[0].vPosition.z = 0.1f;
-    
+    //Out[0].vPosition.z = 0.9f;
 
     Out[1].vPosition = In[0].vPosition + (vRight * In[0].vPSize.x * -0.5f) +
 		(vUp * In[0].vPSize.y * 0.5f);
     Out[1].vTexUV = float2(1.f, 0.f);
-    Out[1].vPosition.z = 0.1f;
+   // Out[1].vPosition.z = 0.9f;
 
     Out[2].vPosition = In[0].vPosition + (vRight * In[0].vPSize.x * -0.5f) +
 		(vUp * In[0].vPSize.y * -0.5f);
     Out[2].vTexUV = float2(1.f, 1.f);
-    Out[2].vPosition.z = 0.1f;
+   // Out[2].vPosition.z = 0.9f;
 
     OutStream.Append(Out[0]);
     OutStream.Append(Out[1]);
@@ -116,7 +115,7 @@ void GS_MAIN(point GS_IN In[1], inout TriangleStream<GS_OUT> OutStream)
     Out[5].vPosition = In[0].vPosition + (vRight * In[0].vPSize.x * 0.5f) +
 		(vUp * In[0].vPSize.y * -0.5f);
     Out[5].vTexUV = float2(0.f, 1.f);
-    Out[5].vPosition.z = 0.1f;
+  //  Out[5].vPosition.z = 0.9f;
 
     OutStream.Append(Out[3]);
     OutStream.Append(Out[4]);

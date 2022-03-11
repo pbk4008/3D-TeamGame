@@ -112,7 +112,7 @@ HRESULT CUI_Ingame::Render()
 
 	m_pBuffer->SetUp_TextureOnShader("g_DiffuseTexture", m_pTexture); 
 
-	m_pBuffer->Render(1);
+	m_pBuffer->Render(3);
 	
 	return S_OK;
 }

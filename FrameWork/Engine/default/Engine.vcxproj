@@ -201,11 +201,7 @@ call Update_Library_Release.bat</Command>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\bin\ShaderFiles\Shader_Calculate.hpp" />
-<<<<<<< HEAD
     <ClInclude Include="..\bin\ShaderFiles\Shader_RenderState.hpp" />
-    <ClInclude Include="..\private\MeshCollider.h" />
-=======
->>>>>>> Main
     <ClInclude Include="..\public\Actor.h" />
     <ClInclude Include="..\public\Animation.h" />
     <ClInclude Include="..\public\AnimationController.h">
