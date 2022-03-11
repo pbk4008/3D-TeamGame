@@ -32,14 +32,14 @@ namespace Engine
 		XMFLOAT4X4		OffsetMatrix;
 		class CHierarchyNode*	pNode;
 	}BONEDESC;
-
+	
 	typedef struct tagVertex_Mesh
 	{
 		XMFLOAT3		vPosition;
 		XMFLOAT3		vNormal;
 		XMFLOAT2		vTexUV;
 		XMFLOAT3		vTangent;
-		//XMFLOAT3		vBiNormal;
+		XMFLOAT3		vBiNormal;
 	}VTXMESH;
 
 	typedef struct tagVertex_Anim : public VTXMESH

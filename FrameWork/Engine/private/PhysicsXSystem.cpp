@@ -26,9 +26,9 @@ HRESULT CPhysicsXSystem::Init_PhysicsX()
 
 	cookingParams.meshPreprocessParams = PxMeshPreprocessingFlag::eDISABLE_CLEAN_MESH;
 
-	PxCooking* pCooking = PxCreateCooking(PX_PHYSICS_VERSION, *m_pFoundation, cookingParams);
+	m_pCooking = PxCreateCooking(PX_PHYSICS_VERSION, *m_pFoundation, cookingParams);
 
-	if (!pCooking)
+	if (!m_pCooking)
 		return E_FAIL;
 
 	if (FAILED(Intit_Scene()))

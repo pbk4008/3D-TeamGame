@@ -92,7 +92,7 @@ HRESULT CMenu_Form::Create_Model_Prototype(const FILEINFO& _fileInfo)
 	string FolderName;
 	FolderName.assign(_fileInfo.cstrFolder.begin(), _fileInfo.cstrFolder.end());
 	
-	wstring Static_ShaderFilePath = L"../../Reference/ShaderFile/Shader_Mesh.hlsl";
+	wstring Static_ShaderFilePath = L"../../Reference/ShaderFile/Shader_StaticMesh.hlsl";
 	wstring Anim_ShaderFilePath = L"../../Reference/ShaderFile/Shader_MeshAnim.hlsl";
 
 	_matrix  PivotMatrix;
@@ -136,7 +136,6 @@ END_MESSAGE_MAP()
 
 
 // CMenu_Form 진단
-
 #ifdef _DEBUG
 void CMenu_Form::AssertValid() const
 {
@@ -150,7 +149,6 @@ void CMenu_Form::Dump(CDumpContext& dc) const
 }
 #endif
 #endif //_DEBUG
-
 
 // CMenu_Form 메시지 처리기
 

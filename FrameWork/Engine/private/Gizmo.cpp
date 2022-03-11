@@ -264,10 +264,12 @@ HRESULT CGizmo::DrawMesh(void* pPoints, const wstring& pCameraTag, _fvector vCol
 		return E_FAIL;
 
 	_float3* pTmp = (_float3*)pPoints;
-
-	DrawLine(XMLoadFloat3(&pTmp[0]), XMLoadFloat3(&pTmp[1]), pCameraTag, vColor);
-	DrawLine(XMLoadFloat3(&pTmp[1]), XMLoadFloat3(&pTmp[2]), pCameraTag, vColor);
-	DrawLine(XMLoadFloat3(&pTmp[2]), XMLoadFloat3(&pTmp[3]), pCameraTag, vColor);
+	HRESULT hr;
+	hr = DrawLine(XMLoadFloat3(&pTmp[0]), XMLoadFloat3(&pTmp[1]), pCameraTag, vColor);
+	hr = DrawLine(XMLoadFloat3(&pTmp[1]), XMLoadFloat3(&pTmp[2]), pCameraTag, vColor);
+	hr = DrawLine(XMLoadFloat3(&pTmp[2]), XMLoadFloat3(&pTmp[0]), pCameraTag, vColor);
+	if (FAILED(hr))
+		return E_FAIL;
 
 	return S_OK;
 }

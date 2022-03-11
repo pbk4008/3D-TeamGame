@@ -64,7 +64,7 @@ _int CTool_Main::Tool_Main_Update(const _double _dTimeDelta)
 
 HRESULT CTool_Main::Tool_Main_Render(void)
 {
-	if (FAILED(g_pGameInstance->Clear_BackBuffer_View(XMFLOAT4(0.21f, 0.21f, 0.21f, 1.f))))
+	if (FAILED(g_pGameInstance->Clear_BackBuffer_View(XMFLOAT4(0.324f, 0.273f, 0.398f, 1.f))))
 		return E_FAIL;
 	if (FAILED(g_pGameInstance->Clear_DepthStencil_View()))
 		return E_FAIL;
