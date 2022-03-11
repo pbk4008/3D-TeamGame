@@ -219,7 +219,7 @@ void CPlane::Pick_Model(void)
 	vRayPos = XMVector3TransformCoord(vRayPos, matInverseWrold);
 	vRayDir = XMVector3TransformNormal(vRayDir, matInverseWrold);
 
-	FACEINDICES32* Indices = m_pVIBufferCom->Get_Indices();
+	FACEINDICES32* Indices = (FACEINDICES32*)m_pVIBufferCom->Get_Indices();
 	void* pVertices = m_pVIBufferCom->Get_Vertices();
 	_uint iNumFaces = m_pVIBufferCom->Get_NumFaces();
 	_float fBary1, fBary2;

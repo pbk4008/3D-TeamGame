@@ -54,6 +54,7 @@ HRESULT CTool_Main::Tool_Main_Ready(void)
 
 _int CTool_Main::Tool_Main_Update(const _double _dTimeDelta)
 {
+	g_pGameInstance->Update_InputDev();
 	g_pGameInstance->Tick_Engine(_dTimeDelta);
 
 	m_pMenu_Form->Update_Menu_Form(_dTimeDelta);

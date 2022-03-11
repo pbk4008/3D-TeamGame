@@ -250,10 +250,6 @@ HRESULT CMeshContainer::Set_UpVerticesDesc(CModel* pModel, aiMesh* pMesh, _fmatr
 		memcpy(&pVertices->vTexUV, &pMesh->mTextureCoords[0][i], sizeof(_float2));
 		memcpy(&pVertices->vTangent, &pMesh->mTangents[i], sizeof(_float3));
 		memcpy(&pVertices->vBiNormal, &pMesh->mBitangents[i], sizeof(_float3));
-<<<<<<< HEAD
-=======
-
->>>>>>> main
 	}
 	m_VBSubresourceData.pSysMem = m_pVertices;
 
