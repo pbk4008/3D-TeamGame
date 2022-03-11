@@ -1,10 +1,10 @@
 #pragma once
 
-#include "State_Silvermane.h"
+#include "Silvermane_Jog.h"
 
 BEGIN(Client)
 
-class CSilvermane_JogLeftPivot180 final : public CState_Silvermane
+class CSilvermane_JogLeftPivot180 final : public CSilvermane_Jog
 {
 protected:
 	explicit CSilvermane_JogLeftPivot180(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext);

@@ -51,6 +51,14 @@ HRESULT CPhysicsXSystem::Init_PhysicsX()
 
 	if (FAILED(Init_ControllerManager())) return E_FAIL;
 
+
+#ifdef _DEBUG
+	m_pScene->setVisualizationParameter(PxVisualizationParameter::eSCALE, 1.f);
+	m_pScene->setVisualizationParameter(PxVisualizationParameter::eCOLLISION_SHAPES, 1.f);
+	//m_pScene->setVisualizationParameter(PxVisualizationParameter::eACTOR_AXES, 2.f); // ±âÁî¸ð
+#endif // _DEBUG
+
+
 	return S_OK;
 }
 
@@ -208,7 +216,13 @@ HRESULT CPhysicsXSystem::Create_CharacterController(CCharacterController* _pCont
 
 	*_ppOutPxController = pPxController;
 
+	m_pScene->addActor(*pPxController->getActor());
 	return S_OK;
+}
+
+const PxRenderBuffer& CPhysicsXSystem::Get_RenderBuffer()
+{
+	return m_pScene->getRenderBuffer();
 }
 
 HRESULT CPhysicsXSystem::Intit_Scene()

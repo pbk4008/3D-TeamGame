@@ -4,12 +4,12 @@
 #include "StateController.h"
 
 CSilvermane_JogLeft::CSilvermane_JogLeft(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
-	: CState_Silvermane(_pDevice, _pDeviceContext)
+	: CSilvermane_Jog(_pDevice, _pDeviceContext)
 {
 }
 
 CSilvermane_JogLeft::CSilvermane_JogLeft(const CSilvermane_JogLeft& _rhs)
-	: CState_Silvermane(_rhs)
+	: CSilvermane_Jog(_rhs)
 {
 }
 

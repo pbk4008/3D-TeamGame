@@ -180,11 +180,18 @@
     <ClInclude Include="..\Default\Client_Function.h" />
     <ClInclude Include="..\Default\Client_Include.h" />
     <ClInclude Include="..\Default\Clinet_Define.h" />
-    <ClInclude Include="..\Headers\1H_SowrdAttackNormalR1_01.h" />
-    <ClInclude Include="..\Headers\1H_SowrdAttackNormalR1_02.h" />
+    <ClInclude Include="..\Headers\1H_SwordAttackNormalR1_01.h" />
+    <ClInclude Include="..\Headers\1H_SwordAttackNormalR1_02.h" />
+    <ClInclude Include="..\Headers\1H_SwordAttackNormalR1_03.h" />
+    <ClInclude Include="..\Headers\1H_SwordAttackNormalR1_04.h" />
+    <ClInclude Include="..\Headers\1H_SwordJogAttack.h" />
+    <ClInclude Include="..\Headers\1H_SwordSupermanStab.h" />
     <ClInclude Include="..\Headers\1H_SwordDodgeSpinFwd_V3.h" />
     <ClInclude Include="..\Headers\1H_SwordEquipOff.h" />
     <ClInclude Include="..\Headers\1H_SwordEquipOn.h" />
+    <ClInclude Include="..\Headers\1H_SwordNormalSidestepBwd_V3.h" />
+    <ClInclude Include="..\Headers\1H_SwordNormalSidestepLeft_V3.h" />
+    <ClInclude Include="..\Headers\1H_SwordNormalSidestepRight_V3.h" />
     <ClInclude Include="..\Headers\BackGround.h" />
     <ClInclude Include="..\Headers\Camera_Silvermane.h" />
     <ClInclude Include="..\Headers\Camera_Debug.h" />
@@ -210,6 +217,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClInclude>
     <ClInclude Include="..\Headers\Silvermane_Idle.h" />
+    <ClInclude Include="..\Headers\Silvermane_Jog.h" />
     <ClInclude Include="..\Headers\Silvermane_JogBwd.h" />
     <ClInclude Include="..\Headers\Silvermane_JogBwdStart.h" />
     <ClInclude Include="..\Headers\Silvermane_JogBwdPivot180.h" />
@@ -239,11 +247,18 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\Codes\1H_SowrdAttackNormalR1_01.cpp" />
-    <ClCompile Include="..\Codes\1H_SowrdAttackNormalR1_02.cpp" />
+    <ClCompile Include="..\Codes\1H_SwordAttackNormalR1_01.cpp" />
+    <ClCompile Include="..\Codes\1H_SwordAttackNormalR1_02.cpp" />
+    <ClCompile Include="..\Codes\1H_SwordAttackNormalR1_03.cpp" />
+    <ClCompile Include="..\Codes\1H_SwordAttackNormalR1_04.cpp" />
+    <ClCompile Include="..\Codes\1H_SwordJogAttack.cpp" />
+    <ClCompile Include="..\Codes\1H_SwordSupermanStab.cpp" />
     <ClCompile Include="..\Codes\1H_SwordDodgeSpinFwd_V3.cpp" />
     <ClCompile Include="..\Codes\1H_SwordEquipOff.cpp" />
     <ClCompile Include="..\Codes\1H_SwordEquipOn.cpp" />
+    <ClCompile Include="..\Codes\1H_SwordNormalSidestepBwd_V3.cpp" />
+    <ClCompile Include="..\Codes\1H_SwordNormalSidestepLeft_V3.cpp" />
+    <ClCompile Include="..\Codes\1H_SwordNormalSidestepRight_V3.cpp" />
     <ClCompile Include="..\Codes\BackGround.cpp" />
     <ClCompile Include="..\Codes\Monster_Bastion_2HSword.cpp" />
     <ClCompile Include="..\Codes\Camera_Silvermane.cpp" />
@@ -270,6 +285,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\Codes\Silvermane_Idle.cpp" />
+    <ClCompile Include="..\Codes\Silvermane_Jog.cpp" />
     <ClCompile Include="..\Codes\Silvermane_JogBwd.cpp" />
     <ClCompile Include="..\Codes\Silvermane_JogBwdStart.cpp" />
     <ClCompile Include="..\Codes\Silvermane_JogBwdPivot180.cpp" />

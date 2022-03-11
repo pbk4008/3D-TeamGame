@@ -415,6 +415,11 @@ const _int CAnimationController::Move_Transform(const _double& _dDeltaTime)
 	return _int();
 }
 
+void CAnimationController::Reset_Animation()
+{
+	m_pCurAnim->Reset_Animation();
+}
+
 void CAnimationController::Render_Debug()
 {
 	if (FAILED(g_pGameInstance->Render_Font(TEXT("Font_Arial"), XMVectorSet(1.f, 0.0f, 0.f, 1.f), m_wstrPosition.c_str(), _float2(0.f, 80.f), _float2(0.8f, 0.8f))))

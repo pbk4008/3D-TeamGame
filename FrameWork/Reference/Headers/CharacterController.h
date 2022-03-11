@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Component.h"
+#include "DebugDraw.h"
 
 BEGIN(Engine)
 
@@ -80,6 +81,13 @@ private:
 	_float4x4 m_matWorld;
 
 	CTransform* m_pOwnerTransform = nullptr;
+
+	// 그리기용
+private:
+	BasicEffect* m_pEffect = nullptr;
+	PrimitiveBatch<VertexPositionColor>* m_pBatch = nullptr;
+	ID3D11InputLayout* m_pInputLayout = nullptr;
+
 public:
 	static CCharacterController* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext);
 	virtual CComponent* Clone(void* _pArg = nullptr);

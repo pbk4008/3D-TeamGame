@@ -4,11 +4,11 @@
 
 BEGIN(Engine)
 
-class C1H_SowrdAttackNormalR1_02 final : public CState_Silvermane
+class C1H_SwordAttackNormalR1_02 final : public CState_Silvermane
 {
 private:
-	explicit C1H_SowrdAttackNormalR1_02(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext);
-	virtual ~C1H_SowrdAttackNormalR1_02() = default;
+	explicit C1H_SwordAttackNormalR1_02(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext);
+	virtual ~C1H_SwordAttackNormalR1_02() = default;
 
 public:
 	virtual HRESULT NativeConstruct(void* _pArg = nullptr);
@@ -24,7 +24,7 @@ public:
 	virtual _int KeyCheck(const _double& _dDeltaTime) override;
 
 public:
-	static C1H_SowrdAttackNormalR1_02* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext, void* _pArg = nullptr);
+	static C1H_SwordAttackNormalR1_02* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext, void* _pArg = nullptr);
 	virtual void Free() override;
 };
 

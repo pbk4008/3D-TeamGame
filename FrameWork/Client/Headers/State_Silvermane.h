@@ -13,7 +13,6 @@ public:
 	enum class EDir { Left, Forward, Right, Backward, LeftForward, RightForward, LeftBackward, RightBackward, Max};
 protected:
 	explicit CState_Silvermane(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext);
-	explicit CState_Silvermane(const CState_Silvermane& _rhs);
 	virtual ~CState_Silvermane() = default;
 
 public:

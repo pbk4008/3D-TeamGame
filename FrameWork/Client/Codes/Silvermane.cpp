@@ -31,13 +31,21 @@
 #include "Silvermane_SprintFwdStop.h"
 
 //////////////////// 1H
-#include "1H_SowrdAttackNormalR1_01.h"
-#include "1H_SowrdAttackNormalR1_02.h"
+#include "1H_SwordAttackNormalR1_01.h"
+#include "1H_SwordAttackNormalR1_02.h"
+#include "1H_SwordAttackNormalR1_03.h"
+#include "1H_SwordAttackNormalR1_04.h"
+
+#include "1H_SwordJogAttack.h"
+#include "1H_SwordSupermanStab.h"
 
 #include "1H_SwordEquipOff.h"
 #include "1H_SwordEquipOn.h"
 
 #include "1H_SwordDodgeSpinFwd_V3.h"
+#include "1H_SwordNormalSidestepBwd_V3.h"
+#include "1H_SwordNormalSidestepLeft_V3.h"
+#include "1H_SwordNormalSidestepRight_V3.h"
 #pragma endregion
 
 
@@ -111,6 +119,11 @@ HRESULT CSilvermane::Render()
 {
 	if (FAILED(__super::Render())) return E_FAIL;
 
+#ifdef _DEBUG
+	m_pCharacterController->Render();
+#endif // _DEBUG
+
+
 	_matrix smatWorld, smatView, smatProj;
 	smatWorld = XMMatrixTranspose(m_pTransform->Get_CombinedMatrix());
 	smatView = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_VIEW));
@@ -136,7 +149,6 @@ HRESULT CSilvermane::Render()
 	wstring wstrPlusAngle = L"Plus Angle : " + to_wstring(m_fPlusAngle);
 	if (FAILED(g_pGameInstance->Render_Font(TEXT("Font_Arial"), XMVectorSet(1.f, 0.0f, 0.f, 1.f), wstrPlusAngle.c_str(), _float2(0.f, 340.f), _float2(0.8f, 0.8f))))
 		return E_FAIL;
-	m_pCharacterController->Render();
 #endif
 
 	return S_OK;
@@ -172,8 +184,8 @@ HRESULT CSilvermane::Ready_Components()
 
 	// 캐릭터 컨트롤러
 	CCharacterController::CHARACTERCONTROLLERDESC tCharacterControllerDesc;
-	tCharacterControllerDesc.fHeight = 4.f;
-	tCharacterControllerDesc.fRadius = 1.f;
+	tCharacterControllerDesc.fHeight = 2.f;
+	tCharacterControllerDesc.fRadius = 0.5f;
 	tCharacterControllerDesc.fStaticFriction = 0.5f;
 	tCharacterControllerDesc.fDynamicFriction = 0.5f;
 	tCharacterControllerDesc.fRestitution = 0.f;
@@ -224,15 +236,29 @@ HRESULT CSilvermane::Ready_States()
 		return E_FAIL;
 #pragma endregion
 #pragma region 1H
-	if (FAILED(m_pStateController->Add_State(L"1H_SwordAttackNormalR1_01", C1H_SowrdAttackNormalR1_01::Create(m_pDevice, m_pDeviceContext))))
+	if (FAILED(m_pStateController->Add_State(L"1H_SwordAttackNormalR1_01", C1H_SwordAttackNormalR1_01::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
-	if (FAILED(m_pStateController->Add_State(L"1H_SwordAttackNormalR1_02", C1H_SowrdAttackNormalR1_02::Create(m_pDevice, m_pDeviceContext))))
+	if (FAILED(m_pStateController->Add_State(L"1H_SwordAttackNormalR1_02", C1H_SwordAttackNormalR1_02::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	if (FAILED(m_pStateController->Add_State(L"1H_SwordAttackNormalR1_03", C1H_SwordAttackNormalR1_03::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	if (FAILED(m_pStateController->Add_State(L"1H_SwordAttackNormalR1_04", C1H_SwordAttackNormalR1_04::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	if (FAILED(m_pStateController->Add_State(L"1H_SwordJogAttack", C1H_SwordJogAttack::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	if (FAILED(m_pStateController->Add_State(L"1H_SwordSupermanStab", C1H_SwordSupermanStab::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 	if (FAILED(m_pStateController->Add_State(L"1H_SwordEquipOff", C1H_SwordEquipOff::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 	if (FAILED(m_pStateController->Add_State(L"1H_SwordEquipOn", C1H_SwordEquipOn::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 	if (FAILED(m_pStateController->Add_State(L"1H_DodgeSpin", C1H_SwordDodgeSpinFwd_V3::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	if (FAILED(m_pStateController->Add_State(L"1H_SidestepBwd", C1H_SwordNormalSidestepBwd_V3::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	if (FAILED(m_pStateController->Add_State(L"1H_SidestepLeft", C1H_SwordNormalSidestepLeft_V3::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	if (FAILED(m_pStateController->Add_State(L"1H_SidestepRight", C1H_SwordNormalSidestepRight_V3::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 #pragma endregion
 
@@ -274,6 +300,13 @@ void CSilvermane::Set_EquipWeapon(const _bool _isEquipWeapon)
 	m_pWeapon->Set_Equip(m_isEquipWeapon);
 }
 
+void CSilvermane::Set_WeaponFixedBone(const string& _sstrFixedBoneTag)
+{
+	CHierarchyNode* pFixedBone = m_pModel->Get_BoneMatrix(_sstrFixedBoneTag.c_str());
+	if(pFixedBone)
+		m_pWeapon->Set_FixedBone(pFixedBone);
+}
+
 void CSilvermane::Set_WeaponFixedBone(CHierarchyNode* _pFixedBone)
 {
 	if (m_pWeapon)
@@ -283,6 +316,11 @@ void CSilvermane::Set_WeaponFixedBone(CHierarchyNode* _pFixedBone)
 void CSilvermane::Set_Camera(CCamera_Silvermane* _pCamera)
 {
 	m_pCamera = _pCamera;
+}
+
+void CSilvermane::Set_PlusAngle(const _float _fAngle)
+{
+	m_fPlusAngle = _fAngle;
 }
 
 const _bool CSilvermane::Is_EquipWeapon() const
@@ -295,10 +333,6 @@ void CSilvermane::Add_PlusAngle(const _float _fDeltaAngle)
 	m_fPlusAngle += _fDeltaAngle * 400.f;
 	if (360.f < m_fPlusAngle || -360.f > m_fPlusAngle)
 		m_fPlusAngle = fmodf(m_fPlusAngle, 360.f);
-	//if (-45.f > m_fPlusAngle)
-	//	m_fPlusAngle = -45.f;
-	//else if (45.f < m_fPlusAngle)
-	//	m_fPlusAngle = 45.f;
 }
 
 _int CSilvermane::Trace_CameraLook(const _double& _dDeltaTime)

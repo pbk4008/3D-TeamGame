@@ -1,14 +1,14 @@
 #include "pch.h"
-#include "1H_SowrdAttackNormalR1_02.h"
+#include "1H_SwordAttackNormalR1_02.h"
 
 #include "StateController.h"
 
-C1H_SowrdAttackNormalR1_02::C1H_SowrdAttackNormalR1_02(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
+C1H_SwordAttackNormalR1_02::C1H_SwordAttackNormalR1_02(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
 	: CState_Silvermane(_pDevice, _pDeviceContext)
 {
 }
 
-HRESULT C1H_SowrdAttackNormalR1_02::NativeConstruct(void* _pArg)
+HRESULT C1H_SwordAttackNormalR1_02::NativeConstruct(void* _pArg)
 {
 	if (FAILED(__super::NativeConstruct(_pArg)))
 		return E_FAIL;
@@ -16,7 +16,7 @@ HRESULT C1H_SowrdAttackNormalR1_02::NativeConstruct(void* _pArg)
 	return S_OK;
 }
 
-_int C1H_SowrdAttackNormalR1_02::Tick(const _double& _dDeltaTime)
+_int C1H_SwordAttackNormalR1_02::Tick(const _double& _dDeltaTime)
 {
 	_int iProgress = __super::Tick(_dDeltaTime);
 	if (NO_EVENT != iProgress)
@@ -31,7 +31,7 @@ _int C1H_SowrdAttackNormalR1_02::Tick(const _double& _dDeltaTime)
 	return _int();
 }
 
-_int C1H_SowrdAttackNormalR1_02::LateTick(const _double& _dDeltaTime)
+_int C1H_SwordAttackNormalR1_02::LateTick(const _double& _dDeltaTime)
 {
 	_int iProgress = __super::LateTick(_dDeltaTime);
 	if (NO_EVENT != iProgress)
@@ -40,7 +40,7 @@ _int C1H_SowrdAttackNormalR1_02::LateTick(const _double& _dDeltaTime)
 	return _int();
 }
 
-HRESULT C1H_SowrdAttackNormalR1_02::Render()
+HRESULT C1H_SwordAttackNormalR1_02::Render()
 {
 	if (FAILED(__super::Render()))
 		return E_FAIL;
@@ -48,7 +48,7 @@ HRESULT C1H_SowrdAttackNormalR1_02::Render()
 	return S_OK;
 }
 
-HRESULT C1H_SowrdAttackNormalR1_02::EnterState()
+HRESULT C1H_SwordAttackNormalR1_02::EnterState()
 {
 	if (FAILED(__super::EnterState()))
 		return E_FAIL;
@@ -60,7 +60,7 @@ HRESULT C1H_SowrdAttackNormalR1_02::EnterState()
 	return S_OK;
 }
 
-HRESULT C1H_SowrdAttackNormalR1_02::ExitState()
+HRESULT C1H_SwordAttackNormalR1_02::ExitState()
 {
 	if (FAILED(__super::ExitState()))
 		return E_FAIL;
@@ -68,37 +68,39 @@ HRESULT C1H_SowrdAttackNormalR1_02::ExitState()
 	return S_OK;
 }
 
-_int C1H_SowrdAttackNormalR1_02::KeyCheck(const _double& _dDeltaTime)
+_int C1H_SwordAttackNormalR1_02::KeyCheck(const _double& _dDeltaTime)
 {
 	_int iProgress = __super::KeyCheck(_dDeltaTime);
 	if (NO_EVENT != iProgress)
 		return iProgress;
 	
-	if (21 < m_pAnimationController->Get_CurKeyFrameIndex())
+	if (14 < m_pAnimationController->Get_CurKeyFrameIndex())
 	{
 		if (g_pGameInstance->getMouseKeyDown(CInputDev::MOUSESTATE::MB_LBUTTON))
 		{
-
+			if (FAILED(m_pStateController->Change_State(L"1H_SwordAttackNormalR1_03")))
+				return E_FAIL;
+			return STATE_CHANGE;
 		}
 	}
 
 	return _int();
 }
 
-C1H_SowrdAttackNormalR1_02* C1H_SowrdAttackNormalR1_02::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext, void* _pArg)
+C1H_SwordAttackNormalR1_02* C1H_SwordAttackNormalR1_02::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext, void* _pArg)
 {
-	C1H_SowrdAttackNormalR1_02* pInstance = new C1H_SowrdAttackNormalR1_02(_pDevice, _pDeviceContext);
+	C1H_SwordAttackNormalR1_02* pInstance = new C1H_SwordAttackNormalR1_02(_pDevice, _pDeviceContext);
 
 	if (FAILED(pInstance->NativeConstruct(_pArg)))
 	{
-		MSGBOX("C1H_SowrdAttackNormalR1_02 Create Fail");
+		MSGBOX("C1H_SwordAttackNormalR1_02 Create Fail");
 		Safe_Release(pInstance);
 	}
 
 	return pInstance;
 }
 
-void C1H_SowrdAttackNormalR1_02::Free()
+void C1H_SwordAttackNormalR1_02::Free()
 {
 
 	__super::Free();

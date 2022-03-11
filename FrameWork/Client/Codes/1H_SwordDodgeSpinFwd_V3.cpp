@@ -76,8 +76,35 @@ _int C1H_SwordDodgeSpinFwd_V3::KeyCheck(const _double& _dDeltaTime)
 	_int iProgress = __super::KeyCheck(_dDeltaTime);
 	if (NO_EVENT != iProgress)
 		return iProgress;
-	
 
+	if (g_pGameInstance->getkeyDown(DIK_SPACE))
+	{
+		if (g_pGameInstance->getkeyPress(DIK_W))
+		{
+			if (20 < m_pAnimationController->Get_CurKeyFrameIndex())
+			{
+				m_pAnimationController->Reset_Animation();
+			}
+		}
+		else if (g_pGameInstance->getkeyDown(DIK_A))
+		{
+			if (FAILED(m_pStateController->Change_State(L"1H_SidestepLeft")))
+				return E_FAIL;
+			return STATE_CHANGE;
+		}
+		else if (g_pGameInstance->getkeyDown(DIK_D))
+		{
+			if (FAILED(m_pStateController->Change_State(L"1H_SidestepRight")))
+				return E_FAIL;
+			return STATE_CHANGE;
+		}
+		else
+		{
+			if (FAILED(m_pStateController->Change_State(L"1H_SidestepBwd")))
+				return E_FAIL;
+			return STATE_CHANGE;
+		}
+	}
 
 	return _int();
 }

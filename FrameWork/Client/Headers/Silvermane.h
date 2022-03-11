@@ -34,8 +34,10 @@ public:
 
 	void Set_Move(const _bool _isMove);
 	void Set_EquipWeapon(const _bool _isEquipWeapon);
+	void Set_WeaponFixedBone(const string& _wstrFixedBoneTag);
 	void Set_WeaponFixedBone(CHierarchyNode* _pFixedBone);
 	void Set_Camera(CCamera_Silvermane* _pCamera);
+	void Set_PlusAngle(const _float _fAngle);
 
 	const _bool Is_EquipWeapon() const;
 	void Add_PlusAngle(const _float _fDeltaAngle);

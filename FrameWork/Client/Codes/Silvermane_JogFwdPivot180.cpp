@@ -4,12 +4,12 @@
 #include "StateController.h"
 
 CSilvermane_JogFwdPivot180::CSilvermane_JogFwdPivot180(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
-	: CState_Silvermane(_pDevice, _pDeviceContext)
+	: CSilvermane_Jog(_pDevice, _pDeviceContext)
 {
 }
 
 CSilvermane_JogFwdPivot180::CSilvermane_JogFwdPivot180(const CSilvermane_JogFwdPivot180& _rhs)
-	: CState_Silvermane(_rhs)
+	: CSilvermane_Jog(_rhs)
 {
 }
 

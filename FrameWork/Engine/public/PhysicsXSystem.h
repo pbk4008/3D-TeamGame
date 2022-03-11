@@ -40,6 +40,7 @@ public:
 	PxShape* Init_Mesh(const PxTriangleMeshDesc& tDesc);
 	HRESULT Create_Material(const PxReal _staticFriction, const PxReal _dynamicFriction, const PxReal _restitution, PxMaterial** _ppOutMaterial);
 	HRESULT Create_CharacterController(CCharacterController* _pController, PxController** _ppOutPxController, vector<PxShape*>& _vecShapes);
+	const PxRenderBuffer& Get_RenderBuffer();
 private:
 	HRESULT Intit_Scene();
 	HRESULT Init_ControllerManager();

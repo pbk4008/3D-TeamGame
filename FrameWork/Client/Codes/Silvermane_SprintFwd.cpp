@@ -419,6 +419,14 @@ _int CSilvermane_SprintFwd::KeyCheck(const _double& _dDeltaTime)
 	if (NO_EVENT != iProgress)
 		return iProgress;
 
+
+	if (g_pGameInstance->getMouseKeyDown(CInputDev::MOUSESTATE::MB_LBUTTON))
+	{
+		if (FAILED(m_pStateController->Change_State(L"1H_SwordSupermanStab")))
+			return E_FAIL;
+		return STATE_CHANGE;
+	}
+
 	if (g_pGameInstance->getkeyPress(DIK_LSHIFT))
 	{
 		if (g_pGameInstance->getkeyPress(DIK_W))
@@ -478,6 +486,18 @@ _int CSilvermane_SprintFwd::KeyCheck(const _double& _dDeltaTime)
 		else if (g_pGameInstance->getkeyPress(DIK_S))
 		{
 			if (FAILED(m_pStateController->Change_State(L"JogBwd")))
+				return E_FAIL;
+			return STATE_CHANGE;
+		}
+		else if (g_pGameInstance->getkeyPress(DIK_A))
+		{
+			if (FAILED(m_pStateController->Change_State(L"JogLeft")))
+				return E_FAIL;
+			return STATE_CHANGE;
+		}
+		else if (g_pGameInstance->getkeyPress(DIK_D))
+		{
+			if (FAILED(m_pStateController->Change_State(L"JogRight")))
 				return E_FAIL;
 			return STATE_CHANGE;
 		}

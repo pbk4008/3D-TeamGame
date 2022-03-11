@@ -4,12 +4,12 @@
 #include "StateController.h"
 
 CSilvermane_JogBwd::CSilvermane_JogBwd(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
-	: CState_Silvermane(_pDevice, _pDeviceContext)
+	: CSilvermane_Jog(_pDevice, _pDeviceContext)
 {
 }
 
 CSilvermane_JogBwd::CSilvermane_JogBwd(const CSilvermane_JogBwd& _rhs)
-	: CState_Silvermane(_rhs)
+	: CSilvermane_Jog(_rhs)
 {
 }
 
@@ -101,13 +101,13 @@ _int CSilvermane_JogBwd::KeyCheck(const _double& _dDeltaTime)
 	}
 	else if (g_pGameInstance->getkeyPress(DIK_D))
 	{
-		if (FAILED(m_pStateController->Change_State(L"JogRightStart")))
+		if (FAILED(m_pStateController->Change_State(L"JogRight")))
 			return -1;
 		return STATE_CHANGE;
 	}
 	else if (g_pGameInstance->getkeyPress(DIK_A))
 	{
-		if (FAILED(m_pStateController->Change_State(L"JogLeftStart")))
+		if (FAILED(m_pStateController->Change_State(L"JogLeft")))
 			return -1;
 		return STATE_CHANGE;
 	}
