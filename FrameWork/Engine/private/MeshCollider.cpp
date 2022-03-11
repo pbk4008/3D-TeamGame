@@ -43,7 +43,7 @@ HRESULT CMeshCollider::NativeConstruct(void* pArg)
 
 HRESULT CMeshCollider::Render(const wstring& pCameraTag)
 {
-	if (m_pGizmo)
+	if (!m_pGizmo)
 		return E_FAIL;
 
 	PxTriangleMeshGeometry pxTriangleMesh;
@@ -75,7 +75,17 @@ HRESULT CMeshCollider::Render(const wstring& pCameraTag)
 
 HRESULT CMeshCollider::Init_Shape(const vector<_float3*>& vecPoints)
 {
+	_float3* pPoints = new _float3[vecPoints.size() * 3];
+
+	for (_uint i = 0; i < (_uint)vecPoints.size(); i++)
+	{
+		pPoints[i * 3] = vecPoints[i][0];
+		pPoints[i * 3 + 1] = vecPoints[i][1];
+		pPoints[i * 3 + 2] = vecPoints[i][2];
+	}
+
 	FACEINDICES32* Indices = new FACEINDICES32[(_uint)vecPoints.size()];
+
 	for (_uint i = 0; i < (_uint)vecPoints.size(); i++)
 	{
 		Indices[i]._0 = i * 3;
@@ -85,8 +95,8 @@ HRESULT CMeshCollider::Init_Shape(const vector<_float3*>& vecPoints)
 
 	PxTriangleMeshDesc meshDesc;
 
-	meshDesc.points.data = &vecPoints;
-	meshDesc.points.count = (_uint)vecPoints.size()*3;
+	meshDesc.points.data = pPoints;
+	meshDesc.points.count = (_uint)vecPoints.size() * 3;
 	meshDesc.points.stride = sizeof(_float3);
 	meshDesc.triangles.count = (_uint)vecPoints.size();
 	meshDesc.triangles.data = Indices;

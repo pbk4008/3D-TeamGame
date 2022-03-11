@@ -13,6 +13,7 @@
 #include "Cell.h"
 #include "NavSphere.h"
 #include "Navigation.h"
+#include "MeshCollider.h"
 
 // CModel_Inspector 대화 상자
 
@@ -40,6 +41,7 @@ BOOL CModel_Inspector::OnInitDialog()
 	m_pInspec_Form = dynamic_cast<CInspector_Form*>(m_pMainFrm->m_tMainSplitter.GetPane(0, 2));
 
 	m_pObserver = GET_INSTANCE(CObserver);
+
 
 	return TRUE;  // return TRUE unless you set the focus to a control
 				  // 예외: OCX 속성 페이지는 FALSE를 반환해야 합니다.
@@ -82,7 +84,6 @@ _int CModel_Inspector::Update_Model_Inspector(_double _dTimeDelta)
 
 		UpdateData(FALSE);
 	}
-
 	return _int();
 }
 
@@ -164,6 +165,7 @@ BEGIN_MESSAGE_MAP(CModel_Inspector, CDialogEx)
 	ON_BN_CLICKED(IDC_RADIO5, &CModel_Inspector::OnBnClickedRotYButton)
 	ON_BN_CLICKED(IDC_RADIO6, &CModel_Inspector::OnBnClickedZRotButton)
 	ON_BN_CLICKED(IDC_RADIO7, &CModel_Inspector::OnBnClickedRotNoneButton)
+	ON_BN_CLICKED(IDC_BUTTON4, &CModel_Inspector::OnBnClickedCreateNavMesh)
 END_MESSAGE_MAP()
 
 
@@ -317,7 +319,50 @@ void CModel_Inspector::OnBnClickedNavLoadButton()
 	pPlaneNav->SetUp_Neighbor();
 }
 
+void CModel_Inspector::OnBnClickedCreateNavMesh()
+{
+	// TODO: 네비 매쉬 파일을 불러와 매쉬를 쿠킹합니다.
+	CFileDialog Dlg(true, L"dat", L"*.dat");
+	TCHAR szFilePath[MAX_PATH] = L"";
+	HRESULT hr = E_FAIL;
 
+	GetCurrentDirectory(MAX_PATH, szFilePath);
+	PathRemoveFileSpec(szFilePath);
+	lstrcat(szFilePath, L"\\Data\\NavMesh\\");
+	Dlg.m_ofn.lpstrInitialDir = szFilePath;
+
+	if (IDOK == Dlg.DoModal())
+	{
+		wstring strFilePath = Dlg.GetPathName();
+		g_pGameInstance->LoadFile<NAVMESHDESC>(m_NavMeshList_Pos, strFilePath);
+	}
+
+	CMeshCollider::MESHDESC NavMeshDesc;
+	CPhysicsXSystem::COLDESC	ColDesc;
+
+	ColDesc.eType = CPhysicsXSystem::ACTORTYPE::ACTOR_STATIC;
+	ColDesc.fPos = { 0.0f, 0.0f, 0.0f };//Collider Local
+	ColDesc.bGravity = FALSE;
+	ColDesc.bKinematic = FALSE;
+
+	for (int i = 0; i < m_NavMeshList_Pos.size(); ++i)
+		NavMeshDesc.vecPoints.push_back(m_NavMeshList_Pos[i].Point);
+
+	XMStoreFloat4x4(&NavMeshDesc.matTransform, XMMatrixIdentity());
+	NavMeshDesc.pParent = nullptr;
+	NavMeshDesc.tColDesc = ColDesc;
+
+	m_pMeshCollider = (CMeshCollider*)g_pGameInstance->Clone_Component(TAB_MAP, L"Prototype_Component_MeshCollider", &NavMeshDesc);
+	
+
+	m_pObserver->m_pMeshCollider = m_pMeshCollider;
+
+	if (nullptr == m_pMeshCollider)
+	{
+		MessageBox(L"네비 매쉬 파일을 불러오는 도중 쿠킹에 실패했습니다.", MB_OK);
+		return;
+	}
+}
 
 void CModel_Inspector::OnBnClickedRotXButton()
 {
