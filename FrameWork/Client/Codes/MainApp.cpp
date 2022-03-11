@@ -16,8 +16,9 @@ HRESULT CMainApp::NativeConstruct()
 		return E_FAIL;
 	RELEASE_INSTANCE(CGameInstance);
 
-	if (FAILED(Ready_Fonts()))
-		return E_FAIL;
+	//if (FAILED(Ready_Fonts()))
+	//	return E_FAIL;
+
 	if (FAILED(Load_Texture()))
 		return E_FAIL;
 	if (FAILED(Ready_Component_Prototype()))
@@ -97,7 +98,6 @@ HRESULT CMainApp::Render()
 
 	if (FAILED(g_pGameInstance->Render_Font(TEXT("Font_Arial"), XMVectorSet(1.f, 0.0f, 0.f, 1.f), m_szFPS)))
 		return E_FAIL;
-
 #endif // _DEBUG
 
 	if (FAILED(g_pGameInstance->Present()))

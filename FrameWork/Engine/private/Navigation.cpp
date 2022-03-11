@@ -123,7 +123,7 @@ _bool CNavigation::Move_OnNavigation(_fvector vPosition)
 			return false;
 	}
 }
-
+#ifdef _DEBUG
 HRESULT CNavigation::Update_Buffer(_fvector pPosition)
 {
 	class CCell* pCell = nullptr;
@@ -158,6 +158,7 @@ HRESULT CNavigation::Update_Buffer(_fvector pPosition)
 	}
 	return S_OK;
 }
+#endif // _DEBUG
 
 /*RESULT CNavigation::Find_Cell(_fvector _vFindPoint, _fvector _vUpdatePos)
 {

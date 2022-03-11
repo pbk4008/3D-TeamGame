@@ -150,9 +150,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="..\bin\ShaderFiles\Shader_Compute.hlsl">
-      <Filter>ShaderFiles</Filter>
-    </FxCompile>
     <FxCompile Include="..\bin\ShaderFiles\Shader_CSGSBlur.hlsl">
       <Filter>ShaderFiles</Filter>
     </FxCompile>
