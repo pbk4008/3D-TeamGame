@@ -373,9 +373,9 @@ HRESULT CRenderer::SetUp_RenderTarget()
 		return E_FAIL;
 
 	// Compute Shader
-	if (FAILED(m_pTargetMgr->Add_CSTarget(m_pDevice, m_pDeviceContext, L"CSDownScale", L"../Bin/ShaderFiles/Shader_DownSample.hlsl", "CS_Main", (_uint)ViewportDesc.Width, (_uint)ViewportDesc.Height, DXGI_FORMAT_R8G8B8A8_UNORM, _float4(1.f, 1.f, 1.f, 1.f), CCSTarget::CSType::DOWNSAMPLE)))
+	if (FAILED(m_pTargetMgr->Add_CSTarget(m_pDevice, m_pDeviceContext, L"CSDownScale", L"../../Reference/ShaderFile/Shader_DownSample.hlsl", "CS_Main", (_uint)ViewportDesc.Width, (_uint)ViewportDesc.Height, DXGI_FORMAT_R8G8B8A8_UNORM, _float4(1.f, 1.f, 1.f, 1.f), CCSTarget::CSType::DOWNSAMPLE)))
 		return E_FAIL;
-	if (FAILED(m_pTargetMgr->Add_CSTarget(m_pDevice, m_pDeviceContext, L"CSGSBlur", L"../Bin/ShaderFiles/Shader_CSGSBlur.hlsl", "Blur", (_uint)ViewportDesc.Width, (_uint)ViewportDesc.Height, DXGI_FORMAT_R8G8B8A8_UNORM, _float4(1.f, 1.f, 1.f, 1.f), CCSTarget::CSType::GSBLUR)))
+	if (FAILED(m_pTargetMgr->Add_CSTarget(m_pDevice, m_pDeviceContext, L"CSGSBlur", L"../../Reference/ShaderFile/Shader_CSGSBlur.hlsl", "Blur", (_uint)ViewportDesc.Width, (_uint)ViewportDesc.Height, DXGI_FORMAT_R8G8B8A8_UNORM, _float4(1.f, 1.f, 1.f, 1.f), CCSTarget::CSType::GSBLUR)))
 		return E_FAIL;
 
 	// 멀티 랜더 타겟 Deferred

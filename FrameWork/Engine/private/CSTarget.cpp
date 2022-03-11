@@ -222,7 +222,7 @@ HRESULT CCSTarget::Clear()
 #ifdef _DEBUG
 HRESULT CCSTarget::Ready_Debug_Buffer(_float fX, _float fY, _float fSizeX, _float fSizeY)
 {
-	m_pDebugBuffer = CVIBuffer_RectViewPort::Create(m_pDevice, m_pDeviceContext, fX, fY, fSizeX, fSizeY, L"../Bin/ShaderFiles/Shader_DSViewPort.hlsl");
+	m_pDebugBuffer = CVIBuffer_RectViewPort::Create(m_pDevice, m_pDeviceContext, fX, fY, fSizeX, fSizeY, L"../../Reference/ShaderFile/Shader_DSViewPort.hlsl");
 
 	if (nullptr == m_pDebugBuffer)
 		return E_FAIL;
