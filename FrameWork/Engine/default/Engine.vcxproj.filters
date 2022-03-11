@@ -327,12 +327,6 @@
     <ClInclude Include="..\public\Collider.h">
       <Filter>00.Utility\03.Component\00.Collider</Filter>
     </ClInclude>
-    <ClInclude Include="..\public\Navigation.h">
-      <Filter>00.Utility\03.Component\01.Navigation</Filter>
-    </ClInclude>
-    <ClInclude Include="..\public\Cell.h">
-      <Filter>00.Utility\03.Component\01.Navigation\Cell</Filter>
-    </ClInclude>
     <ClInclude Include="..\public\VIBuffer_Triangle.h">
       <Filter>00.Utility\03.Component\05.VIBuffer\06.Triangle</Filter>
     </ClInclude>
@@ -480,6 +474,12 @@
     <ClInclude Include="..\bin\ShaderFiles\Shader_Calculate.hpp">
       <Filter>00.Utility\04.Manager\03. RenderTargetManager\99.Shader</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\Cell.h">
+      <Filter>00.Utility\03.Component\01.Navigation\Cell</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Navigation.h">
+      <Filter>00.Utility\03.Component\01.Navigation</Filter>
+	</ClInclude>
     <ClInclude Include="..\public\VIBuffer_Trapezium.h">
       <Filter>00.Utility\03.Component\05.VIBuffer\10.Trapezium</Filter>
     </ClInclude>
@@ -556,12 +556,6 @@
     </ClCompile>
     <ClCompile Include="..\private\Collider.cpp">
       <Filter>00.Utility\03.Component\00.Collider</Filter>
-    </ClCompile>
-    <ClCompile Include="..\private\Navigation.cpp">
-      <Filter>00.Utility\03.Component\01.Navigation</Filter>
-    </ClCompile>
-    <ClCompile Include="..\private\Cell.cpp">
-      <Filter>00.Utility\03.Component\01.Navigation\Cell</Filter>
     </ClCompile>
     <ClCompile Include="..\private\VIBuffer_Triangle.cpp">
       <Filter>00.Utility\03.Component\05.VIBuffer\06.Triangle</Filter>
@@ -703,6 +697,12 @@
     </ClCompile>
     <ClCompile Include="..\private\CSTarget.cpp">
       <Filter>00.Utility\04.Manager\03. RenderTargetManager\01.CSTarget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Cell.cpp">
+      <Filter>00.Utility\03.Component\01.Navigation\Cell</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Navigation.cpp">
+      <Filter>00.Utility\03.Component\01.Navigation</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

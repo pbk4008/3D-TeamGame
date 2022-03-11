@@ -19,9 +19,11 @@ public:
 	HRESULT SetUp_Neighbor();
 	_bool Move_OnNavigation(_fvector vPosition);
 
+#ifdef _DEBUG
 public:
 	HRESULT					Update_Buffer(_fvector pPosition);
 	vector<class CCell*>	Get_vecCells(void) { return m_Cells; }
+#endif // _DEBUG
 
 #ifdef _DEBUG
 public:

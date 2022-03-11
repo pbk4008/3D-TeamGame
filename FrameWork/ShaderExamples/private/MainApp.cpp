@@ -47,7 +47,7 @@ HRESULT CMainApp::NativeConstruct()
 _int CMainApp::Tick(_double TimeDelta)
 {
 	m_TimeAcc += TimeDelta;
-
+	g_pGameInstance->Update_InputDev();
 	g_pGameInstance->Tick_Engine(TimeDelta);
 
 	if (g_pGameInstance->getkeyDown(DIK_F1))
