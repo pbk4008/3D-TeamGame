@@ -337,6 +337,12 @@
     <ClInclude Include="..\Headers\Silvermane_Jog.h">
       <Filter>02.GameObject\98.Player\00.Silvermane\State\Default\Jog</Filter>
     </ClInclude>
+    <ClInclude Include="..\Headers\1H_SwordAttack.h">
+      <Filter>02.GameObject\98.Player\00.Silvermane\State\1H</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\1H_Dash.h">
+      <Filter>02.GameObject\98.Player\00.Silvermane\State\1H</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -520,6 +526,12 @@
     </ClCompile>
     <ClCompile Include="..\Codes\Silvermane_Jog.cpp">
       <Filter>02.GameObject\98.Player\00.Silvermane\State\Default\Jog</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\1H_SwordAttack.cpp">
+      <Filter>02.GameObject\98.Player\00.Silvermane\State\1H</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\1H_Dash.cpp">
+      <Filter>02.GameObject\98.Player\00.Silvermane\State\1H</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

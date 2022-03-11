@@ -42,6 +42,7 @@ protected:
 	CTransform* m_pTransform = nullptr;
 	CModel* m_pModel = nullptr;
 	CAnimationController* m_pAnimationController = nullptr;
+	_int m_iCutIndex = 0;
 
 public:
 	virtual void Free() override;

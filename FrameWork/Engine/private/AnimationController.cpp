@@ -236,8 +236,7 @@ HRESULT CAnimationController::SetUp_NextAnimation(const string& _strAnimTag, con
 			{
 				m_tBlendDesc.iNextAnimIndex = pAnimation->Get_Index();
 
-				if (m_isChangeAnim)
-					vecAnimations[m_tBlendDesc.iNextAnimIndex]->Reset_Animation();
+				vecAnimations[m_tBlendDesc.iNextAnimIndex]->Reset_Animation();
 
 				m_tBlendDesc.isLoopNextAnim = _isLoopNextAnim;
 				m_pFixedBone = pAnimation->Get_Channel("root");
@@ -270,8 +269,7 @@ HRESULT CAnimationController::SetUp_NextAnimation(_uint iIndex, const _bool _isL
 			{
 				m_tBlendDesc.iNextAnimIndex = pAnimation->Get_Index();
 
-				if (m_isChangeAnim)
-					vecAnimations[m_tBlendDesc.iNextAnimIndex]->Reset_Animation();
+				vecAnimations[m_tBlendDesc.iNextAnimIndex]->Reset_Animation();
 
 				m_tBlendDesc.isLoopNextAnim = _isLoopNextAnim;
 				m_pFixedBone = pAnimation->Get_Channel("root");

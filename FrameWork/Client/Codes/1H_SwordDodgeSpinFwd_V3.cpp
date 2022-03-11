@@ -3,10 +3,8 @@
 
 #include "StateController.h"
 
-#include "Silvermane.h"
-
 C1H_SwordDodgeSpinFwd_V3::C1H_SwordDodgeSpinFwd_V3(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
-	: CState_Silvermane(_pDevice, _pDeviceContext)
+	: C1H_SwordAttack(_pDevice, _pDeviceContext)
 {
 }
 
@@ -14,6 +12,8 @@ HRESULT C1H_SwordDodgeSpinFwd_V3::NativeConstruct(void* _pArg)
 {
 	if (FAILED(__super::NativeConstruct(_pArg)))
 		return E_FAIL;
+
+	m_iCutIndex = 20;
 
 	return S_OK;
 }
@@ -23,6 +23,8 @@ _int C1H_SwordDodgeSpinFwd_V3::Tick(const _double& _dDeltaTime)
 	_int iProgress = __super::Tick(_dDeltaTime);
 	if (NO_EVENT != iProgress)
 		return iProgress;
+
+	Add_PlusAngle(EDir::Forward, _dDeltaTime);
 
 	if (m_pAnimationController->Is_Finished())
 	{
@@ -79,14 +81,8 @@ _int C1H_SwordDodgeSpinFwd_V3::KeyCheck(const _double& _dDeltaTime)
 
 	if (g_pGameInstance->getkeyDown(DIK_SPACE))
 	{
-		if (g_pGameInstance->getkeyPress(DIK_W))
-		{
-			if (20 < m_pAnimationController->Get_CurKeyFrameIndex())
-			{
-				m_pAnimationController->Reset_Animation();
-			}
-		}
-		else if (g_pGameInstance->getkeyDown(DIK_A))
+
+		if (g_pGameInstance->getkeyDown(DIK_A))
 		{
 			if (FAILED(m_pStateController->Change_State(L"1H_SidestepLeft")))
 				return E_FAIL;
@@ -97,6 +93,13 @@ _int C1H_SwordDodgeSpinFwd_V3::KeyCheck(const _double& _dDeltaTime)
 			if (FAILED(m_pStateController->Change_State(L"1H_SidestepRight")))
 				return E_FAIL;
 			return STATE_CHANGE;
+		}
+		else if (g_pGameInstance->getkeyPress(DIK_W))
+		{
+			if (m_iCutIndex < m_pAnimationController->Get_CurKeyFrameIndex())
+			{
+				m_pAnimationController->Reset_Animation();
+			}
 		}
 		else
 		{
