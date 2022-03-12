@@ -11,6 +11,8 @@ HRESULT CSilvermane_SprintFwdStop::NativeConstruct(void* _pArg)
 	if (FAILED(__super::NativeConstruct(_pArg)))
 		return E_FAIL;
 
+	m_iCutIndex = 40;
+
 	return S_OK;
 }
 
@@ -114,7 +116,7 @@ _int CSilvermane_SprintFwdStop::KeyCheck(const _double& _dDeltaTime)
 		}
 		else
 		{
-			if (m_pAnimationController->Is_Finished())
+			if (m_iCutIndex < m_pAnimationController->Get_CurKeyFrameIndex())
 			{
 				if (FAILED(m_pStateController->Change_State(L"Idle")))
 					return E_FAIL;
