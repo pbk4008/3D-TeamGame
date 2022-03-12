@@ -38,6 +38,7 @@ HRESULT CAnimation::Add_Channel(CChannel * pChannel)
 
 HRESULT CAnimation::Update_TransformationMatrix(_double TimeDelta,const _bool _isLoop)
 {
+	m_bLoop = _isLoop;
 	if (!m_isFinished)
 		m_TrackPositionAcc += m_PlaySpeed * TimeDelta;
 

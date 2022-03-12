@@ -219,10 +219,24 @@ HRESULT CModel::Add_Material(CMaterial* _pMtrl, const _uint _iMtrlIndex)
 
 HRESULT CModel::SetUp_ValueOnShader(const char* pConstantName, void* pData, _uint iSize)
 {
-	for (auto& pMtrl : m_vecMaterials)
+	if (m_bUsingMaterial)
 	{
-		if (pMtrl)
-			pMtrl->SetUp_ValueOnShader(pConstantName, pData, iSize);
+		for (auto& pMtrl : m_vecMaterials)
+		{
+			if (pMtrl)
+				pMtrl->SetUp_ValueOnShader(pConstantName, pData, iSize);
+		}
+	}
+	else
+	{
+		if (!m_pEffect)
+			return E_FAIL;
+
+		ID3DX11EffectVariable* pVariable = m_pEffect->GetVariableByName(pConstantName);
+		if (!pVariable)
+			return E_FAIL;
+
+		return pVariable->SetRawValue(pData, 0, iSize);
 	}
 	return S_OK;
 }
