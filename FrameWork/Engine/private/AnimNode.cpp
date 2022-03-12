@@ -24,7 +24,7 @@ HRESULT CAnimNode::NativeConstruct_Prototype(const wstring& pName, CAnimation* p
 
 _bool CAnimNode::Check_AnimNodeName(const wstring& pName)
 {
-	if (pName == m_wstrName)
+	if (pName==m_wstrName)
 		return true;
 
 	return false;
@@ -36,20 +36,17 @@ CAnimNode* CAnimNode::Check_ConnectNode(const wstring& pName)
 		return nullptr;
 
 	CAnimNode* pFind = nullptr;
-	auto& iter = find(m_vecAnimNode.begin(), m_vecAnimNode.end(), [&](CAnimNode* pNode)
-		{
-			if (pNode->Check_AnimNodeName(pName))
-				return true;
-			return false;
-		});
 
-	if (iter == m_vecAnimNode.end())
+
+	for (auto& pNode : m_vecAnimNode)
 	{
-		for (auto& pNode : m_vecAnimNode)
-			pFind = pNode->Check_ConnectNode(pName);
+		if (pNode->Check_AnimNodeName(pName))
+		{
+			pFind = pNode;
+			break;
+		}
 	}
-	else
-		pFind = nullptr;
+
 	return pFind;
 }
 
@@ -68,7 +65,7 @@ void CAnimNode::Set_RootAnimValue(_bool& bUsingRootAnim, _bool& bUsingTransformA
 CAnimNode* CAnimNode::Create(const wstring& pName, CAnimation* pAnim, _bool bLoop, _uint iIndex, _bool bRootAnim, _bool bTransformMove, ERootOption eOption)
 {
 	CAnimNode* pInstance = new CAnimNode();
-	if (FAILED(pInstance->NativeConstruct_Prototype(pName, pAnim, bLoop, iIndex)))
+	if (FAILED(pInstance->NativeConstruct_Prototype(pName, pAnim, bLoop, iIndex,bRootAnim, bTransformMove,eOption)))
 	{
 		MSGBOX("CAnimNode Create Fail");
 		Safe_Release(pInstance);

@@ -19,6 +19,7 @@ HRESULT CStage1::NativeConstruct()
 	if (FAILED(CLevel::NativeConstruct()))
 		return E_FAIL;
 
+
 	if (FAILED(Ready_MapObject()))
 	{
 		return E_FAIL;

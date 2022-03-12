@@ -57,6 +57,8 @@ public:
 	void Lerp_Anim(vector<CAnimation*>& _vecAnimations);
 	HRESULT SetUp_NextAnimation(const string& _strAnimTag, const _bool _isLoopNextAnim = true);
 	HRESULT SetUp_NextAnimation(_uint iIndex, const _bool _isLoopNextAnim = true);
+	//다음 애니메이션 변경(AnimNode 직접 받도록)
+	HRESULT SetUp_NextAnimation(class CAnimNode* pChangeAnimNode);
 	HRESULT Change_Anim(const string& _strAnimTag, _bool _isLoop = true);
 	const _int Move_Transform(const _double& _dDeltaTime);
 	void Reset_Animation();

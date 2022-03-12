@@ -30,7 +30,7 @@ public:
 	virtual _int LateTick(_double dDeltaTime);
 public:
 	//애니메이션 추가(추가하는 애니메이션 태그, 연결하고자 하는 애니메이션 태그, 애니메이션, 이중연결할건지 안할건지)
-	HRESULT Insert_Animation(const wstring& pName, const wstring& pConnectName, class CAnimation* pAnim, _bool bRootAnim, _bool bTransFrom, ERootOption eOption,_bool bDouble=false);
+	HRESULT Insert_Animation(const _tchar* pName, const wstring& pConnectName, class CAnimation* pAnim, _bool bRootAnim, _bool bTransFrom, ERootOption eOption,_bool bDouble=false);
 	//애니메이션 연결(연결하고자 하는 애니메이션태그, 애니메이션 노드, 이중연결할건지 안할건지)
 	HRESULT Connect_Animation(const wstring& pConnectName, CAnimNode* pNode, _bool bDouble);
 	//애니메이션 변경(변경하고자하는 애니메이션 태그)
@@ -42,6 +42,8 @@ public:
 private:
 	//애니메이션 찾기
 	CAnimNode* Find_Animation(const wstring& pConnectName, CAnimNode* pNode=nullptr);
+	//AnimNode 중복 체크
+	_bool Get_DuplicateTag(const wstring& pName);
 public:
 	static CAnimator* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);
 	virtual CComponent* Clone(void* pArg);

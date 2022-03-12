@@ -75,19 +75,12 @@ _int CAnimator::LateTick(_double dDeltaTime)
 	return _int();
 }
 
-HRESULT CAnimator::Insert_Animation(const wstring& pName, const wstring& pConnectName, class CAnimation* pAnim, _bool bRootAnim, _bool bTransFrom, ERootOption eOption, _bool bDouble)
+HRESULT CAnimator::Insert_Animation(const _tchar* pName, const wstring& pConnectName, CAnimation* pAnim, _bool bRootAnim, _bool bTransFrom, ERootOption eOption, _bool bDouble)
 {
 	//만들고자 하는 애니메이션 중복 체크
-	auto& iter = find(m_vecAnimNodeName.begin(), m_vecAnimNodeName.end(), [&](wstring tName)
-		{
-			if (tName == pConnectName)
-				return true;
-			return false;
-		});
-	
-	if (iter != m_vecAnimNodeName.end())
+	if (Get_DuplicateTag(pName))
 		return E_FAIL;
-
+	
 	//애니메이션으로 AnimNode 만들기
 	CAnimNode* pNewNode = CAnimNode::Create(pName, pAnim, pAnim->Get_Loop(), (_uint)m_vecAnimNodeName.size(),bRootAnim,bTransFrom,eOption);
 	if (!pNewNode)
@@ -138,7 +131,7 @@ const wstring& CAnimator::Get_CurrentAnim()
 
 HRESULT CAnimator::Change_Animation(const wstring& pName)
 {
-	m_pChangeNode = m_pCulAnimNode->Check_ConnectNode(pName);
+	m_pChangeNode = m_pCulAnimNode->Check_ConnectNode(pName.c_str());
 	if (!m_pChangeNode)
 		return E_FAIL;
 
@@ -148,16 +141,9 @@ HRESULT CAnimator::Change_Animation(const wstring& pName)
 	return S_OK;
 }
 
-CAnimNode* CAnimator::Find_Animation(const wstring& pConnectName, CAnimNode* pNode = nullptr)
+CAnimNode* CAnimator::Find_Animation(const wstring& pConnectName, CAnimNode* pNode)
 {
-	auto& pFind=find(m_vecAnimNodeName.begin(), m_vecAnimNodeName.end(), [&](wstring tName)
-					{
-						if (tName == pConnectName)
-							return true;
-						return false;
-					});
-
-	if (pFind == m_vecAnimNodeName.end())
+	if (!Get_DuplicateTag(pConnectName))
 		return nullptr;
 
 	if (!pNode)
@@ -166,7 +152,17 @@ CAnimNode* CAnimator::Find_Animation(const wstring& pConnectName, CAnimNode* pNo
 	if (pNode->Is_LinkEmpty())
 		return nullptr;
 
-	return pNode->Check_ConnectNode(pConnectName);
+	return pNode->Check_ConnectNode(pConnectName.c_str());
+}
+
+_bool CAnimator::Get_DuplicateTag(const wstring& pName)
+{
+	for (auto& pTag : m_vecAnimNodeName)
+	{
+		if (pTag == pName)
+			return true;
+	}
+	return false;
 }
 
 CAnimator* CAnimator::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
