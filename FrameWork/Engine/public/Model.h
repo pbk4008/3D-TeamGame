@@ -26,6 +26,7 @@ public:
 	TYPE getType() { return m_eMeshType; }
 	vector<CHierarchyNode*>& Get_HierachyNodes() { return m_HierarchyNodes; }
 	vector<CAnimation*>& Get_Animations() { return m_Animations; }
+	CAnimation* Get_Animation(const string& pName);
 	_bool getUsingMaterial() { return m_bUsingMaterial; }
 	vector<vector<CMeshContainer*>> Get_MeshContainer() { return m_MeshContainers; }
 	vector<CMaterial*> Get_Materials() { return m_vecMaterials; }

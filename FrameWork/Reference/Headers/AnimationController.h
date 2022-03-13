@@ -40,6 +40,7 @@ public:
 	const _uint Get_CurFixedBoneKeyFrameIndex() const;
 	const _uint Get_MaxKeyFrameIndex() const;
 	const ERootOption Get_RootOption() const;
+	const _bool Get_ChangeAnimation() const;
 
 	void Set_GameObject(CGameObject* _pGameObject);
 	void Set_Transform(CTransform* _pTransform);

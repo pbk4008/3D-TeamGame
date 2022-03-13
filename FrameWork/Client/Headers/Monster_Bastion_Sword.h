@@ -4,6 +4,7 @@
 
 BEGIN(Engine)
 class CModel;
+class CAnimator;
 END
 
 BEGIN(Client)
@@ -26,11 +27,10 @@ private:
 
 private:
 	CModel* m_pModelCom = nullptr;
-	CAnimationController* m_pAnimControllerCom = nullptr;
+	CAnimator* m_pAnimator = nullptr;
 
 private:
 	_uint itest = 0;
-
 public:
 	static CMonster_Bastion_Sword* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext);
 	virtual CGameObject* Clone(void* _pArg = nullptr) override;

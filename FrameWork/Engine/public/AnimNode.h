@@ -21,6 +21,7 @@ public:
 	//애니메이션 노드 연결
 	void Conntect_AnimNode(CAnimNode* pNode);
 	void Set_RootAnimValue(_bool& bUsingRootAnim, _bool& bUsingTransformAnim, ERootOption& eRootOption);
+	void Change_Loop(_bool bChange);
 public:
 	const wstring& Get_Name() { return m_wstrName; }
 	//자식 노드들이 비어있는지 판단
@@ -29,7 +30,7 @@ public:
 	_bool Get_Loop() { return m_bLoop; }
 	_int Get_Index() { return m_iIndex; }
 	_int Get_AutoIndex() { return m_iAutoIndex; }
-
+	_bool Is_LoopChange() { return m_bLoop != m_bTmpLoop; }
 public:
 	void Set_AutoChangeIndex(_int ChangeIndex) { m_iAutoIndex = ChangeIndex; }
 public:
@@ -41,6 +42,7 @@ private:
 	CAnimation* m_pAnim;//찐 애니메이션
 	wstring m_wstrName;//Node 태그
 	_bool m_bLoop;//반복 재생
+	_bool m_bTmpLoop;//반복 재생 보관용 변수
 	vector<CAnimNode*> m_vecAnimNode;//현재 노드와 연결되어 있는 자식노드들
 	_int m_iIndex;//중복 방지를 위한 Index(Animator의 벡터의 인덱스)
 	_int m_iAutoIndex;//현재 AnimNode가 끝나면 자동으로 넘어갈 인덱스

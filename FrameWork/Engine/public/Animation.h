@@ -25,7 +25,6 @@ public:
 	const _uint Get_CurrentKeyFrameIndex();
 	void Set_MaxKeyFrameIndex(const _uint _iMaxKeyFrameIndex);
 	const _bool Is_Finished() const { return m_isFinished; }
-	const _bool Get_Loop() const { return m_bLoop; }
 	CSaveManager::ANIMDATA& SetSaveAnimData();
 
 public:
@@ -36,7 +35,6 @@ private:
 	_double				m_TrackPositionAcc = 0.0;
 	_double				m_PlaySpeed = 0.0;
 	_bool				m_isFinished = false;
-	_bool				m_bLoop = false;
 
 	_uint m_iIndex = 0;
 	_uint m_iMaxKeyFrameIndex = 0;

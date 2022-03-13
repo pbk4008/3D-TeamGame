@@ -300,9 +300,6 @@
     <ClInclude Include="..\Headers\Monster_Bastion_Spear.h">
       <Filter>02.GameObject\95.Monster\Bastion_Spear</Filter>
     </ClInclude>
-    <ClInclude Include="..\Headers\Monster_Bastion_Sword.h">
-      <Filter>02.GameObject\95.Monster\Bastion_Sword</Filter>
-    </ClInclude>
     <ClInclude Include="..\Headers\Monster_BronzeAnimus.h">
       <Filter>02.GameObject\95.Monster\BronzeAnimus</Filter>
     </ClInclude>
@@ -342,6 +339,9 @@
     </ClInclude>
     <ClInclude Include="..\Headers\1H_Dash.h">
       <Filter>02.GameObject\98.Player\00.Silvermane\State\1H</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Monster_Bastion_Sword.h">
+      <Filter>02.GameObject\95.Monster\Bastion_Sword</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -490,9 +490,6 @@
     <ClCompile Include="..\Codes\Monster_Bastion_Spear.cpp">
       <Filter>02.GameObject\95.Monster\Bastion_Spear</Filter>
     </ClCompile>
-    <ClCompile Include="..\Codes\Monster_Bastion_Sword.cpp">
-      <Filter>02.GameObject\95.Monster\Bastion_Sword</Filter>
-    </ClCompile>
     <ClCompile Include="..\Codes\Monster_BronzeAnimus.cpp">
       <Filter>02.GameObject\95.Monster\BronzeAnimus</Filter>
     </ClCompile>
@@ -532,6 +529,9 @@
     </ClCompile>
     <ClCompile Include="..\Codes\1H_Dash.cpp">
       <Filter>02.GameObject\98.Player\00.Silvermane\State\1H</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Monster_Bastion_Sword.cpp">
+      <Filter>02.GameObject\95.Monster\Bastion_Sword</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -30,11 +30,14 @@ public:
 	virtual _int LateTick(_double dDeltaTime);
 public:
 	//애니메이션 추가(추가하는 애니메이션 태그, 연결하고자 하는 애니메이션 태그, 애니메이션, 이중연결할건지 안할건지)
-	HRESULT Insert_Animation(const _tchar* pName, const wstring& pConnectName, class CAnimation* pAnim, _bool bRootAnim, _bool bTransFrom, ERootOption eOption,_bool bDouble=false);
+	HRESULT Insert_Animation(const _tchar* pName, const wstring& pConnectName, class CAnimation* pAnim, _bool bRootAnim, _bool bTransFrom, _bool bLoop, ERootOption eOption,_bool bDouble=false);
 	//애니메이션 연결(연결하고자 하는 애니메이션태그, 애니메이션 노드, 이중연결할건지 안할건지)
 	HRESULT Connect_Animation(const wstring& pConnectName, CAnimNode* pNode, _bool bDouble);
 	//애니메이션 변경(변경하고자하는 애니메이션 태그)
 	HRESULT Change_Animation(const wstring& pName);
+	//현재 애니메이션이 루프애니메이션일때만 사용
+	//루프 애니메이션이 끝나면 자동으로 연결되는 애니메이션이 있을경우 자동으로 변경하도록 함
+	HRESULT Change_LoopAnim();
 	//애니메이션 끝나면 자동으로 넘어갈 애니메이션 연결
 	HRESULT Set_UpAutoChangeAnimation(const wstring& pAnim, const wstring& pEndAnim);
 public:

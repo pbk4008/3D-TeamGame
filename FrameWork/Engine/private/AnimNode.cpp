@@ -8,6 +8,7 @@ CAnimNode::CAnimNode()
 	, m_wstrName(L"")
 	, m_bRootAnim(false)
 	, m_bTransformMove(false)
+	, m_bTmpLoop(false)
 	, m_eRootOption(ERootOption::Max)
 {
 }
@@ -18,7 +19,9 @@ HRESULT CAnimNode::NativeConstruct_Prototype(const wstring& pName, CAnimation* p
 	m_pAnim = pAnim;
 	m_bLoop = bLoop;
 	m_iIndex = iIndex;
-
+	m_bRootAnim = bRootAnim;
+	m_bTransformMove = bTransformMove;
+	m_eRootOption = eOption;
 	return S_OK;
 }
 
@@ -37,14 +40,17 @@ CAnimNode* CAnimNode::Check_ConnectNode(const wstring& pName)
 
 	CAnimNode* pFind = nullptr;
 
-
 	for (auto& pNode : m_vecAnimNode)
 	{
-		if (pNode->Check_AnimNodeName(pName))
+		_bool bCheck = pNode->Check_AnimNodeName(pName);
+		if (bCheck)
 		{
 			pFind = pNode;
 			break;
 		}
+		pFind = pNode->Check_ConnectNode(pName);
+		if (pFind)
+			break;
 	}
 
 	return pFind;
@@ -60,6 +66,12 @@ void CAnimNode::Set_RootAnimValue(_bool& bUsingRootAnim, _bool& bUsingTransformA
 	bUsingRootAnim = m_bRootAnim;
 	bUsingTransformAnim = m_bTransformMove;
 	eRootOption = m_eRootOption;
+}
+
+void CAnimNode::Change_Loop(_bool bChange)
+{
+	m_bTmpLoop = m_bLoop;
+	m_bLoop = bChange;
 }
 
 CAnimNode* CAnimNode::Create(const wstring& pName, CAnimation* pAnim, _bool bLoop, _uint iIndex, _bool bRootAnim, _bool bTransformMove, ERootOption eOption)

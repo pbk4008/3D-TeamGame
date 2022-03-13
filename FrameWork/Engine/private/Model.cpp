@@ -88,6 +88,17 @@ CHierarchyNode* CModel::Get_BoneMatrix(const char * pBoneName)
 	return Find_HierarchyNode(pBoneName);	
 }
 
+CAnimation* CModel::Get_Animation(const string& pName)
+{
+	CAnimation* pFindAnim = nullptr;
+	for (auto& pAnim : m_Animations)
+	{
+		if (!strcmp(pAnim->Get_Name(), pName.c_str()))
+			pFindAnim = pAnim;
+	}
+	return pFindAnim;
+}
+
 HRESULT CModel::NativeConstruct_Prototype(const string& pMeshFilePath, const string& pMeshFileName, const wstring& pShaderFilePath, _fmatrix PivotMatrix, TYPE eMeshType, _bool bUsingMaterial)
 {
 	m_bUsingMaterial = bUsingMaterial;

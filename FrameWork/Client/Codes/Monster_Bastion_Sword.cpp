@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "Monster_Bastion_Sword.h"
+#include "Animation.h"
 
 CMonster_Bastion_Sword::CMonster_Bastion_Sword(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
 	:CActor(_pDevice, _pDeviceContext)
@@ -32,7 +33,7 @@ HRESULT CMonster_Bastion_Sword::NativeConstruct(void* _pArg)
 		return E_FAIL;
 	}
 
-	_vector Pos = { 6.f, 0.f, 0.f, 1.f };
+	_vector Pos = { 0.f, 0.f, 10.f, 1.f };
 	m_pTransform->Set_State(CTransform::STATE_POSITION, Pos);
 	return S_OK;
 }
@@ -44,15 +45,13 @@ _int CMonster_Bastion_Sword::Tick(_double _dDeltaTime)
 		return -1;
 	}
 
-	m_pAnimControllerCom->Tick(_dDeltaTime);
+	m_pAnimator->Tick(_dDeltaTime);
 
-	if (g_pGameInstance->getkeyDown(DIK_NUMPAD9))
-	{
-		++itest;
-	}
+	//if (g_pGameInstance->getkeyDown(DIK_SPACE))
+	//	m_pAnimator->Change_LoopAnim();
 
-	m_pAnimControllerCom->SetUp_NextAnimation(itest, true);
-	m_pAnimControllerCom->Set_RootMotion(true, false);
+	/*m_pAnimControllerCom->SetUp_NextAnimation(itest, true);
+	m_pAnimControllerCom->Set_RootMotion(true, false);*/
 	return 0;
 }
 
@@ -105,7 +104,13 @@ HRESULT CMonster_Bastion_Sword::SetUp_Components()
 		return E_FAIL;
 	}
 
-	if (FAILED(__super::SetUp_Components((_uint)SCENEID::SCENE_STAGE1, L"AnimationController", L"Com_AnimationController", (CComponent**)&m_pAnimControllerCom)))
+	CAnimator::ANIMATORDESC tDesc;
+	ZeroMemory(&tDesc, sizeof(tDesc));
+
+	tDesc.pModel = m_pModelCom;
+	tDesc.pTransform = m_pTransform;
+
+	if (FAILED(__super::SetUp_Components((_uint)SCENEID::SCENE_STAGE1, L"Com_Animator", L"Com_AnimationController", (CComponent**)& m_pAnimator, &tDesc)))
 	{
 		return E_FAIL;
 	}
@@ -114,9 +119,32 @@ HRESULT CMonster_Bastion_Sword::SetUp_Components()
 	m_pModelCom->Add_Material(g_pGameInstance->Get_Material(L"Mtrl_Bastion_Sword_Down"), 1);
 	m_pModelCom->Add_Material(g_pGameInstance->Get_Material(L"Mtrl_Bastion_Sword_Cloth"), 2);
 	
-	m_pAnimControllerCom->Set_GameObject(this);
-	m_pAnimControllerCom->Set_Model(m_pModelCom);
-	m_pAnimControllerCom->Set_Transform(m_pTransform);
+	
+	
+	//vector<CAnimation*> vecAnimation = m_pModelCom->Get_Animations();
+
+	CAnimation* pAnim = m_pModelCom->Get_Animation("SK_Bastion_Tier1_Full.ao|A_Run_Start_Swordsworn");
+	if (FAILED(m_pAnimator->Insert_Animation(L"RunStart", L"Head", pAnim, true, false, false, ERootOption::XYZ)))
+		return E_FAIL;
+	pAnim = m_pModelCom->Get_Animation("SK_Bastion_Tier1_Full.ao|A_Run_Fwd_Swordsworn");
+	if (FAILED(m_pAnimator->Insert_Animation(L"RunLoop", L"RunStart", pAnim, true, false, true, ERootOption::XYZ)))
+		return E_FAIL;
+	pAnim = m_pModelCom->Get_Animation("SK_Bastion_Tier1_Full.ao|A_Run_Stop_Swordsworn");
+	if (FAILED(m_pAnimator->Insert_Animation(L"RunStop", L"RunLoop", pAnim, true, false, false, ERootOption::XYZ)))
+		return E_FAIL;
+
+	m_pAnimator->Set_UpAutoChangeAnimation(L"RunStart", L"RunLoop");
+	m_pAnimator->Set_UpAutoChangeAnimation(L"RunLoop", L"RunStop");
+
+	m_pAnimator->Change_Animation(L"RunStart");
+	/*_uint iIndex = 1;
+	for (auto& pAnim : vecAnimation)
+	{
+		cout << iIndex << ". ";
+		cout << pAnim->Get_Name() << endl;
+		iIndex++;
+	}*/
+
 
 	return S_OK;
 }

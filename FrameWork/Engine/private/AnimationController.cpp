@@ -89,6 +89,11 @@ const ERootOption CAnimationController::Get_RootOption() const
 	return m_eRootOption;
 }
 
+const _bool CAnimationController::Get_ChangeAnimation() const
+{
+	return m_isChangeAnim;
+}
+
 void CAnimationController::Set_GameObject(CGameObject* _pGameObject)
 {
 	m_pGameObject = _pGameObject;
@@ -293,9 +298,10 @@ HRESULT CAnimationController::SetUp_NextAnimation(class CAnimNode* pChangeAnimNo
 	if (m_isChangeAnim)
 		pChangeAnimation->Reset_Animation();
 
+	m_tBlendDesc.iNextAnimIndex = pChangeAnimation->Get_Index();
 	m_tBlendDesc.isLoopNextAnim = pChangeAnimNode->Get_Loop();
 	m_pFixedBone = pChangeAnimation->Get_Channel("root");
-
+	
 	m_strPreAnimTag = m_strCurAnimTag;
 	m_strCurAnimTag = pChangeAnimation->Get_Name();
 	m_iCurKeyFrameIndex = pChangeAnimation->Get_CurrentKeyFrameIndex();

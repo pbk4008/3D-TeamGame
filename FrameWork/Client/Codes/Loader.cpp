@@ -218,11 +218,15 @@ HRESULT CLoader::Ready_Stage1()
 	if (FAILED(SetUp_Stage1Map_ProtoComponent()))
 		return E_FAIL;
 
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"AnimationController", CAnimationController::Create(m_pDevice, m_pDeviceContext))))
+	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"AnimationController", CAnimationController::Create(m_pDevice, m_pDeviceContext))))
+	//	return E_FAIL;
+
+	if(FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Com_Animator",CAnimator::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 
+
 	////Monster Crystal_Crawler
-	//_matrix matPivot = XMMatrixIdentity();
+	_matrix matPivot = XMMatrixIdentity();
 	//matPivot = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(180.f));
  //	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Model_Monster_Crawler", CModel::Create(m_pDevice, m_pDeviceContext,
 	//	"../bin/Resources/Mesh/Crystal_Crawler/", "Crystal_Crawler.fbx",
@@ -236,7 +240,8 @@ HRESULT CLoader::Ready_Stage1()
 	//if (FAILED(g_pGameInstance->Add_Prototype(L"Monster_Crawler", CMonster_Crawler::Create(m_pDevice, m_pDeviceContext))))
 	//	return E_FAIL;
 
-	//CTexture* pTexture = CTexture::Create(m_pDevice, m_pDeviceContext);
+	CTexture* pTexture = CTexture::Create(m_pDevice, m_pDeviceContext);
+	CMaterial* pMtrl = nullptr;
 	//pTexture->NativeConstruct_Prototype(L"../Bin/Resources/Mesh/Crystal_Crawler/T_Crystal_Crawler_D.tga", 1);
 	//CMaterial* pMtrl = CMaterial::Create(m_pDevice, m_pDeviceContext, L"Crystal_Crawler", L"../../Reference/ShaderFile/Shader_Mesh.hlsl", CMaterial::EType::Anim);
 	//pMtrl->Set_Texture("g_DiffuseTexture", aiTextureType_DIFFUSE, pTexture, 0);
@@ -305,37 +310,37 @@ HRESULT CLoader::Ready_Stage1()
 
 
 	////Monster Bastion_Sword
-	//	matPivot = XMMatrixIdentity();
-	//matPivot = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(180.f));
-	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Model_Monster_Bastion_Sword", CModel::Create(m_pDevice, m_pDeviceContext,
-	//	"../bin/Resources/Mesh/Bastion_Sword/", "Bastion_Sword.fbx",
-	//	L"../../Reference/ShaderFile/Shader_Mesh.hlsl",
-	//	matPivot,
-	//	CModel::TYPE_ANIM))))
-	//{
-	//	return E_FAIL;
-	//}
+	//matPivot = XMMatrixIdentity();
+	matPivot = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(180.f));
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Model_Monster_Bastion_Sword", CModel::Create(m_pDevice, m_pDeviceContext,
+		"../bin/Resources/Mesh/Bastion_Sword/", "Bastion_Sword.fbx",
+		L"../../Reference/ShaderFile/Shader_Mesh.hlsl",
+		matPivot,
+		CModel::TYPE_ANIM,true))))
+	{
+		return E_FAIL;
+	}
 
-	//if (FAILED(g_pGameInstance->Add_Prototype(L"Monster_Bastion_Sword", CMonster_Bastion_Sword::Create(m_pDevice, m_pDeviceContext))))
-	//	return E_FAIL;
+	if (FAILED(g_pGameInstance->Add_Prototype(L"Monster_Bastion_Sword", CMonster_Bastion_Sword::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
 
-	//pTexture = CTexture::Create(m_pDevice, m_pDeviceContext);
-	//pTexture->NativeConstruct_Prototype(L"../Bin/Resources/Mesh/Bastion_Sword/T_Bastion_Tier1_Down_D.tga", 1);
-	//pMtrl = CMaterial::Create(m_pDevice, m_pDeviceContext, L"Bastion_Sword_Down", L"../../Reference/ShaderFile/Shader_Mesh.hlsl", CMaterial::EType::Anim);
-	//pMtrl->Set_Texture("g_DiffuseTexture", aiTextureType_DIFFUSE, pTexture, 0);
-	//g_pGameInstance->Add_Material(L"Mtrl_Bastion_Sword_Down", pMtrl);
+	pTexture = CTexture::Create(m_pDevice, m_pDeviceContext);
+	pTexture->NativeConstruct_Prototype(L"../Bin/Resources/Mesh/Bastion_Sword/T_Bastion_Tier1_Down_D.tga", 1);
+	pMtrl = CMaterial::Create(m_pDevice, m_pDeviceContext, L"Bastion_Sword_Down", L"../../Reference/ShaderFile/Shader_Mesh.hlsl", CMaterial::EType::Anim);
+	pMtrl->Set_Texture("g_DiffuseTexture", TEXTURETYPE::TEX_DIFFUSE, pTexture, 0);
+	g_pGameInstance->Add_Material(L"Mtrl_Bastion_Sword_Down", pMtrl);
 
-	//pTexture = CTexture::Create(m_pDevice, m_pDeviceContext);
-	//pTexture->NativeConstruct_Prototype(L"../Bin/Resources/Mesh/Bastion_Sword/T_Bastion_Tier1_Top_D.tga", 1);
-	//pMtrl = CMaterial::Create(m_pDevice, m_pDeviceContext, L"Bastion_Sword_Top", L"../../Reference/ShaderFile/Shader_Mesh.hlsl", CMaterial::EType::Anim);
-	//pMtrl->Set_Texture("g_DiffuseTexture", aiTextureType_DIFFUSE, pTexture, 0);
-	//g_pGameInstance->Add_Material(L"Mtrl_Bastion_Sword_Top", pMtrl);
+	pTexture = CTexture::Create(m_pDevice, m_pDeviceContext);
+	pTexture->NativeConstruct_Prototype(L"../Bin/Resources/Mesh/Bastion_Sword/T_Bastion_Tier1_Top_D.tga", 1);
+	pMtrl = CMaterial::Create(m_pDevice, m_pDeviceContext, L"Bastion_Sword_Top", L"../../Reference/ShaderFile/Shader_Mesh.hlsl", CMaterial::EType::Anim);
+	pMtrl->Set_Texture("g_DiffuseTexture", TEXTURETYPE::TEX_DIFFUSE, pTexture, 0);
+	g_pGameInstance->Add_Material(L"Mtrl_Bastion_Sword_Top", pMtrl);
 
-	//pTexture = CTexture::Create(m_pDevice, m_pDeviceContext);
-	//pTexture->NativeConstruct_Prototype(L"../Bin/Resources/Mesh/Bastion_Sword/T_Bastion_Fur_Coeff.tga", 1);
-	//pMtrl = CMaterial::Create(m_pDevice, m_pDeviceContext, L"Bastion_Sword_Fur", L"../../Reference/ShaderFile/Shader_Mesh.hlsl", CMaterial::EType::Anim);
-	//pMtrl->Set_Texture("g_DiffuseTexture", aiTextureType_DIFFUSE, pTexture, 0);
-	//g_pGameInstance->Add_Material(L"Mtrl_Bastion_Sword_Fur", pMtrl);
+	pTexture = CTexture::Create(m_pDevice, m_pDeviceContext);
+	pTexture->NativeConstruct_Prototype(L"../Bin/Resources/Mesh/Bastion_Sword/T_Bastion_Fur_Coeff.tga", 1);
+	pMtrl = CMaterial::Create(m_pDevice, m_pDeviceContext, L"Bastion_Sword_Fur", L"../../Reference/ShaderFile/Shader_Mesh.hlsl", CMaterial::EType::Anim);
+	pMtrl->Set_Texture("g_DiffuseTexture", TEXTURETYPE::TEX_DIFFUSE, pTexture, 0);
+	g_pGameInstance->Add_Material(L"Mtrl_Bastion_Sword_Fur", pMtrl);
 
 	//Effect
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Prototype_Component_VIBuffer_PointInstance_Explosion",

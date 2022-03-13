@@ -62,10 +62,17 @@ HRESULT CAnimator::NativeConstruct(void* pArg)
 _int CAnimator::Tick(_double dDeltaTime)
 {
 	m_pController->Tick(dDeltaTime);
+	if (m_pController->Get_ChangeAnimation())
+		m_pCulAnimNode = m_pChangeNode;
+
 	if (m_pCulAnimNode->Get_AutoIndex() != -1)
 	{
-		if (m_pController->Is_Finished())
+		if (!m_pCulAnimNode->Get_Loop() && m_pController->Is_Finished())
 			Change_Animation(m_vecAnimNodeName[m_pCulAnimNode->Get_AutoIndex()]);
+		/*if (m_pCulAnimNode->Is_LoopChange())
+			m_pCulAnimNode->Change_Loop(true);
+		if (m_pController->Is_Finished())
+			Change_Animation(m_vecAnimNodeName[m_pCulAnimNode->Get_AutoIndex()]);*/
 	}
 	return _int();
 }
@@ -75,14 +82,14 @@ _int CAnimator::LateTick(_double dDeltaTime)
 	return _int();
 }
 
-HRESULT CAnimator::Insert_Animation(const _tchar* pName, const wstring& pConnectName, CAnimation* pAnim, _bool bRootAnim, _bool bTransFrom, ERootOption eOption, _bool bDouble)
+HRESULT CAnimator::Insert_Animation(const _tchar* pName, const wstring& pConnectName, CAnimation* pAnim, _bool bRootAnim, _bool bTransFrom, _bool bLoop, ERootOption eOption, _bool bDouble)
 {
 	//만들고자 하는 애니메이션 중복 체크
 	if (Get_DuplicateTag(pName))
 		return E_FAIL;
 	
 	//애니메이션으로 AnimNode 만들기
-	CAnimNode* pNewNode = CAnimNode::Create(pName, pAnim, pAnim->Get_Loop(), (_uint)m_vecAnimNodeName.size(),bRootAnim,bTransFrom,eOption);
+	CAnimNode* pNewNode = CAnimNode::Create(pName, pAnim, bLoop, (_uint)m_vecAnimNodeName.size(),bRootAnim,bTransFrom,eOption);
 	if (!pNewNode)
 		return E_FAIL;
 	m_vecAnimNodeName.emplace_back(pName);
@@ -112,6 +119,7 @@ HRESULT CAnimator::Set_UpAutoChangeAnimation(const wstring& pAnim, const wstring
 	CAnimNode* pNode = Find_Animation(pAnim);
 	if (!pNode)
 		return E_FAIL;
+
 	CAnimNode* pEndNode = Find_Animation(pEndAnim, pNode);
 	if (!pEndNode)
 		return E_FAIL;
@@ -141,8 +149,24 @@ HRESULT CAnimator::Change_Animation(const wstring& pName)
 	return S_OK;
 }
 
+HRESULT CAnimator::Change_LoopAnim()
+{
+	if (!m_pCulAnimNode)
+		return E_FAIL;
+
+	if (!m_pCulAnimNode->Get_Loop() && m_pCulAnimNode->Get_AutoIndex() != -1)
+		return S_OK;
+
+	m_pCulAnimNode->Change_Loop(false);
+
+	return S_OK;
+}
+
 CAnimNode* CAnimator::Find_Animation(const wstring& pConnectName, CAnimNode* pNode)
 {
+	if (pConnectName == L"Head")
+		return m_pHead;
+
 	if (!Get_DuplicateTag(pConnectName))
 		return nullptr;
 
