@@ -160,6 +160,7 @@ HRESULT CLoader::Load_Stage1StaticUILoad()
 	int iResult = 0;
 	while (iResult != -1)
 	{
+
 		char szFullPath[MAX_PATH] = "../bin/Resources/Texture/UI/Static/";
 		strcat_s(szFullPath, fd.name);
 
