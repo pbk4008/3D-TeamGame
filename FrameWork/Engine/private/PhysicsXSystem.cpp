@@ -40,8 +40,7 @@ HRESULT CPhysicsXSystem::Init_PhysicsX()
 	PxCookingParams cookingParams(m_pPhysics->getTolerancesScale());
 
 	cookingParams.meshPreprocessParams = PxMeshPreprocessingFlag::eDISABLE_CLEAN_MESH;
-
-	/*PxCooking* pCooking*/m_pCooking = PxCreateCooking(PX_PHYSICS_VERSION, *m_pFoundation, cookingParams);
+	m_pCooking = PxCreateCooking(PX_PHYSICS_VERSION, *m_pFoundation, cookingParams);
 
 	if (!m_pCooking)
 		return E_FAIL;

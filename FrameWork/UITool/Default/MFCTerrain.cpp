@@ -90,7 +90,7 @@ HRESULT CMFCTerrain::SetUp_Components()
 		return E_FAIL;
 
 	wstring TexTag = L"Plane_Texture";
-	m_pTexture = (CTexture*)g_pGameInstance->Clone_Component(0, L"Texture", &TexTag);
+	m_pTexture = (CTexture*)g_pGameInstance->Clone_Component(0, L"Proto_Component_Texture", &TexTag);
 
 	return S_OK;
 }

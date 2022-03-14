@@ -6,6 +6,7 @@
 CUI::CUI()
 	: m_pBuffer(nullptr)
 	, m_pTexture(nullptr)
+	, m_pTrapziumBuffer(nullptr)
 {
 }
 
@@ -13,6 +14,7 @@ CUI::CUI(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
 	: CGameObject(pDevice, pDeviceContext)
 	, m_pBuffer(nullptr)
 	, m_pTexture(nullptr)
+	, m_pTrapziumBuffer(nullptr)
 {
 
 }
@@ -21,9 +23,11 @@ CUI::CUI(const CUI& rhs)
 	: CGameObject(rhs)
 	, m_pBuffer(rhs.m_pBuffer)
 	, m_pTexture(rhs.m_pTexture)
+	, m_pTrapziumBuffer(rhs.m_pTrapziumBuffer)
 {
 	Safe_AddRef(m_pBuffer);
 	Safe_AddRef(m_pTexture);
+	Safe_AddRef(m_pTrapziumBuffer);
 }
 
 HRESULT CUI::NativeConstruct_Prototype()
@@ -31,18 +35,18 @@ HRESULT CUI::NativeConstruct_Prototype()
 	if (FAILED(CGameObject::NativeConstruct_Prototype()))
 		return E_FAIL;
 
-	m_pBuffer=g_pGameInstance->Clone_Component<CVIBuffer_Rect>(0, L"RectBuffer");
+	/*m_pBuffer=g_pGameInstance->Clone_Component<CVIBuffer_Rect>(0, L"Proto_Component_RectBuffer");
 
 	if (!m_pBuffer)
 		return E_FAIL;
 
-	if (FAILED(SetUp_Components(L"RectBuffer", m_pBuffer)))
-		return E_FAIL;
+	if (FAILED(SetUp_Components(L"Com_RectBuffer", m_pBuffer)))
+		return E_FAIL;*/
 
-	m_pTexture=g_pGameInstance->Clone_Component<CTexture>(0, L"Texture");
+	m_pTexture=g_pGameInstance->Clone_Component<CTexture>(0, L"Proto_Component_Texture");
 	if (!m_pTexture)
 		return E_FAIL;
-	if (FAILED(SetUp_Components(L"Texture", m_pTexture)))
+	if (FAILED(SetUp_Components(L"Com_Texture", m_pTexture)))
 		return E_FAIL;
 
 	return S_OK;
@@ -50,17 +54,16 @@ HRESULT CUI::NativeConstruct_Prototype()
 
 HRESULT CUI::NativeConstruct(void* pArg)
 {
-	if (FAILED(CGameObject::NativeConstruct(pArg)))
+	if (FAILED(__super::NativeConstruct(pArg)))
 		return E_FAIL;
 
-	if (!pArg)
+	/*if (!pArg)
 		return S_OK;
 
 	wstring pTextureTag = (*(wstring*)pArg);
-	m_iObectTag = m_Desc.IDTag;
 
 	if (FAILED(m_pTexture->Change_Texture(pTextureTag)))
-		return E_FAIL;
+		return E_FAIL;*/
 
 	return S_OK;
 }
@@ -85,4 +88,5 @@ void CUI::Free()
 	CGameObject::Free();
 	Safe_Release(m_pBuffer);
 	Safe_Release(m_pTexture);
+	Safe_Release(m_pTrapziumBuffer);
 }

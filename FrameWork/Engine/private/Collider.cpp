@@ -33,7 +33,7 @@ HRESULT CCollider::NativeConstruct_Prototype()
 {
 	CGameInstance* pInstance = GET_INSTANCE(CGameInstance);
 
-	m_pGizmo = pInstance->Clone_Component<CGizmo>(0,L"Gizmo");
+	m_pGizmo = pInstance->Clone_Component<CGizmo>(0,L"Proto_Component_Gizmo");
 
 	RELEASE_INSTANCE(CGameInstance);
 

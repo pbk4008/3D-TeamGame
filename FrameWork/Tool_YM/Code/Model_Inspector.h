@@ -6,6 +6,7 @@
 
 BEGIN(Engine)
 class CCell;
+class CMeshCollider;
 END
 
 class CObserver;
@@ -41,14 +42,16 @@ public:
 
 public:
 	list<wstring>				m_CloneMode_NameList;
-	vector<Engine::CCell*>		m_vecCells;
+	vector<Engine::CCell*>		m_vecCells; 
 	NAVMESHDESC					m_NavMesh;
 	vector<NAVMESHDESC>			m_NavMeshList_Pos;
 
 public:
-	class CMainFrame*			m_pMainFrm	   = nullptr;
-	class CInspector_Form*		m_pInspec_Form = nullptr;
-	class CObserver*			m_pObserver	   = nullptr;
+	class CMainFrame*			m_pMainFrm	    = nullptr;
+	class CInspector_Form*		m_pInspec_Form  = nullptr;
+	class CObserver*			m_pObserver	    = nullptr;
+	Engine::CMeshCollider*	    m_pMeshCollider = nullptr;
+
 public:
 	_bool	m_bModelInfo_View = true;
 
@@ -79,4 +82,5 @@ public:
 	afx_msg void OnBnClickedRotYButton();
 	afx_msg void OnBnClickedZRotButton();
 	afx_msg void OnBnClickedRotNoneButton();
+	afx_msg void OnBnClickedCreateNavMesh();
 };

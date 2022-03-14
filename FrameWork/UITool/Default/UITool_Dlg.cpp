@@ -20,6 +20,7 @@ CUITool_Dlg::CUITool_Dlg(CWnd* pParent /*=nullptr*/)
 	, m_SizeY(0)
 	, m_IDTag(0)
 	, m_PositionZ(0)
+	, m_fAngle(0)
 {
 
 }
@@ -34,18 +35,21 @@ void CUITool_Dlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_LIST1, m_ListBox);
 	DDX_Text(pDX, IDC_EDIT1, m_PositionX);
 	DDX_Text(pDX, IDC_EDIT2, m_PositionY);
+	DDX_Text(pDX, IDC_EDIT7, m_PositionZ);
 	DDX_Text(pDX, IDC_EDIT3, m_SizeX);
 	DDX_Text(pDX, IDC_EDIT4, m_SizeY);
 	DDX_Text(pDX, IDC_EDIT5, m_IDTag);
 
 	DDV_MinMaxFloat(pDX, m_PositionX, 0, 99999);
 	DDV_MinMaxFloat(pDX, m_PositionY, 0, 99999);
-	DDV_MinMaxFloat(pDX, m_PositionZ, 0, 99999);
+	DDV_MinMaxFloat(pDX, m_PositionZ, 0.1, 99999);
 	DDV_MinMaxFloat(pDX, m_SizeX, 1, 99999);
 	DDV_MinMaxFloat(pDX, m_SizeY, 1, 99999);
 	DDV_MinMaxFloat(pDX, m_IDTag, 0, 99999);
+
 	DDX_Control(pDX, IDC_TREE1, m_TextureTree);
-	DDX_Text(pDX, IDC_EDIT7, m_PositionZ);
+	DDX_Text(pDX, IDC_EDIT27, m_fAngle);
+	DDX_Control(pDX, IDC_CHECK1, m_CheckMinus);
 }
 
 
@@ -119,6 +123,12 @@ void CUITool_Dlg::Setting_Desc(CUI::UIDESC* Desc)
 	m_SizeX = Desc->fSize.x;
 	m_SizeY = Desc->fSize.y;
 	m_IDTag = Desc->IDTag;
+	
+	m_fAngle = Desc->fAngle;
+
+	_bool bCheck = m_CheckMinus.GetCheck();
+	bCheck = Desc->bMinus;
+
 	_tcscpy_s(m_strPickFileName, Desc->TextureTag);
 
 	UpdateData(FALSE);
@@ -162,6 +172,22 @@ void CUITool_Dlg::OnBnClickedButtonApply()
 	Desc.fPos = { m_PositionX,m_PositionY, m_PositionZ};
 	Desc.fSize = { m_SizeX,m_SizeY };
 	Desc.IDTag = m_IDTag;
+	if (13 == m_IDTag)
+	{
+		Desc.fAngle = 0.f;
+	}
+	else if (14 == m_IDTag)
+	{
+		if (m_CheckMinus.GetCheck())
+		{
+			Desc.bMinus = true;
+		}
+		else
+		{
+			Desc.bMinus = false;
+		}
+		Desc.fAngle = m_fAngle;
+	}
 	
 	wstring Name = m_strPickFileName;
 	wstring FullName = L"Prototype_GameObject_UI_" + Name;
@@ -187,6 +213,22 @@ void CUITool_Dlg::OnBnClickedButtonStateSetting()
 		Desc.fPos = { m_PositionX,m_PositionY, m_PositionZ };
 		Desc.fSize = { m_SizeX,m_SizeY };
 		Desc.IDTag = m_IDTag;
+		if (13 == m_IDTag)
+		{
+			Desc.fAngle = 0.f;
+		}
+		else if (14 == m_IDTag)
+		{
+			if (m_CheckMinus.GetCheck())
+			{
+				Desc.bMinus = true;
+			}
+			else
+			{
+				Desc.bMinus = false;
+			}
+			Desc.fAngle = m_fAngle;
+		}
 		m_pObject->Set_UIDesc(Desc);
 	}
 	UpdateData(FALSE);

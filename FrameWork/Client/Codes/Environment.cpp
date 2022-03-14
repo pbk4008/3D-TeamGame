@@ -64,7 +64,7 @@ HRESULT CEnvironment::Render()
 		return E_FAIL;
 
 	_matrix matWorld = XMMatrixTranspose(m_pTransform->Get_WorldMatrix());
-	_matrix matView = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"MainCamera", TRANSFORMSTATEMATRIX::D3DTS_VIEW));
+	_matrix matView = XMMatrixTranspose(g_pGameInstance->Get_Transform(/*L"Camera_Silvermane"*/L"MainCamera", TRANSFORMSTATEMATRIX::D3DTS_VIEW));
 	_matrix matProj = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"MainCamera", TRANSFORMSTATEMATRIX::D3DTS_PROJECTION));
 
 	m_pInstanceMesh->SetUp_ValueOnShader("g_WorldMatrix", &matWorld, sizeof(_matrix));
@@ -73,10 +73,7 @@ HRESULT CEnvironment::Render()
 
 	_uint iNumMeshCnt = m_pInstanceMesh->Get_NumMeshContainer();
 	for (_uint i = 0; i < iNumMeshCnt; i++)
-	{
-		m_pInstanceMesh->SetUp_TextureOnShader("g_DiffuseTexture", i, aiTextureType_DIFFUSE);
 		m_pInstanceMesh->Render(i, 0);
-	}
 //
 //#ifdef _DEBUG
 //	m_pNaviMesh->Render(L"MainCamera");

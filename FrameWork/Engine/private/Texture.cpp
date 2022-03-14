@@ -3,12 +3,14 @@
 
 CTexture::CTexture(ID3D11Device * pDevice, ID3D11DeviceContext * pDeviceContext)
 	: CComponent(pDevice, pDeviceContext)
+	, m_wstrTextureTag(L"")
 {
 	
 }
 
 CTexture::CTexture(const CTexture & rhs)
 	: CComponent(rhs)
+	, m_wstrTextureTag(rhs.m_wstrTextureTag)
 {
 	for (auto& pShaderResourceView : rhs.m_Textures)
 	{
@@ -48,30 +50,28 @@ HRESULT CTexture::NativeConstruct_Prototype(const wstring& pTextureFilePath, _ui
 			hr = DirectX::LoadFromWICFile(szFullPath, DirectX::CP_FLAGS_NONE, nullptr, ScratchImage);
 	}
 
-		if (FAILED(hr))
-			return E_FAIL;
+	if (FAILED(hr))
+		return E_FAIL;
 
-		ID3D11Resource*		pTextureResource = nullptr;
+	ID3D11Resource*		pTextureResource = nullptr;
 
-		if (FAILED(DirectX::CreateTexture(m_pDevice, ScratchImage.GetImages(), ScratchImage.GetImageCount(), ScratchImage.GetMetadata(), &pTextureResource)))
-			return E_FAIL;
+	if (FAILED(DirectX::CreateTexture(m_pDevice, ScratchImage.GetImages(), ScratchImage.GetImageCount(), ScratchImage.GetMetadata(), &pTextureResource)))
+		return E_FAIL;
 
-		ID3D11ShaderResourceView*		pShaderResourceView = nullptr;
+	ID3D11ShaderResourceView*		pShaderResourceView = nullptr;
 
-		if (FAILED(m_pDevice->CreateShaderResourceView(pTextureResource, nullptr, &pShaderResourceView)))
-			return E_FAIL;
+	if (FAILED(m_pDevice->CreateShaderResourceView(pTextureResource, nullptr, &pShaderResourceView)))
+		return E_FAIL;
 
-		m_Textures.push_back(pShaderResourceView);
+	m_Textures.push_back(pShaderResourceView);
 
-		Safe_Release(pTextureResource);
-		ScratchImage.Release();
-
+	Safe_Release(pTextureResource);
+	ScratchImage.Release();
 	return S_OK;
 }
 
 HRESULT CTexture::NativeConstruct_Prototype()
 {
-
 	return S_OK;
 }
 
@@ -79,7 +79,6 @@ HRESULT CTexture::NativeConstruct(void * pArg)
 {
 	if (!pArg)
 		return S_OK;
-
 
 	wstring pTag = (*(wstring*)pArg);
 	if (FAILED(Change_Texture(pTag)))
@@ -103,6 +102,7 @@ HRESULT CTexture::Change_Texture(const wstring& pTextureTag)
 	//	m_Textures.emplace_back((*pTexture)[i]);
 	//	/*Safe_AddRef(m_Textures[i]);*/
 	//}
+	m_wstrTextureTag = pTextureTag;
 
 	if (!m_Textures.empty())
 	{
@@ -121,7 +121,6 @@ HRESULT CTexture::Change_Texture(const wstring& pTextureTag)
 		Safe_Release(pResource);
 		m_Textures.emplace_back(tmpResourceView);
 	}
-
 	RELEASE_INSTANCE(CTextureManager);
 	return S_OK;
 }

@@ -80,7 +80,7 @@ HRESULT CMainCamera_Ortho::Ready_GameObject(void* pArg)
 {
 	CCamera::CAMERADESC tDesc = (*(CCamera::CAMERADESC*)pArg);
 
-	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Camera", L"MainOrthoCamera", (CComponent * *)& m_pCamera, &tDesc)))
+	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_Camera", L"Com_MainOrthoCamera", (CComponent * *)& m_pCamera, &tDesc)))
 		return E_FAIL;
 
 	return S_OK;

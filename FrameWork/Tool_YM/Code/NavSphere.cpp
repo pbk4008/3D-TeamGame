@@ -80,9 +80,9 @@ HRESULT CNavSphere::Render()
 		{
 			m_pModelCom->SetUp_TextureOnShader("g_DiffuseTexture", i, aiTextureType::aiTextureType_DIFFUSE);
 			if (false == m_bPick)
-				m_pModelCom->Render(i, 1);
-			else
 				m_pModelCom->Render(i, 0);
+			else
+				m_pModelCom->Render(i, 1);
 		}
 	}
 	return S_OK;

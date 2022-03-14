@@ -1,10 +1,10 @@
 #pragma once
 
-#include "State_Silvermane.h"
+#include "1H_SwordAttack.h"
 
 BEGIN(Engine)
 
-class C1H_SwordSupermanStab final : public CState_Silvermane
+class C1H_SwordSupermanStab final : public C1H_SwordAttack
 {
 private:
 	explicit C1H_SwordSupermanStab(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext);

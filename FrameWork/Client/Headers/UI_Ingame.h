@@ -16,14 +16,6 @@ END
 BEGIN(Client)
 class CUI_Ingame final : public CUI
 {
-public:
-	typedef struct tagUIDesc
-	{
-		 _tchar TextureTag[MAX_PATH];
-		_float3 fPos;
-		_float2 fScale;
-	}UIDESC;
-
 private:
 	explicit CUI_Ingame(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);
 	explicit CUI_Ingame(const CUI& rhs);

@@ -35,6 +35,7 @@ HRESULT CEffect_DashDust::NativeConstruct(void* pArg)
 		return E_FAIL;
 	}
 
+
 	if (nullptr != pArg)
 	{
 		memcpy(&m_Desc, pArg, sizeof(EFFECTDESC));
@@ -79,7 +80,7 @@ _int CEffect_DashDust::Tick(_double TimeDelta)
 	}
 
 	//z정렬
-	_vector vDir = g_pGameInstance->Get_CamPosition(L"MFCCamera_Proj") - m_pTransform->Get_State(CTransform::STATE_POSITION);
+	_vector vDir = g_pGameInstance->Get_CamPosition(L"MainCamera") - m_pTransform->Get_State(CTransform::STATE_POSITION);
 	vDir = XMVector3Normalize(vDir);
 	m_pBuffer->Set_Dir(vDir);
 
@@ -150,7 +151,8 @@ HRESULT CEffect_DashDust::SetUp_Components()
 
 	//이미지 리스트박스로부터 가져옴
 	wstring tag = m_Desc.TextureTag;
-	if (FAILED(m_pTexture->Change_Texture(tag)))
+	wstring NewTag = L"Texture_" + tag;
+	if (FAILED(m_pTexture->Change_Texture(NewTag)))
 		return E_FAIL;
 
 	_vector vPos = { XMVectorGetX(m_Desc.fMyPos), XMVectorGetY(m_Desc.fMyPos), XMVectorGetY(m_Desc.fMyPos), 1.f };
@@ -167,7 +169,7 @@ HRESULT CEffect_DashDust::SetUp_Components()
 	m_backupDesc.iNumInstance = m_Desc.iNumInstance;
 	m_backupDesc.fLifeTime = m_Desc.fMaxLifeTime;
 	m_backupDesc.fCurTime = m_Desc.fCurTime;
-	if (FAILED(__super::SetUp_Components((_uint)SCENEID::SCENE_STAGE1, L"Prototype_Component_VIBuffer_PointInstance_Explosion", L"Com_VIBuffer", (CComponent**)&m_pBuffer, &m_backupDesc)))
+	if (FAILED(__super::SetUp_Components((_uint)SCENEID::SCENE_STAGE1, L"Proto_Component_VIBuffer_PointInstance_Explosion", L"Com_VIBuffer", (CComponent**)&m_pBuffer, &m_backupDesc)))
 		return E_FAIL;
 
 	return S_OK;

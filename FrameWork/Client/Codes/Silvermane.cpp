@@ -75,7 +75,7 @@ HRESULT CSilvermane::NativeConstruct(void* _pArg)
 	if (FAILED(Ready_States())) return E_FAIL;
 
 	CHierarchyNode* pWeaponBone = m_pModel->Get_BoneMatrix("weapon_r");
-	if (g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_JS, L"Weapon", L"Needle", pWeaponBone, (CGameObject**)&m_pWeapon))
+	if (g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Weapon", L"Needle", pWeaponBone, (CGameObject**)&m_pWeapon))
 		return E_FAIL;
 	m_pWeapon->Set_Owner(this);
 	m_pWeapon->Set_OwnerPivotMatrix(m_pModel->Get_PivotMatrix());
@@ -163,7 +163,7 @@ HRESULT CSilvermane::Ready_Components()
 	m_pTransform->Set_TransformDesc(tTransformDesc);
 
 	// 모델
-	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_TEST_JS, L"Model_Silvermane", L"Model", (CComponent**)&m_pModel)))
+	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STAGE1, L"Model_Silvermane", L"Model", (CComponent**)&m_pModel)))
 		return E_FAIL;
 	m_pModel->Add_Material(g_pGameInstance->Get_Material(L"Mtrl_Silvermane_Top"), 0);
 	m_pModel->Add_Material(g_pGameInstance->Get_Material(L"Mtrl_Silvermane_Down"), 1);
@@ -171,14 +171,14 @@ HRESULT CSilvermane::Ready_Components()
 	m_pModel->Add_Material(g_pGameInstance->Get_Material(L"Mtrl_Silvermane_Hair"), 3);
 
 	// 에니메이션 컨트롤러
-	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_TEST_JS, L"Com_AnimationController", L"AnimationController", (CComponent**)&m_pAnimationController)))
+	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STAGE1, L"Com_AnimationController", L"AnimationController", (CComponent**)&m_pAnimationController)))
 		return E_FAIL;
 	m_pAnimationController->Set_GameObject(this);
 	m_pAnimationController->Set_Model(m_pModel);
 	m_pAnimationController->Set_Transform(m_pTransform);
 
 	// 스테이트 컨트롤러
-	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_TEST_JS, L"Com_StateController", L"StateController", (CComponent**)&m_pStateController)))
+	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STAGE1, L"Com_StateController", L"StateController", (CComponent**)&m_pStateController)))
 		return E_FAIL;
 	m_pStateController->Set_GameObject(this);
 
@@ -190,7 +190,7 @@ HRESULT CSilvermane::Ready_Components()
 	tCharacterControllerDesc.fDynamicFriction = 0.5f;
 	tCharacterControllerDesc.fRestitution = 0.f;
 	tCharacterControllerDesc.pGameObject = this;
-	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_TEST_JS, L"Com_CharacterController", L"CharacterController", (CComponent**)&m_pCharacterController, &tCharacterControllerDesc)))
+	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STAGE1, L"Com_CharacterController", L"CharacterController", (CComponent**)&m_pCharacterController, &tCharacterControllerDesc)))
 		return E_FAIL;
 	m_pCharacterController->Set_OwnerTransform(m_pTransform);
 
@@ -330,7 +330,13 @@ const _bool CSilvermane::Is_EquipWeapon() const
 
 void CSilvermane::Add_PlusAngle(const _float _fDeltaAngle)
 {
-	m_fPlusAngle += _fDeltaAngle * 400.f;
+	//m_fPlusAngle += _fDeltaAngle * 400.f;
+
+	if (0 > _fDeltaAngle)
+		m_fPlusAngle -= 2.f;
+	else
+		m_fPlusAngle += 2.f;
+
 	if (360.f < m_fPlusAngle || -360.f > m_fPlusAngle)
 		m_fPlusAngle = fmodf(m_fPlusAngle, 360.f);
 }

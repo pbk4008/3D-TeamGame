@@ -32,7 +32,7 @@ namespace Engine
 		XMFLOAT4X4		OffsetMatrix;
 		class CHierarchyNode*	pNode;
 	}BONEDESC;
-
+	
 	typedef struct tagVertex_Mesh
 	{
 		XMFLOAT3		vPosition;

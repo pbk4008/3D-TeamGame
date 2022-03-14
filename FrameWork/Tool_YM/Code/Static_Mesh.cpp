@@ -130,13 +130,10 @@ HRESULT CStatic_Mesh::Render()
 			_fvector ZStartVec = m_pTransform->Get_State(CTransform::STATE_POSITION);
 			_fvector ZEndVec = ZStartVec + (m_pTransform->Get_State(CTransform::STATE_RIGHT) * 2);
 
-
 			m_pGizmo->DrawLine(XStartVec, XEndVec, L"Camera", _fvector{ 1.0f, 0.0f, 0.0f, 1.0f }); //X
 			m_pGizmo->DrawLine(YStartVec, YEndVec, L"Camera", _fvector{ 0.0f, 1.0f, 0.0f, 1.0f }); //Y
 			m_pGizmo->DrawLine(ZStartVec, ZEndVec, L"Camera", _fvector{ 0.0f, 0.0f, 1.0f, 1.0f }); //Z
-
 		}
-
 	}
 	return S_OK;
 }
@@ -148,7 +145,7 @@ HRESULT CStatic_Mesh::SetUp_Components()
 		return E_FAIL;
 
 	/* Com_Gizmo*/
-	m_pGizmo = (CGizmo*)g_pGameInstance->Clone_Component(TAB_STATIC, L"Gizmo");
+	m_pGizmo = (CGizmo*)g_pGameInstance->Clone_Component(TAB_STATIC, L"Proto_Component_Gizmo");
 	if (nullptr == m_pGizmo)
 		return E_FAIL;
 

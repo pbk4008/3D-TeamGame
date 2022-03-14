@@ -136,7 +136,6 @@ END_MESSAGE_MAP()
 
 
 // CMenu_Form 진단
-
 #ifdef _DEBUG
 void CMenu_Form::AssertValid() const
 {
@@ -150,7 +149,6 @@ void CMenu_Form::Dump(CDumpContext& dc) const
 }
 #endif
 #endif //_DEBUG
-
 
 // CMenu_Form 메시지 처리기
 

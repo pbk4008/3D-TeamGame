@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project>
+  <ProjectOutputs>
+    <ProjectOutput>
+      <FullPath>C:\heejeong\gitHub\Study\jusin_heejeong\Portfolio\3D_Team\FrameWork\Engine\Bin\Engine.dll</FullPath>
+    </ProjectOutput>
+  </ProjectOutputs>
+  <ContentFiles>
+    <ContentFile>
+      <FullPath>C:\heejeong\gitHub\Study\jusin_heejeong\Portfolio\3D_Team\FrameWork\Engine\Bin\Shader_CSGSBlur.cso</FullPath>
+    </ContentFile>
+    <ContentFile>
+      <FullPath>C:\heejeong\gitHub\Study\jusin_heejeong\Portfolio\3D_Team\FrameWork\Engine\Bin\Shader_DownSample.cso</FullPath>
+    </ContentFile>
+    <ContentFile>
+      <FullPath>C:\heejeong\gitHub\Study\jusin_heejeong\Portfolio\3D_Team\FrameWork\Engine\Bin\Shader_DSViewPort.cso</FullPath>
+    </ContentFile>
+    <ContentFile>
+      <FullPath>C:\heejeong\gitHub\Study\jusin_heejeong\Portfolio\3D_Team\FrameWork\Engine\Bin\Shader_RectViewport.cso</FullPath>
+    </ContentFile>
+    <ContentFile>
+      <FullPath>C:\heejeong\gitHub\Study\jusin_heejeong\Portfolio\3D_Team\FrameWork\Engine\Bin\Shader_Triangle.cso</FullPath>
+    </ContentFile>
+    <ContentFile>
+      <FullPath>C:\heejeong\gitHub\Study\jusin_heejeong\Portfolio\3D_Team\FrameWork\Engine\Bin\Shader_UI.cso</FullPath>
+    </ContentFile>
+  </ContentFiles>
+  <SatelliteDlls />
+  <NonRecipeFileRefs />
+</Project>

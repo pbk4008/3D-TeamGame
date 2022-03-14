@@ -21,8 +21,6 @@ public:
 	}STATICMESHDATA;
 	typedef struct tagBoneData
 	{
-		_uint iBoneNameSize;
-		_uint iParentNameSize;
 		char szBoneName[MAX_PATH];
 		char szParentName[MAX_PATH];
 		_uint iDepth;
@@ -40,12 +38,11 @@ public:
 		FACEINDICES32* pIndex;
 
 		_uint iMeshMtrlNum;
-		BONEDATA* pBoneData;
+		vector<string> vecBoneName;
 	}ANIMMESHDATA;
 	typedef struct tagChannelData
 	{
 		_uint iKeyFrameCnt;
-		_uint iChannelNameSize;
 		char szChannelName[MAX_PATH];
 
 		KEYFRAME* pKeyFrame;
@@ -54,7 +51,6 @@ public:
 	{
 		_double dDuration;
 		_double dPlaySpeed;
-		_uint iAnimNameSize;
 		char szAnimName[MAX_PATH];
 		_uint iAnimIndex;
 		_uint iChannelCnt;
@@ -63,14 +59,16 @@ public:
 	}ANIMDATA;
 	typedef struct tagTextureData
 	{
-		_uint iTextureNameSize;
 		_tchar pTextureName[MAX_PATH];
 		_uint iType;
 	}TEXTUREDATA;
 	typedef struct tagMtrlData
 	{
 		_uint iTextureCnt;
-		vector<TEXTUREDATA> pTaxtureData;
+		_uint iMtrlType;
+		_tchar pMtrlName[MAX_PATH];
+		_tchar pShader_Path[MAX_PATH];
+		vector<TEXTUREDATA> vecTextureData;
 	}MTRLDATA;
 	typedef struct tagStaticModelSaveData
 	{
@@ -85,10 +83,12 @@ public:
 		_uint iMeshCount;
 		_uint iMtrlCount;
 		_uint iAnimCount;
+		_uint iBoneCount;
 
 		vector<MTRLDATA> pMtrlData;
 		vector<ANIMMESHDATA> pMeshData;
 		vector<ANIMDATA> pAnimData;
+		vector<BONEDATA> pBoneData;
 	}DYNAMICDATA;
 private:
 	NO_COPY(CSaveManager);
@@ -138,9 +138,9 @@ public:
 		return S_OK;
 	}
 	HRESULT Save_StaticModel(vector<MTRLDATA>& vecMtrlData, vector<STATICMESHDATA>& vecMeshData, _fmatrix pivotMatrix,const wstring& pFilePath);
-	HRESULT Save_AnimModel(vector<MTRLDATA>& vecMtrlData, vector <ANIMMESHDATA>& vecMeshData, vector<ANIMDATA>& vecAnimData, _fmatrix pivotMatirx, const wstring& pFilePath);
-	HRESULT Load_AnimModel(DYNAMICDATA& AnimData, const wstring& pFilePath);
-	HRESULT Load_StaticModel(STATICDATA& StaticData, const wstring& pFilePath);
+	HRESULT Save_AnimModel(vector<MTRLDATA>& vecMtrlData, vector <ANIMMESHDATA>& vecMeshData, vector<ANIMDATA>& vecAnimData, vector<BONEDATA>& vecBoneData,_fmatrix pivotMatirx, const wstring& pFilePath);
+	HRESULT Load_AnimModel(DYNAMICDATA& AnimData, _matrix& pivotMatrix, const wstring& pFilePath);
+	HRESULT Load_StaticModel(STATICDATA& StaticData,  const wstring& pFilePath);
 private:
 	virtual void Free();
 };
