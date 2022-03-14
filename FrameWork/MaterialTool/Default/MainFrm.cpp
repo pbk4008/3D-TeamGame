@@ -115,7 +115,7 @@ BOOL CMainFrame::OnCreateClient(LPCREATESTRUCT lpcs, CCreateContext* pContext)
 	m_tMainSplitter.CreateStatic(this, 1, 2);
 
 	m_tMainSplitter.CreateView(0, 1, RUNTIME_CLASS(CToolYASICView), CSize(1280, 720), pContext);
-	m_tMainSplitter.CreateView(0, 0, RUNTIME_CLASS(CMainForm), CSize(600, 720), pContext);
+	m_tMainSplitter.CreateView(0, 0, RUNTIME_CLASS(CMainForm), CSize(800, 720), pContext);
 
 	m_pToolView = static_cast<CToolYASICView*>(m_tMainSplitter.GetPane(0, 1));
 	CRect rcToolView = {};

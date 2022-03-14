@@ -159,7 +159,7 @@
     </Filter>
     <Filter Include="02.GameObject\98.Player\00.Silvermane\State\Hand\Sprint">
       <UniqueIdentifier>{f86ae29b-ccc6-4e20-aafd-431e17d61329}</UniqueIdentifier>
-	</Filter>
+    </Filter>
     <Filter Include="02.GameObject\05.UI\01.UI_Ingame\01.Meter">
       <UniqueIdentifier>{25729745-f9c6-4a84-b355-89c40ec68f2c}</UniqueIdentifier>
     </Filter>
@@ -198,6 +198,12 @@
     </Filter>
     <Filter Include="02.GameObject\05.UI\01.UI_Ingame\01.Meter\02.Monster\03.HpUI">
       <UniqueIdentifier>{8d05bd08-0e08-4584-9925-592ea048aeab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\98.Player\00.Silvermane\State\2H_Hammer\R1">
+      <UniqueIdentifier>{8442c6e8-1b71-42cb-9465-65001b52b72f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\98.Player\00.Silvermane\State\2H_Hammer\R2">
+      <UniqueIdentifier>{e33ba3ef-21b0-430f-8b2b-2ca2d50e74c5}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -544,6 +550,51 @@
     <ClInclude Include="..\Headers\UI_Monster_HpBar.h">
       <Filter>02.GameObject\05.UI\01.UI_Ingame\01.Meter\02.Monster\03.HpUI</Filter>
     </ClInclude>
+    <ClInclude Include="..\Headers\2H_HammerAttack.h">
+      <Filter>02.GameObject\98.Player\00.Silvermane\State\2H_Hammer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\2H_HammerAttackR1_01.h">
+      <Filter>02.GameObject\98.Player\00.Silvermane\State\2H_Hammer\R1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\2H_HammerAttackR1_02.h">
+      <Filter>02.GameObject\98.Player\00.Silvermane\State\2H_Hammer\R1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\2H_HammerAttackR1_03.h">
+      <Filter>02.GameObject\98.Player\00.Silvermane\State\2H_Hammer\R1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\2H_HammerAttackR1_04.h">
+      <Filter>02.GameObject\98.Player\00.Silvermane\State\2H_Hammer\R1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\2H_HammerAttackJogR1.h">
+      <Filter>02.GameObject\98.Player\00.Silvermane\State\2H_Hammer\R1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\2H_HammerAttackR2_01.h">
+      <Filter>02.GameObject\98.Player\00.Silvermane\State\2H_Hammer\R2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\2H_HammerAttackR2_02.h">
+      <Filter>02.GameObject\98.Player\00.Silvermane\State\2H_Hammer\R2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\2H_HammerAttackR2_03.h">
+      <Filter>02.GameObject\98.Player\00.Silvermane\State\2H_Hammer\R2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\2H_HammerChargeStage1_Start.h">
+      <Filter>02.GameObject\98.Player\00.Silvermane\State\2H_Hammer\R2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\2H_HammerChargeStage1_Loop.h">
+      <Filter>02.GameObject\98.Player\00.Silvermane\State\2H_Hammer\R2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\2H_HammerAttackSprintR1.h">
+      <Filter>02.GameObject\98.Player\00.Silvermane\State\2H_Hammer\R1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\2H_HammerAttackR1_04Swap.h">
+      <Filter>02.GameObject\98.Player\00.Silvermane\State\2H_Hammer\R2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\2H_HammerAttackDodgeR1.h">
+      <Filter>02.GameObject\98.Player\00.Silvermane\State\2H_Hammer\R1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\2H_HammerAttackR2_Charge.h">
+      <Filter>02.GameObject\98.Player\00.Silvermane\State\2H_Hammer\R2</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -865,6 +916,51 @@
     </ClCompile>
     <ClCompile Include="..\Codes\UI_Monster_HpBar.cpp">
       <Filter>02.GameObject\05.UI\01.UI_Ingame\01.Meter\02.Monster\03.HpUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\2H_HammerAttack.cpp">
+      <Filter>02.GameObject\98.Player\00.Silvermane\State\2H_Hammer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\2H_HammerAttackR1_01.cpp">
+      <Filter>02.GameObject\98.Player\00.Silvermane\State\2H_Hammer\R1</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\2H_HammerAttackR1_02.cpp">
+      <Filter>02.GameObject\98.Player\00.Silvermane\State\2H_Hammer\R1</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\2H_HammerAttackR1_03.cpp">
+      <Filter>02.GameObject\98.Player\00.Silvermane\State\2H_Hammer\R1</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\2H_HammerAttackR1_04.cpp">
+      <Filter>02.GameObject\98.Player\00.Silvermane\State\2H_Hammer\R1</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\2H_HammerAttackJogR1.cpp">
+      <Filter>02.GameObject\98.Player\00.Silvermane\State\2H_Hammer\R1</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\2H_HammerAttackR2_01.cpp">
+      <Filter>02.GameObject\98.Player\00.Silvermane\State\2H_Hammer\R2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\2H_HammerAttackR2_02.cpp">
+      <Filter>02.GameObject\98.Player\00.Silvermane\State\2H_Hammer\R2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\2H_HammerAttackR2_03.cpp">
+      <Filter>02.GameObject\98.Player\00.Silvermane\State\2H_Hammer\R2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\2H_HammerChargeStage1_Start.cpp">
+      <Filter>02.GameObject\98.Player\00.Silvermane\State\2H_Hammer\R2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\2H_HammerChargeStage1_Loop.cpp">
+      <Filter>02.GameObject\98.Player\00.Silvermane\State\2H_Hammer\R2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\2H_HammerAttackSprintR1.cpp">
+      <Filter>02.GameObject\98.Player\00.Silvermane\State\2H_Hammer\R1</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\2H_HammerAttackR1_04Swap.cpp">
+      <Filter>02.GameObject\98.Player\00.Silvermane\State\2H_Hammer\R2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\2H_HammerAttackDodgeR1.cpp">
+      <Filter>02.GameObject\98.Player\00.Silvermane\State\2H_Hammer\R1</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\2H_HammerAttackR2_Charge.cpp">
+      <Filter>02.GameObject\98.Player\00.Silvermane\State\2H_Hammer\R2</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

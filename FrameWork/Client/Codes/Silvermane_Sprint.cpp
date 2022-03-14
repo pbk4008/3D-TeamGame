@@ -111,7 +111,7 @@ _int CSilvermane_Sprint::KeyCheck(const _double& _dDeltaTime)
 			return STATE_CHANGE;
 			break;
 		case CWeapon::EType::Hammer_2H:
-			if (FAILED(m_pStateController->Change_State(L"2H_HammerSprintAttack")))
+			if (FAILED(m_pStateController->Change_State(L"2H_HammerAttackSprintR1")))
 				return -1;
 			return STATE_CHANGE;
 			break;

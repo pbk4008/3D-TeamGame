@@ -1,10 +1,10 @@
 #pragma once
 
-#include "State_Silvermane.h"
+#include "Silvermane_Sprint.h"
 
 BEGIN(Client)
 
-class CSilvermane_SprintFwdStop final : public CState_Silvermane
+class CSilvermane_SprintFwdStop final : public CSilvermane_Sprint
 {
 private:
 	explicit CSilvermane_SprintFwdStop(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext);

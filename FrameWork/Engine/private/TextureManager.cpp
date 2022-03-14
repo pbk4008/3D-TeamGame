@@ -32,18 +32,20 @@ HRESULT CTextureManager::Init_Texture(ID3D11Device* pDevice, const wstring& pTex
 	if (!pDevice)
 		return E_FAIL;
 
+	_tchar szFullPath[MAX_PATH] = L"";
+
   	DirectX::ScratchImage tImage;
 
-	_tchar szExt[MAX_PATH] = L"";
-	_wsplitpath_s(pFilePath.c_str(), nullptr, 0, nullptr, 0, nullptr, 0, szExt, 256);
-
-	_tchar szFullPath[MAX_PATH] = L"";
-	HRESULT hr = 0;
 	
 	vector<ID3D11ShaderResourceView*> vecResource;
 	vecResource.reserve(iTextureCnt);
+
+	HRESULT hr = 0;
 	for (_uint i = 0; i < iTextureCnt; i++)
 	{
+		_tchar szExt[MAX_PATH] = L"";
+		_wsplitpath_s(pFilePath.c_str(), nullptr, 0, nullptr, 0, nullptr, 0, szExt, 256);
+
 		wsprintf(szFullPath, pFilePath.c_str(), i);
 
 		if (!lstrcmp(szExt, L".dds"))
@@ -52,8 +54,13 @@ HRESULT CTextureManager::Init_Texture(ID3D11Device* pDevice, const wstring& pTex
 		{
 			hr = LoadFromTGAFile(szFullPath, nullptr, tImage);
 
+<<<<<<< HEAD
 			/*DirectX::ScratchImage MipChain;
 			hr = DirectX::GenerateMipMaps(tImage.GetImages(), tImage.GetImageCount(), tImage.GetMetadata(), TEX_FILTER_FANT, 0, MipChain);
+=======
+			//DirectX::ScratchImage MipChain;
+			/*hr = DirectX::GenerateMipMaps(tImage.GetImages(), tImage.GetImageCount(), tImage.GetMetadata(), TEX_FILTER_FANT, 0, MipChain);
+>>>>>>> main
 			if (FAILED(hr))
 				return E_FAIL;
 			else
@@ -77,7 +84,7 @@ HRESULT CTextureManager::Init_Texture(ID3D11Device* pDevice, const wstring& pTex
 			}*/
 		}
 		else
-			hr = LoadFromWICFile(szFullPath, CP_FLAGS_NONE, nullptr, tImage);
+			hr = DirectX::LoadFromWICFile(szFullPath, DirectX::WIC_FLAGS_NONE, nullptr, tImage);
 
 		if (FAILED(hr))
 			return E_FAIL;

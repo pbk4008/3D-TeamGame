@@ -51,6 +51,10 @@ HRESULT CMeshContainer::NativeConstruct_Prototype(_uint iMaterialIndex, _uint iN
 		return E_FAIL;
 
 	m_iMaterialIndex = iMaterialIndex;
+<<<<<<< HEAD
+=======
+
+>>>>>>> main
 	return S_OK;
 }
 
