@@ -3,6 +3,7 @@
 
 #include "HierarchyNode.h"
 #include "Silvermane.h"
+#include "StateController.h"
 
 CNeedle::CNeedle(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
 	: CWeapon(_pDevice, _pDeviceContext)
@@ -18,6 +19,9 @@ HRESULT CNeedle::NativeConstruct_Prototype()
 {
 	if (FAILED(__super::NativeConstruct_Prototype()))
 		return E_FAIL;
+
+	m_eType = EType::Sword_1H;
+	m_wstrName = L"Needle";
 
 	return S_OK;
 }
@@ -90,7 +94,7 @@ HRESULT CNeedle::Ready_Components()
 	m_pTransform->Set_TransformDesc(transformDesc);
 	m_pLocalTransform->Set_TransformDesc(transformDesc);
 
-	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STAGE1, L"Model_Needle", L"Model", (CComponent**)&m_pModel)))
+	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_TEST_JS, L"Model_Needle", L"Model", (CComponent**)&m_pModel)))
 		return E_FAIL;
 
 	return S_OK;
@@ -106,7 +110,6 @@ _int CNeedle::Attach_FixedBone(const _double& _dDeltaTime)
 
 		if (!m_isEquip)
 		{
-			//m_smatPivot = XMMatrixRotationRollPitchYaw(XMConvertToRadians(-20.f), XMConvertToRadians(-67.f), XMConvertToRadians(0.f)) * XMMatrixTranslation(0.5f, 0.05f, -0.2f);
 			smatWorld = m_smatPivot * smatWorld;
 		}
 
@@ -152,7 +155,6 @@ CGameObject* CNeedle::Clone(void* _pArg)
 
 void CNeedle::Free()
 {
-
 
 	__super::Free();
 }

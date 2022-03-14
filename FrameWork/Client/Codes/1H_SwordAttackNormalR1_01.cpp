@@ -64,7 +64,6 @@ HRESULT C1H_SwordAttackNormalR1_01::EnterState()
 		CHierarchyNode* pWeaponBone = m_pModel->Get_BoneMatrix("weapon_r");
 		m_pSilvermane->Set_WeaponFixedBone(pWeaponBone);
 	}
-	
 
 	return S_OK;
 }
@@ -88,6 +87,12 @@ _int C1H_SwordAttackNormalR1_01::KeyCheck(const _double& _dDeltaTime)
 		if (g_pGameInstance->getMouseKeyDown(CInputDev::MOUSESTATE::MB_LBUTTON))
 		{
 			m_pStateController->Change_State(L"1H_SwordAttackNormalR1_02");
+			return STATE_CHANGE;
+		}
+		else if (g_pGameInstance->getMouseKeyDown(CInputDev::MOUSESTATE::MB_RBUTTON))
+		{
+			if (FAILED(m_pStateController->Change_State(L"1H_SwordAttackNormalR2_Start")))
+				return -1;
 			return STATE_CHANGE;
 		}
 	}

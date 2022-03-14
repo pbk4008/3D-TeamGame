@@ -84,13 +84,13 @@ _int CSilvermane_JogLeft::KeyCheck(const _double& _dDeltaTime)
 		if (g_pGameInstance->getkeyPress(DIK_W))
 		{
 			if(FAILED(m_pStateController->Change_State(L"JogFwd")))
-				return E_FAIL;
+				return -1;
 			return STATE_CHANGE;
 		}
 		if (g_pGameInstance->getkeyPress(DIK_S))
 		{
 			if (FAILED(m_pStateController->Change_State(L"JogBwd")))
-				return E_FAIL;
+				return -1;
 			return STATE_CHANGE;
 		}
 		else

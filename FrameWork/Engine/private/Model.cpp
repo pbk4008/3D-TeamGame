@@ -1049,6 +1049,7 @@ void CModel::Free()
 		{
 			Safe_Release(pPassDec->pInputLayout);
 			Safe_Release(pPassDec->pPass);
+			Safe_Delete(pPassDec);
 		}
 		m_PassDesc.clear();
 	}

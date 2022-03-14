@@ -566,4 +566,5 @@ FrameWork/Engine/default/x64/Release/CSTarget.obj
 FrameWork/Engine/default/x64/Release/CustumFont.obj
 FrameWork/Engine/default/x64/Release/DebugDraw.obj
 FrameWork/Engine/default/x64/Release/Effect.obj
+FrameWork/Client/bin/Resources/Mesh/Silvermane/Silvermane_Anim231.fbx
 *.enc

@@ -131,6 +131,16 @@ void CAnimationController::Set_RootMotion(const _bool _isRootMotion, const _bool
 	m_eRootOption = _eRootOption;
 }
 
+void CAnimationController::Set_PlaySpeed(const _float _fPlaySpeed)
+{
+	m_fPlaySpeed = _fPlaySpeed;
+}
+
+void CAnimationController::Set_MoveSpeed(const _float _fMoveSpeed)
+{
+	m_fMoveSpeed = _fMoveSpeed;
+}
+
 const _bool CAnimationController::Is_RootMotion() const
 {
 	return m_isRootMotion;
@@ -156,7 +166,7 @@ _int CAnimationController::Update_CombinedTransformMatrix(const _double& _dDelta
 		m_tBlendDesc.fChangeTime += (_float)_dDeltaTime;
 		m_tBlendDesc.fTweenTime = m_tBlendDesc.fChangeTime / m_tBlendDesc.fTakeTime;
 
-		vecAnimations[m_tBlendDesc.iNextAnimIndex]->Update_TransformationMatrix(_dDeltaTime, m_tBlendDesc.isLoopNextAnim);
+		vecAnimations[m_tBlendDesc.iNextAnimIndex]->Update_TransformationMatrix(_dDeltaTime * m_fPlaySpeed, m_tBlendDesc.isLoopNextAnim);
 		m_isFinished = vecAnimations[m_tBlendDesc.iNextAnimIndex]->Is_Finished();
 		m_iCurKeyFrameIndex = vecAnimations[m_tBlendDesc.iNextAnimIndex]->Get_CurrentKeyFrameIndex();
 
@@ -164,7 +174,7 @@ _int CAnimationController::Update_CombinedTransformMatrix(const _double& _dDelta
 	}
 	else
 	{
-		vecAnimations[m_tBlendDesc.iCurAnimIndex]->Update_TransformationMatrix(_dDeltaTime, m_isLoopAnim);
+		vecAnimations[m_tBlendDesc.iCurAnimIndex]->Update_TransformationMatrix(_dDeltaTime * m_fPlaySpeed, m_isLoopAnim);
 		m_isFinished = vecAnimations[m_tBlendDesc.iCurAnimIndex]->Is_Finished();
 		m_iCurKeyFrameIndex = vecAnimations[m_tBlendDesc.iCurAnimIndex]->Get_CurrentKeyFrameIndex();
 	}
@@ -421,9 +431,9 @@ const _int CAnimationController::Move_Transform(const _double& _dDeltaTime)
 			svVelocity = XMVector4Transform(svVelocity, m_smatPivot * m_pTransform->Get_PivotMatrix());
 
 			XMStoreFloat3(&vVelocity, svVelocity);
-			m_pTransform->Go_Right(vVelocity.x * _dDeltaTime);
-			m_pTransform->Go_Up(vVelocity.y * _dDeltaTime);
-			m_pTransform->Go_Straight(vVelocity.z * _dDeltaTime);
+			m_pTransform->Go_Right(vVelocity.x * _dDeltaTime * m_fMoveSpeed);
+			m_pTransform->Go_Up(vVelocity.y * _dDeltaTime* m_fMoveSpeed);
+			m_pTransform->Go_Straight(vVelocity.z * _dDeltaTime* m_fMoveSpeed);
 
 			// 요 아래는 디버그 용이야
 			_float3 vPosition = { 0.f, 0.f, 0.f };

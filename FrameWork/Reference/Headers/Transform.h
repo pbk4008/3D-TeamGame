@@ -56,6 +56,9 @@ public:
 	void SetUp_Rotation(_fvector vAxis, _float fRadian); /* 디폴트상태기준으로 특정축으로 몇도만큼 회전시켜놓겠다. */
 	void Scaling(_fvector vScale);
 	void Scale_Up(_fvector vScale);
+	void ScaleX_Up(_fvector vScale);
+	void ScaleY_Up(_fvector vScale);
+	void ScaleZ_Up(_fvector vScale);
 
 public:
 	void Mesh_Straight(_double TimeDelta, class CNavigation* pNavigation = nullptr);
