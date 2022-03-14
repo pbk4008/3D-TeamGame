@@ -19,6 +19,7 @@
 #include "Silvermane.h"
 #include "Camera_Silvermane.h"
 #include "Needle.h"
+#include "Fury.h"
 #include "Monster_Bastion_2HSword.h"
 #include "Monster_Bastion_Healer.h"
 #include "Monster_Bastion_Shooter.h"
@@ -472,6 +473,13 @@ HRESULT CLoader::Ready_Test_JS()
 	{
 		return E_FAIL;
 	}
+	matPivot = XMMatrixIdentity();
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_TEST_JS, L"Model_Fury", CModel::Create(m_pDevice, m_pDeviceContext,
+		"../bin/Resources/Mesh/Fury/", "Fury.fbx",
+		L"../../Reference/ShaderFile/Shader_StaticMesh.hlsl", matPivot, CModel::TYPE_STATIC, true))))
+	{
+		return E_FAIL;
+	}
 	matPivot = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(180.f));
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_TEST_JS, L"Model_Bastion_2HSword", CModel::Create(m_pDevice, m_pDeviceContext,
 		"../bin/Resources/Mesh/Bastion_2HSword/", "Bastion_2HSword.fbx",
@@ -530,7 +538,9 @@ HRESULT CLoader::Ready_Test_JS()
 		return E_FAIL;
 	if (FAILED(g_pGameInstance->Add_Prototype(L"Camera_Debug", CCamera_Debug::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
-	if (FAILED(g_pGameInstance->Add_Prototype(L"Needle", CNeedle::Create(m_pDevice, m_pDeviceContext))))
+	if (FAILED(g_pGameInstance->Add_Prototype(L"Weapon_Needle", CNeedle::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	if (FAILED(g_pGameInstance->Add_Prototype(L"Weapon_Fury", CFury::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 	if (FAILED(g_pGameInstance->Add_Prototype(L"Monster_Bastion_2HSword", CMonster_Bastion_2HSword::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;

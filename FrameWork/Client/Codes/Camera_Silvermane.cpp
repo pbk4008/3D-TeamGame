@@ -94,7 +94,6 @@ HRESULT CCamera_Silvermane::Ready_Components()
 	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Camera", L"Camera", (CComponent**)&m_pCamera, &cameraDesc)))
 		return E_FAIL;
 
-
 	CTransform::TRANSFORMDESC transformDesc;
 	transformDesc.fSpeedPerSec = 0.f;
 	transformDesc.fRotationPerSec = 0.f;
@@ -107,8 +106,6 @@ HRESULT CCamera_Silvermane::Ready_Components()
 	transformDesc.fRotationPerSec = XMConvertToRadians(120.f);
 	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Transform", L"WorldTransform", (CComponent**)&m_pWorldTransform, &transformDesc)))
 		return E_FAIL;
-
-
 
 	return S_OK;
 }

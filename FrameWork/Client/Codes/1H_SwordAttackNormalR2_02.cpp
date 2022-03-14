@@ -78,7 +78,13 @@ _int C1H_SwordAttackNormalR2_02::KeyCheck(const _double& _dDeltaTime)
 	
 	if (m_iCutIndex < m_pAnimationController->Get_CurKeyFrameIndex())
 	{
-		if (g_pGameInstance->getMouseKeyDown(CInputDev::MOUSESTATE::MB_RBUTTON))
+		if (g_pGameInstance->getMouseKeyDown(CInputDev::MOUSESTATE::MB_LBUTTON))
+		{
+			if (FAILED(m_pStateController->Change_State(L"1H_SwordAttackNormalR1_01")))
+				return -1;
+			return STATE_CHANGE;
+		}
+		else if (g_pGameInstance->getMouseKeyDown(CInputDev::MOUSESTATE::MB_RBUTTON))
 		{
 			if (FAILED(m_pStateController->Change_State(L"1H_SwordAttackNormalR2_03")))
 				return -1;

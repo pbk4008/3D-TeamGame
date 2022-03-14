@@ -69,8 +69,7 @@ HRESULT C1H_SwordEquipOff::ExitState()
 		return E_FAIL;
 
 	m_pSilvermane->Set_EquipWeapon(false);
-	CHierarchyNode* pWeaponBone = m_pModel->Get_BoneMatrix("spine_03");
-	m_pSilvermane->Set_WeaponFixedBone(pWeaponBone);
+	m_pSilvermane->Set_WeaponFixedBone("spine_03");
 
 	return S_OK;
 }

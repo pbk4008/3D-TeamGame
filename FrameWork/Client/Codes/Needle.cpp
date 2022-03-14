@@ -3,6 +3,7 @@
 
 #include "HierarchyNode.h"
 #include "Silvermane.h"
+#include "StateController.h"
 
 CNeedle::CNeedle(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
 	: CWeapon(_pDevice, _pDeviceContext)
@@ -18,6 +19,9 @@ HRESULT CNeedle::NativeConstruct_Prototype()
 {
 	if (FAILED(__super::NativeConstruct_Prototype()))
 		return E_FAIL;
+
+	m_eType = EType::Sword_1H;
+	m_wstrName = L"Needle";
 
 	return S_OK;
 }
@@ -151,7 +155,6 @@ CGameObject* CNeedle::Clone(void* _pArg)
 
 void CNeedle::Free()
 {
-
 
 	__super::Free();
 }

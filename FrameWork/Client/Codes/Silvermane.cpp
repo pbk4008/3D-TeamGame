@@ -3,6 +3,7 @@
 
 #include "Camera_Silvermane.h"
 #include "Needle.h"
+#include "Fury.h"
 
 #pragma region 스테이트들
 #include "Silvermane_Idle.h"
@@ -25,32 +26,70 @@
 #include "Silvermane_JogRightPivot180.h"
 #include "Silvermane_JogRightStart.h"
 
-//////////////////// Sprint
+///////////////////////////////////// Sprint
 #include "Silvermane_SprintFwd.h"
 #include "Silvermane_SprintFwdStart.h"
 #include "Silvermane_SprintFwdStop.h"
 
-//////////////////// 1H
+//////////////////////////////////// 1H_Sword
+#include "1H_SwordEquipOff.h"
+#include "1H_SwordEquipOn.h"
+#include "1H_SwordIdle.h"
+// Jog
+#include "1H_SwordJogBwd.h"
+#include "1H_SwordJogBwdPivot180.h"
+#include "1H_SwordJogBwdStart.h"
+#include "1H_SwordJogFwd.h"
+#include "1H_SwordJogFwdPivot180.h"
+#include "1H_SwordJogFwdStart.h"
+#include "1H_SwordJogLeft.h"
+#include "1H_SwordJogLeftPivot180.h"
+#include "1H_SwordJogLeftStart.h"
+#include "1H_SwordJogRight.h"
+#include "1H_SwordJogRightPivot180.h"
+#include "1H_SwordJogRightStart.h"
+
+// Attack
 #include "1H_SwordAttackNormalR1_01.h"
 #include "1H_SwordAttackNormalR1_02.h"
 #include "1H_SwordAttackNormalR1_03.h"
 #include "1H_SwordAttackNormalR1_04.h"
+#include "1H_SwordAttackNormalR1_04Swap.h"
 
 #include "1H_SwordJogAttack.h"
 #include "1H_SwordSupermanStab.h"
-
-#include "1H_SwordEquipOff.h"
-#include "1H_SwordEquipOn.h"
 
 #include "1H_SwordDodgeSpinFwd_V3.h"
 #include "1H_SwordNormalSidestepBwd_V3.h"
 #include "1H_SwordNormalSidestepLeft_V3.h"
 #include "1H_SwordNormalSidestepRight_V3.h"
 
+#include "1H_SwordAttackNormalR2_Start.h"
+#include "1H_SwordAttackNormalR2_Loop.h"
 #include "1H_SwordAttackNormalR2_ReleaseStab.h" // 이게 첫번쨰 공격같은데 왜 ReleaseStab?
 #include "1H_SwordAttackNormalR2_02.h"
 #include "1H_SwordAttackNormalR2_03.h"
 #include "1H_SwordAttackNormalR2_04.h"
+#include "1H_SwordAttackNormalR2_ReleaseDoubleSwing.h"
+
+//////////////////////// 2H_Hammer
+#include "2H_HammerEquipOff.h"
+#include "2H_HammerEquipOn.h"
+#include "2H_HammerIdle.h"
+
+// Jog
+#include "2H_HammerJogBwd.h"
+#include "2H_HammerJogBwdPivot180.h"
+#include "2H_HammerJogBwdStart.h"
+#include "2H_HammerJogFwd.h"
+#include "2H_HammerJogFwdPivot180.h"
+#include "2H_HammerJogFwdStart.h"
+#include "2H_HammerJogLeft.h"
+#include "2H_HammerJogLeftPivot180.h"
+#include "2H_HammerJogLeftStart.h"
+#include "2H_HammerJogRight.h"
+#include "2H_HammerJogRightPivot180.h"
+#include "2H_HammerJogRightStart.h"
 #pragma endregion
 
 
@@ -78,13 +117,7 @@ HRESULT CSilvermane::NativeConstruct(void* _pArg)
 
 	if (FAILED(Ready_Components())) return E_FAIL;
 	if (FAILED(Ready_States())) return E_FAIL;
-
-	CHierarchyNode* pWeaponBone = m_pModel->Get_BoneMatrix("weapon_r");
-	if (g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_JS, L"Weapon", L"Needle", pWeaponBone, (CGameObject**)&m_pWeapon))
-		return E_FAIL;
-	m_pWeapon->Set_Owner(this);
-	m_pWeapon->Set_OwnerPivotMatrix(m_pModel->Get_PivotMatrix());
-	Set_EquipWeapon(true);
+	if (FAILED(Ready_Weapons())) return E_FAIL;
 
 	return S_OK;
 }
@@ -100,10 +133,18 @@ _int CSilvermane::Tick(_double _dDeltaTime)
 	iProgress = Trace_CameraLook(_dDeltaTime);
 	if (NO_EVENT != iProgress) return iProgress;
 
-	iProgress = m_pAnimationController->Tick(_dDeltaTime * 1.2f);
+	iProgress = m_pAnimationController->Tick(_dDeltaTime);
 	if (NO_EVENT != iProgress) return iProgress;
 
 	m_pCharacterController->Tick(_dDeltaTime);
+
+	// 무기 업뎃
+	if (m_pCurWeapon)
+	{
+		iProgress = m_pCurWeapon->Tick(_dDeltaTime);
+		if (NO_EVENT != iProgress) return iProgress;
+	}
+
 	return _int();
 }
 
@@ -116,6 +157,13 @@ _int CSilvermane::LateTick(_double _dDeltaTime)
 	if (NO_EVENT != iProgress) return iProgress;
 
 	if(FAILED(m_pRenderer->Add_RenderGroup(CRenderer::RENDER_ALPHA, this))) return -1;
+
+	// 무기 레잇업뎃
+	if (m_pCurWeapon)
+	{
+		iProgress = m_pCurWeapon->LateTick(_dDeltaTime);
+		if (NO_EVENT != iProgress) return iProgress;
+	}
 
 	return _int();
 }
@@ -181,6 +229,7 @@ HRESULT CSilvermane::Ready_Components()
 	m_pAnimationController->Set_GameObject(this);
 	m_pAnimationController->Set_Model(m_pModel);
 	m_pAnimationController->Set_Transform(m_pTransform);
+	m_pAnimationController->Set_MoveSpeed(2.f);
 
 	// 스테이트 컨트롤러
 	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_TEST_JS, L"Com_StateController", L"StateController", (CComponent**)&m_pStateController)))
@@ -240,11 +289,39 @@ HRESULT CSilvermane::Ready_States()
 	if (FAILED(m_pStateController->Add_State(L"SprintFwdStop", CSilvermane_SprintFwdStop::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 #pragma endregion
-#pragma region 1H
+#pragma region 1H_Sword
 	if (FAILED(m_pStateController->Add_State(L"1H_SwordEquipOn", C1H_SwordEquipOn::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 	if (FAILED(m_pStateController->Add_State(L"1H_SwordEquipOff", C1H_SwordEquipOff::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
+	if (FAILED(m_pStateController->Add_State(L"1H_SwordIdle", C1H_SwordIdle::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	// Jog
+	if (FAILED(m_pStateController->Add_State(L"1H_SwordJogBwd", C1H_SwordJogBwd::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	if (FAILED(m_pStateController->Add_State(L"1H_SwordJogBwdPivot180", C1H_SwordJogBwdPivot180::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	if (FAILED(m_pStateController->Add_State(L"1H_SwordJogBwdStart", C1H_SwordJogBwdStart::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	if (FAILED(m_pStateController->Add_State(L"1H_SwordJogFwd", C1H_SwordJogFwd::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	if (FAILED(m_pStateController->Add_State(L"1H_SwordJogFwdPivot180", C1H_SwordJogFwdPivot180::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	if (FAILED(m_pStateController->Add_State(L"1H_SwordJogFwdStart", C1H_SwordJogFwdStart::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	if (FAILED(m_pStateController->Add_State(L"1H_SwordJogLeft", C1H_SwordJogLeft::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	if (FAILED(m_pStateController->Add_State(L"1H_SwordJogLeftPivot180", C1H_SwordJogLeftPivot180::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	if (FAILED(m_pStateController->Add_State(L"1H_SwordJogLeftStart", C1H_SwordJogLeftStart::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	if (FAILED(m_pStateController->Add_State(L"1H_SwordJogRight", C1H_SwordJogRight::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	if (FAILED(m_pStateController->Add_State(L"1H_SwordJogRightPivot180", C1H_SwordJogRightPivot180::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	if (FAILED(m_pStateController->Add_State(L"1H_SwordJogRightStart", C1H_SwordJogRightStart::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	// Attack
 	if (FAILED(m_pStateController->Add_State(L"1H_SwordAttackNormalR1_01", C1H_SwordAttackNormalR1_01::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 	if (FAILED(m_pStateController->Add_State(L"1H_SwordAttackNormalR1_02", C1H_SwordAttackNormalR1_02::Create(m_pDevice, m_pDeviceContext))))
@@ -253,9 +330,15 @@ HRESULT CSilvermane::Ready_States()
 		return E_FAIL;
 	if (FAILED(m_pStateController->Add_State(L"1H_SwordAttackNormalR1_04", C1H_SwordAttackNormalR1_04::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
+	if (FAILED(m_pStateController->Add_State(L"1H_SwordAttackNormalR1_04Swap", C1H_SwordAttackNormalR1_04Swap::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
 	if (FAILED(m_pStateController->Add_State(L"1H_SwordJogAttack", C1H_SwordJogAttack::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 	if (FAILED(m_pStateController->Add_State(L"1H_SwordSupermanStab", C1H_SwordSupermanStab::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	if (FAILED(m_pStateController->Add_State(L"1H_SwordAttackNormalR2_Start", C1H_SwordAttackNormalR2_Start::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	if (FAILED(m_pStateController->Add_State(L"1H_SwordAttackNormalR2_Loop", C1H_SwordAttackNormalR2_Loop::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 	if (FAILED(m_pStateController->Add_State(L"1H_SwordAttackNormalR2_ReleaseStab", C1H_SwordAttackNormalR2_ReleaseStab::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
@@ -264,6 +347,8 @@ HRESULT CSilvermane::Ready_States()
 	if (FAILED(m_pStateController->Add_State(L"1H_SwordAttackNormalR2_03", C1H_SwordAttackNormalR2_03::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 	if (FAILED(m_pStateController->Add_State(L"1H_SwordAttackNormalR2_04", C1H_SwordAttackNormalR2_04::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	if (FAILED(m_pStateController->Add_State(L"1H_SwordAttackNormalR2_ReleaseDoubleSwing", C1H_SwordAttackNormalR2_ReleaseDoubleSwing::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 	if (FAILED(m_pStateController->Add_State(L"1H_DodgeSpin", C1H_SwordDodgeSpinFwd_V3::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
@@ -274,6 +359,40 @@ HRESULT CSilvermane::Ready_States()
 	if (FAILED(m_pStateController->Add_State(L"1H_SidestepRight", C1H_SwordNormalSidestepRight_V3::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 #pragma endregion
+#pragma region 2H_Hammer
+	if (FAILED(m_pStateController->Add_State(L"2H_HammerEquipOn", C2H_HammerEquipOn::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	if (FAILED(m_pStateController->Add_State(L"2H_HammerEquipOff", C2H_HammerEquipOff::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	if (FAILED(m_pStateController->Add_State(L"2H_HammerIdle", C2H_HammerIdle::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	// Jog
+	if (FAILED(m_pStateController->Add_State(L"2H_HammerJogBwd", C2H_HammerJogBwd::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	if (FAILED(m_pStateController->Add_State(L"2H_HammerJogBwdPivot180", C2H_HammerJogBwdPivot180::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	if (FAILED(m_pStateController->Add_State(L"2H_HammerJogBwdStart", C2H_HammerJogBwdStart::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	if (FAILED(m_pStateController->Add_State(L"2H_HammerJogFwd", C2H_HammerJogFwd::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	if (FAILED(m_pStateController->Add_State(L"2H_HammerJogFwdPivot180", C2H_HammerJogFwdPivot180::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	if (FAILED(m_pStateController->Add_State(L"2H_HammerJogFwdStart", C2H_HammerJogFwdStart::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	if (FAILED(m_pStateController->Add_State(L"2H_HammerJogLeft", C2H_HammerJogLeft::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	if (FAILED(m_pStateController->Add_State(L"2H_HammerJogLeftPivot180", C2H_HammerJogLeftPivot180::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	if (FAILED(m_pStateController->Add_State(L"2H_HammerJogLeftStart", C2H_HammerJogLeftStart::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	if (FAILED(m_pStateController->Add_State(L"2H_HammerJogRight", C2H_HammerJogRight::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	if (FAILED(m_pStateController->Add_State(L"2H_HammerJogRightPivot180", C2H_HammerJogRightPivot180::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	if (FAILED(m_pStateController->Add_State(L"2H_HammerJogRightStart", C2H_HammerJogRightStart::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+#pragma endregion
+
 
 	for (auto& pair : m_pStateController->Get_States())
 	{
@@ -284,6 +403,27 @@ HRESULT CSilvermane::Ready_States()
 		static_cast<CState_Silvermane*>(pair.second)->Set_AnimationController(m_pAnimationController);
 	}
 	m_pStateController->Change_State(L"Idle");
+	return S_OK;
+}
+
+HRESULT CSilvermane::Ready_Weapons()
+{
+	CHierarchyNode* pWeaponBone = m_pModel->Get_BoneMatrix("spine_03");
+	CWeapon* pWeapon = nullptr;
+	// 한손검
+	pWeapon = CNeedle::Create(m_pDevice, m_pDeviceContext);
+	pWeapon->NativeConstruct(pWeaponBone);
+	pWeapon->Set_Owner(this);
+	pWeapon->Set_OwnerPivotMatrix(m_pModel->Get_PivotMatrix());
+	m_umapWeapons.emplace(L"Needle", pWeapon);
+	m_pCurWeapon = pWeapon;
+	// 해머
+	pWeapon = CFury::Create(m_pDevice, m_pDeviceContext);
+	pWeapon->NativeConstruct(pWeaponBone);
+	pWeapon->Set_Owner(this);
+	pWeapon->Set_OwnerPivotMatrix(m_pModel->Get_PivotMatrix());
+	m_umapWeapons.emplace(L"Fury", pWeapon);
+	
 	return S_OK;
 }
 
@@ -302,28 +442,38 @@ const _float CSilvermane::Get_PlusAngle() const
 	return m_fPlusAngle;
 }
 
+const _float CSilvermane::Get_Angle() const
+{
+	return m_fAngle;
+}
+
 void CSilvermane::Set_Move(const _bool _isMove)
 {
 	m_isMove = _isMove;
 }
 
+void CSilvermane::Set_TrasceCamera(const _bool _isTraceCamera)
+{
+	m_isTraceCamera = _isTraceCamera;
+}
+
 void CSilvermane::Set_EquipWeapon(const _bool _isEquipWeapon)
 {
 	m_isEquipWeapon = _isEquipWeapon;
-	m_pWeapon->Set_Equip(m_isEquipWeapon);
+	m_pCurWeapon->Set_Equip(m_isEquipWeapon);
 }
 
 void CSilvermane::Set_WeaponFixedBone(const string& _sstrFixedBoneTag)
 {
 	CHierarchyNode* pFixedBone = m_pModel->Get_BoneMatrix(_sstrFixedBoneTag.c_str());
 	if(pFixedBone)
-		m_pWeapon->Set_FixedBone(pFixedBone);
+		m_pCurWeapon->Set_FixedBone(pFixedBone);
 }
 
 void CSilvermane::Set_WeaponFixedBone(CHierarchyNode* _pFixedBone)
 {
-	if (m_pWeapon)
-		m_pWeapon->Set_FixedBone(_pFixedBone);
+	if (m_pCurWeapon)
+		m_pCurWeapon->Set_FixedBone(_pFixedBone);
 }
 
 void CSilvermane::Set_Camera(CCamera_Silvermane* _pCamera)
@@ -341,6 +491,11 @@ const _bool CSilvermane::Is_EquipWeapon() const
 	return m_isEquipWeapon;
 }
 
+const CWeapon::EType CSilvermane::Get_WeaponType() const
+{
+	return m_pCurWeapon->Get_Type();
+}
+
 void CSilvermane::Add_PlusAngle(const _float _fDeltaAngle)
 {
 	//m_fPlusAngle += _fDeltaAngle * 400.f;
@@ -354,6 +509,28 @@ void CSilvermane::Add_PlusAngle(const _float _fDeltaAngle)
 		m_fPlusAngle = fmodf(m_fPlusAngle, 360.f);
 }
 
+const _bool CSilvermane::Change_Weapon(const wstring& _name)
+{
+	CWeapon* pWeapon = m_umapWeapons[_name];
+	if (!pWeapon)
+		return false;
+	if (m_pCurWeapon == pWeapon)
+		return false;
+	
+	if (m_pCurWeapon)
+	{
+		Set_EquipWeapon(false);
+		Set_WeaponFixedBone("spine_03");
+	}
+	m_pCurWeapon = pWeapon;
+	return true;
+}
+
+HRESULT CSilvermane::Change_State(const wstring& _wstrStateTag)
+{
+	return m_pStateController->Change_State(_wstrStateTag);
+}
+
 _int CSilvermane::Trace_CameraLook(const _double& _dDeltaTime)
 {
 	_vector svCameraLook = m_pCamera->Get_Look();
@@ -362,7 +539,6 @@ _int CSilvermane::Trace_CameraLook(const _double& _dDeltaTime)
 
 	svCameraLook = XMVector3Normalize(XMVectorSetY(svCameraLook, 0.f));
 	svLook = XMVector3Normalize(XMVectorSetY(svLook, 0.f));
-
 
 	if (m_isMove)
 	{
@@ -387,12 +563,14 @@ _int CSilvermane::Trace_CameraLook(const _double& _dDeltaTime)
 		_vector svCross = XMVector3Cross(svLook, svCameraLook);
 		if (0.f < XMVectorGetY(svCross)) // 카메라가 왼쪽
 		{
-			m_pTransform->Rotation_Axis(XMVectorSet(0.f, 1.f, 0.f, 0.f), (fRadian)*_dDeltaTime * 5.f);
+			if(m_isTraceCamera)
+				m_pTransform->Rotation_Axis(XMVectorSet(0.f, 1.f, 0.f, 0.f), (fRadian)*_dDeltaTime * 5.f);
 			m_fAngle = XMConvertToDegrees(fRadian);
 		}
 		else if (0.f > XMVectorGetY(svCross)) // 카메라가 오른쪽
 		{
-			m_pTransform->Rotation_Axis(XMVectorSet(0.f, 1.f, 0.f, 0.f), (fRadian) * -_dDeltaTime * 5.f);
+			if (m_isTraceCamera)
+				m_pTransform->Rotation_Axis(XMVectorSet(0.f, 1.f, 0.f, 0.f), (fRadian) * -_dDeltaTime * 5.f);
 			m_fAngle = -XMConvertToDegrees(fRadian);
 		}
 		else
@@ -426,6 +604,12 @@ CGameObject* CSilvermane::Clone(void* _pArg)
 
 void CSilvermane::Free()
 {
+	for (auto& pair : m_umapWeapons)
+	{
+		Safe_Release(pair.second);
+	}
+	m_umapWeapons;
+
 	Safe_Release(m_pCharacterController);
 	Safe_Release(m_pStateController);
 	Safe_Release(m_pAnimationController);

@@ -40,6 +40,26 @@ HRESULT C1H_Dash::Render()
 	return S_OK;
 }
 
+HRESULT C1H_Dash::EnterState()
+{
+	if (FAILED(__super::EnterState()))
+		return E_FAIL;
+
+	m_pSilvermane->Set_Move(true);
+
+	return S_OK;
+}
+
+HRESULT C1H_Dash::ExitState()
+{
+	if (FAILED(__super::ExitState()))
+		return E_FAIL;
+
+	m_pSilvermane->Set_Move(false);
+
+	return S_OK;
+}
+
 _int C1H_Dash::KeyCheck(const _double& _dDeltaTime)
 {
 	_int iProgress = __super::KeyCheck(_dDeltaTime);
@@ -51,6 +71,12 @@ _int C1H_Dash::KeyCheck(const _double& _dDeltaTime)
 		if (g_pGameInstance->getMouseKeyDown(CInputDev::MOUSESTATE::MB_LBUTTON))
 		{
 			if (FAILED(m_pStateController->Change_State(L"1H_SwordJogAttack")))
+				return -1;
+			return STATE_CHANGE;
+		}
+		else if (g_pGameInstance->getMouseKeyDown(CInputDev::MOUSESTATE::MB_RBUTTON))
+		{
+			if (FAILED(m_pStateController->Change_State(L"1H_SwordAttackNormalR2_Start")))
 				return -1;
 			return STATE_CHANGE;
 		}

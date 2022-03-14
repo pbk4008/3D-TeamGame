@@ -40,6 +40,26 @@ HRESULT CSilvermane_Jog::Render()
 	return S_OK;
 }
 
+HRESULT CSilvermane_Jog::EnterState()
+{
+	if (FAILED(__super::EnterState()))
+		return E_FAIL;
+
+	m_pSilvermane->Set_Move(true);
+
+	return S_OK;
+}
+
+HRESULT CSilvermane_Jog::ExitState()
+{
+	if (FAILED(__super::ExitState()))
+		return E_FAIL;
+
+	m_pSilvermane->Set_Move(false);
+
+	return S_OK;
+}
+
 _int CSilvermane_Jog::KeyCheck(const _double& _dDeltaTime)
 {
 	_int iProgress = __super::KeyCheck(_dDeltaTime);

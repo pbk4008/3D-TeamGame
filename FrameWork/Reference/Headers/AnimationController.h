@@ -48,6 +48,8 @@ public:
 	void Set_TransformMove(const _bool _isTransformMove);
 	void Set_PivotMatrix(const _fmatrix& _smatPivot);
 	void Set_RootMotion(const _bool _isRootMotion, const _bool _isTransformMove, const ERootOption _eRootOption = ERootOption::XYZ);
+	void Set_PlaySpeed(const _float _fPlaySpeed);
+	void Set_MoveSpeed(const _float _fMoveSpeed);
 
 	const _bool Is_RootMotion() const;
 	const _bool Is_Finished() const;
@@ -88,6 +90,9 @@ private:
 	_int m_iCurFixedBoneKeyFrameIndex = 0;
 	_uint m_iCurKeyFrameIndex = 0;
 	_uint m_iMaxKeyFrameIndex = 0;
+
+	_float m_fPlaySpeed = 1.f;
+	_float m_fMoveSpeed = 1.f;
 
 	_matrix m_smatPivot = XMMatrixIdentity();
 
