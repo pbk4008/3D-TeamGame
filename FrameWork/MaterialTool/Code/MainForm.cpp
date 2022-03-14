@@ -92,7 +92,7 @@ void CMainForm::OnInitialUpdate()
 	if (FAILED(g_pGameInstance->SetUpBaseComponent(m_pDevice, m_pDeviceContext)))
 		return;
 
-	m_pRenderer = g_pGameInstance->Clone_Component<CRenderer>(0, L"Renderer");
+	m_pRenderer = g_pGameInstance->Clone_Component<CRenderer>(0, L"Proto_Component_Renderer");
 	
 	if (FAILED(Start_Level()))
 		return;

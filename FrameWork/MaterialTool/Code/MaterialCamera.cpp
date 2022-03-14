@@ -35,7 +35,7 @@ HRESULT CMaterialCamera::NativeConstruct(void* pArg)
 	if (FAILED(CGameObject::NativeConstruct(pArg)))
 		return E_FAIL;
 	CCamera::CAMERADESC tDesc = (*(CCamera::CAMERADESC*)pArg);
-	if (FAILED(SetUp_Components(0, L"Camera", L"MaterialCamera", (CComponent * *)& m_pCamera, &tDesc)))
+	if (FAILED(SetUp_Components(0, L"Proto_Component_Camera", L"MaterialCamera", (CComponent * *)& m_pCamera, &tDesc)))
 		return E_FAIL;
 	m_pTransform->Set_TransformDesc(3.f, XMConvertToRadians(30.f));
 	m_pTransform->Set_State(CTransform::STATE_POSITION, XMVectorSet(0.f, 30.f, 10.f,1.f));

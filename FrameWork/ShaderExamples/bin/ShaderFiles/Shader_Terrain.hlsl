@@ -188,8 +188,7 @@ PS_OUT_SHADOW PS_MAIN_SHADOW(PS_IN_SHADOW In)
 	
 	float fDepth = In.vClipPos.z / In.vClipPos.w;
 	
-	float4 color = g_DiffuseSourTexture.Sample(DefaultSampler, In.vTexUV);
-	//TerrainSplitting(In.vTexUV, In.vWorldPos);
+	float4 color = TerrainSplitting(In.vTexUV, In.vWorldPos);
 	
 	float Alpha = 1.f;
 	
@@ -225,7 +224,7 @@ PS_OUT_SHADESHADOW PS_MAIN_SHADESHADOW(PS_IN_SHADESHADOW In)
 	
 	float fOut = 1.f;
 	
-	vector Diffuse = g_DiffuseSourTexture.Sample(DefaultSampler, In.vTexUV); /*TerrainSplitting(In.vTexUV, In.vWorldPos)*/;
+	vector Diffuse = TerrainSplitting(In.vTexUV, In.vWorldPos);
 	
 	
 	float Bias = 0.001f;
@@ -321,8 +320,7 @@ PS_OUT PS_MAIN(PS_IN In)
 {
 	PS_OUT		Out = (PS_OUT)0;
 	
-	Out.vDiffuse = g_DiffuseSourTexture.Sample(DefaultSampler, In.vTexUV);
-	//TerrainSplitting(In.vTexUV, In.vWorldPos);
+	Out.vDiffuse = TerrainSplitting(In.vTexUV, In.vWorldPos);
 	Out.vDiffuse.a = 1.f;
 	Out.vPosition = In.vViewPos;
 	Out.vNormal = vector(In.vNormal.xyz * 0.5f + 0.5f, 0.f);

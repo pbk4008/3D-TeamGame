@@ -28,7 +28,6 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Client", "Client\Include\Cl
 		{B0233BC4-97D8-4AF2-A164-3B4CFF2E34DA} = {B0233BC4-97D8-4AF2-A164-3B4CFF2E34DA}
 	EndProjectSection
 EndProject
-<<<<<<< HEAD
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ShaderFile", "ShaderFile", "{3B18EBCC-4F73-4D1A-A154-4BB6F658175B}"
 	ProjectSection(SolutionItems) = preProject
 		Reference\ShaderFile\Shader_Cube.hlsl = Reference\ShaderFile\Shader_Cube.hlsl
@@ -47,12 +46,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ShaderFile", "ShaderFile", 
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Tool_YASIC", "MaterialTool\Default\Tool_YASIC.vcxproj", "{A79D68EF-CAD7-43B3-A8E2-334A1900121A}"
-	ProjectSection(ProjectDependencies) = postProject
-		{B0233BC4-97D8-4AF2-A164-3B4CFF2E34DA} = {B0233BC4-97D8-4AF2-A164-3B4CFF2E34DA}
-	EndProjectSection
 EndProject
-=======
->>>>>>> Heejeong
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
