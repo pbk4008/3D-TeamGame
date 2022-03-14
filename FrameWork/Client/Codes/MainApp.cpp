@@ -64,6 +64,12 @@ _int CMainApp::Tick(_double TimeDelta)
 		}
 	}
 
+	if (g_pGameInstance->getkeyDown(DIK_F1))
+	{
+		m_bDeffered = !m_bDeffered;
+		m_pRenderer->SetRenderButton(CRenderer::DEFERRED, m_bDeffered);
+	}
+
 
 	return _int();
 }
