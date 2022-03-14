@@ -20,12 +20,12 @@ HRESULT CStage1::NativeConstruct()
 	if (FAILED(CLevel::NativeConstruct()))
 		return E_FAIL;
 
-	/*if (FAILED(Ready_MapObject()))
+	if (FAILED(Ready_MapObject()))
 	{
 		return E_FAIL;
-	}*/
+	}
 
-	if (FAILED(Ready_Monster(L"Layer_Monster")))
+	/*if (FAILED(Ready_Monster(L"Layer_Monster")))
 	{
 		return E_FAIL;
 	}
@@ -36,7 +36,7 @@ HRESULT CStage1::NativeConstruct()
 	}
 
 
-	//Data
+	Data
 	if (FAILED(Ready_Data_UI(L"../bin/SaveData/UI/UI.dat")))
 	{
 		return E_FAIL;
@@ -44,7 +44,7 @@ HRESULT CStage1::NativeConstruct()
 	if (FAILED(Ready_Data_Effect(L"../bin/SaveData/Effect/Effect_Explosion.dat")))
 	{
 		return E_FAIL;
-	}
+	}*/
 
 
 	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Silvermane", L"Silvermane")))
@@ -73,7 +73,7 @@ HRESULT CStage1::Ready_MapObject()
 		return E_FAIL;
 
 	vector<CEnvironment::ENVIRONMENTDESC> tEnvironmentDesc;
-	tEnvironmentDesc.resize(350);
+	tEnvironmentDesc.resize(1000);
 	_uint iIndex = 0;
 	tEnvironmentDesc[iIndex].wstrInstaneTag = vecEnvironmentData[0].FileName;
 	for (auto& pData : vecEnvironmentData)

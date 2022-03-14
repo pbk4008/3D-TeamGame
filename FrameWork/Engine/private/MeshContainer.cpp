@@ -50,6 +50,7 @@ HRESULT CMeshContainer::NativeConstruct_Prototype(_uint iMaterialIndex, _uint iN
 	if (FAILED(Set_IndicesDesc(iNumIdxCnt, pIdx)))
 		return E_FAIL;
 
+	m_iMaterialIndex = iMaterialIndex;
 	return S_OK;
 }
 
