@@ -30,6 +30,7 @@ private:
 
 	_bool				m_isPause = false;
 	_bool				m_isRender = true;
+	_bool				m_bDeffered = false;
 
 private:
 	HRESULT SetUp_StartLevel(SCENEID eLevel);

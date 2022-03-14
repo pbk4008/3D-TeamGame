@@ -70,8 +70,8 @@ _int CStatic_Mesh::LateTick(_double TimeDelta)
 {
 	m_pRenderer->Add_RenderGroup(CRenderer::RENDER_ALPHA, this);
 
-	if(TKEY_DOWN(VK_RBUTTON))
-		Pick_Model();
+	/*if(TKEY_DOWN(VK_RBUTTON))
+		Pick_Model();*/
 
 	if (true == m_bPick)
 	{
@@ -260,12 +260,12 @@ void CStatic_Mesh::Pick_Scale(_double _dtimeDelta, CObserver::ScaleMode _eMode)
 			if (0 < MouseWheel)
 			{
 				_fvector ScaleXUp = { 1.05f, 1.0f, 1.0f };
-				//m_pTransform->ScaleX_Up(ScaleXUp);
+				m_pTransform->ScaleX_Up(ScaleXUp);
 			}
 			else
 			{
 				_fvector Scale_Down = { 0.95f, 1.0f, 1.0f };
-				//m_pTransform->ScaleX_Up(Scale_Down);
+				m_pTransform->ScaleX_Up(Scale_Down);
 			}
 		}
 	}
@@ -277,12 +277,12 @@ void CStatic_Mesh::Pick_Scale(_double _dtimeDelta, CObserver::ScaleMode _eMode)
 			if (0 < MouseWheel)
 			{
 				_fvector ScaleXUp = { 1.0f, 1.05f, 1.0f };
-				//m_pTransform->ScaleY_Up(ScaleXUp);
+				m_pTransform->ScaleY_Up(ScaleXUp);
 			}
 			else
 			{
 				_fvector Scale_Down = { 1.0f, 0.95f, 1.0f };
-				//m_pTransform->ScaleY_Up(Scale_Down);
+				m_pTransform->ScaleY_Up(Scale_Down);
 			}
 		}
 	}
@@ -294,12 +294,12 @@ void CStatic_Mesh::Pick_Scale(_double _dtimeDelta, CObserver::ScaleMode _eMode)
 			if (0 < MouseWheel)
 			{
 				_fvector ScaleXUp = { 1.0f, 1.0f, 1.05f };
-				//m_pTransform->ScaleZ_Up(ScaleXUp);
+				m_pTransform->ScaleZ_Up(ScaleXUp);
 			}
 			else
 			{
 				_fvector Scale_Down = { 1.0f, 1.0f, 0.95f };
-				//m_pTransform->ScaleZ_Up(Scale_Down);
+				m_pTransform->ScaleZ_Up(Scale_Down);
 			}
 		}
 	}
