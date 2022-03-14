@@ -155,6 +155,5 @@ CGameObject* CFury::Clone(void* _pArg)
 void CFury::Free()
 {
 
-
 	__super::Free();
 }
