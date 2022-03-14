@@ -103,7 +103,7 @@ HRESULT CInstancing_Mesh::Render(_uint iMeshContainerIndex, _int iPassindex)
 						return E_FAIL;
 				}*/
 			m_vecMaterials[iMtrlIndex]->Render(iPassindex);
-			pMeshContainer->Render();
+			pMeshContainer->Render(m_pVBInstance,m_iInstStride);
 		}
 	}
 	return S_OK;

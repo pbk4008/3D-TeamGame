@@ -52,8 +52,8 @@ HRESULT CTextureManager::Init_Texture(ID3D11Device* pDevice, const wstring& pTex
 		{
 			hr = LoadFromTGAFile(szFullPath, nullptr, tImage);
 
-			DirectX::ScratchImage MipChain;
-			hr = DirectX::GenerateMipMaps(tImage.GetImages(), tImage.GetImageCount(), tImage.GetMetadata(), TEX_FILTER_FANT, 0, MipChain);
+			//DirectX::ScratchImage MipChain;
+			/*hr = DirectX::GenerateMipMaps(tImage.GetImages(), tImage.GetImageCount(), tImage.GetMetadata(), TEX_FILTER_FANT, 0, MipChain);
 			if (FAILED(hr))
 				return E_FAIL;
 			else
@@ -74,7 +74,7 @@ HRESULT CTextureManager::Init_Texture(ID3D11Device* pDevice, const wstring& pTex
 				tImage.Release();
 				MipChain.Release();
 				continue;
-			}
+			}*/
 		}
 		else
 			hr = LoadFromWICFile(szFullPath, CP_FLAGS_NONE, nullptr, tImage);
