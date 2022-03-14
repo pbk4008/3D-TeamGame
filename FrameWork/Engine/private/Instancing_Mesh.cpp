@@ -3,6 +3,7 @@
 #include "Material.h"
 #include "TextureManager.h"
 #include "Component_Manager.h"
+#include "GameInstance.h"
 #include "Texture.h"
 
 CInstancing_Mesh::CInstancing_Mesh(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
@@ -18,16 +19,14 @@ CInstancing_Mesh::CInstancing_Mesh(ID3D11Device* pDevice, ID3D11DeviceContext* p
 
 CInstancing_Mesh::CInstancing_Mesh(const CInstancing_Mesh& rhs)
 	: CComponent(rhs)
-	, m_vecMaterialDesc(rhs.m_vecMaterialDesc)
 	, m_pVBInstance(rhs.m_pVBInstance)
 	, m_VBInstDesc(rhs.m_VBInstDesc)
 	, m_VBInstSubResourceData(rhs.m_VBInstSubResourceData)
 	, m_iInstStride(rhs.m_iInstStride)
 	, m_iInstNumVertices(rhs.m_iInstNumVertices)
 	, m_eType(rhs.m_eType)
-	, m_pEffect(rhs.m_pEffect)
-	, m_PassDesc(rhs.m_PassDesc)
 	, m_matPivot(rhs.m_matPivot)
+	, m_vecMaterials(rhs.m_vecMaterials)
 {
 	Safe_AddRef(m_pVBInstance);
 
@@ -43,22 +42,9 @@ CInstancing_Mesh::CInstancing_Mesh(const CInstancing_Mesh& rhs)
 			m_vecMeshContainers[pMeshContainer->getMaterialIndex()].push_back(pMeshContainer);
 		}
 	}
-	for (auto& pMaterial : m_vecMaterialDesc)
-	{
-		for (_uint i = 0; i < AI_TEXTURE_TYPE_MAX; ++i)
-			Safe_AddRef(pMaterial->pMeshTexture[i]);
-	}
-	for (auto& pPassDesc : m_PassDesc)
-	{
-		Safe_AddRef(pPassDesc->pInputLayout);
-		Safe_AddRef(pPassDesc->pPass);
-	}
-	Safe_AddRef(m_pEffect);
-	//for (auto& pMaterial : m_vecMaterials)
-	//{
-	//	for (_uint i = 0; i < AI_TEXTURE_TYPE_MAX; i++)
-	//		Safe_AddRef(pMaterial->pMeshTexture[i]);
-	//}
+
+	for (auto& pMaterial : m_vecMaterials)
+		Safe_AddRef(pMaterial);
 }
 
 HRESULT CInstancing_Mesh::NativeConstruct_Prototype(const wstring& pMeshFilePath, const wstring& pShaderFile, INSTANCE_TYPE eType)
@@ -74,8 +60,7 @@ HRESULT CInstancing_Mesh::NativeConstruct_Prototype(const wstring& pMeshFilePath
 	{
 
 	}
-	if (FAILED(Compile_Shader(pShaderFile)))
-		return E_FAIL;
+
 
 	return S_OK;
 }
@@ -90,40 +75,37 @@ HRESULT CInstancing_Mesh::NativeConstruct(void* pArg)
 
 HRESULT CInstancing_Mesh::SetUp_ValueOnShader(const char* pConstantName, void* pData, _uint iSize)
 {
-	if (!m_pEffect)
-		return E_FAIL;
-	ID3DX11EffectVariable* pVariable = m_pEffect->GetVariableByName(pConstantName);
-	if (!pVariable)
-		return E_FAIL;
-	return pVariable->SetRawValue(pData,0,iSize);
-}
-
-HRESULT CInstancing_Mesh::SetUp_TextureOnShader(const char* pConstantName, _uint iMeshContainerIndex, aiTextureType eType)
-{
-	if (!m_vecMaterialDesc[iMeshContainerIndex]->pMeshTexture[eType])
-		return S_OK;
-
-	ID3DX11EffectShaderResourceVariable* pVariabe = m_pEffect->GetVariableByName(pConstantName)->AsShaderResource();
-	if (!pVariabe)
-		return E_FAIL;
-
-	return pVariabe->SetResource(m_vecMaterialDesc[iMeshContainerIndex]->pMeshTexture[eType]->Get_ShaderResourceView());
+	for (auto& pMtrl : m_vecMaterials)
+	{
+		if (pMtrl)
+			pMtrl->SetUp_ValueOnShader(pConstantName, pData, iSize);
+	}
+	return S_OK;
 }
 
 HRESULT CInstancing_Mesh::Render(_uint iMeshContainerIndex, _int iPassindex)
 {
-	if (iPassindex >= (_uint)m_PassDesc.size())
-		return E_FAIL;
-
 	for (auto& pMeshContainer : m_vecMeshContainers[iMeshContainerIndex])
 	{
- 		_uint iMtrlIndex = pMeshContainer->getMaterialIndex();
-		pMeshContainer->Render(m_pVBInstance, m_iInstStride);
-	}
-	m_pDeviceContext->IASetInputLayout(m_PassDesc[iPassindex]->pInputLayout);
-	if (FAILED(m_PassDesc[iPassindex]->pPass->Apply(0, m_pDeviceContext)))
-		return E_FAIL;
+		_uint iMtrlIndex = pMeshContainer->getMaterialIndex();
+		if (m_vecMaterials[iMtrlIndex])
+		{
+			m_vecMaterials[iMtrlIndex]->Set_InputLayout(iPassindex);
 
+			/*	if (m_eType == CInstancing_Mesh::INSTANCE_TYPE::ANIM)
+				{
+					_matrix		BoneMatrices[256];
+					ZeroMemory(BoneMatrices, sizeof(_matrix) * 256);
+
+					pMeshContainer->SetUp_BoneMatrices(BoneMatrices, XMLoadFloat4x4(&m_PivotMatrix));
+
+					if (FAILED(m_vecMaterials[iMtrlIndex]->SetUp_ValueOnShader("g_BoneMatrices", BoneMatrices, sizeof(_matrix) * 256)))
+						return E_FAIL;
+				}*/
+			m_vecMaterials[iMtrlIndex]->Render(iPassindex);
+			pMeshContainer->Render();
+		}
+	}
 	return S_OK;
 }
 
@@ -180,48 +162,23 @@ HRESULT CInstancing_Mesh::Create_VertextIndexBuffer()
 
 HRESULT CInstancing_Mesh::Create_Material(const CSaveManager::MTRLDATA& pData)
 {
-	_uint iIndex = 0;
-	_uint iTextureCnt = pData.iTextureCnt;
-
-	MESHMATERIAL* pDesc = new MESHMATERIAL;
-	ZeroMemory(pDesc, sizeof(MESHMATERIAL));
-	for(_uint i=0; i< iTextureCnt; i++)
+	CMaterial* pMaterial = g_pGameInstance->Get_Material(pData.pMtrlName);
+	if (!pMaterial)
 	{
-		char szFilePath[MAX_PATH] = "";
-		WideCharToMultiByte(CP_ACP, 0, pData.pTaxtureData[i].pTextureName, MAX_PATH, szFilePath, MAX_PATH, NULL, NULL);
-
-		char	szFileName[MAX_PATH] = "";
-		char	szExt[MAX_PATH] = "";
-
-		_splitpath_s(szFilePath, nullptr, 0, nullptr, 0, szFileName, MAX_PATH, szExt, MAX_PATH);
-
-		strcat_s(szFileName, ".tga");
-		wstring     strTexture;
-		_tchar		szFullName[MAX_PATH] = L"../bin/FBX/Texture/";
-		_tchar		szTextureTag[MAX_PATH] = TEXT("");
-		MultiByteToWideChar(CP_ACP, 0, szFileName, (_int)strlen(szFileName), szTextureTag, MAX_PATH);
-
-		lstrcat(szFullName, szTextureTag);
-		CTextureManager* pTextureMgr = GET_INSTANCE(CTextureManager);
-
-		if (FAILED(pTextureMgr->Add_Texture(m_pDevice, szTextureTag, szFullName)))
+		pMaterial = CMaterial::Create(m_pDevice, m_pDeviceContext, pData.pMtrlName, pData.pShader_Path, (CMaterial::EType)pData.iMtrlType);
+		g_pGameInstance->Add_Material(pData.pMtrlName, pMaterial);
+		if (!pMaterial)
 			return E_FAIL;
 
-		RELEASE_INSTANCE(CTextureManager);
-
-		CComponent_Manager* pInstance = GET_INSTANCE(CComponent_Manager);
-
-		strTexture = szTextureTag;
-
-		pDesc->pMeshTexture[pData.pTaxtureData[i].iType] = static_cast<CTexture*>(pInstance->Clone_Component(0, L"Proto_Component_Texture", &strTexture));
-		lstrcpy(pDesc->pMeshTextureName[pData.pTaxtureData[i].iType], szFullName);
-		RELEASE_INSTANCE(CComponent_Manager);
-
-		if (nullptr == pDesc->pMeshTexture[pData.pTaxtureData[i].iType])
-			return E_FAIL;
-
+		for (auto& pTextureData : pData.vecTextureData)
+		{
+			wstring wstrMaterialPath = L"../bin/FBX/Texture/";
+			wstrMaterialPath += pTextureData.pTextureName;
+			pMaterial->Set_Texture((TEXTURETYPE)pTextureData.iType, pTextureData.pTextureName, wstrMaterialPath);
+		}
+		m_vecMaterials.emplace_back(pMaterial);
+		Safe_AddRef(pMaterial);
 	}
-	m_vecMaterialDesc.emplace_back(pDesc);
 	return S_OK;
 }
 
@@ -263,82 +220,6 @@ HRESULT CInstancing_Mesh::Create_InstancingBuffer(void* pArg)
 	return S_OK;
 }
 
-HRESULT CInstancing_Mesh::Compile_Shader(const wstring& pShaderFilePath)
-{
-	_uint iNumElements = 0;
-	D3D11_INPUT_ELEMENT_DESC Elements[D3D11_IA_VERTEX_INPUT_STRUCTURE_ELEMENT_COUNT];
-	ZeroMemory(Elements, sizeof(D3D11_INPUT_ELEMENT_DESC) * D3D11_IA_VERTEX_INPUT_STRUCTURE_ELEMENT_COUNT);
-
-	if (m_eType == INSTANCE_TYPE::STATIC)
-	{
-		iNumElements = 9;
-		Elements[0] = { "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 };
-		Elements[1] = { "NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 };
-		Elements[2] = { "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 24, D3D11_INPUT_PER_VERTEX_DATA, 0 };
-		Elements[3] = { "TANGENT", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 32, D3D11_INPUT_PER_VERTEX_DATA, 0 };
-		Elements[4] = { "BINORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 44, D3D11_INPUT_PER_VERTEX_DATA, 0 };
-
-		Elements[5] = { "TEXCOORD", 1, DXGI_FORMAT_R32G32B32A32_FLOAT, 1, 0, D3D11_INPUT_PER_INSTANCE_DATA, 1 };
-		Elements[6] = { "TEXCOORD", 2, DXGI_FORMAT_R32G32B32A32_FLOAT, 1, 16, D3D11_INPUT_PER_INSTANCE_DATA, 1 };
-		Elements[7] = { "TEXCOORD", 3, DXGI_FORMAT_R32G32B32A32_FLOAT, 1, 32, D3D11_INPUT_PER_INSTANCE_DATA, 1 };
-		Elements[8] = { "TEXCOORD", 4, DXGI_FORMAT_R32G32B32A32_FLOAT, 1, 48, D3D11_INPUT_PER_INSTANCE_DATA, 1 };
-	}
-	else
-	{
-		iNumElements = 11;
-		Elements[0] = { "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 };
-		Elements[1] = { "NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 };
-		Elements[2] = { "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 24, D3D11_INPUT_PER_VERTEX_DATA, 0 };
-		Elements[3] = { "TANGENT", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 32, D3D11_INPUT_PER_VERTEX_DATA, 0 };
-		Elements[4] = { "BINORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 44, D3D11_INPUT_PER_VERTEX_DATA, 0 };
-		Elements[5] = { "BLENDINDEX", 0, DXGI_FORMAT_R32G32B32A32_UINT, 0, 56, D3D11_INPUT_PER_VERTEX_DATA, 0 };
-		Elements[6] = { "BLENDWEIGHT", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 72, D3D11_INPUT_PER_VERTEX_DATA, 0 };
-
-		Elements[7] = { "TEXCOORD", 1, DXGI_FORMAT_R32G32B32A32_FLOAT, 1, 0, D3D11_INPUT_PER_INSTANCE_DATA, 1 };
-		Elements[8] = { "TEXCOORD", 2, DXGI_FORMAT_R32G32B32A32_FLOAT, 1, 16, D3D11_INPUT_PER_INSTANCE_DATA, 1 };
-		Elements[9] = { "TEXCOORD", 3, DXGI_FORMAT_R32G32B32A32_FLOAT, 1, 32, D3D11_INPUT_PER_INSTANCE_DATA, 1 };
-		Elements[10] = { "TEXCOORD", 4, DXGI_FORMAT_R32G32B32A32_FLOAT, 1, 48, D3D11_INPUT_PER_INSTANCE_DATA, 1 };
-
-	}
-	_uint		iFlag = 0;
-
-#ifdef _DEBUG
-	iFlag = D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION;
-#else
-	iFlag = D3DCOMPILE_OPTIMIZATION_LEVEL1;
-#endif // _DEBUG	
-	if (FAILED(D3DX11CompileEffectFromFile(pShaderFilePath.c_str(), nullptr, D3D_COMPILE_STANDARD_FILE_INCLUDE, iFlag, 0, m_pDevice, &m_pEffect, nullptr)))
-		return E_FAIL;
-
-	ID3DX11EffectTechnique* pTechnique = m_pEffect->GetTechniqueByIndex(0);
-
-	D3DX11_TECHNIQUE_DESC			TechniqueDesc;
-	ZeroMemory(&TechniqueDesc, sizeof(D3DX11_TECHNIQUE_DESC));
-
-	pTechnique->GetDesc(&TechniqueDesc);
-
-	m_PassDesc.reserve(TechniqueDesc.Passes);
-
-	for (_uint i = 0; i < TechniqueDesc.Passes; ++i)
-	{
-		EFFECTDESC* pPassDesc = new EFFECTDESC;
-
-		pPassDesc->pPass = pTechnique->GetPassByIndex(i);
-
-		D3DX11_PASS_DESC		PassDesc;
-		ZeroMemory(&PassDesc, sizeof(D3DX11_PASS_DESC));
-
-		pPassDesc->pPass->GetDesc(&PassDesc);
-
-		if (FAILED(m_pDevice->CreateInputLayout(Elements, iNumElements, PassDesc.pIAInputSignature, PassDesc.IAInputSignatureSize, &pPassDesc->pInputLayout)))
-			return E_FAIL;
-
-		m_PassDesc.push_back(pPassDesc);
-	}
-
-	return S_OK;
-}
-
 CInstancing_Mesh* CInstancing_Mesh::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext, const wstring& pMeshFilePath, const wstring& pShaderFile, INSTANCE_TYPE eType)
 {
 	CInstancing_Mesh* pInstance = new CInstancing_Mesh(pDevice, pDeviceContext);
@@ -366,22 +247,7 @@ void CInstancing_Mesh::Free()
 	CComponent::Free();
 
 	Safe_Release(m_pVBInstance);
-	if (false == m_isCloned)
-	{
-		for (auto& pPassDesc : m_PassDesc)
-			Safe_Delete(pPassDesc);
-	}
-	m_PassDesc.clear();
-	Safe_Release(m_pEffect);
 
-	for (auto& pMaterial : m_vecMaterialDesc)
-	{
-		for (_uint i = 0; i < AI_TEXTURE_TYPE_MAX; ++i)
-			Safe_Release(pMaterial->pMeshTexture[i]);
-		if (false == m_isCloned)
-			Safe_Delete(pMaterial);
-	}
-	m_vecMaterialDesc.clear();
 
 	for (auto& pMtrlMeshContainer : m_vecMeshContainers)
 	{
@@ -391,4 +257,7 @@ void CInstancing_Mesh::Free()
 	}
 	m_vecMeshContainers.clear();
 
+	for (auto& pMaterial : m_vecMaterials)
+		Safe_Release(pMaterial);
+	m_vecMaterials.clear();
 }

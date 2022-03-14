@@ -37,6 +37,7 @@ public:
 
 public:
 	HRESULT NativeConstruct(char* pBoneName, _fmatrix TransformationMatrix, _uint iDepth, CHierarchyNode* pParent);
+	HRESULT NativeConstruct(char* pBoneName, _fmatrix OffsetMatrix, _fmatrix TransformationMatrix, _uint iDepth, CHierarchyNode* pParent);
 	void Update_CombinedTransformationMatrix(_uint iAnimationIndex=0);
 	void Update_CombinedTransformationMatrix(const _uint _iAnimIndex, const _bool _isRootMotion, const ERootOption _eRootOption);
 private:
@@ -57,6 +58,7 @@ private:
 
 public:
 	static CHierarchyNode* Create(char* pBoneName, _fmatrix TransformationMatrix, _uint iDepth = 0, CHierarchyNode* pParent = nullptr);
+	static CHierarchyNode* Create(char* pBoneName, _fmatrix OffsetMatrix, _fmatrix TransformationMatrix, _uint iDepth, CHierarchyNode* pParent);
 	virtual void Free() override;
 };
 

@@ -73,10 +73,7 @@ HRESULT CEnvironment::Render()
 
 	_uint iNumMeshCnt = m_pInstanceMesh->Get_NumMeshContainer();
 	for (_uint i = 0; i < iNumMeshCnt; i++)
-	{
-		m_pInstanceMesh->SetUp_TextureOnShader("g_DiffuseTexture", i, aiTextureType_DIFFUSE);
 		m_pInstanceMesh->Render(i, 0);
-	}
 //
 //#ifdef _DEBUG
 //	m_pNaviMesh->Render(L"MainCamera");

@@ -4,7 +4,7 @@
 #include "StateController.h"
 
 C1H_SwordJogAttack::C1H_SwordJogAttack(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
-	: CState_Silvermane(_pDevice, _pDeviceContext)
+	: C1H_SwordAttack(_pDevice, _pDeviceContext)
 {
 }
 
@@ -12,6 +12,8 @@ HRESULT C1H_SwordJogAttack::NativeConstruct(void* _pArg)
 {
 	if (FAILED(__super::NativeConstruct(_pArg)))
 		return E_FAIL;
+
+	m_iCutIndex = 12;
 
 	return S_OK;
 }
@@ -81,7 +83,7 @@ _int C1H_SwordJogAttack::KeyCheck(const _double& _dDeltaTime)
 	if (NO_EVENT != iProgress)
 		return iProgress;
 	
-	if (12 < m_pAnimationController->Get_CurKeyFrameIndex())
+	if (m_iCutIndex < m_pAnimationController->Get_CurKeyFrameIndex())
 	{
 		if (g_pGameInstance->getMouseKeyDown(CInputDev::MOUSESTATE::MB_LBUTTON))
 		{

@@ -4,7 +4,6 @@
 
 CMeshContainer::CMeshContainer(ID3D11Device * pDevice, ID3D11DeviceContext * pDeviceContext)
 	: CVIBuffer(pDevice, pDeviceContext)
-	, m_iMaterialIndex(0)
 	, m_iNumMesh(0)
 {
 }
@@ -26,19 +25,20 @@ HRESULT CMeshContainer::NativeConstruct_Prototype(CModel* pModel, aiMesh* pMesh,
 	if (FAILED(Set_IndicesDesc(pMesh)))
 		return E_FAIL;
 
-	m_iMaterialIndex = pMesh->mMaterialIndex;
+	if (!pModel->getUsingMaterial())
+		m_iMaterialIndex = pMesh->mMaterialIndex;
 
 	return S_OK;
 }
 
 HRESULT CMeshContainer::NativeConstruct_Prototype(_uint iMaterialIndex, _uint iNumVtxCnt, _uint iNumIdxCnt, class CModel* pModel, void* pVtx, void* pIdx)
 {
+	m_iMaterialIndex = iMaterialIndex;
+
 	if (FAILED(Set_UpVerticesDesc(iNumVtxCnt, pModel, pVtx)))
 		return E_FAIL;
 	if (FAILED(Set_IndicesDesc(iNumIdxCnt,pIdx)))
 		return E_FAIL;
-
-	m_iMaterialIndex = iMaterialIndex;
 
 	return S_OK;
 }
@@ -49,8 +49,6 @@ HRESULT CMeshContainer::NativeConstruct_Prototype(_uint iMaterialIndex, _uint iN
 		return E_FAIL;
 	if (FAILED(Set_IndicesDesc(iNumIdxCnt, pIdx)))
 		return E_FAIL;
-
-	m_iMaterialIndex = iMaterialIndex;
 
 	return S_OK;
 }
@@ -119,8 +117,7 @@ HRESULT CMeshContainer::Add_Bone(CModel* pModel)
 	{
 		CHierarchyNode* pNode = pModel->Find_HierarchyNode(m_pAIMesh->mName.data);
 		if (!pNode)
-			return E_FAIL;
-
+				return E_FAIL;
 		pNode->Set_OffsetMatrix(XMMatrixIdentity());
 		m_Bones.push_back(pNode);
 		Safe_AddRef(pNode);
@@ -147,6 +144,19 @@ HRESULT CMeshContainer::Add_Bone(CModel* pModel)
 	return S_OK;
 }
 
+HRESULT CMeshContainer::Add_Bone(vector<string>& vecBoneName, CModel* pModel)
+{
+	for (auto& pName : vecBoneName)
+	{
+		CHierarchyNode* pNode = pModel->Find_HierarchyNode(pName.c_str());
+		if (!pNode)
+			return E_FAIL;
+		m_Bones.push_back(pNode);
+		Safe_AddRef(pNode);
+	}
+	return S_OK;
+}
+
 void CMeshContainer::SetUp_BoneMatrices(_matrix * pBoneMatrices, _fmatrix PivotMatrix)
 {
 	_uint		iIndex = 0;
@@ -162,7 +172,7 @@ void CMeshContainer::SetUp_BoneMatrices(_matrix * pBoneMatrices, _fmatrix PivotM
 	}
 }
 
-const CSaveManager::STATICMESHDATA& CMeshContainer::SetStaticSaveData()
+const CSaveManager::STATICMESHDATA CMeshContainer::SetStaticSaveData()
 {
 	CSaveManager::STATICMESHDATA pData;
 
@@ -175,7 +185,7 @@ const CSaveManager::STATICMESHDATA& CMeshContainer::SetStaticSaveData()
 	return pData;
 }
 
-const CSaveManager::ANIMMESHDATA& CMeshContainer::SetAnimSaveData()
+const CSaveManager::ANIMMESHDATA CMeshContainer::SetAnimSaveData()
 {
 	CSaveManager::ANIMMESHDATA pData;
 
@@ -185,19 +195,11 @@ const CSaveManager::ANIMMESHDATA& CMeshContainer::SetAnimSaveData()
 	pData.pVtxPoint = (VTXMESH_ANIM*)m_pVertices;
 	pData.pIndex = (FACEINDICES32*)m_pIndices;
 
-	_uint iBoneCnt = (_uint)m_Bones.size();
-	pData.iBoneCnt = iBoneCnt;
-	pData.pBoneData = new CSaveManager::BONEDATA[iBoneCnt];
-	ZeroMemory(pData.pBoneData, sizeof(CSaveManager::BONEDATA) * iBoneCnt);
-	for (_uint i = 0; i < iBoneCnt; i++)
+	pData.iBoneCnt = (_uint)m_Bones.size();
+	for (auto& pBone : m_Bones)
 	{
-		pData.pBoneData[i].iBoneNameSize = (_uint)strlen(m_Bones[i]->Get_Name());
-		strcpy_s(pData.pBoneData[i].szBoneName,m_Bones[i]->Get_Name());
-		pData.pBoneData[i].iDepth = m_Bones[i]->Get_Depth();
-		pData.pBoneData[i].iParentNameSize = (_uint)strlen(m_Bones[i]->Get_Parent()->Get_Name());
-		strcpy_s(pData.pBoneData[i].szParentName, m_Bones[i]->Get_Parent()->Get_Name());
-		XMStoreFloat4x4(&pData.pBoneData[i].OffsetMatrix, m_Bones[i]->Get_OffsetMatrix());
-		XMStoreFloat4x4(&pData.pBoneData[i].TransformationMatrix, m_Bones[i]->Get_TransformMatrix());
+		string strName = pBone->Get_Name();
+		pData.vecBoneName.emplace_back(strName);
 	}
 	return pData;
 }

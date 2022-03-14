@@ -2,6 +2,7 @@
 
 #include "GameInstance.h"
 #include "Animation.h"
+#include "AnimNode.h"
 
 CAnimationController::CAnimationController(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
 	: CComponent(_pDevice, _pDeviceContext)
@@ -86,6 +87,11 @@ const _uint CAnimationController::Get_MaxKeyFrameIndex() const
 const ERootOption CAnimationController::Get_RootOption() const
 {
 	return m_eRootOption;
+}
+
+const _bool CAnimationController::Get_ChangeAnimation() const
+{
+	return m_isChangeAnim;
 }
 
 void CAnimationController::Set_GameObject(CGameObject* _pGameObject)
@@ -236,8 +242,7 @@ HRESULT CAnimationController::SetUp_NextAnimation(const string& _strAnimTag, con
 			{
 				m_tBlendDesc.iNextAnimIndex = pAnimation->Get_Index();
 
-				if (m_isChangeAnim)
-					vecAnimations[m_tBlendDesc.iNextAnimIndex]->Reset_Animation();
+				vecAnimations[m_tBlendDesc.iNextAnimIndex]->Reset_Animation();
 
 				m_tBlendDesc.isLoopNextAnim = _isLoopNextAnim;
 				m_pFixedBone = pAnimation->Get_Channel("root");
@@ -270,8 +275,7 @@ HRESULT CAnimationController::SetUp_NextAnimation(_uint iIndex, const _bool _isL
 			{
 				m_tBlendDesc.iNextAnimIndex = pAnimation->Get_Index();
 
-				if (m_isChangeAnim)
-					vecAnimations[m_tBlendDesc.iNextAnimIndex]->Reset_Animation();
+				vecAnimations[m_tBlendDesc.iNextAnimIndex]->Reset_Animation();
 
 				m_tBlendDesc.isLoopNextAnim = _isLoopNextAnim;
 				m_pFixedBone = pAnimation->Get_Channel("root");
@@ -283,6 +287,26 @@ HRESULT CAnimationController::SetUp_NextAnimation(_uint iIndex, const _bool _isL
 			}
 		}
 	}
+
+	return S_OK;
+}
+
+HRESULT CAnimationController::SetUp_NextAnimation(class CAnimNode* pChangeAnimNode)
+{
+	CAnimation* pChangeAnimation = pChangeAnimNode->Get_Animation();
+
+	if (m_isChangeAnim)
+		pChangeAnimation->Reset_Animation();
+
+	m_tBlendDesc.iNextAnimIndex = pChangeAnimation->Get_Index();
+	m_tBlendDesc.isLoopNextAnim = pChangeAnimNode->Get_Loop();
+	m_pFixedBone = pChangeAnimation->Get_Channel("root");
+	
+	m_strPreAnimTag = m_strCurAnimTag;
+	m_strCurAnimTag = pChangeAnimation->Get_Name();
+	m_iCurKeyFrameIndex = pChangeAnimation->Get_CurrentKeyFrameIndex();
+
+	pChangeAnimNode->Set_RootAnimValue(m_isRootMotion, m_isTransformMove, m_eRootOption);
 
 	return S_OK;
 }

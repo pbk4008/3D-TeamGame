@@ -180,6 +180,8 @@
     <ClInclude Include="..\Default\Client_Function.h" />
     <ClInclude Include="..\Default\Client_Include.h" />
     <ClInclude Include="..\Default\Clinet_Define.h" />
+    <ClInclude Include="..\Headers\1H_Dash.h" />
+    <ClInclude Include="..\Headers\1H_SwordAttack.h" />
     <ClInclude Include="..\Headers\1H_SwordAttackNormalR1_01.h" />
     <ClInclude Include="..\Headers\1H_SwordAttackNormalR1_02.h" />
     <ClInclude Include="..\Headers\1H_SwordAttackNormalR1_03.h" />
@@ -251,6 +253,8 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\Codes\1H_Dash.cpp" />
+    <ClCompile Include="..\Codes\1H_SwordAttack.cpp" />
     <ClCompile Include="..\Codes\1H_SwordAttackNormalR1_01.cpp" />
     <ClCompile Include="..\Codes\1H_SwordAttackNormalR1_02.cpp" />
     <ClCompile Include="..\Codes\1H_SwordAttackNormalR1_03.cpp" />

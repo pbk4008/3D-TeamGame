@@ -13,6 +13,8 @@ HRESULT C1H_SwordNormalSidestepRight_V3::NativeConstruct(void* _pArg)
 	if (FAILED(__super::NativeConstruct(_pArg)))
 		return E_FAIL;
 
+	m_iCutIndex = 20;
+
 	return S_OK;
 }
 
@@ -95,7 +97,7 @@ _int C1H_SwordNormalSidestepRight_V3::KeyCheck(const _double& _dDeltaTime)
 		}
 		else if (g_pGameInstance->getkeyPress(DIK_D))
 		{
-			if (20 < m_pAnimationController->Get_CurKeyFrameIndex())
+			if (m_iCutIndex < m_pAnimationController->Get_CurKeyFrameIndex())
 			{
 				m_pAnimationController->Reset_Animation();
 

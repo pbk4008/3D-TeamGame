@@ -330,7 +330,13 @@ const _bool CSilvermane::Is_EquipWeapon() const
 
 void CSilvermane::Add_PlusAngle(const _float _fDeltaAngle)
 {
-	m_fPlusAngle += _fDeltaAngle * 400.f;
+	//m_fPlusAngle += _fDeltaAngle * 400.f;
+
+	if (0 > _fDeltaAngle)
+		m_fPlusAngle -= 2.f;
+	else
+		m_fPlusAngle += 2.f;
+
 	if (360.f < m_fPlusAngle || -360.f > m_fPlusAngle)
 		m_fPlusAngle = fmodf(m_fPlusAngle, 360.f);
 }
