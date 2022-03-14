@@ -9,6 +9,8 @@ CWeapon::CWeapon(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
 
 CWeapon::CWeapon(const CWeapon& _rhs)
 	: CGameObject(_rhs)
+	, m_eType(_rhs.m_eType)
+	, m_wstrName(_rhs.m_wstrName)
 {
 }
 
@@ -25,7 +27,7 @@ HRESULT CWeapon::NativeConstruct(void* _pArg)
 	if (FAILED(__super::NativeConstruct(_pArg)))
 		return E_FAIL;
 
-	m_pLocalTransform = g_pGameInstance->Clone_Component<CTransform>(0, L"Transform");
+	m_pLocalTransform = g_pGameInstance->Clone_Component<CTransform>(0, L"Proto_Component_Transform");
 
 	return S_OK;
 }
@@ -52,6 +54,16 @@ HRESULT CWeapon::Render()
 		return E_FAIL;
 
 	return S_OK;
+}
+
+const wstring& CWeapon::Get_Name() const
+{
+	return m_wstrName;
+}
+
+const CWeapon::EType CWeapon::Get_Type() const
+{
+	return m_eType;
 }
 
 void CWeapon::Set_Owner(CGameObject* _pOwner)

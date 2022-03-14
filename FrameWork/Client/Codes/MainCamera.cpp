@@ -36,7 +36,7 @@ HRESULT CMainCamera::NativeConstruct(void* pArg)
 
 	m_pTransform->Set_TransformDesc(15.f, XMConvertToRadians(30.f));
 	m_pTransform->Set_State(CTransform::STATE_POSITION, XMVectorSet(0.f, 0.f, -1.f, 1.f));
-	m_pTransform->SetUp_Rotation(XMVectorSet(1.f, 0.f, 0.f, 0.f), XMConvertToRadians(30.f));
+	//m_pTransform->SetUp_Rotation(XMVectorSet(1.f, 0.f, 0.f, 0.f), XMConvertToRadians(30.f));
 	return S_OK;
 }
 
@@ -118,7 +118,7 @@ HRESULT CMainCamera::Ready_GameObject(void* pArg)
 {
 	CCamera::CAMERADESC tDesc = (*(CCamera::CAMERADESC*)pArg);
 
-	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Camera", L"MainCameara", (CComponent * *)& m_pCamera, &tDesc)))
+	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_Camera", L"Com_MainCameara", (CComponent * *)& m_pCamera, &tDesc)))
 		return E_FAIL;
 
 	return S_OK;

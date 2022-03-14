@@ -57,8 +57,8 @@ HRESULT CFloor::Render()
 
 	m_pVIBufferCom->SetUp_TextureOnShader("g_DiffuseSourTexture", m_pTexture->Get_ShaderResourceView(0));
 	m_pVIBufferCom->SetUp_TextureOnShader("g_DiffuseDestTexture", m_pTexture->Get_ShaderResourceView(1));
-	m_pVIBufferCom->SetUp_TextureOnShader("g_FilterTexture", m_pFilterTexture->Get_ShaderResourceView(0));
-	m_pVIBufferCom->SetUp_TextureOnShader("g_BrushTexture", m_pBrushTexture->Get_ShaderResourceView(0));
+	/*m_pVIBufferCom->SetUp_TextureOnShader("g_FilterTexture", m_pFilterTexture->Get_ShaderResourceView(0));
+	m_pVIBufferCom->SetUp_TextureOnShader("g_BrushTexture", m_pBrushTexture->Get_ShaderResourceView(0));*/
 
 	m_pVIBufferCom->Render(0);
 
@@ -79,8 +79,8 @@ HRESULT CFloor::Render_Shadow()
 
 	m_pVIBufferCom->SetUp_TextureOnShader("g_DiffuseSourTexture", m_pTexture->Get_ShaderResourceView(0));
 	m_pVIBufferCom->SetUp_TextureOnShader("g_DiffuseDestTexture", m_pTexture->Get_ShaderResourceView(1));
-	m_pVIBufferCom->SetUp_TextureOnShader("g_FilterTexture", m_pFilterTexture->Get_ShaderResourceView(0));
-	m_pVIBufferCom->SetUp_TextureOnShader("g_BrushTexture", m_pBrushTexture->Get_ShaderResourceView(0));
+	//m_pVIBufferCom->SetUp_TextureOnShader("g_FilterTexture", m_pFilterTexture->Get_ShaderResourceView(0));
+	//m_pVIBufferCom->SetUp_TextureOnShader("g_BrushTexture", m_pBrushTexture->Get_ShaderResourceView(0));
 
 	m_pVIBufferCom->Render(1);
 	return S_OK;
@@ -103,8 +103,8 @@ HRESULT CFloor::Render_ShadeShadow(ID3D11ShaderResourceView* ShadowMap)
 
 	m_pVIBufferCom->SetUp_TextureOnShader("g_DiffuseSourTexture", m_pTexture->Get_ShaderResourceView(0));
 	m_pVIBufferCom->SetUp_TextureOnShader("g_DiffuseDestTexture", m_pTexture->Get_ShaderResourceView(1));
-	m_pVIBufferCom->SetUp_TextureOnShader("g_FilterTexture", m_pFilterTexture->Get_ShaderResourceView(0));
-	m_pVIBufferCom->SetUp_TextureOnShader("g_BrushTexture", m_pBrushTexture->Get_ShaderResourceView(0));
+	//m_pVIBufferCom->SetUp_TextureOnShader("g_FilterTexture", m_pFilterTexture->Get_ShaderResourceView(0));
+	//m_pVIBufferCom->SetUp_TextureOnShader("g_BrushTexture", m_pBrushTexture->Get_ShaderResourceView(0));
 	m_pVIBufferCom->SetUp_TextureOnShader("g_ShadowTexture", ShadowMap);
 
 	m_pVIBufferCom->Render(2);
@@ -133,8 +133,8 @@ HRESULT CFloor::SetUp_Components()
 	m_pBrushTexture = g_pGameInstance->Clone_Component<CTexture>(0, L"Texture");
 
 	m_pTexture->Change_Texture(L"FloorBase");
-	m_pFilterTexture->Change_Texture(L"FloorFilter");
-	m_pBrushTexture->Change_Texture(L"FloorBrush");
+	//m_pFilterTexture->Change_Texture(L"FloorFilter");
+	//m_pBrushTexture->Change_Texture(L"FloorBrush");
 
 	if (FAILED(__super::SetUp_Components((_uint)SCENEID::SCENE_STAGE1, L"PrototypeTerrainVIBuffer", L"TerrainCom", (CComponent**)&m_pVIBufferCom)))
 		return E_FAIL;

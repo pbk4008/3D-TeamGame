@@ -1,0 +1,114 @@
+#include "pch.h"
+#include "1H_Dash.h"
+
+C1H_Dash::C1H_Dash(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
+	: CState_Silvermane(_pDevice, _pDeviceContext)
+{
+}
+
+HRESULT C1H_Dash::NativeConstruct(void* _pArg)
+{
+	if (FAILED(__super::NativeConstruct(_pArg)))
+		return E_FAIL;
+
+	return S_OK;
+}
+
+_int C1H_Dash::Tick(const _double& _dDeltaTime)
+{
+	_int iProgress = __super::Tick(_dDeltaTime);
+	if (NO_EVENT != iProgress)
+		return iProgress;
+
+	return _int();
+}
+
+_int C1H_Dash::LateTick(const _double& _dDeltaTime)
+{
+	_int iProgress = __super::LateTick(_dDeltaTime);
+	if (NO_EVENT != iProgress)
+		return iProgress;
+
+	return _int();
+}
+
+HRESULT C1H_Dash::Render()
+{
+	if (FAILED(__super::Render()))
+		return E_FAIL;
+
+	return S_OK;
+}
+
+HRESULT C1H_Dash::EnterState()
+{
+	if (FAILED(__super::EnterState()))
+		return E_FAIL;
+
+	m_pSilvermane->Set_Move(true);
+
+	return S_OK;
+}
+
+HRESULT C1H_Dash::ExitState()
+{
+	if (FAILED(__super::ExitState()))
+		return E_FAIL;
+
+	m_pSilvermane->Set_Move(false);
+
+	return S_OK;
+}
+
+_int C1H_Dash::KeyCheck(const _double& _dDeltaTime)
+{
+	_int iProgress = __super::KeyCheck(_dDeltaTime);
+	if (NO_EVENT != iProgress)
+		return iProgress;
+
+	if (m_iCutIndex < m_pAnimationController->Get_CurKeyFrameIndex())
+	{
+		if (g_pGameInstance->getMouseKeyDown(CInputDev::MOUSESTATE::MB_LBUTTON))
+		{
+			if (FAILED(m_pStateController->Change_State(L"1H_SwordJogAttack")))
+				return -1;
+			return STATE_CHANGE;
+		}
+		else if (g_pGameInstance->getMouseKeyDown(CInputDev::MOUSESTATE::MB_RBUTTON))
+		{
+			if (FAILED(m_pStateController->Change_State(L"1H_SwordAttackNormalR2_Start")))
+				return -1;
+			return STATE_CHANGE;
+		}
+
+		if (g_pGameInstance->getkeyPress(DIK_LSHIFT))
+		{
+			if (g_pGameInstance->getkeyPress(DIK_W) ||
+				g_pGameInstance->getkeyPress(DIK_S) ||
+				g_pGameInstance->getkeyPress(DIK_A) ||
+				g_pGameInstance->getkeyPress(DIK_D))
+			{
+				if (!m_pSilvermane->Is_EquipWeapon())
+				{
+					if (FAILED(m_pStateController->Change_State(L"SprintFwdStart")))
+						return -1;
+				}
+				else
+				{
+					if (FAILED(m_pStateController->Change_State(L"1H_SwordEquipOff")))
+						return -1;
+				}
+				return STATE_CHANGE;
+			}
+		}
+	}
+
+
+	return _int();
+}
+
+void C1H_Dash::Free()
+{
+
+	__super::Free();
+}

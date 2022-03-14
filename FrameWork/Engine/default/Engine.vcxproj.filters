@@ -184,9 +184,6 @@
     <Filter Include="00.Utility\03.Component\07.Gizmo">
       <UniqueIdentifier>{86842f87-0dbf-441f-85ad-26157a2796b2}</UniqueIdentifier>
     </Filter>
-    <Filter Include="00.Utility\03.Component\98.AnimationController">
-      <UniqueIdentifier>{f8ca6ff5-63fe-4167-8054-cb8caa6731f2}</UniqueIdentifier>
-    </Filter>
     <Filter Include="00.Utility\03.Component\05.VIBuffer\07.Model\Material">
       <UniqueIdentifier>{3e6b5c11-88b5-4f9e-911f-9740de61e903}</UniqueIdentifier>
     </Filter>
@@ -237,6 +234,18 @@
     </Filter>
     <Filter Include="00.Utility\04.Manager\03. RenderTargetManager\99.Shader">
       <UniqueIdentifier>{a13b4594-b2c5-415d-b9fc-8b3314871506}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00.Utility\03.Component\08. AnimationController">
+      <UniqueIdentifier>{f6e49bb3-9ba7-4443-a04a-fad53dcc39b0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00.Utility\03.Component\08. AnimationController\00.Auto">
+      <UniqueIdentifier>{ae45706f-4057-46d3-8e0b-62a1fb99765f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00.Utility\03.Component\08. AnimationController\00.Auto\AnimNode">
+      <UniqueIdentifier>{3ddfe407-5eaf-413b-b8fa-326846ffe1ab}</UniqueIdentifier>
+	</Filter>
+    <Filter Include="98.ShaderFiles">
+      <UniqueIdentifier>{cfba5601-427a-4c39-988f-e706425993d5}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -435,9 +444,6 @@
     <ClInclude Include="..\public\Gizmo.h">
       <Filter>00.Utility\03.Component\07.Gizmo</Filter>
     </ClInclude>
-    <ClInclude Include="..\public\AnimationController.h">
-      <Filter>00.Utility\03.Component\98.AnimationController</Filter>
-    </ClInclude>
     <ClInclude Include="..\public\Material.h">
       <Filter>00.Utility\03.Component\05.VIBuffer\07.Model\Material</Filter>
     </ClInclude>
@@ -479,12 +485,21 @@
     </ClInclude>
     <ClInclude Include="..\public\Navigation.h">
       <Filter>00.Utility\03.Component\01.Navigation</Filter>
-	</ClInclude>
+    </ClInclude>
     <ClInclude Include="..\public\VIBuffer_Trapezium.h">
       <Filter>00.Utility\03.Component\05.VIBuffer\10.Trapezium</Filter>
     </ClInclude>
     <ClInclude Include="..\bin\ShaderFiles\Shader_RenderState.hpp">
-      <Filter>00.Utility\03.Component\05.VIBuffer\03.RectInstance</Filter>
+      <Filter>98.ShaderFiles</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\AnimationController.h">
+      <Filter>00.Utility\03.Component\08. AnimationController</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Animator.h">
+      <Filter>00.Utility\03.Component\08. AnimationController\00.Auto</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\AnimNode.h">
+      <Filter>00.Utility\03.Component\08. AnimationController\00.Auto\AnimNode</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -662,9 +677,6 @@
     <ClCompile Include="..\private\Gizmo.cpp">
       <Filter>00.Utility\03.Component\07.Gizmo</Filter>
     </ClCompile>
-    <ClCompile Include="..\private\AnimationController.cpp">
-      <Filter>00.Utility\03.Component\98.AnimationController</Filter>
-    </ClCompile>
     <ClCompile Include="..\private\Model.cpp">
       <Filter>00.Utility\03.Component\05.VIBuffer\07.Model</Filter>
     </ClCompile>
@@ -704,6 +716,15 @@
     <ClCompile Include="..\private\Navigation.cpp">
       <Filter>00.Utility\03.Component\01.Navigation</Filter>
     </ClCompile>
+    <ClCompile Include="..\private\AnimationController.cpp">
+      <Filter>00.Utility\03.Component\08. AnimationController</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Animator.cpp">
+      <Filter>00.Utility\03.Component\08. AnimationController\00.Auto</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\AnimNode.cpp">
+      <Filter>00.Utility\03.Component\08. AnimationController\00.Auto\AnimNode</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="..\bin\ShaderFiles\Shader_Triangle.hlsl">
@@ -721,8 +742,47 @@
     <FxCompile Include="..\bin\ShaderFiles\Shader_DSViewPort.hlsl">
       <Filter>00.Utility\04.Manager\03. RenderTargetManager\99.Shader</Filter>
     </FxCompile>
-    <FxCompile Include="..\bin\ShaderFiles\Shader_UI.hlsl">
+    <FxCompile Include="..\bin\ShaderFiles\Shader_Geo_UI.hlsl">
       <Filter>00.Utility\03.Component\05.VIBuffer\03.RectInstance</Filter>
+    </FxCompile>
+    <FxCompile Include="..\..\Reference\ShaderFile\Shader_Cube.hlsl">
+      <Filter>98.ShaderFiles</Filter>
+    </FxCompile>
+    <FxCompile Include="..\bin\ShaderFiles\Shader_Instance.hlsl">
+      <Filter>98.ShaderFiles</Filter>
+    </FxCompile>
+    <FxCompile Include="..\bin\ShaderFiles\Shader_InstanceMesh.hlsl">
+      <Filter>98.ShaderFiles</Filter>
+    </FxCompile>
+    <FxCompile Include="..\bin\ShaderFiles\Shader_Plane.hlsl">
+      <Filter>98.ShaderFiles</Filter>
+    </FxCompile>
+    <FxCompile Include="..\bin\ShaderFiles\Shader_StaticMesh.hlsl">
+      <Filter>98.ShaderFiles</Filter>
+    </FxCompile>
+    <FxCompile Include="..\bin\ShaderFiles\Shader_Terrain.hlsl">
+      <Filter>98.ShaderFiles</Filter>
+    </FxCompile>
+    <FxCompile Include="..\bin\ShaderFiles\Shader_Mesh.hlsl">
+      <Filter>98.ShaderFiles</Filter>
+    </FxCompile>
+    <FxCompile Include="..\bin\ShaderFiles\Shader_MeshAnim.hlsl">
+      <Filter>98.ShaderFiles</Filter>
+    </FxCompile>
+    <FxCompile Include="..\bin\ShaderFiles\Shader_Particle.hlsl">
+      <Filter>00.Utility\03.Component\05.VIBuffer\09.Instance\00..InstanceExplosion</Filter>
+    </FxCompile>
+    <FxCompile Include="..\bin\ShaderFiles\Shader_UI.hlsl">
+      <Filter>98.ShaderFiles</Filter>
+    </FxCompile>
+    <FxCompile Include="..\bin\ShaderFiles\Shader_Rect.hlsl">
+      <Filter>98.ShaderFiles</Filter>
+    </FxCompile>
+    <FxCompile Include="..\bin\ShaderFiles\Shader_PointInstance.hlsl">
+      <Filter>98.ShaderFiles</Filter>
+    </FxCompile>
+    <FxCompile Include="..\bin\ShaderFiles\Shader_UI_Bar.hlsl">
+      <Filter>98.ShaderFiles</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>

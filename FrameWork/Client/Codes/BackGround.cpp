@@ -28,10 +28,10 @@ HRESULT CBackGround::NativeConstruct_Prototype()
 	if (FAILED(CGameObject::NativeConstruct_Prototype()))
 		return E_FAIL;
 
-	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Texture", L"BackGroundTex", (CComponent * *)& m_pTexture)))
+	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_Texture", L"Com_Texture", (CComponent * *)& m_pTexture)))
 		return E_FAIL;
 
-	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"RectBuffer", L"BackGroundBuffer", (CComponent * *)& m_pRcTex)))
+	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_RectBuffer", L"Com_Buffer", (CComponent * *)& m_pRcTex)))
 		return E_FAIL;
 
 	return S_OK;

@@ -89,12 +89,12 @@ HRESULT CLoader::Ready_Stage1()
 	//	return E_FAIL;
 
 	// Ready Texutre
-     if (FAILED(g_pGameInstance->Add_Texture(m_pDevice,L"FloorBase", L"../bin/Resources/Textures/Terrain/Grass_%d.dds",2)))
+	//if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"FloorFilter", L"../bin/Resources/Textures/Terrain/Filter.bmp")))
+	//	return E_FAIL;
+	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"FloorBase", L"../bin/Resources/Textures/Terrain/Grass_%d.dds", 2)))
 		return E_FAIL;
-	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"FloorFilter",L"../bin/Resources/Textures/Terrain/Filter.bmp")))
-		return E_FAIL;
-	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"FloorBrush",L"../bin/Resources/Textures/Terrain/Brush.png")))
-		return E_FAIL;
+	//if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"FloorBrush", L"../bin/Resources/Textures/Terrain/Brush.png")))
+	//	return E_FAIL;
 	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"SkyBox", L"../bin/Resources/Textures/SkyBox/burger%d.dds", 4)))
 		return E_FAIL;
 	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"PBR_Player_Top", L"../Bin/Resources/Meshes/fbx/T_Silvermane_Top_MRA.tga")))

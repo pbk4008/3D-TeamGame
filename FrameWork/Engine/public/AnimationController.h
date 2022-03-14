@@ -40,6 +40,7 @@ public:
 	const _uint Get_CurFixedBoneKeyFrameIndex() const;
 	const _uint Get_MaxKeyFrameIndex() const;
 	const ERootOption Get_RootOption() const;
+	const _bool Get_ChangeAnimation() const;
 
 	void Set_GameObject(CGameObject* _pGameObject);
 	void Set_Transform(CTransform* _pTransform);
@@ -48,6 +49,8 @@ public:
 	void Set_TransformMove(const _bool _isTransformMove);
 	void Set_PivotMatrix(const _fmatrix& _smatPivot);
 	void Set_RootMotion(const _bool _isRootMotion, const _bool _isTransformMove, const ERootOption _eRootOption = ERootOption::XYZ);
+	void Set_PlaySpeed(const _float _fPlaySpeed);
+	void Set_MoveSpeed(const _float _fMoveSpeed);
 
 	const _bool Is_RootMotion() const;
 	const _bool Is_Finished() const;
@@ -57,6 +60,8 @@ public:
 	void Lerp_Anim(vector<CAnimation*>& _vecAnimations);
 	HRESULT SetUp_NextAnimation(const string& _strAnimTag, const _bool _isLoopNextAnim = true);
 	HRESULT SetUp_NextAnimation(_uint iIndex, const _bool _isLoopNextAnim = true);
+	//다음 애니메이션 변경(AnimNode 직접 받도록)
+	HRESULT SetUp_NextAnimation(class CAnimNode* pChangeAnimNode);
 	HRESULT Change_Anim(const string& _strAnimTag, _bool _isLoop = true);
 	const _int Move_Transform(const _double& _dDeltaTime);
 	void Reset_Animation();
@@ -88,6 +93,9 @@ private:
 	_int m_iCurFixedBoneKeyFrameIndex = 0;
 	_uint m_iCurKeyFrameIndex = 0;
 	_uint m_iMaxKeyFrameIndex = 0;
+
+	_float m_fPlaySpeed = 1.f;
+	_float m_fMoveSpeed = 1.f;
 
 	_matrix m_smatPivot = XMMatrixIdentity();
 

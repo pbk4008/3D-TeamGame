@@ -13,6 +13,8 @@ HRESULT C1H_SwordEquipOn::NativeConstruct(void* _pArg)
 	if (FAILED(__super::NativeConstruct(_pArg)))
 		return E_FAIL;
 
+	m_iCutIndex = 11;
+
 	return S_OK;
 }
 
@@ -23,20 +25,19 @@ _int C1H_SwordEquipOn::Tick(const _double& _dDeltaTime)
 		return iProgress;
 
 
-	if (11 <= m_pAnimationController->Get_CurKeyFrameIndex())
+	if (m_iCutIndex < m_pAnimationController->Get_CurKeyFrameIndex())
 	{
 		if (!m_pSilvermane->Is_EquipWeapon())
 		{
 			m_pSilvermane->Set_EquipWeapon(true);
-			CHierarchyNode* pWeaponBone = m_pModel->Get_BoneMatrix("weapon_r");
-			m_pSilvermane->Set_WeaponFixedBone(pWeaponBone);
+			m_pSilvermane->Set_WeaponFixedBone("weapon_r");
 		}
 	}
 
 	if (m_pAnimationController->Is_Finished())
 	{
-		if (FAILED(m_pStateController->Change_State(L"Idle")))
-			return E_FAIL;
+		if (FAILED(m_pStateController->Change_State(L"1H_SwordIdle")))
+			return -1;
 		return STATE_CHANGE;
 	}
 

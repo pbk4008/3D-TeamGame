@@ -145,7 +145,7 @@ HRESULT CStatic_Mesh::SetUp_Components()
 		return E_FAIL;
 
 	/* Com_Gizmo*/
-	m_pGizmo = (CGizmo*)g_pGameInstance->Clone_Component(TAB_STATIC, L"Gizmo");
+	m_pGizmo = (CGizmo*)g_pGameInstance->Clone_Component(TAB_STATIC, L"Proto_Component_Gizmo");
 	if (nullptr == m_pGizmo)
 		return E_FAIL;
 

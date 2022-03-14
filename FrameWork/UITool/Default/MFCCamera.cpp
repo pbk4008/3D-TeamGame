@@ -42,7 +42,7 @@ HRESULT CMFCCamera::NativeConstruct(void* pArg)
 	Desc.fFar = 1.f;
 	Desc.pCameraTag = L"MFCCamera";
 
-	m_pCameraCom = g_pGameInstance->Clone_Component<CCamera>(TOOL_LEVEL::TOOL_LEVEL_LOGO, L"Camera", &Desc);
+	m_pCameraCom = g_pGameInstance->Clone_Component<CCamera>(TOOL_LEVEL::TOOL_LEVEL_LOGO, L"Proto_Component_Camera", &Desc);
 
 	if (FAILED(SetUp_Components(L"MFCCamera", m_pCameraCom)))
 	{

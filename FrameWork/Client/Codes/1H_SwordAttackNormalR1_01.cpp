@@ -3,10 +3,8 @@
 
 #include "StateController.h"
 
-#include "Silvermane.h"
-
 C1H_SwordAttackNormalR1_01::C1H_SwordAttackNormalR1_01(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
-	: CState_Silvermane(_pDevice, _pDeviceContext)
+	: C1H_SwordAttack(_pDevice, _pDeviceContext)
 {
 }
 
@@ -14,6 +12,8 @@ HRESULT C1H_SwordAttackNormalR1_01::NativeConstruct(void* _pArg)
 {
 	if (FAILED(__super::NativeConstruct(_pArg)))
 		return E_FAIL;
+
+	m_iCutIndex = 20;
 
 	return S_OK;
 }
@@ -64,7 +64,6 @@ HRESULT C1H_SwordAttackNormalR1_01::EnterState()
 		CHierarchyNode* pWeaponBone = m_pModel->Get_BoneMatrix("weapon_r");
 		m_pSilvermane->Set_WeaponFixedBone(pWeaponBone);
 	}
-	
 
 	return S_OK;
 }
@@ -83,11 +82,17 @@ _int C1H_SwordAttackNormalR1_01::KeyCheck(const _double& _dDeltaTime)
 	if (NO_EVENT != iProgress)
 		return iProgress;
 	
-	if (20 < m_pAnimationController->Get_CurKeyFrameIndex())
+	if (m_iCutIndex < m_pAnimationController->Get_CurKeyFrameIndex())
 	{
 		if (g_pGameInstance->getMouseKeyDown(CInputDev::MOUSESTATE::MB_LBUTTON))
 		{
 			m_pStateController->Change_State(L"1H_SwordAttackNormalR1_02");
+			return STATE_CHANGE;
+		}
+		else if (g_pGameInstance->getMouseKeyDown(CInputDev::MOUSESTATE::MB_RBUTTON))
+		{
+			if (FAILED(m_pStateController->Change_State(L"1H_SwordAttackNormalR2_Start")))
+				return -1;
 			return STATE_CHANGE;
 		}
 	}

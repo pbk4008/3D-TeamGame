@@ -4,7 +4,7 @@
 #include "StateController.h"
 
 C1H_SwordNormalSidestepRight_V3::C1H_SwordNormalSidestepRight_V3(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
-	: CState_Silvermane(_pDevice, _pDeviceContext)
+	: C1H_Dash(_pDevice, _pDeviceContext)
 {
 }
 
@@ -12,6 +12,8 @@ HRESULT C1H_SwordNormalSidestepRight_V3::NativeConstruct(void* _pArg)
 {
 	if (FAILED(__super::NativeConstruct(_pArg)))
 		return E_FAIL;
+
+	m_iCutIndex = 20;
 
 	return S_OK;
 }
@@ -27,7 +29,7 @@ _int C1H_SwordNormalSidestepRight_V3::Tick(const _double& _dDeltaTime)
 	if (m_pAnimationController->Is_Finished())
 	{
  		if (FAILED(m_pStateController->Change_State(L"Idle")))
-			return E_FAIL;
+			return -1;
 		return STATE_CHANGE;
 	}
 
@@ -62,8 +64,6 @@ HRESULT C1H_SwordNormalSidestepRight_V3::EnterState()
 	
 	if (g_pGameInstance->getkeyPress(DIK_W))
 		m_eDir = EDir::LeftForward;
-	else if (g_pGameInstance->getkeyPress(DIK_S))
-		m_eDir = EDir::RightForward;
 	else
 		m_eDir = EDir::Forward;
 
@@ -85,41 +85,46 @@ _int C1H_SwordNormalSidestepRight_V3::KeyCheck(const _double& _dDeltaTime)
 	if (NO_EVENT != iProgress)
 		return iProgress;
 
-	if (g_pGameInstance->getkeyDown(DIK_SPACE))
+	if (m_iCutIndex < m_pAnimationController->Get_CurKeyFrameIndex())
 	{
-		if (g_pGameInstance->getkeyPress(DIK_A))
+		if (g_pGameInstance->getkeyDown(DIK_SPACE))
 		{
-			if (FAILED(m_pStateController->Change_State(L"1H_SidestepLeft")))
-				return E_FAIL;
-			return STATE_CHANGE;
-		}
-		else if (g_pGameInstance->getkeyPress(DIK_D))
-		{
-			if (20 < m_pAnimationController->Get_CurKeyFrameIndex())
+			if (g_pGameInstance->getkeyPress(DIK_A))
+			{
+				if (FAILED(m_pStateController->Change_State(L"1H_SidestepLeft")))
+					return -1;
+				return STATE_CHANGE;
+			}
+			else if (g_pGameInstance->getkeyPress(DIK_S))
+			{
+				if (FAILED(m_pStateController->Change_State(L"1H_SidestepBwd")))
+					return -1;
+				return STATE_CHANGE;
+			}
+			else if (g_pGameInstance->getkeyPress(DIK_D))
 			{
 				m_pAnimationController->Reset_Animation();
 
 				if (g_pGameInstance->getkeyPress(DIK_W))
 					m_eDir = EDir::LeftForward;
-				else if (g_pGameInstance->getkeyPress(DIK_S))
-					m_eDir = EDir::RightForward;
 				else
 					m_eDir = EDir::Forward;
 			}
-		}
-		else if (g_pGameInstance->getkeyPress(DIK_W))
-		{
-			if (FAILED(m_pStateController->Change_State(L"1H_DodgeSpin")))
-				return E_FAIL;
-			return STATE_CHANGE;
-		}
-		else
-		{
-			if (FAILED(m_pStateController->Change_State(L"1H_SidestepBwd")))
-				return E_FAIL;
-			return STATE_CHANGE;
+			else if (g_pGameInstance->getkeyPress(DIK_W))
+			{
+				if (FAILED(m_pStateController->Change_State(L"1H_DodgeSpin")))
+					return -1;
+				return STATE_CHANGE;
+			}
+			else
+			{
+				if (FAILED(m_pStateController->Change_State(L"1H_SidestepBwd")))
+					return -1;
+				return STATE_CHANGE;
+			}
 		}
 	}
+
 	return _int();
 }
 

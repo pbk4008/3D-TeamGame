@@ -34,7 +34,7 @@ HRESULT CMFCMainApp::NativeConstruct()
 		return E_FAIL;
 	}
 
-	m_pRenderer = g_pGameInstance->Clone_Component<CRenderer>(0, L"Renderer");
+	m_pRenderer = g_pGameInstance->Clone_Component<CRenderer>(0, L"Proto_Component_Renderer");
 
 	if (FAILED(Ready_Component_Prototype()))
 	{
@@ -58,6 +58,8 @@ HRESULT CMFCMainApp::NativeConstruct()
 
 _int CMFCMainApp::Tick(_double TimeDelta)
 {
+	g_pGameInstance->Update_InputDev();
+
 	if (nullptr == g_pGameInstance)
 	{
 		return -1;
@@ -166,11 +168,11 @@ HRESULT CMFCMainApp::Ready_Component_Prototype()
 		return E_FAIL;
 	}
 
-
+	//////////////////////////////////////////Static////////////////////////////////////////////////
 	_finddata_t fd;
 	ZeroMemory(&fd, sizeof(_finddata_t));
 
-	intptr_t handle = _findfirst("../bin/Resource/Textures/UI/*.dds", &fd);
+	intptr_t handle = _findfirst("../bin/Resource/Textures/UI/Static/*.dds", &fd);
 
 	if (handle == 0)
 		return E_FAIL;
@@ -178,7 +180,7 @@ HRESULT CMFCMainApp::Ready_Component_Prototype()
 	int iResult = 0;
 	while (iResult != -1)
 	{
-		char szFullPath[MAX_PATH] = "../bin/Resource/Textures/UI/";
+		char szFullPath[MAX_PATH] = "../bin/Resource/Textures/UI/Static/";
 		strcat_s(szFullPath, fd.name);
 
 		_tchar fbxName[MAX_PATH] = L"";
@@ -203,6 +205,42 @@ HRESULT CMFCMainApp::Ready_Component_Prototype()
 	}
 	_findclose(handle);
 
+
+	//////////////////////////////////////////Changing////////////////////////////////////////////////
+	ZeroMemory(&fd, sizeof(_finddata_t));
+
+	handle = _findfirst("../bin/Resource/Textures/UI/Dynamic/*.dds", &fd);
+
+	if (handle == 0)
+		return E_FAIL;
+
+	iResult = 0;
+	while (iResult != -1)
+	{
+		char szFullPath[MAX_PATH] = "../bin/Resource/Textures/UI/Dynamic/";
+		strcat_s(szFullPath, fd.name);
+
+		_tchar fbxName[MAX_PATH] = L"";
+		_tchar fbxPath[MAX_PATH] = L"";
+		MultiByteToWideChar(CP_ACP, 0, fd.name, MAX_PATH, fbxName, MAX_PATH);
+		MultiByteToWideChar(CP_ACP, 0, szFullPath, MAX_PATH, fbxPath, MAX_PATH);
+
+		::PathRemoveExtension(fbxName); //이게 있으면 확장자도 지워짐
+
+		if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, fbxName, fbxPath)))
+		{
+			return E_FAIL;
+		}
+		wstring Name = fbxName;
+		wstring tag = L"Prototype_GameObject_UI_" + Name;
+		if (FAILED(g_pGameInstance->Add_Prototype(tag, CMFCObject_UI::Create(m_pDevice, m_pDeviceContext))))
+		{
+			return E_FAIL;
+		}
+
+		iResult = _findnext(handle, &fd);
+	}
+	_findclose(handle);
 	return S_OK;
 
 }

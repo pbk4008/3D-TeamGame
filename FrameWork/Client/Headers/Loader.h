@@ -18,17 +18,25 @@ public:
 private:
 	HRESULT LoadForScene();
 private:
-	HRESULT SetUp_Stage1Map_ProtoComponent();
+	HRESULT Ready_Logo();
+	HRESULT Ready_Stage1();
+	HRESULT Ready_Test_JS();
+
+private:
+	//stage1
+	HRESULT SetUp_Stage1_Prototype();
+	HRESULT SetUp_Stage1_Object();
 	HRESULT Load_Stage1FBXLoad();
-	HRESULT Load_Stage1TextureUILoad();
+	HRESULT Load_Stage1PlayerLoad();
+	HRESULT Load_Stage1MonsterLoad();
+	HRESULT Load_Stage1StaticUILoad(); //툴에서 값 지정해주는 UI들은 여기서 미리 생성
+	HRESULT Load_Stage1UILoad(); //직접 생성
+	HRESULT Load_Stage1EffectLoad();
 
 public:
 	static _uint CALLBACK Thread_Main(void* pArg);
 	static CLoader* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext, SCENEID eID);
-private:
-	HRESULT Ready_Logo();
-	HRESULT Ready_Stage1();
-	HRESULT Ready_Test_JS();
+
 
 private:
 	virtual void Free();
