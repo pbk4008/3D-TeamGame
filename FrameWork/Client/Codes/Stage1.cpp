@@ -4,6 +4,7 @@
 
 #include "Effect_DashDust.h"
 #include "UI_Ingame.h"
+#include "UI_Monster_Back.h"
 
 CStage1::CStage1()
 {
@@ -19,29 +20,37 @@ HRESULT CStage1::NativeConstruct()
 	if (FAILED(CLevel::NativeConstruct()))
 		return E_FAIL;
 
+	/*if (FAILED(Ready_MapObject()))
+	{
+		return E_FAIL;
+	}*/
 
-	//if (FAILED(Ready_MapObject()))
-	//{
-	//	return E_FAIL;
-	//}
 	if (FAILED(Ready_Monster(L"Layer_Monster")))
 	{
 		return E_FAIL;
 	}
 
-
-	if (FAILED(Ready_UI(L"../bin/SaveData/UI/UI.dat")))
+	if (FAILED(Ready_UI(L"Layer_UI")))
 	{
 		return E_FAIL;
 	}
 
 
-	if (FAILED(Ready_Effect(L"../bin/SaveData/Effect/Effect_Explosion.dat")))
+	//Data
+	if (FAILED(Ready_Data_UI(L"../bin/SaveData/UI/UI.dat")))
+	{
+		return E_FAIL;
+	}
+	if (FAILED(Ready_Data_Effect(L"../bin/SaveData/Effect/Effect_Explosion.dat")))
 	{
 		return E_FAIL;
 	}
 
 
+	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Silvermane", L"Silvermane")))
+	//	return E_FAIL;
+	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Camera", L"Camera_Silvermane")))
+	//	return E_FAIL;
 
 
 	return S_OK;
@@ -83,7 +92,7 @@ HRESULT CStage1::Ready_MapObject()
 	{
 		if (pDesc.wstrInstaneTag == L"")
 			break;
-		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Environment", L"Environment", &pDesc)))
+		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Environment", L"Proto_GameObject_Environment", &pDesc)))
 		{
 			int a = 0;
 		}
@@ -100,10 +109,10 @@ HRESULT CStage1::Ready_MapObject()
 
 HRESULT CStage1::Ready_Monster(const _tchar* LayerTag)
 {
-	/*if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Monster_Crawler")))
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Proto_GameObject_Monster_Crawler")))
 		return E_FAIL;
 
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Monster_EarthAberrant")))
+	/*if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Monster_EarthAberrant")))
 		return E_FAIL;
 
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Monster_BronzeAnimus")))
@@ -115,7 +124,23 @@ HRESULT CStage1::Ready_Monster(const _tchar* LayerTag)
 	return S_OK;
 }
 
-HRESULT CStage1::Ready_Effect(const _tchar* pDataFilePath)
+HRESULT CStage1::Ready_UI(const _tchar* LayerTag)
+{
+	/*CUI_Monster_Back::UIACTIVEDESC Desc;
+	_tcscpy_s(Desc.UIDesc.TextureTag, L"Texture_Monster_Back");
+	Desc.UIDesc.bMinus = true;
+	Desc.UIDesc.fAngle = 0.3f;
+	Desc.UIDesc.fPos = { 500.f, 200.f, 0.1f};
+	Desc.UIDesc.fSize = { 291.f, 29.f };
+	Desc.UIDesc.IDTag = 14;
+	Desc.pTargetTransform = nullptr;
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Proto_GameObject_UI_Monster_Back", &Desc)))
+		return E_FAIL;*/
+
+	return S_OK;
+}
+
+HRESULT CStage1::Ready_Data_Effect(const _tchar* pDataFilePath)
 {
 	vector<CEffect_DashDust::EFFECTDESC> vecEffect;
 	g_pGameInstance->LoadFile<CEffect_DashDust::EFFECTDESC>(vecEffect, pDataFilePath);
@@ -123,7 +148,7 @@ HRESULT CStage1::Ready_Effect(const _tchar* pDataFilePath)
 	for (int i = 0; i < vecEffect.size(); ++i)
 	{
 		wstring Tag = vecEffect[i].TextureTag;
-		wstring FullName = L"Prototype_GameObject_Effect";
+		wstring FullName = L"Proto_GameObject_Effect";
 
 		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Effect", FullName, &vecEffect[i])))
 		{
@@ -135,15 +160,16 @@ HRESULT CStage1::Ready_Effect(const _tchar* pDataFilePath)
 	return S_OK;
 }
 
-HRESULT CStage1::Ready_UI(const _tchar* pDataFilePath)
+HRESULT CStage1::Ready_Data_UI(const _tchar* pDataFilePath)
 {
+	//UI_Ingame_Static
 	vector<CUI::UIDESC> vecUI;
 	g_pGameInstance->LoadFile<CUI::UIDESC>(vecUI, pDataFilePath);
 
 	for (int i = 0; i < vecUI.size(); ++i)
 	{
 		wstring Tag = vecUI[i].TextureTag;
-		wstring FullName = L"Prototype_GameObject_UI_" + Tag;
+		wstring FullName = L"Proto_GameObject_UI_" + Tag;
 
 		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_UI", FullName, &vecUI[i])))
 		{

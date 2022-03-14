@@ -215,6 +215,20 @@ HRESULT CRenderer::Render_UI()
 	return S_OK;
 }
 
+HRESULT CRenderer::Render_UI_Active()
+{
+	for (auto& pGameObject : m_RenderGroup[RENDER_UI_ACTIVE])
+	{
+		if (nullptr != pGameObject)
+			pGameObject->Render();
+
+		Safe_Release(pGameObject);
+	}
+	m_RenderGroup[RENDER_UI_ACTIVE].clear();
+
+	return S_OK;
+}
+
 HRESULT CRenderer::Render_Shadow()
 {
 	if (FAILED(m_pTargetMgr->Begin_MRT(m_pDeviceContext, TEXT("MRT_Shadow"))))

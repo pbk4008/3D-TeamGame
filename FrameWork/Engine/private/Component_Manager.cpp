@@ -46,21 +46,23 @@ CComponent * CComponent_Manager::Clone_Component(_uint iLevelIndex, const wstrin
 
 HRESULT CComponent_Manager::SetUpBaseComponent(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
 {
-	if (Add_Prototype(0,L"Transform", CTransform::Create(pDevice, pDeviceContext)))
+	if (Add_Prototype(0, L"Proto_Component_Transform", CTransform::Create(pDevice, pDeviceContext)))
 		return E_FAIL;
-	if (Add_Prototype(0, L"Renderer", CRenderer::Create(pDevice, pDeviceContext)))
+	if (Add_Prototype(0, L"Proto_Component_Renderer", CRenderer::Create(pDevice, pDeviceContext)))
 		return E_FAIL;
-	if (Add_Prototype(0, L"Texture", CTexture::Create(pDevice, pDeviceContext)))
+	if (Add_Prototype(0, L"Proto_Component_Texture", CTexture::Create(pDevice, pDeviceContext)))
 		return E_FAIL;
-	if (Add_Prototype(0, L"Camera", CCamera::Create(pDevice, pDeviceContext)))
+	if (Add_Prototype(0, L"Proto_Component_Camera", CCamera::Create(pDevice, pDeviceContext)))
 		return E_FAIL;
-	if (Add_Prototype(0, L"Gizmo", CGizmo::Create(pDevice, pDeviceContext)))
+	if (Add_Prototype(0, L"Proto_Component_Gizmo", CGizmo::Create(pDevice, pDeviceContext)))
 		return E_FAIL;
-	if (Add_Prototype(0, L"RectBuffer", CVIBuffer_Rect::Create(pDevice, pDeviceContext,L"../../Reference/ShaderFile/Shader_Rect.hlsl")))
+	if (Add_Prototype(0, L"Proto_Component_RectBuffer", CVIBuffer_Rect::Create(pDevice, pDeviceContext,L"../../Reference/ShaderFile/Shader_Rect.hlsl")))
 		return E_FAIL;
-	if (Add_Prototype(0, L"RectInstanceBuffer_UI", CVIBuffer_RectInstance::Create(pDevice, pDeviceContext, L"../../Reference/ShaderFile/Shader_UI.hlsl", 1)))
+	if (Add_Prototype(0, L"Proto_Component_Rect_UI", CVIBuffer_Rect::Create(pDevice, pDeviceContext, L"../../Reference/ShaderFile/Shader_UI.hlsl")))
 		return E_FAIL;
-	if (Add_Prototype(0, L"Rect_UI", CVIBuffer_Trapezium::Create(pDevice, pDeviceContext, L"../../Reference/ShaderFile/Shader_Rect.hlsl")))
+	if (Add_Prototype(0, L"Proto_Component_RectInstance_UI", CVIBuffer_RectInstance::Create(pDevice, pDeviceContext, L"../../Reference/ShaderFile/Shader_Geo_UI.hlsl", 1)))
+		return E_FAIL;
+	if (Add_Prototype(0, L"Proto_Component_Trapezium_UI", CVIBuffer_Trapezium::Create(pDevice, pDeviceContext)))
 		return E_FAIL;
 
 

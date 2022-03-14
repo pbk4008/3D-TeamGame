@@ -44,11 +44,14 @@ _int CLoading::Tick(_double TimeDelta)
 		return -1;
 	if (m_pLoader->getFinish())
 	{
-		if (g_pGameInstance->getkeyDown(DIK_SPACE))
+		/*if (g_pGameInstance->getkeyDown(DIK_SPACE))
 		{
 			if (FAILED(Move_Scene()))
 				return -1;
-		}
+		}*/
+
+		if (FAILED(Move_Scene()))
+			return -1;
 	}
 	return 0;
 }
@@ -85,8 +88,8 @@ HRESULT CLoading::Move_Scene()
 
 HRESULT CLoading::Ready_GameObject()
 {
-	wstring strTag = L"BackGround";
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_LOADING, L"Loading_Background", L"Prototype_GameObject_BackGround", &strTag)))
+	wstring strTag = L"Texture_BackGround";
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_LOADING, L"Layer_Background", L"Proto_GameObject_BackGround", &strTag)))
 		return E_FAIL;
 
 	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"BoxCollider", CBoxCollider::Create(m_pDevice, m_pDeviceContext))))
@@ -97,7 +100,6 @@ HRESULT CLoading::Ready_GameObject()
 	//	return E_FAIL;
 	/*if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model", CModel::Create(m_pDevice, m_pDeviceContext,L"../bin/SaveData/Sphere.fbx",L"../../Reference/ShaderFile/Shader_Mesh.hlsl",CModel::TYPE_STATIC))))
 			return E_FAIL;
-
 
 
 	if (FAILED(g_pGameInstance->Add_Prototype(L"TestObj", CTestObj::Create(m_pDevice, m_pDeviceContext))))

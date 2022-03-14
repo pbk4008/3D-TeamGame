@@ -54,8 +54,8 @@ HRESULT CLevel_Logo::Render()
 
 HRESULT CLevel_Logo::Ready_GameObejct()
 {
-	wstring strTag = L"Title";
-	g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_LOGO, L"Logo_Back", L"Prototype_GameObject_BackGround", &strTag);
+	wstring strTag = L"Texture_Title";
+	g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_LOGO, L"Layer_Background", L"Proto_GameObject_BackGround", &strTag);
 
 	return S_OK;
 }

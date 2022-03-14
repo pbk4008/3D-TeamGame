@@ -1,9 +1,11 @@
 #pragma once
 
 #include "Actor.h"
+#include "UI_Monster_Panel.h"
 
 BEGIN(Engine)
 class CModel;
+class CCapsuleCollider;
 END
 
 BEGIN(Client)
@@ -27,7 +29,9 @@ private:
 private:
 	CModel* m_pModelCom = nullptr;
 	CAnimationController* m_pAnimControllerCom = nullptr;
+	CCapsuleCollider* m_pColliderCom = nullptr;
 
+	CUI_Monster_Panel* m_pPanel = nullptr;
 private:
 	_uint itest = 0;
 

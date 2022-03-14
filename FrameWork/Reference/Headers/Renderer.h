@@ -13,7 +13,7 @@ public: enum RENDERBUTTON
 	SHADOW,PBRHDR,BLUR,DEFERRED, RENDERBUTTON_END
 };
 
-public: enum RENDER { RENDER_PRIORITY, RENDER_NONALPHA, RENDER_ALPHA, RENDER_UI, RENDER_END };
+public: enum RENDER { RENDER_PRIORITY, RENDER_NONALPHA, RENDER_ALPHA, RENDER_UI, RENDER_UI_ACTIVE, RENDER_END };
 
 private: explicit CRenderer(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);
 private: virtual ~CRenderer() = default;
@@ -47,6 +47,7 @@ private: HRESULT Render_Priority();
 private: HRESULT Render_NonAlpha();
 private: HRESULT Render_Alpha();
 private: HRESULT Render_UI();
+private: HRESULT Render_UI_Active();
 
 private: HRESULT Render_Shadow();
 private: HRESULT Render_ShadeShadow();

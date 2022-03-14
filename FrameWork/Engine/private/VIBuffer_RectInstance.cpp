@@ -46,7 +46,7 @@ HRESULT CVIBuffer_RectInstance::NativeConstruct_Prototype(const _tchar* pShaderF
 
 	for (_uint i = 0; i < m_iNumVertices; ++i)
 	{
-		((VTXPOINT*)m_pVertices)[i].vPosition = _float3(0.f, 0.f, 0.1f);
+		((VTXPOINT*)m_pVertices)[i].vPosition = _float3(0.f, 0.f, 0.f);
 		((VTXPOINT*)m_pVertices)[i].vPSize = _float2(1.0f, 1.f);
 	}
 
@@ -79,7 +79,7 @@ HRESULT CVIBuffer_RectInstance::NativeConstruct_Prototype(const _tchar* pShaderF
 		pVertices[i].vRight = _float4(1.0f, 0.f, 0.f, 0.f);
 		pVertices[i].vUp = _float4(0.f, 1.0f, 0.f, 0.f);
 		pVertices[i].vLook = _float4(0.f, 0.f, 1.0f, 0.f);
-		pVertices[i].vPosition = _float4(0.f, 0.f, 0.1f, 1.f);
+		pVertices[i].vPosition = _float4(0.f, 0.f, 0.f, 1.f);
 	}
 	m_VBInstSubresourceData.pSysMem = pVertices;
 

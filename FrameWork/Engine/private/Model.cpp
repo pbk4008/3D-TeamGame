@@ -501,7 +501,7 @@ HRESULT CModel::Create_MaterialDesc()
 			CComponent_Manager* pInstance = GET_INSTANCE(CComponent_Manager);
 
 			strTexture = szTextureTag;
-			pMeshMaterial->pMeshTexture[j] = static_cast<CTexture*>(pInstance->Clone_Component(0, L"Texture", &strTexture));
+			pMeshMaterial->pMeshTexture[j] = static_cast<CTexture*>(pInstance->Clone_Component(0, L"Proto_Component_Texture", &strTexture));
 
 			//wstring wstrSaveFolder = L"../bin/Resource/ "
 			lstrcpy(pMeshMaterial->pMeshTextureName[j], szFullName);
@@ -550,7 +550,7 @@ HRESULT CModel::Load_Materials(_uint iType, const wstring& pFilePath)
 
 	strTexture = szTextureTag;
 	
-	pDesc->pMeshTexture[iType] = static_cast<CTexture*>(pInstance->Clone_Component(0, L"Texture", &strTexture));
+	pDesc->pMeshTexture[iType] = static_cast<CTexture*>(pInstance->Clone_Component(0, L"Proto_Component_Texture", &strTexture));
 	lstrcpy(pDesc->pMeshTextureName[iType], szFullName);
 	RELEASE_INSTANCE(CComponent_Manager);
 
