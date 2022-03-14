@@ -132,7 +132,7 @@ HRESULT CMainApp::Ready_Component_Prototype()
 	if (FAILED(g_pGameInstance->SetUpBaseComponent(m_pDevice, m_pDeviceContext)))
 		return E_FAIL;
 
-	m_pRenderer = g_pGameInstance->Clone_Component<CRenderer>((_uint)SCENEID::SCENE_STATIC, L"Renderer");
+	m_pRenderer = g_pGameInstance->Clone_Component<CRenderer>((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_Renderer");
 
 	if (!m_pRenderer)
 		return E_FAIL;

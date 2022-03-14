@@ -239,6 +239,10 @@
     <ClInclude Include="..\Headers\TestObj.h" />
     <ClInclude Include="..\Headers\TestScene_JS.h" />
     <ClInclude Include="..\Headers\UI_Ingame.h" />
+    <ClInclude Include="..\Headers\UI_Monster_Back.h" />
+    <ClInclude Include="..\Headers\UI_Monster_HpBar.h" />
+    <ClInclude Include="..\Headers\UI_Monster_Level.h" />
+    <ClInclude Include="..\Headers\UI_Monster_Panel.h" />
     <ClInclude Include="..\Headers\Weapon.h" />
     <ClInclude Include="Client.h" />
     <ClInclude Include="framework.h" />
@@ -307,6 +311,10 @@
     <ClCompile Include="..\Codes\TestObj.cpp" />
     <ClCompile Include="..\Codes\TestScene_JS.cpp" />
     <ClCompile Include="..\Codes\UI_Ingame.cpp" />
+    <ClCompile Include="..\Codes\UI_Monster_Back.cpp" />
+    <ClCompile Include="..\Codes\UI_Monster_HpBar.cpp" />
+    <ClCompile Include="..\Codes\UI_Monster_Level.cpp" />
+    <ClCompile Include="..\Codes\UI_Monster_Panel.cpp" />
     <ClCompile Include="..\Codes\Weapon.cpp" />
     <ClCompile Include="Client.cpp" />
     <ClCompile Include="pch.cpp">

@@ -20,9 +20,6 @@ HRESULT CMFCObject_UI::NativeConstruct_Prototype()
 		return E_FAIL;
 	}
 
-	//m_ProjectionMatrix = XMMatrixOrthographicLH(WINCX, WINCY, 0.f, 1.f);
-	//XMStoreFloat4x4(&m_WorldMatrix, XMMatrixIdentity());
-
 	return S_OK;
 }
 
@@ -32,6 +29,8 @@ HRESULT CMFCObject_UI::NativeConstruct(void* pArg)
 	{
 		memcpy(&m_Desc, pArg, sizeof(UIDESC));
 	}
+
+	m_iObectTag = m_Desc.IDTag;
 
 	wstring tag = m_Desc.TextureTag;
 	if (FAILED(__super::NativeConstruct(&tag)))
@@ -45,49 +44,18 @@ HRESULT CMFCObject_UI::NativeConstruct(void* pArg)
 		return E_FAIL;
 	}
 
-	//m_Desc.fPos.x = 500.f;
-	//m_Desc.fPos.y = 500.f;
-	//m_Desc.fScale.x = 100.f;
-	//m_Desc.fScale.y = 100.f;
-
 
 	return S_OK;
 }
 
 _int CMFCObject_UI::Tick(_double TimeDelta)
 {
-	_vector vPos = { m_Desc.fPos.x - (WINCX >> 1),-m_Desc.fPos.y + (WINCY >> 1), 1.f ,1.f };
+	_vector vPos = { m_Desc.fPos.x - (WINCX >> 1),-m_Desc.fPos.y + (WINCY >> 1), m_Desc.fPos.z ,1.f };
 	m_pTransform->Set_State(CTransform::STATE_POSITION, vPos);
 
 	_vector vSize = { m_Desc.fSize.x,m_Desc.fSize.y,1.f ,1.f };
 	m_pTransform->Scaling(vSize);
 
-	//XMStoreFloat4x4(&m_WorldMatrix, XMMatrixIdentity());
-	//m_WorldMatrix._11 = m_fSizeX;
-	//m_WorldMatrix._22 = m_fSizeY;
-	
-	//m_WorldMatrix._41 = m_fX - (WINCX >> 1);
-	//m_WorldMatrix._42 = -m_fY + (WINCY >> 1);
-	//m_WorldMatrix._43 = 0.69f;
-
-	//RECT		rc;
-	//SetRect(&rc, (_uint)(m_fX - m_fSizeX * 0.5f), (_uint)(m_fY - m_fSizeY * 0.5f),
-	//	(_uint)(m_fX + m_fSizeX * 0.5f), (_uint)(m_fY + m_fSizeY * 0.5f));
-
-	//POINT		ptMouse;
-	//GetCursorPos(&ptMouse);
-	//ScreenToClient(g_hWnd, &ptMouse);
-
-	//if (TRUE == PtInRect(&rc, ptMouse))
-	//{
-	//	m_bIn = true;
-	//	cout << "MFCObject_UI ¾È¿¡ µé¾î¿ÍÀÖÀ½" << endl;
-	//}
-	//else
-	//{
-	//	m_bIn = false;
-	//}
-	//m_pBuffer->Update(TimeDelta);
 	return 0;
 }
 
@@ -107,36 +75,59 @@ HRESULT CMFCObject_UI::Render()
 	_matrix XMViewMatrix = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"MFCCamera", TRANSFORMSTATEMATRIX::D3DTS_VIEW));
 	_matrix XMProjectMatrix = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"MFCCamera", TRANSFORMSTATEMATRIX::D3DTS_PROJECTION));
 
-	m_pBuffer->SetUp_ValueOnShader("g_WorldMatrix", &XMWorldMatrix, sizeof(_float) * 16);
-	m_pBuffer->SetUp_ValueOnShader("g_ViewMatrix", &XMViewMatrix, sizeof(_float) * 16);
-	m_pBuffer->SetUp_ValueOnShader("g_ProjMatrix", &XMProjectMatrix, sizeof(XMMATRIX));
+	if (nullptr != m_pBuffer)
+	{
+		m_pBuffer->SetUp_ValueOnShader("g_WorldMatrix", &XMWorldMatrix, sizeof(_float) * 16);
+		m_pBuffer->SetUp_ValueOnShader("g_ViewMatrix", &XMViewMatrix, sizeof(_float) * 16);
+		m_pBuffer->SetUp_ValueOnShader("g_ProjMatrix", &XMProjectMatrix, sizeof(XMMATRIX));
 
-	m_pBuffer->SetUp_TextureOnShader("g_DiffuseTexture", m_pTexture); // 0 ÀÌ¶û 1·Î ³ª´²Áà¾ßÇÔ 
+		m_pBuffer->SetUp_TextureOnShader("g_DiffuseTexture", m_pTexture); // 0 ÀÌ¶û 1·Î ³ª´²Áà¾ßÇÔ 
 
-	m_pBuffer->Render(3);
-	
+		m_pBuffer->Render(3);
+	}
+
+	else if (nullptr != m_pTrapziumBuffer)
+	{
+		m_pTrapziumBuffer->SetUp_ValueOnShader("g_WorldMatrix", &XMWorldMatrix, sizeof(_float) * 16);
+		m_pTrapziumBuffer->SetUp_ValueOnShader("g_ViewMatrix", &XMViewMatrix, sizeof(_float) * 16);
+		m_pTrapziumBuffer->SetUp_ValueOnShader("g_ProjMatrix", &XMProjectMatrix, sizeof(XMMATRIX));
+
+		m_pTrapziumBuffer->SetUp_TextureOnShader("g_DiffuseTexture", m_pTexture); // 0 ÀÌ¶û 1·Î ³ª´²Áà¾ßÇÔ 
+
+		m_pTrapziumBuffer->Render(3);
+	}
 	return S_OK;
 }
 
 HRESULT CMFCObject_UI::SetUp_Components()
 {
-	///* Com_Renderer */
-	//if (FAILED(__super::SetUp_Components((_uint)LEVEL::LEVEL_STATIC, TEXT("Prototype_Component_Renderer"), TEXT("Com_Renderer"), (CComponent**)&m_pRendererCom)))
-	//{
-	//	return E_FAIL;
-	//}
+	if (13 == m_Desc.IDTag) //static
+	{
+		m_pBuffer = g_pGameInstance->Clone_Component<CVIBuffer_Rect>(0, L"Proto_Component_RectBuffer");
 
-	///* Com_VIBuffer */
-	//if (FAILED(__super::SetUp_Components((_uint)LEVEL::LEVEL_STATIC, TEXT("Prototype_Component_VIBuffer_UI"), TEXT("Com_VIBuffer"), (CComponent**)&m_pVIBufferCom)))
-	//{
-	//	return E_FAIL;
-	//}
+		if (!m_pBuffer)
+			return E_FAIL;
 
-	///* Com_Texture */
-	//if (FAILED(__super::SetUp_Components((_uint)LEVEL::LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_MFCObject_UI"), TEXT("Com_Texture"), (CComponent**)&m_pTextureCom)))
-	//{
-	//	return E_FAIL;
-	//}
+		if (FAILED(__super::SetUp_Components(L"Com_RectBuffer", m_pBuffer)))
+			return E_FAIL;
+	}
+
+	else if (14 == m_Desc.IDTag) //dynamic
+	{
+		CVIBuffer_Trapezium::TRAPDESC Desc;
+		Desc.fAngle = m_Desc.fAngle;
+		_tcscpy_s(Desc.ShaderFilePath, L"../../Reference/ShaderFile/Shader_Rect.hlsl");
+
+		Desc.bMinus = m_Desc.bMinus;
+
+		m_pTrapziumBuffer = g_pGameInstance->Clone_Component<CVIBuffer_Trapezium>(0, L"Proto_Component_Trapezium_UI",&Desc);
+
+		if (!m_pTrapziumBuffer)
+			return E_FAIL;
+
+		if (FAILED(__super::SetUp_Components(L"Com_TrapeziumBuffer", m_pTrapziumBuffer)))
+			return E_FAIL;
+	}
 
 	return S_OK;
 }

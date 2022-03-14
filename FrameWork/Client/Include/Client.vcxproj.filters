@@ -130,6 +130,45 @@
     <Filter Include="02.GameObject\95.Monster\EarthAberrant">
       <UniqueIdentifier>{3ff89c49-f181-4547-aeea-d6ccbc1b943e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\05.UI\01.UI_Ingame\01.Meter">
+      <UniqueIdentifier>{25729745-f9c6-4a84-b355-89c40ec68f2c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.UI\01.UI_Ingame\01.Meter\00.Player">
+      <UniqueIdentifier>{4de05ff2-3d03-4f3b-ad4d-09b3e5ba1d89}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.UI\01.UI_Ingame\01.Meter\02.Monster">
+      <UniqueIdentifier>{502a6b26-1f52-4b01-ba20-de46249aa8be}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.UI\01.UI_Ingame\00.UI_Ingame_Static">
+      <UniqueIdentifier>{25165615-4570-4a4e-bba1-7184efc01ed4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.UI\01.UI_Ingame\01.Meter\03.Experience">
+      <UniqueIdentifier>{e9863d16-3274-42ad-b939-668432992c6a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.UI\01.UI_Ingame\01.Meter\04.Quest">
+      <UniqueIdentifier>{27923a70-84a2-468f-a230-34f40a40682f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.UI\01.UI_Ingame\01.Meter\05.Tutorial">
+      <UniqueIdentifier>{15bb2a83-2c91-4dd2-8f5a-44ac8b9947eb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.UI\01.UI_Ingame\01.Meter\05.Tutorial\01.SideTutorial">
+      <UniqueIdentifier>{084cbf4c-c0f2-467b-b1a2-0cbd5dfed096}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.UI\01.UI_Ingame\01.Meter\05.Tutorial\00.WindowTutorial">
+      <UniqueIdentifier>{35f9989b-6fcb-4f33-8ef7-b58dd6d6549f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.UI\01.UI_Ingame\01.Meter\02.Monster\02.LevelUI">
+      <UniqueIdentifier>{b525fe55-b1b3-46b1-b25d-5a2f5862ee98}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.UI\01.UI_Ingame\01.Meter\02.Monster\01.BackUI">
+      <UniqueIdentifier>{a09772d0-1451-4530-a375-7fe1820525c4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.UI\01.UI_Ingame\01.Meter\02.Monster\00.Panel">
+      <UniqueIdentifier>{03b93ce8-7782-46d2-877d-9aad77e75074}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.UI\01.UI_Ingame\01.Meter\02.Monster\03.HpUI">
+      <UniqueIdentifier>{8d05bd08-0e08-4584-9925-592ea048aeab}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -282,9 +321,6 @@
     <ClInclude Include="..\Headers\MainCamera_Ortho.h">
       <Filter>02.GameObject\01. MainCamera\OrthoCam</Filter>
     </ClInclude>
-    <ClInclude Include="..\Headers\UI_Ingame.h">
-      <Filter>02.GameObject\05.UI\01.UI_Ingame</Filter>
-    </ClInclude>
     <ClInclude Include="..\Headers\Camera_Debug.h">
       <Filter>02.GameObject\98.Player\00.Silvermane\Camera</Filter>
     </ClInclude>
@@ -299,9 +335,6 @@
     </ClInclude>
     <ClInclude Include="..\Headers\Monster_Bastion_Spear.h">
       <Filter>02.GameObject\95.Monster\Bastion_Spear</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Headers\Monster_Bastion_Sword.h">
-      <Filter>02.GameObject\95.Monster\Bastion_Sword</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\Monster_BronzeAnimus.h">
       <Filter>02.GameObject\95.Monster\BronzeAnimus</Filter>
@@ -336,6 +369,24 @@
     </ClInclude>
     <ClInclude Include="..\Headers\Silvermane_Jog.h">
       <Filter>02.GameObject\98.Player\00.Silvermane\State\Default\Jog</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Monster_Bastion_Sword.h">
+      <Filter>02.GameObject\95.Monster\Bastion_Sword</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\UI_Ingame.h">
+      <Filter>02.GameObject\05.UI\01.UI_Ingame\00.UI_Ingame_Static</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\UI_Monster_Level.h">
+      <Filter>02.GameObject\05.UI\01.UI_Ingame\01.Meter\02.Monster\02.LevelUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\UI_Monster_Back.h">
+      <Filter>02.GameObject\05.UI\01.UI_Ingame\01.Meter\02.Monster\01.BackUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\UI_Monster_Panel.h">
+      <Filter>02.GameObject\05.UI\01.UI_Ingame\01.Meter\02.Monster\00.Panel</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\UI_Monster_HpBar.h">
+      <Filter>02.GameObject\05.UI\01.UI_Ingame\01.Meter\02.Monster\03.HpUI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -460,9 +511,6 @@
     <ClCompile Include="..\Codes\Effect_DashDust.cpp">
       <Filter>02.GameObject\04.Effect\01.Effect_DashDust_Player</Filter>
     </ClCompile>
-    <ClCompile Include="..\Codes\UI_Ingame.cpp">
-      <Filter>02.GameObject\05.UI\01.UI_Ingame</Filter>
-    </ClCompile>
     <ClCompile Include="..\Codes\MainCamera_Ortho.cpp">
       <Filter>02.GameObject\01. MainCamera\OrthoCam</Filter>
     </ClCompile>
@@ -483,9 +531,6 @@
     </ClCompile>
     <ClCompile Include="..\Codes\Monster_Bastion_Spear.cpp">
       <Filter>02.GameObject\95.Monster\Bastion_Spear</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Codes\Monster_Bastion_Sword.cpp">
-      <Filter>02.GameObject\95.Monster\Bastion_Sword</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\Monster_BronzeAnimus.cpp">
       <Filter>02.GameObject\95.Monster\BronzeAnimus</Filter>
@@ -520,6 +565,24 @@
     </ClCompile>
     <ClCompile Include="..\Codes\Silvermane_Jog.cpp">
       <Filter>02.GameObject\98.Player\00.Silvermane\State\Default\Jog</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Monster_Bastion_Sword.cpp">
+      <Filter>02.GameObject\95.Monster\Bastion_Sword</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\UI_Ingame.cpp">
+      <Filter>02.GameObject\05.UI\01.UI_Ingame\00.UI_Ingame_Static</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\UI_Monster_Level.cpp">
+      <Filter>02.GameObject\05.UI\01.UI_Ingame\01.Meter\02.Monster\02.LevelUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\UI_Monster_Back.cpp">
+      <Filter>02.GameObject\05.UI\01.UI_Ingame\01.Meter\02.Monster\01.BackUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\UI_Monster_Panel.cpp">
+      <Filter>02.GameObject\05.UI\01.UI_Ingame\01.Meter\02.Monster\00.Panel</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\UI_Monster_HpBar.cpp">
+      <Filter>02.GameObject\05.UI\01.UI_Ingame\01.Meter\02.Monster\03.HpUI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -49,7 +49,7 @@ VS_OUT VS_MAIN(VS_IN In)
 		
 	Out.vPosition = mul(vector(In.vPosition, 1.f), matWVP);	
 	Out.vTexUV = In.vTexUV;	
-
+	;
 	return Out;
 }
 
@@ -128,6 +128,17 @@ technique11			DefaultTechnique
 		GeometryShader = NULL;
 		PixelShader = compile ps_5_0 PS_MAIN();
 	}
+
+    pass AlphaBlend
+    {
+        SetRasterizerState(CullMode_Default);
+        SetDepthStencilState(ZDefault, 0);
+        SetBlendState(AlphaBlending, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+
+        VertexShader = compile vs_5_0 VS_MAIN();
+        GeometryShader = NULL;
+        PixelShader = compile ps_5_0 PS_MAIN();
+    }
 	
 }
 

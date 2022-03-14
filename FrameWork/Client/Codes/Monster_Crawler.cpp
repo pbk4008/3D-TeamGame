@@ -34,15 +34,29 @@ HRESULT CMonster_Crawler::NativeConstruct(void* _pArg)
 
 	_vector Pos = { -3.f, 0.f, 0.f, 1.f };
 	m_pTransform->Set_State(CTransform::STATE_POSITION, Pos);
+
+
+	//MonsterBar Back
+	CUI_Monster_Panel::PANELDESC Desc;
+	Desc.pTargetTransform = m_pTransform;
+
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_UI", L"Proto_GameObject_UI_Monster_Panel", &Desc,
+		(CGameObject**)&m_pPanel)))
+		return E_FAIL;
+
+	m_pPanel->Set_TargetWorldMatrix(m_pTransform->Get_WorldMatrix());
+
 	return S_OK;
 }
 
 _int CMonster_Crawler::Tick(_double _dDeltaTime)
 {
-	if (0 > __super::Tick(+_dDeltaTime))
+	if (0 > __super::Tick(_dDeltaTime))
 	{
 		return -1;
 	}
+	
+	m_pColliderCom->Update(m_pTransform->Get_WorldMatrix());
 
 	m_pAnimControllerCom->Tick(_dDeltaTime);
 
@@ -76,6 +90,10 @@ HRESULT CMonster_Crawler::Render()
 		return E_FAIL;
 	}
 
+#ifdef _DEBUG
+	m_pColliderCom->Render(L"MainCamera");
+#endif // _DEBUG
+
 	_matrix XMWorldMatrix = XMMatrixTranspose(m_pTransform->Get_WorldMatrix());
 	_matrix XMViewMatrix = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"MainCamera", TRANSFORMSTATEMATRIX::D3DTS_VIEW));
 	_matrix XMProjectMatrix = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"MainCamera", TRANSFORMSTATEMATRIX::D3DTS_PROJECTION));
@@ -100,13 +118,27 @@ HRESULT CMonster_Crawler::SetUp_Components()
 	Desc.fSpeedPerSec = 1.f;
 	Desc.fRotationPerSec = XMConvertToRadians(60.f);
 	m_pTransform->Set_TransformDesc(Desc);
-
-	if (FAILED(__super::SetUp_Components((_uint)SCENEID::SCENE_STAGE1, L"Model_Monster_Crawler", L"Model", (CComponent**)&m_pModelCom)))
+	
+	if (FAILED(__super::SetUp_Components((_uint)SCENEID::SCENE_STAGE1, L"Model_Monster_Crawler", L"Com_Model", (CComponent**)&m_pModelCom)))
 	{
 		return E_FAIL;
 	}
 
-	if (FAILED(__super::SetUp_Components((_uint)SCENEID::SCENE_STAGE1, L"AnimationController", L"Com_AnimationController", (CComponent**)&m_pAnimControllerCom)))
+	if (FAILED(__super::SetUp_Components((_uint)SCENEID::SCENE_STAGE1, L"Proto_Component_AnimationController", L"Com_AnimationController", (CComponent**)&m_pAnimControllerCom)))
+	{
+		return E_FAIL;
+	}
+
+	CCapsuleCollider::CAPSULEDESC CapDesc;
+	XMStoreFloat4x4(&CapDesc.matTransform, XMMatrixIdentity());
+	CapDesc.pParent = this;
+
+	CPhysicsXSystem::COLDESC PhyDesc;
+	PhyDesc.bGravity = false;
+	PhyDesc.bKinematic = false;
+	PhyDesc.eType = CPhysicsXSystem::ACTORTYPE::ACTOR_DYNAMIC;
+	CapDesc.tColDesc = PhyDesc;
+	if (FAILED(__super::SetUp_Components((_uint)SCENEID::SCENE_STAGE1, L"Proto_Component_CapsuleCollider", L"Com_CapsuleCollider", (CComponent**)&m_pColliderCom, &CapDesc)))
 	{
 		return E_FAIL;
 	}

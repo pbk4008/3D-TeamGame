@@ -25,10 +25,10 @@ HRESULT CEffect::NativeConstruct_Prototype()
 	if (FAILED(__super::NativeConstruct_Prototype()))
 		return E_FAIL;
 
-	m_pTexture = g_pGameInstance->Clone_Component<CTexture>(0, L"Texture");
+	m_pTexture = g_pGameInstance->Clone_Component<CTexture>(0, L"Proto_Component_Texture");
 	if (!m_pTexture)
 		return E_FAIL;
-	if (FAILED(SetUp_Components(L"Texture", m_pTexture)))
+	if (FAILED(SetUp_Components(L"Com_Texture", m_pTexture)))
 		return E_FAIL;
 
 	return S_OK;

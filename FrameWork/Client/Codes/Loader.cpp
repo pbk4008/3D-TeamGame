@@ -3,6 +3,10 @@
 
 #include "Effect_DashDust.h"
 #include "UI_Ingame.h"
+#include "UI_Monster_Panel.h"
+#include "UI_Monster_Back.h"
+#include "UI_Monster_Level.h"
+#include "UI_Monster_HpBar.h"
 #include "Material.h"
 #include "Instancing_Mesh.h"
 #include "Environment.h"
@@ -84,17 +88,26 @@ HRESULT CLoader::LoadForScene()
 	return S_OK;
 }
 
-HRESULT CLoader::SetUp_Stage1Map_ProtoComponent()
+HRESULT CLoader::SetUp_Stage1_Object()
 {
 	
-	if (FAILED(Load_Stage1FBXLoad()))
+	/*if (FAILED(Load_Stage1FBXLoad()))
+		return E_FAIL;*/
+
+	/*if (FAILED(Load_Stage1PlayerLoad()))
+		return E_FAIL;*/
+
+	if (FAILED(Load_Stage1MonsterLoad()))
 		return E_FAIL;
 
-	if (FAILED(Load_Stage1TextureUILoad()))
+	if (FAILED(Load_Stage1StaticUILoad()))
 		return E_FAIL;
 
+	if (FAILED(Load_Stage1UILoad()))
+		return E_FAIL;
 
-	g_pGameInstance->Add_Prototype(L"Environment", CEnvironment::Create(m_pDevice, m_pDeviceContext));
+	if (FAILED(Load_Stage1EffectLoad()))
+		return E_FAIL;
 
 	return S_OK;
 }
@@ -133,12 +146,13 @@ HRESULT CLoader::Load_Stage1FBXLoad()
 	return S_OK;
 }
 
-HRESULT CLoader::Load_Stage1TextureUILoad()
+HRESULT CLoader::Load_Stage1StaticUILoad()
 {
+	/////////////////////////////////////////////////////Static/////////////////////////////////////////////////////
 	_finddata_t fd;
 	ZeroMemory(&fd, sizeof(_finddata_t));
 
-	intptr_t handle = _findfirst("../bin/Resources/Texture/UI/*.dds", &fd);
+	intptr_t handle = _findfirst("../bin/Resources/Texture/UI/Static/*.dds", &fd);
 
 	if (handle == 0)
 		return E_FAIL;
@@ -146,7 +160,7 @@ HRESULT CLoader::Load_Stage1TextureUILoad()
 	int iResult = 0;
 	while (iResult != -1)
 	{
-		char szFullPath[MAX_PATH] = "../bin/Resources/Texture/UI/";
+		char szFullPath[MAX_PATH] = "../bin/Resources/Texture/UI/Static/";
 		strcat_s(szFullPath, fd.name);
 
 		_tchar UIName[MAX_PATH] = L"";
@@ -159,13 +173,14 @@ HRESULT CLoader::Load_Stage1TextureUILoad()
 		//ext extract
 		size_t lastIndex = Name.find_last_of(L".");
 		wstring rawName = Name.substr(0, lastIndex);
+		wstring NewName = L"Texture_" + rawName;
 
-		if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, rawName, UIPath)))
+		if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, NewName, UIPath)))
 		{
 			return E_FAIL;
 		}
 		
-		wstring tag = L"Prototype_GameObject_UI_" + rawName;
+		wstring tag = L"Proto_GameObject_UI_" + rawName;
 		if (FAILED(g_pGameInstance->Add_Prototype(tag, CUI_Ingame::Create(m_pDevice, m_pDeviceContext))))
 		{
 			return E_FAIL;
@@ -175,72 +190,221 @@ HRESULT CLoader::Load_Stage1TextureUILoad()
 	}
 	_findclose(handle);
 
-	return S_OK;
-}
 
-_uint CLoader::Thread_Main(void* pArg)
-{
-	CLoader* pLoader = (CLoader*)pArg;
-	_uint iFlag = 0;
+	/////////////////////////////////////////////////////Changing/////////////////////////////////////////////////////
 
-	EnterCriticalSection(pLoader->getCritical());
-	if (FAILED(pLoader->LoadForScene()))
-		iFlag = E_FAIL;
+	ZeroMemory(&fd, sizeof(_finddata_t));
 
-	pLoader->m_bFinish = true;
-	LeaveCriticalSection(pLoader->getCritical());
-	return iFlag;
-}
+	handle = _findfirst("../bin/Resources/Texture/UI/Dynamic/*.dds", &fd);
 
-CLoader* CLoader::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext, SCENEID eID)
-{
-	CLoader* pInsance = new CLoader(pDevice, pDeviceContext);
-	if (FAILED(pInsance->Init_Loader(eID)))
+	if (handle == 0)
+		return E_FAIL;
+
+	iResult = 0;
+	while (iResult != -1)
 	{
-		MSGBOX("Loader Create Fail");
-		Safe_Release(pInsance);
+		char szFullPath[MAX_PATH] = "../bin/Resources/Texture/UI/Dynamic/";
+		strcat_s(szFullPath, fd.name);
+
+		_tchar UIName[MAX_PATH] = L"";
+		_tchar UIPath[MAX_PATH] = L"";
+		MultiByteToWideChar(CP_ACP, 0, fd.name, MAX_PATH, UIName, MAX_PATH);
+		MultiByteToWideChar(CP_ACP, 0, szFullPath, MAX_PATH, UIPath, MAX_PATH);
+
+		wstring Name = UIName;
+
+		//ext extract
+		size_t lastIndex = Name.find_last_of(L".");
+		wstring rawName = Name.substr(0, lastIndex);
+		wstring NewName = L"Texture_" + rawName;
+
+		if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, NewName, UIPath)))
+		{
+			return E_FAIL;
+		}
+
+		wstring tag = L"Proto_GameObject_UI_" + rawName;
+		if (FAILED(g_pGameInstance->Add_Prototype(tag, CUI_Ingame::Create(m_pDevice, m_pDeviceContext))))
+		{
+			return E_FAIL;
+		}
+
+		iResult = _findnext(handle, &fd);
 	}
-	return pInsance;
+	_findclose(handle);
+	return S_OK;
 }
 
-HRESULT CLoader::Ready_Logo()
+HRESULT CLoader::Load_Stage1UILoad()
 {
-	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"Title", L"../bin/Resources/Texture/Loading/logo_godfall_3d.dds")))
+	//Panel
+	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_UI_Monster_Panel"), CUI_Monster_Panel::Create(m_pDevice, m_pDeviceContext))))
+	{
 		return E_FAIL;
+	}
 
-	
+	//BarBack
+	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_UI_Monster_Back"), CUI_Monster_Back::Create(m_pDevice, m_pDeviceContext))))
+	{
+		return E_FAIL;
+	}
+	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"Texture_Monster_Back", L"../bin/Resources/Texture/UI/Dynamic/Active/T_HUD_Enemy_HealthMeter_BG.dds")))
+	{
+		return E_FAIL;
+	}
+
+	//Level
+	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_UI_Monster_Level"), CUI_Monster_Level::Create(m_pDevice, m_pDeviceContext))))
+	{
+		return E_FAIL;
+	}
+	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"Texture_Monster_Level", L"../bin/Resources/Texture/UI/Static/Active/T_HUD_Enemy_Icon_Tier1.dds")))
+	{
+		return E_FAIL;
+	}
+
+	//HpBar
+	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_UI_Monster_HpBar"), CUI_Monster_HpBar::Create(m_pDevice, m_pDeviceContext))))
+	{
+		return E_FAIL;
+	}
+	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"Texture_Monster_HpBar", L"../bin/Resources/Texture/UI/Dynamic/Active/T_HUD_Enemy_HealthMeter.dds")))
+	{
+		return E_FAIL;
+	}
 
 	return S_OK;
 }
 
-HRESULT CLoader::Ready_Stage1()
+HRESULT CLoader::Load_Stage1EffectLoad()
 {
-	if (FAILED(SetUp_Stage1Map_ProtoComponent()))
+	//Effect
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Proto_Component_VIBuffer_PointInstance_Explosion",
+		CVIBuffer_PointInstance_Explosion::Create(m_pDevice, m_pDeviceContext))))
+	{
+		return E_FAIL;
+	}
+	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_Effect"), CEffect_DashDust::Create(m_pDevice, m_pDeviceContext))))
+	{
+		return E_FAIL;
+	}
+	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"Texture_bubble", L"../bin/Resources/Texture/Effect/bubble.tga")))
+	{
+		return E_FAIL;
+	}
+	
+	return S_OK;
+}
+
+HRESULT CLoader::SetUp_Stage1_Prototype()
+{
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Proto_Component_CapsuleCollider", CCapsuleCollider::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"AnimationController", CAnimationController::Create(m_pDevice, m_pDeviceContext))))
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Proto_Component_AnimationController", CAnimationController::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 
-	////Monster Crystal_Crawler
-	//_matrix matPivot = XMMatrixIdentity();
-	//matPivot = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(180.f));
- //	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Model_Monster_Crawler", CModel::Create(m_pDevice, m_pDeviceContext,
-	//	"../bin/Resources/Mesh/Crystal_Crawler/", "Crystal_Crawler.fbx",
-	//	L"../../Reference/ShaderFile/Shader_Mesh.hlsl",
-	//	matPivot,
-	//	CModel::TYPE_ANIM))))
-	//{
-	//	return E_FAIL;
-	//}
+	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Environment", CEnvironment::Create(m_pDevice, m_pDeviceContext))))
+	{
+		return E_FAIL;
+	}
 
-	//if (FAILED(g_pGameInstance->Add_Prototype(L"Monster_Crawler", CMonster_Crawler::Create(m_pDevice, m_pDeviceContext))))
-	//	return E_FAIL;
+	return S_OK;
+}
 
-	//CTexture* pTexture = CTexture::Create(m_pDevice, m_pDeviceContext);
-	//pTexture->NativeConstruct_Prototype(L"../Bin/Resources/Mesh/Crystal_Crawler/T_Crystal_Crawler_D.tga", 1);
-	//CMaterial* pMtrl = CMaterial::Create(m_pDevice, m_pDeviceContext, L"Crystal_Crawler", L"../../Reference/ShaderFile/Shader_Mesh.hlsl", CMaterial::EType::Anim);
-	//pMtrl->Set_Texture("g_DiffuseTexture", aiTextureType_DIFFUSE, pTexture, 0);
-	//g_pGameInstance->Add_Material(L"Mtrl_Crystal_Crawler", pMtrl);
+HRESULT CLoader::Load_Stage1PlayerLoad()
+{
+	CTexture* pTexture = nullptr;
+#pragma region 플레이어 마테리얼
+	pTexture = CTexture::Create(m_pDevice, m_pDeviceContext);
+	pTexture->NativeConstruct_Prototype(L"../Bin/Resources/Mesh/Silvermane/T_Silvermane_Hairs_d_new.tga", 1);
+	CMaterial* pMtrl = CMaterial::Create(m_pDevice, m_pDeviceContext, L"Silvermane_Hair", L"../../Reference/ShaderFile/Shader_Mesh.hlsl", CMaterial::EType::Anim);
+	pMtrl->Set_Texture("g_DiffuseTexture", aiTextureType_DIFFUSE, pTexture, 0);
+	g_pGameInstance->Add_Material(L"Mtrl_Silvermane_Hair", pMtrl);
+
+	pTexture = CTexture::Create(m_pDevice, m_pDeviceContext);
+	pTexture->NativeConstruct_Prototype(L"../Bin/Resources/Mesh/Silvermane/T_Silvermane_Cloak_D.tga", 1);
+	pMtrl = CMaterial::Create(m_pDevice, m_pDeviceContext, L"Silvermane_Cloak", L"../../Reference/ShaderFile/Shader_Mesh.hlsl", CMaterial::EType::Anim);
+	pMtrl->Set_Texture("g_DiffuseTexture", aiTextureType_DIFFUSE, pTexture, 0);
+	g_pGameInstance->Add_Material(L"Mtrl_Silvermane_Cloak", pMtrl);
+
+	pTexture = CTexture::Create(m_pDevice, m_pDeviceContext);
+	pTexture->NativeConstruct_Prototype(L"../Bin/Resources/Mesh/Silvermane/T_Silvermane_Down_D.tga", 1);
+	pMtrl = CMaterial::Create(m_pDevice, m_pDeviceContext, L"Silvermane_Down", L"../../Reference/ShaderFile/Shader_Mesh.hlsl", CMaterial::EType::Anim);
+	pMtrl->Set_Texture("g_DiffuseTexture", aiTextureType_DIFFUSE, pTexture, 0);
+	g_pGameInstance->Add_Material(L"Mtrl_Silvermane_Down", pMtrl);
+
+	pTexture = CTexture::Create(m_pDevice, m_pDeviceContext);
+	pTexture->NativeConstruct_Prototype(L"../Bin/Resources/Mesh/Silvermane/T_Silvermane_Top_D.tga", 1);
+	pMtrl = CMaterial::Create(m_pDevice, m_pDeviceContext, L"Silvermane_Top", L"../../Reference/ShaderFile/Shader_Mesh.hlsl", CMaterial::EType::Anim);
+	pMtrl->Set_Texture("g_DiffuseTexture", aiTextureType_DIFFUSE, pTexture, 0);
+	g_pGameInstance->Add_Material(L"Mtrl_Silvermane_Top", pMtrl);
+#pragma endregion
+#pragma region 모델
+	_matrix matPivot = XMMatrixIdentity();
+	matPivot = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(180.f));
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Model_Silvermane", CModel::Create(m_pDevice, m_pDeviceContext,
+		"../bin/Resources/Mesh/Silvermane/", "Silvermane.fbx",
+		L"../../Reference/ShaderFile/Shader_Mesh.hlsl",
+		matPivot,
+		CModel::TYPE_ANIM))))
+	{
+		return E_FAIL;
+	}
+	matPivot = XMMatrixIdentity();
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Model_Needle", CModel::Create(m_pDevice, m_pDeviceContext,
+		"../bin/Resources/Mesh/Needle/", "Needle.fbx",
+		L"../../Reference/ShaderFile/Shader_StaticMesh.hlsl", matPivot, CModel::TYPE_STATIC))))
+	{
+		return E_FAIL;
+	}
+#pragma endregion
+#pragma region 컴포넌트
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Proto_Component_AnimationController", CAnimationController::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Proto_Component_StateController", CStateController::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Proto_Component_CharacterController", CCharacterController::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+#pragma endregion
+#pragma region 오브젝트
+	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Silvermane", CSilvermane::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Camera_Silvermane", CCamera_Silvermane::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Needle", CNeedle::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+#pragma endregion
+
+
+	return S_OK;
+}
+
+HRESULT CLoader::Load_Stage1MonsterLoad()
+{
+	//Monster Crystal_Crawler
+	_matrix matPivot = XMMatrixIdentity();
+	matPivot = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(180.f));
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Model_Monster_Crawler", CModel::Create(m_pDevice, m_pDeviceContext,
+		"../bin/Resources/Mesh/Crystal_Crawler/", "Crystal_Crawler.fbx",
+		L"../../Reference/ShaderFile/Shader_Mesh.hlsl",	matPivot, CModel::TYPE_ANIM))))
+	{
+		return E_FAIL;
+	}
+
+	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Monster_Crawler", CMonster_Crawler::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+
+	CTexture* pTexture = CTexture::Create(m_pDevice, m_pDeviceContext);
+	if (FAILED(pTexture->NativeConstruct_Prototype(L"../Bin/Resources/Mesh/Crystal_Crawler/T_Crystal_Crawler_D.tga", 1)))
+		return E_FAIL;
+
+	CMaterial* pMtrl = CMaterial::Create(m_pDevice, m_pDeviceContext, L"Crystal_Crawler", L"../../Reference/ShaderFile/Shader_Mesh.hlsl", CMaterial::EType::Anim);
+	if (FAILED(pMtrl->Set_Texture("g_DiffuseTexture", aiTextureType_DIFFUSE, pTexture, 0)))
+		return E_FAIL;
+	if (FAILED(g_pGameInstance->Add_Material(L"Mtrl_Crystal_Crawler", pMtrl)))
+		return E_FAIL;
+	
 
 	////Monster EarthAberrant
 	//matPivot = XMMatrixIdentity();
@@ -337,31 +501,53 @@ HRESULT CLoader::Ready_Stage1()
 	//pMtrl->Set_Texture("g_DiffuseTexture", aiTextureType_DIFFUSE, pTexture, 0);
 	//g_pGameInstance->Add_Material(L"Mtrl_Bastion_Sword_Fur", pMtrl);
 
-	//Effect
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Prototype_Component_VIBuffer_PointInstance_Explosion",
-		CVIBuffer_PointInstance_Explosion::Create(m_pDevice, m_pDeviceContext))))
+	return S_OK;
+}
+
+_uint CLoader::Thread_Main(void* pArg)
+{
+	CLoader* pLoader = (CLoader*)pArg;
+	_uint iFlag = 0;
+
+	EnterCriticalSection(pLoader->getCritical());
+	if (FAILED(pLoader->LoadForScene()))
+		iFlag = E_FAIL;
+
+	pLoader->m_bFinish = true;
+	LeaveCriticalSection(pLoader->getCritical());
+	return iFlag;
+}
+
+CLoader* CLoader::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext, SCENEID eID)
+{
+	CLoader* pInsance = new CLoader(pDevice, pDeviceContext);
+	if (FAILED(pInsance->Init_Loader(eID)))
 	{
-		return E_FAIL;
+		MSGBOX("Loader Create Fail");
+		Safe_Release(pInsance);
 	}
-	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Effect"), CEffect_DashDust::Create(m_pDevice, m_pDeviceContext))))
-	{
+	return pInsance;
+}
+
+HRESULT CLoader::Ready_Logo()
+{
+	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"Texture_Title", L"../bin/Resources/Texture/Loading/logo_godfall_3d.dds")))
 		return E_FAIL;
-	}
-	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"bubble", L"../bin/Resources/Texture/Effect/bubble.tga")))
+
+	return S_OK;
+}
+
+HRESULT CLoader::Ready_Stage1()
+{
+	if (FAILED(SetUp_Stage1_Prototype()))
 	{
 		return E_FAIL;
 	}
 
-	//UI
-	//if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"T_HUD_Player_Shield_Icon", L"../bin/Resources/Texture/UI/T_HUD_Player_Shield_Icon.tga")))
-	//{
-	//	return E_FAIL;
-	//}
-
-	//if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_T_HUD_Player_Shield_Icon"), CUI_Ingame::Create(m_pDevice, m_pDeviceContext))))
-	//{
-	//	return E_FAIL;
-	//}
+	if (FAILED(SetUp_Stage1_Object()))
+	{
+		return E_FAIL;
+	}
 
 	return S_OK;
 }

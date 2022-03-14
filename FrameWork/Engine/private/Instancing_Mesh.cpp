@@ -213,7 +213,7 @@ HRESULT CInstancing_Mesh::Create_Material(const CSaveManager::MTRLDATA& pData)
 
 		strTexture = szTextureTag;
 
-		pDesc->pMeshTexture[pData.pTaxtureData[i].iType] = static_cast<CTexture*>(pInstance->Clone_Component(0, L"Texture", &strTexture));
+		pDesc->pMeshTexture[pData.pTaxtureData[i].iType] = static_cast<CTexture*>(pInstance->Clone_Component(0, L"Proto_Component_Texture", &strTexture));
 		lstrcpy(pDesc->pMeshTextureName[pData.pTaxtureData[i].iType], szFullName);
 		RELEASE_INSTANCE(CComponent_Manager);
 

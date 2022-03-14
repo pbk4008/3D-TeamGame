@@ -365,12 +365,25 @@ call Update_Library_Release.bat</Command>
     <ClCompile Include="..\private\VIBuffer_Triangle.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <FxCompile Include="..\..\Reference\ShaderFile\Shader_Cube.hlsl" />
     <FxCompile Include="..\bin\ShaderFiles\Shader_CSGSBlur.hlsl" />
     <FxCompile Include="..\bin\ShaderFiles\Shader_DownSample.hlsl" />
     <FxCompile Include="..\bin\ShaderFiles\Shader_DSViewPort.hlsl" />
+    <FxCompile Include="..\bin\ShaderFiles\Shader_Instance.hlsl" />
+    <FxCompile Include="..\bin\ShaderFiles\Shader_InstanceMesh.hlsl" />
+    <FxCompile Include="..\bin\ShaderFiles\Shader_Mesh.hlsl" />
+    <FxCompile Include="..\bin\ShaderFiles\Shader_MeshAnim.hlsl" />
+    <FxCompile Include="..\bin\ShaderFiles\Shader_Particle.hlsl" />
+    <FxCompile Include="..\bin\ShaderFiles\Shader_Plane.hlsl" />
+    <FxCompile Include="..\bin\ShaderFiles\Shader_PointInstance.hlsl" />
+    <FxCompile Include="..\bin\ShaderFiles\Shader_Rect.hlsl" />
     <FxCompile Include="..\bin\ShaderFiles\Shader_RectViewport.hlsl" />
+    <FxCompile Include="..\bin\ShaderFiles\Shader_StaticMesh.hlsl" />
+    <FxCompile Include="..\bin\ShaderFiles\Shader_Terrain.hlsl" />
     <FxCompile Include="..\bin\ShaderFiles\Shader_Triangle.hlsl" />
+    <FxCompile Include="..\bin\ShaderFiles\Shader_Geo_UI.hlsl" />
     <FxCompile Include="..\bin\ShaderFiles\Shader_UI.hlsl" />
+    <FxCompile Include="..\bin\ShaderFiles\Shader_UI_Bar.hlsl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
