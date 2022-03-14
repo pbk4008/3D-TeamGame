@@ -63,7 +63,7 @@ _int CPlane::Tick(_double TimeDelta)
 
 _int CPlane::LateTick(_double TimeDelta)
 {
-	m_pRenderer->Add_RenderGroup(CRenderer::RENDER_PRIORITY, this);
+	m_pRenderer->Add_RenderGroup(CRenderer::RENDER_UI, this);
 
 
 	Update_CellPos();

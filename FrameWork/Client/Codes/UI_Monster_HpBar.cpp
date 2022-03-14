@@ -46,6 +46,9 @@ HRESULT CUI_Monster_HpBar::NativeConstruct(void* pArg)
 		return E_FAIL;
 	}
 
+	m_fGapX = 1.f;
+	m_fGapY = 0.5f;
+
 	return S_OK;
 }
 
@@ -54,6 +57,11 @@ _int CUI_Monster_HpBar::Tick(_double TimeDelta)
 	if (FAILED(CUI::Tick(TimeDelta)))
 		return -1;
 	
+	if (g_pGameInstance->getkeyDown(DIK_L))
+	{
+		m_fGapX -= 0.1f;
+	}
+
 	return 0;
 }
 
@@ -78,10 +86,12 @@ HRESULT CUI_Monster_HpBar::Render()
 	m_pTrapziumBuffer->SetUp_ValueOnShader("g_WorldMatrix", &XMWorldMatrix, sizeof(_float) * 16);
 	m_pTrapziumBuffer->SetUp_ValueOnShader("g_ViewMatrix", &XMViewMatrix, sizeof(_float) * 16);
 	m_pTrapziumBuffer->SetUp_ValueOnShader("g_ProjMatrix", &XMProjectMatrix, sizeof(XMMATRIX));
+	m_pTrapziumBuffer->SetUp_ValueOnShader("g_fX", &m_fGapX, sizeof(_float));
+	m_pTrapziumBuffer->SetUp_ValueOnShader("g_fY", &m_fGapY, sizeof(_float));
 
 	m_pTrapziumBuffer->SetUp_TextureOnShader("g_DiffuseTexture", m_pTexture);
 
-	m_pTrapziumBuffer->Render(1);
+	m_pTrapziumBuffer->Render(2);
 	
 	return S_OK;
 }

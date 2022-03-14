@@ -1,10 +1,10 @@
 #pragma once
 
-#include "1H_SwordAttack.h"
+#include "1H_Dash.h"
 
 BEGIN(Engine)
 
-class C1H_SwordDodgeSpinFwd_V3 final : public C1H_SwordAttack
+class C1H_SwordDodgeSpinFwd_V3 final : public C1H_Dash
 {
 private:
 	explicit C1H_SwordDodgeSpinFwd_V3(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext);

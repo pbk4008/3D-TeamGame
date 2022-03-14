@@ -46,6 +46,9 @@ HRESULT CUI_Monster_Back::NativeConstruct(void* pArg)
 		return E_FAIL;
 	}
 
+	m_fGapX = 1.f;
+	m_fGapY = 0.5f;
+
 	return S_OK;
 }
 
@@ -78,6 +81,8 @@ HRESULT CUI_Monster_Back::Render()
 	m_pTrapziumBuffer->SetUp_ValueOnShader("g_WorldMatrix", &XMWorldMatrix, sizeof(_float) * 16);
 	m_pTrapziumBuffer->SetUp_ValueOnShader("g_ViewMatrix", &XMViewMatrix, sizeof(_float) * 16);
 	m_pTrapziumBuffer->SetUp_ValueOnShader("g_ProjMatrix", &XMProjectMatrix, sizeof(XMMATRIX));
+	m_pTrapziumBuffer->SetUp_ValueOnShader("g_fX", &m_fGapX, sizeof(_float));
+	m_pTrapziumBuffer->SetUp_ValueOnShader("g_fY", &m_fGapY, sizeof(_float));
 
 	m_pTrapziumBuffer->SetUp_TextureOnShader("g_DiffuseTexture", m_pTexture);
 

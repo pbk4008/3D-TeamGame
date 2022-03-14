@@ -20,31 +20,31 @@ HRESULT CStage1::NativeConstruct()
 	if (FAILED(CLevel::NativeConstruct()))
 		return E_FAIL;
 
-	/*if (FAILED(Ready_MapObject()))
-	{
-		return E_FAIL;
-	}*/
-
-	if (FAILED(Ready_Monster(L"Layer_Monster")))
+	if (FAILED(Ready_MapObject()))
 	{
 		return E_FAIL;
 	}
 
-	if (FAILED(Ready_UI(L"Layer_UI")))
-	{
-		return E_FAIL;
-	}
+	//if (FAILED(Ready_Monster(L"Layer_Monster")))
+	//{
+	//	return E_FAIL;
+	//}
+
+	//if (FAILED(Ready_UI(L"Layer_UI")))
+	//{
+	//	return E_FAIL;
+	//}
 
 
-	//Data
-	if (FAILED(Ready_Data_UI(L"../bin/SaveData/UI/UI.dat")))
-	{
-		return E_FAIL;
-	}
-	if (FAILED(Ready_Data_Effect(L"../bin/SaveData/Effect/Effect_Explosion.dat")))
-	{
-		return E_FAIL;
-	}
+	////Data
+	//if (FAILED(Ready_Data_UI(L"../bin/SaveData/UI/UI.dat")))
+	//{
+	//	return E_FAIL;
+	//}
+	//if (FAILED(Ready_Data_Effect(L"../bin/SaveData/Effect/Effect_Explosion.dat")))
+	//{
+	//	return E_FAIL;
+	//}
 
 
 	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Silvermane", L"Silvermane")))

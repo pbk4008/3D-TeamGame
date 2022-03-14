@@ -105,7 +105,7 @@ CGameObject* CEnvironment::Clone(void* pArg)
 	CEnvironment* pInstance = new CEnvironment(*this);
 	if (FAILED(pInstance->NativeConstruct(pArg)))
 	{
-		MSGBOX("CEnvironment Clone Fail");
+		//MSGBOX("CEnvironment Clone Fail");
 		Safe_Release(pInstance);
 	}
 	return pInstance;

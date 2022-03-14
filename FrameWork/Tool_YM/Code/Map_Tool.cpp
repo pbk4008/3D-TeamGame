@@ -639,6 +639,7 @@ void CMap_Tool::OnBnClickedLoadButton()
 		FileInfo.cstrFolder = FileFolder;
 		FileInfo.cstrFileName = FileName;
 		FileInfo.cstrFBX_Type = iType;
+
  		auto TagFinder = find(m_ProtoTag.begin(), m_ProtoTag.end(), FileInfo.cstrFileName);
 
 		if (TagFinder == m_ProtoTag.end())

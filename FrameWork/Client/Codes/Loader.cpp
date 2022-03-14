@@ -23,6 +23,7 @@
 #include "Silvermane.h"
 #include "Camera_Silvermane.h"
 #include "Needle.h"
+#include "Fury.h"
 #include "Monster_Bastion_2HSword.h"
 #include "Monster_Bastion_Healer.h"
 #include "Monster_Bastion_Shooter.h"
@@ -91,22 +92,23 @@ HRESULT CLoader::LoadForScene()
 HRESULT CLoader::SetUp_Stage1_Object()
 {
 	
-	/*if (FAILED(Load_Stage1FBXLoad()))
-		return E_FAIL;*/
+	if (FAILED(Load_Stage1FBXLoad()))
+		return E_FAIL;
 
 	/*if (FAILED(Load_Stage1PlayerLoad()))
 		return E_FAIL;*/
- 	if (FAILED(Load_Stage1MonsterLoad()))
-		return E_FAIL;
 
-	if (FAILED(Load_Stage1StaticUILoad()))
-		return E_FAIL;
+	//if (FAILED(Load_Stage1MonsterLoad()))
+	//	return E_FAIL;
 
-	if (FAILED(Load_Stage1UILoad()))
-		return E_FAIL;
+	//if (FAILED(Load_Stage1StaticUILoad()))
+	//	return E_FAIL;
 
-	if (FAILED(Load_Stage1EffectLoad()))
-		return E_FAIL;
+	//if (FAILED(Load_Stage1UILoad()))
+	//	return E_FAIL;
+
+	//if (FAILED(Load_Stage1EffectLoad()))
+	//	return E_FAIL;
 
 	return S_OK;
 }
@@ -389,6 +391,7 @@ HRESULT CLoader::Load_Stage1MonsterLoad()
 	//Monster Crystal_Crawler
 	_matrix matPivot = XMMatrixIdentity();
 	matPivot = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(180.f));
+
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Model_Monster_Crawler", CModel::Create(m_pDevice, m_pDeviceContext,
 		"../bin/Resources/Mesh/Crystal_Crawler/", "Crystal_Crawler.fbx",
 		L"../../Reference/ShaderFile/Shader_Mesh.hlsl",	matPivot, CModel::TYPE_ANIM))))
@@ -472,38 +475,38 @@ HRESULT CLoader::Load_Stage1MonsterLoad()
 	//g_pGameInstance->Add_Material(L"Mtrl_BronzeAnimus_Top", pMtrl);
 
 
-	////Monster Bastion_Sword
-	//matPivot = XMMatrixIdentity();
-	matPivot = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(180.f));
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Model_Monster_Bastion_Sword", CModel::Create(m_pDevice, m_pDeviceContext,
-		"../bin/Resources/Mesh/Bastion_Sword/", "Bastion_Sword.fbx",
-		L"../../Reference/ShaderFile/Shader_Mesh.hlsl",
-		matPivot,
-		CModel::TYPE_ANIM,true))))
-	{
-		return E_FAIL;
-	}
+	//////Monster Bastion_Sword
+	////matPivot = XMMatrixIdentity();
+	//matPivot = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(180.f));
+	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Model_Monster_Bastion_Sword", CModel::Create(m_pDevice, m_pDeviceContext,
+	//	"../bin/Resources/Mesh/Bastion_Sword/", "Bastion_Sword.fbx",
+	//	L"../../Reference/ShaderFile/Shader_Mesh.hlsl",
+	//	matPivot,
+	//	CModel::TYPE_ANIM,true))))
+	//{
+	//	return E_FAIL;
+	//}
 
-	if (FAILED(g_pGameInstance->Add_Prototype(L"Monster_Bastion_Sword", CMonster_Bastion_Sword::Create(m_pDevice, m_pDeviceContext))))
-		return E_FAIL;
+	//if (FAILED(g_pGameInstance->Add_Prototype(L"Monster_Bastion_Sword", CMonster_Bastion_Sword::Create(m_pDevice, m_pDeviceContext))))
+	//	return E_FAIL;
 
-	pTexture = CTexture::Create(m_pDevice, m_pDeviceContext);
-	pTexture->NativeConstruct_Prototype(L"../Bin/Resources/Mesh/Bastion_Sword/T_Bastion_Tier1_Down_D.tga", 1);
-	pMtrl = CMaterial::Create(m_pDevice, m_pDeviceContext, L"Bastion_Sword_Down", L"../../Reference/ShaderFile/Shader_Mesh.hlsl", CMaterial::EType::Anim);
-	pMtrl->Set_Texture("g_DiffuseTexture", TEXTURETYPE::TEX_DIFFUSE, pTexture, 0);
-	g_pGameInstance->Add_Material(L"Mtrl_Bastion_Sword_Down", pMtrl);
+	//pTexture = CTexture::Create(m_pDevice, m_pDeviceContext);
+	//pTexture->NativeConstruct_Prototype(L"../Bin/Resources/Mesh/Bastion_Sword/T_Bastion_Tier1_Down_D.tga", 1);
+	//pMtrl = CMaterial::Create(m_pDevice, m_pDeviceContext, L"Bastion_Sword_Down", L"../../Reference/ShaderFile/Shader_Mesh.hlsl", CMaterial::EType::Anim);
+	//pMtrl->Set_Texture("g_DiffuseTexture", TEXTURETYPE::TEX_DIFFUSE, pTexture, 0);
+	//g_pGameInstance->Add_Material(L"Mtrl_Bastion_Sword_Down", pMtrl);
 
-	pTexture = CTexture::Create(m_pDevice, m_pDeviceContext);
-	pTexture->NativeConstruct_Prototype(L"../Bin/Resources/Mesh/Bastion_Sword/T_Bastion_Tier1_Top_D.tga", 1);
-	pMtrl = CMaterial::Create(m_pDevice, m_pDeviceContext, L"Bastion_Sword_Top", L"../../Reference/ShaderFile/Shader_Mesh.hlsl", CMaterial::EType::Anim);
-	pMtrl->Set_Texture("g_DiffuseTexture", TEXTURETYPE::TEX_DIFFUSE, pTexture, 0);
-	g_pGameInstance->Add_Material(L"Mtrl_Bastion_Sword_Top", pMtrl);
+	//pTexture = CTexture::Create(m_pDevice, m_pDeviceContext);
+	//pTexture->NativeConstruct_Prototype(L"../Bin/Resources/Mesh/Bastion_Sword/T_Bastion_Tier1_Top_D.tga", 1);
+	//pMtrl = CMaterial::Create(m_pDevice, m_pDeviceContext, L"Bastion_Sword_Top", L"../../Reference/ShaderFile/Shader_Mesh.hlsl", CMaterial::EType::Anim);
+	//pMtrl->Set_Texture("g_DiffuseTexture", TEXTURETYPE::TEX_DIFFUSE, pTexture, 0);
+	//g_pGameInstance->Add_Material(L"Mtrl_Bastion_Sword_Top", pMtrl);
 
-	pTexture = CTexture::Create(m_pDevice, m_pDeviceContext);
-	pTexture->NativeConstruct_Prototype(L"../Bin/Resources/Mesh/Bastion_Sword/T_Bastion_Fur_Coeff.tga", 1);
-	pMtrl = CMaterial::Create(m_pDevice, m_pDeviceContext, L"Bastion_Sword_Fur", L"../../Reference/ShaderFile/Shader_Mesh.hlsl", CMaterial::EType::Anim);
-	pMtrl->Set_Texture("g_DiffuseTexture", TEXTURETYPE::TEX_DIFFUSE, pTexture, 0);
-	g_pGameInstance->Add_Material(L"Mtrl_Bastion_Sword_Fur", pMtrl);
+	//pTexture = CTexture::Create(m_pDevice, m_pDeviceContext);
+	//pTexture->NativeConstruct_Prototype(L"../Bin/Resources/Mesh/Bastion_Sword/T_Bastion_Fur_Coeff.tga", 1);
+	//pMtrl = CMaterial::Create(m_pDevice, m_pDeviceContext, L"Bastion_Sword_Fur", L"../../Reference/ShaderFile/Shader_Mesh.hlsl", CMaterial::EType::Anim);
+	//pMtrl->Set_Texture("g_DiffuseTexture", TEXTURETYPE::TEX_DIFFUSE, pTexture, 0);
+	//g_pGameInstance->Add_Material(L"Mtrl_Bastion_Sword_Fur", pMtrl);
 
 	return S_OK;
 }
@@ -561,11 +564,10 @@ HRESULT CLoader::Ready_Test_JS()
 	cout << "TestScene_JS 로딩 시작..." << endl;
 	cout << "TestScene_JS 리소스 생성중..." << endl;
 #pragma region 리소스
-	if(FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"Plane_Texture", L"../Bin/Resources/Texture/Terrain/Plane_Default.tga")))
-		return E_FAIL;
-
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_TEST_JS, L"VIBuffer_Plane", CVIBuffer_Plane::Create(m_pDevice, m_pDeviceContext, L"../../Reference/ShaderFile/Shader_Plane.hlsl", 100, 100))))
-		return E_FAIL;
+	//if(FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"Plane_Texture", L"../Bin/Resources/Texture/Terrain/Plane_Default.png")))
+	//	return E_FAIL;
+	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_TEST_JS, L"VIBuffer_Plane", CVIBuffer_Plane::Create(m_pDevice, m_pDeviceContext, L"../../Reference/ShaderFile/Shader_Plane.hlsl", 100, 100))))
+	//	return E_FAIL;
 
 
 	cout << "TestScene_JS 마테리얼 생성중..." << endl;
@@ -662,6 +664,13 @@ HRESULT CLoader::Ready_Test_JS()
 	{
 		return E_FAIL;
 	}
+	matPivot = XMMatrixIdentity();
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_TEST_JS, L"Model_Fury", CModel::Create(m_pDevice, m_pDeviceContext,
+		"../bin/Resources/Mesh/Fury/", "Fury.fbx",
+		L"../../Reference/ShaderFile/Shader_StaticMesh.hlsl", matPivot, CModel::TYPE_STATIC, true))))
+	{
+		return E_FAIL;
+	}
 	matPivot = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(180.f));
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_TEST_JS, L"Model_Bastion_2HSword", CModel::Create(m_pDevice, m_pDeviceContext,
 		"../bin/Resources/Mesh/Bastion_2HSword/", "Bastion_2HSword.fbx",
@@ -712,15 +721,17 @@ HRESULT CLoader::Ready_Test_JS()
 #pragma endregion
 #pragma region 오브젝트
 	cout << "TestScene_JS 오브젝트 프로토타입 생성중..." << endl;
-	if (FAILED(g_pGameInstance->Add_Prototype(L"Plane_Test", CPlane_Test::Create(m_pDevice, m_pDeviceContext))))
-		return E_FAIL;
+	//if (FAILED(g_pGameInstance->Add_Prototype(L"Plane_Test", CPlane_Test::Create(m_pDevice, m_pDeviceContext))))
+	//	return E_FAIL;
 	if (FAILED(g_pGameInstance->Add_Prototype(L"Silvermane", CSilvermane::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 	if (FAILED(g_pGameInstance->Add_Prototype(L"Camera_Silvermane", CCamera_Silvermane::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 	if (FAILED(g_pGameInstance->Add_Prototype(L"Camera_Debug", CCamera_Debug::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
-	if (FAILED(g_pGameInstance->Add_Prototype(L"Needle", CNeedle::Create(m_pDevice, m_pDeviceContext))))
+	if (FAILED(g_pGameInstance->Add_Prototype(L"Weapon_Needle", CNeedle::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	if (FAILED(g_pGameInstance->Add_Prototype(L"Weapon_Fury", CFury::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 	if (FAILED(g_pGameInstance->Add_Prototype(L"Monster_Bastion_2HSword", CMonster_Bastion_2HSword::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;

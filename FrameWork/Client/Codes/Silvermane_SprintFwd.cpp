@@ -49,6 +49,8 @@ HRESULT CSilvermane_SprintFwd::EnterState()
 		return E_FAIL;
 	m_pAnimationController->Set_RootMotion(true, true);
 
+	m_pSilvermane->Set_Move(true);
+
 	return S_OK;
 }
 
@@ -56,6 +58,8 @@ HRESULT CSilvermane_SprintFwd::ExitState()
 {
 	if (FAILED(__super::ExitState()))
 		return E_FAIL;
+
+	m_pSilvermane->Set_Move(false);
 
 	return S_OK;
 }
@@ -426,6 +430,12 @@ _int CSilvermane_SprintFwd::KeyCheck(const _double& _dDeltaTime)
 			return E_FAIL;
 		return STATE_CHANGE;
 	}
+	else if (g_pGameInstance->getMouseKeyDown(CInputDev::MOUSESTATE::MB_RBUTTON))
+	{
+		if (FAILED(m_pStateController->Change_State(L"1H_SwordAttackNormalR2_")))
+			return E_FAIL;
+		return STATE_CHANGE;
+	}
 
 	if (g_pGameInstance->getkeyPress(DIK_LSHIFT))
 	{
@@ -471,7 +481,7 @@ _int CSilvermane_SprintFwd::KeyCheck(const _double& _dDeltaTime)
 		else
 		{
 			if (FAILED(m_pStateController->Change_State(L"SprintFwdStop")))
-				return E_FAIL;
+				return -1;
 			return STATE_CHANGE;
 		}
 	}
@@ -480,31 +490,31 @@ _int CSilvermane_SprintFwd::KeyCheck(const _double& _dDeltaTime)
 		if (g_pGameInstance->getkeyPress(DIK_W))
 		{
 			if (FAILED(m_pStateController->Change_State(L"JogFwd")))
-				return E_FAIL;
+				return -1;
 			return STATE_CHANGE;
 		}
 		else if (g_pGameInstance->getkeyPress(DIK_S))
 		{
 			if (FAILED(m_pStateController->Change_State(L"JogBwd")))
-				return E_FAIL;
+				return -1;
 			return STATE_CHANGE;
 		}
 		else if (g_pGameInstance->getkeyPress(DIK_A))
 		{
 			if (FAILED(m_pStateController->Change_State(L"JogLeft")))
-				return E_FAIL;
+				return -1;
 			return STATE_CHANGE;
 		}
 		else if (g_pGameInstance->getkeyPress(DIK_D))
 		{
 			if (FAILED(m_pStateController->Change_State(L"JogRight")))
-				return E_FAIL;
+				return -1;
 			return STATE_CHANGE;
 		}
 		else
 		{
 			if (FAILED(m_pStateController->Change_State(L"SprintFwdStop")))
-				return E_FAIL;
+				return -1;
 			return STATE_CHANGE;
 		}
 	}

@@ -2,6 +2,7 @@
 
 #include "State.h"
 #include "Silvermane.h"
+#include "Weapon.h"
 
 BEGIN(Client)
 
@@ -42,7 +43,8 @@ protected:
 	CTransform* m_pTransform = nullptr;
 	CModel* m_pModel = nullptr;
 	CAnimationController* m_pAnimationController = nullptr;
-	_int m_iCutIndex = 0;
+	_uint m_iCutIndex = 0;
+	EDir m_eDir = EDir::Max;
 
 public:
 	virtual void Free() override;
