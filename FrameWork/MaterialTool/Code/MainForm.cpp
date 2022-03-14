@@ -111,6 +111,7 @@ void CMainForm::OnInitialUpdate()
 _int CMainForm::Tick(_double dDeltaTime)
 {
 	//LevelUpdate 도는 중
+	g_pGameInstance->Update_InputDev();
 	g_pGameInstance->Tick_Engine(dDeltaTime);
 
 	Update_Tree();
@@ -145,23 +146,38 @@ HRESULT CMainForm::Render()
 
 _int CMainForm::Update_Tree()
 {
-	m_tFbxPath = L"../FBX/";
+	CString strFbxPath = L"../FBX/";
 	HTREEITEM tSelItem = m_FbxTree.GetSelectedItem();
 	m_tFbxName = m_FbxTree.GetItemText(tSelItem);
-	HTREEITEM tParent=m_FbxTree.GetParentItem(tSelItem);
-	 m_tFbxPath+= m_FbxTree.GetItemText(tParent);
-	 m_tFbxPath += "/";
-	 if (m_tFbxPath == L"../FBX//" || m_tFbxPath == L"../FBX/FBX/")
-		 return 0;
-	 wstring tmpPath = m_tFbxPath.GetString();
-	 wstring wstrExt;
-	 wstrExt.assign(tmpPath.end() - 4, tmpPath.end()-1);
-	 if (wstrExt == L"fbx")
-	 {
-		 m_pSelModel->setDraw(true);
-		 return 0;
-	 }
+	if (m_tFbxName == L""||m_tFbxName == L"FBX")
+		return 0;
 
+	HTREEITEM tFolder=m_FbxTree.GetParentItem(tSelItem);
+	CString strFolderName = m_FbxTree.GetItemText(tFolder);
+
+	//폴더 선택
+	if (strFolderName == L"FBX"||
+		strFolderName == L"Anim"||
+		strFolderName == L"Static")
+		return 0;
+
+	wstring wstrTmpFolder = strFolderName;
+	wstring wstrFolderCheck;
+	wstrFolderCheck.assign(wstrTmpFolder.end() - 4, wstrTmpFolder.end());
+
+	if (wstrFolderCheck == L".fbx")
+	{
+		m_pSelModel->setDraw(true);
+		return 0;
+	}
+
+	HTREEITEM tParent = m_FbxTree.GetParentItem(tFolder);
+	CString strParentName = m_FbxTree.GetItemText(tParent);
+
+	strFbxPath += strParentName + L"/" + strFolderName + L"/";
+
+
+	m_tFbxPath = strFbxPath;
 	m_pSelModel = Find_Model(m_tFbxName.GetString());
 
 	if (!m_pSelModel)
@@ -178,19 +194,40 @@ _int CMainForm::Update_Tree()
 		{
 			wstring wstrSaveFilePath = L"../../Client/Test/";
 			wstrSaveFilePath += wstrFbxName;
-			if (FAILED(g_pGameInstance->Add_Prototype(0, wstrFbxName
-				, CModel::Create(m_pDevice, m_pDeviceContext, wstrSaveFilePath,CModel::TYPE::TYPE_STATIC,true))))
+			if (strParentName == L"Static")
+			{
+				if (FAILED(g_pGameInstance->Add_Prototype(0, wstrFbxName
+					, CModel::Create(m_pDevice, m_pDeviceContext, wstrSaveFilePath, CModel::TYPE::TYPE_STATIC, true))))
 					return E_FAIL;
+			}
+			else if (strParentName == L"Anim")
+			{
+				if (FAILED(g_pGameInstance->Add_Prototype(0, wstrFbxName
+					, CModel::Create(m_pDevice, m_pDeviceContext, wstrSaveFilePath, CModel::TYPE::TYPE_ANIM, true))))
+					return E_FAIL;
+			}
 		}
 		else
 		{
 			//원형 만들고 만든 원형 바로 넣어주기?
-			_matrix matPivot = XMMatrixRotationX(XMConvertToRadians(90.0f)) * XMMatrixRotationY(XMConvertToRadians(180.0f));
+			_matrix matPivot = XMMatrixIdentity();
 
-			if (FAILED(g_pGameInstance->Add_Prototype(0, wstrFbxName
-				, CModel::Create(m_pDevice, m_pDeviceContext, strFbxPath, strFbxName
-					, L"../../Reference/ShaderFile/Shader_StaticMesh.hlsl", matPivot, CModel::TYPE::TYPE_STATIC, true))))
-				return E_FAIL;
+			if (strParentName == L"Static")
+			{
+				matPivot = XMMatrixRotationX(XMConvertToRadians(90.0f)) * XMMatrixRotationY(XMConvertToRadians(180.0f));
+				if (FAILED(g_pGameInstance->Add_Prototype(0, wstrFbxName
+					, CModel::Create(m_pDevice, m_pDeviceContext, strFbxPath, strFbxName
+						, L"../../Reference/ShaderFile/Shader_StaticMesh.hlsl", matPivot, CModel::TYPE::TYPE_STATIC, true))))
+					return E_FAIL;
+			}
+			else
+			{
+				matPivot = XMMatrixScaling(0.01f, 0.01f, 0.01f);
+				if (FAILED(g_pGameInstance->Add_Prototype(0, wstrFbxName
+					, CModel::Create(m_pDevice, m_pDeviceContext, strFbxPath, strFbxName
+						, L"../../Reference/ShaderFile/Shader_StaticMesh.hlsl", matPivot, CModel::TYPE::TYPE_ANIM, true))))
+					return E_FAIL;
+			}
 		}
 
 		CModelObject::MODELOBJDESC tDesc;
@@ -298,21 +335,37 @@ HRESULT CMainForm::Ready_Tree()
 	while (bWorking)
 	{
 		bWorking = fFinder.FindNextFile();
+		CString str = fFinder.GetFilePath();
 		if (fFinder.IsDots()) continue;
 		if (fFinder.IsDirectory())
 		{
 			HTREEITEM tParent = m_FbxTree.InsertItem(fFinder.GetFileName(), tRoot);
-			CString tmp = L"..\\FBX\\";
-			tmp += fFinder.GetFileName();
-			tmp += L"\\*.fbx";
-			CFileFind fFileFinder;
-			_bool bFileCheck = fFileFinder.FindFile(tmp);
-			while (bFileCheck)
+			//CString tmp = L"..\\FBX\\";
+			//tmp += fFinder.GetFileName();
+			 str+= L"\\*.*";
+			CFileFind fFolderFinder;
+			_bool bFolderCheck = fFolderFinder.FindFile(str);
+			while (bFolderCheck)
 			{
-				bFileCheck = fFileFinder.FindNextFile();
-				if (fFileFinder.IsDots()) 
+				bFolderCheck = fFolderFinder.FindNextFile();
+				if (fFolderFinder.IsDots())
 					continue;
-				m_FbxTree.InsertItem(fFileFinder.GetFileName(), tParent);
+				if(fFolderFinder.IsDirectory())
+				{
+					HTREEITEM tFolder = m_FbxTree.InsertItem(fFolderFinder.GetFileName(), tParent);
+					CString tmp = fFolderFinder.GetFilePath();
+					CFileFind fFileFinder;
+					tmp += L"\\*.fbx";
+					_bool bFileCheck = fFileFinder.FindFile(tmp);
+					while (bFileCheck)
+					{
+						bFileCheck = fFileFinder.FindNextFile();
+						CString FileName = fFileFinder.GetFilePath();
+						if (fFileFinder.IsDots())
+							continue;
+						m_FbxTree.InsertItem(fFileFinder.GetFileName(), tFolder);
+					}
+				}
 			}
 		}
 	}

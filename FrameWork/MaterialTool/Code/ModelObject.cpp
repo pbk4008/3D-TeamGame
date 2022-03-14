@@ -65,6 +65,8 @@ _int CModelObject::Tick(_double dDeltaTime)
 {
 	m_bDraw = false;
 
+	m_pModel->Update_CombinedTransformationMatrix(dDeltaTime);
+
 	for (auto bPick : m_vecPick)
 		bPick = false;
 
@@ -190,7 +192,7 @@ _uint CModelObject::get_MeshCount()
 
 HRESULT CModelObject::Save_Model(const wstring& pFilePath)
 {
-	if (FAILED(m_pModel->Save_StaticModel(pFilePath)))
+	if (FAILED(m_pModel->Save_Model(pFilePath)))
 		return E_FAIL;
 
 	return S_OK;

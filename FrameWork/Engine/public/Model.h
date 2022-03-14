@@ -1,5 +1,5 @@
 #pragma once
-
+#include "SaveManager.h"
 #include "Component.h"
 
 BEGIN(Engine)
@@ -62,6 +62,8 @@ private:
 	_bool				m_bUsingMaterial = false;
 	_bool				m_bUsingTool = false;
 private:
+	CSaveManager::DYNAMICDATA m_tAnimData;
+private:
 	ID3DX11Effect* m_pEffect = nullptr;
 	vector<EFFECTDESC*> m_PassDesc;
 private:
@@ -81,21 +83,28 @@ private:
 public:
 	CHierarchyNode* Find_HierarchyNode(const char* pName);
 	HRESULT Save_StaticModel(const wstring& pFilePath);
-	HRESULT Save_AnimModel();
+	HRESULT Save_AnimModel(const wstring& pFilePath);
 private:
 	HRESULT Load_StaticModel(const wstring& pFilePath);
+	HRESULT Load_AnimModel(const wstring& pFilePath);
 private:
 	HRESULT Create_Materials();
-	HRESULT Create_MaterialDesc();
-
 	HRESULT Load_Materials(_uint iType, const wstring& pFilePath);
+
+	HRESULT Create_MaterialDesc();
+	HRESULT Compile_Shader(const wstring& pShaderFilePath);
 	/* 모델을 구성하는 메시들의 정보를 구성한다. */
+
 	HRESULT Create_MeshContainer();
 	HRESULT Load_MeshContainer(_uint iMaterialIndex, _uint iNumVtxCnt, _uint iNumIdxCnt, void* pVtx, void* pIdx);
 	HRESULT Create_VertexIndexBuffer();
-	HRESULT Compile_Shader(const wstring& pShaderFilePath);
+
+
 	HRESULT Create_HierarchyNode(aiNode* pNode, CHierarchyNode* pParent = nullptr, _uint iDepth = 0);
+	HRESULT Load_HierarchyNode();
+
 	HRESULT Create_Animation();
+	HRESULT Load_Animation();
 
 public:
 	static CModel* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext, const string& pMeshFilePath, const string& pMeshFileName, const wstring& pShaderFilePath, _fmatrix PivotMatrix, TYPE eMeshType,_bool bMaterial = false);

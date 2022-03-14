@@ -20,6 +20,7 @@ public:
 public:
 	HRESULT Create_VertexIndexBuffer();
 	HRESULT Add_Bone(class CModel* pModel);
+	HRESULT Add_Bone(vector<string>& vecBoneName, class CModel* pModel);
 	void SetUp_BoneMatrices(_matrix* pBoneMatrices, _fmatrix PivotMatrix);
 	const CSaveManager::STATICMESHDATA SetStaticSaveData();
 	const CSaveManager::ANIMMESHDATA SetAnimSaveData();
