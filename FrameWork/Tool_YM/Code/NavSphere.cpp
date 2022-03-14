@@ -66,7 +66,7 @@ _int CNavSphere::Tick(_double TimeDelta)
 
 _int CNavSphere::LateTick(_double TimeDelta)
 {
-	m_pRenderer->Add_RenderGroup(CRenderer::RENDER_PRIORITY, this);
+	m_pRenderer->Add_RenderGroup(CRenderer::RENDER_UI, this);
 	return _int();
 }
 

@@ -251,6 +251,24 @@ void CTransform::Scale_Up(_fvector vScale)
 	Set_State(CTransform::STATE_LOOK, vLook);
 }
 
+void CTransform::ScaleX_Up(_fvector vScale)
+{
+	_vector		vRight = Get_State(CTransform::STATE_RIGHT) * XMVectorGetX(vScale);
+	Set_State(CTransform::STATE_RIGHT, vRight);
+}
+
+void CTransform::ScaleY_Up(_fvector vScale)
+{
+	_vector		vUp = Get_State(CTransform::STATE_UP) * XMVectorGetY(vScale);
+	Set_State(CTransform::STATE_UP, vUp);
+}
+
+void CTransform::ScaleZ_Up(_fvector vScale)
+{
+	_vector		vLook = Get_State(CTransform::STATE_LOOK) * XMVectorGetZ(vScale);
+	Set_State(CTransform::STATE_LOOK, vLook);
+}
+
 void CTransform::Mesh_Straight(_double TimeDelta, CNavigation* pNavigation)
 {
 	_vector		vLook = Get_State(CTransform::STATE_LOOK);
