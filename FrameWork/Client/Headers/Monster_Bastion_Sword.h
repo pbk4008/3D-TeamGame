@@ -24,11 +24,12 @@ public:
 
 private:
 	virtual HRESULT SetUp_Components();
+	HRESULT Set_Animation_FSM();
 
 private:
 	CModel* m_pModelCom = nullptr;
 	CAnimator* m_pAnimator = nullptr;
-
+	CCapsuleCollider* m_pCollider = nullptr;
 private:
 	_uint itest = 0;
 public:
