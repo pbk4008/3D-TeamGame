@@ -176,9 +176,11 @@ HRESULT CInstancing_Mesh::Create_Material(const CSaveManager::MTRLDATA& pData)
 			wstrMaterialPath += pTextureData.pTextureName;
 			pMaterial->Set_Texture((TEXTURETYPE)pTextureData.iType, pTextureData.pTextureName, wstrMaterialPath);
 		}
-		m_vecMaterials.emplace_back(pMaterial);
-		Safe_AddRef(pMaterial);
+
 	}
+	m_vecMaterials.emplace_back(pMaterial);
+	Safe_AddRef(pMaterial);
+
 	return S_OK;
 }
 
