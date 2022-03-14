@@ -35,7 +35,7 @@ HRESULT CCamera_Silvermane::NativeConstruct(void* _pArg)
 		return E_FAIL;
 	}
 
-	m_pSilvermane = static_cast<CSilvermane*>(g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_TEST_JS, L"Layer_Silvermane")->front());
+	m_pSilvermane = static_cast<CSilvermane*>(g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Layer_Silvermane")->front());
 	m_pSilvermane->Set_Camera(this);
 
 	return S_OK;
@@ -91,20 +91,20 @@ HRESULT CCamera_Silvermane::Ready_Components()
 	cameraDesc.fAspect = _float(g_iWinCx) / g_iWinCy;
 	cameraDesc.fNear = 0.1f;
 	cameraDesc.fFar = 1000.f;
-	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Camera", L"Camera", (CComponent**)&m_pCamera, &cameraDesc)))
+	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_Camera", L"Com_Camera", (CComponent**)&m_pCamera, &cameraDesc)))
 		return E_FAIL;
 
 	CTransform::TRANSFORMDESC transformDesc;
 	transformDesc.fSpeedPerSec = 0.f;
 	transformDesc.fRotationPerSec = 0.f;
-	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Transform", L"LocalTransform", (CComponent**)&m_pLocalTransform, &transformDesc)))
+	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_Transform", L"Com_LocalTransform", (CComponent**)&m_pLocalTransform, &transformDesc)))
 		return E_FAIL;
 	_float4 vPosition = { 0.5f, 3.f, -3.f, 1.f };
 	m_pLocalTransform->Set_State(CTransform::STATE_POSITION, XMLoadFloat4(&vPosition));
 	m_pLocalTransform->SetUp_Rotation(m_pLocalTransform->Get_State(CTransform::STATE_RIGHT), XMConvertToRadians(30.f));
 
 	transformDesc.fRotationPerSec = XMConvertToRadians(120.f);
-	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Transform", L"WorldTransform", (CComponent**)&m_pWorldTransform, &transformDesc)))
+	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_Transform", L"Com_WorldTransform", (CComponent**)&m_pWorldTransform, &transformDesc)))
 		return E_FAIL;
 
 	return S_OK;

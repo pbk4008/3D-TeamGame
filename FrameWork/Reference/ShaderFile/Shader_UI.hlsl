@@ -25,15 +25,13 @@ sampler DefaultSampler = sampler_state
 struct VS_IN
 {
     float3 vPosition : POSITION;
-    float2 vPSize : PSIZE;
-
-    row_major matrix TransformMatrix : WORLD;
+    float2 vTexUV : TEXCOORD0;
 };
 
 struct VS_OUT
 {
-    float4 vPosition : POSITION;
-    float2 vPSize : PSIZE;
+    float4 vPosition : SV_POSITION;
+    float2 vTexUV : TEXCOORD0;
 };
 
 
@@ -46,82 +44,18 @@ VS_OUT VS_MAIN(VS_IN In)
 	// VS_IN In : 정점버퍼에 정의되어있던 정점정보를 그대로 받아온것이다. 
     matrix matWV, matWVP;
 
-
     matWV = mul(g_WorldMatrix, g_ViewMatrix);
     matWVP = mul(matWV, g_ProjMatrix);
-	
-    vector vPosition = mul(vector(In.vPosition, 1.f), In.TransformMatrix);
-    
-    Out.vPosition = mul(vPosition , matWVP);
-    //Out.vPosition = mul(vector(In.vPosition, 1.f), matWVP);
-    //Out.vTexUV = In.vTexUV;
-	
-	
-   
-    
-    //Out.vPosition = mul(vPosition, g_WorldMatrix);
-    Out.vPSize.x = In.vPSize.x * In.TransformMatrix._11;
-    Out.vPSize.y = In.vPSize.y * In.TransformMatrix._22;
-    //Out.vPSize = In.vPSize;
-	
+		
+    Out.vPosition = mul(vector(In.vPosition, 1.f), matWVP);
+    Out.vTexUV = In.vTexUV;
+	;
     return Out;
 }
 
-struct GS_IN
-{
-    float4 vPosition : POSITION;
-    float2 vPSize : PSIZE;
-};
-
-struct GS_OUT
-{
-    float4 vPosition : SV_POSITION;
-    float2 vTexUV : TEXCOORD0;
-};
-
-[maxvertexcount(6)]
-void GS_MAIN(point GS_IN In[1], inout TriangleStream<GS_OUT> OutStream)
-{
-    GS_OUT Out[6];
-
-    vector vRight = vector(1.f, 0.f, 0.f, 0.f);
-    vector vUp = vector(0.f, 1.f, 0.f, 0.f);
-
-    Out[0].vPosition = In[0].vPosition + (vRight * In[0].vPSize.x * 0.5f) +
-		(vUp * In[0].vPSize.y * 0.5f);
-    Out[0].vTexUV = float2(0.f, 0.f);
-    //Out[0].vPosition.z = 0.9f;
-
-    Out[1].vPosition = In[0].vPosition + (vRight * In[0].vPSize.x * -0.5f) +
-		(vUp * In[0].vPSize.y * 0.5f);
-    Out[1].vTexUV = float2(1.f, 0.f);
-   // Out[1].vPosition.z = 0.9f;
-
-    Out[2].vPosition = In[0].vPosition + (vRight * In[0].vPSize.x * -0.5f) +
-		(vUp * In[0].vPSize.y * -0.5f);
-    Out[2].vTexUV = float2(1.f, 1.f);
-   // Out[2].vPosition.z = 0.9f;
-
-    OutStream.Append(Out[0]);
-    OutStream.Append(Out[1]);
-    OutStream.Append(Out[2]);
-    OutStream.RestartStrip();
-
-
-    Out[3] = Out[0];
-
-    Out[4] = Out[2];
-
-    Out[5].vPosition = In[0].vPosition + (vRight * In[0].vPSize.x * 0.5f) +
-		(vUp * In[0].vPSize.y * -0.5f);
-    Out[5].vTexUV = float2(0.f, 1.f);
-  //  Out[5].vPosition.z = 0.9f;
-
-    OutStream.Append(Out[3]);
-    OutStream.Append(Out[4]);
-    OutStream.Append(Out[5]);
-    OutStream.RestartStrip();
-}
+/* SV_POSITION을 가진 데잍처에대해서만 원근투영.(정점의 w값으로 xyzw를 나눈다.) */
+/* 뷰포트로 변환한다. */
+/* 래스터라이즈.(둘러쌓여진 정점의 정보를 바탕으로 하여. 픽셀정보를 생성한다.) */
 
 struct PS_IN
 {
@@ -142,7 +76,10 @@ PS_OUT PS_MAIN(PS_IN In)
     PS_OUT Out = (PS_OUT) 0;
 
     Out.vColor = g_DiffuseTexture.Sample(DefaultSampler, In.vTexUV);
-
+	
+    if (Out.vColor.a < 0.01)
+        discard;
+    
     return Out;
 }
 
@@ -156,12 +93,11 @@ technique11 DefaultTechnique
 		/* 렌더스테이츠에 대한 정의. */
         SetRasterizerState(CullMode_Default);
         SetDepthStencilState(ZDefault, 0);
-        SetBlendState(BlendDisable, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
 
 
 		/* 진입점함수를 지정한다. */
         VertexShader = compile vs_5_0 VS_MAIN();
-        GeometryShader = compile gs_5_0 GS_MAIN();
+        GeometryShader = NULL;
         PixelShader = compile ps_5_0 PS_MAIN();
     }
 
@@ -172,7 +108,8 @@ technique11 DefaultTechnique
         SetBlendState(AlphaBlending, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
 
         VertexShader = compile vs_5_0 VS_MAIN();
-        GeometryShader = compile gs_5_0 GS_MAIN();
+        GeometryShader = NULL;
         PixelShader = compile ps_5_0 PS_MAIN();
     }
+	
 }

@@ -27,7 +27,7 @@ HRESULT CWeapon::NativeConstruct(void* _pArg)
 	if (FAILED(__super::NativeConstruct(_pArg)))
 		return E_FAIL;
 
-	m_pLocalTransform = g_pGameInstance->Clone_Component<CTransform>(0, L"Transform");
+	m_pLocalTransform = g_pGameInstance->Clone_Component<CTransform>(0, L"Proto_Component_Transform");
 
 	return S_OK;
 }

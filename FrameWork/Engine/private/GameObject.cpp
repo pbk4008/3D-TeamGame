@@ -61,14 +61,14 @@ HRESULT CGameObject::NativeConstruct_Prototype()
 {
 	CGameInstance* pInstance = GET_INSTANCE(CGameInstance);
 
-	m_pRenderer = pInstance->Clone_Component<CRenderer>(0, L"Renderer");
+	m_pRenderer = pInstance->Clone_Component<CRenderer>(0, L"Proto_Component_Renderer");
 
 	RELEASE_INSTANCE(CGameInstance);
 
 	if (!m_pRenderer)
 		return E_FAIL;
 
-	if (FAILED(SetUp_Components(L"Renderer", m_pRenderer)))
+	if (FAILED(SetUp_Components(L"Com_Renderer", m_pRenderer)))
 		return E_FAIL;
 
 	return S_OK;
@@ -78,14 +78,14 @@ HRESULT CGameObject::NativeConstruct(void * pArg)
 {
 	CGameInstance* pInstance = GET_INSTANCE(CGameInstance);
 
-	m_pTransform = pInstance->Clone_Component<CTransform>(0, L"Transform");
+	m_pTransform = pInstance->Clone_Component<CTransform>(0, L"Proto_Component_Transform");
 
 	RELEASE_INSTANCE(CGameInstance);
 
 	if (!m_pTransform)
 		return E_FAIL;
 
-	if (FAILED(SetUp_Components(L"Transform", m_pTransform)))
+	if (FAILED(SetUp_Components(L"Com_Transform", m_pTransform)))
 		return E_FAIL;
 
 	return S_OK;

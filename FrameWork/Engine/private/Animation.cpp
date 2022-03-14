@@ -163,7 +163,6 @@ CSaveManager::ANIMDATA& CAnimation::SetSaveAnimData()
 	pData.dDuration = m_Duration;
 	pData.dPlaySpeed = m_PlaySpeed;
 	pData.iAnimIndex = m_iIndex;
-	pData.iAnimNameSize = (_uint)strlen(m_szName);
 	strcpy_s(pData.szAnimName, m_szName);
 
 	_uint iChannelCnt = (_uint)m_Channels.size();
@@ -171,7 +170,6 @@ CSaveManager::ANIMDATA& CAnimation::SetSaveAnimData()
 	pData.pChannelData = new CSaveManager::CHANNELDATA[iChannelCnt];
 	for (_uint i = 0; i < iChannelCnt; i++)
 	{
-		pData.pChannelData[i].iChannelNameSize = (_uint)strlen(m_Channels[i]->Get_Name());
 		strcpy_s(pData.pChannelData[i].szChannelName, m_Channels[i]->Get_Name());
 		vector<KEYFRAME*> vecKeyFame = m_Channels[i]->Get_KeyFrames();
 		_uint iKeyFrameCnt=(_uint)vecKeyFame.size();

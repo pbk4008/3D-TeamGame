@@ -43,11 +43,14 @@ public:
 	float m_PositionZ;
 	float m_SizeX;
 	float m_SizeY;
+	int m_IDTag;
+
 	afx_msg void OnBnClickedButtonStateSetting();
 	afx_msg void OnBnClickedButtonSave();
 	afx_msg void OnBnClickedButtonLoad();
 	CTreeCtrl m_TextureTree;
 	afx_msg void OnTvnSelchangedTree1(NMHDR* pNMHDR, LRESULT* pResult);
 	virtual BOOL OnInitDialog();
-	int m_IDTag;
+	float m_fAngle;
+	CButton m_CheckMinus;
 };

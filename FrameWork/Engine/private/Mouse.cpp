@@ -87,7 +87,7 @@ CUI* CMouse::getCheckUI(list<CGameObject*>* pObjList)
 
 	for (auto& pObj : *pObjList)
 	{
-		CTransform* pUITransform = pObj->Get_Component<CTransform>(L"Transform");
+		CTransform* pUITransform = pObj->Get_Component<CTransform>(L"Com_Transform");
 
 		if (!pUITransform)
 			return false;

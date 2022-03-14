@@ -117,8 +117,7 @@ HRESULT CMeshContainer::Add_Bone(CModel* pModel)
 	{
 		CHierarchyNode* pNode = pModel->Find_HierarchyNode(m_pAIMesh->mName.data);
 		if (!pNode)
-			return E_FAIL;
-
+				return E_FAIL;
 		pNode->Set_OffsetMatrix(XMMatrixIdentity());
 		m_Bones.push_back(pNode);
 		Safe_AddRef(pNode);
@@ -141,6 +140,19 @@ HRESULT CMeshContainer::Add_Bone(CModel* pModel)
 			m_Bones.emplace_back(pNode);
 			Safe_AddRef(pNode);
 		}
+	}
+	return S_OK;
+}
+
+HRESULT CMeshContainer::Add_Bone(vector<string>& vecBoneName, CModel* pModel)
+{
+	for (auto& pName : vecBoneName)
+	{
+		CHierarchyNode* pNode = pModel->Find_HierarchyNode(pName.c_str());
+		if (!pNode)
+			return E_FAIL;
+		m_Bones.push_back(pNode);
+		Safe_AddRef(pNode);
 	}
 	return S_OK;
 }
@@ -178,24 +190,16 @@ const CSaveManager::ANIMMESHDATA CMeshContainer::SetAnimSaveData()
 	CSaveManager::ANIMMESHDATA pData;
 
 	pData.iIdxCount = m_iNumPrimitive;
-	//pData.iMeshMtrlNum = m_iMaterialIndex;
+	pData.iMeshMtrlNum = m_iMaterialIndex;
 	pData.iVtxCount = m_iNumVertices;
 	pData.pVtxPoint = (VTXMESH_ANIM*)m_pVertices;
 	pData.pIndex = (FACEINDICES32*)m_pIndices;
 
-	_uint iBoneCnt = (_uint)m_Bones.size();
-	pData.iBoneCnt = iBoneCnt;
-	pData.pBoneData = new CSaveManager::BONEDATA[iBoneCnt];
-	ZeroMemory(pData.pBoneData, sizeof(CSaveManager::BONEDATA) * iBoneCnt);
-	for (_uint i = 0; i < iBoneCnt; i++)
+	pData.iBoneCnt = (_uint)m_Bones.size();
+	for (auto& pBone : m_Bones)
 	{
-		pData.pBoneData[i].iBoneNameSize = (_uint)strlen(m_Bones[i]->Get_Name());
-		strcpy_s(pData.pBoneData[i].szBoneName,m_Bones[i]->Get_Name());
-		pData.pBoneData[i].iDepth = m_Bones[i]->Get_Depth();
-		pData.pBoneData[i].iParentNameSize = (_uint)strlen(m_Bones[i]->Get_Parent()->Get_Name());
-		strcpy_s(pData.pBoneData[i].szParentName, m_Bones[i]->Get_Parent()->Get_Name());
-		XMStoreFloat4x4(&pData.pBoneData[i].OffsetMatrix, m_Bones[i]->Get_OffsetMatrix());
-		XMStoreFloat4x4(&pData.pBoneData[i].TransformationMatrix, m_Bones[i]->Get_TransformMatrix());
+		string strName = pBone->Get_Name();
+		pData.vecBoneName.emplace_back(strName);
 	}
 	return pData;
 }
