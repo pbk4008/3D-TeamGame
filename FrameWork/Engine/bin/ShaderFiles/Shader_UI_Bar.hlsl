@@ -10,6 +10,9 @@ cbuffer Matrices
     matrix g_ProjMatrix;
 };
 
+float g_fX;
+float g_fY;
+
 texture2D g_DiffuseTexture;
 
 sampler DefaultSampler = sampler_state
@@ -75,7 +78,7 @@ PS_OUT PS_MAIN(PS_IN In)
 {
     PS_OUT Out = (PS_OUT) 0;
 
-    if (In.vTexUV.y > 0.5f)
+    if (In.vTexUV.y > g_fY)
     {
         discard;
     }
@@ -84,6 +87,37 @@ PS_OUT PS_MAIN(PS_IN In)
 	
     if (Out.vColor.a < 0.01)
         discard;
+    
+    return Out;
+}
+
+PS_OUT PS_MAIN_RED(PS_IN In)
+{
+    PS_OUT Out = (PS_OUT) 0;
+
+    if (In.vTexUV.y < 0.1f)
+    {
+        discard;
+    }
+    
+    if (In.vTexUV.y > g_fY)
+    {
+        discard;
+    }
+    
+    if (In.vTexUV.x > g_fX)
+    {
+        discard;
+    }
+    
+    
+    Out.vColor = g_DiffuseTexture.Sample(DefaultSampler, In.vTexUV);
+	
+    if (Out.vColor.a < 0.01)
+        discard;
+    
+    Out.vColor.r = 1.f;
+    Out.vColor.gb = 0.f;
     
     return Out;
 }
@@ -115,6 +149,17 @@ technique11 DefaultTechnique
         VertexShader = compile vs_5_0 VS_MAIN();
         GeometryShader = NULL;
         PixelShader = compile ps_5_0 PS_MAIN();
+    }
+
+    pass AlphaBlendRed
+    {
+        SetRasterizerState(CullMode_Default);
+        SetDepthStencilState(ZDefault, 0);
+        SetBlendState(AlphaBlending, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+
+        VertexShader = compile vs_5_0 VS_MAIN();
+        GeometryShader = NULL;
+        PixelShader = compile ps_5_0 PS_MAIN_RED();
     }
 	
 }

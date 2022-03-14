@@ -39,6 +39,8 @@ public:
 
 private:
 	UIACTIVEDESC m_Desc;
+	_float m_fGapX = 0.f;
+	_float m_fGapY = 0.f;
 private:
 	virtual HRESULT SetUp_Components();
 
