@@ -115,7 +115,6 @@ HRESULT CInstancing_Mesh::Init_StaticMesh(const wstring& pMeshFilePath)
 	CSaveManager* pInstance = GET_INSTANCE(CSaveManager);
 
 	CSaveManager::STATICDATA pData;
-	ZeroMemory(&pData, sizeof(pData));
 
 	if (FAILED(pInstance->Load_StaticModel(pData,pMeshFilePath)))
 		return E_FAIL;

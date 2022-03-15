@@ -138,7 +138,6 @@ HRESULT CSaveManager::Load_AnimModel(DYNAMICDATA& AnimData, _matrix& pivotMatrix
 	if (INVALID_HANDLE_VALUE == hFile)
 		return E_FAIL;
 
-	ZeroMemory(&AnimData, sizeof(DYNAMICDATA));
 
 	_ulong dwByte = 1;
 	ReadFile(hFile, &AnimData.iMtrlCount, sizeof(_uint), &dwByte, nullptr);
@@ -152,7 +151,6 @@ HRESULT CSaveManager::Load_AnimModel(DYNAMICDATA& AnimData, _matrix& pivotMatrix
 	for (_uint i=0; i<AnimData.iMtrlCount; i++)
 	{
 		MTRLDATA tMtrlData;
-		ZeroMemory(&tMtrlData, sizeof(tMtrlData));
 
 		ReadFile(hFile, &tMtrlData.iTextureCnt, sizeof(_uint), &dwByte, nullptr);
 		ReadFile(hFile, &tMtrlData.iMtrlType, sizeof(_uint), &dwByte, nullptr);
@@ -174,7 +172,6 @@ HRESULT CSaveManager::Load_AnimModel(DYNAMICDATA& AnimData, _matrix& pivotMatrix
 	for (_uint i=0; i<AnimData.iMeshCount; i++)
 	{
 		ANIMMESHDATA tAnimMeshData;
-		ZeroMemory(&tAnimMeshData, sizeof(ANIMMESHDATA));
 
 		ReadFile(hFile, &tAnimMeshData.iVtxCount, sizeof(_uint), &dwByte, nullptr);
 		ReadFile(hFile, &tAnimMeshData.iIdxCount, sizeof(_uint), &dwByte, nullptr);
@@ -260,8 +257,6 @@ HRESULT CSaveManager::Load_StaticModel(STATICDATA& StaticData, const wstring& pF
 
 	_ulong dwByte = 1;
 
-	ZeroMemory(&StaticData, sizeof(STATICDATA));
-
 	ReadFile(hFile, &StaticData.iMtrlCount, sizeof(_uint), &dwByte, nullptr);
 	ReadFile(hFile, &StaticData.iMeshCount, sizeof(_uint), &dwByte, nullptr);
 
@@ -269,7 +264,6 @@ HRESULT CSaveManager::Load_StaticModel(STATICDATA& StaticData, const wstring& pF
 	for (_uint i = 0; i < StaticData.iMtrlCount; i++)
 	{
 		MTRLDATA pMTrl;
-		ZeroMemory(&pMTrl, sizeof(pMTrl));
 		ReadFile(hFile, &pMTrl.iTextureCnt, sizeof(_uint), &dwByte, nullptr);
 		ReadFile(hFile, &pMTrl.iMtrlType, sizeof(_uint), &dwByte, nullptr);
 		ReadFile(hFile, &pMTrl.pMtrlName, sizeof(_tchar)*MAX_PATH, &dwByte, nullptr);

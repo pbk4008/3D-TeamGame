@@ -37,8 +37,6 @@ private:
 public:
 	static _uint CALLBACK Thread_Main(void* pArg);
 	static CLoader* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext, SCENEID eID);
-
-
 private:
 	virtual void Free();
 public:
