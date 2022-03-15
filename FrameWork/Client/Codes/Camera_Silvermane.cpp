@@ -35,7 +35,7 @@ HRESULT CCamera_Silvermane::NativeConstruct(void* _pArg)
 		return E_FAIL;
 	}
 
-	m_pSilvermane = static_cast<CSilvermane*>(g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_TEST_YM, L"Layer_Silvermane")->front());
+	m_pSilvermane = static_cast<CSilvermane*>(g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_TEST_JS, L"Layer_Silvermane")->front());
 	m_pSilvermane->Set_Camera(this);
 
 	return S_OK;
