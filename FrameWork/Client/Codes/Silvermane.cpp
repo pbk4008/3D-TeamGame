@@ -90,6 +90,24 @@
 #include "2H_HammerJogRight.h"
 #include "2H_HammerJogRightPivot180.h"
 #include "2H_HammerJogRightStart.h"
+
+//Attack
+#include "2H_HammerAttackR1_01.h"
+#include "2H_HammerAttackR1_02.h"
+#include "2H_HammerAttackR1_03.h"
+#include "2H_HammerAttackR1_04.h"
+#include "2H_HammerAttackR1_04Swap.h"
+#include "2H_HammerAttackJogR1.h"
+
+#include "2H_HammerChargeStage1_Start.h"
+#include "2H_HammerChargeStage1_Loop.h"
+#include "2H_HammerAttackR2_01.h"
+#include "2H_HammerAttackR2_02.h"
+#include "2H_HammerAttackR2_03.h"
+#include "2H_HammerAttackR2_Charge.h"
+
+#include "2H_HammerAttackDodgeR1.h"
+#include "2H_HammerAttackSprintR1.h"
 #pragma endregion
 
 
@@ -390,6 +408,35 @@ HRESULT CSilvermane::Ready_States()
 	if (FAILED(m_pStateController->Add_State(L"2H_HammerJogRightPivot180", C2H_HammerJogRightPivot180::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 	if (FAILED(m_pStateController->Add_State(L"2H_HammerJogRightStart", C2H_HammerJogRightStart::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	// Attack
+	if (FAILED(m_pStateController->Add_State(L"2H_HammerAttackR1_01", C2H_HammerAttackR1_01::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	if (FAILED(m_pStateController->Add_State(L"2H_HammerAttackR1_02", C2H_HammerAttackR1_02::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	if (FAILED(m_pStateController->Add_State(L"2H_HammerAttackR1_03", C2H_HammerAttackR1_03::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	if (FAILED(m_pStateController->Add_State(L"2H_HammerAttackR1_04", C2H_HammerAttackR1_04::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	if (FAILED(m_pStateController->Add_State(L"2H_HammerAttackR1_04Swap", C2H_HammerAttackR1_04Swap::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	if (FAILED(m_pStateController->Add_State(L"2H_HammerAttackJogR1", C2H_HammerAttackJogR1::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	if (FAILED(m_pStateController->Add_State(L"2H_HammerChargeStage1_Start", C2H_HammerChargeStage1_Start::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	if (FAILED(m_pStateController->Add_State(L"2H_HammerChargeStage1_Loop", C2H_HammerChargeStage1_Loop::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	if (FAILED(m_pStateController->Add_State(L"2H_HammerAttackR2_01", C2H_HammerAttackR2_01::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	if (FAILED(m_pStateController->Add_State(L"2H_HammerAttackR2_02", C2H_HammerAttackR2_02::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	if (FAILED(m_pStateController->Add_State(L"2H_HammerAttackR2_03", C2H_HammerAttackR2_03::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	if (FAILED(m_pStateController->Add_State(L"2H_HammerAttackR2_Charge", C2H_HammerAttackR2_Charge::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	if (FAILED(m_pStateController->Add_State(L"2H_HammerAttackDodgeR1", C2H_HammerAttackDodgeR1::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	if (FAILED(m_pStateController->Add_State(L"2H_HammerAttackSprintR1", C2H_HammerAttackSprintR1::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 #pragma endregion
 

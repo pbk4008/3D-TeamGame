@@ -2,7 +2,7 @@
 #include "Silvermane_SprintFwdStop.h"
 
 CSilvermane_SprintFwdStop::CSilvermane_SprintFwdStop(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
-	: CState_Silvermane(_pDevice, _pDeviceContext)
+	: CSilvermane_Sprint(_pDevice, _pDeviceContext)
 {
 }
 

@@ -150,14 +150,12 @@ HRESULT CMainApp::Ready_GameObject_Prototype()
 	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_MainCamera"), CMainCamera::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 
-
-
 	return S_OK;
 }
 
 HRESULT CMainApp::Load_Texture()
 {
-	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"BackGroundTex", L"../bin/Resources/Textures/T_LoadScreen_KeyArt_5.tga")))
+	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"BackGroundTex", L"../bin/Resources/Textures/T_LoadScreen_KeyArt_5.dds")))
 		return E_FAIL;
 
 	return S_OK;

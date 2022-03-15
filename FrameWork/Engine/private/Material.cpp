@@ -179,7 +179,9 @@ HRESULT CMaterial::SetUp_TextureOnShader(const string _strConstantName, TEXTURET
 			if (nullptr == pVariable)
 				return E_FAIL;
 
-			return pVariable->SetResource(pShaderResourceView);
+			HRESULT hr = pVariable->SetResource(pShaderResourceView);
+
+			return hr;
 		}
 	}
 

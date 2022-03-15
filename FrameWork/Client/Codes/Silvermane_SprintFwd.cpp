@@ -2,7 +2,7 @@
 #include "Silvermane_SprintFwd.h"
 
 CSilvermane_SprintFwd::CSilvermane_SprintFwd(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
-	: CState_Silvermane(_pDevice, _pDeviceContext)
+	: CSilvermane_Sprint(_pDevice, _pDeviceContext)
 {
 }
 
@@ -423,19 +423,6 @@ _int CSilvermane_SprintFwd::KeyCheck(const _double& _dDeltaTime)
 	if (NO_EVENT != iProgress)
 		return iProgress;
 
-
-	if (g_pGameInstance->getMouseKeyDown(CInputDev::MOUSESTATE::MB_LBUTTON))
-	{
-		if (FAILED(m_pStateController->Change_State(L"1H_SwordSupermanStab")))
-			return E_FAIL;
-		return STATE_CHANGE;
-	}
-	else if (g_pGameInstance->getMouseKeyDown(CInputDev::MOUSESTATE::MB_RBUTTON))
-	{
-		if (FAILED(m_pStateController->Change_State(L"1H_SwordAttackNormalR2_")))
-			return E_FAIL;
-		return STATE_CHANGE;
-	}
 
 	if (g_pGameInstance->getkeyPress(DIK_LSHIFT))
 	{

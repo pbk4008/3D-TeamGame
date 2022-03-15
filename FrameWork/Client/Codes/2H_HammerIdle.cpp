@@ -99,7 +99,7 @@ _int C2H_HammerIdle::KeyCheck(const _double& _dDeltaTime)
 	
 	if (g_pGameInstance->getMouseKeyDown(CInputDev::MOUSESTATE::MB_LBUTTON))
 	{
-		if (FAILED(m_pStateController->Change_State(L"2H_HammerAttackNormalR1_01")))
+		if (FAILED(m_pStateController->Change_State(L"2H_HammerAttackR1_01")))
 			return -1;
 		return STATE_CHANGE;
 	}
