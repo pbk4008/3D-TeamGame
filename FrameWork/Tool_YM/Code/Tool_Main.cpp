@@ -27,7 +27,7 @@ HRESULT CTool_Main::Tool_Main_Ready(void)
 	if (FAILED(g_pGameInstance->SetUpBaseComponent(m_pDevice, m_pDeviceContext)))
 		return E_FAIL;
 
-	m_pRenderer = g_pGameInstance->Clone_Component<CRenderer>(TAB_STATIC, L"Renderer");
+	m_pRenderer = g_pGameInstance->Clone_Component<CRenderer>(TAB_STATIC, L"Proto_Component_Renderer");
 
 	if (nullptr == m_pRenderer)
 		return E_FAIL;
