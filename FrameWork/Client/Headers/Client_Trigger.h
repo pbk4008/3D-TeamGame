@@ -27,7 +27,6 @@ public:
 	CGizmo*		m_pGizmo = nullptr;
 public:
 	TRIGGER		m_TriggerDesc;
-
 public:
 	_float4x4  m_matWorld;
 	_float3	   m_fLocalMouse; 
