@@ -12,7 +12,6 @@
 CModel::CModel(ID3D11Device * pDevice, ID3D11DeviceContext * pDeviceContext)
 	: CComponent(pDevice, pDeviceContext)
 {
-	ZeroMemory(&m_tAnimData, sizeof(m_tAnimData));
 }
 
 CModel::CModel(const CModel& rhs)
@@ -906,7 +905,6 @@ HRESULT CModel::Load_StaticModel(const wstring& pFilePath)
 	CSaveManager* pInstance = GET_INSTANCE(CSaveManager);
 
 	CSaveManager::STATICDATA pData;
-	ZeroMemory(&pData, sizeof(pData));
 	if (FAILED(pInstance->Load_StaticModel(pData, pFilePath)))
 		return E_FAIL;
 

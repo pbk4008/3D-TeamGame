@@ -115,7 +115,6 @@ HRESULT CInstancing_Mesh::Init_StaticMesh(const wstring& pMeshFilePath)
 	CSaveManager* pInstance = GET_INSTANCE(CSaveManager);
 
 	CSaveManager::STATICDATA pData;
-	ZeroMemory(&pData, sizeof(pData));
 
 	if (FAILED(pInstance->Load_StaticModel(pData,pMeshFilePath)))
 		return E_FAIL;
@@ -249,7 +248,6 @@ void CInstancing_Mesh::Free()
 
 	Safe_Release(m_pVBInstance);
 
-
 	for (auto& pMtrlMeshContainer : m_vecMeshContainers)
 	{
 		for (auto& pMeshContainer : pMtrlMeshContainer)
@@ -260,5 +258,6 @@ void CInstancing_Mesh::Free()
 
 	for (auto& pMaterial : m_vecMaterials)
 		Safe_Release(pMaterial);
+
 	m_vecMaterials.clear();
 }
