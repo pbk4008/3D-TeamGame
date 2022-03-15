@@ -84,6 +84,8 @@ HRESULT CNeedle::Render()
 
 		m_pModel->Render(i, 0);
 	}
+
+	return S_OK;
 }
 
 HRESULT CNeedle::Ready_Components()

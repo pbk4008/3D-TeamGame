@@ -5,6 +5,7 @@
 CWeapon::CWeapon(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
 	: CGameObject(_pDevice, _pDeviceContext)
 {
+	m_bActive = true;
 }
 
 CWeapon::CWeapon(const CWeapon& _rhs)
@@ -12,6 +13,7 @@ CWeapon::CWeapon(const CWeapon& _rhs)
 	, m_eType(_rhs.m_eType)
 	, m_wstrName(_rhs.m_wstrName)
 {
+	m_bActive = _rhs.m_bActive;
 }
 
 HRESULT CWeapon::NativeConstruct_Prototype()

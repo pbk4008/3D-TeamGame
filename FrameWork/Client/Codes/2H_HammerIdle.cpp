@@ -96,7 +96,14 @@ _int C2H_HammerIdle::KeyCheck(const _double& _dDeltaTime)
 			return STATE_CHANGE;
 		}
 	}
-	
+
+	if (g_pGameInstance->getkeyDown(DIK_Q))
+	{
+		if (FAILED(m_pStateController->Change_State(L"Shield_BlockStart")))
+			return E_FAIL;
+		return STATE_CHANGE;
+	}
+
 	if (g_pGameInstance->getMouseKeyDown(CInputDev::MOUSESTATE::MB_LBUTTON))
 	{
 		if (FAILED(m_pStateController->Change_State(L"2H_HammerAttackR1_01")))

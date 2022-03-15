@@ -4,6 +4,7 @@
 #include "Camera_Silvermane.h"
 #include "Needle.h"
 #include "Fury.h"
+#include "Shield.h"
 
 #pragma region 스테이트들
 #include "Silvermane_Idle.h"
@@ -108,6 +109,28 @@
 
 #include "2H_HammerAttackDodgeR1.h"
 #include "2H_HammerAttackSprintR1.h"
+
+///////////////////////////////////////////// Shield
+#include "Shield_BlockStart.h"
+#include "Shield_BlockLoop.h"
+#include "Shield_BlockEnd.h"
+
+// Walk
+#include "Shield_WalkBwd.h"
+#include "Shield_WalkBwdStart.h"
+#include "Shield_WalkBwdStop.h"
+#include "Shield_WalkFwd.h"
+#include "Shield_WalkFwdStart.h"
+#include "Shield_WalkFwdStop.h"
+#include "Shield_WalkLeft.h"
+#include "Shield_WalkLeftStart.h"
+#include "Shield_WalkLeftStop.h"
+#include "Shield_WalkRight.h"
+#include "Shield_WalkRightStart.h"
+#include "Shield_WalkRightStop.h"
+
+// Attack
+#include "Shield_SupermanPunchStraight.h"
 #pragma endregion
 
 
@@ -162,6 +185,11 @@ _int CSilvermane::Tick(_double _dDeltaTime)
 		iProgress = m_pCurWeapon->Tick(_dDeltaTime);
 		if (NO_EVENT != iProgress) return iProgress;
 	}
+	if (m_pShield->getActive())
+	{
+		iProgress = m_pShield->Tick(_dDeltaTime);
+		if (NO_EVENT != iProgress) return iProgress;
+	}
 
 	return _int();
 }
@@ -174,12 +202,18 @@ _int CSilvermane::LateTick(_double _dDeltaTime)
 	iProgress = m_pStateController->LateTick(_dDeltaTime);
 	if (NO_EVENT != iProgress) return iProgress;
 
-	if(FAILED(m_pRenderer->Add_RenderGroup(CRenderer::RENDER_ALPHA, this))) return -1;
+	if(FAILED(m_pRenderer->Add_RenderGroup(CRenderer::RENDER_ALPHA, this)))
+		return -1;
 
 	// 무기 레잇업뎃
 	if (m_pCurWeapon)
 	{
 		iProgress = m_pCurWeapon->LateTick(_dDeltaTime);
+		if (NO_EVENT != iProgress) return iProgress;
+	}
+	if (m_pShield->getActive())
+	{
+		iProgress = m_pShield->LateTick(_dDeltaTime);
 		if (NO_EVENT != iProgress) return iProgress;
 	}
 
@@ -439,7 +473,42 @@ HRESULT CSilvermane::Ready_States()
 	if (FAILED(m_pStateController->Add_State(L"2H_HammerAttackSprintR1", C2H_HammerAttackSprintR1::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 #pragma endregion
-
+#pragma region Shield
+	if (FAILED(m_pStateController->Add_State(L"Shield_BlockStart", CShield_BlockStart::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	if (FAILED(m_pStateController->Add_State(L"Shield_BlockLoop", CShield_BlockLoop::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	if (FAILED(m_pStateController->Add_State(L"Shield_BlockEnd", CShield_BlockEnd::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	// Walk
+	if (FAILED(m_pStateController->Add_State(L"Shield_WalkBwd", CShield_WalkBwd::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	if (FAILED(m_pStateController->Add_State(L"Shield_WalkBwdStart", CShield_WalkBwdStart::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	if (FAILED(m_pStateController->Add_State(L"Shield_WalkBwdStop", CShield_WalkBwdStop::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	if (FAILED(m_pStateController->Add_State(L"Shield_WalkFwd", CShield_WalkFwd::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	if (FAILED(m_pStateController->Add_State(L"Shield_WalkFwdStart", CShield_WalkFwdStart::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	if (FAILED(m_pStateController->Add_State(L"Shield_WalkFwdStop", CShield_WalkFwdStop::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	if (FAILED(m_pStateController->Add_State(L"Shield_WalkLeft", CShield_WalkLeft::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	if (FAILED(m_pStateController->Add_State(L"Shield_WalkLeftStart", CShield_WalkLeftStart::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	if (FAILED(m_pStateController->Add_State(L"Shield_WalkLeftStop", CShield_WalkLeftStop::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	if (FAILED(m_pStateController->Add_State(L"Shield_WalkRight", CShield_WalkRight::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	if (FAILED(m_pStateController->Add_State(L"Shield_WalkRightStart", CShield_WalkRightStart::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	if (FAILED(m_pStateController->Add_State(L"Shield_WalkRightStop", CShield_WalkRightStop::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	// Attack
+	if (FAILED(m_pStateController->Add_State(L"Shield_SupermanPunchStraight", CShield_SupermanPunchStraight::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+#pragma endregion
 
 	for (auto& pair : m_pStateController->Get_States())
 	{
@@ -470,6 +539,14 @@ HRESULT CSilvermane::Ready_Weapons()
 	pWeapon->Set_Owner(this);
 	pWeapon->Set_OwnerPivotMatrix(m_pModel->Get_PivotMatrix());
 	m_umapWeapons.emplace(L"Fury", pWeapon);
+
+	// 방패
+	pWeaponBone = m_pModel->Get_BoneMatrix("weapon_l");
+	m_pShield = CShield::Create(m_pDevice, m_pDeviceContext);
+	m_pShield->NativeConstruct(pWeaponBone);
+	m_pShield->Set_Owner(this);
+	m_pShield->Set_OwnerPivotMatrix(m_pModel->Get_PivotMatrix());
+	Set_EquipShield(false);
 	
 	return S_OK;
 }
@@ -538,6 +615,11 @@ const _bool CSilvermane::Is_EquipWeapon() const
 	return m_isEquipWeapon;
 }
 
+const _bool CSilvermane::Is_EquipShield() const
+{
+	return m_isEquipShield;
+}
+
 const CWeapon::EType CSilvermane::Get_WeaponType() const
 {
 	return m_pCurWeapon->Get_Type();
@@ -576,6 +658,15 @@ const _bool CSilvermane::Change_Weapon(const wstring& _name)
 HRESULT CSilvermane::Change_State(const wstring& _wstrStateTag)
 {
 	return m_pStateController->Change_State(_wstrStateTag);
+}
+
+void CSilvermane::Set_EquipShield(const _bool _isEquipShield)
+{
+	if (m_pShield)
+	{
+		m_pShield->Set_Equip(_isEquipShield);
+		m_isEquipShield = _isEquipShield;
+	}
 }
 
 _int CSilvermane::Trace_CameraLook(const _double& _dDeltaTime)
@@ -651,10 +742,9 @@ CGameObject* CSilvermane::Clone(void* _pArg)
 
 void CSilvermane::Free()
 {
+	Safe_Release(m_pShield);
 	for (auto& pair : m_umapWeapons)
-	{
 		Safe_Release(pair.second);
-	}
 	m_umapWeapons;
 
 	Safe_Release(m_pCharacterController);

@@ -83,6 +83,8 @@ HRESULT CFury::Render()
 
 		m_pModel->Render(i, 0);
 	}
+
+	return S_OK;
 }
 
 HRESULT CFury::Ready_Components()

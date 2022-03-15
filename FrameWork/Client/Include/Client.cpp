@@ -154,6 +154,24 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
    ShowWindow(hWnd, nCmdShow);
    UpdateWindow(hWnd);
 
+   RECT rcClip;
+   POINT p1, p2;
+   GetClientRect(hWnd, &rcClip);
+   p1.x = rcClip.left;
+   p1.y = rcClip.top;
+   p2.x = rcClip.right;
+   p2.y = rcClip.bottom;
+
+   ClientToScreen(hWnd, &p1);
+   ClientToScreen(hWnd, &p2);
+
+   rcClip.left = p1.x;
+   rcClip.top = p1.y;
+   rcClip.right = p2.x;
+   rcClip.bottom = p2.y;
+
+   ClipCursor(&rcClip);
+
    g_hWnd = hWnd;
    return TRUE;
 }
@@ -172,6 +190,33 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
     switch (message)
     {
+    case WM_ACTIVATE:
+        switch (wParam)
+        {
+        case WA_ACTIVE:
+        case WA_CLICKACTIVE:
+        {
+            RECT rcClip;
+            POINT p1, p2;
+            GetClientRect(hWnd, &rcClip);
+            p1.x = rcClip.left;
+            p1.y = rcClip.top;
+            p2.x = rcClip.right;
+            p2.y = rcClip.bottom;
+
+            ClientToScreen(hWnd, &p1);
+            ClientToScreen(hWnd, &p2);
+
+            rcClip.left = p1.x;
+            rcClip.top = p1.y;
+            rcClip.right = p2.x;
+            rcClip.bottom = p2.y;
+
+            ClipCursor(&rcClip);
+        }
+            break;
+        }
+        break;
     case WM_KEYDOWN:
     {
         switch (wParam)

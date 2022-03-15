@@ -44,12 +44,16 @@ public:
 
 public: /* For.Weapon */
 	const _bool Is_EquipWeapon() const;
+	const _bool Is_EquipShield() const;
 	const CWeapon::EType Get_WeaponType() const;
 	void Set_EquipWeapon(const _bool _isEquipWeapon);
 	void Set_WeaponFixedBone(const string& _wstrFixedBoneTag);
 	void Set_WeaponFixedBone(CHierarchyNode* _pFixedBone);
 	const _bool Change_Weapon(const wstring& _name);
 	HRESULT Change_State(const wstring& _wstrStateTag);
+
+public: /* For.Shield */
+	void Set_EquipShield(const _bool _isEquipShield);
 
 private:
 	_int Trace_CameraLook(const _double& _dDeltaTime);
@@ -69,7 +73,9 @@ private:
 
 private: /* For.Weapon */
 	CWeapon* m_pCurWeapon = nullptr;
+	CWeapon* m_pShield = nullptr;
 	_bool m_isEquipWeapon = false;
+	_bool m_isEquipShield = false;
 	unordered_map<wstring, CWeapon*> m_umapWeapons;
 
 public:
