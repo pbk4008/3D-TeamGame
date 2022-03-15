@@ -45,6 +45,7 @@ public:
 	vector<Engine::CCell*>		m_vecCells; 
 	NAVMESHDESC					m_NavMesh;
 	vector<NAVMESHDESC>			m_NavMeshList_Pos;
+	vector<TRIGGER>				m_vecTrigger;
 
 public:
 	class CMainFrame*			m_pMainFrm	    = nullptr;
@@ -63,6 +64,7 @@ public:
 	CEdit m_EditText_Model_Tag;
 	CEdit m_EditTxt_Model_Name;
 	CComboBox m_Combo_Level;
+	CComboBox m_TriggerCombo;
 
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV 지원입니다.
@@ -83,4 +85,7 @@ public:
 	afx_msg void OnBnClickedZRotButton();
 	afx_msg void OnBnClickedRotNoneButton();
 	afx_msg void OnBnClickedCreateNavMesh();
+	afx_msg void OnBnClickedTriggerAdd();
+	afx_msg void OnBnClickedSaveTrigger();
+	afx_msg void OnBnClickedLodTrigger();
 };

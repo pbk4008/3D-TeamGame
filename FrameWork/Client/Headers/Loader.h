@@ -21,6 +21,7 @@ private:
 	HRESULT Ready_Logo();
 	HRESULT Ready_Stage1();
 	HRESULT Ready_Test_JS();
+	HRESULT Ready_Test_YM();
 
 private:
 	//stage1
@@ -32,12 +33,11 @@ private:
 	HRESULT Load_Stage1StaticUILoad(); //툴에서 값 지정해주는 UI들은 여기서 미리 생성
 	HRESULT Load_Stage1UILoad(); //직접 생성
 	HRESULT Load_Stage1EffectLoad();
+	HRESULT Load_Stage1TriggerLod();
 
 public:
 	static _uint CALLBACK Thread_Main(void* pArg);
 	static CLoader* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext, SCENEID eID);
-
-
 private:
 	virtual void Free();
 public:

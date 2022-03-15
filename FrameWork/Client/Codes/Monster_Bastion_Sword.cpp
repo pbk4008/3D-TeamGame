@@ -29,8 +29,8 @@ HRESULT CMonster_Bastion_Sword::NativeConstruct(void* _pArg)
 	if (FAILED(SetUp_Components()))
 		return E_FAIL;
 
-	if (FAILED(Set_Animation_FSM()))
-		return E_FAIL;
+	//if (FAILED(Set_Animation_FSM()))
+	//	return E_FAIL;
 
 	_vector Pos = { 0.f, 0.f, 10.f, 1.f };
 	m_pTransform->Set_State(CTransform::STATE_POSITION, Pos);
@@ -96,23 +96,23 @@ HRESULT CMonster_Bastion_Sword::SetUp_Components()
 		return E_FAIL;
 	}
 
-	CAnimator::ANIMATORDESC tDesc;
-	ZeroMemory(&tDesc, sizeof(tDesc));
+	//CAnimator::ANIMATORDESC tDesc;
+	//ZeroMemory(&tDesc, sizeof(tDesc));
 
-	tDesc.pModel = m_pModelCom;
-	tDesc.pTransform = m_pTransform;
+	//tDesc.pModel = m_pModelCom;
+	//tDesc.pTransform = m_pTransform;
 
-	if (FAILED(__super::SetUp_Components((_uint)SCENEID::SCENE_STAGE1, L"Com_Animator", L"Com_AnimationController", (CComponent**)& m_pAnimator, &tDesc)))
-	{
-		return E_FAIL;
-	}
+	//if (FAILED(__super::SetUp_Components((_uint)SCENEID::SCENE_STAGE1, L"Com_Animator", L"Com_AnimationController", (CComponent**)& m_pAnimator, &tDesc)))
+	//{
+	//	return E_FAIL;
+	//}
 
-	m_pModelCom->Add_Material(g_pGameInstance->Get_Material(L"Mtrl_Bastion_Sword_Top"), 0);
-	m_pModelCom->Add_Material(g_pGameInstance->Get_Material(L"Mtrl_Bastion_Sword_Down"), 1);
-	m_pModelCom->Add_Material(g_pGameInstance->Get_Material(L"Mtrl_Bastion_Sword_Cloth"), 2);
-	
-	
-	
+	//m_pModelCom->Add_Material(g_pGameInstance->Get_Material(L"Mtrl_Bastion_Sword_Top"), 0);
+	//m_pModelCom->Add_Material(g_pGameInstance->Get_Material(L"Mtrl_Bastion_Sword_Down"), 1);
+	//m_pModelCom->Add_Material(g_pGameInstance->Get_Material(L"Mtrl_Bastion_Sword_Cloth"), 2);
+	//
+	//
+	//
 	//vector<CAnimation*> vecAnimation = m_pModelCom->Get_Animations();
 
 	
@@ -130,7 +130,7 @@ HRESULT CMonster_Bastion_Sword::SetUp_Components()
 
 HRESULT CMonster_Bastion_Sword::Set_Animation_FSM()
 {
-	CAnimation* pAnim = m_pModelCom->Get_Animation("SK_Bastion_Tier1_Full.ao|A_Run_Start_Swordsworn");
+	/*CAnimation* pAnim = m_pModelCom->Get_Animation("SK_Bastion_Tier1_Full.ao|A_Run_Start_Swordsworn");
 	if (FAILED(m_pAnimator->Insert_Animation(L"RunStart", L"Head", pAnim, true, false, false, ERootOption::XYZ)))
 		return E_FAIL;
 	pAnim = m_pModelCom->Get_Animation("SK_Bastion_Tier1_Full.ao|A_Run_Fwd_Swordsworn");
@@ -143,7 +143,7 @@ HRESULT CMonster_Bastion_Sword::Set_Animation_FSM()
 	m_pAnimator->Set_UpAutoChangeAnimation(L"RunStart", L"RunLoop");
 	m_pAnimator->Set_UpAutoChangeAnimation(L"RunLoop", L"RunStop");
 
-	m_pAnimator->Change_Animation(L"RunStart");
+	m_pAnimator->Change_Animation(L"RunStart");*/
 
 
 

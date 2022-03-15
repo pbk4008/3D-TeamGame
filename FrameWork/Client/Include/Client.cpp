@@ -59,8 +59,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	if (FAILED(g_pGameInstance->Ready_Timer(L"Timer_60")))
 		return E_FAIL;
 
-  /*  pGameInstance->Init();
-    pGameInstance->Init_FrameMgr(60.f);*/
+    //pGameInstance->Init();
+    //pGameInstance->Init_FrameMgr(60.f);
     // 기본 메시지 루프입니다:
     _double  dTimerAcc = 0.0;
     while (true)

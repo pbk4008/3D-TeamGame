@@ -4,6 +4,7 @@
 #include "Weapon.h"
 
 BEGIN(Engine)
+
 END
 
 BEGIN(Client)

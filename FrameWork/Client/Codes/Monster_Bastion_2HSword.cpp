@@ -1,6 +1,12 @@
 #include "pch.h"
 #include "Monster_Bastion_2HSword.h"
 
+/* for. Idle */
+#include "Bastion_2HSword_Idle.h"
+
+/* for. Weapon */
+#include "RetributionBlade.h"
+
 CMonster_Bastion_2HSword::CMonster_Bastion_2HSword(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
 	: CActor(_pDevice, _pDeviceContext)
 {
@@ -23,6 +29,7 @@ HRESULT CMonster_Bastion_2HSword::NativeConstruct(void* _pArg)
 	if (FAILED(__super::NativeConstruct(_pArg))) return E_FAIL;
 
 	if (FAILED(Ready_Components())) return E_FAIL;
+	if (FAILED(Ready_Weapon())) return E_FAIL;
 
 	return S_OK;
 }
@@ -34,6 +41,12 @@ _int CMonster_Bastion_2HSword::Tick(_double _dDeltaTime)
 
 	m_pAnimationController->Tick(_dDeltaTime);
 
+	// 무기 업뎃
+	if (m_pCurWeapon)
+	{
+		iProgress = m_pCurWeapon->Tick(_dDeltaTime);
+		if (NO_EVENT != iProgress) return iProgress;
+	}
 	return _int();
 }
 
@@ -43,6 +56,13 @@ _int CMonster_Bastion_2HSword::LateTick(_double _dDeltaTime)
 	if (NO_EVENT != iProgress) return iProgress;
 
 	if (FAILED(m_pRenderer->Add_RenderGroup(CRenderer::RENDER_ALPHA, this))) return -1;
+
+	// 무기 레잇업뎃
+	if (m_pCurWeapon)
+	{
+		iProgress = m_pCurWeapon->LateTick(_dDeltaTime);
+		if (NO_EVENT != iProgress) return iProgress;
+	}
 
 	return _int();
 }
@@ -66,7 +86,6 @@ HRESULT CMonster_Bastion_2HSword::Render()
 
 		if (FAILED(m_pModel->Render(i, 0))) return E_FAIL;
 	}
-
 	return S_OK;
 }
 
@@ -79,17 +98,58 @@ HRESULT CMonster_Bastion_2HSword::Ready_Components()
 	_float4 vPosition = { -3.f, 0.f, 3.f, 1.f };
 	m_pTransform->Set_State(CTransform::STATE_POSITION, XMLoadFloat4(&vPosition));
 
-	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_TEST_JS, L"Model_Bastion_2HSword", L"Model", (CComponent**)&m_pModel)))
+	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_TEST_YM, L"Model_Bastion_2HSword", L"Model", (CComponent**)&m_pModel)))
 		return E_FAIL;
 	m_pModel->Add_Material(g_pGameInstance->Get_Material(L"Mtrl_BastionTierII_Top"), 0);
 	m_pModel->Add_Material(g_pGameInstance->Get_Material(L"Mtrl_BastionTierII_Down"), 1);
 	m_pModel->Add_Material(g_pGameInstance->Get_Material(L"Mtrl_BastionTierII_Fur"), 2);
 
-	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_TEST_JS, L"Com_AnimationController", L"AnimationController", (CComponent**)&m_pAnimationController)))
+	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_TEST_YM, L"Com_AnimationController", L"AnimationController", (CComponent**)&m_pAnimationController)))
 		return E_FAIL;
 	m_pAnimationController->Set_GameObject(this);
 	m_pAnimationController->Set_Model(m_pModel);
 	m_pAnimationController->Set_Transform(m_pTransform);
+
+	// 스테이트 컨트롤러
+	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_TEST_YM, L"Com_StateController", L"StateController", (CComponent**)&m_pStateController)))
+		return E_FAIL;
+	m_pStateController->Set_GameObject(this);
+
+	return S_OK;
+}
+
+HRESULT CMonster_Bastion_2HSword::Ready_Weapon()
+{
+	CHierarchyNode* pWeaponBone = m_pModel->Get_BoneMatrix("weapon_r_end_end");
+	CWeapon* pWeapon = nullptr;
+
+	//RetributionBlade
+	pWeapon = CRetributionBlade::Create(m_pDevice, m_pDeviceContext);
+	pWeapon->NativeConstruct(pWeaponBone);
+	pWeapon->Set_Owner(this);
+	pWeapon->Set_OwnerPivotMatrix(m_pModel->Get_PivotMatrix());
+	m_umapWeapons.emplace(L"RetributionBlade", pWeapon);
+	m_pCurWeapon = pWeapon;
+
+	return S_OK;
+}
+
+HRESULT CMonster_Bastion_2HSword::Ready_States()
+{
+#pragma region Default
+	if (FAILED(m_pStateController->Add_State(L"Idle", CBastion_2HSword_Idle::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+#pragma endregion
+
+	for (auto& pair : m_pStateController->Get_States())
+	{
+		pair.second->Set_StateController(m_pStateController);
+		static_cast<CState_Monster*>(pair.second)->Set_Monster(this);
+		static_cast<CState_Monster*>(pair.second)->Set_Transform(m_pTransform);
+		static_cast<CState_Monster*>(pair.second)->Set_Model(m_pModel);
+		static_cast<CState_Monster*>(pair.second)->Set_AnimationController(m_pAnimationController);
+	}
+	m_pStateController->Change_State(L"Idle");
 
 	return S_OK;
 }

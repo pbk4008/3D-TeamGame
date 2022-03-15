@@ -222,6 +222,28 @@
     </Filter>
     <Filter Include="02.GameObject\98.Player\00.Silvermane\State\Shield\Attack">
       <UniqueIdentifier>{d31e6c56-beaa-4aaa-a144-eba3c2cdafff}</UniqueIdentifier>
+	</Filter>
+    <Filter Include="94.Trigger">
+      <UniqueIdentifier>{64538ba6-dcae-4651-a187-37e1fdf0fbf0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Scene\98.TestScene_YM">
+      <UniqueIdentifier>{8e37d1fe-95e3-4c35-bcbf-fba13eeabb78}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\96.Weapon\02.RetributionBlade">
+      <UniqueIdentifier>{493beca5-7248-489a-b7af-b6706549a6e7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\95.Monster\Bastion_2HSword\State">
+      <UniqueIdentifier>{caa8bc81-a039-4cfc-a64a-ea1a7a5dc328}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\95.Monster\Bastion_2HSword\State\Hand">
+      <UniqueIdentifier>{ea7d1da7-e9cb-4925-b1b9-f6240057aa7b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\95.Monster\Bastion_2HSword\State\Hand\Default">
+      <UniqueIdentifier>{dbf9c379-34a9-4be7-ac82-ccc9fa42deb6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\95.Monster\State">
+      <UniqueIdentifier>{ed0d6809-deab-4c78-b015-113a00eac212}</UniqueIdentifier>
+>>>>>>> main
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -672,6 +694,21 @@
     </ClInclude>
     <ClInclude Include="..\Headers\Shield_SupermanPunchStraight.h">
       <Filter>02.GameObject\98.Player\00.Silvermane\State\Shield\Attack</Filter>
+	</ClInclude>
+    <ClInclude Include="..\Headers\Client_Trigger.h">
+      <Filter>94.Trigger</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\TestScene_YM.h">
+      <Filter>01.Scene\98.TestScene_YM</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\RetributionBlade.h">
+      <Filter>02.GameObject\96.Weapon\02.RetributionBlade</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Bastion_2HSword_Idle.h">
+      <Filter>02.GameObject\95.Monster\Bastion_2HSword\State\Hand\Default</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\State_Monster.h">
+      <Filter>02.GameObject\95.Monster\State</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1099,6 +1136,21 @@
     </ClCompile>
     <ClCompile Include="..\Codes\Shield_SupermanPunchStraight.cpp">
       <Filter>02.GameObject\98.Player\00.Silvermane\State\Shield\Attack</Filter>
+	</ClCompile>
+    <ClCompile Include="..\Codes\Client_Trigger.cpp">
+      <Filter>94.Trigger</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\TestScene_YM.cpp">
+      <Filter>01.Scene\98.TestScene_YM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\RetributionBlade.cpp">
+      <Filter>02.GameObject\96.Weapon\02.RetributionBlade</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Bastion_2HSword_Idle.cpp">
+      <Filter>02.GameObject\95.Monster\Bastion_2HSword\State\Hand\Default</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\State_Monster.cpp">
+      <Filter>02.GameObject\95.Monster\State</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

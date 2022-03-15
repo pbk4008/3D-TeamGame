@@ -66,6 +66,5 @@ HRESULT CLandScape::Render()
 
 void CLandScape::Free()
 {
-
 	CGameObject::Free();
 }

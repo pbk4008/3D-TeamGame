@@ -13,6 +13,7 @@ public:
 	{
 		wstring wstrInstaneTag = L"";
 		CInstancing_Mesh::INSTANCINGMESHDESC tInstanceDesc;
+
 	}ENVIRONMENTDESC;
 private:
 	explicit CEnvironment();
