@@ -1,7 +1,6 @@
 #include "Material.h"
 #include "Texture.h"
 #include "TextureManager.h"
-#include "Component_Manager.h"
 
 CMaterial::CMaterial(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
 	: m_pDevice(_pDevice)
@@ -212,9 +211,6 @@ HRESULT CMaterial::Set_Texture(TEXTURETYPE _eTextureType, const wstring& _pTextu
 
 
 	CTextureManager* pTextureMgr = GET_INSTANCE(CTextureManager);
-
-	CComponent_Manager* pComponentMgr = GET_INSTANCE(CComponent_Manager);
-
 
 	if (FAILED(pTextureMgr->Add_Texture(m_pDevice, _pTextureTag, _pTexturePath)))
 		return E_FAIL;

@@ -148,7 +148,7 @@ HRESULT CSaveManager::Load_AnimModel(DYNAMICDATA& AnimData, _matrix& pivotMatrix
 
 	ReadFile(hFile, &pivotMatrix, sizeof(_matrix), &dwByte, nullptr);
 
-	
+	AnimData.pMtrlData.resize(AnimData.iMtrlCount);
 	for (_uint i=0; i<AnimData.iMtrlCount; i++)
 	{
 		MTRLDATA tMtrlData;
@@ -167,9 +167,10 @@ HRESULT CSaveManager::Load_AnimModel(DYNAMICDATA& AnimData, _matrix& pivotMatrix
 
 			tMtrlData.vecTextureData.emplace_back(tTextureData);
 		}
-		AnimData.pMtrlData.emplace_back(tMtrlData);
+		AnimData.pMtrlData[i]=tMtrlData;
 	}
 
+	AnimData.pMeshData.resize(AnimData.iMeshCount);
 	for (_uint i=0; i<AnimData.iMeshCount; i++)
 	{
 		ANIMMESHDATA tAnimMeshData;
@@ -189,18 +190,18 @@ HRESULT CSaveManager::Load_AnimModel(DYNAMICDATA& AnimData, _matrix& pivotMatrix
 
 		_uint iBoneCnt = 0;
 		ReadFile(hFile, &iBoneCnt, sizeof(_uint), &dwByte, nullptr);
+		tAnimMeshData.vecBoneName.resize(iBoneCnt);
 		for(_uint j =0; j< iBoneCnt; j++)
 		{
 			char strBoneName[MAX_PATH] = "";
 			ReadFile(hFile, &strBoneName, sizeof(char) * MAX_PATH, &dwByte, nullptr);
 			string tmp = strBoneName;
-			tAnimMeshData.vecBoneName.emplace_back(tmp);
+			tAnimMeshData.vecBoneName[i]=tmp;
 		}
-
-
-		AnimData.pMeshData.emplace_back(tAnimMeshData);
+		AnimData.pMeshData[i] = tAnimMeshData;
 	}
 
+	AnimData.pAnimData.resize(AnimData.iAnimCount);
 	for (_uint i=0; i<AnimData.iAnimCount; i++)
 	{
 		ANIMDATA tAnimData;
@@ -233,16 +234,17 @@ HRESULT CSaveManager::Load_AnimModel(DYNAMICDATA& AnimData, _matrix& pivotMatrix
 				ReadFile(hFile, &tAnimData.pChannelData[j].pKeyFrame[k].vPosition, sizeof(_float3), &dwByte, nullptr);
 			}
 		}
-		AnimData.pAnimData.emplace_back(tAnimData);
+		AnimData.pAnimData[i]=tAnimData;
 	}
 
+	AnimData.pBoneData.resize(AnimData.iBoneCount);
 	for (_uint i = 0; i < AnimData.iBoneCount; i++)
 	{
 		BONEDATA tBoneData;
 		ZeroMemory(&tBoneData, sizeof(BONEDATA));
 		ReadFile(hFile, &tBoneData, sizeof(BONEDATA), &dwByte, nullptr);
 
-		AnimData.pBoneData.emplace_back(tBoneData);
+		AnimData.pBoneData[i] = tBoneData;
 	}
 
 	CloseHandle(hFile);
@@ -263,7 +265,7 @@ HRESULT CSaveManager::Load_StaticModel(STATICDATA& StaticData, const wstring& pF
 	ReadFile(hFile, &StaticData.iMtrlCount, sizeof(_uint), &dwByte, nullptr);
 	ReadFile(hFile, &StaticData.iMeshCount, sizeof(_uint), &dwByte, nullptr);
 
-	//StaticData.pMtrlData.reserve(StaticData.iMtrlCount);
+	StaticData.pMtrlData.resize(StaticData.iMtrlCount);
 	for (_uint i = 0; i < StaticData.iMtrlCount; i++)
 	{
 		MTRLDATA pMTrl;
@@ -280,9 +282,9 @@ HRESULT CSaveManager::Load_StaticModel(STATICDATA& StaticData, const wstring& pF
 			ReadFile(hFile, &pTexture, sizeof(TEXTUREDATA), &dwByte, nullptr);
 			pMTrl.vecTextureData.emplace_back(pTexture);
 		}
-		StaticData.pMtrlData.emplace_back(pMTrl);
+		StaticData.pMtrlData[i] = pMTrl;
 	}
-	//StaticData.pMeshData.reserve(StaticData.iMeshCount);
+	StaticData.pMeshData.resize(StaticData.iMeshCount);
 	for (_uint i = 0; i < StaticData.iMeshCount; i++)
 	{
 		STATICMESHDATA pMesh;
@@ -299,7 +301,7 @@ HRESULT CSaveManager::Load_StaticModel(STATICDATA& StaticData, const wstring& pF
 		ReadFile(hFile, pMesh.pIndex, sizeof(FACEINDICES32) * iIdxCnt, &dwByte, nullptr);
 		ReadFile(hFile, &pMesh.iMeshMtrlNum, sizeof(_uint), &dwByte, nullptr);
 
-		StaticData.pMeshData.emplace_back(pMesh);
+		StaticData.pMeshData[i] = pMesh;
 	}
 	CloseHandle(hFile);
 

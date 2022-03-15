@@ -249,7 +249,6 @@ void CInstancing_Mesh::Free()
 
 	Safe_Release(m_pVBInstance);
 
-
 	for (auto& pMtrlMeshContainer : m_vecMeshContainers)
 	{
 		for (auto& pMeshContainer : pMtrlMeshContainer)
@@ -260,5 +259,6 @@ void CInstancing_Mesh::Free()
 
 	for (auto& pMaterial : m_vecMaterials)
 		Safe_Release(pMaterial);
+
 	m_vecMaterials.clear();
 }
