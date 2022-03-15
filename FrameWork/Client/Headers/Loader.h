@@ -21,6 +21,7 @@ private:
 	HRESULT Ready_Logo();
 	HRESULT Ready_Stage1();
 	HRESULT Ready_Test_JS();
+	HRESULT Ready_Test_YM();
 
 private:
 	//stage1

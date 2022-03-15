@@ -94,7 +94,7 @@ HRESULT CNeedle::Ready_Components()
 	m_pTransform->Set_TransformDesc(transformDesc);
 	m_pLocalTransform->Set_TransformDesc(transformDesc);
 
-	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_TEST_JS, L"Model_Needle", L"Model", (CComponent**)&m_pModel)))
+	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_TEST_YM, L"Model_Needle", L"Model", (CComponent**)&m_pModel)))
 		return E_FAIL;
 
 	return S_OK;

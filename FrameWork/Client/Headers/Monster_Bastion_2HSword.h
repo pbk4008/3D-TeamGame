@@ -1,11 +1,14 @@
-#pragma once
-
+#ifndef Monster_Bastion_2HSword_h__
+#define Monster_Bastion_2HSword_h__
 
 #include "Actor.h"
 
-BEGIN(Client)
+BEGIN(Engine)
+END
 
-class CMonster_Bastion_2HSword : public CActor
+BEGIN(Client)
+class CWeapon;
+class CMonster_Bastion_2HSword final : public CActor
 {
 private:
 	explicit CMonster_Bastion_2HSword(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext);
@@ -21,10 +24,18 @@ public:
 
 private:
 	HRESULT Ready_Components();
+	HRESULT Ready_Weapon();
+	HRESULT Ready_States();
 
 private:
-	CModel* m_pModel = nullptr;
+	CModel*				  m_pModel = nullptr;
 	CAnimationController* m_pAnimationController = nullptr;
+	CStateController*	  m_pStateController = nullptr;
+
+private: /* For.Weapon */
+	CWeapon* m_pCurWeapon = nullptr;
+	_bool m_isEquipWeapon = false;
+	unordered_map<wstring, CWeapon*> m_umapWeapons;
 
 public:
 	static CMonster_Bastion_2HSword* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext);
@@ -33,3 +44,6 @@ public:
 };
 
 END
+
+
+#endif // Monster_Bastion_2HSword_h__
