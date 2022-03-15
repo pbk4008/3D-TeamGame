@@ -9,6 +9,7 @@
 #include "UI_Monster_HpBar.h"
 #include "Material.h"
 #include "Instancing_Mesh.h"
+#include "Client_Trigger.h"
 #include "Environment.h"
 #include "Monster_Crawler.h"
 #include "Monster_EarthAberrant.h"
@@ -91,27 +92,26 @@ HRESULT CLoader::LoadForScene()
 
 HRESULT CLoader::SetUp_Stage1_Object()
 {
-	
-	if (FAILED(Load_Stage1FBXLoad()))
+ 	if (FAILED(Load_Stage1FBXLoad()))
 		return E_FAIL;
 
-	/*if (FAILED(Load_Stage1PlayerLoad()))
-		return E_FAIL;*/
+	if (FAILED(Load_Stage1PlayerLoad()))
+		return E_FAIL;
 
-	//if (FAILED(Load_Stage1MonsterLoad()))
-	//	return E_FAIL;
+	if (FAILED(Load_Stage1MonsterLoad()))
+		return E_FAIL;
 
-	//if (FAILED(Load_Stage1StaticUILoad()))
-	//	return E_FAIL;
+	if (FAILED(Load_Stage1StaticUILoad()))
+		return E_FAIL;
 
-	//if (FAILED(Load_Stage1UILoad()))
-	//	return E_FAIL;
+	if (FAILED(Load_Stage1UILoad()))
+		return E_FAIL;
 
 	if (FAILED(Load_Stage1EffectLoad()))
 		return E_FAIL;
 
-	//if (FAILED(Load_Stage1EffectLoad()))
-	//	return E_FAIL;
+	if (FAILED(Load_Stage1TriggerLod()))
+		return E_FAIL;
 
 	return S_OK;
 }
@@ -298,6 +298,15 @@ HRESULT CLoader::Load_Stage1EffectLoad()
 		return E_FAIL;
 	}
 	
+	return S_OK;
+}
+
+HRESULT CLoader::Load_Stage1TriggerLod()
+{
+	/* Prototype_GameObject_Trigger */
+	if (FAILED(g_pGameInstance->Add_Prototype(L"Prototype_GameObject_Trigger", CClient_Trigger::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+
 	return S_OK;
 }
 

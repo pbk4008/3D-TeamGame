@@ -9,6 +9,7 @@
 #include "NavSphere.h"
 #include "Navigation.h"
 #include "MeshCollider.h"
+#include "Trigger.h"
 
 CChanger::CChanger(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
 	:m_pDevice(_pDevice)
@@ -80,7 +81,7 @@ HRESULT CChanger::Loading_For_Static(void)
 		return E_FAIL;
 
 	/* Prototype_Component_Texture_Terrain */
-	g_pGameInstance->Add_Texture(m_pDevice, L"Plane_Texture", L"../Bin/Resources/Textures/Terrain/Plane_Default.png");
+	g_pGameInstance->Add_Texture(m_pDevice, L"Plane_Texture", L"../Bin/Resources/Textures/Terrain/Plane_Default.dds");
 
 	/* Prototype_GameObject_Terrain */
 	if (FAILED(g_pGameInstance->Add_Prototype(L"Prototype_GameObject_Plane", CPlane::Create(m_pDevice, m_pDeviceContext))))
@@ -117,10 +118,9 @@ HRESULT CChanger::Loading_ForMap_Tool(void)
 	if (FAILED(g_pGameInstance->Add_Prototype(L"Prototype_GameObject_StaticMesh", CStatic_Mesh::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 
-
-
-
-
+	/* Prototype_GameObject_Trigger */
+	if (FAILED(g_pGameInstance->Add_Prototype(L"Prototype_GameObject_Trigger", CTrigger::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
 
 	m_isFinished = TRUE;
 

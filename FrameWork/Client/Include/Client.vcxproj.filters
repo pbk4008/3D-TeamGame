@@ -205,6 +205,9 @@
     <Filter Include="02.GameObject\98.Player\00.Silvermane\State\2H_Hammer\R2">
       <UniqueIdentifier>{e33ba3ef-21b0-430f-8b2b-2ca2d50e74c5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="94.Trigger">
+      <UniqueIdentifier>{64538ba6-dcae-4651-a187-37e1fdf0fbf0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -595,6 +598,9 @@
     <ClInclude Include="..\Headers\2H_HammerAttackR2_Charge.h">
       <Filter>02.GameObject\98.Player\00.Silvermane\State\2H_Hammer\R2</Filter>
     </ClInclude>
+    <ClInclude Include="..\Headers\Client_Trigger.h">
+      <Filter>94.Trigger</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -961,6 +967,9 @@
     </ClCompile>
     <ClCompile Include="..\Codes\2H_HammerAttackR2_Charge.cpp">
       <Filter>02.GameObject\98.Player\00.Silvermane\State\2H_Hammer\R2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Client_Trigger.cpp">
+      <Filter>94.Trigger</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
