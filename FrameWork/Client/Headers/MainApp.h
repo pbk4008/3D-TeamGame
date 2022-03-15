@@ -18,6 +18,10 @@ public:
 	HRESULT NativeConstruct();
 	_int Tick(_double TimeDelta);
 	HRESULT Render();
+
+private:
+	void Lock_Mouse();
+
 private:
 	ID3D11Device*			m_pDevice = nullptr;
 	ID3D11DeviceContext*	m_pDeviceContext = nullptr;
@@ -28,6 +32,7 @@ private:
 	_uint				m_iNumRender = 0;
 	_tchar				m_szFPS[MAX_PATH] = TEXT("");
 
+	_bool				m_isLockMouse = false;
 	_bool				m_isPause = false;
 	_bool				m_isRender = true;
 	_bool				m_bDeffered = false;

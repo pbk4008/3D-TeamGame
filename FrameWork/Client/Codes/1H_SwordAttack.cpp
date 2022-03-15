@@ -98,6 +98,13 @@ _int C1H_SwordAttack::KeyCheck(const _double& _dDeltaTime)
 			}
 		}
 
+		if (g_pGameInstance->getkeyPress(DIK_Q))
+		{
+			if (FAILED(m_pStateController->Change_State(L"1H_SwordIdle")))
+				return E_FAIL;
+			return STATE_CHANGE;
+		}
+
 		if (g_pGameInstance->getkeyPress(DIK_LSHIFT))
 		{
 			if (g_pGameInstance->getkeyPress(DIK_W) ||

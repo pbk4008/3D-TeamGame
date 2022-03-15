@@ -524,7 +524,7 @@ HRESULT CSilvermane::Ready_States()
 
 HRESULT CSilvermane::Ready_Weapons()
 {
-	CHierarchyNode* pWeaponBone = m_pModel->Get_BoneMatrix("spien_03");
+	CHierarchyNode* pWeaponBone = m_pModel->Get_BoneMatrix("spine_03");
 	CWeapon* pWeapon = nullptr;
 	// ÇÑ¼Õ°Ë
 	pWeapon = CNeedle::Create(m_pDevice, m_pDeviceContext);

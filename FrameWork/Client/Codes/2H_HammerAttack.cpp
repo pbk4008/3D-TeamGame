@@ -104,6 +104,13 @@ _int C2H_HammerAttack::KeyCheck(const _double& _dDeltaTime)
 			}
 		}
 
+		if (g_pGameInstance->getkeyPress(DIK_Q))
+		{
+			if (FAILED(m_pStateController->Change_State(L"Shield_BlockStart")))
+				return E_FAIL;
+			return STATE_CHANGE;
+		}
+
 		if (g_pGameInstance->getkeyPress(DIK_LSHIFT))
 		{
 			if (g_pGameInstance->getkeyPress(DIK_W) ||
