@@ -30,23 +30,33 @@ public:
 	virtual _int LateTick(_double dDeltaTime);
 public:
 	//애니메이션 추가(추가하는 애니메이션 태그, 연결하고자 하는 애니메이션 태그, 애니메이션, 이중연결할건지 안할건지)
-	HRESULT Insert_Animation(const _tchar* pName, const wstring& pConnectName, class CAnimation* pAnim, _bool bRootAnim, _bool bTransFrom, _bool bLoop, ERootOption eOption,_bool bDouble=false);
+	HRESULT Insert_Animation(_uint iTag, _uint iConnectTag, class CAnimation* pAnim, _bool bRootAnim, _bool bTransFrom, _bool bLoop, ERootOption eOption,_bool bDouble=false);
 	//애니메이션 연결(연결하고자 하는 애니메이션태그, 애니메이션 노드, 이중연결할건지 안할건지)
-	HRESULT Connect_Animation(const wstring& pConnectName, CAnimNode* pNode, _bool bDouble);
+	HRESULT Connect_Animation(_uint iConnectTag, CAnimNode* pNode, _bool bDouble);
+	//애니메이션 연결(연결하는 애니메이션 태그, 연결하고자 하는 애니메이션 태그, 이중연결 할건지 안할건지
+	HRESULT Connect_Animation(_uint iTag, _uint iConnectTag, _bool bDouble);
 	//애니메이션 변경(변경하고자하는 애니메이션 태그)
-	HRESULT Change_Animation(const wstring& pName);
+	HRESULT Change_Animation(_uint iTag);
+	//AnyEntry애니메이션으로 변경(변경하고자 하는 애니메이션 태그)
+	HRESULT Change_AnyEntryAnimation(_uint iTag);
 	//현재 애니메이션이 루프애니메이션일때만 사용
 	//루프 애니메이션이 끝나면 자동으로 연결되는 애니메이션이 있을경우 자동으로 변경하도록 함
 	HRESULT Change_LoopAnim();
 	//애니메이션 끝나면 자동으로 넘어갈 애니메이션 연결
-	HRESULT Set_UpAutoChangeAnimation(const wstring& pAnim, const wstring& pEndAnim);
+	HRESULT Set_UpAutoChangeAnimation(_uint iTag, _uint iEndTag);
+	//애니메이션 어떤 조건을 통해서 들어오는 애니메이션 추가시 사용
+	// **무조건 끝나고 나서 행동해야하는 애니메이션 연결 필수!!
+	HRESULT Insert_AnyEntryAnimation(_uint iTag, class CAnimation* pAnim, _bool bRootAnim, _bool bTransFrom, ERootOption eOption);
 public:
-	const wstring& Get_CurrentAnim();
+	const _uint Get_CurrentAnim();
 private:
 	//애니메이션 찾기
-	CAnimNode* Find_Animation(const wstring& pConnectName, CAnimNode* pNode=nullptr);
+	CAnimNode* Find_Animation(_uint itTag, CAnimNode* pNode=nullptr);
+	//AnyEntry애니메이션 찾기
+	CAnimNode* Find_AnyEntryAnim(_uint iTag);
 	//AnimNode 중복 체크
-	_bool Get_DuplicateTag(const wstring& pName);
+	_bool Get_DuplicateTag(_uint iAnimTag);
+	_bool Get_AnyEntryDuplicateTag(_uint iAnimTag);
 public:
 	static CAnimator* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);
 	virtual CComponent* Clone(void* pArg);
@@ -57,7 +67,10 @@ private:
 	CAnimNode* m_pHead;//링크드 리스트 Head 노드
 	CAnimNode* m_pCulAnimNode;//현재 노드
 	CAnimNode* m_pChangeNode;//바꿀 노드
-	vector<wstring> m_vecAnimNodeName;//이름 저장소(노드를 만들때 넣어줘서 중복체크 하는 벡터)
+
+	vector<_uint> m_vecAnimNode;
+
+	vector<CAnimNode*> m_vecAnyEntryNode;
 };
 END
 #endif

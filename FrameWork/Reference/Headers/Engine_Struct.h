@@ -174,6 +174,7 @@ namespace Engine
 	typedef struct tagTrigger
 	{
 		TRIGGERTYPE eTrigger_Type;
-		_float3		fTrigger_Point;
+		_uint		iTrigger_Index;
+		_float3	fTrigger_Point;
 	}TRIGGER;
 }

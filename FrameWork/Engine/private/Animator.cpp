@@ -47,9 +47,8 @@ HRESULT CAnimator::NativeConstruct(void* pArg)
 	m_pController->Set_Model(tDesc.pModel);
 	m_pController->Set_Transform(tDesc.pTransform);
 
-	m_pHead = CAnimNode::Create(L"Head",nullptr, false,(_uint)m_vecAnimNodeName.size(),false,false,ERootOption::Max);
-	m_vecAnimNodeName.emplace_back(m_pHead->Get_Name());
-
+	m_pHead = CAnimNode::Create(0, nullptr, false,false,false,ERootOption::Max);
+	m_vecAnimNode.emplace_back(m_pHead->Get_Index());
 	if (!m_pHead)
 		return E_FAIL;
 
@@ -68,7 +67,7 @@ _int CAnimator::Tick(_double dDeltaTime)
 	if (m_pCulAnimNode->Get_AutoIndex() != -1)
 	{
 		if (!m_pCulAnimNode->Get_Loop() && m_pController->Is_Finished())
-			Change_Animation(m_vecAnimNodeName[m_pCulAnimNode->Get_AutoIndex()]);
+			Change_Animation(m_vecAnimNode[m_pCulAnimNode->Get_AutoIndex()]);
 		/*if (m_pCulAnimNode->Is_LoopChange())
 			m_pCulAnimNode->Change_Loop(true);
 		if (m_pController->Is_Finished())
@@ -82,28 +81,29 @@ _int CAnimator::LateTick(_double dDeltaTime)
 	return _int();
 }
 
-HRESULT CAnimator::Insert_Animation(const _tchar* pName, const wstring& pConnectName, CAnimation* pAnim, _bool bRootAnim, _bool bTransFrom, _bool bLoop, ERootOption eOption, _bool bDouble)
+HRESULT CAnimator::Insert_Animation(_uint iTag, _uint iConnectTag, CAnimation* pAnim, _bool bRootAnim, _bool bTransFrom, _bool bLoop, ERootOption eOption, _bool bDouble)
 {
 	//만들고자 하는 애니메이션 중복 체크
-	if (Get_DuplicateTag(pName))
+	if (Get_DuplicateTag(iTag))
 		return E_FAIL;
 	
 	//애니메이션으로 AnimNode 만들기
-	CAnimNode* pNewNode = CAnimNode::Create(pName, pAnim, bLoop, (_uint)m_vecAnimNodeName.size(),bRootAnim,bTransFrom,eOption);
+	CAnimNode* pNewNode = CAnimNode::Create(iTag, pAnim, bLoop, bRootAnim,bTransFrom,eOption);
 	if (!pNewNode)
 		return E_FAIL;
-	m_vecAnimNodeName.emplace_back(pName);
+
+	m_vecAnimNode.emplace_back(iTag);
 	
 	//AnimNode 연결
-	if (FAILED(Connect_Animation(pConnectName, pNewNode, bDouble)))
+	if (FAILED(Connect_Animation(iTag, iConnectTag, bDouble)))
 		return E_FAIL;
 
 	return S_OK;
 }
 
-HRESULT CAnimator::Connect_Animation(const wstring& pConnectName, CAnimNode* pNode, _bool bDouble)
+HRESULT CAnimator::Connect_Animation(_uint iConnectTag, CAnimNode* pNode, _bool bDouble)
 {
-	CAnimNode* pConntectNode = Find_Animation(pConnectName);
+	CAnimNode* pConntectNode = Find_Animation(iConnectTag);
 
 	if (!pConntectNode)
 		return E_FAIL;
@@ -114,13 +114,31 @@ HRESULT CAnimator::Connect_Animation(const wstring& pConnectName, CAnimNode* pNo
 
 	return S_OK;
 }
-HRESULT CAnimator::Set_UpAutoChangeAnimation(const wstring& pAnim, const wstring& pEndAnim)
+HRESULT CAnimator::Connect_Animation(_uint iTag, _uint iConnectTag, _bool bDouble)
 {
-	CAnimNode* pNode = Find_Animation(pAnim);
+	CAnimNode* pNode = Find_Animation(iTag);
 	if (!pNode)
 		return E_FAIL;
 
-	CAnimNode* pEndNode = Find_Animation(pEndAnim, pNode);
+	CAnimNode* pConntectNode = Find_Animation(iConnectTag);
+
+	if (!pConntectNode)
+		return E_FAIL;
+
+	pConntectNode->Conntect_AnimNode(pNode);
+
+	if (bDouble)
+		pNode->Conntect_AnimNode(pConntectNode);
+
+	return S_OK;
+}
+HRESULT CAnimator::Set_UpAutoChangeAnimation(_uint iTag, _uint iEndTag)
+{
+	CAnimNode* pNode = Find_Animation(iTag);
+	if (!pNode)
+		return E_FAIL;
+
+	CAnimNode* pEndNode = Find_Animation(iTag, pNode);
 	if (!pEndNode)
 		return E_FAIL;
 
@@ -129,19 +147,52 @@ HRESULT CAnimator::Set_UpAutoChangeAnimation(const wstring& pAnim, const wstring
 	return S_OK;
 }
 
-const wstring& CAnimator::Get_CurrentAnim()
+HRESULT CAnimator::Insert_AnyEntryAnimation(_uint iTag, CAnimation* pAnim, _bool bRootAnim, _bool bTransFrom, ERootOption eOption)
 {
-	if (!m_pCulAnimNode)
-		return nullptr;
+	if (Get_DuplicateTag(iTag))
+		return E_FAIL;
+	if (Get_AnyEntryDuplicateTag(iTag))
+		return E_FAIL;
 
-	return m_pCulAnimNode->Get_Name();
+	//애니메이션으로 AnimNode 만들기
+	CAnimNode* pNewNode = CAnimNode::Create(iTag, pAnim, false, bRootAnim, bTransFrom, eOption);
+	if (!pNewNode)
+		return E_FAIL;
+
+	m_vecAnimNode.emplace_back(iTag);
+
+	m_vecAnyEntryNode.emplace_back(pNewNode);
+
+	return S_OK;
 }
 
-HRESULT CAnimator::Change_Animation(const wstring& pName)
+const _uint CAnimator::Get_CurrentAnim()
 {
-	m_pChangeNode = m_pCulAnimNode->Check_ConnectNode(pName.c_str());
+	if (!m_pCulAnimNode)
+		return -1;
+
+	return m_pCulAnimNode->Get_Index();
+}
+
+HRESULT CAnimator::Change_Animation(_uint iTag)
+{
+	m_pChangeNode = m_pCulAnimNode->Check_ConnectNode(iTag);
 	if (!m_pChangeNode)
 		return E_FAIL;
+
+	if (FAILED(m_pController->SetUp_NextAnimation(m_pChangeNode)))
+		return E_FAIL;
+
+	return S_OK;
+}
+
+HRESULT CAnimator::Change_AnyEntryAnimation(_uint iTag)
+{
+	CAnimNode* pNode = Find_AnyEntryAnim(iTag);
+	if (!pNode)
+		return E_FAIL;
+
+	m_pChangeNode = pNode;
 
 	if (FAILED(m_pController->SetUp_NextAnimation(m_pChangeNode)))
 		return E_FAIL;
@@ -162,12 +213,12 @@ HRESULT CAnimator::Change_LoopAnim()
 	return S_OK;
 }
 
-CAnimNode* CAnimator::Find_Animation(const wstring& pConnectName, CAnimNode* pNode)
+CAnimNode* CAnimator::Find_Animation(_uint iTag, CAnimNode* pNode)
 {
-	if (pConnectName == L"Head")
+	if (iTag == 0)
 		return m_pHead;
 
-	if (!Get_DuplicateTag(pConnectName))
+	if (!Get_DuplicateTag(iTag))
 		return nullptr;
 
 	if (!pNode)
@@ -176,14 +227,39 @@ CAnimNode* CAnimator::Find_Animation(const wstring& pConnectName, CAnimNode* pNo
 	if (pNode->Is_LinkEmpty())
 		return nullptr;
 
-	return pNode->Check_ConnectNode(pConnectName.c_str());
+	return pNode->Check_ConnectNode(iTag);
 }
 
-_bool CAnimator::Get_DuplicateTag(const wstring& pName)
+CAnimNode* CAnimator::Find_AnyEntryAnim(_uint iTag)
 {
-	for (auto& pTag : m_vecAnimNodeName)
+	CAnimNode* pFindNode = nullptr;
+
+	for (auto& pNode : m_vecAnyEntryNode)
 	{
-		if (pTag == pName)
+		if (pNode->Get_Index() == iTag)
+		{
+			pFindNode = pNode;
+			break;
+		}
+	}
+	return pFindNode;
+}
+
+_bool CAnimator::Get_DuplicateTag(_uint iAnimTag)
+{
+	for (auto& pIndex : m_vecAnimNode)
+	{
+		if (pIndex == iAnimTag)
+			return true;
+	}
+	return false;
+}
+
+_bool CAnimator::Get_AnyEntryDuplicateTag(_uint iAnimTag)
+{
+	for (auto& pNode : m_vecAnyEntryNode)
+	{
+		if (pNode->Get_Index() == iAnimTag)
 			return true;
 	}
 	return false;
@@ -218,4 +294,7 @@ void CAnimator::Free()
 	CComponent::Free();
 	Safe_Release(m_pController);
 	Safe_Release(m_pHead);
+
+	for (auto& pNode : m_vecAnyEntryNode)
+		Safe_Release(pNode);
 }
