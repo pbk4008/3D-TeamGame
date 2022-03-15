@@ -291,9 +291,7 @@
     <ClInclude Include="..\Headers\Shield_WalkRight.h" />
     <ClInclude Include="..\Headers\Shield_WalkRightStart.h" />
     <ClInclude Include="..\Headers\Shield_WalkRightStop.h" />
-=======
     <ClInclude Include="..\Headers\RetributionBlade.h" />
->>>>>>> main
     <ClInclude Include="..\Headers\Silvermane.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClInclude>
