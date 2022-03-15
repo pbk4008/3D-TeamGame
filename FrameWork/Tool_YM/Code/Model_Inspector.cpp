@@ -14,6 +14,7 @@
 #include "NavSphere.h"
 #include "Navigation.h"
 #include "MeshCollider.h"
+#include "Trigger.h"
 
 // CModel_Inspector 대화 상자
 
@@ -96,6 +97,12 @@ void CModel_Inspector::Ready_Level_Combo(void)
 	m_Combo_Level.AddString(_T("Level_Stage_Boss"));
 
 	m_Combo_Level.SetCurSel(0);
+	m_TriggerCombo.AddString(_T("for Lod"));
+	m_TriggerCombo.AddString(_T("for Scene"));
+	m_TriggerCombo.AddString(_T("for Light"));
+	m_TriggerCombo.AddString(_T("for Monster"));
+
+	m_TriggerCombo.SetCurSel(0);
 }
 
 HRESULT CModel_Inspector::Delete_Clone_ModelList(wstring _ModelName)
@@ -152,6 +159,7 @@ void CModel_Inspector::DoDataExchange(CDataExchange* pDX)
 	DDX_Text(pDX, IDC_Model5, m_ModelScaleX);
 	DDX_Text(pDX, IDC_Model6, m_ModelScaleY);
 	DDX_Text(pDX, IDC_Model7, m_ModelScaleZ);
+	DDX_Control(pDX, IDC_COMBO1, m_TriggerCombo);
 }
 
 
@@ -166,6 +174,9 @@ BEGIN_MESSAGE_MAP(CModel_Inspector, CDialogEx)
 	ON_BN_CLICKED(IDC_RADIO6, &CModel_Inspector::OnBnClickedZRotButton)
 	ON_BN_CLICKED(IDC_RADIO7, &CModel_Inspector::OnBnClickedRotNoneButton)
 	ON_BN_CLICKED(IDC_BUTTON4, &CModel_Inspector::OnBnClickedCreateNavMesh)
+	ON_BN_CLICKED(IDC_BUTTON5, &CModel_Inspector::OnBnClickedTriggerAdd)
+	ON_BN_CLICKED(IDC_BUTTON6, &CModel_Inspector::OnBnClickedSaveTrigger)
+	ON_BN_CLICKED(IDC_BUTTON7, &CModel_Inspector::OnBnClickedLodTrigger)
 END_MESSAGE_MAP()
 
 
@@ -389,4 +400,88 @@ void CModel_Inspector::OnBnClickedRotNoneButton()
 	// TODO: 스케일 조정 기능 비활성화
 	m_pObserver->m_eScaleMode = CObserver::SCALE_END;
 
+}
+
+
+void CModel_Inspector::OnBnClickedTriggerAdd()
+{
+	// TODO: 트리거를 추가합니다.
+	TRIGGER TriggerDesc;
+
+	/* TRIGGERTYPE { TRIGGER_LOD, TRIGGER_SCENE, TRIGGER_LIGHT, TRIGGER_MONSTER, TRIGGER_END } */
+
+	TriggerDesc.eTrigger_Type = (TRIGGERTYPE)m_TriggerCombo.GetCurSel();
+	TriggerDesc.fTrigger_Point = m_pObserver->m_fPickPos;
+	
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer(TAB_MAP, L"Layer_Trigger", L"Prototype_GameObject_Trigger", &TriggerDesc)))
+	{
+		MessageBox(L"Failed to Create Trigger!!!");
+		return;
+	}
+}
+
+
+void CModel_Inspector::OnBnClickedSaveTrigger()
+{
+	// TODO: 트리거 데이터를 저장합니다.
+	list<CGameObject*> TriggerList = *(g_pGameInstance->getObjectList(TAB_MAP, L"Layer_Trigger"));
+
+	m_vecTrigger.clear();
+
+	if (!TriggerList.empty())
+	{
+		for (auto& pObj : TriggerList)
+		{
+			CTrigger* pTrigger = (CTrigger*)pObj;
+			m_vecTrigger.push_back(pTrigger->m_TriggerDesc);
+		}
+	}
+
+	CFileDialog Dlg(false, L"dat", L"*.dat"); //저장, 디폴트확장자, 디폴트파일이름
+	TCHAR szFilePath[MAX_PATH] = L"";
+
+	GetCurrentDirectory(MAX_PATH, szFilePath);
+	PathRemoveFileSpec(szFilePath);
+	lstrcat(szFilePath, L"\\Data\\Trigger\\");
+	Dlg.m_ofn.lpstrInitialDir = szFilePath;
+
+	if (IDOK == Dlg.DoModal())
+	{
+		wstring strFilePath = Dlg.GetPathName();
+		g_pGameInstance->SaveFile<TRIGGER>(&m_vecTrigger, strFilePath);
+	}
+}
+
+void CModel_Inspector::OnBnClickedLodTrigger()
+{
+	// TODO: 트리거 데이터를 불러옵니다.
+
+	CFileDialog Dlg(true, L"dat", L"*.dat");
+	TCHAR szFilePath[MAX_PATH] = L"";
+	HRESULT hr = E_FAIL;
+
+	GetCurrentDirectory(MAX_PATH, szFilePath);
+	PathRemoveFileSpec(szFilePath);
+	lstrcat(szFilePath, L"\\Data\\Trigger\\");
+	Dlg.m_ofn.lpstrInitialDir = szFilePath;
+
+	m_vecTrigger.clear();
+
+	if (IDOK == Dlg.DoModal())
+	{
+		wstring strFilePath = Dlg.GetPathName();
+		g_pGameInstance->LoadFile<TRIGGER>(m_vecTrigger, strFilePath);
+	}
+	for (int i = 0; i < m_vecTrigger.size(); ++i)
+	{
+		TRIGGER TriggerDesc;
+		TriggerDesc.eTrigger_Type = m_vecTrigger[i].eTrigger_Type;
+		TriggerDesc.fTrigger_Point = m_vecTrigger[i].fTrigger_Point;
+
+		if (FAILED(g_pGameInstance->Add_GameObjectToLayer(TAB_MAP, L"Layer_Trigger", L"Prototype_GameObject_Trigger", &TriggerDesc)))
+		{
+			MessageBox(L"Failed to Create Trigger!!!");
+			return;
+		}
+	}
 }
