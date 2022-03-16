@@ -28,6 +28,7 @@ private:
 	HRESULT Ready_MapObject();
 	HRESULT Ready_Camera(const _tchar* LayerTag);
 	HRESULT Ready_Player(const _tchar* LayerTag);
+	HRESULT Ready_Boss(const _tchar* LayerTag);
 	HRESULT Ready_Monster(const _tchar* LayerTag);
 	HRESULT Ready_UI(const _tchar* LayerTag);
 

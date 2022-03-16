@@ -228,20 +228,20 @@
     </Filter>
     <Filter Include="02.GameObject\94.Observer">
       <UniqueIdentifier>{940d0a05-11c0-4eb4-a1d5-243f18cbc146}</UniqueIdentifier>
-	</Filter>
+    </Filter>
     <Filter Include="02.GameObject\05.UI\01.UI_Ingame\01.Meter\00.Player\00.HpBar_Green">
       <UniqueIdentifier>{5669ad8b-59eb-4030-b7fe-a090faac3e0f}</UniqueIdentifier>
     </Filter>
     <Filter Include="02.GameObject\05.UI\01.UI_Ingame\01.Meter\00.Player\01.HpBar_Red">
       <UniqueIdentifier>{3bc79af9-7de6-4fdb-bd68-25821baf2a4b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObject\94.Boss">
+    <Filter Include="02.GameObject\93.Boss">
       <UniqueIdentifier>{5e4ce90c-d575-4e08-9ce0-006401437c35}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObject\94.Boss\00.MiddleBoss">
+    <Filter Include="02.GameObject\93.Boss\00.MiddleBoss">
       <UniqueIdentifier>{a7db1ec6-722d-46ed-bdad-a86d3c709df2}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObject\94.Boss\00.MiddleBoss\00.Weapon">
+    <Filter Include="02.GameObject\93.Boss\00.MiddleBoss\00.Weapon">
       <UniqueIdentifier>{eee5d743-fda4-4f7b-ba26-d4c790268f21}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -702,18 +702,18 @@
     </ClInclude>
     <ClInclude Include="..\Headers\Client_Observer.h">
       <Filter>02.GameObject\94.Observer</Filter>
-	</ClInclude>
-	<ClInclude Include="..\Headers\UI_Player_HpBar.h">
+    </ClInclude>
+    <ClInclude Include="..\Headers\UI_Player_HpBar.h">
       <Filter>02.GameObject\05.UI\01.UI_Ingame\01.Meter\00.Player\00.HpBar_Green</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\UI_Player_HpBar_Red.h">
       <Filter>02.GameObject\05.UI\01.UI_Ingame\01.Meter\00.Player\01.HpBar_Red</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\Boss_Bastion_Judicator.h">
-      <Filter>02.GameObject\94.Boss\00.MiddleBoss</Filter>
+      <Filter>02.GameObject\93.Boss\00.MiddleBoss</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\ShieldBreaker.h">
-      <Filter>02.GameObject\94.Boss\00.MiddleBoss\00.Weapon</Filter>
+      <Filter>02.GameObject\93.Boss\00.MiddleBoss\00.Weapon</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1150,7 +1150,7 @@
     </ClCompile>
     <ClCompile Include="..\Codes\Client_Observer.cpp">
       <Filter>02.GameObject\94.Observer</Filter>
-	</ClCompile>
+    </ClCompile>
     <ClCompile Include="..\Codes\UI_Player_HpBar.cpp">
       <Filter>02.GameObject\05.UI\01.UI_Ingame\01.Meter\00.Player\00.HpBar_Green</Filter>
     </ClCompile>
@@ -1158,10 +1158,10 @@
       <Filter>02.GameObject\05.UI\01.UI_Ingame\01.Meter\00.Player\01.HpBar_Red</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\Boss_Bastion_Judicator.cpp">
-      <Filter>02.GameObject\94.Boss\00.MiddleBoss</Filter>
+      <Filter>02.GameObject\93.Boss\00.MiddleBoss</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\ShieldBreaker.cpp">
-      <Filter>02.GameObject\94.Boss\00.MiddleBoss\00.Weapon</Filter>
+      <Filter>02.GameObject\93.Boss\00.MiddleBoss\00.Weapon</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
