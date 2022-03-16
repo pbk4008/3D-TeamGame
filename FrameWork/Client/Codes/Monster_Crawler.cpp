@@ -36,7 +36,7 @@ HRESULT CMonster_Crawler::NativeConstruct(void* _pArg)
 	m_pTransform->Set_State(CTransform::STATE_POSITION, Pos);
 
 
-	//MonsterBar Back
+	//MonsterBar Panel
 	CUI_Monster_Panel::PANELDESC Desc;
 	Desc.pTargetTransform = m_pTransform;
 
@@ -58,15 +58,15 @@ _int CMonster_Crawler::Tick(_double _dDeltaTime)
 	
 	m_pColliderCom->Update(m_pTransform->Get_WorldMatrix());
 
-	m_pAnimControllerCom->Tick(_dDeltaTime);
+	//m_pAnimControllerCom->Tick(_dDeltaTime);
 
 	/*if (g_pGameInstance->getkeyDown(DIK_NUMPAD9))
 	{
 		++itest;
 	}*/
 
-	m_pAnimControllerCom->SetUp_NextAnimation(itest, true);
-	m_pAnimControllerCom->Set_RootMotion(true, false);
+	//m_pAnimControllerCom->SetUp_NextAnimation(itest, true);
+	//m_pAnimControllerCom->Set_RootMotion(true, false);
 
 	return 0;
 }
@@ -124,7 +124,12 @@ HRESULT CMonster_Crawler::SetUp_Components()
 		return E_FAIL;
 	}
 
-	if (FAILED(__super::SetUp_Components((_uint)SCENEID::SCENE_STAGE1, L"Proto_Component_AnimationController", L"Com_AnimationController", (CComponent**)&m_pAnimControllerCom)))
+	/*if (FAILED(__super::SetUp_Components((_uint)SCENEID::SCENE_STAGE1, L"Proto_Component_AnimationController", L"Com_AnimationController", (CComponent**)&m_pAnimControllerCom)))
+	{
+		return E_FAIL;
+	}*/
+
+	if (FAILED(__super::SetUp_Components((_uint)SCENEID::SCENE_STAGE1, L"Proto_Component_Animator", L"Com_Animator", (CComponent**)&m_pAnimatorCom)))
 	{
 		return E_FAIL;
 	}
@@ -145,9 +150,40 @@ HRESULT CMonster_Crawler::SetUp_Components()
 
 	m_pModelCom->Add_Material(g_pGameInstance->Get_Material(L"Mtrl_Crystal_Crawler"), 0);
 	
-	m_pAnimControllerCom->Set_GameObject(this);
-	m_pAnimControllerCom->Set_Model(m_pModelCom);
-	m_pAnimControllerCom->Set_Transform(m_pTransform);
+	//m_pAnimControllerCom->Set_GameObject(this);
+	//m_pAnimControllerCom->Set_Model(m_pModelCom);
+	//m_pAnimControllerCom->Set_Transform(m_pTransform);
+
+	return S_OK;
+}
+
+HRESULT CMonster_Crawler::Animation_Setting()
+{
+	CAnimation* pAnim = m_pModelCom->Get_Animation("SK_Crystal_Crawler_v3.ao|A_Idle_CrystalCrawler");
+	if (FAILED(m_pAnimatorCom->Insert_Animation(L"Idle", L"Head", pAnim, false, false, true, ERootOption::XYZ)))
+		return E_FAIL;
+
+	pAnim = m_pModelCom->Get_Animation("SK_Crystal_Crawler_v3.ao|A_Walk_Fwd_Stop_CrystalCrawler");
+	if (FAILED(m_pAnimatorCom->Insert_Animation(L"Walk_Fwd", L"Idle", pAnim, true, false, true, ERootOption::XYZ, true)))
+		return E_FAIL;
+
+	pAnim = m_pModelCom->Get_Animation("SK_Crystal_Crawler_v3.ao|A_Walk_Fwd_Stop_CrystalCrawler");
+	if (FAILED(m_pAnimatorCom->Insert_Animation(L"Walk_Bwd", L"Idle", pAnim, true, false, true, ERootOption::XYZ, true)))
+		return E_FAIL;
+
+	pAnim = m_pModelCom->Get_Animation("SK_Crystal_Crawler_v3.ao|A_Walk_Fwd_Stop_CrystalCrawler");
+	if (FAILED(m_pAnimatorCom->Insert_Animation(L"Walk_Left", L"Idle", pAnim, true, false, true, ERootOption::XYZ, true)))
+		return E_FAIL;
+
+	pAnim = m_pModelCom->Get_Animation("SK_Crystal_Crawler_v3.ao|A_Walk_Fwd_Stop_CrystalCrawler");
+	if (FAILED(m_pAnimatorCom->Insert_Animation(L"Walk_Right", L"Idle", pAnim, true, false, true, ERootOption::XYZ, true)))
+		return E_FAIL;
+
+
+	m_pAnimatorCom->Set_UpAutoChangeAnimation(L"RunStart", L"RunLoop");
+	m_pAnimatorCom->Set_UpAutoChangeAnimation(L"RunLoop", L"RunStop");
+
+	m_pAnimatorCom->Change_Animation(L"RunStart");
 
 	return S_OK;
 }

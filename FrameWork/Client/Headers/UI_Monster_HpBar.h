@@ -15,12 +15,6 @@ END
 BEGIN(Client)
 class CUI_Monster_HpBar final : public CUI_Monster_Panel
 {
-public:
-	typedef struct tagUIDesc
-	{
-		CUI::UIDESC UIDesc;
-	}UIACTIVEDESC;
-
 private:
 	explicit CUI_Monster_HpBar(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);
 	explicit CUI_Monster_HpBar(const CUI_Monster_Panel& rhs);
@@ -34,11 +28,11 @@ public:
 	virtual HRESULT Render() override;
 
 public:
-	void Set_UIDesc(UIACTIVEDESC Desc) { m_Desc = Desc; }
-	UIACTIVEDESC Get_UIDesc() { return m_Desc; }
+	void Set_UIDesc(CUI::UIDESC Desc) { m_Desc = Desc; }
+	CUI::UIDESC Get_UIDesc() { return m_Desc; }
 
 private:
-	UIACTIVEDESC m_Desc;
+	CUI::UIDESC m_Desc;
 	_float m_fGapX = 0.f;
 	_float m_fGapY = 0.f;
 
