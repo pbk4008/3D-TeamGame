@@ -2,6 +2,7 @@
 #ifndef __STAGE1_H__
 #define __STAGE1_H__
 #include "Level.h"
+BEGIN(Client)
 class CStage1 final : public CLevel
 {
 public:
@@ -26,8 +27,12 @@ public:
 	virtual HRESULT Render();
 private:
 	HRESULT Ready_MapObject();
+	HRESULT Ready_Camera(const _tchar* LayerTag);
+	HRESULT Ready_Player(const _tchar* LayerTag);
+	HRESULT Ready_Boss(const _tchar* LayerTag);
 	HRESULT Ready_Monster(const _tchar* LayerTag);
 	HRESULT Ready_UI(const _tchar* LayerTag);
+	HRESULT Ready_LightDesc();
 
 
 	HRESULT Ready_Data_Effect(const _tchar* pDataFilePath);
@@ -45,3 +50,5 @@ private:
 	virtual void Free() override;
 };
 #endif
+
+END

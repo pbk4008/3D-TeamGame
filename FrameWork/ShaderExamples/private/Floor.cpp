@@ -128,9 +128,9 @@ HRESULT CFloor::Render_PBR()
 
 HRESULT CFloor::SetUp_Components()
 {
-	m_pTexture = g_pGameInstance->Clone_Component<CTexture>(0, L"Texture");
-	m_pFilterTexture = g_pGameInstance->Clone_Component<CTexture>(0, L"Texture");
-	m_pBrushTexture = g_pGameInstance->Clone_Component<CTexture>(0, L"Texture");
+	m_pTexture = g_pGameInstance->Clone_Component<CTexture>(0, L"Proto_Component_Texture");
+	m_pFilterTexture = g_pGameInstance->Clone_Component<CTexture>(0, L"Proto_Component_Texture");
+	m_pBrushTexture = g_pGameInstance->Clone_Component<CTexture>(0, L"Proto_Component_Texture");
 
 	m_pTexture->Change_Texture(L"FloorBase");
 	//m_pFilterTexture->Change_Texture(L"FloorFilter");

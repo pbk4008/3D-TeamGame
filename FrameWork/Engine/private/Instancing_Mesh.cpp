@@ -83,6 +83,14 @@ HRESULT CInstancing_Mesh::SetUp_ValueOnShader(const char* pConstantName, void* p
 	return S_OK;
 }
 
+HRESULT CInstancing_Mesh::SetUp_TextureOnShader(const char* pConstantName, ID3D11ShaderResourceView* pSRV, _ulong Numindex)
+{
+	if (FAILED(m_vecMaterials[Numindex]->SetUp_TextureOnShader(pConstantName, pSRV)))
+		return E_FAIL;
+
+	return S_OK;
+}
+
 HRESULT CInstancing_Mesh::Render(_uint iMeshContainerIndex, _int iPassindex)
 {
 	for (auto& pMeshContainer : m_vecMeshContainers[iMeshContainerIndex])

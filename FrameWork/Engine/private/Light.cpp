@@ -20,7 +20,7 @@ HRESULT CLight::NativeConstruct(const LIGHTDESC& LightDesc)
 	_uint		iNumViewports = 1;
 	m_pDeviceContext->RSGetViewports(&iNumViewports, &ViewportDesc);
 
-	m_pVIBuffer = CVIBuffer_RectViewPort::Create(m_pDevice, m_pDeviceContext, 0.f, 0.f, ViewportDesc.Width, ViewportDesc.Height, TEXT("../Bin/ShaderFiles/Shader_RectViewPort.hlsl"));
+	m_pVIBuffer = CVIBuffer_RectViewPort::Create(m_pDevice, m_pDeviceContext, 0.f, 0.f, ViewportDesc.Width, ViewportDesc.Height, TEXT("../../Reference/ShaderFile/Shader_RectViewPort.hlsl"));
 	if (nullptr == m_pVIBuffer)
 		return E_FAIL;
 
@@ -80,6 +80,46 @@ HRESULT CLight::Render(const wstring& pCameraTag, _bool PBRHDRcheck)
 	
 
 	return S_OK;
+}
+
+void CLight::UpdateLightCam(_fvector playerpos)
+{
+	_float3 up = _float3(0, 1.f, 0);
+	_float3 lookat;
+	XMStoreFloat3(&lookat, playerpos);
+
+
+	_vector		vPosition = XMLoadFloat3(&m_LightDesc.vPosition);
+	vPosition = XMVectorSetW(vPosition, 1.f);
+
+	_vector		vLook = XMLoadFloat3(&lookat) - XMLoadFloat3(&m_LightDesc.vPosition);
+	vLook = XMVector3Normalize(vLook);
+
+	_vector		vRight = XMVector3Cross(XMLoadFloat3(&up), vLook);
+	vRight = XMVector3Normalize(vRight);
+
+	_vector		vUp = XMVector3Cross(vLook, vRight);
+	vUp = XMVector3Normalize(vUp);
+
+	_matrix lightcam;
+	lightcam.r[0] = vRight;
+	lightcam.r[1] = vUp;
+	lightcam.r[2] = vLook;
+	lightcam.r[3] = vPosition;
+
+	m_LightDesc.mLightView = XMMatrixInverse(nullptr, lightcam);
+
+	_vector origin = { 0,0,0,0 };
+	_float3	forigin;
+	origin = XMVector3TransformCoord(origin, m_LightDesc.mLightView);
+	XMStoreFloat3(&forigin, origin);
+
+	m_LightDesc.mOrthinfo[1] = forigin.x - m_LightDesc.mOrthinfo[0];
+	m_LightDesc.mOrthinfo[2] = forigin.x + m_LightDesc.mOrthinfo[0];
+	m_LightDesc.mOrthinfo[3] = forigin.y - m_LightDesc.mOrthinfo[0];
+	m_LightDesc.mOrthinfo[4] = forigin.y + m_LightDesc.mOrthinfo[0];
+
+	m_LightDesc.mLightProj = XMMatrixOrthographicLH(m_LightDesc.mOrthinfo[2] - m_LightDesc.mOrthinfo[1], m_LightDesc.mOrthinfo[4] - m_LightDesc.mOrthinfo[3], 0.1f, 1000.f);
 }
 
 CLight * CLight::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pDeviceContext, const LIGHTDESC& LightDesc)

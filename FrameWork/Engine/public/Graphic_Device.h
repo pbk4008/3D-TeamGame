@@ -13,6 +13,7 @@ public:
 	NO_COPY(CGraphic_Device);
 	explicit CGraphic_Device();
 	virtual ~CGraphic_Device() = default;
+
 public:
 	HRESULT Ready_Graphic_Device(HWND hWnd, WINMODE WinMode, _uint iWinCX, _uint iWinCY, ID3D11Device** ppDeviceOut, ID3D11DeviceContext** ppDeviceContextOut);
 	HRESULT Clear_BackBuffer_View(XMFLOAT4 vClearColor);

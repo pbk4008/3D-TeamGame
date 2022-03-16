@@ -1,12 +1,13 @@
 #pragma once
 
 #include "Base.h"
+#include "Client_Observer.h"
 
 BEGIN(Engine)
 class CRenderer;
 class CGameInstance;
 END
-	
+
 BEGIN(Client)
 
 class CMainApp final : public CBase

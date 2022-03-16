@@ -28,15 +28,17 @@ public:
 	_int Get_Index() { return m_iIndex; }
 	_int Get_AutoIndex() { return m_iAutoIndex; }
 	_bool Is_LoopChange() { return m_bLoop != m_bTmpLoop; }
+	HRESULT Delete_Node(vector<_uint>& vecNode);
 public:
 	void Set_AutoChangeIndex(_int ChangeIndex) { m_iAutoIndex = ChangeIndex; }
 public:
 	//AnimNode 태그, 애니메이션, 반복재생 여부, 중복방지를 위한 Animator에 있는 백터의 Index
 	static CAnimNode* Create(_uint iTag, CAnimation* pAnim, _bool bLoop, _bool bRootAnim, _bool bTransformMove, ERootOption eOption);
+
 private:
 	virtual void Free() override;
 private:
-	CAnimation* m_pAnim;//찐 애니메이션
+	CAnimation* m_pAnim;//찐 애니메이션 
 	_bool m_bLoop;//반복 재생
 	_bool m_bTmpLoop;//반복 재생 보관용 변수
 	vector<CAnimNode*> m_vecAnimNode;//현재 노드와 연결되어 있는 자식노드들

@@ -1,0 +1,26 @@
+Materials[1] =
+{
+    Materials[0] = Material3'/Game/Aperion/Environment/SunForge/Materials/M_Ceiling_Baroque_Simple_Black.M_Ceiling_Baroque_Simple_Black'
+}
+SourceModels[0] = {}
+StaticMaterials[1] =
+{
+    StaticMaterials[0] =
+    {
+        MaterialInterface = Material3'/Game/Aperion/Environment/SunForge/Materials/M_Ceiling_Baroque_Simple_Black.M_Ceiling_Baroque_Simple_Black'
+        MaterialSlotName = WorldGridMaterial_ncl1_3
+        UVChannelData =
+        {
+            bInitialized = true
+            bOverrideDensities = false
+            LocalUVDensities[4] = { 938.145, 1641.86, 1641.86, 0 }
+        }
+    }
+}
+Sockets[0] = {}
+ExtendedBounds =
+{
+    Origin = { X=0, Y=0, Z=207.037 }
+    BoxExtent = { X=540, Y=540, Z=207.037 }
+    SphereRadius = 791.242
+}

@@ -150,6 +150,11 @@ void CAnimationController::Set_MoveSpeed(const _float _fMoveSpeed)
 	m_fMoveSpeed = _fMoveSpeed;
 }
 
+void CAnimationController::Set_IsChange(const _bool _bChange)
+{
+	m_isChangeAnim = _bChange;
+}
+
 const _bool CAnimationController::Is_RootMotion() const
 {
 	return m_isRootMotion;
@@ -326,8 +331,7 @@ HRESULT CAnimationController::SetUp_NextAnimation(class CAnimNode* pChangeAnimNo
 {
 	CAnimation* pChangeAnimation = pChangeAnimNode->Get_Animation();
 
-	if (m_isChangeAnim)
-		pChangeAnimation->Reset_Animation();
+	pChangeAnimation->Reset_Animation();
 
 	m_tBlendDesc.iNextAnimIndex = pChangeAnimation->Get_Index();
 	m_tBlendDesc.isLoopNextAnim = pChangeAnimNode->Get_Loop();
@@ -338,6 +342,8 @@ HRESULT CAnimationController::SetUp_NextAnimation(class CAnimNode* pChangeAnimNo
 	m_iCurKeyFrameIndex = pChangeAnimation->Get_CurrentKeyFrameIndex();
 
 	pChangeAnimNode->Set_RootAnimValue(m_isRootMotion, m_isTransformMove, m_eRootOption);
+	
+	m_isChangeAnim = true;
 
 	return S_OK;
 }

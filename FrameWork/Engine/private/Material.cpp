@@ -187,6 +187,16 @@ HRESULT CMaterial::SetUp_TextureOnShader(const string _strConstantName, TEXTURET
 	return S_OK;
 }
 
+HRESULT CMaterial::SetUp_TextureOnShader(const string _strConstantName, ID3D11ShaderResourceView* pSRV)
+{
+	ID3DX11EffectShaderResourceVariable* pVariable = m_pEffect->GetVariableByName(_strConstantName.c_str())->AsShaderResource();
+
+	if (nullptr == pVariable)
+		return E_FAIL;
+
+	return pVariable->SetResource(pSRV);
+}
+
 const wstring& CMaterial::Get_Name() const
 {
 	return m_wstrName;

@@ -1,10 +1,15 @@
-#include "..\public\Renderer.h"
+#include "Renderer.h"
 #include "GameObject.h"
 #include "Target_Manager.h"
 #include "Light_Manager.h"
 #include "VIBuffer_RectViewPort.h"
 #include "GameInstance.h"
 #include "Transform.h"
+#include "RendererAssit.h"
+#include "Luminance.h"
+#include "HDR.h"
+#include "PostProcess.h"
+#include "Tonemapping.h"
 
 CRenderer::CRenderer(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
 	: CComponent(pDevice, pDeviceContext)
@@ -20,22 +25,33 @@ void CRenderer::SetRenderButton(RENDERBUTTON ebutton, _bool check)
 	case Engine::CRenderer::SHADOW: 
 		m_bShadow = check;
 		break;
-	case Engine::CRenderer::PBRHDR:
-		m_bPBRHDR = check;
+	case Engine::CRenderer::PBR:
+		m_bPBR = check;
 		break;
-	case Engine::CRenderer::BLUR:
-		m_bBlur = check;
-		break;
-	case Engine::CRenderer::DEFERRED:
-		m_bDeferred = check;
+	case Engine::CRenderer::HDR:
+		m_bHDR = check;
 		break;
 	}
 }
 
 HRESULT CRenderer::NativeConstruct_Prototype()
 {
-	if (FAILED(SetUp_RenderTarget()))
+	_uint		iViewportIndex = 1;
+	D3D11_VIEWPORT		ViewportDesc;
+
+	m_pDeviceContext->RSGetViewports(&iViewportIndex, &ViewportDesc);
+
+	if (FAILED(CreateShadowDepthStencilview(SHADOW_MAP, SHADOW_MAP, &m_pShadowMap)))
 		return E_FAIL;
+
+	m_pRenderAssit = CRendererAssit::Create(m_pDevice, m_pDeviceContext);
+	m_pLuminance = CLuminance::Create(m_pDevice, m_pDeviceContext);
+	m_pHDR = CHDR::Create(m_pDevice, m_pDeviceContext);
+	m_pPostProcess = CPostProcess::Create(m_pDevice, m_pDeviceContext);
+	m_pTonemapping = CTonemapping::Create(m_pDevice, m_pDeviceContext);
+
+	m_pVIBuffer = CVIBuffer_RectViewPort::Create(m_pDevice, m_pDeviceContext, 0.f, 0.f, ViewportDesc.Width, ViewportDesc.Height, TEXT("../../Reference/ShaderFile/Shader_RectViewPort.hlsl"));
+	if (nullptr == m_pVIBuffer)
 
 	lstrcpy(m_CameraTag, L"MainCamera");
 
@@ -47,13 +63,33 @@ HRESULT CRenderer::NativeConstruct(void* pArg)
 	return S_OK;
 }
 
-ID3D11ShaderResourceView* CRenderer::Get_SRV(const wstring& pTargetTag)
+HRESULT CRenderer::CreateShadowDepthStencilview(_uint iWidth, _uint iHeight,ID3D11DepthStencilView** ppDepthStencilView)
 {
+	ID3D11Texture2D* pDepthStencilTexture = nullptr;
+	D3D11_TEXTURE2D_DESC	TextureDesc;
+	ZeroMemory(&TextureDesc, sizeof(D3D11_TEXTURE2D_DESC));
 
-	ID3D11ShaderResourceView* SRV = m_pTargetMgr->Get_SRV(pTargetTag);
-	
+	TextureDesc.Width = iWidth;
+	TextureDesc.Height = iHeight;
+	TextureDesc.MipLevels = 1;
+	TextureDesc.ArraySize = 1;
+	TextureDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+	TextureDesc.SampleDesc.Quality = 0;
+	TextureDesc.SampleDesc.Count = 1;
+	TextureDesc.Usage = D3D11_USAGE_DEFAULT;
+	TextureDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
+	TextureDesc.CPUAccessFlags = 0;
+	TextureDesc.MiscFlags = 0;
 
-	return SRV;
+	if (FAILED(m_pDevice->CreateTexture2D(&TextureDesc, nullptr, &pDepthStencilTexture)))
+		return E_FAIL;
+
+	if (FAILED(m_pDevice->CreateDepthStencilView(pDepthStencilTexture, nullptr, ppDepthStencilView)))
+		return E_FAIL;
+
+	Safe_Release(pDepthStencilTexture);
+
+	return S_OK;
 }
 
 HRESULT CRenderer::Add_RenderGroup(RENDER eRenderID, CGameObject* pGameObject)
@@ -73,17 +109,46 @@ HRESULT CRenderer::Draw_RenderGroup()
 	if (FAILED(Render_Priority()))
 		return E_FAIL;
 
+	if (m_bShadow)
+	{
+		if (FAILED(Render_Shadow()))
+			return E_FAIL;
+
+		if (FAILED(Render_ShadeShadow()))
+			return E_FAIL;
+	}
+
+	if (m_bPBR)
+	{
+		if (FAILED(Render_PBR()))
+			return E_FAIL;
+	}
+
 	if (FAILED(Render_NonAlpha())) // 디퍼드 단계
 		return E_FAIL;
 
-	if (FAILED(Render_LightAcc())) // 빛연산
+	if (FAILED(m_pRenderAssit->Render_LightAcc(m_CameraTag, m_bPBR))) // 빛연산
 		return E_FAIL;
 
-	if (FAILED(Render_Blend())) // 최종 결합
-		return E_FAIL;
+	if (m_bHDR)
+	{
+		if (FAILED(m_pHDR->Render_HDRBase(m_pTargetMgr, m_bShadow)))
+			return E_FAIL;
 
-	if (FAILED(Render_PostProcessing()))
+		if (FAILED(m_pLuminance->DownSampling(m_pTargetMgr)))
+			return E_FAIL;
+
+		if (FAILED(m_pPostProcess->PostProcessing(m_pTargetMgr)))
+			return E_FAIL;
+
+		if (FAILED(m_pTonemapping->Render_HDR(m_pTargetMgr)))
+			return E_FAIL;
+	}
+
+	m_pTonemapping->Set_HDR(m_bHDR);
+	if (FAILED(m_pTonemapping->Blend_HDR(m_pTargetMgr)))
 		return E_FAIL;
+		
 
 	if (FAILED(Render_Alpha()))
 		return E_FAIL;
@@ -91,33 +156,55 @@ HRESULT CRenderer::Draw_RenderGroup()
 	if (FAILED(Render_UI()))
 		return E_FAIL;
 
+	if (FAILED(Render_UI_Active()))
+		return E_FAIL;
+
 #ifdef _DEBUG
 	if (m_bDeferred)
 	{
-		if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("MRT_Shadow"))))
-			return E_FAIL;
+		//if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("MRT_Shadow"))))
+		//	return E_FAIL;
+		//if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("MRT_ShaeShadow"))))
+		//	return E_FAIL;
+		//if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("MRT_Deferred"))))
+		//	return E_FAIL;
+		//if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("MRT_PBR"))))
+		//	return E_FAIL;
+		//if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("MRT_LightAcc"))))
+		//	return E_FAIL;
+		//if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("MRT_Blend"))))
+		//	return E_FAIL;
+		//if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("MRT_HDRBASE"))))
+		//	return E_FAIL;
 
-		if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("MRT_ShaeShadow"))))
-			return E_FAIL;
+		//if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("MRT_Lum1"))))
+		//	return E_FAIL;
+		//if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("MRT_Lum2"))))
+		//	return E_FAIL;
+		//if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("MRT_Lum3"))))
+		//	return E_FAIL;
+		//if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("MRT_Lum4"))))
+		//	return E_FAIL;
+		//if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("MRT_Lum5"))))
+		//	return E_FAIL;
 
-		if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("MRT_Deferred"))))
-			return E_FAIL;
+		//if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("MRT_BrightPass"))))
+		//	return E_FAIL;
+		//if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("MRT_BrightPassDS"))))
+		//	return E_FAIL;
+		//if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("MRT_HorizontalBlur"))))
+		//	return E_FAIL;
+		//if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("MRT_VerticalBlur"))))
+		//	return E_FAIL;
 
-		if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("MRT_PBR"))))
-			return E_FAIL;
+		//if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("MRT_BloomUpSample"))))
+		//	return E_FAIL;
+		//if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("MRT_ToneMapping"))))
+		//	return E_FAIL;
 
-		if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("MRT_LightAcc"))))
-			return E_FAIL;
+		//if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("MRT_Priority"))))
+		//	return E_FAIL;
 
-		if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("MRT_Blend"))))
-			return E_FAIL;
-
-		if (FAILED(m_pTargetMgr->Render_Debug_Buffer_CSTarget(L"CSDownScale")))
-			return E_FAIL;
-
-		if (FAILED(m_pTargetMgr->Render_Debug_Buffer_CSTarget(L"CSGSBlur")))
-			return E_FAIL;
-		
 	}
 #endif // _DEBUG
 
@@ -140,21 +227,6 @@ HRESULT CRenderer::Render_Priority()
 
 HRESULT CRenderer::Render_NonAlpha()
 {
-	if (m_bShadow)
-	{
-		if (FAILED(Render_Shadow())) // 그림자 맵
-			return E_FAIL;
-
-		if (FAILED(Render_ShadeShadow()))
-			return E_FAIL;
-	}
-
-	if (m_bPBRHDR)
-	{
-		if (FAILED(Render_PBR()))
-			return E_FAIL;
-	}
-
 	if (FAILED(m_pTargetMgr->Begin_MRT(m_pDeviceContext, TEXT("MRT_Deferred"))))
 		return E_FAIL;
 
@@ -168,7 +240,6 @@ HRESULT CRenderer::Render_NonAlpha()
 
 	if (FAILED(m_pTargetMgr->End_MRT(m_pDeviceContext)))
 		return E_FAIL;
-
 	
 	return S_OK;
 }
@@ -231,19 +302,18 @@ HRESULT CRenderer::Render_UI_Active()
 
 HRESULT CRenderer::Render_Shadow()
 {
-	if (FAILED(m_pTargetMgr->Begin_MRT(m_pDeviceContext, TEXT("MRT_Shadow"))))
+	if (FAILED(m_pTargetMgr->Begin_RT(m_pDeviceContext, L"MRT_Shadow", m_pShadowMap)))
 		return E_FAIL;
 
-	for (auto& pGameObject : m_RenderGroup[RENDER_NONALPHA])
+	for (auto& pGameObject : m_RenderGroup[RENDER_SHADOW])
 	{
 		if (nullptr != pGameObject)
 			pGameObject->Render_Shadow();
 	}
 
-	if (FAILED(m_pTargetMgr->End_MRT(m_pDeviceContext)))
+	if (FAILED(m_pTargetMgr->End_RT(m_pDeviceContext, m_pShadowMap)))
 		return E_FAIL;
 
-	
 	return S_OK;
 }
 
@@ -252,16 +322,18 @@ HRESULT CRenderer::Render_ShadeShadow()
 	if (FAILED(m_pTargetMgr->Begin_MRT(m_pDeviceContext, TEXT("MRT_ShaeShadow"))))
 		return E_FAIL;
 
-	for (auto& pGameObject : m_RenderGroup[RENDER_NONALPHA])
+	for (auto& pGameObject : m_RenderGroup[RENDER_SHADOW])
 	{
 		if (nullptr != pGameObject)
 			pGameObject->Render_ShadeShadow(m_pTargetMgr->Get_SRV(L"Target_Shadow"));
+
+		Safe_Release(pGameObject);
 	}
+	m_RenderGroup[RENDER_SHADOW].clear();
 
 	if (FAILED(m_pTargetMgr->End_MRT(m_pDeviceContext)))
 		return E_FAIL;
 
-	
 	return S_OK;
 }
 
@@ -270,223 +342,50 @@ HRESULT CRenderer::Render_PBR()
 	if (FAILED(m_pTargetMgr->Begin_MRT(m_pDeviceContext, TEXT("MRT_PBR"))))
 		return E_FAIL;
 
-	for (auto& pGameObject : m_RenderGroup[RENDER_NONALPHA])
+	for (auto& pGameObject : m_RenderGroup[RENDER_PBR])
 	{
 		if (nullptr != pGameObject)
 			pGameObject->Render_PBR();
+		Safe_Release(pGameObject);
 	}
+	m_RenderGroup[RENDER_PBR].clear();
 
 	if (FAILED(m_pTargetMgr->End_MRT(m_pDeviceContext)))
 		return E_FAIL;
 
 	
-	return S_OK;
-}
-
-HRESULT CRenderer::Render_LightAcc()
-{
-
-	CLight_Manager* pLight_Manager = GET_INSTANCE(CLight_Manager);
-
-	/*  Target_Shader를 장치에 바인드하였다. */
-	m_pTargetMgr->Begin_MRT(m_pDeviceContext, TEXT("MRT_LightAcc"));
-
-	pLight_Manager->SetPBRCheck(m_bPBRHDR);
-	pLight_Manager->Render_Lights(m_CameraTag);
-
-	m_pTargetMgr->End_MRT(m_pDeviceContext);
-
-	RELEASE_INSTANCE(CLight_Manager);
-	
-
 	return S_OK;
 }
 
 HRESULT CRenderer::Render_Blend()
 {
-	if (FAILED(m_pTargetMgr->Begin_MRT(m_pDeviceContext, TEXT("MRT_Blend"))))
+	if (nullptr == m_pTargetMgr)
 		return E_FAIL;
+
+	//if (FAILED(m_pTargetMgr->Begin_MRT(m_pDeviceContext, TEXT("MRT_Blend"))))
+	//	return E_FAIL;
 
 	if (FAILED(m_pVIBuffer->SetUp_TextureOnShader("g_DiffuseTexture", m_pTargetMgr->Get_SRV(TEXT("Target_Diffuse")))))
 		return E_FAIL;
-
 	if (FAILED(m_pVIBuffer->SetUp_TextureOnShader("g_ShadeTexture", m_pTargetMgr->Get_SRV(TEXT("Target_Shade")))))
 		return E_FAIL;
-
 	if (FAILED(m_pVIBuffer->SetUp_TextureOnShader("g_SpecularTexture", m_pTargetMgr->Get_SRV(TEXT("Target_Specular")))))
 		return E_FAIL;
-	 
 	if (FAILED(m_pVIBuffer->SetUp_TextureOnShader("g_ShadowTexture", m_pTargetMgr->Get_SRV(TEXT("Target_ShadeShadow")))))
 		return E_FAIL;
-
 	if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_bShadow", &m_bShadow, sizeof(_bool))))
 		return E_FAIL;
-
-	if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_bPBRHDR", &m_bPBRHDR, sizeof(_bool))))
+	if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_bPBRHDR", &m_bPBR, sizeof(_bool))))
 		return E_FAIL;
 
 	m_pVIBuffer->Render(3);
 
-	if (FAILED(m_pTargetMgr->End_MRT(m_pDeviceContext)))
-		return E_FAIL;
-
-	
-	return S_OK;
-}
-
-HRESULT CRenderer::Render_PostProcessing()
-{
-	// post processing
-	if (m_bBlur)
-	{
-		if (FAILED(m_pTargetMgr->RunComputeShader(L"CSDownScale", m_pTargetMgr->Get_SRV(L"Target_Specular"), CCSTarget::CSType::DOWNSAMPLE)))
-			return E_FAIL;
-
-		if (FAILED(m_pTargetMgr->RunComputeShader(L"CSGSBlur", m_pTargetMgr->Get_SRVCS(L"CSDownScale"), CCSTarget::CSType::GSBLUR)))
-			return E_FAIL;
-
-		if (FAILED(m_pVIBuffer->SetUp_TextureOnShader("g_BlurTexture", m_pTargetMgr->Get_SRVCS(L"CSDownScale"))))
-			return E_FAIL;
-
-		if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_bBlur", &m_bBlur, sizeof(_bool))))
-			return E_FAIL;
-
-	}
-
-	if (FAILED(m_pVIBuffer->SetUp_TextureOnShader("g_BlendTexture", m_pTargetMgr->Get_SRV(L"Target_Blend"))))
-		return E_FAIL;
-
-	m_pVIBuffer->Render(4);
+	//if (FAILED(m_pTargetMgr->End_MRT(m_pDeviceContext)))
+	//	return E_FAIL;
 
 	return S_OK;
 }
 
-HRESULT CRenderer::SetUp_RenderTarget()
-{
-	_uint		iViewportIndex = 1;
-	D3D11_VIEWPORT		ViewportDesc;
-
-
-	m_pDeviceContext->RSGetViewports(&iViewportIndex, &ViewportDesc);
-
-	if (FAILED(m_pTargetMgr->Add_RenderTarget(m_pDevice, m_pDeviceContext, TEXT("Target_Diffuse"), (_uint)ViewportDesc.Width, (_uint)ViewportDesc.Height, DXGI_FORMAT_B8G8R8A8_UNORM, _float4(1.f, 1.f, 1.f, 0.f), CRenderTarget::RTT::DEFFURED)))
-		return E_FAIL;
-	if (FAILED(m_pTargetMgr->Add_RenderTarget(m_pDevice, m_pDeviceContext, TEXT("Target_Normal"), (_uint)ViewportDesc.Width, (_uint)ViewportDesc.Height, DXGI_FORMAT_R16G16B16A16_FLOAT, _float4(1.f, 1.f, 1.f, 1.f), CRenderTarget::RTT::DEFFURED)))
-		return E_FAIL;
-	if (FAILED(m_pTargetMgr->Add_RenderTarget(m_pDevice, m_pDeviceContext, TEXT("Target_Depth"), (_uint)ViewportDesc.Width, (_uint)ViewportDesc.Height, DXGI_FORMAT_R32G32B32A32_FLOAT, _float4(0.f, 0.f, 0.f, 0.f), CRenderTarget::RTT::DEFFURED)))
-		return E_FAIL;
-	if (FAILED(m_pTargetMgr->Add_RenderTarget(m_pDevice, m_pDeviceContext, TEXT("Target_Position"), (_uint)ViewportDesc.Width, (_uint)ViewportDesc.Height, DXGI_FORMAT_B8G8R8A8_UNORM, _float4(1.f, 1.f, 1.f, 0.f), CRenderTarget::RTT::DEFFURED)))
-		return E_FAIL;
-
-	if (FAILED(m_pTargetMgr->Add_RenderTarget(m_pDevice, m_pDeviceContext, TEXT("Target_Shadow"), (_uint)ViewportDesc.Width, (_uint)ViewportDesc.Height, DXGI_FORMAT_R32G32B32A32_FLOAT, _float4(0.f, 0.f, 0.f, 0.f), CRenderTarget::RTT::SHADOWMAP)))
-		return E_FAIL;
-
-	if (FAILED(m_pTargetMgr->Add_RenderTarget(m_pDevice, m_pDeviceContext, TEXT("Target_ShadeShadow"), (_uint)ViewportDesc.Width, (_uint)ViewportDesc.Height, DXGI_FORMAT_R32G32B32A32_FLOAT, _float4(0.f, 0.f, 0.f, 0.f), CRenderTarget::RTT::SHADOWDEPTH)))
-		return E_FAIL;
-
-	if (FAILED(m_pTargetMgr->Add_RenderTarget(m_pDevice, m_pDeviceContext, TEXT("Target_Shade"), (_uint)ViewportDesc.Width, (_uint)ViewportDesc.Height, DXGI_FORMAT_R16G16B16A16_FLOAT, _float4(0.0f, 0.0f, 0.0f, 1.f), CRenderTarget::RTT::LIGHTING)))
-		return E_FAIL;
-	if (FAILED(m_pTargetMgr->Add_RenderTarget(m_pDevice, m_pDeviceContext, TEXT("Target_Specular"), (_uint)ViewportDesc.Width, (_uint)ViewportDesc.Height, DXGI_FORMAT_R16G16B16A16_FLOAT, _float4(0.0f, 0.0f, 0.0f, 0.f), CRenderTarget::RTT::LIGHTING)))
-		return E_FAIL;
-
-	// Blend RenderTarget
-	if (FAILED(m_pTargetMgr->Add_RenderTarget(m_pDevice, m_pDeviceContext, TEXT("Target_Blend"), (_uint)ViewportDesc.Width, (_uint)ViewportDesc.Height, DXGI_FORMAT_R16G16B16A16_FLOAT, _float4(0.0f, 0.0f, 0.0f, 0.f), CRenderTarget::RTT::LIGHTING)))
-		return E_FAIL;
-
-	// PBR RenderTargets
-	if (FAILED(m_pTargetMgr->Add_RenderTarget(m_pDevice, m_pDeviceContext, TEXT("Target_Metallic"), (_uint)ViewportDesc.Width, (_uint)ViewportDesc.Height, DXGI_FORMAT_R16G16B16A16_FLOAT, _float4(0.f, 0.f, 0.f, 1.f), CRenderTarget::RTT::LIGHTING)))
-		return E_FAIL;
-	if (FAILED(m_pTargetMgr->Add_RenderTarget(m_pDevice, m_pDeviceContext, TEXT("Target_Roughness"), (_uint)ViewportDesc.Width, (_uint)ViewportDesc.Height, DXGI_FORMAT_R16G16B16A16_FLOAT, _float4(1.f, 1.f, 1.f, 1.f), CRenderTarget::RTT::LIGHTING)))
-		return E_FAIL;
-	if (FAILED(m_pTargetMgr->Add_RenderTarget(m_pDevice, m_pDeviceContext, TEXT("Target_AO"), (_uint)ViewportDesc.Width, (_uint)ViewportDesc.Height, DXGI_FORMAT_R16G16B16A16_FLOAT, _float4(0.f, 0.f, 0.f, 1.f), CRenderTarget::RTT::LIGHTING)))
-		return E_FAIL;
-
-	// Compute Shader
-	if (FAILED(m_pTargetMgr->Add_CSTarget(m_pDevice, m_pDeviceContext, L"CSDownScale", L"../../Reference/ShaderFile/Shader_DownSample.hlsl", "CS_Main", (_uint)ViewportDesc.Width, (_uint)ViewportDesc.Height, DXGI_FORMAT_R8G8B8A8_UNORM, _float4(1.f, 1.f, 1.f, 1.f), CCSTarget::CSType::DOWNSAMPLE)))
-		return E_FAIL;
-	if (FAILED(m_pTargetMgr->Add_CSTarget(m_pDevice, m_pDeviceContext, L"CSGSBlur", L"../../Reference/ShaderFile/Shader_CSGSBlur.hlsl", "Blur", (_uint)ViewportDesc.Width, (_uint)ViewportDesc.Height, DXGI_FORMAT_R8G8B8A8_UNORM, _float4(1.f, 1.f, 1.f, 1.f), CCSTarget::CSType::GSBLUR)))
-		return E_FAIL;
-
-	// 멀티 랜더 타겟 Deferred
-	if (FAILED(m_pTargetMgr->Add_MRT(TEXT("MRT_Deferred"), TEXT("Target_Diffuse"))))
-		return E_FAIL;
-	if (FAILED(m_pTargetMgr->Add_MRT(TEXT("MRT_Deferred"), TEXT("Target_Normal"))))
-		return E_FAIL;
-	if (FAILED(m_pTargetMgr->Add_MRT(TEXT("MRT_Deferred"), TEXT("Target_Depth"))))
-		return E_FAIL;
-	if (FAILED(m_pTargetMgr->Add_MRT(TEXT("MRT_Deferred"), TEXT("Target_Position"))))
-		return E_FAIL;
-
-	// 단일 랜더 타겟 ShadowMap
-	if (FAILED(m_pTargetMgr->Add_MRT(TEXT("MRT_Shadow"), TEXT("Target_Shadow"))))
-		return E_FAIL;
-	// 단일 랜더 타겟 ShadowDepth
-	if (FAILED(m_pTargetMgr->Add_MRT(TEXT("MRT_ShaeShadow"), TEXT("Target_ShadeShadow"))))
-		return E_FAIL;
-
-	// 멀티 랜더 타겟 Lighting
-	if (FAILED(m_pTargetMgr->Add_MRT(TEXT("MRT_LightAcc"), TEXT("Target_Shade"))))
-		return E_FAIL;
-	if (FAILED(m_pTargetMgr->Add_MRT(TEXT("MRT_LightAcc"), TEXT("Target_Specular"))))
-		return E_FAIL;
-
-	// 멀티 랜더 타겟 PBR
-	if (FAILED(m_pTargetMgr->Add_MRT(TEXT("MRT_PBR"), TEXT("Target_Metallic"))))
-		return E_FAIL;
-	if (FAILED(m_pTargetMgr->Add_MRT(TEXT("MRT_PBR"), TEXT("Target_Roughness"))))
-		return E_FAIL;
-	if (FAILED(m_pTargetMgr->Add_MRT(TEXT("MRT_PBR"), TEXT("Target_AO"))))
-		return E_FAIL;
-
-	if (FAILED(m_pTargetMgr->Add_MRT(TEXT("MRT_Blend"), TEXT("Target_Blend"))))
-		return E_FAIL;
-
-	m_pVIBuffer = CVIBuffer_RectViewPort::Create(m_pDevice, m_pDeviceContext, 0.f, 0.f, ViewportDesc.Width, ViewportDesc.Height, TEXT("../../Reference/ShaderFile/Shader_RectViewPort.hlsl"));
-	if (nullptr == m_pVIBuffer)
-		return E_FAIL;
-
-#ifdef _DEBUG
-	if (FAILED(m_pTargetMgr->Ready_Debug_Buffer(TEXT("Target_Diffuse"), 0, 0, 100.f, 100.f)))
-		return E_FAIL;
-	if (FAILED(m_pTargetMgr->Ready_Debug_Buffer(TEXT("Target_Normal"), 100.f, 0, 100.f, 100.f)))
-		return E_FAIL;
-	if (FAILED(m_pTargetMgr->Ready_Debug_Buffer(TEXT("Target_Depth"), 200.f, 0, 100.f, 100.f)))
-		return E_FAIL;
-	if (FAILED(m_pTargetMgr->Ready_Debug_Buffer(TEXT("Target_Position"), 300, 0, 100.f, 100.f)))
-		return E_FAIL;
-
-	if (FAILED(m_pTargetMgr->Ready_Debug_Buffer(TEXT("Target_Shadow"), 400.f, 0, 100.f, 100.f)))
-		return E_FAIL;
-
-	if (FAILED(m_pTargetMgr->Ready_Debug_Buffer(TEXT("Target_ShadeShadow"), 500.f, 0, 100.f, 100.f)))
-		return E_FAIL;
-
-	if (FAILED(m_pTargetMgr->Ready_Debug_Buffer(TEXT("Target_Shade"), 600.f, 0, 100.f, 100.f)))
-		return E_FAIL;
-	if (FAILED(m_pTargetMgr->Ready_Debug_Buffer(TEXT("Target_Specular"), 700.f, 0, 100.f, 100.f)))
-		return E_FAIL;
-
-	if (FAILED(m_pTargetMgr->Ready_Debug_Buffer(TEXT("Target_Metallic"), 1180.f, 0, 100.f, 100.f)))
-		return E_FAIL;
-	if (FAILED(m_pTargetMgr->Ready_Debug_Buffer(TEXT("Target_Roughness"), 1180.f, 100.f, 100.f, 100.f)))
-		return E_FAIL;
-	if (FAILED(m_pTargetMgr->Ready_Debug_Buffer(TEXT("Target_AO"), 1180.f, 200, 100.f, 100.f)))
-		return E_FAIL;
-
-	if (FAILED(m_pTargetMgr->Ready_Debug_Buffer(TEXT("Target_Blend"), 0.f, 520, 100.f, 100.f)))
-		return E_FAIL;
-
-	if (FAILED(m_pTargetMgr->Ready_Debug_Buffer_CSTarget(L"CSDownScale", 0.f, 620, 100.f, 100.f)))
-		return E_FAIL;
-
-	if (FAILED(m_pTargetMgr->Ready_Debug_Buffer_CSTarget(L"CSGSBlur", 100.f, 620, 100.f, 100.f)))
-		return E_FAIL;
-#endif // _DEBUG
-
-	
-
-	return S_OK;
-}
 
 CRenderer* CRenderer::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
 {
@@ -519,7 +418,14 @@ void CRenderer::Free()
 
 		m_RenderGroup[i].clear();
 	}
-	Safe_Release(m_pVIBuffer);
+	Safe_Release(m_pShadowMap);
+
+	Safe_Release(m_pHDR);
+	Safe_Release(m_pLuminance);
+	Safe_Release(m_pPostProcess);
+	Safe_Release(m_pTonemapping);
+	Safe_Release(m_pRenderAssit);
 
 	Safe_Release(m_pTargetMgr);
+	Safe_Release(m_pVIBuffer);
 }

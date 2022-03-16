@@ -20,3 +20,5 @@ extern HWND			g_hWnd;
 namespace Example {}
 
 using namespace Example;
+
+#include "DataLoadStruct.h"

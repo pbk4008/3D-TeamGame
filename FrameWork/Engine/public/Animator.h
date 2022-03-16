@@ -48,7 +48,10 @@ public:
 	// **무조건 끝나고 나서 행동해야하는 애니메이션 연결 필수!!
 	HRESULT Insert_AnyEntryAnimation(_uint iTag, class CAnimation* pAnim, _bool bRootAnim, _bool bTransFrom, ERootOption eOption);
 public:
-	const _uint Get_CurrentAnim();
+	const _uint Get_CurrentAnimNode();
+	CAnimation* Get_CurrentAnimation();
+public:
+	vector<_uint> Get_Nodes() { return m_vecAnimNode; }
 private:
 	//애니메이션 찾기
 	CAnimNode* Find_Animation(_uint itTag, CAnimNode* pNode=nullptr);

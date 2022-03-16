@@ -6,6 +6,11 @@ CLight_Manager::CLight_Manager()
 {
 }
 
+void CLight_Manager::UpdateLightCam(_uint LightIndx, _fvector playerpos)
+{
+	m_Lights[LightIndx]->UpdateLightCam(playerpos);
+}
+
 const LIGHTDESC* CLight_Manager::Get_LightDesc(_uint iIndex)
 {
 	auto	iter = m_Lights.begin();

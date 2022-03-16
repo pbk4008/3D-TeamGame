@@ -26,11 +26,13 @@ cbuffer LightBuffer
 cbuffer ShadeCheck
 {
 	bool g_bool = false;
+	bool g_NonTex = false;
 };
 
 texture2D g_DiffuseTexture;
-texture2D g_ShadowTexture;
 texture2D g_BiNormalTexture;
+texture2D g_ShadowTexture;
+texture2D g_PBRTexture;
 
 sampler DefaultSampler = sampler_state
 {
@@ -172,25 +174,29 @@ PS_OUT PS_MAIN(PS_IN In)
 	Out.vPosition = In.vViewPos;
 	Out.vDiffuse = g_DiffuseTexture.Sample(DefaultSampler, In.vTexUV);
 	Out.vDiffuse.a = 1.f;
-
-	float3 vNormalMap = g_BiNormalTexture.Sample(DefaultSampler, In.vTexUV).xyz;
-	float3 vNormal = normalize(vNormalMap.xyz * 2.f - 1.f);
-	vector pos = (vector) 1;
-	float4x4 matTangent = float4x4(normalize(In.vTangent), normalize(In.vBiNormal), normalize(In.vNormal), pos);
-	
-	matTangent = transpose(matTangent);
 	/* -1 ~ 1 */
 	/* 0 ~ 1 */
 	//Out.vNormal = vector(In.vNormal.xyz * 0.5f + 0.5f, 0.f);
+	
 	if (g_bool == true)
+	{
+		float3 vNormalMap = g_BiNormalTexture.Sample(DefaultSampler, In.vTexUV).xyz;
+		float3 vNormal = normalize(vNormalMap.xyz * 2.f - 1.f);
+		vector pos = (vector) 1;
+		float4x4 matTangent = float4x4(normalize(In.vTangent), normalize(In.vBiNormal), normalize(In.vNormal), pos);
+	
+		matTangent = transpose(matTangent);
+		
 		Out.vNormal = mul(vector(vNormal.xyz, 0.f), matTangent);
+	}
 	else
 		Out.vNormal = vector(In.vNormal.xyz * 0.5f + 0.5f, 0.f);
 	
-	Out.vDepth = vector(In.vProjPos.z / In.vProjPos.w, In.vProjPos.w / 300.0f, 0.0f, 0.0f);
+	
+	Out.vDepth = vector(In.vProjPos.z / In.vProjPos.w, In.vProjPos.w / 150.0f, 0.0f, 0.0f);
 
 
-	return Out;
+		return Out;
 }
 // SHADOWMAP
 //*---------------------------------------------------------------------------------------------*
@@ -283,6 +289,39 @@ PS_OUT_SHADESHADOW PS_MAIN_SHADESHADOW(PS_IN_SHADESHADOW In)
 	return Out;
 }
 //*---------------------------------------------------------------------------------------------*
+
+// Ready PBR
+//*---------------------------------------------------------------------------------------------*
+struct PS_OUT_PBR
+{
+	vector vMetallic : SV_TARGET0;
+	vector vRoughness : SV_TARGET1;
+	vector vAO : SV_TARGET2;
+};
+
+PS_OUT_PBR PS_MAIN_PBR(PS_IN In)
+{
+	PS_OUT_PBR Out = (PS_OUT_PBR) 0;
+	
+	if (g_NonTex == true)
+	{
+		Out.vMetallic = vector(0.f, 0.f, 0.f, 1.f);
+		Out.vRoughness = vector(1.f, 1.f, 1.f, 1.f);
+		Out.vAO = vector(1.f, 1.f, 1.f, 1.f);
+	}
+	else
+	{
+		vector vPBRTexture = g_PBRTexture.Sample(DefaultSampler, In.vTexUV);
+	
+		Out.vMetallic = vector(vPBRTexture.rrr, 1.f);
+		Out.vRoughness = vector(vPBRTexture.ggg, 1.f);
+		Out.vAO = vector(vPBRTexture.bbb, 1.f);
+	}
+	
+	return Out;
+}
+//*---------------------------------------------------------------------------------------------*
+
 struct PS_OUT_TOOL
 {
 	vector vDiffuse : SV_TARGET0;
@@ -299,7 +338,7 @@ PS_OUT_TOOL PS_MAIN_TOOL(PS_IN In)
 	Out.vDiffuse.a = 1.f;
 
 	Out.vNormal = vector(In.vNormal.xyz * 0.5f + 0.5f, 0.f);
-	Out.vDepth = vector(In.vProjPos.z / In.vProjPos.w, In.vProjPos.w / 300.0f, 0.0f, 0.0f);
+	Out.vDepth = vector(In.vProjPos.z / In.vProjPos.w, In.vProjPos.w / 150.0f, 0.0f, 0.0f);
 
 	return Out;
 }
@@ -361,6 +400,18 @@ technique11 DefaultTechnique
 		VertexShader = compile vs_5_0 VS_MAIN_SHADESHADOW_STATIC();
 		GeometryShader = NULL;
 		PixelShader = compile ps_5_0 PS_MAIN_SHADESHADOW();
+	}
+
+	pass ReadyPBR //------------------------------------------------------------------------------------4 Static Shade_Shadow
+	{
+		SetRasterizerState(CullMode_Default);
+		SetDepthStencilState(ZDefault, 0);
+		SetBlendState(BlendDisable, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+
+		/* 진입점함수를 지정한다. */
+		VertexShader = compile vs_5_0 VS_MAIN_STATIC();
+		GeometryShader = NULL;
+		PixelShader = compile ps_5_0 PS_MAIN_PBR();
 	}
 }
 

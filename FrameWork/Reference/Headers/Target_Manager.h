@@ -21,6 +21,9 @@ public: HRESULT Add_RenderTarget(ID3D11Device* pDevice, ID3D11DeviceContext* pDe
 public: HRESULT	Add_CSTarget(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext, const _tchar* CsTag, const _tchar* pShaderFilePath, const char* pEntryPoitn, _uint iWidth, _uint iHeight, DXGI_FORMAT eFormat, _float4 vClearColor, CCSTarget::CSType eType);
 public: HRESULT Add_MRT(const wstring& pMRTTag, const wstring& pTargetTag);
 
+public: HRESULT	Begin_RT(ID3D11DeviceContext* pDeviceContext, const wstring& pRTTag, ID3D11DepthStencilView* DepthView);
+public: HRESULT	End_RT(ID3D11DeviceContext* pDeviceContext, ID3D11DepthStencilView* DepthView);
+
 public: HRESULT Begin_MRT(ID3D11DeviceContext* pDeviceContext, const wstring& pMRTTag);
 public: HRESULT End_MRT(ID3D11DeviceContext* pDeviceContext);
 
@@ -47,6 +50,8 @@ private: typedef map<wstring, list<class CRenderTarget*>>	MRTS;
 
 private: ID3D11RenderTargetView*				m_pOldView = nullptr;
 private: ID3D11DepthStencilView*				m_pDepthStencilView = nullptr;
+private: D3D11_RECT								m_oldrects[1];
+private: D3D11_VIEWPORT							m_oldvp[2];
 
 private: CRenderTarget*					Find_Target(const wstring& pTargetTag);
 private: CCSTarget*						Find_CSTarget(const _tchar* pTargetTag);

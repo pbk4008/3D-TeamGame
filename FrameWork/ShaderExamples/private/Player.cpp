@@ -53,14 +53,23 @@ _int CPlayer::Tick(_double TimeDelta)
 	if (GetAsyncKeyState(VK_NUMPAD2) & 0x8000)
 		m_bTrailOnOff = false;
 
+	/*g_pGameInstance->UpdateLightCam(0, m_pTransform->Get_State(CTransform::STATE_POSITION));*/
+
 	return _int();
 }
 
 _int CPlayer::LateTick(_double TimeDelta)
 {
 	if (nullptr != m_pRenderer)
-		m_pRenderer->Add_RenderGroup(CRenderer::RENDER_NONALPHA, this);
+	{
+		if(m_pRenderer->Get_Shadow())
+			m_pRenderer->Add_RenderGroup(CRenderer::RENDER_SHADOW, this);
 
+		if(m_pRenderer->Get_PBR())
+			m_pRenderer->Add_RenderGroup(CRenderer::RENDER_PBR, this);
+
+		m_pRenderer->Add_RenderGroup(CRenderer::RENDER_NONALPHA, this);
+	}
 	if (m_bTrailOnOff)
 		m_pModelCom->Update_CombinedTransformationMatrix(TimeDelta);
 	else
@@ -209,8 +218,8 @@ HRESULT CPlayer::SetUp_Components()
 	m_pTransform->Set_TransformDesc(TransformDesc);
 
 	m_vecTextureCom.resize(2);
-	m_vecTextureCom[0] = g_pGameInstance->Clone_Component<CTexture>(0, L"Texture");
-	m_vecTextureCom[1] = g_pGameInstance->Clone_Component<CTexture>(0, L"Texture");
+	m_vecTextureCom[0] = g_pGameInstance->Clone_Component<CTexture>(0, L"Proto_Component_Texture");
+	m_vecTextureCom[1] = g_pGameInstance->Clone_Component<CTexture>(0, L"Proto_Component_Texture");
 
 	m_vecTextureCom[0]->Change_Texture(L"PBR_Player_Top");
 	m_vecTextureCom[1]->Change_Texture(L"PBR_Player_Down");
@@ -221,7 +230,7 @@ HRESULT CPlayer::SetUp_Components()
 	m_Lightdesc = g_pGameInstance->Get_LightDesc(0);
 	m_pWeponNode = m_pModelCom->Get_BoneMatrix("weapon_r_end");
 
-	_vector vpos = { 3.f,2.f,3.f,1.f };
+	_vector vpos = { 0.f,0.f,0.f,1.f };
 	m_pTransform->Set_State(CTransform::STATE_POSITION, vpos);
 
 	return S_OK;

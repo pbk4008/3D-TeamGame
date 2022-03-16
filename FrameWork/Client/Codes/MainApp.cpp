@@ -5,8 +5,10 @@
 #include "MainCamera_Ortho.h"
 #include "Loading.h"
 
+CClient_Observer* g_pObserver = nullptr;
+
 CMainApp::CMainApp()
-{	
+{
 }
 
 HRESULT CMainApp::NativeConstruct()
@@ -38,6 +40,8 @@ HRESULT CMainApp::NativeConstruct()
 	if (FAILED(SetUp_StartLevel(SCENEID::SCENE_LOGO)))
 		return E_FAIL;
 
+	g_pObserver = GET_INSTANCE(CClient_Observer);
+
 	return S_OK;
 }
 
@@ -64,11 +68,11 @@ _int CMainApp::Tick(_double TimeDelta)
 		}
 	}
 
-	if (g_pGameInstance->getkeyDown(DIK_F1))
+	/*if (g_pGameInstance->getkeyDown(DIK_F1))
 	{
 		m_bDeffered = !m_bDeffered;
 		m_pRenderer->SetRenderButton(CRenderer::DEFERRED, m_bDeffered);
-	}
+	}*/
 
 
 	return _int();
@@ -234,6 +238,9 @@ void CMainApp::Free()
 	//CDebugSystem::Stop_DebugSystem();
 	//if (FAILED(CDebugSystem::DestroyInstance()))
 	//	MSGBOX("CDebugSystem Destroy Fail");
+	
+	RELEASE_INSTANCE(CClient_Observer);
+	Safe_Release(g_pObserver);
 
 	Safe_Release(m_pRenderer);
 

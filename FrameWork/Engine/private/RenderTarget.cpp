@@ -54,10 +54,10 @@ HRESULT CRenderTarget::NativeConstruct(_uint iWidth, _uint iHeight, DXGI_FORMAT 
 	if (FAILED(m_pDevice->CreateShaderResourceView(m_pTexture, &SRVDesc, &m_pSRV)))
 		return E_FAIL;
 
-	if (m_eType == RTT::SHADOWMAP)
-	{
-		CreateDSV(iWidth, iHeight, eFormat);
-	}
+	//if (m_eType == RTT::SHADOWMAP)
+	//{
+	//	CreateDSV(iWidth, iHeight, eFormat);
+	//}
 
 	m_vClearColor = vClearColor;
 
@@ -100,37 +100,37 @@ HRESULT CRenderTarget::Render_Debug_Buffer()
 #endif // _DEBUG
 
 
-HRESULT CRenderTarget::CreateDSV(_uint iWidth, _uint iHeight, DXGI_FORMAT eFormat)
-{
-	D3D11_TEXTURE2D_DESC	TextureDesc;
-	ZeroMemory(&TextureDesc, sizeof(D3D11_TEXTURE2D_DESC));
-
-	TextureDesc.Width = iWidth;
-	TextureDesc.Height = iHeight;
-	TextureDesc.MipLevels = 1;
-	TextureDesc.ArraySize = 1;
-	TextureDesc.Format = eFormat;
-	TextureDesc.SampleDesc.Quality = 0;
-	TextureDesc.SampleDesc.Count = 1;
-	TextureDesc.Usage = D3D11_USAGE_DEFAULT;
-	TextureDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
-	TextureDesc.CPUAccessFlags = 0;
-	TextureDesc.MiscFlags = 0;
-
-	if (FAILED(m_pDevice->CreateTexture2D(&TextureDesc, nullptr, &m_pDepthStencilTex)))
-		return E_FAIL;
-
-	D3D11_DEPTH_STENCIL_VIEW_DESC	DSVDesc;
-
-	DSVDesc.Format = eFormat;
-	DSVDesc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
-	DSVDesc.Texture2D.MipSlice = 0;
-
-	if (FAILED(m_pDevice->CreateDepthStencilView(m_pDepthStencilTex, &DSVDesc, &m_pDepthStencilView)))
-		return E_FAIL;
-
-	return S_OK;
-}
+//HRESULT CRenderTarget::CreateDSV(_uint iWidth, _uint iHeight, DXGI_FORMAT eFormat)
+//{
+//	D3D11_TEXTURE2D_DESC	TextureDesc;
+//	ZeroMemory(&TextureDesc, sizeof(D3D11_TEXTURE2D_DESC));
+//
+//	TextureDesc.Width = iWidth;
+//	TextureDesc.Height = iHeight;
+//	TextureDesc.MipLevels = 1;
+//	TextureDesc.ArraySize = 1;
+//	TextureDesc.Format = eFormat;
+//	TextureDesc.SampleDesc.Quality = 0;
+//	TextureDesc.SampleDesc.Count = 1;
+//	TextureDesc.Usage = D3D11_USAGE_DEFAULT;
+//	TextureDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
+//	TextureDesc.CPUAccessFlags = 0;
+//	TextureDesc.MiscFlags = 0;
+//
+//	if (FAILED(m_pDevice->CreateTexture2D(&TextureDesc, nullptr, &m_pDepthStencilTex)))
+//		return E_FAIL;
+//
+//	D3D11_DEPTH_STENCIL_VIEW_DESC	DSVDesc;
+//
+//	DSVDesc.Format = eFormat;
+//	DSVDesc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
+//	DSVDesc.Texture2D.MipSlice = 0;
+//
+//	if (FAILED(m_pDevice->CreateDepthStencilView(m_pDepthStencilTex, &DSVDesc, &m_pDepthStencilView)))
+//		return E_FAIL;
+//
+//	return S_OK;
+//}
 
 CRenderTarget* CRenderTarget::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext, _uint iWidth, _uint iHeight, DXGI_FORMAT eFormat, _float4 vClearColor, RTT eType)
 {

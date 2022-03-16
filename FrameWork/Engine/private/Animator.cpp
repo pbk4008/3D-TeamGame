@@ -62,12 +62,15 @@ _int CAnimator::Tick(_double dDeltaTime)
 {
 	m_pController->Tick(dDeltaTime);
 	if (m_pController->Get_ChangeAnimation())
+	{
 		m_pCulAnimNode = m_pChangeNode;
+		m_pController->Set_IsChange(false);
+	}
 
 	if (m_pCulAnimNode->Get_AutoIndex() != -1)
 	{
 		if (!m_pCulAnimNode->Get_Loop() && m_pController->Is_Finished())
-			Change_Animation(m_vecAnimNode[m_pCulAnimNode->Get_AutoIndex()]);
+			Change_Animation(m_pCulAnimNode->Get_AutoIndex());
 		/*if (m_pCulAnimNode->Is_LoopChange())
 			m_pCulAnimNode->Change_Loop(true);
 		if (m_pController->Is_Finished())
@@ -95,7 +98,7 @@ HRESULT CAnimator::Insert_Animation(_uint iTag, _uint iConnectTag, CAnimation* p
 	m_vecAnimNode.emplace_back(iTag);
 	
 	//AnimNode ¿¬°á
-	if (FAILED(Connect_Animation(iTag, iConnectTag, bDouble)))
+	if (FAILED(Connect_Animation(iConnectTag, pNewNode, bDouble)))
 		return E_FAIL;
 
 	return S_OK;
@@ -138,7 +141,7 @@ HRESULT CAnimator::Set_UpAutoChangeAnimation(_uint iTag, _uint iEndTag)
 	if (!pNode)
 		return E_FAIL;
 
-	CAnimNode* pEndNode = Find_Animation(iTag, pNode);
+	CAnimNode* pEndNode = Find_Animation(iEndTag, pNode);
 	if (!pEndNode)
 		return E_FAIL;
 
@@ -166,12 +169,20 @@ HRESULT CAnimator::Insert_AnyEntryAnimation(_uint iTag, CAnimation* pAnim, _bool
 	return S_OK;
 }
 
-const _uint CAnimator::Get_CurrentAnim()
+const _uint CAnimator::Get_CurrentAnimNode()
 {
 	if (!m_pCulAnimNode)
 		return -1;
 
 	return m_pCulAnimNode->Get_Index();
+}
+
+CAnimation* CAnimator::Get_CurrentAnimation()
+{
+	if (!m_pCulAnimNode)
+		return nullptr;
+
+	return m_pCulAnimNode->Get_Animation();
 }
 
 HRESULT CAnimator::Change_Animation(_uint iTag)
@@ -293,8 +304,13 @@ void CAnimator::Free()
 {
 	CComponent::Free();
 	Safe_Release(m_pController);
+	m_pHead->Delete_Node(m_vecAnimNode);
 	Safe_Release(m_pHead);
 
 	for (auto& pNode : m_vecAnyEntryNode)
+	{
+		pNode->Delete_Node(m_vecAnimNode);
 		Safe_Release(pNode);
+	}
+	m_vecAnyEntryNode.clear();
 }

@@ -412,6 +412,14 @@ HRESULT CGameInstance::Add_Light(ID3D11Device * pDevice, ID3D11DeviceContext * p
 	return m_pLight_Manager->Add_Light(pDevice, pDeviceContext, LightDesc);	
 }
 
+void CGameInstance::UpdateLightCam(_uint LightIndx, _fvector playerpos)
+{
+	if (!m_pLight_Manager)
+		return;
+
+	m_pLight_Manager->UpdateLightCam(LightIndx, playerpos);
+}
+
 HRESULT CGameInstance::Add_Font(ID3D11Device * pDevice, ID3D11DeviceContext * pDeviceContext, const wstring& pFontTag, const wstring& pFontPath)
 {
 	if (nullptr == m_pFont_Manager)

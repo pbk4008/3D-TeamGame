@@ -423,11 +423,24 @@ HRESULT CModel::Load_Animation()
 			iMaxKeyFrameIndex = iKeyFrameCnt;
 			for (_uint k = 0; k < iKeyFrameCnt; ++k)
 			{
-				KEYFRAME* pKeyFrame = &m_tAnimData.pAnimData[i].pChannelData[j].pKeyFrame[k];
+				KEYFRAME* pKeyFrame = new KEYFRAME;
+				ZeroMemory(pKeyFrame, sizeof(KEYFRAME));
+
+				pKeyFrame->Time = m_tAnimData.pAnimData[i].pChannelData[j].pKeyFrame[k].Time;
+				pKeyFrame->vPosition = m_tAnimData.pAnimData[i].pChannelData[j].pKeyFrame[k].vPosition;
+				pKeyFrame->vRotation = m_tAnimData.pAnimData[i].pChannelData[j].pKeyFrame[k].vRotation;
+				pKeyFrame->vScale = m_tAnimData.pAnimData[i].pChannelData[j].pKeyFrame[k].vScale;
+
 				pChannel->Add_KeyFrame(pKeyFrame);
 			}
+			delete []m_tAnimData.pAnimData[i].pChannelData[j].pKeyFrame;
+			m_tAnimData.pAnimData[i].pChannelData[j].pKeyFrame = nullptr;
+
 			pAnimation->Add_Channel(pChannel);
 		}
+		delete[] m_tAnimData.pAnimData[i].pChannelData;
+		m_tAnimData.pAnimData[i].pChannelData = nullptr;
+
 		pAnimation->Set_MaxKeyFrameIndex(iMaxKeyFrameIndex);
 		m_Animations.push_back(pAnimation);
 	}

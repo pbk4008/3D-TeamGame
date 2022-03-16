@@ -1,4 +1,6 @@
 #include "AnimNode.h"
+#include "Animator.h"
+
 
 CAnimNode::CAnimNode()
 	: m_pAnim(nullptr)
@@ -65,6 +67,45 @@ void CAnimNode::Change_Loop(_bool bChange)
 	m_bLoop = bChange;
 }
 
+HRESULT CAnimNode::Delete_Node(vector<_uint>& vecNode)
+{
+	_bool bCheck = false;
+	for (auto iter = vecNode.begin(); iter != vecNode.end(); iter++)
+	{
+		if (*iter == m_iIndex)
+		{
+			bCheck = true;
+			if (iter == vecNode.end() - 1)
+			{
+				vecNode.pop_back();
+				break;
+			}
+			vecNode.erase(iter);
+			break;
+		}
+	}
+	if (!bCheck)
+		return S_OK;
+
+	for (auto& pNode : m_vecAnimNode)
+	{
+		for (auto& pNum : vecNode)
+		{
+			if (pNode)
+			{
+				if (pNum == pNode->m_iIndex)
+				{
+					pNode->Delete_Node(vecNode);
+					Safe_Release(pNode);
+				}
+			}
+		}
+	}
+	m_vecAnimNode.clear();
+
+	return S_OK;
+}
+
 CAnimNode* CAnimNode::Create(_uint iTag, CAnimation* pAnim, _bool bLoop, _bool bRootAnim, _bool bTransformMove, ERootOption eOption)
 {
 	CAnimNode* pInstance = new CAnimNode();
@@ -78,8 +119,5 @@ CAnimNode* CAnimNode::Create(_uint iTag, CAnimation* pAnim, _bool bLoop, _bool b
 
 void CAnimNode::Free()
 {
-	for (auto& pNode : m_vecAnimNode)
-		Safe_Release(pNode);
-
-	m_vecAnimNode.clear();
+	
 }

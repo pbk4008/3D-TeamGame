@@ -162,6 +162,7 @@
     <ClInclude Include="..\bin\ShaderFiles\Shader_Calculate.hpp" />
     <ClInclude Include="..\bin\ShaderFiles\Shader_RenderState.hpp" />
     <ClInclude Include="..\public\BackGround.h" />
+    <ClInclude Include="..\public\DataLoader.h" />
     <ClInclude Include="..\public\MainCamera.h" />
     <ClInclude Include="..\public\Floor.h" />
     <ClInclude Include="..\public\Loader.h" />
@@ -170,6 +171,8 @@
     <ClInclude Include="..\public\Player.h" />
     <ClInclude Include="..\public\SkyBox.h" />
     <ClInclude Include="..\public\Stage1.h" />
+    <ClInclude Include="..\public\StaticObject.h" />
+    <ClInclude Include="DataLoadStruct.h" />
     <ClInclude Include="Defines.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="Resource.h" />
@@ -178,6 +181,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\private\BackGround.cpp" />
+    <ClCompile Include="..\private\DataLoader.cpp" />
     <ClCompile Include="..\private\MainCamera.cpp" />
     <ClCompile Include="..\private\Floor.cpp" />
     <ClCompile Include="..\private\Loader.cpp" />
@@ -186,6 +190,7 @@
     <ClCompile Include="..\private\Player.cpp" />
     <ClCompile Include="..\private\SkyBox.cpp" />
     <ClCompile Include="..\private\Stage1.cpp" />
+    <ClCompile Include="..\private\StaticObject.cpp" />
     <ClCompile Include="ShaderExamples.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -204,6 +209,7 @@
     <FxCompile Include="..\bin\ShaderFiles\Shader_Mesh.hlsl" />
     <FxCompile Include="..\bin\ShaderFiles\Shader_MeshAnim.hlsl" />
     <FxCompile Include="..\bin\ShaderFiles\Shader_PointInstance.hlsl" />
+    <FxCompile Include="..\bin\ShaderFiles\Shader_PsotProcess.hlsl" />
     <FxCompile Include="..\bin\ShaderFiles\Shader_Rect.hlsl" />
     <FxCompile Include="..\bin\ShaderFiles\Shader_RectViewport.hlsl" />
     <FxCompile Include="..\bin\ShaderFiles\Shader_StaticMesh.hlsl" />
