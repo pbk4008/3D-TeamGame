@@ -34,7 +34,7 @@ HRESULT CRendererAssit::Setup_RenderTarget()
 	_float fheight = ViewportDesc.Height;
 #endif // _DEBUG
 
-	m_pVIBuffer = CVIBuffer_RectViewPort::Create(m_pDevice, m_pDeviceContext, 0.f, 0.f, ViewportDesc.Width, ViewportDesc.Height, TEXT("../bin/ShaderFiles/Shader_RectViewPort.hlsl"));
+	m_pVIBuffer = CVIBuffer_RectViewPort::Create(m_pDevice, m_pDeviceContext, 0.f, 0.f, ViewportDesc.Width, ViewportDesc.Height, TEXT("../../Reference/ShaderFile/Shader_RectViewPort.hlsl"));
 	if (nullptr == m_pVIBuffer)
 		return E_FAIL;
 

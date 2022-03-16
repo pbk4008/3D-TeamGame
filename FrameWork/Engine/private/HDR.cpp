@@ -16,7 +16,7 @@ HRESULT CHDR::InitHDR()
 
 	m_pDeviceContext->RSGetViewports(&iViewportIndex, &ViewportDesc);
 
-	m_pVIBuffer = CVIBuffer_RectViewPort::Create(m_pDevice, m_pDeviceContext, 0.f, 0.f, ViewportDesc.Width, ViewportDesc.Height, TEXT("../Bin/ShaderFiles/Shader_HDRBase.hlsl"));
+	m_pVIBuffer = CVIBuffer_RectViewPort::Create(m_pDevice, m_pDeviceContext, 0.f, 0.f, ViewportDesc.Width, ViewportDesc.Height, TEXT("../../Reference/ShaderFile/Shader_HDRBase.hlsl"));
 	if (nullptr == m_pVIBuffer)
 		return E_FAIL;
 

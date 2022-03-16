@@ -16,11 +16,11 @@ HRESULT CTonemapping::InitToneMapping()
 
 	m_pDeviceContext->RSGetViewports(&iViewportIndex, &m_viewport);
 
-	m_pVIBuffer = CVIBuffer_RectViewPort::Create(m_pDevice, m_pDeviceContext, 0.f, 0.f, m_viewport.Width, m_viewport.Height, TEXT("../Bin/ShaderFiles/Shader_Tonemapping.hlsl"));
+	m_pVIBuffer = CVIBuffer_RectViewPort::Create(m_pDevice, m_pDeviceContext, 0.f, 0.f, m_viewport.Width, m_viewport.Height, TEXT("../../Reference/ShaderFile/Shader_Tonemapping.hlsl"));
 	if (nullptr == m_pVIBuffer)
 		return E_FAIL;
 
-	m_pFinalBlend = CVIBuffer_RectViewPort::Create(m_pDevice, m_pDeviceContext, 0.f, 0.f, m_viewport.Width, m_viewport.Height, TEXT("../Bin/ShaderFiles/Shader_Blend.hlsl"));
+	m_pFinalBlend = CVIBuffer_RectViewPort::Create(m_pDevice, m_pDeviceContext, 0.f, 0.f, m_viewport.Width, m_viewport.Height, TEXT("../../Reference/ShaderFile/Shader_Blend.hlsl"));
 	if (nullptr == m_pFinalBlend)
 		return E_FAIL; 
 

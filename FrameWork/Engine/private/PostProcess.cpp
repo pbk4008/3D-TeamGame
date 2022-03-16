@@ -32,7 +32,7 @@ HRESULT CPostProcess::InitPostProcess()
 
 	m_pDeviceContext->RSGetViewports(&iViewportIndex, &m_viewport);
 
-	m_pVIBuffer = CVIBuffer_RectViewPort::Create(m_pDevice, m_pDeviceContext, 0.f, 0.f, m_viewport.Width, m_viewport.Height, TEXT("../Bin/ShaderFiles/Shader_PsotProcess.hlsl"));
+	m_pVIBuffer = CVIBuffer_RectViewPort::Create(m_pDevice, m_pDeviceContext, 0.f, 0.f, m_viewport.Width, m_viewport.Height, TEXT("../../Reference/ShaderFile/Shader_PsotProcess.hlsl"));
 	if (nullptr == m_pVIBuffer)
 		return E_FAIL;
 

@@ -50,7 +50,7 @@ HRESULT CRenderer::NativeConstruct_Prototype()
 	m_pPostProcess = CPostProcess::Create(m_pDevice, m_pDeviceContext);
 	m_pTonemapping = CTonemapping::Create(m_pDevice, m_pDeviceContext);
 
-	m_pVIBuffer = CVIBuffer_RectViewPort::Create(m_pDevice, m_pDeviceContext, 0.f, 0.f, ViewportDesc.Width, ViewportDesc.Height, TEXT("../Bin/ShaderFiles/Shader_RectViewPort.hlsl"));
+	m_pVIBuffer = CVIBuffer_RectViewPort::Create(m_pDevice, m_pDeviceContext, 0.f, 0.f, ViewportDesc.Width, ViewportDesc.Height, TEXT("../../Reference/ShaderFile/Shader_RectViewPort.hlsl"));
 	if (nullptr == m_pVIBuffer)
 
 	lstrcpy(m_CameraTag, L"MainCamera");
