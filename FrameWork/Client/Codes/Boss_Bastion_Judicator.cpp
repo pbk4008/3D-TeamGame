@@ -30,8 +30,8 @@ HRESULT CBoss_Bastion_Judicator::NativeConstruct(void* pArg)
 	if (FAILED(SetUp_Components()))
 		return E_FAIL;
 
-	/*if (FAILED(Set_Animation_FSM()))
-		return E_FAIL;*/
+	if (FAILED(Set_Animation_FSM()))
+		return E_FAIL;
 
 	CHierarchyNode* pBone = m_pModelCom->Get_BoneMatrix("weapon_r_end");
 	CShieldBreaker* pWeapon = CShieldBreaker::Create(m_pDevice, m_pDeviceContext);
@@ -42,6 +42,7 @@ HRESULT CBoss_Bastion_Judicator::NativeConstruct(void* pArg)
 
 	_vector Pos = { 0.f, 0.f, 5.f, 1.f };
 	m_pTransform->Set_State(CTransform::STATE_POSITION, Pos);
+
 	return S_OK;
 }
 
@@ -51,15 +52,6 @@ _int CBoss_Bastion_Judicator::Tick(_double TimeDelta)
 	{
 		return -1;
 	}
-
-	if (g_pGameInstance->getkeyDown(DIK_NUMPAD9))
-	{
-		++itest;
-		m_pModelCom->SetUp_AnimationIndex(itest);
-	}
-
-	m_pModelCom->Update_CombinedTransformationMatrix(TimeDelta);
-
 	if (nullptr != m_pWeapon)
 	{
 		if (-1 == m_pWeapon->Tick(TimeDelta))
@@ -67,7 +59,18 @@ _int CBoss_Bastion_Judicator::Tick(_double TimeDelta)
 			return -1;
 		}
 	}
-	//m_pAnimator->Tick(TimeDelta);
+
+	/*if (g_pGameInstance->getkeyDown(DIK_NUMPAD9))
+	{
+		++itest;
+		m_pModelCom->SetUp_AnimationIndex(itest);
+	}*/
+
+	
+	m_pAnimator->Tick(TimeDelta);
+
+	m_pModelCom->Update_CombinedTransformationMatrix(TimeDelta);
+
 	return 0;
 }
 
@@ -148,20 +151,31 @@ HRESULT CBoss_Bastion_Judicator::SetUp_Components()
 
 HRESULT CBoss_Bastion_Judicator::Set_Animation_FSM()
 {
-	CAnimation* pAnim = m_pModelCom->Get_Animation("SK_Bastion_Tier1_Full.ao|A_Run_Start_Swordsworn");
-	if (FAILED(m_pAnimator->Insert_Animation(L"RunStart", L"Head", pAnim, true, false, false, ERootOption::XYZ)))
+	CAnimation* pAnim = m_pModelCom->Get_Animation("SK_Bastion_Tier3.ao|A_2H_Hammer_Attack_JogR1");
+	if (FAILED(m_pAnimator->Insert_Animation(ATTACK_JOG_H, HEAD, pAnim, true, false, false, ERootOption::XYZ)))
 		return E_FAIL;
-	pAnim = m_pModelCom->Get_Animation("SK_Bastion_Tier1_Full.ao|A_Run_Fwd_Swordsworn");
-	if (FAILED(m_pAnimator->Insert_Animation(L"RunLoop", L"RunStart", pAnim, true, false, true, ERootOption::XYZ)))
+	pAnim = m_pModelCom->Get_Animation("SK_Bastion_Tier3.ao|A_Idle_Judicator");
+	if (FAILED(m_pAnimator->Insert_Animation(IDLE, ATTACK_JOG_H, pAnim, false, false, false, ERootOption::XYZ)))
 		return E_FAIL;
-	pAnim = m_pModelCom->Get_Animation("SK_Bastion_Tier1_Full.ao|A_Run_Stop_Swordsworn");
-	if (FAILED(m_pAnimator->Insert_Animation(L"RunStop", L"RunLoop", pAnim, true, false, false, ERootOption::XYZ)))
+	pAnim = m_pModelCom->Get_Animation("SK_Bastion_Tier3.ao|A_Attack_BattleCry_Start_Judicator");
+	if (FAILED(m_pAnimator->Insert_Animation(BATTLE_CRY_START, IDLE, pAnim, true, false, false, ERootOption::XYZ)))
 		return E_FAIL;
+	pAnim = m_pModelCom->Get_Animation("SK_Bastion_Tier3.ao|A_Attack_BattleCry_Judicator");
+	if (FAILED(m_pAnimator->Insert_Animation(BATTLE_CRY, BATTLE_CRY_START, pAnim, true, false, false, ERootOption::XYZ)))
+		return E_FAIL;
+	pAnim = m_pModelCom->Get_Animation("SK_Bastion_Tier3.ao|A_Attack_BattleCry_Stop_Judicator");
+	if (FAILED(m_pAnimator->Insert_Animation(BATTLE_CRY_STOP, BATTLE_CRY, pAnim, true, false, false, ERootOption::XYZ)))
+		return E_FAIL;
+	
 
-	m_pAnimator->Set_UpAutoChangeAnimation(L"RunStart", L"RunLoop");
-	m_pAnimator->Set_UpAutoChangeAnimation(L"RunLoop", L"RunStop");
 
-	m_pAnimator->Change_Animation(L"RunStart");
+	//루프하나
+	m_pAnimator->Set_UpAutoChangeAnimation(ATTACK_JOG_H, IDLE);
+	m_pAnimator->Set_UpAutoChangeAnimation(IDLE, BATTLE_CRY_START);
+	m_pAnimator->Set_UpAutoChangeAnimation(BATTLE_CRY_START, BATTLE_CRY);
+	m_pAnimator->Set_UpAutoChangeAnimation(BATTLE_CRY, BATTLE_CRY_STOP);
+
+	m_pAnimator->Change_Animation(ATTACK_JOG_H); //시작애니메이션 정함
 
 	return S_OK;
 }

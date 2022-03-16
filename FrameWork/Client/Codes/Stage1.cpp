@@ -24,6 +24,7 @@ HRESULT CStage1::NativeConstruct()
 	//{
 	//	return E_FAIL;
 	//}
+
 	if (FAILED(Ready_Camera(L"Layer_Camera")))
 	{
 		return E_FAIL;
@@ -32,14 +33,18 @@ HRESULT CStage1::NativeConstruct()
 	{
 		return E_FAIL;
 	}*/
+	/*if (FAILED(Ready_Boss(L"Layer_Boss")))
+	{
+		return E_FAIL;
+	}*/
 	if (FAILED(Ready_Monster(L"Layer_Monster")))
 	{
 		return E_FAIL;
 	}
-	/*if (FAILED(Ready_UI(L"Layer_UI")))
+	if (FAILED(Ready_UI(L"Layer_UI")))
 	{
 		return E_FAIL;
-	}*/
+	}
 
 
 
@@ -134,16 +139,18 @@ HRESULT CStage1::Ready_Player(const _tchar* LayerTag)
 	return S_OK;
 }
 
-HRESULT CStage1::Ready_Monster(const _tchar* LayerTag)
+HRESULT CStage1::Ready_Boss(const _tchar* LayerTag)
 {
-	
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Proto_GameObject_Boss_Judicator")))
 		return E_FAIL;
 
-	/*if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Proto_GameObject_Weapon_ShieldBreaker")))
-		return E_FAIL;*/
-	/*if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Proto_GameObject_Monster_Crawler")))
-		return E_FAIL;*/
+	return S_OK;
+}
+
+HRESULT CStage1::Ready_Monster(const _tchar* LayerTag)
+{
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Proto_GameObject_Monster_Crawler")))
+		return E_FAIL;
 
 	/*if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Monster_EarthAberrant")))
 		return E_FAIL;
