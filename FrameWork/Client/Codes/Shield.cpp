@@ -22,6 +22,8 @@ HRESULT CShield::NativeConstruct_Prototype()
 	m_wstrName = L"Shield";
 	m_eType = EType::Shield;
 
+	m_smatPivot = XMMatrixRotationRollPitchYaw(XMConvertToRadians(0.f), XMConvertToRadians(0.f), XMConvertToRadians(0.f)) * XMMatrixTranslation(0.f, 0.f, 0.f);
+
 	return S_OK;
 }
 
@@ -47,8 +49,6 @@ _int CShield::Tick(_double _dDeltaTime)
 
 	Attach_FixedBone(_dDeltaTime);
 	Attach_Owner(_dDeltaTime);
-
-	m_smatPivot = XMMatrixRotationRollPitchYaw(XMConvertToRadians(0.f), XMConvertToRadians(0.f), XMConvertToRadians(0.f)) * XMMatrixTranslation(0.f, 0.f, 0.f);
 
 	return _int();
 }

@@ -154,11 +154,15 @@ HRESULT CSilvermane::NativeConstruct_Prototype()
 
 HRESULT CSilvermane::NativeConstruct(void* _pArg)
 {
-	if (FAILED(__super::NativeConstruct(_pArg))) return E_FAIL;
+	if (FAILED(__super::NativeConstruct(_pArg))) 
+		return E_FAIL;
 
-	if (FAILED(Ready_Components())) return E_FAIL;
-	if (FAILED(Ready_States())) return E_FAIL;
-	if (FAILED(Ready_Weapons())) return E_FAIL;
+	if (FAILED(Ready_Components()))
+		return E_FAIL;
+	if (FAILED(Ready_States())) 
+		return E_FAIL;
+	if (FAILED(Ready_Weapons())) 
+		return E_FAIL;
 
 	return S_OK;
 }
@@ -166,16 +170,20 @@ HRESULT CSilvermane::NativeConstruct(void* _pArg)
 _int CSilvermane::Tick(_double _dDeltaTime)
 {
 	_int iProgress = __super::Tick(_dDeltaTime);
-	if (NO_EVENT != iProgress) return iProgress;
+	if (NO_EVENT != iProgress)
+		return iProgress;
 
 	iProgress = m_pStateController->Tick(_dDeltaTime);
-	if (NO_EVENT != iProgress) return iProgress;
+	if (NO_EVENT != iProgress) 
+		return iProgress;
 
 	iProgress = Trace_CameraLook(_dDeltaTime);
-	if (NO_EVENT != iProgress) return iProgress;
+	if (NO_EVENT != iProgress) 
+		return iProgress;
 
 	iProgress = m_pAnimationController->Tick(_dDeltaTime);
-	if (NO_EVENT != iProgress) return iProgress;
+	if (NO_EVENT != iProgress) 
+		return iProgress;
 
 	m_pCharacterController->Tick(_dDeltaTime);
 
@@ -183,12 +191,14 @@ _int CSilvermane::Tick(_double _dDeltaTime)
 	if (m_pCurWeapon)
 	{
 		iProgress = m_pCurWeapon->Tick(_dDeltaTime);
-		if (NO_EVENT != iProgress) return iProgress;
+		if (NO_EVENT != iProgress) 
+			return iProgress;
 	}
 	if (m_pShield->getActive())
 	{
 		iProgress = m_pShield->Tick(_dDeltaTime);
-		if (NO_EVENT != iProgress) return iProgress;
+		if (NO_EVENT != iProgress)
+			return iProgress;
 	}
 
 	return _int();
@@ -197,10 +207,12 @@ _int CSilvermane::Tick(_double _dDeltaTime)
 _int CSilvermane::LateTick(_double _dDeltaTime)
 {
 	_int iProgress = __super::LateTick(_dDeltaTime);
-	if (NO_EVENT != iProgress) return iProgress;
+	if (NO_EVENT != iProgress) 
+		return iProgress;
 
 	iProgress = m_pStateController->LateTick(_dDeltaTime);
-	if (NO_EVENT != iProgress) return iProgress;
+	if (NO_EVENT != iProgress) 
+		return iProgress;
 
 	if(FAILED(m_pRenderer->Add_RenderGroup(CRenderer::RENDER_ALPHA, this)))
 		return -1;
@@ -209,12 +221,14 @@ _int CSilvermane::LateTick(_double _dDeltaTime)
 	if (m_pCurWeapon)
 	{
 		iProgress = m_pCurWeapon->LateTick(_dDeltaTime);
-		if (NO_EVENT != iProgress) return iProgress;
+		if (NO_EVENT != iProgress) 
+			return iProgress;
 	}
 	if (m_pShield->getActive())
 	{
 		iProgress = m_pShield->LateTick(_dDeltaTime);
-		if (NO_EVENT != iProgress) return iProgress;
+		if (NO_EVENT != iProgress) 
+			return iProgress;
 	}
 
 	return _int();
@@ -222,32 +236,38 @@ _int CSilvermane::LateTick(_double _dDeltaTime)
 
 HRESULT CSilvermane::Render()
 {
-	if (FAILED(__super::Render())) return E_FAIL;
+	if (FAILED(__super::Render())) 
+		return E_FAIL;
 
 #ifdef _DEBUG
 	m_pCharacterController->Render();
 #endif // _DEBUG
-
 
 	_matrix smatWorld, smatView, smatProj;
 	smatWorld = XMMatrixTranspose(m_pTransform->Get_CombinedMatrix());
 	smatView = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_VIEW));
 	smatProj = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_PROJECTION));
 
-	if(FAILED(m_pModel->SetUp_ValueOnShader("g_WorldMatrix", &smatWorld, sizeof(_matrix)))) return E_FAIL;
-	if (FAILED(m_pModel->SetUp_ValueOnShader("g_ViewMatrix", &smatView, sizeof(_matrix)))) return E_FAIL;
-	if (FAILED(m_pModel->SetUp_ValueOnShader("g_ProjMatrix", &smatProj, sizeof(_matrix)))) return E_FAIL;
+	if(FAILED(m_pModel->SetUp_ValueOnShader("g_WorldMatrix", &smatWorld, sizeof(_matrix))))
+		return E_FAIL;
+	if (FAILED(m_pModel->SetUp_ValueOnShader("g_ViewMatrix", &smatView, sizeof(_matrix)))) 
+		return E_FAIL;
+	if (FAILED(m_pModel->SetUp_ValueOnShader("g_ProjMatrix", &smatProj, sizeof(_matrix)))) 
+		return E_FAIL;
 
 	for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
 	{
 		//if (FAILED(m_pModel->SetUp_TextureOnShader("g_DiffuseTexture", i, aiTextureType_DIFFUSE))) return E_FAIL;
 
-		if (FAILED(m_pModel->Render(i, 0))) return E_FAIL;
+		if (FAILED(m_pModel->Render(i, 0)))
+			return E_FAIL;
 	}
 
 #ifdef _DEBUG
-	if (FAILED(m_pAnimationController->Render())) return E_FAIL;
-	if (FAILED(m_pStateController->Render())) return E_FAIL;
+	if (FAILED(m_pAnimationController->Render())) 
+		return E_FAIL;
+	if (FAILED(m_pStateController->Render())) 
+		return E_FAIL;
 	wstring wstrAngle = L"Angle : " + to_wstring(m_fAngle);
 	if (FAILED(g_pGameInstance->Render_Font(TEXT("Font_Arial"), XMVectorSet(1.f, 0.0f, 0.f, 1.f), wstrAngle.c_str(), _float2(0.f, 300.f), _float2(0.8f, 0.8f))))
 		return E_FAIL;

@@ -276,7 +276,6 @@
     <ClInclude Include="..\Headers\Shield_BlockEnd.h" />
     <ClInclude Include="..\Headers\Shield_BlockLoop.h" />
     <ClInclude Include="..\Headers\Shield_BlockStart.h" />
-    <ClInclude Include="..\Headers\Shield_Idle.h" />
     <ClInclude Include="..\Headers\Shield_SupermanPunchStraight.h" />
     <ClInclude Include="..\Headers\Shield_Walk.h" />
     <ClInclude Include="..\Headers\Shield_WalkBwd.h" />
@@ -430,7 +429,6 @@
     <ClCompile Include="..\Codes\Shield_BlockEnd.cpp" />
     <ClCompile Include="..\Codes\Shield_BlockLoop.cpp" />
     <ClCompile Include="..\Codes\Shield_BlockStart.cpp" />
-    <ClCompile Include="..\Codes\Shield_Idle.cpp" />
     <ClCompile Include="..\Codes\Shield_SupermanPunchStraight.cpp" />
     <ClCompile Include="..\Codes\Shield_Walk.cpp" />
     <ClCompile Include="..\Codes\Shield_WalkBwd.cpp" />
