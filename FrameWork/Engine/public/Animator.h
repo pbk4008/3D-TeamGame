@@ -49,6 +49,8 @@ public:
 	HRESULT Insert_AnyEntryAnimation(_uint iTag, class CAnimation* pAnim, _bool bRootAnim, _bool bTransFrom, ERootOption eOption);
 public:
 	const _uint Get_CurrentAnim();
+public:
+	vector<_uint> Get_Nodes() { return m_vecAnimNode; }
 private:
 	//애니메이션 찾기
 	CAnimNode* Find_Animation(_uint itTag, CAnimNode* pNode=nullptr);

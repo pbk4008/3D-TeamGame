@@ -15,9 +15,8 @@ CMonster_Bastion_Sword::CMonster_Bastion_Sword(const CMonster_Bastion_Sword& _rh
 HRESULT CMonster_Bastion_Sword::NativeConstruct_Prototype()
 {
 	if (FAILED(__super::NativeConstruct_Prototype()))
-	{
 		return E_FAIL;
-	}
+
 	return S_OK;
 }
 
@@ -29,8 +28,8 @@ HRESULT CMonster_Bastion_Sword::NativeConstruct(void* _pArg)
 	if (FAILED(SetUp_Components()))
 		return E_FAIL;
 
-	//if (FAILED(Set_Animation_FSM()))
-	//	return E_FAIL;
+	if (FAILED(Set_Animation_FSM()))
+		return E_FAIL;
 
 	_vector Pos = { 0.f, 0.f, 10.f, 1.f };
 	m_pTransform->Set_State(CTransform::STATE_POSITION, Pos);
@@ -45,6 +44,12 @@ _int CMonster_Bastion_Sword::Tick(_double _dDeltaTime)
 	}
 
 	m_pAnimator->Tick(_dDeltaTime);
+
+	if (g_pGameInstance->getkeyDown(DIK_SPACE))
+	{
+		if (FAILED(m_pAnimator->Change_Animation((_uint)ANIM_TYPE::RUN_START)))
+			return -1;
+	}
 	return 0;
 }
 
@@ -92,60 +97,51 @@ HRESULT CMonster_Bastion_Sword::SetUp_Components()
 	m_pTransform->Set_TransformDesc(Desc);
 
 	if (FAILED(__super::SetUp_Components((_uint)SCENEID::SCENE_STAGE1, L"Model_Monster_Bastion_Sword", L"Model", (CComponent**)&m_pModelCom)))
-	{
 		return E_FAIL;
-	}
 
-	//CAnimator::ANIMATORDESC tDesc;
-	//ZeroMemory(&tDesc, sizeof(tDesc));
+	CAnimator::ANIMATORDESC tDesc;
+	ZeroMemory(&tDesc, sizeof(tDesc));
 
-	//tDesc.pModel = m_pModelCom;
-	//tDesc.pTransform = m_pTransform;
+	tDesc.pModel = m_pModelCom;
+	tDesc.pTransform = m_pTransform;
 
-	//if (FAILED(__super::SetUp_Components((_uint)SCENEID::SCENE_STAGE1, L"Com_Animator", L"Com_AnimationController", (CComponent**)& m_pAnimator, &tDesc)))
-	//{
-	//	return E_FAIL;
-	//}
-
-	//m_pModelCom->Add_Material(g_pGameInstance->Get_Material(L"Mtrl_Bastion_Sword_Top"), 0);
-	//m_pModelCom->Add_Material(g_pGameInstance->Get_Material(L"Mtrl_Bastion_Sword_Down"), 1);
-	//m_pModelCom->Add_Material(g_pGameInstance->Get_Material(L"Mtrl_Bastion_Sword_Cloth"), 2);
-	//
-	//
-	//
-	//vector<CAnimation*> vecAnimation = m_pModelCom->Get_Animations();
-
-	
-	/*_uint iIndex = 1;
-	for (auto& pAnim : vecAnimation)
-	{
-		cout << iIndex << ". ";
-		cout << pAnim->Get_Name() << endl;
-		iIndex++;
-	}*/
-
+	if (FAILED(__super::SetUp_Components((_uint)SCENEID::SCENE_STAGE1, L"Proto_Component_Animator", L"Com_Animator", (CComponent**)& m_pAnimator, &tDesc)))
+		return E_FAIL;
 
 	return S_OK;
 }
 
 HRESULT CMonster_Bastion_Sword::Set_Animation_FSM()
 {
-	/*CAnimation* pAnim = m_pModelCom->Get_Animation("SK_Bastion_Tier1_Full.ao|A_Run_Start_Swordsworn");
-	if (FAILED(m_pAnimator->Insert_Animation(L"RunStart", L"Head", pAnim, true, false, false, ERootOption::XYZ)))
-		return E_FAIL;
-	pAnim = m_pModelCom->Get_Animation("SK_Bastion_Tier1_Full.ao|A_Run_Fwd_Swordsworn");
-	if (FAILED(m_pAnimator->Insert_Animation(L"RunLoop", L"RunStart", pAnim, true, false, true, ERootOption::XYZ)))
-		return E_FAIL;
-	pAnim = m_pModelCom->Get_Animation("SK_Bastion_Tier1_Full.ao|A_Run_Stop_Swordsworn");
-	if (FAILED(m_pAnimator->Insert_Animation(L"RunStop", L"RunLoop", pAnim, true, false, false, ERootOption::XYZ)))
+	//애니메이션 생성
+	CAnimation* pAnim = m_pModelCom->Get_Animation("Idle");
+	//생성 하면서 연결(연결 할애, 연결 당할애, 애니메이션, 루트 애님, 트랜스폼(루트애니메이션할때 찐으로 따라감), 루프, 옵션)
+	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::IDLE, (_uint)ANIM_TYPE::HEAD, pAnim, true, false, true, ERootOption::XYZ)))
 		return E_FAIL;
 
-	m_pAnimator->Set_UpAutoChangeAnimation(L"RunStart", L"RunLoop");
-	m_pAnimator->Set_UpAutoChangeAnimation(L"RunLoop", L"RunStop");
+	pAnim = m_pModelCom->Get_Animation("Run_Start");
+	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::RUN_START, (_uint)ANIM_TYPE::IDLE, pAnim, true, false, false, ERootOption::XYZ)))
+		return E_FAIL;
 
-	m_pAnimator->Change_Animation(L"RunStart");*/
+	pAnim = m_pModelCom->Get_Animation("Run_Loop");
+	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::RUN_LOOP, (_uint)ANIM_TYPE::RUN_START, pAnim, true, false, false, ERootOption::XYZ)))
+		return E_FAIL;
 
+	pAnim = m_pModelCom->Get_Animation("Run_Stop");
+	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::RUN_END, (_uint)ANIM_TYPE::RUN_LOOP, pAnim, true, false, false, ERootOption::XYZ)))
+		return E_FAIL;
 
+	//애니메이션 연결(연결 당할 애, 연결할 애, 쌍방으로 연결할지 안할지)
+	if(FAILED(m_pAnimator->Connect_Animation((_uint)ANIM_TYPE::IDLE , (_uint)ANIM_TYPE::RUN_END,false)))
+		return E_FAIL;
+
+	//자동으로 돌릴 애들(끝나는애, 끝나고 시작할 애)
+	m_pAnimator->Set_UpAutoChangeAnimation((_uint)ANIM_TYPE::RUN_START, (_uint)ANIM_TYPE::RUN_LOOP);
+	m_pAnimator->Set_UpAutoChangeAnimation((_uint)ANIM_TYPE::RUN_LOOP, (_uint)ANIM_TYPE::RUN_END);
+	m_pAnimator->Set_UpAutoChangeAnimation((_uint)ANIM_TYPE::RUN_END, (_uint)ANIM_TYPE::IDLE);
+
+	//애니메이션 체인지(바꿀 애)
+	m_pAnimator->Change_Animation((_uint)ANIM_TYPE::RUN_START);
 
 	return S_OK;
 }
@@ -166,7 +162,7 @@ CGameObject* CMonster_Bastion_Sword::Clone(void* _pArg)
 	CMonster_Bastion_Sword* pInstance = new CMonster_Bastion_Sword(*this);
 	if (FAILED(pInstance->NativeConstruct(_pArg)))
 	{
-		MSGBOX("Failed to Creating Clone CMonster_Bastion_Sword");
+		MSGBOX("Failed to Clone CMonster_Bastion_Sword");
 		Safe_Release(pInstance);
 	}
 	return pInstance;
@@ -174,6 +170,7 @@ CGameObject* CMonster_Bastion_Sword::Clone(void* _pArg)
 
 void CMonster_Bastion_Sword::Free()
 {
-	Safe_Release(m_pModelCom);
 	__super::Free();
+	Safe_Release(m_pModelCom);
+	Safe_Release(m_pAnimator);
 }

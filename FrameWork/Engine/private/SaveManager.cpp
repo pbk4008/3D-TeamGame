@@ -193,7 +193,7 @@ HRESULT CSaveManager::Load_AnimModel(DYNAMICDATA& AnimData, _matrix& pivotMatrix
 			char strBoneName[MAX_PATH] = "";
 			ReadFile(hFile, &strBoneName, sizeof(char) * MAX_PATH, &dwByte, nullptr);
 			string tmp = strBoneName;
-			tAnimMeshData.vecBoneName[i]=tmp;
+			tAnimMeshData.vecBoneName[j]=tmp;
 		}
 		AnimData.pMeshData[i] = tAnimMeshData;
 	}
