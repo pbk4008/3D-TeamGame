@@ -159,7 +159,7 @@ HRESULT CMonster_Crawler::SetUp_Components()
 
 HRESULT CMonster_Crawler::Animation_Setting()
 {
-	CAnimation* pAnim = m_pModelCom->Get_Animation("SK_Crystal_Crawler_v3.ao|A_Idle_CrystalCrawler");
+	/*CAnimation* pAnim = m_pModelCom->Get_Animation("SK_Crystal_Crawler_v3.ao|A_Idle_CrystalCrawler");
 	if (FAILED(m_pAnimatorCom->Insert_Animation(L"Idle", L"Head", pAnim, false, false, true, ERootOption::XYZ)))
 		return E_FAIL;
 
@@ -183,7 +183,7 @@ HRESULT CMonster_Crawler::Animation_Setting()
 	m_pAnimatorCom->Set_UpAutoChangeAnimation(L"RunStart", L"RunLoop");
 	m_pAnimatorCom->Set_UpAutoChangeAnimation(L"RunLoop", L"RunStop");
 
-	m_pAnimatorCom->Change_Animation(L"RunStart");
+	m_pAnimatorCom->Change_Animation(L"RunStart");*/
 
 	return S_OK;
 }

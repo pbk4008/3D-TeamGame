@@ -51,7 +51,7 @@ public:
 	void Set_RootMotion(const _bool _isRootMotion, const _bool _isTransformMove, const ERootOption _eRootOption = ERootOption::XYZ);
 	void Set_PlaySpeed(const _float _fPlaySpeed);
 	void Set_MoveSpeed(const _float _fMoveSpeed);
-
+	void Set_IsChange(const _bool _bChange);
 	const _bool Is_RootMotion() const;
 	const _bool Is_Finished() const;
 
