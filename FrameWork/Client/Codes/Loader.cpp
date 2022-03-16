@@ -519,6 +519,8 @@ HRESULT CLoader::Load_Stage1BossLoad()
 	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Weapon_ShieldBreaker", CShieldBreaker::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 	*/
+
+	return S_OK;
 }
 
 HRESULT CLoader::Load_Stage1MonsterLoad()

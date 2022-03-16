@@ -159,31 +159,31 @@ HRESULT CMonster_Crawler::SetUp_Components()
 
 HRESULT CMonster_Crawler::Animation_Setting()
 {
-	CAnimation* pAnim = m_pModelCom->Get_Animation("SK_Crystal_Crawler_v3.ao|A_Idle_CrystalCrawler");
-	if (FAILED(m_pAnimatorCom->Insert_Animation(L"Idle", L"Head", pAnim, false, false, true, ERootOption::XYZ)))
-		return E_FAIL;
+	//CAnimation* pAnim = m_pModelCom->Get_Animation("SK_Crystal_Crawler_v3.ao|A_Idle_CrystalCrawler");
+	//if (FAILED(m_pAnimatorCom->Insert_Animation(L"Idle", L"Head", pAnim, false, false, true, ERootOption::XYZ)))
+	//	return E_FAIL;
 
-	pAnim = m_pModelCom->Get_Animation("SK_Crystal_Crawler_v3.ao|A_Walk_Fwd_Stop_CrystalCrawler");
-	if (FAILED(m_pAnimatorCom->Insert_Animation(L"Walk_Fwd", L"Idle", pAnim, true, false, true, ERootOption::XYZ, true)))
-		return E_FAIL;
+	//pAnim = m_pModelCom->Get_Animation("SK_Crystal_Crawler_v3.ao|A_Walk_Fwd_Stop_CrystalCrawler");
+	//if (FAILED(m_pAnimatorCom->Insert_Animation(L"Walk_Fwd", L"Idle", pAnim, true, false, true, ERootOption::XYZ, true)))
+	//	return E_FAIL;
 
-	pAnim = m_pModelCom->Get_Animation("SK_Crystal_Crawler_v3.ao|A_Walk_Fwd_Stop_CrystalCrawler");
-	if (FAILED(m_pAnimatorCom->Insert_Animation(L"Walk_Bwd", L"Idle", pAnim, true, false, true, ERootOption::XYZ, true)))
-		return E_FAIL;
+	//pAnim = m_pModelCom->Get_Animation("SK_Crystal_Crawler_v3.ao|A_Walk_Fwd_Stop_CrystalCrawler");
+	//if (FAILED(m_pAnimatorCom->Insert_Animation(L"Walk_Bwd", L"Idle", pAnim, true, false, true, ERootOption::XYZ, true)))
+	//	return E_FAIL;
 
-	pAnim = m_pModelCom->Get_Animation("SK_Crystal_Crawler_v3.ao|A_Walk_Fwd_Stop_CrystalCrawler");
-	if (FAILED(m_pAnimatorCom->Insert_Animation(L"Walk_Left", L"Idle", pAnim, true, false, true, ERootOption::XYZ, true)))
-		return E_FAIL;
+	//pAnim = m_pModelCom->Get_Animation("SK_Crystal_Crawler_v3.ao|A_Walk_Fwd_Stop_CrystalCrawler");
+	//if (FAILED(m_pAnimatorCom->Insert_Animation(L"Walk_Left", L"Idle", pAnim, true, false, true, ERootOption::XYZ, true)))
+	//	return E_FAIL;
 
-	pAnim = m_pModelCom->Get_Animation("SK_Crystal_Crawler_v3.ao|A_Walk_Fwd_Stop_CrystalCrawler");
-	if (FAILED(m_pAnimatorCom->Insert_Animation(L"Walk_Right", L"Idle", pAnim, true, false, true, ERootOption::XYZ, true)))
-		return E_FAIL;
+	//pAnim = m_pModelCom->Get_Animation("SK_Crystal_Crawler_v3.ao|A_Walk_Fwd_Stop_CrystalCrawler");
+	//if (FAILED(m_pAnimatorCom->Insert_Animation(L"Walk_Right", L"Idle", pAnim, true, false, true, ERootOption::XYZ, true)))
+	//	return E_FAIL;
 
 
-	m_pAnimatorCom->Set_UpAutoChangeAnimation(L"RunStart", L"RunLoop");
-	m_pAnimatorCom->Set_UpAutoChangeAnimation(L"RunLoop", L"RunStop");
+	//m_pAnimatorCom->Set_UpAutoChangeAnimation(L"RunStart", L"RunLoop");
+	//m_pAnimatorCom->Set_UpAutoChangeAnimation(L"RunLoop", L"RunStop");
 
-	m_pAnimatorCom->Change_Animation(L"RunStart");
+	//m_pAnimatorCom->Change_Animation(L"RunStart");
 
 	return S_OK;
 }
