@@ -39,9 +39,6 @@ private:
 	_bool				m_bDeffered = false;
 
 private:
-	CClient_Observer*	m_pObserver = nullptr;
-
-private:
 	HRESULT SetUp_StartLevel(SCENEID eLevel);
 
 	/* For. Level_static*/

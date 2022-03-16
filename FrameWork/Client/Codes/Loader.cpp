@@ -624,13 +624,13 @@ HRESULT CLoader::Ready_Test_JS()
 	pMtrl->Set_Texture("g_DiffuseTexture", TEXTURETYPE::TEX_DIFFUSE, pTexture, 0);
 	g_pGameInstance->Add_Material(L"Mtrl_Silvermane_Top", pMtrl);
 #pragma endregion
-#pragma region 무기
-	pTexture = CTexture::Create(m_pDevice, m_pDeviceContext);
-	pTexture->NativeConstruct_Prototype(L"../Bin/Resources/Mesh/Shield/T_ShieldBase_D.tga", 1);
-	pMtrl = CMaterial::Create(m_pDevice, m_pDeviceContext, L"Mtrl_Shield", L"../../Reference/ShaderFile/Shader_StaticMesh.hlsl", CMaterial::EType::Static);
-	pMtrl->Set_Texture("g_DiffuseTexture", TEXTURETYPE::TEX_DIFFUSE, pTexture, 0);
-	g_pGameInstance->Add_Material(L"Mtrl_Shield", pMtrl);
-#pragma endregion
+//#pragma region 무기
+//	pTexture = CTexture::Create(m_pDevice, m_pDeviceContext);
+//	pTexture->NativeConstruct_Prototype(L"../Bin/Resources/Mesh/Shield/T_ShieldBase_D.tga", 1);
+//	pMtrl = CMaterial::Create(m_pDevice, m_pDeviceContext, L"Mtrl_Shield", L"../../Reference/ShaderFile/Shader_StaticMesh.hlsl", CMaterial::EType::Static);
+//	pMtrl->Set_Texture("g_DiffuseTexture", TEXTURETYPE::TEX_DIFFUSE, pTexture, 0);
+//	g_pGameInstance->Add_Material(L"Mtrl_Shield", pMtrl);
+//#pragma endregion
 #pragma region 몬스터
 	//pTexture = CTexture::Create(m_pDevice, m_pDeviceContext);
 	//pTexture->NativeConstruct_Prototype(L"../Bin/Resources/Mesh/Bastion_Shooter/T_Bastion_Tier1_Down_D.tga", 1);
@@ -795,6 +795,10 @@ HRESULT CLoader::Ready_Test_YM()
 	cout << "TestScene_YM 로딩 시작..." << endl;
 	cout << "TestScene_YM 리소스 생성중..." << endl;
 #pragma region 리소스
+	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"Plane_Texture", L"../Bin/Resources/Texture/Terrain/Plane_Default.dds")))
+		return E_FAIL;
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_TEST_YM, L"VIBuffer_Plane", CVIBuffer_Plane::Create(m_pDevice, m_pDeviceContext, L"../../Reference/ShaderFile/Shader_Plane.hlsl", 100, 100))))
+		return E_FAIL;
 
 	cout << "TestScene_YM 마테리얼 생성중..." << endl;
 	CTexture* pTexture = nullptr;

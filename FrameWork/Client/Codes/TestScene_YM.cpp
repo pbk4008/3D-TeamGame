@@ -33,7 +33,7 @@ HRESULT CTestScene_YM::Render()
 
 HRESULT CTestScene_YM::Ready_Gameobject()
 {
- 	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_JS, L"Layer_Plane", L"Plane_Test")))
+ 	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_YM, L"Layer_Plane", L"Plane_Test")))
 		//return E_FAIL;
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_YM, L"Layer_Silvermane", L"Silvermane")))
 		return E_FAIL;
