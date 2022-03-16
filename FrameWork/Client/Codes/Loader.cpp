@@ -709,13 +709,13 @@ HRESULT CLoader::Ready_Test_JS()
 	pMtrl->Set_Texture("g_DiffuseTexture", TEXTURETYPE::TEX_DIFFUSE, pTexture, 0);
 	g_pGameInstance->Add_Material(L"Mtrl_Silvermane_Top", pMtrl);
 #pragma endregion
-//#pragma region 무기
-//	pTexture = CTexture::Create(m_pDevice, m_pDeviceContext);
-//	pTexture->NativeConstruct_Prototype(L"../Bin/Resources/Mesh/Shield/T_ShieldBase_D.tga", 1);
-//	pMtrl = CMaterial::Create(m_pDevice, m_pDeviceContext, L"Mtrl_Shield", L"../../Reference/ShaderFile/Shader_StaticMesh.hlsl", CMaterial::EType::Static);
-//	pMtrl->Set_Texture("g_DiffuseTexture", TEXTURETYPE::TEX_DIFFUSE, pTexture, 0);
-//	g_pGameInstance->Add_Material(L"Mtrl_Shield", pMtrl);
-//#pragma endregion
+#pragma region 무기
+	pTexture = CTexture::Create(m_pDevice, m_pDeviceContext);
+	pTexture->NativeConstruct_Prototype(L"../Bin/Resources/Mesh/Shield/T_ShieldBase_D.tga", 1);
+	pMtrl = CMaterial::Create(m_pDevice, m_pDeviceContext, L"Mtrl_Shield", L"../../Reference/ShaderFile/Shader_StaticMesh.hlsl", CMaterial::EType::Static);
+	pMtrl->Set_Texture("g_DiffuseTexture", TEXTURETYPE::TEX_DIFFUSE, pTexture, 0);
+	g_pGameInstance->Add_Material(L"Mtrl_Shield", pMtrl);
+#pragma endregion
 #pragma region 몬스터
 	//pTexture = CTexture::Create(m_pDevice, m_pDeviceContext);
 	//pTexture->NativeConstruct_Prototype(L"../Bin/Resources/Mesh/Bastion_Shooter/T_Bastion_Tier1_Down_D.tga", 1);

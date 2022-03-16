@@ -14,8 +14,7 @@ class CTonemapping;
 
 class ENGINE_DLL CRenderer final : public CComponent
 {
-public: 
-enum RENDERBUTTON
+public: enum RENDERBUTTON
 {
 	SHADOW,PBR,HDR, RENDERBUTTON_END
 };
