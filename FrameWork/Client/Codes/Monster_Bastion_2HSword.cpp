@@ -29,8 +29,6 @@ HRESULT CMonster_Bastion_2HSword::NativeConstruct(void* _pArg)
 	if (FAILED(Ready_Weapon())) return E_FAIL;
 	if (FAILED(Ready_AnimFSM())) return E_FAIL;
 
-	//m_pAnimator->Change_Animation((_uint)ANIM_TYPE::ANIM_IDLE);
-
 	return S_OK;
 }
 
@@ -41,6 +39,12 @@ _int CMonster_Bastion_2HSword::Tick(_double _dDeltaTime)
 
 	m_pAnimator->Tick(_dDeltaTime);
 	
+	if (g_pGameInstance->getkeyDown(DIK_F5))
+	{
+		m_pAnimator->Change_Animation((_uint)ANIM_TYPE::A_WALK_FWD_ST);
+		return -1;
+	}
+
 	// 무기 업뎃
 	if (m_pCurWeapon)
 	{
@@ -102,10 +106,9 @@ void CMonster_Bastion_2HSword::Check_DistanceForPlayer(void)
 	_fvector vDist = vMonsterPos - vPlayerPos;
 	fDistToPlayer = XMVectorGetX(XMVector3Length(vDist));
 
-	if (2.0f > fDistToPlayer)
+	if (10.0f > fDistToPlayer)
 	{
 		m_pTransform->Face_Target(vPlayerPos);
-		m_pAnimator->Change_Animation((_uint)ANIM_TYPE::ANIM_ATTK);
 	}
 }
 
@@ -125,6 +128,15 @@ HRESULT CMonster_Bastion_2HSword::Ready_Components()
 	m_pModel->Add_Material(g_pGameInstance->Get_Material(L"Mtrl_BastionTierII_Top"), 0);
 	m_pModel->Add_Material(g_pGameInstance->Get_Material(L"Mtrl_BastionTierII_Down"), 1);
 	m_pModel->Add_Material(g_pGameInstance->Get_Material(L"Mtrl_BastionTierII_Fur"), 2);
+
+	// 에니메이션 컨트롤러
+	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_TEST_YM, L"Com_AnimationController", L"AnimationController", (CComponent**)&m_pAnimationController)))
+		return E_FAIL;
+	m_pAnimationController->Set_GameObject(this);
+	m_pAnimationController->Set_Model(m_pModel);
+	m_pAnimationController->Set_Transform(m_pTransform);
+	m_pAnimationController->Set_MoveSpeed(2.f);
+
 
 	m_AanimDesc.pModel = m_pModel;
 	m_AanimDesc.pTransform = m_pTransform;
@@ -161,18 +173,85 @@ HRESULT CMonster_Bastion_2HSword::Ready_AnimFSM(void)
 		##5.루트 애님시 트랜스폼이 따라가게 할 것인지(제자리)
 		##6.루프설정
 		##7.루트애님 옵션, 막고자 하는 축설정
-		##8.쌍방연결
+		##8.쌍방연결 default : false
 	*/
-	CAnimation* pAnimation = m_pModel->Get_Animation("A_Idle");
-	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::ANIM_IDLE, (_uint)ANIM_TYPE::ANIM_HEAD, pAnimation, TRUE, FALSE, FALSE, ERootOption::XYZ, FALSE)))
+	CAnimation* pAnimation = m_pModel->Get_Animation("A_Idle_Siphonblade");
+	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::A_IDLE, (_uint)ANIM_TYPE::A_HEAD, pAnimation, TRUE, TRUE, TRUE, ERootOption::XYZ, FALSE)))
 		return E_FAIL;
 
-	pAnimation = m_pModel->Get_Animation("A_Attack_S3");
-	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::ANIM_ATTK, (_uint)ANIM_TYPE::ANIM_IDLE, pAnimation, TRUE, FALSE, FALSE, ERootOption::XYZ, TRUE)))
+#pragma region Insert_Anim
+	//pAnimation = m_pModel->Get_Animation("A_Death_Siphonblade");
+	//pAnimation = m_pModel->Get_Animation("A_Ricochet");
+	//pAnimation = m_pModel->Get_Animation("A_Flinch_Left");
+	//pAnimation = m_pModel->Get_Animation("A_Walk_Fwd_Start");
+	//pAnimation = m_pModel->Get_Animation("A_Walk_Fwd");
+	//pAnimation = m_pModel->Get_Animation("A_Walk_Fwd_Stop");
+	//pAnimation = m_pModel->Get_Animation("A_Walk_Bwd_Start");
+	//pAnimation = m_pModel->Get_Animation("A_Walk_Bwd");
+	//pAnimation = m_pModel->Get_Animation("A_Walk_Bwd_Stop"); 
+	//pAnimation = m_pModel->Get_Animation("A_Walk_Left_Start");
+	//pAnimation = m_pModel->Get_Animation("A_Walk_Left");
+	//pAnimation = m_pModel->Get_Animation("A_Walk_Left_Stop");
+	//pAnimation = m_pModel->Get_Animation("A_Walk_Right_Start");
+	//pAnimation = m_pModel->Get_Animation("A_Walk_Right");
+	//pAnimation = m_pModel->Get_Animation("A_Walk_Right_Stop");
+	//pAnimation = m_pModel->Get_Animation("A_Dash_Bwd");
+	//pAnimation = m_pModel->Get_Animation("A_Dash_Left");
+	//pAnimation = m_pModel->Get_Animation("A_Dash_Right");
+	//pAnimation = m_pModel->Get_Animation("A_Attack_R1");
+	//pAnimation = m_pModel->Get_Animation("A_Attack_R2");
+	//pAnimation = m_pModel->Get_Animation("A_Attack_S1");
+	//pAnimation = m_pModel->Get_Animation("A_Attack_S3");
+	//pAnimation = m_pModel->Get_Animation("A_BattleCry_Start");
+	//pAnimation = m_pModel->Get_Animation("A_BattleCry_Loop");
+	//pAnimation = m_pModel->Get_Animation("A_BattleCry_End");
+	//pAnimation = m_pModel->Get_Animation("A_Taunt_Roar");
+	//pAnimation = m_pModel->Get_Animation("A_Kneel_Start");
+	//pAnimation = m_pModel->Get_Animation("A_Kneel_Loop");
+	//pAnimation = m_pModel->Get_Animation("A_Kneel_End");
+	//pAnimation = m_pModel->Get_Animation("A_Stun_Start");
+	//pAnimation = m_pModel->Get_Animation("A_Stun_Loop");
+	//pAnimation = m_pModel->Get_Animation("A_Stun_End");
+	//pAnimation = m_pModel->Get_Animation("A_Turn_45_Left");
+	//pAnimation = m_pModel->Get_Animation("A_Turn_45_Right");
+	//pAnimation = m_pModel->Get_Animation("A_Turn_90_Left");
+	//pAnimation = m_pModel->Get_Animation("A_Turn_90_Right");
+	//pAnimation = m_pModel->Get_Animation("A_Turn_135_Left");
+	//pAnimation = m_pModel->Get_Animation("A_Turn_135_Right");
+	//pAnimation = m_pModel->Get_Animation("A_Turn_180_Left");
+	//pAnimation = m_pModel->Get_Animation("A_Turn_180_Right");
+#pragma endregion
+
+#pragma region Link_Anim
+	pAnimation = m_pModel->Get_Animation("A_Walk_Fwd_Start");
+	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::A_WALK_FWD_ST, (_uint)ANIM_TYPE::A_IDLE, pAnimation, TRUE, TRUE, FALSE, ERootOption::XYZ, FALSE)))
 		return E_FAIL;
 
+	pAnimation = m_pModel->Get_Animation("A_Walk_Fwd");
+	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::A_WALK_FWD, (_uint)ANIM_TYPE::A_WALK_FWD_ST, pAnimation, TRUE, TRUE, FALSE, ERootOption::XYZ, FALSE)))
+		return E_FAIL;
+
+	pAnimation = m_pModel->Get_Animation("A_Walk_Fwd_Stop");
+	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::A_WALK_FWD_ED, (_uint)ANIM_TYPE::A_WALK_FWD, pAnimation, TRUE, TRUE, FALSE, ERootOption::XYZ, FALSE)))
+		return E_FAIL;
+
+#pragma endregion Anim to Anim Link
+	if (FAILED(m_pAnimator->Connect_Animation((_uint)ANIM_TYPE::A_IDLE, (_uint)ANIM_TYPE::A_WALK_FWD_ED, FALSE)))
+		return E_FAIL;
+#pragma 
+
+#pragma region  State_Change
 	/* ##1.끝나는 애님 ##2.루트할 애님  */
-	m_pAnimator->Set_UpAutoChangeAnimation((_uint)ANIM_TYPE::ANIM_ATTK, (_uint)ANIM_TYPE::ANIM_IDLE);
+	m_pAnimator->Set_UpAutoChangeAnimation((_uint)ANIM_TYPE::A_WALK_FWD_ST, (_uint)ANIM_TYPE::A_WALK_FWD);
+	m_pAnimator->Set_UpAutoChangeAnimation((_uint)ANIM_TYPE::A_WALK_FWD, (_uint)ANIM_TYPE::A_WALK_FWD_ED);
+	m_pAnimator->Set_UpAutoChangeAnimation((_uint)ANIM_TYPE::A_WALK_FWD_ED, (_uint)ANIM_TYPE::A_IDLE);
+#pragma endregion
+
+	//m_pAnimator->Change_Animation((_uint)ANIM_TYPE::ANIM_IDLE);
+	/* ##1.끝나는 애님 ##2.루트할 애님  */
+	//m_pAnimator->Set_UpAutoChangeAnimation((_uint)ANIM_TYPE::A_ATTACK_S3, (_uint)ANIM_TYPE::A_IDLE);
+
+	m_pAnimator->Change_Animation((_uint)ANIM_TYPE::A_IDLE);
 
 	return S_OK;
 }

@@ -11,6 +11,8 @@ BEGIN(Client)
 class CMonster_Bastion_Sword final : public CActor
 {
 private:
+	enum class ANIM_TYPE { HEAD, IDLE, ATTACK, RUN_START, RUN_END, RUN_LOOP, HIT, TYPE_END};
+private:
 	explicit CMonster_Bastion_Sword(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext);
 	explicit CMonster_Bastion_Sword(const CMonster_Bastion_Sword& _rhs);
 	virtual ~CMonster_Bastion_Sword() = default;

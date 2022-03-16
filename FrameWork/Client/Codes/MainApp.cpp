@@ -5,10 +5,10 @@
 #include "MainCamera_Ortho.h"
 #include "Loading.h"
 
+CClient_Observer* g_pObserver = nullptr;
+
 CMainApp::CMainApp()
-	:m_pObserver(CClient_Observer::GetInstance()) 
 {
-	Safe_AddRef(m_pObserver);
 }
 
 HRESULT CMainApp::NativeConstruct()
@@ -39,6 +39,8 @@ HRESULT CMainApp::NativeConstruct()
 
 	if (FAILED(SetUp_StartLevel(SCENEID::SCENE_LOGO)))
 		return E_FAIL;
+
+	g_pObserver = GET_INSTANCE(CClient_Observer);
 
 	return S_OK;
 }
@@ -271,8 +273,9 @@ void CMainApp::Free()
 	//CDebugSystem::Stop_DebugSystem();
 	//if (FAILED(CDebugSystem::DestroyInstance()))
 	//	MSGBOX("CDebugSystem Destroy Fail");
+	
+	RELEASE_INSTANCE(CClient_Observer);
 
-	Safe_Release(m_pObserver);
 	Safe_Release(m_pRenderer);
 
 	Safe_Release(m_pDeviceContext);

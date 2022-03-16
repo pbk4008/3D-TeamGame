@@ -12,7 +12,21 @@ class CWeapon;
 class CMonster_Bastion_2HSword final : public CActor
 {
 public:
-	enum class ANIM_TYPE { ANIM_HEAD, ANIM_IDLE, ANIM_ATTK, ANIM_END };
+	enum class ANIM_TYPE { A_HEAD, A_IDLE, A_DEATH, A_RICOCHET, A_FLINCH_LEFT,
+		A_WALK_FWD_ST, A_WALK_FWD, A_WALK_FWD_ED, 
+		A_WALK_BWD_ST, A_WALK_BWD, A_WALK_BWD_ED,  
+		A_WALK_LEFT_ST, A_WALK_LEFT, A_WALK_LEFT_ED,
+		A_WALK_RIGHT_ST, A_WALK_RIGHT, A_WALK_RIGHT_ED,
+		A_ATTACK_R1, A_ATTACK_R2, A_ATTACK_S1, A_ATTACK_S3,
+		A_BATTLECRY_ST, A_BATTLECRY, A_BATTLECRY_ED, A_TAUNT_ROAR,
+		A_KNEEL_ST, A_KNEEL, A_KNEEL_ED, 
+		A_DASH_BWD, A_DASH_LEFT, A_DASH_RIGHT, 
+		A_STUN_ST, A_STUN, A_STUN_ED,
+		A_TURN_45_LEFT, A_TURN_45_RIGHT,
+		A_TURN_90_LEFT, A_TURN_90_RIGHT,
+		A_TURN_135_LEFT, A_TURN_135_RIGHT,
+		A_TURN_180_LEFT, A_TURN_180_RIGHT,
+		A_END };
 
 private:
 	explicit CMonster_Bastion_2HSword(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext);
@@ -36,6 +50,7 @@ private:
 private:
 	CModel*				  m_pModel = nullptr;
 	CAnimator*			  m_pAnimator = nullptr;
+	CAnimationController* m_pAnimationController = nullptr;
 
 private:
 	CAnimator::ANIMATORDESC m_AanimDesc;

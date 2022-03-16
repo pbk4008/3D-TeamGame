@@ -62,7 +62,10 @@ _int CAnimator::Tick(_double dDeltaTime)
 {
 	m_pController->Tick(dDeltaTime);
 	if (m_pController->Get_ChangeAnimation())
+	{
 		m_pCulAnimNode = m_pChangeNode;
+		m_pController->Set_IsChange(false);
+	}
 
 	if (m_pCulAnimNode->Get_AutoIndex() != -1)
 	{
@@ -293,8 +296,13 @@ void CAnimator::Free()
 {
 	CComponent::Free();
 	Safe_Release(m_pController);
+	m_pHead->Delete_Node(m_vecAnimNode);
 	Safe_Release(m_pHead);
 
 	for (auto& pNode : m_vecAnyEntryNode)
+	{
+		pNode->Delete_Node(m_vecAnimNode);
 		Safe_Release(pNode);
+	}
+	m_vecAnyEntryNode.clear();
 }
