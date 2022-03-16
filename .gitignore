@@ -570,4 +570,8 @@ FrameWork/Client/bin/Resources/Mesh/Silvermane/Silvermane_Anim231.fbx
 *.enc
 *.tga
 *.fbx
+<<<<<<< HEAD
+*.cso
+=======
 *.recipe
+>>>>>>> main

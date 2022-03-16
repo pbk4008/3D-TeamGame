@@ -46,6 +46,7 @@ HRESULT C1H_Dash::EnterState()
 		return E_FAIL;
 
 	m_pSilvermane->Set_Move(true);
+	m_pSilvermane->Set_EquipShield(false);
 
 	return S_OK;
 }
@@ -68,6 +69,13 @@ _int C1H_Dash::KeyCheck(const _double& _dDeltaTime)
 
 	if (m_iCutIndex < m_pAnimationController->Get_CurKeyFrameIndex())
 	{
+		if (g_pGameInstance->getkeyPress(DIK_Q))
+		{
+			if (FAILED(m_pStateController->Change_State(L"Shield_BlockStart")))
+				return E_FAIL;
+			return STATE_CHANGE;
+		}
+
 		if (g_pGameInstance->getMouseKeyDown(CInputDev::MOUSESTATE::MB_LBUTTON))
 		{
 			switch (m_pSilvermane->Get_WeaponType())

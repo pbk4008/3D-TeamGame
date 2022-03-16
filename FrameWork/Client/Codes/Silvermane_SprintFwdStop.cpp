@@ -76,7 +76,8 @@ _int CSilvermane_SprintFwdStop::KeyCheck(const _double& _dDeltaTime)
 	{
 		if( g_pGameInstance->getkeyPress(DIK_W) ||
 			g_pGameInstance->getkeyPress(DIK_A) ||
-			g_pGameInstance->getkeyPress(DIK_D))
+			g_pGameInstance->getkeyPress(DIK_D) ||
+			g_pGameInstance->getkeyPress(DIK_S))
 		{
 			if(FAILED(m_pStateController->Change_State(L"SprintFwdStart")))
 				return -1;

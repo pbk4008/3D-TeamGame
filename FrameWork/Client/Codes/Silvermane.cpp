@@ -4,6 +4,7 @@
 #include "Camera_Silvermane.h"
 #include "Needle.h"
 #include "Fury.h"
+#include "Shield.h"
 
 #pragma region 스테이트들
 #include "Silvermane_Idle.h"
@@ -108,6 +109,28 @@
 
 #include "2H_HammerAttackDodgeR1.h"
 #include "2H_HammerAttackSprintR1.h"
+
+///////////////////////////////////////////// Shield
+#include "Shield_BlockStart.h"
+#include "Shield_BlockLoop.h"
+#include "Shield_BlockEnd.h"
+
+// Walk
+#include "Shield_WalkBwd.h"
+#include "Shield_WalkBwdStart.h"
+#include "Shield_WalkBwdStop.h"
+#include "Shield_WalkFwd.h"
+#include "Shield_WalkFwdStart.h"
+#include "Shield_WalkFwdStop.h"
+#include "Shield_WalkLeft.h"
+#include "Shield_WalkLeftStart.h"
+#include "Shield_WalkLeftStop.h"
+#include "Shield_WalkRight.h"
+#include "Shield_WalkRightStart.h"
+#include "Shield_WalkRightStop.h"
+
+// Attack
+#include "Shield_SupermanPunchStraight.h"
 #pragma endregion
 
 
@@ -131,11 +154,15 @@ HRESULT CSilvermane::NativeConstruct_Prototype()
 
 HRESULT CSilvermane::NativeConstruct(void* _pArg)
 {
-	if (FAILED(__super::NativeConstruct(_pArg))) return E_FAIL;
+	if (FAILED(__super::NativeConstruct(_pArg))) 
+		return E_FAIL;
 
-	if (FAILED(Ready_Components())) return E_FAIL;
-	if (FAILED(Ready_States())) return E_FAIL;
-	if (FAILED(Ready_Weapons())) return E_FAIL;
+	if (FAILED(Ready_Components()))
+		return E_FAIL;
+	if (FAILED(Ready_States())) 
+		return E_FAIL;
+	if (FAILED(Ready_Weapons())) 
+		return E_FAIL;
 
 	return S_OK;
 }
@@ -143,16 +170,20 @@ HRESULT CSilvermane::NativeConstruct(void* _pArg)
 _int CSilvermane::Tick(_double _dDeltaTime)
 {
 	_int iProgress = __super::Tick(_dDeltaTime);
-	if (NO_EVENT != iProgress) return iProgress;
+	if (NO_EVENT != iProgress)
+		return iProgress;
 
 	iProgress = m_pStateController->Tick(_dDeltaTime);
-	if (NO_EVENT != iProgress) return iProgress;
+	if (NO_EVENT != iProgress) 
+		return iProgress;
 
 	iProgress = Trace_CameraLook(_dDeltaTime);
-	if (NO_EVENT != iProgress) return iProgress;
+	if (NO_EVENT != iProgress) 
+		return iProgress;
 
 	iProgress = m_pAnimationController->Tick(_dDeltaTime);
-	if (NO_EVENT != iProgress) return iProgress;
+	if (NO_EVENT != iProgress) 
+		return iProgress;
 
 	m_pCharacterController->Tick(_dDeltaTime);
 
@@ -160,7 +191,14 @@ _int CSilvermane::Tick(_double _dDeltaTime)
 	if (m_pCurWeapon)
 	{
 		iProgress = m_pCurWeapon->Tick(_dDeltaTime);
-		if (NO_EVENT != iProgress) return iProgress;
+		if (NO_EVENT != iProgress) 
+			return iProgress;
+	}
+	if (m_pShield->getActive())
+	{
+		iProgress = m_pShield->Tick(_dDeltaTime);
+		if (NO_EVENT != iProgress)
+			return iProgress;
 	}
 
 	return _int();
@@ -169,18 +207,28 @@ _int CSilvermane::Tick(_double _dDeltaTime)
 _int CSilvermane::LateTick(_double _dDeltaTime)
 {
 	_int iProgress = __super::LateTick(_dDeltaTime);
-	if (NO_EVENT != iProgress) return iProgress;
+	if (NO_EVENT != iProgress) 
+		return iProgress;
 
 	iProgress = m_pStateController->LateTick(_dDeltaTime);
-	if (NO_EVENT != iProgress) return iProgress;
+	if (NO_EVENT != iProgress) 
+		return iProgress;
 
-	if(FAILED(m_pRenderer->Add_RenderGroup(CRenderer::RENDER_ALPHA, this))) return -1;
+	if(FAILED(m_pRenderer->Add_RenderGroup(CRenderer::RENDER_ALPHA, this)))
+		return -1;
 
 	// 무기 레잇업뎃
 	if (m_pCurWeapon)
 	{
 		iProgress = m_pCurWeapon->LateTick(_dDeltaTime);
-		if (NO_EVENT != iProgress) return iProgress;
+		if (NO_EVENT != iProgress) 
+			return iProgress;
+	}
+	if (m_pShield->getActive())
+	{
+		iProgress = m_pShield->LateTick(_dDeltaTime);
+		if (NO_EVENT != iProgress) 
+			return iProgress;
 	}
 
 	return _int();
@@ -188,32 +236,38 @@ _int CSilvermane::LateTick(_double _dDeltaTime)
 
 HRESULT CSilvermane::Render()
 {
-	if (FAILED(__super::Render())) return E_FAIL;
+	if (FAILED(__super::Render())) 
+		return E_FAIL;
 
 #ifdef _DEBUG
 	m_pCharacterController->Render();
 #endif // _DEBUG
-
 
 	_matrix smatWorld, smatView, smatProj;
 	smatWorld = XMMatrixTranspose(m_pTransform->Get_CombinedMatrix());
 	smatView = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_VIEW));
 	smatProj = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_PROJECTION));
 
-	if(FAILED(m_pModel->SetUp_ValueOnShader("g_WorldMatrix", &smatWorld, sizeof(_matrix)))) return E_FAIL;
-	if (FAILED(m_pModel->SetUp_ValueOnShader("g_ViewMatrix", &smatView, sizeof(_matrix)))) return E_FAIL;
-	if (FAILED(m_pModel->SetUp_ValueOnShader("g_ProjMatrix", &smatProj, sizeof(_matrix)))) return E_FAIL;
+	if(FAILED(m_pModel->SetUp_ValueOnShader("g_WorldMatrix", &smatWorld, sizeof(_matrix))))
+		return E_FAIL;
+	if (FAILED(m_pModel->SetUp_ValueOnShader("g_ViewMatrix", &smatView, sizeof(_matrix)))) 
+		return E_FAIL;
+	if (FAILED(m_pModel->SetUp_ValueOnShader("g_ProjMatrix", &smatProj, sizeof(_matrix)))) 
+		return E_FAIL;
 
 	for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
 	{
 		//if (FAILED(m_pModel->SetUp_TextureOnShader("g_DiffuseTexture", i, aiTextureType_DIFFUSE))) return E_FAIL;
 
-		if (FAILED(m_pModel->Render(i, 0))) return E_FAIL;
+		if (FAILED(m_pModel->Render(i, 0)))
+			return E_FAIL;
 	}
 
 #ifdef _DEBUG
-	if (FAILED(m_pAnimationController->Render())) return E_FAIL;
-	if (FAILED(m_pStateController->Render())) return E_FAIL;
+	if (FAILED(m_pAnimationController->Render())) 
+		return E_FAIL;
+	if (FAILED(m_pStateController->Render())) 
+		return E_FAIL;
 	wstring wstrAngle = L"Angle : " + to_wstring(m_fAngle);
 	if (FAILED(g_pGameInstance->Render_Font(TEXT("Font_Arial"), XMVectorSet(1.f, 0.0f, 0.f, 1.f), wstrAngle.c_str(), _float2(0.f, 300.f), _float2(0.8f, 0.8f))))
 		return E_FAIL;
@@ -234,7 +288,7 @@ HRESULT CSilvermane::Ready_Components()
 	m_pTransform->Set_TransformDesc(tTransformDesc);
 
 	// 모델
-	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_TEST_YM, L"Model_Silvermane", L"Model", (CComponent**)&m_pModel)))
+	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_TEST_JS, L"Model_Silvermane", L"Model", (CComponent**)&m_pModel)))
 		return E_FAIL;
 	m_pModel->Add_Material(g_pGameInstance->Get_Material(L"Mtrl_Silvermane_Top"), 0);
 	m_pModel->Add_Material(g_pGameInstance->Get_Material(L"Mtrl_Silvermane_Down"), 1);
@@ -242,7 +296,7 @@ HRESULT CSilvermane::Ready_Components()
 	m_pModel->Add_Material(g_pGameInstance->Get_Material(L"Mtrl_Silvermane_Hair"), 3);
 
 	// 에니메이션 컨트롤러
-	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_TEST_YM, L"Com_AnimationController", L"AnimationController", (CComponent**)&m_pAnimationController)))
+	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_TEST_JS, L"Com_AnimationController", L"AnimationController", (CComponent**)&m_pAnimationController)))
 		return E_FAIL;
 	m_pAnimationController->Set_GameObject(this);
 	m_pAnimationController->Set_Model(m_pModel);
@@ -250,7 +304,7 @@ HRESULT CSilvermane::Ready_Components()
 	m_pAnimationController->Set_MoveSpeed(2.f);
 
 	// 스테이트 컨트롤러
-	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_TEST_YM, L"Com_StateController", L"StateController", (CComponent**)&m_pStateController)))
+	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_TEST_JS, L"Com_StateController", L"StateController", (CComponent**)&m_pStateController)))
 		return E_FAIL;
 	m_pStateController->Set_GameObject(this);
 
@@ -262,7 +316,7 @@ HRESULT CSilvermane::Ready_Components()
 	tCharacterControllerDesc.fDynamicFriction = 0.5f;
 	tCharacterControllerDesc.fRestitution = 0.f;
 	tCharacterControllerDesc.pGameObject = this;
-	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_TEST_YM, L"Com_CharacterController", L"CharacterController", (CComponent**)&m_pCharacterController, &tCharacterControllerDesc)))
+	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_TEST_JS, L"Com_CharacterController", L"CharacterController", (CComponent**)&m_pCharacterController, &tCharacterControllerDesc)))
 		return E_FAIL;
 	m_pCharacterController->Set_OwnerTransform(m_pTransform);
 
@@ -439,7 +493,42 @@ HRESULT CSilvermane::Ready_States()
 	if (FAILED(m_pStateController->Add_State(L"2H_HammerAttackSprintR1", C2H_HammerAttackSprintR1::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 #pragma endregion
-
+#pragma region Shield
+	if (FAILED(m_pStateController->Add_State(L"Shield_BlockStart", CShield_BlockStart::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	if (FAILED(m_pStateController->Add_State(L"Shield_BlockLoop", CShield_BlockLoop::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	if (FAILED(m_pStateController->Add_State(L"Shield_BlockEnd", CShield_BlockEnd::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	// Walk
+	if (FAILED(m_pStateController->Add_State(L"Shield_WalkBwd", CShield_WalkBwd::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	if (FAILED(m_pStateController->Add_State(L"Shield_WalkBwdStart", CShield_WalkBwdStart::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	if (FAILED(m_pStateController->Add_State(L"Shield_WalkBwdStop", CShield_WalkBwdStop::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	if (FAILED(m_pStateController->Add_State(L"Shield_WalkFwd", CShield_WalkFwd::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	if (FAILED(m_pStateController->Add_State(L"Shield_WalkFwdStart", CShield_WalkFwdStart::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	if (FAILED(m_pStateController->Add_State(L"Shield_WalkFwdStop", CShield_WalkFwdStop::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	if (FAILED(m_pStateController->Add_State(L"Shield_WalkLeft", CShield_WalkLeft::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	if (FAILED(m_pStateController->Add_State(L"Shield_WalkLeftStart", CShield_WalkLeftStart::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	if (FAILED(m_pStateController->Add_State(L"Shield_WalkLeftStop", CShield_WalkLeftStop::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	if (FAILED(m_pStateController->Add_State(L"Shield_WalkRight", CShield_WalkRight::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	if (FAILED(m_pStateController->Add_State(L"Shield_WalkRightStart", CShield_WalkRightStart::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	if (FAILED(m_pStateController->Add_State(L"Shield_WalkRightStop", CShield_WalkRightStop::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	// Attack
+	if (FAILED(m_pStateController->Add_State(L"Shield_SupermanPunchStraight", CShield_SupermanPunchStraight::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+#pragma endregion
 
 	for (auto& pair : m_pStateController->Get_States())
 	{
@@ -455,7 +544,7 @@ HRESULT CSilvermane::Ready_States()
 
 HRESULT CSilvermane::Ready_Weapons()
 {
-	CHierarchyNode* pWeaponBone = m_pModel->Get_BoneMatrix("spien_03");
+	CHierarchyNode* pWeaponBone = m_pModel->Get_BoneMatrix("spine_03");
 	CWeapon* pWeapon = nullptr;
 	// 한손검
 	pWeapon = CNeedle::Create(m_pDevice, m_pDeviceContext);
@@ -470,6 +559,14 @@ HRESULT CSilvermane::Ready_Weapons()
 	pWeapon->Set_Owner(this);
 	pWeapon->Set_OwnerPivotMatrix(m_pModel->Get_PivotMatrix());
 	m_umapWeapons.emplace(L"Fury", pWeapon);
+
+	// 방패
+	pWeaponBone = m_pModel->Get_BoneMatrix("weapon_l");
+	m_pShield = CShield::Create(m_pDevice, m_pDeviceContext);
+	m_pShield->NativeConstruct(pWeaponBone);
+	m_pShield->Set_Owner(this);
+	m_pShield->Set_OwnerPivotMatrix(m_pModel->Get_PivotMatrix());
+	Set_EquipShield(false);
 	
 	return S_OK;
 }
@@ -538,6 +635,11 @@ const _bool CSilvermane::Is_EquipWeapon() const
 	return m_isEquipWeapon;
 }
 
+const _bool CSilvermane::Is_EquipShield() const
+{
+	return m_isEquipShield;
+}
+
 const CWeapon::EType CSilvermane::Get_WeaponType() const
 {
 	return m_pCurWeapon->Get_Type();
@@ -576,6 +678,15 @@ const _bool CSilvermane::Change_Weapon(const wstring& _name)
 HRESULT CSilvermane::Change_State(const wstring& _wstrStateTag)
 {
 	return m_pStateController->Change_State(_wstrStateTag);
+}
+
+void CSilvermane::Set_EquipShield(const _bool _isEquipShield)
+{
+	if (m_pShield)
+	{
+		m_pShield->Set_Equip(_isEquipShield);
+		m_isEquipShield = _isEquipShield;
+	}
 }
 
 _int CSilvermane::Trace_CameraLook(const _double& _dDeltaTime)
@@ -651,10 +762,9 @@ CGameObject* CSilvermane::Clone(void* _pArg)
 
 void CSilvermane::Free()
 {
+	Safe_Release(m_pShield);
 	for (auto& pair : m_umapWeapons)
-	{
 		Safe_Release(pair.second);
-	}
 	m_umapWeapons;
 
 	Safe_Release(m_pCharacterController);

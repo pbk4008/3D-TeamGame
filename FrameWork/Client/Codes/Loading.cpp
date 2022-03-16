@@ -80,8 +80,10 @@ HRESULT CLoading::Move_Scene()
 		break;
 	case SCENEID::SCENE_TEST_JS:
 		pLevel = CTestScene_JS::Create(m_pDevice, m_pDeviceContext);
+		break;
 	case SCENEID::SCENE_TEST_YM:
 		pLevel = CTestScene_YM::Create(m_pDevice, m_pDeviceContext);
+		break;
 	}
 	if (FAILED(g_pGameInstance->Open_Level((_uint)m_eSceneID, pLevel)))
 		return E_FAIL;
