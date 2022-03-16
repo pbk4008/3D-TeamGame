@@ -75,6 +75,57 @@ HRESULT CTarget_Manager::Add_MRT(const wstring& pMRTTag, const wstring& pTargetT
 	return S_OK;
 }
 
+HRESULT CTarget_Manager::Begin_RT(ID3D11DeviceContext* pDeviceContext, const wstring& pRTTag, ID3D11DepthStencilView* DepthView)
+{
+	list<CRenderTarget*>* pMRTList = Find_MRT(pRTTag);
+
+	ID3D11RenderTargetView* RTVs[8] = { nullptr };
+
+
+	UINT num = 1;
+	pDeviceContext->RSGetScissorRects(&num, m_oldrects);
+	num = 1;
+	pDeviceContext->RSGetViewports(&num, m_oldvp);
+	m_oldvp[1] = m_oldvp[0];
+
+	D3D11_RECT rects[1] = { {0,SHADOW_MAP,0, SHADOW_MAP} };
+	pDeviceContext->RSSetScissorRects(1, rects);
+
+	D3D11_VIEWPORT vp[1] = { {0,0,SHADOW_MAP,SHADOW_MAP,0,1.f} };
+	pDeviceContext->RSSetViewports(1, vp);
+	pDeviceContext->OMGetRenderTargets(1, &m_pOldView, &m_pDepthStencilView);
+
+	_uint		iNumViews = (_uint)pMRTList->size();
+
+	_uint		iIndex = 0;
+
+	for (auto& pRenderTarget : *pMRTList)
+	{
+		pRenderTarget->Clear();
+		RTVs[iIndex++] = pRenderTarget->Get_RTV();
+	}
+
+	pDeviceContext->OMSetRenderTargets(iNumViews, RTVs, DepthView);
+	pDeviceContext->ClearDepthStencilView(DepthView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.f, 0);
+
+	return S_OK;
+}
+
+HRESULT CTarget_Manager::End_RT(ID3D11DeviceContext* pDeviceContext, ID3D11DepthStencilView* DepthView)
+{
+	pDeviceContext->RSSetScissorRects(1, m_oldrects);
+	pDeviceContext->RSSetViewports(1, m_oldvp);
+
+	pDeviceContext->OMSetRenderTargets(1, &m_pOldView, m_pDepthStencilView);
+	pDeviceContext->ClearDepthStencilView(m_pDepthStencilView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.f, 0);
+	pDeviceContext->ClearDepthStencilView(DepthView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.f, 0);
+
+	Safe_Release(m_pOldView);
+	Safe_Release(m_pDepthStencilView);
+
+	return S_OK;
+}
+
 HRESULT CTarget_Manager::Begin_MRT(ID3D11DeviceContext* pDeviceContext, const wstring& pMRTTag)
 {
 	list<CRenderTarget*>* pMRTList = Find_MRT(pMRTTag);
@@ -94,7 +145,6 @@ HRESULT CTarget_Manager::Begin_MRT(ID3D11DeviceContext* pDeviceContext, const ws
 	}
 
 	pDeviceContext->OMSetRenderTargets(iNumViews, RTVs, m_pDepthStencilView);
-
 	return S_OK;
 }
 

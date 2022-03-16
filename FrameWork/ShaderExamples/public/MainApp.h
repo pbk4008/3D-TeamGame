@@ -40,7 +40,7 @@ private:
 
 	_bool	m_bShadow = false;
 	_bool	m_bPBR = false;
-	_bool	m_bBlur = false;
+	_bool	m_bHDR = false;
 	_bool	m_bDeferred = false;
 
 public:

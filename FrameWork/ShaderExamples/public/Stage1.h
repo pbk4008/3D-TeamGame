@@ -19,6 +19,7 @@ public:
 private:
 	HRESULT	Ready_LightDesc();
 	HRESULT Ready_Gameobject();
+	HRESULT	Ready_LoadMapData();
 
 public:
 	static CStage1* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);

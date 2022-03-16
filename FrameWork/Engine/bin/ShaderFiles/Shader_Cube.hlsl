@@ -75,34 +75,23 @@ PS_OUT PS_MAIN(PS_IN In)
 	
 	return Out;	
 }
+struct PS_OUT_PBR
+{
+	vector vMetallic : SV_TARGET0;
+	vector vRoughness : SV_TARGET1;
+	vector vAO : SV_TARGET2;
+};
 
-//D3D11_FILL_MODE FillMode;
-//D3D11_CULL_MODE CullMode;
-//BOOL FrontCounterClockwise;
-//INT DepthBias;
-//FLOAT DepthBiasClamp;
-//FLOAT SlopeScaledDepthBias;
-//BOOL DepthClipEnable;
-//BOOL ScissorEnable;
-//BOOL MultisampleEnable;
-//BOOL AntialiasedLineEnable;
-
-/* 앞면뒷면에 대한 정의. + 후면처리내기에대한 정의. */
-
-//
-//
-///* 픽셀의 블렌딩방식 */
-//BlendState 
-//{
-//
-//}
-//
-///* 깊이테스트, 스텐실에 대한 설정. */
-//DepthStencilState
-//{
-//
-//}
-//
+PS_OUT_PBR PS_MAIN_PBR(PS_IN In)
+{
+	PS_OUT_PBR Out = (PS_OUT_PBR) 0;
+	
+	Out.vMetallic = vector(0.f, 0.f, 0.f, 1.f);
+	Out.vRoughness = vector(1.f, 1.f, 1.f, 1.f);
+	Out.vAO = vector(1.f, 1.f, 1.f, 1.f);
+	
+	return Out;
+}
 
 technique11			DefaultTechnique
 {
@@ -118,6 +107,18 @@ technique11			DefaultTechnique
 		VertexShader = compile vs_5_0 VS_MAIN();
 		GeometryShader = NULL;
 		PixelShader = compile ps_5_0  PS_MAIN();
+	}
+
+	pass ReadyPBR
+	{
+		/* 렌더스테이츠에 대한 정의. */		
+		SetRasterizerState(CullMode_None);
+		SetDepthStencilState(ZWriteDisable, 0);
+
+		/* 진입점함수를 지정한다. */
+		VertexShader = compile vs_5_0 VS_MAIN();
+		GeometryShader = NULL;
+		PixelShader = compile ps_5_0 PS_MAIN_PBR();
 	}
 }
 
