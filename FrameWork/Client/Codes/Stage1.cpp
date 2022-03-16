@@ -25,32 +25,32 @@ HRESULT CStage1::NativeConstruct()
 	//	return E_FAIL;
 	//}
 
-	if (FAILED(Ready_Player(L"Layer_Player")))
+	//if (FAILED(Ready_Player(L"Layer_Player")))
+	//{
+	//	return E_FAIL;
+	//}
+	//if (FAILED(Ready_Boss(L"Layer_Boss")))
+	//{
+	//	return E_FAIL;
+	//}
+	if (FAILED(Ready_Monster(L"Layer_Monster")))
 	{
 		return E_FAIL;
 	}
-	if (FAILED(Ready_Boss(L"Layer_Boss")))
-	{
-		return E_FAIL;
-	}
-	/*if (FAILED(Ready_Monster(L"Layer_Monster")))
-	{
-		return E_FAIL;
-	}*/
-	if (FAILED(Ready_UI(L"Layer_UI")))
-	{
-		return E_FAIL;
-	}
+	//if (FAILED(Ready_UI(L"Layer_UI")))
+	//{
+	//	return E_FAIL;
+	//}
 
-	//Data
-	if (FAILED(Ready_Data_UI(L"../bin/SaveData/UI/UI.dat")))
-	{
-		return E_FAIL;
-	}
-	if (FAILED(Ready_Data_Effect(L"../bin/SaveData/Effect/Effect_Explosion.dat")))
-	{
-		return E_FAIL;
-	}
+	////Data
+	//if (FAILED(Ready_Data_UI(L"../bin/SaveData/UI/UI.dat")))
+	//{
+	//	return E_FAIL;
+	//}
+	//if (FAILED(Ready_Data_Effect(L"../bin/SaveData/Effect/Effect_Explosion.dat")))
+	//{
+	//	return E_FAIL;
+	//}
 
 	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Silvermane", L"Silvermane")))
 	//	return E_FAIL;
@@ -143,8 +143,8 @@ HRESULT CStage1::Ready_Boss(const _tchar* LayerTag)
 
 HRESULT CStage1::Ready_Monster(const _tchar* LayerTag)
 {
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Proto_GameObject_Monster_Crawler")))
-		return E_FAIL;
+	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Proto_GameObject_Monster_Crawler")))
+	//	return E_FAIL;
 	
 	/*if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Monster_EarthAberrant")))
 		return E_FAIL;

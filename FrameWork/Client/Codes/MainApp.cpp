@@ -275,6 +275,7 @@ void CMainApp::Free()
 	//	MSGBOX("CDebugSystem Destroy Fail");
 	
 	RELEASE_INSTANCE(CClient_Observer);
+	Safe_Release(g_pObserver);
 
 	Safe_Release(m_pRenderer);
 

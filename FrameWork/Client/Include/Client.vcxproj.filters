@@ -244,6 +244,9 @@
     <Filter Include="02.GameObject\93.Boss\00.MiddleBoss\00.Weapon">
       <UniqueIdentifier>{eee5d743-fda4-4f7b-ba26-d4c790268f21}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\96.Weapon\03.Stargazer">
+      <UniqueIdentifier>{c7467934-81e9-48c7-9c6f-403039f32fbb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -715,6 +718,9 @@
     <ClInclude Include="..\Headers\ShieldBreaker.h">
       <Filter>02.GameObject\93.Boss\00.MiddleBoss\00.Weapon</Filter>
     </ClInclude>
+    <ClInclude Include="..\Headers\Stargazer.h">
+      <Filter>02.GameObject\96.Weapon\03.Stargazer</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -1162,6 +1168,9 @@
     </ClCompile>
     <ClCompile Include="..\Codes\ShieldBreaker.cpp">
       <Filter>02.GameObject\93.Boss\00.MiddleBoss\00.Weapon</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Stargazer.cpp">
+      <Filter>02.GameObject\96.Weapon\03.Stargazer</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

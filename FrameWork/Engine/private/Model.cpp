@@ -432,11 +432,15 @@ HRESULT CModel::Load_Animation()
 				pKeyFrame->vScale = m_tAnimData.pAnimData[i].pChannelData[j].pKeyFrame[k].vScale;
 
 				pChannel->Add_KeyFrame(pKeyFrame);
-				Safe_Delete_Array(m_tAnimData.pAnimData[i].pChannelData[j].pKeyFrame[k]);
 			}
+			delete []m_tAnimData.pAnimData[i].pChannelData[j].pKeyFrame;
+			m_tAnimData.pAnimData[i].pChannelData[j].pKeyFrame = nullptr;
+
 			pAnimation->Add_Channel(pChannel);
-			//Safe_Delete_Array(m_tAnimData.pAnimData[i].pChannelData[j]);
 		}
+		delete[] m_tAnimData.pAnimData[i].pChannelData;
+		m_tAnimData.pAnimData[i].pChannelData = nullptr;
+
 		pAnimation->Set_MaxKeyFrameIndex(iMaxKeyFrameIndex);
 		m_Animations.push_back(pAnimation);
 	}

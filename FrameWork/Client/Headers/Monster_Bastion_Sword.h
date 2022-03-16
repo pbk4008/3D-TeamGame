@@ -8,6 +8,8 @@ class CAnimator;
 END
 
 BEGIN(Client)
+class CShieldBreaker;
+class CStargazer;
 class CMonster_Bastion_Sword final : public CActor
 {
 private:
@@ -27,13 +29,15 @@ public:
 private:
 	virtual HRESULT SetUp_Components();
 	HRESULT Set_Animation_FSM();
+	HRESULT Set_Weapon();
 
 private:
 	CModel* m_pModelCom = nullptr;
 	CAnimator* m_pAnimator = nullptr;
 	CCapsuleCollider* m_pCollider = nullptr;
 private:
-	_uint itest = 0;
+	//CShieldBreaker* m_pWeapon = nullptr;
+	CStargazer* m_pWeapon = nullptr;
 public:
 	static CMonster_Bastion_Sword* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext);
 	virtual CGameObject* Clone(void* _pArg = nullptr) override;

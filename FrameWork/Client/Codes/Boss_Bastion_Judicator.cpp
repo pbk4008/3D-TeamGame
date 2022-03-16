@@ -68,7 +68,7 @@ _int CBoss_Bastion_Judicator::Tick(_double TimeDelta)
 
 	m_pAnimator->Tick(TimeDelta);
 
-	m_pAnimator->Get_CurrentAnim();
+	//m_pAnimator->Get_CurrentAnim();
 	//m_pModelCom->Update_CombinedTransformationMatrix(TimeDelta);
 
 	return 0;
