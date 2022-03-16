@@ -89,8 +89,17 @@ HRESULT CAnimNode::Delete_Node(vector<_uint>& vecNode)
 
 	for (auto& pNode : m_vecAnimNode)
 	{
-		Delete_Node(vecNode);
-		Safe_Release(pNode);
+		for (auto& pNum : vecNode)
+		{
+			if (pNode)
+			{
+				if (pNum == pNode->m_iIndex)
+				{
+					pNode->Delete_Node(vecNode);
+					Safe_Release(pNode);
+				}
+			}
+		}
 	}
 	m_vecAnimNode.clear();
 
