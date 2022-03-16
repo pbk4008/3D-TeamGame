@@ -66,10 +66,10 @@ _int CBoss_Bastion_Judicator::Tick(_double TimeDelta)
 		m_pModelCom->SetUp_AnimationIndex(itest);
 	}*/
 
-	
 	m_pAnimator->Tick(TimeDelta);
 
-	m_pModelCom->Update_CombinedTransformationMatrix(TimeDelta);
+	m_pAnimator->Get_CurrentAnim();
+	//m_pModelCom->Update_CombinedTransformationMatrix(TimeDelta);
 
 	return 0;
 }
@@ -102,9 +102,9 @@ HRESULT CBoss_Bastion_Judicator::Render()
 	}
 
 	_matrix XMWorldMatrix = XMMatrixTranspose(m_pTransform->Get_WorldMatrix());
-	_matrix XMViewMatrix = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"MainCamera", TRANSFORMSTATEMATRIX::D3DTS_VIEW));
-	_matrix XMProjectMatrix = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"MainCamera", TRANSFORMSTATEMATRIX::D3DTS_PROJECTION));
-	_vector CamPos = g_pGameInstance->Get_CamPosition(L"MainCamera");
+	_matrix XMViewMatrix = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_VIEW));
+	_matrix XMProjectMatrix = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_PROJECTION));
+	_vector CamPos = g_pGameInstance->Get_CamPosition(L"Camera_Silvermane");
 
 	m_pModelCom->SetUp_ValueOnShader("g_WorldMatrix", &XMWorldMatrix, sizeof(_float) * 16);
 	m_pModelCom->SetUp_ValueOnShader("g_ViewMatrix", &XMViewMatrix, sizeof(_float) * 16);
@@ -151,32 +151,45 @@ HRESULT CBoss_Bastion_Judicator::SetUp_Components()
 
 HRESULT CBoss_Bastion_Judicator::Set_Animation_FSM()
 {
-	CAnimation* pAnim = m_pModelCom->Get_Animation("SK_Bastion_Tier3.ao|A_2H_Hammer_Attack_JogR1");
-	if (FAILED(m_pAnimator->Insert_Animation(ATTACK_JOG_H, HEAD, pAnim, true, false, false, ERootOption::XYZ)))
-		return E_FAIL;
-	pAnim = m_pModelCom->Get_Animation("SK_Bastion_Tier3.ao|A_Idle_Judicator");
-	if (FAILED(m_pAnimator->Insert_Animation(IDLE, ATTACK_JOG_H, pAnim, false, false, false, ERootOption::XYZ)))
+	CAnimation* pAnim = m_pModelCom->Get_Animation("SK_Bastion_Tier3.ao|A_Idle_Judicator");
+	if (FAILED(m_pAnimator->Insert_Animation(IDLE, HEAD, pAnim, false, false, false, ERootOption::XYZ)))
 		return E_FAIL;
 	pAnim = m_pModelCom->Get_Animation("SK_Bastion_Tier3.ao|A_Attack_BattleCry_Start_Judicator");
-	if (FAILED(m_pAnimator->Insert_Animation(BATTLE_CRY_START, IDLE, pAnim, true, false, false, ERootOption::XYZ)))
+	if (FAILED(m_pAnimator->Insert_Animation(BATTLE_CRY_START, IDLE, pAnim, true, true, false, ERootOption::XYZ)))
 		return E_FAIL;
 	pAnim = m_pModelCom->Get_Animation("SK_Bastion_Tier3.ao|A_Attack_BattleCry_Judicator");
-	if (FAILED(m_pAnimator->Insert_Animation(BATTLE_CRY, BATTLE_CRY_START, pAnim, true, false, false, ERootOption::XYZ)))
+	if (FAILED(m_pAnimator->Insert_Animation(BATTLE_CRY, BATTLE_CRY_START, pAnim, true, true, false, ERootOption::XYZ)))
 		return E_FAIL;
 	pAnim = m_pModelCom->Get_Animation("SK_Bastion_Tier3.ao|A_Attack_BattleCry_Stop_Judicator");
-	if (FAILED(m_pAnimator->Insert_Animation(BATTLE_CRY_STOP, BATTLE_CRY, pAnim, true, false, false, ERootOption::XYZ)))
+	if (FAILED(m_pAnimator->Insert_Animation(BATTLE_CRY_STOP, BATTLE_CRY, pAnim, true, true, false, ERootOption::XYZ)))
 		return E_FAIL;
+
+	pAnim = m_pModelCom->Get_Animation("SK_Bastion_Tier3.ao|A_Run_Start_Judicator");
+	if (FAILED(m_pAnimator->Insert_Animation(RUN_START, BATTLE_CRY_STOP, pAnim, true, true, false, ERootOption::XYZ)))
+		return E_FAIL;
+	pAnim = m_pModelCom->Get_Animation("SK_Bastion_Tier3.ao|A_Run_Judicator");
+	if (FAILED(m_pAnimator->Insert_Animation(RUN, RUN_START, pAnim, true, true, false, ERootOption::XYZ)))
+		return E_FAIL;
+	pAnim = m_pModelCom->Get_Animation("SK_Bastion_Tier3.ao|A_Run_Stop_Judicator");
+	if (FAILED(m_pAnimator->Insert_Animation(RUN_STOP, RUN, pAnim, true, true, false, ERootOption::XYZ)))
+		return E_FAIL;
+
+
+	pAnim = m_pModelCom->Get_Animation("SK_Bastion_Tier3.ao|A_Run_Stop_Judicator");
+	if (FAILED(m_pAnimator->Insert_Animation(RUN_STOP, RUN_STOP, pAnim, true, true, false, ERootOption::XYZ)))
+		return E_FAIL;
+
+	pAnim = m_pModelCom->Get_Animation("SK_Bastion_Tier3.ao|A_Run_Stop_Judicator");
 	
 
 
 	//루프하나
-	m_pAnimator->Set_UpAutoChangeAnimation(ATTACK_JOG_H, IDLE);
 	m_pAnimator->Set_UpAutoChangeAnimation(IDLE, BATTLE_CRY_START);
 	m_pAnimator->Set_UpAutoChangeAnimation(BATTLE_CRY_START, BATTLE_CRY);
 	m_pAnimator->Set_UpAutoChangeAnimation(BATTLE_CRY, BATTLE_CRY_STOP);
 
-	m_pAnimator->Change_Animation(ATTACK_JOG_H); //시작애니메이션 정함
-
+	m_pAnimator->Change_Animation(BATTLE_CRY_START); //시작애니메이션 정함
+	m_pAnimator->Change_AnyEntryAnimation(BATTLE_CRY_START);
 	return S_OK;
 }
 

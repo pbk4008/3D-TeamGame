@@ -107,16 +107,16 @@ HRESULT CLoader::LoadForScene()
 HRESULT CLoader::SetUp_Stage1_Object()
 {
 	/*if (FAILED(Load_Stage1FBXLoad()))
-		return E_FAIL;
-
-	if (FAILED(Load_Stage1PlayerLoad()))
 		return E_FAIL;*/
 
-		/*if (FAILED(Load_Stage1BossLoad()))
-			return E_FAIL;*/
-
-	if (FAILED(Load_Stage1MonsterLoad()))
+	if (FAILED(Load_Stage1PlayerLoad()))
 		return E_FAIL;
+
+	if (FAILED(Load_Stage1BossLoad()))
+		return E_FAIL;
+
+	/*if (FAILED(Load_Stage1MonsterLoad()))
+		return E_FAIL;*/
 
 	if (FAILED(Load_Stage1StaticUILoad()))
 		return E_FAIL;
@@ -439,7 +439,7 @@ HRESULT CLoader::Load_Stage1PlayerLoad()
 
 HRESULT CLoader::Load_Stage1BossLoad()
 {
-	/*
+	
 	//Boss Bastion_Judicator
 	_matrix matPivot = XMMatrixIdentity();
 	matPivot = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(180.f));
@@ -512,7 +512,7 @@ HRESULT CLoader::Load_Stage1BossLoad()
 	}
 	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Weapon_ShieldBreaker", CShieldBreaker::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
-	*/
+	
 
 	return S_OK;
 }
