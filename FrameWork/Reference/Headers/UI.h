@@ -37,7 +37,7 @@ protected:
 	CVIBuffer_Trapezium* m_pTrapziumBuffer;
 	CTexture* m_pTexture;
 
-private:
+protected:
 	UIDESC m_Desc;
 };
 END

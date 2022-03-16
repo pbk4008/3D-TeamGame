@@ -575,3 +575,5 @@ FrameWork/Client/bin/Resources/Mesh/Silvermane/Silvermane_Anim231.fbx
 =======
 *.recipe
 >>>>>>> main
+*.tlog
+*.idb

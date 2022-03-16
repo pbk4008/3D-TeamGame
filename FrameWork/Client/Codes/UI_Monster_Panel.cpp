@@ -46,39 +46,39 @@ HRESULT CUI_Monster_Panel::NativeConstruct(void* pArg)
 	}
 
 	//MonsterBar Back
-	CUI_Monster_Back::UIACTIVEDESC Desc;
-	_tcscpy_s(Desc.UIDesc.TextureTag, L"Texture_Monster_Back");
-	Desc.UIDesc.IDTag = 14;
-	Desc.UIDesc.bMinus = true;
-	Desc.UIDesc.fAngle = 0.36f;
-	Desc.UIDesc.fPos = { 0.f, 0.f, 0.f };
-	Desc.UIDesc.fSize = { 1.f, 1.f };
+	CUI::UIDESC Desc;
+	_tcscpy_s(Desc.TextureTag, L"Texture_Monster_Back");
+	Desc.IDTag = 14;
+	Desc.bMinus = true;
+	Desc.fAngle = 0.36f;
+	Desc.fPos = { 0.f, 0.f, 0.f };
+	Desc.fSize = { 1.f, 1.f };
 	
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_UI", L"Proto_GameObject_UI_Monster_Back", &Desc, 
 		(CGameObject**)&m_pUIBack)))
 		return E_FAIL;
 
 	//MonsterBar Level
-	CUI_Monster_Level::UIACTIVEDESC Desc2;
-	_tcscpy_s(Desc2.UIDesc.TextureTag, L"Texture_Monster_Level");
-	Desc2.UIDesc.IDTag = 13;
-	Desc2.UIDesc.bMinus = false;
-	Desc2.UIDesc.fAngle = 0.f;
-	Desc2.UIDesc.fPos = { 0.f, 0.f, 0.f };
-	Desc2.UIDesc.fSize = { 1.f, 1.f };
+	CUI::UIDESC Desc2;
+	_tcscpy_s(Desc2.TextureTag, L"Texture_Monster_Level");
+	Desc2.IDTag = 13;
+	Desc2.bMinus = false;
+	Desc2.fAngle = 0.f;
+	Desc2.fPos = { 0.f, 0.f, 0.f };
+	Desc2.fSize = { 1.f, 1.f };
 
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_UI", L"Proto_GameObject_UI_Monster_Level", &Desc2, 
 		(CGameObject**)&m_pUILevel)))
 		return E_FAIL;
 
 	//MonsterBar Level
-	CUI_Monster_HpBar::UIACTIVEDESC Desc3;
-	_tcscpy_s(Desc3.UIDesc.TextureTag, L"Texture_Monster_HpBar");
-	Desc3.UIDesc.IDTag = 14;
-	Desc3.UIDesc.bMinus = true;
-	Desc3.UIDesc.fAngle = 0.36f;
-	Desc3.UIDesc.fPos = { 0.f, 0.f, 0.f };
-	Desc3.UIDesc.fSize = { 1.f, 1.f };
+	CUI::UIDESC Desc3;
+	_tcscpy_s(Desc3.TextureTag, L"Texture_Monster_HpBar");
+	Desc3.IDTag = 14;
+	Desc3.bMinus = true;
+	Desc3.fAngle = 0.36f;
+	Desc3.fPos = { 0.f, 0.f, 0.f };
+	Desc3.fSize = { 1.f, 1.f };
 
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_UI", L"Proto_GameObject_UI_Monster_HpBar", &Desc3,
 		(CGameObject**)&m_pUIHpBar)))
