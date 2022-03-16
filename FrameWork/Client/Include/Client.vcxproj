@@ -233,6 +233,7 @@
     <ClInclude Include="..\Headers\2H_HammerJogRightPivot180.h" />
     <ClInclude Include="..\Headers\2H_HammerJogRightStart.h" />
     <ClInclude Include="..\Headers\BackGround.h" />
+    <ClInclude Include="..\Headers\Boss_Bastion_Judicator.h" />
     <ClInclude Include="..\Headers\Camera_Silvermane.h" />
     <ClInclude Include="..\Headers\Camera_Debug.h" />
     <ClInclude Include="..\Headers\Effect_DashDust.h" />
@@ -254,6 +255,7 @@
     <ClInclude Include="..\Headers\Monster_EarthAberrant.h" />
     <ClInclude Include="..\Headers\Needle.h" />
     <ClInclude Include="..\Headers\Plane_Test.h" />
+    <ClInclude Include="..\Headers\ShieldBreaker.h" />
     <ClInclude Include="..\Headers\Silvermane.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClInclude>
@@ -285,6 +287,8 @@
     <ClInclude Include="..\Headers\UI_Monster_HpBar.h" />
     <ClInclude Include="..\Headers\UI_Monster_Level.h" />
     <ClInclude Include="..\Headers\UI_Monster_Panel.h" />
+    <ClInclude Include="..\Headers\UI_Player_HpBar.h" />
+    <ClInclude Include="..\Headers\UI_Player_HpBar_Red.h" />
     <ClInclude Include="..\Headers\Weapon.h" />
     <ClInclude Include="Client.h" />
     <ClInclude Include="framework.h" />
@@ -346,6 +350,7 @@
     <ClCompile Include="..\Codes\2H_Hammer_EquipOn.cpp" />
     <ClCompile Include="..\Codes\BackGround.cpp" />
     <ClCompile Include="..\Codes\1H_SwordAttackNormalR2_Start.cpp" />
+    <ClCompile Include="..\Codes\Boss_Bastion_Judicator.cpp" />
     <ClCompile Include="..\Codes\Fury.cpp" />
     <ClCompile Include="..\Codes\Monster_Bastion_2HSword.cpp" />
     <ClCompile Include="..\Codes\Camera_Silvermane.cpp" />
@@ -368,6 +373,7 @@
     <ClCompile Include="..\Codes\Monster_EarthAberrant.cpp" />
     <ClCompile Include="..\Codes\Needle.cpp" />
     <ClCompile Include="..\Codes\Plane_Test.cpp" />
+    <ClCompile Include="..\Codes\ShieldBreaker.cpp" />
     <ClCompile Include="..\Codes\Silvermane.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
@@ -399,6 +405,8 @@
     <ClCompile Include="..\Codes\UI_Monster_HpBar.cpp" />
     <ClCompile Include="..\Codes\UI_Monster_Level.cpp" />
     <ClCompile Include="..\Codes\UI_Monster_Panel.cpp" />
+    <ClCompile Include="..\Codes\UI_Player_HpBar.cpp" />
+    <ClCompile Include="..\Codes\UI_Player_HpBar_Red.cpp" />
     <ClCompile Include="..\Codes\Weapon.cpp" />
     <ClCompile Include="Client.cpp" />
     <ClCompile Include="pch.cpp">

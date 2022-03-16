@@ -78,6 +78,11 @@ PS_OUT PS_MAIN(PS_IN In)
 {
     PS_OUT Out = (PS_OUT) 0;
 
+    if (In.vTexUV.x > g_fX)
+    {
+        discard;
+    }
+    
     if (In.vTexUV.y > g_fY)
     {
         discard;
@@ -95,7 +100,7 @@ PS_OUT PS_MAIN_RED(PS_IN In)
 {
     PS_OUT Out = (PS_OUT) 0;
 
-    if (In.vTexUV.y < 0.1f)
+    if (In.vTexUV.y < 0.2f)
     {
         discard;
     }

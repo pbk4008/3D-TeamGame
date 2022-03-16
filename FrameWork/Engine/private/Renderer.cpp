@@ -91,6 +91,9 @@ HRESULT CRenderer::Draw_RenderGroup()
 	if (FAILED(Render_UI()))
 		return E_FAIL;
 
+	if (FAILED(Render_UI_Active()))
+		return E_FAIL;
+
 #ifdef _DEBUG
 	if (m_bDeferred)
 	{
