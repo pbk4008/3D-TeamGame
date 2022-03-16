@@ -112,20 +112,20 @@ HRESULT CLoader::SetUp_Stage1_Object()
 	if (FAILED(Load_Stage1PlayerLoad()))
 		return E_FAIL;*/
 
-	if (FAILED(Load_Stage1BossLoad()))
+	//if (FAILED(Load_Stage1BossLoad()))
+	//	return E_FAIL;
+
+	if (FAILED(Load_Stage1MonsterLoad()))
 		return E_FAIL;
 
-	/*if (FAILED(Load_Stage1MonsterLoad()))
-		return E_FAIL;*/
+	//if (FAILED(Load_Stage1StaticUILoad()))
+	//	return E_FAIL;
 
-	if (FAILED(Load_Stage1StaticUILoad()))
-		return E_FAIL;
+	//if (FAILED(Load_Stage1UILoad()))
+	//	return E_FAIL;
 
-	if (FAILED(Load_Stage1UILoad()))
-		return E_FAIL;
-
-	if (FAILED(Load_Stage1EffectLoad()))
-		return E_FAIL;
+	//if (FAILED(Load_Stage1EffectLoad()))
+	//	return E_FAIL;
 
 	//if (FAILED(Load_Stage1TriggerLod()))
 	//	return E_FAIL;
@@ -519,6 +519,7 @@ HRESULT CLoader::Load_Stage1BossLoad()
 	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Weapon_ShieldBreaker", CShieldBreaker::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 	*/
+	return S_OK;
 }
 
 HRESULT CLoader::Load_Stage1MonsterLoad()
@@ -610,12 +611,12 @@ HRESULT CLoader::Load_Stage1MonsterLoad()
 
 
 	//////Monster Bastion_Sword
-	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Model_Monster_Bastion_Sword", CModel::Create(m_pDevice, m_pDeviceContext,
-	//	L"../bin/FBX/Monster/Bastion_Sword.fbx",CModel::TYPE_ANIM, true))))
-	//	return E_FAIL;
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Model_Monster_Bastion_Sword", CModel::Create(m_pDevice, m_pDeviceContext,
+		L"../bin/FBX/Monster/Bastion_Sword.fbx",CModel::TYPE_ANIM, true))))
+		return E_FAIL;
 
-	//if (FAILED(g_pGameInstance->Add_Prototype(L"Monster_Bastion_Sword", CMonster_Bastion_Sword::Create(m_pDevice, m_pDeviceContext))))
-	//	return E_FAIL;
+	if (FAILED(g_pGameInstance->Add_Prototype(L"Monster_Bastion_Sword", CMonster_Bastion_Sword::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
 
 	return S_OK;
 }

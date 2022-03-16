@@ -148,7 +148,7 @@ HRESULT CBoss_Bastion_Judicator::SetUp_Components()
 
 HRESULT CBoss_Bastion_Judicator::Set_Animation_FSM()
 {
-	CAnimation* pAnim = m_pModelCom->Get_Animation("SK_Bastion_Tier1_Full.ao|A_Run_Start_Swordsworn");
+	/*CAnimation* pAnim = m_pModelCom->Get_Animation("SK_Bastion_Tier1_Full.ao|A_Run_Start_Swordsworn");
 	if (FAILED(m_pAnimator->Insert_Animation(L"RunStart", L"Head", pAnim, true, false, false, ERootOption::XYZ)))
 		return E_FAIL;
 	pAnim = m_pModelCom->Get_Animation("SK_Bastion_Tier1_Full.ao|A_Run_Fwd_Swordsworn");
@@ -161,7 +161,7 @@ HRESULT CBoss_Bastion_Judicator::Set_Animation_FSM()
 	m_pAnimator->Set_UpAutoChangeAnimation(L"RunStart", L"RunLoop");
 	m_pAnimator->Set_UpAutoChangeAnimation(L"RunLoop", L"RunStop");
 
-	m_pAnimator->Change_Animation(L"RunStart");
+	m_pAnimator->Change_Animation(L"RunStart");*/
 
 	return S_OK;
 }
