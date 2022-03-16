@@ -21,6 +21,7 @@ private:
 	HRESULT Ready_Logo();
 	HRESULT Ready_Stage1();
 	HRESULT Ready_Test_JS();
+	HRESULT Ready_Test_YM();
 
 private:
 	//stage1
@@ -28,6 +29,7 @@ private:
 	HRESULT SetUp_Stage1_Object();
 	HRESULT Load_Stage1FBXLoad();
 	HRESULT Load_Stage1PlayerLoad();
+	HRESULT Load_Stage1BossLoad();
 	HRESULT Load_Stage1MonsterLoad();
 	HRESULT Load_Stage1StaticUILoad(); //툴에서 값 지정해주는 UI들은 여기서 미리 생성
 	HRESULT Load_Stage1UILoad(); //직접 생성

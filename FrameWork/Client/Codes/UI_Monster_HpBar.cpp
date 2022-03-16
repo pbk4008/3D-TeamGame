@@ -27,7 +27,7 @@ HRESULT CUI_Monster_HpBar::NativeConstruct(void* pArg)
 {
 	if (nullptr != pArg)
 	{
-		memcpy(&m_Desc, pArg, sizeof(UIACTIVEDESC));
+		memcpy(&m_Desc, pArg, sizeof(CUI::UIDESC));
 	}
 
 	if (FAILED(CGameObject::NativeConstruct(pArg)))
@@ -35,9 +35,9 @@ HRESULT CUI_Monster_HpBar::NativeConstruct(void* pArg)
 		return E_FAIL;
 	}
 
-	m_iObectTag = m_Desc.UIDesc.IDTag;
+	m_iObectTag = m_Desc.IDTag;
 
-	if (FAILED(m_pTexture->Change_Texture(m_Desc.UIDesc.TextureTag)))
+	if (FAILED(m_pTexture->Change_Texture(m_Desc.TextureTag)))
 		return E_FAIL;
 
 	/* 복제받은 데이터로 내가 원하는 값 세팅 */
@@ -57,10 +57,10 @@ _int CUI_Monster_HpBar::Tick(_double TimeDelta)
 	if (FAILED(CUI::Tick(TimeDelta)))
 		return -1;
 	
-	if (g_pGameInstance->getkeyDown(DIK_L))
+	/*if (g_pGameInstance->getkeyDown(DIK_L))
 	{
 		m_fGapX -= 0.1f;
-	}
+	}*/
 
 	return 0;
 }
@@ -99,10 +99,10 @@ HRESULT CUI_Monster_HpBar::Render()
 HRESULT CUI_Monster_HpBar::SetUp_Components()
 {
 	CVIBuffer_Trapezium::TRAPDESC Desc;
-	Desc.fAngle = m_Desc.UIDesc.fAngle;
+	Desc.fAngle = m_Desc.fAngle;
 	_tcscpy_s(Desc.ShaderFilePath, L"../../Reference/ShaderFile/Shader_UI_Bar.hlsl");
 
-	Desc.bMinus = m_Desc.UIDesc.bMinus;
+	Desc.bMinus = m_Desc.bMinus;
 
 	m_pTrapziumBuffer = g_pGameInstance->Clone_Component<CVIBuffer_Trapezium>(0, L"Proto_Component_Trapezium_UI", &Desc);
 

@@ -55,6 +55,8 @@ public:
 	const _bool Is_RootMotion() const;
 	const _bool Is_Finished() const;
 
+	void Add_TrackAcc(const _double& _dTrackAcc);
+
 public:
 	_int Update_CombinedTransformMatrix(const _double& _dDeltaTime);
 	void Lerp_Anim(vector<CAnimation*>& _vecAnimations);

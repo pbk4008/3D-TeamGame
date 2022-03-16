@@ -151,17 +151,28 @@ const _bool CAnimationController::Is_Finished() const
 	return m_isFinished;
 }
 
+void CAnimationController::Add_TrackAcc(const _double& _dTrackAcc)
+{
+	if (-1 != m_tBlendDesc.iNextAnimIndex)
+	{
+		vector<CAnimation*>& vecAnimations = m_pModel->Get_Animations();
+		vecAnimations[m_tBlendDesc.iNextAnimIndex]->Add_TrackAcc(_dTrackAcc);
+		return;
+	}
+	m_pCurAnim->Add_TrackAcc(_dTrackAcc);
+}
+
 _int CAnimationController::Update_CombinedTransformMatrix(const _double& _dDeltaTime)
 {
 	vector<CAnimation*>& vecAnimations = m_pModel->Get_Animations();
 
 	if (-1 != m_tBlendDesc.iNextAnimIndex)
 	{
-		if (!m_isChangeAnim)
-		{
-			vecAnimations[m_tBlendDesc.iNextAnimIndex]->Reset_Animation();
-			m_isChangeAnim = true;
-		}
+		//if (!m_isChangeAnim)
+		//{
+		//	vecAnimations[m_tBlendDesc.iNextAnimIndex]->Reset_Animation();
+		//	m_isChangeAnim = true;
+		//}
 
 		m_tBlendDesc.fChangeTime += (_float)_dDeltaTime;
 		m_tBlendDesc.fTweenTime = m_tBlendDesc.fChangeTime / m_tBlendDesc.fTakeTime;

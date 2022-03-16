@@ -1,12 +1,13 @@
 #pragma once
 
 #include "Base.h"
+#include "Client_Observer.h"
 
 BEGIN(Engine)
 class CRenderer;
 class CGameInstance;
 END
-	
+
 BEGIN(Client)
 
 class CMainApp final : public CBase
@@ -18,6 +19,10 @@ public:
 	HRESULT NativeConstruct();
 	_int Tick(_double TimeDelta);
 	HRESULT Render();
+
+private:
+	void Lock_Mouse();
+
 private:
 	ID3D11Device*			m_pDevice = nullptr;
 	ID3D11DeviceContext*	m_pDeviceContext = nullptr;
@@ -28,9 +33,13 @@ private:
 	_uint				m_iNumRender = 0;
 	_tchar				m_szFPS[MAX_PATH] = TEXT("");
 
+	_bool				m_isLockMouse = false;
 	_bool				m_isPause = false;
 	_bool				m_isRender = true;
 	_bool				m_bDeffered = false;
+
+private:
+	CClient_Observer*	m_pObserver = nullptr;
 
 private:
 	HRESULT SetUp_StartLevel(SCENEID eLevel);

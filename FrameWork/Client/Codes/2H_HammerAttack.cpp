@@ -20,6 +20,10 @@ _int C2H_HammerAttack::Tick(const _double& _dDeltaTime)
 	if (NO_EVENT != iProgress)
 		return iProgress;
 
+	_uint iCurKeyFrameIndex = m_pAnimationController->Get_CurKeyFrameIndex();
+	if (4 < iCurKeyFrameIndex && 10 > iCurKeyFrameIndex)
+		m_pSilvermane->Set_TrasceCamera(false);
+
 	return _int();
 }
 
@@ -31,7 +35,7 @@ _int C2H_HammerAttack::LateTick(const _double& _dDeltaTime)
 
 	return _int();
 }
-
+           
 HRESULT C2H_HammerAttack::Render()
 {
 	if (FAILED(__super::Render()))
@@ -52,6 +56,8 @@ HRESULT C2H_HammerAttack::ExitState()
 {
 	if (FAILED(__super::ExitState()))
 		return E_FAIL;
+
+	m_pSilvermane->Set_TrasceCamera(true);
 
 	return S_OK;
 }
@@ -96,6 +102,13 @@ _int C2H_HammerAttack::KeyCheck(const _double& _dDeltaTime)
 					return -1;
 				return STATE_CHANGE;
 			}
+		}
+
+		if (g_pGameInstance->getkeyPress(DIK_Q))
+		{
+			if (FAILED(m_pStateController->Change_State(L"Shield_BlockStart")))
+				return E_FAIL;
+			return STATE_CHANGE;
 		}
 
 		if (g_pGameInstance->getkeyPress(DIK_LSHIFT))

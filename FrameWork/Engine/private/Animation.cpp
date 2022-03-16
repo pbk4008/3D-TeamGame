@@ -196,6 +196,11 @@ void CAnimation::Reset_Animation()
 		pChannel->Set_CurrentKeyFrameIndex(0);
 }
 
+void CAnimation::Add_TrackAcc(const _double& _dTrackAcc)
+{
+	m_TrackPositionAcc += _dTrackAcc;
+}
+
 CAnimation * CAnimation::Create(char * pName, _double Duration, _double PlaySpeed, const _int _iIndex)
 {
 	CAnimation*		pInstance = new CAnimation();
