@@ -169,12 +169,20 @@ HRESULT CAnimator::Insert_AnyEntryAnimation(_uint iTag, CAnimation* pAnim, _bool
 	return S_OK;
 }
 
-const _uint CAnimator::Get_CurrentAnim()
+const _uint CAnimator::Get_CurrentAnimNode()
 {
 	if (!m_pCulAnimNode)
 		return -1;
 
 	return m_pCulAnimNode->Get_Index();
+}
+
+CAnimation* CAnimator::Get_CurrentAnimation()
+{
+	if (!m_pCulAnimNode)
+		return nullptr;
+
+	return m_pCulAnimNode->Get_Animation();
 }
 
 HRESULT CAnimator::Change_Animation(_uint iTag)
