@@ -55,7 +55,7 @@ HRESULT CShield_Walk::ExitState()
 	if (FAILED(__super::ExitState()))
 		return E_FAIL;
 
-	//m_pSilvermane->Set_Move(false);
+	m_pSilvermane->Set_Move(false);
 
 	return S_OK;
 }

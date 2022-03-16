@@ -36,11 +36,10 @@ _int CStateController::Tick(const _double& _dDeltaTime)
 {
 	if (!m_pCurState)
 		return -1;
+
 	_int iProgress = m_pCurState->Tick(_dDeltaTime);
 	if (0 != iProgress)
-	{
 		return iProgress;
-	}
 
 	return _int();
 }
@@ -49,25 +48,34 @@ _int CStateController::LateTick(const _double& _dDeltaTime)
 {
 	if (!m_pCurState)
 		return -1;
+	if (m_isChange)
+		return NO_EVENT;
+
 	_int iProgress = m_pCurState->LateTick(_dDeltaTime);
 	if (0 != iProgress)
-	{
 		return iProgress;
-	}
 
 	return _int();
 }
 
 HRESULT CStateController::Render()
 {
-	if (FAILED(m_pCurState->Render()))
-		return E_FAIL;
-
+#ifdef _DEBUG
 	if (m_pCurState)
 	{
 		if (FAILED(g_pGameInstance->Render_Font(TEXT("Font_Arial"), XMVectorSet(1.f, 0.0f, 0.f, 1.f), m_wstrCurStateTag.c_str(), _float2(0.f, 260.f), _float2(0.8f, 0.8f))))
 			return E_FAIL;
 	}
+#endif // _DEBUG
+
+	if (m_isChange)
+	{
+		m_isChange = false;
+		return NO_EVENT;
+	}
+
+	if (FAILED(m_pCurState->Render()))
+		return E_FAIL;
 
 	return S_OK;
 }
@@ -136,6 +144,8 @@ HRESULT CStateController::Change_State(const wstring& _wstrStateTag, const EChan
 
 		m_wstrPreStateTag = m_wstrCurStateTag;
 		m_wstrCurStateTag = _wstrStateTag;
+
+		m_isChange = true;
 	}
 
 	return S_OK;

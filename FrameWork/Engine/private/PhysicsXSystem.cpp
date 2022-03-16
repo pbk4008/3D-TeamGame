@@ -4,6 +4,7 @@
 #include "GameObject.h"
 
 #include "CharacterController.h"
+#include "Transform.h"
 
 CPhysicsXSystem::CPhysicsXSystem()
 	: m_pFoundation(nullptr)
@@ -33,7 +34,12 @@ HRESULT CPhysicsXSystem::Init_PhysicsX()
 	if (!m_pFoundation)
 		return E_FAIL;
 
-	m_pPhysics = PxCreatePhysics(PX_PHYSICS_VERSION, *m_pFoundation, PxTolerancesScale(), true);
+	//m_pPvd = PxCreatePvd(*m_pFoundation);
+	//m_pPvdTransport = PxDefaultPvdSocketTransportCreate(PVD_HOST, PVD_PORT, PVD_DEFAULT_TIMEOUT);
+	//if (!m_pPvd->connect(*m_pPvdTransport, PxPvdInstrumentationFlag::eALL))
+	//	return E_FAIL;
+
+	m_pPhysics = PxCreatePhysics(PX_PHYSICS_VERSION, *m_pFoundation, PxTolerancesScale(), true/*, m_pPvd*/);
 	if (!m_pPhysics)
 		return E_FAIL;
 
@@ -57,6 +63,13 @@ HRESULT CPhysicsXSystem::Init_PhysicsX()
 	//m_pScene->setVisualizationParameter(PxVisualizationParameter::eACTOR_AXES, 2.f); // ±âÁî¸ð
 #endif // _DEBUG
 
+	PxPvdSceneClient* pvdClient = m_pScene->getScenePvdClient();
+	if (pvdClient)
+	{
+		pvdClient->setScenePvdFlag(PxPvdSceneFlag::eTRANSMIT_CONSTRAINTS, true);
+		pvdClient->setScenePvdFlag(PxPvdSceneFlag::eTRANSMIT_CONTACTS, true);
+		pvdClient->setScenePvdFlag(PxPvdSceneFlag::eTRANSMIT_SCENEQUERIES, true);
+	}
 
 	return S_OK;
 }
@@ -187,7 +200,9 @@ HRESULT CPhysicsXSystem::Create_CharacterController(CCharacterController* _pCont
 	controllerDesc.upDirection = ToPxVec3(tCharacterControllerDesc.vUpDirection);
 	controllerDesc.reportCallback = m_pControllerHitReport;
 
-	_float3 vPosition = tCharacterControllerDesc.vPosition;
+	_vector svPosition =_pController->m_pOwnerTransform->Get_State(CTransform::STATE_POSITION);
+	svPosition += XMLoadFloat3(&tCharacterControllerDesc.vPosition);
+	_float3 vPosition; XMStoreFloat3(&vPosition, svPosition);
 	controllerDesc.position = PxExtendedVec3(vPosition.x, vPosition.y, vPosition.z);
 
 	PxController* pPxController = m_pControllerManager->createController(controllerDesc);
@@ -270,10 +285,20 @@ void CPhysicsXSystem::Free()
 	Safe_Delete(m_pControllerHitReport);
 	Safe_Delete(m_pControllerBehaviorCallback);
 
+
+	if (m_pPvd)
+		m_pPvd->disconnect();
+
+
+
 	m_pScene->release();
 	m_pDispatcher->release();
 	m_pCooking->release();
 	m_pPhysics->release();
+	if (m_pPvd)
+		m_pPvd->release();
+	if (m_pPvdTransport)
+		m_pPvdTransport->release();
 	m_pFoundation->release();
 	//PX_RELEASE(m_pScene);
 	//PX_RELEASE(m_pDispatcher);

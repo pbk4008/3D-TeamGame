@@ -9,10 +9,12 @@ class CTransform;
 class CModel;
 class CAnimation;
 class CChannel;
+class CCharacterController;
 
 class ENGINE_DLL CAnimationController final : public CComponent
 {
 public:
+	enum class EType { Transform, CharacterController, Max };
 	typedef struct tagAnimBlendDesc
 	{
 		_bool isLoopNextAnim = true;
@@ -30,7 +32,7 @@ private:
 public:
 	virtual HRESULT NativeConstruct_Prototype() override;
 	virtual HRESULT NativeConstruct(void* _pArg = nullptr) override;
-	virtual _int Tick(const _double& _dDeltaTime);
+	virtual _int Tick(const _double& _dDeltaTime, const EType _eType = EType::Transform);
 	virtual _int LateTick(const _double& _dDeltaTime);
 	virtual HRESULT Render();
 
@@ -66,6 +68,7 @@ public:
 	HRESULT SetUp_NextAnimation(class CAnimNode* pChangeAnimNode);
 	HRESULT Change_Anim(const string& _strAnimTag, _bool _isLoop = true);
 	const _int Move_Transform(const _double& _dDeltaTime);
+	const _int Add_TransformVelocity(const _double& _dDeltaTime);
 	void Reset_Animation();
 	
 	void Render_Debug();
@@ -98,6 +101,7 @@ private:
 
 	_float m_fPlaySpeed = 1.f;
 	_float m_fMoveSpeed = 1.f;
+	_float m_fFixedBoneHoldTime = 0.f;
 
 	_matrix m_smatPivot = XMMatrixIdentity();
 

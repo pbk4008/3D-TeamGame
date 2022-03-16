@@ -11,8 +11,6 @@ HRESULT C1H_SwordAttackNormalR2_ReleaseStab::NativeConstruct(void* _pArg)
 	if (FAILED(__super::NativeConstruct(_pArg)))
 		return E_FAIL;
 
-	m_iCutIndex = 25;
-
 	return S_OK;
 }
 
@@ -22,6 +20,7 @@ _int C1H_SwordAttackNormalR2_ReleaseStab::Tick(const _double& _dDeltaTime)
 	if (NO_EVENT != iProgress)
 		return iProgress;
 
+	m_iCutIndex = 30;
 	if (m_pAnimationController->Is_Finished())
 	{
 		if (FAILED(m_pStateController->Change_State(L"Idle")))
@@ -63,6 +62,8 @@ HRESULT C1H_SwordAttackNormalR2_ReleaseStab::EnterState()
 		m_pSilvermane->Set_WeaponFixedBone("weapon_r");
 	}
 
+
+	m_iCutIndex = 16;
 	return S_OK;
 }
 

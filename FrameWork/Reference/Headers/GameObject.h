@@ -47,6 +47,8 @@ public:
 	void setActive(_bool bActive);
 	_bool getActive() { return m_bActive; }
 	_int getTag() { return m_iObectTag; }
+
+	CTransform* Get_Transform() const;
 protected:
 	ID3D11Device* m_pDevice;
 	ID3D11DeviceContext*	m_pDeviceContext;
@@ -61,7 +63,7 @@ protected:
 	virtual HRESULT SetUp_Components(_uint iLevelIndex, const wstring& pPrototypeTag, const wstring& pComponentTag, CComponent** ppOut, void* pArg = nullptr);
 	virtual HRESULT SetUp_Components(const wstring& pComponentTag, CComponent* pClone);
 public:
-	virtual CGameObject* Clone(void* pArg) = 0; 
+	virtual CGameObject* Clone(void* pArg) = 0;
 	virtual void Free() override;
 };
 

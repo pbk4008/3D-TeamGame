@@ -25,10 +25,11 @@ _int CShield_SupermanPunchStraight::Tick(const _double& _dDeltaTime)
 		return iProgress;
 
 	Add_PlusAngle(EDir::Forward, _dDeltaTime);
-
 	if (m_pAnimationController->Is_Finished())
 	{
-		m_pStateController->Change_State(L"Shield_BlockEnd");
+		m_pSilvermane->Set_EquipShield(false);
+		if(FAILED(m_pStateController->Change_State(L"Idle")))
+			return -1;
 		return STATE_CHANGE;
 	}
 
@@ -62,6 +63,7 @@ HRESULT CShield_SupermanPunchStraight::EnterState()
 	m_pAnimationController->Set_RootMotion(true, true);
 
 	m_pSilvermane->Set_EquipShield(true);
+	m_pSilvermane->Set_TrasceCamera(true);
 	return S_OK;
 }
 
@@ -70,6 +72,7 @@ HRESULT CShield_SupermanPunchStraight::ExitState()
 	if (FAILED(__super::ExitState()))
 		return E_FAIL;
 
+	m_pSilvermane->Set_TrasceCamera(false);
 	return S_OK;
 }
 

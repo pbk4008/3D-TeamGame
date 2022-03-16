@@ -13,8 +13,6 @@ HRESULT C2H_HammerAttackR1_03::NativeConstruct(void* _pArg)
 	if (FAILED(__super::NativeConstruct(_pArg)))
 		return E_FAIL;
 
-	m_iCutIndex = 40;
-
 	return S_OK;
 }
 
@@ -59,7 +57,8 @@ HRESULT C2H_HammerAttackR1_03::EnterState()
 		return E_FAIL;
 	m_pAnimationController->Set_RootMotion(true, true);
 
-	m_iCutIndex = 50;
+	m_iCutIndex = 40;
+	m_pAnimationController->Set_PlaySpeed(1.2f);
 	return S_OK;
 }
 
@@ -68,6 +67,7 @@ HRESULT C2H_HammerAttackR1_03::ExitState()
 	if (FAILED(__super::ExitState()))
 		return E_FAIL;
 
+	m_pAnimationController->Set_PlaySpeed(1.f);
 	return S_OK;
 }
 
