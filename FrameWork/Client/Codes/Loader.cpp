@@ -15,7 +15,7 @@
 #include "Monster_EarthAberrant.h"
 #include "Monster_BronzeAnimus.h"
 #include "Monster_Bastion_Sword.h"
-
+#include "Animator.h"
 
 #pragma region TestScene_JS
 
@@ -329,6 +329,9 @@ HRESULT CLoader::SetUp_Stage1_Prototype()
 		return E_FAIL;
 
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Proto_Component_AnimationController", CAnimationController::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Proto_Component_Animator", CAnimator::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 
 	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Environment", CEnvironment::Create(m_pDevice, m_pDeviceContext))))
@@ -903,6 +906,8 @@ HRESULT CLoader::Ready_Test_YM()
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_TEST_YM, L"Com_StateController", CStateController::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_TEST_YM, L"Com_CharacterController", CCharacterController::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_TEST_YM, L"Proto_Component_Animator", CAnimator::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 #pragma endregion
 #pragma region 오브젝트

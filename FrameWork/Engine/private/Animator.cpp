@@ -95,7 +95,7 @@ HRESULT CAnimator::Insert_Animation(_uint iTag, _uint iConnectTag, CAnimation* p
 	m_vecAnimNode.emplace_back(iTag);
 	
 	//AnimNode ¿¬°á
-	if (FAILED(Connect_Animation(iTag, iConnectTag, bDouble)))
+	if (FAILED(Connect_Animation(iConnectTag, pNewNode, bDouble)))
 		return E_FAIL;
 
 	return S_OK;

@@ -6,7 +6,9 @@
 #include "Loading.h"
 
 CMainApp::CMainApp()
-{	
+	:m_pObserver(CClient_Observer::GetInstance()) 
+{
+	Safe_AddRef(m_pObserver);
 }
 
 HRESULT CMainApp::NativeConstruct()
@@ -235,6 +237,7 @@ void CMainApp::Free()
 	//if (FAILED(CDebugSystem::DestroyInstance()))
 	//	MSGBOX("CDebugSystem Destroy Fail");
 
+	Safe_Release(m_pObserver);
 	Safe_Release(m_pRenderer);
 
 	Safe_Release(m_pDeviceContext);

@@ -248,9 +248,9 @@
     <ClInclude Include="..\Headers\2H_HammerJogRightPivot180.h" />
     <ClInclude Include="..\Headers\2H_HammerJogRightStart.h" />
     <ClInclude Include="..\Headers\BackGround.h" />
-    <ClInclude Include="..\Headers\Bastion_2HSword_Idle.h" />
     <ClInclude Include="..\Headers\Camera_Silvermane.h" />
     <ClInclude Include="..\Headers\Camera_Debug.h" />
+    <ClInclude Include="..\Headers\Client_Observer.h" />
     <ClInclude Include="..\Headers\Client_Trigger.h" />
     <ClInclude Include="..\Headers\Effect_DashDust.h" />
     <ClInclude Include="..\Headers\Environment.h" />
@@ -295,7 +295,6 @@
     <ClInclude Include="..\Headers\Silvermane_SprintFwdStart.h" />
     <ClInclude Include="..\Headers\Silvermane_SprintFwdStop.h" />
     <ClInclude Include="..\Headers\Stage1.h" />
-    <ClInclude Include="..\Headers\State_Monster.h" />
     <ClInclude Include="..\Headers\State_Silvermane.h" />
     <ClInclude Include="..\Headers\TestObj.h" />
     <ClInclude Include="..\Headers\TestScene_JS.h" />
@@ -381,7 +380,7 @@
     <ClCompile Include="..\Codes\2H_Hammer_EquipOn.cpp" />
     <ClCompile Include="..\Codes\BackGround.cpp" />
     <ClCompile Include="..\Codes\1H_SwordAttackNormalR2_Start.cpp" />
-    <ClCompile Include="..\Codes\Bastion_2HSword_Idle.cpp" />
+    <ClCompile Include="..\Codes\Client_Observer.cpp" />
     <ClCompile Include="..\Codes\Client_Trigger.cpp" />
     <ClCompile Include="..\Codes\Fury.cpp" />
     <ClCompile Include="..\Codes\Monster_Bastion_2HSword.cpp" />
@@ -429,7 +428,6 @@
     <ClCompile Include="..\Codes\Silvermane_SprintFwdStart.cpp" />
     <ClCompile Include="..\Codes\Silvermane_SprintFwdStop.cpp" />
     <ClCompile Include="..\Codes\Stage1.cpp" />
-    <ClCompile Include="..\Codes\State_Monster.cpp" />
     <ClCompile Include="..\Codes\State_Silvermane.cpp" />
     <ClCompile Include="..\Codes\TestObj.cpp" />
     <ClCompile Include="..\Codes\TestScene_JS.cpp" />

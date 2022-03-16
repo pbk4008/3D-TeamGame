@@ -1,12 +1,13 @@
 #pragma once
 
 #include "Base.h"
+#include "Client_Observer.h"
 
 BEGIN(Engine)
 class CRenderer;
 class CGameInstance;
 END
-	
+
 BEGIN(Client)
 
 class CMainApp final : public CBase
@@ -31,6 +32,9 @@ private:
 	_bool				m_isPause = false;
 	_bool				m_isRender = true;
 	_bool				m_bDeffered = false;
+
+private:
+	CClient_Observer*	m_pObserver = nullptr;
 
 private:
 	HRESULT SetUp_StartLevel(SCENEID eLevel);

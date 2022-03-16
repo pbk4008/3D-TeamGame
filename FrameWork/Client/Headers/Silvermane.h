@@ -70,7 +70,9 @@ private:
 
 private: /* For.Weapon */
 	CWeapon* m_pCurWeapon = nullptr;
+	CWeapon* m_pShield = nullptr;
 	_bool m_isEquipWeapon = false;
+	_bool m_isEquipShield = false;
 	unordered_map<wstring, CWeapon*> m_umapWeapons;
 
 public:
