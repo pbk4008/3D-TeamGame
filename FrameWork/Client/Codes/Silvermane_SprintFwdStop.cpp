@@ -2,7 +2,7 @@
 #include "Silvermane_SprintFwdStop.h"
 
 CSilvermane_SprintFwdStop::CSilvermane_SprintFwdStop(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
-	: CState_Silvermane(_pDevice, _pDeviceContext)
+	: CSilvermane_Sprint(_pDevice, _pDeviceContext)
 {
 }
 
@@ -76,7 +76,8 @@ _int CSilvermane_SprintFwdStop::KeyCheck(const _double& _dDeltaTime)
 	{
 		if( g_pGameInstance->getkeyPress(DIK_W) ||
 			g_pGameInstance->getkeyPress(DIK_A) ||
-			g_pGameInstance->getkeyPress(DIK_D))
+			g_pGameInstance->getkeyPress(DIK_D) ||
+			g_pGameInstance->getkeyPress(DIK_S))
 		{
 			if(FAILED(m_pStateController->Change_State(L"SprintFwdStart")))
 				return -1;

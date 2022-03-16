@@ -144,11 +144,7 @@ HRESULT CRenderer::Draw_RenderGroup()
 		if (FAILED(m_pTonemapping->Render_HDR(m_pTargetMgr)))
 			return E_FAIL;
 	}
-	//else
-	//{
-	//	if (FAILED(Render_Blend()))
-	//		return E_FAIL;
-	//}
+
 	m_pTonemapping->Set_HDR(m_bHDR);
 	if (FAILED(m_pTonemapping->Blend_HDR(m_pTargetMgr)))
 		return E_FAIL;
@@ -158,6 +154,9 @@ HRESULT CRenderer::Draw_RenderGroup()
 		return E_FAIL;
 
 	if (FAILED(Render_UI()))
+		return E_FAIL;
+
+	if (FAILED(Render_UI_Active()))
 		return E_FAIL;
 
 #ifdef _DEBUG

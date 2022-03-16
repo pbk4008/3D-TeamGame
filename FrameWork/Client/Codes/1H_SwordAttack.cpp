@@ -40,6 +40,22 @@ HRESULT C1H_SwordAttack::Render()
 	return S_OK;
 }
 
+HRESULT C1H_SwordAttack::EnterState()
+{
+	if (FAILED(__super::EnterState()))
+		return E_FAIL;
+
+	return S_OK;
+}
+
+HRESULT C1H_SwordAttack::ExitState()
+{
+	if (FAILED(__super::ExitState()))
+		return E_FAIL;
+
+	return S_OK;
+}
+
 _int C1H_SwordAttack::KeyCheck(const _double& _dDeltaTime)
 {
 	_int iProgress = __super::KeyCheck(_dDeltaTime);
@@ -80,6 +96,13 @@ _int C1H_SwordAttack::KeyCheck(const _double& _dDeltaTime)
 					return -1;
 				return STATE_CHANGE;
 			}
+		}
+
+		if (g_pGameInstance->getkeyPress(DIK_Q))
+		{
+			if (FAILED(m_pStateController->Change_State(L"Shield_BlockStart")))
+				return E_FAIL;
+			return STATE_CHANGE;
 		}
 
 		if (g_pGameInstance->getkeyPress(DIK_LSHIFT))

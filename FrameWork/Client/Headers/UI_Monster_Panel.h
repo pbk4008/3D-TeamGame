@@ -37,7 +37,7 @@ public:
 	void Set_TargetWorldMatrix(_matrix matTarget) { XMStoreFloat4x4(&m_TargetMatrix, matTarget);}
 
 private:
-	PANELDESC m_Desc;
+	PANELDESC m_PanelDesc;
 	_float4x4 m_TargetMatrix;
 
 	class CUI_Monster_Back* m_pUIBack = nullptr;

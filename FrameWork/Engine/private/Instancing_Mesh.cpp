@@ -123,7 +123,6 @@ HRESULT CInstancing_Mesh::Init_StaticMesh(const wstring& pMeshFilePath)
 	CSaveManager* pInstance = GET_INSTANCE(CSaveManager);
 
 	CSaveManager::STATICDATA pData;
-	ZeroMemory(&pData, sizeof(pData));
 
 	if (FAILED(pInstance->Load_StaticModel(pData,pMeshFilePath)))
 		return E_FAIL;
@@ -184,7 +183,6 @@ HRESULT CInstancing_Mesh::Create_Material(const CSaveManager::MTRLDATA& pData)
 			wstrMaterialPath += pTextureData.pTextureName;
 			pMaterial->Set_Texture((TEXTURETYPE)pTextureData.iType, pTextureData.pTextureName, wstrMaterialPath);
 		}
-
 	}
 	m_vecMaterials.emplace_back(pMaterial);
 	Safe_AddRef(pMaterial);
@@ -258,7 +256,6 @@ void CInstancing_Mesh::Free()
 
 	Safe_Release(m_pVBInstance);
 
-
 	for (auto& pMtrlMeshContainer : m_vecMeshContainers)
 	{
 		for (auto& pMeshContainer : pMtrlMeshContainer)
@@ -269,5 +266,6 @@ void CInstancing_Mesh::Free()
 
 	for (auto& pMaterial : m_vecMaterials)
 		Safe_Release(pMaterial);
+
 	m_vecMaterials.clear();
 }

@@ -1,11 +1,12 @@
 #include "AnimNode.h"
+#include "Animator.h"
+
 
 CAnimNode::CAnimNode()
 	: m_pAnim(nullptr)
 	, m_bLoop(false)
 	, m_iIndex(-1)
 	, m_iAutoIndex(-1)
-	, m_wstrName(L"")
 	, m_bRootAnim(false)
 	, m_bTransformMove(false)
 	, m_bTmpLoop(false)
@@ -13,27 +14,20 @@ CAnimNode::CAnimNode()
 {
 }
 
-HRESULT CAnimNode::NativeConstruct_Prototype(const wstring& pName, CAnimation* pAnim, _bool bLoop, _uint iIndex, _bool bRootAnim, _bool bTransformMove, ERootOption eOption)
+HRESULT CAnimNode::NativeConstruct_Prototype(_uint iTag, CAnimation* pAnim, _bool bLoop,  _bool bRootAnim, _bool bTransformMove, ERootOption eOption)
 {
-	m_wstrName = pName;
 	m_pAnim = pAnim;
 	m_bLoop = bLoop;
-	m_iIndex = iIndex;
+	m_iIndex = iTag;
 	m_bRootAnim = bRootAnim;
 	m_bTransformMove = bTransformMove;
 	m_eRootOption = eOption;
+
 	return S_OK;
 }
 
-_bool CAnimNode::Check_AnimNodeName(const wstring& pName)
-{
-	if (pName==m_wstrName)
-		return true;
 
-	return false;
-}
-
-CAnimNode* CAnimNode::Check_ConnectNode(const wstring& pName)
+CAnimNode* CAnimNode::Check_ConnectNode(_uint iIndex)
 {
 	if (Is_LinkEmpty())
 		return nullptr;
@@ -42,13 +36,12 @@ CAnimNode* CAnimNode::Check_ConnectNode(const wstring& pName)
 
 	for (auto& pNode : m_vecAnimNode)
 	{
-		_bool bCheck = pNode->Check_AnimNodeName(pName);
-		if (bCheck)
+		if(pNode->m_iIndex == iIndex)
 		{
 			pFind = pNode;
 			break;
 		}
-		pFind = pNode->Check_ConnectNode(pName);
+		pFind = pNode->Check_ConnectNode(iIndex);
 		if (pFind)
 			break;
 	}
@@ -74,10 +67,49 @@ void CAnimNode::Change_Loop(_bool bChange)
 	m_bLoop = bChange;
 }
 
-CAnimNode* CAnimNode::Create(const wstring& pName, CAnimation* pAnim, _bool bLoop, _uint iIndex, _bool bRootAnim, _bool bTransformMove, ERootOption eOption)
+HRESULT CAnimNode::Delete_Node(vector<_uint>& vecNode)
+{
+	_bool bCheck = false;
+	for (auto iter = vecNode.begin(); iter != vecNode.end(); iter++)
+	{
+		if (*iter == m_iIndex)
+		{
+			bCheck = true;
+			if (iter == vecNode.end() - 1)
+			{
+				vecNode.pop_back();
+				break;
+			}
+			vecNode.erase(iter);
+			break;
+		}
+	}
+	if (!bCheck)
+		return S_OK;
+
+	for (auto& pNode : m_vecAnimNode)
+	{
+		for (auto& pNum : vecNode)
+		{
+			if (pNode)
+			{
+				if (pNum == pNode->m_iIndex)
+				{
+					pNode->Delete_Node(vecNode);
+					Safe_Release(pNode);
+				}
+			}
+		}
+	}
+	m_vecAnimNode.clear();
+
+	return S_OK;
+}
+
+CAnimNode* CAnimNode::Create(_uint iTag, CAnimation* pAnim, _bool bLoop, _bool bRootAnim, _bool bTransformMove, ERootOption eOption)
 {
 	CAnimNode* pInstance = new CAnimNode();
-	if (FAILED(pInstance->NativeConstruct_Prototype(pName, pAnim, bLoop, iIndex,bRootAnim, bTransformMove,eOption)))
+	if (FAILED(pInstance->NativeConstruct_Prototype(iTag, pAnim, bLoop, bRootAnim, bTransformMove,eOption)))
 	{
 		MSGBOX("CAnimNode Create Fail");
 		Safe_Release(pInstance);
@@ -87,8 +119,5 @@ CAnimNode* CAnimNode::Create(const wstring& pName, CAnimation* pAnim, _bool bLoo
 
 void CAnimNode::Free()
 {
-	for (auto& pNode : m_vecAnimNode)
-		Safe_Release(pNode);
-
-	m_vecAnimNode.clear();
+	
 }

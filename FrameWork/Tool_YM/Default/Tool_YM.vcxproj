@@ -211,6 +211,7 @@
     <ClInclude Include="..\Code\Tool_Main.h" />
     <ClInclude Include="..\Code\Tool_Mouse.h" />
     <ClInclude Include="..\Code\Tool_Struct.h" />
+    <ClInclude Include="..\Code\Trigger.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="MainFrm.h" />
     <ClInclude Include="pch.h" />
@@ -239,6 +240,7 @@
     <ClCompile Include="..\Code\Tab_Changer.cpp" />
     <ClCompile Include="..\Code\Tool_Main.cpp" />
     <ClCompile Include="..\Code\Tool_Mouse.cpp" />
+    <ClCompile Include="..\Code\Trigger.cpp" />
     <ClCompile Include="MainFrm.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

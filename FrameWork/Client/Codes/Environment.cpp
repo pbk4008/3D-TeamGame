@@ -6,7 +6,6 @@ CEnvironment::CEnvironment()
 	: m_pNaviMesh(nullptr)
 	, m_pInstanceMesh(nullptr)
 {
-	ZeroMemory(&m_tEnvironmentDesc, sizeof(ENVIRONMENTDESC));
 }
 
 CEnvironment::CEnvironment(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
@@ -14,7 +13,6 @@ CEnvironment::CEnvironment(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceCo
 	, m_pInstanceMesh(nullptr)
 	, m_pNaviMesh(nullptr)
 {
-	ZeroMemory(&m_tEnvironmentDesc, sizeof(ENVIRONMENTDESC));
 }
 
 CEnvironment::CEnvironment(const CEnvironment& rhs)

@@ -5,8 +5,10 @@
 #include "MainCamera_Ortho.h"
 #include "Loading.h"
 
+CClient_Observer* g_pObserver = nullptr;
+
 CMainApp::CMainApp()
-{	
+{
 }
 
 HRESULT CMainApp::NativeConstruct()
@@ -38,11 +40,15 @@ HRESULT CMainApp::NativeConstruct()
 	if (FAILED(SetUp_StartLevel(SCENEID::SCENE_LOGO)))
 		return E_FAIL;
 
+	g_pObserver = GET_INSTANCE(CClient_Observer);
+
 	return S_OK;
 }
 
 _int CMainApp::Tick(_double TimeDelta)
 {
+	Lock_Mouse();
+
 	m_TimeAcc += TimeDelta;
 
 	g_pGameInstance->Update_InputDev();
@@ -110,6 +116,39 @@ HRESULT CMainApp::Render()
 
 	m_isRender = false;
 	return S_OK;
+}
+
+void CMainApp::Lock_Mouse()
+{
+	if (g_pGameInstance->getkeyDown(DIK_PGDN))
+	{
+		m_isLockMouse = !m_isLockMouse;
+	}
+
+	if (m_isLockMouse)
+	{
+		RECT rcClip;
+		POINT p1, p2;
+		GetClientRect(g_hWnd, &rcClip);
+		p1.x = rcClip.left;
+		p1.y = rcClip.top;
+		p2.x = rcClip.right;
+		p2.y = rcClip.bottom;
+
+		ClientToScreen(g_hWnd, &p1);
+		ClientToScreen(g_hWnd, &p2);
+
+		rcClip.left = p1.x;
+		rcClip.top = p1.y;
+		rcClip.right = p2.x;
+		rcClip.bottom = p2.y;
+
+		ClipCursor(&rcClip);
+	}
+	else
+	{
+		ClipCursor(NULL);
+	}
 }
 
 HRESULT CMainApp::SetUp_StartLevel(SCENEID eLevel)
@@ -234,6 +273,8 @@ void CMainApp::Free()
 	//CDebugSystem::Stop_DebugSystem();
 	//if (FAILED(CDebugSystem::DestroyInstance()))
 	//	MSGBOX("CDebugSystem Destroy Fail");
+	
+	RELEASE_INSTANCE(CClient_Observer);
 
 	Safe_Release(m_pRenderer);
 

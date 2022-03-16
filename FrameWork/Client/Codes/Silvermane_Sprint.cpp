@@ -66,6 +66,13 @@ _int CSilvermane_Sprint::KeyCheck(const _double& _dDeltaTime)
 	if (NO_EVENT != iProgress)
 		return iProgress;
 
+	if (g_pGameInstance->getkeyDown(DIK_Q))
+	{
+		if (FAILED(m_pStateController->Change_State(L"Shield_BlockStart")))
+			return E_FAIL;
+		return STATE_CHANGE;
+	}
+
 	if (g_pGameInstance->getkeyDown(DIK_SPACE))
 	{
 		if (g_pGameInstance->getkeyPress(DIK_A))
@@ -111,11 +118,17 @@ _int CSilvermane_Sprint::KeyCheck(const _double& _dDeltaTime)
 			return STATE_CHANGE;
 			break;
 		case CWeapon::EType::Hammer_2H:
-			if (FAILED(m_pStateController->Change_State(L"2H_HammerSprintAttack")))
+			if (FAILED(m_pStateController->Change_State(L"2H_HammerAttackSprintR1")))
 				return -1;
 			return STATE_CHANGE;
 			break;
 		}
+	}
+	if (g_pGameInstance->getMouseKeyDown(CInputDev::MOUSESTATE::MB_RBUTTON))
+	{
+		if (FAILED(m_pStateController->Change_State(L"Shield_SupermanPunchStraight")))
+			return -1;
+		return STATE_CHANGE;
 	}
 
 	return _int();

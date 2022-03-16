@@ -54,6 +54,8 @@ HRESULT CTextureManager::Init_Texture(ID3D11Device* pDevice, const wstring& pTex
 		{
 			hr = LoadFromTGAFile(szFullPath, nullptr, tImage);
 
+			/*DirectX::ScratchImage MipChain;
+			hr = DirectX::GenerateMipMaps(tImage.GetImages(), tImage.GetImageCount(), tImage.GetMetadata(), TEX_FILTER_FANT, 0, MipChain);
 			//DirectX::ScratchImage MipChain;
 			/*hr = DirectX::GenerateMipMaps(tImage.GetImages(), tImage.GetImageCount(), tImage.GetMetadata(), TEX_FILTER_FANT, 0, MipChain);
 			if (FAILED(hr))

@@ -70,6 +70,9 @@
     <Filter Include="04.Tool_Object\Mouse">
       <UniqueIdentifier>{30654af0-d0ce-4141-afe3-edd8532da52c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="04.Tool_Object\Trigger">
+      <UniqueIdentifier>{5c57b0be-f5cc-4220-b9ee-9b766041eff8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -159,6 +162,9 @@
     <ClInclude Include="..\Code\NavSphere.h">
       <Filter>04.Tool_Object\NavSphere</Filter>
     </ClInclude>
+    <ClInclude Include="..\Code\Trigger.h">
+      <Filter>04.Tool_Object\Trigger</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -229,6 +235,9 @@
     </ClCompile>
     <ClCompile Include="..\Code\NavSphere.cpp">
       <Filter>04.Tool_Object\NavSphere</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Trigger.cpp">
+      <Filter>04.Tool_Object\Trigger</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

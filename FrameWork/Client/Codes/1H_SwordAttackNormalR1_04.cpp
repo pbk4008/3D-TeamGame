@@ -26,7 +26,7 @@ _int C1H_SwordAttackNormalR1_04::Tick(const _double& _dDeltaTime)
 
 	if (m_pAnimationController->Is_Finished())
 	{
-		m_pStateController->Change_State(L"Idle");
+		m_pStateController->Change_State(L"1H_SwordIdle");
 		return STATE_CHANGE;
 	}
 

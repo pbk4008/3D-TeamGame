@@ -66,6 +66,13 @@ _int C1H_SwordJog::KeyCheck(const _double& _dDeltaTime)
 	if (NO_EVENT != iProgress)
 		return iProgress;
 
+	if (g_pGameInstance->getkeyDown(DIK_Q))
+	{
+		if (FAILED(m_pStateController->Change_State(L"Shield_BlockStart")))
+			return E_FAIL;
+		return STATE_CHANGE;
+	}
+
 	if (g_pGameInstance->getkeyDown(DIK_SPACE))
 	{
 		if (g_pGameInstance->getkeyPress(DIK_A))

@@ -16,6 +16,9 @@ public:
 	virtual _int LateTick(const _double& _dDeltaTime);
 	virtual HRESULT Render();
 
+	virtual HRESULT EnterState() override;
+	virtual HRESULT ExitState() override;
+
 protected:
 	virtual _int KeyCheck(const _double& _dDeltaTime);
 

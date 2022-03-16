@@ -1,0 +1,68 @@
+#include "pch.h"
+#include "..\Headers\TestScene_YM.h"
+
+CTestScene_YM::CTestScene_YM()
+{
+}
+
+CTestScene_YM::CTestScene_YM(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
+	: CLevel(pDevice, pDeviceContext)
+{
+}
+
+HRESULT CTestScene_YM::NativeConstruct()
+{
+	if (FAILED(__super::NativeConstruct())) return E_FAIL;
+
+	if (FAILED(Ready_Gameobject())) return E_FAIL;
+
+	return S_OK;
+}
+
+_int CTestScene_YM::Tick(_double TimeDelta)
+{
+	if (0 > __super::Tick(TimeDelta)) return -1;
+
+	return _int();
+}
+
+HRESULT CTestScene_YM::Render()
+{
+	return S_OK;
+}
+
+HRESULT CTestScene_YM::Ready_Gameobject()
+{
+ 	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_YM, L"Layer_Plane", L"Plane_Test")))
+		//return E_FAIL;
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_YM, L"Layer_Silvermane", L"Silvermane")))
+		return E_FAIL;
+ 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_YM, L"Layer_Camera", L"Camera_Silvermane")))
+		return E_FAIL;
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_YM, L"Layer_Monster", L"Monster_Bastion_2HSword")))
+		return E_FAIL;
+	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_YM, L"Layer_Monster", L"Monster_Bastion_Healer")))
+	//	return E_FAIL;
+	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_YM, L"Layer_Monster", L"Monster_Bastion_Shooter")))
+	//	return E_FAIL;
+	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_YM, L"Layer_Monster", L"Monster_Bastion_Spear")))
+	//	return E_FAIL;
+	return S_OK;
+}
+
+CTestScene_YM* CTestScene_YM::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
+{
+	CTestScene_YM* pInstance = new CTestScene_YM(pDevice, pDeviceContext);
+	if (FAILED(pInstance->NativeConstruct()))
+	{
+		MSGBOX("CTestScene_YM Create Fail");
+		Safe_Release(pInstance);
+	}
+	return pInstance;
+}
+
+void CTestScene_YM::Free()
+{
+
+	__super::Free();
+}

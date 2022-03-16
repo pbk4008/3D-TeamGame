@@ -171,4 +171,11 @@ namespace Engine
 		int radius;
 		int direction;
 	}BLURPARAM;
+
+	/* for. Trigger */
+	typedef struct tagTrigger
+	{
+		TRIGGERTYPE eTrigger_Type;
+		_float3		fTrigger_Point;
+	}TRIGGER;
 }

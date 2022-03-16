@@ -20,7 +20,7 @@ HRESULT CMapTool_Level::NativeConstruct()
 	if (FAILED(Ready_Later_Mouse(L"Layer_Mouse")))
 		return E_FAIL;
 
-	if (FAILED(Ready_Layer_Camera(L"Layer_Camera")))
+ 	if (FAILED(Ready_Layer_Camera(L"Layer_Camera")))
 		return E_FAIL;
 
 	if (FAILED(Ready_Layer_Plane(L"Layer_Plane")))

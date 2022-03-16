@@ -12,7 +12,6 @@
 CModel::CModel(ID3D11Device * pDevice, ID3D11DeviceContext * pDeviceContext)
 	: CComponent(pDevice, pDeviceContext)
 {
-	ZeroMemory(&m_tAnimData, sizeof(m_tAnimData));
 }
 
 CModel::CModel(const CModel& rhs)
@@ -424,10 +423,19 @@ HRESULT CModel::Load_Animation()
 			iMaxKeyFrameIndex = iKeyFrameCnt;
 			for (_uint k = 0; k < iKeyFrameCnt; ++k)
 			{
-				KEYFRAME* pKeyFrame = &m_tAnimData.pAnimData[i].pChannelData[j].pKeyFrame[k];
+				KEYFRAME* pKeyFrame = new KEYFRAME;
+				ZeroMemory(pKeyFrame, sizeof(KEYFRAME));
+
+				pKeyFrame->Time = m_tAnimData.pAnimData[i].pChannelData[j].pKeyFrame[k].Time;
+				pKeyFrame->vPosition = m_tAnimData.pAnimData[i].pChannelData[j].pKeyFrame[k].vPosition;
+				pKeyFrame->vRotation = m_tAnimData.pAnimData[i].pChannelData[j].pKeyFrame[k].vRotation;
+				pKeyFrame->vScale = m_tAnimData.pAnimData[i].pChannelData[j].pKeyFrame[k].vScale;
+
 				pChannel->Add_KeyFrame(pKeyFrame);
+				Safe_Delete_Array(m_tAnimData.pAnimData[i].pChannelData[j].pKeyFrame[k]);
 			}
 			pAnimation->Add_Channel(pChannel);
+			//Safe_Delete_Array(m_tAnimData.pAnimData[i].pChannelData[j]);
 		}
 		pAnimation->Set_MaxKeyFrameIndex(iMaxKeyFrameIndex);
 		m_Animations.push_back(pAnimation);
@@ -906,7 +914,6 @@ HRESULT CModel::Load_StaticModel(const wstring& pFilePath)
 	CSaveManager* pInstance = GET_INSTANCE(CSaveManager);
 
 	CSaveManager::STATICDATA pData;
-	ZeroMemory(&pData, sizeof(pData));
 	if (FAILED(pInstance->Load_StaticModel(pData, pFilePath)))
 		return E_FAIL;
 
