@@ -23,9 +23,11 @@ HRESULT CVIBuffer_RectViewPort::NativeConstruct_Prototype( _float fX, _float fY,
 	m_iNumVertices = 4;
 
 	m_VBDesc.ByteWidth = m_iStride * m_iNumVertices;
-	m_VBDesc.Usage = D3D11_USAGE_IMMUTABLE;
+	/*m_VBDesc.Usage = D3D11_USAGE_IMMUTABLE;*/
+	m_VBDesc.Usage = D3D11_USAGE_DYNAMIC;
 	m_VBDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-	m_VBDesc.CPUAccessFlags = 0;
+	/*m_VBDesc.CPUAccessFlags = 0;*/
+	m_VBDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 	m_VBDesc.MiscFlags = 0;
 	m_VBDesc.StructureByteStride = m_iStride;
 
@@ -34,7 +36,7 @@ HRESULT CVIBuffer_RectViewPort::NativeConstruct_Prototype( _float fX, _float fY,
 	_uint		iNumViewport = 1;	
 
 	m_pDeviceContext->RSGetViewports(&iNumViewport, &ViewportDesc);
-
+	m_viewport = ViewportDesc;
 	
 	/* D3D11_SUBRESOURCE_DATA */
 	ZeroMemory(&m_VBSubresourceData, sizeof(D3D11_SUBRESOURCE_DATA));
@@ -117,6 +119,32 @@ HRESULT CVIBuffer_RectViewPort::NativeConstruct(void * pArg)
 {
 	if (FAILED(__super::NativeConstruct(pArg)))
 		return E_FAIL;
+
+	return S_OK;
+}
+
+HRESULT CVIBuffer_RectViewPort::Buffer_Resize(_float sizex, _float sizey)
+{
+	_float x = 0;
+	_float y = 0;
+	_float2 vTexUV = { 1.f / sizex , 1.f / sizey };
+	D3D11_MAPPED_SUBRESOURCE ms;
+	if (FAILED(m_pDeviceContext->Map(m_pVB, 0, D3D11_MAP_WRITE_DISCARD, 0, &ms)))
+		return E_FAIL;
+
+	((VTXTEX*)ms.pData)[0].vPosition = _float3((x) / (m_viewport.Width * 0.5f) - 1.f, y / (m_viewport.Height * -0.5f) + 1.f, 0.f);
+	((VTXTEX*)ms.pData)[0].vTexUV = _float2(0.f, 0.f);
+
+	((VTXTEX*)ms.pData)[1].vPosition = _float3((x + sizex) / (m_viewport.Width * 0.5f) - 1.f, y / (m_viewport.Height * -0.5f) + 1.f, 0.f);
+	((VTXTEX*)ms.pData)[1].vTexUV = _float2(1.f, 0.f);
+
+	((VTXTEX*)ms.pData)[2].vPosition = _float3((x + sizex) / (m_viewport.Width * 0.5f) - 1.f, (y + sizey) / (m_viewport.Height * -0.5f) + 1.f, 0.f);
+	((VTXTEX*)ms.pData)[2].vTexUV = _float2(1.f, 1.f);
+
+	((VTXTEX*)ms.pData)[3].vPosition = _float3((x) / (m_viewport.Width * 0.5f) - 1.f, (y + sizey) / (m_viewport.Height * -0.5f) + 1.f, 0.f);
+	((VTXTEX*)ms.pData)[3].vTexUV = _float2(0.f, 1.f);
+
+	m_pDeviceContext->Unmap(m_pVB, 0);
 
 	return S_OK;
 }

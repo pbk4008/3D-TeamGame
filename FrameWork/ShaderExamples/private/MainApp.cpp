@@ -58,17 +58,12 @@ _int CMainApp::Tick(_double TimeDelta)
 	if (g_pGameInstance->getkeyDown(DIK_F2))
 	{
 		m_bPBR = !m_bPBR;
-		m_pRenderer->SetRenderButton(CRenderer::PBRHDR, m_bPBR);
+		m_pRenderer->SetRenderButton(CRenderer::PBR, m_bPBR);
 	}
 	if (g_pGameInstance->getkeyDown(DIK_F3))
 	{
-		m_bBlur = !m_bBlur;
-		m_pRenderer->SetRenderButton(CRenderer::BLUR, m_bBlur);
-	}
-	if (g_pGameInstance->getkeyDown(DIK_F4))
-	{
-		m_bDeferred = !m_bDeferred;
-		m_pRenderer->SetRenderButton(CRenderer::DEFERRED, m_bDeferred);
+		m_bHDR = !m_bHDR;
+		m_pRenderer->SetRenderButton(CRenderer::HDR, m_bHDR);
 	}
 
 	return _int();
@@ -88,6 +83,9 @@ HRESULT CMainApp::Render()
 		return E_FAIL;
 
 #ifdef _DEBUG
+
+#endif // _DEBUG
+
 	++m_iNumRender;
 
 	if (m_TimeAcc >= 1.0)
@@ -100,12 +98,8 @@ HRESULT CMainApp::Render()
 	if (FAILED(g_pGameInstance->Render_Font(TEXT("Font_Arial"), XMVectorSet(1.f, 0.0f, 0.f, 1.f), m_szFPS)))
 		return E_FAIL;
 
-#endif // _DEBUG
-
 	if (FAILED(g_pGameInstance->Present()))
 		return E_FAIL;
-
-
 
 	return S_OK;
 }
@@ -155,7 +149,7 @@ HRESULT CMainApp::Ready_GameObject_Prototype()
 
 HRESULT CMainApp::Load_Texture()
 {
-	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"BackGroundTex", L"../bin/Resources/Textures/T_LoadScreen_KeyArt_5.dds")))
+	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"BackGroundTex", L"../bin/Resources/Textures/T_LoadScreen_KeyArt_5.tga")))
 		return E_FAIL;
 
 	return S_OK;
@@ -169,10 +163,10 @@ HRESULT CMainApp::Init_Camera()
 	tDesc.vEye = _float4(0.0f, 0.0f, 0.0f, 1.0f);
 	tDesc.vAt = _float4(0.0f, 0.0f, 1.0f, 1.0f);
 	tDesc.vAxisY = _float4(0.f, 1.f, 0.f, 0.0f);
-	tDesc.fFovy = XMConvertToRadians(60.f);
+	tDesc.fFovy = XMConvertToRadians(90.f);
 	tDesc.fAspect = _float(g_iWinCX) / g_iWinCY;
 	tDesc.fNear = 0.2f;
-	tDesc.fFar = 300.f;
+	tDesc.fFar = 150.f;
 
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Static", L"Prototype_GameObject_MainCamera", &tDesc)))
 		return E_FAIL;

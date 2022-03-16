@@ -65,6 +65,8 @@ namespace Engine
 		XMMATRIX		mLightWorld;
 		XMMATRIX		mLightView;
 		XMMATRIX		mLightProj;
+
+		_float			mOrthinfo[5];
 	}LIGHTDESC;
 
 	typedef struct tagMtrlDesc
