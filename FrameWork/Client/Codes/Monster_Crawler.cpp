@@ -20,9 +20,9 @@ HRESULT CMonster_Crawler::NativeConstruct_Prototype()
 	return S_OK;
 }
 
-HRESULT CMonster_Crawler::NativeConstruct(void* _pArg)
+HRESULT CMonster_Crawler::NativeConstruct(const _uint _iSceneID, void* _pArg)
 {
-	if (FAILED(__super::NativeConstruct(_pArg)))
+	if (FAILED(__super::NativeConstruct(_iSceneID, _pArg)))
 	{
 		return E_FAIL;
 	}
@@ -194,10 +194,10 @@ CMonster_Crawler* CMonster_Crawler::Create(ID3D11Device* _pDevice, ID3D11DeviceC
 	return pInstance;
 }
 
-CGameObject* CMonster_Crawler::Clone(void* _pArg)
+CGameObject* CMonster_Crawler::Clone(const _uint _iSceneID, void* _pArg)
 {
 	CMonster_Crawler* pInstance = new CMonster_Crawler(*this);
-	if (FAILED(pInstance->NativeConstruct(_pArg)))
+	if (FAILED(pInstance->NativeConstruct(_iSceneID, _pArg)))
 	{
 		MSGBOX("Failed to Creating Clone CMonster_Crawler");
 		Safe_Release(pInstance);

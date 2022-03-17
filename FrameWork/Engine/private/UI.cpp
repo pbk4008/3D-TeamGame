@@ -52,9 +52,9 @@ HRESULT CUI::NativeConstruct_Prototype()
 	return S_OK;
 }
 
-HRESULT CUI::NativeConstruct(void* pArg)
+HRESULT CUI::NativeConstruct(const _uint _iSceneID, void* pArg)
 {
-	if (FAILED(__super::NativeConstruct(pArg)))
+	if (FAILED(__super::NativeConstruct(_iSceneID, pArg)))
 		return E_FAIL;
 
 	/*if (!pArg)

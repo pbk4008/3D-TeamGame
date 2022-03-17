@@ -13,7 +13,7 @@ private:
 	virtual ~CMouse() = default;
 public:
 	virtual HRESULT NativeConstruct_Prototype();
-	virtual HRESULT NativeConstruct(void* pArg);
+	virtual HRESULT NativeConstruct(const _uint _iSceneID, void* pArg);
 	virtual _int Tick(HWND hWnd, _double TimeDelta);
 public:
 	void RayUpdate(const wstring& pCamTag);
@@ -24,7 +24,7 @@ public:
 	_fvector getRayDir() { return XMLoadFloat3(&m_vRayDir); }
 public:
 	static CMouse* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);
-	virtual CGameObject* Clone(void* pArg);
+	virtual CGameObject* Clone(const _uint iSceneID, void* pArg);
 private:
 	POINT m_tMousePos;
 	_float3 m_vRayPos;

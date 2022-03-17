@@ -45,8 +45,8 @@ public:
 	//애니메이션 끝나면 자동으로 넘어갈 애니메이션 연결
 	HRESULT Set_UpAutoChangeAnimation(_uint iTag, _uint iEndTag);
 	//애니메이션 어떤 조건을 통해서 들어오는 애니메이션 추가시 사용
-	// **무조건 끝나고 나서 행동해야하는 애니메이션 연결 필수!!
-	HRESULT Insert_AnyEntryAnimation(_uint iTag, class CAnimation* pAnim, _bool bRootAnim, _bool bTransFrom, ERootOption eOption);
+	//이미 만들어진 애니메이션을 AnyEntry에 담아서 조건에 따라 변경하면서 사용
+	HRESULT Insert_AnyEntryAnimation(_uint iTag);
 public:
 	const _uint Get_CurrentAnimNode();
 	CAnimation* Get_CurrentAnimation();

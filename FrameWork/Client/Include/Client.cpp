@@ -12,6 +12,7 @@ HINSTANCE  g_hInst;                                // 현재 인스턴스입니�
 HWND g_hWnd;
 WCHAR szTitle[MAX_LOADSTRING];                  // 제목 표시줄 텍스트입니다.
 WCHAR szWindowClass[MAX_LOADSTRING];            // 기본 창 클래스 이름입니다.
+_bool g_isLockMouse = false;
 
 // 이 코드 모듈에 포함된 함수의 선언을 전달합니다:
 ATOM                MyRegisterClass(HINSTANCE hInstance);
@@ -90,6 +91,32 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
             if (FAILED(pMainGame->Render()))
                 break;
+
+            // 마우스 클라이언트에 락
+            if (g_pGameInstance->getkeyDown(DIK_PGDN))
+                g_isLockMouse = !g_isLockMouse;
+            if (g_isLockMouse)
+            {
+                RECT rcClip;
+                POINT p1, p2;
+                GetClientRect(g_hWnd, &rcClip);
+                p1.x = rcClip.left;
+                p1.y = rcClip.top;
+                p2.x = rcClip.right;
+                p2.y = rcClip.bottom;
+
+                ClientToScreen(g_hWnd, &p1);
+                ClientToScreen(g_hWnd, &p2);
+
+                rcClip.left = p1.x;
+                rcClip.top = p1.y;
+                rcClip.right = p2.x;
+                rcClip.bottom = p2.y;
+
+                ClipCursor(&rcClip);
+            }
+            else
+                ClipCursor(NULL);
         }
         
     }
@@ -190,6 +217,14 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
     switch (message)
     {
+    case WM_ACTIVATEAPP:
+        switch (wParam)
+        {
+        case FALSE:
+            g_isLockMouse = false;
+            break;
+        }
+        break;
     case WM_KEYDOWN:
     {
         switch (wParam)

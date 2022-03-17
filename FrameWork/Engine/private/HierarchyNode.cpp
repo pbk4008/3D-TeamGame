@@ -4,6 +4,7 @@
 HRESULT CHierarchyNode::NativeConstruct(char* pBoneName, _fmatrix TransformationMatrix, _uint iDepth, CHierarchyNode* pParent)
 {
 	strcpy_s(m_szBoneName, pBoneName);
+	XMStoreFloat4x4(&m_CreateMatrix, TransformationMatrix);
 	XMStoreFloat4x4(&m_TransformationMatrix, TransformationMatrix);
 	XMStoreFloat4x4(&m_CombinedTransformationMatrix, XMMatrixIdentity());
 	m_iDepth = iDepth;
@@ -17,6 +18,7 @@ HRESULT CHierarchyNode::NativeConstruct(char* pBoneName, _fmatrix Transformation
 HRESULT CHierarchyNode::NativeConstruct(char* pBoneName, _fmatrix OffsetMatrix, _fmatrix TransformationMatrix, _uint iDepth, CHierarchyNode* pParent)
 {
 	strcpy_s(m_szBoneName, pBoneName);
+	XMStoreFloat4x4(&m_CreateMatrix, TransformationMatrix);
 	XMStoreFloat4x4(&m_TransformationMatrix, TransformationMatrix);
 	XMStoreFloat4x4(&m_OffsetMatrix, OffsetMatrix);
 	XMStoreFloat4x4(&m_CombinedTransformationMatrix, XMMatrixIdentity());

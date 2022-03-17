@@ -144,13 +144,13 @@ HRESULT CPlane::Make_NavigationCell(CCell* _pCell/*= nullptr*/)
 
 	if (nullptr == _pCell)
 	{
-		CCW_Sort((*m_fPoints));
+		CCW_Sort((m_fPoints));
 		pCell = CCell::Create(m_pDevice, m_pDeviceContext, m_fPoints, m_pNavigationCom->m_Cells.size());
 	}
 	else
 	{
 		memcpy(m_fPoints, _pCell->m_vPoint, sizeof(_float3) * CCell::POINT_END);
-		CCW_Sort((*m_fPoints));
+		CCW_Sort((m_fPoints));
 		pCell = CCell::Create(m_pDevice, m_pDeviceContext, *m_fPoints, m_pNavigationCom->m_Cells.size());
 	}
 
@@ -162,21 +162,21 @@ HRESULT CPlane::Make_NavigationCell(CCell* _pCell/*= nullptr*/)
 	return S_OK;
 }
 
-void CPlane::CCW_Sort(_float3* pPoints)
+void CPlane::CCW_Sort(_float3* pPoints[])
 {
-	_int temp = (pPoints[0].x * pPoints[1].z) +
-		(pPoints[1].x * pPoints[2].z) +
-		(pPoints[2].x * pPoints[0].z);
+	_int temp = (pPoints[0]->x * pPoints[1]->z) +
+		(pPoints[1]->x * pPoints[2]->z) +
+		(pPoints[2]->x * pPoints[0]->z);
 
-	temp = temp - (pPoints[0].z * pPoints[1].x) -
-		(pPoints[1].z * pPoints[2].x) -
-		(pPoints[2].z * pPoints[0].x);
+	temp = temp - (pPoints[0]->z * pPoints[1]->x) -
+		(pPoints[1]->z * pPoints[2]->x) -
+		(pPoints[2]->z * pPoints[0]->x);
 
 	if (temp > 0)
 	{
-		_float3 fPointTemp = pPoints[1];
-		pPoints[1] = pPoints[2];
-		pPoints[2] = fPointTemp;
+		_float3 fPointTemp = *pPoints[1];
+		*pPoints[1] = *pPoints[2];
+		*pPoints[2] = fPointTemp;
 		CCW_Sort(pPoints);
 	}
 	else if (temp < 0)

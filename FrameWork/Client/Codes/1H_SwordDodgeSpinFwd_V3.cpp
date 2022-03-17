@@ -26,13 +26,6 @@ _int C1H_SwordDodgeSpinFwd_V3::Tick(const _double& _dDeltaTime)
 
 	Add_PlusAngle(EDir::Forward, _dDeltaTime);
 
-	if (m_pAnimationController->Is_Finished())
-	{
- 		if (FAILED(m_pStateController->Change_State(L"Idle")))
-			return E_FAIL;
-		return STATE_CHANGE;
-	}
-
 	return _int();
 }
 
@@ -84,7 +77,6 @@ _int C1H_SwordDodgeSpinFwd_V3::KeyCheck(const _double& _dDeltaTime)
 	{
 		if (g_pGameInstance->getkeyDown(DIK_SPACE))
 		{
-
 			if (g_pGameInstance->getkeyPress(DIK_A))
 			{
 				if (FAILED(m_pStateController->Change_State(L"1H_SidestepLeft")))

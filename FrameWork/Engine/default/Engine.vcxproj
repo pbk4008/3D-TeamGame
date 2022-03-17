@@ -220,7 +220,9 @@ call Update_Library_Release.bat</Command>
     <ClInclude Include="..\public\ControllerFilterCallback.h" />
     <ClInclude Include="..\public\ControllerHitReport.h" />
     <ClInclude Include="..\public\CSTarget.h" />
+    <ClInclude Include="..\public\HDR.h" />
     <ClInclude Include="..\public\Instancing_Mesh.h" />
+    <ClInclude Include="..\public\Luminance.h" />
     <ClInclude Include="..\public\Material_Manager.h" />
     <ClInclude Include="..\public\Effect.h" />
     <ClInclude Include="..\public\Channel.h" />
@@ -260,8 +262,10 @@ call Update_Library_Release.bat</Command>
     <ClInclude Include="..\public\Object_Manager.h" />
     <ClInclude Include="..\public\PhysicsXSystem.h" />
     <ClInclude Include="..\public\PipeLine.h" />
+    <ClInclude Include="..\public\PostProcess.h" />
     <ClInclude Include="..\public\QuadTree.h" />
     <ClInclude Include="..\public\Renderer.h" />
+    <ClInclude Include="..\public\RendererAssit.h" />
     <ClInclude Include="..\public\RenderTarget.h" />
     <ClInclude Include="..\public\SaveManager.h" />
     <ClInclude Include="..\public\SingleTon.h" />
@@ -274,6 +278,7 @@ call Update_Library_Release.bat</Command>
     <ClInclude Include="..\public\TextureManager.h" />
     <ClInclude Include="..\public\Timer.h" />
     <ClInclude Include="..\public\Timer_Manager.h" />
+    <ClInclude Include="..\public\Tonemapping.h" />
     <ClInclude Include="..\public\Transform.h" />
     <ClInclude Include="..\public\UI.h" />
     <ClInclude Include="..\public\VIBuffer.h" />
@@ -308,7 +313,9 @@ call Update_Library_Release.bat</Command>
     <ClCompile Include="..\private\ControllerFilterCallback.cpp" />
     <ClCompile Include="..\private\ControllerHitReport.cpp" />
     <ClCompile Include="..\private\CSTarget.cpp" />
+    <ClCompile Include="..\private\HDR.cpp" />
     <ClCompile Include="..\private\Instancing_Mesh.cpp" />
+    <ClCompile Include="..\private\Luminance.cpp" />
     <ClCompile Include="..\private\Material_Manager.cpp" />
     <ClCompile Include="..\private\Collider.cpp" />
     <ClCompile Include="..\private\Component.cpp" />
@@ -324,9 +331,12 @@ call Update_Library_Release.bat</Command>
     <ClCompile Include="..\private\Mouse.cpp" />
     <ClCompile Include="..\private\Navigation.cpp" />
     <ClCompile Include="..\private\PhysicsXSystem.cpp" />
+    <ClCompile Include="..\private\PostProcess.cpp" />
+    <ClCompile Include="..\private\RendererAssit.cpp" />
     <ClCompile Include="..\private\SphereCollider.cpp" />
     <ClCompile Include="..\private\State.cpp" />
     <ClCompile Include="..\private\StateController.cpp" />
+    <ClCompile Include="..\private\Tonemapping.cpp" />
     <ClCompile Include="..\private\UI.cpp" />
     <ClCompile Include="..\private\CustumFont.cpp" />
     <ClCompile Include="..\private\DebugDraw.cpp" />
@@ -369,21 +379,26 @@ call Update_Library_Release.bat</Command>
     <ClCompile Include="..\private\VIBuffer_Triangle.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="..\..\Reference\ShaderFile\Shader_Cube.hlsl" />
+    <FxCompile Include="..\bin\ShaderFiles\Shader_Blend.hlsl" />
     <FxCompile Include="..\bin\ShaderFiles\Shader_CSGSBlur.hlsl" />
+    <FxCompile Include="..\bin\ShaderFiles\Shader_Cube.hlsl" />
     <FxCompile Include="..\bin\ShaderFiles\Shader_DownSample.hlsl" />
     <FxCompile Include="..\bin\ShaderFiles\Shader_DSViewPort.hlsl" />
+    <FxCompile Include="..\bin\ShaderFiles\Shader_HDRBase.hlsl" />
     <FxCompile Include="..\bin\ShaderFiles\Shader_Instance.hlsl" />
     <FxCompile Include="..\bin\ShaderFiles\Shader_InstanceMesh.hlsl" />
+    <FxCompile Include="..\bin\ShaderFiles\Shader_Luminance.hlsl" />
     <FxCompile Include="..\bin\ShaderFiles\Shader_Mesh.hlsl" />
     <FxCompile Include="..\bin\ShaderFiles\Shader_MeshAnim.hlsl" />
     <FxCompile Include="..\bin\ShaderFiles\Shader_Particle.hlsl" />
     <FxCompile Include="..\bin\ShaderFiles\Shader_Plane.hlsl" />
     <FxCompile Include="..\bin\ShaderFiles\Shader_PointInstance.hlsl" />
+    <FxCompile Include="..\bin\ShaderFiles\Shader_PsotProcess.hlsl" />
     <FxCompile Include="..\bin\ShaderFiles\Shader_Rect.hlsl" />
     <FxCompile Include="..\bin\ShaderFiles\Shader_RectViewport.hlsl" />
     <FxCompile Include="..\bin\ShaderFiles\Shader_StaticMesh.hlsl" />
     <FxCompile Include="..\bin\ShaderFiles\Shader_Terrain.hlsl" />
+    <FxCompile Include="..\bin\ShaderFiles\Shader_Tonemapping.hlsl" />
     <FxCompile Include="..\bin\ShaderFiles\Shader_Triangle.hlsl" />
     <FxCompile Include="..\bin\ShaderFiles\Shader_Geo_UI.hlsl" />
     <FxCompile Include="..\bin\ShaderFiles\Shader_UI.hlsl" />

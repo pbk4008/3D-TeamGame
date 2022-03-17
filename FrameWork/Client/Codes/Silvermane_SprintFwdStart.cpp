@@ -49,8 +49,22 @@ HRESULT CSilvermane_SprintFwdStart::EnterState()
 		return E_FAIL;
 	m_pAnimationController->Set_RootMotion(true, true);
 
-	m_pSilvermane->Set_Move(true);
-
+	//if (m_pSilvermane->Is_EquipWeapon())
+	//{
+	//	switch (m_pSilvermane->Get_WeaponType())
+	//	{
+	//	case CWeapon::EType::Sword_1H:
+	//		if (FAILED(m_pStateController->Change_State(L"1H_SwordEquipOff")))
+	//			return E_FAIL;
+	//		break;
+	//	case CWeapon::EType::Hammer_2H:
+	//		if (FAILED(m_pStateController->Change_State(L"2H_HammerEquipOff")))
+	//			return E_FAIL;
+	//		break;
+	//	}
+	//	return STATE_CHANGE;
+	//}
+	
 	return S_OK;
 }
 
@@ -58,8 +72,6 @@ HRESULT CSilvermane_SprintFwdStart::ExitState()
 {
 	if (FAILED(__super::ExitState()))
 		return E_FAIL;
-
-	m_pSilvermane->Set_Move(false);
 
 	return S_OK;
 }

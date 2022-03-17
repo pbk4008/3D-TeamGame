@@ -27,9 +27,9 @@ HRESULT CShield::NativeConstruct_Prototype()
 	return S_OK;
 }
 
-HRESULT CShield::NativeConstruct(void* _pArg)
+HRESULT CShield::NativeConstruct(const _uint _iSceneID, void* _pArg)
 {
-	if (FAILED(__super::NativeConstruct(_pArg)))
+	if (FAILED(__super::NativeConstruct(_iSceneID, _pArg)))
 		return E_FAIL;
 
 	if (FAILED(Ready_Components()))
@@ -97,7 +97,7 @@ HRESULT CShield::Ready_Components()
 	m_pTransform->Set_TransformDesc(transformDesc);
 	m_pLocalTransform->Set_TransformDesc(transformDesc);
 
-	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_TEST_JS, L"Model_Shield", L"Model", (CComponent**)&m_pModel)))
+	if (FAILED(SetUp_Components(m_iSceneID, L"Model_Shield", L"Model", (CComponent**)&m_pModel)))
 		return E_FAIL;
 	m_pModel->Add_Material(g_pGameInstance->Get_Material(L"Mtrl_Shield"), 0);
 
@@ -109,7 +109,7 @@ _int CShield::Attach_FixedBone(const _double& _dDeltaTime)
 	if (m_pFixedBone)
 	{
 		_matrix smatWorld = m_pFixedBone->Get_CombinedMatrix();
-		smatWorld *= m_smatOwnerPivot;
+		smatWorld *= XMLoadFloat4x4(&m_smatOwnerPivot);;
 
 		if (!m_isEquip)
 			smatWorld = m_smatPivot * smatWorld;
@@ -149,10 +149,10 @@ CShield* CShield::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceCo
 	return pInstance;
 }
 
-CGameObject* CShield::Clone(void* _pArg)
+CGameObject* CShield::Clone(const _uint _iSceneID, void* _pArg)
 {
 	CShield* pInstance = new CShield(*this);
-	if (FAILED(pInstance->NativeConstruct(_pArg)))
+	if (FAILED(pInstance->NativeConstruct(_iSceneID, _pArg)))
 	{
 		MSGBOX("CShield Clone Fail");
 		Safe_Release(pInstance);

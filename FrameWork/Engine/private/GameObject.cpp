@@ -12,6 +12,7 @@ CGameObject::CGameObject()
 	, m_bActive(false)
 	, m_bCheckCollider(false)
 	, m_iObectTag(0)
+	, m_iSceneID(-1)
 {
 }
 
@@ -23,6 +24,7 @@ CGameObject::CGameObject(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceCont
 	, m_bActive(false)
 	, m_bCheckCollider(false)
 	, m_iObectTag(0)
+	, m_iSceneID(-1)
 {
 	Safe_AddRef(m_pDeviceContext);
 	Safe_AddRef(m_pDevice);	
@@ -37,6 +39,7 @@ CGameObject::CGameObject(const CGameObject& rhs)
 	, m_bActive(rhs.m_bActive)
 	, m_bCheckCollider(false)
 	, m_iObectTag(rhs.m_iObectTag)
+	, m_iSceneID(rhs.m_iSceneID)
 {
 	Safe_AddRef(m_pDeviceContext);
 	Safe_AddRef(m_pDevice);
@@ -74,8 +77,9 @@ HRESULT CGameObject::NativeConstruct_Prototype()
 	return S_OK;
 }
 
-HRESULT CGameObject::NativeConstruct(void * pArg)
+HRESULT CGameObject::NativeConstruct(const _uint iSceneID, void* pArg)
 {
+	m_iSceneID = iSceneID;
 	CGameInstance* pInstance = GET_INSTANCE(CGameInstance);
 
 	m_pTransform = pInstance->Clone_Component<CTransform>(0, L"Proto_Component_Transform");
@@ -146,6 +150,11 @@ void CGameObject::setActive(_bool bActive)
 	m_bActive = bActive;
 	for (auto& pCom : m_Components)
 		pCom.second->setActive(m_bActive);
+}
+
+CTransform* CGameObject::Get_Transform() const
+{
+	return m_pTransform;
 }
 
 HRESULT CGameObject::SetUp_Components(_uint iLevelIndex, const wstring& pPrototypeTag, const wstring&pComponentTag, CComponent** ppOut, void* pArg)

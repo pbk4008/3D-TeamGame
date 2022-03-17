@@ -136,7 +136,7 @@ PS_OUT_LIGHTACC PS_MAIN_LIGHTACC_DIRECTIONAL(PS_IN In)
 	float Metallic = g_Metallic.Sample(DefaultSampler, In.vTexUV).r;
 	float Roughness = g_Roughness.Sample(DefaultSampler, In.vTexUV).r;
 	float AO = g_AO.Sample(DefaultSampler, In.vTexUV).r;
-	float fViewZ = vDepthDesc.y * 300.f;
+	float fViewZ = vDepthDesc.y * 150.f;
 	
 	vector vWorldPos;
 	vWorldPos.x = In.vTexUV.x * 2.f - 1.f;
@@ -149,7 +149,6 @@ PS_OUT_LIGHTACC PS_MAIN_LIGHTACC_DIRECTIONAL(PS_IN In)
 	vWorldPos = mul(vWorldPos, g_ViewMatrixInv);
 	
 	vWorldPos.xyz = (vWorldPos / vWorldPos.w).xyz;
-	vWorldPos.w = 1.f;
 	
 	/* 0 ~ 1*/ /* -1 ~ 1*/
 	vector vNormal = vector(vNormalDesc.xyz * 2.f - 1.f, 0.f);
@@ -165,8 +164,8 @@ PS_OUT_LIGHTACC PS_MAIN_LIGHTACC_DIRECTIONAL(PS_IN In)
 		float3 diffuse = vDiffuseDesc.rgb;
 		diffuse = pow((diffuse), gamma);
 		
-		float3 N = normalize(vNormal).rgb;
-		float3 V = normalize(g_vCamPosition - vWorldPos).rgb;
+		float3 N = normalize(vNormal.rgb);
+		float3 V = normalize(g_vCamPosition.rgb - vWorldPos.rgb);
 		
 		float3 F0 = 0.04f; // F0 : 반사율 - 0.04는 비금속 표면에 대해 시각적으로 정확해 보입니다.
 		F0 = lerp(F0, diffuse, Metallic);
@@ -274,13 +273,13 @@ PS_OUT_BLEND PS_MAIN_BLEND(PS_IN In)
 	vector vShadowTexture = g_ShadowTexture.Sample(DefaultSampler, In.vTexUV);
 	
 	if (g_bShadow == true && g_bPBRHDR == false)
-		Out.vColor = vDiffuseDesc * vShadeDesc * vShadowTexture + vSpecularDesc;
+		Out.vColor = vDiffuseDesc * vShadeDesc * vShadowTexture + vector(vSpecularDesc.rgb, 0.f);
 	else if (g_bShadow == true && g_bPBRHDR == true)
 		Out.vColor = vDiffuseDesc * vShadeDesc * vShadowTexture + vector(vSpecularDesc.rgb, 0.f);
 	else if (g_bShadow == false && g_bPBRHDR == false)
 		Out.vColor = vDiffuseDesc * vShadeDesc + vector(vSpecularDesc.rgb, 0.f);
 	else if (g_bShadow == false && g_bPBRHDR == true)
-		Out.vColor = vDiffuseDesc * vShadeDesc + vSpecularDesc;
+		Out.vColor = vDiffuseDesc * vShadeDesc + vector(vSpecularDesc.rgb, 0.f);
 
 	// 외곽선 효과
 	//float fCoord[3] = { -1.f, 0.f, 1.f };

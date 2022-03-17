@@ -8,7 +8,11 @@ class CRenderTarget final : public CBase
 {
 public: enum class RTT // Render Target Type
 {
-	SHADOWMAP, SHADOWDEPTH, DEFFURED, LIGHTING, RTT_END
+	SHADOWMAP, SHADOWDEPTH,
+	DEFFURED, LIGHTING,
+	PBR,
+	HDRBase, Luminance,
+	RTT_END
 };
 
 private: CRenderTarget(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);
@@ -25,7 +29,7 @@ public: HRESULT  Ready_Debug_Buffer(_float fX, _float fY, _float fSizeX, _float 
 public: HRESULT  Render_Debug_Buffer();
 #endif // _DEBUG
 
-private: HRESULT CreateDSV(_uint iWidth, _uint iHeight, DXGI_FORMAT eFormat);
+//private: HRESULT CreateDSV(_uint iWidth, _uint iHeight, DXGI_FORMAT eFormat);
 
 private: ID3D11Device* m_pDevice = nullptr;
 private: ID3D11DeviceContext* m_pDeviceContext = nullptr;

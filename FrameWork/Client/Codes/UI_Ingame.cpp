@@ -23,14 +23,14 @@ HRESULT CUI_Ingame::NativeConstruct_Prototype()
 	return S_OK;
 }
 
-HRESULT CUI_Ingame::NativeConstruct(void* pArg)
+HRESULT CUI_Ingame::NativeConstruct(const _uint _iSceneID, void* pArg)
 {
 	if (nullptr != pArg)
 	{
 		memcpy(&m_Desc, pArg, sizeof(UIDESC));
 	}
 
-	if (FAILED(__super::NativeConstruct(pArg)))
+	if (FAILED(__super::NativeConstruct(_iSceneID, pArg)))
 	{
 		return E_FAIL;
 	}
@@ -181,10 +181,10 @@ CUI_Ingame* CUI_Ingame::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDevi
 	return pInstance;
 }
 
-CGameObject* CUI_Ingame::Clone(void* pArg)
+CGameObject* CUI_Ingame::Clone(const _uint _iSceneID, void* pArg)
 {
 	CUI_Ingame* pInstance = new CUI_Ingame(*this);
-	if (FAILED(pInstance->NativeConstruct(pArg)))
+	if (FAILED(pInstance->NativeConstruct(_iSceneID, pArg)))
 	{
 		MSGBOX("Failed to Creating Clone CUI_Ingame");
 		Safe_Release(pInstance);

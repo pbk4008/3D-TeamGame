@@ -18,6 +18,8 @@ public:
 	HRESULT NativeConstruct(const LIGHTDESC& LightDesc);
 	HRESULT Render(const wstring& pCameraTag, _bool PBRHDRcheck);
 
+public: void UpdateLightCam(_fvector playerpos);
+
 private:
 	ID3D11Device*				m_pDevice = nullptr;
 	ID3D11DeviceContext*		m_pDeviceContext = nullptr;

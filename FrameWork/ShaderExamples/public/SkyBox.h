@@ -25,6 +25,10 @@ public:
 	virtual _int Tick(_double TimeDelta) override;
 	virtual _int LateTick(_double TimeDelta) override;
 	virtual HRESULT Render() override;
+	virtual HRESULT	Render_Shadow() override;
+	virtual HRESULT	Render_ShadeShadow(ID3D11ShaderResourceView* ShaodwMap) override;
+	virtual HRESULT	Render_PBR()  override;
+
 private:
 	CTexture* m_pTexture = nullptr;
 	CVIBuffer_Cube* m_pVIBufferCom = nullptr;

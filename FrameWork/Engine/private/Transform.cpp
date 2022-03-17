@@ -2,6 +2,8 @@
 #include "GameObject.h"
 #include "Navigation.h"
 
+#include "CharacterController.h"
+
 CTransform::CTransform(ID3D11Device * pDevice, ID3D11DeviceContext * pDeviceContext)
 	: CComponent(pDevice, pDeviceContext)	
 {
@@ -35,6 +37,16 @@ HRESULT CTransform::NativeConstruct(void * pArg)
 	if (nullptr != pArg)
 		memcpy(&m_TransformDesc, pArg, sizeof(TRANSFORMDESC));
 	return S_OK;
+}
+
+const _int CTransform::Tick(_double& _dDeltaTime)
+{
+	return _int();
+}
+
+const _int CTransform::LateTick(_double& _dDeltaTime)
+{
+	return _int();
 }
 
 void CTransform::Set_TransformDesc(_float fSpeedPerSec, _float fAnglePerSec)
@@ -325,6 +337,21 @@ void CTransform::Mesh_Down(_double TimeDelta)
 
 	vPosition += XMVector3Normalize(vUp) * 0.5f * -(_float)TimeDelta;
 	Set_State(STATE_POSITION, vPosition);
+}
+
+const _float3& CTransform::Get_Velocity() const
+{
+	return m_vVelocity;
+}
+
+void CTransform::Set_Velocity(const _fvector & _svVelocity)
+{
+	XMStoreFloat3(&m_vVelocity, _svVelocity);
+}
+
+void CTransform::Add_Velocity(const _fvector& _svVelocity)
+{
+	XMStoreFloat3(&m_vVelocity, XMLoadFloat3(&m_vVelocity) + _svVelocity);
 }
 
 CTransform * CTransform::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pDeviceContext)

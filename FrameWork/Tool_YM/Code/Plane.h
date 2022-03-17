@@ -33,7 +33,7 @@ public:
 	HRESULT			Create_NavigationLine();
 	HRESULT			Make_NavigationCell(class CCell* _pCell = nullptr);
 	HRESULT			Update_CellPos();
-	void			CCW_Sort(_float3* pPoints);
+	void			CCW_Sort(_float3* pPoints[]);
 	void			Input_Key(_double _dtimeDelta);
 
 public:

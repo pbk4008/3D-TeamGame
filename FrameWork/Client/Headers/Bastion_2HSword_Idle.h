@@ -1,11 +1,10 @@
 #ifndef Bastion_2HSword_Idle_h__
 #define Bastion_2HSword_Idle_h__
 
-#include "State_Monster.h"
+#include "Monster_FSM.h"
 
 BEGIN(Client)
-
-class CBastion_2HSword_Idle final : public CState_Monster
+class CBastion_2HSword_Idle final : public CMonster_FSM
 {
 protected:
 	explicit CBastion_2HSword_Idle(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext);
@@ -22,10 +21,7 @@ public:
 	virtual HRESULT ExitState();
 
 public:
-	virtual _int KeyCheck(const _double & _dDeltaTime) override;
-
-private:
-	_float m_fHoldTime = 0.f;
+	virtual void Look_Player(void) override;
 
 public:
 	static CBastion_2HSword_Idle* Create(ID3D11Device * _pDevice, ID3D11DeviceContext * _pDeviceContext, void* _pArg = nullptr);

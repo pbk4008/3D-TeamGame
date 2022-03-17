@@ -23,9 +23,9 @@ HRESULT CBoss_Bastion_Judicator::NativeConstruct_Prototype()
 	return S_OK;
 }
 
-HRESULT CBoss_Bastion_Judicator::NativeConstruct(void* pArg)
+HRESULT CBoss_Bastion_Judicator::NativeConstruct(const _uint _iSceneID, void* pArg)
 {
-	if (FAILED(__super::NativeConstruct(pArg)))
+	if (FAILED(__super::NativeConstruct(_iSceneID, pArg)))
 		return E_FAIL;
 
 	if (FAILED(SetUp_Components()))
@@ -36,7 +36,7 @@ HRESULT CBoss_Bastion_Judicator::NativeConstruct(void* pArg)
 
 	CHierarchyNode* pBone = m_pModelCom->Get_BoneMatrix("weapon_r_end");
 	CShieldBreaker* pWeapon = CShieldBreaker::Create(m_pDevice, m_pDeviceContext);
-	pWeapon->NativeConstruct(pBone);
+	pWeapon->NativeConstruct(m_iSceneID, pBone);
 	pWeapon->Set_Owner(this);
 	pWeapon->Set_OwnerPivotMatrix(m_pModelCom->Get_PivotMatrix());
 	m_pWeapon = pWeapon;
@@ -87,6 +87,7 @@ _int CBoss_Bastion_Judicator::Tick(_double TimeDelta)
 	m_pAnimator->Tick(TimeDelta);
 
 	//m_pAnimator->Get_CurrentAnimation();
+
 	//m_pModelCom->Update_CombinedTransformationMatrix(TimeDelta);
 
 	return 0;
@@ -219,10 +220,10 @@ CBoss_Bastion_Judicator* CBoss_Bastion_Judicator::Create(ID3D11Device* pDevice, 
 	return pInstance;
 }
 
-CGameObject* CBoss_Bastion_Judicator::Clone(void* pArg)
+CGameObject* CBoss_Bastion_Judicator::Clone(const _uint _iSceneID, void* pArg)
 {
 	CBoss_Bastion_Judicator* pInstance = new CBoss_Bastion_Judicator(*this);
-	if (FAILED(pInstance->NativeConstruct(pArg)))
+	if (FAILED(pInstance->NativeConstruct(_iSceneID, pArg)))
 	{
 		MSGBOX("Failed to Creating Clone CBoss_Bastion_Judicator");
 		Safe_Release(pInstance);

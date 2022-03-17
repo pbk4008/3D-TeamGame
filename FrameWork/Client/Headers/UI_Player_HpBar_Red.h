@@ -23,7 +23,7 @@ private:
 
 public:
 	virtual HRESULT NativeConstruct_Prototype() override;
-	virtual HRESULT NativeConstruct(void* pArg) override;
+	virtual HRESULT NativeConstruct(const _uint _iSceneID, void* pArg) override;
 	virtual _int Tick(_double TimeDelta) override;
 	virtual _int LateTick(_double TimeDelta) override;
 	virtual HRESULT Render() override;
@@ -42,7 +42,7 @@ private:
 
 public:
 	static CUI_Player_HpBar_Red* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);
-	virtual CGameObject* Clone(void* pArg) override;
+	virtual CGameObject* Clone(const _uint _iSceneID, void* pArg) override;
 	virtual void Free() override;
 };
 

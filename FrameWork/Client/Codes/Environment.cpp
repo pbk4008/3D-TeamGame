@@ -33,11 +33,11 @@ HRESULT CEnvironment::NativeConstruct_Prototype()
 	return S_OK;
 }
 
-HRESULT CEnvironment::NativeConstruct(void* pArg)
+HRESULT CEnvironment::NativeConstruct(const _uint _iSceneID, void* pArg)
 {
 	m_tEnvironmentDesc = (*(ENVIRONMENTDESC*)pArg);
 	m_tEnvironmentDesc.tInstanceDesc.iNumInstance = (_uint)m_tEnvironmentDesc.tInstanceDesc.vecMatrix.size();
-	if (FAILED(CLandScape::NativeConstruct(pArg)))
+	if (FAILED(CLandScape::NativeConstruct(_iSceneID, pArg)))
 		return E_FAIL;
 	
 	if (FAILED(Ready_Component()))
@@ -70,8 +70,8 @@ HRESULT CEnvironment::Render()
 	m_pInstanceMesh->SetUp_ValueOnShader("g_ViewMatrix", &matView, sizeof(_matrix));
 	m_pInstanceMesh->SetUp_ValueOnShader("g_ProjMatrix", &matProj, sizeof(_matrix));
 
-	_uint iNumMeshCnt = m_pInstanceMesh->Get_NumMeshContainer();
-	for (_uint i = 0; i < iNumMeshCnt; i++)
+	/*_uint iNumMeshCnt = m_pInstanceMesh->Get_NumMeshContainer();*/
+	for (_uint i = 0; i < m_Nummeshcontainer; i++)
 		m_pInstanceMesh->Render(i, 0);
 //
 //#ifdef _DEBUG
@@ -80,10 +80,61 @@ HRESULT CEnvironment::Render()
 	return S_OK;
 }
 
+HRESULT CEnvironment::Render_Shadow()
+{
+	_matrix world, lightview, ligtproj;
+	world = XMMatrixTranspose(m_pTransform->Get_WorldMatrix());
+	lightview = XMMatrixTranspose(m_LightDesc->mLightView);
+	ligtproj = XMMatrixTranspose(m_LightDesc->mLightProj);
+
+	m_pInstanceMesh->SetUp_ValueOnShader("g_WorldMatrix", &world, sizeof(_matrix));
+	m_pInstanceMesh->SetUp_ValueOnShader("g_LightView", &lightview, sizeof(_matrix));
+	m_pInstanceMesh->SetUp_ValueOnShader("g_LightProj", &ligtproj, sizeof(_matrix));
+	
+	for (_uint i = 0; i < m_Nummeshcontainer; i++)
+		m_pInstanceMesh->Render(i, 2);
+
+	return S_OK;
+}
+
+HRESULT CEnvironment::Render_ShadeShadow(ID3D11ShaderResourceView* ShadowMap)
+{
+
+	_matrix world, view, proj, lightview, lightproj;
+	world = XMMatrixTranspose(m_pTransform->Get_WorldMatrix());
+	view = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"MainCamera", TRANSFORMSTATEMATRIX::D3DTS_VIEW));
+	proj = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"MainCamera", TRANSFORMSTATEMATRIX::D3DTS_PROJECTION));
+	lightview = XMMatrixTranspose(m_LightDesc->mLightView);
+	lightproj = XMMatrixTranspose(m_LightDesc->mLightProj);
+
+	m_pInstanceMesh->SetUp_ValueOnShader("g_WorldMatrix", &world, sizeof(_matrix));
+	m_pInstanceMesh->SetUp_ValueOnShader("g_ViewMatrix", &view, sizeof(_matrix));
+	m_pInstanceMesh->SetUp_ValueOnShader("g_ProjMatrix", &proj, sizeof(_matrix));
+	m_pInstanceMesh->SetUp_ValueOnShader("g_LightView", &lightview, sizeof(_matrix));
+	m_pInstanceMesh->SetUp_ValueOnShader("g_LightProj", &lightproj, sizeof(_matrix));
+
+	for (_uint i = 0; i < m_Nummeshcontainer; i++)
+	{
+		m_pInstanceMesh->Render(i, 3);
+		m_pInstanceMesh->SetUp_TextureOnShader("g_ShadowTexture", ShadowMap, i);
+	}
+
+	return S_OK;
+}
+
+HRESULT CEnvironment::Render_PBR()
+{
+	return S_OK;
+}
+
 HRESULT CEnvironment::Ready_Component()
 {
 	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STAGE1, m_tEnvironmentDesc.wstrInstaneTag, m_tEnvironmentDesc.wstrInstaneTag, (CComponent * *)& m_pInstanceMesh, &m_tEnvironmentDesc.tInstanceDesc)))
 		return E_FAIL;
+
+	m_Nummeshcontainer = m_pInstanceMesh->Get_NumMeshContainer();
+
+	//m_LightDesc = g_pGameInstance->Get_LightDesc(0);
 
 	return S_OK; 
 }
@@ -99,12 +150,12 @@ CEnvironment* CEnvironment::Create(ID3D11Device* pDevice, ID3D11DeviceContext* p
 	return pInstance;
 }
 
-CGameObject* CEnvironment::Clone(void* pArg)
+CGameObject* CEnvironment::Clone(const _uint _iSceneID, void* pArg)
 {
 	CEnvironment* pInstance = new CEnvironment(*this);
-	if (FAILED(pInstance->NativeConstruct(pArg)))
+	if (FAILED(pInstance->NativeConstruct(_iSceneID, pArg)))
 	{
-		//MSGBOX("CEnvironment Clone Fail");
+		MSGBOX("CEnvironment Clone Fail");
 		Safe_Release(pInstance);
 	}
 	return pInstance;

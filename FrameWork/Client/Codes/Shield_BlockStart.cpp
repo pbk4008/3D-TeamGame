@@ -11,6 +11,8 @@ HRESULT CShield_BlockStart::NativeConstruct(void* _pArg)
 	if (FAILED(__super::NativeConstruct(_pArg)))
 		return E_FAIL;
 
+	m_iCutIndex = 10;
+
 	return S_OK;
 }
 
@@ -57,6 +59,8 @@ HRESULT CShield_BlockStart::EnterState()
 
 	m_pSilvermane->Set_EquipShield(true);
 
+	m_pSilvermane->Set_TrasceCamera(false);
+
 	return S_OK;
 }
 
@@ -65,6 +69,7 @@ HRESULT CShield_BlockStart::ExitState()
 	if (FAILED(__super::ExitState()))
 		return E_FAIL;
 
+	m_pSilvermane->Set_TrasceCamera(true);
 	return S_OK;
 }
 
