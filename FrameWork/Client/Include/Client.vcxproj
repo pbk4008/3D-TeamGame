@@ -273,7 +273,6 @@
     <ClInclude Include="..\Headers\Monster_BronzeAnimus.h" />
     <ClInclude Include="..\Headers\Monster_Crawler.h" />
     <ClInclude Include="..\Headers\Monster_EarthAberrant.h" />
-    <ClInclude Include="..\Headers\Monster_FSM.h" />
     <ClInclude Include="..\Headers\Needle.h" />
     <ClInclude Include="..\Headers\Plane_Test.h" />
     <ClInclude Include="..\Headers\Shield.h" />
@@ -297,6 +296,7 @@
     <ClInclude Include="..\Headers\Shield_WalkRightStop.h" />
     <ClInclude Include="..\Headers\RetributionBlade.h" />
     <ClInclude Include="..\Headers\ShieldBreaker.h" />
+    <ClInclude Include="..\Headers\Shooter_Idle.h" />
     <ClInclude Include="..\Headers\Silvermane.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClInclude>
@@ -324,6 +324,7 @@
     <ClInclude Include="..\Headers\State_Silvermane.h" />
     <ClInclude Include="..\Headers\TestObj.h" />
     <ClInclude Include="..\Headers\TestScene_JS.h" />
+    <ClInclude Include="..\Headers\TestScene_Sb.h" />
     <ClInclude Include="..\Headers\TestScene_YM.h" />
     <ClInclude Include="..\Headers\Traverse_Jump400Jog.h" />
     <ClInclude Include="..\Headers\UI_Ingame.h" />
@@ -435,7 +436,6 @@
     <ClCompile Include="..\Codes\Monster_BronzeAnimus.cpp" />
     <ClCompile Include="..\Codes\Monster_Crawler.cpp" />
     <ClCompile Include="..\Codes\Monster_EarthAberrant.cpp" />
-    <ClCompile Include="..\Codes\Monster_FSM.cpp" />
     <ClCompile Include="..\Codes\Needle.cpp" />
     <ClCompile Include="..\Codes\Plane_Test.cpp" />
     <ClCompile Include="..\Codes\Shield.cpp" />
@@ -459,6 +459,7 @@
     <ClCompile Include="..\Codes\Shield_WalkRightStop.cpp" />
     <ClCompile Include="..\Codes\RetributionBlade.cpp" />
     <ClCompile Include="..\Codes\ShieldBreaker.cpp" />
+    <ClCompile Include="..\Codes\Shooter_Idle.cpp" />
     <ClCompile Include="..\Codes\Silvermane.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
@@ -486,6 +487,7 @@
     <ClCompile Include="..\Codes\State_Silvermane.cpp" />
     <ClCompile Include="..\Codes\TestObj.cpp" />
     <ClCompile Include="..\Codes\TestScene_JS.cpp" />
+    <ClCompile Include="..\Codes\TestScene_Sb.cpp" />
     <ClCompile Include="..\Codes\TestScene_YM.cpp" />
     <ClCompile Include="..\Codes\Traverse_Jump400Jog.cpp" />
     <ClCompile Include="..\Codes\UI_Ingame.cpp" />

@@ -195,7 +195,7 @@ HRESULT CMonster_Bastion_Sword::Set_Weapon()
 	CHierarchyNode* pWeaponBone = nullptr;
 	for (auto& pNode : vecNode)
 	{
-		if (!strcmp(pNode->Get_Name(), "weapon_r_end"))
+		if (!strcmp(pNode->Get_Name(), "weapon_r"))
 		{
 			pWeaponBone = pNode;
 			break;

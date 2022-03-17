@@ -274,6 +274,9 @@
     <Filter Include="00.Utility\03.Component\02.Renderer\04.ToneMapping\shader">
       <UniqueIdentifier>{0e8c9a0f-729c-420e-b495-e34ce4445d13}</UniqueIdentifier>
     </Filter>
+    <Filter Include="00.Utility\98.State\00. MonsterState">
+      <UniqueIdentifier>{e3f3fa09-7abd-499b-b103-108c9ed2efea}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\public\Base.h">
@@ -543,6 +546,9 @@
     <ClInclude Include="..\public\Tonemapping.h">
       <Filter>00.Utility\03.Component\02.Renderer\04.ToneMapping</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\Monster_FSM.h">
+      <Filter>00.Utility\98.State\00. MonsterState</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\private\Base.cpp">
@@ -781,6 +787,9 @@
     </ClCompile>
     <ClCompile Include="..\private\Tonemapping.cpp">
       <Filter>00.Utility\03.Component\02.Renderer\04.ToneMapping</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Monster_FSM.cpp">
+      <Filter>00.Utility\98.State\00. MonsterState</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
