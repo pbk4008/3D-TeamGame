@@ -16,7 +16,6 @@ public:
 	virtual _int LateTick(const _double& _dDeltaTime);
 	virtual HRESULT Render();
 
-public:
 	virtual HRESULT EnterState();
 	virtual HRESULT ExitState();
 

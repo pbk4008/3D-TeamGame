@@ -27,9 +27,9 @@ HRESULT CPlane::NativeConstruct_Prototype()
 	return S_OK;
 }
 
-HRESULT CPlane::NativeConstruct(void* pArg)
+HRESULT CPlane::NativeConstruct(const _uint _iSceneID, void* pArg)
 {
-	if (FAILED(__super::NativeConstruct(pArg)))
+	if (FAILED(__super::NativeConstruct(_iSceneID, pArg)))
 		return E_FAIL;
 
  	if (FAILED(SetUp_Components()))
@@ -372,11 +372,11 @@ CPlane* CPlane::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceCont
 	return pInstance;
 }
 
-CGameObject* CPlane::Clone(void* pArg)
+CGameObject* CPlane::Clone(const _uint _iSceneID, void* pArg)
 {
 	CPlane* pInstance = new CPlane(*this);
 
-	if (FAILED(pInstance->NativeConstruct(pArg)))
+	if (FAILED(pInstance->NativeConstruct(_iSceneID, pArg)))
 	{
 		MSGBOX("Failed to Create CPlane!!!");
 		Safe_Release(pInstance);

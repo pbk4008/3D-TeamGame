@@ -22,9 +22,9 @@ HRESULT CNavSphere::NativeConstruct_Prototype()
 	return S_OK;
 }
 
-HRESULT CNavSphere::NativeConstruct(void* pArg)
+HRESULT CNavSphere::NativeConstruct(const _uint _iSceneID, void* pArg)
 {
-	if (FAILED(__super::NativeConstruct(pArg)))
+	if (FAILED(__super::NativeConstruct(_iSceneID, pArg)))
 		return E_FAIL;
 
 	if (FAILED(SetUp_Components()))
@@ -300,11 +300,11 @@ CNavSphere* CNavSphere::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDe
 	return pInstance;
 }
 
-Engine::CGameObject* CNavSphere::Clone(void* pArg)
+Engine::CGameObject* CNavSphere::Clone(const _uint _iSceneID, void* pArg)
 {
 	CNavSphere* pInstance = new CNavSphere(*this);
 
-	if (FAILED(pInstance->NativeConstruct(pArg)))
+	if (FAILED(pInstance->NativeConstruct(_iSceneID, pArg)))
 	{
 		MSGBOX("Failed to Create CNavSphere!!!");
 		Safe_Release(pInstance);
