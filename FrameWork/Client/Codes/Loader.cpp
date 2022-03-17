@@ -114,23 +114,23 @@ HRESULT CLoader::SetUp_Stage1_Object()
 	/*if (FAILED(Load_Stage1FBXLoad()))
 		return E_FAIL;*/
 
-	if (FAILED(Load_Stage1PlayerLoad()))
-		return E_FAIL;
-
-	if (FAILED(Load_Stage1BossLoad()))
-		return E_FAIL;
-
-	//if (FAILED(Load_Stage1MonsterLoad()))
+	//if (FAILED(Load_Stage1PlayerLoad()))
 	//	return E_FAIL;
 
-	if (FAILED(Load_Stage1StaticUILoad()))
+	/*if (FAILED(Load_Stage1BossLoad()))
+		return E_FAIL;*/
+
+	if (FAILED(Load_Stage1MonsterLoad()))
 		return E_FAIL;
 
-	if (FAILED(Load_Stage1UILoad()))
-		return E_FAIL;
+	//if (FAILED(Load_Stage1StaticUILoad()))
+	//	return E_FAIL;
 
-	if (FAILED(Load_Stage1EffectLoad()))
-		return E_FAIL;
+	//if (FAILED(Load_Stage1UILoad()))
+	//	return E_FAIL;
+
+	//if (FAILED(Load_Stage1EffectLoad()))
+	//	return E_FAIL;
 
 	//if (FAILED(Load_Stage1TriggerLod()))
 	//	return E_FAIL;
@@ -633,10 +633,6 @@ HRESULT CLoader::Load_Stage1MonsterLoad()
 	if(FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Model_Weapon_Stargazer",
 		CModel::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/Monster/Weapon/Stargazer(1H Sword).fbx", CModel::TYPE_STATIC,true))))
 		return E_FAIL;
-	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Model_Weapon_Stargazer",
-	//	CModel::Create(m_pDevice, m_pDeviceContext, "../bin/FBX/Monster/Weapon/1H/","Stargazer(1H Sword).fbx",
-	//		L"../../Reference/ShaderFile/Shader_StaticMesh.hlsl", mat, CModel::TYPE_STATIC))))
-	//	return E_FAIL;
 
 	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Weapon_Stargazer", CStargazer::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;

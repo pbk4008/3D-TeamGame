@@ -35,7 +35,7 @@ public:
 
 private:
 	CGameObject* m_pGameObject = nullptr;
-	unordered_map<wstring, CState*> m_mapStates;
+	unordered_map<wstring, CState*> m_mapStates;//State 보관용 변수
 
 	_bool m_isChange = false;
 

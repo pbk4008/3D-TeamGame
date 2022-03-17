@@ -41,7 +41,17 @@ HRESULT CState::EnterState()
 	return S_OK;
 }
 
+HRESULT CState::EnterState(void* pArg)
+{
+	return S_OK;
+}
+
 HRESULT CState::ExitState()
+{
+	return S_OK;
+}
+
+HRESULT CState::ExitState(void* pArg)
 {
 	return S_OK;
 }
@@ -60,4 +70,5 @@ void CState::Free()
 {
 	Safe_Release(m_pDeviceContext);
 	Safe_Release(m_pDevice);
+	Safe_Release(m_pStateController);
 }
