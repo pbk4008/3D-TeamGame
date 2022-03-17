@@ -22,6 +22,9 @@ _int CSilvermane_SprintFwdStop::Tick(const _double& _dDeltaTime)
 	if (NO_EVENT != iProgress)
 		return iProgress;
 
+	if (14 < m_pAnimationController->Get_CurKeyFrameIndex())
+		Add_PlusAngle(EDir::Forward, _dDeltaTime);
+
 	return _int();
 }
 
@@ -50,7 +53,7 @@ HRESULT CSilvermane_SprintFwdStop::EnterState()
 	if (FAILED(m_pAnimationController->SetUp_NextAnimation("SK_Silvermane.ao|A_Sprint_Fwd_Stop_Player", false)))
 		return E_FAIL;
 	m_pAnimationController->Set_RootMotion(true, true);
-
+	
 	return S_OK;
 }
 

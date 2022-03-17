@@ -22,6 +22,7 @@ private:
 	HRESULT Ready_Stage1();
 	HRESULT Ready_Test_JS();
 	HRESULT Ready_Test_YM();
+	HRESULT Ready_Test_SB();
 
 private:
 	//stage1

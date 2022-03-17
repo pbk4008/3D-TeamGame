@@ -22,9 +22,9 @@ HRESULT CStatic_Mesh::NativeConstruct_Prototype()
 	return S_OK;
 }
 
-HRESULT CStatic_Mesh::NativeConstruct(void* pArg)
+HRESULT CStatic_Mesh::NativeConstruct(const _uint _iSceneID, void* pArg)
 {
-	if (FAILED(__super::NativeConstruct(pArg)))
+	if (FAILED(__super::NativeConstruct(_iSceneID, pArg)))
 		return E_FAIL;
 
 	m_ModelDesc = *(MODELDESC*)pArg;
@@ -469,11 +469,11 @@ _bool CStatic_Mesh::IntersectTriangle(const _fvector& orig, const _fvector& dir,
 	return TRUE;
 }
 
-CGameObject* CStatic_Mesh::Clone(void* pArg)
+CGameObject* CStatic_Mesh::Clone(const _uint _iSceneID, void* pArg)
 {
 	CStatic_Mesh* pInstance = new CStatic_Mesh(*this);
 
-	if (FAILED(pInstance->NativeConstruct(pArg)))
+	if (FAILED(pInstance->NativeConstruct(_iSceneID, pArg)))
 	{
 		MSGBOX("Failed to Create CStatic_Mesh!!!");
 		Safe_Release(pInstance);

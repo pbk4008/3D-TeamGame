@@ -113,6 +113,12 @@ _int CSilvermane_Idle::KeyCheck(const _double& _dDeltaTime)
 			return E_FAIL;
 		return STATE_CHANGE;
 	}
+	if (g_pGameInstance->getkeyDown(DIK_C))
+	{
+		if (FAILED(m_pStateController->Change_State(L"Traverse_Jump400Jog")))
+			return E_FAIL;
+		return STATE_CHANGE;
+	}
 
 	if (g_pGameInstance->getMouseKeyDown(CInputDev::MOUSESTATE::MB_LBUTTON))
 	{
