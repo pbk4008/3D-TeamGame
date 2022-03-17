@@ -82,12 +82,12 @@ HRESULT CPlane_Test::Render()
 HRESULT CPlane_Test::Ready_Components()
 {
 	/* Com_VIBuffer */
-	if (FAILED(__super::SetUp_Components((_uint)SCENEID::SCENE_TEST_YM, L"VIBuffer_Plane", L"VIBuffer", (CComponent**)&m_pVIBuffer)))
+	if (FAILED(__super::SetUp_Components(m_iSceneID, L"VIBuffer_Plane", L"VIBuffer", (CComponent**)&m_pVIBuffer)))
 		return E_FAIL;
 
 	/* Com_Texture  */
 	wstring TexTag = L"Plane_Texture";
-	m_pTexture = (CTexture*)g_pGameInstance->Clone_Component((_uint)SCENEID::SCENE_TEST_YM, L"Plane_Texture", &TexTag);
+	m_pTexture = (CTexture*)g_pGameInstance->Clone_Component(m_iSceneID, L"Plane_Texture", &TexTag);
 
 	CMeshCollider::MESHDESC tMeshColliderDesc;
 	tMeshColliderDesc.pParent = this;

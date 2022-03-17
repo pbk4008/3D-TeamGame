@@ -258,9 +258,15 @@
     </Filter>
     <Filter Include="02.GameObject\95.Monster\Bastion_2HSword\State_2HSword\Idle">
       <UniqueIdentifier>{18041324-6424-4135-85dd-5f36abcfcc46}</UniqueIdentifier>
-	</Filter>
+    </Filter>
     <Filter Include="02.GameObject\96.Weapon\03.Stargazer">
       <UniqueIdentifier>{c7467934-81e9-48c7-9c6f-403039f32fbb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Scene\100.TestScene_SB">
+      <UniqueIdentifier>{976dac7e-cb0b-4d33-ad07-182416607cee}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\95.Monster\Bastion_Shooter\Idle">
+      <UniqueIdentifier>{98de4f7a-c550-41c1-9300-e3be3582d049}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -748,6 +754,12 @@
     <ClInclude Include="..\Headers\Bastion_2HSword_Chaser.h">
       <Filter>02.GameObject\95.Monster\Bastion_2HSword\State_2HSword\Chaser</Filter>
     </ClInclude>
+    <ClInclude Include="..\Headers\TestScene_Sb.h">
+      <Filter>01.Scene\100.TestScene_SB</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Shooter_Idle.h">
+      <Filter>02.GameObject\95.Monster\Bastion_Shooter\Idle</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -1210,6 +1222,12 @@
     </ClCompile>
     <ClCompile Include="..\Codes\Bastion_2HSword_Chaser.cpp">
       <Filter>02.GameObject\95.Monster\Bastion_2HSword\State_2HSword\Chaser</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\TestScene_Sb.cpp">
+      <Filter>01.Scene\100.TestScene_SB</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Shooter_Idle.cpp">
+      <Filter>02.GameObject\95.Monster\Bastion_Shooter\Idle</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
