@@ -572,7 +572,9 @@ FrameWork/Client/bin/Resources/Mesh/Silvermane/Silvermane_Anim231.fbx
 *.fbx
 *.cso
 *.recipe
+FrameWork/Engine/default/x64/Debug/Engine.tlog/link.17508.delete.1.tlog
+FrameWork/Engine/default/x64/Debug/Engine.tlog/link.368.delete.1.tlog
+FrameWork/Engine/default/x64/Debug/Engine.tlog/link.6656.delete.1.tlog
 FrameWork/Engine/bin/Engine.exp
 *.tlog
 *.idb
-

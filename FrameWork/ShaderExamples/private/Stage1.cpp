@@ -1,6 +1,7 @@
 #include "framework.h"
 #include "Stage1.h"
 #include "GameInstance.h"
+#include "DataLoader.h"
 
 CStage1::CStage1()
 {
@@ -22,6 +23,9 @@ HRESULT CStage1::NativeConstruct()
 	if (FAILED(Ready_Gameobject()))
 		return E_FAIL;
 
+	if (FAILED(Ready_LoadMapData()))
+		return E_FAIL;
+
 	return S_OK;
 }
 
@@ -41,50 +45,51 @@ HRESULT CStage1::Ready_LightDesc()
 	ZeroMemory(&LightDesc, sizeof(LIGHTDESC));
 
 	LightDesc.eType = LIGHTDESC::TYPE_DIRECTIONAL;
-	LightDesc.vDirection = _float3(1.f, -1.f, 1.f);
+	LightDesc.vDirection = _float3(-1.f, -1.f, 1.f);
 	LightDesc.vDiffuse = _float4(1.f, 1.f, 1.f, 1.f);
 	LightDesc.vSpecular = _float4(0.8f, 0.8f, 0.8f, 1.f);
 	LightDesc.vAmbient = _float4(0.6f, 0.6f, 0.6f, 1.f);
-	LightDesc.vPosition = _float3(-100.f, 100.f, -100.f);
+	/*LightDesc.vPosition = _float3(0.f, 50.f, 0.f);*/
 
-	_float3 up = _float3(0, 1.f, 0);
-	_float3 lookat = _float3(10.f, 1.f, 10.f);
+	_vector up = { 0, 1.f, 0,0 };
+	_vector lookat = { 0.f, 1.f, 0.f, 1.f };
 
-	_vector		vPosition = XMLoadFloat3(&LightDesc.vPosition);
-	vPosition = XMVectorSetW(vPosition, 1.f);
+	//_vector		vPosition = XMLoadFloat3(&LightDesc.vPosition);
+	//vPosition = XMVectorSetW(vPosition, 1.f);
 
-	_vector		vLook = XMLoadFloat3(&lookat) - XMLoadFloat3(&LightDesc.vPosition);
-	vLook = XMVector3Normalize(vLook);
+	//_vector		vLook = XMLoadFloat3(&lookat) - XMLoadFloat3(&LightDesc.vPosition);
+	//vLook = XMVector3Normalize(vLook);
 
-	_vector		vRight = XMVector3Cross(XMLoadFloat3(&up), vLook);
-	vRight = XMVector3Normalize(vRight);
+	//_vector		vRight = XMVector3Cross(XMLoadFloat3(&up), vLook);
+	//vRight = XMVector3Normalize(vRight);
 
-	_vector		vUp = XMVector3Cross(vLook, vRight);
-	vUp = XMVector3Normalize(vUp);
+	//_vector		vUp = XMVector3Cross(vLook, vRight);
+	//vUp = XMVector3Normalize(vUp);
 
-	_matrix lightcam;
-	lightcam.r[0] = vRight;
-	lightcam.r[1] = vUp;
-	lightcam.r[2] = vLook;
-	lightcam.r[3] = vPosition;
+	//_matrix lightcam;
+	//lightcam.r[0] = vRight;
+	//lightcam.r[1] = vUp;
+	//lightcam.r[2] = vLook;
+	//lightcam.r[3] = vPosition;
+
+	//LightDesc.mLightView = XMMatrixInverse(nullptr, lightcam);
+	LightDesc.mOrthinfo[0] = 50.f;
+
+	XMStoreFloat3(&LightDesc.vPosition,((XMLoadFloat3(&LightDesc.vDirection) * LightDesc.mOrthinfo[0] * -1.f) + lookat));
+	 LightDesc.mLightView = XMMatrixLookAtLH(XMLoadFloat3(&LightDesc.vPosition), lookat, up);
 
 	_vector origin = { 0,0,0,0 };
 	_float3	forigin;
-	_float fleft, fright, ftop, fbottom, fradius;
-
-	fradius = 10.f;
-
-	LightDesc.mLightView = XMMatrixInverse(nullptr, lightcam);
 
 	origin = XMVector3TransformCoord(origin, LightDesc.mLightView);
 	XMStoreFloat3(&forigin, origin);
 
-	fleft = forigin.x - fradius;
-	fright = forigin.x + fradius;
-	fbottom = forigin.y - fradius;
-	ftop = forigin.y + fradius;
+	LightDesc.mOrthinfo[1] = forigin.x - LightDesc.mOrthinfo[0];
+	LightDesc.mOrthinfo[2] = forigin.x + LightDesc.mOrthinfo[0];
+	LightDesc.mOrthinfo[3] = forigin.y - LightDesc.mOrthinfo[0];
+	LightDesc.mOrthinfo[4] = forigin.y + LightDesc.mOrthinfo[0];
 
-	LightDesc.mLightProj = XMMatrixOrthographicLH(fright - fleft, ftop - fbottom, 0.1f, 1000.f);
+	LightDesc.mLightProj = XMMatrixOrthographicLH(LightDesc.mOrthinfo[2] - LightDesc.mOrthinfo[1], LightDesc.mOrthinfo[4] - LightDesc.mOrthinfo[3], 0.1f, 300.f);
 
 	if (FAILED(g_pGameInstance->Add_Light(m_pDevice, m_pDeviceContext, LightDesc)))
 		return E_FAIL;
@@ -94,12 +99,27 @@ HRESULT CStage1::Ready_LightDesc()
 
 HRESULT CStage1::Ready_Gameobject()
 {
-	g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"LayerFloor", L"Floor");
+	//g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"LayerFloor", L"Floor");
 
 	g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"LayerSky", L"Sky");
 
 	g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"LayerPlayer", L"Player");
-	
+
+	return S_OK;
+}
+
+HRESULT CStage1::Ready_LoadMapData()
+{
+	CDataLoader* pDataLoader = CDataLoader::Create(m_pDevice, m_pDeviceContext);
+
+	if (!pDataLoader)
+		return E_FAIL;
+
+	if (FAILED(pDataLoader->LoadMapData(L"../bin/Data/Stage_1.dat")))
+		return E_FAIL;
+
+	Safe_Release(pDataLoader);
+
 	return S_OK;
 }
 

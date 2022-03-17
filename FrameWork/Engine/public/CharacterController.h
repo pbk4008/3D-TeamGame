@@ -12,6 +12,7 @@ class CGizmo;
 
 class ENGINE_DLL CCharacterController : public CComponent
 {
+	friend class CPhysicsXSystem;
 public:
 	typedef struct tagCharacterControllerDesc
 	{
@@ -50,9 +51,12 @@ public:
 	const _bool IsUp();
 	const _bool IsSides();
 	
+public:
+	void Move(const _double& _dDeltaTime, const _float3 _vVelocity);
+	void Update_OwnerTransform();
+
 private:
 	HRESULT Create_Controller();
-	void Move(const _double& _dDeltaTime, const _float3 _vVelocity);
 
 	_fvector getQuaternion(_fmatrix matTransform);
 	_fvector ToXMVector4(const PxQuat pxquat);

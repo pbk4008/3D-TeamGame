@@ -20,6 +20,7 @@
 #include "Monster_Bastion_Sword.h"
 #include "Boss_Bastion_Judicator.h"
 #include "ShieldBreaker.h"
+#include "Stargazer.h"
 
 #pragma region TestScene_JS
 
@@ -106,26 +107,26 @@ HRESULT CLoader::LoadForScene()
 
 HRESULT CLoader::SetUp_Stage1_Object()
 {
-	/*if (FAILED(Load_Stage1FBXLoad()))
-		return E_FAIL;
+	//if (FAILED(Load_Stage1FBXLoad()))
+	//	return E_FAIL;
 
-	if (FAILED(Load_Stage1PlayerLoad()))
-		return E_FAIL;*/
+	//if (FAILED(Load_Stage1PlayerLoad()))
+	//	return E_FAIL;
 
-	if (FAILED(Load_Stage1BossLoad()))
-		return E_FAIL;
+	//if (FAILED(Load_Stage1BossLoad()))
+	//	return E_FAIL;
 
 	if (FAILED(Load_Stage1MonsterLoad()))
 		return E_FAIL;
 
-	if (FAILED(Load_Stage1StaticUILoad()))
-		return E_FAIL;
+	//if (FAILED(Load_Stage1StaticUILoad()))
+	//	return E_FAIL;
 
-	if (FAILED(Load_Stage1UILoad()))
-		return E_FAIL;
+	//if (FAILED(Load_Stage1UILoad()))
+	//	return E_FAIL;
 
-	if (FAILED(Load_Stage1EffectLoad()))
-		return E_FAIL;
+	//if (FAILED(Load_Stage1EffectLoad()))
+	//	return E_FAIL;
 
 	//if (FAILED(Load_Stage1TriggerLod()))
 	//	return E_FAIL;
@@ -439,13 +440,7 @@ HRESULT CLoader::Load_Stage1PlayerLoad()
 
 HRESULT CLoader::Load_Stage1BossLoad()
 {
-	//Monster Crystal_Crawler
-	/*_matrix matPivot = XMMatrixIdentity();
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Proto_Component_Animator", CAnimator::Create(m_pDevice, m_pDeviceContext))))
-	{
-		return E_FAIL;
-	}
-
+	
 	//Boss Bastion_Judicator
 	_matrix matPivot = XMMatrixIdentity();
 	matPivot = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(180.f));
@@ -518,36 +513,36 @@ HRESULT CLoader::Load_Stage1BossLoad()
 	}
 	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Weapon_ShieldBreaker", CShieldBreaker::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
-	*/
+	
 
 	return S_OK;
 }
 
 HRESULT CLoader::Load_Stage1MonsterLoad()
 {
-	////Monster Crystal_Crawler
-	//_matrix matPivot = XMMatrixIdentity();
-	//matPivot = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(180.f));
+	//Monster Crystal_Crawler
+	/*_matrix matPivot = XMMatrixIdentity();
+	matPivot = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(180.f));
 
-	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Model_Monster_Crawler", CModel::Create(m_pDevice, m_pDeviceContext,
-	//	"../bin/Resources/Mesh/Crystal_Crawler/", "Crystal_Crawler.fbx",
-	//	L"../../Reference/ShaderFile/Shader_Mesh.hlsl",	matPivot, CModel::TYPE_ANIM, true))))
-	//{
-	//	return E_FAIL;
-	//}
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Model_Monster_Crawler", CModel::Create(m_pDevice, m_pDeviceContext,
+		"../bin/Resources/Mesh/Crystal_Crawler/", "Crystal_Crawler.fbx",
+		L"../../Reference/ShaderFile/Shader_Mesh.hlsl",	matPivot, CModel::TYPE_ANIM, true))))
+	{
+		return E_FAIL;
+	}
 
-	//if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Monster_Crawler", CMonster_Crawler::Create(m_pDevice, m_pDeviceContext))))
-	//	return E_FAIL;
+	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Monster_Crawler", CMonster_Crawler::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
 
-	//CTexture* pTexture = CTexture::Create(m_pDevice, m_pDeviceContext);
-	//if (FAILED(pTexture->NativeConstruct_Prototype(L"../Bin/Resources/Mesh/Crystal_Crawler/T_Crystal_Crawler_D.tga", 1)))
-	//	return E_FAIL;
+	CTexture* pTexture = CTexture::Create(m_pDevice, m_pDeviceContext);
+	if (FAILED(pTexture->NativeConstruct_Prototype(L"../Bin/Resources/Mesh/Crystal_Crawler/T_Crystal_Crawler_D.tga", 1)))
+		return E_FAIL;
 
-	//CMaterial* pMtrl = CMaterial::Create(m_pDevice, m_pDeviceContext, L"Crystal_Crawler", L"../../Reference/ShaderFile/Shader_Mesh.hlsl", CMaterial::EType::Anim);
-	//if (FAILED(pMtrl->Set_Texture("g_DiffuseTexture", TEXTURETYPE::TEX_DIFFUSE, pTexture, 0)))
-	//	return E_FAIL;
-	//if (FAILED(g_pGameInstance->Add_Material(L"Mtrl_Crystal_Crawler", pMtrl)))
-	//	return E_FAIL;
+	CMaterial* pMtrl = CMaterial::Create(m_pDevice, m_pDeviceContext, L"Crystal_Crawler", L"../../Reference/ShaderFile/Shader_Mesh.hlsl", CMaterial::EType::Anim);
+	if (FAILED(pMtrl->Set_Texture("g_DiffuseTexture", TEXTURETYPE::TEX_DIFFUSE, pTexture, 0)))
+		return E_FAIL;
+	if (FAILED(g_pGameInstance->Add_Material(L"Mtrl_Crystal_Crawler", pMtrl)))
+		return E_FAIL;*/
 	
 	////Monster EarthAberrant
 	//matPivot = XMMatrixIdentity();
@@ -615,8 +610,14 @@ HRESULT CLoader::Load_Stage1MonsterLoad()
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Model_Monster_Bastion_Sword", CModel::Create(m_pDevice, m_pDeviceContext,
 		L"../bin/FBX/Monster/Bastion_Sword.fbx",CModel::TYPE_ANIM, true))))
 		return E_FAIL;
-
 	if (FAILED(g_pGameInstance->Add_Prototype(L"Monster_Bastion_Sword", CMonster_Bastion_Sword::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Model_Weapon_Stargazer",
+		CModel::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/Monster/Weapon/Stargazer(1H Sword).fbx", CModel::TYPE_STATIC, true))))
+		return E_FAIL;
+
+	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Weapon_Stargazer", CStargazer::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 
 	return S_OK;
@@ -708,13 +709,13 @@ HRESULT CLoader::Ready_Test_JS()
 	pMtrl->Set_Texture("g_DiffuseTexture", TEXTURETYPE::TEX_DIFFUSE, pTexture, 0);
 	g_pGameInstance->Add_Material(L"Mtrl_Silvermane_Top", pMtrl);
 #pragma endregion
-//#pragma region 무기
-//	pTexture = CTexture::Create(m_pDevice, m_pDeviceContext);
-//	pTexture->NativeConstruct_Prototype(L"../Bin/Resources/Mesh/Shield/T_ShieldBase_D.tga", 1);
-//	pMtrl = CMaterial::Create(m_pDevice, m_pDeviceContext, L"Mtrl_Shield", L"../../Reference/ShaderFile/Shader_StaticMesh.hlsl", CMaterial::EType::Static);
-//	pMtrl->Set_Texture("g_DiffuseTexture", TEXTURETYPE::TEX_DIFFUSE, pTexture, 0);
-//	g_pGameInstance->Add_Material(L"Mtrl_Shield", pMtrl);
-//#pragma endregion
+#pragma region 무기
+	pTexture = CTexture::Create(m_pDevice, m_pDeviceContext);
+	pTexture->NativeConstruct_Prototype(L"../Bin/Resources/Mesh/Shield/T_ShieldBase_D.tga", 1);
+	pMtrl = CMaterial::Create(m_pDevice, m_pDeviceContext, L"Mtrl_Shield", L"../../Reference/ShaderFile/Shader_StaticMesh.hlsl", CMaterial::EType::Static);
+	pMtrl->Set_Texture("g_DiffuseTexture", TEXTURETYPE::TEX_DIFFUSE, pTexture, 0);
+	g_pGameInstance->Add_Material(L"Mtrl_Shield", pMtrl);
+#pragma endregion
 #pragma region 몬스터
 	//pTexture = CTexture::Create(m_pDevice, m_pDeviceContext);
 	//pTexture->NativeConstruct_Prototype(L"../Bin/Resources/Mesh/Bastion_Shooter/T_Bastion_Tier1_Down_D.tga", 1);
@@ -842,6 +843,8 @@ HRESULT CLoader::Ready_Test_JS()
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_TEST_JS, L"Com_StateController", CStateController::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_TEST_JS, L"Com_CharacterController", CCharacterController::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_TEST_JS, L"Com_MeshCollider", CMeshCollider::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 #pragma endregion
 #pragma region 오브젝트

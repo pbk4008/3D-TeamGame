@@ -13,8 +13,6 @@ HRESULT C1H_SwordAttackNormalR1_02::NativeConstruct(void* _pArg)
 	if (FAILED(__super::NativeConstruct(_pArg)))
 		return E_FAIL;
 
-	m_iCutIndex = 14;
-
 	return S_OK;
 }
 
@@ -59,6 +57,8 @@ HRESULT C1H_SwordAttackNormalR1_02::EnterState()
 		return E_FAIL;
 	m_pAnimationController->Set_RootMotion(true, true);
 
+	m_pAnimationController->Set_PlaySpeed(1.2f);
+	m_iCutIndex = 12;
 	return S_OK;
 }
 
@@ -67,6 +67,7 @@ HRESULT C1H_SwordAttackNormalR1_02::ExitState()
 	if (FAILED(__super::ExitState()))
 		return E_FAIL;
 
+	m_pAnimationController->Set_PlaySpeed(1.f);
 	return S_OK;
 }
 

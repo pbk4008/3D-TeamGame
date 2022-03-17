@@ -13,8 +13,6 @@ HRESULT C2H_HammerAttackSprintR1::NativeConstruct(void* _pArg)
 	if (FAILED(__super::NativeConstruct(_pArg)))
 		return E_FAIL;
 
-	m_iCutIndex = 50;
-
 	return S_OK;
 }
 
@@ -66,6 +64,8 @@ HRESULT C2H_HammerAttackSprintR1::EnterState()
 		m_pSilvermane->Set_WeaponFixedBone("weapon_r");
 	}
 
+
+	m_iCutIndex = 40;
 	return S_OK;
 }
 

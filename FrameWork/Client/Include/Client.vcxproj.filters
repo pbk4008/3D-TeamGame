@@ -235,13 +235,13 @@
     <Filter Include="02.GameObject\05.UI\01.UI_Ingame\01.Meter\00.Player\01.HpBar_Red">
       <UniqueIdentifier>{3bc79af9-7de6-4fdb-bd68-25821baf2a4b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObject\94.Boss">
+    <Filter Include="02.GameObject\93.Boss">
       <UniqueIdentifier>{5e4ce90c-d575-4e08-9ce0-006401437c35}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObject\94.Boss\00.MiddleBoss">
+    <Filter Include="02.GameObject\93.Boss\00.MiddleBoss">
       <UniqueIdentifier>{a7db1ec6-722d-46ed-bdad-a86d3c709df2}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObject\94.Boss\00.MiddleBoss\00.Weapon">
+    <Filter Include="02.GameObject\93.Boss\00.MiddleBoss\00.Weapon">
       <UniqueIdentifier>{eee5d743-fda4-4f7b-ba26-d4c790268f21}</UniqueIdentifier>
     </Filter>
     <Filter Include="02.GameObject\95.Monster\99.State">
@@ -258,6 +258,9 @@
     </Filter>
     <Filter Include="02.GameObject\95.Monster\Bastion_2HSword\State_2HSword\Idle">
       <UniqueIdentifier>{18041324-6424-4135-85dd-5f36abcfcc46}</UniqueIdentifier>
+	</Filter>
+    <Filter Include="02.GameObject\96.Weapon\03.Stargazer">
+      <UniqueIdentifier>{c7467934-81e9-48c7-9c6f-403039f32fbb}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -725,10 +728,13 @@
       <Filter>02.GameObject\05.UI\01.UI_Ingame\01.Meter\00.Player\01.HpBar_Red</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\Boss_Bastion_Judicator.h">
-      <Filter>02.GameObject\94.Boss\00.MiddleBoss</Filter>
+      <Filter>02.GameObject\93.Boss\00.MiddleBoss</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\ShieldBreaker.h">
-      <Filter>02.GameObject\94.Boss\00.MiddleBoss\00.Weapon</Filter>
+      <Filter>02.GameObject\93.Boss\00.MiddleBoss\00.Weapon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Stargazer.h">
+      <Filter>02.GameObject\96.Weapon\03.Stargazer</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\Monster_FSM.h">
       <Filter>02.GameObject\95.Monster\99.State</Filter>
@@ -1185,10 +1191,13 @@
       <Filter>02.GameObject\05.UI\01.UI_Ingame\01.Meter\00.Player\01.HpBar_Red</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\Boss_Bastion_Judicator.cpp">
-      <Filter>02.GameObject\94.Boss\00.MiddleBoss</Filter>
+      <Filter>02.GameObject\93.Boss\00.MiddleBoss</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\ShieldBreaker.cpp">
-      <Filter>02.GameObject\94.Boss\00.MiddleBoss\00.Weapon</Filter>
+      <Filter>02.GameObject\93.Boss\00.MiddleBoss\00.Weapon</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Stargazer.cpp">
+      <Filter>02.GameObject\96.Weapon\03.Stargazer</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\Monster_FSM.cpp">
       <Filter>02.GameObject\95.Monster\99.State</Filter>

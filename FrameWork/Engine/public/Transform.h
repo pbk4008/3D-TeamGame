@@ -7,6 +7,8 @@
 
 BEGIN(Engine)
 
+class CCharacterController;
+
 class ENGINE_DLL CTransform final : public CComponent
 {
 public:
@@ -38,6 +40,8 @@ public:
 public:
 	virtual HRESULT NativeConstruct_Prototype();
 	virtual HRESULT NativeConstruct(void* pArg);
+	virtual const _int Tick(_double& _dDeltaTime);
+	virtual const _int LateTick(_double& _dDeltaTime);
 
 public:
 	void Go_Straight(_double TimeDelta, class CNavigation* pNavigation = nullptr);
@@ -68,10 +72,17 @@ public:
 	void Mesh_Up(_double TimeDelta);
 	void Mesh_Down(_double TimeDelta);
 
+public: /* For.CharacterController */
+	const _float3& Get_Velocity() const;
+	void Set_Velocity(const _fvector& _svVelocity);
+	void Add_Velocity(const _fvector& _svVelocity);
+
 private:
 	_float4x4				m_WorldMatrix;	
 	_matrix					m_smatPivot = XMMatrixIdentity();
 	TRANSFORMDESC			m_TransformDesc;
+
+	_float3					m_vVelocity = { 0.f, 0.f, 0.f };
 
 public:
 	static CTransform* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);

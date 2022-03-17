@@ -26,6 +26,7 @@ public:
 	virtual HRESULT NativeConstruct(void* pArg) override;
 public:
 	HRESULT SetUp_ValueOnShader(const char* pConstantName, void* pData, _uint iSize);
+	HRESULT	SetUp_TextureOnShader(const char* pConstantName, ID3D11ShaderResourceView* pSRV, _ulong Numindex);
 	HRESULT Render(_uint iMeshContainerIndex, _int iPassindex);
 private:
 	HRESULT Init_StaticMesh(const wstring& pMeshFilePath);

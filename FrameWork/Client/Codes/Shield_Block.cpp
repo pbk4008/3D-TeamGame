@@ -104,35 +104,37 @@ _int CShield_Block::KeyCheck(const _double& _dDeltaTime)
 				return STATE_CHANGE;
 			}
 		}
+
+
+		if (m_pSilvermane->Is_EquipShield())
+		{
+			if (g_pGameInstance->getkeyPress(DIK_W))
+			{
+				if (FAILED(m_pStateController->Change_State(L"Shield_WalkFwdStart")))
+					return -1;
+				return STATE_CHANGE;
+			}
+			if (g_pGameInstance->getkeyPress(DIK_S))
+			{
+				if (FAILED(m_pStateController->Change_State(L"Shield_WalkBwdStart")))
+					return -1;
+				return STATE_CHANGE;
+			}
+			if (g_pGameInstance->getkeyPress(DIK_D))
+			{
+				if (FAILED(m_pStateController->Change_State(L"Shield_WalkRightStart")))
+					return -1;
+				return STATE_CHANGE;
+			}
+			if (g_pGameInstance->getkeyPress(DIK_A))
+			{
+				if (FAILED(m_pStateController->Change_State(L"Shield_WalkLeftStart")))
+					return -1;
+				return STATE_CHANGE;
+			}
+		}
 	}
 
-	if (m_pSilvermane->Is_EquipShield())
-	{
-		if (g_pGameInstance->getkeyPress(DIK_W))
-		{
-			if (FAILED(m_pStateController->Change_State(L"Shield_WalkFwdStart")))
-				return -1;
-			return STATE_CHANGE;
-		}
-		if (g_pGameInstance->getkeyPress(DIK_S))
-		{
-			if (FAILED(m_pStateController->Change_State(L"Shield_WalkBwdStart")))
-				return -1;
-			return STATE_CHANGE;
-		}
-		if (g_pGameInstance->getkeyPress(DIK_D))
-		{
-			if (FAILED(m_pStateController->Change_State(L"Shield_WalkRightStart")))
-				return -1;
-			return STATE_CHANGE;
-		}
-		if (g_pGameInstance->getkeyPress(DIK_A))
-		{
-			if (FAILED(m_pStateController->Change_State(L"Shield_WalkLeftStart")))
-				return -1;
-			return STATE_CHANGE;
-		}
-	}
 
 	return _int();
 }

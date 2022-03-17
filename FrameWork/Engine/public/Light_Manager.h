@@ -12,6 +12,7 @@ public:
 	CLight_Manager();
 	virtual ~CLight_Manager() = default;
 
+public: void UpdateLightCam(_uint LightIndx, _fvector playerpos);
 public: void SetPBRCheck(_bool check) { m_bPBRHDR = check; }
 
 public:
@@ -21,8 +22,8 @@ public:
 	HRESULT Add_Light(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext, const LIGHTDESC& LightDesc);
 	HRESULT Render_Lights(const wstring& pCameraTag);
 private:
-	list<class CLight*>				m_Lights;
-	typedef list<class CLight*>		LIGHTS;
+	vector<class CLight*>				m_Lights;
+	typedef vector<class CLight*>		LIGHTS;
 
 private: _bool	m_bPBRHDR = false;
 

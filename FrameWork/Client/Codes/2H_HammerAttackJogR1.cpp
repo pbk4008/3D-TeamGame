@@ -13,8 +13,6 @@ HRESULT C2H_HammerAttackJogR1::NativeConstruct(void* _pArg)
 	if (FAILED(__super::NativeConstruct(_pArg)))
 		return E_FAIL;
 
-	m_iCutIndex = 12;
-
 	return S_OK;
 }
 
@@ -66,6 +64,9 @@ HRESULT C2H_HammerAttackJogR1::EnterState()
 		m_pSilvermane->Set_WeaponFixedBone("weapon_r");
 	}
 
+
+	m_iCutIndex = 10;
+	m_pAnimationController->Set_PlaySpeed(1.2f);
 	return S_OK;
 }
 
@@ -74,6 +75,7 @@ HRESULT C2H_HammerAttackJogR1::ExitState()
 	if (FAILED(__super::ExitState()))
 		return E_FAIL;
 
+	m_pAnimationController->Set_PlaySpeed(1.f);
 	return S_OK;
 }
 

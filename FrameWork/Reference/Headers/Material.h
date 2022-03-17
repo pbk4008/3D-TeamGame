@@ -20,6 +20,7 @@ public:
 	virtual HRESULT Compile_ShaderFiles(const wstring& _wstrShaderFilePath, D3D11_INPUT_ELEMENT_DESC* _pElementDesc, const _uint _iNumElements);
 	HRESULT SetUp_ValueOnShader(const string _strConstantName, void* _pData, const _uint _iSize);
 	HRESULT SetUp_TextureOnShader(const string _strConstantName, TEXTURETYPE eType, _uint _iTextureIndex = 0);
+	HRESULT SetUp_TextureOnShader(const string _strConstantName, ID3D11ShaderResourceView* pSRV);
 
 	const wstring& Get_Name() const;
 

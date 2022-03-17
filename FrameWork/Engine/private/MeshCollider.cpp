@@ -111,6 +111,9 @@ HRESULT CMeshCollider::Init_Shape(const vector<_float3*>& vecPoints)
 
 	RELEASE_INSTANCE(CPhysicsXSystem);
 
+	Safe_Delete_Array(pPoints);
+	Safe_Delete_Array(Indices);
+
 	return S_OK;
 }
 

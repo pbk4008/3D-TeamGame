@@ -320,6 +320,7 @@
     <ClInclude Include="..\Headers\Silvermane_SprintFwdStart.h" />
     <ClInclude Include="..\Headers\Silvermane_SprintFwdStop.h" />
     <ClInclude Include="..\Headers\Stage1.h" />
+    <ClInclude Include="..\Headers\Stargazer.h" />
     <ClInclude Include="..\Headers\State_Silvermane.h" />
     <ClInclude Include="..\Headers\TestObj.h" />
     <ClInclude Include="..\Headers\TestScene_JS.h" />
@@ -480,6 +481,7 @@
     <ClCompile Include="..\Codes\Silvermane_SprintFwdStart.cpp" />
     <ClCompile Include="..\Codes\Silvermane_SprintFwdStop.cpp" />
     <ClCompile Include="..\Codes\Stage1.cpp" />
+    <ClCompile Include="..\Codes\Stargazer.cpp" />
     <ClCompile Include="..\Codes\State_Silvermane.cpp" />
     <ClCompile Include="..\Codes\TestObj.cpp" />
     <ClCompile Include="..\Codes\TestScene_JS.cpp" />

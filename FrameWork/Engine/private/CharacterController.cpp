@@ -1,6 +1,7 @@
 #include "CharacterController.h"
 
 #include "GameInstance.h"
+#include "GameObject.h"
 #include "ControllerFilterCallback.h"
 #include "Gizmo.h"
 #include "Transform.h"
@@ -18,7 +19,8 @@ CCharacterController::CCharacterController(const CCharacterController& _rhs)
 
 HRESULT CCharacterController::NativeConstruct_Prototype()
 {
-	if (FAILED(__super::NativeConstruct_Prototype())) return E_FAIL;
+	if (FAILED(__super::NativeConstruct_Prototype())) 
+		return E_FAIL;
 
 	m_pFilterCallback = new CControllerFilterCallback();
 
@@ -27,7 +29,8 @@ HRESULT CCharacterController::NativeConstruct_Prototype()
 
 HRESULT CCharacterController::NativeConstruct(void* _pArg)
 {
-	if (FAILED(__super::NativeConstruct(_pArg))) return E_FAIL;
+	if (FAILED(__super::NativeConstruct(_pArg))) 
+		return E_FAIL;
 
 	CGameInstance* pInstance = GET_INSTANCE(CGameInstance);
 
@@ -36,9 +39,14 @@ HRESULT CCharacterController::NativeConstruct(void* _pArg)
 	RELEASE_INSTANCE(CGameInstance);
 
 	if (_pArg)
+	{
 		memcpy_s(&m_tCharacterControllerDesc, sizeof(CHARACTERCONTROLLERDESC), _pArg, sizeof(CHARACTERCONTROLLERDESC));
+		m_pOwnerTransform = m_tCharacterControllerDesc.pGameObject->Get_Transform();
+	}
 
-	if (FAILED(Create_Controller())) return E_FAIL;
+
+	if (FAILED(Create_Controller())) 
+		return E_FAIL;
 
 	XMStoreFloat4x4(&m_matLocal, XMMatrixIdentity());
 
@@ -175,7 +183,7 @@ HRESULT CCharacterController::Create_Controller()
 		RELEASE_INSTANCE(CPhysicsXSystem);
 		return E_FAIL;
 	}
-	//m_pPxController->setContactOffset(PxF32(0.f));
+	m_pPxController->setContactOffset(PxF32(0.f));
 	//m_pPxController->setStepOffset(PxF32(0.f));
 
 	RELEASE_INSTANCE(CPhysicsXSystem);
@@ -186,6 +194,7 @@ HRESULT CCharacterController::Create_Controller()
 void CCharacterController::Move(const _double& _dDeltaTime, const _float3 _vVelocity)
 {
 	PxVec3 pxvVelocity = ToPxVec3(_vVelocity);
+	//pxvVelocity.y += -9.8f * _dDeltaTime;
 	if (!pxvVelocity.isFinite())
 	{
 		m_vVelocity = { 0.f, 0.f, 0.f };
@@ -194,6 +203,15 @@ void CCharacterController::Move(const _double& _dDeltaTime, const _float3 _vVelo
 	PxControllerFilters filter;
 	m_preFlag = m_curFlag;
 	m_curFlag = m_pPxController->move(pxvVelocity, 0.f, (_float)_dDeltaTime, filter);
+}
+
+void CCharacterController::Update_OwnerTransform()
+{
+	PxExtendedVec3 pxPosition = m_pPxController->getPosition();
+
+	_float3 vPosition = { (_float)pxPosition.x, (_float)pxPosition.y, (_float)pxPosition.z };
+	_vector svPosition = XMLoadFloat3(&vPosition) - XMLoadFloat3(&m_tCharacterControllerDesc.vPosition);
+	m_pOwnerTransform->Set_State(CTransform::STATE_POSITION, XMVectorSetW(svPosition, 1.f));
 }
 
 _fvector CCharacterController::getQuaternion(_fmatrix matTransform)
@@ -263,6 +281,10 @@ _fmatrix CCharacterController::Update_Rotate(_fmatrix matTransform)
 
 _fmatrix CCharacterController::Update_Position(PxVec3 vPos)
 {
+	_float3 vOffsetPos = m_tCharacterControllerDesc.vPosition;
+	vPos.x += vOffsetPos.x;
+	vPos.y += vOffsetPos.y;
+	vPos.z += vOffsetPos.z;
 	_matrix matPos = XMMatrixIdentity();
 	PxTransform pRigidTr = m_pPxController->getActor()->getGlobalPose();
 	pRigidTr.p = vPos;

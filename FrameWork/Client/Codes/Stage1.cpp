@@ -24,24 +24,25 @@ HRESULT CStage1::NativeConstruct()
 	//{
 	//	return E_FAIL;
 	//}
-	//if (FAILED(Ready_Camera(L"Layer_Camera")))
+
+	//if (FAILED(Ready_Player(L"Layer_Player")))
 	//{
 	//	return E_FAIL;
 	//}
-	/*if (FAILED(Ready_Player(L"Layer_Player")))
-	{
-		return E_FAIL;
-	}*/
+	//if (FAILED(Ready_Boss(L"Layer_Boss")))
+	//{
+	//	return E_FAIL;
+	//}
 	if (FAILED(Ready_Monster(L"Layer_Monster")))
 	{
 		return E_FAIL;
 	}
-	/*if (FAILED(Ready_UI(L"Layer_UI")))
-	{
-		return E_FAIL;
-	}*/
+	//if (FAILED(Ready_UI(L"Layer_UI")))
+	//{
+	//	return E_FAIL;
+	//}
 
-	//Data
+	////Data
 	//if (FAILED(Ready_Data_UI(L"../bin/SaveData/UI/UI.dat")))
 	//{
 	//	return E_FAIL;
@@ -118,17 +119,25 @@ HRESULT CStage1::Ready_MapObject()
 
 HRESULT CStage1::Ready_Camera(const _tchar* LayerTag)
 {
-	/*if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Camera_Silvermane")))
-		return E_FAIL;*/
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Camera_Silvermane")))
+		return E_FAIL;
 	
 	return S_OK;
 }
 
 HRESULT CStage1::Ready_Player(const _tchar* LayerTag)
 {
-	/*if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Proto_GameObject_Silvermane")))
-		return E_FAIL;*/
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Proto_GameObject_Silvermane")))
+		return E_FAIL;
 	
+	return S_OK;
+}
+
+HRESULT CStage1::Ready_Boss(const _tchar* LayerTag)
+{
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Proto_GameObject_Boss_Judicator")))
+		return E_FAIL;
+
 	return S_OK;
 }
 
@@ -137,12 +146,6 @@ HRESULT CStage1::Ready_Monster(const _tchar* LayerTag)
 	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Proto_GameObject_Monster_Crawler")))
 	//	return E_FAIL;
 	
-	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Proto_GameObject_Boss_Judicator")))
-	//	return E_FAIL;
-
-	/*if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Proto_GameObject_Weapon_ShieldBreaker")))
-		return E_FAIL;*/
-
 	/*if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Monster_EarthAberrant")))
 		return E_FAIL;
 

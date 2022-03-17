@@ -148,6 +148,11 @@ void CGameObject::setActive(_bool bActive)
 		pCom.second->setActive(m_bActive);
 }
 
+CTransform* CGameObject::Get_Transform() const
+{
+	return m_pTransform;
+}
+
 HRESULT CGameObject::SetUp_Components(_uint iLevelIndex, const wstring& pPrototypeTag, const wstring&pComponentTag, CComponent** ppOut, void* pArg)
 {
 	auto	iter = find_if(m_Components.begin(), m_Components.end(), CTag_Finder(pComponentTag));

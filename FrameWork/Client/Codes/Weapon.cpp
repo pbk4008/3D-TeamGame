@@ -91,6 +91,30 @@ void CWeapon::Set_FixedBone(CHierarchyNode* _pFixedBone)
 	m_pFixedBone = _pFixedBone;
 }
 
+_fmatrix CWeapon::Remove_Scale(_fmatrix matTransform)
+{
+	//Right벡터 Nomalize해서 구하기
+	_vector vRight = XMVector3Normalize(matTransform.r[0]);
+	//Up벡터 Nomalize해서 구하기
+	_vector vUP = XMVector3Normalize(matTransform.r[1]);
+	//Look벡터 Nomalize해서 구하기
+	_vector vLook = XMVector3Normalize(matTransform.r[2]);
+	
+	//결과 벡터
+	_matrix matResult = XMMatrixIdentity();
+
+	//결과 벡터에 right넣기
+	matResult.r[0] = vRight;
+	//결과 벡터에 Up넣기
+	matResult.r[1] = vUP;
+	//결과 벡터에 Look넣기
+	matResult.r[2] = vLook;
+	//결과 벡터에 가져온 Pos넣기
+	matResult.r[3] = matTransform.r[3];
+
+	return matResult;
+}
+
 void CWeapon::Free()
 {
 	Safe_Release(m_pLocalTransform);

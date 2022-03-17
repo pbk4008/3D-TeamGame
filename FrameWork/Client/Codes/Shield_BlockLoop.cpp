@@ -20,6 +20,8 @@ _int CShield_BlockLoop::Tick(const _double& _dDeltaTime)
 	if (NO_EVENT != iProgress)
 		return iProgress;
 
+	Add_PlusAngle(EDir::Forward, _dDeltaTime);
+
 	return _int();
 }
 

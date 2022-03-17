@@ -37,6 +37,8 @@ private:
 	CGameObject* m_pGameObject = nullptr;
 	unordered_map<wstring, CState*> m_mapStates;
 
+	_bool m_isChange = false;
+
 	wstring m_wstrPreStateTag = L"";
 	wstring m_wstrCurStateTag = L"";
 

@@ -169,23 +169,26 @@ HRESULT CSilvermane::NativeConstruct(void* _pArg)
 
 _int CSilvermane::Tick(_double _dDeltaTime)
 {
+	m_pAnimationController->Set_MoveSpeed(4.f);
 	_int iProgress = __super::Tick(_dDeltaTime);
 	if (NO_EVENT != iProgress)
 		return iProgress;
+	m_pTransform->Set_Velocity(XMVectorZero());
 
 	iProgress = m_pStateController->Tick(_dDeltaTime);
-	if (NO_EVENT != iProgress) 
+	if (NO_EVENT != iProgress && STATE_CHANGE != iProgress) 
 		return iProgress;
 
 	iProgress = Trace_CameraLook(_dDeltaTime);
 	if (NO_EVENT != iProgress) 
 		return iProgress;
 
-	iProgress = m_pAnimationController->Tick(_dDeltaTime);
+	iProgress = m_pAnimationController->Tick(_dDeltaTime, CAnimationController::EType::Transform);
 	if (NO_EVENT != iProgress) 
 		return iProgress;
 
 	m_pCharacterController->Tick(_dDeltaTime);
+	//m_pCharacterController->Move(_dDeltaTime, m_pTransform->Get_Velocity());
 
 	// 무기 업뎃
 	if (m_pCurWeapon)
@@ -194,12 +197,13 @@ _int CSilvermane::Tick(_double _dDeltaTime)
 		if (NO_EVENT != iProgress) 
 			return iProgress;
 	}
-	//if (m_pShield->getActive())
-	//{
-	//	iProgress = m_pShield->Tick(_dDeltaTime);
-	//	if (NO_EVENT != iProgress)
-	//		return iProgress;
-	//}
+
+	if (m_pShield && m_pShield->getActive())
+	{
+		iProgress = m_pShield->Tick(_dDeltaTime);
+		if (NO_EVENT != iProgress)
+			return iProgress;
+	}
 
 	return _int();
 }
@@ -209,6 +213,8 @@ _int CSilvermane::LateTick(_double _dDeltaTime)
 	_int iProgress = __super::LateTick(_dDeltaTime);
 	if (NO_EVENT != iProgress) 
 		return iProgress;
+
+	//m_pCharacterController->Update_OwnerTransform();
 
 	iProgress = m_pStateController->LateTick(_dDeltaTime);
 	if (NO_EVENT != iProgress) 
@@ -224,12 +230,12 @@ _int CSilvermane::LateTick(_double _dDeltaTime)
 		if (NO_EVENT != iProgress) 
 			return iProgress;
 	}
-	//if (m_pShield->getActive())
-	//{
-	//	iProgress = m_pShield->LateTick(_dDeltaTime);
-	//	if (NO_EVENT != iProgress) 
-	//		return iProgress;
-	//}
+	if (m_pShield && m_pShield->getActive())
+	{
+		iProgress = m_pShield->LateTick(_dDeltaTime);
+		if (NO_EVENT != iProgress) 
+			return iProgress;
+	}
 
 	g_pObserver->Set_PlayerPos(m_pTransform->Get_State(CTransform::STATE_POSITION));
 
@@ -289,6 +295,7 @@ HRESULT CSilvermane::Ready_Components()
 	tTransformDesc.fSpeedPerSec = 10.f;
 	tTransformDesc.fRotationPerSec = XMConvertToRadians(90.f);
 	m_pTransform->Set_TransformDesc(tTransformDesc);
+	m_pTransform->Set_State(CTransform::STATE_POSITION, XMVectorSet(0.f, 2.f, 0.f, 1.f));
 
 	// 모델
 	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_TEST_JS, L"Model_Silvermane", L"Model", (CComponent**)&m_pModel)))
@@ -313,12 +320,14 @@ HRESULT CSilvermane::Ready_Components()
 
 	// 캐릭터 컨트롤러
 	CCharacterController::CHARACTERCONTROLLERDESC tCharacterControllerDesc;
-	tCharacterControllerDesc.fHeight = 2.f;
+	tCharacterControllerDesc.fHeight = 1.6f;
 	tCharacterControllerDesc.fRadius = 0.5f;
 	tCharacterControllerDesc.fStaticFriction = 0.5f;
 	tCharacterControllerDesc.fDynamicFriction = 0.5f;
 	tCharacterControllerDesc.fRestitution = 0.f;
 	tCharacterControllerDesc.pGameObject = this;
+	tCharacterControllerDesc.vPosition = { 0.f, 0.8f, 0.f };
+
 	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_TEST_JS, L"Com_CharacterController", L"CharacterController", (CComponent**)&m_pCharacterController, &tCharacterControllerDesc)))
 		return E_FAIL;
 	m_pCharacterController->Set_OwnerTransform(m_pTransform);

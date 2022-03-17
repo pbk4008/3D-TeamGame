@@ -38,7 +38,7 @@ public:
 private:
 	virtual void Free() override;
 private:
-	CAnimation* m_pAnim;//찐 애니메이션
+	CAnimation* m_pAnim;//찐 애니메이션 
 	_bool m_bLoop;//반복 재생
 	_bool m_bTmpLoop;//반복 재생 보관용 변수
 	vector<CAnimNode*> m_vecAnimNode;//현재 노드와 연결되어 있는 자식노드들

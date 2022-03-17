@@ -151,6 +151,11 @@ const _uint CAnimation::Get_CurrentKeyFrameIndex()
 	return m_iCurKeyFrameIndex;
 }
 
+const _float CAnimation::Get_PalySpeed() const
+{
+	return m_PlaySpeed;
+}
+
 void CAnimation::Set_MaxKeyFrameIndex(const _uint _iMaxKeyFrameIndex)
 {
 	m_iMaxKeyFrameIndex = _iMaxKeyFrameIndex;
