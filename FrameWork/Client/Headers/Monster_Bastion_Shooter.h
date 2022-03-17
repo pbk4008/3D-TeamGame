@@ -27,7 +27,7 @@ public:
 
 private:
 	HRESULT Ready_Components();
-	HRESULT Set_Animation_FSM();
+	HRESULT Ready_AnimationFSM();
 	HRESULT Ready_StateFSM();
 
 private:

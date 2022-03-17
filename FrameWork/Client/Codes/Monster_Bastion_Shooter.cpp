@@ -28,6 +28,9 @@ HRESULT CMonster_Bastion_Shooter::NativeConstruct(const _uint _iSceneID, void* _
 	if (FAILED(Ready_Components()))
 		return E_FAIL;
 
+	if (FAILED(Ready_AnimationFSM()))
+		return E_FAIL;
+
 	if (FAILED(Ready_StateFSM()))
 		return E_FAIL;
 
@@ -113,7 +116,7 @@ HRESULT CMonster_Bastion_Shooter::Ready_Components()
 	return S_OK;
 }
 
-HRESULT CMonster_Bastion_Shooter::Set_Animation_FSM()
+HRESULT CMonster_Bastion_Shooter::Ready_AnimationFSM()
 {
 	CAnimation* pAnim = m_pModelCom->Get_Animation("A_Idle_CrimsonMarksman");
 	//생성 하면서 연결(연결 할애, 연결 당할애, 애니메이션, 루트 애님, 트랜스폼(루트애니메이션할때 찐으로 따라감), 루프, 옵션)
