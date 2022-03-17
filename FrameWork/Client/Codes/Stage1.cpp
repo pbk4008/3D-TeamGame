@@ -25,10 +25,10 @@ HRESULT CStage1::NativeConstruct()
 		return E_FAIL;
 	}*/
 
-	//if (FAILED(Ready_Player(L"Layer_Silvermane")))
-	//{
-	//	return E_FAIL;
-	//}
+	if (FAILED(Ready_Player(L"Layer_Silvermane")))
+	{
+		return E_FAIL;
+	}
 	//if (FAILED(Ready_Boss(L"Layer_Boss")))
 	//{
 	//	return E_FAIL;
