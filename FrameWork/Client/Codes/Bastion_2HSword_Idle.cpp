@@ -84,7 +84,7 @@ void CBastion_2HSword_Idle::Look_Player(void)
 	if(5.0f > fDistToPlayer && TRUE == g_pObserver->m_bAttack)
 		m_pStateController->Change_State(L"Dash");
 
-	if(4.0f > fDistToPlayer)
+	if(2.0f > fDistToPlayer)
 		m_pStateController->Change_State(L"Attack");
 }
 

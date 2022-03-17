@@ -29,6 +29,7 @@ _int CBastion_2HSword_Chaser::Tick(const _double& _dDeltaTime)
 		return iProgress;
 
 	m_pAnimator->Tick(_dDeltaTime);
+
 	m_pTransform->Chase_Target(g_pObserver->m_pPlayerTrans, _dDeltaTime);
 
 	return _int();
@@ -82,7 +83,7 @@ void CBastion_2HSword_Chaser::Look_Player(void)
   		m_pStateController->Change_State(L"Idle");
 	}
 
-	if (4.0f > fDistToPlayer)
+	if (2.0f > fDistToPlayer)
 		m_pStateController->Change_State(L"Attack");
 }
 

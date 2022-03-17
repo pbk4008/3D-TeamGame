@@ -894,12 +894,9 @@ HRESULT CLoader::Ready_Test_YM()
 #pragma region 모델
 	cout << "TestScene_YM 모델 프로토타입 생성중..." << endl;
 	_matrix matPivot = XMMatrixIdentity();
-	matPivot = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(180.f));
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_TEST_YM, L"Model_Silvermane", CModel::Create(m_pDevice, m_pDeviceContext,
-		"../bin/Resources/Mesh/Silvermane/", "Silvermane.fbx",
-		L"../../Reference/ShaderFile/Shader_Mesh.hlsl",
-		matPivot,
-		CModel::TYPE_ANIM, true))))
+
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_TEST_YM, L"Model_Silvermane_Bin", CModel::Create(m_pDevice, m_pDeviceContext,
+		L"../bin/FBX/Silvermane/Silvermane_Bin.fbx", CModel::TYPE_ANIM, true))))
 	{
 		return E_FAIL;
 	}
@@ -910,6 +907,22 @@ HRESULT CLoader::Ready_Test_YM()
 	{
 		return E_FAIL;
 	}
+	matPivot = XMMatrixIdentity();
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_TEST_YM, L"Model_Fury", CModel::Create(m_pDevice, m_pDeviceContext,
+		"../bin/Resources/Mesh/Fury/", "Fury.fbx",
+		L"../../Reference/ShaderFile/Shader_StaticMesh.hlsl", matPivot, CModel::TYPE_STATIC, true))))
+	{
+		return E_FAIL;
+	}
+	matPivot = XMMatrixIdentity();
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_TEST_YM, L"Model_Shield", CModel::Create(m_pDevice, m_pDeviceContext,
+		"../bin/Resources/Mesh/Shield/", "Shield.fbx",
+		L"../../Reference/ShaderFile/Shader_StaticMesh.hlsl", matPivot, CModel::TYPE_STATIC, true))))
+	{
+		return E_FAIL;
+	}
+
+
 	matPivot = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(180.f));
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_TEST_YM, L"Model_Bastion_2HSword", CModel::Create(m_pDevice, m_pDeviceContext,
 		"../bin/Resources/Mesh/Bastion_2HSword/", "Bastion_2HSword.fbx",
