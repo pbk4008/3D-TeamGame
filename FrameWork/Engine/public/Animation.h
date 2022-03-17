@@ -23,6 +23,7 @@ public:
 	vector <class CChannel*>& Get_Channels() { return m_Channels; }
 	const _uint Get_MaxKeyFrameIndex() const;
 	const _uint Get_CurrentKeyFrameIndex();
+	const _float Get_PalySpeed() const;
 	void Set_MaxKeyFrameIndex(const _uint _iMaxKeyFrameIndex);
 	const _bool Is_Finished() const { return m_isFinished; }
 	CSaveManager::ANIMDATA& SetSaveAnimData();

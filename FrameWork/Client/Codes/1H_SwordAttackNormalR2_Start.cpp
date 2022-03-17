@@ -11,6 +11,8 @@ HRESULT C1H_SwordAttackNormalR2_Start::NativeConstruct(void* _pArg)
 	if (FAILED(__super::NativeConstruct(_pArg)))
 		return E_FAIL;
 
+	m_iCutIndex = 20;
+
 	return S_OK;
 }
 
@@ -29,6 +31,7 @@ _int C1H_SwordAttackNormalR2_Start::Tick(const _double& _dDeltaTime)
 		return STATE_CHANGE;
 	}
 
+	m_iCutIndex = 20;
 	return _int();
 }
 

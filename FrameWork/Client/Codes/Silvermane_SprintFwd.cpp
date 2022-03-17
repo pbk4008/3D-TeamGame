@@ -49,8 +49,6 @@ HRESULT CSilvermane_SprintFwd::EnterState()
 		return E_FAIL;
 	m_pAnimationController->Set_RootMotion(true, true);
 
-	m_pSilvermane->Set_Move(true);
-
 	return S_OK;
 }
 
@@ -58,8 +56,6 @@ HRESULT CSilvermane_SprintFwd::ExitState()
 {
 	if (FAILED(__super::ExitState()))
 		return E_FAIL;
-
-	m_pSilvermane->Set_Move(false);
 
 	return S_OK;
 }

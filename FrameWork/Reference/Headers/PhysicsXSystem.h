@@ -3,6 +3,11 @@
 #define __PHYSICSXSYSTEM__
 #include "SingleTon.h"
 
+
+#define PVD_HOST "127.0.0.1"
+#define PVD_PORT 5425
+#define PVD_DEFAULT_TIMEOUT 10//ms
+
 #define ToPxVec3(v)					PxVec3((v).x, (v).y, (v).z)
 #define FromPxVec3(v)				_float3((v).x, (v).y, (v).z)
 #define ToPxExtendedVec3(v)			PxExtendedVec3((v).x, (v).y, (v).z)
@@ -54,6 +59,10 @@ private:
 	PxScene* m_pScene;
 	PxCooking* m_pCooking;
 	PxDefaultCpuDispatcher* m_pDispatcher;
+
+
+	PxPvdTransport* m_pPvdTransport = nullptr;
+	PxPvd* m_pPvd = nullptr;
 
 private: /* For.ControllerManager */
 	PxControllerManager* m_pControllerManager = nullptr;

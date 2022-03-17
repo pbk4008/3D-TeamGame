@@ -13,8 +13,6 @@ HRESULT C2H_HammerAttackR2_03::NativeConstruct(void* _pArg)
 	if (FAILED(__super::NativeConstruct(_pArg)))
 		return E_FAIL;
 
-	m_iCutIndex = 50;
-
 	return S_OK;
 }
 
@@ -28,7 +26,7 @@ _int C2H_HammerAttackR2_03::Tick(const _double& _dDeltaTime)
 
 	if (m_pAnimationController->Is_Finished())
 	{
-		m_pStateController->Change_State(L"Idle");
+		m_pStateController->Change_State(L"2H_HammerIdle");
 		return STATE_CHANGE;
 	}
 
@@ -61,6 +59,9 @@ HRESULT C2H_HammerAttackR2_03::EnterState()
 		return E_FAIL;
 	m_pAnimationController->Set_RootMotion(true, true);
 
+
+	m_iCutIndex = 50;
+	m_pAnimationController->Add_TrackAcc(6.0);
 	return S_OK;
 }
 

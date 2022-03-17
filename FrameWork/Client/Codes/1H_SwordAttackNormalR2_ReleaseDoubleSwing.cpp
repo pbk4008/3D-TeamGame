@@ -25,7 +25,7 @@ _int C1H_SwordAttackNormalR2_ReleaseDoubleSwing::Tick(const _double& _dDeltaTime
 	m_fRotTime += (_float)_dDeltaTime;
 	Add_PlusAngle(EDir::Forward, -_dDeltaTime);
 
-	if (4 < m_pAnimationController->Get_CurKeyFrameIndex())
+	if (25 < m_pAnimationController->Get_CurKeyFrameIndex())
 	{
 		m_pSilvermane->Set_TrasceCamera(false);
 	}
@@ -72,6 +72,7 @@ HRESULT C1H_SwordAttackNormalR2_ReleaseDoubleSwing::EnterState()
 
 	m_pAnimationController->Set_RootMotion(true, true);
 	m_pAnimationController->Set_PlaySpeed(1.4f);
+	m_pAnimationController->Add_TrackAcc(20.0);
 
 	return S_OK;
 }

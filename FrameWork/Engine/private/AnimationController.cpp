@@ -30,13 +30,22 @@ HRESULT CAnimationController::NativeConstruct(void* _pArg)
 	return S_OK;
 }
 
-_int CAnimationController::Tick(const _double& _dDeltaTime)
+_int CAnimationController::Tick(const _double& _dDeltaTime, const EType _eType)
 {
 	if (0 > Update_CombinedTransformMatrix(_dDeltaTime))
 		return -1;
 
-	if (0 > Move_Transform(_dDeltaTime))
-		return -1;
+	switch (_eType)
+	{
+	case EType::Transform:
+		if (0 > Move_Transform(_dDeltaTime))
+			return -1;
+		break;
+	case EType::CharacterController:
+		if (0 > Add_TransformVelocity(_dDeltaTime))
+			return -1;
+		break;
+	}
 
 	if(-1 != m_tBlendDesc.iNextAnimIndex)
 	{
@@ -217,6 +226,7 @@ _int CAnimationController::Update_CombinedTransformMatrix(const _double& _dDelta
 	return _int();
 }
 
+
 void CAnimationController::Lerp_Anim(vector<CAnimation*>& _vecvecAnimations)
 {
 	vector<CChannel*>& vecCurrentAnim = _vecvecAnimations[m_tBlendDesc.iCurAnimIndex]->Get_Channels();
@@ -360,6 +370,14 @@ const _int CAnimationController::Move_Transform(const _double& _dDeltaTime)
 	{
 		if (m_pFixedBone)
 		{
+			if (m_pFixedBone->Get_CurrentKeyFrameIndex() == m_iCurFixedBoneKeyFrameIndex)
+				m_fFixedBoneHoldTime += (_float)_dDeltaTime * m_fPlaySpeed * m_pCurAnim->Get_PalySpeed();
+			else
+				m_fFixedBoneHoldTime = 0.f;
+
+			if (1.f < m_fFixedBoneHoldTime)
+				return 0;
+
 			vector<KEYFRAME*> KeyFrames = m_pFixedBone->Get_KeyFrames();
 			m_iCurFixedBoneKeyFrameIndex = m_pFixedBone->Get_CurrentKeyFrameIndex();
 			m_iPreFixedBoneKeyFrameIndex = m_iCurFixedBoneKeyFrameIndex - 1;
@@ -368,7 +386,6 @@ const _int CAnimationController::Move_Transform(const _double& _dDeltaTime)
 			_vector svRight = m_pTransform->Get_State(CTransform::STATE_RIGHT);
 			_vector svUp = m_pTransform->Get_State(CTransform::STATE_UP);
 			_vector svLook = m_pTransform->Get_State(CTransform::STATE_LOOK);
-
 
 			_vector svPreVelocity = XMVectorZero();
 			_vector svVelocity = XMVectorZero();
@@ -448,9 +465,140 @@ const _int CAnimationController::Move_Transform(const _double& _dDeltaTime)
 			svVelocity = XMVector4Transform(svVelocity, m_smatPivot * m_pTransform->Get_PivotMatrix());
 
 			XMStoreFloat3(&vVelocity, svVelocity);
-			m_pTransform->Go_Right(vVelocity.x * _dDeltaTime * m_fMoveSpeed);
-			m_pTransform->Go_Up(vVelocity.y * _dDeltaTime* m_fMoveSpeed);
-			m_pTransform->Go_Straight(vVelocity.z * _dDeltaTime* m_fMoveSpeed);
+			m_pTransform->Go_Right((_float)vVelocity.x * _dDeltaTime * m_fMoveSpeed);
+			m_pTransform->Go_Up((_float)vVelocity.y * _dDeltaTime* m_fMoveSpeed);
+			m_pTransform->Go_Straight((_float)vVelocity.z * _dDeltaTime* m_fMoveSpeed);
+
+			// 요 아래는 디버그 용이야
+			_float3 vPosition = { 0.f, 0.f, 0.f };
+			XMStoreFloat3(&vBonePosition, svPosition);
+
+			wstring wstrBonePosition = L"FixedBonePosition : ";
+			wstrBonePosition += wstrBonePosition + to_wstring(vBonePosition.x) + L", " + to_wstring(vBonePosition.y) + L", " + to_wstring(vBonePosition.z);
+			wstring wstrPosition = L"Position : ";
+			wstrPosition += to_wstring(vPosition.x) + L", " + to_wstring(vPosition.y) + L", " + to_wstring(vPosition.z);
+		}
+	}
+
+	return _int();
+}
+
+const _int CAnimationController::Add_TransformVelocity(const _double& _dDeltaTime)
+{
+	if (!m_pTransform)
+	{
+		return -1;
+	}
+	if (!m_isTransformMove)
+	{
+		return 0;
+	}
+
+	if (m_pCurAnim)
+	{
+		if (m_pFixedBone)
+		{
+			if (m_pFixedBone->Get_CurrentKeyFrameIndex() == m_iCurFixedBoneKeyFrameIndex)
+				m_fFixedBoneHoldTime += (_float)_dDeltaTime * m_fPlaySpeed * m_pCurAnim->Get_PalySpeed();
+			else
+				m_fFixedBoneHoldTime = 0.f;
+
+			if (1.f < m_fFixedBoneHoldTime)
+				return 0;
+
+			vector<KEYFRAME*> KeyFrames = m_pFixedBone->Get_KeyFrames();
+			m_iCurFixedBoneKeyFrameIndex = m_pFixedBone->Get_CurrentKeyFrameIndex();
+			m_iPreFixedBoneKeyFrameIndex = m_iCurFixedBoneKeyFrameIndex - 1;
+
+			_vector svPosition = m_pTransform->Get_State(CTransform::STATE_POSITION);
+			_vector svRight = m_pTransform->Get_State(CTransform::STATE_RIGHT);
+			_vector svUp = m_pTransform->Get_State(CTransform::STATE_UP);
+			_vector svLook = m_pTransform->Get_State(CTransform::STATE_LOOK);
+
+			_vector svPreVelocity = XMVectorZero();
+			_vector svVelocity = XMVectorZero();
+
+			_vector svPreQuaternian = XMVectorZero();
+			_vector svQuaternian = XMVectorZero();
+
+			if (0 == m_iCurFixedBoneKeyFrameIndex)
+			{
+				svPreVelocity = XMLoadFloat3(&KeyFrames[KeyFrames.size() - 2]->vPosition);
+				svVelocity = XMLoadFloat3(&KeyFrames[KeyFrames.size() - 1]->vPosition);
+
+				svPreQuaternian = XMLoadFloat4(&KeyFrames[KeyFrames.size() - 2]->vRotation);
+				svQuaternian = XMLoadFloat4(&KeyFrames[KeyFrames.size() - 1]->vRotation);
+
+				svVelocity -= svPreVelocity;
+				svQuaternian -= svPreQuaternian;
+			}
+			else
+			{
+				if (m_iPreFixedBoneKeyFrameIndex >= 0)
+				{
+					svPreVelocity = XMLoadFloat3(&KeyFrames[m_iPreFixedBoneKeyFrameIndex]->vPosition);
+					svPreQuaternian = XMLoadFloat4(&KeyFrames[m_iPreFixedBoneKeyFrameIndex]->vRotation);
+				}
+				svVelocity = XMLoadFloat3(&KeyFrames[m_iCurFixedBoneKeyFrameIndex]->vPosition);
+				svQuaternian = XMLoadFloat4(&KeyFrames[m_iCurFixedBoneKeyFrameIndex]->vRotation);
+
+				svVelocity -= svPreVelocity;
+				svQuaternian -= svPreQuaternian;
+			}
+
+			//svVelocity *= _dDeltaTime;
+			svQuaternian = XMVector4Transform(svQuaternian, m_smatPivot);
+
+			_float3 vVelocity, vBonePosition, vEuler, vRotation;
+			_float4 vQuaternian;
+			XMStoreFloat3(&vVelocity, svVelocity);
+			XMStoreFloat4(&vQuaternian, svQuaternian);
+			vEuler = QuaternionToEuler(vQuaternian);
+
+			switch (m_eRootOption)
+			{
+			case ERootOption::X:
+				vBonePosition = { -vVelocity.x, 0.f, 0.f };
+				break;
+			case ERootOption::Y:
+				vBonePosition = { 0.f, 0.f, -vVelocity.y };
+				break;
+			case ERootOption::Z:
+				vBonePosition = { 0.f, -vVelocity.z, 0.f };
+				break;
+			case ERootOption::XY:
+				vBonePosition = { -vVelocity.x, 0.f, -vVelocity.y };
+				break;
+			case ERootOption::XZ:
+				vBonePosition = { -vVelocity.x, -vVelocity.z, 0.f };
+				break;
+			case ERootOption::YZ:
+				vBonePosition = { 0.f, -vVelocity.z, -vVelocity.y };
+				break;
+			case ERootOption::XYZ:
+				vBonePosition = { -vVelocity.x, -vVelocity.z, -vVelocity.y };
+				break;
+			}
+			vRotation = { -vEuler.x, -vEuler.z, -vEuler.y };
+
+
+			m_pTransform->Rotation_Axis(svRight, _dDeltaTime * vRotation.x);
+			m_pTransform->Rotation_Axis(svUp, _dDeltaTime * vRotation.y);
+			m_pTransform->Rotation_Axis(svLook, _dDeltaTime * vRotation.z);
+
+
+			svLook = m_pTransform->Get_State(CTransform::STATE_LOOK);
+
+			svVelocity = XMLoadFloat3(&vBonePosition);
+			svVelocity = XMVector4Transform(svVelocity, m_smatPivot * m_pTransform->Get_PivotMatrix());
+			
+			_vector svWorldQuaterian = XMQuaternionNormalize(XMQuaternionRotationMatrix(m_pTransform->Get_WorldMatrix()));
+			_matrix svRotation = XMMatrixRotationQuaternion(svWorldQuaterian);
+			svVelocity = XMVector4Transform(svVelocity, svRotation);
+
+			XMStoreFloat3(&vVelocity, svVelocity);
+			svVelocity *= m_fMoveSpeed;
+			m_pTransform->Add_Velocity(svVelocity);
 
 			// 요 아래는 디버그 용이야
 			_float3 vPosition = { 0.f, 0.f, 0.f };
