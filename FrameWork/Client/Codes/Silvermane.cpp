@@ -198,12 +198,12 @@ _int CSilvermane::Tick(_double _dDeltaTime)
 			return iProgress;
 	}
 
-	if (m_pShield && m_pShield->getActive())
+	/*if (m_pShield && m_pShield->getActive())
 	{
 		iProgress = m_pShield->Tick(_dDeltaTime);
 		if (NO_EVENT != iProgress)
 			return iProgress;
-	}
+	}*/
 
 	return _int();
 }
@@ -295,10 +295,10 @@ HRESULT CSilvermane::Ready_Components()
 	tTransformDesc.fSpeedPerSec = 10.f;
 	tTransformDesc.fRotationPerSec = XMConvertToRadians(90.f);
 	m_pTransform->Set_TransformDesc(tTransformDesc);
-	m_pTransform->Set_State(CTransform::STATE_POSITION, XMVectorSet(0.f, 2.f, 0.f, 1.f));
+	m_pTransform->Set_State(CTransform::STATE_POSITION, XMVectorSet(0.f, 0.f, 0.f, 1.f));
 
 	// 모델
-	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_TEST_JS, L"Model_Silvermane", L"Model", (CComponent**)&m_pModel)))
+	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_TEST_YM, L"Model_Silvermane", L"Model", (CComponent**)&m_pModel)))
 		return E_FAIL;
 	m_pModel->Add_Material(g_pGameInstance->Get_Material(L"Mtrl_Silvermane_Top"), 0);
 	m_pModel->Add_Material(g_pGameInstance->Get_Material(L"Mtrl_Silvermane_Down"), 1);
@@ -306,7 +306,7 @@ HRESULT CSilvermane::Ready_Components()
 	m_pModel->Add_Material(g_pGameInstance->Get_Material(L"Mtrl_Silvermane_Hair"), 3);
 
 	// 에니메이션 컨트롤러
-	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_TEST_JS, L"Com_AnimationController", L"AnimationController", (CComponent**)&m_pAnimationController)))
+	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_TEST_YM, L"Com_AnimationController", L"AnimationController", (CComponent**)&m_pAnimationController)))
 		return E_FAIL;
 	m_pAnimationController->Set_GameObject(this);
 	m_pAnimationController->Set_Model(m_pModel);
@@ -314,7 +314,7 @@ HRESULT CSilvermane::Ready_Components()
 	m_pAnimationController->Set_MoveSpeed(2.f);
 
 	// 스테이트 컨트롤러
-	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_TEST_JS, L"Com_StateController", L"StateController", (CComponent**)&m_pStateController)))
+	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_TEST_YM, L"Com_StateController", L"StateController", (CComponent**)&m_pStateController)))
 		return E_FAIL;
 	m_pStateController->Set_GameObject(this);
 
@@ -328,7 +328,7 @@ HRESULT CSilvermane::Ready_Components()
 	tCharacterControllerDesc.pGameObject = this;
 	tCharacterControllerDesc.vPosition = { 0.f, 0.8f, 0.f };
 
-	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_TEST_JS, L"Com_CharacterController", L"CharacterController", (CComponent**)&m_pCharacterController, &tCharacterControllerDesc)))
+	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_TEST_YM, L"Com_CharacterController", L"CharacterController", (CComponent**)&m_pCharacterController, &tCharacterControllerDesc)))
 		return E_FAIL;
 	m_pCharacterController->Set_OwnerTransform(m_pTransform);
 
@@ -573,12 +573,12 @@ HRESULT CSilvermane::Ready_Weapons()
 	m_umapWeapons.emplace(L"Fury", pWeapon);
 
 	// 방패
-	pWeaponBone = m_pModel->Get_BoneMatrix("weapon_l");
+	/*pWeaponBone = m_pModel->Get_BoneMatrix("weapon_l");
 	m_pShield = CShield::Create(m_pDevice, m_pDeviceContext);
 	m_pShield->NativeConstruct(pWeaponBone);
 	m_pShield->Set_Owner(this);
 	m_pShield->Set_OwnerPivotMatrix(m_pModel->Get_PivotMatrix());
-	Set_EquipShield(false);
+	Set_EquipShield(false);*/
 	
 	return S_OK;
 }

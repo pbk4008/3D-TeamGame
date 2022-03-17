@@ -29,8 +29,8 @@ public:
 	HRESULT Ready_NaviMesh();
 	
 private:
-	//CVIBuffer_Plane* m_pVIBuffer = nullptr;
-	//CTexture* m_pTexture = nullptr;
+	CVIBuffer_Plane* m_pVIBuffer = nullptr;
+	CTexture* m_pTexture = nullptr;
 
 	CMeshCollider* m_pNaviCollider = nullptr;
 	vector<NAVIMESHDESC> m_vecNaviPoints;
