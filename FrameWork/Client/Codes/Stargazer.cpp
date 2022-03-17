@@ -51,7 +51,6 @@ _int CStargazer::LateTick(_double _dDeltaTime)
 
 HRESULT CStargazer::Render()
 {
-
 	_matrix XMWorldMatrix = XMMatrixTranspose(m_pTransform->Get_WorldMatrix());
 	_matrix XMViewMatrix = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"MainCamera", TRANSFORMSTATEMATRIX::D3DTS_VIEW));
 	_matrix XMProjectMatrix = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"MainCamera", TRANSFORMSTATEMATRIX::D3DTS_PROJECTION));
@@ -74,11 +73,7 @@ HRESULT CStargazer::Render()
 
 void CStargazer::Set_OwnerPivotMatrix(const _fmatrix& _smatPivot)
 {
-	_matrix matResult = _smatPivot;
-	_matrix matRotate = XMMatrixRotationAxis(XMVectorSet(0.f, 1.f, 0.f, 0.f), XMConvertToRadians(-30.f));
-	matResult *= matRotate;
-
-	XMStoreFloat4x4(&m_smatOwnerPivot, matResult);
+	XMStoreFloat4x4(&m_smatOwnerPivot, _smatPivot);
 }
 
 HRESULT CStargazer::SetUp_Component()
@@ -93,7 +88,7 @@ HRESULT CStargazer::SetUp_Component()
 	m_pTransform->Set_TransformDesc(tDesc);
 	//로컬 트랜스폼 셋팅
 	m_pLocalTransform->Set_TransformDesc(tDesc);
-
+	
 	return S_OK;
 }
 
@@ -103,15 +98,17 @@ _int CStargazer::Attach_FixedBone(const _double& _dDeltaTime)
 	if (m_pFixedBone)
 	{
 		//뼈노드가 가지고 있는 Combine행렬 가져옴
+		_matrix matResult = XMMatrixIdentity();
+		_matrix matRotate = XMMatrixRotationRollPitchYaw(XMConvertToRadians(230), XMConvertToRadians(30), XMConvertToRadians(0));
 		_matrix smatWorld = m_pFixedBone->Get_CombinedMatrix();
 		//무기 가지고 있는 객체의 피벗 곱해줌
-		smatWorld *= XMLoadFloat4x4(&m_smatOwnerPivot);
-		;
-	
+		_matrix matPivot = XMLoadFloat4x4(&m_smatOwnerPivot);
 		//smatWorld *= XMLoadFloat4x4(&m_matTransform);
 		//무기 로컬 트랜스 폼 갱신
-		m_pLocalTransform->Set_WorldMatrix(smatWorld);
 
+		matResult = matRotate * smatWorld * matPivot;
+
+		m_pLocalTransform->Set_WorldMatrix(matResult);
 	}
 	return _int();
 }
@@ -131,8 +128,10 @@ _int CStargazer::Attach_Owner(const _double& _dDeltaTime)
 		_matrix smatOwerWorld = pTransform->Get_WorldMatrix();
 		//무기 가지고 있는 객체의 월드Matrix중 크기 삭제
 		smatOwerWorld = Remove_Scale(smatOwerWorld);
+
+		_matrix matResult = smatWorld * smatOwerWorld;
 		//메인 트랜스폼에 무기 가지고 있는 객체와 로컬 트랜스폼을 곱한 것을 넣어줌
-		m_pTransform->Set_WorldMatrix(smatWorld * smatOwerWorld);
+		m_pTransform->Set_WorldMatrix(matResult);
 	}
 	return _int();
 }
