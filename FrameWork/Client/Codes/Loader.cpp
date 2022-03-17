@@ -107,16 +107,16 @@ HRESULT CLoader::LoadForScene()
 HRESULT CLoader::SetUp_Stage1_Object()
 {
 	/*if (FAILED(Load_Stage1FBXLoad()))
-		return E_FAIL;*/
+		return E_FAIL;
 
 	if (FAILED(Load_Stage1PlayerLoad()))
 		return E_FAIL;
 
+	if (FAILED(Load_Stage1MonsterLoad()))
+		return E_FAIL;*/
+
 	if (FAILED(Load_Stage1BossLoad()))
 		return E_FAIL;
-
-	/*if (FAILED(Load_Stage1MonsterLoad()))
-		return E_FAIL;*/
 
 	if (FAILED(Load_Stage1StaticUILoad()))
 		return E_FAIL;
@@ -284,7 +284,15 @@ HRESULT CLoader::Load_Stage1UILoad()
 	{
 		return E_FAIL;
 	}
-	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"Texture_Monster_Level", L"../bin/Resources/Texture/UI/Static/Active/T_HUD_Enemy_Icon_Tier1.dds")))
+	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"Texture_Monster_Level_1", L"../bin/Resources/Texture/UI/Static/Active/T_HUD_Enemy_Icon_Tier1.dds")))
+	{
+		return E_FAIL;
+	}
+	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"Texture_Monster_Level_2", L"../bin/Resources/Texture/UI/Static/Active/T_HUD_Enemy_Icon_Tier2.dds" )))
+	{
+		return E_FAIL;
+	}
+	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"Texture_Monster_Level_3", L"../bin/Resources/Texture/UI/Static/Active/T_HUD_Enemy_Icon_Tier3.dds" )))
 	{
 		return E_FAIL;
 	}
@@ -440,62 +448,62 @@ HRESULT CLoader::Load_Stage1PlayerLoad()
 HRESULT CLoader::Load_Stage1BossLoad()
 {
 	
-	//Boss Bastion_Judicator
+	//Boss Bastion_Tier4
 	_matrix matPivot = XMMatrixIdentity();
 	matPivot = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(180.f));
 
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Model_Boss_Bastion_Judicator", CModel::Create(m_pDevice, m_pDeviceContext,
-		"../bin/Resources/Mesh/Bastion_Judicator/", "Bastion_Judicator.fbx",
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Model_Boss_Bastion_Tier4", CModel::Create(m_pDevice, m_pDeviceContext,
+		"../bin/Resources/Mesh/Bastion_Tier4/", "Bastion_Tier4.fbx",
 		L"../../Reference/ShaderFile/Shader_Mesh.hlsl", matPivot, CModel::TYPE_ANIM, true))))
 	{
 		return E_FAIL;
 	}
 
-	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Boss_Judicator", CBoss_Bastion_Judicator::Create(m_pDevice, m_pDeviceContext))))
+	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Boss_Bastion", CBoss_Bastion_Judicator::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 
 	//0
 	CTexture* pTexture = CTexture::Create(m_pDevice, m_pDeviceContext);
-	if (FAILED(pTexture->NativeConstruct_Prototype(L"../Bin/Resources/Mesh/Bastion_Judicator/T_BastionTierIII_Top_D.dds", 1)))
+	if (FAILED(pTexture->NativeConstruct_Prototype(L"../Bin/Resources/Mesh/Bastion_Tier4/T_Bastion_Tier4_Top_D.dds", 1)))
 		return E_FAIL;
 
 	CMaterial* pMtrl = CMaterial::Create(m_pDevice, m_pDeviceContext, L"Bastion_Judicator_0", L"../../Reference/ShaderFile/Shader_Mesh.hlsl", CMaterial::EType::Anim);
 	if (FAILED(pMtrl->Set_Texture("g_DiffuseTexture", TEXTURETYPE::TEX_DIFFUSE, pTexture, 0)))
 		return E_FAIL;
-	if (FAILED(g_pGameInstance->Add_Material(L"MI_Bastion_Top_Tier3", pMtrl)))
+	if (FAILED(g_pGameInstance->Add_Material(L"MI_Bastion_Top_Tier4", pMtrl)))
 		return E_FAIL;
 
 	//1
 	pTexture = CTexture::Create(m_pDevice, m_pDeviceContext);
-	if (FAILED(pTexture->NativeConstruct_Prototype(L"../Bin/Resources/Mesh/Bastion_Judicator/T_BastionTierIII_Fur_Coeff.dds", 1)))
+	if (FAILED(pTexture->NativeConstruct_Prototype(L"../Bin/Resources/Mesh/Bastion_Tier4/T_BastionTier4_Fur_Coeff.dds", 1)))
 		return E_FAIL;
 
 	pMtrl = CMaterial::Create(m_pDevice, m_pDeviceContext, L"Bastion_Judicator_1", L"../../Reference/ShaderFile/Shader_Mesh.hlsl", CMaterial::EType::Anim);
 	if (FAILED(pMtrl->Set_Texture("g_DiffuseTexture", TEXTURETYPE::TEX_DIFFUSE, pTexture, 0)))
 		return E_FAIL;
-	if (FAILED(g_pGameInstance->Add_Material(L"MI_Bastion_Fur_Tier3", pMtrl)))
+	if (FAILED(g_pGameInstance->Add_Material(L"MI_Bastion_Fur_Tier4", pMtrl)))
 		return E_FAIL;
 
 	//2
 	pTexture = CTexture::Create(m_pDevice, m_pDeviceContext);
-	if (FAILED(pTexture->NativeConstruct_Prototype(L"../Bin/Resources/Mesh/Bastion_Judicator/T_BastionTierIII_Down_D.dds", 1)))
+	if (FAILED(pTexture->NativeConstruct_Prototype(L"../Bin/Resources/Mesh/Bastion_Tier4/T_Bastion_Tier4_Down_D.dds", 1)))
 		return E_FAIL;
 
 	pMtrl = CMaterial::Create(m_pDevice, m_pDeviceContext, L"Bastion_Judicator_2", L"../../Reference/ShaderFile/Shader_Mesh.hlsl", CMaterial::EType::Anim);
 	if (FAILED(pMtrl->Set_Texture("g_DiffuseTexture", TEXTURETYPE::TEX_DIFFUSE, pTexture, 0)))
 		return E_FAIL;
-	if (FAILED(g_pGameInstance->Add_Material(L"MI_Bastion_Down_Tier3", pMtrl)))
+	if (FAILED(g_pGameInstance->Add_Material(L"MI_Bastion_Down_Tier4", pMtrl)))
 		return E_FAIL;
 
 	//3
 	pTexture = CTexture::Create(m_pDevice, m_pDeviceContext);
-	if (FAILED(pTexture->NativeConstruct_Prototype(L"../Bin/Resources/Mesh/Bastion_Judicator/T_BastionTierIII_Elite_Cloak_D.dds", 1)))
+	if (FAILED(pTexture->NativeConstruct_Prototype(L"../Bin/Resources/Mesh/Bastion_Tier4/T_Bastion_Tier4_Cloth_D.dds", 1)))
 		return E_FAIL;
 
 	pMtrl = CMaterial::Create(m_pDevice, m_pDeviceContext, L"Bastion_Judicator_3", L"../../Reference/ShaderFile/Shader_Mesh.hlsl", CMaterial::EType::Anim);
 	if (FAILED(pMtrl->Set_Texture("g_DiffuseTexture", TEXTURETYPE::TEX_DIFFUSE, pTexture, 0)))
 		return E_FAIL;
-	if (FAILED(g_pGameInstance->Add_Material(L"MI_Bastion_Cloth_Tier3", pMtrl)))
+	if (FAILED(g_pGameInstance->Add_Material(L"MI_Bastion_Cloth_Tier4", pMtrl)))
 		return E_FAIL;
 
 	//weapon

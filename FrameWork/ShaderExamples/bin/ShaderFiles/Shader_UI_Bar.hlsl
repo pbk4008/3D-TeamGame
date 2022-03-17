@@ -127,6 +127,38 @@ PS_OUT PS_MAIN_RED(PS_IN In)
     return Out;
 }
 
+PS_OUT PS_MAIN_YELLOW(PS_IN In)
+{
+    PS_OUT Out = (PS_OUT) 0;
+
+    if (In.vTexUV.y < 0.2f)
+    {
+        discard;
+    }
+    
+    if (In.vTexUV.y > g_fY)
+    {
+        discard;
+    }
+    
+    if (In.vTexUV.x > g_fX)
+    {
+        discard;
+    }
+    
+    
+    Out.vColor = g_DiffuseTexture.Sample(DefaultSampler, In.vTexUV);
+	
+    if (Out.vColor.a < 0.01)
+        discard;
+    
+    Out.vColor.r = 1.f;
+    Out.vColor.g = 0.6f;
+    Out.vColor.b = 0.2f;
+    
+    return Out;
+}
+
 
 technique11 DefaultTechnique
 {
@@ -166,5 +198,15 @@ technique11 DefaultTechnique
         GeometryShader = NULL;
         PixelShader = compile ps_5_0 PS_MAIN_RED();
     }
-	
+
+    pass AlphaBlendYellow
+    {
+        SetRasterizerState(CullMode_Default);
+        SetDepthStencilState(ZDefault, 0);
+        SetBlendState(AlphaBlending, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+
+        VertexShader = compile vs_5_0 VS_MAIN();
+        GeometryShader = NULL;
+        PixelShader = compile ps_5_0 PS_MAIN_YELLOW();
+    }
 }

@@ -39,6 +39,7 @@ HRESULT CMonster_Crawler::NativeConstruct(void* _pArg)
 	//MonsterBar Panel
 	CUI_Monster_Panel::PANELDESC Desc;
 	Desc.pTargetTransform = m_pTransform;
+	Desc.iEnemyTag = CUI_Monster_Panel::Enemy::CRAWLER;
 
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_UI", L"Proto_GameObject_UI_Monster_Panel", &Desc,
 		(CGameObject**)&m_pPanel)))
@@ -58,6 +59,7 @@ _int CMonster_Crawler::Tick(_double _dDeltaTime)
 	
 	m_pColliderCom->Update(m_pTransform->Get_WorldMatrix());
 
+	m_pModelCom->Update_CombinedTransformationMatrix(_dDeltaTime);
 	//m_pAnimControllerCom->Tick(_dDeltaTime);
 
 	/*if (g_pGameInstance->getkeyDown(DIK_NUMPAD9))
@@ -135,7 +137,7 @@ HRESULT CMonster_Crawler::SetUp_Components()
 	tDesc.pModel = m_pModelCom;
 	tDesc.pTransform = m_pTransform;
 
-	if (FAILED(__super::SetUp_Components((_uint)SCENEID::SCENE_STAGE1, L"Proto_Component_Animator", L"Com_Animator", (CComponent**)&m_pAnimatorCom)))
+	if (FAILED(__super::SetUp_Components((_uint)SCENEID::SCENE_STAGE1, L"Proto_Component_Animator", L"Com_Animator", (CComponent**)&m_pAnimatorCom, &tDesc)))
 	{
 		return E_FAIL;
 	}
