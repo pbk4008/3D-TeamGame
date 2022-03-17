@@ -111,23 +111,23 @@ HRESULT CLoader::SetUp_Stage1_Object()
 	/*if (FAILED(Load_Stage1FBXLoad()))
 		return E_FAIL;*/
 
-	//if (FAILED(Load_Stage1PlayerLoad()))
-	//	return E_FAIL;
-
-	//if (FAILED(Load_Stage1BossLoad()))
-	//	return E_FAIL;
-
-	if (FAILED(Load_Stage1MonsterLoad()))
+	if (FAILED(Load_Stage1PlayerLoad()))
 		return E_FAIL;
 
-	//if (FAILED(Load_Stage1StaticUILoad()))
+	if (FAILED(Load_Stage1BossLoad()))
+		return E_FAIL;
+
+	//if (FAILED(Load_Stage1MonsterLoad()))
 	//	return E_FAIL;
 
-	//if (FAILED(Load_Stage1UILoad()))
-	//	return E_FAIL;
+	if (FAILED(Load_Stage1StaticUILoad()))
+		return E_FAIL;
 
-	//if (FAILED(Load_Stage1EffectLoad()))
-	//	return E_FAIL;
+	if (FAILED(Load_Stage1UILoad()))
+		return E_FAIL;
+
+	if (FAILED(Load_Stage1EffectLoad()))
+		return E_FAIL;
 
 	//if (FAILED(Load_Stage1TriggerLod()))
 	//	return E_FAIL;
@@ -382,37 +382,13 @@ HRESULT CLoader::Load_Stage1PlayerLoad()
 {
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Proto_Component_MeshCollider", CMeshCollider::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
-	// 네비메쉬 플레인
-	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Plane_Test", CPlane_Test::Create(m_pDevice, m_pDeviceContext))))
-		return E_FAIL;
+	//// 네비메쉬 플레인
+	//if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Plane_Test", CPlane_Test::Create(m_pDevice, m_pDeviceContext))))
+	//	return E_FAIL;
 
 	CTexture* pTexture = nullptr;
 #pragma region 마테리얼
-#pragma region 플레이어 마테리얼
-	pTexture = CTexture::Create(m_pDevice, m_pDeviceContext);
-	pTexture->NativeConstruct_Prototype(L"../Bin/Resources/Mesh/Silvermane/T_Silvermane_Hairs_d_new.tga", 1);
-	CMaterial* pMtrl = CMaterial::Create(m_pDevice, m_pDeviceContext, L"Silvermane_Hair", L"../../Reference/ShaderFile/Shader_Mesh.hlsl", CMaterial::EType::Anim);
-	pMtrl->Set_Texture("g_DiffuseTexture", TEXTURETYPE::TEX_DIFFUSE, pTexture, 0);
-	g_pGameInstance->Add_Material(L"Mtrl_Silvermane_Hair", pMtrl);
-
-	pTexture = CTexture::Create(m_pDevice, m_pDeviceContext);
-	pTexture->NativeConstruct_Prototype(L"../Bin/Resources/Mesh/Silvermane/T_Silvermane_Cloak_D.tga", 1);
-	pMtrl = CMaterial::Create(m_pDevice, m_pDeviceContext, L"Silvermane_Cloak", L"../../Reference/ShaderFile/Shader_Mesh.hlsl", CMaterial::EType::Anim);
-	pMtrl->Set_Texture("g_DiffuseTexture", TEXTURETYPE::TEX_DIFFUSE, pTexture, 0);
-	g_pGameInstance->Add_Material(L"Mtrl_Silvermane_Cloak", pMtrl);
-
-	pTexture = CTexture::Create(m_pDevice, m_pDeviceContext);
-	pTexture->NativeConstruct_Prototype(L"../Bin/Resources/Mesh/Silvermane/T_Silvermane_Down_D.tga", 1);
-	pMtrl = CMaterial::Create(m_pDevice, m_pDeviceContext, L"Silvermane_Down", L"../../Reference/ShaderFile/Shader_Mesh.hlsl", CMaterial::EType::Anim);
-	pMtrl->Set_Texture("g_DiffuseTexture", TEXTURETYPE::TEX_DIFFUSE, pTexture, 0);
-	g_pGameInstance->Add_Material(L"Mtrl_Silvermane_Down", pMtrl);
-
-	pTexture = CTexture::Create(m_pDevice, m_pDeviceContext);
-	pTexture->NativeConstruct_Prototype(L"../Bin/Resources/Mesh/Silvermane/T_Silvermane_Top_D.tga", 1);
-	pMtrl = CMaterial::Create(m_pDevice, m_pDeviceContext, L"Silvermane_Top", L"../../Reference/ShaderFile/Shader_Mesh.hlsl", CMaterial::EType::Anim);
-	pMtrl->Set_Texture("g_DiffuseTexture", TEXTURETYPE::TEX_DIFFUSE, pTexture, 0);
-	g_pGameInstance->Add_Material(L"Mtrl_Silvermane_Top", pMtrl);
-#pragma endregion
+	CMaterial* pMtrl = nullptr;
 #pragma region 무기
 	pTexture = CTexture::Create(m_pDevice, m_pDeviceContext);
 	pTexture->NativeConstruct_Prototype(L"../Bin/Resources/Mesh/Shield/T_ShieldBase_D.tga", 1);
@@ -424,19 +400,15 @@ HRESULT CLoader::Load_Stage1PlayerLoad()
 
 #pragma region 모델
 	_matrix matPivot = XMMatrixIdentity();
-	matPivot = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(180.f));
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Model_Silvermane", CModel::Create(m_pDevice, m_pDeviceContext,
-		"../bin/Resources/Mesh/Silvermane/", "Silvermane.fbx",
-		L"../../Reference/ShaderFile/Shader_Mesh.hlsl",
-		matPivot,
-		CModel::TYPE_ANIM))))
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Model_Silvermane_Bin", CModel::Create(m_pDevice, m_pDeviceContext,
+		L"../bin/FBX/Silvermane/Silvermane_Bin.fbx", CModel::TYPE_ANIM, true))))
 	{
 		return E_FAIL;
 	}
 	matPivot = XMMatrixIdentity();
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Model_Needle", CModel::Create(m_pDevice, m_pDeviceContext,
 		"../bin/Resources/Mesh/Needle/", "Needle.fbx",
-		L"../../Reference/ShaderFile/Shader_StaticMesh.hlsl", matPivot, CModel::TYPE_STATIC))))
+		L"../../Reference/ShaderFile/Shader_StaticMesh.hlsl", matPivot, CModel::TYPE_STATIC, true))))
 	{
 		return E_FAIL;
 	}

@@ -44,9 +44,7 @@ HRESULT CBoss_Bastion_Judicator::NativeConstruct(const _uint _iSceneID, void* pA
 	_vector Pos = { 0.f, 0.f, 5.f, 1.f };
 	m_pTransform->Set_State(CTransform::STATE_POSITION, Pos);
 
-
 	//MidBossBar Panel
-
 	CUI_Monster_Panel::PANELDESC Desc;
 	Desc.pTargetTransform = m_pTransform;
 	Desc.iEnemyTag = CUI_Monster_Panel::Enemy::MIDBOSS;
@@ -56,6 +54,10 @@ HRESULT CBoss_Bastion_Judicator::NativeConstruct(const _uint _iSceneID, void* pA
 		return E_FAIL;
 
 	m_pPanel->Set_TargetWorldMatrix(m_pTransform->Get_WorldMatrix());
+
+	//애니메이션체인지(바꿀애님)
+	m_eCurState = CBoss_Bastion_Judicator::STATE_RAGE;
+	m_pAnimator->Change_Animation(RAGE);
 
 	return S_OK;
 }
@@ -76,19 +78,20 @@ _int CBoss_Bastion_Judicator::Tick(_double TimeDelta)
 
 	if (g_pGameInstance->getkeyDown(DIK_NUMPAD4))
 	{
-		m_pAnimator->Change_Animation(STUN_START); //시작애니메이션 정함
+		m_pAnimator->Change_AnyEntryAnimation(ATTACK_LEGACY_H);
 	}
-	/*if (g_pGameInstance->getkeyDown(DIK_NUMPAD9))
+
+	if (g_pGameInstance->getkeyDown(DIK_NUMPAD5))
 	{
-		++itest;
-		m_pModelCom->SetUp_AnimationIndex(itest);
-	}*/
+		m_pAnimator->Change_AnyEntryAnimation(ATTACK_S2);
+	}
+
+
+	Set_State();
 
 	m_pAnimator->Tick(TimeDelta);
 
-	//m_pAnimator->Get_CurrentAnimation();
-
-	//m_pModelCom->Update_CombinedTransformationMatrix(TimeDelta);
+	m_pPanel->Set_TargetWorldMatrix(m_pTransform->Get_WorldMatrix());
 
 	return 0;
 }
@@ -171,8 +174,14 @@ HRESULT CBoss_Bastion_Judicator::SetUp_Components()
 HRESULT CBoss_Bastion_Judicator::Set_Animation_FSM()
 {
 	//시작루프
-	CAnimation* pAnim = m_pModelCom->Get_Animation("SK_Bastion_Tier4.ao|A_BattleCry_Start_Phalanxar");
-	if (FAILED(m_pAnimator->Insert_Animation(BATTLECRY_START, HEAD, pAnim, true, true, false, ERootOption::XYZ)))
+	CAnimation* pAnim = m_pModelCom->Get_Animation("SK_Bastion_Tier4.ao|A_Rage_Phalanxar");
+	//연결할애님, 연결당할애님, 애니메이션, 루트애님, 트랜스폼(루트애니메이션때 따라감), 루프, 옵션
+	if (FAILED(m_pAnimator->Insert_Animation(RAGE, HEAD, pAnim, true, true, false, ERootOption::XYZ)))
+		return E_FAIL;
+
+#pragma region 공격재시작루프
+	pAnim = m_pModelCom->Get_Animation("SK_Bastion_Tier4.ao|A_BattleCry_Start_Phalanxar");
+	if (FAILED(m_pAnimator->Insert_Animation(BATTLECRY_START, RAGE, pAnim, true, true, false, ERootOption::XYZ)))
 		return E_FAIL;
 	pAnim = m_pModelCom->Get_Animation("SK_Bastion_Tier4.ao|A_BattleCry_Loop_Phalanxar");
 	if (FAILED(m_pAnimator->Insert_Animation(BATTLECRY_LOOP, BATTLECRY_START, pAnim, true, true, false, ERootOption::XYZ)))
@@ -180,12 +189,14 @@ HRESULT CBoss_Bastion_Judicator::Set_Animation_FSM()
 	pAnim = m_pModelCom->Get_Animation("SK_Bastion_Tier4.ao|A_BattleCry_End_Phalanxar");
 	if (FAILED(m_pAnimator->Insert_Animation(BATTLECRY_END, BATTLECRY_LOOP, pAnim, true, true, false, ERootOption::XYZ)))
 		return E_FAIL;
-	if (FAILED(m_pAnimator->Connect_Animation(BATTLECRY_START, BATTLECRY_END, false)))
+	//애니메이션연결(연결당할애님, 연결할애님, 쌍방으로연결할지안할지)
+	if (FAILED(m_pAnimator->Connect_Animation(RAGE, BATTLECRY_END, false)))
 		return E_FAIL;
+#pragma endregion
 
-	
-	/*pAnim = m_pModelCom->Get_Animation("SK_Bastion_Tier4.ao|A_Stun_Start_Phalanxar");
-	if (FAILED(m_pAnimator->Insert_Animation(STUN_START, BATTLECRY_START, pAnim, true, true, false, ERootOption::XYZ)))
+#pragma region 스턴루프
+	pAnim = m_pModelCom->Get_Animation("SK_Bastion_Tier4.ao|A_Stun_Start_Phalanxar");
+	if (FAILED(m_pAnimator->Insert_Animation(STUN_START, HEAD, pAnim, true, true, false, ERootOption::XYZ)))
 		return E_FAIL;
 	pAnim = m_pModelCom->Get_Animation("SK_Bastion_Tier4.ao|A_Stun_Loop_Phalanxar");
 	if (FAILED(m_pAnimator->Insert_Animation(STUN_LOOP, STUN_START, pAnim, true, true, false, ERootOption::XYZ)))
@@ -193,20 +204,163 @@ HRESULT CBoss_Bastion_Judicator::Set_Animation_FSM()
 	pAnim = m_pModelCom->Get_Animation("SK_Bastion_Tier4.ao|A_Stun_End_Phalanxar");
 	if (FAILED(m_pAnimator->Insert_Animation(STUN_END, STUN_LOOP, pAnim, true, true, false, ERootOption::XYZ)))
 		return E_FAIL;
-	if (FAILED(m_pAnimator->Connect_Animation(STUN_START, STUN_END, false)))
-		return E_FAIL;*/
+	if (FAILED(m_pAnimator->Connect_Animation(RAGE, STUN_END, false)))
+		return E_FAIL;
+#pragma endregion
 
 
+#pragma region 회전
+	pAnim = m_pModelCom->Get_Animation("SK_Bastion_Tier4.ao|A_2H_Hammer_Turn_135_Left_Normal");
+	if (FAILED(m_pAnimator->Insert_Animation(TURN_135LEFT_H, HEAD, pAnim, true, true, true, ERootOption::XYZ)))
+		return E_FAIL;
 
-	//루프하나
+	pAnim = m_pModelCom->Get_Animation("SK_Bastion_Tier4.ao|A_2H_Hammer_Turn_135_Right_Normal");
+	if (FAILED(m_pAnimator->Insert_Animation(TURN_135RIGHT_H, HEAD, pAnim, true, true, true, ERootOption::XYZ)))
+		return E_FAIL;
+
+	pAnim = m_pModelCom->Get_Animation("SK_Bastion_Tier4.ao|A_2H_Hammer_Turn_180_Left_Normal");
+	if (FAILED(m_pAnimator->Insert_Animation(TURN_180LEFT_H, HEAD, pAnim, true, true, false, ERootOption::XYZ)))
+		return E_FAIL;
+
+	pAnim = m_pModelCom->Get_Animation("SK_Bastion_Tier4.ao|A_2H_Hammer_Turn_180_Right_Normal");
+	if (FAILED(m_pAnimator->Insert_Animation(TURN_180RIGHT_H, HEAD, pAnim, true, true, false, ERootOption::XYZ)))
+		return E_FAIL;
+
+	pAnim = m_pModelCom->Get_Animation("SK_Bastion_Tier4.ao|A_2H_Hammer_Turn_45_Left_Normal");
+	if (FAILED(m_pAnimator->Insert_Animation(TURN_45LEFT_H, HEAD, pAnim, true, true, false, ERootOption::XYZ)))
+		return E_FAIL;
+
+	pAnim = m_pModelCom->Get_Animation("SK_Bastion_Tier4.ao|A_2H_Hammer_Turn_45_Right_Normal");
+	if (FAILED(m_pAnimator->Insert_Animation(TURN_45RIGHT_H, HEAD, pAnim, true, true, false, ERootOption::XYZ)))
+		return E_FAIL;
+
+	pAnim = m_pModelCom->Get_Animation("SK_Bastion_Tier4.ao|A_2H_Hammer_Turn_90_Left_Normal");
+	if (FAILED(m_pAnimator->Insert_Animation(TURN_90LEFT_H, HEAD, pAnim, true, true, false, ERootOption::XYZ)))
+		return E_FAIL;
+
+	pAnim = m_pModelCom->Get_Animation("SK_Bastion_Tier4.ao|A_2H_Hammer_Turn_90_Right_Normal");
+	if (FAILED(m_pAnimator->Insert_Animation(TURN_90RIGHT_H, HEAD, pAnim, true, true, false, ERootOption::XYZ)))
+		return E_FAIL;
+#pragma endregion 
+
+#pragma region 상시어택애님
+	pAnim = m_pModelCom->Get_Animation("SK_Bastion_Tier4.ao|A_2H_Hammer_Attack_JogR1");
+	if (FAILED(m_pAnimator->Insert_Animation(ATTACK_JOG_H, HEAD, pAnim, true, true, true, ERootOption::XYZ)))
+		return E_FAIL;
+
+	pAnim = m_pModelCom->Get_Animation("SK_Bastion_Tier4.ao|A_2H_Hammer_Attack_L1_R2_Legacy");
+	if (FAILED(m_pAnimator->Insert_Animation(ATTACK_LEGACY_H, HEAD, pAnim, true, true, false, ERootOption::XYZ)))
+		return E_FAIL;
+
+	pAnim = m_pModelCom->Get_Animation("SK_Bastion_Tier4.ao|A_2H_Hammer_Attack_R1_01");
+	if (FAILED(m_pAnimator->Insert_Animation(ATTACK_R1_H, HEAD, pAnim, true, true, true, ERootOption::XYZ)))
+		return E_FAIL;
+
+	pAnim = m_pModelCom->Get_Animation("SK_Bastion_Tier4.ao|A_2H_Hammer_Sprint_Attack");
+	if (FAILED(m_pAnimator->Insert_Animation(SPRINT_ATTACK_H, HEAD, pAnim, true, true, true, ERootOption::XYZ)))
+		return E_FAIL;
+
+	pAnim = m_pModelCom->Get_Animation("SK_Bastion_Tier4.ao|A_Attack_R1_Phalanxar");
+	if (FAILED(m_pAnimator->Insert_Animation(ATTACK_R1, HEAD, pAnim, true, true, true, ERootOption::XYZ)))
+		return E_FAIL;
+
+	pAnim = m_pModelCom->Get_Animation("SK_Bastion_Tier4.ao|A_Attack_S1_Phalanxar");
+	if (FAILED(m_pAnimator->Insert_Animation(ATTACK_S1, HEAD, pAnim, true, true, true, ERootOption::XYZ)))
+		return E_FAIL;
+
+	pAnim = m_pModelCom->Get_Animation("SK_Bastion_Tier4.ao|A_Attack_S2_Phalanxar");
+	if (FAILED(m_pAnimator->Insert_Animation(ATTACK_S2, HEAD, pAnim, true, true, true, ERootOption::XYZ)))
+		return E_FAIL;
+#pragma endregion 
+
+#pragma region 죽음
+	pAnim = m_pModelCom->Get_Animation("SK_Bastion_Tier4.ao|A_Death_Phalanxar");
+	if (FAILED(m_pAnimator->Insert_Animation(DEATH, HEAD, pAnim, true, true, true, ERootOption::XYZ)))
+		return E_FAIL;
+#pragma endregion 
+
+
+	//자동으로 돌릴 애들(끝날애님, 끝나고시작할애님)
+	m_pAnimator->Set_UpAutoChangeAnimation(RAGE, BATTLECRY_START);
 	m_pAnimator->Set_UpAutoChangeAnimation(BATTLECRY_START, BATTLECRY_LOOP);
 	m_pAnimator->Set_UpAutoChangeAnimation(BATTLECRY_LOOP, BATTLECRY_END);
-	m_pAnimator->Set_UpAutoChangeAnimation(BATTLECRY_END, BATTLECRY_START);
+	m_pAnimator->Set_UpAutoChangeAnimation(BATTLECRY_END, RAGE);
 
+	m_pAnimator->Set_UpAutoChangeAnimation(STUN_START, STUN_LOOP);
+	m_pAnimator->Set_UpAutoChangeAnimation(STUN_LOOP, STUN_END);
+	m_pAnimator->Set_UpAutoChangeAnimation(STUN_END, RAGE);
 
-	m_pAnimator->Change_Animation(BATTLECRY_START); //시작애니메이션 정함
+	//스턴루프
+	m_pAnimator->Insert_AnyEntryAnimation(STUN_START);
+
+	//어택애님
+	m_pAnimator->Insert_AnyEntryAnimation(ATTACK_JOG_H);
+	m_pAnimator->Insert_AnyEntryAnimation(ATTACK_LEGACY_H);
+	m_pAnimator->Insert_AnyEntryAnimation(ATTACK_R1_H);
+	m_pAnimator->Insert_AnyEntryAnimation(SPRINT_ATTACK_H);
+	m_pAnimator->Insert_AnyEntryAnimation(ATTACK_R1);
+	m_pAnimator->Insert_AnyEntryAnimation(ATTACK_S1);
+	m_pAnimator->Insert_AnyEntryAnimation(ATTACK_S2);
+
+	//죽음
+	m_pAnimator->Insert_AnyEntryAnimation(DEATH);
+
+	//회전
+	m_pAnimator->Insert_AnyEntryAnimation(TURN_135LEFT_H);
+	m_pAnimator->Insert_AnyEntryAnimation(TURN_135RIGHT_H);
+	m_pAnimator->Insert_AnyEntryAnimation(TURN_180LEFT_H);
+	m_pAnimator->Insert_AnyEntryAnimation(TURN_180RIGHT_H);
+	m_pAnimator->Insert_AnyEntryAnimation(TURN_90LEFT_H);
+	m_pAnimator->Insert_AnyEntryAnimation(TURN_90RIGHT_H);
+	m_pAnimator->Insert_AnyEntryAnimation(TURN_45LEFT_H);
+	m_pAnimator->Insert_AnyEntryAnimation(TURN_45RIGHT_H);
 
 	return S_OK;
+}
+
+void CBoss_Bastion_Judicator::Set_State()
+{
+	if (m_ePreState != m_eCurState)
+	{
+		switch (m_eCurState)
+		{
+		case Client::CBoss_Bastion_Judicator::STATE_RAGE:
+			break;
+		case Client::CBoss_Bastion_Judicator::STATE_ATTACK_JOG:
+			break;
+		case Client::CBoss_Bastion_Judicator::STATE_ATTACK_LEGA:
+			break;
+		case Client::CBoss_Bastion_Judicator::STATE_ATTACK_R1H:
+			break;
+		case Client::CBoss_Bastion_Judicator::STATE_ATTACK_R1:
+			break;
+		case Client::CBoss_Bastion_Judicator::STATE_ATTACK_S1:
+			break;
+		case Client::CBoss_Bastion_Judicator::STATE_ATTACK_S2:
+			break;
+		case Client::CBoss_Bastion_Judicator::STATE_SPRINT:
+			break;
+		case Client::CBoss_Bastion_Judicator::STATE_STUN:
+			break;
+		case Client::CBoss_Bastion_Judicator::STATE_TURN:
+			break;
+		case Client::CBoss_Bastion_Judicator::STATE_WALK:
+			break;
+		case Client::CBoss_Bastion_Judicator::STATE_RUN:
+			break;
+		case Client::CBoss_Bastion_Judicator::STATE_DASH:
+			break;
+		case Client::CBoss_Bastion_Judicator::STATE_FALLING:
+			break;
+		case Client::CBoss_Bastion_Judicator::STATE_RECOCHET:
+			break;
+		case Client::CBoss_Bastion_Judicator::STATE_DAETH:
+
+			break;
+		}
+
+		m_ePreState = m_eCurState;
+	}
 }
 
 CBoss_Bastion_Judicator* CBoss_Bastion_Judicator::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
