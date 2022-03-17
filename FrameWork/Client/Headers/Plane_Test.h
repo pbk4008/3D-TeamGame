@@ -22,7 +22,7 @@ public:
 	virtual _int Tick(_double _dDeltaTime) override;
 	virtual _int LateTick(_double _dDeltaTime) override;
 	virtual HRESULT Render() override;
-
+	
 public:
 	virtual HRESULT Ready_Components();
 	HRESULT Ready_NaviPoints(const wstring& _wstrFilePath);

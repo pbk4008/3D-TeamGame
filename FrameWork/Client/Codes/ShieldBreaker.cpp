@@ -104,7 +104,7 @@ _int CShieldBreaker::Attach_FixedBone(const _double& TimeDelta)
 	{
 		_matrix smatWorld = m_pFixedBone->Get_CombinedMatrix();
 
-		smatWorld *= m_smatOwnerPivot;
+		smatWorld *= XMLoadFloat4x4(&m_smatOwnerPivot);
 
 		m_pLocalTransform->Set_WorldMatrix(smatWorld);
 	}

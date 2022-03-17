@@ -23,9 +23,10 @@ public:
 	const _uint Get_CurrentKeyFrameIndex() const { return m_iCurrentKeyFrameIndex; }
 	KEYFRAME* Get_CurrentKeyFrame() const { return m_KeyFrames[m_iCurrentKeyFrameIndex]; }
 	_matrix Get_TransformMatrix() const { return XMLoadFloat4x4(&m_TransformationMatrix); }
+	_matrix Get_CreateTransformMatrix() const {	return XMLoadFloat4x4(&m_CreatTransfommationMatrix);	}
 
+	void Set_TransformationMatrix(_fmatrix TransformationMatrix);
 	void Set_CurrentKeyFrameIndex(_uint KeyFrameIndex) { m_iCurrentKeyFrameIndex = KeyFrameIndex; }
-	void Set_TransformationMatrix(_fmatrix TransformationMatrix) { XMStoreFloat4x4(&m_TransformationMatrix, TransformationMatrix); }
 	void Set_AnimInterPolation(_fvector _vScale, _fvector _vRotation, _fvector _vPosition);
 public:
 	ANIMINTERPOL& getAnimInterPolation() { return m_tAnimInterPolation; }
@@ -38,6 +39,7 @@ private:
 	char					m_szName[MAX_PATH] = "";
 	_uint					m_iCurrentKeyFrameIndex = 0;
 	_float4x4				m_TransformationMatrix;
+	_float4x4				m_CreatTransfommationMatrix;
 	_bool					m_isRoot = false;
 
 	_bool m_isClone = false;

@@ -4,6 +4,11 @@
 /* for. Weapon */
 #include "RetributionBlade.h"
 
+/* for. FSM */
+#include "Bastion_2HSword_Idle.h"
+#include "Bastion_2HSword_Chaser.h"
+#include "Bastion_2HSword_Dash.h"
+
 CMonster_Bastion_2HSword::CMonster_Bastion_2HSword(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
 	: CActor(_pDevice, _pDeviceContext)
 {
@@ -25,12 +30,13 @@ HRESULT CMonster_Bastion_2HSword::NativeConstruct(const _uint _iSceneID, void* _
 {
 	if (FAILED(__super::NativeConstruct(_iSceneID, _pArg)))
 		return E_FAIL;
-
-	if (FAILED(Ready_Components()))
+	if (FAILED(Ready_Components())) 
 		return E_FAIL;
-	if (FAILED(Ready_Weapon()))
+	if (FAILED(Ready_Weapon())) 
 		return E_FAIL;
 	if (FAILED(Ready_AnimFSM())) 
+		return E_FAIL;
+	if (FAILED(Ready_StateFSM()))
 		return E_FAIL;
 
 	return S_OK;
@@ -42,13 +48,10 @@ _int CMonster_Bastion_2HSword::Tick(_double _dDeltaTime)
 	if (NO_EVENT != iProgress) 
 		return iProgress;
 
-	m_pAnimator->Tick(_dDeltaTime);
-	
-	if (g_pGameInstance->getkeyDown(DIK_F5))
-	{
-		m_pAnimator->Change_Animation((_uint)ANIM_TYPE::A_WALK_FWD_ST);
-		return -1;
-	}
+	/* State FSM Update */
+	iProgress = m_pStateController->Tick(_dDeltaTime);
+	if (NO_EVENT != iProgress)
+		return iProgress;
 
 	// 무기 업뎃
 	if (m_pCurWeapon)
@@ -66,8 +69,10 @@ _int CMonster_Bastion_2HSword::LateTick(_double _dDeltaTime)
 	if (NO_EVENT != iProgress) 
 		return iProgress;
 
-	if (FAILED(m_pRenderer->Add_RenderGroup(CRenderer::RENDER_ALPHA, this)))
-		return -1;
+	/* State FSM Late Update */
+	iProgress = m_pStateController->LateTick(_dDeltaTime);
+	if (NO_EVENT != iProgress)
+		return iProgress;
 
 	// 무기 레잇업뎃
 	if (m_pCurWeapon)
@@ -77,8 +82,8 @@ _int CMonster_Bastion_2HSword::LateTick(_double _dDeltaTime)
 			return iProgress;
 	}
 
-	Check_DistanceForPlayer();
-
+	if (FAILED(m_pRenderer->Add_RenderGroup(CRenderer::RENDER_ALPHA, this)))
+		return -1;
 	return _int();
 }
 
@@ -108,23 +113,6 @@ HRESULT CMonster_Bastion_2HSword::Render()
 	return S_OK;
 }
 
-void CMonster_Bastion_2HSword::Check_DistanceForPlayer(void)
-{
-	CTransform* pPlayerTransCom = (CTransform*)g_pGameInstance->Get_Component((_uint)SCENEID::SCENE_TEST_YM, L"Layer_Silvermane", L"Com_Transform");
-	_float		fDistToPlayer = 0.f;
-
-	_fvector vPlayerPos = pPlayerTransCom->Get_State(CTransform::STATE::STATE_POSITION);
-	_fvector vMonsterPos = m_pTransform->Get_State(CTransform::STATE::STATE_POSITION);
-
-	_fvector vDist = vMonsterPos - vPlayerPos;
-	fDistToPlayer = XMVectorGetX(XMVector3Length(vDist));
-
-	if (10.0f > fDistToPlayer)
-	{
-		m_pTransform->Face_Target(vPlayerPos);
-	}
-}
-
 HRESULT CMonster_Bastion_2HSword::Ready_Components()
 {
 	CTransform::TRANSFORMDESC transformDesc;
@@ -142,14 +130,10 @@ HRESULT CMonster_Bastion_2HSword::Ready_Components()
 	m_pModel->Add_Material(g_pGameInstance->Get_Material(L"Mtrl_BastionTierII_Down"), 1);
 	m_pModel->Add_Material(g_pGameInstance->Get_Material(L"Mtrl_BastionTierII_Fur"), 2);
 
-	// 에니메이션 컨트롤러
-	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_TEST_YM, L"Com_AnimationController", L"AnimationController", (CComponent**)&m_pAnimationController)))
+	// 스테이트 컨트롤러
+	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_TEST_YM, L"Com_StateController", L"StateController", (CComponent**)&m_pStateController)))
 		return E_FAIL;
-	m_pAnimationController->Set_GameObject(this);
-	m_pAnimationController->Set_Model(m_pModel);
-	m_pAnimationController->Set_Transform(m_pTransform);
-	m_pAnimationController->Set_MoveSpeed(2.f);
-
+	m_pStateController->Set_GameObject(this);
 
 	m_AanimDesc.pModel = m_pModel;
 	m_AanimDesc.pTransform = m_pTransform;
@@ -163,7 +147,7 @@ HRESULT CMonster_Bastion_2HSword::Ready_Components()
 
 HRESULT CMonster_Bastion_2HSword::Ready_Weapon()
 {
-	CHierarchyNode* pWeaponBone = m_pModel->Get_BoneMatrix("weapon_r_end_end");
+	CHierarchyNode* pWeaponBone = m_pModel->Get_BoneMatrix("weapon_r");
 	CWeapon* pWeapon = nullptr;
 
 	//RetributionBlade
@@ -188,11 +172,7 @@ HRESULT CMonster_Bastion_2HSword::Ready_AnimFSM(void)
 		##7.루트애님 옵션, 막고자 하는 축설정
 		##8.쌍방연결 default : false
 	*/
-	CAnimation* pAnimation = m_pModel->Get_Animation("A_Idle_Siphonblade");
-	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::A_IDLE, (_uint)ANIM_TYPE::A_HEAD, pAnimation, TRUE, TRUE, TRUE, ERootOption::XYZ, FALSE)))
-		return E_FAIL;
-
-#pragma region Insert_Anim
+#pragma region Anim List
 	//pAnimation = m_pModel->Get_Animation("A_Death_Siphonblade");
 	//pAnimation = m_pModel->Get_Animation("A_Ricochet");
 	//pAnimation = m_pModel->Get_Animation("A_Flinch_Left");
@@ -235,36 +215,70 @@ HRESULT CMonster_Bastion_2HSword::Ready_AnimFSM(void)
 	//pAnimation = m_pModel->Get_Animation("A_Turn_180_Right");
 #pragma endregion
 
-#pragma region Link_Anim
+#pragma region Insert Anim
+	CAnimation* pAnimation = m_pModel->Get_Animation("A_Idle");
+	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::A_IDLE, (_uint)ANIM_TYPE::A_HEAD, pAnimation, TRUE, TRUE, TRUE, ERootOption::XYZ, FALSE)))
+		return E_FAIL;
+
 	pAnimation = m_pModel->Get_Animation("A_Walk_Fwd_Start");
-	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::A_WALK_FWD_ST, (_uint)ANIM_TYPE::A_IDLE, pAnimation, TRUE, TRUE, FALSE, ERootOption::XYZ, FALSE)))
+	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::A_WALK_FWD_ST, (_uint)ANIM_TYPE::A_IDLE, pAnimation, TRUE, FALSE, FALSE, ERootOption::XYZ, FALSE)))
 		return E_FAIL;
 
 	pAnimation = m_pModel->Get_Animation("A_Walk_Fwd");
-	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::A_WALK_FWD, (_uint)ANIM_TYPE::A_WALK_FWD_ST, pAnimation, TRUE, TRUE, FALSE, ERootOption::XYZ, FALSE)))
+	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::A_WALK_FWD, (_uint)ANIM_TYPE::A_WALK_FWD_ST, pAnimation, TRUE, FALSE, TRUE, ERootOption::XYZ, FALSE)))
 		return E_FAIL;
 
-	pAnimation = m_pModel->Get_Animation("A_Walk_Fwd_Stop");
-	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::A_WALK_FWD_ED, (_uint)ANIM_TYPE::A_WALK_FWD, pAnimation, TRUE, TRUE, FALSE, ERootOption::XYZ, FALSE)))
+	pAnimation = m_pModel->Get_Animation("A_Walk_Fwd_End");
+	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::A_WALK_FWD_ED, (_uint)ANIM_TYPE::A_WALK_FWD, pAnimation, TRUE, FALSE, FALSE, ERootOption::XYZ, FALSE)))
 		return E_FAIL;
 
-#pragma endregion Anim to Anim Link
+	pAnimation = m_pModel->Get_Animation("A_Dash_Bwd");
+	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::A_DASH_BWD, (_uint)ANIM_TYPE::A_IDLE, pAnimation, TRUE, TRUE, FALSE, ERootOption::XYZ, TRUE)))
+		return E_FAIL;
+
+#pragma endregion
+	
+#pragma	region Anim to Anim Link
 	if (FAILED(m_pAnimator->Connect_Animation((_uint)ANIM_TYPE::A_IDLE, (_uint)ANIM_TYPE::A_WALK_FWD_ED, FALSE)))
 		return E_FAIL;
-#pragma 
+	//if (FAILED(m_pAnimator->Connect_Animation((_uint)ANIM_TYPE::A_IDLE, (_uint)ANIM_TYPE::A_DASH_BWD, FALSE)))
+	//	return E_FAIL;
+#pragma endregion
 
-#pragma region  State_Change
+#pragma region  Auto Change Anim
 	/* ##1.끝나는 애님 ##2.루트할 애님  */
 	m_pAnimator->Set_UpAutoChangeAnimation((_uint)ANIM_TYPE::A_WALK_FWD_ST, (_uint)ANIM_TYPE::A_WALK_FWD);
 	m_pAnimator->Set_UpAutoChangeAnimation((_uint)ANIM_TYPE::A_WALK_FWD, (_uint)ANIM_TYPE::A_WALK_FWD_ED);
 	m_pAnimator->Set_UpAutoChangeAnimation((_uint)ANIM_TYPE::A_WALK_FWD_ED, (_uint)ANIM_TYPE::A_IDLE);
+	//m_pAnimator->Set_UpAutoChangeAnimation((_uint)ANIM_TYPE::A_DASH_BWD, (_uint)ANIM_TYPE::A_IDLE);
 #pragma endregion
 
-	//m_pAnimator->Change_Animation((_uint)ANIM_TYPE::ANIM_IDLE);
-	/* ##1.끝나는 애님 ##2.루트할 애님  */
-	//m_pAnimator->Set_UpAutoChangeAnimation((_uint)ANIM_TYPE::A_ATTACK_S3, (_uint)ANIM_TYPE::A_IDLE);
+	return S_OK;
+}
 
-	m_pAnimator->Change_Animation((_uint)ANIM_TYPE::A_IDLE);
+HRESULT CMonster_Bastion_2HSword::Ready_StateFSM(void)
+{
+	/* for. Monster Idle */
+	if (FAILED(m_pStateController->Add_State(L"Idle", CBastion_2HSword_Idle::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+
+	/* for. Player Chaser */
+	if (FAILED(m_pStateController->Add_State(L"Chaser", CBastion_2HSword_Chaser::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;	
+
+	/* for. Dash */
+	if (FAILED(m_pStateController->Add_State(L"Dash", CBastion_2HSword_Dash::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+
+	for (auto& pair : m_pStateController->Get_States())
+	{
+		pair.second->Set_StateController(m_pStateController);
+		static_cast<CMonster_FSM*>(pair.second)->Set_Monster(this);
+		static_cast<CMonster_FSM*>(pair.second)->Set_Transform(m_pTransform);
+		static_cast<CMonster_FSM*>(pair.second)->Set_Model(m_pModel);
+		static_cast<CMonster_FSM*>(pair.second)->Set_Animator(m_pAnimator);
+	}
+	m_pStateController->Change_State(L"Idle");
 
 	return S_OK;
 }

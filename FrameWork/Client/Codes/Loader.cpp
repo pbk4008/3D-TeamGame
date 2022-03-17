@@ -637,6 +637,7 @@ HRESULT CLoader::Load_Stage1MonsterLoad()
 	if (FAILED(g_pGameInstance->Add_Prototype(L"Monster_Bastion_Sword", CMonster_Bastion_Sword::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 
+	//Weapon
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Model_Weapon_Stargazer",
 		CModel::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/Monster/Weapon/Stargazer(1H Sword).fbx", CModel::TYPE_STATIC, true))))
 		return E_FAIL;
@@ -1030,8 +1031,8 @@ HRESULT CLoader::Ready_Test_YM()
 #pragma endregion
 #pragma region 오브젝트
 	cout << "TestScene_YM 오브젝트 프로토타입 생성중..." << endl;
-	//if (FAILED(g_pGameInstance->Add_Prototype(L"Plane_Test", CPlane_Test::Create(m_pDevice, m_pDeviceContext))))
-	//	return E_FAIL;
+	if (FAILED(g_pGameInstance->Add_Prototype(L"Plane_Test", CPlane_Test::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
 	if (FAILED(g_pGameInstance->Add_Prototype(L"Silvermane", CSilvermane::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 	if (FAILED(g_pGameInstance->Add_Prototype(L"Camera_Silvermane", CCamera_Silvermane::Create(m_pDevice, m_pDeviceContext))))

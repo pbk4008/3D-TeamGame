@@ -197,6 +197,7 @@ _int CSilvermane::Tick(_double _dDeltaTime)
 		if (NO_EVENT != iProgress) 
 			return iProgress;
 	}
+
 	if (m_pShield && m_pShield->getActive())
 	{
 		iProgress = m_pShield->Tick(_dDeltaTime);
@@ -235,6 +236,9 @@ _int CSilvermane::LateTick(_double _dDeltaTime)
 		if (NO_EVENT != iProgress) 
 			return iProgress;
 	}
+
+	g_pObserver->Set_PlayerPos(m_pTransform->Get_State(CTransform::STATE_POSITION));
+
 
 	return _int();
 }
@@ -307,7 +311,7 @@ HRESULT CSilvermane::Ready_Components()
 	m_pAnimationController->Set_GameObject(this);
 	m_pAnimationController->Set_Model(m_pModel);
 	m_pAnimationController->Set_Transform(m_pTransform);
-	m_pAnimationController->Set_MoveSpeed(1.f);
+	m_pAnimationController->Set_MoveSpeed(2.f);
 
 	// 스테이트 컨트롤러
 	if (FAILED(SetUp_Components(m_iSceneID, L"Proto_Component_StateController", L"StateController", (CComponent**)&m_pStateController)))

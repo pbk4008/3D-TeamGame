@@ -6,11 +6,9 @@
 CStargazer::CStargazer(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
 	: CWeapon(_pDevice, _pDeviceContext)
 {
-	ZeroMemory(&m_matTransform, sizeof(_float4x4));
 }
 CStargazer::CStargazer(const CStargazer& _rhs)
 	: CWeapon(_rhs)
-	, m_matTransform(_rhs.m_matTransform)
 {
 }
 
@@ -20,8 +18,6 @@ HRESULT CStargazer::NativeConstruct_Prototype()
 		return E_FAIL;
 
 	m_eType = EType::Sword_1H;
-	if(FAILED(Set_Transform()))
-		return E_FAIL;
 	return S_OK;
 }
 
@@ -76,6 +72,15 @@ HRESULT CStargazer::Render()
 	return S_OK;
 }
 
+void CStargazer::Set_OwnerPivotMatrix(const _fmatrix& _smatPivot)
+{
+	_matrix matResult = _smatPivot;
+	_matrix matRotate = XMMatrixRotationAxis(XMVectorSet(0.f, 1.f, 0.f, 0.f), XMConvertToRadians(-30.f));
+	matResult *= matRotate;
+
+	XMStoreFloat4x4(&m_smatOwnerPivot, matResult);
+}
+
 HRESULT CStargazer::SetUp_Component()
 {
 	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STAGE1, L"Model_Weapon_Stargazer", L"Model", (CComponent**)&m_pModel)))
@@ -100,9 +105,10 @@ _int CStargazer::Attach_FixedBone(const _double& _dDeltaTime)
 		//뼈노드가 가지고 있는 Combine행렬 가져옴
 		_matrix smatWorld = m_pFixedBone->Get_CombinedMatrix();
 		//무기 가지고 있는 객체의 피벗 곱해줌
-		smatWorld *= m_smatOwnerPivot;
+		smatWorld *= XMLoadFloat4x4(&m_smatOwnerPivot);
+		;
 	
-		smatWorld *= XMLoadFloat4x4(&m_matTransform);
+		//smatWorld *= XMLoadFloat4x4(&m_matTransform);
 		//무기 로컬 트랜스 폼 갱신
 		m_pLocalTransform->Set_WorldMatrix(smatWorld);
 
@@ -131,16 +137,6 @@ _int CStargazer::Attach_Owner(const _double& _dDeltaTime)
 	return _int();
 }
 
-HRESULT CStargazer::Set_Transform()
-{
-	//_matrix matPos = XMMatrixTranslation(-0.41f, 0.f, 0.7f);
-	//_matrix matRotate = XMMatrixRotationAxis(XMVectorSet(0.f, 1.f, 0.f, 0.f), XMConvertToRadians(-90.f));
-
-
-	//XMStoreFloat4x4(&m_matTransform, matRotate*matPos);
-
-	return S_OK;
-}
 
 CStargazer* CStargazer::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
 {

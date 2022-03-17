@@ -115,8 +115,13 @@ HRESULT CPlane_Test::Ready_NaviMesh()
 	NaviMeshDesc.tColDesc = ColDesc;
 
 	m_pNaviCollider = (CMeshCollider*)g_pGameInstance->Clone_Component(m_iSceneID, L"Proto_Component_MeshCollider", &NaviMeshDesc);
+
 	if (!m_pNaviCollider)
 		return E_FAIL;
+
+	/* Com_Texture  */
+	//wstring TexTag = L"Plane_Texture";
+	//m_pTexture = (CTexture*)g_pGameInstance->Clone_Component((_uint)SCENEID::SCENE_TEST_YM, L"Plane_Texture", &TexTag);
 
 	return S_OK;
 }
