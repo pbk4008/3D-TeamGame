@@ -98,6 +98,11 @@ CAnimation* CModel::Get_Animation(const string& pName)
 	return pFindAnim;
 }
 
+void CModel::Set_PivotMatrix(const _fmatrix& _matPivot)
+{
+	XMStoreFloat4x4(&m_PivotMatrix, _matPivot);
+}
+
 HRESULT CModel::NativeConstruct_Prototype(const string& pMeshFilePath, const string& pMeshFileName, const wstring& pShaderFilePath, _fmatrix PivotMatrix, TYPE eMeshType, _bool bUsingMaterial)
 {
 	m_bUsingMaterial = bUsingMaterial;

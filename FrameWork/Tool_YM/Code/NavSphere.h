@@ -15,7 +15,7 @@ protected:
 
 public:
 	virtual HRESULT NativeConstruct_Prototype() override;
-	virtual HRESULT NativeConstruct(void* pArg) override;
+	virtual HRESULT NativeConstruct(const _uint _iSceneID, void* pArg) override;
 	virtual _int	Tick(_double TimeDelta) override;
 	virtual _int	LateTick(_double TimeDelta) override;
 	virtual HRESULT Render() override;
@@ -43,7 +43,7 @@ public:
 public:
 	// CGameObject을(를) 통해 상속됨
 	static CNavSphere* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext);
-	virtual Engine::CGameObject* Clone(void* pArg);
+	virtual Engine::CGameObject* Clone(const _uint _iSceneID, void* pArg);
 	virtual void Free(void) override;
 };
 

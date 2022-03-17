@@ -20,15 +20,15 @@ HRESULT CStage1::NativeConstruct()
 	if (FAILED(CLevel::NativeConstruct()))
 		return E_FAIL;
 
-	if (FAILED(Ready_MapObject()))
+	/*if (FAILED(Ready_MapObject()))
+	{
+		return E_FAIL;
+	}*/
+
+	if (FAILED(Ready_Player(L"Layer_Silvermane")))
 	{
 		return E_FAIL;
 	}
-
-	//if (FAILED(Ready_Player(L"Layer_Silvermane")))
-	//{
-	//	return E_FAIL;
-	//}
 	//if (FAILED(Ready_Boss(L"Layer_Boss")))
 	//{
 	//	return E_FAIL;
@@ -136,7 +136,7 @@ HRESULT CStage1::Ready_Player(const _tchar* LayerTag)
 
 HRESULT CStage1::Ready_Boss(const _tchar* LayerTag)
 {
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Proto_GameObject_Boss_Judicator")))
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Proto_GameObject_Boss_Bastion")))
 		return E_FAIL;
 
 	return S_OK;

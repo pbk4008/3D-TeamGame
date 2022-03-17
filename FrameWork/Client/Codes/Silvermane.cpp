@@ -131,6 +131,9 @@
 
 // Attack
 #include "Shield_SupermanPunchStraight.h"
+
+//////////////////////////////////////////// Jump
+#include "Traverse_Jump400Jog.h"
 #pragma endregion
 
 
@@ -200,12 +203,12 @@ _int CSilvermane::Tick(_double _dDeltaTime)
 			return iProgress;
 	}
 
-	/*if (m_pShield && m_pShield->getActive())
+	if (m_pShield && m_pShield->getActive())
 	{
 		iProgress = m_pShield->Tick(_dDeltaTime);
 		if (NO_EVENT != iProgress)
 			return iProgress;
-	}*/
+	}
 
 	return _int();
 }
@@ -300,12 +303,14 @@ HRESULT CSilvermane::Ready_Components()
 	m_pTransform->Set_State(CTransform::STATE_POSITION, XMVectorSet(0.f, 0.f, 0.f, 1.f));
 
 	// ¸ðµ¨
-	if (FAILED(SetUp_Components(m_iSceneID, L"Model_Silvermane", L"Model", (CComponent**)&m_pModel)))
+	if (FAILED(SetUp_Components(m_iSceneID, L"Model_Silvermane_Bin", L"Model", (CComponent**)&m_pModel)))
 		return E_FAIL;
-	m_pModel->Add_Material(g_pGameInstance->Get_Material(L"Mtrl_Silvermane_Top"), 0);
-	m_pModel->Add_Material(g_pGameInstance->Get_Material(L"Mtrl_Silvermane_Down"), 1);
-	m_pModel->Add_Material(g_pGameInstance->Get_Material(L"Mtrl_Silvermane_Cloak"), 2);
-	m_pModel->Add_Material(g_pGameInstance->Get_Material(L"Mtrl_Silvermane_Hair"), 3);
+	_matrix matPivot = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(180.f));
+	m_pModel->Set_PivotMatrix(matPivot);
+	//m_pModel->Add_Material(g_pGameInstance->Get_Material(L"Mtrl_Silvermane_Top"), 0);
+	//m_pModel->Add_Material(g_pGameInstance->Get_Material(L"Mtrl_Silvermane_Down"), 1);
+	//m_pModel->Add_Material(g_pGameInstance->Get_Material(L"Mtrl_Silvermane_Cloak"), 2);
+	//m_pModel->Add_Material(g_pGameInstance->Get_Material(L"Mtrl_Silvermane_Hair"), 3);
 
 	// ¿¡´Ï¸ÞÀÌ¼Ç ÄÁÆ®·Ñ·¯
 	if (FAILED(SetUp_Components(m_iSceneID, L"Proto_Component_AnimationController", L"AnimationController", (CComponent**)&m_pAnimationController)))
@@ -543,6 +548,9 @@ HRESULT CSilvermane::Ready_States()
 	if (FAILED(m_pStateController->Add_State(L"Shield_SupermanPunchStraight", CShield_SupermanPunchStraight::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 #pragma endregion
+	// Â«Çª
+	if (FAILED(m_pStateController->Add_State(L"Traverse_Jump400Jog", CTraverse_Jump400Jog::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
 
 	for (auto& pair : m_pStateController->Get_States())
 	{
@@ -575,12 +583,12 @@ HRESULT CSilvermane::Ready_Weapons()
 	m_umapWeapons.emplace(L"Fury", pWeapon);
 
 	// ¹æÆÐ
-	/*pWeaponBone = m_pModel->Get_BoneMatrix("weapon_l");
+	pWeaponBone = m_pModel->Get_BoneMatrix("weapon_l");
 	m_pShield = CShield::Create(m_pDevice, m_pDeviceContext);
 	m_pShield->NativeConstruct(m_iSceneID, pWeaponBone);
 	m_pShield->Set_Owner(this);
 	m_pShield->Set_OwnerPivotMatrix(m_pModel->Get_PivotMatrix());
-	Set_EquipShield(false);*/
+	Set_EquipShield(false);
 	
 	return S_OK;
 }

@@ -20,9 +20,9 @@ HRESULT CDynamic_Camera::NativeConstruct_Prototype()
 	return S_OK;
 }
 
-HRESULT CDynamic_Camera::NativeConstruct(void* pArg)
+HRESULT CDynamic_Camera::NativeConstruct(const _uint _iSceneID, void* pArg)
 {
-	if (FAILED(__super::NativeConstruct(pArg)))
+	if (FAILED(__super::NativeConstruct(_iSceneID, pArg)))
 		return E_FAIL;
 
 	if (FAILED(SetUp_Components()))
@@ -130,11 +130,11 @@ CDynamic_Camera* CDynamic_Camera::Create(ID3D11Device* _pDevice, ID3D11DeviceCon
 	return pInstance;
 }
 
-CGameObject* CDynamic_Camera::Clone(void* pArg)
+CGameObject* CDynamic_Camera::Clone(const _uint _iSceneID, void* pArg)
 {
 	CDynamic_Camera* pInstance = new CDynamic_Camera(*this);
 
-	if (FAILED(pInstance->NativeConstruct(pArg)))
+	if (FAILED(pInstance->NativeConstruct(_iSceneID, pArg)))
 	{
 		MSGBOX("Failed to Create CDynamic_Camera!!!");
 		Safe_Release(pInstance);

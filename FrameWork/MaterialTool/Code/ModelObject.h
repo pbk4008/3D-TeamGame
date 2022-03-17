@@ -22,7 +22,7 @@ private:
 	virtual ~CModelObject()= default;
 public:
 	virtual HRESULT NativeConstruct_Prototype();
-	virtual HRESULT NativeConstruct(void* pArg);
+	virtual HRESULT NativeConstruct(const _uint iSceneID, void* pArg);
 	virtual _int Tick(_double dDeltaTime);
 	virtual _int LateTick(_double dDeltaTime);
 	virtual HRESULT Render();
@@ -39,7 +39,7 @@ public:
 	void setDraw(_bool bCheck) { m_bDraw = bCheck; }
 public:
 	static CModelObject* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);
-	virtual CGameObject* Clone(void* pArg);
+	virtual CGameObject* Clone(const _uint iSceneID, void* pArg);
 private:
 	virtual void Free() override;
 private:

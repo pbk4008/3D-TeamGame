@@ -6,6 +6,13 @@ BEGIN(Client)
 
 class CMonster_Bastion_Shooter : public CActor
 {
+public:
+	enum class ANIM_TYPE {
+		HEAD, IDLE, ATTACK, RUN_START, RUN_END, RUN_LOOP
+		, ATTACK_JUMPSTART, ATTACK_JUMPLOOP, ATTACK_JUMPEND
+		, HIT, TYPE_END
+	};
+
 private:
 	explicit CMonster_Bastion_Shooter(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext);
 	explicit CMonster_Bastion_Shooter(const CMonster_Bastion_Shooter& _rhs);
@@ -20,10 +27,14 @@ public:
 
 private:
 	HRESULT Ready_Components();
+	HRESULT Ready_AnimationFSM();
+	HRESULT Ready_StateFSM();
 
 private:
-	CModel* m_pModel = nullptr;
-	CAnimationController* m_pAnimationController = nullptr;
+	CModel* m_pModelCom = nullptr;
+	CAnimator* m_pAnimator = nullptr;
+	CCapsuleCollider* m_pCollider = nullptr;
+	CStateController* m_pStateController = nullptr;
 
 public:
 	static CMonster_Bastion_Shooter* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext);

@@ -63,7 +63,6 @@ HRESULT CShield_SupermanPunchStraight::EnterState()
 	m_pAnimationController->Set_RootMotion(true, true);
 
 	m_pSilvermane->Set_EquipShield(true);
-	m_pSilvermane->Set_TrasceCamera(true);
 	return S_OK;
 }
 
@@ -72,7 +71,6 @@ HRESULT CShield_SupermanPunchStraight::ExitState()
 	if (FAILED(__super::ExitState()))
 		return E_FAIL;
 
-	m_pSilvermane->Set_TrasceCamera(false);
 	return S_OK;
 }
 

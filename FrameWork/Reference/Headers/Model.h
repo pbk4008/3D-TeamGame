@@ -32,6 +32,7 @@ public:
 	vector<CMaterial*> Get_Materials() { return m_vecMaterials; }
 public:
 	void setUsingTool(_bool Check) { m_bUsingTool = Check; }
+	void Set_PivotMatrix(const _fmatrix& _matPivot);
 public:
 	HRESULT NativeConstruct_Prototype(const string& pMeshFilePath, const string& pMeshFileName, const wstring& pShaderFilePath, _fmatrix PivotMatrix, TYPE eMeshType,_bool bUsingMaterial);
 	HRESULT NativeConstruct_Prototype(const wstring& pMeshFilePath, TYPE eType, _bool bUsingMaterial);

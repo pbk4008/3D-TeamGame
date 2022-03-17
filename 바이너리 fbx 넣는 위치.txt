@@ -1,0 +1,14 @@
+맵 FBX 바이너리
+- Client의 Test 폴더에 저장(Test폴더가 없을 경우 만들기)
+- Test폴더에 만들어진 fbx를 Client/bin/FBX에 넣기(없을 경우 폴더 만들기)
+- Texture는 Client/bin/FBX/Texture 에 넣기(없을 경우 폴더 만들기)
+
+몬스터 FBX 바이너리
+- Client의 Test 폴더에 저장(폴더 없을 경우 만들기)
+- Test폴더에 만들어진 fbx를 Client/bin/FBX/Monster에 넣기(없을 경우 폴더 만들기)
+- Texture는 Client/bin/FBX/Texture 에 넣기(없을 경우 폴더 만들기)
+
+무기 FBX 바이너리
+- Client의 Test 폴더에 저장(폴더 없을 경우 만들기)
+- Test폴더에 만들어진 fbx를 Client/bin/FBX/Monster/Weapon에 넣기(없을 경우 폴더 만들기)
+- Texture는 Client/bin/FBX/Texture 에 넣기(없을 경우 폴더 만들기)

@@ -27,12 +27,12 @@ HRESULT CMaterialCamera::NativeConstruct_Prototype()
 	return S_OK;
 }
 
-HRESULT CMaterialCamera::NativeConstruct(void* pArg)
+HRESULT CMaterialCamera::NativeConstruct(const _uint iSceneID, void* pArg)
 {
 	if (!pArg)
 		return S_OK;
 
-	if (FAILED(CGameObject::NativeConstruct(pArg)))
+	if (FAILED(CGameObject::NativeConstruct(iSceneID ,pArg)))
 		return E_FAIL;
 	CCamera::CAMERADESC tDesc = (*(CCamera::CAMERADESC*)pArg);
 	if (FAILED(SetUp_Components(0, L"Proto_Component_Camera", L"MaterialCamera", (CComponent * *)& m_pCamera, &tDesc)))
@@ -87,10 +87,10 @@ CMaterialCamera* CMaterialCamera::Create(ID3D11Device* pDevice, ID3D11DeviceCont
 	return pInstance;
 }
 
-CGameObject* CMaterialCamera::Clone(void* pArg)
+CGameObject* CMaterialCamera::Clone(const _uint iSceneID, void* pArg)
 {
 	CMaterialCamera* pInstance = new CMaterialCamera(*this);
-	if (FAILED(pInstance->NativeConstruct(pArg)))
+	if (FAILED(pInstance->NativeConstruct(iSceneID ,pArg)))
 	{
 		MSGBOX("CMaterialCamera Clone Fail");
 		Safe_Release(pInstance);

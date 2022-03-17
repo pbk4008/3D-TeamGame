@@ -27,9 +27,9 @@ HRESULT CMFCCamera::NativeConstruct_Prototype()
 	return S_OK;
 }
 
-HRESULT CMFCCamera::NativeConstruct(void* pArg)
+HRESULT CMFCCamera::NativeConstruct(const _uint iSceneID, void* pArg)
 {
-	if (FAILED(__super::NativeConstruct(pArg)))
+	if (FAILED(__super::NativeConstruct(iSceneID, pArg)))
 	{
 		return E_FAIL;
 	}
@@ -81,11 +81,11 @@ CMFCCamera* CMFCCamera::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDevi
 	return pInstance;
 }
 
-CGameObject* CMFCCamera::Clone(void* pArg)
+CGameObject* CMFCCamera::Clone(const _uint iSceneID, void* pArg)
 {
 	CMFCCamera* pInstance = new CMFCCamera(*this);
 
-	if (FAILED(pInstance->NativeConstruct(pArg)))
+	if (FAILED(pInstance->NativeConstruct(iSceneID, pArg)))
 	{
 		MSGBOX("Failed to Creating Clone CMFCCamera");
 		Safe_Release(pInstance);
