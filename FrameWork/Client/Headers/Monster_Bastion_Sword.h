@@ -13,7 +13,9 @@ class CStargazer;
 class CMonster_Bastion_Sword final : public CActor
 {
 private:
-	enum class ANIM_TYPE { HEAD, IDLE, ATTACK, RUN_START, RUN_END, RUN_LOOP, HIT, TYPE_END};
+	enum class ANIM_TYPE { HEAD, IDLE, ATTACK, RUN_START, RUN_END, RUN_LOOP
+		, ATTACK_JUMPSTART,ATTACK_JUMPLOOP, ATTACK_JUMPEND
+		,HIT, TYPE_END};
 private:
 	explicit CMonster_Bastion_Sword(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext);
 	explicit CMonster_Bastion_Sword(const CMonster_Bastion_Sword& _rhs);
@@ -36,7 +38,6 @@ private:
 	CAnimator* m_pAnimator = nullptr;
 	CCapsuleCollider* m_pCollider = nullptr;
 private:
-	//CShieldBreaker* m_pWeapon = nullptr;
 	CStargazer* m_pWeapon = nullptr;
 public:
 	static CMonster_Bastion_Sword* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext);

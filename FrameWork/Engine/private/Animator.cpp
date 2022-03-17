@@ -150,21 +150,23 @@ HRESULT CAnimator::Set_UpAutoChangeAnimation(_uint iTag, _uint iEndTag)
 	return S_OK;
 }
 
-HRESULT CAnimator::Insert_AnyEntryAnimation(_uint iTag, CAnimation* pAnim, _bool bRootAnim, _bool bTransFrom, ERootOption eOption)
+HRESULT CAnimator::Insert_AnyEntryAnimation(_uint iTag)
 {
-	if (Get_DuplicateTag(iTag))
+	//애니메이터 루프내에 애니메이션이 있는지 없는지 판단
+	//있어야만 루프 내의 애니메이션에서 가져올수 있음
+	if (!Get_DuplicateTag(iTag))
 		return E_FAIL;
+	//AnyEntry내에 해당 태그를 가지고 있는 애니메이션 존재하는지 판단
 	if (Get_AnyEntryDuplicateTag(iTag))
 		return E_FAIL;
 
-	//애니메이션으로 AnimNode 만들기
-	CAnimNode* pNewNode = CAnimNode::Create(iTag, pAnim, false, bRootAnim, bTransFrom, eOption);
-	if (!pNewNode)
+	//애니메이션 노드 찾기
+	CAnimNode* pNode = Find_Animation(iTag);
+	if (!pNode)
 		return E_FAIL;
 
-	m_vecAnimNode.emplace_back(iTag);
-
-	m_vecAnyEntryNode.emplace_back(pNewNode);
+	//찾으면 AnyEntry에 넣어주기
+	m_vecAnyEntryNode.emplace_back(pNode);
 
 	return S_OK;
 }
@@ -187,10 +189,19 @@ CAnimation* CAnimator::Get_CurrentAnimation()
 
 HRESULT CAnimator::Change_Animation(_uint iTag)
 {
-	m_pChangeNode = m_pCulAnimNode->Check_ConnectNode(iTag);
-	if (!m_pChangeNode)
-		return E_FAIL;
+	//현재 애니메이션과 연결된 애들 중에서 태그 값을 가진 애니메이션노드 찾기
+	CAnimNode* pNode = m_pCulAnimNode->Check_ConnectNode(iTag);
 
+	//없으면 끝
+	if (!pNode)
+	{
+		MSGBOX("현재 연결된 애니메이션이 아닙니다.");
+		return S_OK;
+	}
+	//있으면 바꿀애니메이션으로 변경
+	m_pChangeNode = pNode;
+
+	//Animation컨트롤러에 바꿀애니메이션으로 예약
 	if (FAILED(m_pController->SetUp_NextAnimation(m_pChangeNode)))
 		return E_FAIL;
 
@@ -238,8 +249,9 @@ CAnimNode* CAnimator::Find_Animation(_uint iTag, CAnimNode* pNode)
 	if (pNode->Is_LinkEmpty())
 		return nullptr;
 
-	return pNode->Check_ConnectNode(iTag);
+	return pNode->Check_ConnectNode(iTag,&m_vecAnimNode);
 }
+
 
 CAnimNode* CAnimator::Find_AnyEntryAnim(_uint iTag)
 {
@@ -307,10 +319,5 @@ void CAnimator::Free()
 	m_pHead->Delete_Node(m_vecAnimNode);
 	Safe_Release(m_pHead);
 
-	for (auto& pNode : m_vecAnyEntryNode)
-	{
-		pNode->Delete_Node(m_vecAnimNode);
-		Safe_Release(pNode);
-	}
 	m_vecAnyEntryNode.clear();
 }

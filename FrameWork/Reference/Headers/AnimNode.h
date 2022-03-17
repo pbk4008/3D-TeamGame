@@ -14,7 +14,9 @@ public:
 	//AnimNode 태그, 애니메이션, 반복재생 여부, 중복방지를 위한 Animator에 있는 백터의 Index
 	virtual HRESULT NativeConstruct_Prototype(_uint iTag, CAnimation* pAnim, _bool bLoop, _bool bRootAnim, _bool bTransformMove, ERootOption eOption);
 public:
-	//본인이 가지고 있는 링크벡터에 해당 이름을 가지고 있는 링크가 있는지 없는지 판단
+	//본인이 가지고 있는 링크벡터에 해당 이름을 가지고 있는 링크가 있는지 없는지 판단(중복체크까지 판단)
+	CAnimNode* Check_ConnectNode(_uint iIndex, vector<_uint>* vecDuplicate);
+	//본인이 가지고 있는 링크벡터에 해당 이름을 가지고 있는 링크가 있는지 없는지 판단(단순하게 가지고 있는지만 판단)
 	CAnimNode* Check_ConnectNode(_uint iIndex);
 	//애니메이션 노드 연결
 	void Conntect_AnimNode(CAnimNode* pNode);

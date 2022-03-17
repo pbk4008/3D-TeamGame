@@ -27,23 +27,69 @@ HRESULT CAnimNode::NativeConstruct_Prototype(_uint iTag, CAnimation* pAnim, _boo
 }
 
 
-CAnimNode* CAnimNode::Check_ConnectNode(_uint iIndex)
+CAnimNode* CAnimNode::Check_ConnectNode(_uint iIndex, vector<_uint>* vecDuplicate)
 {
 	if (Is_LinkEmpty())
 		return nullptr;
 
+	//찾는 노드
 	CAnimNode* pFind = nullptr;
-
+	//모든 자식 노드 탐색
 	for (auto& pNode : m_vecAnimNode)
 	{
+		//새로운 중복 방지벡터
+		vector<_uint> vecNewDuplicate;
+		//탐색 시작 체크를 하는 변수
+		_bool bCheck = false;
+		for (auto& pDuplicate : *vecDuplicate)
+		{
+			//중복 방지 벡터와 같은 Index가 있으면
+			if (pDuplicate == pNode->m_iIndex)
+			{
+				//탐색 시작을 하고
+				bCheck = true;
+				//새로운 중복 방지 벡터에 넣지 않기 위해 continue로 건너뜀
+				continue;
+			}
+			//같은 벡터가 없으면 새로운 중복 방지 벡터에 넣는다
+			vecNewDuplicate.emplace_back(pDuplicate);
+		}
+		//탐색 시작을 못하면(중복 방지 벡터에 걸리는게 없으면) null
+		if (!bCheck)
+			return nullptr;
+		//자식의 index가 매개변수로 받은 index와 같으면
 		if(pNode->m_iIndex == iIndex)
+		{
+			//노드를 가져오고 for 문을 벗어난다.
+			pFind = pNode;
+			break;
+		}
+		//자식의 index가 매개변수로 받은 index와 다르면
+		//자식의 자식으로 찾는다.
+		pFind = pNode->Check_ConnectNode(iIndex, &vecNewDuplicate);
+		//자식의 자식으로 값을 받고 있으면 for문을 나간다
+		if (pFind)
+			break;
+	}
+	return pFind;
+}
+
+CAnimNode* CAnimNode::Check_ConnectNode(_uint iIndex)
+{
+	//자식 링크가 비어있는지 판단
+	if (Is_LinkEmpty())
+		return nullptr;
+
+	//찾는 노드
+	CAnimNode* pFind = nullptr;
+	//모든 자식 노드 탐색
+	for (auto& pNode : m_vecAnimNode)
+	{
+		if (pNode->m_iIndex == iIndex)
 		{
 			pFind = pNode;
 			break;
 		}
-		pFind = pNode->Check_ConnectNode(iIndex);
-		if (pFind)
-			break;
 	}
 
 	return pFind;

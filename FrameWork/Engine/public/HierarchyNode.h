@@ -23,7 +23,7 @@ public:
 		return XMLoadFloat4x4(&m_TransformationMatrix);
 	}
 	_fmatrix Get_OffsetMatrix() const { return XMLoadFloat4x4(&m_OffsetMatrix); }
-
+	_fmatrix Get_CreateMatrix() const { return XMLoadFloat4x4(&m_CreateMatrix); }
 	void Set_OffsetMatrix(_fmatrix OffsetMatrix) { XMStoreFloat4x4(&m_OffsetMatrix, OffsetMatrix); }
 
 
@@ -47,6 +47,7 @@ private:
 	_uint						m_iDepth = 0;
 
 	_float4x4			m_OffsetMatrix;
+	_float4x4			m_CreateMatrix;
 	_float4x4			m_TransformationMatrix;
 	_float4x4			m_CombinedTransformationMatrix;
 

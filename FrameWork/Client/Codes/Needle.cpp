@@ -108,7 +108,7 @@ _int CNeedle::Attach_FixedBone(const _double& _dDeltaTime)
 	{
 		_matrix smatWorld = m_pFixedBone->Get_CombinedMatrix();
 
-		smatWorld *= m_smatOwnerPivot;
+		smatWorld *= XMLoadFloat4x4(&m_smatOwnerPivot);;
 
 		if (!m_isEquip)
 		{

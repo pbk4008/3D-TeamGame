@@ -6,12 +6,14 @@ CWeapon::CWeapon(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
 	: CGameObject(_pDevice, _pDeviceContext)
 {
 	m_bActive = true;
+	ZeroMemory(&m_smatOwnerPivot, sizeof(_float4x4));
 }
 
 CWeapon::CWeapon(const CWeapon& _rhs)
 	: CGameObject(_rhs)
 	, m_eType(_rhs.m_eType)
 	, m_wstrName(_rhs.m_wstrName)
+	, m_smatOwnerPivot(_rhs.m_smatOwnerPivot)
 {
 	m_bActive = _rhs.m_bActive;
 }
@@ -76,7 +78,8 @@ void CWeapon::Set_Owner(CGameObject* _pOwner)
 void CWeapon::Set_OwnerPivotMatrix(const _fmatrix& _smatPivot)
 {
 	_float fRadian = XMConvertToRadians(180.f);
-	m_smatOwnerPivot = XMMatrixRotationRollPitchYaw(fRadian, fRadian, fRadian) * _smatPivot;
+	_matrix matResut = XMMatrixRotationRollPitchYaw(fRadian, fRadian, fRadian) * _smatPivot;
+	XMStoreFloat4x4(&m_smatOwnerPivot, matResut);
 }
 
 void CWeapon::Set_Equip(const _bool _isEquip, void* _pArg)

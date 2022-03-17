@@ -53,7 +53,7 @@ _int CEnvironment::Tick(_double TimeDelta)
 
 _int CEnvironment::LateTick(_double TimeDelta)
 {
-	m_pRenderer->Add_RenderGroup(CRenderer::RENDER_NONALPHA, this);
+	m_pRenderer->Add_RenderGroup(CRenderer::RENDER_ALPHA, this);
 	return _int();
 }
 
@@ -134,7 +134,7 @@ HRESULT CEnvironment::Ready_Component()
 
 	m_Nummeshcontainer = m_pInstanceMesh->Get_NumMeshContainer();
 
-	m_LightDesc = g_pGameInstance->Get_LightDesc(0);
+	//m_LightDesc = g_pGameInstance->Get_LightDesc(0);
 
 	return S_OK; 
 }
