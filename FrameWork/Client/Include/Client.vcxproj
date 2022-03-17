@@ -265,6 +265,7 @@
     <ClInclude Include="..\Headers\MainApp.h" />
     <ClInclude Include="..\Headers\MainCamera.h" />
     <ClInclude Include="..\Headers\MainCamera_Ortho.h" />
+    <ClInclude Include="..\Headers\MidBoss_Rage.h" />
     <ClInclude Include="..\Headers\Monster_Bastion_2HSword.h" />
     <ClInclude Include="..\Headers\Monster_Bastion_Healer.h" />
     <ClInclude Include="..\Headers\Monster_Bastion_Shooter.h" />
@@ -417,6 +418,7 @@
     <ClCompile Include="..\Codes\Client_Trigger.cpp" />
     <ClCompile Include="..\Codes\Boss_Bastion_Judicator.cpp" />
     <ClCompile Include="..\Codes\Fury.cpp" />
+    <ClCompile Include="..\Codes\MidBoss_Rage.cpp" />
     <ClCompile Include="..\Codes\Monster_Bastion_2HSword.cpp" />
     <ClCompile Include="..\Codes\Camera_Silvermane.cpp" />
     <ClCompile Include="..\Codes\DebugSystem.cpp" />

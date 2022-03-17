@@ -4,6 +4,8 @@
 #include "ShieldBreaker.h"
 #include "UI_Monster_Panel.h"
 
+#include "MidBoss_Rage.h"
+
 CBoss_Bastion_Judicator::CBoss_Bastion_Judicator(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
 	:CActor(pDevice, pDeviceContext)
 {
@@ -41,7 +43,7 @@ HRESULT CBoss_Bastion_Judicator::NativeConstruct(const _uint _iSceneID, void* pA
 	pWeapon->Set_OwnerPivotMatrix(m_pModelCom->Get_PivotMatrix());
 	m_pWeapon = pWeapon;
 
-	_vector Pos = { 0.f, 0.f, 5.f, 1.f };
+	_vector Pos = { 0.f, 0.f, 10.f, 1.f };
 	m_pTransform->Set_State(CTransform::STATE_POSITION, Pos);
 
 	//MidBossBar Panel
@@ -55,8 +57,6 @@ HRESULT CBoss_Bastion_Judicator::NativeConstruct(const _uint _iSceneID, void* pA
 
 	m_pPanel->Set_TargetWorldMatrix(m_pTransform->Get_WorldMatrix());
 
-	//애니메이션체인지(바꿀애님)
-	m_eCurState = CBoss_Bastion_Judicator::STATE_RAGE;
 	m_pAnimator->Change_Animation(RAGE);
 
 	return S_OK;
@@ -68,6 +68,13 @@ _int CBoss_Bastion_Judicator::Tick(_double TimeDelta)
 	{
 		return -1;
 	}
+
+	_int iProgress = m_pStateController->Tick(TimeDelta);
+	if (NO_EVENT != iProgress)
+	{
+		return iProgress;
+	}
+
 	if (nullptr != m_pWeapon)
 	{
 		if (-1 == m_pWeapon->Tick(TimeDelta))
@@ -87,8 +94,6 @@ _int CBoss_Bastion_Judicator::Tick(_double TimeDelta)
 	}
 
 
-	Set_State();
-
 	m_pAnimator->Tick(TimeDelta);
 
 	m_pPanel->Set_TargetWorldMatrix(m_pTransform->Get_WorldMatrix());
@@ -101,6 +106,12 @@ _int CBoss_Bastion_Judicator::LateTick(_double TimeDelta)
 	if (0 > __super::LateTick(TimeDelta))
 	{
 		return -1;
+	}
+
+	_int iProgress = m_pStateController->LateTick(TimeDelta);
+	if (NO_EVENT != iProgress)
+	{
+		return iProgress;
 	}
 
 	m_pRenderer->Add_RenderGroup(CRenderer::RENDER_ALPHA, this);
@@ -124,9 +135,9 @@ HRESULT CBoss_Bastion_Judicator::Render()
 	}
 
 	_matrix XMWorldMatrix = XMMatrixTranspose(m_pTransform->Get_WorldMatrix());
-	_matrix XMViewMatrix = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"MainCamera", TRANSFORMSTATEMATRIX::D3DTS_VIEW));
-	_matrix XMProjectMatrix = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"MainCamera", TRANSFORMSTATEMATRIX::D3DTS_PROJECTION));
-	_vector CamPos = g_pGameInstance->Get_CamPosition(L"MainCamera");
+	_matrix XMViewMatrix = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_VIEW));
+	_matrix XMProjectMatrix = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_PROJECTION));
+	_vector CamPos = g_pGameInstance->Get_CamPosition(L"Camera_Silvermane");
 
 	m_pModelCom->SetUp_ValueOnShader("g_WorldMatrix", &XMWorldMatrix, sizeof(_float) * 16);
 	m_pModelCom->SetUp_ValueOnShader("g_ViewMatrix", &XMViewMatrix, sizeof(_float) * 16);
@@ -167,6 +178,11 @@ HRESULT CBoss_Bastion_Judicator::SetUp_Components()
 	m_pModelCom->Add_Material(g_pGameInstance->Get_Material(L"MI_Bastion_Fur_Tier4"), 1);
 	m_pModelCom->Add_Material(g_pGameInstance->Get_Material(L"MI_Bastion_Cloth_Tier4"), 2);
 	m_pModelCom->Add_Material(g_pGameInstance->Get_Material(L"MI_Bastion_Down_Tier4"), 3);
+
+
+	if (FAILED(__super::SetUp_Components((_uint)SCENEID::SCENE_STAGE1, L"Proto_Component_StateController", L"Com_StateController", (CComponent**)&m_pStateController)))
+		return E_FAIL;
+	m_pStateController->Set_GameObject(this);
 	
 	return S_OK;
 }
@@ -318,50 +334,33 @@ HRESULT CBoss_Bastion_Judicator::Set_Animation_FSM()
 	return S_OK;
 }
 
-void CBoss_Bastion_Judicator::Set_State()
+HRESULT CBoss_Bastion_Judicator::Set_State_FSM()
 {
-	if (m_ePreState != m_eCurState)
+	/* for. Monster Idle */
+	if (FAILED(m_pStateController->Add_State(L"Rage", CMidBoss_Rage::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+
+	///* for. Player Chaser */
+	//if (FAILED(m_pStateController->Add_State(L"Chaser", CBastion_2HSword_Chaser::Create(m_pDevice, m_pDeviceContext))))
+	//	return E_FAIL;
+
+	///* for. Dash */
+	//if (FAILED(m_pStateController->Add_State(L"Dash", CBastion_2HSword_Dash::Create(m_pDevice, m_pDeviceContext))))
+	//	return E_FAIL;
+
+	for (auto& pair : m_pStateController->Get_States())
 	{
-		switch (m_eCurState)
-		{
-		case Client::CBoss_Bastion_Judicator::STATE_RAGE:
-			break;
-		case Client::CBoss_Bastion_Judicator::STATE_ATTACK_JOG:
-			break;
-		case Client::CBoss_Bastion_Judicator::STATE_ATTACK_LEGA:
-			break;
-		case Client::CBoss_Bastion_Judicator::STATE_ATTACK_R1H:
-			break;
-		case Client::CBoss_Bastion_Judicator::STATE_ATTACK_R1:
-			break;
-		case Client::CBoss_Bastion_Judicator::STATE_ATTACK_S1:
-			break;
-		case Client::CBoss_Bastion_Judicator::STATE_ATTACK_S2:
-			break;
-		case Client::CBoss_Bastion_Judicator::STATE_SPRINT:
-			break;
-		case Client::CBoss_Bastion_Judicator::STATE_STUN:
-			break;
-		case Client::CBoss_Bastion_Judicator::STATE_TURN:
-			break;
-		case Client::CBoss_Bastion_Judicator::STATE_WALK:
-			break;
-		case Client::CBoss_Bastion_Judicator::STATE_RUN:
-			break;
-		case Client::CBoss_Bastion_Judicator::STATE_DASH:
-			break;
-		case Client::CBoss_Bastion_Judicator::STATE_FALLING:
-			break;
-		case Client::CBoss_Bastion_Judicator::STATE_RECOCHET:
-			break;
-		case Client::CBoss_Bastion_Judicator::STATE_DAETH:
-
-			break;
-		}
-
-		m_ePreState = m_eCurState;
+		pair.second->Set_StateController(m_pStateController);
+		static_cast<CMonster_FSM*>(pair.second)->Set_Monster(this);
+		static_cast<CMonster_FSM*>(pair.second)->Set_Transform(m_pTransform);
+		static_cast<CMonster_FSM*>(pair.second)->Set_Model(m_pModelCom);
+		static_cast<CMonster_FSM*>(pair.second)->Set_Animator(m_pAnimator);
 	}
+	m_pStateController->Change_State(L"Rage");
+
+	return S_OK;
 }
+
 
 CBoss_Bastion_Judicator* CBoss_Bastion_Judicator::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
 {
