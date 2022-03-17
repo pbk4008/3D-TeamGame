@@ -23,9 +23,9 @@ HRESULT CMFCTerrain::NativeConstruct_Prototype()
 	return S_OK;
 }
 
-HRESULT CMFCTerrain::NativeConstruct(void* pArg)
+HRESULT CMFCTerrain::NativeConstruct(const _uint iSceneID, void* pArg)
 {
-	if (FAILED(__super::NativeConstruct(pArg)))
+	if (FAILED(__super::NativeConstruct(iSceneID, pArg)))
 	{
 		return E_FAIL;
 	}
@@ -108,11 +108,11 @@ CMFCTerrain* CMFCTerrain::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDe
 	return pInstance;
 }
 
-CGameObject* CMFCTerrain::Clone(void* pArg)
+CGameObject* CMFCTerrain::Clone(const _uint iSceneID, void* pArg)
 {
 	CMFCTerrain* pInstance = new CMFCTerrain(*this);
 
-	if (FAILED(pInstance->NativeConstruct(pArg)))
+	if (FAILED(pInstance->NativeConstruct(iSceneID, pArg)))
 	{
 		MSGBOX("Failed to Creating Clone CMFCTerrain");
 		Safe_Release(pInstance);

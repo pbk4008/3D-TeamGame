@@ -31,9 +31,9 @@ HRESULT CMFCEffect::NativeConstruct_Prototype()
     return S_OK;
 }
 
-HRESULT CMFCEffect::NativeConstruct(void* pArg)
+HRESULT CMFCEffect::NativeConstruct(const _uint iSceneID, void* pArg)
 {
-	if (FAILED(__super::NativeConstruct(pArg)))
+	if (FAILED(__super::NativeConstruct(iSceneID, pArg)))
 	{
 		return E_FAIL;
 	}
@@ -225,11 +225,11 @@ CMFCEffect* CMFCEffect::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDevi
 	return pInstance;
 }
 
-CGameObject* CMFCEffect::Clone(void* pArg)
+CGameObject* CMFCEffect::Clone(const _uint iSceneID, void* pArg)
 {
 	/* 복제본 생성할때는 아래함수 호출해서 추가 초기화를 진행 */
 	CMFCEffect* pInstance = new CMFCEffect(*this);
-	if (FAILED(pInstance->NativeConstruct(pArg)))
+	if (FAILED(pInstance->NativeConstruct(iSceneID ,pArg)))
 	{
 		MSGBOX("Failed to Creating Clone CMFCEffect");
 		Safe_Release(pInstance);
