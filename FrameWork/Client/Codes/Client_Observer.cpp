@@ -21,6 +21,11 @@ void CClient_Observer::Set_PlayerAttack(_bool _isAttack)
 	m_bAttack = _isAttack;
 }
 
+void CClient_Observer::Set_PlayerTransCom(CTransform* _pTransCom)
+{
+	m_pPlayerTrans = _pTransCom;
+}
+
 void CClient_Observer::Free(void)
 {
 }

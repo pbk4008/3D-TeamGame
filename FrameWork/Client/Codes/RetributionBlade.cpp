@@ -85,6 +85,8 @@ HRESULT CRetributionBlade::Render()
 
 		m_pModel->Render(i, 0);
 	}
+
+	return S_OK;
 }
 
 HRESULT CRetributionBlade::Ready_Components()

@@ -11,6 +11,8 @@ HRESULT CMonster_FSM::NativeConstruct(void* _pArg)
 {
 	if (FAILED(__super::NativeConstruct(_pArg)))
 		return E_FAIL;
+
+	return S_OK;
 }
 
 _int CMonster_FSM::Tick(const _double& _dDeltaTime)

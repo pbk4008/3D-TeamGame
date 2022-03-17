@@ -30,6 +30,8 @@ _int C1H_SwordIdle::Tick(const _double& _dDeltaTime)
 	m_fHoldTime += (_float)_dDeltaTime;
 	Add_PlusAngle(EDir::Forward, _dDeltaTime);
 
+	g_pObserver->m_bAttack = FALSE;
+
 	return _int();
 }
 

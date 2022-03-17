@@ -33,11 +33,11 @@ HRESULT CTestScene_YM::Render()
 
 HRESULT CTestScene_YM::Ready_Gameobject()
 {
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_YM, L"Layer_Plane", L"Plane_Test")))
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_YM, L"Layer_Plane", L"Proto_GameObject_Plane_Test")))
 		return E_FAIL;
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_YM, L"Layer_Silvermane", L"Silvermane")))
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_YM, L"Layer_Silvermane", L"Proto_GameObject_Silvermane")))
 		return E_FAIL;
- 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_YM, L"Layer_Camera", L"Camera_Silvermane")))
+ 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_YM, L"Layer_Camera", L"Proto_GameObject_Camera_Silvermane")))
 		return E_FAIL;
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_YM, L"Layer_Monster", L"Monster_Bastion_2HSword")))
 		return E_FAIL;

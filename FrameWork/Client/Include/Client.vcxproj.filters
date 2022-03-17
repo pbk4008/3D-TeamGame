@@ -258,9 +258,15 @@
     </Filter>
     <Filter Include="02.GameObject\95.Monster\Bastion_2HSword\State_2HSword\Idle">
       <UniqueIdentifier>{18041324-6424-4135-85dd-5f36abcfcc46}</UniqueIdentifier>
-	</Filter>
+    </Filter>
     <Filter Include="02.GameObject\96.Weapon\03.Stargazer">
       <UniqueIdentifier>{c7467934-81e9-48c7-9c6f-403039f32fbb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\95.Monster\Bastion_2HSword\State_2HSword\Attack">
+      <UniqueIdentifier>{3eaa0c37-22a5-4c1c-9f2b-98016a66f7b6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\95.Monster\Bastion_2HSword\State_2HSword\Death">
+      <UniqueIdentifier>{47fa8725-e6cb-49c0-87f1-92cb4ca29640}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -748,6 +754,9 @@
     <ClInclude Include="..\Headers\Bastion_2HSword_Chaser.h">
       <Filter>02.GameObject\95.Monster\Bastion_2HSword\State_2HSword\Chaser</Filter>
     </ClInclude>
+    <ClInclude Include="..\Headers\Bastion_2HSword_Attack.h">
+      <Filter>02.GameObject\95.Monster\Bastion_2HSword\State_2HSword\Attack</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -1210,6 +1219,9 @@
     </ClCompile>
     <ClCompile Include="..\Codes\Bastion_2HSword_Chaser.cpp">
       <Filter>02.GameObject\95.Monster\Bastion_2HSword\State_2HSword\Chaser</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Bastion_2HSword_Attack.cpp">
+      <Filter>02.GameObject\95.Monster\Bastion_2HSword\State_2HSword\Attack</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

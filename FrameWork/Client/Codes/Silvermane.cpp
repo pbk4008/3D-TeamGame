@@ -164,6 +164,8 @@ HRESULT CSilvermane::NativeConstruct(const _uint _iSceneID, void* _pArg)
 	if (FAILED(Ready_Weapons())) 
 		return E_FAIL;
 
+	g_pObserver->Set_PlayerTransCom(m_pTransform);
+
 	return S_OK;
 }
 

@@ -55,7 +55,7 @@ HRESULT CBastion_2HSword_Dash::EnterState()
 	if (FAILED(__super::EnterState()))
 		return E_FAIL;
 
-	m_pAnimator->Change_Animation((_uint)CMonster_Bastion_2HSword::ANIM_TYPE::A_DASH_BWD);
+	m_pAnimator->Change_AnyEntryAnimation((_uint)CMonster_Bastion_2HSword::ANIM_TYPE::A_DASH_BWD);
 
 	return S_OK;
 }
@@ -70,19 +70,16 @@ HRESULT CBastion_2HSword_Dash::ExitState()
 
 void CBastion_2HSword_Dash::Look_Player(void)
 {
-	//_fvector vMonsterPos = m_pTransform->Get_State(CTransform::STATE::STATE_POSITION);
+	_fvector vMonsterPos = m_pTransform->Get_State(CTransform::STATE::STATE_POSITION);
+	_fvector vDist = vMonsterPos - XMLoadFloat3(&g_pObserver->m_fPos);
+	_float fDistToPlayer = XMVectorGetX(XMVector3Length(vDist));
 
-	//_fvector vDist = vMonsterPos - XMLoadFloat3(&g_pObserver->m_fPos);
+	if (5.0f < fDistToPlayer && 15.0f > fDistToPlayer)
+	{
+		m_pTransform->Face_Target(XMLoadFloat3(&g_pObserver->m_fPos));
+		m_pStateController->Change_State(L"Chaser");
+	}
 
-	//_float fDistToPlayer = XMVectorGetX(XMVector3Length(vDist));
-
-	//if (5.0f < fDistToPlayer && 15.0f > fDistToPlayer)
-	//{
-	//	m_pTransform->Face_Target(XMLoadFloat3(&g_pObserver->m_fPos));
-	//	m_pStateController->Change_State(L"Chaser");
-	//}
-	if(FALSE == g_pObserver->m_bAttack)
-		m_pStateController->Change_State(L"Idle");
 }
 
 CBastion_2HSword_Dash* CBastion_2HSword_Dash::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext, void* _pArg)

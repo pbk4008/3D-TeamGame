@@ -54,7 +54,8 @@ HRESULT CBastion_2HSword_Idle::EnterState()
 	if (FAILED(__super::EnterState()))
 		return E_FAIL;
 
-	m_pAnimator->Change_Animation((_uint)CMonster_Bastion_2HSword::ANIM_TYPE::A_IDLE);
+	if (FAILED(m_pAnimator->Change_AnyEntryAnimation((_uint)CMonster_Bastion_2HSword::ANIM_TYPE::A_IDLE)))
+		return E_FAIL;
 
 	return S_OK;
 }
@@ -82,6 +83,9 @@ void CBastion_2HSword_Idle::Look_Player(void)
 
 	if(5.0f > fDistToPlayer && TRUE == g_pObserver->m_bAttack)
 		m_pStateController->Change_State(L"Dash");
+
+	if(4.0f > fDistToPlayer)
+		m_pStateController->Change_State(L"Attack");
 }
 
 CBastion_2HSword_Idle* CBastion_2HSword_Idle::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext, void* _pArg)
