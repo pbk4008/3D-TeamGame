@@ -297,6 +297,7 @@
     <ClInclude Include="..\Headers\Shield_WalkRightStop.h" />
     <ClInclude Include="..\Headers\RetributionBlade.h" />
     <ClInclude Include="..\Headers\ShieldBreaker.h" />
+    <ClInclude Include="..\Headers\Shooter_Attack.h" />
     <ClInclude Include="..\Headers\Shooter_Idle.h" />
     <ClInclude Include="..\Headers\Silvermane.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
@@ -461,6 +462,7 @@
     <ClCompile Include="..\Codes\Shield_WalkRightStop.cpp" />
     <ClCompile Include="..\Codes\RetributionBlade.cpp" />
     <ClCompile Include="..\Codes\ShieldBreaker.cpp" />
+    <ClCompile Include="..\Codes\Shooter_Attack.cpp" />
     <ClCompile Include="..\Codes\Shooter_Idle.cpp" />
     <ClCompile Include="..\Codes\Silvermane.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>

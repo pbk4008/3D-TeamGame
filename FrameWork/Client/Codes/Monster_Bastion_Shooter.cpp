@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "Monster_Bastion_Shooter.h"
 #include "Shooter_Idle.h"
+#include "Shooter_Attack.h"
 
 CMonster_Bastion_Shooter::CMonster_Bastion_Shooter(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
 	: CActor(_pDevice, _pDeviceContext)
@@ -41,11 +42,16 @@ HRESULT CMonster_Bastion_Shooter::NativeConstruct(const _uint _iSceneID, void* _
 
 _int CMonster_Bastion_Shooter::Tick(_double _dDeltaTime)
 {
+	if (g_pGameInstance->getkeyDown(DIK_NUMPAD9))
+		m_pStateController->Change_State(L"Attack");
+
 	_int iProgress = __super::Tick(_dDeltaTime);
 	if (NO_EVENT != iProgress)
 		return iProgress;
 
-	m_pAnimator->Tick(_dDeltaTime);
+	iProgress = m_pStateController->Tick(_dDeltaTime);
+	if (NO_EVENT != iProgress)
+		return iProgress;
 
 	return _int();
 }
@@ -100,6 +106,9 @@ HRESULT CMonster_Bastion_Shooter::Ready_Components()
 	if (FAILED(__super::SetUp_Components(m_iSceneID, L"Model_Monster_Bastion_Marksman", L"Model", (CComponent**)&m_pModelCom)))
 		return E_FAIL;
 
+	_matrix matPivot = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(180.f));
+	m_pModelCom->Set_PivotMatrix(matPivot);
+
 	CAnimator::ANIMATORDESC tDesc;
 	ZeroMemory(&tDesc, sizeof(tDesc));
 
@@ -118,59 +127,20 @@ HRESULT CMonster_Bastion_Shooter::Ready_Components()
 
 HRESULT CMonster_Bastion_Shooter::Ready_AnimationFSM()
 {
-	CAnimation* pAnim = m_pModelCom->Get_Animation("A_Idle_CrimsonMarksman");
+	CAnimation* pAnim = m_pModelCom->Get_Animation("SK_Crimson_Marksman.ao|A_Idle_CrimsonMarksman");
 	//생성 하면서 연결(연결 할애, 연결 당할애, 애니메이션, 루트 애님, 트랜스폼(루트애니메이션할때 찐으로 따라감), 루프, 옵션)
+
 	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::IDLE, (_uint)ANIM_TYPE::HEAD, pAnim, true, true, true, ERootOption::XYZ)))
 		return E_FAIL;
 
 	////////////////////
-	//pAnim = m_pModelCom->Get_Animation("Run_Start");
-	//if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::RUN_START, (_uint)ANIM_TYPE::IDLE, pAnim, true, false, false, ERootOption::XYZ)))
-	//	return E_FAIL;
+	pAnim = m_pModelCom->Get_Animation("SK_Crimson_Marksman.ao|A_Attack_R1_CrimsonMarksman");
+	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::ATTACK,(_uint)ANIM_TYPE::HEAD, pAnim, true, true, true, ERootOption::XYZ)))
+		return E_FAIL;
 
-	//pAnim = m_pModelCom->Get_Animation("Run_Loop");
-	//if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::RUN_LOOP, (_uint)ANIM_TYPE::RUN_START, pAnim, true, false, false, ERootOption::XYZ)))
-	//	return E_FAIL;
+	m_pAnimator->Connect_Animation((_uint)ANIM_TYPE::ATTACK, (_uint)ANIM_TYPE::IDLE, false);
 
-	//pAnim = m_pModelCom->Get_Animation("Run_Stop");
-	//if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::RUN_END, (_uint)ANIM_TYPE::RUN_LOOP, pAnim, true, false, false, ERootOption::XYZ)))
-	//	return E_FAIL;
-
-	///////////////////////////////////////////////
-	//pAnim = m_pModelCom->Get_Animation("Attack_JumpStart");
-	//if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::ATTACK_JUMPSTART, (_uint)ANIM_TYPE::HEAD, pAnim, true, false, false, ERootOption::XYZ)))
-	//	return E_FAIL;
-
-	//pAnim = m_pModelCom->Get_Animation("Attack_JumpLoop");
-	//if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::ATTACK_JUMPLOOP, (_uint)ANIM_TYPE::ATTACK_JUMPSTART, pAnim, true, false, false, ERootOption::XYZ)))
-	//	return E_FAIL;
-
-	//pAnim = m_pModelCom->Get_Animation("Attack_JumpEnd");
-	//if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::ATTACK_JUMPEND, (_uint)ANIM_TYPE::ATTACK_JUMPLOOP, pAnim, true, false, false, ERootOption::XYZ)))
-	//	return E_FAIL;
-
-	////////////////////////////////////
-	////애니메이션 연결(연결 당할 애, 연결할 애, 쌍방으로 연결할지 안할지)
-	//if (FAILED(m_pAnimator->Connect_Animation((_uint)ANIM_TYPE::IDLE, (_uint)ANIM_TYPE::RUN_END, false)))
-	//	return E_FAIL;
-
-	//if (FAILED(m_pAnimator->Connect_Animation((_uint)ANIM_TYPE::IDLE, (_uint)ANIM_TYPE::ATTACK_JUMPEND, false)))
-	//	return E_FAIL;
-
-	////자동으로 돌릴 애들(끝나는애, 끝나고 시작할 애)
-	//m_pAnimator->Set_UpAutoChangeAnimation((_uint)ANIM_TYPE::RUN_START, (_uint)ANIM_TYPE::RUN_LOOP);
-	//m_pAnimator->Set_UpAutoChangeAnimation((_uint)ANIM_TYPE::RUN_LOOP, (_uint)ANIM_TYPE::RUN_END);
-	//m_pAnimator->Set_UpAutoChangeAnimation((_uint)ANIM_TYPE::RUN_END, (_uint)ANIM_TYPE::IDLE);
-
-	//m_pAnimator->Set_UpAutoChangeAnimation((_uint)ANIM_TYPE::ATTACK_JUMPSTART, (_uint)ANIM_TYPE::ATTACK_JUMPLOOP);
-	//m_pAnimator->Set_UpAutoChangeAnimation((_uint)ANIM_TYPE::ATTACK_JUMPLOOP, (_uint)ANIM_TYPE::ATTACK_JUMPEND);
-	//m_pAnimator->Set_UpAutoChangeAnimation((_uint)ANIM_TYPE::ATTACK_JUMPEND, (_uint)ANIM_TYPE::IDLE);
-
-	//m_pAnimator->Insert_AnyEntryAnimation((_uint)ANIM_TYPE::ATTACK_JUMPSTART);
-
-
-	//애니메이션 체인지(바꿀 애)
-	m_pAnimator->Change_Animation((_uint)ANIM_TYPE::IDLE);
+	m_pAnimator->Set_UpAutoChangeAnimation((_uint)ANIM_TYPE::ATTACK, (_uint)ANIM_TYPE::IDLE);
 
 	return S_OK;
 }
@@ -178,6 +148,9 @@ HRESULT CMonster_Bastion_Shooter::Ready_AnimationFSM()
 HRESULT CMonster_Bastion_Shooter::Ready_StateFSM()
 {
 	if (FAILED(m_pStateController->Add_State(L"Idle", CShooter_Idle::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+
+	if (FAILED(m_pStateController->Add_State(L"Attack", CShooter_Attack::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 
 	for (auto& pair : m_pStateController->Get_States())
@@ -217,7 +190,6 @@ CGameObject* CMonster_Bastion_Shooter::Clone(const _uint _iSceneID, void* _pArg)
 
 void CMonster_Bastion_Shooter::Free()
 {
-	Safe_Release(m_pCollider);
 	Safe_Release(m_pStateController);
 	Safe_Release(m_pAnimator);
 	Safe_Release(m_pModelCom);
