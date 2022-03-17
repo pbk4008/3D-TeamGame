@@ -318,7 +318,7 @@ void CUI_Monster_Panel::Update_Setting_Crawler(_double TimeDelta)
 
 	//ºôº¸µå
 	_matrix ViewMatrix;
-	ViewMatrix = g_pGameInstance->Get_Transform(L"MainCamera", TRANSFORMSTATEMATRIX::D3DTS_VIEW);
+	ViewMatrix = g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_VIEW);
 	ViewMatrix = XMMatrixInverse(nullptr, ViewMatrix);
 	m_pTransform->Set_State(CTransform::STATE::STATE_RIGHT, ViewMatrix.r[0]);
 	m_pTransform->Set_State(CTransform::STATE::STATE_LOOK, ViewMatrix.r[2]);
@@ -384,13 +384,13 @@ void CUI_Monster_Panel::Update_Setting_MidBoss(_double TimeDelta)
 {
 	//Panel pos Setting
 	_matrix SettingMat = XMMatrixIdentity();
-	SettingMat.r[3] = { 0.f, 4.f, 0.f , 1.f };
+	SettingMat.r[3] = { 0.f, 3.f, 0.f , 1.f };
 	_matrix TargetSettinMat = SettingMat * XMLoadFloat4x4(&m_TargetMatrix); //¸ó½ºÅÍ(Å¸°Ù)À§Ä¡
 	m_pTransform->Set_WorldMatrix(TargetSettinMat);
 
 	//ºôº¸µå
 	_matrix ViewMatrix;
-	ViewMatrix = g_pGameInstance->Get_Transform(L"MainCamera", TRANSFORMSTATEMATRIX::D3DTS_VIEW);
+	ViewMatrix = g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_VIEW);
 	ViewMatrix = XMMatrixInverse(nullptr, ViewMatrix);
 	m_pTransform->Set_State(CTransform::STATE::STATE_RIGHT, ViewMatrix.r[0]);
 	m_pTransform->Set_State(CTransform::STATE::STATE_LOOK, ViewMatrix.r[2]);

@@ -20,6 +20,13 @@ _int CTraverse_Jump400Jog::Tick(const _double& _dDeltaTime)
 	if (NO_EVENT != iProgress)
 		return iProgress;
 
+	if (m_pAnimationController->Is_Finished())
+	{
+		if (FAILED(m_pStateController->Change_State(L"Idle")))
+			return E_FAIL;
+		return STATE_CHANGE;
+	}
+
 	return _int();
 }
 
@@ -34,7 +41,7 @@ _int CTraverse_Jump400Jog::LateTick(const _double& _dDeltaTime)
 
 HRESULT CTraverse_Jump400Jog::Render()
 {
-	if (FAILED(Render()))
+	if (FAILED(__super::Render()))
 		return E_FAIL;
 
 	return S_OK;
@@ -45,10 +52,11 @@ HRESULT CTraverse_Jump400Jog::EnterState()
 	if (FAILED(__super::EnterState()))
 		return E_FAIL;
 
-	if (FAILED(m_pAnimationController->SetUp_NextAnimation("SK_Silvermane.ao|A_Spectral_Shield_Superman_Punch_Straight", false)))
+	if (FAILED(m_pAnimationController->SetUp_NextAnimation("SK_Silvermane.ao|A_Traverse_Jump_400_Jog_Player", false)))
 		return E_FAIL;
 	m_pAnimationController->Set_RootMotion(true, true);
-
+	
+	m_pSilvermane->Set_TrasceCamera(false);
 	return S_OK;
 }
 
@@ -57,6 +65,7 @@ HRESULT CTraverse_Jump400Jog::ExitState()
 	if (FAILED(__super::ExitState()))
 		return E_FAIL;
 
+	m_pSilvermane->Set_TrasceCamera(true);
 	return S_OK;
 }
 

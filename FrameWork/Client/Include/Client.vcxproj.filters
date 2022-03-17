@@ -244,9 +244,6 @@
     <Filter Include="02.GameObject\93.Boss\00.MiddleBoss\00.Weapon">
       <UniqueIdentifier>{eee5d743-fda4-4f7b-ba26-d4c790268f21}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObject\95.Monster\99.State">
-      <UniqueIdentifier>{74e06248-1a45-4416-99cb-0ded2bd52003}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObject\95.Monster\Bastion_2HSword\State_2HSword">
       <UniqueIdentifier>{af1e5dd1-ee66-47a7-aec3-1945a6e5ae03}</UniqueIdentifier>
     </Filter>
@@ -262,6 +259,12 @@
     <Filter Include="02.GameObject\96.Weapon\03.Stargazer">
       <UniqueIdentifier>{c7467934-81e9-48c7-9c6f-403039f32fbb}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\95.Monster\Bastion_2HSword\State_2HSword\Attack">
+      <UniqueIdentifier>{3eaa0c37-22a5-4c1c-9f2b-98016a66f7b6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\95.Monster\Bastion_2HSword\State_2HSword\Death">
+      <UniqueIdentifier>{47fa8725-e6cb-49c0-87f1-92cb4ca29640}</UniqueIdentifier>
+    </Filter>
     <Filter Include="01.Scene\100.TestScene_SB">
       <UniqueIdentifier>{976dac7e-cb0b-4d33-ad07-182416607cee}</UniqueIdentifier>
     </Filter>
@@ -273,6 +276,15 @@
     </Filter>
     <Filter Include="02.GameObject\95.Monster\Bastion_Shooter\Attack">
       <UniqueIdentifier>{0e465f15-42b9-4038-9066-ca93866e3c94}</UniqueIdentifier>
+	</Filter>
+	<Filter Include="02.GameObject\95.Monster\Bastion_2HSword\State_2HSword\Rage">
+		<UniqueIdentifier>{bd8eebf8-c00f-4303-9ddc-b43dfb509314}</UniqueIdentifier>
+	</Filter>
+    <Filter Include="02.GameObject\93.Boss\00.MiddleBoss\State">
+      <UniqueIdentifier>{8a29aee6-6d31-4f13-bfdb-45f715488804}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\93.Boss\00.MiddleBoss\State\Rage">
+      <UniqueIdentifier>{78558ab8-2fff-4b33-ab1b-2e33a7ffd7ca}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -748,9 +760,6 @@
     <ClInclude Include="..\Headers\Stargazer.h">
       <Filter>02.GameObject\96.Weapon\03.Stargazer</Filter>
     </ClInclude>
-    <ClInclude Include="..\Headers\Monster_FSM.h">
-      <Filter>02.GameObject\95.Monster\99.State</Filter>
-    </ClInclude>
     <ClInclude Include="..\Headers\Bastion_2HSword_Dash.h">
       <Filter>02.GameObject\95.Monster\Bastion_2HSword\State_2HSword\Dash</Filter>
     </ClInclude>
@@ -759,6 +768,9 @@
     </ClInclude>
     <ClInclude Include="..\Headers\Bastion_2HSword_Chaser.h">
       <Filter>02.GameObject\95.Monster\Bastion_2HSword\State_2HSword\Chaser</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Bastion_2HSword_Attack.h">
+      <Filter>02.GameObject\95.Monster\Bastion_2HSword\State_2HSword\Attack</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\TestScene_Sb.h">
       <Filter>01.Scene\100.TestScene_SB</Filter>
@@ -771,6 +783,9 @@
     </ClInclude>
     <ClInclude Include="..\Headers\Shooter_Attack.h">
       <Filter>02.GameObject\95.Monster\Bastion_Shooter\Attack</Filter>
+	</ClInclude>
+    <ClInclude Include="..\Headers\MidBoss_Rage.h">
+      <Filter>02.GameObject\93.Boss\00.MiddleBoss\State\Rage</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1223,9 +1238,6 @@
     <ClCompile Include="..\Codes\Stargazer.cpp">
       <Filter>02.GameObject\96.Weapon\03.Stargazer</Filter>
     </ClCompile>
-    <ClCompile Include="..\Codes\Monster_FSM.cpp">
-      <Filter>02.GameObject\95.Monster\99.State</Filter>
-    </ClCompile>
     <ClCompile Include="..\Codes\Bastion_2HSword_Dash.cpp">
       <Filter>02.GameObject\95.Monster\Bastion_2HSword\State_2HSword\Dash</Filter>
     </ClCompile>
@@ -1234,6 +1246,9 @@
     </ClCompile>
     <ClCompile Include="..\Codes\Bastion_2HSword_Chaser.cpp">
       <Filter>02.GameObject\95.Monster\Bastion_2HSword\State_2HSword\Chaser</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Bastion_2HSword_Attack.cpp">
+      <Filter>02.GameObject\95.Monster\Bastion_2HSword\State_2HSword\Attack</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\TestScene_Sb.cpp">
       <Filter>01.Scene\100.TestScene_SB</Filter>
@@ -1246,6 +1261,9 @@
     </ClCompile>
     <ClCompile Include="..\Codes\Shooter_Attack.cpp">
       <Filter>02.GameObject\95.Monster\Bastion_Shooter\Attack</Filter>
+	</ClCompile>
+    <ClCompile Include="..\Codes\MidBoss_Rage.cpp">
+      <Filter>02.GameObject\93.Boss\00.MiddleBoss\State\Rage</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

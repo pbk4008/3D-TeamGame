@@ -59,6 +59,8 @@ _int CMonster_Crawler::Tick(_double _dDeltaTime)
 	
 	m_pColliderCom->Update(m_pTransform->Get_WorldMatrix());
 
+	m_pPanel->Set_TargetWorldMatrix(m_pTransform->Get_WorldMatrix());
+
 	m_pModelCom->Update_CombinedTransformationMatrix(_dDeltaTime);
 	//m_pAnimControllerCom->Tick(_dDeltaTime);
 
