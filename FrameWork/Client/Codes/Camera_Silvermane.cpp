@@ -23,9 +23,9 @@ HRESULT CCamera_Silvermane::NativeConstruct_Prototype()
 	return S_OK;
 }
 
-HRESULT CCamera_Silvermane::NativeConstruct(void* _pArg)
+HRESULT CCamera_Silvermane::NativeConstruct(const _uint _iSceneID, void* _pArg)
 {
-	if (FAILED(__super::NativeConstruct(_pArg)))
+	if (FAILED(__super::NativeConstruct(_iSceneID, _pArg)))
 	{
 		return E_FAIL;
 	}
@@ -35,7 +35,7 @@ HRESULT CCamera_Silvermane::NativeConstruct(void* _pArg)
 		return E_FAIL;
 	}
 
-	m_pSilvermane = static_cast<CSilvermane*>(g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_TEST_JS, L"Layer_Silvermane")->front());
+	m_pSilvermane = static_cast<CSilvermane*>(g_pGameInstance->getObjectList(m_iSceneID, L"Layer_Silvermane")->front());
 	m_pSilvermane->Set_Camera(this);
 
 	return S_OK;
@@ -159,10 +159,10 @@ CCamera_Silvermane* CCamera_Silvermane::Create(ID3D11Device* _pDevice, ID3D11Dev
 	return pInstance;
 }
 
-CGameObject* CCamera_Silvermane::Clone(void* _pArg)
+CGameObject* CCamera_Silvermane::Clone(const _uint _iSceneID, void* _pArg)
 {
 	CCamera_Silvermane* pInstance = new CCamera_Silvermane(*this);
-	if (FAILED(pInstance->NativeConstruct(_pArg)))
+	if (FAILED(pInstance->NativeConstruct(_iSceneID, _pArg)))
 	{
 		MSGBOX("CCamera_Silvermane Clone Fail");
 		Safe_Release(pInstance);

@@ -12,7 +12,7 @@ protected:
 	virtual ~CLandScape() = default;
 protected:
 	virtual HRESULT NativeConstruct_Prototype();
-	virtual HRESULT NativeConstruct(void* pArg);
+	virtual HRESULT NativeConstruct(const _uint _iSceneID, void* pArg);
 	virtual _int Tick(_double TimeDelta);
 	virtual _int LateTick(_double TimeDelta);
 	virtual HRESULT Render();

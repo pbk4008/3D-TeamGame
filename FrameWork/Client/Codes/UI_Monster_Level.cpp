@@ -23,14 +23,14 @@ HRESULT CUI_Monster_Level::NativeConstruct_Prototype()
 	return S_OK;
 }
 
-HRESULT CUI_Monster_Level::NativeConstruct(void* pArg)
+HRESULT CUI_Monster_Level::NativeConstruct(const _uint _iSceneID, void* pArg)
 {
 	if (nullptr != pArg)
 	{
 		memcpy(&m_Desc, pArg, sizeof(UIACTIVEDESC));
 	}
 
-	if (FAILED(CGameObject::NativeConstruct(pArg)))
+	if (FAILED(CGameObject::NativeConstruct(_iSceneID, pArg)))
 	{
 		return E_FAIL;
 	}
@@ -113,10 +113,10 @@ CUI_Monster_Level* CUI_Monster_Level::Create(ID3D11Device* pDevice, ID3D11Device
 	return pInstance;
 }
 
-CGameObject* CUI_Monster_Level::Clone(void* pArg)
+CGameObject* CUI_Monster_Level::Clone(const _uint _iSceneID, void* pArg)
 {
 	CUI_Monster_Level* pInstance = new CUI_Monster_Level(*this);
-	if (FAILED(pInstance->NativeConstruct(pArg)))
+	if (FAILED(pInstance->NativeConstruct(_iSceneID, pArg)))
 	{
 		MSGBOX("Failed to Creating Clone CUI_Monster_Level");
 		Safe_Release(pInstance);

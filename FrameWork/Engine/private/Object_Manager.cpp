@@ -50,7 +50,7 @@ HRESULT CObject_Manager::Add_GameObjectToLayer(_uint iLevelIndex, const wstring&
 	if (nullptr == pPrototype)
 		return E_FAIL;
 
-	CGameObject*	pGameObject = pPrototype->Clone(pArg);
+	CGameObject*	pGameObject = pPrototype->Clone(iLevelIndex, pArg);
 	if (nullptr == pGameObject)
 		return E_FAIL;
 
@@ -85,7 +85,7 @@ CGameObject* CObject_Manager::Clone_Gameobject(_uint iLevelIndex, const wstring&
 	if (nullptr == pPrototype)
 		return nullptr;
 
-	CGameObject * pGameObject = pPrototype->Clone(pArg);
+	CGameObject * pGameObject = pPrototype->Clone(iLevelIndex, pArg);
 	if (nullptr == pGameObject)
 		return nullptr;
 

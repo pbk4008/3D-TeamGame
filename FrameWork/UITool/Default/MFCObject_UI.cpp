@@ -23,7 +23,7 @@ HRESULT CMFCObject_UI::NativeConstruct_Prototype()
 	return S_OK;
 }
 
-HRESULT CMFCObject_UI::NativeConstruct(void* pArg)
+HRESULT CMFCObject_UI::NativeConstruct(const _uint iSceneID, void* pArg)
 {
 	if (nullptr != pArg)
 	{
@@ -33,7 +33,7 @@ HRESULT CMFCObject_UI::NativeConstruct(void* pArg)
 	m_iObectTag = m_Desc.IDTag;
 
 	wstring tag = m_Desc.TextureTag;
-	if (FAILED(__super::NativeConstruct(&tag)))
+	if (FAILED(__super::NativeConstruct(iSceneID, &tag)))
 	{
 		return E_FAIL;
 	}
@@ -146,10 +146,10 @@ CMFCObject_UI* CMFCObject_UI::Create(ID3D11Device* pDevice, ID3D11DeviceContext*
 	return pInstance;
 }
 
-CGameObject* CMFCObject_UI::Clone(void* pArg)
+CGameObject* CMFCObject_UI::Clone(const _uint iSceneID, void* pArg)
 {
 	CMFCObject_UI* pInstance = new CMFCObject_UI(*this);
-	if (FAILED(pInstance->NativeConstruct(pArg)))
+	if (FAILED(pInstance->NativeConstruct(iSceneID, pArg)))
 	{
 		MSGBOX("Failed to Creating Clone CMFCObject_UI");
 		Safe_Release(pInstance);

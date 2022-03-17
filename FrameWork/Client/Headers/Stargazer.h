@@ -12,7 +12,7 @@ private:
 	virtual ~CStargazer() = default;
 public:
 	virtual HRESULT NativeConstruct_Prototype() override;
-	virtual HRESULT NativeConstruct(void* _pArg = nullptr) override;
+	virtual HRESULT NativeConstruct(const _uint _iSceneID, void* _pArg = nullptr) override;
 	virtual _int Tick(_double _dDeltaTime) override;
 	virtual _int LateTick(_double _dDeltaTime) override;
 	virtual HRESULT Render() override;
@@ -28,7 +28,7 @@ private:
 	_int Attach_Owner(const _double& _dDeltaTime);
 public:
 	static CStargazer* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext);
-	virtual CGameObject* Clone(void* pArg);
+	virtual CGameObject* Clone(const _uint _iSceneID, void* pArg);
 private:
 	virtual void Free() override;
 };

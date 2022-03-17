@@ -37,9 +37,9 @@ HRESULT CBackGround::NativeConstruct_Prototype()
 	return S_OK;
 }
 
-HRESULT CBackGround::NativeConstruct(void* pArg)
+HRESULT CBackGround::NativeConstruct(const _uint _iSceneID, void* pArg)
 {
-	if (FAILED(CGameObject::NativeConstruct(pArg)))
+	if (FAILED(CGameObject::NativeConstruct(_iSceneID, pArg)))
 		return E_FAIL;
 
 	if (FAILED(Ready_GameObject(pArg)))
@@ -100,11 +100,10 @@ HRESULT CBackGround::Render()
 	return S_OK;
 }
 
-CGameObject* CBackGround::Clone(void* pArg)
+CGameObject* CBackGround::Clone(const _uint _iSceneID, void* pArg)
 {
 	CBackGround* pInstance = new CBackGround(*this);
-
- 	if (FAILED(pInstance->NativeConstruct(pArg)))
+ 	if (FAILED(pInstance->NativeConstruct(_iSceneID, pArg)))
 	{
 		MSGBOX("BackGround Clone Fail");
 		Safe_Release(pInstance);

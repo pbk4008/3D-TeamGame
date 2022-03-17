@@ -17,7 +17,7 @@ protected:
 	/* 원형객체가 생성될때 호출되는 함수. */
 	virtual HRESULT NativeConstruct_Prototype();
 	/* 복제본객체가 생성될때 호출되는 함수. */
-	virtual HRESULT NativeConstruct(void* pArg);
+	virtual HRESULT NativeConstruct(const _uint iSceneID, void* pArg);
 	virtual _int Tick(_double TimeDelta);
 	virtual _int LateTick(_double TimeDelta);
 	virtual HRESULT Render();
@@ -36,7 +36,7 @@ private:
 	_bool m_bReset = false;
 public:
 	static CMFCEffect* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);
-	virtual CGameObject* Clone(void* pArg) override;
+	virtual CGameObject* Clone(const _uint iSceneID, void* pArg) override;
 	virtual void Free() override;
 };
 

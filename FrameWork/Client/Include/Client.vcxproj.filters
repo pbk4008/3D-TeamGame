@@ -258,9 +258,12 @@
     </Filter>
     <Filter Include="02.GameObject\95.Monster\Bastion_2HSword\State_2HSword\Idle">
       <UniqueIdentifier>{18041324-6424-4135-85dd-5f36abcfcc46}</UniqueIdentifier>
-	</Filter>
+    </Filter>
     <Filter Include="02.GameObject\96.Weapon\03.Stargazer">
       <UniqueIdentifier>{c7467934-81e9-48c7-9c6f-403039f32fbb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\98.Player\00.Silvermane\State\Jump">
+      <UniqueIdentifier>{c46bf2a8-6d72-4573-8057-fad1bf3781e0}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -748,6 +751,9 @@
     <ClInclude Include="..\Headers\Bastion_2HSword_Chaser.h">
       <Filter>02.GameObject\95.Monster\Bastion_2HSword\State_2HSword\Chaser</Filter>
     </ClInclude>
+    <ClInclude Include="..\Headers\Traverse_Jump400Jog.h">
+      <Filter>02.GameObject\98.Player\00.Silvermane\State\Jump</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -1210,6 +1216,9 @@
     </ClCompile>
     <ClCompile Include="..\Codes\Bastion_2HSword_Chaser.cpp">
       <Filter>02.GameObject\95.Monster\Bastion_2HSword\State_2HSword\Chaser</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Traverse_Jump400Jog.cpp">
+      <Filter>02.GameObject\98.Player\00.Silvermane\State\Jump</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

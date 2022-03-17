@@ -22,9 +22,9 @@ HRESULT CClient_Trigger::NativeConstruct_Prototype()
 	return S_OK;
 }
 
-HRESULT CClient_Trigger::NativeConstruct(void* pArg)
+HRESULT CClient_Trigger::NativeConstruct(const _uint _iSceneID, void* pArg)
 {
-	if (FAILED(__super::NativeConstruct(pArg)))
+	if (FAILED(__super::NativeConstruct(_iSceneID, pArg)))
 		return E_FAIL;
 
 	m_TriggerDesc = *(TRIGGER*)pArg;
@@ -100,11 +100,10 @@ _fmatrix CClient_Trigger::Get_WorldMat(void)
 	return m_pTransform->Get_WorldMatrix();
 }
 
-CGameObject* CClient_Trigger::Clone(void* pArg)
+CGameObject* CClient_Trigger::Clone(const _uint _iSceneID, void* pArg)
 {
 	CClient_Trigger* pInstance = new CClient_Trigger(*this);
-
-	if (FAILED(pInstance->NativeConstruct(pArg)))
+	if (FAILED(pInstance->NativeConstruct(_iSceneID, pArg)))
 	{
 		MSGBOX("Failed to Create CClient_Trigger!!!");
 		Safe_Release(pInstance);

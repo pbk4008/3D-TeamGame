@@ -26,9 +26,9 @@ HRESULT CShieldBreaker::NativeConstruct_Prototype()
 	return S_OK;
 }
 
-HRESULT CShieldBreaker::NativeConstruct(void* pArg)
+HRESULT CShieldBreaker::NativeConstruct(const _uint _iSceneID, void* pArg)
 {
-	if (FAILED(__super::NativeConstruct(pArg)))
+	if (FAILED(__super::NativeConstruct(_iSceneID,pArg)))
 		return E_FAIL;
 
 	if (FAILED(Ready_Components()))
@@ -69,8 +69,8 @@ HRESULT CShieldBreaker::Render()
 
 	_matrix smatWorld, smatView, smatProj;
 	smatWorld = XMMatrixTranspose(m_pTransform->Get_WorldMatrix());
-	smatView = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_VIEW));
-	smatProj = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_PROJECTION));
+	smatView = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"MainCamera", TRANSFORMSTATEMATRIX::D3DTS_VIEW));
+	smatProj = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"MainCamera", TRANSFORMSTATEMATRIX::D3DTS_PROJECTION));
 
 	m_pModel->SetUp_ValueOnShader("g_WorldMatrix", &smatWorld, sizeof(_matrix));
 	m_pModel->SetUp_ValueOnShader("g_ViewMatrix", &smatView, sizeof(_matrix));
@@ -136,10 +136,10 @@ CShieldBreaker* CShieldBreaker::Create(ID3D11Device* pDevice, ID3D11DeviceContex
 	return pInstance;
 }
 
-CGameObject* CShieldBreaker::Clone(void* pArg)
+CGameObject* CShieldBreaker::Clone(const _uint _iSceneID, void* pArg)
 {
 	CShieldBreaker* pInstance = new CShieldBreaker(*this);
-	if (FAILED(pInstance->NativeConstruct(pArg)))
+	if (FAILED(pInstance->NativeConstruct(_iSceneID, pArg)))
 	{
 		MSGBOX("CShieldBreaker Clone Fail");
 		Safe_Release(pInstance);

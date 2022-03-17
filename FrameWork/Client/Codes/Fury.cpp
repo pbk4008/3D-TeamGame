@@ -25,9 +25,9 @@ HRESULT CFury::NativeConstruct_Prototype()
 	return S_OK;
 }
 
-HRESULT CFury::NativeConstruct(void* _pArg)
+HRESULT CFury::NativeConstruct(const _uint _iSceneID, void* _pArg)
 {
-	if (FAILED(__super::NativeConstruct(_pArg)))
+	if (FAILED(__super::NativeConstruct(_iSceneID, _pArg)))
 		return E_FAIL;
 
 	if (FAILED(Ready_Components()))
@@ -95,7 +95,7 @@ HRESULT CFury::Ready_Components()
 	m_pTransform->Set_TransformDesc(transformDesc);
 	m_pLocalTransform->Set_TransformDesc(transformDesc);
 
-	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_TEST_JS, L"Model_Fury", L"Model", (CComponent**)&m_pModel)))
+	if (FAILED(SetUp_Components(m_iSceneID, L"Model_Fury", L"Model", (CComponent**)&m_pModel)))
 		return E_FAIL;
 
 	return S_OK;
@@ -143,10 +143,10 @@ CFury* CFury::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContex
 	return pInstance;
 }
 
-CGameObject* CFury::Clone(void* _pArg)
+CGameObject* CFury::Clone(const _uint _iSceneID, void* _pArg)
 {
 	CFury* pInstance = new CFury(*this);
-	if (FAILED(pInstance->NativeConstruct(_pArg)))
+	if (FAILED(pInstance->NativeConstruct(_iSceneID, _pArg)))
 	{
 		MSGBOX("CFury Clone Fail");
 		Safe_Release(pInstance);

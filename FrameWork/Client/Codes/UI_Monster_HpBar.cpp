@@ -23,21 +23,21 @@ HRESULT CUI_Monster_HpBar::NativeConstruct_Prototype()
 	return S_OK;
 }
 
-HRESULT CUI_Monster_HpBar::NativeConstruct(void* pArg)
+HRESULT CUI_Monster_HpBar::NativeConstruct(const _uint _iSceneID, void* pArg)
 {
 	if (nullptr != pArg)
 	{
-		memcpy(&m_Desc, pArg, sizeof(CUI::UIDESC));
+		memcpy(&m_UIBarDesc, pArg, sizeof(UIBARDESC));
 	}
 
-	if (FAILED(CGameObject::NativeConstruct(pArg)))
+	if (FAILED(CGameObject::NativeConstruct(_iSceneID, pArg)))
 	{
 		return E_FAIL;
 	}
 
-	m_iObectTag = m_Desc.IDTag;
+	m_iObectTag = m_UIBarDesc.UIDesc.IDTag;
 
-	if (FAILED(m_pTexture->Change_Texture(m_Desc.TextureTag)))
+	if (FAILED(m_pTexture->Change_Texture(m_UIBarDesc.UIDesc.TextureTag)))
 		return E_FAIL;
 
 	/* 복제받은 데이터로 내가 원하는 값 세팅 */
@@ -91,7 +91,7 @@ HRESULT CUI_Monster_HpBar::Render()
 
 	m_pTrapziumBuffer->SetUp_TextureOnShader("g_DiffuseTexture", m_pTexture);
 
-	m_pTrapziumBuffer->Render(2);
+	m_pTrapziumBuffer->Render(m_UIBarDesc.iRenderPass);
 	
 	return S_OK;
 }
@@ -99,10 +99,10 @@ HRESULT CUI_Monster_HpBar::Render()
 HRESULT CUI_Monster_HpBar::SetUp_Components()
 {
 	CVIBuffer_Trapezium::TRAPDESC Desc;
-	Desc.fAngle = m_Desc.fAngle;
+	Desc.fAngle =  m_UIBarDesc.UIDesc.fAngle;
 	_tcscpy_s(Desc.ShaderFilePath, L"../../Reference/ShaderFile/Shader_UI_Bar.hlsl");
 
-	Desc.bMinus = m_Desc.bMinus;
+	Desc.bMinus = m_UIBarDesc.UIDesc.bMinus;
 
 	m_pTrapziumBuffer = g_pGameInstance->Clone_Component<CVIBuffer_Trapezium>(0, L"Proto_Component_Trapezium_UI", &Desc);
 
@@ -129,10 +129,10 @@ CUI_Monster_HpBar* CUI_Monster_HpBar::Create(ID3D11Device* pDevice, ID3D11Device
 	return pInstance;
 }
 
-CGameObject* CUI_Monster_HpBar::Clone(void* pArg)
+CGameObject* CUI_Monster_HpBar::Clone(const _uint _iSceneID, void* pArg)
 {
 	CUI_Monster_HpBar* pInstance = new CUI_Monster_HpBar(*this);
-	if (FAILED(pInstance->NativeConstruct(pArg)))
+	if (FAILED(pInstance->NativeConstruct(_iSceneID, pArg)))
 	{
 		MSGBOX("Failed to Creating Clone CUI_Monster_HpBar");
 		Safe_Release(pInstance);

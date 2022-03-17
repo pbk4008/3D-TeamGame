@@ -26,9 +26,9 @@ HRESULT CNeedle::NativeConstruct_Prototype()
 	return S_OK;
 }
 
-HRESULT CNeedle::NativeConstruct(void* _pArg)
+HRESULT CNeedle::NativeConstruct(const _uint _iSceneID, void* _pArg)
 {
-	if (FAILED(__super::NativeConstruct(_pArg)))
+	if (FAILED(__super::NativeConstruct(_iSceneID, _pArg)))
 		return E_FAIL;
 
 	if (FAILED(Ready_Components()))
@@ -96,7 +96,7 @@ HRESULT CNeedle::Ready_Components()
 	m_pTransform->Set_TransformDesc(transformDesc);
 	m_pLocalTransform->Set_TransformDesc(transformDesc);
 
-	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_TEST_JS, L"Model_Needle", L"Model", (CComponent**)&m_pModel)))
+	if (FAILED(SetUp_Components(m_iSceneID, L"Model_Needle", L"Model", (CComponent**)&m_pModel)))
 		return E_FAIL;
 
 	return S_OK;
@@ -111,9 +111,7 @@ _int CNeedle::Attach_FixedBone(const _double& _dDeltaTime)
 		smatWorld *= XMLoadFloat4x4(&m_smatOwnerPivot);;
 
 		if (!m_isEquip)
-		{
 			smatWorld = m_smatPivot * smatWorld;
-		}
 
 		m_pLocalTransform->Set_WorldMatrix(smatWorld);
 	}
@@ -144,10 +142,10 @@ CNeedle* CNeedle::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceCo
 	return pInstance;
 }
 
-CGameObject* CNeedle::Clone(void* _pArg)
+CGameObject* CNeedle::Clone(const _uint _iSceneID, void* _pArg)
 {
 	CNeedle* pInstance = new CNeedle(*this);
-	if (FAILED(pInstance->NativeConstruct(_pArg)))
+	if (FAILED(pInstance->NativeConstruct(_iSceneID, _pArg)))
 	{
 		MSGBOX("CNeedle Clone Fail");
 		Safe_Release(pInstance);

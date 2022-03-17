@@ -23,9 +23,9 @@ HRESULT CMonster_Bastion_Sword::NativeConstruct_Prototype()
 	return S_OK;
 }
 
-HRESULT CMonster_Bastion_Sword::NativeConstruct(void* _pArg)
+HRESULT CMonster_Bastion_Sword::NativeConstruct(const _uint _iSceneID, void* _pArg)
 {
-	if (FAILED(__super::NativeConstruct(_pArg)))
+	if (FAILED(__super::NativeConstruct(_iSceneID, _pArg)))
 		return E_FAIL;
 
 	if (FAILED(SetUp_Components()))
@@ -218,10 +218,10 @@ CMonster_Bastion_Sword* CMonster_Bastion_Sword::Create(ID3D11Device* _pDevice, I
 	return pInstance;
 }
 
-CGameObject* CMonster_Bastion_Sword::Clone(void* _pArg)
+CGameObject* CMonster_Bastion_Sword::Clone(const _uint _iSceneID, void* _pArg)
 {
 	CMonster_Bastion_Sword* pInstance = new CMonster_Bastion_Sword(*this);
-	if (FAILED(pInstance->NativeConstruct(_pArg)))
+	if (FAILED(pInstance->NativeConstruct(_iSceneID, _pArg)))
 	{
 		MSGBOX("Failed to Clone CMonster_Bastion_Sword");
 		Safe_Release(pInstance);

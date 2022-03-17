@@ -41,7 +41,7 @@ HRESULT CModelObject::NativeConstruct_Prototype()
 	return S_OK;
 }
 
-HRESULT CModelObject::NativeConstruct(void* pArg)
+HRESULT CModelObject::NativeConstruct(const _uint iSceneID, void* pArg)
 {
 	MODELOBJDESC tDesc = (*(MODELOBJDESC*)pArg);
 
@@ -51,7 +51,7 @@ HRESULT CModelObject::NativeConstruct(void* pArg)
 	if (FAILED(SetUp_Components(0, m_tModelName, L"Com_Model", (CComponent * *)& m_pModel)))
 		return E_FAIL;
 
-	if (FAILED(CGameObject::NativeConstruct(pArg)))
+	if (FAILED(CGameObject::NativeConstruct(iSceneID, pArg)))
 		return E_FAIL;
 
 
@@ -209,10 +209,10 @@ CModelObject* CModelObject::Create(ID3D11Device* pDevice, ID3D11DeviceContext* p
 	return pInstance;
 }
 
-CGameObject* CModelObject::Clone(void* pArg)
+CGameObject* CModelObject::Clone(const _uint iSceneID, void* pArg)
 {
 	CModelObject* pInstance = new CModelObject(*this);
-	if (FAILED(pInstance->NativeConstruct(pArg)))
+	if (FAILED(pInstance->NativeConstruct(iSceneID, pArg)))
 	{
 		MSGBOX("CModelObject Clone Fail");
 		Safe_Release(pInstance);

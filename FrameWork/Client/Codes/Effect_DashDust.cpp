@@ -28,9 +28,9 @@ HRESULT CEffect_DashDust::NativeConstruct_Prototype()
     return S_OK;
 }
 
-HRESULT CEffect_DashDust::NativeConstruct(void* pArg)
+HRESULT CEffect_DashDust::NativeConstruct(const _uint _iSceneID, void* pArg)
 {
-	if (FAILED(__super::NativeConstruct(pArg)))
+	if (FAILED(__super::NativeConstruct(_iSceneID, pArg)))
 	{
 		return E_FAIL;
 	}
@@ -189,11 +189,11 @@ CEffect_DashDust* CEffect_DashDust::Create(ID3D11Device* pDevice, ID3D11DeviceCo
 	return pInstance;
 }
 
-CGameObject* CEffect_DashDust::Clone(void* pArg)
+CGameObject* CEffect_DashDust::Clone(const _uint _iSceneID, void* pArg)
 {
 	/* 복제본 생성할때는 아래함수 호출해서 추가 초기화를 진행 */
 	CEffect_DashDust* pInstance = new CEffect_DashDust(*this);
-	if (FAILED(pInstance->NativeConstruct(pArg)))
+	if (FAILED(pInstance->NativeConstruct(_iSceneID, pArg)))
 	{
 		MSGBOX("Failed to Creating Clone CEffect_DashDust");
 		Safe_Release(pInstance);

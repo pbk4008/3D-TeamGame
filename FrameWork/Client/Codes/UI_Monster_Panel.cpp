@@ -27,14 +27,14 @@ HRESULT CUI_Monster_Panel::NativeConstruct_Prototype()
 	return S_OK;
 }
 
-HRESULT CUI_Monster_Panel::NativeConstruct(void* pArg)
+HRESULT CUI_Monster_Panel::NativeConstruct(const _uint _iSceneID, void* pArg)
 {
 	if (nullptr != pArg)
 	{
-		memcpy(&m_Desc, pArg, sizeof(PANELDESC));
+		memcpy(&m_PanelDesc, pArg, sizeof(PANELDESC));
 	}
 
-	if (FAILED(__super::NativeConstruct(pArg)))
+	if (FAILED(__super::NativeConstruct(_iSceneID, pArg)))
 	{
 		return E_FAIL;
 	}
@@ -45,45 +45,11 @@ HRESULT CUI_Monster_Panel::NativeConstruct(void* pArg)
 		return E_FAIL;
 	}
 
-	//MonsterBar Back
-	CUI::UIDESC Desc;
-	_tcscpy_s(Desc.TextureTag, L"Texture_Monster_Back");
-	Desc.IDTag = 14;
-	Desc.bMinus = true;
-	Desc.fAngle = 0.36f;
-	Desc.fPos = { 0.f, 0.f, 0.f };
-	Desc.fSize = { 1.f, 1.f };
+	m_EnemyTag = m_PanelDesc.iEnemyTag; //태그값 받아온걸로 어떤거 생성할지 정해줌 
+
+	if (FAILED(Panel_Setting())) //생성 
+		return E_FAIL;
 	
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_UI", L"Proto_GameObject_UI_Monster_Back", &Desc, 
-		(CGameObject**)&m_pUIBack)))
-		return E_FAIL;
-
-	//MonsterBar Level
-	CUI::UIDESC Desc2;
-	_tcscpy_s(Desc2.TextureTag, L"Texture_Monster_Level");
-	Desc2.IDTag = 13;
-	Desc2.bMinus = false;
-	Desc2.fAngle = 0.f;
-	Desc2.fPos = { 0.f, 0.f, 0.f };
-	Desc2.fSize = { 1.f, 1.f };
-
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_UI", L"Proto_GameObject_UI_Monster_Level", &Desc2, 
-		(CGameObject**)&m_pUILevel)))
-		return E_FAIL;
-
-	//MonsterBar Level
-	CUI::UIDESC Desc3;
-	_tcscpy_s(Desc3.TextureTag, L"Texture_Monster_HpBar");
-	Desc3.IDTag = 14;
-	Desc3.bMinus = true;
-	Desc3.fAngle = 0.36f;
-	Desc3.fPos = { 0.f, 0.f, 0.f };
-	Desc3.fSize = { 1.f, 1.f };
-
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_UI", L"Proto_GameObject_UI_Monster_HpBar", &Desc3,
-		(CGameObject**)&m_pUIHpBar)))
-		return E_FAIL;
-
 	return S_OK;
 }
 
@@ -92,6 +58,258 @@ _int CUI_Monster_Panel::Tick(_double TimeDelta)
 	if (FAILED(__super::Tick(TimeDelta)))
 		return -1;
 
+	
+	Update_Panel(TimeDelta);
+
+	return 0;
+}
+
+_int CUI_Monster_Panel::LateTick(_double TimeDelta)
+{
+	if (FAILED(CUI::LateTick(TimeDelta)))
+		return -1;
+
+	if (nullptr != m_pRenderer)
+	{
+		m_pRenderer->Add_RenderGroup(CRenderer::RENDER::RENDER_ALPHA, this);
+	}
+	return _int();
+}
+
+HRESULT CUI_Monster_Panel::Render()
+{
+	return S_OK;
+}
+
+HRESULT CUI_Monster_Panel::Panel_Setting()
+{
+	switch (m_EnemyTag)
+	{
+	case Enemy::CRAWLER:
+		if (FAILED(Setting_Crawler()))
+			return E_FAIL;
+		break;
+	case Enemy::ABERRANT:
+		if (FAILED(Setting_Aberrant()))
+			return E_FAIL;
+		break;
+	case Enemy::ANIMUS:
+		if (FAILED(Setting_Animus()))
+			return E_FAIL;
+		break;
+	case Enemy::SWORD:
+		if (FAILED(Setting_Sword()))
+			return E_FAIL;
+		break;
+	case Enemy::SPEAR:
+		if (FAILED(Setting_Spear()))
+			return E_FAIL;
+		break;
+	case Enemy::SHOOTER:
+		if (FAILED(Setting_Shooter()))
+			return E_FAIL;
+		break;
+	case Enemy::HEALER:
+		if (FAILED(Setting_Healer()))
+			return E_FAIL;
+		break;
+	case Enemy::SWORD2H:
+		if (FAILED(Setting_2HSword()))
+			return E_FAIL;
+		break;
+	case Enemy::MIDBOSS:
+		if (FAILED(Setting_MidBoss()))
+			return E_FAIL;
+		break;
+	case Enemy::ENDBOSS:
+		if (FAILED(Setting_EndBoss()))
+			return E_FAIL;
+		break;
+	case Enemy::ENEMY_END:
+		MSGBOX("Failed to Panel Setting In CUI_Monster_Panel::Panel_Setting()");
+		break;
+	default:
+		MSGBOX("Failed to Panel Setting In CUI_Monster_Panel::Panel_Setting()");
+		break;
+	}
+	return S_OK;
+}
+
+HRESULT CUI_Monster_Panel::Setting_Crawler()
+{
+	//MonsterBar Back
+	CUI::UIDESC Desc;
+	_tcscpy_s(Desc.TextureTag, L"Texture_Monster_Back");
+	Desc.IDTag = 14;
+	Desc.bMinus = true;
+	Desc.fAngle = 0.38f;
+	Desc.fPos = { 0.f, 0.f, 0.f };
+	Desc.fSize = { 1.f, 1.f };
+
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_UI", L"Proto_GameObject_UI_Monster_Back", &Desc,
+		(CGameObject**)&m_pUIBack)))
+		return E_FAIL;
+
+	//MonsterBar Level
+	CUI::UIDESC Desc2;
+	_tcscpy_s(Desc2.TextureTag, L"Texture_Monster_Level_1");
+	Desc2.IDTag = 13;
+	Desc2.bMinus = false;
+	Desc2.fAngle = 0.f;
+	Desc2.fPos = { 0.f, 0.f, 0.f };
+	Desc2.fSize = { 1.f, 1.f };
+
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_UI", L"Proto_GameObject_UI_Monster_Level", &Desc2,
+		(CGameObject**)&m_pUILevel)))
+		return E_FAIL;
+
+	//MonsterBar Level
+	CUI_Monster_HpBar::UIBARDESC Desc3;
+	_tcscpy_s(Desc3.UIDesc.TextureTag, L"Texture_Monster_HpBar");
+	Desc3.UIDesc.IDTag = 14;
+	Desc3.UIDesc.bMinus = true;
+	Desc3.UIDesc.fAngle = 0.36f;
+	Desc3.UIDesc.fPos = { 0.f, 0.f, 0.f };
+	Desc3.UIDesc.fSize = { 1.f, 1.f };
+	Desc3.iRenderPass = 2;
+
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_UI", L"Proto_GameObject_UI_Monster_HpBar", &Desc3,
+		(CGameObject**)&m_pUIHpBar)))
+		return E_FAIL;
+
+	return S_OK;
+}
+
+HRESULT CUI_Monster_Panel::Setting_Aberrant()
+{
+	return S_OK;
+}
+
+HRESULT CUI_Monster_Panel::Setting_Animus()
+{
+	return S_OK;
+}
+
+HRESULT CUI_Monster_Panel::Setting_Sword()
+{
+	return S_OK;
+}
+
+HRESULT CUI_Monster_Panel::Setting_Spear()
+{
+	return S_OK;
+}
+
+HRESULT CUI_Monster_Panel::Setting_Shooter()
+{
+	return S_OK;
+}
+
+HRESULT CUI_Monster_Panel::Setting_Healer()
+{
+	return S_OK;
+}
+
+HRESULT CUI_Monster_Panel::Setting_2HSword()
+{
+	return S_OK;
+}
+
+HRESULT CUI_Monster_Panel::Setting_MidBoss()
+{
+	//MonsterBar Back
+	CUI::UIDESC Desc;
+	_tcscpy_s(Desc.TextureTag, L"Texture_Monster_Back");
+	Desc.IDTag = 14;
+	Desc.bMinus = true;
+	Desc.fAngle = 0.42f;
+	Desc.fPos = { 0.f, 0.f, 0.f };
+	Desc.fSize = { 1.f, 1.f };
+
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_UI", L"Proto_GameObject_UI_Monster_Back", &Desc,
+		(CGameObject**)&m_pUIBack)))
+		return E_FAIL;
+
+	//MonsterBar Level
+	CUI::UIDESC Desc2;
+	_tcscpy_s(Desc2.TextureTag, L"Texture_Monster_Level_3");
+	Desc2.IDTag = 13;
+	Desc2.bMinus = false;
+	Desc2.fAngle = 0.f;
+	Desc2.fPos = { 0.f, 0.f, 0.f };
+	Desc2.fSize = { 1.f, 1.f };
+
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_UI", L"Proto_GameObject_UI_Monster_Level", &Desc2,
+		(CGameObject**)&m_pUILevel)))
+		return E_FAIL;
+
+	//MonsterBar Level
+	CUI_Monster_HpBar::UIBARDESC Desc3;
+	_tcscpy_s(Desc3.UIDesc.TextureTag, L"Texture_Monster_HpBar");
+	Desc3.UIDesc.IDTag = 14;
+	Desc3.UIDesc.bMinus = true;
+	Desc3.UIDesc.fAngle = 0.42f;
+	Desc3.UIDesc.fPos = { 0.f, 0.f, 0.f };
+	Desc3.UIDesc.fSize = { 1.f, 1.f };
+	Desc3.iRenderPass = 3;
+
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_UI", L"Proto_GameObject_UI_Monster_HpBar", &Desc3,
+		(CGameObject**)&m_pUIHpBar)))
+		return E_FAIL;
+
+	return S_OK;
+}
+
+HRESULT CUI_Monster_Panel::Setting_EndBoss()
+{
+	return S_OK;
+}
+
+void CUI_Monster_Panel::Update_Panel(_double TimeDelta)
+{
+	switch (m_EnemyTag)
+	{
+	case Client::CUI_Monster_Panel::Enemy::CRAWLER:
+		Update_Setting_Crawler(TimeDelta);
+		break;
+	case Client::CUI_Monster_Panel::Enemy::ABERRANT:
+		Update_Setting_Aberrant(TimeDelta);
+		break;
+	case Client::CUI_Monster_Panel::Enemy::ANIMUS:
+		Update_Setting_Animus(TimeDelta);
+		break;
+	case Client::CUI_Monster_Panel::Enemy::SWORD:
+		Update_Setting_Sword(TimeDelta);
+		break;
+	case Client::CUI_Monster_Panel::Enemy::SPEAR:
+		Update_Setting_Spear(TimeDelta);
+		break;
+	case Client::CUI_Monster_Panel::Enemy::SHOOTER:
+		Update_Setting_Shooter(TimeDelta);
+		break;
+	case Client::CUI_Monster_Panel::Enemy::HEALER:
+		Update_Setting_Healer(TimeDelta);
+		break;
+	case Client::CUI_Monster_Panel::Enemy::SWORD2H:
+		Update_Setting_2HSword(TimeDelta);
+		break;
+	case Client::CUI_Monster_Panel::Enemy::MIDBOSS:
+		Update_Setting_MidBoss(TimeDelta);
+		break;
+	case Client::CUI_Monster_Panel::Enemy::ENDBOSS:
+		Update_Setting_EndBoss(TimeDelta);
+		break;
+	case Client::CUI_Monster_Panel::Enemy::ENEMY_END:
+		MSGBOX("Failed In CUI_Monster_Panel::Update_Panel()");
+		break;
+	default:
+		MSGBOX("Failed In CUI_Monster_Panel::Update_Panel()");
+		break;
+	}
+}
+
+void CUI_Monster_Panel::Update_Setting_Crawler(_double TimeDelta)
+{
 	//Panel pos Setting
 	_matrix SettingMat = XMMatrixIdentity();
 	SettingMat.r[3] = { 0.f, 2.f, 0.f , 1.f };
@@ -116,7 +334,7 @@ _int CUI_Monster_Panel::Tick(_double TimeDelta)
 	Backmat.r[1] = XMVectorSetY(Backmat.r[1], 0.40f);
 	Backmat.r[3] = { 0.f, 0.f, 0.f, 1.f };
 	BackTransform->Set_WorldMatrix(Backmat * m_pTransform->Get_WorldMatrix());
-	
+
 	//UI Level
 	CTransform* LevelTransform = (CTransform*)m_pUILevel->Get_Component(L"Com_Transform");
 	_matrix Levelmat = XMMatrixIdentity();
@@ -132,26 +350,85 @@ _int CUI_Monster_Panel::Tick(_double TimeDelta)
 	HpBarmat.r[1] = XMVectorSetY(HpBarmat.r[1], 0.40f);
 	HpBarmat.r[3] = { 0.f, 0.0f, -0.001f, 1.f };
 	HpBarTransform->Set_WorldMatrix(HpBarmat * m_pTransform->Get_WorldMatrix());
-
-	return 0;
 }
 
-_int CUI_Monster_Panel::LateTick(_double TimeDelta)
+void CUI_Monster_Panel::Update_Setting_Aberrant(_double TimeDelta)
 {
-	if (FAILED(CUI::LateTick(TimeDelta)))
-		return -1;
-
-	if (nullptr != m_pRenderer)
-	{
-		m_pRenderer->Add_RenderGroup(CRenderer::RENDER::RENDER_ALPHA, this);
-	}
-	return _int();
 }
 
-HRESULT CUI_Monster_Panel::Render()
+void CUI_Monster_Panel::Update_Setting_Animus(_double TimeDelta)
 {
-	return S_OK;
 }
+
+void CUI_Monster_Panel::Update_Setting_Sword(_double TimeDelta)
+{
+}
+
+void CUI_Monster_Panel::Update_Setting_Spear(_double TimeDelta)
+{
+}
+
+void CUI_Monster_Panel::Update_Setting_Shooter(_double TimeDelta)
+{
+}
+
+void CUI_Monster_Panel::Update_Setting_Healer(_double TimeDelta)
+{
+}
+
+void CUI_Monster_Panel::Update_Setting_2HSword(_double TimeDelta)
+{
+}
+
+void CUI_Monster_Panel::Update_Setting_MidBoss(_double TimeDelta)
+{
+	//Panel pos Setting
+	_matrix SettingMat = XMMatrixIdentity();
+	SettingMat.r[3] = { 0.f, 4.f, 0.f , 1.f };
+	_matrix TargetSettinMat = SettingMat * XMLoadFloat4x4(&m_TargetMatrix); //몬스터(타겟)위치
+	m_pTransform->Set_WorldMatrix(TargetSettinMat);
+
+	//빌보드
+	_matrix ViewMatrix;
+	ViewMatrix = g_pGameInstance->Get_Transform(L"MainCamera", TRANSFORMSTATEMATRIX::D3DTS_VIEW);
+	ViewMatrix = XMMatrixInverse(nullptr, ViewMatrix);
+	m_pTransform->Set_State(CTransform::STATE::STATE_RIGHT, ViewMatrix.r[0]);
+	m_pTransform->Set_State(CTransform::STATE::STATE_LOOK, ViewMatrix.r[2]);
+
+	//Panel Size
+	_vector vScale = { 1.f,1.f,1.f,1.f };
+	m_pTransform->Scaling(vScale);
+
+	//UI Back
+	CTransform* BackTransform = (CTransform*)m_pUIBack->Get_Component(L"Com_Transform");
+	_matrix Backmat = XMMatrixIdentity();
+	Backmat.r[0] = XMVectorSetX(Backmat.r[0], 4.f);
+	Backmat.r[1] = XMVectorSetY(Backmat.r[1], 0.40f);
+	Backmat.r[3] = { 0.f, 0.f, 0.f, 1.f };
+	BackTransform->Set_WorldMatrix(Backmat * m_pTransform->Get_WorldMatrix());
+
+	//UI Level
+	CTransform* LevelTransform = (CTransform*)m_pUILevel->Get_Component(L"Com_Transform");
+	_matrix Levelmat = XMMatrixIdentity();
+	Levelmat.r[0] = XMVectorSetX(Levelmat.r[0], 0.6f);
+	Levelmat.r[1] = XMVectorSetY(Levelmat.r[1], 0.6f);
+	Levelmat.r[3] = { -2.1f, 0.11f, 0.f, 1.f };
+	LevelTransform->Set_WorldMatrix(Levelmat * m_pTransform->Get_WorldMatrix());
+
+	//UI HpBar
+	CTransform* HpBarTransform = (CTransform*)m_pUIHpBar->Get_Component(L"Com_Transform");
+	_matrix HpBarmat = XMMatrixIdentity();
+	HpBarmat.r[0] = XMVectorSetX(HpBarmat.r[0], 3.7f);
+	HpBarmat.r[1] = XMVectorSetY(HpBarmat.r[1], 0.40f);
+	HpBarmat.r[3] = { 0.0f, 0.0f, -0.001f, 1.f };
+	HpBarTransform->Set_WorldMatrix(HpBarmat * m_pTransform->Get_WorldMatrix());
+}
+
+void CUI_Monster_Panel::Update_Setting_EndBoss(_double TimeDelta)
+{
+}
+
+
 
 HRESULT CUI_Monster_Panel::SetUp_Components()
 {
@@ -180,10 +457,10 @@ CUI_Monster_Panel* CUI_Monster_Panel::Create(ID3D11Device* pDevice, ID3D11Device
 	return pInstance;
 }
 
-CGameObject* CUI_Monster_Panel::Clone(void* pArg)
+CGameObject* CUI_Monster_Panel::Clone(const _uint _iSceneID, void* pArg)
 {
 	CUI_Monster_Panel* pInstance = new CUI_Monster_Panel(*this);
-	if (FAILED(pInstance->NativeConstruct(pArg)))
+	if (FAILED(pInstance->NativeConstruct(_iSceneID, pArg)))
 	{
 		MSGBOX("Failed to Creating Clone CUI_Monster_Panel");
 		Safe_Release(pInstance);
