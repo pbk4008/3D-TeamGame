@@ -30,7 +30,7 @@ public:
 	/* 원형객체가 생성될때 호출되는 함수. */
 	virtual HRESULT NativeConstruct_Prototype();
 	/* 복제본객체가 생성될때 호출되는 함수. */
-	virtual HRESULT NativeConstruct(void* pArg);
+	virtual HRESULT NativeConstruct(const _uint iSceneID, void* pArg);
 	virtual _int Tick(_double TimeDelta);
 	virtual _int LateTick(_double TimeDelta);
 	virtual HRESULT Render();
@@ -57,13 +57,14 @@ protected:
 	_bool m_bActive;
 	_bool m_bCheckCollider;
 	_uint m_iObectTag;
+	_uint m_iSceneID;
 protected:
 	unordered_map<wstring, class CComponent*>		m_Components;
 protected:
 	virtual HRESULT SetUp_Components(_uint iLevelIndex, const wstring& pPrototypeTag, const wstring& pComponentTag, CComponent** ppOut, void* pArg = nullptr);
 	virtual HRESULT SetUp_Components(const wstring& pComponentTag, CComponent* pClone);
 public:
-	virtual CGameObject* Clone(void* pArg) = 0;
+	virtual CGameObject* Clone(const _uint iSceneID, void* pArg) = 0;
 	virtual void Free() override;
 };
 

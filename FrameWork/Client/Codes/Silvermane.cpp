@@ -152,9 +152,9 @@ HRESULT CSilvermane::NativeConstruct_Prototype()
 	return S_OK;
 }
 
-HRESULT CSilvermane::NativeConstruct(void* _pArg)
+HRESULT CSilvermane::NativeConstruct(const _uint _iSceneID, void* _pArg)
 {
-	if (FAILED(__super::NativeConstruct(_pArg))) 
+	if (FAILED(__super::NativeConstruct(_iSceneID, _pArg))) 
 		return E_FAIL;
 
 	if (FAILED(Ready_Components()))
@@ -294,7 +294,7 @@ HRESULT CSilvermane::Ready_Components()
 	m_pTransform->Set_State(CTransform::STATE_POSITION, XMVectorSet(0.f, 2.f, 0.f, 1.f));
 
 	// 모델
-	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_TEST_JS, L"Model_Silvermane", L"Model", (CComponent**)&m_pModel)))
+	if (FAILED(SetUp_Components(m_iSceneID, L"Model_Silvermane", L"Model", (CComponent**)&m_pModel)))
 		return E_FAIL;
 	m_pModel->Add_Material(g_pGameInstance->Get_Material(L"Mtrl_Silvermane_Top"), 0);
 	m_pModel->Add_Material(g_pGameInstance->Get_Material(L"Mtrl_Silvermane_Down"), 1);
@@ -302,7 +302,7 @@ HRESULT CSilvermane::Ready_Components()
 	m_pModel->Add_Material(g_pGameInstance->Get_Material(L"Mtrl_Silvermane_Hair"), 3);
 
 	// 에니메이션 컨트롤러
-	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_TEST_JS, L"Com_AnimationController", L"AnimationController", (CComponent**)&m_pAnimationController)))
+	if (FAILED(SetUp_Components(m_iSceneID, L"Proto_Component_AnimationController", L"AnimationController", (CComponent**)&m_pAnimationController)))
 		return E_FAIL;
 	m_pAnimationController->Set_GameObject(this);
 	m_pAnimationController->Set_Model(m_pModel);
@@ -310,7 +310,7 @@ HRESULT CSilvermane::Ready_Components()
 	m_pAnimationController->Set_MoveSpeed(1.f);
 
 	// 스테이트 컨트롤러
-	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_TEST_JS, L"Com_StateController", L"StateController", (CComponent**)&m_pStateController)))
+	if (FAILED(SetUp_Components(m_iSceneID, L"Proto_Component_StateController", L"StateController", (CComponent**)&m_pStateController)))
 		return E_FAIL;
 	m_pStateController->Set_GameObject(this);
 
@@ -323,7 +323,7 @@ HRESULT CSilvermane::Ready_Components()
 	tCharacterControllerDesc.fRestitution = 0.f;
 	tCharacterControllerDesc.pGameObject = this;
 	tCharacterControllerDesc.vPosition = { 0.f, 0.8f, 0.f };
-	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_TEST_JS, L"Com_CharacterController", L"CharacterController", (CComponent**)&m_pCharacterController, &tCharacterControllerDesc)))
+	if (FAILED(SetUp_Components(m_iSceneID, L"Proto_Component_CharacterController", L"CharacterController", (CComponent**)&m_pCharacterController, &tCharacterControllerDesc)))
 		return E_FAIL;
 	m_pCharacterController->Set_OwnerTransform(m_pTransform);
 
@@ -555,14 +555,14 @@ HRESULT CSilvermane::Ready_Weapons()
 	CWeapon* pWeapon = nullptr;
 	// 한손검
 	pWeapon = CNeedle::Create(m_pDevice, m_pDeviceContext);
-	pWeapon->NativeConstruct(pWeaponBone);
+	pWeapon->NativeConstruct(m_iSceneID, pWeaponBone);
 	pWeapon->Set_Owner(this);
 	pWeapon->Set_OwnerPivotMatrix(m_pModel->Get_PivotMatrix());
 	m_umapWeapons.emplace(L"Needle", pWeapon);
 	m_pCurWeapon = pWeapon;
 	// 해머
 	pWeapon = CFury::Create(m_pDevice, m_pDeviceContext);
-	pWeapon->NativeConstruct(pWeaponBone);
+	pWeapon->NativeConstruct(m_iSceneID, pWeaponBone);
 	pWeapon->Set_Owner(this);
 	pWeapon->Set_OwnerPivotMatrix(m_pModel->Get_PivotMatrix());
 	m_umapWeapons.emplace(L"Fury", pWeapon);
@@ -570,7 +570,7 @@ HRESULT CSilvermane::Ready_Weapons()
 	// 방패
 	pWeaponBone = m_pModel->Get_BoneMatrix("weapon_l");
 	m_pShield = CShield::Create(m_pDevice, m_pDeviceContext);
-	m_pShield->NativeConstruct(pWeaponBone);
+	m_pShield->NativeConstruct(m_iSceneID, pWeaponBone);
 	m_pShield->Set_Owner(this);
 	m_pShield->Set_OwnerPivotMatrix(m_pModel->Get_PivotMatrix());
 	Set_EquipShield(false);
@@ -756,10 +756,10 @@ CSilvermane* CSilvermane::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _p
 	return pInstance;
 }
 
-CGameObject* CSilvermane::Clone(void* _pArg)
+CGameObject* CSilvermane::Clone(const _uint _iSceneID, void* _pArg)
 {
 	CSilvermane* pInstance = new CSilvermane(*this);
-	if (FAILED(pInstance->NativeConstruct(_pArg)))
+	if (FAILED(pInstance->NativeConstruct(_iSceneID, _pArg)))
 	{
 		MSGBOX("CSilvermane Clone Fail");
 		Safe_Release(pInstance);

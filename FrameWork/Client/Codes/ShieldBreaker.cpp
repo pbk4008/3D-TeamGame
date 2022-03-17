@@ -26,9 +26,9 @@ HRESULT CShieldBreaker::NativeConstruct_Prototype()
 	return S_OK;
 }
 
-HRESULT CShieldBreaker::NativeConstruct(void* pArg)
+HRESULT CShieldBreaker::NativeConstruct(const _uint _iSceneID, void* pArg)
 {
-	if (FAILED(__super::NativeConstruct(pArg)))
+	if (FAILED(__super::NativeConstruct(_iSceneID,pArg)))
 		return E_FAIL;
 
 	if (FAILED(Ready_Components()))
@@ -136,10 +136,10 @@ CShieldBreaker* CShieldBreaker::Create(ID3D11Device* pDevice, ID3D11DeviceContex
 	return pInstance;
 }
 
-CGameObject* CShieldBreaker::Clone(void* pArg)
+CGameObject* CShieldBreaker::Clone(const _uint _iSceneID, void* pArg)
 {
 	CShieldBreaker* pInstance = new CShieldBreaker(*this);
-	if (FAILED(pInstance->NativeConstruct(pArg)))
+	if (FAILED(pInstance->NativeConstruct(_iSceneID, pArg)))
 	{
 		MSGBOX("CShieldBreaker Clone Fail");
 		Safe_Release(pInstance);

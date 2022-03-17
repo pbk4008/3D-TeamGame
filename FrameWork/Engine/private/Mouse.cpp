@@ -23,7 +23,7 @@ HRESULT CMouse::NativeConstruct_Prototype()
 	return S_OK;
 }
 
-HRESULT CMouse::NativeConstruct(void* pArg)
+HRESULT CMouse::NativeConstruct(const _uint _iSceneID, void* pArg)
 {
 	return S_OK;
 }
@@ -181,10 +181,11 @@ CMouse* CMouse::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContex
 	return pInstance;
 }
 
-CGameObject* CMouse::Clone(void* pArg)
+CGameObject* CMouse::Clone(const _uint _iSceneID, void* pArg)
 {
 	CMouse* pInstance = new CMouse(*this);
-	if (FAILED(pInstance->NativeConstruct(pArg)))
+	pInstance->m_iSceneID = _iSceneID;
+	if (FAILED(pInstance->NativeConstruct(_iSceneID, pArg)))
 	{
 		MSGBOX("CMouse Clone Fail");
 		Safe_Release(pInstance);

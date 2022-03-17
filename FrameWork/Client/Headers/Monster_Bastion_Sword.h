@@ -21,7 +21,7 @@ private:
 
 public:
 	virtual HRESULT NativeConstruct_Prototype() override;
-	virtual HRESULT NativeConstruct(void* _pArg = nullptr) override;
+	virtual HRESULT NativeConstruct(const _uint _iSceneID, void* _pArg = nullptr) override;
 	virtual _int Tick(_double _dDeltaTime) override;
 	virtual _int LateTick(_double _dDeltaTime) override;
 	virtual HRESULT Render() override;
@@ -40,7 +40,7 @@ private:
 	CStargazer* m_pWeapon = nullptr;
 public:
 	static CMonster_Bastion_Sword* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext);
-	virtual CGameObject* Clone(void* _pArg = nullptr) override;
+	virtual CGameObject* Clone(const _uint _iSceneID, void* _pArg = nullptr) override;
 	virtual void Free() override;
 };
 END

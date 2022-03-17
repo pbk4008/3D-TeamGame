@@ -24,9 +24,9 @@ HRESULT CLandScape::NativeConstruct_Prototype()
 	return S_OK;
 }
 
-HRESULT CLandScape::NativeConstruct(void* pArg)
+HRESULT CLandScape::NativeConstruct(const _uint _iSceneID, void* pArg)
 {
-	if (FAILED(__super::NativeConstruct(pArg)))
+	if (FAILED(__super::NativeConstruct(_iSceneID, pArg)))
 	{
 		return E_FAIL;
 	}

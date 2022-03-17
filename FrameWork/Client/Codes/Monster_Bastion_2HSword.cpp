@@ -21,13 +21,17 @@ HRESULT CMonster_Bastion_2HSword::NativeConstruct_Prototype()
 	return S_OK;
 }
 
-HRESULT CMonster_Bastion_2HSword::NativeConstruct(void* _pArg)
+HRESULT CMonster_Bastion_2HSword::NativeConstruct(const _uint _iSceneID, void* _pArg)
 {
-	if (FAILED(__super::NativeConstruct(_pArg))) return E_FAIL;
+	if (FAILED(__super::NativeConstruct(_iSceneID, _pArg)))
+		return E_FAIL;
 
-	if (FAILED(Ready_Components())) return E_FAIL;
-	if (FAILED(Ready_Weapon())) return E_FAIL;
-	if (FAILED(Ready_AnimFSM())) return E_FAIL;
+	if (FAILED(Ready_Components()))
+		return E_FAIL;
+	if (FAILED(Ready_Weapon()))
+		return E_FAIL;
+	if (FAILED(Ready_AnimFSM())) 
+		return E_FAIL;
 
 	return S_OK;
 }
@@ -35,7 +39,8 @@ HRESULT CMonster_Bastion_2HSword::NativeConstruct(void* _pArg)
 _int CMonster_Bastion_2HSword::Tick(_double _dDeltaTime)
 {
 	_int iProgress = __super::Tick(_dDeltaTime);
-	if (NO_EVENT != iProgress) return iProgress;
+	if (NO_EVENT != iProgress) 
+		return iProgress;
 
 	m_pAnimator->Tick(_dDeltaTime);
 	
@@ -49,7 +54,8 @@ _int CMonster_Bastion_2HSword::Tick(_double _dDeltaTime)
 	if (m_pCurWeapon)
 	{
 		iProgress = m_pCurWeapon->Tick(_dDeltaTime);
-		if (NO_EVENT != iProgress) return iProgress;
+		if (NO_EVENT != iProgress) 
+			return iProgress;
 	}
 	return _int();
 }
@@ -57,15 +63,18 @@ _int CMonster_Bastion_2HSword::Tick(_double _dDeltaTime)
 _int CMonster_Bastion_2HSword::LateTick(_double _dDeltaTime)
 {
 	_int iProgress = __super::LateTick(_dDeltaTime);
-	if (NO_EVENT != iProgress) return iProgress;
+	if (NO_EVENT != iProgress) 
+		return iProgress;
 
-	if (FAILED(m_pRenderer->Add_RenderGroup(CRenderer::RENDER_ALPHA, this))) return -1;
+	if (FAILED(m_pRenderer->Add_RenderGroup(CRenderer::RENDER_ALPHA, this)))
+		return -1;
 
 	// ¹«±â ·¹ÀÕ¾÷µ«
 	if (m_pCurWeapon)
 	{
 		iProgress = m_pCurWeapon->LateTick(_dDeltaTime);
-		if (NO_EVENT != iProgress) return iProgress;
+		if (NO_EVENT != iProgress) 
+			return iProgress;
 	}
 
 	Check_DistanceForPlayer();
@@ -75,16 +84,20 @@ _int CMonster_Bastion_2HSword::LateTick(_double _dDeltaTime)
 
 HRESULT CMonster_Bastion_2HSword::Render()
 {
-	if (FAILED(__super::Render())) return E_FAIL;
+	if (FAILED(__super::Render()))
+		return E_FAIL;
 
 	_matrix smatWorld, smatView, smatProj;
 	smatWorld = XMMatrixTranspose(m_pTransform->Get_WorldMatrix());
 	smatView = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_VIEW));
 	smatProj = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_PROJECTION));
 
-	if (FAILED(m_pModel->SetUp_ValueOnShader("g_WorldMatrix", &smatWorld, sizeof(_matrix)))) return E_FAIL;
-	if (FAILED(m_pModel->SetUp_ValueOnShader("g_ViewMatrix", &smatView, sizeof(_matrix)))) return E_FAIL;
-	if (FAILED(m_pModel->SetUp_ValueOnShader("g_ProjMatrix", &smatProj, sizeof(_matrix)))) return E_FAIL;
+	if (FAILED(m_pModel->SetUp_ValueOnShader("g_WorldMatrix", &smatWorld, sizeof(_matrix))))
+		return E_FAIL;
+	if (FAILED(m_pModel->SetUp_ValueOnShader("g_ViewMatrix", &smatView, sizeof(_matrix)))) 
+		return E_FAIL;
+	if (FAILED(m_pModel->SetUp_ValueOnShader("g_ProjMatrix", &smatProj, sizeof(_matrix))))
+		return E_FAIL;
 
 	for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
 	{
@@ -155,7 +168,7 @@ HRESULT CMonster_Bastion_2HSword::Ready_Weapon()
 
 	//RetributionBlade
 	pWeapon = CRetributionBlade::Create(m_pDevice, m_pDeviceContext);
-	pWeapon->NativeConstruct(pWeaponBone);
+	pWeapon->NativeConstruct(m_iSceneID, pWeaponBone);
 	pWeapon->Set_Owner(this);
 	pWeapon->Set_OwnerPivotMatrix(m_pModel->Get_PivotMatrix());
 	m_umapWeapons.emplace(L"RetributionBlade", pWeapon);
@@ -267,10 +280,10 @@ CMonster_Bastion_2HSword* CMonster_Bastion_2HSword::Create(ID3D11Device* _pDevic
 	return pInstance;
 }
 
-CGameObject* CMonster_Bastion_2HSword::Clone(void* _pArg)
+CGameObject* CMonster_Bastion_2HSword::Clone(const _uint _iSceneID, void* _pArg)
 {
 	CMonster_Bastion_2HSword* pInstance = new CMonster_Bastion_2HSword(*this);
-	if (FAILED(pInstance->NativeConstruct(_pArg)))
+	if (FAILED(pInstance->NativeConstruct(_iSceneID, _pArg)))
 	{
 		MSGBOX("CMonster_Bastion_2HSword Clone Fail");
 		Safe_Release(pInstance);

@@ -35,9 +35,9 @@ HRESULT CTestObj::NativeConstruct_Prototype()
 	return S_OK;
 }
 
-HRESULT CTestObj::NativeConstruct(void* pArg)
+HRESULT CTestObj::NativeConstruct(const _uint _iSceneID, void* pArg)
 {
-	if (FAILED(CGameObject::NativeConstruct(pArg)))
+	if (FAILED(CGameObject::NativeConstruct(_iSceneID, pArg)))
 		return E_FAIL;
 
 	m_pTransform->Set_TransformDesc(5.f, 10.f);
@@ -166,10 +166,10 @@ CTestObj* CTestObj::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceCo
 	return pInstance;
 }
 
-CGameObject* CTestObj::Clone(void* pArg)
+CGameObject* CTestObj::Clone(const _uint _iSceneID, void* pArg)
 {
 	CTestObj* pInstance = new CTestObj(*this);
-	if (FAILED(pInstance->NativeConstruct(pArg)))
+	if (FAILED(pInstance->NativeConstruct(_iSceneID, pArg)))
 	{
 		MSGBOX("CTestObj Clone Fail");
 		Safe_Release(pInstance);

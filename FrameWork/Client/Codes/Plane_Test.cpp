@@ -23,9 +23,9 @@ HRESULT CPlane_Test::NativeConstruct_Prototype()
 	return S_OK;
 }
 
-HRESULT CPlane_Test::NativeConstruct(void* _pArg)
+HRESULT CPlane_Test::NativeConstruct(const _uint _iSceneID, void* _pArg)
 {
-	if (FAILED(__super::NativeConstruct(_pArg)))
+	if (FAILED(__super::NativeConstruct(_iSceneID, _pArg)))
 		return E_FAIL;
 
 	if (FAILED(Ready_Components()))
@@ -114,7 +114,7 @@ HRESULT CPlane_Test::Ready_NaviMesh()
 	NaviMeshDesc.pParent = this;
 	NaviMeshDesc.tColDesc = ColDesc;
 
-	m_pNaviCollider = (CMeshCollider*)g_pGameInstance->Clone_Component((_uint)SCENEID::SCENE_TEST_JS, L"Com_MeshCollider", &NaviMeshDesc);
+	m_pNaviCollider = (CMeshCollider*)g_pGameInstance->Clone_Component(m_iSceneID, L"Proto_Component_MeshCollider", &NaviMeshDesc);
 	if (!m_pNaviCollider)
 		return E_FAIL;
 
@@ -142,10 +142,10 @@ CPlane_Test* CPlane_Test::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _p
 	return pInstance;
 }
 
-CGameObject* CPlane_Test::Clone(void* _pArg)
+CGameObject* CPlane_Test::Clone(const _uint _iSceneID, void* _pArg)
 {
 	CPlane_Test* pInstance = new CPlane_Test(*this);
-	if (FAILED(pInstance->NativeConstruct(_pArg)))
+	if (FAILED(pInstance->NativeConstruct(_iSceneID, _pArg)))
 	{
 		MSGBOX("CPlane_Test Clone Fail");
 		Safe_Release(pInstance);

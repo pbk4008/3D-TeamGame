@@ -24,7 +24,7 @@ private:
 public:
 	virtual HRESULT NativeConstruct_Prototype();
 	/* 복제본객체가 생성될때 호출되는 함수. */
-	virtual HRESULT NativeConstruct(void* pArg);
+	virtual HRESULT NativeConstruct(const _uint _iSceneID, void* pArg);
 	virtual _int Tick(_double TimeDelta);
 	virtual _int LateTick(_double TimeDelta);
 	virtual HRESULT Render()override;
@@ -36,7 +36,7 @@ private:
 	HRESULT Ready_Component();
 public:
 	static CEnvironment* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);
-	virtual CGameObject* Clone(void* pArg);
+	virtual CGameObject* Clone(const _uint _iSceneID, void* pArg);
 private:
 	virtual void Free() override;
 private:

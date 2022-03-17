@@ -20,9 +20,9 @@ HRESULT CMonster_BronzeAnimus::NativeConstruct_Prototype()
 	return S_OK;
 }
 
-HRESULT CMonster_BronzeAnimus::NativeConstruct(void* _pArg)
+HRESULT CMonster_BronzeAnimus::NativeConstruct(const _uint _iSceneID, void* _pArg)
 {
-	if (FAILED(__super::NativeConstruct(_pArg)))
+	if (FAILED(__super::NativeConstruct(_iSceneID, _pArg)))
 	{
 		return E_FAIL;
 	}
@@ -132,10 +132,10 @@ CMonster_BronzeAnimus* CMonster_BronzeAnimus::Create(ID3D11Device* _pDevice, ID3
 	return pInstance;
 }
 
-CGameObject* CMonster_BronzeAnimus::Clone(void* _pArg)
+CGameObject* CMonster_BronzeAnimus::Clone(const _uint _iSceneID, void* _pArg)
 {
 	CMonster_BronzeAnimus* pInstance = new CMonster_BronzeAnimus(*this);
-	if (FAILED(pInstance->NativeConstruct(_pArg)))
+	if (FAILED(pInstance->NativeConstruct(_iSceneID, _pArg)))
 	{
 		MSGBOX("Failed to Creating Clone CMonster_BronzeAnimus");
 		Safe_Release(pInstance);

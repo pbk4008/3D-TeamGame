@@ -13,16 +13,19 @@ CMonster_Bastion_Spear::CMonster_Bastion_Spear(const CMonster_Bastion_Spear& _rh
 
 HRESULT CMonster_Bastion_Spear::NativeConstruct_Prototype()
 {
-	if (FAILED(__super::NativeConstruct_Prototype())) return E_FAIL;
+	if (FAILED(__super::NativeConstruct_Prototype())) 
+		return E_FAIL;
 
 	return S_OK;
 }
 
-HRESULT CMonster_Bastion_Spear::NativeConstruct(void* _pArg)
+HRESULT CMonster_Bastion_Spear::NativeConstruct(const _uint _iSceneID, void* _pArg)
 {
-	if (FAILED(__super::NativeConstruct(_pArg))) return E_FAIL;
+	if (FAILED(__super::NativeConstruct(_iSceneID, _pArg)))
+		return E_FAIL;
 
-	if (FAILED(Ready_Components())) return E_FAIL;
+	if (FAILED(Ready_Components()))
+		return E_FAIL;
 
 	return S_OK;
 }
@@ -30,7 +33,8 @@ HRESULT CMonster_Bastion_Spear::NativeConstruct(void* _pArg)
 _int CMonster_Bastion_Spear::Tick(_double _dDeltaTime)
 {
 	_int iProgress = __super::Tick(_dDeltaTime);
-	if (NO_EVENT != iProgress) return iProgress;
+	if (NO_EVENT != iProgress) 
+		return iProgress;
 
 	m_pAnimationController->Tick(_dDeltaTime);
 
@@ -40,31 +44,38 @@ _int CMonster_Bastion_Spear::Tick(_double _dDeltaTime)
 _int CMonster_Bastion_Spear::LateTick(_double _dDeltaTime)
 {
 	_int iProgress = __super::LateTick(_dDeltaTime);
-	if (NO_EVENT != iProgress) return iProgress;
+	if (NO_EVENT != iProgress) 
+		return iProgress;
 
-	if (FAILED(m_pRenderer->Add_RenderGroup(CRenderer::RENDER_ALPHA, this))) return -1;
+	if (FAILED(m_pRenderer->Add_RenderGroup(CRenderer::RENDER_ALPHA, this)))
+		return -1;
 
 	return _int();
 }
 
 HRESULT CMonster_Bastion_Spear::Render()
 {
-	if (FAILED(__super::Render())) return E_FAIL;
+	if (FAILED(__super::Render()))
+		return E_FAIL;
 
 	_matrix smatWorld, smatView, smatProj;
 	smatWorld = XMMatrixTranspose(m_pTransform->Get_WorldMatrix());
 	smatView = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_VIEW));
 	smatProj = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_PROJECTION));
 
-	if (FAILED(m_pModel->SetUp_ValueOnShader("g_WorldMatrix", &smatWorld, sizeof(_matrix)))) return E_FAIL;
-	if (FAILED(m_pModel->SetUp_ValueOnShader("g_ViewMatrix", &smatView, sizeof(_matrix)))) return E_FAIL;
-	if (FAILED(m_pModel->SetUp_ValueOnShader("g_ProjMatrix", &smatProj, sizeof(_matrix)))) return E_FAIL;
+	if (FAILED(m_pModel->SetUp_ValueOnShader("g_WorldMatrix", &smatWorld, sizeof(_matrix))))
+		return E_FAIL;
+	if (FAILED(m_pModel->SetUp_ValueOnShader("g_ViewMatrix", &smatView, sizeof(_matrix)))) 
+		return E_FAIL;
+	if (FAILED(m_pModel->SetUp_ValueOnShader("g_ProjMatrix", &smatProj, sizeof(_matrix)))) 
+		return E_FAIL;
 
 	for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
 	{
 		//if (FAILED(m_pModel->SetUp_TextureOnShader("g_DiffuseTexture", i, aiTextureType_DIFFUSE))) return E_FAIL;
 
-		if (FAILED(m_pModel->Render(i, 0))) return E_FAIL;
+		if (FAILED(m_pModel->Render(i, 0)))
+			return E_FAIL;
 	}
 
 	return S_OK;
@@ -104,10 +115,10 @@ CMonster_Bastion_Spear* CMonster_Bastion_Spear::Create(ID3D11Device* _pDevice, I
 	return pInstance;
 }
 
-CGameObject* CMonster_Bastion_Spear::Clone(void* _pArg)
+CGameObject* CMonster_Bastion_Spear::Clone(const _uint _iSceneID, void* _pArg)
 {
 	CMonster_Bastion_Spear* pInstance = new CMonster_Bastion_Spear(*this);
-	if (FAILED(pInstance->NativeConstruct(_pArg)))
+	if (FAILED(pInstance->NativeConstruct(_iSceneID, _pArg)))
 	{
 		MSGBOX("CMonster_Bastion_Spear Clone Fail");
 		Safe_Release(pInstance);

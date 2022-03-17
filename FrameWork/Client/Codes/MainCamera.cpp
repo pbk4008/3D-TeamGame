@@ -26,9 +26,9 @@ HRESULT CMainCamera::NativeConstruct_Prototype()
 	return S_OK;
 }
 
-HRESULT CMainCamera::NativeConstruct(void* pArg)
+HRESULT CMainCamera::NativeConstruct(const _uint _iSceneID, void* pArg)
 {
-	if (FAILED(CGameObject::NativeConstruct(pArg)))
+	if (FAILED(CGameObject::NativeConstruct(_iSceneID, pArg)))
 		return E_FAIL;
 
 	if (FAILED(Ready_GameObject(pArg)))
@@ -92,10 +92,10 @@ HRESULT CMainCamera::Render()
 	return S_OK;
 }
 
-CGameObject* CMainCamera::Clone(void* pArg)
+CGameObject* CMainCamera::Clone(const _uint _iSceneID, void* pArg)
 {
 	CMainCamera* pInstance = new CMainCamera(*this);
-	if (FAILED(pInstance->NativeConstruct(pArg)))
+	if (FAILED(pInstance->NativeConstruct(_iSceneID, pArg)))
 	{
 		MSGBOX("CMainCamera Clone Fail");
 		Safe_Release(pInstance);

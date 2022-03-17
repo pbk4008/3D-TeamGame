@@ -31,7 +31,7 @@ private:
 
 public:
 	virtual HRESULT NativeConstruct_Prototype() override;
-	virtual HRESULT NativeConstruct(void* pArg = nullptr) override;
+	virtual HRESULT NativeConstruct(const _uint _iSceneID, void* pArg = nullptr) override;
 	virtual _int Tick(_double TimeDelta) override;
 	virtual _int LateTick(_double TimeDelta) override;
 	virtual HRESULT Render() override;
@@ -51,7 +51,7 @@ private:
 	_uint itest = 0;
 public:
 	static CBoss_Bastion_Judicator* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);
-	virtual CGameObject* Clone(void* pArg = nullptr) override;
+	virtual CGameObject* Clone(const _uint _iSceneID, void* pArg = nullptr) override;
 	virtual void Free() override;
 };
 END

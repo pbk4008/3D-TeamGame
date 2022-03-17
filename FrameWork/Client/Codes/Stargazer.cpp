@@ -25,9 +25,9 @@ HRESULT CStargazer::NativeConstruct_Prototype()
 	return S_OK;
 }
 
-HRESULT CStargazer::NativeConstruct(void* _pArg)
+HRESULT CStargazer::NativeConstruct(const _uint _iSceneID, void* _pArg)
 {
-	if (FAILED(CWeapon::NativeConstruct(_pArg)))
+	if (FAILED(CWeapon::NativeConstruct(_iSceneID, _pArg)))
 		return E_FAIL;
 
 	if (FAILED(SetUp_Component()))
@@ -153,10 +153,10 @@ CStargazer* CStargazer::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDe
 	return pInstance;
 }
 
-CGameObject* CStargazer::Clone(void* pArg)
+CGameObject* CStargazer::Clone(const _uint _iSceneID, void* pArg)
 {
 	CStargazer* pInstance = new CStargazer(*this);
-	if (FAILED(pInstance->NativeConstruct(pArg)))
+	if (FAILED(pInstance->NativeConstruct(_iSceneID, pArg)))
 	{
 		MSGBOX("CStargazer Clone Fail");
 		Safe_Release(pInstance);
