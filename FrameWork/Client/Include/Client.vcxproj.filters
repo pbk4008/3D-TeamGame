@@ -274,8 +274,14 @@
     <Filter Include="02.GameObject\98.Player\00.Silvermane\State\Jump">
       <UniqueIdentifier>{c46bf2a8-6d72-4573-8057-fad1bf3781e0}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObject\95.Monster\Bastion_2HSword\State_2HSword\Rage">
-      <UniqueIdentifier>{bd8eebf8-c00f-4303-9ddc-b43dfb509314}</UniqueIdentifier>
+	<Filter Include="02.GameObject\95.Monster\Bastion_2HSword\State_2HSword\Rage">
+		<UniqueIdentifier>{bd8eebf8-c00f-4303-9ddc-b43dfb509314}</UniqueIdentifier>
+	</Filter>
+    <Filter Include="02.GameObject\93.Boss\00.MiddleBoss\State">
+      <UniqueIdentifier>{8a29aee6-6d31-4f13-bfdb-45f715488804}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\93.Boss\00.MiddleBoss\State\Rage">
+      <UniqueIdentifier>{78558ab8-2fff-4b33-ab1b-2e33a7ffd7ca}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -772,6 +778,9 @@
     <ClInclude Include="..\Headers\Traverse_Jump400Jog.h">
       <Filter>02.GameObject\98.Player\00.Silvermane\State\Jump</Filter>
     </ClInclude>
+    <ClInclude Include="..\Headers\MidBoss_Rage.h">
+      <Filter>02.GameObject\93.Boss\00.MiddleBoss\State\Rage</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -1243,6 +1252,9 @@
     </ClCompile>
     <ClCompile Include="..\Codes\Traverse_Jump400Jog.cpp">
       <Filter>02.GameObject\98.Player\00.Silvermane\State\Jump</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\MidBoss_Rage.cpp">
+      <Filter>02.GameObject\93.Boss\00.MiddleBoss\State\Rage</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
