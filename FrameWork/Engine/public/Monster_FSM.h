@@ -2,11 +2,14 @@
 #define Monster_FSM_h__
 
 #include "State.h"
-#include "Actor.h"
 
-BEGIN(Client)
+BEGIN(Engine)
+class CAnimator;
+class CModel;
+class CActor;
+class CTransform;
 
-class CMonster_FSM abstract : public CState
+class ENGINE_DLL CMonster_FSM abstract : public CState
 {
 protected:
 	explicit CMonster_FSM(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext);

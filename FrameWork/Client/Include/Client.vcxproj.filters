@@ -244,9 +244,6 @@
     <Filter Include="02.GameObject\93.Boss\00.MiddleBoss\00.Weapon">
       <UniqueIdentifier>{eee5d743-fda4-4f7b-ba26-d4c790268f21}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObject\95.Monster\99.State">
-      <UniqueIdentifier>{74e06248-1a45-4416-99cb-0ded2bd52003}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObject\95.Monster\Bastion_2HSword\State_2HSword">
       <UniqueIdentifier>{af1e5dd1-ee66-47a7-aec3-1945a6e5ae03}</UniqueIdentifier>
     </Filter>
@@ -739,9 +736,6 @@
     <ClInclude Include="..\Headers\Stargazer.h">
       <Filter>02.GameObject\96.Weapon\03.Stargazer</Filter>
     </ClInclude>
-    <ClInclude Include="..\Headers\Monster_FSM.h">
-      <Filter>02.GameObject\95.Monster\99.State</Filter>
-    </ClInclude>
     <ClInclude Include="..\Headers\Bastion_2HSword_Dash.h">
       <Filter>02.GameObject\95.Monster\Bastion_2HSword\State_2HSword\Dash</Filter>
     </ClInclude>
@@ -1204,9 +1198,6 @@
     </ClCompile>
     <ClCompile Include="..\Codes\Stargazer.cpp">
       <Filter>02.GameObject\96.Weapon\03.Stargazer</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Codes\Monster_FSM.cpp">
-      <Filter>02.GameObject\95.Monster\99.State</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\Bastion_2HSword_Dash.cpp">
       <Filter>02.GameObject\95.Monster\Bastion_2HSword\State_2HSword\Dash</Filter>
