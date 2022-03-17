@@ -22,9 +22,9 @@ HRESULT CTrigger::NativeConstruct_Prototype()
 	return S_OK;
 }
 
-HRESULT CTrigger::NativeConstruct(void* pArg)
+HRESULT CTrigger::NativeConstruct(const _uint _iSceneID, void* pArg)
 {
-	if (FAILED(__super::NativeConstruct(pArg)))
+	if (FAILED(__super::NativeConstruct(_iSceneID, pArg)))
 		return E_FAIL;
 
 	m_TriggerDesc = *(TRIGGER*)pArg;
@@ -101,11 +101,11 @@ _fmatrix CTrigger::Get_WorldMat(void)
 	return m_pTransform->Get_WorldMatrix();
 }
 
-CGameObject* CTrigger::Clone(void* pArg)
+CGameObject* CTrigger::Clone(const _uint _iSceneID, void* pArg)
 {
 	CTrigger* pInstance = new CTrigger(*this);
 
-	if (FAILED(pInstance->NativeConstruct(pArg)))
+	if (FAILED(pInstance->NativeConstruct(_iSceneID, pArg)))
 	{
 		MSGBOX("Failed to Create CTrigger!!!");
 		Safe_Release(pInstance);

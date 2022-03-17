@@ -14,9 +14,9 @@ HRESULT CTool_Mouse::NativeConstruct_Prototype()
 	return S_OK;
 }
 
-HRESULT CTool_Mouse::NativeConstruct(void* pArg)
+HRESULT CTool_Mouse::NativeConstruct(const _uint _iSceneID, void* pArg)
 {
-	if (FAILED(__super::NativeConstruct(pArg)))
+	if (FAILED(__super::NativeConstruct(_iSceneID, pArg)))
 		return E_FAIL;
 
 	return S_OK;
@@ -39,11 +39,11 @@ CTool_Mouse* CTool_Mouse::Create()
 	return pInstance;
 }
 
-CGameObject* CTool_Mouse::Clone(void* pArg)
+CGameObject* CTool_Mouse::Clone(const _uint _iSceneID, void* pArg)
 {
 	CTool_Mouse* pInstance = new CTool_Mouse(*this);
 
-	if (FAILED(pInstance->NativeConstruct(pArg)))
+	if (FAILED(pInstance->NativeConstruct(_iSceneID, pArg)))
 	{
 		MSGBOX("Failed to Create CTool_Mouse!!!");
 		Safe_Release(pInstance);
