@@ -23,14 +23,14 @@ HRESULT CUI_Player_HpBar::NativeConstruct_Prototype()
 	return S_OK;
 }
 
-HRESULT CUI_Player_HpBar::NativeConstruct(void* pArg)
+HRESULT CUI_Player_HpBar::NativeConstruct(const _uint _iSceneID, void* pArg)
 {
 	if (nullptr != pArg)
 	{
 		memcpy(&m_Desc, pArg, sizeof(UIDESC));
 	}
 
-	if (FAILED(__super::NativeConstruct(pArg)))
+	if (FAILED(__super::NativeConstruct(_iSceneID, pArg)))
 	{
 		return E_FAIL;
 	}
@@ -140,10 +140,10 @@ CUI_Player_HpBar* CUI_Player_HpBar::Create(ID3D11Device* pDevice, ID3D11DeviceCo
 	return pInstance;
 }
 
-CGameObject* CUI_Player_HpBar::Clone(void* pArg)
+CGameObject* CUI_Player_HpBar::Clone(const _uint _iSceneID, void* pArg)
 {
 	CUI_Player_HpBar* pInstance = new CUI_Player_HpBar(*this);
-	if (FAILED(pInstance->NativeConstruct(pArg)))
+	if (FAILED(pInstance->NativeConstruct(_iSceneID, pArg)))
 	{
 		MSGBOX("Failed to Creating Clone CUI_Player_HpBar");
 		Safe_Release(pInstance);

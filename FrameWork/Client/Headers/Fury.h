@@ -13,7 +13,7 @@ private:
 
 public:
 	virtual HRESULT NativeConstruct_Prototype() override;
-	virtual HRESULT NativeConstruct(void* _pArg = nullptr);
+	virtual HRESULT NativeConstruct(const _uint _iSceneID, void* _pArg = nullptr);
 	virtual _int Tick(_double _dDeltaTime) override;
 	virtual _int LateTick(_double _dDeltaTime) override;
 	virtual HRESULT Render() override;
@@ -28,7 +28,7 @@ private:
 
 public:
 	static CFury* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext);
-	virtual CGameObject* Clone(void* _pArg = nullptr) override;
+	virtual CGameObject* Clone(const _uint _iSceneID, void* _pArg = nullptr) override;
 	virtual void Free() override;
 };
 

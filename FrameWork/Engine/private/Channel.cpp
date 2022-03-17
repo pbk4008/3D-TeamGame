@@ -16,7 +16,11 @@ CChannel::CChannel(const CChannel& rhs)
 {
 	strcpy_s(m_szName, rhs.m_szName);
 }
-
+void CChannel::Set_TransformationMatrix(_fmatrix TransformationMatrix)
+{
+	XMStoreFloat4x4(&m_CreatTransfommationMatrix, TransformationMatrix);
+	m_TransformationMatrix = m_CreatTransfommationMatrix;
+}
 void CChannel::Set_AnimInterPolation(_fvector _vScale, _fvector _vRotation, _fvector _vPosition)
 {
 	XMStoreFloat4(&m_tAnimInterPolation.vScale, _vScale);

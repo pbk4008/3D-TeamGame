@@ -34,9 +34,9 @@ HRESULT CEffect::NativeConstruct_Prototype()
 	return S_OK;
 }
 
-HRESULT CEffect::NativeConstruct(void* pArg)
+HRESULT CEffect::NativeConstruct(const _uint _iSceneID, void* pArg)
 {
-	if (FAILED(__super::NativeConstruct(pArg)))
+	if (FAILED(__super::NativeConstruct(_iSceneID, pArg)))
 		return E_FAIL;
 
 	if (nullptr != pArg)

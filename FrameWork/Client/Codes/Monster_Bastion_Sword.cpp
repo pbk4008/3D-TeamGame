@@ -23,9 +23,9 @@ HRESULT CMonster_Bastion_Sword::NativeConstruct_Prototype()
 	return S_OK;
 }
 
-HRESULT CMonster_Bastion_Sword::NativeConstruct(void* _pArg)
+HRESULT CMonster_Bastion_Sword::NativeConstruct(const _uint _iSceneID, void* _pArg)
 {
-	if (FAILED(__super::NativeConstruct(_pArg)))
+	if (FAILED(__super::NativeConstruct(_iSceneID, _pArg)))
 		return E_FAIL;
 
 	if (FAILED(SetUp_Components()))
@@ -55,6 +55,11 @@ _int CMonster_Bastion_Sword::Tick(_double _dDeltaTime)
 	if (g_pGameInstance->getkeyDown(DIK_SPACE))
 	{
 		if (FAILED(m_pAnimator->Change_Animation((_uint)ANIM_TYPE::RUN_START)))
+			return -1;
+	}
+	if (g_pGameInstance->getkeyDown(DIK_RETURN))
+	{
+		if (FAILED(m_pAnimator->Change_AnyEntryAnimation((_uint)ANIM_TYPE::ATTACK_JUMPSTART)))
 			return -1;
 	}
 
@@ -125,6 +130,7 @@ HRESULT CMonster_Bastion_Sword::Set_Animation_FSM()
 	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::IDLE, (_uint)ANIM_TYPE::HEAD, pAnim, true, false, true, ERootOption::XYZ)))
 		return E_FAIL;
 
+	////////////////////
 	pAnim = m_pModelCom->Get_Animation("Run_Start");
 	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::RUN_START, (_uint)ANIM_TYPE::IDLE, pAnim, true, false, false, ERootOption::XYZ)))
 		return E_FAIL;
@@ -137,8 +143,25 @@ HRESULT CMonster_Bastion_Sword::Set_Animation_FSM()
 	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::RUN_END, (_uint)ANIM_TYPE::RUN_LOOP, pAnim, true, false, false, ERootOption::XYZ)))
 		return E_FAIL;
 
+	/////////////////////////////////////////////
+	pAnim = m_pModelCom->Get_Animation("Attack_JumpStart");
+	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::ATTACK_JUMPSTART, (_uint)ANIM_TYPE::HEAD, pAnim, true, false, false, ERootOption::XYZ)))
+		return E_FAIL;
+
+	pAnim = m_pModelCom->Get_Animation("Attack_JumpLoop");
+	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::ATTACK_JUMPLOOP, (_uint)ANIM_TYPE::ATTACK_JUMPSTART, pAnim, true, false, false, ERootOption::XYZ)))
+		return E_FAIL;
+
+	pAnim = m_pModelCom->Get_Animation("Attack_JumpEnd");
+	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::ATTACK_JUMPEND, (_uint)ANIM_TYPE::ATTACK_JUMPLOOP, pAnim, true, false, false, ERootOption::XYZ)))
+		return E_FAIL;
+
+	//////////////////////////////////
 	//애니메이션 연결(연결 당할 애, 연결할 애, 쌍방으로 연결할지 안할지)
 	if(FAILED(m_pAnimator->Connect_Animation((_uint)ANIM_TYPE::IDLE , (_uint)ANIM_TYPE::RUN_END,false)))
+		return E_FAIL;
+
+	if (FAILED(m_pAnimator->Connect_Animation((_uint)ANIM_TYPE::IDLE, (_uint)ANIM_TYPE::ATTACK_JUMPEND, false)))
 		return E_FAIL;
 
 	//자동으로 돌릴 애들(끝나는애, 끝나고 시작할 애)
@@ -146,8 +169,15 @@ HRESULT CMonster_Bastion_Sword::Set_Animation_FSM()
 	m_pAnimator->Set_UpAutoChangeAnimation((_uint)ANIM_TYPE::RUN_LOOP, (_uint)ANIM_TYPE::RUN_END);
 	m_pAnimator->Set_UpAutoChangeAnimation((_uint)ANIM_TYPE::RUN_END, (_uint)ANIM_TYPE::IDLE);
 
+	m_pAnimator->Set_UpAutoChangeAnimation((_uint)ANIM_TYPE::ATTACK_JUMPSTART, (_uint)ANIM_TYPE::ATTACK_JUMPLOOP);
+	m_pAnimator->Set_UpAutoChangeAnimation((_uint)ANIM_TYPE::ATTACK_JUMPLOOP, (_uint)ANIM_TYPE::ATTACK_JUMPEND);
+	m_pAnimator->Set_UpAutoChangeAnimation((_uint)ANIM_TYPE::ATTACK_JUMPEND, (_uint)ANIM_TYPE::IDLE);
+
+	m_pAnimator->Insert_AnyEntryAnimation((_uint)ANIM_TYPE::ATTACK_JUMPSTART);
+
+
 	//애니메이션 체인지(바꿀 애)
-	m_pAnimator->Change_Animation((_uint)ANIM_TYPE::RUN_START);
+	m_pAnimator->Change_Animation((_uint)ANIM_TYPE::IDLE);
 
 	return S_OK;
 }
@@ -155,7 +185,6 @@ HRESULT CMonster_Bastion_Sword::Set_Animation_FSM()
 HRESULT CMonster_Bastion_Sword::Set_Weapon()
 {
 	m_pWeapon = static_cast<CStargazer*>(g_pGameInstance->Clone_GameObject((_uint)SCENEID::SCENE_STAGE1, L"Proto_GameObject_Weapon_Stargazer"));
-	//m_pWeapon = static_cast<CShieldBreaker*>(g_pGameInstance->Clone_GameObject((_uint)SCENEID::SCENE_STAGE1, L"Proto_GameObject_Weapon_ShieldBreaker"));
 
 	if (!m_pWeapon)
 		return E_FAIL;
@@ -174,6 +203,7 @@ HRESULT CMonster_Bastion_Sword::Set_Weapon()
 	}
 	m_pWeapon->Set_FixedBone(pWeaponBone);
 	m_pWeapon->Set_OwnerPivotMatrix(m_pModelCom->Get_PivotMatrix());
+
 	return S_OK;
 }
 
@@ -188,10 +218,10 @@ CMonster_Bastion_Sword* CMonster_Bastion_Sword::Create(ID3D11Device* _pDevice, I
 	return pInstance;
 }
 
-CGameObject* CMonster_Bastion_Sword::Clone(void* _pArg)
+CGameObject* CMonster_Bastion_Sword::Clone(const _uint _iSceneID, void* _pArg)
 {
 	CMonster_Bastion_Sword* pInstance = new CMonster_Bastion_Sword(*this);
-	if (FAILED(pInstance->NativeConstruct(_pArg)))
+	if (FAILED(pInstance->NativeConstruct(_iSceneID, _pArg)))
 	{
 		MSGBOX("Failed to Clone CMonster_Bastion_Sword");
 		Safe_Release(pInstance);

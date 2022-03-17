@@ -27,9 +27,9 @@ HRESULT CRetributionBlade::NativeConstruct_Prototype()
 	return S_OK;
 }
 
-HRESULT CRetributionBlade::NativeConstruct(void* _pArg)
+HRESULT CRetributionBlade::NativeConstruct(const _uint _iSceneID, void* _pArg)
 {
-	if (FAILED(__super::NativeConstruct(_pArg)))
+	if (FAILED(__super::NativeConstruct(_iSceneID, _pArg)))
 		return E_FAIL;
 
 	if (FAILED(Ready_Components()))
@@ -107,7 +107,7 @@ _int CRetributionBlade::Attach_FixedBone(const _double& _dDeltaTime)
 	{
 		_matrix smatWorld = m_pFixedBone->Get_CombinedMatrix();
 
-		smatWorld *= m_smatOwnerPivot;
+		smatWorld *= XMLoadFloat4x4(&m_smatOwnerPivot);
 
 		if (!m_isEquip)
 		{
@@ -143,10 +143,10 @@ CRetributionBlade* CRetributionBlade::Create(ID3D11Device* _pDevice, ID3D11Devic
 	return pInstance;
 }
 
-CGameObject* CRetributionBlade::Clone(void* _pArg)
+CGameObject* CRetributionBlade::Clone(const _uint _iSceneID, void* _pArg)
 {
 	CRetributionBlade* pInstance = new CRetributionBlade(*this);
-	if (FAILED(pInstance->NativeConstruct(_pArg)))
+	if (FAILED(pInstance->NativeConstruct(_iSceneID, _pArg)))
 	{
 		MSGBOX("CRetributionBlade Clone Fail");
 		Safe_Release(pInstance);

@@ -19,9 +19,9 @@ HRESULT CCamera_Debug::NativeConstruct_Prototype()
 	return S_OK;
 }
 
-HRESULT CCamera_Debug::NativeConstruct(void* pArg)
+HRESULT CCamera_Debug::NativeConstruct(const _uint _iSceneID, void* pArg)
 {
-	if (FAILED(__super::NativeConstruct(pArg)))
+	if (FAILED(__super::NativeConstruct(_iSceneID, pArg)))
 		return E_FAIL;
 
 	if (FAILED(SetUp_Components()))
@@ -111,11 +111,10 @@ CCamera_Debug* CCamera_Debug::Create(ID3D11Device* _pDevice, ID3D11DeviceContext
 	return pInstance;
 }
 
-CGameObject* CCamera_Debug::Clone(void* pArg)
+CGameObject* CCamera_Debug::Clone(const _uint _iSceneID, void* pArg)
 {
 	CCamera_Debug* pInstance = new CCamera_Debug(*this);
-
-	if (FAILED(pInstance->NativeConstruct(pArg)))
+	if (FAILED(pInstance->NativeConstruct(_iSceneID, pArg)))
 	{
 		MSGBOX("Failed to Clone CCamera_Debug!!!");
 		Safe_Release(pInstance);

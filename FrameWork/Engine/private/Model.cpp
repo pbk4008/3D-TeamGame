@@ -899,7 +899,7 @@ HRESULT CModel::Save_AnimModel(const wstring& pFilePath)
 
 		pBoneData.iDepth = pNode->Get_Depth();
 		XMStoreFloat4x4(&pBoneData.OffsetMatrix, pNode->Get_OffsetMatrix());
-		XMStoreFloat4x4(&pBoneData.TransformationMatrix, pNode->Get_TransformMatrix());
+		XMStoreFloat4x4(&pBoneData.TransformationMatrix, pNode->Get_CreateMatrix());
 
 		vecBone.emplace_back(pBoneData);
 	}

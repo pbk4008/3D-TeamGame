@@ -20,9 +20,9 @@ HRESULT CMonster_EarthAberrant::NativeConstruct_Prototype()
 	return S_OK;
 }
 
-HRESULT CMonster_EarthAberrant::NativeConstruct(void* _pArg)
+HRESULT CMonster_EarthAberrant::NativeConstruct(const _uint _iSceneID, void* _pArg)
 {
-	if (FAILED(__super::NativeConstruct(_pArg)))
+	if (FAILED(__super::NativeConstruct(_iSceneID, _pArg)))
 	{
 		return E_FAIL;
 	}
@@ -131,10 +131,10 @@ CMonster_EarthAberrant* CMonster_EarthAberrant::Create(ID3D11Device* _pDevice, I
 	return pInstance;
 }
 
-CGameObject* CMonster_EarthAberrant::Clone(void* _pArg)
+CGameObject* CMonster_EarthAberrant::Clone(const _uint _iSceneID, void* _pArg)
 {
 	CMonster_EarthAberrant* pInstance = new CMonster_EarthAberrant(*this);
-	if (FAILED(pInstance->NativeConstruct(_pArg)))
+	if (FAILED(pInstance->NativeConstruct(_iSceneID, _pArg)))
 	{
 		MSGBOX("Failed to Creating Clone CMonster_EarthAberrant");
 		Safe_Release(pInstance);

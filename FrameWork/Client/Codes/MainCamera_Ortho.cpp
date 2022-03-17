@@ -26,9 +26,9 @@ HRESULT CMainCamera_Ortho::NativeConstruct_Prototype()
 	return S_OK;
 }
 
-HRESULT CMainCamera_Ortho::NativeConstruct(void* pArg)
+HRESULT CMainCamera_Ortho::NativeConstruct(const _uint _iSceneID, void* pArg)
 {
-	if (FAILED(CGameObject::NativeConstruct(pArg)))
+	if (FAILED(CGameObject::NativeConstruct(_iSceneID, pArg)))
 		return E_FAIL;
 
 	if (FAILED(Ready_GameObject(pArg)))
@@ -54,10 +54,10 @@ HRESULT CMainCamera_Ortho::Render()
 	return S_OK;
 }
 
-CGameObject* CMainCamera_Ortho::Clone(void* pArg)
+CGameObject* CMainCamera_Ortho::Clone(const _uint _iSceneID, void* pArg)
 {
 	CMainCamera_Ortho* pInstance = new CMainCamera_Ortho(*this);
-	if (FAILED(pInstance->NativeConstruct(pArg)))
+	if (FAILED(pInstance->NativeConstruct(_iSceneID, pArg)))
 	{
 		MSGBOX("CMainCamera_Ortho Clone Fail");
 		Safe_Release(pInstance);

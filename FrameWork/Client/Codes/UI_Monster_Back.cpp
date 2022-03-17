@@ -23,14 +23,14 @@ HRESULT CUI_Monster_Back::NativeConstruct_Prototype()
 	return S_OK;
 }
 
-HRESULT CUI_Monster_Back::NativeConstruct(void* pArg)
+HRESULT CUI_Monster_Back::NativeConstruct(const _uint _iSceneID, void* pArg)
 {
 	if (nullptr != pArg)
 	{
 		memcpy(&m_Desc, pArg, sizeof(UIACTIVEDESC));
 	}
 
-	if (FAILED(CGameObject::NativeConstruct(pArg)))
+	if (FAILED(CGameObject::NativeConstruct(_iSceneID, pArg)))
 	{
 		return E_FAIL;
 	}
@@ -124,10 +124,10 @@ CUI_Monster_Back* CUI_Monster_Back::Create(ID3D11Device* pDevice, ID3D11DeviceCo
 	return pInstance;
 }
 
-CGameObject* CUI_Monster_Back::Clone(void* pArg)
+CGameObject* CUI_Monster_Back::Clone(const _uint _iSceneID, void* pArg)
 {
 	CUI_Monster_Back* pInstance = new CUI_Monster_Back(*this);
-	if (FAILED(pInstance->NativeConstruct(pArg)))
+	if (FAILED(pInstance->NativeConstruct(_iSceneID, pArg)))
 	{
 		MSGBOX("Failed to Creating Clone CUI_Monster_Back");
 		Safe_Release(pInstance);

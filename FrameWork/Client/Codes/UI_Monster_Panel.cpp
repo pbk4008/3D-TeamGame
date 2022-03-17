@@ -27,14 +27,14 @@ HRESULT CUI_Monster_Panel::NativeConstruct_Prototype()
 	return S_OK;
 }
 
-HRESULT CUI_Monster_Panel::NativeConstruct(void* pArg)
+HRESULT CUI_Monster_Panel::NativeConstruct(const _uint _iSceneID, void* pArg)
 {
 	if (nullptr != pArg)
 	{
 		memcpy(&m_Desc, pArg, sizeof(PANELDESC));
 	}
 
-	if (FAILED(__super::NativeConstruct(pArg)))
+	if (FAILED(__super::NativeConstruct(_iSceneID, pArg)))
 	{
 		return E_FAIL;
 	}
@@ -180,10 +180,10 @@ CUI_Monster_Panel* CUI_Monster_Panel::Create(ID3D11Device* pDevice, ID3D11Device
 	return pInstance;
 }
 
-CGameObject* CUI_Monster_Panel::Clone(void* pArg)
+CGameObject* CUI_Monster_Panel::Clone(const _uint _iSceneID, void* pArg)
 {
 	CUI_Monster_Panel* pInstance = new CUI_Monster_Panel(*this);
-	if (FAILED(pInstance->NativeConstruct(pArg)))
+	if (FAILED(pInstance->NativeConstruct(_iSceneID, pArg)))
 	{
 		MSGBOX("Failed to Creating Clone CUI_Monster_Panel");
 		Safe_Release(pInstance);

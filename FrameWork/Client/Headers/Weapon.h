@@ -15,7 +15,7 @@ protected:
 
 public:
 	virtual HRESULT NativeConstruct_Prototype() override;
-	virtual HRESULT NativeConstruct(void* _pArg = nullptr) override;
+	virtual HRESULT NativeConstruct(const _uint _iSceneID, void* _pArg = nullptr) override;
 	virtual _int Tick(_double _dDeltaTime) override;
 	virtual _int LateTick(_double _dDeltaTime) override;
 	virtual HRESULT Render() override;
@@ -25,7 +25,7 @@ public:
 	const EType Get_Type() const;
 
 	void Set_Owner(CGameObject* _pOwner);
-	void Set_OwnerPivotMatrix(const _fmatrix& _smatPivot);
+	virtual void Set_OwnerPivotMatrix(const _fmatrix& _smatPivot);
 	virtual void Set_Equip(const _bool _isEquip, void* _pArg = nullptr);
 	void Set_FixedBone(CHierarchyNode* _pFixedBone);
 protected:
@@ -35,7 +35,7 @@ protected:
 protected:
 	CTransform* m_pLocalTransform = nullptr;
 	CModel* m_pModel = nullptr;
-	_matrix m_smatOwnerPivot = XMMatrixIdentity();
+	_float4x4 m_smatOwnerPivot;;
 
 	CGameObject* m_pOwner = nullptr;
 	CHierarchyNode* m_pFixedBone = nullptr;
@@ -46,7 +46,7 @@ protected:
 	wstring m_wstrName = L"";
 
 public:
-	virtual CGameObject* Clone(void* _pArg = nullptr) PURE;
+	virtual CGameObject* Clone(const _uint _iSceneID, void* _pArg = nullptr) PURE;
 	virtual void Free() override;
 };
 

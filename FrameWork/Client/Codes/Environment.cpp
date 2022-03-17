@@ -33,11 +33,11 @@ HRESULT CEnvironment::NativeConstruct_Prototype()
 	return S_OK;
 }
 
-HRESULT CEnvironment::NativeConstruct(void* pArg)
+HRESULT CEnvironment::NativeConstruct(const _uint _iSceneID, void* pArg)
 {
 	m_tEnvironmentDesc = (*(ENVIRONMENTDESC*)pArg);
 	m_tEnvironmentDesc.tInstanceDesc.iNumInstance = (_uint)m_tEnvironmentDesc.tInstanceDesc.vecMatrix.size();
-	if (FAILED(CLandScape::NativeConstruct(pArg)))
+	if (FAILED(CLandScape::NativeConstruct(_iSceneID, pArg)))
 		return E_FAIL;
 	
 	if (FAILED(Ready_Component()))
@@ -53,7 +53,7 @@ _int CEnvironment::Tick(_double TimeDelta)
 
 _int CEnvironment::LateTick(_double TimeDelta)
 {
-	m_pRenderer->Add_RenderGroup(CRenderer::RENDER_NONALPHA, this);
+	m_pRenderer->Add_RenderGroup(CRenderer::RENDER_ALPHA, this);
 	return _int();
 }
 
@@ -134,7 +134,7 @@ HRESULT CEnvironment::Ready_Component()
 
 	m_Nummeshcontainer = m_pInstanceMesh->Get_NumMeshContainer();
 
-	m_LightDesc = g_pGameInstance->Get_LightDesc(0);
+	//m_LightDesc = g_pGameInstance->Get_LightDesc(0);
 
 	return S_OK; 
 }
@@ -150,10 +150,10 @@ CEnvironment* CEnvironment::Create(ID3D11Device* pDevice, ID3D11DeviceContext* p
 	return pInstance;
 }
 
-CGameObject* CEnvironment::Clone(void* pArg)
+CGameObject* CEnvironment::Clone(const _uint _iSceneID, void* pArg)
 {
 	CEnvironment* pInstance = new CEnvironment(*this);
-	if (FAILED(pInstance->NativeConstruct(pArg)))
+	if (FAILED(pInstance->NativeConstruct(_iSceneID, pArg)))
 	{
 		MSGBOX("CEnvironment Clone Fail");
 		Safe_Release(pInstance);
