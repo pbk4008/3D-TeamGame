@@ -248,6 +248,9 @@
     <ClInclude Include="..\Headers\2H_HammerJogRightPivot180.h" />
     <ClInclude Include="..\Headers\2H_HammerJogRightStart.h" />
     <ClInclude Include="..\Headers\BackGround.h" />
+    <ClInclude Include="..\Headers\Bastion_2HSword_Chaser.h" />
+    <ClInclude Include="..\Headers\Bastion_2HSword_Dash.h" />
+    <ClInclude Include="..\Headers\Bastion_2HSword_Idle.h" />
     <ClInclude Include="..\Headers\Boss_Bastion_Judicator.h" />
     <ClInclude Include="..\Headers\Camera_Silvermane.h" />
     <ClInclude Include="..\Headers\Camera_Debug.h" />
@@ -270,6 +273,7 @@
     <ClInclude Include="..\Headers\Monster_BronzeAnimus.h" />
     <ClInclude Include="..\Headers\Monster_Crawler.h" />
     <ClInclude Include="..\Headers\Monster_EarthAberrant.h" />
+    <ClInclude Include="..\Headers\Monster_FSM.h" />
     <ClInclude Include="..\Headers\Needle.h" />
     <ClInclude Include="..\Headers\Plane_Test.h" />
     <ClInclude Include="..\Headers\Shield.h" />
@@ -403,6 +407,9 @@
     <ClCompile Include="..\Codes\2H_Hammer_EquipOn.cpp" />
     <ClCompile Include="..\Codes\BackGround.cpp" />
     <ClCompile Include="..\Codes\1H_SwordAttackNormalR2_Start.cpp" />
+    <ClCompile Include="..\Codes\Bastion_2HSword_Chaser.cpp" />
+    <ClCompile Include="..\Codes\Bastion_2HSword_Dash.cpp" />
+    <ClCompile Include="..\Codes\Bastion_2HSword_Idle.cpp" />
     <ClCompile Include="..\Codes\Client_Observer.cpp" />
     <ClCompile Include="..\Codes\Client_Trigger.cpp" />
     <ClCompile Include="..\Codes\Boss_Bastion_Judicator.cpp" />
@@ -426,6 +433,7 @@
     <ClCompile Include="..\Codes\Monster_BronzeAnimus.cpp" />
     <ClCompile Include="..\Codes\Monster_Crawler.cpp" />
     <ClCompile Include="..\Codes\Monster_EarthAberrant.cpp" />
+    <ClCompile Include="..\Codes\Monster_FSM.cpp" />
     <ClCompile Include="..\Codes\Needle.cpp" />
     <ClCompile Include="..\Codes\Plane_Test.cpp" />
     <ClCompile Include="..\Codes\Shield.cpp" />

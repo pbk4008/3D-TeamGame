@@ -13,13 +13,16 @@ protected:
 
 public:
 	void Set_PlayerWordlMat(_fmatrix _matWorld);
+	void Set_PlayerPos(_fvector _vecPos);
+	void Set_PlayerAttack(_bool _isAttack);
 
 public:
 	_float4x4 m_matWorld;
+	_float3	  m_fPos;
+	_bool	  m_bAttack = false;
 
 public:
 	virtual void Free(void) override;
 };
-
 
 #endif // Client_Observer_h__

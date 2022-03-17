@@ -80,7 +80,7 @@ HRESULT CPlane_Test::Ready_Components()
 
 	/* Com_Texture  */
 	wstring TexTag = L"Plane_Texture";
-	m_pTexture = (CTexture*)g_pGameInstance->Clone_Component((_uint)SCENEID::SCENE_TEST_JS, L"Plane_Texture", &TexTag);
+	m_pTexture = (CTexture*)g_pGameInstance->Clone_Component((_uint)SCENEID::SCENE_TEST_YM, L"Plane_Texture", &TexTag);
 
 	return S_OK;
 }

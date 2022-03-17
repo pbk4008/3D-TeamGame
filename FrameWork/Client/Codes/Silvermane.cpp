@@ -201,8 +201,6 @@ _int CSilvermane::Tick(_double _dDeltaTime)
 	//		return iProgress;
 	//}
 
-	g_pObserver->Set_PlayerWordlMat(m_pTransform->Get_WorldMatrix());
-
 	return _int();
 }
 
@@ -232,6 +230,9 @@ _int CSilvermane::LateTick(_double _dDeltaTime)
 	//	if (NO_EVENT != iProgress) 
 	//		return iProgress;
 	//}
+
+	g_pObserver->Set_PlayerPos(m_pTransform->Get_State(CTransform::STATE_POSITION));
+
 
 	return _int();
 }
@@ -290,7 +291,7 @@ HRESULT CSilvermane::Ready_Components()
 	m_pTransform->Set_TransformDesc(tTransformDesc);
 
 	// 모델
-	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_TEST_YM, L"Model_Silvermane", L"Model", (CComponent**)&m_pModel)))
+	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_TEST_JS, L"Model_Silvermane", L"Model", (CComponent**)&m_pModel)))
 		return E_FAIL;
 	m_pModel->Add_Material(g_pGameInstance->Get_Material(L"Mtrl_Silvermane_Top"), 0);
 	m_pModel->Add_Material(g_pGameInstance->Get_Material(L"Mtrl_Silvermane_Down"), 1);
@@ -298,7 +299,7 @@ HRESULT CSilvermane::Ready_Components()
 	m_pModel->Add_Material(g_pGameInstance->Get_Material(L"Mtrl_Silvermane_Hair"), 3);
 
 	// 에니메이션 컨트롤러
-	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_TEST_YM, L"Com_AnimationController", L"AnimationController", (CComponent**)&m_pAnimationController)))
+	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_TEST_JS, L"Com_AnimationController", L"AnimationController", (CComponent**)&m_pAnimationController)))
 		return E_FAIL;
 	m_pAnimationController->Set_GameObject(this);
 	m_pAnimationController->Set_Model(m_pModel);
@@ -306,7 +307,7 @@ HRESULT CSilvermane::Ready_Components()
 	m_pAnimationController->Set_MoveSpeed(2.f);
 
 	// 스테이트 컨트롤러
-	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_TEST_YM, L"Com_StateController", L"StateController", (CComponent**)&m_pStateController)))
+	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_TEST_JS, L"Com_StateController", L"StateController", (CComponent**)&m_pStateController)))
 		return E_FAIL;
 	m_pStateController->Set_GameObject(this);
 
@@ -318,7 +319,7 @@ HRESULT CSilvermane::Ready_Components()
 	tCharacterControllerDesc.fDynamicFriction = 0.5f;
 	tCharacterControllerDesc.fRestitution = 0.f;
 	tCharacterControllerDesc.pGameObject = this;
-	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_TEST_YM, L"Com_CharacterController", L"CharacterController", (CComponent**)&m_pCharacterController, &tCharacterControllerDesc)))
+	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_TEST_JS, L"Com_CharacterController", L"CharacterController", (CComponent**)&m_pCharacterController, &tCharacterControllerDesc)))
 		return E_FAIL;
 	m_pCharacterController->Set_OwnerTransform(m_pTransform);
 
