@@ -131,6 +131,9 @@
 
 // Attack
 #include "Shield_SupermanPunchStraight.h"
+
+//////////////////////////////////////////// Jump
+#include "Traverse_Jump400Jog.h"
 #pragma endregion
 
 
@@ -163,6 +166,8 @@ HRESULT CSilvermane::NativeConstruct(const _uint _iSceneID, void* _pArg)
 		return E_FAIL;
 	if (FAILED(Ready_Weapons())) 
 		return E_FAIL;
+
+	g_pObserver->Set_PlayerTransCom(m_pTransform);
 
 	return S_OK;
 }
@@ -543,6 +548,9 @@ HRESULT CSilvermane::Ready_States()
 	if (FAILED(m_pStateController->Add_State(L"Shield_SupermanPunchStraight", CShield_SupermanPunchStraight::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 #pragma endregion
+	// «Ǫ
+	if (FAILED(m_pStateController->Add_State(L"Traverse_Jump400Jog", CTraverse_Jump400Jog::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
 
 	for (auto& pair : m_pStateController->Get_States())
 	{

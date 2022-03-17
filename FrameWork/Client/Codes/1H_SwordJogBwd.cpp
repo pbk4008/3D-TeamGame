@@ -97,7 +97,7 @@ _int C1H_SwordJogBwd::KeyCheck(const _double& _dDeltaTime)
 	}
 	else if (g_pGameInstance->getkeyPress(DIK_W))
 	{
-		if (FAILED(m_pStateController->Change_State(L"1H_SwordBwdPivot180")))
+		if (FAILED(m_pStateController->Change_State(L"1H_SwordJogBwdPivot180")))
 			return -1;
 		return STATE_CHANGE;
 	}

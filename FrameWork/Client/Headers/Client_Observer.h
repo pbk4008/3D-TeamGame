@@ -15,11 +15,12 @@ public:
 	void Set_PlayerWordlMat(_fmatrix _matWorld);
 	void Set_PlayerPos(_fvector _vecPos);
 	void Set_PlayerAttack(_bool _isAttack);
-
+	void Set_PlayerTransCom(CTransform* _pTransCom);
 public:
 	_float4x4 m_matWorld;
 	_float3	  m_fPos;
 	_bool	  m_bAttack = false;
+	CTransform* m_pPlayerTrans = nullptr;
 
 public:
 	virtual void Free(void) override;

@@ -25,32 +25,33 @@ HRESULT CStage1::NativeConstruct()
 		return E_FAIL;
 	}*/
 
-	//if (FAILED(Ready_Player(L"Layer_Silvermane")))
-	//{
-	//	return E_FAIL;
-	//}
-	//if (FAILED(Ready_Boss(L"Layer_Boss")))
-	//{
-	//	return E_FAIL;
-	//}
-	if (FAILED(Ready_Monster(L"Layer_Monster")))
+	if (FAILED(Ready_Player(L"Layer_Silvermane")))
 	{
 		return E_FAIL;
 	}
-	//if (FAILED(Ready_UI(L"Layer_UI")))
-	//{
-	//	return E_FAIL;
-	//}
 
-	////Data
-	//if (FAILED(Ready_Data_UI(L"../bin/SaveData/UI/UI.dat")))
+	if (FAILED(Ready_Boss(L"Layer_Boss")))
+	{
+		return E_FAIL;
+	}
+	//if (FAILED(Ready_Monster(L"Layer_Monster")))
 	//{
 	//	return E_FAIL;
 	//}
-	//if (FAILED(Ready_Data_Effect(L"../bin/SaveData/Effect/Effect_Explosion.dat")))
-	//{
-	//	return E_FAIL;
-	//}
+	if (FAILED(Ready_UI(L"Layer_UI")))
+	{
+		return E_FAIL;
+	}
+
+	//Data
+	if (FAILED(Ready_Data_UI(L"../bin/SaveData/UI/UI.dat")))
+	{
+		return E_FAIL;
+	}
+	if (FAILED(Ready_Data_Effect(L"../bin/SaveData/Effect/Effect_Explosion.dat")))
+	{
+		return E_FAIL;
+	}
 
 	//if (FAILED(Ready_Trigger_Lod(L"../bin/SaveData/Trigger/Stage1_LodTri.dat")))
 	//	return E_FAIL;
@@ -122,9 +123,9 @@ HRESULT CStage1::Ready_Camera(const _tchar* LayerTag)
 
 HRESULT CStage1::Ready_Player(const _tchar* LayerTag)
 {
-	// 네비메쉬
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Plane", L"Proto_GameObject_Plane_Test")))
-		return E_FAIL;
+	//// 네비메쉬
+	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Plane", L"Proto_GameObject_Plane_Test")))
+	//	return E_FAIL;
 
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Proto_GameObject_Silvermane")))
 		return E_FAIL;
