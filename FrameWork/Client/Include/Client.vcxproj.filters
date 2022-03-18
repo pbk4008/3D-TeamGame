@@ -327,7 +327,6 @@
     </Filter>
     <Filter Include="02.GameObject\95.Monster\Bastion_Sword\00.State\08.Walk">
       <UniqueIdentifier>{fe36a500-8b7c-4714-bff8-ed49386ac515}</UniqueIdentifier>
->>>>>>> main
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -868,7 +867,6 @@
     </ClInclude>
     <ClInclude Include="..\Headers\Bastion_Sword_Walk.h">
       <Filter>02.GameObject\95.Monster\Bastion_Sword\00.State\08.Walk</Filter>
->>>>>>> main
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1386,7 +1384,6 @@
     </ClCompile>
     <ClCompile Include="..\Codes\Bastion_Sword_Walk.cpp">
       <Filter>02.GameObject\95.Monster\Bastion_Sword\00.State\08.Walk</Filter>
->>>>>>> main
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

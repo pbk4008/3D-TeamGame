@@ -70,7 +70,7 @@ HRESULT CBastion_2HSword_Rage::ExitState()
 
 void CBastion_2HSword_Rage::Look_Player(void)
 {
-	_fvector vMonsterPos = m_pTransform->Get_State(CTransform::STATE::STATE_POSITION);
+	/*_fvector vMonsterPos = m_pTransform->Get_State(CTransform::STATE::STATE_POSITION);
 	_fvector vDist = vMonsterPos - XMLoadFloat3(&g_pObserver->m_fPos);
 	_float fDistToPlayer = XMVectorGetX(XMVector3Length(vDist));
 
@@ -81,7 +81,7 @@ void CBastion_2HSword_Rage::Look_Player(void)
 	}
 
 	if (TRUE == g_pObserver->m_bAttack)
-		dynamic_cast<CMonster_Bastion_2HSword*>(m_pMonster)->m_iHp -= 1;
+		dynamic_cast<CMonster_Bastion_2HSword*>(m_pMonster)->m_iHp -= 1;*/
 
 }
 

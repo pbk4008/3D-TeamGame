@@ -101,11 +101,11 @@ void CBastion_2HSword_Attack::Look_Player(void)
 		m_pStateController->Change_State(L"Chaser");
 	}
 
-	if (TRUE == g_pObserver->m_bAttack)
-	{
-		m_pStateController->Change_State(L"Dash");
-		dynamic_cast<CMonster_Bastion_2HSword*>(m_pMonster)->m_iHp -= 1;
-	}
+	//if (TRUE == g_pObserver->m_bAttack)
+	//{
+	//	m_pStateController->Change_State(L"Dash");
+	//	dynamic_cast<CMonster_Bastion_2HSword*>(m_pMonster)->m_iHp -= 1;
+	//}
 }
 
 void CBastion_2HSword_Attack::Look_Monster(void)

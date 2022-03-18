@@ -46,7 +46,6 @@ protected:
 	virtual void Look_Player(void); /* 플레이어 상태 추적 */
 	virtual void Look_Monster(void); /* 몬스터 자신의 상태 추적 */
 
-
 protected:
 	CAnimator*  m_pAnimator  = nullptr;
 	CActor*		m_pMonster   = nullptr;

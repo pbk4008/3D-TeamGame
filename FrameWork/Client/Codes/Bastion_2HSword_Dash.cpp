@@ -80,8 +80,8 @@ void CBastion_2HSword_Dash::Look_Player(void)
 		m_pStateController->Change_State(L"Chaser");
 	}
 
-	if (TRUE == g_pObserver->m_bAttack)
-		dynamic_cast<CMonster_Bastion_2HSword*>(m_pMonster)->m_iHp -= 1;
+	/*if (TRUE == g_pObserver->m_bAttack)
+		dynamic_cast<CMonster_Bastion_2HSword*>(m_pMonster)->m_iHp -= 1;*/
 
 }
 
