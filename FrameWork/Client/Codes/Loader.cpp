@@ -903,6 +903,13 @@ HRESULT CLoader::Ready_Test_YM()
 	{
 		return E_FAIL;
 	}
+
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_TEST_YM, L"Model_Bastion_2HSword_Bin", CModel::Create(m_pDevice, m_pDeviceContext,
+		L"../bin/Resources/Mesh/Bastion_2HSword/Bastion_2HSword_Bin.fbx", CModel::TYPE_ANIM, true))))
+	{
+		return E_FAIL;
+	}
+
 	matPivot = XMMatrixIdentity();
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_TEST_YM, L"Model_Needle", CModel::Create(m_pDevice, m_pDeviceContext,
 		"../bin/Resources/Mesh/Needle/", "Needle.fbx",
@@ -926,15 +933,7 @@ HRESULT CLoader::Ready_Test_YM()
 	}
 
 
-	matPivot = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(180.f));
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_TEST_YM, L"Model_Bastion_2HSword", CModel::Create(m_pDevice, m_pDeviceContext,
-		"../bin/Resources/Mesh/Bastion_2HSword/", "Bastion_2HSword.fbx",
-		L"../../Reference/ShaderFile/Shader_Mesh.hlsl",
-		matPivot,
-		CModel::TYPE_ANIM, true))))
-	{
-		return E_FAIL;
-	}
+
 	matPivot = XMMatrixIdentity();
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_TEST_YM, L"Model_RetributionBlade", CModel::Create(m_pDevice, m_pDeviceContext,
 		"../bin/Resources/Mesh/RetributionBlade/", "RetributionBlade(2H).fbx",

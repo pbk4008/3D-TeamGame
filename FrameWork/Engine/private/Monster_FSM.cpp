@@ -21,6 +21,7 @@ _int CMonster_FSM::Tick(const _double& _dDeltaTime)
 		return iProgress;
 
 	Look_Player();
+	Look_Monster();
 
 	return _int();
 }
@@ -59,6 +60,10 @@ HRESULT CMonster_FSM::ExitState()
 }
 
 void CMonster_FSM::Look_Player(void)
+{
+}
+
+void CMonster_FSM::Look_Monster(void)
 {
 }
 

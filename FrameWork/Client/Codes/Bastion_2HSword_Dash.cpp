@@ -80,6 +80,15 @@ void CBastion_2HSword_Dash::Look_Player(void)
 		m_pStateController->Change_State(L"Chaser");
 	}
 
+	if (TRUE == g_pObserver->m_bAttack)
+		dynamic_cast<CMonster_Bastion_2HSword*>(m_pMonster)->m_iHp -= 1;
+
+}
+
+void CBastion_2HSword_Dash::Look_Monster(void)
+{
+	if (0 == dynamic_cast<CMonster_Bastion_2HSword*>(m_pMonster)->m_iHp)
+		m_pStateController->Change_State(L"Rage");
 }
 
 CBastion_2HSword_Dash* CBastion_2HSword_Dash::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext, void* _pArg)

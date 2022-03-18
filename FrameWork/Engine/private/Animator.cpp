@@ -46,6 +46,7 @@ HRESULT CAnimator::NativeConstruct(void* pArg)
 
 	m_pController->Set_Model(tDesc.pModel);
 	m_pController->Set_Transform(tDesc.pTransform);
+	m_pController->Set_MoveSpeed(40.f);
 
 	m_pHead = CAnimNode::Create(0, nullptr, false,false,false,ERootOption::Max);
 	m_vecAnimNode.emplace_back(m_pHead->Get_Index());
@@ -53,7 +54,6 @@ HRESULT CAnimator::NativeConstruct(void* pArg)
 		return E_FAIL;
 
 	m_pCulAnimNode = m_pHead;
-
 
 	return S_OK;
 }

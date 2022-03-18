@@ -23,6 +23,7 @@ public:
 
 public:
 	virtual void Look_Player(void) override;
+	virtual void Look_Monster(void) override;
 
 public:
 	static CBastion_2HSword_Chaser* Create(ID3D11Device * _pDevice, ID3D11DeviceContext * _pDeviceContext, void* _pArg = nullptr);

@@ -274,14 +274,17 @@
     <Filter Include="02.GameObject\98.Player\00.Silvermane\State\Jump">
       <UniqueIdentifier>{c46bf2a8-6d72-4573-8057-fad1bf3781e0}</UniqueIdentifier>
     </Filter>
-	<Filter Include="02.GameObject\95.Monster\Bastion_2HSword\State_2HSword\Rage">
-		<UniqueIdentifier>{bd8eebf8-c00f-4303-9ddc-b43dfb509314}</UniqueIdentifier>
-	</Filter>
+    <Filter Include="02.GameObject\95.Monster\Bastion_2HSword\State_2HSword\Rage">
+      <UniqueIdentifier>{bd8eebf8-c00f-4303-9ddc-b43dfb509314}</UniqueIdentifier>
+    </Filter>
     <Filter Include="02.GameObject\93.Boss\00.MiddleBoss\State">
       <UniqueIdentifier>{8a29aee6-6d31-4f13-bfdb-45f715488804}</UniqueIdentifier>
     </Filter>
     <Filter Include="02.GameObject\93.Boss\00.MiddleBoss\State\Rage">
       <UniqueIdentifier>{78558ab8-2fff-4b33-ab1b-2e33a7ffd7ca}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\95.Monster\Bastion_2HSword\State_2HSword\Rage\Rage_Attack">
+      <UniqueIdentifier>{b13c53f4-6c0a-428b-b366-9dd68df48dd5}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -766,9 +769,6 @@
     <ClInclude Include="..\Headers\Bastion_2HSword_Chaser.h">
       <Filter>02.GameObject\95.Monster\Bastion_2HSword\State_2HSword\Chaser</Filter>
     </ClInclude>
-    <ClInclude Include="..\Headers\Bastion_2HSword_Attack.h">
-      <Filter>02.GameObject\95.Monster\Bastion_2HSword\State_2HSword\Attack</Filter>
-    </ClInclude>
     <ClInclude Include="..\Headers\TestScene_Sb.h">
       <Filter>01.Scene\100.TestScene_SB</Filter>
     </ClInclude>
@@ -780,6 +780,18 @@
     </ClInclude>
     <ClInclude Include="..\Headers\MidBoss_Rage.h">
       <Filter>02.GameObject\93.Boss\00.MiddleBoss\State\Rage</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Bastion_2HSword_Death.h">
+      <Filter>02.GameObject\95.Monster\Bastion_2HSword\State_2HSword\Death</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Bastion_2HSword_Rage.h">
+      <Filter>02.GameObject\95.Monster\Bastion_2HSword\State_2HSword\Rage</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Bastion_2HSword_Attack_Rage.h">
+      <Filter>02.GameObject\95.Monster\Bastion_2HSword\State_2HSword\Rage\Rage_Attack</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Bastion_2HSword_Attack.h">
+      <Filter>02.GameObject\95.Monster\Bastion_2HSword\State_2HSword\Attack</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1241,9 +1253,6 @@
     <ClCompile Include="..\Codes\Bastion_2HSword_Chaser.cpp">
       <Filter>02.GameObject\95.Monster\Bastion_2HSword\State_2HSword\Chaser</Filter>
     </ClCompile>
-    <ClCompile Include="..\Codes\Bastion_2HSword_Attack.cpp">
-      <Filter>02.GameObject\95.Monster\Bastion_2HSword\State_2HSword\Attack</Filter>
-    </ClCompile>
     <ClCompile Include="..\Codes\TestScene_Sb.cpp">
       <Filter>01.Scene\100.TestScene_SB</Filter>
     </ClCompile>
@@ -1255,6 +1264,18 @@
     </ClCompile>
     <ClCompile Include="..\Codes\MidBoss_Rage.cpp">
       <Filter>02.GameObject\93.Boss\00.MiddleBoss\State\Rage</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Bastion_2HSword_Death.cpp">
+      <Filter>02.GameObject\95.Monster\Bastion_2HSword\State_2HSword\Death</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Bastion_2HSword_Rage.cpp">
+      <Filter>02.GameObject\95.Monster\Bastion_2HSword\State_2HSword\Rage</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Bastion_2HSword_Attack_Rage.cpp">
+      <Filter>02.GameObject\95.Monster\Bastion_2HSword\State_2HSword\Rage\Rage_Attack</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Bastion_2HSword_Attack.cpp">
+      <Filter>02.GameObject\95.Monster\Bastion_2HSword\State_2HSword\Attack</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
