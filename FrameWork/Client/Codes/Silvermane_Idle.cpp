@@ -39,7 +39,7 @@ _int CSilvermane_Idle::Tick(const _double& _dDeltaTime)
 	//	}
 	//}
 
-	g_pObserver->Set_PlayerAttack(FALSE);
+	//g_pObserver->Set_PlayerAttack(FALSE);
 
 	return _int();
 }

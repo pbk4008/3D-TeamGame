@@ -29,8 +29,8 @@ public:
 	_float Get_Scale(STATE eState) const { return XMVectorGetX(XMVector3Length(Get_State(eState))); }
 	_fmatrix Get_WorldMatrix() const { return XMLoadFloat4x4(&m_WorldMatrix); }
 	_fmatrix Get_WorldMatrixInverse() const { return XMMatrixInverse(nullptr, XMLoadFloat4x4(&m_WorldMatrix)); }
-	const _fmatrix& Get_PivotMatrix() const { return m_smatPivot; }
-	const _fmatrix Get_CombinedMatrix() const { return m_smatPivot * XMLoadFloat4x4(&m_WorldMatrix); }
+	const _fmatrix Get_PivotMatrix() const { return XMLoadFloat4x4(&m_matPivot); }
+	const _fmatrix Get_CombinedMatrix() const { return XMLoadFloat4x4(&m_matPivot) * XMLoadFloat4x4(&m_WorldMatrix); }
 
 	void Set_WorldMatrix(_fmatrix matWorld) { XMStoreFloat4x4(&m_WorldMatrix, matWorld); }
 	void Set_State(STATE eState, _fvector vState) {	XMStoreFloat4((_float4*)&m_WorldMatrix.m[eState][0], vState); }		
@@ -79,7 +79,7 @@ public: /* For.CharacterController */
 
 private:
 	_float4x4				m_WorldMatrix;	
-	_matrix					m_smatPivot = XMMatrixIdentity();
+	_float4x4				m_matPivot;
 	TRANSFORMDESC			m_TransformDesc;
 
 	_float3					m_vVelocity = { 0.f, 0.f, 0.f };

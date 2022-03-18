@@ -71,10 +71,10 @@ _int CAnimator::Tick(_double dDeltaTime)
 	{
 		if (!m_pCulAnimNode->Get_Loop() && m_pController->Is_Finished())
 			Change_Animation(m_pCulAnimNode->Get_AutoIndex());
-		/*if (m_pCulAnimNode->Is_LoopChange())
+		if (m_pCulAnimNode->Is_LoopChange())
 			m_pCulAnimNode->Change_Loop(true);
-		if (m_pController->Is_Finished())
-			Change_Animation(m_vecAnimNodeName[m_pCulAnimNode->Get_AutoIndex()]);*/
+		//if (m_pController->Is_Finished())
+		//	Change_Animation(m_vecAnimNodeName[m_pCulAnimNode->Get_AutoIndex()]);
 	}
 	return _int();
 }

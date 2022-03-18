@@ -120,7 +120,6 @@ _fmatrix CWeapon::Remove_Scale(_fmatrix matTransform)
 
 void CWeapon::Free()
 {
-	Safe_Release(m_pLocalTransform);
 	Safe_Release(m_pModel);
 	Safe_Release(m_pLocalTransform);
 

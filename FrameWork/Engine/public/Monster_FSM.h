@@ -8,9 +8,20 @@ class CAnimator;
 class CModel;
 class CActor;
 class CTransform;
+class CStateController;
 
 class ENGINE_DLL CMonster_FSM abstract : public CState
 {
+public:
+	typedef struct tagStateFSMDesc
+	{
+		CAnimator* pAnimator;
+		CStateController* pController;
+	}FSMDESC;
+	typedef struct tagStateFSMMoveDesc : public tagStateFSMDesc
+	{
+		CTransform* pTransform;
+	}FSMMOVEDESC;
 protected:
 	explicit CMonster_FSM(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext);
 	virtual ~CMonster_FSM() = default;

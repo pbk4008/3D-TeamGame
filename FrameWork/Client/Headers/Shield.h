@@ -22,10 +22,14 @@ private:
 	HRESULT Ready_Components();
 	_int Attach_FixedBone(const _double& _dDeltaTime);
 	_int Attach_Owner(const _double& _dDeltaTime);
+
+public:
 	virtual void Set_Equip(const _bool _isEquip, void* _pArg = nullptr);
+	virtual void Set_EquipAnim(const _bool _isEquip);
 
 private:
-	_matrix m_smatPivot = XMMatrixIdentity();
+	_float4x4 m_matPivot;
+	CAnimationController* m_pAnimationController = nullptr;
 
 public:
 	static CShield* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext);

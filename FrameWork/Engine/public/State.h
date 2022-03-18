@@ -20,7 +20,9 @@ public:
 	virtual HRESULT Render();
 
 	virtual HRESULT EnterState();
+	virtual HRESULT EnterState(void* pArg);
 	virtual HRESULT ExitState();
+	virtual HRESULT ExitState(void* pArg);
 
 public:
 	const wstring& Get_Tag() const;

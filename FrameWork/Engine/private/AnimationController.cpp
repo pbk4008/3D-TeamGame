@@ -27,6 +27,7 @@ HRESULT CAnimationController::NativeConstruct(void* _pArg)
 	if (FAILED(__super::NativeConstruct(_pArg)))
 		return E_FAIL;
 
+	XMStoreFloat4x4(&m_matPivot, XMMatrixIdentity());
 	return S_OK;
 }
 
@@ -103,6 +104,11 @@ const _bool CAnimationController::Get_ChangeAnimation() const
 	return m_isChangeAnim;
 }
 
+const string& CAnimationController::Get_CurAnimTag() const
+{
+	return m_strCurAnimTag;
+}
+
 void CAnimationController::Set_GameObject(CGameObject* _pGameObject)
 {
 	m_pGameObject = _pGameObject;
@@ -130,7 +136,7 @@ void CAnimationController::Set_TransformMove(const _bool _isTransformMove)
 
 void CAnimationController::Set_PivotMatrix(const _fmatrix& _smatPivot)
 {
-	m_smatPivot = _smatPivot;
+	XMStoreFloat4x4(&m_matPivot, _smatPivot);
 }
 
 void CAnimationController::Set_RootMotion(const _bool _isRootMotion, const _bool _isTransformMove, const ERootOption _eRootOption)
@@ -419,7 +425,7 @@ const _int CAnimationController::Move_Transform(const _double& _dDeltaTime)
 			}
 
 			//svVelocity *= _dDeltaTime;
-			svQuaternian = XMVector4Transform(svQuaternian, m_smatPivot);
+			svQuaternian = XMVector4Transform(svQuaternian, XMLoadFloat4x4(&m_matPivot));
 
 			_float3 vVelocity, vBonePosition, vEuler, vRotation;
 			_float4 vQuaternian;
@@ -462,21 +468,12 @@ const _int CAnimationController::Move_Transform(const _double& _dDeltaTime)
 			svLook = m_pTransform->Get_State(CTransform::STATE_LOOK);
 
 			svVelocity = XMLoadFloat3(&vBonePosition);
-			svVelocity = XMVector4Transform(svVelocity, m_smatPivot * m_pTransform->Get_PivotMatrix());
+			svVelocity = XMVector4Transform(svVelocity, XMLoadFloat4x4(&m_matPivot) * m_pTransform->Get_PivotMatrix());
 
 			XMStoreFloat3(&vVelocity, svVelocity);
 			m_pTransform->Go_Right((_float)vVelocity.x * _dDeltaTime * m_fMoveSpeed);
 			m_pTransform->Go_Up((_float)vVelocity.y * _dDeltaTime* m_fMoveSpeed);
 			m_pTransform->Go_Straight((_float)vVelocity.z * _dDeltaTime* m_fMoveSpeed);
-
-			// 요 아래는 디버그 용이야
-			_float3 vPosition = { 0.f, 0.f, 0.f };
-			XMStoreFloat3(&vBonePosition, svPosition);
-
-			wstring wstrBonePosition = L"FixedBonePosition : ";
-			wstrBonePosition += wstrBonePosition + to_wstring(vBonePosition.x) + L", " + to_wstring(vBonePosition.y) + L", " + to_wstring(vBonePosition.z);
-			wstring wstrPosition = L"Position : ";
-			wstrPosition += to_wstring(vPosition.x) + L", " + to_wstring(vPosition.y) + L", " + to_wstring(vPosition.z);
 		}
 	}
 
@@ -547,7 +544,7 @@ const _int CAnimationController::Add_TransformVelocity(const _double& _dDeltaTim
 			}
 
 			//svVelocity *= _dDeltaTime;
-			svQuaternian = XMVector4Transform(svQuaternian, m_smatPivot);
+			svQuaternian = XMVector4Transform(svQuaternian, XMLoadFloat4x4(&m_matPivot));
 
 			_float3 vVelocity, vBonePosition, vEuler, vRotation;
 			_float4 vQuaternian;
@@ -590,7 +587,7 @@ const _int CAnimationController::Add_TransformVelocity(const _double& _dDeltaTim
 			svLook = m_pTransform->Get_State(CTransform::STATE_LOOK);
 
 			svVelocity = XMLoadFloat3(&vBonePosition);
-			svVelocity = XMVector4Transform(svVelocity, m_smatPivot * m_pTransform->Get_PivotMatrix());
+			svVelocity = XMVector4Transform(svVelocity, XMLoadFloat4x4(&m_matPivot) * m_pTransform->Get_PivotMatrix());
 			
 			_vector svWorldQuaterian = XMQuaternionNormalize(XMQuaternionRotationMatrix(m_pTransform->Get_WorldMatrix()));
 			_matrix svRotation = XMMatrixRotationQuaternion(svWorldQuaterian);
@@ -599,15 +596,6 @@ const _int CAnimationController::Add_TransformVelocity(const _double& _dDeltaTim
 			XMStoreFloat3(&vVelocity, svVelocity);
 			svVelocity *= m_fMoveSpeed;
 			m_pTransform->Add_Velocity(svVelocity);
-
-			// 요 아래는 디버그 용이야
-			_float3 vPosition = { 0.f, 0.f, 0.f };
-			XMStoreFloat3(&vBonePosition, svPosition);
-
-			wstring wstrBonePosition = L"FixedBonePosition : ";
-			wstrBonePosition += wstrBonePosition + to_wstring(vBonePosition.x) + L", " + to_wstring(vBonePosition.y) + L", " + to_wstring(vBonePosition.z);
-			wstring wstrPosition = L"Position : ";
-			wstrPosition += to_wstring(vPosition.x) + L", " + to_wstring(vPosition.y) + L", " + to_wstring(vPosition.z);
 		}
 	}
 
@@ -621,37 +609,7 @@ void CAnimationController::Reset_Animation()
 
 void CAnimationController::Render_Debug()
 {
-	if (FAILED(g_pGameInstance->Render_Font(TEXT("Font_Arial"), XMVectorSet(1.f, 0.0f, 0.f, 1.f), m_wstrPosition.c_str(), _float2(0.f, 80.f), _float2(0.8f, 0.8f))))
-		return;
 
-	if (m_pFixedBone)
-	{
-		if (FAILED(g_pGameInstance->Render_Font(TEXT("Font_Arial"), XMVectorSet(1.f, 0.f, 0.f, 1.f), m_wstrFixedBonePosition.c_str(), _float2(0.f, 40.f), _float2(0.8f, 0.8f))))
-			return;
-
-		m_wstrCurIndex = (to_wstring(m_iCurFixedBoneKeyFrameIndex));
-		if (FAILED(g_pGameInstance->Render_Font(TEXT("Font_Arial"), XMVectorSet(1.f, 0.0f, 0.f, 1.f), m_wstrCurIndex.c_str(), _float2(0.f, 160.f), _float2(0.8f, 0.8f))))
-			return;
-	}
-
-	if (m_pCurAnim)
-	{
-		m_wstrCurAnimTag.assign(m_strCurAnimTag.begin(), m_strCurAnimTag.end());
-		m_wstrCurAnimTag = m_wstrCurAnimTag.substr(m_wstrCurAnimTag.find_last_of(L"|") + 1);
-		if (FAILED(g_pGameInstance->Render_Font(TEXT("Font_Arial"), XMVectorSet(1.f, 0.0f, 0.f, 1.f), m_wstrCurAnimTag.c_str(), _float2(0.f, 200.f), _float2(0.8f, 0.8f))))
-			return;
-
-		m_wstrPreIndex = (to_wstring(m_iCurKeyFrameIndex));
-		if (FAILED(g_pGameInstance->Render_Font(TEXT("Font_Arial"), XMVectorSet(1.f, 0.0f, 0.f, 1.f), m_wstrPreIndex.c_str(), _float2(0.f, 120.f), _float2(0.8f, 0.8f))))
-			return;
-
-		if (m_pCurAnim->Is_Finished())
-			m_wstrIsFinished = L"true";
-		else
-			m_wstrIsFinished = L"false";
-		if (FAILED(g_pGameInstance->Render_Font(TEXT("Font_Arial"), XMVectorSet(1.f, 0.0f, 0.f, 1.f), m_wstrIsFinished.c_str(), _float2(0.f, 240.f), _float2(0.8f, 0.8f))))
-			return;
-	}
 }
 
 CAnimationController* CAnimationController::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
