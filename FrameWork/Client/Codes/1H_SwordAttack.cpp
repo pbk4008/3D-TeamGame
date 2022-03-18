@@ -47,6 +47,8 @@ HRESULT C1H_SwordAttack::EnterState()
 	if (FAILED(__super::EnterState()))
 		return E_FAIL;
 
+	g_pObserver->Get_PlayerIsAttack(TRUE);
+
 	return S_OK;
 }
 
