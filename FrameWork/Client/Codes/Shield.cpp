@@ -22,7 +22,7 @@ HRESULT CShield::NativeConstruct_Prototype()
 	m_wstrName = L"Shield";
 	m_eType = EType::Shield;
 
-	m_smatPivot = XMMatrixRotationRollPitchYaw(XMConvertToRadians(0.f), XMConvertToRadians(0.f), XMConvertToRadians(0.f)) * XMMatrixTranslation(0.f, 0.f, 0.f);
+	XMStoreFloat4x4(&m_matPivot, XMMatrixRotationRollPitchYaw(XMConvertToRadians(0.f), XMConvertToRadians(0.f), XMConvertToRadians(0.f)) * XMMatrixTranslation(0.f, 0.f, 0.f));
 
 	return S_OK;
 }
@@ -49,6 +49,8 @@ _int CShield::Tick(_double _dDeltaTime)
 
 	Attach_FixedBone(_dDeltaTime);
 	Attach_Owner(_dDeltaTime);
+
+	m_pAnimationController->Tick(_dDeltaTime);
 
 	return _int();
 }
@@ -99,7 +101,16 @@ HRESULT CShield::Ready_Components()
 
 	if (FAILED(SetUp_Components(m_iSceneID, L"Model_Shield", L"Model", (CComponent**)&m_pModel)))
 		return E_FAIL;
+	_matrix matPivot = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationRollPitchYaw(XMConvertToRadians(-90.f), XMConvertToRadians(0.f), XMConvertToRadians(0.f));
+	m_pModel->Set_PivotMatrix(matPivot);
 	m_pModel->Add_Material(g_pGameInstance->Get_Material(L"Mtrl_Shield"), 0);
+
+	if (FAILED(SetUp_Components(m_iSceneID, L"Proto_Component_AnimationController", L"AnimationController", (CComponent**)&m_pAnimationController)))
+		return E_FAIL;
+	m_pAnimationController->Set_GameObject(this);
+	m_pAnimationController->Set_Model(m_pModel);
+	m_pAnimationController->Set_Transform(m_pTransform);
+	m_pAnimationController->Set_PlaySpeed(0.55f);
 
 	return S_OK;
 }
@@ -112,7 +123,7 @@ _int CShield::Attach_FixedBone(const _double& _dDeltaTime)
 		smatWorld *= XMLoadFloat4x4(&m_smatOwnerPivot);;
 
 		if (!m_isEquip)
-			smatWorld = m_smatPivot * smatWorld;
+			smatWorld = XMLoadFloat4x4(&m_matPivot) * smatWorld;
 
 		m_pLocalTransform->Set_WorldMatrix(smatWorld);
 	}
@@ -136,6 +147,19 @@ void CShield::Set_Equip(const _bool _isEquip, void* _pArg)
 {
 	__super::Set_Equip(_isEquip, _pArg);
 	m_bActive = _isEquip;
+}
+
+void CShield::Set_EquipAnim(const _bool _isEquip)
+{
+	switch (_isEquip)
+	{
+	case true:
+		m_pAnimationController->SetUp_NextAnimation("SK_shieldBase.ao|A_Spectral_Shield_Block_Start_Weapon", false);
+		break;
+	case false:
+		m_pAnimationController->SetUp_NextAnimation("SK_shieldBase.ao|A_Spectral_Shield_Block_End_Weapon", false);
+		break;
+	}
 }
 
 CShield* CShield::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
@@ -162,6 +186,7 @@ CGameObject* CShield::Clone(const _uint _iSceneID, void* _pArg)
 
 void CShield::Free()
 {
+	Safe_Release(m_pAnimationController);
 
 	__super::Free();
 }

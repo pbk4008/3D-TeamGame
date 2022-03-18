@@ -24,6 +24,7 @@ public:
 	virtual _int Tick(_double _dDeltaTime) override;
 	virtual _int LateTick(_double _dDeltaTime) override;
 	virtual HRESULT Render() override;
+	HRESULT Render_Debug();
 
 private:
 	HRESULT Ready_Components();
@@ -55,6 +56,7 @@ public: /* For.Weapon */
 
 public: /* For.Shield */
 	void Set_EquipShield(const _bool _isEquipShield);
+	void Set_EquipShieldAnim(const _bool _isEquipShield);
 
 private:
 	_int Trace_CameraLook(const _double& _dDeltaTime);

@@ -58,6 +58,7 @@ HRESULT CShield_BlockStart::EnterState()
 	m_pAnimationController->Set_RootMotion(true, true, ERootOption::XYZ);
 
 	m_pSilvermane->Set_EquipShield(true);
+	m_pSilvermane->Set_EquipShieldAnim(true);
 
 	m_pSilvermane->Set_TrasceCamera(false);
 

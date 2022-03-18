@@ -259,6 +259,7 @@
     <ClInclude Include="..\Headers\Effect_DashDust.h" />
     <ClInclude Include="..\Headers\Environment.h" />
     <ClInclude Include="..\Headers\Fury.h" />
+    <ClInclude Include="..\Headers\JumpNode.h" />
     <ClInclude Include="..\Headers\Level_Logo.h" />
     <ClInclude Include="..\Headers\Loader.h" />
     <ClInclude Include="..\Headers\Loading.h" />
@@ -406,8 +407,8 @@
     <ClCompile Include="..\Codes\2H_HammerJogRight.cpp" />
     <ClCompile Include="..\Codes\2H_HammerJogRightPivot180.cpp" />
     <ClCompile Include="..\Codes\2H_HammerJogRightStart.cpp" />
-    <ClCompile Include="..\Codes\2H_Hammer_EquipOff.cpp" />
-    <ClCompile Include="..\Codes\2H_Hammer_EquipOn.cpp" />
+    <ClCompile Include="..\Codes\2H_HammerEquipOff.cpp" />
+    <ClCompile Include="..\Codes\2H_HammerEquipOn.cpp" />
     <ClCompile Include="..\Codes\BackGround.cpp" />
     <ClCompile Include="..\Codes\1H_SwordAttackNormalR2_Start.cpp" />
     <ClCompile Include="..\Codes\Bastion_2HSword_Chaser.cpp" />
@@ -417,6 +418,7 @@
     <ClCompile Include="..\Codes\Client_Trigger.cpp" />
     <ClCompile Include="..\Codes\Boss_Bastion_Judicator.cpp" />
     <ClCompile Include="..\Codes\Fury.cpp" />
+    <ClCompile Include="..\Codes\JumpNode.cpp" />
     <ClCompile Include="..\Codes\Monster_Bastion_2HSword.cpp" />
     <ClCompile Include="..\Codes\Camera_Silvermane.cpp" />
     <ClCompile Include="..\Codes\DebugSystem.cpp" />

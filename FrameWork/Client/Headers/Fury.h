@@ -24,7 +24,7 @@ private:
 	_int Attach_Owner(const _double& _dDeltaTime);
 
 private:
-	_matrix m_smatPivot = XMMatrixIdentity();
+	_float4x4 m_matPivot;
 
 public:
 	static CFury* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext);

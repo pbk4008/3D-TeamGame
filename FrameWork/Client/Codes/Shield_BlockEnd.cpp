@@ -78,6 +78,7 @@ HRESULT CShield_BlockEnd::EnterState()
 	m_pAnimationController->SetUp_NextAnimation("SK_Silvermane.ao|A_Spectral_Shield_Block_End", false);
 	m_pAnimationController->Set_RootMotion(true, true, ERootOption::XYZ);
 
+	m_pSilvermane->Set_EquipShieldAnim(false);
 	m_pSilvermane->Set_TrasceCamera(false);
 	return S_OK;
 }

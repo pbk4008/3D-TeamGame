@@ -14,12 +14,12 @@ CTransform::CTransform(const CTransform & rhs)
 	: CComponent(rhs)
 	, m_WorldMatrix(rhs.m_WorldMatrix)
 {
-	
+	XMStoreFloat4x4(&m_matPivot, XMMatrixIdentity());
 }
 
 const _fvector CTransform::Get_CombinedState(const STATE _eState)
 {
-	_matrix smatCombined = m_smatPivot* XMLoadFloat4x4(&m_WorldMatrix);
+	_matrix smatCombined = XMLoadFloat4x4(&m_matPivot) * XMLoadFloat4x4(&m_WorldMatrix);
 	_float4x4 matCombined; XMStoreFloat4x4(&matCombined, smatCombined);
 
 	return XMLoadFloat4((_float4*)&matCombined.m[_eState][0]);
@@ -57,7 +57,7 @@ void CTransform::Set_TransformDesc(_float fSpeedPerSec, _float fAnglePerSec)
 
 void CTransform::Set_PivotMatrix(const _fmatrix& _matPivot)
 {
-	m_smatPivot = _matPivot;
+	XMStoreFloat4x4(&m_matPivot, _matPivot);
 }
 
 void CTransform::Go_Straight(_double TimeDelta, CNavigation * pNavigation)

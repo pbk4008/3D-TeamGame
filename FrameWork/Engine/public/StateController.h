@@ -26,6 +26,8 @@ public:
 public:
 	CGameObject* Get_GameObject() const;
 	unordered_map<wstring, CState*>& Get_States();
+	/* For.Debug */
+	const wstring& Get_CurStateTag() const;
 	
 	void Set_GameObject(CGameObject* _pGameObject);
 

@@ -16,18 +16,15 @@ CStateController::CStateController(const CStateController& _rhs)
 HRESULT CStateController::NativeConstruct_Prototype()
 {
 	if (FAILED(__super::NativeConstruct_Prototype()))
-	{
 		return E_FAIL;
-	}
+
 	return S_OK;
 }
 
 HRESULT CStateController::NativeConstruct(void* _pArg)
 {
 	if (FAILED(__super::NativeConstruct(_pArg)))
-	{
 		return E_FAIL;
-	}
 
 	return S_OK;
 }
@@ -36,6 +33,8 @@ _int CStateController::Tick(const _double& _dDeltaTime)
 {
 	if (!m_pCurState)
 		return -1;
+	if(m_isChange)
+		m_isChange = false;
 
 	_int iProgress = m_pCurState->Tick(_dDeltaTime);
 	if (0 != iProgress)
@@ -60,19 +59,8 @@ _int CStateController::LateTick(const _double& _dDeltaTime)
 
 HRESULT CStateController::Render()
 {
-#ifdef _DEBUG
-	if (m_pCurState)
-	{
-		if (FAILED(g_pGameInstance->Render_Font(TEXT("Font_Arial"), XMVectorSet(1.f, 0.0f, 0.f, 1.f), m_wstrCurStateTag.c_str(), _float2(0.f, 260.f), _float2(0.8f, 0.8f))))
-			return E_FAIL;
-	}
-#endif // _DEBUG
-
 	if (m_isChange)
-	{
-		m_isChange = false;
 		return NO_EVENT;
-	}
 
 	if (FAILED(m_pCurState->Render()))
 		return E_FAIL;
@@ -90,6 +78,11 @@ unordered_map<wstring, CState*>& CStateController::Get_States()
 	return m_mapStates;
 }
 
+const wstring& CStateController::Get_CurStateTag() const
+{
+	return m_wstrCurStateTag;
+}
+
 void CStateController::Set_GameObject(CGameObject* _pGameObject)
 {
 	m_pGameObject = _pGameObject;
@@ -99,9 +92,8 @@ HRESULT CStateController::Add_State(const wstring& _wstrStateTag, CState* _pStat
 {
 	auto& iter_find = m_mapStates.find(_wstrStateTag);
 	if (m_mapStates.end() != iter_find)
-	{
 		return E_FAIL;
-	}
+
 	m_mapStates.emplace(_wstrStateTag, _pState);
 
 	return S_OK;
@@ -113,9 +105,7 @@ HRESULT CStateController::Change_State(const wstring& _wstrStateTag, const EChan
 	{
 		CState* pState = m_mapStates[_wstrStateTag];
 		if (!pState)
-		{
 			return E_FAIL;
-		}
 
 		if (m_pCurState)
 		{
@@ -178,9 +168,7 @@ CComponent* CStateController::Clone(void* _pArg)
 void CStateController::Free()
 {
 	for (auto& pState : m_mapStates)
-	{
 		Safe_Release(pState.second);
-	}
 	m_mapStates.clear();
 
 	__super::Free();
