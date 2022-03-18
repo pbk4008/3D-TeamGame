@@ -41,6 +41,8 @@ private:
 	HRESULT Set_Weapon();
 	_int Change_State();
 private:
+	void Chase();
+private:
 	CModel* m_pModelCom = nullptr;
 	CAnimator* m_pAnimator = nullptr;
 	CCapsuleCollider* m_pCollider = nullptr;
@@ -49,6 +51,7 @@ private:
 	CStargazer* m_pWeapon = nullptr;
 private:
 	ANIM_TYPE m_eHitType = ANIM_TYPE::TYPE_END;//Hit¸¸ ÆÇÁ¤
+	wstring m_wstrCurState = L"";
 public:
 	static CMonster_Bastion_Sword* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext);
 	virtual CGameObject* Clone(const _uint _iSceneID, void* _pArg = nullptr) override;

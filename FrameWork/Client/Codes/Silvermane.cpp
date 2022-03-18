@@ -698,6 +698,11 @@ void CSilvermane::Set_PlusAngle(const _float _fAngle)
 	m_fPlusAngle = _fAngle;
 }
 
+void CSilvermane::Set_IsAttack(const _bool bAttack)
+{
+	m_isAttack = bAttack;
+}
+
 const _bool CSilvermane::Is_EquipWeapon() const
 {
 	return m_isEquipWeapon;
@@ -724,6 +729,11 @@ void CSilvermane::Add_PlusAngle(const _float _fDeltaAngle)
 
 	if (360.f < m_fPlusAngle || -360.f > m_fPlusAngle)
 		m_fPlusAngle = fmodf(m_fPlusAngle, 360.f);
+}
+
+const _bool CSilvermane::Get_IsAttack()
+{
+	return m_isAttack;
 }
 
 const _bool CSilvermane::Change_Weapon(const wstring& _name)

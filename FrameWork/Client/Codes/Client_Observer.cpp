@@ -51,6 +51,22 @@ _fvector CClient_Observer::Get_PlayerPos()
 	return vPos;
 }
 
+_bool CClient_Observer::Get_IsAttack()
+{
+	if (!m_pPlayer)
+		return false;
+
+	return m_pPlayer->Get_IsAttack();
+}
+
+void CClient_Observer::Set_IsAttack(const _bool bAttack)
+{
+	if (!m_pPlayer)
+		return;
+
+	m_pPlayer->Set_IsAttack(bAttack);
+}
+
 void CClient_Observer::Free(void)
 {
 	Safe_Release(m_pPlayer);

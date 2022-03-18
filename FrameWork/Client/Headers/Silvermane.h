@@ -41,9 +41,10 @@ public:
 	void Set_TrasceCamera(const _bool _isTraceCamera);
 	void Set_Camera(CCamera_Silvermane* _pCamera);
 	void Set_PlusAngle(const _float _fAngle);
-
+	void Set_IsAttack(const _bool bAttack);
 	void Add_PlusAngle(const _float _fDeltaAngle);
 
+	const _bool Get_IsAttack();
 public: /* For.Weapon */
 	const _bool Is_EquipWeapon() const;
 	const _bool Is_EquipShield() const;
@@ -70,6 +71,8 @@ private:
 
 	_bool m_isMove = false;
 	_bool m_isTraceCamera = true;
+	_bool m_isAttack = false;
+
 
 	_float m_fAngle = 0.f;
 	_float m_fPlusAngle = 0.f;
