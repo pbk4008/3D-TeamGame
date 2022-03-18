@@ -11,6 +11,9 @@
 #include "Bastion_Sword_Hit.h"
 #include "Bastion_Sword_Death.h"
 #include "Bastion_Sword_Groggy.h"
+#include "Bastion_Sword_Paring.h"
+#include "Bastion_Sword_Turn.h"
+#include "Bastion_Sword_Walk.h"
 
 CMonster_Bastion_Sword::CMonster_Bastion_Sword(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
 	:CActor(_pDevice, _pDeviceContext)
@@ -58,8 +61,13 @@ _int CMonster_Bastion_Sword::Tick(_double _dDeltaTime)
 	{
 		return -1;
 	}
+	//상태 컨트롤러 돌리기->애니메이터 자동으로 돌아감
 	m_pStateController->Tick(_dDeltaTime);
+
+	//무기 뼈 업데이트
 	m_pWeapon->Tick(_dDeltaTime);
+
+	//상태 갱신
 	Change_State();
 
 	return 0;
@@ -393,6 +401,14 @@ HRESULT CMonster_Bastion_Sword::Set_State_FSM()
 	if (FAILED(m_pStateController->Add_State(L"GROGGY", CBastion_Sword_Groggy::Create(m_pDevice, m_pDeviceContext, &tFSMDesc))))
 		return E_FAIL;
 
+	if (FAILED(m_pStateController->Add_State(L"Paring", CBastion_Sword_Paring::Create(m_pDevice, m_pDeviceContext, &tFSMDesc))))
+		return E_FAIL;
+
+	if (FAILED(m_pStateController->Add_State(L"Turn", CBastion_Sword_Turn::Create(m_pDevice, m_pDeviceContext, &tFSMDesc))))
+		return E_FAIL;
+
+	if (FAILED(m_pStateController->Add_State(L"Walk", CBastion_Sword_Walk::Create(m_pDevice, m_pDeviceContext, &tMoveDesc))))
+		return E_FAIL;
 	m_pStateController->Change_State(L"Idle",CStateController::EChange::NonExit);
 
 	return S_OK;
@@ -425,6 +441,7 @@ HRESULT CMonster_Bastion_Sword::Set_Weapon()
 
 _int CMonster_Bastion_Sword::Change_State()
 {
+	//조건에 따라 상태 변경
 	if (g_pGameInstance->getkeyPress(DIK_SPACE))
 		m_pStateController->Change_State(L"Chase");
 

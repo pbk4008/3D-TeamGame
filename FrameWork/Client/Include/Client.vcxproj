@@ -258,6 +258,9 @@
     <ClInclude Include="..\Headers\Bastion_Sword_Groggy.h" />
     <ClInclude Include="..\Headers\Bastion_Sword_Hit.h" />
     <ClInclude Include="..\Headers\Bastion_Sword_Idle.h" />
+    <ClInclude Include="..\Headers\Bastion_Sword_Paring.h" />
+    <ClInclude Include="..\Headers\Bastion_Sword_Turn.h" />
+    <ClInclude Include="..\Headers\Bastion_Sword_Walk.h" />
     <ClInclude Include="..\Headers\Boss_Bastion_Judicator.h" />
     <ClInclude Include="..\Headers\Camera_Silvermane.h" />
     <ClInclude Include="..\Headers\Camera_Debug.h" />
@@ -427,6 +430,8 @@
     <ClCompile Include="..\Codes\Bastion_Sword_Death.cpp" />
     <ClCompile Include="..\Codes\Bastion_Sword_Groggy.cpp" />
     <ClCompile Include="..\Codes\Bastion_Sword_Idle.cpp" />
+    <ClCompile Include="..\Codes\Bastion_Sword_Paring.cpp" />
+    <ClCompile Include="..\Codes\Bastion_Sword_Walk.cpp" />
     <ClCompile Include="..\Codes\Client_Observer.cpp" />
     <ClCompile Include="..\Codes\Client_Trigger.cpp" />
     <ClCompile Include="..\Codes\Boss_Bastion_Judicator.cpp" />
@@ -514,6 +519,7 @@
     <ClCompile Include="..\Codes\UI_Player_HpBar_Red.cpp" />
     <ClCompile Include="..\Codes\Weapon.cpp" />
     <ClCompile Include="..\Headers\Bastion_Sword_Hit.cpp" />
+    <ClCompile Include="..\Headers\Bastion_Sword_Turn.cpp" />
     <ClCompile Include="Client.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

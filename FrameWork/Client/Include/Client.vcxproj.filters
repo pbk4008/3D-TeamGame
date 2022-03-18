@@ -304,6 +304,15 @@
     <Filter Include="02.GameObject\95.Monster\Bastion_Sword\00.State\05.Groggy">
       <UniqueIdentifier>{3d15588b-416d-40ca-b9f2-015a9e9d2a0b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\95.Monster\Bastion_Sword\00.State\06.Paring">
+      <UniqueIdentifier>{0914aca3-ccbf-42a5-83c1-a594627f4e52}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\95.Monster\Bastion_Sword\00.State\07.Turn">
+      <UniqueIdentifier>{f15707ff-b13d-4f61-ae5b-8aaf6d1afdc7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\95.Monster\Bastion_Sword\00.State\08.Walk">
+      <UniqueIdentifier>{fe36a500-8b7c-4714-bff8-ed49386ac515}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -820,6 +829,15 @@
     <ClInclude Include="..\Headers\Bastion_Sword_Groggy.h">
       <Filter>02.GameObject\95.Monster\Bastion_Sword\00.State\05.Groggy</Filter>
     </ClInclude>
+    <ClInclude Include="..\Headers\Bastion_Sword_Paring.h">
+      <Filter>02.GameObject\95.Monster\Bastion_Sword\00.State\06.Paring</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Bastion_Sword_Turn.h">
+      <Filter>02.GameObject\95.Monster\Bastion_Sword\00.State\07.Turn</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Bastion_Sword_Walk.h">
+      <Filter>02.GameObject\95.Monster\Bastion_Sword\00.State\08.Walk</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -1312,6 +1330,15 @@
     </ClCompile>
     <ClCompile Include="..\Codes\Bastion_Sword_Groggy.cpp">
       <Filter>02.GameObject\95.Monster\Bastion_Sword\00.State\05.Groggy</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Bastion_Sword_Paring.cpp">
+      <Filter>02.GameObject\95.Monster\Bastion_Sword\00.State\06.Paring</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Headers\Bastion_Sword_Turn.cpp">
+      <Filter>02.GameObject\95.Monster\Bastion_Sword\00.State\07.Turn</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Bastion_Sword_Walk.cpp">
+      <Filter>02.GameObject\95.Monster\Bastion_Sword\00.State\08.Walk</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
