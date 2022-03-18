@@ -20,7 +20,7 @@ _int C1H_SwordAttack::Tick(const _double& _dDeltaTime)
 	if (NO_EVENT != iProgress)
 		return iProgress;
 
-	/*g_pObserver->Set_PlayerAttack(TRUE);*/
+	g_pObserver->Set_IsAttack(true);
 
 	return _int();
 }

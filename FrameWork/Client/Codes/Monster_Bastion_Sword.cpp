@@ -441,11 +441,34 @@ HRESULT CMonster_Bastion_Sword::Set_Weapon()
 
 _int CMonster_Bastion_Sword::Change_State()
 {
-	//조건에 따라 상태 변경
-	/*g_pObserver->m_fPos*/
-	m_pStateController->Change_State(L"Chase");
+	wstring tmpState = m_pStateController->Get_CurStateTag();
+	if (tmpState != m_wstrCurState)
+	{
+		m_wstrCurState = tmpState;
+
+		if (tmpState == L"Idle")
+		{
+			
+		}
+
+	}
+
+
 
 	return _int();
+}
+
+void CMonster_Bastion_Sword::Chase()
+{
+	_vector vPos = m_pTransform->Get_State(CTransform::STATE_POSITION);
+	_vector vPlayerPos = g_pObserver->Get_PlayerPos();
+
+	if (XMVector3Equal(vPlayerPos, XMVectorZero()))
+		return;
+
+	_float fDist = XMVectorGetX(XMVector3Length(vPos - vPlayerPos));
+
+	if(fDist<)
 }
 
 CMonster_Bastion_Sword* CMonster_Bastion_Sword::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
