@@ -237,8 +237,6 @@ HRESULT CMaterial::Set_Texture(TEXTURETYPE _eTextureType, const wstring& _pTextu
 
 	m_vecTextures[(_uint)_eTextureType] = pTexture;
 	
-	SetUp_TextureOnShader();
-
 	return S_OK;
 }
 
@@ -302,9 +300,9 @@ list<wstring> CMaterial::Get_TextureName()
 
 HRESULT CMaterial::SetUp_TextureOnShader()
 {
-	string str = "";
 	for (_uint i = 0; i < (_uint)TEXTURETYPE::TEX_END; i++)
 	{
+		string str = "";
 		if (!m_vecTextures[i])
 			continue;
 		switch ((TEXTURETYPE)i)

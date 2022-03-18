@@ -35,9 +35,11 @@ public:
 	HRESULT Add_State(const wstring & _wstrStateTag, CState * _pState);
 	HRESULT Change_State(const wstring& _wstrStateTag, const EChange _eChange = EChange::Normal);
 
+	//상태를 바꿀때 매계변수를 받아서 바꾸고 싶을 때 사용
+	HRESULT Change_State(const wstring& _wstrStateTag, void* _pArg, const EChange _eChange = EChange::Normal);
 private:
 	CGameObject* m_pGameObject = nullptr;
-	unordered_map<wstring, CState*> m_mapStates;
+	unordered_map<wstring, CState*> m_mapStates;//State 보관용 변수
 
 	_bool m_isChange = false;
 

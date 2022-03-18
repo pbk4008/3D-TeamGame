@@ -90,52 +90,105 @@ void CStateController::Set_GameObject(CGameObject* _pGameObject)
 
 HRESULT CStateController::Add_State(const wstring& _wstrStateTag, CState* _pState)
 {
+	//State 찾기
 	auto& iter_find = m_mapStates.find(_wstrStateTag);
-	if (m_mapStates.end() != iter_find)
+	if (m_mapStates.end() != iter_find)//있으면 나가라
 		return E_FAIL;
 
-	m_mapStates.emplace(_wstrStateTag, _pState);
+	m_mapStates.emplace(_wstrStateTag, _pState);//없으면 추가
 
 	return S_OK;
 }
 
 HRESULT CStateController::Change_State(const wstring& _wstrStateTag, const EChange _eChange)
 {
+	//현재 태그가 바꾸고자 하는 태그랑 다르면
 	if (m_wstrCurStateTag != _wstrStateTag)
 	{
+		//바꾸고자 하는 상태 가져오기
 		CState* pState = m_mapStates[_wstrStateTag];
+		//바꾸고자 하는 상태 없으면 끝
 		if (!pState)
 			return E_FAIL;
 
+		//현재 상태가 있으면
 		if (m_pCurState)
 		{
 			switch (_eChange)
 			{
 			case EChange::Normal:
-			case EChange::NonEnter:
+			case EChange::NonEnter://현재 상태의 나가는 이벤트를 호출
 				m_pCurState->ExitState();
 				break;
 			} 
 		}
 
-		m_pPreState = m_pCurState;
-		m_pCurState = pState;
+		m_pPreState = m_pCurState;//이전 상태를 현재 상태로 바꾸고
+		m_pCurState = pState;//현재 상태를 바꾸고자 하는 상태로 변경
 
 		if (m_pCurState)
 		{
 			switch (_eChange)
 			{
 			case EChange::Normal:
-			case EChange::NonExit:
+			case EChange::NonExit://현재상태의 들어오는 이벤트를 호출
 				m_pCurState->EnterState();
 				break;
 			}
 		}
 
-		m_wstrPreStateTag = m_wstrCurStateTag;
-		m_wstrCurStateTag = _wstrStateTag;
+		m_wstrPreStateTag = m_wstrCurStateTag;//이전 태그를 현재 태그로 변경
+		m_wstrCurStateTag = _wstrStateTag;//현재 태그를 바꿀 태그로 변경
 
-		m_isChange = true;
+		m_isChange = true;//상태를 바꿧다라고 표시해라(렌더에서 다시 변경 -> LateTick 까진 이전 상태를 돌아야 하기 때문)
+	}
+
+	return S_OK;
+}
+
+HRESULT CStateController::Change_State(const wstring& _wstrStateTag, void* _pArg, const EChange _eChange)
+{
+	//매개 변수 있을때 상태를 변경 하는 함수
+	if (m_wstrCurStateTag != _wstrStateTag)
+	{
+		//바꾸고자 하는 상태 가져오기
+		CState* pState = m_mapStates[_wstrStateTag];
+		//바꾸고자 하는 상태 없으면 끝
+		if (!pState)
+		{
+			return E_FAIL;
+		}
+
+		//현재 상태가 있으면
+		if (m_pCurState)
+		{
+			switch (_eChange)
+			{
+			case EChange::Normal:
+			case EChange::NonEnter://현재 상태의 나가는 이벤트를 호출
+				m_pCurState->ExitState(_pArg);
+				break;
+			}
+		}
+
+		m_pPreState = m_pCurState;//이전 상태를 현재 상태로 바꾸고
+		m_pCurState = pState;//현재 상태를 바꾸고자 하는 상태로 변경
+
+		if (m_pCurState)
+		{
+			switch (_eChange)
+			{
+			case EChange::Normal:
+			case EChange::NonExit://현재상태의 들어오는 이벤트를 호출
+				m_pCurState->EnterState(_pArg);
+				break;
+			}
+		}
+
+		m_wstrPreStateTag = m_wstrCurStateTag;//이전 태그를 현재 태그로 변경
+		m_wstrCurStateTag = _wstrStateTag;//현재 태그를 바꿀 태그로 변경
+
+		m_isChange = true;//상태를 바꿧다라고 표시해라(렌더에서 다시 변경 -> LateTick 까진 이전 상태를 돌아야 하기 때문)
 	}
 
 	return S_OK;

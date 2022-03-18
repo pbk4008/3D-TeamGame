@@ -46,6 +46,7 @@ HRESULT CAnimator::NativeConstruct(void* pArg)
 
 	m_pController->Set_Model(tDesc.pModel);
 	m_pController->Set_Transform(tDesc.pTransform);
+	m_pController->Set_MoveSpeed(40.f);
 
 	m_pHead = CAnimNode::Create(0, nullptr, false,false,false,ERootOption::Max);
 	m_vecAnimNode.emplace_back(m_pHead->Get_Index());
@@ -71,10 +72,10 @@ _int CAnimator::Tick(_double dDeltaTime)
 	{
 		if (!m_pCulAnimNode->Get_Loop() && m_pController->Is_Finished())
 			Change_Animation(m_pCulAnimNode->Get_AutoIndex());
-		/*if (m_pCulAnimNode->Is_LoopChange())
+		if (m_pCulAnimNode->Is_LoopChange())
 			m_pCulAnimNode->Change_Loop(true);
-		if (m_pController->Is_Finished())
-			Change_Animation(m_vecAnimNodeName[m_pCulAnimNode->Get_AutoIndex()]);*/
+		//if (m_pController->Is_Finished())
+		//	Change_Animation(m_vecAnimNodeName[m_pCulAnimNode->Get_AutoIndex()]);
 	}
 	return _int();
 }

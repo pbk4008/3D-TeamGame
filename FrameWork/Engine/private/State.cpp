@@ -1,4 +1,5 @@
 #include "State.h"
+#include "StateController.h"
 
 CState::CState(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
 	: m_pDevice(_pDevice)
@@ -41,7 +42,17 @@ HRESULT CState::EnterState()
 	return S_OK;
 }
 
+HRESULT CState::EnterState(void* pArg)
+{
+	return S_OK;
+}
+
 HRESULT CState::ExitState()
+{
+	return S_OK;
+}
+
+HRESULT CState::ExitState(void* pArg)
 {
 	return S_OK;
 }
