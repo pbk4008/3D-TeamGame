@@ -283,7 +283,6 @@
 	<Filter Include="02.GameObject\95.Monster\Bastion_2HSword\State_2HSword\Rage">
 		<UniqueIdentifier>{bd8eebf8-c00f-4303-9ddc-b43dfb509314}</UniqueIdentifier>
 	</Filter>
->>>>>>> main
     <Filter Include="02.GameObject\93.Boss\00.MiddleBoss\State">
       <UniqueIdentifier>{8a29aee6-6d31-4f13-bfdb-45f715488804}</UniqueIdentifier>
     </Filter>
