@@ -167,7 +167,10 @@ HRESULT CSilvermane::NativeConstruct(const _uint _iSceneID, void* _pArg)
 	if (FAILED(Ready_Weapons())) 
 		return E_FAIL;
 
-	g_pObserver->Set_PlayerTransCom(m_pTransform);
+	/*g_pObserver->Set_PlayerTransCom(m_pTransform);*/
+	//생성될때 옵저버에 플레이어 셋팅
+	if (FAILED(g_pObserver->Set_Player(this)))
+		return E_FAIL;
 
 	return S_OK;
 }
@@ -241,9 +244,6 @@ _int CSilvermane::LateTick(_double _dDeltaTime)
 		if (NO_EVENT != iProgress) 
 			return iProgress;
 	}
-
-	g_pObserver->Set_PlayerPos(m_pTransform->Get_State(CTransform::STATE_POSITION));
-
 
 	return _int();
 }

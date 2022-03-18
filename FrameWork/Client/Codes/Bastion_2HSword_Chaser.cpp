@@ -30,7 +30,7 @@ _int CBastion_2HSword_Chaser::Tick(const _double& _dDeltaTime)
 
 	m_pAnimator->Tick(_dDeltaTime);
 
-	m_pTransform->Chase_Target(g_pObserver->m_pPlayerTrans, _dDeltaTime);
+	m_pTransform->Chase_Target(g_pObserver->Get_Transform(), _dDeltaTime);
 
 	return _int();
 }
@@ -73,13 +73,13 @@ void CBastion_2HSword_Chaser::Look_Player(void)
 {
 	_fvector vMonsterPos = m_pTransform->Get_State(CTransform::STATE::STATE_POSITION);
 
-	_fvector vDist = vMonsterPos - XMLoadFloat3(&g_pObserver->m_fPos);
+	_fvector vDist = vMonsterPos - g_pObserver->Get_PlayerPos();
 
 	_float fDistToPlayer = XMVectorGetX(XMVector3Length(vDist));
 
 	if (2.0f > fDistToPlayer || 15.0f < fDistToPlayer)
 	{
- 		m_pTransform->Face_Target(XMLoadFloat3(&g_pObserver->m_fPos));
+ 		m_pTransform->Face_Target(g_pObserver->Get_PlayerPos());
   		m_pStateController->Change_State(L"Idle");
 	}
 

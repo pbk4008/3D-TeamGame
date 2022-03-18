@@ -7,8 +7,9 @@
 
 #include "Client_Enum.h"
 #include "Client_Function.h"
+using namespace Client;
+
 #include "Client_Observer.h"
 #include "Clinet_Define.h"
 
-using namespace Client;
 #endif

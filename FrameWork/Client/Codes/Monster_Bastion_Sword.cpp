@@ -50,7 +50,7 @@ HRESULT CMonster_Bastion_Sword::NativeConstruct(const _uint _iSceneID, void* _pA
 	if (FAILED(Set_State_FSM()))
 		return E_FAIL;
 
-	_vector Pos = { 0.f, 0.f, 10.f, 1.f };
+	_vector Pos = { 0.f, 0.f, 30.f, 1.f };
 	m_pTransform->Set_State(CTransform::STATE_POSITION, Pos);
 	return S_OK;
 }
@@ -442,8 +442,8 @@ HRESULT CMonster_Bastion_Sword::Set_Weapon()
 _int CMonster_Bastion_Sword::Change_State()
 {
 	//조건에 따라 상태 변경
-	if (g_pGameInstance->getkeyPress(DIK_SPACE))
-		m_pStateController->Change_State(L"Chase");
+	/*g_pObserver->m_fPos*/
+	m_pStateController->Change_State(L"Chase");
 
 	return _int();
 }

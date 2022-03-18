@@ -1,31 +1,57 @@
 #include "pch.h"
 #include "Client_Observer.h"
+#include "Silvermane.h"
 
-CClient_Observer::CClient_Observer()
+CClient_Observer::CClient_Observer(void)
+	: m_pPlayer(nullptr)
 {
-
 }
 
-void CClient_Observer::Set_PlayerWordlMat(_fmatrix _matWorld)
+HRESULT CClient_Observer::Set_Player(CSilvermane* pPlayer)
 {
-	XMStoreFloat4x4(&m_matWorld, _matWorld);
+	m_pPlayer = pPlayer;
+	Safe_AddRef(m_pPlayer);
+
+	return S_OK;
 }
 
-void CClient_Observer::Set_PlayerPos(_fvector _vecPos)
+const CTransform* CClient_Observer::Get_Transform()
 {
-	XMStoreFloat3(&m_fPos, _vecPos);
+	if (!m_pPlayer)
+		return nullptr;
+
+	return m_pPlayer->Get_Transform();
 }
 
-void CClient_Observer::Set_PlayerAttack(_bool _isAttack)
+_fmatrix CClient_Observer::Get_PlayerWorldMatrix()
 {
-	m_bAttack = _isAttack;
+	_matrix matPlayerWorld;
+	ZeroMemory(&matPlayerWorld, sizeof(_matrix));
+	//플레이어가 없으면
+	if (!m_pPlayer)
+		return matPlayerWorld;//0행렬 밖으로
+
+	//Transform 가져오기
+	const CTransform* pTransform = Get_Transform();
+	//Transform이 없으면
+	if (!pTransform)
+		return matPlayerWorld;//0행렬
+
+	matPlayerWorld = pTransform->Get_WorldMatrix();//월드 행렬 가져오기
+
+	return matPlayerWorld;
 }
 
-void CClient_Observer::Set_PlayerTransCom(CTransform* _pTransCom)
+_fvector CClient_Observer::Get_PlayerPos()
 {
-	m_pPlayerTrans = _pTransCom;
+	_matrix matTransform = Get_PlayerWorldMatrix();
+
+	_vector vPos = matTransform.r[3];
+
+	return vPos;
 }
 
 void CClient_Observer::Free(void)
 {
+	Safe_Release(m_pPlayer);
 }

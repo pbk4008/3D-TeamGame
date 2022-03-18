@@ -72,17 +72,17 @@ HRESULT CBastion_2HSword_Idle::ExitState()
 void CBastion_2HSword_Idle::Look_Player(void)
 {
 	_fvector vMonsterPos = m_pTransform->Get_State(CTransform::STATE::STATE_POSITION);
-	_fvector vDist = vMonsterPos - XMLoadFloat3(&g_pObserver->m_fPos);
+	_fvector vDist = vMonsterPos - g_pObserver->Get_PlayerPos();
 	_float fDistToPlayer = XMVectorGetX(XMVector3Length(vDist));
 
 	if (5.0f < fDistToPlayer && 15.0f > fDistToPlayer)
 	{
-		m_pTransform->Face_Target(XMLoadFloat3(&g_pObserver->m_fPos));
+		m_pTransform->Face_Target(g_pObserver->Get_PlayerPos());
 		m_pStateController->Change_State(L"Chaser");
 	}
 
-	if(5.0f > fDistToPlayer && TRUE == g_pObserver->m_bAttack)
-		m_pStateController->Change_State(L"Dash");
+	//if(5.0f > fDistToPlayer && TRUE == g_pObserver->m_bAttack)
+	//	m_pStateController->Change_State(L"Dash");
 
 	if(2.0f > fDistToPlayer)
 		m_pStateController->Change_State(L"Attack");

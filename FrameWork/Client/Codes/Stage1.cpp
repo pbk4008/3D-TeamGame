@@ -34,10 +34,10 @@ HRESULT CStage1::NativeConstruct()
 	//{
 	//	return E_FAIL;
 	//}
-	//if (FAILED(Ready_Monster(L"Layer_Monster")))
-	//{
-	//	return E_FAIL;
-	//}
+	if (FAILED(Ready_Monster(L"Layer_Monster")))
+	{
+		return E_FAIL;
+	}
 	//if (FAILED(Ready_UI(L"Layer_UI")))
 	//{
 	//	return E_FAIL;
@@ -154,8 +154,8 @@ HRESULT CStage1::Ready_Monster(const _tchar* LayerTag)
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Monster_BronzeAnimus")))
 		return E_FAIL;*/
 
-	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Monster_Bastion_Sword")))
-	//	return E_FAIL;
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Monster_Bastion_Sword")))
+		return E_FAIL;
 
 		//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Monster_Bastion_Shooter")))
 		//return E_FAIL;
