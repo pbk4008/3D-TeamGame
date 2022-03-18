@@ -245,7 +245,7 @@ _int CSilvermane::LateTick(_double _dDeltaTime)
 	}
 
 
-	g_pObserver->Set_PlayerPos(m_pTransform->Get_State(CTransform::STATE_POSITION));
+	//g_pObserver->Set_PlayerPos(m_pTransform->Get_State(CTransform::STATE_POSITION));
 	return _int();
 }
 
