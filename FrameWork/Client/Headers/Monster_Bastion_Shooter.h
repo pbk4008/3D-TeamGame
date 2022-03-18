@@ -9,7 +9,6 @@ class CMonster_Bastion_Shooter : public CActor
 public:
 	enum class ANIM_TYPE {
 		HEAD, IDLE, ATTACK, RUN_START, RUN_END, RUN_LOOP
-		, ATTACK_JUMPSTART, ATTACK_JUMPLOOP, ATTACK_JUMPEND
 		, HIT, TYPE_END
 	};
 
@@ -33,7 +32,6 @@ private:
 private:
 	CModel* m_pModelCom = nullptr;
 	CAnimator* m_pAnimator = nullptr;
-	CCapsuleCollider* m_pCollider = nullptr;
 	CStateController* m_pStateController = nullptr;
 
 public:

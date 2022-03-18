@@ -23,6 +23,8 @@ _int CShooter_Idle::Tick(const _double& _dDeltaTime)
 
 	m_pAnimator->Tick(_dDeltaTime);
 
+	m_pTransform->Face_Target(XMLoadFloat3(&g_pObserver->m_fPos));
+	
 	return _int();
 }
 
@@ -59,22 +61,6 @@ HRESULT CShooter_Idle::ExitState()
 		return E_FAIL;
 
 	return S_OK;
-}
-
-void CShooter_Idle::Look_Player(void)
-{
-	_fvector vMonsterPos = m_pTransform->Get_State(CTransform::STATE::STATE_POSITION);
-	_fvector vDist = vMonsterPos - XMLoadFloat3(&g_pObserver->m_fPos);
-	_float fDistToPlayer = XMVectorGetX(XMVector3Length(vDist));
-
-	if (5.0f < fDistToPlayer && 15.0f > fDistToPlayer)
-	{
-		m_pTransform->Face_Target(XMLoadFloat3(&g_pObserver->m_fPos));
-		m_pStateController->Change_State(L"Chaser");
-	}
-
-	if (5.0f > fDistToPlayer && TRUE == g_pObserver->m_bAttack)
-		m_pStateController->Change_State(L"Dash");
 }
 
 CShooter_Idle* CShooter_Idle::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext, void* _pArg)
