@@ -21,7 +21,6 @@ HRESULT CBastion_Sword_Chase::NativeConstruct(void* _pArg)
 
 	Safe_AddRef(m_pAnimator);
 	Safe_AddRef(m_pTransform);
-	Safe_AddRef(m_pStateController);
 
 	if (FAILED(CMonster_FSM::NativeConstruct(_pArg)))
 		return E_FAIL;
@@ -30,7 +29,7 @@ HRESULT CBastion_Sword_Chase::NativeConstruct(void* _pArg)
 
 _int CBastion_Sword_Chase::Tick(const _double& _dDeltaTime)
 {
-	if (!m_pAnimator||!m_pController)
+	if (!m_pAnimator||!m_pStateController)
 		return -1;
 
 	//애니메이션 진행

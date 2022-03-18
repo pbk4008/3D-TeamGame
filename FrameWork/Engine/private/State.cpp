@@ -1,4 +1,5 @@
 #include "State.h"
+#include "StateController.h"
 
 CState::CState(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
 	: m_pDevice(_pDevice)
@@ -70,5 +71,4 @@ void CState::Free()
 {
 	Safe_Release(m_pDeviceContext);
 	Safe_Release(m_pDevice);
-	Safe_Release(m_pStateController);
 }

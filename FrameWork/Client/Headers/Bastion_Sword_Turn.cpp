@@ -17,7 +17,6 @@ HRESULT CBastion_Sword_Turn::NativeConstruct(void* _pArg)
 	m_pStateController = tDesc.pController;
 
 	Safe_AddRef(m_pAnimator);
-	Safe_AddRef(m_pStateController);
 
 	if (FAILED(CMonster_FSM::NativeConstruct(_pArg)))
 		return E_FAIL;
@@ -33,7 +32,7 @@ _int CBastion_Sword_Turn::Tick(const _double& _dDeltaTime)
 	m_pAnimator->Tick(_dDeltaTime);
 
 	if (m_pAnimator->Get_CurrentAnimNode() == (_uint)CMonster_Bastion_Sword::ANIM_TYPE::IDLE)
-		m_pController->Change_State(L"Idle");
+		m_pStateController->Change_State(L"Idle");
 
 	return _int();
 }

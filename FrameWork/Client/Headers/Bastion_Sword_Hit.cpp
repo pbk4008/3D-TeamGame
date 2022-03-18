@@ -18,7 +18,6 @@ HRESULT CBastion_Sword_Hit::NativeConstruct(void* _pArg)
 	m_pStateController = tDesc.pController;
 
 	Safe_AddRef(m_pAnimator);
-	Safe_AddRef(m_pStateController);
 
 	if (CMonster_FSM::NativeConstruct(_pArg))
 		return E_FAIL;

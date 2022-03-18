@@ -18,7 +18,6 @@ HRESULT CBastion_Sword_Walk::NativeConstruct(void* _pArg)
 	m_pTransform = tDesc.pTransform;
 
 	Safe_AddRef(m_pAnimator);
-	Safe_AddRef(m_pStateController);
 	Safe_AddRef(m_pTransform);
 
 	if (FAILED(CMonster_FSM::NativeConstruct(_pArg)))

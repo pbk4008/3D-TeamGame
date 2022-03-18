@@ -21,6 +21,7 @@ public:
 	HRESULT SetUp_ValueOnShader(const string _strConstantName, void* _pData, const _uint _iSize);
 	HRESULT SetUp_TextureOnShader(const string _strConstantName, TEXTURETYPE eType, _uint _iTextureIndex = 0);
 	HRESULT SetUp_TextureOnShader(const string _strConstantName, ID3D11ShaderResourceView* pSRV);
+	HRESULT SetUp_TextureOnShader();
 
 	const wstring& Get_Name() const;
 
@@ -31,8 +32,6 @@ public:
 	CSaveManager::MTRLDATA SetMaterialSaveData();
 public:
 	list<wstring> Get_TextureName();
-private:
-	HRESULT SetUp_TextureOnShader();
 private:
 	vector<CTexture*> m_vecTextures;
 	wstring m_wstrShaderPath = L"";

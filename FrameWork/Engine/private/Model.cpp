@@ -1003,10 +1003,14 @@ HRESULT CModel::Load_AnimModel(const wstring& pFilePath)
 			for (auto& pTextureData : pMtrl.vecTextureData)
 			{
 				wstring wstrTexturePath = L"../../Client/bin/FBX/Texture/";
+				_uint iLen = lstrlen(pTextureData.pTextureName);
+				wcsncpy_s(pTextureData.pTextureName, pTextureData.pTextureName, iLen - 1 - 3);
 				wstrTexturePath += pTextureData.pTextureName;
+				wstrTexturePath += L".tga";
 				if (FAILED(pMaterial->Set_Texture((TEXTURETYPE)pTextureData.iType, pTextureData.pTextureName, wstrTexturePath)))
 					return E_FAIL;
 			}
+			pMaterial->SetUp_TextureOnShader();
 		}
 		g_pGameInstance->Add_Material(pMtrl.pMtrlName, pMaterial);
 		Add_Material(pMaterial, iMtrlIndex);

@@ -274,6 +274,7 @@ HRESULT CSaveManager::Load_StaticModel(STATICDATA& StaticData, const wstring& pF
 			TEXTUREDATA pTexture;
 			ZeroMemory(&pTexture, sizeof(pTexture));
 			ReadFile(hFile, &pTexture, sizeof(TEXTUREDATA), &dwByte, nullptr);
+
 			pMTrl.vecTextureData.emplace_back(pTexture);
 		}
 		StaticData.pMtrlData[i] = pMTrl;
