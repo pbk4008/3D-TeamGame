@@ -17,6 +17,7 @@ public:
 	{
 		CAnimator* pAnimator;
 		CStateController* pController;
+		_tchar pName[MAX_PATH];
 	}FSMDESC;
 	typedef struct tagStateFSMMoveDesc : public tagStateFSMDesc
 	{

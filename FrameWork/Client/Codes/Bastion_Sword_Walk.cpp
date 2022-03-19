@@ -16,6 +16,7 @@ HRESULT CBastion_Sword_Walk::NativeConstruct(void* _pArg)
 	m_pAnimator = tDesc.pAnimator;
 	m_pStateController = tDesc.pController;
 	m_pTransform = tDesc.pTransform;
+	m_wstrTag = tDesc.pName;
 
 	Safe_AddRef(m_pAnimator);
 	Safe_AddRef(m_pTransform);
