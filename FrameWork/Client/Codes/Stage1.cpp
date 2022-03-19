@@ -34,6 +34,7 @@ HRESULT CStage1::NativeConstruct()
 	{
 		return E_FAIL;
 	}
+
 	//if (FAILED(Ready_Monster(L"Layer_Monster")))
 	//{
 	//	return E_FAIL;

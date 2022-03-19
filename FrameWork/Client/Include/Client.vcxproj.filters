@@ -276,15 +276,27 @@
     </Filter>
     <Filter Include="02.GameObject\95.Monster\Bastion_Shooter\Attack">
       <UniqueIdentifier>{0e465f15-42b9-4038-9066-ca93866e3c94}</UniqueIdentifier>
-	</Filter>
-	<Filter Include="02.GameObject\95.Monster\Bastion_2HSword\State_2HSword\Rage">
-		<UniqueIdentifier>{bd8eebf8-c00f-4303-9ddc-b43dfb509314}</UniqueIdentifier>
-	</Filter>
+    </Filter>
+    <Filter Include="02.GameObject\95.Monster\Bastion_2HSword\State_2HSword\Rage">
+      <UniqueIdentifier>{bd8eebf8-c00f-4303-9ddc-b43dfb509314}</UniqueIdentifier>
+    </Filter>
     <Filter Include="02.GameObject\93.Boss\00.MiddleBoss\State">
       <UniqueIdentifier>{8a29aee6-6d31-4f13-bfdb-45f715488804}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObject\93.Boss\00.MiddleBoss\State\Rage">
+    <Filter Include="02.GameObject\93.Boss\00.MiddleBoss\State\00.Rage">
       <UniqueIdentifier>{78558ab8-2fff-4b33-ab1b-2e33a7ffd7ca}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\93.Boss\00.MiddleBoss\State\01.BattleCry">
+      <UniqueIdentifier>{0548b5d4-b2f0-44cd-be0d-411854b88969}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\93.Boss\00.MiddleBoss\State\02.Attack">
+      <UniqueIdentifier>{1b94931b-764f-4fd3-9076-83d5953ebc0b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\93.Boss\00.MiddleBoss\State\03.Turn">
+      <UniqueIdentifier>{f2df4087-aee9-4ef4-bcdf-ddd10c0ac559}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\93.Boss\00.MiddleBoss\State\04.Chase">
+      <UniqueIdentifier>{9ca0b922-5493-4c13-b374-4312bd2f3120}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -783,9 +795,18 @@
     </ClInclude>
     <ClInclude Include="..\Headers\Shooter_Attack.h">
       <Filter>02.GameObject\95.Monster\Bastion_Shooter\Attack</Filter>
-	</ClInclude>
+    </ClInclude>
     <ClInclude Include="..\Headers\MidBoss_Rage.h">
-      <Filter>02.GameObject\93.Boss\00.MiddleBoss\State\Rage</Filter>
+      <Filter>02.GameObject\93.Boss\00.MiddleBoss\State\00.Rage</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\MidBoss_Attack.h">
+      <Filter>02.GameObject\93.Boss\00.MiddleBoss\State\02.Attack</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\MidBoss_BattleCry.h">
+      <Filter>02.GameObject\93.Boss\00.MiddleBoss\State\01.BattleCry</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\MidBoss_Turn.h">
+      <Filter>02.GameObject\93.Boss\00.MiddleBoss\State\03.Turn</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1261,9 +1282,18 @@
     </ClCompile>
     <ClCompile Include="..\Codes\Shooter_Attack.cpp">
       <Filter>02.GameObject\95.Monster\Bastion_Shooter\Attack</Filter>
-	</ClCompile>
+    </ClCompile>
     <ClCompile Include="..\Codes\MidBoss_Rage.cpp">
-      <Filter>02.GameObject\93.Boss\00.MiddleBoss\State\Rage</Filter>
+      <Filter>02.GameObject\93.Boss\00.MiddleBoss\State\00.Rage</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\MidBoss_Attack.cpp">
+      <Filter>02.GameObject\93.Boss\00.MiddleBoss\State\02.Attack</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\MidBoss_BattleCry.cpp">
+      <Filter>02.GameObject\93.Boss\00.MiddleBoss\State\01.BattleCry</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\MidBoss_Turn.cpp">
+      <Filter>02.GameObject\93.Boss\00.MiddleBoss\State\03.Turn</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -141,7 +141,6 @@ HRESULT CStateController::Change_State(const wstring& _wstrStateTag, const EChan
 				break;
 			}
 		}
-
 		m_wstrPreStateTag = m_wstrCurStateTag;
 		m_wstrCurStateTag = _wstrStateTag;
 

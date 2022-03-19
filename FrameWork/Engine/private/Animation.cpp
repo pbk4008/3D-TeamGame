@@ -121,8 +121,11 @@ HRESULT CAnimation::Update_TransformationMatrix(_double TimeDelta,const _bool _i
 
 	if (m_isFinished)
 	{
-		m_TrackPositionAcc = 0.0;
-		m_iCurKeyFrameIndex = 0;
+		if (_isLoop)
+		{
+			m_TrackPositionAcc = 0.0;
+			m_iCurKeyFrameIndex = 0;
+		}
 	}
 
 	return S_OK;

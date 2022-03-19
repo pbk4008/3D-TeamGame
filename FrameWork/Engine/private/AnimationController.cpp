@@ -155,6 +155,11 @@ void CAnimationController::Set_IsChange(const _bool _bChange)
 	m_isChangeAnim = _bChange;
 }
 
+void CAnimationController::Set_RotSpeed(const _float _fRotSpeed)
+{
+	m_fRotSpeed = _fRotSpeed;
+}
+
 const _bool CAnimationController::Is_RootMotion() const
 {
 	return m_isRootMotion;
@@ -419,7 +424,7 @@ const _int CAnimationController::Move_Transform(const _double& _dDeltaTime)
 			}
 
 			//svVelocity *= _dDeltaTime;
-			svQuaternian = XMVector4Transform(svQuaternian, m_smatPivot);
+			//svQuaternian = XMVector4Transform(svQuaternian, XMLoadFloat4x4(&m_matPivot));
 
 			_float3 vVelocity, vBonePosition, vEuler, vRotation;
 			_float4 vQuaternian;
@@ -451,32 +456,20 @@ const _int CAnimationController::Move_Transform(const _double& _dDeltaTime)
 				vBonePosition = { -vVelocity.x, -vVelocity.z, -vVelocity.y };
 				break;
 			}
-			vRotation = { -vEuler.x, -vEuler.z, -vEuler.y };
+			vRotation = { vEuler.x, vEuler.z, vEuler.y };
 
 
-			m_pTransform->Rotation_Axis(svRight, _dDeltaTime * vRotation.x);
-			m_pTransform->Rotation_Axis(svUp, _dDeltaTime * vRotation.y);
-			m_pTransform->Rotation_Axis(svLook, _dDeltaTime * vRotation.z);
-
-
-			svLook = m_pTransform->Get_State(CTransform::STATE_LOOK);
+			m_pTransform->Rotation_Axis(svRight, XMConvertToRadians(vRotation.x) * _dDeltaTime * m_fRotSpeed);
+			m_pTransform->Rotation_Axis(svUp, XMConvertToRadians(vRotation.y) * _dDeltaTime * m_fRotSpeed);
+			m_pTransform->Rotation_Axis(svLook, XMConvertToRadians(vRotation.z) * _dDeltaTime * m_fRotSpeed);
 
 			svVelocity = XMLoadFloat3(&vBonePosition);
 			svVelocity = XMVector4Transform(svVelocity, m_smatPivot * m_pTransform->Get_PivotMatrix());
 
 			XMStoreFloat3(&vVelocity, svVelocity);
 			m_pTransform->Go_Right((_float)vVelocity.x * _dDeltaTime * m_fMoveSpeed);
-			m_pTransform->Go_Up((_float)vVelocity.y * _dDeltaTime* m_fMoveSpeed);
-			m_pTransform->Go_Straight((_float)vVelocity.z * _dDeltaTime* m_fMoveSpeed);
-
-			// 요 아래는 디버그 용이야
-			_float3 vPosition = { 0.f, 0.f, 0.f };
-			XMStoreFloat3(&vBonePosition, svPosition);
-
-			wstring wstrBonePosition = L"FixedBonePosition : ";
-			wstrBonePosition += wstrBonePosition + to_wstring(vBonePosition.x) + L", " + to_wstring(vBonePosition.y) + L", " + to_wstring(vBonePosition.z);
-			wstring wstrPosition = L"Position : ";
-			wstrPosition += to_wstring(vPosition.x) + L", " + to_wstring(vPosition.y) + L", " + to_wstring(vPosition.z);
+			m_pTransform->Go_Up((_float)vVelocity.y * _dDeltaTime * m_fMoveSpeed);
+			m_pTransform->Go_Straight((_float)vVelocity.z * _dDeltaTime * m_fMoveSpeed);
 		}
 	}
 

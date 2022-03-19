@@ -46,6 +46,7 @@ HRESULT CAnimator::NativeConstruct(void* pArg)
 
 	m_pController->Set_Model(tDesc.pModel);
 	m_pController->Set_Transform(tDesc.pTransform);
+	m_pController->Set_MoveSpeed(40.f);
 
 	m_pHead = CAnimNode::Create(0, nullptr, false,false,false,ERootOption::Max);
 	m_vecAnimNode.emplace_back(m_pHead->Get_Index());
@@ -60,7 +61,7 @@ HRESULT CAnimator::NativeConstruct(void* pArg)
 
 _int CAnimator::Tick(_double dDeltaTime)
 {
-	m_pController->Tick(dDeltaTime);
+	m_pController->Tick(dDeltaTime * m_fPlaySpeed);
 	if (m_pController->Get_ChangeAnimation())
 	{
 		m_pCulAnimNode = m_pChangeNode;
@@ -169,6 +170,11 @@ HRESULT CAnimator::Insert_AnyEntryAnimation(_uint iTag)
 	m_vecAnyEntryNode.emplace_back(pNode);
 
 	return S_OK;
+}
+
+void CAnimator::Set_PivotMat(const _fmatrix& matPivot)
+{
+	m_pController->Set_PivotMatrix(matPivot);
 }
 
 const _uint CAnimator::Get_CurrentAnimNode()

@@ -47,9 +47,14 @@ public:
 	//애니메이션 어떤 조건을 통해서 들어오는 애니메이션 추가시 사용
 	//이미 만들어진 애니메이션을 AnyEntry에 담아서 조건에 따라 변경하면서 사용
 	HRESULT Insert_AnyEntryAnimation(_uint iTag);
+
+	void Set_AnimSpeed(_float fSpeed) { m_fPlaySpeed = fSpeed; };
+	void Set_PivotMat(const _fmatrix& matPivot);
+
 public:
 	const _uint Get_CurrentAnimNode();
 	CAnimation* Get_CurrentAnimation();
+	CAnimationController* Get_AnimController() { return m_pController; };
 public:
 	vector<_uint> Get_Nodes() { return m_vecAnimNode; }
 private:
@@ -74,6 +79,8 @@ private:
 	vector<_uint> m_vecAnimNode;
 
 	vector<CAnimNode*> m_vecAnyEntryNode;
+
+	_float m_fPlaySpeed = 1.f;
 };
 END
 #endif

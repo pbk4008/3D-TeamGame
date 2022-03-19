@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "MidBoss_Rage.h"
 
+#include "Animation.h"
 #include "Boss_Bastion_Judicator.h"
 
 CMidBoss_Rage::CMidBoss_Rage(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
@@ -29,6 +30,16 @@ _int CMidBoss_Rage::Tick(const _double& TimeDelta)
 
 	m_pAnimator->Tick(TimeDelta);
 
+	/*if (m_pAnimator->Get_AnimController()->Is_Finished())
+	{
+		m_pStateController->Change_State(L"BattleCry");
+	}*/
+
+	if (m_pAnimator->Get_CurrentAnimation()->Is_Finished())
+	{
+		m_pStateController->Change_State(L"BattleCry");
+	}
+
 	return _int();
 }
 
@@ -54,7 +65,22 @@ HRESULT CMidBoss_Rage::EnterState()
 	if (FAILED(__super::EnterState()))
 		return E_FAIL;
 
-	m_pAnimator->Change_Animation((_uint)CBoss_Bastion_Judicator::M_BossAnimState::RAGE);
+	//m_pAnimator->Change_Animation(CBoss_Bastion_Judicator::M_BossAnimState::RAGE);
+	
+	//_matrix matPivot = XMMatrixRotationY(XMConvertToRadians(180.f));
+	//m_pAnimator->Get_AnimController()->Set_PivotMatrix(matPivot);
+
+	_vector vec = { 0.f, 1.f, 0.f,0.f };
+	m_pTransform->SetUp_Rotation(vec, (XMConvertToRadians(180.f)));
+
+	_fvector vMonsterPos = m_pTransform->Get_State(CTransform::STATE::STATE_POSITION);
+	_fvector vDist = vMonsterPos - XMLoadFloat3(&g_pObserver->m_fPos);
+	_float fDistToPlayer = XMVectorGetX(XMVector3Length(vDist));
+
+	/*if (20.0f > fDistToPlayer)
+	{
+		m_pTransform->Face_Target(XMLoadFloat3(&g_pObserver->m_fPos));
+	}*/
 
 	return S_OK;
 }
@@ -63,22 +89,16 @@ HRESULT CMidBoss_Rage::ExitState()
 {
 	if (FAILED(__super::ExitState()))
 		return E_FAIL;
+
+	_vector vec = { 0.f, 1.f, 0.f,0.f };
+	m_pTransform->SetUp_Rotation(vec, (XMConvertToRadians(0.f)));
+
+
 	return S_OK;
 }
 
 void CMidBoss_Rage::Look_Player(void)
 {
-	_fvector vMonsterPos = m_pTransform->Get_State(CTransform::STATE::STATE_POSITION);
-
-	_fvector vDist = vMonsterPos - XMLoadFloat3(&g_pObserver->m_fPos);
-
-	_float fDistToPlayer = XMVectorGetX(XMVector3Length(vDist));
-
-	if (2.0f > fDistToPlayer)
-	{
-		m_pTransform->Face_Target(XMLoadFloat3(&g_pObserver->m_fPos));
-		m_pStateController->Change_State(L"Rage");
-	}
 }
 
 CMidBoss_Rage* CMidBoss_Rage::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext, void* pArg)

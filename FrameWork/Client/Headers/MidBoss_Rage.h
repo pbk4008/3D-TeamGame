@@ -3,6 +3,10 @@
 
 #include "Monster_FSM.h"
 
+BEGIN(Engine)
+class CAnimator;
+END
+
 BEGIN(Client)
 class CMidBoss_Rage final : public CMonster_FSM
 {
