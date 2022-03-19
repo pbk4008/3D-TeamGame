@@ -12,10 +12,10 @@ class CShieldBreaker;
 class CStargazer;
 class CMonster_Bastion_Sword final : public CActor
 {
-private:
-	enum class ANIM_TYPE { HEAD, IDLE, ATTACK, RUN_START, RUN_END, RUN_LOOP
+public:
+	enum class ANIM_TYPE { HEAD, IDLE, RUN_START, RUN_END, RUN_LOOP
 		, ATTACK_JUMPSTART,ATTACK_JUMPLOOP, ATTACK_JUMPEND
-		, ATTACK_DOUBLE, ATTACKE_SINGLE
+		, ATTACK_DOUBLE, ATTACK_SINGLE
 		,HIT1, HIT2, HIT3, HIT4,DEATH
 		, GROGGY_START, GROGGY_LOOP, GROGGY_END
 		,BACKWARD_START,BACKWARD_LOOP, BACKWARD_END
@@ -28,25 +28,33 @@ private:
 	explicit CMonster_Bastion_Sword(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext);
 	explicit CMonster_Bastion_Sword(const CMonster_Bastion_Sword& _rhs);
 	virtual ~CMonster_Bastion_Sword() = default;
-
 public:
 	virtual HRESULT NativeConstruct_Prototype() override;
 	virtual HRESULT NativeConstruct(const _uint _iSceneID, void* _pArg = nullptr) override;
 	virtual _int Tick(_double _dDeltaTime) override;
 	virtual _int LateTick(_double _dDeltaTime) override;
 	virtual HRESULT Render() override;
-
 private:
 	virtual HRESULT SetUp_Components();
 	HRESULT Set_Animation_FSM();
+	HRESULT Set_State_FSM();
 	HRESULT Set_Weapon();
-
+	_int Change_State();
+private:
+	void Chase();
 private:
 	CModel* m_pModelCom = nullptr;
 	CAnimator* m_pAnimator = nullptr;
 	CCapsuleCollider* m_pCollider = nullptr;
+	CStateController* m_pStateController = nullptr;
 private:
 	CStargazer* m_pWeapon = nullptr;
+private:
+	ANIM_TYPE m_eHitType = ANIM_TYPE::TYPE_END;//Hit¸¸ ÆÇÁ¤
+	wstring m_wstrCurState = L"";
+private:
+	_uint m_iMaxHp = 0;
+	_uint m_iCurHp = 0;
 public:
 	static CMonster_Bastion_Sword* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext);
 	virtual CGameObject* Clone(const _uint _iSceneID, void* _pArg = nullptr) override;

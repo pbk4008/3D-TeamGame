@@ -167,14 +167,16 @@ HRESULT CSilvermane::NativeConstruct(const _uint _iSceneID, void* _pArg)
 	if (FAILED(Ready_Weapons())) 
 		return E_FAIL;
 
-	g_pObserver->Set_PlayerTransCom(m_pTransform);
+	/*g_pObserver->Set_PlayerTransCom(m_pTransform);*/
+	//생성될때 옵저버에 플레이어 셋팅
+	if (FAILED(g_pObserver->Set_Player(this)))
+		return E_FAIL;
 
 	return S_OK;
 }
 
 _int CSilvermane::Tick(_double _dDeltaTime)
 {
-	m_pAnimationController->Set_MoveSpeed(4.f);
 	_int iProgress = __super::Tick(_dDeltaTime);
 	if (NO_EVENT != iProgress)
 		return iProgress;
@@ -242,9 +244,8 @@ _int CSilvermane::LateTick(_double _dDeltaTime)
 			return iProgress;
 	}
 
-	g_pObserver->Set_PlayerPos(m_pTransform->Get_State(CTransform::STATE_POSITION));
 
-
+	//g_pObserver->Set_PlayerPos(m_pTransform->Get_State(CTransform::STATE_POSITION));
 	return _int();
 }
 
@@ -256,7 +257,6 @@ HRESULT CSilvermane::Render()
 #ifdef _DEBUG
 	m_pCharacterController->Render();
 #endif // _DEBUG
-
 	_matrix smatWorld, smatView, smatProj;
 	smatWorld = XMMatrixTranspose(m_pTransform->Get_CombinedMatrix());
 	smatView = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_VIEW));
@@ -271,25 +271,64 @@ HRESULT CSilvermane::Render()
 
 	for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
 	{
-		//if (FAILED(m_pModel->SetUp_TextureOnShader("g_DiffuseTexture", i, aiTextureType_DIFFUSE))) return E_FAIL;
+		//if (FAILED(m_pModel->SetUp_TextureOnShader("g_DiffuseTexture", i, aiTextureType_DIFFUSE))) 
+		//	return E_FAIL;
 
 		if (FAILED(m_pModel->Render(i, 0)))
 			return E_FAIL;
 	}
 
 #ifdef _DEBUG
-	if (FAILED(m_pAnimationController->Render())) 
-		return E_FAIL;
-	if (FAILED(m_pStateController->Render())) 
-		return E_FAIL;
-	wstring wstrAngle = L"Angle : " + to_wstring(m_fAngle);
-	if (FAILED(g_pGameInstance->Render_Font(TEXT("Font_Arial"), XMVectorSet(1.f, 0.0f, 0.f, 1.f), wstrAngle.c_str(), _float2(0.f, 300.f), _float2(0.8f, 0.8f))))
-		return E_FAIL;
-	wstring wstrPlusAngle = L"Plus Angle : " + to_wstring(m_fPlusAngle);
-	if (FAILED(g_pGameInstance->Render_Font(TEXT("Font_Arial"), XMVectorSet(1.f, 0.0f, 0.f, 1.f), wstrPlusAngle.c_str(), _float2(0.f, 340.f), _float2(0.8f, 0.8f))))
-		return E_FAIL;
+	Render_Debug();
 #endif
 
+	return S_OK;
+}
+
+HRESULT CSilvermane::Render_Debug()
+{
+	if (FAILED(m_pAnimationController->Render()))
+		return E_FAIL;
+	if (FAILED(m_pStateController->Render()))
+		return E_FAIL;
+
+	// FSM
+	wstring wstrCurStateTag = m_pStateController->Get_CurStateTag();
+	if (FAILED(g_pGameInstance->Render_Font(TEXT("Font_Arial"), XMVectorSet(1.f, 0.0f, 0.f, 1.f), wstrCurStateTag.c_str(), _float2(0.f, 40.f), _float2(0.6f, 0.6f))))
+		return E_FAIL;
+
+
+	// 애니메이션 상태들
+	wstring wstrCurKeyFrameIndex = to_wstring(m_pAnimationController->Get_CurKeyFrameIndex());
+	if (FAILED(g_pGameInstance->Render_Font(TEXT("Font_Arial"), XMVectorSet(1.f, 0.0f, 0.f, 1.f), wstrCurKeyFrameIndex.c_str(), _float2(0.f, 60.f), _float2(0.6f, 0.6f))))
+		return E_FAIL;
+	wstring wstrCurIndex = to_wstring(m_pAnimationController->Get_CurFixedBoneKeyFrameIndex());
+	if (FAILED(g_pGameInstance->Render_Font(TEXT("Font_Arial"), XMVectorSet(1.f, 0.0f, 0.f, 1.f), wstrCurIndex.c_str(), _float2(0.f, 80.f), _float2(0.6f, 0.6f))))
+		return E_FAIL;
+	string strCurAnimTag = m_pAnimationController->Get_CurAnimTag();
+	wstring wstrCurAnimTag;
+	wstrCurAnimTag.assign(strCurAnimTag.begin(), strCurAnimTag.end());
+	wstrCurAnimTag = wstrCurAnimTag.substr(wstrCurAnimTag.find_last_of(L"|") + 1);
+	if (FAILED(g_pGameInstance->Render_Font(TEXT("Font_Arial"), XMVectorSet(1.f, 0.0f, 0.f, 1.f), wstrCurAnimTag.c_str(), _float2(0.f, 100.f), _float2(0.6f, 0.6f))))
+		return E_FAIL;
+
+	wstring wstrAnimFinished = L"";
+	if (m_pAnimationController->Is_Finished())
+		wstrAnimFinished = L"AnimFinished : true";
+	else
+		wstrAnimFinished = L"AnimFinished : false";
+	if (FAILED(g_pGameInstance->Render_Font(TEXT("Font_Arial"), XMVectorSet(1.f, 0.0f, 0.f, 1.f), wstrAnimFinished.c_str(), _float2(0.f, 120.f), _float2(0.6f, 0.6f))))
+		return E_FAIL;
+
+
+	// 카메라와의 각도
+	wstring wstrAngle = L"Angle : " + to_wstring(m_fAngle);
+	if (FAILED(g_pGameInstance->Render_Font(TEXT("Font_Arial"), XMVectorSet(1.f, 0.0f, 0.f, 1.f), wstrAngle.c_str(), _float2(0.f, 140.f), _float2(0.6f, 0.6f))))
+		return E_FAIL;
+	// 플러스 각도
+	wstring wstrPlusAngle = L"Plus Angle : " + to_wstring(m_fPlusAngle);
+	if (FAILED(g_pGameInstance->Render_Font(TEXT("Font_Arial"), XMVectorSet(1.f, 0.0f, 0.f, 1.f), wstrPlusAngle.c_str(), _float2(0.f, 160.f), _float2(0.6f, 0.6f))))
+		return E_FAIL;
 	return S_OK;
 }
 
@@ -302,15 +341,21 @@ HRESULT CSilvermane::Ready_Components()
 	m_pTransform->Set_TransformDesc(tTransformDesc);
 	m_pTransform->Set_State(CTransform::STATE_POSITION, XMVectorSet(0.f, 0.f, 0.f, 1.f));
 
+
 	// 모델
-	if (FAILED(SetUp_Components(m_iSceneID, L"Model_Silvermane_Bin", L"Model", (CComponent**)&m_pModel)))
-		return E_FAIL;
-	_matrix matPivot = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(180.f));
-	m_pModel->Set_PivotMatrix(matPivot);
+	// 어심프용
+	//if (FAILED(SetUp_Components(m_iSceneID, L"Model_Silvermane", L"Model", (CComponent**)&m_pModel)))
+	//	return E_FAIL;
 	//m_pModel->Add_Material(g_pGameInstance->Get_Material(L"Mtrl_Silvermane_Top"), 0);
 	//m_pModel->Add_Material(g_pGameInstance->Get_Material(L"Mtrl_Silvermane_Down"), 1);
 	//m_pModel->Add_Material(g_pGameInstance->Get_Material(L"Mtrl_Silvermane_Cloak"), 2);
 	//m_pModel->Add_Material(g_pGameInstance->Get_Material(L"Mtrl_Silvermane_Hair"), 3);
+	// 바이너리용
+	if (FAILED(SetUp_Components(m_iSceneID, L"Model_Silvermane_Bin", L"Model", (CComponent**)&m_pModel)))
+		return E_FAIL;
+	_matrix matPivot = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(180.f));
+	m_pModel->Set_PivotMatrix(matPivot);
+
 
 	// 에니메이션 컨트롤러
 	if (FAILED(SetUp_Components(m_iSceneID, L"Proto_Component_AnimationController", L"AnimationController", (CComponent**)&m_pAnimationController)))
@@ -652,6 +697,11 @@ void CSilvermane::Set_PlusAngle(const _float _fAngle)
 	m_fPlusAngle = _fAngle;
 }
 
+void CSilvermane::Set_IsAttack(const _bool bAttack)
+{
+	m_isAttack = bAttack;
+}
+
 const _bool CSilvermane::Is_EquipWeapon() const
 {
 	return m_isEquipWeapon;
@@ -678,6 +728,11 @@ void CSilvermane::Add_PlusAngle(const _float _fDeltaAngle)
 
 	if (360.f < m_fPlusAngle || -360.f > m_fPlusAngle)
 		m_fPlusAngle = fmodf(m_fPlusAngle, 360.f);
+}
+
+const _bool CSilvermane::Get_IsAttack()
+{
+	return m_isAttack;
 }
 
 const _bool CSilvermane::Change_Weapon(const wstring& _name)
@@ -709,6 +764,11 @@ void CSilvermane::Set_EquipShield(const _bool _isEquipShield)
 		m_pShield->Set_Equip(_isEquipShield);
 		m_isEquipShield = _isEquipShield;
 	}
+}
+
+void CSilvermane::Set_EquipShieldAnim(const _bool _isEquipShield)
+{
+	static_cast<CShield*>(m_pShield)->Set_EquipAnim(_isEquipShield);
 }
 
 _int CSilvermane::Trace_CameraLook(const _double& _dDeltaTime)
@@ -787,7 +847,7 @@ void CSilvermane::Free()
 	Safe_Release(m_pShield);
 	for (auto& pair : m_umapWeapons)
 		Safe_Release(pair.second);
-	m_umapWeapons;
+	m_umapWeapons.clear();
 
 	Safe_Release(m_pCharacterController);
 	Safe_Release(m_pStateController);

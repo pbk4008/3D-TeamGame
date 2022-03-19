@@ -23,7 +23,7 @@ _int CShooter_Idle::Tick(const _double& _dDeltaTime)
 
 	m_pAnimator->Tick(_dDeltaTime);
 
-	m_pTransform->Face_Target(XMLoadFloat3(&g_pObserver->m_fPos));
+	m_pTransform->Face_Target(g_pObserver->Get_PlayerPos());
 	
 	return _int();
 }

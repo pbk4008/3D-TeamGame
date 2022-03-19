@@ -1,16 +1,17 @@
 #include "pch.h"
 #include "Bastion_2HSword_Attack.h"
+#include "Animation.h"
 
 /* Monster List */
 #include "Monster_Bastion_2HSword.h"
 
 CBastion_2HSword_Attack::CBastion_2HSword_Attack(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
-	: CMonster_FSM(_pDevice, _pDeviceContext)
+	: CBastion_2HSword_State(_pDevice, _pDeviceContext)
 {
 }
 
 CBastion_2HSword_Attack::CBastion_2HSword_Attack(const CBastion_2HSword_Attack& _rhs)
-	: CMonster_FSM(_rhs)
+	: CBastion_2HSword_State(_rhs)
 {
 }
 
@@ -60,19 +61,19 @@ HRESULT CBastion_2HSword_Attack::EnterState()
 	switch (randAtt)
 	{
 	case 0:
-		if (FAILED(m_pAnimator->Change_Animation((_uint)CMonster_Bastion_2HSword::ANIM_TYPE::A_ATTACK_R1)))
+		if (FAILED(m_pAnimator->Change_AnyEntryAnimation((_uint)CMonster_Bastion_2HSword::ANIM_TYPE::A_ATTACK_R1)))
 			return E_FAIL;
 		break;
 	case 1:
-		if (FAILED(m_pAnimator->Change_Animation((_uint)CMonster_Bastion_2HSword::ANIM_TYPE::A_ATTACK_R2)))
+		if (FAILED(m_pAnimator->Change_AnyEntryAnimation((_uint)CMonster_Bastion_2HSword::ANIM_TYPE::A_ATTACK_R2)))
 			return E_FAIL;
 		break;
 	case 2:
-		if (FAILED(m_pAnimator->Change_Animation((_uint)CMonster_Bastion_2HSword::ANIM_TYPE::A_ATTACK_S1)))
+		if (FAILED(m_pAnimator->Change_AnyEntryAnimation((_uint)CMonster_Bastion_2HSword::ANIM_TYPE::A_ATTACK_S1)))
 			return E_FAIL;
 		break;
 	case 3:
-		if (FAILED(m_pAnimator->Change_Animation((_uint)CMonster_Bastion_2HSword::ANIM_TYPE::A_ATTACK_S3)))
+		if (FAILED(m_pAnimator->Change_AnyEntryAnimation((_uint)CMonster_Bastion_2HSword::ANIM_TYPE::A_ATTACK_S3)))
 			return E_FAIL;
 		break;
 	}
@@ -91,18 +92,15 @@ HRESULT CBastion_2HSword_Attack::ExitState()
 
 void CBastion_2HSword_Attack::Look_Player(void)
 {
-	_fvector vMonsterPos = m_pTransform->Get_State(CTransform::STATE::STATE_POSITION);
-	_fvector vDist = vMonsterPos - XMLoadFloat3(&g_pObserver->m_fPos);
-	_float fDistToPlayer = XMVectorGetX(XMVector3Length(vDist));
+	CAnimation* pAnim = m_pAnimator->Get_CurrentAnimation();
 
-	if (5.0f < fDistToPlayer && 15.0f > fDistToPlayer)
-	{
-		m_pTransform->Face_Target(XMLoadFloat3(&g_pObserver->m_fPos));
+	if (m_bTargetOn && pAnim->Is_Finished())
 		m_pStateController->Change_State(L"Chaser");
-	}
+}
 
-	if (TRUE == g_pObserver->m_bAttack)
-		m_pStateController->Change_State(L"Dash");
+void CBastion_2HSword_Attack::Look_Monster(void)
+{
+
 }
 
 CBastion_2HSword_Attack* CBastion_2HSword_Attack::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext, void* _pArg)

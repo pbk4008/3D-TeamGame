@@ -11,6 +11,7 @@ CAnimationController::CAnimationController(ID3D11Device* _pDevice, ID3D11DeviceC
 
 CAnimationController::CAnimationController(const CAnimationController& _rhs)
 	: CComponent(_rhs)
+	, m_matPivot(_rhs.m_matPivot)
 {
 }
 
@@ -18,7 +19,7 @@ HRESULT CAnimationController::NativeConstruct_Prototype()
 {
 	if (FAILED(__super::NativeConstruct_Prototype()))
 		return E_FAIL;
-
+	XMStoreFloat4x4(&m_matPivot, XMMatrixIdentity());
 	return S_OK;
 }
 
@@ -38,6 +39,7 @@ _int CAnimationController::Tick(const _double& _dDeltaTime, const EType _eType)
 	switch (_eType)
 	{
 	case EType::Transform:
+		//트랜스폼 하는곳
 		if (0 > Move_Transform(_dDeltaTime))
 			return -1;
 		break;
@@ -49,6 +51,7 @@ _int CAnimationController::Tick(const _double& _dDeltaTime, const EType _eType)
 
 	if(-1 != m_tBlendDesc.iNextAnimIndex)
 	{
+		//루트 애니메이션
 		if (FAILED(m_pModel->Update_CombinedTransformationMatrix(m_tBlendDesc.iNextAnimIndex, m_isRootMotion, m_eRootOption)))
 			return E_FAIL;
 	}
@@ -103,6 +106,11 @@ const _bool CAnimationController::Get_ChangeAnimation() const
 	return m_isChangeAnim;
 }
 
+const string& CAnimationController::Get_CurAnimTag() const
+{
+	return m_strCurAnimTag;
+}
+
 void CAnimationController::Set_GameObject(CGameObject* _pGameObject)
 {
 	m_pGameObject = _pGameObject;
@@ -130,7 +138,7 @@ void CAnimationController::Set_TransformMove(const _bool _isTransformMove)
 
 void CAnimationController::Set_PivotMatrix(const _fmatrix& _smatPivot)
 {
-	m_smatPivot = _smatPivot;
+	XMStoreFloat4x4(&m_matPivot, _smatPivot);
 }
 
 void CAnimationController::Set_RootMotion(const _bool _isRootMotion, const _bool _isTransformMove, const ERootOption _eRootOption)
@@ -183,8 +191,10 @@ void CAnimationController::Add_TrackAcc(const _double& _dTrackAcc)
 
 _int CAnimationController::Update_CombinedTransformMatrix(const _double& _dDeltaTime)
 {
+	//애니메이션들 가져옴
 	vector<CAnimation*>& vecAnimations = m_pModel->Get_Animations();
 
+	//바꾸는 애니메이션이 잇는지 
 	if (-1 != m_tBlendDesc.iNextAnimIndex)
 	{
 		//if (!m_isChangeAnim)
@@ -193,6 +203,7 @@ _int CAnimationController::Update_CombinedTransformMatrix(const _double& _dDelta
 		//	m_isChangeAnim = true;
 		//}
 
+		//러프 비율
 		m_tBlendDesc.fChangeTime += (_float)_dDeltaTime;
 		m_tBlendDesc.fTweenTime = m_tBlendDesc.fChangeTime / m_tBlendDesc.fTakeTime;
 
@@ -200,6 +211,7 @@ _int CAnimationController::Update_CombinedTransformMatrix(const _double& _dDelta
 		m_isFinished = vecAnimations[m_tBlendDesc.iNextAnimIndex]->Is_Finished();
 		m_iCurKeyFrameIndex = vecAnimations[m_tBlendDesc.iNextAnimIndex]->Get_CurrentKeyFrameIndex();
 
+		//러프 ㄱㄱ
 		Lerp_Anim(vecAnimations);
 	}
 	else
@@ -209,6 +221,7 @@ _int CAnimationController::Update_CombinedTransformMatrix(const _double& _dDelta
 		m_iCurKeyFrameIndex = vecAnimations[m_tBlendDesc.iCurAnimIndex]->Get_CurrentKeyFrameIndex();
 	}
 
+	//러프의 시간이 1초보다 커지면 애니메이션 변경
 	if (m_tBlendDesc.fTweenTime >= 1.f)
 	{
 		//vecAnimations[m_tBlendDesc.iCurAnimIndex]->Reset_Animation();
@@ -370,9 +383,10 @@ const _int CAnimationController::Move_Transform(const _double& _dDeltaTime)
 	{
 		return 0;
 	}
-
+	//현재 애니메이션이 잇으면
 	if (m_pCurAnim)
 	{
+		//루트 본
 		if (m_pFixedBone)
 		{
 			if (m_pFixedBone->Get_CurrentKeyFrameIndex() == m_iCurFixedBoneKeyFrameIndex)
@@ -382,9 +396,11 @@ const _int CAnimationController::Move_Transform(const _double& _dDeltaTime)
 
 			if (1.f < m_fFixedBoneHoldTime)
 				return 0;
-
+			//고정뼈의 키프래임들 가져오기
 			vector<KEYFRAME*> KeyFrames = m_pFixedBone->Get_KeyFrames();
+			//고정뼈의 키프레임의 현재 Index 
 			m_iCurFixedBoneKeyFrameIndex = m_pFixedBone->Get_CurrentKeyFrameIndex();
+			//고정뼈의 이전 키프레임 Index
 			m_iPreFixedBoneKeyFrameIndex = m_iCurFixedBoneKeyFrameIndex - 1;
 
 			_vector svPosition = m_pTransform->Get_State(CTransform::STATE_POSITION);
@@ -398,11 +414,13 @@ const _int CAnimationController::Move_Transform(const _double& _dDeltaTime)
 			_vector svPreQuaternian = XMVectorZero();
 			_vector svQuaternian = XMVectorZero();
 
+			//현재 키프레임이 0이면
 			if (0 == m_iCurFixedBoneKeyFrameIndex)
 			{
+				//끝의 한틱 이동량을 구함
 				svPreVelocity = XMLoadFloat3(&KeyFrames[KeyFrames.size() - 2]->vPosition);
 				svVelocity = XMLoadFloat3(&KeyFrames[KeyFrames.size() - 1]->vPosition);
-
+				//끈의 한틱 회전량을 구함
 				svPreQuaternian = XMLoadFloat4(&KeyFrames[KeyFrames.size() - 2]->vRotation);
 				svQuaternian = XMLoadFloat4(&KeyFrames[KeyFrames.size() - 1]->vRotation);
 
@@ -411,8 +429,10 @@ const _int CAnimationController::Move_Transform(const _double& _dDeltaTime)
 			}
 			else
 			{
+				//현재의 키프레임 변화량을 구한다
 				if (m_iPreFixedBoneKeyFrameIndex >= 0)
 				{
+					
 					svPreVelocity = XMLoadFloat3(&KeyFrames[m_iPreFixedBoneKeyFrameIndex]->vPosition);
 					svPreQuaternian = XMLoadFloat4(&KeyFrames[m_iPreFixedBoneKeyFrameIndex]->vRotation);
 				}
@@ -424,14 +444,22 @@ const _int CAnimationController::Move_Transform(const _double& _dDeltaTime)
 			}
 
 			//svVelocity *= _dDeltaTime;
+			
+			//변환에 의한 피벗을 곱해준다?
+			// 
 			//svQuaternian = XMVector4Transform(svQuaternian, XMLoadFloat4x4(&m_matPivot));
 
 			_float3 vVelocity, vBonePosition, vEuler, vRotation;
 			_float4 vQuaternian;
+			//1틱의 변화량을 가져온다
 			XMStoreFloat3(&vVelocity, svVelocity);
+			////1틱의 회전량을 가져온다
 			XMStoreFloat4(&vQuaternian, svQuaternian);
+			//회전량을 오일러 각도로 변환한다
 			vEuler = QuaternionToEuler(vQuaternian);
 
+
+			//루트 옵션에 따라(블랜더와 우리의 축을 맞게 변환)
 			switch (m_eRootOption)
 			{
 			case ERootOption::X:
@@ -462,16 +490,78 @@ const _int CAnimationController::Move_Transform(const _double& _dDeltaTime)
 			m_pTransform->Rotation_Axis(svRight, XMConvertToRadians(vRotation.x) * _dDeltaTime * m_fRotSpeed);
 			m_pTransform->Rotation_Axis(svUp, XMConvertToRadians(vRotation.y) * _dDeltaTime * m_fRotSpeed);
 			m_pTransform->Rotation_Axis(svLook, XMConvertToRadians(vRotation.z) * _dDeltaTime * m_fRotSpeed);
+			//회전 각도를 만들고
+			vRotation = { -vEuler.x, -vEuler.z, -vEuler.y };
 
+			//객체 기준 x축으로 회전
+			m_pTransform->Rotation_Axis(svRight, _dDeltaTime * vRotation.x);
+			//객체 기준 y축으로 회전
+			m_pTransform->Rotation_Axis(svUp, _dDeltaTime * vRotation.y);
+			//객체 기준 x축으로 회전
+			m_pTransform->Rotation_Axis(svLook, _dDeltaTime * vRotation.z);
+
+
+			//look벡터 가져오고
+			svLook = m_pTransform->Get_State(CTransform::STATE_LOOK);
+
+			//변화량을 vector로 만들어주고
 			svVelocity = XMLoadFloat3(&vBonePosition);
-			svVelocity = XMVector4Transform(svVelocity, m_smatPivot * m_pTransform->Get_PivotMatrix());
+			//변화량 벡터에 뼈에 대한 피벗을 과 객체의 피벗을 곱해준다
+			svVelocity = XMVector4Transform(svVelocity, XMLoadFloat4x4(&m_matPivot) * m_pTransform->Get_PivotMatrix());
 
+			//변화량을 집어넣어준다.
 			XMStoreFloat3(&vVelocity, svVelocity);
 			m_pTransform->Go_Right((_float)vVelocity.x * _dDeltaTime * m_fMoveSpeed);
 			m_pTransform->Go_Up((_float)vVelocity.y * _dDeltaTime * m_fMoveSpeed);
 			m_pTransform->Go_Straight((_float)vVelocity.z * _dDeltaTime * m_fMoveSpeed);
+
+
+			//_matrix matTransform = m_pTransform->Get_WorldMatrix();
+
+
+			//_matrix matScale = XMMatrixIdentity();
+			//_matrix matRotate = XMMatrixRotationQuaternion(svQuaternian);
+
+			////루트 옵션에 따라(블랜더와 우리의 축을 맞게 변환), 위치값 셋팅
+			//switch (m_eRootOption)
+			//{
+			//case ERootOption::X:
+			//	vBonePosition = { -vVelocity.x, 0.f, 0.f };
+			//	break;
+			//case ERootOption::Y:
+			//	vBonePosition = { 0.f, 0.f, -vVelocity.y };
+			//	break;
+			//case ERootOption::Z:
+			//	vBonePosition = { 0.f, -vVelocity.z, 0.f };
+			//	break;
+			//case ERootOption::XY:
+			//	vBonePosition = { -vVelocity.x, 0.f, -vVelocity.y };
+			//	break;
+			//case ERootOption::XZ:
+			//	vBonePosition = { -vVelocity.x, -vVelocity.z, 0.f };
+			//	break;
+			//case ERootOption::YZ:
+			//	vBonePosition = { 0.f, -vVelocity.z, -vVelocity.y };
+			//	break;
+			//case ERootOption::XYZ:
+			//	vBonePosition = { -vVelocity.x, -vVelocity.z, -vVelocity.y };
+			//	break;
+			//}
+
+			//_matrix matPos = XMMatrixTranslation(vBonePosition.x, vBonePosition.y, vBonePosition.z);
+
+			//matTransform = matScale * matRotate * matPos;
+
+			//matTransform *= XMLoadFloat4x4(&m_matPivot);
+
+			//_matrix matResult = m_pTransform->Get_WorldMatrix();
+			//matResult *= matTransform;
+			//m_pTransform->Set_WorldMatrix(matResult);
+
 		}
 	}
+
+
 
 	return _int();
 }
@@ -540,7 +630,7 @@ const _int CAnimationController::Add_TransformVelocity(const _double& _dDeltaTim
 			}
 
 			//svVelocity *= _dDeltaTime;
-			svQuaternian = XMVector4Transform(svQuaternian, m_smatPivot);
+			svQuaternian = XMVector4Transform(svQuaternian, XMLoadFloat4x4(&m_matPivot));
 
 			_float3 vVelocity, vBonePosition, vEuler, vRotation;
 			_float4 vQuaternian;
@@ -583,7 +673,7 @@ const _int CAnimationController::Add_TransformVelocity(const _double& _dDeltaTim
 			svLook = m_pTransform->Get_State(CTransform::STATE_LOOK);
 
 			svVelocity = XMLoadFloat3(&vBonePosition);
-			svVelocity = XMVector4Transform(svVelocity, m_smatPivot * m_pTransform->Get_PivotMatrix());
+			svVelocity = XMVector4Transform(svVelocity, XMLoadFloat4x4(&m_matPivot) * m_pTransform->Get_PivotMatrix());
 			
 			_vector svWorldQuaterian = XMQuaternionNormalize(XMQuaternionRotationMatrix(m_pTransform->Get_WorldMatrix()));
 			_matrix svRotation = XMMatrixRotationQuaternion(svWorldQuaterian);
@@ -592,15 +682,6 @@ const _int CAnimationController::Add_TransformVelocity(const _double& _dDeltaTim
 			XMStoreFloat3(&vVelocity, svVelocity);
 			svVelocity *= m_fMoveSpeed;
 			m_pTransform->Add_Velocity(svVelocity);
-
-			// 요 아래는 디버그 용이야
-			_float3 vPosition = { 0.f, 0.f, 0.f };
-			XMStoreFloat3(&vBonePosition, svPosition);
-
-			wstring wstrBonePosition = L"FixedBonePosition : ";
-			wstrBonePosition += wstrBonePosition + to_wstring(vBonePosition.x) + L", " + to_wstring(vBonePosition.y) + L", " + to_wstring(vBonePosition.z);
-			wstring wstrPosition = L"Position : ";
-			wstrPosition += to_wstring(vPosition.x) + L", " + to_wstring(vPosition.y) + L", " + to_wstring(vPosition.z);
 		}
 	}
 
@@ -614,37 +695,7 @@ void CAnimationController::Reset_Animation()
 
 void CAnimationController::Render_Debug()
 {
-	if (FAILED(g_pGameInstance->Render_Font(TEXT("Font_Arial"), XMVectorSet(1.f, 0.0f, 0.f, 1.f), m_wstrPosition.c_str(), _float2(0.f, 80.f), _float2(0.8f, 0.8f))))
-		return;
 
-	if (m_pFixedBone)
-	{
-		if (FAILED(g_pGameInstance->Render_Font(TEXT("Font_Arial"), XMVectorSet(1.f, 0.f, 0.f, 1.f), m_wstrFixedBonePosition.c_str(), _float2(0.f, 40.f), _float2(0.8f, 0.8f))))
-			return;
-
-		m_wstrCurIndex = (to_wstring(m_iCurFixedBoneKeyFrameIndex));
-		if (FAILED(g_pGameInstance->Render_Font(TEXT("Font_Arial"), XMVectorSet(1.f, 0.0f, 0.f, 1.f), m_wstrCurIndex.c_str(), _float2(0.f, 160.f), _float2(0.8f, 0.8f))))
-			return;
-	}
-
-	if (m_pCurAnim)
-	{
-		m_wstrCurAnimTag.assign(m_strCurAnimTag.begin(), m_strCurAnimTag.end());
-		m_wstrCurAnimTag = m_wstrCurAnimTag.substr(m_wstrCurAnimTag.find_last_of(L"|") + 1);
-		if (FAILED(g_pGameInstance->Render_Font(TEXT("Font_Arial"), XMVectorSet(1.f, 0.0f, 0.f, 1.f), m_wstrCurAnimTag.c_str(), _float2(0.f, 200.f), _float2(0.8f, 0.8f))))
-			return;
-
-		m_wstrPreIndex = (to_wstring(m_iCurKeyFrameIndex));
-		if (FAILED(g_pGameInstance->Render_Font(TEXT("Font_Arial"), XMVectorSet(1.f, 0.0f, 0.f, 1.f), m_wstrPreIndex.c_str(), _float2(0.f, 120.f), _float2(0.8f, 0.8f))))
-			return;
-
-		if (m_pCurAnim->Is_Finished())
-			m_wstrIsFinished = L"true";
-		else
-			m_wstrIsFinished = L"false";
-		if (FAILED(g_pGameInstance->Render_Font(TEXT("Font_Arial"), XMVectorSet(1.f, 0.0f, 0.f, 1.f), m_wstrIsFinished.c_str(), _float2(0.f, 240.f), _float2(0.8f, 0.8f))))
-			return;
-	}
 }
 
 CAnimationController* CAnimationController::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)

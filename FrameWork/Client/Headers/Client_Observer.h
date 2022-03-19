@@ -2,28 +2,36 @@
 #define Client_Observer_h__
 
 #include "SingleTon.h"
-
+BEGIN(Client)
+class CSilvermane;
 class CClient_Observer final :  public CSingleTon<CClient_Observer>
 {
-	friend CSingleTon;
-
-protected:
-	CClient_Observer(void);
+friend CSingleTon;
+private:
+	explicit CClient_Observer(void);
 	virtual ~CClient_Observer(void) = default;
 
 public:
-	void Set_PlayerWordlMat(_fmatrix _matWorld);
-	void Set_PlayerPos(_fvector _vecPos);
-	void Set_PlayerAttack(_bool _isAttack);
-	void Set_PlayerTransCom(CTransform* _pTransCom);
+	//플레이어 셋팅
+	HRESULT Set_Player(CSilvermane* pPlayer);
 public:
-	_float4x4 m_matWorld;
-	_float3	  m_fPos;
-	_bool	  m_bAttack = false;
-	CTransform* m_pPlayerTrans = nullptr;
-
+	//플레이어 Transform가져오기
+	const CTransform* Get_Transform();
+	//플레이어 월드Matrix 가져오기
+	_fmatrix Get_PlayerWorldMatrix();
+	//플레이어 Pos 가져오기
+	_fvector Get_PlayerPos();
+	//플레이어가 공격하는지 안하는지 체크
+	const _bool Get_IsAttack();
+	//플레이어와 해당 좌표와의 거리
+	const _float Get_Dist(_fvector vPos);
+public:
+	//플레이어 공격 셋팅
+	void Set_IsAttack(const _bool bAttack);
+private:
+	CSilvermane* m_pPlayer;
 public:
 	virtual void Free(void) override;
 };
-
+END
 #endif // Client_Observer_h__

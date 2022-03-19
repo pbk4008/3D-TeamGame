@@ -51,12 +51,17 @@ void CHierarchyNode::Update_CombinedTransformationMatrix(const _uint _iAnimIndex
 {
 	if (nullptr != m_Channels[_iAnimIndex])
 	{
+		//뼈가 루트 일때만
 		if (_isRootMotion && !strcmp(m_szBoneName, "root"))
 		{
+			//현재 키프래임의 회전 값을 가져온다
 			_float3 vRot = QuaternionToEuler(m_Channels[_iAnimIndex]->Get_CurrentKeyFrame()->vRotation);
+			//현재 키프레임의 위치값을 가져온다
 			_float3 vPos = m_Channels[_iAnimIndex]->Get_CurrentKeyFrame()->vPosition;
+			//현재 키프레임의 크기값을 가져온다
 			_float3 vScale = m_Channels[_iAnimIndex]->Get_CurrentKeyFrame()->vScale;
 
+			//해당 축을 고정 시킨다
 			switch (_eRootOption)
 			{
 			case ERootOption::X:
@@ -98,7 +103,7 @@ void CHierarchyNode::Update_CombinedTransformationMatrix(const _uint _iAnimIndex
 				vRot.z = 0;
 				break;
 			}
-
+			//루트의 vector값으로 matrix를 만든다
 			XMStoreFloat4x4(&m_TransformationMatrix
 				, XMMatrixScaling(vScale.x, vScale.y, vScale.z)
 				* XMMatrixRotationRollPitchYaw(vRot.x, vRot.y, vRot.z)

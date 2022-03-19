@@ -5,12 +5,12 @@
 #include "Monster_Bastion_2HSword.h"
 
 CBastion_2HSword_Chaser::CBastion_2HSword_Chaser(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
-	: CMonster_FSM(_pDevice, _pDeviceContext)
+	: CBastion_2HSword_State(_pDevice, _pDeviceContext)
 {
 }
 
 CBastion_2HSword_Chaser::CBastion_2HSword_Chaser(const CBastion_2HSword_Chaser& _rhs)
-	: CMonster_FSM(_rhs)
+	: CBastion_2HSword_State(_rhs)
 {
 }
 
@@ -30,7 +30,7 @@ _int CBastion_2HSword_Chaser::Tick(const _double& _dDeltaTime)
 
 	m_pAnimator->Tick(_dDeltaTime);
 
-	m_pTransform->Chase_Target(g_pObserver->m_pPlayerTrans, _dDeltaTime);
+	m_pTransform->Chase_Target(g_pObserver->Get_Transform(), _dDeltaTime);
 
 	return _int();
 }
@@ -72,19 +72,15 @@ HRESULT CBastion_2HSword_Chaser::ExitState()
 void CBastion_2HSword_Chaser::Look_Player(void)
 {
 	_fvector vMonsterPos = m_pTransform->Get_State(CTransform::STATE::STATE_POSITION);
-
-	_fvector vDist = vMonsterPos - XMLoadFloat3(&g_pObserver->m_fPos);
-
+	_fvector vDist = vMonsterPos - g_pObserver->Get_PlayerPos();
 	_float fDistToPlayer = XMVectorGetX(XMVector3Length(vDist));
 
-	if (2.0f > fDistToPlayer || 15.0f < fDistToPlayer)
-	{
- 		m_pTransform->Face_Target(XMLoadFloat3(&g_pObserver->m_fPos));
-  		m_pStateController->Change_State(L"Idle");
-	}
+	if (!m_bTargetOn)
+		m_pStateController->Change_State(L"Idle");
+}
 
-	if (2.0f > fDistToPlayer)
-		m_pStateController->Change_State(L"Attack");
+void CBastion_2HSword_Chaser::Look_Monster(void)
+{
 }
 
 CBastion_2HSword_Chaser* CBastion_2HSword_Chaser::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext, void* _pArg)

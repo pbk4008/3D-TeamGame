@@ -14,12 +14,12 @@ CTransform::CTransform(const CTransform & rhs)
 	: CComponent(rhs)
 	, m_WorldMatrix(rhs.m_WorldMatrix)
 {
-	
+	XMStoreFloat4x4(&m_matPivot, XMMatrixIdentity());
 }
 
 const _fvector CTransform::Get_CombinedState(const STATE _eState)
 {
-	_matrix smatCombined = m_smatPivot* XMLoadFloat4x4(&m_WorldMatrix);
+	_matrix smatCombined = XMLoadFloat4x4(&m_matPivot) * XMLoadFloat4x4(&m_WorldMatrix);
 	_float4x4 matCombined; XMStoreFloat4x4(&matCombined, smatCombined);
 
 	return XMLoadFloat4((_float4*)&matCombined.m[_eState][0]);
@@ -57,7 +57,7 @@ void CTransform::Set_TransformDesc(_float fSpeedPerSec, _float fAnglePerSec)
 
 void CTransform::Set_PivotMatrix(const _fmatrix& _matPivot)
 {
-	m_smatPivot = _matPivot;
+	XMStoreFloat4x4(&m_matPivot, _matPivot);
 }
 
 void CTransform::Go_Straight(_double TimeDelta, CNavigation * pNavigation)
@@ -162,7 +162,7 @@ void CTransform::Chase_Target(const CTransform * pTargetTransform, _double TimeD
 void CTransform::Face_Target(_fvector vTargetPos)
 {
 	_vector		vPosition = Get_State(CTransform::STATE_POSITION);
-	_vector		vLook = vTargetPos - vPosition;
+	_vector		vLook = vPosition - vTargetPos;
 
 	_vector		vRight = XMVector3Cross(XMVectorSet(0.f, 1.f, 0.f, 0.f), vLook);
 	vLook = XMVector3Cross(vRight, XMVectorSet(0.f, 1.f, 0.f, 0.f));
@@ -173,6 +173,7 @@ void CTransform::Face_Target(_fvector vTargetPos)
 	Set_State(CTransform::STATE_LOOK, vLook);
 	Set_State(CTransform::STATE_RIGHT, vRight);
 }
+
 
 void CTransform::Rotation_Axis(_fvector vAxis, _double TimeDelta)
 {

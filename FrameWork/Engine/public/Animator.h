@@ -57,6 +57,9 @@ public:
 	CAnimationController* Get_AnimController() { return m_pController; };
 public:
 	vector<_uint> Get_Nodes() { return m_vecAnimNode; }
+	_bool Get_IsLerp() { return m_bLerp; }
+public:
+	void Set_PivotMatrix(_fmatrix matPivot);
 private:
 	//애니메이션 찾기
 	CAnimNode* Find_Animation(_uint itTag, CAnimNode* pNode=nullptr);
@@ -70,6 +73,9 @@ public:
 	virtual CComponent* Clone(void* pArg);
 private:
 	virtual void Free() override;
+private:
+	//러프 중인지 아닌지 판단하는 변수
+	_bool m_bLerp;
 private:
 	CAnimationController* m_pController;
 	CAnimNode* m_pHead;//링크드 리스트 Head 노드

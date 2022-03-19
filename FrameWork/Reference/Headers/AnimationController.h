@@ -43,6 +43,8 @@ public:
 	const _uint Get_MaxKeyFrameIndex() const;
 	const ERootOption Get_RootOption() const;
 	const _bool Get_ChangeAnimation() const;
+	/* For.Debug */ // 외부에서 디버깅용으로 상태를 알아가기 위한 겟함수들
+	const string& Get_CurAnimTag() const;
 
 	void Set_GameObject(CGameObject* _pGameObject);
 	void Set_Transform(CTransform* _pTransform);
@@ -72,6 +74,7 @@ public:
 	const _int Add_TransformVelocity(const _double& _dDeltaTime);
 	void Reset_Animation();
 	
+public: /* For.Debug */
 	void Render_Debug();
 
 private:
@@ -105,17 +108,13 @@ private:
 	_float m_fRotSpeed = 700.f;
 	_float m_fFixedBoneHoldTime = 0.f;
 
-	_matrix m_smatPivot = XMMatrixIdentity();
+	_float4x4 m_matPivot;
 
 	ANIMBLENDDESC m_tBlendDesc;
 
 	// 디버그용
 	wstring m_wstrFixedBonePosition = L"";
 	wstring m_wstrPosition = L"";
-	wstring m_wstrCurAnimTag = L"";
-	wstring m_wstrPreIndex = L"";
-	wstring m_wstrCurIndex = L"";
-	wstring m_wstrIsFinished = L"";
 
 public:
 	static CAnimationController* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext);

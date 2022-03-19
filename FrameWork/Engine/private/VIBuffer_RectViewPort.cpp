@@ -158,7 +158,6 @@ CVIBuffer_RectViewPort * CVIBuffer_RectViewPort::Create(ID3D11Device * pDevice, 
 		MSGBOX("Failed to Creating CVIBuffer_RectViewPort");
 		Safe_Release(pInstance);
 	}
-
 	return pInstance;
 }
 

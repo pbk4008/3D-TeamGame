@@ -8,9 +8,21 @@ class CAnimator;
 class CModel;
 class CActor;
 class CTransform;
+class CStateController;
 
 class ENGINE_DLL CMonster_FSM abstract : public CState
 {
+public:
+	typedef struct tagStateFSMDesc
+	{
+		CAnimator* pAnimator;
+		CStateController* pController;
+		_tchar pName[MAX_PATH];
+	}FSMDESC;
+	typedef struct tagStateFSMMoveDesc : public tagStateFSMDesc
+	{
+		CTransform* pTransform;
+	}FSMMOVEDESC;
 protected:
 	explicit CMonster_FSM(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext);
 	virtual ~CMonster_FSM() = default;
@@ -33,6 +45,7 @@ public:
 
 protected:
 	virtual void Look_Player(void); /* 플레이어 상태 추적 */
+	virtual void Look_Monster(void); /* 몬스터 자신의 상태 추적 */
 
 protected:
 	CAnimator*  m_pAnimator  = nullptr;

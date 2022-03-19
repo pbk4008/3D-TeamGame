@@ -36,7 +36,7 @@ HRESULT CFury::NativeConstruct(const _uint _iSceneID, void* _pArg)
 	if (_pArg)
 		m_pFixedBone = static_cast<CHierarchyNode*>(_pArg);
 
-	m_smatPivot = XMMatrixRotationRollPitchYaw(XMConvertToRadians(-21.5f), XMConvertToRadians(-118.f), XMConvertToRadians(20.f)) * XMMatrixTranslation(0.28f, 0.11f, 0.05f);
+	XMStoreFloat4x4(&m_matPivot, XMMatrixRotationRollPitchYaw(XMConvertToRadians(-21.5f), XMConvertToRadians(-118.f), XMConvertToRadians(20.f)) * XMMatrixTranslation(0.28f, 0.11f, 0.05f));
 
 	return S_OK;
 }
@@ -111,7 +111,7 @@ _int CFury::Attach_FixedBone(const _double& _dDeltaTime)
 
 		if (!m_isEquip)
 		{
-			smatWorld = m_smatPivot * smatWorld;
+			smatWorld = XMLoadFloat4x4(&m_matPivot) * smatWorld;
 		}
 
 		m_pLocalTransform->Set_WorldMatrix(smatWorld);

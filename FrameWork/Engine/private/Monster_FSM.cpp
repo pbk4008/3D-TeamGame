@@ -1,5 +1,8 @@
 #include "Monster_FSM.h"
-
+#include "Transform.h"
+#include "Model.h"
+#include "Animator.h"
+#include "Actor.h"
 
 CMonster_FSM::CMonster_FSM(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
 	: CState(_pDevice, _pDeviceContext)
@@ -21,6 +24,7 @@ _int CMonster_FSM::Tick(const _double& _dDeltaTime)
 		return iProgress;
 
 	Look_Player();
+	Look_Monster();
 
 	return _int();
 }
@@ -62,7 +66,15 @@ void CMonster_FSM::Look_Player(void)
 {
 }
 
+void CMonster_FSM::Look_Monster(void)
+{
+}
+
 void CMonster_FSM::Free()
 {
 	__super::Free();
+	Safe_Release(m_pModel);
+	Safe_Release(m_pAnimator);
+	Safe_Release(m_pTransform);
+	Safe_Release(m_pMonster);
 }

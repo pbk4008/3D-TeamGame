@@ -37,7 +37,7 @@ HRESULT CNeedle::NativeConstruct(const _uint _iSceneID, void* _pArg)
 	if (_pArg)
 		m_pFixedBone = static_cast<CHierarchyNode*>(_pArg);
 
-	m_smatPivot = XMMatrixRotationRollPitchYaw(XMConvertToRadians(-20.f), XMConvertToRadians(-67.f), XMConvertToRadians(0.f)) * XMMatrixTranslation(0.5f, 0.05f, -0.2f);
+	XMStoreFloat4x4(&m_matPivot, XMMatrixRotationRollPitchYaw(XMConvertToRadians(-20.f), XMConvertToRadians(-67.f), XMConvertToRadians(0.f)) * XMMatrixTranslation(0.5f, 0.05f, -0.2f));
 
 	return S_OK;
 }
@@ -111,7 +111,7 @@ _int CNeedle::Attach_FixedBone(const _double& _dDeltaTime)
 		smatWorld *= XMLoadFloat4x4(&m_smatOwnerPivot);;
 
 		if (!m_isEquip)
-			smatWorld = m_smatPivot * smatWorld;
+			smatWorld = XMLoadFloat4x4(&m_matPivot) * smatWorld;
 
 		m_pLocalTransform->Set_WorldMatrix(smatWorld);
 	}

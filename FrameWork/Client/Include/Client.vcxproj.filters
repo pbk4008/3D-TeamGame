@@ -274,6 +274,15 @@
     <Filter Include="02.GameObject\98.Player\00.Silvermane\State\Jump">
       <UniqueIdentifier>{c46bf2a8-6d72-4573-8057-fad1bf3781e0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\95.Monster\Bastion_2HSword\State_2HSword\Rage">
+      <UniqueIdentifier>{bd8eebf8-c00f-4303-9ddc-b43dfb509314}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\50.JumpNode">
+      <UniqueIdentifier>{15743125-3fab-4955-a1a7-2c3ab22ace2e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\95.Monster\Bastion_2HSword\State_2HSword\Rage">
+      <UniqueIdentifier>{bd8eebf8-c00f-4303-9ddc-b43dfb509314}</UniqueIdentifier>
+    </Filter>
     <Filter Include="02.GameObject\95.Monster\Bastion_Shooter\Attack">
       <UniqueIdentifier>{0e465f15-42b9-4038-9066-ca93866e3c94}</UniqueIdentifier>
     </Filter>
@@ -297,6 +306,42 @@
     </Filter>
     <Filter Include="02.GameObject\93.Boss\00.MiddleBoss\State\04.Chase">
       <UniqueIdentifier>{9ca0b922-5493-4c13-b374-4312bd2f3120}</UniqueIdentifier>
+	</Filter>
+    <Filter Include="02.GameObject\95.Monster\Bastion_2HSword\State_2HSword\Rage\Rage_Attack">
+      <UniqueIdentifier>{b13c53f4-6c0a-428b-b366-9dd68df48dd5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\95.Monster\Bastion_Sword\00.State">
+      <UniqueIdentifier>{9607ce11-6263-4e1e-8495-2de83143c495}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\95.Monster\Bastion_Sword\00.State\00.Idle">
+      <UniqueIdentifier>{2398d3e4-0aad-4c0a-b779-2676cae6f42f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\95.Monster\Bastion_Sword\00.State\01.Chase">
+      <UniqueIdentifier>{198aa2cf-1f67-4f22-b567-e3dc4942f330}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\95.Monster\Bastion_Sword\00.State\02.Attack">
+      <UniqueIdentifier>{37cf987f-07dd-4d07-9d9b-25d6172a3b02}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\95.Monster\Bastion_Sword\00.State\03.Hit">
+      <UniqueIdentifier>{c566e27b-d8f9-4f71-a9a3-1f26dea458e5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\95.Monster\Bastion_Sword\00.State\04.Death">
+      <UniqueIdentifier>{ef3cb63a-530b-45b7-92f9-fdd0cdbeffc0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\95.Monster\Bastion_Sword\00.State\05.Groggy">
+      <UniqueIdentifier>{3d15588b-416d-40ca-b9f2-015a9e9d2a0b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\95.Monster\Bastion_Sword\00.State\06.Paring">
+      <UniqueIdentifier>{0914aca3-ccbf-42a5-83c1-a594627f4e52}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\95.Monster\Bastion_Sword\00.State\07.Turn">
+      <UniqueIdentifier>{f15707ff-b13d-4f61-ae5b-8aaf6d1afdc7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\95.Monster\Bastion_Sword\00.State\08.Walk">
+      <UniqueIdentifier>{fe36a500-8b7c-4714-bff8-ed49386ac515}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\95.Monster\Bastion_2HSword\State_2HSword\Hit">
+      <UniqueIdentifier>{7622b84d-629f-47c9-91a2-0c5b83b391dc}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -781,9 +826,6 @@
     <ClInclude Include="..\Headers\Bastion_2HSword_Chaser.h">
       <Filter>02.GameObject\95.Monster\Bastion_2HSword\State_2HSword\Chaser</Filter>
     </ClInclude>
-    <ClInclude Include="..\Headers\Bastion_2HSword_Attack.h">
-      <Filter>02.GameObject\95.Monster\Bastion_2HSword\State_2HSword\Attack</Filter>
-    </ClInclude>
     <ClInclude Include="..\Headers\TestScene_Sb.h">
       <Filter>01.Scene\100.TestScene_SB</Filter>
     </ClInclude>
@@ -792,6 +834,9 @@
     </ClInclude>
     <ClInclude Include="..\Headers\Traverse_Jump400Jog.h">
       <Filter>02.GameObject\98.Player\00.Silvermane\State\Jump</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\JumpNode.h">
+      <Filter>02.GameObject\50.JumpNode</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\Shooter_Attack.h">
       <Filter>02.GameObject\95.Monster\Bastion_Shooter\Attack</Filter>
@@ -807,6 +852,51 @@
     </ClInclude>
     <ClInclude Include="..\Headers\MidBoss_Turn.h">
       <Filter>02.GameObject\93.Boss\00.MiddleBoss\State\03.Turn</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Bastion_2HSword_Death.h">
+      <Filter>02.GameObject\95.Monster\Bastion_2HSword\State_2HSword\Death</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Bastion_2HSword_Rage.h">
+      <Filter>02.GameObject\95.Monster\Bastion_2HSword\State_2HSword\Rage</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Bastion_2HSword_Attack_Rage.h">
+      <Filter>02.GameObject\95.Monster\Bastion_2HSword\State_2HSword\Rage\Rage_Attack</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Bastion_2HSword_Attack.h">
+      <Filter>02.GameObject\95.Monster\Bastion_2HSword\State_2HSword\Attack</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Bastion_Sword_Idle.h">
+      <Filter>02.GameObject\95.Monster\Bastion_Sword\00.State\00.Idle</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Bastion_Sword_Chase.h">
+      <Filter>02.GameObject\95.Monster\Bastion_Sword\00.State\01.Chase</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Bastion_Sword_Attack.h">
+      <Filter>02.GameObject\95.Monster\Bastion_Sword\00.State\02.Attack</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Bastion_Sword_Hit.h">
+      <Filter>02.GameObject\95.Monster\Bastion_Sword\00.State\03.Hit</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Bastion_Sword_Death.h">
+      <Filter>02.GameObject\95.Monster\Bastion_Sword\00.State\04.Death</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Bastion_Sword_Groggy.h">
+      <Filter>02.GameObject\95.Monster\Bastion_Sword\00.State\05.Groggy</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Bastion_Sword_Paring.h">
+      <Filter>02.GameObject\95.Monster\Bastion_Sword\00.State\06.Paring</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Bastion_Sword_Turn.h">
+      <Filter>02.GameObject\95.Monster\Bastion_Sword\00.State\07.Turn</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Bastion_Sword_Walk.h">
+      <Filter>02.GameObject\95.Monster\Bastion_Sword\00.State\08.Walk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Bastion_2HSword_State.h">
+      <Filter>02.GameObject\95.Monster\Bastion_2HSword\State_2HSword</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Bastion_2HSword_Hit.h">
+      <Filter>02.GameObject\95.Monster\Bastion_2HSword\State_2HSword\Hit</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1016,10 +1106,10 @@
     <ClCompile Include="..\Codes\2H_HammerIdle.cpp">
       <Filter>02.GameObject\98.Player\00.Silvermane\State\2H_Hammer\Default</Filter>
     </ClCompile>
-    <ClCompile Include="..\Codes\2H_Hammer_EquipOff.cpp">
+    <ClCompile Include="..\Codes\2H_HammerEquipOff.cpp">
       <Filter>02.GameObject\98.Player\00.Silvermane\State\2H_Hammer\Default</Filter>
     </ClCompile>
-    <ClCompile Include="..\Codes\2H_Hammer_EquipOn.cpp">
+    <ClCompile Include="..\Codes\2H_HammerEquipOn.cpp">
       <Filter>02.GameObject\98.Player\00.Silvermane\State\2H_Hammer\Default</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\2H_HammerJog.cpp">
@@ -1268,9 +1358,6 @@
     <ClCompile Include="..\Codes\Bastion_2HSword_Chaser.cpp">
       <Filter>02.GameObject\95.Monster\Bastion_2HSword\State_2HSword\Chaser</Filter>
     </ClCompile>
-    <ClCompile Include="..\Codes\Bastion_2HSword_Attack.cpp">
-      <Filter>02.GameObject\95.Monster\Bastion_2HSword\State_2HSword\Attack</Filter>
-    </ClCompile>
     <ClCompile Include="..\Codes\TestScene_Sb.cpp">
       <Filter>01.Scene\100.TestScene_SB</Filter>
     </ClCompile>
@@ -1279,6 +1366,9 @@
     </ClCompile>
     <ClCompile Include="..\Codes\Traverse_Jump400Jog.cpp">
       <Filter>02.GameObject\98.Player\00.Silvermane\State\Jump</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\JumpNode.cpp">
+      <Filter>02.GameObject\50.JumpNode</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\Shooter_Attack.cpp">
       <Filter>02.GameObject\95.Monster\Bastion_Shooter\Attack</Filter>
@@ -1294,6 +1384,51 @@
     </ClCompile>
     <ClCompile Include="..\Codes\MidBoss_Turn.cpp">
       <Filter>02.GameObject\93.Boss\00.MiddleBoss\State\03.Turn</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Bastion_2HSword_Death.cpp">
+      <Filter>02.GameObject\95.Monster\Bastion_2HSword\State_2HSword\Death</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Bastion_2HSword_Rage.cpp">
+      <Filter>02.GameObject\95.Monster\Bastion_2HSword\State_2HSword\Rage</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Bastion_2HSword_Attack_Rage.cpp">
+      <Filter>02.GameObject\95.Monster\Bastion_2HSword\State_2HSword\Rage\Rage_Attack</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Bastion_2HSword_Attack.cpp">
+      <Filter>02.GameObject\95.Monster\Bastion_2HSword\State_2HSword\Attack</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Bastion_Sword_Idle.cpp">
+      <Filter>02.GameObject\95.Monster\Bastion_Sword\00.State\00.Idle</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Bastion_Sword_Chase.cpp">
+      <Filter>02.GameObject\95.Monster\Bastion_Sword\00.State\01.Chase</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Bastion_Sword_Attack.cpp">
+      <Filter>02.GameObject\95.Monster\Bastion_Sword\00.State\02.Attack</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Headers\Bastion_Sword_Hit.cpp">
+      <Filter>02.GameObject\95.Monster\Bastion_Sword\00.State\03.Hit</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Bastion_Sword_Death.cpp">
+      <Filter>02.GameObject\95.Monster\Bastion_Sword\00.State\04.Death</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Bastion_Sword_Groggy.cpp">
+      <Filter>02.GameObject\95.Monster\Bastion_Sword\00.State\05.Groggy</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Bastion_Sword_Paring.cpp">
+      <Filter>02.GameObject\95.Monster\Bastion_Sword\00.State\06.Paring</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Headers\Bastion_Sword_Turn.cpp">
+      <Filter>02.GameObject\95.Monster\Bastion_Sword\00.State\07.Turn</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Bastion_Sword_Walk.cpp">
+      <Filter>02.GameObject\95.Monster\Bastion_Sword\00.State\08.Walk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Bastion_2HSword_State.cpp">
+      <Filter>02.GameObject\95.Monster\Bastion_2HSword\State_2HSword</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Bastion_2HSword_Hit.cpp">
+      <Filter>02.GameObject\95.Monster\Bastion_2HSword\State_2HSword\Hit</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

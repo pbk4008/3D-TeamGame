@@ -8,7 +8,8 @@ CAnimator::CAnimator(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
 	, m_pController(nullptr)
 	, m_pHead(nullptr)
 	, m_pCulAnimNode(nullptr)
-	,m_pChangeNode(nullptr)
+	, m_pChangeNode(nullptr)
+	, m_bLerp(false)
 {
 }
 
@@ -18,6 +19,7 @@ CAnimator::CAnimator(const CAnimator& rhs)
 	, m_pHead(nullptr)
 	, m_pCulAnimNode(nullptr)
 	, m_pChangeNode(nullptr)
+	, m_bLerp(false)
 {
 	Safe_AddRef(m_pController);
 }
@@ -55,7 +57,6 @@ HRESULT CAnimator::NativeConstruct(void* pArg)
 
 	m_pCulAnimNode = m_pHead;
 
-
 	return S_OK;
 }
 
@@ -66,16 +67,17 @@ _int CAnimator::Tick(_double dDeltaTime)
 	{
 		m_pCulAnimNode = m_pChangeNode;
 		m_pController->Set_IsChange(false);
+		m_bLerp = false;
 	}
 
 	if (m_pCulAnimNode->Get_AutoIndex() != -1)
 	{
 		if (!m_pCulAnimNode->Get_Loop() && m_pController->Is_Finished())
 			Change_Animation(m_pCulAnimNode->Get_AutoIndex());
-		/*if (m_pCulAnimNode->Is_LoopChange())
+		if (m_pCulAnimNode->Is_LoopChange())
 			m_pCulAnimNode->Change_Loop(true);
-		if (m_pController->Is_Finished())
-			Change_Animation(m_vecAnimNodeName[m_pCulAnimNode->Get_AutoIndex()]);*/
+		//if (m_pController->Is_Finished())
+		//	Change_Animation(m_vecAnimNodeName[m_pCulAnimNode->Get_AutoIndex()]);
 	}
 	return _int();
 }
@@ -210,7 +212,7 @@ HRESULT CAnimator::Change_Animation(_uint iTag)
 	//Animation컨트롤러에 바꿀애니메이션으로 예약
 	if (FAILED(m_pController->SetUp_NextAnimation(m_pChangeNode)))
 		return E_FAIL;
-
+	m_bLerp = true;
 	return S_OK;
 }
 
@@ -225,6 +227,7 @@ HRESULT CAnimator::Change_AnyEntryAnimation(_uint iTag)
 	if (FAILED(m_pController->SetUp_NextAnimation(m_pChangeNode)))
 		return E_FAIL;
 
+	m_bLerp = true;
 	return S_OK;
 }
 
@@ -239,6 +242,13 @@ HRESULT CAnimator::Change_LoopAnim()
 	m_pCulAnimNode->Change_Loop(false);
 
 	return S_OK;
+}
+
+void CAnimator::Set_PivotMatrix(_fmatrix matPivot)
+{
+	if (!m_pController)
+		return;
+	m_pController->Set_PivotMatrix(matPivot);
 }
 
 CAnimNode* CAnimator::Find_Animation(_uint iTag, CAnimNode* pNode)
