@@ -14,12 +14,13 @@ HRESULT CBastion_Sword_Idle::NativeConstruct(void* _pArg)
 		return E_FAIL;
 
 
-	FSMDESC tDesc = (*(FSMDESC*)_pArg);
+	FSMMOVEDESC tDesc = (*(FSMMOVEDESC*)_pArg);
 
 	m_wstrTag = tDesc.pName;
 	m_pAnimator = tDesc.pAnimator;
-
+	m_pTransform = tDesc.pTransform;
 	Safe_AddRef(m_pAnimator);
+	Safe_AddRef(m_pTransform);
 
 	if (FAILED(CMonster_FSM::NativeConstruct(_pArg)))
 		return E_FAIL;
@@ -50,10 +51,21 @@ HRESULT CBastion_Sword_Idle::Render()
 
 HRESULT CBastion_Sword_Idle::EnterState()
 {
+	
 	return S_OK;
 }
 
 HRESULT CBastion_Sword_Idle::ExitState()
+{
+	return S_OK;
+}
+
+HRESULT CBastion_Sword_Idle::EnterState(void* _pArg)
+{
+	return S_OK;
+}
+
+HRESULT CBastion_Sword_Idle::ExitState(void* _pArg)
 {
 	return S_OK;
 }

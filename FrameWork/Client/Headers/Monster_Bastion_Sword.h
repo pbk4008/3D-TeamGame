@@ -52,6 +52,9 @@ private:
 private:
 	ANIM_TYPE m_eHitType = ANIM_TYPE::TYPE_END;//Hit¸¸ ÆÇÁ¤
 	wstring m_wstrCurState = L"";
+private:
+	_uint m_iMaxHp = 0;
+	_uint m_iCurHp = 0;
 public:
 	static CMonster_Bastion_Sword* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext);
 	virtual CGameObject* Clone(const _uint _iSceneID, void* _pArg = nullptr) override;

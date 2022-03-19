@@ -4,6 +4,7 @@
 
 CBastion_Sword_Attack::CBastion_Sword_Attack(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
 	: CMonster_FSM(_pDevice,_pDeviceContext)
+	, m_eAttackType(ATTACK_TYPE::ATTACK_END)
 {
 }
 
@@ -12,13 +13,15 @@ HRESULT CBastion_Sword_Attack::NativeConstruct(void* _pArg)
 	if (!_pArg)
 		return E_FAIL;
 
-	FSMDESC tDesc = (*(FSMDESC*)_pArg);
+	FSMMOVEDESC tDesc = (*(FSMMOVEDESC*)_pArg);
 	m_pAnimator = tDesc.pAnimator;
 	m_pStateController = tDesc.pController;
+	m_pTransform = tDesc.pTransform;
+
 	m_wstrTag = tDesc.pName;
 
 	Safe_AddRef(m_pAnimator);
-
+	Safe_AddRef(m_pTransform);
 
 	if (FAILED(CMonster_FSM::NativeConstruct(_pArg)))
 		return E_FAIL;
@@ -34,8 +37,6 @@ _int CBastion_Sword_Attack::Tick(const _double& _dDeltaTime)
 	m_pAnimator->Tick(_dDeltaTime);
 
 	//무한 루프에 대한 조건 들어갈 자리
-
-
 
 	if (m_pAnimator->Get_CurrentAnimNode() == (_uint)CMonster_Bastion_Sword::ANIM_TYPE::IDLE)
 		m_pStateController->Change_State(L"Idle");
@@ -54,25 +55,36 @@ HRESULT CBastion_Sword_Attack::Render()
 	return S_OK;
 }
 
-HRESULT CBastion_Sword_Attack::EnterState()
+HRESULT CBastion_Sword_Attack::EnterState(void* pArg)
 {
-	_uint iAttackType = rand() % 3;
-	switch (iAttackType)
+	m_eAttackType = (*(ATTACK_TYPE*)pArg);
+
+	switch (m_eAttackType)
 	{
-	case 0:
+	case ATTACK_TYPE::ATTACK_SINGLE:
 		if (FAILED(m_pAnimator->Change_AnyEntryAnimation((_uint)CMonster_Bastion_Sword::ANIM_TYPE::ATTACK_SINGLE)))
 			return E_FAIL;
 		break;
-	case 1:
+	case ATTACK_TYPE::ATTACK_DOUBLE:
 		if (FAILED(m_pAnimator->Change_AnyEntryAnimation((_uint)CMonster_Bastion_Sword::ANIM_TYPE::ATTACK_DOUBLE)))
 			return E_FAIL;
 		break;
-	case 2:
+	case ATTACK_TYPE::ATTACK_JUMP:
 		if (FAILED(m_pAnimator->Change_AnyEntryAnimation((_uint)CMonster_Bastion_Sword::ANIM_TYPE::ATTACK_JUMPSTART)))
 			return E_FAIL;
 		break;
 	}
 
+	return S_OK;
+}
+
+HRESULT CBastion_Sword_Attack::ExitState(void* _pArg)
+{
+	return S_OK;
+}
+
+HRESULT CBastion_Sword_Attack::EnterState()
+{
 	return S_OK;
 }
 

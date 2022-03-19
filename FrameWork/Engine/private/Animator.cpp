@@ -239,6 +239,13 @@ HRESULT CAnimator::Change_LoopAnim()
 	return S_OK;
 }
 
+void CAnimator::Set_PivotMatrix(_fmatrix matPivot)
+{
+	if (!m_pController)
+		return;
+	m_pController->Set_PivotMatrix(matPivot);
+}
+
 CAnimNode* CAnimator::Find_Animation(_uint iTag, CAnimNode* pNode)
 {
 	if (iTag == 0)

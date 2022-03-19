@@ -8,6 +8,12 @@ BEGIN(Client)
 
 class CBastion_Sword_Hit final : public CMonster_FSM
 {
+public:
+	typedef struct tagHitData
+	{
+		_uint iHitType;
+		_uint iCurHp;
+	}HITDATA;
 private:
 	explicit CBastion_Sword_Hit(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext);
 	virtual ~CBastion_Sword_Hit() = default;
@@ -19,6 +25,8 @@ public:
 	virtual HRESULT Render();
 
 public:
+	virtual HRESULT EnterState();
+	virtual HRESULT ExitState();
 	virtual HRESULT EnterState(void* _pArg);
 	virtual HRESULT ExitState(void* _pArg);
 
@@ -26,6 +34,8 @@ public:
 	static CBastion_Sword_Hit* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext, void* _pArg = nullptr);
 private:
 	virtual void Free() override;
+private:
+	_uint m_iCurHp;
 };
 END
 #endif

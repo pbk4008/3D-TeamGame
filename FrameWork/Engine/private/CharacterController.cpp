@@ -101,35 +101,37 @@ HRESULT CCharacterController::Render()
 	if (!m_pGizmo)
 		return E_FAIL;
 	
+	_vector vColor = XMVectorSet(1.f, 0.f, 0.f, 1.f);
+	m_pGizmo->DrawCapsule(XMLoadFloat4x4(&m_matWorld), L"Camera_Silvermane", vColor);
 	//CPhysicsXSystem* pPhysXSystem = GET_INSTANCE(CPhysicsXSystem);
 	//const PxRenderBuffer& rb = pPhysXSystem->Get_RenderBuffer();
 	//RELEASE_INSTANCE(CPhysicsXSystem);
 
-	const PxRenderBuffer& rb = m_pPxController->getActor()->getScene()->getRenderBuffer();
-	//PxU32 index = m_pPxController->getActor()->getInternalIslandNodeIndex();
-	_float4 vColor = { 1.f, 0.f, 0.f, 1.f };
+	//const PxRenderBuffer& rb = m_pPxController->getActor()->getScene()->getRenderBuffer();
+	////PxU32 index = m_pPxController->getActor()->getInternalIslandNodeIndex();
+	//	_float4 vColor = { 1.f, 0.f, 0.f, 1.f };
 
-	m_pEffect->SetView(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_VIEW));
-	m_pEffect->SetProjection(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_PROJECTION));
+	//m_pEffect->SetView(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_VIEW));
+	//m_pEffect->SetProjection(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_PROJECTION));
 
-	m_pDeviceContext->IASetInputLayout(m_pInputLayout);
-	m_pEffect->Apply(m_pDeviceContext);
+	//m_pDeviceContext->IASetInputLayout(m_pInputLayout);
+	//m_pEffect->Apply(m_pDeviceContext);
 
-	m_pBatch->Begin();
+	//m_pBatch->Begin();
 
-	PxU32 iNBLines = rb.getNbLines();
-	for (PxU32 i = 0; i < iNBLines; ++i)
-	{
-		const PxDebugLine line = rb.getLines()[i];
-		_float3 pos0 = FromPxVec3(line.pos0);
-		_float3 pos1 = FromPxVec3(line.pos1);
-		_vector vPos0 = XMLoadFloat4(&_float4(pos0.x, pos0.y, pos0.z, 1.f));
-		_vector vPos1 = XMLoadFloat4(&_float4(pos1.x, pos1.y, pos1.z, 1.f));
+	//PxU32 iNBLines = rb.getNbLines();
+	//for (PxU32 i = 0; i < iNBLines; ++i)
+	//{
+	//	const PxDebugLine line = rb.getLines()[i];
+	//	_float3 pos0 = FromPxVec3(line.pos0);
+	//	_float3 pos1 = FromPxVec3(line.pos1);
+	//	_vector vPos0 = XMLoadFloat4(&_float4(pos0.x, pos0.y, pos0.z, 1.f));
+	//	_vector vPos1 = XMLoadFloat4(&_float4(pos1.x, pos1.y, pos1.z, 1.f));
 
-		DX::DrawTriangle(m_pBatch, vPos0, vPos1, vPos0, XMLoadFloat4(&vColor));
-	}
+	//	DX::DrawTriangle(m_pBatch, vPos0, vPos1, vPos0, XMLoadFloat4(&vColor));
+	//}
 
-	m_pBatch->End();
+	//m_pBatch->End();
 
 	return S_OK;
 }

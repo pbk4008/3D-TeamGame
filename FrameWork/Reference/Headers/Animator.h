@@ -53,6 +53,8 @@ public:
 public:
 	vector<_uint> Get_Nodes() { return m_vecAnimNode; }
 	_bool Get_IsLerp() { return m_bLerp; }
+public:
+	void Set_PivotMatrix(_fmatrix matPivot);
 private:
 	//애니메이션 찾기
 	CAnimNode* Find_Animation(_uint itTag, CAnimNode* pNode=nullptr);
