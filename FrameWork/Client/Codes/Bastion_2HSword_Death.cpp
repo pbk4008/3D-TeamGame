@@ -6,12 +6,12 @@
 #include "Monster_Bastion_2HSword.h"
 
 CBastion_2HSword_Death::CBastion_2HSword_Death(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
-	: CMonster_FSM(_pDevice, _pDeviceContext)
+	: CBastion_2HSword_State(_pDevice, _pDeviceContext)
 {
 }
 
 CBastion_2HSword_Death::CBastion_2HSword_Death(const CBastion_2HSword_Death& _rhs)
-	: CMonster_FSM(_rhs)
+	: CBastion_2HSword_State(_rhs)
 {
 }
 
@@ -31,10 +31,6 @@ _int CBastion_2HSword_Death::Tick(const _double& _dDeltaTime)
 
 	m_pAnimator->Tick(_dDeltaTime);
 
-	CAnimation* pAnim =  m_pAnimator->Get_CurrentAnimation();
-
-	if (pAnim->Is_Finished())
-		static_cast<CMonster_Bastion_2HSword*>(m_pMonster)->m_bRender = false;
 
 	return _int();
 }
@@ -81,6 +77,10 @@ void CBastion_2HSword_Death::Look_Player(void)
 
 void CBastion_2HSword_Death::Look_Monster(void)
 {
+	CAnimation* pAnim = m_pAnimator->Get_CurrentAnimation();
+
+	if (pAnim->Is_Finished())
+		static_cast<CMonster_Bastion_2HSword*>(m_pMonster)->m_bRender = false;
 }
 
 CBastion_2HSword_Death* CBastion_2HSword_Death::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext, void* _pArg)

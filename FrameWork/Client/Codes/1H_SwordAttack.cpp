@@ -57,7 +57,8 @@ HRESULT C1H_SwordAttack::ExitState()
 	if (FAILED(__super::ExitState()))
 		return E_FAIL;
 
-	g_pObserver->Set_IsAttack(false);
+	g_pObserver->Set_IsAttack(FALSE);
+
 	return S_OK;
 }
 

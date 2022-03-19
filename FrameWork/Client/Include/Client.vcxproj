@@ -253,8 +253,10 @@
     <ClInclude Include="..\Headers\Bastion_2HSword_Chaser.h" />
     <ClInclude Include="..\Headers\Bastion_2HSword_Dash.h" />
     <ClInclude Include="..\Headers\Bastion_2HSword_Death.h" />
+    <ClInclude Include="..\Headers\Bastion_2HSword_Hit.h" />
     <ClInclude Include="..\Headers\Bastion_2HSword_Idle.h" />
     <ClInclude Include="..\Headers\Bastion_2HSword_Rage.h" />
+    <ClInclude Include="..\Headers\Bastion_2HSword_State.h" />
     <ClInclude Include="..\Headers\Bastion_Sword_Attack.h" />
     <ClInclude Include="..\Headers\Bastion_Sword_Chase.h" />
     <ClInclude Include="..\Headers\Bastion_Sword_Death.h" />
@@ -431,8 +433,10 @@
     <ClCompile Include="..\Codes\Bastion_2HSword_Chaser.cpp" />
     <ClCompile Include="..\Codes\Bastion_2HSword_Dash.cpp" />
     <ClCompile Include="..\Codes\Bastion_2HSword_Death.cpp" />
+    <ClCompile Include="..\Codes\Bastion_2HSword_Hit.cpp" />
     <ClCompile Include="..\Codes\Bastion_2HSword_Idle.cpp" />
     <ClCompile Include="..\Codes\Bastion_2HSword_Rage.cpp" />
+    <ClCompile Include="..\Codes\Bastion_2HSword_State.cpp" />
     <ClCompile Include="..\Codes\Bastion_Sword_Attack.cpp" />
     <ClCompile Include="..\Codes\Bastion_Sword_Chase.cpp" />
     <ClCompile Include="..\Codes\Bastion_Sword_Death.cpp" />

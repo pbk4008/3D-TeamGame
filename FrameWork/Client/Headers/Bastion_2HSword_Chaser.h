@@ -1,10 +1,10 @@
 #ifndef Bastion_2HSword_Chaser_h__
 #define Bastion_2HSword_Chaser_h__
 
-#include "Monster_FSM.h"
+#include "Bastion_2HSword_State.h"
 
 BEGIN(Client)
-class CBastion_2HSword_Chaser final : public CMonster_FSM
+class CBastion_2HSword_Chaser final : public CBastion_2HSword_State
 {
 
 protected:

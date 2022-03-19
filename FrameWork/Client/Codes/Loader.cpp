@@ -977,6 +977,8 @@ HRESULT CLoader::Ready_Test_YM()
 		return E_FAIL;
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_TEST_YM, L"Proto_Component_Animator", CAnimator::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_TEST_YM, L"Proto_Component_CapsuleCollider", CCapsuleCollider::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
 #pragma endregion
 #pragma region 오브젝트
 	cout << "TestScene_YM 오브젝트 프로토타입 생성중..." << endl;

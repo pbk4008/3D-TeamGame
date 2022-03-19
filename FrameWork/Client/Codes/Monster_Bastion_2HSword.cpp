@@ -1,15 +1,16 @@
 #include "pch.h"
 #include "Monster_Bastion_2HSword.h"
-
+#include "Animation.h"
 /* for. Weapon */
 #include "RetributionBlade.h"
 
 /* for. FSM */
 #include "Bastion_2HSword_Idle.h"
+#include "Bastion_2HSword_Hit.h"
+#include "Bastion_2HSword_Death.h"
 #include "Bastion_2HSword_Chaser.h"
 #include "Bastion_2HSword_Dash.h"
 #include "Bastion_2HSword_Attack.h"
-#include "Bastion_2HSword_Death.h"
 #include "Bastion_2HSword_Rage.h"
 #include "Bastion_2HSword_Attack_Rage.h"
 
@@ -51,6 +52,9 @@ _int CMonster_Bastion_2HSword::Tick(_double _dDeltaTime)
 	_int iProgress = __super::Tick(_dDeltaTime);
 	if (NO_EVENT != iProgress) 
 		return iProgress;
+
+	/* Collider Update */
+	m_pColliderCom->Update(m_pTransform->Get_WorldMatrix());
 
 	/* State FSM Update */
 	iProgress = m_pStateController->Tick(_dDeltaTime);
@@ -112,21 +116,25 @@ HRESULT CMonster_Bastion_2HSword::Render()
 
 		for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
 		{
-			//if (FAILED(m_pModel->SetUp_TextureOnShader("g_DiffuseTexture", i, aiTextureType_DIFFUSE))) return E_FAIL;
-
 			if (FAILED(m_pModel->Render(i, 0))) return E_FAIL;
 		}
+
+#ifdef _DEBUG
+		Render_Debug();
+		m_pColliderCom->Render(L"Camera_Silvermane");
+#endif
 	}
 	else
+	{
 		m_pCurWeapon = nullptr;
-
+	}
 	return S_OK;
 }
 
 HRESULT CMonster_Bastion_2HSword::Ready_Components()
 {
 	CTransform::TRANSFORMDESC transformDesc;
-	transformDesc.fSpeedPerSec = 1.0f;
+	transformDesc.fSpeedPerSec = 0.7f;
 	transformDesc.fRotationPerSec = XMConvertToRadians(90.f);
 	m_pTransform->Set_TransformDesc(transformDesc);
 	_float4 vPosition = { 0.f, 0.f, 3.f, 1.f };
@@ -140,6 +148,21 @@ HRESULT CMonster_Bastion_2HSword::Ready_Components()
 	_matrix matPivot = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(180.f));
 	m_pModel->Set_PivotMatrix(matPivot);
 
+	/* for. Collider */
+	CCapsuleCollider::CAPSULEDESC CapDesc;
+	XMStoreFloat4x4(&CapDesc.matTransform, XMMatrixIdentity());
+	CapDesc.pParent = this;
+
+	CPhysicsXSystem::COLDESC PhyDesc;
+	PhyDesc.bGravity = false;
+	PhyDesc.bKinematic = false;
+	PhyDesc.eType = CPhysicsXSystem::ACTORTYPE::ACTOR_DYNAMIC;
+	CapDesc.tColDesc = PhyDesc;
+	if (FAILED(__super::SetUp_Components((_uint)SCENEID::SCENE_TEST_YM, L"Proto_Component_CapsuleCollider", L"Com_CapsuleCollider", (CComponent**)&m_pColliderCom, &CapDesc)))
+	{
+		return E_FAIL;
+	}
+
 	// 스테이트 컨트롤러
 	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_TEST_YM, L"Proto_Component_StateController", L"StateController", (CComponent**)&m_pStateController)))
 		return E_FAIL;
@@ -148,7 +171,7 @@ HRESULT CMonster_Bastion_2HSword::Ready_Components()
 	m_AanimDesc.pModel = m_pModel;
 	m_AanimDesc.pTransform = m_pTransform;
 
-	//m_pAnimator
+	//Anim FSM
 	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_TEST_YM, L"Proto_Component_Animator", L"Animator", (CComponent**)&m_pAnimator, &m_AanimDesc)))
 		return E_FAIL;
 
@@ -225,19 +248,25 @@ HRESULT CMonster_Bastion_2HSword::Ready_AnimFSM(void)
 	//pAnimation = m_pModel->Get_Animation("A_Turn_180_Right");
 #pragma endregion
 
-#pragma region Insert Anim
+#pragma region Default
 	CAnimation* pAnimation = m_pModel->Get_Animation("A_Idle");
 	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::A_IDLE, (_uint)ANIM_TYPE::A_HEAD, pAnimation, TRUE, TRUE, TRUE, ERootOption::XYZ)))
 		return E_FAIL;
 
+	//Hit
+	pAnimation = m_pModel->Get_Animation("A_Stagger_Left");
+	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::A_FLINCH_LEFT, (_uint)ANIM_TYPE::A_HEAD, pAnimation, TRUE, FALSE, FALSE, ERootOption::XYZ)))
+		return E_FAIL;
 	//A_Death
 	pAnimation = m_pModel->Get_Animation("A_Death");
 	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::A_DEATH, (_uint)ANIM_TYPE::A_HEAD, pAnimation, TRUE, FALSE, FALSE, ERootOption::XYZ)))
 		return E_FAIL;
+#pragma endregion
 
+#pragma region Walk_Fwd
 	//A_Walk_Fwd
 	pAnimation = m_pModel->Get_Animation("A_Walk_Fwd_Start");
-	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::A_WALK_FWD_ST, (_uint)ANIM_TYPE::A_IDLE, pAnimation, TRUE, FALSE, FALSE, ERootOption::XYZ)))
+	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::A_WALK_FWD_ST, (_uint)ANIM_TYPE::A_HEAD, pAnimation, TRUE, TRUE, FALSE, ERootOption::XYZ)))
 		return E_FAIL;
 
 	pAnimation = m_pModel->Get_Animation("A_Walk_Fwd");
@@ -245,132 +274,79 @@ HRESULT CMonster_Bastion_2HSword::Ready_AnimFSM(void)
 		return E_FAIL;
 
 	pAnimation = m_pModel->Get_Animation("A_Walk_Fwd_End");
-	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::A_WALK_FWD_ED, (_uint)ANIM_TYPE::A_WALK_FWD, pAnimation, TRUE, FALSE, FALSE, ERootOption::XYZ)))
+	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::A_WALK_FWD_ED, (_uint)ANIM_TYPE::A_WALK_FWD, pAnimation, TRUE, TRUE, FALSE, ERootOption::XYZ)))
 		return E_FAIL;
-	
+#pragma endregion
+
+#pragma region Dash
 	//A_Dash_Bwd
 	pAnimation = m_pModel->Get_Animation("A_Dash_Bwd");
 	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::A_DASH_BWD, (_uint)ANIM_TYPE::A_HEAD, pAnimation, TRUE, TRUE, FALSE, ERootOption::XYZ, FALSE)))
 		return E_FAIL;
 
-	pAnimation = m_pModel->Get_Animation("A_Dash_Left");
-	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::A_DASH_LEFT, (_uint)ANIM_TYPE::A_HEAD, pAnimation, FALSE, TRUE, FALSE, ERootOption::XYZ, FALSE)))
+	pAnimation = m_pModel->Get_Animation("A_Dash_Right");
+	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::A_DASH_RIGHT, (_uint)ANIM_TYPE::A_HEAD, pAnimation, TRUE, TRUE, FALSE, ERootOption::XYZ, FALSE)))
 		return E_FAIL;
 
+	pAnimation = m_pModel->Get_Animation("A_Dash_Left");
+	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::A_DASH_LEFT, (_uint)ANIM_TYPE::A_HEAD, pAnimation, TRUE, TRUE, FALSE, ERootOption::XYZ, FALSE)))
+		return E_FAIL;
+#pragma  endregion
+
+#pragma region Attack
 	//A_Attack
 	pAnimation = m_pModel->Get_Animation("A_Attack_R1");
-	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::A_ATTACK_R1, (_uint)ANIM_TYPE::A_HEAD, pAnimation, TRUE, TRUE, TRUE, ERootOption::XYZ, FALSE)))
+	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::A_ATTACK_R1, (_uint)ANIM_TYPE::A_HEAD, pAnimation, TRUE, TRUE, FALSE, ERootOption::XYZ, FALSE)))
 		return E_FAIL;
 
 	pAnimation = m_pModel->Get_Animation("A_Attack_R2");
-	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::A_ATTACK_R2, (_uint)ANIM_TYPE::A_HEAD, pAnimation, TRUE, TRUE, TRUE, ERootOption::XYZ, FALSE)))
+	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::A_ATTACK_R2, (_uint)ANIM_TYPE::A_HEAD, pAnimation, TRUE, TRUE, FALSE, ERootOption::XYZ, FALSE)))
 		return E_FAIL;
 
 	pAnimation = m_pModel->Get_Animation("A_Attack_S1");
-	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::A_ATTACK_S1, (_uint)ANIM_TYPE::A_HEAD, pAnimation, TRUE, TRUE, TRUE, ERootOption::XYZ, FALSE)))
+	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::A_ATTACK_S1, (_uint)ANIM_TYPE::A_HEAD, pAnimation, TRUE, TRUE, FALSE, ERootOption::XYZ, FALSE)))
 		return E_FAIL;
 
 	pAnimation = m_pModel->Get_Animation("A_Attack_S3");
-	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::A_ATTACK_S3, (_uint)ANIM_TYPE::A_HEAD, pAnimation, TRUE, TRUE, TRUE, ERootOption::XYZ)))
+	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::A_ATTACK_S3, (_uint)ANIM_TYPE::A_HEAD, pAnimation, TRUE, TRUE, FALSE, ERootOption::XYZ, FALSE)))
 		return E_FAIL;
+#pragma endregion
 
+#pragma region Rage
 	//Rage
 	pAnimation = m_pModel->Get_Animation("A_Taunt_Roar");
 	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::A_TAUNT_ROAR, (_uint)ANIM_TYPE::A_HEAD, pAnimation, TRUE, TRUE, FALSE, ERootOption::XYZ, FALSE)))
 		return E_FAIL;
 
 	pAnimation = m_pModel->Get_Animation("A_BattleCry_Start");
-	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::A_BATTLECRY_ST, (_uint)ANIM_TYPE::A_TAUNT_ROAR, pAnimation, FALSE, TRUE, FALSE, ERootOption::XYZ, FALSE)))
+	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::A_BATTLECRY_ST, (_uint)ANIM_TYPE::A_TAUNT_ROAR, pAnimation, TRUE, TRUE, FALSE, ERootOption::XYZ, FALSE)))
 		return E_FAIL;
 
 	pAnimation = m_pModel->Get_Animation("A_BattleCry");
-	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::A_BATTLECRY, (_uint)ANIM_TYPE::A_BATTLECRY_ST, pAnimation, TRUE, FALSE, TRUE, ERootOption::XYZ, FALSE)))
+	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::A_BATTLECRY, (_uint)ANIM_TYPE::A_BATTLECRY_ST, pAnimation, TRUE, TRUE, TRUE, ERootOption::XYZ, FALSE)))
 		return E_FAIL;
 
 	pAnimation = m_pModel->Get_Animation("A_BattleCry_End");
-	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::A_BATTLECRY_ED, (_uint)ANIM_TYPE::A_BATTLECRY, pAnimation, FALSE, TRUE, FALSE, ERootOption::XYZ, FALSE)))
+	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::A_BATTLECRY_ED, (_uint)ANIM_TYPE::A_BATTLECRY, pAnimation, TRUE, TRUE, FALSE, ERootOption::XYZ, FALSE)))
 		return E_FAIL;
 #pragma endregion
-	
-#pragma	region Anim to Anim Link
-	if (FAILED(m_pAnimator->Connect_Animation((_uint)ANIM_TYPE::A_IDLE, (_uint)ANIM_TYPE::A_WALK_FWD_ST, FALSE)))
-		return E_FAIL;
-	if (FAILED(m_pAnimator->Connect_Animation((_uint)ANIM_TYPE::A_IDLE, (_uint)ANIM_TYPE::A_WALK_FWD, FALSE)))
-		return E_FAIL;
-	if (FAILED(m_pAnimator->Connect_Animation((_uint)ANIM_TYPE::A_IDLE, (_uint)ANIM_TYPE::A_WALK_FWD_ED, FALSE)))
-		return E_FAIL;
-	if (FAILED(m_pAnimator->Connect_Animation((_uint)ANIM_TYPE::A_IDLE, (_uint)ANIM_TYPE::A_DASH_BWD, FALSE)))
-		return E_FAIL;
-	if (FAILED(m_pAnimator->Connect_Animation((_uint)ANIM_TYPE::A_ATTACK_R1, (_uint)ANIM_TYPE::A_IDLE, FALSE)))
-		return E_FAIL;
-	if (FAILED(m_pAnimator->Connect_Animation((_uint)ANIM_TYPE::A_ATTACK_R1, (_uint)ANIM_TYPE::A_DASH_BWD, FALSE)))
-		return E_FAIL;
-	if (FAILED(m_pAnimator->Connect_Animation((_uint)ANIM_TYPE::A_ATTACK_R1, (_uint)ANIM_TYPE::A_WALK_FWD_ST, FALSE)))
-		return E_FAIL;
-	if (FAILED(m_pAnimator->Connect_Animation((_uint)ANIM_TYPE::A_ATTACK_R1, (_uint)ANIM_TYPE::A_WALK_FWD, FALSE)))
-		return E_FAIL;
-	if (FAILED(m_pAnimator->Connect_Animation((_uint)ANIM_TYPE::A_ATTACK_R1, (_uint)ANIM_TYPE::A_WALK_FWD_ED, FALSE)))
-		return E_FAIL;
 
-	if (FAILED(m_pAnimator->Connect_Animation((_uint)ANIM_TYPE::A_ATTACK_R2, (_uint)ANIM_TYPE::A_IDLE, FALSE)))
-		return E_FAIL;
-	if (FAILED(m_pAnimator->Connect_Animation((_uint)ANIM_TYPE::A_ATTACK_R2, (_uint)ANIM_TYPE::A_DASH_BWD, FALSE)))
-		return E_FAIL;
-	if (FAILED(m_pAnimator->Connect_Animation((_uint)ANIM_TYPE::A_ATTACK_R2, (_uint)ANIM_TYPE::A_WALK_FWD_ST, FALSE)))
-		return E_FAIL;
-	if (FAILED(m_pAnimator->Connect_Animation((_uint)ANIM_TYPE::A_ATTACK_R2, (_uint)ANIM_TYPE::A_WALK_FWD, FALSE)))
-		return E_FAIL;
-	if (FAILED(m_pAnimator->Connect_Animation((_uint)ANIM_TYPE::A_ATTACK_R2, (_uint)ANIM_TYPE::A_WALK_FWD_ED, FALSE)))
-		return E_FAIL;
-
-	if (FAILED(m_pAnimator->Connect_Animation((_uint)ANIM_TYPE::A_ATTACK_S3, (_uint)ANIM_TYPE::A_IDLE, FALSE)))
-		return E_FAIL;
-	if (FAILED(m_pAnimator->Connect_Animation((_uint)ANIM_TYPE::A_ATTACK_S3, (_uint)ANIM_TYPE::A_DASH_BWD, FALSE)))
-		return E_FAIL;
-	if (FAILED(m_pAnimator->Connect_Animation((_uint)ANIM_TYPE::A_ATTACK_S3, (_uint)ANIM_TYPE::A_WALK_FWD_ST, FALSE)))
-		return E_FAIL;
-	if (FAILED(m_pAnimator->Connect_Animation((_uint)ANIM_TYPE::A_ATTACK_S3, (_uint)ANIM_TYPE::A_WALK_FWD, FALSE)))
-		return E_FAIL;
-	if (FAILED(m_pAnimator->Connect_Animation((_uint)ANIM_TYPE::A_ATTACK_S3, (_uint)ANIM_TYPE::A_WALK_FWD_ED, FALSE)))
-		return E_FAIL;
-
-
-	if (FAILED(m_pAnimator->Connect_Animation((_uint)ANIM_TYPE::A_ATTACK_S1, (_uint)ANIM_TYPE::A_IDLE, FALSE)))
-		return E_FAIL;
-	if (FAILED(m_pAnimator->Connect_Animation((_uint)ANIM_TYPE::A_ATTACK_S1, (_uint)ANIM_TYPE::A_DASH_BWD, FALSE)))
-		return E_FAIL;
-	if (FAILED(m_pAnimator->Connect_Animation((_uint)ANIM_TYPE::A_ATTACK_S1, (_uint)ANIM_TYPE::A_WALK_FWD_ST, FALSE)))
-		return E_FAIL;
-	if (FAILED(m_pAnimator->Connect_Animation((_uint)ANIM_TYPE::A_ATTACK_S1, (_uint)ANIM_TYPE::A_WALK_FWD, FALSE)))
-		return E_FAIL;
-	if (FAILED(m_pAnimator->Connect_Animation((_uint)ANIM_TYPE::A_ATTACK_S1, (_uint)ANIM_TYPE::A_WALK_FWD_ED, FALSE)))
-		return E_FAIL;
-
-	if (FAILED(m_pAnimator->Connect_Animation((_uint)ANIM_TYPE::A_ATTACK_R2, (_uint)ANIM_TYPE::A_WALK_FWD_ST, FALSE)))
-		return E_FAIL;
-	if (FAILED(m_pAnimator->Connect_Animation((_uint)ANIM_TYPE::A_ATTACK_R2, (_uint)ANIM_TYPE::A_WALK_FWD, FALSE)))
-		return E_FAIL;
-	if (FAILED(m_pAnimator->Connect_Animation((_uint)ANIM_TYPE::A_ATTACK_R2, (_uint)ANIM_TYPE::A_WALK_FWD_ED, FALSE)))
-		return E_FAIL;
-
-	if (FAILED(m_pAnimator->Connect_Animation((_uint)ANIM_TYPE::A_ATTACK_S1, (_uint)ANIM_TYPE::A_WALK_FWD_ST, FALSE)))
-		return E_FAIL;
-	if (FAILED(m_pAnimator->Connect_Animation((_uint)ANIM_TYPE::A_ATTACK_S1, (_uint)ANIM_TYPE::A_WALK_FWD, FALSE)))
-		return E_FAIL;
-	if (FAILED(m_pAnimator->Connect_Animation((_uint)ANIM_TYPE::A_ATTACK_S1, (_uint)ANIM_TYPE::A_WALK_FWD_ED, FALSE)))
-		return E_FAIL;
-
-	if (FAILED(m_pAnimator->Connect_Animation((_uint)ANIM_TYPE::A_ATTACK_S3, (_uint)ANIM_TYPE::A_WALK_FWD_ST, FALSE)))
-		return E_FAIL;
-	if (FAILED(m_pAnimator->Connect_Animation((_uint)ANIM_TYPE::A_ATTACK_S3, (_uint)ANIM_TYPE::A_WALK_FWD, FALSE)))
-		return E_FAIL;
-	if (FAILED(m_pAnimator->Connect_Animation((_uint)ANIM_TYPE::A_ATTACK_S3, (_uint)ANIM_TYPE::A_WALK_FWD_ED, FALSE)))
-		return E_FAIL;
-
-	if (FAILED(m_pAnimator->Connect_Animation((_uint)ANIM_TYPE::A_BATTLECRY_ED, (_uint)ANIM_TYPE::A_BATTLECRY, FALSE)))
-		return E_FAIL;
-	if (FAILED(m_pAnimator->Connect_Animation((_uint)ANIM_TYPE::A_BATTLECRY_ED, (_uint)ANIM_TYPE::A_IDLE, FALSE)))
-		return E_FAIL;
+#pragma region  Set Any Entry Animation
+	m_pAnimator->Insert_AnyEntryAnimation((_uint)ANIM_TYPE::A_IDLE);
+	m_pAnimator->Insert_AnyEntryAnimation((_uint)ANIM_TYPE::A_DEATH);
+	m_pAnimator->Insert_AnyEntryAnimation((_uint)ANIM_TYPE::A_FLINCH_LEFT);
+	m_pAnimator->Insert_AnyEntryAnimation((_uint)ANIM_TYPE::A_WALK_FWD_ST);
+	m_pAnimator->Insert_AnyEntryAnimation((_uint)ANIM_TYPE::A_WALK_FWD_ED);
+	m_pAnimator->Insert_AnyEntryAnimation((_uint)ANIM_TYPE::A_DASH_BWD);
+	m_pAnimator->Insert_AnyEntryAnimation((_uint)ANIM_TYPE::A_DASH_LEFT);
+	m_pAnimator->Insert_AnyEntryAnimation((_uint)ANIM_TYPE::A_DASH_RIGHT);
+	m_pAnimator->Insert_AnyEntryAnimation((_uint)ANIM_TYPE::A_ATTACK_R1);
+	m_pAnimator->Insert_AnyEntryAnimation((_uint)ANIM_TYPE::A_ATTACK_R2);
+	m_pAnimator->Insert_AnyEntryAnimation((_uint)ANIM_TYPE::A_ATTACK_S1);
+	m_pAnimator->Insert_AnyEntryAnimation((_uint)ANIM_TYPE::A_ATTACK_S3);
+	m_pAnimator->Insert_AnyEntryAnimation((_uint)ANIM_TYPE::A_DASH_LEFT);
+	m_pAnimator->Insert_AnyEntryAnimation((_uint)ANIM_TYPE::A_TAUNT_ROAR);
+	m_pAnimator->Insert_AnyEntryAnimation((_uint)ANIM_TYPE::A_BATTLECRY_ED);
 #pragma endregion
 
 #pragma region  Auto Change Anim
@@ -378,23 +354,28 @@ HRESULT CMonster_Bastion_2HSword::Ready_AnimFSM(void)
 	m_pAnimator->Set_UpAutoChangeAnimation((_uint)ANIM_TYPE::A_WALK_FWD_ST, (_uint)ANIM_TYPE::A_WALK_FWD);
 	m_pAnimator->Set_UpAutoChangeAnimation((_uint)ANIM_TYPE::A_WALK_FWD, (_uint)ANIM_TYPE::A_WALK_FWD_ED);
 	m_pAnimator->Set_UpAutoChangeAnimation((_uint)ANIM_TYPE::A_WALK_FWD_ED, (_uint)ANIM_TYPE::A_IDLE);
-	m_pAnimator->Set_UpAutoChangeAnimation((_uint)ANIM_TYPE::A_DASH_BWD, (_uint)ANIM_TYPE::A_IDLE);
-	m_pAnimator->Set_UpAutoChangeAnimation((_uint)ANIM_TYPE::A_ATTACK_R1, (_uint)ANIM_TYPE::A_IDLE);
 
 	m_pAnimator->Set_UpAutoChangeAnimation((_uint)ANIM_TYPE::A_TAUNT_ROAR, (_uint)ANIM_TYPE::A_BATTLECRY_ST);
 	m_pAnimator->Set_UpAutoChangeAnimation((_uint)ANIM_TYPE::A_BATTLECRY_ST, (_uint)ANIM_TYPE::A_BATTLECRY);
 	//m_pAnimator->Set_UpAutoChangeAnimation((_uint)ANIM_TYPE::A_BATTLECRY, (_uint)ANIM_TYPE::A_BATTLECRY_ED);
 	//m_pAnimator->Set_UpAutoChangeAnimation((_uint)ANIM_TYPE::A_BATTLECRY_ED, (_uint)ANIM_TYPE::A_IDLE);
+
+	m_pAnimator->Set_UpAutoChangeAnimation((_uint)ANIM_TYPE::A_DASH_BWD, (_uint)ANIM_TYPE::A_WALK_FWD_ST);
+	m_pAnimator->Set_UpAutoChangeAnimation((_uint)ANIM_TYPE::A_DASH_LEFT, (_uint)ANIM_TYPE::A_WALK_FWD_ST);
+	m_pAnimator->Set_UpAutoChangeAnimation((_uint)ANIM_TYPE::A_DASH_RIGHT, (_uint)ANIM_TYPE::A_WALK_FWD_ST);
 #pragma endregion
 
-#pragma region  Set Any Entry Animation
-	m_pAnimator->Insert_AnyEntryAnimation((_uint)ANIM_TYPE::A_IDLE);
-	m_pAnimator->Insert_AnyEntryAnimation((_uint)ANIM_TYPE::A_WALK_FWD_ST);
-	m_pAnimator->Insert_AnyEntryAnimation((_uint)ANIM_TYPE::A_DASH_BWD);
-	m_pAnimator->Insert_AnyEntryAnimation((_uint)ANIM_TYPE::A_DEATH);
-	m_pAnimator->Insert_AnyEntryAnimation((_uint)ANIM_TYPE::A_TAUNT_ROAR);
-	m_pAnimator->Insert_AnyEntryAnimation((_uint)ANIM_TYPE::A_BATTLECRY_ED);
-
+#pragma region Anim to Anim Connect
+	if (FAILED(m_pAnimator->Connect_Animation((_uint)ANIM_TYPE::A_IDLE, (_uint)ANIM_TYPE::A_WALK_FWD_ED, FALSE)))
+		return E_FAIL;
+	//if (FAILED(m_pAnimator->Connect_Animation((_uint)ANIM_TYPE::A_IDLE, (_uint)ANIM_TYPE::A_DASH_BWD, FALSE)))
+	//	return E_FAIL;
+	if (FAILED(m_pAnimator->Connect_Animation((_uint)ANIM_TYPE::A_IDLE, (_uint)ANIM_TYPE::A_DASH_LEFT, FALSE)))
+		return E_FAIL;
+	if (FAILED(m_pAnimator->Connect_Animation((_uint)ANIM_TYPE::A_IDLE, (_uint)ANIM_TYPE::A_DASH_RIGHT, FALSE)))
+		return E_FAIL;
+	if (FAILED(m_pAnimator->Connect_Animation((_uint)ANIM_TYPE::A_BATTLECRY, (_uint)ANIM_TYPE::A_BATTLECRY_ED, FALSE)))
+		return E_FAIL;
 #pragma endregion
 	return S_OK;
 }
@@ -429,6 +410,10 @@ HRESULT CMonster_Bastion_2HSword::Ready_StateFSM(void)
 	if (FAILED(m_pStateController->Add_State(L"Death", CBastion_2HSword_Death::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 
+	/* for. Hit */
+	if (FAILED(m_pStateController->Add_State(L"Hit", CBastion_2HSword_Hit::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+
 	for (auto& pair : m_pStateController->Get_States())
 	{
 		pair.second->Set_StateController(m_pStateController);
@@ -438,6 +423,49 @@ HRESULT CMonster_Bastion_2HSword::Ready_StateFSM(void)
 		static_cast<CMonster_FSM*>(pair.second)->Set_Animator(m_pAnimator);
 	}
 	m_pStateController->Change_State(L"Idle");
+
+	return S_OK;
+}
+
+HRESULT CMonster_Bastion_2HSword::Render_Debug(void)
+{
+	if (FAILED(m_pStateController->Render()))
+		return E_FAIL;
+	
+	//Hp
+	if (FAILED(g_pGameInstance->Render_Font(TEXT("Font_Arial"), XMVectorSet(0.f, 1.0f, 0.f, 1.f), L"HP : " + to_wstring(m_iHp), _float2(950.f, 20.f), _float2(0.6f, 0.6f))))
+		return E_FAIL;
+
+	// FSM
+	wstring wstrCurStateTag = m_pStateController->Get_CurStateTag();
+	wstring wstrState = L"Cur State : ";
+
+	if (FAILED(g_pGameInstance->Render_Font(TEXT("Font_Arial"), XMVectorSet(0.f, 1.0f, 0.f, 1.f), (wstrState + wstrCurStateTag).c_str(), _float2(950.f, 40.f), _float2(0.6f, 0.6f))))
+		return E_FAIL;
+	
+	m_pAnimation = m_pAnimator->Get_CurrentAnimation();
+
+	// 애니메이션 이름
+	string CurAnimName = m_pAnimation->Get_Name();
+	wstring wstrCurAnimTag;
+	wstring wstrAnimname = L"Cur Anim Tag : ";
+	wstrCurAnimTag.assign(CurAnimName.begin(), CurAnimName.end());
+	if (FAILED(g_pGameInstance->Render_Font(TEXT("Font_Arial"), XMVectorSet(0.f, 1.0f, 0.f, 1.f), (wstrAnimname + wstrCurAnimTag).c_str(), _float2(950.f, 60.f), _float2(0.6f, 0.6f))))
+		return E_FAIL;
+
+	// 애니메이션 상태
+	wstring wstrCurKeyFrameIndex = to_wstring(m_pAnimation->Get_CurrentKeyFrameIndex());
+	wstring wstrKeyFrame = L"Key Frame : ";
+	if (FAILED(g_pGameInstance->Render_Font(TEXT("Font_Arial"), XMVectorSet(0.f, 1.0f, 0.f, 1.f), (wstrKeyFrame + wstrCurKeyFrameIndex).c_str(), _float2(950.f, 80.f), _float2(0.6f, 0.6f))))
+		return E_FAIL;
+
+	wstring wstrAnimFinished = L"";
+	if (m_pAnimation->Is_Finished())
+		wstrAnimFinished = L"AnimFinished : TRUE";
+	else
+		wstrAnimFinished = L"AnimFinished : FALSE";
+	if (FAILED(g_pGameInstance->Render_Font(TEXT("Font_Arial"), XMVectorSet(0.f, 1.0f, 0.f, 1.f), wstrAnimFinished.c_str(), _float2(950.f, 100.f), _float2(0.6f, 0.6f))))
+		return E_FAIL;
 
 	return S_OK;
 }
@@ -466,9 +494,9 @@ CGameObject* CMonster_Bastion_2HSword::Clone(const _uint _iSceneID, void* _pArg)
 
 void CMonster_Bastion_2HSword::Free()
 {
+	__super::Free();
+
 	Safe_Release(m_pStateController);
 	Safe_Release(m_pModel);
 	Safe_Release(m_pAnimator);
-
-	__super::Free();
 }
