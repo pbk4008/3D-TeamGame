@@ -257,7 +257,6 @@ HRESULT CSilvermane::Render()
 #ifdef _DEBUG
 	m_pCharacterController->Render();
 #endif // _DEBUG
-
 	_matrix smatWorld, smatView, smatProj;
 	smatWorld = XMMatrixTranspose(m_pTransform->Get_CombinedMatrix());
 	smatView = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_VIEW));

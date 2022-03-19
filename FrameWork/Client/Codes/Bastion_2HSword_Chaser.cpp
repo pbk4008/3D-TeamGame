@@ -5,12 +5,12 @@
 #include "Monster_Bastion_2HSword.h"
 
 CBastion_2HSword_Chaser::CBastion_2HSword_Chaser(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
-	: CMonster_FSM(_pDevice, _pDeviceContext)
+	: CBastion_2HSword_State(_pDevice, _pDeviceContext)
 {
 }
 
 CBastion_2HSword_Chaser::CBastion_2HSword_Chaser(const CBastion_2HSword_Chaser& _rhs)
-	: CMonster_FSM(_rhs)
+	: CBastion_2HSword_State(_rhs)
 {
 }
 
@@ -72,10 +72,11 @@ HRESULT CBastion_2HSword_Chaser::ExitState()
 void CBastion_2HSword_Chaser::Look_Player(void)
 {
 	_fvector vMonsterPos = m_pTransform->Get_State(CTransform::STATE::STATE_POSITION);
-
 	_fvector vDist = vMonsterPos - g_pObserver->Get_PlayerPos();
-
 	_float fDistToPlayer = XMVectorGetX(XMVector3Length(vDist));
+
+	if (!m_bTargetOn)
+		m_pStateController->Change_State(L"Idle");
 }
 
 void CBastion_2HSword_Chaser::Look_Monster(void)

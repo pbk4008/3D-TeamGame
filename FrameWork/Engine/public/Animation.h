@@ -5,7 +5,7 @@
 /* 애니메이션 하나의 동작. */
 
 BEGIN(Engine)
-class CAnimation final : public CBase
+class ENGINE_DLL CAnimation final : public CBase
 {
 public:
 	CAnimation();

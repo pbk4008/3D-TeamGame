@@ -34,8 +34,8 @@ _int CBastion_Sword_Death::Tick(const _double& _dDeltaTime)
 
 	m_pAnimator->Tick(_dDeltaTime);
 
-	if(m_pAnimator->Get_CurrentAnimation()->Is_Finished())
-		//°´Ã¼ »èÁ¦
+	//if(m_pAnimator->Get_CurrentAnimation()->Is_Finished())
+	
 
 	return _int();
 }

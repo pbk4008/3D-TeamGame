@@ -29,6 +29,7 @@ _int CBastion_2HSword_Attack_Rage::Tick(const _double& _dDeltaTime)
 		return iProgress;
 
 	m_pAnimator->Tick(_dDeltaTime);
+	//m_pTransform->Chase_Target(g_pObserver->Get_Transform(), _dDeltaTime);
 
 	return _int();
 }
@@ -70,20 +71,14 @@ HRESULT CBastion_2HSword_Attack_Rage::ExitState()
 
 void CBastion_2HSword_Attack_Rage::Look_Player(void)
 {
-	_fvector vMonsterPos = m_pTransform->Get_State(CTransform::STATE::STATE_POSITION);
-	_fvector vDist = vMonsterPos - g_pObserver->Get_PlayerPos();
-	_float fDistToPlayer = XMVectorGetX(XMVector3Length(vDist));
-
-	if (2.9f < fDistToPlayer && 15.0f > fDistToPlayer)
-	{
-		m_pTransform->Face_Target(g_pObserver->Get_PlayerPos());
-		m_pStateController->Change_State(L"Chaser");
-	}
-
 }
 
 void CBastion_2HSword_Attack_Rage::Look_Monster(void)
 {
+	CAnimation* pAnim = m_pAnimator->Get_CurrentAnimation();
+
+	if (pAnim->Is_Finished())
+		m_pStateController->Change_State(L"Idle");
 }
 
 CBastion_2HSword_Attack_Rage* CBastion_2HSword_Attack_Rage::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext, void* _pArg)

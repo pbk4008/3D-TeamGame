@@ -1,10 +1,10 @@
 #ifndef Bastion_2HSword_Death_h__
 #define Bastion_2HSword_Death_h__
 
-#include "Monster_FSM.h"
+#include "Bastion_2HSword_State.h"
 
 BEGIN(Client)
-class CBastion_2HSword_Death final : public CMonster_FSM
+class CBastion_2HSword_Death final : public CBastion_2HSword_State
 {
 protected:
 	explicit CBastion_2HSword_Death(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext);
