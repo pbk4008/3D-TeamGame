@@ -162,7 +162,7 @@ void CTransform::Chase_Target(const CTransform * pTargetTransform, _double TimeD
 void CTransform::Face_Target(_fvector vTargetPos)
 {
 	_vector		vPosition = Get_State(CTransform::STATE_POSITION);
-	_vector		vLook = vPosition - vTargetPos;
+	_vector		vLook = vTargetPos - vPosition;
 
 	_vector		vRight = XMVector3Cross(XMVectorSet(0.f, 1.f, 0.f, 0.f), vLook);
 	vLook = XMVector3Cross(vRight, XMVectorSet(0.f, 1.f, 0.f, 0.f));

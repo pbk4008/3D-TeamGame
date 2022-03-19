@@ -30,10 +30,6 @@ _int CMidBoss_Rage::Tick(const _double& TimeDelta)
 
 	m_pAnimator->Tick(TimeDelta);
 
-	/*if (m_pAnimator->Get_AnimController()->Is_Finished())
-	{
-		m_pStateController->Change_State(L"BattleCry");
-	}*/
 
 	if (m_pAnimator->Get_CurrentAnimation()->Is_Finished())
 	{
@@ -65,22 +61,13 @@ HRESULT CMidBoss_Rage::EnterState()
 	if (FAILED(__super::EnterState()))
 		return E_FAIL;
 
-	//m_pAnimator->Change_Animation(CBoss_Bastion_Judicator::M_BossAnimState::RAGE);
-	
-	//_matrix matPivot = XMMatrixRotationY(XMConvertToRadians(180.f));
-	//m_pAnimator->Get_AnimController()->Set_PivotMatrix(matPivot);
-
 	_vector vec = { 0.f, 1.f, 0.f,0.f };
 	m_pTransform->SetUp_Rotation(vec, (XMConvertToRadians(180.f)));
 
 	_fvector vMonsterPos = m_pTransform->Get_State(CTransform::STATE::STATE_POSITION);
-	_fvector vDist = vMonsterPos - XMLoadFloat3(&g_pObserver->m_fPos);
+	_fvector vDist = vMonsterPos - g_pObserver->Get_PlayerPos();
 	_float fDistToPlayer = XMVectorGetX(XMVector3Length(vDist));
 
-	/*if (20.0f > fDistToPlayer)
-	{
-		m_pTransform->Face_Target(XMLoadFloat3(&g_pObserver->m_fPos));
-	}*/
 
 	return S_OK;
 }
@@ -99,6 +86,7 @@ HRESULT CMidBoss_Rage::ExitState()
 
 void CMidBoss_Rage::Look_Player(void)
 {
+
 }
 
 CMidBoss_Rage* CMidBoss_Rage::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext, void* pArg)

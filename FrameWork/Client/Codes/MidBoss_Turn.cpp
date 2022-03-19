@@ -108,7 +108,7 @@ _int CMidBoss_Turn::Tick(const _double& TimeDelta)
 
 				else if (!m_bLeft) //몬스터오른쪽회전
 				{
-					m_pTransform->Rotation_Axis(CTransform::STATE_UP, TimeDelta * 1.f);
+  					m_pTransform->Rotation_Axis(CTransform::STATE_UP, TimeDelta * 1.f);
 				}
 			}
 		}
@@ -139,10 +139,8 @@ HRESULT CMidBoss_Turn::EnterState()
 	if (FAILED(__super::EnterState()))
 		return E_FAIL;
 
-	//m_pAnimator->Get_AnimController()->Set_RotSpeed(0.f);
-
 	_vector vMonsterPos = m_pTransform->Get_State(CTransform::STATE::STATE_POSITION);
-	_vector vDist = vMonsterPos - XMLoadFloat3(&g_pObserver->m_fPos);
+	_vector vDist = vMonsterPos - g_pObserver->Get_PlayerPos();
 	_float fDistToPlayer = XMVectorGetX(XMVector3Length(vDist));
 
 	vDist = XMVector3Normalize(vDist); //보스가 플레이어를 바라보는 방향벡터
@@ -158,14 +156,14 @@ HRESULT CMidBoss_Turn::EnterState()
 	_vector vCross = XMVector3Cross(vMyLook, vDist);
 
 	m_fRadian = fRadian;
-	cout << m_fRadian << endl;
+
 	if (0.f < XMVectorGetY(vCross)) //몬스터왼쪽회전
 	{
 		m_bLeft = true; 
 
 		if (25.f > XMConvertToDegrees(fRadian))
 		{
-			m_pTransform->Face_Target(XMLoadFloat3(&g_pObserver->m_fPos));
+			m_pTransform->Face_Target(g_pObserver->Get_PlayerPos());
 		}
 		else if (25.f <= XMConvertToDegrees(fRadian) && 45.f > XMConvertToDegrees(fRadian))
 		{
@@ -198,7 +196,7 @@ HRESULT CMidBoss_Turn::EnterState()
 
 		if (25.f > XMConvertToDegrees(fRadian))
 		{
-			m_pTransform->Face_Target(XMLoadFloat3(&g_pObserver->m_fPos));
+			m_pTransform->Face_Target(g_pObserver->Get_PlayerPos());
 		}
 		else if (25.f <= XMConvertToDegrees(fRadian) && 45.f > XMConvertToDegrees(fRadian))
 		{

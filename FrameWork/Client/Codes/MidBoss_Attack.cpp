@@ -62,11 +62,10 @@ HRESULT CMidBoss_Attack::EnterState()
 		return E_FAIL;
 
 	_fvector vMonsterPos = m_pTransform->Get_State(CTransform::STATE::STATE_POSITION);
-	_fvector vDist = vMonsterPos - XMLoadFloat3(&g_pObserver->m_fPos);
+	_fvector vDist = vMonsterPos - g_pObserver->Get_PlayerPos();
 	_float fDistToPlayer = XMVectorGetX(XMVector3Length(vDist));
 
-	m_pTransform->Face_Target(XMLoadFloat3(&g_pObserver->m_fPos));
-
+	m_pTransform->Face_Target(g_pObserver->Get_PlayerPos());
 
 	if (4.0f > fDistToPlayer)
 	{

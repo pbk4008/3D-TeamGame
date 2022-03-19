@@ -118,20 +118,20 @@ HRESULT CLoader::SetUp_Stage1_Object()
 	if (FAILED(Load_Stage1PlayerLoad()))
 		return E_FAIL;
 
-	/*if (FAILED(Load_Stage1BossLoad()))
-		return E_FAIL;*/
-
-	if (FAILED(Load_Stage1MonsterLoad()))
+	if (FAILED(Load_Stage1BossLoad()))
 		return E_FAIL;
 
-	//if (FAILED(Load_Stage1StaticUILoad()))
-	//	return E_FAIL;
+	/*if (FAILED(Load_Stage1MonsterLoad()))
+		return E_FAIL;*/
 
-	//if (FAILED(Load_Stage1UILoad()))
-	//	return E_FAIL;
+	if (FAILED(Load_Stage1StaticUILoad()))
+		return E_FAIL;
 
-	//if (FAILED(Load_Stage1EffectLoad()))
-	//	return E_FAIL;
+	if (FAILED(Load_Stage1UILoad()))
+		return E_FAIL;
+
+	if (FAILED(Load_Stage1EffectLoad()))
+		return E_FAIL;
 
 	//if (FAILED(Load_Stage1TriggerLod()))
 	//	return E_FAIL;
@@ -798,8 +798,7 @@ HRESULT CLoader::Ready_Test_JS()
 	cout << "TestScene_JS 컴포넌트 프로토타입 생성중..." << endl;
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_TEST_JS, L"Proto_Component_AnimationController", CAnimationController::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_TEST_JS, L"Proto_Component_StateController", CStateController::Create(m_pDevice, m_pDeviceContext))))
-		return E_FAIL;
+	
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_TEST_JS, L"Proto_Component_CharacterController", CCharacterController::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_TEST_JS, L"Proto_Component_MeshCollider", CMeshCollider::Create(m_pDevice, m_pDeviceContext))))
