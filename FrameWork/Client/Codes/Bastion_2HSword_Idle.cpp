@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "Bastion_2HSword_Idle.h"
 #include "Monster_Bastion_2HSword.h"
-
+#include "Animation.h"
 
 CBastion_2HSword_Idle::CBastion_2HSword_Idle(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
 	: CMonster_FSM(_pDevice, _pDeviceContext)
@@ -54,10 +54,10 @@ HRESULT CBastion_2HSword_Idle::EnterState()
 	if (FAILED(__super::EnterState()))
 		return E_FAIL;
 
-	//if (FAILED(m_pAnimator->Change_AnyEntryAnimation((_uint)CMonster_Bastion_2HSword::ANIM_TYPE::A_IDLE)))
-	//	return E_FAIL;
+	if (FAILED(m_pAnimator->Change_AnyEntryAnimation((_uint)CMonster_Bastion_2HSword::ANIM_TYPE::A_IDLE)))
+		return E_FAIL;
 
-	m_pAnimator->Change_Animation((_uint)CMonster_Bastion_2HSword::ANIM_TYPE::A_IDLE);
+	//m_pAnimator->Change_Animation((_uint)CMonster_Bastion_2HSword::ANIM_TYPE::A_IDLE);
 
 	return S_OK;
 }
@@ -77,11 +77,11 @@ void CBastion_2HSword_Idle::Look_Player(void)
 	_fvector vDist = vMonsterPos - g_pObserver->Get_PlayerPos();
 	_float fDistToPlayer = XMVectorGetX(XMVector3Length(vDist));
 
-	if (3.0f < fDistToPlayer && 15.0f > fDistToPlayer)
-	{
-		m_pTransform->Face_Target(g_pObserver->Get_PlayerPos());
-		m_pStateController->Change_State(L"Chaser");
-	}
+	//if (3.0f < fDistToPlayer && 15.0f > fDistToPlayer)
+	//{
+	//	m_pTransform->Face_Target(g_pObserver->Get_PlayerPos());
+	//	m_pStateController->Change_State(L"Chaser");
+	//}
 
 	//if(5.0f > fDistToPlayer && TRUE == g_pObserver->m_bAttack)
 	//	m_pStateController->Change_State(L"Dash");
