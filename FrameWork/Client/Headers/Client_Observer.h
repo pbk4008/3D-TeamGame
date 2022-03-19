@@ -23,6 +23,8 @@ public:
 	_fvector Get_PlayerPos();
 	//플레이어가 공격하는지 안하는지 체크
 	const _bool Get_IsAttack();
+	//플레이어와 해당 좌표와의 거리
+	const _float Get_Dist(_fvector vPos);
 public:
 	//플레이어 공격 셋팅
 	void Set_IsAttack(const _bool bAttack);

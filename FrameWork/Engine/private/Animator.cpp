@@ -8,7 +8,8 @@ CAnimator::CAnimator(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
 	, m_pController(nullptr)
 	, m_pHead(nullptr)
 	, m_pCulAnimNode(nullptr)
-	,m_pChangeNode(nullptr)
+	, m_pChangeNode(nullptr)
+	, m_bLerp(false)
 {
 }
 
@@ -18,6 +19,7 @@ CAnimator::CAnimator(const CAnimator& rhs)
 	, m_pHead(nullptr)
 	, m_pCulAnimNode(nullptr)
 	, m_pChangeNode(nullptr)
+	, m_bLerp(false)
 {
 	Safe_AddRef(m_pController);
 }
@@ -65,6 +67,7 @@ _int CAnimator::Tick(_double dDeltaTime)
 	{
 		m_pCulAnimNode = m_pChangeNode;
 		m_pController->Set_IsChange(false);
+		m_bLerp = false;
 	}
 
 	if (m_pCulAnimNode->Get_AutoIndex() != -1)
@@ -204,7 +207,7 @@ HRESULT CAnimator::Change_Animation(_uint iTag)
 	//Animation컨트롤러에 바꿀애니메이션으로 예약
 	if (FAILED(m_pController->SetUp_NextAnimation(m_pChangeNode)))
 		return E_FAIL;
-
+	m_bLerp = true;
 	return S_OK;
 }
 
@@ -219,6 +222,7 @@ HRESULT CAnimator::Change_AnyEntryAnimation(_uint iTag)
 	if (FAILED(m_pController->SetUp_NextAnimation(m_pChangeNode)))
 		return E_FAIL;
 
+	m_bLerp = true;
 	return S_OK;
 }
 

@@ -13,7 +13,12 @@ HRESULT CBastion_Sword_Idle::NativeConstruct(void* _pArg)
 	if (!_pArg)
 		return E_FAIL;
 
-	m_pAnimator = (CAnimator*)(_pArg);//애니메이터 넣어줌
+
+	FSMDESC tDesc = (*(FSMDESC*)_pArg);
+
+	m_wstrTag = tDesc.pName;
+	m_pAnimator = tDesc.pAnimator;
+
 	Safe_AddRef(m_pAnimator);
 
 	if (FAILED(CMonster_FSM::NativeConstruct(_pArg)))

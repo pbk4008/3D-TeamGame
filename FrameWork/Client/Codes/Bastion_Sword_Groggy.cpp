@@ -16,6 +16,7 @@ HRESULT CBastion_Sword_Groggy::NativeConstruct(void* _pArg)
 
 	m_pAnimator = tDesc.pAnimator;
 	m_pStateController = tDesc.pController;
+	m_wstrTag = tDesc.pName;
 
 	Safe_AddRef(m_pAnimator);
 

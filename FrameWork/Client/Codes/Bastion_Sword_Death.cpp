@@ -13,7 +13,12 @@ HRESULT CBastion_Sword_Death::NativeConstruct(void* _pArg)
 	if (!_pArg)
 		return E_FAIL;
 
-	m_pAnimator = (CAnimator*)_pArg;
+
+	FSMDESC tDesc = (*(FSMDESC*)_pArg);
+
+	m_pAnimator = tDesc.pAnimator;
+	m_wstrTag = tDesc.pName;
+
 	Safe_AddRef(m_pAnimator);
 
 	if (FAILED(CMonster_FSM::NativeConstruct(_pArg)))
