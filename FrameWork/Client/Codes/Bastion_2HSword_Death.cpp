@@ -31,10 +31,10 @@ _int CBastion_2HSword_Death::Tick(const _double& _dDeltaTime)
 
 	m_pAnimator->Tick(_dDeltaTime);
 
-	CAnimation* pAnim =  m_pAnimator->Get_CurrentAnimation();
+	//CAnimation* pAnim =  m_pAnimator->Get_CurrentAnimation();
 
-	if (pAnim->Is_Finished())
-		static_cast<CMonster_Bastion_2HSword*>(m_pMonster)->m_bRender = false;
+	//if (pAnim->Is_Finished())
+	//	static_cast<CMonster_Bastion_2HSword*>(m_pMonster)->m_bRender = false;
 
 	return _int();
 }

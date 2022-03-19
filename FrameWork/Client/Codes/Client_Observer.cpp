@@ -51,7 +51,7 @@ _fvector CClient_Observer::Get_PlayerPos()
 	return vPos;
 }
 
-_bool CClient_Observer::Get_IsAttack()
+const _bool CClient_Observer::Get_IsAttack()
 {
 	if (!m_pPlayer)
 		return false;

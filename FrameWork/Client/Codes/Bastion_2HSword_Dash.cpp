@@ -70,25 +70,12 @@ HRESULT CBastion_2HSword_Dash::ExitState()
 
 void CBastion_2HSword_Dash::Look_Player(void)
 {
-	_fvector vMonsterPos = m_pTransform->Get_State(CTransform::STATE::STATE_POSITION);
-	_fvector vDist = vMonsterPos - g_pObserver->Get_PlayerPos();
-	_float fDistToPlayer = XMVectorGetX(XMVector3Length(vDist));
-
-	if (5.0f < fDistToPlayer && 15.0f > fDistToPlayer)
-	{
-		m_pTransform->Face_Target(g_pObserver->Get_PlayerPos());
-		m_pStateController->Change_State(L"Chaser");
-	}
-
-	/*if (TRUE == g_pObserver->m_bAttack)
-		dynamic_cast<CMonster_Bastion_2HSword*>(m_pMonster)->m_iHp -= 1;*/
 
 }
 
 void CBastion_2HSword_Dash::Look_Monster(void)
 {
-	if (0 == dynamic_cast<CMonster_Bastion_2HSword*>(m_pMonster)->m_iHp)
-		m_pStateController->Change_State(L"Rage");
+
 }
 
 CBastion_2HSword_Dash* CBastion_2HSword_Dash::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext, void* _pArg)

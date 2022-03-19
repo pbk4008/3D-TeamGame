@@ -452,9 +452,6 @@ _int CMonster_Bastion_Sword::Change_State()
 		}
 
 	}
-
-
-
 	return _int();
 }
 
@@ -468,7 +465,6 @@ void CMonster_Bastion_Sword::Chase()
 
 	_float fDist = XMVectorGetX(XMVector3Length(vPos - vPlayerPos));
 
-	if(fDist<)
 }
 
 CMonster_Bastion_Sword* CMonster_Bastion_Sword::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)

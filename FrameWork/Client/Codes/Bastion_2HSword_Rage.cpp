@@ -70,25 +70,25 @@ HRESULT CBastion_2HSword_Rage::ExitState()
 
 void CBastion_2HSword_Rage::Look_Player(void)
 {
-	/*_fvector vMonsterPos = m_pTransform->Get_State(CTransform::STATE::STATE_POSITION);
-	_fvector vDist = vMonsterPos - XMLoadFloat3(&g_pObserver->m_fPos);
+	_fvector vMonsterPos = m_pTransform->Get_State(CTransform::STATE::STATE_POSITION);
+	_fvector vDist = vMonsterPos -g_pObserver->Get_PlayerPos();
 	_float fDistToPlayer = XMVectorGetX(XMVector3Length(vDist));
 
-	if (5.0f  > fDistToPlayer && 6.0f > fDistToPlayer)
+	if (5.0f > fDistToPlayer && 6.0f > fDistToPlayer)
 	{
-		m_pTransform->Face_Target(XMLoadFloat3(&g_pObserver->m_fPos));
+		m_pTransform->Face_Target(g_pObserver->Get_PlayerPos());
 		m_pStateController->Change_State(L"Rage_Attack");
 	}
 
-	if (TRUE == g_pObserver->m_bAttack)
-		dynamic_cast<CMonster_Bastion_2HSword*>(m_pMonster)->m_iHp -= 1;*/
+	if (g_pObserver->Get_IsAttack())
+		dynamic_cast<CMonster_Bastion_2HSword*>(m_pMonster)->m_iHp -= 1;
 
 }
 
 void CBastion_2HSword_Rage::Look_Monster(void)
 {
-	/*if (0 == dynamic_cast<CMonster_Bastion_2HSword*>(m_pMonster)->m_iHp)
-		m_pStateController->Change_State(L"Death");*/
+	//if (0 == dynamic_cast<CMonster_Bastion_2HSword*>(m_pMonster)->m_iHp)
+	//	m_pStateController->Change_State(L"Death");
 }
 
 CBastion_2HSword_Rage* CBastion_2HSword_Rage::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext, void* _pArg)
