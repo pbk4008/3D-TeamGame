@@ -256,6 +256,8 @@ HRESULT CModel::Add_Material(CMaterial* _pMtrl, const _uint _iMtrlIndex)
 		m_vecMaterials[_iMtrlIndex] = _pMtrl;
 		Safe_AddRef(_pMtrl);
 
+		m_vecMaterials[_iMtrlIndex]->SetUp_TextureOnShader();
+
 		return S_OK;
 	}
 	return E_FAIL;
