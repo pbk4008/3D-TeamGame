@@ -58,7 +58,7 @@ CAnimNode* CAnimNode::Check_ConnectNode(_uint iIndex, vector<_uint>* vecDuplicat
 			_bool bDoubleCheck = false;
 			for (auto& pNewDuplicate : vecNewDuplicate)
 			{
-				if (pNewDuplicate == pNewDuplicate)
+				if (pNewDuplicate == pDuplicate)
 				{
 					bDoubleCheck = true;
 					break;
