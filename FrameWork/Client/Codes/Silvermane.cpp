@@ -678,7 +678,6 @@ const _float CSilvermane::Get_Angle() const
 	return m_fAngle;
 }
 
-<<<<<<< HEAD
 const CSilvermane::SCENEMOVEDATA CSilvermane::Get_SceneMoveData() const
 {
 	SCENEMOVEDATA tDesc;
