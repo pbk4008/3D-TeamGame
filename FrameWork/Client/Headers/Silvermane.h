@@ -47,9 +47,14 @@ public:
 	const SCENEMOVEDATA Get_SceneMoveData() const;
 	void Set_Move(const _bool _isMove);
 	void Set_TrasceCamera(const _bool _isTraceCamera);
+
+	void Set_IsFall(const _bool _isFall);
+	void Set_IsMove(const _bool _isMove);
+	void Set_IsTrasceCamera(const _bool _isTraceCamera);
+	void Set_IsAttack(const _bool bAttack);
+
 	void Set_Camera(CCamera_Silvermane* _pCamera);
 	void Set_PlusAngle(const _float _fAngle);
-	void Set_IsAttack(const _bool bAttack);
 	void Add_PlusAngle(const _float _fDeltaAngle);
 
 	const _bool Get_IsAttack();

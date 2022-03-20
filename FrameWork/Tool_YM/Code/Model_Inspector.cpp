@@ -283,10 +283,10 @@ void CModel_Inspector::OnBnClickedNavSaveButton()
 	
 	for (auto iter : m_vecCells)
 	{
-		CCW_Sort(iter->m_pPoint);
+		//CCW_Sort(iter->m_pPoint);
 		for (int i = 0; i < 3; ++i)
 		{
-			m_NavMesh.Point[i] = *iter->m_pPoint[i];
+			m_NavMesh.Point[i] = iter->m_vPoint[i];
 		}
 		m_NavMeshList_Pos.push_back(m_NavMesh);
 	}

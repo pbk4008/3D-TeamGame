@@ -161,7 +161,7 @@ void CNavSphere::Pick_Model(void)
 					break;
 				}
 			}
-			if (true == m_bPick)\
+			if (true == m_bPick)
 				break;
 		}
 	}

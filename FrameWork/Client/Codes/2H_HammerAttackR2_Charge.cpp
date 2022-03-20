@@ -27,11 +27,11 @@ _int C2H_HammerAttackR2_Charge::Tick(const _double& _dDeltaTime)
 
 	_uint iCurKeyFrameIndex = m_pAnimationController->Get_CurKeyFrameIndex();
 	if (37 < iCurKeyFrameIndex && 40 > iCurKeyFrameIndex)
-		m_pSilvermane->Set_TrasceCamera(false);
+		m_pSilvermane->Set_IsTrasceCamera(false);
 	else if (60 < iCurKeyFrameIndex && 65 > iCurKeyFrameIndex)
-		m_pSilvermane->Set_TrasceCamera(true);
+		m_pSilvermane->Set_IsTrasceCamera(true);
 	else if (75 < iCurKeyFrameIndex)
-		m_pSilvermane->Set_TrasceCamera(false);
+		m_pSilvermane->Set_IsTrasceCamera(false);
 
 	if (m_pAnimationController->Is_Finished())
 	{
@@ -83,7 +83,7 @@ HRESULT C2H_HammerAttackR2_Charge::ExitState()
 
 	m_pAnimationController->Set_PlaySpeed(1.f);
 
-	m_pSilvermane->Set_TrasceCamera(true);
+	m_pSilvermane->Set_IsTrasceCamera(true);
 	m_fRotTime = 0.f;
 
 	return S_OK;
