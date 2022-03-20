@@ -40,6 +40,9 @@ _int CJumpNode::Tick(_double _dDeltaTime)
 	if (NO_EVENT != iProgress)
 		return iProgress;
 
+	//Raycast_FromMouse(_dDeltaTime);
+
+	m_pCollider->Update(m_pTransform->Get_WorldMatrix());
 	return _int();
 }
 
@@ -73,12 +76,17 @@ HRESULT CJumpNode::Render()
 
 	for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
 	{
-		if (FAILED(m_pModel->SetUp_TextureOnShader("g_DiffuseTexture", i, aiTextureType_DIFFUSE)))
-			return E_FAIL;
+		//if (FAILED(m_pModel->SetUp_TextureOnShader("g_DiffuseTexture", i, aiTextureType_DIFFUSE)))
+		//	return E_FAIL;
 
 		if (FAILED(m_pModel->Render(i, 0)))
 			return E_FAIL;
 	}
+
+#ifdef _DEBUG
+	m_pCollider->Render(L"Camera_Silvermane");
+#endif // _DEBUG
+
 
 	return S_OK;
 }
@@ -103,21 +111,55 @@ HRESULT CJumpNode::Ready_Components()
 	m_pAnimationController->Set_Transform(m_pTransform);
 	m_pAnimationController->SetUp_NextAnimation("SK_Jump_Node.ao|A_Idle_JumpNode");
 
-
-	CPhysicsXSystem::COLDESC tColDesc;
-	tColDesc.bGravity = false;
-	tColDesc.bKinematic = false;
-	tColDesc.eType = CPhysicsXSystem::ACTORTYPE::ACTOR_STATIC;
-	XMStoreFloat3(&tColDesc.fPos, m_pTransform->Get_State(CTransform::STATE_POSITION));
-
-	CBoxCollider::BOXDESC tBoxColDesc;
-	tBoxColDesc.tColDesc = tColDesc;
-	XMStoreFloat4x4(&tBoxColDesc.matTransform, m_pTransform->Get_CombinedMatrix());
-	tBoxColDesc.pParent = this;
-	if (FAILED(SetUp_Components(m_iSceneID, L"Proto_Component_BoxCollider", L"Collider", (CComponent**)&m_pCollider, &tBoxColDesc)))
+	CRay_Collider::COLLIDERDESC tColliderDesc;
+	ZeroMemory(&tColliderDesc, sizeof(CRay_Collider::COLLIDERDESC));
+	tColliderDesc.vScale = { 2.f, 4.f, 2.f };
+	tColliderDesc.vPosition = { 0.f, 2.f, 0.f };
+	if (FAILED(SetUp_Components(m_iSceneID, L"Proto_Component_RayCollider", L"Collider", (CComponent**)&m_pCollider, &tColliderDesc)))
 		return E_FAIL;
 
 	return S_OK;
+}
+
+void CJumpNode::Raycast_FromMouse(const _double& _dDeltaTime)
+{
+	_matrix smatView;
+
+	smatView = g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_VIEW);
+	smatView = XMMatrixInverse(nullptr, smatView);
+
+	_vector svRayPos, svRayDir;
+	memcpy_s(&svRayPos, sizeof(_vector), &smatView.r[3], sizeof(_vector));
+	memcpy_s(&svRayDir, sizeof(_vector), &smatView.r[2], sizeof(_vector));
+	svRayDir = XMVector3Normalize(svRayDir);
+
+	_float fOutDist = 0.f;
+	if (m_pCollider->Raycast_AABB(svRayPos, svRayDir, fOutDist))
+	{
+		m_fHoldTime += (_float)_dDeltaTime;
+		m_isPick = true;
+	}
+	else
+	{
+		m_fHoldTime = 0.f;
+		m_isPick = false;
+	}
+}
+
+_bool CJumpNode::Raycast(const _fvector& _svRayPos, const _fvector& _svRayDir, _float& _fOutDist, const _double & _dDeltaTime)
+{
+	if(m_pCollider->Raycast_AABB(_svRayPos, _svRayDir, _fOutDist))
+	{
+		m_fHoldTime += (_float)_dDeltaTime;
+		m_isPick = true;
+	}
+	else
+	{
+		m_fHoldTime = 0.f;
+		m_isPick = false;
+	}
+
+	return m_isPick;
 }
 
 CJumpNode* CJumpNode::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)

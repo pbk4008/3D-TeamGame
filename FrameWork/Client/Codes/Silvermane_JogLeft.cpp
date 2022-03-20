@@ -26,7 +26,7 @@ _int CSilvermane_JogLeft::Tick(const _double& _dDeltaTime)
 	if (0 > __super::Tick(_dDeltaTime))
 		return -1;
 
-	m_pTransform->Go_Left(_dDeltaTime * 0.2f);
+	m_pTransform->Add_Velocity(CTransform::STATE_RIGHT, -2.f * (_float)_dDeltaTime);
 
 	return _int();
 }
@@ -52,7 +52,6 @@ HRESULT CSilvermane_JogLeft::EnterState()
 	if (FAILED(__super::EnterState()))
 		return E_FAIL;
 
-	
 	m_pAnimationController->SetUp_NextAnimation("SK_Silvermane.ao|A_Loco_Jog_Left_Player", true);
 	m_pAnimationController->Set_RootMotion(true, false, ERootOption::XYZ);
 

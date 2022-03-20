@@ -281,7 +281,10 @@
     <ClInclude Include="..\Headers\MainApp.h" />
     <ClInclude Include="..\Headers\MainCamera.h" />
     <ClInclude Include="..\Headers\MainCamera_Ortho.h" />
+    <ClInclude Include="..\Headers\MidBoss_Attack.h" />
+    <ClInclude Include="..\Headers\MidBoss_BattleCry.h" />
     <ClInclude Include="..\Headers\MidBoss_Rage.h" />
+    <ClInclude Include="..\Headers\MidBoss_Turn.h" />
     <ClInclude Include="..\Headers\Monster_Bastion_2HSword.h" />
     <ClInclude Include="..\Headers\Monster_Bastion_Healer.h" />
     <ClInclude Include="..\Headers\Monster_Bastion_Shooter.h" />
@@ -345,6 +348,7 @@
     <ClInclude Include="..\Headers\TestScene_Sb.h" />
     <ClInclude Include="..\Headers\TestScene_YM.h" />
     <ClInclude Include="..\Headers\Traverse_Jump400Jog.h" />
+    <ClInclude Include="..\Headers\Traverse_JumpNodeJog.h" />
     <ClInclude Include="..\Headers\UI_Ingame.h" />
     <ClInclude Include="..\Headers\UI_Monster_Back.h" />
     <ClInclude Include="..\Headers\UI_Monster_HpBar.h" />
@@ -448,8 +452,11 @@
     <ClCompile Include="..\Codes\Client_Trigger.cpp" />
     <ClCompile Include="..\Codes\Boss_Bastion_Judicator.cpp" />
     <ClCompile Include="..\Codes\Fury.cpp" />
+    <ClCompile Include="..\Codes\MidBoss_Attack.cpp" />
+    <ClCompile Include="..\Codes\MidBoss_BattleCry.cpp" />
     <ClCompile Include="..\Codes\JumpNode.cpp" />
     <ClCompile Include="..\Codes\MidBoss_Rage.cpp" />
+    <ClCompile Include="..\Codes\MidBoss_Turn.cpp" />
     <ClCompile Include="..\Codes\Monster_Bastion_2HSword.cpp" />
     <ClCompile Include="..\Codes\Camera_Silvermane.cpp" />
     <ClCompile Include="..\Codes\DebugSystem.cpp" />
@@ -524,6 +531,7 @@
     <ClCompile Include="..\Codes\TestScene_Sb.cpp" />
     <ClCompile Include="..\Codes\TestScene_YM.cpp" />
     <ClCompile Include="..\Codes\Traverse_Jump400Jog.cpp" />
+    <ClCompile Include="..\Codes\Traverse_JumpNodeJog.cpp" />
     <ClCompile Include="..\Codes\UI_Ingame.cpp" />
     <ClCompile Include="..\Codes\UI_Monster_Back.cpp" />
     <ClCompile Include="..\Codes\UI_Monster_HpBar.cpp" />

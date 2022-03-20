@@ -21,6 +21,8 @@ public:
 public:
 	virtual HRESULT EnterState();
 	virtual HRESULT ExitState();
+	virtual HRESULT EnterState(void* _pArg);
+	virtual HRESULT ExitState(void* _pArg);
 
 public:
 	static CBastion_Sword_Idle* Create(ID3D11Device * _pDevice, ID3D11DeviceContext * _pDeviceContext, void* _pArg = nullptr);

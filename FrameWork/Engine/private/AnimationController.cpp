@@ -158,6 +158,11 @@ void CAnimationController::Set_MoveSpeed(const _float _fMoveSpeed)
 	m_fMoveSpeed = _fMoveSpeed;
 }
 
+void CAnimationController::Set_RotSpeed(const _float _fRotSpeed)
+{
+	m_fRotSpeed = _fRotSpeed;
+}
+
 void CAnimationController::Set_IsChange(const _bool _bChange)
 {
 	m_isChangeAnim = _bChange;
@@ -391,11 +396,9 @@ const _int CAnimationController::Move_Transform(const _double& _dDeltaTime)
 
 			if (1.f < m_fFixedBoneHoldTime)
 				return 0;
-			//고정뼈의 키프래임들 가져오기
+
 			vector<KEYFRAME*> KeyFrames = m_pFixedBone->Get_KeyFrames();
-			//고정뼈의 키프레임의 현재 Index 
 			m_iCurFixedBoneKeyFrameIndex = m_pFixedBone->Get_CurrentKeyFrameIndex();
-			//고정뼈의 이전 키프레임 Index
 			m_iPreFixedBoneKeyFrameIndex = m_iCurFixedBoneKeyFrameIndex - 1;
 
 			_vector svPosition = m_pTransform->Get_State(CTransform::STATE_POSITION);
@@ -409,13 +412,11 @@ const _int CAnimationController::Move_Transform(const _double& _dDeltaTime)
 			_vector svPreQuaternian = XMVectorZero();
 			_vector svQuaternian = XMVectorZero();
 
-			//현재 키프레임이 0이면
 			if (0 == m_iCurFixedBoneKeyFrameIndex)
 			{
-				//끝의 한틱 이동량을 구함
 				svPreVelocity = XMLoadFloat3(&KeyFrames[KeyFrames.size() - 2]->vPosition);
 				svVelocity = XMLoadFloat3(&KeyFrames[KeyFrames.size() - 1]->vPosition);
-				//끈의 한틱 회전량을 구함
+
 				svPreQuaternian = XMLoadFloat4(&KeyFrames[KeyFrames.size() - 2]->vRotation);
 				svQuaternian = XMLoadFloat4(&KeyFrames[KeyFrames.size() - 1]->vRotation);
 
@@ -424,10 +425,8 @@ const _int CAnimationController::Move_Transform(const _double& _dDeltaTime)
 			}
 			else
 			{
-				//현재의 키프레임 변화량을 구한다
 				if (m_iPreFixedBoneKeyFrameIndex >= 0)
 				{
-					
 					svPreVelocity = XMLoadFloat3(&KeyFrames[m_iPreFixedBoneKeyFrameIndex]->vPosition);
 					svPreQuaternian = XMLoadFloat4(&KeyFrames[m_iPreFixedBoneKeyFrameIndex]->vRotation);
 				}
@@ -439,21 +438,14 @@ const _int CAnimationController::Move_Transform(const _double& _dDeltaTime)
 			}
 
 			//svVelocity *= _dDeltaTime;
-			
-			//변환에 의한 피벗을 곱해준다?
 			//svQuaternian = XMVector4Transform(svQuaternian, XMLoadFloat4x4(&m_matPivot));
 
 			_float3 vVelocity, vBonePosition, vEuler, vRotation;
 			_float4 vQuaternian;
-			//1틱의 변화량을 가져온다
 			XMStoreFloat3(&vVelocity, svVelocity);
-			////1틱의 회전량을 가져온다
 			XMStoreFloat4(&vQuaternian, svQuaternian);
-			//회전량을 오일러 각도로 변환한다
 			vEuler = QuaternionToEuler(vQuaternian);
 
-
-			//루트 옵션에 따라(블랜더와 우리의 축을 맞게 변환)
 			switch (m_eRootOption)
 			{
 			case ERootOption::X:
@@ -478,78 +470,21 @@ const _int CAnimationController::Move_Transform(const _double& _dDeltaTime)
 				vBonePosition = { -vVelocity.x, -vVelocity.z, -vVelocity.y };
 				break;
 			}
-			//회전 각도를 만들고
-			vRotation = { -vEuler.x, -vEuler.z, -vEuler.y };
+			vRotation = { vEuler.x, vEuler.z, vEuler.y };
 
-			//객체 기준 x축으로 회전
-			m_pTransform->Rotation_Axis(svRight, _dDeltaTime * vRotation.x);
-			//객체 기준 y축으로 회전
-			m_pTransform->Rotation_Axis(svUp, _dDeltaTime * vRotation.y);
-			//객체 기준 x축으로 회전
-			m_pTransform->Rotation_Axis(svLook, _dDeltaTime * vRotation.z);
+			m_pTransform->Rotation_Axis(svRight, XMConvertToRadians(vRotation.x) * _dDeltaTime * m_fRotSpeed);
+			m_pTransform->Rotation_Axis(svUp, XMConvertToRadians(vRotation.y) * _dDeltaTime * m_fRotSpeed);
+			m_pTransform->Rotation_Axis(svLook, XMConvertToRadians(vRotation.z) * _dDeltaTime * m_fRotSpeed);
 
-
-			//look벡터 가져오고
-			svLook = m_pTransform->Get_State(CTransform::STATE_LOOK);
-
-			//변화량을 vector로 만들어주고
 			svVelocity = XMLoadFloat3(&vBonePosition);
-			//변화량 벡터에 뼈에 대한 피벗을 과 객체의 피벗을 곱해준다
 			svVelocity = XMVector4Transform(svVelocity, XMLoadFloat4x4(&m_matPivot) * m_pTransform->Get_PivotMatrix());
 
-			//변화량을 집어넣어준다.
 			XMStoreFloat3(&vVelocity, svVelocity);
 			m_pTransform->Go_Right((_float)vVelocity.x * _dDeltaTime * m_fMoveSpeed);
-			m_pTransform->Go_Up((_float)vVelocity.y * _dDeltaTime* m_fMoveSpeed);
-			m_pTransform->Go_Straight((_float)vVelocity.z * _dDeltaTime* m_fMoveSpeed);
-
-			//_matrix matTransform = m_pTransform->Get_WorldMatrix();
-
-
-			//_matrix matScale = XMMatrixIdentity();
-			//_matrix matRotate = XMMatrixRotationQuaternion(svQuaternian);
-
-			////루트 옵션에 따라(블랜더와 우리의 축을 맞게 변환), 위치값 셋팅
-			//switch (m_eRootOption)
-			//{
-			//case ERootOption::X:
-			//	vBonePosition = { -vVelocity.x, 0.f, 0.f };
-			//	break;
-			//case ERootOption::Y:
-			//	vBonePosition = { 0.f, 0.f, -vVelocity.y };
-			//	break;
-			//case ERootOption::Z:
-			//	vBonePosition = { 0.f, -vVelocity.z, 0.f };
-			//	break;
-			//case ERootOption::XY:
-			//	vBonePosition = { -vVelocity.x, 0.f, -vVelocity.y };
-			//	break;
-			//case ERootOption::XZ:
-			//	vBonePosition = { -vVelocity.x, -vVelocity.z, 0.f };
-			//	break;
-			//case ERootOption::YZ:
-			//	vBonePosition = { 0.f, -vVelocity.z, -vVelocity.y };
-			//	break;
-			//case ERootOption::XYZ:
-			//	vBonePosition = { -vVelocity.x, -vVelocity.z, -vVelocity.y };
-			//	break;
-			//}
-
-			//_matrix matPos = XMMatrixTranslation(vBonePosition.x, vBonePosition.y, vBonePosition.z);
-
-			//matTransform = matScale * matRotate * matPos;
-
-			//matTransform *= XMLoadFloat4x4(&m_matPivot);
-
-			//_matrix matResult = m_pTransform->Get_WorldMatrix();
-			//matResult *= matTransform;
-			//m_pTransform->Set_WorldMatrix(matResult);
-
-
+			m_pTransform->Go_Up((_float)vVelocity.y * _dDeltaTime * m_fMoveSpeed);
+			m_pTransform->Go_Straight((_float)vVelocity.z * _dDeltaTime * m_fMoveSpeed);
 		}
 	}
-
-
 
 	return _int();
 }
@@ -618,7 +553,7 @@ const _int CAnimationController::Add_TransformVelocity(const _double& _dDeltaTim
 			}
 
 			//svVelocity *= _dDeltaTime;
-			svQuaternian = XMVector4Transform(svQuaternian, XMLoadFloat4x4(&m_matPivot));
+			//svQuaternian = XMVector4Transform(svQuaternian, XMLoadFloat4x4(&m_matPivot));
 
 			_float3 vVelocity, vBonePosition, vEuler, vRotation;
 			_float4 vQuaternian;
@@ -650,26 +585,23 @@ const _int CAnimationController::Add_TransformVelocity(const _double& _dDeltaTim
 				vBonePosition = { -vVelocity.x, -vVelocity.z, -vVelocity.y };
 				break;
 			}
-			vRotation = { -vEuler.x, -vEuler.z, -vEuler.y };
+			vRotation = { vEuler.x, vEuler.z, vEuler.y };
 
 
-			m_pTransform->Rotation_Axis(svRight, _dDeltaTime * vRotation.x);
-			m_pTransform->Rotation_Axis(svUp, _dDeltaTime * vRotation.y);
-			m_pTransform->Rotation_Axis(svLook, _dDeltaTime * vRotation.z);
-
-
-			svLook = m_pTransform->Get_State(CTransform::STATE_LOOK);
+			m_pTransform->Rotation_Axis(svRight, XMConvertToRadians(vRotation.x) * _dDeltaTime * m_fRotSpeed);
+			m_pTransform->Rotation_Axis(svUp, XMConvertToRadians(vRotation.y) * _dDeltaTime * m_fRotSpeed);
+			m_pTransform->Rotation_Axis(svLook, XMConvertToRadians(vRotation.z) * _dDeltaTime * m_fRotSpeed);
 
 			svVelocity = XMLoadFloat3(&vBonePosition);
 			svVelocity = XMVector4Transform(svVelocity, XMLoadFloat4x4(&m_matPivot) * m_pTransform->Get_PivotMatrix());
 			
-			_vector svWorldQuaterian = XMQuaternionNormalize(XMQuaternionRotationMatrix(m_pTransform->Get_WorldMatrix()));
-			_matrix svRotation = XMMatrixRotationQuaternion(svWorldQuaterian);
-			svVelocity = XMVector4Transform(svVelocity, svRotation);
+			_vector svScale, svRot, svPos;
+			XMMatrixDecompose(&svScale, &svRot, &svPos, m_pTransform->Get_WorldMatrix());
+			_matrix smatRotation = XMMatrixRotationQuaternion(svRot);
+			svVelocity = XMVector4Transform(svVelocity, smatRotation);
 
-			XMStoreFloat3(&vVelocity, svVelocity);
 			svVelocity *= m_fMoveSpeed;
-			m_pTransform->Add_Velocity(svVelocity);
+			m_pTransform->Add_Velocity(svVelocity * _dDeltaTime);
 		}
 	}
 

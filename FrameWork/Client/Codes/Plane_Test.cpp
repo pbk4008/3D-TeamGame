@@ -17,8 +17,8 @@ HRESULT CPlane_Test::NativeConstruct_Prototype()
 	if (FAILED(__super::NativeConstruct_Prototype()))
 		return E_FAIL;
 
-	//if(FAILED(Ready_NaviPoints(L"../Data/NavMesh/2222.dat")))
-	//	return E_FAIL;
+	if(FAILED(Ready_NaviPoints(L"../Data/NavMesh/2222.dat")))
+		return E_FAIL;
 
 	return S_OK;
 }
@@ -31,8 +31,8 @@ HRESULT CPlane_Test::NativeConstruct(const _uint _iSceneID, void* _pArg)
 	if (FAILED(Ready_Components()))
 		return E_FAIL;
 
-	//if (FAILED(Ready_NaviMesh()))
-	//	return E_FAIL;
+	if (FAILED(Ready_NaviMesh()))
+		return E_FAIL;
 
 	return S_OK;
 }

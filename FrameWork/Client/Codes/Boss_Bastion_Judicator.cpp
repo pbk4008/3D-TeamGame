@@ -5,6 +5,9 @@
 #include "UI_Monster_Panel.h"
 
 #include "MidBoss_Rage.h"
+#include "MidBoss_BattleCry.h"
+#include "MidBoss_Attack.h"
+#include "MidBoss_Turn.h"
 
 CBoss_Bastion_Judicator::CBoss_Bastion_Judicator(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
 	:CActor(pDevice, pDeviceContext)
@@ -36,6 +39,9 @@ HRESULT CBoss_Bastion_Judicator::NativeConstruct(const _uint _iSceneID, void* pA
 	if (FAILED(Set_Animation_FSM()))
 		return E_FAIL;
 
+	if (FAILED(Set_State_FSM()))
+		return E_FAIL;
+
 	CHierarchyNode* pBone = m_pModelCom->Get_BoneMatrix("weapon_r_end");
 	CShieldBreaker* pWeapon = CShieldBreaker::Create(m_pDevice, m_pDeviceContext);
 	pWeapon->NativeConstruct(m_iSceneID, pBone);
@@ -56,8 +62,6 @@ HRESULT CBoss_Bastion_Judicator::NativeConstruct(const _uint _iSceneID, void* pA
 		return E_FAIL;
 
 	m_pPanel->Set_TargetWorldMatrix(m_pTransform->Get_WorldMatrix());
-
-	m_pAnimator->Change_Animation(RAGE);
 
 	return S_OK;
 }
@@ -82,19 +86,6 @@ _int CBoss_Bastion_Judicator::Tick(_double TimeDelta)
 			return -1;
 		}
 	}
-
-	if (g_pGameInstance->getkeyDown(DIK_NUMPAD4))
-	{
-		m_pAnimator->Change_AnyEntryAnimation(ATTACK_LEGACY_H);
-	}
-
-	if (g_pGameInstance->getkeyDown(DIK_NUMPAD5))
-	{
-		m_pAnimator->Change_AnyEntryAnimation(ATTACK_S2);
-	}
-
-
-	m_pAnimator->Tick(TimeDelta);
 
 	m_pPanel->Set_TargetWorldMatrix(m_pTransform->Get_WorldMatrix());
 
@@ -123,6 +114,8 @@ _int CBoss_Bastion_Judicator::LateTick(_double TimeDelta)
 			return E_FAIL;
 		}
 	}
+
+	
 
 	return 0;
 }
@@ -197,7 +190,7 @@ HRESULT CBoss_Bastion_Judicator::Set_Animation_FSM()
 
 #pragma region 공격재시작루프
 	pAnim = m_pModelCom->Get_Animation("SK_Bastion_Tier4.ao|A_BattleCry_Start_Phalanxar");
-	if (FAILED(m_pAnimator->Insert_Animation(BATTLECRY_START, RAGE, pAnim, true, true, false, ERootOption::XYZ)))
+	if (FAILED(m_pAnimator->Insert_Animation(BATTLECRY_START, HEAD, pAnim, true, true, false, ERootOption::XYZ)))
 		return E_FAIL;
 	pAnim = m_pModelCom->Get_Animation("SK_Bastion_Tier4.ao|A_BattleCry_Loop_Phalanxar");
 	if (FAILED(m_pAnimator->Insert_Animation(BATTLECRY_LOOP, BATTLECRY_START, pAnim, true, true, false, ERootOption::XYZ)))
@@ -215,7 +208,7 @@ HRESULT CBoss_Bastion_Judicator::Set_Animation_FSM()
 	if (FAILED(m_pAnimator->Insert_Animation(STUN_START, HEAD, pAnim, true, true, false, ERootOption::XYZ)))
 		return E_FAIL;
 	pAnim = m_pModelCom->Get_Animation("SK_Bastion_Tier4.ao|A_Stun_Loop_Phalanxar");
-	if (FAILED(m_pAnimator->Insert_Animation(STUN_LOOP, STUN_START, pAnim, true, true, false, ERootOption::XYZ)))
+	if (FAILED(m_pAnimator->Insert_Animation(STUN_LOOP, STUN_START, pAnim, false, true, false, ERootOption::XYZ)))
 		return E_FAIL;
 	pAnim = m_pModelCom->Get_Animation("SK_Bastion_Tier4.ao|A_Stun_End_Phalanxar");
 	if (FAILED(m_pAnimator->Insert_Animation(STUN_END, STUN_LOOP, pAnim, true, true, false, ERootOption::XYZ)))
@@ -227,11 +220,11 @@ HRESULT CBoss_Bastion_Judicator::Set_Animation_FSM()
 
 #pragma region 회전
 	pAnim = m_pModelCom->Get_Animation("SK_Bastion_Tier4.ao|A_2H_Hammer_Turn_135_Left_Normal");
-	if (FAILED(m_pAnimator->Insert_Animation(TURN_135LEFT_H, HEAD, pAnim, true, true, true, ERootOption::XYZ)))
+	if (FAILED(m_pAnimator->Insert_Animation(TURN_135LEFT_H, HEAD, pAnim, true, true, false, ERootOption::XYZ)))
 		return E_FAIL;
 
 	pAnim = m_pModelCom->Get_Animation("SK_Bastion_Tier4.ao|A_2H_Hammer_Turn_135_Right_Normal");
-	if (FAILED(m_pAnimator->Insert_Animation(TURN_135RIGHT_H, HEAD, pAnim, true, true, true, ERootOption::XYZ)))
+	if (FAILED(m_pAnimator->Insert_Animation(TURN_135RIGHT_H, HEAD, pAnim, true, true, false, ERootOption::XYZ)))
 		return E_FAIL;
 
 	pAnim = m_pModelCom->Get_Animation("SK_Bastion_Tier4.ao|A_2H_Hammer_Turn_180_Left_Normal");
@@ -257,7 +250,7 @@ HRESULT CBoss_Bastion_Judicator::Set_Animation_FSM()
 	pAnim = m_pModelCom->Get_Animation("SK_Bastion_Tier4.ao|A_2H_Hammer_Turn_90_Right_Normal");
 	if (FAILED(m_pAnimator->Insert_Animation(TURN_90RIGHT_H, HEAD, pAnim, true, true, false, ERootOption::XYZ)))
 		return E_FAIL;
-#pragma endregion 
+#pragma endregion
 
 #pragma region 상시어택애님
 	pAnim = m_pModelCom->Get_Animation("SK_Bastion_Tier4.ao|A_2H_Hammer_Attack_JogR1");
@@ -265,7 +258,7 @@ HRESULT CBoss_Bastion_Judicator::Set_Animation_FSM()
 		return E_FAIL;
 
 	pAnim = m_pModelCom->Get_Animation("SK_Bastion_Tier4.ao|A_2H_Hammer_Attack_L1_R2_Legacy");
-	if (FAILED(m_pAnimator->Insert_Animation(ATTACK_LEGACY_H, HEAD, pAnim, true, true, false, ERootOption::XYZ)))
+	if (FAILED(m_pAnimator->Insert_Animation(ATTACK_LEGACY_H, HEAD, pAnim, true, true, true, ERootOption::XYZ)))
 		return E_FAIL;
 
 	pAnim = m_pModelCom->Get_Animation("SK_Bastion_Tier4.ao|A_2H_Hammer_Attack_R1_01");
@@ -297,7 +290,7 @@ HRESULT CBoss_Bastion_Judicator::Set_Animation_FSM()
 
 
 	//자동으로 돌릴 애들(끝날애님, 끝나고시작할애님)
-	m_pAnimator->Set_UpAutoChangeAnimation(RAGE, BATTLECRY_START);
+	//m_pAnimator->Set_UpAutoChangeAnimation(RAGE, BATTLECRY_START);
 	m_pAnimator->Set_UpAutoChangeAnimation(BATTLECRY_START, BATTLECRY_LOOP);
 	m_pAnimator->Set_UpAutoChangeAnimation(BATTLECRY_LOOP, BATTLECRY_END);
 	m_pAnimator->Set_UpAutoChangeAnimation(BATTLECRY_END, RAGE);
@@ -305,6 +298,8 @@ HRESULT CBoss_Bastion_Judicator::Set_Animation_FSM()
 	m_pAnimator->Set_UpAutoChangeAnimation(STUN_START, STUN_LOOP);
 	m_pAnimator->Set_UpAutoChangeAnimation(STUN_LOOP, STUN_END);
 	m_pAnimator->Set_UpAutoChangeAnimation(STUN_END, RAGE);
+
+	m_pAnimator->Insert_AnyEntryAnimation(BATTLECRY_START);
 
 	//스턴루프
 	m_pAnimator->Insert_AnyEntryAnimation(STUN_START);
@@ -331,22 +326,25 @@ HRESULT CBoss_Bastion_Judicator::Set_Animation_FSM()
 	m_pAnimator->Insert_AnyEntryAnimation(TURN_45LEFT_H);
 	m_pAnimator->Insert_AnyEntryAnimation(TURN_45RIGHT_H);
 
+
+	m_pAnimator->Change_Animation(RAGE);
+
 	return S_OK;
 }
 
 HRESULT CBoss_Bastion_Judicator::Set_State_FSM()
 {
-	/* for. Monster Idle */
 	if (FAILED(m_pStateController->Add_State(L"Rage", CMidBoss_Rage::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 
-	///* for. Player Chaser */
-	//if (FAILED(m_pStateController->Add_State(L"Chaser", CBastion_2HSword_Chaser::Create(m_pDevice, m_pDeviceContext))))
-	//	return E_FAIL;
+	if (FAILED(m_pStateController->Add_State(L"BattleCry", CMidBoss_BattleCry::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
 
-	///* for. Dash */
-	//if (FAILED(m_pStateController->Add_State(L"Dash", CBastion_2HSword_Dash::Create(m_pDevice, m_pDeviceContext))))
-	//	return E_FAIL;
+	if (FAILED(m_pStateController->Add_State(L"Attack", CMidBoss_Attack::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+
+	if (FAILED(m_pStateController->Add_State(L"Turn", CMidBoss_Turn::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
 
 	for (auto& pair : m_pStateController->Get_States())
 	{
@@ -356,6 +354,7 @@ HRESULT CBoss_Bastion_Judicator::Set_State_FSM()
 		static_cast<CMonster_FSM*>(pair.second)->Set_Model(m_pModelCom);
 		static_cast<CMonster_FSM*>(pair.second)->Set_Animator(m_pAnimator);
 	}
+
 	m_pStateController->Change_State(L"Rage");
 
 	return S_OK;
@@ -386,6 +385,9 @@ CGameObject* CBoss_Bastion_Judicator::Clone(const _uint _iSceneID, void* pArg)
 
 void CBoss_Bastion_Judicator::Free()
 {
+	Safe_Release(m_pStateController);
+	Safe_Release(m_pAnimator);
 	Safe_Release(m_pModelCom);
+
 	__super::Free();
 }

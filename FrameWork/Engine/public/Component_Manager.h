@@ -10,6 +10,7 @@
 #include "SphereCollider.h"
 #include "CapsuleCollider.h"
 #include "MeshCollider.h"
+#include "Ray_Collider.h"
 #include "Renderer.h"
 #include "Transform.h"
 //#include "Navigation.h"

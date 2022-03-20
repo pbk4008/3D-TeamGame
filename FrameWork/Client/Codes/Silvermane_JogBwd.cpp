@@ -26,7 +26,9 @@ _int CSilvermane_JogBwd::Tick(const _double& _dDeltaTime)
 	if (0 > __super::Tick(_dDeltaTime))
 		return -1;
 
-	m_pTransform->Go_BackWard(_dDeltaTime * 0.2f);
+	//m_pTransform->Go_BackWard(_dDeltaTime * 0.2f);
+
+	m_pTransform->Add_Velocity(CTransform::STATE_LOOK, -2.f * (_float)_dDeltaTime);
 
 	return _int();
 }

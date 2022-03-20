@@ -112,17 +112,17 @@ HRESULT CLoader::LoadForScene()
 HRESULT CLoader::SetUp_Stage1_Object()
 {
 
-	/*if (FAILED(Load_Stage1FBXLoad()))
-		return E_FAIL;*/
-
-	if (FAILED(Load_Stage1PlayerLoad()))
+	if (FAILED(Load_Stage1FBXLoad()))
 		return E_FAIL;
 
-	/*if (FAILED(Load_Stage1BossLoad()))
-		return E_FAIL;*/
+	//if (FAILED(Load_Stage1PlayerLoad()))
+	//	return E_FAIL;
 
-	if (FAILED(Load_Stage1MonsterLoad()))
-		return E_FAIL;
+	//if (FAILED(Load_Stage1BossLoad()))
+	//	return E_FAIL;
+
+	//if (FAILED(Load_Stage1MonsterLoad()))
+	//	return E_FAIL;
 
 	//if (FAILED(Load_Stage1StaticUILoad()))
 	//	return E_FAIL;
@@ -133,8 +133,8 @@ HRESULT CLoader::SetUp_Stage1_Object()
 	//if (FAILED(Load_Stage1EffectLoad()))
 	//	return E_FAIL;
 
-	//if (FAILED(Load_Stage1TriggerLod()))
-	//	return E_FAIL;
+	if (FAILED(Load_Stage1TriggerLod()))
+		return E_FAIL;
 
 	return S_OK;
 }
@@ -713,7 +713,7 @@ HRESULT CLoader::Ready_Test_JS()
 	CMaterial* pMtrl = nullptr;
 #pragma region 플레이어
 	pTexture = CTexture::Create(m_pDevice, m_pDeviceContext);
-	pTexture->NativeConstruct_Prototype(L"../Bin/Resources/Mesh/Silvermane/T_Silvermane_Hairs_d_new.tga", 1);
+	pTexture->NativeConstruct_Prototype(L"../Bin/Resources/Mesh/Silvermane/T_Silvermane_Hair_D.tga", 1);
 	pMtrl = CMaterial::Create(m_pDevice, m_pDeviceContext, L"Silvermane_Hair", L"../../Reference/ShaderFile/Shader_Mesh.hlsl", CMaterial::EType::Anim);
 	pMtrl->Set_Texture("g_DiffuseTexture", TEXTURETYPE::TEX_DIFFUSE, pTexture, 0);
 	g_pGameInstance->Add_Material(L"Mtrl_Silvermane_Hair", pMtrl);
@@ -787,7 +787,7 @@ HRESULT CLoader::Ready_Test_JS()
 	matPivot = XMMatrixIdentity();
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_TEST_JS, L"Model_JumpNode", CModel::Create(m_pDevice, m_pDeviceContext,
 		"../bin/Resources/Mesh/JumpNode/", "JumpNode.fbx",
-		L"../../Reference/ShaderFile/Shader_Mesh.hlsl", matPivot, CModel::TYPE_ANIM, false))))
+		L"../../Reference/ShaderFile/Shader_Mesh.hlsl", matPivot, CModel::TYPE_ANIM, true))))
 	{
 		return E_FAIL;
 	}
@@ -805,6 +805,8 @@ HRESULT CLoader::Ready_Test_JS()
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_TEST_JS, L"Proto_Component_MeshCollider", CMeshCollider::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_TEST_JS, L"Proto_Component_BoxCollider", CBoxCollider::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_TEST_JS, L"Proto_Component_RayCollider", CRay_Collider::Create(m_pDevice, m_pDeviceContext, CRay_Collider::TYPE_AABB))))
 		return E_FAIL;
 #pragma endregion
 #pragma region 오브젝트

@@ -10,6 +10,7 @@ END
 BEGIN(Client)
 class CWeapon;
 class CCamera_Silvermane;
+class CJumpNode;
 
 class CSilvermane final : public CActor
 {
@@ -59,8 +60,13 @@ public: /* For.Shield */
 	void Set_EquipShield(const _bool _isEquipShield);
 	void Set_EquipShieldAnim(const _bool _isEquipShield);
 
+public: /* For.JumpNode */
+	CJumpNode* Get_TargetJumpNode() const;
+	const _bool Raycast_JumpNode(const _double& _dDeltaTime);
+
 private:
-	_int Trace_CameraLook(const _double& _dDeltaTime);
+	const _int Trace_CameraLook(const _double& _dDeltaTime);
+	const _int Fall(const _double& _dDeltaTime);
 
 private:
 	CModel* m_pModel = nullptr;
@@ -69,6 +75,7 @@ private:
 	CCamera_Silvermane* m_pCamera = nullptr;
 	CCharacterController* m_pCharacterController = nullptr;
 
+	_bool m_isFall = false;
 	_bool m_isMove = false;
 	_bool m_isTraceCamera = true;
 	_bool m_isAttack = false;
@@ -83,6 +90,10 @@ private: /* For.Weapon */
 	_bool m_isEquipWeapon = false;
 	_bool m_isEquipShield = false;
 	unordered_map<wstring, CWeapon*> m_umapWeapons;
+
+private: /* For.JumpNode */
+	CJumpNode* m_pTargetJumpNode = nullptr;
+	_float m_fJumpNodeLookTime = 0.f;
 
 public:
 	static CSilvermane* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext);
