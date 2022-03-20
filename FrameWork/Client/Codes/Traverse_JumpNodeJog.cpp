@@ -27,7 +27,7 @@ _int CTraverse_JumpNodeJog::Tick(const _double& _dDeltaTime)
 
 	//svPos += XMLoadFloat3(&m_vDir) * _dDeltaTime * m_fMoveSpeed;
 	//m_pTransform->Set_State(CTransform::STATE_POSITION, svPos);
-	_vector svVelocity = XMLoadFloat3(&m_vDir) * _dDeltaTime * m_fMoveSpeed;
+	_vector svVelocity = XMLoadFloat3(&m_vDir) * (_float)_dDeltaTime * m_fMoveSpeed;
 	m_pTransform->Add_Velocity(svVelocity);
 
 	if (!m_isJumpEnd)

@@ -57,7 +57,6 @@ public:
 	void Set_MoveSpeed(const _float _fMoveSpeed);
 	void Set_RotSpeed(const _float _fRotSpeed);
 	void Set_IsChange(const _bool _bChange);
-	void Set_RotSpeed(const _float _fRotSpeed);
 	const _bool Is_RootMotion() const;
 	const _bool Is_Finished() const;
 

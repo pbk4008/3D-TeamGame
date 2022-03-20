@@ -350,18 +350,18 @@ HRESULT CSilvermane::Ready_Components()
 
 
 	// 모델
-	// 어심프용
-	if (FAILED(SetUp_Components(m_iSceneID, L"Model_Silvermane", L"Model", (CComponent**)&m_pModel)))
-		return E_FAIL;
-	m_pModel->Add_Material(g_pGameInstance->Get_Material(L"Mtrl_Silvermane_Top"), 0);
-	m_pModel->Add_Material(g_pGameInstance->Get_Material(L"Mtrl_Silvermane_Down"), 1);
-	m_pModel->Add_Material(g_pGameInstance->Get_Material(L"Mtrl_Silvermane_Cloak"), 2);
-	m_pModel->Add_Material(g_pGameInstance->Get_Material(L"Mtrl_Silvermane_Hair"), 3);
-	//// 바이너리용
-	//if (FAILED(SetUp_Components(m_iSceneID, L"Model_Silvermane_Bin", L"Model", (CComponent**)&m_pModel)))
+	//// 어심프용
+	//if (FAILED(SetUp_Components(m_iSceneID, L"Model_Silvermane", L"Model", (CComponent**)&m_pModel)))
 	//	return E_FAIL;
-	//_matrix matPivot = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(180.f));
-	//m_pModel->Set_PivotMatrix(matPivot);
+	//m_pModel->Add_Material(g_pGameInstance->Get_Material(L"Mtrl_Silvermane_Top"), 0);
+	//m_pModel->Add_Material(g_pGameInstance->Get_Material(L"Mtrl_Silvermane_Down"), 1);
+	//m_pModel->Add_Material(g_pGameInstance->Get_Material(L"Mtrl_Silvermane_Cloak"), 2);
+	//m_pModel->Add_Material(g_pGameInstance->Get_Material(L"Mtrl_Silvermane_Hair"), 3);
+	// 바이너리용
+	if (FAILED(SetUp_Components(m_iSceneID, L"Model_Silvermane_Bin", L"Model", (CComponent**)&m_pModel)))
+		return E_FAIL;
+	_matrix matPivot = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(180.f));
+	m_pModel->Set_PivotMatrix(matPivot);
 
 
 	// 에니메이션 컨트롤러

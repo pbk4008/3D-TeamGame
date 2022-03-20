@@ -101,15 +101,13 @@ HRESULT CCharacterController::Render()
 	if (!m_pGizmo)
 		return E_FAIL;
 	
-	_vector vColor = XMVectorSet(1.f, 0.f, 0.f, 1.f);
-	m_pGizmo->DrawCapsule(XMLoadFloat4x4(&m_matWorld), L"Camera_Silvermane", vColor);
+	//_vector vColor = XMVectorSet(1.f, 0.f, 0.f, 1.f);
+	//m_pGizmo->DrawCapsule(XMLoadFloat4x4(&m_matWorld), L"Camera_Silvermane", vColor);
 	//CPhysicsXSystem* pPhysXSystem = GET_INSTANCE(CPhysicsXSystem);
 	//const PxRenderBuffer& rb = pPhysXSystem->Get_RenderBuffer();
 	//RELEASE_INSTANCE(CPhysicsXSystem);
 
-	//const PxRenderBuffer& rb = m_pPxController->getActor()->getScene()->getRenderBuffer();
-	////PxU32 index = m_pPxController->getActor()->getInternalIslandNodeIndex();
-	//	_float4 vColor = { 1.f, 0.f, 0.f, 1.f };
+	//_float4 vColor = { 1.f, 0.f, 0.f, 1.f };
 
 	//m_pEffect->SetView(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_VIEW));
 	//m_pEffect->SetProjection(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_PROJECTION));

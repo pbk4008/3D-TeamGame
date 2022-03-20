@@ -168,11 +168,6 @@ void CAnimationController::Set_IsChange(const _bool _bChange)
 	m_isChangeAnim = _bChange;
 }
 
-void CAnimationController::Set_RotSpeed(const _float _fRotSpeed)
-{
-	m_fRotSpeed = _fRotSpeed;
-}
-
 const _bool CAnimationController::Is_RootMotion() const
 {
 	return m_isRootMotion;

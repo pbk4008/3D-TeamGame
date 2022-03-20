@@ -749,20 +749,20 @@ HRESULT CLoader::Ready_Test_JS()
 #pragma region 모델
 	cout << "TestScene_JS 모델 프로토타입 생성중..." << endl;
 	_matrix matPivot = XMMatrixIdentity();
-	matPivot = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(180.f));
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_TEST_JS, L"Model_Silvermane", CModel::Create(m_pDevice, m_pDeviceContext,
-		"../bin/Resources/Mesh/Silvermane/", "Silvermane.fbx",
-		L"../../Reference/ShaderFile/Shader_Mesh.hlsl",
-		matPivot,
-		CModel::TYPE_ANIM, true))))
-	{
-		return E_FAIL;
-	}
-	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_TEST_JS, L"Model_Silvermane_Bin", CModel::Create(m_pDevice, m_pDeviceContext,
-	//	L"../bin/FBX/Silvermane/Silvermane_Bin.fbx", CModel::TYPE_ANIM, true))))
+	//matPivot = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(180.f));
+	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_TEST_JS, L"Model_Silvermane", CModel::Create(m_pDevice, m_pDeviceContext,
+	//	"../bin/Resources/Mesh/Silvermane/", "Silvermane.fbx",
+	//	L"../../Reference/ShaderFile/Shader_Mesh.hlsl",
+	//	matPivot,
+	//	CModel::TYPE_ANIM, true))))
 	//{
 	//	return E_FAIL;
 	//}
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_TEST_JS, L"Model_Silvermane_Bin", CModel::Create(m_pDevice, m_pDeviceContext,
+		L"../bin/FBX/Silvermane/Silvermane_Bin.fbx", CModel::TYPE_ANIM, true))))
+	{
+		return E_FAIL;
+	}
 	matPivot = XMMatrixIdentity();
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_TEST_JS, L"Model_Needle", CModel::Create(m_pDevice, m_pDeviceContext,
 		"../bin/Resources/Mesh/Needle/", "Needle.fbx",
@@ -798,7 +798,8 @@ HRESULT CLoader::Ready_Test_JS()
 	cout << "TestScene_JS 컴포넌트 프로토타입 생성중..." << endl;
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_TEST_JS, L"Proto_Component_AnimationController", CAnimationController::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
-	
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_TEST_JS, L"Proto_Component_StateController", CStateController::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_TEST_JS, L"Proto_Component_CharacterController", CCharacterController::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_TEST_JS, L"Proto_Component_MeshCollider", CMeshCollider::Create(m_pDevice, m_pDeviceContext))))
