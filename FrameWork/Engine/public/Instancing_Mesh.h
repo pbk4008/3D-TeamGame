@@ -24,6 +24,7 @@ private:
 public:
 	virtual HRESULT NativeConstruct_Prototype(const wstring& pMeshFilePath, const wstring& pShaderFile, INSTANCE_TYPE eType);
 	virtual HRESULT NativeConstruct(void* pArg) override;
+	void Update_InstanceBuffer(const vector<_float4x4>& pMatrix);
 public:
 	HRESULT SetUp_ValueOnShader(const char* pConstantName, void* pData, _uint iSize);
 	HRESULT	SetUp_TextureOnShader(const char* pConstantName, ID3D11ShaderResourceView* pSRV, _ulong Numindex);

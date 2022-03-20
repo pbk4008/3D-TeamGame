@@ -73,6 +73,47 @@ HRESULT CInstancing_Mesh::NativeConstruct(void* pArg)
 	return S_OK;
 }
 
+void CInstancing_Mesh::Update_InstanceBuffer(const vector<_float4x4>& pMatrix)
+{
+	vector<_float4x4> matMatrix;
+	for (auto& pData : pMatrix)
+	{
+		_matrix matData = XMLoadFloat4x4(&pData);
+		if (!XMVector4Equal(matData.r[0], XMVectorZero())
+			|| !XMVector4Equal(matData.r[1], XMVectorZero())
+			|| !XMVector4Equal(matData.r[2], XMVectorZero())
+			|| !XMVector4Equal(matData.r[3], XMVectorZero()))
+			matMatrix.emplace_back(pData);
+	}
+
+	m_iInstNumVertices = (_uint)matMatrix.size();
+
+	D3D11_MAPPED_SUBRESOURCE		SubResource;
+
+	m_pDeviceContext->Map(m_pVBInstance, 0, D3D11_MAP_WRITE_NO_OVERWRITE, 0, &SubResource);
+
+	for (_uint i = 0; i < m_iInstNumVertices; ++i)
+	{
+		_float4 vRight;
+		memcpy(&vRight, &matMatrix[0], sizeof(_float4));
+		_float4 vUp;
+		memcpy(&vUp, &matMatrix[1], sizeof(_float4));
+		_float4 vLook;
+		memcpy(&vLook, &matMatrix[2], sizeof(_float4));
+		_float4 vPos;
+		memcpy(&vPos, &matMatrix[3], sizeof(_float4));
+
+		((VTXMATRIX*)SubResource.pData)[i].vRight = vRight;
+		((VTXMATRIX*)SubResource.pData)[i].vUp = vUp;
+		((VTXMATRIX*)SubResource.pData)[i].vLook = vLook;
+		((VTXMATRIX*)SubResource.pData)[i].vPosition = vPos;
+	}
+
+	m_pDeviceContext->Unmap(m_pVBInstance, 0);
+
+
+}
+
 HRESULT CInstancing_Mesh::SetUp_ValueOnShader(const char* pConstantName, void* pData, _uint iSize)
 {
 	for (auto& pMtrl : m_vecMaterials)
