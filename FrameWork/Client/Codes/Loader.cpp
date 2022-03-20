@@ -112,29 +112,29 @@ HRESULT CLoader::LoadForScene()
 HRESULT CLoader::SetUp_Stage1_Object()
 {
 
-	/*if (FAILED(Load_Stage1FBXLoad()))
-		return E_FAIL;*/
-
-	if (FAILED(Load_Stage1PlayerLoad()))
+	if (FAILED(Load_Stage1FBXLoad()))
 		return E_FAIL;
 
-	if (FAILED(Load_Stage1BossLoad()))
-		return E_FAIL;
-
-	/*if (FAILED(Load_Stage1MonsterLoad()))
-		return E_FAIL;*/
-
-	if (FAILED(Load_Stage1StaticUILoad()))
-		return E_FAIL;
-
-	if (FAILED(Load_Stage1UILoad()))
-		return E_FAIL;
-
-	if (FAILED(Load_Stage1EffectLoad()))
-		return E_FAIL;
-
-	//if (FAILED(Load_Stage1TriggerLod()))
+	//if (FAILED(Load_Stage1PlayerLoad()))
 	//	return E_FAIL;
+
+	//if (FAILED(Load_Stage1BossLoad()))
+	//	return E_FAIL;
+
+	//if (FAILED(Load_Stage1MonsterLoad()))
+	//	return E_FAIL;
+
+	//if (FAILED(Load_Stage1StaticUILoad()))
+	//	return E_FAIL;
+
+	//if (FAILED(Load_Stage1UILoad()))
+	//	return E_FAIL;
+
+	//if (FAILED(Load_Stage1EffectLoad()))
+	//	return E_FAIL;
+
+	if (FAILED(Load_Stage1TriggerLod()))
+		return E_FAIL;
 
 	return S_OK;
 }

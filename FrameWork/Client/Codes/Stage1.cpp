@@ -20,43 +20,43 @@ HRESULT CStage1::NativeConstruct()
 	if (FAILED(CLevel::NativeConstruct()))
 		return E_FAIL;
 
-	/*if (FAILED(Ready_MapObject()))
-	{
-		return E_FAIL;
-	}*/
-
-	if (FAILED(Ready_Player(L"Layer_Silvermane")))
+	if (FAILED(Ready_MapObject()))
 	{
 		return E_FAIL;
 	}
 
-	if (FAILED(Ready_Boss(L"Layer_Boss")))
-	{
-		return E_FAIL;
-	}
-
-	/*if (FAILED(Ready_Monster(L"Layer_Monster")))
-	{
-		return E_FAIL;
-	}*/
-
-	if (FAILED(Ready_UI(L"Layer_UI")))
-	{
-		return E_FAIL;
-	}
-
-	//Data
-	if (FAILED(Ready_Data_UI(L"../bin/SaveData/UI/UI.dat")))
-	{
-		return E_FAIL;
-	}
-	if (FAILED(Ready_Data_Effect(L"../bin/SaveData/Effect/Effect_Explosion.dat")))
-	{
-		return E_FAIL;
-	}
-
-	//if (FAILED(Ready_Trigger_Lod(L"../bin/SaveData/Trigger/Stage1_LodTri.dat")))
+	//if (FAILED(Ready_Player(L"Layer_Silvermane")))
+	//{
 	//	return E_FAIL;
+	//}
+
+	//if (FAILED(Ready_Boss(L"Layer_Boss")))
+	//{
+	//	return E_FAIL;
+	//}
+
+	//if (FAILED(Ready_Monster(L"Layer_Monster")))
+	//{
+	//	return E_FAIL;
+	//}
+
+	//if (FAILED(Ready_UI(L"Layer_UI")))
+	//{
+	//	return E_FAIL;
+	//}
+
+	////Data
+	//if (FAILED(Ready_Data_UI(L"../bin/SaveData/UI/UI.dat")))
+	//{
+	//	return E_FAIL;
+	//}
+	//if (FAILED(Ready_Data_Effect(L"../bin/SaveData/Effect/Effect_Explosion.dat")))
+	//{
+	//	return E_FAIL;
+	//}
+
+	if (FAILED(Ready_Trigger_Lod(L"../bin/SaveData/Trigger/Stage1_LodTri.dat")))
+		return E_FAIL;
 	//if (FAILED(Ready_Trigger_Light(L"../bin/SaveData/Trigger/Stage1_LodTri.dat")))
 	//	return E_FAIL;
 	//if (FAILED(Ready_Trigger_Monster(L"../bin/SaveData/Trigger/Stage1_LodTri.dat")))
@@ -237,10 +237,11 @@ HRESULT CStage1::Ready_Data_UI(const _tchar* pDataFilePath)
 
 HRESULT CStage1::Ready_Trigger_Lod(const _tchar* pDataFilePath)
 {
+	//트리거를 벡터로 받는다
 	vector<TRIGGER> vecTrigger;
 	
 	g_pGameInstance->LoadFile<TRIGGER>(vecTrigger, pDataFilePath);
-
+	 
 	for (int i = 0; i < vecTrigger.size(); ++i)
 	{
 		TRIGGER TriggerDesc;

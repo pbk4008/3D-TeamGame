@@ -39,7 +39,7 @@ _int CBastion_Sword_Chase::Tick(const _double& _dDeltaTime)
 
 	m_pAnimator->Tick(_dDeltaTime);
 	Look_Player();
-	m_pTransform->Face_Target(g_pObserver->Get_PlayerPos());
+	//m_pTransform->Face_Target(g_pObserver->Get_PlayerPos());
 	//일정 거리가 되면 바로 공
 	_uint iAtkType = rand() % 3;
 	if (iAtkType == 2)
