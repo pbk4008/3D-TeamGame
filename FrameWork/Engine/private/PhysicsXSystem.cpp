@@ -34,12 +34,12 @@ HRESULT CPhysicsXSystem::Init_PhysicsX()
 	if (!m_pFoundation)
 		return E_FAIL;
 
-	m_pPvd = PxCreatePvd(*m_pFoundation);
-	m_pPvdTransport = PxDefaultPvdSocketTransportCreate(PVD_HOST, PVD_PORT, PVD_DEFAULT_TIMEOUT);
-	if (!m_pPvd->connect(*m_pPvdTransport, PxPvdInstrumentationFlag::eALL))
-		return E_FAIL;
+	//m_pPvd = PxCreatePvd(*m_pFoundation);
+	//m_pPvdTransport = PxDefaultPvdSocketTransportCreate(PVD_HOST, PVD_PORT, PVD_DEFAULT_TIMEOUT);
+	//if (!m_pPvd->connect(*m_pPvdTransport, PxPvdInstrumentationFlag::eALL))
+	//	return E_FAIL;
 
-	m_pPhysics = PxCreatePhysics(PX_PHYSICS_VERSION, *m_pFoundation, PxTolerancesScale(), true, m_pPvd);
+	m_pPhysics = PxCreatePhysics(PX_PHYSICS_VERSION, *m_pFoundation, PxTolerancesScale(), true/*, m_pPvd*/);
 	if (!m_pPhysics)
 		return E_FAIL;
 
