@@ -60,7 +60,7 @@ HRESULT C1H_SwordIdle::EnterState()
 	m_pAnimationController->SetUp_NextAnimation("SK_Silvermane.ao|A_1H_Sword_Pose_Normal", true);
 	m_pAnimationController->Set_RootMotion(true, true, ERootOption::XYZ);
 
-	m_pSilvermane->Set_TrasceCamera(true);
+	m_pSilvermane->Set_IsTrasceCamera(true);
 	return S_OK;
 }
 

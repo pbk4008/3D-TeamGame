@@ -19,7 +19,7 @@ public:
 		_float fHeight = 0.f;
 		_float fRadius = 0.f;
 		_float fContactOffset = 0.1f;
-		_float fStepOffset = 0.1f;
+		_float fStepOffset = 0.f;
 		_float fSlopeLimit = 30.f;
 		_float fStaticFriction = 0.f;
 		_float fDynamicFriction = 0.f;
@@ -45,6 +45,7 @@ public:
 	const CHARACTERCONTROLLERDESC& Get_CharacterControllerDesc() const;
 	PxMaterial* Get_Material();
 
+	void Set_FootPosition(const _float3& _vPosition);
 	void Set_OwnerTransform(CTransform* _pTransform);
 
 	const _bool IsDown();
@@ -85,12 +86,6 @@ private:
 	_float4x4 m_matWorld;
 
 	CTransform* m_pOwnerTransform = nullptr;
-
-	// 그리기용
-private:
-	BasicEffect* m_pEffect = nullptr;
-	PrimitiveBatch<VertexPositionColor>* m_pBatch = nullptr;
-	ID3D11InputLayout* m_pInputLayout = nullptr;
 
 public:
 	static CCharacterController* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext);

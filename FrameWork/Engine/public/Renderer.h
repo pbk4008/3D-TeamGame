@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Component.h"
+#include "DebugDraw.h"
 
 BEGIN(Engine)
 
@@ -68,6 +69,13 @@ private: HRESULT Render_Shadow();
 private: HRESULT Render_ShadeShadow();
 private: HRESULT Render_PBR();
 private: HRESULT Render_Blend();
+
+private: /* For.PhysX */
+	_bool m_isPhysXRender = false;
+	BasicEffect* m_pEffect = nullptr;
+	PrimitiveBatch<VertexPositionColor>* m_pBatch = nullptr;
+	ID3D11InputLayout* m_pInputLayout = nullptr;
+	HRESULT Render_PhysX();
 
 public: static CRenderer* Create(ID3D11Device * pDevice, ID3D11DeviceContext * pDeviceContext);
 public: virtual CComponent* Clone(void* pArg) override;

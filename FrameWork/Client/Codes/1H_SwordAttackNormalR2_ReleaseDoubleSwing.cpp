@@ -27,12 +27,12 @@ _int C1H_SwordAttackNormalR2_ReleaseDoubleSwing::Tick(const _double& _dDeltaTime
 
 	if (25 < m_pAnimationController->Get_CurKeyFrameIndex())
 	{
-		m_pSilvermane->Set_TrasceCamera(false);
+		m_pSilvermane->Set_IsTrasceCamera(false);
 	}
 
 	//if (0.05f < m_fRotTime)
 	//{
-	//	m_pSilvermane->Set_TrasceCamera(false);
+	//	m_pSilvermane->Set_IsTrasceCamera(false);
 	//}
 
 	if (m_pAnimationController->Is_Finished())
@@ -84,7 +84,7 @@ HRESULT C1H_SwordAttackNormalR2_ReleaseDoubleSwing::ExitState()
 
 	m_pAnimationController->Set_PlaySpeed(1.f);
 
-	m_pSilvermane->Set_TrasceCamera(true);
+	m_pSilvermane->Set_IsTrasceCamera(true);
 	m_fRotTime = 0.f;
 
 	return S_OK;

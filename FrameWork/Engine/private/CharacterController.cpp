@@ -50,25 +50,6 @@ HRESULT CCharacterController::NativeConstruct(void* _pArg)
 
 	XMStoreFloat4x4(&m_matLocal, XMMatrixIdentity());
 
-
-
-
-
-#pragma region 그리기용
-	m_pEffect = new BasicEffect(m_pDevice);
-	m_pEffect->SetVertexColorEnabled(true);
-
-	const void* pShaderByteCode = nullptr;
-	size_t			ShaderByteCodeLength = 0;
-	m_pEffect->GetVertexShaderBytecode(&pShaderByteCode, &ShaderByteCodeLength);
-
-	if (FAILED(m_pDevice->CreateInputLayout(VertexPositionColor::InputElements, VertexPositionColor::InputElementCount, pShaderByteCode, ShaderByteCodeLength, &m_pInputLayout)))
-		E_FAIL;
-
-	m_pBatch = new PrimitiveBatch<VertexPositionColor>(m_pDeviceContext);
-#pragma endregion
-
-
 	return S_OK;
 }
 
@@ -103,33 +84,6 @@ HRESULT CCharacterController::Render()
 	
 	//_vector vColor = XMVectorSet(1.f, 0.f, 0.f, 1.f);
 	//m_pGizmo->DrawCapsule(XMLoadFloat4x4(&m_matWorld), L"Camera_Silvermane", vColor);
-	//CPhysicsXSystem* pPhysXSystem = GET_INSTANCE(CPhysicsXSystem);
-	//const PxRenderBuffer& rb = pPhysXSystem->Get_RenderBuffer();
-	//RELEASE_INSTANCE(CPhysicsXSystem);
-
-	//_float4 vColor = { 1.f, 0.f, 0.f, 1.f };
-
-	//m_pEffect->SetView(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_VIEW));
-	//m_pEffect->SetProjection(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_PROJECTION));
-
-	//m_pDeviceContext->IASetInputLayout(m_pInputLayout);
-	//m_pEffect->Apply(m_pDeviceContext);
-
-	//m_pBatch->Begin();
-
-	//PxU32 iNBLines = rb.getNbLines();
-	//for (PxU32 i = 0; i < iNBLines; ++i)
-	//{
-	//	const PxDebugLine line = rb.getLines()[i];
-	//	_float3 pos0 = FromPxVec3(line.pos0);
-	//	_float3 pos1 = FromPxVec3(line.pos1);
-	//	_vector vPos0 = XMLoadFloat4(&_float4(pos0.x, pos0.y, pos0.z, 1.f));
-	//	_vector vPos1 = XMLoadFloat4(&_float4(pos1.x, pos1.y, pos1.z, 1.f));
-
-	//	DX::DrawTriangle(m_pBatch, vPos0, vPos1, vPos0, XMLoadFloat4(&vColor));
-	//}
-
-	//m_pBatch->End();
 
 	return S_OK;
 }
@@ -142,6 +96,12 @@ const CCharacterController::CHARACTERCONTROLLERDESC& CCharacterController::Get_C
 PxMaterial* CCharacterController::Get_Material()
 {
 	return m_pMaterial;
+}
+
+void CCharacterController::Set_FootPosition(const _float3 & _vPosition)
+{
+	PxExtendedVec3 pxvFootPos = { _vPosition.x, _vPosition.y, _vPosition.z };
+	m_pPxController->setFootPosition(pxvFootPos);
 }
 
 void CCharacterController::Set_OwnerTransform(CTransform* _pTransform)
@@ -183,8 +143,9 @@ HRESULT CCharacterController::Create_Controller()
 		RELEASE_INSTANCE(CPhysicsXSystem);
 		return E_FAIL;
 	}
-	m_pPxController->setContactOffset(PxF32(0.f));
-	m_pPxController->setStepOffset(PxF32(0.f));
+	m_pPxController->setContactOffset(0.f);
+	PxF32 a = m_pPxController->getContactOffset();
+	m_pPxController->setStepOffset(0.f);
 
 	RELEASE_INSTANCE(CPhysicsXSystem);
 
@@ -194,7 +155,6 @@ HRESULT CCharacterController::Create_Controller()
 void CCharacterController::Move(const _double& _dDeltaTime, const _float3 _vVelocity)
 {
 	PxVec3 pxvVelocity = ToPxVec3(_vVelocity);
-	//pxvVelocity.y += -9.8f * _dDeltaTime;
 	if (!pxvVelocity.isFinite())
 	{
 		m_vVelocity = { 0.f, 0.f, 0.f };
@@ -207,11 +167,17 @@ void CCharacterController::Move(const _double& _dDeltaTime, const _float3 _vVelo
 
 void CCharacterController::Update_OwnerTransform()
 {
-	PxExtendedVec3 pxPosition = m_pPxController->getPosition();
+	//PxExtendedVec3 pxPosition = m_pPxController->getPosition();
 
-	_float3 vPosition = { (_float)pxPosition.x, (_float)pxPosition.y, (_float)pxPosition.z };
-	_vector svPosition = XMLoadFloat3(&vPosition) - XMLoadFloat3(&m_tCharacterControllerDesc.vPosition);
-	m_pOwnerTransform->Set_State(CTransform::STATE_POSITION, XMVectorSetW(svPosition, 1.f));
+	//_float3 vPosition = { (_float)pxPosition.x, (_float)pxPosition.y, (_float)pxPosition.z };
+	//_vector svPosition = XMLoadFloat3(&vPosition) - XMLoadFloat3(&m_tCharacterControllerDesc.vPosition);
+	//m_pOwnerTransform->Set_State(CTransform::STATE_POSITION, XMVectorSetW(svPosition, 1.f));
+
+	PxExtendedVec3 pxPosition = m_pPxController->getFootPosition();
+
+	_float4 vPosition = { (_float)pxPosition.x, (_float)pxPosition.y, (_float)pxPosition.z, 1.f};
+	m_pOwnerTransform->Set_State(CTransform::STATE_POSITION, XMLoadFloat4(&vPosition));
+
 }
 
 _fvector CCharacterController::getQuaternion(_fmatrix matTransform)
@@ -320,10 +286,6 @@ CComponent* CCharacterController::Clone(void* _pArg)
 
 void CCharacterController::Free()
 {
-	Safe_Delete(m_pEffect);
-	Safe_Delete(m_pBatch);
-	Safe_Release(m_pInputLayout);
-
 	//// 컨트롤러랑 둘중에 하나만 릴리즈 해줘야 한다
 	//for (auto& pShape : m_vecShapes)
 	//{

@@ -45,7 +45,7 @@ HRESULT C2H_HammerJog::EnterState()
 	if (FAILED(__super::EnterState()))
 		return E_FAIL;
 
-	m_pSilvermane->Set_Move(true);
+	m_pSilvermane->Set_IsMove(true);
 
 	return S_OK;
 }
@@ -55,7 +55,7 @@ HRESULT C2H_HammerJog::ExitState()
 	if (FAILED(__super::ExitState()))
 		return E_FAIL;
 
-	m_pSilvermane->Set_Move(false);
+	m_pSilvermane->Set_IsMove(false);
 
 	return S_OK;
 }
