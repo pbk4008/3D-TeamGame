@@ -212,9 +212,6 @@
     <ClCompile Include="..\Code\Tab_Changer.cpp">
       <Filter>03.Level</Filter>
     </ClCompile>
-    <ClCompile Include="..\Code\MapTool_Level.cpp">
-      <Filter>03.Level\00.Map_Tool</Filter>
-    </ClCompile>
     <ClCompile Include="..\Code\CamTool_Level.cpp">
       <Filter>03.Level\01.Cam_Tool</Filter>
     </ClCompile>
@@ -238,6 +235,9 @@
     </ClCompile>
     <ClCompile Include="..\Code\Trigger.cpp">
       <Filter>04.Tool_Object\Trigger</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\MapTool_Level.cpp">
+      <Filter>03.Level\00.Map_Tool</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
