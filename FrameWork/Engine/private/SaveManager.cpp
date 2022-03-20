@@ -163,6 +163,10 @@ HRESULT CSaveManager::Load_AnimModel(DYNAMICDATA& AnimData, _matrix& pivotMatrix
 			ZeroMemory(&tTextureData, sizeof(TEXTUREDATA));
 			ReadFile(hFile, &tTextureData, sizeof(TEXTUREDATA), &dwByte, nullptr);
 
+			_uint iLen = lstrlen(tTextureData.pTextureName);
+			wcsncpy_s(tTextureData.pTextureName, tTextureData.pTextureName, iLen - 1 - 3);
+			lstrcat(tTextureData.pTextureName, L".dds");
+
 			tMtrlData.vecTextureData.emplace_back(tTextureData);
 		}
 		AnimData.pMtrlData[i]=tMtrlData;
@@ -274,6 +278,10 @@ HRESULT CSaveManager::Load_StaticModel(STATICDATA& StaticData, const wstring& pF
 			TEXTUREDATA pTexture;
 			ZeroMemory(&pTexture, sizeof(pTexture));
 			ReadFile(hFile, &pTexture, sizeof(TEXTUREDATA), &dwByte, nullptr);
+
+			_uint iLen = lstrlen(pTexture.pTextureName);
+			wcsncpy_s(pTexture.pTextureName, pTexture.pTextureName, iLen - 1 - 3);
+			lstrcat(pTexture.pTextureName, L".dds");
 
 			pMTrl.vecTextureData.emplace_back(pTexture);
 		}

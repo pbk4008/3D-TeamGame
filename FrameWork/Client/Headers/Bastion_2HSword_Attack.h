@@ -2,10 +2,10 @@
 #define Bastion_2HSword_Attack_h__
 
 
-#include "Monster_FSM.h"
+#include "Bastion_2HSword_State.h"
 
 BEGIN(Client)
-class CBastion_2HSword_Attack final : public CMonster_FSM
+class CBastion_2HSword_Attack : public CBastion_2HSword_State
 {
 protected:
 	explicit CBastion_2HSword_Attack(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext);
@@ -23,6 +23,7 @@ public:
 
 public:
 	virtual void Look_Player(void) override;
+	virtual void Look_Monster(void) override;
 
 public:
 	static CBastion_2HSword_Attack* Create(ID3D11Device * _pDevice, ID3D11DeviceContext * _pDeviceContext, void* _pArg = nullptr);

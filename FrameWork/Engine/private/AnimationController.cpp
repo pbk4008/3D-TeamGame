@@ -11,6 +11,7 @@ CAnimationController::CAnimationController(ID3D11Device* _pDevice, ID3D11DeviceC
 
 CAnimationController::CAnimationController(const CAnimationController& _rhs)
 	: CComponent(_rhs)
+	, m_matPivot(_rhs.m_matPivot)
 {
 }
 
@@ -18,7 +19,7 @@ HRESULT CAnimationController::NativeConstruct_Prototype()
 {
 	if (FAILED(__super::NativeConstruct_Prototype()))
 		return E_FAIL;
-
+	XMStoreFloat4x4(&m_matPivot, XMMatrixIdentity());
 	return S_OK;
 }
 
@@ -27,7 +28,6 @@ HRESULT CAnimationController::NativeConstruct(void* _pArg)
 	if (FAILED(__super::NativeConstruct(_pArg)))
 		return E_FAIL;
 
-	XMStoreFloat4x4(&m_matPivot, XMMatrixIdentity());
 	return S_OK;
 }
 
@@ -39,6 +39,7 @@ _int CAnimationController::Tick(const _double& _dDeltaTime, const EType _eType)
 	switch (_eType)
 	{
 	case EType::Transform:
+		//트랜스폼 하는곳
 		if (0 > Move_Transform(_dDeltaTime))
 			return -1;
 		break;
@@ -50,6 +51,7 @@ _int CAnimationController::Tick(const _double& _dDeltaTime, const EType _eType)
 
 	if(-1 != m_tBlendDesc.iNextAnimIndex)
 	{
+		//루트 애니메이션
 		if (FAILED(m_pModel->Update_CombinedTransformationMatrix(m_tBlendDesc.iNextAnimIndex, m_isRootMotion, m_eRootOption)))
 			return E_FAIL;
 	}
@@ -166,6 +168,11 @@ void CAnimationController::Set_IsChange(const _bool _bChange)
 	m_isChangeAnim = _bChange;
 }
 
+void CAnimationController::Set_RotSpeed(const _float _fRotSpeed)
+{
+	m_fRotSpeed = _fRotSpeed;
+}
+
 const _bool CAnimationController::Is_RootMotion() const
 {
 	return m_isRootMotion;
@@ -189,8 +196,10 @@ void CAnimationController::Add_TrackAcc(const _double& _dTrackAcc)
 
 _int CAnimationController::Update_CombinedTransformMatrix(const _double& _dDeltaTime)
 {
+	//애니메이션들 가져옴
 	vector<CAnimation*>& vecAnimations = m_pModel->Get_Animations();
 
+	//바꾸는 애니메이션이 잇는지 
 	if (-1 != m_tBlendDesc.iNextAnimIndex)
 	{
 		//if (!m_isChangeAnim)
@@ -199,6 +208,7 @@ _int CAnimationController::Update_CombinedTransformMatrix(const _double& _dDelta
 		//	m_isChangeAnim = true;
 		//}
 
+		//러프 비율
 		m_tBlendDesc.fChangeTime += (_float)_dDeltaTime;
 		m_tBlendDesc.fTweenTime = m_tBlendDesc.fChangeTime / m_tBlendDesc.fTakeTime;
 
@@ -206,6 +216,7 @@ _int CAnimationController::Update_CombinedTransformMatrix(const _double& _dDelta
 		m_isFinished = vecAnimations[m_tBlendDesc.iNextAnimIndex]->Is_Finished();
 		m_iCurKeyFrameIndex = vecAnimations[m_tBlendDesc.iNextAnimIndex]->Get_CurrentKeyFrameIndex();
 
+		//러프 ㄱㄱ
 		Lerp_Anim(vecAnimations);
 	}
 	else
@@ -215,6 +226,7 @@ _int CAnimationController::Update_CombinedTransformMatrix(const _double& _dDelta
 		m_iCurKeyFrameIndex = vecAnimations[m_tBlendDesc.iCurAnimIndex]->Get_CurrentKeyFrameIndex();
 	}
 
+	//러프의 시간이 1초보다 커지면 애니메이션 변경
 	if (m_tBlendDesc.fTweenTime >= 1.f)
 	{
 		//vecAnimations[m_tBlendDesc.iCurAnimIndex]->Reset_Animation();
@@ -376,9 +388,10 @@ const _int CAnimationController::Move_Transform(const _double& _dDeltaTime)
 	{
 		return 0;
 	}
-
+	//현재 애니메이션이 잇으면
 	if (m_pCurAnim)
 	{
+		//루트 본
 		if (m_pFixedBone)
 		{
 			if (m_pFixedBone->Get_CurrentKeyFrameIndex() == m_iCurFixedBoneKeyFrameIndex)
@@ -464,7 +477,6 @@ const _int CAnimationController::Move_Transform(const _double& _dDeltaTime)
 			}
 			vRotation = { vEuler.x, vEuler.z, vEuler.y };
 
-
 			m_pTransform->Rotation_Axis(svRight, XMConvertToRadians(vRotation.x) * _dDeltaTime * m_fRotSpeed);
 			m_pTransform->Rotation_Axis(svUp, XMConvertToRadians(vRotation.y) * _dDeltaTime * m_fRotSpeed);
 			m_pTransform->Rotation_Axis(svLook, XMConvertToRadians(vRotation.z) * _dDeltaTime * m_fRotSpeed);
@@ -474,8 +486,8 @@ const _int CAnimationController::Move_Transform(const _double& _dDeltaTime)
 
 			XMStoreFloat3(&vVelocity, svVelocity);
 			m_pTransform->Go_Right((_float)vVelocity.x * _dDeltaTime * m_fMoveSpeed);
-			m_pTransform->Go_Up((_float)vVelocity.y * _dDeltaTime* m_fMoveSpeed);
-			m_pTransform->Go_Straight((_float)vVelocity.z * _dDeltaTime* m_fMoveSpeed);
+			m_pTransform->Go_Up((_float)vVelocity.y * _dDeltaTime * m_fMoveSpeed);
+			m_pTransform->Go_Straight((_float)vVelocity.z * _dDeltaTime * m_fMoveSpeed);
 		}
 	}
 

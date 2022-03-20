@@ -51,6 +51,36 @@ _fvector CClient_Observer::Get_PlayerPos()
 	return vPos;
 }
 
+const _bool CClient_Observer::Get_IsAttack()
+{
+	if (!m_pPlayer)
+		return false;
+
+	return m_pPlayer->Get_IsAttack();
+}
+
+const _float CClient_Observer::Get_Dist(_fvector vPos)
+{
+	//플레이어 위치 받아오기
+	_vector vPlayer = Get_PlayerPos();
+	//플레이어의 좌표가 0일경우 -1 리턴
+	if (XMVector4Equal(vPlayer, XMVectorZero()))
+		return -1;
+
+	//거리 구하기
+	_float fDist = XMVectorGetX(XMVector3Length(vPlayer - vPos));
+
+	return fDist;
+}
+
+void CClient_Observer::Set_IsAttack(const _bool bAttack)
+{
+	if (!m_pPlayer)
+		return;
+
+	m_pPlayer->Set_IsAttack(bAttack);
+}
+
 void CClient_Observer::Free(void)
 {
 	Safe_Release(m_pPlayer);

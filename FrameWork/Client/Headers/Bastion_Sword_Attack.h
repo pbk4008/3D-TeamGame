@@ -9,6 +9,8 @@ BEGIN(Client)
 class CBastion_Sword_Attack final : public CMonster_FSM
 {
 private:
+	enum class ATTACK_TYPE {ATTACK_SINGLE, ATTACK_DOUBLE, ATTACK_JUMP, ATTACK_END};
+private:
 	explicit CBastion_Sword_Attack(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext);
 	virtual ~CBastion_Sword_Attack() = default;
 public:
@@ -20,11 +22,15 @@ public:
 public:
 	virtual HRESULT EnterState();
 	virtual HRESULT ExitState();
+	virtual HRESULT EnterState(void* pArg);
+	virtual HRESULT ExitState(void* _pArg);
 
 public:
 	static CBastion_Sword_Attack* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext, void* _pArg = nullptr);
 private:
 	virtual void Free() override;
+private:
+	ATTACK_TYPE m_eAttackType;
 };
 END
 #endif

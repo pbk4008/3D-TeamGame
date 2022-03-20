@@ -24,6 +24,7 @@ _int CMonster_FSM::Tick(const _double& _dDeltaTime)
 		return iProgress;
 
 	Look_Player();
+	Look_Monster();
 
 	return _int();
 }

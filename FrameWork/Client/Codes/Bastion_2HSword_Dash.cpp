@@ -1,16 +1,16 @@
 #include "pch.h"
 #include "Bastion_2HSword_Dash.h"
-
+#include "Animation.h"
 /* Monster List */
 #include "Monster_Bastion_2HSword.h"
 
 CBastion_2HSword_Dash::CBastion_2HSword_Dash(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
-	: CMonster_FSM(_pDevice, _pDeviceContext)
+	: CBastion_2HSword_State(_pDevice, _pDeviceContext)
 {
 }
 
 CBastion_2HSword_Dash::CBastion_2HSword_Dash(const CBastion_2HSword_Dash& _rhs)
-	: CMonster_FSM(_rhs)
+	: CBastion_2HSword_State(_rhs)
 {
 }
 
@@ -55,7 +55,23 @@ HRESULT CBastion_2HSword_Dash::EnterState()
 	if (FAILED(__super::EnterState()))
 		return E_FAIL;
 
-	m_pAnimator->Change_AnyEntryAnimation((_uint)CMonster_Bastion_2HSword::ANIM_TYPE::A_DASH_BWD);
+	m_pTransform->Face_Target(g_pObserver->Get_PlayerPos());
+
+
+	_int randAtt = rand() % 3;
+
+	switch (randAtt)
+	{
+	case 1:
+		m_pAnimator->Change_AnyEntryAnimation((_uint)CMonster_Bastion_2HSword::ANIM_TYPE::A_DASH_BWD);
+		break;
+	case 2:
+		m_pAnimator->Change_AnyEntryAnimation((_uint)CMonster_Bastion_2HSword::ANIM_TYPE::A_DASH_RIGHT);
+		break;
+	case 3:
+		m_pAnimator->Change_AnyEntryAnimation((_uint)CMonster_Bastion_2HSword::ANIM_TYPE::A_DASH_LEFT);
+		break;
+	}
 
 	return S_OK;
 }
@@ -67,19 +83,17 @@ HRESULT CBastion_2HSword_Dash::ExitState()
 
 	return S_OK;
 }
-
 void CBastion_2HSword_Dash::Look_Player(void)
 {
-	_fvector vMonsterPos = m_pTransform->Get_State(CTransform::STATE::STATE_POSITION);
-	_fvector vDist = vMonsterPos - g_pObserver->Get_PlayerPos();
-	_float fDistToPlayer = XMVectorGetX(XMVector3Length(vDist));
 
-	if (5.0f < fDistToPlayer && 15.0f > fDistToPlayer)
-	{
-		m_pTransform->Face_Target(g_pObserver->Get_PlayerPos());
+}
+
+void CBastion_2HSword_Dash::Look_Monster(void)
+{
+	CAnimation* pAnim = m_pAnimator->Get_CurrentAnimation();
+
+	if (pAnim->Is_Finished())
 		m_pStateController->Change_State(L"Chaser");
-	}
-
 }
 
 CBastion_2HSword_Dash* CBastion_2HSword_Dash::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext, void* _pArg)

@@ -15,7 +15,7 @@ HRESULT CBastion_Sword_Turn::NativeConstruct(void* _pArg)
 	FSMDESC tDesc = (*(FSMDESC*)_pArg);
 	m_pAnimator = tDesc.pAnimator;
 	m_pStateController = tDesc.pController;
-
+	m_wstrTag = tDesc.pName;
 	Safe_AddRef(m_pAnimator);
 
 	if (FAILED(CMonster_FSM::NativeConstruct(_pArg)))

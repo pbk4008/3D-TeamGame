@@ -5,6 +5,8 @@
 
 BEGIN(Engine)
 class CAnimator;
+class CAnimation;
+class CCapsuleCollider;
 END
 
 BEGIN(Client)
@@ -47,11 +49,14 @@ private:
 	HRESULT Ready_Weapon(void);
 	HRESULT Ready_AnimFSM(void);
 	HRESULT Ready_StateFSM(void);
+	HRESULT Render_Debug(void);
 
 private:
 	CModel*				  m_pModel = nullptr;
+	CAnimation*			  m_pAnimation = nullptr;
 	CAnimator*			  m_pAnimator = nullptr;
 	CStateController*	  m_pStateController = nullptr;
+	CCapsuleCollider*	  m_pColliderCom = nullptr;
 
 private:
 	CAnimator::ANIMATORDESC m_AanimDesc;
@@ -61,6 +66,9 @@ private: /* For.Weapon */
 	_bool m_isEquipWeapon = false;
 	unordered_map<wstring, CWeapon*> m_umapWeapons;
 
+public:
+	_int	m_iHp = 3;
+	_bool	m_bRender = true;
 public:
 	static CMonster_Bastion_2HSword* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext);
 	virtual CGameObject* Clone(const _uint _iSceneID, void* _pArg = nullptr) override;

@@ -112,17 +112,17 @@ HRESULT CLoader::LoadForScene()
 HRESULT CLoader::SetUp_Stage1_Object()
 {
 
-	/*if (FAILED(Load_Stage1FBXLoad()))
-		return E_FAIL;*/
-
-	if (FAILED(Load_Stage1PlayerLoad()))
+	if (FAILED(Load_Stage1FBXLoad()))
 		return E_FAIL;
 
-	/*if (FAILED(Load_Stage1BossLoad()))
-		return E_FAIL;*/
+	//if (FAILED(Load_Stage1PlayerLoad()))
+	//	return E_FAIL;
 
-	if (FAILED(Load_Stage1MonsterLoad()))
-		return E_FAIL;
+	//if (FAILED(Load_Stage1BossLoad()))
+	//	return E_FAIL;
+
+	//if (FAILED(Load_Stage1MonsterLoad()))
+	//	return E_FAIL;
 
 	//if (FAILED(Load_Stage1StaticUILoad()))
 	//	return E_FAIL;
@@ -133,8 +133,8 @@ HRESULT CLoader::SetUp_Stage1_Object()
 	//if (FAILED(Load_Stage1EffectLoad()))
 	//	return E_FAIL;
 
-	//if (FAILED(Load_Stage1TriggerLod()))
-	//	return E_FAIL;
+	if (FAILED(Load_Stage1TriggerLod()))
+		return E_FAIL;
 
 	return S_OK;
 }
@@ -798,8 +798,7 @@ HRESULT CLoader::Ready_Test_JS()
 	cout << "TestScene_JS 컴포넌트 프로토타입 생성중..." << endl;
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_TEST_JS, L"Proto_Component_AnimationController", CAnimationController::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_TEST_JS, L"Proto_Component_StateController", CStateController::Create(m_pDevice, m_pDeviceContext))))
-		return E_FAIL;
+	
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_TEST_JS, L"Proto_Component_CharacterController", CCharacterController::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_TEST_JS, L"Proto_Component_MeshCollider", CMeshCollider::Create(m_pDevice, m_pDeviceContext))))
@@ -921,6 +920,13 @@ HRESULT CLoader::Ready_Test_YM()
 	{
 		return E_FAIL;
 	}
+
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_TEST_YM, L"Model_Bastion_2HSword_Bin", CModel::Create(m_pDevice, m_pDeviceContext,
+		L"../bin/Resources/Mesh/Bastion_2HSword/Bastion_2HSword_Bin.fbx", CModel::TYPE_ANIM, true))))
+	{
+		return E_FAIL;
+	}
+
 	matPivot = XMMatrixIdentity();
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_TEST_YM, L"Model_Needle", CModel::Create(m_pDevice, m_pDeviceContext,
 		"../bin/Resources/Mesh/Needle/", "Needle.fbx",
@@ -944,15 +950,7 @@ HRESULT CLoader::Ready_Test_YM()
 	}
 
 
-	matPivot = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(180.f));
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_TEST_YM, L"Model_Bastion_2HSword", CModel::Create(m_pDevice, m_pDeviceContext,
-		"../bin/Resources/Mesh/Bastion_2HSword/", "Bastion_2HSword.fbx",
-		L"../../Reference/ShaderFile/Shader_Mesh.hlsl",
-		matPivot,
-		CModel::TYPE_ANIM, true))))
-	{
-		return E_FAIL;
-	}
+
 	matPivot = XMMatrixIdentity();
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_TEST_YM, L"Model_RetributionBlade", CModel::Create(m_pDevice, m_pDeviceContext,
 		"../bin/Resources/Mesh/RetributionBlade/", "RetributionBlade(2H).fbx",
@@ -979,6 +977,8 @@ HRESULT CLoader::Ready_Test_YM()
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_TEST_YM, L"Proto_Component_CharacterController", CCharacterController::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_TEST_YM, L"Proto_Component_Animator", CAnimator::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_TEST_YM, L"Proto_Component_CapsuleCollider", CCapsuleCollider::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 #pragma endregion
 #pragma region 오브젝트

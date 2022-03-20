@@ -174,6 +174,7 @@ void CTransform::Face_Target(_fvector vTargetPos)
 	Set_State(CTransform::STATE_RIGHT, vRight);
 }
 
+
 void CTransform::Rotation_Axis(_fvector vAxis, _double TimeDelta)
 {
 	_matrix		RotationMatrix = XMMatrixRotationAxis(vAxis, m_TransformDesc.fRotationPerSec * (_float)TimeDelta );

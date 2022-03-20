@@ -5,6 +5,7 @@
 
 CBastion_Sword_Chase::CBastion_Sword_Chase(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
 	:CMonster_FSM(_pDevice, _pDeviceContext)
+	, m_fAngle(0.f)
 {
 }
 
@@ -18,6 +19,7 @@ HRESULT CBastion_Sword_Chase::NativeConstruct(void* _pArg)
 	m_pAnimator = tDesc.pAnimator;
 	m_pTransform = tDesc.pTransform;
 	m_pStateController = tDesc.pController;
+	m_wstrTag = tDesc.pName;
 
 	Safe_AddRef(m_pAnimator);
 	Safe_AddRef(m_pTransform);
@@ -29,28 +31,36 @@ HRESULT CBastion_Sword_Chase::NativeConstruct(void* _pArg)
 
 _int CBastion_Sword_Chase::Tick(const _double& _dDeltaTime)
 {
-	if (!m_pAnimator||!m_pStateController)
+	if (!m_pAnimator||!m_pStateController) 
 		return -1;
 
 	//애니메이션 진행
 	//쫓기 시작 -쫓기 루프 -쫓기 끝의 루프를 진행
+
 	m_pAnimator->Tick(_dDeltaTime);
-
-	m_fAccTime += _dDeltaTime;
-	//일정 조건(ex : 플레이어와의 거리가 일정 거리가 되면)에 해당 애니메이션이 루프에니메이션이면
-	if (m_fAccTime > 5.f&&!bChange)
+	Look_Player();
+	//m_pTransform->Face_Target(g_pObserver->Get_PlayerPos());
+	//일정 거리가 되면 바로 공
+	_uint iAtkType = rand() % 3;
+	if (iAtkType == 2)
 	{
-		bChange = true;
- 		m_fAccTime = 0.f;
-		//루프 애니메이션에 자동으로 옮기는게 연결되어 잇으면 자동으로 옮기는 것으로 애니메이션 전환
-		m_pAnimator->Change_LoopAnim();
+		if (g_pObserver->Get_Dist(m_pTransform->Get_State(CTransform::STATE_POSITION)) < 4.f)
+		{
+			m_pStateController->Change_State(L"Attack",&iAtkType);
+			return 0;
+		}
 	}
-
+	else
+	{
+		if (g_pObserver->Get_Dist(m_pTransform->Get_State(CTransform::STATE_POSITION)) < 2.f)
+		{
+			m_pStateController->Change_State(L"Attack", &iAtkType);
+			return 0;
+		}
+	}
 	//해당 애니메이션이 종착 애니메이션에 도달하면 상태머신의 상태 변경
-	if (m_pAnimator->Get_CurrentAnimNode() == (_uint)CMonster_Bastion_Sword::ANIM_TYPE::IDLE)
-	{
+	if (!m_pAnimator->Get_IsLerp()&&m_pAnimator->Get_CurrentAnimNode() == (_uint)CMonster_Bastion_Sword::ANIM_TYPE::IDLE)
 		m_pStateController->Change_State(L"Idle");
-	}
 
 	return _int();
 }
@@ -69,18 +79,53 @@ HRESULT CBastion_Sword_Chase::EnterState()
 {
 	if (!m_pAnimator)
 		return E_FAIL;
-	//bChange = false;
-	//m_fAccTime = 0.f;
-	//들어오자 마자 애니메이션 변경 시작 위치는 RunStart
+
 	if (FAILED(m_pAnimator->Change_AnyEntryAnimation((_uint)CMonster_Bastion_Sword::ANIM_TYPE::RUN_START)))
 		return E_FAIL;
+
+	_matrix matRotate = XMMatrixRotationAxis(XMVectorSet(0.f, 1.f, 0.f, 0.f), XMConvertToRadians(180.f));
+	m_pAnimator->Set_PivotMatrix(matRotate);
 
 	return S_OK;
 }
 
 HRESULT CBastion_Sword_Chase::ExitState()
 {
+	_matrix matIdentity = XMMatrixIdentity();
+	m_pAnimator->Set_PivotMatrix(matIdentity);
 	return S_OK;
+}
+
+HRESULT CBastion_Sword_Chase::EnterState(void* pArg)
+{
+	//if (FAILED(m_pAnimator->Change_AnyEntryAnimation((_uint)CMonster_Bastion_Sword::ANIM_TYPE::RUN_START)))
+	//	return E_FAIL;
+
+	//_matrix matRotate = XMMatrixRotationAxis(XMVectorSet(0.f, 1.f, 0.f, 0.f), XMConvertToRadians(180.f));
+	//m_pAnimator->Set_PivotMatrix(matRotate);
+	return S_OK;
+}
+
+HRESULT CBastion_Sword_Chase::ExitState(void* pArg)
+{
+	//_matrix matIdentity = XMMatrixIdentity();
+	//m_pAnimator->Set_PivotMatrix(matIdentity);
+	return S_OK;
+}
+
+void CBastion_Sword_Chase::Look_Player()
+{
+	_vector		vPosition = m_pTransform->Get_State(CTransform::STATE_POSITION);
+	_vector		vLook = vPosition - g_pObserver->Get_PlayerPos();
+
+	_vector		vRight = XMVector3Cross(XMVectorSet(0.f, 1.f, 0.f, 0.f), vLook);
+	vLook = XMVector3Cross(vRight, XMVectorSet(0.f, 1.f, 0.f, 0.f));
+
+	vLook = XMVector3Normalize(vLook) * m_pTransform->Get_Scale(CTransform::STATE_LOOK);
+	vRight = XMVector3Normalize(vRight) * m_pTransform->Get_Scale(CTransform::STATE_RIGHT);
+
+	m_pTransform->Set_State(CTransform::STATE_LOOK, vLook);
+	m_pTransform->Set_State(CTransform::STATE_RIGHT, vRight);
 }
 
 CBastion_Sword_Chase* CBastion_Sword_Chase::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext, void* _pArg)

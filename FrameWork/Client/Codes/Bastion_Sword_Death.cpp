@@ -13,7 +13,12 @@ HRESULT CBastion_Sword_Death::NativeConstruct(void* _pArg)
 	if (!_pArg)
 		return E_FAIL;
 
-	m_pAnimator = (CAnimator*)_pArg;
+
+	FSMDESC tDesc = (*(FSMDESC*)_pArg);
+
+	m_pAnimator = tDesc.pAnimator;
+	m_wstrTag = tDesc.pName;
+
 	Safe_AddRef(m_pAnimator);
 
 	if (FAILED(CMonster_FSM::NativeConstruct(_pArg)))
@@ -29,8 +34,8 @@ _int CBastion_Sword_Death::Tick(const _double& _dDeltaTime)
 
 	m_pAnimator->Tick(_dDeltaTime);
 
-	if(m_pAnimator->Get_CurrentAnimation()->Is_Finished())
-		//°´Ã¼ »èÁ¦
+	//if(m_pAnimator->Get_CurrentAnimation()->Is_Finished())
+	
 
 	return _int();
 }

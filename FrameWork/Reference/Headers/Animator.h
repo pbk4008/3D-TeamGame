@@ -47,11 +47,19 @@ public:
 	//애니메이션 어떤 조건을 통해서 들어오는 애니메이션 추가시 사용
 	//이미 만들어진 애니메이션을 AnyEntry에 담아서 조건에 따라 변경하면서 사용
 	HRESULT Insert_AnyEntryAnimation(_uint iTag);
+
+	void Set_AnimSpeed(_float fSpeed) { m_fPlaySpeed = fSpeed; };
+	void Set_PivotMat(const _fmatrix& matPivot);
+
 public:
 	const _uint Get_CurrentAnimNode();
 	CAnimation* Get_CurrentAnimation();
+	CAnimationController* Get_AnimController() { return m_pController; };
 public:
 	vector<_uint> Get_Nodes() { return m_vecAnimNode; }
+	_bool Get_IsLerp() { return m_bLerp; }
+public:
+	void Set_PivotMatrix(_fmatrix matPivot);
 private:
 	//애니메이션 찾기
 	CAnimNode* Find_Animation(_uint itTag, CAnimNode* pNode=nullptr);
@@ -66,6 +74,9 @@ public:
 private:
 	virtual void Free() override;
 private:
+	//러프 중인지 아닌지 판단하는 변수
+	_bool m_bLerp;
+private:
 	CAnimationController* m_pController;
 	CAnimNode* m_pHead;//링크드 리스트 Head 노드
 	CAnimNode* m_pCulAnimNode;//현재 노드
@@ -74,6 +85,8 @@ private:
 	vector<_uint> m_vecAnimNode;
 
 	vector<CAnimNode*> m_vecAnyEntryNode;
+
+	_float m_fPlaySpeed = 1.f;
 };
 END
 #endif
