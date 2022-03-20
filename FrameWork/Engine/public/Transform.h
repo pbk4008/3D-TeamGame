@@ -76,6 +76,7 @@ public: /* For.CharacterController */
 	const _float3& Get_Velocity() const;
 	void Set_Velocity(const _fvector& _svVelocity);
 	void Add_Velocity(const _fvector& _svVelocity);
+	void Add_Velocity(const STATE _eState, const _float _fValue);
 
 private:
 	_float4x4				m_WorldMatrix;	

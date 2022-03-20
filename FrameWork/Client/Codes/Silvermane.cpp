@@ -5,6 +5,7 @@
 #include "Needle.h"
 #include "Fury.h"
 #include "Shield.h"
+#include "JumpNode.h"
 
 #pragma region 스테이트들
 #include "Silvermane_Idle.h"
@@ -134,6 +135,7 @@
 
 //////////////////////////////////////////// Jump
 #include "Traverse_Jump400Jog.h"
+#include "Traverse_JumpNodeJog.h"
 #pragma endregion
 
 
@@ -190,12 +192,18 @@ _int CSilvermane::Tick(_double _dDeltaTime)
 	if (NO_EVENT != iProgress) 
 		return iProgress;
 
-	iProgress = m_pAnimationController->Tick(_dDeltaTime, CAnimationController::EType::Transform);
+	iProgress = m_pAnimationController->Tick(_dDeltaTime, CAnimationController::EType::CharacterController);
 	if (NO_EVENT != iProgress) 
 		return iProgress;
 
-	m_pCharacterController->Tick(_dDeltaTime);
-	//m_pCharacterController->Move(_dDeltaTime, m_pTransform->Get_Velocity());
+
+	Fall(_dDeltaTime);
+	//m_pCharacterController->Tick(_dDeltaTime);
+	m_pCharacterController->Move(_dDeltaTime, m_pTransform->Get_Velocity());
+
+
+	Raycast_JumpNode(_dDeltaTime);
+
 
 	// 무기 업뎃
 	if (m_pCurWeapon)
@@ -204,14 +212,13 @@ _int CSilvermane::Tick(_double _dDeltaTime)
 		if (NO_EVENT != iProgress) 
 			return iProgress;
 	}
-
 	if (m_pShield && m_pShield->getActive())
 	{
 		iProgress = m_pShield->Tick(_dDeltaTime);
 		if (NO_EVENT != iProgress)
 			return iProgress;
 	}
-
+	
 	return _int();
 }
 
@@ -221,7 +228,7 @@ _int CSilvermane::LateTick(_double _dDeltaTime)
 	if (NO_EVENT != iProgress) 
 		return iProgress;
 
-	//m_pCharacterController->Update_OwnerTransform();
+	m_pCharacterController->Update_OwnerTransform();
 
 	iProgress = m_pStateController->LateTick(_dDeltaTime);
 	if (NO_EVENT != iProgress) 
@@ -345,17 +352,17 @@ HRESULT CSilvermane::Ready_Components()
 
 	// 모델
 	// 어심프용
-	//if (FAILED(SetUp_Components(m_iSceneID, L"Model_Silvermane", L"Model", (CComponent**)&m_pModel)))
-	//	return E_FAIL;
-	//m_pModel->Add_Material(g_pGameInstance->Get_Material(L"Mtrl_Silvermane_Top"), 0);
-	//m_pModel->Add_Material(g_pGameInstance->Get_Material(L"Mtrl_Silvermane_Down"), 1);
-	//m_pModel->Add_Material(g_pGameInstance->Get_Material(L"Mtrl_Silvermane_Cloak"), 2);
-	//m_pModel->Add_Material(g_pGameInstance->Get_Material(L"Mtrl_Silvermane_Hair"), 3);
-	// 바이너리용
-	if (FAILED(SetUp_Components(m_iSceneID, L"Model_Silvermane_Bin", L"Model", (CComponent**)&m_pModel)))
+	if (FAILED(SetUp_Components(m_iSceneID, L"Model_Silvermane", L"Model", (CComponent**)&m_pModel)))
 		return E_FAIL;
-	_matrix matPivot = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(180.f));
-	m_pModel->Set_PivotMatrix(matPivot);
+	m_pModel->Add_Material(g_pGameInstance->Get_Material(L"Mtrl_Silvermane_Top"), 0);
+	m_pModel->Add_Material(g_pGameInstance->Get_Material(L"Mtrl_Silvermane_Down"), 1);
+	m_pModel->Add_Material(g_pGameInstance->Get_Material(L"Mtrl_Silvermane_Cloak"), 2);
+	m_pModel->Add_Material(g_pGameInstance->Get_Material(L"Mtrl_Silvermane_Hair"), 3);
+	//// 바이너리용
+	//if (FAILED(SetUp_Components(m_iSceneID, L"Model_Silvermane_Bin", L"Model", (CComponent**)&m_pModel)))
+	//	return E_FAIL;
+	//_matrix matPivot = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(180.f));
+	//m_pModel->Set_PivotMatrix(matPivot);
 
 
 	// 에니메이션 컨트롤러
@@ -364,7 +371,7 @@ HRESULT CSilvermane::Ready_Components()
 	m_pAnimationController->Set_GameObject(this);
 	m_pAnimationController->Set_Model(m_pModel);
 	m_pAnimationController->Set_Transform(m_pTransform);
-	m_pAnimationController->Set_MoveSpeed(2.f);
+	m_pAnimationController->Set_MoveSpeed(10.f);
 
 	// 스테이트 컨트롤러
 	if (FAILED(SetUp_Components(m_iSceneID, L"Proto_Component_StateController", L"StateController", (CComponent**)&m_pStateController)))
@@ -597,6 +604,8 @@ HRESULT CSilvermane::Ready_States()
 	// 짬푸
 	if (FAILED(m_pStateController->Add_State(L"Traverse_Jump400Jog", CTraverse_Jump400Jog::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
+	if (FAILED(m_pStateController->Add_State(L"Traverse_JumpNodeJog", CTraverse_JumpNodeJog::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
 
 	for (auto& pair : m_pStateController->Get_States())
 	{
@@ -762,7 +771,7 @@ void CSilvermane::Set_EquipShieldAnim(const _bool _isEquipShield)
 	static_cast<CShield*>(m_pShield)->Set_EquipAnim(_isEquipShield);
 }
 
-_int CSilvermane::Trace_CameraLook(const _double& _dDeltaTime)
+const _int CSilvermane::Trace_CameraLook(const _double& _dDeltaTime)
 {
 	_vector svCameraLook = m_pCamera->Get_Look();
 	_vector svLook = m_pTransform->Get_State(CTransform::STATE_LOOK);
@@ -809,6 +818,66 @@ _int CSilvermane::Trace_CameraLook(const _double& _dDeltaTime)
 	}
 
  	return _int();
+}
+
+const _int CSilvermane::Fall(const _double& _dDeltaTime)
+{
+	if (m_isFall)
+	{
+		_vector svPos = m_pTransform->Get_State(CTransform::STATE_POSITION);
+		if (0.f < XMVectorGetY(svPos))
+		{
+			m_pTransform->Add_Velocity(XMVectorSet(0.f, -9.8f * (_float)_dDeltaTime, 0.f, 0.f));
+		}
+	}
+
+	return _int();
+}
+
+CJumpNode* CSilvermane::Get_TargetJumpNode() const
+{
+	return m_pTargetJumpNode;
+}
+
+const _bool CSilvermane::Raycast_JumpNode(const _double& _dDeltaTime)
+{
+	_matrix smatView;
+
+	smatView = g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_VIEW);
+	smatView = XMMatrixInverse(nullptr, smatView);
+	if (XMMatrixIsNaN(smatView))
+		return false;
+
+	_vector svRayPos, svRayDir;
+	memcpy_s(&svRayPos, sizeof(_vector), &smatView.r[3], sizeof(_vector));
+	memcpy_s(&svRayDir, sizeof(_vector), &smatView.r[2], sizeof(_vector));
+	svRayDir = XMVector3Normalize(svRayDir);
+	_float fOutDist = 0.f;
+
+	list<CGameObject*>* listJumpNode = g_pGameInstance->getObjectList(m_iSceneID, L"Layer_JumpNode");
+	if (!listJumpNode)
+		return false;
+	for (auto& pJumpNode : *listJumpNode)
+	{
+		if(static_cast<CJumpNode*>(pJumpNode)->Raycast(svRayPos, svRayDir, fOutDist, _dDeltaTime))
+		{
+			m_pTargetJumpNode = static_cast<CJumpNode*>(pJumpNode);
+			if (g_pGameInstance->getkeyPress(DIK_C))
+				m_fJumpNodeLookTime += (_float)_dDeltaTime;
+
+			if (2.f < m_fJumpNodeLookTime)
+			{
+				if (FAILED(m_pStateController->Change_State(L"Traverse_JumpNodeJog")))
+					return false;
+				m_fJumpNodeLookTime = 0.f;
+			}
+			return true;
+		}
+	}
+
+	m_pTargetJumpNode = nullptr;
+	m_fJumpNodeLookTime = 0.f;
+	return false;
 }
 
 CSilvermane* CSilvermane::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)

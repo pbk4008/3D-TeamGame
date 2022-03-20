@@ -32,7 +32,7 @@ private:
 public:
 	_fvector Get_Min(BoundingBox* pBoundBox);
 	_fvector Get_Max(BoundingBox* pBoundBox);
-
+	
 public:
 	virtual HRESULT NativeConstruct_Prototype(TYPE eColliderType);
 	virtual HRESULT NativeConstruct(void* pArg);
@@ -44,6 +44,7 @@ public:
 	_bool Collision_AABB(CRay_Collider* pTargetCollider);
 	_bool Collision_OBB(CRay_Collider* pTargetCollider);
 	_bool Collision_Sphere(CRay_Collider* pTargetCollider);
+	_bool Raycast_AABB(const _fvector& _svRayPos, const _fvector& _svRayDir, _float& _fOutDist);
 private:
 	BoundingBox*				m_pOriginAABB = nullptr;
 	BoundingBox*				m_pAABB = nullptr;
@@ -69,6 +70,7 @@ private:
 private:
 	TYPE			m_eColliderType = TYPE_END;
 	_bool			m_isCollision = false;
+	_bool			m_isRaycast = false;
 
 private:
 	_fmatrix Remove_Rotation(_fmatrix TransformMatrix);

@@ -354,6 +354,29 @@ void CTransform::Add_Velocity(const _fvector& _svVelocity)
 	XMStoreFloat3(&m_vVelocity, XMLoadFloat3(&m_vVelocity) + _svVelocity);
 }
 
+void CTransform::Add_Velocity(const STATE _eState, const _float _fValue)
+{
+	_vector svVelocity = XMVectorZero();
+	switch (_eState)
+	{
+	case STATE_RIGHT:
+		svVelocity = XMVectorSet(_fValue, 0.f, 0.f, 0.f);
+		break;
+	case STATE_UP:
+		svVelocity = XMVectorSet(0.f, _fValue, 0.f, 0.f);
+		break;
+	case STATE_LOOK:
+		svVelocity = XMVectorSet(0.f, 0.f, _fValue, 0.f);
+		break;
+	}
+
+	_vector svScale, svRot, svPos;
+	XMMatrixDecompose(&svScale, &svRot, &svPos, XMLoadFloat4x4(&m_WorldMatrix));
+	_matrix smatRotation = XMMatrixRotationQuaternion(svRot);
+	svVelocity = XMVector4Transform(svVelocity, smatRotation);
+	XMStoreFloat3(&m_vVelocity, XMLoadFloat3(&m_vVelocity) + svVelocity);
+}
+
 CTransform * CTransform::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pDeviceContext)
 {
 	CTransform*		pInstance = new CTransform(pDevice, pDeviceContext);

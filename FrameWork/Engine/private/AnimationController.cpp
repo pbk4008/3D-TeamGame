@@ -156,6 +156,11 @@ void CAnimationController::Set_MoveSpeed(const _float _fMoveSpeed)
 	m_fMoveSpeed = _fMoveSpeed;
 }
 
+void CAnimationController::Set_RotSpeed(const _float _fRotSpeed)
+{
+	m_fRotSpeed = _fRotSpeed;
+}
+
 void CAnimationController::Set_IsChange(const _bool _bChange)
 {
 	m_isChangeAnim = _bChange;
@@ -425,7 +430,7 @@ const _int CAnimationController::Move_Transform(const _double& _dDeltaTime)
 			}
 
 			//svVelocity *= _dDeltaTime;
-			svQuaternian = XMVector4Transform(svQuaternian, XMLoadFloat4x4(&m_matPivot));
+			//svQuaternian = XMVector4Transform(svQuaternian, XMLoadFloat4x4(&m_matPivot));
 
 			_float3 vVelocity, vBonePosition, vEuler, vRotation;
 			_float4 vQuaternian;
@@ -457,15 +462,12 @@ const _int CAnimationController::Move_Transform(const _double& _dDeltaTime)
 				vBonePosition = { -vVelocity.x, -vVelocity.z, -vVelocity.y };
 				break;
 			}
-			vRotation = { -vEuler.x, -vEuler.z, -vEuler.y };
+			vRotation = { vEuler.x, vEuler.z, vEuler.y };
 
 
-			m_pTransform->Rotation_Axis(svRight, _dDeltaTime * vRotation.x);
-			m_pTransform->Rotation_Axis(svUp, _dDeltaTime * vRotation.y);
-			m_pTransform->Rotation_Axis(svLook, _dDeltaTime * vRotation.z);
-
-
-			svLook = m_pTransform->Get_State(CTransform::STATE_LOOK);
+			m_pTransform->Rotation_Axis(svRight, XMConvertToRadians(vRotation.x) * _dDeltaTime * m_fRotSpeed);
+			m_pTransform->Rotation_Axis(svUp, XMConvertToRadians(vRotation.y) * _dDeltaTime * m_fRotSpeed);
+			m_pTransform->Rotation_Axis(svLook, XMConvertToRadians(vRotation.z) * _dDeltaTime * m_fRotSpeed);
 
 			svVelocity = XMLoadFloat3(&vBonePosition);
 			svVelocity = XMVector4Transform(svVelocity, XMLoadFloat4x4(&m_matPivot) * m_pTransform->Get_PivotMatrix());
@@ -544,7 +546,7 @@ const _int CAnimationController::Add_TransformVelocity(const _double& _dDeltaTim
 			}
 
 			//svVelocity *= _dDeltaTime;
-			svQuaternian = XMVector4Transform(svQuaternian, XMLoadFloat4x4(&m_matPivot));
+			//svQuaternian = XMVector4Transform(svQuaternian, XMLoadFloat4x4(&m_matPivot));
 
 			_float3 vVelocity, vBonePosition, vEuler, vRotation;
 			_float4 vQuaternian;
@@ -576,26 +578,23 @@ const _int CAnimationController::Add_TransformVelocity(const _double& _dDeltaTim
 				vBonePosition = { -vVelocity.x, -vVelocity.z, -vVelocity.y };
 				break;
 			}
-			vRotation = { -vEuler.x, -vEuler.z, -vEuler.y };
+			vRotation = { vEuler.x, vEuler.z, vEuler.y };
 
 
-			m_pTransform->Rotation_Axis(svRight, _dDeltaTime * vRotation.x);
-			m_pTransform->Rotation_Axis(svUp, _dDeltaTime * vRotation.y);
-			m_pTransform->Rotation_Axis(svLook, _dDeltaTime * vRotation.z);
-
-
-			svLook = m_pTransform->Get_State(CTransform::STATE_LOOK);
+			m_pTransform->Rotation_Axis(svRight, XMConvertToRadians(vRotation.x) * _dDeltaTime * m_fRotSpeed);
+			m_pTransform->Rotation_Axis(svUp, XMConvertToRadians(vRotation.y) * _dDeltaTime * m_fRotSpeed);
+			m_pTransform->Rotation_Axis(svLook, XMConvertToRadians(vRotation.z) * _dDeltaTime * m_fRotSpeed);
 
 			svVelocity = XMLoadFloat3(&vBonePosition);
 			svVelocity = XMVector4Transform(svVelocity, XMLoadFloat4x4(&m_matPivot) * m_pTransform->Get_PivotMatrix());
 			
-			_vector svWorldQuaterian = XMQuaternionNormalize(XMQuaternionRotationMatrix(m_pTransform->Get_WorldMatrix()));
-			_matrix svRotation = XMMatrixRotationQuaternion(svWorldQuaterian);
-			svVelocity = XMVector4Transform(svVelocity, svRotation);
+			_vector svScale, svRot, svPos;
+			XMMatrixDecompose(&svScale, &svRot, &svPos, m_pTransform->Get_WorldMatrix());
+			_matrix smatRotation = XMMatrixRotationQuaternion(svRot);
+			svVelocity = XMVector4Transform(svVelocity, smatRotation);
 
-			XMStoreFloat3(&vVelocity, svVelocity);
 			svVelocity *= m_fMoveSpeed;
-			m_pTransform->Add_Velocity(svVelocity);
+			m_pTransform->Add_Velocity(svVelocity * _dDeltaTime);
 		}
 	}
 

@@ -83,7 +83,7 @@ CTraverse_Jump400Jog* CTraverse_Jump400Jog::Create(ID3D11Device* _pDevice, ID3D1
 	CTraverse_Jump400Jog* pInstance = new CTraverse_Jump400Jog(_pDevice, _pDeviceContext);
 	if (FAILED(pInstance->NativeConstruct(_pArg)))
 	{
-		MSGBOX("CShield_SupermanPunchStraight Create Fail");
+		MSGBOX("CTraverse_Jump400Jog Create Fail");
 		Safe_Release(pInstance);
 	}
 

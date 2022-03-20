@@ -713,7 +713,7 @@ HRESULT CLoader::Ready_Test_JS()
 	CMaterial* pMtrl = nullptr;
 #pragma region 플레이어
 	pTexture = CTexture::Create(m_pDevice, m_pDeviceContext);
-	pTexture->NativeConstruct_Prototype(L"../Bin/Resources/Mesh/Silvermane/T_Silvermane_Hairs_d_new.tga", 1);
+	pTexture->NativeConstruct_Prototype(L"../Bin/Resources/Mesh/Silvermane/T_Silvermane_Hair_D.tga", 1);
 	pMtrl = CMaterial::Create(m_pDevice, m_pDeviceContext, L"Silvermane_Hair", L"../../Reference/ShaderFile/Shader_Mesh.hlsl", CMaterial::EType::Anim);
 	pMtrl->Set_Texture("g_DiffuseTexture", TEXTURETYPE::TEX_DIFFUSE, pTexture, 0);
 	g_pGameInstance->Add_Material(L"Mtrl_Silvermane_Hair", pMtrl);
@@ -749,20 +749,20 @@ HRESULT CLoader::Ready_Test_JS()
 #pragma region 모델
 	cout << "TestScene_JS 모델 프로토타입 생성중..." << endl;
 	_matrix matPivot = XMMatrixIdentity();
-	//matPivot = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(180.f));
-	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_TEST_JS, L"Model_Silvermane", CModel::Create(m_pDevice, m_pDeviceContext,
-	//	"../bin/Resources/Mesh/Silvermane/", "Silvermane.fbx",
-	//	L"../../Reference/ShaderFile/Shader_Mesh.hlsl",
-	//	matPivot,
-	//	CModel::TYPE_ANIM, true))))
-	//{
-	//	return E_FAIL;
-	//}
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_TEST_JS, L"Model_Silvermane_Bin", CModel::Create(m_pDevice, m_pDeviceContext,
-		L"../bin/FBX/Silvermane/Silvermane_Bin.fbx", CModel::TYPE_ANIM, true))))
+	matPivot = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(180.f));
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_TEST_JS, L"Model_Silvermane", CModel::Create(m_pDevice, m_pDeviceContext,
+		"../bin/Resources/Mesh/Silvermane/", "Silvermane.fbx",
+		L"../../Reference/ShaderFile/Shader_Mesh.hlsl",
+		matPivot,
+		CModel::TYPE_ANIM, true))))
 	{
 		return E_FAIL;
 	}
+	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_TEST_JS, L"Model_Silvermane_Bin", CModel::Create(m_pDevice, m_pDeviceContext,
+	//	L"../bin/FBX/Silvermane/Silvermane_Bin.fbx", CModel::TYPE_ANIM, true))))
+	//{
+	//	return E_FAIL;
+	//}
 	matPivot = XMMatrixIdentity();
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_TEST_JS, L"Model_Needle", CModel::Create(m_pDevice, m_pDeviceContext,
 		"../bin/Resources/Mesh/Needle/", "Needle.fbx",
@@ -787,7 +787,7 @@ HRESULT CLoader::Ready_Test_JS()
 	matPivot = XMMatrixIdentity();
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_TEST_JS, L"Model_JumpNode", CModel::Create(m_pDevice, m_pDeviceContext,
 		"../bin/Resources/Mesh/JumpNode/", "JumpNode.fbx",
-		L"../../Reference/ShaderFile/Shader_Mesh.hlsl", matPivot, CModel::TYPE_ANIM, false))))
+		L"../../Reference/ShaderFile/Shader_Mesh.hlsl", matPivot, CModel::TYPE_ANIM, true))))
 	{
 		return E_FAIL;
 	}
@@ -805,6 +805,8 @@ HRESULT CLoader::Ready_Test_JS()
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_TEST_JS, L"Proto_Component_MeshCollider", CMeshCollider::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_TEST_JS, L"Proto_Component_BoxCollider", CBoxCollider::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_TEST_JS, L"Proto_Component_RayCollider", CRay_Collider::Create(m_pDevice, m_pDeviceContext, CRay_Collider::TYPE_AABB))))
 		return E_FAIL;
 #pragma endregion
 #pragma region 오브젝트

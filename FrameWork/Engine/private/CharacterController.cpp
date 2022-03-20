@@ -184,7 +184,7 @@ HRESULT CCharacterController::Create_Controller()
 		return E_FAIL;
 	}
 	m_pPxController->setContactOffset(PxF32(0.f));
-	//m_pPxController->setStepOffset(PxF32(0.f));
+	m_pPxController->setStepOffset(PxF32(0.f));
 
 	RELEASE_INSTANCE(CPhysicsXSystem);
 

@@ -59,7 +59,6 @@ HRESULT C1H_SwordAttackNormalR1_04Swap::EnterState()
 		return E_FAIL;
 	m_pAnimationController->Set_RootMotion(true, true);
 
-	m_pSilvermane->Set_TrasceCamera(true);
 	m_pAnimationController->Add_TrackAcc(15.0);
 	return S_OK;
 }
@@ -69,7 +68,6 @@ HRESULT C1H_SwordAttackNormalR1_04Swap::ExitState()
 	if (FAILED(__super::ExitState()))
 		return E_FAIL;
 
-	m_pSilvermane->Set_TrasceCamera(false);
 	return S_OK;
 }
 

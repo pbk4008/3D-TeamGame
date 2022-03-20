@@ -276,16 +276,16 @@
     </Filter>
     <Filter Include="02.GameObject\50.JumpNode">
       <UniqueIdentifier>{15743125-3fab-4955-a1a7-2c3ab22ace2e}</UniqueIdentifier>
-	</Filter>
+    </Filter>
     <Filter Include="02.GameObject\95.Monster\Bastion_2HSword\State_2HSword\Rage">
       <UniqueIdentifier>{bd8eebf8-c00f-4303-9ddc-b43dfb509314}</UniqueIdentifier>
     </Filter>
     <Filter Include="02.GameObject\95.Monster\Bastion_Shooter\Attack">
       <UniqueIdentifier>{0e465f15-42b9-4038-9066-ca93866e3c94}</UniqueIdentifier>
-	</Filter>
-	<Filter Include="02.GameObject\95.Monster\Bastion_2HSword\State_2HSword\Rage">
-		<UniqueIdentifier>{bd8eebf8-c00f-4303-9ddc-b43dfb509314}</UniqueIdentifier>
-	</Filter>
+    </Filter>
+    <Filter Include="02.GameObject\95.Monster\Bastion_2HSword\State_2HSword\Rage">
+      <UniqueIdentifier>{bd8eebf8-c00f-4303-9ddc-b43dfb509314}</UniqueIdentifier>
+    </Filter>
     <Filter Include="02.GameObject\93.Boss\00.MiddleBoss\State">
       <UniqueIdentifier>{8a29aee6-6d31-4f13-bfdb-45f715488804}</UniqueIdentifier>
     </Filter>
@@ -543,9 +543,6 @@
     </ClInclude>
     <ClInclude Include="..\Headers\1H_SwordAttackNormalR2_Loop.h">
       <Filter>02.GameObject\98.Player\00.Silvermane\State\1H_Sword\R2</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Headers\1H_SwordAttackNormalR1_04Swap.h">
-      <Filter>02.GameObject\98.Player\00.Silvermane\State\1H_Sword\R1</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\Fury.h">
       <Filter>02.GameObject\96.Weapon\01.Fury</Filter>
@@ -819,10 +816,10 @@
     </ClInclude>
     <ClInclude Include="..\Headers\JumpNode.h">
       <Filter>02.GameObject\50.JumpNode</Filter>
-	</ClInclude>
+    </ClInclude>
     <ClInclude Include="..\Headers\Shooter_Attack.h">
       <Filter>02.GameObject\95.Monster\Bastion_Shooter\Attack</Filter>
-	</ClInclude>
+    </ClInclude>
     <ClInclude Include="..\Headers\MidBoss_Rage.h">
       <Filter>02.GameObject\93.Boss\00.MiddleBoss\State\Rage</Filter>
     </ClInclude>
@@ -852,6 +849,12 @@
     </ClInclude>
     <ClInclude Include="..\Headers\Bastion_Sword_Walk.h">
       <Filter>02.GameObject\95.Monster\Bastion_Sword\00.State\08.Walk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Traverse_JumpNodeJog.h">
+      <Filter>02.GameObject\98.Player\00.Silvermane\State\Jump</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\1H_SwordAttackNormalR1_04Swap.h">
+      <Filter>02.GameObject\98.Player\00.Silvermane\State\1H_Sword\R2</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1051,9 +1054,6 @@
     </ClCompile>
     <ClCompile Include="..\Codes\1H_SwordAttackNormalR2_Loop.cpp">
       <Filter>02.GameObject\98.Player\00.Silvermane\State\1H_Sword\R2</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Codes\1H_SwordAttackNormalR1_04Swap.cpp">
-      <Filter>02.GameObject\98.Player\00.Silvermane\State\1H_Sword\R1</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\Fury.cpp">
       <Filter>02.GameObject\96.Weapon\01.Fury</Filter>
@@ -1327,10 +1327,10 @@
     </ClCompile>
     <ClCompile Include="..\Codes\JumpNode.cpp">
       <Filter>02.GameObject\50.JumpNode</Filter>
-	</ClCompile>
+    </ClCompile>
     <ClCompile Include="..\Codes\Shooter_Attack.cpp">
       <Filter>02.GameObject\95.Monster\Bastion_Shooter\Attack</Filter>
-	</ClCompile>
+    </ClCompile>
     <ClCompile Include="..\Codes\MidBoss_Rage.cpp">
       <Filter>02.GameObject\93.Boss\00.MiddleBoss\State\Rage</Filter>
     </ClCompile>
@@ -1360,6 +1360,12 @@
     </ClCompile>
     <ClCompile Include="..\Codes\Bastion_Sword_Walk.cpp">
       <Filter>02.GameObject\95.Monster\Bastion_Sword\00.State\08.Walk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Traverse_JumpNodeJog.cpp">
+      <Filter>02.GameObject\98.Player\00.Silvermane\State\Jump</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\1H_SwordAttackNormalR1_04Swap.cpp">
+      <Filter>02.GameObject\98.Player\00.Silvermane\State\1H_Sword\R2</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
