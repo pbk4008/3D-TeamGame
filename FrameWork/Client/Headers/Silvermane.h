@@ -14,6 +14,13 @@ class CJumpNode;
 
 class CSilvermane final : public CActor
 {
+public:
+	typedef struct tagSceneMove
+	{
+		_uint iMaxHp;
+		_uint iCurHp;
+		_float3 vPos;
+	}SCENEMOVEDATA;
 private:
 	explicit CSilvermane(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext);
 	explicit CSilvermane(const CSilvermane& _rhs);
@@ -26,7 +33,6 @@ public:
 	virtual _int LateTick(_double _dDeltaTime) override;
 	virtual HRESULT Render() override;
 	HRESULT Render_Debug();
-
 private:
 	HRESULT Ready_Components();
 	HRESULT Ready_States();
@@ -37,7 +43,8 @@ public:
 	CModel* Get_Model() const;
 	const _float Get_PlusAngle() const;
 	const _float Get_Angle() const;
-
+	//플레이어 씬 이동시 다음씬으로 넘어가야 할 데이터 생성 후 밖으로 빼내기
+	const SCENEMOVEDATA Get_SceneMoveData() const;
 	void Set_Move(const _bool _isMove);
 	void Set_TrasceCamera(const _bool _isTraceCamera);
 	void Set_Camera(CCamera_Silvermane* _pCamera);

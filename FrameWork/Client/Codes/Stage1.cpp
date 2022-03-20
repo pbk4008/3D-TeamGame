@@ -1,4 +1,5 @@
 #include "pch.h"
+#include "Loading.h"
 #include "Stage1.h"
 #include "Environment.h"
 
@@ -25,10 +26,10 @@ HRESULT CStage1::NativeConstruct()
 		return E_FAIL;
 	}
 
-	//if (FAILED(Ready_Player(L"Layer_Silvermane")))
-	//{
-	//	return E_FAIL;
-	//}
+	if (FAILED(Ready_Player(L"Layer_Silvermane")))
+	{
+		return E_FAIL;
+	}
 
 	//if (FAILED(Ready_Boss(L"Layer_Boss")))
 	//{
@@ -69,6 +70,17 @@ HRESULT CStage1::NativeConstruct()
 
 _int CStage1::Tick(_double TimeDelta)
 {
+#ifdef  _DEBUG
+	_int iLevel = 0;
+	if (g_pDebugSystem->Get_LevelMoveCheck(iLevel))
+	{
+		CLoading* pLoading = CLoading::Create(m_pDevice, m_pDeviceContext, (SCENEID)iLevel);
+		if (FAILED(g_pGameInstance->Open_Level((_uint)SCENEID::SCENE_LOADING, pLoading)))
+			return -1;
+		g_pDebugSystem->Set_LevelcMoveCheck(false);
+	}
+#endif //  _DEBUG
+
 	return _int();
 }
 

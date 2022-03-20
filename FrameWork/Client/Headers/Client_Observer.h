@@ -1,9 +1,9 @@
 #ifndef Client_Observer_h__
 #define Client_Observer_h__
 
+#include "Silvermane.h"
 #include "SingleTon.h"
 BEGIN(Client)
-class CSilvermane;
 class CClient_Observer final :  public CSingleTon<CClient_Observer>
 {
 friend CSingleTon;
@@ -25,6 +25,7 @@ public:
 	const _bool Get_IsAttack();
 	//플레이어와 해당 좌표와의 거리
 	const _float Get_Dist(_fvector vPos);
+	const CSilvermane::SCENEMOVEDATA Get_SceneMoveData();
 public:
 	//플레이어 공격 셋팅
 	void Set_IsAttack(const _bool bAttack);

@@ -3,10 +3,11 @@
 #include "BackGround.h"
 #include "MainCamera.h"
 #include "MainCamera_Ortho.h"
+#include "DebugSystem.h"
 #include "Loading.h"
 
 CClient_Observer* g_pObserver = nullptr;
-
+CDebugSystem* g_pDebugSystem = nullptr;
 CMainApp::CMainApp()
 {
 }
@@ -32,15 +33,15 @@ HRESULT CMainApp::NativeConstruct()
 		return E_FAIL;
 
 #ifdef _DEBUG
-	//CDebugSystem* pDebug = GET_INSTANCE(CDebugSystem);
-	//if (FAILED(pDebug->Init_DebugSystem(m_pDevice, m_pDeviceContext)))
-	//	return E_FAIL;
+	g_pDebugSystem = CDebugSystem::GetInstance();
+	if (FAILED(g_pDebugSystem->Init_DebugSystem(m_pDevice, m_pDeviceContext,m_pRenderer)))
+		return E_FAIL;
 #endif
 
 	if (FAILED(SetUp_StartLevel(SCENEID::SCENE_LOGO)))
 		return E_FAIL;
 
-	g_pObserver = GET_INSTANCE(CClient_Observer);
+	g_pObserver = CClient_Observer::GetInstance();
 
 	return S_OK;
 }
@@ -234,12 +235,9 @@ CMainApp * CMainApp::Create()
 
 void CMainApp::Free()
 {
-	//RELEASE_INSTANCE(CDebugSystem);
-	//CDebugSystem::Stop_DebugSystem();
-	//if (FAILED(CDebugSystem::DestroyInstance()))
-	//	MSGBOX("CDebugSystem Destroy Fail");
+	g_pDebugSystem->Stop_DebugSystem();
+	Safe_Release(g_pDebugSystem);
 	
-	RELEASE_INSTANCE(CClient_Observer);
 	Safe_Release(g_pObserver);
 
 	Safe_Release(m_pRenderer);
