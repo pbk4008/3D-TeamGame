@@ -247,6 +247,7 @@
     <ClInclude Include="..\Headers\2H_HammerJogRight.h" />
     <ClInclude Include="..\Headers\2H_HammerJogRightPivot180.h" />
     <ClInclude Include="..\Headers\2H_HammerJogRightStart.h" />
+    <ClInclude Include="..\Headers\Aberrant_Idle.h" />
     <ClInclude Include="..\Headers\BackGround.h" />
     <ClInclude Include="..\Headers\Bastion_2HSword_Attack.h" />
     <ClInclude Include="..\Headers\Bastion_2HSword_Attack_Rage.h" />
@@ -271,6 +272,12 @@
     <ClInclude Include="..\Headers\Camera_Debug.h" />
     <ClInclude Include="..\Headers\Client_Observer.h" />
     <ClInclude Include="..\Headers\Client_Trigger.h" />
+    <ClInclude Include="..\Headers\Crawler_Attack.h" />
+    <ClInclude Include="..\Headers\Crawler_Death.h" />
+    <ClInclude Include="..\Headers\Crawler_Flinch_Left.h" />
+    <ClInclude Include="..\Headers\Crawler_Idle.h" />
+    <ClInclude Include="..\Headers\Crawler_Ricochet.h" />
+    <ClInclude Include="..\Headers\Crawler_Walk.h" />
     <ClInclude Include="..\Headers\Effect_DashDust.h" />
     <ClInclude Include="..\Headers\Environment.h" />
     <ClInclude Include="..\Headers\Fury.h" />
@@ -352,6 +359,7 @@
     <ClInclude Include="..\Headers\UI_Monster_Back.h" />
     <ClInclude Include="..\Headers\UI_Monster_HpBar.h" />
     <ClInclude Include="..\Headers\UI_Monster_Level.h" />
+    <ClInclude Include="..\Headers\UI_Monster_Name.h" />
     <ClInclude Include="..\Headers\UI_Monster_Panel.h" />
     <ClInclude Include="..\Headers\UI_Player_HpBar.h" />
     <ClInclude Include="..\Headers\UI_Player_HpBar_Red.h" />
@@ -429,6 +437,7 @@
     <ClCompile Include="..\Codes\2H_HammerJogRightStart.cpp" />
     <ClCompile Include="..\Codes\2H_HammerEquipOff.cpp" />
     <ClCompile Include="..\Codes\2H_HammerEquipOn.cpp" />
+    <ClCompile Include="..\Codes\Aberrant_Idle.cpp" />
     <ClCompile Include="..\Codes\BackGround.cpp" />
     <ClCompile Include="..\Codes\1H_SwordAttackNormalR2_Start.cpp" />
     <ClCompile Include="..\Codes\Bastion_2HSword_Attack.cpp" />
@@ -450,6 +459,12 @@
     <ClCompile Include="..\Codes\Client_Observer.cpp" />
     <ClCompile Include="..\Codes\Client_Trigger.cpp" />
     <ClCompile Include="..\Codes\Boss_Bastion_Judicator.cpp" />
+    <ClCompile Include="..\Codes\Crawler_Attack.cpp" />
+    <ClCompile Include="..\Codes\Crawler_Death.cpp" />
+    <ClCompile Include="..\Codes\Crawler_Flinch_Left.cpp" />
+    <ClCompile Include="..\Codes\Crawler_Idle.cpp" />
+    <ClCompile Include="..\Codes\Crawler_Ricochet.cpp" />
+    <ClCompile Include="..\Codes\Crawler_Walk.cpp" />
     <ClCompile Include="..\Codes\Fury.cpp" />
     <ClCompile Include="..\Codes\MidBoss_Attack.cpp" />
     <ClCompile Include="..\Codes\MidBoss_BattleCry.cpp" />
@@ -534,6 +549,7 @@
     <ClCompile Include="..\Codes\UI_Monster_Back.cpp" />
     <ClCompile Include="..\Codes\UI_Monster_HpBar.cpp" />
     <ClCompile Include="..\Codes\UI_Monster_Level.cpp" />
+    <ClCompile Include="..\Codes\UI_Monster_Name.cpp" />
     <ClCompile Include="..\Codes\UI_Monster_Panel.cpp" />
     <ClCompile Include="..\Codes\UI_Player_HpBar.cpp" />
     <ClCompile Include="..\Codes\UI_Player_HpBar_Red.cpp" />

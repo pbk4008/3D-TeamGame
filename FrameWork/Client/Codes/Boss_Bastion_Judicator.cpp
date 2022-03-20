@@ -288,7 +288,6 @@ HRESULT CBoss_Bastion_Judicator::Set_Animation_FSM()
 		return E_FAIL;
 #pragma endregion 
 
-
 	//자동으로 돌릴 애들(끝날애님, 끝나고시작할애님)
 	//m_pAnimator->Set_UpAutoChangeAnimation(RAGE, BATTLECRY_START);
 	m_pAnimator->Set_UpAutoChangeAnimation(BATTLECRY_START, BATTLECRY_LOOP);

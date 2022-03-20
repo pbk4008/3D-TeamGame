@@ -77,6 +77,7 @@ private:
 	class CUI_Monster_Back* m_pUIBack = nullptr;
 	class CUI_Monster_Level* m_pUILevel = nullptr;
 	class CUI_Monster_HpBar* m_pUIHpBar = nullptr;
+	class CUI_Monster_Name* m_pUIName = nullptr;
 private:
 	virtual HRESULT SetUp_Components();
 
