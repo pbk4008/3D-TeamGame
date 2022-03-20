@@ -34,7 +34,7 @@ _int CTraverse_JumpNodeJog::Tick(const _double& _dDeltaTime)
 	{
 		if (7 < iCurKeyFrameIndex)
 		{
-			m_pSilvermane->Set_TrasceCamera(false);
+			m_pSilvermane->Set_IsTrasceCamera(false);
 
 			_vector svPos = m_pTransform->Get_State(CTransform::STATE_POSITION);
 			svPos += svVelocity;
@@ -53,6 +53,10 @@ _int CTraverse_JumpNodeJog::Tick(const _double& _dDeltaTime)
 				}
 			}
 		}
+	}
+	else
+	{
+
 	}
 
 	if (m_pAnimationController->Is_Finished())
@@ -97,7 +101,7 @@ HRESULT CTraverse_JumpNodeJog::EnterState()
 	XMStoreFloat3(&m_vDir, XMVector3Normalize(svTargetPosition - m_pTransform->Get_State(CTransform::STATE_POSITION)));
 
 	m_fMoveSpeed = 10.f;
-
+	m_pSilvermane->Set_IsFall(false);
 	return S_OK;
 }
 
@@ -106,7 +110,7 @@ HRESULT CTraverse_JumpNodeJog::ExitState()
 	if (FAILED(__super::ExitState()))
 		return E_FAIL;
 
-	m_pSilvermane->Set_TrasceCamera(true);
+	m_pSilvermane->Set_IsTrasceCamera(true);
 	m_isJumpEnd = false;
 	return S_OK;
 }

@@ -174,6 +174,7 @@ HRESULT CSilvermane::NativeConstruct(const _uint _iSceneID, void* _pArg)
 	if (FAILED(g_pObserver->Set_Player(this)))
 		return E_FAIL;
 
+	m_isFall = true;
 	return S_OK;
 }
 
@@ -195,7 +196,6 @@ _int CSilvermane::Tick(_double _dDeltaTime)
 	iProgress = m_pAnimationController->Tick(_dDeltaTime, CAnimationController::EType::CharacterController);
 	if (NO_EVENT != iProgress) 
 		return iProgress;
-
 
 	Fall(_dDeltaTime);
 	//m_pCharacterController->Tick(_dDeltaTime);
@@ -346,11 +346,11 @@ HRESULT CSilvermane::Ready_Components()
 	tTransformDesc.fSpeedPerSec = 10.f;
 	tTransformDesc.fRotationPerSec = XMConvertToRadians(90.f);
 	m_pTransform->Set_TransformDesc(tTransformDesc);
-	m_pTransform->Set_State(CTransform::STATE_POSITION, XMVectorSet(0.f, 0.f, 0.f, 1.f));
+	m_pTransform->Set_State(CTransform::STATE_POSITION, XMVectorSet(0.f, 2.f, 0.f, 1.f));
 
 
 	// 모델
-	//// 어심프용
+	// 어심프용
 	//if (FAILED(SetUp_Components(m_iSceneID, L"Model_Silvermane", L"Model", (CComponent**)&m_pModel)))
 	//	return E_FAIL;
 	//m_pModel->Add_Material(g_pGameInstance->Get_Material(L"Mtrl_Silvermane_Top"), 0);
@@ -379,13 +379,14 @@ HRESULT CSilvermane::Ready_Components()
 
 	// 캐릭터 컨트롤러
 	CCharacterController::CHARACTERCONTROLLERDESC tCharacterControllerDesc;
-	tCharacterControllerDesc.fHeight = 1.6f;
+	tCharacterControllerDesc.fHeight = 1.2f;
 	tCharacterControllerDesc.fRadius = 0.5f;
+	tCharacterControllerDesc.fContactOffset = tCharacterControllerDesc.fRadius * 0.1f;
 	tCharacterControllerDesc.fStaticFriction = 0.5f;
 	tCharacterControllerDesc.fDynamicFriction = 0.5f;
 	tCharacterControllerDesc.fRestitution = 0.f;
 	tCharacterControllerDesc.pGameObject = this;
-	tCharacterControllerDesc.vPosition = { 0.f, 0.8f, 0.f };
+	tCharacterControllerDesc.vPosition = { 0.f, 0.f, 0.f };
 
 	if (FAILED(SetUp_Components(m_iSceneID, L"Proto_Component_CharacterController", L"CharacterController", (CComponent**)&m_pCharacterController, &tCharacterControllerDesc)))
 		return E_FAIL;
@@ -667,12 +668,17 @@ const _float CSilvermane::Get_Angle() const
 	return m_fAngle;
 }
 
-void CSilvermane::Set_Move(const _bool _isMove)
+void CSilvermane::Set_IsFall(const _bool _isFall)
+{
+	m_isFall = _isFall;
+}
+
+void CSilvermane::Set_IsMove(const _bool _isMove)
 {
 	m_isMove = _isMove;
 }
 
-void CSilvermane::Set_TrasceCamera(const _bool _isTraceCamera)
+void CSilvermane::Set_IsTrasceCamera(const _bool _isTraceCamera)
 {
 	m_isTraceCamera = _isTraceCamera;
 }
@@ -831,10 +837,16 @@ const _int CSilvermane::Trace_CameraLook(const _double& _dDeltaTime)
 
 const _int CSilvermane::Fall(const _double& _dDeltaTime)
 {
+	if (g_pGameInstance->getkeyDown(DIK_HOME))
+	{
+		m_pCharacterController->Set_FootPosition(_float3(0.f, 2.f, 0.f));
+		m_isFall = true;
+	}
+
 	if (m_isFall)
 	{
 		_vector svPos = m_pTransform->Get_State(CTransform::STATE_POSITION);
-		if (0.f < XMVectorGetY(svPos))
+		if (-10.f < XMVectorGetY(svPos))
 		{
 			m_pTransform->Add_Velocity(XMVectorSet(0.f, -9.8f * (_float)_dDeltaTime, 0.f, 0.f));
 		}

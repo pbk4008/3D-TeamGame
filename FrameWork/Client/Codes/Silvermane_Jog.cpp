@@ -45,7 +45,7 @@ HRESULT CSilvermane_Jog::EnterState()
 	if (FAILED(__super::EnterState()))
 		return E_FAIL;
 
-	m_pSilvermane->Set_Move(true);
+	m_pSilvermane->Set_IsMove(true);
 
 	return S_OK;
 }
@@ -55,7 +55,7 @@ HRESULT CSilvermane_Jog::ExitState()
 	if (FAILED(__super::ExitState()))
 		return E_FAIL;
 
-	m_pSilvermane->Set_Move(false);
+	m_pSilvermane->Set_IsMove(false);
 
 	return S_OK;
 }
