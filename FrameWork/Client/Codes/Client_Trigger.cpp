@@ -72,6 +72,9 @@ HRESULT CClient_Trigger::Render()
 	case TRIGGERTYPE::TRIGGER_MONSTER:
 		m_pGizmo->DrawCube(m_pTransform->Get_WorldMatrix(), L"MainCamera", _fvector{ 0.309f, 0.933f, 0.125f, 1.0f });
 		break;
+	case TRIGGERTYPE::TRIGGER_QUEST:
+		m_pGizmo->DrawCube(m_pTransform->Get_WorldMatrix(), L"MainCamera", _fvector{ 0.501f, 0.082f, 0.0f, 1.0f });
+		break;
 	}
 	return S_OK;
 }

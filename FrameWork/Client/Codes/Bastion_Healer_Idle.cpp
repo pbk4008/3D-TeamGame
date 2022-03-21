@@ -29,10 +29,7 @@ _int CBastion_Healer_Idle::Tick(const _double& _dDeltaTime)
 
 	m_pAnimator->Tick(_dDeltaTime);
 
-	//if (m_bTargetOn)
-	//	m_pStateController->Change_State(L"Chaser");
-	//else if (m_bRageOn)
-	//	m_pStateController->Change_State(L"Rage");
+	m_fChaserDelay -= _dDeltaTime;
 
 	return _int();
 }
@@ -59,6 +56,8 @@ HRESULT CBastion_Healer_Idle::EnterState()
 	if (FAILED(__super::EnterState()))
 		return E_FAIL;
 
+	m_fChaserDelay = 0.5f;
+
 	if (FAILED(m_pAnimator->Change_AnyEntryAnimation((_uint)CMonster_Bastion_Healer::ANIM_TYPE::A_IDLE)))
 		return E_FAIL;
 
@@ -76,11 +75,8 @@ HRESULT CBastion_Healer_Idle::ExitState()
 /* 플레이어 상태 추적 */
 void CBastion_Healer_Idle::Look_Player(void)
 {
-	//if (m_bAttackOn && !m_bRageOn)
-	//{
-	//	m_pTransform->Face_Target(g_pObserver->Get_PlayerPos());
-	//	m_pStateController->Change_State(L"Attack");
-	//}
+	if (m_bTargetOn && 0 > m_fChaserDelay)
+		m_pStateController->Change_State(L"Chaser");
 }
 
 void CBastion_Healer_Idle::Look_Monster(void)

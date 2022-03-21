@@ -101,6 +101,7 @@ void CModel_Inspector::Ready_Level_Combo(void)
 	m_TriggerCombo.AddString(_T("for Scene"));
 	m_TriggerCombo.AddString(_T("for Light"));
 	m_TriggerCombo.AddString(_T("for Monster"));
+	m_TriggerCombo.AddString(_T("for Quest"));
 
 	m_TriggerCombo.SetCurSel(0);
 }
@@ -432,18 +433,37 @@ void CModel_Inspector::OnBnClickedTriggerAdd()
 	// TODO: 트리거를 추가합니다.
 	TRIGGER TriggerDesc;
 
-	/* TRIGGERTYPE { TRIGGER_LOD, TRIGGER_SCENE, TRIGGER_LIGHT, TRIGGER_MONSTER, TRIGGER_END } */
+	/* TRIGGERTYPE { TRIGGER_LOD, TRIGGER_SCENE, TRIGGER_LIGHT, TRIGGER_MONSTER, TRIGGER_QUEST, TRIGGER_END } */
 
 	TriggerDesc.eTrigger_Type = (TRIGGERTYPE)m_TriggerCombo.GetCurSel();
-	TriggerDesc.fTrigger_Point = m_pObserver->m_fPickPos;
-	
+	void* temp = &XMVector3TransformCoord(XMLoadFloat3(&m_pObserver->m_fPickPos), m_pObserver->m_pPlane->Get_Transform()->Get_WorldMatrix());
+	TriggerDesc.fTrigger_Point = *(_float3*)temp;
+
+	switch (TriggerDesc.eTrigger_Type)
+	{
+	case TRIGGERTYPE::TRIGGER_LOD:
+		TriggerDesc.iIndex = m_iLodIndex++;
+		break;
+	case TRIGGERTYPE::TRIGGER_LIGHT:
+		TriggerDesc.iIndex = m_iLightIndex++;
+		break;
+	case TRIGGERTYPE::TRIGGER_SCENE:
+		TriggerDesc.iIndex = m_iSceneIndex++;
+		break;
+	case TRIGGERTYPE::TRIGGER_MONSTER:
+		TriggerDesc.iIndex = m_iMonsterIndex++;
+		break;
+	case TRIGGERTYPE::TRIGGER_QUEST:
+		TriggerDesc.iIndex = m_iQuestIndex++;
+		break;
+	}
+
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer(TAB_MAP, L"Layer_Trigger", L"Prototype_GameObject_Trigger", &TriggerDesc)))
 	{
 		MessageBox(L"Failed to Create Trigger!!!");
 		return;
 	}
 }
-
 
 void CModel_Inspector::OnBnClickedSaveTrigger()
 {
@@ -501,6 +521,7 @@ void CModel_Inspector::OnBnClickedLodTrigger()
 		TRIGGER TriggerDesc;
 		TriggerDesc.eTrigger_Type = m_vecTrigger[i].eTrigger_Type;
 		TriggerDesc.fTrigger_Point = m_vecTrigger[i].fTrigger_Point;
+		TriggerDesc.iIndex = m_vecTrigger[i].iIndex;
 
 		if (FAILED(g_pGameInstance->Add_GameObjectToLayer(TAB_MAP, L"Layer_Trigger", L"Prototype_GameObject_Trigger", &TriggerDesc)))
 		{

@@ -55,15 +55,16 @@ HRESULT CStage1::NativeConstruct()
 	//{
 	//	return E_FAIL;
 	//}
-
-	if (FAILED(Ready_Trigger_Lod(L"../bin/SaveData/Trigger/Stage1_LodTri.dat")))
-		return E_FAIL;
+	//if (FAILED(Ready_Trigger_Lod(L"../bin/SaveData/Trigger/Stage1_LodTri.dat")))
+	//	return E_FAIL;
 	//if (FAILED(Ready_Trigger_Light(L"../bin/SaveData/Trigger/Stage1_LodTri.dat")))
 	//	return E_FAIL;
 	//if (FAILED(Ready_Trigger_Monster(L"../bin/SaveData/Trigger/Stage1_LodTri.dat")))
 	//	return E_FAIL;
 	//if (FAILED(Ready_Trigger_Scene(L"../bin/SaveData/Trigger/Stage1_LodTri.dat")))
 	//	return E_FAIL;
+	if (FAILED(Ready_Trigger_Quest(L"../bin/SaveData/Trigger/Stage1_QuestTri.dat")))
+		return E_FAIL;
 
 	return S_OK;
 }
@@ -260,6 +261,7 @@ HRESULT CStage1::Ready_Trigger_Lod(const _tchar* pDataFilePath)
 
 		TriggerDesc.eTrigger_Type = vecTrigger[i].eTrigger_Type;
 		TriggerDesc.fTrigger_Point = vecTrigger[i].fTrigger_Point;
+		TriggerDesc.iIndex = vecTrigger[i].iIndex;
 
 		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Trigger_Lod", L"Prototype_GameObject_Trigger", &TriggerDesc)))
 		{
@@ -284,6 +286,30 @@ HRESULT CStage1::Ready_Trigger_Scene(const _tchar* pDataFilePath)
 HRESULT CStage1::Ready_Trigger_Monster(const _tchar* pDataFilePath)
 {
 	return E_NOTIMPL;
+}
+
+HRESULT CStage1::Ready_Trigger_Quest(const _tchar* pDataFilePath)
+{
+	vector<TRIGGER> vecTrigger;
+
+	g_pGameInstance->LoadFile<TRIGGER>(vecTrigger, pDataFilePath);
+
+	for (int i = 0; i < vecTrigger.size(); ++i)
+	{
+		TRIGGER TriggerDesc;
+
+		TriggerDesc.eTrigger_Type = vecTrigger[i].eTrigger_Type;
+		TriggerDesc.fTrigger_Point = vecTrigger[i].fTrigger_Point;
+		TriggerDesc.iIndex = vecTrigger[i].iIndex;
+
+		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Trigger_Quest", L"Prototype_GameObject_Trigger", &TriggerDesc)))
+		{
+			MSGBOX("트리거 파일을 불러오는 도중 오류가 발생했습니다. Stage1.cpp Line 306");
+			return E_FAIL;
+		}
+	}
+
+	return S_OK;
 }
 
 CStage1* CStage1::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)

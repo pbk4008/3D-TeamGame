@@ -177,5 +177,6 @@ namespace Engine
 	{
 		TRIGGERTYPE eTrigger_Type;
 		_float3		fTrigger_Point;
+		_int		iIndex;
 	}TRIGGER;
 }

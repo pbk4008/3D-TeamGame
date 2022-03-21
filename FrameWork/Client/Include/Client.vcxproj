@@ -257,6 +257,9 @@
     <ClInclude Include="..\Headers\Bastion_2HSword_Idle.h" />
     <ClInclude Include="..\Headers\Bastion_2HSword_Rage.h" />
     <ClInclude Include="..\Headers\Bastion_2HSword_State.h" />
+    <ClInclude Include="..\Headers\Bastion_Healer_Attack.h" />
+    <ClInclude Include="..\Headers\Bastion_Healer_Chaser.h" />
+    <ClInclude Include="..\Headers\Bastion_Healer_Chaser_End.h" />
     <ClInclude Include="..\Headers\Bastion_Healer_Idle.h" />
     <ClInclude Include="..\Headers\Bastion_Healer_State.h" />
     <ClInclude Include="..\Headers\Bastion_Sword_Attack.h" />
@@ -447,6 +450,9 @@
     <ClCompile Include="..\Codes\Bastion_2HSword_Idle.cpp" />
     <ClCompile Include="..\Codes\Bastion_2HSword_Rage.cpp" />
     <ClCompile Include="..\Codes\Bastion_2HSword_State.cpp" />
+    <ClCompile Include="..\Codes\Bastion_Healer_Attack.cpp" />
+    <ClCompile Include="..\Codes\Bastion_Healer_Chaser.cpp" />
+    <ClCompile Include="..\Codes\Bastion_Healer_Chaser_End.cpp" />
     <ClCompile Include="..\Codes\Bastion_Healer_Idle.cpp" />
     <ClCompile Include="..\Codes\Bastion_Healer_State.cpp" />
     <ClCompile Include="..\Codes\Bastion_Sword_Attack.cpp" />

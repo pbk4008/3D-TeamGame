@@ -26,6 +26,7 @@ public:
 
 public:
 	HRESULT	Render_Debug();
+	void	Check_Attack(const _double& _dDeltaTime);
 
 protected:
 	_bool	m_bTargetOn = false;
@@ -33,6 +34,13 @@ protected:
 	_bool	m_bPlayerAttack = false;
 	_bool	m_bRageOn = false;
 	_bool	m_bRageAttack = false;
+	_float	m_fChaserDelay;
+
+private:
+	_float m_CheckFWD = 0.0f;
+	_float m_fRadian = 0.0f;
+	_float m_fDistance = 0.0f;
+	_float m_fAttackTime = 0.0f;
 
 public:
 	static CBastion_Healer_State* Create(ID3D11Device * _pDevice, ID3D11DeviceContext * _pDeviceContext, void* _pArg = nullptr);

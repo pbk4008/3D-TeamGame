@@ -121,15 +121,15 @@ HRESULT CMonster_Bastion_2HSword::Render()
 			if (FAILED(m_pModel->Render(i, 0))) return E_FAIL;
 		}
 
-#ifdef _DEBUG
-		Render_Debug();
-		m_pColliderCom->Render(L"Camera_Silvermane");
-#endif
 	}
 	else
 	{
 		m_pCurWeapon = nullptr;
 	}
+#ifdef _DEBUG
+		Render_Debug();
+		m_pColliderCom->Render(L"Camera_Silvermane");
+#endif
 	return S_OK;
 }
 
@@ -161,13 +161,13 @@ HRESULT CMonster_Bastion_2HSword::Ready_Components()
 	PhyDesc.eType = CPhysicsXSystem::ACTORTYPE::ACTOR_DYNAMIC;
 	
 	CapDesc.tColDesc = PhyDesc;
-	if (FAILED(__super::SetUp_Components((_uint)SCENEID::SCENE_TEST_YM, L"Proto_Component_CapsuleCollider", L"Com_CapsuleCollider", (CComponent**)&m_pColliderCom, &CapDesc)))
+	if (FAILED(__super::SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_CapsuleCollider", L"Com_CapsuleCollider", (CComponent**)&m_pColliderCom, &CapDesc)))
 	{
 		return E_FAIL;
 	}
 
 	// 스테이트 컨트롤러
-	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_TEST_YM, L"Proto_Component_StateController", L"StateController", (CComponent**)&m_pStateController)))
+	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_StateController", L"StateController", (CComponent**)&m_pStateController)))
 		return E_FAIL;
 	m_pStateController->Set_GameObject(this);
 
@@ -175,7 +175,7 @@ HRESULT CMonster_Bastion_2HSword::Ready_Components()
 	m_AanimDesc.pTransform = m_pTransform;
 	
 	//Anim FSM
-	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_TEST_YM, L"Proto_Component_Animator", L"Animator", (CComponent**)&m_pAnimator, &m_AanimDesc)))
+	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_Animator", L"Animator", (CComponent**)&m_pAnimator, &m_AanimDesc)))
 		return E_FAIL;
 	
 	return S_OK;

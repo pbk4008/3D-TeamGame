@@ -27,38 +27,20 @@ _int CBastion_Healer_State::Tick(const _double& _dDeltaTime)
 	if (NO_EVENT != iProgress)
 		return iProgress;
 
+	m_bTargetOn = false;
+	m_bAttackOn = false;
+	m_bPlayerAttack = false;
+
+	Check_Attack(_dDeltaTime);
+
 	m_pAnimator->Tick(_dDeltaTime);
 
-	//_fvector vMonsterPos = m_pTransform->Get_State(CTransform::STATE::STATE_POSITION);
-	//_fvector vDist = vMonsterPos - g_pObserver->Get_PlayerPos();
-	//_float fDistToPlayer = XMVectorGetX(XMVector3Length(vDist));
+	_fvector vMonsterPos = m_pTransform->Get_State(CTransform::STATE::STATE_POSITION);
+	_fvector vDist = vMonsterPos - g_pObserver->Get_PlayerPos();
+	_float fDistToPlayer = XMVectorGetX(XMVector3Length(vDist));
 
-	//m_bTargetOn = false;
-	//m_bAttackOn = false;
-	//m_bPlayerAttack = false;
-	//m_bRageOn = false;
-
-	//if (g_pObserver->Get_IsAttack())
-	//	m_bPlayerAttack = true;
-
-	//if (1.0f < fDistToPlayer && 10.0f > fDistToPlayer)
-	//{
-	//	m_pTransform->Face_Target(g_pObserver->Get_PlayerPos());
-	//	m_bTargetOn = true;
-	//}
-
-	//else if (10.0f < fDistToPlayer && 15.0f > fDistToPlayer)
-	//	m_bRageOn = true;
-
-	//if (2.0f >= fDistToPlayer)
-	//	m_bAttackOn = true;
-
-	//if (m_bPlayerAttack)
-	//{
-	//	static_cast<CMonster_Bastion_2HSword*>(m_pMonster)->m_iHp += -1;
-	//	m_pStateController->Change_State(L"Hit");
-	//	//공격여부로만 판별하다보니 아직은 Hp가 1씩 깍이진 않음
-	//}
+	if (2.0f >= fDistToPlayer)
+		m_bAttackOn = true;
 
 	return _int();
 }
@@ -141,7 +123,65 @@ HRESULT CBastion_Healer_State::Render_Debug()
 	if (FAILED(g_pGameInstance->Render_Font(TEXT("Font_Arial"), XMVectorSet(0.f, 1.0f, 0.f, 1.f), (wstrAttackOn + wstrIsAttack).c_str(), _float2(950.f, 140.f), _float2(0.6f, 0.6f))))
 		return E_FAIL;
 
+	wstring wstrFWD;
+	if (0 > m_CheckFWD)
+		wstrFWD = L"Forward";
+	else
+		wstrFWD = L"Backward";
+
+	if (FAILED(g_pGameInstance->Render_Font(TEXT("Font_Arial"), XMVectorSet(0.f, 1.0f, 0.f, 1.f), L"Check Distance : " + to_wstring(m_fDistance), _float2(950.f, 160.f), _float2(0.6f, 0.6f))))
+		return E_FAIL;
+	if (FAILED(g_pGameInstance->Render_Font(TEXT("Font_Arial"), XMVectorSet(0.f, 1.0f, 0.f, 1.f), L"Check FWD : " + wstrFWD, _float2(950.f, 180.f), _float2(0.6f, 0.6f))))
+		return E_FAIL;
+	if (FAILED(g_pGameInstance->Render_Font(TEXT("Font_Arial"), XMVectorSet(0.f, 1.0f, 0.f, 1.f), L"Check Radian : " + to_wstring(m_fRadian), _float2(950.f, 200.f), _float2(0.6f, 0.6f))))
+		return E_FAIL;
+
+
 	return S_OK;
+}
+
+void CBastion_Healer_State::Check_Attack(const _double& _dDeltaTime)
+{
+	/* 몬스터의 현재 Look 방향 벡터 */
+	_fvector vecMonsterLook = XMVector3Normalize(m_pTransform->Get_State(CTransform::STATE_LOOK));
+	/* 몬스터가 플레이어에게 향하는 방향 벡터 */
+	_fvector vMonsterPos = m_pTransform->Get_State(CTransform::STATE::STATE_POSITION);
+	_fvector vDist = vMonsterPos - g_pObserver->Get_PlayerPos();
+	/* 몬스터와 플레이어 사이의 거리 */
+	m_fDistance = XMVectorGetX(XMVector3Length(vDist));
+
+	/* 플레이어가 몬스터의 앞에 있는지 뒤에있는지 판단 */
+	_fvector vecMonsterToPlayer = XMVector3Normalize(vDist);
+	_fvector dotVec = XMVector3Dot(vecMonsterLook, vecMonsterToPlayer);
+	m_CheckFWD = XMVectorGetX(dotVec); /* 음수-> 플레이어가 앞에 있다*/
+
+	/* 플레이어,몬스터 위치 차 벡터 */
+	_fvector vPlayerToMonster = g_pObserver->Get_PlayerPos() - vMonsterPos;
+
+	/* 두 벡터의 사이 각 */
+	_vector svAngle = XMVector3AngleBetweenVectors(vecMonsterLook, vPlayerToMonster);
+	XMStoreFloat(&m_fRadian, svAngle);
+	m_fRadian = XMConvertToDegrees(m_fRadian);
+
+	if (0 > m_CheckFWD && (5.0f < m_fDistance && 10.0f > m_fDistance))
+	{
+		m_pTransform->Face_Target(g_pObserver->Get_PlayerPos());
+		m_bTargetOn = true;
+	}
+
+	if (0 > m_CheckFWD && 3.0f > m_fDistance)
+	{
+		if (10.0f > m_fRadian)
+		{
+			m_fAttackTime += _dDeltaTime;
+			if (m_fAttackTime > 0.5f)
+			{
+				m_fAttackTime = 0.0f;
+				m_pStateController->Change_State(L"Attack");
+			}
+		}
+	}
+
 }
 
 CBastion_Healer_State* CBastion_Healer_State::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext, void* _pArg)
@@ -160,8 +200,4 @@ CBastion_Healer_State* CBastion_Healer_State::Create(ID3D11Device* _pDevice, ID3
 void CBastion_Healer_State::Free()
 {
 	__super::Free();
-	CAnimator* m_pAnimator = nullptr;
-	CActor* m_pMonster = nullptr;
-	CTransform* m_pTransform = nullptr;
-	CModel* m_pModel = nullptr;
 }
