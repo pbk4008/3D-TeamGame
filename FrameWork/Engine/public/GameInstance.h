@@ -104,6 +104,7 @@ public: /* For.PipeLine */
 	_fmatrix Get_Transform(const wstring& pCameraTag, TRANSFORMSTATEMATRIX eType);
 	_fvector Get_CamPosition(const wstring& pCameraTag);
 	void Set_Transform(const wstring& pCameraTag, TRANSFORMSTATEMATRIX eType, _fmatrix TransformMatrix);
+	HRESULT Change_BaseCamera(const wstring& pCameraTag);
 
 public: /* for.Input_Device */
 	void Update_InputDev();

@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "Loader.h"
+#include "MeshLoader.h"
 
 #include "Animator.h"
 #include "Material.h"
@@ -162,6 +163,7 @@ HRESULT CLoader::Load_Stage1FBXLoad()
 			break;
 
 		char szFullPath[MAX_PATH] = "../bin/FBX/";
+
 		strcat_s(szFullPath, fd.name);
 
 
@@ -170,11 +172,25 @@ HRESULT CLoader::Load_Stage1FBXLoad()
 		MultiByteToWideChar(CP_ACP, 0, fd.name, MAX_PATH, fbxName, MAX_PATH);
 		MultiByteToWideChar(CP_ACP, 0, szFullPath, MAX_PATH, fbxPath, MAX_PATH);
 
+		CMeshLoader::MESHTYPE tMeshType;
+		ZeroMemory(&tMeshType, sizeof(tMeshType));
 
- 		if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, fbxName
-			, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, fbxPath,
-				L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
-			return E_FAIL; 
+		lstrcpy(tMeshType.szFBXName, fbxName);
+		lstrcpy(tMeshType.szFBXPath, fbxPath);
+		tMeshType.iType = 2;
+
+		if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, tMeshType.szFBXName
+			, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, tMeshType.szFBXPath,
+				CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
+			return E_FAIL;
+
+		/*CMeshLoader* pMeshLoader = GET_INSTANCE(CMeshLoader);
+		if (!pMeshLoader->Get_AllWorking())
+			pMeshLoader->Add_MeshLoader(tMeshType);
+		else
+			continue;
+
+		RELEASE_INSTANCE(CMeshLoader);*/
 
 		iResult = _findnext(handle, &fd);
 	}

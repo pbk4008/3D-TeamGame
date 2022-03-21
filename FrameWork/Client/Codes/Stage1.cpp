@@ -66,6 +66,9 @@ HRESULT CStage1::NativeConstruct()
 	if (FAILED(Ready_Trigger_Quest(L"../bin/SaveData/Trigger/Stage1_QuestTri.dat")))
 		return E_FAIL;
 
+	g_pGameInstance->Change_BaseCamera(L"Camera_Silvermane");
+	
+
 	return S_OK;
 }
 

@@ -76,7 +76,7 @@ HRESULT CMeshContainer::Render()
 	return S_OK;
 }
 
-HRESULT CMeshContainer::Render(ID3D11Buffer* pInstVetex, _uint iInstStride)
+HRESULT CMeshContainer::Render(ID3D11Buffer* pInstVetex, _uint iInstStride,_uint iInstCnt)
 {
 	if (nullptr == m_pDeviceContext)
 		return E_FAIL;
@@ -98,7 +98,7 @@ HRESULT CMeshContainer::Render(ID3D11Buffer* pInstVetex, _uint iInstStride)
 	m_pDeviceContext->IASetVertexBuffers(0, 2, pVertexBuffer, iStrides, iOffset);
 	m_pDeviceContext->IASetIndexBuffer(m_pIB, m_eFormat, 0);
 	m_pDeviceContext->IASetPrimitiveTopology(m_ePrimitiveTopology);
-	m_pDeviceContext->DrawIndexedInstanced(m_iNumPrimitive *3, iInstStride, 0, 0,0);
+	m_pDeviceContext->DrawIndexedInstanced(m_iNumPrimitive *3, iInstCnt, 0, 0,0);
 	return S_OK;
 }
 
