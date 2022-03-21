@@ -91,6 +91,12 @@ HRESULT CLoader::LoadForScene()
 	case SCENEID::SCENE_STAGE1:
 		hr = Ready_Stage1();
 		break;
+	case SCENEID::SCENE_STAGE2:
+		hr = Ready_Stage2();
+		break;
+	case SCENEID::SCENE_STAGE3:
+		hr = Ready_Stage3();
+		break;
 	case SCENEID::SCENE_TEST_JS:
 		hr = Ready_Test_JS();
 		break;
@@ -103,9 +109,9 @@ HRESULT CLoader::LoadForScene()
 	default:
 		return E_FAIL;
 	}
-
 	if (FAILED(hr))
 		return E_FAIL;
+
 	return S_OK;
 }
 
@@ -115,8 +121,8 @@ HRESULT CLoader::SetUp_Stage1_Object()
 	if (FAILED(Load_Stage1FBXLoad()))
 		return E_FAIL;
 
-	//if (FAILED(Load_Stage1PlayerLoad()))
-	//	return E_FAIL;
+	if (FAILED(Load_Stage1PlayerLoad()))
+		return E_FAIL;
 
 	//if (FAILED(Load_Stage1BossLoad()))
 	//	return E_FAIL;
@@ -165,7 +171,7 @@ HRESULT CLoader::Load_Stage1FBXLoad()
 		MultiByteToWideChar(CP_ACP, 0, szFullPath, MAX_PATH, fbxPath, MAX_PATH);
 
 
- 		if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, fbxName
+ 		if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, fbxName
 			, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, fbxPath,
 				L"../../Reference/ShaderFile/Shader_InstanceMesh.hlsl", CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
 			return E_FAIL; 
@@ -367,16 +373,16 @@ HRESULT CLoader::Load_Stage1TriggerLod()
 
 HRESULT CLoader::SetUp_Stage1_Prototype()
 {
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Proto_Component_CapsuleCollider", CCapsuleCollider::Create(m_pDevice, m_pDeviceContext))))
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_CapsuleCollider", CCapsuleCollider::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Proto_Component_AnimationController", CAnimationController::Create(m_pDevice, m_pDeviceContext))))
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_AnimationController", CAnimationController::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Proto_Component_Animator", CAnimator::Create(m_pDevice, m_pDeviceContext))))
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_Animator", CAnimator::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Proto_Component_StateController", CStateController::Create(m_pDevice, m_pDeviceContext))))
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_StateController", CStateController::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 
 	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Environment", CEnvironment::Create(m_pDevice, m_pDeviceContext))))
@@ -411,27 +417,27 @@ HRESULT CLoader::Load_Stage1PlayerLoad()
 
 #pragma region 모델
 	_matrix matPivot = XMMatrixIdentity();
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Model_Silvermane_Bin", CModel::Create(m_pDevice, m_pDeviceContext,
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Silvermane_Bin", CModel::Create(m_pDevice, m_pDeviceContext,
 		L"../bin/FBX/Silvermane/Silvermane_Bin.fbx", CModel::TYPE_ANIM, true))))
 	{
 		return E_FAIL;
 	}
 	matPivot = XMMatrixIdentity();
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Model_Needle", CModel::Create(m_pDevice, m_pDeviceContext,
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Needle", CModel::Create(m_pDevice, m_pDeviceContext,
 		"../bin/Resources/Mesh/Needle/", "Needle.fbx",
 		L"../../Reference/ShaderFile/Shader_StaticMesh.hlsl", matPivot, CModel::TYPE_STATIC, true))))
 	{
 		return E_FAIL;
 	}
 	matPivot = XMMatrixIdentity();
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Model_Fury", CModel::Create(m_pDevice, m_pDeviceContext,
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Fury", CModel::Create(m_pDevice, m_pDeviceContext,
 		"../bin/Resources/Mesh/Fury/", "Fury.fbx",
 		L"../../Reference/ShaderFile/Shader_StaticMesh.hlsl", matPivot, CModel::TYPE_STATIC, true))))
 	{
 		return E_FAIL;
 	}
 	matPivot = XMMatrixIdentity();
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Model_Shield", CModel::Create(m_pDevice, m_pDeviceContext,
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Shield", CModel::Create(m_pDevice, m_pDeviceContext,
 		"../bin/Resources/Mesh/Shield/", "Shield.fbx",
 		L"../../Reference/ShaderFile/Shader_StaticMesh.hlsl", matPivot, CModel::TYPE_STATIC, true))))
 	{
@@ -443,7 +449,7 @@ HRESULT CLoader::Load_Stage1PlayerLoad()
 	//위에 만들어 놨음
 	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Proto_Component_StateController", CStateController::Create(m_pDevice, m_pDeviceContext))))
 	//	return E_FAIL;
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Proto_Component_CharacterController", CCharacterController::Create(m_pDevice, m_pDeviceContext))))
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_CharacterController", CCharacterController::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 #pragma endregion
 #pragma region 오브젝트
@@ -694,6 +700,16 @@ HRESULT CLoader::Ready_Stage1()
 		return E_FAIL;
 	}
 
+	return S_OK;
+}
+
+HRESULT CLoader::Ready_Stage2()
+{
+	return S_OK;
+}
+
+HRESULT CLoader::Ready_Stage3()
+{
 	return S_OK;
 }
 

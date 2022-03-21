@@ -145,7 +145,7 @@ HRESULT CMonster_Bastion_2HSword::Ready_Components()
 
 
 	// ¸ðµ¨
-	if (FAILED(SetUp_Components(m_iSceneID, L"Model_Bastion_2HSword_Bin", L"Model", (CComponent**)&m_pModel)))
+	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Model_Bastion_2HSword_Bin", L"Model", (CComponent**)&m_pModel)))
 		return E_FAIL;
 	_matrix matPivot = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(180.f));
 	m_pModel->Set_PivotMatrix(matPivot);

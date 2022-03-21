@@ -3,6 +3,9 @@
 #include "Loader.h"
 #include "Level_Logo.h"
 #include "Stage1.h"
+#include "Stage2.h"
+#include "Stage3.h"
+
 #include "TestObj.h"
 
 #include "TestScene_JS.h"
@@ -78,6 +81,12 @@ HRESULT CLoading::Move_Scene()
 		break;
 	case SCENEID::SCENE_STAGE1:
 		pLevel = CStage1::Create(m_pDevice, m_pDeviceContext);
+		break;
+	case SCENEID::SCENE_STAGE2:
+		pLevel = CStage2::Create(m_pDevice, m_pDeviceContext);
+		break;
+	case SCENEID::SCENE_STAGE3:
+		pLevel = CStage2::Create(m_pDevice, m_pDeviceContext);
 		break;
 	case SCENEID::SCENE_TEST_JS:
 		pLevel = CTestScene_JS::Create(m_pDevice, m_pDeviceContext);

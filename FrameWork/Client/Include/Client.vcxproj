@@ -175,10 +175,10 @@
     </FxCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\Codes\DebugSystem.h" />
     <ClInclude Include="..\Default\Client_Enum.h" />
     <ClInclude Include="..\Default\Client_Function.h" />
     <ClInclude Include="..\Default\Client_Include.h" />
+    <ClInclude Include="..\Default\Client_Struct.h" />
     <ClInclude Include="..\Default\Clinet_Define.h" />
     <ClInclude Include="..\Headers\1H_Dash.h" />
     <ClInclude Include="..\Headers\1H_SwordAttack.h" />
@@ -273,6 +273,7 @@
     <ClInclude Include="..\Headers\Camera_Debug.h" />
     <ClInclude Include="..\Headers\Client_Observer.h" />
     <ClInclude Include="..\Headers\Client_Trigger.h" />
+    <ClInclude Include="..\Headers\DebugSystem.h" />
     <ClInclude Include="..\Headers\Effect_DashDust.h" />
     <ClInclude Include="..\Headers\Environment.h" />
     <ClInclude Include="..\Headers\Fury.h" />
@@ -344,6 +345,8 @@
     <ClInclude Include="..\Headers\Silvermane_SprintFwdStop.h" />
     <ClInclude Include="..\Headers\Staff.h" />
     <ClInclude Include="..\Headers\Stage1.h" />
+    <ClInclude Include="..\Headers\Stage2.h" />
+    <ClInclude Include="..\Headers\Stage3.h" />
     <ClInclude Include="..\Headers\Stargazer.h" />
     <ClInclude Include="..\Headers\State_Silvermane.h" />
     <ClInclude Include="..\Headers\TestObj.h" />
@@ -450,8 +453,10 @@
     <ClCompile Include="..\Codes\Bastion_Sword_Chase.cpp" />
     <ClCompile Include="..\Codes\Bastion_Sword_Death.cpp" />
     <ClCompile Include="..\Codes\Bastion_Sword_Groggy.cpp" />
+    <ClCompile Include="..\Codes\Bastion_Sword_Hit.cpp" />
     <ClCompile Include="..\Codes\Bastion_Sword_Idle.cpp" />
     <ClCompile Include="..\Codes\Bastion_Sword_Paring.cpp" />
+    <ClCompile Include="..\Codes\Bastion_Sword_Turn.cpp" />
     <ClCompile Include="..\Codes\Bastion_Sword_Walk.cpp" />
     <ClCompile Include="..\Codes\Client_Observer.cpp" />
     <ClCompile Include="..\Codes\Client_Trigger.cpp" />
@@ -530,6 +535,8 @@
     <ClCompile Include="..\Codes\Silvermane_SprintFwdStop.cpp" />
     <ClCompile Include="..\Codes\Staff.cpp" />
     <ClCompile Include="..\Codes\Stage1.cpp" />
+    <ClCompile Include="..\Codes\Stage2.cpp" />
+    <ClCompile Include="..\Codes\Stage3.cpp" />
     <ClCompile Include="..\Codes\Stargazer.cpp" />
     <ClCompile Include="..\Codes\State_Silvermane.cpp" />
     <ClCompile Include="..\Codes\TestObj.cpp" />
@@ -546,8 +553,6 @@
     <ClCompile Include="..\Codes\UI_Player_HpBar.cpp" />
     <ClCompile Include="..\Codes\UI_Player_HpBar_Red.cpp" />
     <ClCompile Include="..\Codes\Weapon.cpp" />
-    <ClCompile Include="..\Headers\Bastion_Sword_Hit.cpp" />
-    <ClCompile Include="..\Headers\Bastion_Sword_Turn.cpp" />
     <ClCompile Include="Client.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

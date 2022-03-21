@@ -231,6 +231,19 @@ HRESULT CRenderer::Draw_RenderGroup()
 	return S_OK;
 }
 
+HRESULT CRenderer::Remove_RenderGroup()
+{
+	for (_uint i = 0; i < RENDER_END; i++)
+	{
+		for (auto pObj : m_RenderGroup[i])
+			Safe_Release(pObj);
+
+		m_RenderGroup[i].clear();
+	}
+
+	return S_OK;
+}
+
 HRESULT CRenderer::Render_Priority()
 {
 	for (auto& pGameObject : m_RenderGroup[RENDER_PRIORITY])

@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Base.h"
-#include "Client_Observer.h"
 
 BEGIN(Engine)
 class CRenderer;
