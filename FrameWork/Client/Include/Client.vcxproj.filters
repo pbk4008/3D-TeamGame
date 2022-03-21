@@ -352,6 +352,9 @@
     <Filter Include="01.Scene\02.Stage\02.Stage3">
       <UniqueIdentifier>{1c229266-2fe0-42c7-b3c0-4ff0917f6000}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01.Scene\01.Loading\00.Loader\00.MeshLoader">
+      <UniqueIdentifier>{c2049929-7ae9-4414-bb90-0d30c5d6089c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -924,6 +927,9 @@
     <ClInclude Include="..\Headers\DebugSystem.h">
       <Filter>97.DebugSystem</Filter>
     </ClInclude>
+    <ClInclude Include="..\Codes\MeshLoader.h">
+      <Filter>01.Scene\01.Loading\00.Loader\00.MeshLoader</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -1469,6 +1475,9 @@
     </ClCompile>
     <ClCompile Include="..\Codes\Stage3.cpp">
       <Filter>01.Scene\02.Stage\02.Stage3</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\MeshLoader.cpp">
+      <Filter>01.Scene\01.Loading\00.Loader\00.MeshLoader</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

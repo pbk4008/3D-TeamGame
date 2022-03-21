@@ -47,7 +47,7 @@ CInstancing_Mesh::CInstancing_Mesh(const CInstancing_Mesh& rhs)
 		Safe_AddRef(pMaterial);
 }
 
-HRESULT CInstancing_Mesh::NativeConstruct_Prototype(const wstring& pMeshFilePath, const wstring& pShaderFile, INSTANCE_TYPE eType)
+HRESULT CInstancing_Mesh::NativeConstruct_Prototype(const wstring& pMeshFilePath, INSTANCE_TYPE eType)
 {
 	m_eType = eType;
 
@@ -95,13 +95,13 @@ void CInstancing_Mesh::Update_InstanceBuffer(const vector<_float4x4>& pMatrix)
 	for (_uint i = 0; i < m_iInstNumVertices; ++i)
 	{
 		_float4 vRight;
-		memcpy(&vRight, &matMatrix[0], sizeof(_float4));
+		memcpy(&vRight, &matMatrix[i].m[0], sizeof(_float4));
 		_float4 vUp;
-		memcpy(&vUp, &matMatrix[1], sizeof(_float4));
+		memcpy(&vUp, &matMatrix[i].m[1], sizeof(_float4));
 		_float4 vLook;
-		memcpy(&vLook, &matMatrix[2], sizeof(_float4));
+		memcpy(&vLook, &matMatrix[i].m[2], sizeof(_float4));
 		_float4 vPos;
-		memcpy(&vPos, &matMatrix[3], sizeof(_float4));
+		memcpy(&vPos, &matMatrix[i].m[3], sizeof(_float4));
 
 		((VTXMATRIX*)SubResource.pData)[i].vRight = vRight;
 		((VTXMATRIX*)SubResource.pData)[i].vUp = vUp;
@@ -110,8 +110,6 @@ void CInstancing_Mesh::Update_InstanceBuffer(const vector<_float4x4>& pMatrix)
 	}
 
 	m_pDeviceContext->Unmap(m_pVBInstance, 0);
-
-
 }
 
 HRESULT CInstancing_Mesh::SetUp_ValueOnShader(const char* pConstantName, void* pData, _uint iSize)
@@ -152,7 +150,7 @@ HRESULT CInstancing_Mesh::Render(_uint iMeshContainerIndex, _int iPassindex)
 						return E_FAIL;
 				}*/
 			m_vecMaterials[iMtrlIndex]->Render(iPassindex);
-			pMeshContainer->Render(m_pVBInstance,m_iInstStride);
+			pMeshContainer->Render(m_pVBInstance,m_iInstStride,m_iInstNumVertices);
 		}
 	}
 	return S_OK;
@@ -270,10 +268,10 @@ HRESULT CInstancing_Mesh::Create_InstancingBuffer(void* pArg)
 	return S_OK;
 }
 
-CInstancing_Mesh* CInstancing_Mesh::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext, const wstring& pMeshFilePath, const wstring& pShaderFile, INSTANCE_TYPE eType)
+CInstancing_Mesh* CInstancing_Mesh::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext, const wstring& pMeshFilePath, INSTANCE_TYPE eType)
 {
 	CInstancing_Mesh* pInstance = new CInstancing_Mesh(pDevice, pDeviceContext);
-	if (FAILED(pInstance->NativeConstruct_Prototype(pMeshFilePath,pShaderFile,eType)))
+	if (FAILED(pInstance->NativeConstruct_Prototype(pMeshFilePath,eType)))
 	{
 		MSGBOX("CInstancing_Mesh Create Fail");
 		Safe_Release(pInstance);

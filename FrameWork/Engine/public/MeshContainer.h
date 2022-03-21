@@ -16,7 +16,7 @@ public:
 	HRESULT NativeConstruct_Prototype(_uint iMaterialIndex, _uint iNumVtxCnt, _uint iNumIdxCnt, _uint iType, void* pVtx, void* pIdx);
 	HRESULT NativeConstruct(void* pArg) override;
 	HRESULT Render();
-	HRESULT Render(ID3D11Buffer* pInstVetex, _uint iInstStride);
+	HRESULT Render(ID3D11Buffer* pInstVetex, _uint iInstStride, _uint iInstCnt);
 public:
 	HRESULT Create_VertexIndexBuffer();
 	HRESULT Add_Bone(class CModel* pModel);
