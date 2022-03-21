@@ -286,7 +286,7 @@ void CModel_Inspector::OnBnClickedNavSaveButton()
 		//CCW_Sort(iter->m_pPoint);
 		for (int i = 0; i < 3; ++i)
 		{
-			m_NavMesh.Point[i] = iter->m_vPoint[i];
+			m_NavMesh.Point[i] = (iter->m_vPoint[i]);
 		}
 		m_NavMeshList_Pos.push_back(m_NavMesh);
 	}

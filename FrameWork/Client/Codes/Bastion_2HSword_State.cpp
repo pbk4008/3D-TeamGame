@@ -160,4 +160,8 @@ CBastion_2HSword_State* CBastion_2HSword_State::Create(ID3D11Device* _pDevice, I
 void CBastion_2HSword_State::Free()
 {
 	__super::Free();
+	CAnimator* m_pAnimator = nullptr;
+	CActor* m_pMonster = nullptr;
+	CTransform* m_pTransform = nullptr;
+	CModel* m_pModel = nullptr;
 }

@@ -1,10 +1,12 @@
 #include "pch.h"
 #include "Monster_Bastion_2HSword.h"
 #include "Animation.h"
+
 /* for. Weapon */
 #include "RetributionBlade.h"
 
 /* for. FSM */
+#include "Bastion_2HSword_State.h"
 #include "Bastion_2HSword_Idle.h"
 #include "Bastion_2HSword_Hit.h"
 #include "Bastion_2HSword_Death.h"
@@ -157,6 +159,7 @@ HRESULT CMonster_Bastion_2HSword::Ready_Components()
 	PhyDesc.bGravity = false;
 	PhyDesc.bKinematic = false;
 	PhyDesc.eType = CPhysicsXSystem::ACTORTYPE::ACTOR_DYNAMIC;
+	
 	CapDesc.tColDesc = PhyDesc;
 	if (FAILED(__super::SetUp_Components((_uint)SCENEID::SCENE_TEST_YM, L"Proto_Component_CapsuleCollider", L"Com_CapsuleCollider", (CComponent**)&m_pColliderCom, &CapDesc)))
 	{
@@ -170,11 +173,11 @@ HRESULT CMonster_Bastion_2HSword::Ready_Components()
 
 	m_AanimDesc.pModel = m_pModel;
 	m_AanimDesc.pTransform = m_pTransform;
-
+	
 	//Anim FSM
 	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_TEST_YM, L"Proto_Component_Animator", L"Animator", (CComponent**)&m_pAnimator, &m_AanimDesc)))
 		return E_FAIL;
-
+	
 	return S_OK;
 }
 

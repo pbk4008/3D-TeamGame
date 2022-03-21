@@ -244,9 +244,6 @@
     <Filter Include="02.GameObject\50.JumpNode">
       <UniqueIdentifier>{15743125-3fab-4955-a1a7-2c3ab22ace2e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObject\95.Monster\Bastion_2HSword\State_2HSword\Rage">
-      <UniqueIdentifier>{bd8eebf8-c00f-4303-9ddc-b43dfb509314}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_Healer">
       <UniqueIdentifier>{335bed18-d7d5-4883-82c3-5137d2e1cbc5}</UniqueIdentifier>
     </Filter>
@@ -348,6 +345,15 @@
     </Filter>
     <Filter Include="02.GameObject\03.Character\02.Boss\00.MiddleBoss\State\04.Chase">
       <UniqueIdentifier>{9ca0b922-5493-4c13-b374-4312bd2f3120}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_Healer\State_Healer">
+      <UniqueIdentifier>{ac333559-d103-4db9-a16f-3083aeb79507}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_Healer\State_Healer\Idle">
+      <UniqueIdentifier>{ae86d84e-b34f-4aae-957e-4acd49333021}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\96.Weapon\04.Staff">
+      <UniqueIdentifier>{19b1f1d3-c266-4b09-9b08-5abbbca7ed80}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -901,12 +907,6 @@
     <ClInclude Include="..\Headers\Bastion_2HSword_Hit.h">
       <Filter>02.GameObject\03.Character\01.Monster\Bastion_2HSword\State_2HSword\Hit</Filter>
     </ClInclude>
-    <ClInclude Include="..\Headers\Monster_Bastion_Sword.h">
-      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Sword</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Headers\1H_SwordAttackNormalR1_04Swap.h">
-      <Filter>02.GameObject\98.Player\00.Silvermane\State\1H_Sword\R2</Filter>
-    </ClInclude>
     <ClInclude Include="..\Headers\Monster_Bastion_Sword.h" />
     <ClInclude Include="..\Headers\1H_SwordAttackNormalR1_04Swap.h">
       <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\1H_Sword\R2</Filter>
@@ -914,12 +914,24 @@
     <ClInclude Include="..\Headers\Traverse_JumpNodeJog.h">
       <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Jump</Filter>
     </ClInclude>
+    <ClInclude Include="..\Headers\1H_SwordAttackNormalR1_04Swap.h" />
+    <ClInclude Include="..\Headers\Monster_Bastion_Sword.h">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Sword</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Bastion_Healer_State.h">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Healer\State_Healer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Bastion_Healer_Idle.h">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Healer\State_Healer\Idle</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Staff.h">
+      <Filter>02.GameObject\96.Weapon\04.Staff</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
       <Filter>99.Default</Filter>
     </ClCompile>
-    <ClCompile Include="Client.cpp" />
     <ClCompile Include="..\Codes\MainApp.cpp">
       <Filter>00.MainGame</Filter>
     </ClCompile>
@@ -1443,18 +1455,28 @@
     <ClCompile Include="..\Codes\Bastion_2HSword_Hit.cpp">
       <Filter>02.GameObject\03.Character\01.Monster\Bastion_2HSword\State_2HSword\Hit</Filter>
     </ClCompile>
-    <ClCompile Include="..\Codes\Monster_Bastion_Sword.cpp">
-      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Sword</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Codes\1H_SwordAttackNormalR1_04Swap.cpp">
-      <Filter>02.GameObject\98.Player\00.Silvermane\State\1H_Sword\R2</Filter>
-    </ClCompile>
     <ClCompile Include="..\Codes\Monster_Bastion_Sword.cpp" />
     <ClCompile Include="..\Codes\1H_SwordAttackNormalR1_04Swap.cpp">
       <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\1H_Sword\R2</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\Traverse_JumpNodeJog.cpp">
       <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Jump</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\1H_SwordAttackNormalR1_04Swap.cpp" />
+    <ClCompile Include="..\Codes\Monster_Bastion_Sword.cpp">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Sword</Filter>
+    </ClCompile>
+    <ClCompile Include="Client.cpp">
+      <Filter>99.Default</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Bastion_Healer_State.cpp">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Healer\State_Healer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Bastion_Healer_Idle.cpp">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Healer\State_Healer\Idle</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Staff.cpp">
+      <Filter>02.GameObject\96.Weapon\04.Staff</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

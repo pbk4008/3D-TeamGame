@@ -257,6 +257,8 @@
     <ClInclude Include="..\Headers\Bastion_2HSword_Idle.h" />
     <ClInclude Include="..\Headers\Bastion_2HSword_Rage.h" />
     <ClInclude Include="..\Headers\Bastion_2HSword_State.h" />
+    <ClInclude Include="..\Headers\Bastion_Healer_Idle.h" />
+    <ClInclude Include="..\Headers\Bastion_Healer_State.h" />
     <ClInclude Include="..\Headers\Bastion_Sword_Attack.h" />
     <ClInclude Include="..\Headers\Bastion_Sword_Chase.h" />
     <ClInclude Include="..\Headers\Bastion_Sword_Death.h" />
@@ -340,6 +342,7 @@
     <ClInclude Include="..\Headers\Silvermane_SprintFwd.h" />
     <ClInclude Include="..\Headers\Silvermane_SprintFwdStart.h" />
     <ClInclude Include="..\Headers\Silvermane_SprintFwdStop.h" />
+    <ClInclude Include="..\Headers\Staff.h" />
     <ClInclude Include="..\Headers\Stage1.h" />
     <ClInclude Include="..\Headers\Stargazer.h" />
     <ClInclude Include="..\Headers\State_Silvermane.h" />
@@ -441,6 +444,8 @@
     <ClCompile Include="..\Codes\Bastion_2HSword_Idle.cpp" />
     <ClCompile Include="..\Codes\Bastion_2HSword_Rage.cpp" />
     <ClCompile Include="..\Codes\Bastion_2HSword_State.cpp" />
+    <ClCompile Include="..\Codes\Bastion_Healer_Idle.cpp" />
+    <ClCompile Include="..\Codes\Bastion_Healer_State.cpp" />
     <ClCompile Include="..\Codes\Bastion_Sword_Attack.cpp" />
     <ClCompile Include="..\Codes\Bastion_Sword_Chase.cpp" />
     <ClCompile Include="..\Codes\Bastion_Sword_Death.cpp" />
@@ -523,6 +528,7 @@
     <ClCompile Include="..\Codes\Silvermane_SprintFwd.cpp" />
     <ClCompile Include="..\Codes\Silvermane_SprintFwdStart.cpp" />
     <ClCompile Include="..\Codes\Silvermane_SprintFwdStop.cpp" />
+    <ClCompile Include="..\Codes\Staff.cpp" />
     <ClCompile Include="..\Codes\Stage1.cpp" />
     <ClCompile Include="..\Codes\Stargazer.cpp" />
     <ClCompile Include="..\Codes\State_Silvermane.cpp" />
