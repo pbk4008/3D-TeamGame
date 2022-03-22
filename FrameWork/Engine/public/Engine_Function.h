@@ -56,7 +56,10 @@ namespace Engine
 	void Safe_PxRelease(T& pInstance)
 	{
 		if (pInstance)
+		{
 			pInstance->release();
+			pInstance = nullptr;
+		}
 	}
 
 	// Functor

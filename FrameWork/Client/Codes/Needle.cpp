@@ -111,7 +111,7 @@ HRESULT CNeedle::Ready_Components()
 	tCapsuleColliderDesc.tColliderDesc = tColliderDesc;
 	tCapsuleColliderDesc.fHeight = 1.f;
 	tCapsuleColliderDesc.fRadius = 0.1f;
-	if (FAILED(SetUp_Components(m_iSceneID, L"Proto_Component_CapsuleCollider", L"Collider", (CComponent**)&m_pCollider, &tCapsuleColliderDesc)))
+	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_CapsuleCollider", L"Collider", (CComponent**)&m_pCollider, &tCapsuleColliderDesc)))
 		return E_FAIL;
 
 	_matrix smatPviot = XMMatrixRotationY(XMConvertToRadians(90.f)) * XMMatrixTranslation(0.f, 0.f, 1.f);

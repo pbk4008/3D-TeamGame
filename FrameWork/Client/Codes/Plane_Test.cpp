@@ -147,7 +147,7 @@ void CPlane_Test::Free()
 {
 	Safe_Release(m_pVIBuffer);
 	Safe_Release(m_pTexture);
-	//Safe_Release(m_pNaviCollider);
+	Safe_Release(m_pNaviCollider);
 
 	__super::Free();
 }

@@ -22,7 +22,9 @@ HRESULT CNavMeshCollider::NativeConstruct(void* _pArg)
 {
 	if (_pArg)
 	{
-		memcpy_s(&m_tDesc, sizeof(DESC), _pArg, sizeof(DESC));
+		//memcpy_s(&m_tDesc, sizeof(DESC), _pArg, sizeof(DESC));
+		// vector 컨테이너가 있어서 무지성 memcpy 금지!!!!!!!!!!!!!
+		m_tDesc = *(static_cast<DESC*>(_pArg));
 		m_pGameObject = m_tDesc.tColliderDesc.pGameObject;
 	}
 

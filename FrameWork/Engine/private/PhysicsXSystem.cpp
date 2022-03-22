@@ -318,8 +318,6 @@ HRESULT CPhysicsXSystem::Create_NavMesh(CNavMeshCollider* _pCollider)
 	_pCollider->setShape(pShape);
 	_pCollider->setRigidActor(pRigidActor);
 
-
-
 	Safe_Delete_Array(pPoints);
 	Safe_Delete_Array(Indices);
 
@@ -398,6 +396,9 @@ void CPhysicsXSystem::Free()
 	// release
 	Safe_PxRelease(m_pControllerManager);
 	Safe_PxRelease(m_pCooking);
+
+	Safe_PxRelease(m_pDefaultMaterial);
+
 	Safe_PxRelease(m_pScene);
 	Safe_PxRelease(m_pDispatcher);
 	Safe_PxRelease(m_pPhysics);
