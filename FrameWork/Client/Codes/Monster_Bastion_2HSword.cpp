@@ -56,7 +56,7 @@ _int CMonster_Bastion_2HSword::Tick(_double _dDeltaTime)
 		return iProgress;
 
 	/* Collider Update */
-	m_pColliderCom->Update(m_pTransform->Get_WorldMatrix());
+	//m_pColliderCom->Update(m_pTransform->Get_WorldMatrix());
 
 	/* State FSM Update */
 	iProgress = m_pStateController->Tick(_dDeltaTime);
@@ -83,6 +83,9 @@ _int CMonster_Bastion_2HSword::LateTick(_double _dDeltaTime)
 	iProgress = m_pStateController->LateTick(_dDeltaTime);
 	if (NO_EVENT != iProgress)
 		return iProgress;
+
+
+	m_pCharacterController->Update_OwnerTransform();
 
 	// ¹«±â ·¹ÀÕ¾÷µ«
 	if (m_pCurWeapon)
@@ -120,7 +123,6 @@ HRESULT CMonster_Bastion_2HSword::Render()
 		{
 			if (FAILED(m_pModel->Render(i, 0))) return E_FAIL;
 		}
-
 	}
 	else
 	{
@@ -128,56 +130,53 @@ HRESULT CMonster_Bastion_2HSword::Render()
 	}
 #ifdef _DEBUG
 		Render_Debug();
-		m_pColliderCom->Render(L"Camera_Silvermane");
 #endif
 	return S_OK;
 }
 
 HRESULT CMonster_Bastion_2HSword::Ready_Components()
 {
+	/* for. Transform Com */
 	CTransform::TRANSFORMDESC transformDesc;
 	transformDesc.fSpeedPerSec = 0.7f;
 	transformDesc.fRotationPerSec = XMConvertToRadians(90.f);
 	m_pTransform->Set_TransformDesc(transformDesc);
-	_float4 vPosition = { 0.f, 0.f, 3.f, 1.f };
+	_float4 vPosition = { 0.f, 2.f, 3.f, 1.f };
 
 	m_pTransform->Set_State(CTransform::STATE_POSITION, XMLoadFloat4(&vPosition));
 
-
-	// ¸ðµ¨
-	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Model_Bastion_2HSword_Bin", L"Model", (CComponent**)&m_pModel)))
+	/* for. Model Com */
+	if (FAILED(SetUp_Components(m_iSceneID, L"Model_Bastion_2HSword_Bin", L"Model", (CComponent**)&m_pModel)))
 		return E_FAIL;
 	_matrix matPivot = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(180.f));
 	m_pModel->Set_PivotMatrix(matPivot);
 
-	/* for. Collider */
-	CCapsuleCollider::CAPSULEDESC CapDesc;
-	XMStoreFloat4x4(&CapDesc.matTransform, XMMatrixIdentity());
-	CapDesc.pParent = this;
-
-	CPhysicsXSystem::COLDESC PhyDesc;
-	PhyDesc.bGravity = false;
-	PhyDesc.bKinematic = false;
-	PhyDesc.eType = CPhysicsXSystem::ACTORTYPE::ACTOR_DYNAMIC;
-	
-	CapDesc.tColDesc = PhyDesc;
-	if (FAILED(__super::SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_CapsuleCollider", L"Com_CapsuleCollider", (CComponent**)&m_pColliderCom, &CapDesc)))
-	{
-		return E_FAIL;
-	}
-
-	// ½ºÅ×ÀÌÆ® ÄÁÆ®·Ñ·¯
+	/* for. State Controller */
 	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_StateController", L"StateController", (CComponent**)&m_pStateController)))
 		return E_FAIL;
 	m_pStateController->Set_GameObject(this);
 
 	m_AanimDesc.pModel = m_pModel;
 	m_AanimDesc.pTransform = m_pTransform;
-	
-	//Anim FSM
+
+	/* for.Anim FSM */
 	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_Animator", L"Animator", (CComponent**)&m_pAnimator, &m_AanimDesc)))
 		return E_FAIL;
-	
+
+	/* for.Character Controller */
+	CCharacterController::DESC tCharacterControllerDesc;
+	tCharacterControllerDesc.fHeight = 1.f;
+	tCharacterControllerDesc.fRadius = 0.5f;
+	tCharacterControllerDesc.fContactOffset = tCharacterControllerDesc.fRadius * 0.1f;
+	tCharacterControllerDesc.fStaticFriction = 0.5f;
+	tCharacterControllerDesc.fDynamicFriction = 0.5f;
+	tCharacterControllerDesc.fRestitution = 0.f;
+	tCharacterControllerDesc.pGameObject = this;
+	tCharacterControllerDesc.vPosition = { 0.f, 0.f, 0.f };
+
+	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_CharacterController", L"CharacterController", (CComponent**)&m_pCharacterController, &tCharacterControllerDesc)))
+		return E_FAIL;
+
 	return S_OK;
 }
 
@@ -497,10 +496,14 @@ CGameObject* CMonster_Bastion_2HSword::Clone(const _uint _iSceneID, void* _pArg)
 
 void CMonster_Bastion_2HSword::Free()
 {
-	__super::Free();
+	for (auto& pair : m_umapWeapons)
+		Safe_Release(pair.second);
+	m_umapWeapons.clear();
 
+	Safe_Release(m_pCharacterController);
 	Safe_Release(m_pStateController);
-	Safe_Release(m_pModel);
 	Safe_Release(m_pAnimator);
+	Safe_Release(m_pModel);
 
+	__super::Free();
 }

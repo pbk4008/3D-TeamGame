@@ -29,7 +29,7 @@ HRESULT CVIBuffer_Triangle::NativeConstruct_Prototype(const _tchar* pShaderFileP
 	m_VBDesc.MiscFlags = 0;
 	m_VBDesc.StructureByteStride = m_iStride;
 
-	
+
 	/* D3D11_SUBRESOURCE_DATA */
 	ZeroMemory(&m_VBSubresourceData, sizeof(D3D11_SUBRESOURCE_DATA));
 	m_pVertices = new VTXCOL[m_iNumVertices];
@@ -39,7 +39,7 @@ HRESULT CVIBuffer_Triangle::NativeConstruct_Prototype(const _tchar* pShaderFileP
 	{
 		((VTXCOL*)m_pVertices)[0].vPosition = _float3(-0.5f, 0.0f, 0.f);
 		((VTXCOL*)m_pVertices)[1].vPosition = _float3(0.0f, 1.0f, 0.f);
-		((VTXCOL*)m_pVertices)[2].vPosition = _float3(0.5f, 0.f, 0.f);	
+		((VTXCOL*)m_pVertices)[2].vPosition = _float3(0.5f, 0.f, 0.f);
 	}
 	else
 	{
@@ -50,8 +50,8 @@ HRESULT CVIBuffer_Triangle::NativeConstruct_Prototype(const _tchar* pShaderFileP
 
 	((VTXCOL*)m_pVertices)[0].vColor = _float4(0.0f, 1.f, 0.f, 1.f);
 	((VTXCOL*)m_pVertices)[1].vColor = _float4(0.0f, 1.f, 0.f, 1.f);
-	((VTXCOL*)m_pVertices)[2].vColor = _float4(0.0f, 1.f, 0.f, 1.f);	
-	
+	((VTXCOL*)m_pVertices)[2].vColor = _float4(0.0f, 1.f, 0.f, 1.f);
+
 	m_VBSubresourceData.pSysMem = m_pVertices;
 
 	if (FAILED(__super::Create_VertexBuffer()))
@@ -76,7 +76,7 @@ HRESULT CVIBuffer_Triangle::NativeConstruct_Prototype(const _tchar* pShaderFileP
 	/* D3D11_SUBRESOURCE_DATA */
 	ZeroMemory(&m_IBSubresourceData, sizeof(D3D11_SUBRESOURCE_DATA));
 
-	LINEINDICES16*		pIndices = new LINEINDICES16[m_iNumPrimitive];
+	LINEINDICES16* pIndices = new LINEINDICES16[m_iNumPrimitive];
 	ZeroMemory(pIndices, sizeof(LINEINDICES16) * m_iNumPrimitive);
 
 	pIndices[0]._0 = 0;
@@ -87,7 +87,7 @@ HRESULT CVIBuffer_Triangle::NativeConstruct_Prototype(const _tchar* pShaderFileP
 
 	pIndices[2]._0 = 2;
 	pIndices[2]._1 = 0;
-	
+
 
 	m_IBSubresourceData.pSysMem = pIndices;
 
@@ -101,10 +101,10 @@ HRESULT CVIBuffer_Triangle::NativeConstruct_Prototype(const _tchar* pShaderFileP
 
 	Safe_Delete_Array(pIndices);
 
-	D3D11_INPUT_ELEMENT_DESC		ElementDescs[] = 
-	{		
+	D3D11_INPUT_ELEMENT_DESC		ElementDescs[] =
+	{
 		{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-		{ "COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 }		
+		{ "COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 }
 	};
 
 	if (FAILED(Compile_ShaderFiles(pShaderFilePath, ElementDescs, 2)))
@@ -125,9 +125,9 @@ HRESULT CVIBuffer_Triangle::NativeConstruct_Prototype(const _tchar* pShaderFileP
 	m_iNumVertices = 3;
 
 	m_VBDesc.ByteWidth = m_iStride * m_iNumVertices;
-	m_VBDesc.Usage = D3D11_USAGE_IMMUTABLE;
+	m_VBDesc.Usage = D3D11_USAGE_DYNAMIC;
 	m_VBDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-	m_VBDesc.CPUAccessFlags = 0;
+	m_VBDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 	m_VBDesc.MiscFlags = 0;
 	m_VBDesc.StructureByteStride = m_iStride;
 

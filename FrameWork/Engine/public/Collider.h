@@ -1,49 +1,62 @@
 #pragma once
 
 #include "Component.h"
-#include "DebugDraw.h"
 #include "PhysicsXSystem.h"
 
 BEGIN(Engine)
-class CGizmo;
+
+class CGameObject;
+
 class ENGINE_DLL CCollider abstract : public CComponent
 {
+public:
+	typedef struct tagDesc
+	{
+		/* For.Rigidbody */
+		ERigidType eRigidType = ERigidType::Dynamic;			// 리지드스태틱(움직이지 않는 고정된 액터) or 리지드바디(움직이며 물리연산을 받는 액터)
+		_bool isGravity = false;								// 중력을 받을것인가?
+		_bool isKinematic = false;								// 다른 액터로부터 물리연산을 안받는 객체
+		/* For.Shape */
+		_bool isSceneQuery = false;								// cct로 밀거나 물리작용하는 오브젝트들
+		_bool isTrigger = false;								// 트리거 로 만들 것인가?
+		/* For.Material */
+		_float fStaticFriction = 0.5f;							// 정적 마찰
+		_float fDynamicFriction = 0.5f;							// 동적 마찰
+		_float fRestitution = 0.6f;								// 물체가 튕기는 정도(?)
+		/* For.Collider */
+		CGameObject* pGameObject = nullptr;						// 액터를 가지고 있는 오브젝트
+	}DESC;
 protected:
-	CCollider() = default;
-	CCollider(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);
-	CCollider(const CCollider& rhs);
+	explicit CCollider(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext);
+	explicit CCollider(const CCollider& _rhs);
 	virtual ~CCollider() = default;
+
 public:
-	virtual HRESULT NativeConstruct_Prototype();
-	virtual HRESULT NativeConstruct(void* pArg);
-public:
-	void Update(_fmatrix TransformMatrix);
-	virtual HRESULT Render(const wstring& pCameraTag);
-public:
-	void Collider();
+	virtual HRESULT NativeConstruct_Prototype() override;
+	virtual HRESULT NativeConstruct(void* _pArg = nullptr) override;
+	virtual const _int Tick(const _double& _dDeltaTime);
+	virtual const _int LateTick(const _double& _dDeltaTime);
+
+	CGameObject* getGameObject();
+
+	void setRigidActor(PxRigidActor* _pRigidbody);
+	void setShape(PxShape* _pShape);
+	void setMaterial(PxMaterial* _pMaterial);
+	void setPivotMatrix(const _fmatrix& _smatPivot);
+
+	_int Update_Transform();
+	_int Update_PxTransform();
+
 protected:
-	HRESULT Init_Collider(const CPhysicsXSystem::COLDESC& tDesc);
-	const PxVec3 Calcul_Extends(_fmatrix matTransform);
-	_fvector getQuaternion(_fmatrix matTransform);
-	_fvector ToXMVector3(const PxVec3 pxvec);
-	_fvector ToXMVector4(const PxQuat pxquat);
-	const PxVec3 ToPxVector(_fvector xmvec);
-	const PxQuat ToQuat(_fvector xmvec);
-private:
-	_fmatrix Update_Scale(_fmatrix matTransform);
-	_fmatrix Update_Rotate(_fmatrix matTransform);
-	_fmatrix Update_Position(PxVec3 vPos);
-protected:
-	CGizmo* m_pGizmo = nullptr;
-	_float4x4 m_matLoaclMatrix;
-	_float4x4 m_matWorldMatrix;
-	_float4	m_vColor = {0.f,0.f,0.f,0.f};
-protected:
-	_bool			m_isCollisioning = false;
-	_bool			m_isCollision = false;
-	PxRigidActor* m_pRigidBody = nullptr;
+	CPhysicsXSystem* m_pPhsyX = nullptr;
+	PxRigidActor* m_pRigidActor = nullptr;
 	PxShape* m_pShape = nullptr;
-	CPhysicsXSystem::ACTORTYPE m_eType = CPhysicsXSystem::ACTORTYPE::ACTOR_END;
+	PxMaterial* m_pMaterial = nullptr;
+	CGameObject* m_pGameObject = nullptr;
+
+	_float4x4 m_matPivot;
+
+
 public:
 	virtual void Free() override;
 };

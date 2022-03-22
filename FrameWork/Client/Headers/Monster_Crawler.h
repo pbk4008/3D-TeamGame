@@ -36,10 +36,13 @@ private:
 private:
 	CModel* m_pModelCom = nullptr;
 	CAnimator* m_pAnimatorCom = nullptr;
-	CCapsuleCollider* m_pColliderCom = nullptr;
 	CStateController* m_pStateController = nullptr;
 
 	class CUI_Monster_Panel* m_pPanel = nullptr;
+
+private:
+	_float m_fHp = 10.f;
+	_float m_fMaxHp = 10.f;
 
 public:
 	static CMonster_Crawler* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext);

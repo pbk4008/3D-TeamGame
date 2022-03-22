@@ -118,7 +118,7 @@ void CCamera_Silvermane::Set_ChaseTarget(const _bool _isChase)
 _int CCamera_Silvermane::Chase_Target(const _double& _dDeltaTime)
 {
 	if (!m_pSilvermane)
-		return - 1;
+		return -1;
 	if (!m_isChase)
 		return 0;
 

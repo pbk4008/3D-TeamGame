@@ -33,6 +33,9 @@ private:
 	HRESULT Ready_Trigger_Monster(const _tchar* pDataFilePath);
 	HRESULT Ready_Trigger_Quest(const _tchar* pDataFilePath);
 
+private:
+	HRESULT	Ready_Treasure_Chest();
+
 public:
 	static CStage1* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);
 private:

@@ -1,265 +1,128 @@
 #include "Collider.h"
+
 #include "Transform.h"
-#include "PipeLine.h"
+#include "GameObject.h"
 #include "GameInstance.h"
 
-CCollider::CCollider(ID3D11Device * pDevice, ID3D11DeviceContext * pDeviceContext)
-	: CComponent(pDevice, pDeviceContext)
-	, m_pGizmo(nullptr)
+CCollider::CCollider(ID3D11Device * _pDevice, ID3D11DeviceContext * _pDeviceContext)
+	: CComponent(_pDevice, _pDeviceContext)
+	, m_pPhsyX(CPhysicsXSystem::GetInstance())
 {
-	ZeroMemory(&m_matLoaclMatrix, sizeof(_float4x4));
-	ZeroMemory(&m_matWorldMatrix, sizeof(_float4x4));
-	ZeroMemory(&m_vColor, sizeof(_float4));
+	//Safe_AddRef(m_pPhsyX);
+	XMStoreFloat4x4(&m_matPivot, XMMatrixIdentity());
 }
 
-CCollider::CCollider(const CCollider & rhs)
-	: CComponent(rhs)
-	/*, m_pEffect(rhs.m_pEffect)
-	, m_pBatch(rhs.m_pBatch)
-	, m_pInputLayout(rhs.m_pInputLayout)*/
-	, m_pGizmo(rhs.m_pGizmo)
-	, m_vColor(rhs.m_vColor)
-	, m_pRigidBody(rhs.m_pRigidBody)
-	, m_pShape(rhs.m_pShape)
-	, m_eType(rhs.m_eType)
-	, m_matLoaclMatrix(rhs.m_matLoaclMatrix)
-	, m_matWorldMatrix(rhs.m_matWorldMatrix)
+CCollider::CCollider(const CCollider& _rhs)
+	: CComponent(_rhs)
+	, m_pPhsyX(_rhs.m_pPhsyX)
+	, m_matPivot(_rhs.m_matPivot)
 {
-	Safe_AddRef(m_pGizmo);
-	PX_ADDREF(m_pShape)
+	//Safe_AddRef(m_pPhsyX);
 }
 
 HRESULT CCollider::NativeConstruct_Prototype()
 {
-	CGameInstance* pInstance = GET_INSTANCE(CGameInstance);
-
-	m_pGizmo = pInstance->Clone_Component<CGizmo>(0,L"Proto_Component_Gizmo");
-
-	RELEASE_INSTANCE(CGameInstance);
-
-	return S_OK;
-}
-
-HRESULT CCollider::NativeConstruct(void * pArg)
-{
-	m_eType = (*(CPhysicsXSystem::ACTORTYPE*)pArg);
-
-	m_vColor = _float4(1.f, 0.f, 0.f, 1.f);
-
-	return S_OK;
-}
-
-void CCollider::Update(_fmatrix TransformMatrix)
-{
-	_matrix matTransform = XMLoadFloat4x4(&m_matLoaclMatrix);
-
-	matTransform *= TransformMatrix;
-	_matrix matScale=Update_Scale(matTransform);
-
-	_matrix matRotate=Update_Rotate(matTransform);
-
-	matScale *= matRotate;
-
-	if (m_eType == CPhysicsXSystem::ACTORTYPE::ACTOR_DYNAMIC)
-	{
-		PxVec3 pxPos = PxVec3(ToPxVector(matTransform.r[3]));
-		_matrix matPos = Update_Position(pxPos);
-		matScale *= matPos;
-	}
-	XMStoreFloat4x4(&m_matWorldMatrix, matScale);
-	/*_vector vTransformPos = TransformMatrix.r[3];
-	_vector vTransformQuat = getQuaternion(TransformMatrix);
-
-	PxQuat q(XMVectorGetX(vTransformQuat), XMVectorGetY(vTransformQuat), XMVectorGetZ(vTransformQuat), XMVectorGetW(vTransformQuat));
-	PxVec3 p(XMVectorGetX(vTransformPos), XMVectorGetY(vTransformPos), XMVectorGetZ(vTransformPos));
-
-	PxTransform pRigidTr = m_pRigidBody->getGlobalPose();
-	pRigidTr.q* q;
-	pRigidTr.p += p;
-	if (m_eType == CPhysicsXSystem::ACTORTYPE::ACTOR_DYNAMIC)
-		static_cast<PxRigidDynamic*>(m_pRigidBody)->setGlobalPose(pRigidTr);*/
-}
-
-HRESULT CCollider::Render(const wstring& pCameraTag)
-{
-	return S_OK;
-}
-
-void CCollider::Collider()
-{
-	if (!m_bActive)
-	{
-		m_isCollision = !m_isCollision;
-		if (!m_isCollision)
-			m_vColor = _float4(1.f, 0.f, 0.f, 1.f);
-		else
-			m_vColor = _float4(0.f, 1.f, 0.f, 1.f);
-	}
-}
-
-
-HRESULT CCollider::Init_Collider(const CPhysicsXSystem::COLDESC& tDesc)
-{
-	CPhysicsXSystem* pInstance = GET_INSTANCE(CPhysicsXSystem);
-
-	if (FAILED(pInstance->Init_RigidActor(m_pShape, tDesc, &m_pRigidBody)))
-	{
-		RELEASE_INSTANCE(CPhysicsXSystem);
+	if (FAILED(__super::NativeConstruct_Prototype()))
 		return E_FAIL;
-	}
-	RELEASE_INSTANCE(CPhysicsXSystem);
 
 	return S_OK;
 }
 
-const PxVec3 CCollider::Calcul_Extends(_fmatrix matTransform)
+HRESULT CCollider::NativeConstruct(void * _pArg)
 {
-	_float fSizeX, fSizeY, fSizeZ;
+	if (FAILED(__super::NativeConstruct(_pArg)))
+		return E_FAIL;
 
-	fSizeX = XMVectorGetX(XMVector3Length(matTransform.r[0]));
-	fSizeY = XMVectorGetY(XMVector3Length(matTransform.r[1]));
-	fSizeZ = XMVectorGetZ(XMVector3Length(matTransform.r[2]));
-
-	PxVec3 result = PxVec3(fSizeX, fSizeY, fSizeZ);
-
-	return result;
+	return S_OK;
 }
 
-_fvector CCollider::getQuaternion(_fmatrix matTransform)
+const _int CCollider::Tick(const _double& _dDeltaTime)
 {
-	_vector vRight, vUp, vLook;
-	vRight = matTransform.r[0];
-	vUp = matTransform.r[1];
-	vLook = matTransform.r[2];
+	Update_PxTransform();
 
-	vRight = XMVector3Normalize(vRight);
-	vUp = XMVector3Normalize(vUp);
-	vLook = XMVector3Normalize(vLook);
-
-	_matrix matRotation;
-	ZeroMemory(&matRotation, sizeof(_matrix));
-
-	matRotation.r[0] = vRight;
-	matRotation.r[1] = vUp;
-	matRotation.r[2] = vLook;
-
-	_vector vQuaternion = XMQuaternionRotationMatrix(matRotation);
-
-	return vQuaternion;
+	return _int();
 }
 
-_fvector CCollider::ToXMVector3(const PxVec3 pxvec)
+const _int CCollider::LateTick(const _double& _dDeltaTime)
 {
-	_fvector vVector = XMVectorSet(pxvec.x, pxvec.y, pxvec.z,0.f);
+	Update_Transform();
 
-	return vVector;
+	return _int();
 }
 
-_fvector CCollider::ToXMVector4(const PxQuat pxquat)
+CGameObject* CCollider::getGameObject()
 {
-	_fvector vVector = XMVectorSet(pxquat.x, pxquat.y, pxquat.z, pxquat.w);
-
-	return vVector;
+	return m_pGameObject;
 }
 
-const PxVec3 CCollider::ToPxVector(_fvector xmvec)
+void CCollider::setRigidActor(PxRigidActor* _pRigidbody)
 {
-	PxVec3 vVector = PxVec3(XMVectorGetX(xmvec), XMVectorGetY(xmvec), XMVectorGetZ(xmvec));
-
-	return vVector;
+	m_pRigidActor = _pRigidbody;
 }
 
-const PxQuat CCollider::ToQuat(_fvector xmvec)
+void CCollider::setShape(PxShape* _pShape)
 {
-	_float4 tmpQuat;
-	XMStoreFloat4(&tmpQuat, xmvec);
-	PxQuat pxQuat = PxQuat(tmpQuat.x, tmpQuat.y, tmpQuat.z, tmpQuat.w);
-
-	return pxQuat;
+	m_pShape = _pShape;
 }
 
-_fmatrix CCollider::Update_Scale(_fmatrix matTransform)
+void CCollider::setMaterial(PxMaterial* _pMaterial)
 {
-	_float fSizeX = XMVectorGetX(XMVector3Length(matTransform.r[0]));
-	_float fSizeY = XMVectorGetX(XMVector3Length(matTransform.r[1]));
-	_float fSizeZ = XMVectorGetX(XMVector3Length(matTransform.r[2]));
-
-	PxGeometryHolder tHolder = m_pShape->getGeometry();
-	if (tHolder.getType() == PxGeometryType::eBOX)
-	{
-		PxBoxGeometry pBox = tHolder.box();
-		pBox.halfExtents = PxVec3(fSizeX * 0.5f, fSizeY * 0.5f, fSizeZ * 0.5f);
-		m_pShape->setGeometry(pBox);
-	}
-	else if (tHolder.getType() == PxGeometryType::eCAPSULE)
-	{
-		tHolder.capsule().halfHeight = fSizeY * 0.5f;
-		//	tHolder.capsule().radius = fSizeX * 0.5f;
-		//	m_pShape->setGeometry(tHolder.capsule());
-	}
-	else if (tHolder.getType() == PxGeometryType::eSPHERE)
-	{
-		tHolder.sphere().radius = fSizeX * 0.5f;
-		//	m_pShape->setGeometry(tHolder.sphere());
-	}
-
-	_matrix matScale = XMMatrixScaling(fSizeX, fSizeY, fSizeZ);
-
-	return matScale;
-	//switch (tHolder.getType())
-	//{
-	//case PxGeometryType::eBOX :
-	//	pGeometry = &tHolder.box();
-	//	static_cast<PxBoxGeometry*>(pGeometry)->halfExtents = PxVec3(fSizeX * 0.5f, fSizeY * 0.5f, fSizeZ * 0.5f);
-	//	m_pShape->setGeometry(*pGeometry);
-	//	break;
-	//case PxGeometryType::eCAPSULE:
-	//	tHolder.capsule().halfHeight = fSizeY * 0.5f;
-	//	tHolder.capsule().radius = fSizeX * 0.5f;
-	//	m_pShape->setGeometry(tHolder.capsule());
-	//	break;
-	//case PxGeometryType::eSPHERE:
-	//	tHolder.sphere().radius = fSizeX * 0.5f;
-	//	m_pShape->setGeometry(tHolder.sphere());
-	//	break;
-	//default:
-	//	break;
-	//}
+	m_pMaterial = _pMaterial;
 }
 
-_fmatrix CCollider::Update_Rotate(_fmatrix matTransform)
+void CCollider::setPivotMatrix(const _fmatrix& _smatPivot)
 {
-	_vector vTransformQuat = getQuaternion(matTransform);
-	PxVec3 pxTransformQuat = ToPxVector(vTransformQuat);
-	PxTransform pRigidTr = m_pRigidBody->getGlobalPose();
-	pRigidTr.rotate(pxTransformQuat);
-
-	_vector vQuat = ToXMVector4(pRigidTr.q);
-	_matrix matRotate = XMMatrixRotationQuaternion(vQuat);
-
-	return matRotate;
+	XMStoreFloat4x4(&m_matPivot, _smatPivot);
 }
 
-_fmatrix CCollider::Update_Position(PxVec3 vPos)
+_int CCollider::Update_Transform()
 {
-	_matrix matPos = XMMatrixIdentity();
-	PxTransform pRigidTr = m_pRigidBody->getGlobalPose();
-	pRigidTr.p= vPos;
+	PxTransform pxTransform = m_pRigidActor->getGlobalPose();
+	CTransform* pTransform = m_pGameObject->Get_Transform();
+	_float3 vPosition = FromPxVec3(pxTransform.p);
+	//_float4 vQuat = FromPxQuat(pxTransform.q);
+	//_float3 vRotation = QuaternionToEuler(vQuat);
 
-	_vector vMatPos = XMVectorSet(pRigidTr.p.x, pRigidTr.p.y, pRigidTr.p.z, 1.f);
+	pTransform->Set_State(CTransform::STATE_POSITION, XMVectorSetW(XMLoadFloat3(&vPosition), 1.f));
 
-	static_cast<PxRigidDynamic*>(m_pRigidBody)->setGlobalPose(pRigidTr);
-	matPos.r[3] = vMatPos;
-	return matPos;
+	return _int();
+}
+
+_int CCollider::Update_PxTransform()
+{
+	CTransform* pTransform = m_pGameObject->Get_Transform();
+	_matrix smatWorld = pTransform->Get_WorldMatrix();
+	smatWorld = XMLoadFloat4x4(&m_matPivot) * smatWorld;
+
+	_vector svScale, svQuat, svPos;
+	XMMatrixDecompose(&svScale, &svQuat, &svPos, smatWorld);
+
+	// Pos
+	_float3 vPosition;
+	XMStoreFloat3(&vPosition, svPos);
+
+	// Rot
+	_float4 vQuat;
+	XMStoreFloat4(&vQuat, svQuat);
+	
+	PxTransform transform = m_pShape->getLocalPose();
+	transform.p = ToPxVec3(vPosition);
+	transform.q = ToPxQuat(vQuat);
+	m_pRigidActor->setGlobalPose(transform);
+
+	return _int();
 }
 
 void CCollider::Free()
 {
+	if (m_pShape)
+		m_pShape->getActor()->detachShape(*m_pShape);
+	m_pPhsyX->Remove_Actor(m_pRigidActor);
+
+	Safe_PxRelease(m_pShape);
+	Safe_PxRelease(m_pRigidActor);
+	Safe_PxRelease(m_pMaterial);
+
+	//Safe_Release(m_pPhsyX);
 	__super::Free();
-
-	PX_RELEASE(m_pShape);
-	if (false == m_isCloned)
-		PX_RELEASE(m_pRigidBody);
-
-	Safe_Release(m_pGizmo);
 }

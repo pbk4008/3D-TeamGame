@@ -130,12 +130,12 @@ HRESULT CPlane::Create_NavigationLine()
 
 HRESULT CPlane::Update_CellPos()
 {
-	//CNavSphere* pSphere = m_pObserver->m_pNavSphere;
-	//if (nullptr == pSphere)
-	//	return E_FAIL;
+	CNavSphere* pSphere = m_pObserver->m_pNavSphere;
+	if (nullptr == pSphere)
+		return E_FAIL;
 
-	//if (FAILED(m_pNavigationCom->Update_Buffer(XMLoadFloat3(&pSphere->m_fPostion))))
-	//	return E_FAIL;
+	if (FAILED(m_pNavigationCom->Update_Buffer(XMLoadFloat3(&pSphere->m_fPostion))))
+		return E_FAIL;
 
 	return S_OK;
 }

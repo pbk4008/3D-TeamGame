@@ -40,33 +40,24 @@ HRESULT CTestObj::NativeConstruct(const _uint _iSceneID, void* pArg)
 	if (FAILED(CGameObject::NativeConstruct(_iSceneID, pArg)))
 		return E_FAIL;
 
+	if (pArg)
+		memcpy_s(&m_tTestDesc, sizeof(TESTDESC), pArg, sizeof(TESTDESC));
+
 	m_pTransform->Set_TransformDesc(5.f, 10.f);
-	m_pTransform->Set_State(CTransform::STATE_POSITION, XMVectorSet(0.f, 0.f, 10.f, 1.f));
+	m_pTransform->Set_State(CTransform::STATE_POSITION, XMVectorSetW(XMLoadFloat3(&m_tTestDesc.vPosition), 1.f));
 	
-	TESTDESC tDesc = (*(TESTDESC*)pArg);
+	CCollider::DESC tColliderDesc;
+	tColliderDesc.isTrigger = m_tTestDesc.isTrigger;
+	tColliderDesc.eRigidType = m_tTestDesc._eRigidType;
+	tColliderDesc.pGameObject = this;
 
+	CBoxCollider::DESC tBoxColliderDesc;
+	tBoxColliderDesc.tColliderDesc = tColliderDesc;
+	tBoxColliderDesc.vScale = { 1.f, 1.f, 1.f };
+	if (FAILED(SetUp_Components(m_iSceneID, L"Proto_Component_BoxCollider", L"BoxCollider", (CComponent**)&m_pBoxCollider, &tBoxColliderDesc)))
+		return E_FAIL;
 
-	if (tDesc.tSphereDesc.matTransform._11 == 0.f && tDesc.tCapsuleDesc.matTransform._11 == 0.f)
-	{
-		tDesc.tBoxDesc.pParent = this;
-		if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"BoxCollider", L"TestCol", (CComponent * *)& m_pBoxCollider, &tDesc.tBoxDesc)))
-			return E_FAIL;
-	}
-	else
-	{
-		if (tDesc.tSphereDesc.matTransform._11 != 0.f)
-		{
-			tDesc.tSphereDesc.pParent = this;
-			if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"SphereCollider", L"TestCol", (CComponent * *)& m_pSphereCollider, &tDesc.tSphereDesc)))
-				return E_FAIL;
-		}
-		else
-		{
-			tDesc.tCapsuleDesc.pParent = this;
-			if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"CapsuleCollider", L"TestCol", (CComponent * *)& m_pCapsuleCollider, &tDesc.tCapsuleDesc)))
-				return E_FAIL;
-		}
-	}
+	m_isMove = m_tTestDesc.isMove;
 
 	return S_OK;
 }
@@ -76,11 +67,11 @@ _int CTestObj::Tick(_double TimeDelta)
 	move(TimeDelta);
 
 	if(m_pBoxCollider)
-		m_pBoxCollider->Update(m_pTransform->Get_WorldMatrix());
+		m_pBoxCollider->Tick(TimeDelta);
 	if(m_pSphereCollider)
-		m_pSphereCollider->Update(m_pTransform->Get_WorldMatrix());
+		m_pSphereCollider->Tick(TimeDelta);
 	if (m_pCapsuleCollider)
-		m_pCapsuleCollider->Update(m_pTransform->Get_WorldMatrix());
+		m_pCapsuleCollider->Tick(TimeDelta);
 
 	return _int();
 }
@@ -93,58 +84,44 @@ _int CTestObj::LateTick(_double TimeDelta)
 
 HRESULT CTestObj::Render()
 {
-#ifdef _DEBUG
-	if(m_pBoxCollider)
-		m_pBoxCollider->Render(L"MainCamera");
-	if (m_pSphereCollider)
-		m_pSphereCollider->Render(L"MainCamera");
-	if (m_pCapsuleCollider)
-		m_pCapsuleCollider->Render(L"MainCamera");
-#endif
+
 	return S_OK;
 }
 
-void CTestObj::OnCollisionEnter(CGameObject* pObj)
+void CTestObj::OnCollisionEnter(CCollision& _collision)
 {
-	if(typeid(*pObj) == typeid(CTestObj))
+	if(typeid(*_collision.pGameObject) == typeid(CTestObj))
 	{
-		if (m_pBoxCollider)
-			m_pBoxCollider->Collider();
-		else if (m_pSphereCollider)
-			m_pSphereCollider->Collider();
-		else if (m_pCapsuleCollider)
-			m_pCapsuleCollider->Collider();
+
 	}
 }
 
-void CTestObj::OnCollisionExit(CGameObject* pObj)
+void CTestObj::OnCollisionExit(CCollision& _collision)
 {
-	if (typeid(*pObj) == typeid(CTestObj))
+	if (typeid(*_collision.pGameObject) == typeid(CTestObj))
 	{
-		if (m_pBoxCollider)
-			m_pBoxCollider->Collider();
-		else if (m_pSphereCollider)
-			m_pSphereCollider->Collider();
-		else if (m_pCapsuleCollider)
-			m_pCapsuleCollider->Collider();
+
 	}
 }
 
-void CTestObj::OnTriggerEnter(CGameObject* pObj)
+void CTestObj::OnTriggerEnter(CCollision& _collision)
 {
-	if (typeid(*pObj) == typeid(CTestObj))
+	if (typeid(*_collision.pGameObject) == typeid(CTestObj))
 	{
-		if (m_pBoxCollider)
-			m_pBoxCollider->Collider();
-		else if (m_pSphereCollider)
-			m_pSphereCollider->Collider();
-		else if (m_pCapsuleCollider)
-			m_pCapsuleCollider->Collider();
+
 	}
+}
+
+void CTestObj::setIsMove(const _bool _isMove)
+{
+	m_isMove = _isMove;
 }
 
 void CTestObj::move(_double dDeltaTime)
 {
+	if (!m_isMove)
+		return;
+
 	if (g_pGameInstance->getkeyPress(DIK_RIGHT))
 		m_pTransform->Go_Right(dDeltaTime);
 	if (g_pGameInstance->getkeyPress(DIK_UP))
@@ -179,8 +156,8 @@ CGameObject* CTestObj::Clone(const _uint _iSceneID, void* pArg)
 
 void CTestObj::Free()
 {
-	CGameObject::Free();
 	Safe_Release(m_pBoxCollider);
 	Safe_Release(m_pSphereCollider);
 	Safe_Release(m_pCapsuleCollider);
+	CGameObject::Free();
 }

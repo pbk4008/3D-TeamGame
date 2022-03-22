@@ -38,10 +38,11 @@ private:
 private:
 	CModel* m_pModelCom = nullptr;
 	CAnimator* m_pAnimatorCom = nullptr;
-	CCapsuleCollider* m_pColliderCom = nullptr;
 	CStateController* m_pStateController = nullptr;
 
 	class CUI_Monster_Panel* m_pPanel = nullptr;
+
+	class CEarthAberrant_Pick* m_pWeapon = nullptr;
 
 public:
 	static CMonster_EarthAberrant* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext);

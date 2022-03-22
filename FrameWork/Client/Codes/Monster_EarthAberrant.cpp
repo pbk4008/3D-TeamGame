@@ -3,9 +3,16 @@
 
 #include "UI_Monster_Panel.h"
 
+#include "EarthAberrant_Pick.h"
+
 #include "Aberrant_Idle.h"
 #include "Aberrant_Walk.h"
+#include "Aberrant_Run.h"
 #include "Aberrant_Attack.h"
+#include "Aberrant_Flinch_Left.h"
+#include "Aberrant_Dash_Bwd.h"
+#include "Aberrant_Stun.h"
+#include "Aberrant_Death.h"
 
 CMonster_EarthAberrant::CMonster_EarthAberrant(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
 	:CActor(_pDevice, _pDeviceContext)
@@ -48,9 +55,15 @@ HRESULT CMonster_EarthAberrant::NativeConstruct(const _uint _iSceneID, void* _pA
 		return E_FAIL;
 	}
 
+	CHierarchyNode* pBone = m_pModelCom->Get_BoneMatrix("weapon_r_end");
+	CEarthAberrant_Pick* pWeapon = CEarthAberrant_Pick::Create(m_pDevice, m_pDeviceContext);
+	pWeapon->NativeConstruct(m_iSceneID, pBone);
+	pWeapon->Set_Owner(this);
+	pWeapon->Set_OwnerPivotMatrix(m_pModelCom->Get_PivotMatrix());
+	m_pWeapon = pWeapon;
+
 	_vector Pos = { 3.f, 0.f, 9.f, 1.f };
 	m_pTransform->Set_State(CTransform::STATE_POSITION, Pos);
-
 
 	//MonsterBar Panel
 	CUI_Monster_Panel::PANELDESC Desc;
@@ -79,7 +92,30 @@ _int CMonster_EarthAberrant::Tick(_double _dDeltaTime)
 		return iProgress;
 	}
 
-	m_pColliderCom->Update(m_pTransform->Get_WorldMatrix());
+	if (nullptr != m_pWeapon)
+	{
+		if (-1 == m_pWeapon->Tick(_dDeltaTime))
+		{
+			return -1;
+		}
+	}
+
+	if (g_pGameInstance->getkeyDown(DIK_NUMPAD5))
+	{
+		m_pStateController->Change_State(L"Flinch_Left");
+	}
+
+	if (g_pGameInstance->getkeyDown(DIK_NUMPAD6))
+	{
+		m_pStateController->Change_State(L"Death");
+	}
+
+	if (g_pGameInstance->getkeyDown(DIK_NUMPAD7))
+	{
+		m_pStateController->Change_State(L"Stun");
+	}
+
+
 	m_pPanel->Set_TargetWorldMatrix(m_pTransform->Get_WorldMatrix());
 	
 	return 0;
@@ -100,6 +136,14 @@ _int CMonster_EarthAberrant::LateTick(_double _dDeltaTime)
 
 	m_pRenderer->Add_RenderGroup(CRenderer::RENDER_ALPHA, this);
 
+	if (nullptr != m_pWeapon)
+	{
+		if (-1 == m_pWeapon->LateTick(_dDeltaTime))
+		{
+			return E_FAIL;
+		}
+	}
+
 	return 0;
 }
 
@@ -110,9 +154,6 @@ HRESULT CMonster_EarthAberrant::Render()
 		return E_FAIL;
 	}
 
-#ifdef _DEBUG
-	m_pColliderCom->Render(L"Camera_Silvermane");
-#endif // _DEBUG
 
 	_matrix XMWorldMatrix = XMMatrixTranspose(m_pTransform->Get_WorldMatrix());
 	_matrix XMViewMatrix = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_VIEW));
@@ -143,34 +184,23 @@ HRESULT CMonster_EarthAberrant::SetUp_Components()
 		return E_FAIL;
 	}
 
+	_matrix matPivot = XMMatrixIdentity();
+	matPivot = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(180.f));
+	m_pModelCom->Set_PivotMatrix(matPivot);
+
 	CAnimator::ANIMATORDESC tDesc;
 	ZeroMemory(&tDesc, sizeof(tDesc));
 
 	tDesc.pModel = m_pModelCom;
 	tDesc.pTransform = m_pTransform;
 
-	if (FAILED(__super::SetUp_Components((_uint)SCENEID::SCENE_STAGE1, L"Proto_Component_Animator", L"Com_Animator", (CComponent**)&m_pAnimatorCom, &tDesc)))
+	if (FAILED(__super::SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_Animator", L"Com_Animator", (CComponent**)&m_pAnimatorCom, &tDesc)))
 	{
 		return E_FAIL;
 	}
 
-	CCapsuleCollider::CAPSULEDESC CapDesc;
-	XMStoreFloat4x4(&CapDesc.matTransform, XMMatrixIdentity());
-	CapDesc.pParent = this;
-	CPhysicsXSystem::COLDESC PhyDesc;
-	PhyDesc.bGravity = false;
-	PhyDesc.bKinematic = false;
-	PhyDesc.eType = CPhysicsXSystem::ACTORTYPE::ACTOR_DYNAMIC;
-	CapDesc.tColDesc = PhyDesc;
-	if (FAILED(__super::SetUp_Components((_uint)SCENEID::SCENE_STAGE1, L"Proto_Component_CapsuleCollider", L"Com_CapsuleCollider", (CComponent**)&m_pColliderCom, &CapDesc)))
-	{
-		return E_FAIL;
-	}
 
-	m_pModelCom->Add_Material(g_pGameInstance->Get_Material(L"Mtrl_EarthAberrant_Body"), 0);
-	m_pModelCom->Add_Material(g_pGameInstance->Get_Material(L"Mtrl_EarthAberrant_ctystal"), 1);
-
-	if (FAILED(__super::SetUp_Components((_uint)SCENEID::SCENE_STAGE1, L"Proto_Component_StateController", L"Com_StateController", (CComponent**)&m_pStateController)))
+	if (FAILED(__super::SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_StateController", L"Com_StateController", (CComponent**)&m_pStateController)))
 		return E_FAIL;
 	m_pStateController->Set_GameObject(this);
 
@@ -356,8 +386,8 @@ HRESULT CMonster_EarthAberrant::Set_Animation_FSM()
 	m_pAnimatorCom->Set_UpAutoChangeAnimation(STUN_END, IDLE);
 
 	m_pAnimatorCom->Set_UpAutoChangeAnimation(RUN_FWD_START, RUN_FWD);
-	m_pAnimatorCom->Set_UpAutoChangeAnimation(RUN_FWD, RUN_FWD_STOP);
-	m_pAnimatorCom->Set_UpAutoChangeAnimation(RUN_FWD_STOP, IDLE);
+	//m_pAnimatorCom->Set_UpAutoChangeAnimation(RUN_FWD, RUN_FWD_STOP);
+	//m_pAnimatorCom->Set_UpAutoChangeAnimation(RUN_FWD_STOP, IDLE);
 
 	m_pAnimatorCom->Set_UpAutoChangeAnimation(KNOCKBACK, GET_UP);
 	m_pAnimatorCom->Set_UpAutoChangeAnimation(GET_UP, IDLE);
@@ -403,17 +433,23 @@ HRESULT CMonster_EarthAberrant::Set_State_FSM()
 	if (FAILED(m_pStateController->Add_State(L"Walk", CAberrant_Walk::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 
+	if (FAILED(m_pStateController->Add_State(L"Run", CAberrant_Run::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+
 	if (FAILED(m_pStateController->Add_State(L"Attack", CAberrant_Attack::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 
-	/*if (FAILED(m_pStateController->Add_State(L"Ricochet", CCrawler_Ricochet::Create(m_pDevice, m_pDeviceContext))))
+	if (FAILED(m_pStateController->Add_State(L"Flinch_Left", CAberrant_Flinch_Left::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 
-	if (FAILED(m_pStateController->Add_State(L"Death", CCrawler_Death::Create(m_pDevice, m_pDeviceContext))))
+	if (FAILED(m_pStateController->Add_State(L"Dash_Bwd", CAberrant_Dash_Bwd::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 
-	if (FAILED(m_pStateController->Add_State(L"Flinch_Left", CCrawler_Flinch_Left::Create(m_pDevice, m_pDeviceContext))))
-		return E_FAIL;*/
+	if (FAILED(m_pStateController->Add_State(L"Stun", CAberrant_Stun::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+
+	if (FAILED(m_pStateController->Add_State(L"Death", CAberrant_Death::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
 
 	for (auto& pair : m_pStateController->Get_States())
 	{
@@ -453,7 +489,6 @@ CGameObject* CMonster_EarthAberrant::Clone(const _uint _iSceneID, void* _pArg)
 
 void CMonster_EarthAberrant::Free()
 {
-	Safe_Release(m_pColliderCom);
 	Safe_Release(m_pPanel);
 	Safe_Release(m_pStateController);
 	Safe_Release(m_pAnimatorCom);

@@ -64,11 +64,17 @@ _int CUI_Player_HpBar_Red::Tick(_double TimeDelta)
 	if (FAILED(__super::Tick(TimeDelta)))
 		return -1;
 
+	//초록색으로부터 현재 hp가져오려고 
 	CUI_Player_HpBar* pUI = (CUI_Player_HpBar*)g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Layer_UI_Green")->front();
 	
 	if (nullptr != pUI)
 	{
 		_float fUIHp = pUI->GetHp(); 
+
+		if (1.f == fUIHp)
+		{
+			m_fGapX = 1.f;
+		}
 
 		if (1.f > fUIHp)
 		{
@@ -78,7 +84,8 @@ _int CUI_Player_HpBar_Red::Tick(_double TimeDelta)
 
 		if (m_fGapX > fUIHp)
 		{
-			m_fGapX -= TimeDelta * 0.1f;
+			_float DecreaseGapSpeed = m_fGapX - fUIHp;
+			m_fGapX -= TimeDelta * DecreaseGapSpeed * 1.5f; //데미지가 더 많이 들어오면 더 빨리 깎아주려고
 		}
 	}
 

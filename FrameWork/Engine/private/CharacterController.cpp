@@ -29,46 +29,23 @@ HRESULT CCharacterController::NativeConstruct_Prototype()
 
 HRESULT CCharacterController::NativeConstruct(void* _pArg)
 {
+	if (_pArg)
+	{
+		memcpy_s(&m_tDesc, sizeof(DESC), _pArg, sizeof(DESC));
+		m_pOwnerTransform = m_tDesc.pGameObject->Get_Transform();
+	}
+
 	if (FAILED(__super::NativeConstruct(_pArg))) 
 		return E_FAIL;
 
-	CGameInstance* pInstance = GET_INSTANCE(CGameInstance);
-
-	m_pGizmo = pInstance->Clone_Component<CGizmo>(0, L"Proto_Component_Gizmo");
-
-	RELEASE_INSTANCE(CGameInstance);
-
-	if (_pArg)
-	{
-		memcpy_s(&m_tCharacterControllerDesc, sizeof(CHARACTERCONTROLLERDESC), _pArg, sizeof(CHARACTERCONTROLLERDESC));
-		m_pOwnerTransform = m_tCharacterControllerDesc.pGameObject->Get_Transform();
-	}
-
-
 	if (FAILED(Create_Controller())) 
 		return E_FAIL;
-
-	XMStoreFloat4x4(&m_matLocal, XMMatrixIdentity());
 
 	return S_OK;
 }
 
 const _int CCharacterController::Tick(const _double& _dDeltaTime)
 {
-	_matrix smatLocal = XMLoadFloat4x4(&m_matLocal);
-
-	smatLocal *= m_pOwnerTransform->Get_CombinedMatrix();
-	_matrix matScale = Update_Scale(smatLocal);
-	_matrix matRotate = Update_Rotate(smatLocal);
-
-	matScale *= matRotate;
-
-	PxVec3 pxPos = ToPxVector(smatLocal.r[3]);
-	_matrix matPos = Update_Position(pxPos);
-	matScale *= matPos;
-
-	XMStoreFloat4x4(&m_matWorld, matScale);
-
 	return _int();
 }
 
@@ -77,34 +54,33 @@ const _int CCharacterController::LateTick(const _double& _dDeltaTime)
 	return _int();
 }
 
-HRESULT CCharacterController::Render()
+const CCharacterController::DESC& CCharacterController::Get_CharacterControllerDesc() const
 {
-	if (!m_pGizmo)
-		return E_FAIL;
-	
-	//_vector vColor = XMVectorSet(1.f, 0.f, 0.f, 1.f);
-	//m_pGizmo->DrawCapsule(XMLoadFloat4x4(&m_matWorld), L"Camera_Silvermane", vColor);
-
-	return S_OK;
+	return m_tDesc;
 }
 
-const CCharacterController::CHARACTERCONTROLLERDESC& CCharacterController::Get_CharacterControllerDesc() const
+void CCharacterController::setMaterial(PxMaterial* _pMateiral)
 {
-	return m_tCharacterControllerDesc;
+	m_pMaterial = _pMateiral;
 }
 
-PxMaterial* CCharacterController::Get_Material()
+void CCharacterController::setPxController(PxController* _pPxController)
 {
-	return m_pMaterial;
+	m_pPxController = _pPxController;
 }
 
-void CCharacterController::Set_FootPosition(const _float3 & _vPosition)
+void CCharacterController::setShapes(vector<PxShape*>& _vecShapes)
+{
+	m_vecShapes = _vecShapes;
+}
+
+void CCharacterController::setFootPosition(const _float3 & _vPosition)
 {
 	PxExtendedVec3 pxvFootPos = { _vPosition.x, _vPosition.y, _vPosition.z };
 	m_pPxController->setFootPosition(pxvFootPos);
 }
 
-void CCharacterController::Set_OwnerTransform(CTransform* _pTransform)
+void CCharacterController::setOwnerTransform(CTransform* _pTransform)
 {
 	m_pOwnerTransform = _pTransform;
 }
@@ -128,25 +104,11 @@ HRESULT CCharacterController::Create_Controller()
 {
 	CPhysicsXSystem* pPhysXSystem = GET_INSTANCE(CPhysicsXSystem);
 
-	if (FAILED(pPhysXSystem->Create_Material(
-		m_tCharacterControllerDesc.fStaticFriction,
-		m_tCharacterControllerDesc.fDynamicFriction,
-		m_tCharacterControllerDesc.fRestitution
-		, &m_pMaterial)))
+	if (FAILED(pPhysXSystem->Create_CharacterController(this)))
 	{
 		RELEASE_INSTANCE(CPhysicsXSystem);
 		return E_FAIL;
 	}
-
-	if (FAILED(pPhysXSystem->Create_CharacterController(this, &m_pPxController, m_vecShapes)))
-	{
-		RELEASE_INSTANCE(CPhysicsXSystem);
-		return E_FAIL;
-	}
-	m_pPxController->setContactOffset(0.f);
-	PxF32 a = m_pPxController->getContactOffset();
-	m_pPxController->setStepOffset(0.f);
-
 	RELEASE_INSTANCE(CPhysicsXSystem);
 
 	return S_OK;
@@ -161,6 +123,7 @@ void CCharacterController::Move(const _double& _dDeltaTime, const _float3 _vVelo
 		pxvVelocity = { 0.f, 0.f, 0.f };
 	}
 	PxControllerFilters filter;
+	filter.mCCTFilterCallback = m_pFilterCallback;
 	m_preFlag = m_curFlag;
 	m_curFlag = m_pPxController->move(pxvVelocity, 0.f, (_float)_dDeltaTime, filter);
 }
@@ -169,8 +132,8 @@ void CCharacterController::Update_OwnerTransform()
 {
 	//PxExtendedVec3 pxPosition = m_pPxController->getPosition();
 
-	//_float3 vPosition = { (_float)pxPosition.x, (_float)pxPosition.y, (_float)pxPosition.z };
-	//_vector svPosition = XMLoadFloat3(&vPosition) - XMLoadFloat3(&m_tCharacterControllerDesc.vPosition);
+	//_float3 vOffset = { (_float)pxPosition.x, (_float)pxPosition.y, (_float)pxPosition.z };
+	//_vector svPosition = XMLoadFloat3(&vOffset) - XMLoadFloat3(&m_tDesc.vOffset);
 	//m_pOwnerTransform->Set_State(CTransform::STATE_POSITION, XMVectorSetW(svPosition, 1.f));
 
 	PxExtendedVec3 pxPosition = m_pPxController->getFootPosition();
@@ -203,71 +166,12 @@ _fvector CCharacterController::getQuaternion(_fmatrix matTransform)
 	return vQuaternion;
 }
 
-_fvector CCharacterController::ToXMVector4(const PxQuat pxquat)
-{
-	_fvector vVector = XMVectorSet(pxquat.x, pxquat.y, pxquat.z, pxquat.w);
-
-	return vVector;
-}
-
-const PxVec3 CCharacterController::ToPxVector(_fvector xmvec)
-{
-	PxVec3 vVector = PxVec3(XMVectorGetX(xmvec), XMVectorGetY(xmvec), XMVectorGetZ(xmvec));
-	return vVector;
-}
-
-_fmatrix CCharacterController::Update_Scale(_fmatrix matTransform)
-{
-	_float fSizeX = XMVectorGetX(XMVector3Length(matTransform.r[0]));
-	_float fSizeY = XMVectorGetX(XMVector3Length(matTransform.r[1]));
-	_float fSizeZ = XMVectorGetX(XMVector3Length(matTransform.r[2]));
-
-	PxGeometryHolder tHolder = m_vecShapes[0]->getGeometry();
-	tHolder.capsule().halfHeight = fSizeY * 0.5f;
-	//	tHolder.capsule().radius = fSizeX * 0.5f;
-	//	m_pShape->setGeometry(tHolder.capsule());
-
-	_matrix matScale = XMMatrixScaling(fSizeX, fSizeY, fSizeZ);
-
-	return matScale;
-}
-
-_fmatrix CCharacterController::Update_Rotate(_fmatrix matTransform)
-{
-	_vector vTransformQuat = getQuaternion(matTransform);
-	PxVec3 pxTransformQuat = ToPxVector(vTransformQuat);
-	PxTransform pRigidTr = m_pPxController->getActor()->getGlobalPose();
-	pRigidTr.rotate(pxTransformQuat);
-
-	_vector vQuat = ToXMVector4(pRigidTr.q);
-	_matrix matRotate = XMMatrixRotationQuaternion(vQuat);
-
-	return matRotate;
-}
-
-_fmatrix CCharacterController::Update_Position(PxVec3 vPos)
-{
-	_float3 vOffsetPos = m_tCharacterControllerDesc.vPosition;
-	vPos.x += vOffsetPos.x;
-	vPos.y += vOffsetPos.y;
-	vPos.z += vOffsetPos.z;
-	_matrix matPos = XMMatrixIdentity();
-	PxTransform pRigidTr = m_pPxController->getActor()->getGlobalPose();
-	pRigidTr.p = vPos;
-
-	_vector vMatPos = XMVectorSet(pRigidTr.p.x, pRigidTr.p.y, pRigidTr.p.z, 1.f);
-
-	static_cast<PxRigidDynamic*>(m_pPxController->getActor())->setGlobalPose(pRigidTr);
-	matPos.r[3] = vMatPos;
-	return matPos;
-}
-
 CCharacterController* CCharacterController::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
 {
 	CCharacterController* pInstance = new CCharacterController(_pDevice, _pDeviceContext);
 	if (FAILED(pInstance->NativeConstruct_Prototype()))
 	{
-		MSGBOX("CMesh Collider Crate Fail");
+		MSGBOX("CCharacterController Crate Fail");
 		Safe_Release(pInstance);
 	}
 	return pInstance;
@@ -278,7 +182,7 @@ CComponent* CCharacterController::Clone(void* _pArg)
 	CCharacterController* pInstance = new CCharacterController(*this);
 	if (FAILED(pInstance->NativeConstruct(_pArg)))
 	{
-		MSGBOX("CMesh Collider Clone Fail");
+		MSGBOX("CCharacterController Clone Fail");
 		Safe_Release(pInstance);
 	}
 	return pInstance;
@@ -288,19 +192,14 @@ void CCharacterController::Free()
 {
 	//// 컨트롤러랑 둘중에 하나만 릴리즈 해줘야 한다
 	//for (auto& pShape : m_vecShapes)
-	//{
-	//	if (pShape)
-	//		pShape->release();
-	//}
+	//	Safe_PxRelease(pShape)
 	//m_vecShapes.clear();
 
-	if (m_pPxController) 
-		m_pPxController->release();
+	Safe_PxRelease(m_pPxController);
+	Safe_PxRelease(m_pMaterial);
+
 	if (!m_isCloned)
 		Safe_Delete(m_pFilterCallback);
-	if(m_pMaterial)
-		m_pMaterial->release();
-	
-	Safe_Release(m_pGizmo);
+
 	__super::Free();
 }

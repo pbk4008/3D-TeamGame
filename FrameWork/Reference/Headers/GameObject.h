@@ -2,6 +2,7 @@
 
 /* 클라이언트에 정의할 게임요소(객체, 오브젝트)들의 부모가 되는 클래스다. */
 #include "Base.h"
+#include "Collision.h"
 
 BEGIN(Engine)
 class CTransform;
@@ -38,11 +39,12 @@ public:
 	virtual HRESULT	Render_ShadeShadow(ID3D11ShaderResourceView* ShaodwMap);
 	virtual HRESULT	Render_PBR();
 public:
-	virtual void OnCollisionEnter(CGameObject* pCol);
-	virtual void OnCollisionStay(CGameObject* pCol);
-	virtual void OnCollisionExit(CGameObject* pCol);
-	virtual void OnTriggerEnter(CGameObject* pCol);
-	virtual void OnTriggerExit(CGameObject* pCol);
+	virtual void OnCollisionEnter(CCollision& collision);
+	virtual void OnCollisionStay(CCollision& collision);
+	virtual void OnCollisionExit(CCollision& collision);
+	virtual void OnTriggerEnter(CCollision& collision);
+	virtual void OnTriggerStay(CCollision& collision);
+	virtual void OnTriggerExit(CCollision& collision);
 public:
 	void setActive(_bool bActive);
 	_bool getActive() { return m_bActive; }

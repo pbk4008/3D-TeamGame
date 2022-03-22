@@ -34,22 +34,10 @@ _int CAberrant_Attack::Tick(const _double& TimeDelta)
 	_fvector vDist = vMonsterPos - g_pObserver->Get_PlayerPos();
 	_float fDistToPlayer = XMVectorGetX(XMVector3Length(vDist));
 
-	/*if (m_pAnimator->Get_AnimController()->Is_Finished() && 3 > m_iAttackCount)
-	{
-		++m_iAttackCount;
-	}
-
-	if (2 == m_iAttackCount)
-	{
-		m_pStateController->Change_State(L"Walk");
-
-		cout << "워크으로변경" << endl;
-	}*/
-
 	if (m_pAnimator->Get_AnimController()->Is_Finished())
 	{
-		m_pStateController->Change_State(L"Walk");
-		cout << "워크으로변경" << endl;
+		m_pStateController->Change_State(L"Dash_Bwd");
+		//cout << "대쉬로변경" << endl;
 	}
 	return _int();
 }
@@ -76,28 +64,23 @@ HRESULT CAberrant_Attack::EnterState()
 	if (FAILED(__super::EnterState()))
 		return E_FAIL;
 
+	_vector vMonsterPos = m_pTransform->Get_State(CTransform::STATE::STATE_POSITION);
+	_vector vDist = vMonsterPos - g_pObserver->Get_PlayerPos();
+	_float fDistToPlayer = XMVectorGetX(XMVector3Length(vDist));
+
+	
 	m_pTransform->Face_Target(g_pObserver->Get_PlayerPos());
 
-	_int iRandom = rand() % 2;
+	_uint iRandom = rand() % 2;
 
-	while (m_iPreState_1 == iRandom)
+	switch (iRandom)
 	{
-		iRandom = rand() % 2;
-	}
-
-	if (m_iPreState_1 != iRandom)
-	{
-		switch (iRandom)
-		{
-		case 0:
-			m_pAnimator->Change_AnyEntryAnimation((_uint)CMonster_EarthAberrant::MON_STATE::ATTACK_R1);
-			break;
-		case 1:
-			m_pAnimator->Change_AnyEntryAnimation((_uint)CMonster_EarthAberrant::MON_STATE::ATTACK_R2);
-			break;
-		}
-
-		m_iPreState_1 = iRandom;
+	case 0:
+		m_pAnimator->Change_AnyEntryAnimation((_uint)CMonster_EarthAberrant::MON_STATE::ATTACK_R1);
+		break;
+	case 1:
+		m_pAnimator->Change_AnyEntryAnimation((_uint)CMonster_EarthAberrant::MON_STATE::ATTACK_R2);
+		break;
 	}
 
 	//_vector vec = { 0.f, 1.f, 0.f,0.f };

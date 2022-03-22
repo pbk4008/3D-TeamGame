@@ -276,9 +276,6 @@ HRESULT CSilvermane::Render()
 	if (FAILED(__super::Render())) 
 		return E_FAIL;
 
-#ifdef _DEBUG
-	m_pCharacterController->Render();
-#endif // _DEBUG
 	_matrix smatWorld, smatView, smatProj;
 	smatWorld = XMMatrixTranspose(m_pTransform->Get_CombinedMatrix());
 	smatView = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_VIEW));
@@ -349,6 +346,13 @@ HRESULT CSilvermane::Render_Debug()
 	wstring wstrPlusAngle = L"Plus Angle : " + to_wstring(m_fPlusAngle);
 	if (FAILED(g_pGameInstance->Render_Font(TEXT("Font_Arial"), XMVectorSet(1.f, 0.0f, 0.f, 1.f), wstrPlusAngle.c_str(), _float2(0.f, 160.f), _float2(0.6f, 0.6f))))
 		return E_FAIL;
+
+	_float3 vPosition;
+	XMStoreFloat3(&vPosition, m_pTransform->Get_State(CTransform::STATE_POSITION));
+	wstring wstrPosition = L"Position : " + to_wstring(vPosition.x) + L", " + to_wstring(vPosition.y) + L", " + to_wstring(vPosition.z);
+	if (FAILED(g_pGameInstance->Render_Font(TEXT("Font_Arial"), XMVectorSet(1.f, 0.0f, 0.f, 1.f), wstrPosition.c_str(), _float2(0.f, 180.f), _float2(0.6f, 0.6f))))
+		return E_FAIL;
+
 	return S_OK;
 }
 
@@ -383,7 +387,7 @@ HRESULT CSilvermane::Ready_Components()
 	m_pAnimationController->Set_GameObject(this);
 	m_pAnimationController->Set_Model(m_pModel);
 	m_pAnimationController->Set_Transform(m_pTransform);
-	m_pAnimationController->Set_MoveSpeed(10.f);
+	m_pAnimationController->Set_MoveSpeed(16.f);
 
 	// 스테이트 컨트롤러
 	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_StateController", L"StateController", (CComponent**)&m_pStateController)))
@@ -391,19 +395,19 @@ HRESULT CSilvermane::Ready_Components()
 	m_pStateController->Set_GameObject(this);
 
 	// 캐릭터 컨트롤러
-	CCharacterController::CHARACTERCONTROLLERDESC tCharacterControllerDesc;
-	tCharacterControllerDesc.fHeight = 1.2f;
+	CCharacterController::DESC tCharacterControllerDesc;
+	tCharacterControllerDesc.fHeight = 1.f;
 	tCharacterControllerDesc.fRadius = 0.5f;
 	tCharacterControllerDesc.fContactOffset = tCharacterControllerDesc.fRadius * 0.1f;
 	tCharacterControllerDesc.fStaticFriction = 0.5f;
 	tCharacterControllerDesc.fDynamicFriction = 0.5f;
 	tCharacterControllerDesc.fRestitution = 0.f;
-	tCharacterControllerDesc.pGameObject = this;
 	tCharacterControllerDesc.vPosition = { 0.f, 0.f, 0.f };
+	tCharacterControllerDesc.pGameObject = this;
 
 	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_CharacterController", L"CharacterController", (CComponent**)&m_pCharacterController, &tCharacterControllerDesc)))
 		return E_FAIL;
-	m_pCharacterController->Set_OwnerTransform(m_pTransform);
+	m_pCharacterController->setOwnerTransform(m_pTransform);
 
 	m_pTexture = g_pGameInstance->Clone_Component<CTexture>(0, L"Proto_Component_Texture");
 	m_pTexture->Change_Texture(L"Texture_SilvermeanNewHair");
@@ -870,7 +874,7 @@ const _int CSilvermane::Fall(const _double& _dDeltaTime)
 {
 	if (g_pGameInstance->getkeyDown(DIK_HOME))
 	{
-		m_pCharacterController->Set_FootPosition(_float3(0.f, 2.f, 0.f));
+		m_pCharacterController->setFootPosition(_float3(0.f, 2.f, 0.f));
 		m_isFall = true;
 	}
 

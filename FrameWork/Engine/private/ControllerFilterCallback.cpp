@@ -12,5 +12,5 @@ HRESULT CControllerFilterCallback::NativeConstruct()
 
 bool CControllerFilterCallback::filter(const PxController& a, const PxController& b)
 {
-	return true; // cct vs cct Ãæµ¹ x
+	return true;
 }

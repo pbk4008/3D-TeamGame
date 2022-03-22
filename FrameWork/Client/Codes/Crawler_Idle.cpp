@@ -65,8 +65,8 @@ HRESULT CCrawler_Idle::EnterState()
 	if (FAILED(__super::EnterState()))
 		return E_FAIL;
 
-	//_vector vec = { 0.f, 1.f, 0.f,0.f };
-	//m_pTransform->SetUp_Rotation(vec, (XMConvertToRadians(180.f)));
+	_vector vec = { 0.f, 1.f, 0.f,0.f };
+	m_pTransform->SetUp_Rotation(vec, (XMConvertToRadians(180.f)));
 
 	return S_OK;
 }

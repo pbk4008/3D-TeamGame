@@ -73,8 +73,4 @@ void CMonster_FSM::Look_Monster(void)
 void CMonster_FSM::Free()
 {
 	__super::Free();
-	Safe_Release(m_pModel);
-	Safe_Release(m_pAnimator);
-	Safe_Release(m_pTransform);
-	Safe_Release(m_pMonster);
 }

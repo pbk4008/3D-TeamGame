@@ -429,6 +429,21 @@
     </Filter>
     <Filter Include="02.GameObject\00. BackGround\Skybox">
       <UniqueIdentifier>{34e9d6fc-40fa-469c-b052-c7a694bdeaaa}</UniqueIdentifier>
+	</Filter>
+    <Filter Include="02.GameObject\49.Treasure_Chest">
+      <UniqueIdentifier>{cbf09ecb-b293-43d9-8ea2-ea120f524ad7}</UniqueIdentifier>
+	</Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\EarthAberrant\State\07.Death">
+      <UniqueIdentifier>{955cc475-5007-4ece-807c-dd6fbd6d41a5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\EarthAberrant\State\08.Dash">
+      <UniqueIdentifier>{44af2aae-a22a-45f0-b19b-a68fbdd4099f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\EarthAberrant\00.Weapon">
+      <UniqueIdentifier>{70d04976-04d3-4f7a-8a9c-a591900de310}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\EarthAberrant\00.Weapon\00.Aberrant_Pick">
+      <UniqueIdentifier>{5fb68284-c871-4e91-8aaa-81ee9c81ea14}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -977,6 +992,15 @@
       <Filter>02.GameObject\03.Character\01.Monster\Bastion_2HSword\State_2HSword\Hit</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\Monster_Bastion_Sword.h" />
+    <ClInclude Include="..\Headers\Traverse_JumpNodeJog.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Jump</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Monster_Bastion_Sword.h">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Sword</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\1H_SwordAttackNormalR1_04Swap.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\1H_Sword\R2</Filter>
+    </ClInclude>
     <ClInclude Include="..\Headers\1H_SwordAttackNormalR1_04Swap.h">
       <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\1H_Sword\R2</Filter>
     </ClInclude>
@@ -1058,6 +1082,30 @@
     </ClInclude>
     <ClInclude Include="..\Headers\SkyBox.h">
       <Filter>02.GameObject\00. BackGround\Skybox</Filter>
+	</ClInclude>
+    <ClInclude Include="..\Headers\Treasure_Chest.h">
+      <Filter>02.GameObject\49.Treasure_Chest</Filter>
+	</ClInclude>
+    <ClInclude Include="..\Headers\Aberrant_Flinch_Left.h">
+      <Filter>02.GameObject\03.Character\01.Monster\EarthAberrant\State\04.Flinch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Aberrant_Run.h">
+      <Filter>02.GameObject\03.Character\01.Monster\EarthAberrant\State\02.Run</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Aberrant_Dash_Bwd.h">
+      <Filter>02.GameObject\03.Character\01.Monster\EarthAberrant\State\08.Dash</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Aberrant_Death.h">
+      <Filter>02.GameObject\03.Character\01.Monster\EarthAberrant\State\07.Death</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Aberrant_Stun.h">
+      <Filter>02.GameObject\03.Character\01.Monster\EarthAberrant\State\05.Stun</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\EarthAberrant_Pick.h">
+      <Filter>02.GameObject\03.Character\01.Monster\EarthAberrant\00.Weapon\00.Aberrant_Pick</Filter>
+	</ClInclude>
+    <ClInclude Include="..\Headers\1H_SwordAttackNormalR1_04Swap.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\1H_Sword\R2</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1579,6 +1627,15 @@
       <Filter>02.GameObject\03.Character\01.Monster\Bastion_2HSword\State_2HSword\Hit</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\Monster_Bastion_Sword.cpp" />
+    <ClCompile Include="..\Codes\Traverse_JumpNodeJog.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Jump</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Monster_Bastion_Sword.cpp">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Sword</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\1H_SwordAttackNormalR1_04Swap.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\1H_Sword\R2</Filter>
+    </ClCompile>
     <ClCompile Include="..\Codes\1H_SwordAttackNormalR1_04Swap.cpp">
       <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\1H_Sword\R2</Filter>
     </ClCompile>
@@ -1663,6 +1720,30 @@
     </ClCompile>
     <ClCompile Include="..\Codes\SkyBox.cpp">
       <Filter>02.GameObject\00. BackGround\Skybox</Filter>
+	</ClCompile>
+    <ClCompile Include="..\Codes\Treasure_Chest.cpp">
+      <Filter>02.GameObject\49.Treasure_Chest</Filter>
+	</ClCompile>
+    <ClCompile Include="..\Codes\Aberrant_Flinch_Left.cpp">
+      <Filter>02.GameObject\03.Character\01.Monster\EarthAberrant\State\04.Flinch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Aberrant_Run.cpp">
+      <Filter>02.GameObject\03.Character\01.Monster\EarthAberrant\State\02.Run</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Aberrant_Dash_Bwd.cpp">
+      <Filter>02.GameObject\03.Character\01.Monster\EarthAberrant\State\08.Dash</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Aberrant_Death.cpp">
+      <Filter>02.GameObject\03.Character\01.Monster\EarthAberrant\State\07.Death</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Aberrant_Stun.cpp">
+      <Filter>02.GameObject\03.Character\01.Monster\EarthAberrant\State\05.Stun</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\EarthAberrant_Pick.cpp">
+      <Filter>02.GameObject\03.Character\01.Monster\EarthAberrant\00.Weapon\00.Aberrant_Pick</Filter>
+	</ClCompile>
+    <ClCompile Include="..\Codes\1H_SwordAttackNormalR1_04Swap.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\1H_Sword\R2</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
