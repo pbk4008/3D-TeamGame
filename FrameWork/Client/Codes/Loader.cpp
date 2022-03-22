@@ -124,39 +124,30 @@ HRESULT CLoader::LoadForScene()
 
 HRESULT CLoader::SetUp_Stage1_Object()
 {
+	if (FAILED(Load_Stage1FBXLoad()))
+		return E_FAIL;
+
 	if (FAILED(Load_Stage1PlayerLoad()))
 		return E_FAIL;
 
 	if (FAILED(Load_Stage1MonsterLoad()))
 		return E_FAIL;
 
-	if (FAILED(Load_Stage1FBXLoad()))
-		return E_FAIL;
-
 	//if (FAILED(Load_Stage1BossLoad()))
 	//	return E_FAIL;
 
-	/*if (FAILED(Load_Stage1StaticUILoad()))
+	if (FAILED(Load_Stage1StaticUILoad()))
 		return E_FAIL;
 
 	if (FAILED(Load_Stage1UILoad()))
-		return E_FAIL;*/
+		return E_FAIL;
+
+	if (FAILED(Load_Stage1EffectLoad()))
+		return E_FAIL;
 
 	//if (FAILED(Load_Stage1TriggerLod()))
 	//	return E_FAIL;
 
-	//if (FAILED(Load_Stage1EffectLoad()))
-	//	return E_FAIL;
-
-	CMeshLoader* pLoader = GET_INSTANCE(CMeshLoader);
-	pLoader->Resume_Thread();
-	while (true)
-	{
-		pLoader->Update();
-		if (pLoader->Get_Clear())
-			break;
-	}
-	RELEASE_INSTANCE(CMeshLoader);
 
 	return S_OK;
 }
@@ -196,8 +187,8 @@ HRESULT CLoader::Load_Stage1FBXLoad()
 		lstrcpy(tMeshType->szFBXPath, fbxPath);
 		tMeshType->iType = 2;
 
-		_bool bCheck = false;
-		Sleep(1);
+		/*_bool bCheck = false;
+		Sleep(10);
 		pMeshLoader->Add_MeshLoader(tMeshType, bCheck);
 		if (bCheck)
 		{
@@ -205,12 +196,30 @@ HRESULT CLoader::Load_Stage1FBXLoad()
 			Safe_Delete_Array(tMeshType->szFBXPath);
 			Safe_Delete(tMeshType);
 			continue;
-		}
+		}*/
+		if(FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, tMeshType->szFBXName
+			, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, tMeshType->szFBXPath, CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
+			return E_FAIL;
+
+		Safe_Delete_Array(tMeshType->szFBXName);
+		Safe_Delete_Array(tMeshType->szFBXPath);
+		Safe_Delete(tMeshType);
+
 		iResult = _findnext(handle, &fd);
 	}
 
 
 	_findclose(handle);
+	RELEASE_INSTANCE(CMeshLoader);
+
+	CMeshLoader* pLoader = GET_INSTANCE(CMeshLoader);
+	pLoader->Resume_Thread();
+	while (true)
+	{
+		pLoader->Update();
+		if (pLoader->Get_Clear())
+			break;
+	}
 	RELEASE_INSTANCE(CMeshLoader);
 
 	return S_OK;

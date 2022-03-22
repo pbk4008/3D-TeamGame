@@ -21,10 +21,10 @@ HRESULT CStage1::NativeConstruct()
 	if (FAILED(CLevel::NativeConstruct()))
 		return E_FAIL;
 
-	//if (FAILED(Ready_MapObject()))
-	//{
-	//	return E_FAIL;
-	//}
+	if (FAILED(Ready_MapObject()))
+	{
+		return E_FAIL;
+	}
 
 	if (FAILED(Ready_Player(L"Layer_Silvermane")))
 	{
@@ -56,15 +56,6 @@ HRESULT CStage1::NativeConstruct()
 		return E_FAIL;
 	}
 
-	////Data
-	//if (FAILED(Ready_Data_UI(L"../bin/SaveData/UI/UI.dat")))
-	//{
-	//	return E_FAIL;
-	//}
-	//if (FAILED(Ready_Data_Effect(L"../bin/SaveData/Effect/Effect_Explosion.dat")))
-	//{
-	//	return E_FAIL;
-	//}
 	//if (FAILED(Ready_Trigger_Lod(L"../bin/SaveData/Trigger/Stage1_LodTri.dat")))
 	//	return E_FAIL;
 	//if (FAILED(Ready_Trigger_Light(L"../bin/SaveData/Trigger/Stage1_LodTri.dat")))
