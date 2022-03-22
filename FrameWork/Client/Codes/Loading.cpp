@@ -122,7 +122,7 @@ HRESULT CLoading::Ready_GameObject()
 	XMStoreFloat4x4(&tDesc.tCapsuleDesc.matTransform, matIdentity);
 	tDesc.tCapsuleDesc.tColDesc.bGravity = false;
 	tDesc.tCapsuleDesc.tColDesc.bKinematic = false;
-	tDesc.tCapsuleDesc.tColDesc.eType = CPhysicsXSystem::ACTORTYPE::ACTOR_DYNAMIC;
+	tDesc.tCapsuleDesc.tColDesc.eType = CPhysicsXSystem::ERigidType::Dynamic;
 
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_LOADING, L"Test", L"TestObj", &tDesc)))
 		return E_FAIL;
@@ -132,7 +132,7 @@ HRESULT CLoading::Ready_GameObject()
 	XMStoreFloat4x4(&tDesc.tBoxDesc.matTransform, matIdentity);
 	tDesc.tBoxDesc.tColDesc.bGravity = false;
 	tDesc.tBoxDesc.tColDesc.bKinematic = false;
-	tDesc.tBoxDesc.tColDesc.eType = CPhysicsXSystem::ACTORTYPE::ACTOR_STATIC;
+	tDesc.tBoxDesc.tColDesc.eType = CPhysicsXSystem::ERigidType::Static;
 
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_LOADING, L"Test", L"TestObj" ,&tDesc)))
 		return E_FAIL;*/

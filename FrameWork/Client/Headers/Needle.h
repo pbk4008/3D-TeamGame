@@ -25,6 +25,7 @@ private:
 
 private:
 	_float4x4 m_matPivot;
+	CCapsuleCollider* m_pCollider = nullptr;
 
 public:
 	static CNeedle* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext);

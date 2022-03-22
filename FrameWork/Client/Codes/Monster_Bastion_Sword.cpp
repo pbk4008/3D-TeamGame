@@ -72,8 +72,8 @@ _int CMonster_Bastion_Sword::Tick(_double _dDeltaTime)
 
 	//상태 갱신
 	Change_State();
+
 	//콜리더 갱신
-	m_pCollider->Update(m_pTransform->Get_WorldMatrix());
 
 	return 0;
 }
@@ -107,10 +107,6 @@ HRESULT CMonster_Bastion_Sword::Render()
 	for (_uint i = 0; i < m_pModelCom->Get_NumMeshContainer(); ++i)
 		m_pModelCom->Render(i, 0);
 
-#ifdef _DEBUG
-	m_pCollider->Render(L"Camera_Silvermane");
-#endif
-
 	return S_OK;
 }
 
@@ -134,18 +130,6 @@ HRESULT CMonster_Bastion_Sword::SetUp_Components()
 		return E_FAIL;
 
 	if (FAILED(__super::SetUp_Components(m_iSceneID, L"Proto_Component_StateController", L"Com_StateController", (CComponent**)&m_pStateController)))
-		return E_FAIL;
-
-	CCapsuleCollider::CAPSULEDESC tColliderDesc;
-	ZeroMemory(&tColliderDesc, sizeof(tColliderDesc));
-
-	XMStoreFloat4x4(&tColliderDesc.matTransform, XMMatrixIdentity());
-	tColliderDesc.tColDesc.bGravity = false;
-	tColliderDesc.tColDesc.bKinematic = false;
-	tColliderDesc.tColDesc.eType = CPhysicsXSystem::ACTORTYPE::ACTOR_DYNAMIC;
-	tColliderDesc.pParent = this;
-	
-	if (FAILED(__super::SetUp_Components(m_iSceneID, L"Proto_Component_CapsuleCollider", L"Com_CapsuleCollier", (CComponent**)&m_pCollider,&tColliderDesc)))
 		return E_FAIL;
 
 	return S_OK;
@@ -535,5 +519,4 @@ void CMonster_Bastion_Sword::Free()
 	Safe_Release(m_pAnimator);
 	Safe_Release(m_pWeapon);
 	Safe_Release(m_pStateController);
-	Safe_Release(m_pCollider);
 }

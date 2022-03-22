@@ -50,6 +50,9 @@ _int CNeedle::Tick(_double _dDeltaTime)
 	Attach_FixedBone(_dDeltaTime);
 	Attach_Owner(_dDeltaTime);
 
+	if (m_pCollider)
+		m_pCollider->Tick(_dDeltaTime);
+
 	return _int();
 }
 
@@ -99,6 +102,21 @@ HRESULT CNeedle::Ready_Components()
 	if (FAILED(SetUp_Components(m_iSceneID, L"Model_Needle", L"Model", (CComponent**)&m_pModel)))
 		return E_FAIL;
 
+	CCollider::DESC tColliderDesc;
+	tColliderDesc.isTrigger = true;
+	tColliderDesc.eRigidType = ERigidType::Dynamic;
+	tColliderDesc.pGameObject = this;
+
+	CCapsuleCollider::DESC tCapsuleColliderDesc;
+	tCapsuleColliderDesc.tColliderDesc = tColliderDesc;
+	tCapsuleColliderDesc.fHeight = 1.f;
+	tCapsuleColliderDesc.fRadius = 0.1f;
+	if (FAILED(SetUp_Components(m_iSceneID, L"Proto_Component_CapsuleCollider", L"Collider", (CComponent**)&m_pCollider, &tCapsuleColliderDesc)))
+		return E_FAIL;
+
+	_matrix smatPviot = XMMatrixRotationY(XMConvertToRadians(90.f)) * XMMatrixTranslation(0.f, 0.f, 1.f);
+	m_pCollider->setPivotMatrix(smatPviot);
+
 	return S_OK;
 }
 
@@ -107,6 +125,8 @@ _int CNeedle::Attach_FixedBone(const _double& _dDeltaTime)
 	if (m_pFixedBone)
 	{
 		_matrix smatWorld = m_pFixedBone->Get_CombinedMatrix();
+		if (XMMatrixIsNaN(smatWorld))
+			smatWorld = XMMatrixIdentity();
 
 		smatWorld *= XMLoadFloat4x4(&m_smatOwnerPivot);;
 
@@ -155,6 +175,7 @@ CGameObject* CNeedle::Clone(const _uint _iSceneID, void* _pArg)
 
 void CNeedle::Free()
 {
+	Safe_Release(m_pCollider);
 
 	__super::Free();
 }

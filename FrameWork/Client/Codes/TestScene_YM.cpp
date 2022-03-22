@@ -1,6 +1,8 @@
 #include "pch.h"
 #include "..\Headers\TestScene_YM.h"
 
+#include "TestObj.h"
+
 CTestScene_YM::CTestScene_YM()
 {
 }
@@ -33,8 +35,23 @@ HRESULT CTestScene_YM::Render()
 
 HRESULT CTestScene_YM::Ready_Gameobject()
 {
+	CGameObject* pObj = nullptr;
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_YM, L"Layer_Plane", L"Proto_GameObject_Plane_Test")))
 		return E_FAIL;
+
+	//CTestObj::TESTDESC tTestDesc;
+	//tTestDesc._eRigidType = ERigidType::Static;
+	//tTestDesc.vPosition = { 2.f, 0.f, 2.f };
+	//tTestDesc.isMove = false;
+	//tTestDesc.isTrigger = false;
+	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_YM, L"Layer_TestObj", L"Proto_GameObject_TestObj", &tTestDesc, &pObj)))
+	//	return E_FAIL;
+	//tTestDesc._eRigidType = ERigidType::Dynamic;
+	//tTestDesc.vPosition = { -2.f, 0.f, 2.f };
+	//tTestDesc.isMove = true;
+	//tTestDesc.isTrigger = true;
+	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_YM, L"Layer_TestObj", L"Proto_GameObject_TestObj", &tTestDesc, &pObj)))
+	//	return E_FAIL;
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_YM, L"Layer_Silvermane", L"Proto_GameObject_Silvermane")))
 		return E_FAIL;
  	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_YM, L"Layer_Camera", L"Proto_GameObject_Camera_Silvermane")))
