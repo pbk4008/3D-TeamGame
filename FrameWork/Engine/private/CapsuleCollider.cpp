@@ -1,75 +1,66 @@
 #include "CapsuleCollider.h"
-#include "Gizmo.h"
 
-CCapsuleCollider::CCapsuleCollider(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
-	: CCollider(pDevice, pDeviceContext)
+CCapsuleCollider::CCapsuleCollider(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
+	: CCollider(_pDevice, _pDeviceContext)
 {
 }
 
-CCapsuleCollider::CCapsuleCollider(const CCapsuleCollider& rhs)
-	: CCollider(rhs)
+CCapsuleCollider::CCapsuleCollider(const CCapsuleCollider& _rhs)
+	: CCollider(_rhs)
 {
 }
 
 HRESULT CCapsuleCollider::NativeConstruct_Prototype()
 {
-	if (FAILED(CCollider::NativeConstruct_Prototype()))
+	if (FAILED(__super::NativeConstruct_Prototype()))
 		return E_FAIL;
 
 	return S_OK;
 }
 
-HRESULT CCapsuleCollider::NativeConstruct(void* pArg)
+HRESULT CCapsuleCollider::NativeConstruct(void* _pArg)
 {
-	CAPSULEDESC tDesc = (*(CAPSULEDESC*)pArg);
+	if (_pArg)
+	{
+		memcpy_s(&m_tDesc, sizeof(DESC), _pArg, sizeof(DESC));
+		m_pGameObject = m_tDesc.tColliderDesc.pGameObject;
+	}
 
-	if (FAILED(CCollider::NativeConstruct(&tDesc.tColDesc.eType)))
+	if (FAILED(__super::NativeConstruct(&m_tDesc.tColliderDesc)))
 		return E_FAIL;
 
-	PxVec3 pxExtends = Calcul_Extends(XMLoadFloat4x4(&tDesc.matTransform));
-	if (FAILED(Init_Shape(pxExtends)))
+	if (FAILED(m_pPhsyX->Create_Capsule(this)))
 		return E_FAIL;
-
-
-	tDesc.tColDesc.fPos = _float3(tDesc.matTransform._41, tDesc.matTransform._42, tDesc.matTransform._43);
-	if (FAILED(Init_Collider(tDesc.tColDesc)))
-		return E_FAIL;
-
-	if (!m_pRigidBody)
-		return E_FAIL;
-
-	m_pRigidBody->userData = tDesc.pParent;
-
-	m_matLoaclMatrix = tDesc.matTransform;
 
 	return S_OK;
 }
 
-HRESULT CCapsuleCollider::Render(const wstring& pCameraTag)
+const _int CCapsuleCollider::Tick(const _double& _dDeltaTime)
 {
-	if (!m_pGizmo)
-		return E_FAIL;
+	_int iProgress = __super::Tick(_dDeltaTime);
+	if (NO_EVENT != iProgress)
+		return iProgress;
 
-	m_pGizmo->DrawCapsule(XMLoadFloat4x4(&m_matWorldMatrix), pCameraTag, XMLoadFloat4(&m_vColor));
-	
-	return S_OK;
+	return _int();
 }
 
-HRESULT CCapsuleCollider::Init_Shape(PxVec3 pxExtends)
+const _int CCapsuleCollider::LateTick(const _double& _dDeltaTime)
 {
-	CPhysicsXSystem* pInstance = GET_INSTANCE(CPhysicsXSystem);
+	_int iProgress = __super::LateTick(_dDeltaTime);
+	if (NO_EVENT != iProgress)
+		return iProgress;
 
-	m_pShape = pInstance->Init_Shape(CPhysicsXSystem::COLLIDERTYPE::COL_CAP, pxExtends);
-
-	RELEASE_INSTANCE(CPhysicsXSystem);
-
-	return S_OK;
+	return _int();
 }
 
-CCapsuleCollider* CCapsuleCollider::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
+const CCapsuleCollider::DESC& CCapsuleCollider::getDesc() const
 {
-	CCapsuleCollider* pInstance = new CCapsuleCollider(pDevice, pDeviceContext);
+	return m_tDesc;
+}
 
+CCapsuleCollider* CCapsuleCollider::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
+{
+	CCapsuleCollider* pInstance = new CCapsuleCollider(_pDevice, _pDeviceContext);
 	if (FAILED(pInstance->NativeConstruct_Prototype()))
 	{
 		MSGBOX("CCapsuleCollider Create Fail");
@@ -78,11 +69,10 @@ CCapsuleCollider* CCapsuleCollider::Create(ID3D11Device* pDevice, ID3D11DeviceCo
 	return pInstance;
 }
 
-CComponent* CCapsuleCollider::Clone(void* pArg)
+CComponent* CCapsuleCollider::Clone(void* _pArg)
 {
 	CCapsuleCollider* pInstance = new CCapsuleCollider(*this);
-
-	if (FAILED(pInstance->NativeConstruct(pArg)))
+	if (FAILED(pInstance->NativeConstruct(_pArg)))
 	{
 		MSGBOX("CCapsuleCollider Clone Fail");
 		Safe_Release(pInstance);
@@ -92,5 +82,6 @@ CComponent* CCapsuleCollider::Clone(void* pArg)
 
 void CCapsuleCollider::Free()
 {
-	CCollider::Free();
+
+	__super::Free();
 }

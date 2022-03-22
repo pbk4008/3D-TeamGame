@@ -77,7 +77,7 @@ HRESULT CStage1::NativeConstruct()
 	//	return E_FAIL;
 
 	g_pGameInstance->Change_BaseCamera(L"Camera_Silvermane");
-	
+
 
 	return S_OK;
 }

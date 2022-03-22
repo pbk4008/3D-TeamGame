@@ -36,7 +36,6 @@ private:
 private:
 	CModel* m_pModelCom = nullptr;
 	CAnimator* m_pAnimatorCom = nullptr;
-	CCapsuleCollider* m_pColliderCom = nullptr;
 	CStateController* m_pStateController = nullptr;
 
 	class CUI_Monster_Panel* m_pPanel = nullptr;

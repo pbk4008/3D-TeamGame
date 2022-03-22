@@ -1,75 +1,67 @@
 #include "BoxCollider.h"
-#include "Gizmo.h"
 
-
-CBoxCollider::CBoxCollider(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
-	: CCollider(pDevice, pDeviceContext)
+CBoxCollider::CBoxCollider(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
+	: CCollider(_pDevice, _pDeviceContext)
 {
 }
 
-CBoxCollider::CBoxCollider(const CBoxCollider& rhs)
-	: CCollider(rhs)
+CBoxCollider::CBoxCollider(const CBoxCollider& _rhs)
+	: CCollider(_rhs)
 {
 }
 
 HRESULT CBoxCollider::NativeConstruct_Prototype()
 {
-	if (FAILED(CCollider::NativeConstruct_Prototype()))
+	if (FAILED(__super::NativeConstruct_Prototype()))
 		return E_FAIL;
 
 	return S_OK;
 }
 
-HRESULT CBoxCollider::NativeConstruct(void* pArg)
+HRESULT CBoxCollider::NativeConstruct(void* _pArg)
 {
-	BOXDESC tDesc = (*(BOXDESC*)pArg);
+	if (_pArg)
+	{
+		memcpy_s(&m_tDesc, sizeof(DESC), _pArg, sizeof(DESC));
+		m_pGameObject = m_tDesc.tColliderDesc.pGameObject;
+	}
 
-	if (FAILED(CCollider::NativeConstruct(&tDesc.tColDesc.eType)))
+	if (FAILED(__super::NativeConstruct(&m_tDesc.tColliderDesc)))
 		return E_FAIL;
 
-	PxVec3 pxExtends = Calcul_Extends(XMLoadFloat4x4(&tDesc.matTransform));
-	if (FAILED(Init_Shape(pxExtends)))
+	if (FAILED(m_pPhsyX->Create_Box(this)))
 		return E_FAIL;
-	
-	tDesc.tColDesc.fPos = _float3(tDesc.matTransform._41, tDesc.matTransform._42, tDesc.matTransform._43);
-	if (FAILED(Init_Collider(tDesc.tColDesc)))
-		return E_FAIL;
-
-	if (!m_pRigidBody)
-		return E_FAIL;
-
-	m_pRigidBody->userData = tDesc.pParent;
-
-	m_matLoaclMatrix = tDesc.matTransform;
 
 	return S_OK;
 }
 
-HRESULT CBoxCollider::Render(const wstring& pCameraTag)
+const _int CBoxCollider::Tick(const _double& _dDeltaTime)
 {
-	if (!m_pGizmo)
-		return E_FAIL;
+	_int iProgress = __super::Tick(_dDeltaTime);
+	if (NO_EVENT != iProgress)
+		return iProgress;
 
-	m_pGizmo->DrawCube(XMLoadFloat4x4(&m_matWorldMatrix), pCameraTag, XMLoadFloat4(&m_vColor));
-	
-	return S_OK;
+	return _int();
 }
 
-HRESULT CBoxCollider::Init_Shape(PxVec3 pxExtends)
+const _int CBoxCollider::LateTick(const _double& _dDeltaTime)
 {
-	CPhysicsXSystem* pInstance = GET_INSTANCE(CPhysicsXSystem);
+	_int iProgress = __super::LateTick(_dDeltaTime);
+	if (NO_EVENT != iProgress)
+		return iProgress;
 
-	m_pShape = pInstance->Init_Shape(CPhysicsXSystem::COLLIDERTYPE::COL_BOX, pxExtends);
-
-	RELEASE_INSTANCE(CPhysicsXSystem);
-
-	return S_OK;
+	return _int();
 }
 
-CBoxCollider* CBoxCollider::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
-{
-	CBoxCollider* pInstance = new CBoxCollider(pDevice, pDeviceContext);
 
+const CBoxCollider::DESC& CBoxCollider::getDesc() const
+{
+	return m_tDesc;
+}
+
+CBoxCollider* CBoxCollider::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
+{
+	CBoxCollider* pInstance = new CBoxCollider(_pDevice, _pDeviceContext);
 	if (FAILED(pInstance->NativeConstruct_Prototype()))
 	{
 		MSGBOX("CBoxCollider Create Fail");
@@ -78,11 +70,10 @@ CBoxCollider* CBoxCollider::Create(ID3D11Device* pDevice, ID3D11DeviceContext* p
 	return pInstance;
 }
 
-CComponent* CBoxCollider::Clone(void* pArg)
+CComponent* CBoxCollider::Clone(void* _pArg)
 {
 	CBoxCollider* pInstance = new CBoxCollider(*this);
-
-	if (FAILED(pInstance->NativeConstruct(pArg)))
+	if (FAILED(pInstance->NativeConstruct(_pArg)))
 	{
 		MSGBOX("CBoxCollider Clone Fail");
 		Safe_Release(pInstance);
@@ -92,5 +83,6 @@ CComponent* CBoxCollider::Clone(void* pArg)
 
 void CBoxCollider::Free()
 {
-	CCollider::Free();
+
+	__super::Free();
 }

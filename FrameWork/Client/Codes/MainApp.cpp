@@ -34,9 +34,9 @@ HRESULT CMainApp::NativeConstruct()
 		return E_FAIL;
 
 #ifdef _DEBUG
-	g_pDebugSystem = CDebugSystem::GetInstance();
-	if (FAILED(g_pDebugSystem->Init_DebugSystem(m_pDevice, m_pDeviceContext,m_pRenderer)))
-		return E_FAIL;
+	//g_pDebugSystem = CDebugSystem::GetInstance();
+	//if (FAILED(g_pDebugSystem->Init_DebugSystem(m_pDevice, m_pDeviceContext,m_pRenderer)))
+	//	return E_FAIL;
 #endif
 
 	if (FAILED(SetUp_StartLevel(SCENEID::SCENE_LOGO)))
@@ -242,8 +242,8 @@ CMainApp * CMainApp::Create()
 void CMainApp::Free()
 {
 #ifdef _DEBUG
-	g_pDebugSystem->Stop_DebugSystem();
-	Safe_Release(g_pDebugSystem);
+	//g_pDebugSystem->Stop_DebugSystem();
+	//Safe_Release(g_pDebugSystem);
 #endif
 	CMeshLoader::DestroyInstance();
 	

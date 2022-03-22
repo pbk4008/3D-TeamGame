@@ -45,7 +45,6 @@ private:
 private:
 	CModel* m_pModelCom = nullptr;
 	CAnimator* m_pAnimator = nullptr;
-	CCapsuleCollider* m_pCollider = nullptr;
 	CStateController* m_pStateController = nullptr;
 private:
 	CStargazer* m_pWeapon = nullptr;

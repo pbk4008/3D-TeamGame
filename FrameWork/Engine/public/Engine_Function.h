@@ -52,7 +52,12 @@ namespace Engine
 
 		return dwRefCnt;
 	}
-
+	template<typename T>
+	void Safe_PxRelease(T& pInstance)
+	{
+		if (pInstance)
+			pInstance->release();
+	}
 
 	// Functor
 	class CTag_Finder

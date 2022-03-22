@@ -1,36 +1,26 @@
 #pragma once
-#ifndef __MESHCOLLIDER_H__
-#define __MESHCOLLIDER_H__
 
 #include "Collider.h"
+
 BEGIN(Engine)
-class CGameObject;
+
 class ENGINE_DLL CMeshCollider final : public CCollider
 {
-public:
-	typedef struct tagMeshDesc
-	{
-		_float4x4 matTransform;
-		CPhysicsXSystem::COLDESC tColDesc;
-		vector<_float3*> vecPoints;
-		CGameObject* pParent;
-	}MESHDESC;
 private:
-	explicit CMeshCollider() = default;
-	explicit CMeshCollider(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);
-	explicit CMeshCollider(const CMeshCollider& rhs);
+	explicit CMeshCollider(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext);
+	explicit CMeshCollider(const CMeshCollider& _rhs);
 	virtual ~CMeshCollider() = default;
+
 public:
-	virtual HRESULT NativeConstruct_Prototype();
-	virtual HRESULT NativeConstruct(void* pArg);
-	virtual HRESULT Render(const wstring& pCameraTag);
-private:
-	virtual HRESULT Init_Shape(const vector<_float3*>& vecPoints);
+	virtual HRESULT NativeConstruct_Prototype() override;
+	virtual HRESULT NativeConstruct(void* _pArg = nullptr) override;
+	virtual const _int Tick(const _double& _dDeltaTime) override;
+	virtual const _int LateTick(const _double& _dDeltaTime) override;
+
 public:
-	static CMeshCollider* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);
-	virtual CComponent* Clone(void* pArg);
-private:
+	static CMeshCollider* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext);
+	virtual CComponent* Clone(void* _pArg = nullptr) override;
 	virtual void Free() override;
 };
+
 END
-#endif

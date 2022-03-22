@@ -23,7 +23,8 @@
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>Engine</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
-    <ProjectName> </ProjectName>
+    <ProjectName>
+    </ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -212,11 +213,17 @@ call Update_Library_Release.bat</Command>
     <ClInclude Include="..\public\Animator.h" />
     <ClInclude Include="..\public\AnimNode.h" />
     <ClInclude Include="..\public\Base.h" />
-    <ClInclude Include="..\public\BoxCollider.h" />
+    <ClInclude Include="..\public\BoxCollider.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+    </ClInclude>
     <ClInclude Include="..\public\Camera.h" />
-    <ClInclude Include="..\public\CapsuleCollider.h" />
+    <ClInclude Include="..\public\CapsuleCollider.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+    </ClInclude>
     <ClInclude Include="..\public\Cell.h" />
     <ClInclude Include="..\public\CharacterController.h" />
+    <ClInclude Include="..\public\Collision.h" />
+    <ClInclude Include="..\public\contactReportFilterShader.h" />
     <ClInclude Include="..\public\ControllerBehaviorCallback.h" />
     <ClInclude Include="..\public\ControllerFilterCallback.h" />
     <ClInclude Include="..\public\ControllerHitReport.h" />
@@ -255,25 +262,34 @@ call Update_Library_Release.bat</Command>
     <ClInclude Include="..\public\Material.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClInclude>
-    <ClInclude Include="..\public\MeshCollider.h" />
+    <ClInclude Include="..\public\MeshCollider.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+    </ClInclude>
     <ClInclude Include="..\public\MeshContainer.h" />
     <ClInclude Include="..\public\Model.h" />
     <ClInclude Include="..\public\Monster_FSM.h" />
     <ClInclude Include="..\public\Mouse.h" />
     <ClInclude Include="..\public\Navigation.h" />
+    <ClInclude Include="..\public\NavMeshCollider.h" />
     <ClInclude Include="..\public\Object_Manager.h" />
     <ClInclude Include="..\public\PhysicsXSystem.h" />
     <ClInclude Include="..\public\PipeLine.h" />
     <ClInclude Include="..\public\PostProcess.h" />
     <ClInclude Include="..\public\QuadTree.h" />
-    <ClInclude Include="..\public\Ray_Collider.h" />
+    <ClInclude Include="..\public\Ray_Collider.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+    </ClInclude>
     <ClInclude Include="..\public\Renderer.h" />
     <ClInclude Include="..\public\RendererAssit.h" />
     <ClInclude Include="..\public\RenderTarget.h" />
     <ClInclude Include="..\public\SaveManager.h" />
+    <ClInclude Include="..\public\SimulationEventCallback.h" />
+    <ClInclude Include="..\public\SimulationFilterCallback.h" />
     <ClInclude Include="..\public\SingleTon.h" />
     <ClInclude Include="..\public\SoundMgr.h" />
-    <ClInclude Include="..\public\SphereCollider.h" />
+    <ClInclude Include="..\public\SphereCollider.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+    </ClInclude>
     <ClInclude Include="..\public\State.h" />
     <ClInclude Include="..\public\StateController.h" />
     <ClInclude Include="..\public\Target_Manager.h" />
@@ -306,12 +322,17 @@ call Update_Library_Release.bat</Command>
     <ClCompile Include="..\private\Animator.cpp" />
     <ClCompile Include="..\private\AnimNode.cpp" />
     <ClCompile Include="..\private\Base.cpp" />
-    <ClCompile Include="..\private\BoxCollider.cpp" />
+    <ClCompile Include="..\private\BoxCollider.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="..\private\Camera.cpp" />
-    <ClCompile Include="..\private\CapsuleCollider.cpp" />
+    <ClCompile Include="..\private\CapsuleCollider.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="..\private\Cell.cpp" />
     <ClCompile Include="..\private\Channel.cpp" />
     <ClCompile Include="..\private\CharacterController.cpp" />
+    <ClCompile Include="..\private\Collision.cpp" />
     <ClCompile Include="..\private\ControllerBehaviorCallback.cpp" />
     <ClCompile Include="..\private\ControllerFilterCallback.cpp" />
     <ClCompile Include="..\private\ControllerHitReport.cpp" />
@@ -330,15 +351,24 @@ call Update_Library_Release.bat</Command>
     <ClCompile Include="..\private\Material.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="..\private\MeshCollider.cpp" />
+    <ClCompile Include="..\private\MeshCollider.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="..\private\Monster_FSM.cpp" />
     <ClCompile Include="..\private\Mouse.cpp" />
     <ClCompile Include="..\private\Navigation.cpp" />
+    <ClCompile Include="..\private\NavMeshCollider.cpp" />
     <ClCompile Include="..\private\PhysicsXSystem.cpp" />
     <ClCompile Include="..\private\PostProcess.cpp" />
-    <ClCompile Include="..\private\Ray_Collider.cpp" />
+    <ClCompile Include="..\private\Ray_Collider.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="..\private\RendererAssit.cpp" />
-    <ClCompile Include="..\private\SphereCollider.cpp" />
+    <ClCompile Include="..\private\SimulationEventCallback.cpp" />
+    <ClCompile Include="..\private\SimulationFilterCallback.cpp" />
+    <ClCompile Include="..\private\SphereCollider.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="..\private\State.cpp" />
     <ClCompile Include="..\private\StateController.cpp" />
     <ClCompile Include="..\private\Tonemapping.cpp" />

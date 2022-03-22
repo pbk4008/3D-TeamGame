@@ -77,6 +77,10 @@ _int CMonster_Crawler::Tick(_double _dDeltaTime)
 		return -1;
 	}
 	
+	m_pPanel->Set_TargetWorldMatrix(m_pTransform->Get_WorldMatrix());
+
+	m_pModelCom->Update_CombinedTransformationMatrix(_dDeltaTime);
+	//m_pAnimControllerCom->Tick(_dDeltaTime);
 	_int iProgress = m_pStateController->Tick(_dDeltaTime);
 	if (NO_EVENT != iProgress)
 	{
@@ -97,7 +101,6 @@ _int CMonster_Crawler::Tick(_double _dDeltaTime)
 		m_pStateController->Change_State(L"Death");
 	}
 
-	m_pColliderCom->Update(m_pTransform->Get_WorldMatrix());
 	m_pPanel->Set_TargetWorldMatrix(m_pTransform->Get_WorldMatrix());
 	
 	return 0;
@@ -127,10 +130,6 @@ HRESULT CMonster_Crawler::Render()
 	{
 		return E_FAIL;
 	}
-
-#ifdef _DEBUG
-	m_pColliderCom->Render(L"Camera_Silvermane");
-#endif // _DEBUG
 
 	_matrix XMWorldMatrix = XMMatrixTranspose(m_pTransform->Get_WorldMatrix());
 	_matrix XMViewMatrix = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_VIEW));
@@ -176,21 +175,7 @@ HRESULT CMonster_Crawler::SetUp_Components()
 		return E_FAIL;
 	}
 
-	CCapsuleCollider::CAPSULEDESC CapDesc;
-	XMStoreFloat4x4(&CapDesc.matTransform, XMMatrixIdentity());
-	CapDesc.pParent = this;
-
-	CPhysicsXSystem::COLDESC PhyDesc;
-	PhyDesc.bGravity = false;
-	PhyDesc.bKinematic = false;
-	PhyDesc.eType = CPhysicsXSystem::ACTORTYPE::ACTOR_DYNAMIC;
-	CapDesc.tColDesc = PhyDesc;
-	if (FAILED(__super::SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_CapsuleCollider", L"Com_CapsuleCollider", (CComponent**)&m_pColliderCom, &CapDesc)))
-	{
-		return E_FAIL;
-	}
-
-	if (FAILED(__super::SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_StateController", L"Com_StateController", (CComponent**)&m_pStateController)))
+	if (FAILED(__super::SetUp_Components((_uint)SCENEID::SCENE_STAGE1, L"Proto_Component_StateController", L"Com_StateController", (CComponent**)&m_pStateController)))
 		return E_FAIL;
 	m_pStateController->Set_GameObject(this);
 
@@ -314,7 +299,6 @@ CGameObject* CMonster_Crawler::Clone(const _uint _iSceneID, void* _pArg)
 
 void CMonster_Crawler::Free()
 {
-	Safe_Release(m_pColliderCom);
 	Safe_Release(m_pPanel);
 	Safe_Release(m_pStateController);
 	Safe_Release(m_pAnimatorCom);
