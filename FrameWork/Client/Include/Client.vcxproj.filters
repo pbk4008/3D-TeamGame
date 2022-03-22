@@ -372,9 +372,12 @@
     </Filter>
     <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_Healer\State_Healer\Death">
       <UniqueIdentifier>{cb8123f1-7865-4c84-bd46-7c2c4c7fb4fc}</UniqueIdentifier>
-   </Filter>
+    </Filter>
     <Filter Include="01.Scene\01.Loading\00.Loader\00.MeshLoader">
       <UniqueIdentifier>{c2049929-7ae9-4414-bb90-0d30c5d6089c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\49.Treasure_Chest">
+      <UniqueIdentifier>{cbf09ecb-b293-43d9-8ea2-ea120f524ad7}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -972,6 +975,9 @@
     <ClInclude Include="..\Codes\MeshLoader.h">
       <Filter>01.Scene\01.Loading\00.Loader\00.MeshLoader</Filter>
     </ClInclude>
+    <ClInclude Include="..\Headers\Treasure_Chest.h">
+      <Filter>02.GameObject\49.Treasure_Chest</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -1543,6 +1549,9 @@
     </ClCompile>
     <ClCompile Include="..\Codes\MeshLoader.cpp">
       <Filter>01.Scene\01.Loading\00.Loader\00.MeshLoader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Treasure_Chest.cpp">
+      <Filter>02.GameObject\49.Treasure_Chest</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

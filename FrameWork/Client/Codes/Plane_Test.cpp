@@ -17,7 +17,7 @@ HRESULT CPlane_Test::NativeConstruct_Prototype()
 	if (FAILED(__super::NativeConstruct_Prototype()))
 		return E_FAIL;
 
-	if(FAILED(Ready_NaviPoints(L"../Data/NavMesh/2222.dat")))
+	if (FAILED(Ready_NaviPoints(L"../Data/NavMesh/Stage_1_Nav.dat")))
 		return E_FAIL;
 
 	return S_OK;
@@ -28,11 +28,12 @@ HRESULT CPlane_Test::NativeConstruct(const _uint _iSceneID, void* _pArg)
 	if (FAILED(__super::NativeConstruct(_iSceneID, _pArg)))
 		return E_FAIL;
 
-	if (FAILED(Ready_Components()))
-		return E_FAIL;
+	//if (FAILED(Ready_Components()))
+	//	return E_FAIL;
 
 	if (FAILED(Ready_NaviMesh()))
 		return E_FAIL;
+
 
 	return S_OK;
 }
@@ -53,8 +54,9 @@ _int CPlane_Test::LateTick(_double _dDeltaTime)
 		return iProgress;
 
 #ifdef _DEBUG
-	m_pRenderer->Add_RenderGroup(CRenderer::RENDER_PRIORITY, this);
+	//m_pRenderer->Add_RenderGroup(CRenderer::RENDER_PRIORITY, this);
 #endif
+
 	return _int();
 }
 
@@ -82,8 +84,8 @@ HRESULT CPlane_Test::Render()
 HRESULT CPlane_Test::Ready_Components()
 {
 	/* Com_VIBuffer */
-	if (FAILED(__super::SetUp_Components(m_iSceneID, L"VIBuffer_Plane", L"VIBuffer", (CComponent**)&m_pVIBuffer)))
-		return E_FAIL;
+	//if (FAILED(__super::SetUp_Components(m_iSceneID, L"VIBuffer_Plane", L"VIBuffer", (CComponent**)&m_pVIBuffer)))
+	//	return E_FAIL;
 
 	/* Com_Texture  */
 	wstring TexTag = L"Plane_Texture";
@@ -114,7 +116,7 @@ HRESULT CPlane_Test::Ready_NaviMesh()
 	NaviMeshDesc.pParent = this;
 	NaviMeshDesc.tColDesc = ColDesc;
 
-	m_pNaviCollider = (CMeshCollider*)g_pGameInstance->Clone_Component(m_iSceneID, L"Proto_Component_MeshCollider", &NaviMeshDesc);
+	m_pNaviCollider = (CMeshCollider*)g_pGameInstance->Clone_Component((_uint)SCENEID::SCENE_STAGE1, L"Proto_Component_MeshCollider", &NaviMeshDesc);
 
 	if (!m_pNaviCollider)
 		return E_FAIL;

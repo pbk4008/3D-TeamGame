@@ -30,13 +30,13 @@ HRESULT CCamera_Silvermane::NativeConstruct(const _uint _iSceneID, void* _pArg)
 		return E_FAIL;
 	}
 
+	m_pSilvermane = static_cast<CSilvermane*>(g_pGameInstance->getObjectList(m_iSceneID, L"Layer_Silvermane")->front());
+	m_pSilvermane->Set_Camera(this);
+
 	if (FAILED(Ready_Components()))
 	{
 		return E_FAIL;
 	}
-
-	m_pSilvermane = static_cast<CSilvermane*>(g_pGameInstance->getObjectList(m_iSceneID, L"Layer_Silvermane")->front());
-	m_pSilvermane->Set_Camera(this);
 
 	return S_OK;
 }
@@ -50,10 +50,15 @@ _int CCamera_Silvermane::Tick(_double _dDeltaTime)
 	iProgress = Chase_Target(_dDeltaTime);
 	if (NO_EVENT != iProgress)
 		return iProgress;
+	iProgress = LookAt(_dDeltaTime);
+	if (NO_EVENT != iProgress)
+		return iProgress;
+
 	iProgress = Input_Key(_dDeltaTime);
 	if (NO_EVENT != iProgress)
 		return iProgress;
 
+	Shaking(_dDeltaTime);
 	m_pTransform->Set_WorldMatrix(m_pLocalTransform->Get_WorldMatrix() * m_pWorldTransform->Get_WorldMatrix());
 	m_pCamera->Update_Matrix(m_pTransform->Get_WorldMatrix());
 	return _int();
@@ -65,6 +70,7 @@ _int CCamera_Silvermane::LateTick(_double _dDeltaTime)
 	{
 		return -1;
 	}
+
 
 	return _int();
 }
@@ -99,9 +105,6 @@ HRESULT CCamera_Silvermane::Ready_Components()
 	transformDesc.fRotationPerSec = 0.f;
 	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_Transform", L"Com_LocalTransform", (CComponent**)&m_pLocalTransform, &transformDesc)))
 		return E_FAIL;
-	_float4 vPosition = { 0.5f, 3.f, -3.f, 1.f };
-	m_pLocalTransform->Set_State(CTransform::STATE_POSITION, XMLoadFloat4(&vPosition));
-	m_pLocalTransform->SetUp_Rotation(m_pLocalTransform->Get_State(CTransform::STATE_RIGHT), XMConvertToRadians(30.f));
 
 	transformDesc.fRotationPerSec = XMConvertToRadians(120.f);
 	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_Transform", L"Com_WorldTransform", (CComponent**)&m_pWorldTransform, &transformDesc)))
@@ -115,6 +118,42 @@ void CCamera_Silvermane::Set_ChaseTarget(const _bool _isChase)
 	m_isChase = _isChase;
 }
 
+void CCamera_Silvermane::Shaking(const _double _dDeltaTime)
+{
+	//float fOriginDelta = _dDeltaTime;
+	if (m_fShakingTime < 0.f)
+	{
+		m_fShakePower = Lerp(m_fShakePower, 0.f, _dDeltaTime);
+		if (fabs(m_fShakePower) <= FLT_EPSILON)
+			return;
+	}
+	
+	m_fShakingTime -= _dDeltaTime;
+	static int Test = 2;
+	Test -= 1;
+	if (Test == 0)
+	{
+		m_fShakePower *= -1.f;
+		Test = 2;
+	}
+
+	_vector vShake = { 0.001f, 0.0f, 0.001f, 0.0f };
+	//auto CamDesc = m_pCamera->Get_CamDesc();
+	_vector pos = m_pLocalTransform->Get_State(CTransform::STATE_POSITION);
+ 	 pos += (vShake * m_fShakePower);
+	 pos = XMVectorSetW(pos, 1.0f);
+
+	m_pLocalTransform->Set_State(CTransform::STATE_POSITION, pos);
+
+	//XMStoreFloat4((&CamDesc->vAt), XMLoadFloat4(&CamDesc->vAt) + (vShake * m_fShakePower));
+}
+
+void CCamera_Silvermane::SetShakeInfo(_float _fShakeTime, _float _fShakePower)
+{
+	m_fShakingTime = _fShakeTime;
+	m_fShakePower = _fShakePower;
+}
+
 _int CCamera_Silvermane::Chase_Target(const _double& _dDeltaTime)
 {
 	if (!m_pSilvermane)
@@ -125,6 +164,36 @@ _int CCamera_Silvermane::Chase_Target(const _double& _dDeltaTime)
 	CTransform* pTargetTransform = m_pSilvermane->Get_Transform();
 	_vector svTargetPosition = pTargetTransform->Get_State(CTransform::STATE_POSITION);
 	m_pWorldTransform->Set_State(CTransform::STATE_POSITION, svTargetPosition);
+
+	return _int();
+}
+
+_int CCamera_Silvermane::LookAt(const _double& _dDeltaTime)
+{
+	CTransform* pTargetTransform = m_pSilvermane->Get_Transform();
+
+	_vector svTagetRight = XMVector3Normalize(pTargetTransform->Get_State(CTransform::STATE_RIGHT));
+	_vector svTagetUp = XMVectorSet(0.f, 1.f, 0.f, 1.f);
+	_vector svTagetLook = XMVector3Normalize(pTargetTransform->Get_State(CTransform::STATE_LOOK));
+
+	m_vEye = { 0.f, 3.f, -3.f, 1.f };
+	_vector svEye = XMLoadFloat4(&m_vEye);
+	m_pLocalTransform->Set_State(CTransform::STATE_POSITION, svEye);
+	
+	_vector svAt = XMVectorSet(0.f, 0.f, 0.f, 0.f);
+	svAt += svTagetUp;// +XMVectorSet(0.f, 0.f, 0.5f, 0.f);
+
+	XMStoreFloat4(&m_vAt, svAt);
+
+	_vector svLook = svAt - svEye;
+	svLook = XMVector3Normalize(svLook);
+
+	_vector svRight = XMVector3Normalize(XMVector3Cross(XMVectorSet(0.f, 1.f, 0.f, 0.f), svLook));
+	_vector svUp = XMVector3Normalize(XMVector3Cross(svLook, svRight));
+
+	m_pLocalTransform->Set_State(CTransform::STATE_RIGHT, svRight);
+	m_pLocalTransform->Set_State(CTransform::STATE_UP, svUp);
+	m_pLocalTransform->Set_State(CTransform::STATE_LOOK, svLook);
 
 	return _int();
 }

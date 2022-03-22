@@ -15,6 +15,7 @@
 #include "Instancing_Mesh.h"
 #include "Client_Trigger.h"
 #include "Environment.h"
+#include "Treasure_Chest.h"
 #include "Monster_Crawler.h"
 #include "Monster_EarthAberrant.h"
 #include "Monster_BronzeAnimus.h"
@@ -140,7 +141,10 @@ HRESULT CLoader::SetUp_Stage1_Object()
 	//if (FAILED(Load_Stage1EffectLoad()))
 	//	return E_FAIL;
 
-	if (FAILED(Load_Stage1TriggerLod()))
+	//if (FAILED(Load_Stage1TriggerLod()))
+	//	return E_FAIL;
+
+	if (FAILED(Load_Stage1_TreasureChest_Load()))
 		return E_FAIL;
 
 	return S_OK;
@@ -387,6 +391,50 @@ HRESULT CLoader::Load_Stage1TriggerLod()
 	return S_OK;
 }
 
+HRESULT CLoader::Load_Stage1_TreasureChest_Load()
+{
+	_finddata_t fd;
+	ZeroMemory(&fd, sizeof(_finddata_t));
+
+	intptr_t handle = _findfirst("../bin/FBX/Treasure_Chest/*.fbx", &fd);
+
+	if (handle == 0)
+		return E_FAIL;
+
+	int iResult = 0;
+	while (iResult != -1)
+	{
+		if (!strcmp(fd.name, ""))
+			break;
+
+		char szFullPath[MAX_PATH] = "../bin/FBX/Treasure_Chest/";
+
+		strcat_s(szFullPath, fd.name);
+
+
+		_tchar fbxName[MAX_PATH] = L"";
+		_tchar fbxPath[MAX_PATH] = L"";
+		MultiByteToWideChar(CP_ACP, 0, fd.name, MAX_PATH, fbxName, MAX_PATH);
+		MultiByteToWideChar(CP_ACP, 0, szFullPath, MAX_PATH, fbxPath, MAX_PATH);
+
+		CMeshLoader::MESHTYPE tMeshType;
+		ZeroMemory(&tMeshType, sizeof(tMeshType));
+
+		lstrcpy(tMeshType.szFBXName, fbxName);
+		lstrcpy(tMeshType.szFBXPath, fbxPath);
+		tMeshType.iType = 2;
+
+		if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Treasure_Chest", CModel::Create(m_pDevice, m_pDeviceContext,
+			tMeshType.szFBXPath, CModel::TYPE_STATIC, TRUE))))
+			return E_FAIL;
+
+		iResult = _findnext(handle, &fd);
+	}
+	_findclose(handle);
+
+	return S_OK;
+}
+
 HRESULT CLoader::SetUp_Stage1_Prototype()
 {
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_CapsuleCollider", CCapsuleCollider::Create(m_pDevice, m_pDeviceContext))))
@@ -404,6 +452,8 @@ HRESULT CLoader::SetUp_Stage1_Prototype()
 	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Environment", CEnvironment::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 
+	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Treasure_Chest", CTreasure_Chest::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
 	return S_OK;
 }
 
@@ -412,12 +462,12 @@ HRESULT CLoader::Load_Stage1PlayerLoad()
 	/*if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"Plane_Texture", L"../Bin/Resources/Texture/Terrain/Plane_Default.dds")))
 		return E_FAIL;
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"VIBuffer_Plane", CVIBuffer_Plane::Create(m_pDevice, m_pDeviceContext, L"../../Reference/ShaderFile/Shader_Plane.hlsl", 100, 100))))
-		return E_FAIL;
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Proto_Component_MeshCollider", CMeshCollider::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;*/
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Proto_Component_MeshCollider", CMeshCollider::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
 	//// 네비메쉬 플레인
-	//if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Plane_Test", CPlane_Test::Create(m_pDevice, m_pDeviceContext))))
-	//	return E_FAIL;
+	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Plane_Test", CPlane_Test::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
 
 	CTexture* pTexture = nullptr;
 #pragma region 마테리얼
@@ -935,7 +985,7 @@ HRESULT CLoader::Ready_Test_YM()
 
 	matPivot = XMMatrixIdentity();
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_TEST_YM, L"Model_Staff", CModel::Create(m_pDevice, m_pDeviceContext,
-		"../bin/Resources/Mesh/Staffe/", "Staff.fbx",
+		"../bin/Resources/Mesh/Staff/", "Staff.fbx",
 		L"../../Reference/ShaderFile/Shader_StaticMesh.hlsl", matPivot, CModel::TYPE_STATIC, true))))
 	{
 		return E_FAIL;

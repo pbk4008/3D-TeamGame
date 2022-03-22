@@ -38,6 +38,7 @@ private:
 	HRESULT Load_Stage1UILoad(); //流立 积己
 	HRESULT Load_Stage1EffectLoad();
 	HRESULT Load_Stage1TriggerLod();
+	HRESULT	Load_Stage1_TreasureChest_Load();
 
 public:
 	static _uint CALLBACK Thread_Main(void* pArg);

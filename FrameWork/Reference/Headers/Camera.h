@@ -38,6 +38,11 @@ private:
 	HRESULT setViewMatrix();
 	HRESULT setProjMatrix();
 public:
+	void Set_Eye(_fvector _vEye) { XMStoreFloat4(&m_tCameraDesc.vEye, _vEye); }
+	void Set_At(_fvector _vAt) { XMStoreFloat4(&m_tCameraDesc.vAt, _vAt); }
+	CAMERADESC* Get_CamDesc(void) { return &m_tCameraDesc; }
+
+public:
 	virtual CCamera* Clone(void* pArg);
 	static CCamera* Create(ID3D11Device * pDevice, ID3D11DeviceContext * pDevice_Context);
 public:

@@ -160,7 +160,7 @@ HRESULT CEnvironment::Culling()
 		else
 			m_vecUsingMatrix[i] = m_tEnvironmentDesc.tInstanceDesc.vecMatrix[i];
 	}
-	
+
 	m_pInstanceMesh->Update_InstanceBuffer(m_vecUsingMatrix);
 
 	return S_OK;
