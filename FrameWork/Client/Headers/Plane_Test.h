@@ -26,13 +26,13 @@ public:
 public:
 	virtual HRESULT Ready_Components();
 	HRESULT Ready_NaviPoints(const wstring& _wstrFilePath);
-	HRESULT Ready_NaviMesh();
+	HRESULT Ready_NavMesh();
 	
 private:
 	CVIBuffer_Plane* m_pVIBuffer = nullptr;
 	CTexture* m_pTexture = nullptr;
 
-	CMeshCollider* m_pNaviCollider = nullptr;
+	CNavMeshCollider* m_pNaviCollider = nullptr;
 	vector<NAVIMESHDESC> m_vecNaviPoints;
 
 public:

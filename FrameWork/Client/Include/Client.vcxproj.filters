@@ -343,6 +343,57 @@
     <Filter Include="02.GameObject\03.Character\02.Boss\00.MiddleBoss\State\04.Chase">
       <UniqueIdentifier>{9ca0b922-5493-4c13-b374-4312bd2f3120}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\05.UI\01.UI_Ingame\01.Meter\02.Monster\04.Name">
+      <UniqueIdentifier>{f93eb3ac-c59a-4020-8040-bc1b1ca22d26}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\Crawler\State">
+      <UniqueIdentifier>{d76242e7-e6bc-430a-b9db-6e820a61d11f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\Crawler\State\03.Flinch">
+      <UniqueIdentifier>{7ae21a8b-87f2-42a9-b8ec-557e3b386415}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\Crawler\State\01.Walk">
+      <UniqueIdentifier>{c9f6cc46-ba83-4d0f-b3ed-dee4c84a7974}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\Crawler\State\02.Attack">
+      <UniqueIdentifier>{9121331f-10e4-4281-a84d-af03d2a228d0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\Crawler\State\00.Idle">
+      <UniqueIdentifier>{80718da2-b434-4f3a-83f6-f405a8b45485}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\Crawler\State\04.Knockback">
+      <UniqueIdentifier>{e39aa1b3-074d-44d7-bfb9-3305bcc059cf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\Crawler\State\05.Death">
+      <UniqueIdentifier>{68e33a80-cc88-4dfe-a15d-622a68dcbb14}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\Crawler\State\06.Ricochet">
+      <UniqueIdentifier>{5d0d2558-f65e-4b32-8804-080a0c1b99d6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\EarthAberrant\State">
+      <UniqueIdentifier>{c378b0cc-f07a-4ba2-8dae-09b85aedec4b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\EarthAberrant\State\00.Idle">
+      <UniqueIdentifier>{89a86753-77d9-4309-aceb-d226891146ab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\EarthAberrant\State\01.Walk">
+      <UniqueIdentifier>{8ee6be25-4296-447d-a71c-1df2c16a91ef}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\EarthAberrant\State\02.Run">
+      <UniqueIdentifier>{7464defb-76ef-40ae-9e49-60563ce32ef8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\EarthAberrant\State\03.Attack">
+      <UniqueIdentifier>{8891ce53-fa8d-4839-acaf-b37030d1d847}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\EarthAberrant\State\04.Flinch">
+      <UniqueIdentifier>{598793a3-920b-4585-a942-1ffe7b1a718a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\EarthAberrant\State\05.Stun">
+      <UniqueIdentifier>{a5feef31-56a7-454e-b845-a90b88d0d9cf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\EarthAberrant\State\06.Knockback">
+      <UniqueIdentifier>{fcb36259-0e76-4d95-8ef9-ad44c10ef567}</UniqueIdentifier>
+    </Filter>
     <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_Healer\State_Healer">
       <UniqueIdentifier>{ac333559-d103-4db9-a16f-3083aeb79507}</UniqueIdentifier>
     </Filter>
@@ -372,7 +423,7 @@
     </Filter>
     <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_Healer\State_Healer\Death">
       <UniqueIdentifier>{cb8123f1-7865-4c84-bd46-7c2c4c7fb4fc}</UniqueIdentifier>
-   </Filter>
+    </Filter>
     <Filter Include="01.Scene\01.Loading\00.Loader\00.MeshLoader">
       <UniqueIdentifier>{c2049929-7ae9-4414-bb90-0d30c5d6089c}</UniqueIdentifier>
     </Filter>
@@ -923,6 +974,15 @@
       <Filter>02.GameObject\03.Character\01.Monster\Bastion_2HSword\State_2HSword\Hit</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\Monster_Bastion_Sword.h" />
+    <ClInclude Include="..\Headers\Traverse_JumpNodeJog.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Jump</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Monster_Bastion_Sword.h">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Sword</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\1H_SwordAttackNormalR1_04Swap.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\1H_Sword\R2</Filter>
+    </ClInclude>
     <ClInclude Include="..\Headers\1H_SwordAttackNormalR1_04Swap.h">
       <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\1H_Sword\R2</Filter>
     </ClInclude>
@@ -951,6 +1011,36 @@
     <ClInclude Include="..\Headers\Monster_Bastion_Sword.h">
       <Filter>02.GameObject\03.Character\01.Monster\Bastion_Sword</Filter>
     </ClInclude>
+    <ClInclude Include="..\Headers\UI_Monster_Name.h">
+      <Filter>02.GameObject\05.UI\01.UI_Ingame\01.Meter\02.Monster\04.Name</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Crawler_Idle.h">
+      <Filter>02.GameObject\03.Character\01.Monster\Crawler\State\00.Idle</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Crawler_Walk.h">
+      <Filter>02.GameObject\03.Character\01.Monster\Crawler\State\01.Walk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Crawler_Attack.h">
+      <Filter>02.GameObject\03.Character\01.Monster\Crawler\State\02.Attack</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Crawler_Ricochet.h">
+      <Filter>02.GameObject\03.Character\01.Monster\Crawler\State\06.Ricochet</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Crawler_Death.h">
+      <Filter>02.GameObject\03.Character\01.Monster\Crawler\State\05.Death</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Crawler_Flinch_Left.h">
+      <Filter>02.GameObject\03.Character\01.Monster\Crawler\State\03.Flinch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Aberrant_Idle.h">
+      <Filter>02.GameObject\03.Character\01.Monster\EarthAberrant\State\00.Idle</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Aberrant_Walk.h">
+      <Filter>02.GameObject\03.Character\01.Monster\EarthAberrant\State\01.Walk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Aberrant_Attack.h">
+      <Filter>02.GameObject\03.Character\01.Monster\EarthAberrant\State\03.Attack</Filter>
+    </ClInclude>
     <ClInclude Include="..\Default\Client_Struct.h">
       <Filter>98.Headers</Filter>
     </ClInclude>
@@ -971,6 +1061,9 @@
     </ClInclude>
     <ClInclude Include="..\Codes\MeshLoader.h">
       <Filter>01.Scene\01.Loading\00.Loader\00.MeshLoader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\1H_SwordAttackNormalR1_04Swap.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\1H_Sword\R2</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1492,6 +1585,15 @@
       <Filter>02.GameObject\03.Character\01.Monster\Bastion_2HSword\State_2HSword\Hit</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\Monster_Bastion_Sword.cpp" />
+    <ClCompile Include="..\Codes\Traverse_JumpNodeJog.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Jump</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Monster_Bastion_Sword.cpp">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Sword</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\1H_SwordAttackNormalR1_04Swap.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\1H_Sword\R2</Filter>
+    </ClCompile>
     <ClCompile Include="..\Codes\1H_SwordAttackNormalR1_04Swap.cpp">
       <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\1H_Sword\R2</Filter>
     </ClCompile>
@@ -1523,6 +1625,36 @@
     <ClCompile Include="..\Codes\Monster_Bastion_Sword.cpp">
       <Filter>02.GameObject\03.Character\01.Monster\Bastion_Sword</Filter>
     </ClCompile>
+    <ClCompile Include="..\Codes\UI_Monster_Name.cpp">
+      <Filter>02.GameObject\05.UI\01.UI_Ingame\01.Meter\02.Monster\04.Name</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Crawler_Idle.cpp">
+      <Filter>02.GameObject\03.Character\01.Monster\Crawler\State\00.Idle</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Crawler_Walk.cpp">
+      <Filter>02.GameObject\03.Character\01.Monster\Crawler\State\01.Walk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Crawler_Attack.cpp">
+      <Filter>02.GameObject\03.Character\01.Monster\Crawler\State\02.Attack</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Crawler_Ricochet.cpp">
+      <Filter>02.GameObject\03.Character\01.Monster\Crawler\State\06.Ricochet</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Crawler_Death.cpp">
+      <Filter>02.GameObject\03.Character\01.Monster\Crawler\State\05.Death</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Crawler_Flinch_Left.cpp">
+      <Filter>02.GameObject\03.Character\01.Monster\Crawler\State\03.Flinch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Aberrant_Idle.cpp">
+      <Filter>02.GameObject\03.Character\01.Monster\EarthAberrant\State\00.Idle</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Aberrant_Walk.cpp">
+      <Filter>02.GameObject\03.Character\01.Monster\EarthAberrant\State\01.Walk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Aberrant_Attack.cpp">
+      <Filter>02.GameObject\03.Character\01.Monster\EarthAberrant\State\03.Attack</Filter>
+    </ClCompile>
     <ClCompile Include="..\Codes\Bastion_Sword_Hit.cpp">
       <Filter>02.GameObject\03.Character\01.Monster\Bastion_Sword\00.State\03.Hit</Filter>
     </ClCompile>
@@ -1543,6 +1675,9 @@
     </ClCompile>
     <ClCompile Include="..\Codes\MeshLoader.cpp">
       <Filter>01.Scene\01.Loading\00.Loader\00.MeshLoader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\1H_SwordAttackNormalR1_04Swap.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\1H_Sword\R2</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

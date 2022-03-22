@@ -34,10 +34,11 @@ CAnimNode* CAnimNode::Check_ConnectNode(_uint iIndex, vector<_uint>* vecDuplicat
 
 	//찾는 노드
 	CAnimNode* pFind = nullptr;
-	//모든 자식 노드 탐색
 
 	//새로운 중복 방지벡터
 	vector<_uint> vecNewDuplicate;
+
+	//모든 자식 노드 탐색
 	for (auto& pNode : m_vecAnimNode)
 	{
 		//탐색 시작 체크를 하는 변수
@@ -56,13 +57,14 @@ CAnimNode* CAnimNode::Check_ConnectNode(_uint iIndex, vector<_uint>* vecDuplicat
 			_bool bDoubleCheck = false;
 			for (auto& pNewDuplicate : vecNewDuplicate)
 			{
-				if (pNewDuplicate == pNewDuplicate)
+				if (pNewDuplicate == pDuplicate)
+
 				{
 					bDoubleCheck = true;
 					break;
 				}
 			}
-			if(!bDoubleCheck)
+			if (!bDoubleCheck)
 				vecNewDuplicate.emplace_back(pDuplicate);
 		}
 		//탐색 시작을 못하면(중복 방지 벡터에 걸리는게 없으면) null

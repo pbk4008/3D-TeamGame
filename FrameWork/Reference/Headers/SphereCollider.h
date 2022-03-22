@@ -1,37 +1,37 @@
 #pragma once
-#ifndef __SPHERECOLLIDER_H__
-#define __SPHERECOLLIDER_H__
+
 #include "Collider.h"
+
 BEGIN(Engine)
-class CGameObject;
+
 class ENGINE_DLL CSphereCollider final : public CCollider
 {
 public:
-	typedef struct tagSphere
+	typedef struct tagDesc
 	{
-		_float4x4 matTransform;
-		CPhysicsXSystem::COLDESC tColDesc;
-		CGameObject* pParent;
-	}SPHEREDESC;
+		CCollider::DESC tColliderDesc;
+		_float fRadius = 0.5f;
+	}DESC;
 private:
-	explicit CSphereCollider();
-	explicit CSphereCollider(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);
-	explicit CSphereCollider(const CSphereCollider& rhs);
+	explicit CSphereCollider(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext);
+	explicit CSphereCollider(const CSphereCollider& _rhs);
 	virtual ~CSphereCollider() = default;
+
 public:
-	virtual HRESULT NativeConstruct_Prototype();
-	virtual HRESULT NativeConstruct(void* pArg);
-	virtual HRESULT Render(const wstring& pCameraTag);
+	virtual HRESULT NativeConstruct_Prototype() override;
+	virtual HRESULT NativeConstruct(void* _pArg = nullptr) override;
+	virtual const _int Tick(const _double& _dDeltaTime) override;
+	virtual const _int LateTick(const _double& _dDeltaTime) override;
+
+	const DESC& getDesc() const;
+
 private:
-	virtual HRESULT Init_Shape(PxVec3 pxExtends);
+	DESC m_tDesc;
+
 public:
-	static CSphereCollider* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);
-	virtual CComponent* Clone(void* pArg);
-private:
+	static CSphereCollider* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext);
+	virtual CComponent* Clone(void* _pArg = nullptr) override;
 	virtual void Free() override;
-private:
-	BoundingSphere* m_pOriginSphere;
-	BoundingSphere* m_pSphere;
 };
+
 END
-#endif

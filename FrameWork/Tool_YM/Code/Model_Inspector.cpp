@@ -376,7 +376,7 @@ void CModel_Inspector::OnBnClickedCreateNavMesh()
 	CMeshCollider::MESHDESC NavMeshDesc;
 	CPhysicsXSystem::COLDESC	ColDesc;
 
-	ColDesc.eType = CPhysicsXSystem::ACTORTYPE::ACTOR_STATIC;
+	ColDesc.eType = CPhysicsXSystem::ERigidType::Static;
 	ColDesc.fPos = { 0.0f, 0.0f, 0.0f };//Collider Local
 	ColDesc.bGravity = FALSE;
 	ColDesc.bKinematic = FALSE;

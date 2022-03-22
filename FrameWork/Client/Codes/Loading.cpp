@@ -120,33 +120,8 @@ HRESULT CLoading::Ready_GameObject()
 	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model", CModel::Create(m_pDevice, m_pDeviceContext,L"../bin/SaveData/Sphere.fbx",L"../../Reference/ShaderFile/Shader_Mesh.hlsl",CModel::TYPE_STATIC))))
 	//		return E_FAIL;
 
-
 	//if (FAILED(g_pGameInstance->Add_Prototype(L"TestObj", CTestObj::Create(m_pDevice, m_pDeviceContext))))
 	//	return E_FAIL;
-
-	//CTestObj::TESTDESC tDesc;
-	//ZeroMemory(&tDesc, sizeof(tDesc));
-
-
-	//_matrix matIdentity = XMMatrixIdentity();
-	//XMStoreFloat4x4(&tDesc.tCapsuleDesc.matTransform, matIdentity);
-	//tDesc.tCapsuleDesc.tColDesc.bGravity = false;
-	//tDesc.tCapsuleDesc.tColDesc.bKinematic = false;
-	//tDesc.tCapsuleDesc.tColDesc.eType = CPhysicsXSystem::ACTORTYPE::ACTOR_DYNAMIC;
-
-	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_LOADING, L"Test", L"TestObj", &tDesc)))
-	//	return E_FAIL;
-
-	//ZeroMemory(&tDesc, sizeof(tDesc));
-
-	//XMStoreFloat4x4(&tDesc.tBoxDesc.matTransform, matIdentity);
-	//tDesc.tBoxDesc.tColDesc.bGravity = false;
-	//tDesc.tBoxDesc.tColDesc.bKinematic = false;
-	//tDesc.tBoxDesc.tColDesc.eType = CPhysicsXSystem::ACTORTYPE::ACTOR_STATIC;
-
-	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_LOADING, L"Test", L"TestObj" ,&tDesc)))
-	//	return E_FAIL;
-
 
 	return S_OK;
 }

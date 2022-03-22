@@ -181,7 +181,7 @@ VS_OUT_SHADESHADOW VS_MAIN_SHADESHADOW(VS_IN In)
 	Out.vPosition = mul(vector(vPosition.xyz, 1.f), matWVP);
 	Out.vTexUV = In.vTexUV;
 	Out.vLightPosition = mul(vector(vPosition.xyz, 1.f), matLightWVP);
-	//Out.vLightPosition = Out.vPosition;
+	//Out.vLightPosition = Out.vOffset;
 	
 	return Out;
 }

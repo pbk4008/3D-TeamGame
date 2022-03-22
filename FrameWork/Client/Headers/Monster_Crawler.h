@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Actor.h"
-#include "UI_Monster_Panel.h"
 
 BEGIN(Engine)
 class CModel;
@@ -12,6 +11,7 @@ END
 BEGIN(Client)
 class CMonster_Crawler final : public CActor
 {
+public:
 	enum MON_STATE {
 		HEAD ,ATTACK_R1, DEATH, FLINCH_LEFT, FLINCH_RIGHT, IDLE, KNOCKBACK_END, KNOCKBACK_START, RICOCHET,
 		WALK_BWD, WALK_FWD, WALK_LEFT, WALK_RIGHT , MON_STATE_END
@@ -30,15 +30,15 @@ public:
 
 private:
 	virtual HRESULT SetUp_Components();
-	HRESULT Animation_Setting();
+	HRESULT Set_Animation_FSM();
+	HRESULT Set_State_FSM();
 
 private:
 	CModel* m_pModelCom = nullptr;
-	//CAnimationController* m_pAnimControllerCom = nullptr;
 	CAnimator* m_pAnimatorCom = nullptr;
-	CCapsuleCollider* m_pColliderCom = nullptr;
+	CStateController* m_pStateController = nullptr;
 
-	CUI_Monster_Panel* m_pPanel = nullptr;
+	class CUI_Monster_Panel* m_pPanel = nullptr;
 
 public:
 	static CMonster_Crawler* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext);
