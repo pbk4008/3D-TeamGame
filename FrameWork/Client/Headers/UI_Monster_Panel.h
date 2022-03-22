@@ -43,6 +43,9 @@ public:
 public:
 	void Set_TargetWorldMatrix(_matrix matTarget) { XMStoreFloat4x4(&m_TargetMatrix, matTarget);}
 
+public:
+	void Set_HpBar(_float fMaxHp, _float fHp);
+
 private:
 	HRESULT Panel_Setting();
 	HRESULT Setting_Crawler();

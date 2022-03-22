@@ -7,6 +7,9 @@
 - Client의 Test 폴더에 저장(폴더 없을 경우 만들기)
 - Test폴더에 만들어진 fbx를 Client/bin/FBX/Monster에 넣기(없을 경우 폴더 만들기)
 - Texture는 Client/bin/FBX/Texture 에 넣기(없을 경우 폴더 만들기)
+- 쉐이더 매쉬애님 선택해야하고 원본 fbx들어가있는폴더안에 dds 텍스쳐도 같이 들어있어야함
+
+
 
 무기 FBX 바이너리
 - Client의 Test 폴더에 저장(폴더 없을 경우 만들기)
