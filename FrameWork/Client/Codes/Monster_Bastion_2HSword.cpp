@@ -130,7 +130,6 @@ HRESULT CMonster_Bastion_2HSword::Render()
 	}
 #ifdef _DEBUG
 		Render_Debug();
-		m_pColliderCom->Render(L"Camera_Silvermane");
 #endif
 	return S_OK;
 }
@@ -148,26 +147,10 @@ HRESULT CMonster_Bastion_2HSword::Ready_Components()
 
 
 	/* for. Model Com */
-	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Model_Bastion_2HSword_Bin", L"Model", (CComponent**)&m_pModel)))
+	if (FAILED(SetUp_Components(m_iSceneID, L"Model_Bastion_2HSword_Bin", L"Model", (CComponent**)&m_pModel)))
 		return E_FAIL;
 	_matrix matPivot = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(180.f));
 	m_pModel->Set_PivotMatrix(matPivot);
-
-	/* for.Capsule Collider */
-	CCapsuleCollider::CAPSULEDESC CapDesc;
-	XMStoreFloat4x4(&CapDesc.matTransform, XMMatrixIdentity());
-	CapDesc.pParent = this;
-
-	CPhysicsXSystem::COLDESC PhyDesc;
-	PhyDesc.bGravity = false;
-	PhyDesc.bKinematic = false;
-	PhyDesc.eType = CPhysicsXSystem::ACTORTYPE::ACTOR_DYNAMIC;
-	
-	CapDesc.tColDesc = PhyDesc;
-	if (FAILED(__super::SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_CapsuleCollider", L"Com_CapsuleCollider", (CComponent**)&m_pColliderCom, &CapDesc)))
-	{
-		return E_FAIL;
-	}
 
 	/* for. State Controller */
 	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_StateController", L"StateController", (CComponent**)&m_pStateController)))
@@ -192,7 +175,7 @@ HRESULT CMonster_Bastion_2HSword::Ready_Components()
 	tCharacterControllerDesc.pGameObject = this;
 	tCharacterControllerDesc.vPosition = { 0.f, 0.f, 0.f };
 
-	if (FAILED(SetUp_Components(m_iSceneID, L"Proto_Component_CharacterController", L"CharacterController", (CComponent**)&m_pCharacterController, &tCharacterControllerDesc)))
+	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_CharacterController", L"CharacterController", (CComponent**)&m_pCharacterController, &tCharacterControllerDesc)))
 		return E_FAIL;
 
 	return S_OK;
@@ -519,7 +502,6 @@ void CMonster_Bastion_2HSword::Free()
 	m_umapWeapons.clear();
 
 	Safe_Release(m_pCharacterController);
-	Safe_Release(m_pColliderCom);
 	Safe_Release(m_pStateController);
 	Safe_Release(m_pAnimator);
 	Safe_Release(m_pModel);

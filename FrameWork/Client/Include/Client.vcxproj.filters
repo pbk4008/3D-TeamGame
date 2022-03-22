@@ -423,7 +423,7 @@
     </Filter>
     <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_Healer\State_Healer\Death">
       <UniqueIdentifier>{cb8123f1-7865-4c84-bd46-7c2c4c7fb4fc}</UniqueIdentifier>
-   </Filter>
+    </Filter>
     <Filter Include="01.Scene\01.Loading\00.Loader\00.MeshLoader">
       <UniqueIdentifier>{c2049929-7ae9-4414-bb90-0d30c5d6089c}</UniqueIdentifier>
     </Filter>
@@ -977,7 +977,6 @@
     <ClInclude Include="..\Headers\Traverse_JumpNodeJog.h">
       <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Jump</Filter>
     </ClInclude>
-    <ClInclude Include="..\Headers\1H_SwordAttackNormalR1_04Swap.h" />
     <ClInclude Include="..\Headers\Monster_Bastion_Sword.h">
       <Filter>02.GameObject\03.Character\01.Monster\Bastion_Sword</Filter>
     </ClInclude>
@@ -1041,7 +1040,7 @@
     </ClInclude>
     <ClInclude Include="..\Headers\Aberrant_Attack.h">
       <Filter>02.GameObject\03.Character\01.Monster\EarthAberrant\State\03.Attack</Filter>
-	</ClInclude>
+    </ClInclude>
     <ClInclude Include="..\Default\Client_Struct.h">
       <Filter>98.Headers</Filter>
     </ClInclude>
@@ -1062,6 +1061,9 @@
     </ClInclude>
     <ClInclude Include="..\Codes\MeshLoader.h">
       <Filter>01.Scene\01.Loading\00.Loader\00.MeshLoader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\1H_SwordAttackNormalR1_04Swap.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\1H_Sword\R2</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1586,7 +1588,6 @@
     <ClCompile Include="..\Codes\Traverse_JumpNodeJog.cpp">
       <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Jump</Filter>
     </ClCompile>
-    <ClCompile Include="..\Codes\1H_SwordAttackNormalR1_04Swap.cpp" />
     <ClCompile Include="..\Codes\Monster_Bastion_Sword.cpp">
       <Filter>02.GameObject\03.Character\01.Monster\Bastion_Sword</Filter>
     </ClCompile>
@@ -1653,7 +1654,7 @@
     </ClCompile>
     <ClCompile Include="..\Codes\Aberrant_Attack.cpp">
       <Filter>02.GameObject\03.Character\01.Monster\EarthAberrant\State\03.Attack</Filter>
-	</ClCompile>
+    </ClCompile>
     <ClCompile Include="..\Codes\Bastion_Sword_Hit.cpp">
       <Filter>02.GameObject\03.Character\01.Monster\Bastion_Sword\00.State\03.Hit</Filter>
     </ClCompile>
@@ -1674,6 +1675,9 @@
     </ClCompile>
     <ClCompile Include="..\Codes\MeshLoader.cpp">
       <Filter>01.Scene\01.Loading\00.Loader\00.MeshLoader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\1H_SwordAttackNormalR1_04Swap.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\1H_Sword\R2</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

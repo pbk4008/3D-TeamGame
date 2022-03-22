@@ -56,7 +56,6 @@ private:
 	CAnimation*			  m_pAnimation = nullptr;
 	CAnimator*			  m_pAnimator = nullptr;
 	CStateController*	  m_pStateController = nullptr;
-	CCapsuleCollider*	  m_pColliderCom = nullptr;
 	CCharacterController* m_pCharacterController = nullptr;
 
 private:

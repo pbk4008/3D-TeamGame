@@ -79,7 +79,6 @@ _int CMonster_EarthAberrant::Tick(_double _dDeltaTime)
 		return iProgress;
 	}
 
-	m_pColliderCom->Update(m_pTransform->Get_WorldMatrix());
 	m_pPanel->Set_TargetWorldMatrix(m_pTransform->Get_WorldMatrix());
 	
 	return 0;
@@ -110,9 +109,6 @@ HRESULT CMonster_EarthAberrant::Render()
 		return E_FAIL;
 	}
 
-#ifdef _DEBUG
-	m_pColliderCom->Render(L"Camera_Silvermane");
-#endif // _DEBUG
 
 	_matrix XMWorldMatrix = XMMatrixTranspose(m_pTransform->Get_WorldMatrix());
 	_matrix XMViewMatrix = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_VIEW));
@@ -150,19 +146,6 @@ HRESULT CMonster_EarthAberrant::SetUp_Components()
 	tDesc.pTransform = m_pTransform;
 
 	if (FAILED(__super::SetUp_Components((_uint)SCENEID::SCENE_STAGE1, L"Proto_Component_Animator", L"Com_Animator", (CComponent**)&m_pAnimatorCom, &tDesc)))
-	{
-		return E_FAIL;
-	}
-
-	CCapsuleCollider::CAPSULEDESC CapDesc;
-	XMStoreFloat4x4(&CapDesc.matTransform, XMMatrixIdentity());
-	CapDesc.pParent = this;
-	CPhysicsXSystem::COLDESC PhyDesc;
-	PhyDesc.bGravity = false;
-	PhyDesc.bKinematic = false;
-	PhyDesc.eType = CPhysicsXSystem::ACTORTYPE::ACTOR_DYNAMIC;
-	CapDesc.tColDesc = PhyDesc;
-	if (FAILED(__super::SetUp_Components((_uint)SCENEID::SCENE_STAGE1, L"Proto_Component_CapsuleCollider", L"Com_CapsuleCollider", (CComponent**)&m_pColliderCom, &CapDesc)))
 	{
 		return E_FAIL;
 	}
@@ -453,7 +436,6 @@ CGameObject* CMonster_EarthAberrant::Clone(const _uint _iSceneID, void* _pArg)
 
 void CMonster_EarthAberrant::Free()
 {
-	Safe_Release(m_pColliderCom);
 	Safe_Release(m_pPanel);
 	Safe_Release(m_pStateController);
 	Safe_Release(m_pAnimatorCom);
