@@ -13,18 +13,18 @@ public:
 	typedef struct tagDesc
 	{
 		/* For.Rigidbody */
-		ERigidType eRigidType = ERigidType::Dynamic;
-		_bool isGravity = false;
-		_bool isKinematic = false;
+		ERigidType eRigidType = ERigidType::Dynamic;			// 리지드스태틱(움직이지 않는 고정된 액터) or 리지드바디(움직이며 물리연산을 받는 액터)
+		_bool isGravity = false;								// 중력을 받을것인가?
+		_bool isKinematic = false;								// 다른 액터로부터 물리연산을 안받는 객체
 		/* For.Shape */
-		_bool isSceneQuery = false; // cct로 밀거나 물리작용하는 오브젝트들
-		_bool isTrigger = false;
+		_bool isSceneQuery = false;								// cct로 밀거나 물리작용하는 오브젝트들
+		_bool isTrigger = false;								// 트리거 로 만들 것인가?
 		/* For.Material */
-		_float fStaticFriction = 0.5f;
-		_float fDynamicFriction = 0.5f;
-		_float fRestitution = 0.6f;
+		_float fStaticFriction = 0.5f;							// 정적 마찰
+		_float fDynamicFriction = 0.5f;							// 동적 마찰
+		_float fRestitution = 0.6f;								// 물체가 튕기는 정도(?)
 		/* For.Collider */
-		CGameObject* pGameObject = nullptr;
+		CGameObject* pGameObject = nullptr;						// 액터를 가지고 있는 오브젝트
 	}DESC;
 protected:
 	explicit CCollider(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext);
