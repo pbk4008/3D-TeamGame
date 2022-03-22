@@ -119,8 +119,8 @@ void CCollider::Free()
 		m_pShape->getActor()->detachShape(*m_pShape);
 	m_pPhsyX->Remove_Actor(m_pRigidActor);
 
-	Safe_PxRelease(m_pRigidActor);
 	Safe_PxRelease(m_pShape);
+	Safe_PxRelease(m_pRigidActor);
 	Safe_PxRelease(m_pMaterial);
 
 	Safe_Release(m_pPhsyX);
