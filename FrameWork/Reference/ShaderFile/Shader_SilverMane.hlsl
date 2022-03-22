@@ -329,7 +329,7 @@ PS_OUT PS_MAIN_TOP(PS_IN In)
 	Out.depth = float4(In.vUvDepth.z / In.vUvDepth.w, In.vUvDepth.w / 300.f, 0.f, 0.f);
 	
 	float4 Ecolor = float4(0.98, 0.23, 0.19, 0.f);
-	float Epower = 0.7f;
+	float Epower = 1.5f;
 	
 	float accvalue = diffuse.r + diffuse.g - diffuse.b;
 	if(accvalue > 0.6f)

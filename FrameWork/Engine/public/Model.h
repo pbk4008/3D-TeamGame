@@ -40,6 +40,7 @@ public:
 public:
 	HRESULT Add_Material(CMaterial* _pMtrl, const _uint _iMtrlIndex);
 	HRESULT SetUp_ValueOnShader(const char* pConstantName, void* pData, _uint iSize);
+	HRESULT SetUp_TextureOnShader(const string& pConstantName, class CTexture* pTextureCom, _uint iTextureIndex = 0);
 	HRESULT SetUp_TextureOnShader(const char* pConstantName, _uint iMeshContainerIndex, aiTextureType eType);
 	HRESULT SetUp_TextureOnShader(const char* pConstantName, ID3D11ShaderResourceView* pSRV);
 

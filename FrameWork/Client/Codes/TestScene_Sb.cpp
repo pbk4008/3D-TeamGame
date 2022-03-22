@@ -14,6 +14,8 @@ HRESULT CTestScene_Sb::NativeConstruct()
 {
 	if (FAILED(__super::NativeConstruct())) return E_FAIL;
 
+	if (FAILED(Ready_LightDesc())) return E_FAIL;
+
 	if (FAILED(Ready_Gameobject())) return E_FAIL;
 
 	return S_OK;
@@ -22,6 +24,7 @@ HRESULT CTestScene_Sb::NativeConstruct()
 _int CTestScene_Sb::Tick(_double TimeDelta)
 {
 	if (0 > __super::Tick(TimeDelta)) return -1;
+		
 
 	return _int();
 }
@@ -33,13 +36,15 @@ HRESULT CTestScene_Sb::Render()
 
 HRESULT CTestScene_Sb::Ready_Gameobject()
 {
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_SB, L"Layer_Plane", L"Plane_Test")))
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_Plane", L"Proto_GameObject_Plane_Test")))
 		return E_FAIL;
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_SB, L"Layer_Silvermane", L"Silvermane")))
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_Silvermane", L"Proto_GameObject_Silvermane")))
 		return E_FAIL;
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_SB, L"Layer_Camera", L"Camera_Silvermane")))
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_Camera", L"Proto_GameObject_Camera_Silvermane")))
 		return E_FAIL;
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_SB, L"Layer_Monster", L"Monster_Bastion_Marksman")))
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_Monster", L"Monster_Bastion_Marksman")))
+		return E_FAIL;
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_SkyBox", L"Proto_GameObject_SkyBox")))
 		return E_FAIL;
 
 	return S_OK;

@@ -106,6 +106,7 @@ private: /* For.Weapon */
 private: /* For.JumpNode */
 	CJumpNode* m_pTargetJumpNode = nullptr;
 	_float m_fJumpNodeLookTime = 0.f;
+	CTexture*	m_pTexture = nullptr;
 
 public:
 	static CSilvermane* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext);

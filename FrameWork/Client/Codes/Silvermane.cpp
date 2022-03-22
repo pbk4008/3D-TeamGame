@@ -137,7 +137,7 @@
 #include "Traverse_Jump400Jog.h"
 #include "Traverse_JumpNodeJog.h"
 #pragma endregion
-
+#include "Material.h"
 
 CSilvermane::CSilvermane(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
 	: CActor(_pDevice, _pDeviceContext)
@@ -170,7 +170,7 @@ HRESULT CSilvermane::NativeConstruct(const _uint _iSceneID, void* _pArg)
 		m_pTransform->Set_State(CTransform::STATE_POSITION, vPos);
 	}
 	else
-		m_pTransform->Set_State(CTransform::STATE_POSITION, XMVectorSet(0.f, 2.f, 0.f, 1.f));
+		m_pTransform->Set_State(CTransform::STATE_POSITION, XMVectorSet(0.f, 1.f, 0.f, 1.f));
 
 	if (FAILED(Ready_Components()))
 		return E_FAIL;
@@ -185,6 +185,11 @@ HRESULT CSilvermane::NativeConstruct(const _uint _iSceneID, void* _pArg)
 		return E_FAIL;
 
 	m_isFall = true;
+
+	m_pRenderer->SetRenderButton(CRenderer::PIXEL, true);
+	m_pRenderer->SetRenderButton(CRenderer::PBRHDR, true);
+	m_pRenderer->SetCameraTag(L"Camera_Silvermane");
+
 	return S_OK;
 }
 
@@ -244,7 +249,7 @@ _int CSilvermane::LateTick(_double _dDeltaTime)
 	if (NO_EVENT != iProgress) 
 		return iProgress;
 
-	if(FAILED(m_pRenderer->Add_RenderGroup(CRenderer::RENDER_ALPHA, this)))
+	if(FAILED(m_pRenderer->Add_RenderGroup(CRenderer::RENDER_NONALPHA, this)))
 		return -1;
 
 	// ¹«±â ·¹ÀÕ¾÷µ«
@@ -287,9 +292,7 @@ HRESULT CSilvermane::Render()
 	{
 		//if (FAILED(m_pModel->SetUp_TextureOnShader("g_DiffuseTexture", i, aiTextureType_DIFFUSE))) 
 		//	return E_FAIL;
-
-		if (FAILED(m_pModel->Render(i, 0)))
-			return E_FAIL;
+		if (FAILED(m_pModel->Render(i, i)))	return E_FAIL;
 	}
 
 #ifdef _DEBUG
@@ -405,6 +408,11 @@ HRESULT CSilvermane::Ready_Components()
 	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_CharacterController", L"CharacterController", (CComponent**)&m_pCharacterController, &tCharacterControllerDesc)))
 		return E_FAIL;
 	m_pCharacterController->setOwnerTransform(m_pTransform);
+
+	m_pTexture = g_pGameInstance->Clone_Component<CTexture>(0, L"Proto_Component_Texture");
+	m_pTexture->Change_Texture(L"Texture_SilvermeanNewHair");
+
+	m_pModel->Get_Materials()[3]->Set_Texture("g_NewHairTexture", TEXTURETYPE::TEX_TINT, m_pTexture);
 
 	return S_OK;
 }

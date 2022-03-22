@@ -75,13 +75,6 @@ _int CMainApp::Tick(_double TimeDelta)
 		}
 	}
 
-	/*if (g_pGameInstance->getkeyDown(DIK_F1))
-	{
-		m_bDeffered = !m_bDeffered;
-		m_pRenderer->SetRenderButton(CRenderer::DEFERRED, m_bDeffered);
-	}*/
-
-
 	return _int();
 }
 
@@ -173,6 +166,9 @@ HRESULT CMainApp::Ready_GameObject_Prototype()
 HRESULT CMainApp::Load_Texture()
 {
 	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, TEXT("Texture_BackGround"), TEXT("../bin/Resources/Texture/Loading/T_LoadScreen_KeyArt_5.dds"))))
+		return E_FAIL;
+
+	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, TEXT("Texture_SilvermeanNewHair"), TEXT("../bin/FBX/Texture/T_Silvermane_Hairs_d_new.dds"))))
 		return E_FAIL;
 
 	return S_OK;

@@ -1,45 +1,61 @@
 #include "Shader_Calculate.hpp"
 
-//#pragma pack_matrix(row_major);
-
 sampler DefaultSampler = sampler_state
 {
-	filter = min_mag_mip_linear;
-	AddressU = clamp;
-	AddressV = clamp;
-};
-sampler SamplerWrap = sampler_state
-{
-	filter = min_mag_mip_linear;
-	AddressU = wrap;
-	AddressV = wrap;
+	filter = anisotropic;
+	MaxAnisotropy = 16;
+
+	AddressU = mirror;
+	AddressV = mirror;
+
+	//filter = min_mag_mip_linear;
+	//AddressU = wrap;
+	//AddressV = wrap;
 };
 
-cbuffer ShaderCheck
+cbuffer RtPixel
 {
-	bool g_bShadow;
-};
-
-cbuffer ConstBuffer
-{
-	vector	g_BrightPassOffset[4];
-	vector	g_DSOffset[16];
-	float	g_BrightPassThreshold;
-};
-
-cbuffer HorizontalBlur
-{
-	float g_HBloomOffset[9];
-	float g_HBloomWeight[9];
-};
-
-cbuffer VerticalBlur
-{
-	float g_VBloomOffset[9];
-	float g_VBloomWeight[9];
+	float2 g_RtperPixel;
 };
 
 texture2D g_Basetexture;
+
+int g_blurSize = 3;
+
+float pixelKernel[13] =
+{
+	-6,
+	-5,
+	-4,
+	-3,
+	-2,
+	-1,
+	0,
+	1,
+	2,
+	3,
+	4,
+	5,
+	6,
+};
+
+float blurWeights[13] =
+{
+	0.002216,
+	0.008764,
+	0.026995,
+	0.064759,
+	0.120985,
+	0.176033,
+	0.199471,
+	0.176033,
+	0.120985,
+	0.064759,
+	0.026995,
+	0.008764,
+	0.002216,
+};
+
 
 struct VS_IN
 {
@@ -70,43 +86,23 @@ struct PS_IN
 
 struct PS_OUT
 {
-	vector vOutColor	: SV_Target0;
+	vector vOutColor : SV_Target0;
 };
 
-PS_OUT PS_MAIN_BrightPass(PS_IN In)
+PS_OUT PS_MAIN_VerticalBlur(PS_IN In)
 {
 	PS_OUT Out = (PS_OUT) 0;
-
-	float4 Average = float4(0.f, 0.f, 0.f, 0.f);
 	
-	for (int i = 0; i < 4; i++ )
+	float4 color = 0;
+	for (int i = 0; i < 13; ++i)
 	{
-		Average += g_Basetexture.Sample(DefaultSampler, (In.vTexUV + float2(g_BrightPassOffset[i].x, g_BrightPassOffset[i].y)));
+		color += g_Basetexture.Sample(DefaultSampler, float2(
+													In.vTexUV.x + g_RtperPixel.x,
+													In.vTexUV.y + (pixelKernel[i] * g_RtperPixel.y * g_blurSize) + g_RtperPixel.y))
+													* blurWeights[i];
 	}
-	Average *= 0.25f;
 	
-	float Luminance = max(Average.r, max(Average.g, Average.b));
-	
-	if(Luminance < g_BrightPassThreshold)
-		Average = float4(0.f, 0.f, 0.f, 1.f);
-		
-	Out.vOutColor = Average;
-	
-	return Out;
-}
-
-PS_OUT PS_MAIN_DOWNSAMPLE(PS_IN In)
-{
-	PS_OUT Out = (PS_OUT) 0;
-
-	float4 Average = float4(0.f, 0.f, 0.f, 0.f);
-	
-	for (int i = 0; i < 16 ; i++)
-	{
-		Average += g_Basetexture.Sample(DefaultSampler, In.vTexUV + float2(g_DSOffset[i].x, g_DSOffset[i].y));
-	}
-	Average *= (1.f / 16.f);
-	Out.vOutColor = Average;
+	Out.vOutColor = color;
 	
 	return Out;
 }
@@ -115,38 +111,25 @@ PS_OUT PS_MAIN_HorizontalBlur(PS_IN In)
 {
 	PS_OUT Out = (PS_OUT) 0;
 	
-	float4 BaseColor = float4(0.f, 0.f, 0.f, 0.f);
-	
-	for (int i = 0; i < 9; i++)
+	float4 color = 0;
+	for (int i = 0; i < 13; ++i)
 	{
-		BaseColor += (g_Basetexture.Sample(DefaultSampler, (In.vTexUV + float2(g_HBloomOffset[i], 0.f))) * g_HBloomWeight[i]);
+		color += g_Basetexture.Sample(DefaultSampler, float2(
+													In.vTexUV.x + (pixelKernel[i] * g_RtperPixel.x * g_blurSize) + g_RtperPixel.x,
+													In.vTexUV.y + g_RtperPixel.y))
+													* blurWeights[i];
 	}
-	Out.vOutColor = vector(BaseColor.rgb, 1.f);
+	
+	Out.vOutColor.xyz = color.xyz;
 	
 	return Out;
 }
-
-PS_OUT PS_MAIN_VerticalBlur(PS_IN In)
-{
-	PS_OUT Out = (PS_OUT) 0;
-	
-	float4 BaseColor = float4(0.f, 0.f, 0.f, 0.f);
-	
-	for (int i = 0; i < 9; i++)
-	{
-		BaseColor += (g_Basetexture.Sample(DefaultSampler, (In.vTexUV + float2(0.f, g_VBloomOffset[i]))) * g_VBloomWeight[i]);
-	}
-	Out.vOutColor = vector(BaseColor.rgb, 1.f);
-	
-	return Out;
-}
-
 
 
 //--------------------------------------------------------------------------------------------------------------------------//
 technique11 PostProcess
 {
-	pass BrightPass
+	pass VerticalBlur
 	{
 		SetRasterizerState(CullMode_Default);
 		SetDepthStencilState(ZTestDiable, 0);
@@ -154,18 +137,7 @@ technique11 PostProcess
 
 		VertexShader = compile vs_5_0 VS_MAIN_VIEWPORT();
 		GeometryShader = NULL;
-		PixelShader = compile ps_5_0 PS_MAIN_BrightPass();
-	}
-
-	pass BrightPassDownSample
-	{
-		SetRasterizerState(CullMode_Default);
-		SetDepthStencilState(ZTestDiable, 0);
-		SetBlendState(BlendDisable, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
-
-		VertexShader = compile vs_5_0 VS_MAIN_VIEWPORT();
-		GeometryShader = NULL;
-		PixelShader = compile ps_5_0 PS_MAIN_DOWNSAMPLE();
+		PixelShader = compile ps_5_0 PS_MAIN_VerticalBlur();
 	}
 
 	pass HorizontalBlur
@@ -177,17 +149,6 @@ technique11 PostProcess
 		VertexShader = compile vs_5_0 VS_MAIN_VIEWPORT();
 		GeometryShader = NULL;
 		PixelShader = compile ps_5_0 PS_MAIN_HorizontalBlur();
-	}
-
-	pass VerticalBlur
-	{
-		SetRasterizerState(CullMode_Default);
-		SetDepthStencilState(ZTestDiable, 0);
-		SetBlendState(BlendDisable, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
-
-		VertexShader = compile vs_5_0 VS_MAIN_VIEWPORT();
-		GeometryShader = NULL;
-		PixelShader = compile ps_5_0 PS_MAIN_VerticalBlur();
 	}
 	
 }

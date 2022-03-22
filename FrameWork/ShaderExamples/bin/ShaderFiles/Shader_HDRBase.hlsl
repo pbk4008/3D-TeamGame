@@ -9,6 +9,18 @@ sampler DefaultSampler = sampler_state
 	AddressV = clamp;
 };
 
+sampler DiffuseSampler = sampler_state
+{
+	filter = anisotropic;
+	MaxAnisotropy = 16;
+};
+
+sampler ShadowSampler = sampler_state
+{
+	filter = anisotropic;
+	MaxAnisotropy = 16;
+};
+
 cbuffer ShaderCheck
 {
 	bool g_bShadow;
@@ -23,8 +35,10 @@ cbuffer ConstBuffer
 
 texture2D g_ShadowTexture;
 texture2D g_DiffuseTexture;
+texture2D g_NormalTexture;
 texture2D g_SpecularTexture;
 texture2D g_ShadeTexture;
+texture2D g_SSS;
 
 struct VS_IN
 {
@@ -63,36 +77,22 @@ PS_OUT PS_MAIN_HDDRBASE(PS_IN In)
 {
 	PS_OUT Out = (PS_OUT) 0;
 	
-	vector vDiffuse, vSaecular, vShade, vShadow;
+	float4 diffuse = g_DiffuseTexture.Sample(DiffuseSampler, In.vTexUV);
+	float3 normal = g_NormalTexture.Sample(DefaultSampler, In.vTexUV).xyz;
 	
-	float Gamma = 2.2f;
-	float LightAmount = 1.f;
-	float SpecularAmount = 1.3f;
-	
-	vDiffuse = g_DiffuseTexture.Sample(DefaultSampler, In.vTexUV);
-	vSaecular = g_SpecularTexture.Sample(DefaultSampler, In.vTexUV);
-	vShade = (g_ShadeTexture.Sample(DefaultSampler, In.vTexUV));
-	vShadow = g_ShadowTexture.Sample(DefaultSampler, In.vTexUV);
-	
-	if(g_bShadow)
+	float4 final;
+	if (any(normal))
 	{
-		vDiffuse *= vShadow;
-		vSaecular *= vShadow;
+		float4 light = g_ShadeTexture.Sample(DefaultSampler, In.vTexUV);
 		
-		vDiffuse = pow(abs(vDiffuse), Gamma);
-		vSaecular = pow(abs(vSaecular), Gamma);
+		final = diffuse * light;
 	}
 	else
 	{
-		vDiffuse = pow(abs(vDiffuse), Gamma);
-		vSaecular = pow(abs(vSaecular), Gamma);
+		final = diffuse;
 	}
 	
-	vDiffuse *= float4(LightAmount, LightAmount, LightAmount, 1.f);
-	vSaecular *= float4(SpecularAmount, SpecularAmount, SpecularAmount, 1.f);
-	
-	Out.vHDRDiffuse = vDiffuse * vShade;
-	Out.vHDRSpecular = vSaecular;
+	Out.vHDRDiffuse = final;
 	
 	return Out;
 }

@@ -325,10 +325,13 @@ HRESULT CMaterial::SetUp_TextureOnShader()
 		case TEXTURETYPE::TEX_ORM:
 			break;
 		case TEXTURETYPE::TEX_OMER:
+			str = "g_OMERTexture";
 			break;
 		case TEXTURETYPE::TEX_CEO:
+			str = "g_CEOTexture";
 			break;
 		case TEXTURETYPE::TEX_MRA:
+			str = "g_MRATexture";
 			break;
 		case TEXTURETYPE::TEX_HEIGHT:
 			break;

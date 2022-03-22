@@ -4,24 +4,30 @@
 
 sampler DefaultSampler = sampler_state
 {
-	filter = min_mag_mip_linear;
-	AddressU = wrap;
-	AddressV = wrap;
-};
+	//filter = anisotropic;
+	//MaxAnisotropy = 16;
 
-cbuffer ConstBuffer
-{
-	bool g_bHDR;
+	filter = min_mag_mip_linear;
+	AddressU = clamp;
+	AddressV = clamp;
 };
 
 texture2D g_DiffuseTexture;
-texture2D g_ShadeTexture;
-texture2D g_ShadowTexture;
 texture2D g_SpecularTexture;
 
-texture2D g_ToneTexture;
-texture2D g_ToneSepcular;
+texture2D g_EmissionTexture;
 
+texture2D g_Blur2Texture;
+texture2D g_Blur4Texture;
+texture2D g_Blur8Texture;
+texture2D g_Blur16Texture;
+
+texture2D g_BloomTexture;
+
+cbuffer hdrcheck
+{
+	bool g_bhdr;
+};
 
 struct VS_IN
 {
@@ -55,50 +61,50 @@ struct PS_OUT
 	vector vOutColor : SV_Target0;
 };
 
+
 PS_OUT PS_MAIN_BLEND(PS_IN In)
 {
 	PS_OUT Out = (PS_OUT) 0;
 	
-	vector albedo = g_DiffuseTexture.Sample(DefaultSampler, In.vTexUV);
-	vector Shade = g_ShadeTexture.Sample(DefaultSampler, In.vTexUV);
-	vector shadow = g_ShadowTexture.Sample(DefaultSampler, In.vTexUV);
-	vector specular = g_SpecularTexture.Sample(DefaultSampler, In.vTexUV);
+	float Gamma = 2.2f;
 	
-	//vector ambient = vector(0.4f, 0.4f, 0.4f, 1.f) * albedo;
-	//vector emissive = 
-	vector diffuse = /*vector(1.f, 1.f, 1.f, 1.f) **/albedo * Shade;
+	float4 diffuse = g_DiffuseTexture.Sample(DefaultSampler, In.vTexUV);
+	float4 emission = g_EmissionTexture.Sample(DefaultSampler, In.vTexUV);
+	float4 specular = g_SpecularTexture.Sample(DefaultSampler, In.vTexUV);
+		 
+	float4 blur2 = g_Blur2Texture.Sample(DefaultSampler, In.vTexUV);
+	float4 blur4 = g_Blur4Texture.Sample(DefaultSampler, In.vTexUV);
+	float4 blur8 = g_Blur8Texture.Sample(DefaultSampler, In.vTexUV);
+	float4 blur16 = g_Blur16Texture.Sample(DefaultSampler, In.vTexUV);
 	
-	vector notTonemapping = diffuse + vector(specular.rgb, 0.f);
+	float4 final = diffuse + ((emission) * 1.f + (blur2) * 1.3f + (blur4) * 1.5f + (blur8) * 2.5f + (blur16) * 3.5f) + specular;
 	
-	//-----------------------------------------------------------------------//
-	
-	vector HDRalbedo = g_ToneTexture.Sample(DefaultSampler, In.vTexUV);
-	vector HDRsepcular = g_ToneSepcular.Sample(DefaultSampler, In.vTexUV);
-	
-	vector Tonemapping = HDRalbedo + HDRsepcular;
-	
-	if (g_bHDR == true)
+	if (g_bhdr == true)
 	{
-		Out.vOutColor = Tonemapping;
-		
-		if(Out.vOutColor.a == 0.f)
-			discard;
+		final = pow(final, Gamma);
+	
+		float Luminance = 1.f;
+		float MiddleGray = 0.18f;
+		float WhiteCutoff = 0.9f;
+	
+		vector color;
+		color = final * MiddleGray / (Luminance + 0.001f);
+	
+		color *= (1.f + (color / (WhiteCutoff * WhiteCutoff)));
+		color /= (1.f + color);
+	
+		Out.vOutColor = pow(color, 1 / Gamma);
 	}
 	else
 	{
-		Out.vOutColor = notTonemapping;
-		
-		if (Out.vOutColor.a == 0.f)
-			discard;
+		Out.vOutColor = final;
 	}
-	
 	
 	return Out;
 }
-
-technique11 Luminance
+technique11 Emissionblend
 {
-	pass UpSamplling
+	pass BlendEmission
 	{
 		SetRasterizerState(CullMode_Default);
 		SetDepthStencilState(ZTestDiable, 0);

@@ -17,7 +17,8 @@ HRESULT CPlane_Test::NativeConstruct_Prototype()
 	if (FAILED(__super::NativeConstruct_Prototype()))
 		return E_FAIL;
 
-	if(FAILED(Ready_NaviPoints(L"../Data/NavMesh/Stage_1_Nav.dat")))
+
+	if (FAILED(Ready_NaviPoints(L"../Data/NavMesh/Stage_1_Nav.dat")))
 		return E_FAIL;
 
 	return S_OK;
@@ -28,11 +29,12 @@ HRESULT CPlane_Test::NativeConstruct(const _uint _iSceneID, void* _pArg)
 	if (FAILED(__super::NativeConstruct(_iSceneID, _pArg)))
 		return E_FAIL;
 
-	if (FAILED(Ready_Components()))
-		return E_FAIL;
+	//if (FAILED(Ready_Components()))
+	//	return E_FAIL;
 
 	if (FAILED(Ready_NavMesh()))
 		return E_FAIL;
+
 
 	return S_OK;
 }
@@ -53,28 +55,29 @@ _int CPlane_Test::LateTick(_double _dDeltaTime)
 		return iProgress;
 
 #ifdef _DEBUG
-	m_pRenderer->Add_RenderGroup(CRenderer::RENDER_PRIORITY, this);
+	//m_pRenderer->Add_RenderGroup(CRenderer::RENDER_PRIORITY, this);
 #endif
+
 	return _int();
 }
 
 HRESULT CPlane_Test::Render()
 {
-	_fmatrix matWorld = m_pTransform->Get_WorldMatrix();
-	auto vCamPos = g_pGameInstance->Get_CamPosition(L"Camera_Silvermane");
+	//_fmatrix matWorld = m_pTransform->Get_WorldMatrix();
+	//auto vCamPos = g_pGameInstance->Get_CamPosition(L"Camera_Silvermane");
 
-	auto matWorldInvers = XMMatrixTranspose(matWorld);
-	auto matViewInvers = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_VIEW));
-	auto matProjInvers = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_PROJECTION));
+	//auto matWorldInvers = XMMatrixTranspose(matWorld);
+	//auto matViewInvers = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_VIEW));
+	//auto matProjInvers = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_PROJECTION));
 
-	m_pVIBuffer->SetUp_ValueOnShader("g_WorldMatrix", &matWorldInvers, sizeof(_matrix));
-	m_pVIBuffer->SetUp_ValueOnShader("g_ViewMatrix", &matViewInvers, sizeof(_matrix));
-	m_pVIBuffer->SetUp_ValueOnShader("g_ProjMatrix", &matProjInvers, sizeof(_matrix));
-	m_pVIBuffer->SetUp_TextureOnShader("g_DiffuseTexture", m_pTexture, 0);
+	//m_pVIBuffer->SetUp_ValueOnShader("g_WorldMatrix", &matWorldInvers, sizeof(_matrix));
+	//m_pVIBuffer->SetUp_ValueOnShader("g_ViewMatrix", &matViewInvers, sizeof(_matrix));
+	//m_pVIBuffer->SetUp_ValueOnShader("g_ProjMatrix", &matProjInvers, sizeof(_matrix));
+	//m_pVIBuffer->SetUp_TextureOnShader("g_DiffuseTexture", m_pTexture, 0);
 
-	m_pVIBuffer->SetUp_ValueOnShader("g_vCamPosition", &vCamPos, sizeof(_vector));
+	//m_pVIBuffer->SetUp_ValueOnShader("g_vCamPosition", &vCamPos, sizeof(_vector));
 
-	m_pVIBuffer->Render(0);
+	//m_pVIBuffer->Render(0);
 
 	return S_OK;
 }
@@ -82,12 +85,12 @@ HRESULT CPlane_Test::Render()
 HRESULT CPlane_Test::Ready_Components()
 {
 	/* Com_VIBuffer */
-	if (FAILED(__super::SetUp_Components(m_iSceneID, L"VIBuffer_Plane", L"VIBuffer", (CComponent**)&m_pVIBuffer)))
-		return E_FAIL;
+	//if (FAILED(__super::SetUp_Components(m_iSceneID, L"VIBuffer_Plane", L"VIBuffer", (CComponent**)&m_pVIBuffer)))
+	//	return E_FAIL;
 
 	/* Com_Texture  */
-	wstring TexTag = L"Plane_Texture";
-	m_pTexture = (CTexture*)g_pGameInstance->Clone_Component(m_iSceneID, L"Plane_Texture", &TexTag);
+	m_pTexture = g_pGameInstance->Clone_Component<CTexture>(0, L"Proto_Component_Texture");
+	m_pTexture->Change_Texture(L"Plane_Texture");
 
 	return S_OK;
 }

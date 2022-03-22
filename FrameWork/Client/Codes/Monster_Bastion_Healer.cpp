@@ -133,7 +133,7 @@ HRESULT CMonster_Bastion_Healer::Ready_Components()
 
 
 	// ¸ðµ¨
-	if (FAILED(SetUp_Components(m_iSceneID, L"Model_Bastion_Healer_Bin", L"Model", (CComponent**)&m_pModel)))
+	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_TEST_YM, L"Model_Bastion_Healer_Bin", L"Model", (CComponent**)&m_pModel)))
 		return E_FAIL;
 	_matrix matPivot = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(180.f));
 	m_pModel->Set_PivotMatrix(matPivot);

@@ -364,6 +364,7 @@
     <ClInclude Include="..\Headers\Silvermane_SprintFwd.h" />
     <ClInclude Include="..\Headers\Silvermane_SprintFwdStart.h" />
     <ClInclude Include="..\Headers\Silvermane_SprintFwdStop.h" />
+    <ClInclude Include="..\Headers\SkyBox.h" />
     <ClInclude Include="..\Headers\Staff.h" />
     <ClInclude Include="..\Headers\Stage1.h" />
     <ClInclude Include="..\Headers\Stage2.h" />
@@ -376,6 +377,7 @@
     <ClInclude Include="..\Headers\TestScene_YM.h" />
     <ClInclude Include="..\Headers\Traverse_Jump400Jog.h" />
     <ClInclude Include="..\Headers\Traverse_JumpNodeJog.h" />
+    <ClInclude Include="..\Headers\Treasure_Chest.h" />
     <ClInclude Include="..\Headers\UI_Ingame.h" />
     <ClInclude Include="..\Headers\UI_Monster_Back.h" />
     <ClInclude Include="..\Headers\UI_Monster_HpBar.h" />
@@ -576,6 +578,7 @@
     <ClCompile Include="..\Codes\Silvermane_SprintFwd.cpp" />
     <ClCompile Include="..\Codes\Silvermane_SprintFwdStart.cpp" />
     <ClCompile Include="..\Codes\Silvermane_SprintFwdStop.cpp" />
+    <ClCompile Include="..\Codes\SkyBox.cpp" />
     <ClCompile Include="..\Codes\Staff.cpp" />
     <ClCompile Include="..\Codes\Stage1.cpp" />
     <ClCompile Include="..\Codes\Stage2.cpp" />
@@ -588,6 +591,7 @@
     <ClCompile Include="..\Codes\TestScene_YM.cpp" />
     <ClCompile Include="..\Codes\Traverse_Jump400Jog.cpp" />
     <ClCompile Include="..\Codes\Traverse_JumpNodeJog.cpp" />
+    <ClCompile Include="..\Codes\Treasure_Chest.cpp" />
     <ClCompile Include="..\Codes\UI_Ingame.cpp" />
     <ClCompile Include="..\Codes\UI_Monster_Back.cpp" />
     <ClCompile Include="..\Codes\UI_Monster_HpBar.cpp" />

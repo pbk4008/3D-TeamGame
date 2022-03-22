@@ -42,6 +42,7 @@ CAnimNode* CAnimNode::Check_ConnectNode(_uint iIndex, vector<_uint>* vecDuplicat
 	for (auto& pNode : m_vecAnimNode)
 	{
 		//탐색 시작 체크를 하는 변수
+
 		_bool bCheck = false;
 		for (auto& pDuplicate : *vecDuplicate)
 		{
@@ -58,7 +59,6 @@ CAnimNode* CAnimNode::Check_ConnectNode(_uint iIndex, vector<_uint>* vecDuplicat
 			for (auto& pNewDuplicate : vecNewDuplicate)
 			{
 				if (pNewDuplicate == pDuplicate)
-
 				{
 					bDoubleCheck = true;
 					break;

@@ -15,7 +15,7 @@ cbuffer LightBuffer
 
 texture2D g_DiffuseTexture;
 texture2D g_ShadowTexture;
-texture2D g_PBRTexture;
+texture2D g_BiNormalTexture;
 
 sampler DefaultSampler = sampler_state
 {
@@ -23,6 +23,17 @@ sampler DefaultSampler = sampler_state
 	AddressU = wrap;
 	AddressV = wrap;
 };
+
+float3 Normalmapping(float3 normaltex, float3x3 tbn)
+{
+	normaltex = normaltex * 2 - 1;
+	normaltex = normalize(normaltex);
+	
+	normaltex = normalize(mul(normaltex, tbn));
+	normaltex = normaltex * 0.5f + 0.5f;
+	
+	return normaltex;
+}
 
 struct VS_IN
 {
@@ -42,8 +53,9 @@ struct VS_OUT
 {
 	float4 vPosition : SV_POSITION;
 	float4 vNormal : NORMAL;
-	float2 vTexUV : TEXCOORD0;
-	float4 vClipPos : TEXCOORD1;
+	float4 vTangent : TANGENT;
+	float4 vBiNormal : BINORMAL;
+	float4 vUvDepth : TEXCOORD0;
 };
 
 bool g_bUsingTool = false;
@@ -63,16 +75,23 @@ VS_OUT VS_MESH(VS_IN In)
 	}
 
 	vector vPosition = mul(vector(In.vPosition, 1.f), matInstance);
-
+	
+	vector vNormal = mul(vector(In.vNormal, 0.f), matInstance);
+	vector vBiNormal = mul(vector(In.vBiNormal, 0.f), matInstance);
+	vector vTangent = mul(vector(In.vTangent, 0.f), matInstance);
+	
 	matrix matWV, matWVP;
 
 	matWV = mul(g_WorldMatrix, g_ViewMatrix);
 	matWVP = mul(matWV, g_ProjMatrix);
 
 	Out.vPosition = mul(vPosition, matWVP);
-	Out.vNormal = normalize(mul(vector(In.vNormal, 0.f), g_WorldMatrix));
-	Out.vTexUV = In.vTexUV;
-	Out.vClipPos = Out.vPosition;
+	Out.vNormal = normalize(mul(vNormal, g_WorldMatrix));
+	Out.vBiNormal = normalize(mul(vBiNormal, g_WorldMatrix));
+	Out.vTangent = normalize(mul(vTangent, g_WorldMatrix));
+	Out.vUvDepth.xy = In.vTexUV.xy;
+	Out.vUvDepth.zw = Out.vPosition.zw;
+	
 	return Out;
 }
 // VS_SHADOW_MAP
@@ -152,10 +171,11 @@ VS_OUT_SHADESHADOW VS_MAIN_SHADESHADOW(VS_IN In)
 
 struct PS_IN
 {
-	float4		vPosition : SV_POSITION;
-	float4		vNormal : NORMAL;
-	float2		vTexUV : TEXCOORD0;
-	float4		vProjPos : TEXCOORD1;
+	float4 vPosition : SV_POSITION;
+	float4 vNormal : NORMAL;
+	float4 vTangent : TANGENT;
+	float4 vBiNormal : BINORMAL;
+	float4 vUvDepth : TEXCOORD0;
 };
 struct PS_RECT_IN
 {
@@ -164,20 +184,36 @@ struct PS_RECT_IN
 };
 struct PS_OUT
 {
-	vector		vColor : SV_TARGET0;
-	vector		vNormal : SV_TARGET1;
-	vector		vDepth : SV_TARGET2;
+	float4 diffuse : SV_TARGET0;
+	float4 normal : SV_TARGET1;
+	float4 depth : SV_TARGET2;
+	float4 M : SV_Target3;
+	float4 R : SV_Target4;
+	float4 A : SV_Target5;
+	float4 E : SV_Target6;
 };
 PS_OUT PS_MAIN(PS_IN In)
 {
-	PS_OUT Out = (PS_OUT)0;
-	Out.vColor = g_DiffuseTexture.Sample(DefaultSampler, In.vTexUV);
+	PS_OUT Out = (PS_OUT) 0;
 	
-	//if (Out.vColor.a < 0.2f)
-	//	discard;
+	float4 diffuse = g_DiffuseTexture.Sample(DefaultSampler, In.vUvDepth.xy);
+	float3 normal = g_BiNormalTexture.Sample(DefaultSampler, In.vUvDepth.xy).xyz;
+	float3x3 tbn = { In.vTangent.xyz, In.vBiNormal.xyz, In.vNormal.xyz };
+	
+	normal = Normalmapping(normal, tbn);
+	
+	Out.diffuse = diffuse;
 
-	Out.vNormal = vector(In.vNormal.xyz * 0.5f + 0.5f, 0.f);
-	Out.vDepth = vector(In.vProjPos.z / In.vProjPos.w, In.vProjPos.w / 300.f, 0.f, 0.f);
+	Out.depth = float4(In.vUvDepth.z / In.vUvDepth.w, In.vUvDepth.w / 300.f, 0.f, 0.f);
+	Out.normal = float4(normal, 0);
+	
+	Out.M = float4(0.3, 0.3, 0.3, 1);
+	Out.R = float4(0.3, 0.3, 0.3, 1);
+	Out.A = float4(1, 1, 1, 1);
+	float4 color = float4(0.996f, 0.843f, 0.f, 1.f);
+	float4 power = 0.03f;
+	Out.E = float4(0, 0, 0, 1);
+
 	return Out;
 }
 

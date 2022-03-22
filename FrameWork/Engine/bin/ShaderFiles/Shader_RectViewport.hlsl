@@ -9,11 +9,17 @@ sampler DefaultSampler = sampler_state
 	AddressV = wrap;
 };
 
+sampler SkyBoxSampler = sampler_state
+{
+	AddressU = mirror;
+	AddressV = mirror;
+};
+
 cbuffer ShaderCheck
 {
 	bool g_bShadow;
 	bool g_bPBRHDR;
-	bool g_bBlur;
+	bool g_bHDR;
 };
 
 cbuffer LightDesc
@@ -45,26 +51,24 @@ cbuffer MatrixInverse
 	matrix g_ViewMatrixInv;
 };
 
-// ?? 
-texture2D g_DepthTexture;
+texture2D g_SkyBoxTexutre;
 
 // Lighting
 texture2D g_DiffuseTexture;
 texture2D g_NormalTexture;
-texture2D g_PositionTexture;
+texture2D g_DepthTexture;
 
 texture2D g_Metallic;
 texture2D g_Roughness;
 texture2D g_AO;
+
+texture2D g_SSS;
 
 // belnding
 texture2D g_ShadeTexture;
 texture2D g_SpecularTexture;
 texture2D g_ShadowTexture;
 
-// final
-texture2D g_BlendTexture;
-texture2D g_BlurTexture;
 
 /* 1. m_pDeviceContext->DrawIndexed() */
 /* 2. 인덱스가 가지고 있던 인덱스 세개에 해당하는 정점 세개를 정점버퍼로부터 얻어온다. */
@@ -129,86 +133,100 @@ PS_OUT_LIGHTACC PS_MAIN_LIGHTACC_DIRECTIONAL(PS_IN In)
 {
 	PS_OUT_LIGHTACC Out = (PS_OUT_LIGHTACC) 0;
 	
-	vector vDiffuseDesc = g_DiffuseTexture.Sample(DefaultSampler, In.vTexUV);
-	vector vNormalDesc = g_NormalTexture.Sample(DefaultSampler, In.vTexUV);
-	vector vDepthDesc = g_DepthTexture.Sample(DefaultSampler, In.vTexUV);
+	float2 uvRT = In.vTexUV/* + float2(perPixelX, perPixelY)*/;
 	
-	float Metallic = g_Metallic.Sample(DefaultSampler, In.vTexUV).r;
-	float Roughness = g_Roughness.Sample(DefaultSampler, In.vTexUV).r;
-	float AO = g_AO.Sample(DefaultSampler, In.vTexUV).r;
-	float fViewZ = vDepthDesc.y * 150.f;
+	vector vDiffuseDesc = g_DiffuseTexture.Sample(DefaultSampler, uvRT);
+	vector vNormalDesc = g_NormalTexture.Sample(DefaultSampler, uvRT);
+	vector vDepthDesc = g_DepthTexture.Sample(DefaultSampler, uvRT);
+	float Metallic = g_Metallic.Sample(DefaultSampler, uvRT).r;
+	float Roughness = g_Roughness.Sample(DefaultSampler, uvRT).r;
+	float AO = g_AO.Sample(DefaultSampler, uvRT).r;
+	float fViewZ = vDepthDesc.y * 300.f;
 	
+	float3 normaltest = vNormalDesc.xyz;
+	if (!any(normaltest))
+		clip(0);
+
 	vector vWorldPos;
-	vWorldPos.x = In.vTexUV.x * 2.f - 1.f;
-	vWorldPos.y = In.vTexUV.y * -2.f + 1.f;
-	vWorldPos.z = vDepthDesc.r;
-	vWorldPos.w = 1.f;
+	vWorldPos.x = (uvRT.x * 2.f - 1.f) * fViewZ;
+	vWorldPos.y = (uvRT.y * -2.f + 1.f) * fViewZ;
+	vWorldPos.z = vDepthDesc.x * fViewZ;
+	vWorldPos.w = fViewZ;
 	
-	//vWorldPos = vWorldPos * fViewZ;
 	vWorldPos = mul(vWorldPos, g_ProjMatrixInv);
 	vWorldPos = mul(vWorldPos, g_ViewMatrixInv);
 	
-	vWorldPos.xyz = (vWorldPos / vWorldPos.w).xyz;
+	vector normal = vector(normaltest * 2.f - 1.f, 0.f);
+	float lightpow = 2.f;
 	
-	/* 0 ~ 1*/ /* -1 ~ 1*/
-	vector vNormal = vector(vNormalDesc.xyz * 2.f - 1.f, 0.f);
-	uint Pow = 3.f;
-	//Out.vShade = saturate(dot(normalize(vector(g_vLightDir.xyz, 0.f)) * -1.f, vNormal ) * (g_vLightDiffuse * g_vMtrlDiffuse) + (g_vLightAmbient * g_vMtrlAmbient));
-	Out.vShade = saturate(pow((dot(normalize(vector(g_vLightDir.xyz, 0.f)) * -1.f, vNormal) * 0.5f + 0.5f), Pow) * (g_vLightDiffuse * g_vMtrlDiffuse) + (g_vLightAmbient * g_vMtrlAmbient));
-	//Out.vShade.a = 1.f;
+	//Out.vShade 
+	float4 light = saturate(pow((dot(normalize(vector(g_vLightDir.xyz, 0.f)) * -1.f, normal) * 0.5f + 0.5f), lightpow) * (g_vLightDiffuse * g_vMtrlDiffuse) + (g_vLightAmbient * g_vMtrlAmbient));
+	Out.vShade = light;
+	Out.vShade.a = 1.f;
 	
 	if (g_bPBRHDR == true)
 	{
-		float gamma = 2.2; // liner space 에서 빛계산을 하는것이 중요 그래서 gamma correction 된 공간에서 계산을 하는것이다.
+		float3 normal3 = normalize(normal.xyz);
+		float3 N = normal3;
+		float3 V = normalize(g_vCamPosition.xyz - vWorldPos.xyz);
+		float3 L = normalize(g_vLightPos.xyz - vWorldPos.xyz);
+		//float3 L = (g_vLightDir.xyz) * -1;
+		float F0 = 0.04;
 		
-		float3 diffuse = vDiffuseDesc.rgb;
-		diffuse = pow((diffuse), gamma);
+		float alpha = Roughness * Roughness;
 		
-		float3 N = normalize(vNormal.rgb);
-		float3 V = normalize(g_vCamPosition.rgb - vWorldPos.rgb);
-		
-		float3 F0 = 0.04f; // F0 : 반사율 - 0.04는 비금속 표면에 대해 시각적으로 정확해 보입니다.
-		F0 = lerp(F0, diffuse, Metallic);
-		
-		float3 Lo = float3(0.f, 0.f, 0.f);
-		
-		float3 L = normalize(g_vLightPos - vWorldPos).rgb;
 		float3 H = normalize(V + L);
-		float distance = length(g_vLightPos - vWorldPos);
-		float attenuation = 1.f / (distance * distance);
-		//float3 reflectratio = float3(1.f, 1.f, 1.f) * attenuation;  // 반사율 거리 비례 
-		float3 reflectratio = float3(1.f, 1.f, 1.f); // 반사율 full power
-		
-		float NDF = NormalDistributionGGXTR(N, H, Roughness); // 면의 거칠기에 따른 빛 에너지 '근사량!!'
-		float G = GeometrySmit(N, V, L, Roughness); // 각각의 면에 따른 상호적인 '감쇄량!!'
-		float3 F = FresnelSchlick(saturate(dot(H, V)), F0); // 프레넬 방정식을 통한 '반사량!!' 시야각에 따른 '반사율'을 구하기 위해 필요
-		
-		float3 kS = F; // 반사량
-		float3 kD = 1.f - kS; // 반사량을 통한 굴절 에너지 유도
-		kD *= 1.0 - 1.0; // 추가적인 금속 재질정도를 곱연산
-		// 왜 1.f 에서 Metallic 의 값을 빼주는건가 ?? 재질이 완전히 metallic 이면 굴절을 하지 않고 반사가 되기 때문에 0으로 바꾸는 것
-		// 이렇게 해서 나온 겨로가값이 바로 최종 '정반사량!!!'
-		
-		// BRDF 
-		float3 numerator = NDF * G * F; // 분자 
-		float denominator = 4.0 * saturate(dot(N, V)) * saturate(dot(N, L)) + 0.0001; // 분모
-		float3 specular = numerator / denominator;
 		
 		float NdotL = saturate(dot(N, L));
-		Lo = ((kD * diffuse / PI) + specular) * reflectratio * NdotL;
+		float NdotV = saturate(dot(N, V));
+		float NdotH = saturate(dot(N, H));
+		float LdotH = saturate(dot(L, H));
 		
-		float3 ambient = (g_vLightAmbient * g_vMtrlAmbient).rgb * diffuse * AO;
-		float3 PBR_Specular = ambient + (Lo * (g_vLightDiffuse * g_vMtrlDiffuse).rgb);
-		PBR_Specular = PBR_Specular / (PBR_Specular + float(1.f).xxx);
-		PBR_Specular = pow((PBR_Specular), 1.0 / 2.2);
+		float _F;
+		float _D;
+		float _V;
 		
-		Out.vSpecular = /*PBR_Specular*/float4(PBR_Specular.rgb, 1.f);
-		//Out.vSpecular.rgb = float4(PBR_Specular.rgb, 1.f).rgb;
+		float alphaSqr = alpha * alpha;
+		float denom = NdotH * NdotH * (alphaSqr - 1.0f) + 1.0f;
+		_D = alphaSqr / (PI * denom * denom);
 		
+		float LdotH5 = pow(1.0f - LdotH, 5);
+		_F = F0 + (1.0f - F0) * LdotH5;
+		
+		float k = alpha / 2.0f;
+		_V = (1.0f / (NdotL * (1.0f - k) + k)) * (1.0f / (NdotV * (1.0f - k) + k));
+
+		float specular = NdotL * _D * _F * _V;
+		//-------------------------------------------------------------------------//
+		//float3 color = float3(0.97f, 0.95f, 0.8f);
+		//float4 ambientcolor = float4(color * 0.2f, 1.0);
+		//float diffusefactor = dot(normal3, normalize(g_vLightPos.xyz - vWorldPos.xyz));
+		//float4 diffusecolor = 0;
+		
+		//if (diffusefactor > 0.0)
+		//{
+		//	float diffuseintensity = 0.5f;
+		//	diffusecolor = float4(color * diffuseintensity * diffusefactor, 1.0);
+		//}
+		
+		//float4 light = diffusecolor * diffusefactor + ambientcolor;
+		//-------------------------------------------------------------------------//		
+		float3 CamToWorldDirection = normalize(vWorldPos.xyz - g_vCamPosition.xyz);
+		float3 worldReflectDirection = reflect(CamToWorldDirection, normal3);
+		
+		float smoothness = 1 - Roughness;
+		
+		float4 cubeRef1 = g_SkyBoxTexutre.Sample(SkyBoxSampler, worldReflectDirection.xy);
+	
+		float InvMetalic = (1 - Metallic);
+		InvMetalic = max(InvMetalic, 0.5f);
+		float4 lightpower = InvMetalic * light * AO;
+		
+		Out.vSpecular.xyz = ((light * specular + cubeRef1) * Metallic * smoothness).xyz;
 	}
 	else
 	{
-		vector vReflect = reflect(normalize(g_vLightDir), vNormal);
+		vector vReflect = reflect(normalize(g_vLightDir), normal);
 
 		vector vLook = normalize(vWorldPos - g_vCamPosition);
 
@@ -266,21 +284,14 @@ struct PS_OUT_BLEND
 PS_OUT_BLEND PS_MAIN_BLEND(PS_IN In)
 {
 	PS_OUT_BLEND Out = (PS_OUT_BLEND) 0;
-
-	vector vDiffuseDesc = g_DiffuseTexture.Sample(DefaultSampler, In.vTexUV);
-	vector vShadeDesc = g_ShadeTexture.Sample(DefaultSampler, In.vTexUV);
-	vector vSpecularDesc = g_SpecularTexture.Sample(DefaultSampler, In.vTexUV);
-	vector vShadowTexture = g_ShadowTexture.Sample(DefaultSampler, In.vTexUV);
 	
-	if (g_bShadow == true && g_bPBRHDR == false)
-		Out.vColor = vDiffuseDesc * vShadeDesc * vShadowTexture + vector(vSpecularDesc.rgb, 0.f);
-	else if (g_bShadow == true && g_bPBRHDR == true)
-		Out.vColor = vDiffuseDesc * vShadeDesc * vShadowTexture + vector(vSpecularDesc.rgb, 0.f);
-	else if (g_bShadow == false && g_bPBRHDR == false)
-		Out.vColor = vDiffuseDesc * vShadeDesc + vector(vSpecularDesc.rgb, 0.f);
-	else if (g_bShadow == false && g_bPBRHDR == true)
-		Out.vColor = vDiffuseDesc * vShadeDesc + vector(vSpecularDesc.rgb, 0.f);
-
+	Out.vColor = g_DiffuseTexture.Sample(DefaultSampler, In.vTexUV);
+	
+	if (Out.vColor.a == 0)
+		discard;
+	
+	return Out;
+	
 	// 외곽선 효과
 	//float fCoord[3] = { -1.f, 0.f, 1.f };
 
@@ -293,27 +304,6 @@ PS_OUT_BLEND PS_MAIN_BLEND(PS_IN In)
 	
 	//for (int i = 0; i < 9; ++i)
 	//	Out.vColor += fLaplacianMask[i] * g_DiffuseTexture.Sample(DefaultSampler, (In.vTexUV + float2(fCoord[i / 3] / 1280.f, fCoord[i / 3] / 720.f)));
-	if (Out.vColor.a == 0.f)
-		discard;
-
-	return Out;
-}
-
-PS_OUT_BLEND PS_MAIN_FINAL(PS_IN In)
-{
-	PS_OUT_BLEND Out = (PS_OUT_BLEND) 0;
-	
-	vector vFinal = g_BlendTexture.Sample(DefaultSampler, In.vTexUV);
-	vector vBlur = g_BlurTexture.Sample(DefaultSampler, In.vTexUV);
-
-	//vBlur = pow(vBlur, 1.f / 2.2f);
-	
-	Out.vColor = vFinal + vector(vBlur.rgb, 0);
-	
-	if (Out.vColor.a == 0.f)
-		discard;
-
-	return Out;
 }
 
 //----------------------------------technique pass-----------------------------------//
@@ -364,16 +354,5 @@ technique11 DefaultTechnique
 		VertexShader = compile vs_5_0 VS_MAIN_VIEWPORT();
 		GeometryShader = NULL;
 		PixelShader = compile ps_5_0 PS_MAIN_BLEND();
-	}
-
-	pass Final
-	{
-		SetRasterizerState(CullMode_Default);
-		SetDepthStencilState(ZTestDiable, 0);
-		SetBlendState(BlendDisable, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
-
-		VertexShader = compile vs_5_0 VS_MAIN_VIEWPORT();
-		GeometryShader = NULL;
-		PixelShader = compile ps_5_0 PS_MAIN_FINAL();
 	}
 }

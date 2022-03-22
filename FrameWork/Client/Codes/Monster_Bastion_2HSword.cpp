@@ -145,7 +145,6 @@ HRESULT CMonster_Bastion_2HSword::Ready_Components()
 
 	m_pTransform->Set_State(CTransform::STATE_POSITION, XMLoadFloat4(&vPosition));
 
-
 	/* for. Model Com */
 	if (FAILED(SetUp_Components(m_iSceneID, L"Model_Bastion_2HSword_Bin", L"Model", (CComponent**)&m_pModel)))
 		return E_FAIL;

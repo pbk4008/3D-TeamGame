@@ -22,11 +22,14 @@ void CRenderer::SetRenderButton(RENDERBUTTON ebutton, _bool check)
 {
 	switch (ebutton)
 	{
-	case Engine::CRenderer::SHADOW: 
+	case Engine::CRenderer::SHADOW:
 		m_bShadow = check;
 		break;
-	case Engine::CRenderer::PBR:
+	case Engine::CRenderer::PBRHDR:
 		m_bPBR = check;
+		break;
+	case Engine::CRenderer::PIXEL:
+		m_bPixel = check;
 		break;
 	case Engine::CRenderer::HDR:
 		m_bHDR = check;
@@ -126,106 +129,64 @@ HRESULT CRenderer::Draw_RenderGroup()
 	if (FAILED(Render_Priority()))
 		return E_FAIL;
 
-	if (m_bShadow)
-	{
-		if (FAILED(Render_Shadow()))
-			return E_FAIL;
-
-		if (FAILED(Render_ShadeShadow()))
-			return E_FAIL;
-	}
-
-	if (m_bPBR)
-	{
-		if (FAILED(Render_PBR()))
-			return E_FAIL;
-	}
+	if (FAILED(Render_SkyBox())) return E_FAIL;
 
 	if (FAILED(Render_NonAlpha())) // 디퍼드 단계
 		return E_FAIL;
 
-	if (FAILED(m_pRenderAssit->Render_LightAcc(m_CameraTag, m_bPBR))) // 빛연산
+	if (FAILED(m_pRenderAssit->Render_LightAcc(m_CameraTag,m_bPBR))) // 빛연산
 		return E_FAIL;
 
-	if (m_bHDR)
+	if (m_bPixel) // Pixel HDR
 	{
-		if (FAILED(m_pHDR->Render_HDRBase(m_pTargetMgr, m_bShadow)))
-			return E_FAIL;
+		if (FAILED(m_pHDR->Render_HDRBase(m_pTargetMgr, m_bShadow))) return E_FAIL;
 
-		if (FAILED(m_pLuminance->DownSampling(m_pTargetMgr)))
-			return E_FAIL;
-
-		if (FAILED(m_pPostProcess->PostProcessing(m_pTargetMgr)))
-			return E_FAIL;
-
-		if (FAILED(m_pTonemapping->Render_HDR(m_pTargetMgr)))
-			return E_FAIL;
+		if (FAILED(m_pPostProcess->BlurPass(m_pTargetMgr, L"Target_Emission", L"Target_Vertical2", L"Target_Horizontal2", 640, 360))) return E_FAIL;
+		if (FAILED(m_pPostProcess->BlurPass(m_pTargetMgr, L"Target_Horizontal2", L"Target_Vertical4", L"Target_Horizontal4", 320, 180))) return E_FAIL;
+		if (FAILED(m_pPostProcess->BlurPass(m_pTargetMgr, L"Target_Horizontal4", L"Target_Vertical8", L"Target_Horizontal8", 160, 90))) return E_FAIL;
+		if (FAILED(m_pPostProcess->BlurPass(m_pTargetMgr, L"Target_Horizontal8", L"Target_Vertical16", L"Target_Horizontal16", 64, 64))) return E_FAIL;
+		if (FAILED(m_pTonemapping->Blend_ToneMapping(m_pTargetMgr, m_bHDR))) return E_FAIL;
 	}
 
-	m_pTonemapping->Set_HDR(m_bHDR);
-	if (FAILED(m_pTonemapping->Blend_HDR(m_pTargetMgr)))
-		return E_FAIL;
-		
+	if (FAILED(Render_Final())) return E_FAIL;
 
 	if (FAILED(Render_Alpha()))
-		return E_FAIL;
-
-	if (FAILED(Render_PhysX()))
 		return E_FAIL;
 
 	if (FAILED(Render_UI()))
 		return E_FAIL;
 
-	if (FAILED(Render_UI_Active()))
+#ifdef _DEBUG
+	if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("MRT_SkyBox"))))
 		return E_FAIL;
 
-#ifdef _DEBUG
-	if (m_bDeferred)
-	{
-		//if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("MRT_Shadow"))))
-		//	return E_FAIL;
-		//if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("MRT_ShaeShadow"))))
-		//	return E_FAIL;
-		//if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("MRT_Deferred"))))
-		//	return E_FAIL;
-		//if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("MRT_PBR"))))
-		//	return E_FAIL;
-		//if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("MRT_LightAcc"))))
-		//	return E_FAIL;
-		//if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("MRT_Blend"))))
-		//	return E_FAIL;
-		//if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("MRT_HDRBASE"))))
-		//	return E_FAIL;
+	if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("MRT_Shadow"))))
+		return E_FAIL;
+	if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("MRT_ShaeShadow"))))
+		return E_FAIL;
+	if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("MRT_Deferred"))))
+		return E_FAIL;
+	if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("MRT_SSS"))))
+		return E_FAIL;
+	if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("MRT_LightAcc"))))
+		return E_FAIL;
+	if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("MRT_HDRBASE"))))
+		return E_FAIL;
 
-		//if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("MRT_Lum1"))))
-		//	return E_FAIL;
-		//if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("MRT_Lum2"))))
-		//	return E_FAIL;
-		//if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("MRT_Lum3"))))
-		//	return E_FAIL;
-		//if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("MRT_Lum4"))))
-		//	return E_FAIL;
-		//if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("MRT_Lum5"))))
-		//	return E_FAIL;
+	if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("Target_Vertical2")))) return E_FAIL;
+	if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("Target_Horizontal2")))) return E_FAIL;
 
-		//if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("MRT_BrightPass"))))
-		//	return E_FAIL;
-		//if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("MRT_BrightPassDS"))))
-		//	return E_FAIL;
-		//if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("MRT_HorizontalBlur"))))
-		//	return E_FAIL;
-		//if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("MRT_VerticalBlur"))))
-		//	return E_FAIL;
+	if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("Target_Vertical4")))) return E_FAIL;
+	if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("Target_Horizontal4")))) return E_FAIL;
 
-		//if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("MRT_BloomUpSample"))))
-		//	return E_FAIL;
-		//if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("MRT_ToneMapping"))))
-		//	return E_FAIL;
+	if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("Target_Vertical8")))) return E_FAIL;
+	if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("Target_Horizontal8")))) return E_FAIL;
 
-		//if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("MRT_Priority"))))
-		//	return E_FAIL;
+	if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("Target_Vertical16")))) return E_FAIL;
+	if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("Target_Horizontal16")))) return E_FAIL;
 
-	}
+	if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("Target_Blend")))) return E_FAIL;
+
 #endif // _DEBUG
 
 	return S_OK;
@@ -254,6 +215,26 @@ HRESULT CRenderer::Render_Priority()
 		Safe_Release(pGameObject);
 	}
 	m_RenderGroup[RENDER_PRIORITY].clear();
+
+	return S_OK;
+}
+
+HRESULT CRenderer::Render_SkyBox()
+{
+	if (FAILED(m_pTargetMgr->Begin_MRT(m_pDeviceContext, TEXT("MRT_SkyBox"))))
+		return E_FAIL;
+
+	for (auto& pGameObject : m_RenderGroup[RENDER_SKYBOX])
+	{
+		if (nullptr != pGameObject)
+			pGameObject->Render();
+
+		Safe_Release(pGameObject);
+	}
+	m_RenderGroup[RENDER_SKYBOX].clear();
+
+	if (FAILED(m_pTargetMgr->End_MRT(m_pDeviceContext)))
+		return E_FAIL;
 
 	return S_OK;
 }
@@ -370,51 +351,13 @@ HRESULT CRenderer::Render_ShadeShadow()
 	return S_OK;
 }
 
-HRESULT CRenderer::Render_PBR()
+HRESULT CRenderer::Render_Final()
 {
-	if (FAILED(m_pTargetMgr->Begin_MRT(m_pDeviceContext, TEXT("MRT_PBR"))))
-		return E_FAIL;
+	if (!m_pTargetMgr)	return E_FAIL;
 
-	for (auto& pGameObject : m_RenderGroup[RENDER_PBR])
-	{
-		if (nullptr != pGameObject)
-			pGameObject->Render_PBR();
-		Safe_Release(pGameObject);
-	}
-	m_RenderGroup[RENDER_PBR].clear();
-
-	if (FAILED(m_pTargetMgr->End_MRT(m_pDeviceContext)))
-		return E_FAIL;
-
-	
-	return S_OK;
-}
-
-HRESULT CRenderer::Render_Blend()
-{
-	if (nullptr == m_pTargetMgr)
-		return E_FAIL;
-
-	//if (FAILED(m_pTargetMgr->Begin_MRT(m_pDeviceContext, TEXT("MRT_Blend"))))
-	//	return E_FAIL;
-
-	if (FAILED(m_pVIBuffer->SetUp_TextureOnShader("g_DiffuseTexture", m_pTargetMgr->Get_SRV(TEXT("Target_Diffuse")))))
-		return E_FAIL;
-	if (FAILED(m_pVIBuffer->SetUp_TextureOnShader("g_ShadeTexture", m_pTargetMgr->Get_SRV(TEXT("Target_Shade")))))
-		return E_FAIL;
-	if (FAILED(m_pVIBuffer->SetUp_TextureOnShader("g_SpecularTexture", m_pTargetMgr->Get_SRV(TEXT("Target_Specular")))))
-		return E_FAIL;
-	if (FAILED(m_pVIBuffer->SetUp_TextureOnShader("g_ShadowTexture", m_pTargetMgr->Get_SRV(TEXT("Target_ShadeShadow")))))
-		return E_FAIL;
-	if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_bShadow", &m_bShadow, sizeof(_bool))))
-		return E_FAIL;
-	if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_bPBRHDR", &m_bPBR, sizeof(_bool))))
-		return E_FAIL;
+	if (FAILED(m_pVIBuffer->SetUp_TextureOnShader("g_DiffuseTexture", m_pTargetMgr->Get_SRV(TEXT("Target_Blend"))))) return E_FAIL;
 
 	m_pVIBuffer->Render(3);
-
-	//if (FAILED(m_pTargetMgr->End_MRT(m_pDeviceContext)))
-	//	return E_FAIL;
 
 	return S_OK;
 }
@@ -511,8 +454,8 @@ void CRenderer::Free()
 
 		m_RenderGroup[i].clear();
 	}
-	Safe_Release(m_pShadowMap);
 
+	Safe_Release(m_pShadowMap);
 	Safe_Release(m_pHDR);
 	Safe_Release(m_pLuminance);
 	Safe_Release(m_pPostProcess);

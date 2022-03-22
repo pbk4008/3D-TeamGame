@@ -18,6 +18,10 @@ private:
 	HRESULT Ready_Gameobject();
 	HRESULT Ready_LightDesc();
 
+private: _bool		m_bPBR = false;
+private: _bool		m_bHDR = false;
+private: _bool		m_bShadow = false;
+
 public:
 	static CTestScene_Sb* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);
 

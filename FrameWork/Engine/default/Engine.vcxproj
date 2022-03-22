@@ -425,12 +425,14 @@ call Update_Library_Release.bat</Command>
     <FxCompile Include="..\bin\ShaderFiles\Shader_Luminance.hlsl" />
     <FxCompile Include="..\bin\ShaderFiles\Shader_Mesh.hlsl" />
     <FxCompile Include="..\bin\ShaderFiles\Shader_MeshAnim.hlsl" />
+    <FxCompile Include="..\bin\ShaderFiles\Shader_Monster.hlsl" />
     <FxCompile Include="..\bin\ShaderFiles\Shader_Particle.hlsl" />
     <FxCompile Include="..\bin\ShaderFiles\Shader_Plane.hlsl" />
     <FxCompile Include="..\bin\ShaderFiles\Shader_PointInstance.hlsl" />
     <FxCompile Include="..\bin\ShaderFiles\Shader_PsotProcess.hlsl" />
     <FxCompile Include="..\bin\ShaderFiles\Shader_Rect.hlsl" />
     <FxCompile Include="..\bin\ShaderFiles\Shader_RectViewport.hlsl" />
+    <FxCompile Include="..\bin\ShaderFiles\Shader_SilverMane.hlsl" />
     <FxCompile Include="..\bin\ShaderFiles\Shader_StaticMesh.hlsl" />
     <FxCompile Include="..\bin\ShaderFiles\Shader_Terrain.hlsl" />
     <FxCompile Include="..\bin\ShaderFiles\Shader_Tonemapping.hlsl" />
