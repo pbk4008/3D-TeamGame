@@ -3,7 +3,6 @@
 
 #include "Monster_Crawler.h"
 #include "Animation.h"
-#include "Boss_Bastion_Judicator.h"
 
 CCrawler_Ricochet::CCrawler_Ricochet(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
 	: CMonster_FSM(pDevice, pDeviceContext)

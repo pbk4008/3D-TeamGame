@@ -373,6 +373,24 @@
     <Filter Include="02.GameObject\03.Character\01.Monster\EarthAberrant\State\00.Idle">
       <UniqueIdentifier>{89a86753-77d9-4309-aceb-d226891146ab}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\EarthAberrant\State\01.Walk">
+      <UniqueIdentifier>{8ee6be25-4296-447d-a71c-1df2c16a91ef}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\EarthAberrant\State\02.Run">
+      <UniqueIdentifier>{7464defb-76ef-40ae-9e49-60563ce32ef8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\EarthAberrant\State\03.Attack">
+      <UniqueIdentifier>{8891ce53-fa8d-4839-acaf-b37030d1d847}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\EarthAberrant\State\04.Flinch">
+      <UniqueIdentifier>{598793a3-920b-4585-a942-1ffe7b1a718a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\EarthAberrant\State\05.Stun">
+      <UniqueIdentifier>{a5feef31-56a7-454e-b845-a90b88d0d9cf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\EarthAberrant\State\06.Knockback">
+      <UniqueIdentifier>{fcb36259-0e76-4d95-8ef9-ad44c10ef567}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -952,6 +970,12 @@
     <ClInclude Include="..\Headers\Aberrant_Idle.h">
       <Filter>02.GameObject\03.Character\01.Monster\EarthAberrant\State\00.Idle</Filter>
     </ClInclude>
+    <ClInclude Include="..\Headers\Aberrant_Walk.h">
+      <Filter>02.GameObject\03.Character\01.Monster\EarthAberrant\State\01.Walk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Aberrant_Attack.h">
+      <Filter>02.GameObject\03.Character\01.Monster\EarthAberrant\State\03.Attack</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -1507,6 +1531,12 @@
     </ClCompile>
     <ClCompile Include="..\Codes\Aberrant_Idle.cpp">
       <Filter>02.GameObject\03.Character\01.Monster\EarthAberrant\State\00.Idle</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Aberrant_Walk.cpp">
+      <Filter>02.GameObject\03.Character\01.Monster\EarthAberrant\State\01.Walk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Aberrant_Attack.cpp">
+      <Filter>02.GameObject\03.Character\01.Monster\EarthAberrant\State\03.Attack</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

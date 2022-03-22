@@ -125,14 +125,14 @@ HRESULT CLoader::SetUp_Stage1_Object()
 	if (FAILED(Load_Stage1MonsterLoad()))
 		return E_FAIL;
 
-	/*if (FAILED(Load_Stage1StaticUILoad()))
+	if (FAILED(Load_Stage1StaticUILoad()))
 		return E_FAIL;
 
 	if (FAILED(Load_Stage1UILoad()))
 		return E_FAIL;
 
 	if (FAILED(Load_Stage1EffectLoad()))
-		return E_FAIL;*/
+		return E_FAIL;
 
 	//if (FAILED(Load_Stage1TriggerLod()))
 	//	return E_FAIL;
@@ -339,7 +339,7 @@ HRESULT CLoader::Load_Stage1UILoad()
 	{
 		return E_FAIL;
 	}
-	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"Texture_Monster_Name", L"../bin/Resources/Texture/UI/Static/Active/MonsterName_%d.dds", 2)))
+	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"Texture_Monster_Name", L"../bin/Resources/Texture/UI/Static/Active/MonsterName_%d.dds", 10)))
 	{
 		return E_FAIL;
 	}
@@ -563,11 +563,11 @@ HRESULT CLoader::Load_Stage1MonsterLoad()
 	//if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Monster_Crawler", CMonster_Crawler::Create(m_pDevice, m_pDeviceContext))))
 	//	return E_FAIL;
 
-	CTexture* pTexture = CTexture::Create(m_pDevice, m_pDeviceContext);
+	//CTexture* pTexture = CTexture::Create(m_pDevice, m_pDeviceContext);
 	//if (FAILED(pTexture->NativeConstruct_Prototype(L"../Bin/Resources/Mesh/Crystal_Crawler/T_Crystal_Crawler_D.tga", 1)))
 	//	return E_FAIL;
 
-	CMaterial* pMtrl = CMaterial::Create(m_pDevice, m_pDeviceContext, L"Crystal_Crawler", L"../../Reference/ShaderFile/Shader_Mesh.hlsl", CMaterial::EType::Anim);
+	//CMaterial* pMtrl = CMaterial::Create(m_pDevice, m_pDeviceContext, L"Crystal_Crawler", L"../../Reference/ShaderFile/Shader_Mesh.hlsl", CMaterial::EType::Anim);
 	//if (FAILED(pMtrl->Set_Texture("g_DiffuseTexture", TEXTURETYPE::TEX_DIFFUSE, pTexture, 0)))
 	//	return E_FAIL;
 	//if (FAILED(g_pGameInstance->Add_Material(L"Mtrl_Crystal_Crawler", pMtrl)))
@@ -588,14 +588,24 @@ HRESULT CLoader::Load_Stage1MonsterLoad()
 	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Monster_EarthAberrant", CMonster_EarthAberrant::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 
-	pTexture = CTexture::Create(m_pDevice, m_pDeviceContext);
+	CTexture* pTexture = CTexture::Create(m_pDevice, m_pDeviceContext);
 	if (FAILED(pTexture->NativeConstruct_Prototype(L"../Bin/Resources/Mesh/EarthAberrant/T_EarthAberrant_body_D.tga", 1)))
 		return E_FAIL;
 
-	pMtrl = CMaterial::Create(m_pDevice, m_pDeviceContext, L"EarthAberrant_Body", L"../../Reference/ShaderFile/Shader_Mesh.hlsl", CMaterial::EType::Anim);
+	CMaterial*  pMtrl = CMaterial::Create(m_pDevice, m_pDeviceContext, L"EarthAberrant_Body", L"../../Reference/ShaderFile/Shader_Mesh.hlsl", CMaterial::EType::Anim);
 	if (FAILED(pMtrl->Set_Texture("g_DiffuseTexture", TEXTURETYPE::TEX_DIFFUSE, pTexture, 0)))
 		return E_FAIL;
 	if (FAILED(g_pGameInstance->Add_Material(L"Mtrl_EarthAberrant_Body", pMtrl)))
+		return E_FAIL;
+
+	pTexture = CTexture::Create(m_pDevice, m_pDeviceContext);
+	if (FAILED(pTexture->NativeConstruct_Prototype(L"../Bin/Resources/Mesh/EarthAberrant/T_EarthAberrant_crystal_D.tga", 1)))
+		return E_FAIL;
+
+	pMtrl = CMaterial::Create(m_pDevice, m_pDeviceContext, L"EarthAberrant_ctystal", L"../../Reference/ShaderFile/Shader_Mesh.hlsl", CMaterial::EType::Anim);
+	if (FAILED(pMtrl->Set_Texture("g_DiffuseTexture", TEXTURETYPE::TEX_DIFFUSE, pTexture, 0)))
+		return E_FAIL;
+	if (FAILED(g_pGameInstance->Add_Material(L"Mtrl_EarthAberrant_ctystal", pMtrl)))
 		return E_FAIL;
 
 	////Monster BronzeAnimus

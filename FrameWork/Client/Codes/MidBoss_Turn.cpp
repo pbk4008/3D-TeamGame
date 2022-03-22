@@ -30,89 +30,34 @@ _int CMidBoss_Turn::Tick(const _double& TimeDelta)
 
 	m_pAnimator->Tick(TimeDelta);
 
-	//_vector vMonsterPos = m_pTransform->Get_State(CTransform::STATE::STATE_POSITION);
-	//_vector vDist = vMonsterPos - XMLoadFloat3(&g_pObserver->m_fPos);
-	//_float fDistToPlayer = XMVectorGetX(XMVector3Length(vDist));
 
-	//vDist = XMVector3Normalize(vDist); //보스가 플레이어를 바라보는 방향벡터
-	//_vector vMyLook = m_pTransform->Get_State(CTransform::STATE_LOOK); //몬스터가 실제로 보고있는 방향벡터
-	//_vector vMyUp = m_pTransform->Get_State(CTransform::STATE_UP);
-
-	//vDist = XMVector3Normalize(XMVectorSetY(vDist, 0.f));
-	//vMyLook = XMVector3Normalize(XMVectorSetY(vMyLook, 0.f));
-
-	//_vector vAngle = XMVector3AngleBetweenVectors(vMyLook, vDist);
-	//_float fRadian;
-	//XMStoreFloat(&fRadian, vAngle);
-	//_vector vCross = XMVector3Cross(vMyLook, vDist);
-
-	//if (45.f > XMConvertToDegrees(m_fRadian))
-	//{
-	//	m_pAnimator->Change_AnyEntryAnimation((_uint)CBoss_Bastion_Judicator::M_BossAnimState::TURN_180RIGHT_H);
-	//	//m_pAnimator->Change_AnyEntryAnimation((_uint)CBoss_Bastion_Judicator::M_BossAnimState::TURN_180RIGHT_H);
-	//	//m_pStateController->Change_State(L"Attack");
-	//	cout << "각이너무 작아서 어택" <<endl;
-	//}
-	//
-	//else
-	//{
-	//	if (XMConvertToDegrees(m_fRadian) > m_fRadAcc)
-	//	{
-	//		cout << XMVectorGetY(vCross) << endl;
-
-	//		m_fRadAcc += TimeDelta * 0.1f;
-
-	//		if (m_bLeft) //몬스터왼쪽회전
-	//		{
-	//			m_pTransform->Rotation_Axis(CTransform::STATE_UP, TimeDelta * -1.f);
-	//			//cout << " 1 " << endl;
-	//		}
-
-	//		else if (0.f > XMVectorGetY(vCross)) //몬스터오른쪽회전
-	//		{
-	//			m_pTransform->Rotation_Axis(CTransform::STATE_UP, TimeDelta * 1.f);
-	//			//cout << " 2 " << endl;
-	//		}
-	//	}
-	//}
-	//
-	///*if (XMConvertToDegrees(m_fRadian) <= m_fRadAcc)
-	//{
-	//	m_pTransform->Rotation_Axis(CTransform::STATE_UP, 0.f);
-	//	cout << " 3 " << endl;
-	//}*/
-
-
-	
 	if (m_pAnimator->Get_AnimController()->Is_Finished())
 	{
 		m_pStateController->Change_State(L"Attack");
-		cout << "턴->어택" << endl;
+		cout << "turn update" << endl;
 	}
-	
-	m_TurnTime += TimeDelta;
-	m_fRadAcc += TimeDelta * 0.1f;
 
-	if (m_TurnTime < 1.f)
-	{
-		if (5.f < XMConvertToDegrees(m_fRadian))
-		{
-			if (XMConvertToDegrees(m_fRadian) > m_fRadAcc)
-			{
-				cout << XMConvertToDegrees(m_fRadian) << endl;
+	//m_TurnTime += TimeDelta;
+	//m_fRadAcc += TimeDelta * 0.1f;
 
-				if (m_bLeft) //몬스터왼쪽회전
-				{
-					m_pTransform->Rotation_Axis(CTransform::STATE_UP, TimeDelta * -1.f);
-				}
+	//if (m_TurnTime < 1.f)
+	//{
+	//	if (10.f < XMConvertToDegrees(m_fRadian) && 170.f < XMConvertToDegrees(m_fRadian))
+	//	{
+	//		if (XMConvertToDegrees(m_fRadian) > m_fRadAcc)
+	//		{
+	//			if (m_bLeft) //몬스터왼쪽회전
+	//			{
+	//				m_pTransform->Rotation_Axis(CTransform::STATE_UP, TimeDelta * -1.f);
+	//			}
 
-				else if (!m_bLeft) //몬스터오른쪽회전
-				{
-  					m_pTransform->Rotation_Axis(CTransform::STATE_UP, TimeDelta * 1.f);
-				}
-			}
-		}
-	}
+	//			else if (!m_bLeft) //몬스터오른쪽회전
+	//			{
+ // 					m_pTransform->Rotation_Axis(CTransform::STATE_UP, TimeDelta * 1.f);
+	//			}
+	//		}
+	//	}
+	//}
 
 	return _int();
 }
@@ -139,96 +84,211 @@ HRESULT CMidBoss_Turn::EnterState()
 	if (FAILED(__super::EnterState()))
 		return E_FAIL;
 
-	_vector vMonsterPos = m_pTransform->Get_State(CTransform::STATE::STATE_POSITION);
-	_vector vDist = vMonsterPos - g_pObserver->Get_PlayerPos();
+	//플레이어를 향한 방향벡터
+	_vector vBossPos = m_pTransform->Get_State(CTransform::STATE::STATE_POSITION);
+	_vector vDist = vBossPos - g_pObserver->Get_PlayerPos();
+	_vector vBossToPlayerLook = XMVector3Normalize(vDist);
+
+	//보스의 현재Look
+	_vector vMyLook = XMVector3Normalize(m_pTransform->Get_State(CTransform::STATE_LOOK));
+	_vector vMyUp = m_pTransform->Get_State(CTransform::STATE_UP);
+
+	//플레이어와의 거리 
 	_float fDistToPlayer = XMVectorGetX(XMVector3Length(vDist));
 
-	vDist = XMVector3Normalize(vDist); //보스가 플레이어를 바라보는 방향벡터
-	_vector vMyLook = m_pTransform->Get_State(CTransform::STATE_LOOK); //몬스터가 실제로 보고있는 방향벡터
-	_vector vMyUp = m_pTransform->Get_State(CTransform::STATE_UP);
+	//플레이어가 몬스터의 앞인지 뒤인지
+	_vector vecDot = XMVector3Dot(vMyLook, vBossToPlayerLook);
+	_float CheckFWD = XMVectorGetX(vecDot); //음수 = 플레이어가 앞에있다 
 
 	vDist = XMVector3Normalize(XMVectorSetY(vDist, 0.f));
 	vMyLook = XMVector3Normalize(XMVectorSetY(vMyLook, 0.f));
 
 	_vector vAngle = XMVector3AngleBetweenVectors(vMyLook, vDist);
-	_float fRadian;
+	_float fRadian = 0.f;
 	XMStoreFloat(&fRadian, vAngle);
 	_vector vCross = XMVector3Cross(vMyLook, vDist);
 
 	m_fRadian = fRadian;
 
-	if (0.f < XMVectorGetY(vCross)) //몬스터왼쪽회전
+	if (0 > CheckFWD)
 	{
-		m_bLeft = true; 
+		cout << "CheckFWD 음수" << endl;
 
-		if (25.f > XMConvertToDegrees(fRadian))
+		if (0.f < XMVectorGetY(vCross)) //몬스터왼쪽회전
 		{
-			m_pTransform->Face_Target(g_pObserver->Get_PlayerPos());
+			fRadian = XMConvertToRadians(180.f - XMConvertToDegrees(m_fRadian));
+
+			m_bLeft = true;
+
+			cout << "왼쪽회전" << endl;
+			cout << "Angle : " << XMConvertToDegrees(fRadian) << endl;
+
+			if (0.f <= XMConvertToDegrees(fRadian) && 45.f > XMConvertToDegrees(fRadian))
+			{
+				m_pAnimator->Change_AnyEntryAnimation((_uint)CBoss_Bastion_Judicator::M_BossAnimState::TURN_45LEFT_H);
+				m_pAnimator->Get_AnimController()->Set_RotSpeed(500.f);
+				cout << "45" << endl;
+
+			}
+			else if (45.f <= XMConvertToDegrees(fRadian) && 90.f > XMConvertToDegrees(fRadian))
+			{
+				m_pAnimator->Change_AnyEntryAnimation((_uint)CBoss_Bastion_Judicator::M_BossAnimState::TURN_90LEFT_H);
+				m_pAnimator->Get_AnimController()->Set_RotSpeed(500.f);
+				cout << "90" << endl;
+
+			}
+			else if (90.f <= XMConvertToDegrees(fRadian) && 135.f > XMConvertToDegrees(fRadian))
+			{
+				m_pAnimator->Change_AnyEntryAnimation((_uint)CBoss_Bastion_Judicator::M_BossAnimState::TURN_135LEFT_H);
+				m_pAnimator->Get_AnimController()->Set_RotSpeed(500.f);
+				cout << "135" << endl;
+
+
+			}
+			else if (135.f <= XMConvertToDegrees(fRadian) && 180.f > XMConvertToDegrees(fRadian))
+			{
+				m_pAnimator->Change_AnyEntryAnimation((_uint)CBoss_Bastion_Judicator::M_BossAnimState::TURN_180LEFT_H);
+				m_pAnimator->Get_AnimController()->Set_RotSpeed(500.f);
+				//m_pTransform->Face_Target(g_pObserver->Get_PlayerPos());
+				cout << "180" << endl;
+
+			}
+
 		}
-		else if (25.f <= XMConvertToDegrees(fRadian) && 45.f > XMConvertToDegrees(fRadian))
+		else if (0.f > XMVectorGetY(vCross)) //몬스터오른쪽회전
 		{
-			m_pAnimator->Change_AnyEntryAnimation((_uint)CBoss_Bastion_Judicator::M_BossAnimState::TURN_45LEFT_H);
-			m_pAnimator->Get_AnimController()->Set_RotSpeed(1400.f);
+			fRadian = XMConvertToRadians(180.f - XMConvertToDegrees(m_fRadian));
 
+			m_bLeft = false;
+
+			cout << "오른쪽회전" << endl;
+			cout << "Angle : " << XMConvertToDegrees(fRadian) << endl;
+
+			if (0.f <= XMConvertToDegrees(fRadian) && 45.f > XMConvertToDegrees(fRadian))
+			{
+				m_pAnimator->Change_AnyEntryAnimation((_uint)CBoss_Bastion_Judicator::M_BossAnimState::TURN_45RIGHT_H);
+				m_pAnimator->Get_AnimController()->Set_RotSpeed(500.f);
+				cout << "45" << endl;
+
+			}
+			else if (45.f <= XMConvertToDegrees(fRadian) && 90.f > XMConvertToDegrees(fRadian))
+			{
+				m_pAnimator->Change_AnyEntryAnimation((_uint)CBoss_Bastion_Judicator::M_BossAnimState::TURN_90RIGHT_H);
+				m_pAnimator->Get_AnimController()->Set_RotSpeed(500.f);
+				cout << "90" << endl;
+
+			}
+			else if (90.f <= XMConvertToDegrees(fRadian) && 135.f > XMConvertToDegrees(fRadian))
+			{
+				m_pAnimator->Change_AnyEntryAnimation((_uint)CBoss_Bastion_Judicator::M_BossAnimState::TURN_135RIGHT_H);
+				m_pAnimator->Get_AnimController()->Set_RotSpeed(500.f);
+				cout << "135" << endl;
+
+
+			}
+			else if (135.f <= XMConvertToDegrees(fRadian) && 180.f > XMConvertToDegrees(fRadian))
+			{
+				m_pAnimator->Change_AnyEntryAnimation((_uint)CBoss_Bastion_Judicator::M_BossAnimState::TURN_180RIGHT_H);
+				m_pAnimator->Get_AnimController()->Set_RotSpeed(500.f);
+				//m_pTransform->Face_Target(g_pObserver->Get_PlayerPos());
+				cout << "180" << endl;
+
+			}
 		}
-		else if (45.f <= XMConvertToDegrees(fRadian) && 90.f > XMConvertToDegrees(fRadian))
-		{
-			m_pAnimator->Change_AnyEntryAnimation((_uint)CBoss_Bastion_Judicator::M_BossAnimState::TURN_90LEFT_H);
-			m_pAnimator->Get_AnimController()->Set_RotSpeed(700.f);
+		//else
+		//{
+		//	cout << "아무거에도 안속함, 어택으로넘어감 " << endl;
+		//	m_pStateController->Change_State(L"Attack");
+		//}
 
+	}
+
+	if (0 < CheckFWD)
+	{
+		cout << "CheckFWD 양수" << endl;
+
+		if (0.f < XMVectorGetY(vCross)) //몬스터왼쪽회전
+		{
+			fRadian = XMConvertToRadians(180.f - XMConvertToDegrees(m_fRadian));
+
+			m_bLeft = true;
+
+			cout << "왼쪽회전" << endl;
+			cout << "Angle : " << XMConvertToDegrees(fRadian) << endl;
+
+			if (0.f <= XMConvertToDegrees(fRadian) && 45.f > XMConvertToDegrees(fRadian))
+			{
+				m_pAnimator->Change_AnyEntryAnimation((_uint)CBoss_Bastion_Judicator::M_BossAnimState::TURN_45LEFT_H);
+				m_pAnimator->Get_AnimController()->Set_RotSpeed(500.f);
+				cout << "45" << endl;
+
+			}
+			else if (45.f <= XMConvertToDegrees(fRadian) && 90.f > XMConvertToDegrees(fRadian))
+			{
+				m_pAnimator->Change_AnyEntryAnimation((_uint)CBoss_Bastion_Judicator::M_BossAnimState::TURN_90LEFT_H);
+				m_pAnimator->Get_AnimController()->Set_RotSpeed(500.f);
+				cout << "90" << endl;
+
+			}
+			else if (90.f <= XMConvertToDegrees(fRadian) && 135.f > XMConvertToDegrees(fRadian))
+			{
+				m_pAnimator->Change_AnyEntryAnimation((_uint)CBoss_Bastion_Judicator::M_BossAnimState::TURN_135LEFT_H);
+				m_pAnimator->Get_AnimController()->Set_RotSpeed(500.f);
+				cout << "135" << endl;
+
+			}
+			else if (135.f <= XMConvertToDegrees(fRadian) && 180.f > XMConvertToDegrees(fRadian))
+			{
+				m_pAnimator->Change_AnyEntryAnimation((_uint)CBoss_Bastion_Judicator::M_BossAnimState::TURN_180LEFT_H);
+				m_pAnimator->Get_AnimController()->Set_RotSpeed(500.f);
+				cout << "180" << endl;
+
+			}
 		}
-		else if (90.f <= XMConvertToDegrees(fRadian) && 135.f > XMConvertToDegrees(fRadian))
+		else if (0.f > XMVectorGetY(vCross)) //몬스터오른쪽회전
 		{
-			m_pAnimator->Change_AnyEntryAnimation((_uint)CBoss_Bastion_Judicator::M_BossAnimState::TURN_135LEFT_H);
-			m_pAnimator->Get_AnimController()->Set_RotSpeed(300.f);
+			fRadian = XMConvertToRadians(180.f - XMConvertToDegrees(m_fRadian));
 
-		}
-		else if (135.f <= XMConvertToDegrees(fRadian) && 180.f > XMConvertToDegrees(fRadian))
-		{
-			m_pAnimator->Change_AnyEntryAnimation((_uint)CBoss_Bastion_Judicator::M_BossAnimState::TURN_180LEFT_H);
-			m_pAnimator->Get_AnimController()->Set_RotSpeed(100.f);
+			m_bLeft = false;
 
+			cout << "오른쪽회전" << endl;
+			cout << "Angle : " << XMConvertToDegrees(fRadian) << endl;
+
+			if (0.f <= XMConvertToDegrees(fRadian) && 45.f > XMConvertToDegrees(fRadian))
+			{
+				m_pAnimator->Change_AnyEntryAnimation((_uint)CBoss_Bastion_Judicator::M_BossAnimState::TURN_45RIGHT_H);
+				m_pAnimator->Get_AnimController()->Set_RotSpeed(500.f);
+				cout << "45" << endl;
+
+			}
+			else if (45.f <= XMConvertToDegrees(fRadian) && 90.f > XMConvertToDegrees(fRadian))
+			{
+				m_pAnimator->Change_AnyEntryAnimation((_uint)CBoss_Bastion_Judicator::M_BossAnimState::TURN_90RIGHT_H);
+				m_pAnimator->Get_AnimController()->Set_RotSpeed(500.f);
+				cout << "90" << endl;
+
+			}
+
+			//TODO : 이거 애니메이션 RIGHT로 변경해야함
+			else if (90.f <= XMConvertToDegrees(fRadian) && 135.f > XMConvertToDegrees(fRadian))
+			{
+				m_pAnimator->Change_AnyEntryAnimation((_uint)CBoss_Bastion_Judicator::M_BossAnimState::TURN_135LEFT_H);
+				m_pAnimator->Get_AnimController()->Set_RotSpeed(1200.f);
+				cout << "135" << endl;
+
+
+			}
+			else if (135.f <= XMConvertToDegrees(fRadian) && 180.f > XMConvertToDegrees(fRadian))
+			{
+				m_pAnimator->Change_AnyEntryAnimation((_uint)CBoss_Bastion_Judicator::M_BossAnimState::TURN_180LEFT_H);
+				m_pAnimator->Get_AnimController()->Set_RotSpeed(700.f);
+				//m_pTransform->Face_Target(g_pObserver->Get_PlayerPos());
+				cout << "180" << endl;
+			}
 		}
 	}
-	else if (0.f > XMVectorGetY(vCross)) //몬스터오른쪽회전
-	{
-		m_bLeft = false;
 
-		if (25.f > XMConvertToDegrees(fRadian))
-		{
-			m_pTransform->Face_Target(g_pObserver->Get_PlayerPos());
-		}
-		else if (25.f <= XMConvertToDegrees(fRadian) && 45.f > XMConvertToDegrees(fRadian))
-		{
-			m_pAnimator->Change_AnyEntryAnimation((_uint)CBoss_Bastion_Judicator::M_BossAnimState::TURN_45RIGHT_H);
-			m_pAnimator->Get_AnimController()->Set_RotSpeed(1400.f);
-
-		}
-		else if (45.f <= XMConvertToDegrees(fRadian) && 90.f > XMConvertToDegrees(fRadian))
-		{
-			m_pAnimator->Change_AnyEntryAnimation((_uint)CBoss_Bastion_Judicator::M_BossAnimState::TURN_90RIGHT_H);
-			m_pAnimator->Get_AnimController()->Set_RotSpeed(700.f);
-
-		}
-		else if (90.f <= XMConvertToDegrees(fRadian) && 135.f > XMConvertToDegrees(fRadian))
-		{
-			m_pAnimator->Change_AnyEntryAnimation((_uint)CBoss_Bastion_Judicator::M_BossAnimState::TURN_135RIGHT_H);
-			m_pAnimator->Get_AnimController()->Set_RotSpeed(300.f);
-
-		}
-		else if (135.f <= XMConvertToDegrees(fRadian) && 180.f > XMConvertToDegrees(fRadian))
-		{
-			m_pAnimator->Change_AnyEntryAnimation((_uint)CBoss_Bastion_Judicator::M_BossAnimState::TURN_180RIGHT_H);
-			m_pAnimator->Get_AnimController()->Set_RotSpeed(100.f);
-
-		}
-	}
-	else
-	{
-		cout << "아무거에도 안속함, 어택으로넘어감 " << endl;
-		m_pStateController->Change_State(L"Attack");
-	}
-
+	cout << "=============" << endl;
 	return S_OK;
 }
 
@@ -238,14 +298,20 @@ HRESULT CMidBoss_Turn::ExitState()
 		return E_FAIL;
 
 	m_fRadian = 0.f;
-	m_pAnimator->Get_AnimController()->Set_RotSpeed(700.f);
+	m_pAnimator->Get_AnimController()->Set_RotSpeed(500.f);
 	m_TurnTime = 0.f;
+
+	//_vector vec = { 0.f, 1.f, 0.f,0.f };
+	//m_pTransform->SetUp_Rotation(vec, (XMConvertToRadians(0.f)));
+
+	cout << "turn end" << endl;
+
 	return S_OK;
 }
 
 void CMidBoss_Turn::Look_Player(void)
 {
-	
+
 }
 
 CMidBoss_Turn* CMidBoss_Turn::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext, void* pArg)

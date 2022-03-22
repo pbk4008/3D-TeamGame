@@ -1,19 +1,20 @@
 #include "pch.h"
-#include "Crawler_Idle.h"
+#include "Aberrant_Walk.h"
 
+#include "Monster_EarthAberrant.h"
 #include "Animation.h"
 
-CCrawler_Idle::CCrawler_Idle(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
+CAberrant_Walk::CAberrant_Walk(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
 	: CMonster_FSM(pDevice, pDeviceContext)
 {
 }
 
-CCrawler_Idle::CCrawler_Idle(const CCrawler_Idle& rhs)
+CAberrant_Walk::CAberrant_Walk(const CAberrant_Walk& rhs)
 	: CMonster_FSM(rhs)
 {
 }
 
-HRESULT CCrawler_Idle::NativeConstruct(void* pArg)
+HRESULT CAberrant_Walk::NativeConstruct(void* pArg)
 {
 	if (FAILED(__super::NativeConstruct(pArg)))
 		return E_FAIL;
@@ -21,7 +22,7 @@ HRESULT CCrawler_Idle::NativeConstruct(void* pArg)
 	return S_OK;
 }
 
-_int CCrawler_Idle::Tick(const _double& TimeDelta)
+_int CAberrant_Walk::Tick(const _double& TimeDelta)
 {
 	_int iProgress = __super::Tick(TimeDelta);
 	if (NO_EVENT != iProgress)
@@ -33,17 +34,21 @@ _int CCrawler_Idle::Tick(const _double& TimeDelta)
 	_fvector vDist = vMonsterPos - g_pObserver->Get_PlayerPos();
 	_float fDistToPlayer = XMVectorGetX(XMVector3Length(vDist));
 
-	if ( 5.f > fDistToPlayer)
+	if (5.f < fDistToPlayer)
 	{
 		m_pTransform->Face_Target(g_pObserver->Get_PlayerPos());
-		m_pStateController->Change_State(L"Walk");
-		cout << "걷기로 변경" << endl;
+	}
+
+	if (5.f > fDistToPlayer)
+	{
+		m_pStateController->Change_State(L"Attack");
+		cout << "공격으로 변경" << endl;
 	}
 
 	return _int();
 }
 
-_int CCrawler_Idle::LateTick(const _double& TimeDelta)
+_int CAberrant_Walk::LateTick(const _double& TimeDelta)
 {
 	_int iProgress = __super::LateTick(TimeDelta);
 	if (NO_EVENT != iProgress)
@@ -52,7 +57,7 @@ _int CCrawler_Idle::LateTick(const _double& TimeDelta)
 	return _int();
 }
 
-HRESULT CCrawler_Idle::Render()
+HRESULT CAberrant_Walk::Render()
 {
 	if (FAILED(__super::Render()))
 		return E_FAIL;
@@ -60,10 +65,12 @@ HRESULT CCrawler_Idle::Render()
 	return S_OK;
 }
 
-HRESULT CCrawler_Idle::EnterState()
+HRESULT CAberrant_Walk::EnterState()
 {
 	if (FAILED(__super::EnterState()))
 		return E_FAIL;
+
+	m_pAnimator->Change_AnyEntryAnimation(CMonster_EarthAberrant::MON_STATE::WALK_FWD_START);
 
 	//_vector vec = { 0.f, 1.f, 0.f,0.f };
 	//m_pTransform->SetUp_Rotation(vec, (XMConvertToRadians(180.f)));
@@ -71,7 +78,7 @@ HRESULT CCrawler_Idle::EnterState()
 	return S_OK;
 }
 
-HRESULT CCrawler_Idle::ExitState()
+HRESULT CAberrant_Walk::ExitState()
 {
 	if (FAILED(__super::ExitState()))
 		return E_FAIL;
@@ -82,25 +89,25 @@ HRESULT CCrawler_Idle::ExitState()
 	return S_OK;
 }
 
-void CCrawler_Idle::Look_Player(void)
+void CAberrant_Walk::Look_Player(void)
 {
 
 }
 
-CCrawler_Idle* CCrawler_Idle::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext, void* pArg)
+CAberrant_Walk* CAberrant_Walk::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext, void* pArg)
 {
-	CCrawler_Idle* pInstance = new CCrawler_Idle(pDevice, pDeviceContext);
+	CAberrant_Walk* pInstance = new CAberrant_Walk(pDevice, pDeviceContext);
 
 	if (FAILED(pInstance->NativeConstruct(pArg)))
 	{
-		MSGBOX("CCrawler_Idle Create Fail");
+		MSGBOX("CAberrant_Walk Create Fail");
 		Safe_Release(pInstance);
 	}
 
 	return pInstance;
 }
 
-void CCrawler_Idle::Free()
+void CAberrant_Walk::Free()
 {
 	__super::Free();
 }

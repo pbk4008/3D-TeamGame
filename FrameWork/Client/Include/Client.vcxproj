@@ -247,7 +247,9 @@
     <ClInclude Include="..\Headers\2H_HammerJogRight.h" />
     <ClInclude Include="..\Headers\2H_HammerJogRightPivot180.h" />
     <ClInclude Include="..\Headers\2H_HammerJogRightStart.h" />
+    <ClInclude Include="..\Headers\Aberrant_Attack.h" />
     <ClInclude Include="..\Headers\Aberrant_Idle.h" />
+    <ClInclude Include="..\Headers\Aberrant_Walk.h" />
     <ClInclude Include="..\Headers\BackGround.h" />
     <ClInclude Include="..\Headers\Bastion_2HSword_Attack.h" />
     <ClInclude Include="..\Headers\Bastion_2HSword_Attack_Rage.h" />
@@ -437,7 +439,9 @@
     <ClCompile Include="..\Codes\2H_HammerJogRightStart.cpp" />
     <ClCompile Include="..\Codes\2H_HammerEquipOff.cpp" />
     <ClCompile Include="..\Codes\2H_HammerEquipOn.cpp" />
+    <ClCompile Include="..\Codes\Aberrant_Attack.cpp" />
     <ClCompile Include="..\Codes\Aberrant_Idle.cpp" />
+    <ClCompile Include="..\Codes\Aberrant_Walk.cpp" />
     <ClCompile Include="..\Codes\BackGround.cpp" />
     <ClCompile Include="..\Codes\1H_SwordAttackNormalR2_Start.cpp" />
     <ClCompile Include="..\Codes\Bastion_2HSword_Attack.cpp" />
