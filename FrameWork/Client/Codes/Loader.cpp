@@ -110,21 +110,21 @@ HRESULT CLoader::LoadForScene()
 	default:
 		return E_FAIL;
 	}
+
 	if (FAILED(hr))
 		return E_FAIL;
+
+	
 
 	return S_OK;
 }
 
 HRESULT CLoader::SetUp_Stage1_Object()
 {
-
-	if (FAILED(Load_Stage1FBXLoad()))
-		return E_FAIL;
-
 	if (FAILED(Load_Stage1PlayerLoad()))
 		return E_FAIL;
-
+	if (FAILED(Load_Stage1FBXLoad()))
+		return E_FAIL;
 	//if (FAILED(Load_Stage1BossLoad()))
 	//	return E_FAIL;
 
@@ -140,8 +140,19 @@ HRESULT CLoader::SetUp_Stage1_Object()
 	//if (FAILED(Load_Stage1EffectLoad()))
 	//	return E_FAIL;
 
-	if (FAILED(Load_Stage1TriggerLod()))
-		return E_FAIL;
+	//if (FAILED(Load_Stage1TriggerLod()))
+	//	return E_FAIL;
+
+	
+	CMeshLoader* pLoader = GET_INSTANCE(CMeshLoader);
+	pLoader->Resume_Thread();
+	while (true)
+	{
+		pLoader->Update();
+		if (pLoader->Get_Clear())
+			break;
+	}
+	RELEASE_INSTANCE(CMeshLoader);
 
 	return S_OK;
 }
@@ -157,44 +168,45 @@ HRESULT CLoader::Load_Stage1FBXLoad()
 		return E_FAIL;
 
 	int iResult = 0;
+	CMeshLoader* pMeshLoader = GET_INSTANCE(CMeshLoader);
 	while (iResult != -1)
 	{
 		if (!strcmp(fd.name, ""))
 			break;
-
 		char szFullPath[MAX_PATH] = "../bin/FBX/";
 
 		strcat_s(szFullPath, fd.name);
-
 
 		_tchar fbxName[MAX_PATH] = L"";
 		_tchar fbxPath[MAX_PATH] = L"";
 		MultiByteToWideChar(CP_ACP, 0, fd.name, MAX_PATH, fbxName, MAX_PATH);
 		MultiByteToWideChar(CP_ACP, 0, szFullPath, MAX_PATH, fbxPath, MAX_PATH);
 
-		CMeshLoader::MESHTYPE tMeshType;
-		ZeroMemory(&tMeshType, sizeof(tMeshType));
+		CMeshLoader::MESHTYPE* tMeshType = new CMeshLoader::MESHTYPE;
+		ZeroMemory(tMeshType, sizeof(CMeshLoader::MESHTYPE));
 
-		lstrcpy(tMeshType.szFBXName, fbxName);
-		lstrcpy(tMeshType.szFBXPath, fbxPath);
-		tMeshType.iType = 2;
+		tMeshType->szFBXName = new _tchar[MAX_PATH];
+		tMeshType->szFBXPath = new _tchar[MAX_PATH];
 
-		if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, tMeshType.szFBXName
-			, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, tMeshType.szFBXPath,
-				CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
-			return E_FAIL;
+		lstrcpy(tMeshType->szFBXName, fbxName);
+		lstrcpy(tMeshType->szFBXPath, fbxPath);
+		tMeshType->iType = 2;
 
-		/*CMeshLoader* pMeshLoader = GET_INSTANCE(CMeshLoader);
-		if (!pMeshLoader->Get_AllWorking())
-			pMeshLoader->Add_MeshLoader(tMeshType);
-		else
+		_bool bCheck = false;
+		Sleep(1);
+		pMeshLoader->Add_MeshLoader(tMeshType, bCheck);
+		if (bCheck)
+		{
+			Safe_Delete_Array(tMeshType->szFBXName);
+			Safe_Delete_Array(tMeshType->szFBXPath);
+			Safe_Delete(tMeshType);
 			continue;
-
-		RELEASE_INSTANCE(CMeshLoader);*/
-
+		}
 		iResult = _findnext(handle, &fd);
 	}
+
 	_findclose(handle);
+	RELEASE_INSTANCE(CMeshLoader);
 
 	return S_OK;
 }
@@ -213,7 +225,6 @@ HRESULT CLoader::Load_Stage1StaticUILoad()
 	int iResult = 0;
 	while (iResult != -1)
 	{
-
 		char szFullPath[MAX_PATH] = "../bin/Resources/Texture/UI/Static/";
 		strcat_s(szFullPath, fd.name);
 
@@ -432,12 +443,30 @@ HRESULT CLoader::Load_Stage1PlayerLoad()
 #pragma endregion
 
 #pragma region ¸ðµ¨
+	CMeshLoader* pLoader = GET_INSTANCE(CMeshLoader);
+
+	CMeshLoader::MESHTYPE* tDesc = new CMeshLoader::MESHTYPE;
+	ZeroMemory(tDesc, sizeof(CMeshLoader::MESHTYPE));
+
+	tDesc->szFBXName = new _tchar[MAX_PATH];
+	tDesc->szFBXPath = new _tchar[MAX_PATH];
+
+	lstrcpy(tDesc->szFBXName, L"Model_Silvermane_Bin");
+	lstrcpy(tDesc->szFBXPath, L"../bin/FBX/Silvermane/Silvermane_Bin.fbx");
+	tDesc->iType = 1;
+	_bool bCheck = true;
+	pLoader->Add_MeshLoader(tDesc, bCheck);
+	RELEASE_INSTANCE(CMeshLoader);
+
+
+
 	_matrix matPivot = XMMatrixIdentity();
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Silvermane_Bin", CModel::Create(m_pDevice, m_pDeviceContext,
-		L"../bin/FBX/Silvermane/Silvermane_Bin.fbx", CModel::TYPE_ANIM, true))))
-	{
-		return E_FAIL;
-	}
+	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Silvermane_Bin", CModel::Create(m_pDevice, m_pDeviceContext,
+	//	L"../bin/FBX/Silvermane/Silvermane_Bin.fbx", CModel::TYPE_ANIM, true))))
+	//{
+	//	return E_FAIL;
+	//}
+
 	matPivot = XMMatrixIdentity();
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Needle", CModel::Create(m_pDevice, m_pDeviceContext,
 		"../bin/Resources/Mesh/Needle/", "Needle.fbx",
@@ -679,7 +708,6 @@ _uint CLoader::Thread_Main(void* pArg)
 	EnterCriticalSection(pLoader->getCritical());
 	if (FAILED(pLoader->LoadForScene()))
 		iFlag = E_FAIL;
-
 	pLoader->m_bFinish = true;
 	LeaveCriticalSection(pLoader->getCritical());
 	return iFlag;
@@ -710,11 +738,12 @@ HRESULT CLoader::Ready_Stage1()
 	{
 		return E_FAIL;
 	}
-
 	if (FAILED(SetUp_Stage1_Object()))
 	{
 		return E_FAIL;
 	}
+
+	
 
 	return S_OK;
 }
