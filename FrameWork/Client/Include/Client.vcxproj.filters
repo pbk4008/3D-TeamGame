@@ -343,6 +343,90 @@
     <Filter Include="02.GameObject\03.Character\02.Boss\00.MiddleBoss\State\04.Chase">
       <UniqueIdentifier>{9ca0b922-5493-4c13-b374-4312bd2f3120}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\05.UI\01.UI_Ingame\01.Meter\02.Monster\04.Name">
+      <UniqueIdentifier>{f93eb3ac-c59a-4020-8040-bc1b1ca22d26}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\Crawler\State">
+      <UniqueIdentifier>{d76242e7-e6bc-430a-b9db-6e820a61d11f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\Crawler\State\03.Flinch">
+      <UniqueIdentifier>{7ae21a8b-87f2-42a9-b8ec-557e3b386415}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\Crawler\State\01.Walk">
+      <UniqueIdentifier>{c9f6cc46-ba83-4d0f-b3ed-dee4c84a7974}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\Crawler\State\02.Attack">
+      <UniqueIdentifier>{9121331f-10e4-4281-a84d-af03d2a228d0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\Crawler\State\00.Idle">
+      <UniqueIdentifier>{80718da2-b434-4f3a-83f6-f405a8b45485}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\Crawler\State\04.Knockback">
+      <UniqueIdentifier>{e39aa1b3-074d-44d7-bfb9-3305bcc059cf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\Crawler\State\05.Death">
+      <UniqueIdentifier>{68e33a80-cc88-4dfe-a15d-622a68dcbb14}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\Crawler\State\06.Ricochet">
+      <UniqueIdentifier>{5d0d2558-f65e-4b32-8804-080a0c1b99d6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\EarthAberrant\State">
+      <UniqueIdentifier>{c378b0cc-f07a-4ba2-8dae-09b85aedec4b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\EarthAberrant\State\00.Idle">
+      <UniqueIdentifier>{89a86753-77d9-4309-aceb-d226891146ab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\EarthAberrant\State\01.Walk">
+      <UniqueIdentifier>{8ee6be25-4296-447d-a71c-1df2c16a91ef}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\EarthAberrant\State\02.Run">
+      <UniqueIdentifier>{7464defb-76ef-40ae-9e49-60563ce32ef8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\EarthAberrant\State\03.Attack">
+      <UniqueIdentifier>{8891ce53-fa8d-4839-acaf-b37030d1d847}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\EarthAberrant\State\04.Flinch">
+      <UniqueIdentifier>{598793a3-920b-4585-a942-1ffe7b1a718a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\EarthAberrant\State\05.Stun">
+      <UniqueIdentifier>{a5feef31-56a7-454e-b845-a90b88d0d9cf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\EarthAberrant\State\06.Knockback">
+      <UniqueIdentifier>{fcb36259-0e76-4d95-8ef9-ad44c10ef567}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_Healer\State_Healer">
+      <UniqueIdentifier>{ac333559-d103-4db9-a16f-3083aeb79507}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_Healer\State_Healer\Idle">
+      <UniqueIdentifier>{ae86d84e-b34f-4aae-957e-4acd49333021}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\96.Weapon\04.Staff">
+      <UniqueIdentifier>{19b1f1d3-c266-4b09-9b08-5abbbca7ed80}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Scene\02.Stage\00.Stage1">
+      <UniqueIdentifier>{ed994de5-4c7c-496e-8ec2-e5c3993d6b2d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Scene\02.Stage\01.Stage2">
+      <UniqueIdentifier>{a040ae63-0bf3-4932-8dd6-cc54af1b87c5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Scene\02.Stage\02.Stage3">
+      <UniqueIdentifier>{1c229266-2fe0-42c7-b3c0-4ff0917f6000}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_Healer\State_Healer\Chaser">
+      <UniqueIdentifier>{6c4f4213-7978-4785-9bab-d674b1588fbf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_Healer\State_Healer\Attack">
+      <UniqueIdentifier>{17b7c742-628e-4868-8d1e-7c0d413d9f1d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_Healer\State_Healer\Protect">
+      <UniqueIdentifier>{a934e01a-0d69-4988-820b-0a3452caae48}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_Healer\State_Healer\Death">
+      <UniqueIdentifier>{cb8123f1-7865-4c84-bd46-7c2c4c7fb4fc}</UniqueIdentifier>
+   </Filter>
+    <Filter Include="01.Scene\01.Loading\00.Loader\00.MeshLoader">
+      <UniqueIdentifier>{c2049929-7ae9-4414-bb90-0d30c5d6089c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -386,12 +470,6 @@
     </ClInclude>
     <ClInclude Include="..\Headers\BackGround.h">
       <Filter>02.GameObject\00. BackGround</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Codes\DebugSystem.h">
-      <Filter>97.DebugSystem</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Headers\Stage1.h">
-      <Filter>01.Scene\02.Stage</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\TestObj.h">
       <Filter>02.GameObject\99.TestObj</Filter>
@@ -906,12 +984,90 @@
     <ClInclude Include="..\Headers\1H_SwordAttackNormalR1_04Swap.h">
       <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\1H_Sword\R2</Filter>
     </ClInclude>
+    <ClInclude Include="..\Headers\1H_SwordAttackNormalR1_04Swap.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\1H_Sword\R2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Traverse_JumpNodeJog.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Jump</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\1H_SwordAttackNormalR1_04Swap.h" />
+    <ClInclude Include="..\Headers\Monster_Bastion_Sword.h">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Sword</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Bastion_Healer_State.h">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Healer\State_Healer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Bastion_Healer_Idle.h">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Healer\State_Healer\Idle</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Staff.h">
+      <Filter>02.GameObject\96.Weapon\04.Staff</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Stage1.h">
+      <Filter>01.Scene\02.Stage\00.Stage1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Stage2.h">
+      <Filter>01.Scene\02.Stage\01.Stage2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Monster_Bastion_Sword.h">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Sword</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\UI_Monster_Name.h">
+      <Filter>02.GameObject\05.UI\01.UI_Ingame\01.Meter\02.Monster\04.Name</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Crawler_Idle.h">
+      <Filter>02.GameObject\03.Character\01.Monster\Crawler\State\00.Idle</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Crawler_Walk.h">
+      <Filter>02.GameObject\03.Character\01.Monster\Crawler\State\01.Walk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Crawler_Attack.h">
+      <Filter>02.GameObject\03.Character\01.Monster\Crawler\State\02.Attack</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Crawler_Ricochet.h">
+      <Filter>02.GameObject\03.Character\01.Monster\Crawler\State\06.Ricochet</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Crawler_Death.h">
+      <Filter>02.GameObject\03.Character\01.Monster\Crawler\State\05.Death</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Crawler_Flinch_Left.h">
+      <Filter>02.GameObject\03.Character\01.Monster\Crawler\State\03.Flinch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Aberrant_Idle.h">
+      <Filter>02.GameObject\03.Character\01.Monster\EarthAberrant\State\00.Idle</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Aberrant_Walk.h">
+      <Filter>02.GameObject\03.Character\01.Monster\EarthAberrant\State\01.Walk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Aberrant_Attack.h">
+      <Filter>02.GameObject\03.Character\01.Monster\EarthAberrant\State\03.Attack</Filter>
+	</ClInclude>
+    <ClInclude Include="..\Default\Client_Struct.h">
+      <Filter>98.Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Stage3.h">
+      <Filter>01.Scene\02.Stage\02.Stage3</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\DebugSystem.h">
+      <Filter>97.DebugSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Bastion_Healer_Chaser.h">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Healer\State_Healer\Chaser</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Bastion_Healer_Attack.h">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Healer\State_Healer\Attack</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Bastion_Healer_Chaser_End.h">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Healer\State_Healer\Chaser</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Codes\MeshLoader.h">
+      <Filter>01.Scene\01.Loading\00.Loader\00.MeshLoader</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
       <Filter>99.Default</Filter>
     </ClCompile>
-    <ClCompile Include="Client.cpp" />
     <ClCompile Include="..\Codes\MainApp.cpp">
       <Filter>00.MainGame</Filter>
     </ClCompile>
@@ -929,9 +1085,6 @@
     </ClCompile>
     <ClCompile Include="..\Codes\DebugSystem.cpp">
       <Filter>97.DebugSystem</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Codes\Stage1.cpp">
-      <Filter>01.Scene\02.Stage</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\TestObj.cpp">
       <Filter>02.GameObject\99.TestObj</Filter>
@@ -1411,9 +1564,6 @@
     <ClCompile Include="..\Codes\Bastion_Sword_Attack.cpp">
       <Filter>02.GameObject\03.Character\01.Monster\Bastion_Sword\00.State\02.Attack</Filter>
     </ClCompile>
-    <ClCompile Include="..\Headers\Bastion_Sword_Hit.cpp">
-      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Sword\00.State\03.Hit</Filter>
-    </ClCompile>
     <ClCompile Include="..\Codes\Bastion_Sword_Death.cpp">
       <Filter>02.GameObject\03.Character\01.Monster\Bastion_Sword\00.State\04.Death</Filter>
     </ClCompile>
@@ -1422,9 +1572,6 @@
     </ClCompile>
     <ClCompile Include="..\Codes\Bastion_Sword_Paring.cpp">
       <Filter>02.GameObject\03.Character\01.Monster\Bastion_Sword\00.State\06.Paring</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Headers\Bastion_Sword_Turn.cpp">
-      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Sword\00.State\07.Turn</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\Bastion_Sword_Walk.cpp">
       <Filter>02.GameObject\03.Character\01.Monster\Bastion_Sword\00.State\08.Walk</Filter>
@@ -1445,6 +1592,88 @@
     </ClCompile>
     <ClCompile Include="..\Codes\1H_SwordAttackNormalR1_04Swap.cpp">
       <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\1H_Sword\R2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\1H_SwordAttackNormalR1_04Swap.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\1H_Sword\R2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Traverse_JumpNodeJog.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Jump</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\1H_SwordAttackNormalR1_04Swap.cpp" />
+    <ClCompile Include="..\Codes\Monster_Bastion_Sword.cpp">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Sword</Filter>
+    </ClCompile>
+    <ClCompile Include="Client.cpp">
+      <Filter>99.Default</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Bastion_Healer_State.cpp">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Healer\State_Healer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Bastion_Healer_Idle.cpp">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Healer\State_Healer\Idle</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Staff.cpp">
+      <Filter>02.GameObject\96.Weapon\04.Staff</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Stage1.cpp">
+      <Filter>01.Scene\02.Stage\00.Stage1</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Stage2.cpp">
+      <Filter>01.Scene\02.Stage\01.Stage2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Monster_Bastion_Sword.cpp">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Sword</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\UI_Monster_Name.cpp">
+      <Filter>02.GameObject\05.UI\01.UI_Ingame\01.Meter\02.Monster\04.Name</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Crawler_Idle.cpp">
+      <Filter>02.GameObject\03.Character\01.Monster\Crawler\State\00.Idle</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Crawler_Walk.cpp">
+      <Filter>02.GameObject\03.Character\01.Monster\Crawler\State\01.Walk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Crawler_Attack.cpp">
+      <Filter>02.GameObject\03.Character\01.Monster\Crawler\State\02.Attack</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Crawler_Ricochet.cpp">
+      <Filter>02.GameObject\03.Character\01.Monster\Crawler\State\06.Ricochet</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Crawler_Death.cpp">
+      <Filter>02.GameObject\03.Character\01.Monster\Crawler\State\05.Death</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Crawler_Flinch_Left.cpp">
+      <Filter>02.GameObject\03.Character\01.Monster\Crawler\State\03.Flinch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Aberrant_Idle.cpp">
+      <Filter>02.GameObject\03.Character\01.Monster\EarthAberrant\State\00.Idle</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Aberrant_Walk.cpp">
+      <Filter>02.GameObject\03.Character\01.Monster\EarthAberrant\State\01.Walk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Aberrant_Attack.cpp">
+      <Filter>02.GameObject\03.Character\01.Monster\EarthAberrant\State\03.Attack</Filter>
+	</ClCompile>
+    <ClCompile Include="..\Codes\Bastion_Sword_Hit.cpp">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Sword\00.State\03.Hit</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Bastion_Sword_Turn.cpp">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Sword\00.State\07.Turn</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Stage3.cpp">
+      <Filter>01.Scene\02.Stage\02.Stage3</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Bastion_Healer_Chaser.cpp">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Healer\State_Healer\Chaser</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Bastion_Healer_Attack.cpp">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Healer\State_Healer\Attack</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Bastion_Healer_Chaser_End.cpp">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Healer\State_Healer\Chaser</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\MeshLoader.cpp">
+      <Filter>01.Scene\01.Loading\00.Loader\00.MeshLoader</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -117,7 +117,7 @@ HRESULT CMonster_Bastion_Sword::SetUp_Components()
 	Desc.fRotationPerSec = XMConvertToRadians(60.f);
 	m_pTransform->Set_TransformDesc(Desc);
 
-	if (FAILED(__super::SetUp_Components(m_iSceneID, L"Model_Monster_Bastion_Sword", L"Model", (CComponent**)&m_pModelCom)))
+	if (FAILED(__super::SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Model_Monster_Bastion_Sword", L"Model", (CComponent**)&m_pModelCom)))
 		return E_FAIL;
 
 	CAnimator::ANIMATORDESC tDesc;
@@ -126,10 +126,10 @@ HRESULT CMonster_Bastion_Sword::SetUp_Components()
 	tDesc.pModel = m_pModelCom;
 	tDesc.pTransform = m_pTransform;
 
-	if (FAILED(__super::SetUp_Components(m_iSceneID, L"Proto_Component_Animator", L"Com_Animator", (CComponent**)&m_pAnimator, &tDesc)))
+	if (FAILED(__super::SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_Animator", L"Com_Animator", (CComponent**)&m_pAnimator, &tDesc)))
 		return E_FAIL;
 
-	if (FAILED(__super::SetUp_Components(m_iSceneID, L"Proto_Component_StateController", L"Com_StateController", (CComponent**)&m_pStateController)))
+	if (FAILED(__super::SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_StateController", L"Com_StateController", (CComponent**)&m_pStateController)))
 		return E_FAIL;
 
 	return S_OK;

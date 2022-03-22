@@ -18,6 +18,8 @@ public:
 	_fmatrix Get_Transform(const wstring& pCameraTag, TRANSFORMSTATEMATRIX eType);
 	_fvector Get_CamPosition(const wstring& pCameraTag);
 	void Set_Transform(const wstring& pCameraTag, TRANSFORMSTATEMATRIX eType, _fmatrix TransformMatrix);
+	//기본 카메라 변경
+	HRESULT Change_BaseCamera(const wstring& pCameraTag);
 public:
 	_uint getCameraCount() { return (_uint)m_mapPipeLine.size(); }
 	const wstring& getBaseCamera();

@@ -5,18 +5,6 @@
 BEGIN(Client)
 class CStage1 final : public CLevel
 {
-public:
-	typedef struct tagEnvironMentLoadData
-	{
-		_tchar FolderName[MAX_PATH];
-		_tchar FileName[MAX_PATH];
-		_tchar Tag[MAX_PATH];
-		_tchar Name[MAX_PATH];
-		_float4x4 WorldMat;
-		_float3 fInitPos;
-		LEVEL_ID eLevel;
-		_uint	  iType;
-	}ENVIRONMENTLOADDATA;
 private:
 	explicit CStage1();
 	explicit CStage1(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);
@@ -43,6 +31,7 @@ private:
 	HRESULT Ready_Trigger_Light(const _tchar* pDataFilePath);
 	HRESULT Ready_Trigger_Scene(const _tchar* pDataFilePath);
 	HRESULT Ready_Trigger_Monster(const _tchar* pDataFilePath);
+	HRESULT Ready_Trigger_Quest(const _tchar* pDataFilePath);
 
 public:
 	static CStage1* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);

@@ -37,6 +37,7 @@ public: virtual HRESULT NativeConstruct(void* pArg);
 public: HRESULT	CreateShadowDepthStencilview(_uint iWidth, _uint iHeight, ID3D11DepthStencilView** ppDepthStencilView);
 public: HRESULT Add_RenderGroup(RENDER eRenderID, class CGameObject* pGameObject);
 public: HRESULT Draw_RenderGroup();
+public: HRESULT Remove_RenderGroup();
 
 private: list<class CGameObject*>			m_RenderGroup[RENDER_END];
 private: typedef list<class CGameObject*>	RENDERGROUP;

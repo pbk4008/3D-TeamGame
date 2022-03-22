@@ -162,6 +162,16 @@ HRESULT CSilvermane::NativeConstruct(const _uint _iSceneID, void* _pArg)
 	if (FAILED(__super::NativeConstruct(_iSceneID, _pArg))) 
 		return E_FAIL;
 
+	if (_pArg)
+	{
+		SCENEMOVEDATA tDesc = (*(SCENEMOVEDATA*)_pArg);
+		_vector vPos = XMLoadFloat3(&tDesc.vPos);
+		vPos=XMVectorSetW(vPos, 1.f);
+		m_pTransform->Set_State(CTransform::STATE_POSITION, vPos);
+	}
+	else
+		m_pTransform->Set_State(CTransform::STATE_POSITION, XMVectorSet(0.f, 2.f, 0.f, 1.f));
+
 	if (FAILED(Ready_Components()))
 		return E_FAIL;
 	if (FAILED(Ready_States())) 
@@ -197,7 +207,7 @@ _int CSilvermane::Tick(_double _dDeltaTime)
 	if (NO_EVENT != iProgress) 
 		return iProgress;
 
-	Fall(_dDeltaTime);
+	//Fall(_dDeltaTime);
 	//m_pCharacterController->Tick(_dDeltaTime);
 	m_pCharacterController->Move(_dDeltaTime, m_pTransform->Get_Velocity());
 
@@ -350,8 +360,8 @@ HRESULT CSilvermane::Ready_Components()
 	tTransformDesc.fSpeedPerSec = 10.f;
 	tTransformDesc.fRotationPerSec = XMConvertToRadians(90.f);
 	m_pTransform->Set_TransformDesc(tTransformDesc);
-	m_pTransform->Set_State(CTransform::STATE_POSITION, XMVectorSet(0.f, 2.f, 0.f, 1.f));
-
+	//m_pTransform->Set_State(CTransform::STATE_POSITION, XMVectorSet(0.f, 0.f, 0.f, 1.f));
+	//위치 셋팅은 위에서 해줬음
 
 	// 모델
 	// 어심프용
@@ -362,14 +372,14 @@ HRESULT CSilvermane::Ready_Components()
 	//m_pModel->Add_Material(g_pGameInstance->Get_Material(L"Mtrl_Silvermane_Cloak"), 2);
 	//m_pModel->Add_Material(g_pGameInstance->Get_Material(L"Mtrl_Silvermane_Hair"), 3);
 	// 바이너리용
-	if (FAILED(SetUp_Components(m_iSceneID, L"Model_Silvermane_Bin", L"Model", (CComponent**)&m_pModel)))
+	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Model_Silvermane_Bin", L"Model", (CComponent**)&m_pModel)))
 		return E_FAIL;
 	_matrix matPivot = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(180.f));
 	m_pModel->Set_PivotMatrix(matPivot);
 
 
 	// 에니메이션 컨트롤러
-	if (FAILED(SetUp_Components(m_iSceneID, L"Proto_Component_AnimationController", L"AnimationController", (CComponent**)&m_pAnimationController)))
+	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_AnimationController", L"AnimationController", (CComponent**)&m_pAnimationController)))
 		return E_FAIL;
 	m_pAnimationController->Set_GameObject(this);
 	m_pAnimationController->Set_Model(m_pModel);
@@ -377,7 +387,7 @@ HRESULT CSilvermane::Ready_Components()
 	m_pAnimationController->Set_MoveSpeed(16.f);
 
 	// 스테이트 컨트롤러
-	if (FAILED(SetUp_Components(m_iSceneID, L"Proto_Component_StateController", L"StateController", (CComponent**)&m_pStateController)))
+	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_StateController", L"StateController", (CComponent**)&m_pStateController)))
 		return E_FAIL;
 	m_pStateController->Set_GameObject(this);
 
@@ -392,7 +402,7 @@ HRESULT CSilvermane::Ready_Components()
 	tCharacterControllerDesc.vPosition = { 0.f, 0.f, 0.f };
 	tCharacterControllerDesc.pGameObject = this;
 
-	if (FAILED(SetUp_Components(m_iSceneID, L"Proto_Component_CharacterController", L"CharacterController", (CComponent**)&m_pCharacterController, &tCharacterControllerDesc)))
+	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_CharacterController", L"CharacterController", (CComponent**)&m_pCharacterController, &tCharacterControllerDesc)))
 		return E_FAIL;
 	m_pCharacterController->setOwnerTransform(m_pTransform);
 
@@ -670,6 +680,19 @@ const _float CSilvermane::Get_PlusAngle() const
 const _float CSilvermane::Get_Angle() const
 {
 	return m_fAngle;
+}
+
+const CSilvermane::SCENEMOVEDATA CSilvermane::Get_SceneMoveData() const
+{
+	SCENEMOVEDATA tDesc;
+	ZeroMemory(&tDesc, sizeof(tDesc));
+
+
+	//현재 체력 및 기타 추가해야할 변수
+	tDesc.iMaxHp = 100;
+	tDesc.iCurHp = 10;
+
+	return tDesc;
 }
 
 void CSilvermane::Set_IsFall(const _bool _isFall)

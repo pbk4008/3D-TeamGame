@@ -579,3 +579,5 @@ FrameWork/Engine/bin/Engine.exp
 *.tlog
 *.idb
 *.res
+*.iobj
+*.ipdb

@@ -99,7 +99,7 @@ HRESULT CNeedle::Ready_Components()
 	m_pTransform->Set_TransformDesc(transformDesc);
 	m_pLocalTransform->Set_TransformDesc(transformDesc);
 
-	if (FAILED(SetUp_Components(m_iSceneID, L"Model_Needle", L"Model", (CComponent**)&m_pModel)))
+	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Model_Needle", L"Model", (CComponent**)&m_pModel)))
 		return E_FAIL;
 
 	CCollider::DESC tColliderDesc;

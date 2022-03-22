@@ -175,10 +175,13 @@
     </FxCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\Codes\DebugSystem.h" />
+    <ClInclude Include="..\Codes\MeshLoader.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
+    </ClInclude>
     <ClInclude Include="..\Default\Client_Enum.h" />
     <ClInclude Include="..\Default\Client_Function.h" />
     <ClInclude Include="..\Default\Client_Include.h" />
+    <ClInclude Include="..\Default\Client_Struct.h" />
     <ClInclude Include="..\Default\Clinet_Define.h" />
     <ClInclude Include="..\Headers\1H_Dash.h" />
     <ClInclude Include="..\Headers\1H_SwordAttack.h" />
@@ -247,6 +250,9 @@
     <ClInclude Include="..\Headers\2H_HammerJogRight.h" />
     <ClInclude Include="..\Headers\2H_HammerJogRightPivot180.h" />
     <ClInclude Include="..\Headers\2H_HammerJogRightStart.h" />
+    <ClInclude Include="..\Headers\Aberrant_Attack.h" />
+    <ClInclude Include="..\Headers\Aberrant_Idle.h" />
+    <ClInclude Include="..\Headers\Aberrant_Walk.h" />
     <ClInclude Include="..\Headers\BackGround.h" />
     <ClInclude Include="..\Headers\Bastion_2HSword_Attack.h" />
     <ClInclude Include="..\Headers\Bastion_2HSword_Attack_Rage.h" />
@@ -257,6 +263,11 @@
     <ClInclude Include="..\Headers\Bastion_2HSword_Idle.h" />
     <ClInclude Include="..\Headers\Bastion_2HSword_Rage.h" />
     <ClInclude Include="..\Headers\Bastion_2HSword_State.h" />
+    <ClInclude Include="..\Headers\Bastion_Healer_Attack.h" />
+    <ClInclude Include="..\Headers\Bastion_Healer_Chaser.h" />
+    <ClInclude Include="..\Headers\Bastion_Healer_Chaser_End.h" />
+    <ClInclude Include="..\Headers\Bastion_Healer_Idle.h" />
+    <ClInclude Include="..\Headers\Bastion_Healer_State.h" />
     <ClInclude Include="..\Headers\Bastion_Sword_Attack.h" />
     <ClInclude Include="..\Headers\Bastion_Sword_Chase.h" />
     <ClInclude Include="..\Headers\Bastion_Sword_Death.h" />
@@ -271,6 +282,13 @@
     <ClInclude Include="..\Headers\Camera_Debug.h" />
     <ClInclude Include="..\Headers\Client_Observer.h" />
     <ClInclude Include="..\Headers\Client_Trigger.h" />
+    <ClInclude Include="..\Headers\Crawler_Attack.h" />
+    <ClInclude Include="..\Headers\Crawler_Death.h" />
+    <ClInclude Include="..\Headers\Crawler_Flinch_Left.h" />
+    <ClInclude Include="..\Headers\Crawler_Idle.h" />
+    <ClInclude Include="..\Headers\Crawler_Ricochet.h" />
+    <ClInclude Include="..\Headers\Crawler_Walk.h" />
+    <ClInclude Include="..\Headers\DebugSystem.h" />
     <ClInclude Include="..\Headers\Effect_DashDust.h" />
     <ClInclude Include="..\Headers\Environment.h" />
     <ClInclude Include="..\Headers\Fury.h" />
@@ -340,7 +358,10 @@
     <ClInclude Include="..\Headers\Silvermane_SprintFwd.h" />
     <ClInclude Include="..\Headers\Silvermane_SprintFwdStart.h" />
     <ClInclude Include="..\Headers\Silvermane_SprintFwdStop.h" />
+    <ClInclude Include="..\Headers\Staff.h" />
     <ClInclude Include="..\Headers\Stage1.h" />
+    <ClInclude Include="..\Headers\Stage2.h" />
+    <ClInclude Include="..\Headers\Stage3.h" />
     <ClInclude Include="..\Headers\Stargazer.h" />
     <ClInclude Include="..\Headers\State_Silvermane.h" />
     <ClInclude Include="..\Headers\TestObj.h" />
@@ -353,6 +374,7 @@
     <ClInclude Include="..\Headers\UI_Monster_Back.h" />
     <ClInclude Include="..\Headers\UI_Monster_HpBar.h" />
     <ClInclude Include="..\Headers\UI_Monster_Level.h" />
+    <ClInclude Include="..\Headers\UI_Monster_Name.h" />
     <ClInclude Include="..\Headers\UI_Monster_Panel.h" />
     <ClInclude Include="..\Headers\UI_Player_HpBar.h" />
     <ClInclude Include="..\Headers\UI_Player_HpBar_Red.h" />
@@ -430,6 +452,9 @@
     <ClCompile Include="..\Codes\2H_HammerJogRightStart.cpp" />
     <ClCompile Include="..\Codes\2H_HammerEquipOff.cpp" />
     <ClCompile Include="..\Codes\2H_HammerEquipOn.cpp" />
+    <ClCompile Include="..\Codes\Aberrant_Attack.cpp" />
+    <ClCompile Include="..\Codes\Aberrant_Idle.cpp" />
+    <ClCompile Include="..\Codes\Aberrant_Walk.cpp" />
     <ClCompile Include="..\Codes\BackGround.cpp" />
     <ClCompile Include="..\Codes\1H_SwordAttackNormalR2_Start.cpp" />
     <ClCompile Include="..\Codes\Bastion_2HSword_Attack.cpp" />
@@ -441,17 +466,33 @@
     <ClCompile Include="..\Codes\Bastion_2HSword_Idle.cpp" />
     <ClCompile Include="..\Codes\Bastion_2HSword_Rage.cpp" />
     <ClCompile Include="..\Codes\Bastion_2HSword_State.cpp" />
+    <ClCompile Include="..\Codes\Bastion_Healer_Attack.cpp" />
+    <ClCompile Include="..\Codes\Bastion_Healer_Chaser.cpp" />
+    <ClCompile Include="..\Codes\Bastion_Healer_Chaser_End.cpp" />
+    <ClCompile Include="..\Codes\Bastion_Healer_Idle.cpp" />
+    <ClCompile Include="..\Codes\Bastion_Healer_State.cpp" />
     <ClCompile Include="..\Codes\Bastion_Sword_Attack.cpp" />
     <ClCompile Include="..\Codes\Bastion_Sword_Chase.cpp" />
     <ClCompile Include="..\Codes\Bastion_Sword_Death.cpp" />
     <ClCompile Include="..\Codes\Bastion_Sword_Groggy.cpp" />
+    <ClCompile Include="..\Codes\Bastion_Sword_Hit.cpp" />
     <ClCompile Include="..\Codes\Bastion_Sword_Idle.cpp" />
     <ClCompile Include="..\Codes\Bastion_Sword_Paring.cpp" />
+    <ClCompile Include="..\Codes\Bastion_Sword_Turn.cpp" />
     <ClCompile Include="..\Codes\Bastion_Sword_Walk.cpp" />
     <ClCompile Include="..\Codes\Client_Observer.cpp" />
     <ClCompile Include="..\Codes\Client_Trigger.cpp" />
     <ClCompile Include="..\Codes\Boss_Bastion_Judicator.cpp" />
+    <ClCompile Include="..\Codes\Crawler_Attack.cpp" />
+    <ClCompile Include="..\Codes\Crawler_Death.cpp" />
+    <ClCompile Include="..\Codes\Crawler_Flinch_Left.cpp" />
+    <ClCompile Include="..\Codes\Crawler_Idle.cpp" />
+    <ClCompile Include="..\Codes\Crawler_Ricochet.cpp" />
+    <ClCompile Include="..\Codes\Crawler_Walk.cpp" />
     <ClCompile Include="..\Codes\Fury.cpp" />
+    <ClCompile Include="..\Codes\MeshLoader.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="..\Codes\MidBoss_Attack.cpp" />
     <ClCompile Include="..\Codes\MidBoss_BattleCry.cpp" />
     <ClCompile Include="..\Codes\JumpNode.cpp" />
@@ -523,7 +564,10 @@
     <ClCompile Include="..\Codes\Silvermane_SprintFwd.cpp" />
     <ClCompile Include="..\Codes\Silvermane_SprintFwdStart.cpp" />
     <ClCompile Include="..\Codes\Silvermane_SprintFwdStop.cpp" />
+    <ClCompile Include="..\Codes\Staff.cpp" />
     <ClCompile Include="..\Codes\Stage1.cpp" />
+    <ClCompile Include="..\Codes\Stage2.cpp" />
+    <ClCompile Include="..\Codes\Stage3.cpp" />
     <ClCompile Include="..\Codes\Stargazer.cpp" />
     <ClCompile Include="..\Codes\State_Silvermane.cpp" />
     <ClCompile Include="..\Codes\TestObj.cpp" />
@@ -536,12 +580,11 @@
     <ClCompile Include="..\Codes\UI_Monster_Back.cpp" />
     <ClCompile Include="..\Codes\UI_Monster_HpBar.cpp" />
     <ClCompile Include="..\Codes\UI_Monster_Level.cpp" />
+    <ClCompile Include="..\Codes\UI_Monster_Name.cpp" />
     <ClCompile Include="..\Codes\UI_Monster_Panel.cpp" />
     <ClCompile Include="..\Codes\UI_Player_HpBar.cpp" />
     <ClCompile Include="..\Codes\UI_Player_HpBar_Red.cpp" />
     <ClCompile Include="..\Codes\Weapon.cpp" />
-    <ClCompile Include="..\Headers\Bastion_Sword_Hit.cpp" />
-    <ClCompile Include="..\Headers\Bastion_Sword_Turn.cpp" />
     <ClCompile Include="Client.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

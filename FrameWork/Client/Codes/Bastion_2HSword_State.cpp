@@ -46,7 +46,7 @@ _int CBastion_2HSword_State::Tick(const _double& _dDeltaTime)
 		m_pTransform->Face_Target(g_pObserver->Get_PlayerPos());
 		m_bTargetOn = true;
 	}
-
+	
 	else if (10.0f < fDistToPlayer && 15.0f > fDistToPlayer)
 		m_bRageOn = true;
 
@@ -59,7 +59,6 @@ _int CBastion_2HSword_State::Tick(const _double& _dDeltaTime)
 		m_pStateController->Change_State(L"Hit");
 		//공격여부로만 판별하다보니 아직은 Hp가 1씩 깍이진 않음
 	}
-
 	return _int();
 }
 

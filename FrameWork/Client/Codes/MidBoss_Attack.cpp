@@ -140,16 +140,6 @@ HRESULT CMidBoss_Attack::ExitState()
 
 void CMidBoss_Attack::Look_Player(void)
 {
-	/*_fvector vMonsterPos = m_pTransform->Get_State(CTransform::STATE::STATE_POSITION);
-
-	_fvector vDist = vMonsterPos - XMLoadFloat3(&g_pObserver->m_fPos);
-
-	_float fDistToPlayer = XMVectorGetX(XMVector3Length(vDist));
-
-	if (25.0f > fDistToPlayer)
-	{
-		m_pTransform->Face_Target(XMLoadFloat3(&g_pObserver->m_fPos));
-	}*/
 }
 
 CMidBoss_Attack* CMidBoss_Attack::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext, void* pArg)

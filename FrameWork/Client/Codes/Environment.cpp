@@ -3,25 +3,24 @@
 #include "MeshCollider.h"
 
 CEnvironment::CEnvironment()
-	: m_pNaviMesh(nullptr)
-	, m_pInstanceMesh(nullptr)
+	: m_pInstanceMesh(nullptr)
 {
 }
 
 CEnvironment::CEnvironment(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
 	: CLandScape(pDevice, pDeviceContext)
 	, m_pInstanceMesh(nullptr)
-	, m_pNaviMesh(nullptr)
+	, m_iInstanceCnt(0)
 {
 }
 
 CEnvironment::CEnvironment(const CEnvironment& rhs)
 	: CLandScape(rhs)
-	, m_pNaviMesh(rhs.m_pNaviMesh)
 	, m_pInstanceMesh(rhs.m_pInstanceMesh)
 	, m_tEnvironmentDesc(rhs.m_tEnvironmentDesc)
+	, m_vecUsingMatrix(rhs.m_vecUsingMatrix)
+	, m_iInstanceCnt(rhs.m_iInstanceCnt)
 {
-	Safe_AddRef(m_pNaviMesh);
 	Safe_AddRef(m_pInstanceMesh);
 }
 
@@ -37,6 +36,11 @@ HRESULT CEnvironment::NativeConstruct(const _uint _iSceneID, void* pArg)
 {
 	m_tEnvironmentDesc = (*(ENVIRONMENTDESC*)pArg);
 	m_tEnvironmentDesc.tInstanceDesc.iNumInstance = (_uint)m_tEnvironmentDesc.tInstanceDesc.vecMatrix.size();
+
+	m_iInstanceCnt = m_tEnvironmentDesc.tInstanceDesc.iNumInstance;
+
+	m_vecUsingMatrix = m_tEnvironmentDesc.tInstanceDesc.vecMatrix;
+
 	if (FAILED(CLandScape::NativeConstruct(_iSceneID, pArg)))
 		return E_FAIL;
 	
@@ -48,11 +52,17 @@ HRESULT CEnvironment::NativeConstruct(const _uint _iSceneID, void* pArg)
 
 _int CEnvironment::Tick(_double TimeDelta)
 {
+	
+	
+
+
 	return _int();
 }
 
 _int CEnvironment::LateTick(_double TimeDelta)
 {
+	if (FAILED(Culling()))
+		return -1;
 	m_pRenderer->Add_RenderGroup(CRenderer::RENDER_ALPHA, this);
 	return _int();
 }
@@ -129,7 +139,7 @@ HRESULT CEnvironment::Render_PBR()
 
 HRESULT CEnvironment::Ready_Component()
 {
-	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STAGE1, m_tEnvironmentDesc.wstrInstaneTag, m_tEnvironmentDesc.wstrInstaneTag, (CComponent * *)& m_pInstanceMesh, &m_tEnvironmentDesc.tInstanceDesc)))
+	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, m_tEnvironmentDesc.wstrInstaneTag, m_tEnvironmentDesc.wstrInstaneTag, (CComponent * *)& m_pInstanceMesh, &m_tEnvironmentDesc.tInstanceDesc)))
 		return E_FAIL;
 
 	m_Nummeshcontainer = m_pInstanceMesh->Get_NumMeshContainer();
@@ -137,6 +147,23 @@ HRESULT CEnvironment::Ready_Component()
 	//m_LightDesc = g_pGameInstance->Get_LightDesc(0);
 
 	return S_OK; 
+}
+
+HRESULT CEnvironment::Culling()
+{
+	for (_uint i = 0; i < m_iInstanceCnt; i++)
+	{
+		_matrix matTmp = XMLoadFloat4x4(&m_vecUsingMatrix[i]);
+		_vector vPos = matTmp.r[3];
+		if (!g_pGameInstance->isIn_WorldFrustum(vPos, 30.f))
+			ZeroMemory(&m_vecUsingMatrix[i], sizeof(_float4x4));
+		else
+			m_vecUsingMatrix[i] = m_tEnvironmentDesc.tInstanceDesc.vecMatrix[i];
+	}
+	
+	m_pInstanceMesh->Update_InstanceBuffer(m_vecUsingMatrix);
+
+	return S_OK;
 }
 
 CEnvironment* CEnvironment::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
@@ -164,6 +191,5 @@ CGameObject* CEnvironment::Clone(const _uint _iSceneID, void* pArg)
 void CEnvironment::Free()
 {
 	CLandScape::Free();
-	Safe_Release(m_pNaviMesh);
 	Safe_Release(m_pInstanceMesh);
 }

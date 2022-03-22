@@ -22,8 +22,9 @@ private:
 	explicit CInstancing_Mesh(const CInstancing_Mesh& rhs);
 	virtual ~CInstancing_Mesh() = default;
 public:
-	virtual HRESULT NativeConstruct_Prototype(const wstring& pMeshFilePath, const wstring& pShaderFile, INSTANCE_TYPE eType);
+	virtual HRESULT NativeConstruct_Prototype(const wstring& pMeshFilePath, INSTANCE_TYPE eType);
 	virtual HRESULT NativeConstruct(void* pArg) override;
+	void Update_InstanceBuffer(const vector<_float4x4>& pMatrix);
 public:
 	HRESULT SetUp_ValueOnShader(const char* pConstantName, void* pData, _uint iSize);
 	HRESULT	SetUp_TextureOnShader(const char* pConstantName, ID3D11ShaderResourceView* pSRV, _ulong Numindex);
@@ -35,7 +36,7 @@ private:
 	HRESULT Create_Material(const CSaveManager::MTRLDATA& pData);
 	HRESULT Create_InstancingBuffer(void* pArg);
 public:
-	static CInstancing_Mesh* Create(ID3D11Device * pDevice, ID3D11DeviceContext * pDeviceContext, const wstring& pMeshFilePath, const wstring& pShaderFile, INSTANCE_TYPE eType);
+	static CInstancing_Mesh* Create(ID3D11Device * pDevice, ID3D11DeviceContext * pDeviceContext, const wstring& pMeshFilePath, INSTANCE_TYPE eType);
 	virtual CComponent* Clone(void* pArg) override;
 
 private:

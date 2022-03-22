@@ -20,6 +20,8 @@ private:
 private:
 	HRESULT Ready_Logo();
 	HRESULT Ready_Stage1();
+	HRESULT Ready_Stage2();
+	HRESULT Ready_Stage3();
 	HRESULT Ready_Test_JS();
 	HRESULT Ready_Test_YM();
 	HRESULT Ready_Test_SB();
