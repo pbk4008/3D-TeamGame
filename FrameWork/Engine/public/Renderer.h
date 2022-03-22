@@ -17,10 +17,10 @@ class ENGINE_DLL CRenderer final : public CComponent
 {
 public: enum RENDERBUTTON
 {
-	SHADOW,PBR,HDR, RENDERBUTTON_END
+	SHADOW,PBRHDR,PIXEL,HDR, RENDERBUTTON_END
 };
 
-public: enum RENDER { RENDER_PRIORITY,RENDER_SHADOW, RENDER_PBR, RENDER_NONALPHA, RENDER_ALPHA, RENDER_UI, RENDER_UI_ACTIVE, RENDER_END };
+public: enum RENDER { RENDER_PRIORITY, RENDER_SKYBOX,RENDER_SHADOW, RENDER_PBR, RENDER_NONALPHA, RENDER_ALPHA, RENDER_UI, RENDER_UI_ACTIVE, RENDER_END };
 
 private: explicit CRenderer(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);
 private: virtual ~CRenderer() = default;
@@ -49,7 +49,7 @@ private: ID3D11DepthStencilView*			m_pShadowMap = nullptr;
 
 private: _bool								m_bShadow = false;
 private: _bool								m_bPBR = false;
-private: _bool								m_bDeferred = true;
+private: _bool								m_bPixel = false;
 private: _bool								m_bHDR = false;
 private: RENDERBUTTON						m_eRenderButton;
 private: _tchar								m_CameraTag[128];
@@ -61,6 +61,7 @@ private: CPostProcess*						m_pPostProcess = nullptr;
 private: CTonemapping*						m_pTonemapping = nullptr;
 
 private: HRESULT Render_Priority();
+private: HRESULT Render_SkyBox();
 private: HRESULT Render_NonAlpha();
 private: HRESULT Render_Alpha();
 private: HRESULT Render_UI();
@@ -68,8 +69,7 @@ private: HRESULT Render_UI_Active();
 
 private: HRESULT Render_Shadow();
 private: HRESULT Render_ShadeShadow();
-private: HRESULT Render_PBR();
-private: HRESULT Render_Blend();
+private: HRESULT Render_Final();
 
 private: /* For.PhysX */
 	_bool m_isPhysXRender = false;

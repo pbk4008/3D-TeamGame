@@ -49,34 +49,14 @@ HRESULT CStage1::Ready_LightDesc()
 	LightDesc.vDiffuse = _float4(1.f, 1.f, 1.f, 1.f);
 	LightDesc.vSpecular = _float4(0.8f, 0.8f, 0.8f, 1.f);
 	LightDesc.vAmbient = _float4(0.6f, 0.6f, 0.6f, 1.f);
-	/*LightDesc.vPosition = _float3(0.f, 50.f, 0.f);*/
 
 	_vector up = { 0, 1.f, 0,0 };
 	_vector lookat = { 0.f, 1.f, 0.f, 1.f };
 
-	//_vector		vPosition = XMLoadFloat3(&LightDesc.vPosition);
-	//vPosition = XMVectorSetW(vPosition, 1.f);
-
-	//_vector		vLook = XMLoadFloat3(&lookat) - XMLoadFloat3(&LightDesc.vPosition);
-	//vLook = XMVector3Normalize(vLook);
-
-	//_vector		vRight = XMVector3Cross(XMLoadFloat3(&up), vLook);
-	//vRight = XMVector3Normalize(vRight);
-
-	//_vector		vUp = XMVector3Cross(vLook, vRight);
-	//vUp = XMVector3Normalize(vUp);
-
-	//_matrix lightcam;
-	//lightcam.r[0] = vRight;
-	//lightcam.r[1] = vUp;
-	//lightcam.r[2] = vLook;
-	//lightcam.r[3] = vPosition;
-
-	//LightDesc.mLightView = XMMatrixInverse(nullptr, lightcam);
 	LightDesc.mOrthinfo[0] = 50.f;
 
-	XMStoreFloat3(&LightDesc.vPosition,((XMLoadFloat3(&LightDesc.vDirection) * LightDesc.mOrthinfo[0] * -1.f) + lookat));
-	 LightDesc.mLightView = XMMatrixLookAtLH(XMLoadFloat3(&LightDesc.vPosition), lookat, up);
+	XMStoreFloat3(&LightDesc.vPosition, ((XMLoadFloat3(&LightDesc.vDirection) * LightDesc.mOrthinfo[0] * -1.f) + lookat));
+	LightDesc.mLightView = XMMatrixLookAtLH(XMLoadFloat3(&LightDesc.vPosition), lookat, up);
 
 	_vector origin = { 0,0,0,0 };
 	_float3	forigin;

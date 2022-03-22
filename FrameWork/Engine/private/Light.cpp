@@ -37,25 +37,28 @@ HRESULT CLight::Render(const wstring& pCameraTag, _bool PBRHDRcheck)
 		if (m_LightDesc.eType == tagLightDesc::TYPE_DIRECTIONAL)
 		{
 			iPassIndex = 1;
+
+			m_pVIBuffer->SetUp_ValueOnShader("g_vLightDir", &_float4(m_LightDesc.vDirection.x, m_LightDesc.vDirection.y, m_LightDesc.vDirection.z, 0.f), sizeof(_float4));
 		}
 		else if (m_LightDesc.eType == tagLightDesc::TYPE_POINT)
 		{
 			iPassIndex = 2;
 			m_pVIBuffer->SetUp_ValueOnShader("g_fRange", &m_LightDesc.fRange, sizeof(_float));
 		}
-		m_pVIBuffer->SetUp_ValueOnShader("g_vLightDir", &_float4(m_LightDesc.vDirection.x, m_LightDesc.vDirection.y, m_LightDesc.vDirection.z, 0.f), sizeof(_float4));
+		m_pVIBuffer->SetUp_TextureOnShader("g_ShadowTexture", pTarget_Manager->Get_SRV(TEXT("Target_Shadow")));
 		m_pVIBuffer->SetUp_ValueOnShader("g_vLightPos", &_float4(m_LightDesc.vPosition.x, m_LightDesc.vPosition.y, m_LightDesc.vPosition.z, 1.f), sizeof(_float4));
 
 		m_pVIBuffer->SetUp_TextureOnShader("g_NormalTexture", pTarget_Manager->Get_SRV(TEXT("Target_Normal")));
 		m_pVIBuffer->SetUp_TextureOnShader("g_DepthTexture", pTarget_Manager->Get_SRV(TEXT("Target_Depth")));
 		m_pVIBuffer->SetUp_TextureOnShader("g_ShadowTexture", pTarget_Manager->Get_SRV(TEXT("Target_ShadeShadow")));
 
-		m_pVIBuffer->SetUp_TextureOnShader("g_PositionTexture", pTarget_Manager->Get_SRV(TEXT("Target_Position")));
+		m_pVIBuffer->SetUp_TextureOnShader("g_SkyBoxTexutre", pTarget_Manager->Get_SRV(TEXT("Target_SkyBox")));
 		m_pVIBuffer->SetUp_TextureOnShader("g_DiffuseTexture", pTarget_Manager->Get_SRV(TEXT("Target_Diffuse")));
 
 		m_pVIBuffer->SetUp_TextureOnShader("g_Metallic", pTarget_Manager->Get_SRV(TEXT("Target_Metallic")));
 		m_pVIBuffer->SetUp_TextureOnShader("g_Roughness", pTarget_Manager->Get_SRV(TEXT("Target_Roughness")));
 		m_pVIBuffer->SetUp_TextureOnShader("g_AO", pTarget_Manager->Get_SRV(TEXT("Target_AO")));
+		m_pVIBuffer->SetUp_TextureOnShader("g_BiNormal", pTarget_Manager->Get_SRV(TEXT("Target_PBRNormal")));
 
 		m_pVIBuffer->SetUp_ValueOnShader("g_vLightDiffuse", &m_LightDesc.vDiffuse, sizeof(_float4));
 		m_pVIBuffer->SetUp_ValueOnShader("g_vLightAmbient", &m_LightDesc.vAmbient, sizeof(_float4));
@@ -63,9 +66,9 @@ HRESULT CLight::Render(const wstring& pCameraTag, _bool PBRHDRcheck)
 
 		_vector		vCamPosition = g_pGameInstance->Get_CamPosition(pCameraTag);
 
-		_matrix		ViewMatrix = g_pGameInstance->Get_Transform(pCameraTag, TRANSFORMSTATEMATRIX::D3DTS_VIEW);
+		_matrix		ViewMatrix = g_pGameInstance->Get_Transform(pCameraTag,TRANSFORMSTATEMATRIX::D3DTS_VIEW);
 		ViewMatrix = XMMatrixInverse(nullptr, ViewMatrix);
-		_matrix		ProjMatrix = g_pGameInstance->Get_Transform(pCameraTag, TRANSFORMSTATEMATRIX::D3DTS_PROJECTION);
+		_matrix		ProjMatrix = g_pGameInstance->Get_Transform(pCameraTag,TRANSFORMSTATEMATRIX::D3DTS_PROJECTION);
 		ProjMatrix = XMMatrixInverse(nullptr, ProjMatrix);
 
 		m_pVIBuffer->SetUp_ValueOnShader("g_vCamPosition", &vCamPosition, sizeof(_float4));
@@ -75,9 +78,7 @@ HRESULT CLight::Render(const wstring& pCameraTag, _bool PBRHDRcheck)
 
 		m_pVIBuffer->Render(iPassIndex);
 	}
-
 	RELEASE_INSTANCE(CTarget_Manager);
-	
 
 	return S_OK;
 }

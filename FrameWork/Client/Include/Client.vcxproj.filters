@@ -423,9 +423,12 @@
     </Filter>
     <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_Healer\State_Healer\Death">
       <UniqueIdentifier>{cb8123f1-7865-4c84-bd46-7c2c4c7fb4fc}</UniqueIdentifier>
-   </Filter>
+    </Filter>
     <Filter Include="01.Scene\01.Loading\00.Loader\00.MeshLoader">
       <UniqueIdentifier>{c2049929-7ae9-4414-bb90-0d30c5d6089c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\00. BackGround\Skybox">
+      <UniqueIdentifier>{34e9d6fc-40fa-469c-b052-c7a694bdeaaa}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -1031,7 +1034,7 @@
     </ClInclude>
     <ClInclude Include="..\Headers\Aberrant_Attack.h">
       <Filter>02.GameObject\03.Character\01.Monster\EarthAberrant\State\03.Attack</Filter>
-	</ClInclude>
+    </ClInclude>
     <ClInclude Include="..\Default\Client_Struct.h">
       <Filter>98.Headers</Filter>
     </ClInclude>
@@ -1052,6 +1055,9 @@
     </ClInclude>
     <ClInclude Include="..\Codes\MeshLoader.h">
       <Filter>01.Scene\01.Loading\00.Loader\00.MeshLoader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\SkyBox.h">
+      <Filter>02.GameObject\00. BackGround\Skybox</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1633,7 +1639,7 @@
     </ClCompile>
     <ClCompile Include="..\Codes\Aberrant_Attack.cpp">
       <Filter>02.GameObject\03.Character\01.Monster\EarthAberrant\State\03.Attack</Filter>
-	</ClCompile>
+    </ClCompile>
     <ClCompile Include="..\Codes\Bastion_Sword_Hit.cpp">
       <Filter>02.GameObject\03.Character\01.Monster\Bastion_Sword\00.State\03.Hit</Filter>
     </ClCompile>
@@ -1654,6 +1660,9 @@
     </ClCompile>
     <ClCompile Include="..\Codes\MeshLoader.cpp">
       <Filter>01.Scene\01.Loading\00.Loader\00.MeshLoader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\SkyBox.cpp">
+      <Filter>02.GameObject\00. BackGround\Skybox</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

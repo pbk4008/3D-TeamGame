@@ -502,4 +502,5 @@ void CMonster_Bastion_2HSword::Free()
 	Safe_Release(m_pStateController);
 	Safe_Release(m_pModel);
 	Safe_Release(m_pAnimator);
+
 }

@@ -358,6 +358,7 @@
     <ClInclude Include="..\Headers\Silvermane_SprintFwd.h" />
     <ClInclude Include="..\Headers\Silvermane_SprintFwdStart.h" />
     <ClInclude Include="..\Headers\Silvermane_SprintFwdStop.h" />
+    <ClInclude Include="..\Headers\SkyBox.h" />
     <ClInclude Include="..\Headers\Staff.h" />
     <ClInclude Include="..\Headers\Stage1.h" />
     <ClInclude Include="..\Headers\Stage2.h" />
@@ -564,6 +565,7 @@
     <ClCompile Include="..\Codes\Silvermane_SprintFwd.cpp" />
     <ClCompile Include="..\Codes\Silvermane_SprintFwdStart.cpp" />
     <ClCompile Include="..\Codes\Silvermane_SprintFwdStop.cpp" />
+    <ClCompile Include="..\Codes\SkyBox.cpp" />
     <ClCompile Include="..\Codes\Staff.cpp" />
     <ClCompile Include="..\Codes\Stage1.cpp" />
     <ClCompile Include="..\Codes\Stage2.cpp" />

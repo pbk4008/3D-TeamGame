@@ -50,7 +50,7 @@ DepthStencilState ZDefault
 
 DepthStencilState ZWriteDisable
 {
-	DepthEnable = true;
+	DepthEnable = false;
 	DepthWriteMask = Zero;
 	DepthFunc = less;
 };

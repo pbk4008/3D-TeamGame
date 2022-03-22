@@ -41,6 +41,17 @@ sampler DefaultSampler = sampler_state
 	AddressV = wrap;
 };
 
+float3 Normalmapping(float3 normaltex, float3x3 tbn)
+{
+	normaltex = normaltex * 2 - 1;
+	normaltex = normalize(normaltex);
+	
+	normaltex = normalize(mul(normaltex, tbn));
+	normaltex = normaltex * 0.5f + 0.5f;
+	
+	return normaltex;
+}
+
 
 struct VS_IN
 {
@@ -55,11 +66,9 @@ struct VS_OUT
 {
 	float4 vPosition : SV_POSITION;
 	float4 vNormal : NORMAL;
-	float2 vTexUV : TEXCOORD0;
 	float4 vTangent : TANGENT;
 	float4 vBiNormal : BINORMAL;
-	float4 vProjPos : TEXCOORD1;
-	float4 vViewPos : TEXCOORD2;
+	float4 vUvDepth : TEXCOORD0;
 };
 
 VS_OUT VS_MAIN_STATIC(VS_IN In)
@@ -74,14 +83,13 @@ VS_OUT VS_MAIN_STATIC(VS_IN In)
 
 	Out.vPosition = mul(vector(In.vPosition, 1.f), matWVP);
 	Out.vNormal = normalize(mul(vector(In.vNormal, 0.f), g_WorldMatrix));
-	Out.vTexUV = In.vTexUV;
+	
+	Out.vUvDepth.xy = In.vTexUV.xy;
 	
 	Out.vBiNormal = normalize(mul(vector(In.vBiNormal, 0.f), g_WorldMatrix));
 	Out.vTangent = normalize(mul(vector(In.vTangent, 0.f), g_WorldMatrix));
-	
-	Out.vProjPos = Out.vPosition;
-	Out.vViewPos = mul(vector(In.vPosition, 1.f), matWV);
 
+	Out.vUvDepth.zw = Out.vPosition.zw;
 	return Out;
 
 }
@@ -152,51 +160,44 @@ struct PS_IN
 {
 	float4 vPosition : SV_POSITION;
 	float4 vNormal : NORMAL;
-	float2 vTexUV : TEXCOORD0;
 	float4 vTangent : TANGENT;
 	float4 vBiNormal : BINORMAL;
-	float4 vProjPos : TEXCOORD1;
-	float4 vViewPos : TEXCOORD2;
+	float4 vUvDepth : TEXCOORD0;
 };
 
 struct PS_OUT
 {
-	vector vDiffuse : SV_TARGET0;
-	vector vNormal : SV_TARGET1;
-	vector vDepth : SV_TARGET2;
-	vector vPosition : SV_TARGET3;
+	float4 diffuse : SV_TARGET0;
+	float4 normal : SV_TARGET1;
+	float4 depth : SV_TARGET2;
+	float4 M : SV_Target3;
+	float4 R : SV_Target4;
+	float4 A : SV_Target5;
+	float4 E : SV_Target6;
 };
 
 PS_OUT PS_MAIN(PS_IN In)
 {
 	PS_OUT Out = (PS_OUT) 0;
 	
-	Out.vPosition = In.vViewPos;
-	Out.vDiffuse = g_DiffuseTexture.Sample(DefaultSampler, In.vTexUV);
-	Out.vDiffuse.a = 1.f;
-	/* -1 ~ 1 */
-	/* 0 ~ 1 */
-	//Out.vNormal = vector(In.vNormal.xyz * 0.5f + 0.5f, 0.f);
+	float4 diffuse = g_DiffuseTexture.Sample(DefaultSampler, In.vUvDepth.xy);
+	float3 normal = g_BiNormalTexture.Sample(DefaultSampler, In.vUvDepth.xy).xyz;
+	float3x3 tbn = { In.vTangent.xyz, In.vBiNormal.xyz, In.vNormal.xyz };
 	
-	if (g_bool == true)
-	{
-		float3 vNormalMap = g_BiNormalTexture.Sample(DefaultSampler, In.vTexUV).xyz;
-		float3 vNormal = normalize(vNormalMap.xyz * 2.f - 1.f);
-		vector pos = (vector) 1;
-		float4x4 matTangent = float4x4(normalize(In.vTangent), normalize(In.vBiNormal), normalize(In.vNormal), pos);
+	normal = Normalmapping(normal, tbn);
 	
-		matTangent = transpose(matTangent);
-		
-		Out.vNormal = mul(vector(vNormal.xyz, 0.f), matTangent);
-	}
-	else
-		Out.vNormal = vector(In.vNormal.xyz * 0.5f + 0.5f, 0.f);
+	Out.diffuse = diffuse;
+
+	Out.depth = float4(In.vUvDepth.z / In.vUvDepth.w, In.vUvDepth.w / 300.f, 0.f, 0.f);
+	Out.normal = float4(normal, 0);
 	
-	
-	Out.vDepth = vector(In.vProjPos.z / In.vProjPos.w, In.vProjPos.w / 150.0f, 0.0f, 0.0f);
+	Out.M = float4(1, 1, 1, 1);
+	Out.R = float4(0, 0, 0, 1);
+	Out.A = float4(1, 1, 1, 1);
+	Out.E = float4(0.1, 0.1, 0.1, 1);
 
 
-		return Out;
+	return Out;
 }
 // SHADOWMAP
 //*---------------------------------------------------------------------------------------------*
@@ -290,38 +291,6 @@ PS_OUT_SHADESHADOW PS_MAIN_SHADESHADOW(PS_IN_SHADESHADOW In)
 }
 //*---------------------------------------------------------------------------------------------*
 
-// Ready PBR
-//*---------------------------------------------------------------------------------------------*
-struct PS_OUT_PBR
-{
-	vector vMetallic : SV_TARGET0;
-	vector vRoughness : SV_TARGET1;
-	vector vAO : SV_TARGET2;
-};
-
-PS_OUT_PBR PS_MAIN_PBR(PS_IN In)
-{
-	PS_OUT_PBR Out = (PS_OUT_PBR) 0;
-	
-	if (g_NonTex == true)
-	{
-		Out.vMetallic = vector(0.f, 0.f, 0.f, 1.f);
-		Out.vRoughness = vector(1.f, 1.f, 1.f, 1.f);
-		Out.vAO = vector(1.f, 1.f, 1.f, 1.f);
-	}
-	else
-	{
-		vector vPBRTexture = g_PBRTexture.Sample(DefaultSampler, In.vTexUV);
-	
-		Out.vMetallic = vector(vPBRTexture.rrr, 1.f);
-		Out.vRoughness = vector(vPBRTexture.ggg, 1.f);
-		Out.vAO = vector(vPBRTexture.bbb, 1.f);
-	}
-	
-	return Out;
-}
-//*---------------------------------------------------------------------------------------------*
-
 struct PS_OUT_TOOL
 {
 	vector vDiffuse : SV_TARGET0;
@@ -334,11 +303,11 @@ PS_OUT_TOOL PS_MAIN_TOOL(PS_IN In)
 {
 	PS_OUT_TOOL Out = (PS_OUT_TOOL) 0;
 
-	Out.vDiffuse = g_DiffuseTexture.Sample(DefaultSampler, In.vTexUV);
+	Out.vDiffuse = g_DiffuseTexture.Sample(DefaultSampler, In.vUvDepth.xy);
 	Out.vDiffuse.a = 1.f;
 
 	Out.vNormal = vector(In.vNormal.xyz * 0.5f + 0.5f, 0.f);
-	Out.vDepth = vector(In.vProjPos.z / In.vProjPos.w, In.vProjPos.w / 150.0f, 0.0f, 0.0f);
+	Out.vDepth = vector(In.vUvDepth.z / In.vUvDepth.w, In.vUvDepth.w / 150.0f, 0.0f, 0.0f);
 
 	return Out;
 }
@@ -400,18 +369,6 @@ technique11 DefaultTechnique
 		VertexShader = compile vs_5_0 VS_MAIN_SHADESHADOW_STATIC();
 		GeometryShader = NULL;
 		PixelShader = compile ps_5_0 PS_MAIN_SHADESHADOW();
-	}
-
-	pass ReadyPBR //------------------------------------------------------------------------------------4 Static Shade_Shadow
-	{
-		SetRasterizerState(CullMode_Default);
-		SetDepthStencilState(ZDefault, 0);
-		SetBlendState(BlendDisable, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
-
-		/* 진입점함수를 지정한다. */
-		VertexShader = compile vs_5_0 VS_MAIN_STATIC();
-		GeometryShader = NULL;
-		PixelShader = compile ps_5_0 PS_MAIN_PBR();
 	}
 }
 

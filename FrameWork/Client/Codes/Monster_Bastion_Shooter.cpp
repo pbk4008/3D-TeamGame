@@ -37,6 +37,11 @@ HRESULT CMonster_Bastion_Shooter::NativeConstruct(const _uint _iSceneID, void* _
 
 	m_pTransform->Set_State(CTransform::STATE_POSITION, XMVectorSet(5.f, 0.f, 5.f, 1.f));
 
+
+	m_pRenderer->SetRenderButton(CRenderer::PIXEL, true);
+	m_pRenderer->SetRenderButton(CRenderer::PBRHDR, true);
+	m_pRenderer->SetCameraTag(L"Camera_Silvermane");
+
 	return S_OK;
 }
 
@@ -62,7 +67,7 @@ _int CMonster_Bastion_Shooter::LateTick(_double _dDeltaTime)
 	if (NO_EVENT != iProgress) 
 		return iProgress;
 
-	if (FAILED(m_pRenderer->Add_RenderGroup(CRenderer::RENDER_ALPHA, this)))
+	if (FAILED(m_pRenderer->Add_RenderGroup(CRenderer::RENDER_NONALPHA, this)))
 		return -1;
 
 	return _int();
@@ -89,8 +94,14 @@ HRESULT CMonster_Bastion_Shooter::Render()
 	{
 		//if (FAILED(m_pModelCom->SetUp_TextureOnShader("g_DiffuseTexture", i, aiTextureType_DIFFUSE))) return E_FAIL;
 
-		if (FAILED(m_pModelCom->Render(i, 0))) 
-			return E_FAIL;
+		if (i == 2)
+		{
+			if (FAILED(m_pModelCom->Render(i, 1))) 	return E_FAIL;
+		}
+		else
+		{
+			if (FAILED(m_pModelCom->Render(i, 0))) 	return E_FAIL;
+		}
 	}
 
 	return S_OK;
@@ -135,7 +146,7 @@ HRESULT CMonster_Bastion_Shooter::Ready_AnimationFSM()
 
 	////////////////////
 	pAnim = m_pModelCom->Get_Animation("SK_Crimson_Marksman.ao|A_Attack_R1_CrimsonMarksman");
-	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::ATTACK,(_uint)ANIM_TYPE::HEAD, pAnim, true, true, true, ERootOption::XYZ)))
+	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::ATTACK,(_uint)ANIM_TYPE::HEAD, pAnim, true, true, false, ERootOption::XYZ)))
 		return E_FAIL;
 
 	m_pAnimator->Connect_Animation((_uint)ANIM_TYPE::ATTACK, (_uint)ANIM_TYPE::IDLE, false);

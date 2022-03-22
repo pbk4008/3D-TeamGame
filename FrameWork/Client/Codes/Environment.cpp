@@ -52,10 +52,6 @@ HRESULT CEnvironment::NativeConstruct(const _uint _iSceneID, void* pArg)
 
 _int CEnvironment::Tick(_double TimeDelta)
 {
-	
-	
-
-
 	return _int();
 }
 
@@ -63,7 +59,7 @@ _int CEnvironment::LateTick(_double TimeDelta)
 {
 	if (FAILED(Culling()))
 		return -1;
-	m_pRenderer->Add_RenderGroup(CRenderer::RENDER_ALPHA, this);
+	m_pRenderer->Add_RenderGroup(CRenderer::RENDER_NONALPHA, this);
 	return _int();
 }
 
@@ -155,7 +151,7 @@ HRESULT CEnvironment::Culling()
 	{
 		_matrix matTmp = XMLoadFloat4x4(&m_vecUsingMatrix[i]);
 		_vector vPos = matTmp.r[3];
-		if (!g_pGameInstance->isIn_WorldFrustum(vPos, 30.f))
+		if (!g_pGameInstance->isIn_WorldFrustum(vPos, 20.f))
 			ZeroMemory(&m_vecUsingMatrix[i], sizeof(_float4x4));
 		else
 			m_vecUsingMatrix[i] = m_tEnvironmentDesc.tInstanceDesc.vecMatrix[i];

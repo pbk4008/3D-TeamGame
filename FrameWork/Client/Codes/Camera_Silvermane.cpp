@@ -90,7 +90,7 @@ HRESULT CCamera_Silvermane::Ready_Components()
 	cameraDesc.fFovy = XMConvertToRadians(60.f);
 	cameraDesc.fAspect = _float(g_iWinCx) / g_iWinCy;
 	cameraDesc.fNear = 0.1f;
-	cameraDesc.fFar = 1000.f;
+	cameraDesc.fFar = 300.f;
 	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_Camera", L"Com_Camera", (CComponent**)&m_pCamera, &cameraDesc)))
 		return E_FAIL;
 
