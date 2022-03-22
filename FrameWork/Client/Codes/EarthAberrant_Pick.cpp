@@ -1,32 +1,32 @@
 #include "pch.h"
-#include "ShieldBreaker.h"
+#include "EarthAberrant_Pick.h"
 
-#include "Boss_Bastion_Judicator.h"
+#include "Monster_EarthAberrant.h"
 #include "HierarchyNode.h"
 
 
-CShieldBreaker::CShieldBreaker(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
+CEarthAberrant_Pick::CEarthAberrant_Pick(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
 	: CWeapon(pDevice, pDeviceContext)
 {
 }
 
-CShieldBreaker::CShieldBreaker(const CShieldBreaker& rhs)
+CEarthAberrant_Pick::CEarthAberrant_Pick(const CEarthAberrant_Pick& rhs)
 	: CWeapon(rhs)
 {
 }
 
-HRESULT CShieldBreaker::NativeConstruct_Prototype()
+HRESULT CEarthAberrant_Pick::NativeConstruct_Prototype()
 {
 	if (FAILED(__super::NativeConstruct_Prototype()))
 		return E_FAIL;
 
-	m_eType = EType::Hammer_2H;
-	m_wstrName = L"ShieldBreaker";
+	m_eType = EType::Earth_Pick;
+	m_wstrName = L"EarthAberrant_Pick";
 
 	return S_OK;
 }
 
-HRESULT CShieldBreaker::NativeConstruct(const _uint _iSceneID, void* pArg)
+HRESULT CEarthAberrant_Pick::NativeConstruct(const _uint _iSceneID, void* pArg)
 {
 	if (FAILED(__super::NativeConstruct(_iSceneID,pArg)))
 		return E_FAIL;
@@ -40,7 +40,7 @@ HRESULT CShieldBreaker::NativeConstruct(const _uint _iSceneID, void* pArg)
 	return S_OK;
 }
 
-_int CShieldBreaker::Tick(_double TimeDelta)
+_int CEarthAberrant_Pick::Tick(_double TimeDelta)
 {
 	if (0 > __super::Tick(TimeDelta))
 		return -1;
@@ -51,7 +51,7 @@ _int CShieldBreaker::Tick(_double TimeDelta)
 	return _int();
 }
 
-_int CShieldBreaker::LateTick(_double TimeDelta)
+_int CEarthAberrant_Pick::LateTick(_double TimeDelta)
 {
 	if (0 > __super::LateTick(TimeDelta))
 		return -1;
@@ -62,7 +62,7 @@ _int CShieldBreaker::LateTick(_double TimeDelta)
 	return _int();
 }
 
-HRESULT CShieldBreaker::Render()
+HRESULT CEarthAberrant_Pick::Render()
 {
 	if (FAILED(__super::Render()))
 		return E_FAIL;
@@ -84,7 +84,7 @@ HRESULT CShieldBreaker::Render()
 	}
 }
 
-HRESULT CShieldBreaker::Ready_Components()
+HRESULT CEarthAberrant_Pick::Ready_Components()
 {
 	CTransform::TRANSFORMDESC transformDesc;
 	transformDesc.fSpeedPerSec = 0.f;
@@ -92,15 +92,15 @@ HRESULT CShieldBreaker::Ready_Components()
 	m_pTransform->Set_TransformDesc(transformDesc);
 	m_pLocalTransform->Set_TransformDesc(transformDesc);
 
-	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STAGE1, L"Model_Weapon_ShieldBreaker", L"Com_Model", (CComponent**)&m_pModel)))
+	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STAGE1, L"Model_Weapon_EarthAberrant_Pick", L"Com_Model", (CComponent**)&m_pModel)))
 		return E_FAIL;
 
-	m_pModel->Add_Material(g_pGameInstance->Get_Material(L"MI_2H_hammer_Shieldbreaker"), 0);
+	m_pModel->Add_Material(g_pGameInstance->Get_Material(L"MI_Earth_Aberrant_Pick"), 0);
 
 	return S_OK;
 }
 
-_int CShieldBreaker::Attach_FixedBone(const _double& TimeDelta)
+_int CEarthAberrant_Pick::Attach_FixedBone(const _double& TimeDelta)
 {
 	if (m_pFixedBone)
 	{
@@ -114,12 +114,12 @@ _int CShieldBreaker::Attach_FixedBone(const _double& TimeDelta)
 	return NO_EVENT;
 }
 
-_int CShieldBreaker::Attach_Owner(const _double& TimeDelta)
+_int CEarthAberrant_Pick::Attach_Owner(const _double& TimeDelta)
 {
 	if (m_pOwner)
 	{
 		_matrix matWorld = m_pLocalTransform->Get_WorldMatrix();
-		CTransform* BossTransform = (CTransform*)static_cast<CBoss_Bastion_Judicator*>(m_pOwner)->Get_Component(L"Com_Transform");
+		CTransform* BossTransform = (CTransform*)static_cast<CMonster_EarthAberrant*>(m_pOwner)->Get_Component(L"Com_Transform");
 		_matrix OwnerMat = BossTransform->Get_CombinedMatrix();
 		m_pTransform->Set_WorldMatrix(matWorld * OwnerMat);
 	}
@@ -127,29 +127,29 @@ _int CShieldBreaker::Attach_Owner(const _double& TimeDelta)
 	return _int();
 }
 
-CShieldBreaker* CShieldBreaker::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
+CEarthAberrant_Pick* CEarthAberrant_Pick::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
 {
-	CShieldBreaker* pInstance = new CShieldBreaker(pDevice, pDeviceContext);
+	CEarthAberrant_Pick* pInstance = new CEarthAberrant_Pick(pDevice, pDeviceContext);
 	if (FAILED(pInstance->NativeConstruct_Prototype()))
 	{
-		MSGBOX("CShieldBreaker Create Fail");
+		MSGBOX("CEarthAberrant_Pick Create Fail");
 		Safe_Release(pInstance);
 	}
 	return pInstance;
 }
 
-CGameObject* CShieldBreaker::Clone(const _uint _iSceneID, void* pArg)
+CGameObject* CEarthAberrant_Pick::Clone(const _uint _iSceneID, void* pArg)
 {
-	CShieldBreaker* pInstance = new CShieldBreaker(*this);
+	CEarthAberrant_Pick* pInstance = new CEarthAberrant_Pick(*this);
 	if (FAILED(pInstance->NativeConstruct(_iSceneID, pArg)))
 	{
-		MSGBOX("CShieldBreaker Clone Fail");
+		MSGBOX("CEarthAberrant_Pick Clone Fail");
 		Safe_Release(pInstance);
 	}
 	return pInstance;
 }
 
-void CShieldBreaker::Free()
+void CEarthAberrant_Pick::Free()
 {
 
 	__super::Free();

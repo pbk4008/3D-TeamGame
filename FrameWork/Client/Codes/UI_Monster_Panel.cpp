@@ -82,6 +82,11 @@ HRESULT CUI_Monster_Panel::Render()
 	return S_OK;
 }
 
+void CUI_Monster_Panel::Set_HpBar(_float fMaxHp, _float fHp)
+{
+	m_pUIHpBar->Set_TargetHpBar(fMaxHp, fHp);
+}
+
 HRESULT CUI_Monster_Panel::Panel_Setting()
 {
 	switch (m_EnemyTag)

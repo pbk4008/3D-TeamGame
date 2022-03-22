@@ -63,10 +63,19 @@ _int CUI_Player_HpBar::Tick(_double TimeDelta)
 	if (FAILED(__super::Tick(TimeDelta)))
 		return -1;
 
-	if (g_pGameInstance->getkeyDown(DIK_L))
+	/*if (g_pGameInstance->getkeyDown(DIK_L))
 	{
 		m_fHp -= 0.1f;
 	}
+	if (g_pGameInstance->getkeyDown(DIK_K))
+	{
+		m_fHp -= 0.4f;
+	}
+	if (g_pGameInstance->getkeyDown(DIK_J))
+	{
+		m_fHp = 1.f;
+		m_fGapX = 1.f;
+	}*/
 
 	if (m_fGapX > m_fHp)
 	{

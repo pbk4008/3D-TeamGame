@@ -30,7 +30,6 @@ public:
 
 private:
 	_uint m_iAttackCount = 0;
-	_uint m_iPreState_1 = 0;
 
 public:
 	static CAberrant_Attack* Create(ID3D11Device * pDevice, ID3D11DeviceContext * pDeviceContext, void* pArg = nullptr);

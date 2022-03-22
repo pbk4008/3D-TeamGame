@@ -22,6 +22,7 @@
 #include "Monster_Bastion_Sword.h"
 #include "Boss_Bastion_Judicator.h"
 #include "ShieldBreaker.h"
+#include "EarthAberrant_Pick.h"
 #include "Stargazer.h"
 
 #pragma region TestScene_JS
@@ -112,26 +113,28 @@ HRESULT CLoader::LoadForScene()
 	default:
 		return E_FAIL;
 	}
+
 	if (FAILED(hr))
 		return E_FAIL;
+
+	
 
 	return S_OK;
 }
 
 HRESULT CLoader::SetUp_Stage1_Object()
 {
-
-	//if (FAILED(Load_Stage1FBXLoad()))
-	//	return E_FAIL;
+	if (FAILED(Load_Stage1FBXLoad()))
+		return E_FAIL;
 
 	if (FAILED(Load_Stage1PlayerLoad()))
 		return E_FAIL;
 
-	//if (FAILED(Load_Stage1BossLoad()))
-	//	return E_FAIL;
-
 	if (FAILED(Load_Stage1MonsterLoad()))
 		return E_FAIL;
+
+	//if (FAILED(Load_Stage1BossLoad()))
+	//	return E_FAIL;
 
 	if (FAILED(Load_Stage1StaticUILoad()))
 		return E_FAIL;
@@ -144,6 +147,7 @@ HRESULT CLoader::SetUp_Stage1_Object()
 
 	//if (FAILED(Load_Stage1TriggerLod()))
 	//	return E_FAIL;
+
 
 	return S_OK;
 }
@@ -159,44 +163,64 @@ HRESULT CLoader::Load_Stage1FBXLoad()
 		return E_FAIL;
 
 	int iResult = 0;
+	CMeshLoader* pMeshLoader = GET_INSTANCE(CMeshLoader);
 	while (iResult != -1)
 	{
 		if (!strcmp(fd.name, ""))
 			break;
-
 		char szFullPath[MAX_PATH] = "../bin/FBX/";
 
 		strcat_s(szFullPath, fd.name);
-
 
 		_tchar fbxName[MAX_PATH] = L"";
 		_tchar fbxPath[MAX_PATH] = L"";
 		MultiByteToWideChar(CP_ACP, 0, fd.name, MAX_PATH, fbxName, MAX_PATH);
 		MultiByteToWideChar(CP_ACP, 0, szFullPath, MAX_PATH, fbxPath, MAX_PATH);
 
-		CMeshLoader::MESHTYPE tMeshType;
-		ZeroMemory(&tMeshType, sizeof(tMeshType));
+		CMeshLoader::MESHTYPE* tMeshType = new CMeshLoader::MESHTYPE;
+		ZeroMemory(tMeshType, sizeof(CMeshLoader::MESHTYPE));
 
-		lstrcpy(tMeshType.szFBXName, fbxName);
-		lstrcpy(tMeshType.szFBXPath, fbxPath);
-		tMeshType.iType = 2;
+		tMeshType->szFBXName = new _tchar[MAX_PATH];
+		tMeshType->szFBXPath = new _tchar[MAX_PATH];
 
-		if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, tMeshType.szFBXName
-			, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, tMeshType.szFBXPath,
-				CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
+		lstrcpy(tMeshType->szFBXName, fbxName);
+		lstrcpy(tMeshType->szFBXPath, fbxPath);
+		tMeshType->iType = 2;
+
+		/*_bool bCheck = false;
+		Sleep(10);
+		pMeshLoader->Add_MeshLoader(tMeshType, bCheck);
+		if (bCheck)
+		{
+			Safe_Delete_Array(tMeshType->szFBXName);
+			Safe_Delete_Array(tMeshType->szFBXPath);
+			Safe_Delete(tMeshType);
+			continue;
+		}*/
+		if(FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, tMeshType->szFBXName
+			, CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, tMeshType->szFBXPath, CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
 			return E_FAIL;
 
-		/*CMeshLoader* pMeshLoader = GET_INSTANCE(CMeshLoader);
-		if (!pMeshLoader->Get_AllWorking())
-			pMeshLoader->Add_MeshLoader(tMeshType);
-		else
-			continue;
-
-		RELEASE_INSTANCE(CMeshLoader);*/
+		Safe_Delete_Array(tMeshType->szFBXName);
+		Safe_Delete_Array(tMeshType->szFBXPath);
+		Safe_Delete(tMeshType);
 
 		iResult = _findnext(handle, &fd);
 	}
+
+
 	_findclose(handle);
+	RELEASE_INSTANCE(CMeshLoader);
+
+	CMeshLoader* pLoader = GET_INSTANCE(CMeshLoader);
+	pLoader->Resume_Thread();
+	while (true)
+	{
+		pLoader->Update();
+		if (pLoader->Get_Clear())
+			break;
+	}
+	RELEASE_INSTANCE(CMeshLoader);
 
 	return S_OK;
 }
@@ -215,7 +239,6 @@ HRESULT CLoader::Load_Stage1StaticUILoad()
 	int iResult = 0;
 	while (iResult != -1)
 	{
-
 		char szFullPath[MAX_PATH] = "../bin/Resources/Texture/UI/Static/";
 		strcat_s(szFullPath, fd.name);
 
@@ -399,6 +422,32 @@ HRESULT CLoader::Load_Stage1TriggerLod()
 	return S_OK;
 }
 
+void CLoader::Add_LoadingThread(const wstring& pComponetTag, const wstring& pFilePath, _uint iType)
+{
+	CMeshLoader* pLoader = GET_INSTANCE(CMeshLoader);
+
+	CMeshLoader::MESHTYPE* tDesc = new CMeshLoader::MESHTYPE;
+	ZeroMemory(tDesc, sizeof(CMeshLoader::MESHTYPE));
+
+	tDesc->szFBXName = new _tchar[MAX_PATH];
+	tDesc->szFBXPath = new _tchar[MAX_PATH];
+
+	lstrcpy(tDesc->szFBXName, pComponetTag.c_str());
+	lstrcpy(tDesc->szFBXPath, pFilePath.c_str());
+
+	tDesc->iType = iType;
+	_bool bCheck = true;
+	while (true)
+	{
+		Sleep(1);
+		pLoader->Add_MeshLoader(tDesc, bCheck);
+		if (!bCheck)
+			break;
+	}
+
+	RELEASE_INSTANCE(CMeshLoader);
+}
+
 HRESULT CLoader::SetUp_Stage1_Prototype()
 {
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_CapsuleCollider", CCapsuleCollider::Create(m_pDevice, m_pDeviceContext))))
@@ -444,12 +493,31 @@ HRESULT CLoader::Load_Stage1PlayerLoad()
 #pragma endregion
 
 #pragma region 모델
+	
+	//쓰레드 추가로 변경(위 함수)
+	//CMeshLoader* pLoader = GET_INSTANCE(CMeshLoader);
+
+	//CMeshLoader::MESHTYPE* tDesc = new CMeshLoader::MESHTYPE;
+	//ZeroMemory(tDesc, sizeof(CMeshLoader::MESHTYPE));
+
+	//tDesc->szFBXName = new _tchar[MAX_PATH];
+	//tDesc->szFBXPath = new _tchar[MAX_PATH];
+
+	//lstrcpy(tDesc->szFBXName, );
+	//lstrcpy(tDesc->szFBXPath, );
+	//tDesc->iType = 1;
+	//_bool bCheck = true;
+	//pLoader->Add_MeshLoader(tDesc, bCheck);
+
+	//RELEASE_INSTANCE(CMeshLoader);
+
 	_matrix matPivot = XMMatrixIdentity();
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Silvermane_Bin", CModel::Create(m_pDevice, m_pDeviceContext,
 		L"../bin/FBX/Silvermane/Silvermane_Bin.fbx", CModel::TYPE_ANIM, true))))
 	{
 		return E_FAIL;
 	}
+
 	matPivot = XMMatrixIdentity();
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Needle", CModel::Create(m_pDevice, m_pDeviceContext,
 		"../bin/Resources/Mesh/Needle/", "Needle.fbx",
@@ -492,80 +560,45 @@ HRESULT CLoader::Load_Stage1PlayerLoad()
 
 HRESULT CLoader::Load_Stage1BossLoad()
 {
-	
 	//Boss Bastion_Tier4
-	_matrix matPivot = XMMatrixIdentity();
-	matPivot = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(180.f));
-
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Model_Boss_Bastion_Tier4", CModel::Create(m_pDevice, m_pDeviceContext,
-		"../bin/Resources/Mesh/Bastion_Tier4/", "Bastion_Tier4.fbx",
-		L"../../Reference/ShaderFile/Shader_Mesh.hlsl", matPivot, CModel::TYPE_ANIM, true))))
-	{
+		L"../bin/FBX/Monster/Bastion_Tier4.fbx",CModel::TYPE_ANIM, true))))
 		return E_FAIL;
-	}
 
 	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Boss_Bastion", CBoss_Bastion_Judicator::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
-
-	//0
-	CTexture* pTexture = CTexture::Create(m_pDevice, m_pDeviceContext);
-	if (FAILED(pTexture->NativeConstruct_Prototype(L"../Bin/Resources/Mesh/Bastion_Tier4/T_Bastion_Tier4_Top_D.dds", 1)))
-		return E_FAIL;
-
-	CMaterial* pMtrl = CMaterial::Create(m_pDevice, m_pDeviceContext, L"Bastion_Judicator_0", L"../../Reference/ShaderFile/Shader_Mesh.hlsl", CMaterial::EType::Anim);
-	if (FAILED(pMtrl->Set_Texture("g_DiffuseTexture", TEXTURETYPE::TEX_DIFFUSE, pTexture, 0)))
-		return E_FAIL;
-	if (FAILED(g_pGameInstance->Add_Material(L"MI_Bastion_Top_Tier4", pMtrl)))
-		return E_FAIL;
-
-	//1
-	pTexture = CTexture::Create(m_pDevice, m_pDeviceContext);
-	if (FAILED(pTexture->NativeConstruct_Prototype(L"../Bin/Resources/Mesh/Bastion_Tier4/T_BastionTier4_Fur_Coeff.dds", 1)))
-		return E_FAIL;
-
-	pMtrl = CMaterial::Create(m_pDevice, m_pDeviceContext, L"Bastion_Judicator_1", L"../../Reference/ShaderFile/Shader_Mesh.hlsl", CMaterial::EType::Anim);
-	if (FAILED(pMtrl->Set_Texture("g_DiffuseTexture", TEXTURETYPE::TEX_DIFFUSE, pTexture, 0)))
-		return E_FAIL;
-	if (FAILED(g_pGameInstance->Add_Material(L"MI_Bastion_Fur_Tier4", pMtrl)))
-		return E_FAIL;
-
-	//2
-	pTexture = CTexture::Create(m_pDevice, m_pDeviceContext);
-	if (FAILED(pTexture->NativeConstruct_Prototype(L"../Bin/Resources/Mesh/Bastion_Tier4/T_Bastion_Tier4_Down_D.dds", 1)))
-		return E_FAIL;
-
-	pMtrl = CMaterial::Create(m_pDevice, m_pDeviceContext, L"Bastion_Judicator_2", L"../../Reference/ShaderFile/Shader_Mesh.hlsl", CMaterial::EType::Anim);
-	if (FAILED(pMtrl->Set_Texture("g_DiffuseTexture", TEXTURETYPE::TEX_DIFFUSE, pTexture, 0)))
-		return E_FAIL;
-	if (FAILED(g_pGameInstance->Add_Material(L"MI_Bastion_Down_Tier4", pMtrl)))
-		return E_FAIL;
-
-	//3
-	pTexture = CTexture::Create(m_pDevice, m_pDeviceContext);
-	if (FAILED(pTexture->NativeConstruct_Prototype(L"../Bin/Resources/Mesh/Bastion_Tier4/T_Bastion_Tier4_Cloth_D.dds", 1)))
-		return E_FAIL;
-
-	pMtrl = CMaterial::Create(m_pDevice, m_pDeviceContext, L"Bastion_Judicator_3", L"../../Reference/ShaderFile/Shader_Mesh.hlsl", CMaterial::EType::Anim);
-	if (FAILED(pMtrl->Set_Texture("g_DiffuseTexture", TEXTURETYPE::TEX_DIFFUSE, pTexture, 0)))
-		return E_FAIL;
-	if (FAILED(g_pGameInstance->Add_Material(L"MI_Bastion_Cloth_Tier4", pMtrl)))
-		return E_FAIL;
-
+	 
 	//weapon
 
 	//ShieldBreaker_BossWeapon
-	matPivot = XMMatrixIdentity();
+	_matrix matPivot = XMMatrixIdentity();
 	//matPivot = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(180.f));
 
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Model_Weapon_ShieldBreaker", CModel::Create(m_pDevice, m_pDeviceContext,
 		"../bin/Resources/Mesh/ShieldBreaker/", "ShieldBreaker.fbx",
-		L"../../Reference/ShaderFile/Shader_StaticMesh.hlsl", matPivot, CModel::TYPE_STATIC))))
+		L"../../Reference/ShaderFile/Shader_StaticMesh.hlsl", matPivot, CModel::TYPE_STATIC, true))))
 	{
 		return E_FAIL;
 	}
 	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Weapon_ShieldBreaker", CShieldBreaker::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 	
+	//1
+	CTexture* pTexture = CTexture::Create(m_pDevice, m_pDeviceContext);
+	if (FAILED(pTexture->NativeConstruct_Prototype(L"../Bin/Resources/Mesh/ShieldBreaker/T_2H_hammer_Shieldbreaker_D.dds", 1)))
+		return E_FAIL;
+
+	CMaterial* pMtrl = CMaterial::Create(m_pDevice, m_pDeviceContext, L"2H_hammer_Shieldbreaker", L"../../Reference/ShaderFile/Shader_StaticMesh.hlsl", CMaterial::EType::Static);
+	if (FAILED(pMtrl->Set_Texture("g_DiffuseTexture", TEXTURETYPE::TEX_DIFFUSE, pTexture, 0)))
+		return E_FAIL;
+	/*if (FAILED(pMtrl->Set_Texture("g_DiffuseTexture", TEXTURETYPE::TEX_DIFFUSE, pTexture, 0)))
+		return E_FAIL;
+	if (FAILED(pMtrl->Set_Texture("g_DiffuseTexture", TEXTURETYPE::TEX_DIFFUSE, pTexture, 0)))
+		return E_FAIL;
+	if (FAILED(pMtrl->Set_Texture("g_DiffuseTexture", TEXTURETYPE::TEX_DIFFUSE, pTexture, 0)))
+		return E_FAIL;*/
+	if (FAILED(g_pGameInstance->Add_Material(L"MI_2H_hammer_Shieldbreaker", pMtrl)))
+		return E_FAIL;
 
 	return S_OK;
 }
@@ -573,62 +606,42 @@ HRESULT CLoader::Load_Stage1BossLoad()
 HRESULT CLoader::Load_Stage1MonsterLoad()
 {
 	////Monster Crystal_Crawler
-	_matrix matPivot = XMMatrixIdentity();
-	//matPivot = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(180.f));
-
 	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Model_Monster_Crawler", CModel::Create(m_pDevice, m_pDeviceContext,
-	//	"../bin/Resources/Mesh/Crystal_Crawler/", "Crystal_Crawler.fbx",
-	//	L"../../Reference/ShaderFile/Shader_Mesh.hlsl", matPivot, CModel::TYPE_ANIM, true))))
-	//{
+	//	L"../bin/FBX/Monster/Crystal_Crawler.fbx",CModel::TYPE_ANIM, true))))
 	//	return E_FAIL;
-	//}
 
 	//if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Monster_Crawler", CMonster_Crawler::Create(m_pDevice, m_pDeviceContext))))
 	//	return E_FAIL;
 
-	//CTexture* pTexture = CTexture::Create(m_pDevice, m_pDeviceContext);
-	//if (FAILED(pTexture->NativeConstruct_Prototype(L"../Bin/Resources/Mesh/Crystal_Crawler/T_Crystal_Crawler_D.tga", 1)))
-	//	return E_FAIL;
-
-	//CMaterial* pMtrl = CMaterial::Create(m_pDevice, m_pDeviceContext, L"Crystal_Crawler", L"../../Reference/ShaderFile/Shader_Mesh.hlsl", CMaterial::EType::Anim);
-	//if (FAILED(pMtrl->Set_Texture("g_DiffuseTexture", TEXTURETYPE::TEX_DIFFUSE, pTexture, 0)))
-	//	return E_FAIL;
-	//if (FAILED(g_pGameInstance->Add_Material(L"Mtrl_Crystal_Crawler", pMtrl)))
-	//	return E_FAIL;
-	
 	//Monster EarthAberrant
-	matPivot = XMMatrixIdentity();
-	matPivot = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(180.f));
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Model_Monster_EarthAberrant", CModel::Create(m_pDevice, m_pDeviceContext,
-		"../bin/Resources/Mesh/EarthAberrant/", "EarthAberrant.fbx",
-		L"../../Reference/ShaderFile/Shader_Mesh.hlsl",
-		matPivot,
-		CModel::TYPE_ANIM))))
-	{
+		L"../bin/FBX/Monster/EarthAberrant.fbx", CModel::TYPE_ANIM, true))))
 		return E_FAIL;
-	}
-
+	
 	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Monster_EarthAberrant", CMonster_EarthAberrant::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 
+	//Monster EarthAberrant Weapon
+	_matrix matPivot = XMMatrixIdentity();
+	//matPivot = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(180.f));
+
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Model_Weapon_EarthAberrant_Pick", CModel::Create(m_pDevice, m_pDeviceContext,
+		"../bin/Resources/Mesh/Earth_Aberrant_Pick/", "EarthAberrant_Pick.fbx",
+		L"../../Reference/ShaderFile/Shader_StaticMesh.hlsl", matPivot, CModel::TYPE_STATIC, true))))
+		return E_FAIL;
+
+	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Weapon_EarthAberrant_Pick", CEarthAberrant_Pick::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+
 	CTexture* pTexture = CTexture::Create(m_pDevice, m_pDeviceContext);
-	if (FAILED(pTexture->NativeConstruct_Prototype(L"../Bin/Resources/Mesh/EarthAberrant/T_EarthAberrant_body_D.tga", 1)))
+	if (FAILED(pTexture->NativeConstruct_Prototype(L"../Bin/Resources/Mesh/Earth_Aberrant_Pick/T_IcePick_D.dds", 1)))
 		return E_FAIL;
 
-	CMaterial*  pMtrl = CMaterial::Create(m_pDevice, m_pDeviceContext, L"EarthAberrant_Body", L"../../Reference/ShaderFile/Shader_Mesh.hlsl", CMaterial::EType::Anim);
+	CMaterial* pMtrl = CMaterial::Create(m_pDevice, m_pDeviceContext, L"Earth_Aberrant_Pick", L"../../Reference/ShaderFile/Shader_StaticMesh.hlsl", CMaterial::EType::Static);
 	if (FAILED(pMtrl->Set_Texture("g_DiffuseTexture", TEXTURETYPE::TEX_DIFFUSE, pTexture, 0)))
 		return E_FAIL;
-	if (FAILED(g_pGameInstance->Add_Material(L"Mtrl_EarthAberrant_Body", pMtrl)))
-		return E_FAIL;
 
-	pTexture = CTexture::Create(m_pDevice, m_pDeviceContext);
-	if (FAILED(pTexture->NativeConstruct_Prototype(L"../Bin/Resources/Mesh/EarthAberrant/T_EarthAberrant_crystal_D.tga", 1)))
-		return E_FAIL;
-
-	pMtrl = CMaterial::Create(m_pDevice, m_pDeviceContext, L"EarthAberrant_ctystal", L"../../Reference/ShaderFile/Shader_Mesh.hlsl", CMaterial::EType::Anim);
-	if (FAILED(pMtrl->Set_Texture("g_DiffuseTexture", TEXTURETYPE::TEX_DIFFUSE, pTexture, 0)))
-		return E_FAIL;
-	if (FAILED(g_pGameInstance->Add_Material(L"Mtrl_EarthAberrant_ctystal", pMtrl)))
+	if (FAILED(g_pGameInstance->Add_Material(L"MI_Earth_Aberrant_Pick", pMtrl)))
 		return E_FAIL;
 
 	////Monster BronzeAnimus
@@ -671,17 +684,19 @@ HRESULT CLoader::Load_Stage1MonsterLoad()
 	//if (FAILED(g_pGameInstance->Add_Prototype(L"Monster_Bastion_Shooter", CMonster_Bastion_Shooter::Create(m_pDevice, m_pDeviceContext))))
 	//	return E_FAIL;
 
-	////////Monster Bastion_Sword
+
+	////Monster Bastion_Sword
+
 	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Model_Monster_Bastion_Sword", CModel::Create(m_pDevice, m_pDeviceContext,
-	//	L"../bin/FBX/Monster/Bastion_Sword.fbx",CModel::TYPE_ANIM, true))))
+	//	L"../bin/FBX/Monster/Bastion_Sword.fbx", CModel::TYPE_ANIM, true))))
 	//	return E_FAIL;
 
 	//if (FAILED(g_pGameInstance->Add_Prototype(L"Monster_Bastion_Sword", CMonster_Bastion_Sword::Create(m_pDevice, m_pDeviceContext))))
 	//	return E_FAIL;
 
 	////Weapon
-	//if(FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Model_Weapon_Stargazer",
-	//	CModel::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/Monster/Weapon/Stargazer(1H Sword).fbx", CModel::TYPE_STATIC,true))))
+	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Model_Weapon_Stargazer",
+	//	CModel::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/Monster/Weapon/Stargazer(1H Sword).fbx", CModel::TYPE_STATIC, true))))
 	//	return E_FAIL;
 
 	//if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Weapon_Stargazer", CStargazer::Create(m_pDevice, m_pDeviceContext))))
@@ -696,9 +711,9 @@ _uint CLoader::Thread_Main(void* pArg)
 	_uint iFlag = 0;
 
 	EnterCriticalSection(pLoader->getCritical());
+
 	if (FAILED(pLoader->LoadForScene()))
 		iFlag = E_FAIL;
-
 	pLoader->m_bFinish = true;
 	LeaveCriticalSection(pLoader->getCritical());
 	return iFlag;
@@ -729,11 +744,12 @@ HRESULT CLoader::Ready_Stage1()
 	{
 		return E_FAIL;
 	}
-
 	if (FAILED(SetUp_Stage1_Object()))
 	{
 		return E_FAIL;
 	}
+
+	
 
 	return S_OK;
 }
