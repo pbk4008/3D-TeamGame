@@ -126,26 +126,26 @@ HRESULT CLoader::SetUp_Stage1_Object()
 	if (FAILED(Load_Stage1PlayerLoad()))
 		return E_FAIL;
 
+	if (FAILED(Load_Stage1MonsterLoad()))
+		return E_FAIL;
+
 	if (FAILED(Load_Stage1FBXLoad()))
 		return E_FAIL;
 
 	//if (FAILED(Load_Stage1BossLoad()))
 	//	return E_FAIL;
 
-	if (FAILED(Load_Stage1MonsterLoad()))
-		return E_FAIL;
-
-	if (FAILED(Load_Stage1StaticUILoad()))
+	/*if (FAILED(Load_Stage1StaticUILoad()))
 		return E_FAIL;
 
 	if (FAILED(Load_Stage1UILoad()))
-		return E_FAIL;
+		return E_FAIL;*/
 
 	//if (FAILED(Load_Stage1TriggerLod()))
 	//	return E_FAIL;
 
-	if (FAILED(Load_Stage1EffectLoad()))
-		return E_FAIL;
+	//if (FAILED(Load_Stage1EffectLoad()))
+	//	return E_FAIL;
 
 	CMeshLoader* pLoader = GET_INSTANCE(CMeshLoader);
 	pLoader->Resume_Thread();
@@ -412,6 +412,32 @@ HRESULT CLoader::Load_Stage1TriggerLod()
 	return S_OK;
 }
 
+void CLoader::Add_LoadingThread(const wstring& pComponetTag, const wstring& pFilePath, _uint iType)
+{
+	CMeshLoader* pLoader = GET_INSTANCE(CMeshLoader);
+
+	CMeshLoader::MESHTYPE* tDesc = new CMeshLoader::MESHTYPE;
+	ZeroMemory(tDesc, sizeof(CMeshLoader::MESHTYPE));
+
+	tDesc->szFBXName = new _tchar[MAX_PATH];
+	tDesc->szFBXPath = new _tchar[MAX_PATH];
+
+	lstrcpy(tDesc->szFBXName, pComponetTag.c_str());
+	lstrcpy(tDesc->szFBXPath, pFilePath.c_str());
+
+	tDesc->iType = iType;
+	_bool bCheck = true;
+	while (true)
+	{
+		Sleep(1);
+		pLoader->Add_MeshLoader(tDesc, bCheck);
+		if (!bCheck)
+			break;
+	}
+
+	RELEASE_INSTANCE(CMeshLoader);
+}
+
 HRESULT CLoader::SetUp_Stage1_Prototype()
 {
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_CapsuleCollider", CCapsuleCollider::Create(m_pDevice, m_pDeviceContext))))
@@ -457,28 +483,30 @@ HRESULT CLoader::Load_Stage1PlayerLoad()
 #pragma endregion
 
 #pragma region 모델
-	CMeshLoader* pLoader = GET_INSTANCE(CMeshLoader);
+	
+	//쓰레드 추가로 변경(위 함수)
+	//CMeshLoader* pLoader = GET_INSTANCE(CMeshLoader);
 
-	CMeshLoader::MESHTYPE* tDesc = new CMeshLoader::MESHTYPE;
-	ZeroMemory(tDesc, sizeof(CMeshLoader::MESHTYPE));
+	//CMeshLoader::MESHTYPE* tDesc = new CMeshLoader::MESHTYPE;
+	//ZeroMemory(tDesc, sizeof(CMeshLoader::MESHTYPE));
 
-	tDesc->szFBXName = new _tchar[MAX_PATH];
-	tDesc->szFBXPath = new _tchar[MAX_PATH];
+	//tDesc->szFBXName = new _tchar[MAX_PATH];
+	//tDesc->szFBXPath = new _tchar[MAX_PATH];
 
-	lstrcpy(tDesc->szFBXName, L"Model_Silvermane_Bin");
-	lstrcpy(tDesc->szFBXPath, L"../bin/FBX/Silvermane/Silvermane_Bin.fbx");
-	tDesc->iType = 1;
-	_bool bCheck = true;
-	pLoader->Add_MeshLoader(tDesc, bCheck);
+	//lstrcpy(tDesc->szFBXName, );
+	//lstrcpy(tDesc->szFBXPath, );
+	//tDesc->iType = 1;
+	//_bool bCheck = true;
+	//pLoader->Add_MeshLoader(tDesc, bCheck);
 
-	RELEASE_INSTANCE(CMeshLoader);
+	//RELEASE_INSTANCE(CMeshLoader);
 
 	_matrix matPivot = XMMatrixIdentity();
-	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Silvermane_Bin", CModel::Create(m_pDevice, m_pDeviceContext,
-	//	L"../bin/FBX/Silvermane/Silvermane_Bin.fbx", CModel::TYPE_ANIM, true))))
-	//{
-	//	return E_FAIL;
-	//}
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Silvermane_Bin", CModel::Create(m_pDevice, m_pDeviceContext,
+		L"../bin/FBX/Silvermane/Silvermane_Bin.fbx", CModel::TYPE_ANIM, true))))
+	{
+		return E_FAIL;
+	}
 
 	matPivot = XMMatrixIdentity();
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Needle", CModel::Create(m_pDevice, m_pDeviceContext,
@@ -522,7 +550,6 @@ HRESULT CLoader::Load_Stage1PlayerLoad()
 
 HRESULT CLoader::Load_Stage1BossLoad()
 {
-	
 	//Boss Bastion_Tier4
 	_matrix matPivot = XMMatrixIdentity();
 	matPivot = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(180.f));
@@ -627,7 +654,7 @@ HRESULT CLoader::Load_Stage1MonsterLoad()
 	//	return E_FAIL;
 	
 	//Monster EarthAberrant
-	matPivot = XMMatrixIdentity();
+	/*matPivot = XMMatrixIdentity();
 	matPivot = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(180.f));
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Model_Monster_EarthAberrant", CModel::Create(m_pDevice, m_pDeviceContext,
 		"../bin/Resources/Mesh/EarthAberrant/", "EarthAberrant.fbx",
@@ -659,7 +686,7 @@ HRESULT CLoader::Load_Stage1MonsterLoad()
 	if (FAILED(pMtrl->Set_Texture("g_DiffuseTexture", TEXTURETYPE::TEX_DIFFUSE, pTexture, 0)))
 		return E_FAIL;
 	if (FAILED(g_pGameInstance->Add_Material(L"Mtrl_EarthAberrant_ctystal", pMtrl)))
-		return E_FAIL;
+		return E_FAIL;*/
 
 	////Monster BronzeAnimus
 	//matPivot = XMMatrixIdentity();
@@ -702,20 +729,21 @@ HRESULT CLoader::Load_Stage1MonsterLoad()
 	//	return E_FAIL;
 
 	////////Monster Bastion_Sword
-	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Model_Monster_Bastion_Sword", CModel::Create(m_pDevice, m_pDeviceContext,
-	//	L"../bin/FBX/Monster/Bastion_Sword.fbx",CModel::TYPE_ANIM, true))))
-	//	return E_FAIL;
 
-	//if (FAILED(g_pGameInstance->Add_Prototype(L"Monster_Bastion_Sword", CMonster_Bastion_Sword::Create(m_pDevice, m_pDeviceContext))))
-	//	return E_FAIL;
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Model_Monster_Bastion_Sword", CModel::Create(m_pDevice, m_pDeviceContext,
+		L"../bin/FBX/Monster/Bastion_Sword.fbx", CModel::TYPE_ANIM, true))))
+		return E_FAIL;
+
+	if (FAILED(g_pGameInstance->Add_Prototype(L"Monster_Bastion_Sword", CMonster_Bastion_Sword::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
 
 	////Weapon
-	//if(FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Model_Weapon_Stargazer",
-	//	CModel::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/Monster/Weapon/Stargazer(1H Sword).fbx", CModel::TYPE_STATIC,true))))
-	//	return E_FAIL;
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Model_Weapon_Stargazer",
+		CModel::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/Monster/Weapon/Stargazer(1H Sword).fbx", CModel::TYPE_STATIC, true))))
+		return E_FAIL;
 
-	//if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Weapon_Stargazer", CStargazer::Create(m_pDevice, m_pDeviceContext))))
-	//	return E_FAIL;
+	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Weapon_Stargazer", CStargazer::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
 
 	return S_OK;
 }

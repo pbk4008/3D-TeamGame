@@ -10,8 +10,6 @@ class CMeshLoader final : public CSingleTon<CMeshLoader>
 public:
 	typedef struct MESHTYPE
 	{
-	/*	_tchar szFBXPath[MAX_PATH];
-		_tchar szFBXName[MAX_PATH];*/
 		_tchar* szFBXPath;
 		_tchar* szFBXName;
 		_uint iType;
