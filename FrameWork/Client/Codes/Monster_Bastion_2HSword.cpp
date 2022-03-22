@@ -500,7 +500,6 @@ void CMonster_Bastion_2HSword::Free()
 		Safe_Release(pair.second);
 	m_umapWeapons.clear();
 
-	Safe_Release(m_pColliderCom);
 	Safe_Release(m_pCharacterController);
 	Safe_Release(m_pStateController);
 	Safe_Release(m_pAnimator);

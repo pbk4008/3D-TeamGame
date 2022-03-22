@@ -36,7 +36,7 @@ HRESULT CStage1::NativeConstruct()
 	//	return E_FAIL;
 	//}
 
-	if (FAILED(Ready_Monster(L"Layer_Monster")))
+	/*if (FAILED(Ready_Monster(L"Layer_Monster")))
 	{
 		return E_FAIL;
 	}
@@ -44,17 +44,17 @@ HRESULT CStage1::NativeConstruct()
 	if (FAILED(Ready_UI(L"Layer_UI")))
 	{
 		return E_FAIL;
-	}
+	}*/
 
 	//Data
-	if (FAILED(Ready_Data_UI(L"../bin/SaveData/UI/UI.dat")))
+	/*if (FAILED(Ready_Data_UI(L"../bin/SaveData/UI/UI.dat")))
 	{
 		return E_FAIL;
 	}
 	if (FAILED(Ready_Data_Effect(L"../bin/SaveData/Effect/Effect_Explosion.dat")))
 	{
 		return E_FAIL;
-	}
+	}*/
 
 	//if (FAILED(Ready_Trigger_Lod(L"../bin/SaveData/Trigger/Stage1_LodTri.dat")))
 	//	return E_FAIL;
@@ -66,8 +66,8 @@ HRESULT CStage1::NativeConstruct()
 	//	return E_FAIL;
 	//if (FAILED(Ready_Trigger_Quest(L"../bin/SaveData/Trigger/Stage1_QuestTri.dat")))
 	//	return E_FAIL;
-	if (FAILED(Ready_Treasure_Chest()))
-		return E_FAIL;
+	//if (FAILED(Ready_Treasure_Chest()))
+	//	return E_FAIL;
 
 	g_pGameInstance->Change_BaseCamera(L"Camera_Silvermane");
 

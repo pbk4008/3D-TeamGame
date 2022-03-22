@@ -105,13 +105,7 @@ HRESULT CPlane_Test::Ready_NavMesh()
 	NavMeshDesc.tColliderDesc = ColDesc;
 	NavMeshDesc.vecPoints.reserve(m_vecNaviPoints.size());
 	for (_int i = 0; i < m_vecNaviPoints.size(); ++i)
-		NaviMeshDesc.vecPoints.emplace_back(m_vecNaviPoints[i].vPoints);
-
-	XMStoreFloat4x4(&NaviMeshDesc.matTransform, XMMatrixIdentity());
-	NaviMeshDesc.pParent = this;
-	NaviMeshDesc.tColDesc = ColDesc;
-
-	m_pNaviCollider = (CMeshCollider*)g_pGameInstance->Clone_Component((_uint)SCENEID::SCENE_STAGE1, L"Proto_Component_MeshCollider", &NaviMeshDesc);
+		NavMeshDesc.vecPoints.emplace_back(m_vecNaviPoints[i].vPoints);
 
 	if (FAILED(SetUp_Components(m_iSceneID, L"Proto_Component_NavMeshCollider", L"NavMeshCollider", (CComponent**)&m_pNaviCollider, &NavMeshDesc)))
 		return E_FAIL;
