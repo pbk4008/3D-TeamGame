@@ -55,8 +55,8 @@ public:
 	void Set_RootMotion(const _bool _isRootMotion, const _bool _isTransformMove, const ERootOption _eRootOption = ERootOption::XYZ);
 	void Set_PlaySpeed(const _float _fPlaySpeed);
 	void Set_MoveSpeed(const _float _fMoveSpeed);
-	void Set_IsChange(const _bool _bChange);
 	void Set_RotSpeed(const _float _fRotSpeed);
+	void Set_IsChange(const _bool _bChange);
 	const _bool Is_RootMotion() const;
 	const _bool Is_Finished() const;
 
@@ -105,7 +105,7 @@ private:
 
 	_float m_fPlaySpeed = 1.f;
 	_float m_fMoveSpeed = 1.f;
-	_float m_fRotSpeed = 700.f;
+	_float m_fRotSpeed = 1.f;
 	_float m_fFixedBoneHoldTime = 0.f;
 
 	_float4x4 m_matPivot;

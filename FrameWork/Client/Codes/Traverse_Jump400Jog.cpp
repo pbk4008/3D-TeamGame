@@ -56,7 +56,7 @@ HRESULT CTraverse_Jump400Jog::EnterState()
 		return E_FAIL;
 	m_pAnimationController->Set_RootMotion(true, true);
 	
-	m_pSilvermane->Set_TrasceCamera(false);
+	m_pSilvermane->Set_IsTrasceCamera(false);
 	return S_OK;
 }
 
@@ -65,7 +65,7 @@ HRESULT CTraverse_Jump400Jog::ExitState()
 	if (FAILED(__super::ExitState()))
 		return E_FAIL;
 
-	m_pSilvermane->Set_TrasceCamera(true);
+	m_pSilvermane->Set_IsTrasceCamera(true);
 	return S_OK;
 }
 
@@ -83,7 +83,7 @@ CTraverse_Jump400Jog* CTraverse_Jump400Jog::Create(ID3D11Device* _pDevice, ID3D1
 	CTraverse_Jump400Jog* pInstance = new CTraverse_Jump400Jog(_pDevice, _pDeviceContext);
 	if (FAILED(pInstance->NativeConstruct(_pArg)))
 	{
-		MSGBOX("CShield_SupermanPunchStraight Create Fail");
+		MSGBOX("CTraverse_Jump400Jog Create Fail");
 		Safe_Release(pInstance);
 	}
 

@@ -55,6 +55,23 @@ HRESULT CRenderer::NativeConstruct_Prototype()
 
 	lstrcpy(m_CameraTag, L"MainCamera");
 
+
+
+#pragma region PhysX그리기용
+	m_pEffect = new BasicEffect(m_pDevice);
+	m_pEffect->SetVertexColorEnabled(true);
+
+	const void* pShaderByteCode = nullptr;
+	size_t			ShaderByteCodeLength = 0;
+	m_pEffect->GetVertexShaderBytecode(&pShaderByteCode, &ShaderByteCodeLength);
+
+	if (FAILED(m_pDevice->CreateInputLayout(VertexPositionColor::InputElements, VertexPositionColor::InputElementCount, pShaderByteCode, ShaderByteCodeLength, &m_pInputLayout)))
+		E_FAIL;
+
+	m_pBatch = new PrimitiveBatch<VertexPositionColor>(m_pDeviceContext);
+#pragma endregion
+
+
 	return S_OK;
 }
 
@@ -153,6 +170,9 @@ HRESULT CRenderer::Draw_RenderGroup()
 	if (FAILED(Render_Alpha()))
 		return E_FAIL;
 
+	if (FAILED(Render_PhysX()))
+		return E_FAIL;
+
 	if (FAILED(Render_UI()))
 		return E_FAIL;
 
@@ -207,6 +227,19 @@ HRESULT CRenderer::Draw_RenderGroup()
 
 	}
 #endif // _DEBUG
+
+	return S_OK;
+}
+
+HRESULT CRenderer::Remove_RenderGroup()
+{
+	for (_uint i = 0; i < RENDER_END; i++)
+	{
+		for (auto pObj : m_RenderGroup[i])
+			Safe_Release(pObj);
+
+		m_RenderGroup[i].clear();
+	}
 
 	return S_OK;
 }
@@ -386,6 +419,60 @@ HRESULT CRenderer::Render_Blend()
 	return S_OK;
 }
 
+HRESULT CRenderer::Render_PhysX()
+{
+	if (g_pGameInstance->getkeyDown(DIK_RCONTROL))
+		m_isPhysXRender = !m_isPhysXRender;
+
+	if (!m_isPhysXRender)
+		return S_OK;
+
+	CPhysicsXSystem* pPhysXSystem = GET_INSTANCE(CPhysicsXSystem);
+	const PxRenderBuffer& rb = pPhysXSystem->Get_RenderBuffer();
+	RELEASE_INSTANCE(CPhysicsXSystem);
+
+
+	_float4 vColor = { 1.f, 0.f, 0.f, 1.f };
+
+	m_pEffect->SetView(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_VIEW));
+	m_pEffect->SetProjection(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_PROJECTION));
+
+	m_pDeviceContext->IASetInputLayout(m_pInputLayout);
+	m_pEffect->Apply(m_pDeviceContext);
+
+	m_pBatch->Begin();
+
+	PxU32 iNBLines = rb.getNbLines();
+	for (PxU32 i = 0; i < iNBLines; ++i)
+	{
+		const PxDebugLine line = rb.getLines()[i];
+		_float3 pos0 = FromPxVec3(line.pos0);
+		_float3 pos1 = FromPxVec3(line.pos1);
+		_vector vPos0 = XMLoadFloat4(&_float4(pos0.x, pos0.y, pos0.z, 1.f));
+		_vector vPos1 = XMLoadFloat4(&_float4(pos1.x, pos1.y, pos1.z, 1.f));
+
+		DX::DrawTriangle(m_pBatch, vPos0, vPos1, vPos0, XMLoadFloat4(&vColor));
+	}
+
+	//PxU32 iNBTriangles = rb.getNbTriangles();
+	//for (PxU32 i = 0; i < iNBLines; ++i)
+	//{
+	//	const PxDebugTriangle triangle = rb.getTriangles()[i];
+	//	_float3 pos0 = FromPxVec3(triangle.pos0);
+	//	_float3 pos1 = FromPxVec3(triangle.pos1);
+	//	_float3 pos2 = FromPxVec3(triangle.pos2);
+	//	_vector vPos0 = XMLoadFloat4(&_float4(pos0.x, pos0.y, pos0.z, 1.f));
+	//	_vector vPos1 = XMLoadFloat4(&_float4(pos1.x, pos1.y, pos1.z, 1.f));
+	//	_vector vPos2 = XMLoadFloat4(&_float4(pos2.x, pos2.y, pos2.z, 1.f));
+
+	//	DX::DrawTriangle(m_pBatch, vPos0, vPos1, vPos2, XMLoadFloat4(&vColor));
+	//}
+
+	m_pBatch->End();
+
+	return S_OK;
+}
+
 
 CRenderer* CRenderer::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
 {
@@ -410,6 +497,12 @@ CComponent* CRenderer::Clone(void* pArg)
 void CRenderer::Free()
 {
 	__super::Free();
+
+#pragma region PhysX 그리기용
+	Safe_Delete(m_pEffect);
+	Safe_Delete(m_pBatch);
+	Safe_Release(m_pInputLayout);
+#pragma endregion
 
 	for (_uint i = 0; i < RENDER_END; ++i)
 	{

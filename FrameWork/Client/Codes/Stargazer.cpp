@@ -78,7 +78,7 @@ void CStargazer::Set_OwnerPivotMatrix(const _fmatrix& _smatPivot)
 
 HRESULT CStargazer::SetUp_Component()
 {
-	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STAGE1, L"Model_Weapon_Stargazer", L"Model", (CComponent**)&m_pModel)))
+	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Model_Weapon_Stargazer", L"Model", (CComponent**)&m_pModel)))
 	return E_FAIL;
 
 	CTransform::TRANSFORMDESC tDesc;

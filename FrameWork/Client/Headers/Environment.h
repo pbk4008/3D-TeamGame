@@ -14,7 +14,6 @@ public:
 	{
 		wstring wstrInstaneTag = L"";
 		CInstancing_Mesh::INSTANCINGMESHDESC tInstanceDesc;
-
 	}ENVIRONMENTDESC;
 private:
 	explicit CEnvironment();
@@ -31,9 +30,9 @@ public:
 	virtual HRESULT	Render_Shadow() override;
 	virtual HRESULT	Render_ShadeShadow(ID3D11ShaderResourceView* ShadowMap) override;
 	virtual HRESULT	Render_PBR() override;
-
 private:
 	HRESULT Ready_Component();
+	HRESULT Culling();
 public:
 	static CEnvironment* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);
 	virtual CGameObject* Clone(const _uint _iSceneID, void* pArg);
@@ -41,10 +40,11 @@ private:
 	virtual void Free() override;
 private:
 	ENVIRONMENTDESC		m_tEnvironmentDesc;
-	CMeshCollider*		m_pNaviMesh;
 	CInstancing_Mesh*	m_pInstanceMesh;
 	const LIGHTDESC*	m_LightDesc = nullptr;
 	_ulong				m_Nummeshcontainer = 0;
+	_uint					m_iInstanceCnt;
+	vector<_float4x4> m_vecUsingMatrix;
 };
 END
 #endif

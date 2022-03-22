@@ -5,11 +5,15 @@
 #include <process.h>
 #include <io.h>
 
+
+
 #include "Client_Enum.h"
 #include "Client_Function.h"
-using namespace Client;
+#include "Client_Struct.h"
 
+using namespace Client;
 #include "Client_Observer.h"
+#include "DebugSystem.h"
 #include "Clinet_Define.h"
 
 #endif

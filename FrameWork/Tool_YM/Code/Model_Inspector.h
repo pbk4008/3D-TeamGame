@@ -53,9 +53,15 @@ public:
 	class CInspector_Form*		m_pInspec_Form  = nullptr;
 	class CObserver*			m_pObserver	    = nullptr;
 	Engine::CMeshCollider*	    m_pMeshCollider = nullptr;
+	/* TRIGGERTYPE { TRIGGER_LOD, TRIGGER_SCENE, TRIGGER_LIGHT, TRIGGER_MONSTER, TRIGGER_QUEST, TRIGGER_END } */
 
 public:
 	_bool	m_bModelInfo_View = true;
+	_int	m_iLodIndex = 0;
+	_int	m_iSceneIndex = 0;
+	_int	m_iLightIndex = 0;
+	_int	m_iMonsterIndex = 0;
+	_int	m_iQuestIndex = 0;
 
 public:
 	CString m_ModelPosX, m_ModelPosY, m_ModelPosZ;

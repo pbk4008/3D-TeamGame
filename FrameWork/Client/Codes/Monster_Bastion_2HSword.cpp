@@ -1,10 +1,12 @@
 #include "pch.h"
 #include "Monster_Bastion_2HSword.h"
 #include "Animation.h"
+
 /* for. Weapon */
 #include "RetributionBlade.h"
 
 /* for. FSM */
+#include "Bastion_2HSword_State.h"
 #include "Bastion_2HSword_Idle.h"
 #include "Bastion_2HSword_Hit.h"
 #include "Bastion_2HSword_Death.h"
@@ -119,15 +121,15 @@ HRESULT CMonster_Bastion_2HSword::Render()
 			if (FAILED(m_pModel->Render(i, 0))) return E_FAIL;
 		}
 
-#ifdef _DEBUG
-		Render_Debug();
-		m_pColliderCom->Render(L"Camera_Silvermane");
-#endif
 	}
 	else
 	{
 		m_pCurWeapon = nullptr;
 	}
+#ifdef _DEBUG
+		Render_Debug();
+		m_pColliderCom->Render(L"Camera_Silvermane");
+#endif
 	return S_OK;
 }
 
@@ -143,7 +145,7 @@ HRESULT CMonster_Bastion_2HSword::Ready_Components()
 
 
 	// 모델
-	if (FAILED(SetUp_Components(m_iSceneID, L"Model_Bastion_2HSword_Bin", L"Model", (CComponent**)&m_pModel)))
+	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Model_Bastion_2HSword_Bin", L"Model", (CComponent**)&m_pModel)))
 		return E_FAIL;
 	_matrix matPivot = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(180.f));
 	m_pModel->Set_PivotMatrix(matPivot);
@@ -157,24 +159,25 @@ HRESULT CMonster_Bastion_2HSword::Ready_Components()
 	PhyDesc.bGravity = false;
 	PhyDesc.bKinematic = false;
 	PhyDesc.eType = CPhysicsXSystem::ACTORTYPE::ACTOR_DYNAMIC;
+	
 	CapDesc.tColDesc = PhyDesc;
-	if (FAILED(__super::SetUp_Components((_uint)SCENEID::SCENE_TEST_YM, L"Proto_Component_CapsuleCollider", L"Com_CapsuleCollider", (CComponent**)&m_pColliderCom, &CapDesc)))
+	if (FAILED(__super::SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_CapsuleCollider", L"Com_CapsuleCollider", (CComponent**)&m_pColliderCom, &CapDesc)))
 	{
 		return E_FAIL;
 	}
 
 	// 스테이트 컨트롤러
-	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_TEST_YM, L"Proto_Component_StateController", L"StateController", (CComponent**)&m_pStateController)))
+	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_StateController", L"StateController", (CComponent**)&m_pStateController)))
 		return E_FAIL;
 	m_pStateController->Set_GameObject(this);
 
 	m_AanimDesc.pModel = m_pModel;
 	m_AanimDesc.pTransform = m_pTransform;
-
+	
 	//Anim FSM
-	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_TEST_YM, L"Proto_Component_Animator", L"Animator", (CComponent**)&m_pAnimator, &m_AanimDesc)))
+	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_Animator", L"Animator", (CComponent**)&m_pAnimator, &m_AanimDesc)))
 		return E_FAIL;
-
+	
 	return S_OK;
 }
 

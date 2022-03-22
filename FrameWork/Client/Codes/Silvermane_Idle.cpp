@@ -28,18 +28,7 @@ _int CSilvermane_Idle::Tick(const _double& _dDeltaTime)
 	if (NO_EVENT != iProgress)
 		return iProgress;
 
-	m_fHoldTime += (_float)_dDeltaTime;
-	//if (5.f < m_fHoldTime)
-	//{
-	//	if (m_pSilvermane->Is_EquipWeapon())
-	//	{
-	//		if (FAILED(m_pStateController->Change_State(L"1H_SwordEquipOff")))
-	//			return -1;
-	//		return STATE_CHANGE;
-	//	}
-	//}
-
-	//g_pObserver->Set_PlayerAttack(FALSE);
+	Add_PlusAngle(EDir::Forward, _dDeltaTime);
 
 	return _int();
 }
@@ -113,12 +102,12 @@ _int CSilvermane_Idle::KeyCheck(const _double& _dDeltaTime)
 			return E_FAIL;
 		return STATE_CHANGE;
 	}
-	if (g_pGameInstance->getkeyDown(DIK_C))
-	{
-		if (FAILED(m_pStateController->Change_State(L"Traverse_Jump400Jog")))
-			return E_FAIL;
-		return STATE_CHANGE;
-	}
+	//if (g_pGameInstance->getkeyDown(DIK_C))
+	//{
+	//	if (FAILED(m_pStateController->Change_State(L"Traverse_Jump400Jog")))
+	//		return E_FAIL;
+	//	return STATE_CHANGE;
+	//}
 
 	if (g_pGameInstance->getMouseKeyDown(CInputDev::MOUSESTATE::MB_LBUTTON))
 	{
@@ -262,8 +251,6 @@ _int CSilvermane_Idle::KeyCheck(const _double& _dDeltaTime)
 			return STATE_CHANGE;
 		}
 	}
-
-	Add_PlusAngle(EDir::Forward, _dDeltaTime);
 
 	return _int();
 }

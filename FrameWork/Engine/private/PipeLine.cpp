@@ -78,6 +78,33 @@ void CPipeLine::Set_Transform(const wstring& pCameraTag, TRANSFORMSTATEMATRIX eT
 	}
 }
 
+HRESULT CPipeLine::Change_BaseCamera(const wstring& pCameraTag)
+{
+	//파이프라인이 비어있으면 나가
+	if (m_mapPipeLine.empty())
+		return E_FAIL;
+	
+	if ((*m_mapPipeLine.begin()).first == pCameraTag)
+		return S_OK;
+
+	//첫번째 카메라 가져오기
+	auto iter_begin = m_mapPipeLine.begin();
+	//찾고자 하는 카메라 가져오기
+	auto iter_Find = Find_Camera(pCameraTag);
+	if (!iter_Find)
+		return E_FAIL;
+	//임시로 저장할 카메라
+	CAMERA* pTmpCamera = nullptr;
+	//임시로 저장할 카메라에 첫번째 카메라 저장
+	pTmpCamera = (*iter_begin).second;
+	//첫번째 카메라에 찾고자 하는 카메라 변경
+	(*iter_begin).second = iter_Find;
+	//찾고자 하는 카메라에 저장했던 첫번째 카메라로 변경
+	iter_Find = pTmpCamera;
+
+	return S_OK;
+}
+
 const wstring& CPipeLine::getBaseCamera()
 {
 	if (m_mapPipeLine.empty())

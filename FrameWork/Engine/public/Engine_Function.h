@@ -77,40 +77,58 @@ namespace Engine
 
 	static const _float3 QuaternionToEuler(const _float4& _q)
 	{
-		_float3 euler;
+		//_float3 euler;
 
-		float unit = (_q.x * _q.x) + (_q.y * _q.y) + (_q.z * _q.z) + (_q.w * _q.w);
+		//float unit = (_q.x * _q.x) + (_q.y * _q.y) + (_q.z * _q.z) + (_q.w * _q.w);
 
-		float test = _q.x * _q.w - _q.y * _q.z;
+		//float test = _q.x * _q.w - _q.y * _q.z;
 
-		if (test > 0.49999f * unit)
-		{
-			euler.x = (_float)M_PI / 2;
-			euler.y = 2.0f * atan2f(_q.y, _q.x);
-			euler.z = 0;
-		}
-		else if (test < -0.49999f * unit)
-		{
-			euler.x = -(_float)M_PI / 2;
-			euler.y = -2.0f * atan2f(_q.y, _q.x);
-			euler.z = 0;
-		}
+		//if (test > 0.49999f * unit)
+		//{
+		//	euler.x = (_float)M_PI / 2;
+		//	euler.y = 2.0f * atan2f(_q.y, _q.x);
+		//	euler.z = 0;
+		//}
+		//else if (test < -0.49999f * unit)
+		//{
+		//	euler.x = -(_float)M_PI / 2;
+		//	euler.y = -2.0f * atan2f(_q.y, _q.x);
+		//	euler.z = 0;
+		//}
+		//else
+		//{
+		//	euler.x = asinf(2.0f * (_q.w * _q.x - _q.y * _q.z));
+		//	euler.y = atan2f(2.0f * _q.w * _q.y + 2.0f * _q.z * _q.x, 1 - 2.0f * (_q.x * _q.x + _q.y * _q.y));
+		//	euler.z = atan2f(2.0f * _q.w * _q.z + 2.0f * _q.x * _q.y, 1 - 2.0f * (_q.z * _q.z + _q.x * _q.x));
+		//}
+
+		//euler.x = XMConvertToDegrees(euler.x);
+		//euler.y = XMConvertToDegrees(euler.y);
+		//euler.z = XMConvertToDegrees(euler.z);
+
+		//euler.x = fmodf(euler.x, 360.0f);
+		//euler.y = fmodf(euler.y, 360.0f);
+		//euler.z = fmodf(euler.z, 360.0f);
+		double roll, pitch, yaw;
+
+		// roll (x-axis rotation)
+		double sinR_cosP = 2 * (_q.w * _q.x + _q.y * _q.z);
+		double cosR_cosP = 1 - 2 * (_q.x * _q.x + _q.y * _q.y);
+		roll = atan2(sinR_cosP, cosR_cosP);
+
+		// pitch (y-axis rotation)
+		double sinP = 2 * (_q.w * _q.y - _q.z * _q.x);
+		if (std::abs(sinP) >= 1)
+			pitch = copysign(M_PI * 0.5f, sinP);	// use 90 degrees if out of range
 		else
-		{
-			euler.x = asinf(2.0f * (_q.w * _q.x - _q.y * _q.z));
-			euler.y = atan2f(2.0f * _q.w * _q.y + 2.0f * _q.z * _q.x, 1 - 2.0f * (_q.x * _q.x + _q.y * _q.y));
-			euler.z = atan2f(2.0f * _q.w * _q.z + 2.0f * _q.x * _q.y, 1 - 2.0f * (_q.z * _q.z + _q.x * _q.x));
-		}
+			pitch = asin(sinP);
 
-		euler.x = XMConvertToDegrees(euler.x);
-		euler.y = XMConvertToDegrees(euler.y);
-		euler.z = XMConvertToDegrees(euler.z);
+		// yaw (z-axis rotation)
+		double sinY_cosP = 2 * (_q.w * _q.z + _q.x * _q.y);
+		double cosY_cosP = 1 - 2 * (_q.y * _q.y + _q.z * _q.z);
+		yaw = atan2(sinY_cosP, cosY_cosP);
 
-		euler.x = fmodf(euler.x, 360.0f);
-		euler.y = fmodf(euler.y, 360.0f);
-		euler.z = fmodf(euler.z, 360.0f);
-
-		return euler;
+		return _float3(XMConvertToDegrees((_float)roll), XMConvertToDegrees((_float)pitch), XMConvertToDegrees((_float)yaw));
 	}
 }
 

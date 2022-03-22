@@ -39,9 +39,11 @@ CAnimNode* CAnimNode::Check_ConnectNode(_uint iIndex, vector<_uint>* vecDuplicat
 	vector<_uint> vecNewDuplicate;
 
 	//모든 자식 노드 탐색
+
+	//새로운 중복 방지벡터
+	vector<_uint> vecNewDuplicate;
 	for (auto& pNode : m_vecAnimNode)
 	{
-		
 		//탐색 시작 체크를 하는 변수
 		_bool bCheck = false;
 		for (auto& pDuplicate : *vecDuplicate)
@@ -59,6 +61,7 @@ CAnimNode* CAnimNode::Check_ConnectNode(_uint iIndex, vector<_uint>* vecDuplicat
 			for (auto& pNewDuplicate : vecNewDuplicate)
 			{
 				if (pNewDuplicate == pDuplicate)
+
 				{
 					bDoubleCheck = true;
 					break;

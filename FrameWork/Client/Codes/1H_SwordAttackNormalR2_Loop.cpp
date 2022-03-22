@@ -51,7 +51,7 @@ HRESULT C1H_SwordAttackNormalR2_Loop::EnterState()
 		return E_FAIL;
 	m_pAnimationController->Set_RootMotion(true, true);
 
-	m_pSilvermane->Set_TrasceCamera(false);
+	m_pSilvermane->Set_IsTrasceCamera(false);
 
 	return S_OK;
 }
@@ -61,7 +61,7 @@ HRESULT C1H_SwordAttackNormalR2_Loop::ExitState()
 	if (FAILED(__super::ExitState()))
 		return E_FAIL;
 
-	m_pSilvermane->Set_TrasceCamera(true);
+	m_pSilvermane->Set_IsTrasceCamera(true);
 	m_fHoldTime = 0.f;
 
 	return S_OK;

@@ -110,6 +110,7 @@ HRESULT CPlane::Create_NavigationLine()
 		CNavSphere* pSphere = dynamic_cast<CNavSphere*>(m_pObserver->m_pNavSphere);
 		m_fPoints[m_iPointindex++] = &(pSphere->m_fPostion);
 		m_pObserver->m_bNavSpherePick = false;
+		cout << "Pick Sphere" << endl;
 		return S_OK;
 	}
 	else
@@ -118,6 +119,7 @@ HRESULT CPlane::Create_NavigationLine()
 		if (SUCCEEDED(g_pGameInstance->Add_GameObjectToLayer(TAB_STATIC, L"Layer_NaveSphere", L"Prototype_GameObject_NavSphere", &XMVector3TransformCoord(XMLoadFloat3(&m_fLocalMouse), m_pTransform->Get_WorldMatrix())  /*&m_pObserver->m_fPickPos*/, &pSphere)))
 		{
 			m_fPoints[m_iPointindex++] = &(dynamic_cast<CNavSphere*>(pSphere)->m_fPostion);
+			cout << "Create Sphere" << endl;
 			return S_OK;
 		}
 		else
@@ -128,12 +130,12 @@ HRESULT CPlane::Create_NavigationLine()
 
 HRESULT CPlane::Update_CellPos()
 {
-	CNavSphere* pSphere = m_pObserver->m_pNavSphere;
-	if (nullptr == pSphere)
-		return E_FAIL;
+	//CNavSphere* pSphere = m_pObserver->m_pNavSphere;
+	//if (nullptr == pSphere)
+	//	return E_FAIL;
 
-	if (FAILED(m_pNavigationCom->Update_Buffer(XMLoadFloat3(&pSphere->m_fPostion))))
-		return E_FAIL;
+	//if (FAILED(m_pNavigationCom->Update_Buffer(XMLoadFloat3(&pSphere->m_fPostion))))
+	//	return E_FAIL;
 
 	return S_OK;
 }

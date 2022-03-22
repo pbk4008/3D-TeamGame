@@ -22,7 +22,7 @@ _int C2H_HammerAttack::Tick(const _double& _dDeltaTime)
 
 	_uint iCurKeyFrameIndex = m_pAnimationController->Get_CurKeyFrameIndex();
 	if (4 < iCurKeyFrameIndex && 10 > iCurKeyFrameIndex)
-		m_pSilvermane->Set_TrasceCamera(false);
+		m_pSilvermane->Set_IsTrasceCamera(false);
 
 	return _int();
 }
@@ -57,7 +57,7 @@ HRESULT C2H_HammerAttack::ExitState()
 	if (FAILED(__super::ExitState()))
 		return E_FAIL;
 
-	m_pSilvermane->Set_TrasceCamera(true);
+	m_pSilvermane->Set_IsTrasceCamera(true);
 
 	return S_OK;
 }

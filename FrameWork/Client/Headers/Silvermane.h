@@ -10,9 +10,17 @@ END
 BEGIN(Client)
 class CWeapon;
 class CCamera_Silvermane;
+class CJumpNode;
 
 class CSilvermane final : public CActor
 {
+public:
+	typedef struct tagSceneMove
+	{
+		_uint iMaxHp;
+		_uint iCurHp;
+		_float3 vPos;
+	}SCENEMOVEDATA;
 private:
 	explicit CSilvermane(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext);
 	explicit CSilvermane(const CSilvermane& _rhs);
@@ -25,7 +33,6 @@ public:
 	virtual _int LateTick(_double _dDeltaTime) override;
 	virtual HRESULT Render() override;
 	HRESULT Render_Debug();
-
 private:
 	HRESULT Ready_Components();
 	HRESULT Ready_States();
@@ -36,12 +43,18 @@ public:
 	CModel* Get_Model() const;
 	const _float Get_PlusAngle() const;
 	const _float Get_Angle() const;
-
+	//플레이어 씬 이동시 다음씬으로 넘어가야 할 데이터 생성 후 밖으로 빼내기
+	const SCENEMOVEDATA Get_SceneMoveData() const;
 	void Set_Move(const _bool _isMove);
 	void Set_TrasceCamera(const _bool _isTraceCamera);
+
+	void Set_IsFall(const _bool _isFall);
+	void Set_IsMove(const _bool _isMove);
+	void Set_IsTrasceCamera(const _bool _isTraceCamera);
+	void Set_IsAttack(const _bool bAttack);
+
 	void Set_Camera(CCamera_Silvermane* _pCamera);
 	void Set_PlusAngle(const _float _fAngle);
-	void Set_IsAttack(const _bool bAttack);
 	void Add_PlusAngle(const _float _fDeltaAngle);
 
 	const _bool Get_IsAttack();
@@ -59,8 +72,13 @@ public: /* For.Shield */
 	void Set_EquipShield(const _bool _isEquipShield);
 	void Set_EquipShieldAnim(const _bool _isEquipShield);
 
+public: /* For.JumpNode */
+	CJumpNode* Get_TargetJumpNode() const;
+	const _bool Raycast_JumpNode(const _double& _dDeltaTime);
+
 private:
-	_int Trace_CameraLook(const _double& _dDeltaTime);
+	const _int Trace_CameraLook(const _double& _dDeltaTime);
+	const _int Fall(const _double& _dDeltaTime);
 
 private:
 	CModel* m_pModel = nullptr;
@@ -69,6 +87,7 @@ private:
 	CCamera_Silvermane* m_pCamera = nullptr;
 	CCharacterController* m_pCharacterController = nullptr;
 
+	_bool m_isFall = false;
 	_bool m_isMove = false;
 	_bool m_isTraceCamera = true;
 	_bool m_isAttack = false;
@@ -83,6 +102,10 @@ private: /* For.Weapon */
 	_bool m_isEquipWeapon = false;
 	_bool m_isEquipShield = false;
 	unordered_map<wstring, CWeapon*> m_umapWeapons;
+
+private: /* For.JumpNode */
+	CJumpNode* m_pTargetJumpNode = nullptr;
+	_float m_fJumpNodeLookTime = 0.f;
 
 public:
 	static CSilvermane* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext);

@@ -35,7 +35,6 @@ HRESULT CTrigger::NativeConstruct(const _uint _iSceneID, void* pArg)
 	m_matWorld._43 = m_TriggerDesc.fTrigger_Point.z;
 
 	m_pTransform->Set_WorldMatrix(XMLoadFloat4x4(&m_matWorld));
-	m_pTransform->Set_TransformDesc(10.0f, XMConvertToRadians(45.f));
 
 	if (FAILED(SetUp_Components()))
 		return E_FAIL;
@@ -72,6 +71,9 @@ HRESULT CTrigger::Render()
 	case TRIGGERTYPE::TRIGGER_MONSTER:
 		m_pGizmo->DrawCube(m_pTransform->Get_WorldMatrix(), L"Camera", _fvector{ 0.309f, 0.933f, 0.125f, 1.0f });
 		break;
+	case TRIGGERTYPE::TRIGGER_QUEST:
+		m_pGizmo->DrawCube(m_pTransform->Get_WorldMatrix(), L"Camera", _fvector{ 0.f, 1.0f, 0.88f, 1.0f });
+		break;
 	}
 	return S_OK;
 }
@@ -90,7 +92,7 @@ void CTrigger::Set_WVPMatrix(void)
 {
 	_fmatrix matWorld = m_pTransform->Get_WorldMatrix();
 	auto vCamPos = g_pGameInstance->Get_CamPosition(L"Camera");
-	 
+
 	auto matWorldInvers = XMMatrixTranspose(matWorld);
 	auto matViewInvers = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera", TRANSFORMSTATEMATRIX::D3DTS_VIEW));
 	auto matProjInvers = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera", TRANSFORMSTATEMATRIX::D3DTS_PROJECTION));

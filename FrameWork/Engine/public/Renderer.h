@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Component.h"
+#include "DebugDraw.h"
 
 BEGIN(Engine)
 
@@ -36,6 +37,7 @@ public: virtual HRESULT NativeConstruct(void* pArg);
 public: HRESULT	CreateShadowDepthStencilview(_uint iWidth, _uint iHeight, ID3D11DepthStencilView** ppDepthStencilView);
 public: HRESULT Add_RenderGroup(RENDER eRenderID, class CGameObject* pGameObject);
 public: HRESULT Draw_RenderGroup();
+public: HRESULT Remove_RenderGroup();
 
 private: list<class CGameObject*>			m_RenderGroup[RENDER_END];
 private: typedef list<class CGameObject*>	RENDERGROUP;
@@ -68,6 +70,13 @@ private: HRESULT Render_Shadow();
 private: HRESULT Render_ShadeShadow();
 private: HRESULT Render_PBR();
 private: HRESULT Render_Blend();
+
+private: /* For.PhysX */
+	_bool m_isPhysXRender = false;
+	BasicEffect* m_pEffect = nullptr;
+	PrimitiveBatch<VertexPositionColor>* m_pBatch = nullptr;
+	ID3D11InputLayout* m_pInputLayout = nullptr;
+	HRESULT Render_PhysX();
 
 public: static CRenderer* Create(ID3D11Device * pDevice, ID3D11DeviceContext * pDeviceContext);
 public: virtual CComponent* Clone(void* pArg) override;

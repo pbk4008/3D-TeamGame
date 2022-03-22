@@ -322,6 +322,14 @@ void CGameInstance::Set_Transform(const wstring& pCameraTag, TRANSFORMSTATEMATRI
 	return m_pPipeLine->Set_Transform(pCameraTag, eType, TransformMatrix);
 }
 
+HRESULT CGameInstance::Change_BaseCamera(const wstring& pCameraTag)
+{
+	if (!m_pPipeLine)
+		return E_FAIL;
+
+	return m_pPipeLine->Change_BaseCamera(pCameraTag);
+}
+
 void CGameInstance::Update_InputDev()
 {
 	if (!m_pInput_Device)

@@ -71,10 +71,6 @@ HRESULT CBastion_2HSword_Chaser::ExitState()
 
 void CBastion_2HSword_Chaser::Look_Player(void)
 {
-	_fvector vMonsterPos = m_pTransform->Get_State(CTransform::STATE::STATE_POSITION);
-	_fvector vDist = vMonsterPos - g_pObserver->Get_PlayerPos();
-	_float fDistToPlayer = XMVectorGetX(XMVector3Length(vDist));
-
 	if (!m_bTargetOn)
 		m_pStateController->Change_State(L"Idle");
 }

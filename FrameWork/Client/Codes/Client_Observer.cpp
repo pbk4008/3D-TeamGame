@@ -1,6 +1,5 @@
 #include "pch.h"
 #include "Client_Observer.h"
-#include "Silvermane.h"
 
 CClient_Observer::CClient_Observer(void)
 	: m_pPlayer(nullptr)
@@ -9,6 +8,9 @@ CClient_Observer::CClient_Observer(void)
 
 HRESULT CClient_Observer::Set_Player(CSilvermane* pPlayer)
 {
+	if (m_pPlayer)
+		Safe_Release(m_pPlayer);
+
 	m_pPlayer = pPlayer;
 	Safe_AddRef(m_pPlayer);
 
@@ -71,6 +73,11 @@ const _float CClient_Observer::Get_Dist(_fvector vPos)
 	_float fDist = XMVectorGetX(XMVector3Length(vPlayer - vPos));
 
 	return fDist;
+}
+
+const CSilvermane::SCENEMOVEDATA CClient_Observer::Get_SceneMoveData()
+{
+	return m_pPlayer->Get_SceneMoveData();
 }
 
 void CClient_Observer::Set_IsAttack(const _bool bAttack)

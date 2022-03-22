@@ -69,7 +69,7 @@ HRESULT C1H_Dash::EnterState()
 	if (FAILED(__super::EnterState()))
 		return E_FAIL;
 
-	m_pSilvermane->Set_Move(true);
+	m_pSilvermane->Set_IsMove(true);
 	m_pSilvermane->Set_EquipShield(false);
 
 	return S_OK;
@@ -80,7 +80,7 @@ HRESULT C1H_Dash::ExitState()
 	if (FAILED(__super::ExitState()))
 		return E_FAIL;
 
-	m_pSilvermane->Set_Move(false);
+	m_pSilvermane->Set_IsMove(false);
 
 	return S_OK;
 }

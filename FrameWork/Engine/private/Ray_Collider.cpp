@@ -120,7 +120,11 @@ HRESULT CRay_Collider::Render(const wstring& pCameraTag)
 {	
 	CPipeLine*		pPipeLine = GET_INSTANCE(CPipeLine);
 
-	m_vColor = m_isCollision == true ? _float4(1.f, 0.f, 0.f, 1.f) : _float4(0.f, 1.f, 0.f, 1.f);
+	//m_vColor = m_isCollision == true ? _float4(1.f, 0.f, 0.f, 1.f) : _float4(0.f, 1.f, 0.f, 1.f);
+	if (m_isCollision || m_isRaycast)
+		m_vColor = _float4(1.f, 0.f, 0.f, 1.f);
+	else
+		m_vColor = _float4(0.f, 1.f, 0.f, 1.f);
 
 	m_pEffect->SetView(pPipeLine->Get_Transform(pCameraTag,TRANSFORMSTATEMATRIX::D3DTS_VIEW));
 	m_pEffect->SetProjection(pPipeLine->Get_Transform(pCameraTag, TRANSFORMSTATEMATRIX::D3DTS_PROJECTION));
@@ -229,6 +233,16 @@ _bool CRay_Collider::Collision_OBB(CRay_Collider* pTargetCollider)
 _bool CRay_Collider::Collision_Sphere(CRay_Collider* pTargetCollider)
 {
 	return _bool();
+}
+
+_bool CRay_Collider::Raycast_AABB(const _fvector& _svRayPos, const _fvector& _svRayDir, _float& _fOutDist)
+{
+	if (m_pAABB->Intersects(_svRayPos, _svRayDir, _fOutDist))
+		m_isRaycast = true;
+	else
+		m_isRaycast = false;
+
+	return m_isRaycast;
 }
 
 _fmatrix CRay_Collider::Remove_Rotation(_fmatrix TransformMatrix)
