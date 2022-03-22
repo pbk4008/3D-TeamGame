@@ -58,7 +58,7 @@ _int CFury::LateTick(_double _dDeltaTime)
 		return -1;
 
 	if(m_pRenderer)
-		m_pRenderer->Add_RenderGroup(CRenderer::RENDER_ALPHA, this);
+		m_pRenderer->Add_RenderGroup(CRenderer::RENDER_NONALPHA, this);
 
 	return _int();
 }
