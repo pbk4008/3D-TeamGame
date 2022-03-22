@@ -52,7 +52,7 @@ HRESULT CGameInstance::Initialize_Engine(HINSTANCE hInst, HWND hWnd, _uint iNumL
 	if (FAILED(m_pInput_Device->Init_InputDevice(hInst, hWnd)))
 		return E_FAIL;
 
-	if (FAILED(m_pPhysicSystem->Init_PhysicsX()))
+	if (FAILED(m_pPhysicSystem->Init_PhysX()))
 		return E_FAIL;
 
 	if (FAILED(m_pMaterial_Manager->NativeConstruct(*ppDeviceOut, *ppDeviceContextOut)))
@@ -97,7 +97,7 @@ _int CGameInstance::Tick_Engine(_double TimeDelta)
 	if(m_pPipeLine->getCameraCount())
 		m_pFrustum->Transform_ToWorldSpace(m_pPipeLine->getBaseCamera());
 	
-	m_pPhysicSystem->UpDate_Collision(TimeDelta);
+	m_pPhysicSystem->Tick(TimeDelta);
 
 	iProgress = m_pObject_Manager->LateTick(TimeDelta);
 	if (0 > iProgress)

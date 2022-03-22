@@ -1,6 +1,19 @@
 #include "pch.h"
 #include "Monster_EarthAberrant.h"
 
+#include "UI_Monster_Panel.h"
+
+#include "EarthAberrant_Pick.h"
+
+#include "Aberrant_Idle.h"
+#include "Aberrant_Walk.h"
+#include "Aberrant_Run.h"
+#include "Aberrant_Attack.h"
+#include "Aberrant_Flinch_Left.h"
+#include "Aberrant_Dash_Bwd.h"
+#include "Aberrant_Stun.h"
+#include "Aberrant_Death.h"
+
 CMonster_EarthAberrant::CMonster_EarthAberrant(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
 	:CActor(_pDevice, _pDeviceContext)
 {
@@ -32,8 +45,37 @@ HRESULT CMonster_EarthAberrant::NativeConstruct(const _uint _iSceneID, void* _pA
 		return E_FAIL;
 	}
 
-	_vector Pos = { 3.f, 0.f, 0.f, 1.f };
+	if (FAILED(Set_Animation_FSM()))
+	{
+		return E_FAIL;
+	}
+
+	if (FAILED(Set_State_FSM()))
+	{
+		return E_FAIL;
+	}
+
+	CHierarchyNode* pBone = m_pModelCom->Get_BoneMatrix("weapon_r_end");
+	CEarthAberrant_Pick* pWeapon = CEarthAberrant_Pick::Create(m_pDevice, m_pDeviceContext);
+	pWeapon->NativeConstruct(m_iSceneID, pBone);
+	pWeapon->Set_Owner(this);
+	pWeapon->Set_OwnerPivotMatrix(m_pModelCom->Get_PivotMatrix());
+	m_pWeapon = pWeapon;
+
+	_vector Pos = { 3.f, 0.f, 9.f, 1.f };
 	m_pTransform->Set_State(CTransform::STATE_POSITION, Pos);
+
+	//MonsterBar Panel
+	CUI_Monster_Panel::PANELDESC Desc;
+	Desc.pTargetTransform = m_pTransform;
+	Desc.iEnemyTag = CUI_Monster_Panel::Enemy::ABERRANT;
+
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_UI", L"Proto_GameObject_UI_Monster_Panel", &Desc,
+		(CGameObject**)&m_pPanel)))
+		return E_FAIL;
+
+	m_pPanel->Set_TargetWorldMatrix(m_pTransform->Get_WorldMatrix());
+
 	return S_OK;
 }
 
@@ -44,15 +86,38 @@ _int CMonster_EarthAberrant::Tick(_double _dDeltaTime)
 		return -1;
 	}
 
-	m_pAnimControllerCom->Tick(_dDeltaTime);
-
-	/*if (g_pGameInstance->getkeyDown(DIK_NUMPAD9))
+	_int iProgress = m_pStateController->Tick(_dDeltaTime);
+	if (NO_EVENT != iProgress)
 	{
-		++itest;
-	}*/
+		return iProgress;
+	}
 
-	m_pAnimControllerCom->SetUp_NextAnimation(itest, true);
-	m_pAnimControllerCom->Set_RootMotion(true, false);
+	if (nullptr != m_pWeapon)
+	{
+		if (-1 == m_pWeapon->Tick(_dDeltaTime))
+		{
+			return -1;
+		}
+	}
+
+	if (g_pGameInstance->getkeyDown(DIK_NUMPAD5))
+	{
+		m_pStateController->Change_State(L"Flinch_Left");
+	}
+
+	if (g_pGameInstance->getkeyDown(DIK_NUMPAD6))
+	{
+		m_pStateController->Change_State(L"Death");
+	}
+
+	if (g_pGameInstance->getkeyDown(DIK_NUMPAD7))
+	{
+		m_pStateController->Change_State(L"Stun");
+	}
+
+
+	m_pPanel->Set_TargetWorldMatrix(m_pTransform->Get_WorldMatrix());
+	
 	return 0;
 }
 
@@ -63,7 +128,21 @@ _int CMonster_EarthAberrant::LateTick(_double _dDeltaTime)
 		return -1;
 	}
 
+	_int iProgress = m_pStateController->LateTick(_dDeltaTime);
+	if (NO_EVENT != iProgress)
+	{
+		return iProgress;
+	}
+
 	m_pRenderer->Add_RenderGroup(CRenderer::RENDER_ALPHA, this);
+
+	if (nullptr != m_pWeapon)
+	{
+		if (-1 == m_pWeapon->LateTick(_dDeltaTime))
+		{
+			return E_FAIL;
+		}
+	}
 
 	return 0;
 }
@@ -75,10 +154,11 @@ HRESULT CMonster_EarthAberrant::Render()
 		return E_FAIL;
 	}
 
+
 	_matrix XMWorldMatrix = XMMatrixTranspose(m_pTransform->Get_WorldMatrix());
-	_matrix XMViewMatrix = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"MainCamera", TRANSFORMSTATEMATRIX::D3DTS_VIEW));
-	_matrix XMProjectMatrix = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"MainCamera", TRANSFORMSTATEMATRIX::D3DTS_PROJECTION));
-	_vector CamPos = g_pGameInstance->Get_CamPosition(L"MainCamera");
+	_matrix XMViewMatrix = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_VIEW));
+	_matrix XMProjectMatrix = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_PROJECTION));
+	_vector CamPos = g_pGameInstance->Get_CamPosition(L"Camera_Silvermane");
 
 	m_pModelCom->SetUp_ValueOnShader("g_WorldMatrix", &XMWorldMatrix, sizeof(_float) * 16);
 	m_pModelCom->SetUp_ValueOnShader("g_ViewMatrix", &XMViewMatrix, sizeof(_float) * 16);
@@ -86,7 +166,6 @@ HRESULT CMonster_EarthAberrant::Render()
 
 	for (_uint i = 0; i < m_pModelCom->Get_NumMeshContainer(); ++i)
 	{
-		//m_pModelCom->SetUp_TextureOnShader("g_DiffuseTexture", i, aiTextureType_DIFFUSE);
 		m_pModelCom->Render(i, 0);
 	}
 
@@ -100,22 +179,288 @@ HRESULT CMonster_EarthAberrant::SetUp_Components()
 	Desc.fRotationPerSec = XMConvertToRadians(60.f);
 	m_pTransform->Set_TransformDesc(Desc);
 
-	if (FAILED(__super::SetUp_Components((_uint)SCENEID::SCENE_STAGE1, L"Model_Monster_EarthAberrant", L"Model", (CComponent**)&m_pModelCom)))
+	if (FAILED(__super::SetUp_Components((_uint)SCENEID::SCENE_STAGE1, L"Model_Monster_EarthAberrant", L"Com_Model", (CComponent**)&m_pModelCom)))
 	{
 		return E_FAIL;
 	}
 
-	if (FAILED(__super::SetUp_Components((_uint)SCENEID::SCENE_STAGE1, L"AnimationController", L"Com_AnimationController", (CComponent**)&m_pAnimControllerCom)))
+	_matrix matPivot = XMMatrixIdentity();
+	matPivot = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(180.f));
+	m_pModelCom->Set_PivotMatrix(matPivot);
+
+	CAnimator::ANIMATORDESC tDesc;
+	ZeroMemory(&tDesc, sizeof(tDesc));
+
+	tDesc.pModel = m_pModelCom;
+	tDesc.pTransform = m_pTransform;
+
+	if (FAILED(__super::SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_Animator", L"Com_Animator", (CComponent**)&m_pAnimatorCom, &tDesc)))
 	{
 		return E_FAIL;
 	}
 
-	m_pModelCom->Add_Material(g_pGameInstance->Get_Material(L"Mtrl_EarthAberrant_Crystal"), 0);
-	m_pModelCom->Add_Material(g_pGameInstance->Get_Material(L"Mtrl_EarthAberrant_Body"), 1);
+
+	if (FAILED(__super::SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_StateController", L"Com_StateController", (CComponent**)&m_pStateController)))
+		return E_FAIL;
+	m_pStateController->Set_GameObject(this);
+
+	return S_OK;
+}
+
+HRESULT CMonster_EarthAberrant::Set_Animation_FSM()
+{
+	CAnimation* pAnim = m_pModelCom->Get_Animation("SK_Earth_Aberrant_B.ao|A_Idle_Aberrant");
+	if (FAILED(m_pAnimatorCom->Insert_Animation(IDLE, HEAD, pAnim, true, true, true, ERootOption::XYZ)))
+		return E_FAIL;
+
+	//hit
+	pAnim = m_pModelCom->Get_Animation("SK_Earth_Aberrant_B.ao|A_Attack_Execution_Mook");
+	if (FAILED(m_pAnimatorCom->Insert_Animation(ATTACK_EXECUTION, HEAD, pAnim, true, true, false, ERootOption::XYZ, true)))
+		return E_FAIL;
+	pAnim = m_pModelCom->Get_Animation("SK_Earth_Aberrant_B.ao|A_Flinch_Left_1_Aberrant");
+	if (FAILED(m_pAnimatorCom->Insert_Animation(FLINCH_LEFT, HEAD, pAnim, true, true, false, ERootOption::XYZ, true)))
+		return E_FAIL;
+	pAnim = m_pModelCom->Get_Animation("SK_Earth_Aberrant_B.ao|A_Flinch_Right_1_Aberrant");
+	if (FAILED(m_pAnimatorCom->Insert_Animation(FLINCH_RIGHT, HEAD, pAnim, true, true, false, ERootOption::XYZ, true)))
+		return E_FAIL;
+	pAnim = m_pModelCom->Get_Animation("SK_Earth_Aberrant_B.ao|A_Ricochet_Aberrant");
+	if (FAILED(m_pAnimatorCom->Insert_Animation(RICOCHET, HEAD, pAnim, true, true, false, ERootOption::XYZ, true)))
+		return E_FAIL;
+	pAnim = m_pModelCom->Get_Animation("SK_Earth_Aberrant_B.ao|A_Stagger_Left_1_Aberrant");
+	if (FAILED(m_pAnimatorCom->Insert_Animation(STAGGER_LEFT, HEAD, pAnim, true, true, false, ERootOption::XYZ, true)))
+		return E_FAIL;
+	pAnim = m_pModelCom->Get_Animation("SK_Earth_Aberrant_B.ao|A_Stagger_Right_1_Aberrant");
+	if (FAILED(m_pAnimatorCom->Insert_Animation(STAGGER_RIGHT, HEAD, pAnim, true, true, false, ERootOption::XYZ, true)))
+		return E_FAIL;
+
+	//attack
+	pAnim = m_pModelCom->Get_Animation("SK_Earth_Aberrant_B.ao|A_Attack_R1_Aberrant");
+	if (FAILED(m_pAnimatorCom->Insert_Animation(ATTACK_R1, HEAD, pAnim, true, true, true, ERootOption::XYZ, true)))
+		return E_FAIL;
+	pAnim = m_pModelCom->Get_Animation("SK_Earth_Aberrant_B.ao|A_Attack_R2_Aberrant");
+	if (FAILED(m_pAnimatorCom->Insert_Animation(ATTACK_R2, HEAD, pAnim, true, true, true, ERootOption::XYZ, true)))
+		return E_FAIL;
+
+	//stun
+	pAnim = m_pModelCom->Get_Animation("SK_Earth_Aberrant_B.ao|A_Stun_Start_Aberrant");
+	if (FAILED(m_pAnimatorCom->Insert_Animation(STUN_START, HEAD, pAnim, true, true, false, ERootOption::XYZ, true)))
+		return E_FAIL;
+	pAnim = m_pModelCom->Get_Animation("SK_Earth_Aberrant_B.ao|A_Stun_Loop_Aberrant");
+	if (FAILED(m_pAnimatorCom->Insert_Animation(STUN_LOOP, STUN_START, pAnim, true, true, false, ERootOption::XYZ, true)))
+		return E_FAIL;
+	pAnim = m_pModelCom->Get_Animation("SK_Earth_Aberrant_B.ao|A_Stun_End_Aberrant");
+	if (FAILED(m_pAnimatorCom->Insert_Animation(STUN_END, STUN_LOOP, pAnim, true, true, false, ERootOption::XYZ, true)))
+		return E_FAIL;
+	//if (FAILED(m_pAnimatorCom->Connect_Animation(IDLE, STUN_END, false)))
+	//	return E_FAIL;
+
+	//dash
+	pAnim = m_pModelCom->Get_Animation("SK_Earth_Aberrant_B.ao|A_Dash_Bwd_Aberrant");
+	if (FAILED(m_pAnimatorCom->Insert_Animation(DASH_BWD, HEAD, pAnim, true, true, false, ERootOption::XYZ, true)))
+		return E_FAIL;
+	pAnim = m_pModelCom->Get_Animation("SK_Earth_Aberrant_B.ao|A_Dash_Left_Aberrant");
+	if (FAILED(m_pAnimatorCom->Insert_Animation(DASH_LEFT, HEAD, pAnim, true, true, false, ERootOption::XYZ, true)))
+		return E_FAIL;
+	pAnim = m_pModelCom->Get_Animation("SK_Earth_Aberrant_B.ao|A_Dash_Right_Aberrant");
+	if (FAILED(m_pAnimatorCom->Insert_Animation(DASH_RIGHT, HEAD, pAnim, true, true, false, ERootOption::XYZ, true)))
+		return E_FAIL;
+
+	//death
+	pAnim = m_pModelCom->Get_Animation("SK_Earth_Aberrant_B.ao|A_Death_Aberrant");
+	if (FAILED(m_pAnimatorCom->Insert_Animation(DEATH, HEAD, pAnim, true, true, false, ERootOption::XYZ, true)))
+		return E_FAIL;
+
+	//run
+	pAnim = m_pModelCom->Get_Animation("SK_Earth_Aberrant_B.ao|A_Run_Fwd_Start_Aberrant");
+	if (FAILED(m_pAnimatorCom->Insert_Animation(RUN_FWD_START, HEAD, pAnim, true, true, false, ERootOption::XYZ, true)))
+		return E_FAIL;
+	pAnim = m_pModelCom->Get_Animation("SK_Earth_Aberrant_B.ao|A_Run_Fwd_Aberrant");
+	if (FAILED(m_pAnimatorCom->Insert_Animation(RUN_FWD, RUN_FWD_START, pAnim, true, true, true, ERootOption::XYZ, true)))
+		return E_FAIL;
+	pAnim = m_pModelCom->Get_Animation("SK_Earth_Aberrant_B.ao|A_Run_Fwd_Stop_Aberrant");
+	if (FAILED(m_pAnimatorCom->Insert_Animation(RUN_FWD_STOP, RUN_FWD, pAnim, true, true, false, ERootOption::XYZ, true)))
+		return E_FAIL;
+	/*if (FAILED(m_pAnimatorCom->Connect_Animation(IDLE, RUN_FWD, false)))
+		return E_FAIL;*/
+
+
+	//walk
+	pAnim = m_pModelCom->Get_Animation("SK_Earth_Aberrant_B.ao|A_Walk_Bwd_Start_Aberrant");
+	if (FAILED(m_pAnimatorCom->Insert_Animation(WALK_BWD_START, HEAD, pAnim, true, true, false, ERootOption::XYZ, true)))
+		return E_FAIL;
+	pAnim = m_pModelCom->Get_Animation("SK_Earth_Aberrant_B.ao|A_Walk_Bwd_Aberrant");
+	if (FAILED(m_pAnimatorCom->Insert_Animation(WALK_BWD, WALK_BWD_START, pAnim, true, true, true, ERootOption::XYZ, true)))
+		return E_FAIL;
+	pAnim = m_pModelCom->Get_Animation("SK_Earth_Aberrant_B.ao|A_Walk_Bwd_Stop_Aberrant");
+	if (FAILED(m_pAnimatorCom->Insert_Animation(WALK_BWD_STOP, WALK_BWD, pAnim, true, true, false, ERootOption::XYZ, true)))
+		return E_FAIL;
+	/*if (FAILED(m_pAnimatorCom->Connect_Animation(IDLE, WALK_BWD_STOP, false)))
+		return E_FAIL;*/
+
+
+	pAnim = m_pModelCom->Get_Animation("SK_Earth_Aberrant_B.ao|A_Walk_Fwd_Start_Aberrant");
+	if (FAILED(m_pAnimatorCom->Insert_Animation(WALK_FWD_START, HEAD, pAnim, true, true, false, ERootOption::XYZ, true)))
+		return E_FAIL;
+	pAnim = m_pModelCom->Get_Animation("SK_Earth_Aberrant_B.ao|A_Walk_Fwd_Aberrant");
+	if (FAILED(m_pAnimatorCom->Insert_Animation(WALK_FWD, WALK_FWD_START, pAnim, true, true, true, ERootOption::XYZ, true)))
+		return E_FAIL;
+	pAnim = m_pModelCom->Get_Animation("SK_Earth_Aberrant_B.ao|A_Walk_Fwd_Stop_Aberrant");
+	if (FAILED(m_pAnimatorCom->Insert_Animation(WALK_FWD_STOP, WALK_FWD, pAnim, true, true, false, ERootOption::XYZ, true)))
+		return E_FAIL;
+	/*if (FAILED(m_pAnimatorCom->Connect_Animation(IDLE, WALK_FWD_STOP, false)))
+		return E_FAIL;*/
+
+
+	pAnim = m_pModelCom->Get_Animation("SK_Earth_Aberrant_B.ao|A_Walk_Left_Aberrant");
+	if (FAILED(m_pAnimatorCom->Insert_Animation(WALK_LEFT_START, HEAD, pAnim, true, true, false, ERootOption::XYZ, true)))
+		return E_FAIL;
+	pAnim = m_pModelCom->Get_Animation("SK_Earth_Aberrant_B.ao|A_Walk_Fwd_Aberrant");
+	if (FAILED(m_pAnimatorCom->Insert_Animation(WALK_LEFT, WALK_LEFT_START, pAnim, true, true, true, ERootOption::XYZ, true)))
+		return E_FAIL;
+	pAnim = m_pModelCom->Get_Animation("SK_Earth_Aberrant_B.ao|A_Walk_Left_Start_Aberrant");
+	if (FAILED(m_pAnimatorCom->Insert_Animation(WALK_LEFT_STOP, WALK_LEFT, pAnim, true, true, false, ERootOption::XYZ, true)))
+		return E_FAIL;
+	/*if (FAILED(m_pAnimatorCom->Connect_Animation(IDLE, WALK_LEFT_STOP, false)))
+		return E_FAIL;*/
+
+
+	pAnim = m_pModelCom->Get_Animation("SK_Earth_Aberrant_B.ao|A_Walk_Right_Start_Aberrant");
+	if (FAILED(m_pAnimatorCom->Insert_Animation(WALK_RIGHT_START, HEAD, pAnim, true, true, false, ERootOption::XYZ, true)))
+		return E_FAIL;
+	pAnim = m_pModelCom->Get_Animation("SK_Earth_Aberrant_B.ao|A_Walk_Right_Aberrant");
+	if (FAILED(m_pAnimatorCom->Insert_Animation(WALK_RIGHT, WALK_RIGHT_START, pAnim, true, true, true, ERootOption::XYZ, true)))
+		return E_FAIL;
+	pAnim = m_pModelCom->Get_Animation("SK_Earth_Aberrant_B.ao|A_Walk_Right_Stop_Aberrant");
+	if (FAILED(m_pAnimatorCom->Insert_Animation(WALK_RIGHT_STOP, WALK_RIGHT, pAnim, true, true, false, ERootOption::XYZ, true)))
+		return E_FAIL;
+	/*if (FAILED(m_pAnimatorCom->Connect_Animation(IDLE, WALK_RIGHT_STOP, false)))
+		return E_FAIL;*/
+
+
+	//³Ë¹é
+	pAnim = m_pModelCom->Get_Animation("SK_Earth_Aberrant_B.ao|A_Walk_Left_Start_Aberrant");
+	if (FAILED(m_pAnimatorCom->Insert_Animation(KNOCKBACK, HEAD, pAnim, true, true, false, ERootOption::XYZ, true)))
+		return E_FAIL;
+	pAnim = m_pModelCom->Get_Animation("SK_Earth_Aberrant_B.ao|A_GetUp_Aberrant");
+	if (FAILED(m_pAnimatorCom->Insert_Animation(GET_UP, KNOCKBACK, pAnim, true, true, false, ERootOption::XYZ, true)))
+		return E_FAIL;
+	/*if (FAILED(m_pAnimatorCom->Connect_Animation(IDLE, GET_UP, false)))
+		return E_FAIL;*/
+
+
 	
-	m_pAnimControllerCom->Set_GameObject(this);
-	m_pAnimControllerCom->Set_Model(m_pModelCom);
-	m_pAnimControllerCom->Set_Transform(m_pTransform);
+	if (FAILED(m_pAnimatorCom->Connect_Animation(IDLE, RUN_FWD_STOP, false)))
+		return E_FAIL;
+	if (FAILED(m_pAnimatorCom->Connect_Animation(IDLE, WALK_BWD_STOP, false)))
+		return E_FAIL;
+	if (FAILED(m_pAnimatorCom->Connect_Animation(IDLE, WALK_FWD_STOP, false)))
+		return E_FAIL;
+	if (FAILED(m_pAnimatorCom->Connect_Animation(IDLE, WALK_LEFT_STOP, false)))
+		return E_FAIL;
+	if (FAILED(m_pAnimatorCom->Connect_Animation(IDLE, WALK_RIGHT_STOP, false)))
+		return E_FAIL;
+	if (FAILED(m_pAnimatorCom->Connect_Animation(IDLE, GET_UP, false)))
+		return E_FAIL;
+	if (FAILED(m_pAnimatorCom->Connect_Animation(IDLE, STUN_END, false)))
+		return E_FAIL;
+
+
+	m_pAnimatorCom->Set_UpAutoChangeAnimation(WALK_BWD_START, WALK_BWD);
+	m_pAnimatorCom->Set_UpAutoChangeAnimation(WALK_BWD, WALK_BWD_STOP);
+	m_pAnimatorCom->Set_UpAutoChangeAnimation(WALK_BWD_STOP, IDLE);
+
+	m_pAnimatorCom->Set_UpAutoChangeAnimation(WALK_FWD_START, WALK_FWD);
+	//m_pAnimatorCom->Set_UpAutoChangeAnimation(WALK_FWD, WALK_FWD_STOP);
+	//m_pAnimatorCom->Set_UpAutoChangeAnimation(WALK_FWD_STOP, IDLE);
+
+	m_pAnimatorCom->Set_UpAutoChangeAnimation(WALK_LEFT_START, WALK_LEFT);
+	m_pAnimatorCom->Set_UpAutoChangeAnimation(WALK_LEFT, WALK_LEFT_STOP);
+	m_pAnimatorCom->Set_UpAutoChangeAnimation(WALK_LEFT_STOP, IDLE);
+
+	m_pAnimatorCom->Set_UpAutoChangeAnimation(WALK_RIGHT_START, WALK_RIGHT);
+	m_pAnimatorCom->Set_UpAutoChangeAnimation(WALK_RIGHT, WALK_RIGHT_STOP);
+	m_pAnimatorCom->Set_UpAutoChangeAnimation(WALK_RIGHT_STOP, IDLE);
+
+	m_pAnimatorCom->Set_UpAutoChangeAnimation(STUN_START, STUN_LOOP);
+	m_pAnimatorCom->Set_UpAutoChangeAnimation(STUN_LOOP, STUN_END);
+	m_pAnimatorCom->Set_UpAutoChangeAnimation(STUN_END, IDLE);
+
+	m_pAnimatorCom->Set_UpAutoChangeAnimation(RUN_FWD_START, RUN_FWD);
+	//m_pAnimatorCom->Set_UpAutoChangeAnimation(RUN_FWD, RUN_FWD_STOP);
+	//m_pAnimatorCom->Set_UpAutoChangeAnimation(RUN_FWD_STOP, IDLE);
+
+	m_pAnimatorCom->Set_UpAutoChangeAnimation(KNOCKBACK, GET_UP);
+	m_pAnimatorCom->Set_UpAutoChangeAnimation(GET_UP, IDLE);
+
+	//Insert
+	m_pAnimatorCom->Insert_AnyEntryAnimation(ATTACK_EXECUTION);
+	m_pAnimatorCom->Insert_AnyEntryAnimation(FLINCH_LEFT);
+	m_pAnimatorCom->Insert_AnyEntryAnimation(FLINCH_RIGHT);
+	m_pAnimatorCom->Insert_AnyEntryAnimation(RICOCHET);
+	m_pAnimatorCom->Insert_AnyEntryAnimation(STAGGER_LEFT);
+	m_pAnimatorCom->Insert_AnyEntryAnimation(STAGGER_RIGHT);
+
+	m_pAnimatorCom->Insert_AnyEntryAnimation(STUN_START);
+
+	m_pAnimatorCom->Insert_AnyEntryAnimation(ATTACK_R1);
+	m_pAnimatorCom->Insert_AnyEntryAnimation(ATTACK_R2);
+
+	m_pAnimatorCom->Insert_AnyEntryAnimation(DASH_BWD);
+	m_pAnimatorCom->Insert_AnyEntryAnimation(DASH_LEFT);
+	m_pAnimatorCom->Insert_AnyEntryAnimation(DASH_RIGHT);
+	
+	m_pAnimatorCom->Insert_AnyEntryAnimation(DEATH);
+
+	m_pAnimatorCom->Insert_AnyEntryAnimation(RUN_FWD_START);
+	m_pAnimatorCom->Insert_AnyEntryAnimation(WALK_BWD_START);
+	m_pAnimatorCom->Insert_AnyEntryAnimation(WALK_FWD_START);
+	m_pAnimatorCom->Insert_AnyEntryAnimation(WALK_LEFT_START);
+	m_pAnimatorCom->Insert_AnyEntryAnimation(WALK_RIGHT_START);
+
+	m_pAnimatorCom->Insert_AnyEntryAnimation(KNOCKBACK);
+
+
+	m_pAnimatorCom->Change_Animation(IDLE);
+
+	return S_OK;
+}
+
+HRESULT CMonster_EarthAberrant::Set_State_FSM()
+{
+	if (FAILED(m_pStateController->Add_State(L"Idle", CAberrant_Idle::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+
+	if (FAILED(m_pStateController->Add_State(L"Walk", CAberrant_Walk::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+
+	if (FAILED(m_pStateController->Add_State(L"Run", CAberrant_Run::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+
+	if (FAILED(m_pStateController->Add_State(L"Attack", CAberrant_Attack::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+
+	if (FAILED(m_pStateController->Add_State(L"Flinch_Left", CAberrant_Flinch_Left::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+
+	if (FAILED(m_pStateController->Add_State(L"Dash_Bwd", CAberrant_Dash_Bwd::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+
+	if (FAILED(m_pStateController->Add_State(L"Stun", CAberrant_Stun::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+
+	if (FAILED(m_pStateController->Add_State(L"Death", CAberrant_Death::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+
+	for (auto& pair : m_pStateController->Get_States())
+	{
+		pair.second->Set_StateController(m_pStateController);
+		static_cast<CMonster_FSM*>(pair.second)->Set_Monster(this);
+		static_cast<CMonster_FSM*>(pair.second)->Set_Transform(m_pTransform);
+		static_cast<CMonster_FSM*>(pair.second)->Set_Model(m_pModelCom);
+		static_cast<CMonster_FSM*>(pair.second)->Set_Animator(m_pAnimatorCom);
+	}
+
+	m_pStateController->Change_State(L"Idle");
 
 	return S_OK;
 }
@@ -144,6 +489,10 @@ CGameObject* CMonster_EarthAberrant::Clone(const _uint _iSceneID, void* _pArg)
 
 void CMonster_EarthAberrant::Free()
 {
+	Safe_Release(m_pPanel);
+	Safe_Release(m_pStateController);
+	Safe_Release(m_pAnimatorCom);
 	Safe_Release(m_pModelCom);
+
 	__super::Free();
 }

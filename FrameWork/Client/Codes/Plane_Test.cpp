@@ -31,7 +31,7 @@ HRESULT CPlane_Test::NativeConstruct(const _uint _iSceneID, void* _pArg)
 	//if (FAILED(Ready_Components()))
 	//	return E_FAIL;
 
-	if (FAILED(Ready_NaviMesh()))
+	if (FAILED(Ready_NavMesh()))
 		return E_FAIL;
 
 
@@ -91,24 +91,19 @@ HRESULT CPlane_Test::Ready_Components()
 	wstring TexTag = L"Plane_Texture";
 	m_pTexture = (CTexture*)g_pGameInstance->Clone_Component(m_iSceneID, L"Plane_Texture", &TexTag);
 
-	CMeshCollider::MESHDESC tMeshColliderDesc;
-	tMeshColliderDesc.pParent = this;
-	XMStoreFloat4x4(&tMeshColliderDesc.matTransform, XMMatrixIdentity());
-
 	return S_OK;
 }
 
-HRESULT CPlane_Test::Ready_NaviMesh()
+HRESULT CPlane_Test::Ready_NavMesh()
 {
-	CMeshCollider::MESHDESC NaviMeshDesc;
-	CPhysicsXSystem::COLDESC ColDesc;
+	CCollider::DESC ColDesc;
+	ColDesc.eRigidType = ERigidType::Static;
+	ColDesc.isSceneQuery = true;
+	ColDesc.pGameObject = this;
 
-	ColDesc.eType = CPhysicsXSystem::ACTORTYPE::ACTOR_STATIC;
-	ColDesc.fPos = { 0.f, 0.f, 0.f };
-	ColDesc.bGravity = false;
-	ColDesc.bKinematic = false;
-
-	NaviMeshDesc.vecPoints.reserve(m_vecNaviPoints.size());
+	CNavMeshCollider::DESC NavMeshDesc;
+	NavMeshDesc.tColliderDesc = ColDesc;
+	NavMeshDesc.vecPoints.reserve(m_vecNaviPoints.size());
 	for (_int i = 0; i < m_vecNaviPoints.size(); ++i)
 		NaviMeshDesc.vecPoints.emplace_back(m_vecNaviPoints[i].vPoints);
 
@@ -118,12 +113,8 @@ HRESULT CPlane_Test::Ready_NaviMesh()
 
 	m_pNaviCollider = (CMeshCollider*)g_pGameInstance->Clone_Component((_uint)SCENEID::SCENE_STAGE1, L"Proto_Component_MeshCollider", &NaviMeshDesc);
 
-	if (!m_pNaviCollider)
+	if (FAILED(SetUp_Components(m_iSceneID, L"Proto_Component_NavMeshCollider", L"NavMeshCollider", (CComponent**)&m_pNaviCollider, &NavMeshDesc)))
 		return E_FAIL;
-
-	/* Com_Texture  */
-	//wstring TexTag = L"Plane_Texture";
-	//m_pTexture = (CTexture*)g_pGameInstance->Clone_Component((_uint)SCENEID::SCENE_TEST_YM, L"Plane_Texture", &TexTag);
 
 	return S_OK;
 }
@@ -162,9 +153,9 @@ CGameObject* CPlane_Test::Clone(const _uint _iSceneID, void* _pArg)
 
 void CPlane_Test::Free()
 {
-	Safe_Release(m_pTexture);
 	Safe_Release(m_pVIBuffer);
-	Safe_Release(m_pNaviCollider);
+	Safe_Release(m_pTexture);
+	//Safe_Release(m_pNaviCollider);
 
 	__super::Free();
 }

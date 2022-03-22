@@ -6,6 +6,7 @@
 #include "UI_Monster_Back.h"
 #include "UI_Monster_Level.h"
 #include "UI_Monster_HpBar.h"
+#include "UI_Monster_Name.h"
 
 CUI_Monster_Panel::CUI_Monster_Panel(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
 	:CUI(pDevice,pDeviceContext)
@@ -81,6 +82,11 @@ HRESULT CUI_Monster_Panel::Render()
 	return S_OK;
 }
 
+void CUI_Monster_Panel::Set_HpBar(_float fMaxHp, _float fHp)
+{
+	m_pUIHpBar->Set_TargetHpBar(fMaxHp, fHp);
+}
+
 HRESULT CUI_Monster_Panel::Panel_Setting()
 {
 	switch (m_EnemyTag)
@@ -138,32 +144,32 @@ HRESULT CUI_Monster_Panel::Panel_Setting()
 HRESULT CUI_Monster_Panel::Setting_Crawler()
 {
 	//MonsterBar Back
-	CUI::UIDESC Desc;
-	_tcscpy_s(Desc.TextureTag, L"Texture_Monster_Back");
-	Desc.IDTag = 14;
-	Desc.bMinus = true;
-	Desc.fAngle = 0.38f;
-	Desc.fPos = { 0.f, 0.f, 0.f };
-	Desc.fSize = { 1.f, 1.f };
+	CUI_Monster_Back::UIACTIVEDESC Desc;
+	_tcscpy_s(Desc.UIDesc.TextureTag, L"Texture_Monster_Back");
+	Desc.UIDesc.IDTag = 14;
+	Desc.UIDesc.bMinus = true;
+	Desc.UIDesc.fAngle = 0.38f;
+	Desc.UIDesc.fPos = { 0.f, 0.f, 0.f };
+	Desc.UIDesc.fSize = { 1.f, 1.f };
 
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_UI", L"Proto_GameObject_UI_Monster_Back", &Desc,
 		(CGameObject**)&m_pUIBack)))
 		return E_FAIL;
 
 	//MonsterBar Level
-	CUI::UIDESC Desc2;
-	_tcscpy_s(Desc2.TextureTag, L"Texture_Monster_Level_1");
-	Desc2.IDTag = 13;
-	Desc2.bMinus = false;
-	Desc2.fAngle = 0.f;
-	Desc2.fPos = { 0.f, 0.f, 0.f };
-	Desc2.fSize = { 1.f, 1.f };
+	CUI_Monster_Level::UIACTIVEDESC Desc2;
+	_tcscpy_s(Desc2.UIDesc.TextureTag, L"Texture_Monster_Level_1");
+	Desc2.UIDesc.IDTag = 13;
+	Desc2.UIDesc.bMinus = false;
+	Desc2.UIDesc.fAngle = 0.f;
+	Desc2.UIDesc.fPos = { 0.f, 0.f, 0.f };
+	Desc2.UIDesc.fSize = { 1.f, 1.f };
 
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_UI", L"Proto_GameObject_UI_Monster_Level", &Desc2,
 		(CGameObject**)&m_pUILevel)))
 		return E_FAIL;
 
-	//MonsterBar Level
+	//MonsterBar Bar
 	CUI_Monster_HpBar::UIBARDESC Desc3;
 	_tcscpy_s(Desc3.UIDesc.TextureTag, L"Texture_Monster_HpBar");
 	Desc3.UIDesc.IDTag = 14;
@@ -177,11 +183,81 @@ HRESULT CUI_Monster_Panel::Setting_Crawler()
 		(CGameObject**)&m_pUIHpBar)))
 		return E_FAIL;
 
+
+	//MonsterBar Name
+	CUI_Monster_Name::UINAMEDESC Desc4;
+	_tcscpy_s(Desc4.UIDesc.TextureTag, L"Texture_Monster_Name");
+	Desc4.UIDesc.IDTag = 13;
+	Desc4.UIDesc.bMinus = false;
+	Desc4.UIDesc.fAngle = 0.f;
+	Desc4.UIDesc.fPos = { 0.f, 0.f, 0.f };
+	Desc4.UIDesc.fSize = { 1.f, 1.f };
+	Desc4.iTextureNum = 0;
+
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_UI", L"Proto_GameObject_UI_Monster_Name", &Desc4,
+		(CGameObject**)&m_pUIName)))
+		return E_FAIL;
+
 	return S_OK;
 }
 
 HRESULT CUI_Monster_Panel::Setting_Aberrant()
 {
+	//MonsterBar Back
+	CUI_Monster_Back::UIACTIVEDESC Desc;
+	_tcscpy_s(Desc.UIDesc.TextureTag, L"Texture_Monster_Back");
+	Desc.UIDesc.IDTag = 14;
+	Desc.UIDesc.bMinus = true;
+	Desc.UIDesc.fAngle = 0.38f;
+	Desc.UIDesc.fPos = { 0.f, 0.f, 0.f };
+	Desc.UIDesc.fSize = { 1.f, 1.f };
+
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_UI", L"Proto_GameObject_UI_Monster_Back", &Desc,
+		(CGameObject**)&m_pUIBack)))
+		return E_FAIL;
+
+	//MonsterBar Level
+	CUI_Monster_Level::UIACTIVEDESC Desc2;
+	_tcscpy_s(Desc2.UIDesc.TextureTag, L"Texture_Monster_Level_1");
+	Desc2.UIDesc.IDTag = 13;
+	Desc2.UIDesc.bMinus = false;
+	Desc2.UIDesc.fAngle = 0.f;
+	Desc2.UIDesc.fPos = { 0.f, 0.f, 0.f };
+	Desc2.UIDesc.fSize = { 1.f, 1.f };
+
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_UI", L"Proto_GameObject_UI_Monster_Level", &Desc2,
+		(CGameObject**)&m_pUILevel)))
+		return E_FAIL;
+
+	//MonsterBar Bar
+	CUI_Monster_HpBar::UIBARDESC Desc3;
+	_tcscpy_s(Desc3.UIDesc.TextureTag, L"Texture_Monster_HpBar");
+	Desc3.UIDesc.IDTag = 14;
+	Desc3.UIDesc.bMinus = true;
+	Desc3.UIDesc.fAngle = 0.36f;
+	Desc3.UIDesc.fPos = { 0.f, 0.f, 0.f };
+	Desc3.UIDesc.fSize = { 1.f, 1.f };
+	Desc3.iRenderPass = 2;
+
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_UI", L"Proto_GameObject_UI_Monster_HpBar", &Desc3,
+		(CGameObject**)&m_pUIHpBar)))
+		return E_FAIL;
+
+
+	//MonsterBar Name
+	CUI_Monster_Name::UINAMEDESC Desc4;
+	_tcscpy_s(Desc4.UIDesc.TextureTag, L"Texture_Monster_Name");
+	Desc4.UIDesc.IDTag = 13;
+	Desc4.UIDesc.bMinus = false;
+	Desc4.UIDesc.fAngle = 0.f;
+	Desc4.UIDesc.fPos = { 0.f, 0.f, 0.f };
+	Desc4.UIDesc.fSize = { 1.f, 1.f };
+	Desc4.iTextureNum = 1;
+
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_UI", L"Proto_GameObject_UI_Monster_Name", &Desc4,
+		(CGameObject**)&m_pUIName)))
+		return E_FAIL;
+
 	return S_OK;
 }
 
@@ -218,26 +294,26 @@ HRESULT CUI_Monster_Panel::Setting_2HSword()
 HRESULT CUI_Monster_Panel::Setting_MidBoss()
 {
 	//MonsterBar Back
-	CUI::UIDESC Desc;
-	_tcscpy_s(Desc.TextureTag, L"Texture_Monster_Back");
-	Desc.IDTag = 14;
-	Desc.bMinus = true;
-	Desc.fAngle = 0.42f;
-	Desc.fPos = { 0.f, 0.f, 0.f };
-	Desc.fSize = { 1.f, 1.f };
+	CUI_Monster_Back::UIACTIVEDESC Desc;
+	_tcscpy_s(Desc.UIDesc.TextureTag, L"Texture_Monster_Back");
+	Desc.UIDesc.IDTag = 14;
+	Desc.UIDesc.bMinus = true;
+	Desc.UIDesc.fAngle = 0.42f;
+	Desc.UIDesc.fPos = { 0.f, 0.f, 0.f };
+	Desc.UIDesc.fSize = { 1.f, 1.f };
 
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_UI", L"Proto_GameObject_UI_Monster_Back", &Desc,
 		(CGameObject**)&m_pUIBack)))
 		return E_FAIL;
 
 	//MonsterBar Level
-	CUI::UIDESC Desc2;
-	_tcscpy_s(Desc2.TextureTag, L"Texture_Monster_Level_3");
-	Desc2.IDTag = 13;
-	Desc2.bMinus = false;
-	Desc2.fAngle = 0.f;
-	Desc2.fPos = { 0.f, 0.f, 0.f };
-	Desc2.fSize = { 1.f, 1.f };
+	CUI_Monster_Level::UIACTIVEDESC Desc2;
+	_tcscpy_s(Desc2.UIDesc.TextureTag, L"Texture_Monster_Level_3");
+	Desc2.UIDesc.IDTag = 13;
+	Desc2.UIDesc.bMinus = false;
+	Desc2.UIDesc.fAngle = 0.f;
+	Desc2.UIDesc.fPos = { 0.f, 0.f, 0.f };
+	Desc2.UIDesc.fSize = { 1.f, 1.f };
 
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_UI", L"Proto_GameObject_UI_Monster_Level", &Desc2,
 		(CGameObject**)&m_pUILevel)))
@@ -255,6 +331,21 @@ HRESULT CUI_Monster_Panel::Setting_MidBoss()
 
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_UI", L"Proto_GameObject_UI_Monster_HpBar", &Desc3,
 		(CGameObject**)&m_pUIHpBar)))
+		return E_FAIL;
+
+
+	//MonsterBar Name
+	CUI_Monster_Name::UINAMEDESC Desc4;
+	_tcscpy_s(Desc4.UIDesc.TextureTag, L"Texture_Monster_Name");
+	Desc4.UIDesc.IDTag = 13;
+	Desc4.UIDesc.bMinus = false;
+	Desc4.UIDesc.fAngle = 0.f;
+	Desc4.UIDesc.fPos = { 0.f, 0.f, 0.f };
+	Desc4.UIDesc.fSize = { 1.f, 1.f };
+	Desc4.iTextureNum = 8;
+
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_UI", L"Proto_GameObject_UI_Monster_Name", &Desc4,
+		(CGameObject**)&m_pUIName)))
 		return E_FAIL;
 
 	return S_OK;
@@ -346,14 +437,70 @@ void CUI_Monster_Panel::Update_Setting_Crawler(_double TimeDelta)
 	//UI HpBar
 	CTransform* HpBarTransform = (CTransform*)m_pUIHpBar->Get_Component(L"Com_Transform");
 	_matrix HpBarmat = XMMatrixIdentity();
-	HpBarmat.r[0] = XMVectorSetX(HpBarmat.r[0], 2.5f);
+	HpBarmat.r[0] = XMVectorSetX(HpBarmat.r[0], 2.75f);
 	HpBarmat.r[1] = XMVectorSetY(HpBarmat.r[1], 0.40f);
-	HpBarmat.r[3] = { 0.f, 0.0f, -0.001f, 1.f };
+	HpBarmat.r[3] = { -0.03f, 0.0f, -0.001f, 1.f };
 	HpBarTransform->Set_WorldMatrix(HpBarmat * m_pTransform->Get_WorldMatrix());
+
+	//UI Name
+	CTransform* NameTransform = (CTransform*)m_pUIName->Get_Component(L"Com_Transform");
+	_matrix Namemat = XMMatrixIdentity();
+	Namemat.r[0] = XMVectorSetX(Namemat.r[0], 1.28f);
+	Namemat.r[1] = XMVectorSetY(Namemat.r[1], 0.64f);
+	Namemat.r[3] = { -0.7f, 0.35f, -0.001f, 1.f };
+	NameTransform->Set_WorldMatrix(Namemat * m_pTransform->Get_WorldMatrix());
 }
 
 void CUI_Monster_Panel::Update_Setting_Aberrant(_double TimeDelta)
 {
+	//Panel pos Setting
+	_matrix SettingMat = XMMatrixIdentity();
+	SettingMat.r[3] = { 0.f, 2.f, 0.f , 1.f };
+	_matrix TargetSettinMat = SettingMat * XMLoadFloat4x4(&m_TargetMatrix); //¸ó½ºÅÍ(Å¸°Ù)À§Ä¡
+	m_pTransform->Set_WorldMatrix(TargetSettinMat);
+
+	//ºôº¸µå
+	_matrix ViewMatrix;
+	ViewMatrix = g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_VIEW);
+	ViewMatrix = XMMatrixInverse(nullptr, ViewMatrix);
+	m_pTransform->Set_State(CTransform::STATE::STATE_RIGHT, ViewMatrix.r[0]);
+	m_pTransform->Set_State(CTransform::STATE::STATE_LOOK, ViewMatrix.r[2]);
+
+	//Panel Size
+	_vector vScale = { 1.f,1.f,1.f,1.f };
+	m_pTransform->Scaling(vScale);
+
+	//UI Back
+	CTransform* BackTransform = (CTransform*)m_pUIBack->Get_Component(L"Com_Transform");
+	_matrix Backmat = XMMatrixIdentity();
+	Backmat.r[0] = XMVectorSetX(Backmat.r[0], 3.f);
+	Backmat.r[1] = XMVectorSetY(Backmat.r[1], 0.40f);
+	Backmat.r[3] = { 0.f, 0.f, 0.f, 1.f };
+	BackTransform->Set_WorldMatrix(Backmat * m_pTransform->Get_WorldMatrix());
+
+	//UI Level
+	CTransform* LevelTransform = (CTransform*)m_pUILevel->Get_Component(L"Com_Transform");
+	_matrix Levelmat = XMMatrixIdentity();
+	Levelmat.r[0] = XMVectorSetX(Levelmat.r[0], 0.6f);
+	Levelmat.r[1] = XMVectorSetY(Levelmat.r[1], 0.6f);
+	Levelmat.r[3] = { -1.55f, 0.11f, 0.f, 1.f };
+	LevelTransform->Set_WorldMatrix(Levelmat * m_pTransform->Get_WorldMatrix());
+
+	//UI HpBar
+	CTransform* HpBarTransform = (CTransform*)m_pUIHpBar->Get_Component(L"Com_Transform");
+	_matrix HpBarmat = XMMatrixIdentity();
+	HpBarmat.r[0] = XMVectorSetX(HpBarmat.r[0], 2.75f);
+	HpBarmat.r[1] = XMVectorSetY(HpBarmat.r[1], 0.40f);
+	HpBarmat.r[3] = { -0.03f, 0.0f, -0.001f, 1.f };
+	HpBarTransform->Set_WorldMatrix(HpBarmat * m_pTransform->Get_WorldMatrix());
+
+	//UI Name
+	CTransform* NameTransform = (CTransform*)m_pUIName->Get_Component(L"Com_Transform");
+	_matrix Namemat = XMMatrixIdentity();
+	Namemat.r[0] = XMVectorSetX(Namemat.r[0], 1.28f);
+	Namemat.r[1] = XMVectorSetY(Namemat.r[1], 0.64f);
+	Namemat.r[3] = { -0.5f, 0.35f, -0.001f, 1.f };
+	NameTransform->Set_WorldMatrix(Namemat * m_pTransform->Get_WorldMatrix());
 }
 
 void CUI_Monster_Panel::Update_Setting_Animus(_double TimeDelta)
@@ -422,13 +569,19 @@ void CUI_Monster_Panel::Update_Setting_MidBoss(_double TimeDelta)
 	HpBarmat.r[1] = XMVectorSetY(HpBarmat.r[1], 0.40f);
 	HpBarmat.r[3] = { 0.0f, 0.0f, -0.001f, 1.f };
 	HpBarTransform->Set_WorldMatrix(HpBarmat * m_pTransform->Get_WorldMatrix());
+
+	//UI Name
+	CTransform* NameTransform = (CTransform*)m_pUIName->Get_Component(L"Com_Transform");
+	_matrix Namemat = XMMatrixIdentity();
+	Namemat.r[0] = XMVectorSetX(Namemat.r[0], 2.56f);
+	Namemat.r[1] = XMVectorSetY(Namemat.r[1], 0.64f);
+	Namemat.r[3] = { -0.7f, 0.35f, -0.001f, 1.f };
+	NameTransform->Set_WorldMatrix(Namemat * m_pTransform->Get_WorldMatrix());
 }
 
 void CUI_Monster_Panel::Update_Setting_EndBoss(_double TimeDelta)
 {
 }
-
-
 
 HRESULT CUI_Monster_Panel::SetUp_Components()
 {

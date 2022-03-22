@@ -1,139 +1,66 @@
 #include "MeshCollider.h"
-#include "Gizmo.h"
-CMeshCollider::CMeshCollider(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
-	:CCollider(pDevice, pDeviceContext)
+
+CMeshCollider::CMeshCollider(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
+	: CCollider(_pDevice, _pDeviceContext)
 {
 }
 
-CMeshCollider::CMeshCollider(const CMeshCollider& rhs)
-	: CCollider(rhs)
+CMeshCollider::CMeshCollider(const CMeshCollider& _rhs)
+	: CCollider(_rhs)
 {
 }
 
 HRESULT CMeshCollider::NativeConstruct_Prototype()
 {
-	if (FAILED(CCollider::NativeConstruct_Prototype()))
+	if (FAILED(__super::NativeConstruct_Prototype()))
 		return E_FAIL;
 
 	return S_OK;
 }
 
-HRESULT CMeshCollider::NativeConstruct(void* pArg)
+HRESULT CMeshCollider::NativeConstruct(void* _pArg)
 {
-	MESHDESC tDesc = (*(MESHDESC*)pArg);
-
-	if (FAILED(CCollider::NativeConstruct(&tDesc.tColDesc.eType)))
+	if (FAILED(__super::NativeConstruct(_pArg)))
 		return E_FAIL;
-
-	if (FAILED(Init_Shape(tDesc.vecPoints)))
-		return E_FAIL;
-
-	tDesc.tColDesc.fPos = _float3(tDesc.matTransform._41, tDesc.matTransform._42, tDesc.matTransform._43);
-	if (FAILED(Init_Collider(tDesc.tColDesc)))
-		return E_FAIL;
-
-	if (!m_pRigidBody)
-		return E_FAIL;
-
-	m_pRigidBody->userData = tDesc.pParent;
-
-	m_matLoaclMatrix = tDesc.matTransform;
-	return S_OK;
-}
-
-HRESULT CMeshCollider::Render(const wstring& pCameraTag)
-{
-	if (!m_pGizmo)
-		return E_FAIL;
-
-	PxTriangleMeshGeometry pxTriangleMesh;
-	m_pShape->getTriangleMeshGeometry(pxTriangleMesh);
-	_uint iTriangleCnt = pxTriangleMesh.triangleMesh->getNbTriangles();
-
-	for (_uint i = 0; i < iTriangleCnt; i++)
-	{
-		_float3 pPoints[]
-			= {
-			_float3(pxTriangleMesh.triangleMesh->getVertices()[i * 3].x,
-			pxTriangleMesh.triangleMesh->getVertices()[i * 3].y,
-			pxTriangleMesh.triangleMesh->getVertices()[i * 3].z),
-
-			_float3(pxTriangleMesh.triangleMesh->getVertices()[i * 3 + 1].x,
-			pxTriangleMesh.triangleMesh->getVertices()[i * 3 + 1].y,
-			pxTriangleMesh.triangleMesh->getVertices()[i * 3 + 1].z),
-
-			_float3(pxTriangleMesh.triangleMesh->getVertices()[i * 3 + 2].x,
-			pxTriangleMesh.triangleMesh->getVertices()[i * 3 + 2].y,
-			pxTriangleMesh.triangleMesh->getVertices()[i * 3 + 2].z),
-		};
-
-		m_pGizmo->DrawMesh(pPoints, pCameraTag, XMLoadFloat4(&m_vColor));
-	}
 
 	return S_OK;
 }
 
-HRESULT CMeshCollider::Init_Shape(const vector<_float3*>& vecPoints)
+const _int CMeshCollider::Tick(const _double& _dDeltaTime)
 {
-	_float3* pPoints = new _float3[vecPoints.size() * 3];
+	_int iProgress = __super::Tick(_dDeltaTime);
+	if (NO_EVENT != iProgress)
+		return iProgress;
 
-	for (_uint i = 0; i < (_uint)vecPoints.size(); i++)
-	{
-		pPoints[i * 3] = vecPoints[i][0];
-		pPoints[i * 3 + 1] = vecPoints[i][1];
-		pPoints[i * 3 + 2] = vecPoints[i][2];
-	}
-
-	FACEINDICES32* Indices = new FACEINDICES32[(_uint)vecPoints.size()];
-
-	for (_uint i = 0; i < (_uint)vecPoints.size(); i++)
-	{
-		Indices[i]._0 = i * 3;
-		Indices[i]._1 = i * 3 + 1;
-		Indices[i]._2 = i * 3 + 2;
-	}
-
-	PxTriangleMeshDesc meshDesc;
-
-	meshDesc.points.data = pPoints;
-	meshDesc.points.count = (_uint)vecPoints.size() * 3;
-	meshDesc.points.stride = sizeof(_float3);
-	meshDesc.triangles.count = (_uint)vecPoints.size();
-	meshDesc.triangles.data = Indices;
-	meshDesc.triangles.stride = sizeof(FACEINDICES32);
-
-	CPhysicsXSystem* pInstance = GET_INSTANCE(CPhysicsXSystem);
-
-
-	m_pShape = pInstance->Init_Mesh(meshDesc);
-	if (!m_pShape)
-		return E_FAIL;
-
-	RELEASE_INSTANCE(CPhysicsXSystem);
-
-	Safe_Delete_Array(pPoints);
-	Safe_Delete_Array(Indices);
-
-	return S_OK;
+	return _int();
 }
 
-CMeshCollider* CMeshCollider::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
+const _int CMeshCollider::LateTick(const _double& _dDeltaTime)
 {
-	CMeshCollider* pInstance = new CMeshCollider(pDevice, pDeviceContext);
+	_int iProgress = __super::LateTick(_dDeltaTime);
+	if (NO_EVENT != iProgress)
+		return iProgress;
+
+	return _int();
+}
+
+CMeshCollider* CMeshCollider::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
+{
+	CMeshCollider* pInstance = new CMeshCollider(_pDevice, _pDeviceContext);
 	if (FAILED(pInstance->NativeConstruct_Prototype()))
 	{
-		MSGBOX("CMesh Collider Crate Fail");
+		MSGBOX("CMeshCollider Create Fail");
 		Safe_Release(pInstance);
 	}
 	return pInstance;
 }
 
-CComponent* CMeshCollider::Clone(void* pArg)
+CComponent* CMeshCollider::Clone(void* _pArg)
 {
 	CMeshCollider* pInstance = new CMeshCollider(*this);
-	if (FAILED(pInstance->NativeConstruct(pArg)))
+	if (FAILED(pInstance->NativeConstruct(_pArg)))
 	{
-		MSGBOX("CMesh Collider Clone Fail");
+		MSGBOX("CMeshCollider Clone Fail");
 		Safe_Release(pInstance);
 	}
 	return pInstance;
@@ -141,5 +68,6 @@ CComponent* CMeshCollider::Clone(void* pArg)
 
 void CMeshCollider::Free()
 {
-	CCollider::Free();
+
+	__super::Free();
 }

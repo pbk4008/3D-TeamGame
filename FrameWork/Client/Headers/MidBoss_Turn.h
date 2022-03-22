@@ -37,6 +37,7 @@ public:
 	_float m_fRadAcc = 0.f;
 
 	_bool m_bLeft = false;
+	_float m_fFWD = 0.f;
 
 public:
 	static CMidBoss_Turn* Create(ID3D11Device * pDevice, ID3D11DeviceContext * pDeviceContext, void* pArg = nullptr);

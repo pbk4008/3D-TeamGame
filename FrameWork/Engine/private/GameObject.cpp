@@ -125,25 +125,30 @@ HRESULT CGameObject::Render_PBR()
 	return S_OK;
 }
 
-void CGameObject::OnCollisionEnter(CGameObject* pCol)
+void CGameObject::OnCollisionEnter(CCollision& collision)
 {
 }
 
-void CGameObject::OnCollisionStay(CGameObject* pCol)
+void CGameObject::OnCollisionStay(CCollision& collision)
 {
 }
 
-void CGameObject::OnCollisionExit(CGameObject* pCol)
+void CGameObject::OnCollisionExit(CCollision& collision)
 {
 }
 
-void CGameObject::OnTriggerEnter(CGameObject* pCol)
+void CGameObject::OnTriggerEnter(CCollision& collision)
 {
 }
 
-void CGameObject::OnTriggerExit(CGameObject* pCol)
+void CGameObject::OnTriggerStay(CCollision& collision)
 {
 }
+
+void CGameObject::OnTriggerExit(CCollision& collision)
+{
+}
+
 
 void CGameObject::setActive(_bool bActive)
 {

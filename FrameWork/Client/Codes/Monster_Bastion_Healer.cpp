@@ -395,9 +395,15 @@ CGameObject* CMonster_Bastion_Healer::Clone(const _uint _iSceneID, void* _pArg)
 
 void CMonster_Bastion_Healer::Free()
 {
-	__super::Free();
+	for (auto& pair : m_umapWeapons)
+		Safe_Release(pair.second);
+	m_umapWeapons.clear();
 
+	//Safe_Release(m_pCharacterController);
+	Safe_Release(m_pColliderCom);
 	Safe_Release(m_pStateController);
-	Safe_Release(m_pModel);
 	Safe_Release(m_pAnimator);
+	Safe_Release(m_pModel);
+
+	__super::Free();
 }

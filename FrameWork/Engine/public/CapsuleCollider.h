@@ -1,34 +1,38 @@
 #pragma once
-#ifndef __CAPSULECOLLIDER_H__
-#define __CAPSULECOLLIDER_H__
+
 #include "Collider.h"
+
 BEGIN(Engine)
-class CGameObject;
+
 class ENGINE_DLL CCapsuleCollider final : public CCollider
 {
 public:
-	typedef struct tagCapsule
+	typedef struct tagDesc
 	{
-		_float4x4 matTransform;
-		CPhysicsXSystem::COLDESC tColDesc;
-		CGameObject* pParent;
-	}CAPSULEDESC;
+		CCollider::DESC tColliderDesc;
+		_float fHeight = 1.f;
+		_float fRadius = 0.5f;
+	}DESC;
 private:
-	explicit CCapsuleCollider() = default;
-	explicit CCapsuleCollider(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);
-	explicit CCapsuleCollider(const CCapsuleCollider& rhs);
+	explicit CCapsuleCollider(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext);
+	explicit CCapsuleCollider(const CCapsuleCollider& _rhs);
 	virtual ~CCapsuleCollider() = default;
+
 public:
-	virtual HRESULT NativeConstruct_Prototype();
-	virtual HRESULT NativeConstruct(void* pArg);
-	virtual HRESULT Render(const wstring& pCameraTag);
+	virtual HRESULT NativeConstruct_Prototype() override;
+	virtual HRESULT NativeConstruct(void* _pArg = nullptr) override;
+	virtual const _int Tick(const _double& _dDeltaTime) override;
+	virtual const _int LateTick(const _double& _dDeltaTime) override;
+
+	const DESC& getDesc() const;
+
 private:
-	virtual HRESULT Init_Shape(PxVec3 pxExtends);
+	DESC m_tDesc;
+
 public:
-	static CCapsuleCollider* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);
-	virtual CComponent* Clone(void* pArg);
-private:
+	static CCapsuleCollider* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext);
+	virtual CComponent* Clone(void* _pArg = nullptr) override;
 	virtual void Free() override;
 };
+
 END
-#endif

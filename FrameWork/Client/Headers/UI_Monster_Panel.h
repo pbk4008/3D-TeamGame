@@ -43,6 +43,9 @@ public:
 public:
 	void Set_TargetWorldMatrix(_matrix matTarget) { XMStoreFloat4x4(&m_TargetMatrix, matTarget);}
 
+public:
+	void Set_HpBar(_float fMaxHp, _float fHp);
+
 private:
 	HRESULT Panel_Setting();
 	HRESULT Setting_Crawler();
@@ -77,6 +80,7 @@ private:
 	class CUI_Monster_Back* m_pUIBack = nullptr;
 	class CUI_Monster_Level* m_pUILevel = nullptr;
 	class CUI_Monster_HpBar* m_pUIHpBar = nullptr;
+	class CUI_Monster_Name* m_pUIName = nullptr;
 private:
 	virtual HRESULT SetUp_Components();
 

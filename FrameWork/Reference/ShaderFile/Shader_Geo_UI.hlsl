@@ -53,8 +53,8 @@ VS_OUT VS_MAIN(VS_IN In)
 		
     Out.vPosition = mul(vector(In.vPosition, 1.f), matWVP);
     
-    //vector vPosition = mul(vector(In.vPosition, 1.f), In.TransformMatrix);
-    //Out.vPosition = mul(vPosition, g_WorldMatrix);
+    //vector vOffset = mul(vector(In.vOffset, 1.f), In.TransformMatrix);
+    //Out.vOffset = mul(vOffset, g_WorldMatrix);
     
     //Out.vPSize.x = In.vPSize.x * In.TransformMatrix._11;
     //Out.vPSize.y = In.vPSize.y * In.TransformMatrix._22;

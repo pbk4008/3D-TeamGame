@@ -14,7 +14,7 @@ class ENGINE_DLL CCharacterController : public CComponent
 {
 	friend class CPhysicsXSystem;
 public:
-	typedef struct tagCharacterControllerDesc
+	typedef struct tagDesc
 	{
 		_float fHeight = 0.f;
 		_float fRadius = 0.f;
@@ -28,7 +28,7 @@ public:
 		_float3 vUpDirection = { 0.f, 1.f, 0.f };
 		CGameObject* pGameObject = nullptr;
 		PxCapsuleClimbingMode::Enum eClimbingMode = PxCapsuleClimbingMode::eCONSTRAINED;
-	}CHARACTERCONTROLLERDESC;
+	}DESC;
 private:
 	explicit CCharacterController(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext);
 	explicit CCharacterController(const CCharacterController& _rhs);
@@ -39,14 +39,16 @@ public:
 	virtual HRESULT NativeConstruct(void* _pArg = nullptr) override;
 	const _int Tick(const _double& _dDeltaTime);
 	const _int LateTick(const _double& _dDeltaTime);
-	HRESULT Render();
 
 public:
-	const CHARACTERCONTROLLERDESC& Get_CharacterControllerDesc() const;
-	PxMaterial* Get_Material();
+	const DESC& Get_CharacterControllerDesc() const;
 
-	void Set_FootPosition(const _float3& _vPosition);
-	void Set_OwnerTransform(CTransform* _pTransform);
+	void setMaterial(PxMaterial* _pMateiral);
+	void setPxController(PxController* _pPxController);
+	void setShapes(vector<PxShape*>& _vecShapes);
+
+	void setFootPosition(const _float3& _vPosition);
+	void setOwnerTransform(CTransform* _pTransform);
 
 	const _bool IsDown();
 	const _bool IsUp();
@@ -60,15 +62,9 @@ private:
 	HRESULT Create_Controller();
 
 	_fvector getQuaternion(_fmatrix matTransform);
-	_fvector ToXMVector4(const PxQuat pxquat);
-	const PxVec3 ToPxVector(_fvector xmvec);
-
-	_fmatrix Update_Scale(_fmatrix matTransform);
-	_fmatrix Update_Rotate(_fmatrix matTransform);
-	_fmatrix Update_Position(PxVec3 vPos);
 
 private:
-	CHARACTERCONTROLLERDESC m_tCharacterControllerDesc;
+	DESC m_tDesc;
 
 	PxControllerCollisionFlags m_preFlag;
 	PxControllerCollisionFlags m_curFlag;
@@ -80,10 +76,6 @@ private:
 
 	PxMaterial* m_pMaterial = nullptr;
 	_float3 m_vVelocity = { 0.f, 0.f, 0.f };
-
-	CGizmo* m_pGizmo = nullptr;
-	_float4x4 m_matLocal;
-	_float4x4 m_matWorld;
 
 	CTransform* m_pOwnerTransform = nullptr;
 
