@@ -207,7 +207,7 @@ _int CSilvermane::Tick(_double _dDeltaTime)
 	if (NO_EVENT != iProgress) 
 		return iProgress;
 
-	//Fall(_dDeltaTime);
+	Fall(_dDeltaTime);
 	//m_pCharacterController->Tick(_dDeltaTime);
 	m_pCharacterController->Move(_dDeltaTime, m_pTransform->Get_Velocity());
 
@@ -651,13 +651,13 @@ HRESULT CSilvermane::Ready_Weapons()
 	pWeapon->Set_OwnerPivotMatrix(m_pModel->Get_PivotMatrix());
 	m_umapWeapons.emplace(L"Fury", pWeapon);
 
-	//// 방패
-	//pWeaponBone = m_pModel->Get_BoneMatrix("weapon_l");
-	//m_pShield = CShield::Create(m_pDevice, m_pDeviceContext);
-	//m_pShield->NativeConstruct(m_iSceneID, pWeaponBone);
-	//m_pShield->Set_Owner(this);
-	//m_pShield->Set_OwnerPivotMatrix(m_pModel->Get_PivotMatrix());
-	//Set_EquipShield(false);
+	// 방패
+	pWeaponBone = m_pModel->Get_BoneMatrix("weapon_l");
+	m_pShield = CShield::Create(m_pDevice, m_pDeviceContext);
+	m_pShield->NativeConstruct(m_iSceneID, pWeaponBone);
+	m_pShield->Set_Owner(this);
+	m_pShield->Set_OwnerPivotMatrix(m_pModel->Get_PivotMatrix());
+	Set_EquipShield(false);
 	
 	return S_OK;
 }

@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "1H_SwordAttack.h"
+#include "Camera_Silvermane.h"
 
 C1H_SwordAttack::C1H_SwordAttack(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
 	: CState_Silvermane(_pDevice, _pDeviceContext)
@@ -48,6 +49,7 @@ HRESULT C1H_SwordAttack::EnterState()
 		return E_FAIL;
 
 	g_pObserver->Set_IsAttack(TRUE);
+	//m_pSilvermane->Get_PlayerCamera()->SetShakeInfo(0.6f, 4.f);
 
 	return S_OK;
 }
@@ -58,6 +60,7 @@ HRESULT C1H_SwordAttack::ExitState()
 		return E_FAIL;
 
 	g_pObserver->Set_IsAttack(FALSE);
+	//m_pSilvermane->Get_PlayerCamera()->SetShakeInfo(0.0f, 0.0f);
 
 	return S_OK;
 }

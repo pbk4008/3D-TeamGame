@@ -103,6 +103,13 @@ void CModel_Inspector::Ready_Level_Combo(void)
 	m_TriggerCombo.AddString(_T("for Monster"));
 	m_TriggerCombo.AddString(_T("for Quest"));
 
+	m_TriggerCombo.AddString(_T("땅벌레"));
+	m_TriggerCombo.AddString(_T("힐러"));
+	m_TriggerCombo.AddString(_T("한손검"));
+	m_TriggerCombo.AddString(_T("두손검"));
+	m_TriggerCombo.AddString(_T("대지"));
+	m_TriggerCombo.AddString(_T("중간보스"));
+
 	m_TriggerCombo.SetCurSel(0);
 }
 

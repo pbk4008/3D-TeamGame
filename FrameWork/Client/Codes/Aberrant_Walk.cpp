@@ -30,19 +30,15 @@ _int CAberrant_Walk::Tick(const _double& TimeDelta)
 
 	m_pAnimator->Tick(TimeDelta);
 
-	_fvector vMonsterPos = m_pTransform->Get_State(CTransform::STATE::STATE_POSITION);
-	_fvector vDist = vMonsterPos - g_pObserver->Get_PlayerPos();
+	_vector vMonsterPos = m_pTransform->Get_State(CTransform::STATE::STATE_POSITION);
+	_vector vDist = vMonsterPos - g_pObserver->Get_PlayerPos();
 	_float fDistToPlayer = XMVectorGetX(XMVector3Length(vDist));
 
-	if (5.f < fDistToPlayer)
+	if (4.f < fDistToPlayer)
 	{
 		m_pTransform->Face_Target(g_pObserver->Get_PlayerPos());
-	}
-
-	if (5.f > fDistToPlayer)
-	{
 		m_pStateController->Change_State(L"Attack");
-		cout << "공격으로 변경" << endl;
+		//cout << "공격으로 변경" << endl;
 	}
 
 	return _int();

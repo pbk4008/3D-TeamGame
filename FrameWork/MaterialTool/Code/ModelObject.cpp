@@ -122,7 +122,7 @@ HRESULT CModelObject::Check_Texture(list<wstring>& pTextrue)
 
 	string strTexturePath;
 	strTexturePath.assign(m_tModelFolder.begin(), m_tModelFolder.end());
-	strTexturePath += "*.tga";
+	strTexturePath += "*.dds";
 
 	intptr_t handle = _findfirst(strTexturePath.c_str(), &fd);
 

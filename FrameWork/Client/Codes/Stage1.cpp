@@ -21,10 +21,10 @@ HRESULT CStage1::NativeConstruct()
 	if (FAILED(CLevel::NativeConstruct()))
 		return E_FAIL;
 
-	//if (FAILED(Ready_MapObject()))
-	//{
-	//	return E_FAIL;
-	//}
+	if (FAILED(Ready_MapObject()))
+	{
+		return E_FAIL;
+	}
 
 	if (FAILED(Ready_Player(L"Layer_Silvermane")))
 	{
@@ -36,7 +36,7 @@ HRESULT CStage1::NativeConstruct()
 	//	return E_FAIL;
 	//}
 
-	if (FAILED(Ready_Monster(L"Layer_Monster")))
+	/*if (FAILED(Ready_Monster(L"Layer_Monster")))
 	{
 		return E_FAIL;
 	}
@@ -55,16 +55,21 @@ HRESULT CStage1::NativeConstruct()
 	//{
 	//	return E_FAIL;
 	//}
+	if (FAILED(Ready_UI(L"Layer_UI")))
+	{
+		return E_FAIL;
+	}*/
 
-	////Data
-	//if (FAILED(Ready_Data_UI(L"../bin/SaveData/UI/UI.dat")))
-	//{
-	//	return E_FAIL;
-	//}
-	//if (FAILED(Ready_Data_Effect(L"../bin/SaveData/Effect/Effect_Explosion.dat")))
-	//{
-	//	return E_FAIL;
-	//}
+	//Data
+	/*if (FAILED(Ready_Data_UI(L"../bin/SaveData/UI/UI.dat")))
+	{
+		return E_FAIL;
+	}
+	if (FAILED(Ready_Data_Effect(L"../bin/SaveData/Effect/Effect_Explosion.dat")))
+	{
+		return E_FAIL;
+	}*/
+
 	//if (FAILED(Ready_Trigger_Lod(L"../bin/SaveData/Trigger/Stage1_LodTri.dat")))
 	//	return E_FAIL;
 	//if (FAILED(Ready_Trigger_Light(L"../bin/SaveData/Trigger/Stage1_LodTri.dat")))
@@ -74,6 +79,8 @@ HRESULT CStage1::NativeConstruct()
 	//if (FAILED(Ready_Trigger_Scene(L"../bin/SaveData/Trigger/Stage1_LodTri.dat")))
 	//	return E_FAIL;
 	//if (FAILED(Ready_Trigger_Quest(L"../bin/SaveData/Trigger/Stage1_QuestTri.dat")))
+	//	return E_FAIL;
+	//if (FAILED(Ready_Treasure_Chest()))
 	//	return E_FAIL;
 
 	g_pGameInstance->Change_BaseCamera(L"Camera_Silvermane");
@@ -152,9 +159,8 @@ HRESULT CStage1::Ready_Camera(const _tchar* LayerTag)
 HRESULT CStage1::Ready_Player(const _tchar* LayerTag)
 {
 	//// 네비메쉬
-	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Plane", L"Proto_GameObject_Plane_Test")))
-	//	return E_FAIL;
-
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Plane", L"Proto_GameObject_Plane_Test")))
+		return E_FAIL;
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Proto_GameObject_Silvermane")))
 		return E_FAIL;
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Camera", L"Proto_GameObject_Camera_Silvermane")))
@@ -319,6 +325,39 @@ HRESULT CStage1::Ready_Trigger_Quest(const _tchar* pDataFilePath)
 		}
 	}
 
+	return S_OK;
+}
+
+HRESULT CStage1::Ready_Treasure_Chest()
+{
+	vector<ENVIRONMENTLOADDATA> vecMapObjectData;
+	if (FAILED(g_pGameInstance->LoadFile<ENVIRONMENTLOADDATA>(vecMapObjectData, L"../bin/SaveData/Treasure_Chest/Stage1_Treasure_Chest.dat")))
+		return E_FAIL;
+
+	vector<_float4x4> vecObject;
+
+	vector<CEnvironment::ENVIRONMENTDESC> tChestDesc;
+	tChestDesc.resize(10);
+	_uint iIndex = 0;
+	tChestDesc[iIndex].wstrInstaneTag = vecMapObjectData[0].FileName;
+
+	for (auto& pData : vecMapObjectData)
+	{
+		vecObject. emplace_back(pData.WorldMat);
+	}
+
+	for (int i = 0; i < vecObject.size(); ++i)
+	{
+		MABOBJECT MapObjectDesc;
+
+		MapObjectDesc.WorldMat = vecObject[i];
+
+		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Treasure_Chest", L"Proto_GameObject_Treasure_Chest", &MapObjectDesc)))
+		{
+			MSGBOX("Treasure_Chest 파일을 불러오는 도중 오류가 발생했습니다. Stage1.cpp Line 306");
+			return E_FAIL;
+		}
+	}
 	return S_OK;
 }
 

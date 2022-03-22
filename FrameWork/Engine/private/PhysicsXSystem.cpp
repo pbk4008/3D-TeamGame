@@ -303,9 +303,9 @@ HRESULT CPhysicsXSystem::Create_NavMesh(CNavMeshCollider* _pCollider)
 	PxTriangleMesh* pTriMesh = m_pCooking->createTriangleMesh(meshDesc, m_pPhysics->getPhysicsInsertionCallback());
 	if (!pTriMesh)
 		return E_FAIL;
-	PxTriangleMeshGeometry pxMesh = PxTriangleMeshGeometry(pTriMesh);
 
-	PxShape* pShape = m_pPhysics->createShape(pxMesh, *pMaterial, true);
+	//PxTriangleMeshGeometry pxMesh = PxTriangleMeshGeometry(pTriMesh);
+	PxShape* pShape = m_pPhysics->createShape(PxTriangleMeshGeometry(pTriMesh), *pMaterial, true);
 	pShape->setFlag(PxShapeFlag::eVISUALIZATION, true);
 	pShape->setFlag(PxShapeFlag::eSCENE_QUERY_SHAPE, tColliderDesc.isSceneQuery);
 	pShape->setFlag(PxShapeFlag::eSIMULATION_SHAPE, !tColliderDesc.isTrigger);

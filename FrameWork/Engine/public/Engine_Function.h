@@ -7,7 +7,7 @@ namespace Engine
 	// 기능을 인스턴스화 하기 위하여 만들어두는 틀
 
 	template<typename T>
-	void	Safe_Delete(T& Pointer)
+	void   Safe_Delete(T& Pointer)
 	{
 		if (nullptr != Pointer)
 		{
@@ -17,11 +17,11 @@ namespace Engine
 	}
 
 	template<typename T>
-	void	Safe_Delete_Array(T& Pointer)
+	void   Safe_Delete_Array(T& Pointer)
 	{
 		if (nullptr != Pointer)
 		{
-			delete [] Pointer;
+			delete[] Pointer;
 			Pointer = nullptr;
 		}
 	}
@@ -29,10 +29,10 @@ namespace Engine
 	template<typename T>
 	unsigned long Safe_AddRef(T& pInstance)
 	{
-		unsigned long		dwRefCnt = 0;
+		unsigned long      dwRefCnt = 0;
 
-		if (nullptr != pInstance)		
-			dwRefCnt = pInstance->AddRef();	
+		if (nullptr != pInstance)
+			dwRefCnt = pInstance->AddRef();
 
 		return dwRefCnt;
 	}
@@ -40,7 +40,7 @@ namespace Engine
 	template<typename T>
 	unsigned long Safe_Release(T& pInstance)
 	{
-		unsigned long		dwRefCnt = 0;
+		unsigned long      dwRefCnt = 0;
 
 		if (nullptr != pInstance)
 		{
@@ -63,21 +63,21 @@ namespace Engine
 	class CTag_Finder
 	{
 	public:
-		explicit CTag_Finder(const wstring& pTag) : m_pTargetTag(pTag){}
+		explicit CTag_Finder(const wstring& pTag) : m_pTargetTag(pTag) {}
 		~CTag_Finder(void) {}
 
 	public:
-		template<typename T> 
-		bool		operator()(const T& pair)
+		template<typename T>
+		bool      operator()(const T& pair)
 		{
-			if (m_pTargetTag==pair.first)
+			if (m_pTargetTag == pair.first)
 				return true;
-			
+
 			return false;
 		}
 
 	private:
-		wstring		m_pTargetTag = nullptr;
+		wstring      m_pTargetTag = nullptr;
 	};
 
 	static const _float3 QuaternionToEuler(const _float4& _q)
@@ -90,21 +90,21 @@ namespace Engine
 
 		//if (test > 0.49999f * unit)
 		//{
-		//	euler.x = (_float)M_PI / 2;
-		//	euler.y = 2.0f * atan2f(_q.y, _q.x);
-		//	euler.z = 0;
+		//   euler.x = (_float)M_PI / 2;
+		//   euler.y = 2.0f * atan2f(_q.y, _q.x);
+		//   euler.z = 0;
 		//}
 		//else if (test < -0.49999f * unit)
 		//{
-		//	euler.x = -(_float)M_PI / 2;
-		//	euler.y = -2.0f * atan2f(_q.y, _q.x);
-		//	euler.z = 0;
+		//   euler.x = -(_float)M_PI / 2;
+		//   euler.y = -2.0f * atan2f(_q.y, _q.x);
+		//   euler.z = 0;
 		//}
 		//else
 		//{
-		//	euler.x = asinf(2.0f * (_q.w * _q.x - _q.y * _q.z));
-		//	euler.y = atan2f(2.0f * _q.w * _q.y + 2.0f * _q.z * _q.x, 1 - 2.0f * (_q.x * _q.x + _q.y * _q.y));
-		//	euler.z = atan2f(2.0f * _q.w * _q.z + 2.0f * _q.x * _q.y, 1 - 2.0f * (_q.z * _q.z + _q.x * _q.x));
+		//   euler.x = asinf(2.0f * (_q.w * _q.x - _q.y * _q.z));
+		//   euler.y = atan2f(2.0f * _q.w * _q.y + 2.0f * _q.z * _q.x, 1 - 2.0f * (_q.x * _q.x + _q.y * _q.y));
+		//   euler.z = atan2f(2.0f * _q.w * _q.z + 2.0f * _q.x * _q.y, 1 - 2.0f * (_q.z * _q.z + _q.x * _q.x));
 		//}
 
 		//euler.x = XMConvertToDegrees(euler.x);
@@ -124,7 +124,7 @@ namespace Engine
 		// pitch (y-axis rotation)
 		double sinP = 2 * (_q.w * _q.y - _q.z * _q.x);
 		if (std::abs(sinP) >= 1)
-			pitch = copysign(M_PI * 0.5f, sinP);	// use 90 degrees if out of range
+			pitch = copysign(M_PI * 0.5f, sinP);   // use 90 degrees if out of range
 		else
 			pitch = asin(sinP);
 

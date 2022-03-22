@@ -179,4 +179,10 @@ namespace Engine
 		_float3		fTrigger_Point;
 		_int		iIndex;
 	}TRIGGER;
+
+	/* for. Map_Object*/
+	typedef struct tagMabObject
+	{
+		_float4x4 WorldMat;
+	}MABOBJECT;
 }

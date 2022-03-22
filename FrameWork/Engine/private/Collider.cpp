@@ -8,7 +8,7 @@ CCollider::CCollider(ID3D11Device * _pDevice, ID3D11DeviceContext * _pDeviceCont
 	: CComponent(_pDevice, _pDeviceContext)
 	, m_pPhsyX(CPhysicsXSystem::GetInstance())
 {
-	Safe_AddRef(m_pPhsyX);
+	//Safe_AddRef(m_pPhsyX);
 	XMStoreFloat4x4(&m_matPivot, XMMatrixIdentity());
 }
 
@@ -17,7 +17,7 @@ CCollider::CCollider(const CCollider& _rhs)
 	, m_pPhsyX(_rhs.m_pPhsyX)
 	, m_matPivot(_rhs.m_matPivot)
 {
-	Safe_AddRef(m_pPhsyX);
+	//Safe_AddRef(m_pPhsyX);
 }
 
 HRESULT CCollider::NativeConstruct_Prototype()
@@ -119,10 +119,10 @@ void CCollider::Free()
 		m_pShape->getActor()->detachShape(*m_pShape);
 	m_pPhsyX->Remove_Actor(m_pRigidActor);
 
-	Safe_PxRelease(m_pRigidActor);
 	Safe_PxRelease(m_pShape);
+	Safe_PxRelease(m_pRigidActor);
 	Safe_PxRelease(m_pMaterial);
 
-	Safe_Release(m_pPhsyX);
+	//Safe_Release(m_pPhsyX);
 	__super::Free();
 }

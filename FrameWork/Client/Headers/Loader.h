@@ -37,6 +37,8 @@ private:
 	HRESULT Load_Stage1UILoad(); //직접 생성
 	HRESULT Load_Stage1EffectLoad();
 	HRESULT Load_Stage1TriggerLod();
+	HRESULT	Load_Stage1_TreasureChest_Load();
+
 private:
 	//쓰레드에 로딩할 파일 추가(컴포넌트 태그, 로딩할 파일 패스, 타입(0 = Static, 1 = Ainm, 2 = Instancing_Static)
 	void Add_LoadingThread(const wstring& pComponetTag, const wstring& pFilePath, _uint iType);

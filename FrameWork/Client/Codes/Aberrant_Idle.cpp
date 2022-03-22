@@ -34,11 +34,11 @@ _int CAberrant_Idle::Tick(const _double& TimeDelta)
 	_fvector vDist = vMonsterPos - g_pObserver->Get_PlayerPos();
 	_float fDistToPlayer = XMVectorGetX(XMVector3Length(vDist));
 
-	if ( 10.f > fDistToPlayer)
+	if ( 15.f > fDistToPlayer)
 	{
 		m_pTransform->Face_Target(g_pObserver->Get_PlayerPos());
 		m_pStateController->Change_State(L"Walk");
-		cout << "°È±â·Î º¯°æ" << endl;
+		//cout << "°È±â·Î º¯°æ" << endl;
 	}
 
 	return _int();
