@@ -37,6 +37,8 @@ public:
 	void Set_UIDesc(UIACTIVEDESC Desc) { m_Desc = Desc; }
 	UIACTIVEDESC Get_UIDesc() { return m_Desc; }
 
+	void Set_GapY(_float GapY) { m_fGapY = GapY; }
+
 private:
 	UIACTIVEDESC m_Desc;
 	_float m_fGapX = 0.f;

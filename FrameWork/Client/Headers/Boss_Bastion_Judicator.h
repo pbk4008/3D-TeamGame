@@ -5,6 +5,7 @@
 BEGIN(Engine)
 class CModel;
 class CAnimator;
+class CCharacterController;
 END
 
 BEGIN(Client)
@@ -37,18 +38,32 @@ private:
 	HRESULT Set_State_FSM();
 
 private:
+	const _int Fall(const _double& TimeDelta);
+	virtual void OnTriggerEnter(CCollision& collision) override;
+
+public:
+	void Set_Groggy(_float fGroggy) { m_fGroggy = fGroggy; }
+
+private:
 	CModel* m_pModelCom = nullptr;
 	CAnimator* m_pAnimator = nullptr;
-	CCapsuleCollider* m_pCollider = nullptr;
 	CStateController* m_pStateController = nullptr;
+	CCharacterController* m_pCharacterController = nullptr;
 
 	class CShieldBreaker* m_pWeapon = nullptr;
 	class CUI_Monster_Panel* m_pPanel = nullptr;
 
 private:
-
 	_uint itest = 0;
 	_float fTime = 0.f;
+	_float m_fGroggy = 0.f;
+	_float m_fMaxGroggy = 0.f;
+
+private:
+	_bool	m_isFall = false;
+	_bool m_bFirstHit = false; //맨처음들어와서 맞았을때 판넬크기바꿔줘야돼서
+	_bool m_bGroggy = false;
+
 public:
 	static CBoss_Bastion_Judicator* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);
 	virtual CGameObject* Clone(const _uint _iSceneID, void* pArg = nullptr) override;

@@ -45,6 +45,8 @@ public:
 
 public:
 	void Set_HpBar(_float fMaxHp, _float fHp);
+	void Set_GroggyBar(_float fMaxGroggy, _float fGroggy);
+	void Set_BackUIGapY(_float GapY);
 
 private:
 	HRESULT Panel_Setting();
@@ -81,6 +83,7 @@ private:
 	class CUI_Monster_Level* m_pUILevel = nullptr;
 	class CUI_Monster_HpBar* m_pUIHpBar = nullptr;
 	class CUI_Monster_Name* m_pUIName = nullptr;
+	class CUI_Monster_GroggyBar* m_pUIGroggyBar = nullptr;
 private:
 	virtual HRESULT SetUp_Components();
 

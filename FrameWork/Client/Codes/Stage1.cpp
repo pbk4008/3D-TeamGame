@@ -23,22 +23,22 @@ HRESULT CStage1::NativeConstruct()
 	if (FAILED(CLevel::NativeConstruct()))
 		return E_FAIL;
 
-	//if (FAILED(Ready_Light())) return E_FAIL;
-	//
-	//if (FAILED(Ready_MapObject()))
-	//{
-	//	return E_FAIL;
-	//}
-	//
-	//if (FAILED(Ready_Player(L"Layer_Silvermane")))
-	//{
-	//	return E_FAIL;
-	//}
+	if (FAILED(Ready_Light())) return E_FAIL;
 
-	//if (FAILED(Ready_Boss(L"Layer_Boss")))
-	//{
-	//	return E_FAIL;
-	//}
+	if (FAILED(Ready_MapObject()))
+	{
+		return E_FAIL;
+	}
+
+	if (FAILED(Ready_Player(L"Layer_Silvermane")))
+	{
+		return E_FAIL;
+	}
+
+	if (FAILED(Ready_Boss(L"Layer_Boss")))
+	{
+		return E_FAIL;
+	}
 
 	//if (FAILED(Ready_Monster(L"Layer_Monster")))
 	//{
@@ -46,14 +46,15 @@ HRESULT CStage1::NativeConstruct()
 	//}
 
 	//Data
-	//if (FAILED(Ready_Data_UI(L"../bin/SaveData/UI/UI.dat")))
-	//{
-	//	return E_FAIL;
-	//}
-	//if (FAILED(Ready_Data_Effect(L"../bin/SaveData/Effect/Effect_Explosion.dat")))
-	//{
-	//	return E_FAIL;
-	//}
+	if (FAILED(Ready_Data_UI(L"../bin/SaveData/UI/UI.dat")))
+	{
+		return E_FAIL;
+	}
+	
+	if (FAILED(Ready_Data_Effect(L"../bin/SaveData/Effect/Effect_Explosion.dat")))
+	{
+		return E_FAIL;
+	}
 
 	if (FAILED(Ready_UI(L"Layer_UI")))
 	{

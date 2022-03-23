@@ -20,6 +20,8 @@ HRESULT CShieldBreaker::NativeConstruct_Prototype()
 	if (FAILED(__super::NativeConstruct_Prototype()))
 		return E_FAIL;
 
+	XMStoreFloat4x4(&m_matPivot, XMMatrixIdentity());
+	
 	m_iObectTag = (_uint)GAMEOBJECT::WEAPON_MIDBOSS;
 	m_eType = EType::Hammer_2H;
 	m_wstrName = L"ShieldBreaker";
@@ -49,6 +51,14 @@ _int CShieldBreaker::Tick(_double TimeDelta)
 	Attach_FixedBone(TimeDelta);
 	Attach_Owner(TimeDelta);
 	
+	if (nullptr != m_pCollider)
+	{
+		m_pCollider->Tick(TimeDelta);
+	}
+
+	_matrix matPivot = XMMatrixRotationY(XMConvertToRadians(90.f)) * XMMatrixTranslation(0.f, 0.f, 1.f);
+	m_pCollider->setPivotMatrix(matPivot);
+
 	return _int();
 }
 
@@ -58,7 +68,7 @@ _int CShieldBreaker::LateTick(_double TimeDelta)
 		return -1;
 
 	if(m_pRenderer)
-		m_pRenderer->Add_RenderGroup(CRenderer::RENDER_ALPHA, this);
+		m_pRenderer->Add_RenderGroup(CRenderer::RENDER_NONALPHA, this);
 
 	return _int();
 }
@@ -79,7 +89,7 @@ HRESULT CShieldBreaker::Render()
 
 	for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
 	{
-		m_pModel->SetUp_TextureOnShader("g_DiffuseTexture", i, aiTextureType_DIFFUSE);
+		//m_pModel->SetUp_TextureOnShader("g_DiffuseTexture", i, aiTextureType_DIFFUSE);
 
 		m_pModel->Render(i, 0);
 	}
@@ -97,6 +107,22 @@ HRESULT CShieldBreaker::Ready_Components()
 		return E_FAIL;
 
 	m_pModel->Add_Material(g_pGameInstance->Get_Material(L"MI_2H_hammer_Shieldbreaker"), 0);
+
+
+	CCollider::DESC tColliderDesc;
+	tColliderDesc.isTrigger = true;
+	tColliderDesc.eRigidType = ERigidType::Dynamic;
+	tColliderDesc.pGameObject = this;
+
+	CCapsuleCollider::DESC tCapsuleColliderDesc;
+	tCapsuleColliderDesc.tColliderDesc = tColliderDesc;
+	tCapsuleColliderDesc.fHeight = 0.8f;
+	tCapsuleColliderDesc.fRadius = 0.4f;
+	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_CapsuleCollider", L"Collider", (CComponent**)&m_pCollider, &tCapsuleColliderDesc)))
+		return E_FAIL;
+
+	_matrix matPivot = XMMatrixRotationY(XMConvertToRadians(90.f)) * XMMatrixTranslation(0.f, 0.f, 1.f);
+	m_pCollider->setPivotMatrix(matPivot);
 
 	return S_OK;
 }
@@ -152,6 +178,7 @@ CGameObject* CShieldBreaker::Clone(const _uint _iSceneID, void* pArg)
 
 void CShieldBreaker::Free()
 {
+	Safe_Release(m_pCollider);
 
 	__super::Free();
 }

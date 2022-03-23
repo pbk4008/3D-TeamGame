@@ -7,6 +7,7 @@
 #include "UI_Monster_Level.h"
 #include "UI_Monster_HpBar.h"
 #include "UI_Monster_Name.h"
+#include "UI_Monster_GroggyBar.h"
 
 CUI_Monster_Panel::CUI_Monster_Panel(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
 	:CUI(pDevice,pDeviceContext)
@@ -85,6 +86,16 @@ HRESULT CUI_Monster_Panel::Render()
 void CUI_Monster_Panel::Set_HpBar(_float fMaxHp, _float fHp)
 {
 	m_pUIHpBar->Set_TargetHpBar(fMaxHp, fHp);
+}
+
+void CUI_Monster_Panel::Set_GroggyBar(_float fMaxGroggy, _float fGroggy)
+{
+	m_pUIGroggyBar->Set_TargetGroggyBar(fMaxGroggy, fGroggy);
+}
+
+void CUI_Monster_Panel::Set_BackUIGapY(_float GapY)
+{
+	m_pUIBack->Set_GapY(GapY);
 }
 
 HRESULT CUI_Monster_Panel::Panel_Setting()
@@ -319,12 +330,12 @@ HRESULT CUI_Monster_Panel::Setting_MidBoss()
 		(CGameObject**)&m_pUILevel)))
 		return E_FAIL;
 
-	//MonsterBar Level
+	//MonsterBar HpBar
 	CUI_Monster_HpBar::UIBARDESC Desc3;
 	_tcscpy_s(Desc3.UIDesc.TextureTag, L"Texture_Monster_HpBar");
 	Desc3.UIDesc.IDTag = 14;
 	Desc3.UIDesc.bMinus = true;
-	Desc3.UIDesc.fAngle = 0.42f;
+	Desc3.UIDesc.fAngle = 0.4f;
 	Desc3.UIDesc.fPos = { 0.f, 0.f, 0.f };
 	Desc3.UIDesc.fSize = { 1.f, 1.f };
 	Desc3.iRenderPass = 3;
@@ -346,6 +357,20 @@ HRESULT CUI_Monster_Panel::Setting_MidBoss()
 
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_UI", L"Proto_GameObject_UI_Monster_Name", &Desc4,
 		(CGameObject**)&m_pUIName)))
+		return E_FAIL;
+
+	//MonsterBar GroggyBar
+	CUI_Monster_GroggyBar::UIBARDESC Desc5;
+	_tcscpy_s(Desc5.UIDesc.TextureTag, L"Texture_Monster_HpBar");
+	Desc5.UIDesc.IDTag = 14;
+	Desc5.UIDesc.bMinus = true;
+	Desc5.UIDesc.fAngle = 0.45f;
+	Desc5.UIDesc.fPos = { 0.f, 0.f, 0.f };
+	Desc5.UIDesc.fSize = { 1.f, 1.f };
+	Desc5.iRenderPass = 4;
+
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_UI", L"Proto_GameObject_UI_Monster_GroggyBar", &Desc5,
+		(CGameObject**)&m_pUIGroggyBar)))
 		return E_FAIL;
 
 	return S_OK;
@@ -567,7 +592,7 @@ void CUI_Monster_Panel::Update_Setting_MidBoss(_double TimeDelta)
 	_matrix HpBarmat = XMMatrixIdentity();
 	HpBarmat.r[0] = XMVectorSetX(HpBarmat.r[0], 3.7f);
 	HpBarmat.r[1] = XMVectorSetY(HpBarmat.r[1], 0.40f);
-	HpBarmat.r[3] = { 0.0f, 0.0f, -0.001f, 1.f };
+	HpBarmat.r[3] = { -0.05f, 0.0f, -0.001f, 1.f };
 	HpBarTransform->Set_WorldMatrix(HpBarmat * m_pTransform->Get_WorldMatrix());
 
 	//UI Name
@@ -577,6 +602,14 @@ void CUI_Monster_Panel::Update_Setting_MidBoss(_double TimeDelta)
 	Namemat.r[1] = XMVectorSetY(Namemat.r[1], 0.64f);
 	Namemat.r[3] = { -0.7f, 0.35f, -0.001f, 1.f };
 	NameTransform->Set_WorldMatrix(Namemat * m_pTransform->Get_WorldMatrix());
+
+	//UI GroggyBar
+	CTransform* GroggyBarTransform = (CTransform*)m_pUIGroggyBar->Get_Component(L"Com_Transform");
+	_matrix GroggyBarmat = XMMatrixIdentity();
+	GroggyBarmat.r[0] = XMVectorSetX(GroggyBarmat.r[0], 3.7f);
+	GroggyBarmat.r[1] = XMVectorSetY(GroggyBarmat.r[1], 0.2f);
+	GroggyBarmat.r[3] = { -0.05f, -0.1f, -0.001f, 1.f };
+	GroggyBarTransform->Set_WorldMatrix(GroggyBarmat * m_pTransform->Get_WorldMatrix());
 }
 
 void CUI_Monster_Panel::Update_Setting_EndBoss(_double TimeDelta)

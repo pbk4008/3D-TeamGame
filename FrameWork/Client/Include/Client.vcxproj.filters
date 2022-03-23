@@ -340,9 +340,6 @@
     <Filter Include="02.GameObject\03.Character\02.Boss\00.MiddleBoss\State\03.Turn">
       <UniqueIdentifier>{f2df4087-aee9-4ef4-bcdf-ddd10c0ac559}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObject\03.Character\02.Boss\00.MiddleBoss\State\04.Chase">
-      <UniqueIdentifier>{9ca0b922-5493-4c13-b374-4312bd2f3120}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObject\05.UI\01.UI_Ingame\01.Meter\02.Monster\04.Name">
       <UniqueIdentifier>{f93eb3ac-c59a-4020-8040-bc1b1ca22d26}</UniqueIdentifier>
     </Filter>
@@ -450,6 +447,18 @@
     </Filter>
     <Filter Include="02.GameObject\05.UI\01.UI_Ingame\01.Meter\05.Tutorial\01.SideTutorial\01.Font">
       <UniqueIdentifier>{bc016171-dd24-4100-ae51-f14583cc3157}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\02.Boss\00.MiddleBoss\State\04.Death">
+      <UniqueIdentifier>{9ca0b922-5493-4c13-b374-4312bd2f3120}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\02.Boss\00.MiddleBoss\State\05.Stun">
+      <UniqueIdentifier>{2a308277-84e1-4f4f-afc1-cfdeb29f6ae2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\02.Boss\00.MiddleBoss\State\06.Dash">
+      <UniqueIdentifier>{4baaba8b-5237-43af-afef-9920e42133bd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.UI\01.UI_Ingame\01.Meter\02.Monster\05.Groggy">
+      <UniqueIdentifier>{de4559b8-3cc3-4e19-a28c-9e4004bf6722}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -1119,6 +1128,15 @@
     <ClInclude Include="..\Headers\UI_Tuto_Font.h">
       <Filter>02.GameObject\05.UI\01.UI_Ingame\01.Meter\05.Tutorial\01.SideTutorial\01.Font</Filter>
     </ClInclude>
+    <ClInclude Include="..\Headers\MidBoss_Death.h">
+      <Filter>02.GameObject\03.Character\02.Boss\00.MiddleBoss\State\04.Death</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\MidBoss_Stun.h">
+      <Filter>02.GameObject\03.Character\02.Boss\00.MiddleBoss\State\05.Stun</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\UI_Monster_GroggyBar.h">
+      <Filter>02.GameObject\05.UI\01.UI_Ingame\01.Meter\02.Monster\05.Groggy</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -1762,6 +1780,15 @@
     </ClCompile>
     <ClCompile Include="..\Codes\UI_Tuto_Font.cpp">
       <Filter>02.GameObject\05.UI\01.UI_Ingame\01.Meter\05.Tutorial\01.SideTutorial\01.Font</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\MidBoss_Death.cpp">
+      <Filter>02.GameObject\03.Character\02.Boss\00.MiddleBoss\State\04.Death</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\MidBoss_Stun.cpp">
+      <Filter>02.GameObject\03.Character\02.Boss\00.MiddleBoss\State\05.Stun</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\UI_Monster_GroggyBar.cpp">
+      <Filter>02.GameObject\05.UI\01.UI_Ingame\01.Meter\02.Monster\05.Groggy</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
