@@ -56,7 +56,7 @@ HRESULT C1H_SwordAttackNormalR1_01::EnterState()
 	if (FAILED(m_pAnimationController->SetUp_NextAnimation("SK_Silvermane.ao|A_1H_Sword_Attack_Normal_R1_01", false)))
 		return E_FAIL;
 	m_pAnimationController->Set_RootMotion(true, true);
-	if (!m_pSilvermane->Is_EquipWeapon())
+	if (!m_pSilvermane->IsEquipWeapon())
 	{
 		m_pSilvermane->Set_EquipWeapon(true);
 		CHierarchyNode* pWeaponBone = m_pModel->Get_BoneMatrix("weapon_r");

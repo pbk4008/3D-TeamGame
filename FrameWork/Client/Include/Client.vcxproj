@@ -299,6 +299,7 @@
     <ClInclude Include="..\Headers\Environment.h" />
     <ClInclude Include="..\Headers\Fury.h" />
     <ClInclude Include="..\Headers\JumpNode.h" />
+    <ClInclude Include="..\Headers\JumpTrigger.h" />
     <ClInclude Include="..\Headers\Level_Logo.h" />
     <ClInclude Include="..\Headers\Loader.h" />
     <ClInclude Include="..\Headers\Loading.h" />
@@ -307,7 +308,9 @@
     <ClInclude Include="..\Headers\MainCamera_Ortho.h" />
     <ClInclude Include="..\Headers\MidBoss_Attack.h" />
     <ClInclude Include="..\Headers\MidBoss_BattleCry.h" />
+    <ClInclude Include="..\Headers\MidBoss_Death.h" />
     <ClInclude Include="..\Headers\MidBoss_Rage.h" />
+    <ClInclude Include="..\Headers\MidBoss_Stun.h" />
     <ClInclude Include="..\Headers\MidBoss_Turn.h" />
     <ClInclude Include="..\Headers\Monster_Bastion_2HSword.h" />
     <ClInclude Include="..\Headers\Monster_Bastion_Healer.h" />
@@ -380,6 +383,7 @@
     <ClInclude Include="..\Headers\Treasure_Chest.h" />
     <ClInclude Include="..\Headers\UI_Ingame.h" />
     <ClInclude Include="..\Headers\UI_Monster_Back.h" />
+    <ClInclude Include="..\Headers\UI_Monster_GroggyBar.h" />
     <ClInclude Include="..\Headers\UI_Monster_HpBar.h" />
     <ClInclude Include="..\Headers\UI_Monster_Level.h" />
     <ClInclude Include="..\Headers\UI_Monster_Name.h" />
@@ -506,13 +510,16 @@
     <ClCompile Include="..\Codes\Crawler_Walk.cpp" />
     <ClCompile Include="..\Codes\EarthAberrant_Pick.cpp" />
     <ClCompile Include="..\Codes\Fury.cpp" />
+    <ClCompile Include="..\Codes\JumpTrigger.cpp" />
     <ClCompile Include="..\Codes\MeshLoader.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\Codes\MidBoss_Attack.cpp" />
     <ClCompile Include="..\Codes\MidBoss_BattleCry.cpp" />
     <ClCompile Include="..\Codes\JumpNode.cpp" />
+    <ClCompile Include="..\Codes\MidBoss_Death.cpp" />
     <ClCompile Include="..\Codes\MidBoss_Rage.cpp" />
+    <ClCompile Include="..\Codes\MidBoss_Stun.cpp" />
     <ClCompile Include="..\Codes\MidBoss_Turn.cpp" />
     <ClCompile Include="..\Codes\Monster_Bastion_2HSword.cpp" />
     <ClCompile Include="..\Codes\Camera_Silvermane.cpp" />
@@ -596,6 +603,7 @@
     <ClCompile Include="..\Codes\Treasure_Chest.cpp" />
     <ClCompile Include="..\Codes\UI_Ingame.cpp" />
     <ClCompile Include="..\Codes\UI_Monster_Back.cpp" />
+    <ClCompile Include="..\Codes\UI_Monster_GroggyBar.cpp" />
     <ClCompile Include="..\Codes\UI_Monster_HpBar.cpp" />
     <ClCompile Include="..\Codes\UI_Monster_Level.cpp" />
     <ClCompile Include="..\Codes\UI_Monster_Name.cpp" />

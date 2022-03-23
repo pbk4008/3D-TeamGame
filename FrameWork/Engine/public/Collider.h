@@ -31,6 +31,8 @@ protected:
 	explicit CCollider(const CCollider& _rhs);
 	virtual ~CCollider() = default;
 
+public: void			Remove_Actor();
+
 public:
 	virtual HRESULT NativeConstruct_Prototype() override;
 	virtual HRESULT NativeConstruct(void* _pArg = nullptr) override;

@@ -1,0 +1,61 @@
+#pragma once
+
+#ifndef UI_Monster_GroggyBar_h__
+#define UI_Monster_GroggyBar_h__
+
+#include "UI_Monster_Panel.h"
+
+BEGIN(Engine)
+class CVIBuffer_Trapezium;
+class CTexture;
+class CRenderer;
+class CTransform;
+END
+
+BEGIN(Client)
+class CUI_Monster_GroggyBar final : public CUI_Monster_Panel
+{
+public:
+	typedef struct UIBar
+	{
+		CUI::UIDESC UIDesc;
+		_uint iRenderPass;
+	}UIBARDESC;
+private:
+	explicit CUI_Monster_GroggyBar(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);
+	explicit CUI_Monster_GroggyBar(const CUI_Monster_Panel& rhs);
+	virtual ~CUI_Monster_GroggyBar() = default;
+
+public:
+	virtual HRESULT NativeConstruct_Prototype() override;
+	virtual HRESULT NativeConstruct(const _uint _iSceneID, void* pArg) override;
+	virtual _int Tick(_double TimeDelta) override;
+	virtual _int LateTick(_double TimeDelta) override;
+	virtual HRESULT Render() override;
+
+public:
+	void Set_UIDesc(UIBARDESC Desc) { m_UIBarDesc = Desc; }
+	UIBARDESC Get_UIDesc() { return m_UIBarDesc; }
+
+public:
+	void Set_TargetGroggyBar(_float fMaxGroggy, _float fGroggy);
+
+private:
+	UIBARDESC m_UIBarDesc;
+	_float m_fGapX = 0.f;
+	_float m_fGapY = 0.f;
+
+	_float m_fTargetMaxGroggy = 0.f;
+	_float m_fTargetGroggy = 0.f;
+
+private:
+	virtual HRESULT SetUp_Components();
+
+public:
+	static CUI_Monster_GroggyBar* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);
+	virtual CGameObject* Clone(const _uint _iSceneID, void* pArg) override;
+	virtual void Free() override;
+};
+
+END
+#endif // UI_Monster_GroggyBar_h__

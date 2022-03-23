@@ -97,14 +97,14 @@ HRESULT CJumpNode::Ready_Components()
 	tTransformDesc.fSpeedPerSec = 0.f;
 	tTransformDesc.fRotationPerSec = 0.f;
 	m_pTransform->Set_TransformDesc(tTransformDesc);
-	m_pTransform->Set_State(CTransform::STATE_POSITION, XMVectorSet(10.f, 4.f, 10.f, 1.f));
+	m_pTransform->Set_State(CTransform::STATE_POSITION, XMVectorSet(25.f, 5.f, 84.f, 1.f));
 
-	if (FAILED(SetUp_Components(m_iSceneID, L"Model_JumpNode", L"Model", (CComponent**)&m_pModel)))
+	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Model_JumpNode", L"Model", (CComponent**)&m_pModel)))
 		return E_FAIL;
-	_matrix matPivot = XMMatrixScaling(0.01f, 0.01f, 0.01f);
+	_matrix matPivot = XMMatrixScaling(0.008f, 0.008f, 0.008f);
 	m_pModel->Set_PivotMatrix(matPivot);
 
-	if (FAILED(SetUp_Components(m_iSceneID, L"Proto_Component_AnimationController", L"AnimationController", (CComponent**)&m_pAnimationController)))
+	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_AnimationController", L"AnimationController", (CComponent**)&m_pAnimationController)))
 		return E_FAIL;
 	m_pAnimationController->Set_GameObject(this);
 	m_pAnimationController->Set_Model(m_pModel);
@@ -115,7 +115,7 @@ HRESULT CJumpNode::Ready_Components()
 	ZeroMemory(&tColliderDesc, sizeof(CRay_Collider::COLLIDERDESC));
 	tColliderDesc.vScale = { 2.f, 4.f, 2.f };
 	tColliderDesc.vPosition = { 0.f, 2.f, 0.f };
-	if (FAILED(SetUp_Components(m_iSceneID, L"Proto_Component_RayCollider", L"Collider", (CComponent**)&m_pCollider, &tColliderDesc)))
+	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_RayCollider", L"Collider", (CComponent**)&m_pCollider, &tColliderDesc)))
 		return E_FAIL;
 
 	return S_OK;

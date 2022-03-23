@@ -106,7 +106,7 @@ _int CShield_Block::KeyCheck(const _double& _dDeltaTime)
 		}
 
 
-		if (m_pSilvermane->Is_EquipShield())
+		if (m_pSilvermane->IsEquipShield())
 		{
 			if (g_pGameInstance->getkeyPress(DIK_W))
 			{

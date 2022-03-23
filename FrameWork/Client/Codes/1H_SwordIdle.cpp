@@ -80,16 +80,7 @@ _int C1H_SwordIdle::KeyCheck(const _double& _dDeltaTime)
 	if (NO_EVENT != iProgress)
 		return iProgress;
 
-	if (g_pGameInstance->getkeyDown(DIK_COLON))
-	{
-		if (m_pSilvermane->Change_Weapon(L"Needle"))
-		{
-			if (FAILED(m_pStateController->Change_State(L"1H_SwordEquipOn")))
-				return E_FAIL;
-			return STATE_CHANGE;
-		}
-	}
-	else if (g_pGameInstance->getkeyDown(DIK_SEMICOLON))
+	if (g_pGameInstance->getkeyDown(DIK_SEMICOLON))
 	{
 		if (m_pSilvermane->Change_Weapon(L"Fury"))
 		{
@@ -154,7 +145,7 @@ _int C1H_SwordIdle::KeyCheck(const _double& _dDeltaTime)
 			g_pGameInstance->getkeyPress(DIK_A) ||
 			g_pGameInstance->getkeyPress(DIK_D))
 		{
-			if (!m_pSilvermane->Is_EquipWeapon())
+			if (!m_pSilvermane->IsEquipWeapon())
 			{
 				if (FAILED(m_pStateController->Change_State(L"SprintFwdStart")))
 					return -1;

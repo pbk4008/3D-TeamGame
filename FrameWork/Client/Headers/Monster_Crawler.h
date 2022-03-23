@@ -13,13 +13,24 @@ class CMonster_Crawler final : public CActor
 {
 public:
 	enum MON_STATE {
-		HEAD ,ATTACK_R1, DEATH, FLINCH_LEFT, FLINCH_RIGHT, IDLE, KNOCKBACK_END, KNOCKBACK_START, RICOCHET,
-		WALK_BWD, WALK_FWD, WALK_LEFT, WALK_RIGHT , MON_STATE_END
+		HEAD ,
+		ATTACK_R1,
+		DEATH,
+		FLINCH_LEFT, FLINCH_RIGHT,
+		IDLE,
+		KNOCKBACK_END, KNOCKBACK_START,
+		RICOCHET,
+		WALK_BWD, WALK_FWD,
+		WALK_LEFT, WALK_RIGHT,
+		MON_STATE_END
 	};
 private:
 	explicit CMonster_Crawler(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext);
 	explicit CMonster_Crawler(const CMonster_Crawler& _rhs);
 	virtual ~CMonster_Crawler() = default;
+
+public: _float			Get_Hp() { return m_fHp; }
+public: void			Clear_Physix();
 
 public:
 	virtual HRESULT NativeConstruct_Prototype() override;
@@ -28,21 +39,30 @@ public:
 	virtual _int LateTick(_double _dDeltaTime) override;
 	virtual HRESULT Render() override;
 
+private: void	OnTriggerEnter(CCollision& collision) override;
+
+private:
+	const _int Fall(const _double& _dDeltaTime);
+
 private:
 	virtual HRESULT SetUp_Components();
+	HRESULT	Ready_Weapone();
 	HRESULT Set_Animation_FSM();
 	HRESULT Set_State_FSM();
 
 private:
-	CModel* m_pModelCom = nullptr;
-	CAnimator* m_pAnimatorCom = nullptr;
-	CStateController* m_pStateController = nullptr;
-
-	class CUI_Monster_Panel* m_pPanel = nullptr;
+	CModel*						m_pModelCom = nullptr;
+	CAnimator*					m_pAnimatorCom = nullptr;
+	CStateController*			m_pStateController = nullptr;
+	CCharacterController*		m_pCharacterController = nullptr;
+	class CUI_Monster_Panel*	m_pPanel = nullptr;
+	CSphereCollider*			m_pCollider = nullptr;
+	
 
 private:
-	_float m_fHp = 10.f;
-	_float m_fMaxHp = 10.f;
+	_float	m_fHp = 10.f;
+	_float	m_fMaxHp = 10.f;
+	_bool	m_isFall = true;
 
 public:
 	static CMonster_Crawler* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext);

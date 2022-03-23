@@ -27,7 +27,8 @@ _int C1H_SwordJogBwd::Tick(const _double& _dDeltaTime)
 	if (NO_EVENT > iProgress)
 		return iProgress;
 
-	m_pTransform->Go_BackWard(_dDeltaTime * 0.2f);
+	//m_pTransform->Go_BackWard(_dDeltaTime * 0.2f);
+	m_pSilvermane->Add_Velocity(CTransform::STATE_LOOK, -_dDeltaTime);
 
 	return _int();
 }

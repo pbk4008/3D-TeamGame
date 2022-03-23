@@ -20,6 +20,16 @@ CMonster_Crawler::CMonster_Crawler(const CMonster_Crawler& _rhs)
 {
 }
 
+void CMonster_Crawler::Clear_Physix()
+{
+
+	m_pCollider->Remove_Actor();
+	m_pCharacterController->Remove_CCT();
+	Safe_Release(m_pCollider);
+	Safe_Release(m_pCharacterController);
+
+}
+
 HRESULT CMonster_Crawler::NativeConstruct_Prototype()
 {
 	if (FAILED(__super::NativeConstruct_Prototype()))
@@ -31,95 +41,77 @@ HRESULT CMonster_Crawler::NativeConstruct_Prototype()
 
 HRESULT CMonster_Crawler::NativeConstruct(const _uint _iSceneID, void* _pArg)
 {
-	if (FAILED(__super::NativeConstruct(_iSceneID, _pArg)))
-	{
-		return E_FAIL;
-	}
+	if (FAILED(__super::NativeConstruct(_iSceneID, _pArg)))	return E_FAIL;
+	if (FAILED(SetUp_Components())) return E_FAIL;
+	if (FAILED(Set_Animation_FSM())) return E_FAIL;
+	if (FAILED(Set_State_FSM())) return E_FAIL;
+	if (FAILED(Ready_Weapone())) return E_FAIL;
 
-	if (FAILED(SetUp_Components()))
-	{
-		return E_FAIL;
-	}
-
-	if (FAILED(Set_Animation_FSM()))
-	{
-		return E_FAIL;
-	}
-
-	if (FAILED(Set_State_FSM()))
-	{
-		return E_FAIL;
-	}
-
-
-	_vector Pos = { 0.f, 1.f, 3.f, 1.f };
-	m_pTransform->Set_State(CTransform::STATE_POSITION, Pos);
 
 
 	//MonsterBar Panel
-	CUI_Monster_Panel::PANELDESC Desc;
-	Desc.pTargetTransform = m_pTransform;
-	Desc.iEnemyTag = CUI_Monster_Panel::Enemy::CRAWLER;
+	//CUI_Monster_Panel::PANELDESC Desc;
+	//Desc.pTargetTransform = m_pTransform;
+	//Desc.iEnemyTag = CUI_Monster_Panel::Enemy::CRAWLER;
 
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_UI", L"Proto_GameObject_UI_Monster_Panel", &Desc,
-		(CGameObject**)&m_pPanel)))
-		return E_FAIL;
+	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_UI", L"Proto_GameObject_UI_Monster_Panel", &Desc,
+	//	(CGameObject**)&m_pPanel)))
+	//	return E_FAIL;
 
-	m_pPanel->Set_TargetWorldMatrix(m_pTransform->Get_WorldMatrix());
+	//m_pPanel->Set_TargetWorldMatrix(m_pTransform->Get_WorldMatrix());
 
 	return S_OK;
 }
 
 _int CMonster_Crawler::Tick(_double _dDeltaTime)
-{
-	if (0 > __super::Tick(_dDeltaTime))
-	{
-		return -1;
-	}
-	
-	m_pPanel->Set_TargetWorldMatrix(m_pTransform->Get_WorldMatrix());
+{	
+	m_pTransform->Set_Velocity(XMVectorZero());
 
-	m_pModelCom->Update_CombinedTransformationMatrix(_dDeltaTime);
+	//m_pPanel->Set_TargetWorldMatrix(m_pTransform->Get_WorldMatrix());
+
+	//m_pModelCom->Update_CombinedTransformationMatrix(_dDeltaTime);
 	//m_pAnimControllerCom->Tick(_dDeltaTime);
 	_int iProgress = m_pStateController->Tick(_dDeltaTime);
 	if (NO_EVENT != iProgress)
-	{
 		return iProgress;
-	}
 
 	if (g_pGameInstance->getkeyDown(DIK_NUMPAD5))
 	{
 		--m_fHp;
-		m_pPanel->Set_HpBar(m_fMaxHp, m_fHp);
+		//m_pPanel->Set_HpBar(m_fMaxHp, m_fHp);
 		cout << m_fHp << endl;
 
 		m_pStateController->Change_State(L"Flinch_Left");
 	}
 	
-	if (0.f >= m_fHp)
-	{
-		m_pStateController->Change_State(L"Death");
-	}
+	m_pCollider->Tick(_dDeltaTime);
 
-	m_pPanel->Set_TargetWorldMatrix(m_pTransform->Get_WorldMatrix());
-	
+	Fall(_dDeltaTime);
+	m_pCharacterController->Move(_dDeltaTime, m_pTransform->Get_Velocity());
+
+
+	//if (0.f >= m_fHp)
+	//{
+	//	m_pStateController->Change_State(L"Death");
+	//}
+
+	//m_pPanel->Set_TargetWorldMatrix(m_pTransform->Get_WorldMatrix());
+
 	return 0;
 }
 
 _int CMonster_Crawler::LateTick(_double _dDeltaTime)
 {
-	if (0 > __super::LateTick(_dDeltaTime))
-	{
-		return -1;
-	}
-	
+	m_pRenderer->Add_RenderGroup(CRenderer::RENDER_NONALPHA, this);
+
+	m_pCharacterController->Update_OwnerTransform();
+
 	_int iProgress = m_pStateController->LateTick(_dDeltaTime);
 	if (NO_EVENT != iProgress)
 	{
 		return iProgress;
 	}
 
-	m_pRenderer->Add_RenderGroup(CRenderer::RENDER_ALPHA, this);
 
 	return 0;
 }
@@ -148,8 +140,38 @@ HRESULT CMonster_Crawler::Render()
 	return S_OK;
 }
 
+void CMonster_Crawler::OnTriggerEnter(CCollision& collision)
+{
+	if ((_uint)GAMEOBJECT::WEAPON == collision.pGameObject->getTag() && g_pObserver->IsAttack() && m_fHp > 0)
+	{
+		m_fHp -= 2;
+		m_pStateController->Change_State(L"Flinch_Left");
+		cout << "히트해부렀으" << endl;
+	}
+
+}
+
+const _int CMonster_Crawler::Fall(const _double& _dDeltaTime)
+{
+	if (m_isFall)
+	{
+		_vector svPos = m_pTransform->Get_State(CTransform::STATE_POSITION);
+		if (-10.f < XMVectorGetY(svPos))
+		{
+			m_pTransform->Add_Velocity(XMVectorSet(0.f, -9.8f * (_float)_dDeltaTime, 0.f, 0.f));
+		}
+	}
+	return _int();
+}
+
 HRESULT CMonster_Crawler::SetUp_Components()
 {
+	//_float x = _float(rand()% 3);
+	_float z = _float(rand()% 10) + 3.f;
+
+	_vector Pos = { 0.f, 10.f, z, 1.f };
+	m_pTransform->Set_State(CTransform::STATE_POSITION, Pos);
+
 	CTransform::TRANSFORMDESC Desc;
 	Desc.fSpeedPerSec = 1.f;
 	Desc.fRotationPerSec = XMConvertToRadians(60.f);
@@ -169,15 +191,50 @@ HRESULT CMonster_Crawler::SetUp_Components()
 
 	tDesc.pModel = m_pModelCom;
 	tDesc.pTransform = m_pTransform;
+	tDesc.eType = CAnimationController::EType::CharacterController;
 
 	if (FAILED(__super::SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_Animator", L"Com_Animator", (CComponent**)&m_pAnimatorCom, &tDesc)))
-	{
 		return E_FAIL;
-	}
+
+	CCharacterController::DESC tCCTDesc;
+	tCCTDesc.fHeight = 1.f;
+	tCCTDesc.fRadius = 0.5f;
+	tCCTDesc.fContactOffset = tCCTDesc.fRadius * 0.1f;
+	tCCTDesc.fStaticFriction = 0.5f;
+	tCCTDesc.fDynamicFriction = 0.5f;
+	tCCTDesc.fRestitution = 0.f;
+	tCCTDesc.pGameObject = this;
+	tCCTDesc.vPosition = { 0.f, 0.f, 0.f };
+
+	if (FAILED(__super::SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_CharacterController", L"CharacterController", (CComponent**)&m_pCharacterController, &tCCTDesc)))
+		return E_FAIL;
+	m_pCharacterController->setOwnerTransform(m_pTransform);
 
 	if (FAILED(__super::SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_StateController", L"Com_StateController", (CComponent**)&m_pStateController)))
 		return E_FAIL;
 	m_pStateController->Set_GameObject(this);
+
+
+	return S_OK;
+}
+
+HRESULT CMonster_Crawler::Ready_Weapone()
+{
+	CCollider::DESC tColliderDesc;
+	tColliderDesc.isTrigger = true;
+	tColliderDesc.eRigidType = ERigidType::Dynamic;
+	tColliderDesc.pGameObject = this;
+
+	CSphereCollider::DESC tSphereCol;
+	tSphereCol.tColliderDesc = tColliderDesc;
+	tSphereCol.fRadius = 0.3f;
+	if (FAILED(__super::SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_SphereCollider", L"Collider", (CComponent**)&m_pCollider, &tSphereCol)))
+		return E_FAIL;
+
+	_matrix smatPviot = XMMatrixRotationY(XMConvertToRadians(90.f)) * XMMatrixTranslation(0.f, 0.5f, 0.5f);
+	m_pCollider->setPivotMatrix(smatPviot);
+
+	m_pCollider->setActive(false);
 
 	return S_OK;
 }
@@ -221,13 +278,11 @@ HRESULT CMonster_Crawler::Set_Animation_FSM()
 	if (FAILED(m_pAnimatorCom->Insert_Animation(KNOCKBACK_END, KNOCKBACK_START, pAnim, true, true, false, ERootOption::XYZ, true)))
 		return E_FAIL;
 
-	if (FAILED(m_pAnimatorCom->Connect_Animation(IDLE, KNOCKBACK_END, false)))
-		return E_FAIL;
+	if (FAILED(m_pAnimatorCom->Connect_Animation(IDLE, KNOCKBACK_END, false)))	return E_FAIL;
+	if (FAILED(m_pAnimatorCom->Connect_Animation(IDLE, ATTACK_R1, true)))	return E_FAIL;
 
 
-	m_pAnimatorCom->Set_UpAutoChangeAnimation(KNOCKBACK_START, KNOCKBACK_END);
-
-
+	m_pAnimatorCom->Insert_AnyEntryAnimation(IDLE);
 	m_pAnimatorCom->Insert_AnyEntryAnimation(WALK_FWD);
 	m_pAnimatorCom->Insert_AnyEntryAnimation(ATTACK_R1);
 	m_pAnimatorCom->Insert_AnyEntryAnimation(DEATH);
@@ -299,6 +354,12 @@ CGameObject* CMonster_Crawler::Clone(const _uint _iSceneID, void* _pArg)
 
 void CMonster_Crawler::Free()
 {
+	if (m_pCollider != nullptr && m_pCharacterController != nullptr)
+	{
+		Safe_Release(m_pCollider);
+		Safe_Release(m_pCharacterController);
+	}
+
 	Safe_Release(m_pPanel);
 	Safe_Release(m_pStateController);
 	Safe_Release(m_pAnimatorCom);

@@ -55,7 +55,7 @@ HRESULT C2H_HammerAttackR2_01::EnterState()
 	if (FAILED(m_pAnimationController->SetUp_NextAnimation("SK_Silvermane.ao|A_2H_Hammer_Attack_R2_01", false)))
 		return E_FAIL;
 	m_pAnimationController->Set_RootMotion(true, true);
-	if (!m_pSilvermane->Is_EquipWeapon())
+	if (!m_pSilvermane->IsEquipWeapon())
 	{
 		m_pSilvermane->Set_EquipWeapon(true);
 		m_pSilvermane->Set_WeaponFixedBone("weapon_r");

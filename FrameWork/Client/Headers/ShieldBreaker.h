@@ -24,7 +24,8 @@ private:
 	_int Attach_Owner(const _double& Timedelta);
 
 private:
-	_matrix m_smatPivot = XMMatrixIdentity();
+	_float4x4 m_matPivot;
+	CCapsuleCollider* m_pCollider = nullptr;
 
 public:
 	static CShieldBreaker* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);

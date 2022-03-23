@@ -2,6 +2,7 @@
 
 CComponent::CComponent(ID3D11Device * pDevice, ID3D11DeviceContext * pDeviceContext)
 	: m_pDevice(pDevice)
+	, m_bActive(true)
 	, m_pDeviceContext(pDeviceContext)
 	, m_isCloned(false)
 {
@@ -12,6 +13,7 @@ CComponent::CComponent(ID3D11Device * pDevice, ID3D11DeviceContext * pDeviceCont
 CComponent::CComponent(const CComponent & rhs)
 	: m_pDevice(rhs.m_pDevice)
 	, m_pDeviceContext(rhs.m_pDeviceContext)
+	, m_bActive(rhs.m_bActive)
 	, m_isCloned(true)
 {
 	Safe_AddRef(m_pDevice);

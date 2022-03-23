@@ -20,6 +20,15 @@ CCollider::CCollider(const CCollider& _rhs)
 	//Safe_AddRef(m_pPhsyX);
 }
 
+void CCollider::Remove_Actor()
+{
+	CPhysicsXSystem* phx = GET_INSTANCE(CPhysicsXSystem);
+
+	phx->Remove_Actor(m_pRigidActor);
+
+	RELEASE_INSTANCE(CPhysicsXSystem);
+}
+
 HRESULT CCollider::NativeConstruct_Prototype()
 {
 	if (FAILED(__super::NativeConstruct_Prototype()))
