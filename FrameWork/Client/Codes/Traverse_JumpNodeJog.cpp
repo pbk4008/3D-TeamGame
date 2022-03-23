@@ -48,15 +48,15 @@ _int CTraverse_JumpNodeJog::Tick(const _double& _dDeltaTime)
 			else
 			{
 				if (20 < iCurKeyFrameIndex)
-				{
 					m_pAnimationController->Set_PlaySpeed(0.1f);
-				}
+				else
+					m_pAnimationController->Set_PlaySpeed(8.f);
 			}
 		}
 	}
 	else
 	{
-
+		m_pSilvermane->Set_IsFall(true);
 	}
 
 	if (m_pAnimationController->Is_Finished())
@@ -100,7 +100,7 @@ HRESULT CTraverse_JumpNodeJog::EnterState()
 	XMStoreFloat3(&m_vTargetPos, svTargetPosition);
 	XMStoreFloat3(&m_vDir, XMVector3Normalize(svTargetPosition - m_pTransform->Get_State(CTransform::STATE_POSITION)));
 
-	m_fMoveSpeed = 10.f;
+	m_fMoveSpeed = 30.f;
 	m_pSilvermane->Set_IsFall(false);
 	return S_OK;
 }

@@ -53,12 +53,12 @@ _fvector CClient_Observer::Get_PlayerPos()
 	return vPos;
 }
 
-const _bool CClient_Observer::Get_IsAttack()
+const _bool CClient_Observer::IsAttack()
 {
 	if (!m_pPlayer)
 		return false;
 
-	return m_pPlayer->Get_IsAttack();
+	return m_pPlayer->IsAttack();
 }
 
 const _float CClient_Observer::Get_Dist(_fvector vPos)
@@ -73,6 +73,11 @@ const _float CClient_Observer::Get_Dist(_fvector vPos)
 	_float fDist = XMVectorGetX(XMVector3Length(vPlayer - vPos));
 
 	return fDist;
+}
+
+const _float CClient_Observer::Get_HP()
+{
+	return m_pPlayer->Get_CurrentHp();
 }
 
 const CSilvermane::SCENEMOVEDATA CClient_Observer::Get_SceneMoveData()

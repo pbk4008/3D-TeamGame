@@ -11,6 +11,7 @@ BEGIN(Client)
 class CWeapon;
 class CCamera_Silvermane;
 class CJumpNode;
+class CJumpTrigger;
 
 class CSilvermane final : public CActor
 {
@@ -39,29 +40,37 @@ private:
 	HRESULT Ready_Weapons();
 
 public:
+	virtual void OnCollisionEnter(CCollision& collision) override;
+	virtual void OnCollisionStay(CCollision& collision) override;
+	virtual void OnCollisionExit(CCollision& collision) override;
+	virtual void OnTriggerEnter(CCollision& collision) override;
+	virtual void OnTriggerExit(CCollision& collision) override;
+
+public:
 	CTransform* Get_Transform() const;
 	CModel* Get_Model() const;
 	const _float Get_PlusAngle() const;
 	const _float Get_Angle() const;
 	//플레이어 씬 이동시 다음씬으로 넘어가야 할 데이터 생성 후 밖으로 빼내기
 	const SCENEMOVEDATA Get_SceneMoveData() const;
-	void Set_Move(const _bool _isMove);
-	void Set_TrasceCamera(const _bool _isTraceCamera);
 
 	void Set_IsFall(const _bool _isFall);
 	void Set_IsMove(const _bool _isMove);
 	void Set_IsTrasceCamera(const _bool _isTraceCamera);
-	void Set_IsAttack(const _bool bAttack);
 
 	void Set_Camera(CCamera_Silvermane* _pCamera);
 	void Set_PlusAngle(const _float _fAngle);
-	void Add_PlusAngle(const _float _fDeltaAngle);
+	void Set_Position(const _float3 _vPosition);
 
-	const _bool Get_IsAttack();
+	void Add_PlusAngle(const _float _fDeltaAngle);
+	void Add_Velocity(const CTransform::STATE _eState, const _double& _dDeltaTime);
+
 public: /* For.Weapon */
-	const _bool Is_EquipWeapon() const;
-	const _bool Is_EquipShield() const;
+	const _bool IsEquipWeapon() const;
+	const _bool IsEquipShield() const;
+	const _bool IsAttack();
 	const CWeapon::EType Get_WeaponType() const;
+	void Set_IsAttack(const _bool _isAttack);
 	void Set_EquipWeapon(const _bool _isEquipWeapon);
 	void Set_WeaponFixedBone(const string& _wstrFixedBoneTag);
 	void Set_WeaponFixedBone(CHierarchyNode* _pFixedBone);
@@ -74,11 +83,13 @@ public: /* For.Shield */
 
 public: /* For.JumpNode */
 	CJumpNode* Get_TargetJumpNode() const;
+	CJumpTrigger* Get_TargetJumpTrigger() const;
 	const _bool Raycast_JumpNode(const _double& _dDeltaTime);
 
 private:
 	const _int Trace_CameraLook(const _double& _dDeltaTime);
 	const _int Fall(const _double& _dDeltaTime);
+	const _int KeyCheck(const _double& _dDeltaTime);
 
 private:
 	CModel* m_pModel = nullptr;
@@ -92,7 +103,7 @@ private:
 	_bool m_isTraceCamera = true;
 	_bool m_isAttack = false;
 
-
+	_float m_fMoveSpeed = 0.f;
 	_float m_fAngle = 0.f;
 	_float m_fPlusAngle = 0.f;
 
@@ -105,7 +116,9 @@ private: /* For.Weapon */
 
 private: /* For.JumpNode */
 	CJumpNode* m_pTargetJumpNode = nullptr;
+	CJumpTrigger* m_pTargetJumpTrigger = nullptr;
 	_float m_fJumpNodeLookTime = 0.f;
+	_float m_fJumpTriggerLookTime = 0.f;
 	CTexture*	m_pTexture = nullptr;
 
 public:

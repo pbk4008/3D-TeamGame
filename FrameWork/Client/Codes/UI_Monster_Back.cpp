@@ -47,7 +47,7 @@ HRESULT CUI_Monster_Back::NativeConstruct(const _uint _iSceneID, void* pArg)
 	}
 
 	m_fGapX = 1.f;
-	m_fGapY = 1.f;
+	m_fGapY = 0.63f;
 
 	return S_OK;
 }

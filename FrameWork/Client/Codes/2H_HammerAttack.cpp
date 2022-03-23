@@ -118,7 +118,7 @@ _int C2H_HammerAttack::KeyCheck(const _double& _dDeltaTime)
 				g_pGameInstance->getkeyPress(DIK_A) ||
 				g_pGameInstance->getkeyPress(DIK_D))
 			{
-				if (!m_pSilvermane->Is_EquipWeapon())
+				if (!m_pSilvermane->IsEquipWeapon())
 				{
 					if (FAILED(m_pStateController->Change_State(L"SprintFwdStart")))
 						return -1;

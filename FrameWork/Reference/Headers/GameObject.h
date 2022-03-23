@@ -43,7 +43,7 @@ public:
 	virtual void OnCollisionStay(CCollision& collision);
 	virtual void OnCollisionExit(CCollision& collision);
 	virtual void OnTriggerEnter(CCollision& collision);
-	virtual void OnTriggerStay(CCollision& collision);
+	virtual void OnTriggerStay(CCollision& collision); //Áö±Ý¸ø¾¸
 	virtual void OnTriggerExit(CCollision& collision);
 public:
 	void setActive(_bool bActive);

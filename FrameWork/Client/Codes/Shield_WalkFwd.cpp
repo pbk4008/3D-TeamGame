@@ -22,6 +22,8 @@ _int CShield_WalkFwd::Tick(const _double& _dDeltaTime)
 	if (NO_EVENT > iProgress)
 		return iProgress;
 
+	m_pSilvermane->Add_Velocity(CTransform::STATE_LOOK, _dDeltaTime * 0.5);
+
 	return _int();
 }
 
@@ -49,7 +51,7 @@ HRESULT CShield_WalkFwd::EnterState()
 
 	
 	m_pAnimationController->SetUp_NextAnimation("SK_Silvermane.ao|A_Spectral_Shield_Walk_Fwd_Player", true);
-	m_pAnimationController->Set_RootMotion(true, true, ERootOption::XYZ);
+	m_pAnimationController->Set_RootMotion(true, false, ERootOption::XYZ);
 	
 
 	return S_OK;

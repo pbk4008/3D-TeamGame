@@ -48,7 +48,6 @@ HRESULT C1H_SwordAttack::EnterState()
 	if (FAILED(__super::EnterState()))
 		return E_FAIL;
 
-	g_pObserver->Set_IsAttack(TRUE);
 	//m_pSilvermane->Get_PlayerCamera()->SetShakeInfo(0.6f, 4.f);
 
 	return S_OK;
@@ -59,7 +58,6 @@ HRESULT C1H_SwordAttack::ExitState()
 	if (FAILED(__super::ExitState()))
 		return E_FAIL;
 
-	g_pObserver->Set_IsAttack(FALSE);
 	//m_pSilvermane->Get_PlayerCamera()->SetShakeInfo(0.0f, 0.0f);
 
 	return S_OK;
@@ -121,7 +119,7 @@ _int C1H_SwordAttack::KeyCheck(const _double& _dDeltaTime)
 				g_pGameInstance->getkeyPress(DIK_A) ||
 				g_pGameInstance->getkeyPress(DIK_D))
 			{
-				if (!m_pSilvermane->Is_EquipWeapon())
+				if (!m_pSilvermane->IsEquipWeapon())
 				{
 					if (FAILED(m_pStateController->Change_State(L"SprintFwdStart")))
 						return -1;

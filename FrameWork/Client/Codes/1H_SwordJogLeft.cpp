@@ -27,7 +27,7 @@ _int C1H_SwordJogLeft::Tick(const _double& _dDeltaTime)
 	if (NO_EVENT > iProgress)
 		return iProgress;
 
-	m_pTransform->Go_Left(_dDeltaTime * 0.2f);
+	m_pSilvermane->Add_Velocity(CTransform::STATE_RIGHT, -_dDeltaTime);
 
 	return _int();
 }

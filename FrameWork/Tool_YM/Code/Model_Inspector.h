@@ -63,6 +63,13 @@ public:
 	_int	m_iMonsterIndex = 0;
 	_int	m_iQuestIndex = 0;
 
+	_int	m_iMonster1Index = 0;
+	_int	m_iMonster2Index = 0;
+	_int	m_iMonster3Index = 0;
+	_int	m_iMonster4Index = 0;
+	_int	m_iMonster5Index = 0;
+	_int	m_iMonster6Index = 0;
+
 public:
 	CString m_ModelPosX, m_ModelPosY, m_ModelPosZ;
 	CString m_ModelScaleX, m_ModelScaleY, m_ModelScaleZ;

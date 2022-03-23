@@ -9,6 +9,9 @@
 #include "UI_Tuto_Base.h"
 #include "UI_Tuto_Font.h"
 
+#include "JumpNode.h"
+#include "JumpTrigger.h"
+
 CStage1::CStage1()
 	: m_pTriggerSystem(nullptr)
 {
@@ -31,7 +34,10 @@ HRESULT CStage1::NativeConstruct()
 	{
 		return E_FAIL;
 	}
-
+	if (FAILED(Ready_Trigger_Jump()))
+	{
+		return E_FAIL;
+	}
 	if (FAILED(Ready_Player(L"Layer_Silvermane")))
 	{
 		return E_FAIL;
@@ -45,19 +51,27 @@ HRESULT CStage1::NativeConstruct()
 	//{
 	//	return E_FAIL;
 	//}
-	//Data
-	//if (FAILED(Ready_Data_UI(L"../bin/SaveData/UI/UI.dat")))
+
+	//if (FAILED(Ready_Boss(L"Layer_Boss")))
 	//{
 	//	return E_FAIL;
 	//}
+
+	//Data
+	if (FAILED(Ready_Data_UI(L"../bin/SaveData/UI/UI.dat")))
+	{
+		return E_FAIL;
+	}
+	
 	//if (FAILED(Ready_Data_Effect(L"../bin/SaveData/Effect/Effect_Explosion.dat")))
 	//{
 	//	return E_FAIL;
 	//}
-	//if (FAILED(Ready_UI(L"Layer_UI")))
-	//{
-	//	return E_FAIL;
-	//}
+
+	if (FAILED(Ready_UI(L"Layer_UI")))
+	{
+		return E_FAIL;
+	}
 
 	//m_pTriggerSystem = CTriggerSystem::Create(m_pDevice, m_pDeviceContext, );
 	m_pTriggerSystem = new CTriggerSystem<Client::CStage1>(m_pDevice, m_pDeviceContext);
@@ -189,11 +203,16 @@ HRESULT CStage1::Ready_Monster(const _tchar* LayerTag)
 			return E_FAIL;
 	}
 
-
-
-
 	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Proto_GameObject_Monster_Crawler")))
 	//	return E_FAIL;
+	for (int i = 0; i < 3; ++i)
+	{
+		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Proto_GameObject_Monster_Crawler")))
+			return E_FAIL;
+	}
+
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Monster", L"Monster_Bastion_2HSword")))
+		return E_FAIL;
 	
 	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Proto_GameObject_Monster_EarthAberrant")))
 	//	return E_FAIL;
@@ -201,10 +220,12 @@ HRESULT CStage1::Ready_Monster(const _tchar* LayerTag)
 	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Proto_GameObject_Monster_BronzeAnimus")))
 	//	return E_FAIL;
 
-	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Proto_GameObject_Monster_BronzeAnimus")))
+	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Proto_GameObject_Monster_Bastion_Healer")))
 	//	return E_FAIL;
 
 
+	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Model_Monster_Bastion_Sword")))
+	//	return E_FAIL;
 
 	return S_OK;
 }
@@ -535,6 +556,32 @@ HRESULT CStage1::Ready_Trigger_Quest(const _tchar* pDataFilePath)
 			return E_FAIL;
 		}
 	}
+
+	return S_OK;
+}
+
+HRESULT CStage1::Ready_Trigger_Jump()
+{
+	// 점프 노드들
+	CJumpNode::DESC tJumpNodeDesc;
+	tJumpNodeDesc.vPosition = { 25.f, 5.f, 84.f };
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_JumpNode", L"Proto_GameObject_JumpNode", &tJumpNodeDesc)))
+		return E_FAIL;
+	tJumpNodeDesc.vPosition = { -176.f, 50.f, 335.f };
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_JumpNode", L"Proto_GameObject_JumpNode", &tJumpNodeDesc)))
+		return E_FAIL;
+
+	// 점프 트리거들
+	CJumpTrigger::DESC tJumpTriggerDesc;
+	tJumpTriggerDesc.vPosition = { -25.f, 6.f, 100.f };
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_JumpTrigger", L"Proto_GameObject_JumpTrigger", &tJumpTriggerDesc)))
+		return E_FAIL;
+	tJumpTriggerDesc.vPosition = { -47.f, 5.f, 81.f };
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_JumpTrigger", L"Proto_GameObject_JumpTrigger", &tJumpTriggerDesc)))
+		return E_FAIL;
+	tJumpTriggerDesc.vPosition = { -136.f, 18.f, 236.f };
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_JumpTrigger", L"Proto_GameObject_JumpTrigger", &tJumpTriggerDesc)))
+		return E_FAIL;
 
 	return S_OK;
 }

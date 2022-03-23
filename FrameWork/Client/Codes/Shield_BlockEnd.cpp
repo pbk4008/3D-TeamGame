@@ -27,7 +27,7 @@ _int CShield_BlockEnd::Tick(const _double& _dDeltaTime)
 
 	if (m_pAnimationController->Is_Finished())
 	{
-		if (m_pSilvermane->Is_EquipWeapon())
+		if (m_pSilvermane->IsEquipWeapon())
 		{
 			switch (m_pSilvermane->Get_WeaponType())
 			{
@@ -114,7 +114,7 @@ _int CShield_BlockEnd::KeyCheck(const _double& _dDeltaTime)
 			g_pGameInstance->getkeyPress(DIK_D) ||
 			g_pGameInstance->getkeyPress(DIK_A))
 		{
-			if (m_pSilvermane->Is_EquipWeapon())
+			if (m_pSilvermane->IsEquipWeapon())
 			{
 				switch (m_pSilvermane->Get_WeaponType())
 				{

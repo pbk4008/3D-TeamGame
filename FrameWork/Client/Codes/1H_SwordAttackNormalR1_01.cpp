@@ -56,7 +56,7 @@ HRESULT C1H_SwordAttackNormalR1_01::EnterState()
 	if (FAILED(m_pAnimationController->SetUp_NextAnimation("SK_Silvermane.ao|A_1H_Sword_Attack_Normal_R1_01", false)))
 		return E_FAIL;
 	m_pAnimationController->Set_RootMotion(true, true);
-	if (!m_pSilvermane->Is_EquipWeapon())
+	if (!m_pSilvermane->IsEquipWeapon())
 	{
 		m_pSilvermane->Set_EquipWeapon(true);
 		CHierarchyNode* pWeaponBone = m_pModel->Get_BoneMatrix("weapon_r");
@@ -85,6 +85,7 @@ _int C1H_SwordAttackNormalR1_01::KeyCheck(const _double& _dDeltaTime)
 	
 	if (m_iCutIndex < m_pAnimationController->Get_CurKeyFrameIndex())
 	{
+		g_pObserver->Set_IsAttack(false);
 		if (g_pGameInstance->getMouseKeyDown(CInputDev::MOUSESTATE::MB_LBUTTON))
 		{
 			m_pStateController->Change_State(L"1H_SwordAttackNormalR1_02");
