@@ -1,6 +1,6 @@
 #include "pch.h"
 #include "Crawler_Idle.h"
-
+#include "Monster_Crawler.h"
 #include "Animation.h"
 
 CCrawler_Idle::CCrawler_Idle(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
@@ -39,6 +39,8 @@ _int CCrawler_Idle::Tick(const _double& TimeDelta)
 		m_pStateController->Change_State(L"Walk");
 		cout << "°È±â·Î º¯°æ" << endl;
 	}
+	else
+		m_pStateController->Change_State(L"Idle");
 
 	return _int();
 }
@@ -68,6 +70,7 @@ HRESULT CCrawler_Idle::EnterState()
 	_vector vec = { 0.f, 1.f, 0.f,0.f };
 	m_pTransform->SetUp_Rotation(vec, (XMConvertToRadians(180.f)));
 
+	m_pAnimator->Change_AnyEntryAnimation(CMonster_Crawler::MON_STATE::IDLE);
 	return S_OK;
 }
 

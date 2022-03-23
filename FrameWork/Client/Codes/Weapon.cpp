@@ -95,6 +95,16 @@ void CWeapon::Set_FixedBone(CHierarchyNode* _pFixedBone)
 	m_pFixedBone = _pFixedBone;
 }
 
+void CWeapon::Set_IsAttack(const _bool _isAttack)
+{
+	m_isAttack = _isAttack;
+}
+
+const _bool CWeapon::IsAttack() const
+{
+	return m_isAttack;
+}
+
 _fmatrix CWeapon::Remove_Scale(_fmatrix matTransform)
 {
 	//Right벡터 Nomalize해서 구하기

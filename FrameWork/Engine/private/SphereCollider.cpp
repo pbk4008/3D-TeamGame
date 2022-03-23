@@ -10,6 +10,7 @@ CSphereCollider::CSphereCollider(const CSphereCollider& _rhs)
 {
 }
 
+
 HRESULT CSphereCollider::NativeConstruct_Prototype()
 {
 	if (FAILED(__super::NativeConstruct_Prototype()))

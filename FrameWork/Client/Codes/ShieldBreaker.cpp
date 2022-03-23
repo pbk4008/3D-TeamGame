@@ -93,6 +93,8 @@ HRESULT CShieldBreaker::Render()
 
 		m_pModel->Render(i, 0);
 	}
+
+	return S_OK;
 }
 
 HRESULT CShieldBreaker::Ready_Components()

@@ -92,7 +92,7 @@ _int CMonster_Bastion_Sword::Tick(_double _dDeltaTime)
 	Change_State();
 
 	//콜리더 갱신
-	m_pCharacterController->Move(_dDeltaTime, m_pTransform->Get_Velocity());
+	//m_pCharacterController->Move(_dDeltaTime, m_pTransform->Get_Velocity());
 	return 0;
 }
 

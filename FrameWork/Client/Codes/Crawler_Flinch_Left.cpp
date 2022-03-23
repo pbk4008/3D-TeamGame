@@ -3,7 +3,6 @@
 
 #include "Monster_Crawler.h"
 #include "Animation.h"
-#include "Boss_Bastion_Judicator.h"
 
 CCrawler_Flinch_Left::CCrawler_Flinch_Left(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
 	: CMonster_FSM(pDevice, pDeviceContext)
@@ -35,6 +34,9 @@ _int CCrawler_Flinch_Left::Tick(const _double& TimeDelta)
 	{
 		m_pStateController->Change_State(L"Walk");
 	}
+
+	if (static_cast<CMonster_Crawler*>(m_pMonster)->Get_Hp() <= 0)
+		m_pStateController->Change_State(L"Death");
 
 	return _int();
 }

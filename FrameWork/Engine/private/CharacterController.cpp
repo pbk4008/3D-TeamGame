@@ -54,6 +54,16 @@ const _int CCharacterController::LateTick(const _double& _dDeltaTime)
 	return _int();
 }
 
+void CCharacterController::Remove_CCT()
+{
+	CPhysicsXSystem* phx = GET_INSTANCE(CPhysicsXSystem);
+
+	phx->Remove_Actor(m_pPxController->getActor());
+	Safe_PxRelease(m_pPxController);
+
+	RELEASE_INSTANCE(CPhysicsXSystem);
+}
+
 const CCharacterController::DESC& CCharacterController::Get_CharacterControllerDesc() const
 {
 	return m_tDesc;
@@ -78,6 +88,11 @@ void CCharacterController::setFootPosition(const _float3 & _vPosition)
 {
 	PxExtendedVec3 pxvFootPos = { _vPosition.x, _vPosition.y, _vPosition.z };
 	m_pPxController->setFootPosition(pxvFootPos);
+}
+
+void CCharacterController::setPosition(const _float3& _vPosition)
+{
+	m_pPxController->setPosition(ToPxExtendedVec3(_vPosition));
 }
 
 void CCharacterController::setOwnerTransform(CTransform* _pTransform)

@@ -49,7 +49,7 @@ HRESULT CSilvermane_SprintFwdStart::EnterState()
 		return E_FAIL;
 	m_pAnimationController->Set_RootMotion(true, true);
 
-	//if (m_pSilvermane->Is_EquipWeapon())
+	//if (m_pSilvermane->IsEquipWeapon())
 	//{
 	//	switch (m_pSilvermane->Get_WeaponType())
 	//	{
