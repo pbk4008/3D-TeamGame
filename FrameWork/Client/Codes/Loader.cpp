@@ -908,8 +908,7 @@ HRESULT CLoader::Ready_Test_JS()
 		return E_FAIL;
 	}
 	matPivot = XMMatrixIdentity();
-	if (FAILED(g_pGameInstance->Add_Prototyp
-		e((_uint)SCENEID::SCENE_TEST_JS, L"Model_Needle", CModel::Create(m_pDevice, m_pDeviceContext,
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_TEST_JS, L"Model_Needle", CModel::Create(m_pDevice, m_pDeviceContext,
 		"../bin/Resources/Mesh/Needle/", "Needle.fbx",
 		L"../../Reference/ShaderFile/Shader_StaticMesh.hlsl", matPivot, CModel::TYPE_STATIC, true))))
 	{
