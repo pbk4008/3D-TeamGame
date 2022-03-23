@@ -88,6 +88,15 @@ void CBastion_2HSword_Idle::Look_Monster(void)
 
 }
 
+void CBastion_2HSword_Idle::OnTriggerEnter(CCollision& collision)
+{
+	if ((_uint)GAMEOBJECT::WEAPON == collision.pGameObject->getTag() && g_pObserver->Get_IsAttack())
+	{
+		static_cast<CMonster_Bastion_2HSword*>(m_pMonster)->m_iHp += -1;
+		m_pStateController->Change_State(L"Hit");
+	}
+}
+
 CBastion_2HSword_Idle* CBastion_2HSword_Idle::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext, void* _pArg)
 {
 	CBastion_2HSword_Idle* pInstance = new CBastion_2HSword_Idle(_pDevice, _pDeviceContext);

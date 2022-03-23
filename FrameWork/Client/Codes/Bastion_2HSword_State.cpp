@@ -38,8 +38,8 @@ _int CBastion_2HSword_State::Tick(const _double& _dDeltaTime)
 	m_bPlayerAttack = false;
 	m_bRageOn = false;
 
-	if (g_pObserver->Get_IsAttack())
-		m_bPlayerAttack = true;
+	//if (g_pObserver->Get_IsAttack())
+	//	m_bPlayerAttack = true;
 
 	if (3.5f < fDistToPlayer && 10.0f > fDistToPlayer)
 	{
@@ -53,12 +53,6 @@ _int CBastion_2HSword_State::Tick(const _double& _dDeltaTime)
 	if (3.5f > fDistToPlayer)
 		m_bAttackOn = true;
 
-	if (m_bPlayerAttack)
-	{
-		static_cast<CMonster_Bastion_2HSword*>(m_pMonster)->m_iHp += -1;
-		m_pStateController->Change_State(L"Hit");
-		//공격여부로만 판별하다보니 아직은 Hp가 1씩 깍이진 않음
-	}
 	return _int();
 }
 
@@ -116,12 +110,11 @@ void CBastion_2HSword_State::Look_Monster(void)
 
 void CBastion_2HSword_State::OnTriggerEnter(CCollision& collision)
 {
-	if ((_uint)GAMEOBJECT::WEAPON == collision.pGameObject->getTag())
+	if ((_uint)GAMEOBJECT::WEAPON == collision.pGameObject->getTag() && g_pObserver->Get_IsAttack())
 	{
-		int a = 10;
+		static_cast<CMonster_Bastion_2HSword*>(m_pMonster)->m_iHp += -1;
+		m_pStateController->Change_State(L"Hit");
 	}
-	else
-		int b = 10;
 }
 
 HRESULT CBastion_2HSword_State::Render_Debug()

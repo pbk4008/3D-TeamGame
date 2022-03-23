@@ -365,46 +365,46 @@ void CModel_Inspector::OnBnClickedNavLoadButton()
 void CModel_Inspector::OnBnClickedCreateNavMesh()
 {
 	// TODO: 네비 매쉬 파일을 불러와 매쉬를 쿠킹합니다.
-	CFileDialog Dlg(true, L"dat", L"*.dat");
-	TCHAR szFilePath[MAX_PATH] = L"";
-	HRESULT hr = E_FAIL;
+	//CFileDialog Dlg(true, L"dat", L"*.dat");
+	//TCHAR szFilePath[MAX_PATH] = L"";
+	//HRESULT hr = E_FAIL;
 
-	GetCurrentDirectory(MAX_PATH, szFilePath);
-	PathRemoveFileSpec(szFilePath);
-	lstrcat(szFilePath, L"\\Data\\NavMesh\\");
-	Dlg.m_ofn.lpstrInitialDir = szFilePath;
+	//GetCurrentDirectory(MAX_PATH, szFilePath);
+	//PathRemoveFileSpec(szFilePath);
+	//lstrcat(szFilePath, L"\\Data\\NavMesh\\");
+	//Dlg.m_ofn.lpstrInitialDir = szFilePath;
 
-	if (IDOK == Dlg.DoModal())
-	{
-		wstring strFilePath = Dlg.GetPathName();
-		g_pGameInstance->LoadFile<NAVMESHDESC>(m_NavMeshList_Pos, strFilePath);
-	}
+	//if (IDOK == Dlg.DoModal())
+	//{
+	//	wstring strFilePath = Dlg.GetPathName();
+	//	g_pGameInstance->LoadFile<NAVMESHDESC>(m_NavMeshList_Pos, strFilePath);
+	//}
 
-	CMeshCollider::MESHDESC NavMeshDesc;
-	CPhysicsXSystem::COLDESC	ColDesc;
+	//CNavMeshCollider::DESC	NavMeshDesc;
+	//CCollider::DESC	ColDesc;
+	// 
+	//ColDesc.eType = CPhysicsXSystem::ERigidType::Static;
+	//ColDesc.fPos = { 0.0f, 0.0f, 0.0f };//Collider Local
+	//ColDesc.bGravity = FALSE;
+	//ColDesc.bKinematic = FALSE;
 
-	ColDesc.eType = CPhysicsXSystem::ERigidType::Static;
-	ColDesc.fPos = { 0.0f, 0.0f, 0.0f };//Collider Local
-	ColDesc.bGravity = FALSE;
-	ColDesc.bKinematic = FALSE;
+	//for (int i = 0; i < m_NavMeshList_Pos.size(); ++i)
+	//	NavMeshDesc.vecPoints.push_back(m_NavMeshList_Pos[i].Point);
 
-	for (int i = 0; i < m_NavMeshList_Pos.size(); ++i)
-		NavMeshDesc.vecPoints.push_back(m_NavMeshList_Pos[i].Point);
+	//XMStoreFloat4x4(&NavMeshDesc.matTransform, XMMatrixIdentity());
+	//NavMeshDesc.pParent = nullptr;
+	//NavMeshDesc.tColDesc = ColDesc;
 
-	XMStoreFloat4x4(&NavMeshDesc.matTransform, XMMatrixIdentity());
-	NavMeshDesc.pParent = nullptr;
-	NavMeshDesc.tColDesc = ColDesc;
+	//m_pMeshCollider = (CMeshCollider*)g_pGameInstance->Clone_Component(TAB_MAP, L"Prototype_Component_MeshCollider", &NavMeshDesc);
+	//
 
-	m_pMeshCollider = (CMeshCollider*)g_pGameInstance->Clone_Component(TAB_MAP, L"Prototype_Component_MeshCollider", &NavMeshDesc);
-	
+	//m_pObserver->m_pMeshCollider = m_pMeshCollider;
 
-	m_pObserver->m_pMeshCollider = m_pMeshCollider;
-
-	if (nullptr == m_pMeshCollider)
-	{
-		MessageBox(L"네비 매쉬 파일을 불러오는 도중 쿠킹에 실패했습니다.", MB_OK);
-		return;
-	}
+	//if (nullptr == m_pMeshCollider)
+	//{
+	//	MessageBox(L"네비 매쉬 파일을 불러오는 도중 쿠킹에 실패했습니다.", MB_OK);
+	//	return;
+	//}
 }
 
 void CModel_Inspector::OnBnClickedRotXButton()
@@ -446,6 +446,9 @@ void CModel_Inspector::OnBnClickedTriggerAdd()
 	void* temp = &XMVector3TransformCoord(XMLoadFloat3(&m_pObserver->m_fPickPos), m_pObserver->m_pPlane->Get_Transform()->Get_WorldMatrix());
 	TriggerDesc.fTrigger_Point = *(_float3*)temp;
 
+	/* MONSTER_1, MONSTER_2, MONSTER_3, MONSTER_4, MONSTER_5 */
+	/* 한손검, 두손검, 땅벌레, 대지, 중간보스 */
+
 	switch (TriggerDesc.eTrigger_Type)
 	{
 	case TRIGGERTYPE::TRIGGER_LOD:
@@ -462,6 +465,24 @@ void CModel_Inspector::OnBnClickedTriggerAdd()
 		break;
 	case TRIGGERTYPE::TRIGGER_QUEST:
 		TriggerDesc.iIndex = m_iQuestIndex++;
+		break;
+	case TRIGGERTYPE::MONSTER_1:
+		TriggerDesc.iIndex = m_iMonster1Index++;
+		break;
+	case TRIGGERTYPE::MONSTER_2:
+		TriggerDesc.iIndex = m_iMonster2Index++;
+		break;
+	case TRIGGERTYPE::MONSTER_3:
+		TriggerDesc.iIndex = m_iMonster3Index++;
+		break;
+	case TRIGGERTYPE::MONSTER_4:
+		TriggerDesc.iIndex = m_iMonster4Index++;
+		break;
+	case TRIGGERTYPE::MONSTER_5:
+		TriggerDesc.iIndex = m_iMonster5Index++;
+		break;
+	case TRIGGERTYPE::MONSTER_6:
+		TriggerDesc.iIndex = m_iMonster6Index++;
 		break;
 	}
 

@@ -85,6 +85,7 @@ _int C1H_SwordAttackNormalR1_01::KeyCheck(const _double& _dDeltaTime)
 	
 	if (m_iCutIndex < m_pAnimationController->Get_CurKeyFrameIndex())
 	{
+		g_pObserver->Set_IsAttack(false);
 		if (g_pGameInstance->getMouseKeyDown(CInputDev::MOUSESTATE::MB_LBUTTON))
 		{
 			m_pStateController->Change_State(L"1H_SwordAttackNormalR1_02");
