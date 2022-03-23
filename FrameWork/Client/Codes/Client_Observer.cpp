@@ -75,6 +75,11 @@ const _float CClient_Observer::Get_Dist(_fvector vPos)
 	return fDist;
 }
 
+const _float CClient_Observer::Get_HP()
+{
+	return m_pPlayer->Get_CurrentHp();
+}
+
 const CSilvermane::SCENEMOVEDATA CClient_Observer::Get_SceneMoveData()
 {
 	return m_pPlayer->Get_SceneMoveData();

@@ -21,6 +21,9 @@ HRESULT CJumpTrigger::NativeConstruct_Prototype()
 
 HRESULT CJumpTrigger::NativeConstruct(const _uint _iSceneID, void* _pArg)
 {
+	if (_pArg)
+		memcpy_s(&m_tDesc, sizeof(DESC), _pArg, sizeof(DESC));
+
 	if (FAILED(__super::NativeConstruct(_iSceneID, _pArg)))
 		return E_FAIL;
 
@@ -71,12 +74,12 @@ HRESULT CJumpTrigger::Ready_Components()
 	tTransformDesc.fSpeedPerSec = 0.f;
 	tTransformDesc.fRotationPerSec = 0.f;
 	m_pTransform->Set_TransformDesc(tTransformDesc);
-	m_pTransform->Set_State(CTransform::STATE_POSITION, XMVectorSet(25.f, 2.f, 84.f, 1.f));
+	m_pTransform->Set_State(CTransform::STATE_POSITION, XMVectorSetW(XMLoadFloat3(&m_tDesc.vPosition), 1.f));
 
 
 	CRay_Collider::COLLIDERDESC tColliderDesc;
 	ZeroMemory(&tColliderDesc, sizeof(CRay_Collider::COLLIDERDESC));
-	tColliderDesc.vScale = { 4.f, 2.f, 2.f };
+	tColliderDesc.vScale = { 2.f, 2.f, 2.f };
 	tColliderDesc.vPosition = { 0.f, 2.f, 0.f };
 	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_RayCollider", L"Collider", (CComponent**)&m_pCollider, &tColliderDesc)))
 		return E_FAIL;

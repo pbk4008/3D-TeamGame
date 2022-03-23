@@ -25,6 +25,9 @@ public:
 	const _bool IsAttack();
 	//플레이어와 해당 좌표와의 거리
 	const _float Get_Dist(_fvector vPos);
+	//플레이어의 HP 가져오기
+	const _float Get_HP();
+
 	const CSilvermane::SCENEMOVEDATA Get_SceneMoveData();
 public:
 	//플레이어 공격 셋팅

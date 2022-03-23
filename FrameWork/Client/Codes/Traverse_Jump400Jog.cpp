@@ -98,9 +98,10 @@ HRESULT CTraverse_Jump400Jog::EnterState()
 	CTransform* pTargetTransform = m_pSilvermane->Get_TargetJumpTrigger()->Get_Transform();
 	_vector svTargetPosition = pTargetTransform->Get_State(CTransform::STATE_POSITION);
 	XMStoreFloat3(&m_vTargetPos, svTargetPosition);
-	XMStoreFloat3(&m_vDir, XMVector3Normalize(svTargetPosition - m_pTransform->Get_State(CTransform::STATE_POSITION)));
+	_vector svDir = svTargetPosition - m_pTransform->Get_State(CTransform::STATE_POSITION);
+	XMStoreFloat3(&m_vDir, XMVector3Normalize(XMVectorSetY(svDir, 0.f)));
 
-	m_fMoveSpeed = 6.f;
+	m_fMoveSpeed = 4.f;
 	m_pSilvermane->Set_IsFall(false);
 	return S_OK;
 }

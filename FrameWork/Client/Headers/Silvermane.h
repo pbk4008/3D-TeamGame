@@ -40,6 +40,13 @@ private:
 	HRESULT Ready_Weapons();
 
 public:
+	virtual void OnCollisionEnter(CCollision& collision) override;
+	virtual void OnCollisionStay(CCollision& collision) override;
+	virtual void OnCollisionExit(CCollision& collision) override;
+	virtual void OnTriggerEnter(CCollision& collision) override;
+	virtual void OnTriggerExit(CCollision& collision) override;
+
+public:
 	CTransform* Get_Transform() const;
 	CModel* Get_Model() const;
 	const _float Get_PlusAngle() const;

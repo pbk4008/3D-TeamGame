@@ -691,6 +691,34 @@ HRESULT CSilvermane::Ready_Weapons()
 	return S_OK;
 }
 
+void CSilvermane::OnCollisionEnter(CCollision& collision)
+{
+}
+
+void CSilvermane::OnCollisionStay(CCollision& collision)
+{
+}
+
+void CSilvermane::OnCollisionExit(CCollision& collision)
+{
+}
+
+void CSilvermane::OnTriggerEnter(CCollision& collision)
+{
+	_uint iTag = collision.pGameObject->getTag();
+	if ((_uint)GAMEOBJECT::WEAPON_MIDBOSS == iTag)
+	{
+		if (static_cast<CWeapon*>(collision.pGameObject)->IsAttack())
+		{
+			--m_fCurrentHp;
+		}
+	}
+}
+
+void CSilvermane::OnTriggerExit(CCollision& collision)
+{
+}
+
 CTransform* CSilvermane::Get_Transform() const
 {
 	return m_pTransform;
