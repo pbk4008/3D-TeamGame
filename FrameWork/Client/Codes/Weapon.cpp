@@ -23,6 +23,7 @@ HRESULT CWeapon::NativeConstruct_Prototype()
 	if (FAILED(__super::NativeConstruct_Prototype()))
 		return E_FAIL;
 
+
 	return S_OK;
 }
 

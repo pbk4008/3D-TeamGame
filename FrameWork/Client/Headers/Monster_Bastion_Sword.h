@@ -5,6 +5,7 @@
 BEGIN(Engine)
 class CModel;
 class CAnimator;
+class CCharacterController;
 END
 
 BEGIN(Client)
@@ -35,6 +36,8 @@ public:
 	virtual _int LateTick(_double _dDeltaTime) override;
 	virtual HRESULT Render() override;
 private:
+	virtual void OnTriggerEnter(CCollision& collision) override;
+private:
 	virtual HRESULT SetUp_Components();
 	HRESULT Set_Animation_FSM();
 	HRESULT Set_State_FSM();
@@ -42,18 +45,17 @@ private:
 	_int Change_State();
 private:
 	void Chase();
+	void Hit();
 private:
 	CModel* m_pModelCom = nullptr;
 	CAnimator* m_pAnimator = nullptr;
 	CStateController* m_pStateController = nullptr;
+	CCharacterController* m_pCharacterController = nullptr;
 private:
 	CStargazer* m_pWeapon = nullptr;
 private:
 	ANIM_TYPE m_eHitType = ANIM_TYPE::TYPE_END;//Hit¸¸ ÆÇÁ¤
 	wstring m_wstrCurState = L"";
-private:
-	_uint m_iMaxHp = 0;
-	_uint m_iCurHp = 0;
 public:
 	static CMonster_Bastion_Sword* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext);
 	virtual CGameObject* Clone(const _uint _iSceneID, void* _pArg = nullptr) override;
