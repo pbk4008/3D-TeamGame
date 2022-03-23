@@ -90,7 +90,7 @@ void CBastion_2HSword_Idle::Look_Monster(void)
 
 void CBastion_2HSword_Idle::OnTriggerEnter(CCollision& collision)
 {
-	if ((_uint)GAMEOBJECT::WEAPON == collision.pGameObject->getTag() && g_pObserver->Get_IsAttack())
+	if ((_uint)GAMEOBJECT::WEAPON == collision.pGameObject->getTag() && g_pObserver->IsAttack())
 	{
 		static_cast<CMonster_Bastion_2HSword*>(m_pMonster)->m_iHp += -1;
 		m_pStateController->Change_State(L"Hit");
