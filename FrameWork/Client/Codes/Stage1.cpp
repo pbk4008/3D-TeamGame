@@ -34,10 +34,10 @@ HRESULT CStage1::NativeConstruct()
 	{
 		return E_FAIL;
 	}
-	if (FAILED(Ready_Trigger_Jump()))
-	{
-		return E_FAIL;
-	}
+	//if (FAILED(Ready_Trigger_Jump()))
+	//{
+	//	return E_FAIL;
+	//}
 	if (FAILED(Ready_Player(L"Layer_Silvermane")))
 	{
 		return E_FAIL;
@@ -58,29 +58,28 @@ HRESULT CStage1::NativeConstruct()
 	//}
 
 	//Data
-	if (FAILED(Ready_Data_UI(L"../bin/SaveData/UI/UI.dat")))
-	{
-		return E_FAIL;
-	}
-	
+	//if (FAILED(Ready_Data_UI(L"../bin/SaveData/UI/UI.dat")))
+	//{
+	//	return E_FAIL;
+	//}
+	//
 	//if (FAILED(Ready_Data_Effect(L"../bin/SaveData/Effect/Effect_Explosion.dat")))
 	//{
 	//	return E_FAIL;
 	//}
 
-	if (FAILED(Ready_UI(L"Layer_UI")))
-	{
-		return E_FAIL;
-	}
+	//if (FAILED(Ready_UI(L"Layer_UI")))
+	//{
+	//	return E_FAIL;
+	//}
 
-	//m_pTriggerSystem = CTriggerSystem::Create(m_pDevice, m_pDeviceContext, );
-	m_pTriggerSystem = new CTriggerSystem<Client::CStage1>(m_pDevice, m_pDeviceContext);
+	//m_pTriggerSystem = new CTriggerSystem<Client::CStage1>(m_pDevice, m_pDeviceContext);
 
-	if (FAILED(m_pTriggerSystem->NativeConstruct(L"../bin/SaveData/Trigger/Monster_Respon.dat",this)))
-		return E_FAIL;
+	//if (FAILED(m_pTriggerSystem->NativeConstruct(L"../bin/SaveData/Trigger/Monster_Respon.dat",this)))
+	//	return E_FAIL;
 
-	if(FAILED(Ready_TriggerFunctionSetting()))
-		return E_FAIL;
+	//if(FAILED(Ready_TriggerFunctionSetting()))
+	//	return E_FAIL;
 	//if (FAILED(Ready_Trigger_Lod(L"../bin/SaveData/Trigger/Stage1_LodTri.dat")))
 	//	return E_FAIL;
 	//if (FAILED(Ready_Trigger_Light(L"../bin/SaveData/Trigger/Stage1_LodTri.dat")))
@@ -112,7 +111,7 @@ _int CStage1::Tick(_double TimeDelta)
 		g_pDebugSystem->Set_LevelcMoveCheck(false);
 	}
 #endif //  _DEBUG
-	m_pTriggerSystem->Tick(TimeDelta);
+	//m_pTriggerSystem->Tick(TimeDelta);
 
 	return _int();
 }
@@ -120,7 +119,7 @@ _int CStage1::Tick(_double TimeDelta)
 HRESULT CStage1::Render()
 {
 #ifdef _DEBUG
-	m_pTriggerSystem->Render();
+	//m_pTriggerSystem->Render();
 #endif
 	return S_OK;
 }
@@ -205,14 +204,14 @@ HRESULT CStage1::Ready_Monster(const _tchar* LayerTag)
 
 	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Proto_GameObject_Monster_Crawler")))
 	//	return E_FAIL;
-	for (int i = 0; i < 3; ++i)
-	{
-		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Proto_GameObject_Monster_Crawler")))
-			return E_FAIL;
-	}
+	//for (int i = 0; i < 3; ++i)
+	//{
+	//	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Proto_GameObject_Monster_Crawler")))
+	//		return E_FAIL;
+	//}
 
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Monster", L"Monster_Bastion_2HSword")))
-		return E_FAIL;
+	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Monster", L"Monster_Bastion_2HSword")))
+	//	return E_FAIL;
 	
 	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Proto_GameObject_Monster_EarthAberrant")))
 	//	return E_FAIL;
@@ -373,127 +372,12 @@ HRESULT CStage1::Ready_TriggerFunctionSetting()
 {
 	void(Client::CStage1:: * fp)(const wstring&);
 
-	fp = &CStage1::Trigger_Spawn_Monster1;
-	m_pTriggerSystem->Add_TriggerFuntion(fp,L"../bin/SaveData/Stage1_Enemy_Group_1.dat");
+	/*fp = &CStage1::Trigger_Spawn_Monster1;
+	m_pTriggerSystem->Add_TriggerFuntion(fp,L"../bin/SaveData/Stage1_Enemy_Group_1.dat");*/
 
-	fp = &CStage1::Trigger_Spawn_Monster2;
-	m_pTriggerSystem->Add_TriggerFuntion(fp,L"../bin/SaveData/Stage1_Enemy_Group_2.dat");
-
-	fp = &CStage1::Trigger_Spawn_Monster3;
-	m_pTriggerSystem->Add_TriggerFuntion(fp, L"../bin/SaveData/Stage1_Enemy_Group_3.dat");
-
-	fp = &CStage1::Trigger_Spawn_Monster1;
-	m_pTriggerSystem->Add_TriggerFuntion(fp, L"../bin/SaveData/Stage1_Enemy_Group_4.dat");
-
-	fp = &CStage1::Trigger_Spawn_Monster2;
-	m_pTriggerSystem->Add_TriggerFuntion(fp, L"../bin/SaveData/Stage1_Enemy_Group_5.dat");
-
-	fp = &CStage1::Trigger_Spawn_Monster3;
-	m_pTriggerSystem->Add_TriggerFuntion(fp, L"../bin/SaveData/Stage1_Enemy_Group_6.dat");
-
-	fp = &CStage1::Trigger_Spawn_Monster2;
-	m_pTriggerSystem->Add_TriggerFuntion(fp, L"../bin/SaveData/Stage1_Enemy_Group_7.dat");
-
-	fp = &CStage1::Trigger_Spawn_Monster3;
-	m_pTriggerSystem->Add_TriggerFuntion(fp, L"../bin/SaveData/Stage1_Enemy_Group_8.dat");
-
-	fp = &CStage1::Trigger_Spawn_Monster1;
-	m_pTriggerSystem->Add_TriggerFuntion(fp, L"../bin/SaveData/Stage1_Enemy_Group_9.dat");
-
-	fp = &CStage1::Trigger_Spawn_Monster2;
-	m_pTriggerSystem->Add_TriggerFuntion(fp, L"../bin/SaveData/Stage1_Enemy_Group_10.dat");
-
-	fp = &CStage1::Trigger_Spawn_Monster3;
-	m_pTriggerSystem->Add_TriggerFuntion(fp, L"../bin/SaveData/Stage1_Enemy_Group_11.dat");
-
-	fp = &CStage1::Trigger_Spawn_Monster1;
-	m_pTriggerSystem->Add_TriggerFuntion(fp, L"../bin/SaveData/Stage1_Enemy_Group_12.dat");
-
-	fp = &CStage1::Trigger_Spanw_Boss;
-	m_pTriggerSystem->Add_TriggerFuntion(fp, L"../bin/SaveData/Stage1_Enemy_Group_13.dat");
 
 	
 	return S_OK;
-}
-
-void CStage1::Trigger_Spawn_Monster1(const wstring& pFileData)
-{
-	vector<TRIGGER> vecMonsterData;
-	if (FAILED(g_pGameInstance->LoadFile<TRIGGER>(vecMonsterData, pFileData)))
-		return;
-	for (auto& pMonsterData : vecMonsterData)
-	{
-		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Monster", L"Proto_GameObject_Monster_Crawler", &pMonsterData.fTrigger_Point)))
-			return;
-	}
-}
-
-void CStage1::Trigger_Spawn_Monster2(const wstring& pFileData)
-{
-	vector<TRIGGER> vecMonsterData;
-	if (FAILED(g_pGameInstance->LoadFile<TRIGGER>(vecMonsterData, pFileData)))
-		return;
-	for (auto& pMonsterData : vecMonsterData)
-	{
-		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Monster", L"Monster_Bastion_Healer", &pMonsterData.fTrigger_Point)))
-			return;
-	}
-}
-
-void CStage1::Trigger_Spawn_Monster3(const wstring& pFileData)
-{
-	vector<TRIGGER> vecMonsterData;
-	if (FAILED(g_pGameInstance->LoadFile<TRIGGER>(vecMonsterData, pFileData)))
-		return;
-	for (auto& pMonsterData : vecMonsterData)
-	{
-		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Monster", L"Monster_Bastion_2HSword", &pMonsterData.fTrigger_Point)))
-			return;
-	}
-}
-
-void CStage1::Trigger_Spanw_Boss(const wstring& pFileData)
-{
-	vector<TRIGGER> vecMonsterData;
-	if (FAILED(g_pGameInstance->LoadFile<TRIGGER>(vecMonsterData, pFileData)))
-		return;
-	for (auto& pMonsterData : vecMonsterData)
-	{
-		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Boss", L"Proto_GameObject_Boss_Bastion", &pMonsterData.fTrigger_Point)))
-			return;
-	}
-}
-
-void CStage1::Trigger_SpawnMonster_1H(const wstring& pFileData)
-{
-	vector<TRIGGER> vecMonsterData;
-	if (FAILED(g_pGameInstance->LoadFile<TRIGGER>(vecMonsterData, pFileData)))
-		return;
-	for (auto& pMonsterData : vecMonsterData)
-	{
-		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Monster", L"Proto_GameObject_Monster_Bastion_Sword", &pMonsterData.fTrigger_Point)))
-			return;
-	}
-}
-
-void CStage1::Trigger_SpawnMonster_2H(const wstring& pFileData)
-{
-}
-
-void CStage1::Trigger_SpawnMonster_Crystal(const wstring& pFileData)
-{
-}
-
-void CStage1::Trigger_SpawnMonster_Healer(const wstring& pFileData)
-{
-}
-
-void CStage1::Trigger_SpawnMonster_Earth(const wstring& pFileData)
-{
-}
-
-void CStage1::Trigger_SpawnMonster_MidBoss(const wstring& pFileData)
-{
 }
 
 HRESULT CStage1::Ready_Trigger_Lod(const _tchar* pDataFilePath)

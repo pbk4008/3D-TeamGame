@@ -6,7 +6,7 @@
 BEGIN(Client)
 class CStage1 final : public CLevel
 {
-public:
+private:
 	explicit CStage1();
 	explicit CStage1(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);
 	virtual ~CStage1() = default;
@@ -29,18 +29,7 @@ private:
 	HRESULT Ready_TriggerFunctionSetting();
 
 public:
-	void Trigger_Spawn_Monster1(const wstring& pFileData);
-	void Trigger_Spawn_Monster2(const wstring& pFileData);
-	void Trigger_Spawn_Monster3(const wstring& pFileData);
-	void Trigger_Spanw_Boss(const wstring& pFileData);
-
-	void Trigger_SpawnMonster_1H(const wstring& pFileData);
-	void Trigger_SpawnMonster_2H(const wstring& pFileData);
-	void Trigger_SpawnMonster_Crystal(const wstring& pFileData);
-	void Trigger_SpawnMonster_Healer(const wstring& pFileData);
-	void Trigger_SpawnMonster_Earth(const wstring& pFileData);
-	void Trigger_SpawnMonster_MidBoss(const wstring& pFileData);
-
+	
 	/// ////////////////////////////////////
 	HRESULT Ready_Trigger_Lod(const _tchar* pDataFilePath);
 	HRESULT Ready_Trigger_Light(const _tchar* pDataFilePath);

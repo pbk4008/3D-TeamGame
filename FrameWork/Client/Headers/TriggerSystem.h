@@ -17,11 +17,11 @@ public:
 	explicit CTriggerSystem(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
 		: m_pDevice(pDevice)
 		, m_pDeviceContext(pDeviceContext)
-		, m_iIndex(0)
 	{
 		Safe_AddRef(m_pDevice);
 		Safe_AddRef(m_pDeviceContext);
 	}
+private:
 	virtual ~CTriggerSystem() = default;
 public:
 	HRESULT NativeConstruct(const wstring& pFilePath, T* pStage)
@@ -42,15 +42,13 @@ public:
 		_uint iSize = (_uint)m_vecTrigger.size();
 		for (_uint i = 0; i < iSize; i++)
 		{
-			if (i >= m_iIndex)
-				break;
 			m_vecTrigger[i]->Tick(dDeltaTime);
 
 			if (m_vecTrigger[i]->Get_OnTrigger() && !m_vecTrigger[i]->Get_Overlap())
 			{
 				m_vecTrigger[i]->Set_Overlap(true);
 				
-				(m_pStage->*m_TriggerFunctionArr[i].first)(m_TriggerFunctionArr[i].second);
+				(m_pStage->*m_vecTriggerFunction[i].first)(m_vecTriggerFunction[i].second);
 			}
 		}
 		return _uint();
@@ -66,10 +64,7 @@ public:
 public:
 	HRESULT Add_TriggerFuntion(void(T::* pf)(const wstring&), const wstring& pFunctionArg)
 	{
-		pair<void(T::*)(const wstring&), wstring > pPair = make_pair(pf, pFunctionArg);
-		m_TriggerFunctionArr[m_iIndex] = pPair;
-		m_iIndex++;
-
+		m_vecTriggerFunction.emplace_back(make_pair(pf, pFunctionArg));
 		return S_OK;
 	}
 	HRESULT Load_Trigger(const wstring& pFilePath)
@@ -85,11 +80,6 @@ public:
 			pTrigger = g_pGameInstance->Clone_GameObject<CClient_Trigger>((_uint)SCENEID::SCENE_STATIC, L"Prototype_GameObject_Trigger", &pTriggerData);
 			m_vecTrigger.emplace_back(pTrigger);
 		}
-
-		_uint iSize = (_uint)m_vecTrigger.size();
-		m_TriggerFunctionArr = new pair<void(T::*)(const wstring&), wstring >[iSize];
-
-
 		return S_OK;
 	}
 private:
@@ -97,10 +87,11 @@ private:
 	{
 		Safe_Release(m_pDevice);
 		Safe_Release(m_pDeviceContext);
-		Safe_Delete_Array(m_TriggerFunctionArr);
+		
+		m_vecTriggerFunction.clear();
+
 		for (auto& pTrigger : m_vecTrigger)
 			Safe_Release(pTrigger);
-
 	}
 private:
 	ID3D11Device* m_pDevice;
@@ -108,9 +99,7 @@ private:
 private:
 	T* m_pStage;
 	vector<CClient_Trigger*> m_vecTrigger;
-	//vector<pair<void(T::*)(const wstring&), wstring >> m_vecTriggerFunction;
-	pair<void(T::*)(const wstring&), wstring >* m_TriggerFunctionArr;
-	_uint m_iIndex;
+	vector<pair<void(T::*)(const wstring&), wstring >> m_vecTriggerFunction;
 };
 END
 #endif

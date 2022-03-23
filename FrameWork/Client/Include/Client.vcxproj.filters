@@ -1142,7 +1142,6 @@
     </ClInclude>
     <ClInclude Include="..\Headers\JumpTrigger.h">
       <Filter>02.GameObject\02.Map\02.JumpNode</Filter>
->>>>>>> main
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
