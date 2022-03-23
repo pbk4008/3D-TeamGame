@@ -429,10 +429,10 @@
     </Filter>
     <Filter Include="02.GameObject\00. BackGround\Skybox">
       <UniqueIdentifier>{34e9d6fc-40fa-469c-b052-c7a694bdeaaa}</UniqueIdentifier>
-	</Filter>
+    </Filter>
     <Filter Include="02.GameObject\49.Treasure_Chest">
       <UniqueIdentifier>{cbf09ecb-b293-43d9-8ea2-ea120f524ad7}</UniqueIdentifier>
-	</Filter>
+    </Filter>
     <Filter Include="02.GameObject\03.Character\01.Monster\EarthAberrant\State\07.Death">
       <UniqueIdentifier>{955cc475-5007-4ece-807c-dd6fbd6d41a5}</UniqueIdentifier>
     </Filter>
@@ -444,6 +444,12 @@
     </Filter>
     <Filter Include="02.GameObject\03.Character\01.Monster\EarthAberrant\00.Weapon\00.Aberrant_Pick">
       <UniqueIdentifier>{5fb68284-c871-4e91-8aaa-81ee9c81ea14}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.UI\01.UI_Ingame\01.Meter\05.Tutorial\01.SideTutorial\00.Base">
+      <UniqueIdentifier>{e8825a4a-7e01-4b4a-bf32-adb9045e05f3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.UI\01.UI_Ingame\01.Meter\05.Tutorial\01.SideTutorial\01.Font">
+      <UniqueIdentifier>{bc016171-dd24-4100-ae51-f14583cc3157}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -1082,10 +1088,10 @@
     </ClInclude>
     <ClInclude Include="..\Headers\SkyBox.h">
       <Filter>02.GameObject\00. BackGround\Skybox</Filter>
-	</ClInclude>
+    </ClInclude>
     <ClInclude Include="..\Headers\Treasure_Chest.h">
       <Filter>02.GameObject\49.Treasure_Chest</Filter>
-	</ClInclude>
+    </ClInclude>
     <ClInclude Include="..\Headers\Aberrant_Flinch_Left.h">
       <Filter>02.GameObject\03.Character\01.Monster\EarthAberrant\State\04.Flinch</Filter>
     </ClInclude>
@@ -1103,9 +1109,15 @@
     </ClInclude>
     <ClInclude Include="..\Headers\EarthAberrant_Pick.h">
       <Filter>02.GameObject\03.Character\01.Monster\EarthAberrant\00.Weapon\00.Aberrant_Pick</Filter>
-	</ClInclude>
+    </ClInclude>
     <ClInclude Include="..\Headers\1H_SwordAttackNormalR1_04Swap.h">
       <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\1H_Sword\R2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\UI_Tuto_Base.h">
+      <Filter>02.GameObject\05.UI\01.UI_Ingame\01.Meter\05.Tutorial\01.SideTutorial\00.Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\UI_Tuto_Font.h">
+      <Filter>02.GameObject\05.UI\01.UI_Ingame\01.Meter\05.Tutorial\01.SideTutorial\01.Font</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1720,10 +1732,10 @@
     </ClCompile>
     <ClCompile Include="..\Codes\SkyBox.cpp">
       <Filter>02.GameObject\00. BackGround\Skybox</Filter>
-	</ClCompile>
+    </ClCompile>
     <ClCompile Include="..\Codes\Treasure_Chest.cpp">
       <Filter>02.GameObject\49.Treasure_Chest</Filter>
-	</ClCompile>
+    </ClCompile>
     <ClCompile Include="..\Codes\Aberrant_Flinch_Left.cpp">
       <Filter>02.GameObject\03.Character\01.Monster\EarthAberrant\State\04.Flinch</Filter>
     </ClCompile>
@@ -1741,9 +1753,15 @@
     </ClCompile>
     <ClCompile Include="..\Codes\EarthAberrant_Pick.cpp">
       <Filter>02.GameObject\03.Character\01.Monster\EarthAberrant\00.Weapon\00.Aberrant_Pick</Filter>
-	</ClCompile>
+    </ClCompile>
     <ClCompile Include="..\Codes\1H_SwordAttackNormalR1_04Swap.cpp">
       <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\1H_Sword\R2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\UI_Tuto_Base.cpp">
+      <Filter>02.GameObject\05.UI\01.UI_Ingame\01.Meter\05.Tutorial\01.SideTutorial\00.Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\UI_Tuto_Font.cpp">
+      <Filter>02.GameObject\05.UI\01.UI_Ingame\01.Meter\05.Tutorial\01.SideTutorial\01.Font</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

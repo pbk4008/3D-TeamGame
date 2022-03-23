@@ -159,6 +159,15 @@ void CTransform::Chase_Target(const CTransform * pTargetTransform, _double TimeD
 	Set_State(CTransform::STATE_POSITION, vPosition);
 }
 
+_fvector CTransform::Chase_Pos(const CTransform* pTargetTransform, _double TimeDelta)
+{
+	_vector		vPosition = Get_State(CTransform::STATE_POSITION);
+	_vector		vLook = pTargetTransform->Get_State(CTransform::STATE_POSITION) - vPosition;
+
+	Face_Target(pTargetTransform->Get_State(CTransform::STATE_POSITION));
+	return XMVector3Normalize(vLook) * m_TransformDesc.fSpeedPerSec * (_float)TimeDelta;
+}
+
 void CTransform::Face_Target(_fvector vTargetPos)
 {
 	_vector		vPosition = Get_State(CTransform::STATE_POSITION);

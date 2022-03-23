@@ -23,6 +23,7 @@ public:
 public:
 	virtual void Look_Player(void) override;
 	virtual void Look_Monster(void) override;
+	virtual void OnTriggerEnter(CCollision& collision) override;
 
 public:
 	HRESULT	Render_Debug();

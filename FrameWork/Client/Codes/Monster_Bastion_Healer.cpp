@@ -40,6 +40,8 @@ HRESULT CMonster_Bastion_Healer::NativeConstruct(const _uint _iSceneID, void* _p
 	if (FAILED(Ready_StateFSM()))
 		return E_FAIL;
 
+	m_isFall = true;
+	m_iObectTag = (_uint)GAMEOBJECT::MONSTER_HEALER;
 
 	return S_OK;
 }
@@ -49,11 +51,15 @@ _int CMonster_Bastion_Healer::Tick(_double _dDeltaTime)
 	_int iProgress = __super::Tick(_dDeltaTime);
 	if (NO_EVENT != iProgress) 
 		return iProgress;
+	m_pTransform->Set_Velocity(XMVectorZero());
 
 	/* State FSM Update */
 	iProgress = m_pStateController->Tick(_dDeltaTime);
 	if (NO_EVENT != iProgress)
 		return iProgress;
+
+	Fall(_dDeltaTime);
+	m_pCharacterController->Move(_dDeltaTime, m_pTransform->Get_Velocity());
 
 	// 무기 업뎃
 	if (m_pCurWeapon)
@@ -71,13 +77,16 @@ _int CMonster_Bastion_Healer::LateTick(_double _dDeltaTime)
 	if (NO_EVENT != iProgress) 
 		return iProgress;
 
+	if (FAILED(m_pRenderer->Add_RenderGroup(CRenderer::RENDER_NONALPHA, this)))
+		return -1;
+
+	m_pCharacterController->Update_OwnerTransform();
+
 	/* State FSM Late Update */
 	iProgress = m_pStateController->LateTick(_dDeltaTime);
 	if (NO_EVENT != iProgress)
 		return iProgress;
 
-	if (FAILED(m_pRenderer->Add_RenderGroup(CRenderer::RENDER_ALPHA, this)))
-		return -1;
 
 	// 무기 레잇업뎃
 	if (m_pCurWeapon)
@@ -116,7 +125,6 @@ HRESULT CMonster_Bastion_Healer::Render()
 	}
 #ifdef _DEBUG
 	Render_Debug();
-	//m_pColliderCom->Render(L"Camera_Silvermane");
 #endif
 	return S_OK;
 }
@@ -124,10 +132,10 @@ HRESULT CMonster_Bastion_Healer::Render()
 HRESULT CMonster_Bastion_Healer::Ready_Components()
 {
 	CTransform::TRANSFORMDESC transformDesc;
-	transformDesc.fSpeedPerSec = 0.8f;
+	transformDesc.fSpeedPerSec = 2.0f;
 	transformDesc.fRotationPerSec = XMConvertToRadians(90.f);
 	m_pTransform->Set_TransformDesc(transformDesc);
-	_float4 vPosition = { 3.f, 0.f, 3.f, 1.f };
+	_float4 vPosition = { 3.f, 2.f, 3.f, 1.f };
 
 	m_pTransform->Set_State(CTransform::STATE_POSITION, XMLoadFloat4(&vPosition));
 
@@ -138,21 +146,20 @@ HRESULT CMonster_Bastion_Healer::Ready_Components()
 	_matrix matPivot = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(180.f));
 	m_pModel->Set_PivotMatrix(matPivot);
 
-	/* for. Collider */
-	//CCapsuleCollider::CAPSULEDESC CapDesc;
-	//XMStoreFloat4x4(&CapDesc.matTransform, XMMatrixIdentity());
-	//CapDesc.pParent = this;
+	//* for.Character Controller */
+	CCharacterController::DESC tCharacterControllerDesc;
+	tCharacterControllerDesc.fHeight = 1.f;
+	tCharacterControllerDesc.fRadius = 0.5f;
+	tCharacterControllerDesc.fContactOffset = tCharacterControllerDesc.fRadius * 0.1f;
+	tCharacterControllerDesc.fStaticFriction = 0.5f;
+	tCharacterControllerDesc.fDynamicFriction = 0.5f;
+	tCharacterControllerDesc.fRestitution = 0.f;
+	tCharacterControllerDesc.pGameObject = this;
+	tCharacterControllerDesc.vPosition = { 0.f, 0.f, 0.f };
 
-	//CPhysicsXSystem::COLDESC PhyDesc;
-	//PhyDesc.bGravity = false;
-	//PhyDesc.bKinematic = false;
-	//PhyDesc.eType = CPhysicsXSystem::ACTORTYPE::ACTOR_DYNAMIC;
-
-	//CapDesc.tColDesc = PhyDesc;
-	//if (FAILED(__super::SetUp_Components((_uint)SCENEID::SCENE_TEST_YM, L"Proto_Component_CapsuleCollider", L"Com_CapsuleCollider", (CComponent**)&m_pColliderCom, &CapDesc)))
-	//{
-	//	return E_FAIL;
-	//}
+	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_CharacterController", L"CharacterController", (CComponent**)&m_pCharacterController, &tCharacterControllerDesc)))
+		return E_FAIL;
+	m_pCharacterController->setOwnerTransform(m_pTransform);
 
 	// 스테이트 컨트롤러
 	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_StateController", L"StateController", (CComponent**)&m_pStateController)))
@@ -161,6 +168,7 @@ HRESULT CMonster_Bastion_Healer::Ready_Components()
 
 	m_AanimDesc.pModel = m_pModel;
 	m_AanimDesc.pTransform = m_pTransform;
+	m_AanimDesc.eType = CAnimationController::EType::CharacterController;
 
 	//Anim FSM
 	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_Animator", L"Animator", (CComponent**)&m_pAnimator, &m_AanimDesc)))
@@ -367,8 +375,20 @@ HRESULT CMonster_Bastion_Healer::Render_Debug(void)
 		wstrAnimFinished = L"AnimFinished : FALSE";
 	if (FAILED(g_pGameInstance->Render_Font(TEXT("Font_Arial"), XMVectorSet(0.f, 1.0f, 0.f, 1.f), wstrAnimFinished.c_str(), _float2(950.f, 100.f), _float2(0.6f, 0.6f))))
 		return E_FAIL;
+	 
+}
 
-	return S_OK;
+const _int CMonster_Bastion_Healer::Fall(const _double& _dDeltaTime)
+{
+	if (m_isFall)
+	{
+		_vector svPos = m_pTransform->Get_State(CTransform::STATE_POSITION);
+		if (-10.f < XMVectorGetY(svPos))
+		{
+			m_pTransform->Add_Velocity(XMVectorSet(0.f, -9.8f * (_float)_dDeltaTime, 0.f, 0.f));
+		}
+	}
+	return _int();
 }
 
 CMonster_Bastion_Healer* CMonster_Bastion_Healer::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)

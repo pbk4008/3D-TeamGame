@@ -154,6 +154,8 @@ HRESULT CSilvermane::NativeConstruct_Prototype()
 	if (FAILED(__super::NativeConstruct_Prototype()))
 		return E_FAIL;
 
+	m_iObectTag = (_uint)GAMEOBJECT::PLAYER;
+
 	return S_OK;
 }
 
@@ -658,7 +660,6 @@ HRESULT CSilvermane::Ready_Weapons()
 	pWeapon->Set_Owner(this);
 	pWeapon->Set_OwnerPivotMatrix(m_pModel->Get_PivotMatrix());
 	m_umapWeapons.emplace(L"Fury", pWeapon);
-
 	// ¹æÆÐ
 	pWeaponBone = m_pModel->Get_BoneMatrix("weapon_l");
 	m_pShield = CShield::Create(m_pDevice, m_pDeviceContext);

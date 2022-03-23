@@ -5,6 +5,7 @@
 BEGIN(Engine)
 
 class CStateController;
+class CCollision;
 
 class ENGINE_DLL CState abstract : public CBase
 {
@@ -28,6 +29,16 @@ public:
 	const wstring& Get_Tag() const;
 
 	void Set_StateController(CStateController* _pStateController);
+
+
+public:
+	virtual void OnCollisionEnter(CCollision & collision);
+	virtual void OnCollisionStay(CCollision & collision);
+	virtual void OnCollisionExit(CCollision & collision);
+	virtual void OnTriggerEnter(CCollision & collision);
+	virtual void OnTriggerStay(CCollision & collision);
+	virtual void OnTriggerExit(CCollision & collision);
+
 
 protected:
 	ID3D11Device* m_pDevice = nullptr;

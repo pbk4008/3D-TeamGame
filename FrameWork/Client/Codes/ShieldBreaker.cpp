@@ -20,6 +20,7 @@ HRESULT CShieldBreaker::NativeConstruct_Prototype()
 	if (FAILED(__super::NativeConstruct_Prototype()))
 		return E_FAIL;
 
+	m_iObectTag = (_uint)GAMEOBJECT::WEAPON_MIDBOSS;
 	m_eType = EType::Hammer_2H;
 	m_wstrName = L"ShieldBreaker";
 

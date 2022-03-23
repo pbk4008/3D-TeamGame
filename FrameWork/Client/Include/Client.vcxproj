@@ -386,6 +386,8 @@
     <ClInclude Include="..\Headers\UI_Monster_Panel.h" />
     <ClInclude Include="..\Headers\UI_Player_HpBar.h" />
     <ClInclude Include="..\Headers\UI_Player_HpBar_Red.h" />
+    <ClInclude Include="..\Headers\UI_Tuto_Base.h" />
+    <ClInclude Include="..\Headers\UI_Tuto_Font.h" />
     <ClInclude Include="..\Headers\Weapon.h" />
     <ClInclude Include="Client.h" />
     <ClInclude Include="framework.h" />
@@ -600,6 +602,8 @@
     <ClCompile Include="..\Codes\UI_Monster_Panel.cpp" />
     <ClCompile Include="..\Codes\UI_Player_HpBar.cpp" />
     <ClCompile Include="..\Codes\UI_Player_HpBar_Red.cpp" />
+    <ClCompile Include="..\Codes\UI_Tuto_Base.cpp" />
+    <ClCompile Include="..\Codes\UI_Tuto_Font.cpp" />
     <ClCompile Include="..\Codes\Weapon.cpp" />
     <ClCompile Include="Client.cpp" />
     <ClCompile Include="pch.cpp">

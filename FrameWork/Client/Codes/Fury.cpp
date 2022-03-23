@@ -3,6 +3,7 @@
 
 #include "HierarchyNode.h"
 #include "Silvermane.h"
+#include "Material.h"
 
 CFury::CFury(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
 	: CWeapon(_pDevice, _pDeviceContext)
@@ -19,8 +20,27 @@ HRESULT CFury::NativeConstruct_Prototype()
 	if (FAILED(__super::NativeConstruct_Prototype()))
 		return E_FAIL;
 
+	m_iObectTag = (_uint)GAMEOBJECT::WEAPON;
 	m_eType = EType::Hammer_2H;
 	m_wstrName = L"Fury";
+
+
+	CMaterial* pMtrl = nullptr;
+	CTexture* pTexture = nullptr;
+	pMtrl = CMaterial::Create(m_pDevice, m_pDeviceContext, L"Mtrl_Fury", L"../../Reference/ShaderFile/Shader_Weapon.hlsl", CMaterial::EType::Static);
+	pTexture = CTexture::Create(m_pDevice, m_pDeviceContext);
+	pTexture->NativeConstruct_Prototype(L"../Bin/Resources/Mesh/Fury/T_2h_Hammer_Fury_D.dds", 1);
+	pMtrl->Set_Texture("g_DiffuseTexture", TEXTURETYPE::TEX_DIFFUSE, pTexture, 0);
+	pTexture = CTexture::Create(m_pDevice, m_pDeviceContext);
+	pTexture->NativeConstruct_Prototype(L"../Bin/Resources/Mesh/Fury/T_2h_Hammer_Fury_N.dds", 1);
+	pMtrl->Set_Texture("g_BiNormalTexture", TEXTURETYPE::TEX_NORMAL, pTexture, 0);
+	pTexture = CTexture::Create(m_pDevice, m_pDeviceContext);
+	pTexture->NativeConstruct_Prototype(L"../Bin/Resources/Mesh/Fury/T_2h_Hammer_Fury_MRA.dds", 1);
+	pMtrl->Set_Texture("g_MRATexture", TEXTURETYPE::TEX_MRA, pTexture, 0);
+	pTexture = CTexture::Create(m_pDevice, m_pDeviceContext);
+	pTexture->NativeConstruct_Prototype(L"../Bin/Resources/Mesh/Fury/T_2h_Hammer_Fury_CEO.dds", 1);
+	pMtrl->Set_Texture("g_CEOTexture", TEXTURETYPE::TEX_CEO, pTexture, 0);
+	g_pGameInstance->Add_Material(L"Mtrl_Fury", pMtrl);
 
 	return S_OK;
 }
@@ -79,7 +99,7 @@ HRESULT CFury::Render()
 
 	for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
 	{
-		m_pModel->SetUp_TextureOnShader("g_DiffuseTexture", i, aiTextureType_DIFFUSE);
+		//m_pModel->SetUp_TextureOnShader("g_DiffuseTexture", i, aiTextureType_DIFFUSE);
 
 		m_pModel->Render(i, 0);
 	}
@@ -95,8 +115,9 @@ HRESULT CFury::Ready_Components()
 	m_pTransform->Set_TransformDesc(transformDesc);
 	m_pLocalTransform->Set_TransformDesc(transformDesc);
 
-	if (FAILED(SetUp_Components(m_iSceneID, L"Model_Fury", L"Model", (CComponent**)&m_pModel)))
+	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Model_Fury", L"Model", (CComponent**)&m_pModel)))
 		return E_FAIL;
+	m_pModel->Add_Material(g_pGameInstance->Get_Material(L"Mtrl_Fury"), 0);
 
 	return S_OK;
 }

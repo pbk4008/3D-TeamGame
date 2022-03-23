@@ -143,22 +143,25 @@ HRESULT CBastion_Healer_State::Render_Debug()
 void CBastion_Healer_State::Check_Attack(const _double& _dDeltaTime)
 {
 	/* 몬스터의 현재 Look 방향 벡터 */
-	_fvector vecMonsterLook = XMVector3Normalize(m_pTransform->Get_State(CTransform::STATE_LOOK));
+	_vector vecMonsterLook = XMVector3Normalize(m_pTransform->Get_State(CTransform::STATE_LOOK));
 	/* 몬스터가 플레이어에게 향하는 방향 벡터 */
-	_fvector vMonsterPos = m_pTransform->Get_State(CTransform::STATE::STATE_POSITION);
-	_fvector vDist = vMonsterPos - g_pObserver->Get_PlayerPos();
+	_vector vMonsterPos = m_pTransform->Get_State(CTransform::STATE::STATE_POSITION);
+	_vector vDist = vMonsterPos - g_pObserver->Get_PlayerPos();
 	/* 몬스터와 플레이어 사이의 거리 */
 	m_fDistance = XMVectorGetX(XMVector3Length(vDist));
 
 	/* 플레이어가 몬스터의 앞에 있는지 뒤에있는지 판단 */
-	_fvector vecMonsterToPlayer = XMVector3Normalize(vDist);
-	_fvector dotVec = XMVector3Dot(vecMonsterLook, vecMonsterToPlayer);
+	_vector vecMonsterToPlayer = XMVector3Normalize(vDist);
+	_vector dotVec = XMVector3Dot(vecMonsterLook, vecMonsterToPlayer);
 	m_CheckFWD = XMVectorGetX(dotVec); /* 음수-> 플레이어가 앞에 있다*/
 
 	/* 플레이어,몬스터 위치 차 벡터 */
-	_fvector vPlayerToMonster = g_pObserver->Get_PlayerPos() - vMonsterPos;
+	_vector vPlayerToMonster = g_pObserver->Get_PlayerPos() - vMonsterPos;
 
 	/* 두 벡터의 사이 각 */
+	vecMonsterLook = XMVectorSetY(vecMonsterLook, 0.f);
+	vPlayerToMonster = XMVectorSetY(vPlayerToMonster, 0.f);
+
 	_vector svAngle = XMVector3AngleBetweenVectors(vecMonsterLook, vPlayerToMonster);
 	XMStoreFloat(&m_fRadian, svAngle);
 	m_fRadian = XMConvertToDegrees(m_fRadian);
@@ -182,6 +185,11 @@ void CBastion_Healer_State::Check_Attack(const _double& _dDeltaTime)
 		}
 	}
 
+}
+
+void CBastion_Healer_State::OnTriggerEnter(CCollision& collision)
+{
+	int a = 10;
 }
 
 CBastion_Healer_State* CBastion_Healer_State::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext, void* _pArg)

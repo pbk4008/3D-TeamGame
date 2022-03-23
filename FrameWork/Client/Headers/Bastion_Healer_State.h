@@ -28,6 +28,9 @@ public:
 	HRESULT	Render_Debug();
 	void	Check_Attack(const _double& _dDeltaTime);
 
+public:
+	virtual	void OnTriggerEnter(CCollision& collision);
+
 protected:
 	_bool	m_bTargetOn = false;
 	_bool   m_bAttackOn = false;
