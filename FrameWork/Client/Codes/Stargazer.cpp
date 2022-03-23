@@ -2,6 +2,7 @@
 #include "Stargazer.h"
 #include "HierarchyNode.h"
 #include "Monster_Bastion_Sword.h"
+#include "Material.h"
 
 CStargazer::CStargazer(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
 	: CWeapon(_pDevice, _pDeviceContext)
@@ -81,7 +82,10 @@ void CStargazer::Set_OwnerPivotMatrix(const _fmatrix& _smatPivot)
 HRESULT CStargazer::SetUp_Component()
 {
 	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Model_Weapon_Stargazer", L"Model", (CComponent**)&m_pModel)))
-	return E_FAIL;
+		return E_FAIL;
+
+	if (FAILED(SetUp_Material()))
+		return E_FAIL;
 
 	CTransform::TRANSFORMDESC tDesc;
 	ZeroMemory(&tDesc, sizeof(tDesc));
@@ -100,17 +104,11 @@ _int CStargazer::Attach_FixedBone(const _double& _dDeltaTime)
 	if (m_pFixedBone)
 	{
 		//뼈노드가 가지고 있는 Combine행렬 가져옴
-		_matrix matResult = XMMatrixIdentity();
-		_matrix matRotate = XMMatrixRotationRollPitchYaw(XMConvertToRadians(230), XMConvertToRadians(30), XMConvertToRadians(0));
 		_matrix smatWorld = m_pFixedBone->Get_CombinedMatrix();
 		//무기 가지고 있는 객체의 피벗 곱해줌
-		_matrix matPivot = XMLoadFloat4x4(&m_smatOwnerPivot);
-		//smatWorld *= XMLoadFloat4x4(&m_matTransform);
+		smatWorld *= XMLoadFloat4x4(&m_smatOwnerPivot);
 		//무기 로컬 트랜스 폼 갱신
-
-		matResult = matRotate * smatWorld * matPivot;
-
-		m_pLocalTransform->Set_WorldMatrix(matResult);
+		m_pLocalTransform->Set_WorldMatrix(smatWorld);
 	}
 	return _int();
 }
@@ -120,22 +118,40 @@ _int CStargazer::Attach_Owner(const _double& _dDeltaTime)
 	//무기 가지고 있는 객체가 있을때
 	if (m_pOwner)
 	{
-		//로컬 트랜스폼 가져옴
 		_matrix smatWorld = m_pLocalTransform->Get_WorldMatrix();
-		//무기 가지고 있는 객체의 트랜스폼 가져옴
-		CTransform* pTransform = static_cast<CTransform*>(m_pOwner->Get_Component(L"Com_Transform"));
-		if (!pTransform)
-			return -1;
-		//무기 가지고 있는 객체의 월드Matrix가져옴
-		_matrix smatOwerWorld = pTransform->Get_WorldMatrix();
-		//무기 가지고 있는 객체의 월드Matrix중 크기 삭제
-		smatOwerWorld = Remove_Scale(smatOwerWorld);
-
-		_matrix matResult = smatWorld * smatOwerWorld;
-		//메인 트랜스폼에 무기 가지고 있는 객체와 로컬 트랜스폼을 곱한 것을 넣어줌
-		m_pTransform->Set_WorldMatrix(matResult);
+		_matrix smatOwerWorld = static_cast<CMonster_Bastion_Sword*>(m_pOwner)->Get_Transform()->Get_CombinedMatrix();
+		m_pTransform->Set_WorldMatrix(smatWorld * smatOwerWorld);
 	}
 	return _int();
+}
+
+HRESULT CStargazer::SetUp_Material()
+{
+	if (!m_pModel)
+		return E_FAIL;
+
+	CTexture* pTexture = CTexture::Create(m_pDevice, m_pDeviceContext);
+	pTexture->NativeConstruct_Prototype(L"../Bin/Resources/Mesh/Stargazer/T_1h_Sword_Stargazer_D.dds", 1);
+	CMaterial* pMtrl = CMaterial::Create(m_pDevice, m_pDeviceContext, L"Mtrl_Stargazer", L"../../Reference/ShaderFile/Shader_Weapon.hlsl", CMaterial::EType::Static);
+	pMtrl->Set_Texture("g_DiffuseTexture", TEXTURETYPE::TEX_DIFFUSE, pTexture, 0);
+
+	pTexture = CTexture::Create(m_pDevice, m_pDeviceContext);
+	pTexture->NativeConstruct_Prototype(L"../Bin/Resources/Mesh/Stargazer/T_1h_Sword_Stargazer_N.dds", 1);
+	pMtrl->Set_Texture("g_BiNormalTexture", TEXTURETYPE::TEX_NORMAL, pTexture, 0);
+
+	pTexture = CTexture::Create(m_pDevice, m_pDeviceContext);
+	pTexture->NativeConstruct_Prototype(L"../Bin/Resources/Mesh/Stargazer/T_1h_Sword_Stargazer_MRA.dds", 1);
+	pMtrl->Set_Texture("g_MRATexture", TEXTURETYPE::TEX_MRA, pTexture, 0);
+
+	pTexture = CTexture::Create(m_pDevice, m_pDeviceContext);
+	pTexture->NativeConstruct_Prototype(L"../Bin/Resources/Mesh/Stargazer/T_1h_Sword_Stargazer_CEO.dds", 1);
+	pMtrl->Set_Texture("g_CEOTexture", TEXTURETYPE::TEX_CEO, pTexture, 0);
+
+	g_pGameInstance->Add_Material(L"Mtrl_Stargazer", pMtrl);
+
+	m_pModel->Add_Material(pMtrl, 0);
+
+	return S_OK;
 }
 
 

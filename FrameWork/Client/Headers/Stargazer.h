@@ -26,6 +26,8 @@ private:
 	_int Attach_FixedBone(const _double& _dDeltaTime);
 	//가져온 뼈행렬에 무기 가지고있는 객체의 월드Matrix 계산
 	_int Attach_Owner(const _double& _dDeltaTime);
+	//Material셋팅
+	HRESULT SetUp_Material();
 public:
 	static CStargazer* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext);
 	virtual CGameObject* Clone(const _uint _iSceneID, void* pArg);
