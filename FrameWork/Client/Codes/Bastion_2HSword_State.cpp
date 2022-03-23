@@ -114,6 +114,16 @@ void CBastion_2HSword_State::Look_Monster(void)
 
 }
 
+void CBastion_2HSword_State::OnTriggerEnter(CCollision& collision)
+{
+	if ((_uint)GAMEOBJECT::WEAPON == collision.pGameObject->getTag())
+	{
+		int a = 10;
+	}
+	else
+		int b = 10;
+}
+
 HRESULT CBastion_2HSword_State::Render_Debug()
 {
 	wstring wstrChaserOn = L"Target On : ";
