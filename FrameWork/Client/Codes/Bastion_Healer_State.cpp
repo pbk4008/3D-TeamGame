@@ -158,10 +158,11 @@ void CBastion_Healer_State::Check_Attack(const _double& _dDeltaTime)
 	/* 플레이어,몬스터 위치 차 벡터 */
 	_vector vPlayerToMonster = g_pObserver->Get_PlayerPos() - vMonsterPos;
 
-	/* 두 벡터의 사이 각 */
+	/* 위치차이에 따른 Y 값 0으로 셋팅 */
 	vecMonsterLook = XMVectorSetY(vecMonsterLook, 0.f);
 	vPlayerToMonster = XMVectorSetY(vPlayerToMonster, 0.f);
 
+	/* 두 벡터의 사이 각 */
 	_vector svAngle = XMVector3AngleBetweenVectors(vecMonsterLook, vPlayerToMonster);
 	XMStoreFloat(&m_fRadian, svAngle);
 	m_fRadian = XMConvertToDegrees(m_fRadian);
