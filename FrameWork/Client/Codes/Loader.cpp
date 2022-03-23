@@ -4,6 +4,7 @@
 
 #include "Animator.h"
 #include "Material.h"
+
 #include "Effect_DashDust.h"
 #include "UI_Ingame.h"
 #include "UI_Player_HpBar.h"
@@ -13,6 +14,9 @@
 #include "UI_Monster_Level.h"
 #include "UI_Monster_HpBar.h"
 #include "UI_Monster_Name.h"
+#include "UI_Tuto_Base.h"
+#include "UI_Tuto_Font.h"
+
 #include "Instancing_Mesh.h"
 #include "Client_Trigger.h"
 #include "Environment.h"
@@ -126,23 +130,23 @@ HRESULT CLoader::LoadForScene()
 
 HRESULT CLoader::SetUp_Stage1_Object()
 {
-	if (FAILED(Load_Stage1FBXLoad()))
-		return E_FAIL;
+	//if (FAILED(Load_Stage1FBXLoad()))
+	//	return E_FAIL;
+	//
+	//if (FAILED(Load_Stage1PlayerLoad()))
+	//	return E_FAIL;
 
-	if (FAILED(Load_Stage1PlayerLoad()))
+	if (FAILED(Load_Stage1MonsterLoad()))
 		return E_FAIL;
-
-	/*if (FAILED(Load_Stage1MonsterLoad()))
-		return E_FAIL;*/
 
 	//if (FAILED(Load_Stage1BossLoad()))
 	//	return E_FAIL;
 
-	/*if (FAILED(Load_Stage1StaticUILoad()))
-		return E_FAIL;*/
-
-	//if (FAILED(Load_Stage1UILoad()))
+	//if (FAILED(Load_Stage1StaticUILoad()))
 	//	return E_FAIL;
+
+	if (FAILED(Load_Stage1UILoad()))
+		return E_FAIL;
 
 	//if (FAILED(Load_Stage1EffectLoad()))
 	//	return E_FAIL;
@@ -387,6 +391,27 @@ HRESULT CLoader::Load_Stage1UILoad()
 		return E_FAIL;
 	}
 	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"Texture_Monster_Name", L"../bin/Resources/Texture/UI/Static/Active/MonsterName_%d.dds", 10)))
+	{
+		return E_FAIL;
+	}
+
+
+	//Tuto_Base
+	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_UI_Tuto_Base"), CUI_Tuto_Base::Create(m_pDevice, m_pDeviceContext))))
+	{
+		return E_FAIL;
+	}
+	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"Texture_Tuto_Base", L"../bin/Resources/Texture/UI/Static/Active/T_HUD_Tutorial_Backplate.dds")))
+	{
+		return E_FAIL;
+	}
+
+	//Tuto_Base
+	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_UI_Tuto_Font"), CUI_Tuto_Font::Create(m_pDevice, m_pDeviceContext))))
+	{
+		return E_FAIL;
+	}
+	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"Texture_Tuto_Font", L"../bin/Resources/Texture/UI/Static/Active/Tuto_Font_%d.dds", 4)))
 	{
 		return E_FAIL;
 	}
@@ -667,10 +692,11 @@ HRESULT CLoader::Load_Stage1MonsterLoad()
 		return E_FAIL;
 
 	//Monster EarthAberrant
-	/*if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Model_Monster_EarthAberrant", CModel::Create(m_pDevice, m_pDeviceContext,
-		L"../bin/FBX/Monster/EarthAberrant.fbx", CModel::TYPE_ANIM, true))))
-		return E_FAIL;*/
-	
+	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Model_Monster_EarthAberrant", CModel::Create(m_pDevice, m_pDeviceContext,
+	//	L"../bin/FBX/Monster/EarthAberrant.fbx", CModel::TYPE_ANIM, true))))
+	//	return E_FAIL;
+	//
+
 	//if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Monster_EarthAberrant", CMonster_EarthAberrant::Create(m_pDevice, m_pDeviceContext))))
 	//	return E_FAIL;
 
@@ -678,10 +704,10 @@ HRESULT CLoader::Load_Stage1MonsterLoad()
 	_matrix matPivot = XMMatrixIdentity();
 	//matPivot = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(180.f));
 
-	/*if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Model_Weapon_EarthAberrant_Pick", CModel::Create(m_pDevice, m_pDeviceContext,
-		"../bin/Resources/Mesh/Earth_Aberrant_Pick/", "EarthAberrant_Pick.fbx",
-		L"../../Reference/ShaderFile/Shader_StaticMesh.hlsl", matPivot, CModel::TYPE_STATIC, true))))
-		return E_FAIL;*/
+	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Model_Weapon_EarthAberrant_Pick", CModel::Create(m_pDevice, m_pDeviceContext,
+	//	"../bin/Resources/Mesh/Earth_Aberrant_Pick/", "EarthAberrant_Pick.fbx",
+	//	L"../../Reference/ShaderFile/Shader_StaticMesh.hlsl", matPivot, CModel::TYPE_STATIC, true))))
+	//	return E_FAIL;
 
 	//if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Weapon_EarthAberrant_Pick", CEarthAberrant_Pick::Create(m_pDevice, m_pDeviceContext))))
 	//	return E_FAIL;
@@ -740,20 +766,25 @@ HRESULT CLoader::Load_Stage1MonsterLoad()
 
 	////Monster Bastion_Sword
 
-	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Model_Monster_Bastion_Sword", CModel::Create(m_pDevice, m_pDeviceContext,
-	//	L"../bin/FBX/Monster/Bastion_Sword.fbx", CModel::TYPE_ANIM, true))))
-	//	return E_FAIL;
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Monster_Bastion_Sword", CModel::Create(m_pDevice, m_pDeviceContext,
+		L"../bin/FBX/Monster/Bastion_Sword.fbx", CModel::TYPE_ANIM, true))))
+		return E_FAIL;
 
-	//if (FAILED(g_pGameInstance->Add_Prototype(L"Monster_Bastion_Sword", CMonster_Bastion_Sword::Create(m_pDevice, m_pDeviceContext))))
-	//	return E_FAIL;
+	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Monster_BronzeAnimus", CMonster_Bastion_Sword::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
 
 	////Weapon
 	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Model_Weapon_Stargazer",
-	//	CModel::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/Monster/Weapon/Stargazer(1H Sword).fbx", CModel::TYPE_STATIC, true))))
+	//	CModel::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/Monster/Weapon/Stargazer(1H Sword).fbx", ,CModel::TYPE_STATIC, true))))
 	//	return E_FAIL;
 
-	//if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Weapon_Stargazer", CStargazer::Create(m_pDevice, m_pDeviceContext))))
-	//	return E_FAIL;
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Weapon_Stargazer", CModel::Create(m_pDevice, m_pDeviceContext,
+		"../bin/Resources/Mesh/Stargazer/", "Stargazer(1H Sword).fbx",
+		L"../../Reference/ShaderFile/Shader_StaticMesh.hlsl", matPivot, CModel::TYPE_STATIC, true))))
+		return E_FAIL;
+
+	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Weapon_Stargazer", CStargazer::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
 
 	return S_OK;
 }

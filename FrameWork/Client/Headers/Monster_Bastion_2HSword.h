@@ -53,6 +53,7 @@ private:
 
 private:
 	const _int Fall(const _double& _dDeltaTime);
+	virtual void OnTriggerEnter(CCollision& collision) override;
 
 private:
 	CModel*				  m_pModel = nullptr;

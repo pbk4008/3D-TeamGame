@@ -6,6 +6,8 @@
 #include "Effect_DashDust.h"
 #include "UI_Ingame.h"
 #include "UI_Player_HpBar.h"
+#include "UI_Tuto_Base.h"
+#include "UI_Tuto_Font.h"
 
 CStage1::CStage1()
 {
@@ -21,27 +23,27 @@ HRESULT CStage1::NativeConstruct()
 	if (FAILED(CLevel::NativeConstruct()))
 		return E_FAIL;
 
-	if (FAILED(Ready_Light())) return E_FAIL;
-
-	if (FAILED(Ready_MapObject()))
-	{
-		return E_FAIL;
-	}
-
-	if (FAILED(Ready_Player(L"Layer_Silvermane")))
-	{
-		return E_FAIL;
-	}
+	//if (FAILED(Ready_Light())) return E_FAIL;
+	//
+	//if (FAILED(Ready_MapObject()))
+	//{
+	//	return E_FAIL;
+	//}
+	//
+	//if (FAILED(Ready_Player(L"Layer_Silvermane")))
+	//{
+	//	return E_FAIL;
+	//}
 
 	//if (FAILED(Ready_Boss(L"Layer_Boss")))
 	//{
 	//	return E_FAIL;
 	//}
 
-	//if (FAILED(Ready_Monster(L"Layer_Monster")))
-	//{
-	//	return E_FAIL;
-	//}
+	if (FAILED(Ready_Monster(L"Layer_Monster")))
+	{
+		return E_FAIL;
+	}
 
 	//Data
 	//if (FAILED(Ready_Data_UI(L"../bin/SaveData/UI/UI.dat")))
@@ -52,10 +54,10 @@ HRESULT CStage1::NativeConstruct()
 	//{
 	//	return E_FAIL;
 	//}
-	/*if (FAILED(Ready_UI(L"Layer_UI")))
-	{
-		return E_FAIL;
-	}*/
+	//if (FAILED(Ready_UI(L"Layer_UI")))
+	//{
+	//	return E_FAIL;
+	//}
 
 	//if (FAILED(Ready_Trigger_Lod(L"../bin/SaveData/Trigger/Stage1_LodTri.dat")))
 	//	return E_FAIL;
@@ -166,8 +168,8 @@ HRESULT CStage1::Ready_Boss(const _tchar* LayerTag)
 
 HRESULT CStage1::Ready_Monster(const _tchar* LayerTag)
 {
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Proto_GameObject_Monster_Crawler")))
-		return E_FAIL;
+	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Proto_GameObject_Monster_Crawler")))
+	//	return E_FAIL;
 	
 	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Proto_GameObject_Monster_EarthAberrant")))
 	//	return E_FAIL;
@@ -175,8 +177,11 @@ HRESULT CStage1::Ready_Monster(const _tchar* LayerTag)
 	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Proto_GameObject_Monster_BronzeAnimus")))
 	//	return E_FAIL;
 
-	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Model_Monster_Bastion_Sword")))
+	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Proto_GameObject_Monster_BronzeAnimus")))
 	//	return E_FAIL;
+
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Model_Monster_Bastion_Sword")))
+		return E_FAIL;
 
 	return S_OK;
 }
@@ -205,6 +210,34 @@ HRESULT CStage1::Ready_UI(const _tchar* LayerTag)
 	Desc.IDTag = (_uint)GAMEOBJECT::UI_DYNAMIC;
 
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_UI", L"Proto_GameObject_UI_Player_HpBar_Red", &Desc)))
+		return E_FAIL;
+
+
+	//Tuto Base
+	CUI_Tuto_Base::UIACTIVEDESC Desc1;
+	ZeroMemory(&Desc1, sizeof(CUI_Tuto_Base::UIACTIVEDESC));
+	_tcscpy_s(Desc1.UIDesc.TextureTag, L"Texture_Tuto_Base");
+	Desc1.UIDesc.bMinus = false;
+	Desc1.UIDesc.fAngle = 0.f;
+	Desc1.UIDesc.fPos = { 1150.f, 360.f, 0.2f };
+	Desc1.UIDesc.fSize = { 333.f , 105.f };
+	Desc1.UIDesc.IDTag = (_uint)GAMEOBJECT::UI_STATIC;
+
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_UI", L"Proto_GameObject_UI_Tuto_Base", &Desc1)))
+		return E_FAIL;
+
+	//Tuto Font
+	CUI_Tuto_Font::UIACTIVEDESC Desc2;
+	ZeroMemory(&Desc2, sizeof(CUI_Tuto_Font::UIACTIVEDESC));
+	_tcscpy_s(Desc2.UIDesc.TextureTag, L"Texture_Tuto_Font");
+	Desc2.UIDesc.bMinus = false;
+	Desc2.UIDesc.fAngle = 0.f;
+	Desc2.UIDesc.fPos = { 1130.f, 360.f, 0.1f };
+	Desc2.UIDesc.fSize = { 73.f , 73.f };
+	Desc2.UIDesc.IDTag = (_uint)GAMEOBJECT::UI_STATIC;
+	Desc2.iTextureNum = 0;
+	
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_UI", L"Proto_GameObject_UI_Tuto_Font", &Desc2)))
 		return E_FAIL;
 
 	return S_OK;
