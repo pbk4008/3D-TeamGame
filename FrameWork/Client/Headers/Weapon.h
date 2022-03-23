@@ -28,6 +28,9 @@ public:
 	virtual void Set_OwnerPivotMatrix(const _fmatrix& _smatPivot);
 	virtual void Set_Equip(const _bool _isEquip, void* _pArg = nullptr);
 	void Set_FixedBone(CHierarchyNode* _pFixedBone);
+
+	void Set_IsAttack(const _bool _isAttack);
+	const _bool IsAttack() const;
 protected:
 	//매개변수로 받은 행렬 크기 없애주는 함수
 	_fmatrix Remove_Scale(_fmatrix matTransform);
@@ -41,6 +44,7 @@ protected:
 	CHierarchyNode* m_pFixedBone = nullptr;
 
 	_bool m_isEquip = false;
+	_bool m_isAttack = false;
 	EType m_eType = EType::Max;
 
 	wstring m_wstrName = L"";

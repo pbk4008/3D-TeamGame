@@ -1,6 +1,8 @@
 #include "pch.h"
 #include "Traverse_Jump400Jog.h"
 
+#include "JumpTrigger.h"
+
 CTraverse_Jump400Jog::CTraverse_Jump400Jog(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
 	: CState_Silvermane(_pDevice, _pDeviceContext)
 {
@@ -19,6 +21,43 @@ _int CTraverse_Jump400Jog::Tick(const _double& _dDeltaTime)
 	_int iProgress = __super::Tick(_dDeltaTime);
 	if (NO_EVENT != iProgress)
 		return iProgress;
+
+	Add_PlusAngle(EDir::Forward, _dDeltaTime);
+	_uint iCurKeyFrameIndex = m_pAnimationController->Get_CurKeyFrameIndex();
+
+	//svPos += XMLoadFloat3(&m_vDir) * _dDeltaTime * m_fMoveSpeed;
+	//m_pTransform->Set_State(CTransform::STATE_POSITION, svPos);
+	_vector svVelocity = XMLoadFloat3(&m_vDir) * (_float)_dDeltaTime * m_fMoveSpeed;
+	m_pTransform->Add_Velocity(svVelocity);
+
+	if (!m_isJumpEnd)
+	{
+		if (7 < iCurKeyFrameIndex)
+		{
+			m_pSilvermane->Set_IsTrasceCamera(false);
+
+			_vector svPos = m_pTransform->Get_State(CTransform::STATE_POSITION);
+			svPos += svVelocity;
+			_vector svDis = XMVector3Length(XMLoadFloat3(&m_vTargetPos) - svPos);
+			if (1.f > XMVectorGetX(svDis))
+			{
+				//m_fMoveSpeed = 0.f;
+				//m_pAnimationController->Set_PlaySpeed(1.f);
+				m_isJumpEnd = true;
+			}
+			else
+			{
+				if (20 < iCurKeyFrameIndex)
+				{
+					//m_pAnimationController->Set_PlaySpeed(0.1f);
+				}
+			}
+		}
+	}
+	else
+	{
+		m_pSilvermane->Set_IsFall(true);
+	}
 
 	if (m_pAnimationController->Is_Finished())
 	{
@@ -54,9 +93,15 @@ HRESULT CTraverse_Jump400Jog::EnterState()
 
 	if (FAILED(m_pAnimationController->SetUp_NextAnimation("SK_Silvermane.ao|A_Traverse_Jump_400_Jog_Player", false)))
 		return E_FAIL;
-	m_pAnimationController->Set_RootMotion(true, true);
-	
-	m_pSilvermane->Set_IsTrasceCamera(false);
+	m_pAnimationController->Set_RootMotion(true, true, ERootOption::XY);
+
+	CTransform* pTargetTransform = m_pSilvermane->Get_TargetJumpTrigger()->Get_Transform();
+	_vector svTargetPosition = pTargetTransform->Get_State(CTransform::STATE_POSITION);
+	XMStoreFloat3(&m_vTargetPos, svTargetPosition);
+	XMStoreFloat3(&m_vDir, XMVector3Normalize(svTargetPosition - m_pTransform->Get_State(CTransform::STATE_POSITION)));
+
+	m_fMoveSpeed = 6.f;
+	m_pSilvermane->Set_IsFall(false);
 	return S_OK;
 }
 

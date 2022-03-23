@@ -6,6 +6,7 @@
 #include "Fury.h"
 #include "Shield.h"
 #include "JumpNode.h"
+#include "JumpTrigger.h"
 
 #pragma region 스테이트들
 #include "Silvermane_Idle.h"
@@ -767,17 +768,12 @@ void CSilvermane::Set_PlusAngle(const _float _fAngle)
 	m_fPlusAngle = _fAngle;
 }
 
-void CSilvermane::Set_IsAttack(const _bool bAttack)
-{
-	m_isAttack = bAttack;
-}
-
-const _bool CSilvermane::Is_EquipWeapon() const
+const _bool CSilvermane::IsEquipWeapon() const
 {
 	return m_isEquipWeapon;
 }
 
-const _bool CSilvermane::Is_EquipShield() const
+const _bool CSilvermane::IsEquipShield() const
 {
 	return m_isEquipShield;
 }
@@ -785,6 +781,13 @@ const _bool CSilvermane::Is_EquipShield() const
 const CWeapon::EType CSilvermane::Get_WeaponType() const
 {
 	return m_pCurWeapon->Get_Type();
+}
+
+void CSilvermane::Set_IsAttack(const _bool _isAttack)
+{
+	m_isAttack = _isAttack;
+	if (m_pCurWeapon)
+		m_pCurWeapon->Set_IsAttack(_isAttack);
 }
 
 void CSilvermane::Add_PlusAngle(const _float _fDeltaAngle)
@@ -810,7 +813,7 @@ void CSilvermane::Set_Position(const _float3 _vPosition)
 	m_pCharacterController->setPosition(_vPosition);
 }
 
-const _bool CSilvermane::Get_IsAttack()
+const _bool CSilvermane::IsAttack()
 {
 	return m_isAttack;
 }
@@ -944,6 +947,11 @@ CJumpNode* CSilvermane::Get_TargetJumpNode() const
 	return m_pTargetJumpNode;
 }
 
+CJumpTrigger* CSilvermane::Get_TargetJumpTrigger() const
+{
+	return m_pTargetJumpTrigger;
+}
+
 const _bool CSilvermane::Raycast_JumpNode(const _double& _dDeltaTime)
 {
 	_matrix smatView;
@@ -959,6 +967,31 @@ const _bool CSilvermane::Raycast_JumpNode(const _double& _dDeltaTime)
 	svRayDir = XMVector3Normalize(svRayDir);
 	_float fOutDist = 0.f;
 
+	// JumpTrigger
+	list<CGameObject*>* listJumpTrigger = g_pGameInstance->getObjectList(m_iSceneID, L"Layer_JumpTrigger");
+	if (!listJumpTrigger)
+		return false;
+	for (auto& pJumpTrigger : *listJumpTrigger)
+	{
+		if (static_cast<CJumpTrigger*>(pJumpTrigger)->Raycast(svRayPos, svRayDir, fOutDist, _dDeltaTime))
+		{
+			m_pTargetJumpTrigger = static_cast<CJumpTrigger*>(pJumpTrigger);
+			if (g_pGameInstance->getkeyPress(DIK_C))
+				m_fJumpTriggerLookTime += (_float)_dDeltaTime;
+
+			if (1.5f < m_fJumpTriggerLookTime)
+			{
+				if (FAILED(m_pStateController->Change_State(L"Traverse_Jump400Jog")))
+					return false;
+				m_fJumpTriggerLookTime = 0.f;
+			}
+			return true;
+		}
+	}
+	m_pTargetJumpTrigger = nullptr;
+	m_fJumpTriggerLookTime = 0.f;
+
+	// JumpNode
 	list<CGameObject*>* listJumpNode = g_pGameInstance->getObjectList(m_iSceneID, L"Layer_JumpNode");
 	if (!listJumpNode)
 		return false;
@@ -970,7 +1003,7 @@ const _bool CSilvermane::Raycast_JumpNode(const _double& _dDeltaTime)
 			if (g_pGameInstance->getkeyPress(DIK_C))
 				m_fJumpNodeLookTime += (_float)_dDeltaTime;
 
-			if (2.f < m_fJumpNodeLookTime)
+			if (1.5f < m_fJumpNodeLookTime)
 			{
 				if (FAILED(m_pStateController->Change_State(L"Traverse_JumpNodeJog")))
 					return false;
@@ -979,7 +1012,6 @@ const _bool CSilvermane::Raycast_JumpNode(const _double& _dDeltaTime)
 			return true;
 		}
 	}
-
 	m_pTargetJumpNode = nullptr;
 	m_fJumpNodeLookTime = 0.f;
 	return false;

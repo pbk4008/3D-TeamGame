@@ -102,16 +102,10 @@ _int CSilvermane_Idle::KeyCheck(const _double& _dDeltaTime)
 			return E_FAIL;
 		return STATE_CHANGE;
 	}
-	//if (g_pGameInstance->getkeyDown(DIK_C))
-	//{
-	//	if (FAILED(m_pStateController->Change_State(L"Traverse_Jump400Jog")))
-	//		return E_FAIL;
-	//	return STATE_CHANGE;
-	//}
 
 	if (g_pGameInstance->getMouseKeyDown(CInputDev::MOUSESTATE::MB_LBUTTON))
 	{
-		if (m_pSilvermane->Is_EquipWeapon())
+		if (m_pSilvermane->IsEquipWeapon())
 		{
 			switch (m_pSilvermane->Get_WeaponType())
 			{
@@ -146,7 +140,7 @@ _int CSilvermane_Idle::KeyCheck(const _double& _dDeltaTime)
 	}
 	else if (g_pGameInstance->getMouseKeyDown(CInputDev::MOUSESTATE::MB_RBUTTON))
 	{
-		if (m_pSilvermane->Is_EquipWeapon())
+		if (m_pSilvermane->IsEquipWeapon())
 		{
 			switch (m_pSilvermane->Get_WeaponType())
 			{
@@ -215,7 +209,7 @@ _int CSilvermane_Idle::KeyCheck(const _double& _dDeltaTime)
 			g_pGameInstance->getkeyPress(DIK_A) ||
 			g_pGameInstance->getkeyPress(DIK_D))
 		{
-			if (!m_pSilvermane->Is_EquipWeapon())
+			if (!m_pSilvermane->IsEquipWeapon())
 			{
 				if (FAILED(m_pStateController->Change_State(L"SprintFwdStart")))
 					return -1;

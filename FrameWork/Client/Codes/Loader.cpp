@@ -45,6 +45,7 @@
 #include "Monster_Bastion_Shooter.h"
 #include "Monster_Bastion_Spear.h"
 #include "JumpNode.h"
+#include "JumpTrigger.h"
 
 #pragma endregion
 
@@ -964,6 +965,8 @@ HRESULT CLoader::Ready_Test_JS()
 	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Camera_Silvermane", CCamera_Silvermane::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_JumpNode", CJumpNode::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_JumpTrigger", CJumpTrigger::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 #pragma endregion
 
