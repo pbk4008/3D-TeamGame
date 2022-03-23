@@ -36,6 +36,14 @@ _int CMidBoss_Attack::Tick(const _double& TimeDelta)
 		//cout << "어택->턴" << endl;
 	}
 
+	CBoss_Bastion_Judicator* pBoss = (CBoss_Bastion_Judicator*)m_pStateController->Get_GameObject();
+
+	if (nullptr != pBoss)
+	{
+		pBoss->Set_IsAttack(true);
+		cout << "보스공격중" << endl;
+	}
+
 	return _int();
 }
 

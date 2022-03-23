@@ -44,6 +44,10 @@ private:
 public:
 	void Set_Groggy(_float fGroggy) { m_fGroggy = fGroggy; }
 
+public:
+	const _bool IsAttack() { return m_bIsAttack; }
+	void Set_IsAttack(const _bool _isAttack);
+
 private:
 	CModel* m_pModelCom = nullptr;
 	CAnimator* m_pAnimator = nullptr;
@@ -63,6 +67,7 @@ private:
 	_bool	m_isFall = false;
 	_bool m_bFirstHit = false; //맨처음들어와서 맞았을때 판넬크기바꿔줘야돼서
 	_bool m_bGroggy = false;
+	_bool m_bIsAttack = false;
 
 public:
 	static CBoss_Bastion_Judicator* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);

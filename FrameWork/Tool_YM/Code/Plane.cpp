@@ -75,14 +75,13 @@ HRESULT CPlane::Render()
 	Set_WVPMatrix();
 
 #ifdef _DEBUG
-	if (nullptr != m_pObserver->m_pMeshCollider)
-		m_pObserver->m_pMeshCollider->Render(L"Camera");
+	/*if (nullptr != m_pObserver->m_pMeshCollider)
+		m_pObserver->m_pMeshCollider->Render(L"Camera");*/
 
 	if(m_bRender)
 		m_pVIBufferCom->Render(0);
 	m_pNavigationCom->Render(L"Camera");
 #endif // _DEBUG
-
 	return S_OK;
 }
 

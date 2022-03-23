@@ -26,6 +26,7 @@ private:
 
 private:
 	_matrix m_smatPivot = XMMatrixIdentity();
+	CCapsuleCollider* m_pCollider = nullptr;
 
 public:
 	static CRetributionBlade* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext);

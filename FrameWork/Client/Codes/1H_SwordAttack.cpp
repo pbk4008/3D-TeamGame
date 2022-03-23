@@ -48,7 +48,6 @@ HRESULT C1H_SwordAttack::EnterState()
 	if (FAILED(__super::EnterState()))
 		return E_FAIL;
 
-	g_pObserver->Set_IsAttack(TRUE);
 	//m_pSilvermane->Get_PlayerCamera()->SetShakeInfo(0.6f, 4.f);
 
 	return S_OK;
@@ -59,7 +58,6 @@ HRESULT C1H_SwordAttack::ExitState()
 	if (FAILED(__super::ExitState()))
 		return E_FAIL;
 
-	g_pObserver->Set_IsAttack(FALSE);
 	//m_pSilvermane->Get_PlayerCamera()->SetShakeInfo(0.0f, 0.0f);
 
 	return S_OK;

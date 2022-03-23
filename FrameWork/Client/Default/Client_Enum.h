@@ -25,6 +25,8 @@ enum class GAMEOBJECT
 	//이 이후로 추가되는거 달아주세요, 위에 추가하면 꼬임
 	WEAPON_MIDBOSS,
 	WEAPON_EARTH,
+	WEAPON_2HSword,
+	WEAPON_HEALER,
 	GAMEOBJECT_END
 };
 END

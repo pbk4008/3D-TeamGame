@@ -316,27 +316,6 @@
     <Filter Include="02.GameObject\03.Character\02.Boss">
       <UniqueIdentifier>{5e4ce90c-d575-4e08-9ce0-006401437c35}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObject\03.Character\02.Boss\00.MiddleBoss">
-      <UniqueIdentifier>{a7db1ec6-722d-46ed-bdad-a86d3c709df2}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObject\03.Character\02.Boss\00.MiddleBoss\00.Weapon">
-      <UniqueIdentifier>{eee5d743-fda4-4f7b-ba26-d4c790268f21}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObject\03.Character\02.Boss\00.MiddleBoss\State">
-      <UniqueIdentifier>{8a29aee6-6d31-4f13-bfdb-45f715488804}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObject\03.Character\02.Boss\00.MiddleBoss\State\00.Rage">
-      <UniqueIdentifier>{78558ab8-2fff-4b33-ab1b-2e33a7ffd7ca}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObject\03.Character\02.Boss\00.MiddleBoss\State\01.BattleCry">
-      <UniqueIdentifier>{0548b5d4-b2f0-44cd-be0d-411854b88969}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObject\03.Character\02.Boss\00.MiddleBoss\State\02.Attack">
-      <UniqueIdentifier>{1b94931b-764f-4fd3-9076-83d5953ebc0b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObject\03.Character\02.Boss\00.MiddleBoss\State\03.Turn">
-      <UniqueIdentifier>{f2df4087-aee9-4ef4-bcdf-ddd10c0ac559}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObject\05.UI\01.UI_Ingame\01.Meter\02.Monster\04.Name">
       <UniqueIdentifier>{f93eb3ac-c59a-4020-8040-bc1b1ca22d26}</UniqueIdentifier>
     </Filter>
@@ -433,17 +412,38 @@
     <Filter Include="02.GameObject\03.Character\01.Monster\EarthAberrant\State\08.Dash">
       <UniqueIdentifier>{44af2aae-a22a-45f0-b19b-a68fbdd4099f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObject\03.Character\01.Monster\EarthAberrant\00.Weapon">
-      <UniqueIdentifier>{70d04976-04d3-4f7a-8a9c-a591900de310}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObject\03.Character\01.Monster\EarthAberrant\00.Weapon\00.Aberrant_Pick">
-      <UniqueIdentifier>{5fb68284-c871-4e91-8aaa-81ee9c81ea14}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObject\05.UI\01.UI_Ingame\01.Meter\05.Tutorial\01.SideTutorial\00.Base">
       <UniqueIdentifier>{e8825a4a-7e01-4b4a-bf32-adb9045e05f3}</UniqueIdentifier>
     </Filter>
     <Filter Include="02.GameObject\05.UI\01.UI_Ingame\01.Meter\05.Tutorial\01.SideTutorial\01.Font">
       <UniqueIdentifier>{bc016171-dd24-4100-ae51-f14583cc3157}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.UI\01.UI_Ingame\01.Meter\02.Monster\05.Groggy">
+      <UniqueIdentifier>{de4559b8-3cc3-4e19-a28c-9e4004bf6722}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\02.Boss\00.MiddleBoss">
+      <UniqueIdentifier>{a7db1ec6-722d-46ed-bdad-a86d3c709df2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\02.Boss\00.MiddleBoss\00.Weapon">
+      <UniqueIdentifier>{eee5d743-fda4-4f7b-ba26-d4c790268f21}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\02.Boss\00.MiddleBoss\State">
+      <UniqueIdentifier>{8a29aee6-6d31-4f13-bfdb-45f715488804}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\02.Boss\00.MiddleBoss\State\00.Rage">
+      <UniqueIdentifier>{78558ab8-2fff-4b33-ab1b-2e33a7ffd7ca}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\02.Boss\00.MiddleBoss\State\01.BattleCry">
+      <UniqueIdentifier>{0548b5d4-b2f0-44cd-be0d-411854b88969}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\02.Boss\00.MiddleBoss\State\02.Attack">
+      <UniqueIdentifier>{1b94931b-764f-4fd3-9076-83d5953ebc0b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\02.Boss\00.MiddleBoss\State\03.Turn">
+      <UniqueIdentifier>{f2df4087-aee9-4ef4-bcdf-ddd10c0ac559}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\02.Boss\00.MiddleBoss\State\04.Chase">
+      <UniqueIdentifier>{9ca0b922-5493-4c13-b374-4312bd2f3120}</UniqueIdentifier>
     </Filter>
     <Filter Include="02.GameObject\03.Character\02.Boss\00.MiddleBoss\State\04.Death">
       <UniqueIdentifier>{9ca0b922-5493-4c13-b374-4312bd2f3120}</UniqueIdentifier>
@@ -451,38 +451,11 @@
     <Filter Include="02.GameObject\03.Character\02.Boss\00.MiddleBoss\State\05.Stun">
       <UniqueIdentifier>{2a308277-84e1-4f4f-afc1-cfdeb29f6ae2}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObject\03.Character\02.Boss\00.MiddleBoss\State\06.Dash">
-      <UniqueIdentifier>{4baaba8b-5237-43af-afef-9920e42133bd}</UniqueIdentifier>
+    <Filter Include="02.GameObject\03.Character\01.Monster\EarthAberrant\00.Weapon">
+      <UniqueIdentifier>{0bf5894c-ed8e-4af5-8351-a1c946f08e63}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObject\05.UI\01.UI_Ingame\01.Meter\02.Monster\05.Groggy">
-      <UniqueIdentifier>{de4559b8-3cc3-4e19-a28c-9e4004bf6722}</UniqueIdentifier>
-	</Filter>
-	<Filter Include="02.GameObject\03.Character\01.Monster\EarthAberrant\02.Boss">
-      <UniqueIdentifier>{5e4ce90c-d575-4e08-9ce0-006401437c35}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObject\03.Character\01.Monster\EarthAberrant\02.Boss\00.MiddleBoss">
-      <UniqueIdentifier>{a7db1ec6-722d-46ed-bdad-a86d3c709df2}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObject\03.Character\01.Monster\EarthAberrant\02.Boss\00.MiddleBoss\00.Weapon">
-      <UniqueIdentifier>{eee5d743-fda4-4f7b-ba26-d4c790268f21}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObject\03.Character\01.Monster\EarthAberrant\02.Boss\00.MiddleBoss\State">
-      <UniqueIdentifier>{8a29aee6-6d31-4f13-bfdb-45f715488804}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObject\03.Character\01.Monster\EarthAberrant\02.Boss\00.MiddleBoss\State\00.Rage">
-      <UniqueIdentifier>{78558ab8-2fff-4b33-ab1b-2e33a7ffd7ca}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObject\03.Character\01.Monster\EarthAberrant\02.Boss\00.MiddleBoss\State\01.BattleCry">
-      <UniqueIdentifier>{0548b5d4-b2f0-44cd-be0d-411854b88969}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObject\03.Character\01.Monster\EarthAberrant\02.Boss\00.MiddleBoss\State\02.Attack">
-      <UniqueIdentifier>{1b94931b-764f-4fd3-9076-83d5953ebc0b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObject\03.Character\01.Monster\EarthAberrant\02.Boss\00.MiddleBoss\State\03.Turn">
-      <UniqueIdentifier>{f2df4087-aee9-4ef4-bcdf-ddd10c0ac559}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObject\03.Character\01.Monster\EarthAberrant\02.Boss\00.MiddleBoss\State\04.Chase">
-      <UniqueIdentifier>{9ca0b922-5493-4c13-b374-4312bd2f3120}</UniqueIdentifier>
+    <Filter Include="02.GameObject\03.Character\01.Monster\EarthAberrant\00.Weapon\00.Aberrant_Pick">
+      <UniqueIdentifier>{5fb68284-c871-4e91-8aaa-81ee9c81ea14}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -937,10 +910,10 @@
       <Filter>02.GameObject\05.UI\01.UI_Ingame\01.Meter\00.Player\01.HpBar_Red</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\Boss_Bastion_Judicator.h">
-      <Filter>02.GameObject\03.Character\01.Monster\EarthAberrant\02.Boss\00.MiddleBoss</Filter>
+      <Filter>02.GameObject\03.Character\02.Boss\00.MiddleBoss</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\ShieldBreaker.h">
-      <Filter>02.GameObject\03.Character\01.Monster\EarthAberrant\02.Boss\00.MiddleBoss\00.Weapon</Filter>
+      <Filter>02.GameObject\03.Character\02.Boss\00.MiddleBoss\00.Weapon</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\Stargazer.h">
       <Filter>02.GameObject\96.Weapon\03.Stargazer</Filter>
@@ -971,16 +944,16 @@
       <Filter>02.GameObject\03.Character\01.Monster\Bastion_Shooter\Attack</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\MidBoss_Rage.h">
-      <Filter>02.GameObject\03.Character\01.Monster\EarthAberrant\02.Boss\00.MiddleBoss\State\00.Rage</Filter>
+      <Filter>02.GameObject\03.Character\02.Boss\00.MiddleBoss\State\00.Rage</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\MidBoss_Attack.h">
-      <Filter>02.GameObject\03.Character\01.Monster\EarthAberrant\02.Boss\00.MiddleBoss\State\02.Attack</Filter>
+      <Filter>02.GameObject\03.Character\02.Boss\00.MiddleBoss\State\02.Attack</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\MidBoss_BattleCry.h">
-      <Filter>02.GameObject\03.Character\01.Monster\EarthAberrant\02.Boss\00.MiddleBoss\State\01.BattleCry</Filter>
+      <Filter>02.GameObject\03.Character\02.Boss\00.MiddleBoss\State\01.BattleCry</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\MidBoss_Turn.h">
-      <Filter>02.GameObject\03.Character\01.Monster\EarthAberrant\02.Boss\00.MiddleBoss\State\03.Turn</Filter>
+      <Filter>02.GameObject\03.Character\02.Boss\00.MiddleBoss\State\03.Turn</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\Bastion_2HSword_Death.h">
       <Filter>02.GameObject\03.Character\01.Monster\Bastion_2HSword\State_2HSword\Death</Filter>
@@ -1157,8 +1130,8 @@
     </ClInclude>
     <ClInclude Include="..\Headers\UI_Monster_GroggyBar.h">
       <Filter>02.GameObject\05.UI\01.UI_Ingame\01.Meter\02.Monster\05.Groggy</Filter>
-	</ClInclude>
-	<ClInclude Include="..\Headers\JumpNode.h">
+    </ClInclude>
+    <ClInclude Include="..\Headers\JumpNode.h">
       <Filter>02.GameObject\02.Map\02.JumpNode</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\JumpTrigger.h">
@@ -1596,10 +1569,10 @@
       <Filter>02.GameObject\05.UI\01.UI_Ingame\01.Meter\00.Player\01.HpBar_Red</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\Boss_Bastion_Judicator.cpp">
-      <Filter>02.GameObject\03.Character\01.Monster\EarthAberrant\02.Boss\00.MiddleBoss</Filter>
+      <Filter>02.GameObject\03.Character\02.Boss\00.MiddleBoss</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\ShieldBreaker.cpp">
-      <Filter>02.GameObject\03.Character\01.Monster\EarthAberrant\02.Boss\00.MiddleBoss\00.Weapon</Filter>
+      <Filter>02.GameObject\03.Character\02.Boss\00.MiddleBoss\00.Weapon</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\Stargazer.cpp">
       <Filter>02.GameObject\96.Weapon\03.Stargazer</Filter>
@@ -1630,16 +1603,16 @@
       <Filter>02.GameObject\03.Character\01.Monster\Bastion_Shooter\Attack</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\MidBoss_Rage.cpp">
-      <Filter>02.GameObject\03.Character\01.Monster\EarthAberrant\02.Boss\00.MiddleBoss\State\00.Rage</Filter>
+      <Filter>02.GameObject\03.Character\02.Boss\00.MiddleBoss\State\00.Rage</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\MidBoss_Attack.cpp">
-      <Filter>02.GameObject\03.Character\01.Monster\EarthAberrant\02.Boss\00.MiddleBoss\State\02.Attack</Filter>
+      <Filter>02.GameObject\03.Character\02.Boss\00.MiddleBoss\State\02.Attack</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\MidBoss_BattleCry.cpp">
-      <Filter>02.GameObject\03.Character\01.Monster\EarthAberrant\02.Boss\00.MiddleBoss\State\01.BattleCry</Filter>
+      <Filter>02.GameObject\03.Character\02.Boss\00.MiddleBoss\State\01.BattleCry</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\MidBoss_Turn.cpp">
-      <Filter>02.GameObject\03.Character\01.Monster\EarthAberrant\02.Boss\00.MiddleBoss\State\03.Turn</Filter>
+      <Filter>02.GameObject\03.Character\02.Boss\00.MiddleBoss\State\03.Turn</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\Bastion_2HSword_Death.cpp">
       <Filter>02.GameObject\03.Character\01.Monster\Bastion_2HSword\State_2HSword\Death</Filter>
@@ -1813,8 +1786,8 @@
     </ClCompile>
     <ClCompile Include="..\Codes\UI_Monster_GroggyBar.cpp">
       <Filter>02.GameObject\05.UI\01.UI_Ingame\01.Meter\02.Monster\05.Groggy</Filter>
-	</ClCompile>
-	<ClCompile Include="..\Codes\JumpNode.cpp">
+    </ClCompile>
+    <ClCompile Include="..\Codes\JumpNode.cpp">
       <Filter>02.GameObject\02.Map\02.JumpNode</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\JumpTrigger.cpp">
