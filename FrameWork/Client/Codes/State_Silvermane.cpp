@@ -73,7 +73,7 @@ void CState_Silvermane::Set_AnimationController(CAnimationController* _pAnimatio
 const _int CState_Silvermane::Add_PlusAngle(const EDir _eDir, const _double& _dDeltaTime)
 {
 	_float fPlusAngle = m_pSilvermane->Get_PlusAngle();
-	_float fValue = 2.f; // 고정시킬 각도의 여유를 주는값
+	_float fValue = 4.f; // 고정시킬 각도의 여유를 주는값
 	switch (_eDir)
 	{
 	case EDir::Forward:

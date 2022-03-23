@@ -187,6 +187,7 @@ HRESULT CSilvermane::NativeConstruct(const _uint _iSceneID, void* _pArg)
 		return E_FAIL;
 
 	m_isFall = true;
+	m_fMoveSpeed = 2.f;
 
 	m_pRenderer->SetRenderButton(CRenderer::PIXEL, true);
 	m_pRenderer->SetRenderButton(CRenderer::PBRHDR, true);
@@ -214,12 +215,18 @@ _int CSilvermane::Tick(_double _dDeltaTime)
 	if (NO_EVENT != iProgress) 
 		return iProgress;
 
+	iProgress = KeyCheck(_dDeltaTime);
+	if (NO_EVENT != iProgress)
+		return iProgress;
+
 	Fall(_dDeltaTime);
 	//m_pCharacterController->Tick(_dDeltaTime);
 	m_pCharacterController->Move(_dDeltaTime, m_pTransform->Get_Velocity());
 
 
 	Raycast_JumpNode(_dDeltaTime);
+
+
 
 
 	// 무기 업뎃
@@ -389,7 +396,7 @@ HRESULT CSilvermane::Ready_Components()
 	m_pAnimationController->Set_GameObject(this);
 	m_pAnimationController->Set_Model(m_pModel);
 	m_pAnimationController->Set_Transform(m_pTransform);
-	m_pAnimationController->Set_MoveSpeed(16.f);
+	m_pAnimationController->Set_MoveSpeed(20.f);
 
 	// 스테이트 컨트롤러
 	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_StateController", L"StateController", (CComponent**)&m_pStateController)))
@@ -649,21 +656,33 @@ HRESULT CSilvermane::Ready_Weapons()
 	CWeapon* pWeapon = nullptr;
 	// 한손검
 	pWeapon = CNeedle::Create(m_pDevice, m_pDeviceContext);
-	pWeapon->NativeConstruct((_uint)SCENEID::SCENE_STATIC, pWeaponBone);
+	if (FAILED(pWeapon->NativeConstruct((_uint)SCENEID::SCENE_STATIC, pWeaponBone)))
+	{
+		Safe_Release(pWeapon);
+		return E_FAIL;
+	}
 	pWeapon->Set_Owner(this);
 	pWeapon->Set_OwnerPivotMatrix(m_pModel->Get_PivotMatrix());
 	m_umapWeapons.emplace(L"Needle", pWeapon);
 	m_pCurWeapon = pWeapon;
 	// 해머
 	pWeapon = CFury::Create(m_pDevice, m_pDeviceContext);
-	pWeapon->NativeConstruct((_uint)SCENEID::SCENE_STATIC, pWeaponBone);
+	if (FAILED(pWeapon->NativeConstruct((_uint)SCENEID::SCENE_STATIC, pWeaponBone)))
+	{
+		Safe_Release(pWeapon);
+		return E_FAIL;
+	}
 	pWeapon->Set_Owner(this);
 	pWeapon->Set_OwnerPivotMatrix(m_pModel->Get_PivotMatrix());
 	m_umapWeapons.emplace(L"Fury", pWeapon);
 	// 방패
 	pWeaponBone = m_pModel->Get_BoneMatrix("weapon_l");
 	m_pShield = CShield::Create(m_pDevice, m_pDeviceContext);
-	m_pShield->NativeConstruct((_uint)SCENEID::SCENE_STATIC, pWeaponBone);
+	if (FAILED(m_pShield->NativeConstruct((_uint)SCENEID::SCENE_STATIC, pWeaponBone)))
+	{
+		Safe_Release(m_pShield);
+		return E_FAIL;
+	}
 	m_pShield->Set_Owner(this);
 	m_pShield->Set_OwnerPivotMatrix(m_pModel->Get_PivotMatrix());
 	Set_EquipShield(false);
@@ -770,15 +789,25 @@ const CWeapon::EType CSilvermane::Get_WeaponType() const
 
 void CSilvermane::Add_PlusAngle(const _float _fDeltaAngle)
 {
-	//m_fPlusAngle += _fDeltaAngle * 400.f;
+	m_fPlusAngle += _fDeltaAngle * 400.f;
 
-	if (0 > _fDeltaAngle)
-		m_fPlusAngle -= 2.f;
-	else
-		m_fPlusAngle += 2.f;
+	//if (0 > _fDeltaAngle)
+	//	m_fPlusAngle -= 2.f;
+	//else
+	//	m_fPlusAngle += 2.f;
 
 	if (360.f < m_fPlusAngle || -360.f > m_fPlusAngle)
 		m_fPlusAngle = fmodf(m_fPlusAngle, 360.f);
+}
+
+void CSilvermane::Add_Velocity(const CTransform::STATE _eState, const _double& _dDeltaTime)
+{
+	m_pTransform->Add_Velocity(_eState, m_fMoveSpeed * _dDeltaTime);
+}
+
+void CSilvermane::Set_Position(const _float3 _vPosition)
+{
+	m_pCharacterController->setPosition(_vPosition);
 }
 
 const _bool CSilvermane::Get_IsAttack()
@@ -886,6 +915,25 @@ const _int CSilvermane::Fall(const _double& _dDeltaTime)
 		{
 			m_pTransform->Add_Velocity(XMVectorSet(0.f, -9.8f * (_float)_dDeltaTime, 0.f, 0.f));
 		}
+	}
+
+	return _int();
+}
+
+const _int CSilvermane::KeyCheck(const _double& _dDeltaTime)
+{
+	if (g_pGameInstance->getkeyDown(DIK_NUMPAD9))
+		Set_Position(_float3(-170.f, 65.f, 440.f));
+
+	if (g_pGameInstance->getkeyDown(DIK_MINUS))
+		m_isFall = !m_isFall;
+
+	if (!m_isFall)
+	{
+		if (g_pGameInstance->getkeyPress(DIK_UP))
+			m_pTransform->Add_Velocity(XMVectorSet(0.f, 10.f, 0.f, 0.f));
+		if (g_pGameInstance->getkeyPress(DIK_DOWN))
+			m_pTransform->Add_Velocity(XMVectorSet(0.f, -10.f, 0.f, 0.f));
 	}
 
 	return _int();

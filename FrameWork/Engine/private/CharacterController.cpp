@@ -80,6 +80,11 @@ void CCharacterController::setFootPosition(const _float3 & _vPosition)
 	m_pPxController->setFootPosition(pxvFootPos);
 }
 
+void CCharacterController::setPosition(const _float3& _vPosition)
+{
+	m_pPxController->setPosition(ToPxExtendedVec3(_vPosition));
+}
+
 void CCharacterController::setOwnerTransform(CTransform* _pTransform)
 {
 	m_pOwnerTransform = _pTransform;

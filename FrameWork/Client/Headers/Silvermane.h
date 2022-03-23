@@ -56,6 +56,8 @@ public:
 	void Set_Camera(CCamera_Silvermane* _pCamera);
 	void Set_PlusAngle(const _float _fAngle);
 	void Add_PlusAngle(const _float _fDeltaAngle);
+	void Add_Velocity(const CTransform::STATE _eState, const _double& _dDeltaTime);
+	void Set_Position(const _float3 _vPosition);
 
 	const _bool Get_IsAttack();
 public: /* For.Weapon */
@@ -79,6 +81,7 @@ public: /* For.JumpNode */
 private:
 	const _int Trace_CameraLook(const _double& _dDeltaTime);
 	const _int Fall(const _double& _dDeltaTime);
+	const _int KeyCheck(const _double& _dDeltaTime);
 
 private:
 	CModel* m_pModel = nullptr;
@@ -92,7 +95,7 @@ private:
 	_bool m_isTraceCamera = true;
 	_bool m_isAttack = false;
 
-
+	_float m_fMoveSpeed = 0.f;
 	_float m_fAngle = 0.f;
 	_float m_fPlusAngle = 0.f;
 
