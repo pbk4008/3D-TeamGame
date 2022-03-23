@@ -21,6 +21,8 @@ protected:
 	virtual HRESULT Render();
 public:
 	const _float Get_CurrentHpRatio();
+protected:
+	HRESULT Set_SpawnPosition(const _float3 vPoint);
 public:
 	const _bool Get_Dead() { return m_bDead; }
 	_float Get_CurrentHp() { return m_fCurrentHp; }

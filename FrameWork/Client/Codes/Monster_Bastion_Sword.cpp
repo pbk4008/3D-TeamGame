@@ -56,6 +56,10 @@ HRESULT CMonster_Bastion_Sword::NativeConstruct(const _uint _iSceneID, void* _pA
 
 	if (FAILED(SetUp_Components()))
 		return E_FAIL;
+	_float3 tPos = (*(_float3*)_pArg);
+
+	if (FAILED(Set_SpawnPosition(tPos)))
+		return E_FAIL;
 
 	if (FAILED(Set_Animation_FSM()))
 		return E_FAIL;
@@ -65,9 +69,6 @@ HRESULT CMonster_Bastion_Sword::NativeConstruct(const _uint _iSceneID, void* _pA
 
 	if (FAILED(Set_State_FSM()))
 		return E_FAIL;
-
-	_vector Pos = { 0.f, 0.f, 30.f, 1.f };
-	m_pTransform->Set_State(CTransform::STATE_POSITION, Pos);
 
 	m_fMaxHp = 3;
 	m_fCurrentHp = m_fMaxHp;

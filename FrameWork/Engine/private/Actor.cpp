@@ -1,5 +1,6 @@
 #include "Actor.h"
 #include "..\public\Actor.h"
+#include "Transform.h"
 
 CActor::CActor()
 	:m_fSpeed(0.f)
@@ -85,6 +86,19 @@ const _float CActor::Get_CurrentHpRatio()
 	_float fRatio = m_fCurrentHp / m_fMaxHp;
 
 	return fRatio;
+}
+
+HRESULT CActor::Set_SpawnPosition(const _float3 vPoint)
+{
+	if (!m_pTransform)
+		return E_FAIL;
+
+	_vector vPos = XMLoadFloat3(&vPoint);
+	vPos=XMVectorSetW(vPos, 1.f);
+
+	m_pTransform->Set_State(CTransform::STATE_POSITION, vPos);
+
+	return S_OK;
 }
 
 

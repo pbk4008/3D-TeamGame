@@ -313,9 +313,6 @@
     <Filter Include="02.GameObject\02.Map\02.JumpNode">
       <UniqueIdentifier>{15743125-3fab-4955-a1a7-2c3ab22ace2e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObject\02.Map\03.Trigger">
-      <UniqueIdentifier>{64538ba6-dcae-4651-a187-37e1fdf0fbf0}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObject\03.Character\02.Boss">
       <UniqueIdentifier>{5e4ce90c-d575-4e08-9ce0-006401437c35}</UniqueIdentifier>
     </Filter>
@@ -450,6 +447,12 @@
     </Filter>
     <Filter Include="02.GameObject\05.UI\01.UI_Ingame\01.Meter\05.Tutorial\01.SideTutorial\01.Font">
       <UniqueIdentifier>{bc016171-dd24-4100-ae51-f14583cc3157}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.System">
+      <UniqueIdentifier>{62988325-939c-4ebd-9df0-bc7e105ce642}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.System\00.Trigger">
+      <UniqueIdentifier>{64538ba6-dcae-4651-a187-37e1fdf0fbf0}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -886,7 +889,7 @@
       <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Shield\Attack</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\Client_Trigger.h">
-      <Filter>02.GameObject\02.Map\03.Trigger</Filter>
+      <Filter>03.System\00.Trigger</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\TestScene_YM.h">
       <Filter>01.Scene\98.TestScene_YM</Filter>
@@ -1118,6 +1121,9 @@
     </ClInclude>
     <ClInclude Include="..\Headers\UI_Tuto_Font.h">
       <Filter>02.GameObject\05.UI\01.UI_Ingame\01.Meter\05.Tutorial\01.SideTutorial\01.Font</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\TriggerSystem.h">
+      <Filter>03.System</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1533,7 +1539,7 @@
       <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Shield\Attack</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\Client_Trigger.cpp">
-      <Filter>02.GameObject\02.Map\03.Trigger</Filter>
+      <Filter>03.System\00.Trigger</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\TestScene_YM.cpp">
       <Filter>01.Scene\98.TestScene_YM</Filter>

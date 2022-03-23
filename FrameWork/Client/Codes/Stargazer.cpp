@@ -129,26 +129,29 @@ HRESULT CStargazer::SetUp_Material()
 {
 	if (!m_pModel)
 		return E_FAIL;
+	CMaterial* pMtrl = g_pGameInstance->Get_Material(L"Mtrl_Stargazer");
+	if (!pMtrl)
+	{
+		CTexture* pTexture = CTexture::Create(m_pDevice, m_pDeviceContext);
+		pTexture->NativeConstruct_Prototype(L"../Bin/Resources/Mesh/Stargazer/T_1h_Sword_Stargazer_D.dds", 1);
+		pMtrl = CMaterial::Create(m_pDevice, m_pDeviceContext, L"Mtrl_Stargazer", L"../../Reference/ShaderFile/Shader_Weapon.hlsl", CMaterial::EType::Static);
+		pMtrl->Set_Texture("g_DiffuseTexture", TEXTURETYPE::TEX_DIFFUSE, pTexture, 0);
 
-	CTexture* pTexture = CTexture::Create(m_pDevice, m_pDeviceContext);
-	pTexture->NativeConstruct_Prototype(L"../Bin/Resources/Mesh/Stargazer/T_1h_Sword_Stargazer_D.dds", 1);
-	CMaterial* pMtrl = CMaterial::Create(m_pDevice, m_pDeviceContext, L"Mtrl_Stargazer", L"../../Reference/ShaderFile/Shader_Weapon.hlsl", CMaterial::EType::Static);
-	pMtrl->Set_Texture("g_DiffuseTexture", TEXTURETYPE::TEX_DIFFUSE, pTexture, 0);
+		pTexture = CTexture::Create(m_pDevice, m_pDeviceContext);
+		pTexture->NativeConstruct_Prototype(L"../Bin/Resources/Mesh/Stargazer/T_1h_Sword_Stargazer_N.dds", 1);
+		pMtrl->Set_Texture("g_BiNormalTexture", TEXTURETYPE::TEX_NORMAL, pTexture, 0);
 
-	pTexture = CTexture::Create(m_pDevice, m_pDeviceContext);
-	pTexture->NativeConstruct_Prototype(L"../Bin/Resources/Mesh/Stargazer/T_1h_Sword_Stargazer_N.dds", 1);
-	pMtrl->Set_Texture("g_BiNormalTexture", TEXTURETYPE::TEX_NORMAL, pTexture, 0);
+		pTexture = CTexture::Create(m_pDevice, m_pDeviceContext);
+		pTexture->NativeConstruct_Prototype(L"../Bin/Resources/Mesh/Stargazer/T_1h_Sword_Stargazer_MRA.dds", 1);
+		pMtrl->Set_Texture("g_MRATexture", TEXTURETYPE::TEX_MRA, pTexture, 0);
 
-	pTexture = CTexture::Create(m_pDevice, m_pDeviceContext);
-	pTexture->NativeConstruct_Prototype(L"../Bin/Resources/Mesh/Stargazer/T_1h_Sword_Stargazer_MRA.dds", 1);
-	pMtrl->Set_Texture("g_MRATexture", TEXTURETYPE::TEX_MRA, pTexture, 0);
+		pTexture = CTexture::Create(m_pDevice, m_pDeviceContext);
+		pTexture->NativeConstruct_Prototype(L"../Bin/Resources/Mesh/Stargazer/T_1h_Sword_Stargazer_CEO.dds", 1);
+		pMtrl->Set_Texture("g_CEOTexture", TEXTURETYPE::TEX_CEO, pTexture, 0);
 
-	pTexture = CTexture::Create(m_pDevice, m_pDeviceContext);
-	pTexture->NativeConstruct_Prototype(L"../Bin/Resources/Mesh/Stargazer/T_1h_Sword_Stargazer_CEO.dds", 1);
-	pMtrl->Set_Texture("g_CEOTexture", TEXTURETYPE::TEX_CEO, pTexture, 0);
+		g_pGameInstance->Add_Material(L"Mtrl_Stargazer", pMtrl);
 
-	g_pGameInstance->Add_Material(L"Mtrl_Stargazer", pMtrl);
-
+	}
 	m_pModel->Add_Material(pMtrl, 0);
 
 	return S_OK;

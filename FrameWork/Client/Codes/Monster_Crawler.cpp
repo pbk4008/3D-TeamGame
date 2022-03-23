@@ -52,9 +52,12 @@ HRESULT CMonster_Crawler::NativeConstruct(const _uint _iSceneID, void* _pArg)
 	}
 
 
-	_vector Pos = { 0.f, 1.f, 3.f, 1.f };
-	m_pTransform->Set_State(CTransform::STATE_POSITION, Pos);
+	/*_vector Pos = { 0.f, 1.f, 3.f, 1.f };
+	m_pTransform->Set_State(CTransform::STATE_POSITION, Pos);*/
+	_float3 vPoint = (*(_float3*)_pArg);
 
+	if (FAILED(Set_SpawnPosition(vPoint)))
+		return E_FAIL;
 
 	//MonsterBar Panel
 	CUI_Monster_Panel::PANELDESC Desc;
