@@ -130,14 +130,14 @@ HRESULT CLoader::LoadForScene()
 
 HRESULT CLoader::SetUp_Stage1_Object()
 {
-	//if (FAILED(Load_Stage1FBXLoad()))
-	//	return E_FAIL;
-	//
-	//if (FAILED(Load_Stage1PlayerLoad()))
-	//	return E_FAIL;
+	if (FAILED(Load_Stage1FBXLoad()))
+		return E_FAIL;
+	
+	if (FAILED(Load_Stage1PlayerLoad()))
+		return E_FAIL;
 
-	/*if (FAILED(Load_Stage1MonsterLoad()))
-		return E_FAIL;*/
+	if (FAILED(Load_Stage1MonsterLoad()))
+		return E_FAIL;
 
 	//if (FAILED(Load_Stage1BossLoad()))
 	//	return E_FAIL;
@@ -145,8 +145,8 @@ HRESULT CLoader::SetUp_Stage1_Object()
 	//if (FAILED(Load_Stage1StaticUILoad()))
 	//	return E_FAIL;
 
-	if (FAILED(Load_Stage1UILoad()))
-		return E_FAIL;
+	//if (FAILED(Load_Stage1UILoad()))
+	//	return E_FAIL;
 
 	//if (FAILED(Load_Stage1EffectLoad()))
 	//	return E_FAIL;
@@ -523,6 +523,9 @@ HRESULT CLoader::SetUp_Stage1_Prototype()
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_CapsuleCollider", CCapsuleCollider::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_SphereCollider", CSphereCollider::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_AnimationController", CAnimationController::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 
@@ -561,11 +564,6 @@ HRESULT CLoader::Load_Stage1PlayerLoad()
 #pragma region 마테리얼
 	CMaterial* pMtrl = nullptr;
 #pragma region 무기
-	pTexture = CTexture::Create(m_pDevice, m_pDeviceContext);
-	pTexture->NativeConstruct_Prototype(L"../Bin/Resources/Mesh/Shield/T_ShieldBase_D.dds", 1);
-	pMtrl = CMaterial::Create(m_pDevice, m_pDeviceContext, L"Mtrl_Shield", L"../../Reference/ShaderFile/Shader_StaticMesh.hlsl", CMaterial::EType::Static);
-	pMtrl->Set_Texture("g_DiffuseTexture", TEXTURETYPE::TEX_DIFFUSE, pTexture, 0);
-	g_pGameInstance->Add_Material(L"Mtrl_Shield", pMtrl);
 #pragma endregion
 #pragma endregion
 
@@ -612,7 +610,7 @@ HRESULT CLoader::Load_Stage1PlayerLoad()
 	matPivot = XMMatrixIdentity();
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Shield", CModel::Create(m_pDevice, m_pDeviceContext,
 		"../bin/Resources/Mesh/Shield/", "Shield.fbx",
-		L"../../Reference/ShaderFile/Shader_StaticMesh.hlsl", matPivot, CModel::TYPE_STATIC, true))))
+		L"../../Reference/ShaderFile/Shader_Mesh.hlsl", matPivot, CModel::TYPE::TYPE_ANIM, true))))
 	{
 		return E_FAIL;
 	}

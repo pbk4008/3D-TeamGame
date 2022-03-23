@@ -42,6 +42,8 @@ public:
 	const _int Tick(const _double& _dDeltaTime);
 	const _int LateTick(const _double& _dDeltaTime);
 
+public: void		Remove_CCT();
+
 public:
 	const DESC& Get_CharacterControllerDesc() const;
 

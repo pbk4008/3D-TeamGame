@@ -32,7 +32,7 @@ _int CLayer::Tick(_double TimeDelta)
 
 	for (auto& pGameObject : m_Objects)
 	{
-		if (nullptr != pGameObject)
+		if (nullptr != pGameObject && pGameObject->getActive() == true)
 			iProgress = pGameObject->Tick(TimeDelta);			
 
 		if (0 > iProgress)
@@ -47,7 +47,7 @@ _int CLayer::LateTick(_double TimeDelta)
 
 	for (auto& pGameObject : m_Objects)
 	{
-		if (nullptr != pGameObject)
+		if (nullptr != pGameObject && pGameObject->getActive() == true)
 			iProgress = pGameObject->LateTick(TimeDelta);
 
 		if (0 > iProgress)

@@ -54,6 +54,16 @@ const _int CCharacterController::LateTick(const _double& _dDeltaTime)
 	return _int();
 }
 
+void CCharacterController::Remove_CCT()
+{
+	CPhysicsXSystem* phx = GET_INSTANCE(CPhysicsXSystem);
+
+	phx->Remove_Actor(m_pPxController->getActor());
+	Safe_PxRelease(m_pPxController);
+
+	RELEASE_INSTANCE(CPhysicsXSystem);
+}
+
 const CCharacterController::DESC& CCharacterController::Get_CharacterControllerDesc() const
 {
 	return m_tDesc;

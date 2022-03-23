@@ -39,11 +39,11 @@ _int CCrawler_Attack::Tick(const _double& TimeDelta)
 		++m_iAttackCount;
 	}
 
-	if (2 == m_iAttackCount)
+	if (1 == m_iAttackCount)
 	{
-		m_pStateController->Change_State(L"Ricochet");
+		m_pStateController->Change_State(L"Idle");
 		
-		cout << "리코챗으로변경" << endl;
+		cout << "아이들로 변경" << endl;
 	}
 
 	return _int();

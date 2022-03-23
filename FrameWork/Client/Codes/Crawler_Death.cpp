@@ -30,10 +30,10 @@ _int CCrawler_Death::Tick(const _double& TimeDelta)
 
 	m_pAnimator->Tick(TimeDelta);
 
-	if (m_pAnimator->Get_AnimController()->Is_Finished())
-	{
-		cout << "Á×À½" << endl;
-	}
+	//if (m_pAnimator->Get_AnimController()->Is_Finished())
+	//{
+	//	cout << "Á×À½" << endl;
+	//}
 
 	return _int();
 }
@@ -43,6 +43,12 @@ _int CCrawler_Death::LateTick(const _double& TimeDelta)
 	_int iProgress = __super::LateTick(TimeDelta);
 	if (NO_EVENT != iProgress)
 		return iProgress;
+
+	if (m_pAnimator->Get_CurrentAnimation()->Is_Finished())
+	{
+		static_cast<CMonster_Crawler*>(m_pMonster)->setActive(false);
+		static_cast<CMonster_Crawler*>(m_pMonster)->Clear_Physix();
+	}
 
 	return _int();
 }
@@ -63,7 +69,6 @@ HRESULT CCrawler_Death::EnterState()
 	//m_pTransform->Face_Target(g_pObserver->Get_PlayerPos());
 	m_pAnimator->Change_AnyEntryAnimation(CMonster_Crawler::MON_STATE::DEATH);
 
-
 	return S_OK;
 }
 
@@ -71,7 +76,6 @@ HRESULT CCrawler_Death::ExitState()
 {
 	if (FAILED(__super::ExitState()))
 		return E_FAIL;
-
 
 	return S_OK;
 }

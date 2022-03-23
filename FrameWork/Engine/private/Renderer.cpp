@@ -367,7 +367,7 @@ HRESULT CRenderer::Render_Final()
 
 HRESULT CRenderer::Render_PhysX()
 {
-	if (g_pGameInstance->getkeyDown(DIK_RCONTROL))
+	if (g_pGameInstance->getkeyDown(DIK_LCONTROL))
 		m_isPhysXRender = !m_isPhysXRender;
 
 	if (!m_isPhysXRender)
