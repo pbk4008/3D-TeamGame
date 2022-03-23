@@ -32,6 +32,7 @@ private:
 	HRESULT Ready_Trigger_Scene(const _tchar* pDataFilePath);
 	HRESULT Ready_Trigger_Monster(const _tchar* pDataFilePath);
 	HRESULT Ready_Trigger_Quest(const _tchar* pDataFilePath);
+	HRESULT Ready_Trigger_Jump();
 
 private:
 	HRESULT	Ready_Treasure_Chest();

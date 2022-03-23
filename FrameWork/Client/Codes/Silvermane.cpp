@@ -188,7 +188,6 @@ HRESULT CSilvermane::NativeConstruct(const _uint _iSceneID, void* _pArg)
 		return E_FAIL;
 
 	m_isFall = true;
-	m_fMoveSpeed = 2.f;
 
 	m_pRenderer->SetRenderButton(CRenderer::PIXEL, true);
 	m_pRenderer->SetRenderButton(CRenderer::PBRHDR, true);
@@ -397,7 +396,8 @@ HRESULT CSilvermane::Ready_Components()
 	m_pAnimationController->Set_GameObject(this);
 	m_pAnimationController->Set_Model(m_pModel);
 	m_pAnimationController->Set_Transform(m_pTransform);
-	m_pAnimationController->Set_MoveSpeed(20.f);
+	m_pAnimationController->Set_MoveSpeed(30.f);
+	m_fMoveSpeed = 3.f;
 
 	// 스테이트 컨트롤러
 	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_StateController", L"StateController", (CComponent**)&m_pStateController)))
