@@ -104,6 +104,7 @@ _int CBoss_Bastion_Judicator::Tick(_double TimeDelta)
 	
 	if (0 >= m_fCurrentHp)
 	{
+		m_bDead = true;
 		m_pStateController->Change_State(L"Death");
 	}
 
@@ -116,7 +117,7 @@ _int CBoss_Bastion_Judicator::Tick(_double TimeDelta)
 		m_pPanel->Set_GroggyBar(m_fMaxGroggy, m_fGroggy);
 	}
 	
-	if (true == m_bGroggy)
+	if (true == m_bGroggy || true == m_bDead )
 	{
 		m_fGroggy = 0.f;
 		m_pPanel->Set_GroggyBar(m_fMaxGroggy, m_fGroggy);
