@@ -35,7 +35,7 @@ HRESULT CBoss_Bastion_Judicator::NativeConstruct(const _uint _iSceneID, void* pA
 	if (FAILED(__super::NativeConstruct(_iSceneID, pArg)))
 		return E_FAIL;
 
-	_vector Pos = { 0.f, 12.f, 10.f, 1.f };
+	_vector Pos = { 0.f, 12.f, 20.f, 1.f };
 	m_pTransform->Set_State(CTransform::STATE_POSITION, Pos);
 
 	if (FAILED(SetUp_Components()))
