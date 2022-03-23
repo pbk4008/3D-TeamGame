@@ -4,6 +4,7 @@
 
 #include "Animator.h"
 #include "Material.h"
+
 #include "Effect_DashDust.h"
 #include "UI_Ingame.h"
 #include "UI_Player_HpBar.h"
@@ -13,6 +14,9 @@
 #include "UI_Monster_Level.h"
 #include "UI_Monster_HpBar.h"
 #include "UI_Monster_Name.h"
+#include "UI_Tuto_Base.h"
+#include "UI_Tuto_Font.h"
+
 #include "Instancing_Mesh.h"
 #include "Client_Trigger.h"
 #include "Environment.h"
@@ -126,11 +130,11 @@ HRESULT CLoader::LoadForScene()
 
 HRESULT CLoader::SetUp_Stage1_Object()
 {
-	if (FAILED(Load_Stage1FBXLoad()))
-		return E_FAIL;
-
-	if (FAILED(Load_Stage1PlayerLoad()))
-		return E_FAIL;
+	//if (FAILED(Load_Stage1FBXLoad()))
+	//	return E_FAIL;
+	//
+	//if (FAILED(Load_Stage1PlayerLoad()))
+	//	return E_FAIL;
 
 	/*if (FAILED(Load_Stage1MonsterLoad()))
 		return E_FAIL;*/
@@ -138,11 +142,11 @@ HRESULT CLoader::SetUp_Stage1_Object()
 	//if (FAILED(Load_Stage1BossLoad()))
 	//	return E_FAIL;
 
-	/*if (FAILED(Load_Stage1StaticUILoad()))
-		return E_FAIL;*/
-
-	//if (FAILED(Load_Stage1UILoad()))
+	//if (FAILED(Load_Stage1StaticUILoad()))
 	//	return E_FAIL;
+
+	if (FAILED(Load_Stage1UILoad()))
+		return E_FAIL;
 
 	//if (FAILED(Load_Stage1EffectLoad()))
 	//	return E_FAIL;
@@ -387,6 +391,27 @@ HRESULT CLoader::Load_Stage1UILoad()
 		return E_FAIL;
 	}
 	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"Texture_Monster_Name", L"../bin/Resources/Texture/UI/Static/Active/MonsterName_%d.dds", 10)))
+	{
+		return E_FAIL;
+	}
+
+
+	//Tuto_Base
+	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_UI_Tuto_Base"), CUI_Tuto_Base::Create(m_pDevice, m_pDeviceContext))))
+	{
+		return E_FAIL;
+	}
+	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"Texture_Tuto_Base", L"../bin/Resources/Texture/UI/Static/Active/T_HUD_Tutorial_Backplate.dds")))
+	{
+		return E_FAIL;
+	}
+
+	//Tuto_Base
+	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_UI_Tuto_Font"), CUI_Tuto_Font::Create(m_pDevice, m_pDeviceContext))))
+	{
+		return E_FAIL;
+	}
+	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"Texture_Tuto_Font", L"../bin/Resources/Texture/UI/Static/Active/Tuto_Font_%d.dds", 4)))
 	{
 		return E_FAIL;
 	}
