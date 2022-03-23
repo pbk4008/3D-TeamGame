@@ -26,19 +26,13 @@ HRESULT CStage1::NativeConstruct()
 	if (FAILED(Ready_Light())) return E_FAIL;
 
 	if (FAILED(Ready_MapObject()))
-	{
 		return E_FAIL;
-	}
 	
 	if (FAILED(Ready_Player(L"Layer_Silvermane")))
-	{
 		return E_FAIL;
-	}
 
 	if (FAILED(Ready_Monster(L"Layer_Monster")))
-	{
 		return E_FAIL;
-	}
 
 	//if (FAILED(Ready_Boss(L"Layer_Boss")))
 	//{
@@ -177,7 +171,7 @@ HRESULT CStage1::Ready_Monster(const _tchar* LayerTag)
 			return E_FAIL;
 	}
 
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Monster", L"Monster_Bastion_2HSword")))
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Monster", L"Proto_GameObject_Monster_Bastion_2HSword")))
 		return E_FAIL;
 	
 	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Proto_GameObject_Monster_EarthAberrant")))
@@ -258,8 +252,8 @@ HRESULT CStage1::Ready_Light()
 	ZeroMemory(&LightDesc, sizeof(LIGHTDESC));
 
 	LightDesc.eType = LIGHTDESC::TYPE_DIRECTIONAL;
-	LightDesc.vDirection = _float3(-1.f, -1.f, 1.f);
-	LightDesc.vDiffuse = _float4(1.f, 1.f, 1.f, 1.f);
+	LightDesc.vDirection = _float3(0.f, -1.f, 1.f);
+	LightDesc.vDiffuse = _float4(0.949f, 0.596f, 0.525f, 1.f);
 	LightDesc.vSpecular = _float4(0.8f, 0.8f, 0.8f, 1.f);
 	LightDesc.vAmbient = _float4(0.6f, 0.6f, 0.6f, 1.f);
 

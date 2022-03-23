@@ -171,7 +171,7 @@ PS_OUT_LIGHTACC PS_MAIN_LIGHTACC_DIRECTIONAL(PS_IN In)
 		float3 V = normalize(g_vCamPosition.xyz - vWorldPos.xyz);
 		float3 L = normalize(g_vLightPos.xyz - vWorldPos.xyz);
 		//float3 L = (g_vLightDir.xyz) * -1;
-		float F0 = 0.04;
+		float F0 = 0.93;
 		
 		float alpha = Roughness * Roughness;
 		
