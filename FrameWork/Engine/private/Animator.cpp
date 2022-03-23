@@ -1,5 +1,4 @@
 #include "Animator.h"
-#include "AnimationController.h"
 #include "AnimNode.h"
 #include "Animation.h"
 
@@ -10,6 +9,7 @@ CAnimator::CAnimator(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
 	, m_pCulAnimNode(nullptr)
 	, m_pChangeNode(nullptr)
 	, m_bLerp(false)
+	, m_eType(CAnimationController::EType::Max)
 {
 }
 
@@ -20,6 +20,7 @@ CAnimator::CAnimator(const CAnimator& rhs)
 	, m_pCulAnimNode(nullptr)
 	, m_pChangeNode(nullptr)
 	, m_bLerp(false)
+	, m_eType(rhs.m_eType)
 {
 	Safe_AddRef(m_pController);
 }
@@ -46,6 +47,7 @@ HRESULT CAnimator::NativeConstruct(void* pArg)
 	if (!m_pController)
 		return E_FAIL;
 
+	m_eType = tDesc.eType;
 	m_pController->Set_Model(tDesc.pModel);
 	m_pController->Set_Transform(tDesc.pTransform);
 	m_pController->Set_MoveSpeed(40.f);
@@ -62,7 +64,7 @@ HRESULT CAnimator::NativeConstruct(void* pArg)
 
 _int CAnimator::Tick(_double dDeltaTime)
 {
-	m_pController->Tick(dDeltaTime * m_fPlaySpeed);
+	m_pController->Tick(dDeltaTime * m_fPlaySpeed, m_eType);
 	if (m_pController->Get_ChangeAnimation())
 	{
 		m_pCulAnimNode = m_pChangeNode;
