@@ -52,7 +52,7 @@ HRESULT CMonster_Crawler::NativeConstruct(const _uint _iSceneID, void* _pArg)
 	}
 
 
-	_vector Pos = { 0.f, 0.f, 9.f, 1.f };
+	_vector Pos = { 0.f, 1.f, 3.f, 1.f };
 	m_pTransform->Set_State(CTransform::STATE_POSITION, Pos);
 
 
