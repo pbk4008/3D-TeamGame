@@ -52,6 +52,8 @@ HRESULT CEnvironment::NativeConstruct(const _uint _iSceneID, void* pArg)
 
 _int CEnvironment::Tick(_double TimeDelta)
 {
+	//_vector vPos=g_pGameInstance->Get_CamPosition(L"Camera_Silvermane");
+	//cout << XMVectorGetX(vPos) << ", " << XMVectorGetY(vPos) << ", " << XMVectorGetZ(vPos) << endl;
 	return _int();
 }
 
@@ -59,6 +61,7 @@ _int CEnvironment::LateTick(_double TimeDelta)
 {
 	if (FAILED(Culling()))
 		return -1;
+
 	m_pRenderer->Add_RenderGroup(CRenderer::RENDER_NONALPHA, this);
 	return _int();
 }
@@ -149,9 +152,9 @@ HRESULT CEnvironment::Culling()
 {
 	for (_uint i = 0; i < m_iInstanceCnt; i++)
 	{
-		_matrix matTmp = XMLoadFloat4x4(&m_vecUsingMatrix[i]);
+		_matrix matTmp = XMLoadFloat4x4(&m_tEnvironmentDesc.tInstanceDesc.vecMatrix[i]);
 		_vector vPos = matTmp.r[3];
-		if (!g_pGameInstance->isIn_WorldFrustum(vPos, 20.f))
+		if (!g_pGameInstance->isIn_WorldFrustum(vPos, 50.f))
 			ZeroMemory(&m_vecUsingMatrix[i], sizeof(_float4x4));
 		else
 			m_vecUsingMatrix[i] = m_tEnvironmentDesc.tInstanceDesc.vecMatrix[i];

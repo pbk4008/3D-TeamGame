@@ -17,7 +17,9 @@ HRESULT CStargazer::NativeConstruct_Prototype()
 	if (FAILED(CWeapon::NativeConstruct_Prototype()))
 		return E_FAIL;
 
-	m_eType = EType::Sword_1H;
+	m_eType = EType::Monster_Sword1H;
+	m_iObectTag = (_uint)GAMEOBJECT::WEAPON;
+
 	return S_OK;
 }
 

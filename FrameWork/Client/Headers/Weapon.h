@@ -7,7 +7,7 @@ BEGIN(Client)
 class CWeapon abstract : public CGameObject
 {
 public:
-	enum class EType { None, Sword_1H, Sword_2H, Hammer_2H, Shield, Staff,Earth_Pick ,Max};
+	enum class EType { None, Sword_1H, Sword_2H, Monster_Sword1H, Hammer_2H, Shield, Staff,Earth_Pick ,Max};
 protected:
 	explicit CWeapon(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext);
 	explicit CWeapon(const CWeapon& _rhs);
