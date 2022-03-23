@@ -54,6 +54,8 @@ public:
 	void Go_Up(const _float _fVelocityY);
 	void Go_Down(_double TimeDelta);
 	void Chase_Target(const CTransform* pTargetTransform, _double TimeDelta);
+	_fvector Chase_Pos(const CTransform* pTargetTransform, _double TimeDelta);
+
 	void Face_Target(_fvector	vTargetPos);
 	void Rotation_Axis(_fvector vAxis, _double TimeDelta); /* 동적으로 TimeDelta이용한 회전. */
 	void Rotation_Axis(const STATE _eState, const _float _fValue);

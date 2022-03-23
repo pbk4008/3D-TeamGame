@@ -5,6 +5,8 @@
 #include "Silvermane.h"
 #include "StateController.h"
 
+#include "Material.h"
+
 CNeedle::CNeedle(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
 	: CWeapon(_pDevice, _pDeviceContext)
 {
@@ -20,8 +22,26 @@ HRESULT CNeedle::NativeConstruct_Prototype()
 	if (FAILED(__super::NativeConstruct_Prototype()))
 		return E_FAIL;
 
+	m_iObectTag = (_uint)GAMEOBJECT::WEAPON;
 	m_eType = EType::Sword_1H;
 	m_wstrName = L"Needle";
+
+	CMaterial* pMtrl = nullptr;
+	CTexture* pTexture = nullptr;
+	pMtrl = CMaterial::Create(m_pDevice, m_pDeviceContext, L"Mtrl_Needle", L"../../Reference/ShaderFile/Shader_Weapon.hlsl", CMaterial::EType::Static);
+	pTexture = CTexture::Create(m_pDevice, m_pDeviceContext);
+	pTexture->NativeConstruct_Prototype(L"../Bin/Resources/Mesh/Needle/T_1h_Sword_Needle_D.dds", 1);
+	pMtrl->Set_Texture("g_DiffuseTexture", TEXTURETYPE::TEX_DIFFUSE, pTexture, 0);
+	pTexture = CTexture::Create(m_pDevice, m_pDeviceContext);
+	pTexture->NativeConstruct_Prototype(L"../Bin/Resources/Mesh/Needle/T_1h_Sword_Needle_N.dds", 1);
+	pMtrl->Set_Texture("g_BiNormalTexture", TEXTURETYPE::TEX_NORMAL, pTexture, 0);
+	pTexture = CTexture::Create(m_pDevice, m_pDeviceContext);
+	pTexture->NativeConstruct_Prototype(L"../Bin/Resources/Mesh/Needle/T_1h_Sword_Needle_MRA.dds", 1);
+	pMtrl->Set_Texture("g_MRATexture", TEXTURETYPE::TEX_MRA, pTexture, 0);
+	pTexture = CTexture::Create(m_pDevice, m_pDeviceContext);
+	pTexture->NativeConstruct_Prototype(L"../Bin/Resources/Mesh/Needle/T_1h_Sword_Needle_CEO.dds", 1);
+	pMtrl->Set_Texture("g_CEOTexture", TEXTURETYPE::TEX_CEO, pTexture, 0);
+	g_pGameInstance->Add_Material(L"Mtrl_Needle", pMtrl);
 
 	return S_OK;
 }
@@ -101,6 +121,7 @@ HRESULT CNeedle::Ready_Components()
 
 	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Model_Needle", L"Model", (CComponent**)&m_pModel)))
 		return E_FAIL;
+	m_pModel->Add_Material(g_pGameInstance->Get_Material(L"Mtrl_Needle"), 0);
 
 	CCollider::DESC tColliderDesc;
 	tColliderDesc.isTrigger = true;

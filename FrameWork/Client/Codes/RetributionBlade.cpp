@@ -23,6 +23,7 @@ HRESULT CRetributionBlade::NativeConstruct_Prototype()
 
 	m_eType = EType::Sword_2H;
 	m_wstrName = L"RetributionBlade";
+	m_iObectTag = (_uint)GAMEOBJECT::WEAPON;
 
 	return S_OK;
 }

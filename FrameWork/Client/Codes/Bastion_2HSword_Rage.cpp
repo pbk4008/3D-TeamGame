@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "Bastion_2HSword_Rage.h"
+#include "Animation.h"
 
 /* Monster List */
 #include "Monster_Bastion_2HSword.h"
@@ -29,6 +30,11 @@ _int CBastion_2HSword_Rage::Tick(const _double& _dDeltaTime)
 		return iProgress;
 
 	m_pAnimator->Tick(_dDeltaTime);
+	CAnimation* pAnim = m_pAnimator->Get_CurrentAnimation();
+
+	_uint CurAnim = m_pAnimator->Get_CurrentAnimNode();
+	if((CurAnim != (_uint)CMonster_Bastion_2HSword::ANIM_TYPE::A_TAUNT_ROAR) && pAnim->Is_Finished())
+		m_pTransform->Add_Velocity(m_pTransform->Chase_Pos(g_pObserver->Get_Transform(), _dDeltaTime));
 
 	return _int();
 }

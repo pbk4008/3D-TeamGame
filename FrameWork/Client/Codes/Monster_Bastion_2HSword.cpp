@@ -46,6 +46,9 @@ HRESULT CMonster_Bastion_2HSword::NativeConstruct(const _uint _iSceneID, void* _
 	if (FAILED(Ready_StateFSM()))
 		return E_FAIL;
 
+	m_isFall = true;
+	m_iObectTag = (_uint)GAMEOBJECT::MONSTER_2H;
+
 	return S_OK;
 }
 
@@ -54,6 +57,7 @@ _int CMonster_Bastion_2HSword::Tick(_double _dDeltaTime)
 	_int iProgress = __super::Tick(_dDeltaTime);
 	if (NO_EVENT != iProgress) 
 		return iProgress;
+	m_pTransform->Set_Velocity(XMVectorZero());
 
 	/* Collider Update */
 	//m_pColliderCom->Update(m_pTransform->Get_WorldMatrix());
@@ -62,6 +66,9 @@ _int CMonster_Bastion_2HSword::Tick(_double _dDeltaTime)
 	iProgress = m_pStateController->Tick(_dDeltaTime);
 	if (NO_EVENT != iProgress)
 		return iProgress;
+
+	Fall(_dDeltaTime);
+	m_pCharacterController->Move(_dDeltaTime, m_pTransform->Get_Velocity());
 
 	// 公扁 诀但
 	if (m_pCurWeapon)
@@ -79,13 +86,15 @@ _int CMonster_Bastion_2HSword::LateTick(_double _dDeltaTime)
 	if (NO_EVENT != iProgress) 
 		return iProgress;
 
+	if (FAILED(m_pRenderer->Add_RenderGroup(CRenderer::RENDER_NONALPHA, this)))
+		return -1;
+
+	m_pCharacterController->Update_OwnerTransform();
+
 	/* State FSM Late Update */
 	iProgress = m_pStateController->LateTick(_dDeltaTime);
 	if (NO_EVENT != iProgress)
 		return iProgress;
-
-
-	m_pCharacterController->Update_OwnerTransform();
 
 	// 公扁 饭勒诀但
 	if (m_pCurWeapon)
@@ -95,8 +104,6 @@ _int CMonster_Bastion_2HSword::LateTick(_double _dDeltaTime)
 			return iProgress;
 	}
 
-	if (FAILED(m_pRenderer->Add_RenderGroup(CRenderer::RENDER_ALPHA, this)))
-		return -1;
 	return _int();
 }
 
@@ -138,10 +145,10 @@ HRESULT CMonster_Bastion_2HSword::Ready_Components()
 {
 	/* for. Transform Com */
 	CTransform::TRANSFORMDESC transformDesc;
-	transformDesc.fSpeedPerSec = 0.7f;
+	transformDesc.fSpeedPerSec = 2.0f;
 	transformDesc.fRotationPerSec = XMConvertToRadians(90.f);
 	m_pTransform->Set_TransformDesc(transformDesc);
-	_float4 vPosition = { 0.f, 2.f, 3.f, 1.f };
+	_float4 vPosition = { 0.f, 2.f, 20.f, 1.f };
 
 	m_pTransform->Set_State(CTransform::STATE_POSITION, XMLoadFloat4(&vPosition));
 
@@ -158,6 +165,7 @@ HRESULT CMonster_Bastion_2HSword::Ready_Components()
 
 	m_AanimDesc.pModel = m_pModel;
 	m_AanimDesc.pTransform = m_pTransform;
+	m_AanimDesc.eType = CAnimationController::EType::CharacterController;
 
 	/* for.Anim FSM */
 	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_Animator", L"Animator", (CComponent**)&m_pAnimator, &m_AanimDesc)))
@@ -176,6 +184,7 @@ HRESULT CMonster_Bastion_2HSword::Ready_Components()
 
 	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_CharacterController", L"CharacterController", (CComponent**)&m_pCharacterController, &tCharacterControllerDesc)))
 		return E_FAIL;
+	m_pCharacterController->setOwnerTransform(m_pTransform);
 
 	return S_OK;
 }
@@ -317,11 +326,11 @@ HRESULT CMonster_Bastion_2HSword::Ready_AnimFSM(void)
 #pragma region Rage
 	//Rage
 	pAnimation = m_pModel->Get_Animation("A_Taunt_Roar");
-	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::A_TAUNT_ROAR, (_uint)ANIM_TYPE::A_HEAD, pAnimation, TRUE, TRUE, FALSE, ERootOption::XYZ, FALSE)))
+	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::A_TAUNT_ROAR, (_uint)ANIM_TYPE::A_HEAD, pAnimation, FALSE, FALSE, FALSE, ERootOption::XYZ, FALSE)))
 		return E_FAIL;
 
 	pAnimation = m_pModel->Get_Animation("A_BattleCry_Start");
-	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::A_BATTLECRY_ST, (_uint)ANIM_TYPE::A_TAUNT_ROAR, pAnimation, TRUE, TRUE, FALSE, ERootOption::XYZ, FALSE)))
+	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::A_BATTLECRY_ST, (_uint)ANIM_TYPE::A_TAUNT_ROAR, pAnimation, FALSE, FALSE, FALSE, ERootOption::XYZ, FALSE)))
 		return E_FAIL;
 
 	pAnimation = m_pModel->Get_Animation("A_BattleCry");
@@ -470,6 +479,19 @@ HRESULT CMonster_Bastion_2HSword::Render_Debug(void)
 		return E_FAIL;
 
 	return S_OK;
+}
+
+const _int CMonster_Bastion_2HSword::Fall(const _double& _dDeltaTime)
+{
+	if (m_isFall)
+	{
+		_vector svPos = m_pTransform->Get_State(CTransform::STATE_POSITION);
+		if (-10.f < XMVectorGetY(svPos))
+		{
+			m_pTransform->Add_Velocity(XMVectorSet(0.f, -9.8f * (_float)_dDeltaTime, 0.f, 0.f));
+		}
+	}
+	return _int();
 }
 
 CMonster_Bastion_2HSword* CMonster_Bastion_2HSword::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
