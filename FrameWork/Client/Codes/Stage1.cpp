@@ -26,10 +26,10 @@ HRESULT CStage1::NativeConstruct()
 	if (FAILED(Ready_Light())) return E_FAIL;
 	
 
-	if (FAILED(Ready_MapObject()))
+	/*if (FAILED(Ready_MapObject()))
 	{
 		return E_FAIL;
-	}
+	}*/
 
 	if (FAILED(Ready_Player(L"Layer_Silvermane")))
 	{
@@ -41,10 +41,10 @@ HRESULT CStage1::NativeConstruct()
 		return E_FAIL;
 	}
 
-	if (FAILED(Ready_Monster(L"Layer_Monster")))
-	{
-		return E_FAIL;
-	}
+	//if (FAILED(Ready_Monster(L"Layer_Monster")))
+	//{
+	//	return E_FAIL;
+	//}
 
 	//Data
 	if (FAILED(Ready_Data_UI(L"../bin/SaveData/UI/UI.dat")))
@@ -57,10 +57,10 @@ HRESULT CStage1::NativeConstruct()
 		return E_FAIL;
 	}
 
-	//if (FAILED(Ready_UI(L"Layer_UI")))
-	//{
-	//	return E_FAIL;
-	//}
+	if (FAILED(Ready_UI(L"Layer_UI")))
+	{
+		return E_FAIL;
+	}
 
 	//if (FAILED(Ready_Trigger_Lod(L"../bin/SaveData/Trigger/Stage1_LodTri.dat")))
 	//	return E_FAIL;

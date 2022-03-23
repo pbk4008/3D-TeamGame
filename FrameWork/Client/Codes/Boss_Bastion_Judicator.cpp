@@ -443,7 +443,7 @@ const _int CBoss_Bastion_Judicator::Fall(const _double& TimeDelta)
 void CBoss_Bastion_Judicator::OnTriggerEnter(CCollision& collision)
 {
 
-	if (true == g_pObserver->Get_IsAttack()) //플레이어공격일때
+	if (true == g_pObserver->IsAttack()) //플레이어공격일때
 	{
 		m_bFirstHit = true; //딱 한번 true로 변경해줌
 
@@ -472,6 +472,13 @@ void CBoss_Bastion_Judicator::OnTriggerEnter(CCollision& collision)
 			
 	}
 	
+}
+
+void CBoss_Bastion_Judicator::Set_IsAttack(const _bool _isAttack)
+{
+	m_bIsAttack = _isAttack;
+	if (m_pWeapon)
+		m_pWeapon->Set_IsAttack(_isAttack);
 }
 
 

@@ -142,7 +142,7 @@ HRESULT CMonster_Crawler::Render()
 
 void CMonster_Crawler::OnTriggerEnter(CCollision& collision)
 {
-	if ((_uint)GAMEOBJECT::WEAPON == collision.pGameObject->getTag() && g_pObserver->Get_IsAttack() && m_fHp > 0)
+	if ((_uint)GAMEOBJECT::WEAPON == collision.pGameObject->getTag() && g_pObserver->IsAttack() && m_fHp > 0)
 	{
 		m_fHp -= 2;
 		m_pStateController->Change_State(L"Flinch_Left");
