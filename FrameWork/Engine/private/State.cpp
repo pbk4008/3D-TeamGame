@@ -67,6 +67,30 @@ void CState::Set_StateController(CStateController* _pStateController)
 	m_pStateController = _pStateController;
 }
 
+void CState::OnCollisionEnter(CCollision& collision)
+{
+}
+
+void CState::OnCollisionStay(CCollision& collision)
+{
+}
+
+void CState::OnCollisionExit(CCollision& collision)
+{
+}
+
+void CState::OnTriggerEnter(CCollision& collision)
+{
+}
+
+void CState::OnTriggerStay(CCollision& collision)
+{
+}
+
+void CState::OnTriggerExit(CCollision& collision)
+{
+}
+
 void CState::Free()
 {
 	Safe_Release(m_pDeviceContext);

@@ -154,6 +154,8 @@ HRESULT CSilvermane::NativeConstruct_Prototype()
 	if (FAILED(__super::NativeConstruct_Prototype()))
 		return E_FAIL;
 
+	m_iObectTag = (_uint)GAMEOBJECT::PLAYER;
+
 	return S_OK;
 }
 
@@ -652,20 +654,20 @@ HRESULT CSilvermane::Ready_Weapons()
 	pWeapon->Set_OwnerPivotMatrix(m_pModel->Get_PivotMatrix());
 	m_umapWeapons.emplace(L"Needle", pWeapon);
 	m_pCurWeapon = pWeapon;
-	// 해머
-	pWeapon = CFury::Create(m_pDevice, m_pDeviceContext);
-	pWeapon->NativeConstruct(m_iSceneID, pWeaponBone);
-	pWeapon->Set_Owner(this);
-	pWeapon->Set_OwnerPivotMatrix(m_pModel->Get_PivotMatrix());
-	m_umapWeapons.emplace(L"Fury", pWeapon);
+	//// 해머
+	//pWeapon = CFury::Create(m_pDevice, m_pDeviceContext);
+	//pWeapon->NativeConstruct(m_iSceneID, pWeaponBone);
+	//pWeapon->Set_Owner(this);
+	//pWeapon->Set_OwnerPivotMatrix(m_pModel->Get_PivotMatrix());
+	//m_umapWeapons.emplace(L"Fury", pWeapon);
 
-	// 방패
-	pWeaponBone = m_pModel->Get_BoneMatrix("weapon_l");
-	m_pShield = CShield::Create(m_pDevice, m_pDeviceContext);
-	m_pShield->NativeConstruct(m_iSceneID, pWeaponBone);
-	m_pShield->Set_Owner(this);
-	m_pShield->Set_OwnerPivotMatrix(m_pModel->Get_PivotMatrix());
-	Set_EquipShield(false);
+	//// 방패
+	//pWeaponBone = m_pModel->Get_BoneMatrix("weapon_l");
+	//m_pShield = CShield::Create(m_pDevice, m_pDeviceContext);
+	//m_pShield->NativeConstruct(m_iSceneID, pWeaponBone);
+	//m_pShield->Set_Owner(this);
+	//m_pShield->Set_OwnerPivotMatrix(m_pModel->Get_PivotMatrix());
+	//Set_EquipShield(false);
 	
 	return S_OK;
 }
