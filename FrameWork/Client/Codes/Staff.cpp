@@ -4,6 +4,7 @@
 #include "HierarchyNode.h"
 #include "Silvermane.h"
 #include "Monster_Bastion_Healer.h"
+#include "Material.h"
 #include "StateController.h"
 
 CStaff::CStaff(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
@@ -23,6 +24,20 @@ HRESULT CStaff::NativeConstruct_Prototype()
 
 	m_eType = EType::Staff;
 	m_wstrName = L"Staff";
+
+	CMaterial* pMtrl = nullptr;
+	CTexture* pTexture = nullptr;
+	pMtrl = CMaterial::Create(m_pDevice, m_pDeviceContext, L"Mtrl_Staff", L"../../Reference/ShaderFile/Shader_Weapon.hlsl", CMaterial::EType::Static);
+	pTexture = CTexture::Create(m_pDevice, m_pDeviceContext);
+	pTexture->NativeConstruct_Prototype(L"../Bin/Resources/Mesh/Staff/T_bastion_staff_D.dds", 1);
+	pMtrl->Set_Texture("g_DiffuseTexture", TEXTURETYPE::TEX_DIFFUSE, pTexture, 0);
+	pTexture = CTexture::Create(m_pDevice, m_pDeviceContext);
+	pTexture->NativeConstruct_Prototype(L"../Bin/Resources/Mesh/Staff/T_bastion_staff_N.dds", 1);
+	pMtrl->Set_Texture("g_BiNormalTexture", TEXTURETYPE::TEX_NORMAL, pTexture, 0);
+	pTexture = CTexture::Create(m_pDevice, m_pDeviceContext);
+	pTexture->NativeConstruct_Prototype(L"../Bin/Resources/Mesh/Staff/T_bastion_staff_OMER.dds", 1);
+	pMtrl->Set_Texture("g_MRATexture", TEXTURETYPE::TEX_OMER, pTexture, 0);
+	g_pGameInstance->Add_Material(L"Mtrl_Staff", pMtrl);
 
 	return S_OK;
 }
@@ -58,7 +73,7 @@ _int CStaff::LateTick(_double _dDeltaTime)
 		return -1;
 
 	if(m_pRenderer)
-		m_pRenderer->Add_RenderGroup(CRenderer::RENDER_ALPHA, this);
+		m_pRenderer->Add_RenderGroup(CRenderer::RENDER_NONALPHA, this);
 
 	return _int();
 }
@@ -95,8 +110,10 @@ HRESULT CStaff::Ready_Components()
 	m_pTransform->Set_TransformDesc(transformDesc);
 	m_pLocalTransform->Set_TransformDesc(transformDesc);
 
-	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_TEST_YM, L"Model_Staff", L"Model", (CComponent**)&m_pModel)))
+	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STAGE1, L"Model_Staff", L"Model", (CComponent**)&m_pModel)))
 		return E_FAIL;
+
+	m_pModel->Add_Material(g_pGameInstance->Get_Material(L"Mtrl_Staff"), 0);
 
 	return S_OK;
 }

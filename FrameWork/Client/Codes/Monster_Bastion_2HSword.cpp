@@ -134,6 +134,7 @@ HRESULT CMonster_Bastion_2HSword::Render()
 	else
 	{
 		m_pCurWeapon = nullptr;
+		
 	}
 #ifdef _DEBUG
 		Render_Debug();
@@ -153,7 +154,7 @@ HRESULT CMonster_Bastion_2HSword::Ready_Components()
 	m_pTransform->Set_State(CTransform::STATE_POSITION, XMLoadFloat4(&vPosition));
 
 	/* for. Model Com */
-	if (FAILED(SetUp_Components(m_iSceneID, L"Model_Bastion_2HSword_Bin", L"Model", (CComponent**)&m_pModel)))
+	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STAGE1, L"Model_Bastion_2HSword", L"Model", (CComponent**)&m_pModel)))
 		return E_FAIL;
 	_matrix matPivot = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(180.f));
 	m_pModel->Set_PivotMatrix(matPivot);

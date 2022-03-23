@@ -4,6 +4,7 @@
 #include "HierarchyNode.h"
 #include "Silvermane.h"
 #include "Monster_Bastion_2HSword.h"
+#include "Material.h"
 #include "StateController.h"
 
 CRetributionBlade::CRetributionBlade(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
@@ -23,7 +24,24 @@ HRESULT CRetributionBlade::NativeConstruct_Prototype()
 
 	m_eType = EType::Sword_2H;
 	m_wstrName = L"RetributionBlade";
-	m_iObectTag = (_uint)GAMEOBJECT::WEAPON;
+	m_iObectTag = (_uint)GAMEOBJECT::WEAPON_2HSword;
+
+	CMaterial* pMtrl = nullptr;
+	CTexture* pTexture = nullptr;
+	pMtrl = CMaterial::Create(m_pDevice, m_pDeviceContext, L"Mtrl_RetributionBlade", L"../../Reference/ShaderFile/Shader_Weapon.hlsl", CMaterial::EType::Static);
+	pTexture = CTexture::Create(m_pDevice, m_pDeviceContext);
+	pTexture->NativeConstruct_Prototype(L"../Bin/Resources/Mesh/RetributionBlade/T_2h_Sword_RetributionBlade_D.dds", 1);
+	pMtrl->Set_Texture("g_DiffuseTexture", TEXTURETYPE::TEX_DIFFUSE, pTexture, 0);
+	pTexture = CTexture::Create(m_pDevice, m_pDeviceContext);
+	pTexture->NativeConstruct_Prototype(L"../Bin/Resources/Mesh/RetributionBlade/T_2h_Sword_RetributionBlade_N.dds", 1);
+	pMtrl->Set_Texture("g_BiNormalTexture", TEXTURETYPE::TEX_NORMAL, pTexture, 0);
+	pTexture = CTexture::Create(m_pDevice, m_pDeviceContext);
+	pTexture->NativeConstruct_Prototype(L"../Bin/Resources/Mesh/RetributionBlade/T_2h_Sword_RetributionBlade_MRA.dds", 1);
+	pMtrl->Set_Texture("g_MRATexture", TEXTURETYPE::TEX_MRA, pTexture, 0);
+	pTexture = CTexture::Create(m_pDevice, m_pDeviceContext);
+	pTexture->NativeConstruct_Prototype(L"../Bin/Resources/Mesh/RetributionBlade/T_2h_Sword_RetributionBlade_CEO.dds", 1);
+	pMtrl->Set_Texture("g_CEOTexture", TEXTURETYPE::TEX_CEO, pTexture, 0);
+	g_pGameInstance->Add_Material(L"Mtrl_RetributionBlade", pMtrl);
 
 	return S_OK;
 }
@@ -52,6 +70,9 @@ _int CRetributionBlade::Tick(_double _dDeltaTime)
 	Attach_FixedBone(_dDeltaTime);
 	Attach_Owner(_dDeltaTime);
 
+	if (m_pCollider)
+		m_pCollider->Tick(_dDeltaTime);
+
 	return _int();
 }
 
@@ -61,7 +82,7 @@ _int CRetributionBlade::LateTick(_double _dDeltaTime)
 		return -1;
 
 	if(m_pRenderer)
-		m_pRenderer->Add_RenderGroup(CRenderer::RENDER_ALPHA, this);
+		m_pRenderer->Add_RenderGroup(CRenderer::RENDER_NONALPHA, this);
 
 	return _int();
 }
@@ -98,8 +119,26 @@ HRESULT CRetributionBlade::Ready_Components()
 	m_pTransform->Set_TransformDesc(transformDesc);
 	m_pLocalTransform->Set_TransformDesc(transformDesc);
 
-	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_TEST_YM, L"Model_RetributionBlade", L"Model", (CComponent**)&m_pModel)))
+	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STAGE1, L"Model_RetributionBlade", L"Model", (CComponent**)&m_pModel)))
 		return E_FAIL;
+
+	m_pModel->Add_Material(g_pGameInstance->Get_Material(L"Mtrl_RetributionBlade"), 0);
+
+	CCollider::DESC tColliderDesc;
+	tColliderDesc.isTrigger = true;
+	tColliderDesc.eRigidType = ERigidType::Dynamic;
+	tColliderDesc.pGameObject = this;
+
+	CCapsuleCollider::DESC tCapsuleColliderDesc;
+	tCapsuleColliderDesc.tColliderDesc = tColliderDesc;
+	tCapsuleColliderDesc.fHeight = 1.5f;
+	tCapsuleColliderDesc.fRadius = 0.15f;
+
+	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_CapsuleCollider", L"Collider", (CComponent**)&m_pCollider, &tCapsuleColliderDesc)))
+		return E_FAIL;
+
+	_matrix smatPviot = XMMatrixRotationY(XMConvertToRadians(90.f)) * XMMatrixTranslation(0.f, 0.f, 1.f);
+	m_pCollider->setPivotMatrix(smatPviot);
 
 	return S_OK;
 }
@@ -159,6 +198,6 @@ CGameObject* CRetributionBlade::Clone(const _uint _iSceneID, void* _pArg)
 
 void CRetributionBlade::Free()
 {
-
+	Safe_Release(m_pCollider);
 	__super::Free();
 }
