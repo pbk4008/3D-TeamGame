@@ -494,6 +494,11 @@ const _int CMonster_Bastion_2HSword::Fall(const _double& _dDeltaTime)
 	return _int();
 }
 
+void CMonster_Bastion_2HSword::OnTriggerEnter(CCollision& collision)
+{
+	m_pStateController->OnTriggerEnter(collision);
+}
+
 CMonster_Bastion_2HSword* CMonster_Bastion_2HSword::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
 {
 	CMonster_Bastion_2HSword* pInstance = new CMonster_Bastion_2HSword(_pDevice, _pDeviceContext);

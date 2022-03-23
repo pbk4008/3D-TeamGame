@@ -52,6 +52,7 @@ public:
 	void setShapes(vector<PxShape*>& _vecShapes);
 
 	void setFootPosition(const _float3& _vPosition);
+	void setPosition(const _float3& _vPosition);
 	void setOwnerTransform(CTransform* _pTransform);
 
 	const _bool IsDown();

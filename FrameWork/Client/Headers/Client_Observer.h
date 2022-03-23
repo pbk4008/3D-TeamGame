@@ -22,7 +22,7 @@ public:
 	//플레이어 Pos 가져오기
 	_fvector Get_PlayerPos();
 	//플레이어가 공격하는지 안하는지 체크
-	const _bool Get_IsAttack();
+	const _bool IsAttack();
 	//플레이어와 해당 좌표와의 거리
 	const _float Get_Dist(_fvector vPos);
 	const CSilvermane::SCENEMOVEDATA Get_SceneMoveData();

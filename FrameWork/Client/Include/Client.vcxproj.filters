@@ -241,9 +241,6 @@
     <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_2HSword\State_2HSword\Hit">
       <UniqueIdentifier>{7622b84d-629f-47c9-91a2-0c5b83b391dc}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObject\50.JumpNode">
-      <UniqueIdentifier>{15743125-3fab-4955-a1a7-2c3ab22ace2e}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_Healer">
       <UniqueIdentifier>{335bed18-d7d5-4883-82c3-5137d2e1cbc5}</UniqueIdentifier>
     </Filter>
@@ -930,9 +927,6 @@
     <ClInclude Include="..\Headers\Traverse_Jump400Jog.h">
       <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Jump</Filter>
     </ClInclude>
-    <ClInclude Include="..\Headers\JumpNode.h">
-      <Filter>02.GameObject\50.JumpNode</Filter>
-    </ClInclude>
     <ClInclude Include="..\Headers\Shooter_Attack.h">
       <Filter>02.GameObject\95.Monster\Bastion_Shooter\Attack</Filter>
       <Filter>02.GameObject\02.Map\02.JumpNode</Filter>
@@ -1118,6 +1112,12 @@
     </ClInclude>
     <ClInclude Include="..\Headers\UI_Tuto_Font.h">
       <Filter>02.GameObject\05.UI\01.UI_Ingame\01.Meter\05.Tutorial\01.SideTutorial\01.Font</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\JumpNode.h">
+      <Filter>02.GameObject\02.Map\02.JumpNode</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\JumpTrigger.h">
+      <Filter>02.GameObject\02.Map\02.JumpNode</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1577,9 +1577,6 @@
     <ClCompile Include="..\Codes\Traverse_Jump400Jog.cpp">
       <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Jump</Filter>
     </ClCompile>
-    <ClCompile Include="..\Codes\JumpNode.cpp">
-      <Filter>02.GameObject\50.JumpNode</Filter>
-    </ClCompile>
     <ClCompile Include="..\Codes\Shooter_Attack.cpp">
       <Filter>02.GameObject\95.Monster\Bastion_Shooter\Attack</Filter>
       <Filter>02.GameObject\02.Map\02.JumpNode</Filter>
@@ -1762,6 +1759,12 @@
     </ClCompile>
     <ClCompile Include="..\Codes\UI_Tuto_Font.cpp">
       <Filter>02.GameObject\05.UI\01.UI_Ingame\01.Meter\05.Tutorial\01.SideTutorial\01.Font</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\JumpNode.cpp">
+      <Filter>02.GameObject\02.Map\02.JumpNode</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\JumpTrigger.cpp">
+      <Filter>02.GameObject\02.Map\02.JumpNode</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

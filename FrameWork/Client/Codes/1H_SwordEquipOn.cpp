@@ -27,7 +27,7 @@ _int C1H_SwordEquipOn::Tick(const _double& _dDeltaTime)
 
 	if (m_iCutIndex < m_pAnimationController->Get_CurKeyFrameIndex())
 	{
-		if (!m_pSilvermane->Is_EquipWeapon())
+		if (!m_pSilvermane->IsEquipWeapon())
 		{
 			m_pSilvermane->Set_EquipWeapon(true);
 			m_pSilvermane->Set_WeaponFixedBone("weapon_r");

@@ -56,7 +56,7 @@ _int CTraverse_JumpNodeJog::Tick(const _double& _dDeltaTime)
 	}
 	else
 	{
-
+		m_pSilvermane->Set_IsFall(true);
 	}
 
 	if (m_pAnimationController->Is_Finished())
