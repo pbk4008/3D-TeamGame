@@ -132,8 +132,8 @@ HRESULT CLoader::SetUp_Stage1_Object()
 	if (FAILED(Load_Stage1PlayerLoad()))
 		return E_FAIL;
 
-	/*if (FAILED(Load_Stage1MonsterLoad()))
-		return E_FAIL;*/
+	if (FAILED(Load_Stage1MonsterLoad()))
+		return E_FAIL;
 
 	//if (FAILED(Load_Stage1BossLoad()))
 	//	return E_FAIL;
@@ -663,9 +663,8 @@ HRESULT CLoader::Load_Stage1MonsterLoad()
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Model_Monster_Crawler", CModel::Create(m_pDevice, m_pDeviceContext,
 		L"../bin/FBX/Monster/Crystal_Crawler.fbx",CModel::TYPE_ANIM, true))))
 		return E_FAIL;
-
-	//if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Monster_Crawler", CMonster_Crawler::Create(m_pDevice, m_pDeviceContext))))
-	//	return E_FAIL;
+	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Monster_Crawler", CMonster_Crawler::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
 
 	//Monster EarthAberrant
 	/*if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Model_Monster_EarthAberrant", CModel::Create(m_pDevice, m_pDeviceContext,
