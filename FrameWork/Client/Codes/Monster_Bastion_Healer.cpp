@@ -168,6 +168,7 @@ HRESULT CMonster_Bastion_Healer::Ready_Components()
 
 	m_AanimDesc.pModel = m_pModel;
 	m_AanimDesc.pTransform = m_pTransform;
+	m_AanimDesc.eType = CAnimationController::EType::CharacterController;
 
 	//Anim FSM
 	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_Animator", L"Animator", (CComponent**)&m_pAnimator, &m_AanimDesc)))

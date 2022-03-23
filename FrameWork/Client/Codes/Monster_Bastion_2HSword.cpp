@@ -148,7 +148,7 @@ HRESULT CMonster_Bastion_2HSword::Ready_Components()
 	transformDesc.fSpeedPerSec = 2.0f;
 	transformDesc.fRotationPerSec = XMConvertToRadians(90.f);
 	m_pTransform->Set_TransformDesc(transformDesc);
-	_float4 vPosition = { 0.f, 2.f, 3.f, 1.f };
+	_float4 vPosition = { 0.f, 2.f, 20.f, 1.f };
 
 	m_pTransform->Set_State(CTransform::STATE_POSITION, XMLoadFloat4(&vPosition));
 
@@ -165,6 +165,7 @@ HRESULT CMonster_Bastion_2HSword::Ready_Components()
 
 	m_AanimDesc.pModel = m_pModel;
 	m_AanimDesc.pTransform = m_pTransform;
+	m_AanimDesc.eType = CAnimationController::EType::CharacterController;
 
 	/* for.Anim FSM */
 	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_Animator", L"Animator", (CComponent**)&m_pAnimator, &m_AanimDesc)))
