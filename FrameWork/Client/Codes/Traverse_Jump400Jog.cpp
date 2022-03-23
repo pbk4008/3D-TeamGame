@@ -39,7 +39,7 @@ _int CTraverse_Jump400Jog::Tick(const _double& _dDeltaTime)
 			_vector svPos = m_pTransform->Get_State(CTransform::STATE_POSITION);
 			svPos += svVelocity;
 			_vector svDis = XMVector3Length(XMLoadFloat3(&m_vTargetPos) - svPos);
-			if (1.f > XMVectorGetX(svDis))
+			if (2.f > XMVectorGetX(svDis))
 			{
 				//m_fMoveSpeed = 0.f;
 				//m_pAnimationController->Set_PlaySpeed(1.f);
@@ -101,7 +101,7 @@ HRESULT CTraverse_Jump400Jog::EnterState()
 	_vector svDir = svTargetPosition - m_pTransform->Get_State(CTransform::STATE_POSITION);
 	XMStoreFloat3(&m_vDir, XMVector3Normalize(XMVectorSetY(svDir, 0.f)));
 
-	m_fMoveSpeed = 4.f;
+	m_fMoveSpeed = 2.f;
 	m_pSilvermane->Set_IsFall(false);
 	return S_OK;
 }
@@ -112,6 +112,7 @@ HRESULT CTraverse_Jump400Jog::ExitState()
 		return E_FAIL;
 
 	m_pSilvermane->Set_IsTrasceCamera(true);
+	m_isJumpEnd = false;
 	return S_OK;
 }
 
