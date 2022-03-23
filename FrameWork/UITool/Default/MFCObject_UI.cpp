@@ -32,6 +32,9 @@ HRESULT CMFCObject_UI::NativeConstruct(const _uint iSceneID, void* pArg)
 
 	m_iObectTag = m_Desc.IDTag;
 
+	if (FAILED(m_pTexture->Change_Texture(m_Desc.TextureTag)))
+		return E_FAIL;
+
 	wstring tag = m_Desc.TextureTag;
 	if (FAILED(__super::NativeConstruct(iSceneID, &tag)))
 	{
@@ -83,7 +86,7 @@ HRESULT CMFCObject_UI::Render()
 
 		m_pBuffer->SetUp_TextureOnShader("g_DiffuseTexture", m_pTexture); // 0 ÀÌ¶û 1·Î ³ª´²Áà¾ßÇÔ 
 
-		m_pBuffer->Render(3);
+		m_pBuffer->Render(1);
 	}
 
 	else if (nullptr != m_pTrapziumBuffer)
@@ -94,7 +97,7 @@ HRESULT CMFCObject_UI::Render()
 
 		m_pTrapziumBuffer->SetUp_TextureOnShader("g_DiffuseTexture", m_pTexture); // 0 ÀÌ¶û 1·Î ³ª´²Áà¾ßÇÔ 
 
-		m_pTrapziumBuffer->Render(3);
+		m_pTrapziumBuffer->Render(1);
 	}
 	return S_OK;
 }
@@ -103,12 +106,12 @@ HRESULT CMFCObject_UI::SetUp_Components()
 {
 	if (13 == m_Desc.IDTag) //static
 	{
-		m_pBuffer = g_pGameInstance->Clone_Component<CVIBuffer_Rect>(0, L"Proto_Component_RectBuffer");
+		m_pBuffer = g_pGameInstance->Clone_Component<CVIBuffer_Rect>(0, L"Proto_Component_Rect_UI");
 
 		if (!m_pBuffer)
 			return E_FAIL;
 
-		if (FAILED(__super::SetUp_Components(L"Com_RectBuffer", m_pBuffer)))
+		if (FAILED(__super::SetUp_Components(L"Com_Rect_UI", m_pBuffer)))
 			return E_FAIL;
 	}
 

@@ -155,6 +155,7 @@ HRESULT CRenderer::Draw_RenderGroup()
 
 	if (FAILED(Render_UI()))
 		return E_FAIL;
+
 //
 //#ifdef _DEBUG
 //	if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("MRT_SkyBox"))))

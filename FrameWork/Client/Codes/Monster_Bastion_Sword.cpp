@@ -4,6 +4,7 @@
 #include "Stargazer.h"
 #include "ShieldBreaker.h"
 #include "HierarchyNode.h"
+#include "Animator.h"
 
 #include "Bastion_Sword_Idle.h"
 #include "Bastion_Sword_Chase.h"
@@ -15,20 +16,35 @@
 #include "Bastion_Sword_Turn.h"
 #include "Bastion_Sword_Walk.h"
 
+
 CMonster_Bastion_Sword::CMonster_Bastion_Sword(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
 	:CActor(_pDevice, _pDeviceContext)
+	, m_pCharacterController(nullptr)
+	, m_pModelCom(nullptr)
+	, m_pStateController(nullptr)
+	, m_pAnimator(nullptr)
 {
 }
 
 CMonster_Bastion_Sword::CMonster_Bastion_Sword(const CMonster_Bastion_Sword& _rhs)
 	:CActor(_rhs)
+	, m_pCharacterController(_rhs.m_pCharacterController)
+	, m_pModelCom(_rhs.m_pModelCom)
+	, m_pStateController(_rhs.m_pStateController)
+	, m_pAnimator(_rhs.m_pAnimator)
 {
+	Safe_AddRef(m_pCharacterController);
+	Safe_AddRef(m_pModelCom);
+	Safe_AddRef(m_pStateController);
+	Safe_AddRef(m_pAnimator);
 }
 
 HRESULT CMonster_Bastion_Sword::NativeConstruct_Prototype()
 {
 	if (FAILED(__super::NativeConstruct_Prototype()))
 		return E_FAIL;
+
+	m_iObectTag = (_uint)GAMEOBJECT::MONSTER_1H;
 
 	return S_OK;
 }
@@ -53,8 +69,8 @@ HRESULT CMonster_Bastion_Sword::NativeConstruct(const _uint _iSceneID, void* _pA
 	_vector Pos = { 0.f, 0.f, 30.f, 1.f };
 	m_pTransform->Set_State(CTransform::STATE_POSITION, Pos);
 
-	m_iMaxHp = 3;
-	m_iCurHp = m_iMaxHp;
+	m_fMaxHp = 3;
+	m_fCurrentHp = m_fMaxHp;
 	return S_OK;
 }
 
@@ -64,6 +80,8 @@ _int CMonster_Bastion_Sword::Tick(_double _dDeltaTime)
 	{
 		return -1;
 	}
+	m_pTransform->Set_Velocity(XMVectorZero());
+
 	//상태 컨트롤러 돌리기->애니메이터 자동으로 돌아감
 	m_pStateController->Tick(_dDeltaTime);
 
@@ -74,7 +92,7 @@ _int CMonster_Bastion_Sword::Tick(_double _dDeltaTime)
 	Change_State();
 
 	//콜리더 갱신
-
+	m_pCharacterController->Move(_dDeltaTime, m_pTransform->Get_Velocity());
 	return 0;
 }
 
@@ -110,6 +128,18 @@ HRESULT CMonster_Bastion_Sword::Render()
 	return S_OK;
 }
 
+void CMonster_Bastion_Sword::OnTriggerEnter(CCollision& collision)
+{
+	if (collision.pGameObject->getTag()==(_uint)GAMEOBJECT::WEAPON)
+	{
+		CWeapon* pWeapon = static_cast<CWeapon*>(collision.pGameObject);
+		if (pWeapon->Get_Type() == CWeapon::EType::Sword_1H)
+		{
+			Hit();
+		}
+	}
+}
+
 HRESULT CMonster_Bastion_Sword::SetUp_Components()
 {
 	CTransform::TRANSFORMDESC Desc;
@@ -125,6 +155,7 @@ HRESULT CMonster_Bastion_Sword::SetUp_Components()
 
 	tDesc.pModel = m_pModelCom;
 	tDesc.pTransform = m_pTransform;
+	tDesc.eType = CAnimationController::EType::CharacterController;//애니메이션 돌릴 타입 선택(캐컨으로 움직일지 / Transform으로 움직일지)
 
 	if (FAILED(__super::SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_Animator", L"Com_Animator", (CComponent**)&m_pAnimator, &tDesc)))
 		return E_FAIL;
@@ -458,19 +489,6 @@ _int CMonster_Bastion_Sword::Change_State()
 		if (tmpState == L"Idle")
 			Chase();
 	}
-	//히트 판정은 충돌 할때 사용 나중에 삭제할것!!
-	if (g_pGameInstance->getkeyDown(DIK_LSHIFT))
-	{
-		m_iCurHp--;
-		m_eHitType = ANIM_TYPE::HIT1;
-		CBastion_Sword_Hit::HITDATA tData;
-		ZeroMemory(&tData, sizeof(tData));
-
-		tData.iCurHp = m_iCurHp;
-		tData.iHitType = (_uint)m_eHitType;
-		m_pStateController->Change_State(L"Hit", &tData);
-		m_wstrCurState = L"Hit";
-	}
 	return _int();
 }
 
@@ -488,6 +506,18 @@ void CMonster_Bastion_Sword::Chase()
 	{		m_wstrCurState = L"Chase";
 		m_pStateController->Change_State(L"Chase");
 	}
+}
+
+void CMonster_Bastion_Sword::Hit()
+{
+	m_eHitType = ANIM_TYPE::HIT1;
+	CBastion_Sword_Hit::HITDATA tData;
+	ZeroMemory(&tData, sizeof(tData));
+
+	tData.fCurHp = m_fCurrentHp;
+	tData.iHitType = (_uint)m_eHitType;
+	m_pStateController->Change_State(L"Hit", &tData);
+	m_wstrCurState = L"Hit";
 }
 
 CMonster_Bastion_Sword* CMonster_Bastion_Sword::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)

@@ -4,6 +4,9 @@
 CActor::CActor()
 	:m_fSpeed(0.f)
 	, m_bDead(false)
+	, m_bAttack(false)
+	, m_fMaxHp(0.f)
+	, m_fCurrentHp(0.f)
 {
 }
 
@@ -11,6 +14,9 @@ CActor::CActor(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
 	:CGameObject(pDevice, pDeviceContext)
 	, m_fSpeed(0.f)
 	, m_bDead(false)
+	, m_bAttack(false)
+	, m_fMaxHp(0.f)
+	, m_fCurrentHp(0.f)
 {
 }
 
@@ -18,6 +24,9 @@ CActor::CActor(const CActor& rhs)
 	: CGameObject(rhs)
 	, m_fSpeed(rhs.m_fSpeed)
 	, m_bDead(rhs.m_bDead)
+	, m_bAttack(rhs.m_bAttack)
+	, m_fMaxHp(rhs.m_fMaxHp)
+	, m_fCurrentHp(rhs.m_fCurrentHp)
 {
 }
 
@@ -71,8 +80,15 @@ HRESULT CActor::Render()
 	return S_OK;
 }
 
+const _float CActor::Get_CurrentHpRatio()
+{
+	_float fRatio = m_fCurrentHp / m_fMaxHp;
+
+	return fRatio;
+}
+
+
 void CActor::Free()
 {
-
 	CGameObject::Free();
 }
