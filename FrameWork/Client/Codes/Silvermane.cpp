@@ -398,6 +398,7 @@ HRESULT CSilvermane::Ready_Components()
 	m_pAnimationController->Set_Transform(m_pTransform);
 	m_pAnimationController->Set_MoveSpeed(30.f);
 	m_fMoveSpeed = 3.f;
+	m_fCurrentHp = 100.f;
 
 	// 스테이트 컨트롤러
 	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_StateController", L"StateController", (CComponent**)&m_pStateController)))
@@ -747,7 +748,7 @@ const CSilvermane::SCENEMOVEDATA CSilvermane::Get_SceneMoveData() const
 
 	//현재 체력 및 기타 추가해야할 변수
 	tDesc.iMaxHp = 100;
-	tDesc.iCurHp = 10;
+	tDesc.iCurHp = 100;
 
 	return tDesc;
 }

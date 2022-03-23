@@ -55,7 +55,7 @@ HRESULT CUI_Player_HpBar::NativeConstruct(const _uint _iSceneID, void* pArg)
 	m_fGapX = 1.f;
 	m_fGapY = 1.f;
 
-	m_fPlayerMaxHp = 100.f;
+	m_fPlayerMaxHp = 50.f;
 
 	return S_OK;
 }
