@@ -194,6 +194,42 @@ HRESULT CStateController::Change_State(const wstring& _wstrStateTag, void* _pArg
 	return S_OK;
 }
 
+void CStateController::OnCollisionEnter(CCollision& collision)
+{
+	if (m_pCurState)
+		m_pCurState->OnCollisionEnter(collision);
+}
+
+void CStateController::OnCollisionStay(CCollision& collision)
+{
+	if (m_pCurState)
+		m_pCurState->OnCollisionStay(collision);
+}
+
+void CStateController::OnCollisionExit(CCollision& collision)
+{
+	if (m_pCurState)
+		m_pCurState->OnCollisionExit(collision);
+}
+
+void CStateController::OnTriggerEnter(CCollision& collision)
+{
+	if (m_pCurState)
+		m_pCurState->OnTriggerEnter(collision);
+}
+
+void CStateController::OnTriggerStay(CCollision& collision)
+{
+	if (m_pCurState)
+		m_pCurState->OnTriggerStay(collision);
+}
+
+void CStateController::OnTriggerExit(CCollision& collision)
+{
+	if (m_pCurState)
+		m_pCurState->OnTriggerExit(collision);
+}
+
 CStateController* CStateController::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
 {
 	CStateController* pInstance = new CStateController(_pDevice, _pDeviceContext);

@@ -12,7 +12,7 @@ public:
 	typedef struct tagHitData
 	{
 		_uint iHitType;
-		_uint iCurHp;
+		_float fCurHp;
 	}HITDATA;
 private:
 	explicit CBastion_Sword_Hit(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext);
@@ -35,7 +35,7 @@ public:
 private:
 	virtual void Free() override;
 private:
-	_uint m_iCurHp;
+	_float m_fCurHp;
 };
 END
 #endif

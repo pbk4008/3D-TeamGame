@@ -428,6 +428,7 @@ PS_OUT PS_MAIN_HAIR(PS_IN In)
 	PS_OUT Out = (PS_OUT) 0;
 	float4 diffuse = g_DiffuseTexture.Sample(DefaultSampler, In.vUvDepth.xy);
 	float4 diffuse2 = g_NewHairTexture.Sample(DefaultSampler, In.vUvDepth.xy);
+	diffuse.rgb = diffuse.rgb + float3(0.66, 0.66, 0.66);
 	float4 omer = g_OMERTexture.Sample(DefaultSampler, In.vUvDepth.xy);
 	
 	Out.diffuse.xyz = diffuse * 0.5f + 0.5f;

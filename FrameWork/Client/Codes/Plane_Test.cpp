@@ -108,7 +108,7 @@ HRESULT CPlane_Test::Ready_NavMesh()
 	for (_int i = 0; i < m_vecNaviPoints.size(); ++i)
 		NavMeshDesc.vecPoints.emplace_back(m_vecNaviPoints[i].vPoints);
 
-	if (FAILED(SetUp_Components(m_iSceneID, L"Proto_Component_NavMeshCollider", L"NavMeshCollider", (CComponent**)&m_pNaviCollider, &NavMeshDesc)))
+	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_NavMeshCollider", L"NavMeshCollider", (CComponent**)&m_pNaviCollider, &NavMeshDesc)))
 		return E_FAIL;
 
 	return S_OK;

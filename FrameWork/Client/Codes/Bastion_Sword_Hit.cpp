@@ -4,7 +4,7 @@
 
 CBastion_Sword_Hit::CBastion_Sword_Hit(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
 	: CMonster_FSM(_pDevice, _pDeviceContext)
-	, m_iCurHp(0)
+	, m_fCurHp(0)
 {
 }
 
@@ -34,7 +34,7 @@ _int CBastion_Sword_Hit::Tick(const _double& _dDeltaTime)
 	m_pAnimator->Tick(_dDeltaTime);
 
 
-	if (m_iCurHp <= 0)
+	if (m_fCurHp <= 0.f)
 		m_pStateController->Change_State(L"Death");
 
 	if(m_pAnimator->Get_CurrentAnimNode() == (_uint)CMonster_Bastion_Sword::ANIM_TYPE::IDLE)
@@ -70,7 +70,7 @@ HRESULT CBastion_Sword_Hit::EnterState(void* _pArg)
 	HITDATA tData = (*(HITDATA*)_pArg);
 
 	m_pAnimator->Change_AnyEntryAnimation(tData.iHitType);
-	m_iCurHp = tData.iCurHp;
+	m_fCurHp = tData.fCurHp;
 
 	return S_OK;
 }

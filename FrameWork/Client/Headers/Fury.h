@@ -25,6 +25,7 @@ private:
 
 private:
 	_float4x4 m_matPivot;
+	CBoxCollider* m_pCollider = nullptr;
 
 public:
 	static CFury* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext);
