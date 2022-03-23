@@ -422,7 +422,10 @@ call Update_Library_Release.bat</Command>
     <FxCompile Include="..\bin\ShaderFiles\Shader_HDRBase.hlsl" />
     <FxCompile Include="..\bin\ShaderFiles\Shader_Instance.hlsl" />
     <FxCompile Include="..\bin\ShaderFiles\Shader_InstanceMesh.hlsl" />
-    <FxCompile Include="..\bin\ShaderFiles\Shader_INST_.hlsl" />
+    <FxCompile Include="..\bin\ShaderFiles\Shader_INST_MASK.hlsl" />
+    <FxCompile Include="..\bin\ShaderFiles\Shader_INST_ORM.hlsl" />
+    <FxCompile Include="..\bin\ShaderFiles\Shader_INST_ORME.hlsl" />
+    <FxCompile Include="..\bin\ShaderFiles\Shader_INST_ORS.hlsl" />
     <FxCompile Include="..\bin\ShaderFiles\Shader_Luminance.hlsl" />
     <FxCompile Include="..\bin\ShaderFiles\Shader_Mesh.hlsl" />
     <FxCompile Include="..\bin\ShaderFiles\Shader_MeshAnim.hlsl" />

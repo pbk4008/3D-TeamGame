@@ -931,7 +931,16 @@
     <FxCompile Include="..\bin\ShaderFiles\Shader_InstanceMesh.hlsl">
       <Filter>98.ShaderFiles\Environment</Filter>
     </FxCompile>
-    <FxCompile Include="..\bin\ShaderFiles\Shader_INST_.hlsl">
+    <FxCompile Include="..\bin\ShaderFiles\Shader_INST_ORM.hlsl">
+      <Filter>98.ShaderFiles\Environment</Filter>
+    </FxCompile>
+    <FxCompile Include="..\bin\ShaderFiles\Shader_INST_ORME.hlsl">
+      <Filter>98.ShaderFiles\Environment</Filter>
+    </FxCompile>
+    <FxCompile Include="..\bin\ShaderFiles\Shader_INST_ORS.hlsl">
+      <Filter>98.ShaderFiles\Environment</Filter>
+    </FxCompile>
+    <FxCompile Include="..\bin\ShaderFiles\Shader_INST_MASK.hlsl">
       <Filter>98.ShaderFiles\Environment</Filter>
     </FxCompile>
   </ItemGroup>
