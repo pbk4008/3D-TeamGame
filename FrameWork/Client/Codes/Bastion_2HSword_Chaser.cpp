@@ -30,7 +30,7 @@ _int CBastion_2HSword_Chaser::Tick(const _double& _dDeltaTime)
 
 	m_pAnimator->Tick(_dDeltaTime);
 
-	m_pTransform->Chase_Target(g_pObserver->Get_Transform(), _dDeltaTime);
+	m_pTransform->Add_Velocity(m_pTransform->Chase_Pos(g_pObserver->Get_Transform(), _dDeltaTime));
 
 	return _int();
 }

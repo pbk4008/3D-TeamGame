@@ -55,7 +55,7 @@ _int CPlane_Test::LateTick(_double _dDeltaTime)
 		return iProgress;
 
 #ifdef _DEBUG
-	//m_pRenderer->Add_RenderGroup(CRenderer::RENDER_PRIORITY, this);
+	m_pRenderer->Add_RenderGroup(CRenderer::RENDER_PRIORITY, this);
 #endif
 
 	return _int();

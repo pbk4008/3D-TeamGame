@@ -47,12 +47,15 @@ private:
 	HRESULT Render_Debug(void);
 
 private:
+	const _int Fall(const _double& _dDeltaTime);
+
+private:
 	CModel* m_pModel = nullptr;
 	CAnimation* m_pAnimation = nullptr;
 	CAnimator* m_pAnimator = nullptr;
 	CStateController* m_pStateController = nullptr;
 	CCapsuleCollider* m_pColliderCom = nullptr;
-
+	CCharacterController* m_pCharacterController = nullptr;
 private:
 	CAnimator::ANIMATORDESC m_AanimDesc;
 
@@ -64,6 +67,9 @@ private: /* For.Weapon */
 public:
 	_int	m_iHp = 3;
 	_bool	m_bRender = true;
+
+private:
+	_bool m_isFall = false;
 
 public:
 	static CMonster_Bastion_Healer* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext);

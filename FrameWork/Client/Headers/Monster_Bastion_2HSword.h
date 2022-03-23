@@ -52,6 +52,9 @@ private:
 	HRESULT Render_Debug(void);
 
 private:
+	const _int Fall(const _double& _dDeltaTime);
+
+private:
 	CModel*				  m_pModel = nullptr;
 	CAnimation*			  m_pAnimation = nullptr;
 	CAnimator*			  m_pAnimator = nullptr;
@@ -69,6 +72,10 @@ private: /* For.Weapon */
 public:
 	_int	m_iHp = 3;
 	_bool	m_bRender = true;
+
+private:
+	_bool	m_isFall = false;
+	
 public:
 	static CMonster_Bastion_2HSword* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext);
 	virtual CGameObject* Clone(const _uint _iSceneID, void* _pArg = nullptr) override;

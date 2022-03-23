@@ -41,7 +41,7 @@ _int CBastion_2HSword_State::Tick(const _double& _dDeltaTime)
 	if (g_pObserver->Get_IsAttack())
 		m_bPlayerAttack = true;
 
-	if (1.0f < fDistToPlayer && 10.0f > fDistToPlayer)
+	if (3.5f < fDistToPlayer && 10.0f > fDistToPlayer)
 	{
 		m_pTransform->Face_Target(g_pObserver->Get_PlayerPos());
 		m_bTargetOn = true;
@@ -50,7 +50,7 @@ _int CBastion_2HSword_State::Tick(const _double& _dDeltaTime)
 	else if (10.0f < fDistToPlayer && 15.0f > fDistToPlayer)
 		m_bRageOn = true;
 
-	if (2.0f >= fDistToPlayer)
+	if (3.5f > fDistToPlayer)
 		m_bAttackOn = true;
 
 	if (m_bPlayerAttack)
