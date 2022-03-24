@@ -141,20 +141,23 @@ HRESULT CLoader::SetUp_Stage1_Object()
 	if (FAILED(Load_Stage1MonsterLoad()))
 		return E_FAIL;
 
-	//if (FAILED(Load_Stage1BossLoad()))
-	//	return E_FAIL;
-
-	//if (FAILED(Load_Stage1StaticUILoad()))
-	//	return E_FAIL;
-
-	//if (FAILED(Load_Stage1UILoad()))
-	//	return E_FAIL;
-
-	//if (FAILED(Load_Stage1EffectLoad()))
-	//	return E_FAIL;
-
-	if (FAILED(Load_Stage1TriggerLod()))
+	if (FAILED(Load_Stage1BossLoad()))
 		return E_FAIL;
+
+	if (FAILED(Load_Stage1StaticUILoad()))
+		return E_FAIL;
+
+	if (FAILED(Load_Stage1UILoad()))
+		return E_FAIL;
+
+	if (FAILED(Load_Stage1EffectLoad()))
+		return E_FAIL;
+
+	if (FAILED(Load_Stage1JumpTrigger()))
+		return E_FAIL;
+
+	//if (FAILED(Load_Stage1TriggerLod()))
+	//	return E_FAIL;
 
 	//if (FAILED(Load_Stage1_TreasureChest_Load()))
 	//	return E_FAIL;
@@ -446,6 +449,23 @@ HRESULT CLoader::Load_Stage1EffectLoad()
 		return E_FAIL;
 	}
 	
+	return S_OK;
+}
+
+HRESULT CLoader::Load_Stage1JumpTrigger()
+{
+	_matrix matPivot = XMMatrixIdentity();
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_JumpNode", CModel::Create(m_pDevice, m_pDeviceContext,
+		"../bin/Resources/Mesh/JumpNode/", "JumpNode.fbx",
+		L"../../Reference/ShaderFile/Shader_Mesh.hlsl", matPivot, CModel::TYPE_ANIM, true))))
+	{
+		return E_FAIL;
+	}
+	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_JumpNode", CJumpNode::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_JumpTrigger", CJumpTrigger::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+
 	return S_OK;
 }
 
@@ -934,33 +954,6 @@ HRESULT CLoader::Ready_Test_JS()
 	cout << "TestScene_JS 마테리얼 생성중..." << endl;
 	CTexture* pTexture = nullptr;
 	CMaterial* pMtrl = nullptr;
-#pragma region 플레이어
-	//pTexture = CTexture::Create(m_pDevice, m_pDeviceContext);
-	//pTexture->NativeConstruct_Prototype(L"../Bin/Resources/Mesh/Silvermane/T_Silvermane_Hair_D.tga", 1);
-	//pMtrl = CMaterial::Create(m_pDevice, m_pDeviceContext, L"Silvermane_Hair", L"../../Reference/ShaderFile/Shader_Mesh.hlsl", CMaterial::EType::Anim);
-	//pMtrl->Set_Texture("g_DiffuseTexture", TEXTURETYPE::TEX_DIFFUSE, pTexture, 0);
-	//g_pGameInstance->Add_Material(L"Mtrl_Silvermane_Hair", pMtrl);
-
-	//pTexture = CTexture::Create(m_pDevice, m_pDeviceContext);
-	//pTexture->NativeConstruct_Prototype(L"../Bin/Resources/Mesh/Silvermane/T_Silvermane_Cloak_D.tga", 1);
-	//pMtrl = CMaterial::Create(m_pDevice, m_pDeviceContext, L"Silvermane_Cloak", L"../../Reference/ShaderFile/Shader_Mesh.hlsl", CMaterial::EType::Anim);
-	//pMtrl->Set_Texture("g_DiffuseTexture", TEXTURETYPE::TEX_DIFFUSE, pTexture, 0);
-	//g_pGameInstance->Add_Material(L"Mtrl_Silvermane_Cloak", pMtrl);
-
-	//pTexture = CTexture::Create(m_pDevice, m_pDeviceContext);
-	//pTexture->NativeConstruct_Prototype(L"../Bin/Resources/Mesh/Silvermane/T_Silvermane_Down_D.tga", 1);
-	//pMtrl = CMaterial::Create(m_pDevice, m_pDeviceContext, L"Silvermane_Down", L"../../Reference/ShaderFile/Shader_Mesh.hlsl", CMaterial::EType::Anim);
-	//pMtrl->Set_Texture("g_DiffuseTexture", TEXTURETYPE::TEX_DIFFUSE, pTexture, 0);
-	//g_pGameInstance->Add_Material(L"Mtrl_Silvermane_Down", pMtrl);
-
-	//pTexture = CTexture::Create(m_pDevice, m_pDeviceContext);
-	//pTexture->NativeConstruct_Prototype(L"../Bin/Resources/Mesh/Silvermane/T_Silvermane_Top_D.tga", 1);
-	//pMtrl = CMaterial::Create(m_pDevice, m_pDeviceContext, L"Silvermane_Top", L"../../Reference/ShaderFile/Shader_Mesh.hlsl", CMaterial::EType::Anim);
-	//pMtrl->Set_Texture("g_DiffuseTexture", TEXTURETYPE::TEX_DIFFUSE, pTexture, 0);
-	//g_pGameInstance->Add_Material(L"Mtrl_Silvermane_Top", pMtrl);
-#pragma endregion
-#pragma endregion
-
 
 #pragma region 모델
 	cout << "TestScene_JS 모델 프로토타입 생성중..." << endl;

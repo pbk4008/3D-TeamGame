@@ -118,11 +118,6 @@ _int CCollider::Update_PxTransform()
 	return _int();
 }
 
-const _bool CCollider::Raycast(const _float3& _vOrigin, const _float3& _vDir, const _float _fMaxDistance, CGameObject** _ppOutHitObject)
-{
-	return m_pPhsyX->Raycast(_vOrigin, _vDir, _fMaxDistance, _ppOutHitObject);
-}
-
 void CCollider::Free()
 {
 	if (m_pShape)

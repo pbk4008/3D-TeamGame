@@ -55,18 +55,17 @@ _int CCamera_Silvermane::Tick(_double _dDeltaTime)
 		return iProgress;
 
 	m_pTransform->Set_WorldMatrix(m_pLocalTransform->Get_WorldMatrix() * m_pWorldTransform->Get_WorldMatrix());
-	m_pCamera->Update_Matrix(m_pTransform->Get_WorldMatrix());
-
 
 	return _int();
 }
 
 _int CCamera_Silvermane::LateTick(_double _dDeltaTime)
 {
-	if (0 > __super::LateTick(_dDeltaTime))
-	{
-		return -1;
-	}
+	_int iProgress = __super::LateTick(_dDeltaTime);
+	if (NO_EVENT != iProgress)
+		return iProgress;
+
+	m_pCamera->Update_Matrix(m_pTransform->Get_WorldMatrix());
 
 	return _int();
 }
