@@ -156,21 +156,21 @@ HRESULT CModel_Inspector::Add_GameObjectToLayer(const MESHDESC& ModelDesc)
 	return S_OK;
 }
 
-void CModel_Inspector::CCW_Sort(_float3* pPoints[])
+void CModel_Inspector::CCW_Sort(_float3 pPoints[])
 {
-	_int temp = (pPoints[0]->x * pPoints[1]->z) +
-		(pPoints[1]->x * pPoints[2]->z) +
-		(pPoints[2]->x * pPoints[0]->z);
+	_int temp = (pPoints[0].x * pPoints[1].z) +
+		(pPoints[1].x * pPoints[2].z) +
+		(pPoints[2].x * pPoints[0].z);
 
-	temp = temp - (pPoints[0]->z * pPoints[1]->x) -
-		(pPoints[1]->z * pPoints[2]->x) -
-		(pPoints[2]->z * pPoints[0]->x);
+	temp = temp - (pPoints[0].z * pPoints[1].x) -
+		(pPoints[1].z * pPoints[2].x) -
+		(pPoints[2].z * pPoints[0].x);
 
 	if (temp > 0)
 	{
-		_float3 fPointTemp = *pPoints[1];
-		*pPoints[1] = *pPoints[2];
-		*pPoints[2] = fPointTemp;
+		_float3 fPointTemp = pPoints[1];
+		pPoints[1] = pPoints[2];
+		pPoints[2] = fPointTemp;
 		CCW_Sort(pPoints);
 	}
 	else if (temp < 0)
@@ -294,10 +294,10 @@ void CModel_Inspector::OnBnClickedNavSaveButton()
 	
 	for (auto iter : m_vecCells)
 	{
-		CCW_Sort(iter->m_pPoint);
+		CCW_Sort(iter->m_vPoint);
 		for (int i = 0; i < 3; ++i)
 		{
-			m_NavMesh.Point[i] = *(iter->m_pPoint[i]);
+			m_NavMesh.Point[i] = (iter->m_vPoint[i]);
 		}
 		m_NavMeshList_Pos.push_back(m_NavMesh);
 	}

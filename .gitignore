@@ -581,3 +581,10 @@ FrameWork/Engine/bin/Engine.exp
 *.res
 *.iobj
 *.ipdb
+*.ini
+*.pskx
+*.mat
+*.txt
+*.dat
+*.cpp
+*.hlsl

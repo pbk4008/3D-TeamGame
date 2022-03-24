@@ -138,7 +138,6 @@ void CNavSphere::Pick_Model(void)
 			_float fBary1, fBary2;
 			_float fDist = 0.0f;
 			m_bPick = false;
-			//pObserver->m_bNavSpherePick = false;
 			for (_uint i = 0; i < iNumFaces; ++i)
 			{
 				_float3 v0 = ((VTXMESH*)pVertices)[Indices[i]._0].vPosition;

@@ -35,7 +35,7 @@ public:
 	HRESULT		Delete_Clone_ModelList(wstring _ModelName);
 	void		Clear_Clone_ModelList(void);
 	HRESULT		Add_GameObjectToLayer(const MESHDESC& ModelDesc);
-	void		CCW_Sort(_float3* pPoints[]);
+	void		CCW_Sort(_float3 pPoints[]);
 
 public:
 	FILEINFO	m_FileInfo; /* Map_Tool에서 선택한 원본 모델에 대한 정보를 저장합니다. */
