@@ -222,10 +222,10 @@ _int CSilvermane::Tick(_double _dDeltaTime)
 		return iProgress;
 
 	//Fall(_dDeltaTime);
-	m_pTransform->Fall(_dDeltaTime);
+	if(m_isFall)
+		m_pTransform->Fall(_dDeltaTime, m_pCharacterController->IsDown());
 	//m_pCharacterController->Tick(_dDeltaTime);
 	m_pCharacterController->Move(_dDeltaTime, m_pTransform->Get_Velocity());
-
 
 	Raycast_JumpNode(_dDeltaTime);
 
@@ -941,20 +941,6 @@ const _int CSilvermane::Trace_CameraLook(const _double& _dDeltaTime)
 	}
 
  	return _int();
-}
-
-const _int CSilvermane::Fall(const _double& _dDeltaTime)
-{
-	if (m_isFall)
-	{
-		_vector svPos = m_pTransform->Get_State(CTransform::STATE_POSITION);
-		if (-10.f < XMVectorGetY(svPos))
-		{
-			m_pTransform->Add_Velocity(XMVectorSet(0.f, -9.8f * (_float)_dDeltaTime, 0.f, 0.f));
-		}
-	}
-
-	return _int();
 }
 
 const _int CSilvermane::KeyCheck(const _double& _dDeltaTime)

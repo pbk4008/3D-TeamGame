@@ -88,7 +88,6 @@ public: /* For.JumpNode */
 private:
 	void Raycast_Camera();
 	const _int Trace_CameraLook(const _double& _dDeltaTime);
-	const _int Fall(const _double& _dDeltaTime);
 	const _int KeyCheck(const _double& _dDeltaTime);
 
 private: /* Components */

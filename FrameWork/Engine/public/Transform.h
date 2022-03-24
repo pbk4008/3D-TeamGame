@@ -66,7 +66,7 @@ public:
 	void ScaleY_Up(_fvector vScale);
 	void ScaleZ_Up(_fvector vScale);
 public:
-	void Fall(_double dDeltaTime);
+	void Fall(_double dDeltaTime, _bool bCheck = true);
 
 public:
 	void Mesh_Straight(_double TimeDelta, class CNavigation* pNavigation = nullptr);
