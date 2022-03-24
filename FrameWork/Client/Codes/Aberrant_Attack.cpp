@@ -36,7 +36,7 @@ _int CAberrant_Attack::Tick(const _double& TimeDelta)
 
 	if (m_pAnimator->Get_AnimController()->Is_Finished())
 	{
-		m_pStateController->Change_State(L"Dash_Bwd");
+		m_pStateController->Change_State(L"Walk");
 		//cout << "대쉬로변경" << endl;
 	}
 	return _int();

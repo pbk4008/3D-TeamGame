@@ -442,9 +442,6 @@
     <Filter Include="02.GameObject\03.Character\02.Boss\00.MiddleBoss\State\03.Turn">
       <UniqueIdentifier>{f2df4087-aee9-4ef4-bcdf-ddd10c0ac559}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObject\03.Character\02.Boss\00.MiddleBoss\State\04.Chase">
-      <UniqueIdentifier>{9ca0b922-5493-4c13-b374-4312bd2f3120}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObject\03.Character\02.Boss\00.MiddleBoss\State\04.Death">
       <UniqueIdentifier>{9ca0b922-5493-4c13-b374-4312bd2f3120}</UniqueIdentifier>
     </Filter>
@@ -456,6 +453,12 @@
     </Filter>
     <Filter Include="02.GameObject\03.Character\01.Monster\EarthAberrant\00.Weapon\00.Aberrant_Pick">
       <UniqueIdentifier>{5fb68284-c871-4e91-8aaa-81ee9c81ea14}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\02.Boss\00.MiddleBoss\State\00.Idle">
+      <UniqueIdentifier>{bc617a5c-688e-4158-810d-363ff4b32592}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\02.Boss\00.MiddleBoss\State\00.Run">
+      <UniqueIdentifier>{e800aeda-0ac9-4c06-ba77-a606ba04cd5b}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -1137,6 +1140,12 @@
     <ClInclude Include="..\Headers\JumpTrigger.h">
       <Filter>02.GameObject\02.Map\02.JumpNode</Filter>
     </ClInclude>
+    <ClInclude Include="..\Headers\MidBoss_Idle.h">
+      <Filter>02.GameObject\03.Character\02.Boss\00.MiddleBoss\State\00.Idle</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\MidBoss_Run.h">
+      <Filter>02.GameObject\03.Character\02.Boss\00.MiddleBoss\State\00.Run</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -1792,6 +1801,12 @@
     </ClCompile>
     <ClCompile Include="..\Codes\JumpTrigger.cpp">
       <Filter>02.GameObject\02.Map\02.JumpNode</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\MidBoss_Idle.cpp">
+      <Filter>02.GameObject\03.Character\02.Boss\00.MiddleBoss\State\00.Idle</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\MidBoss_Run.cpp">
+      <Filter>02.GameObject\03.Character\02.Boss\00.MiddleBoss\State\00.Run</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

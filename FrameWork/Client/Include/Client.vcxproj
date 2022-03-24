@@ -309,7 +309,9 @@
     <ClInclude Include="..\Headers\MidBoss_Attack.h" />
     <ClInclude Include="..\Headers\MidBoss_BattleCry.h" />
     <ClInclude Include="..\Headers\MidBoss_Death.h" />
+    <ClInclude Include="..\Headers\MidBoss_Idle.h" />
     <ClInclude Include="..\Headers\MidBoss_Rage.h" />
+    <ClInclude Include="..\Headers\MidBoss_Run.h" />
     <ClInclude Include="..\Headers\MidBoss_Stun.h" />
     <ClInclude Include="..\Headers\MidBoss_Turn.h" />
     <ClInclude Include="..\Headers\Monster_Bastion_2HSword.h" />
@@ -518,7 +520,9 @@
     <ClCompile Include="..\Codes\MidBoss_BattleCry.cpp" />
     <ClCompile Include="..\Codes\JumpNode.cpp" />
     <ClCompile Include="..\Codes\MidBoss_Death.cpp" />
+    <ClCompile Include="..\Codes\MidBoss_Idle.cpp" />
     <ClCompile Include="..\Codes\MidBoss_Rage.cpp" />
+    <ClCompile Include="..\Codes\MidBoss_Run.cpp" />
     <ClCompile Include="..\Codes\MidBoss_Stun.cpp" />
     <ClCompile Include="..\Codes\MidBoss_Turn.cpp" />
     <ClCompile Include="..\Codes\Monster_Bastion_2HSword.cpp" />

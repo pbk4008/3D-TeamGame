@@ -4,6 +4,8 @@
 #include "Monster_EarthAberrant.h"
 #include "HierarchyNode.h"
 
+#include "Material.h"
+
 
 CEarthAberrant_Pick::CEarthAberrant_Pick(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
 	: CWeapon(pDevice, pDeviceContext)
@@ -20,8 +22,41 @@ HRESULT CEarthAberrant_Pick::NativeConstruct_Prototype()
 	if (FAILED(__super::NativeConstruct_Prototype()))
 		return E_FAIL;
 
+	XMStoreFloat4x4(&m_matPivot, XMMatrixIdentity());
+
+	m_iObectTag = (_uint)GAMEOBJECT::WEAPON_EARTH;
 	m_eType = EType::Earth_Pick;
 	m_wstrName = L"EarthAberrant_Pick";
+
+	CTexture* pTexture = CTexture::Create(m_pDevice, m_pDeviceContext);
+	if (FAILED(pTexture->NativeConstruct_Prototype(L"../Bin/Resources/Mesh/Earth_Aberrant_Pick/T_IcePick_D.dds", 1)))
+		return E_FAIL;
+	CMaterial* pMtrl = CMaterial::Create(m_pDevice, m_pDeviceContext, L"Earth_Aberrant_Pick", L"../../Reference/ShaderFile/Shader_Weapon.hlsl", CMaterial::EType::Static);
+	if (FAILED(pMtrl->Set_Texture("g_DiffuseTexture", TEXTURETYPE::TEX_DIFFUSE, pTexture, 0)))
+		return E_FAIL;
+
+	pTexture = CTexture::Create(m_pDevice, m_pDeviceContext);
+	if (FAILED(pTexture->NativeConstruct_Prototype(L"../Bin/Resources/Mesh/Earth_Aberrant_Pick/T_IcePick_N.dds", 1)))
+		return E_FAIL;
+	if (FAILED(pMtrl->Set_Texture("g_BiNormalTexture", TEXTURETYPE::TEX_NORMAL, pTexture, 0)))
+		return E_FAIL;
+
+	pTexture = CTexture::Create(m_pDevice, m_pDeviceContext);
+	if (FAILED(pTexture->NativeConstruct_Prototype(L"../Bin/Resources/Mesh/Earth_Aberrant_Pick/T_IcePick_MRA.dds", 1)))
+		return E_FAIL;
+	if (FAILED(pMtrl->Set_Texture("g_MRATexture", TEXTURETYPE::TEX_MRA, pTexture, 0)))
+		return E_FAIL;
+
+	//TODO : ÀÌ°Å MASK ½¦ÀÌ´õ¾ø¾î¼­ Àá±ñ ´Ý¾Æ³ùÀ½ 
+	/*pTexture = CTexture::Create(m_pDevice, m_pDeviceContext);
+	if (FAILED(pTexture->NativeConstruct_Prototype(L"../Bin/Resources/Mesh/Earth_Aberrant_Pick/T_IcePick_MASK.dds", 1)))
+		return E_FAIL;
+	if (FAILED(pMtrl->Set_Texture("g_MASKTexture", TEXTURETYPE::TEX_MASK, pTexture, 0)))
+		return E_FAIL;*/
+
+
+	if (FAILED(g_pGameInstance->Add_Material(L"MI_Earth_Aberrant_Pick", pMtrl)))
+		return E_FAIL;
 
 	return S_OK;
 }
@@ -48,6 +83,13 @@ _int CEarthAberrant_Pick::Tick(_double TimeDelta)
 	Attach_FixedBone(TimeDelta);
 	Attach_Owner(TimeDelta);
 	
+	if (nullptr != m_pCollider)
+	{
+		m_pCollider->Tick(TimeDelta);
+	}
+
+	
+
 	return _int();
 }
 
@@ -57,7 +99,7 @@ _int CEarthAberrant_Pick::LateTick(_double TimeDelta)
 		return -1;
 
 	if(m_pRenderer)
-		m_pRenderer->Add_RenderGroup(CRenderer::RENDER_ALPHA, this);
+		m_pRenderer->Add_RenderGroup(CRenderer::RENDER_NONALPHA, this);
 
 	return _int();
 }
@@ -78,8 +120,6 @@ HRESULT CEarthAberrant_Pick::Render()
 
 	for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
 	{
-		m_pModel->SetUp_TextureOnShader("g_DiffuseTexture", i, aiTextureType_DIFFUSE);
-
 		m_pModel->Render(i, 0);
 	}
 }
@@ -96,6 +136,21 @@ HRESULT CEarthAberrant_Pick::Ready_Components()
 		return E_FAIL;
 
 	m_pModel->Add_Material(g_pGameInstance->Get_Material(L"MI_Earth_Aberrant_Pick"), 0);
+
+	CCollider::DESC tColliderDesc;
+	tColliderDesc.isTrigger = true;
+	tColliderDesc.eRigidType = ERigidType::Dynamic;
+	tColliderDesc.pGameObject = this;
+
+	CCapsuleCollider::DESC tCapsuleColliderDesc;
+	tCapsuleColliderDesc.tColliderDesc = tColliderDesc;
+	tCapsuleColliderDesc.fHeight = 0.4f;
+	tCapsuleColliderDesc.fRadius = 0.25f;
+	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_CapsuleCollider", L"Collider", (CComponent**)&m_pCollider, &tCapsuleColliderDesc)))
+		return E_FAIL;
+
+	_matrix matPivot = XMMatrixRotationY(XMConvertToRadians(90.f)) * XMMatrixTranslation(0.f, 0.f, -0.6f);
+	m_pCollider->setPivotMatrix(matPivot);
 
 	return S_OK;
 }

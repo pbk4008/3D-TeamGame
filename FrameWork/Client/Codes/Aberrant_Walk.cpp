@@ -41,6 +41,13 @@ _int CAberrant_Walk::Tick(const _double& TimeDelta)
 		//cout << "공격으로 변경" << endl;
 	}
 
+	if (4.f > fDistToPlayer)
+	{
+		m_pTransform->Face_Target(g_pObserver->Get_PlayerPos());
+		m_pStateController->Change_State(L"Dash_Bwd");
+		//cout << "공격으로 변경" << endl;
+	}
+
 	return _int();
 }
 

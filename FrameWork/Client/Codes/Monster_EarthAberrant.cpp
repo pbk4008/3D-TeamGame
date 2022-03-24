@@ -1,8 +1,8 @@
 #include "pch.h"
 #include "Monster_EarthAberrant.h"
 
+#include "Animation.h"
 #include "UI_Monster_Panel.h"
-
 #include "EarthAberrant_Pick.h"
 
 #include "Aberrant_Idle.h"
@@ -39,6 +39,9 @@ HRESULT CMonster_EarthAberrant::NativeConstruct(const _uint _iSceneID, void* _pA
 	{
 		return E_FAIL;
 	}
+	
+	_vector Pos = { 3.f, 0.f, 15.f, 1.f };
+	m_pTransform->Set_State(CTransform::STATE_POSITION, Pos);
 
 	if (FAILED(SetUp_Components()))
 	{
@@ -62,8 +65,7 @@ HRESULT CMonster_EarthAberrant::NativeConstruct(const _uint _iSceneID, void* _pA
 	pWeapon->Set_OwnerPivotMatrix(m_pModelCom->Get_PivotMatrix());
 	m_pWeapon = pWeapon;
 
-	_vector Pos = { 3.f, 0.f, 9.f, 1.f };
-	m_pTransform->Set_State(CTransform::STATE_POSITION, Pos);
+	
 
 	//MonsterBar Panel
 	CUI_Monster_Panel::PANELDESC Desc;
@@ -76,6 +78,17 @@ HRESULT CMonster_EarthAberrant::NativeConstruct(const _uint _iSceneID, void* _pA
 
 	m_pPanel->Set_TargetWorldMatrix(m_pTransform->Get_WorldMatrix());
 
+	m_isFall = true;
+	m_iObectTag = (_uint)GAMEOBJECT::MONSTER_ABERRANT;
+
+	m_fMaxHp = 30.f;
+	m_fCurrentHp = m_fMaxHp;
+
+	m_fMaxGroggy = 10.f;
+	m_fGroggy = 0;
+
+	m_pPanel->Set_GroggyBar(m_fMaxGroggy, m_fGroggy);
+
 	return S_OK;
 }
 
@@ -85,6 +98,8 @@ _int CMonster_EarthAberrant::Tick(_double _dDeltaTime)
 	{
 		return -1;
 	}
+
+	m_pTransform->Set_Velocity(XMVectorZero());
 
 	_int iProgress = m_pStateController->Tick(_dDeltaTime);
 	if (NO_EVENT != iProgress)
@@ -100,21 +115,38 @@ _int CMonster_EarthAberrant::Tick(_double _dDeltaTime)
 		}
 	}
 
-	if (g_pGameInstance->getkeyDown(DIK_NUMPAD5))
+	if (0 >= m_fCurrentHp)
 	{
-		m_pStateController->Change_State(L"Flinch_Left");
-	}
-
-	if (g_pGameInstance->getkeyDown(DIK_NUMPAD6))
-	{
+		m_bDead = true;
 		m_pStateController->Change_State(L"Death");
 	}
 
-	if (g_pGameInstance->getkeyDown(DIK_NUMPAD7))
+	if (m_fGroggy >= m_fMaxGroggy)
 	{
+		//스턴상태일때 스턴state에서 현재 그로기 계속 0으로 고정시켜줌
+		m_bGroggy = true;
 		m_pStateController->Change_State(L"Stun");
+		m_fGroggy = 0.f;
+		m_pPanel->Set_GroggyBar(m_fMaxGroggy, m_fGroggy);
 	}
 
+	if (true == m_bGroggy || true == m_bDead)
+	{
+		m_fGroggy = 0.f;
+		m_pPanel->Set_GroggyBar(m_fMaxGroggy, m_fGroggy);
+	}
+
+	if (STUN_END == m_pAnimatorCom->Get_CurrentAnimNode())
+	{
+		if (m_pAnimatorCom->Get_AnimController()->Is_Finished())
+		{
+			m_bGroggy = false;
+		}
+	}
+
+	//Fall(_dDeltaTime);
+
+	m_pCharacterController->Move(_dDeltaTime, m_pTransform->Get_Velocity());
 
 	m_pPanel->Set_TargetWorldMatrix(m_pTransform->Get_WorldMatrix());
 	
@@ -133,8 +165,10 @@ _int CMonster_EarthAberrant::LateTick(_double _dDeltaTime)
 	{
 		return iProgress;
 	}
+	
+	m_pCharacterController->Update_OwnerTransform();
 
-	m_pRenderer->Add_RenderGroup(CRenderer::RENDER_ALPHA, this);
+	m_pRenderer->Add_RenderGroup(CRenderer::RENDER_NONALPHA, this);
 
 	if (nullptr != m_pWeapon)
 	{
@@ -193,16 +227,33 @@ HRESULT CMonster_EarthAberrant::SetUp_Components()
 
 	tDesc.pModel = m_pModelCom;
 	tDesc.pTransform = m_pTransform;
+	tDesc.eType = CAnimationController::EType::CharacterController;
 
 	if (FAILED(__super::SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_Animator", L"Com_Animator", (CComponent**)&m_pAnimatorCom, &tDesc)))
 	{
 		return E_FAIL;
 	}
 
-
 	if (FAILED(__super::SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_StateController", L"Com_StateController", (CComponent**)&m_pStateController)))
 		return E_FAIL;
 	m_pStateController->Set_GameObject(this);
+
+
+
+	/* for.Character Controller */
+	CCharacterController::DESC tCharacterControllerDesc;
+	tCharacterControllerDesc.fHeight = 1.f;
+	tCharacterControllerDesc.fRadius = 0.5f;
+	tCharacterControllerDesc.fContactOffset = tCharacterControllerDesc.fRadius * 0.1f;
+	tCharacterControllerDesc.fStaticFriction = 0.5f;
+	tCharacterControllerDesc.fDynamicFriction = 0.5f;
+	tCharacterControllerDesc.fRestitution = 0.f;
+	tCharacterControllerDesc.pGameObject = this;
+	tCharacterControllerDesc.vPosition = { 0.f, 0.f, 0.f };
+
+	if (FAILED(__super::SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_CharacterController", L"CharacterController", (CComponent**)&m_pCharacterController, &tCharacterControllerDesc)))
+		return E_FAIL;
+	m_pCharacterController->setOwnerTransform(m_pTransform);
 
 	return S_OK;
 }
@@ -463,6 +514,44 @@ HRESULT CMonster_EarthAberrant::Set_State_FSM()
 	m_pStateController->Change_State(L"Idle");
 
 	return S_OK;
+}
+
+void CMonster_EarthAberrant::OnTriggerEnter(CCollision& collision)
+{
+	if (true == g_pObserver->IsAttack()) //플레이어공격일때
+	{
+		m_bFirstHit = true; //딱 한번 true로 변경해줌
+
+		if (true == m_bFirstHit)
+		{
+			m_pPanel->Set_BackUIGapY(1.f);
+		}
+
+		if ((_uint)GAMEOBJECT::WEAPON == collision.pGameObject->getTag())
+		{
+			--m_fCurrentHp;
+			m_fGroggy += 2; //TODO::수치정해서바꿔줘야됨
+
+			m_pPanel->Set_HpBar(m_fMaxHp, m_fCurrentHp);
+
+			if (false == m_bGroggy)
+			{
+				//그로기 아닐때만 증가할수있게
+				m_pPanel->Set_GroggyBar(m_fMaxGroggy, m_fGroggy);
+			}
+		}
+		else
+		{
+
+		}
+	}
+}
+
+void CMonster_EarthAberrant::Set_IsAttack(const _bool _isAttack)
+{
+	m_bIsAttack = _isAttack;
+	if (m_pWeapon)
+		m_pWeapon->Set_IsAttack(_isAttack);
 }
 
 CMonster_EarthAberrant* CMonster_EarthAberrant::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)

@@ -54,11 +54,10 @@ private:
 	CStateController* m_pStateController = nullptr;
 	CCharacterController* m_pCharacterController = nullptr;
 
-	class CShieldBreaker* m_pWeapon = nullptr;
 	class CUI_Monster_Panel* m_pPanel = nullptr;
+	class CShieldBreaker* m_pWeapon = nullptr;
 
 private:
-	_uint itest = 0;
 	_float fTime = 0.f;
 	_float m_fGroggy = 0.f;
 	_float m_fMaxGroggy = 0.f;

@@ -30,11 +30,25 @@ _int CMidBoss_Turn::Tick(const _double& TimeDelta)
 
 	m_pAnimator->Tick(TimeDelta);
 
+	cout << "turn" << endl;
 
 	if (m_pAnimator->Get_AnimController()->Is_Finished())
 	{
-		m_pStateController->Change_State(L"Attack");
-		cout << "turn update" << endl;
+		_vector vMonsterPos = m_pTransform->Get_State(CTransform::STATE::STATE_POSITION);
+		_vector vDist = vMonsterPos - g_pObserver->Get_PlayerPos();
+		_float fDistToPlayer = XMVectorGetX(XMVector3Length(vDist));
+
+		if (10.f > fDistToPlayer)
+		{
+			m_pStateController->Change_State(L"Attack");
+			cout << "turn update" << endl;
+		}
+	
+		if (10.f < fDistToPlayer)
+		{
+			m_pStateController->Change_State(L"Run");
+
+		}
 	}
 
 	//m_TurnTime += TimeDelta;
