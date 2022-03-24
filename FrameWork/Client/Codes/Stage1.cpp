@@ -79,7 +79,7 @@ HRESULT CStage1::NativeConstruct()
 		return E_FAIL;
 	}
 
-	m_pTriggerSystem = CTriggerSystem<Client::CStage1>::Create(m_pDevice, m_pDeviceContext, L"../bin/SaveData/MonsterSpawnTrigger.data");
+	m_pTriggerSystem = CTriggerSystem<Client::CStage1>::Create(m_pDevice, m_pDeviceContext, L"../bin/SaveData/MonsterSpawnTrigger.data",this);
 
 	if (!m_pTriggerSystem)
 		return E_FAIL;

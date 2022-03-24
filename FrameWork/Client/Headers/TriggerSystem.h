@@ -94,10 +94,10 @@ private:
 			Safe_Release(pTrigger);
 	}
 public:
-	static CTriggerSystem<T>* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext, const wstring& pFilePath)
+	static CTriggerSystem<T>* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext, const wstring& pFilePath, T* pStage)
 	{
 		CTriggerSystem<T>* pInstance= new CTriggerSystem<T>(pDevice, pDeviceContext);
-		if (FAILED(pInstance->NativeConstruct(pFilePath)))
+		if (FAILED(pInstance->NativeConstruct(pFilePath,pStage)))
 		{
 			MSGBOX("TriggerSystem Create Fail");
 			Safe_Release(pInstance);
