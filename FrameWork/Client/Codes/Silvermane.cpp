@@ -278,7 +278,7 @@ _int CSilvermane::LateTick(_double _dDeltaTime)
 	}
 
 
-	Raycast_Camera();
+	//Raycast_Camera();
 
 	//g_pObserver->Set_PlayerPos(m_pTransform->Get_State(CTransform::STATE_POSITION));
 	return _int();
@@ -840,7 +840,7 @@ void CSilvermane::Add_PlusAngle(const _float _fDeltaAngle)
 
 void CSilvermane::Add_Velocity(const CTransform::STATE _eState, const _double& _dDeltaTime)
 {
-	m_pTransform->Add_Velocity(_eState, m_fMoveSpeed * _dDeltaTime);
+	m_pTransform->Add_Velocity(_eState, m_fMoveSpeed * (_float)_dDeltaTime);
 }
 
 void CSilvermane::Set_Position(const _float3 _vPosition)
@@ -975,9 +975,9 @@ const _int CSilvermane::KeyCheck(const _double& _dDeltaTime)
 	if (!m_isFall)
 	{
 		if (g_pGameInstance->getkeyPress(DIK_UP))
-			m_pTransform->Add_Velocity(XMVectorSet(0.f, 40.f * _dDeltaTime, 0.f, 0.f));
+			m_pTransform->Add_Velocity(XMVectorSet(0.f, 40.f * (_float)_dDeltaTime, 0.f, 0.f));
 		if (g_pGameInstance->getkeyPress(DIK_DOWN))
-			m_pTransform->Add_Velocity(XMVectorSet(0.f, -40.f * _dDeltaTime, 0.f, 0.f));
+			m_pTransform->Add_Velocity(XMVectorSet(0.f, -40.f * (_float)_dDeltaTime, 0.f, 0.f));
 	}
 
 	return _int();
