@@ -391,6 +391,26 @@ void CPhysicsXSystem::Remove_Actor(PxActor* _pActor)
 		m_pScene->removeActor(*_pActor);
 }
 
+const _bool CPhysicsXSystem::Raycast(const _float3& _vOrigin, const _float3& _vDir, const _float _fMaxDistance, CGameObject ** _ppOutHitObject)
+{
+	PxVec3 origin = ToPxVec3(_vOrigin);
+	PxVec3 unitDir = ToPxVec3(_vDir);
+	PxReal maxDistance = _fMaxDistance;
+	PxRaycastBuffer hit;
+
+	if (m_pScene->raycast(origin, unitDir, maxDistance, hit))
+	{
+		if (hit.hasBlock)
+		{
+			PxRaycastHit hitInfo = hit.block;
+			if(_ppOutHitObject)
+				*_ppOutHitObject = static_cast<CGameObject*>(hitInfo.actor->userData);
+			return true;
+		}
+	}
+	return false;
+}
+
 void CPhysicsXSystem::Free()
 {
 	// release

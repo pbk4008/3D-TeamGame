@@ -24,7 +24,9 @@ public:
 public:
 	const _bool Get_Dead() { return m_bDead; }
 	_float Get_CurrentHp() { return m_fCurrentHp; }
+	_float Get_MaxHp() { return m_fMaxHp; }
 	void Set_CurrentHp(_float fCurrentHp) { m_fCurrentHp = fCurrentHp; }
+	void Set_MaxHp(_float fMaxHp) { m_fMaxHp = fMaxHp; }
 protected:
 	virtual void Free() override;
 protected:

@@ -32,6 +32,8 @@ class CMeshCollider;
 class CNavMeshCollider;
 class CCharacterController;
 
+class CGameObject;
+
 class CPhysicsXSystem final : public CSingleTon<CPhysicsXSystem>
 {
 	friend CSingleTon;
@@ -58,6 +60,9 @@ public:
 	const PxRenderBuffer& Get_RenderBuffer();
 
 	void Remove_Actor(PxActor* _pActor);
+
+public:
+	const _bool Raycast(const _float3& _vOrigin, const _float3& _vDir, const _float _fMaxDistance, CGameObject** _ppOutHitObject);
 
 private:
 	PxDefaultAllocator m_Allocator;

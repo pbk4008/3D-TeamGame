@@ -36,22 +36,10 @@ _int CTraverse_JumpNodeJog::Tick(const _double& _dDeltaTime)
 		{
 			m_pSilvermane->Set_IsTrasceCamera(false);
 
-			_vector svPos = m_pTransform->Get_State(CTransform::STATE_POSITION);
-			svPos += svVelocity;
-			_vector svDis = XMVector3Length(XMLoadFloat3(&m_vTargetPos) - svPos);
-			if (1.f > XMVectorGetX(svDis))
-			{
-				m_fMoveSpeed = 0.f;
-				m_pAnimationController->Set_PlaySpeed(1.f);
-				m_isJumpEnd = true;
-			}
+			if (20 < iCurKeyFrameIndex)
+				m_pAnimationController->Set_PlaySpeed(0.1f);
 			else
-			{
-				if (20 < iCurKeyFrameIndex)
-					m_pAnimationController->Set_PlaySpeed(0.1f);
-				else
-					m_pAnimationController->Set_PlaySpeed(8.f);
-			}
+				m_pAnimationController->Set_PlaySpeed(8.f);
 		}
 	}
 	else
@@ -122,6 +110,18 @@ _int CTraverse_JumpNodeJog::KeyCheck(const _double& _dDeltaTime)
 		return iProgress;
 
 	return _int();
+}
+
+void CTraverse_JumpNodeJog::OnTriggerExit(CCollision& collision)
+{
+	_uint iTag = collision.pGameObject->getTag();
+
+	if ((_uint)GAMEOBJECT::JUMP_NODE == iTag)
+	{
+		m_fMoveSpeed = 0.f;
+		m_pAnimationController->Set_PlaySpeed(1.f);
+		m_isJumpEnd = true;
+	}
 }
 
 CTraverse_JumpNodeJog* CTraverse_JumpNodeJog::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext, void* _pArg)

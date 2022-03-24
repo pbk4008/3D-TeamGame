@@ -188,6 +188,8 @@ HRESULT CSilvermane::NativeConstruct(const _uint _iSceneID, void* _pArg)
 		return E_FAIL;
 
 	m_isFall = true;
+	m_fCurrentHp = 100.f;
+	m_fMaxHp = 100.f;
 
 	m_pRenderer->SetRenderButton(CRenderer::PIXEL, true);
 	m_pRenderer->SetRenderButton(CRenderer::PBRHDR, true);
@@ -713,10 +715,12 @@ void CSilvermane::OnTriggerEnter(CCollision& collision)
 			--m_fCurrentHp;
 		}
 	}
+
 }
 
 void CSilvermane::OnTriggerExit(CCollision& collision)
 {
+	m_pStateController->OnTriggerExit(collision);
 }
 
 CTransform* CSilvermane::Get_Transform() const
@@ -882,6 +886,16 @@ void CSilvermane::Set_EquipShieldAnim(const _bool _isEquipShield)
 	static_cast<CShield*>(m_pShield)->Set_EquipAnim(_isEquipShield);
 }
 
+void CSilvermane::Raycast_Camera()
+{
+	CTransform* pCameraTransform = m_pCamera->Get_Transform();
+
+	_vector svCameraPosition = pCameraTransform->Get_State(CTransform::STATE_POSITION);
+	_vector svPosition = m_pTransform->Get_State(CTransform::STATE_POSITION);
+
+
+}
+
 const _int CSilvermane::Trace_CameraLook(const _double& _dDeltaTime)
 {
 	_vector svCameraLook = m_pCamera->Get_Look();
@@ -933,12 +947,6 @@ const _int CSilvermane::Trace_CameraLook(const _double& _dDeltaTime)
 
 const _int CSilvermane::Fall(const _double& _dDeltaTime)
 {
-	if (g_pGameInstance->getkeyDown(DIK_HOME))
-	{
-		m_pCharacterController->setFootPosition(_float3(0.f, 2.f, 0.f));
-		m_isFall = true;
-	}
-
 	if (m_isFall)
 	{
 		_vector svPos = m_pTransform->Get_State(CTransform::STATE_POSITION);
@@ -953,6 +961,11 @@ const _int CSilvermane::Fall(const _double& _dDeltaTime)
 
 const _int CSilvermane::KeyCheck(const _double& _dDeltaTime)
 {
+	if (g_pGameInstance->getkeyDown(DIK_HOME))
+	{
+		m_pCharacterController->setFootPosition(_float3(0.f, 2.f, 0.f));
+		m_isFall = true;
+	}
 	if (g_pGameInstance->getkeyDown(DIK_NUMPAD9))
 		Set_Position(_float3(-170.f, 65.f, 440.f));
 
@@ -962,9 +975,9 @@ const _int CSilvermane::KeyCheck(const _double& _dDeltaTime)
 	if (!m_isFall)
 	{
 		if (g_pGameInstance->getkeyPress(DIK_UP))
-			m_pTransform->Add_Velocity(XMVectorSet(0.f, 10.f, 0.f, 0.f));
+			m_pTransform->Add_Velocity(XMVectorSet(0.f, 100.f * _dDeltaTime, 0.f, 0.f));
 		if (g_pGameInstance->getkeyPress(DIK_DOWN))
-			m_pTransform->Add_Velocity(XMVectorSet(0.f, -10.f, 0.f, 0.f));
+			m_pTransform->Add_Velocity(XMVectorSet(0.f, -100.f * _dDeltaTime, 0.f, 0.f));
 	}
 
 	return _int();
@@ -983,7 +996,6 @@ CJumpTrigger* CSilvermane::Get_TargetJumpTrigger() const
 const _bool CSilvermane::Raycast_JumpNode(const _double& _dDeltaTime)
 {
 	_matrix smatView;
-
 	smatView = g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_VIEW);
 	smatView = XMMatrixInverse(nullptr, smatView);
 	if (XMMatrixIsNaN(smatView))
@@ -995,53 +1007,69 @@ const _bool CSilvermane::Raycast_JumpNode(const _double& _dDeltaTime)
 	svRayDir = XMVector3Normalize(svRayDir);
 	_float fOutDist = 0.f;
 
-	// JumpTrigger
-	list<CGameObject*>* listJumpTrigger = g_pGameInstance->getObjectList(m_iSceneID, L"Layer_JumpTrigger");
-	if (!listJumpTrigger)
-		return false;
-	for (auto& pJumpTrigger : *listJumpTrigger)
-	{
-		if (static_cast<CJumpTrigger*>(pJumpTrigger)->Raycast(svRayPos, svRayDir, fOutDist, _dDeltaTime))
-		{
-			m_pTargetJumpTrigger = static_cast<CJumpTrigger*>(pJumpTrigger);
-			if (g_pGameInstance->getkeyPress(DIK_C))
-				m_fJumpTriggerLookTime += (_float)_dDeltaTime;
 
-			if (1.5f < m_fJumpTriggerLookTime)
-			{
-				if (FAILED(m_pStateController->Change_State(L"Traverse_Jump400Jog")))
-					return false;
-				m_fJumpTriggerLookTime = 0.f;
-			}
-			return true;
+	_uint iObjectTag = -1;
+
+	_float3 vOrigin;
+	XMStoreFloat3(&vOrigin, svRayPos);
+	_float3 vDir;
+	XMStoreFloat3(&vDir, svRayDir);
+	CGameObject* pHitObject = nullptr;
+	if (g_pGameInstance->Raycast(vOrigin, vDir, 50.f, &pHitObject))
+	{
+		if (pHitObject)
+		{
+			iObjectTag = pHitObject->getTag();
 		}
 	}
-	m_pTargetJumpTrigger = nullptr;
-	m_fJumpTriggerLookTime = 0.f;
 
-	// JumpNode
-	list<CGameObject*>* listJumpNode = g_pGameInstance->getObjectList(m_iSceneID, L"Layer_JumpNode");
-	if (!listJumpNode)
+	if(-1 == iObjectTag)
 		return false;
-	for (auto& pJumpNode : *listJumpNode)
-	{
-		if(static_cast<CJumpNode*>(pJumpNode)->Raycast(svRayPos, svRayDir, fOutDist, _dDeltaTime))
-		{
-			m_pTargetJumpNode = static_cast<CJumpNode*>(pJumpNode);
-			if (g_pGameInstance->getkeyPress(DIK_C))
-				m_fJumpNodeLookTime += (_float)_dDeltaTime;
 
-			if (1.5f < m_fJumpNodeLookTime)
-			{
-				if (FAILED(m_pStateController->Change_State(L"Traverse_JumpNodeJog")))
-					return false;
-				m_fJumpNodeLookTime = 0.f;
-			}
-			return true;
+
+	if ((_uint)GAMEOBJECT::JUMP_TRIGGER == iObjectTag)
+	{
+		m_pTargetJumpTrigger = static_cast<CJumpTrigger*>(pHitObject);
+		if (g_pGameInstance->getkeyPress(DIK_C))
+			m_fJumpTriggerLookTime += (_float)_dDeltaTime;
+
+
+		if (1.5f < m_fJumpTriggerLookTime)
+		{
+			if (FAILED(m_pStateController->Change_State(L"Traverse_Jump400Jog")))
+				return false;
+			m_fJumpTriggerLookTime = 0.f;
 		}
+		return true;
 	}
-	m_pTargetJumpNode = nullptr;
-	m_fJumpNodeLookTime = 0.f;
+	else
+	{
+		m_pTargetJumpTrigger = nullptr;
+		m_fJumpTriggerLookTime = 0.f;
+	}
+
+
+	if ((_uint)GAMEOBJECT::JUMP_NODE == iObjectTag)
+	{
+		m_pTargetJumpNode = static_cast<CJumpNode*>(pHitObject);
+		if (g_pGameInstance->getkeyPress(DIK_C))
+			m_fJumpNodeLookTime += (_float)_dDeltaTime;
+
+
+		if (1.5f < m_fJumpNodeLookTime)
+		{
+			if (FAILED(m_pStateController->Change_State(L"Traverse_JumpNodeJog")))
+				return false;
+			m_fJumpNodeLookTime = 0.f;
+		}
+		return true;
+	}
+	else
+	{
+		m_pTargetJumpNode = nullptr;
+		m_fJumpNodeLookTime = 0.f;
+	}
+
 	return false;
 }
 

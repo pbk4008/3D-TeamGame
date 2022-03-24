@@ -8,7 +8,7 @@ CCollider::CCollider(ID3D11Device * _pDevice, ID3D11DeviceContext * _pDeviceCont
 	: CComponent(_pDevice, _pDeviceContext)
 	, m_pPhsyX(CPhysicsXSystem::GetInstance())
 {
-	//Safe_AddRef(m_pPhsyX);
+	Safe_AddRef(m_pPhsyX);
 	XMStoreFloat4x4(&m_matPivot, XMMatrixIdentity());
 }
 
@@ -17,7 +17,7 @@ CCollider::CCollider(const CCollider& _rhs)
 	, m_pPhsyX(_rhs.m_pPhsyX)
 	, m_matPivot(_rhs.m_matPivot)
 {
-	//Safe_AddRef(m_pPhsyX);
+	Safe_AddRef(m_pPhsyX);
 }
 
 void CCollider::Remove_Actor()
@@ -122,6 +122,11 @@ _int CCollider::Update_PxTransform()
 	return _int();
 }
 
+const _bool CCollider::Raycast(const _float3& _vOrigin, const _float3& _vDir, const _float _fMaxDistance, CGameObject** _ppOutHitObject)
+{
+	return m_pPhsyX->Raycast(_vOrigin, _vDir, _fMaxDistance, _ppOutHitObject);
+}
+
 void CCollider::Free()
 {
 	if (m_pShape)
@@ -132,6 +137,6 @@ void CCollider::Free()
 	Safe_PxRelease(m_pRigidActor);
 	Safe_PxRelease(m_pMaterial);
 
-	//Safe_Release(m_pPhsyX);
+	Safe_Release(m_pPhsyX);
 	__super::Free();
 }
