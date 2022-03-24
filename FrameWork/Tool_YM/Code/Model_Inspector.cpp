@@ -58,7 +58,7 @@ HRESULT CModel_Inspector::Get_ModelInfo(const FILEINFO& _FileInfo)
 
 	m_StaticTxt_FileName.SetWindowTextW(m_FileInfo.cstrFileName.c_str());
 	m_EditText_Model_Tag.SetWindowTextW(m_FileInfo.cstrFileName.c_str());
-
+	//m_EditText_Model_Tag.SetWindowTextW(L"Env_Tree");
 	return S_OK;
 }
 
