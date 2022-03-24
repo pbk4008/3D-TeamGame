@@ -80,6 +80,16 @@ const _float CClient_Observer::Get_HP()
 	return m_pPlayer->Get_CurrentHp();
 }
 
+const _float CClient_Observer::Get_MaxHP()
+{
+	return m_pPlayer->Get_MaxHp();
+}
+
+const _float CClient_Observer::Get_HPRatio()
+{
+	return m_pPlayer->Get_CurrentHpRatio();
+}
+
 const CSilvermane::SCENEMOVEDATA CClient_Observer::Get_SceneMoveData()
 {
 	return m_pPlayer->Get_SceneMoveData();
@@ -91,6 +101,24 @@ void CClient_Observer::Set_IsAttack(const _bool bAttack)
 		return;
 
 	m_pPlayer->Set_IsAttack(bAttack);
+}
+
+void CClient_Observer::Set_Hp(const _float fCurrentHp)
+{
+	if (!m_pPlayer)
+		return;
+	m_pPlayer->Set_CurrentHp(fCurrentHp);
+}
+
+void CClient_Observer::MinusHp(const _float fDamage)
+{
+	if (!m_pPlayer)
+		return;
+
+	_float fCurrentHp = Get_HP();
+	
+	fCurrentHp -= fDamage;
+	Set_Hp(fCurrentHp);
 }
 
 void CClient_Observer::Free(void)

@@ -65,6 +65,8 @@ public:
 	void ScaleX_Up(_fvector vScale);
 	void ScaleY_Up(_fvector vScale);
 	void ScaleZ_Up(_fvector vScale);
+public:
+	void Fall(_double dDeltaTime, _bool bCheck = true);
 
 public:
 	void Mesh_Straight(_double TimeDelta, class CNavigation* pNavigation = nullptr);
@@ -86,6 +88,7 @@ private:
 	TRANSFORMDESC			m_TransformDesc;
 
 	_float3					m_vVelocity = { 0.f, 0.f, 0.f };
+	_float m_fAccFallTime;
 
 public:
 	static CTransform* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);

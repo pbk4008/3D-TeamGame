@@ -2,9 +2,9 @@
 #include "Monster_Bastion_Sword.h"
 #include "Animation.h"
 #include "Stargazer.h"
-#include "ShieldBreaker.h"
 #include "HierarchyNode.h"
 #include "Animator.h"
+#include "CharacterController.h"
 
 #include "Bastion_Sword_Idle.h"
 #include "Bastion_Sword_Chase.h"
@@ -54,6 +54,17 @@ HRESULT CMonster_Bastion_Sword::NativeConstruct(const _uint _iSceneID, void* _pA
 	if (FAILED(__super::NativeConstruct(_iSceneID, _pArg)))
 		return E_FAIL;
 
+	if (_pArg)
+	{
+		_float3 tPos = (*(_float3*)_pArg);
+		if (FAILED(Set_SpawnPosition(tPos)))
+			return E_FAIL;
+	}
+	else
+	{
+		m_pTransform->Set_State(CTransform::STATE_POSITION, XMVectorSet(5.f, 0.f, 10.f, 1.f));
+	}
+
 	if (FAILED(SetUp_Components()))
 		return E_FAIL;
 
@@ -65,9 +76,6 @@ HRESULT CMonster_Bastion_Sword::NativeConstruct(const _uint _iSceneID, void* _pA
 
 	if (FAILED(Set_State_FSM()))
 		return E_FAIL;
-
-	_vector Pos = { 0.f, 0.f, 30.f, 1.f };
-	m_pTransform->Set_State(CTransform::STATE_POSITION, Pos);
 
 	m_fMaxHp = 3;
 	m_fCurrentHp = m_fMaxHp;
@@ -82,17 +90,19 @@ _int CMonster_Bastion_Sword::Tick(_double _dDeltaTime)
 	}
 	m_pTransform->Set_Velocity(XMVectorZero());
 
+	m_pTransform->Fall(_dDeltaTime);
 	//상태 컨트롤러 돌리기->애니메이터 자동으로 돌아감
 	m_pStateController->Tick(_dDeltaTime);
 
 	//무기 뼈 업데이트
 	m_pWeapon->Tick(_dDeltaTime);
 
+	m_pCharacterController->Move(_dDeltaTime, m_pTransform->Get_Velocity());
 	//상태 갱신
 	Change_State();
 
 	//콜리더 갱신
-	//m_pCharacterController->Move(_dDeltaTime, m_pTransform->Get_Velocity());
+	
 	return 0;
 }
 
@@ -102,8 +112,9 @@ _int CMonster_Bastion_Sword::LateTick(_double _dDeltaTime)
 	{
 		return -1;
 	}
+	m_pCharacterController->Update_OwnerTransform();
 
-	m_pRenderer->Add_RenderGroup(CRenderer::RENDER_ALPHA, this);
+	m_pRenderer->Add_RenderGroup(CRenderer::RENDER_NONALPHA, this);
 	m_pWeapon->LateTick(_dDeltaTime);
 	return 0;
 }
@@ -116,7 +127,6 @@ HRESULT CMonster_Bastion_Sword::Render()
 	_matrix XMWorldMatrix = XMMatrixTranspose(m_pTransform->Get_WorldMatrix());
 	_matrix XMViewMatrix = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_VIEW));
 	_matrix XMProjectMatrix = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_PROJECTION));
-	_vector CamPos = g_pGameInstance->Get_CamPosition(L"Camera_Silvermane");
 
 	m_pModelCom->SetUp_ValueOnShader("g_WorldMatrix", &XMWorldMatrix, sizeof(_float) * 16);
 	m_pModelCom->SetUp_ValueOnShader("g_ViewMatrix", &XMViewMatrix, sizeof(_float) * 16);
@@ -130,12 +140,13 @@ HRESULT CMonster_Bastion_Sword::Render()
 
 void CMonster_Bastion_Sword::OnTriggerEnter(CCollision& collision)
 {
-	if (collision.pGameObject->getTag()==(_uint)GAMEOBJECT::WEAPON)
+	if(m_fCurrentHp>=0.f&&m_wstrCurState != L"Hit")
 	{
-		CWeapon* pWeapon = static_cast<CWeapon*>(collision.pGameObject);
-		if (pWeapon->Get_Type() == CWeapon::EType::Sword_1H)
+		if (collision.pGameObject->getTag() == (_uint)GAMEOBJECT::WEAPON)
 		{
-			Hit();
+			CWeapon* pWeapon = static_cast<CWeapon*>(collision.pGameObject);
+			if (pWeapon->IsAttack())
+				Hit();
 		}
 	}
 }
@@ -149,6 +160,8 @@ HRESULT CMonster_Bastion_Sword::SetUp_Components()
 
 	if (FAILED(__super::SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Model_Monster_Bastion_Sword", L"Model", (CComponent**)&m_pModelCom)))
 		return E_FAIL;
+	_matrix matPivot = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(180.f));
+	m_pModelCom->Set_PivotMatrix(matPivot);
 
 	CAnimator::ANIMATORDESC tDesc;
 	ZeroMemory(&tDesc, sizeof(tDesc));
@@ -163,6 +176,23 @@ HRESULT CMonster_Bastion_Sword::SetUp_Components()
 	if (FAILED(__super::SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_StateController", L"Com_StateController", (CComponent**)&m_pStateController)))
 		return E_FAIL;
 
+	CCharacterController::DESC tController;
+
+	tController.fHeight = 1.f;
+	tController.fRadius = 1.f;
+	tController.fContactOffset = tController.fRadius*0.1f;
+	tController.fStaticFriction = 0.5f;
+	tController.fDynamicFriction = 0.5f;
+	tController.fRestitution = 0.f;
+	
+	tController.vPosition = _float3(0.f, 0.f, 0.f);
+	tController.pGameObject = this;
+
+	if(FAILED(__super::SetUp_Components((_uint)SCENEID::SCENE_STATIC, 
+		L"Proto_Component_CharacterController", L"Com_CharacterController", (CComponent**)&m_pCharacterController,&tController)))
+		return E_FAIL;
+
+	m_pCharacterController->setOwnerTransform(m_pTransform);
 	return S_OK;
 }
 
@@ -410,9 +440,14 @@ HRESULT CMonster_Bastion_Sword::Set_State_FSM()
 
 	CMonster_FSM::FSMDESC tFSMDesc;
 	ZeroMemory(&tFSMDesc, sizeof(tFSMDesc));
-	ZeroMemory(&tFSMDesc, sizeof(tFSMDesc));
 	tFSMDesc.pAnimator = m_pAnimator;
 	tFSMDesc.pController = m_pStateController;
+
+	CMonster_FSM::FSMACTORDESC tActorDesc;
+	ZeroMemory(&tActorDesc, sizeof(tActorDesc));
+	tActorDesc.pAnimator = m_pAnimator;
+	tActorDesc.pController = m_pStateController;
+	tActorDesc.pActor = this;
 
 	lstrcpy(tMoveDesc.pName,L"Idle");
 	if (FAILED(m_pStateController->Add_State(L"Idle", CBastion_Sword_Idle::Create(m_pDevice, m_pDeviceContext, &tMoveDesc))))
@@ -422,8 +457,8 @@ HRESULT CMonster_Bastion_Sword::Set_State_FSM()
 	if (FAILED(m_pStateController->Add_State(L"Chase", CBastion_Sword_Chase::Create(m_pDevice, m_pDeviceContext, &tMoveDesc))))
 		return E_FAIL;
 
-	lstrcpy(tMoveDesc.pName, L"Attack");
-	if (FAILED(m_pStateController->Add_State(L"Attack", CBastion_Sword_Attack::Create(m_pDevice, m_pDeviceContext, &tMoveDesc))))
+	lstrcpy(tActorDesc.pName, L"Attack");
+	if (FAILED(m_pStateController->Add_State(L"Attack", CBastion_Sword_Attack::Create(m_pDevice, m_pDeviceContext, &tActorDesc))))
 		return E_FAIL;
 
 	lstrcpy(tFSMDesc.pName, L"Hit");
@@ -489,6 +524,14 @@ _int CMonster_Bastion_Sword::Change_State()
 		if (tmpState == L"Idle")
 			Chase();
 	}
+	if (tmpState == L"Death")
+	{
+		if (m_bDead&&m_pAnimator->Get_CurrentAnimation()->Is_Finished())
+		{
+			setActive(true);
+			m_bRemove = true;
+		}
+	}
 	return _int();
 }
 
@@ -514,10 +557,13 @@ void CMonster_Bastion_Sword::Hit()
 	CBastion_Sword_Hit::HITDATA tData;
 	ZeroMemory(&tData, sizeof(tData));
 
+	m_fCurrentHp--;
 	tData.fCurHp = m_fCurrentHp;
 	tData.iHitType = (_uint)m_eHitType;
 	m_pStateController->Change_State(L"Hit", &tData);
 	m_wstrCurState = L"Hit";
+	if(m_fCurrentHp<=0.f)
+		m_bDead = true;
 }
 
 CMonster_Bastion_Sword* CMonster_Bastion_Sword::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
@@ -549,4 +595,5 @@ void CMonster_Bastion_Sword::Free()
 	Safe_Release(m_pAnimator);
 	Safe_Release(m_pWeapon);
 	Safe_Release(m_pStateController);
+	Safe_Release(m_pCharacterController);
 }

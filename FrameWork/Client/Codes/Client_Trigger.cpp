@@ -6,11 +6,24 @@
 
 CClient_Trigger::CClient_Trigger(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
 	: CGameObject(_pDevice, _pDeviceContext)
+	, m_pGizmo(nullptr)
+	, m_bOnTrigger(false)
+	, m_pBoxCollider(nullptr)
+	, m_bPick(false)
+	, m_bOverlap(false)
 {
+	ZeroMemory(&m_matWorld, sizeof(_float4x4));
+	ZeroMemory(&m_fLocalMouse, sizeof(_float3));
+	ZeroMemory(&m_vRayPos, sizeof(_float3));
 }
 
 CClient_Trigger::CClient_Trigger(const CClient_Trigger& _rhs)
 	: CGameObject(_rhs)
+	, m_pGizmo(_rhs.m_pGizmo)
+	, m_bOnTrigger(_rhs.m_bOnTrigger)
+	, m_pBoxCollider(_rhs.m_pBoxCollider)
+	, m_bPick(_rhs.m_bPick)
+	, m_bOverlap(_rhs.m_bOverlap)
 {
 }
 
@@ -45,6 +58,8 @@ HRESULT CClient_Trigger::NativeConstruct(const _uint _iSceneID, void* pArg)
 
 _int CClient_Trigger::Tick(_double TimeDelta)
 {
+	m_pBoxCollider->Tick(TimeDelta);
+
 	return _int();
 }
 
@@ -61,22 +76,31 @@ HRESULT CClient_Trigger::Render()
 	switch ((TRIGGERTYPE)m_TriggerDesc.eTrigger_Type)
 	{
 	case TRIGGERTYPE::TRIGGER_LOD:
-		m_pGizmo->DrawCapsule(m_pTransform->Get_WorldMatrix(), L"MainCamera", _fvector{0.129f, 0.65f, 0.929f, 1.0f});
+		m_pGizmo->DrawCapsule(m_pTransform->Get_WorldMatrix(), L"Camera_Silvermane", _fvector{0.129f, 0.65f, 0.929f, 1.0f});
 		break;
 	case TRIGGERTYPE::TRIGGER_LIGHT:
-		m_pGizmo->DrawSphere(m_pTransform->Get_WorldMatrix(), L"MainCamera", _fvector{ 0.96f, 0.98f, 0.074f, 1.0f });
+		m_pGizmo->DrawSphere(m_pTransform->Get_WorldMatrix(), L"Camera_Silvermane", _fvector{ 0.96f, 0.98f, 0.074f, 1.0f });
 		break;
 	case TRIGGERTYPE::TRIGGER_SCENE:
-		m_pGizmo->DrawCube(m_pTransform->Get_WorldMatrix(), L"MainCamera", _fvector{ 1.0, 0.0f, 0.0f, 1.0f });
+		m_pGizmo->DrawCube(m_pTransform->Get_WorldMatrix(), L"Camera_Silvermane", _fvector{ 1.0, 0.0f, 0.0f, 1.0f });
 		break;
 	case TRIGGERTYPE::TRIGGER_MONSTER:
-		m_pGizmo->DrawCube(m_pTransform->Get_WorldMatrix(), L"MainCamera", _fvector{ 0.309f, 0.933f, 0.125f, 1.0f });
+		m_pGizmo->DrawCube(m_pTransform->Get_WorldMatrix(), L"Camera_Silvermane", _fvector{ 0.309f, 0.933f, 0.125f, 1.0f });
 		break;
 	case TRIGGERTYPE::TRIGGER_QUEST:
-		m_pGizmo->DrawCube(m_pTransform->Get_WorldMatrix(), L"MainCamera", _fvector{ 0.501f, 0.082f, 0.0f, 1.0f });
+		m_pGizmo->DrawCube(m_pTransform->Get_WorldMatrix(), L"Camera_Silvermane", _fvector{ 0.501f, 0.082f, 0.0f, 1.0f });
 		break;
 	}
 	return S_OK;
+}
+
+void CClient_Trigger::OnTriggerEnter(CCollision& collision)
+{
+	if (collision.pGameObject->getTag() == (_uint)GAMEOBJECT::PLAYER)
+	{
+		if(!m_bOnTrigger)
+			m_bOnTrigger = true;
+	}
 }
 
 HRESULT CClient_Trigger::SetUp_Components()
@@ -84,6 +108,24 @@ HRESULT CClient_Trigger::SetUp_Components()
 	/* Com_Gizmo*/
 	m_pGizmo = (CGizmo*)g_pGameInstance->Clone_Component((_uint)LEVEL_ID::LEVEL_STATIC, L"Proto_Component_Gizmo");
 	if (nullptr == m_pGizmo)
+		return E_FAIL;
+
+	CBoxCollider::DESC tDesc;
+	ZeroMemory(&tDesc, sizeof(tDesc));
+
+	tDesc.tColliderDesc.eRigidType = ERigidType::Static;
+	tDesc.tColliderDesc.isGravity = false;
+	tDesc.tColliderDesc.isKinematic = false;
+	tDesc.tColliderDesc.isSceneQuery = false;
+	tDesc.tColliderDesc.isTrigger = true;
+	tDesc.tColliderDesc.fStaticFriction = 0.5f;
+	tDesc.tColliderDesc.fDynamicFriction = 0.5f;
+	tDesc.tColliderDesc.fRestitution = 0.6f;
+	tDesc.tColliderDesc.pGameObject = this;
+
+	tDesc.vScale = _float3(10.f, 3.f, 10.f);
+
+	if (FAILED(CGameObject::SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_BoxCollider", L"BoxTrigger", (CComponent**)&m_pBoxCollider,&tDesc)))
 		return E_FAIL;
 
 	return S_OK;

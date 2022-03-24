@@ -14,6 +14,7 @@ public:
 	{
 		/* For.Rigidbody */
 		ERigidType eRigidType = ERigidType::Dynamic;			// 리지드스태틱(움직이지 않는 고정된 액터) or 리지드바디(움직이며 물리연산을 받는 액터)
+		_bool isVisualization = true;							// 렌더 할것인가?
 		_bool isGravity = false;								// 중력을 받을것인가?
 		_bool isKinematic = false;								// 다른 액터로부터 물리연산을 안받는 객체
 		/* For.Shape */
@@ -48,6 +49,8 @@ public:
 
 	_int Update_Transform();
 	_int Update_PxTransform();
+
+	const _bool Raycast(const _float3& _vOrigin, const _float3& _vDir, const _float _fMaxDistance, CGameObject** _ppOutHitObject);
 
 protected:
 	CPhysicsXSystem* m_pPhsyX = nullptr;

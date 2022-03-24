@@ -1,6 +1,7 @@
 #include "..\public\Layer.h"
 #include "GameObject.h"
 #include "Component.h"
+#include "Actor.h"
 
 CLayer::CLayer()
 {
@@ -45,16 +46,44 @@ _int CLayer::LateTick(_double TimeDelta)
 {
 	_int		iProgress = 0;
 
-	for (auto& pGameObject : m_Objects)
+	auto& iter = m_Objects.begin();
+
+	for (; iter != m_Objects.end();)
 	{
-		if (nullptr != pGameObject && pGameObject->getActive() == true)
-			iProgress = pGameObject->LateTick(TimeDelta);
+		if (nullptr != (*iter) && (*iter)->getActive() == true)
+			iProgress = (*iter)->LateTick(TimeDelta);
+
+		if (!Delete_GameObject(iter))
+			iter++;
 
 		if (0 > iProgress)
 			return -1;
 	}
+
+	/*for (auto& pGameObject : m_Objects)
+	{
+		if (nullptr != pGameObject && pGameObject->getActive() == true)
+			iProgress = pGameObject->LateTick(TimeDelta);
+		cout << typeid(pGameObject).name() << endl;
+
+		if (0 > iProgress)
+			return -1;
+	}*/
 	return _int(0);
 }
+
+_bool CLayer::Delete_GameObject(list<class CGameObject*>::iterator& iter)
+{
+	if ((*iter)->getRemove())
+	{
+		Safe_Release(*iter);
+		iter = m_Objects.erase(iter);
+		return true;
+	}
+	return false;
+}
+
+
 
 CLayer * CLayer::Create()
 {

@@ -68,9 +68,8 @@ public:
 public: /* For.Weapon */
 	const _bool IsEquipWeapon() const;
 	const _bool IsEquipShield() const;
-	const _bool IsAttack();
 	const CWeapon::EType Get_WeaponType() const;
-	void Set_IsAttack(const _bool _isAttack);
+	virtual void Set_IsAttack(const _bool _isAttack);
 	void Set_EquipWeapon(const _bool _isEquipWeapon);
 	void Set_WeaponFixedBone(const string& _wstrFixedBoneTag);
 	void Set_WeaponFixedBone(CHierarchyNode* _pFixedBone);
@@ -87,21 +86,22 @@ public: /* For.JumpNode */
 	const _bool Raycast_JumpNode(const _double& _dDeltaTime);
 
 private:
+	void Raycast_Camera();
 	const _int Trace_CameraLook(const _double& _dDeltaTime);
-	const _int Fall(const _double& _dDeltaTime);
 	const _int KeyCheck(const _double& _dDeltaTime);
 
-private:
+private: /* Components */
 	CModel* m_pModel = nullptr;
 	CStateController* m_pStateController = nullptr;
 	CAnimationController* m_pAnimationController = nullptr;
-	CCamera_Silvermane* m_pCamera = nullptr;
 	CCharacterController* m_pCharacterController = nullptr;
+
+public:
+	CCamera_Silvermane* m_pCamera = nullptr;
 
 	_bool m_isFall = false;
 	_bool m_isMove = false;
 	_bool m_isTraceCamera = true;
-	_bool m_isAttack = false;
 
 	_float m_fMoveSpeed = 0.f;
 	_float m_fAngle = 0.f;
@@ -119,6 +119,8 @@ private: /* For.JumpNode */
 	CJumpTrigger* m_pTargetJumpTrigger = nullptr;
 	_float m_fJumpNodeLookTime = 0.f;
 	_float m_fJumpTriggerLookTime = 0.f;
+
+private:
 	CTexture*	m_pTexture = nullptr;
 
 public:

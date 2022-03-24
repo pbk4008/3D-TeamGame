@@ -71,6 +71,7 @@ private:
 private:
 	DESC m_tDesc;
 
+	CPhysicsXSystem* m_pPhysX = nullptr;
 	PxControllerCollisionFlags m_preFlag;
 	PxControllerCollisionFlags m_curFlag;
 

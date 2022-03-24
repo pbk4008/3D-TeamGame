@@ -13,10 +13,11 @@ HRESULT CBastion_Sword_Attack::NativeConstruct(void* _pArg)
 	if (!_pArg)
 		return E_FAIL;
 
-	FSMMOVEDESC tDesc = (*(FSMMOVEDESC*)_pArg);
+	FSMACTORDESC tDesc = (*(FSMACTORDESC*)_pArg);
 	m_pAnimator = tDesc.pAnimator;
 	m_pStateController = tDesc.pController;
-	m_pTransform = tDesc.pTransform;
+	m_pMonster = tDesc.pActor;
+	m_pTransform = m_pMonster->Get_Transform();
 
 	m_wstrTag = tDesc.pName;
 
@@ -57,6 +58,7 @@ HRESULT CBastion_Sword_Attack::Render()
 
 HRESULT CBastion_Sword_Attack::EnterState(void* pArg)
 {
+	m_pMonster->Set_IsAttack(true);
 	m_eAttackType = (*(ATTACK_TYPE*)pArg);
 
 	switch (m_eAttackType)
@@ -80,6 +82,8 @@ HRESULT CBastion_Sword_Attack::EnterState(void* pArg)
 
 HRESULT CBastion_Sword_Attack::ExitState(void* _pArg)
 {
+	m_pMonster->Set_IsAttack(false);
+
 	return S_OK;
 }
 

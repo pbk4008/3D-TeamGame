@@ -37,6 +37,21 @@
 #include "UI_Tuto_Base.h"
 #include "UI_Tuto_Font.h"
 
+#include "Environment.h"
+#include "Client_Trigger.h"
+#include "Treasure_Chest.h"
+
+//Monster
+#include "Monster_Crawler.h"
+#include "Monster_EarthAberrant.h"
+#include "Monster_BronzeAnimus.h"
+#include "Monster_Bastion_Sword.h"
+#include "Boss_Bastion_Judicator.h"
+#include "Monster_Bastion_Shooter.h"
+
+#include "ShieldBreaker.h"
+#include "EarthAberrant_Pick.h"
+#include "Stargazer.h"
 
 #pragma region TestScene_JS
 
@@ -50,7 +65,7 @@
 #include "Shield.h"
 #include "Monster_Bastion_2HSword.h"
 #include "Monster_Bastion_Healer.h"
-#include "Monster_Bastion_Shooter.h"
+
 #include "Monster_Bastion_Spear.h"
 #include "JumpNode.h"
 #include "JumpTrigger.h"
@@ -152,18 +167,18 @@ HRESULT CLoader::SetUp_Stage1_Object()
 
 	//if (FAILED(Load_Stage1BossLoad()))
 	//	return E_FAIL;
+	// 
+	//if (FAILED(Load_Stage1StaticUILoad()))
+	//	return E_FAIL;
 
-	if (FAILED(Load_Stage1StaticUILoad()))
-		return E_FAIL;
-
-	if (FAILED(Load_Stage1UILoad()))
-		return E_FAIL;
+	//if (FAILED(Load_Stage1UILoad()))
+	//	return E_FAIL;
 
 	//if (FAILED(Load_Stage1EffectLoad()))
 	//	return E_FAIL;
 
-	//if (FAILED(Load_Stage1TriggerLod()))
-	//	return E_FAIL;
+	if (FAILED(Load_Stage1TriggerLod()))
+		return E_FAIL;
 
 	//if (FAILED(Load_Stage1_TreasureChest_Load()))
 	//	return E_FAIL;
@@ -196,15 +211,15 @@ HRESULT CLoader::Load_Stage1FBXLoad()
 		MultiByteToWideChar(CP_ACP, 0, fd.name, MAX_PATH, fbxName, MAX_PATH);
 		MultiByteToWideChar(CP_ACP, 0, szFullPath, MAX_PATH, fbxPath, MAX_PATH);
 
-		CMeshLoader::MESHTYPE* tMeshType = new CMeshLoader::MESHTYPE;
-		ZeroMemory(tMeshType, sizeof(CMeshLoader::MESHTYPE));
+	/*	CMeshLoader::MESHTYPE* tMeshType = new CMeshLoader::MESHTYPE;
+		ZeroMemory(tMeshType, sizeof(CMeshLoader::MESHTYPE));*/
 
-		tMeshType->szFBXName = new _tchar[MAX_PATH];
-		tMeshType->szFBXPath = new _tchar[MAX_PATH];
+		//tMeshType->szFBXName = new _tchar[MAX_PATH];
+		//tMeshType->szFBXPath = new _tchar[MAX_PATH];
 
-		lstrcpy(tMeshType->szFBXName, fbxName);
-		lstrcpy(tMeshType->szFBXPath, fbxPath);
-		tMeshType->iType = 2;
+		//lstrcpy(tMeshType->szFBXName, fbxName);
+		//lstrcpy(tMeshType->szFBXPath, fbxPath);
+		//tMeshType->iType = 2;
 
 		/*_bool bCheck = false;
 		Sleep(10);
@@ -217,12 +232,13 @@ HRESULT CLoader::Load_Stage1FBXLoad()
 			continue;
 		}*/
 
-		if(FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, tMeshType->szFBXName,
-			CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, tMeshType->szFBXPath, CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
+		if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, fbxName,
+			CInstancing_Mesh::Create(m_pDevice, m_pDeviceContext, fbxPath, CInstancing_Mesh::INSTANCE_TYPE::STATIC))))
+			return E_FAIL;
 
-		Safe_Delete_Array(tMeshType->szFBXName);
+	/*	Safe_Delete_Array(tMeshType->szFBXName);
 		Safe_Delete_Array(tMeshType->szFBXPath);
-		Safe_Delete(tMeshType);
+		Safe_Delete(tMeshType);*/
 
 		iResult = _findnext(handle, &fd);
 	}
@@ -556,6 +572,9 @@ HRESULT CLoader::SetUp_Stage1_Prototype()
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_CapsuleCollider", CCapsuleCollider::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_BoxCollider", CBoxCollider::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_SphereCollider", CSphereCollider::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 
@@ -571,26 +590,26 @@ HRESULT CLoader::SetUp_Stage1_Prototype()
 	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Environment", CEnvironment::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 
-	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Treasure_Chest", CTreasure_Chest::Create(m_pDevice, m_pDeviceContext))))
-		return E_FAIL;
+	//if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Treasure_Chest", CTreasure_Chest::Create(m_pDevice, m_pDeviceContext))))
+	//	return E_FAIL;
 
 
 	// For Jump!!!
-	_matrix matPivot = XMMatrixIdentity();
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_JumpNode", CModel::Create(m_pDevice, m_pDeviceContext,
-		"../bin/Resources/Mesh/JumpNode/", "JumpNode.fbx",
-		L"../../Reference/ShaderFile/Shader_Mesh.hlsl", matPivot, CModel::TYPE_ANIM, true))))
-	{
-		return E_FAIL;
-	}
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_RayCollider", CRay_Collider::Create(m_pDevice, m_pDeviceContext, CRay_Collider::TYPE_AABB))))
-		return E_FAIL;
+	//_matrix matPivot = XMMatrixIdentity();
+	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_JumpNode", CModel::Create(m_pDevice, m_pDeviceContext,
+	//	"../bin/Resources/Mesh/JumpNode/", "JumpNode.fbx",
+	//	L"../../Reference/ShaderFile/Shader_Mesh.hlsl", matPivot, CModel::TYPE_ANIM, true))))
+	//{ 
+	//	return E_FAIL;
+	////}
+	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_RayCollider", CRay_Collider::Create(m_pDevice, m_pDeviceContext, CRay_Collider::TYPE_AABB))))
+	//	return E_FAIL;
 
-	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_JumpNode", CJumpNode::Create(m_pDevice, m_pDeviceContext))))
-		return E_FAIL;
+	//if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_JumpNode", CJumpNode::Create(m_pDevice, m_pDeviceContext))))
+	//	return E_FAIL;
 
-	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_JumpTrigger", CJumpTrigger::Create(m_pDevice, m_pDeviceContext))))
-		return E_FAIL;
+	//if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_JumpTrigger", CJumpTrigger::Create(m_pDevice, m_pDeviceContext))))
+	//	return E_FAIL;
 
 	return S_OK;
 }
@@ -692,10 +711,11 @@ HRESULT CLoader::Load_Stage1BossLoad()
 
 HRESULT CLoader::Load_Stage1MonsterLoad()
 {
-	//////Monster Crystal_Crawler
+	////Monster Crystal_Crawler
 	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Model_Monster_Crawler", CModel::Create(m_pDevice, m_pDeviceContext,
-	//	L"../bin/FBX/Monster/Crystal_Crawler.fbx",CModel::TYPE_ANIM, true))))
+	//	L"../bin/FBX/Monster/Crystal_Crawler.fbx", CModel::TYPE_ANIM, true))))
 	//	return E_FAIL;
+
 	//if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Monster_Crawler", CMonster_Crawler::Create(m_pDevice, m_pDeviceContext))))
 	//	return E_FAIL;
 
@@ -761,13 +781,13 @@ HRESULT CLoader::Load_Stage1MonsterLoad()
 	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Monster_Bastion_Sword", CModel::Create(m_pDevice, m_pDeviceContext,
 	//	L"../bin/FBX/Monster/Bastion_Sword.fbx", CModel::TYPE_ANIM, true))))
 	//	return E_FAIL;
-	//if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Monster_BronzeAnimus", CMonster_Bastion_Sword::Create(m_pDevice, m_pDeviceContext))))
+	//if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Monster_Bastion_Sword", CMonster_Bastion_Sword::Create(m_pDevice, m_pDeviceContext))))
 	//	return E_FAIL;
 
 	////Weapon
 	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Weapon_Stargazer", CModel::Create(m_pDevice, m_pDeviceContext,
 	//	"../bin/Resources/Mesh/Stargazer/", "Stargazer(1H Sword).fbx",
-	//	L"../../Reference/ShaderFile/Shader_StaticMesh.hlsl", matPivot, CModel::TYPE_STATIC, true))))
+	//	L"../../Reference/ShaderFile/Shader_Weapon.hlsl", matPivot, CModel::TYPE_STATIC, true))))
 	//	return E_FAIL;
 	//if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Weapon_Stargazer", CStargazer::Create(m_pDevice, m_pDeviceContext))))
 	//	return E_FAIL;
@@ -780,6 +800,26 @@ HRESULT CLoader::Load_Stage1MonsterLoad()
 	//if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Monster_Bastion_2HSword", CMonster_Bastion_2HSword::Create(m_pDevice, m_pDeviceContext))))
 	//	return E_FAIL;
 	////weapon
+
+	//if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Weapon_Stargazer", CStargazer::Create(m_pDevice, m_pDeviceContext))))
+	//	return E_FAIL;
+
+	/////Monster Bastion_Shooter
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Monster_Bastion_Shooter", CModel::Create(m_pDevice, m_pDeviceContext,
+		L"../bin/FBX/Monster/Bastion_Maskman.fbx", CModel::TYPE_ANIM, true))))
+		return E_FAIL;
+
+	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Monster_Bastion_Shooter", CMonster_Bastion_Shooter::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+
+	//Bastion_2HSword
+	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Model_Bastion_2HSword", CModel::Create(m_pDevice, m_pDeviceContext,
+	//	L"../bin/FBX/Monster/Bastion_2HSword_Bin.fbx", CModel::TYPE_ANIM, true))))
+	//	return E_FAIL;
+
+	//if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Monster_Bastion_2HSword", CMonster_Bastion_2HSword::Create(m_pDevice, m_pDeviceContext))))
+	//	return E_FAIL;
+
 	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Model_RetributionBlade", CModel::Create(m_pDevice, m_pDeviceContext,
 	//	"../bin/Resources/Mesh/RetributionBlade/", "RetributionBlade(2H).fbx",
 	//	L"../../Reference/ShaderFile/Shader_Weapon.hlsl", matPivot, CModel::TYPE_STATIC, true))))

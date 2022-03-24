@@ -13,11 +13,13 @@
 #include "JumpTrigger.h"
 
 CStage1::CStage1()
+	: m_pTriggerSystem(nullptr)
 {
 }
 
 CStage1::CStage1(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
 	:CLevel(pDevice, pDeviceContext)
+	, m_pTriggerSystem(nullptr)
 {
 }
 
@@ -28,6 +30,7 @@ HRESULT CStage1::NativeConstruct()
 
 	if (FAILED(Ready_Light())) 
 		return E_FAIL;
+	
 
 	/*if (FAILED(Ready_MapObject()))
 	{
@@ -39,12 +42,12 @@ HRESULT CStage1::NativeConstruct()
 		return E_FAIL;
 	}
 
-	if (FAILED(Ready_Player(L"Layer_Silvermane")))
-	{
-		return E_FAIL;
-	}
+	//if (FAILED(Ready_Trigger_Jump()))
+	//{
+	//	return E_FAIL;
+	//}
 
-	if (FAILED(Ready_Monster(L"Layer_Monster")))
+	if (FAILED(Ready_Player(L"Layer_Silvermane")))
 	{
 		return E_FAIL;
 	}
@@ -54,23 +57,35 @@ HRESULT CStage1::NativeConstruct()
 	//	return E_FAIL;
 	//}
 
-
-	//Data
-	if (FAILED(Ready_Data_UI(L"../bin/SaveData/UI/UI.dat")))
+	if (FAILED(Ready_Monster(L"Layer_Monster")))
 	{
 		return E_FAIL;
 	}
-	
+
+
+	//Data
+	//if (FAILED(Ready_Data_UI(L"../bin/SaveData/UI/UI.dat")))
+	//{
+	//	return E_FAIL;
+	//}
+	//
 	//if (FAILED(Ready_Data_Effect(L"../bin/SaveData/Effect/Effect_Explosion.dat")))
 	//{
 	//	return E_FAIL;
 	//}
 
-	if (FAILED(Ready_UI(L"Layer_UI")))
-	{
-		return E_FAIL;
-	}
+	//if (FAILED(Ready_UI(L"Layer_UI")))
+	//{
+	//	return E_FAIL;
+	//}
 
+	//m_pTriggerSystem = new CTriggerSystem<Client::CStage1>(m_pDevice, m_pDeviceContext);
+
+	//if (FAILED(m_pTriggerSystem->NativeConstruct(L"../bin/SaveData/Trigger/Monster_Respon.dat",this)))
+	//	return E_FAIL;
+
+	//if(FAILED(Ready_TriggerFunctionSetting()))
+	//	return E_FAIL;
 	//if (FAILED(Ready_Trigger_Lod(L"../bin/SaveData/Trigger/Stage1_LodTri.dat")))
 	//	return E_FAIL;
 	//if (FAILED(Ready_Trigger_Light(L"../bin/SaveData/Trigger/Stage1_LodTri.dat")))
@@ -102,12 +117,16 @@ _int CStage1::Tick(_double TimeDelta)
 		g_pDebugSystem->Set_LevelcMoveCheck(false);
 	}
 #endif //  _DEBUG
+	//m_pTriggerSystem->Tick(TimeDelta);
 
 	return _int();
 }
 
 HRESULT CStage1::Render()
 {
+#ifdef _DEBUG
+	//m_pTriggerSystem->Render();
+#endif
 	return S_OK;
 }
 
@@ -180,17 +199,18 @@ HRESULT CStage1::Ready_Boss(const _tchar* LayerTag)
 
 HRESULT CStage1::Ready_Monster(const _tchar* LayerTag)
 {
-	/*for (int i = 0; i < 3; ++i)
-	{
-		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Proto_GameObject_Monster_Crawler")))
-			return E_FAIL;
-	}
 
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Monster", L"Monster_Bastion_2HSword")))
-		return E_FAIL;*/
-	
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Proto_GameObject_Monster_EarthAberrant")))
 		return E_FAIL;
+	
+	//for (int i = 0; i < 3; ++i)
+	//{
+	//	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Proto_GameObject_Monster_Crawler")))
+	//		return E_FAIL;
+	//}
+
+	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Monster", L"Monster_Bastion_2HSword")))
+	//	return E_FAIL;
 	
 
 	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Proto_GameObject_Monster_BronzeAnimus")))
@@ -199,9 +219,11 @@ HRESULT CStage1::Ready_Monster(const _tchar* LayerTag)
 	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Proto_GameObject_Monster_Bastion_Healer")))
 	//	return E_FAIL;
 
-	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Model_Monster_Bastion_Sword")))
+	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Proto_GameObject_Monster_Bastion_Sword")))
 	//	return E_FAIL;
 
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Proto_GameObject_Monster_Bastion_Shooter")))
+		return E_FAIL;
 	return S_OK;
 }
 
@@ -344,6 +366,18 @@ HRESULT CStage1::Ready_Data_UI(const _tchar* pDataFilePath)
 	return S_OK;
 }
 
+HRESULT CStage1::Ready_TriggerFunctionSetting()
+{
+	void(Client::CStage1:: * fp)(const wstring&);
+
+	/*fp = &CStage1::Trigger_Spawn_Monster1;
+	m_pTriggerSystem->Add_TriggerFuntion(fp,L"../bin/SaveData/Stage1_Enemy_Group_1.dat");*/
+
+
+	
+	return S_OK;
+}
+
 HRESULT CStage1::Ready_Trigger_Lod(const _tchar* pDataFilePath)
 {
 	//트리거를 벡터로 받는다
@@ -481,4 +515,5 @@ CStage1* CStage1::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceCont
 void CStage1::Free()
 {
 	CLevel::Free();
+	Safe_Release(m_pTriggerSystem);
 }

@@ -383,6 +383,7 @@
     <ClInclude Include="..\Headers\Traverse_Jump400Jog.h" />
     <ClInclude Include="..\Headers\Traverse_JumpNodeJog.h" />
     <ClInclude Include="..\Headers\Treasure_Chest.h" />
+    <ClInclude Include="..\Headers\TriggerSystem.h" />
     <ClInclude Include="..\Headers\UI_Ingame.h" />
     <ClInclude Include="..\Headers\UI_Monster_Back.h" />
     <ClInclude Include="..\Headers\UI_Monster_GroggyBar.h" />

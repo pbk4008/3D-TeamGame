@@ -56,7 +56,14 @@ HRESULT CBoss_Bastion_Judicator::NativeConstruct(const _uint _iSceneID, void* pA
 	pWeapon->Set_OwnerPivotMatrix(m_pModelCom->Get_PivotMatrix());
 	m_pWeapon = pWeapon;
 
-	
+	/*_vector Pos = { 0.f, 0.f, 10.f, 1.f };
+	m_pTransform->Set_State(CTransform::STATE_POSITION, Pos);*/
+
+	_float3 vPoint = (*(_float3*)pArg);
+
+	if (FAILED(Set_SpawnPosition(vPoint)))
+		return E_FAIL;
+
 	//MidBossBar Panel
 	CUI_Monster_Panel::PANELDESC Desc;
 	Desc.pTargetTransform = m_pTransform;
