@@ -221,7 +221,8 @@ _int CSilvermane::Tick(_double _dDeltaTime)
 	if (NO_EVENT != iProgress)
 		return iProgress;
 
-	Fall(_dDeltaTime);
+	//Fall(_dDeltaTime);
+	m_pTransform->Fall(_dDeltaTime);
 	//m_pCharacterController->Tick(_dDeltaTime);
 	m_pCharacterController->Move(_dDeltaTime, m_pTransform->Get_Velocity());
 
@@ -972,9 +973,9 @@ const _int CSilvermane::KeyCheck(const _double& _dDeltaTime)
 	if (!m_isFall)
 	{
 		if (g_pGameInstance->getkeyPress(DIK_UP))
-			m_pTransform->Add_Velocity(XMVectorSet(0.f, 100.f * _dDeltaTime, 0.f, 0.f));
+			m_pTransform->Add_Velocity(XMVectorSet(0.f, 40.f * _dDeltaTime, 0.f, 0.f));
 		if (g_pGameInstance->getkeyPress(DIK_DOWN))
-			m_pTransform->Add_Velocity(XMVectorSet(0.f, -100.f * _dDeltaTime, 0.f, 0.f));
+			m_pTransform->Add_Velocity(XMVectorSet(0.f, -40.f * _dDeltaTime, 0.f, 0.f));
 	}
 
 	return _int();

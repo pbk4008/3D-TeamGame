@@ -56,6 +56,8 @@ _int CCamera_Silvermane::Tick(_double _dDeltaTime)
 
 	m_pTransform->Set_WorldMatrix(m_pLocalTransform->Get_WorldMatrix() * m_pWorldTransform->Get_WorldMatrix());
 	m_pCamera->Update_Matrix(m_pTransform->Get_WorldMatrix());
+
+
 	return _int();
 }
 
@@ -107,16 +109,6 @@ HRESULT CCamera_Silvermane::Ready_Components()
 	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_Transform", L"Com_WorldTransform", (CComponent**)&m_pWorldTransform, &transformDesc)))
 		return E_FAIL;
 
-
-
-	CCollider::DESC tColliderDesc;
-	tColliderDesc.isTrigger = true;
-	tColliderDesc.pGameObject = this;
-	CBoxCollider::DESC tBoxColliderDesc;
-	tBoxColliderDesc.tColliderDesc = tColliderDesc;
-	tBoxColliderDesc.vScale = { 1.f, 1.f, 1.f };
-	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_BoxCollider", L"Collider", (CComponent**)&m_pCollider, &tBoxColliderDesc)))
-		return E_FAIL;
 
 	return S_OK;
 }

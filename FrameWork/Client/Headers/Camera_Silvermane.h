@@ -38,7 +38,6 @@ private:
 	CSilvermane* m_pSilvermane = nullptr;
 	CTransform* m_pLocalTransform = nullptr;
 	CTransform* m_pWorldTransform = nullptr;
-	CBoxCollider* m_pCollider = nullptr;
 
 	_float m_fRotY = 0.f;
 	_float m_fRotRight = 0.f;

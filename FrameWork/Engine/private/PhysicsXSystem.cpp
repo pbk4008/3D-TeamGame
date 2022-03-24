@@ -158,7 +158,7 @@ HRESULT CPhysicsXSystem::Create_Box(CBoxCollider* _pCollider)
 	pxvHalfExtents *= 0.5f;
 
 	PxShape* pShape = m_pPhysics->createShape(PxBoxGeometry(pxvHalfExtents), *pMaterial, true);
-	pShape->setFlag(PxShapeFlag::eVISUALIZATION, true);
+	pShape->setFlag(PxShapeFlag::eVISUALIZATION, tColliderDesc.isVisualization);
 	pShape->setFlag(PxShapeFlag::eSCENE_QUERY_SHAPE, tColliderDesc.isSceneQuery);
 	pShape->setFlag(PxShapeFlag::eSIMULATION_SHAPE, !tColliderDesc.isTrigger);
 	pShape->setFlag(PxShapeFlag::eTRIGGER_SHAPE, tColliderDesc.isTrigger);
@@ -195,7 +195,7 @@ HRESULT CPhysicsXSystem::Create_Sphere(CSphereCollider* _pCollider)
 
 	// Shape
 	PxShape* pShape = m_pPhysics->createShape(PxSphereGeometry(tSphereCollideDesc.fRadius), *pMaterial, true);
-	pShape->setFlag(PxShapeFlag::eVISUALIZATION, true);
+	pShape->setFlag(PxShapeFlag::eVISUALIZATION, tColliderDesc.isVisualization);
 	pShape->setFlag(PxShapeFlag::eSCENE_QUERY_SHAPE, tColliderDesc.isSceneQuery);
 	pShape->setFlag(PxShapeFlag::eSIMULATION_SHAPE, !tColliderDesc.isTrigger);
 	pShape->setFlag(PxShapeFlag::eTRIGGER_SHAPE, tColliderDesc.isTrigger);
@@ -232,7 +232,7 @@ HRESULT CPhysicsXSystem::Create_Capsule(CCapsuleCollider* _pCollider)
 
 	// Shape
 	PxShape* pShape = m_pPhysics->createShape(PxCapsuleGeometry(tCapsuleCollideDesc.fRadius, tCapsuleCollideDesc.fHeight * 0.5f), *pMaterial, true);
-	pShape->setFlag(PxShapeFlag::eVISUALIZATION, true);
+	pShape->setFlag(PxShapeFlag::eVISUALIZATION, tColliderDesc.isVisualization);
 	pShape->setFlag(PxShapeFlag::eSCENE_QUERY_SHAPE, tColliderDesc.isSceneQuery);
 	pShape->setFlag(PxShapeFlag::eSIMULATION_SHAPE, !tColliderDesc.isTrigger);
 	pShape->setFlag(PxShapeFlag::eTRIGGER_SHAPE, tColliderDesc.isTrigger);
@@ -306,7 +306,7 @@ HRESULT CPhysicsXSystem::Create_NavMesh(CNavMeshCollider* _pCollider)
 
 	//PxTriangleMeshGeometry pxMesh = PxTriangleMeshGeometry(pTriMesh);
 	PxShape* pShape = m_pPhysics->createShape(PxTriangleMeshGeometry(pTriMesh), *pMaterial, true);
-	pShape->setFlag(PxShapeFlag::eVISUALIZATION, true);
+	pShape->setFlag(PxShapeFlag::eVISUALIZATION, tColliderDesc.isVisualization);
 	pShape->setFlag(PxShapeFlag::eSCENE_QUERY_SHAPE, tColliderDesc.isSceneQuery);
 	pShape->setFlag(PxShapeFlag::eSIMULATION_SHAPE, !tColliderDesc.isTrigger);
 	pShape->setFlag(PxShapeFlag::eTRIGGER_SHAPE, tColliderDesc.isTrigger);

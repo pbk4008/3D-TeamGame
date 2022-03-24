@@ -22,11 +22,7 @@ CCollider::CCollider(const CCollider& _rhs)
 
 void CCollider::Remove_Actor()
 {
-	CPhysicsXSystem* phx = GET_INSTANCE(CPhysicsXSystem);
-
-	phx->Remove_Actor(m_pRigidActor);
-
-	RELEASE_INSTANCE(CPhysicsXSystem);
+	m_pPhsyX->Remove_Actor(m_pRigidActor);
 }
 
 HRESULT CCollider::NativeConstruct_Prototype()
