@@ -30,9 +30,13 @@ _int CAberrant_Stun::Tick(const _double& TimeDelta)
 
 	m_pAnimator->Tick(TimeDelta);
 
-	if (m_pAnimator->Get_AnimController()->Is_Finished())
+	if (CMonster_EarthAberrant::MON_STATE::STUN_END == m_pAnimator->Get_CurrentAnimNode())
 	{
-		m_pStateController->Change_State(L"Run");
+		if (m_pAnimator->Get_AnimController()->Is_Finished())
+		{
+			cout << " ¾Ö´Ô³¡" << endl;
+			m_pStateController->Change_State(L"Run");
+		}
 	}
 
 	return _int();

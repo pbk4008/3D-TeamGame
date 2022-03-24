@@ -83,14 +83,14 @@ HRESULT CUI_Monster_Panel::Render()
 	return S_OK;
 }
 
-void CUI_Monster_Panel::Set_HpBar(_float fMaxHp, _float fHp)
+void CUI_Monster_Panel::Set_HpBar(_float fRatio)
 {
-	m_pUIHpBar->Set_TargetHpBar(fMaxHp, fHp);
+	m_pUIHpBar->Set_HpRatio(fRatio);
 }
 
-void CUI_Monster_Panel::Set_GroggyBar(_float fMaxGroggy, _float fGroggy)
+void CUI_Monster_Panel::Set_GroggyBar(_float fRatio)
 {
-	m_pUIGroggyBar->Set_TargetGroggyBar(fMaxGroggy, fGroggy);
+	m_pUIGroggyBar->Set_GroggyRatio(fRatio);
 }
 
 void CUI_Monster_Panel::Set_BackUIGapY(_float GapY)
@@ -267,6 +267,20 @@ HRESULT CUI_Monster_Panel::Setting_Aberrant()
 
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_UI", L"Proto_GameObject_UI_Monster_Name", &Desc4,
 		(CGameObject**)&m_pUIName)))
+		return E_FAIL;
+
+	//MonsterBar GroggyBar
+	CUI_Monster_GroggyBar::UIBARDESC Desc5;
+	_tcscpy_s(Desc5.UIDesc.TextureTag, L"Texture_Monster_HpBar");
+	Desc5.UIDesc.IDTag = 14;
+	Desc5.UIDesc.bMinus = true;
+	Desc5.UIDesc.fAngle = 0.43f;
+	Desc5.UIDesc.fPos = { 0.f, 0.f, 0.f };
+	Desc5.UIDesc.fSize = { 1.f, 1.f };
+	Desc5.iRenderPass = 4;
+
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_UI", L"Proto_GameObject_UI_Monster_GroggyBar", &Desc5,
+		(CGameObject**)&m_pUIGroggyBar)))
 		return E_FAIL;
 
 	return S_OK;
@@ -526,6 +540,14 @@ void CUI_Monster_Panel::Update_Setting_Aberrant(_double TimeDelta)
 	Namemat.r[1] = XMVectorSetY(Namemat.r[1], 0.64f);
 	Namemat.r[3] = { -0.5f, 0.35f, -0.001f, 1.f };
 	NameTransform->Set_WorldMatrix(Namemat * m_pTransform->Get_WorldMatrix());
+
+	//UI GroggyBar
+	CTransform* GroggyBarTransform = (CTransform*)m_pUIGroggyBar->Get_Component(L"Com_Transform");
+	_matrix GroggyBarmat = XMMatrixIdentity();
+	GroggyBarmat.r[0] = XMVectorSetX(GroggyBarmat.r[0], 2.75f);
+	GroggyBarmat.r[1] = XMVectorSetY(GroggyBarmat.r[1], 0.2f);
+	GroggyBarmat.r[3] = { -0.02f, -0.1f, -0.001f, 1.f };
+	GroggyBarTransform->Set_WorldMatrix(GroggyBarmat * m_pTransform->Get_WorldMatrix());
 }
 
 void CUI_Monster_Panel::Update_Setting_Animus(_double TimeDelta)

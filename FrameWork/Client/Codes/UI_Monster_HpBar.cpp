@@ -57,7 +57,7 @@ _int CUI_Monster_HpBar::Tick(_double TimeDelta)
 	if (FAILED(CUI::Tick(TimeDelta)))
 		return -1;
 	
-	m_fGapX = m_fTargetHp / m_fTargetMaxHp;
+	m_fGapX = m_fHpRatio;
 
 	/*if (g_pGameInstance->getkeyDown(DIK_L))
 	{
@@ -96,12 +96,6 @@ HRESULT CUI_Monster_HpBar::Render()
 	m_pTrapziumBuffer->Render(m_UIBarDesc.iRenderPass);
 	
 	return S_OK;
-}
-
-void CUI_Monster_HpBar::Set_TargetHpBar(_float fMaxHp, _float fHp)
-{
-	m_fTargetMaxHp = fMaxHp;
-	m_fTargetHp = fHp;
 }
 
 HRESULT CUI_Monster_HpBar::SetUp_Components()

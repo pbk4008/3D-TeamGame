@@ -93,6 +93,17 @@ private:
 		for (auto& pTrigger : m_vecTrigger)
 			Safe_Release(pTrigger);
 	}
+public:
+	static CTriggerSystem<T>* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext, const wstring& pFilePath, T* pStage)
+	{
+		CTriggerSystem<T>* pInstance= new CTriggerSystem<T>(pDevice, pDeviceContext);
+		if (FAILED(pInstance->NativeConstruct(pFilePath,pStage)))
+		{
+			MSGBOX("TriggerSystem Create Fail");
+			Safe_Release(pInstance);
+		}
+		return pInstance;
+	}
 private:
 	ID3D11Device* m_pDevice;
 	ID3D11DeviceContext* m_pDeviceContext;

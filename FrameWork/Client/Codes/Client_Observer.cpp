@@ -87,7 +87,7 @@ const _float CClient_Observer::Get_MaxHP()
 
 const _float CClient_Observer::Get_HPRatio()
 {
-	return m_pPlayer->Get_CurrentHpRatio();
+	return m_pPlayer->Get_HpRatio();
 }
 
 const CSilvermane::SCENEMOVEDATA CClient_Observer::Get_SceneMoveData()
