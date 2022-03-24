@@ -40,7 +40,7 @@ HRESULT CMonster_EarthAberrant::NativeConstruct(const _uint _iSceneID, void* _pA
 		return E_FAIL;
 	}
 	
-	_vector Pos = { 3.f, 0.f, 15.f, 1.f };
+	_vector Pos = { 3.f, 10.f, 15.f, 1.f };
 	m_pTransform->Set_State(CTransform::STATE_POSITION, Pos);
 
 	if (FAILED(SetUp_Components()))
@@ -78,16 +78,18 @@ HRESULT CMonster_EarthAberrant::NativeConstruct(const _uint _iSceneID, void* _pA
 
 	m_pPanel->Set_TargetWorldMatrix(m_pTransform->Get_WorldMatrix());
 
-	m_isFall = true;
+	m_bIsFall = true;
 	m_iObectTag = (_uint)GAMEOBJECT::MONSTER_ABERRANT;
 
+	//아래세팅 꼭해줘야됨 
 	m_fMaxHp = 30.f;
 	m_fCurrentHp = m_fMaxHp;
 
-	m_fMaxGroggy = 10.f;
-	m_fGroggy = 10;
+	m_fMaxGroggyGauge = 10.f;
+	m_fGroggyGauge = 0.f;
 
-	m_pPanel->Set_GroggyBar(m_fMaxGroggy, m_fGroggy);
+	m_pPanel->Set_HpBar(Get_HpRatio());
+	m_pPanel->Set_GroggyBar(Get_GroggyGaugeRatio());
 
 	return S_OK;
 }
@@ -100,6 +102,9 @@ _int CMonster_EarthAberrant::Tick(_double _dDeltaTime)
 	}
 
 	m_pTransform->Set_Velocity(XMVectorZero());
+	
+	if (m_bIsFall)
+		m_pTransform->Fall(_dDeltaTime);
 
 	_int iProgress = m_pStateController->Tick(_dDeltaTime);
 	if (NO_EVENT != iProgress)
@@ -121,19 +126,19 @@ _int CMonster_EarthAberrant::Tick(_double _dDeltaTime)
 		m_pStateController->Change_State(L"Death");
 	}
 
-	//if (m_fGroggy >= m_fMaxGroggy)
-	//{
-	//	//스턴상태일때 스턴state에서 현재 그로기 계속 0으로 고정시켜줌
-	//	m_bGroggy = true;
-	//	m_pStateController->Change_State(L"Stun");
-	//	m_fGroggy = 0.f;
-	//	m_pPanel->Set_GroggyBar(m_fMaxGroggy, m_fGroggy);
-	//}
+	if (m_fGroggyGauge >= m_fMaxGroggyGauge)
+	{
+		//스턴상태일때 스턴state에서 현재 그로기 계속 0으로 고정시켜줌
+		m_bGroggy = true;
+		m_pStateController->Change_State(L"Stun");
+		m_fGroggyGauge = 0.f;
+		m_pPanel->Set_GroggyBar(Get_GroggyGaugeRatio());
+	}
 
 	if (true == m_bGroggy || true == m_bDead)
 	{
-		m_fGroggy = 0.f;
-		m_pPanel->Set_GroggyBar(m_fMaxGroggy, m_fGroggy);
+		m_fGroggyGauge = 0.f;
+		m_pPanel->Set_GroggyBar(Get_GroggyGaugeRatio());
 	}
 
 	if (STUN_END == m_pAnimatorCom->Get_CurrentAnimNode())
@@ -143,8 +148,6 @@ _int CMonster_EarthAberrant::Tick(_double _dDeltaTime)
 			m_bGroggy = false;
 		}
 	}
-
-	//Fall(_dDeltaTime);
 
 	m_pCharacterController->Move(_dDeltaTime, m_pTransform->Get_Velocity());
 
@@ -530,14 +533,15 @@ void CMonster_EarthAberrant::OnTriggerEnter(CCollision& collision)
 		if ((_uint)GAMEOBJECT::WEAPON == collision.pGameObject->getTag())
 		{
 			--m_fCurrentHp;
-			//m_fGroggy += 2; //TODO::수치정해서바꿔줘야됨
+			m_fGroggyGauge += 2; //TODO::수치정해서바꿔줘야됨
 
-			m_pPanel->Set_HpBar(m_fMaxHp, m_fCurrentHp);
+			m_pPanel->Set_HpBar(Get_HpRatio());
 
 			if (false == m_bGroggy)
 			{
 				//그로기 아닐때만 증가할수있게
-				//m_pPanel->Set_GroggyBar(m_fMaxGroggy, m_fGroggy);
+				m_pPanel->Set_GroggyBar(Get_GroggyGaugeRatio());
+				m_pStateController->Change_State(L"Flinch_Left");
 			}
 		}
 		else

@@ -83,14 +83,14 @@ HRESULT CUI_Monster_Panel::Render()
 	return S_OK;
 }
 
-void CUI_Monster_Panel::Set_HpBar(_float fMaxHp, _float fHp)
+void CUI_Monster_Panel::Set_HpBar(_float fRatio)
 {
-	m_pUIHpBar->Set_TargetHpBar(fMaxHp, fHp);
+	m_pUIHpBar->Set_HpRatio(fRatio);
 }
 
-void CUI_Monster_Panel::Set_GroggyBar(_float fMaxGroggy, _float fGroggy)
+void CUI_Monster_Panel::Set_GroggyBar(_float fRatio)
 {
-	m_pUIGroggyBar->Set_TargetGroggyBar(fMaxGroggy, fGroggy);
+	m_pUIGroggyBar->Set_GroggyRatio(fRatio);
 }
 
 void CUI_Monster_Panel::Set_BackUIGapY(_float GapY)

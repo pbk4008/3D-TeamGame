@@ -44,8 +44,8 @@ public:
 	void Set_TargetWorldMatrix(_matrix matTarget) { XMStoreFloat4x4(&m_TargetMatrix, matTarget);}
 
 public:
-	void Set_HpBar(_float fMaxHp, _float fHp);
-	void Set_GroggyBar(_float fMaxGroggy, _float fGroggy);
+	void Set_HpBar(_float fRatio);
+	void Set_GroggyBar(_float fRatio);
 	void Set_BackUIGapY(_float GapY);
 
 private:

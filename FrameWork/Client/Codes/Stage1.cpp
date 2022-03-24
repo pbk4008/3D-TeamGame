@@ -209,7 +209,7 @@ HRESULT CStage1::Ready_Monster(const _tchar* LayerTag)
 	//		return E_FAIL;
 	//}
 
-	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Monster", L"Monster_Bastion_2HSword")))
+	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Monster_Bastion_2HSword")))
 	//	return E_FAIL;
 	
 

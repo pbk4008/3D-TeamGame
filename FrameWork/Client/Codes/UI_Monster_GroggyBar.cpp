@@ -57,7 +57,7 @@ _int CUI_Monster_GroggyBar::Tick(_double TimeDelta)
 	if (FAILED(CUI::Tick(TimeDelta)))
 		return -1;
 	
-	m_fGapX = m_fTargetGroggy / m_fTargetMaxGroggy;
+	m_fGapX = m_fGroggyRatio;
 
 	/*if (g_pGameInstance->getkeyDown(DIK_L))
 	{
@@ -96,12 +96,6 @@ HRESULT CUI_Monster_GroggyBar::Render()
 	m_pTrapziumBuffer->Render(m_UIBarDesc.iRenderPass);
 	
 	return S_OK;
-}
-
-void CUI_Monster_GroggyBar::Set_TargetGroggyBar(_float fMaxGroggy, _float fGroggy)
-{
-	m_fTargetMaxGroggy = fMaxGroggy;
-	m_fTargetGroggy = fGroggy;
 }
 
 HRESULT CUI_Monster_GroggyBar::SetUp_Components()
