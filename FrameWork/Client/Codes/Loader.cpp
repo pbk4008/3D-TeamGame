@@ -18,15 +18,18 @@
 #include "UI_Tuto_Base.h"
 #include "UI_Tuto_Font.h"
 
-#include "Instancing_Mesh.h"
-#include "Client_Trigger.h"
 #include "Environment.h"
+
+#include "Client_Trigger.h"
 #include "Treasure_Chest.h"
+
 #include "Monster_Crawler.h"
 #include "Monster_EarthAberrant.h"
 #include "Monster_BronzeAnimus.h"
 #include "Monster_Bastion_Sword.h"
 #include "Boss_Bastion_Judicator.h"
+#include "Monster_Bastion_Shooter.h"
+
 #include "ShieldBreaker.h"
 #include "EarthAberrant_Pick.h"
 #include "Stargazer.h"
@@ -43,7 +46,7 @@
 #include "Shield.h"
 #include "Monster_Bastion_2HSword.h"
 #include "Monster_Bastion_Healer.h"
-#include "Monster_Bastion_Shooter.h"
+
 #include "Monster_Bastion_Spear.h"
 #include "JumpNode.h"
 #include "JumpTrigger.h"
@@ -809,21 +812,27 @@ HRESULT CLoader::Load_Stage1MonsterLoad()
 
 
 	////Monster Bastion_Sword
+	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Monster_Bastion_Sword", CModel::Create(m_pDevice, m_pDeviceContext,
+	//	L"../bin/FBX/Monster/Bastion_Sword.fbx", CModel::TYPE_ANIM, true))))
+	//	return E_FAIL;
 
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Monster_Bastion_Sword", CModel::Create(m_pDevice, m_pDeviceContext,
-		L"../bin/FBX/Monster/Bastion_Sword.fbx", CModel::TYPE_ANIM, true))))
+	//if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Monster_Bastion_Sword", CMonster_Bastion_Sword::Create(m_pDevice, m_pDeviceContext))))
+	//	return E_FAIL;
+
+	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Weapon_Stargazer", CModel::Create(m_pDevice, m_pDeviceContext,
+	//	"../bin/Resources/Mesh/Stargazer/", "Stargazer(1H Sword).fbx",
+	//	L"../../Reference/ShaderFile/Shader_Weapon.hlsl", matPivot, CModel::TYPE_STATIC, true))))
+	//	return E_FAIL;
+
+	//if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Weapon_Stargazer", CStargazer::Create(m_pDevice, m_pDeviceContext))))
+	//	return E_FAIL;
+
+	/////Monster Bastion_Shooter
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Monster_Bastion_Shooter", CModel::Create(m_pDevice, m_pDeviceContext,
+		L"../bin/FBX/Monster/Bastion_Maskman.fbx", CModel::TYPE_ANIM, true))))
 		return E_FAIL;
 
-	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Monster_Bastion_Sword", CMonster_Bastion_Sword::Create(m_pDevice, m_pDeviceContext))))
-		return E_FAIL;
-
-	////Weapon
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Weapon_Stargazer", CModel::Create(m_pDevice, m_pDeviceContext,
-		"../bin/Resources/Mesh/Stargazer/", "Stargazer(1H Sword).fbx",
-		L"../../Reference/ShaderFile/Shader_Weapon.hlsl", matPivot, CModel::TYPE_STATIC, true))))
-		return E_FAIL;
-
-	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Weapon_Stargazer", CStargazer::Create(m_pDevice, m_pDeviceContext))))
+	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Monster_Bastion_Shooter", CMonster_Bastion_Shooter::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 
 	//Bastion_2HSword

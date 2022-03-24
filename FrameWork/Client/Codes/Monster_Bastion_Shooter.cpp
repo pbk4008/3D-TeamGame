@@ -114,7 +114,7 @@ HRESULT CMonster_Bastion_Shooter::Ready_Components()
 	Desc.fRotationPerSec = XMConvertToRadians(60.f);
 	m_pTransform->Set_TransformDesc(Desc);
 
-	if (FAILED(__super::SetUp_Components(m_iSceneID, L"Model_Monster_Bastion_Marksman", L"Model", (CComponent**)&m_pModelCom)))
+	if (FAILED(__super::SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Model_Monster_Bastion_Shooter", L"Model", (CComponent**)&m_pModelCom)))
 		return E_FAIL;
 
 	_matrix matPivot = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(180.f));
@@ -126,11 +126,12 @@ HRESULT CMonster_Bastion_Shooter::Ready_Components()
 	tDesc.pModel = m_pModelCom;
 	tDesc.pTransform = m_pTransform;
 
-	if (FAILED(__super::SetUp_Components(m_iSceneID, L"Proto_Component_Animator", L"Com_Animator", (CComponent**)&m_pAnimator, &tDesc)))
+	if (FAILED(__super::SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_Animator", L"Com_Animator", (CComponent**)&m_pAnimator, &tDesc)))
 		return E_FAIL;
 
-	if (FAILED(SetUp_Components(m_iSceneID, L"Proto_Component_StateController", L"StateController", (CComponent**)&m_pStateController)))
+	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_StateController", L"StateController", (CComponent**)&m_pStateController)))
 		return E_FAIL;
+
 	m_pStateController->Set_GameObject(this);
 
 	return S_OK;
@@ -201,9 +202,8 @@ CGameObject* CMonster_Bastion_Shooter::Clone(const _uint _iSceneID, void* _pArg)
 
 void CMonster_Bastion_Shooter::Free()
 {
+	__super::Free();
 	Safe_Release(m_pStateController);
 	Safe_Release(m_pAnimator);
 	Safe_Release(m_pModelCom);
-
-	__super::Free();
 }
