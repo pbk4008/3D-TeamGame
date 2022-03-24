@@ -160,17 +160,14 @@ PS_OUT_LIGHTACC PS_MAIN_LIGHTACC_DIRECTIONAL(PS_IN In)
 	float lightpow = 2.f;
 	
 	//Out.vShade 
-	float4 light = saturate(pow((dot(normalize(vector(g_vLightDir.xyz, 0.f)) * -1.f, normal) * 0.5f + 0.5f), lightpow) * (g_vLightDiffuse * g_vMtrlDiffuse) + (g_vLightAmbient * g_vMtrlAmbient));
-	Out.vShade = light;
-	Out.vShade.a = 1.f;
 	
 	if (g_bPBRHDR == true)
 	{
 		float3 normal3 = normalize(normal.xyz);
 		float3 N = normal3;
 		float3 V = normalize(g_vCamPosition.xyz - vWorldPos.xyz);
-		float3 L = normalize(g_vLightPos.xyz - vWorldPos.xyz);
-		//float3 L = (g_vLightDir.xyz) * -1;
+		//float3 L = normalize(g_vLightPos.xyz - vWorldPos.xyz);
+		float3 L = (g_vLightDir.xyz) * -1;
 		float F0 = 0.93;
 		
 		float alpha = Roughness * Roughness;
@@ -198,18 +195,18 @@ PS_OUT_LIGHTACC PS_MAIN_LIGHTACC_DIRECTIONAL(PS_IN In)
 
 		float specular = NdotL * _D * _F * _V;
 		//-------------------------------------------------------------------------//
-		//float3 color = float3(0.97f, 0.95f, 0.8f);
-		//float4 ambientcolor = float4(color * 0.2f, 1.0);
-		//float diffusefactor = dot(normal3, normalize(g_vLightPos.xyz - vWorldPos.xyz));
-		//float4 diffusecolor = 0;
+		float3 color = float3(0.97f, 0.95f, 0.8f);
+		float4 ambientcolor = float4(color * 0.2f, 1.0);
+		float diffusefactor = dot(normal3, normalize(L));
+		float4 diffusecolor = 0;
 		
-		//if (diffusefactor > 0.0)
-		//{
-		//	float diffuseintensity = 0.5f;
-		//	diffusecolor = float4(color * diffuseintensity * diffusefactor, 1.0);
-		//}
+		if (diffusefactor > 0.0)
+		{
+			float diffuseintensity = 0.5f;
+			diffusecolor = float4(color * diffuseintensity * diffusefactor, 1.0);
+		}
 		
-		//float4 light = diffusecolor * diffusefactor + ambientcolor;
+		float4 light = diffusecolor * diffusefactor + ambientcolor;
 		//-------------------------------------------------------------------------//		
 		float3 CamToWorldDirection = normalize(vWorldPos.xyz - g_vCamPosition.xyz);
 		float3 worldReflectDirection = reflect(CamToWorldDirection, normal3);
@@ -223,6 +220,8 @@ PS_OUT_LIGHTACC PS_MAIN_LIGHTACC_DIRECTIONAL(PS_IN In)
 		float4 lightpower = InvMetalic * light * AO;
 		
 		Out.vSpecular.xyz = ((light * specular + cubeRef1) * Metallic * smoothness).xyz;
+		Out.vShade = light;
+		Out.vShade.a = 1.f;
 	}
 	else
 	{
@@ -231,6 +230,9 @@ PS_OUT_LIGHTACC PS_MAIN_LIGHTACC_DIRECTIONAL(PS_IN In)
 		vector vLook = normalize(vWorldPos - g_vCamPosition);
 
 		Out.vSpecular.xyz = ((g_vLightSpecular * g_vMtrlSpecular) * pow(saturate(dot(normalize(vReflect) * -1.f, vLook)), 30.f)).xyz;
+		float4 light = saturate(pow((dot(normalize(vector(g_vLightDir.xyz, 0.f)) * -1.f, normal) * 0.5f + 0.5f), lightpow) * (g_vLightDiffuse * g_vMtrlDiffuse) + (g_vLightAmbient * g_vMtrlAmbient));
+		Out.vShade = light;
+		Out.vShade.a = 1.f;
 	}
 	
 	return Out;

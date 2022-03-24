@@ -17,7 +17,9 @@ cbuffer LightBuffer
 texture2D g_ShadowTexture;
 texture2D g_DiffuseTexture;
 texture2D g_BiNormalTexture;
+
 texture2D g_ORMTexture;
+texture2D g_HeightTexture;
 
 sampler DefaultSampler = sampler_state
 {
@@ -58,13 +60,14 @@ struct VS_OUT
 	float4 vTangent : TANGENT;
 	float4 vBiNormal : BINORMAL;
 	float4 vUvDepth : TEXCOORD0;
+	float3 vTangentViewPos : TEXCOORD1;
 };
 
 bool g_bUsingTool = false;
 
 VS_OUT VS_MESH(VS_IN In)
 {
-	VS_OUT			Out = (VS_OUT)0;
+	VS_OUT Out = (VS_OUT) 0;
 
 	matrix matInstance = float4x4(In.vRight, In.vUp, In.vLook, In.vTranslation);
 	
@@ -84,15 +87,22 @@ VS_OUT VS_MESH(VS_IN In)
 	
 	matrix matWV, matWVP;
 
+	float4 worldpos = mul(vPosition, g_WorldMatrix);
+	
 	matWV = mul(g_WorldMatrix, g_ViewMatrix);
 	matWVP = mul(matWV, g_ProjMatrix);
-
+	
 	Out.vPosition = mul(vPosition, matWVP);
 	Out.vNormal = normalize(mul(vNormal, g_WorldMatrix));
 	Out.vBiNormal = normalize(mul(vBiNormal, g_WorldMatrix));
 	Out.vTangent = normalize(mul(vTangent, g_WorldMatrix));
+	
+	float3x3 TBN = transpose(float3x3(Out.vTangent.xyz, Out.vBiNormal.xyz, Out.vNormal.xyz));
+	
 	Out.vUvDepth.xy = In.vTexUV.xy;
 	Out.vUvDepth.zw = Out.vPosition.zw;
+	
+	Out.vTangentViewPos = mul((g_CamPos.xyz - worldpos.xyz), TBN);
 	
 	return Out;
 }
@@ -170,11 +180,66 @@ VS_OUT_SHADESHADOW VS_MAIN_SHADESHADOW(VS_IN In)
 }
 //*---------------------------------------------------------------------------------------------*
 
+
+struct PS_IN
+{
+	float4 vPosition : SV_POSITION;
+	float4 vNormal : NORMAL;
+	float4 vTangent : TANGENT;
+	float4 vBiNormal : BINORMAL;
+	float4 vUvDepth : TEXCOORD0;
+	float3 vTangentViewPos : TEXCOORD1;
+};
 struct PS_RECT_IN
 {
 	float4		vPosition : SV_POSITION;
 	float2		vTexUV : TEXCOORD0;
 };
+struct PS_OUT
+{
+	float4 diffuse : SV_TARGET0;
+	float4 normal : SV_TARGET1;
+	float4 depth : SV_TARGET2;
+	float4 M : SV_Target3;
+	float4 R : SV_Target4;
+	float4 A : SV_Target5;
+	float4 E : SV_Target6;
+};
+PS_OUT PS_MAIN(PS_IN In)
+{
+	PS_OUT Out = (PS_OUT) 0;
+	
+	float height = g_HeightTexture.Sample(DefaultSampler, In.vUvDepth.xy).r;
+	
+	float3 viewDir = normalize(In.vTangentViewPos);
+	float2 parallax = viewDir.xy / viewDir.z * (height * 0.01f);
+	float2 parallaxUV = In.vUvDepth.xy - parallax;
+	if (parallaxUV.x > 1.f || parallaxUV.y > 1.f || parallaxUV.x < 0.f || parallaxUV.y < 0.f)
+		discard;
+	
+	
+	float4 diffuse = g_DiffuseTexture.Sample(DefaultSampler, parallaxUV);
+	float3 normal = g_BiNormalTexture.Sample(DefaultSampler, parallaxUV).xyz;
+	float3 orm = g_ORMTexture.Sample(DefaultSampler, parallaxUV).xyz;
+
+	float3x3 tbn = { In.vTangent.xyz, In.vBiNormal.xyz, In.vNormal.xyz };
+	normal = Normalmapping(normal, tbn);
+	
+
+	Out.diffuse = diffuse;
+	Out.depth = float4(In.vUvDepth.z / In.vUvDepth.w, In.vUvDepth.w / 300.f, 0.f, 0.f);
+	Out.normal = float4(normal, 0);
+	
+	float Metalic = orm.b + 0.2f;
+	Out.M = float4(Metalic.rrr, 1.f);
+	float Roughness = orm.g + 0.05f;
+	Out.R = float4(Roughness.rrr, 1.f);
+	float Ao = orm.r;
+	Out.A = float4(Ao.rrr, 1.f);
+	
+
+	return Out;
+}
 
 // SHADOW_MAP
 //*---------------------------------------------------------------------------------------------*
@@ -271,51 +336,6 @@ PS_OUT_SHADESHADOW PS_MAIN_SHADESHADOW(PS_IN_SHADESHADOW In)
 	return Out;
 }
 //*---------------------------------------------------------------------------------------------*
-
-struct PS_IN
-{
-	float4 vPosition : SV_POSITION;
-	float4 vNormal : NORMAL;
-	float4 vTangent : TANGENT;
-	float4 vBiNormal : BINORMAL;
-	float4 vUvDepth : TEXCOORD0;
-};
-struct PS_OUT
-{
-	float4 diffuse : SV_TARGET0;
-	float4 normal : SV_TARGET1;
-	float4 depth : SV_TARGET2;
-	float4 M : SV_Target3;
-	float4 R : SV_Target4;
-	float4 A : SV_Target5;
-	float4 E : SV_Target6;
-};
-PS_OUT PS_MAIN(PS_IN In)
-{
-	PS_OUT Out = (PS_OUT) 0;
-	
-	float4 diffuse = g_DiffuseTexture.Sample(DefaultSampler, In.vUvDepth.xy);
-	float3 normal = g_BiNormalTexture.Sample(DefaultSampler, In.vUvDepth.xy).xyz;
-	float3 orm = g_ORMTexture.Sample(DefaultSampler, In.vUvDepth).xyz;
-	float3x3 tbn = { In.vTangent.xyz, In.vBiNormal.xyz, In.vNormal.xyz };
-	
-	normal = Normalmapping(normal, tbn);
-	
-
-	Out.diffuse = diffuse;
-
-	Out.depth = float4(In.vUvDepth.z / In.vUvDepth.w, In.vUvDepth.w / 300.f, 0.f, 0.f);
-	Out.normal = float4(normal, 0);
-	
-	float Metalic = orm.b;
-	Out.M = float4(Metalic.rrr, 1.f);
-	float Roughness = orm.g;
-	Out.R = float4(Roughness.rrr, 1.f);
-	float Ao = orm.r;
-	Out.A = float4(Ao.rrr, 1.f);
-	
-	return Out;
-}
 
 technique11			DefaultTechnique
 {

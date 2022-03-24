@@ -29,7 +29,6 @@ public:
 	virtual HRESULT Render()override;
 	virtual HRESULT	Render_Shadow() override;
 	virtual HRESULT	Render_ShadeShadow(ID3D11ShaderResourceView* ShadowMap) override;
-	virtual HRESULT	Render_PBR() override;
 private:
 	HRESULT Ready_Component();
 	HRESULT Culling();

@@ -943,5 +943,17 @@
     <FxCompile Include="..\bin\ShaderFiles\Shader_INST_MASK.hlsl">
       <Filter>98.ShaderFiles\Environment</Filter>
     </FxCompile>
+    <FxCompile Include="..\bin\ShaderFiles\Shader_INST_ORM_Gold.hlsl">
+      <Filter>98.ShaderFiles\Environment</Filter>
+    </FxCompile>
+    <FxCompile Include="..\bin\ShaderFiles\Shader_INST_ORM_M.hlsl">
+      <Filter>98.ShaderFiles\Environment</Filter>
+    </FxCompile>
+    <FxCompile Include="..\bin\ShaderFiles\Shader_INST_ORM_N2.hlsl">
+      <Filter>98.ShaderFiles\Environment</Filter>
+    </FxCompile>
+    <FxCompile Include="..\bin\ShaderFiles\Shader_INST_Coin.hlsl">
+      <Filter>98.ShaderFiles\Environment</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

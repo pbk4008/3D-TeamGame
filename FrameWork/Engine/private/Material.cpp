@@ -314,15 +314,16 @@ HRESULT CMaterial::SetUp_TextureOnShader()
 			str = "g_BiNormalTexture";
 			break;
 		case TEXTURETYPE::TEX_METALIC:
-			str = "g_Metallic;";
+			/*str = "g_Metallic;";*/
 			break;
 		case TEXTURETYPE::TEX_OCCLUSION:
-			str = "g_AO";
+			/*str = "g_AO";*/
 			break;
 		case TEXTURETYPE::TEX_ROUGHNESS:
-			str = "g_Roughness";
+			/*str = "g_Roughness";*/
 			break;
 		case TEXTURETYPE::TEX_ORM:
+			str = "g_ORMTexture";
 			break;
 		case TEXTURETYPE::TEX_OMER:
 			str = "g_OMERTexture";
@@ -334,12 +335,14 @@ HRESULT CMaterial::SetUp_TextureOnShader()
 			str = "g_MRATexture";
 			break;
 		case TEXTURETYPE::TEX_HEIGHT:
+			str = "g_HeightTexture";
 			break;
 		case TEXTURETYPE::TEX_TINT:
 			break;
 		case TEXTURETYPE::TEX_MT:
 			break;
 		case TEXTURETYPE::TEX_ORS:
+			str = "g_ORSTexture";
 			break;
 		case TEXTURETYPE::TEX_NM:
 			break;
@@ -348,6 +351,7 @@ HRESULT CMaterial::SetUp_TextureOnShader()
 		case TEXTURETYPE::TEX_NRM:
 			break;
 		case TEXTURETYPE::TEX_MASK:
+			str = "g_MaskTexture";
 			break;
 		case TEXTURETYPE::TEX_DR:
 			break;

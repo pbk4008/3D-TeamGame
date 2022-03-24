@@ -158,7 +158,7 @@ HRESULT CRenderer::Draw_RenderGroup()
 
 	if (FAILED(Render_PhysX()))
 		return E_FAIL;
-	/*
+	
 #ifdef _DEBUG
 	if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("MRT_SkyBox"))))
 		return E_FAIL;
@@ -191,7 +191,7 @@ HRESULT CRenderer::Draw_RenderGroup()
 	if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("Target_Blend")))) return E_FAIL;
 
 #endif // _DEBUG
-*/
+
 	return S_OK;
 }
 

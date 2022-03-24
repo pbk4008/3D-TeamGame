@@ -5,6 +5,7 @@ cbuffer Matrices
 	matrix		g_WorldMatrix = (matrix)0;
 	matrix		g_ViewMatrix;
 	matrix		g_ProjMatrix;
+	vector		g_CamPos;
 };
 
 cbuffer LightBuffer
