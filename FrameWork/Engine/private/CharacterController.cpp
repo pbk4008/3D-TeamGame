@@ -8,13 +8,17 @@
 
 CCharacterController::CCharacterController(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
 	: CComponent(_pDevice, _pDeviceContext)
+	, m_pPhysX(CPhysicsXSystem::GetInstance())
 {
+	Safe_AddRef(m_pPhysX);
 }
 
 CCharacterController::CCharacterController(const CCharacterController& _rhs)
 	: CComponent(_rhs)
+	, m_pPhysX(_rhs.m_pPhysX)
 	, m_pFilterCallback(_rhs.m_pFilterCallback)
 {
+	Safe_AddRef(m_pPhysX);
 }
 
 HRESULT CCharacterController::NativeConstruct_Prototype()
@@ -56,12 +60,8 @@ const _int CCharacterController::LateTick(const _double& _dDeltaTime)
 
 void CCharacterController::Remove_CCT()
 {
-	CPhysicsXSystem* phx = GET_INSTANCE(CPhysicsXSystem);
-
-	phx->Remove_Actor(m_pPxController->getActor());
+	m_pPhysX->Remove_Actor(m_pPxController->getActor());
 	Safe_PxRelease(m_pPxController);
-
-	RELEASE_INSTANCE(CPhysicsXSystem);
 }
 
 const CCharacterController::DESC& CCharacterController::Get_CharacterControllerDesc() const
@@ -216,5 +216,6 @@ void CCharacterController::Free()
 	if (!m_isCloned)
 		Safe_Delete(m_pFilterCallback);
 
+	Safe_Release(m_pPhysX);
 	__super::Free();
 }

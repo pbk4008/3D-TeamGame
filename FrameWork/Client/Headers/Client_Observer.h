@@ -25,8 +25,12 @@ public:
 	const _bool IsAttack();
 	//플레이어와 해당 좌표와의 거리
 	const _float Get_Dist(_fvector vPos);
-	//플레이어의 HP 가져오기
+	//플레이어의 현재HP 가져오기
 	const _float Get_HP();
+	//플레이어의 최대HP 가져오기
+	const _float Get_MaxHP();
+	//플레이어의 최대체력과 현재체력의 비율 가져오기
+	const _float Get_HPRatio();
 
 	const CSilvermane::SCENEMOVEDATA Get_SceneMoveData();
 public:

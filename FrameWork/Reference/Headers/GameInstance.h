@@ -156,6 +156,10 @@ public:/* For.SaveManager*/
 
 		return m_pSaveManager->LoadFile<T>(pLoadData, pFilePath);
 	}
+
+public:/* For.PhysX */
+	const _bool Raycast(const _float3& _vOrigin, const _float3& _vDir, const _float _fMaxDistance, CGameObject** _ppOutHitObject);
+
 private:
 	CGraphic_Device*			m_pGraphic_Device = nullptr;		
 	CLevel_Manager*				m_pLevel_Manager = nullptr;

@@ -25,14 +25,10 @@ public:
 
 	HRESULT Ready_Components();
 
-public:
-	void Raycast_FromMouse(const _double& _dDeltaTime);
-	_bool Raycast(const _fvector& _svRayPos, const _fvector& _svRayDir, _float& _fOutDist, const _double& _dDeltaTime);
-
 private:
 	CModel* m_pModel = nullptr;
 	CAnimationController* m_pAnimationController = nullptr;
-	CRay_Collider* m_pCollider = nullptr;
+	CBoxCollider* m_pCollider = nullptr;
 
 	_bool m_isPick = false;
 	_float m_fHoldTime = 0.f;
