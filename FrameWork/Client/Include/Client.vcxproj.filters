@@ -457,6 +457,9 @@
     <Filter Include="02.GameObject\03.Character\01.Monster\EarthAberrant\00.Weapon\00.Aberrant_Pick">
       <UniqueIdentifier>{5fb68284-c871-4e91-8aaa-81ee9c81ea14}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_Healer\State_Healer\Hit">
+      <UniqueIdentifier>{d4ca5c36-6c33-400f-a4c0-e81fd9a67485}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -1137,6 +1140,12 @@
     <ClInclude Include="..\Headers\JumpTrigger.h">
       <Filter>02.GameObject\02.Map\02.JumpNode</Filter>
     </ClInclude>
+    <ClInclude Include="..\Headers\Bastion_Healer_Hit.h">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Healer\State_Healer\Hit</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Bastion_Healer_Death.h">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Healer\State_Healer\Death</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -1792,6 +1801,12 @@
     </ClCompile>
     <ClCompile Include="..\Codes\JumpTrigger.cpp">
       <Filter>02.GameObject\02.Map\02.JumpNode</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Bastion_Healer_Hit.cpp">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Healer\State_Healer\Hit</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Bastion_Healer_Death.cpp">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Healer\State_Healer\Death</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

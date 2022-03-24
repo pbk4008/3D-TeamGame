@@ -92,6 +92,12 @@ HRESULT CTrigger::Render()
 	case TRIGGERTYPE::MONSTER_6:
 		m_pGizmo->DrawCube(m_pTransform->Get_WorldMatrix(), L"Camera", _fvector{ 1.0f, 0.0f, 1.0f, 1.0f });
 		break;
+	case TRIGGERTYPE::MONSTER_7:
+		m_pGizmo->DrawCube(m_pTransform->Get_WorldMatrix(), L"Camera", _fvector{ 0.0f, 1.0f, 0.2f, 1.0f });
+		break;
+	case TRIGGERTYPE::MONSTER_8:
+		m_pGizmo->DrawCube(m_pTransform->Get_WorldMatrix(), L"Camera", _fvector{ 1.0f, 0.0f, 0.5f, 1.0f });
+		break;
 	}
 	return S_OK;
 }

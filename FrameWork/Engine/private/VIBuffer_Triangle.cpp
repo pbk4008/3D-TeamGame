@@ -168,9 +168,9 @@ HRESULT CVIBuffer_Triangle::NativeConstruct_Prototype(const _tchar* pShaderFileP
 	m_eFormat = DXGI_FORMAT_R16_UINT;
 
 	m_IBDesc.ByteWidth = m_IndicesByteLength * m_iNumPrimitive;
-	m_IBDesc.Usage = D3D11_USAGE_IMMUTABLE;
+	m_IBDesc.Usage = D3D11_USAGE_DYNAMIC;
 	m_IBDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
-	m_IBDesc.CPUAccessFlags = 0;
+	m_IBDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 	m_IBDesc.MiscFlags = 0;
 	m_IBDesc.StructureByteStride = 0;
 

@@ -271,6 +271,8 @@
     <ClInclude Include="..\Headers\Bastion_Healer_Attack.h" />
     <ClInclude Include="..\Headers\Bastion_Healer_Chaser.h" />
     <ClInclude Include="..\Headers\Bastion_Healer_Chaser_End.h" />
+    <ClInclude Include="..\Headers\Bastion_Healer_Death.h" />
+    <ClInclude Include="..\Headers\Bastion_Healer_Hit.h" />
     <ClInclude Include="..\Headers\Bastion_Healer_Idle.h" />
     <ClInclude Include="..\Headers\Bastion_Healer_State.h" />
     <ClInclude Include="..\Headers\Bastion_Sword_Attack.h" />
@@ -488,6 +490,8 @@
     <ClCompile Include="..\Codes\Bastion_Healer_Attack.cpp" />
     <ClCompile Include="..\Codes\Bastion_Healer_Chaser.cpp" />
     <ClCompile Include="..\Codes\Bastion_Healer_Chaser_End.cpp" />
+    <ClCompile Include="..\Codes\Bastion_Healer_Death.cpp" />
+    <ClCompile Include="..\Codes\Bastion_Healer_Hit.cpp" />
     <ClCompile Include="..\Codes\Bastion_Healer_Idle.cpp" />
     <ClCompile Include="..\Codes\Bastion_Healer_State.cpp" />
     <ClCompile Include="..\Codes\Bastion_Sword_Attack.cpp" />

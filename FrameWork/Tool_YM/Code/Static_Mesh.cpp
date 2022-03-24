@@ -70,8 +70,8 @@ _int CStatic_Mesh::LateTick(_double TimeDelta)
 {
 	m_pRenderer->Add_RenderGroup(CRenderer::RENDER_ALPHA, this);
 
-	/*if(TKEY_DOWN(VK_RBUTTON))
-		Pick_Model();*/
+	//if (TKEY_DOWN(VK_RBUTTON))
+	//	Pick_Model();
 
 	if (true == m_bPick)
 	{

@@ -69,6 +69,8 @@ public:
 	_int	m_iMonster4Index = 0;
 	_int	m_iMonster5Index = 0;
 	_int	m_iMonster6Index = 0;
+	_int	m_iMonster7Index = 0;
+	_int	m_iMonster8Index = 0;
 
 public:
 	CString m_ModelPosX, m_ModelPosY, m_ModelPosZ;

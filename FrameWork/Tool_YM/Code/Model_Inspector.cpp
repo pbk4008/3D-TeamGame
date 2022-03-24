@@ -109,6 +109,8 @@ void CModel_Inspector::Ready_Level_Combo(void)
 	m_TriggerCombo.AddString(_T("두손검"));
 	m_TriggerCombo.AddString(_T("대지"));
 	m_TriggerCombo.AddString(_T("중간보스"));
+	m_TriggerCombo.AddString(_T("슈터"));
+	m_TriggerCombo.AddString(_T("이름모름"));
 
 	m_TriggerCombo.SetCurSel(0);
 }
@@ -241,7 +243,8 @@ void CModel_Inspector::OnBnClickedAddButton()
 		m_ModelDesc.eLevel = (LEVEL_ID)m_Combo_Level.GetCurSel();
 		m_ModelDesc.strFolder = m_FileInfo.cstrFolder;
 		m_ModelDesc.strFileName = m_FileInfo.cstrFileName;
-		m_ModelDesc.fInitPos = m_pObserver->m_fPickPos;
+		void* temp = &XMVector3TransformCoord(XMLoadFloat3(&m_pObserver->m_fPickPos), m_pObserver->m_pPlane->Get_Transform()->Get_WorldMatrix());
+		m_ModelDesc.fInitPos = *(_float3*)temp;
 		m_ModelDesc.iType = m_FileInfo.cstrFBX_Type;
 
 		/* ##2. 사본 모델의 Layer Tag = 모델의 이름  */
@@ -291,10 +294,10 @@ void CModel_Inspector::OnBnClickedNavSaveButton()
 	
 	for (auto iter : m_vecCells)
 	{
-		//CCW_Sort(iter->m_pPoint);
+		CCW_Sort(iter->m_pPoint);
 		for (int i = 0; i < 3; ++i)
 		{
-			m_NavMesh.Point[i] = (iter->m_vPoint[i]);
+			m_NavMesh.Point[i] = *(iter->m_pPoint[i]);
 		}
 		m_NavMeshList_Pos.push_back(m_NavMesh);
 	}
@@ -446,8 +449,8 @@ void CModel_Inspector::OnBnClickedTriggerAdd()
 	void* temp = &XMVector3TransformCoord(XMLoadFloat3(&m_pObserver->m_fPickPos), m_pObserver->m_pPlane->Get_Transform()->Get_WorldMatrix());
 	TriggerDesc.fTrigger_Point = *(_float3*)temp;
 
-	/* MONSTER_1, MONSTER_2, MONSTER_3, MONSTER_4, MONSTER_5 */
-	/* 한손검, 두손검, 땅벌레, 대지, 중간보스 */
+	/* MONSTER_1, MONSTER_2, MONSTER_3, MONSTER_4, MONSTER_5, MONSTER_6, MONSTER_7, MONSTER_8 */
+	/* 한손검, 두손검, 땅벌레, 대지, 중간보스, 힐러, 슈터, 이름 모름 */
 
 	switch (TriggerDesc.eTrigger_Type)
 	{
@@ -483,6 +486,12 @@ void CModel_Inspector::OnBnClickedTriggerAdd()
 		break;
 	case TRIGGERTYPE::MONSTER_6:
 		TriggerDesc.iIndex = m_iMonster6Index++;
+		break;
+	case TRIGGERTYPE::MONSTER_7:
+		TriggerDesc.iIndex = m_iMonster7Index++;
+		break;
+	case TRIGGERTYPE::MONSTER_8:
+		TriggerDesc.iIndex = m_iMonster8Index++;
 		break;
 	}
 

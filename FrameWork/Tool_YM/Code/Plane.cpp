@@ -64,11 +64,12 @@ _int CPlane::Tick(_double TimeDelta)
 _int CPlane::LateTick(_double TimeDelta)
 {
 	m_pRenderer->Add_RenderGroup(CRenderer::RENDER_UI, this);
+	
+	if(m_pObserver->m_bNavSpherePick)
+		Update_CellPos();
 
-
-	Update_CellPos();
 	return _int();
-}
+} 
 
 HRESULT CPlane::Render()
 {
