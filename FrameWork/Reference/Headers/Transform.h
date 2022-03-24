@@ -88,8 +88,6 @@ private:
 	TRANSFORMDESC			m_TransformDesc;
 
 	_float3					m_vVelocity = { 0.f, 0.f, 0.f };
-	_float m_fAccFallTime;
-
 public:
 	static CTransform* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);
 	virtual CComponent* Clone(void* pArg) override;

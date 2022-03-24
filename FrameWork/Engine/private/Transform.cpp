@@ -6,7 +6,6 @@
 
 CTransform::CTransform(ID3D11Device * pDevice, ID3D11DeviceContext * pDeviceContext)
 	: CComponent(pDevice, pDeviceContext)
-	, m_fAccFallTime(0.f)
 {
 
 }
@@ -14,7 +13,6 @@ CTransform::CTransform(ID3D11Device * pDevice, ID3D11DeviceContext * pDeviceCont
 CTransform::CTransform(const CTransform & rhs)
 	: CComponent(rhs)
 	, m_WorldMatrix(rhs.m_WorldMatrix)
-	, m_fAccFallTime(rhs.m_fAccFallTime)
 {
 	XMStoreFloat4x4(&m_matPivot, XMMatrixIdentity());
 }
