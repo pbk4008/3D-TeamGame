@@ -9,7 +9,18 @@ CShooter_Idle::CShooter_Idle(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDevi
 
 HRESULT CShooter_Idle::NativeConstruct(void* _pArg)
 {
-	if (FAILED(__super::NativeConstruct(_pArg)))
+	if (!_pArg)
+		return E_FAIL;
+
+	FSMMOVEDESC tDesc = (*(FSMMOVEDESC*)_pArg);
+
+	m_wstrTag = tDesc.pName;
+	m_pAnimator = tDesc.pAnimator;
+	m_pTransform = tDesc.pTransform;
+	Safe_AddRef(m_pAnimator);
+	Safe_AddRef(m_pTransform);
+
+	if (FAILED(CMonster_FSM::NativeConstruct(_pArg)))
 		return E_FAIL;
 
 	return S_OK;
@@ -23,8 +34,6 @@ _int CShooter_Idle::Tick(const _double& _dDeltaTime)
 
 	m_pAnimator->Tick(_dDeltaTime);
 
-	m_pTransform->Face_Target(g_pObserver->Get_PlayerPos());
-	
 	return _int();
 }
 
@@ -50,8 +59,6 @@ HRESULT CShooter_Idle::EnterState()
 	if (FAILED(__super::EnterState()))
 		return E_FAIL;
 
-	m_pAnimator->Change_Animation((_uint)CMonster_Bastion_Shooter::ANIM_TYPE::IDLE);
-
 	return S_OK;
 }
 
@@ -60,6 +67,16 @@ HRESULT CShooter_Idle::ExitState()
 	if (FAILED(__super::ExitState()))
 		return E_FAIL;
 
+	return S_OK;
+}
+
+HRESULT CShooter_Idle::EnterState(void* pArg)
+{
+	return S_OK;
+}
+
+HRESULT CShooter_Idle::ExitState(void* pArg)
+{
 	return S_OK;
 }
 

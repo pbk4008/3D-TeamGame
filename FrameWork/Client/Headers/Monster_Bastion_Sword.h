@@ -9,7 +9,6 @@ class CCharacterController;
 END
 
 BEGIN(Client)
-class CShieldBreaker;
 class CStargazer;
 class CMonster_Bastion_Sword final : public CActor
 {

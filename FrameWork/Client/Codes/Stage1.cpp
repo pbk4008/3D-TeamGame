@@ -44,18 +44,18 @@ HRESULT CStage1::NativeConstruct()
 	{
 		return E_FAIL;
 	}
-	if (FAILED(Ready_TriggerSystem(L"../bin/SaveData/Trigger/MonsterSpawnTrigger.dat")))
-		return E_FAIL;
+	//if (FAILED(Ready_TriggerSystem(L"../bin/SaveData/Trigger/MonsterSpawnTrigger.dat")))
+	//	return E_FAIL;
 
 	//if (FAILED(Ready_Boss(L"Layer_Boss")))
 	//{
 	//	return E_FAIL;
 	//}
 
-	//if (FAILED(Ready_Monster(L"Layer_Monster")))
-	//{
-	//	return E_FAIL;
-	//}
+	if (FAILED(Ready_Monster(L"Layer_Monster")))
+	{
+		return E_FAIL;
+	}
 
 	//Data
 	if (FAILED(Ready_Data_UI(L"../bin/SaveData/UI/UI.dat")))
@@ -106,7 +106,7 @@ _int CStage1::Tick(_double TimeDelta)
 		g_pDebugSystem->Set_LevelcMoveCheck(false);
 	}
 #endif //  _DEBUG
-	m_pTriggerSystem->Tick(TimeDelta);
+	//m_pTriggerSystem->Tick(TimeDelta);
 
 	return _int();
 }
@@ -114,7 +114,7 @@ _int CStage1::Tick(_double TimeDelta)
 HRESULT CStage1::Render()
 {
 #ifdef _DEBUG
-	m_pTriggerSystem->Render();
+	//m_pTriggerSystem->Render();
 #endif
 	return S_OK;
 }
@@ -211,8 +211,8 @@ HRESULT CStage1::Ready_Monster(const _tchar* LayerTag)
 	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Proto_GameObject_Monster_Bastion_Sword")))
 	//	return E_FAIL;
 
-	/*if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Proto_GameObject_Monster_Bastion_Shooter")))
-		return E_FAIL;*/
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Proto_GameObject_Monster_Bastion_Shooter")))
+		return E_FAIL;
 
 	return S_OK;
 }

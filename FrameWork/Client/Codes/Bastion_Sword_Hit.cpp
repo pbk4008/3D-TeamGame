@@ -21,7 +21,7 @@ HRESULT CBastion_Sword_Hit::NativeConstruct(void* _pArg)
 
 	Safe_AddRef(m_pAnimator);
 
-	if (CMonster_FSM::NativeConstruct(_pArg))
+	if (FAILED(CMonster_FSM::NativeConstruct(_pArg)))
 		return E_FAIL;
 
 	return S_OK;

@@ -1,34 +1,30 @@
 #pragma once
-#ifndef __BASTION_SWORD_WALK_H__
-#define __BASTION_SWORD_WALK_H__
+#ifndef __SHOOTER_DEATH_H__
+#define __SHOOTER_DEATH_H__
 
 #include "Monster_FSM.h"
 
 BEGIN(Client)
 
-class CBastion_Sword_Walk final : public CMonster_FSM
+class CShooter_Death final : public CMonster_FSM
 {
 private:
-	explicit CBastion_Sword_Walk(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext);
-	virtual ~CBastion_Sword_Walk() = default;
-
+	explicit CShooter_Death(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext);
+	virtual ~CShooter_Death() = default;
 public:
 	virtual HRESULT NativeConstruct(void* _pArg = nullptr);
 	virtual _int Tick(const _double& _dDeltaTime);
 	virtual _int LateTick(const _double& _dDeltaTime);
 	virtual HRESULT Render();
-
 public:
 	virtual HRESULT EnterState();
 	virtual HRESULT ExitState();
 	virtual HRESULT EnterState(void* pArg);
 	virtual HRESULT ExitState(void* pArg);
-
 public:
-	static CBastion_Sword_Walk* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext, void* _pArg = nullptr);
+	static CShooter_Death* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext, void* _pArg = nullptr);
 private:
 	virtual void Free() override;
 };
 END
-
 #endif

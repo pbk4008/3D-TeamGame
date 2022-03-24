@@ -44,7 +44,7 @@ _int CBastion_Sword_Walk::LateTick(const _double& _dDeltaTime)
 
 HRESULT CBastion_Sword_Walk::Render()
 {
-	return E_NOTIMPL;
+	return S_OK;
 }
 
 HRESULT CBastion_Sword_Walk::EnterState()
@@ -73,14 +73,33 @@ HRESULT CBastion_Sword_Walk::EnterState()
 
 HRESULT CBastion_Sword_Walk::ExitState()
 {
-	return E_NOTIMPL;
+	return S_OK;
+}
+
+HRESULT CBastion_Sword_Walk::EnterState(void* pArg)
+{
+	return S_OK;
+}
+
+HRESULT CBastion_Sword_Walk::ExitState(void* pArg)
+{
+	return S_OK;
 }
 
 CBastion_Sword_Walk* CBastion_Sword_Walk::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext, void* _pArg)
 {
-	return nullptr;
+	CBastion_Sword_Walk* pInstance = new CBastion_Sword_Walk(_pDevice, _pDeviceContext);
+
+	if (FAILED(pInstance->NativeConstruct(_pArg)))
+	{
+		MSGBOX("CBastion_Sword_Walk Create Fail");
+		Safe_Release(pInstance);
+	}
+
+	return pInstance;
 }
 
 void CBastion_Sword_Walk::Free()
 {
+	CMonster_FSM::Free();
 }

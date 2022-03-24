@@ -548,7 +548,8 @@ void CMonster_Bastion_Sword::Chase()
 	_float fDist = XMVectorGetX(XMVector3Length(vPos - vPlayerPos));
 
 	if (fDist < 10.f)
-	{		m_wstrCurState = L"Chase";
+	{		
+		m_wstrCurState = L"Chase";
 		m_pStateController->Change_State(L"Chase");
 	}
 }
