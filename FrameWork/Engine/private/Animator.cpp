@@ -267,7 +267,11 @@ CAnimNode* CAnimator::Find_Animation(_uint iTag, CAnimNode* pNode)
 	if (pNode->Is_LinkEmpty())
 		return nullptr;
 
-	return pNode->Check_ConnectNode(iTag,&m_vecAnimNode);
+	vector<_uint> vecFind;
+	for (auto& pNode : m_vecAnimNode)
+		vecFind.emplace_back(pNode);
+
+	return pNode->Check_ConnectNode(iTag,&vecFind);
 }
 
 

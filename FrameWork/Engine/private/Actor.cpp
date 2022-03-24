@@ -1,10 +1,11 @@
 #include "Actor.h"
 #include "..\public\Actor.h"
+#include "Transform.h"
 
 CActor::CActor()
 	:m_fSpeed(0.f)
 	, m_bDead(false)
-	, m_bAttack(false)
+	, m_IsAttack(false)
 	, m_fMaxHp(0.f)
 	, m_fCurrentHp(0.f)
 {
@@ -14,7 +15,7 @@ CActor::CActor(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
 	:CGameObject(pDevice, pDeviceContext)
 	, m_fSpeed(0.f)
 	, m_bDead(false)
-	, m_bAttack(false)
+	, m_IsAttack(false)
 	, m_fMaxHp(0.f)
 	, m_fCurrentHp(0.f)
 {
@@ -24,7 +25,7 @@ CActor::CActor(const CActor& rhs)
 	: CGameObject(rhs)
 	, m_fSpeed(rhs.m_fSpeed)
 	, m_bDead(rhs.m_bDead)
-	, m_bAttack(rhs.m_bAttack)
+	, m_IsAttack(rhs.m_IsAttack)
 	, m_fMaxHp(rhs.m_fMaxHp)
 	, m_fCurrentHp(rhs.m_fCurrentHp)
 {
@@ -85,6 +86,19 @@ const _float CActor::Get_CurrentHpRatio()
 	_float fRatio = m_fCurrentHp / m_fMaxHp;
 
 	return fRatio;
+}
+
+HRESULT CActor::Set_SpawnPosition(const _float3 vPoint)
+{
+	if (!m_pTransform)
+		return E_FAIL;
+
+	_vector vPos = XMLoadFloat3(&vPoint);
+	vPos=XMVectorSetW(vPos, 1.f);
+
+	m_pTransform->Set_State(CTransform::STATE_POSITION, vPos);
+
+	return S_OK;
 }
 
 

@@ -36,7 +36,7 @@ public:
 private:
 	UIDESC m_Desc;
 	_float m_fHp = 1.f; //현재 hp
-	_float m_fMaxHp = 1.f; //현재 hp
+	_float m_fMaxHp = 100.f; //현재 hp
 
 	_float m_fGapX = 0.f;
 	_float m_fGapY = 0.f;

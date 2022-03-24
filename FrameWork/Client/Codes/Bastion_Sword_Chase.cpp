@@ -38,7 +38,7 @@ _int CBastion_Sword_Chase::Tick(const _double& _dDeltaTime)
 	//쫓기 시작 -쫓기 루프 -쫓기 끝의 루프를 진행
 
 	m_pAnimator->Tick(_dDeltaTime);
-	Look_Player();
+	m_pTransform->Face_Target(g_pObserver->Get_PlayerPos());
 	//m_pTransform->Face_Target(g_pObserver->Get_PlayerPos());
 	//일정 거리가 되면 바로 공
 	_uint iAtkType = rand() % 3;
@@ -83,16 +83,16 @@ HRESULT CBastion_Sword_Chase::EnterState()
 	if (FAILED(m_pAnimator->Change_AnyEntryAnimation((_uint)CMonster_Bastion_Sword::ANIM_TYPE::RUN_START)))
 		return E_FAIL;
 
-	_matrix matRotate = XMMatrixRotationAxis(XMVectorSet(0.f, 1.f, 0.f, 0.f), XMConvertToRadians(180.f));
-	m_pAnimator->Set_PivotMatrix(matRotate);
+	//_matrix matRotate = XMMatrixRotationAxis(XMVectorSet(0.f, 1.f, 0.f, 0.f), XMConvertToRadians(180.f));
+	//m_pAnimator->Set_PivotMatrix(matRotate);
 
 	return S_OK;
 }
 
 HRESULT CBastion_Sword_Chase::ExitState()
 {
-	_matrix matIdentity = XMMatrixIdentity();
-	m_pAnimator->Set_PivotMatrix(matIdentity);
+	/*_matrix matIdentity = XMMatrixIdentity();
+	m_pAnimator->Set_PivotMatrix(matIdentity);*/
 	return S_OK;
 }
 

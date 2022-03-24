@@ -5,7 +5,8 @@
 #include "CharacterController.h"
 
 CTransform::CTransform(ID3D11Device * pDevice, ID3D11DeviceContext * pDeviceContext)
-	: CComponent(pDevice, pDeviceContext)	
+	: CComponent(pDevice, pDeviceContext)
+	, m_fAccFallTime(0.f)
 {
 
 }
@@ -13,6 +14,7 @@ CTransform::CTransform(ID3D11Device * pDevice, ID3D11DeviceContext * pDeviceCont
 CTransform::CTransform(const CTransform & rhs)
 	: CComponent(rhs)
 	, m_WorldMatrix(rhs.m_WorldMatrix)
+	, m_fAccFallTime(rhs.m_fAccFallTime)
 {
 	XMStoreFloat4x4(&m_matPivot, XMMatrixIdentity());
 }
@@ -289,6 +291,19 @@ void CTransform::ScaleZ_Up(_fvector vScale)
 {
 	_vector		vLook = Get_State(CTransform::STATE_LOOK) * XMVectorGetZ(vScale);
 	Set_State(CTransform::STATE_LOOK, vLook);
+}
+
+void CTransform::Fall(_double dDeltaTime)
+{
+	m_fAccFallTime += (_float)dDeltaTime;
+	_vector svPos = Get_State(CTransform::STATE_POSITION);
+	_float fY = XMVectorGetY(svPos);
+
+	if (fY > -5.f)
+		Add_Velocity(XMVectorSet(0.f, -0.5f * 9.8f * m_fAccFallTime * m_fAccFallTime, 0.f, 0.f));
+	else
+		m_fAccFallTime = 0.f;
+
 }
 
 void CTransform::Mesh_Straight(_double TimeDelta, CNavigation* pNavigation)

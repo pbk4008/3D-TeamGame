@@ -85,7 +85,7 @@ _int CUI_Player_HpBar_Red::Tick(_double TimeDelta)
 		if (m_fGapX > fUIHp)
 		{
 			_float DecreaseGapSpeed = m_fGapX - fUIHp;
-			m_fGapX -= TimeDelta * DecreaseGapSpeed * 1.5f; //데미지가 더 많이 들어오면 더 빨리 깎아주려고
+			m_fGapX -= TimeDelta * DecreaseGapSpeed * 0.001f; //데미지가 더 많이 들어오면 더 빨리 깎아주려고
 		}
 	}
 

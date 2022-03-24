@@ -43,6 +43,11 @@ HRESULT CMonster_Bastion_Healer::NativeConstruct(const _uint _iSceneID, void* _p
 	m_isFall = true;
 	m_iObectTag = (_uint)GAMEOBJECT::MONSTER_HEALER;
 
+	_float3 vPoint = (*(_float3*)_pArg);
+
+	if (FAILED(Set_SpawnPosition(vPoint)))
+		return E_FAIL;
+
 	return S_OK;
 }
 

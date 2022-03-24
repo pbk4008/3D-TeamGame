@@ -68,9 +68,8 @@ public:
 public: /* For.Weapon */
 	const _bool IsEquipWeapon() const;
 	const _bool IsEquipShield() const;
-	const _bool IsAttack();
 	const CWeapon::EType Get_WeaponType() const;
-	void Set_IsAttack(const _bool _isAttack);
+	virtual void Set_IsAttack(const _bool _isAttack);
 	void Set_EquipWeapon(const _bool _isEquipWeapon);
 	void Set_WeaponFixedBone(const string& _wstrFixedBoneTag);
 	void Set_WeaponFixedBone(CHierarchyNode* _pFixedBone);
@@ -104,7 +103,6 @@ public:
 	_bool m_isFall = false;
 	_bool m_isMove = false;
 	_bool m_isTraceCamera = true;
-	_bool m_isAttack = false;
 
 	_float m_fMoveSpeed = 0.f;
 	_float m_fAngle = 0.f;

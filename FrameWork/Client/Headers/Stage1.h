@@ -2,6 +2,7 @@
 #ifndef __STAGE1_H__
 #define __STAGE1_H__
 #include "Level.h"
+#include "TriggerSystem.h"
 BEGIN(Client)
 class CStage1 final : public CLevel
 {
@@ -22,11 +23,14 @@ private:
 	HRESULT Ready_UI(const _tchar* LayerTag);
 	HRESULT Ready_Light();
 
-
 	HRESULT Ready_Data_Effect(const _tchar* pDataFilePath);
 	HRESULT Ready_Data_UI(const _tchar* pDataFilePath);
 
-private:
+	HRESULT Ready_TriggerFunctionSetting();
+
+public:
+	
+	/// ////////////////////////////////////
 	HRESULT Ready_Trigger_Lod(const _tchar* pDataFilePath);
 	HRESULT Ready_Trigger_Light(const _tchar* pDataFilePath);
 	HRESULT Ready_Trigger_Scene(const _tchar* pDataFilePath);
@@ -36,11 +40,12 @@ private:
 
 private:
 	HRESULT	Ready_Treasure_Chest();
-
 public:
 	static CStage1* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);
 private:
 	virtual void Free() override;
+private:
+	CTriggerSystem<CStage1>* m_pTriggerSystem;
 };
 #endif
 

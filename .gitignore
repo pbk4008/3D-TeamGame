@@ -581,3 +581,4 @@ FrameWork/Engine/bin/Engine.exp
 *.res
 *.iobj
 *.ipdb
+*.dat
