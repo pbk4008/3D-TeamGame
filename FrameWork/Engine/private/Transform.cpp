@@ -293,23 +293,13 @@ void CTransform::ScaleZ_Up(_fvector vScale)
 	Set_State(CTransform::STATE_LOOK, vLook);
 }
 
-void CTransform::Fall(_double dDeltaTime, _bool bCheck)
+void CTransform::Fall(_double dDeltaTime)
 {
-	if (!bCheck)
-	{
-		m_fAccFallTime += (_float)dDeltaTime;
-		_vector svPos = Get_State(CTransform::STATE_POSITION);
-		_float fY = XMVectorGetY(svPos);
+	_vector svPos = Get_State(CTransform::STATE_POSITION);
+	_float fY = XMVectorGetY(svPos);
 
-		if (fY > -5.f)
-			Add_Velocity(XMVectorSet(0.f, -0.5f * 9.8f * m_fAccFallTime * m_fAccFallTime, 0.f, 0.f));
-		else
-			m_fAccFallTime = 0.f;
-	}
-	else
-	{
-		m_fAccFallTime = 0.f;
-	}
+	if (fY > -5.f)
+		Add_Velocity(XMVectorSet(0.f, -9.8f * dDeltaTime, 0.f, 0.f));
 }
 
 void CTransform::Mesh_Straight(_double TimeDelta, CNavigation* pNavigation)

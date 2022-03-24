@@ -85,7 +85,7 @@ HRESULT CMonster_EarthAberrant::NativeConstruct(const _uint _iSceneID, void* _pA
 	m_fCurrentHp = m_fMaxHp;
 
 	m_fMaxGroggy = 10.f;
-	m_fGroggy = 0;
+	m_fGroggy = 10;
 
 	m_pPanel->Set_GroggyBar(m_fMaxGroggy, m_fGroggy);
 
@@ -121,14 +121,14 @@ _int CMonster_EarthAberrant::Tick(_double _dDeltaTime)
 		m_pStateController->Change_State(L"Death");
 	}
 
-	if (m_fGroggy >= m_fMaxGroggy)
-	{
-		//스턴상태일때 스턴state에서 현재 그로기 계속 0으로 고정시켜줌
-		m_bGroggy = true;
-		m_pStateController->Change_State(L"Stun");
-		m_fGroggy = 0.f;
-		m_pPanel->Set_GroggyBar(m_fMaxGroggy, m_fGroggy);
-	}
+	//if (m_fGroggy >= m_fMaxGroggy)
+	//{
+	//	//스턴상태일때 스턴state에서 현재 그로기 계속 0으로 고정시켜줌
+	//	m_bGroggy = true;
+	//	m_pStateController->Change_State(L"Stun");
+	//	m_fGroggy = 0.f;
+	//	m_pPanel->Set_GroggyBar(m_fMaxGroggy, m_fGroggy);
+	//}
 
 	if (true == m_bGroggy || true == m_bDead)
 	{
@@ -530,14 +530,14 @@ void CMonster_EarthAberrant::OnTriggerEnter(CCollision& collision)
 		if ((_uint)GAMEOBJECT::WEAPON == collision.pGameObject->getTag())
 		{
 			--m_fCurrentHp;
-			m_fGroggy += 2; //TODO::수치정해서바꿔줘야됨
+			//m_fGroggy += 2; //TODO::수치정해서바꿔줘야됨
 
 			m_pPanel->Set_HpBar(m_fMaxHp, m_fCurrentHp);
 
 			if (false == m_bGroggy)
 			{
 				//그로기 아닐때만 증가할수있게
-				m_pPanel->Set_GroggyBar(m_fMaxGroggy, m_fGroggy);
+				//m_pPanel->Set_GroggyBar(m_fMaxGroggy, m_fGroggy);
 			}
 		}
 		else
