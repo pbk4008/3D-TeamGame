@@ -29,8 +29,8 @@ _int CBastion_2HSword_State::Tick(const _double& _dDeltaTime)
 
 	m_pAnimator->Tick(_dDeltaTime);
 
-	_fvector vMonsterPos = m_pTransform->Get_State(CTransform::STATE::STATE_POSITION);
-	_fvector vDist = vMonsterPos - g_pObserver->Get_PlayerPos();
+	_vector vMonsterPos = m_pTransform->Get_State(CTransform::STATE::STATE_POSITION);
+	_vector vDist = vMonsterPos - g_pObserver->Get_PlayerPos();
 	_float fDistToPlayer = XMVectorGetX(XMVector3Length(vDist));
 
 	m_bTargetOn = false;

@@ -30,6 +30,7 @@ private:
 	HRESULT SetUp_Stage1_Prototype();
 	HRESULT SetUp_Stage1_Object();
 	HRESULT Load_Stage1FBXLoad();
+	HRESULT Load_Stage1Navi_SkyLoad();
 	HRESULT Load_Stage1PlayerLoad();
 	HRESULT Load_Stage1BossLoad();
 	HRESULT Load_Stage1MonsterLoad();

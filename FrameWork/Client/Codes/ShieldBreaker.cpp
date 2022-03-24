@@ -4,6 +4,7 @@
 #include "Boss_Bastion_Judicator.h"
 #include "HierarchyNode.h"
 
+#include "Material.h"
 
 CShieldBreaker::CShieldBreaker(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
 	: CWeapon(pDevice, pDeviceContext)
@@ -25,6 +26,34 @@ HRESULT CShieldBreaker::NativeConstruct_Prototype()
 	m_iObectTag = (_uint)GAMEOBJECT::WEAPON_MIDBOSS;
 	m_eType = EType::Hammer_2H;
 	m_wstrName = L"ShieldBreaker";
+
+	CTexture* pTexture = CTexture::Create(m_pDevice, m_pDeviceContext);
+	if (FAILED(pTexture->NativeConstruct_Prototype(L"../Bin/Resources/Mesh/ShieldBreaker/T_2H_hammer_Shieldbreaker_D.dds", 1)))
+		return E_FAIL;
+	CMaterial* pMtrl = CMaterial::Create(m_pDevice, m_pDeviceContext, L"2H_hammer_Shieldbreaker", L"../../Reference/ShaderFile/Shader_Weapon.hlsl", CMaterial::EType::Static);
+	if (FAILED(pMtrl->Set_Texture("g_DiffuseTexture", TEXTURETYPE::TEX_DIFFUSE, pTexture, 0)))
+		return E_FAIL;
+
+	pTexture = CTexture::Create(m_pDevice, m_pDeviceContext);
+	if (FAILED(pTexture->NativeConstruct_Prototype(L"../Bin/Resources/Mesh/ShieldBreaker/T_2H_hammer_Shieldbreaker_N.dds", 1)))
+		return E_FAIL;
+	if (FAILED(pMtrl->Set_Texture("g_BiNormalTexture", TEXTURETYPE::TEX_NORMAL, pTexture, 0)))
+		return E_FAIL;
+
+	pTexture = CTexture::Create(m_pDevice, m_pDeviceContext);
+	if (FAILED(pTexture->NativeConstruct_Prototype(L"../Bin/Resources/Mesh/ShieldBreaker/T_2H_hammer_Shieldbreaker_CEO.dds", 1)))
+		return E_FAIL;
+	if (FAILED(pMtrl->Set_Texture("g_CEOTexture", TEXTURETYPE::TEX_CEO, pTexture, 0)))
+		return E_FAIL;
+
+	pTexture = CTexture::Create(m_pDevice, m_pDeviceContext);
+	if (FAILED(pTexture->NativeConstruct_Prototype(L"../Bin/Resources/Mesh/ShieldBreaker/T_2H_hammer_Shieldbreaker_MRA.dds", 1)))
+		return E_FAIL;
+	if (FAILED(pMtrl->Set_Texture("g_MRATexture", TEXTURETYPE::TEX_MRA, pTexture, 0)))
+		return E_FAIL;
+
+	if (FAILED(g_pGameInstance->Add_Material(L"MI_2H_hammer_Shieldbreaker", pMtrl)))
+		return E_FAIL;
 
 	return S_OK;
 }
@@ -56,8 +85,7 @@ _int CShieldBreaker::Tick(_double TimeDelta)
 		m_pCollider->Tick(TimeDelta);
 	}
 
-	_matrix matPivot = XMMatrixRotationY(XMConvertToRadians(90.f)) * XMMatrixTranslation(0.f, 0.f, 1.f);
-	m_pCollider->setPivotMatrix(matPivot);
+
 
 	return _int();
 }
@@ -89,8 +117,6 @@ HRESULT CShieldBreaker::Render()
 
 	for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
 	{
-		//m_pModel->SetUp_TextureOnShader("g_DiffuseTexture", i, aiTextureType_DIFFUSE);
-
 		m_pModel->Render(i, 0);
 	}
 

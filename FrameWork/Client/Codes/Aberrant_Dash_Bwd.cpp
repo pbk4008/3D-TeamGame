@@ -35,7 +35,6 @@ _int CAberrant_Dash_Bwd::Tick(const _double& TimeDelta)
 	_float fDistToPlayer = XMVectorGetX(XMVector3Length(vDist));
 
 	CAnimationController* con = m_pAnimator->Get_AnimController();
-	m_pAnimator->Get_AnimController()->Set_MoveSpeed(20.f);
 
 	if (m_pAnimator->Get_AnimController()->Is_Finished())
 	{
@@ -67,6 +66,8 @@ HRESULT CAberrant_Dash_Bwd::EnterState()
 {
 	if (FAILED(__super::EnterState()))
 		return E_FAIL;
+
+	m_pAnimator->Get_AnimController()->Set_MoveSpeed(20.f);
 
 	m_pTransform->Face_Target(g_pObserver->Get_PlayerPos());
 

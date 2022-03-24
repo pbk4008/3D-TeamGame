@@ -28,19 +28,15 @@ _int CMidBoss_Rage::Tick(const _double& TimeDelta)
 	if (NO_EVENT != iProgress)
 		return iProgress;
 
-	_vector vMonsterPos = m_pTransform->Get_State(CTransform::STATE::STATE_POSITION);
-	_vector vDist = vMonsterPos - g_pObserver->Get_PlayerPos();
-	_float fDistToPlayer = XMVectorGetX(XMVector3Length(vDist));
+	m_pAnimator->Tick(TimeDelta);
 
+	m_pTransform->Face_Target(g_pObserver->Get_PlayerPos());
 
-	if (10.f > fDistToPlayer)
+	cout << "Rage" << endl;
+
+	if (m_pAnimator->Get_CurrentAnimation()->Is_Finished())
 	{
-		m_pAnimator->Tick(TimeDelta);
-
-		if (m_pAnimator->Get_CurrentAnimation()->Is_Finished())
-		{
-			m_pStateController->Change_State(L"BattleCry");
-		}
+		m_pStateController->Change_State(L"BattleCry");
 	}
 
 	return _int();
@@ -68,8 +64,8 @@ HRESULT CMidBoss_Rage::EnterState()
 	if (FAILED(__super::EnterState()))
 		return E_FAIL;
 
-	_vector vec = { 0.f, 1.f, 0.f,0.f };
-	m_pTransform->SetUp_Rotation(vec, (XMConvertToRadians(180.f)));
+	m_pAnimator->Change_AnyEntryAnimation((_uint)CBoss_Bastion_Judicator::M_BossAnimState::RAGE);
+
 
 	return S_OK;
 }
@@ -79,8 +75,8 @@ HRESULT CMidBoss_Rage::ExitState()
 	if (FAILED(__super::ExitState()))
 		return E_FAIL;
 
-	_vector vec = { 0.f, 1.f, 0.f,0.f };
-	m_pTransform->SetUp_Rotation(vec, (XMConvertToRadians(0.f)));
+	//_vector vec = { 0.f, 1.f, 0.f,0.f };
+	//m_pTransform->SetUp_Rotation(vec, (XMConvertToRadians(0.f)));
 
 	return S_OK;
 }

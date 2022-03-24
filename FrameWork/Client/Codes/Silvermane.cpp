@@ -221,7 +221,6 @@ _int CSilvermane::Tick(_double _dDeltaTime)
 	if (NO_EVENT != iProgress)
 		return iProgress;
 
-	//Fall(_dDeltaTime);
 	if(m_isFall)
 		m_pTransform->Fall(_dDeltaTime);
 	//m_pCharacterController->Tick(_dDeltaTime);

@@ -28,20 +28,30 @@ HRESULT CStage1::NativeConstruct()
 	if (FAILED(CLevel::NativeConstruct()))
 		return E_FAIL;
 
-	//if (FAILED(Ready_Light())) return E_FAIL;
+	if (FAILED(Ready_Light())) 
+		return E_FAIL;
+	
 
-	if (FAILED(Ready_MapObject()))
+	/*if (FAILED(Ready_MapObject()))
 	{
 		return E_FAIL;
-	}
+	}*/
+	
+	/*if (FAILED(Ready_Trigger_Jump()))
+	{
+		return E_FAIL;
+	}*/
+
 	//if (FAILED(Ready_Trigger_Jump()))
 	//{
 	//	return E_FAIL;
 	//}
+
 	if (FAILED(Ready_Player(L"Layer_Silvermane")))
 	{
 		return E_FAIL;
 	}
+
 	//if (FAILED(Ready_Boss(L"Layer_Boss")))
 	//{
 	//	return E_FAIL;
@@ -52,26 +62,22 @@ HRESULT CStage1::NativeConstruct()
 		return E_FAIL;
 	}
 
-	//if (FAILED(Ready_Boss(L"Layer_Boss")))
-	//{
-	//	return E_FAIL;
-	//}
 
 	//Data
-	//if (FAILED(Ready_Data_UI(L"../bin/SaveData/UI/UI.dat")))
-	//{
-	//	return E_FAIL;
-	//}
-	//
-	//if (FAILED(Ready_Data_Effect(L"../bin/SaveData/Effect/Effect_Explosion.dat")))
-	//{
-	//	return E_FAIL;
-	//}
+	if (FAILED(Ready_Data_UI(L"../bin/SaveData/UI/UI.dat")))
+	{
+		return E_FAIL;
+	}
 
-	//if (FAILED(Ready_UI(L"Layer_UI")))
-	//{
-	//	return E_FAIL;
-	//}
+	if (FAILED(Ready_Data_Effect(L"../bin/SaveData/Effect/Effect_Explosion.dat")))
+	{
+		return E_FAIL;
+	}
+
+	if (FAILED(Ready_UI(L"Layer_UI")))
+	{
+		return E_FAIL;
+	}
 
 	m_pTriggerSystem = CTriggerSystem<Client::CStage1>::Create(m_pDevice, m_pDeviceContext, L"../bin/SaveData/MonsterSpawnTrigger.data");
 
@@ -193,8 +199,10 @@ HRESULT CStage1::Ready_Boss(const _tchar* LayerTag)
 
 HRESULT CStage1::Ready_Monster(const _tchar* LayerTag)
 {
-	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Proto_GameObject_Monster_Crawler")))
-	//	return E_FAIL;
+
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Proto_GameObject_Monster_EarthAberrant")))
+		return E_FAIL;
+	
 	//for (int i = 0; i < 3; ++i)
 	//{
 	//	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Proto_GameObject_Monster_Crawler")))
@@ -204,9 +212,7 @@ HRESULT CStage1::Ready_Monster(const _tchar* LayerTag)
 	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Monster", L"Monster_Bastion_2HSword")))
 	//	return E_FAIL;
 	
-	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Proto_GameObject_Monster_EarthAberrant")))
-	//	return E_FAIL;
-	//
+
 	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Proto_GameObject_Monster_BronzeAnimus")))
 	//	return E_FAIL;
 
@@ -216,8 +222,9 @@ HRESULT CStage1::Ready_Monster(const _tchar* LayerTag)
 	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Proto_GameObject_Monster_Bastion_Sword")))
 	//	return E_FAIL;
 
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Proto_GameObject_Monster_Bastion_Shooter")))
-		return E_FAIL;
+	/*if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Proto_GameObject_Monster_Bastion_Shooter")))
+		return E_FAIL;*/
+
 	return S_OK;
 }
 

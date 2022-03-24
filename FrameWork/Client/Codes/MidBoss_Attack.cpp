@@ -35,13 +35,14 @@ _int CMidBoss_Attack::Tick(const _double& TimeDelta)
 		m_pStateController->Change_State(L"Turn");
 		//cout << "어택->턴" << endl;
 	}
+	cout << "attack" << endl;
 
 	CBoss_Bastion_Judicator* pBoss = (CBoss_Bastion_Judicator*)m_pStateController->Get_GameObject();
 
 	if (nullptr != pBoss)
 	{
 		pBoss->Set_IsAttack(true);
-		cout << "보스공격중" << endl;
+		//cout << "보스공격중" << endl;
 	}
 
 	return _int();
@@ -75,7 +76,9 @@ HRESULT CMidBoss_Attack::EnterState()
 
 	m_pTransform->Face_Target(g_pObserver->Get_PlayerPos());
 
-	if (4.0f > fDistToPlayer)
+
+	//TODO : 계산방법수정해야함 거리계산 
+	if (5.f > fDistToPlayer /*4.f > XMVectorGetX(vDist) && 4.f > XMVectorGetZ(vDist) && 4.f > XMVectorGetY(vDist)*/)
 	{
 		_int iRandom = rand() % 4;
 
@@ -106,13 +109,13 @@ HRESULT CMidBoss_Attack::EnterState()
 		}
 	}
 
-	else if (7.0f > fDistToPlayer)
+	else if (5.f <= fDistToPlayer)
 	{
-		_int iRandom = rand() % 2;
+		_int iRandom = rand() % 3;
 
 		while (m_iPreState_2 == iRandom)
 		{
-			iRandom = rand() % 2;
+			iRandom = rand() % 3;
 		}
 
 		if (m_iPreState_2 != iRandom)
@@ -125,15 +128,12 @@ HRESULT CMidBoss_Attack::EnterState()
 			case 1:
 				m_pAnimator->Change_AnyEntryAnimation((_uint)CBoss_Bastion_Judicator::M_BossAnimState::SPRINT_ATTACK_H);
 				break;
+			case 2:
+				m_pAnimator->Change_AnyEntryAnimation((_uint)CBoss_Bastion_Judicator::M_BossAnimState::ATTACK_LEGACY_H);
 			}
 
 			m_iPreState_2 = iRandom;
 		}
-	}
-
-	else if (7.0f <= fDistToPlayer)
-	{
-		m_pAnimator->Change_AnyEntryAnimation((_uint)CBoss_Bastion_Judicator::M_BossAnimState::ATTACK_LEGACY_H);
 	}
 
 	return S_OK;
