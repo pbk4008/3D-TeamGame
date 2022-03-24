@@ -154,32 +154,32 @@ HRESULT CLoader::LoadForScene()
 
 HRESULT CLoader::SetUp_Stage1_Object()
 {
-	//if (FAILED(Load_Stage1FBXLoad()))
-	//	return E_FAIL;
+	if (FAILED(Load_Stage1FBXLoad()))
+		return E_FAIL;
 	
-	//if (FAILED(Load_Stage1Navi_SkyLoad()))
-	//	return E_FAIL;
-	//
-	//if (FAILED(Load_Stage1PlayerLoad()))
-	//	return E_FAIL;
+	if (FAILED(Load_Stage1Navi_SkyLoad()))
+		return E_FAIL;
 
-	//if (FAILED(Load_Stage1MonsterLoad()))
-	//	return E_FAIL;
+	if (FAILED(Load_Stage1PlayerLoad()))
+		return E_FAIL;
+
+	if (FAILED(Load_Stage1MonsterLoad()))
+		return E_FAIL;
 
 	if (FAILED(Load_Stage1BossLoad()))
 		return E_FAIL;
 
-	//if (FAILED(Load_Stage1StaticUILoad()))
-	//	return E_FAIL;
-	//
-	//if (FAILED(Load_Stage1UILoad()))
-	//	return E_FAIL;
+	if (FAILED(Load_Stage1StaticUILoad()))
+		return E_FAIL;
+	
+	if (FAILED(Load_Stage1UILoad()))
+		return E_FAIL;
 
-	//if (FAILED(Load_Stage1EffectLoad()))
-	//	return E_FAIL;
+	if (FAILED(Load_Stage1EffectLoad()))
+		return E_FAIL;
 
-	//if (FAILED(Load_Stage1JumpTrigger()))
-	//	return E_FAIL;
+	if (FAILED(Load_Stage1JumpTrigger()))
+		return E_FAIL;
 
 	if (FAILED(Load_Stage1TriggerLod()))
 		return E_FAIL;
@@ -676,11 +676,6 @@ HRESULT CLoader::Load_Stage1PlayerLoad()
 	}
 #pragma endregion
 
-#pragma region 컴포넌트
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_CharacterController", CCharacterController::Create(m_pDevice, m_pDeviceContext))))
-		return E_FAIL;
-#pragma endregion
-
 #pragma region 오브젝트
 	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Silvermane", CSilvermane::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
@@ -722,7 +717,7 @@ HRESULT CLoader::Load_Stage1BossLoad()
 
 HRESULT CLoader::Load_Stage1MonsterLoad()
 {
-	////Monster Crystal_Crawler
+	//////Monster Crystal_Crawler
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Model_Monster_Crawler", CModel::Create(m_pDevice, m_pDeviceContext,
 		L"../bin/FBX/Monster/Crystal_Crawler.fbx", CModel::TYPE_ANIM, true))))
 		return E_FAIL;

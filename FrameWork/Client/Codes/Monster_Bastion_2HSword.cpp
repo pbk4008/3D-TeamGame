@@ -601,7 +601,7 @@ void CMonster_Bastion_2HSword::Set_IsAttack(const _bool _isAttack)
 	//	m_pWeapon->Set_IsAttack(_isAttack);
 
 	m_bRemove = true;
-	m_pStateController->OnTriggerEnter(collision);
+	//m_pStateController->OnTriggerEnter(collision);
 }
 
 CMonster_Bastion_2HSword* CMonster_Bastion_2HSword::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
