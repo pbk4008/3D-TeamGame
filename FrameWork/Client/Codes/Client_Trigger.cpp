@@ -111,7 +111,6 @@ HRESULT CClient_Trigger::SetUp_Components()
 		return E_FAIL;
 
 	CBoxCollider::DESC tDesc;
-	ZeroMemory(&tDesc, sizeof(tDesc));
 
 	tDesc.tColliderDesc.eRigidType = ERigidType::Static;
 	tDesc.tColliderDesc.isGravity = false;
@@ -122,11 +121,11 @@ HRESULT CClient_Trigger::SetUp_Components()
 	tDesc.tColliderDesc.fDynamicFriction = 0.5f;
 	tDesc.tColliderDesc.fRestitution = 0.6f;
 	tDesc.tColliderDesc.pGameObject = this;
-
-	tDesc.vScale = _float3(10.f, 3.f, 10.f);
+	tDesc.vScale = _float3(10.f, 1.f, 10.f);
 
 	if (FAILED(CGameObject::SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_BoxCollider", L"BoxTrigger", (CComponent**)&m_pBoxCollider,&tDesc)))
 		return E_FAIL;
+	m_pBoxCollider->Update_PxTransform();
 
 	return S_OK;
 }

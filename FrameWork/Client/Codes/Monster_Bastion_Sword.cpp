@@ -79,6 +79,8 @@ HRESULT CMonster_Bastion_Sword::NativeConstruct(const _uint _iSceneID, void* _pA
 
 	m_fMaxHp = 3;
 	m_fCurrentHp = m_fMaxHp;
+
+	setActive(false);
 	return S_OK;
 }
 

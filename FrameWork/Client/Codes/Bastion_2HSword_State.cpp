@@ -72,7 +72,7 @@ HRESULT CBastion_2HSword_State::Render()
 		return E_FAIL;
 
 #ifdef _DEBUG
-	Render_Debug();
+	//Render_Debug();
 #endif
 
 	return S_OK;

@@ -37,6 +37,20 @@ HRESULT CMonster_Bastion_2HSword::NativeConstruct(const _uint _iSceneID, void* _
 {
 	if (FAILED(__super::NativeConstruct(_iSceneID, _pArg)))
 		return E_FAIL;
+
+	if (_pArg)
+	{
+		_float3 vPoint = (*(_float3*)_pArg);
+		if (FAILED(Set_SpawnPosition(vPoint)))
+			return E_FAIL;
+	}
+	else
+	{
+		_float4 vPosition = { 0.f, 2.f, 20.f, 1.f };
+
+		m_pTransform->Set_State(CTransform::STATE_POSITION, XMLoadFloat4(&vPosition));
+	}
+
 	if (FAILED(Ready_Components())) 
 		return E_FAIL;
 	if (FAILED(Ready_Weapon())) 
@@ -46,14 +60,11 @@ HRESULT CMonster_Bastion_2HSword::NativeConstruct(const _uint _iSceneID, void* _
 	if (FAILED(Ready_StateFSM()))
 		return E_FAIL;
 
-	_float3 vPoint = (*(_float3*)_pArg);
-
-	if (FAILED(Set_SpawnPosition(vPoint)))
-		return E_FAIL;
-
+	
 	m_isFall = true;
 	m_iObectTag = (_uint)GAMEOBJECT::MONSTER_2H;
 
+	setActive(false);
 	return S_OK;
 }
 
@@ -108,7 +119,7 @@ _int CMonster_Bastion_2HSword::LateTick(_double _dDeltaTime)
 		if (NO_EVENT != iProgress) 
 			return iProgress;
 	}
-
+	
 	return _int();
 }
 
@@ -142,7 +153,7 @@ HRESULT CMonster_Bastion_2HSword::Render()
 		
 	}
 #ifdef _DEBUG
-		Render_Debug();
+		//Render_Debug();
 #endif
 	return S_OK;
 }
@@ -154,12 +165,13 @@ HRESULT CMonster_Bastion_2HSword::Ready_Components()
 	transformDesc.fSpeedPerSec = 2.0f;
 	transformDesc.fRotationPerSec = XMConvertToRadians(90.f);
 	m_pTransform->Set_TransformDesc(transformDesc);
-	_float4 vPosition = { 0.f, 2.f, 20.f, 1.f };
+	//¹ÛÀ¸·Î »­
+	/*_float4 vPosition = { 0.f, 2.f, 20.f, 1.f };
 
-	m_pTransform->Set_State(CTransform::STATE_POSITION, XMLoadFloat4(&vPosition));
+	m_pTransform->Set_State(CTransform::STATE_POSITION, XMLoadFloat4(&vPosition));*/
 
 	/* for. Model Com */
-	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STAGE1, L"Model_Bastion_2HSword", L"Model", (CComponent**)&m_pModel)))
+	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Model_Bastion_2HSword", L"Model", (CComponent**)&m_pModel)))
 		return E_FAIL;
 	_matrix matPivot = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(180.f));
 	m_pModel->Set_PivotMatrix(matPivot);
@@ -502,6 +514,7 @@ const _int CMonster_Bastion_2HSword::Fall(const _double& _dDeltaTime)
 
 void CMonster_Bastion_2HSword::OnTriggerEnter(CCollision& collision)
 {
+	m_bRemove = true;
 	m_pStateController->OnTriggerEnter(collision);
 }
 

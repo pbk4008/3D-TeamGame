@@ -26,10 +26,23 @@ private:
 	HRESULT Ready_Data_Effect(const _tchar* pDataFilePath);
 	HRESULT Ready_Data_UI(const _tchar* pDataFilePath);
 
+	HRESULT Ready_TriggerSystem(const _tchar* pTriggerFile);
 	HRESULT Ready_TriggerFunctionSetting();
 
 public:
-	
+	void Trgger_Function1();//1번 트리거가 작동할 함수
+	void Trgger_Function2();//2번 트리거가 작동할 함수
+	void Trgger_Function3();//3번 트리거가 작동할 함수
+	void Trgger_Function4();//4번 트리거가 작동할 함수
+	void Trgger_Function5();//5번 트리거가 작동할 함수
+	void Trgger_Function6();//6번 트리거가 작동할 함수
+	void Trgger_Function7();//7번 트리거가 작동할 함수
+	void Trgger_Function8();//8번 트리거가 작동할 함수
+	void Trgger_Function9();//9번 트리거가 작동할 함수
+	void Trgger_Function10();//10번 트리거가 작동할 함수
+	void Trgger_Function11();//11번 트리거가 작동할 함수
+	void Trgger_FunctionBoss();//보스 트리거가 작동할 함수
+
 	/// ////////////////////////////////////
 	HRESULT Ready_Trigger_Lod(const _tchar* pDataFilePath);
 	HRESULT Ready_Trigger_Light(const _tchar* pDataFilePath);

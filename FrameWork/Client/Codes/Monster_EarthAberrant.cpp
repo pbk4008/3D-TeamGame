@@ -40,8 +40,17 @@ HRESULT CMonster_EarthAberrant::NativeConstruct(const _uint _iSceneID, void* _pA
 		return E_FAIL;
 	}
 	
-	_vector Pos = { 3.f, 0.f, 15.f, 1.f };
-	m_pTransform->Set_State(CTransform::STATE_POSITION, Pos);
+	if (_pArg)
+	{
+		_float3 vPoint = (*(_float3*)_pArg);
+		if (FAILED(Set_SpawnPosition(vPoint)))
+			return E_FAIL;
+	}
+	else
+	{
+		_vector Pos = { 3.f, 0.f, 15.f, 1.f };
+		m_pTransform->Set_State(CTransform::STATE_POSITION, Pos);
+	}
 
 	if (FAILED(SetUp_Components()))
 	{
@@ -89,6 +98,7 @@ HRESULT CMonster_EarthAberrant::NativeConstruct(const _uint _iSceneID, void* _pA
 
 	m_pPanel->Set_GroggyBar(m_fMaxGroggy, m_fGroggy);
 
+	setActive(false);
 	return S_OK;
 }
 
