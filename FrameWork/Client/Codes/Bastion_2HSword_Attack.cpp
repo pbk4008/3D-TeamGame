@@ -31,6 +31,13 @@ _int CBastion_2HSword_Attack::Tick(const _double& _dDeltaTime)
 
 	m_pAnimator->Tick(_dDeltaTime);
 
+	//추가한코드임 - 희정
+	CMonster_Bastion_2HSword* pMonster = (CMonster_Bastion_2HSword*)m_pStateController->Get_GameObject();
+	if (nullptr != pMonster)
+	{
+		pMonster->Set_IsAttack(true);
+	}
+
 	return _int();
 }
 

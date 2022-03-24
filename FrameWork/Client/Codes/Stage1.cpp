@@ -4,6 +4,7 @@
 #include "Environment.h"
 
 #include "Effect_DashDust.h"
+#include "Effect_HitParticle.h"
 #include "UI_Ingame.h"
 #include "UI_Player_HpBar.h"
 #include "UI_Tuto_Base.h"
@@ -28,8 +29,8 @@ HRESULT CStage1::NativeConstruct()
 	if (FAILED(CLevel::NativeConstruct()))
 		return E_FAIL;
 
-	if (FAILED(Ready_Light())) 
-		return E_FAIL;
+	/*if (FAILED(Ready_Light()))
+		return E_FAIL;*/
 	
 
 	/*if (FAILED(Ready_MapObject()))
@@ -47,42 +48,42 @@ HRESULT CStage1::NativeConstruct()
 	//	return E_FAIL;
 	//}
 
-	if (FAILED(Ready_Player(L"Layer_Silvermane")))
-	{
-		return E_FAIL;
-	}
+	//if (FAILED(Ready_Player(L"Layer_Silvermane")))
+	//{
+	//	return E_FAIL;
+	//}
 
 	//if (FAILED(Ready_Boss(L"Layer_Boss")))
 	//{
 	//	return E_FAIL;
 	//}
 
-	if (FAILED(Ready_Monster(L"Layer_Monster")))
-	{
-		return E_FAIL;
-	}
+	//if (FAILED(Ready_Monster(L"Layer_Monster")))
+	//{
+	//	return E_FAIL;
+	//}
 
 
-	//Data
-	if (FAILED(Ready_Data_UI(L"../bin/SaveData/UI/UI.dat")))
-	{
-		return E_FAIL;
-	}
+	////Data
+	//if (FAILED(Ready_Data_UI(L"../bin/SaveData/UI/UI.dat")))
+	//{
+	//	return E_FAIL;
+	//}
 
-	if (FAILED(Ready_Data_Effect(L"../bin/SaveData/Effect/Effect_Explosion.dat")))
-	{
-		return E_FAIL;
-	}
+	//if (FAILED(Ready_Data_Effect()))
+	//{
+	//	return E_FAIL;
+	//}
 
-	if (FAILED(Ready_UI(L"Layer_UI")))
-	{
-		return E_FAIL;
-	}
+	//if (FAILED(Ready_UI(L"Layer_UI")))
+	//{
+	//	return E_FAIL;
+	//}
 
-	m_pTriggerSystem = CTriggerSystem<Client::CStage1>::Create(m_pDevice, m_pDeviceContext, L"../bin/SaveData/MonsterSpawnTrigger.data",this);
+	//m_pTriggerSystem = CTriggerSystem<Client::CStage1>::Create(m_pDevice, m_pDeviceContext, L"../bin/SaveData/MonsterSpawnTrigger.dat",this);
 
-	if (!m_pTriggerSystem)
-		return E_FAIL;
+	//if (!m_pTriggerSystem)
+	//	return E_FAIL;
 
 	//if(FAILED(Ready_TriggerFunctionSetting()))
 	//	return E_FAIL;
@@ -199,20 +200,15 @@ HRESULT CStage1::Ready_Boss(const _tchar* LayerTag)
 
 HRESULT CStage1::Ready_Monster(const _tchar* LayerTag)
 {
+	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Proto_GameObject_Monster_Crawler")))
+	//	return E_FAIL;
 
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Proto_GameObject_Monster_EarthAberrant")))
 		return E_FAIL;
 	
-	//for (int i = 0; i < 3; ++i)
-	//{
-	//	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Proto_GameObject_Monster_Crawler")))
-	//		return E_FAIL;
-	//}
-
-	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Monster_Bastion_2HSword")))
+	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Proto_GameObject_Monster_Bastion_2HSword")))
 	//	return E_FAIL;
 	
-
 	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Proto_GameObject_Monster_BronzeAnimus")))
 	//	return E_FAIL;
 
@@ -326,23 +322,38 @@ HRESULT CStage1::Ready_Light()
 	return S_OK;
 }
 
-HRESULT CStage1::Ready_Data_Effect(const _tchar* pDataFilePath)
+HRESULT CStage1::Ready_Data_Effect()
 {
-	vector<CEffect_DashDust::EFFECTDESC> vecEffect;
-	g_pGameInstance->LoadFile<CEffect_DashDust::EFFECTDESC>(vecEffect, pDataFilePath);
-	
+	/*vector<CEffect_DashDust::EFFECTDESC> vecEffect;
+	g_pGameInstance->LoadFile<CEffect_DashDust::EFFECTDESC>(vecEffect, L"../bin/SaveData/Effect/Effect_Dash.dat");
+
 	for (int i = 0; i < vecEffect.size(); ++i)
 	{
 		wstring Tag = vecEffect[i].TextureTag;
-		wstring FullName = L"Proto_GameObject_Effect";
+		wstring FullName = L"Proto_GameObject_Effect_DashDust";
 
 		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Effect", FullName, &vecEffect[i])))
 		{
 			MSGBOX("Failed to Creating in CStage1::Ready_Effect()");
 			return E_FAIL;
 		}
-	}
+	}*/
 
+
+	vector<CEffect_HitParticle::EFFECTDESC> vecEffect1;
+	g_pGameInstance->LoadFile<CEffect_HitParticle::EFFECTDESC>(vecEffect1, L"../bin/SaveData/Effect/Effect_Explosion.dat");
+
+	for (int i = 0; i < vecEffect1.size(); ++i)
+	{
+		wstring Tag = vecEffect1[i].TextureTag;
+		wstring FullName = L"Proto_GameObject_Effect_Hit";
+
+		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Effect", FullName, &vecEffect1[i])))
+		{
+			MSGBOX("Failed to Creating in CStage1::Ready_Effect()");
+			return E_FAIL;
+		}
+	}
 	return S_OK;
 }
 

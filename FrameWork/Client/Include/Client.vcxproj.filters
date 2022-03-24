@@ -52,9 +52,6 @@
     <Filter Include="02.GameObject\04.Effect">
       <UniqueIdentifier>{8a92a3f2-2ab5-4eeb-a712-96f614c298ff}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObject\04.Effect\01.Effect_DashDust_Player">
-      <UniqueIdentifier>{387da879-a8da-43c1-a901-c84527a9b9f2}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObject\05.UI">
       <UniqueIdentifier>{ea588900-5830-4a87-bbb5-2525229f11a6}</UniqueIdentifier>
     </Filter>
@@ -463,6 +460,15 @@
     <Filter Include="02.GameObject\03.Character\02.Boss\00.MiddleBoss\State\00.Run">
       <UniqueIdentifier>{e800aeda-0ac9-4c06-ba77-a606ba04cd5b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\04.Effect\00.Effect_DashDust_Player">
+      <UniqueIdentifier>{b305731d-7dad-4c04-a1b5-dfb2e52d2441}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\04.Effect\01.Effect_MapLeaf">
+      <UniqueIdentifier>{387da879-a8da-43c1-a901-c84527a9b9f2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\04.Effect\02.HitParticle">
+      <UniqueIdentifier>{b370ed74-461a-48d9-91e0-c06ca932a31c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -584,9 +590,6 @@
     </ClInclude>
     <ClInclude Include="..\Headers\MainCamera.h">
       <Filter>02.GameObject\01. MainCamera\ProjectionCam</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Headers\Effect_DashDust.h">
-      <Filter>02.GameObject\04.Effect\01.Effect_DashDust_Player</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\Environment.h">
       <Filter>02.GameObject\02.Map\01.Environment</Filter>
@@ -1152,6 +1155,12 @@
     <ClInclude Include="..\Headers\MidBoss_Run.h">
       <Filter>02.GameObject\03.Character\02.Boss\00.MiddleBoss\State\00.Run</Filter>
     </ClInclude>
+    <ClInclude Include="..\Headers\Effect_DashDust.h">
+      <Filter>02.GameObject\04.Effect\00.Effect_DashDust_Player</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Effect_HitParticle.h">
+      <Filter>02.GameObject\04.Effect\02.HitParticle</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -1252,9 +1261,6 @@
     </ClCompile>
     <ClCompile Include="..\Codes\MainCamera.cpp">
       <Filter>02.GameObject\01. MainCamera\ProjectionCam</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Codes\Effect_DashDust.cpp">
-      <Filter>02.GameObject\04.Effect\01.Effect_DashDust_Player</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\MainCamera_Ortho.cpp">
       <Filter>02.GameObject\01. MainCamera\OrthoCam</Filter>
@@ -1813,6 +1819,12 @@
     </ClCompile>
     <ClCompile Include="..\Codes\MidBoss_Run.cpp">
       <Filter>02.GameObject\03.Character\02.Boss\00.MiddleBoss\State\00.Run</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Effect_DashDust.cpp">
+      <Filter>02.GameObject\04.Effect\00.Effect_DashDust_Player</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Effect_HitParticle.cpp">
+      <Filter>02.GameObject\04.Effect\02.HitParticle</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

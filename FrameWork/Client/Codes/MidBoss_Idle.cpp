@@ -34,7 +34,6 @@ _int CMidBoss_Idle::Tick(const _double& TimeDelta)
 
 	m_pAnimator->Tick(TimeDelta);
 	
-	cout << "idle" << endl;
 	if (15.f > XMVectorGetX(vDist) && 15.f > XMVectorGetZ(vDist) && 15.f > XMVectorGetY(vDist))
 	{
 		m_pStateController->Change_State(L"Rage");

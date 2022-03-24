@@ -33,16 +33,18 @@ _int CMidBoss_Attack::Tick(const _double& TimeDelta)
 	if (m_pAnimator->Get_AnimController()->Is_Finished())
 	{
 		m_pStateController->Change_State(L"Turn");
-		//cout << "어택->턴" << endl;
 	}
-	cout << "attack" << endl;
 
+	//어택 체크
 	CBoss_Bastion_Judicator* pBoss = (CBoss_Bastion_Judicator*)m_pStateController->Get_GameObject();
-
 	if (nullptr != pBoss)
 	{
+		if (CBoss_Bastion_Judicator::M_BossAnimState::ATTACK_S2 == m_pAnimator->Get_CurrentAnimNode())
+		{
+			//TODO : 일정 범위내에 콜라이더 생겨서 그걸로 충돌처리해야됨
+		}
+
 		pBoss->Set_IsAttack(true);
-		//cout << "보스공격중" << endl;
 	}
 
 	return _int();

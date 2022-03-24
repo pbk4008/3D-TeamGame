@@ -553,7 +553,7 @@ void CMonster_EarthAberrant::OnTriggerEnter(CCollision& collision)
 
 void CMonster_EarthAberrant::Set_IsAttack(const _bool _isAttack)
 {
-	m_bIsAttack = _isAttack;
+	m_IsAttack = _isAttack;
 	if (m_pWeapon)
 		m_pWeapon->Set_IsAttack(_isAttack);
 }

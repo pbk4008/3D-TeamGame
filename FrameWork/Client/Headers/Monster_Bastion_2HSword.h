@@ -52,8 +52,10 @@ private:
 	HRESULT Render_Debug(void);
 
 private:
-	const _int Fall(const _double& _dDeltaTime);
 	virtual void OnTriggerEnter(CCollision& collision) override;
+
+public:
+	void Set_IsAttack(const _bool _isAttack);
 
 private:
 	CModel*				  m_pModel = nullptr;
@@ -70,12 +72,16 @@ private: /* For.Weapon */
 	_bool m_isEquipWeapon = false;
 	unordered_map<wstring, CWeapon*> m_umapWeapons;
 
+private:
+	class CUI_Monster_Panel* m_pPanel = nullptr;
+
 public:
-	_int	m_iHp = 3;
 	_bool	m_bRender = true;
 
 private:
 	_bool	m_isFall = false;
+	_bool	m_bFirstHit = false; //맨처음들어와서 맞았을때 판넬크기바꿔줘야돼서
+	_bool	m_bGroggy = false; //그로기 상태인지 아닌지
 	
 public:
 	static CMonster_Bastion_2HSword* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext);

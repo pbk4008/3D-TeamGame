@@ -25,6 +25,7 @@
 
 //Effect & UI
 #include "Effect_DashDust.h"
+#include "Effect_HitParticle.h"
 #include "UI_Ingame.h"
 #include "UI_Player_HpBar.h"
 #include "UI_Player_HpBar_Red.h"
@@ -153,26 +154,26 @@ HRESULT CLoader::LoadForScene()
 
 HRESULT CLoader::SetUp_Stage1_Object()
 {
-	/*if (FAILED(Load_Stage1FBXLoad()))
-		return E_FAIL;*/
+	//if (FAILED(Load_Stage1FBXLoad()))
+	//	return E_FAIL;
 
-	if (FAILED(Load_Stage1Navi_SkyLoad()))
-		return E_FAIL;
+	//if (FAILED(Load_Stage1Navi_SkyLoad()))
+	//	return E_FAIL;
+	//
+	//if (FAILED(Load_Stage1PlayerLoad()))
+	//	return E_FAIL;
 
-	if (FAILED(Load_Stage1PlayerLoad()))
-		return E_FAIL;
-
-	if (FAILED(Load_Stage1MonsterLoad()))
-		return E_FAIL;
+	//if (FAILED(Load_Stage1MonsterLoad()))
+	//	return E_FAIL;
 
 	//if (FAILED(Load_Stage1BossLoad()))
 	//	return E_FAIL;
 
-	if (FAILED(Load_Stage1StaticUILoad()))
-		return E_FAIL;
-
-	if (FAILED(Load_Stage1UILoad()))
-		return E_FAIL;
+	//if (FAILED(Load_Stage1StaticUILoad()))
+	//	return E_FAIL;
+	//
+	//if (FAILED(Load_Stage1UILoad()))
+	//	return E_FAIL;
 
 	if (FAILED(Load_Stage1EffectLoad()))
 		return E_FAIL;
@@ -476,11 +477,16 @@ HRESULT CLoader::Load_Stage1EffectLoad()
 	{
 		return E_FAIL;
 	}
-	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_Effect"), CEffect_DashDust::Create(m_pDevice, m_pDeviceContext))))
+
+	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_Effect_DashDust"), CEffect_DashDust::Create(m_pDevice, m_pDeviceContext))))
 	{
 		return E_FAIL;
 	}
-	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"Texture_bubble", L"../bin/Resources/Texture/Effect/bubble.tga")))
+	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"Texture_bubble", L"../bin/Resources/Texture/Effect/bubble.dds")))
+	{
+		return E_FAIL;
+	}
+	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_Effect_Hit"), CEffect_HitParticle::Create(m_pDevice, m_pDeviceContext))))
 	{
 		return E_FAIL;
 	}
@@ -582,6 +588,9 @@ HRESULT CLoader::SetUp_Stage1_Prototype()
 		return E_FAIL;
 
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_Animator", CAnimator::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_CharacterController", CCharacterController::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_StateController", CStateController::Create(m_pDevice, m_pDeviceContext))))
@@ -784,6 +793,7 @@ HRESULT CLoader::Load_Stage1MonsterLoad()
 	//if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Monster_Bastion_Sword", CMonster_Bastion_Sword::Create(m_pDevice, m_pDeviceContext))))
 	//	return E_FAIL;
 
+	//_matrix matPivot = XMMatrixIdentity();
 	////Weapon
 	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Weapon_Stargazer", CModel::Create(m_pDevice, m_pDeviceContext,
 	//	"../bin/Resources/Mesh/Stargazer/", "Stargazer(1H Sword).fbx",
@@ -800,7 +810,7 @@ HRESULT CLoader::Load_Stage1MonsterLoad()
 	//if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Monster_Bastion_Shooter", CMonster_Bastion_Shooter::Create(m_pDevice, m_pDeviceContext))))
 	//	return E_FAIL;
 
-	//Bastion_2HSword
+	////Bastion_2HSword
 	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Model_Bastion_2HSword", CModel::Create(m_pDevice, m_pDeviceContext,
 	//	L"../bin/FBX/Monster/Bastion_2HSword_Bin.fbx", CModel::TYPE_ANIM, true))))
 	//	return E_FAIL;

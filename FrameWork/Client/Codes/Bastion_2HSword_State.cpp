@@ -72,7 +72,7 @@ HRESULT CBastion_2HSword_State::Render()
 		return E_FAIL;
 
 #ifdef _DEBUG
-	Render_Debug();
+	//Render_Debug();
 #endif
 
 	return S_OK;
@@ -112,7 +112,7 @@ void CBastion_2HSword_State::OnTriggerEnter(CCollision& collision)
 {
 	if ((_uint)GAMEOBJECT::WEAPON == collision.pGameObject->getTag() && g_pObserver->IsAttack())
 	{
-		static_cast<CMonster_Bastion_2HSword*>(m_pMonster)->m_iHp += -1;
+		static_cast<CMonster_Bastion_2HSword*>(m_pMonster)->Set_CurrentHp(-1);
 		m_pStateController->Change_State(L"Hit");
 	}
 }

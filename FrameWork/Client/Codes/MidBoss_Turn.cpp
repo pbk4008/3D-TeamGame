@@ -30,8 +30,6 @@ _int CMidBoss_Turn::Tick(const _double& TimeDelta)
 
 	m_pAnimator->Tick(TimeDelta);
 
-	cout << "turn" << endl;
-
 	if (m_pAnimator->Get_AnimController()->Is_Finished())
 	{
 		_vector vMonsterPos = m_pTransform->Get_State(CTransform::STATE::STATE_POSITION);

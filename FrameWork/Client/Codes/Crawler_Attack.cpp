@@ -30,6 +30,12 @@ _int CCrawler_Attack::Tick(const _double& TimeDelta)
 
 	m_pAnimator->Tick(TimeDelta);
 
+	CMonster_Crawler* pMonster = (CMonster_Crawler*)m_pStateController->Get_GameObject();
+	if (nullptr != pMonster)
+	{
+		pMonster->Set_IsAttack(true);
+	}
+
 	_fvector vMonsterPos = m_pTransform->Get_State(CTransform::STATE::STATE_POSITION);
 	_fvector vDist = vMonsterPos - g_pObserver->Get_PlayerPos();
 	_float fDistToPlayer = XMVectorGetX(XMVector3Length(vDist));
@@ -43,8 +49,10 @@ _int CCrawler_Attack::Tick(const _double& TimeDelta)
 	{
 		m_pStateController->Change_State(L"Idle");
 		
-		cout << "아이들로 변경" << endl;
+		//cout << "아이들로 변경" << endl;
 	}
+
+
 
 	return _int();
 }

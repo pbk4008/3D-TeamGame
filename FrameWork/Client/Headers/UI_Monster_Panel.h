@@ -79,6 +79,8 @@ private:
 	_float4x4 m_TargetMatrix;
 	Enemy m_EnemyTag = Enemy::ENEMY_END;
 
+	_bool m_bShow = false;
+
 	class CUI_Monster_Back* m_pUIBack = nullptr;
 	class CUI_Monster_Level* m_pUILevel = nullptr;
 	class CUI_Monster_HpBar* m_pUIHpBar = nullptr;

@@ -85,7 +85,7 @@ HRESULT CUI::Render()
 
 void CUI::Free()
 {
-	CGameObject::Free();
+	__super::Free();
 	Safe_Release(m_pBuffer);
 	Safe_Release(m_pTexture);
 	Safe_Release(m_pTrapziumBuffer);

@@ -6,6 +6,8 @@
 #include "Animator.h"
 #include "CharacterController.h"
 
+#include "UI_Monster_Panel.h"
+
 #include "Bastion_Sword_Idle.h"
 #include "Bastion_Sword_Chase.h"
 #include "Bastion_Sword_Attack.h"
@@ -77,8 +79,27 @@ HRESULT CMonster_Bastion_Sword::NativeConstruct(const _uint _iSceneID, void* _pA
 	if (FAILED(Set_State_FSM()))
 		return E_FAIL;
 
-	m_fMaxHp = 3;
+
+	//MonsterBar Panel
+	CUI_Monster_Panel::PANELDESC Desc;
+	Desc.pTargetTransform = m_pTransform;
+	Desc.iEnemyTag = CUI_Monster_Panel::Enemy::SWORD;
+
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_UI", L"Proto_GameObject_UI_Monster_Panel", &Desc,
+		(CGameObject**)&m_pPanel)))
+		return E_FAIL;
+
+	m_pPanel->Set_TargetWorldMatrix(m_pTransform->Get_WorldMatrix());
+
+	m_fMaxHp = 30.f;
 	m_fCurrentHp = m_fMaxHp;
+
+	m_fMaxGroggyGauge = 10.f;
+	m_fGroggyGauge = 0.f;
+
+	m_pPanel->Set_HpBar(Get_HpRatio());
+	m_pPanel->Set_GroggyBar(Get_GroggyGaugeRatio());
+
 	return S_OK;
 }
 
@@ -102,7 +123,32 @@ _int CMonster_Bastion_Sword::Tick(_double _dDeltaTime)
 	Change_State();
 
 	//콜리더 갱신
+
+	if (m_fGroggyGauge >= m_fMaxGroggyGauge)
+	{
+		//스턴상태일때 스턴state에서 현재 그로기 계속 0으로 고정시켜줌
+		m_bGroggy = true;
+		m_pStateController->Change_State(L"Groggy");
+		m_fGroggyGauge = 0.f;
+		m_pPanel->Set_GroggyBar(Get_GroggyGaugeRatio());
+	}
+
+	if (true == m_bGroggy || true == m_bDead)
+	{
+		m_fGroggyGauge = 0.f;
+		m_pPanel->Set_GroggyBar(Get_GroggyGaugeRatio());
+	}
 	
+	if ((_uint)ANIM_TYPE::GROGGY_START == m_pAnimator->Get_CurrentAnimNode())
+	{
+		if (m_pAnimator->Get_AnimController()->Is_Finished())
+		{
+			m_bGroggy = false;
+		}
+	}
+
+	m_pPanel->Set_TargetWorldMatrix(m_pTransform->Get_WorldMatrix());
+
 	return 0;
 }
 
@@ -149,6 +195,36 @@ void CMonster_Bastion_Sword::OnTriggerEnter(CCollision& collision)
 				Hit();
 		}
 	}
+
+	if (true == g_pObserver->IsAttack()) //플레이어공격일때
+	{
+		m_bFirstHit = true; //딱 한번 true로 변경해줌
+
+		if (true == m_bFirstHit)
+		{
+			m_pPanel->Set_BackUIGapY(1.f);
+		}
+
+		if ((_uint)GAMEOBJECT::WEAPON == collision.pGameObject->getTag())
+		{
+			--m_fCurrentHp;
+			m_fGroggyGauge += 2; //TODO::수치정해서바꿔줘야됨
+
+			m_pPanel->Set_HpBar(Get_HpRatio());
+
+			if (false == m_bGroggy)
+			{
+				//그로기 아닐때만 증가할수있게
+				m_pPanel->Set_GroggyBar(Get_GroggyGaugeRatio());
+				m_pStateController->Change_State(L"Hit");
+			}
+		}
+		else
+		{
+
+		}
+	}
+
 }
 
 HRESULT CMonster_Bastion_Sword::SetUp_Components()

@@ -713,10 +713,26 @@ void CSilvermane::OnTriggerEnter(CCollision& collision)
 	{
 		if (static_cast<CWeapon*>(collision.pGameObject)->IsAttack())
 		{
-			--m_fCurrentHp;
+			m_fCurrentHp -= 7;
 		}
 	}
 
+	else if ((_uint)GAMEOBJECT::WEAPON_EARTH == iTag)
+	{
+		if (static_cast<CWeapon*>(collision.pGameObject)->IsAttack())
+		{
+			m_fCurrentHp -= 4;
+		}
+	}
+
+	else if ((_uint)GAMEOBJECT::MONSTER_CRYSTAL == iTag)
+	{
+		_bool a = static_cast<CActor*>(collision.pGameObject)->IsAttack();
+		if (static_cast<CActor*>(collision.pGameObject)->IsAttack())
+		{
+			m_fCurrentHp -= 3;
+		}
+	}
 }
 
 void CSilvermane::OnTriggerExit(CCollision& collision)

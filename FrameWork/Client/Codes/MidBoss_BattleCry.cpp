@@ -29,7 +29,6 @@ _int CMidBoss_BattleCry::Tick(const _double& TimeDelta)
 		return iProgress;
 
 	m_pAnimator->Tick(TimeDelta);
-	cout << "cry" << endl;
 
 	m_pTransform->Face_Target(g_pObserver->Get_PlayerPos());
 

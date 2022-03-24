@@ -127,7 +127,7 @@ void CEffectTool_Dlg::InitialShaderTree()
 
 void CEffectTool_Dlg::InitialTextureTree()
 {
-	HTREEITEM hItem = m_TextureTree.InsertItem(_T("..\\bin\\Resource\\Textures\\Effect\\", hItem));
+	HTREEITEM hItem = m_TextureTree.InsertItem(_T("..\\bin\\Resources\\Texture\\Effect\\", hItem));
 
 	CFileFind fFinder;
 

@@ -29,7 +29,6 @@ _int CMidBoss_Run::Tick(const _double& TimeDelta)
 		return iProgress;
 
 	m_pAnimator->Tick(TimeDelta);
-	cout << "run" << endl;
 
 	m_pTransform->Face_Target(g_pObserver->Get_PlayerPos());
 
