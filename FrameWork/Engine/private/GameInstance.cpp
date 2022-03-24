@@ -497,11 +497,11 @@ CMaterial* CGameInstance::Get_Material(const wstring& _wstrMtrlTag)
 	return m_pMaterial_Manager->Get_Material(_wstrMtrlTag);
 }
 
-const _bool CGameInstance::Raycast(const _float3& _vOrigin, const _float3& _vDir, const _float _fMaxDistance, CGameObject** _ppOutHitObject)
+const _bool CGameInstance::Raycast(RAYCASTDESC & _desc)
 {
 	if (!m_pPhysicSystem)
 		return false;
-	return m_pPhysicSystem->Raycast(_vOrigin, _vDir, _fMaxDistance, _ppOutHitObject);
+	return m_pPhysicSystem->Raycast(_desc);
 }
 
 void CGameInstance::Release_Engine()

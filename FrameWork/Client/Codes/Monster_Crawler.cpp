@@ -53,9 +53,18 @@ HRESULT CMonster_Crawler::NativeConstruct(const _uint _iSceneID, void* _pArg)
 	if (FAILED(Set_State_FSM())) return E_FAIL;
 	if (FAILED(Ready_Weapone())) return E_FAIL;
 
-	/*_vector Pos = { 0.f, 1.f, 3.f, 1.f };
-	m_pTransform->Set_State(CTransform::STATE_POSITION, Pos);*/
+	if (_pArg)
+	{
+		_float3 vPoint = (*(_float3*)_pArg);
 
+		if (FAILED(Set_SpawnPosition(vPoint)))
+			return E_FAIL;
+	}
+	else
+	{
+		_vector Pos = { 0.f, 1.f, 3.f, 1.f };
+		m_pTransform->Set_State(CTransform::STATE_POSITION, Pos);
+	}
 	//MonsterBar Panel
 	//CUI_Monster_Panel::PANELDESC Desc;
 	//Desc.pTargetTransform = m_pTransform;
@@ -151,8 +160,6 @@ void CMonster_Crawler::OnTriggerEnter(CCollision& collision)
 {
 	if ((_uint)GAMEOBJECT::WEAPON == collision.pGameObject->getTag() && g_pObserver->IsAttack() && m_fHp > 0)
 	{
-		m_bRemove = true;
-
 		m_fHp -= 2;
 		m_pStateController->Change_State(L"Flinch_Left");
 		cout << "히트해부렀으" << endl;

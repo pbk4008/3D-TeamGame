@@ -38,15 +38,18 @@ public:
 	UIBARDESC Get_UIDesc() { return m_UIBarDesc; }
 
 public:
-	void Set_TargetHpBar(_float fMaxHp, _float fHp);
+	//void Set_TargetHpBar(_float fMaxHp, _float fHp);
+	void Set_HpRatio(_float Ratio) { m_fHpRatio = Ratio; }
 
 private:
 	UIBARDESC m_UIBarDesc;
 	_float m_fGapX = 0.f;
 	_float m_fGapY = 0.f;
 
-	_float m_fTargetMaxHp = 0.f;
-	_float m_fTargetHp = 0.f;
+	_float m_fHpRatio = 0.f;
+
+	//_float m_fTargetMaxHp = 0.f;
+	//_float m_fTargetHp = 0.f;
 
 private:
 	virtual HRESULT SetUp_Components();

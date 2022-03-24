@@ -158,7 +158,7 @@ public:/* For.SaveManager*/
 	}
 
 public:/* For.PhysX */
-	const _bool Raycast(const _float3& _vOrigin, const _float3& _vDir, const _float _fMaxDistance, CGameObject** _ppOutHitObject);
+	const _bool Raycast(RAYCASTDESC& _desc);
 
 private:
 	CGraphic_Device*			m_pGraphic_Device = nullptr;		

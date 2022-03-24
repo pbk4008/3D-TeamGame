@@ -116,7 +116,7 @@ HRESULT CJumpNode::Ready_Components()
 	m_pAnimationController->SetUp_NextAnimation("SK_Jump_Node.ao|A_Idle_JumpNode");
 
 	CCollider::DESC tColliderDesc;
-	tColliderDesc.eRigidType = ERigidType::Static;
+	tColliderDesc.eRigidType = ERigidType::Dynamic;
 	tColliderDesc.isSceneQuery = true;
 	tColliderDesc.isTrigger = true;
 	tColliderDesc.pGameObject = this;
@@ -129,6 +129,16 @@ HRESULT CJumpNode::Ready_Components()
 	m_pCollider->setPivotMatrix(smatPivot);
 
 	return S_OK;
+}
+
+void CJumpNode::OnTriggerEnter(CCollision& collision)
+{
+	_uint iTag = collision.pGameObject->getTag();
+
+	if ((_uint)SCENEID::SCENE_STATIC == iTag)
+	{
+		int a = 0;
+	}
 }
 
 CJumpNode* CJumpNode::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)

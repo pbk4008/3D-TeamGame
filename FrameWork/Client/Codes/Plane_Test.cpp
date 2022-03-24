@@ -21,6 +21,8 @@ HRESULT CPlane_Test::NativeConstruct_Prototype()
 	if (FAILED(Ready_NaviPoints(L"../Data/NavMesh/Stage_1_Nav.dat")))
 		return E_FAIL;
 
+	m_iObectTag = (_uint)GAMEOBJECT::ENVIRONMENT;
+
 	return S_OK;
 }
 

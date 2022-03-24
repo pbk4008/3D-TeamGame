@@ -80,7 +80,7 @@ HRESULT CJumpTrigger::Ready_Components()
 
 
 	CCollider::DESC tColliderDesc;
-	tColliderDesc.eRigidType = ERigidType::Static;
+	tColliderDesc.eRigidType = ERigidType::Dynamic;
 	tColliderDesc.isSceneQuery = true;
 	tColliderDesc.isTrigger = true;
 	tColliderDesc.pGameObject = this;

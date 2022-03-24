@@ -38,11 +38,7 @@ private:
 	HRESULT Set_State_FSM();
 
 private:
-	const _int Fall(const _double& TimeDelta);
 	virtual void OnTriggerEnter(CCollision& collision) override;
-
-public:
-	void Set_Groggy(_float fGroggy) { m_fGroggy = fGroggy; }
 
 public:
 	const _bool IsAttack() { return m_bIsAttack; }
@@ -58,15 +54,10 @@ private:
 	class CShieldBreaker* m_pWeapon = nullptr;
 
 private:
-	_float fTime = 0.f;
-	_float m_fGroggy = 0.f;
-	_float m_fMaxGroggy = 0.f;
-
-private:
-	_bool	m_isFall = false;
-	_bool m_bFirstHit = false; //맨처음들어와서 맞았을때 판넬크기바꿔줘야돼서
-	_bool m_bGroggy = false;
-	_bool m_bIsAttack = false;
+	_bool	m_bIsFall = false;
+	_bool	m_bFirstHit = false; //맨처음들어와서 맞았을때 판넬크기바꿔줘야돼서
+	_bool	m_bGroggy = false; //그로기 상태인지 아닌지
+	_bool	m_bIsAttack = false; //어택중인지 아닌지
 
 public:
 	static CBoss_Bastion_Judicator* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);

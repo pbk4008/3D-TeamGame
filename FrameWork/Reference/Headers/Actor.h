@@ -20,14 +20,18 @@ protected:
 	virtual _int LateTick(_double TimeDelta);
 	virtual HRESULT Render();
 public:
-	const _float Get_CurrentHpRatio();
+	const _float Get_HpRatio();
+	const _float Get_GroggyGaugeRatio();
 protected:
 	HRESULT Set_SpawnPosition(const _float3 vPoint);
 public:
 	const _bool Get_Dead() { return m_bDead; }
 	_float Get_CurrentHp() { return m_fCurrentHp; }
 	_float Get_MaxHp() { return m_fMaxHp; }
+	_float Get_GroggyGauge() { return m_fGroggyGauge; }
+
 	void Set_CurrentHp(_float fCurrentHp) { m_fCurrentHp = fCurrentHp; }
+	void Set_GroggyGage(_float fGauge) { m_fGroggyGauge = fGauge; }
 	void Set_MaxHp(_float fMaxHp) { m_fMaxHp = fMaxHp; }
 
 	const _bool IsAttack() { return m_IsAttack; }
@@ -37,11 +41,14 @@ public:
 protected:
 	virtual void Free() override;
 protected:
-	_float m_fSpeed;//이동 속도
 	_bool m_bDead;//죽었는지 안죽었는지 판단
 	_bool m_IsAttack;//공격했는지 공격 안했는지
+
+	_float m_fSpeed;//이동 속도
 	_float m_fMaxHp;//최대 체력
 	_float m_fCurrentHp;//현재 체력
+	_float m_fGroggyGauge; //스턴게이지
+	_float m_fMaxGroggyGauge; //스턴게이지
 };
 END
 #endif

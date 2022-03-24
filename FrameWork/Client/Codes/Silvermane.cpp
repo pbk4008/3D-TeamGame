@@ -244,7 +244,7 @@ _int CSilvermane::Tick(_double _dDeltaTime)
 		if (NO_EVENT != iProgress)
 			return iProgress;
 	}
-	
+
 	return _int();
 }
 
@@ -277,6 +277,8 @@ _int CSilvermane::LateTick(_double _dDeltaTime)
 			return iProgress;
 	}
 
+
+	//Raycast_Camera();
 
 	//g_pObserver->Set_PlayerPos(m_pTransform->Get_State(CTransform::STATE_POSITION));
 	return _int();
@@ -838,7 +840,7 @@ void CSilvermane::Add_PlusAngle(const _float _fDeltaAngle)
 
 void CSilvermane::Add_Velocity(const CTransform::STATE _eState, const _double& _dDeltaTime)
 {
-	m_pTransform->Add_Velocity(_eState, m_fMoveSpeed * _dDeltaTime);
+	m_pTransform->Add_Velocity(_eState, m_fMoveSpeed * (_float)_dDeltaTime);
 }
 
 void CSilvermane::Set_Position(const _float3 _vPosition)
@@ -889,8 +891,23 @@ void CSilvermane::Raycast_Camera()
 
 	_vector svCameraPosition = pCameraTransform->Get_State(CTransform::STATE_POSITION);
 	_vector svPosition = m_pTransform->Get_State(CTransform::STATE_POSITION);
+	svPosition += XMVectorSet(0.5f, 1.f, 0.f, 0.f);
 
 
+	RAYCASTDESC tRaycastDesc;
+	XMStoreFloat3(&tRaycastDesc.vOrigin, svPosition);
+	XMStoreFloat3(&tRaycastDesc.vDir, XMVector3Normalize(svCameraPosition - svPosition));
+	tRaycastDesc.fMaxDistance = 4.f;
+	tRaycastDesc.filterData.flags = PxQueryFlag::eANY_HIT | PxQueryFlag::eSTATIC;
+	CGameObject* pHitObject = nullptr;
+	tRaycastDesc.ppOutHitObject = &pHitObject;
+	if (g_pGameInstance->Raycast(tRaycastDesc))
+	{
+		if ((_uint)GAMEOBJECT::ENVIRONMENT == pHitObject->getTag())
+		{
+			m_pCamera->Get_Transform()->Set_State(CTransform::STATE_POSITION, XMVectorSetW(XMLoadFloat3(&tRaycastDesc.vHitPos), 1.f));
+		}
+	}
 }
 
 const _int CSilvermane::Trace_CameraLook(const _double& _dDeltaTime)
@@ -958,9 +975,9 @@ const _int CSilvermane::KeyCheck(const _double& _dDeltaTime)
 	if (!m_isFall)
 	{
 		if (g_pGameInstance->getkeyPress(DIK_UP))
-			m_pTransform->Add_Velocity(XMVectorSet(0.f, 40.f * _dDeltaTime, 0.f, 0.f));
+			m_pTransform->Add_Velocity(XMVectorSet(0.f, 40.f * (_float)_dDeltaTime, 0.f, 0.f));
 		if (g_pGameInstance->getkeyPress(DIK_DOWN))
-			m_pTransform->Add_Velocity(XMVectorSet(0.f, -40.f * _dDeltaTime, 0.f, 0.f));
+			m_pTransform->Add_Velocity(XMVectorSet(0.f, -40.f * (_float)_dDeltaTime, 0.f, 0.f));
 	}
 
 	return _int();
@@ -993,12 +1010,15 @@ const _bool CSilvermane::Raycast_JumpNode(const _double& _dDeltaTime)
 
 	_uint iObjectTag = -1;
 
-	_float3 vOrigin;
-	XMStoreFloat3(&vOrigin, svRayPos);
-	_float3 vDir;
-	XMStoreFloat3(&vDir, svRayDir);
+
+	RAYCASTDESC tRaycastDesc;
+	XMStoreFloat3(&tRaycastDesc.vOrigin, svRayPos);
+	XMStoreFloat3(&tRaycastDesc.vDir, svRayDir);
+	tRaycastDesc.fMaxDistance = 30.f;
+	tRaycastDesc.filterData.flags = PxQueryFlag::eANY_HIT | PxQueryFlag::eDYNAMIC;
 	CGameObject* pHitObject = nullptr;
-	if (g_pGameInstance->Raycast(vOrigin, vDir, 50.f, &pHitObject))
+	tRaycastDesc.ppOutHitObject = &pHitObject;
+	if (g_pGameInstance->Raycast(tRaycastDesc))
 	{
 		if (pHitObject)
 		{

@@ -60,7 +60,6 @@ HRESULT CMonster_Bastion_2HSword::NativeConstruct(const _uint _iSceneID, void* _
 	if (FAILED(Ready_StateFSM()))
 		return E_FAIL;
 
-	
 	m_isFall = true;
 	m_iObectTag = (_uint)GAMEOBJECT::MONSTER_2H;
 

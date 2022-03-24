@@ -59,7 +59,7 @@ HRESULT CBoss_Bastion_Judicator::NativeConstruct(const _uint _iSceneID, void* pA
 	/*_vector Pos = { 0.f, 0.f, 10.f, 1.f };
 	m_pTransform->Set_State(CTransform::STATE_POSITION, Pos);*/
 
-	if (pArg)
+	if (nullptr != pArg)
 	{
 		_float3 vPoint = (*(_float3*)pArg);
 
@@ -78,16 +78,18 @@ HRESULT CBoss_Bastion_Judicator::NativeConstruct(const _uint _iSceneID, void* pA
 
 	m_pPanel->Set_TargetWorldMatrix(m_pTransform->Get_WorldMatrix());
 
-	m_isFall = true;
+	m_bIsFall  = true;
 	m_iObectTag = (_uint)GAMEOBJECT::MIDDLE_BOSS;
 
+	//아래 세팅은 꼭 해줄것, 그래야 UI나옴 초기값 넣어줘야됨
 	m_fMaxHp = 50.f;
 	m_fCurrentHp = m_fMaxHp;
 
-	m_fMaxGroggy = 10.f;
-	m_fGroggy = 0;
+	m_fMaxGroggyGauge = 10.f;
+	m_fGroggyGauge = 0.f;
 
-	m_pPanel->Set_GroggyBar(m_fMaxGroggy, m_fGroggy);
+	m_pPanel->Set_HpBar(Get_HpRatio());
+	m_pPanel->Set_GroggyBar(Get_GroggyGaugeRatio());
 
 	return S_OK;
 }
@@ -120,19 +122,19 @@ _int CBoss_Bastion_Judicator::Tick(_double TimeDelta)
 		m_pStateController->Change_State(L"Death");
 	}
 	
-	if (m_fGroggy >= m_fMaxGroggy)
+	if (m_fGroggyGauge >= m_fMaxGroggyGauge)
 	{
 		//스턴상태일때 스턴state에서 현재 그로기 계속 0으로 고정시켜줌
 		m_bGroggy = true;
 		m_pStateController->Change_State(L"Stun");
-		m_fGroggy = 0.f;
-		m_pPanel->Set_GroggyBar(m_fMaxGroggy, m_fGroggy);
+		m_fGroggyGauge = 0.f;
+		m_pPanel->Set_GroggyBar(Get_GroggyGaugeRatio());
 	}
 	
 	if (true == m_bGroggy || true == m_bDead )
 	{
-		m_fGroggy = 0.f;
-		m_pPanel->Set_GroggyBar(m_fMaxGroggy, m_fGroggy);
+		m_fGroggyGauge = 0.f;
+		m_pPanel->Set_GroggyBar(Get_GroggyGaugeRatio());
 	}
 
 	if (STUN_END == m_pAnimator->Get_CurrentAnimNode())
@@ -143,7 +145,9 @@ _int CBoss_Bastion_Judicator::Tick(_double TimeDelta)
 		}
 	}
 
-	Fall(TimeDelta);
+	if (m_bIsFall)
+		m_pTransform->Fall(TimeDelta);
+
 	m_pCharacterController->Move(TimeDelta, m_pTransform->Get_Velocity());
 
 	m_pPanel->Set_TargetWorldMatrix(m_pTransform->Get_WorldMatrix());
@@ -463,19 +467,6 @@ HRESULT CBoss_Bastion_Judicator::Set_State_FSM()
 	return S_OK;
 }
 
-const _int CBoss_Bastion_Judicator::Fall(const _double& TimeDelta)
-{
-	if (m_isFall)
-	{
-		_vector svPos = m_pTransform->Get_State(CTransform::STATE_POSITION);
-		if (-10.f < XMVectorGetY(svPos))
-		{
-			m_pTransform->Add_Velocity(XMVectorSet(0.f, -9.8f * (_float)TimeDelta, 0.f, 0.f));
-		}
-	}
-	return _int();
-}
-
 void CBoss_Bastion_Judicator::OnTriggerEnter(CCollision& collision)
 {
 
@@ -491,16 +482,17 @@ void CBoss_Bastion_Judicator::OnTriggerEnter(CCollision& collision)
 		if ((_uint)GAMEOBJECT::WEAPON == collision.pGameObject->getTag())
 		{
 			--m_fCurrentHp;
-			m_fGroggy += 2; //TODO::수치정해서바꿔줘야됨
+			m_fGroggyGauge += 2; //TODO::수치정해서바꿔줘야됨
 
-			m_pPanel->Set_HpBar(m_fMaxHp, m_fCurrentHp);
+			m_pPanel->Set_HpBar(Get_HpRatio());
 
 			if (false == m_bGroggy)
 			{	
 				//그로기 아닐때만 증가할수있게
-				m_pPanel->Set_GroggyBar(m_fMaxGroggy, m_fGroggy);
+				m_pPanel->Set_GroggyBar(Get_GroggyGaugeRatio());
 			}
 		}
+
 		else
 		{
 
