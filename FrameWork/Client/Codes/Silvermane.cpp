@@ -814,7 +814,7 @@ const CWeapon::EType CSilvermane::Get_WeaponType() const
 
 void CSilvermane::Set_IsAttack(const _bool _isAttack)
 {
-	m_isAttack = _isAttack;
+	m_IsAttack = _isAttack;
 	if (m_pCurWeapon)
 		m_pCurWeapon->Set_IsAttack(_isAttack);
 }
@@ -842,10 +842,6 @@ void CSilvermane::Set_Position(const _float3 _vPosition)
 	m_pCharacterController->setPosition(_vPosition);
 }
 
-const _bool CSilvermane::IsAttack()
-{
-	return m_isAttack;
-}
 
 const _bool CSilvermane::Change_Weapon(const wstring& _name)
 {

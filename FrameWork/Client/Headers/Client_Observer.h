@@ -32,6 +32,8 @@ public:
 public:
 	//플레이어 공격 셋팅
 	void Set_IsAttack(const _bool bAttack);
+	void Set_Hp(const _float fCurrentHp);
+	void MinusHp(const _float fDamage);
 private:
 	CSilvermane* m_pPlayer;
 public:

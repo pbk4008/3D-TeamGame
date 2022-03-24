@@ -6,11 +6,14 @@
 
 CStargazer::CStargazer(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
 	: CWeapon(_pDevice, _pDeviceContext)
+	, m_pCollider(nullptr)
 {
 }
 CStargazer::CStargazer(const CStargazer& _rhs)
 	: CWeapon(_rhs)
+	, m_pCollider(_rhs.m_pCollider)
 {
+	Safe_AddRef(m_pCollider);
 }
 
 HRESULT CStargazer::NativeConstruct_Prototype()
@@ -42,12 +45,15 @@ _int CStargazer::Tick(_double _dDeltaTime)
 	//무기 가지고 있는 객체의 월드 업데이트
 	Attach_Owner(_dDeltaTime);
 
+	
+	m_pCollider->Tick(_dDeltaTime);
+
 	return _int();
 }
 
 _int CStargazer::LateTick(_double _dDeltaTime)
 {
-	m_pRenderer->Add_RenderGroup(CRenderer::RENDER_ALPHA,this);
+	m_pRenderer->Add_RenderGroup(CRenderer::RENDER_NONALPHA,this);
 
 	return _int();
 }
@@ -84,16 +90,38 @@ HRESULT CStargazer::SetUp_Component()
 	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Model_Weapon_Stargazer", L"Model", (CComponent**)&m_pModel)))
 		return E_FAIL;
 
+	CCapsuleCollider::DESC tDesc;
+	ZeroMemory(&tDesc, sizeof(tDesc));
+
+	tDesc.fHeight = 1.f;
+	tDesc.fRadius = 0.125;
+	tDesc.tColliderDesc.eRigidType = ERigidType::Dynamic;
+	tDesc.tColliderDesc.fDynamicFriction = 0.f;
+	tDesc.tColliderDesc.fStaticFriction = 0.f;
+	tDesc.tColliderDesc.fRestitution = 0.f;
+	tDesc.tColliderDesc.isGravity = false;
+	tDesc.tColliderDesc.isKinematic = false;
+	tDesc.tColliderDesc.isSceneQuery = false;
+	tDesc.tColliderDesc.isTrigger = true;
+	tDesc.tColliderDesc.pGameObject = this;
+
+	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_CapsuleCollider", L"Collider", (CComponent**)&m_pCollider,&tDesc)))
+		return E_FAIL;
+
+	_matrix matPivot = XMMatrixRotationAxis(XMVectorSet(0.f, 1.f, 0.f, 0.f), XMConvertToRadians(90.f))* XMMatrixTranslation(0.f,0.f,1.f);
+
+	m_pCollider->setPivotMatrix(matPivot);
+
 	if (FAILED(SetUp_Material()))
 		return E_FAIL;
 
-	CTransform::TRANSFORMDESC tDesc;
-	ZeroMemory(&tDesc, sizeof(tDesc));
+	CTransform::TRANSFORMDESC tTransformDesc;
+	ZeroMemory(&tTransformDesc, sizeof(tTransformDesc));
 
 	//메인 트랜스폼 셋팅
-	m_pTransform->Set_TransformDesc(tDesc);
+	m_pTransform->Set_TransformDesc(tTransformDesc);
 	//로컬 트랜스폼 셋팅
-	m_pLocalTransform->Set_TransformDesc(tDesc);
+	m_pLocalTransform->Set_TransformDesc(tTransformDesc);
 	
 	return S_OK;
 }
@@ -157,6 +185,30 @@ HRESULT CStargazer::SetUp_Material()
 	return S_OK;
 }
 
+void CStargazer::Check_Attack()
+{
+	if (!m_pOwner)
+		return;
+
+	if (m_pOwner->IsAttack())
+		m_isAttack = true;
+	else
+		m_isAttack = false;
+}
+
+void CStargazer::OnTriggerEnter(CCollision& collision)
+{
+	if (collision.pGameObject->getTag() == (_uint)GAMEOBJECT::PLAYER)
+		g_pObserver->MinusHp(1.f);
+
+}
+
+void CStargazer::OnTriggerExit(CCollision& collision)
+{
+	m_isAttack = false;
+	m_pOwner->Set_IsAttack(false);
+}
+
 
 CStargazer* CStargazer::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
 {
@@ -183,4 +235,5 @@ CGameObject* CStargazer::Clone(const _uint _iSceneID, void* pArg)
 void CStargazer::Free()
 {
 	CWeapon::Free();
+	Safe_Release(m_pCollider);
 }

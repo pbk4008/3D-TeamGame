@@ -93,6 +93,24 @@ void CClient_Observer::Set_IsAttack(const _bool bAttack)
 	m_pPlayer->Set_IsAttack(bAttack);
 }
 
+void CClient_Observer::Set_Hp(const _float fCurrentHp)
+{
+	if (!m_pPlayer)
+		return;
+	m_pPlayer->Set_CurrentHp(fCurrentHp);
+}
+
+void CClient_Observer::MinusHp(const _float fDamage)
+{
+	if (!m_pPlayer)
+		return;
+
+	_float fCurrentHp = Get_HP();
+	
+	fCurrentHp -= fDamage;
+	Set_Hp(fCurrentHp);
+}
+
 void CClient_Observer::Free(void)
 {
 	Safe_Release(m_pPlayer);

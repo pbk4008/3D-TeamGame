@@ -27,12 +27,15 @@ public:
 	const _bool Get_Dead() { return m_bDead; }
 	_float Get_CurrentHp() { return m_fCurrentHp; }
 	void Set_CurrentHp(_float fCurrentHp) { m_fCurrentHp = fCurrentHp; }
+	const _bool IsAttack() { return m_IsAttack; }
+public:
+	virtual void Set_IsAttack(const _bool _isAttack) { m_IsAttack = _isAttack; }
 protected:
 	virtual void Free() override;
 protected:
 	_float m_fSpeed;//이동 속도
 	_bool m_bDead;//죽었는지 안죽었는지 판단
-	_bool m_bAttack;//공격했는지 공격 안했는지
+	_bool m_IsAttack;//공격했는지 공격 안했는지
 	_float m_fMaxHp;//최대 체력
 	_float m_fCurrentHp;//현재 체력
 };
