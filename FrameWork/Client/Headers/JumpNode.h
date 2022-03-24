@@ -25,6 +25,8 @@ public:
 
 	HRESULT Ready_Components();
 
+	virtual void OnTriggerEnter(CCollision& collision) override;
+
 private:
 	CModel* m_pModel = nullptr;
 	CAnimationController* m_pAnimationController = nullptr;

@@ -50,8 +50,6 @@ public:
 	_int Update_Transform();
 	_int Update_PxTransform();
 
-	const _bool Raycast(const _float3& _vOrigin, const _float3& _vDir, const _float _fMaxDistance, CGameObject** _ppOutHitObject);
-
 protected:
 	CPhysicsXSystem* m_pPhsyX = nullptr;
 	PxRigidActor* m_pRigidActor = nullptr;

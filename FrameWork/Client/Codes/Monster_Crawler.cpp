@@ -42,6 +42,12 @@ HRESULT CMonster_Crawler::NativeConstruct_Prototype()
 HRESULT CMonster_Crawler::NativeConstruct(const _uint _iSceneID, void* _pArg)
 {
 	if (FAILED(__super::NativeConstruct(_iSceneID, _pArg)))	return E_FAIL;
+	if (_pArg)
+	{
+		_float3 vPoint = (*(_float3*)_pArg);
+		if (FAILED(Set_SpawnPosition(vPoint)))
+			return E_FAIL;
+	}
 	if (FAILED(SetUp_Components())) return E_FAIL;
 	if (FAILED(Set_Animation_FSM())) return E_FAIL;
 	if (FAILED(Set_State_FSM())) return E_FAIL;
@@ -57,7 +63,11 @@ HRESULT CMonster_Crawler::NativeConstruct(const _uint _iSceneID, void* _pArg)
 		if (FAILED(Set_SpawnPosition(vPoint)))
 			return E_FAIL;
 	}
-
+	else
+	{
+		_vector Pos = { 0.f, 1.f, 3.f, 1.f };
+		m_pTransform->Set_State(CTransform::STATE_POSITION, Pos);
+	}
 	//MonsterBar Panel
 	CUI_Monster_Panel::PANELDESC Desc;
 	Desc.pTargetTransform = m_pTransform;
@@ -82,6 +92,8 @@ HRESULT CMonster_Crawler::NativeConstruct(const _uint _iSceneID, void* _pArg)
 
 	m_pPanel->Set_HpBar(Get_HpRatio());
 	m_pPanel->Set_GroggyBar(Get_GroggyGaugeRatio());
+
+	setActive(false);
 
 	return S_OK;
 }
@@ -203,8 +215,8 @@ HRESULT CMonster_Crawler::SetUp_Components()
 	//_float x = _float(rand()% 3);
 	_float z = _float(rand()% 10) + 3.f;
 
-	_vector Pos = { 0.f, 10.f, z, 1.f };
-	m_pTransform->Set_State(CTransform::STATE_POSITION, Pos);
+	//_vector Pos = { 0.f, 10.f, z, 1.f };
+	//m_pTransform->Set_State(CTransform::STATE_POSITION, Pos);
 
 	CTransform::TRANSFORMDESC Desc;
 	Desc.fSpeedPerSec = 1.f;
@@ -243,7 +255,6 @@ HRESULT CMonster_Crawler::SetUp_Components()
 	if (FAILED(__super::SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_CharacterController", L"CharacterController", (CComponent**)&m_pCharacterController, &tCCTDesc)))
 		return E_FAIL;
 	m_pCharacterController->setOwnerTransform(m_pTransform);
-
 	if (FAILED(__super::SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_StateController", L"Com_StateController", (CComponent**)&m_pStateController)))
 		return E_FAIL;
 	m_pStateController->Set_GameObject(this);

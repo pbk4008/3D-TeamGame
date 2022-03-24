@@ -39,6 +39,20 @@ HRESULT CMonster_Bastion_2HSword::NativeConstruct(const _uint _iSceneID, void* _
 {
 	if (FAILED(__super::NativeConstruct(_iSceneID, _pArg)))
 		return E_FAIL;
+
+	if (_pArg)
+	{
+		_float3 vPoint = (*(_float3*)_pArg);
+		if (FAILED(Set_SpawnPosition(vPoint)))
+			return E_FAIL;
+	}
+	else
+	{
+		_float4 vPosition = { 0.f, 2.f, 20.f, 1.f };
+
+		m_pTransform->Set_State(CTransform::STATE_POSITION, XMLoadFloat4(&vPosition));
+	}
+
 	if (FAILED(Ready_Components())) 
 		return E_FAIL;
 	if (FAILED(Ready_Weapon())) 
@@ -79,7 +93,7 @@ HRESULT CMonster_Bastion_2HSword::NativeConstruct(const _uint _iSceneID, void* _
 	m_isFall = true;
 	m_iObectTag = (_uint)GAMEOBJECT::MONSTER_2H;
 
-
+	setActive(false);
 
 	return S_OK;
 }
@@ -165,7 +179,7 @@ _int CMonster_Bastion_2HSword::LateTick(_double _dDeltaTime)
 		if (NO_EVENT != iProgress) 
 			return iProgress;
 	}
-
+	
 	return _int();
 }
 
@@ -211,12 +225,13 @@ HRESULT CMonster_Bastion_2HSword::Ready_Components()
 	transformDesc.fSpeedPerSec = 2.0f;
 	transformDesc.fRotationPerSec = XMConvertToRadians(90.f);
 	m_pTransform->Set_TransformDesc(transformDesc);
-	_float4 vPosition = { 0.f, 2.f, 20.f, 1.f };
+	//밖으로 뺌
+	/*_float4 vPosition = { 0.f, 2.f, 20.f, 1.f };
 
-	m_pTransform->Set_State(CTransform::STATE_POSITION, XMLoadFloat4(&vPosition));
+	m_pTransform->Set_State(CTransform::STATE_POSITION, XMLoadFloat4(&vPosition));*/
 
 	/* for. Model Com */
-	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STAGE1, L"Model_Bastion_2HSword", L"Model", (CComponent**)&m_pModel)))
+	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Model_Bastion_2HSword", L"Model", (CComponent**)&m_pModel)))
 		return E_FAIL;
 	_matrix matPivot = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(180.f));
 	m_pModel->Set_PivotMatrix(matPivot);
@@ -584,6 +599,9 @@ void CMonster_Bastion_2HSword::Set_IsAttack(const _bool _isAttack)
 	// TODO : 여기 웨폰한테 어택일때 true값 넘겨줘야함! 
 	//if (!m_umapWeapons.empty())
 	//	m_pWeapon->Set_IsAttack(_isAttack);
+
+	m_bRemove = true;
+	m_pStateController->OnTriggerEnter(collision);
 }
 
 CMonster_Bastion_2HSword* CMonster_Bastion_2HSword::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)

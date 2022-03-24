@@ -34,6 +34,8 @@ HRESULT CMonster_BronzeAnimus::NativeConstruct(const _uint _iSceneID, void* _pAr
 
 	_vector Pos = { 0.f, 0.f, 0.f, 1.f };
 	m_pTransform->Set_State(CTransform::STATE_POSITION, Pos);
+
+	setActive(false);
 	return S_OK;
 }
 

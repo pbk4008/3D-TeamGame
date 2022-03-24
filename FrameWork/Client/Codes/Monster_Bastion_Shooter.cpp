@@ -26,6 +26,13 @@ HRESULT CMonster_Bastion_Shooter::NativeConstruct(const _uint _iSceneID, void* _
 	if (FAILED(__super::NativeConstruct(_iSceneID, _pArg)))
 		return E_FAIL;
 
+	if (_pArg)
+	{
+		_float3 vPoint = (*(_float3*)_pArg);
+		if (FAILED(Set_SpawnPosition(vPoint)))
+			return E_FAIL;
+	}
+
 	if (FAILED(Ready_Components()))
 		return E_FAIL;
 
@@ -42,6 +49,7 @@ HRESULT CMonster_Bastion_Shooter::NativeConstruct(const _uint _iSceneID, void* _
 	m_pRenderer->SetRenderButton(CRenderer::PBRHDR, true);
 	m_pRenderer->SetCameraTag(L"Camera_Silvermane");
 
+	setActive(false);
 	return S_OK;
 }
 

@@ -34,6 +34,19 @@ class CCharacterController;
 
 class CGameObject;
 
+typedef struct tagRaycastDesc
+{
+	// int
+	_float3 vOrigin = { 0.f, 0.f, 0.f };
+	_float3 vDir = { 0.f, 0.f, 0.f };
+	_float fMaxDistance = 0.f;
+	PxHitFlags hitFlags = PxHitFlag::eDEFAULT;
+	PxQueryFilterData filterData;
+	// out
+	_float3 vHitPos = { 0.f, 0.f, 0.f };
+	CGameObject** ppOutHitObject = nullptr;
+}RAYCASTDESC;
+
 class CPhysicsXSystem final : public CSingleTon<CPhysicsXSystem>
 {
 	friend CSingleTon;
@@ -48,7 +61,7 @@ public:
 
 private:
 	PxMaterial* Create_Material(const PxReal _staticFriction, const PxReal _dynamicFriction, const PxReal _restitution);
-	PxRigidActor* Create_RigidActor(const ERigidType _eRigidType, const _bool isGravity, const _bool _isKinematic, PxVec3 _pxvPosition = { 0.f, 0.f, 0.f });
+	PxRigidActor* Create_RigidActor(const ERigidType _eRigidType, const _bool isGravity, const _bool _isKinematic, const _bool _isVisualization = true, const PxVec3& _pxvPosition = { 0.f, 0.f, 0.f });
 
 public:
 	HRESULT Create_Box(CBoxCollider* _pCollider);
@@ -62,7 +75,7 @@ public:
 	void Remove_Actor(PxActor* _pActor);
 
 public:
-	const _bool Raycast(const _float3& _vOrigin, const _float3& _vDir, const _float _fMaxDistance, CGameObject** _ppOutHitObject);
+	const _bool Raycast(RAYCASTDESC& _desc);
 
 private:
 	PxDefaultAllocator m_Allocator;

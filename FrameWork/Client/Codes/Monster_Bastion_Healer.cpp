@@ -31,6 +31,18 @@ HRESULT CMonster_Bastion_Healer::NativeConstruct(const _uint _iSceneID, void* _p
 	if (FAILED(__super::NativeConstruct(_iSceneID, _pArg))) 
 		return E_FAIL;
 
+	if (_pArg)
+	{
+		_float3 vPoint = (*(_float3*)_pArg);
+		if (FAILED(Set_SpawnPosition(vPoint)))
+			return E_FAIL;
+	}
+	else
+	{
+		_float4 vPosition = { 3.f, 2.f, 3.f, 1.f };
+		m_pTransform->Set_State(CTransform::STATE_POSITION, XMLoadFloat4(&vPosition));
+	}
+
 	if (FAILED(Ready_Components()))
 		return E_FAIL;
 	if (FAILED(Ready_Weapon()))
@@ -42,12 +54,7 @@ HRESULT CMonster_Bastion_Healer::NativeConstruct(const _uint _iSceneID, void* _p
 
 	m_isFall = true;
 	m_iObectTag = (_uint)GAMEOBJECT::MONSTER_HEALER;
-
-	_float3 vPoint = (*(_float3*)_pArg);
-
-	if (FAILED(Set_SpawnPosition(vPoint)))
-		return E_FAIL;
-
+	setActive(false);
 	return S_OK;
 }
 
@@ -129,7 +136,7 @@ HRESULT CMonster_Bastion_Healer::Render()
 			return E_FAIL;
 	}
 #ifdef _DEBUG
-	Render_Debug();
+	//Render_Debug();
 #endif
 	return S_OK;
 }
@@ -140,13 +147,14 @@ HRESULT CMonster_Bastion_Healer::Ready_Components()
 	transformDesc.fSpeedPerSec = 2.0f;
 	transformDesc.fRotationPerSec = XMConvertToRadians(90.f);
 	m_pTransform->Set_TransformDesc(transformDesc);
-	_float4 vPosition = { 3.f, 2.f, 3.f, 1.f };
+	//¹ÛÀ¸·Î »­
+	//_float4 vPosition = { 3.f, 2.f, 3.f, 1.f };
 
-	m_pTransform->Set_State(CTransform::STATE_POSITION, XMLoadFloat4(&vPosition));
+	//m_pTransform->Set_State(CTransform::STATE_POSITION, XMLoadFloat4(&vPosition));
 
 
 	// ¸ðµ¨
-	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STAGE1, L"Model_Bastion_Healer", L"Model", (CComponent**)&m_pModel)))
+	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Model_Bastion_Healer", L"Model", (CComponent**)&m_pModel)))
 		return E_FAIL;
 	_matrix matPivot = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(180.f));
 	m_pModel->Set_PivotMatrix(matPivot);
@@ -339,6 +347,8 @@ HRESULT CMonster_Bastion_Healer::Ready_StateFSM(void)
 		static_cast<CMonster_FSM*>(pair.second)->Set_Animator(m_pAnimator);
 	}
 	m_pStateController->Change_State(L"Idle");
+
+	return S_OK;
 }
 
 HRESULT CMonster_Bastion_Healer::Render_Debug(void)
@@ -380,7 +390,8 @@ HRESULT CMonster_Bastion_Healer::Render_Debug(void)
 		wstrAnimFinished = L"AnimFinished : FALSE";
 	if (FAILED(g_pGameInstance->Render_Font(TEXT("Font_Arial"), XMVectorSet(0.f, 1.0f, 0.f, 1.f), wstrAnimFinished.c_str(), _float2(950.f, 100.f), _float2(0.6f, 0.6f))))
 		return E_FAIL;
-	 
+
+	return S_OK;
 }
 
 const _int CMonster_Bastion_Healer::Fall(const _double& _dDeltaTime)
