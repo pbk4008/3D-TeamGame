@@ -43,6 +43,9 @@ private:
 	_int Update_TextureList();
 	_int Update_Material();
 	_int Update_AddTextureList();
+	_uint Update_ShaderFile();
+	_uint Update_Type();
+	_uint Click_RadioBtn();
 private:
 	HRESULT Start_Level();
 	CModelObject* Find_Model(const wstring& pModelName);
@@ -64,7 +67,10 @@ private:
 	CRenderer* m_pRenderer;
 	CModelObject* m_pSelModel;
 	CMaterial* m_pSelMaterial;
-	_uint m_iSelMeshIndex;
+	_int m_iSelMeshIndex;
+	_int m_iSelShaderFile;
+	_int m_iCurRadioBtn;
+	_int m_iPreRadioBtn;
 private:
 	CString m_tFbxPath;
 	CString m_tFbxName;
@@ -90,6 +96,7 @@ public:
 	afx_msg void OnTextureAddBtnClick();
 	afx_msg void OnMaterialApplyBtnClick();
 	afx_msg void OnMeshSaveBtnClick();
+	afx_msg void OnChangeShaderFileBtnClick();
 };
 
 

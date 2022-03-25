@@ -16,15 +16,18 @@ public:
 	virtual _int Tick(const _double& _dDeltaTime);
 	virtual _int LateTick(const _double& _dDeltaTime);
 	virtual HRESULT Render();
-
 public:
 	virtual HRESULT EnterState();
 	virtual HRESULT ExitState();
-
+private:
+	void Stun(_double dDeltaTime);
 public:
 	static CBastion_Sword_Groggy* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext, void* _pArg = nullptr);
 private:
 	virtual void Free() override;
+private:
+	_bool m_bStunStart;
+	_float m_fAccStunTime;
 };
 END
 #endif
