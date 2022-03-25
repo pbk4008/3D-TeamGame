@@ -392,6 +392,11 @@ void CPhysicsXSystem::Remove_Actor(PxActor* _pActor)
 		m_pScene->removeActor(*_pActor);
 }
 
+void CPhysicsXSystem::Add_Actor(PxActor* _pActor)
+{
+	m_pScene->addActor(*_pActor);
+}
+
 const _bool CPhysicsXSystem::Raycast(RAYCASTDESC & _desc)
 {
 	PxVec3 origin = ToPxVec3(_desc.vOrigin);

@@ -261,6 +261,7 @@
     <ClInclude Include="..\Headers\Bastion_2HSword_Chaser.h" />
     <ClInclude Include="..\Headers\Bastion_2HSword_Dash.h" />
     <ClInclude Include="..\Headers\Bastion_2HSword_Death.h" />
+    <ClInclude Include="..\Headers\Bastion_2HSword_Groggy.h" />
     <ClInclude Include="..\Headers\Bastion_2HSword_Hit.h" />
     <ClInclude Include="..\Headers\Bastion_2HSword_Idle.h" />
     <ClInclude Include="..\Headers\Bastion_2HSword_Rage.h" />
@@ -268,6 +269,8 @@
     <ClInclude Include="..\Headers\Bastion_Healer_Attack.h" />
     <ClInclude Include="..\Headers\Bastion_Healer_Chaser.h" />
     <ClInclude Include="..\Headers\Bastion_Healer_Chaser_End.h" />
+    <ClInclude Include="..\Headers\Bastion_Healer_Death.h" />
+    <ClInclude Include="..\Headers\Bastion_Healer_Hit.h" />
     <ClInclude Include="..\Headers\Bastion_Healer_Idle.h" />
     <ClInclude Include="..\Headers\Bastion_Healer_State.h" />
     <ClInclude Include="..\Headers\Bastion_Sword_Attack.h" />
@@ -294,6 +297,7 @@
     <ClInclude Include="..\Headers\DebugSystem.h" />
     <ClInclude Include="..\Headers\EarthAberrant_Pick.h" />
     <ClInclude Include="..\Headers\Effect_DashDust.h" />
+    <ClInclude Include="..\Headers\Effect_HitParticle.h" />
     <ClInclude Include="..\Headers\Environment.h" />
     <ClInclude Include="..\Headers\Fury.h" />
     <ClInclude Include="..\Headers\JumpNode.h" />
@@ -488,6 +492,7 @@
     <ClCompile Include="..\Codes\Bastion_2HSword_Chaser.cpp" />
     <ClCompile Include="..\Codes\Bastion_2HSword_Dash.cpp" />
     <ClCompile Include="..\Codes\Bastion_2HSword_Death.cpp" />
+    <ClCompile Include="..\Codes\Bastion_2HSword_Groggy.cpp" />
     <ClCompile Include="..\Codes\Bastion_2HSword_Hit.cpp" />
     <ClCompile Include="..\Codes\Bastion_2HSword_Idle.cpp" />
     <ClCompile Include="..\Codes\Bastion_2HSword_Rage.cpp" />
@@ -495,6 +500,8 @@
     <ClCompile Include="..\Codes\Bastion_Healer_Attack.cpp" />
     <ClCompile Include="..\Codes\Bastion_Healer_Chaser.cpp" />
     <ClCompile Include="..\Codes\Bastion_Healer_Chaser_End.cpp" />
+    <ClCompile Include="..\Codes\Bastion_Healer_Death.cpp" />
+    <ClCompile Include="..\Codes\Bastion_Healer_Hit.cpp" />
     <ClCompile Include="..\Codes\Bastion_Healer_Idle.cpp" />
     <ClCompile Include="..\Codes\Bastion_Healer_State.cpp" />
     <ClCompile Include="..\Codes\Bastion_Sword_Attack.cpp" />
@@ -517,6 +524,7 @@
     <ClCompile Include="..\Codes\Crawler_Ricochet.cpp" />
     <ClCompile Include="..\Codes\Crawler_Walk.cpp" />
     <ClCompile Include="..\Codes\EarthAberrant_Pick.cpp" />
+    <ClCompile Include="..\Codes\Effect_HitParticle.cpp" />
     <ClCompile Include="..\Codes\Fury.cpp" />
     <ClCompile Include="..\Codes\JumpTrigger.cpp" />
     <ClCompile Include="..\Codes\MeshLoader.cpp">

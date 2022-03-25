@@ -96,7 +96,7 @@ void CUITool_Dlg::OnDropFiles(HDROP hDropInfo)
 
 void CUITool_Dlg::InitialTextureTree()
 {
-	HTREEITEM hItem = m_TextureTree.InsertItem(_T("..\\bin\\Resource\\Textures\\UI\\", hItem));
+	HTREEITEM hItem = m_TextureTree.InsertItem(_T("..\\bin\\Resources\\Texture\\UI\\", hItem));
 
 	CFileFind fFinder;
 

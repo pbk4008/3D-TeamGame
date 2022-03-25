@@ -48,6 +48,7 @@ private:
 
 private:
 	const _int Fall(const _double& _dDeltaTime);
+	virtual void OnTriggerEnter(CCollision& collision);
 
 private:
 	CModel* m_pModel = nullptr;

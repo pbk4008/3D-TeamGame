@@ -28,17 +28,13 @@ HRESULT CFury::NativeConstruct_Prototype()
 	CMaterial* pMtrl = nullptr;
 	CTexture* pTexture = nullptr;
 	pMtrl = CMaterial::Create(m_pDevice, m_pDeviceContext, L"Mtrl_Fury", L"../../Reference/ShaderFile/Shader_Weapon.hlsl", CMaterial::EType::Static);
-	pTexture = CTexture::Create(m_pDevice, m_pDeviceContext);
-	pTexture->NativeConstruct_Prototype(L"../Bin/Resources/Mesh/Fury/T_2h_Hammer_Fury_D.dds", 1);
+	pTexture = CTexture::Create(m_pDevice, m_pDeviceContext, L"../Bin/Resources/Mesh/Fury/T_2h_Hammer_Fury_D.dds", 1);
 	pMtrl->Set_Texture("g_DiffuseTexture", TEXTURETYPE::TEX_DIFFUSE, pTexture, 0);
-	pTexture = CTexture::Create(m_pDevice, m_pDeviceContext);
-	pTexture->NativeConstruct_Prototype(L"../Bin/Resources/Mesh/Fury/T_2h_Hammer_Fury_N.dds", 1);
+	pTexture = CTexture::Create(m_pDevice, m_pDeviceContext, L"../Bin/Resources/Mesh/Fury/T_2h_Hammer_Fury_N.dds", 1);
 	pMtrl->Set_Texture("g_BiNormalTexture", TEXTURETYPE::TEX_NORMAL, pTexture, 0);
-	pTexture = CTexture::Create(m_pDevice, m_pDeviceContext);
-	pTexture->NativeConstruct_Prototype(L"../Bin/Resources/Mesh/Fury/T_2h_Hammer_Fury_MRA.dds", 1);
+	pTexture = CTexture::Create(m_pDevice, m_pDeviceContext, L"../Bin/Resources/Mesh/Fury/T_2h_Hammer_Fury_MRA.dds", 1);
 	pMtrl->Set_Texture("g_MRATexture", TEXTURETYPE::TEX_MRA, pTexture, 0);
-	pTexture = CTexture::Create(m_pDevice, m_pDeviceContext);
-	pTexture->NativeConstruct_Prototype(L"../Bin/Resources/Mesh/Fury/T_2h_Hammer_Fury_CEO.dds", 1);
+	pTexture = CTexture::Create(m_pDevice, m_pDeviceContext, L"../Bin/Resources/Mesh/Fury/T_2h_Hammer_Fury_CEO.dds", 1);
 	pMtrl->Set_Texture("g_CEOTexture", TEXTURETYPE::TEX_CEO, pTexture, 0);
 	g_pGameInstance->Add_Material(L"Mtrl_Fury", pMtrl);
 
@@ -68,7 +64,11 @@ _int CFury::Tick(_double _dDeltaTime)
 
 	Attach_FixedBone(_dDeltaTime);
 	Attach_Owner(_dDeltaTime);
-	
+
+	_matrix smatPivot = XMMatrixTranslation(0.f, 0.f, 1.f);
+	m_pCollider->setPivotMatrix(smatPivot);
+	m_pCollider->Tick(_dDeltaTime);
+
 	return _int();
 }
 
@@ -119,6 +119,18 @@ HRESULT CFury::Ready_Components()
 		return E_FAIL;
 	m_pModel->Add_Material(g_pGameInstance->Get_Material(L"Mtrl_Fury"), 0);
 
+
+	CCollider::DESC tColliderDesc;
+	tColliderDesc.isTrigger = true;
+	tColliderDesc.pGameObject = this;
+	CBoxCollider::DESC tBoxColliderDesc;
+	tBoxColliderDesc.tColliderDesc = tColliderDesc;
+	tBoxColliderDesc.vScale = { 1.f, 0.5f, 0.5f };
+	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_BoxCollider", L"Collider", (CComponent**)&m_pCollider, &tBoxColliderDesc)))
+		return E_FAIL;
+	_matrix smatPivot = XMMatrixTranslation(0.f, 0.f, 2.f);
+	m_pCollider->setPivotMatrix(smatPivot);
+
 	return S_OK;
 }
 
@@ -153,6 +165,21 @@ _int CFury::Attach_Owner(const _double& _dDeltaTime)
 	return _int();
 }
 
+void CFury::Set_Equip(const _bool _isEquip, void* _pArg)
+{
+	__super::Set_Equip(_isEquip, _pArg);
+	switch (_isEquip)
+	{
+	case true:
+		m_pCollider->Add_ActorToScene();
+		break;
+	case false:
+		m_pCollider->Remove_ActorFromScene();
+		break;
+	}
+
+}
+
 CFury* CFury::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
 {
 	CFury* pInstance = new CFury(_pDevice, _pDeviceContext);
@@ -177,6 +204,7 @@ CGameObject* CFury::Clone(const _uint _iSceneID, void* _pArg)
 
 void CFury::Free()
 {
+	Safe_Release(m_pCollider);
 
 	__super::Free();
 }

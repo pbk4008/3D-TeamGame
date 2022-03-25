@@ -154,16 +154,16 @@ HRESULT CMFCMainApp::Ready_Component_Prototype()
 		return E_FAIL;
 
 	/* Prototype_Component_Texture_Terrain */
-	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"Plane_Texture", L"../bin/Resource/Textures/Plane_Default.png")))
+	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"Plane_Texture", L"../bin/Resources/Texture/Plane_Default.png")))
 	{
 		return E_FAIL;
 	}
 
-	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"bubble", L"../bin/Resource/Textures/Effect/bubble.dds")))
+	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"bubble", L"../bin/Resources/Texture/Effect/bubble.dds")))
 	{
 		return E_FAIL;
 	}
-	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"Smoke_loop8x8_00", L"../bin/Resource/Textures/Effect/Smoke_loop8x8_00.dds")))
+	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"Smoke_loop8x8_00", L"../bin/Resources/Texture/Effect/Smoke_loop8x8_00.dds")))
 	{
 		return E_FAIL;
 	}
@@ -172,7 +172,7 @@ HRESULT CMFCMainApp::Ready_Component_Prototype()
 	_finddata_t fd;
 	ZeroMemory(&fd, sizeof(_finddata_t));
 
-	intptr_t handle = _findfirst("../bin/Resource/Textures/UI/Static/*.dds", &fd);
+	intptr_t handle = _findfirst("../bin/Resources/Texture/UI/Static/*.dds", &fd);
 
 	if (handle == 0)
 		return E_FAIL;
@@ -180,7 +180,7 @@ HRESULT CMFCMainApp::Ready_Component_Prototype()
 	int iResult = 0;
 	while (iResult != -1)
 	{
-		char szFullPath[MAX_PATH] = "../bin/Resource/Textures/UI/Static/";
+		char szFullPath[MAX_PATH] = "../bin/Resources/Texture/UI/Static/";
 		strcat_s(szFullPath, fd.name);
 
 		_tchar fbxName[MAX_PATH] = L"";
@@ -209,7 +209,7 @@ HRESULT CMFCMainApp::Ready_Component_Prototype()
 	//////////////////////////////////////////Changing////////////////////////////////////////////////
 	ZeroMemory(&fd, sizeof(_finddata_t));
 
-	handle = _findfirst("../bin/Resource/Textures/UI/Dynamic/*.dds", &fd);
+	handle = _findfirst("../bin/Resources/Texture/UI/Dynamic/*.dds", &fd);
 
 	if (handle == 0)
 		return E_FAIL;
@@ -217,7 +217,7 @@ HRESULT CMFCMainApp::Ready_Component_Prototype()
 	iResult = 0;
 	while (iResult != -1)
 	{
-		char szFullPath[MAX_PATH] = "../bin/Resource/Textures/UI/Dynamic/";
+		char szFullPath[MAX_PATH] = "../bin/Resources/Texture/UI/Dynamic/";
 		strcat_s(szFullPath, fd.name);
 
 		_tchar fbxName[MAX_PATH] = L"";

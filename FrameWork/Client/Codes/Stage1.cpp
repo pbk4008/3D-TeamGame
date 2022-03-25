@@ -4,6 +4,7 @@
 #include "Environment.h"
 
 #include "Effect_DashDust.h"
+#include "Effect_HitParticle.h"
 #include "UI_Ingame.h"
 #include "UI_Player_HpBar.h"
 #include "UI_Tuto_Base.h"
@@ -28,24 +29,28 @@ HRESULT CStage1::NativeConstruct()
 	if (FAILED(CLevel::NativeConstruct()))
 		return E_FAIL;
 
-	if (FAILED(Ready_Light())) 
+	if (FAILED(Ready_Light()))
 		return E_FAIL;
 	
-
 	//if (FAILED(Ready_MapObject()))
 	//{
 	//	return E_FAIL;
 	//}
-	/*if (FAILED(Ready_Trigger_Jump()))
-	{
-		return E_FAIL;
-	}*/
+
+	//if (FAILED(Ready_Trigger_Jump()))
+	//{
+	//	return E_FAIL;
+	//}
+
 	if (FAILED(Ready_Player(L"Layer_Silvermane")))
 	{
 		return E_FAIL;
 	}
 	//if (FAILED(Ready_TriggerSystem(L"../bin/SaveData/Trigger/MonsterSpawnTrigger.dat")))
 	//	return E_FAIL;
+
+	if (FAILED(Ready_TriggerSystem(L"../bin/SaveData/Trigger/MonsterSpawnTrigger.dat")))
+		return E_FAIL;
 
 	//if (FAILED(Ready_Boss(L"Layer_Boss")))
 	//{
@@ -57,13 +62,13 @@ HRESULT CStage1::NativeConstruct()
 		return E_FAIL;
 	}
 
-	//Data
+	////Data
 	if (FAILED(Ready_Data_UI(L"../bin/SaveData/UI/UI.dat")))
 	{
 		return E_FAIL;
 	}
-
-	//if (FAILED(Ready_Data_Effect(L"../bin/SaveData/Effect/Effect_Explosion.dat")))
+	
+	//if (FAILED(Ready_Data_Effect()))
 	//{
 	//	return E_FAIL;
 	//}
@@ -188,20 +193,15 @@ HRESULT CStage1::Ready_Boss(const _tchar* LayerTag)
 
 HRESULT CStage1::Ready_Monster(const _tchar* LayerTag)
 {
+	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Proto_GameObject_Monster_Crawler")))
+	//	return E_FAIL;
 
 	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Proto_GameObject_Monster_EarthAberrant")))
 	//	return E_FAIL;
 	
-	//for (int i = 0; i < 3; ++i)
-	//{
-	//	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Proto_GameObject_Monster_Crawler")))
-	//		return E_FAIL;
-	//}
-
-	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Proto_GameObject_Monster_Bastion_2HSword")))
-	//	return E_FAIL;
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Proto_GameObject_Monster_Bastion_2HSword")))
+		return E_FAIL;
 	
-
 	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Proto_GameObject_Monster_BronzeAnimus")))
 	//	return E_FAIL;
 
@@ -309,29 +309,44 @@ HRESULT CStage1::Ready_Light()
 	if (FAILED(g_pGameInstance->Add_Light(m_pDevice, m_pDeviceContext, LightDesc)))
 		return E_FAIL;
 
-	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_SkyBox", L"Proto_GameObject_SkyBox")))
-	//	return E_FAIL;
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_SkyBox", L"Proto_GameObject_SkyBox")))
+		return E_FAIL;
 
 	return S_OK;
 }
 
-HRESULT CStage1::Ready_Data_Effect(const _tchar* pDataFilePath)
+HRESULT CStage1::Ready_Data_Effect()
 {
-	vector<CEffect_DashDust::EFFECTDESC> vecEffect;
-	g_pGameInstance->LoadFile<CEffect_DashDust::EFFECTDESC>(vecEffect, pDataFilePath);
-	
+	/*vector<CEffect_DashDust::EFFECTDESC> vecEffect;
+	g_pGameInstance->LoadFile<CEffect_DashDust::EFFECTDESC>(vecEffect, L"../bin/SaveData/Effect/Effect_Dash.dat");
+
 	for (int i = 0; i < vecEffect.size(); ++i)
 	{
 		wstring Tag = vecEffect[i].TextureTag;
-		wstring FullName = L"Proto_GameObject_Effect";
+		wstring FullName = L"Proto_GameObject_Effect_DashDust";
 
 		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Effect", FullName, &vecEffect[i])))
 		{
 			MSGBOX("Failed to Creating in CStage1::Ready_Effect()");
 			return E_FAIL;
 		}
-	}
+	}*/
 
+
+	vector<CEffect_HitParticle::EFFECTDESC> vecEffect1;
+	g_pGameInstance->LoadFile<CEffect_HitParticle::EFFECTDESC>(vecEffect1, L"../bin/SaveData/Effect/Effect_Explosion.dat");
+
+	for (int i = 0; i < vecEffect1.size(); ++i)
+	{
+		wstring Tag = vecEffect1[i].TextureTag;
+		wstring FullName = L"Proto_GameObject_Effect_Hit";
+
+		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Effect", FullName, &vecEffect1[i])))
+		{
+			MSGBOX("Failed to Creating in CStage1::Ready_Effect()");
+			return E_FAIL;
+		}
+	}
 	return S_OK;
 }
 
@@ -481,7 +496,7 @@ void CStage1::Trgger_Function3()
 	(*iter)->setActive(true);
 
 	//한손검
-	pLayer = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Proto_GameObject_Monster_Bastion_Sword");
+	pLayer = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Layer_Bastion_Sword");
 	if (!pLayer)
 		return;
 
@@ -516,7 +531,7 @@ void CStage1::Trgger_Function4()
 
 void CStage1::Trgger_Function5()
 {
-	list<CGameObject*>* pLayer = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Proto_GameObject_Monster_EarthAberrant");
+	list<CGameObject*>* pLayer = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Layer_EarthAberrant");
 	if (!pLayer)
 		return;
 
@@ -551,7 +566,7 @@ void CStage1::Trgger_Function6()
 	advance(iter, 5);
 	(*iter)->setActive(true);
 
-	 pLayer = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Proto_GameObject_Monster_Crawler");
+	 pLayer = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Layer_Crawler");
 	if (!pLayer)
 		return;
 
@@ -582,7 +597,7 @@ void CStage1::Trgger_Function7()
 	advance(iter, 7);
 	(*iter)->setActive(true);
 
-	pLayer = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Proto_GameObject_Monster_Bastion_Healer");
+	pLayer = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Layer_Healer");
 	if (!pLayer)
 		return;
 
@@ -694,6 +709,7 @@ void CStage1::Trgger_Function11()
 	(*iter)->setActive(true);
 }
 
+//-175 51 422
 void CStage1::Trgger_FunctionBoss()
 {
 	list<CGameObject*>* pLayer = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Layer_Boss");
@@ -774,25 +790,24 @@ HRESULT CStage1::Ready_Trigger_Jump()
 	// 점프 노드들
 	CJumpNode::DESC tJumpNodeDesc;
 	tJumpNodeDesc.vPosition = { 25.f, 5.f, 84.f };
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_JumpNode", L"Proto_GameObject_JumpNode", &tJumpNodeDesc)))
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_JS, L"Layer_JumpNode", L"Proto_GameObject_JumpNode", &tJumpNodeDesc)))
+		return E_FAIL;
+	tJumpNodeDesc.vPosition = { -25.f, 8.f, 100.f };
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_JS, L"Layer_JumpNode", L"Proto_GameObject_JumpNode", &tJumpNodeDesc)))
 		return E_FAIL;
 	tJumpNodeDesc.vPosition = { -176.f, 50.f, 335.f };
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_JumpNode", L"Proto_GameObject_JumpNode", &tJumpNodeDesc)))
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_JS, L"Layer_JumpNode", L"Proto_GameObject_JumpNode", &tJumpNodeDesc)))
 		return E_FAIL;
 
 	// 점프 트리거들
 	CJumpTrigger::DESC tJumpTriggerDesc;
-	tJumpTriggerDesc.vPosition = { -25.f, 6.f, 100.f };
-	tJumpTriggerDesc.vRotation = { 0.f, 0.f, 0.f };
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_JumpTrigger", L"Proto_GameObject_JumpTrigger", &tJumpTriggerDesc)))
-		return E_FAIL;
 	tJumpTriggerDesc.vPosition = { -47.f, 4.5f, 81.f };
 	tJumpTriggerDesc.vRotation = { 0.f, 90.f, 0.f };
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_JumpTrigger", L"Proto_GameObject_JumpTrigger", &tJumpTriggerDesc)))
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_JS, L"Layer_JumpTrigger", L"Proto_GameObject_JumpTrigger", &tJumpTriggerDesc)))
 		return E_FAIL;
 	tJumpTriggerDesc.vPosition = { -136.f, 18.5f, 236.f };
 	tJumpTriggerDesc.vRotation = { 0.f, 0.f, 0.f };
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_JumpTrigger", L"Proto_GameObject_JumpTrigger", &tJumpTriggerDesc)))
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_JS, L"Layer_JumpTrigger", L"Proto_GameObject_JumpTrigger", &tJumpTriggerDesc)))
 		return E_FAIL;
 
 	return S_OK;

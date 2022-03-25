@@ -90,7 +90,7 @@ HRESULT CMonster_EarthAberrant::NativeConstruct(const _uint _iSceneID, void* _pA
 	m_iObectTag = (_uint)GAMEOBJECT::MONSTER_ABERRANT;
 
 	//아래세팅 꼭해줘야됨 
-	m_fMaxHp = 30.f;
+	m_fMaxHp = 3.f;
 	m_fCurrentHp = m_fMaxHp;
 
 	m_fMaxGroggyGauge = 10.f;
@@ -105,6 +105,12 @@ HRESULT CMonster_EarthAberrant::NativeConstruct(const _uint _iSceneID, void* _pA
 
 _int CMonster_EarthAberrant::Tick(_double _dDeltaTime)
 {
+	//나중에지울코드
+	if (!m_bFirst)
+	{
+		m_pPanel->Set_Show(true);
+	}
+	
 	if (0 > __super::Tick(_dDeltaTime))
 	{
 		return -1;
@@ -156,6 +162,14 @@ _int CMonster_EarthAberrant::Tick(_double _dDeltaTime)
 		{
 			m_bGroggy = false;
 		}
+	}
+
+	if (DEATH == m_pAnimatorCom->Get_CurrentAnimNode() && m_pAnimatorCom->Get_AnimController()->Is_Finished())
+	{
+		m_bRemove = true;
+		setActive(false);
+
+		m_pPanel->Set_Show(false);
 	}
 
 	m_pCharacterController->Move(_dDeltaTime, m_pTransform->Get_Velocity());
@@ -562,7 +576,7 @@ void CMonster_EarthAberrant::OnTriggerEnter(CCollision& collision)
 
 void CMonster_EarthAberrant::Set_IsAttack(const _bool _isAttack)
 {
-	m_bIsAttack = _isAttack;
+	m_IsAttack = _isAttack;
 	if (m_pWeapon)
 		m_pWeapon->Set_IsAttack(_isAttack);
 }
@@ -591,7 +605,9 @@ CGameObject* CMonster_EarthAberrant::Clone(const _uint _iSceneID, void* _pArg)
 
 void CMonster_EarthAberrant::Free()
 {
-	Safe_Release(m_pPanel);
+	//Safe_Release(m_pPanel);
+	Safe_Release(m_pCharacterController);
+	Safe_Release(m_pWeapon);
 	Safe_Release(m_pStateController);
 	Safe_Release(m_pAnimatorCom);
 	Safe_Release(m_pModelCom);

@@ -23,7 +23,7 @@ private:
 	HRESULT Ready_UI(const _tchar* LayerTag);
 	HRESULT Ready_Light();
 
-	HRESULT Ready_Data_Effect(const _tchar* pDataFilePath);
+	HRESULT Ready_Data_Effect();
 	HRESULT Ready_Data_UI(const _tchar* pDataFilePath);
 
 	HRESULT Ready_TriggerSystem(const _tchar* pTriggerFile);

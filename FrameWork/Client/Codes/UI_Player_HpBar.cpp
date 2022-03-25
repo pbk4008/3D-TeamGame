@@ -46,7 +46,7 @@ HRESULT CUI_Player_HpBar::NativeConstruct(const _uint _iSceneID, void* pArg)
 		return E_FAIL;
 	}
 
-	_vector vpos = { -400.f, -252.1f, 0.09f, 1.f };
+	_vector vpos = { -400.f, -252.1f, 0.089f, 1.f };
 	m_pTransform->Set_State(CTransform::STATE_POSITION, vpos);
 
 	_vector vScale = { m_Desc.fSize.x,m_Desc.fSize.y,1.f ,1.f };
@@ -55,7 +55,8 @@ HRESULT CUI_Player_HpBar::NativeConstruct(const _uint _iSceneID, void* pArg)
 	m_fGapX = 1.f;
 	m_fGapY = 1.f;
 
-	m_fPlayerMaxHp = 50.f;
+	m_fPlayerMaxHp = g_pObserver->Get_MaxHP();
+	m_fPlayerHp = g_pObserver->Get_HP();
 
 	return S_OK;
 }
@@ -67,23 +68,9 @@ _int CUI_Player_HpBar::Tick(_double TimeDelta)
 
 	m_fPlayerHp = g_pObserver->Get_HP();
 
-	m_fHp = m_fPlayerHp / m_fPlayerMaxHp;
+	m_fRatio = m_fPlayerHp / m_fPlayerMaxHp;
 
-	/*if (g_pGameInstance->getkeyDown(DIK_L))
-	{
-		m_fHp -= 0.1f;
-	}
-	if (g_pGameInstance->getkeyDown(DIK_K))
-	{
-		m_fHp -= 0.4f;
-	}
-	if (g_pGameInstance->getkeyDown(DIK_J))
-	{
-		m_fHp = 1.f;
-		m_fGapX = 1.f;
-	}*/
-
-	if (m_fGapX > m_fHp)
+	if (m_fGapX > m_fRatio)
 	{
 		m_fGapX -= TimeDelta * 1.f;
 	}

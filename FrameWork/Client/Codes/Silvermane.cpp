@@ -229,8 +229,6 @@ _int CSilvermane::Tick(_double _dDeltaTime)
 	Raycast_JumpNode(_dDeltaTime);
 
 
-
-
 	// 무기 업뎃
 	if (m_pCurWeapon)
 	{
@@ -418,6 +416,7 @@ HRESULT CSilvermane::Ready_Components()
 	tCharacterControllerDesc.fDynamicFriction = 0.5f;
 	tCharacterControllerDesc.fRestitution = 0.f;
 	tCharacterControllerDesc.vPosition = { 0.f, 0.f, 0.f };
+	//tCharacterControllerDesc.fSlopeLimit = 45.f;
 	tCharacterControllerDesc.pGameObject = this;
 
 	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_CharacterController", L"CharacterController", (CComponent**)&m_pCharacterController, &tCharacterControllerDesc)))
@@ -680,6 +679,7 @@ HRESULT CSilvermane::Ready_Weapons()
 	}
 	pWeapon->Set_Owner(this);
 	pWeapon->Set_OwnerPivotMatrix(m_pModel->Get_PivotMatrix());
+	pWeapon->Set_Equip(false);
 	m_umapWeapons.emplace(L"Fury", pWeapon);
 	// 방패
 	pWeaponBone = m_pModel->Get_BoneMatrix("weapon_l");
@@ -715,11 +715,28 @@ void CSilvermane::OnTriggerEnter(CCollision& collision)
 	{
 		if (static_cast<CWeapon*>(collision.pGameObject)->IsAttack())
 		{
-			--m_fCurrentHp;
+			m_fCurrentHp -= 7;
+		}
+	}
+
+	else if ((_uint)GAMEOBJECT::WEAPON_EARTH == iTag)
+	{
+		if (static_cast<CWeapon*>(collision.pGameObject)->IsAttack())
+		{
+			m_fCurrentHp -= 4;
 		}
 	}
 	if ((_uint)GAMEOBJECT::WEAPON_BULLET == iTag)
-		--m_fCurrentHp;
+		m_fCurrentHp -= 3;
+
+	else if ((_uint)GAMEOBJECT::MONSTER_CRYSTAL == iTag)
+	{
+		_bool a = static_cast<CActor*>(collision.pGameObject)->IsAttack();
+		if (static_cast<CActor*>(collision.pGameObject)->IsAttack())
+		{
+			m_fCurrentHp -= 3;
+		}
+	}
 }
 
 void CSilvermane::OnTriggerExit(CCollision& collision)
@@ -886,31 +903,6 @@ void CSilvermane::Set_EquipShieldAnim(const _bool _isEquipShield)
 	static_cast<CShield*>(m_pShield)->Set_EquipAnim(_isEquipShield);
 }
 
-void CSilvermane::Raycast_Camera()
-{
-	CTransform* pCameraTransform = m_pCamera->Get_Transform();
-
-	_vector svCameraPosition = pCameraTransform->Get_State(CTransform::STATE_POSITION);
-	_vector svPosition = m_pTransform->Get_State(CTransform::STATE_POSITION);
-	svPosition += XMVectorSet(0.5f, 1.f, 0.f, 0.f);
-
-
-	RAYCASTDESC tRaycastDesc;
-	XMStoreFloat3(&tRaycastDesc.vOrigin, svPosition);
-	XMStoreFloat3(&tRaycastDesc.vDir, XMVector3Normalize(svCameraPosition - svPosition));
-	tRaycastDesc.fMaxDistance = 4.f;
-	tRaycastDesc.filterData.flags = PxQueryFlag::eANY_HIT | PxQueryFlag::eSTATIC;
-	CGameObject* pHitObject = nullptr;
-	tRaycastDesc.ppOutHitObject = &pHitObject;
-	if (g_pGameInstance->Raycast(tRaycastDesc))
-	{
-		if ((_uint)GAMEOBJECT::ENVIRONMENT == pHitObject->getTag())
-		{
-			m_pCamera->Get_Transform()->Set_State(CTransform::STATE_POSITION, XMVectorSetW(XMLoadFloat3(&tRaycastDesc.vHitPos), 1.f));
-		}
-	}
-}
-
 const _int CSilvermane::Trace_CameraLook(const _double& _dDeltaTime)
 {
 	_vector svCameraLook = m_pCamera->Get_Look();
@@ -968,7 +960,7 @@ const _int CSilvermane::KeyCheck(const _double& _dDeltaTime)
 		m_isFall = true;
 	}
 	if (g_pGameInstance->getkeyDown(DIK_NUMPAD9))
-		Set_Position(_float3(-170.f, 65.f, 440.f));
+		Set_Position(_float3(-175.f, 53.f, 384.f));
 
 	if (g_pGameInstance->getkeyDown(DIK_MINUS))
 		m_isFall = !m_isFall;
@@ -1027,10 +1019,6 @@ const _bool CSilvermane::Raycast_JumpNode(const _double& _dDeltaTime)
 		}
 	}
 
-	if(-1 == iObjectTag)
-		return false;
-
-
 	if ((_uint)GAMEOBJECT::JUMP_TRIGGER == iObjectTag)
 	{
 		m_pTargetJumpTrigger = static_cast<CJumpTrigger*>(pHitObject);
@@ -1046,16 +1034,10 @@ const _bool CSilvermane::Raycast_JumpNode(const _double& _dDeltaTime)
 		}
 		return true;
 	}
-	else
-	{
-		m_pTargetJumpTrigger = nullptr;
-		m_fJumpTriggerLookTime = 0.f;
-	}
-
-
-	if ((_uint)GAMEOBJECT::JUMP_NODE == iObjectTag)
+	else if ((_uint)GAMEOBJECT::JUMP_NODE == iObjectTag)
 	{
 		m_pTargetJumpNode = static_cast<CJumpNode*>(pHitObject);
+		m_pTargetJumpNode->setIsPick(true);
 		if (g_pGameInstance->getkeyPress(DIK_C))
 			m_fJumpNodeLookTime += (_float)_dDeltaTime;
 
@@ -1070,8 +1052,17 @@ const _bool CSilvermane::Raycast_JumpNode(const _double& _dDeltaTime)
 	}
 	else
 	{
-		m_pTargetJumpNode = nullptr;
+		if (m_pTargetJumpNode)
+		{
+			m_pTargetJumpNode->setIsPick(false);
+			m_pTargetJumpNode = nullptr;
+		}
+		if (m_pTargetJumpTrigger)
+		{
+			m_pTargetJumpTrigger = nullptr;
+		}
 		m_fJumpNodeLookTime = 0.f;
+		m_fJumpTriggerLookTime = 0.f;
 	}
 
 	return false;

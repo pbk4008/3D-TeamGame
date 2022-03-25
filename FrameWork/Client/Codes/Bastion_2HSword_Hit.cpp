@@ -78,10 +78,8 @@ void CBastion_2HSword_Hit::Look_Monster(void)
 {
 	CAnimation* pAnim = m_pAnimator->Get_CurrentAnimation();
 
-	if (pAnim->Is_Finished() && 0 < static_cast<CMonster_Bastion_2HSword*>(m_pMonster)->m_iHp)
+	if (pAnim->Is_Finished() && 0 < m_pMonster->Get_CurrentHp())
 		m_pStateController->Change_State(L"Idle");
-	else if (0 >= static_cast<CMonster_Bastion_2HSword*>(m_pMonster)->m_iHp)
-		m_pStateController->Change_State(L"Death");
 }
 
 CBastion_2HSword_Hit* CBastion_2HSword_Hit::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext, void* _pArg)

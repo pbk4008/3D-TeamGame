@@ -2,6 +2,7 @@
 #include "Bastion_2HSword_State.h"
 #include "Monster_Bastion_2HSword.h"
 #include "Animation.h"
+#include "UI_Monster_Panel.h"	
 
 CBastion_2HSword_State::CBastion_2HSword_State(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
 	: CMonster_FSM(_pDevice, _pDeviceContext)
@@ -38,9 +39,6 @@ _int CBastion_2HSword_State::Tick(const _double& _dDeltaTime)
 	m_bPlayerAttack = false;
 	m_bRageOn = false;
 
-	//if (g_pObserver->Get_IsAttack())
-	//	m_bPlayerAttack = true;
-
 	if (3.5f < fDistToPlayer && 10.0f > fDistToPlayer)
 	{
 		m_pTransform->Face_Target(g_pObserver->Get_PlayerPos());
@@ -52,6 +50,20 @@ _int CBastion_2HSword_State::Tick(const _double& _dDeltaTime)
 
 	if (3.5f > fDistToPlayer)
 		m_bAttackOn = true;
+
+	if (m_pMonster->Get_GroggyGauge() >= MAXGROOGUGAGUE)
+	{
+		//스턴상태일때 스턴state에서 현재 그로기 계속 0으로 고정시켜줌
+		CMonster_Bastion_2HSword* pMonster = static_cast<CMonster_Bastion_2HSword*>(m_pMonster);
+
+		pMonster->m_bGroggy = true;
+		pMonster->Set_GroggyGauge(0.f);
+		pMonster->m_pPanel->Set_GroggyBar(pMonster->Get_GroggyGaugeRatio());
+		m_pStateController->Change_State(L"Groggy");
+	}
+
+	if (0 >= m_pMonster->Get_CurrentHp())
+		m_pStateController->Change_State(L"Death");
 
 	return _int();
 }
@@ -72,7 +84,7 @@ HRESULT CBastion_2HSword_State::Render()
 		return E_FAIL;
 
 #ifdef _DEBUG
-	//Render_Debug();
+	Render_Debug();
 #endif
 
 	return S_OK;
@@ -105,15 +117,45 @@ void CBastion_2HSword_State::Look_Player(void)
 
 void CBastion_2HSword_State::Look_Monster(void)
 {
-
+	if (0 >= m_pMonster->Get_CurrentHp())
+	{
+		dynamic_cast<CMonster_Bastion_2HSword*>(m_pMonster)->Set_Dead();
+		m_pStateController->Change_State(L"Death");
+	}
 }
 
 void CBastion_2HSword_State::OnTriggerEnter(CCollision& collision)
 {
-	if ((_uint)GAMEOBJECT::WEAPON == collision.pGameObject->getTag() && g_pObserver->IsAttack())
+
+	CMonster_Bastion_2HSword* Sword_2H = static_cast<CMonster_Bastion_2HSword*>(m_pMonster);
+
+	if (true == g_pObserver->IsAttack()) //플레이어공격일때
 	{
-		static_cast<CMonster_Bastion_2HSword*>(m_pMonster)->m_iHp += -1;
-		m_pStateController->Change_State(L"Hit");
+		Sword_2H->m_bFirstHit = true; //딱 한번 true로 변경해줌
+
+		if (true == Sword_2H->m_bFirstHit)
+		{
+			Sword_2H->m_pPanel->Set_BackUIGapY(1.f);
+		}
+
+		if ((_uint)GAMEOBJECT::WEAPON == collision.pGameObject->getTag())
+		{
+			Sword_2H->Set_Current_HP(-5.f);
+			Sword_2H->Set_GroggyGauge(2); //TODO::수치정해서바꿔줘야됨
+
+			Sword_2H->m_pPanel->Set_HpBar(Sword_2H->Get_HpRatio());
+
+			if (false == Sword_2H->m_bGroggy)
+			{
+				//그로기 아닐때만 증가할수있게
+				Sword_2H->m_pPanel->Set_GroggyBar(Sword_2H->Get_GroggyGaugeRatio());
+				m_pStateController->Change_State(L"Hit");
+			}
+		}
+		else
+		{
+			m_pStateController->Change_State(L"Idle");
+		}
 	}
 }
 

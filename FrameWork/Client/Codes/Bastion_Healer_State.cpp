@@ -190,7 +190,11 @@ void CBastion_Healer_State::Check_Attack(const _double& _dDeltaTime)
 
 void CBastion_Healer_State::OnTriggerEnter(CCollision& collision)
 {
-	int a = 10;
+	if ((_uint)GAMEOBJECT::WEAPON == collision.pGameObject->getTag() && g_pObserver->IsAttack())
+	{
+		static_cast<CMonster_Bastion_Healer*>(m_pMonster)->m_iHp += -1;
+		m_pStateController->Change_State(L"Hit");
+	}
 }
 
 CBastion_Healer_State* CBastion_Healer_State::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext, void* _pArg)

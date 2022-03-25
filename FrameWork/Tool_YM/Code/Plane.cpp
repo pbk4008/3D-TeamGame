@@ -61,11 +61,10 @@ _int CPlane::Tick(_double TimeDelta)
 	return _int();
 }
 
+
 _int CPlane::LateTick(_double TimeDelta)
 {
 	m_pRenderer->Add_RenderGroup(CRenderer::RENDER_UI, this);
-
-
 	Update_CellPos();
 	return _int();
 }
@@ -145,13 +144,13 @@ HRESULT CPlane::Make_NavigationCell(CCell* _pCell/*= nullptr*/)
 
 	if (nullptr == _pCell)
 	{
-		CCW_Sort((m_fPoints));
+		//CCW_Sort((m_fPoints));
 		pCell = CCell::Create(m_pDevice, m_pDeviceContext, m_fPoints, m_pNavigationCom->m_Cells.size());
 	}
 	else
 	{
 		memcpy(m_fPoints, _pCell->m_vPoint, sizeof(_float3) * CCell::POINT_END);
-		CCW_Sort((m_fPoints));
+		//CCW_Sort((m_fPoints));
 		pCell = CCell::Create(m_pDevice, m_pDeviceContext, *m_fPoints, m_pNavigationCom->m_Cells.size());
 	}
 

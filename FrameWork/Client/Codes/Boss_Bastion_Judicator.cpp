@@ -37,8 +37,13 @@ HRESULT CBoss_Bastion_Judicator::NativeConstruct(const _uint _iSceneID, void* pA
 	if (FAILED(__super::NativeConstruct(_iSceneID, pArg)))
 		return E_FAIL;
 
-	_vector Pos = { -170.f, 65.f, 460.f, 1.f };
-	m_pTransform->Set_State(CTransform::STATE_POSITION, Pos);
+	if (nullptr != pArg)
+	{
+		_float3 vPoint = (*(_float3*)pArg);
+
+		if (FAILED(Set_SpawnPosition(vPoint)))
+			return E_FAIL;
+	}
 
 	if (FAILED(SetUp_Components()))
 		return E_FAIL;
@@ -59,13 +64,7 @@ HRESULT CBoss_Bastion_Judicator::NativeConstruct(const _uint _iSceneID, void* pA
 	/*_vector Pos = { 0.f, 0.f, 10.f, 1.f };
 	m_pTransform->Set_State(CTransform::STATE_POSITION, Pos);*/
 
-	if (nullptr != pArg)
-	{
-		_float3 vPoint = (*(_float3*)pArg);
-
-		if (FAILED(Set_SpawnPosition(vPoint)))
-			return E_FAIL;
-	}
+	
 
 	//MidBossBar Panel
 	CUI_Monster_Panel::PANELDESC Desc;
@@ -82,7 +81,7 @@ HRESULT CBoss_Bastion_Judicator::NativeConstruct(const _uint _iSceneID, void* pA
 	m_iObectTag = (_uint)GAMEOBJECT::MIDDLE_BOSS;
 
 	//아래 세팅은 꼭 해줄것, 그래야 UI나옴 초기값 넣어줘야됨
-	m_fMaxHp = 50.f;
+	m_fMaxHp = 5.f;
 	m_fCurrentHp = m_fMaxHp;
 
 	m_fMaxGroggyGauge = 10.f;
@@ -96,6 +95,13 @@ HRESULT CBoss_Bastion_Judicator::NativeConstruct(const _uint _iSceneID, void* pA
 
 _int CBoss_Bastion_Judicator::Tick(_double TimeDelta)
 {
+	//나중에지울코드
+	if (!m_bFirst)
+	{
+		m_pPanel->Set_Show(true);
+	}
+
+
 	if (0 > __super::Tick(TimeDelta))
 	{
 		return -1;
@@ -147,6 +153,17 @@ _int CBoss_Bastion_Judicator::Tick(_double TimeDelta)
 
 	if (m_bIsFall)
 		m_pTransform->Fall(TimeDelta);
+
+
+	if (DEATH == m_pAnimator->Get_CurrentAnimNode())
+	{
+		if (m_pAnimator->Get_CurrentAnimation()->Is_Finished())
+		{
+			m_bRemove = true;
+			m_pPanel->Set_Show(false);
+			setActive(false);
+		}
+	}
 
 	m_pCharacterController->Move(TimeDelta, m_pTransform->Get_Velocity());
 
@@ -502,7 +519,7 @@ void CBoss_Bastion_Judicator::OnTriggerEnter(CCollision& collision)
 
 void CBoss_Bastion_Judicator::Set_IsAttack(const _bool _isAttack)
 {
-	m_bIsAttack = _isAttack;
+	m_IsAttack = _isAttack;
 	if (m_pWeapon)
 		m_pWeapon->Set_IsAttack(_isAttack);
 }
@@ -532,7 +549,9 @@ CGameObject* CBoss_Bastion_Judicator::Clone(const _uint _iSceneID, void* pArg)
 
 void CBoss_Bastion_Judicator::Free()
 {
-	Safe_Release(m_pPanel);
+	//Safe_Release(m_pPanel);
+	Safe_Release(m_pCharacterController);
+	Safe_Release(m_pWeapon);
 	Safe_Release(m_pStateController);
 	Safe_Release(m_pAnimator);
 	Safe_Release(m_pModelCom);

@@ -206,6 +206,6 @@ CGameObject* CEarthAberrant_Pick::Clone(const _uint _iSceneID, void* pArg)
 
 void CEarthAberrant_Pick::Free()
 {
-
+	Safe_Release(m_pCollider);
 	__super::Free();
 }

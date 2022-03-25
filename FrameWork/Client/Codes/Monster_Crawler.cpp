@@ -3,6 +3,7 @@
 
 #include "UI_Monster_Panel.h"
 
+#include "Animation.h"
 #include "Crawler_Idle.h"
 #include "Crawler_Walk.h"
 #include "Crawler_Attack.h"
@@ -23,7 +24,7 @@ CMonster_Crawler::CMonster_Crawler(const CMonster_Crawler& _rhs)
 void CMonster_Crawler::Clear_Physix()
 {
 
-	m_pCollider->Remove_Actor();
+	m_pCollider->Remove_ActorFromScene();
 	m_pCharacterController->Remove_CCT();
 	Safe_Release(m_pCollider);
 	Safe_Release(m_pCharacterController);
@@ -53,7 +54,10 @@ HRESULT CMonster_Crawler::NativeConstruct(const _uint _iSceneID, void* _pArg)
 	if (FAILED(Set_State_FSM())) return E_FAIL;
 	if (FAILED(Ready_Weapone())) return E_FAIL;
 
-	if (_pArg)
+	/*_vector Pos = { 0.f, 1.f, 3.f, 1.f };
+	m_pTransform->Set_State(CTransform::STATE_POSITION, Pos);*/
+
+	if (nullptr != _pArg)
 	{
 		_float3 vPoint = (*(_float3*)_pArg);
 
@@ -66,52 +70,85 @@ HRESULT CMonster_Crawler::NativeConstruct(const _uint _iSceneID, void* _pArg)
 		m_pTransform->Set_State(CTransform::STATE_POSITION, Pos);
 	}
 	//MonsterBar Panel
-	//CUI_Monster_Panel::PANELDESC Desc;
-	//Desc.pTargetTransform = m_pTransform;
-	//Desc.iEnemyTag = CUI_Monster_Panel::Enemy::CRAWLER;
+	CUI_Monster_Panel::PANELDESC Desc;
+	Desc.pTargetTransform = m_pTransform;
+	Desc.iEnemyTag = CUI_Monster_Panel::Enemy::CRAWLER;
 
-	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_UI", L"Proto_GameObject_UI_Monster_Panel", &Desc,
-	//	(CGameObject**)&m_pPanel)))
-	//	return E_FAIL;
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_UI", L"Proto_GameObject_UI_Monster_Panel", &Desc,
+		(CGameObject**)&m_pPanel)))
+		return E_FAIL;
 
-	//m_pPanel->Set_TargetWorldMatrix(m_pTransform->Get_WorldMatrix());
+	m_pPanel->Set_TargetWorldMatrix(m_pTransform->Get_WorldMatrix());
+
+
+	m_bIsFall = true;
+
+	m_iObectTag = (_uint)GAMEOBJECT::MONSTER_CRYSTAL;
+
+	m_fMaxHp = 3.f;
+	m_fCurrentHp = m_fMaxHp;
+
+	m_fMaxGroggyGauge = 3.f;
+	m_fGroggyGauge = 0.f;
+
+	m_pPanel->Set_HpBar(Get_HpRatio());
+	m_pPanel->Set_GroggyBar(Get_GroggyGaugeRatio());
+
 	setActive(false);
+
 	return S_OK;
 }
 
 _int CMonster_Crawler::Tick(_double _dDeltaTime)
 {	
+	//나중에지울코드
+	if (!m_bFirst)
+	{
+		m_pPanel->Set_Show(true);
+	}
+
+	
+
 	m_pTransform->Set_Velocity(XMVectorZero());
 
-	//m_pPanel->Set_TargetWorldMatrix(m_pTransform->Get_WorldMatrix());
+	m_pPanel->Set_TargetWorldMatrix(m_pTransform->Get_WorldMatrix());
 
-	//m_pModelCom->Update_CombinedTransformationMatrix(_dDeltaTime);
-	//m_pAnimControllerCom->Tick(_dDeltaTime);
 	_int iProgress = m_pStateController->Tick(_dDeltaTime);
 	if (NO_EVENT != iProgress)
 		return iProgress;
 
-	if (g_pGameInstance->getkeyDown(DIK_NUMPAD5))
+	if (0 >= m_fCurrentHp)
+	{
+		m_bDead = true;
+		m_pStateController->Change_State(L"Death");
+	}
+
+	
+	/*if (g_pGameInstance->getkeyDown(DIK_NUMPAD5))
 	{
 		--m_fHp;
-		//m_pPanel->Set_HpBar(m_fMaxHp, m_fHp);
+		m_pPanel->Set_HpBar(m_fMaxHp, m_fHp);
 		cout << m_fHp << endl;
 
 		m_pStateController->Change_State(L"Flinch_Left");
-	}
+	}*/
 	
 	m_pCollider->Tick(_dDeltaTime);
 
-	Fall(_dDeltaTime);
+	if (m_bIsFall)
+		m_pTransform->Fall(_dDeltaTime);
+
+	if (DEATH == m_pAnimatorCom->Get_CurrentAnimNode())
+	{
+		if (m_pAnimatorCom->Get_CurrentAnimation()->Is_Finished())
+		{
+			m_bRemove = true;
+			m_pPanel->Set_Show(false);
+			setActive(false);
+		}
+	}
+
 	m_pCharacterController->Move(_dDeltaTime, m_pTransform->Get_Velocity());
-
-
-	//if (0.f >= m_fHp)
-	//{
-	//	m_pStateController->Change_State(L"Death");
-	//}
-
-	//m_pPanel->Set_TargetWorldMatrix(m_pTransform->Get_WorldMatrix());
 
 	return 0;
 }
@@ -127,7 +164,6 @@ _int CMonster_Crawler::LateTick(_double _dDeltaTime)
 	{
 		return iProgress;
 	}
-	
 
 	return 0;
 }
@@ -158,26 +194,40 @@ HRESULT CMonster_Crawler::Render()
 
 void CMonster_Crawler::OnTriggerEnter(CCollision& collision)
 {
-	if ((_uint)GAMEOBJECT::WEAPON == collision.pGameObject->getTag() && g_pObserver->IsAttack() && m_fHp > 0)
+	if (true == g_pObserver->IsAttack()) //플레이어공격일때
 	{
-		m_fHp -= 2;
-		m_pStateController->Change_State(L"Flinch_Left");
-		cout << "히트해부렀으" << endl;
+		m_bFirstHit = true; //딱 한번 true로 변경해줌
+
+		if (true == m_bFirstHit)
+		{
+			m_pPanel->Set_BackUIGapY(1.f);
+		}
+
+		if ((_uint)GAMEOBJECT::WEAPON == collision.pGameObject->getTag())
+		{
+			m_fCurrentHp -= 2;
+			m_fGroggyGauge += 2; //TODO::수치정해서바꿔줘야됨
+
+			m_pPanel->Set_HpBar(Get_HpRatio());
+
+			if (false == m_bGroggy)
+			{
+				//그로기 아닐때만 증가할수있게
+				m_pPanel->Set_GroggyBar(Get_GroggyGaugeRatio());
+				m_pStateController->Change_State(L"Flinch_Left");
+			}
+		}
+		else
+		{
+
+		}
 	}
 
 }
 
-const _int CMonster_Crawler::Fall(const _double& _dDeltaTime)
+void CMonster_Crawler::Set_IsAttack(const _bool _isAttack)
 {
-	if (m_isFall)
-	{
-		_vector svPos = m_pTransform->Get_State(CTransform::STATE_POSITION);
-		if (-10.f < XMVectorGetY(svPos))
-		{
-			m_pTransform->Add_Velocity(XMVectorSet(0.f, -9.8f * (_float)_dDeltaTime, 0.f, 0.f));
-		}
-	}
-	return _int();
+	m_IsAttack = _isAttack;
 }
 
 HRESULT CMonster_Crawler::SetUp_Components()
@@ -249,7 +299,7 @@ HRESULT CMonster_Crawler::Ready_Weapone()
 	_matrix smatPviot = XMMatrixRotationY(XMConvertToRadians(90.f)) * XMMatrixTranslation(0.f, 0.5f, 0.5f);
 	m_pCollider->setPivotMatrix(smatPviot);
 
-	m_pCollider->setActive(false);
+	//m_pCollider->setActive(true);
 
 	return S_OK;
 }
@@ -375,7 +425,7 @@ void CMonster_Crawler::Free()
 		Safe_Release(m_pCharacterController);
 	}
 
-	Safe_Release(m_pPanel);
+	//Safe_Release(m_pPanel);
 	Safe_Release(m_pStateController);
 	Safe_Release(m_pAnimatorCom);
 	Safe_Release(m_pModelCom);

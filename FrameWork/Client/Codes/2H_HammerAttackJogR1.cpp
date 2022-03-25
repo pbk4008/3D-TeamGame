@@ -26,7 +26,7 @@ _int C2H_HammerAttackJogR1::Tick(const _double& _dDeltaTime)
 
 	if (m_pAnimationController->Is_Finished())
 	{
-		m_pStateController->Change_State(L"1H_SwordIdle");
+		m_pStateController->Change_State(L"2H_HammerIdle");
 		return STATE_CHANGE;
 	}
 

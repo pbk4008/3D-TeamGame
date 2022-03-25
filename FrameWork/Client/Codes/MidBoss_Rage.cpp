@@ -32,8 +32,6 @@ _int CMidBoss_Rage::Tick(const _double& TimeDelta)
 
 	m_pTransform->Face_Target(g_pObserver->Get_PlayerPos());
 
-	cout << "Rage" << endl;
-
 	if (m_pAnimator->Get_CurrentAnimation()->Is_Finished())
 	{
 		m_pStateController->Change_State(L"BattleCry");
