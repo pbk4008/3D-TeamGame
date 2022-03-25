@@ -20,6 +20,8 @@ public:
 public:
 	virtual _int KeyCheck(const _double& _dDeltaTime) override;
 
+	virtual void OnTriggerExit(CCollision& collision) override;
+
 private:
 	_bool m_isJumpEnd = false;
 

@@ -298,6 +298,7 @@
     <ClInclude Include="..\Headers\DebugSystem.h" />
     <ClInclude Include="..\Headers\EarthAberrant_Pick.h" />
     <ClInclude Include="..\Headers\Effect_DashDust.h" />
+    <ClInclude Include="..\Headers\Effect_HitParticle.h" />
     <ClInclude Include="..\Headers\Environment.h" />
     <ClInclude Include="..\Headers\Fury.h" />
     <ClInclude Include="..\Headers\JumpNode.h" />
@@ -311,7 +312,9 @@
     <ClInclude Include="..\Headers\MidBoss_Attack.h" />
     <ClInclude Include="..\Headers\MidBoss_BattleCry.h" />
     <ClInclude Include="..\Headers\MidBoss_Death.h" />
+    <ClInclude Include="..\Headers\MidBoss_Idle.h" />
     <ClInclude Include="..\Headers\MidBoss_Rage.h" />
+    <ClInclude Include="..\Headers\MidBoss_Run.h" />
     <ClInclude Include="..\Headers\MidBoss_Stun.h" />
     <ClInclude Include="..\Headers\MidBoss_Turn.h" />
     <ClInclude Include="..\Headers\Monster_Bastion_2HSword.h" />
@@ -383,6 +386,7 @@
     <ClInclude Include="..\Headers\Traverse_Jump400Jog.h" />
     <ClInclude Include="..\Headers\Traverse_JumpNodeJog.h" />
     <ClInclude Include="..\Headers\Treasure_Chest.h" />
+    <ClInclude Include="..\Headers\TriggerSystem.h" />
     <ClInclude Include="..\Headers\UI_Ingame.h" />
     <ClInclude Include="..\Headers\UI_Monster_Back.h" />
     <ClInclude Include="..\Headers\UI_Monster_GroggyBar.h" />
@@ -513,6 +517,7 @@
     <ClCompile Include="..\Codes\Crawler_Ricochet.cpp" />
     <ClCompile Include="..\Codes\Crawler_Walk.cpp" />
     <ClCompile Include="..\Codes\EarthAberrant_Pick.cpp" />
+    <ClCompile Include="..\Codes\Effect_HitParticle.cpp" />
     <ClCompile Include="..\Codes\Fury.cpp" />
     <ClCompile Include="..\Codes\JumpTrigger.cpp" />
     <ClCompile Include="..\Codes\MeshLoader.cpp">
@@ -522,7 +527,9 @@
     <ClCompile Include="..\Codes\MidBoss_BattleCry.cpp" />
     <ClCompile Include="..\Codes\JumpNode.cpp" />
     <ClCompile Include="..\Codes\MidBoss_Death.cpp" />
+    <ClCompile Include="..\Codes\MidBoss_Idle.cpp" />
     <ClCompile Include="..\Codes\MidBoss_Rage.cpp" />
+    <ClCompile Include="..\Codes\MidBoss_Run.cpp" />
     <ClCompile Include="..\Codes\MidBoss_Stun.cpp" />
     <ClCompile Include="..\Codes\MidBoss_Turn.cpp" />
     <ClCompile Include="..\Codes\Monster_Bastion_2HSword.cpp" />

@@ -13,6 +13,7 @@ CGameObject::CGameObject()
 	, m_bCheckCollider(false)
 	, m_iObectTag(0)
 	, m_iSceneID(-1)
+	, m_bRemove(false)
 {
 }
 
@@ -25,6 +26,7 @@ CGameObject::CGameObject(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceCont
 	, m_bCheckCollider(false)
 	, m_iObectTag(0)
 	, m_iSceneID(-1)
+	, m_bRemove(false)
 {
 	Safe_AddRef(m_pDeviceContext);
 	Safe_AddRef(m_pDevice);	
@@ -40,6 +42,7 @@ CGameObject::CGameObject(const CGameObject& rhs)
 	, m_bCheckCollider(false)
 	, m_iObectTag(rhs.m_iObectTag)
 	, m_iSceneID(rhs.m_iSceneID)
+	, m_bRemove(false)
 {
 	Safe_AddRef(m_pDeviceContext);
 	Safe_AddRef(m_pDevice);

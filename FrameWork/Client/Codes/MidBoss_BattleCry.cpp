@@ -30,6 +30,8 @@ _int CMidBoss_BattleCry::Tick(const _double& TimeDelta)
 
 	m_pAnimator->Tick(TimeDelta);
 
+	m_pTransform->Face_Target(g_pObserver->Get_PlayerPos());
+
 	if (CBoss_Bastion_Judicator::M_BossAnimState::BATTLECRY_END == m_pAnimator->Get_CurrentAnimNode())
 	{
 		if (m_pAnimator->Get_AnimController()->Is_Finished())
@@ -63,14 +65,16 @@ HRESULT CMidBoss_BattleCry::EnterState()
 	if (FAILED(__super::EnterState()))
 		return E_FAIL;
 
+	m_pAnimator->Get_AnimController()->Set_MoveSpeed(55.f);
+
 	m_pAnimator->Change_AnyEntryAnimation((_uint)CBoss_Bastion_Judicator::M_BossAnimState::BATTLECRY_START);
 	
-	_vector vMonsterPos = m_pTransform->Get_State(CTransform::STATE::STATE_POSITION);
-	_vector vDist = vMonsterPos - g_pObserver->Get_PlayerPos();
-	_float fDistToPlayer = XMVectorGetX(XMVector3Length(vDist));
+	//_vector vMonsterPos = m_pTransform->Get_State(CTransform::STATE::STATE_POSITION);
+	//_vector vDist = vMonsterPos - g_pObserver->Get_PlayerPos();
+	//_float fDistToPlayer = XMVectorGetX(XMVector3Length(vDist));
 
-	_vector vec = { 0.f, 1.f, 0.f,0.f };
-	m_pTransform->SetUp_Rotation(vec, (XMConvertToRadians(180.f)));
+	//_vector vec = { 0.f, 1.f, 0.f,0.f };
+	//m_pTransform->SetUp_Rotation(vec, (XMConvertToRadians(180.f)));
 
 	return S_OK;
 }
@@ -80,8 +84,10 @@ HRESULT CMidBoss_BattleCry::ExitState()
 	if (FAILED(__super::ExitState()))
 		return E_FAIL;
 
-	/*_vector vec = { 0.f, 1.f, 0.f,0.f };
-	m_pTransform->SetUp_Rotation(vec, (XMConvertToRadians(0.f)));*/
+	m_pAnimator->Get_AnimController()->Set_MoveSpeed(40.f);
+
+	//_vector vec = { 0.f, 1.f, 0.f,0.f };
+	//m_pTransform->SetUp_Rotation(vec, (XMConvertToRadians(0.f)));
 
 	return S_OK;
 }

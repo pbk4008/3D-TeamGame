@@ -14,7 +14,7 @@
 #ifdef _AFX
 #define MSGBOX(MESSAGE) AfxMessageBox(TEXT(MESSAGE))
 #else
-#define MSGBOX(MESSAGE) MessageBox(0, TEXT(MESSAGE), TEXT("»¶"), MB_OK)
+#define MSGBOX(MESSAGE) assert(false && MESSAGE);
 #endif
 
 #define NO_COPY(CLASSNAME)										\

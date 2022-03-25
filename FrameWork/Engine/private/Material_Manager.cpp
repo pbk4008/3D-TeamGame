@@ -27,7 +27,7 @@ HRESULT CMaterial_Manager::Add_Material(const wstring& _wstrMtrlTag, CMaterial* 
 	if (m_umapMaterials.end() != iter_find)
 	{
 		Safe_Release(_pMtrl);
-		return E_FAIL;
+		return S_OK;
 	}
 	m_umapMaterials.emplace(_wstrMtrlTag, _pMtrl);
 

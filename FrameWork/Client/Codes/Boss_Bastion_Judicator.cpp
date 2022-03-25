@@ -4,6 +4,8 @@
 #include "ShieldBreaker.h"
 #include "UI_Monster_Panel.h"
 
+#include "MidBoss_Idle.h"
+#include "MidBoss_Run.h"
 #include "MidBoss_Rage.h"
 #include "MidBoss_BattleCry.h"
 #include "MidBoss_Attack.h"
@@ -35,7 +37,7 @@ HRESULT CBoss_Bastion_Judicator::NativeConstruct(const _uint _iSceneID, void* pA
 	if (FAILED(__super::NativeConstruct(_iSceneID, pArg)))
 		return E_FAIL;
 
-	_vector Pos = { 0.f, 12.f, 10.f, 1.f };
+	_vector Pos = { -170.f, 65.f, 460.f, 1.f };
 	m_pTransform->Set_State(CTransform::STATE_POSITION, Pos);
 
 	if (FAILED(SetUp_Components()))
@@ -54,7 +56,17 @@ HRESULT CBoss_Bastion_Judicator::NativeConstruct(const _uint _iSceneID, void* pA
 	pWeapon->Set_OwnerPivotMatrix(m_pModelCom->Get_PivotMatrix());
 	m_pWeapon = pWeapon;
 
-	
+	/*_vector Pos = { 0.f, 0.f, 10.f, 1.f };
+	m_pTransform->Set_State(CTransform::STATE_POSITION, Pos);*/
+
+	if (nullptr != pArg)
+	{
+		_float3 vPoint = (*(_float3*)pArg);
+
+		if (FAILED(Set_SpawnPosition(vPoint)))
+			return E_FAIL;
+	}
+
 	//MidBossBar Panel
 	CUI_Monster_Panel::PANELDESC Desc;
 	Desc.pTargetTransform = m_pTransform;
@@ -66,16 +78,18 @@ HRESULT CBoss_Bastion_Judicator::NativeConstruct(const _uint _iSceneID, void* pA
 
 	m_pPanel->Set_TargetWorldMatrix(m_pTransform->Get_WorldMatrix());
 
-	m_isFall = true;
+	m_bIsFall  = true;
 	m_iObectTag = (_uint)GAMEOBJECT::MIDDLE_BOSS;
 
-	m_fMaxHp = 10.f;
+	//아래 세팅은 꼭 해줄것, 그래야 UI나옴 초기값 넣어줘야됨
+	m_fMaxHp = 50.f;
 	m_fCurrentHp = m_fMaxHp;
 
-	m_fMaxGroggy = 10.f;
-	m_fGroggy = 0;
+	m_fMaxGroggyGauge = 10.f;
+	m_fGroggyGauge = 0.f;
 
-	m_pPanel->Set_GroggyBar(m_fMaxGroggy, m_fGroggy);
+	m_pPanel->Set_HpBar(Get_HpRatio());
+	m_pPanel->Set_GroggyBar(Get_GroggyGaugeRatio());
 
 	return S_OK;
 }
@@ -104,22 +118,23 @@ _int CBoss_Bastion_Judicator::Tick(_double TimeDelta)
 	
 	if (0 >= m_fCurrentHp)
 	{
+		m_bDead = true;
 		m_pStateController->Change_State(L"Death");
 	}
-
-	if (m_fGroggy >= m_fMaxGroggy)
+	
+	if (m_fGroggyGauge >= m_fMaxGroggyGauge)
 	{
 		//스턴상태일때 스턴state에서 현재 그로기 계속 0으로 고정시켜줌
 		m_bGroggy = true;
 		m_pStateController->Change_State(L"Stun");
-		m_fGroggy = 0.f;
-		m_pPanel->Set_GroggyBar(m_fMaxGroggy, m_fGroggy);
+		m_fGroggyGauge = 0.f;
+		m_pPanel->Set_GroggyBar(Get_GroggyGaugeRatio());
 	}
 	
-	if (true == m_bGroggy)
+	if (true == m_bGroggy || true == m_bDead )
 	{
-		m_fGroggy = 0.f;
-		m_pPanel->Set_GroggyBar(m_fMaxGroggy, m_fGroggy);
+		m_fGroggyGauge = 0.f;
+		m_pPanel->Set_GroggyBar(Get_GroggyGaugeRatio());
 	}
 
 	if (STUN_END == m_pAnimator->Get_CurrentAnimNode())
@@ -130,7 +145,9 @@ _int CBoss_Bastion_Judicator::Tick(_double TimeDelta)
 		}
 	}
 
-	Fall(TimeDelta);
+	if (m_bIsFall)
+		m_pTransform->Fall(TimeDelta);
+
 	m_pCharacterController->Move(TimeDelta, m_pTransform->Get_Velocity());
 
 	m_pPanel->Set_TargetWorldMatrix(m_pTransform->Get_WorldMatrix());
@@ -162,8 +179,6 @@ _int CBoss_Bastion_Judicator::LateTick(_double TimeDelta)
 			return E_FAIL;
 		}
 	}
-
-	
 
 	return 0;
 }
@@ -207,7 +222,6 @@ HRESULT CBoss_Bastion_Judicator::SetUp_Components()
 	matPivot = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(180.f));
 	m_pModelCom->Set_PivotMatrix(matPivot);
 
-
 	CAnimator::ANIMATORDESC tDesc;
 	ZeroMemory(&tDesc, sizeof(tDesc));
 
@@ -246,9 +260,22 @@ HRESULT CBoss_Bastion_Judicator::SetUp_Components()
 HRESULT CBoss_Bastion_Judicator::Set_Animation_FSM()
 {
 	//시작루프
-	CAnimation* pAnim = m_pModelCom->Get_Animation("SK_Bastion_Tier4.ao|A_Rage_Phalanxar");
 	//연결할애님, 연결당할애님, 애니메이션, 루트애님, 트랜스폼(루트애니메이션때 따라감), 루프, 옵션
+	CAnimation* pAnim = m_pModelCom->Get_Animation("SK_Bastion_Tier4.ao|A_2H_Hammer_Menu_Idle_Start");
+	if (FAILED(m_pAnimator->Insert_Animation(IDLE_START_H, HEAD, pAnim, true, true, false, ERootOption::XYZ)))
+		return E_FAIL;
+	pAnim = m_pModelCom->Get_Animation("SK_Bastion_Tier4.ao|A_2H_Hammer_Menu_Idle_Loop");
+	if (FAILED(m_pAnimator->Insert_Animation(IDLE_LOOP_H, IDLE_START_H, pAnim, true, true, false, ERootOption::XYZ)))
+		return E_FAIL;
+
+	//Rage
+	pAnim = m_pModelCom->Get_Animation("SK_Bastion_Tier4.ao|A_Rage_Phalanxar");
 	if (FAILED(m_pAnimator->Insert_Animation(RAGE, HEAD, pAnim, true, true, false, ERootOption::XYZ)))
+		return E_FAIL;
+
+	//Run
+	pAnim = m_pModelCom->Get_Animation("SK_Bastion_Tier4.ao|A_2H_Hammer_Loco_Jog_Fwd_Start_Normal");
+	if (FAILED(m_pAnimator->Insert_Animation(JOG_FWD_START_H, HEAD, pAnim, true, true, false, ERootOption::XYZ)))
 		return E_FAIL;
 
 #pragma region 공격재시작루프
@@ -352,6 +379,8 @@ HRESULT CBoss_Bastion_Judicator::Set_Animation_FSM()
 
 	//자동으로 돌릴 애들(끝날애님, 끝나고시작할애님)
 	//m_pAnimator->Set_UpAutoChangeAnimation(RAGE, BATTLECRY_START);
+	m_pAnimator->Set_UpAutoChangeAnimation(IDLE_START_H, IDLE_LOOP_H);
+
 	m_pAnimator->Set_UpAutoChangeAnimation(BATTLECRY_START, BATTLECRY_LOOP);
 	m_pAnimator->Set_UpAutoChangeAnimation(BATTLECRY_LOOP, BATTLECRY_END);
 	m_pAnimator->Set_UpAutoChangeAnimation(BATTLECRY_END, RAGE);
@@ -360,9 +389,14 @@ HRESULT CBoss_Bastion_Judicator::Set_Animation_FSM()
 	m_pAnimator->Set_UpAutoChangeAnimation(STUN_LOOP, STUN_END);
 	m_pAnimator->Set_UpAutoChangeAnimation(STUN_END, RAGE);
 
-	m_pAnimator->Insert_AnyEntryAnimation(BATTLECRY_START);
 
-	//스턴루프
+
+	m_pAnimator->Insert_AnyEntryAnimation(IDLE_START_H);
+	m_pAnimator->Insert_AnyEntryAnimation(RAGE);
+	m_pAnimator->Insert_AnyEntryAnimation(JOG_FWD_START_H);
+
+	m_pAnimator->Insert_AnyEntryAnimation(BATTLECRY_START);
+	
 	m_pAnimator->Insert_AnyEntryAnimation(STUN_START);
 
 	//어택애님
@@ -388,13 +422,19 @@ HRESULT CBoss_Bastion_Judicator::Set_Animation_FSM()
 	m_pAnimator->Insert_AnyEntryAnimation(TURN_45RIGHT_H);
 
 
-	m_pAnimator->Change_Animation(RAGE);
+	m_pAnimator->Change_Animation(IDLE_START_H);
 
 	return S_OK;
 }
 
 HRESULT CBoss_Bastion_Judicator::Set_State_FSM()
 {
+	if (FAILED(m_pStateController->Add_State(L"Idle", CMidBoss_Idle::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+
+	if (FAILED(m_pStateController->Add_State(L"Run", CMidBoss_Run::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+
 	if (FAILED(m_pStateController->Add_State(L"Rage", CMidBoss_Rage::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 
@@ -422,22 +462,9 @@ HRESULT CBoss_Bastion_Judicator::Set_State_FSM()
 		static_cast<CMonster_FSM*>(pair.second)->Set_Animator(m_pAnimator);
 	}
 
-	m_pStateController->Change_State(L"Rage");
+	m_pStateController->Change_State(L"Idle");
 
 	return S_OK;
-}
-
-const _int CBoss_Bastion_Judicator::Fall(const _double& TimeDelta)
-{
-	if (m_isFall)
-	{
-		_vector svPos = m_pTransform->Get_State(CTransform::STATE_POSITION);
-		if (-10.f < XMVectorGetY(svPos))
-		{
-			m_pTransform->Add_Velocity(XMVectorSet(0.f, -9.8f * (_float)TimeDelta, 0.f, 0.f));
-		}
-	}
-	return _int();
 }
 
 void CBoss_Bastion_Judicator::OnTriggerEnter(CCollision& collision)
@@ -455,28 +482,27 @@ void CBoss_Bastion_Judicator::OnTriggerEnter(CCollision& collision)
 		if ((_uint)GAMEOBJECT::WEAPON == collision.pGameObject->getTag())
 		{
 			--m_fCurrentHp;
-			m_fGroggy += 2; //TODO::수치정해서바꿔줘야됨
+			m_fGroggyGauge += 2; //TODO::수치정해서바꿔줘야됨
 
-			m_pPanel->Set_HpBar(m_fMaxHp, m_fCurrentHp);
+			m_pPanel->Set_HpBar(Get_HpRatio());
 
 			if (false == m_bGroggy)
 			{	
 				//그로기 아닐때만 증가할수있게
-				m_pPanel->Set_GroggyBar(m_fMaxGroggy, m_fGroggy);
+				m_pPanel->Set_GroggyBar(Get_GroggyGaugeRatio());
 			}
 		}
+
 		else
 		{
 
 		}
-			
 	}
-	
 }
 
 void CBoss_Bastion_Judicator::Set_IsAttack(const _bool _isAttack)
 {
-	m_bIsAttack = _isAttack;
+	m_IsAttack = _isAttack;
 	if (m_pWeapon)
 		m_pWeapon->Set_IsAttack(_isAttack);
 }
@@ -506,6 +532,9 @@ CGameObject* CBoss_Bastion_Judicator::Clone(const _uint _iSceneID, void* pArg)
 
 void CBoss_Bastion_Judicator::Free()
 {
+	Safe_Release(m_pCharacterController);
+	Safe_Release(m_pWeapon);
+	Safe_Release(m_pPanel);
 	Safe_Release(m_pStateController);
 	Safe_Release(m_pAnimator);
 	Safe_Release(m_pModelCom);

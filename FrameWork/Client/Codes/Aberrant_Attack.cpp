@@ -30,13 +30,20 @@ _int CAberrant_Attack::Tick(const _double& TimeDelta)
 
 	m_pAnimator->Tick(TimeDelta);
 
+	CMonster_EarthAberrant* pMonster = (CMonster_EarthAberrant*)m_pStateController->Get_GameObject();
+
+	if (nullptr != pMonster)
+	{
+		pMonster->Set_IsAttack(true);
+	}
+
 	_fvector vMonsterPos = m_pTransform->Get_State(CTransform::STATE::STATE_POSITION);
 	_fvector vDist = vMonsterPos - g_pObserver->Get_PlayerPos();
 	_float fDistToPlayer = XMVectorGetX(XMVector3Length(vDist));
 
 	if (m_pAnimator->Get_AnimController()->Is_Finished())
 	{
-		m_pStateController->Change_State(L"Dash_Bwd");
+		m_pStateController->Change_State(L"Walk");
 		//cout << "대쉬로변경" << endl;
 	}
 	return _int();

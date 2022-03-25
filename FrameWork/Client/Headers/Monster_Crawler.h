@@ -29,7 +29,6 @@ private:
 	explicit CMonster_Crawler(const CMonster_Crawler& _rhs);
 	virtual ~CMonster_Crawler() = default;
 
-public: _float			Get_Hp() { return m_fHp; }
 public: void			Clear_Physix();
 
 public:
@@ -39,10 +38,12 @@ public:
 	virtual _int LateTick(_double _dDeltaTime) override;
 	virtual HRESULT Render() override;
 
-private: void	OnTriggerEnter(CCollision& collision) override;
+private: 
+	void	OnTriggerEnter(CCollision& collision) override;
 
-private:
-	const _int Fall(const _double& _dDeltaTime);
+public:
+	void Set_IsAttack(const _bool _isAttack);
+
 
 private:
 	virtual HRESULT SetUp_Components();
@@ -60,9 +61,9 @@ private:
 	
 
 private:
-	_float	m_fHp = 10.f;
-	_float	m_fMaxHp = 10.f;
-	_bool	m_isFall = true;
+	_bool	m_bIsFall = false;
+	_bool m_bFirstHit = false; //맨처음들어와서 맞았을때 판넬크기바꿔줘야돼서
+	_bool m_bGroggy = false;
 
 public:
 	static CMonster_Crawler* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext);

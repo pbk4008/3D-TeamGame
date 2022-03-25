@@ -5,7 +5,7 @@
 #include "CharacterController.h"
 
 CTransform::CTransform(ID3D11Device * pDevice, ID3D11DeviceContext * pDeviceContext)
-	: CComponent(pDevice, pDeviceContext)	
+	: CComponent(pDevice, pDeviceContext)
 {
 
 }
@@ -289,6 +289,15 @@ void CTransform::ScaleZ_Up(_fvector vScale)
 {
 	_vector		vLook = Get_State(CTransform::STATE_LOOK) * XMVectorGetZ(vScale);
 	Set_State(CTransform::STATE_LOOK, vLook);
+}
+
+void CTransform::Fall(_double dDeltaTime)
+{
+	_vector svPos = Get_State(CTransform::STATE_POSITION);
+	_float fY = XMVectorGetY(svPos);
+
+	if (fY > -5.f)
+		Add_Velocity(XMVectorSet(0.f, -9.8f * dDeltaTime, 0.f, 0.f));
 }
 
 void CTransform::Mesh_Straight(_double TimeDelta, CNavigation* pNavigation)

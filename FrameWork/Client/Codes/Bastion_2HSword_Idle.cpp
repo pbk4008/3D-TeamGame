@@ -92,7 +92,7 @@ void CBastion_2HSword_Idle::OnTriggerEnter(CCollision& collision)
 {
 	if ((_uint)GAMEOBJECT::WEAPON == collision.pGameObject->getTag() && g_pObserver->IsAttack())
 	{
-		static_cast<CMonster_Bastion_2HSword*>(m_pMonster)->m_iHp += -1;
+		static_cast<CMonster_Bastion_2HSword*>(m_pMonster)->Set_CurrentHp(-1);
 		m_pStateController->Change_State(L"Hit");
 	}
 }

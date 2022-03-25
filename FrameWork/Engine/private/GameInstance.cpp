@@ -497,6 +497,13 @@ CMaterial* CGameInstance::Get_Material(const wstring& _wstrMtrlTag)
 	return m_pMaterial_Manager->Get_Material(_wstrMtrlTag);
 }
 
+const _bool CGameInstance::Raycast(RAYCASTDESC & _desc)
+{
+	if (!m_pPhysicSystem)
+		return false;
+	return m_pPhysicSystem->Raycast(_desc);
+}
+
 void CGameInstance::Release_Engine()
 {
 	RELEASE_INSTANCE(CGameInstance);

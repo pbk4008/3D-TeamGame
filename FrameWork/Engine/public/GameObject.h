@@ -49,7 +49,7 @@ public:
 	void setActive(_bool bActive);
 	_bool getActive() { return m_bActive; }
 	_int getTag() { return m_iObectTag; }
-
+	_bool getRemove() { return m_bRemove; }
 	CTransform* Get_Transform() const;
 protected:
 	ID3D11Device* m_pDevice;
@@ -57,6 +57,7 @@ protected:
 	CTransform* m_pTransform;
 	CRenderer* m_pRenderer;
 	_bool m_bActive;
+	_bool m_bRemove;
 	_bool m_bCheckCollider;
 	_uint m_iObectTag;
 	_uint m_iSceneID;

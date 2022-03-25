@@ -55,6 +55,9 @@ HRESULT CUI_Player_HpBar::NativeConstruct(const _uint _iSceneID, void* pArg)
 	m_fGapX = 1.f;
 	m_fGapY = 1.f;
 
+	m_fPlayerMaxHp = g_pObserver->Get_MaxHP();
+	m_fPlayerHp = g_pObserver->Get_HP();
+
 	return S_OK;
 }
 
@@ -63,21 +66,11 @@ _int CUI_Player_HpBar::Tick(_double TimeDelta)
 	if (FAILED(__super::Tick(TimeDelta)))
 		return -1;
 
-	/*if (g_pGameInstance->getkeyDown(DIK_L))
-	{
-		m_fHp -= 0.1f;
-	}
-	if (g_pGameInstance->getkeyDown(DIK_K))
-	{
-		m_fHp -= 0.4f;
-	}
-	if (g_pGameInstance->getkeyDown(DIK_J))
-	{
-		m_fHp = 1.f;
-		m_fGapX = 1.f;
-	}*/
+	m_fPlayerHp = g_pObserver->Get_HP();
 
-	if (m_fGapX > m_fHp)
+	m_fRatio = m_fPlayerHp / m_fPlayerMaxHp;
+
+	if (m_fGapX > m_fRatio)
 	{
 		m_fGapX -= TimeDelta * 1.f;
 	}

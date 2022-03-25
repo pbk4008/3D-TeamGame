@@ -71,7 +71,7 @@ const CWeapon::EType CWeapon::Get_Type() const
 	return m_eType;
 }
 
-void CWeapon::Set_Owner(CGameObject* _pOwner)
+void CWeapon::Set_Owner(CActor* _pOwner)
 {
 	m_pOwner = _pOwner;
 }

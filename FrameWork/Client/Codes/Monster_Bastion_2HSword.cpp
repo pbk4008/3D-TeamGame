@@ -16,6 +16,8 @@
 #include "Bastion_2HSword_Rage.h"
 #include "Bastion_2HSword_Attack_Rage.h"
 
+#include "UI_Monster_Panel.h"
+
 CMonster_Bastion_2HSword::CMonster_Bastion_2HSword(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
 	: CActor(_pDevice, _pDeviceContext)
 {
@@ -37,6 +39,20 @@ HRESULT CMonster_Bastion_2HSword::NativeConstruct(const _uint _iSceneID, void* _
 {
 	if (FAILED(__super::NativeConstruct(_iSceneID, _pArg)))
 		return E_FAIL;
+
+	if (_pArg)
+	{
+		_float3 vPoint = (*(_float3*)_pArg);
+		if (FAILED(Set_SpawnPosition(vPoint)))
+			return E_FAIL;
+	}
+	else
+	{
+		_float4 vPosition = { 0.f, 2.f, 20.f, 1.f };
+
+		m_pTransform->Set_State(CTransform::STATE_POSITION, XMLoadFloat4(&vPosition));
+	}
+
 	if (FAILED(Ready_Components())) 
 		return E_FAIL;
 	if (FAILED(Ready_Weapon())) 
@@ -46,8 +62,38 @@ HRESULT CMonster_Bastion_2HSword::NativeConstruct(const _uint _iSceneID, void* _
 	if (FAILED(Ready_StateFSM()))
 		return E_FAIL;
 
+	if (nullptr != _pArg)
+	{
+		_float3 vPoint = (*(_float3*)_pArg);
+
+		if (FAILED(Set_SpawnPosition(vPoint)))
+			return E_FAIL;
+	}
+
+	//MonsterBar Panel
+	CUI_Monster_Panel::PANELDESC Desc;
+	Desc.pTargetTransform = m_pTransform;
+	Desc.iEnemyTag = CUI_Monster_Panel::Enemy::SWORD2H;
+
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_UI", L"Proto_GameObject_UI_Monster_Panel", &Desc,
+		(CGameObject**)&m_pPanel)))
+		return E_FAIL;
+
+	m_pPanel->Set_TargetWorldMatrix(m_pTransform->Get_WorldMatrix());
+
+	m_fMaxHp = 30.f;
+	m_fCurrentHp = m_fMaxHp;
+
+	m_fMaxGroggyGauge = 10.f;
+	m_fGroggyGauge = 0.f;
+
+	m_pPanel->Set_HpBar(Get_HpRatio());
+	m_pPanel->Set_GroggyBar(Get_GroggyGaugeRatio());
+
 	m_isFall = true;
 	m_iObectTag = (_uint)GAMEOBJECT::MONSTER_2H;
+
+	setActive(false);
 
 	return S_OK;
 }
@@ -67,7 +113,11 @@ _int CMonster_Bastion_2HSword::Tick(_double _dDeltaTime)
 	if (NO_EVENT != iProgress)
 		return iProgress;
 
-	Fall(_dDeltaTime);
+	if (m_isFall)
+	{
+		m_pTransform->Fall(_dDeltaTime);
+	}
+
 	m_pCharacterController->Move(_dDeltaTime, m_pTransform->Get_Velocity());
 
 	// 무기 업뎃
@@ -77,6 +127,32 @@ _int CMonster_Bastion_2HSword::Tick(_double _dDeltaTime)
 		if (NO_EVENT != iProgress) 
 			return iProgress;
 	}
+
+	if (m_fGroggyGauge >= m_fMaxGroggyGauge)
+	{
+		//스턴상태일때 스턴state에서 현재 그로기 계속 0으로 고정시켜줌
+		m_bGroggy = true;
+		m_pStateController->Change_State(L"Stun");
+		m_fGroggyGauge = 0.f;
+		m_pPanel->Set_GroggyBar(Get_GroggyGaugeRatio());
+	}
+
+	if (true == m_bGroggy || true == m_bDead)
+	{
+		m_fGroggyGauge = 0.f;
+		m_pPanel->Set_GroggyBar(Get_GroggyGaugeRatio());
+	}
+
+	if ((_uint)ANIM_TYPE::A_KNEEL_ED == m_pAnimator->Get_CurrentAnimNode())
+	{
+		if (m_pAnimator->Get_AnimController()->Is_Finished())
+		{
+			m_bGroggy = false;
+		}
+	}
+
+	m_pPanel->Set_TargetWorldMatrix(m_pTransform->Get_WorldMatrix());
+
 	return _int();
 }
 
@@ -103,7 +179,7 @@ _int CMonster_Bastion_2HSword::LateTick(_double _dDeltaTime)
 		if (NO_EVENT != iProgress) 
 			return iProgress;
 	}
-
+	
 	return _int();
 }
 
@@ -137,7 +213,7 @@ HRESULT CMonster_Bastion_2HSword::Render()
 		
 	}
 #ifdef _DEBUG
-		Render_Debug();
+		//Render_Debug();
 #endif
 	return S_OK;
 }
@@ -149,12 +225,13 @@ HRESULT CMonster_Bastion_2HSword::Ready_Components()
 	transformDesc.fSpeedPerSec = 2.0f;
 	transformDesc.fRotationPerSec = XMConvertToRadians(90.f);
 	m_pTransform->Set_TransformDesc(transformDesc);
-	_float4 vPosition = { 0.f, 2.f, 20.f, 1.f };
+	//밖으로 뺌
+	/*_float4 vPosition = { 0.f, 2.f, 20.f, 1.f };
 
-	m_pTransform->Set_State(CTransform::STATE_POSITION, XMLoadFloat4(&vPosition));
+	m_pTransform->Set_State(CTransform::STATE_POSITION, XMLoadFloat4(&vPosition));*/
 
 	/* for. Model Com */
-	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STAGE1, L"Model_Bastion_2HSword", L"Model", (CComponent**)&m_pModel)))
+	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Model_Bastion_2HSword", L"Model", (CComponent**)&m_pModel)))
 		return E_FAIL;
 	_matrix matPivot = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(180.f));
 	m_pModel->Set_PivotMatrix(matPivot);
@@ -445,7 +522,7 @@ HRESULT CMonster_Bastion_2HSword::Render_Debug(void)
 		return E_FAIL;
 	
 	//Hp
-	if (FAILED(g_pGameInstance->Render_Font(TEXT("Font_Arial"), XMVectorSet(0.f, 1.0f, 0.f, 1.f), L"HP : " + to_wstring(m_iHp), _float2(950.f, 20.f), _float2(0.6f, 0.6f))))
+	if (FAILED(g_pGameInstance->Render_Font(TEXT("Font_Arial"), XMVectorSet(0.f, 1.0f, 0.f, 1.f), L"HP : " + to_wstring(m_fCurrentHp), _float2(950.f, 20.f), _float2(0.6f, 0.6f))))
 		return E_FAIL;
 
 	// FSM
@@ -482,22 +559,49 @@ HRESULT CMonster_Bastion_2HSword::Render_Debug(void)
 	return S_OK;
 }
 
-const _int CMonster_Bastion_2HSword::Fall(const _double& _dDeltaTime)
-{
-	if (m_isFall)
-	{
-		_vector svPos = m_pTransform->Get_State(CTransform::STATE_POSITION);
-		if (-10.f < XMVectorGetY(svPos))
-		{
-			m_pTransform->Add_Velocity(XMVectorSet(0.f, -9.8f * (_float)_dDeltaTime, 0.f, 0.f));
-		}
-	}
-	return _int();
-}
-
 void CMonster_Bastion_2HSword::OnTriggerEnter(CCollision& collision)
 {
 	m_pStateController->OnTriggerEnter(collision);
+
+	if (true == g_pObserver->IsAttack()) //플레이어공격일때
+	{
+		m_bFirstHit = true; //딱 한번 true로 변경해줌
+
+		if (true == m_bFirstHit)
+		{
+			m_pPanel->Set_BackUIGapY(1.f);
+		}
+
+		if ((_uint)GAMEOBJECT::WEAPON == collision.pGameObject->getTag())
+		{
+			m_fCurrentHp -= 5.f;
+			m_fGroggyGauge += 2; //TODO::수치정해서바꿔줘야됨
+
+			m_pPanel->Set_HpBar(Get_HpRatio());
+
+			if (false == m_bGroggy)
+			{
+				//그로기 아닐때만 증가할수있게
+				m_pPanel->Set_GroggyBar(Get_GroggyGaugeRatio());
+				m_pStateController->Change_State(L"Hit");
+			}
+		}
+		else
+		{
+
+		}
+	}
+}
+
+void CMonster_Bastion_2HSword::Set_IsAttack(const _bool _isAttack)
+{
+	m_IsAttack = _isAttack;
+	// TODO : 여기 웨폰한테 어택일때 true값 넘겨줘야함! 
+	//if (!m_umapWeapons.empty())
+	//	m_pWeapon->Set_IsAttack(_isAttack);
+
+	m_bRemove = true;
+	//m_pStateController->OnTriggerEnter(collision);
 }
 
 CMonster_Bastion_2HSword* CMonster_Bastion_2HSword::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)

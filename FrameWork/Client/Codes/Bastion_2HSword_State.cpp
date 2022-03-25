@@ -29,8 +29,8 @@ _int CBastion_2HSword_State::Tick(const _double& _dDeltaTime)
 
 	m_pAnimator->Tick(_dDeltaTime);
 
-	_fvector vMonsterPos = m_pTransform->Get_State(CTransform::STATE::STATE_POSITION);
-	_fvector vDist = vMonsterPos - g_pObserver->Get_PlayerPos();
+	_vector vMonsterPos = m_pTransform->Get_State(CTransform::STATE::STATE_POSITION);
+	_vector vDist = vMonsterPos - g_pObserver->Get_PlayerPos();
 	_float fDistToPlayer = XMVectorGetX(XMVector3Length(vDist));
 
 	m_bTargetOn = false;
@@ -72,7 +72,7 @@ HRESULT CBastion_2HSword_State::Render()
 		return E_FAIL;
 
 #ifdef _DEBUG
-	Render_Debug();
+	//Render_Debug();
 #endif
 
 	return S_OK;
@@ -112,7 +112,7 @@ void CBastion_2HSword_State::OnTriggerEnter(CCollision& collision)
 {
 	if ((_uint)GAMEOBJECT::WEAPON == collision.pGameObject->getTag() && g_pObserver->IsAttack())
 	{
-		static_cast<CMonster_Bastion_2HSword*>(m_pMonster)->m_iHp += -1;
+		static_cast<CMonster_Bastion_2HSword*>(m_pMonster)->Set_CurrentHp(-1);
 		m_pStateController->Change_State(L"Hit");
 	}
 }

@@ -51,11 +51,18 @@ private:
 	CAnimator* m_pAnimator = nullptr;
 	CStateController* m_pStateController = nullptr;
 	CCharacterController* m_pCharacterController = nullptr;
+
+	class CUI_Monster_Panel* m_pPanel = nullptr;
+
 private:
 	CStargazer* m_pWeapon = nullptr;
 private:
 	ANIM_TYPE m_eHitType = ANIM_TYPE::TYPE_END;//Hit만 판정
 	wstring m_wstrCurState = L"";
+
+	_bool m_bFirstHit = false; //맨처음들어와서 맞았을때 판넬크기바꿔줘야돼서
+	_bool m_bGroggy = false;
+
 public:
 	static CMonster_Bastion_Sword* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext);
 	virtual CGameObject* Clone(const _uint _iSceneID, void* _pArg = nullptr) override;

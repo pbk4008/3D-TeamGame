@@ -3,6 +3,9 @@
 #define __STARGAZER_H__
 
 #include "Weapon.h"
+BEGIN(Engine)
+class CCapsuleCollider;
+END
 BEGIN(Client)
 class CStargazer final : public CWeapon
 {
@@ -28,11 +31,17 @@ private:
 	_int Attach_Owner(const _double& _dDeltaTime);
 	//Material¼ÂÆÃ
 	HRESULT SetUp_Material();
+	void Check_Attack();
+private:
+	virtual void OnTriggerEnter(CCollision& collision) override;
+	virtual void OnTriggerExit(CCollision& collision) override;
 public:
 	static CStargazer* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext);
 	virtual CGameObject* Clone(const _uint _iSceneID, void* pArg);
 private:
 	virtual void Free() override;
+private:
+	CCapsuleCollider* m_pCollider;
 };
 END
 #endif

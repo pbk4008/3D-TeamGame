@@ -23,11 +23,28 @@ enum class GAMEOBJECT
 	UI_DYNAMIC,
 	EFFECT_EXPLOSION,
 	//이 이후로 추가되는거 달아주세요, 위에 추가하면 꼬임
+	// 무기
 	WEAPON_MIDBOSS,
 	WEAPON_EARTH,
 	WEAPON_2HSword,
 	WEAPON_HEALER,
-	GAMEOBJECT_END
+	// 트리거
+	JUMP_TRIGGER,
+	JUMP_NODE,
+	// END, MAX, SIZE
+	GAMEOBJECT_END,
 };
 END
+
+
+enum class ELayer
+{
+	Enviroment,
+	Player,
+	Monster,
+	Weapon,
+	JumpTrigger,
+	Max
+};
+
 #endif

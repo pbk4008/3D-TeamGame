@@ -24,7 +24,7 @@ public:
 	const wstring& Get_Name() const;
 	const EType Get_Type() const;
 
-	void Set_Owner(CGameObject* _pOwner);
+	void Set_Owner(CActor* _pOwner);
 	virtual void Set_OwnerPivotMatrix(const _fmatrix& _smatPivot);
 	virtual void Set_Equip(const _bool _isEquip, void* _pArg = nullptr);
 	void Set_FixedBone(CHierarchyNode* _pFixedBone);
@@ -40,7 +40,7 @@ protected:
 	CModel* m_pModel = nullptr;
 	_float4x4 m_smatOwnerPivot;;
 
-	CGameObject* m_pOwner = nullptr;
+	CActor* m_pOwner = nullptr;
 	CHierarchyNode* m_pFixedBone = nullptr;
 
 	_bool m_isEquip = false;

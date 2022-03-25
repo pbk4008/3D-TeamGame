@@ -37,16 +37,14 @@ public:
 	void Set_UIDesc(UIBARDESC Desc) { m_UIBarDesc = Desc; }
 	UIBARDESC Get_UIDesc() { return m_UIBarDesc; }
 
-public:
-	void Set_TargetGroggyBar(_float fMaxGroggy, _float fGroggy);
+	void Set_GroggyRatio(_float Ratio) { m_fGroggyRatio = Ratio; }
 
 private:
 	UIBARDESC m_UIBarDesc;
 	_float m_fGapX = 0.f;
 	_float m_fGapY = 0.f;
 
-	_float m_fTargetMaxGroggy = 0.f;
-	_float m_fTargetGroggy = 0.f;
+	_float m_fGroggyRatio = 0.f;
 
 private:
 	virtual HRESULT SetUp_Components();

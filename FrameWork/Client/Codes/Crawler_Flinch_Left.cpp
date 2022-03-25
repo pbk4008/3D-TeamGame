@@ -35,7 +35,7 @@ _int CCrawler_Flinch_Left::Tick(const _double& TimeDelta)
 		m_pStateController->Change_State(L"Walk");
 	}
 
-	if (static_cast<CMonster_Crawler*>(m_pMonster)->Get_Hp() <= 0)
+	if (m_pMonster->Get_CurrentHp() <= 0)
 		m_pStateController->Change_State(L"Death");
 
 	return _int();

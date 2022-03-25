@@ -38,14 +38,9 @@ private:
 	HRESULT Set_State_FSM();
 
 private:
-	const _int Fall(const _double& TimeDelta);
 	virtual void OnTriggerEnter(CCollision& collision) override;
 
 public:
-	void Set_Groggy(_float fGroggy) { m_fGroggy = fGroggy; }
-
-public:
-	const _bool IsAttack() { return m_bIsAttack; }
 	void Set_IsAttack(const _bool _isAttack);
 
 private:
@@ -53,21 +48,15 @@ private:
 	CAnimator* m_pAnimator = nullptr;
 	CStateController* m_pStateController = nullptr;
 	CCharacterController* m_pCharacterController = nullptr;
+	
 
-	class CShieldBreaker* m_pWeapon = nullptr;
 	class CUI_Monster_Panel* m_pPanel = nullptr;
+	class CShieldBreaker* m_pWeapon = nullptr;
 
 private:
-	_uint itest = 0;
-	_float fTime = 0.f;
-	_float m_fGroggy = 0.f;
-	_float m_fMaxGroggy = 0.f;
-
-private:
-	_bool	m_isFall = false;
-	_bool m_bFirstHit = false; //¸ÇÃ³À½µé¾î¿Í¼­ ¸Â¾ÒÀ»¶§ ÆÇ³ÚÅ©±â¹Ù²ãÁà¾ßµÅ¼­
-	_bool m_bGroggy = false;
-	_bool m_bIsAttack = false;
+	_bool	m_bIsFall = false;
+	_bool	m_bFirstHit = false; //¸ÇÃ³À½µé¾î¿Í¼­ ¸Â¾ÒÀ»¶§ ÆÇ³ÚÅ©±â¹Ù²ãÁà¾ßµÅ¼­
+	_bool	m_bGroggy = false; //±×·Î±â »óÅÂÀÎÁö ¾Æ´ÑÁö
 
 public:
 	static CBoss_Bastion_Judicator* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);

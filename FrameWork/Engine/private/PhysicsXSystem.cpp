@@ -117,7 +117,7 @@ PxMaterial* CPhysicsXSystem::Create_Material(const PxReal _staticFriction, const
 	return pMaterial;
 }
 
-PxRigidActor* CPhysicsXSystem::Create_RigidActor(const ERigidType _eRigidType, const _bool _isGravity, const _bool _isKinematic, PxVec3 _pxvPosition)
+PxRigidActor* CPhysicsXSystem::Create_RigidActor(const ERigidType _eRigidType, const _bool _isGravity, const _bool _isKinematic, const _bool _isVisualization, const PxVec3& _pxvPosition)
 {
 	PxRigidActor* pRigidActor = nullptr;
 	PxTransform pxTransform;
@@ -134,6 +134,7 @@ PxRigidActor* CPhysicsXSystem::Create_RigidActor(const ERigidType _eRigidType, c
 		break;
 	}
 	pRigidActor->setActorFlag(PxActorFlag::eDISABLE_GRAVITY, !_isGravity);
+	pRigidActor->setActorFlag(PxActorFlag::eVISUALIZATION, _isVisualization);
 
 	return pRigidActor;
 }
@@ -150,7 +151,7 @@ HRESULT CPhysicsXSystem::Create_Box(CBoxCollider* _pCollider)
 	if (!pMaterial)
 		return E_FAIL;
 
-	PxRigidActor* pRigidActor = Create_RigidActor(tColliderDesc.eRigidType, tColliderDesc.isGravity, tColliderDesc.isKinematic);
+	PxRigidActor* pRigidActor = Create_RigidActor(tColliderDesc.eRigidType, tColliderDesc.isGravity, tColliderDesc.isKinematic, tColliderDesc.isVisualization);
 	pRigidActor->userData = tColliderDesc.pGameObject;
 
 	// Shape
@@ -158,7 +159,7 @@ HRESULT CPhysicsXSystem::Create_Box(CBoxCollider* _pCollider)
 	pxvHalfExtents *= 0.5f;
 
 	PxShape* pShape = m_pPhysics->createShape(PxBoxGeometry(pxvHalfExtents), *pMaterial, true);
-	pShape->setFlag(PxShapeFlag::eVISUALIZATION, true);
+	pShape->setFlag(PxShapeFlag::eVISUALIZATION, tColliderDesc.isVisualization);
 	pShape->setFlag(PxShapeFlag::eSCENE_QUERY_SHAPE, tColliderDesc.isSceneQuery);
 	pShape->setFlag(PxShapeFlag::eSIMULATION_SHAPE, !tColliderDesc.isTrigger);
 	pShape->setFlag(PxShapeFlag::eTRIGGER_SHAPE, tColliderDesc.isTrigger);
@@ -190,12 +191,12 @@ HRESULT CPhysicsXSystem::Create_Sphere(CSphereCollider* _pCollider)
 	if (!pMaterial)
 		return E_FAIL;
 
-	PxRigidActor* pRigidActor = Create_RigidActor(tColliderDesc.eRigidType, tColliderDesc.isGravity, tColliderDesc.isKinematic);
+	PxRigidActor* pRigidActor = Create_RigidActor(tColliderDesc.eRigidType, tColliderDesc.isGravity, tColliderDesc.isKinematic, tColliderDesc.isVisualization);
 	pRigidActor->userData = tColliderDesc.pGameObject;
 
 	// Shape
 	PxShape* pShape = m_pPhysics->createShape(PxSphereGeometry(tSphereCollideDesc.fRadius), *pMaterial, true);
-	pShape->setFlag(PxShapeFlag::eVISUALIZATION, true);
+	pShape->setFlag(PxShapeFlag::eVISUALIZATION, tColliderDesc.isVisualization);
 	pShape->setFlag(PxShapeFlag::eSCENE_QUERY_SHAPE, tColliderDesc.isSceneQuery);
 	pShape->setFlag(PxShapeFlag::eSIMULATION_SHAPE, !tColliderDesc.isTrigger);
 	pShape->setFlag(PxShapeFlag::eTRIGGER_SHAPE, tColliderDesc.isTrigger);
@@ -227,12 +228,12 @@ HRESULT CPhysicsXSystem::Create_Capsule(CCapsuleCollider* _pCollider)
 	if (!pMaterial)
 		return E_FAIL;
 
-	PxRigidActor* pRigidActor = Create_RigidActor(tColliderDesc.eRigidType, tColliderDesc.isGravity, tColliderDesc.isKinematic);
+	PxRigidActor* pRigidActor = Create_RigidActor(tColliderDesc.eRigidType, tColliderDesc.isGravity, tColliderDesc.isKinematic, tColliderDesc.isVisualization);
 	pRigidActor->userData = tColliderDesc.pGameObject;
 
 	// Shape
 	PxShape* pShape = m_pPhysics->createShape(PxCapsuleGeometry(tCapsuleCollideDesc.fRadius, tCapsuleCollideDesc.fHeight * 0.5f), *pMaterial, true);
-	pShape->setFlag(PxShapeFlag::eVISUALIZATION, true);
+	pShape->setFlag(PxShapeFlag::eVISUALIZATION, tColliderDesc.isVisualization);
 	pShape->setFlag(PxShapeFlag::eSCENE_QUERY_SHAPE, tColliderDesc.isSceneQuery);
 	pShape->setFlag(PxShapeFlag::eSIMULATION_SHAPE, !tColliderDesc.isTrigger);
 	pShape->setFlag(PxShapeFlag::eTRIGGER_SHAPE, tColliderDesc.isTrigger);
@@ -269,7 +270,7 @@ HRESULT CPhysicsXSystem::Create_NavMesh(CNavMeshCollider* _pCollider)
 	if (!pMaterial)
 		return E_FAIL;
 
-	PxRigidActor* pRigidActor = Create_RigidActor(tColliderDesc.eRigidType, tColliderDesc.isGravity, tColliderDesc.isKinematic);
+	PxRigidActor* pRigidActor = Create_RigidActor(tColliderDesc.eRigidType, tColliderDesc.isGravity, tColliderDesc.isKinematic, tColliderDesc.isVisualization);
 	pRigidActor->userData = tColliderDesc.pGameObject;
 
 	// Shape
@@ -306,7 +307,7 @@ HRESULT CPhysicsXSystem::Create_NavMesh(CNavMeshCollider* _pCollider)
 
 	//PxTriangleMeshGeometry pxMesh = PxTriangleMeshGeometry(pTriMesh);
 	PxShape* pShape = m_pPhysics->createShape(PxTriangleMeshGeometry(pTriMesh), *pMaterial, true);
-	pShape->setFlag(PxShapeFlag::eVISUALIZATION, true);
+	pShape->setFlag(PxShapeFlag::eVISUALIZATION, tColliderDesc.isVisualization);
 	pShape->setFlag(PxShapeFlag::eSCENE_QUERY_SHAPE, tColliderDesc.isSceneQuery);
 	pShape->setFlag(PxShapeFlag::eSIMULATION_SHAPE, !tColliderDesc.isTrigger);
 	pShape->setFlag(PxShapeFlag::eTRIGGER_SHAPE, tColliderDesc.isTrigger);
@@ -389,6 +390,28 @@ void CPhysicsXSystem::Remove_Actor(PxActor* _pActor)
 {
 	if (_pActor)
 		m_pScene->removeActor(*_pActor);
+}
+
+const _bool CPhysicsXSystem::Raycast(RAYCASTDESC & _desc)
+{
+	PxVec3 origin = ToPxVec3(_desc.vOrigin);
+	PxVec3 unitDir = ToPxVec3(_desc.vDir);
+
+	PxRaycastBuffer hit;
+	if (m_pScene->raycast(origin, unitDir, _desc.fMaxDistance, hit, _desc.hitFlags, _desc.filterData))
+	{
+		if (hit.hasBlock)
+		{
+			PxRaycastHit hitInfo = hit.block;
+			if (_desc.ppOutHitObject)
+			{
+				*_desc.ppOutHitObject = static_cast<CGameObject*>(hitInfo.actor->userData);
+				_desc.vHitPos = FromPxVec3(hitInfo.position);
+			}
+			return true;
+		}
+	}
+	return false;
 }
 
 void CPhysicsXSystem::Free()

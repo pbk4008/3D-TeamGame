@@ -47,7 +47,7 @@ HRESULT CUI_Player_HpBar_Red::NativeConstruct(const _uint _iSceneID, void* pArg)
 		return E_FAIL;
 	}
 
-	_vector vpos = { -400.f, -252.1f, 0.1f, 1.f };
+	_vector vpos = { -400.f, -252.1f, 0.09f, 1.f };
 	m_pTransform->Set_State(CTransform::STATE_POSITION, vpos);
 
 	_vector vScale = { m_Desc.fSize.x,m_Desc.fSize.y,1.f ,1.f };
@@ -69,23 +69,23 @@ _int CUI_Player_HpBar_Red::Tick(_double TimeDelta)
 	
 	if (nullptr != pUI)
 	{
-		_float fUIHp = pUI->GetHp(); 
+		_float fHpRatio = pUI->GetRatio();
 
-		if (1.f == fUIHp)
+		if (1.f == fHpRatio)
 		{
 			m_fGapX = 1.f;
 		}
 
-		if (1.f > fUIHp)
+		if (1.f > fHpRatio)
 		{
-			//옆에 살짝보여서 추가적으로 더 깎아줌 
-			fUIHp = pUI->GetHp() - 0.01f;
+			//옆에 살짝보여서 추가적으로 더 깎아줌p 
+			fHpRatio = pUI->GetRatio() - 0.02f;
 		}
 
-		if (m_fGapX > fUIHp)
+		if (m_fGapX > fHpRatio)
 		{
-			_float DecreaseGapSpeed = m_fGapX - fUIHp;
-			m_fGapX -= TimeDelta * DecreaseGapSpeed * 1.5f; //데미지가 더 많이 들어오면 더 빨리 깎아주려고
+			_float DecreaseGapSpeed = m_fGapX - fHpRatio;
+			m_fGapX -= TimeDelta * DecreaseGapSpeed; //데미지가 더 많이 들어오면 더 빨리 깎아주려고
 		}
 	}
 

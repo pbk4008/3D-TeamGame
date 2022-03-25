@@ -29,14 +29,14 @@ public:
 	virtual HRESULT Render() override;
 
 public:
-	_float GetHp() { return m_fHp; }
+	_float GetRatio() { return m_fRatio; }
 	void Set_UIDesc(UIDESC Desc) { m_Desc = Desc; }
 	UIDESC Get_UIDesc() { return m_Desc; }
 
 private:
 	UIDESC m_Desc;
-	_float m_fHp = 1.f; //현재 hp
-	_float m_fMaxHp = 1.f; //현재 hp
+	
+	_float m_fRatio = 0.f;
 
 	_float m_fGapX = 0.f;
 	_float m_fGapY = 0.f;

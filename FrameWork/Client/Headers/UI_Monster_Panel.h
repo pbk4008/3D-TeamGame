@@ -44,8 +44,8 @@ public:
 	void Set_TargetWorldMatrix(_matrix matTarget) { XMStoreFloat4x4(&m_TargetMatrix, matTarget);}
 
 public:
-	void Set_HpBar(_float fMaxHp, _float fHp);
-	void Set_GroggyBar(_float fMaxGroggy, _float fGroggy);
+	void Set_HpBar(_float fRatio);
+	void Set_GroggyBar(_float fRatio);
 	void Set_BackUIGapY(_float GapY);
 
 private:
@@ -78,6 +78,8 @@ private:
 	PANELDESC m_PanelDesc;
 	_float4x4 m_TargetMatrix;
 	Enemy m_EnemyTag = Enemy::ENEMY_END;
+
+	_bool m_bShow = false;
 
 	class CUI_Monster_Back* m_pUIBack = nullptr;
 	class CUI_Monster_Level* m_pUILevel = nullptr;
