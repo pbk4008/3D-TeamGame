@@ -46,11 +46,19 @@ HRESULT CUI_Monster_Name::NativeConstruct(const _uint _iSceneID, void* pArg)
 		return E_FAIL;
 	}
 
+	//setActive(false);
+
 	return S_OK;
 }
 
 _int CUI_Monster_Name::Tick(_double TimeDelta)
 {
+	if (false == m_bFirstShow)
+	{
+		setActive(true);
+		m_bFirstShow = true;
+	}
+
 	if (FAILED(CUI::Tick(TimeDelta)))
 		return -1;
 
@@ -71,18 +79,22 @@ _int CUI_Monster_Name::LateTick(_double TimeDelta)
 
 HRESULT CUI_Monster_Name::Render()
 {
-	_matrix XMWorldMatrix = XMMatrixTranspose(m_pTransform->Get_WorldMatrix());
-	_matrix XMViewMatrix = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_VIEW));
-	_matrix XMProjectMatrix = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_PROJECTION));
+	if (m_bShow)
+	{
+		_matrix XMWorldMatrix = XMMatrixTranspose(m_pTransform->Get_WorldMatrix());
+		_matrix XMViewMatrix = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_VIEW));
+		_matrix XMProjectMatrix = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_PROJECTION));
 
-	m_pBuffer->SetUp_ValueOnShader("g_WorldMatrix", &XMWorldMatrix, sizeof(_float) * 16);
-	m_pBuffer->SetUp_ValueOnShader("g_ViewMatrix", &XMViewMatrix, sizeof(_float) * 16);
-	m_pBuffer->SetUp_ValueOnShader("g_ProjMatrix", &XMProjectMatrix, sizeof(XMMATRIX));
+		m_pBuffer->SetUp_ValueOnShader("g_WorldMatrix", &XMWorldMatrix, sizeof(_float) * 16);
+		m_pBuffer->SetUp_ValueOnShader("g_ViewMatrix", &XMViewMatrix, sizeof(_float) * 16);
+		m_pBuffer->SetUp_ValueOnShader("g_ProjMatrix", &XMProjectMatrix, sizeof(XMMATRIX));
 
-	m_pBuffer->SetUp_TextureOnShader("g_DiffuseTexture", m_pTexture, m_Desc.iTextureNum);
+		m_pBuffer->SetUp_TextureOnShader("g_DiffuseTexture", m_pTexture, m_Desc.iTextureNum);
 
-	m_pBuffer->Render(1);
+		m_pBuffer->Render(1);
+	}
 	
+
 	return S_OK;
 }
 

@@ -726,6 +726,8 @@ void CSilvermane::OnTriggerEnter(CCollision& collision)
 			m_fCurrentHp -= 4;
 		}
 	}
+	if ((_uint)GAMEOBJECT::WEAPON_BULLET == iTag)
+		m_fCurrentHp -= 3;
 
 	else if ((_uint)GAMEOBJECT::MONSTER_CRYSTAL == iTag)
 	{

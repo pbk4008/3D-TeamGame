@@ -117,6 +117,7 @@ _int CObject_Manager::LateTick(_double TimeDelta)
 		for (auto& Pair : m_pLayers[i])
 			iProgress = Pair.second->LateTick(TimeDelta);
 
+
 		if (0 > iProgress)
 			return -1;
 	}

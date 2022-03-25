@@ -57,6 +57,7 @@ private:
 	_bool	m_bIsFall = false;
 	_bool	m_bFirstHit = false; //맨처음들어와서 맞았을때 판넬크기바꿔줘야돼서
 	_bool	m_bGroggy = false; //그로기 상태인지 아닌지
+	_bool	m_bFirst = false;
 
 public:
 	static CBoss_Bastion_Judicator* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);

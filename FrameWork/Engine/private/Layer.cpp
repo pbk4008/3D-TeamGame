@@ -59,16 +59,6 @@ _int CLayer::LateTick(_double TimeDelta)
 		if (0 > iProgress)
 			return -1;
 	}
-
-	/*for (auto& pGameObject : m_Objects)
-	{
-		if (nullptr != pGameObject && pGameObject->getActive() == true)
-			iProgress = pGameObject->LateTick(TimeDelta);
-		cout << typeid(pGameObject).name() << endl;
-
-		if (0 > iProgress)
-			return -1;
-	}*/
 	return _int(0);
 }
 

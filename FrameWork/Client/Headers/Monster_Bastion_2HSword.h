@@ -72,6 +72,7 @@ private:
 
 private: /* For.Weapon */
 	CRetributionBlade* m_pWeapon = nullptr;
+	_bool m_bFirst = false;
 
 public:
 	class CUI_Monster_Panel* m_pPanel = nullptr;
