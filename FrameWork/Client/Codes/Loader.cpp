@@ -1,7 +1,6 @@
 #include "pch.h"
 #include "Loader.h"
 #include "MeshLoader.h"
-
 #include "Animator.h"
 #include "Material.h"
 
@@ -17,10 +16,12 @@
 #include "Monster_EarthAberrant.h"
 #include "Monster_BronzeAnimus.h"
 #include "Monster_Bastion_Sword.h"
+#include "Monster_Bastion_Shooter.h"
 #include "Boss_Bastion_Judicator.h"
 #include "ShieldBreaker.h"
 #include "EarthAberrant_Pick.h"
 #include "Stargazer.h"
+#include "Bullet.h"
 
 
 //Effect & UI
@@ -37,21 +38,7 @@
 #include "UI_Tuto_Base.h"
 #include "UI_Tuto_Font.h"
 
-#include "Environment.h"
-#include "Client_Trigger.h"
-#include "Treasure_Chest.h"
 
-//Monster
-#include "Monster_Crawler.h"
-#include "Monster_EarthAberrant.h"
-#include "Monster_BronzeAnimus.h"
-#include "Monster_Bastion_Sword.h"
-#include "Boss_Bastion_Judicator.h"
-#include "Monster_Bastion_Shooter.h"
-
-#include "ShieldBreaker.h"
-#include "EarthAberrant_Pick.h"
-#include "Stargazer.h"
 
 #pragma region TestScene_JS
 
@@ -800,6 +787,16 @@ HRESULT CLoader::Load_Stage1MonsterLoad()
 		return E_FAIL;
 
 	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Monster_Bastion_Shooter", CMonster_Bastion_Shooter::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+
+	_matrix matPivot = XMMatrixIdentity();
+
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Shooter_Bullet", CModel::Create(m_pDevice, m_pDeviceContext,
+		"../bin/Resources/Mesh/Bullet/", "Sphere.fbx",
+		L"../../Reference/ShaderFile/Shader_Weapon.hlsl", matPivot, CModel::TYPE_STATIC, true))))
+		return E_FAIL;
+
+	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Shooter_Bullet", CBullet::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 
 	//Bastion_2HSword

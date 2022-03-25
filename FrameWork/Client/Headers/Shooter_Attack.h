@@ -20,10 +20,16 @@ public:
 	virtual HRESULT ExitState();
 	virtual HRESULT EnterState(void* pArg);
 	virtual HRESULT ExitState(void* pArg);
+private:
+	_uint Shot(_double dDeltaTime);
+	_uint Create_Bullet();
 public:
 	static CShooter_Attack* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext, void* _pArg = nullptr);
 private:
 	virtual void			Free() override;
+private:
+	_double m_dAccShotTime;
+	_bool m_bShot;
 };
 
 END

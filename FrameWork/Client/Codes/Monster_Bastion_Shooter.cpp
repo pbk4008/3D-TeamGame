@@ -72,7 +72,7 @@ HRESULT CMonster_Bastion_Shooter::NativeConstruct(const _uint _iSceneID, void* _
 	m_pRenderer->SetRenderButton(CRenderer::PBRHDR, true);
 	m_pRenderer->SetCameraTag(L"Camera_Silvermane");
 
-	setActive(false);
+	//setActive(false);
 
 	return S_OK;
 }
@@ -168,7 +168,7 @@ void CMonster_Bastion_Shooter::Chase()
 
 	_float fDist = XMVectorGetX(XMVector3Length(vPos - vPlayerPos));
 
-	if (fDist < 10.f)
+	if (fDist < 20.f)
 	{
 		m_wstrCurState = L"Chase";
 		m_pStateController->Change_State(L"Chase");

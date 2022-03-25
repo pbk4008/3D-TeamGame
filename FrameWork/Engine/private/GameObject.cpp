@@ -151,8 +151,6 @@ void CGameObject::OnTriggerStay(CCollision& collision)
 void CGameObject::OnTriggerExit(CCollision& collision)
 {
 }
-
-
 void CGameObject::setActive(_bool bActive)
 {
 	m_bActive = bActive;

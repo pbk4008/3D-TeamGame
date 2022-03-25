@@ -718,7 +718,8 @@ void CSilvermane::OnTriggerEnter(CCollision& collision)
 			--m_fCurrentHp;
 		}
 	}
-
+	if ((_uint)GAMEOBJECT::WEAPON_BULLET == iTag)
+		--m_fCurrentHp;
 }
 
 void CSilvermane::OnTriggerExit(CCollision& collision)

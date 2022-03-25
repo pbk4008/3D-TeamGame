@@ -481,6 +481,9 @@
     <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_Shooter\State\Chase">
       <UniqueIdentifier>{bc8ce3b8-ea1a-440f-bb8e-4fb703e5a16c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_Shooter\Bullet">
+      <UniqueIdentifier>{bc9506cc-b8bd-46dc-8693-749f8a69ac2b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -620,9 +623,6 @@
     </ClInclude>
     <ClInclude Include="..\Headers\Monster_Bastion_Healer.h">
       <Filter>02.GameObject\03.Character\01.Monster\Bastion_Healer</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Headers\Monster_Bastion_Shooter.h">
-      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Shooter</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\Monster_Bastion_Spear.h">
       <Filter>02.GameObject\03.Character\01.Monster\Bastion_Spear</Filter>
@@ -961,10 +961,6 @@
       <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Jump</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\Shooter_Attack.h">
-      <Filter>02.GameObject\95.Monster\Bastion_Shooter\Attack</Filter>
-      <Filter>02.GameObject\02.Map\02.JumpNode</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Headers\Shooter_Attack.h">
       <Filter>02.GameObject\03.Character\01.Monster\Bastion_Shooter\Attack</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\MidBoss_Rage.h">
@@ -1185,6 +1181,15 @@
     <ClInclude Include="..\Headers\Shooter_Chase.h">
       <Filter>02.GameObject\03.Character\01.Monster\Bastion_Shooter\State\Chase</Filter>
     </ClInclude>
+    <ClInclude Include="..\Headers\Bullet.h">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Shooter\Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Monster_Bastion_Shooter.h">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Shooter</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Shooter_Attack.h">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Shooter\State\Attack</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -1303,9 +1308,6 @@
     </ClCompile>
     <ClCompile Include="..\Codes\Monster_Bastion_Healer.cpp">
       <Filter>02.GameObject\03.Character\01.Monster\Bastion_Healer</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Codes\Monster_Bastion_Shooter.cpp">
-      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Shooter</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\Monster_Bastion_Spear.cpp">
       <Filter>02.GameObject\03.Character\01.Monster\Bastion_Spear</Filter>
@@ -1644,10 +1646,6 @@
       <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Jump</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\Shooter_Attack.cpp">
-      <Filter>02.GameObject\95.Monster\Bastion_Shooter\Attack</Filter>
-      <Filter>02.GameObject\02.Map\02.JumpNode</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Codes\Shooter_Attack.cpp">
       <Filter>02.GameObject\03.Character\01.Monster\Bastion_Shooter\Attack</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\MidBoss_Rage.cpp">
@@ -1861,6 +1859,15 @@
     </ClCompile>
     <ClCompile Include="..\Codes\Shooter_Chase.cpp">
       <Filter>02.GameObject\03.Character\01.Monster\Bastion_Shooter\State\Chase</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Bullet.cpp">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Shooter\Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Monster_Bastion_Shooter.cpp">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Shooter</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Shooter_Attack.cpp">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Shooter\State\Attack</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

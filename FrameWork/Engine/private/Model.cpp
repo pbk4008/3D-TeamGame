@@ -87,6 +87,22 @@ CHierarchyNode* CModel::Get_BoneMatrix(const char * pBoneName)
 	return Find_HierarchyNode(pBoneName);	
 }
 
+CHierarchyNode* CModel::Get_Bone(const string& pBoneName)
+{
+	if (m_HierarchyNodes.empty())
+		return nullptr;
+	CHierarchyNode* pNode = nullptr;
+	for (auto& pHierarchy : m_HierarchyNodes)
+	{
+		if (pHierarchy->Get_Name() == pBoneName)
+		{
+			pNode = pHierarchy;
+			break;
+		}
+	}
+	return pNode;
+}
+
 CAnimation* CModel::Get_Animation(const string& pName)
 {
 	CAnimation* pFindAnim = nullptr;
