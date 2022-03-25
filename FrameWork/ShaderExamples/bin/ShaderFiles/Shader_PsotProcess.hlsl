@@ -15,10 +15,22 @@ sampler DefaultSampler = sampler_state
 
 cbuffer RtPixel
 {
-	float2 g_RtperPixel;
+	float2	g_RtperPixel;
+};
+
+cbuffer ConstBuffer
+{
+	vector g_BrightPassOffset[4];
+	float g_BrightPassThreshold;
 };
 
 texture2D g_Basetexture;
+
+// bloom
+texture2D g_BaseBlur2Texture;
+texture2D g_BaseBlur4Texture;
+texture2D g_BaseBlur8Texture;
+texture2D g_BaseBlur16Texture;
 
 int g_blurSize = 3;
 
@@ -125,6 +137,46 @@ PS_OUT PS_MAIN_HorizontalBlur(PS_IN In)
 	return Out;
 }
 
+PS_OUT PS_MAIN_BrightPass(PS_IN In)
+{
+	PS_OUT Out = (PS_OUT) 0;
+
+	float4 Average = float4(0.f, 0.f, 0.f, 0.f);
+	
+	for (int i = 0; i < 4; i++)
+	{
+		Average += g_Basetexture.Sample(DefaultSampler, (In.vTexUV + float2(g_BrightPassOffset[i].x, g_BrightPassOffset[i].y)));
+	}
+	Average *= 0.25f;
+	
+	//float Luminance = max(Average.r, max(Average.g, Average.b));
+	float Luminance = 0.5f * (max(Average.r, max(Average.g, Average.b)) + min(Average.r, min(Average.g, Average.b)));
+	
+	if (Luminance < g_BrightPassThreshold)
+		Average = float4(0.f, 0.f, 0.f, 1.f);
+		
+	Out.vOutColor = Average;
+	
+	return Out;
+}
+
+PS_OUT PS_MAIN_Bloom(PS_IN In)
+{
+	PS_OUT Out = (PS_OUT) 0;
+	
+	float weight = 1.1f;
+	
+	float4 base2 = g_BaseBlur2Texture.Sample(DefaultSampler, In.vTexUV);
+	float4 base4 = g_BaseBlur4Texture.Sample(DefaultSampler, In.vTexUV);
+	float4 base8 = g_BaseBlur8Texture.Sample(DefaultSampler, In.vTexUV);
+	float4 base16 = g_BaseBlur16Texture.Sample(DefaultSampler, In.vTexUV);
+	
+	float4 baseBloom = (base2 * weight) + (base4 * weight) + (base8 * weight) + (base16 * weight);
+	
+	Out.vOutColor = baseBloom;
+	
+	return Out;
+}
 
 //--------------------------------------------------------------------------------------------------------------------------//
 technique11 PostProcess
@@ -151,4 +203,25 @@ technique11 PostProcess
 		PixelShader = compile ps_5_0 PS_MAIN_HorizontalBlur();
 	}
 	
+	pass BrightPass
+	{
+		SetRasterizerState(CullMode_Default);
+		SetDepthStencilState(ZTestDiable, 0);
+		SetBlendState(BlendDisable, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+
+		VertexShader = compile vs_5_0 VS_MAIN_VIEWPORT();
+		GeometryShader = NULL;
+		PixelShader = compile ps_5_0 PS_MAIN_BrightPass();
+	}
+
+	pass Bloom
+	{
+		SetRasterizerState(CullMode_Default);
+		SetDepthStencilState(ZTestDiable, 0);
+		SetBlendState(BlendDisable, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+
+		VertexShader = compile vs_5_0 VS_MAIN_VIEWPORT();
+		GeometryShader = NULL;
+		PixelShader = compile ps_5_0 PS_MAIN_Bloom();
+	}
 }

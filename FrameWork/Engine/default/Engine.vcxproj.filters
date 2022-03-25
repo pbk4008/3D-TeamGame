@@ -295,6 +295,9 @@
     <Filter Include="00.Utility\03.Component\00.Collider\99.NavMesh">
       <UniqueIdentifier>{4cfd12c9-3390-4bf3-bb96-e5b30630e0c8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="98.ShaderFiles\Environment">
+      <UniqueIdentifier>{a55263e9-530b-4c0c-92c7-a546a74a279c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\public\Base.h">
@@ -865,9 +868,6 @@
     <FxCompile Include="..\bin\ShaderFiles\Shader_Instance.hlsl">
       <Filter>98.ShaderFiles</Filter>
     </FxCompile>
-    <FxCompile Include="..\bin\ShaderFiles\Shader_InstanceMesh.hlsl">
-      <Filter>98.ShaderFiles</Filter>
-    </FxCompile>
     <FxCompile Include="..\bin\ShaderFiles\Shader_Plane.hlsl">
       <Filter>98.ShaderFiles</Filter>
     </FxCompile>
@@ -927,6 +927,39 @@
     </FxCompile>
     <FxCompile Include="..\bin\ShaderFiles\Shader_Shield.hlsl">
       <Filter>98.ShaderFiles</Filter>
+    </FxCompile>
+    <FxCompile Include="..\bin\ShaderFiles\Shader_InstanceMesh.hlsl">
+      <Filter>98.ShaderFiles\Environment</Filter>
+    </FxCompile>
+    <FxCompile Include="..\bin\ShaderFiles\Shader_INST_ORM.hlsl">
+      <Filter>98.ShaderFiles\Environment</Filter>
+    </FxCompile>
+    <FxCompile Include="..\bin\ShaderFiles\Shader_INST_ORME.hlsl">
+      <Filter>98.ShaderFiles\Environment</Filter>
+    </FxCompile>
+    <FxCompile Include="..\bin\ShaderFiles\Shader_INST_ORS.hlsl">
+      <Filter>98.ShaderFiles\Environment</Filter>
+    </FxCompile>
+    <FxCompile Include="..\bin\ShaderFiles\Shader_INST_MASK.hlsl">
+      <Filter>98.ShaderFiles\Environment</Filter>
+    </FxCompile>
+    <FxCompile Include="..\bin\ShaderFiles\Shader_INST_ORM_Gold.hlsl">
+      <Filter>98.ShaderFiles\Environment</Filter>
+    </FxCompile>
+    <FxCompile Include="..\bin\ShaderFiles\Shader_INST_ORM_M.hlsl">
+      <Filter>98.ShaderFiles\Environment</Filter>
+    </FxCompile>
+    <FxCompile Include="..\bin\ShaderFiles\Shader_INST_ORM_N2.hlsl">
+      <Filter>98.ShaderFiles\Environment</Filter>
+    </FxCompile>
+    <FxCompile Include="..\bin\ShaderFiles\Shader_INST_Coin.hlsl">
+      <Filter>98.ShaderFiles\Environment</Filter>
+    </FxCompile>
+    <FxCompile Include="..\bin\ShaderFiles\Shader_INST_OMR.hlsl">
+      <Filter>98.ShaderFiles\Environment</Filter>
+    </FxCompile>
+    <FxCompile Include="..\bin\ShaderFiles\Shader_INST_OMER.hlsl">
+      <Filter>98.ShaderFiles\Environment</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>

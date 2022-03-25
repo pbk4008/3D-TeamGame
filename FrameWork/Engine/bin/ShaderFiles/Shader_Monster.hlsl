@@ -333,7 +333,7 @@ PS_OUT PS_MAIN_Body(PS_IN In)
 	float Metalic = mra.r + 0.2f;
 	Out.M = float4(Metalic.xxx, 1.f);
 	
-	float Roughness = mra.g;
+	float Roughness = mra.g ;
 	Out.R = float4(Roughness.xxx, 1.f);
 
 	float AO = ceo.b * 1.f;

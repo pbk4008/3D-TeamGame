@@ -23,6 +23,52 @@ HRESULT CPostProcess::InitPostProcess()
 	return S_OK;
 }
 
+HRESULT CPostProcess::ComputeBrightPass(CTarget_Manager* pTargetMgr, const wstring& in, _float sizex, _float sizey)
+{
+	if (FAILED(pTargetMgr->Begin_MRT(m_pDeviceContext, TEXT("MRT_BrightPass"))))
+		return E_FAIL;
+
+	_float2 vTexUV = { 1.f / m_viewport.Width, 1.f / m_viewport.Height };
+
+	_vector	offset[4];
+	ZeroMemory(offset, sizeof(_vector) * 4);
+	offset[0] = { -0.5f * vTexUV.x , 0.5f * vTexUV.y , 0, 0 };
+	offset[1] = { 0.5f * vTexUV.x , 0.5f * vTexUV.y , 0, 0 };
+	offset[2] = { -0.5f * vTexUV.x , -0.5f * vTexUV.y , 0, 0 };
+	offset[3] = { 0.5f * vTexUV.x , -0.5f * vTexUV.y , 0, 0 };
+
+	if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_BrightPassOffset", offset, sizeof(_vector) * 4)))
+		return E_FAIL;
+	if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_BrightPassThreshold", &m_BrightThreshold, sizeof(_float))))
+		return E_FAIL;
+	if (FAILED(m_pVIBuffer->SetUp_TextureOnShader("g_Basetexture", pTargetMgr->Get_SRV(L"Target_HDRDiffuse"))))
+		return E_FAIL;
+
+	m_pVIBuffer->Buffer_Resize(640.f, 360.f);
+	m_pVIBuffer->Render(2);
+
+	if (FAILED(pTargetMgr->End_MRT(m_pDeviceContext)))
+		return E_FAIL;
+
+	return S_OK;
+}
+
+HRESULT CPostProcess::BloomPass(CTarget_Manager* pTargetMgr)
+{
+	if (FAILED(pTargetMgr->Begin_MRT(m_pDeviceContext, TEXT("Target_Bloom"))))	return E_FAIL;
+
+	if (FAILED(m_pVIBuffer->SetUp_TextureOnShader("g_BaseBlur2Texture", pTargetMgr->Get_SRV(L"Target_HZ2"))))	return E_FAIL;
+	if (FAILED(m_pVIBuffer->SetUp_TextureOnShader("g_BaseBlur4Texture", pTargetMgr->Get_SRV(L"Target_HZ4"))))	return E_FAIL;
+	if (FAILED(m_pVIBuffer->SetUp_TextureOnShader("g_BaseBlur8Texture", pTargetMgr->Get_SRV(L"Target_HZ8"))))	return E_FAIL;
+	if (FAILED(m_pVIBuffer->SetUp_TextureOnShader("g_BaseBlur16Texture", pTargetMgr->Get_SRV(L"Target_HZ6")))) return E_FAIL;
+
+	m_pVIBuffer->Render(3);
+
+	if (FAILED(pTargetMgr->End_MRT(m_pDeviceContext))) return E_FAIL;
+
+	return S_OK;
+}
+
 HRESULT CPostProcess::BlurPass(CTarget_Manager* pTargetMgr, const wstring& in, const wstring& middle, const wstring& out, _float sizex, _float sizey)
 {
 	if (FAILED(GaussianBlurVertical(pTargetMgr, in, middle, sizex, sizey))) return E_FAIL;
@@ -62,6 +108,8 @@ HRESULT CPostProcess::GaussianblurHorizontal(CTarget_Manager* pTargetMgr, const 
 	m_pVIBuffer->Render(1);
 
 	if (FAILED(pTargetMgr->End_MRT(m_pDeviceContext)))	return E_FAIL;
+
+	m_pVIBuffer->Buffer_Resize(m_viewport.Width, m_viewport.Height);
 
 	return S_OK;
 }

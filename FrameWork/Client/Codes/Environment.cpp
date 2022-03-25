@@ -74,10 +74,12 @@ HRESULT CEnvironment::Render()
 	_matrix matWorld = XMMatrixTranspose(m_pTransform->Get_WorldMatrix());
 	_matrix matView = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_VIEW));
 	_matrix matProj = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_PROJECTION));
+	_vector campos = g_pGameInstance->Get_CamPosition(L"Camera_Silvermane");
 
 	m_pInstanceMesh->SetUp_ValueOnShader("g_WorldMatrix", &matWorld, sizeof(_matrix));
 	m_pInstanceMesh->SetUp_ValueOnShader("g_ViewMatrix", &matView, sizeof(_matrix));
 	m_pInstanceMesh->SetUp_ValueOnShader("g_ProjMatrix", &matProj, sizeof(_matrix));
+	m_pInstanceMesh->SetUp_ValueOnShader("g_CamPos", &campos, sizeof(_vector));
 
 	/*_uint iNumMeshCnt = m_pInstanceMesh->Get_NumMeshContainer();*/
 	for (_uint i = 0; i < m_Nummeshcontainer; i++)
@@ -128,11 +130,6 @@ HRESULT CEnvironment::Render_ShadeShadow(ID3D11ShaderResourceView* ShadowMap)
 		m_pInstanceMesh->SetUp_TextureOnShader("g_ShadowTexture", ShadowMap, i);
 	}
 
-	return S_OK;
-}
-
-HRESULT CEnvironment::Render_PBR()
-{
 	return S_OK;
 }
 

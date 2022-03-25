@@ -284,10 +284,10 @@ PS_OUT PS_MAIN_WEAPONE(PS_IN In)
 	Out.depth = float4(In.vUvDepth.z / In.vUvDepth.w, In.vUvDepth.w / 300.f, 0.f, 0.f);
 	Out.normal = float4(normal, 0);
 	
-	float Metalic = mra.r;
+	float Metalic = 0.9f;
 	Out.M = float4(Metalic.xxx, 1.f);
 	
-	float Roughness = mra.g;
+	float Roughness = /*mra.g*/0.1f;
 	Out.R = float4(Roughness.xxx, 1.f);
 
 	float AO = mra.b;

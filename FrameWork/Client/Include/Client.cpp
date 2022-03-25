@@ -217,6 +217,20 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
     switch (message)
     {
+	case WM_CREATE:
+		int x, y, width, height;
+		RECT rtDesk, rtWindow;
+		GetWindowRect(GetDesktopWindow(), &rtDesk);
+		GetWindowRect(hWnd, &rtWindow);
+
+		width = rtWindow.right - rtWindow.left;
+		height = rtWindow.bottom - rtWindow.top;
+
+		x = (rtDesk.right - width) / 3;
+		y = (rtDesk.bottom - height) / 3;
+
+		MoveWindow(hWnd, x, y, width, height, TRUE);
+		break;
     case WM_ACTIVATEAPP:
         switch (wParam)
         {
