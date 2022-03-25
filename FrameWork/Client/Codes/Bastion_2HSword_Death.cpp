@@ -80,7 +80,10 @@ void CBastion_2HSword_Death::Look_Monster(void)
 	CAnimation* pAnim = m_pAnimator->Get_CurrentAnimation();
 
 	if (pAnim->Is_Finished())
-		static_cast<CMonster_Bastion_2HSword*>(m_pMonster)->m_bRender = false;
+	{
+		static_cast<CMonster_Bastion_2HSword*>(m_pMonster)->Set_Dead();
+		static_cast<CMonster_Bastion_2HSword*>(m_pMonster)->setActive(false);
+	}
 }
 
 CBastion_2HSword_Death* CBastion_2HSword_Death::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext, void* _pArg)

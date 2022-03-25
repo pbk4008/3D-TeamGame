@@ -107,6 +107,7 @@ public:
 
 		for (auto pMonPoint : vecMonPonit)
 		{
+			pMonPoint.fTrigger_Point.y += 1.f;
 			m_pVecMonsterSpawnPoint[(_uint)eType].emplace_back(pMonPoint.fTrigger_Point);
 			switch (eType)
 			{

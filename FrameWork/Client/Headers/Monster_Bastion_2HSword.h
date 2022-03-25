@@ -10,8 +10,8 @@ class CCapsuleCollider;
 END
 
 BEGIN(Client)
-class CWeapon;
-class CMonster_Bastion_2HSword final : public CActor
+class CRetributionBlade;
+class CMonster_Bastion_2HSword : public CActor
 {
 public:
 	enum class ANIM_TYPE {
@@ -56,6 +56,9 @@ private:
 
 public:
 	void Set_IsAttack(const _bool _isAttack);
+	void Set_Current_HP(_int _iHp) { m_fCurrentHp += _iHp; }
+	void Set_GroggyGauge(_uint _Value) { m_fGroggyGauge += _Value; }
+	void Set_Dead(void) { m_bDead = true; m_bRemove = true; }
 
 private:
 	CModel*				  m_pModel = nullptr;
@@ -68,17 +71,12 @@ private:
 	CAnimator::ANIMATORDESC m_AanimDesc;
 
 private: /* For.Weapon */
-	CWeapon* m_pCurWeapon = nullptr;
-	_bool m_isEquipWeapon = false;
-	unordered_map<wstring, CWeapon*> m_umapWeapons;
+	CRetributionBlade* m_pWeapon = nullptr;
 
-private:
+public:
 	class CUI_Monster_Panel* m_pPanel = nullptr;
 
 public:
-	_bool	m_bRender = true;
-
-private:
 	_bool	m_isFall = false;
 	_bool	m_bFirstHit = false; //맨처음들어와서 맞았을때 판넬크기바꿔줘야돼서
 	_bool	m_bGroggy = false; //그로기 상태인지 아닌지
