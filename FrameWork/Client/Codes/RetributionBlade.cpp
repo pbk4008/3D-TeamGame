@@ -113,6 +113,7 @@ HRESULT CRetributionBlade::Render()
 	return S_OK;
 }
 
+
 HRESULT CRetributionBlade::Ready_Components()
 {
 	CTransform::TRANSFORMDESC transformDesc;

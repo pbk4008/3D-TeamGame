@@ -175,9 +175,6 @@
     </FxCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\Codes\MeshLoader.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
-    </ClInclude>
     <ClInclude Include="..\Default\Client_Enum.h" />
     <ClInclude Include="..\Default\Client_Function.h" />
     <ClInclude Include="..\Default\Client_Include.h" />
@@ -287,6 +284,7 @@
     <ClInclude Include="..\Headers\Bastion_Sword_Turn.h" />
     <ClInclude Include="..\Headers\Bastion_Sword_Walk.h" />
     <ClInclude Include="..\Headers\Boss_Bastion_Judicator.h" />
+    <ClInclude Include="..\Headers\Bullet.h" />
     <ClInclude Include="..\Headers\Camera_Silvermane.h" />
     <ClInclude Include="..\Headers\Camera_Debug.h" />
     <ClInclude Include="..\Headers\Client_Observer.h" />
@@ -311,6 +309,7 @@
     <ClInclude Include="..\Headers\MainApp.h" />
     <ClInclude Include="..\Headers\MainCamera.h" />
     <ClInclude Include="..\Headers\MainCamera_Ortho.h" />
+    <ClInclude Include="..\Headers\MeshLoader.h" />
     <ClInclude Include="..\Headers\MidBoss_Attack.h" />
     <ClInclude Include="..\Headers\MidBoss_BattleCry.h" />
     <ClInclude Include="..\Headers\MidBoss_Death.h" />
@@ -351,7 +350,12 @@
     <ClInclude Include="..\Headers\RetributionBlade.h" />
     <ClInclude Include="..\Headers\ShieldBreaker.h" />
     <ClInclude Include="..\Headers\Shooter_Attack.h" />
+    <ClInclude Include="..\Headers\Shooter_Chase.h" />
+    <ClInclude Include="..\Headers\Shooter_Death.h" />
+    <ClInclude Include="..\Headers\Shooter_Groggy.h" />
+    <ClInclude Include="..\Headers\Shooter_Hit.h" />
     <ClInclude Include="..\Headers\Shooter_Idle.h" />
+    <ClInclude Include="..\Headers\Shooter_Walk.h" />
     <ClInclude Include="..\Headers\Silvermane.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClInclude>
@@ -511,6 +515,7 @@
     <ClCompile Include="..\Codes\Bastion_Sword_Paring.cpp" />
     <ClCompile Include="..\Codes\Bastion_Sword_Turn.cpp" />
     <ClCompile Include="..\Codes\Bastion_Sword_Walk.cpp" />
+    <ClCompile Include="..\Codes\Bullet.cpp" />
     <ClCompile Include="..\Codes\Client_Observer.cpp" />
     <ClCompile Include="..\Codes\Client_Trigger.cpp" />
     <ClCompile Include="..\Codes\Boss_Bastion_Judicator.cpp" />
@@ -579,7 +584,12 @@
     <ClCompile Include="..\Codes\RetributionBlade.cpp" />
     <ClCompile Include="..\Codes\ShieldBreaker.cpp" />
     <ClCompile Include="..\Codes\Shooter_Attack.cpp" />
+    <ClCompile Include="..\Codes\Shooter_Chase.cpp" />
+    <ClCompile Include="..\Codes\Shooter_Death.cpp" />
+    <ClCompile Include="..\Codes\Shooter_Groggy.cpp" />
+    <ClCompile Include="..\Codes\Shooter_Hit.cpp" />
     <ClCompile Include="..\Codes\Shooter_Idle.cpp" />
+    <ClCompile Include="..\Codes\Shooter_Walk.cpp" />
     <ClCompile Include="..\Codes\Silvermane.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>

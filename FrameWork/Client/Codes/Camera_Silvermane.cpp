@@ -55,8 +55,14 @@ _int CCamera_Silvermane::Tick(_double _dDeltaTime)
 		return iProgress;
 
 	m_pTransform->Set_WorldMatrix(m_pLocalTransform->Get_WorldMatrix() * m_pWorldTransform->Get_WorldMatrix());
-	m_pCamera->Update_Matrix(m_pTransform->Get_WorldMatrix());
 
+
+
+	SpringArm();
+
+
+
+	m_pCamera->Update_Matrix(m_pTransform->Get_WorldMatrix());
 	return _int();
 }
 
@@ -135,14 +141,54 @@ _int CCamera_Silvermane::Input_Key(const _double& _dDeltaTime)
 {
 	_long   MouseMove = 0;
 
-	if (MouseMove = g_pGameInstance->getMouseMoveState(CInputDev::MOUSEMOVESTATE::MM_X))
+	MouseMove = g_pGameInstance->getMouseMoveState(CInputDev::MOUSEMOVESTATE::MM_X);
+	if (0 < MouseMove)
+	{
 		m_pWorldTransform->Rotation_Axis(XMVectorSet(0.f, 1.f, 0.f, 0.f), _dDeltaTime * MouseMove * 0.1f);
-
+	}
+	else if (0 > MouseMove)
+	{
+		m_pWorldTransform->Rotation_Axis(XMVectorSet(0.f, 1.f, 0.f, 0.f), _dDeltaTime * MouseMove * 0.1f);
+	}
 	MouseMove = g_pGameInstance->getMouseMoveState(CInputDev::MOUSEMOVESTATE::MM_Y);
-	m_fRotRight += (_float)_dDeltaTime * MouseMove;
-	m_pWorldTransform->Rotation_Axis(m_pWorldTransform->Get_State(CTransform::STATE_RIGHT), _dDeltaTime * MouseMove * 0.1f);
+	if (MouseMove)
+	{
+		_float fMouseDelta = MouseMove * _dDeltaTime * 0.1f;
+		m_vRot.y += fMouseDelta;
+		if (-0.55f < m_vRot.y && 0.25f > m_vRot.y)
+			m_pWorldTransform->Rotation_Axis(m_pWorldTransform->Get_State(CTransform::STATE_RIGHT), fMouseDelta);
+		else if (-0.55f >= m_vRot.y)
+			m_vRot.y = -0.55f;
+		else
+			m_vRot.y = 0.25f;
+	}
 
 	return _int();
+}
+
+void CCamera_Silvermane::SpringArm()
+{
+	CTransform* pTargetTransform = m_pSilvermane->Get_Transform();
+
+	_vector svPosition = m_pTransform->Get_State(CTransform::STATE_POSITION);
+	_vector svTargetPos = pTargetTransform->Get_State(CTransform::STATE_POSITION);
+	svTargetPos += XMVectorSet(0.5f, 1.f, 0.f, 0.f);
+
+
+	RAYCASTDESC tRaycastDesc;
+	XMStoreFloat3(&tRaycastDesc.vOrigin, svTargetPos);
+	XMStoreFloat3(&tRaycastDesc.vDir, XMVector3Normalize(svPosition - svTargetPos));
+	tRaycastDesc.fMaxDistance = 4.f;
+	tRaycastDesc.filterData.flags = PxQueryFlag::eANY_HIT | PxQueryFlag::eSTATIC;
+	CGameObject* pHitObject = nullptr;
+	tRaycastDesc.ppOutHitObject = &pHitObject;
+	if (g_pGameInstance->Raycast(tRaycastDesc))
+	{
+		if ((_uint)GAMEOBJECT::ENVIRONMENT == pHitObject->getTag())
+		{
+			m_pTransform->Set_State(CTransform::STATE_POSITION, XMVectorSetW(XMLoadFloat3(&tRaycastDesc.vHitPos), 1.f));
+		}
+	}
 }
 
 const _fvector& CCamera_Silvermane::Get_Look() const

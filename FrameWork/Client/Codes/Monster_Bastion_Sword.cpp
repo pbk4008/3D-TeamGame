@@ -91,7 +91,7 @@ HRESULT CMonster_Bastion_Sword::NativeConstruct(const _uint _iSceneID, void* _pA
 
 	m_pPanel->Set_TargetWorldMatrix(m_pTransform->Get_WorldMatrix());
 
-	m_fMaxHp = 30.f;
+	m_fMaxHp = 3.f;
 	m_fCurrentHp = m_fMaxHp;
 
 	m_fMaxGroggyGauge = 10.f;
@@ -106,6 +106,12 @@ HRESULT CMonster_Bastion_Sword::NativeConstruct(const _uint _iSceneID, void* _pA
 
 _int CMonster_Bastion_Sword::Tick(_double _dDeltaTime)
 {
+	//나중에지울코드
+	if (!m_bFirst)
+	{
+		m_pPanel->Set_Show(true);
+	}
+
 	if (0 > __super::Tick(_dDeltaTime))
 	{
 		return -1;
@@ -147,6 +153,15 @@ _int CMonster_Bastion_Sword::Tick(_double _dDeltaTime)
 			m_bGroggy = false;
 		}
 	}
+
+	if ((_uint)ANIM_TYPE::DEATH == m_pAnimator->Get_CurrentAnimNode() && m_pAnimator->Get_AnimController()->Is_Finished())
+	{
+		m_bRemove = true;
+		setActive(false);
+
+		m_pPanel->Set_Show(false);
+	}
+
 
 	m_pPanel->Set_TargetWorldMatrix(m_pTransform->Get_WorldMatrix());
 
@@ -623,7 +638,8 @@ void CMonster_Bastion_Sword::Chase()
 	_float fDist = XMVectorGetX(XMVector3Length(vPos - vPlayerPos));
 
 	if (fDist < 10.f)
-	{		m_wstrCurState = L"Chase";
+	{		
+		m_wstrCurState = L"Chase";
 		m_pStateController->Change_State(L"Chase");
 	}
 }

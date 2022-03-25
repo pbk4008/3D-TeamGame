@@ -20,9 +20,14 @@ CCollider::CCollider(const CCollider& _rhs)
 	Safe_AddRef(m_pPhsyX);
 }
 
-void CCollider::Remove_Actor()
+void CCollider::Remove_ActorFromScene()
 {
 	m_pPhsyX->Remove_Actor(m_pRigidActor);
+}
+
+void CCollider::Add_ActorToScene()
+{
+	m_pPhsyX->Add_Actor(m_pRigidActor);
 }
 
 HRESULT CCollider::NativeConstruct_Prototype()

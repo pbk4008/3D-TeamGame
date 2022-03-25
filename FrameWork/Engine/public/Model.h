@@ -25,6 +25,7 @@ public:
 	_fmatrix Get_PivotMatrix() { return XMLoadFloat4x4(&m_PivotMatrix); }
 	TYPE getType() { return m_eMeshType; }
 	vector<CHierarchyNode*>& Get_HierachyNodes() { return m_HierarchyNodes; }
+	CHierarchyNode* Get_Bone(const string& pBoneName);
 	vector<CAnimation*>& Get_Animations() { return m_Animations; }
 	CAnimation* Get_Animation(const string& pName);
 	_bool getUsingMaterial() { return m_bUsingMaterial; }

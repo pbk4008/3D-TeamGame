@@ -22,6 +22,7 @@ private:
 	HRESULT Ready_Components();
 	_int Attach_FixedBone(const _double& _dDeltaTime);
 	_int Attach_Owner(const _double& _dDeltaTime);
+	virtual void Set_Equip(const _bool _isEquip, void* _pArg = nullptr);
 
 private:
 	_float4x4 m_matPivot;

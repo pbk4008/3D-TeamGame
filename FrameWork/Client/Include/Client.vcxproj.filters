@@ -244,12 +244,6 @@
     <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_Shooter">
       <UniqueIdentifier>{9ff8a515-17bc-40fa-a1a9-f012b45f5d19}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_Shooter\Idle">
-      <UniqueIdentifier>{98de4f7a-c550-41c1-9300-e3be3582d049}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_Shooter\Attack">
-      <UniqueIdentifier>{0e465f15-42b9-4038-9066-ca93866e3c94}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_Spear">
       <UniqueIdentifier>{985a4737-6984-45e3-b7aa-e1c5e0c5c488}</UniqueIdentifier>
     </Filter>
@@ -463,6 +457,33 @@
     <Filter Include="02.GameObject\03.Character\02.Boss\00.MiddleBoss\State\00.Run">
       <UniqueIdentifier>{e800aeda-0ac9-4c06-ba77-a606ba04cd5b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_Shooter\State">
+      <UniqueIdentifier>{14771fa7-7054-4bf1-99fc-72b13a0f9722}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_Shooter\State\Attack">
+      <UniqueIdentifier>{0e465f15-42b9-4038-9066-ca93866e3c94}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_Shooter\State\Idle">
+      <UniqueIdentifier>{98de4f7a-c550-41c1-9300-e3be3582d049}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_Shooter\State\Death">
+      <UniqueIdentifier>{b2969b5b-1ae9-43a2-b4ac-88190867c1d0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_Shooter\State\Hit">
+      <UniqueIdentifier>{f8b78009-493d-4f56-bd0a-df9463180192}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_Shooter\State\Groggy">
+      <UniqueIdentifier>{28ef5e3b-891e-4dfb-a639-46f6f9844ec7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_Shooter\State\Walk">
+      <UniqueIdentifier>{45ae3d67-529b-4945-a05d-b6f887e8ddca}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_Shooter\State\Chase">
+      <UniqueIdentifier>{bc8ce3b8-ea1a-440f-bb8e-4fb703e5a16c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_Shooter\Bullet">
+      <UniqueIdentifier>{bc9506cc-b8bd-46dc-8693-749f8a69ac2b}</UniqueIdentifier>
+       </Filter>
     <Filter Include="02.GameObject\04.Effect\00.Effect_DashDust_Player">
       <UniqueIdentifier>{b305731d-7dad-4c04-a1b5-dfb2e52d2441}</UniqueIdentifier>
     </Filter>
@@ -614,9 +635,6 @@
     </ClInclude>
     <ClInclude Include="..\Headers\Monster_Bastion_Healer.h">
       <Filter>02.GameObject\03.Character\01.Monster\Bastion_Healer</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Headers\Monster_Bastion_Shooter.h">
-      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Shooter</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\Monster_Bastion_Spear.h">
       <Filter>02.GameObject\03.Character\01.Monster\Bastion_Spear</Filter>
@@ -949,14 +967,10 @@
       <Filter>01.Scene\100.TestScene_SB</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\Shooter_Idle.h">
-      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Shooter\Idle</Filter>
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Shooter\State\Idle</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\Traverse_Jump400Jog.h">
       <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Jump</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Headers\Shooter_Attack.h">
-      <Filter>02.GameObject\95.Monster\Bastion_Shooter\Attack</Filter>
-      <Filter>02.GameObject\02.Map\02.JumpNode</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\Shooter_Attack.h">
       <Filter>02.GameObject\03.Character\01.Monster\Bastion_Shooter\Attack</Filter>
@@ -1104,9 +1118,6 @@
     <ClInclude Include="..\Headers\Bastion_Healer_Chaser_End.h">
       <Filter>02.GameObject\03.Character\01.Monster\Bastion_Healer\State_Healer\Chaser</Filter>
     </ClInclude>
-    <ClInclude Include="..\Codes\MeshLoader.h">
-      <Filter>01.Scene\01.Loading\00.Loader\00.MeshLoader</Filter>
-    </ClInclude>
     <ClInclude Include="..\Headers\SkyBox.h">
       <Filter>02.GameObject\00. BackGround\Skybox</Filter>
     </ClInclude>
@@ -1170,6 +1181,33 @@
     <ClInclude Include="..\Headers\MidBoss_Run.h">
       <Filter>02.GameObject\03.Character\02.Boss\00.MiddleBoss\State\00.Run</Filter>
     </ClInclude>
+    <ClInclude Include="..\Headers\Shooter_Death.h">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Shooter\State\Death</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Shooter_Hit.h">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Shooter\State\Hit</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\MeshLoader.h">
+      <Filter>01.Scene\01.Loading\00.Loader\00.MeshLoader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Shooter_Groggy.h">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Shooter\State\Groggy</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Shooter_Walk.h">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Shooter\State\Walk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Shooter_Chase.h">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Shooter\State\Chase</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Bullet.h">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Shooter\Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Monster_Bastion_Shooter.h">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Shooter</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Shooter_Attack.h">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Shooter\State\Attack</Filter>
+        </ClInclude>
     <ClInclude Include="..\Headers\Effect_DashDust.h">
       <Filter>02.GameObject\04.Effect\00.Effect_DashDust_Player</Filter>
     </ClInclude>
@@ -1297,9 +1335,6 @@
     </ClCompile>
     <ClCompile Include="..\Codes\Monster_Bastion_Healer.cpp">
       <Filter>02.GameObject\03.Character\01.Monster\Bastion_Healer</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Codes\Monster_Bastion_Shooter.cpp">
-      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Shooter</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\Monster_Bastion_Spear.cpp">
       <Filter>02.GameObject\03.Character\01.Monster\Bastion_Spear</Filter>
@@ -1632,14 +1667,10 @@
       <Filter>01.Scene\100.TestScene_SB</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\Shooter_Idle.cpp">
-      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Shooter\Idle</Filter>
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Shooter\State\Idle</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\Traverse_Jump400Jog.cpp">
       <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Jump</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Codes\Shooter_Attack.cpp">
-      <Filter>02.GameObject\95.Monster\Bastion_Shooter\Attack</Filter>
-      <Filter>02.GameObject\02.Map\02.JumpNode</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\Shooter_Attack.cpp">
       <Filter>02.GameObject\03.Character\01.Monster\Bastion_Shooter\Attack</Filter>
@@ -1847,6 +1878,30 @@
     <ClCompile Include="..\Codes\MidBoss_Run.cpp">
       <Filter>02.GameObject\03.Character\02.Boss\00.MiddleBoss\State\00.Run</Filter>
     </ClCompile>
+    <ClCompile Include="..\Codes\Shooter_Death.cpp">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Shooter\State\Death</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Shooter_Hit.cpp">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Shooter\State\Hit</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Shooter_Groggy.cpp">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Shooter\State\Groggy</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Shooter_Walk.cpp">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Shooter\State\Walk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Shooter_Chase.cpp">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Shooter\State\Chase</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Bullet.cpp">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Shooter\Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Monster_Bastion_Shooter.cpp">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Shooter</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Shooter_Attack.cpp">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Shooter\State\Attack</Filter>
+     </ClCompile>
     <ClCompile Include="..\Codes\Effect_DashDust.cpp">
       <Filter>02.GameObject\04.Effect\00.Effect_DashDust_Player</Filter>
     </ClCompile>

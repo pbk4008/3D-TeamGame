@@ -25,6 +25,8 @@ public:
 
 	HRESULT Ready_Components();
 
+	void setIsPick(const _bool _isPick);
+
 	virtual void OnTriggerEnter(CCollision& collision) override;
 
 private:
@@ -33,6 +35,7 @@ private:
 	CBoxCollider* m_pCollider = nullptr;
 
 	_bool m_isPick = false;
+	_bool m_isChange = false;
 	_float m_fHoldTime = 0.f;
 
 	DESC m_tDesc;
