@@ -29,17 +29,13 @@ HRESULT CNeedle::NativeConstruct_Prototype()
 	CMaterial* pMtrl = nullptr;
 	CTexture* pTexture = nullptr;
 	pMtrl = CMaterial::Create(m_pDevice, m_pDeviceContext, L"Mtrl_Needle", L"../../Reference/ShaderFile/Shader_Weapon.hlsl", CMaterial::EType::Static);
-	pTexture = CTexture::Create(m_pDevice, m_pDeviceContext);
-	pTexture->NativeConstruct_Prototype(L"../Bin/Resources/Mesh/Needle/T_1h_Sword_Needle_D.dds", 1);
+	pTexture = CTexture::Create(m_pDevice, m_pDeviceContext, L"../Bin/Resources/Mesh/Needle/T_1h_Sword_Needle_D.dds", 1);
 	pMtrl->Set_Texture("g_DiffuseTexture", TEXTURETYPE::TEX_DIFFUSE, pTexture, 0);
-	pTexture = CTexture::Create(m_pDevice, m_pDeviceContext);
-	pTexture->NativeConstruct_Prototype(L"../Bin/Resources/Mesh/Needle/T_1h_Sword_Needle_N.dds", 1);
+	pTexture = CTexture::Create(m_pDevice, m_pDeviceContext, L"../Bin/Resources/Mesh/Needle/T_1h_Sword_Needle_N.dds", 1);
 	pMtrl->Set_Texture("g_BiNormalTexture", TEXTURETYPE::TEX_NORMAL, pTexture, 0);
-	pTexture = CTexture::Create(m_pDevice, m_pDeviceContext);
-	pTexture->NativeConstruct_Prototype(L"../Bin/Resources/Mesh/Needle/T_1h_Sword_Needle_MRA.dds", 1);
+	pTexture = CTexture::Create(m_pDevice, m_pDeviceContext, L"../Bin/Resources/Mesh/Needle/T_1h_Sword_Needle_MRA.dds", 1);
 	pMtrl->Set_Texture("g_MRATexture", TEXTURETYPE::TEX_MRA, pTexture, 0);
-	pTexture = CTexture::Create(m_pDevice, m_pDeviceContext);
-	pTexture->NativeConstruct_Prototype(L"../Bin/Resources/Mesh/Needle/T_1h_Sword_Needle_CEO.dds", 1);
+	pTexture = CTexture::Create(m_pDevice, m_pDeviceContext, L"../Bin/Resources/Mesh/Needle/T_1h_Sword_Needle_CEO.dds", 1);
 	pMtrl->Set_Texture("g_CEOTexture", TEXTURETYPE::TEX_CEO, pTexture, 0);
 	g_pGameInstance->Add_Material(L"Mtrl_Needle", pMtrl);
 
@@ -125,17 +121,15 @@ HRESULT CNeedle::Ready_Components()
 
 	CCollider::DESC tColliderDesc;
 	tColliderDesc.isTrigger = true;
-	tColliderDesc.eRigidType = ERigidType::Dynamic;
 	tColliderDesc.pGameObject = this;
-
 	CCapsuleCollider::DESC tCapsuleColliderDesc;
 	tCapsuleColliderDesc.tColliderDesc = tColliderDesc;
-	tCapsuleColliderDesc.fHeight = 1.f;
+	tCapsuleColliderDesc.fHeight = 1.2f;
 	tCapsuleColliderDesc.fRadius = 0.1f;
 	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_CapsuleCollider", L"Collider", (CComponent**)&m_pCollider, &tCapsuleColliderDesc)))
 		return E_FAIL;
 
-	_matrix smatPviot = XMMatrixRotationY(XMConvertToRadians(90.f)) * XMMatrixTranslation(0.f, 0.f, 1.f);
+	_matrix smatPviot = XMMatrixRotationY(XMConvertToRadians(90.f)) * XMMatrixTranslation(0.f, 0.f, 0.8f);
 	m_pCollider->setPivotMatrix(smatPviot);
 
 	return S_OK;
@@ -170,6 +164,20 @@ _int CNeedle::Attach_Owner(const _double& _dDeltaTime)
 	}
 
 	return _int();
+}
+
+void CNeedle::Set_Equip(const _bool _isEquip, void* _pArg)
+{
+	__super::Set_Equip(_isEquip, _pArg);
+	switch (_isEquip)
+	{
+	case true:
+		m_pCollider->Add_ActorToScene();
+		break;
+	case false:
+		m_pCollider->Remove_ActorFromScene();
+		break;
+	}
 }
 
 CNeedle* CNeedle::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)

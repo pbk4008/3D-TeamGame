@@ -27,6 +27,8 @@ _int C2H_HammerJogFwd::Tick(const _double& _dDeltaTime)
 	if (NO_EVENT > iProgress)
 		return iProgress;
 
+	m_pSilvermane->Add_Velocity(CTransform::STATE_LOOK, _dDeltaTime);
+
 	return _int();
 }
 
@@ -54,7 +56,7 @@ HRESULT C2H_HammerJogFwd::EnterState()
 
 	
 	m_pAnimationController->SetUp_NextAnimation("SK_Silvermane.ao|A_2H_Hammer_Loco_Jog_Fwd_Normal", true);
-	m_pAnimationController->Set_RootMotion(true, true, ERootOption::XYZ);
+	m_pAnimationController->Set_RootMotion(true, false, ERootOption::XYZ);
 	
 
 	return S_OK;

@@ -251,6 +251,17 @@ void CTransform::SetUp_Rotation(_fvector vAxis, _float fRadian)
 	Set_State(CTransform::STATE_LOOK, vLook);
 }
 
+void CTransform::SetUp_Rotation(const _float3& _vRot)
+{
+	_vector svRight = XMVectorSet(1.f, 0.f, 0.f, 0.f);
+	_vector svUp = XMVectorSet(0.f, 1.f, 0.f, 0.f);
+	_vector svLook = XMVectorSet(0.f, 0.f, 1.f, 0.f);
+
+	_matrix smatRot = XMMatrixRotationRollPitchYaw(_vRot.x, _vRot.y, _vRot.z);
+
+	XMStoreFloat4x4(&m_WorldMatrix, smatRot * XMLoadFloat4x4(&m_WorldMatrix));
+}
+
 void CTransform::Scaling(_fvector vScale)
 {
 	_vector		vRight = XMVector3Normalize(Get_State(CTransform::STATE_RIGHT)) * XMVectorGetX(vScale);

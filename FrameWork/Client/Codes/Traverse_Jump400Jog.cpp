@@ -25,8 +25,6 @@ _int CTraverse_Jump400Jog::Tick(const _double& _dDeltaTime)
 	Add_PlusAngle(EDir::Forward, _dDeltaTime);
 	_uint iCurKeyFrameIndex = m_pAnimationController->Get_CurKeyFrameIndex();
 
-	//svPos += XMLoadFloat3(&m_vDir) * _dDeltaTime * m_fMoveSpeed;
-	//m_pTransform->Set_State(CTransform::STATE_POSITION, svPos);
 	_vector svVelocity = XMLoadFloat3(&m_vDir) * (_float)_dDeltaTime * m_fMoveSpeed;
 	m_pTransform->Add_Velocity(svVelocity);
 
@@ -42,8 +40,23 @@ _int CTraverse_Jump400Jog::Tick(const _double& _dDeltaTime)
 		m_pSilvermane->Set_IsFall(true);
 	}
 
-	if (m_pAnimationController->Is_Finished())
+	if (m_iCutIndex < iCurKeyFrameIndex)
 	{
+		if (m_pSilvermane->IsEquipWeapon())
+		{
+			switch (m_pSilvermane->Get_WeaponType())
+			{
+			case CWeapon::EType::Sword_1H:
+				if (FAILED(m_pStateController->Change_State(L"1H_SwordIdle")))
+					return E_FAIL;
+				break;
+			case CWeapon::EType::Hammer_2H:
+				if (FAILED(m_pStateController->Change_State(L"2H_HammerIdle")))
+					return E_FAIL;
+				break;
+			}
+			return STATE_CHANGE;
+		}
 		if (FAILED(m_pStateController->Change_State(L"Idle")))
 			return E_FAIL;
 		return STATE_CHANGE;
@@ -86,6 +99,7 @@ HRESULT CTraverse_Jump400Jog::EnterState()
 
 	m_fMoveSpeed = 2.f;
 	m_pSilvermane->Set_IsFall(false);
+	m_iCutIndex = 50;
 	return S_OK;
 }
 

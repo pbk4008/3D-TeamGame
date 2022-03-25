@@ -73,6 +73,7 @@ public:
 	const PxRenderBuffer& Get_RenderBuffer();
 
 	void Remove_Actor(PxActor* _pActor);
+	void Add_Actor(PxActor* _pActor);
 
 public:
 	const _bool Raycast(RAYCASTDESC& _desc);
