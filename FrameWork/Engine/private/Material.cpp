@@ -254,6 +254,25 @@ void CMaterial::Using_Tool()
 	}
 }
 
+HRESULT CMaterial::Change_Material()
+{
+	for (auto& pEffectDesc : m_vecEffectDescs)
+	{
+		Safe_Release(pEffectDesc->pInputLayout);
+		Safe_Delete(pEffectDesc);
+	}
+	m_vecEffectDescs.clear();
+
+	Safe_Release(m_pEffect);
+
+	vector<CTexture*> vecTexturs = m_vecTextures;
+
+	if (FAILED(Native_Construct(m_wstrName,m_wstrShaderPath, m_eType)))
+		return E_FAIL;
+	
+	m_vecTextures = vecTexturs;
+}
+
 CSaveManager::MTRLDATA CMaterial::SetMaterialSaveData()
 {
 	CSaveManager::MTRLDATA tMtrlData;
