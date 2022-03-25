@@ -27,7 +27,7 @@ _int C2H_HammerJogBwd::Tick(const _double& _dDeltaTime)
 	if (NO_EVENT > iProgress)
 		return iProgress;
 
-	m_pTransform->Go_BackWard(_dDeltaTime * 0.2f);
+	m_pSilvermane->Add_Velocity(CTransform::STATE_LOOK, -_dDeltaTime);
 
 	return _int();
 }
@@ -97,7 +97,7 @@ _int C2H_HammerJogBwd::KeyCheck(const _double& _dDeltaTime)
 	}
 	else if (g_pGameInstance->getkeyPress(DIK_W))
 	{
-		if (FAILED(m_pStateController->Change_State(L"2H_HammerBwdPivot180")))
+		if (FAILED(m_pStateController->Change_State(L"2H_HammerJogBwdPivot180")))
 			return -1;
 		return STATE_CHANGE;
 	}

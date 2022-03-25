@@ -27,6 +27,8 @@ _int C2H_HammerJogRight::Tick(const _double& _dDeltaTime)
 	if (NO_EVENT > iProgress)
 		return iProgress;
 
+	m_pSilvermane->Add_Velocity(CTransform::STATE_RIGHT, _dDeltaTime);
+
 	return _int();
 }
 
@@ -54,7 +56,7 @@ HRESULT C2H_HammerJogRight::EnterState()
 
 	
 	m_pAnimationController->SetUp_NextAnimation("SK_Silvermane.ao|A_2H_Hammer_Loco_Jog_Right_Normal", true);
-	m_pAnimationController->Set_RootMotion(true, true, ERootOption::XYZ);
+	m_pAnimationController->Set_RootMotion(true, false, ERootOption::XYZ);
 
 	_matrix smatPivot = XMMatrixRotationY(XMConvertToRadians(90.f));
 	m_pAnimationController->Set_PivotMatrix(smatPivot);

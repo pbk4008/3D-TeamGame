@@ -137,20 +137,12 @@ HRESULT CNavigation::Update_Buffer(_fvector pPosition)
 				Finder->m_vPoint[i] = *(Finder->m_pPoint[i]);
 				pCell = Finder;
 			}
-
 			if (nullptr != pCell)
 			{
 				D3D11_MAPPED_SUBRESOURCE resource;
-				m_pDeviceContext->Map(pCell->m_pVIBuffer->m_pVB, 0, D3D11_MAP_WRITE_DISCARD, 0, &resource);
-
-				resource.pData = pCell->m_pVIBuffer->getVertices();
-
-				VTXCOL* Vtx = (VTXCOL*)resource.pData;
-
+				m_pDeviceContext->Map(pCell->m_pVIBuffer->m_pVB, 0, D3D11_MAP_WRITE_NO_OVERWRITE, 0, &resource);
 				for (int i = 0; i < CCell::POINT_END; ++i)
-				{
-					Vtx[i].vPosition = *pCell->m_pPoint[i];
-				}
+					((VTXCOL*)resource.pData)[i].vPosition = *pCell->m_pPoint[i];
 				m_pDeviceContext->Unmap((pCell)->m_pVIBuffer->m_pVB, 0);
 			}
 		}

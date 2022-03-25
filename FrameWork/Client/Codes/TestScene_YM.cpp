@@ -58,8 +58,8 @@ HRESULT CTestScene_YM::Ready_Gameobject()
 		return E_FAIL;
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_YM, L"Layer_Monster", L"Monster_Bastion_2HSword")))
 		return E_FAIL;
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_YM, L"Layer_Monster", L"Monster_Bastion_Healer")))
-		return E_FAIL;
+	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_Monster", L"Monster_Bastion_Healer")))
+	//	return E_FAIL;
 	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_YM, L"Layer_Monster", L"Monster_Bastion_Healer")))
 	//	return E_FAIL;
 	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_YM, L"Layer_Monster", L"Monster_Bastion_Shooter")))

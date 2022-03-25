@@ -499,10 +499,8 @@ HRESULT CLoader::Load_Stage1EffectLoad()
 
 HRESULT CLoader::Load_Stage1JumpTrigger()
 {
-	_matrix matPivot = XMMatrixIdentity();
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_JumpNode", CModel::Create(m_pDevice, m_pDeviceContext,
-		"../bin/Resources/Mesh/JumpNode/", "JumpNode.fbx",
-		L"../../Reference/ShaderFile/Shader_Mesh.hlsl", matPivot, CModel::TYPE_ANIM, true))))
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_JumpNode_Bin", CModel::Create(m_pDevice, m_pDeviceContext,
+		L"../bin/Resources/Mesh/JumpNode/JumpNode_Bin.fbx", CModel::TYPE_ANIM, true))))
 	{
 		return E_FAIL;
 	}
@@ -954,9 +952,8 @@ HRESULT CLoader::Ready_Test_JS()
 		return E_FAIL;
 	}
 	matPivot = XMMatrixIdentity();
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_JumpNode", CModel::Create(m_pDevice, m_pDeviceContext,
-		"../bin/Resources/Mesh/JumpNode/", "JumpNode.fbx",
-		L"../../Reference/ShaderFile/Shader_Mesh.hlsl", matPivot, CModel::TYPE_ANIM, true))))
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_JumpNode_Bin", CModel::Create(m_pDevice, m_pDeviceContext,
+		L"../bin/Resources/Mesh/JumpNode/JumpNode_Bin.fbx", CModel::TYPE_ANIM, true))))
 	{
 		return E_FAIL;
 	}
@@ -1005,150 +1002,92 @@ HRESULT CLoader::Ready_Test_YM()
 	cout << "TestScene_YM 로딩 시작..." << endl;
 	cout << "TestScene_YM 리소스 생성중..." << endl;
 
+	if (FAILED(Load_Stage1StaticUILoad()))
+		return E_FAIL;
+
+	if (FAILED(Load_Stage1UILoad()))
+		return E_FAIL;
+
+	if (FAILED(Load_Stage1EffectLoad()))
+		return E_FAIL;
+
+	if (FAILED(Load_Stage1JumpTrigger()))
+		return E_FAIL;
+
 	CTexture* pTexture = nullptr;
 #pragma region 플레이어
-	pTexture = CTexture::Create(m_pDevice, m_pDeviceContext);
-	pTexture->NativeConstruct_Prototype(L"../Bin/Resources/Mesh/Silvermane/T_Silvermane_Hair_D.tga", 1);
-	CMaterial* pMtrl = CMaterial::Create(m_pDevice, m_pDeviceContext, L"Silvermane_Hair", L"../../Reference/ShaderFile/Shader_Mesh.hlsl", CMaterial::EType::Anim);
-	pMtrl->Set_Texture("g_DiffuseTexture", TEXTURETYPE::TEX_DIFFUSE, pTexture, 0);
-	g_pGameInstance->Add_Material(L"Mtrl_Silvermane_Hair", pMtrl);
-
-	pTexture = CTexture::Create(m_pDevice, m_pDeviceContext);
-	pTexture->NativeConstruct_Prototype(L"../Bin/Resources/Mesh/Silvermane/T_Silvermane_Cloak_D.tga", 1);
-	pMtrl = CMaterial::Create(m_pDevice, m_pDeviceContext, L"Silvermane_Cloak", L"../../Reference/ShaderFile/Shader_Mesh.hlsl", CMaterial::EType::Anim);
-	pMtrl->Set_Texture("g_DiffuseTexture", TEXTURETYPE::TEX_DIFFUSE, pTexture, 0);
-	g_pGameInstance->Add_Material(L"Mtrl_Silvermane_Cloak", pMtrl);
-
-	pTexture = CTexture::Create(m_pDevice, m_pDeviceContext);
-	pTexture->NativeConstruct_Prototype(L"../Bin/Resources/Mesh/Silvermane/T_Silvermane_Down_D.tga", 1);
-	pMtrl = CMaterial::Create(m_pDevice, m_pDeviceContext, L"Silvermane_Down", L"../../Reference/ShaderFile/Shader_Mesh.hlsl", CMaterial::EType::Anim);
-	pMtrl->Set_Texture("g_DiffuseTexture", TEXTURETYPE::TEX_DIFFUSE, pTexture, 0);
-	g_pGameInstance->Add_Material(L"Mtrl_Silvermane_Down", pMtrl);
-
-	pTexture = CTexture::Create(m_pDevice, m_pDeviceContext);
-	pTexture->NativeConstruct_Prototype(L"../Bin/Resources/Mesh/Silvermane/T_Silvermane_Top_D.tga", 1);
-	pMtrl = CMaterial::Create(m_pDevice, m_pDeviceContext, L"Silvermane_Top", L"../../Reference/ShaderFile/Shader_Mesh.hlsl", CMaterial::EType::Anim);
-	pMtrl->Set_Texture("g_DiffuseTexture", TEXTURETYPE::TEX_DIFFUSE, pTexture, 0);
-	g_pGameInstance->Add_Material(L"Mtrl_Silvermane_Top", pMtrl);
-#pragma endregion
-#pragma region 몬스터
-	pTexture = CTexture::Create(m_pDevice, m_pDeviceContext);
-	pTexture->NativeConstruct_Prototype(L"../Bin/Resources/Mesh/Bastion_Shooter/T_Bastion_Tier1_Down_D.tga", 1);
-	pMtrl = CMaterial::Create(m_pDevice, m_pDeviceContext, L"Bastion_Tier1_Down", L"../../Reference/ShaderFile/Shader_Mesh.hlsl", CMaterial::EType::Anim);
-	pMtrl->Set_Texture("g_DiffuseTexture", TEXTURETYPE::TEX_DIFFUSE, pTexture, 0);
-	g_pGameInstance->Add_Material(L"Mtrl_Bastion_Tier1_Down", pMtrl);
-
-	pTexture = CTexture::Create(m_pDevice, m_pDeviceContext);
-	pTexture->NativeConstruct_Prototype(L"../Bin/Resources/Mesh/Bastion_Shooter/T_Bastion_Tier1_Top_D.tga", 1);
-	pMtrl = CMaterial::Create(m_pDevice, m_pDeviceContext, L"Bastion_Tier1_Top", L"../../Reference/ShaderFile/Shader_Mesh.hlsl", CMaterial::EType::Anim);
-	pMtrl->Set_Texture("g_DiffuseTexture", TEXTURETYPE::TEX_DIFFUSE, pTexture, 0);
-	g_pGameInstance->Add_Material(L"Mtrl_Bastion_Tier1_Top", pMtrl);
-
-	pTexture = CTexture::Create(m_pDevice, m_pDeviceContext);
-	pTexture->NativeConstruct_Prototype(L"../Bin/Resources/Mesh/Bastion_Shooter/T_Bastion_Fur_Coeff.tga", 1);
-	pMtrl = CMaterial::Create(m_pDevice, m_pDeviceContext, L"Bastion_Fur", L"../../Reference/ShaderFile/Shader_Mesh.hlsl", CMaterial::EType::Anim);
-	pMtrl->Set_Texture("g_DiffuseTexture", TEXTURETYPE::TEX_DIFFUSE, pTexture, 0);
-	g_pGameInstance->Add_Material(L"Mtrl_Bastion_Fur", pMtrl);
-
-	pTexture = CTexture::Create(m_pDevice, m_pDeviceContext);
-	pTexture->NativeConstruct_Prototype(L"../Bin/Resources/Mesh/Bastion_Shooter/T_bastion_crossbow_D.tga", 1);
-	pMtrl = CMaterial::Create(m_pDevice, m_pDeviceContext, L"Bastion_Crossbow", L"../../Reference/ShaderFile/Shader_Mesh.hlsl", CMaterial::EType::Anim);
-	pMtrl->Set_Texture("g_DiffuseTexture", TEXTURETYPE::TEX_DIFFUSE, pTexture, 0);
-	g_pGameInstance->Add_Material(L"Mtrl_Bastion_Crossbow", pMtrl);
-
-
-
-	pTexture = CTexture::Create(m_pDevice, m_pDeviceContext);
-	pTexture->NativeConstruct_Prototype(L"../Bin/Resources/Mesh/Bastion_2HSword/T_BastionTierII_Down_D.dds", 1);
-	pMtrl = CMaterial::Create(m_pDevice, m_pDeviceContext, L"BastionTierII_Down", L"../../Reference/ShaderFile/Shader_Mesh.hlsl", CMaterial::EType::Anim);
-	pMtrl->Set_Texture("g_DiffuseTexture", TEXTURETYPE::TEX_DIFFUSE, pTexture, 0);
-	g_pGameInstance->Add_Material(L"Mtrl_BastionTierII_Down", pMtrl);
-
-	pTexture = CTexture::Create(m_pDevice, m_pDeviceContext);
-	pTexture->NativeConstruct_Prototype(L"../Bin/Resources/Mesh/Bastion_2HSword/T_BastionTierII_Top_D.dds", 1);
-	pMtrl = CMaterial::Create(m_pDevice, m_pDeviceContext, L"BastionTierII_Top", L"../../Reference/ShaderFile/Shader_Mesh.hlsl", CMaterial::EType::Anim);
-	pMtrl->Set_Texture("g_DiffuseTexture", TEXTURETYPE::TEX_DIFFUSE, pTexture, 0);
-	g_pGameInstance->Add_Material(L"Mtrl_BastionTierII_Top", pMtrl);
-
-	pTexture = CTexture::Create(m_pDevice, m_pDeviceContext);
-	pTexture->NativeConstruct_Prototype(L"../Bin/Resources/Mesh/Bastion_2HSword/T_BastionTierII_Fur_Coeff.dds", 1);
-	pMtrl = CMaterial::Create(m_pDevice, m_pDeviceContext, L"BastionTierII_Fur", L"../../Reference/ShaderFile/Shader_Mesh.hlsl", CMaterial::EType::Anim);
-	pMtrl->Set_Texture("g_DiffuseTexture", TEXTURETYPE::TEX_DIFFUSE, pTexture, 0);
-	g_pGameInstance->Add_Material(L"Mtrl_BastionTierII_Fur", pMtrl);
-#pragma endregion
-#pragma region 무기
-	//pTexture = CTexture::Create(m_pDevice, m_pDeviceContext);
-	//pTexture->NativeConstruct_Prototype(L"../Bin/Resources/Mesh/Staff/T_bastion_staff_D.tga", 1);
-	//pMtrl = CMaterial::Create(m_pDevice, m_pDeviceContext, L"Mtrl_Staff", L"../../Reference/ShaderFile/Shader_Mesh.hlsl", CMaterial::EType::Anim);
-	//pMtrl->Set_Texture("g_DiffuseTexture", TEXTURETYPE::TEX_DIFFUSE, pTexture, 0);
-	//g_pGameInstance->Add_Material(L"Mtrl_Staff", pMtrl);
-#pragma endregion
-
-#pragma region 리소스
-	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"Plane_Texture", L"../Bin/Resources/Texture/Terrain/Plane_Default.dds")))
-		return E_FAIL;
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_TEST_YM, L"VIBuffer_Plane", CVIBuffer_Plane::Create(m_pDevice, m_pDeviceContext, L"../../Reference/ShaderFile/Shader_Plane.hlsl", 100, 100))))
-		return E_FAIL;
-
-#pragma region 모델
-	cout << "TestScene_YM 모델 프로토타입 생성중..." << endl;
-	_matrix matPivot = XMMatrixIdentity();
-
+	_matrix matPlayerPivot = XMMatrixIdentity();
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Silvermane_Bin", CModel::Create(m_pDevice, m_pDeviceContext,
 		L"../bin/FBX/Silvermane/Silvermane_Bin.fbx", CModel::TYPE_ANIM, true))))
 	{
 		return E_FAIL;
 	}
 
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_TEST_YM, L"Model_Bastion_2HSword_Bin", CModel::Create(m_pDevice, m_pDeviceContext,
-		L"../bin/Resources/Mesh/Bastion_2HSword/Bastion_2HSword_Bin.fbx", CModel::TYPE_ANIM, true))))
-	{
-		return E_FAIL;
-	}
-
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_TEST_YM, L"Model_Bastion_Healer_Bin", CModel::Create(m_pDevice, m_pDeviceContext,
-		L"../bin/Resources/Mesh/Bastion_Healer/Bastion_Healer_Bin.fbx", CModel::TYPE_ANIM, true))))
-	{
-		return E_FAIL;
-	}
-
-	matPivot = XMMatrixIdentity();
+	matPlayerPivot = XMMatrixIdentity();
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Needle", CModel::Create(m_pDevice, m_pDeviceContext,
 		"../bin/Resources/Mesh/Needle/", "Needle.fbx",
-		L"../../Reference/ShaderFile/Shader_StaticMesh.hlsl", matPivot, CModel::TYPE_STATIC, true))))
+		L"../../Reference/ShaderFile/Shader_StaticMesh.hlsl", matPlayerPivot, CModel::TYPE_STATIC, true))))
 	{
 		return E_FAIL;
 	}
-	matPivot = XMMatrixIdentity();
+	matPlayerPivot = XMMatrixIdentity();
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Fury", CModel::Create(m_pDevice, m_pDeviceContext,
 		"../bin/Resources/Mesh/Fury/", "Fury.fbx",
-		L"../../Reference/ShaderFile/Shader_StaticMesh.hlsl", matPivot, CModel::TYPE_STATIC, true))))
+		L"../../Reference/ShaderFile/Shader_StaticMesh.hlsl", matPlayerPivot, CModel::TYPE_STATIC, true))))
 	{
 		return E_FAIL;
 	}
-	matPivot = XMMatrixIdentity();
+	matPlayerPivot = XMMatrixIdentity();
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Shield", CModel::Create(m_pDevice, m_pDeviceContext,
 		"../bin/Resources/Mesh/Shield/", "Shield.fbx",
-		L"../../Reference/ShaderFile/Shader_Mesh.hlsl", matPivot, CModel::TYPE_ANIM, true))))
+		L"../../Reference/ShaderFile/Shader_Mesh.hlsl", matPlayerPivot, CModel::TYPE::TYPE_ANIM, true))))
 	{
 		return E_FAIL;
 	}
+#pragma endregion
+	
+#pragma region 리소스
+	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"Plane_Texture", L"../Bin/Resources/Texture/Terrain/Plane_Default.dds")))
+		return E_FAIL;
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"VIBuffer_Plane", CVIBuffer_Plane::Create(m_pDevice, m_pDeviceContext, L"../../Reference/ShaderFile/Shader_Plane.hlsl", 100, 100))))
+		return E_FAIL;
 
-	matPivot = XMMatrixIdentity();
+#pragma region 모델
+	cout << "TestScene_YM 모델 프로토타입 생성중..." << endl;
+	_matrix matPivot = XMMatrixIdentity();
+
+	//Bastion_2HSword
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_TEST_YM, L"Model_Bastion_2HSword", CModel::Create(m_pDevice, m_pDeviceContext,
+		L"../bin/FBX/Monster/Bastion_2HSword_Bin.fbx", CModel::TYPE_ANIM, true))))
+		return E_FAIL;
+	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Monster_Bastion_2HSword", CMonster_Bastion_2HSword::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_TEST_YM, L"Model_RetributionBlade", CModel::Create(m_pDevice, m_pDeviceContext,
 		"../bin/Resources/Mesh/RetributionBlade/", "RetributionBlade(2H).fbx",
-		L"../../Reference/ShaderFile/Shader_StaticMesh.hlsl", matPivot, CModel::TYPE_STATIC, true))))
+		L"../../Reference/ShaderFile/Shader_Weapon.hlsl", matPivot, CModel::TYPE_STATIC, true))))
 	{
 		return E_FAIL;
 	}
+	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Weapon_RetributionBlade", CRetributionBlade::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
 
-	matPivot = XMMatrixIdentity();
+	////Bastion_Healer
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_TEST_YM, L"Model_Bastion_Healer", CModel::Create(m_pDevice, m_pDeviceContext,
+		L"../bin/FBX/Monster/Bastion_Healer_Bin.fbx", CModel::TYPE_ANIM, true))))
+		return E_FAIL;
+	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Monster_Bastion_Healer", CMonster_Bastion_Healer::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+
+	//weapon
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_TEST_YM, L"Model_Staff", CModel::Create(m_pDevice, m_pDeviceContext,
 		"../bin/Resources/Mesh/Staff/", "Staff.fbx",
-		L"../../Reference/ShaderFile/Shader_StaticMesh.hlsl", matPivot, CModel::TYPE_STATIC, true))))
+		L"../../Reference/ShaderFile/Shader_Weapon.hlsl", matPivot, CModel::TYPE_STATIC, true))))
 	{
 		return E_FAIL;
 	}
+	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Weapon_Staff", CStaff::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
 
 #pragma endregion
 #pragma region 컴포넌트

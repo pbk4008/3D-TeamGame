@@ -32,7 +32,9 @@ protected:
 	explicit CCollider(const CCollider& _rhs);
 	virtual ~CCollider() = default;
 
-public: void			Remove_Actor();
+public:
+	void Remove_ActorFromScene();
+	void Add_ActorToScene();
 
 public:
 	virtual HRESULT NativeConstruct_Prototype() override;

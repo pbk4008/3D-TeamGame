@@ -454,6 +454,9 @@
     <Filter Include="02.GameObject\03.Character\01.Monster\EarthAberrant\00.Weapon\00.Aberrant_Pick">
       <UniqueIdentifier>{5fb68284-c871-4e91-8aaa-81ee9c81ea14}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_Healer\State_Healer\Hit">
+      <UniqueIdentifier>{d4ca5c36-6c33-400f-a4c0-e81fd9a67485}</UniqueIdentifier>
+    </Filter>
     <Filter Include="02.GameObject\03.Character\02.Boss\00.MiddleBoss\State\00.Idle">
       <UniqueIdentifier>{bc617a5c-688e-4158-810d-363ff4b32592}</UniqueIdentifier>
     </Filter>
@@ -468,6 +471,9 @@
     </Filter>
     <Filter Include="02.GameObject\04.Effect\02.HitParticle">
       <UniqueIdentifier>{b370ed74-461a-48d9-91e0-c06ca932a31c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_2HSword\State_2HSword\Groggy">
+      <UniqueIdentifier>{903a9638-b5eb-482e-924a-0a015449b4a1}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -1149,6 +1155,12 @@
     <ClInclude Include="..\Headers\JumpTrigger.h">
       <Filter>02.GameObject\02.Map\02.JumpNode</Filter>
     </ClInclude>
+    <ClInclude Include="..\Headers\Bastion_Healer_Hit.h">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Healer\State_Healer\Hit</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Bastion_Healer_Death.h">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Healer\State_Healer\Death</Filter>
+    </ClInclude>
     <ClInclude Include="..\Headers\MidBoss_Idle.h">
       <Filter>02.GameObject\03.Character\02.Boss\00.MiddleBoss\State\00.Idle</Filter>
     </ClInclude>
@@ -1160,6 +1172,9 @@
     </ClInclude>
     <ClInclude Include="..\Headers\Effect_HitParticle.h">
       <Filter>02.GameObject\04.Effect\02.HitParticle</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Bastion_2HSword_Groggy.h">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_2HSword\State_2HSword\Groggy</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1814,6 +1829,12 @@
     <ClCompile Include="..\Codes\JumpTrigger.cpp">
       <Filter>02.GameObject\02.Map\02.JumpNode</Filter>
     </ClCompile>
+    <ClCompile Include="..\Codes\Bastion_Healer_Hit.cpp">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Healer\State_Healer\Hit</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Bastion_Healer_Death.cpp">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Healer\State_Healer\Death</Filter>
+    </ClCompile>
     <ClCompile Include="..\Codes\MidBoss_Idle.cpp">
       <Filter>02.GameObject\03.Character\02.Boss\00.MiddleBoss\State\00.Idle</Filter>
     </ClCompile>
@@ -1825,6 +1846,9 @@
     </ClCompile>
     <ClCompile Include="..\Codes\Effect_HitParticle.cpp">
       <Filter>02.GameObject\04.Effect\02.HitParticle</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Bastion_2HSword_Groggy.cpp">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_2HSword\State_2HSword\Groggy</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -23,7 +23,7 @@ CMonster_Crawler::CMonster_Crawler(const CMonster_Crawler& _rhs)
 void CMonster_Crawler::Clear_Physix()
 {
 
-	m_pCollider->Remove_Actor();
+	m_pCollider->Remove_ActorFromScene();
 	m_pCharacterController->Remove_CCT();
 	Safe_Release(m_pCollider);
 	Safe_Release(m_pCharacterController);

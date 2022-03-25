@@ -29,6 +29,7 @@ public:
 private:
 	_int Chase_Target(const _double& _dDeltaTime);
 	_int Input_Key(const _double& _dDeltaTime);
+	void SpringArm();
 
 public:
 	const _fvector& Get_Look() const;
@@ -39,8 +40,7 @@ private:
 	CTransform* m_pLocalTransform = nullptr;
 	CTransform* m_pWorldTransform = nullptr;
 
-	_float m_fRotY = 0.f;
-	_float m_fRotRight = 0.f;
+	_float3 m_vRot = { 0.f,0.f,0.f };
 
 	_bool m_isChase = true;
 

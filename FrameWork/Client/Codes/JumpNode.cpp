@@ -1,6 +1,8 @@
 #include "pch.h"
 #include "JumpNode.h"
 
+#include "Material.h"
+
 CJumpNode::CJumpNode(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
 	: CGameObject(_pDevice, _pDeviceContext)
 {
@@ -17,6 +19,27 @@ HRESULT CJumpNode::NativeConstruct_Prototype()
 		return E_FAIL;
 
 	m_iObectTag = (_uint)GAMEOBJECT::JUMP_NODE;
+
+	//CMaterial* pMtrl = nullptr;
+	//CTexture* pTexture = nullptr;
+	//// 0 밖에 놈
+	//pMtrl = CMaterial::Create(m_pDevice, m_pDeviceContext, L"Mtrl_JumpNode", L"../../Reference/ShaderFile/Shader_Mesh.hlsl", CMaterial::EType::Anim);
+	//pTexture = CTexture::Create(m_pDevice, m_pDeviceContext, L"../Bin/Resources/Mesh/JumpNode/T_jumpNode_D.dds", 1);
+	//pMtrl->Set_Texture("g_DiffuseTexture", TEXTURETYPE::TEX_DIFFUSE, pTexture, 0);
+	//pTexture = CTexture::Create(m_pDevice, m_pDeviceContext, L"../Bin/Resources/Mesh/JumpNode/T_jumpNode_N.dds", 1);
+	//pMtrl->Set_Texture("g_BiNormalTexture", TEXTURETYPE::TEX_NORMAL, pTexture, 0);
+	//pTexture = CTexture::Create(m_pDevice, m_pDeviceContext, L"../Bin/Resources/Mesh/JumpNode/T_jumpNode_ORME.dds", 1);
+	//pMtrl->Set_Texture("g_ORMETexture", TEXTURETYPE::TEX_ORME, pTexture, 0);
+	//g_pGameInstance->Add_Material(L"Mtrl_JumpNode", pMtrl);
+	//// 1 내부 원
+	//pMtrl = CMaterial::Create(m_pDevice, m_pDeviceContext, L"Mtrl_JumpPoint", L"../../Reference/ShaderFile/Shader_Mesh.hlsl", CMaterial::EType::Anim);
+	//pTexture = CTexture::Create(m_pDevice, m_pDeviceContext, L"../Bin/Resources/Mesh/JumpNode/towerALL_07_-_Default_BaseColor.dds", 1);
+	//pMtrl->Set_Texture("g_DiffuseTexture", TEXTURETYPE::TEX_DIFFUSE, pTexture, 0);
+	//pTexture = CTexture::Create(m_pDevice, m_pDeviceContext, L"../Bin/Resources/Mesh/JumpNode/towerALL_07_-_Default_Normal.dds", 1);
+	//pMtrl->Set_Texture("g_BiNormalTexture", TEXTURETYPE::TEX_NORMAL, pTexture, 0);
+	//pTexture = CTexture::Create(m_pDevice, m_pDeviceContext, L"../Bin/Resources/Mesh/JumpNode/towerALL_07_-_Default_OcclusionRoughnessMetallic.dds", 1);
+	//pMtrl->Set_Texture("g_ORMTexture", TEXTURETYPE::TEX_ORM, pTexture, 0);
+	//g_pGameInstance->Add_Material(L"Mtrl_JumpPoint", pMtrl);
 
 	return S_OK;
 }
@@ -44,6 +67,32 @@ _int CJumpNode::Tick(_double _dDeltaTime)
 	iProgress = m_pAnimationController->Tick(_dDeltaTime);
 	if (NO_EVENT != iProgress)
 		return iProgress;
+
+
+
+	if (m_isChange)
+	{
+		switch (m_isPick)
+		{
+		case false:
+			if (m_pAnimationController->Is_Finished())
+			{
+				m_pAnimationController->SetUp_NextAnimation("SK_Jump_Node.ao|A_Idle_JumpNode");
+				m_isChange = false;
+			}
+			break;
+		case true:
+			if (m_pAnimationController->Is_Finished())
+			{
+				m_pAnimationController->SetUp_NextAnimation("SK_Jump_Node.ao|A_Activated_Shake_JumpNode");
+				m_pAnimationController->Set_PlaySpeed(0.6f);
+				m_isChange = false;
+			}
+			break;
+		}
+	}
+
+
 
 	m_pCollider->Tick(_dDeltaTime);
 
@@ -83,7 +132,7 @@ HRESULT CJumpNode::Render()
 		//if (FAILED(m_pModel->SetUp_TextureOnShader("g_DiffuseTexture", i, aiTextureType_DIFFUSE)))
 		//	return E_FAIL;
 
-		if (FAILED(m_pModel->Render(i, 0)))
+		if (FAILED(m_pModel->Render(i, i)))
 			return E_FAIL;
 	}
 
@@ -103,10 +152,12 @@ HRESULT CJumpNode::Ready_Components()
 	m_pTransform->Set_TransformDesc(tTransformDesc);
 	m_pTransform->Set_State(CTransform::STATE_POSITION, XMVectorSetW(XMLoadFloat3(&m_tDesc.vPosition), 1.f));
 
-	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Model_JumpNode", L"Model", (CComponent**)&m_pModel)))
+	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Model_JumpNode_Bin", L"Model", (CComponent**)&m_pModel)))
 		return E_FAIL;
 	_matrix matPivot = XMMatrixScaling(0.008f, 0.008f, 0.008f);
 	m_pModel->Set_PivotMatrix(matPivot);
+	//m_pModel->Add_Material(g_pGameInstance->Get_Material(L"Mtrl_JumpNode"), 0);
+	//m_pModel->Add_Material(g_pGameInstance->Get_Material(L"Mtrl_JumpPoint"), 1);
 
 	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_AnimationController", L"AnimationController", (CComponent**)&m_pAnimationController)))
 		return E_FAIL;
@@ -129,6 +180,25 @@ HRESULT CJumpNode::Ready_Components()
 	m_pCollider->setPivotMatrix(smatPivot);
 
 	return S_OK;
+}
+
+void CJumpNode::setIsPick(const _bool _isPick)
+{
+	if (m_isPick != _isPick)
+	{
+		switch (_isPick)
+		{
+		case true:
+			m_pAnimationController->SetUp_NextAnimation("SK_Jump_Node.ao|A_Activating_JumpNode", false);
+			break;
+		case false:
+			m_pAnimationController->SetUp_NextAnimation("SK_Jump_Node.ao|A_Deactivating_JumpNode", false);
+			break;
+		}
+		m_pAnimationController->Set_PlaySpeed(1.f);
+		m_isChange = true;
+		m_isPick = _isPick;
+	}
 }
 
 void CJumpNode::OnTriggerEnter(CCollision& collision)
