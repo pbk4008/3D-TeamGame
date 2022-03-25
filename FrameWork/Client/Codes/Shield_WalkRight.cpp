@@ -75,22 +75,22 @@ _int CShield_WalkRight::KeyCheck(const _double& _dDeltaTime)
 
 	if (g_pGameInstance->getkeyPress(DIK_D))
 	{
-		if (g_pGameInstance->getkeyPress(DIK_W))
-		{
-			if (FAILED(m_pStateController->Change_State(L"Shield_WalkFwdStart")))
-				return -1;
-			return STATE_CHANGE;
-		}
-		if (g_pGameInstance->getkeyPress(DIK_S))
-		{
-			if (FAILED(m_pStateController->Change_State(L"Shield_WalkBwdStart")))
-				return -1;
-			return STATE_CHANGE;
-		}
-		else
-		{
+		//if (g_pGameInstance->getkeyPress(DIK_W))
+		//{
+		//	if (FAILED(m_pStateController->Change_State(L"Shield_WalkFwdStart")))
+		//		return -1;
+		//	return STATE_CHANGE;
+		//}
+		//if (g_pGameInstance->getkeyPress(DIK_S))
+		//{
+		//	if (FAILED(m_pStateController->Change_State(L"Shield_WalkBwdStart")))
+		//		return -1;
+		//	return STATE_CHANGE;
+		//}
+		//else
+		//{
 			Add_PlusAngle(EDir::Forward, _dDeltaTime);
-		}
+		//}
 	}
 	else if (g_pGameInstance->getkeyPress(DIK_A))
 	{

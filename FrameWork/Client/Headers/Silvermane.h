@@ -98,6 +98,7 @@ private: /* Components */
 public:
 	CCamera_Silvermane* m_pCamera = nullptr;
 
+	_bool m_isHit = false;
 	_bool m_isFall = false;
 	_bool m_isMove = false;
 	_bool m_isTraceCamera = true;

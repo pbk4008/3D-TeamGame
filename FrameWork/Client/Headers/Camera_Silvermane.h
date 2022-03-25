@@ -8,6 +8,7 @@ class CSilvermane;
 
 class CCamera_Silvermane final : public CGameObject
 {
+	friend class CCamera_Culling;
 private:
 	explicit CCamera_Silvermane(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext);
 	explicit CCamera_Silvermane(const CCamera_Silvermane& _rhs);

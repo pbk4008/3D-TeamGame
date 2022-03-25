@@ -60,7 +60,7 @@ HRESULT CShield_BlockStart::EnterState()
 	m_pSilvermane->Set_EquipShield(true);
 	m_pSilvermane->Set_EquipShieldAnim(true);
 
-	m_pSilvermane->Set_IsTrasceCamera(false);
+	//m_pSilvermane->Set_IsTrasceCamera(false);
 
 	return S_OK;
 }
@@ -70,7 +70,7 @@ HRESULT CShield_BlockStart::ExitState()
 	if (FAILED(__super::ExitState()))
 		return E_FAIL;
 
-	m_pSilvermane->Set_IsTrasceCamera(true);
+	//m_pSilvermane->Set_IsTrasceCamera(true);
 	return S_OK;
 }
 
