@@ -146,7 +146,7 @@ _int CMonster_Bastion_2HSword::Tick(_double _dDeltaTime)
 		m_pPanel->Set_GroggyBar(Get_GroggyGaugeRatio());
 	}
 
-	if ((_uint)ANIM_TYPE::A_KNEEL_ED == m_pAnimator->Get_CurrentAnimNode())
+	if ((_uint)ANIM_TYPE::A_STUN_ED == m_pAnimator->Get_CurrentAnimNode())
 	{
 		if (m_pAnimator->Get_AnimController()->Is_Finished())
 		{
@@ -596,7 +596,6 @@ void CMonster_Bastion_2HSword::OnTriggerEnter(CCollision& collision)
 void CMonster_Bastion_2HSword::Set_IsAttack(const _bool _isAttack)
 {
 	m_IsAttack = _isAttack;
-	// TODO : 여기 웨폰한테 어택일때 true값 넘겨줘야함! 
 	if (m_pWeapon)
 		m_pWeapon->Set_IsAttack(_isAttack);
 }

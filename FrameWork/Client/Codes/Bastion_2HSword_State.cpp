@@ -59,7 +59,7 @@ _int CBastion_2HSword_State::Tick(const _double& _dDeltaTime)
 		pMonster->m_bGroggy = true;
 		pMonster->Set_GroggyGauge(0.f);
 		pMonster->m_pPanel->Set_GroggyBar(pMonster->Get_GroggyGaugeRatio());
-		m_pStateController->Change_State(L"Groggy");
+		//m_pStateController->Change_State(L"Groggy");
 	}
 
 	if (0 >= m_pMonster->Get_CurrentHp())
