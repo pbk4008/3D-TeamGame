@@ -1005,7 +1005,7 @@ const _bool CSilvermane::Raycast_JumpNode(const _double& _dDeltaTime)
 	RAYCASTDESC tRaycastDesc;
 	XMStoreFloat3(&tRaycastDesc.vOrigin, svRayPos);
 	XMStoreFloat3(&tRaycastDesc.vDir, svRayDir);
-	tRaycastDesc.fMaxDistance = 30.f;
+	tRaycastDesc.fMaxDistance = 50.f;
 	tRaycastDesc.filterData.flags = PxQueryFlag::eANY_HIT | PxQueryFlag::eDYNAMIC;
 	CGameObject* pHitObject = nullptr;
 	tRaycastDesc.ppOutHitObject = &pHitObject;
@@ -1024,7 +1024,7 @@ const _bool CSilvermane::Raycast_JumpNode(const _double& _dDeltaTime)
 			m_fJumpTriggerLookTime += (_float)_dDeltaTime;
 
 
-		if (1.5f < m_fJumpTriggerLookTime)
+		if (1.f < m_fJumpTriggerLookTime)
 		{
 			if (FAILED(m_pStateController->Change_State(L"Traverse_Jump400Jog")))
 				return false;
@@ -1040,7 +1040,7 @@ const _bool CSilvermane::Raycast_JumpNode(const _double& _dDeltaTime)
 			m_fJumpNodeLookTime += (_float)_dDeltaTime;
 
 
-		if (1.5f < m_fJumpNodeLookTime)
+		if (0.5f < m_fJumpNodeLookTime)
 		{
 			if (FAILED(m_pStateController->Change_State(L"Traverse_JumpNodeJog")))
 				return false;

@@ -142,12 +142,26 @@ _int CCamera_Silvermane::Input_Key(const _double& _dDeltaTime)
 	_long   MouseMove = 0;
 
 	MouseMove = g_pGameInstance->getMouseMoveState(CInputDev::MOUSEMOVESTATE::MM_X);
-	if (MouseMove)
+	if (0 < MouseMove)
+	{
 		m_pWorldTransform->Rotation_Axis(XMVectorSet(0.f, 1.f, 0.f, 0.f), _dDeltaTime * MouseMove * 0.1f);
-
+	}
+	else if (0 > MouseMove)
+	{
+		m_pWorldTransform->Rotation_Axis(XMVectorSet(0.f, 1.f, 0.f, 0.f), _dDeltaTime * MouseMove * 0.1f);
+	}
 	MouseMove = g_pGameInstance->getMouseMoveState(CInputDev::MOUSEMOVESTATE::MM_Y);
-	if(MouseMove)
-		m_pWorldTransform->Rotation_Axis(m_pWorldTransform->Get_State(CTransform::STATE_RIGHT), _dDeltaTime * MouseMove * 0.1f);
+	if (MouseMove)
+	{
+		_float fMouseDelta = MouseMove * _dDeltaTime * 0.1f;
+		m_vRot.y += fMouseDelta;
+		if (-0.55f < m_vRot.y && 0.25f > m_vRot.y)
+			m_pWorldTransform->Rotation_Axis(m_pWorldTransform->Get_State(CTransform::STATE_RIGHT), fMouseDelta);
+		else if (-0.55f >= m_vRot.y)
+			m_vRot.y = -0.55f;
+		else
+			m_vRot.y = 0.25f;
+	}
 
 	return _int();
 }
