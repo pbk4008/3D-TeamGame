@@ -113,12 +113,6 @@ HRESULT CRetributionBlade::Render()
 	return S_OK;
 }
 
-void CRetributionBlade::Clear_Physix()
-{
-	m_pCollider->Remove_Actor();
-	Safe_Release(m_pCollider);
-}
-
 HRESULT CRetributionBlade::Ready_Components()
 {
 	CTransform::TRANSFORMDESC transformDesc;

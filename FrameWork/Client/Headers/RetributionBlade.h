@@ -19,9 +19,6 @@ public:
 	virtual _int LateTick(_double _dDeltaTime) override;
 	virtual HRESULT Render() override;
 
-public:
-	void Clear_Physix();
-
 private:
 	HRESULT Ready_Components();
 	_int Attach_FixedBone(const _double& _dDeltaTime);

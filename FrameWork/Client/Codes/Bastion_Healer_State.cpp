@@ -2,6 +2,7 @@
 #include "Bastion_Healer_State.h"
 #include "Monster_Bastion_Healer.h"
 #include "Animation.h"
+#include "UI_Monster_Panel.h"	
 
 CBastion_Healer_State::CBastion_Healer_State(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
 	: CMonster_FSM(_pDevice, _pDeviceContext)
@@ -27,13 +28,13 @@ _int CBastion_Healer_State::Tick(const _double& _dDeltaTime)
 	if (NO_EVENT != iProgress)
 		return iProgress;
 
+	m_pAnimator->Tick(_dDeltaTime);
+
 	m_bTargetOn = false;
 	m_bAttackOn = false;
 	m_bPlayerAttack = false;
 
 	Check_Attack(_dDeltaTime);
-
-	m_pAnimator->Tick(_dDeltaTime);
 
 	_fvector vMonsterPos = m_pTransform->Get_State(CTransform::STATE::STATE_POSITION);
 	_fvector vDist = vMonsterPos - g_pObserver->Get_PlayerPos();
@@ -41,6 +42,20 @@ _int CBastion_Healer_State::Tick(const _double& _dDeltaTime)
 
 	if (2.0f >= fDistToPlayer)
 		m_bAttackOn = true;
+
+	if (m_pMonster->Get_GroggyGauge() >= MAXGROOGUGAGUE)
+	{
+		//스턴상태일때 스턴state에서 현재 그로기 계속 0으로 고정시켜줌
+		CMonster_Bastion_Healer* pMonster = static_cast<CMonster_Bastion_Healer*>(m_pMonster);
+
+		pMonster->m_bGroggy = true;
+		pMonster->Set_GroggyGauge(0.f);
+		pMonster->m_pPanel->Set_GroggyBar(pMonster->Get_GroggyGaugeRatio());
+		//m_pStateController->Change_State(L"Groggy");
+	}
+
+	if (0 >= m_pMonster->Get_CurrentHp())
+		m_pStateController->Change_State(L"Death");
 
 	return _int();
 }
@@ -190,10 +205,35 @@ void CBastion_Healer_State::Check_Attack(const _double& _dDeltaTime)
 
 void CBastion_Healer_State::OnTriggerEnter(CCollision& collision)
 {
-	if ((_uint)GAMEOBJECT::WEAPON == collision.pGameObject->getTag() && g_pObserver->IsAttack())
+	CMonster_Bastion_Healer* pHealer = static_cast<CMonster_Bastion_Healer*>(m_pMonster);
+
+	if (true == g_pObserver->IsAttack()) //플레이어공격일때
 	{
-		static_cast<CMonster_Bastion_Healer*>(m_pMonster)->m_iHp += -1;
-		m_pStateController->Change_State(L"Hit");
+		pHealer->m_bFirstHit = true; //딱 한번 true로 변경해줌
+
+		if (true == pHealer->m_bFirstHit)
+		{
+			pHealer->m_pPanel->Set_BackUIGapY(1.f);
+		}
+
+		if ((_uint)GAMEOBJECT::WEAPON == collision.pGameObject->getTag())
+		{
+			pHealer->Set_Current_HP(-5.f);
+			pHealer->Set_GroggyGauge(2); //TODO::수치정해서바꿔줘야됨
+
+			pHealer->m_pPanel->Set_HpBar(pHealer->Get_HpRatio());
+
+			if (false == pHealer->m_bGroggy)
+			{
+				//그로기 아닐때만 증가할수있게
+				pHealer->m_pPanel->Set_GroggyBar(pHealer->Get_GroggyGaugeRatio());
+				m_pStateController->Change_State(L"Hit");
+			}
+		}
+		else
+		{
+			m_pStateController->Change_State(L"Idle");
+		}
 	}
 }
 
