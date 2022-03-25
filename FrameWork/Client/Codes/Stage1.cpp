@@ -32,35 +32,32 @@ HRESULT CStage1::NativeConstruct()
 	if (FAILED(Ready_Light()))
 		return E_FAIL;
 	
-	//if (FAILED(Ready_MapObject()))
-	//{
-	//	return E_FAIL;
-	//}
+	if (FAILED(Ready_MapObject()))
+	{
+		return E_FAIL;
+	}
 
-	//if (FAILED(Ready_Trigger_Jump()))
-	//{
-	//	return E_FAIL;
-	//}
+	if (FAILED(Ready_Trigger_Jump()))
+	{
+		return E_FAIL;
+	}
 
 	if (FAILED(Ready_Player(L"Layer_Silvermane")))
 	{
 		return E_FAIL;
 	}
-	//if (FAILED(Ready_TriggerSystem(L"../bin/SaveData/Trigger/MonsterSpawnTrigger.dat")))
-	//	return E_FAIL;
-
-	//if (FAILED(Ready_TriggerSystem(L"../bin/SaveData/Trigger/MonsterSpawnTrigger.dat")))
-	//	return E_FAIL;
+	if (FAILED(Ready_TriggerSystem(L"../bin/SaveData/Trigger/MonsterSpawnTrigger.dat")))
+		return E_FAIL;
 
 	//if (FAILED(Ready_Boss(L"Layer_Boss")))
 	//{
 	//	return E_FAIL;
 	//}
 
-	if (FAILED(Ready_Monster(L"Layer_Monster")))
-	{
-		return E_FAIL;
-	}
+	//if (FAILED(Ready_Monster(L"Layer_Monster")))
+	//{
+	//	return E_FAIL;
+	//}
 
 	////Data
 	if (FAILED(Ready_Data_UI(L"../bin/SaveData/UI/UI.dat")))
@@ -111,7 +108,7 @@ _int CStage1::Tick(_double TimeDelta)
 		g_pDebugSystem->Set_LevelcMoveCheck(false);
 	}
 #endif //  _DEBUG
-	//m_pTriggerSystem->Tick(TimeDelta);
+	m_pTriggerSystem->Tick(TimeDelta);
 
 	return _int();
 }
@@ -119,7 +116,7 @@ _int CStage1::Tick(_double TimeDelta)
 HRESULT CStage1::Render()
 {
 #ifdef _DEBUG
-	//m_pTriggerSystem->Render();
+	m_pTriggerSystem->Render();
 #endif
 	return S_OK;
 }
@@ -790,24 +787,24 @@ HRESULT CStage1::Ready_Trigger_Jump()
 	// 점프 노드들
 	CJumpNode::DESC tJumpNodeDesc;
 	tJumpNodeDesc.vPosition = { 25.f, 5.f, 84.f };
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_JS, L"Layer_JumpNode", L"Proto_GameObject_JumpNode", &tJumpNodeDesc)))
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_JumpNode", L"Proto_GameObject_JumpNode", &tJumpNodeDesc)))
 		return E_FAIL;
 	tJumpNodeDesc.vPosition = { -25.f, 8.f, 100.f };
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_JS, L"Layer_JumpNode", L"Proto_GameObject_JumpNode", &tJumpNodeDesc)))
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_JumpNode", L"Proto_GameObject_JumpNode", &tJumpNodeDesc)))
 		return E_FAIL;
 	tJumpNodeDesc.vPosition = { -176.f, 50.f, 335.f };
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_JS, L"Layer_JumpNode", L"Proto_GameObject_JumpNode", &tJumpNodeDesc)))
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_JumpNode", L"Proto_GameObject_JumpNode", &tJumpNodeDesc)))
 		return E_FAIL;
 
 	// 점프 트리거들
 	CJumpTrigger::DESC tJumpTriggerDesc;
 	tJumpTriggerDesc.vPosition = { -47.f, 4.5f, 81.f };
 	tJumpTriggerDesc.vRotation = { 0.f, 90.f, 0.f };
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_JS, L"Layer_JumpTrigger", L"Proto_GameObject_JumpTrigger", &tJumpTriggerDesc)))
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_JumpTrigger", L"Proto_GameObject_JumpTrigger", &tJumpTriggerDesc)))
 		return E_FAIL;
 	tJumpTriggerDesc.vPosition = { -136.f, 18.5f, 236.f };
 	tJumpTriggerDesc.vRotation = { 0.f, 0.f, 0.f };
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_JS, L"Layer_JumpTrigger", L"Proto_GameObject_JumpTrigger", &tJumpTriggerDesc)))
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_JumpTrigger", L"Proto_GameObject_JumpTrigger", &tJumpTriggerDesc)))
 		return E_FAIL;
 
 	return S_OK;
