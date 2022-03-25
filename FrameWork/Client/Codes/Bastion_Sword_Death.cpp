@@ -52,7 +52,7 @@ HRESULT CBastion_Sword_Death::Render()
 
 HRESULT CBastion_Sword_Death::EnterState()
 {
-	m_pAnimator->Change_Animation((_uint)CMonster_Bastion_Sword::ANIM_TYPE::DEATH);
+	m_pAnimator->Change_AnyEntryAnimation((_uint)CMonster_Bastion_Sword::ANIM_TYPE::DEATH);
 
 	return S_OK;
 }

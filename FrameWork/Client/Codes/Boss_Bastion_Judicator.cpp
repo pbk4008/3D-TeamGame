@@ -37,8 +37,13 @@ HRESULT CBoss_Bastion_Judicator::NativeConstruct(const _uint _iSceneID, void* pA
 	if (FAILED(__super::NativeConstruct(_iSceneID, pArg)))
 		return E_FAIL;
 
-	_vector Pos = { -170.f, 65.f, 460.f, 1.f };
-	m_pTransform->Set_State(CTransform::STATE_POSITION, Pos);
+	if (nullptr != pArg)
+	{
+		_float3 vPoint = (*(_float3*)pArg);
+
+		if (FAILED(Set_SpawnPosition(vPoint)))
+			return E_FAIL;
+	}
 
 	if (FAILED(SetUp_Components()))
 		return E_FAIL;
@@ -59,13 +64,7 @@ HRESULT CBoss_Bastion_Judicator::NativeConstruct(const _uint _iSceneID, void* pA
 	/*_vector Pos = { 0.f, 0.f, 10.f, 1.f };
 	m_pTransform->Set_State(CTransform::STATE_POSITION, Pos);*/
 
-	if (nullptr != pArg)
-	{
-		_float3 vPoint = (*(_float3*)pArg);
-
-		if (FAILED(Set_SpawnPosition(vPoint)))
-			return E_FAIL;
-	}
+	
 
 	//MidBossBar Panel
 	CUI_Monster_Panel::PANELDESC Desc;

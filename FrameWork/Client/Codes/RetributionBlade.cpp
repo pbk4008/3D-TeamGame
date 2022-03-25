@@ -9,12 +9,15 @@
 
 CRetributionBlade::CRetributionBlade(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
 	: CWeapon(_pDevice, _pDeviceContext)
+	, m_pCollider(nullptr)
 {
 }
 
 CRetributionBlade::CRetributionBlade(const CRetributionBlade& _rhs)
 	: CWeapon(_rhs)
+	, m_pCollider(_rhs.m_pCollider)
 {
+	Safe_AddRef(m_pCollider);
 }
 
 HRESULT CRetributionBlade::NativeConstruct_Prototype()
@@ -104,11 +107,16 @@ HRESULT CRetributionBlade::Render()
 	for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
 	{
 		m_pModel->SetUp_TextureOnShader("g_DiffuseTexture", i, aiTextureType_DIFFUSE);
-
 		m_pModel->Render(i, 0);
 	}
 
 	return S_OK;
+}
+
+void CRetributionBlade::Clear_Physix()
+{
+	m_pCollider->Remove_Actor();
+	Safe_Release(m_pCollider);
 }
 
 HRESULT CRetributionBlade::Ready_Components()

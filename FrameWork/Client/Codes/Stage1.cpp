@@ -54,7 +54,7 @@ HRESULT CStage1::NativeConstruct()
 	//{
 	//	return E_FAIL;
 	//}
-	//
+
 	//if (FAILED(Ready_Monster(L"Layer_Monster")))
 	//{
 	//	return E_FAIL;
@@ -76,10 +76,6 @@ HRESULT CStage1::NativeConstruct()
 		return E_FAIL;
 	}
 
-	//m_pTriggerSystem = CTriggerSystem<Client::CStage1>::Create(m_pDevice, m_pDeviceContext, L"../bin/SaveData/MonsterSpawnTrigger.dat", this);
-
-	if (!m_pTriggerSystem)
-		return E_FAIL;
 
 	//if(FAILED(Ready_TriggerFunctionSetting()))
 	//	return E_FAIL;
@@ -202,8 +198,8 @@ HRESULT CStage1::Ready_Monster(const _tchar* LayerTag)
 	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Proto_GameObject_Monster_EarthAberrant")))
 	//	return E_FAIL;
 	
-	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Proto_GameObject_Monster_Bastion_2HSword")))
-	//	return E_FAIL;
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Proto_GameObject_Monster_Bastion_2HSword")))
+		return E_FAIL;
 	
 	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Proto_GameObject_Monster_BronzeAnimus")))
 	//	return E_FAIL;
@@ -499,7 +495,7 @@ void CStage1::Trgger_Function3()
 	(*iter)->setActive(true);
 
 	//ÇÑ¼Õ°Ë
-	pLayer = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Proto_GameObject_Monster_Bastion_Sword");
+	pLayer = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Layer_Bastion_Sword");
 	if (!pLayer)
 		return;
 
@@ -534,7 +530,7 @@ void CStage1::Trgger_Function4()
 
 void CStage1::Trgger_Function5()
 {
-	list<CGameObject*>* pLayer = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Proto_GameObject_Monster_EarthAberrant");
+	list<CGameObject*>* pLayer = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Layer_EarthAberrant");
 	if (!pLayer)
 		return;
 
@@ -569,7 +565,7 @@ void CStage1::Trgger_Function6()
 	advance(iter, 5);
 	(*iter)->setActive(true);
 
-	 pLayer = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Proto_GameObject_Monster_Crawler");
+	 pLayer = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Layer_Crawler");
 	if (!pLayer)
 		return;
 
@@ -600,7 +596,7 @@ void CStage1::Trgger_Function7()
 	advance(iter, 7);
 	(*iter)->setActive(true);
 
-	pLayer = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Proto_GameObject_Monster_Bastion_Healer");
+	pLayer = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Layer_Healer");
 	if (!pLayer)
 		return;
 
@@ -712,6 +708,7 @@ void CStage1::Trgger_Function11()
 	(*iter)->setActive(true);
 }
 
+//-175 51 422
 void CStage1::Trgger_FunctionBoss()
 {
 	list<CGameObject*>* pLayer = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Layer_Boss");

@@ -31,8 +31,6 @@ _int CBastion_2HSword_Idle::Tick(const _double& _dDeltaTime)
 
 	if (m_bTargetOn)
 		m_pStateController->Change_State(L"Chaser");
-	else if (m_bRageOn)
-		m_pStateController->Change_State(L"Rage");
 
 	return _int();
 }

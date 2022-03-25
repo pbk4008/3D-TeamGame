@@ -2,9 +2,12 @@
 #include "Monster_Bastion_Healer.h"
 #include "Animation.h"
 #include "Staff.h"
+
 /* for. FSM */
 #include "Bastion_Healer_State.h"
 #include "Bastion_Healer_Idle.h"
+#include "Bastion_Healer_Hit.h"
+#include "Bastion_Healer_Death.h"
 #include "Bastion_Healer_Chaser.h"
 #include "Bastion_Healer_Chaser_End.h"
 #include "Bastion_Healer_Attack.h"
@@ -115,26 +118,31 @@ HRESULT CMonster_Bastion_Healer::Render()
 {
 	if (FAILED(__super::Render()))
 		return E_FAIL;
-
-	_matrix smatWorld, smatView, smatProj;
-	smatWorld = XMMatrixTranspose(m_pTransform->Get_WorldMatrix());
-	smatView = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_VIEW));
-	smatProj = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_PROJECTION));
-
-	if (FAILED(m_pModel->SetUp_ValueOnShader("g_WorldMatrix", &smatWorld, sizeof(_matrix)))) 
-		return E_FAIL;
-	if (FAILED(m_pModel->SetUp_ValueOnShader("g_ViewMatrix", &smatView, sizeof(_matrix)))) 
-		return E_FAIL;
-	if (FAILED(m_pModel->SetUp_ValueOnShader("g_ProjMatrix", &smatProj, sizeof(_matrix)))) 
-		return E_FAIL;
-
-	for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
+	if (m_bRender)
 	{
-		//if (FAILED(m_pModel->SetUp_TextureOnShader("g_DiffuseTexture", i, aiTextureType_DIFFUSE))) return E_FAIL;
+		_matrix smatWorld, smatView, smatProj;
+		smatWorld = XMMatrixTranspose(m_pTransform->Get_WorldMatrix());
+		smatView = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_VIEW));
+		smatProj = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_PROJECTION));
 
-		if (FAILED(m_pModel->Render(i, 0)))
+		if (FAILED(m_pModel->SetUp_ValueOnShader("g_WorldMatrix", &smatWorld, sizeof(_matrix))))
 			return E_FAIL;
+		if (FAILED(m_pModel->SetUp_ValueOnShader("g_ViewMatrix", &smatView, sizeof(_matrix))))
+			return E_FAIL;
+		if (FAILED(m_pModel->SetUp_ValueOnShader("g_ProjMatrix", &smatProj, sizeof(_matrix))))
+			return E_FAIL;
+
+		for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
+		{
+			//if (FAILED(m_pModel->SetUp_TextureOnShader("g_DiffuseTexture", i, aiTextureType_DIFFUSE))) return E_FAIL;
+
+			if (FAILED(m_pModel->Render(i, 0)))
+				return E_FAIL;
+		}
 	}
+	else
+		m_pCurWeapon = nullptr;
+
 #ifdef _DEBUG
 	//Render_Debug();
 #endif
@@ -337,6 +345,12 @@ HRESULT CMonster_Bastion_Healer::Ready_StateFSM(void)
 	/* for. Attack*/
 	if (FAILED(m_pStateController->Add_State(L"Attack", CBastion_Healer_Attack::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
+	/* for. Death */
+	if (FAILED(m_pStateController->Add_State(L"Death", CBastion_Healer_Death::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	/* for. Hit */
+	if (FAILED(m_pStateController->Add_State(L"Hit", CBastion_Healer_Hit::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
 
 	for (auto& pair : m_pStateController->Get_States())
 	{
@@ -405,6 +419,11 @@ const _int CMonster_Bastion_Healer::Fall(const _double& _dDeltaTime)
 		}
 	}
 	return _int();
+}
+
+void CMonster_Bastion_Healer::OnTriggerEnter(CCollision& collision)
+{
+	m_pStateController->OnTriggerEnter(collision);
 }
 
 CMonster_Bastion_Healer* CMonster_Bastion_Healer::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)

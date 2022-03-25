@@ -40,7 +40,6 @@ _int CBastion_Sword_Hit::Tick(const _double& _dDeltaTime)
 	if(m_pAnimator->Get_CurrentAnimNode() == (_uint)CMonster_Bastion_Sword::ANIM_TYPE::IDLE)
 		m_pStateController->Change_State(L"Idle");
 
-	
 
 	return _int();
 }
