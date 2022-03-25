@@ -3,6 +3,7 @@
 
 #include "UI_Monster_Panel.h"
 
+#include "Animation.h"
 #include "Crawler_Idle.h"
 #include "Crawler_Walk.h"
 #include "Crawler_Attack.h"
@@ -105,13 +106,8 @@ _int CMonster_Crawler::Tick(_double _dDeltaTime)
 	{
 		m_pPanel->Set_Show(true);
 	}
-	if (DEATH == m_pAnimatorCom->Get_CurrentAnimNode() && m_pAnimatorCom->Get_AnimController()->Is_Finished())
-	{
-		m_bRemove = true;
-		setActive(false);
 
-		m_pPanel->Set_Show(false);
-	}
+	
 
 	m_pTransform->Set_Velocity(XMVectorZero());
 
@@ -141,6 +137,16 @@ _int CMonster_Crawler::Tick(_double _dDeltaTime)
 
 	if (m_bIsFall)
 		m_pTransform->Fall(_dDeltaTime);
+
+	if (DEATH == m_pAnimatorCom->Get_CurrentAnimNode())
+	{
+		if (m_pAnimatorCom->Get_CurrentAnimation()->Is_Finished())
+		{
+			m_bRemove = true;
+			m_pPanel->Set_Show(false);
+			setActive(false);
+		}
+	}
 
 	m_pCharacterController->Move(_dDeltaTime, m_pTransform->Get_Velocity());
 

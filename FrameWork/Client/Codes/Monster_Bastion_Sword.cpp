@@ -111,13 +111,6 @@ _int CMonster_Bastion_Sword::Tick(_double _dDeltaTime)
 	{
 		m_pPanel->Set_Show(true);
 	}
-	if ((_uint)ANIM_TYPE::DEATH == m_pAnimator->Get_CurrentAnimNode() && m_pAnimator->Get_AnimController()->Is_Finished())
-	{
-		m_bRemove = true;
-		setActive(false);
-
-		m_pPanel->Set_Show(false);
-	}
 
 	if (0 > __super::Tick(_dDeltaTime))
 	{
@@ -160,6 +153,15 @@ _int CMonster_Bastion_Sword::Tick(_double _dDeltaTime)
 			m_bGroggy = false;
 		}
 	}
+
+	if ((_uint)ANIM_TYPE::DEATH == m_pAnimator->Get_CurrentAnimNode() && m_pAnimator->Get_AnimController()->Is_Finished())
+	{
+		m_bRemove = true;
+		setActive(false);
+
+		m_pPanel->Set_Show(false);
+	}
+
 
 	m_pPanel->Set_TargetWorldMatrix(m_pTransform->Get_WorldMatrix());
 

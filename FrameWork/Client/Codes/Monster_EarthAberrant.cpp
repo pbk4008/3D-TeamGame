@@ -110,14 +110,7 @@ _int CMonster_EarthAberrant::Tick(_double _dDeltaTime)
 	{
 		m_pPanel->Set_Show(true);
 	}
-	if (DEATH == m_pAnimatorCom->Get_CurrentAnimNode() && m_pAnimatorCom->Get_AnimController()->Is_Finished())
-	{
-		m_bRemove = true;
-		setActive(false);
-
-		m_pPanel->Set_Show(false);
-	}
-
+	
 	if (0 > __super::Tick(_dDeltaTime))
 	{
 		return -1;
@@ -169,6 +162,14 @@ _int CMonster_EarthAberrant::Tick(_double _dDeltaTime)
 		{
 			m_bGroggy = false;
 		}
+	}
+
+	if (DEATH == m_pAnimatorCom->Get_CurrentAnimNode() && m_pAnimatorCom->Get_AnimController()->Is_Finished())
+	{
+		m_bRemove = true;
+		setActive(false);
+
+		m_pPanel->Set_Show(false);
 	}
 
 	m_pCharacterController->Move(_dDeltaTime, m_pTransform->Get_Velocity());

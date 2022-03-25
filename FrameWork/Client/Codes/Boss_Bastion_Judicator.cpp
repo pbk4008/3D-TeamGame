@@ -100,13 +100,7 @@ _int CBoss_Bastion_Judicator::Tick(_double TimeDelta)
 	{
 		m_pPanel->Set_Show(true);
 	}
-	if (DEATH == m_pAnimator->Get_CurrentAnimNode() && m_pAnimator->Get_AnimController()->Is_Finished())
-	{
-		m_bRemove = true;
-		setActive(false);
 
-		m_pPanel->Set_Show(false);
-	}
 
 	if (0 > __super::Tick(TimeDelta))
 	{
@@ -159,6 +153,17 @@ _int CBoss_Bastion_Judicator::Tick(_double TimeDelta)
 
 	if (m_bIsFall)
 		m_pTransform->Fall(TimeDelta);
+
+
+	if (DEATH == m_pAnimator->Get_CurrentAnimNode())
+	{
+		if (m_pAnimator->Get_CurrentAnimation()->Is_Finished())
+		{
+			m_bRemove = true;
+			m_pPanel->Set_Show(false);
+			setActive(false);
+		}
+	}
 
 	m_pCharacterController->Move(TimeDelta, m_pTransform->Get_Velocity());
 

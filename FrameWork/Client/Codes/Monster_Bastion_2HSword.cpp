@@ -112,14 +112,7 @@ _int CMonster_Bastion_2HSword::Tick(_double _dDeltaTime)
 	{
 		m_pPanel->Set_Show(true);
 	}
-	if ((_uint)ANIM_TYPE::A_DEATH == m_pAnimator->Get_CurrentAnimNode() && m_pAnimator->Get_AnimController()->Is_Finished())
-	{
-		m_bRemove = true;
-		setActive(false);
-
-		m_pPanel->Set_Show(false);
-	}
-
+	
 	_int iProgress = __super::Tick(_dDeltaTime);
 	if (NO_EVENT != iProgress) 
 		return iProgress;
@@ -159,6 +152,14 @@ _int CMonster_Bastion_2HSword::Tick(_double _dDeltaTime)
 		{
 			m_bGroggy = false;
 		}
+	}
+
+	if ((_uint)ANIM_TYPE::A_DEATH == m_pAnimator->Get_CurrentAnimNode() && m_pAnimator->Get_AnimController()->Is_Finished())
+	{
+		m_bRemove = true;
+		setActive(false);
+
+		m_pPanel->Set_Show(false);
 	}
 
 	m_pPanel->Set_TargetWorldMatrix(m_pTransform->Get_WorldMatrix());
