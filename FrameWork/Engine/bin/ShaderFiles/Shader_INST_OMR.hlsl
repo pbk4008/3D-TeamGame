@@ -1,26 +1,11 @@
 #include "Shader_RenderState.hpp"
 
-cbuffer ShadeCheck
-{
-	bool g_bool = false;
-	bool g_NonTex = false;
-};
-
 cbuffer Matrices
 {
-	matrix		g_WorldMatrix  = (matrix)0;
-	matrix		g_ViewMatrix;	
+	matrix		g_WorldMatrix = (matrix)0;
+	matrix		g_ViewMatrix;
 	matrix		g_ProjMatrix;
-};
-
-struct BoneMatrixArray
-{
-	matrix		Bone[256];
-};
-
-cbuffer	BoneMatricesBuffer
-{
-	BoneMatrixArray		g_BoneMatrices;
+	vector		g_CamPos;
 };
 
 cbuffer LightBuffer
@@ -29,25 +14,16 @@ cbuffer LightBuffer
 	matrix g_LightProj;
 };
 
-texture2D	g_DiffuseTexture;
-texture2D	g_ShadowTexture;
-texture2D	g_BiNormalTexture;
-
-texture2D	g_ORMTexture;
-texture2D	g_ORMETexture;
+texture2D g_ShadowTexture;
+texture2D g_DiffuseTexture;
+texture2D g_BiNormalTexture;
+texture2D g_OMRTexture;
 
 sampler DefaultSampler = sampler_state
-{		
+{
 	filter = min_mag_mip_linear;
 	AddressU = wrap;
 	AddressV = wrap;
-};
-
-sampler ClampSampler = sampler_state
-{
-	filter = min_mag_mip_linear;
-	AddressU = clamp;
-	AddressV = clamp;
 };
 
 float3 Normalmapping(float3 normaltex, float3x3 tbn)
@@ -61,16 +37,18 @@ float3 Normalmapping(float3 normaltex, float3x3 tbn)
 	return normaltex;
 }
 
-
 struct VS_IN
 {
-	float3	vPosition : POSITION;
-	float3	vNormal : NORMAL;
-	float2	vTexUV : TEXCOORD0;
-	float3	vTangent : TANGENT;
-	float3	vBiNormal : BINORMAL;
-	uint4	vBlendIndex : BLENDINDEX;
-	float4	vBlendWeight : BLENDWEIGHT;
+	float3		vPosition : POSITION;
+	float3		vNormal : NORMAL;
+	float2		vTexUV : TEXCOORD0;
+	float3		vTangent : TANGENT; 
+	float3		vBiNormal : BINORMAL;
+	
+	float4 vRight : TEXCOORD1;
+	float4 vUp  : TEXCOORD2;
+	float4 vLook  : TEXCOORD3;
+	float4 vTranslation  : TEXCOORD4;
 };
 
 struct VS_OUT
@@ -82,44 +60,43 @@ struct VS_OUT
 	float4 vUvDepth : TEXCOORD0;
 };
 
-VS_OUT VS_MAIN_ANIM(VS_IN In)
+bool g_bUsingTool = false;
+
+VS_OUT VS_MESH(VS_IN In)
 {
-	VS_OUT			Out = (VS_OUT)0;	
+	VS_OUT			Out = (VS_OUT)0;
 
+	matrix matInstance = float4x4(In.vRight, In.vUp, In.vLook, In.vTranslation);
+	
+	if (g_bUsingTool)
+	{
+		matInstance = float4x4(1, 0, 0, 0,
+								0, 1, 0, 0,
+								0, 0, 1, 0,
+								0, 0, 0, 1);
+	}
 
-	matrix			matWV, matWVP;	
-
-	float		fWeightw = 1.f - (In.vBlendWeight.x + In.vBlendWeight.y + In.vBlendWeight.z);
-
-
-	matrix			BoneMatrix = g_BoneMatrices.Bone[In.vBlendIndex.x] * In.vBlendWeight.x +
-		g_BoneMatrices.Bone[In.vBlendIndex.y] * In.vBlendWeight.y +
-		g_BoneMatrices.Bone[In.vBlendIndex.z] * In.vBlendWeight.z +
-		g_BoneMatrices.Bone[In.vBlendIndex.w] * In.vBlendWeight.w;
-
+	vector vPosition = mul(vector(In.vPosition, 1.f), matInstance);
+	
+	vector vNormal = mul(vector(In.vNormal, 0.f), matInstance);
+	vector vBiNormal = mul(vector(In.vBiNormal, 0.f), matInstance);
+	vector vTangent = mul(vector(In.vTangent, 0.f), matInstance);
+	
+	matrix matWV, matWVP;
 
 	matWV = mul(g_WorldMatrix, g_ViewMatrix);
 	matWVP = mul(matWV, g_ProjMatrix);
-		
-	vector		vPosition = mul(vector(In.vPosition, 1.f), BoneMatrix);
-	vPosition = mul(vPosition, matWVP);
 
-	Out.vPosition = vPosition;
-
-	vector		vNormal = mul(vector(In.vNormal, 0.f), BoneMatrix);
-	vector		vBiNoraml = mul(vector(In.vBiNormal, 0.f), BoneMatrix);
-	vector		vTantent = mul(vector(In.vTangent, 0.f), BoneMatrix);
-	
+	Out.vPosition = mul(vPosition, matWVP);
 	Out.vNormal = normalize(mul(vNormal, g_WorldMatrix));
-	Out.vBiNormal = normalize(mul(vBiNoraml, g_WorldMatrix));
-	Out.vTangent = normalize(mul(vTantent, g_WorldMatrix));
-	
+	Out.vBiNormal = normalize(mul(vBiNormal, g_WorldMatrix));
+	Out.vTangent = normalize(mul(vTangent, g_WorldMatrix));
 	Out.vUvDepth.xy = In.vTexUV.xy;
 	Out.vUvDepth.zw = Out.vPosition.zw;
+	
 	return Out;
-
 }
-// VS_SHADOWMAP
+// VS_SHADOW_MAP
 //*---------------------------------------------------------------------------------------------*
 
 struct VS_OUT_SHADOW
@@ -127,31 +104,35 @@ struct VS_OUT_SHADOW
 	float4 vPosition : SV_Position;
 	float2 vTexUV : TEXCOORD0;
 	float4 vClipPos : TEXCOORD1;
+	float4 vWorldPos : TEXCOORD2;
 };
 
 VS_OUT_SHADOW VS_MAIN_SHADOW(VS_IN In)
 {
-	VS_OUT_SHADOW Out = (VS_OUT_SHADOW) 0.f;
-	
-	matrix matWV,matWVP;
-	
-	float fWeightw = 1.f - (In.vBlendWeight.x + In.vBlendWeight.y + In.vBlendWeight.z);
+	VS_OUT_SHADOW Out = (VS_OUT_SHADOW) 0;
 
+	matrix matInstance = float4x4(In.vRight, In.vUp, In.vLook, In.vTranslation);
 
-	matrix BoneMatrix = g_BoneMatrices.Bone[In.vBlendIndex.x] * In.vBlendWeight.x +
-		g_BoneMatrices.Bone[In.vBlendIndex.y] * In.vBlendWeight.y +
-		g_BoneMatrices.Bone[In.vBlendIndex.z] * In.vBlendWeight.z +
-		g_BoneMatrices.Bone[In.vBlendIndex.w] * In.vBlendWeight.w;
-	
-	vector vPosition = mul(vector(In.vPosition, 1.f), BoneMatrix);
-	
-	matWV = mul(g_WorldMatrix, g_LightView);
-	matWVP = mul(matWV, g_LightProj);
-	
-	
+	if (g_bUsingTool)
+	{
+		matInstance = float4x4(1, 0, 0, 0,
+								0, 1, 0, 0,
+								0, 0, 1, 0,
+								0, 0, 0, 1);
+	}
+
+	vector vPosition = mul(vector(In.vPosition, 1.f), matInstance);
+
+	matrix matWV, matWVP;
+
+	matWV = mul(g_WorldMatrix, g_ViewMatrix);
+	matWVP = mul(matWV, g_ProjMatrix);
+
 	Out.vPosition = mul(vPosition, matWVP);
-	Out.vClipPos = Out.vPosition;
+	Out.vWorldPos = mul(vector(In.vPosition, 1.f), g_WorldMatrix);
 	Out.vTexUV = In.vTexUV;
+	Out.vClipPos = Out.vPosition;
+	return Out;
 	
 	return Out;
 }
@@ -164,6 +145,7 @@ struct VS_OUT_SHADESHADOW
 	float4 vPosition : SV_Position;
 	float2 vTexUV : TEXCOORD0;
 	float4 vLightPosition : TEXCOORD1;
+	float4 vWorldPos : TEXCOORD2;
 };
 
 VS_OUT_SHADESHADOW VS_MAIN_SHADESHADOW(VS_IN In)
@@ -171,16 +153,7 @@ VS_OUT_SHADESHADOW VS_MAIN_SHADESHADOW(VS_IN In)
 	VS_OUT_SHADESHADOW Out = (VS_OUT_SHADESHADOW) 0.f;
 	
 	matrix matWV, matWVP, matLightWV, matLightWVP;
-	
-	float fWeightw = 1.f - (In.vBlendWeight.x + In.vBlendWeight.y + In.vBlendWeight.z);
 
-
-	matrix BoneMatrix = g_BoneMatrices.Bone[In.vBlendIndex.x] * In.vBlendWeight.x +
-		g_BoneMatrices.Bone[In.vBlendIndex.y] * In.vBlendWeight.y +
-		g_BoneMatrices.Bone[In.vBlendIndex.z] * In.vBlendWeight.z +
-		g_BoneMatrices.Bone[In.vBlendIndex.w] * In.vBlendWeight.w;
-	
-	vector vPosition = mul(vector(In.vPosition, 1.f), BoneMatrix);
 	
 	matWV = mul(g_WorldMatrix, g_ViewMatrix);
 	matWVP = mul(matWV, g_ProjMatrix);
@@ -188,22 +161,29 @@ VS_OUT_SHADESHADOW VS_MAIN_SHADESHADOW(VS_IN In)
 	matLightWV = mul(g_WorldMatrix, g_LightView);
 	matLightWVP = mul(matLightWV, g_LightProj);
 	
-	Out.vPosition = mul(vector(vPosition.xyz, 1.f), matWVP);
+	Out.vPosition = mul(vector(In.vPosition, 1.f), matWVP);
 	Out.vTexUV = In.vTexUV;
-	Out.vLightPosition = mul(vector(vPosition.xyz, 1.f), matLightWVP);
-	//Out.vLightPosition = Out.vOffset;
+	Out.vLightPosition = mul(vector(In.vPosition, 1.f), matLightWVP);
+	Out.vWorldPos = mul(vector(In.vPosition, 1.f), g_WorldMatrix);
 	
 	return Out;
 }
 //*---------------------------------------------------------------------------------------------*
 
-// SHADOWMAP
+struct PS_RECT_IN
+{
+	float4		vPosition : SV_POSITION;
+	float2		vTexUV : TEXCOORD0;
+};
+
+// SHADOW_MAP
 //*---------------------------------------------------------------------------------------------*
 struct PS_IN_SHADOW
 {
 	float4 vPosition : SV_Position;
 	float2 vTexUV : TEXCOORD0;
 	float4 vClipPos : TEXCOORD1;
+	float4 vWorldPos : TEXCOORD2;
 };
 
 struct PS_OUT_SHADOW
@@ -218,12 +198,12 @@ PS_OUT_SHADOW PS_MAIN_SHADOW(PS_IN_SHADOW In)
 	float fDepth = In.vClipPos.z / In.vClipPos.w;
 	
 	float4 color = g_DiffuseTexture.Sample(DefaultSampler, In.vTexUV);
+	
 	float Alpha = 1.f;
 	
-	if (color.r < 0.1f && color.g < 0.1f && color.b < 0.1f)
+	if (color.r < 0.1f)
 	{
-		//Alpha = color.a + 0.3f;
-		discard;
+		Alpha = color.a;
 	}
 	
 	Out.vShadowDepthMap = vector(fDepth.xxx, Alpha);
@@ -239,6 +219,7 @@ struct PS_IN_SHADESHADOW
 	float4 vPosition : SV_Position;
 	float2 vTexUV : TEXCOORD0;
 	float4 vLightPosition : TEXCOORD1;
+	float4 vWorldPos : TEXCOORD2;
 };
 
 struct PS_OUT_SHADESHADOW
@@ -253,24 +234,24 @@ PS_OUT_SHADESHADOW PS_MAIN_SHADESHADOW(PS_IN_SHADESHADOW In)
 	float fOut = 1.f;
 	
 	vector Diffuse = g_DiffuseTexture.Sample(DefaultSampler, In.vTexUV);
+	
+	
 	float Bias = 0.001f;
-	float ShadowIntensity = 0.6f;
+	float ShadowIntensity = 0.3f;
 
 	float CurrentDepth = In.vLightPosition.z / In.vLightPosition.w;
 	
 	float2 ShadowUV = In.vLightPosition.xy / In.vLightPosition.w;
 	
 	if (ShadowUV.x < -fOut || ShadowUV.x > fOut || ShadowUV.y < -fOut || ShadowUV.y > fOut || CurrentDepth < -fOut || CurrentDepth > fOut)
-	{
 		Out.vShadeShadow = float4(1.f, 1.f, 1.f, 1.f);
-	}
 	else
 	{
 		ShadowUV.y = -ShadowUV.y;
 		ShadowUV = ShadowUV * 0.5f + 0.5f;
 
-		float shadowDepth;
-		shadowDepth = g_ShadowTexture.Sample(ClampSampler, ShadowUV).r;
+		float shadowDepth, shadowAlpha;
+		shadowDepth = g_ShadowTexture.Sample(DefaultSampler, ShadowUV).r;
 		
 		Out.vShadeShadow = float4(1.f, 1.f, 1.f, 1.f);
 		if (CurrentDepth > shadowDepth + Bias)
@@ -286,8 +267,8 @@ PS_OUT_SHADESHADOW PS_MAIN_SHADESHADOW(PS_IN_SHADESHADOW In)
 				Out.vShadeShadow.a = Diffuse.a;
 		}
 	}
-	return Out;
 	
+	return Out;
 }
 //*---------------------------------------------------------------------------------------------*
 
@@ -299,9 +280,6 @@ struct PS_IN
 	float4 vBiNormal : BINORMAL;
 	float4 vUvDepth : TEXCOORD0;
 };
-
-//*---------------------------------------------------------------------------------------------*
-
 struct PS_OUT
 {
 	float4 diffuse : SV_TARGET0;
@@ -312,43 +290,13 @@ struct PS_OUT
 	float4 A : SV_Target5;
 	float4 E : SV_Target6;
 };
-
-PS_OUT PS_MAIN_ORME(PS_IN In)
+PS_OUT PS_MAIN(PS_IN In)
 {
 	PS_OUT Out = (PS_OUT) 0;
 	
 	float4 diffuse = g_DiffuseTexture.Sample(DefaultSampler, In.vUvDepth.xy);
 	float3 normal = g_BiNormalTexture.Sample(DefaultSampler, In.vUvDepth.xy).xyz;
-	float4 orme = g_ORMETexture.Sample(DefaultSampler, In.vUvDepth.xy);
-	float3x3 tbn = { In.vTangent.xyz, In.vBiNormal.xyz, In.vNormal.xyz };
-	
-	normal = Normalmapping(normal, tbn);
-	
-	Out.diffuse = diffuse;
-
-	Out.depth = float4(In.vUvDepth.z / In.vUvDepth.w, In.vUvDepth.w / 300.f, 0.f, 0.f);
-	Out.normal = float4(normal, 0);
-	
-	float Metalic = orme.b;
-	Out.M = float4(Metalic.rrr, 1.f);
-	float Roughness = orme.g;
-	Out.R = float4(Roughness.rrr, 1.f);
-	float Ao = orme.r;
-	Out.A = float4(Ao.rrr, 1.f);
-	float4 EmissionColor = float4(1.f, 0.843f, 0.f, 1.f);
-	float EmissionPower = 0.1f;
-	Out.E = float4(diffuse.xyz * orme.a * EmissionPower, 1);
-
-	return Out;
-}
-
-PS_OUT PS_MAIN_ORM(PS_IN In)
-{
-	PS_OUT Out = (PS_OUT) 0;
-	
-	float4 diffuse = g_DiffuseTexture.Sample(DefaultSampler, In.vUvDepth.xy);
-	float3 normal = g_BiNormalTexture.Sample(DefaultSampler, In.vUvDepth.xy).xyz;
-	float3 orm = g_ORMTexture.Sample(DefaultSampler, In.vUvDepth).xyz;
+	float3 omr = g_OMRTexture.Sample(DefaultSampler, In.vUvDepth).xyz;
 	float3x3 tbn = { In.vTangent.xyz, In.vBiNormal.xyz, In.vNormal.xyz };
 	
 	normal = Normalmapping(normal, tbn);
@@ -359,71 +307,56 @@ PS_OUT PS_MAIN_ORM(PS_IN In)
 	Out.depth = float4(In.vUvDepth.z / In.vUvDepth.w, In.vUvDepth.w / 300.f, 0.f, 0.f);
 	Out.normal = float4(normal, 0);
 	
-	float Metalic = orm.b;
+	float Metalic = omr.g;
 	Out.M = float4(Metalic.rrr, 1.f);
-	float Roughness = orm.g;
+	float Roughness = omr.b;
 	Out.R = float4(Roughness.rrr, 1.f);
-	float Ao = orm.r;
+	float Ao = omr.r;
 	Out.A = float4(Ao.rrr, 1.f);
-	
-	float3 color = float3(0.811, 1.f, 0.898f);
-	float EmissionPower = 0.8f;
-	Out.E = float4(color * EmissionPower, 1);
 	
 	return Out;
 }
 
 technique11			DefaultTechnique
 {
-	pass ORME //------------------------------------------------------------------------------------0 ORME
+	pass DefaultShader
 	{
 		SetRasterizerState(CullMode_Default);
 		SetDepthStencilState(ZDefault, 0);
 		SetBlendState(BlendDisable, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
 
-		/* 진입점함수를 지정한다. */
-		VertexShader = compile vs_5_0 VS_MAIN_ANIM();
+		VertexShader = compile vs_5_0 VS_MESH();
 		GeometryShader = NULL;
-		PixelShader = compile ps_5_0 PS_MAIN_ORME();
+		PixelShader = compile ps_5_0  PS_MAIN();
 	}
-
-	pass PS_MAIN_ORM //------------------------------------------------------------------------------------0 ORM
+	pass Default_Frame
 	{
-		SetRasterizerState(CullMode_Default);
+		SetRasterizerState(CullMode_Wireframe);
 		SetDepthStencilState(ZDefault, 0);
 		SetBlendState(BlendDisable, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
 
-		/* 진입점함수를 지정한다. */
-		VertexShader = compile vs_5_0 VS_MAIN_ANIM();
+		VertexShader = compile vs_5_0 VS_MESH();
 		GeometryShader = NULL;
-		PixelShader = compile ps_5_0 PS_MAIN_ORM();
+		PixelShader = compile ps_5_0  PS_MAIN();
 	}
-
-	pass ShadowANIM //-----------------------------------------------------------------------------------------1 Anim ShadowMap
+	pass ShadowMap
 	{
 		SetRasterizerState(CullMode_Default);
 		SetDepthStencilState(ZDefault, 0);
 		SetBlendState(BlendDisable, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
 
-		/* 진입점함수를 지정한다. */
 		VertexShader = compile vs_5_0 VS_MAIN_SHADOW();
 		GeometryShader = NULL;
 		PixelShader = compile ps_5_0 PS_MAIN_SHADOW();
 	}
-
-	pass ShadeShadow //-----------------------------------------------------------------------------------------2 Anim Shade_Shadow
+	pass CompareShadow
 	{
 		SetRasterizerState(CullMode_Default);
 		SetDepthStencilState(ZDefault, 0);
 		SetBlendState(BlendDisable, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
 
-		/* 진입점함수를 지정한다. */
 		VertexShader = compile vs_5_0 VS_MAIN_SHADESHADOW();
 		GeometryShader = NULL;
 		PixelShader = compile ps_5_0 PS_MAIN_SHADESHADOW();
 	}
 }
-
-
-
-

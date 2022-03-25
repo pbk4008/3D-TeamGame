@@ -208,8 +208,8 @@ PS_OUT PS_MAIN(PS_IN In)
 	Out.depth = float4(In.vUvDepth.z / In.vUvDepth.w, In.vUvDepth.w / 300.f, 0.f, 0.f);
 	Out.normal = float4(normal, 0);
 	
-	Out.M = float4(0.3, 0.3, 0.3, 1);
-	Out.R = float4(0.3, 0.3, 0.3, 1);
+	Out.M = float4(0.8, 0.8, 0.8, 1);
+	Out.R = float4(0.2, 0.2, 0.2, 1);
 	Out.A = float4(1, 1, 1, 1);
 	float4 color = float4(0.996f, 0.843f, 0.f, 1.f);
 	float4 power = 0.03f;

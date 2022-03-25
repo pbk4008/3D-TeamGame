@@ -359,9 +359,17 @@ HRESULT CMaterial::SetUp_TextureOnShader()
 			break;
 		case TEXTURETYPE::TEX_ORH:
 			break;
-		case TEXTURETYPE::TEX_COEFF:
+		case TEXTURETYPE::TEX_COEFF: // 20
 			break;
-		case TEXTURETYPE::TEX_ND:
+		case TEXTURETYPE::TEX_ND: // 21
+			break;
+		case TEXTURETYPE::TEX_OMR: // 22
+			str = "g_OMRTexture";
+			break;
+		case TEXTURETYPE::TEX_NORMAL2: // 23
+			break;
+		case TEXTURETYPE::TEX_ORME: // 24
+			str = "g_ORMETexture";
 			break;
 		case TEXTURETYPE::TEX_END:
 			break;

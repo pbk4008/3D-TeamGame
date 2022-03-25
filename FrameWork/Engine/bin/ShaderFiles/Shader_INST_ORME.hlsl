@@ -217,8 +217,8 @@ PS_OUT PS_MAIN(PS_IN In)
 	float Ao = orme.r;
 	Out.A = float4(Ao.rrr, 1.f);
 	float4 EmissionColor = float4(1.f, 0.843f, 0.f, 1.f);
-	float EmissionPower = 0.5f;
-	Out.E = float4(EmissionColor.xyz * orme.a * EmissionPower, 1);
+	float EmissionPower = 0.7f;
+	Out.E = float4(diffuse.xyz * orme.a * EmissionPower, 1);
 
 	return Out;
 }

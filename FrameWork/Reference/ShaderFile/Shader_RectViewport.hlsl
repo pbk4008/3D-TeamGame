@@ -195,7 +195,7 @@ PS_OUT_LIGHTACC PS_MAIN_LIGHTACC_DIRECTIONAL(PS_IN In)
 
 		float specular = NdotL * _D * _F * _V;
 		//-------------------------------------------------------------------------//
-		float3 color = float3(0.97f, 0.95f, 0.8f);
+		float3 color = float3(0.54f, 0.48f, 0.64f);
 		float4 ambientcolor = float4(color * 0.2f, 1.0);
 		float diffusefactor = dot(normal3, normalize(L));
 		float4 diffusecolor = 0;
@@ -220,7 +220,7 @@ PS_OUT_LIGHTACC PS_MAIN_LIGHTACC_DIRECTIONAL(PS_IN In)
 		float4 lightpower = InvMetalic * light * AO;
 		
 		Out.vSpecular.xyz = ((light * specular + cubeRef1) * Metallic * smoothness).xyz;
-		Out.vShade = light;
+		Out.vShade = lightpower;
 		Out.vShade.a = 1.f;
 	}
 	else

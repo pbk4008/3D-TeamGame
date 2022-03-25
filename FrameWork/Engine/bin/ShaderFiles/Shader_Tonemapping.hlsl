@@ -5,8 +5,8 @@
 sampler DefaultSampler = sampler_state
 {
 	filter = min_mag_mip_linear;
-	AddressU = clamp;
-	AddressV = clamp;
+	//AddressU = clamp;
+	//AddressV = clamp;
 };
 
 cbuffer ConstBuffer
@@ -50,20 +50,6 @@ struct PS_IN
 	float2 vTexUV : TEXCOORD0;
 };
 
-struct PS_OUT
-{
-	vector vOutColor : SV_Target0;
-};
-
-PS_OUT PS_MAIN_UPSAMPLING(PS_IN In)
-{
-	PS_OUT Out = (PS_OUT) 0;
-	
-	Out.vOutColor = g_BloomTexture.Sample(DefaultSampler, In.vTexUV);
-	
-	return Out;
-}
-
 struct PS_OUT_TONE
 {
 	vector vHDRDiffuse : SV_Target0;
@@ -75,11 +61,13 @@ PS_OUT_TONE PS_MAIN_TONEMAPPING(PS_IN In)
 	PS_OUT_TONE Out = (PS_OUT_TONE) 0;
 	
 	float Gamma = 2.2f;
+	vector luminanceBase = g_LuminanceTexture.Sample(DefaultSampler, float2(0.5f, 0.5f));
+	
 	
 	vector vTotalcolor = g_HDRDiffuseTexture.Sample(DefaultSampler, In.vTexUV);
 
 	// dx ±âº» Åæ¸ÅÇÎ
-	float Luminance = 0.09f;
+	float Luminance = 0.3f;
 	float MiddleGray = 0.18f;
 	float WhiteCutoff = 0.9f;
 	
@@ -95,7 +83,7 @@ PS_OUT_TONE PS_MAIN_TONEMAPPING(PS_IN In)
 	
 	vector vSpeccular = g_HDRSpecularTexture.Sample(DefaultSampler, In.vTexUV);
 	
-	Luminance = 0.09f;
+	Luminance = 0.2f;
 	MiddleGray = 0.18f;
 	WhiteCutoff = 0.9f;
 	
@@ -106,12 +94,10 @@ PS_OUT_TONE PS_MAIN_TONEMAPPING(PS_IN In)
 	vSpecColor.rgb /= (1.f + vSpecColor.rgb);
 	vSpecColor.a = 1.f;
 	
-	Out.vHDRSpecualr = pow(abs(vSpecColor), 1.f / Gamma);
+	Out.vHDRSpecualr = vSpecColor;
 	
 	
 	vector base = g_HDRDiffuseTexture.Sample(DefaultSampler, In.vTexUV);
-	
-	vector luminanceBase = g_LuminanceTexture.Sample(DefaultSampler, float2(0.5f, 0.5f));
 	
 	float xWeight = frac(In.vTexUV.x / rcp_bloom_tex_w) - 0.5f;
 	float xDir = xWeight;
@@ -127,7 +113,7 @@ PS_OUT_TONE PS_MAIN_TONEMAPPING(PS_IN In)
 	
 	float4 BaseBloom = ((1.0f - xWeight) * (1.0f - yWeight)) * g_BloomTexture.Sample(DefaultSampler, In.vTexUV);
 	BaseBloom += (xWeight * (1.f - yWeight)) * g_BloomTexture.Sample(DefaultSampler, In.vTexUV + float2(xDir, 0.f));
-	BaseBloom += (xWeight * (1.f - yWeight)) * g_BloomTexture.Sample(DefaultSampler, In.vTexUV + float2(0.f, yDir));
+	BaseBloom += (yWeight * (1.f - xWeight)) * g_BloomTexture.Sample(DefaultSampler, In.vTexUV + float2(0.f, yDir));
 	BaseBloom += (xWeight * yWeight) * g_BloomTexture.Sample(DefaultSampler, In.vTexUV + float2(xDir, yDir));
 	
 	vector finaldiffuse = 0.25f * BaseBloom;
@@ -136,35 +122,26 @@ PS_OUT_TONE PS_MAIN_TONEMAPPING(PS_IN In)
 	
 	float LmSqr = (luminanceBase.g + GaussianScalar * luminanceBase.g) * (luminanceBase.g + GaussianScalar * luminanceBase.g);
 	
-	float toneScalar = (Lp * (1.f + (Lp / (LmSqr))) / (1.f + Lp));
+	float toneScalar = (Lp * (1.f + (Lp / (LmSqr)))) / (1.f + Lp);
 	
 	finaldiffuse = finaldiffuse * toneScalar;
 	finaldiffuse.a = 1.f;
 	
-	Out.vHDRDiffuse += pow(abs(finaldiffuse), 1.f / Gamma);
+	Out.vHDRDiffuse += finaldiffuse;/*	pow(abs(finaldiffuse), 1.f / Gamma);*/
+
 	
 	return Out;
 }
 
 technique11 Luminance
 {
-	pass UpSamplling
-	{
-		SetRasterizerState(CullMode_Default);
-		SetDepthStencilState(ZTestDiable, 0);
-		SetBlendState(BlendDisable, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
-
-		VertexShader = compile vs_5_0 VS_MAIN_VIEWPORT();
-		GeometryShader = NULL;
-		PixelShader = compile ps_5_0 PS_MAIN_UPSAMPLING();
-	}
-
 	pass ToneMapping
 	{
 		SetRasterizerState(CullMode_Default);
 		SetDepthStencilState(ZTestDiable, 0);
 		SetBlendState(BlendDisable, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
-
+		//
+		//AlphaBlending
 		VertexShader = compile vs_5_0 VS_MAIN_VIEWPORT();
 		GeometryShader = NULL;
 		PixelShader = compile ps_5_0 PS_MAIN_TONEMAPPING();

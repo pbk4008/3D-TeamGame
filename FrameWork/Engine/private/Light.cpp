@@ -27,6 +27,10 @@ HRESULT CLight::NativeConstruct(const LIGHTDESC& LightDesc)
 	return S_OK;
 }
 
+void CLight::Tick()
+{
+}
+
 HRESULT CLight::Render(const wstring& pCameraTag, _bool PBRHDRcheck)
 {
 	CTarget_Manager* pTarget_Manager = GET_INSTANCE(CTarget_Manager);

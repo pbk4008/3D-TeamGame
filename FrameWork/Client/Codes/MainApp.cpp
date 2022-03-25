@@ -58,6 +58,18 @@ _int CMainApp::Tick(_double TimeDelta)
 
 	g_pGameInstance->Update_InputDev();
 
+	if (g_pGameInstance->getkeyDown(DIK_F1))
+	{
+		m_bHDR = !m_bHDR;
+		m_pRenderer->SetRenderButton(CRenderer::HDR, m_bHDR);
+	}
+
+	if (g_pGameInstance->getkeyDown(DIK_F2))
+	{
+		m_bDBG = !m_bDBG;
+		m_pRenderer->SetRenderButton(CRenderer::DBG, m_bDBG);
+	}
+
 	if (g_pGameInstance->getkeyDown(DIK_P))
 		m_isPause = !m_isPause;
 
