@@ -700,7 +700,7 @@ HRESULT CLoader::Load_Stage1BossLoad()
 	return S_OK;
 }
 
-HRESULT CLoader:: ()
+HRESULT CLoader::Load_Stage1MonsterLoad()
 {
 	////Monster Crystal_Crawler
 	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Model_Monster_Crawler", CModel::Create(m_pDevice, m_pDeviceContext,
