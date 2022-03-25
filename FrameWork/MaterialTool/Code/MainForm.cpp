@@ -26,6 +26,9 @@ CMainForm::CMainForm()
 	, m_iSelMaterialIndex(-1)
 	, m_iPreMaterialIndex(-1)
 	, m_iSelMeshIndex(-1)
+	, m_iSelShaderFile(-1)
+	, m_iCurRadioBtn(-1)
+	, m_iPreRadioBtn(-1)
 {
 
 }
@@ -56,6 +59,7 @@ BEGIN_MESSAGE_MAP(CMainForm, CFormView)
 	ON_BN_CLICKED(IDC_BUTTON2, &CMainForm::OnTextureAddBtnClick)
 	ON_BN_CLICKED(IDC_BUTTON3, &CMainForm::OnMaterialApplyBtnClick)
 	ON_BN_CLICKED(IDC_BUTTON4, &CMainForm::OnMeshSaveBtnClick)
+	ON_BN_CLICKED(IDC_BUTTON5, &CMainForm::OnChangeShaderFileBtnClick)
 END_MESSAGE_MAP()
 
 
@@ -117,6 +121,9 @@ _int CMainForm::Tick(_double dDeltaTime)
 	Update_Tree();
 	Update_TextureList();
 	Update_Material();
+	Update_ShaderFile();
+	Click_RadioBtn();
+	Update_Type();
 	Update_AddTextureList();
 	Focusing();
 	Picking();
@@ -311,6 +318,100 @@ _int CMainForm::Update_AddTextureList()
 
 	m_bTextureChange = false;
 	return 0;
+}
+
+_uint CMainForm::Update_ShaderFile()
+{
+	if (!m_pSelMaterial)
+		return -1;
+	_bool bDropDown = false;
+	if (m_ShaderFileComboBox.GetDroppedState())
+		bDropDown = true;
+	
+	_int iNum = 0;
+	wstring pShaderPath = m_pSelMaterial->Get_ShaderFileName();
+
+	_tchar szName[MAX_PATH] = L"";
+	_tchar szExt[MAX_PATH] = L"";
+	_wsplitpath_s(pShaderPath.c_str(), nullptr, 0, nullptr, 0, szName, 256, szExt, 256);
+
+	lstrcat(szName, szExt);
+
+	if (bDropDown)
+	{
+		iNum = m_ShaderFileComboBox.GetCurSel();
+		CString tmpString;
+		m_ShaderFileComboBox.GetLBText(iNum, tmpString);
+		CString pFilePath = L"../../Reference/ShaderFile/";
+		pFilePath += tmpString;
+		m_pSelMaterial->Set_ShaderFileName(pFilePath.GetString());
+	}
+	else
+	{
+		_uint iCount = m_ShaderFileComboBox.GetCount();
+		_bool bFind = false;
+		for (_uint i = 0; i < iCount; i++)
+		{
+			CString strName;
+			m_ShaderFileComboBox.GetLBText(i, strName);
+			if (strName == szName)
+			{
+				iNum = i;
+				bFind = true;
+				break;
+			}
+		}
+		if (!bFind)
+			iNum = -1;
+	}
+	if (iNum == -1)
+		return 0;
+
+	m_ShaderFileComboBox.SetCurSel(iNum);
+	return _uint();
+}
+
+_uint CMainForm::Update_Type()
+{
+	if (!m_pSelMaterial)
+		return -1;
+	_uint iTypeNum = m_pSelMaterial->Get_Type();
+
+	m_tStaticBtn.SetCheck(false);
+	m_tAnimBtn.SetCheck(false);
+	m_tInstance_StaticBtn.SetCheck(false);
+	m_tInstance_AnimBtn.SetCheck(false);
+	switch (iTypeNum)
+	{
+	case 0:
+		m_tStaticBtn.SetCheck(true);
+		break;
+	case 1:
+		m_tAnimBtn.SetCheck(true);
+		break;
+	case 2:
+		m_tInstance_StaticBtn.SetCheck(true);
+		break;
+	case 3:
+		m_tInstance_AnimBtn.SetCheck(true);
+		break;
+	}
+	return _uint();
+}
+
+_uint CMainForm::Click_RadioBtn()
+{
+	if (!m_pSelMaterial)
+		return 0;
+
+	m_iCurRadioBtn = Check_RadioBtn();
+	if (m_iCurRadioBtn != m_iPreRadioBtn)
+	{
+		m_pSelMaterial->Set_Type(m_iCurRadioBtn);
+		m_iPreRadioBtn = m_iCurRadioBtn;
+	}
+
+	return _uint();
 }
 
 HRESULT CMainForm::Start_Level()
@@ -535,8 +636,6 @@ _int CMainForm::Check_RadioBtn()
 			iResult = 3;
 	}
 
-
-
 	return iResult;
 }
 
@@ -622,4 +721,15 @@ void CMainForm::OnMeshSaveBtnClick()
 	CString strPath = Dlg.GetFolderPath();
 	strPath += L"\\"+m_tFbxName;
 	m_pSelModel->Save_Model(strPath.GetString());
+}
+
+
+void CMainForm::OnChangeShaderFileBtnClick()
+{
+	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+	if (!m_pSelMaterial)
+		return;
+
+
+	m_pSelMaterial->Change_Material();
 }

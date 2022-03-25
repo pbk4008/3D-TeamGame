@@ -130,39 +130,6 @@ _int CMonster_Bastion_Sword::Tick(_double _dDeltaTime)
 	Change_State();
 
 	//콜리더 갱신
-
-	if (m_fGroggyGauge >= m_fMaxGroggyGauge)
-	{
-		//스턴상태일때 스턴state에서 현재 그로기 계속 0으로 고정시켜줌
-		m_bGroggy = true;
-		m_pStateController->Change_State(L"Groggy");
-		m_fGroggyGauge = 0.f;
-		m_pPanel->Set_GroggyBar(Get_GroggyGaugeRatio());
-	}
-
-	if (true == m_bGroggy || true == m_bDead)
-	{
-		m_fGroggyGauge = 0.f;
-		m_pPanel->Set_GroggyBar(Get_GroggyGaugeRatio());
-	}
-	
-	if ((_uint)ANIM_TYPE::GROGGY_START == m_pAnimator->Get_CurrentAnimNode())
-	{
-		if (m_pAnimator->Get_AnimController()->Is_Finished())
-		{
-			m_bGroggy = false;
-		}
-	}
-
-	if ((_uint)ANIM_TYPE::DEATH == m_pAnimator->Get_CurrentAnimNode() && m_pAnimator->Get_AnimController()->Is_Finished())
-	{
-		m_bRemove = true;
-		setActive(false);
-
-		m_pPanel->Set_Show(false);
-	}
-
-
 	m_pPanel->Set_TargetWorldMatrix(m_pTransform->Get_WorldMatrix());
 
 	return 0;
@@ -622,7 +589,21 @@ _int CMonster_Bastion_Sword::Change_State()
 		{
 			setActive(true);
 			m_bRemove = true;
+			m_pPanel->Set_Show(false);
 		}
+		else
+		{
+			m_fGroggyGauge = 0.f;
+			m_pPanel->Set_GroggyBar(Get_GroggyGaugeRatio());
+		}
+	}
+	if (m_fGroggyGauge >= m_fMaxGroggyGauge)
+	{
+		//스턴상태일때 스턴state에서 현재 그로기 계속 0으로 고정시켜줌
+		m_bGroggy = true;
+		m_pStateController->Change_State(L"Groggy");
+		m_fGroggyGauge = 0.f;
+		m_pPanel->Set_GroggyBar(Get_GroggyGaugeRatio());
 	}
 	return _int();
 }

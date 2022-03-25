@@ -4,6 +4,8 @@
 
 CBastion_Sword_Groggy::CBastion_Sword_Groggy(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
 	: CMonster_FSM(_pDevice, _pDeviceContext)
+	, m_fAccStunTime(0.f)
+	, m_bStunStart(false)
 {
 }
 
@@ -20,7 +22,6 @@ HRESULT CBastion_Sword_Groggy::NativeConstruct(void* _pArg)
 
 	Safe_AddRef(m_pAnimator);
 
-
 	if (FAILED(CMonster_FSM::NativeConstruct(_pArg)))
 		return E_FAIL;
 
@@ -34,8 +35,16 @@ _int CBastion_Sword_Groggy::Tick(const _double& _dDeltaTime)
 
 	m_pAnimator->Tick(_dDeltaTime);
 
+	if (m_pAnimator->Get_CurrentAnimNode() == (_uint)CMonster_Bastion_Sword::ANIM_TYPE::GROGGY_START
+		&&m_pAnimator->Get_IsLerp())
+		m_bStunStart = true;
+
+	if (m_bStunStart)
+		Stun(_dDeltaTime);
+
 	if (m_pAnimator->Get_CurrentAnimNode() == (_uint)CMonster_Bastion_Sword::ANIM_TYPE::IDLE)
 		m_pStateController->Change_State(L"Idle");
+
 	return _int();
 }
 
@@ -59,6 +68,16 @@ HRESULT CBastion_Sword_Groggy::EnterState()
 HRESULT CBastion_Sword_Groggy::ExitState()
 {
 	return S_OK;
+}
+
+void CBastion_Sword_Groggy::Stun(_double dDeltaTime)
+{
+	if (m_pAnimator->Get_CurrentAnimNode() == (_uint)CMonster_Bastion_Sword::ANIM_TYPE::GROGGY_LOOP)
+	{
+		m_fAccStunTime += (_float)dDeltaTime;
+		if (m_fAccStunTime > 3.f)
+			m_pAnimator->Change_LoopAnim();
+	}
 }
 
 CBastion_Sword_Groggy* CBastion_Sword_Groggy::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext, void* _pArg)
