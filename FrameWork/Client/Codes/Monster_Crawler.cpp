@@ -84,7 +84,7 @@ HRESULT CMonster_Crawler::NativeConstruct(const _uint _iSceneID, void* _pArg)
 
 	m_iObectTag = (_uint)GAMEOBJECT::MONSTER_CRYSTAL;
 
-	m_fMaxHp = 30.f;
+	m_fMaxHp = 3.f;
 	m_fCurrentHp = m_fMaxHp;
 
 	m_fMaxGroggyGauge = 3.f;
@@ -100,6 +100,19 @@ HRESULT CMonster_Crawler::NativeConstruct(const _uint _iSceneID, void* _pArg)
 
 _int CMonster_Crawler::Tick(_double _dDeltaTime)
 {	
+	//나중에지울코드
+	if (!m_bFirst)
+	{
+		m_pPanel->Set_Show(true);
+	}
+	if (DEATH == m_pAnimatorCom->Get_CurrentAnimNode() && m_pAnimatorCom->Get_AnimController()->Is_Finished())
+	{
+		m_bRemove = true;
+		setActive(false);
+
+		m_pPanel->Set_Show(false);
+	}
+
 	m_pTransform->Set_Velocity(XMVectorZero());
 
 	m_pPanel->Set_TargetWorldMatrix(m_pTransform->Get_WorldMatrix());
@@ -114,6 +127,7 @@ _int CMonster_Crawler::Tick(_double _dDeltaTime)
 		m_pStateController->Change_State(L"Death");
 	}
 
+	
 	/*if (g_pGameInstance->getkeyDown(DIK_NUMPAD5))
 	{
 		--m_fHp;
@@ -405,7 +419,7 @@ void CMonster_Crawler::Free()
 		Safe_Release(m_pCharacterController);
 	}
 
-	Safe_Release(m_pPanel);
+	//Safe_Release(m_pPanel);
 	Safe_Release(m_pStateController);
 	Safe_Release(m_pAnimatorCom);
 	Safe_Release(m_pModelCom);

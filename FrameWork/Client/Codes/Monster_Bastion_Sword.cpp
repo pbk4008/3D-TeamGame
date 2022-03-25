@@ -91,7 +91,7 @@ HRESULT CMonster_Bastion_Sword::NativeConstruct(const _uint _iSceneID, void* _pA
 
 	m_pPanel->Set_TargetWorldMatrix(m_pTransform->Get_WorldMatrix());
 
-	m_fMaxHp = 30.f;
+	m_fMaxHp = 3.f;
 	m_fCurrentHp = m_fMaxHp;
 
 	m_fMaxGroggyGauge = 10.f;
@@ -106,6 +106,19 @@ HRESULT CMonster_Bastion_Sword::NativeConstruct(const _uint _iSceneID, void* _pA
 
 _int CMonster_Bastion_Sword::Tick(_double _dDeltaTime)
 {
+	//나중에지울코드
+	if (!m_bFirst)
+	{
+		m_pPanel->Set_Show(true);
+	}
+	if ((_uint)ANIM_TYPE::DEATH == m_pAnimator->Get_CurrentAnimNode() && m_pAnimator->Get_AnimController()->Is_Finished())
+	{
+		m_bRemove = true;
+		setActive(false);
+
+		m_pPanel->Set_Show(false);
+	}
+
 	if (0 > __super::Tick(_dDeltaTime))
 	{
 		return -1;

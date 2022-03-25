@@ -32,15 +32,15 @@ HRESULT CStage1::NativeConstruct()
 	if (FAILED(Ready_Light()))
 		return E_FAIL;
 	
-	if (FAILED(Ready_MapObject()))
-	{
-		return E_FAIL;
-	}
+	//if (FAILED(Ready_MapObject()))
+	//{
+	//	return E_FAIL;
+	//}
 
-	if (FAILED(Ready_Trigger_Jump()))
-	{
-		return E_FAIL;
-	}
+	//if (FAILED(Ready_Trigger_Jump()))
+	//{
+	//	return E_FAIL;
+	//}
 
 	if (FAILED(Ready_Player(L"Layer_Silvermane")))
 	{
@@ -66,20 +66,15 @@ HRESULT CStage1::NativeConstruct()
 		return E_FAIL;
 	}
 	
-	if (FAILED(Ready_Data_Effect()))
-	{
-		return E_FAIL;
-	}
+	//if (FAILED(Ready_Data_Effect()))
+	//{
+	//	return E_FAIL;
+	//}
 
 	if (FAILED(Ready_UI(L"Layer_UI")))
 	{
 		return E_FAIL;
 	}
-
-	//m_pTriggerSystem = CTriggerSystem<Client::CStage1>::Create(m_pDevice, m_pDeviceContext, L"../bin/SaveData/MonsterSpawnTrigger.dat", this);
-
-	if (!m_pTriggerSystem)
-		return E_FAIL;
 
 	//if(FAILED(Ready_TriggerFunctionSetting()))
 	//	return E_FAIL;

@@ -58,11 +58,12 @@ HRESULT CUI_Monster_Panel::NativeConstruct(const _uint _iSceneID, void* pArg)
 
 _int CUI_Monster_Panel::Tick(_double TimeDelta)
 {
-	//if (false == m_bShow)
-	//{
-	//	setActive(true);
-	//	m_bShow = true;
-	//}
+	/*if (false == m_bFirstShow)
+	{
+		setActive(true);
+		m_bFirstShow = true;
+	}*/
+	
 
 	if (FAILED(__super::Tick(TimeDelta)))
 		return -1;
@@ -87,6 +88,22 @@ _int CUI_Monster_Panel::LateTick(_double TimeDelta)
 
 HRESULT CUI_Monster_Panel::Render()
 {
+	if (m_bShow)
+	{
+		m_pUIBack->Set_Show(true);
+		m_pUILevel->Set_Show(true);
+		m_pUIName->Set_Show(true);
+		m_pUIHpBar->Set_Show(true);
+		m_pUIGroggyBar->Set_Show(true);
+	}
+	if (!m_bShow)
+	{
+		m_pUIBack->Set_Show(false);
+		m_pUILevel->Set_Show(false);
+		m_pUIName->Set_Show(false);
+		m_pUIHpBar->Set_Show(false);
+		m_pUIGroggyBar->Set_Show(false);
+	}
 	return S_OK;
 }
 

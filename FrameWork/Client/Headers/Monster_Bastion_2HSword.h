@@ -71,6 +71,7 @@ private: /* For.Weapon */
 	CWeapon* m_pCurWeapon = nullptr;
 	_bool m_isEquipWeapon = false;
 	unordered_map<wstring, CWeapon*> m_umapWeapons;
+	_bool m_bFirst = false;
 
 private:
 	class CUI_Monster_Panel* m_pPanel = nullptr;

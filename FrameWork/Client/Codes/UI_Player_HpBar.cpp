@@ -46,7 +46,7 @@ HRESULT CUI_Player_HpBar::NativeConstruct(const _uint _iSceneID, void* pArg)
 		return E_FAIL;
 	}
 
-	_vector vpos = { -400.f, -252.1f, 0.09f, 1.f };
+	_vector vpos = { -400.f, -252.1f, 0.089f, 1.f };
 	m_pTransform->Set_State(CTransform::STATE_POSITION, vpos);
 
 	_vector vScale = { m_Desc.fSize.x,m_Desc.fSize.y,1.f ,1.f };

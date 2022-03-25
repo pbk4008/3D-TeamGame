@@ -75,19 +75,26 @@ private:
 	void Update_Setting_EndBoss(_double TimeDelta);
 
 private:
+	virtual HRESULT SetUp_Components();
+
+public:
+	void Set_Show(_bool bShow) { m_bShow = bShow; }
+
+private:
 	PANELDESC m_PanelDesc;
 	_float4x4 m_TargetMatrix;
 	Enemy m_EnemyTag = Enemy::ENEMY_END;
 
+protected:
+	_bool m_bFirstShow = false;
 	_bool m_bShow = false;
 
+private:
 	class CUI_Monster_Back* m_pUIBack = nullptr;
 	class CUI_Monster_Level* m_pUILevel = nullptr;
 	class CUI_Monster_HpBar* m_pUIHpBar = nullptr;
 	class CUI_Monster_Name* m_pUIName = nullptr;
 	class CUI_Monster_GroggyBar* m_pUIGroggyBar = nullptr;
-private:
-	virtual HRESULT SetUp_Components();
 
 public:
 	static CUI_Monster_Panel* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);
