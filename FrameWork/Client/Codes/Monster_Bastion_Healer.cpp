@@ -14,6 +14,8 @@
 #include "Bastion_Healer_Chaser_End.h"
 #include "Bastion_Healer_Attack.h"
 #include "Bastion_Healer_Groggy.h"
+#include "Bastion_Healer_Groggy_End.h"
+#include "Bastion_Healer_CastProtect.h"
 
 CMonster_Bastion_Healer::CMonster_Bastion_Healer(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
 	: CActor(_pDevice, _pDeviceContext)
@@ -73,7 +75,7 @@ HRESULT CMonster_Bastion_Healer::NativeConstruct(const _uint _iSceneID, void* _p
 		return E_FAIL;
 
 	// MonsterBar Panel
-		CUI_Monster_Panel::PANELDESC Desc;
+	CUI_Monster_Panel::PANELDESC Desc;
 	Desc.pTargetTransform = m_pTransform;
 	Desc.iEnemyTag = CUI_Monster_Panel::Enemy::HEALER;
 
@@ -100,6 +102,11 @@ HRESULT CMonster_Bastion_Healer::NativeConstruct(const _uint _iSceneID, void* _p
 
 _int CMonster_Bastion_Healer::Tick(_double _dDeltaTime)
 {
+	if (!m_bFirst)
+	{
+		m_pPanel->Set_Show(true);
+	}
+
 	_int iProgress = __super::Tick(_dDeltaTime);
 	if (NO_EVENT != iProgress) 
 		return iProgress;
@@ -122,7 +129,6 @@ _int CMonster_Bastion_Healer::Tick(_double _dDeltaTime)
 	{
 		//스턴상태일때 스턴state에서 현재 그로기 계속 0으로 고정시켜줌
 		m_bGroggy = true;
-		m_pStateController->Change_State(L"Stun");
 		m_fGroggyGauge = 0.f;
 		m_pPanel->Set_GroggyBar(Get_GroggyGaugeRatio());
 	}
@@ -141,6 +147,13 @@ _int CMonster_Bastion_Healer::Tick(_double _dDeltaTime)
 		}
 	}
 
+	if ((_uint)ANIM_TYPE::A_DEATH == m_pAnimator->Get_CurrentAnimNode() && m_pAnimator->Get_AnimController()->Is_Finished())
+	{
+		m_bRemove = true;
+		setActive(false);
+
+		m_pPanel->Set_Show(false);
+	}
 	m_pPanel->Set_TargetWorldMatrix(m_pTransform->Get_WorldMatrix());
 
 	return _int();
@@ -156,7 +169,6 @@ _int CMonster_Bastion_Healer::LateTick(_double _dDeltaTime)
 		return -1;
 
 	m_pCharacterController->Update_OwnerTransform();
-
 	m_pWeapon->LateTick(_dDeltaTime);
 
 	/* State FSM Late Update */
@@ -186,8 +198,6 @@ HRESULT CMonster_Bastion_Healer::Render()
 
 	for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
 	{
-		//if (FAILED(m_pModel->SetUp_TextureOnShader("g_DiffuseTexture", i, aiTextureType_DIFFUSE))) return E_FAIL;
-
 		if (FAILED(m_pModel->Render(i, 0)))
 			return E_FAIL;
 	}
@@ -382,6 +392,7 @@ HRESULT CMonster_Bastion_Healer::Ready_AnimFSM(void)
 	m_pAnimator->Insert_AnyEntryAnimation((_uint)ANIM_TYPE::A_IDLE);
 	m_pAnimator->Insert_AnyEntryAnimation((_uint)ANIM_TYPE::A_DEATH);
 	m_pAnimator->Insert_AnyEntryAnimation((_uint)ANIM_TYPE::A_STUN_ST);
+	m_pAnimator->Insert_AnyEntryAnimation((_uint)ANIM_TYPE::A_STUN_ED);
 	m_pAnimator->Insert_AnyEntryAnimation((_uint)ANIM_TYPE::A_CAST_PROTECT);
 	m_pAnimator->Insert_AnyEntryAnimation((_uint)ANIM_TYPE::A_ATTACK_BLIND);
 	m_pAnimator->Insert_AnyEntryAnimation((_uint)ANIM_TYPE::A_FLINCH_LEFT);
@@ -447,6 +458,12 @@ HRESULT CMonster_Bastion_Healer::Ready_StateFSM(void)
 		return E_FAIL;
 	/* for. Groggy */
 	if (FAILED(m_pStateController->Add_State(L"Groggy", CBastion_Healer_Groggy::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	/* for. Groggy End */
+	if (FAILED(m_pStateController->Add_State(L"Groggy_End", CBastion_Healer_Groggy_End::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	/* for. Cast Protect */
+	if (FAILED(m_pStateController->Add_State(L"Cast_Protect", CBastion_Healer_CastProtect::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 
 	for (auto& pair : m_pStateController->Get_States())

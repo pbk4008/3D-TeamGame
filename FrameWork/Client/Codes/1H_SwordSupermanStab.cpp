@@ -26,6 +26,14 @@ _int C1H_SwordSupermanStab::Tick(const _double& _dDeltaTime)
 
 	Add_PlusAngle(EDir::Forward, _dDeltaTime);
 
+
+	if (m_pSilvermane->IsAttack())
+	{
+		if (40 < m_pAnimationController->Get_CurKeyFrameIndex())
+			m_pSilvermane->Set_IsAttack(false);
+	}
+
+
 	if (m_pAnimationController->Is_Finished())
 	{
 		m_pStateController->Change_State(L"1H_SwordIdle");
