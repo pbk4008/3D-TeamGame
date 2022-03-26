@@ -75,8 +75,8 @@ HRESULT CStage1::NativeConstruct()
 		return E_FAIL;
 	}
 
-	//if(FAILED(Ready_TriggerFunctionSetting()))
-	//	return E_FAIL;
+	if (FAILED(Ready_TriggerFunctionSetting()))
+		return E_FAIL;
 	//if (FAILED(Ready_Trigger_Lod(L"../bin/SaveData/Trigger/Stage1_LodTri.dat")))
 	//	return E_FAIL;
 	//if (FAILED(Ready_Trigger_Light(L"../bin/SaveData/Trigger/Stage1_LodTri.dat")))

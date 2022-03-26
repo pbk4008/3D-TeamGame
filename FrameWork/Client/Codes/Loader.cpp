@@ -717,7 +717,7 @@ HRESULT CLoader::Load_Stage1MonsterLoad()
 		return E_FAIL;
 
 	//Monster EarthAberrant Weapon
-	_matrix matPivot = XMMatrixIdentity();
+	matPivot = XMMatrixIdentity();
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Model_Weapon_EarthAberrant_Pick", CModel::Create(m_pDevice, m_pDeviceContext,
 		"../bin/Resources/Mesh/Earth_Aberrant_Pick/", "EarthAberrant_Pick.fbx",
 		L"../../Reference/ShaderFile/Shader_StaticMesh.hlsl", matPivot, CModel::TYPE_STATIC, true))))
