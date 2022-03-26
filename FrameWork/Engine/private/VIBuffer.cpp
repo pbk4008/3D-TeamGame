@@ -207,10 +207,7 @@ void CVIBuffer::Free()
 	__super::Free();
 
 	for (auto& pEffectDesc : m_EffectDescs)
-	{
 		Safe_Release(pEffectDesc->pInputLayout);
-		Safe_Release(pEffectDesc->pPass);
-	}
 
 	if (false == m_isCloned)
 	{
@@ -218,7 +215,10 @@ void CVIBuffer::Free()
 		Safe_Delete_Array(m_pIndices);
 
 		for (auto& pEffectDesc : m_EffectDescs)
+		{
+			Safe_Release(pEffectDesc->pPass);
 			Safe_Delete(pEffectDesc);
+		}
 		m_EffectDescs.clear();
 	}	
 

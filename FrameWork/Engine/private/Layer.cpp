@@ -46,15 +46,10 @@ _int CLayer::LateTick(_double TimeDelta)
 {
 	_int		iProgress = 0;
 
-	auto& iter = m_Objects.begin();
-
-	for (; iter != m_Objects.end();)
+	for (auto& pGameObject : m_Objects)
 	{
-		if (nullptr != (*iter) && (*iter)->getActive() == true)
-			iProgress = (*iter)->LateTick(TimeDelta);
-
-		if (!Delete_GameObject(iter))
-			iter++;
+		if (nullptr != pGameObject && pGameObject->getActive() == true)
+			iProgress = pGameObject->LateTick(TimeDelta);
 
 		if (0 > iProgress)
 			return -1;
@@ -62,17 +57,25 @@ _int CLayer::LateTick(_double TimeDelta)
 	return _int(0);
 }
 
-_bool CLayer::Delete_GameObject(list<class CGameObject*>::iterator& iter)
+HRESULT CLayer::Delete_Object()
 {
-	if ((*iter)->getRemove())
-	{
-		Safe_Release(*iter);
-		iter = m_Objects.erase(iter);
-		return true;
-	}
-	return false;
-}
+	if (m_Objects.empty())
+		return S_OK;
 
+	auto iter_begin = m_Objects.begin();
+
+	for (; iter_begin != m_Objects.end();)
+	{
+		if ((*iter_begin)->getRemove())
+		{
+			Safe_Release((*iter_begin));
+			iter_begin=m_Objects.erase(iter_begin);
+		}
+		else
+			iter_begin++;
+	}
+	return S_OK;
+}
 
 
 CLayer * CLayer::Create()

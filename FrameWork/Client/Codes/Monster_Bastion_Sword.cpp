@@ -34,6 +34,7 @@ CMonster_Bastion_Sword::CMonster_Bastion_Sword(const CMonster_Bastion_Sword& _rh
 	, m_pModelCom(_rhs.m_pModelCom)
 	, m_pStateController(_rhs.m_pStateController)
 	, m_pAnimator(_rhs.m_pAnimator)
+	, m_pPanel(_rhs.m_pPanel)
 {
 	Safe_AddRef(m_pCharacterController);
 	Safe_AddRef(m_pModelCom);
@@ -79,27 +80,12 @@ HRESULT CMonster_Bastion_Sword::NativeConstruct(const _uint _iSceneID, void* _pA
 	if (FAILED(Set_State_FSM()))
 		return E_FAIL;
 
-
-	//MonsterBar Panel
-	CUI_Monster_Panel::PANELDESC Desc;
-	Desc.pTargetTransform = m_pTransform;
-	Desc.iEnemyTag = CUI_Monster_Panel::Enemy::SWORD;
-
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_UI", L"Proto_GameObject_UI_Monster_Panel", &Desc,
-		(CGameObject**)&m_pPanel)))
+	if (FAILED(Ready_UI()))
 		return E_FAIL;
 
-	m_pPanel->Set_TargetWorldMatrix(m_pTransform->Get_WorldMatrix());
 
-	m_fMaxHp = 3.f;
-	m_fCurrentHp = m_fMaxHp;
-
-	m_fMaxGroggyGauge = 10.f;
-	m_fGroggyGauge = 0.f;
-
-	m_pPanel->Set_HpBar(Get_HpRatio());
-	m_pPanel->Set_GroggyBar(Get_GroggyGaugeRatio());
-
+	//MonsterBar Panel
+	
 	setActive(false);
 	return S_OK;
 }
@@ -169,7 +155,7 @@ HRESULT CMonster_Bastion_Sword::Render()
 
 void CMonster_Bastion_Sword::OnTriggerEnter(CCollision& collision)
 {
-	if(m_fCurrentHp>=0.f&&m_wstrCurState != L"Hit")
+	if(m_fCurrentHp>=0.f)
 	{
 		if (collision.pGameObject->getTag() == (_uint)GAMEOBJECT::WEAPON)
 		{
@@ -178,36 +164,6 @@ void CMonster_Bastion_Sword::OnTriggerEnter(CCollision& collision)
 				Hit();
 		}
 	}
-
-	if (true == g_pObserver->IsAttack()) //플레이어공격일때
-	{
-		m_bFirstHit = true; //딱 한번 true로 변경해줌
-
-		if (true == m_bFirstHit)
-		{
-			m_pPanel->Set_BackUIGapY(1.f);
-		}
-
-		if ((_uint)GAMEOBJECT::WEAPON == collision.pGameObject->getTag())
-		{
-			--m_fCurrentHp;
-			m_fGroggyGauge += 2; //TODO::수치정해서바꿔줘야됨
-
-			m_pPanel->Set_HpBar(Get_HpRatio());
-
-			if (false == m_bGroggy)
-			{
-				//그로기 아닐때만 증가할수있게
-				m_pPanel->Set_GroggyBar(Get_GroggyGaugeRatio());
-				m_pStateController->Change_State(L"Hit");
-			}
-		}
-		else
-		{
-
-		}
-	}
-
 }
 
 HRESULT CMonster_Bastion_Sword::SetUp_Components()
@@ -467,7 +423,9 @@ HRESULT CMonster_Bastion_Sword::Set_Animation_FSM()
 	m_pAnimator->Insert_AnyEntryAnimation((_uint)ANIM_TYPE::HIT2);
 	m_pAnimator->Insert_AnyEntryAnimation((_uint)ANIM_TYPE::HIT3);
 	m_pAnimator->Insert_AnyEntryAnimation((_uint)ANIM_TYPE::HIT4);
+	m_pAnimator->Insert_AnyEntryAnimation((_uint)ANIM_TYPE::DEATH);
 	
+
 	m_pAnimator->Insert_AnyEntryAnimation((_uint)ANIM_TYPE::GROGGY_START);
 
 	m_pAnimator->Insert_AnyEntryAnimation((_uint)ANIM_TYPE::PARING);
@@ -528,8 +486,8 @@ HRESULT CMonster_Bastion_Sword::Set_State_FSM()
 	if (FAILED(m_pStateController->Add_State(L"Death", CBastion_Sword_Death::Create(m_pDevice, m_pDeviceContext, &tFSMDesc))))
 		return E_FAIL;
 
-	lstrcpy(tFSMDesc.pName, L"Groggy");
-	if (FAILED(m_pStateController->Add_State(L"Groggy", CBastion_Sword_Groggy::Create(m_pDevice, m_pDeviceContext, &tFSMDesc))))
+	lstrcpy(tActorDesc.pName, L"Groggy");
+	if (FAILED(m_pStateController->Add_State(L"Groggy", CBastion_Sword_Groggy::Create(m_pDevice, m_pDeviceContext, &tActorDesc))))
 		return E_FAIL;
 
 	lstrcpy(tFSMDesc.pName, L"Paring");
@@ -574,6 +532,32 @@ HRESULT CMonster_Bastion_Sword::Set_Weapon()
 	return S_OK;
 }
 
+HRESULT CMonster_Bastion_Sword::Ready_UI()
+{
+	CUI_Monster_Panel::PANELDESC Desc;
+	Desc.pTargetTransform = m_pTransform;
+	Desc.iEnemyTag = CUI_Monster_Panel::Enemy::SWORD;
+
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_UI", L"Proto_GameObject_UI_Monster_Panel", &Desc,
+		(CGameObject**)&m_pPanel)))
+		return E_FAIL;
+
+	Safe_AddRef(m_pPanel);
+
+	m_pPanel->Set_TargetWorldMatrix(m_pTransform->Get_WorldMatrix());
+
+	m_fMaxHp = 10.f;
+	m_fCurrentHp = m_fMaxHp;
+
+	m_fMaxGroggyGauge = 10.f;
+	m_fGroggyGauge = 0.f;
+
+	m_pPanel->Set_HpBar(Get_HpRatio());
+	m_pPanel->Set_GroggyBar(Get_GroggyGaugeRatio());
+
+	return S_OK;
+}
+
 _int CMonster_Bastion_Sword::Change_State()
 {
 	wstring tmpState = m_pStateController->Get_CurStateTag();
@@ -585,7 +569,10 @@ _int CMonster_Bastion_Sword::Change_State()
 	}
 	if (tmpState == L"Death")
 	{
-		if (m_bDead&&m_pAnimator->Get_CurrentAnimation()->Is_Finished())
+		if (m_bDead
+			&&m_pAnimator->Get_CurrentAnimNode() == (_uint)ANIM_TYPE::DEATH
+			&&m_pAnimator->Get_CurrentAnimation()->Is_Finished()
+			)
 		{
 			setActive(true);
 			m_bRemove = true;
@@ -632,12 +619,31 @@ void CMonster_Bastion_Sword::Hit()
 	ZeroMemory(&tData, sizeof(tData));
 
 	m_fCurrentHp--;
-	tData.fCurHp = m_fCurrentHp;
-	tData.iHitType = (_uint)m_eHitType;
-	m_pStateController->Change_State(L"Hit", &tData);
-	m_wstrCurState = L"Hit";
-	if(m_fCurrentHp<=0.f)
+	m_pPanel->Set_HpBar(Get_HpRatio());
+
+	if (!m_bFirstHit)
+	{
+		m_bFirstHit = true; //딱 한번 true로 변경해줌
+		m_pPanel->Set_BackUIGapY(1.f);
+	}
+	if (m_wstrCurState != L"Hit"&&!m_bGroggy)
+	{
+		tData.fCurHp = m_fCurrentHp;
+		tData.iHitType = (_uint)m_eHitType;
+		m_wstrCurState = L"Hit";
+		m_pStateController->Change_State(L"Hit", &tData);
+	}
+	if (!m_bGroggy)
+	{
+		//그로기 아닐때만 증가할수있게
+		m_fGroggyGauge += 2; //TODO::수치정해서바꿔줘야됨
+		m_pPanel->Set_GroggyBar(Get_GroggyGaugeRatio());
+	}
+	if (m_fCurrentHp <= 0.f)
+	{
 		m_bDead = true;
+		m_pStateController->Change_State(L"Death");
+	}
 }
 
 CMonster_Bastion_Sword* CMonster_Bastion_Sword::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
@@ -670,4 +676,5 @@ void CMonster_Bastion_Sword::Free()
 	Safe_Release(m_pWeapon);
 	Safe_Release(m_pStateController);
 	Safe_Release(m_pCharacterController);
+	Safe_Release(m_pPanel);
 }

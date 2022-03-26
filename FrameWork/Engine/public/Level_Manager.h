@@ -18,6 +18,7 @@ public:
 	HRESULT Open_Level(_uint iLevelIndex, class CLevel* pOpenLevel);
 	_int Tick(_double TimeDelta);
 	HRESULT Render();
+	HRESULT Delete_GameObject();
 public:
 	_uint getCurrentLevel() { return m_iCurrentLevelID; }
 private:

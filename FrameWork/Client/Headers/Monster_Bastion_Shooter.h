@@ -42,6 +42,7 @@ private:
 	HRESULT Ready_Components();
 	HRESULT Ready_AnimationFSM();
 	HRESULT Ready_StateFSM();
+	HRESULT Ready_UI();
 	_int Change_State();
 private:
 	CModel* m_pModelCom = nullptr;
@@ -51,6 +52,12 @@ private:
 private:
 	wstring m_wstrCurState = L"";
 	ANIM_TYPE m_eHitType = ANIM_TYPE::TYPE_END;
+private:/* For UI*/
+	class CUI_Monster_Panel* m_pPanel = nullptr;
+private:
+	_bool m_bFirstHit = false; //맨처음들어와서 맞았을때 판넬크기바꿔줘야돼서
+	_bool m_bFirst = false; //나중에 지울 변수
+
 public:
 	static CMonster_Bastion_Shooter* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext);
 	virtual CGameObject* Clone(const _uint _iSceneID, void* _pArg = nullptr) override;

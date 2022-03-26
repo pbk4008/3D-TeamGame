@@ -90,15 +90,15 @@ HRESULT CPipeLine::Change_BaseCamera(const wstring& pCameraTag)
 	//첫번째 카메라 가져오기
 	auto iter_begin = m_mapPipeLine.begin();
 	//찾고자 하는 카메라 가져오기
-	auto iter_Find = Find_Camera(pCameraTag);
-	if (!iter_Find)
+
+	auto iter_Find = find_if(m_mapPipeLine.begin(), m_mapPipeLine.end(), CTag_Finder(pCameraTag));
+	if (iter_Find == m_mapPipeLine.end())
 		return E_FAIL;
+
 	//임시로 저장할 카메라
-	CAMERA* pTmpCamera = nullptr;
+	auto pTmpCamera = iter_begin;
 	//임시로 저장할 카메라에 첫번째 카메라 저장
-	pTmpCamera = (*iter_begin).second;
-	//첫번째 카메라에 찾고자 하는 카메라 변경
-	(*iter_begin).second = iter_Find;
+	iter_begin = iter_Find;
 	//찾고자 하는 카메라에 저장했던 첫번째 카메라로 변경
 	iter_Find = pTmpCamera;
 
