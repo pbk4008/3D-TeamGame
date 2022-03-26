@@ -37,6 +37,7 @@ protected:
 	_bool	m_bPlayerAttack = false;
 	_bool	m_bRageOn = false;
 	_bool	m_bRageAttack = false;
+	_bool	m_bCastProtect = false;
 	_float	m_fChaserDelay;
 
 private:

@@ -22,10 +22,15 @@ public:
 	virtual HRESULT ExitState();
 	virtual HRESULT EnterState(void* pArg);
 	virtual HRESULT ExitState(void* pArg);
+private:
+	void Stun(_double dDeltaTime);
 public:
 	static CShooter_Groggy* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext, void* _pArg = nullptr);
 private:
 	virtual void Free() override;
+private:
+	_bool m_bStunStart;
+	_float m_fAccStunTime;
 };
 END
 

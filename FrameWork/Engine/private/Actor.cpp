@@ -10,6 +10,7 @@ CActor::CActor()
 	, m_fCurrentHp(0.f)
 	, m_fGroggyGauge(0.f)
 	, m_fMaxGroggyGauge(0.f)
+	, m_bGroggy(false)
 {
 }
 
@@ -22,6 +23,7 @@ CActor::CActor(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
 	, m_fCurrentHp(0.f)
 	, m_fGroggyGauge(0.f)
 	, m_fMaxGroggyGauge(0.f)
+	, m_bGroggy(false)
 {
 }
 
@@ -34,6 +36,7 @@ CActor::CActor(const CActor& rhs)
 	, m_fCurrentHp(rhs.m_fCurrentHp)
 	, m_fGroggyGauge(rhs.m_fGroggyGauge)
 	, m_fMaxGroggyGauge(rhs.m_fMaxGroggyGauge)
+	, m_bGroggy(rhs.m_bGroggy)
 {
 }
 

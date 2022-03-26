@@ -59,24 +59,24 @@ HRESULT CStage1::NativeConstruct()
 	//	return E_FAIL;
 	//}
 
-	////Data
+	//Data
 	if (FAILED(Ready_Data_UI(L"../bin/SaveData/UI/UI.dat")))
 	{
 		return E_FAIL;
 	}
 	
-	//if (FAILED(Ready_Data_Effect()))
-	//{
-	//	return E_FAIL;
-	//}
+	if (FAILED(Ready_Data_Effect()))
+	{
+		return E_FAIL;
+	}
 
 	if (FAILED(Ready_UI(L"Layer_UI")))
 	{
 		return E_FAIL;
 	}
 
-	//if(FAILED(Ready_TriggerFunctionSetting()))
-	//	return E_FAIL;
+	if (FAILED(Ready_TriggerFunctionSetting()))
+		return E_FAIL;
 	//if (FAILED(Ready_Trigger_Lod(L"../bin/SaveData/Trigger/Stage1_LodTri.dat")))
 	//	return E_FAIL;
 	//if (FAILED(Ready_Trigger_Light(L"../bin/SaveData/Trigger/Stage1_LodTri.dat")))
@@ -90,7 +90,7 @@ HRESULT CStage1::NativeConstruct()
 	//if (FAILED(Ready_Treasure_Chest()))
 	//	return E_FAIL;
 
-	g_pGameInstance->Change_BaseCamera(L"Camera_Silvermane");
+	g_pGameInstance->Change_BaseCamera(L"Camera_Culling");
 
 
 	return S_OK;
@@ -208,8 +208,11 @@ HRESULT CStage1::Ready_Monster(const _tchar* LayerTag)
 	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Proto_GameObject_Monster_Bastion_Sword")))
 	//	return E_FAIL;
 
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Proto_GameObject_Monster_Bastion_Shooter")))
-		return E_FAIL;
+	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Proto_GameObject_Monster_Bastion_Shooter")))
+	//	return E_FAIL;
+	 
+	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Proto_GameObject_Monster_BronzeAnimus")))
+	//	return E_FAIL;
 
 	return S_OK;
 }

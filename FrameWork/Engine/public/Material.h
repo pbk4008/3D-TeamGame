@@ -29,9 +29,16 @@ public:
 	HRESULT Set_Texture(TEXTURETYPE _eTextureType, const wstring& _pTextureTag, const wstring& _pTexturePath, _uint _iTextureIndex = 0);
 	void Set_InputLayout(_uint iPassIndex);
 	void Using_Tool();
+
+	HRESULT Change_Material();
 	CSaveManager::MTRLDATA SetMaterialSaveData();
 public:
 	list<wstring> Get_TextureName();
+	const wstring Get_ShaderFileName() { return m_wstrShaderPath; }
+	const _uint Get_Type() { return (_uint)m_eType; }
+public:
+	void Set_ShaderFileName(const wstring& pFileName) { m_wstrShaderPath = pFileName; }
+	void Set_Type(_uint iType) { m_eType = (EType)iType; }
 private:
 	vector<CTexture*> m_vecTextures;
 	wstring m_wstrShaderPath = L"";
