@@ -1,20 +1,20 @@
 #include "pch.h"
-#include "Bastion_Healer_State.h"
-#include "Monster_Bastion_Healer.h"
+#include "BronzeAnimus_State.h"
+#include "Monster_BronzeAnimus.h"
 #include "Animation.h"
 #include "UI_Monster_Panel.h"	
 
-CBastion_Healer_State::CBastion_Healer_State(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
+CBronzeAnimus_State::CBronzeAnimus_State(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
 	: CMonster_FSM(_pDevice, _pDeviceContext)
 {
 }
 
-CBastion_Healer_State::CBastion_Healer_State(const CBastion_Healer_State& _rhs)
+CBronzeAnimus_State::CBronzeAnimus_State(const CBronzeAnimus_State& _rhs)
 	: CMonster_FSM(_rhs)
 {
 }
 
-HRESULT CBastion_Healer_State::NativeConstruct(void* _pArg)
+HRESULT CBronzeAnimus_State::NativeConstruct(void* _pArg)
 {
 	if (FAILED(__super::NativeConstruct(_pArg)))
 		return E_FAIL;
@@ -22,7 +22,7 @@ HRESULT CBastion_Healer_State::NativeConstruct(void* _pArg)
 	return S_OK;
 }
 
-_int CBastion_Healer_State::Tick(const _double& _dDeltaTime)
+_int CBronzeAnimus_State::Tick(const _double& _dDeltaTime)
 {
 	_int iProgress = __super::Tick(_dDeltaTime);
 	if (NO_EVENT != iProgress)
@@ -46,7 +46,7 @@ _int CBastion_Healer_State::Tick(const _double& _dDeltaTime)
 	if (m_pMonster->Get_GroggyGauge() >= MAXGROOGUGAGUE)
 	{
 		//스턴상태일때 스턴state에서 현재 그로기 계속 0으로 고정시켜줌
-		CMonster_Bastion_Healer* pMonster = static_cast<CMonster_Bastion_Healer*>(m_pMonster);
+		CMonster_BronzeAnimus* pMonster = static_cast<CMonster_BronzeAnimus*>(m_pMonster);
 
 		pMonster->m_bGroggy = true;
 		pMonster->Set_GroggyGauge(0.f);
@@ -57,13 +57,10 @@ _int CBastion_Healer_State::Tick(const _double& _dDeltaTime)
 	if (0 >= m_pMonster->Get_CurrentHp())
 		m_pStateController->Change_State(L"Death");
 
-	if (true == m_bCastProtect)
-		m_pStateController->Change_State(L"Cast_Protect");
-
 	return _int();
 }
 
-_int CBastion_Healer_State::LateTick(const _double& _dDeltaTime)
+_int CBronzeAnimus_State::LateTick(const _double& _dDeltaTime)
 {
 	_int iProgress = __super::LateTick(_dDeltaTime);
 	if (NO_EVENT != iProgress)
@@ -73,30 +70,38 @@ _int CBastion_Healer_State::LateTick(const _double& _dDeltaTime)
 	return _int();
 }
 
-HRESULT CBastion_Healer_State::Render()
+HRESULT CBronzeAnimus_State::Render()
 {
 	if (FAILED(__super::Render()))
 		return E_FAIL;
 
 #ifdef _DEBUG
-	//Render_Debug();
+	Render_Debug();
 #endif
 
 	return S_OK;
 }
 
-HRESULT CBastion_Healer_State::EnterState()
+HRESULT CBronzeAnimus_State::EnterState()
 {
 	if (FAILED(__super::EnterState()))
 		return E_FAIL;
 
-	if (FAILED(m_pAnimator->Change_AnyEntryAnimation((_uint)CMonster_Bastion_Healer::ANIM_TYPE::A_IDLE)))
-		return E_FAIL;
+	if (!m_bBattleOn)
+	{
+		if (FAILED(m_pAnimator->Change_AnyEntryAnimation((_uint)CMonster_BronzeAnimus::ANIM_TYPE::A_IDLE)))
+			return E_FAIL;
+	}
+	else
+	{
+		if (FAILED(m_pAnimator->Change_AnyEntryAnimation((_uint)CMonster_BronzeAnimus::ANIM_TYPE::A_IDLE_BATTLE)))
+			return E_FAIL;
+	}
 
 	return S_OK;
 }
 
-HRESULT CBastion_Healer_State::ExitState()
+HRESULT CBronzeAnimus_State::ExitState()
 {
 	if (FAILED(__super::ExitState()))
 		return E_FAIL;
@@ -105,17 +110,17 @@ HRESULT CBastion_Healer_State::ExitState()
 }
 
 /* 플레이어 상태 추적 */
-void CBastion_Healer_State::Look_Player(void)
+void CBronzeAnimus_State::Look_Player(void)
 {
 	
 }
 
-void CBastion_Healer_State::Look_Monster(void)
+void CBronzeAnimus_State::Look_Monster(void)
 {
 
 }
 
-HRESULT CBastion_Healer_State::Render_Debug()
+HRESULT CBronzeAnimus_State::Render_Debug()
 {
 	wstring wstrChaserOn = L"Target On : ";
 	wstring wstrIsChaser;
@@ -158,7 +163,7 @@ HRESULT CBastion_Healer_State::Render_Debug()
 	return S_OK;
 }
 
-void CBastion_Healer_State::Check_Attack(const _double& _dDeltaTime)
+void CBronzeAnimus_State::Check_Attack(const _double& _dDeltaTime)
 {
 	/* 몬스터의 현재 Look 방향 벡터 */
 	_vector vecMonsterLook = XMVector3Normalize(m_pTransform->Get_State(CTransform::STATE_LOOK));
@@ -185,15 +190,16 @@ void CBastion_Healer_State::Check_Attack(const _double& _dDeltaTime)
 	XMStoreFloat(&m_fRadian, svAngle);
 	m_fRadian = XMConvertToDegrees(m_fRadian);
 
-	if (0 > m_CheckFWD && (5.0f < m_fDistance && 10.0f > m_fDistance))
+	if (0 > m_CheckFWD && (3.0f < m_fDistance && 10.0f > m_fDistance))
 	{
 		m_pTransform->Face_Target(g_pObserver->Get_PlayerPos());
 		m_bTargetOn = true;
+		m_bBattleOn = true;
 	}
 
 	if (0 > m_CheckFWD && 3.0f > m_fDistance)
 	{
-		if (10.0f > m_fRadian)
+		if (20.0f > m_fRadian)
 		{
 			m_fAttackTime += _dDeltaTime;
 			if (m_fAttackTime > 0.5f)
@@ -206,9 +212,9 @@ void CBastion_Healer_State::Check_Attack(const _double& _dDeltaTime)
 
 }
 
-void CBastion_Healer_State::OnTriggerEnter(CCollision& collision)
+void CBronzeAnimus_State::OnTriggerEnter(CCollision& collision)
 {
-	CMonster_Bastion_Healer* pHealer = static_cast<CMonster_Bastion_Healer*>(m_pMonster);
+	CMonster_BronzeAnimus* pHealer = static_cast<CMonster_BronzeAnimus*>(m_pMonster);
 
 	if (true == g_pObserver->IsAttack()) //플레이어공격일때
 	{
@@ -235,25 +241,25 @@ void CBastion_Healer_State::OnTriggerEnter(CCollision& collision)
 		}
 		else
 		{
-			m_pStateController->Change_State(L"Idle");
+			m_pStateController->Change_State(L"A_Idle_Battle");
 		}
 	}
 }
 
-CBastion_Healer_State* CBastion_Healer_State::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext, void* _pArg)
+CBronzeAnimus_State* CBronzeAnimus_State::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext, void* _pArg)
 {
-	CBastion_Healer_State* pInstance = new CBastion_Healer_State(_pDevice, _pDeviceContext);
+	CBronzeAnimus_State* pInstance = new CBronzeAnimus_State(_pDevice, _pDeviceContext);
 
 	if (FAILED(pInstance->NativeConstruct(_pArg)))
 	{
-		MSGBOX("CBastion_Healer_State Create Fail");
+		MSGBOX("CBronzeAnimus_State Create Fail");
 		Safe_Release(pInstance);
 	}
 
 	return pInstance;
 }
 
-void CBastion_Healer_State::Free()
+void CBronzeAnimus_State::Free()
 {
 	__super::Free();
 }

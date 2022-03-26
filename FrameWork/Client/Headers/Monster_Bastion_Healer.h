@@ -70,7 +70,7 @@ private: /* For.Weapon */
 
 public:
 	class CUI_Monster_Panel* m_pPanel = nullptr;
-
+	_bool m_bFirst = false;
 public:
 	_int	m_iHp = 3;
 	_bool	m_bRender = true;

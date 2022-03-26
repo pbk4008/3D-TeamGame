@@ -17,7 +17,9 @@
 #include "Bastion_2HSword_Rage.h"
 #include "Bastion_2HSword_Attack_Rage.h"
 #include "Bastion_2HSword_Groggy.h"
+#include "Bastion_2HSword_Groggy_End.h"
 
+/* for. UI */
 #include "UI_Monster_Panel.h"
 
 CMonster_Bastion_2HSword::CMonster_Bastion_2HSword(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
@@ -78,29 +80,9 @@ HRESULT CMonster_Bastion_2HSword::NativeConstruct(const _uint _iSceneID, void* _
 	if (FAILED(Ready_StateFSM()))
 		return E_FAIL;
 
-	//MonsterBar Panel
-	CUI_Monster_Panel::PANELDESC Desc;
-	Desc.pTargetTransform = m_pTransform;
-	Desc.iEnemyTag = CUI_Monster_Panel::Enemy::SWORD2H;
-
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_UI", L"Proto_GameObject_UI_Monster_Panel", &Desc,
-		(CGameObject**)&m_pPanel)))
-		return E_FAIL;
-
-	m_pPanel->Set_TargetWorldMatrix(m_pTransform->Get_WorldMatrix());
-
-	m_fMaxHp = 3.f;
-	m_fCurrentHp = m_fMaxHp;
-
-	m_fMaxGroggyGauge = 10.f;
-	m_fGroggyGauge = 0.f;
-
-	m_pPanel->Set_HpBar(Get_HpRatio());
-	m_pPanel->Set_GroggyBar(Get_GroggyGaugeRatio());
-
 	m_isFall = true;
 
-	setActive(false);
+	//setActive(false);
 
 	return S_OK;
 }
@@ -135,7 +117,6 @@ _int CMonster_Bastion_2HSword::Tick(_double _dDeltaTime)
 	{
 		//스턴상태일때 스턴state에서 현재 그로기 계속 0으로 고정시켜줌
 		m_bGroggy = true;
-		m_pStateController->Change_State(L"Stun");
 		m_fGroggyGauge = 0.f;
 		m_pPanel->Set_GroggyBar(Get_GroggyGaugeRatio());
 	}
@@ -259,6 +240,26 @@ HRESULT CMonster_Bastion_2HSword::Ready_Components()
 	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_CharacterController", L"CharacterController", (CComponent**)&m_pCharacterController, &tCharacterControllerDesc)))
 		return E_FAIL;
 	m_pCharacterController->setOwnerTransform(m_pTransform);
+
+	//MonsterBar Panel
+	CUI_Monster_Panel::PANELDESC Desc;
+	Desc.pTargetTransform = m_pTransform;
+	Desc.iEnemyTag = CUI_Monster_Panel::Enemy::SWORD2H;
+
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_UI", L"Proto_GameObject_UI_Monster_Panel", &Desc,
+		(CGameObject**)&m_pPanel)))
+		return E_FAIL;
+
+	m_pPanel->Set_TargetWorldMatrix(m_pTransform->Get_WorldMatrix());
+
+	m_fMaxHp = 30.f;
+	m_fCurrentHp = m_fMaxHp;
+
+	m_fMaxGroggyGauge = 10.f;
+	m_fGroggyGauge = 0.f;
+
+	m_pPanel->Set_HpBar(Get_HpRatio());
+	m_pPanel->Set_GroggyBar(Get_GroggyGaugeRatio());
 
 	return S_OK;
 }
@@ -456,7 +457,10 @@ HRESULT CMonster_Bastion_2HSword::Ready_AnimFSM(void)
 	m_pAnimator->Insert_AnyEntryAnimation((_uint)ANIM_TYPE::A_TAUNT_ROAR);
 	m_pAnimator->Insert_AnyEntryAnimation((_uint)ANIM_TYPE::A_BATTLECRY_ED);
 	m_pAnimator->Insert_AnyEntryAnimation((_uint)ANIM_TYPE::A_STUN_ST);
+	m_pAnimator->Insert_AnyEntryAnimation((_uint)ANIM_TYPE::A_STUN_ED);
+
 #pragma endregion
+
 
 #pragma region  Auto Change Anim
 	/* ##1.끝나는 애님 ##2.루트할 애님  */
@@ -530,6 +534,10 @@ HRESULT CMonster_Bastion_2HSword::Ready_StateFSM(void)
 
 	/* for. Groggy */
 	if (FAILED(m_pStateController->Add_State(L"Groggy", CBastion_2HSword_Groggy::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+
+	/* for. Groggy End */
+	if (FAILED(m_pStateController->Add_State(L"Groggy_End", CBastion_2HSword_Groggy_End::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 
 	for (auto& pair : m_pStateController->Get_States())

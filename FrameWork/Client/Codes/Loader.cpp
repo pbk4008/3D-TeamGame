@@ -22,7 +22,9 @@
 #include "EarthAberrant_Pick.h"
 #include "Stargazer.h"
 #include "Bullet.h"
-
+#include "RetributionBlade.h"
+#include "Staff.h"
+#include "BronzeAnimus_Sword.h"
 
 //Effect & UI
 #include "Effect_DashDust.h"
@@ -59,13 +61,6 @@
 #include "JumpTrigger.h"
 
 #pragma endregion
-
-#pragma region TestScene_YM
-#include "RetributionBlade.h"
-#include "Staff.h"
-#pragma endregion
-
-
 
 CLoader::CLoader() 
 	: m_hThread(nullptr)
@@ -162,9 +157,9 @@ HRESULT CLoader::SetUp_Stage1_Object()
 	if (FAILED(Load_Stage1UILoad()))
 		return E_FAIL;
 
-	//if (FAILED(Load_Stage1EffectLoad()))
-	//	return E_FAIL;
-	//
+	if (FAILED(Load_Stage1EffectLoad()))
+		return E_FAIL;
+
 	if (FAILED(Load_Stage1JumpTrigger()))
 		return E_FAIL;
 
@@ -805,10 +800,9 @@ HRESULT CLoader::Load_Stage1MonsterLoad()
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Bastion_2HSword", CModel::Create(m_pDevice, m_pDeviceContext,
 		L"../bin/FBX/Monster/Bastion_2HSword_Bin.fbx", CModel::TYPE_ANIM, true))))
 		return E_FAIL;
-
 	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Monster_Bastion_2HSword", CMonster_Bastion_2HSword::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
-
+	//Weapon
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_RetributionBlade", CModel::Create(m_pDevice, m_pDeviceContext,
 		"../bin/Resources/Mesh/RetributionBlade/", "RetributionBlade(2H).fbx",
 		L"../../Reference/ShaderFile/Shader_Weapon.hlsl", matPivot, CModel::TYPE_STATIC, true))))
@@ -817,14 +811,12 @@ HRESULT CLoader::Load_Stage1MonsterLoad()
 	}
 	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Weapon_RetributionBlade", CRetributionBlade::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
-
 	////Bastion_Healer
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Bastion_Healer", CModel::Create(m_pDevice, m_pDeviceContext,
 		L"../bin/FBX/Monster/Bastion_Healer_Bin.fbx", CModel::TYPE_ANIM, true))))
 		return E_FAIL;
 	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Monster_Bastion_Healer", CMonster_Bastion_Healer::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
-
 	//weapon
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Staff", CModel::Create(m_pDevice, m_pDeviceContext,
 		"../bin/Resources/Mesh/Staff/", "Staff.fbx",
@@ -833,6 +825,21 @@ HRESULT CLoader::Load_Stage1MonsterLoad()
 		return E_FAIL;
 	}
 	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Weapon_Staff", CStaff::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	//BronzeAnimus
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_BronzeAnimus", CModel::Create(m_pDevice, m_pDeviceContext,
+		L"../bin/FBX/Monster/BronzeAnimus_Bin.fbx", CModel::TYPE_ANIM, true))))
+		return E_FAIL;
+	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Monster_BronzeAnimus", CMonster_BronzeAnimus::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	//weapon
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_BronzeAnimus_Sword", CModel::Create(m_pDevice, m_pDeviceContext,
+		"../bin/Resources/Mesh/BronzeAnimus_Sword/", "BronzeAnimus_Sword.fbx",
+		L"../../Reference/ShaderFile/Shader_Weapon.hlsl", matPivot, CModel::TYPE_STATIC, true))))
+	{
+		return E_FAIL;
+	}
+	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Weapon_BronzeAnimus_Sword", CBronzeAnimus_Sword::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 
 	return S_OK;

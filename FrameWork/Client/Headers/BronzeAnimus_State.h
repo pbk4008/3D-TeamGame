@@ -1,15 +1,15 @@
-#ifndef Bastion_Healer_State_h__
-#define Bastion_Healer_State_h__
+#ifndef BronzeAnimus_State_h__
+#define BronzeAnimus_State_h__
 
 #include "Monster_FSM.h"
 
 BEGIN(Client)
-class CBastion_Healer_State  : public CMonster_FSM
+class CBronzeAnimus_State  : public CMonster_FSM
 {
 protected:
-	explicit CBastion_Healer_State(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext);
-	explicit CBastion_Healer_State(const CBastion_Healer_State& _rhs);
-	virtual ~CBastion_Healer_State() = default;
+	explicit CBronzeAnimus_State(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext);
+	explicit CBronzeAnimus_State(const CBronzeAnimus_State& _rhs);
+	virtual ~CBronzeAnimus_State() = default;
 
 public:
 	virtual HRESULT NativeConstruct(void* _pArg = nullptr);
@@ -34,10 +34,8 @@ public:
 protected:
 	_bool	m_bTargetOn = false;
 	_bool   m_bAttackOn = false;
+	_bool   m_bBattleOn = false;
 	_bool	m_bPlayerAttack = false;
-	_bool	m_bRageOn = false;
-	_bool	m_bRageAttack = false;
-	_bool	m_bCastProtect = false;
 	_float	m_fChaserDelay;
 
 private:
@@ -47,10 +45,10 @@ private:
 	_float m_fAttackTime = 0.0f;
 
 public:
-	static CBastion_Healer_State* Create(ID3D11Device * _pDevice, ID3D11DeviceContext * _pDeviceContext, void* _pArg = nullptr);
+	static CBronzeAnimus_State* Create(ID3D11Device * _pDevice, ID3D11DeviceContext * _pDeviceContext, void* _pArg = nullptr);
 	virtual void Free() override;
 };
 
 END
 
-#endif // Bastion_Healer_State_h__
+#endif // BronzeAnimus_State_h__

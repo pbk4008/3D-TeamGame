@@ -1,15 +1,15 @@
-#ifndef Bastion_2HSword_Groggy_h__
-#define Bastion_2HSword_Groggy_h__
+#ifndef BronzeAnimus_Groggy_h__
+#define BronzeAnimus_Groggy_h__
 
-#include "Bastion_2HSword_State.h"
+#include "BronzeAnimus_State.h"
 
 BEGIN(Client)
 
-class CBastion_2HSword_Groggy final : public CBastion_2HSword_State
+class CBronzeAnimus_Groggy final : public CBronzeAnimus_State
 {
 private:
-	explicit CBastion_2HSword_Groggy(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext);
-	virtual ~CBastion_2HSword_Groggy() = default;
+	explicit CBronzeAnimus_Groggy(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext);
+	virtual ~CBronzeAnimus_Groggy() = default;
 
 public:
 	virtual HRESULT NativeConstruct(void* _pArg = nullptr);
@@ -30,10 +30,10 @@ private:
 	_float m_fGroggyTime = 5.0f;
 	_bool  m_bGroggy = false;
 public:
-	static CBastion_2HSword_Groggy* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext, void* _pArg = nullptr);
+	static CBronzeAnimus_Groggy* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext, void* _pArg = nullptr);
 private:
 	virtual void Free() override;
 };
 END
 
-#endif // Bastion_2HSword_Groggy_h__
+#endif // BronzeAnimus_Groggy_h__
