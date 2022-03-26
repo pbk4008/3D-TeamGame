@@ -12,6 +12,8 @@
 #include "Shooter_Walk.h"
 #include "Shooter_Groggy.h"
 
+#include"UI_Monster_Panel.h"
+
 CMonster_Bastion_Shooter::CMonster_Bastion_Shooter(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
 	: CActor(_pDevice, _pDeviceContext)
 	, m_pCharacterController(nullptr)
@@ -27,11 +29,13 @@ CMonster_Bastion_Shooter::CMonster_Bastion_Shooter(const CMonster_Bastion_Shoote
 	, m_pModelCom(_rhs.m_pModelCom)
 	, m_pStateController(_rhs.m_pStateController)
 	, m_pAnimator(_rhs.m_pAnimator)
+	, m_pPanel(_rhs.m_pPanel)
 {
 	Safe_AddRef(m_pCharacterController);
 	Safe_AddRef(m_pModelCom);
 	Safe_AddRef(m_pStateController);
 	Safe_AddRef(m_pAnimator);
+	Safe_AddRef(m_pPanel);
 }
 
 HRESULT CMonster_Bastion_Shooter::NativeConstruct_Prototype()
@@ -68,6 +72,9 @@ HRESULT CMonster_Bastion_Shooter::NativeConstruct(const _uint _iSceneID, void* _
 	if (FAILED(Ready_StateFSM()))
 		return E_FAIL;
 
+	if (FAILED(Ready_UI()))
+		return E_FAIL;
+
 	m_pRenderer->SetRenderButton(CRenderer::PIXEL, true);
 	m_pRenderer->SetRenderButton(CRenderer::PBRHDR, true);
 	m_pRenderer->SetCameraTag(L"Camera_Silvermane");
@@ -79,6 +86,9 @@ HRESULT CMonster_Bastion_Shooter::NativeConstruct(const _uint _iSceneID, void* _
 
 _int CMonster_Bastion_Shooter::Tick(_double _dDeltaTime)
 {
+	if (!m_bFirst)
+		m_pPanel->Set_Show(true);
+
 	_int iProgress = __super::Tick(_dDeltaTime);
 	if (NO_EVENT != iProgress)
 		return iProgress;
@@ -94,6 +104,8 @@ _int CMonster_Bastion_Shooter::Tick(_double _dDeltaTime)
 	m_pCharacterController->Move(_dDeltaTime, m_pTransform->Get_Velocity());
 
 	Change_State();
+
+	m_pPanel->Set_TargetWorldMatrix(m_pTransform->Get_WorldMatrix());
 
 	return _int();
 }
@@ -146,12 +158,11 @@ HRESULT CMonster_Bastion_Shooter::Render()
 
 void CMonster_Bastion_Shooter::OnTriggerEnter(CCollision& collision)
 {
-	if (m_fCurrentHp >= 0.f && m_wstrCurState != L"Hit")
+	if (m_fCurrentHp >= 0.f)
 	{
 		if (collision.pGameObject->getTag() == (_uint)GAMEOBJECT::WEAPON)
 		{
 			CWeapon* pWeapon = static_cast<CWeapon*>(collision.pGameObject);
-
 			if (pWeapon->IsAttack())
 				Hit();
 		}
@@ -182,13 +193,31 @@ void CMonster_Bastion_Shooter::Hit()
 	ZeroMemory(&tData, sizeof(tData));
 
 	m_fCurrentHp--;
-	tData.fCurHp = m_fCurrentHp;
-	tData.iHitType = (_uint)m_eHitType;
-	m_pStateController->Change_State(L"Hit", &tData);
-	m_wstrCurState = L"Hit";
+	m_pPanel->Set_HpBar(Get_HpRatio());
+	if (!m_bFirstHit)
+	{
+		m_bFirstHit = true; //딱 한번 true로 변경해줌
+		m_pPanel->Set_BackUIGapY(1.f);
+	}
+	if (m_wstrCurState != L"Hit" && !m_bGroggy)
+	{
+		tData.fCurHp = m_fCurrentHp;
+		tData.iHitType = (_uint)m_eHitType;
+		m_wstrCurState = L"Hit";
+		m_pStateController->Change_State(L"Hit", &tData);
+	}
 
+	if (!m_bGroggy)
+	{
+		//그로기 아닐때만 증가할수있게
+		m_fGroggyGauge += 2; //TODO::수치정해서바꿔줘야됨
+		m_pPanel->Set_GroggyBar(Get_GroggyGaugeRatio());
+	}
 	if (m_fCurrentHp <= 0.f)
+	{
 		m_bDead = true;
+		m_pStateController->Change_State(L"Death");
+	}
 }
 
 HRESULT CMonster_Bastion_Shooter::Ready_Components()
@@ -286,40 +315,40 @@ HRESULT CMonster_Bastion_Shooter::Ready_AnimationFSM()
 		return E_FAIL;
 
 	pAnim = m_pModelCom->Get_Animation("BwdWalkStart");
-	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::BACKWARD_START, (_uint)ANIM_TYPE::HEAD, pAnim, true, false, false, ERootOption::XYZ)))
+	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::BACKWARD_START, (_uint)ANIM_TYPE::HEAD, pAnim, true, true, false, ERootOption::XYZ)))
 		return E_FAIL;
 	pAnim = m_pModelCom->Get_Animation("BwdWalkLoop");
-	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::BACKWARD_LOOP, (_uint)ANIM_TYPE::BACKWARD_START, pAnim, true, false, true, ERootOption::XYZ)))
+	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::BACKWARD_LOOP, (_uint)ANIM_TYPE::BACKWARD_START, pAnim, true, true, true, ERootOption::XYZ)))
 		return E_FAIL;
 	pAnim = m_pModelCom->Get_Animation("BwdWalkEnd");
-	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::BACKWARD_END, (_uint)ANIM_TYPE::BACKWARD_LOOP, pAnim, true, false, false, ERootOption::XYZ)))
+	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::BACKWARD_END, (_uint)ANIM_TYPE::BACKWARD_LOOP, pAnim, true, true, false, ERootOption::XYZ)))
 		return E_FAIL;
 
 	pAnim = m_pModelCom->Get_Animation("FwdWalkStart");
-	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::FORWARD_START, (_uint)ANIM_TYPE::HEAD, pAnim, true, false, false, ERootOption::XYZ)))
+	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::FORWARD_START, (_uint)ANIM_TYPE::HEAD, pAnim, true, true, false, ERootOption::XYZ)))
 		return E_FAIL;
 	pAnim = m_pModelCom->Get_Animation("FwdWalkLoop");
-	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::FORWARD_LOOP, (_uint)ANIM_TYPE::FORWARD_START, pAnim, true, false, true, ERootOption::XYZ)))
+	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::FORWARD_LOOP, (_uint)ANIM_TYPE::FORWARD_START, pAnim, true, true, true, ERootOption::XYZ)))
 		return E_FAIL;
 	pAnim = m_pModelCom->Get_Animation("FwdWalkStop");
-	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::FORWARD_END, (_uint)ANIM_TYPE::FORWARD_LOOP, pAnim, true, false, false, ERootOption::XYZ)))
+	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::FORWARD_END, (_uint)ANIM_TYPE::FORWARD_LOOP, pAnim, true, true, false, ERootOption::XYZ)))
 		return E_FAIL;
 
 	pAnim = m_pModelCom->Get_Animation("LeftWalkStart");
-	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::LEFTWALK_START, (_uint)ANIM_TYPE::HEAD, pAnim, true, false, false, ERootOption::XYZ)))
+	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::LEFTWALK_START, (_uint)ANIM_TYPE::HEAD, pAnim, true, true, false, ERootOption::XYZ)))
 		return E_FAIL;
 	pAnim = m_pModelCom->Get_Animation("LeftWalkLoop");
-	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::LEFTWALK_LOOP, (_uint)ANIM_TYPE::LEFTWALK_START, pAnim, true, false, true, ERootOption::XYZ)))
+	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::LEFTWALK_LOOP, (_uint)ANIM_TYPE::LEFTWALK_START, pAnim, true, true, true, ERootOption::XYZ)))
 		return E_FAIL;
 	pAnim = m_pModelCom->Get_Animation("LeftWalkEnd");
-	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::LEFTWALK_END, (_uint)ANIM_TYPE::LEFTWALK_LOOP, pAnim, true, false, false, ERootOption::XYZ)))
+	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::LEFTWALK_END, (_uint)ANIM_TYPE::LEFTWALK_LOOP, pAnim, true, true, false, ERootOption::XYZ)))
 		return E_FAIL;
 
 	pAnim = m_pModelCom->Get_Animation("RightWalkStart");
 	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::RIGHTWALK_START, (_uint)ANIM_TYPE::HEAD, pAnim, true, true, false, ERootOption::XYZ)))
 		return E_FAIL;
 	pAnim = m_pModelCom->Get_Animation("RightWalkLoop");
-	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::RIGHTWALK_LOOP, (_uint)ANIM_TYPE::RIGHTWALK_START, pAnim, true, true, false, ERootOption::XYZ)))
+	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::RIGHTWALK_LOOP, (_uint)ANIM_TYPE::RIGHTWALK_START, pAnim, true, true, true, ERootOption::XYZ)))
 		return E_FAIL;
 	pAnim = m_pModelCom->Get_Animation("RightWalkEnd");
 	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::RIGHTWALK_END, (_uint)ANIM_TYPE::RIGHTWALK_LOOP, pAnim, true, true, false, ERootOption::XYZ)))
@@ -396,6 +425,7 @@ HRESULT CMonster_Bastion_Shooter::Ready_AnimationFSM()
 	m_pAnimator->Insert_AnyEntryAnimation((_uint)ANIM_TYPE::HIT2);
 	m_pAnimator->Insert_AnyEntryAnimation((_uint)ANIM_TYPE::HIT3);
 	m_pAnimator->Insert_AnyEntryAnimation((_uint)ANIM_TYPE::HIT4);
+	m_pAnimator->Insert_AnyEntryAnimation((_uint)ANIM_TYPE::DEATH);
 
 	m_pAnimator->Insert_AnyEntryAnimation((_uint)ANIM_TYPE::GROGGY_START);
 
@@ -452,8 +482,8 @@ HRESULT CMonster_Bastion_Shooter::Ready_StateFSM()
 	if (FAILED(m_pStateController->Add_State(L"Death", CShooter_Death::Create(m_pDevice, m_pDeviceContext, &tFSMDesc))))
 		return E_FAIL;
 
-	lstrcpy(tFSMDesc.pName, L"Groggy");
-	if (FAILED(m_pStateController->Add_State(L"Groggy", CShooter_Groggy::Create(m_pDevice, m_pDeviceContext, &tFSMDesc))))
+	lstrcpy(tActorDesc.pName, L"Groggy");
+	if (FAILED(m_pStateController->Add_State(L"Groggy", CShooter_Groggy::Create(m_pDevice, m_pDeviceContext, &tActorDesc))))
 		return E_FAIL;
 
 	lstrcpy(tMoveDesc.pName, L"Walk");
@@ -461,6 +491,32 @@ HRESULT CMonster_Bastion_Shooter::Ready_StateFSM()
 		return E_FAIL;
 
 	m_pStateController->Change_State(L"Idle");
+
+	return S_OK;
+}
+
+HRESULT CMonster_Bastion_Shooter::Ready_UI()
+{
+	CUI_Monster_Panel::PANELDESC Desc;
+	Desc.pTargetTransform = m_pTransform;
+	Desc.iEnemyTag = CUI_Monster_Panel::Enemy::SHOOTER;
+
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_UI", L"Proto_GameObject_UI_Monster_Panel", &Desc,
+		(CGameObject**)&m_pPanel)))
+		return E_FAIL;
+
+	Safe_AddRef(m_pPanel);
+
+	m_pPanel->Set_TargetWorldMatrix(m_pTransform->Get_WorldMatrix());
+
+	m_fMaxHp = 10.f;
+	m_fCurrentHp = m_fMaxHp;
+
+	m_fMaxGroggyGauge = 10.f;
+	m_fGroggyGauge = 0.f;
+
+	m_pPanel->Set_HpBar(Get_HpRatio());
+	m_pPanel->Set_GroggyBar(Get_GroggyGaugeRatio());
 
 	return S_OK;
 }
@@ -476,11 +532,28 @@ _int CMonster_Bastion_Shooter::Change_State()
 	}
 	if (tmpState == L"Death")
 	{
-		if (m_bDead && m_pAnimator->Get_CurrentAnimation()->Is_Finished())
+		if (m_bDead
+			&& m_pAnimator->Get_CurrentAnimNode() == (_uint)ANIM_TYPE::DEATH
+			&& m_pAnimator->Get_CurrentAnimation()->Is_Finished()
+			)
 		{
 			setActive(true);
 			m_bRemove = true;
+			m_pPanel->Set_Show(false);
 		}
+		else
+		{
+			m_fGroggyGauge = 0.f;
+			m_pPanel->Set_GroggyBar(Get_GroggyGaugeRatio());
+		}
+	}
+	if (m_fGroggyGauge >= m_fMaxGroggyGauge)
+	{
+		//스턴상태일때 스턴state에서 현재 그로기 계속 0으로 고정시켜줌
+		m_bGroggy = true;
+		m_pStateController->Change_State(L"Groggy");
+		m_fGroggyGauge = 0.f;
+		m_pPanel->Set_GroggyBar(Get_GroggyGaugeRatio());
 	}
 	return _int();
 }
@@ -514,4 +587,5 @@ void CMonster_Bastion_Shooter::Free()
 	Safe_Release(m_pAnimator);
 	Safe_Release(m_pModelCom);
 	Safe_Release(m_pCharacterController);
+	Safe_Release(m_pPanel);
 }

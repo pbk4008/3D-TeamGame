@@ -51,6 +51,7 @@ public: /* For.Timer_Manager */
 
 public: /* For.Level_Manager*/
 	HRESULT Open_Level(_uint iLevelIndex, class CLevel* pOpenLevel);
+	HRESULT Delete_GameObject();
 	_uint getCurrentLevel();
 
 public: /* For.Object_Manager*/

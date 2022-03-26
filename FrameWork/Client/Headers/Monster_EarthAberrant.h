@@ -53,7 +53,6 @@ private:
 private:
 	_bool	m_bIsFall = false;
 	_bool m_bFirstHit = false; //맨처음들어와서 맞았을때 판넬크기바꿔줘야돼서
-	_bool m_bGroggy = false;
 	_bool m_bFirst = false;
 
 public:

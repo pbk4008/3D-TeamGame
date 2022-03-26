@@ -181,6 +181,14 @@ HRESULT CGameInstance::Open_Level(_uint iLevelIndex, CLevel * pOpenLevel)
 	return m_pLevel_Manager->Open_Level(iLevelIndex, pOpenLevel);
 }
 
+HRESULT CGameInstance::Delete_GameObject()
+{
+	if (!m_pLevel_Manager)
+		return E_FAIL;
+
+	return m_pLevel_Manager->Delete_GameObject();
+}
+
 _uint CGameInstance::getCurrentLevel()
 {
 	if (!m_pLevel_Manager)

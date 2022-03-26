@@ -77,18 +77,18 @@ _int CShield_WalkBwd::KeyCheck(const _double& _dDeltaTime)
 
 	if (g_pGameInstance->getkeyPress(DIK_S))
 	{
-		if (g_pGameInstance->getkeyPress(DIK_A))
-		{
-			Add_PlusAngle(EDir::RightForward, _dDeltaTime);
-		}
-		else if (g_pGameInstance->getkeyPress(DIK_D))
-		{
-			Add_PlusAngle(EDir::LeftForward, _dDeltaTime);
-		}
-		else
-		{
+		//if (g_pGameInstance->getkeyPress(DIK_A))
+		//{
+		//	Add_PlusAngle(EDir::RightForward, _dDeltaTime);
+		//}
+		//else if (g_pGameInstance->getkeyPress(DIK_D))
+		//{
+		//	Add_PlusAngle(EDir::LeftForward, _dDeltaTime);
+		//}
+		//else
+		//{
 			Add_PlusAngle(EDir::Forward, _dDeltaTime);
-		}
+		//}
 	}
 	else if (g_pGameInstance->getkeyPress(DIK_W))
 	{

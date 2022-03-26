@@ -4,12 +4,14 @@
 #include "GameInstance.h"
 
 CUI_Monster_Back::CUI_Monster_Back(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
-	:CUI_Monster_Panel(pDevice,pDeviceContext)
+	:CUI(pDevice,pDeviceContext)
 {
+	ZeroMemory(&m_Desc, sizeof(m_Desc));
 }
 
-CUI_Monster_Back::CUI_Monster_Back(const CUI_Monster_Panel& rhs)
-	: CUI_Monster_Panel(rhs)
+CUI_Monster_Back::CUI_Monster_Back(const CUI_Monster_Back& rhs)
+	: CUI(rhs)
+	, m_Desc(rhs.m_Desc)
 {
 }
 
@@ -30,7 +32,7 @@ HRESULT CUI_Monster_Back::NativeConstruct(const _uint _iSceneID, void* pArg)
 		memcpy(&m_Desc, pArg, sizeof(UIACTIVEDESC));
 	}
 
-	if (FAILED(CGameObject::NativeConstruct(_iSceneID, pArg)))
+	if (FAILED(__super::NativeConstruct(_iSceneID, pArg)))
 	{
 		return E_FAIL;
 	}
@@ -110,13 +112,16 @@ HRESULT CUI_Monster_Back::SetUp_Components()
 
 	Desc.bMinus = m_Desc.UIDesc.bMinus;
 
-	m_pTrapziumBuffer = g_pGameInstance->Clone_Component<CVIBuffer_Trapezium>(0, L"Proto_Component_Trapezium_UI", &Desc);
-
-	if (!m_pTrapziumBuffer)
+	if (FAILED(CGameObject::SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_Trapezium_UI", L"Com_Trapezium_UI", (CComponent**)&m_pTrapziumBuffer, &Desc)))
 		return E_FAIL;
 
-	if (FAILED(CGameObject::SetUp_Components(L"Com_Trapezium_UI", m_pTrapziumBuffer)))
-		return E_FAIL;
+	//m_pTrapziumBuffer = g_pGameInstance->Clone_Component<CVIBuffer_Trapezium>(0, L"Proto_Component_Trapezium_UI", &Desc);
+
+	//if (!m_pTrapziumBuffer)
+	//	return E_FAIL;
+
+	//if (FAILED(CGameObject::SetUp_Components(L"Com_Trapezium_UI", m_pTrapziumBuffer)))
+	//	return E_FAIL;
 
 	return S_OK;
 }
@@ -149,5 +154,5 @@ CGameObject* CUI_Monster_Back::Clone(const _uint _iSceneID, void* pArg)
 
 void CUI_Monster_Back::Free()
 {
-	__super::Free();
+	__super::Free();//Panel
 }

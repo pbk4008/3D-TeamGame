@@ -38,6 +38,10 @@ HRESULT CCamera_Silvermane::NativeConstruct(const _uint _iSceneID, void* _pArg)
 	m_pSilvermane = static_cast<CSilvermane*>(g_pGameInstance->getObjectList(m_iSceneID, L"Layer_Silvermane")->front());
 	m_pSilvermane->Set_Camera(this);
 
+	// 컬링용 카메라 따로생성
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_Camera", L"Proto_GameObject_Camera_Culling", this)))
+		return E_FAIL;
+
 	return S_OK;
 }
 

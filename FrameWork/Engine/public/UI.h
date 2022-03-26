@@ -30,15 +30,18 @@ protected:
 	virtual _int Tick(_double TimeDelta);
 	virtual _int LateTick(_double TimeDelta);
 	virtual HRESULT Render();
+public:
+	void Set_Show(_bool bShow) { m_bShow = bShow; }
 protected:
 	virtual void Free() override;
 protected:
 	CVIBuffer_Rect* m_pBuffer;
 	CVIBuffer_Trapezium* m_pTrapziumBuffer;
 	CTexture* m_pTexture;
-
 protected:
 	UIDESC m_Desc;
+	_bool m_bFirstShow;
+	_bool m_bShow;
 };
 END
 

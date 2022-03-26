@@ -30,7 +30,7 @@ public:
 
 protected:
 	explicit CUI_Monster_Panel(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);
-	explicit CUI_Monster_Panel(const CUI& rhs);
+	explicit CUI_Monster_Panel(const CUI_Monster_Panel& rhs);
 	virtual ~CUI_Monster_Panel() = default;
 
 public:
@@ -76,19 +76,12 @@ private:
 
 private:
 	virtual HRESULT SetUp_Components();
-
 public:
-	void Set_Show(_bool bShow) { m_bShow = bShow; }
-
+	void Set_UIRemove(_bool bCheck);
 private:
 	PANELDESC m_PanelDesc;
 	_float4x4 m_TargetMatrix;
 	Enemy m_EnemyTag = Enemy::ENEMY_END;
-
-protected:
-	_bool m_bFirstShow = false;
-	_bool m_bShow = false;
-
 private:
 	class CUI_Monster_Back* m_pUIBack = nullptr;
 	class CUI_Monster_Level* m_pUILevel = nullptr;

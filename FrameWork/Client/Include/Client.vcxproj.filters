@@ -496,6 +496,12 @@
     <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_2HSword\State_2HSword\Groggy">
       <UniqueIdentifier>{903a9638-b5eb-482e-924a-0a015449b4a1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\03.Character\00.Player\00.Silvermane\State\HIt">
+      <UniqueIdentifier>{c0836172-4e03-4723-b9f5-2ce38812b858}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\01. MainCamera\CullingCam">
+      <UniqueIdentifier>{448dfa35-cb38-4df2-bd37-7952d6ae674d}</UniqueIdentifier>
+    </Filter>
     <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_Healer\State_Healer\Groggy">
       <UniqueIdentifier>{be23ca3f-dcd4-4d54-94af-faa9de66f577}</UniqueIdentifier>
     </Filter>
@@ -1253,6 +1259,10 @@
     <ClInclude Include="..\Headers\Bastion_2HSword_Groggy.h">
       <Filter>02.GameObject\03.Character\01.Monster\Bastion_2HSword\State_2HSword\Groggy</Filter>
     </ClInclude>
+    <ClInclude Include="..\Headers\Shooter_Attack.h" />
+    <ClInclude Include="..\Headers\Camera_Culling.h">
+      <Filter>02.GameObject\01. MainCamera\CullingCam</Filter>
+    </ClInclude>
     <ClInclude Include="..\Headers\Bastion_Healer_Groggy.h">
       <Filter>02.GameObject\03.Character\01.Monster\Bastion_Healer\State_Healer\Groggy</Filter>
     </ClInclude>
@@ -1304,6 +1314,9 @@
     </ClInclude>
     <ClInclude Include="..\Headers\BronzeAnimus_Battle_Idle.h">
       <Filter>02.GameObject\03.Character\01.Monster\BronzeAnimus\Battle_Idle</Filter>
+	</ClInclude>
+    <ClInclude Include="..\Headers\Shooter_Attack.h">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Shooter\State\Attack</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1990,6 +2003,10 @@
     <ClCompile Include="..\Codes\Bastion_2HSword_Groggy.cpp">
       <Filter>02.GameObject\03.Character\01.Monster\Bastion_2HSword\State_2HSword\Groggy</Filter>
     </ClCompile>
+    <ClCompile Include="..\Codes\Shooter_Attack.cpp" />
+    <ClCompile Include="..\Codes\Camera_Culling.cpp">
+      <Filter>02.GameObject\01. MainCamera\CullingCam</Filter>
+    </ClCompile>
     <ClCompile Include="..\Codes\Bastion_Healer_Groggy.cpp">
       <Filter>02.GameObject\03.Character\01.Monster\Bastion_Healer\State_Healer\Groggy</Filter>
     </ClCompile>
@@ -2041,6 +2058,9 @@
     </ClCompile>
     <ClCompile Include="..\Codes\BronzeAnimus_Battle_Idle.cpp">
       <Filter>02.GameObject\03.Character\01.Monster\BronzeAnimus\Battle_Idle</Filter>
+	</ClCompile>
+    <ClCompile Include="..\Codes\Shooter_Attack.cpp">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Shooter\State\Attack</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
