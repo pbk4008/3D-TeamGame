@@ -111,8 +111,16 @@ HRESULT CMainApp::Render()
 	if (FAILED(g_pGameInstance->Present()))
 		return E_FAIL;
 
-
 	m_isRender = false;
+
+	return S_OK;
+}
+
+HRESULT CMainApp::Destroy()
+{
+	if(FAILED(g_pGameInstance->Delete_GameObject()))
+		return E_FAIL;
+
 	return S_OK;
 }
 

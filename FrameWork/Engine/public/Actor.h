@@ -29,20 +29,20 @@ public:
 	_float Get_CurrentHp() { return m_fCurrentHp; }
 	_float Get_MaxHp() { return m_fMaxHp; }
 	_float Get_GroggyGauge() { return m_fGroggyGauge; }
-
+	const _bool IsAttack() { return m_IsAttack; }
+	_bool Get_Groggy() { return m_bGroggy; }
+public:
 	void Set_CurrentHp(_float fCurrentHp) { m_fCurrentHp = fCurrentHp; }
 	void Set_GroggyGage(_float fGauge) { m_fGroggyGauge = fGauge; }
 	void Set_MaxHp(_float fMaxHp) { m_fMaxHp = fMaxHp; }
-
-	const _bool IsAttack() { return m_IsAttack; }
-public:
 	virtual void Set_IsAttack(const _bool _isAttack) { m_IsAttack = _isAttack; }
-
+	void Set_Groggy(const _bool bGroggy) { m_bGroggy = bGroggy; }
 protected:
 	virtual void Free() override;
 protected:
 	_bool m_bDead;//죽었는지 안죽었는지 판단
 	_bool m_IsAttack;//공격했는지 공격 안했는지
+	_bool m_bGroggy;//스턴상태인지 아닌지
 
 	_float m_fSpeed;//이동 속도
 	_float m_fMaxHp;//최대 체력

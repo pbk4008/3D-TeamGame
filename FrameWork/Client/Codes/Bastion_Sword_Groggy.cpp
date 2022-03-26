@@ -14,10 +14,11 @@ HRESULT CBastion_Sword_Groggy::NativeConstruct(void* _pArg)
 	if (!_pArg)
 		return E_FAIL;
 
-	FSMDESC tDesc = (*(FSMDESC*)_pArg);
+	FSMACTORDESC tDesc = (*(FSMACTORDESC*)_pArg);
 
 	m_pAnimator = tDesc.pAnimator;
 	m_pStateController = tDesc.pController;
+	m_pMonster = tDesc.pActor;
 	m_wstrTag = tDesc.pName;
 
 	Safe_AddRef(m_pAnimator);
@@ -67,6 +68,7 @@ HRESULT CBastion_Sword_Groggy::EnterState()
 
 HRESULT CBastion_Sword_Groggy::ExitState()
 {
+	m_pMonster->Set_Groggy(false);
 	return S_OK;
 }
 

@@ -4,12 +4,14 @@
 #include "GameInstance.h"
 
 CUI_Monster_Level::CUI_Monster_Level(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
-	:CUI_Monster_Panel(pDevice,pDeviceContext)
+	:CUI(pDevice,pDeviceContext)
 {
+	ZeroMemory(&m_Desc, sizeof(m_Desc));
 }
 
-CUI_Monster_Level::CUI_Monster_Level(const CUI_Monster_Panel& rhs)
-	: CUI_Monster_Panel(rhs)
+CUI_Monster_Level::CUI_Monster_Level(const CUI_Monster_Level& rhs)
+	: CUI(rhs)
+	, m_Desc(rhs.m_Desc)
 {
 }
 
@@ -99,13 +101,18 @@ HRESULT CUI_Monster_Level::Render()
 
 HRESULT CUI_Monster_Level::SetUp_Components()
 {
-	m_pBuffer = g_pGameInstance->Clone_Component<CVIBuffer_Rect>(0, L"Proto_Component_Rect_UI");
-
-	if (!m_pBuffer)
+	if (FAILED(CGameObject::SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_Rect_UI", L"Com_Rect_UI", (CComponent**)&m_pBuffer)))
 		return E_FAIL;
 
-	if (FAILED(CGameObject::SetUp_Components(L"Com_Rect_UI", m_pBuffer)))
-		return E_FAIL;
+
+	//m_pBuffer = g_pGameInstance->Clone_Component<CVIBuffer_Rect>(0, L"Proto_Component_Rect_UI");
+
+	//if (!m_pBuffer)
+	//	return E_FAIL;
+
+	//if (FAILED(CGameObject::SetUp_Components(L"Com_Rect_UI", m_pBuffer)))
+	//	return E_FAIL;
+
 
 	return S_OK;
 }

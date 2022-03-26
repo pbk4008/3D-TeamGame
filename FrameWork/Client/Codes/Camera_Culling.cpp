@@ -79,6 +79,7 @@ HRESULT CCamera_Culling::Ready_Components()
 	cameraDesc.fAspect = _float(g_iWinCx) / g_iWinCy;
 	cameraDesc.fNear = 0.1f;
 	cameraDesc.fFar = 300.f;
+
 	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_Camera", L"Com_Camera", (CComponent**)&m_pCamera, &cameraDesc)))
 		return E_FAIL;
 

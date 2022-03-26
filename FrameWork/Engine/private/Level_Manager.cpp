@@ -48,6 +48,19 @@ HRESULT CLevel_Manager::Render()
 	return m_pCurrentLevel->Render();
 }
 
+HRESULT CLevel_Manager::Delete_GameObject()
+{
+	CObject_Manager* pInstnace = GET_INSTANCE(CObject_Manager);
+
+	if (FAILED(pInstnace->Destroy_Object(m_iCurrentLevelID)))
+		return E_FAIL;
+
+	RELEASE_INSTANCE(CObject_Manager);
+
+	return S_OK;
+}
+
+
 HRESULT CLevel_Manager::Clear_Managers()
 {
 	CGameInstance*		pGameInstance = GET_INSTANCE(CGameInstance);

@@ -1208,9 +1208,6 @@
     <ClInclude Include="..\Headers\Monster_Bastion_Shooter.h">
       <Filter>02.GameObject\03.Character\01.Monster\Bastion_Shooter</Filter>
     </ClInclude>
-    <ClInclude Include="..\Headers\Shooter_Attack.h">
-      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Shooter\State\Attack</Filter>
-    </ClInclude>
     <ClInclude Include="..\Headers\Effect_DashDust.h">
       <Filter>02.GameObject\04.Effect\00.Effect_DashDust_Player</Filter>
     </ClInclude>
@@ -1226,6 +1223,9 @@
     </ClInclude>
     <ClInclude Include="..\Headers\Bastion_Healer_Groggy.h">
       <Filter>02.GameObject\03.Character\01.Monster\Bastion_Healer\State_Healer\Groggy</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Shooter_Attack.h">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Shooter\State\Attack</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1903,9 +1903,6 @@
     <ClCompile Include="..\Codes\Monster_Bastion_Shooter.cpp">
       <Filter>02.GameObject\03.Character\01.Monster\Bastion_Shooter</Filter>
     </ClCompile>
-    <ClCompile Include="..\Codes\Shooter_Attack.cpp">
-      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Shooter\State\Attack</Filter>
-    </ClCompile>
     <ClCompile Include="..\Codes\Effect_DashDust.cpp">
       <Filter>02.GameObject\04.Effect\00.Effect_DashDust_Player</Filter>
     </ClCompile>
@@ -1921,6 +1918,9 @@
     </ClCompile>
     <ClCompile Include="..\Codes\Bastion_Healer_Groggy.cpp">
       <Filter>02.GameObject\03.Character\01.Monster\Bastion_Healer\State_Healer\Groggy</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Shooter_Attack.cpp">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Shooter\State\Attack</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

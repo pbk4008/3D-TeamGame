@@ -26,6 +26,7 @@ public:
 	CGameObject* Clone_Gameobject(_uint iLevelIndex, const wstring& pPrototypeTag, void* pArg);
 	_int Tick(_double TimeDelta);
 	_int LateTick(_double TimeDelta);
+	HRESULT Destroy_Object(_uint iLevelIndex);
 public:
 	list<CGameObject*>* getObjectList(_uint iLevelIndex, const wstring& pLayerTag);
 	list<CGameObject*> getAllObjectList();

@@ -138,13 +138,15 @@ HRESULT CUI_Ingame::SetUp_Components()
 {
 	if (13 == m_Desc.IDTag) //static
 	{
-		m_pBuffer = g_pGameInstance->Clone_Component<CVIBuffer_Rect>(0, L"Proto_Component_Rect_UI");
+		if (FAILED(CGameObject::SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_Rect_UI", L"Com_Rect_UI", (CComponent**)&m_pBuffer)))
+			return E_FAIL;
+		/*m_pBuffer = g_pGameInstance->Clone_Component<CVIBuffer_Rect>(0, L"Proto_Component_Rect_UI");
 
 		if (!m_pBuffer)
 			return E_FAIL;
 
 		if (FAILED(__super::SetUp_Components(L"Com_Rect_UI", m_pBuffer)))
-			return E_FAIL;
+			return E_FAIL;*/
 	}
 
 	else if (14 == m_Desc.IDTag) //dynamic
@@ -155,13 +157,16 @@ HRESULT CUI_Ingame::SetUp_Components()
 
 		Desc.bMinus = m_Desc.bMinus;
 
-		m_pTrapziumBuffer = g_pGameInstance->Clone_Component<CVIBuffer_Trapezium>(0, L"Proto_Component_Trapezium_UI", &Desc);
+		if (FAILED(CGameObject::SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_Trapezium_UI", L"Com_Trapezium_UI", (CComponent**)&m_pTrapziumBuffer,&Desc)))
+			return E_FAIL;
+
+		/*m_pTrapziumBuffer = g_pGameInstance->Clone_Component<CVIBuffer_Trapezium>(0, L"Proto_Component_Trapezium_UI", &Desc);
 
 		if (!m_pTrapziumBuffer)
 			return E_FAIL;
 
 		if (FAILED(__super::SetUp_Components(L"Com_Trapezium_UI", m_pTrapziumBuffer)))
-			return E_FAIL;
+			return E_FAIL;*/
 	}
 
 	return S_OK;

@@ -31,7 +31,6 @@ public:
 		A_TURN_180_LEFT, A_TURN_180_RIGHT,
 		A_END
 	};
-
 private:
 	explicit CMonster_Bastion_2HSword(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext);
 	explicit CMonster_Bastion_2HSword(const CMonster_Bastion_2HSword& _rhs);
@@ -50,6 +49,9 @@ private:
 	HRESULT Ready_AnimFSM(void);
 	HRESULT Ready_StateFSM(void);
 	HRESULT Render_Debug(void);
+public:
+	void Groggy_Start();
+	void Hit(CCollision& pCol);
 
 private:
 	virtual void OnTriggerEnter(CCollision& collision) override;
@@ -74,13 +76,12 @@ private: /* For.Weapon */
 	CRetributionBlade* m_pWeapon = nullptr;
 	_bool m_bFirst = false;
 
-public:
+private:
 	class CUI_Monster_Panel* m_pPanel = nullptr;
 
-public:
+private:
 	_bool	m_isFall = false;
 	_bool	m_bFirstHit = false; //맨처음들어와서 맞았을때 판넬크기바꿔줘야돼서
-	_bool	m_bGroggy = false; //그로기 상태인지 아닌지
 	
 public:
 	static CMonster_Bastion_2HSword* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext);

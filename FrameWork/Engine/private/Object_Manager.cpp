@@ -126,6 +126,24 @@ _int CObject_Manager::LateTick(_double TimeDelta)
 	return _int();
 }
 
+HRESULT CObject_Manager::Destroy_Object(_uint iLevelIndex)
+{
+	if (iLevelIndex < 0 || iLevelIndex >= m_iNumLevels)
+		return E_FAIL;
+
+	LAYERS mapLayer = m_pLayers[iLevelIndex];
+
+	if (mapLayer.empty())
+		return S_OK;
+	
+	for (auto& pLayer : mapLayer)
+	{
+		if (FAILED(pLayer.second->Delete_Object()))
+			return E_FAIL;
+	}
+	return S_OK;
+}
+
 list<CGameObject*>* CObject_Manager::getObjectList(_uint iLevelIndex, const wstring& pLayerTag)
 {
 	CLayer* pLayer = Find_Layer(iLevelIndex, pLayerTag);

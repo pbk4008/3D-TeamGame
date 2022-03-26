@@ -12,11 +12,17 @@
 CUI_Monster_Panel::CUI_Monster_Panel(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
 	:CUI(pDevice,pDeviceContext)
 {
+	ZeroMemory(&m_PanelDesc, sizeof(m_PanelDesc));
+	ZeroMemory(&m_TargetMatrix, sizeof(_float4x4));
+
 }
 
-CUI_Monster_Panel::CUI_Monster_Panel(const CUI& rhs)
+CUI_Monster_Panel::CUI_Monster_Panel(const CUI_Monster_Panel& rhs)
 	: CUI(rhs)
+	, m_PanelDesc(rhs.m_PanelDesc)
+	, m_TargetMatrix(rhs.m_TargetMatrix)
 {
+
 }
 
 HRESULT CUI_Monster_Panel::NativeConstruct_Prototype()
@@ -52,6 +58,12 @@ HRESULT CUI_Monster_Panel::NativeConstruct(const _uint _iSceneID, void* pArg)
 	if (FAILED(Panel_Setting())) //생성 
 		return E_FAIL;
 	
+	Safe_AddRef(m_pUIBack);
+	Safe_AddRef(m_pUILevel);
+	Safe_AddRef(m_pUIHpBar);
+	Safe_AddRef(m_pUIName);
+	Safe_AddRef(m_pUIGroggyBar);
+
 	//setActive(false);
 	return S_OK;
 }
@@ -1187,15 +1199,30 @@ void CUI_Monster_Panel::Update_Setting_EndBoss(_double TimeDelta)
 
 HRESULT CUI_Monster_Panel::SetUp_Components()
 {
-	m_pBuffer = g_pGameInstance->Clone_Component<CVIBuffer_Rect>(0, L"Proto_Component_Rect_UI");
 
-	if (!m_pBuffer)
+	if (FAILED(CGameObject::SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_Rect_UI", L"Com_Rect_UI", (CComponent**)&m_pBuffer)))
 		return E_FAIL;
 
-	if (FAILED(CGameObject::SetUp_Components(L"Com_Rect_UI", m_pBuffer)))
-		return E_FAIL;
+	//m_pBuffer = g_pGameInstance->Clone_Component<CVIBuffer_Rect>(0, L"Proto_Component_Rect_UI");
+
+	//if (!m_pBuffer)
+	//	return E_FAIL;
+
+	//if (FAILED(CGameObject::SetUp_Components(L"Com_Rect_UI", m_pBuffer)))
+	//	return E_FAIL;
 
 	return S_OK;
+}
+
+void CUI_Monster_Panel::Set_UIRemove(_bool bCheck)
+{
+	CGameObject::Set_Remove(true);
+
+	m_pUIBack->Set_Remove(m_bRemove);
+	m_pUILevel->Set_Remove(m_bRemove);
+	m_pUIHpBar->Set_Remove(m_bRemove);
+	m_pUIName->Set_Remove(m_bRemove);
+	m_pUIGroggyBar->Set_Remove(m_bRemove);
 }
 
 CUI_Monster_Panel* CUI_Monster_Panel::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
@@ -1227,8 +1254,8 @@ CGameObject* CUI_Monster_Panel::Clone(const _uint _iSceneID, void* pArg)
 void CUI_Monster_Panel::Free()
 {
 	__super::Free();
-	Safe_Release(m_pUIBack);
-	Safe_Release(m_pUILevel);
+	Safe_Release(m_pUIBack);//값
+	Safe_Release(m_pUILevel);//값
 	Safe_Release(m_pUIHpBar);
 	Safe_Release(m_pUIName);
 	Safe_Release(m_pUIGroggyBar);

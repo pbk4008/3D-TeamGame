@@ -109,7 +109,7 @@ _uint CShooter_Attack::Shot(_double dDeltaTime)
 		return -1;
 	m_dAccShotTime += dDeltaTime;
 	cout << "Time" << m_dAccShotTime << endl;
-	if (m_dAccShotTime >= 2.3 && !m_bShot)
+	if (m_dAccShotTime >= 2.5 && !m_bShot)
 	{
 		_uint iProgress = Create_Bullet();
 		m_bShot = true;
