@@ -1,4 +1,4 @@
-#pragma onceEffect_HitParticle
+#pragma once
 #ifndef __Effect_HitParticle_H__
 #define __Effect_HitParticle_H__
 

@@ -22,7 +22,7 @@ _int CBastion_Healer_Groggy::Tick(const _double& _dDeltaTime)
 		return iProgress;
 	m_pAnimator->Tick(_dDeltaTime);
 
-	m_fGroggyTime -= _dDeltaTime;
+	m_fGroggyTime -= (_float)_dDeltaTime;
 
 	return _int();
 }

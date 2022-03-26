@@ -57,7 +57,7 @@ _int CBastion_2HSword_State::Tick(const _double& _dDeltaTime)
 		CMonster_Bastion_2HSword* pMonster = static_cast<CMonster_Bastion_2HSword*>(m_pMonster);
 
 		pMonster->m_bGroggy = true;
-		pMonster->Set_GroggyGauge(0.f);
+		pMonster->Set_GroggyGauge(0);
 		pMonster->m_pPanel->Set_GroggyBar(pMonster->Get_GroggyGaugeRatio());
 		//m_pStateController->Change_State(L"Groggy");
 	}
@@ -140,7 +140,7 @@ void CBastion_2HSword_State::OnTriggerEnter(CCollision& collision)
 
 		if ((_uint)GAMEOBJECT::WEAPON == collision.pGameObject->getTag())
 		{
-			Sword_2H->Set_Current_HP(-5.f);
+			Sword_2H->Set_Current_HP(-5);
 			Sword_2H->Set_GroggyGauge(2); //TODO::¼öÄ¡Á¤ÇØ¼­¹Ù²ãÁà¾ßµÊ
 
 			Sword_2H->m_pPanel->Set_HpBar(Sword_2H->Get_HpRatio());

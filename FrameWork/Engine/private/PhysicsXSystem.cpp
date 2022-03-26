@@ -274,7 +274,7 @@ HRESULT CPhysicsXSystem::Create_NavMesh(CNavMeshCollider* _pCollider)
 	pRigidActor->userData = tColliderDesc.pGameObject;
 
 	// Shape
-	_uint iSize = tNavMeshDesc.vecPoints.size();
+	_uint iSize = (_uint)tNavMeshDesc.vecPoints.size();
 	_float3* pPoints = new _float3[iSize * 3];
 	for (_uint i = 0; i < iSize; i++)
 	{

@@ -150,14 +150,14 @@ void CBullet::OnTriggerEnter(CCollision& collision)
 
 _uint CBullet::Move(_double dDeltaTime)
 {
-	m_fSpawnTime += dDeltaTime;
+	m_fSpawnTime += (_float)dDeltaTime;
 	if (m_fSpawnTime < 5.f)
 	{
 		_vector vDir = XMLoadFloat4(&m_fDir);
 
 		_vector vPos = m_pTransform->Get_State(CTransform::STATE_POSITION);
 
-		vPos += vDir*dDeltaTime*m_fSpeed;
+		vPos += vDir * (_float)dDeltaTime * m_fSpeed;
 
 		m_pTransform->Set_State(CTransform::STATE_POSITION, vPos);
 	}
