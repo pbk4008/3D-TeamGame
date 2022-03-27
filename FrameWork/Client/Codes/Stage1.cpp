@@ -5,6 +5,7 @@
 
 #include "Effect_DashDust.h"
 #include "Effect_HitParticle.h"
+#include "Effect_HitFloating.h"
 #include "UI_Ingame.h"
 #include "UI_Player_HpBar.h"
 #include "UI_Tuto_Base.h"
@@ -37,30 +38,28 @@ HRESULT CStage1::NativeConstruct()
 	//	return E_FAIL;
 	//}
 
-	//if (FAILED(Ready_Trigger_Jump()))
-	//{
-	//	return E_FAIL;
-	//}
+	if (FAILED(Ready_Trigger_Jump()))
+	{
+		return E_FAIL;
+	}
 
 	if (FAILED(Ready_Player(L"Layer_Silvermane")))
 	{
 		return E_FAIL;
 	}
-	//if (FAILED(Ready_TriggerSystem(L"../bin/SaveData/Trigger/MonsterSpawnTrigger.dat")))
-	//	return E_FAIL;
-
-	//if (FAILED(Ready_TriggerSystem(L"../bin/SaveData/Trigger/MonsterSpawnTrigger.dat")))
-	//	return E_FAIL;
+	
+	if (FAILED(Ready_TriggerSystem(L"../bin/SaveData/Trigger/MonsterSpawnTrigger.dat")))
+		return E_FAIL;
 
 	//if (FAILED(Ready_Boss(L"Layer_Boss")))
 	//{
 	//	return E_FAIL;
 	//}
 
-	if (FAILED(Ready_Monster(L"Layer_Monster")))
-	{
-		return E_FAIL;
-	}
+	//if (FAILED(Ready_Monster(L"Layer_Monster")))
+	//{
+	//	return E_FAIL;
+	//}
 
 	////Data
 	if (FAILED(Ready_Data_UI(L"../bin/SaveData/UI/UI.dat")))
@@ -68,10 +67,10 @@ HRESULT CStage1::NativeConstruct()
 		return E_FAIL;
 	}
 	
-	//if (FAILED(Ready_Data_Effect()))
-	//{
-	//	return E_FAIL;
-	//}
+	if (FAILED(Ready_Data_Effect()))
+	{
+		return E_FAIL;
+	}
 
 	if (FAILED(Ready_UI(L"Layer_UI")))
 	{
@@ -111,7 +110,10 @@ _int CStage1::Tick(_double TimeDelta)
 		g_pDebugSystem->Set_LevelcMoveCheck(false);
 	}
 #endif //  _DEBUG
-	//m_pTriggerSystem->Tick(TimeDelta);
+	if (nullptr != m_pTriggerSystem)
+	{
+		m_pTriggerSystem->Tick(TimeDelta);
+	}
 
 	return _int();
 }
@@ -119,7 +121,10 @@ _int CStage1::Tick(_double TimeDelta)
 HRESULT CStage1::Render()
 {
 #ifdef _DEBUG
-	//m_pTriggerSystem->Render();
+	if (nullptr != m_pTriggerSystem)
+	{
+		m_pTriggerSystem->Render();
+	}
 #endif
 	return S_OK;
 }
@@ -322,7 +327,6 @@ HRESULT CStage1::Ready_Data_Effect()
 
 	for (int i = 0; i < vecEffect.size(); ++i)
 	{
-		wstring Tag = vecEffect[i].TextureTag;
 		wstring FullName = L"Proto_GameObject_Effect_DashDust";
 
 		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Effect", FullName, &vecEffect[i])))
@@ -331,17 +335,32 @@ HRESULT CStage1::Ready_Data_Effect()
 			return E_FAIL;
 		}
 	}*/
+	
 
+	//捞棋飘积己
+	vector<CEffect_HitParticle::EFFECTDESC> vecEffect;
+	g_pGameInstance->LoadFile<CEffect_HitParticle::EFFECTDESC>(vecEffect, L"../bin/SaveData/Effect/Effect_Player_Attack1.dat");
 
-	vector<CEffect_HitParticle::EFFECTDESC> vecEffect1;
-	g_pGameInstance->LoadFile<CEffect_HitParticle::EFFECTDESC>(vecEffect1, L"../bin/SaveData/Effect/Effect_Explosion.dat");
+	for (int i = 0; i < vecEffect.size(); ++i)
+	{
+		wstring FullName = L"Proto_GameObject_Effect_Hit";
+		//_tcscpy_s(vecEffect1[i].ShaderFullFilePath, L"../../Reference/ShaderFile/Shader_PointInstance.hlsl");
+		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Effect_Hit", FullName, &vecEffect[i])))
+		{
+			MSGBOX("Failed to Creating in CStage1::Ready_Effect()");
+			return E_FAIL;
+		}
+	}
+
+	//捞棋飘积己
+	vector<CEffect_HitFloating::EFFECTDESC> vecEffect1;
+	g_pGameInstance->LoadFile<CEffect_HitFloating::EFFECTDESC>(vecEffect1, L"../bin/SaveData/Effect/Effect_Player_Attack2_Floating_2.dat");
 
 	for (int i = 0; i < vecEffect1.size(); ++i)
 	{
-		wstring Tag = vecEffect1[i].TextureTag;
-		wstring FullName = L"Proto_GameObject_Effect_Hit";
-
-		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Effect", FullName, &vecEffect1[i])))
+		wstring FullName = L"Proto_GameObject_Effect_Floating";
+		//_tcscpy_s(vecEffect1[i].ShaderFullFilePath, L"../../Reference/ShaderFile/Shader_PointInstance.hlsl");
+		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Effect_Floating", FullName, &vecEffect1[i])))
 		{
 			MSGBOX("Failed to Creating in CStage1::Ready_Effect()");
 			return E_FAIL;

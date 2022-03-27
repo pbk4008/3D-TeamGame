@@ -9,6 +9,7 @@
 #include "MFCCamera.h"
 #include "MFCCamera_Proj.h"
 #include "MFCEffect.h"
+#include "MFCEffect_floating.h"
 #include "MFCTerrain.h"
 
 
@@ -41,6 +42,43 @@ HRESULT CMFCMainApp::NativeConstruct()
 		return E_FAIL;
 	}
 	
+	//Effect Texture
+	_finddata_t fd;
+	ZeroMemory(&fd, sizeof(_finddata_t));
+
+	intptr_t handle = _findfirst("../bin/Resources/Texture/Effect/*.dds", &fd);
+
+	if (handle == 0)
+		return E_FAIL;
+
+	int iResult = 0;
+	while (iResult != -1)
+	{
+		char szFullPath[MAX_PATH] = "../bin/Resources/Texture/Effect/";
+		strcat_s(szFullPath, fd.name);
+
+		_tchar fbxName[MAX_PATH] = L"";
+		_tchar fbxPath[MAX_PATH] = L"";
+		MultiByteToWideChar(CP_ACP, 0, fd.name, MAX_PATH, fbxName, MAX_PATH);
+		MultiByteToWideChar(CP_ACP, 0, szFullPath, MAX_PATH, fbxPath, MAX_PATH);
+
+		::PathRemoveExtension(fbxName); //이게 있으면 확장자도 지워짐
+
+		if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, fbxName, fbxPath)))
+		{
+			return E_FAIL;
+		}
+		wstring Name = fbxName;
+		wstring tag = L"Prototype_GameObject_Effect_" + Name;
+		if (FAILED(g_pGameInstance->Add_Prototype(tag, CMFCObject_UI::Create(m_pDevice, m_pDeviceContext))))
+		{
+			return E_FAIL;
+		}
+
+		iResult = _findnext(handle, &fd);
+	}
+	_findclose(handle);
+
 	if (FAILED(Ready_GameObject_Prototype()))
 	{
 		return E_FAIL;
@@ -150,6 +188,11 @@ HRESULT CMFCMainApp::Ready_Component_Prototype()
 		return E_FAIL;
 	}
 
+	if (FAILED(g_pGameInstance->Add_Prototype(TOOL_LEVEL::TOOL_LEVEL_LOGO, L"Prototype_Component_VIBuffer_PointInstance_Floating", CVIBuffer_PointInstance_Floating::Create(m_pDevice, m_pDeviceContext/*, L"../../Reference/ShaderFile/Shader_Particle.hlsl", 100*/))))
+	{
+		return E_FAIL;
+	}
+
 	if (FAILED(g_pGameInstance->Add_Prototype(0, L"Prototype_Component_VIBuffer_Plane", CVIBuffer_Plane::Create(m_pDevice, m_pDeviceContext, L"../../Reference/ShaderFile/Shader_Plane.hlsl", 100, 100))))
 		return E_FAIL;
 
@@ -159,14 +202,7 @@ HRESULT CMFCMainApp::Ready_Component_Prototype()
 		return E_FAIL;
 	}
 
-	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"bubble", L"../bin/Resources/Texture/Effect/bubble.dds")))
-	{
-		return E_FAIL;
-	}
-	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"Smoke_loop8x8_00", L"../bin/Resources/Texture/Effect/Smoke_loop8x8_00.dds")))
-	{
-		return E_FAIL;
-	}
+
 
 	//////////////////////////////////////////Static////////////////////////////////////////////////
 	_finddata_t fd;
@@ -291,6 +327,11 @@ HRESULT CMFCMainApp::Ready_GameObject_Prototype()
 	//}
 
 	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Effect"), CMFCEffect::Create(m_pDevice, m_pDeviceContext))))
+	{
+		return E_FAIL;
+	}
+
+	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Effect_Floating"), CMFCEffect_Floating::Create(m_pDevice, m_pDeviceContext))))
 	{
 		return E_FAIL;
 	}

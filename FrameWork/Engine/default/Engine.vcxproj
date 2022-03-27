@@ -305,6 +305,7 @@ call Update_Library_Release.bat</Command>
     <ClInclude Include="..\public\VIBuffer_Plane.h" />
     <ClInclude Include="..\public\VIBuffer_PointInstance.h" />
     <ClInclude Include="..\public\VIBuffer_PointInstance_Explosion.h" />
+    <ClInclude Include="..\public\VIBuffer_PointInstance_Floating.h" />
     <ClInclude Include="..\public\VIBuffer_Rect.h" />
     <ClInclude Include="..\public\VIBuffer_RectInstance.h" />
     <ClInclude Include="..\public\VIBuffer_RectViewPort.h" />
@@ -406,6 +407,7 @@ call Update_Library_Release.bat</Command>
     <ClCompile Include="..\private\VIBuffer_Plane.cpp" />
     <ClCompile Include="..\private\VIBuffer_PointInstance.cpp" />
     <ClCompile Include="..\private\VIBuffer_PointInstance_Explosion.cpp" />
+    <ClCompile Include="..\private\VIBuffer_PointInstance_Floating.cpp" />
     <ClCompile Include="..\private\VIBuffer_Rect.cpp" />
     <ClCompile Include="..\private\VIBuffer_RectInstance.cpp" />
     <ClCompile Include="..\private\VIBuffer_RectViewPort.cpp" />

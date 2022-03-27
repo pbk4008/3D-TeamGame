@@ -3,6 +3,9 @@
 
 #include "UI_Monster_Panel.h"
 
+#include "Effect_HitParticle.h"
+#include "Effect_HitFloating.h"
+
 #include "Animation.h"
 #include "Crawler_Idle.h"
 #include "Crawler_Walk.h"
@@ -85,7 +88,7 @@ HRESULT CMonster_Crawler::NativeConstruct(const _uint _iSceneID, void* _pArg)
 
 	m_iObectTag = (_uint)GAMEOBJECT::MONSTER_CRYSTAL;
 
-	m_fMaxHp = 3.f;
+	m_fMaxHp = 30.f;
 	m_fCurrentHp = m_fMaxHp;
 
 	m_fMaxGroggyGauge = 3.f;
@@ -205,6 +208,7 @@ void CMonster_Crawler::OnTriggerEnter(CCollision& collision)
 
 		if ((_uint)GAMEOBJECT::WEAPON == collision.pGameObject->getTag())
 		{
+
 			m_fCurrentHp -= 2;
 			m_fGroggyGauge += 2; //TODO::¼öÄ¡Á¤ÇØ¼­¹Ù²ãÁà¾ßµÊ
 
@@ -216,7 +220,22 @@ void CMonster_Crawler::OnTriggerEnter(CCollision& collision)
 				m_pPanel->Set_GroggyBar(Get_GroggyGaugeRatio());
 				m_pStateController->Change_State(L"Flinch_Left");
 			}
+
+			CEffect_HitParticle* pEffect = (CEffect_HitParticle*)g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Layer_Effect_Hit")->front();
+			_vector Mypos = m_pTransform->Get_State(CTransform::STATE_POSITION);
+			Mypos = XMVectorSetY(Mypos, XMVectorGetY(Mypos) + 1.f);
+			pEffect->Get_Transform()->Set_State(CTransform::STATE_POSITION, Mypos);
+			pEffect->setActive(true);
+			pEffect->Set_Reset(true);
+
+			CEffect_HitFloating* pEffect1 = (CEffect_HitFloating*)g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Layer_Effect_Floating")->front();
+			_vector Mypos1 = m_pTransform->Get_State(CTransform::STATE_POSITION);
+			Mypos1 = XMVectorSetY(Mypos1, XMVectorGetY(Mypos1) + 1.f);
+			pEffect1->Get_Transform()->Set_State(CTransform::STATE_POSITION, Mypos1);
+			pEffect1->setActive(true);
+			pEffect1->Set_Reset(true);
 		}
+
 		else
 		{
 

@@ -155,7 +155,7 @@ HRESULT CEffect_DashDust::SetUp_Components()
 	if (FAILED(m_pTexture->Change_Texture(NewTag)))
 		return E_FAIL;
 
-	_vector vPos = { XMVectorGetX(m_Desc.fMyPos), XMVectorGetY(m_Desc.fMyPos), XMVectorGetY(m_Desc.fMyPos), 1.f };
+	_vector vPos = { XMVectorGetX(m_Desc.fMyPos), XMVectorGetY(m_Desc.fMyPos), XMVectorGetZ(m_Desc.fMyPos), 1.f };
 	m_pTransform->Set_State(CTransform::STATE_POSITION, vPos);
 
 	//¹öÆÛ Clone
