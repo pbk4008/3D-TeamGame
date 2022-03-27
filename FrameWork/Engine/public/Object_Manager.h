@@ -23,9 +23,11 @@ public:
 	HRESULT Reserve_Manager(_uint iNumLevels);
 	HRESULT Add_Prototype(const wstring& pPrototypeTag, class CGameObject* pPrototype);
 	HRESULT Add_GameObjectToLayer(_uint iLevelIndex, const wstring& pLayerTag, const wstring& pPrototypeTag, void* pArg, class CGameObject** ppOut = nullptr);
+	HRESULT Add_GameObjectToLayer(_uint iLevelIndex, const wstring& pLayerTag, CGameObject* pGameObject);
 	CGameObject* Clone_Gameobject(_uint iLevelIndex, const wstring& pPrototypeTag, void* pArg);
 	_int Tick(_double TimeDelta);
 	_int LateTick(_double TimeDelta);
+	HRESULT Destroy_Object(_uint iLevelIndex);
 public:
 	list<CGameObject*>* getObjectList(_uint iLevelIndex, const wstring& pLayerTag);
 	list<CGameObject*> getAllObjectList();

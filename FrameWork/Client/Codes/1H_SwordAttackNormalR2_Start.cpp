@@ -63,7 +63,7 @@ HRESULT C1H_SwordAttackNormalR2_Start::EnterState()
 	m_pAnimationController->Set_RootMotion(true, true);
 
 	m_pSilvermane->Set_IsTrasceCamera(false);
-
+	m_pSilvermane->Set_IsAttack(false);
 	return S_OK;
 }
 

@@ -76,6 +76,30 @@ HRESULT CObject_Manager::Add_GameObjectToLayer(_uint iLevelIndex, const wstring&
 	return S_OK;
 }
 
+HRESULT CObject_Manager::Add_GameObjectToLayer(_uint iLevelIndex, const wstring& pLayerTag, CGameObject* pGameObject)
+{
+	if (iLevelIndex >= m_iNumLevels)
+		return E_FAIL;
+
+	auto	iter = find_if(m_pLayers[iLevelIndex].begin(), m_pLayers[iLevelIndex].end(), CTag_Finder(pLayerTag));
+
+	if (iter == m_pLayers[iLevelIndex].end())
+	{
+		CLayer* pLayer = CLayer::Create();
+		if (nullptr == pLayer)
+			return E_FAIL;
+
+		if (FAILED(pLayer->Add_GameObject(pGameObject)))
+			return E_FAIL;
+
+		m_pLayers[iLevelIndex].insert(LAYERS::value_type(pLayerTag, pLayer));
+	}
+	else
+		iter->second->Add_GameObject(pGameObject);
+
+	return S_OK;
+}
+
 CGameObject* CObject_Manager::Clone_Gameobject(_uint iLevelIndex, const wstring& pPrototypeTag, void* pArg)
 {
 	if (iLevelIndex >= m_iNumLevels)
@@ -124,6 +148,24 @@ _int CObject_Manager::LateTick(_double TimeDelta)
 
 
 	return _int();
+}
+
+HRESULT CObject_Manager::Destroy_Object(_uint iLevelIndex)
+{
+	if (iLevelIndex < 0 || iLevelIndex >= m_iNumLevels)
+		return E_FAIL;
+
+	LAYERS mapLayer = m_pLayers[iLevelIndex];
+
+	if (mapLayer.empty())
+		return S_OK;
+	
+	for (auto& pLayer : mapLayer)
+	{
+		if (FAILED(pLayer.second->Delete_Object()))
+			return E_FAIL;
+	}
+	return S_OK;
 }
 
 list<CGameObject*>* CObject_Manager::getObjectList(_uint iLevelIndex, const wstring& pLayerTag)

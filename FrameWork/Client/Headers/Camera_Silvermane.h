@@ -5,9 +5,12 @@
 BEGIN(Client)
 
 class CSilvermane;
+class CCameraShake;
 
 class CCamera_Silvermane final : public CGameObject
 {
+	friend class CCamera_Culling;
+	friend class CCameraShake;
 private:
 	explicit CCamera_Silvermane(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext);
 	explicit CCamera_Silvermane(const CCamera_Silvermane& _rhs);
@@ -32,7 +35,7 @@ private:
 	void SpringArm();
 
 public:
-	const _fvector& Get_Look() const;
+	const _fvector Get_Look() const;
 
 private:
 	CCamera* m_pCamera = nullptr;
@@ -43,6 +46,9 @@ private:
 	_float3 m_vRot = { 0.f,0.f,0.f };
 
 	_bool m_isChase = true;
+
+private: /* For.Shake */
+	CCameraShake* m_pCameraShake = nullptr;
 
 public:
 	static CCamera_Silvermane* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext);

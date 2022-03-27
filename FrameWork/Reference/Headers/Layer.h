@@ -16,8 +16,8 @@ public:
 	HRESULT Add_GameObject(class CGameObject* pGameObject);
 	_int Tick(_double TimeDelta);
 	_int LateTick(_double TimeDelta);
-private:
-	_bool Delete_GameObject(list<class CGameObject*>::iterator& iter);
+public:
+	HRESULT Delete_Object();
 private:
 	list<class CGameObject*>			m_Objects;
 	typedef list<class CGameObject*>	OBJECTS;

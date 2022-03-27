@@ -93,7 +93,7 @@ _int CEffect_DashDust::Tick(_double TimeDelta)
 
 	if (m_Desc.fMaxLifeTime > m_Desc.fCurTime)
 	{
-		m_Desc.fCurTime += TimeDelta;
+		m_Desc.fCurTime += (_float)TimeDelta;
 	}
 
 	if (m_Desc.fMaxLifeTime < m_Desc.fCurTime)

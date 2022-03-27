@@ -69,7 +69,6 @@ public:
 	HRESULT SetUp_NextAnimation(_uint iIndex, const _bool _isLoopNextAnim = true);
 	//다음 애니메이션 변경(AnimNode 직접 받도록)
 	HRESULT SetUp_NextAnimation(class CAnimNode* pChangeAnimNode);
-	HRESULT Change_Anim(const string& _strAnimTag, _bool _isLoop = true);
 	const _int Move_Transform(const _double& _dDeltaTime);
 	const _int Add_TransformVelocity(const _double& _dDeltaTime);
 	void Reset_Animation();

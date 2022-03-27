@@ -228,6 +228,7 @@ call Update_Library_Release.bat</Command>
     <ClInclude Include="..\public\ControllerFilterCallback.h" />
     <ClInclude Include="..\public\ControllerHitReport.h" />
     <ClInclude Include="..\public\CSTarget.h" />
+    <ClInclude Include="..\public\EffectManager.h" />
     <ClInclude Include="..\public\HDR.h" />
     <ClInclude Include="..\public\Instancing_Mesh.h" />
     <ClInclude Include="..\public\Luminance.h" />
@@ -338,6 +339,7 @@ call Update_Library_Release.bat</Command>
     <ClCompile Include="..\private\ControllerFilterCallback.cpp" />
     <ClCompile Include="..\private\ControllerHitReport.cpp" />
     <ClCompile Include="..\private\CSTarget.cpp" />
+    <ClCompile Include="..\private\EffectManager.cpp" />
     <ClCompile Include="..\private\HDR.cpp" />
     <ClCompile Include="..\private\Instancing_Mesh.cpp" />
     <ClCompile Include="..\private\Luminance.cpp" />

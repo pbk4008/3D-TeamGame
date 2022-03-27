@@ -251,15 +251,21 @@ void CTransform::SetUp_Rotation(_fvector vAxis, _float fRadian)
 	Set_State(CTransform::STATE_LOOK, vLook);
 }
 
-void CTransform::SetUp_Rotation(const _float3& _vRot)
+void CTransform::SetUp_Rotation(const _float3& _vEuler)
 {
-	_vector svRight = XMVectorSet(1.f, 0.f, 0.f, 0.f);
-	_vector svUp = XMVectorSet(0.f, 1.f, 0.f, 0.f);
-	_vector svLook = XMVectorSet(0.f, 0.f, 1.f, 0.f);
+	_vector svRight = XMVectorSet(1.f, 0.f, 0.f, 0.f) * Get_Scale(STATE_RIGHT);
+	_vector svUp = XMVectorSet(0.f, 1.f, 0.f, 0.f) * Get_Scale(STATE_UP);
+	_vector svLook = XMVectorSet(0.f, 0.f, 1.f, 0.f) * Get_Scale(STATE_LOOK);
 
-	_matrix smatRot = XMMatrixRotationRollPitchYaw(_vRot.x, _vRot.y, _vRot.z);
+	_matrix smatRot = XMMatrixRotationRollPitchYaw(XMConvertToRadians(_vEuler.x), XMConvertToRadians(_vEuler.y), XMConvertToRadians(_vEuler.z));
 
-	XMStoreFloat4x4(&m_WorldMatrix, smatRot * XMLoadFloat4x4(&m_WorldMatrix));
+	svRight = XMVector4Transform(svRight, smatRot);
+	svUp = XMVector4Transform(svUp, smatRot);
+	svLook = XMVector4Transform(svLook, smatRot);
+
+	Set_State(STATE_RIGHT, svRight);
+	Set_State(STATE_UP, svUp);
+	Set_State(STATE_LOOK, svLook);
 }
 
 void CTransform::Scaling(_fvector vScale)
@@ -308,7 +314,7 @@ void CTransform::Fall(_double dDeltaTime)
 	_float fY = XMVectorGetY(svPos);
 
 	if (fY > -5.f)
-		Add_Velocity(XMVectorSet(0.f, -9.8f * dDeltaTime, 0.f, 0.f));
+		Add_Velocity(XMVectorSet(0.f, -9.8f * (_float)dDeltaTime, 0.f, 0.f));
 }
 
 void CTransform::Mesh_Straight(_double TimeDelta, CNavigation* pNavigation)

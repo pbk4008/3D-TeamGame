@@ -45,7 +45,7 @@ HRESULT CShield_Walk::EnterState()
 	if (FAILED(__super::EnterState()))
 		return E_FAIL;
 
-	m_pSilvermane->Set_IsMove(true);
+	//m_pSilvermane->Set_IsMove(true);
 
 	return S_OK;
 }
@@ -55,7 +55,7 @@ HRESULT CShield_Walk::ExitState()
 	if (FAILED(__super::ExitState()))
 		return E_FAIL;
 
-	m_pSilvermane->Set_IsMove(false);
+	//m_pSilvermane->Set_IsMove(false);
 
 	return S_OK;
 }

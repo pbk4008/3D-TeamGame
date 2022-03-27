@@ -30,10 +30,12 @@ _int C1H_SwordAttackNormalR2_ReleaseDoubleSwing::Tick(const _double& _dDeltaTime
 		m_pSilvermane->Set_IsTrasceCamera(false);
 	}
 
-	//if (0.05f < m_fRotTime)
-	//{
-	//	m_pSilvermane->Set_IsTrasceCamera(false);
-	//}
+	if (m_pSilvermane->IsAttack())
+	{
+		if (50 < m_pAnimationController->Get_CurKeyFrameIndex())
+			m_pSilvermane->Set_IsAttack(false);
+	}
+
 
 	if (m_pAnimationController->Is_Finished())
 	{

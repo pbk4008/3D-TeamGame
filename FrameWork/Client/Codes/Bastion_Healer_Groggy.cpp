@@ -22,7 +22,7 @@ _int CBastion_Healer_Groggy::Tick(const _double& _dDeltaTime)
 		return iProgress;
 	m_pAnimator->Tick(_dDeltaTime);
 
-	m_fGroggyTime -= _dDeltaTime;
+	m_fGroggyTime -= (_float)_dDeltaTime;
 
 	return _int();
 }
@@ -48,7 +48,7 @@ void CBastion_Healer_Groggy::Look_Player(void)
 void CBastion_Healer_Groggy::Look_Monster(void)
 {
 	if (0 >= m_fGroggyTime)
-		m_pAnimator->Change_Animation((_uint)CMonster_Bastion_Healer::ANIM_TYPE::A_STUN_ED);
+		m_pStateController->Change_State(L"Groggy_End");
 }
 
 void CBastion_Healer_Groggy::OnTriggerEnter(CCollision& collision)

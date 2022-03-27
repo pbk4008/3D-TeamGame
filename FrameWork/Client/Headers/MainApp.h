@@ -18,6 +18,7 @@ public:
 	HRESULT NativeConstruct();
 	_int Tick(_double TimeDelta);
 	HRESULT Render();
+	HRESULT Destroy();
 
 private:
 	ID3D11Device*			m_pDevice = nullptr;

@@ -36,7 +36,7 @@ _int CAberrant_Run::Tick(const _double& TimeDelta)
 
 	m_pTransform->Face_Target(g_pObserver->Get_PlayerPos());
 	
-	m_fRunTime += TimeDelta;
+	m_fRunTime += (_float)TimeDelta;
 
 	if (0.5f < m_fRunTime)
 	{
