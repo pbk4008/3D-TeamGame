@@ -149,7 +149,6 @@ VS_OUT_SHADOW VS_MAIN_SHADOW(VS_IN In)
 	matWV = mul(g_WorldMatrix, g_LightView);
 	matWVP = mul(matWV, g_LightProj);
 	
-	
 	Out.vPosition = mul(vPosition, matWVP);
 	Out.vClipPos = Out.vPosition;
 	Out.vTexUV = In.vTexUV;

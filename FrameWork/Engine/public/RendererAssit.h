@@ -15,7 +15,7 @@ private: virtual ~CRendererAssit() = default;
 public: HRESULT			InitRenderAssit();
 public: HRESULT			Setup_RenderTarget();
 
-public: HRESULT			Render_LightAcc(const wstring& cameraTag,_bool bPBR);
+public: HRESULT			Render_LightAcc(const wstring& cameraTag,_bool bPBR, _bool shadow);
 
 private: CVIBuffer_RectViewPort*	m_pVIBuffer = nullptr;
 private: CTarget_Manager*			m_pTargetMgr = nullptr;

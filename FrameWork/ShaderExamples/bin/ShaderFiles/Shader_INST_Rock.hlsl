@@ -17,8 +17,6 @@ cbuffer LightBuffer
 texture2D g_ShadowTexture;
 texture2D g_DiffuseTexture;
 texture2D g_BiNormalTexture;
-texture2D g_ORMTexture;
-texture2D g_MaskTexture;
 
 sampler DefaultSampler = sampler_state
 {
@@ -201,34 +199,24 @@ PS_OUT PS_MAIN(PS_IN In)
 	
 	float4 diffuse = g_DiffuseTexture.Sample(DefaultSampler, In.vUvDepth.xy);
 	float3 normal = g_BiNormalTexture.Sample(DefaultSampler, In.vUvDepth.xy).xyz;
-	float3 orm = g_ORMTexture.Sample(DefaultSampler, In.vUvDepth).xyz;
-	float3 mask = g_MaskTexture.Sample(DefaultSampler, In.vUvDepth).xyz;
-	
 	float3x3 tbn = { In.vTangent.xyz, In.vBiNormal.xyz, In.vNormal.xyz };
 	
 	normal = Normalmapping(normal, tbn);
 	
-	if(mask.b > 0.5f)
-	{
-		Out.diffuse = diffuse;
-		Out.E = float4(0.02f, 0.02f, 0.02f, 1.f);
-	}
-	else
-	{
-		Out.diffuse = diffuse;
-		Out.E = float4(0.01f, 0.006f, 0.0f,1.f);
-	}
+	Out.diffuse = diffuse;
 
 	Out.depth = float4(In.vUvDepth.z / In.vUvDepth.w, In.vUvDepth.w / 300.f, 0.f, 0.f);
 	Out.normal = float4(normal, 0);
 	
-	float Metalic = orm.b + mask.b * 0.25f;
-	Out.M = float4(Metalic.rrr, 1.f);
-	float Roughness = orm.g + mask.b * 0.2f;
+	float Metalic = 0;
+	Out.M = float4(Metalic.xxx, 1.f);
+	float Roughness = 0.8;
 	Out.R = float4(Roughness.rrr, 1.f);
-	float Ao = orm.r;
+	float Ao = 1.f;
 	Out.A = float4(Ao.rrr, 1.f);
+	float EmissionPower = 0.f;
 	
+	Out.E = float4(EmissionPower.rrr, 1);
 
 	return Out;
 }

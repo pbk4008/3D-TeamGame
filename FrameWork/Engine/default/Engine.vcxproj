@@ -432,6 +432,8 @@ call Update_Library_Release.bat</Command>
     <FxCompile Include="..\bin\ShaderFiles\Shader_INST_ORM_M.hlsl" />
     <FxCompile Include="..\bin\ShaderFiles\Shader_INST_ORM_N2.hlsl" />
     <FxCompile Include="..\bin\ShaderFiles\Shader_INST_ORS.hlsl" />
+    <FxCompile Include="..\bin\ShaderFiles\Shader_INST_Rock.hlsl" />
+    <FxCompile Include="..\bin\ShaderFiles\Shader_INST_Tree.hlsl" />
     <FxCompile Include="..\bin\ShaderFiles\Shader_Luminance.hlsl" />
     <FxCompile Include="..\bin\ShaderFiles\Shader_Mesh.hlsl" />
     <FxCompile Include="..\bin\ShaderFiles\Shader_MeshAnim.hlsl" />

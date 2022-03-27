@@ -134,10 +134,16 @@ HRESULT CRenderer::Draw_RenderGroup()
 
 	if (FAILED(Render_SkyBox())) return E_FAIL;
 
+	if (m_bShadow == true)
+	{
+		if (FAILED(Render_Shadow())) return E_FAIL;
+		if (FAILED(Render_ShadeShadow())) return E_FAIL;
+	}
+
 	if (FAILED(Render_NonAlpha())) // 디퍼드 단계
 		return E_FAIL;
 
-	if (FAILED(m_pRenderAssit->Render_LightAcc(m_CameraTag,m_bPBR))) // 빛연산
+	if (FAILED(m_pRenderAssit->Render_LightAcc(m_CameraTag,m_bPBR,m_bShadow))) // 빛연산
 		return E_FAIL;
 
 	if (m_bPixel) // Pixel HDR

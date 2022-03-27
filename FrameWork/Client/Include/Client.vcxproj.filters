@@ -298,9 +298,6 @@
     <Filter Include="02.GameObject\02.Map\01.Environment">
       <UniqueIdentifier>{2671a8b6-a2a8-4ec2-ad0d-b3e116f33512}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObject\02.Map\02.JumpNode">
-      <UniqueIdentifier>{15743125-3fab-4955-a1a7-2c3ab22ace2e}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObject\03.Character\02.Boss">
       <UniqueIdentifier>{5e4ce90c-d575-4e08-9ce0-006401437c35}</UniqueIdentifier>
     </Filter>
@@ -504,6 +501,12 @@
     </Filter>
     <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_Healer\State_Healer\Groggy">
       <UniqueIdentifier>{be23ca3f-dcd4-4d54-94af-faa9de66f577}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\02.Map\02.JumpNode">
+      <UniqueIdentifier>{15743125-3fab-4955-a1a7-2c3ab22ace2e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\02.Map\01.Environment\Tree">
+      <UniqueIdentifier>{afa39133-5db9-4588-b538-151dc4a78680}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -1227,6 +1230,9 @@
     <ClInclude Include="..\Headers\Bastion_Healer_Groggy.h">
       <Filter>02.GameObject\03.Character\01.Monster\Bastion_Healer\State_Healer\Groggy</Filter>
     </ClInclude>
+    <ClInclude Include="..\Headers\SubEnvironment.h">
+      <Filter>02.GameObject\02.Map\01.Environment\Tree</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -1921,6 +1927,9 @@
     </ClCompile>
     <ClCompile Include="..\Codes\Bastion_Healer_Groggy.cpp">
       <Filter>02.GameObject\03.Character\01.Monster\Bastion_Healer\State_Healer\Groggy</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\SubEnvironment.cpp">
+      <Filter>02.GameObject\02.Map\01.Environment\Tree</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

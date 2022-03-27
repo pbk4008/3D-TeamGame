@@ -134,7 +134,7 @@ PS_OUT_LIGHTACC PS_MAIN_LIGHTACC_DIRECTIONAL(PS_IN In)
 	PS_OUT_LIGHTACC Out = (PS_OUT_LIGHTACC) 0;
 	
 	float2 uvRT = In.vTexUV/* + float2(perPixelX, perPixelY)*/;
-	
+
 	vector vDiffuseDesc = g_DiffuseTexture.Sample(DefaultSampler, uvRT);
 	vector vNormalDesc = g_NormalTexture.Sample(DefaultSampler, uvRT);
 	vector vDepthDesc = g_DepthTexture.Sample(DefaultSampler, uvRT);

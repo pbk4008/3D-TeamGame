@@ -62,7 +62,12 @@ _int CEnvironment::LateTick(_double TimeDelta)
 	if (FAILED(Culling()))
 		return -1;
 
-	m_pRenderer->Add_RenderGroup(CRenderer::RENDER_NONALPHA, this);
+	if (m_pRenderer->Get_Shadow() == true)
+	{
+		if (FAILED(m_pRenderer->Add_RenderGroup(CRenderer::RENDER_SHADOW, this))) return -1;
+	}
+
+	if(FAILED(m_pRenderer->Add_RenderGroup(CRenderer::RENDER_NONALPHA, this))) return -1;
 	return _int();
 }
 
@@ -72,8 +77,8 @@ HRESULT CEnvironment::Render()
 		return E_FAIL;
 
 	_matrix matWorld = XMMatrixTranspose(m_pTransform->Get_WorldMatrix());
-	_matrix matView = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_VIEW));
-	_matrix matProj = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_PROJECTION));
+	_matrix matView = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Culling", TRANSFORMSTATEMATRIX::D3DTS_VIEW));
+	_matrix matProj = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Culling", TRANSFORMSTATEMATRIX::D3DTS_PROJECTION));
 	_vector campos = g_pGameInstance->Get_CamPosition(L"Camera_Silvermane");
 
 	m_pInstanceMesh->SetUp_ValueOnShader("g_WorldMatrix", &matWorld, sizeof(_matrix));
@@ -110,7 +115,6 @@ HRESULT CEnvironment::Render_Shadow()
 
 HRESULT CEnvironment::Render_ShadeShadow(ID3D11ShaderResourceView* ShadowMap)
 {
-
 	_matrix world, view, proj, lightview, lightproj;
 	world = XMMatrixTranspose(m_pTransform->Get_WorldMatrix());
 	view = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_VIEW));
@@ -140,7 +144,7 @@ HRESULT CEnvironment::Ready_Component()
 
 	m_Nummeshcontainer = m_pInstanceMesh->Get_NumMeshContainer();
 
-	//m_LightDesc = g_pGameInstance->Get_LightDesc(0);
+	m_LightDesc = g_pGameInstance->Get_LightDesc(0);
 
 	return S_OK; 
 }

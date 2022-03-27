@@ -33,6 +33,8 @@ public:
 	virtual _int Tick(_double _dDeltaTime) override;
 	virtual _int LateTick(_double _dDeltaTime) override;
 	virtual HRESULT Render() override;
+	virtual HRESULT	Render_Shadow()  override;
+	virtual HRESULT	Render_ShadeShadow(ID3D11ShaderResourceView* pshadow) override;
 	HRESULT Render_Debug();
 private:
 	HRESULT Ready_Components();
@@ -122,6 +124,7 @@ private: /* For.JumpNode */
 
 private:
 	CTexture*	m_pTexture = nullptr;
+	const LIGHTDESC* m_Lightdesc = nullptr;
 
 public:
 	static CSilvermane* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext);

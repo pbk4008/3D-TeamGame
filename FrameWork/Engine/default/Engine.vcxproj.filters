@@ -961,5 +961,11 @@
     <FxCompile Include="..\bin\ShaderFiles\Shader_INST_OMER.hlsl">
       <Filter>98.ShaderFiles\Environment</Filter>
     </FxCompile>
+    <FxCompile Include="..\bin\ShaderFiles\Shader_INST_Rock.hlsl">
+      <Filter>98.ShaderFiles\Environment</Filter>
+    </FxCompile>
+    <FxCompile Include="..\bin\ShaderFiles\Shader_INST_Tree.hlsl">
+      <Filter>98.ShaderFiles\Environment</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

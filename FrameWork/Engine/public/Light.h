@@ -17,7 +17,7 @@ public:
 public:
 	HRESULT NativeConstruct(const LIGHTDESC& LightDesc);
 	void	Tick();
-	HRESULT Render(const wstring& pCameraTag, _bool PBRHDRcheck);
+	HRESULT Render(const wstring& pCameraTag, _bool PBRHDRcheck,_bool Shadow);
 
 public: void UpdateLightCam(_fvector playerpos);
 

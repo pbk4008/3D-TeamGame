@@ -258,6 +258,11 @@ _int CSilvermane::LateTick(_double _dDeltaTime)
 	if (NO_EVENT != iProgress) 
 		return iProgress;
 
+	if (m_pRenderer->Get_Shadow() == true)
+	{
+		if (FAILED(m_pRenderer->Add_RenderGroup(CRenderer::RENDER_SHADOW, this))) return -1;
+	}
+
 	if(FAILED(m_pRenderer->Add_RenderGroup(CRenderer::RENDER_NONALPHA, this)))
 		return -1;
 
@@ -309,6 +314,48 @@ HRESULT CSilvermane::Render()
 #ifdef _DEBUG
 	Render_Debug();
 #endif
+
+	return S_OK;
+}
+
+HRESULT CSilvermane::Render_Shadow()
+{
+	_matrix world, lightview, lightproj;
+	world = XMMatrixTranspose(m_pTransform->Get_WorldMatrix());
+	lightview = XMMatrixTranspose(m_Lightdesc->mLightView);
+	lightproj = XMMatrixTranspose(m_Lightdesc->mLightProj);
+
+	m_pModel->SetUp_ValueOnShader("g_WorldMatrix", &world, sizeof(_matrix));
+	m_pModel->SetUp_ValueOnShader("g_LightView", &lightview, sizeof(_matrix));
+	m_pModel->SetUp_ValueOnShader("g_LightProj", &lightproj, sizeof(_matrix));
+
+	for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
+		m_pModel->Render(i, 4);
+
+	return S_OK;
+}
+
+HRESULT CSilvermane::Render_ShadeShadow(ID3D11ShaderResourceView* pshadow)
+{
+	_matrix world, view, proj, lightview, lightproj;
+	world = XMMatrixTranspose(m_pTransform->Get_WorldMatrix());
+	view = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_VIEW));
+	proj = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_PROJECTION));
+	lightview = XMMatrixTranspose(m_Lightdesc->mLightView);
+	lightproj = XMMatrixTranspose(m_Lightdesc->mLightProj);
+
+	m_pModel->SetUp_ValueOnShader("g_WorldMatrix", &world, sizeof(_matrix));
+	m_pModel->SetUp_ValueOnShader("g_ViewMatrix", &view, sizeof(_matrix));
+	m_pModel->SetUp_ValueOnShader("g_ProjMatrix", &proj, sizeof(_matrix));
+	m_pModel->SetUp_ValueOnShader("g_LightView", &lightview, sizeof(_matrix));
+	m_pModel->SetUp_ValueOnShader("g_LightProj", &lightproj, sizeof(_matrix));
+
+
+	for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
+	{
+		m_pModel->SetUp_TextureOnShader("g_ShadowTexture", pshadow);
+		m_pModel->Render(i, 5);
+	}
 
 	return S_OK;
 }
@@ -428,6 +475,7 @@ HRESULT CSilvermane::Ready_Components()
 
 	m_pModel->Get_Materials()[3]->Set_Texture("g_NewHairTexture", TEXTURETYPE::TEX_TINT, m_pTexture);
 
+	m_Lightdesc = g_pGameInstance->Get_LightDesc(0);
 	return S_OK;
 }
 

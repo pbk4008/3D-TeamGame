@@ -152,7 +152,7 @@ PS_OUT PS_MAIN_BrightPass(PS_IN In)
 	//float Luminance = max(Average.r, max(Average.g, Average.b));
 	float Luminance = 0.5f * (max(Average.r, max(Average.g, Average.b)) + min(Average.r, min(Average.g, Average.b)));
 	
-	if (Luminance < g_BrightPassThreshold)
+	if (Luminance > g_BrightPassThreshold)
 		Average = float4(0.f, 0.f, 0.f, 1.f);
 		
 	Out.vOutColor = Average;

@@ -138,6 +138,7 @@ public:
 			}
 		}
 
+		return S_OK;
 	}
 	const vector<_float3> Get_MonsterSpawnPoint(MONSTER eType) { return m_pVecMonsterSpawnPoint[(_uint)eType]; }
 private:

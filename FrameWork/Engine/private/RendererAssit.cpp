@@ -314,7 +314,7 @@ HRESULT CRendererAssit::Setup_RenderTarget()
 	return S_OK;
 }
 
-HRESULT CRendererAssit::Render_LightAcc(const wstring& cameraTag, _bool bPBR)
+HRESULT CRendererAssit::Render_LightAcc(const wstring& cameraTag, _bool bPBR,_bool shadow)
 {
 	if (nullptr == m_pTargetMgr)
 		return E_FAIL;
@@ -323,8 +323,7 @@ HRESULT CRendererAssit::Render_LightAcc(const wstring& cameraTag, _bool bPBR)
 
 	m_pTargetMgr->Begin_MRT(m_pDeviceContext, TEXT("MRT_LightAcc"));
 
-	pLight_Manager->SetPBRCheck(bPBR);
-	pLight_Manager->Render_Lights(cameraTag);
+	pLight_Manager->Render_Lights(cameraTag, bPBR,shadow);
 
 	m_pTargetMgr->End_MRT(m_pDeviceContext);
 

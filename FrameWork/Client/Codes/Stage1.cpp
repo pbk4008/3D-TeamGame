@@ -2,6 +2,7 @@
 #include "Loading.h"
 #include "Stage1.h"
 #include "Environment.h"
+#include "SubEnvironment.h"
 
 #include "Effect_DashDust.h"
 #include "Effect_HitParticle.h"
@@ -150,6 +151,37 @@ HRESULT CStage1::Ready_MapObject()
 		}
 	}
 
+	//------------------------------------------- Tree --------------------------------------------------------------------//
+
+	vector<ENVIRONMENTLOADDATA> vecSubEnvData;
+	if (FAILED(g_pGameInstance->LoadFile<ENVIRONMENTLOADDATA>(vecSubEnvData, L"../bin/SaveData/Tree_Data.dat")))	
+		return E_FAIL;
+
+	vector<CSubEnvironment::ENVIRONMENTDESC> tSubEnvDesc;
+	tSubEnvDesc.resize(100);
+	_uint idx = 0;
+	tSubEnvDesc[idx].wstrInstaneTag = vecSubEnvData[0].FileName;
+	for (auto& pData : vecSubEnvData)
+	{
+		if (lstrcmp(tSubEnvDesc[idx].wstrInstaneTag.c_str(), pData.FileName))
+		{
+			idx++;
+			tSubEnvDesc[idx].wstrInstaneTag = pData.FileName;
+			tSubEnvDesc[idx].tInstanceDesc.vecMatrix.emplace_back(pData.WorldMat);
+		}
+		else
+			tSubEnvDesc[idx].tInstanceDesc.vecMatrix.emplace_back(pData.WorldMat);
+	}
+
+	for (auto& pDesc : tSubEnvDesc)
+	{
+		if (pDesc.wstrInstaneTag == L"") 
+			break;
+
+		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_SubEnvironment", L"Proto_GameObject_SubEnvironment", &pDesc))) 
+			return E_FAIL;
+	}
+
 	//wstring strTag = L"StageBackGround";
 	//g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Stage1_Back", L"Prototype_GameObject_BackGround", &strTag);
 
@@ -275,14 +307,14 @@ HRESULT CStage1::Ready_Light()
 
 	LightDesc.eType = LIGHTDESC::TYPE_DIRECTIONAL;
 	LightDesc.vDirection = _float3(0.f, -1.f, 1.f);
-	LightDesc.vDiffuse = _float4(0.0f, 0.0f, 1.f, 1.f);
+	LightDesc.vDiffuse = _float4(1.f, 1.f, 1.f, 1.f);
 	LightDesc.vSpecular = _float4(0.8f, 0.8f, 0.8f, 1.f);
 	LightDesc.vAmbient = _float4(0.6f, 0.6f, 0.6f, 1.f);
 
 	_vector up = { 0, 1.f, 0,0 };
-	_vector lookat = { 0.f, 1.f, 0.f, 1.f };
+	_vector lookat = { 10.f, -5.f, 10.f, 1.f };
 
-	LightDesc.mOrthinfo[0] = 50.f;
+	LightDesc.mOrthinfo[0] = 30.f;
 
 	XMStoreFloat3(&LightDesc.vPosition, ((XMLoadFloat3(&LightDesc.vDirection) * LightDesc.mOrthinfo[0] * -1.f) + lookat));
 	LightDesc.mLightView = XMMatrixLookAtLH(XMLoadFloat3(&LightDesc.vPosition), lookat, up);

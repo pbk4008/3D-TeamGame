@@ -24,7 +24,7 @@ private: CVIBuffer_RectViewPort*	m_pVIBuffer = nullptr;
 private: ID3D11Device*				m_pDevice = nullptr;
 private: ID3D11DeviceContext*		m_pDeviceContext = nullptr;
 
-private: _float						m_BrightThreshold = 0.75f; // 밝기 한계점 조절
+private: _float						m_BrightThreshold = 0.8f; // 밝기 한계점 조절
 private: _float						m_GaussMultipliter = 1.5f;
 private: _float						m_GaussMean = 0.0f;
 private: _float						m_GaussStdDev = 0.8f;

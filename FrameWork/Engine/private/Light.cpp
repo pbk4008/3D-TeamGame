@@ -31,7 +31,7 @@ void CLight::Tick()
 {
 }
 
-HRESULT CLight::Render(const wstring& pCameraTag, _bool PBRHDRcheck)
+HRESULT CLight::Render(const wstring& pCameraTag, _bool PBRHDRcheck, _bool Shadow)
 {
 	CTarget_Manager* pTarget_Manager = GET_INSTANCE(CTarget_Manager);
 	if (m_pVIBuffer != nullptr)
@@ -79,6 +79,7 @@ HRESULT CLight::Render(const wstring& pCameraTag, _bool PBRHDRcheck)
 		m_pVIBuffer->SetUp_ValueOnShader("g_ViewMatrixInv", &XMMatrixTranspose(ViewMatrix), sizeof(_float4x4));
 		m_pVIBuffer->SetUp_ValueOnShader("g_ProjMatrixInv", &XMMatrixTranspose(ProjMatrix), sizeof(_float4x4));
 		m_pVIBuffer->SetUp_ValueOnShader("g_bPBRHDR", &PBRHDRcheck, sizeof(_bool));
+		m_pVIBuffer->SetUp_ValueOnShader("g_bShadow", &Shadow, sizeof(_bool));
 
 		m_pVIBuffer->Render(iPassIndex);
 	}

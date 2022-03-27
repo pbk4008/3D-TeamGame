@@ -126,8 +126,8 @@ VS_OUT_SHADOW VS_MAIN_SHADOW(VS_IN In)
 
 	matrix matWV, matWVP;
 
-	matWV = mul(g_WorldMatrix, g_ViewMatrix);
-	matWVP = mul(matWV, g_ProjMatrix);
+	matWV = mul(g_WorldMatrix, g_LightView);
+	matWVP = mul(matWV, g_LightProj);
 
 	Out.vPosition = mul(vPosition, matWVP);
 	Out.vWorldPos = mul(vector(In.vPosition, 1.f), g_WorldMatrix);
