@@ -43,7 +43,7 @@ HRESULT CCamera_Silvermane::NativeConstruct(const _uint _iSceneID, void* _pArg)
 	m_pSilvermane->Set_Camera(this);
 
 	// 컬링용 카메라 따로생성
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_Camera", L"Proto_GameObject_Camera_Culling", this)))
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer(_iSceneID, L"Layer_Camera", L"Proto_GameObject_Camera_Culling", this)))
 		return E_FAIL;
 
 	return S_OK;
@@ -232,6 +232,7 @@ void CCamera_Silvermane::Free()
 	Safe_Release(m_pWorldTransform);
 
 	Safe_Release(m_pCamera);
+	Safe_Release(m_pCameraShake);
 
 	__super::Free();
 }

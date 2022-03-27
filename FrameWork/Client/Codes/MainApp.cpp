@@ -44,10 +44,10 @@ HRESULT CMainApp::NativeConstruct()
 
 	g_pObserver = CClient_Observer::GetInstance();
 	
-	CMeshLoader* pMeshLoader = CMeshLoader::GetInstance();
+	/*CMeshLoader* pMeshLoader = CMeshLoader::GetInstance();
 
 	if (FAILED(pMeshLoader->Reserve_MeshLoader(m_pDevice, m_pDeviceContext)))
-		return E_FAIL;
+		return E_FAIL;*/
 
 	return S_OK;
 }
@@ -250,7 +250,7 @@ void CMainApp::Free()
 	Safe_Release(g_pDebugSystem);
 #endif
 	CMeshLoader::DestroyInstance();
-	
+
 	Safe_Release(g_pObserver);
 
 	Safe_Release(m_pRenderer);

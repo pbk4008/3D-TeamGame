@@ -17,6 +17,7 @@ unsigned long CBase::Release()
 	{
 		Free();
 
+
 		delete this;
 
 		return 0;

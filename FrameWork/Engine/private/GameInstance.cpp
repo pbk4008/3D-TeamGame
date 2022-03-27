@@ -579,7 +579,7 @@ void CGameInstance::Release_Engine()
 		MSGBOX("Failed to Release CLight_Manager");
 
 	if (0 != CTarget_Manager::GetInstance()->DestroyInstance())
-		MSGBOX("Failed to Release CTarget_Manager");
+ 		MSGBOX("Failed to Release CTarget_Manager");
 
 	if (0 != CFrustum::GetInstance()->DestroyInstance())
 		MSGBOX("Failed to Release CFrustum");

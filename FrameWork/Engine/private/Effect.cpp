@@ -76,4 +76,5 @@ _fvector CEffect::UsingGravity(_fvector vPos, _double dDeltaTime)
 void CEffect::Free()
 {
 	CGameObject::Free();
+	Safe_Release(m_pTexture);
 }

@@ -154,5 +154,5 @@ CGameObject* CUI_Monster_Back::Clone(const _uint _iSceneID, void* pArg)
 
 void CUI_Monster_Back::Free()
 {
-	__super::Free();//Panel
+	__super::Free();
 }

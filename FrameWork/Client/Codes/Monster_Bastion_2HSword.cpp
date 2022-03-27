@@ -82,7 +82,7 @@ HRESULT CMonster_Bastion_2HSword::NativeConstruct(const _uint _iSceneID, void* _
 
 	m_isFall = true;
 
-	setActive(false);
+	//setActive(false);
 
 	return S_OK;
 }

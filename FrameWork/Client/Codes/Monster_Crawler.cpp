@@ -18,7 +18,17 @@ CMonster_Crawler::CMonster_Crawler(ID3D11Device* _pDevice, ID3D11DeviceContext* 
 
 CMonster_Crawler::CMonster_Crawler(const CMonster_Crawler& _rhs)
 	:CActor(_rhs)
+	, m_pModelCom(_rhs.m_pModelCom)
+	, m_pStateController(_rhs.m_pStateController)
+	, m_pCharacterController(_rhs.m_pCharacterController)
+	, m_pPanel(_rhs.m_pPanel)
+	, m_pCollider(_rhs.m_pCollider)
 {
+	Safe_AddRef(m_pModelCom);
+	Safe_AddRef(m_pStateController);
+	Safe_AddRef(m_pCharacterController);
+	Safe_AddRef(m_pPanel);
+	Safe_AddRef(m_pCollider);
 }
 
 void CMonster_Crawler::Clear_Physix()
@@ -94,7 +104,7 @@ HRESULT CMonster_Crawler::NativeConstruct(const _uint _iSceneID, void* _pArg)
 	m_pPanel->Set_GroggyBar(Get_GroggyGaugeRatio());
 
 	m_iObectTag = (_uint)GAMEOBJECT::MONSTER_CRYSTAL;
-	setActive(false);
+	//setActive(false);
 
 	return S_OK;
 }

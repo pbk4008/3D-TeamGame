@@ -86,7 +86,7 @@ HRESULT CMonster_Bastion_Sword::NativeConstruct(const _uint _iSceneID, void* _pA
 
 	//MonsterBar Panel
 	
-	setActive(false);
+	//setActive(false);
 	return S_OK;
 }
 
