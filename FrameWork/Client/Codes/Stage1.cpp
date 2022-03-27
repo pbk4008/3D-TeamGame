@@ -29,7 +29,9 @@ CStage1::CStage1(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
 
 HRESULT CStage1::NativeConstruct()
 {
-	m_bDebug = true;//false로 바꾸면 무조건 몬스터 다잡고 가야됩니다.
+	//몬스터 안잡고 진행하려면 true, 잡으면서 진행하려면 false (잡고갈때는 무조건 다 잡고가야됨)
+
+	m_bDebug = false;//false로 바꾸면 무조건 몬스터 다잡고 가야됩니다.
 #ifndef _DEBUG 
 	m_bDebug = false;
 #endif // DEBUG

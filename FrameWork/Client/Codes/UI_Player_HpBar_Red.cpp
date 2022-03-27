@@ -79,7 +79,7 @@ _int CUI_Player_HpBar_Red::Tick(_double TimeDelta)
 		if (1.f > fHpRatio)
 		{
 			//¿·¿¡ »ìÂ¦º¸¿©¼­ Ãß°¡ÀûÀ¸·Î ´õ ±ð¾ÆÁÜp 
-			fHpRatio = pUI->GetRatio() - 0.02f;
+			fHpRatio = pUI->GetRatio() - 0.031f;
 		}
 
 		if (m_fGapX > fHpRatio)

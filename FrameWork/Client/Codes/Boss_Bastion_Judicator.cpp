@@ -3,6 +3,7 @@
 #include "Animation.h"
 #include "ShieldBreaker.h"
 #include "UI_Monster_Panel.h"
+#include "Loading.h"
 
 #include "MidBoss_Idle.h"
 #include "MidBoss_Run.h"
@@ -139,9 +140,15 @@ _int CBoss_Bastion_Judicator::Tick(_double TimeDelta)
 	{
 		if (m_pAnimator->Get_CurrentAnimation()->Is_Finished())
 		{
-			m_bRemove = true;
-			m_pPanel->Set_Show(false);
-			setActive(false);
+			
+			//m_bRemove = true;
+			//m_pPanel->Set_Show(false);
+			//setActive(false);
+
+
+			//죽는애니메이션끝나고 씬이동하려는데 터짐 TO : 병규
+			if (FAILED(g_pGameInstance->Open_Level((_uint)SCENEID::SCENE_LOADING, CLoading::Create(m_pDevice, m_pDeviceContext, SCENEID::SCENE_STAGE2))))
+				return -1;
 		}
 	}
 
