@@ -27,12 +27,17 @@ HRESULT CTonemapping::InitToneMapping()
 	return S_OK;
 }
 
-HRESULT CTonemapping::Blend_FinalPass(CTarget_Manager* pTargetMgr, _bool check)
+HRESULT CTonemapping::Blend_FinalPass(CTarget_Manager* pTargetMgr, _bool check,_bool shadow)
 {
 	if (FAILED(pTargetMgr->Begin_MRT(m_pDeviceContext, TEXT("Target_Blend"))))	return E_FAIL;
-
 	
-	if (FAILED(m_pFinalBlend->SetUp_TextureOnShader("g_OriginTexture", pTargetMgr->Get_SRV(L"Target_HDRDiffuse"))))return E_FAIL;
+	if (FAILED(m_pFinalBlend->SetUp_TextureOnShader("g_OriginTexture", pTargetMgr->Get_SRV(L"Target_HDRDiffuse"))))		return E_FAIL;
+	
+
+	if (shadow == true)
+	{
+		if (FAILED(m_pFinalBlend->SetUp_TextureOnShader("g_ShadowTexture", pTargetMgr->Get_SRV(TEXT("Target_ShadeShadow")))))	return E_FAIL;
+	}
 
 	if (check == true)
 	{
@@ -53,6 +58,7 @@ HRESULT CTonemapping::Blend_FinalPass(CTarget_Manager* pTargetMgr, _bool check)
 	if (FAILED(m_pFinalBlend->SetUp_TextureOnShader("g_Blur16Texture", pTargetMgr->Get_SRV(L"Target_Horizontal16")))) return E_FAIL;
 
 	if (FAILED(m_pFinalBlend->SetUp_ValueOnShader("g_check", &check, sizeof(_bool)))) return E_FAIL;
+	if (FAILED(m_pFinalBlend->SetUp_ValueOnShader("g_shadow", &shadow, sizeof(_bool)))) return E_FAIL;
 
 	m_pFinalBlend->Render(0);
 

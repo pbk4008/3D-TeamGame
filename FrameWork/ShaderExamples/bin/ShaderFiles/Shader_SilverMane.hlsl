@@ -188,9 +188,9 @@ VS_OUT_SHADESHADOW VS_MAIN_SHADESHADOW(VS_IN In)
 	matLightWV = mul(g_WorldMatrix, g_LightView);
 	matLightWVP = mul(matLightWV, g_LightProj);
 	
-	Out.vPosition = mul(vector(vPosition.xyz, 1.f), matWVP);
+	Out.vPosition = mul(vPosition, matWVP);
 	Out.vTexUV = In.vTexUV;
-	Out.vLightPosition = mul(vector(vPosition.xyz, 1.f), matLightWVP);
+	Out.vLightPosition = mul(vPosition, matLightWVP);
 	//Out.vLightPosition = Out.vPosition;
 	
 	return Out;
@@ -221,9 +221,9 @@ PS_OUT_SHADOW PS_MAIN_SHADOW(PS_IN_SHADOW In)
 	
 	float Alpha = 1.f;
 	
-	if (color.r < 0.001f && color.g < 0.001f && color.b < 0.001f)
+	if (color.a < 0.1f)
 	{
-		Alpha = color.r;
+		Alpha = color.a;
 	}
 	
 	Out.vShadowDepthMap = vector(fDepth.xxx, Alpha);
@@ -266,7 +266,7 @@ PS_OUT_SHADESHADOW PS_MAIN_SHADESHADOW(PS_IN_SHADESHADOW In)
 	}
 	else
 	{
-		ShadowUV.y = -ShadowUV.y;
+		ShadowUV.y = (ShadowUV.y * -1.f);
 		ShadowUV = ShadowUV * 0.5f + 0.5f;
 
 		float shadowDepth;
@@ -277,13 +277,17 @@ PS_OUT_SHADESHADOW PS_MAIN_SHADESHADOW(PS_IN_SHADESHADOW In)
 		{
 			Out.vShadeShadow.rgb *= ShadowIntensity;
 
-			if (Diffuse.a < 0.1f)
+			if (Diffuse.a < 0.9f)
+			{
 				Out.vShadeShadow.a = Diffuse.a;
+			}
 		}
 		else
 		{
-			if (Diffuse.a < 0.1f)
+			if (Diffuse.a < 0.9f)
+			{
 				Out.vShadeShadow.a = Diffuse.a;
+			}
 		}
 	}
 	return Out;

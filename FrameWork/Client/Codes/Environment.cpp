@@ -77,8 +77,8 @@ HRESULT CEnvironment::Render()
 		return E_FAIL;
 
 	_matrix matWorld = XMMatrixTranspose(m_pTransform->Get_WorldMatrix());
-	_matrix matView = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Culling", TRANSFORMSTATEMATRIX::D3DTS_VIEW));
-	_matrix matProj = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Culling", TRANSFORMSTATEMATRIX::D3DTS_PROJECTION));
+	_matrix matView = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_VIEW));
+	_matrix matProj = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_PROJECTION));
 	_vector campos = g_pGameInstance->Get_CamPosition(L"Camera_Silvermane");
 
 	m_pInstanceMesh->SetUp_ValueOnShader("g_WorldMatrix", &matWorld, sizeof(_matrix));
@@ -130,8 +130,8 @@ HRESULT CEnvironment::Render_ShadeShadow(ID3D11ShaderResourceView* ShadowMap)
 
 	for (_uint i = 0; i < m_Nummeshcontainer; i++)
 	{
-		m_pInstanceMesh->Render(i, 3);
 		m_pInstanceMesh->SetUp_TextureOnShader("g_ShadowTexture", ShadowMap, i);
+		m_pInstanceMesh->Render(i, 3);
 	}
 
 	return S_OK;

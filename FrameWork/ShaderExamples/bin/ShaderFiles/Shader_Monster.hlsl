@@ -354,7 +354,7 @@ PS_OUT PS_MAIN_FUR(PS_IN In)
 	Out.diffuse.xyz = diffuse.xyz * 0.5f + 0.5f;
 	Out.diffuse.w = diffuse.w;
 	
-	float3 normal = In.vNormal;
+	float3 normal = In.vNormal.xyz;
 	normal = normalize(normal);
 	normal = normal * 0.5f + 0.5f;
 	Out.normal = float4(normal, 0.f);

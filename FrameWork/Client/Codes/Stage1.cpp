@@ -40,13 +40,13 @@ HRESULT CStage1::NativeConstruct()
 	if (FAILED(Ready_Light()))
 		return E_FAIL;
 	
-	if (FAILED(Ready_MapObject()))
-		return E_FAIL;
-
 	//if (FAILED(Ready_Trigger_Jump()))
 	//	return E_FAIL;
 	
 	if (FAILED(Ready_Player(L"Layer_Silvermane")))
+		return E_FAIL;
+
+	if (FAILED(Ready_MapObject()))
 		return E_FAIL;
 
 	//if (FAILED(Ready_TriggerSystem(L"../bin/SaveData/Trigger/MonsterSpawnTrigger.dat")))
@@ -91,7 +91,7 @@ HRESULT CStage1::NativeConstruct()
 	//if (FAILED(Ready_Treasure_Chest()))
 	//	return E_FAIL;
 
-	g_pGameInstance->Change_BaseCamera(L"Camera_Culling");
+	g_pGameInstance->Change_BaseCamera(L"Camera_Silvermane");
 
 
 	return S_OK;
@@ -156,7 +156,7 @@ HRESULT CStage1::Ready_MapObject()
 
 	//------------------------------------------- Tree --------------------------------------------------------------------//
 
-	vector<ENVIRONMENTLOADDATA> vecSubEnvData;
+	/*vector<ENVIRONMENTLOADDATA> vecSubEnvData;
 	if (FAILED(g_pGameInstance->LoadFile<ENVIRONMENTLOADDATA>(vecSubEnvData, L"../bin/SaveData/Tree_Data.dat")))	
 		return E_FAIL;
 
@@ -183,7 +183,7 @@ HRESULT CStage1::Ready_MapObject()
 
 		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_SubEnvironment", L"Proto_GameObject_SubEnvironment", &pDesc))) 
 			return E_FAIL;
-	}
+	}*/
 
 	//wstring strTag = L"StageBackGround";
 	//g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Stage1_Back", L"Prototype_GameObject_BackGround", &strTag);
@@ -318,25 +318,58 @@ HRESULT CStage1::Ready_Light()
 	LightDesc.vAmbient = _float4(0.6f, 0.6f, 0.6f, 1.f);
 
 	_vector up = { 0, 1.f, 0,0 };
-	_vector lookat = { 10.f, -5.f, 10.f, 1.f };
+	_vector lookat = { -1.f,1.f,1.f,0.f };
 
-	LightDesc.mOrthinfo[0] = 30.f;
+	LightDesc.mOrthinfo[0] = 50.f;
 
-	XMStoreFloat3(&LightDesc.vPosition, ((XMLoadFloat3(&LightDesc.vDirection) * LightDesc.mOrthinfo[0] * -1.f) + lookat));
+	_float3 dir = _float3(-1.f, -1.f, 1.f);
+	_vector vdir = XMVector3Normalize(XMLoadFloat3(&LightDesc.vDirection));
+	XMStoreFloat3(&LightDesc.vPosition, (vdir * LightDesc.mOrthinfo[0] * -1.f) + lookat);
 	LightDesc.mLightView = XMMatrixLookAtLH(XMLoadFloat3(&LightDesc.vPosition), lookat, up);
 
 	_vector origin = { 0,0,0,0 };
 	_float3	forigin;
+	//LightDesc.vPosition = _float3(20.f,100.f, -20.f);
+
+	//_float3 up = _float3(0, 1.f, 0);
+	//_float3 lookat = _float3(-10.f, 1.f, 5.f);
+
+	//_vector		vPosition = XMLoadFloat3(&LightDesc.vPosition);
+	//vPosition = XMVectorSetW(vPosition, 1.f);
+
+	//_vector		vLook = XMLoadFloat3(&lookat) - XMLoadFloat3(&LightDesc.vPosition);
+	//vLook = XMVector3Normalize(vLook);
+
+	///*XMStoreFloat3(&LightDesc.vDirection, vLook);*/
+
+	//_vector		vRight = XMVector3Cross(XMLoadFloat3(&up), vLook);
+	//vRight = XMVector3Normalize(vRight);
+
+	//_vector		vUp = XMVector3Cross(vLook, vRight);
+	//vUp = XMVector3Normalize(vUp);
+
+	//_matrix lightcam;
+	//lightcam.r[0] = vRight;
+	//lightcam.r[1] = vUp;
+	//lightcam.r[2] = vLook;
+	//lightcam.r[3] = vPosition;
+
+	//_vector origin = { 0,0,0,0 };
+	//_float3	forigin;
+
+	//LightDesc.mLightView = XMMatrixInverse(nullptr, lightcam);
 
 	origin = XMVector3TransformCoord(origin, LightDesc.mLightView);
 	XMStoreFloat3(&forigin, origin);
+
+	//LightDesc.mOrthinfo[0] = 30.f;
 
 	LightDesc.mOrthinfo[1] = forigin.x - LightDesc.mOrthinfo[0];
 	LightDesc.mOrthinfo[2] = forigin.x + LightDesc.mOrthinfo[0];
 	LightDesc.mOrthinfo[3] = forigin.y - LightDesc.mOrthinfo[0];
 	LightDesc.mOrthinfo[4] = forigin.y + LightDesc.mOrthinfo[0];
 
-	LightDesc.mLightProj = XMMatrixOrthographicLH(LightDesc.mOrthinfo[2] - LightDesc.mOrthinfo[1], LightDesc.mOrthinfo[4] - LightDesc.mOrthinfo[3], 0.1f, 300.f);
+	LightDesc.mLightProj = XMMatrixOrthographicLH(LightDesc.mOrthinfo[2] - LightDesc.mOrthinfo[1], LightDesc.mOrthinfo[4] - LightDesc.mOrthinfo[3], 0.1f, 500.f);
 
 	if (FAILED(g_pGameInstance->Add_Light(m_pDevice, m_pDeviceContext, LightDesc)))
 		return E_FAIL;

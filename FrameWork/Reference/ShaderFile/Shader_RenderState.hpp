@@ -78,5 +78,5 @@ BlendState AlphaBlending
 
 BlendState BlendDisable
 {
-	BlendEnable[0] = false;	
+	BlendEnable[0] = false;
 };

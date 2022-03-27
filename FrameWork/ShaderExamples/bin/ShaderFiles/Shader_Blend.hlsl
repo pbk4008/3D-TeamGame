@@ -22,11 +22,13 @@ texture2D g_Blur2Texture;
 texture2D g_Blur4Texture;
 texture2D g_Blur8Texture;
 texture2D g_Blur16Texture;
+texture2D g_ShadowTexture;
 
 
 cbuffer check
 {
 	bool g_check;
+	bool g_shadow;
 };
 
 struct VS_IN
@@ -80,7 +82,13 @@ PS_OUT PS_MAIN_BLEND(PS_IN In)
 	float4 emissive = ((emission) * 1.f + (blur2) * 1.3f + (blur4) * 1.5f + (blur8) * 2.5f + (blur16) * 3.5f);
 	float4 final = float4(0, 0, 0, 0);
 	if (g_check == true)
-	{
+	{	
+		if(g_shadow == true)
+		{
+			float4 shadow = g_ShadowTexture.Sample(DefaultSampler, In.vTexUV);
+			diffuse = diffuse * shadow;
+		}
+		
 		final.rgb = diffuse.rgb + specular.rgb + emissive.rgb;
 		final.a = originA + emissive.a/* + specular.a*/;
 	}
