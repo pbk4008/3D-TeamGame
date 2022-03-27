@@ -3,6 +3,7 @@
 #include "Animation.h"
 #include "ShieldBreaker.h"
 #include "UI_Monster_Panel.h"
+#include "Loading.h"
 
 #include "MidBoss_Idle.h"
 #include "MidBoss_Run.h"
@@ -53,34 +54,15 @@ HRESULT CBoss_Bastion_Judicator::NativeConstruct(const _uint _iSceneID, void* pA
 
 	if (FAILED(Set_State_FSM()))
 		return E_FAIL;
-
-	CHierarchyNode* pBone = m_pModelCom->Get_BoneMatrix("weapon_r_end");
-	CShieldBreaker* pWeapon = CShieldBreaker::Create(m_pDevice, m_pDeviceContext);
-	pWeapon->NativeConstruct(m_iSceneID, pBone);
-	pWeapon->Set_Owner(this);
-	pWeapon->Set_OwnerPivotMatrix(m_pModelCom->Get_PivotMatrix());
-	m_pWeapon = pWeapon;
-
-	/*_vector Pos = { 0.f, 0.f, 10.f, 1.f };
-	m_pTransform->Set_State(CTransform::STATE_POSITION, Pos);*/
-
 	
-
-	//MidBossBar Panel
-	CUI_Monster_Panel::PANELDESC Desc;
-	Desc.pTargetTransform = m_pTransform;
-	Desc.iEnemyTag = CUI_Monster_Panel::Enemy::MIDBOSS;
-
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_UI", L"Proto_GameObject_UI_Monster_Panel", &Desc,
-		(CGameObject**)&m_pPanel)))
+	if (FAILED(Set_Weapon()))
 		return E_FAIL;
 
-	m_pPanel->Set_TargetWorldMatrix(m_pTransform->Get_WorldMatrix());
+	if (FAILED(Set_PanelBar()))
+		return E_FAIL;
 
-	m_bIsFall  = true;
-	m_iObectTag = (_uint)GAMEOBJECT::MIDDLE_BOSS;
 
-	//아래 세팅은 꼭 해줄것, 그래야 UI나옴 초기값 넣어줘야됨
+	//TODO : 아래 세팅은 꼭 해줄것, 그래야 UI나옴 초기값 넣어줘야됨
 	m_fMaxHp = 5.f;
 	m_fCurrentHp = m_fMaxHp;
 
@@ -100,7 +82,6 @@ _int CBoss_Bastion_Judicator::Tick(_double TimeDelta)
 	{
 		m_pPanel->Set_Show(true);
 	}
-
 
 	if (0 > __super::Tick(TimeDelta))
 	{
@@ -159,9 +140,15 @@ _int CBoss_Bastion_Judicator::Tick(_double TimeDelta)
 	{
 		if (m_pAnimator->Get_CurrentAnimation()->Is_Finished())
 		{
-			m_bRemove = true;
-			m_pPanel->Set_Show(false);
-			setActive(false);
+			
+			//m_bRemove = true;
+			//m_pPanel->Set_Show(false);
+			//setActive(false);
+
+
+			//죽는애니메이션끝나고 씬이동하려는데 터짐 TO : 병규
+			if (FAILED(g_pGameInstance->Open_Level((_uint)SCENEID::SCENE_LOADING, CLoading::Create(m_pDevice, m_pDeviceContext, SCENEID::SCENE_STAGE2))))
+				return -1;
 		}
 	}
 
@@ -484,6 +471,42 @@ HRESULT CBoss_Bastion_Judicator::Set_State_FSM()
 	return S_OK;
 }
 
+HRESULT CBoss_Bastion_Judicator::Set_Weapon()
+{
+	CHierarchyNode* pBone = m_pModelCom->Get_BoneMatrix("weapon_r_end");
+	CShieldBreaker* pWeapon = CShieldBreaker::Create(m_pDevice, m_pDeviceContext);
+
+	if (FAILED(pWeapon->NativeConstruct(m_iSceneID, pBone)))
+	{
+		return E_FAIL;
+	}
+
+	pWeapon->Set_Owner(this);
+	pWeapon->Set_OwnerPivotMatrix(m_pModelCom->Get_PivotMatrix());
+	m_pWeapon = pWeapon;
+
+	return S_OK;
+}
+
+HRESULT CBoss_Bastion_Judicator::Set_PanelBar()
+{
+	//MidBossBar Panel
+	CUI_Monster_Panel::PANELDESC Desc;
+	Desc.pTargetTransform = m_pTransform;
+	Desc.iEnemyTag = CUI_Monster_Panel::Enemy::MIDBOSS;
+
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_UI", L"Proto_GameObject_UI_Monster_Panel", &Desc,
+		(CGameObject**)&m_pPanel)))
+		return E_FAIL;
+
+	m_pPanel->Set_TargetWorldMatrix(m_pTransform->Get_WorldMatrix());
+
+	m_bIsFall = true;
+	m_iObectTag = (_uint)GAMEOBJECT::MIDDLE_BOSS;
+
+	return S_OK;
+}
+
 void CBoss_Bastion_Judicator::OnTriggerEnter(CCollision& collision)
 {
 
@@ -509,7 +532,6 @@ void CBoss_Bastion_Judicator::OnTriggerEnter(CCollision& collision)
 				m_pPanel->Set_GroggyBar(Get_GroggyGaugeRatio());
 			}
 		}
-
 		else
 		{
 

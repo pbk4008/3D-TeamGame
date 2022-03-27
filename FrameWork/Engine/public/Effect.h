@@ -52,10 +52,17 @@ protected:
 	virtual HRESULT Render();
 protected:
 	_fvector UsingGravity(_fvector vPos, _double dDeltaTime);
+	
+public:
+	void Set_Reset(_bool bReset) { m_bReset = bReset; }
 
 protected:
 	CTexture* m_pTexture;
 	EFFECTDESC	m_Desc;
+
+	_float m_DeadTimeAcc = 0.f; //이펙트삭제시킬시간
+	_bool m_bReset = false; //이펙트 초기화 할 변수 
+
 protected:
 	virtual void Free() override;
 };

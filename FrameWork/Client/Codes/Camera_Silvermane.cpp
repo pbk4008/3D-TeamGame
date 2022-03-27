@@ -160,9 +160,11 @@ _int CCamera_Silvermane::Input_Key(const _double& _dDeltaTime)
 		m_vRot.y += MouseMove * (_float)_dDeltaTime * 4.f;
 		m_pWorldTransform->SetUp_Rotation(m_vRot);
 	}
+
 	MouseMove = g_pGameInstance->getMouseMoveState(CInputDev::MOUSEMOVESTATE::MM_Y);
 	if (MouseMove)
 	{
+		//m_pWorldTransform->Rotation_Axis(m_pWorldTransform->Get_State(CTransform::STATE_RIGHT), _dDeltaTime * MouseMove * 0.1f);
 		m_vRot.x += MouseMove * (_float)_dDeltaTime * 4.f;
 		if (30.f < m_vRot.x)
 			m_vRot.x = 30.f;

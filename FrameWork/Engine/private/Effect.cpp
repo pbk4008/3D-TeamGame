@@ -46,7 +46,6 @@ HRESULT CEffect::NativeConstruct(const _uint _iSceneID, void* pArg)
 
 	m_pTransform->Set_State(CTransform::STATE_POSITION, m_Desc.fMyPos);
 	m_iObectTag = m_Desc.IDTag;
-
 	return S_OK;
 }
 
@@ -75,6 +74,7 @@ _fvector CEffect::UsingGravity(_fvector vPos, _double dDeltaTime)
 
 void CEffect::Free()
 {
+	Safe_Release(m_pTexture);
 	CGameObject::Free();
 	Safe_Release(m_pTexture);
 }

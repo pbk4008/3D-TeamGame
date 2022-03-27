@@ -82,7 +82,7 @@ void CEffectTool_Dlg::DoDataExchange(CDataExchange* pDX)
 	DDV_MinMaxFloat(pDX, m_fRandomDirZ, 1, 99999);
 	DDV_MinMaxFloat(pDX, m_LiftTime, 0.1, 99999);
 	DDV_MinMaxFloat(pDX, m_Age, 0, 99999);
-	DDV_MinMaxFloat(pDX, m_IDTag, 0, 99999);
+	DDV_MinMaxFloat(pDX, m_IDTag, 0, 99999); //이펙트는 15고정
 	DDV_MinMaxInt(pDX, m_BaseCount, 1, 99999);
 
 
@@ -131,7 +131,7 @@ void CEffectTool_Dlg::InitialTextureTree()
 
 	CFileFind fFinder;
 
-	BOOL bWorking = fFinder.FindFile(_T("\\*.tga"));
+	BOOL bWorking = fFinder.FindFile(_T("\\*.dds"));
 
 	while (bWorking)
 	{
@@ -250,9 +250,10 @@ void CEffectTool_Dlg::OnBnClickedButtonApply()
 	_tcscpy_s(m_EffectDesc.ShaderFilePath, ShaderFolderPath.c_str());
 	_tcscpy_s(m_EffectDesc.ShaderFileName, ShaderFileName.c_str());
 	_tcscpy_s(m_EffectDesc.ShaderFullFilePath, ShaderFullPath.c_str());
-
+	
 	wstring Name = m_strPickFileName;
-	wstring FullName = L"Prototype_GameObject_Effect"/* + Name*/;
+	//wstring FullName = L"Prototype_GameObject_Effect"/* + Name*/;
+	wstring FullName = L"Prototype_GameObject_Effect_Floating"/* + Name*/;
 
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer(TOOL_LEVEL::TOOL_LEVEL_GAMEPLAY, L"Layer_Effect", FullName, &m_EffectDesc)))
 	{
@@ -313,7 +314,7 @@ void CEffectTool_Dlg::OnTvnSelchangedTree1(NMHDR* pNMHDR, LRESULT* pResult)
 			AfxExtractSubString(strExt, strPath, 1, '.');
 
 			if (finder.IsDots()) continue;
-			if (0 != strExt.CompareNoCase(_T("tga")))
+			//if (0 != strExt.CompareNoCase(_T("tga")))
 				m_ShaderPathTree.InsertItem(finder.GetFileName(), hSelected);
 		}
 	}
@@ -379,7 +380,7 @@ void CEffectTool_Dlg::OnTvnSelchangedTree3(NMHDR* pNMHDR, LRESULT* pResult)
 
 	/* 선택한 fbx 파일에 대한 정보를 가져온다 */
 	CString strSelectItem = m_TextureTree.GetItemText(hSelected);
-	CString strFilter = L".tga";
+	CString strFilter = L".dds";
 
 	if (-1 != strSelectItem.Find(strFilter))
 	{
@@ -511,8 +512,9 @@ void CEffectTool_Dlg::OnBnClickedButtonLoad()
 
 	for (int i = 0; i < m_vecEffect.size(); ++i)
 	{
-		wstring Tag = m_vecEffect[i].TextureTag;
-		wstring FullName = L"Prototype_GameObject_Effect"/* + Tag*/;
+		wstring Tag = m_vecEffect[i].TextureTag; 
+		//wstring FullName = L"Prototype_GameObject_Effect"/* + Tag*/;
+		wstring FullName = L"Prototype_GameObject_Effect_Floating"/* + Tag*/;
 
 		if (FAILED(g_pGameInstance->Add_GameObjectToLayer(TOOL_LEVEL::TOOL_LEVEL_GAMEPLAY, L"Layer_Effect", FullName, &m_vecEffect[i])))
 		{

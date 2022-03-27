@@ -119,7 +119,7 @@ HRESULT CMFCObject_UI::SetUp_Components()
 	{
 		CVIBuffer_Trapezium::TRAPDESC Desc;
 		Desc.fAngle = m_Desc.fAngle;
-		_tcscpy_s(Desc.ShaderFilePath, L"../../Reference/ShaderFile/Shader_Rect.hlsl");
+		_tcscpy_s(Desc.ShaderFilePath, L"../../Reference/ShaderFile/Shader_UI.hlsl");
 
 		Desc.bMinus = m_Desc.bMinus;
 

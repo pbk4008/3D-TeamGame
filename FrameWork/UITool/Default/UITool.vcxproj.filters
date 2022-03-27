@@ -61,6 +61,9 @@
     <Filter Include="05.Level\Effect">
       <UniqueIdentifier>{2896475c-aac4-4f70-9959-9da15d79502c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="04.Object\02.Effect\Floating">
+      <UniqueIdentifier>{5c6426a2-70c4-4be3-97dc-4e84839d8046}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MainFrm.h">
@@ -123,6 +126,9 @@
     <ClInclude Include="MFCLevel_Play.h">
       <Filter>05.Level\Effect</Filter>
     </ClInclude>
+    <ClInclude Include="MFCEffect_floating.h">
+      <Filter>04.Object\02.Effect\Floating</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MainFrm.cpp">
@@ -172,6 +178,9 @@
     </ClCompile>
     <ClCompile Include="MFCLevel_Play.cpp">
       <Filter>05.Level\Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="MFCEffect_floating.cpp">
+      <Filter>04.Object\02.Effect\Floating</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -36,6 +36,8 @@ private:
 	virtual HRESULT SetUp_Components();
 	HRESULT Set_Animation_FSM();
 	HRESULT Set_State_FSM();
+	HRESULT Set_Weapon();
+	HRESULT Set_PanelBar();
 
 private:
 	virtual void OnTriggerEnter(CCollision& collision) override;
