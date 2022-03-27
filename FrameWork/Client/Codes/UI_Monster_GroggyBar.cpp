@@ -4,12 +4,15 @@
 #include "GameInstance.h"
 
 CUI_Monster_GroggyBar::CUI_Monster_GroggyBar(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
-	:CUI_Monster_Panel(pDevice,pDeviceContext)
+	:CUI(pDevice,pDeviceContext)
+
 {
+	ZeroMemory(&m_UIBarDesc, sizeof(m_UIBarDesc));
 }
 
-CUI_Monster_GroggyBar::CUI_Monster_GroggyBar(const CUI_Monster_Panel& rhs)
-	: CUI_Monster_Panel(rhs)
+CUI_Monster_GroggyBar::CUI_Monster_GroggyBar(const CUI_Monster_GroggyBar& rhs)
+	: CUI(rhs)
+	, m_UIBarDesc(rhs.m_UIBarDesc)
 {
 }
 
@@ -118,12 +121,7 @@ HRESULT CUI_Monster_GroggyBar::SetUp_Components()
 
 	Desc.bMinus = m_UIBarDesc.UIDesc.bMinus;
 
-	m_pTrapziumBuffer = g_pGameInstance->Clone_Component<CVIBuffer_Trapezium>(0, L"Proto_Component_Trapezium_UI", &Desc);
-
-	if (!m_pTrapziumBuffer)
-		return E_FAIL;
-
-	if (FAILED(CGameObject::SetUp_Components(L"Com_Trapezium_UI", m_pTrapziumBuffer)))
+	if (FAILED(CGameObject::SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_Trapezium_UI", L"Com_Trapezium_UI", (CComponent**)&m_pTrapziumBuffer,&Desc)))
 		return E_FAIL;
 
 	return S_OK;

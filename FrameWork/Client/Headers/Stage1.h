@@ -59,6 +59,7 @@ private:
 	virtual void Free() override;
 private:
 	CTriggerSystem<CStage1>* m_pTriggerSystem;
+	_bool m_bDebug;
 };
 #endif
 

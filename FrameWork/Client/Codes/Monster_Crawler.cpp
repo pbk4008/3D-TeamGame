@@ -77,13 +77,12 @@ HRESULT CMonster_Crawler::NativeConstruct(const _uint _iSceneID, void* _pArg)
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_UI", L"Proto_GameObject_UI_Monster_Panel", &Desc,
 		(CGameObject**)&m_pPanel)))
 		return E_FAIL;
+	//레이어에도 넣어주고 변수도 가지고 있기때문에 Add_Ref필수!!
+	Safe_AddRef(m_pPanel);
 
 	m_pPanel->Set_TargetWorldMatrix(m_pTransform->Get_WorldMatrix());
 
-
 	m_bIsFall = true;
-
-	m_iObectTag = (_uint)GAMEOBJECT::MONSTER_CRYSTAL;
 
 	m_fMaxHp = 3.f;
 	m_fCurrentHp = m_fMaxHp;
@@ -94,6 +93,7 @@ HRESULT CMonster_Crawler::NativeConstruct(const _uint _iSceneID, void* _pArg)
 	m_pPanel->Set_HpBar(Get_HpRatio());
 	m_pPanel->Set_GroggyBar(Get_GroggyGaugeRatio());
 
+	m_iObectTag = (_uint)GAMEOBJECT::MONSTER_CRYSTAL;
 	setActive(false);
 
 	return S_OK;
@@ -106,9 +106,6 @@ _int CMonster_Crawler::Tick(_double _dDeltaTime)
 	{
 		m_pPanel->Set_Show(true);
 	}
-
-	
-
 	m_pTransform->Set_Velocity(XMVectorZero());
 
 	m_pPanel->Set_TargetWorldMatrix(m_pTransform->Get_WorldMatrix());
@@ -141,11 +138,7 @@ _int CMonster_Crawler::Tick(_double _dDeltaTime)
 	if (DEATH == m_pAnimatorCom->Get_CurrentAnimNode())
 	{
 		if (m_pAnimatorCom->Get_CurrentAnimation()->Is_Finished())
-		{
-			m_bRemove = true;
-			m_pPanel->Set_Show(false);
-			setActive(false);
-		}
+			Set_Remove(true);
 	}
 
 	m_pCharacterController->Move(_dDeltaTime, m_pTransform->Get_Velocity());
@@ -395,6 +388,12 @@ HRESULT CMonster_Crawler::Set_State_FSM()
 	return S_OK;
 }
 
+void CMonster_Crawler::Set_Remove(_bool bCheck)
+{
+	m_bRemove = bCheck;
+	m_pPanel->Set_UIRemove(m_bRemove);
+}
+
 CMonster_Crawler* CMonster_Crawler::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
 {
 	CMonster_Crawler* pInstance = new CMonster_Crawler(_pDevice, _pDeviceContext);
@@ -425,7 +424,7 @@ void CMonster_Crawler::Free()
 		Safe_Release(m_pCharacterController);
 	}
 
-	//Safe_Release(m_pPanel);
+	Safe_Release(m_pPanel);
 	Safe_Release(m_pStateController);
 	Safe_Release(m_pAnimatorCom);
 	Safe_Release(m_pModelCom);

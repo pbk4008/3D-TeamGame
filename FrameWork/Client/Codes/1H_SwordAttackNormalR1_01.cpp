@@ -22,8 +22,11 @@ _int C1H_SwordAttackNormalR1_01::Tick(const _double& _dDeltaTime)
 	if (NO_EVENT != iProgress)
 		return iProgress;
 
-	if(m_iCutIndex < m_pAnimationController->Get_CurKeyFrameIndex())
-		m_pSilvermane->Set_IsAttack((false));
+	if (m_pSilvermane->IsAttack())
+	{
+		if (m_iCutIndex < m_pAnimationController->Get_CurKeyFrameIndex())
+			m_pSilvermane->Set_IsAttack((false));
+	}
 
 	if (m_pAnimationController->Is_Finished())
 	{

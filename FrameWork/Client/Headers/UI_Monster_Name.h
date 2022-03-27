@@ -3,7 +3,7 @@
 #ifndef UI_Monster_Name_h__
 #define UI_Monster_Name_h__
 
-#include "UI_Monster_Panel.h"
+#include "UI.h"
 
 BEGIN(Engine)
 class CVIBuffer_Rect;
@@ -13,7 +13,7 @@ class CTransform;
 END
 
 BEGIN(Client)
-class CUI_Monster_Name final : public CUI_Monster_Panel
+class CUI_Monster_Name final : public CUI
 {
 public:
 	typedef struct tagUIDesc
@@ -24,7 +24,7 @@ public:
 
 private:
 	explicit CUI_Monster_Name(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);
-	explicit CUI_Monster_Name(const CUI_Monster_Panel& rhs);
+	explicit CUI_Monster_Name(const CUI_Monster_Name& rhs);
 	virtual ~CUI_Monster_Name() = default;
 
 public:

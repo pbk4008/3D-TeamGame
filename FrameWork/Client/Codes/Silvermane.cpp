@@ -294,8 +294,8 @@ HRESULT CSilvermane::Render()
 
 	_matrix smatWorld, smatView, smatProj;
 	smatWorld = XMMatrixTranspose(m_pTransform->Get_CombinedMatrix());
-	smatView = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Culling", TRANSFORMSTATEMATRIX::D3DTS_VIEW));
-	smatProj = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Culling", TRANSFORMSTATEMATRIX::D3DTS_PROJECTION));
+	smatView = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_VIEW));
+	smatProj = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_PROJECTION));
 
 	if(FAILED(m_pModel->SetUp_ValueOnShader("g_WorldMatrix", &smatWorld, sizeof(_matrix))))
 		return E_FAIL;
@@ -387,11 +387,8 @@ HRESULT CSilvermane::Render_Debug()
 	if (FAILED(g_pGameInstance->Render_Font(TEXT("Font_Arial"), XMVectorSet(1.f, 0.0f, 0.f, 1.f), wstrCurAnimTag.c_str(), _float2(0.f, 100.f), _float2(0.6f, 0.6f))))
 		return E_FAIL;
 
-	wstring wstrAnimFinished = L"";
-	if (m_pAnimationController->Is_Finished())
-		wstrAnimFinished = L"AnimFinished : true";
-	else
-		wstrAnimFinished = L"AnimFinished : false";
+	wstring wstrAnimFinished = L"AnimFinished : ";
+	m_pAnimationController->Is_Finished() == true ? wstrAnimFinished += L"true" : wstrAnimFinished += L"false";
 	if (FAILED(g_pGameInstance->Render_Font(TEXT("Font_Arial"), XMVectorSet(1.f, 0.0f, 0.f, 1.f), wstrAnimFinished.c_str(), _float2(0.f, 120.f), _float2(0.6f, 0.6f))))
 		return E_FAIL;
 
@@ -405,10 +402,17 @@ HRESULT CSilvermane::Render_Debug()
 	if (FAILED(g_pGameInstance->Render_Font(TEXT("Font_Arial"), XMVectorSet(1.f, 0.0f, 0.f, 1.f), wstrPlusAngle.c_str(), _float2(0.f, 160.f), _float2(0.6f, 0.6f))))
 		return E_FAIL;
 
+	// 위치
 	_float3 vPosition;
 	XMStoreFloat3(&vPosition, m_pTransform->Get_State(CTransform::STATE_POSITION));
 	wstring wstrPosition = L"Position : " + to_wstring(vPosition.x) + L", " + to_wstring(vPosition.y) + L", " + to_wstring(vPosition.z);
 	if (FAILED(g_pGameInstance->Render_Font(TEXT("Font_Arial"), XMVectorSet(1.f, 0.0f, 0.f, 1.f), wstrPosition.c_str(), _float2(0.f, 180.f), _float2(0.6f, 0.6f))))
+		return E_FAIL;
+
+	// 공격 상태
+	wstring wstrIsAttack = L"IsAttack : ";
+	m_IsAttack == true ? wstrIsAttack += L"true" : wstrIsAttack += L"false";
+	if (FAILED(g_pGameInstance->Render_Font(TEXT("Font_Arial"), XMVectorSet(1.f, 0.0f, 0.f, 1.f), wstrIsAttack.c_str(), _float2(0.f, 200.f), _float2(0.6f, 0.6f))))
 		return E_FAIL;
 
 	return S_OK;

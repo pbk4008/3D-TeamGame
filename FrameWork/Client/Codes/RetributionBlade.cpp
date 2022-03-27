@@ -2,7 +2,6 @@
 #include "RetributionBlade.h"
 
 #include "HierarchyNode.h"
-#include "Silvermane.h"
 #include "Monster_Bastion_2HSword.h"
 #include "Material.h"
 #include "StateController.h"

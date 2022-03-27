@@ -20,7 +20,14 @@ _int C1H_SwordAttackNormalR2_ReleaseStab::Tick(const _double& _dDeltaTime)
 	if (NO_EVENT != iProgress)
 		return iProgress;
 
-	m_iCutIndex = 30;
+
+	if (m_pSilvermane->IsAttack())
+	{
+		if (30 < m_pAnimationController->Get_CurKeyFrameIndex())
+			m_pSilvermane->Set_IsAttack(false);
+	}
+
+
 	if (m_pAnimationController->Is_Finished())
 	{
 		if (FAILED(m_pStateController->Change_State(L"Idle")))
@@ -63,7 +70,8 @@ HRESULT C1H_SwordAttackNormalR2_ReleaseStab::EnterState()
 	}
 
 
-	m_iCutIndex = 16;
+	//m_iCutIndex = 16;
+	m_iCutIndex = 30;
 	return S_OK;
 }
 

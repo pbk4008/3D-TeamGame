@@ -122,6 +122,7 @@ HRESULT CEarthAberrant_Pick::Render()
 	{
 		m_pModel->Render(i, 0);
 	}
+	return S_OK;
 }
 
 HRESULT CEarthAberrant_Pick::Ready_Components()

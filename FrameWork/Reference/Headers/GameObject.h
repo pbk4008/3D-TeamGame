@@ -51,6 +51,8 @@ public:
 	_int getTag() { return m_iObectTag; }
 	_bool getRemove() { return m_bRemove; }
 	CTransform* Get_Transform() const;
+public:
+	virtual void Set_Remove(_bool bCheck) { m_bRemove = bCheck; };
 protected:
 	ID3D11Device* m_pDevice;
 	ID3D11DeviceContext*	m_pDeviceContext;

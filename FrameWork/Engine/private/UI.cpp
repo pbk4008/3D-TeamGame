@@ -7,7 +7,10 @@ CUI::CUI()
 	: m_pBuffer(nullptr)
 	, m_pTexture(nullptr)
 	, m_pTrapziumBuffer(nullptr)
+	, m_bFirstShow(false)
+	, m_bShow(false)
 {
+	ZeroMemory(&m_Desc, sizeof(m_Desc));
 }
 
 CUI::CUI(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
@@ -15,8 +18,10 @@ CUI::CUI(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
 	, m_pBuffer(nullptr)
 	, m_pTexture(nullptr)
 	, m_pTrapziumBuffer(nullptr)
+	, m_bFirstShow(false)
+	, m_bShow(false)
 {
-
+	ZeroMemory(&m_Desc, sizeof(m_Desc));
 }
 
 CUI::CUI(const CUI& rhs)
@@ -24,6 +29,9 @@ CUI::CUI(const CUI& rhs)
 	, m_pBuffer(rhs.m_pBuffer)
 	, m_pTexture(rhs.m_pTexture)
 	, m_pTrapziumBuffer(rhs.m_pTrapziumBuffer)
+	, m_bFirstShow(rhs.m_bFirstShow)
+	, m_bShow(rhs.m_bShow)
+	, m_Desc(rhs.m_Desc)
 {
 	Safe_AddRef(m_pBuffer);
 	Safe_AddRef(m_pTexture);

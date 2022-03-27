@@ -100,9 +100,10 @@ HRESULT CBullet::Ready_Component(const _uint iSceneID)
 {
 	CTransform::TRANSFORMDESC tDesc;
 	ZeroMemory(&tDesc, sizeof(tDesc));
+	tDesc.fRotationPerSec = XMConvertToRadians(90.f);
+	tDesc.fSpeedPerSec = m_fSpeed;
 
 	m_pTransform->Set_TransformDesc(tDesc);
-	m_pTransform->Scaling(XMVectorSet(0.05f, 0.05f, 0.05f,0.f));
 
 	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Model_Shooter_Bullet", L"BulletModel", (CComponent**)&m_pModelCom)))
 		return E_FAIL;
@@ -126,15 +127,15 @@ HRESULT CBullet::Set_Spawn()
 {
 	_matrix matMatrix = XMLoadFloat4x4(&m_matBulletPosMatrix);
 	_matrix matRotate = XMMatrixRotationAxis(XMVectorSet(0.f, 1.f, 0.f, 0.f), XMConvertToRadians(180.f));
+	
+	_vector vLook = matMatrix.r[2];
+	vLook = XMVector3TransformNormal(vLook, matRotate);
+	matMatrix.r[2] = vLook;
 
+	_matrix matTranslation = XMMatrixTranslation(0.f, 1.3f, 0.f);
+	matMatrix *= matTranslation;
 
-	_vector vPos = matMatrix.r[3];
-	m_pTransform->Set_State(CTransform::STATE_POSITION, vPos);
-
-	_vector vDir = XMVector3Normalize(matMatrix.r[2]);
-	vDir = XMVector3TransformNormal(vDir,matRotate);
-
-	XMStoreFloat4(&m_fDir, vDir);
+	m_pTransform->Set_WorldMatrix(matMatrix);
 
 	return S_OK;
 }
@@ -153,13 +154,14 @@ _uint CBullet::Move(_double dDeltaTime)
 	m_fSpawnTime += dDeltaTime;
 	if (m_fSpawnTime < 5.f)
 	{
-		_vector vDir = XMLoadFloat4(&m_fDir);
+		m_pTransform->Go_Straight(dDeltaTime);
+		//_vector vDir = XMLoadFloat4(&m_fDir);
 
-		_vector vPos = m_pTransform->Get_State(CTransform::STATE_POSITION);
+		//_vector vPos = m_pTransform->Get_State(CTransform::STATE_POSITION);
 
-		vPos += vDir*dDeltaTime*m_fSpeed;
+		//vPos += vDir*dDeltaTime*m_fSpeed;
 
-		m_pTransform->Set_State(CTransform::STATE_POSITION, vPos);
+		//m_pTransform->Set_State(CTransform::STATE_POSITION, vPos);
 	}
 	else
 	{
@@ -197,4 +199,5 @@ void CBullet::Free()
 {
 	CGameObject::Free();
 	Safe_Release(m_pModelCom);
+	Safe_Release(m_pCollider);
 }

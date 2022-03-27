@@ -92,6 +92,9 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
             if (FAILED(pMainGame->Render()))
                 break;
 
+            if (FAILED(pMainGame->Destroy()))
+                break;
+
             // 마우스 클라이언트에 락
             if (g_pGameInstance->getkeyDown(DIK_PGDN))
                 g_isLockMouse = !g_isLockMouse;

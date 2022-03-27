@@ -2,7 +2,6 @@
 #include "Staff.h"
 
 #include "HierarchyNode.h"
-#include "Silvermane.h"
 #include "Monster_Bastion_Healer.h"
 #include "Material.h"
 #include "StateController.h"
