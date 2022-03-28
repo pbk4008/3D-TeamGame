@@ -44,7 +44,7 @@ HRESULT CCamera_Silvermane::NativeConstruct(const _uint _iSceneID, void* _pArg)
 	m_pSilvermane->Set_Camera(this);
 
 	// 컬링용 카메라 따로생성
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_Camera", L"Proto_GameObject_Camera_Culling", this)))
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer(_iSceneID, L"Layer_Camera", L"Proto_GameObject_Camera_Culling", this)))
 		return E_FAIL;
 
 	return S_OK;
@@ -211,9 +211,11 @@ _int CCamera_Silvermane::Input_Key(const _double& _dDeltaTime)
 		m_vRot.y += MouseMove * (_float)_dDeltaTime * 4.f;
 		m_pWorldTransform->SetUp_Rotation(m_vRot);
 	}
+
 	MouseMove = g_pGameInstance->getMouseMoveState(CInputDev::MOUSEMOVESTATE::MM_Y);
 	if (MouseMove)
 	{
+		//m_pWorldTransform->Rotation_Axis(m_pWorldTransform->Get_State(CTransform::STATE_RIGHT), _dDeltaTime * MouseMove * 0.1f);
 		m_vRot.x += MouseMove * (_float)_dDeltaTime * 4.f;
 		if (20.f < m_vRot.x)
 			m_vRot.x = 20.f;
@@ -285,6 +287,7 @@ void CCamera_Silvermane::Free()
 	Safe_Release(m_pWorldTransform);
 
 	Safe_Release(m_pCamera);
+	Safe_Release(m_pCameraShake);
 
 	__super::Free();
 }

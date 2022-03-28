@@ -156,11 +156,12 @@ PS_OUT PS_MAIN(PS_IN In)
 	PS_OUT		Out = (PS_OUT)0;
 
 	Out.vColor = g_DiffuseTexture.Sample(DefaultSampler, In.vTexUV);
-	//Out.vColor.gb = 0.f;
-	//Out.vColor.r = 1.f;
+    Out.vColor.r = 1.f;
+    Out.vColor.g = 0.6f;
+    Out.vColor.b = 0.3f;
 
-	//if (Out.vColor.a < 0.01)
-	//	discard;
+    //if (Out.vColor.a < 0.01)
+    //    discard;
 
 	return Out;
 }
@@ -218,6 +219,19 @@ technique11			DefaultTechnique
         VertexShader = compile vs_5_0 VS_MAIN();
         GeometryShader = compile gs_5_0 GS_MAIN();
         PixelShader = compile ps_5_0 PS_MAIN_MULTIIMAGE();
+    }
+
+    pass AlphaAdd
+    {
+		/* 렌더스테이츠에 대한 정의. */
+        SetRasterizerState(CullMode_Default);
+        SetDepthStencilState(ZDefault, 0);
+        SetBlendState(AlphaAdditive, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+
+		/* 진입점함수를 지정한다. */
+        VertexShader = compile vs_5_0 VS_MAIN();
+        GeometryShader = compile gs_5_0 GS_MAIN();
+        PixelShader = compile ps_5_0 PS_MAIN();
     }
 }
 

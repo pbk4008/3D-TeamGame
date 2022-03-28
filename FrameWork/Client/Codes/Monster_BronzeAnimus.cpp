@@ -222,7 +222,7 @@ HRESULT CMonster_BronzeAnimus::Ready_Components()
 
 
 	// ¸ðµ¨
-	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Model_BronzeAnimus", L"Model", (CComponent**)&m_pModel)))
+	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STAGE2, L"Model_BronzeAnimus", L"Model", (CComponent**)&m_pModel)))
 		return E_FAIL;
 	_matrix matPivot = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(180.f));
 	m_pModel->Set_PivotMatrix(matPivot);

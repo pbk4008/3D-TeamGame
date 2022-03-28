@@ -316,6 +316,7 @@
     <ClInclude Include="..\Headers\DebugSystem.h" />
     <ClInclude Include="..\Headers\EarthAberrant_Pick.h" />
     <ClInclude Include="..\Headers\Effect_DashDust.h" />
+    <ClInclude Include="..\Headers\Effect_HitFloating.h" />
     <ClInclude Include="..\Headers\Effect_HitParticle.h" />
     <ClInclude Include="..\Headers\Environment.h" />
     <ClInclude Include="..\Headers\Fury.h" />
@@ -565,6 +566,7 @@
     <ClCompile Include="..\Codes\Crawler_Ricochet.cpp" />
     <ClCompile Include="..\Codes\Crawler_Walk.cpp" />
     <ClCompile Include="..\Codes\EarthAberrant_Pick.cpp" />
+    <ClCompile Include="..\Codes\Effect_HitFloating.cpp" />
     <ClCompile Include="..\Codes\Effect_HitParticle.cpp" />
     <ClCompile Include="..\Codes\Fury.cpp" />
     <ClCompile Include="..\Codes\JumpBox.cpp" />

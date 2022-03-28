@@ -27,6 +27,7 @@ HRESULT CMonster_Bastion_Spear::NativeConstruct(const _uint _iSceneID, void* _pA
 	if (FAILED(Ready_Components()))
 		return E_FAIL;
 
+	setActive(false);
 	return S_OK;
 }
 
@@ -90,12 +91,12 @@ HRESULT CMonster_Bastion_Spear::Ready_Components()
 	_float4 vPosition = { -3.f, 0.f, -3.f, 1.f };
 	m_pTransform->Set_State(CTransform::STATE_POSITION, XMLoadFloat4(&vPosition));
 
-	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_TEST_JS, L"Model_Bastion_Spear", L"Model", (CComponent**)&m_pModel)))
+	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STAGE2, L"Model_Bastion_Spear", L"Model", (CComponent**)&m_pModel)))
 		return E_FAIL;
-	m_pModel->Add_Material(g_pGameInstance->Get_Material(L"Mtrl_Bastion_Tier1_Down"), 0);
-	m_pModel->Add_Material(g_pGameInstance->Get_Material(L"Mtrl_Bastion_Tier1_Top"), 1);
+	//m_pModel->Add_Material(g_pGameInstance->Get_Material(L"Mtrl_Bastion_Tier1_Down"), 0);
+	//m_pModel->Add_Material(g_pGameInstance->Get_Material(L"Mtrl_Bastion_Tier1_Top"), 1);
 
-	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_TEST_JS, L"Com_AnimationController", L"AnimationController", (CComponent**)&m_pAnimationController)))
+	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_AnimationController", L"AnimationController", (CComponent**)&m_pAnimationController)))
 		return E_FAIL;
 	m_pAnimationController->Set_GameObject(this);
 	m_pAnimationController->Set_Model(m_pModel);
