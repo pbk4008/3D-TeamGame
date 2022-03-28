@@ -3,6 +3,9 @@
 #include "Loading.h"
 #include "Stage1.h"
 #include "Environment.h"
+#include "SubEnvironment.h"
+
+#include "Boss_Bastion_Judicator.h"
 
 #include "Effect_DashDust.h"
 #include "Effect_HitParticle.h"
@@ -13,7 +16,7 @@
 #include "UI_Tuto_Font.h"
 
 #include "JumpNode.h"
-#include "JumpTrigger.h"
+#include "JumpBox.h"
 
 CStage1::CStage1()
 	: m_pTriggerSystem(nullptr)
@@ -43,20 +46,14 @@ HRESULT CStage1::NativeConstruct()
 	if (FAILED(Ready_Light()))
 		return E_FAIL;
 	
-	if (FAILED(Ready_MapObject()))
-	{
-		return E_FAIL;
-	}
-
 	if (FAILED(Ready_Trigger_Jump()))
-	{
 		return E_FAIL;
-	}
 
 	if (FAILED(Ready_Player(L"Layer_Silvermane")))
-	{
 		return E_FAIL;
-	}
+
+	if (FAILED(Ready_MapObject()))
+		return E_FAIL;
 
 	if (FAILED(Ready_TriggerSystem(L"../bin/SaveData/Trigger/MonsterSpawnTrigger.dat")))
 		return E_FAIL;
@@ -76,10 +73,10 @@ HRESULT CStage1::NativeConstruct()
 		return E_FAIL;
 	}
 
-	if (FAILED(Ready_Data_Effect()))
-	{
-		return E_FAIL;
-	}
+	//if (FAILED(Ready_Data_Effect()))
+	//{
+	//	return E_FAIL;
+	//}
 
 	if (FAILED(Ready_UI(L"Layer_UI")))
 	{
@@ -99,7 +96,7 @@ HRESULT CStage1::NativeConstruct()
 	//if (FAILED(Ready_Treasure_Chest()))
 	//	return E_FAIL;
 
-	g_pGameInstance->Change_BaseCamera(L"Camera_Culling");
+	g_pGameInstance->Change_BaseCamera(L"Camera_Silvermane");
 
 
 	return S_OK;
@@ -115,11 +112,23 @@ _int CStage1::Tick(_double TimeDelta)
 		if (FAILED(g_pGameInstance->Open_Level((_uint)SCENEID::SCENE_LOADING, pLoading)))
 			return -1;
 		g_pDebugSystem->Set_LevelcMoveCheck(false);
+		return 0;
 	}
 #endif //  _DEBUG
+
 	if (nullptr != m_pTriggerSystem)
 	{
 		m_pTriggerSystem->Tick(TimeDelta);
+	}
+
+	CBoss_Bastion_Judicator* pBoss = (CBoss_Bastion_Judicator*)g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Layer_Boss")->front();
+	if (nullptr != pBoss)
+	{
+		if (true == pBoss->Get_Dead())
+		{
+			if (FAILED(g_pGameInstance->Open_Level((_uint)SCENEID::SCENE_LOADING, CLoading::Create(m_pDevice, m_pDeviceContext, SCENEID::SCENE_STAGE2))))
+				return -1;
+		}
 	}
 
 	return _int();
@@ -133,6 +142,7 @@ HRESULT CStage1::Render()
 		m_pTriggerSystem->Render();
 	}
 #endif
+
 	return S_OK;
 }
 
@@ -167,6 +177,37 @@ HRESULT CStage1::Ready_MapObject()
 			return E_FAIL;
 		}
 	}
+
+	//------------------------------------------- Tree --------------------------------------------------------------------//
+
+	/*vector<ENVIRONMENTLOADDATA> vecSubEnvData;
+	if (FAILED(g_pGameInstance->LoadFile<ENVIRONMENTLOADDATA>(vecSubEnvData, L"../bin/SaveData/Tree_Data.dat")))	
+		return E_FAIL;
+
+	vector<CSubEnvironment::ENVIRONMENTDESC> tSubEnvDesc;
+	tSubEnvDesc.resize(100);
+	_uint idx = 0;
+	tSubEnvDesc[idx].wstrInstaneTag = vecSubEnvData[0].FileName;
+	for (auto& pData : vecSubEnvData)
+	{
+		if (lstrcmp(tSubEnvDesc[idx].wstrInstaneTag.c_str(), pData.FileName))
+		{
+			idx++;
+			tSubEnvDesc[idx].wstrInstaneTag = pData.FileName;
+			tSubEnvDesc[idx].tInstanceDesc.vecMatrix.emplace_back(pData.WorldMat);
+		}
+		else
+			tSubEnvDesc[idx].tInstanceDesc.vecMatrix.emplace_back(pData.WorldMat);
+	}
+
+	for (auto& pDesc : tSubEnvDesc)
+	{
+		if (pDesc.wstrInstaneTag == L"") 
+			break;
+
+		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_SubEnvironment", L"Proto_GameObject_SubEnvironment", &pDesc))) 
+			return E_FAIL;
+	}*/
 
 	//wstring strTag = L"StageBackGround";
 	//g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Stage1_Back", L"Prototype_GameObject_BackGround", &strTag);
@@ -208,7 +249,7 @@ HRESULT CStage1::Ready_Monster(const _tchar* LayerTag)
 {
 	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Proto_GameObject_Monster_Crawler")))
 	//	return E_FAIL;
-
+	
 	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Proto_GameObject_Monster_EarthAberrant")))
 	//	return E_FAIL;
 	//
@@ -290,31 +331,64 @@ HRESULT CStage1::Ready_Light()
 	ZeroMemory(&LightDesc, sizeof(LIGHTDESC));
 
 	LightDesc.eType = LIGHTDESC::TYPE_DIRECTIONAL;
-	LightDesc.vDirection = _float3(-1.f, -1.f, 1.f);
+	LightDesc.vDirection = _float3(0.f, -1.f, 1.f);
 	LightDesc.vDiffuse = _float4(1.f, 1.f, 1.f, 1.f);
 	LightDesc.vSpecular = _float4(0.8f, 0.8f, 0.8f, 1.f);
 	LightDesc.vAmbient = _float4(0.6f, 0.6f, 0.6f, 1.f);
 
 	_vector up = { 0, 1.f, 0,0 };
-	_vector lookat = { 0.f, 1.f, 0.f, 1.f };
+	_vector lookat = { -1.f,1.f,1.f,0.f };
 
-	LightDesc.mOrthinfo[0] = 50.f;
+	LightDesc.mOrthinfo[0] = 40.f;
 
-	XMStoreFloat3(&LightDesc.vPosition, ((XMLoadFloat3(&LightDesc.vDirection) * LightDesc.mOrthinfo[0] * -1.f) + lookat));
+	_float3 dir = _float3(-1.f, -1.f, 1.f);
+	_vector vdir = XMVector3Normalize(XMLoadFloat3(&LightDesc.vDirection));
+	XMStoreFloat3(&LightDesc.vPosition, (vdir * LightDesc.mOrthinfo[0] * -1.f) + lookat);
 	LightDesc.mLightView = XMMatrixLookAtLH(XMLoadFloat3(&LightDesc.vPosition), lookat, up);
 
 	_vector origin = { 0,0,0,0 };
 	_float3	forigin;
+	//LightDesc.vPosition = _float3(20.f,100.f, -20.f);
+
+	//_float3 up = _float3(0, 1.f, 0);
+	//_float3 lookat = _float3(-10.f, 1.f, 5.f);
+
+	//_vector		vPosition = XMLoadFloat3(&LightDesc.vPosition);
+	//vPosition = XMVectorSetW(vPosition, 1.f);
+
+	//_vector		vLook = XMLoadFloat3(&lookat) - XMLoadFloat3(&LightDesc.vPosition);
+	//vLook = XMVector3Normalize(vLook);
+
+	///*XMStoreFloat3(&LightDesc.vDirection, vLook);*/
+
+	//_vector		vRight = XMVector3Cross(XMLoadFloat3(&up), vLook);
+	//vRight = XMVector3Normalize(vRight);
+
+	//_vector		vUp = XMVector3Cross(vLook, vRight);
+	//vUp = XMVector3Normalize(vUp);
+
+	//_matrix lightcam;
+	//lightcam.r[0] = vRight;
+	//lightcam.r[1] = vUp;
+	//lightcam.r[2] = vLook;
+	//lightcam.r[3] = vPosition;
+
+	//_vector origin = { 0,0,0,0 };
+	//_float3	forigin;
+
+	//LightDesc.mLightView = XMMatrixInverse(nullptr, lightcam);
 
 	origin = XMVector3TransformCoord(origin, LightDesc.mLightView);
 	XMStoreFloat3(&forigin, origin);
+
+	//LightDesc.mOrthinfo[0] = 30.f;
 
 	LightDesc.mOrthinfo[1] = forigin.x - LightDesc.mOrthinfo[0];
 	LightDesc.mOrthinfo[2] = forigin.x + LightDesc.mOrthinfo[0];
 	LightDesc.mOrthinfo[3] = forigin.y - LightDesc.mOrthinfo[0];
 	LightDesc.mOrthinfo[4] = forigin.y + LightDesc.mOrthinfo[0];
 
-	LightDesc.mLightProj = XMMatrixOrthographicLH(LightDesc.mOrthinfo[2] - LightDesc.mOrthinfo[1], LightDesc.mOrthinfo[4] - LightDesc.mOrthinfo[3], 0.1f, 300.f);
+	LightDesc.mLightProj = XMMatrixOrthographicLH(LightDesc.mOrthinfo[2] - LightDesc.mOrthinfo[1], LightDesc.mOrthinfo[4] - LightDesc.mOrthinfo[3], 0.1f, 500.f);
 
 	if (FAILED(g_pGameInstance->Add_Light(m_pDevice, m_pDeviceContext, LightDesc)))
 		return E_FAIL;
@@ -570,6 +644,7 @@ void CStage1::Trgger_Function3()
 		iter++;
 		(*iter)->setActive(true);
 	}
+
 }
 
 void CStage1::Trgger_Function4()
@@ -602,6 +677,7 @@ void CStage1::Trgger_Function4()
 		iter++;
 		(*iter)->setActive(true);
 	}
+
 }
 
 void CStage1::Trgger_Function5()
@@ -994,23 +1070,26 @@ HRESULT CStage1::Ready_Trigger_Jump()
 	tJumpNodeDesc.vPosition = { 25.f, 5.f, 84.f };
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_JumpNode", L"Proto_GameObject_JumpNode", &tJumpNodeDesc)))
 		return E_FAIL;
-	tJumpNodeDesc.vPosition = { -25.f, 8.f, 100.f };
+	tJumpNodeDesc.vPosition = { -25.f, 8.f, 98.f };
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_JumpNode", L"Proto_GameObject_JumpNode", &tJumpNodeDesc)))
 		return E_FAIL;
 	tJumpNodeDesc.vPosition = { -176.f, 50.f, 335.f };
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_JumpNode", L"Proto_GameObject_JumpNode", &tJumpNodeDesc)))
 		return E_FAIL;
 
-	// 점프 트리거들
-	CJumpTrigger::DESC tJumpTriggerDesc;
-	tJumpTriggerDesc.vPosition = { -47.f, 4.5f, 81.f };
-	tJumpTriggerDesc.vRotation = { 0.f, 90.f, 0.f };
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_JumpTrigger", L"Proto_GameObject_JumpTrigger", &tJumpTriggerDesc)))
+	// 점프 박스들
+	CJumpBox::DESC tJumpBoxrDesc;
+	tJumpBoxrDesc.vPosition = { -42.5f, 4.5f, 82.f };
+	tJumpBoxrDesc.vRotation = { 0.f, 0.f, 0.f };
+	tJumpBoxrDesc.vScale = { 7.f, 2.f, 8.f };
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_JumpBox", L"Proto_GameObject_JumpBox", &tJumpBoxrDesc)))
 		return E_FAIL;
-	tJumpTriggerDesc.vPosition = { -136.f, 18.5f, 236.f };
-	tJumpTriggerDesc.vRotation = { 0.f, 0.f, 0.f };
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_JumpTrigger", L"Proto_GameObject_JumpTrigger", &tJumpTriggerDesc)))
+	tJumpBoxrDesc.vPosition = { -136.5f, 19.f, 231.5f };
+	tJumpBoxrDesc.vRotation = { 0.f, 0.f, 0.f };
+	tJumpBoxrDesc.vScale = { 7.f, 2.f, 6.f };
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_JumpBox", L"Proto_GameObject_JumpBox", &tJumpBoxrDesc)))
 		return E_FAIL;
+
 
 	return S_OK;
 }

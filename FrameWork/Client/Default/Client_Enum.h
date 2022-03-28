@@ -34,6 +34,7 @@ enum class GAMEOBJECT
 	// Æ®¸®°Å
 	JUMP_TRIGGER,
 	JUMP_NODE,
+	JUMP_BOX,
 	// END, MAX, SIZE
 	GAMEOBJECT_END,
 };

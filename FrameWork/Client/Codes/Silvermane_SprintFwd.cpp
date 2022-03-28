@@ -20,6 +20,8 @@ _int CSilvermane_SprintFwd::Tick(const _double& _dDeltaTime)
 	if (NO_EVENT != iProgress)
 		return iProgress;
 
+	//m_pSilvermane->Add_Velocity(CTransform::STATE_LOOK, _dDeltaTime * 2.f);
+
 	return _int();
 }
 
@@ -61,9 +63,9 @@ HRESULT CSilvermane_SprintFwd::ExitState()
 }
 
 #pragma region 실패한 코드들
-//_int CSilvermane_SprintFwd::KeyCheck(const _double& _dDeltaTime)
+//_int CSilvermane_SprintFwd::Input(const _double& _dDeltaTime)
 //{
-//	_int iProgress = __super::KeyCheck(_dDeltaTime);
+//	_int iProgress = __super::Input(_dDeltaTime);
 //	if (NO_EVENT != iProgress)
 //		return iProgress;
 //
@@ -211,9 +213,9 @@ HRESULT CSilvermane_SprintFwd::ExitState()
 //
 //	return _int();
 //}
-//_int CSilvermane_SprintFwd::KeyCheck(const _double& _dDeltaTime)
+//_int CSilvermane_SprintFwd::Input(const _double& _dDeltaTime)
 //{
-//	_int iProgress = __super::KeyCheck(_dDeltaTime);
+//	_int iProgress = __super::Input(_dDeltaTime);
 //	if (NO_EVENT != iProgress)
 //		return iProgress;
 //
@@ -413,9 +415,9 @@ HRESULT CSilvermane_SprintFwd::ExitState()
 //}
 #pragma endregion
 
-_int CSilvermane_SprintFwd::KeyCheck(const _double& _dDeltaTime)
+_int CSilvermane_SprintFwd::Input(const _double& _dDeltaTime)
 {
-	_int iProgress = __super::KeyCheck(_dDeltaTime);
+	_int iProgress = __super::Input(_dDeltaTime);
 	if (NO_EVENT != iProgress)
 		return iProgress;
 

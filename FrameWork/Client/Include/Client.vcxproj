@@ -98,6 +98,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <Profile>true</Profile>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -133,6 +134,7 @@
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>../../Reference/Library/Debug/</AdditionalLibraryDirectories>
+      <Profile>true</Profile>
     </Link>
     <PostBuildEvent>
       <Command>
@@ -181,6 +183,7 @@
     <ClInclude Include="..\Default\Client_Struct.h" />
     <ClInclude Include="..\Default\Clinet_Define.h" />
     <ClInclude Include="..\Headers\1H_Dash.h" />
+    <ClInclude Include="..\Headers\1H_FlinchLeft.h" />
     <ClInclude Include="..\Headers\1H_SwordAttack.h" />
     <ClInclude Include="..\Headers\1H_SwordAttackNormalR1_01.h" />
     <ClInclude Include="..\Headers\1H_SwordAttackNormalR1_02.h" />
@@ -319,6 +322,7 @@
     <ClInclude Include="..\Headers\Effect_HitParticle.h" />
     <ClInclude Include="..\Headers\Environment.h" />
     <ClInclude Include="..\Headers\Fury.h" />
+    <ClInclude Include="..\Headers\JumpBox.h" />
     <ClInclude Include="..\Headers\JumpNode.h" />
     <ClInclude Include="..\Headers\JumpTrigger.h" />
     <ClInclude Include="..\Headers\Level_Logo.h" />
@@ -347,6 +351,7 @@
     <ClInclude Include="..\Headers\Needle.h" />
     <ClInclude Include="..\Headers\Plane_Test.h" />
     <ClInclude Include="..\Headers\Polearm.h" />
+    <ClInclude Include="..\Headers\ShakeManager.h" />
     <ClInclude Include="..\Headers\Shield.h" />
     <ClInclude Include="..\Headers\Shield_Block.h" />
     <ClInclude Include="..\Headers\Shield_BlockEnd.h" />
@@ -378,6 +383,7 @@
     <ClInclude Include="..\Headers\Silvermane.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClInclude>
+    <ClInclude Include="..\Headers\Silvermane_Hit.h" />
     <ClInclude Include="..\Headers\Silvermane_Idle.h" />
     <ClInclude Include="..\Headers\Silvermane_Jog.h" />
     <ClInclude Include="..\Headers\Silvermane_JogBwd.h" />
@@ -417,6 +423,7 @@
     <ClInclude Include="..\Headers\Stage3.h" />
     <ClInclude Include="..\Headers\Stargazer.h" />
     <ClInclude Include="..\Headers\State_Silvermane.h" />
+    <ClInclude Include="..\Headers\SubEnvironment.h" />
     <ClInclude Include="..\Headers\TestObj.h" />
     <ClInclude Include="..\Headers\TestScene_JS.h" />
     <ClInclude Include="..\Headers\TestScene_Sb.h" />
@@ -445,6 +452,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Codes\1H_Dash.cpp" />
+    <ClCompile Include="..\Codes\1H_FlinchLeft.cpp" />
     <ClCompile Include="..\Codes\1H_SwordAttack.cpp" />
     <ClCompile Include="..\Codes\1H_SwordAttackNormalR1_01.cpp" />
     <ClCompile Include="..\Codes\1H_SwordAttackNormalR1_02.cpp" />
@@ -578,6 +586,7 @@
     <ClCompile Include="..\Codes\Effect_HitFloating.cpp" />
     <ClCompile Include="..\Codes\Effect_HitParticle.cpp" />
     <ClCompile Include="..\Codes\Fury.cpp" />
+    <ClCompile Include="..\Codes\JumpBox.cpp" />
     <ClCompile Include="..\Codes\JumpTrigger.cpp" />
     <ClCompile Include="..\Codes\MeshLoader.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
@@ -613,6 +622,7 @@
     <ClCompile Include="..\Codes\Needle.cpp" />
     <ClCompile Include="..\Codes\Plane_Test.cpp" />
     <ClCompile Include="..\Codes\Polearm.cpp" />
+    <ClCompile Include="..\Codes\ShakeManager.cpp" />
     <ClCompile Include="..\Codes\Shield.cpp" />
     <ClCompile Include="..\Codes\Shield_Block.cpp" />
     <ClCompile Include="..\Codes\Shield_BlockEnd.cpp" />
@@ -641,6 +651,7 @@
     <ClCompile Include="..\Codes\Shooter_Hit.cpp" />
     <ClCompile Include="..\Codes\Shooter_Idle.cpp" />
     <ClCompile Include="..\Codes\Shooter_Walk.cpp" />
+    <ClCompile Include="..\Codes\Siilvermane_Hit.cpp" />
     <ClCompile Include="..\Codes\Silvermane.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
@@ -683,6 +694,7 @@
     <ClCompile Include="..\Codes\Stage3.cpp" />
     <ClCompile Include="..\Codes\Stargazer.cpp" />
     <ClCompile Include="..\Codes\State_Silvermane.cpp" />
+    <ClCompile Include="..\Codes\SubEnvironment.cpp" />
     <ClCompile Include="..\Codes\TestObj.cpp" />
     <ClCompile Include="..\Codes\TestScene_JS.cpp" />
     <ClCompile Include="..\Codes\TestScene_Sb.cpp" />

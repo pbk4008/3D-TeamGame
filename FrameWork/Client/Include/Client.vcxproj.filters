@@ -175,18 +175,6 @@
     <Filter Include="02.GameObject\03.Character\00.Player\00.Silvermane\State\2H_Hammer\R2">
       <UniqueIdentifier>{e33ba3ef-21b0-430f-8b2b-2ca2d50e74c5}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObject\03.Character\00.Player\00.Silvermane\State\Hand">
-      <UniqueIdentifier>{19b51444-9f5c-44a9-bc78-08fede730b1b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObject\03.Character\00.Player\00.Silvermane\State\Hand\Default">
-      <UniqueIdentifier>{1536151b-11e6-4800-81eb-1e5406329ed6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObject\03.Character\00.Player\00.Silvermane\State\Hand\Jog">
-      <UniqueIdentifier>{01f7ac04-32d9-487c-9957-9dcf393a6d81}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObject\03.Character\00.Player\00.Silvermane\State\Hand\Sprint">
-      <UniqueIdentifier>{f86ae29b-ccc6-4e20-aafd-431e17d61329}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObject\03.Character\00.Player\00.Silvermane\State\Shield">
       <UniqueIdentifier>{4590a2ac-338a-47ba-8c6b-df9838b1d71e}</UniqueIdentifier>
     </Filter>
@@ -297,9 +285,6 @@
     </Filter>
     <Filter Include="02.GameObject\02.Map\01.Environment">
       <UniqueIdentifier>{2671a8b6-a2a8-4ec2-ad0d-b3e116f33512}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObject\02.Map\02.JumpNode">
-      <UniqueIdentifier>{15743125-3fab-4955-a1a7-2c3ab22ace2e}</UniqueIdentifier>
     </Filter>
     <Filter Include="02.GameObject\03.Character\02.Boss">
       <UniqueIdentifier>{5e4ce90c-d575-4e08-9ce0-006401437c35}</UniqueIdentifier>
@@ -505,6 +490,14 @@
     <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_Healer\State_Healer\Groggy">
       <UniqueIdentifier>{be23ca3f-dcd4-4d54-94af-faa9de66f577}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\02.Map\02.JumpNode">
+      <UniqueIdentifier>{15743125-3fab-4955-a1a7-2c3ab22ace2e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\02.Map\01.Environment\Tree">
+      <UniqueIdentifier>{afa39133-5db9-4588-b538-151dc4a78680}</UniqueIdentifier>
+	</Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_2HSword\State_2HSword\Groggy\End">
+	</Filter>
     <Filter Include="02.GameObject\04.Effect\03.Effect_Floating">
       <UniqueIdentifier>{be60742a-b954-4dc6-8968-d6849db69d5c}</UniqueIdentifier>
 	</Filter>
@@ -592,6 +585,21 @@
     <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_Spear\State\Attack\Charge_Attack\End">
       <UniqueIdentifier>{8e1cd7a6-b86e-43a2-95a1-d0ceef66deb8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="03.System\01.ShakeManager">
+      <UniqueIdentifier>{88c490a5-4de2-42f5-8177-be9cf2784d4b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.System\00.Trigger\Client_Trigger">
+      <UniqueIdentifier>{b9091f0b-2046-48f5-9b0a-b245f8fa1e4e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\00.Player\00.Silvermane\State\Idel">
+      <UniqueIdentifier>{c9495a7f-fa32-4be2-9ed1-f71f827bba41}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\00.Player\00.Silvermane\State\Idel\Jog">
+      <UniqueIdentifier>{01f7ac04-32d9-487c-9957-9dcf393a6d81}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\00.Player\00.Silvermane\State\Idel\Sprint">
+      <UniqueIdentifier>{f86ae29b-ccc6-4e20-aafd-431e17d61329}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -651,56 +659,53 @@
     <ClInclude Include="..\Headers\Camera_Silvermane.h">
       <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\Camera</Filter>
     </ClInclude>
-    <ClInclude Include="..\Headers\Silvermane_Idle.h">
-      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Hand\Default</Filter>
-    </ClInclude>
     <ClInclude Include="..\Headers\Silvermane_JogBwd.h">
-      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Hand\Jog</Filter>
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Idel\Jog</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\Silvermane_JogBwdPivot180.h">
-      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Hand\Jog</Filter>
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Idel\Jog</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\Silvermane_JogBwdStart.h">
-      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Hand\Jog</Filter>
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Idel\Jog</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\Silvermane_JogFwd.h">
-      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Hand\Jog</Filter>
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Idel\Jog</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\Silvermane_JogFwdPivot180.h">
-      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Hand\Jog</Filter>
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Idel\Jog</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\Silvermane_JogFwdStart.h">
-      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Hand\Jog</Filter>
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Idel\Jog</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\Silvermane_JogFwdStop.h">
-      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Hand\Jog</Filter>
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Idel\Jog</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\Silvermane_JogLeft.h">
-      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Hand\Jog</Filter>
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Idel\Jog</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\Silvermane_JogLeftPivot180.h">
-      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Hand\Jog</Filter>
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Idel\Jog</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\Silvermane_JogLeftStart.h">
-      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Hand\Jog</Filter>
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Idel\Jog</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\Silvermane_JogRight.h">
-      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Hand\Jog</Filter>
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Idel\Jog</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\Silvermane_JogRightPivot180.h">
-      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Hand\Jog</Filter>
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Idel\Jog</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\Silvermane_JogRightStart.h">
-      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Hand\Jog</Filter>
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Idel\Jog</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\Silvermane_SprintFwd.h">
-      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Hand\Sprint</Filter>
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Idel\Sprint</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\Silvermane_SprintFwdStart.h">
-      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Hand\Sprint</Filter>
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Idel\Sprint</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\Silvermane_SprintFwdStop.h">
-      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Hand\Sprint</Filter>
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Idel\Sprint</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\Plane_Test.h">
       <Filter>02.GameObject\02.Map\00.Plane</Filter>
@@ -736,7 +741,7 @@
       <Filter>02.GameObject\03.Character\01.Monster\EarthAberrant</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\Silvermane_Jog.h">
-      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Hand\Jog</Filter>
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Idel\Jog</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\1H_SwordAttack.h">
       <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\1H_Sword</Filter>
@@ -847,7 +852,7 @@
       <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\2H_Hammer\Jog</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\Silvermane_Sprint.h">
-      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Hand\Sprint</Filter>
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Idel\Sprint</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\1H_SwordEquipOff.h">
       <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\1H_Sword\Default</Filter>
@@ -1013,9 +1018,6 @@
     </ClInclude>
     <ClInclude Include="..\Headers\Shield_SupermanPunchStraight.h">
       <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Shield\Attack</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Headers\Client_Trigger.h">
-      <Filter>03.System\00.Trigger</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\TestScene_YM.h">
       <Filter>01.Scene\98.TestScene_YM</Filter>
@@ -1235,9 +1237,6 @@
     <ClInclude Include="..\Headers\UI_Tuto_Font.h">
       <Filter>02.GameObject\05.UI\01.UI_Ingame\01.Meter\05.Tutorial\01.SideTutorial\01.Font</Filter>
     </ClInclude>
-    <ClInclude Include="..\Headers\TriggerSystem.h">
-      <Filter>03.System</Filter>
-    </ClInclude>
     <ClInclude Include="..\Headers\MidBoss_Death.h">
       <Filter>02.GameObject\03.Character\02.Boss\00.MiddleBoss\State\04.Death</Filter>
     </ClInclude>
@@ -1308,6 +1307,9 @@
     <ClInclude Include="..\Headers\Bastion_Healer_Groggy.h">
       <Filter>02.GameObject\03.Character\01.Monster\Bastion_Healer\State_Healer\Groggy</Filter>
     </ClInclude>
+    <ClInclude Include="..\Headers\SubEnvironment.h">
+      <Filter>02.GameObject\02.Map\01.Environment\Tree</Filter>
+	</ClInclude>
     <ClInclude Include="..\Headers\Shooter_Attack.h" />
     <ClInclude Include="..\Headers\Effect_HitFloating.h">
       <Filter>02.GameObject\04.Effect\03.Effect_Floating</Filter>
@@ -1363,7 +1365,7 @@
     </ClInclude>
     <ClInclude Include="..\Headers\BronzeAnimus_Battle_Idle.h">
       <Filter>02.GameObject\03.Character\01.Monster\BronzeAnimus\State\Battle_Idle</Filter>
-    </ClInclude>
+	</ClInclude>
     <ClInclude Include="..\Headers\Shooter_Attack.h">
       <Filter>02.GameObject\03.Character\01.Monster\Bastion_Shooter\State\Attack</Filter>
     </ClInclude>
@@ -1411,6 +1413,27 @@
     </ClInclude>
     <ClInclude Include="..\Headers\Spear_Charge_Attack_End.h">
       <Filter>02.GameObject\03.Character\01.Monster\Bastion_Spear\State\Attack\Charge_Attack\End</Filter>
+	</ClInclude>
+    <ClInclude Include="..\Headers\TriggerSystem.h">
+      <Filter>03.System\00.Trigger</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Client_Trigger.h">
+      <Filter>03.System\00.Trigger\Client_Trigger</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\ShakeManager.h">
+      <Filter>03.System\01.ShakeManager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Silvermane_Idle.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Idel</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\1H_FlinchLeft.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\HIt</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Silvermane_Hit.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\HIt</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\JumpBox.h">
+      <Filter>02.GameObject\02.Map\02.JumpNode</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1450,56 +1473,53 @@
     <ClCompile Include="..\Codes\Camera_Silvermane.cpp">
       <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\Camera</Filter>
     </ClCompile>
-    <ClCompile Include="..\Codes\Silvermane_Idle.cpp">
-      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Hand\Default</Filter>
-    </ClCompile>
     <ClCompile Include="..\Codes\Silvermane_JogBwd.cpp">
-      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Hand\Jog</Filter>
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Idel\Jog</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\Silvermane_JogBwdPivot180.cpp">
-      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Hand\Jog</Filter>
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Idel\Jog</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\Silvermane_JogBwdStart.cpp">
-      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Hand\Jog</Filter>
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Idel\Jog</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\Silvermane_JogFwd.cpp">
-      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Hand\Jog</Filter>
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Idel\Jog</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\Silvermane_JogFwdPivot180.cpp">
-      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Hand\Jog</Filter>
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Idel\Jog</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\Silvermane_JogFwdStart.cpp">
-      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Hand\Jog</Filter>
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Idel\Jog</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\Silvermane_JogFwdStop.cpp">
-      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Hand\Jog</Filter>
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Idel\Jog</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\Silvermane_JogLeft.cpp">
-      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Hand\Jog</Filter>
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Idel\Jog</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\Silvermane_JogLeftPivot180.cpp">
-      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Hand\Jog</Filter>
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Idel\Jog</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\Silvermane_JogLeftStart.cpp">
-      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Hand\Jog</Filter>
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Idel\Jog</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\Silvermane_JogRight.cpp">
-      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Hand\Jog</Filter>
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Idel\Jog</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\Silvermane_JogRightPivot180.cpp">
-      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Hand\Jog</Filter>
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Idel\Jog</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\Silvermane_JogRightStart.cpp">
-      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Hand\Jog</Filter>
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Idel\Jog</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\Silvermane_SprintFwd.cpp">
-      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Hand\Sprint</Filter>
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Idel\Sprint</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\Silvermane_SprintFwdStart.cpp">
-      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Hand\Sprint</Filter>
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Idel\Sprint</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\Silvermane_SprintFwdStop.cpp">
-      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Hand\Sprint</Filter>
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Idel\Sprint</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\Plane_Test.cpp">
       <Filter>02.GameObject\02.Map\00.Plane</Filter>
@@ -1535,7 +1555,7 @@
       <Filter>02.GameObject\03.Character\01.Monster\EarthAberrant</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\Silvermane_Jog.cpp">
-      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Hand\Jog</Filter>
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Idel\Jog</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\1H_SwordAttack.cpp">
       <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\1H_Sword</Filter>
@@ -1646,7 +1666,7 @@
       <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\2H_Hammer\Jog</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\Silvermane_Sprint.cpp">
-      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Hand\Sprint</Filter>
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Idel\Sprint</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\1H_SwordEquipOff.cpp">
       <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\1H_Sword\Default</Filter>
@@ -1812,9 +1832,6 @@
     </ClCompile>
     <ClCompile Include="..\Codes\Shield_SupermanPunchStraight.cpp">
       <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Shield\Attack</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Codes\Client_Trigger.cpp">
-      <Filter>03.System\00.Trigger</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\TestScene_YM.cpp">
       <Filter>01.Scene\98.TestScene_YM</Filter>
@@ -2101,6 +2118,9 @@
     <ClCompile Include="..\Codes\Bastion_Healer_Groggy.cpp">
       <Filter>02.GameObject\03.Character\01.Monster\Bastion_Healer\State_Healer\Groggy</Filter>
     </ClCompile>
+    <ClCompile Include="..\Codes\SubEnvironment.cpp">
+      <Filter>02.GameObject\02.Map\01.Environment\Tree</Filter>
+	</ClCompile>
     <ClCompile Include="..\Codes\Shooter_Attack.cpp" />
     <ClCompile Include="..\Codes\Effect_HitFloating.cpp">
       <Filter>02.GameObject\04.Effect\03.Effect_Floating</Filter>
@@ -2204,6 +2224,24 @@
     </ClCompile>
     <ClCompile Include="..\Codes\Spear_Charge_Attack_End.cpp">
       <Filter>02.GameObject\03.Character\01.Monster\Bastion_Spear\State\Attack\Charge_Attack\End</Filter>
+	</ClCompile>
+    <ClCompile Include="..\Codes\Client_Trigger.cpp">
+      <Filter>03.System\00.Trigger\Client_Trigger</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\ShakeManager.cpp">
+      <Filter>03.System\01.ShakeManager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Silvermane_Idle.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Idel</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\1H_FlinchLeft.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\HIt</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Siilvermane_Hit.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\HIt</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\JumpBox.cpp">
+      <Filter>02.GameObject\02.Map\02.JumpNode</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

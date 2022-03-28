@@ -79,12 +79,22 @@ PS_OUT PS_MAIN_HDDRBASE(PS_IN In)
 	
 	float4 diffuse = g_DiffuseTexture.Sample(DiffuseSampler, In.vTexUV);
 	float3 normal = g_NormalTexture.Sample(DefaultSampler, In.vTexUV).xyz;
-	
+	float4 specualr = g_SpecularTexture.Sample(DefaultSampler, In.vTexUV);
+	float4 shadow = g_ShadowTexture.Sample(ShadowSampler, In.vTexUV);
 	float4 final;
 	if (any(normal))
 	{
 		float4 light = g_ShadeTexture.Sample(DefaultSampler, In.vTexUV);
 		
+		//diffuse = pow(diffuse, 2.2f);
+		//specualr = pow(specualr, 2.2f);
+		//if (g_bShadow == true)
+		//{
+		//	final = diffuse * light * shadow;
+		//}
+		//else
+		//{
+		//}
 		final = diffuse * light;
 	}
 	else
@@ -93,6 +103,7 @@ PS_OUT PS_MAIN_HDDRBASE(PS_IN In)
 	}
 	
 	Out.vHDRDiffuse = final;
+	Out.vHDRSpecular = specualr;
 	
 	return Out;
 }

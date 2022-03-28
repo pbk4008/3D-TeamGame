@@ -26,6 +26,8 @@ HRESULT CCameraShake::NativeConstruct(void* _pArg)
 	if (FAILED(__super::NativeConstruct(_pArg)))
 		return E_FAIL;
 
+	g_pShakeManager->setOriginCameraShake(this);
+
 	return S_OK;
 }
 
@@ -39,17 +41,23 @@ const _int CCameraShake::Tick(CGameObject* _pCamera, const _double& _dDeltaTime)
 void CCameraShake::PlayShake(CGameObject* _pCamera, const _double& _dDeltaTime)
 {
 	if (0 == m_vecShakeEvents.size())
+	{
+		m_isShaking = false;
 		return;
+	}
+	else
+		m_isShaking = true;
 
-	CTransform* pTargetWorldTransform = static_cast<CCamera_Silvermane*>(_pCamera)->m_pTransform;
-	CTransform* pTargetLocalTransform = static_cast<CCamera_Silvermane*>(_pCamera)->m_pLocalTransform;
+	CCamera_Silvermane* pCamera_Silvermane = static_cast<CCamera_Silvermane*>(_pCamera);
+	CTransform* pTargetWorldTransform = pCamera_Silvermane->m_pTransform;
+	//CTransform* pTargetLocalTransform = pCamera_Silvermane->m_pLocalTransform;
 
 	_float3 vAccPos = { 0.f, 0.f, 0.f };
 	_float3 vAccRot = { 0.f, 0.f, 0.f };
 	_float3 vCamPos;
-	_float3 vCamLocalPos;
+	_float3 vCamLocalOriginPos;
 	XMStoreFloat3(&vCamPos, pTargetWorldTransform->Get_State(CTransform::STATE_POSITION));
-	XMStoreFloat3(&vCamLocalPos, pTargetLocalTransform->Get_State(CTransform::STATE_POSITION));
+	XMStoreFloat3(&vCamLocalOriginPos, XMLoadFloat3(&pCamera_Silvermane->m_vLocalOriginPos));
 
 	for (auto iter = m_vecShakeEvents.begin(); iter != m_vecShakeEvents.end();)
 	{
@@ -62,7 +70,7 @@ void CCameraShake::PlayShake(CGameObject* _pCamera, const _double& _dDeltaTime)
 		}
 		else if ((*iter).fTimer > (*iter).fDuration - (*iter).fBlendOutTime)
 		{
-			if ((*iter).fBlendOutTime != 0)
+			if ((*iter).fBlendOutTime != 0.f)
 				(*iter).fAmplitudeRate = ((*iter).fDuration- (*iter).fTimer) / (*iter).fBlendOutTime;
 			else
 				(*iter).fAmplitudeRate = 0.f;
@@ -89,15 +97,21 @@ void CCameraShake::PlayShake(CGameObject* _pCamera, const _double& _dDeltaTime)
 	}
 
 	//D3DXQuaternionRotationYawPitchRoll(&m_transform->rotation, vAccRot.y, vAccRot.x, vAccRot.z);
-	pTargetLocalTransform->Set_State(CTransform::STATE_POSITION, XMVectorSetW(XMLoadFloat3(&vCamLocalPos) + XMLoadFloat3(&vAccPos), 1.f));
+	//pTargetLocalTransform->Set_State(CTransform::STATE_POSITION, XMVectorSetW(XMLoadFloat3(&vCamLocalOriginPos) + XMLoadFloat3(&vAccPos), 1.f));
+	pCamera_Silvermane->m_vShakeAccPos = vAccPos;
 }
 
-void CCameraShake::Shake(SHAKEEVENT* _tShakeEvent, const _float3& _vEventPos)
+const _bool CCameraShake::IsShaking() const
+{
+	return m_isShaking;
+}
+
+void CCameraShake::Shake(const SHAKEEVENT& _tShakeEvent, const _float3& _vEventPos)
 {
 	// 굳이 주소값으로 받는 이유는 넘어오는 중간에 복사가 일어나지 않도록 하기 위함.
-	// 근디 어차피 안에서 복사하기때문에 밖에서 임시변수 넣어도 괜찮다고 함
+	// 근디 어차피 안에서 복사하기때문에 밖에서 임시변수 넣어도 괜찮다고 함 -> 그래서 원래 point 사용하던 것을 const 래퍼런스로 바꿈
 	SHAKEEVENT tShakeEvent(_vEventPos);
-	tShakeEvent = *_tShakeEvent;
+	tShakeEvent = _tShakeEvent;
 	tShakeEvent.vEventPos = _vEventPos;
 
 	m_vecShakeEvents.emplace_back(tShakeEvent);
@@ -106,23 +120,6 @@ void CCameraShake::Shake(SHAKEEVENT* _tShakeEvent, const _float3& _vEventPos)
 void CCameraShake::StopShake()
 {
 	m_vecShakeEvents.clear();
-}
-
-void CCameraShake::ShakeTest()
-{
-	SHAKEEVENT tShakeEvent;
-
-	tShakeEvent.fDuration = 2.f;
-
-	tShakeEvent.tWaveX.fAmplitude = 0.004f;
-	tShakeEvent.tWaveX.fFrequency = 10.f;
-
-	m_vecShakeEvents.emplace_back(tShakeEvent);
-}
-
-void CCameraShake::Shaking_TestEvent(const _float3& _vPos)
-{
-	Shake(&m_tTestShakeEvent, _vPos);
 }
 
 CCameraShake* CCameraShake::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)

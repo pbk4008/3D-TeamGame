@@ -20,8 +20,10 @@ public:
 	virtual HRESULT EnterState();
 	virtual HRESULT ExitState();
 
+	virtual void OnTriggerEnter(CCollision& collision);
+
 public:
-	virtual _int KeyCheck(const _double & _dDeltaTime) override;
+	virtual _int Input(const _double & _dDeltaTime) override;
 
 private:
 	_float m_fHoldTime = 0.f;

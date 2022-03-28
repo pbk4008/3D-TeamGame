@@ -149,7 +149,6 @@ VS_OUT_SHADOW VS_MAIN_SHADOW(VS_IN In)
 	matWV = mul(g_WorldMatrix, g_LightView);
 	matWVP = mul(matWV, g_LightProj);
 	
-	
 	Out.vPosition = mul(vPosition, matWVP);
 	Out.vClipPos = Out.vPosition;
 	Out.vTexUV = In.vTexUV;
@@ -189,9 +188,9 @@ VS_OUT_SHADESHADOW VS_MAIN_SHADESHADOW(VS_IN In)
 	matLightWV = mul(g_WorldMatrix, g_LightView);
 	matLightWVP = mul(matLightWV, g_LightProj);
 	
-	Out.vPosition = mul(vector(vPosition.xyz, 1.f), matWVP);
+	Out.vPosition = mul(vPosition, matWVP);
 	Out.vTexUV = In.vTexUV;
-	Out.vLightPosition = mul(vector(vPosition.xyz, 1.f), matLightWVP);
+	Out.vLightPosition = mul(vPosition, matLightWVP);
 	//Out.vLightPosition = Out.vPosition;
 	
 	return Out;
@@ -222,9 +221,9 @@ PS_OUT_SHADOW PS_MAIN_SHADOW(PS_IN_SHADOW In)
 	
 	float Alpha = 1.f;
 	
-	if (color.r < 0.001f && color.g < 0.001f && color.b < 0.001f)
+	if (color.a < 0.1f)
 	{
-		Alpha = color.r;
+		Alpha = color.a;
 	}
 	
 	Out.vShadowDepthMap = vector(fDepth.xxx, Alpha);
@@ -267,7 +266,7 @@ PS_OUT_SHADESHADOW PS_MAIN_SHADESHADOW(PS_IN_SHADESHADOW In)
 	}
 	else
 	{
-		ShadowUV.y = -ShadowUV.y;
+		ShadowUV.y = (ShadowUV.y * -1.f);
 		ShadowUV = ShadowUV * 0.5f + 0.5f;
 
 		float shadowDepth;
@@ -278,13 +277,17 @@ PS_OUT_SHADESHADOW PS_MAIN_SHADESHADOW(PS_IN_SHADESHADOW In)
 		{
 			Out.vShadeShadow.rgb *= ShadowIntensity;
 
-			if (Diffuse.a < 0.1f)
+			if (Diffuse.a < 0.9f)
+			{
 				Out.vShadeShadow.a = Diffuse.a;
+			}
 		}
 		else
 		{
-			if (Diffuse.a < 0.1f)
+			if (Diffuse.a < 0.9f)
+			{
 				Out.vShadeShadow.a = Diffuse.a;
+			}
 		}
 	}
 	return Out;
@@ -328,8 +331,9 @@ PS_OUT PS_MAIN_TOP(PS_IN In)
 	
 	Out.depth = float4(In.vUvDepth.z / In.vUvDepth.w, In.vUvDepth.w / 300.f, 0.f, 0.f);
 	
-	float4 Ecolor = float4(0.98, 0.23, 0.19, 0.f);
-	float Epower = 1.5f;
+	//float4 Ecolor = float4(0.98, 0.23, 0.19, 0.f);
+	float4 Ecolor = float4(0.498f, 0.9411f, 0.8196f,0.f);
+	float Epower = 1.0f;
 	
 	float accvalue = diffuse.r + diffuse.g - diffuse.b;
 	if(accvalue > 0.6f)
@@ -426,9 +430,10 @@ PS_OUT PS_MAIN_CLOAK(PS_IN In)
 PS_OUT PS_MAIN_HAIR(PS_IN In)
 {
 	PS_OUT Out = (PS_OUT) 0;
-	float4 diffuse = g_DiffuseTexture.Sample(DefaultSampler, In.vUvDepth.xy);
-	float4 diffuse2 = g_NewHairTexture.Sample(DefaultSampler, In.vUvDepth.xy);
-	diffuse.rgb = diffuse.rgb + float3(0.66, 0.66, 0.66);
+	//g_NewHairTexture.Sample(DefaultSampler, In.vUvDepth.xy);
+	float4 diffuse = g_NewHairTexture.Sample(DefaultSampler, In.vUvDepth.xy);
+	float4 diffuse2 = g_DiffuseTexture.Sample(DefaultSampler, In.vUvDepth.xy);
+	diffuse.rgb = diffuse.rgb/* + float3(0.66, 0.66, 0.66)*/;
 	float4 omer = g_OMERTexture.Sample(DefaultSampler, In.vUvDepth.xy);
 	
 	Out.diffuse.xyz = diffuse * 0.5f + 0.5f;

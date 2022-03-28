@@ -271,6 +271,8 @@ HRESULT CMaterial::Change_Material()
 		return E_FAIL;
 	
 	m_vecTextures = vecTexturs;
+
+	return S_OK;
 }
 
 CSaveManager::MTRLDATA CMaterial::SetMaterialSaveData()

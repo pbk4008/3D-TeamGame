@@ -13,19 +13,16 @@ public:
 	virtual ~CLight_Manager() = default;
 
 public: void UpdateLightCam(_uint LightIndx, _fvector playerpos);
-public: void SetPBRCheck(_bool check) { m_bPBRHDR = check; }
 
 public:
 	const LIGHTDESC* Get_LightDesc(_uint iIndex = 0);
 
 public:
 	HRESULT Add_Light(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext, const LIGHTDESC& LightDesc);
-	HRESULT Render_Lights(const wstring& pCameraTag);
+	HRESULT Render_Lights(const wstring& pCameraTag, _bool pbr, _bool shadow);
 private:
 	vector<class CLight*>				m_Lights;
 	typedef vector<class CLight*>		LIGHTS;
-
-private: _bool	m_bPBRHDR = false;
 
 public:	
 	virtual void Free();
