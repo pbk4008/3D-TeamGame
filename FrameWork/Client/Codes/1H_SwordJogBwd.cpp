@@ -74,9 +74,9 @@ HRESULT C1H_SwordJogBwd::ExitState()
 	return S_OK;
 }
 
-_int C1H_SwordJogBwd::KeyCheck(const _double& _dDeltaTime)
+_int C1H_SwordJogBwd::Input(const _double& _dDeltaTime)
 {
-	_int iProgress = __super::KeyCheck(_dDeltaTime);
+	_int iProgress = __super::Input(_dDeltaTime);
 	if (NO_EVENT != iProgress)
 		return iProgress;
 

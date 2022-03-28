@@ -49,6 +49,11 @@ public:
 	void setMaterial(PxMaterial* _pMaterial);
 	void setPivotMatrix(const _fmatrix& _smatPivot);
 
+	void setGravity(const _bool _isGravity);
+	void setKinematic(const _bool _isKinematic);
+	void setTrigger(const _bool _isTrigger);
+	void setSceneQuery(const _bool _isSceneQuery);
+
 	_int Update_Transform();
 	_int Update_PxTransform();
 

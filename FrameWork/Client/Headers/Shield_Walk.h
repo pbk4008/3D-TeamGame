@@ -20,7 +20,7 @@ public:
 	virtual HRESULT ExitState() override;
 
 protected:
-	virtual _int KeyCheck(const _double& _dDeltaTime);
+	virtual _int Input(const _double& _dDeltaTime);
 
 public:
 	virtual void Free() override;

@@ -20,7 +20,7 @@ _int CState_Silvermane::Tick(const _double& _dDeltaTime)
 	if (NO_EVENT != iProgress)
 		return iProgress;
 
-	iProgress = KeyCheck(_dDeltaTime);
+	iProgress = Input(_dDeltaTime);
 	if (NO_EVENT != iProgress)
 		return iProgress;
 
@@ -56,6 +56,8 @@ HRESULT CState_Silvermane::ExitState()
 {
 	if (FAILED(__super::ExitState()))
 		return E_FAIL;
+	
+	m_isShake = false;
 
 	return S_OK;
 }
@@ -259,9 +261,43 @@ void CState_Silvermane::Set_Transform(CTransform* _pTransform)
 	m_pTransform = _pTransform;
 }
 
-_int CState_Silvermane::KeyCheck(const _double& _dDeltaTime)
+_int CState_Silvermane::Input(const _double& _dDeltaTime)
 {
 	return _int();
+}
+
+void CState_Silvermane::OnTriggerEnterHit(CCollision& collision)
+{
+	_uint iTag = collision.pGameObject->getTag();
+	if ((_uint)GAMEOBJECT::WEAPON_MIDBOSS == iTag)
+	{
+		if (static_cast<CWeapon*>(collision.pGameObject)->IsAttack())
+		{
+			m_pSilvermane->Add_HP(-7);
+			m_pStateController->Change_State(L"1H_FlinchLeft");
+		}
+	}
+	else if ((_uint)GAMEOBJECT::WEAPON_EARTH == iTag)
+	{
+		if (static_cast<CWeapon*>(collision.pGameObject)->IsAttack())
+		{
+			m_pSilvermane->Add_HP(-4);
+			m_pStateController->Change_State(L"1H_FlinchLeft");
+		}
+	}
+	else if ((_uint)GAMEOBJECT::WEAPON_BULLET == iTag)
+	{
+		m_pSilvermane->Add_HP(-4);
+		m_pStateController->Change_State(L"1H_FlinchLeft");
+	}
+	else if ((_uint)GAMEOBJECT::MONSTER_CRYSTAL == iTag)
+	{
+		if (static_cast<CActor*>(collision.pGameObject)->IsAttack())
+		{
+			m_pSilvermane->Add_HP(-3);
+			m_pStateController->Change_State(L"1H_FlinchLeft");
+		}
+	}
 }
 
 void CState_Silvermane::Free()

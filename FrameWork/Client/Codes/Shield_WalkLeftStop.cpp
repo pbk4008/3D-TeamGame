@@ -70,9 +70,9 @@ HRESULT CShield_WalkLeftStop::ExitState()
 	return S_OK;
 }
 
-_int CShield_WalkLeftStop::KeyCheck(const _double& _dDeltaTime)
+_int CShield_WalkLeftStop::Input(const _double& _dDeltaTime)
 {
-	_int iProgress = __super::KeyCheck(_dDeltaTime);
+	_int iProgress = __super::Input(_dDeltaTime);
 	if (NO_EVENT != iProgress)
 		return iProgress;
 

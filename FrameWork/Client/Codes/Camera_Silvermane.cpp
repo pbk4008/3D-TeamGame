@@ -2,6 +2,7 @@
 #include "Camera_Silvermane.h"
 
 #include "Silvermane.h"
+#include "Camera_Culling.h"
 #include "CameraShake.h"
 
 CCamera_Silvermane::CCamera_Silvermane(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
@@ -17,10 +18,10 @@ CCamera_Silvermane::CCamera_Silvermane(const CCamera_Silvermane& _rhs)
 HRESULT CCamera_Silvermane::NativeConstruct_Prototype()
 {
 	if (FAILED(__super::NativeConstruct_Prototype()))
-	{
 		return E_FAIL;
-	}
 
+	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Camera_Culling", CCamera_Culling::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
 	if(FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_CameraShake", CCameraShake::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 
@@ -64,14 +65,65 @@ _int CCamera_Silvermane::Tick(_double _dDeltaTime)
 	m_pTransform->Set_WorldMatrix(m_pLocalTransform->Get_WorldMatrix() * m_pWorldTransform->Get_WorldMatrix());
 
 	SpringArm();
-	if (g_pGameInstance->getkeyDown(DIK_9))
+
+	if (m_pCameraShake)
 	{
-		_float3 vPos;
-		XMStoreFloat3(&vPos, m_pTransform->Get_State(CTransform::STATE_POSITION));
-		//m_pCameraShake->Shaking_TestEvent(vPos);
-		m_pCameraShake->ShakeTest();
+#pragma region 쉐이킹 테스트
+		if (g_pGameInstance->getkeyDown(DIK_7))
+		{
+			g_pShakeManager->Shake(CShakeManager::ETemplate::TestX, _float3(0.f, 0.f, 0.f));
+		}
+		if (g_pGameInstance->getkeyDown(DIK_8))
+		{
+			g_pShakeManager->Shake(CShakeManager::ETemplate::TestY, _float3(0.f, 0.f, 0.f));
+		}
+		if (g_pGameInstance->getkeyDown(DIK_9))
+		{
+			g_pShakeManager->Shake(CShakeManager::ETemplate::TestZ, _float3(0.f, 0.f, 0.f));
+		}
+		if (g_pGameInstance->getkeyDown(DIK_4))
+		{
+			g_pShakeManager->Shake(CShakeManager::ETemplate::TestXY, _float3(0.f, 0.f, 0.f));
+		}
+		if (g_pGameInstance->getkeyDown(DIK_5))
+		{
+			g_pShakeManager->Shake(CShakeManager::ETemplate::TestXZ, _float3(0.f, 0.f, 0.f));
+		}
+		if (g_pGameInstance->getkeyDown(DIK_6))
+		{
+			g_pShakeManager->Shake(CShakeManager::ETemplate::TestYZ, _float3(0.f, 0.f, 0.f));
+		}
+		CCameraShake::SHAKEEVENT tShakeEvent;
+		tShakeEvent.fDuration = 2.0f;
+		tShakeEvent.fBlendInTime = 0.4f;
+		tShakeEvent.fBlendOutTime = 0.4f;
+		tShakeEvent.tWaveX.fAmplitude = 0.04f;
+		tShakeEvent.tWaveX.fFrequency = 10.f;
+		tShakeEvent.tWaveY.fAmplitude = 0.04f;
+		tShakeEvent.tWaveY.fFrequency = 6.f;
+		tShakeEvent.tWaveY.fAmplitude = 0.04f;
+		tShakeEvent.tWaveY.fFrequency = 8.f;
+		tShakeEvent.fBlendOutTime = 0.3f;
+		if (g_pGameInstance->getkeyDown(DIK_RIGHT))
+		{
+			g_pShakeManager->Shake(tShakeEvent, _float3(0.f, 0.f, 0.f));
+		}
+#pragma endregion
+
+
+
+		m_pCameraShake->Tick(this, _dDeltaTime);
+		if (m_pCameraShake->IsShaking())
+		{
+			_vector svLocalTotalpos = XMVectorSetW(XMLoadFloat3(&m_vLocalOriginPos) + XMLoadFloat3(&m_vShakeAccPos), 1.f);
+			m_pLocalTransform->Set_State(CTransform::STATE_POSITION, svLocalTotalpos);
+		}
+		else
+		{
+			_vector svLocalTotalpos = XMVectorSetW(XMLoadFloat3(&m_vLocalOriginPos), 1.f);
+			m_pLocalTransform->Set_State(CTransform::STATE_POSITION, svLocalTotalpos);
+		}
 	}
-	m_pCameraShake->Tick(this, _dDeltaTime);
 
 
 	m_pCamera->Update_Matrix(m_pTransform->Get_WorldMatrix());
@@ -83,7 +135,6 @@ _int CCamera_Silvermane::LateTick(_double _dDeltaTime)
 	_int iProgress = __super::LateTick(_dDeltaTime);
 	if (NO_EVENT != iProgress)
 		return iProgress;
-
 
 	return _int();
 }
@@ -118,8 +169,8 @@ HRESULT CCamera_Silvermane::Ready_Components()
 	transformDesc.fRotationPerSec = 0.f;
 	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_Transform", L"Com_LocalTransform", (CComponent**)&m_pLocalTransform, &transformDesc)))
 		return E_FAIL;
-	_float4 vPosition = { 1.f, 3.f, -2.f, 1.f };
-	m_pLocalTransform->Set_State(CTransform::STATE_POSITION, XMLoadFloat4(&vPosition));
+	m_vLocalOriginPos = { 1.f, 3.f, -2.f };
+	m_pLocalTransform->Set_State(CTransform::STATE_POSITION, XMVectorSetW(XMLoadFloat3(&m_vLocalOriginPos), 1.f));
 	m_pLocalTransform->SetUp_Rotation(m_pLocalTransform->Get_State(CTransform::STATE_RIGHT), XMConvertToRadians(30.f));
 
 	transformDesc.fRotationPerSec = XMConvertToRadians(120.f);
@@ -164,10 +215,10 @@ _int CCamera_Silvermane::Input_Key(const _double& _dDeltaTime)
 	if (MouseMove)
 	{
 		m_vRot.x += MouseMove * (_float)_dDeltaTime * 4.f;
-		if (30.f < m_vRot.x)
-			m_vRot.x = 30.f;
-		if (-75.f > m_vRot.x)
-			m_vRot.x = -75.f;
+		if (20.f < m_vRot.x)
+			m_vRot.x = 20.f;
+		if (-70.f > m_vRot.x)
+			m_vRot.x = -70.f;
 		m_pWorldTransform->SetUp_Rotation(m_vRot);
 	}
 
@@ -228,6 +279,8 @@ CGameObject* CCamera_Silvermane::Clone(const _uint _iSceneID, void* _pArg)
 
 void CCamera_Silvermane::Free()
 {
+	Safe_Release(m_pCameraShake);
+
 	Safe_Release(m_pLocalTransform);
 	Safe_Release(m_pWorldTransform);
 

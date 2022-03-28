@@ -62,9 +62,9 @@ HRESULT C2H_HammerAttack::ExitState()
 	return S_OK;
 }
 
-_int C2H_HammerAttack::KeyCheck(const _double& _dDeltaTime)
+_int C2H_HammerAttack::Input(const _double& _dDeltaTime)
 {
-	_int iProgress = __super::KeyCheck(_dDeltaTime);
+	_int iProgress = __super::Input(_dDeltaTime);
 	if (NO_EVENT != iProgress)
 		return iProgress;
 

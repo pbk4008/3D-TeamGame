@@ -2,6 +2,7 @@
 #include "Traverse_Jump400Jog.h"
 
 #include "JumpTrigger.h"
+#include "JumpBox.h"
 
 CTraverse_Jump400Jog::CTraverse_Jump400Jog(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
 	: CState_Silvermane(_pDevice, _pDeviceContext)
@@ -91,7 +92,8 @@ HRESULT CTraverse_Jump400Jog::EnterState()
 		return E_FAIL;
 	m_pAnimationController->Set_RootMotion(true, true, ERootOption::XY);
 
-	CTransform* pTargetTransform = m_pSilvermane->Get_TargetJumpTrigger()->Get_Transform();
+	//CTransform* pTargetTransform = m_pSilvermane->Get_TargetJumpTrigger()->Get_Transform();
+	CTransform* pTargetTransform = m_pSilvermane->Get_TargetJumpBox()->Get_Transform();
 	_vector svTargetPosition = pTargetTransform->Get_State(CTransform::STATE_POSITION);
 	XMStoreFloat3(&m_vTargetPos, svTargetPosition);
 	_vector svDir = svTargetPosition - m_pTransform->Get_State(CTransform::STATE_POSITION);
@@ -99,7 +101,7 @@ HRESULT CTraverse_Jump400Jog::EnterState()
 
 	m_fMoveSpeed = 2.f;
 	m_pSilvermane->Set_IsFall(false);
-	m_iCutIndex = 50;
+	m_iCutIndex = 45;
 	return S_OK;
 }
 
@@ -110,12 +112,13 @@ HRESULT CTraverse_Jump400Jog::ExitState()
 
 	m_pSilvermane->Set_IsTrasceCamera(true);
 	m_isJumpEnd = false;
+	m_pSilvermane->Set_IsFall(true);
 	return S_OK;
 }
 
-_int CTraverse_Jump400Jog::KeyCheck(const _double& _dDeltaTime)
+_int CTraverse_Jump400Jog::Input(const _double& _dDeltaTime)
 {
-	_int iProgress = __super::KeyCheck(_dDeltaTime);
+	_int iProgress = __super::Input(_dDeltaTime);
 	if (NO_EVENT != iProgress)
 		return iProgress;
 

@@ -25,15 +25,11 @@ _int C1H_SwordAttackNormalR2_ReleaseDoubleSwing::Tick(const _double& _dDeltaTime
 	m_fRotTime += (_float)_dDeltaTime;
 	Add_PlusAngle(EDir::Forward, -_dDeltaTime);
 
-	if (25 < m_pAnimationController->Get_CurKeyFrameIndex())
+	_uint iCurkeyFrameIndex = m_pAnimationController->Get_CurKeyFrameIndex();
+
+	if (25 < iCurkeyFrameIndex)
 	{
 		m_pSilvermane->Set_IsTrasceCamera(false);
-	}
-
-	if (m_pSilvermane->IsAttack())
-	{
-		if (50 < m_pAnimationController->Get_CurKeyFrameIndex())
-			m_pSilvermane->Set_IsAttack(false);
 	}
 
 
@@ -76,6 +72,8 @@ HRESULT C1H_SwordAttackNormalR2_ReleaseDoubleSwing::EnterState()
 	m_pAnimationController->Set_PlaySpeed(1.4f);
 	m_pAnimationController->Add_TrackAcc(20.0);
 
+	m_iAttackStartIndex = 30;
+	m_iAttackEndIndex = 52;
 	return S_OK;
 }
 
@@ -92,9 +90,9 @@ HRESULT C1H_SwordAttackNormalR2_ReleaseDoubleSwing::ExitState()
 	return S_OK;
 }
 
-_int C1H_SwordAttackNormalR2_ReleaseDoubleSwing::KeyCheck(const _double& _dDeltaTime)
+_int C1H_SwordAttackNormalR2_ReleaseDoubleSwing::Input(const _double& _dDeltaTime)
 {
-	_int iProgress = __super::KeyCheck(_dDeltaTime);
+	_int iProgress = __super::Input(_dDeltaTime);
 	if (NO_EVENT != iProgress)
 		return iProgress;
 

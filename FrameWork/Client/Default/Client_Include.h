@@ -14,6 +14,7 @@
 using namespace Client;
 #include "Client_Observer.h"
 #include "DebugSystem.h"
+#include "ShakeManager.h"
 #include "Clinet_Define.h"
 
 #endif

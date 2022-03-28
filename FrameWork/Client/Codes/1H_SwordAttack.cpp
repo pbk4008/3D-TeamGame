@@ -21,7 +21,32 @@ _int C1H_SwordAttack::Tick(const _double& _dDeltaTime)
 	if (NO_EVENT != iProgress)
 		return iProgress;
 
-	//g_pObserver->Set_IsAttack(true);
+
+	_uint iCurkeyFrameIndex = m_pAnimationController->Get_CurKeyFrameIndex();
+	if (m_iAttackStartIndex < iCurkeyFrameIndex && m_iAttackEndIndex > iCurkeyFrameIndex)
+	{
+		m_pSilvermane->Set_IsAttack(true);
+		if (!m_isShake)
+		{
+			CCameraShake::SHAKEEVENT tShakeEvent;
+			tShakeEvent.fDuration = 0.4f;
+			tShakeEvent.tWaveX.fAmplitude = 0.04f;
+			tShakeEvent.tWaveX.fFrequency = 10.f;
+			tShakeEvent.tWaveY.fAmplitude = 0.04f;
+			tShakeEvent.tWaveY.fFrequency = 6.f;
+			tShakeEvent.tWaveY.fAmplitude = 0.04f;
+			tShakeEvent.tWaveY.fFrequency = 8.f;
+			tShakeEvent.fBlendOutTime = 0.3f;
+
+			_float3 vPos; XMStoreFloat3(&vPos, m_pTransform->Get_State(CTransform::STATE_POSITION));
+			//g_pShakeManager->Shake(CShakeManager::ETemplate::Test, vPos);
+			g_pShakeManager->Shake(tShakeEvent, vPos);
+			m_isShake = true;
+		}
+	}
+	else
+		m_pSilvermane->Set_IsAttack(false);
+
 
 	return _int();
 }
@@ -48,9 +73,6 @@ HRESULT C1H_SwordAttack::EnterState()
 	if (FAILED(__super::EnterState()))
 		return E_FAIL;
 
-	if(!m_pSilvermane->IsAttack())
-		m_pSilvermane->Set_IsAttack(true);
-
 	return S_OK;
 }
 
@@ -65,9 +87,15 @@ HRESULT C1H_SwordAttack::ExitState()
 	return S_OK;
 }
 
-_int C1H_SwordAttack::KeyCheck(const _double& _dDeltaTime)
+void C1H_SwordAttack::OnTriggerEnter(CCollision& collision)
 {
-	_int iProgress = __super::KeyCheck(_dDeltaTime);
+	if (m_iCutIndex > m_pAnimationController->Get_CurKeyFrameIndex())
+		return;
+}
+
+_int C1H_SwordAttack::Input(const _double& _dDeltaTime)
+{
+	_int iProgress = __super::Input(_dDeltaTime);
 	if (NO_EVENT != iProgress)
 		return iProgress;
 

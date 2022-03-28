@@ -73,9 +73,9 @@ HRESULT C1H_SwordJogRightPivot180::ExitState()
 	return S_OK;
 }
 
-_int C1H_SwordJogRightPivot180::KeyCheck(const _double& _dDeltaTime)
+_int C1H_SwordJogRightPivot180::Input(const _double& _dDeltaTime)
 {
-	_int iProgress = __super::KeyCheck(_dDeltaTime);
+	_int iProgress = __super::Input(_dDeltaTime);
 	if (NO_EVENT != iProgress)
 		return iProgress;
 

@@ -6,9 +6,12 @@
 #include "DebugSystem.h"
 #include "Loading.h"
 #include "MeshLoader.h"
+#include "ShakeManager.h"
 
 CClient_Observer* g_pObserver = nullptr;
 CDebugSystem* g_pDebugSystem = nullptr;
+CShakeManager* g_pShakeManager = nullptr;
+
 CMainApp::CMainApp()
 {
 }
@@ -43,7 +46,9 @@ HRESULT CMainApp::NativeConstruct()
 		return E_FAIL;
 
 	g_pObserver = CClient_Observer::GetInstance();
-	
+	g_pShakeManager = CShakeManager::GetInstance();
+	if (FAILED(g_pShakeManager->NativeConstruct()))
+		return E_FAIL;
 	CMeshLoader* pMeshLoader = CMeshLoader::GetInstance();
 
 	if (FAILED(pMeshLoader->Reserve_MeshLoader(m_pDevice, m_pDeviceContext)))
@@ -249,6 +254,7 @@ void CMainApp::Free()
 	g_pDebugSystem->Stop_DebugSystem();
 	Safe_Release(g_pDebugSystem);
 #endif
+	CShakeManager::DestroyInstance();
 	CMeshLoader::DestroyInstance();
 	
 	Safe_Release(g_pObserver);

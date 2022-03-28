@@ -65,16 +65,13 @@ private:
 	void PlayShake(CGameObject* _pCamera, const _double& _dDeltaTime);
 
 public:
-	void Shake(SHAKEEVENT* _tShakeEvent, const _float3& _vEventPos);
+	const _bool IsShaking() const;
+	void Shake(const SHAKEEVENT& _tShakeEvent, const _float3& _vEventPos);
 	void StopShake();
 	
 private:
 	vector<SHAKEEVENT> m_vecShakeEvents;
-
-public: /* For.Test */
-	SHAKEEVENT m_tTestShakeEvent;
-	void ShakeTest();
-	void Shaking_TestEvent(const _float3& _vPos = { 0.f, 0.f, 0.f });
+	_bool m_isShaking = false;
 
 public:
 	static CCameraShake* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext);

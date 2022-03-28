@@ -16,12 +16,13 @@ public:
 	virtual _int LateTick(const _double& _dDeltaTime);
 	virtual HRESULT Render();
 
-public:
 	virtual HRESULT EnterState();
 	virtual HRESULT ExitState();
 
+	virtual void OnTriggerEnter(CCollision& collision);
+
 protected:
-	virtual _int KeyCheck(const _double& _dDeltaTime);
+	virtual _int Input(const _double& _dDeltaTime);
 
 public:
 	virtual void Free() override;

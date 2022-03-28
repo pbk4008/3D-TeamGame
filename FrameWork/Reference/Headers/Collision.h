@@ -14,6 +14,7 @@ public:
 
 public:
 	CGameObject* pGameObject = nullptr;
+	_float3 vPos = { 0.f, 0.f, 0.f };
 };
 
 END
