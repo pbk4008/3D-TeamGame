@@ -44,12 +44,6 @@ _int CCrawler_Death::LateTick(const _double& TimeDelta)
 	if (NO_EVENT != iProgress)
 		return iProgress;
 
-	if (m_pAnimator->Get_CurrentAnimation()->Is_Finished())
-	{
-		static_cast<CMonster_Crawler*>(m_pMonster)->setActive(false);
-		static_cast<CMonster_Crawler*>(m_pMonster)->Clear_Physix();
-	}
-
 	return _int();
 }
 

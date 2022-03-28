@@ -14,6 +14,9 @@
 #include "Crawler_Death.h"
 #include "Crawler_Flinch_Left.h"
 
+#include "Stage1.h"
+#include "Stage2.h"
+
 CMonster_Crawler::CMonster_Crawler(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
 	:CActor(_pDevice, _pDeviceContext)
 {
@@ -34,15 +37,6 @@ CMonster_Crawler::CMonster_Crawler(const CMonster_Crawler& _rhs)
 	Safe_AddRef(m_pCollider);
 }
 
-void CMonster_Crawler::Clear_Physix()
-{
-
-	m_pCollider->Remove_ActorFromScene();
-	m_pCharacterController->Remove_CCT();
-	Safe_Release(m_pCollider);
-	Safe_Release(m_pCharacterController);
-
-}
 
 HRESULT CMonster_Crawler::NativeConstruct_Prototype()
 {
@@ -116,6 +110,8 @@ HRESULT CMonster_Crawler::NativeConstruct(const _uint _iSceneID, void* _pArg)
 
 _int CMonster_Crawler::Tick(_double _dDeltaTime)
 {	
+	m_pCollider;
+	int a = 10;
 	//나중에지울코드
 	if (!m_bFirst)
 	{
@@ -153,7 +149,9 @@ _int CMonster_Crawler::Tick(_double _dDeltaTime)
 	if (DEATH == m_pAnimatorCom->Get_CurrentAnimNode())
 	{
 		if (m_pAnimatorCom->Get_CurrentAnimation()->Is_Finished())
+		{
 			Set_Remove(true);
+		}
 	}
 
 	m_pCharacterController->Move(_dDeltaTime, m_pTransform->Get_Velocity());
@@ -163,6 +161,8 @@ _int CMonster_Crawler::Tick(_double _dDeltaTime)
 
 _int CMonster_Crawler::LateTick(_double _dDeltaTime)
 {
+	m_pCollider;
+	int a = 10;
 	m_pRenderer->Add_RenderGroup(CRenderer::RENDER_NONALPHA, this);
 
 	m_pCharacterController->Update_OwnerTransform();
@@ -178,6 +178,8 @@ _int CMonster_Crawler::LateTick(_double _dDeltaTime)
 
 HRESULT CMonster_Crawler::Render()
 {
+	m_pCollider;
+	int a = 10;
 	if (FAILED(__super::Render()))
 	{
 		return E_FAIL;
@@ -226,7 +228,7 @@ void CMonster_Crawler::OnTriggerEnter(CCollision& collision)
 				m_pStateController->Change_State(L"Flinch_Left");
 			}
 
-			CEffect_HitParticle* pEffect = (CEffect_HitParticle*)g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Layer_Effect_Hit")->front();
+			/*CEffect_HitParticle* pEffect = (CEffect_HitParticle*)g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Layer_Effect_Hit")->front();
 			_vector Mypos = m_pTransform->Get_State(CTransform::STATE_POSITION);
 			Mypos = XMVectorSetY(Mypos, XMVectorGetY(Mypos) + 1.f);
 			pEffect->Get_Transform()->Set_State(CTransform::STATE_POSITION, Mypos);
@@ -238,7 +240,7 @@ void CMonster_Crawler::OnTriggerEnter(CCollision& collision)
 			Mypos1 = XMVectorSetY(Mypos1, XMVectorGetY(Mypos1) + 1.f);
 			pEffect1->Get_Transform()->Set_State(CTransform::STATE_POSITION, Mypos1);
 			pEffect1->setActive(true);
-			pEffect1->Set_Reset(true);
+			pEffect1->Set_Reset(true);*/
 		}
 
 		else
@@ -267,7 +269,7 @@ HRESULT CMonster_Crawler::SetUp_Components()
 	Desc.fRotationPerSec = XMConvertToRadians(60.f);
 	m_pTransform->Set_TransformDesc(Desc);
 	
-	if (FAILED(__super::SetUp_Components((_uint)SCENEID::SCENE_STAGE1, L"Model_Monster_Crawler", L"Com_Model", (CComponent**)&m_pModelCom)))
+	if (FAILED(__super::SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Model_Monster_Crawler", L"Com_Model", (CComponent**)&m_pModelCom)))
 	{
 		return E_FAIL;
 	}
@@ -449,6 +451,8 @@ CGameObject* CMonster_Crawler::Clone(const _uint _iSceneID, void* _pArg)
 
 void CMonster_Crawler::Free()
 {
+	m_pCollider;
+	__super::Free();
 	if (m_pCollider != nullptr && m_pCharacterController != nullptr)
 	{
 		Safe_Release(m_pCollider);
@@ -460,5 +464,5 @@ void CMonster_Crawler::Free()
 	Safe_Release(m_pAnimatorCom);
 	Safe_Release(m_pModelCom);
 
-	__super::Free();
+
 }
