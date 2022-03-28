@@ -167,7 +167,6 @@ HRESULT CLoader::SetUp_Stage1_Object()
 	if (FAILED(Load_Stage1JumpTrigger()))
 		return E_FAIL;
 
-
 	if (FAILED(Load_Stage1TriggerLod()))
 		return E_FAIL;
 
