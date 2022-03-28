@@ -1,9 +1,10 @@
-
 #include "pch.h"
 #include "Loading.h"
 #include "Stage1.h"
 #include "Environment.h"
 #include "SubEnvironment.h"
+
+#include "Boss_Bastion_Judicator.h"
 
 #include "Effect_DashDust.h"
 #include "Effect_HitParticle.h"
@@ -46,7 +47,7 @@ HRESULT CStage1::NativeConstruct()
 	
 	if (FAILED(Ready_Trigger_Jump()))
 		return E_FAIL;
-	
+
 	if (FAILED(Ready_Player(L"Layer_Silvermane")))
 		return E_FAIL;
 
@@ -110,22 +111,35 @@ _int CStage1::Tick(_double TimeDelta)
 		if (FAILED(g_pGameInstance->Open_Level((_uint)SCENEID::SCENE_LOADING, pLoading)))
 			return -1;
 		g_pDebugSystem->Set_LevelcMoveCheck(false);
+		return 0;
 	}
 #endif //  _DEBUG
-	//if (nullptr != m_pTriggerSystem)
-	//{
-	//	m_pTriggerSystem->Tick(TimeDelta);
-	//}
+
+	if (nullptr != m_pTriggerSystem)
+	{
+		m_pTriggerSystem->Tick(TimeDelta);
+	}
+
+	CBoss_Bastion_Judicator* pBoss = (CBoss_Bastion_Judicator*)g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Layer_Boss")->front();
+	if (nullptr != pBoss)
+	{
+		if (true == pBoss->Get_Dead())
+		{
+			if (FAILED(g_pGameInstance->Open_Level((_uint)SCENEID::SCENE_LOADING, CLoading::Create(m_pDevice, m_pDeviceContext, SCENEID::SCENE_STAGE2))))
+				return -1;
+		}
+	}
+
 	return _int();
 }
 
 HRESULT CStage1::Render()
 {
 #ifdef _DEBUG
-	//if (nullptr != m_pTriggerSystem)
-	//{
-	//	m_pTriggerSystem->Render();
-	//}
+	if (nullptr != m_pTriggerSystem)
+	{
+		m_pTriggerSystem->Render();
+	}
 #endif
 
 	return S_OK;
@@ -629,6 +643,7 @@ void CStage1::Trgger_Function3()
 		iter++;
 		(*iter)->setActive(true);
 	}
+
 }
 
 void CStage1::Trgger_Function4()
@@ -661,6 +676,7 @@ void CStage1::Trgger_Function4()
 		iter++;
 		(*iter)->setActive(true);
 	}
+
 }
 
 void CStage1::Trgger_Function5()

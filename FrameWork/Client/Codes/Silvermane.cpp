@@ -792,6 +792,30 @@ void CSilvermane::OnControllerColliderHit(CCollision& collision)
 			m_pStateController->Change_State(L"Traverse_Jump400Jog");
 		}
 	}
+	else if ((_uint)GAMEOBJECT::WEAPON_BRONZE == iTag)
+	{
+		_bool a = static_cast<CActor*>(collision.pGameObject)->IsAttack();
+		if (static_cast<CActor*>(collision.pGameObject)->IsAttack())
+		{
+			m_fCurrentHp -= 3;
+		}
+	}
+	else if ((_uint)GAMEOBJECT::WEAPON_2HSword == iTag)
+	{
+		_bool a = static_cast<CActor*>(collision.pGameObject)->IsAttack();
+		if (static_cast<CActor*>(collision.pGameObject)->IsAttack())
+		{
+			m_fCurrentHp -= 3;
+		}
+	}
+	else if ((_uint)GAMEOBJECT::WEAPON_POLEARM == iTag)
+	{
+		_bool a = static_cast<CActor*>(collision.pGameObject)->IsAttack();
+		if (static_cast<CActor*>(collision.pGameObject)->IsAttack())
+		{
+			m_fCurrentHp -= 3;
+		}
+	}
 }
 
 const _bool CSilvermane::IsHit() const

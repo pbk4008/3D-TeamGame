@@ -29,8 +29,6 @@ private:
 	explicit CMonster_Crawler(const CMonster_Crawler& _rhs);
 	virtual ~CMonster_Crawler() = default;
 
-public: void			Clear_Physix();
-
 public:
 	virtual HRESULT NativeConstruct_Prototype() override;
 	virtual HRESULT NativeConstruct(const _uint _iSceneID, void* _pArg = nullptr) override;

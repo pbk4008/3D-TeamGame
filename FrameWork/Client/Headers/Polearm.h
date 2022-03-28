@@ -1,16 +1,16 @@
-#ifndef BronzeAnimus_Sword_h__
-#define BronzeAnimus_Sword_h__
+#ifndef Polearm_h__
+#define Polearm_h__
 
 #include "Weapon.h"
 
 BEGIN(Client)
 
-class CBronzeAnimus_Sword final : public CWeapon
+class CPolearm final : public CWeapon
 {
 private:
-	explicit CBronzeAnimus_Sword(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext);
-	explicit CBronzeAnimus_Sword(const CBronzeAnimus_Sword& _rhs);
-	virtual ~CBronzeAnimus_Sword() = default;
+	explicit CPolearm(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext);
+	explicit CPolearm(const CPolearm& _rhs);
+	virtual ~CPolearm() = default;
 
 public:
 	virtual HRESULT NativeConstruct_Prototype() override;
@@ -29,11 +29,11 @@ private:
 	CCapsuleCollider* m_pCollider = nullptr;
 
 public:
-	static CBronzeAnimus_Sword* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext);
+	static CPolearm* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext);
 	virtual CGameObject* Clone(const _uint _iSceneID, void* _pArg = nullptr) override;
 	virtual void Free() override;
 };
 
 END
 
-#endif // BronzeAnimus_Sword_h__
+#endif // Polearm_h__

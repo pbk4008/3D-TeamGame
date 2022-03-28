@@ -51,7 +51,6 @@ public:
 			if (m_vecTrigger[i]->Get_OnTrigger() && !m_vecTrigger[i]->Get_Overlap())
 			{
 				m_vecTrigger[i]->Set_Overlap(true);
-				
 				(m_pStage->*m_vecTriggerFunction[i])();
 			}
 			if (!m_vecTrigger[i]->Get_OnTrigger())
@@ -66,6 +65,7 @@ public:
 				m_bOverlap = true;
 			}
 		}
+
 		return _uint();
 	}
 	HRESULT Render()
@@ -142,6 +142,7 @@ public:
 		return S_OK;
 	}
 	const vector<_float3> Get_MonsterSpawnPoint(MONSTER eType) { return m_pVecMonsterSpawnPoint[(_uint)eType]; }
+
 private:
 	virtual void Free() override
 	{
@@ -167,6 +168,7 @@ public:
 		}
 		return pInstance;
 	}
+	
 private:
 	ID3D11Device* m_pDevice;
 	ID3D11DeviceContext* m_pDeviceContext;
