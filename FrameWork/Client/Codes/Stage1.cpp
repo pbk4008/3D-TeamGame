@@ -48,10 +48,10 @@ HRESULT CStage1::NativeConstruct()
 		return E_FAIL;
 	}
 
-	/*if (FAILED(Ready_Trigger_Jump()))
+	if (FAILED(Ready_Trigger_Jump()))
 	{
 		return E_FAIL;
-	}*/
+	}
 
 	if (FAILED(Ready_Player(L"Layer_Silvermane")))
 	{

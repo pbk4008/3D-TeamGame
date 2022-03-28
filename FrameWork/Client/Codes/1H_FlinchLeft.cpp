@@ -56,6 +56,25 @@ HRESULT C1H_FlinchLeft::EnterState()
 		return E_FAIL;
 	m_pAnimationController->Set_RootMotion(true, true);
 
+
+	if (!m_isShake)
+	{
+		CCameraShake::SHAKEEVENT tShakeEvent;
+		tShakeEvent.fDuration = 0.4f;
+		tShakeEvent.fBlendInTime = 0.1f;
+		tShakeEvent.fBlendOutTime = 0.1f;
+		tShakeEvent.tWaveX.fAmplitude = 0.04f;
+		tShakeEvent.tWaveX.fFrequency = 12.f;
+		tShakeEvent.tWaveY.fAmplitude = 0.04f;
+		tShakeEvent.tWaveY.fFrequency = 14.f;
+		tShakeEvent.tWaveZ.fAmplitude = 0.04f;
+		tShakeEvent.tWaveZ.fFrequency = 10.f;
+
+		_float3 vPos; XMStoreFloat3(&vPos, m_pTransform->Get_State(CTransform::STATE_POSITION));
+		g_pShakeManager->Shake(tShakeEvent, vPos);
+		m_isShake = true;
+	}
+
 	m_iCutIndex = 20;
 	return S_OK;
 }

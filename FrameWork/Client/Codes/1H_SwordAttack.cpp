@@ -39,7 +39,6 @@ _int C1H_SwordAttack::Tick(const _double& _dDeltaTime)
 			tShakeEvent.fBlendOutTime = 0.3f;
 
 			_float3 vPos; XMStoreFloat3(&vPos, m_pTransform->Get_State(CTransform::STATE_POSITION));
-			//g_pShakeManager->Shake(CShakeManager::ETemplate::Test, vPos);
 			g_pShakeManager->Shake(tShakeEvent, vPos);
 			m_isShake = true;
 		}
