@@ -226,7 +226,7 @@ HRESULT CStage1::Ready_Camera(const _tchar* LayerTag)
 HRESULT CStage1::Ready_Player(const _tchar* LayerTag)
 {
 	//// 네비메쉬
-	wstring wstrNaviFile = L"../Data/NavMesh/Stage_1_Nav.dat";
+	wstring wstrNaviFile = L"../Data/NavMesh/Stage_2_Nav.dat";
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Plane", L"Proto_GameObject_Plane_Test",&wstrNaviFile)))
 		return E_FAIL;
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Proto_GameObject_Silvermane")))
