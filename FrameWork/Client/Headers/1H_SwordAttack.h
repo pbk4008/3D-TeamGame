@@ -28,6 +28,8 @@ protected:
 	_uint m_iAttackStartIndex = 0;
 	_uint m_iAttackEndIndex = 0;
 
+	CCameraShake::SHAKEEVENT m_tShakeEvent;
+
 public:
 	virtual void Free() override;
 };

@@ -37,7 +37,8 @@ HRESULT CTestScene_JS::Render()
 
 HRESULT CTestScene_JS::Ready_Gameobject()
 {
- 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_JS, L"Layer_Plane", L"Proto_GameObject_Plane_Test")))
+	wstring wstrNaviFile = L"../Data/NavMesh/Stage_1_Nav.dat";
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Plane", L"Proto_GameObject_Plane_Test", &wstrNaviFile)))
 		return E_FAIL;
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_JS, L"Layer_Silvermane", L"Proto_GameObject_Silvermane")))
 		return E_FAIL;

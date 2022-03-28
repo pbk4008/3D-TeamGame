@@ -83,11 +83,11 @@ _int CCamera_Silvermane::Tick(_double _dDeltaTime)
 		}
 		if (g_pGameInstance->getkeyDown(DIK_4))
 		{
-			g_pShakeManager->Shake(CShakeManager::ETemplate::TestXY, _float3(0.f, 0.f, 0.f));
+			g_pShakeManager->Shake(CShakeManager::ETemplate::TestXY, _float3(0.f, 0.f, -2.f));
 		}
 		if (g_pGameInstance->getkeyDown(DIK_5))
 		{
-			g_pShakeManager->Shake(CShakeManager::ETemplate::TestXZ, _float3(0.f, 0.f, 0.f));
+			g_pShakeManager->Shake(CShakeManager::ETemplate::TestXZ, _float3(0.f, 0.f, 2.f));
 		}
 		if (g_pGameInstance->getkeyDown(DIK_6))
 		{

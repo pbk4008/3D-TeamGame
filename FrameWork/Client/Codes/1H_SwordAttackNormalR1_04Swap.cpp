@@ -66,6 +66,19 @@ HRESULT C1H_SwordAttackNormalR1_04Swap::EnterState()
 	m_pAnimationController->Add_TrackAcc(15.0);
 	m_iAttackStartIndex = 36;
 	m_iAttackEndIndex = 42;
+
+
+	// Ω¶¿Ã≈© ø…º«
+	m_tShakeEvent.fDuration = 0.8f;
+	m_tShakeEvent.fBlendInTime = 0.4f;
+	m_tShakeEvent.fBlendOutTime = 0.8f;
+	m_tShakeEvent.tWaveX.fAmplitude = 0.04f;
+	m_tShakeEvent.tWaveX.fFrequency = 12.f;
+	m_tShakeEvent.tWaveY.fAmplitude = 0.04f;
+	m_tShakeEvent.tWaveY.fFrequency = 8.f;
+	m_tShakeEvent.tWaveZ.fAmplitude = 0.04f;
+	m_tShakeEvent.tWaveZ.fFrequency = 10.f;
+
 	return S_OK;
 }
 

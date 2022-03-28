@@ -74,6 +74,17 @@ HRESULT C1H_SwordAttackNormalR2_ReleaseDoubleSwing::EnterState()
 
 	m_iAttackStartIndex = 30;
 	m_iAttackEndIndex = 52;
+
+	// Ω¶¿Ã≈© ø…º«
+	m_tShakeEvent.fDuration = 0.4f;
+	m_tShakeEvent.tWaveX.fAmplitude = 0.04f;
+	m_tShakeEvent.tWaveX.fFrequency = 10.f;
+	m_tShakeEvent.tWaveY.fAmplitude = 0.04f;
+	m_tShakeEvent.tWaveY.fFrequency = 6.f;
+	m_tShakeEvent.tWaveZ.fAmplitude = 0.04f;
+	m_tShakeEvent.tWaveZ.fFrequency = 8.f;
+	m_tShakeEvent.fBlendOutTime = 0.3f;
+
 	return S_OK;
 }
 
