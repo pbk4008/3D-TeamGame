@@ -14,7 +14,7 @@ private: virtual ~CPostProcess() = default;
 
 public: HRESULT				InitPostProcess();
 
-public: HRESULT				PossProcessing(CTonemapping* tone,CTarget_Manager* pTargetMgr,_bool hdr, _bool shadow);
+public: HRESULT				PossProcessing(CTonemapping* tone,CTarget_Manager* pTargetMgr,_bool hdr, _bool shadow, _bool particle);
 
 public: HRESULT				ComputeBrightPass(CTarget_Manager* pTargetMgr, const wstring& in, _float sizex, _float sizey);
 public: HRESULT				BloomPass(CTarget_Manager* pTargetMgr);

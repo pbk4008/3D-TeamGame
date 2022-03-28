@@ -37,6 +37,9 @@ void CRenderer::SetRenderButton(RENDERBUTTON ebutton, _bool check)
 	case CRenderer::DBG:
 		m_bDBG = check;
 		break;
+	case CRenderer::PARTICLE:
+		m_bParticle = check;
+		break;
 	}
 }
 
@@ -155,7 +158,7 @@ HRESULT CRenderer::Draw_RenderGroup()
 
 		if (FAILED(m_pLuminance->DownSampling(m_pTargetMgr))) return E_FAIL;
 
-		if (FAILED(m_pPostProcess->PossProcessing(m_pTonemapping, m_pTargetMgr,m_bHDR,m_bShadow))) return E_FAIL;
+		if (FAILED(m_pPostProcess->PossProcessing(m_pTonemapping, m_pTargetMgr,m_bHDR,m_bShadow,m_bParticle))) return E_FAIL;
 	}
 
 	if (FAILED(Render_Final())) return E_FAIL;;

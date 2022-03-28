@@ -34,6 +34,7 @@ cbuffer check
 {
 	bool g_check;
 	bool g_shadow;
+	bool g_particle;
 };
 
 struct VS_IN
@@ -84,25 +85,36 @@ PS_OUT PS_MAIN_BLEND(PS_IN In)
 	float4 blur8 = g_Blur8Texture.Sample(DefaultSampler, In.vTexUV);
 	float4 blur16 = g_Blur16Texture.Sample(DefaultSampler, In.vTexUV);
 	
-	float4 Particle = g_PtTexture.Sample(DefaultSampler, In.vTexUV);
-	float4 pt2 = g_Pt2Texture.Sample(DefaultSampler, In.vTexUV);
-	float4 pt4 = g_Pt4Texture.Sample(DefaultSampler, In.vTexUV);
-	float4 pt8 = g_Pt8Texture.Sample(DefaultSampler, In.vTexUV);
-	float4 pt16 = g_Pt16Texture.Sample(DefaultSampler, In.vTexUV);
+	float4 addpt = 1;
+	if (g_particle == true)
+	{
+		float4 Particle = g_PtTexture.Sample(DefaultSampler, In.vTexUV);
+		float4 pt2 = g_Pt2Texture.Sample(DefaultSampler, In.vTexUV);
+		float4 pt4 = g_Pt4Texture.Sample(DefaultSampler, In.vTexUV);
+		float4 pt8 = g_Pt8Texture.Sample(DefaultSampler, In.vTexUV);
+		float4 pt16 = g_Pt16Texture.Sample(DefaultSampler, In.vTexUV);
+		addpt = ((Particle * 1.f + (pt2) * 1.5f + (pt4) * 2.0f + (pt8) * 2.5f + (pt16) * 3.0f));
+	}
 	
-	//float4 color = float4(1.f, 0, 0, 0);
 	float4 emissive = ((emission) * 1.f + (blur2) * 1.3f + (blur4) * 1.5f + (blur8) * 2.5f + (blur16) * 3.5f);
-	float4 addpt = /*color * */((Particle * 1.f + (pt2) * 1.5f + (pt4) * 2.0f + (pt8) * 2.5f + (pt16) * 3.0f));
 	float4 final = float4(0, 0, 0, 0);
 	if (g_check == true)
-	{	
-		if(g_shadow == true)
+	{
+		if (g_shadow == true)
 		{
 			float4 shadow = g_ShadowTexture.Sample(DefaultSampler, In.vTexUV);
 			diffuse = diffuse * shadow;
 		}
 		
-		final.rgb = diffuse.rgb + specular.rgb + emissive.rgb + addpt.rgb;
+		if(g_particle == true)
+		{
+			final.rgb = diffuse.rgb + specular.rgb + emissive.rgb + addpt.rgb;
+		}
+		else
+		{
+			final.rgb = diffuse.rgb + specular.rgb + emissive.rgb;
+		}
+		
 		final.a = originA + emissive.a/* + specular.a*/;
 	}
 	else
@@ -113,8 +125,8 @@ PS_OUT PS_MAIN_BLEND(PS_IN In)
 	Out.vOutColor = final;
 	
 	
-		return Out;
-	}
+	return Out;
+}
 
 technique11 Emissionblend
 {

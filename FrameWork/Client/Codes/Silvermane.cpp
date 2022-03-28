@@ -326,6 +326,7 @@ HRESULT CSilvermane::Render()
 HRESULT CSilvermane::Render_Shadow()
 {
 	_matrix world, lightview, lightproj;
+	_float3 lightpos = m_Lightdesc->vPosition;
 	world = XMMatrixTranspose(m_pTransform->Get_WorldMatrix());
 	lightview = XMMatrixTranspose(m_Lightdesc->mLightView);
 	lightproj = XMMatrixTranspose(m_Lightdesc->mLightProj);
@@ -333,6 +334,8 @@ HRESULT CSilvermane::Render_Shadow()
 	m_pModel->SetUp_ValueOnShader("g_WorldMatrix", &world, sizeof(_matrix));
 	m_pModel->SetUp_ValueOnShader("g_LightView", &lightview, sizeof(_matrix));
 	m_pModel->SetUp_ValueOnShader("g_LightProj", &lightproj, sizeof(_matrix));
+	m_pModel->SetUp_ValueOnShader("g_LightPos", &lightpos, sizeof(_float3));
+	
 
 	for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
 		m_pModel->Render(i, 4);
