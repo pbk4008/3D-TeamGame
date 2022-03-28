@@ -137,6 +137,8 @@ HRESULT CStage2::Ready_JumpTrigger()
 	tJumpNodeDesc.vPosition = { 39.f, 15.f, 268.f };
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_JS, L"Layer_JumpNode", L"Proto_GameObject_JumpNode", &tJumpNodeDesc)))
 		return E_FAIL;
+
+	return S_OK;
 }
 
 HRESULT CStage2::Ready_TriggerSystem(const _tchar* pTriggerFile)

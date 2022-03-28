@@ -53,8 +53,8 @@ HRESULT CStage1::NativeConstruct()
 	if (FAILED(Ready_MapObject()))
 		return E_FAIL;
 
-	if (FAILED(Ready_TriggerSystem(L"../bin/SaveData/Trigger/MonsterSpawnTrigger.dat")))
-		return E_FAIL;
+	//if (FAILED(Ready_TriggerSystem(L"../bin/SaveData/Trigger/MonsterSpawnTrigger.dat")))
+	//	return E_FAIL;
 
 	//if (FAILED(Ready_Boss(L"Layer_Boss")))
 	//{
@@ -66,15 +66,15 @@ HRESULT CStage1::NativeConstruct()
 	//	return E_FAIL;
 	//}
 
-	if (FAILED(Ready_Data_UI(L"../bin/SaveData/UI/UI.dat")))
-	{
-		return E_FAIL;
-	}
+	//if (FAILED(Ready_Data_UI(L"../bin/SaveData/UI/UI.dat")))
+	//{
+	//	return E_FAIL;
+	//}
 
-	if (FAILED(Ready_Data_Effect()))
-	{
-		return E_FAIL;
-	}
+	//if (FAILED(Ready_Data_Effect()))
+	//{
+	//	return E_FAIL;
+	//}
 
 	//if (FAILED(Ready_UI(L"Layer_UI")))
 	//{
@@ -112,20 +112,20 @@ _int CStage1::Tick(_double TimeDelta)
 		g_pDebugSystem->Set_LevelcMoveCheck(false);
 	}
 #endif //  _DEBUG
-	if (nullptr != m_pTriggerSystem)
-	{
-		m_pTriggerSystem->Tick(TimeDelta);
-	}
+	//if (nullptr != m_pTriggerSystem)
+	//{
+	//	m_pTriggerSystem->Tick(TimeDelta);
+	//}
 	return _int();
 }
 
 HRESULT CStage1::Render()
 {
 #ifdef _DEBUG
-	if (nullptr != m_pTriggerSystem)
-	{
-		m_pTriggerSystem->Render();
-	}
+	//if (nullptr != m_pTriggerSystem)
+	//{
+	//	m_pTriggerSystem->Render();
+	//}
 #endif
 
 	return S_OK;

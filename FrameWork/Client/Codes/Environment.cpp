@@ -59,8 +59,8 @@ _int CEnvironment::Tick(_double TimeDelta)
 
 _int CEnvironment::LateTick(_double TimeDelta)
 {
-	//if (FAILED(Culling()))
-	//	return -1;
+	if (FAILED(Culling()))
+		return -1;
 
 	if (m_pRenderer->Get_Shadow() == true)
 	{
@@ -76,7 +76,7 @@ HRESULT CEnvironment::Render()
 	if (!m_pInstanceMesh)
 		return E_FAIL;
 
-	_float4 ClipPlane = _float4(1.f, 1.f, 1.f, 0.f);
+	_float4 ClipPlane = _float4(0.f, 0.f, 0.f, 0.f);
 	_matrix matWorld = XMMatrixTranspose(m_pTransform->Get_WorldMatrix());
 	_matrix matView = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_VIEW));
 	_matrix matProj = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_PROJECTION));
