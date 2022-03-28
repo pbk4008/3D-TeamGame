@@ -71,10 +71,10 @@ HRESULT CStage1::NativeConstruct()
 	//	return E_FAIL;
 	//}
 
-	//if (FAILED(Ready_Data_Effect()))
-	//{
-	//	return E_FAIL;
-	//}
+	if (FAILED(Ready_Data_Effect()))
+	{
+		return E_FAIL;
+	}
 
 	//if (FAILED(Ready_UI(L"Layer_UI")))
 	//{
@@ -386,9 +386,10 @@ HRESULT CStage1::Ready_Light()
 
 HRESULT CStage1::Ready_Data_Effect()
 {
-	/*vector<CEffect_DashDust::EFFECTDESC> vecEffect;
-	g_pGameInstance->LoadFile<CEffect_DashDust::EFFECTDESC>(vecEffect, L"../bin/SaveData/Effect/Effect_Dash.dat");
-
+	vector<CEffect_DashDust::EFFECTDESC> vecEffect;
+	//Effect_Dash
+	g_pGameInstance->LoadFile<CEffect_DashDust::EFFECTDESC>(vecEffect, L"../bin/SaveData/Effect/Effect_Player_Attack1.dat");
+	
 	for (int i = 0; i < vecEffect.size(); ++i)
 	{
 		wstring FullName = L"Proto_GameObject_Effect_DashDust";
@@ -398,25 +399,25 @@ HRESULT CStage1::Ready_Data_Effect()
 			MSGBOX("Failed to Creating in CStage1::Ready_Effect()");
 			return E_FAIL;
 		}
-	}*/
+	}
 	
 
 	//捞棋飘积己
-	vector<CEffect_HitParticle::EFFECTDESC> vecEffect;
-	g_pGameInstance->LoadFile<CEffect_HitParticle::EFFECTDESC>(vecEffect, L"../bin/SaveData/Effect/Effect_Player_Attack1.dat");
+	//vector<CEffect_HitParticle::EFFECTDESC> vecEffect;
+	//g_pGameInstance->LoadFile<CEffect_HitParticle::EFFECTDESC>(vecEffect, L"../bin/SaveData/Effect/Effect_Player_Attack1.dat");
 
-	for (int i = 0; i < vecEffect.size(); ++i)
-	{
-		wstring FullName = L"Proto_GameObject_Effect_Hit";
-		//_tcscpy_s(vecEffect1[i].ShaderFullFilePath, L"../../Reference/ShaderFile/Shader_PointInstance.hlsl");
-		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Effect_Hit", FullName, &vecEffect[i])))
-		{
-			MSGBOX("Failed to Creating in CStage1::Ready_Effect()");
-			return E_FAIL;
-		}
-	}
+	//for (int i = 0; i < vecEffect.size(); ++i)
+	//{
+	//	wstring FullName = L"Proto_GameObject_Effect_Hit";
+	//	//_tcscpy_s(vecEffect1[i].ShaderFullFilePath, L"../../Reference/ShaderFile/Shader_PointInstance.hlsl");
+	//	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Effect_Hit", FullName, &vecEffect[i])))
+	//	{
+	//		MSGBOX("Failed to Creating in CStage1::Ready_Effect()");
+	//		return E_FAIL;
+	//	}
+	//}
 
-	//捞棋飘积己
+	////捞棋飘积己
 	vector<CEffect_HitFloating::EFFECTDESC> vecEffect1;
 	g_pGameInstance->LoadFile<CEffect_HitFloating::EFFECTDESC>(vecEffect1, L"../bin/SaveData/Effect/Effect_Player_Attack2_Floating_2.dat");
 

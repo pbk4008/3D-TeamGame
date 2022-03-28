@@ -146,35 +146,19 @@ HRESULT CRenderer::Draw_RenderGroup()
 	if (FAILED(m_pRenderAssit->Render_LightAcc(m_CameraTag,m_bPBR,m_bShadow))) // ºû¿¬»ê
 		return E_FAIL;
 
+	if (FAILED(Render_Alpha()))
+		return E_FAIL;
+
 	if (m_bPixel) // Pixel HDR
 	{
 		if (FAILED(m_pHDR->Render_HDRBase(m_pTargetMgr, m_bShadow))) return E_FAIL;
 
 		if (FAILED(m_pLuminance->DownSampling(m_pTargetMgr))) return E_FAIL;
 
-		if (FAILED(m_pPostProcess->ComputeBrightPass(m_pTargetMgr, L"Target_HDRDiffuse", 640.f, 360.f))) return E_FAIL;
-
-		if (FAILED(m_pPostProcess->BlurPass(m_pTargetMgr, L"Target_BrightPass", L"Target_VT2", L"Target_HZ2", 640, 360))) return E_FAIL;
-		if (FAILED(m_pPostProcess->BlurPass(m_pTargetMgr, L"Target_HZ2", L"Target_VT4", L"Target_HZ4", 320, 180))) return E_FAIL;
-		if (FAILED(m_pPostProcess->BlurPass(m_pTargetMgr, L"Target_HZ4", L"Target_VT8", L"Target_HZ8", 160, 90))) return E_FAIL;
-		if (FAILED(m_pPostProcess->BlurPass(m_pTargetMgr, L"Target_HZ8", L"Target_VT16", L"Target_HZ16", 64, 64))) return E_FAIL;
-
-		if (FAILED(m_pPostProcess->BloomPass(m_pTargetMgr))) return E_FAIL;
-
-		if (FAILED(m_pTonemapping->ToneMapping(m_pTargetMgr))) return E_FAIL;
-
-		if (FAILED(m_pPostProcess->BlurPass(m_pTargetMgr, L"Target_Emission", L"Target_Vertical2", L"Target_Horizontal2", 640, 360))) return E_FAIL;
-		if (FAILED(m_pPostProcess->BlurPass(m_pTargetMgr, L"Target_Horizontal2", L"Target_Vertical4", L"Target_Horizontal4", 320, 180))) return E_FAIL;
-		if (FAILED(m_pPostProcess->BlurPass(m_pTargetMgr, L"Target_Horizontal4", L"Target_Vertical8", L"Target_Horizontal8", 160, 90))) return E_FAIL;
-		if (FAILED(m_pPostProcess->BlurPass(m_pTargetMgr, L"Target_Horizontal8", L"Target_Vertical16", L"Target_Horizontal16", 64, 64))) return E_FAIL;
-
-		if (FAILED(m_pTonemapping->Blend_FinalPass(m_pTargetMgr, m_bHDR, m_bShadow))) return E_FAIL;
+		if (FAILED(m_pPostProcess->PossProcessing(m_pTonemapping, m_pTargetMgr,m_bHDR,m_bShadow))) return E_FAIL;
 	}
 
-	if (FAILED(Render_Final())) return E_FAIL;
-
-	if (FAILED(Render_Alpha()))
-		return E_FAIL;
+	if (FAILED(Render_Final())) return E_FAIL;;
 
 	if (FAILED(Render_UI()))
 		return E_FAIL;
@@ -192,6 +176,7 @@ HRESULT CRenderer::Draw_RenderGroup()
 		if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("MRT_Deferred"))))	return E_FAIL;
 		//if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("MRT_SSS"))))
 		//	return E_FAIL;
+
 		if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("MRT_LightAcc"))))	return E_FAIL;
 		if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("MRT_HDRBASE"))))		return E_FAIL;
 		if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("MRT_ToneMapping"))))	return E_FAIL;
@@ -303,6 +288,8 @@ HRESULT CRenderer::Render_NonAlpha()
 
 HRESULT CRenderer::Render_Alpha()
 {
+	if (FAILED(m_pTargetMgr->Begin_MRT(m_pDeviceContext, TEXT("Target_Particle")))) return E_FAIL;
+
 	for (auto& pGameObject : m_RenderGroup[RENDER_ALPHA])
 	{
 		if (nullptr != pGameObject)
@@ -311,6 +298,8 @@ HRESULT CRenderer::Render_Alpha()
 		Safe_Release(pGameObject);
 	}
 	m_RenderGroup[RENDER_ALPHA].clear();
+
+	if (FAILED(m_pTargetMgr->End_MRT(m_pDeviceContext)))	return E_FAIL;
 
 	return S_OK;
 }
