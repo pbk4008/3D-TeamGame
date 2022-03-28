@@ -46,8 +46,8 @@ HRESULT CStage1::NativeConstruct()
 	if (FAILED(Ready_Light()))
 		return E_FAIL;
 	
-	//if (FAILED(Ready_Trigger_Jump()))
-	//	return E_FAIL;
+	if (FAILED(Ready_Trigger_Jump()))
+		return E_FAIL;
 	
 	if (FAILED(Ready_Player(L"Layer_Silvermane")))
 		return E_FAIL;
@@ -55,8 +55,8 @@ HRESULT CStage1::NativeConstruct()
 	if (FAILED(Ready_MapObject()))
 		return E_FAIL;
 
-	//if (FAILED(Ready_TriggerSystem(L"../bin/SaveData/Trigger/MonsterSpawnTrigger.dat")))
-	//	return E_FAIL;
+	if (FAILED(Ready_TriggerSystem(L"../bin/SaveData/Trigger/MonsterSpawnTrigger.dat")))
+		return E_FAIL;
 
 	//if (FAILED(Ready_Boss(L"Layer_Boss")))
 	//{
@@ -68,20 +68,20 @@ HRESULT CStage1::NativeConstruct()
 	//	return E_FAIL;
 	//}
 
-	//if (FAILED(Ready_Data_UI(L"../bin/SaveData/UI/UI.dat")))
-	//{
-	//	return E_FAIL;
-	//}
+	if (FAILED(Ready_Data_UI(L"../bin/SaveData/UI/UI.dat")))
+	{
+		return E_FAIL;
+	}
 
 	//if (FAILED(Ready_Data_Effect()))
 	//{
 	//	return E_FAIL;
 	//}
 
-	//if (FAILED(Ready_UI(L"Layer_UI")))
-	//{
-	//	return E_FAIL;
-	//}
+	if (FAILED(Ready_UI(L"Layer_UI")))
+	{
+		return E_FAIL;
+	}
 
 	//if (FAILED(Ready_Trigger_Lod(L"../bin/SaveData/Trigger/Stage1_LodTri.dat")))
 	//	return E_FAIL;
@@ -137,10 +137,10 @@ _int CStage1::Tick(_double TimeDelta)
 HRESULT CStage1::Render()
 {
 #ifdef _DEBUG
-	//if (nullptr != m_pTriggerSystem)
-	//{
-	//	m_pTriggerSystem->Render();
-	//}
+	if (nullptr != m_pTriggerSystem)
+	{
+		m_pTriggerSystem->Render();
+	}
 #endif
 
 	return S_OK;
