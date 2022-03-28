@@ -68,9 +68,9 @@ HRESULT CShield_WalkBwdStart::ExitState()
 	return S_OK;
 }
 
-_int CShield_WalkBwdStart::KeyCheck(const _double& _dDeltaTime)
+_int CShield_WalkBwdStart::Input(const _double& _dDeltaTime)
 {
-	_int iProgress = __super::KeyCheck(_dDeltaTime);
+	_int iProgress = __super::Input(_dDeltaTime);
 	if (NO_EVENT != iProgress)
 		return iProgress;
 

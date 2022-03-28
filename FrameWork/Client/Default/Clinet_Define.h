@@ -11,6 +11,7 @@ extern HINSTANCE  g_hInst;
 
 extern CClient_Observer* g_pObserver;
 extern CDebugSystem* g_pDebugSystem;
+extern CShakeManager* g_pShakeManager;
 
 
 #endif

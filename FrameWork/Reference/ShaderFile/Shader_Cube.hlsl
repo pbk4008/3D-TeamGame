@@ -43,15 +43,17 @@ VS_OUT VS_MAIN(VS_IN In)
 
 	matrix matWV, matWVP, matVP, matworld;
 
+	matWV = mul(g_WorldMatrix, g_ViewMatrix);
 	matVP = mul(g_ViewMatrix, g_ProjMatrix);
 	
 	matworld = (matrix) 0;
 	
-	matworld._11_22_33_44 = float4(1, 1, 1, 1);
-	matworld._41_42_43 = float3(g_campos.x, g_campos.y, g_campos.z);
+	//matworld._11_22_33_44 = float4(1, 1, 1, 1);
+	//matworld._41_42_43 = float3(g_campos.x, g_campos.y, g_campos.z);
 	
-	matWVP = mul(matworld, matVP);
-	Out.vPosition = mul(float4(In.vPosition, 1), matWVP).xyww;
+	//matWVP = mul(matworld, matVP);
+	matWVP = mul(matWV, g_ProjMatrix);
+	Out.vPosition = mul(float4(In.vPosition, 1), matWVP)/*.xyww*/;
 	Out.vTexUV = In.vTexUV;
 
 	return Out;

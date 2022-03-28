@@ -51,7 +51,6 @@
 #include "TestObj.h"
 #include "Silvermane.h"
 #include "Camera_Silvermane.h"
-#include "Camera_Culling.h"
 #include "Needle.h"
 #include "Fury.h"
 #include "Shield.h"
@@ -61,6 +60,7 @@
 #include "Monster_Bastion_Spear.h"
 #include "JumpNode.h"
 #include "JumpTrigger.h"
+#include "JumpBox.h"
 
 #pragma endregion
 
@@ -147,26 +147,27 @@ HRESULT CLoader::SetUp_Stage1_Object()
 	if (FAILED(Load_Stage1PlayerLoad()))
 		return E_FAIL;
 
-	if (FAILED(Load_Stage1MonsterLoad()))
-		return E_FAIL;
+	//if (FAILED(Load_Stage1MonsterLoad()))
+	//	return E_FAIL;
 
-	if (FAILED(Load_Stage1BossLoad()))
-		return E_FAIL;
+	//if (FAILED(Load_Stage1BossLoad()))
+	//	return E_FAIL;
 
-	if (FAILED(Load_Stage1StaticUILoad()))
-		return E_FAIL;
-	
-	if (FAILED(Load_Stage1UILoad()))
-		return E_FAIL;
+	//if (FAILED(Load_Stage1StaticUILoad()))
+	//	return E_FAIL;
+	//
+	//if (FAILED(Load_Stage1UILoad()))
+	//	return E_FAIL;
 
-	if (FAILED(Load_Stage1EffectLoad()))
-		return E_FAIL;
-
+	//if (FAILED(Load_Stage1EffectLoad()))
+	//	return E_FAIL;
+	//
 	//if (FAILED(Load_Stage1JumpTrigger()))
 	//	return E_FAIL;
 
-	if (FAILED(Load_Stage1TriggerLod()))
-		return E_FAIL;
+
+	//if (FAILED(Load_Stage1TriggerLod()))
+	//	return E_FAIL;
 
 	//if (FAILED(Load_Stage1_TreasureChest_Load()))
 	//	return E_FAIL;
@@ -536,6 +537,8 @@ HRESULT CLoader::Load_Stage1JumpTrigger()
 		return E_FAIL;
 	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_JumpTrigger", CJumpTrigger::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
+	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_JumpBox", CJumpBox::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
 
 	return S_OK;
 }
@@ -691,6 +694,9 @@ HRESULT CLoader::SetUp_Stage1_Prototype()
 	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Environment", CEnvironment::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 
+	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_SubEnvironment", CEnvironment::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+
 	//if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Treasure_Chest", CTreasure_Chest::Create(m_pDevice, m_pDeviceContext))))
 	//	return E_FAIL;
 
@@ -752,8 +758,6 @@ HRESULT CLoader::Load_Stage1PlayerLoad()
 	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Silvermane", CSilvermane::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Camera_Silvermane", CCamera_Silvermane::Create(m_pDevice, m_pDeviceContext))))
-		return E_FAIL;
-	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Camera_Culling", CCamera_Culling::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_SkyBox", CSkyBox::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
@@ -951,11 +955,6 @@ HRESULT CLoader::Ready_Test_JS()
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"VIBuffer_Plane", CVIBuffer_Plane::Create(m_pDevice, m_pDeviceContext, L"../../Reference/ShaderFile/Shader_Plane.hlsl", 100, 100))))
 		return E_FAIL;
 
-
-	cout << "TestScene_JS 마테리얼 생성중..." << endl;
-	CTexture* pTexture = nullptr;
-	CMaterial* pMtrl = nullptr;
-
 #pragma region 모델
 	cout << "TestScene_JS 모델 프로토타입 생성중..." << endl;
 	_matrix matPivot = XMMatrixIdentity();
@@ -1017,8 +1016,6 @@ HRESULT CLoader::Ready_Test_JS()
 		return E_FAIL;
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_CapsuleCollider", CCapsuleCollider::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_RayCollider", CRay_Collider::Create(m_pDevice, m_pDeviceContext, CRay_Collider::TYPE_AABB))))
-		return E_FAIL;
 #pragma endregion
 #pragma region 오브젝트
 	cout << "TestScene_JS 오브젝트 프로토타입 생성중..." << endl;
@@ -1028,11 +1025,11 @@ HRESULT CLoader::Ready_Test_JS()
 		return E_FAIL;
 	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Camera_Silvermane", CCamera_Silvermane::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
-	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Camera_Culling", CCamera_Culling::Create(m_pDevice, m_pDeviceContext))))
-		return E_FAIL;
 	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_JumpNode", CJumpNode::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_JumpTrigger", CJumpTrigger::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_JumpBox", CJumpBox::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 #pragma endregion
 

@@ -19,7 +19,7 @@ public:
 	virtual HRESULT ExitState();
 
 public:
-	virtual _int KeyCheck(const _double& _dDeltaTime) override;
+	virtual _int Input(const _double& _dDeltaTime) override;
 
 public:
 	static C1H_SwordAttackNormalR2_Start* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext, void* _pArg = nullptr);

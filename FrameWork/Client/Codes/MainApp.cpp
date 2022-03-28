@@ -6,9 +6,12 @@
 #include "DebugSystem.h"
 #include "Loading.h"
 #include "MeshLoader.h"
+#include "ShakeManager.h"
 
 CClient_Observer* g_pObserver = nullptr;
 CDebugSystem* g_pDebugSystem = nullptr;
+CShakeManager* g_pShakeManager = nullptr;
+
 CMainApp::CMainApp()
 {
 }
@@ -43,9 +46,10 @@ HRESULT CMainApp::NativeConstruct()
 		return E_FAIL;
 
 	g_pObserver = CClient_Observer::GetInstance();
-	
+	g_pShakeManager = CShakeManager::GetInstance();
+	if (FAILED(g_pShakeManager->NativeConstruct()))
+		return E_FAIL;
 	/*CMeshLoader* pMeshLoader = CMeshLoader::GetInstance();
-
 	if (FAILED(pMeshLoader->Reserve_MeshLoader(m_pDevice, m_pDeviceContext)))
 		return E_FAIL;*/
 
@@ -57,6 +61,23 @@ _int CMainApp::Tick(_double TimeDelta)
 	m_TimeAcc += TimeDelta;
 
 	g_pGameInstance->Update_InputDev();
+
+	if (g_pGameInstance->getkeyDown(DIK_F1))
+	{
+		m_bHDR = !m_bHDR;
+		m_pRenderer->SetRenderButton(CRenderer::HDR, m_bHDR);
+	}
+	if (g_pGameInstance->getkeyDown(DIK_F2))
+	{
+		m_bDBG = !m_bDBG;
+		m_pRenderer->SetRenderButton(CRenderer::DBG, m_bDBG);
+	}
+	if (g_pGameInstance->getkeyDown(DIK_F3))
+	{
+		m_bShadow = !m_bShadow;
+		m_pRenderer->SetRenderButton(CRenderer::SHADOW, m_bShadow);
+	}
+
 
 	if (g_pGameInstance->getkeyDown(DIK_P))
 		m_isPause = !m_isPause;
@@ -249,6 +270,7 @@ void CMainApp::Free()
 	g_pDebugSystem->Stop_DebugSystem();
 	Safe_Release(g_pDebugSystem);
 #endif
+	CShakeManager::DestroyInstance();
 	CMeshLoader::DestroyInstance();
 
 	Safe_Release(g_pObserver);

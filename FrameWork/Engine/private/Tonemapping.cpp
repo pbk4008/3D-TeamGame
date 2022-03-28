@@ -15,7 +15,11 @@ HRESULT CTonemapping::InitToneMapping()
 	ZeroMemory(&m_viewport, sizeof(m_viewport));
 
 	m_pDeviceContext->RSGetViewports(&iViewportIndex, &m_viewport);
-		
+
+	m_pTonmapBuffer = CVIBuffer_RectViewPort::Create(m_pDevice, m_pDeviceContext, 0.f, 0.f, m_viewport.Width, m_viewport.Height, TEXT("../../Reference/ShaderFile/Shader_Tonemapping.hlsl"));
+	if (nullptr == m_pTonmapBuffer)
+		return E_FAIL;
+
 	m_pFinalBlend = CVIBuffer_RectViewPort::Create(m_pDevice, m_pDeviceContext, 0.f, 0.f, m_viewport.Width, m_viewport.Height, TEXT("../../Reference/ShaderFile/Shader_Blend.hlsl"));
 	if (nullptr == m_pFinalBlend)
 		return E_FAIL; 
@@ -23,12 +27,29 @@ HRESULT CTonemapping::InitToneMapping()
 	return S_OK;
 }
 
-HRESULT CTonemapping::Blend_ToneMapping(CTarget_Manager* pTargetMgr, _bool check)
+HRESULT CTonemapping::Blend_FinalPass(CTarget_Manager* pTargetMgr, _bool check,_bool shadow)
 {
 	if (FAILED(pTargetMgr->Begin_MRT(m_pDeviceContext, TEXT("Target_Blend"))))	return E_FAIL;
+	
+	if (FAILED(m_pFinalBlend->SetUp_TextureOnShader("g_OriginTexture", pTargetMgr->Get_SRV(L"Target_HDRDiffuse"))))		return E_FAIL;
+	
 
-	if (FAILED(m_pFinalBlend->SetUp_TextureOnShader("g_DiffuseTexture", pTargetMgr->Get_SRV(L"Target_HDRDiffuse"))))return E_FAIL;
-	if (FAILED(m_pFinalBlend->SetUp_TextureOnShader("g_SpecularTexture", pTargetMgr->Get_SRV(L"Target_Specular"))))	return E_FAIL;
+	if (shadow == true)
+	{
+		if (FAILED(m_pFinalBlend->SetUp_TextureOnShader("g_ShadowTexture", pTargetMgr->Get_SRV(TEXT("Target_ShadeShadow")))))	return E_FAIL;
+	}
+
+	if (check == true)
+	{
+		if (FAILED(m_pFinalBlend->SetUp_TextureOnShader("g_DiffuseTexture", pTargetMgr->Get_SRV(L"Target_ToneMapDiffuse"))))return E_FAIL;
+		//if (FAILED(m_pFinalBlend->SetUp_TextureOnShader("g_SpecularTexture", pTargetMgr->Get_SRV(L"Target_HDRSpecular"))))	return E_FAIL;
+		if (FAILED(m_pFinalBlend->SetUp_TextureOnShader("g_SpecularTexture", pTargetMgr->Get_SRV(L"Target_ToneMapSpecular"))))	return E_FAIL;
+	}
+	else
+	{
+		if (FAILED(m_pFinalBlend->SetUp_TextureOnShader("g_DiffuseTexture", pTargetMgr->Get_SRV(L"Target_HDRDiffuse"))))return E_FAIL;
+		if (FAILED(m_pFinalBlend->SetUp_TextureOnShader("g_SpecularTexture", pTargetMgr->Get_SRV(L"Target_HDRSpecular"))))	return E_FAIL;
+	}
 	if (FAILED(m_pFinalBlend->SetUp_TextureOnShader("g_EmissionTexture", pTargetMgr->Get_SRV(L"Target_Emission"))))	return E_FAIL;
 
 	if (FAILED(m_pFinalBlend->SetUp_TextureOnShader("g_Blur2Texture", pTargetMgr->Get_SRV(L"Target_Horizontal2"))))	return E_FAIL;
@@ -36,11 +57,43 @@ HRESULT CTonemapping::Blend_ToneMapping(CTarget_Manager* pTargetMgr, _bool check
 	if (FAILED(m_pFinalBlend->SetUp_TextureOnShader("g_Blur8Texture", pTargetMgr->Get_SRV(L"Target_Horizontal8"))))	return E_FAIL;
 	if (FAILED(m_pFinalBlend->SetUp_TextureOnShader("g_Blur16Texture", pTargetMgr->Get_SRV(L"Target_Horizontal16")))) return E_FAIL;
 
-	if (FAILED(m_pFinalBlend->SetUp_ValueOnShader("g_bhdr", &check, sizeof(_bool)))) return E_FAIL;
+	if (FAILED(m_pFinalBlend->SetUp_ValueOnShader("g_check", &check, sizeof(_bool)))) return E_FAIL;
+	if (FAILED(m_pFinalBlend->SetUp_ValueOnShader("g_shadow", &shadow, sizeof(_bool)))) return E_FAIL;
 
 	m_pFinalBlend->Render(0);
 
 	if (FAILED(pTargetMgr->End_MRT(m_pDeviceContext))) return E_FAIL;
+
+	return S_OK;
+}
+
+HRESULT CTonemapping::ToneMapping(CTarget_Manager* pTargetMgr)
+{
+	if (FAILED(pTargetMgr->Begin_MRT(m_pDeviceContext, TEXT("MRT_ToneMapping"))))	return E_FAIL;
+
+	if (FAILED(m_pTonmapBuffer->SetUp_TextureOnShader("g_HDRDiffuseTexture", pTargetMgr->Get_SRV(L"Target_HDRDiffuse"))))
+		return E_FAIL;
+	if (FAILED(m_pTonmapBuffer->SetUp_TextureOnShader("g_HDRSpecularTexture", pTargetMgr->Get_SRV(L"Target_HDRSpecular"))))
+		return E_FAIL;
+	if (FAILED(m_pTonmapBuffer->SetUp_TextureOnShader("g_LuminanceTexture", pTargetMgr->Get_SRV(L"Target_Lum5"))))
+		return E_FAIL;
+	if (FAILED(m_pTonmapBuffer->SetUp_TextureOnShader("g_BloomTexture", pTargetMgr->Get_SRV(L"Target_Bloom"))))
+		return E_FAIL;
+
+	_float rcp_w = (1.f / m_viewport.Width);
+	_float rcp_h = (1.f / m_viewport.Height);
+	_float expsure = 0.5f;
+	_float GaussianScalar = 0.4f;
+
+	if (FAILED(m_pTonmapBuffer->SetUp_ValueOnShader("Exposure", &expsure, sizeof(_float))))	return E_FAIL;
+	if (FAILED(m_pTonmapBuffer->SetUp_ValueOnShader("GaussianScalar", &GaussianScalar, sizeof(_float)))) return E_FAIL;
+	if (FAILED(m_pTonmapBuffer->SetUp_ValueOnShader("rcp_bloom_tex_w", &rcp_w, sizeof(_float)))) return E_FAIL;
+	if (FAILED(m_pTonmapBuffer->SetUp_ValueOnShader("rcp_bloom_tex_h", &rcp_h, sizeof(_float)))) return E_FAIL;
+
+	m_pTonmapBuffer->Render(0);
+
+	if (FAILED(pTargetMgr->End_MRT(m_pDeviceContext)))
+		return E_FAIL;
 
 	return S_OK;
 }
@@ -52,7 +105,7 @@ CTonemapping* CTonemapping::Create(ID3D11Device* pDevice, ID3D11DeviceContext* p
 
 	if (FAILED(pInstance->InitToneMapping()))
 	{
-		MSGBOX("Failed To Creating PostProcess");
+		MSGBOX("Failed To Creating ToneMapping");
 		Safe_Release(pInstance);
 	}
 
@@ -61,6 +114,7 @@ CTonemapping* CTonemapping::Create(ID3D11Device* pDevice, ID3D11DeviceContext* p
 
 void CTonemapping::Free()
 {
+	Safe_Release(m_pTonmapBuffer);
 	Safe_Release(m_pFinalBlend);
 	Safe_Release(m_pDevice);
 	Safe_Release(m_pDeviceContext);

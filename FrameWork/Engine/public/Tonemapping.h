@@ -15,9 +15,12 @@ public: void				Set_HDR(_bool check) { m_bHDR = check; }
 
 public: HRESULT				InitToneMapping();
 
-public: HRESULT				Blend_ToneMapping(CTarget_Manager* pTargetMgr, _bool check);
+public: HRESULT				Blend_FinalPass(CTarget_Manager* pTargetMgr, _bool check, _bool shadow);
+public: HRESULT				ToneMapping(CTarget_Manager* pTargetMgr);
 
+private: CVIBuffer_RectViewPort*	m_pTonmapBuffer = nullptr;
 private: CVIBuffer_RectViewPort*	m_pFinalBlend = nullptr;
+
 private: ID3D11Device*				m_pDevice = nullptr;
 private: ID3D11DeviceContext*		m_pDeviceContext = nullptr;
 private: _bool						m_bHDR = false;

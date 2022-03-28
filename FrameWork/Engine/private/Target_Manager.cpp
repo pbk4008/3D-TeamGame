@@ -118,7 +118,7 @@ HRESULT CTarget_Manager::End_RT(ID3D11DeviceContext* pDeviceContext, ID3D11Depth
 
 	pDeviceContext->OMSetRenderTargets(1, &m_pOldView, m_pDepthStencilView);
 	pDeviceContext->ClearDepthStencilView(m_pDepthStencilView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.f, 0);
-	pDeviceContext->ClearDepthStencilView(DepthView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.f, 0);
+	/*pDeviceContext->ClearDepthStencilView(DepthView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.f, 0);*/
 
 	Safe_Release(m_pOldView);
 	Safe_Release(m_pDepthStencilView);

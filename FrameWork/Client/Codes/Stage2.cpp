@@ -4,6 +4,8 @@
 #include "Silvermane.h"
 #include "Environment.h"
 
+#include "JumpNode.h"
+
 CStage2::CStage2(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
 	: CLevel(pDevice, pDeviceContext)
 	, m_bDebug(false)
@@ -116,6 +118,26 @@ HRESULT CStage2::Ready_Player(const _tchar* LayerTag)
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE2, LayerTag, L"Proto_GameObject_Silvermane", &tDesc)))
 		return E_FAIL;
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE2, L"Layer_Camera", L"Proto_GameObject_Camera_Silvermane")))
+		return E_FAIL;
+
+	return S_OK;
+}
+
+HRESULT CStage2::Ready_JumpTrigger()
+{
+	// 점프 노드들
+	CJumpNode::DESC tJumpNodeDesc;
+	tJumpNodeDesc.vPosition = { 30.f , 23.f, 202.f };
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_JS, L"Layer_JumpNode", L"Proto_GameObject_JumpNode", &tJumpNodeDesc)))
+		return E_FAIL;
+	tJumpNodeDesc.vPosition = { 27.f, 18.f, 228.f };
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_JS, L"Layer_JumpNode", L"Proto_GameObject_JumpNode", &tJumpNodeDesc)))
+		return E_FAIL;
+	tJumpNodeDesc.vPosition = { -2.f, 15.f, 235.f };
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_JS, L"Layer_JumpNode", L"Proto_GameObject_JumpNode", &tJumpNodeDesc)))
+		return E_FAIL;
+	tJumpNodeDesc.vPosition = { 39.f, 15.f, 268.f };
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_JS, L"Layer_JumpNode", L"Proto_GameObject_JumpNode", &tJumpNodeDesc)))
 		return E_FAIL;
 
 	return S_OK;

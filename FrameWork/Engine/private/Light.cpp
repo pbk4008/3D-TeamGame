@@ -27,7 +27,11 @@ HRESULT CLight::NativeConstruct(const LIGHTDESC& LightDesc)
 	return S_OK;
 }
 
-HRESULT CLight::Render(const wstring& pCameraTag, _bool PBRHDRcheck)
+void CLight::Tick()
+{
+}
+
+HRESULT CLight::Render(const wstring& pCameraTag, _bool PBRHDRcheck, _bool Shadow)
 {
 	CTarget_Manager* pTarget_Manager = GET_INSTANCE(CTarget_Manager);
 	if (m_pVIBuffer != nullptr)
@@ -75,6 +79,7 @@ HRESULT CLight::Render(const wstring& pCameraTag, _bool PBRHDRcheck)
 		m_pVIBuffer->SetUp_ValueOnShader("g_ViewMatrixInv", &XMMatrixTranspose(ViewMatrix), sizeof(_float4x4));
 		m_pVIBuffer->SetUp_ValueOnShader("g_ProjMatrixInv", &XMMatrixTranspose(ProjMatrix), sizeof(_float4x4));
 		m_pVIBuffer->SetUp_ValueOnShader("g_bPBRHDR", &PBRHDRcheck, sizeof(_bool));
+		m_pVIBuffer->SetUp_ValueOnShader("g_bShadow", &Shadow, sizeof(_bool));
 
 		m_pVIBuffer->Render(iPassIndex);
 	}
@@ -85,42 +90,81 @@ HRESULT CLight::Render(const wstring& pCameraTag, _bool PBRHDRcheck)
 
 void CLight::UpdateLightCam(_fvector playerpos)
 {
-	_float3 up = _float3(0, 1.f, 0);
-	_float3 lookat;
-	XMStoreFloat3(&lookat, playerpos);
+	_vector up = { 0, 1.f, 0,0 };
+	_vector lookat = playerpos;
 
+	m_LightDesc.mOrthinfo[0] = 50.f;
 
-	_vector		vPosition = XMLoadFloat3(&m_LightDesc.vPosition);
-	vPosition = XMVectorSetW(vPosition, 1.f);
+	_float3 dir = _float3(-1.f, -1.f, 1.f);
+	_vector vdir = XMVector3Normalize(XMLoadFloat3(&m_LightDesc.vDirection));
+	XMStoreFloat3(&m_LightDesc.vPosition, (vdir * m_LightDesc.mOrthinfo[0] * -1.f) + lookat);
+	m_LightDesc.mLightView = XMMatrixLookAtLH(XMLoadFloat3(&m_LightDesc.vPosition), lookat, up);
 
-	_vector		vLook = XMLoadFloat3(&lookat) - XMLoadFloat3(&m_LightDesc.vPosition);
-	vLook = XMVector3Normalize(vLook);
+	//_vector eye = playerpos;
+	//_vector lookat = eye + XMVectorSet(0,0,1,0);
+	//_vector up = { 0, 1.f, 0,0 };
 
-	_vector		vRight = XMVector3Cross(XMLoadFloat3(&up), vLook);
-	vRight = XMVector3Normalize(vRight);
+	//m_LightDesc.mLightView = XMMatrixLookAtLH(eye, lookat, up);
+	// 
+	//m_LightDesc.mOrthinfo[0] = 10.f;
+	//m_LightDesc.mLightProj = XMMatrixOrthographicLH(75.f, 75.f, 1.f, 300.f);
+	//XMStoreFloat3(&m_LightDesc.vPosition, ((XMVector3Normalize(XMLoadFloat3(&m_LightDesc.vDirection)) * m_LightDesc.mOrthinfo[0] * -1.f) + lookat));
+	//m_LightDesc.mLightView = XMMatrixLookAtLH(XMLoadFloat3(&m_LightDesc.vPosition), lookat, up);
 
-	_vector		vUp = XMVector3Cross(vLook, vRight);
-	vUp = XMVector3Normalize(vUp);
+	//_vector origin = { 0,0,0,0 };
+	//_float3	forigin;
 
-	_matrix lightcam;
-	lightcam.r[0] = vRight;
-	lightcam.r[1] = vUp;
-	lightcam.r[2] = vLook;
-	lightcam.r[3] = vPosition;
+	//origin = XMVector3TransformCoord(origin, m_LightDesc.mLightView);
+	//XMStoreFloat3(&forigin, origin);
 
-	m_LightDesc.mLightView = XMMatrixInverse(nullptr, lightcam);
+	//m_LightDesc.mOrthinfo[1] = forigin.x - m_LightDesc.mOrthinfo[0];
+	//m_LightDesc.mOrthinfo[2] = forigin.x + m_LightDesc.mOrthinfo[0];
+	//m_LightDesc.mOrthinfo[3] = forigin.y - m_LightDesc.mOrthinfo[0];
+	//m_LightDesc.mOrthinfo[4] = forigin.y + m_LightDesc.mOrthinfo[0];
 
-	_vector origin = { 0,0,0,0 };
-	_float3	forigin;
-	origin = XMVector3TransformCoord(origin, m_LightDesc.mLightView);
-	XMStoreFloat3(&forigin, origin);
+	//m_LightDesc.mLightProj = XMMatrixOrthographicLH(m_LightDesc.mOrthinfo[2] - m_LightDesc.mOrthinfo[1], m_LightDesc.mOrthinfo[4] - m_LightDesc.mOrthinfo[3], 0.1f, 300.f);
 
-	m_LightDesc.mOrthinfo[1] = forigin.x - m_LightDesc.mOrthinfo[0];
-	m_LightDesc.mOrthinfo[2] = forigin.x + m_LightDesc.mOrthinfo[0];
-	m_LightDesc.mOrthinfo[3] = forigin.y - m_LightDesc.mOrthinfo[0];
-	m_LightDesc.mOrthinfo[4] = forigin.y + m_LightDesc.mOrthinfo[0];
+	//_float3 up = _float3(0, 1.f, 0);
+	//_float3 lookat = _float3(0, 0, 0);
 
-	m_LightDesc.mLightProj = XMMatrixOrthographicLH(m_LightDesc.mOrthinfo[2] - m_LightDesc.mOrthinfo[1], m_LightDesc.mOrthinfo[4] - m_LightDesc.mOrthinfo[3], 0.1f, 1000.f);
+	//XMStoreFloat3(&lookat,playerpos);
+
+	//_vector		vPosition = XMLoadFloat3(&m_LightDesc.vPosition);
+	//vPosition = XMVectorSetW(vPosition, 1.f);
+
+	//_vector		vLook = XMLoadFloat3(&lookat) - XMLoadFloat3(&m_LightDesc.vPosition);
+	//vLook = XMVector3Normalize(vLook);
+
+	////XMStoreFloat3(&LightDesc.vDirection, vLook);
+
+	//_vector		vRight = XMVector3Cross(XMLoadFloat3(&up), vLook);
+	//vRight = XMVector3Normalize(vRight);
+
+	//_vector		vUp = XMVector3Cross(vLook, vRight);
+	//vUp = XMVector3Normalize(vUp);
+
+	//_matrix lightcam;
+	//lightcam.r[0] = vRight;
+	//lightcam.r[1] = vUp;
+	//lightcam.r[2] = vLook;
+	//lightcam.r[3] = vPosition;
+
+	////_vector origin = { 0,0,0,0 };
+	////_float3	forigin;
+
+	//m_LightDesc.mLightView = XMMatrixInverse(nullptr, lightcam);
+
+	//origin = XMVector3TransformCoord(origin, m_LightDesc.mLightView);
+	//XMStoreFloat3(&forigin, origin);
+
+	//m_LightDesc.mOrthinfo[0] = 20.f;
+
+	//m_LightDesc.mOrthinfo[1] = forigin.x - m_LightDesc.mOrthinfo[0];
+	//m_LightDesc.mOrthinfo[2] = forigin.x + m_LightDesc.mOrthinfo[0];
+	//m_LightDesc.mOrthinfo[3] = forigin.y - m_LightDesc.mOrthinfo[0];
+	//m_LightDesc.mOrthinfo[4] = forigin.y + m_LightDesc.mOrthinfo[0];
+
+	//m_LightDesc.mLightProj = XMMatrixOrthographicLH(m_LightDesc.mOrthinfo[2] - m_LightDesc.mOrthinfo[1], m_LightDesc.mOrthinfo[4] - m_LightDesc.mOrthinfo[3], 0.1f, 1000.f);
 }
 
 CLight * CLight::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pDeviceContext, const LIGHTDESC& LightDesc)

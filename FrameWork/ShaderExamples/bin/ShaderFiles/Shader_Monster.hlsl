@@ -333,7 +333,7 @@ PS_OUT PS_MAIN_Body(PS_IN In)
 	float Metalic = mra.r + 0.2f;
 	Out.M = float4(Metalic.xxx, 1.f);
 	
-	float Roughness = mra.g;
+	float Roughness = mra.g ;
 	Out.R = float4(Roughness.xxx, 1.f);
 
 	float AO = ceo.b * 1.f;
@@ -354,7 +354,7 @@ PS_OUT PS_MAIN_FUR(PS_IN In)
 	Out.diffuse.xyz = diffuse.xyz * 0.5f + 0.5f;
 	Out.diffuse.w = diffuse.w;
 	
-	float3 normal = In.vNormal;
+	float3 normal = In.vNormal.xyz;
 	normal = normalize(normal);
 	normal = normal * 0.5f + 0.5f;
 	Out.normal = float4(normal, 0.f);

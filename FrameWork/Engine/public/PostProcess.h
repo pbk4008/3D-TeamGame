@@ -13,6 +13,9 @@ private: virtual ~CPostProcess() = default;
 
 public: HRESULT				InitPostProcess();
 
+public: HRESULT				ComputeBrightPass(CTarget_Manager* pTargetMgr, const wstring& in, _float sizex, _float sizey);
+public: HRESULT				BloomPass(CTarget_Manager* pTargetMgr);
+
 public: HRESULT				BlurPass(CTarget_Manager* pTargetMgr, const wstring& in, const wstring& middle, const wstring& out, _float sizex, _float sizey);
 public: HRESULT				GaussianBlurVertical(CTarget_Manager* pTargetMgr, const wstring& in, const wstring& bind, _float sizex, _float sizey);
 public: HRESULT				GaussianblurHorizontal(CTarget_Manager* pTargetMgr, const wstring& in, const wstring& bind, _float sizex, _float sizey);

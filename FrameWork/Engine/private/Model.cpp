@@ -320,11 +320,24 @@ HRESULT CModel::SetUp_TextureOnShader(const char* pConstantName, _uint iMeshCont
 
 HRESULT CModel::SetUp_TextureOnShader(const char* pConstantName, ID3D11ShaderResourceView* pSRV)
 {
-	ID3DX11EffectShaderResourceVariable* pVariable = m_pEffect->GetVariableByName(pConstantName)->AsShaderResource();
-	if (nullptr == pVariable)
-		return E_FAIL;
+	if (m_bUsingMaterial)
+	{
+		for (auto& pMtrl : m_vecMaterials)
+		{
+			if (pMtrl)
+				pMtrl->SetUp_TextureOnShader(pConstantName, pSRV);
+		}
+	}
+	else
+	{
+		ID3DX11EffectShaderResourceVariable* pVariable = m_pEffect->GetVariableByName(pConstantName)->AsShaderResource();
+		if (nullptr == pVariable)
+			return E_FAIL;
 
-	return pVariable->SetResource(pSRV);
+		return pVariable->SetResource(pSRV);
+	}
+
+	return S_OK;
 }
 
 /* 매 프레임마다 호출. */

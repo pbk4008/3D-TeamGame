@@ -13,6 +13,7 @@ sampler DefaultSampler = sampler_state
 };
 
 texture2D g_DiffuseTexture;
+texture2D g_OriginTexture;
 texture2D g_SpecularTexture;
 
 texture2D g_EmissionTexture;
@@ -21,12 +22,13 @@ texture2D g_Blur2Texture;
 texture2D g_Blur4Texture;
 texture2D g_Blur8Texture;
 texture2D g_Blur16Texture;
+texture2D g_ShadowTexture;
 
-texture2D g_BloomTexture;
 
-cbuffer hdrcheck
+cbuffer check
 {
-	bool g_bhdr;
+	bool g_check;
+	bool g_shadow;
 };
 
 struct VS_IN
@@ -66,7 +68,7 @@ PS_OUT PS_MAIN_BLEND(PS_IN In)
 {
 	PS_OUT Out = (PS_OUT) 0;
 	
-	float Gamma = 2.2f;
+	float originA = g_OriginTexture.Sample(DefaultSampler, In.vTexUV).a;
 	
 	float4 diffuse = g_DiffuseTexture.Sample(DefaultSampler, In.vTexUV);
 	float4 emission = g_EmissionTexture.Sample(DefaultSampler, In.vTexUV);
@@ -77,31 +79,30 @@ PS_OUT PS_MAIN_BLEND(PS_IN In)
 	float4 blur8 = g_Blur8Texture.Sample(DefaultSampler, In.vTexUV);
 	float4 blur16 = g_Blur16Texture.Sample(DefaultSampler, In.vTexUV);
 	
-	float4 final = diffuse + ((emission) * 1.f + (blur2) * 1.3f + (blur4) * 1.5f + (blur8) * 2.5f + (blur16) * 3.5f) + specular;
-	
-	if (g_bhdr == true)
-	{
-		final = pow(final, Gamma);
-	
-		float Luminance = 1.f;
-		float MiddleGray = 0.18f;
-		float WhiteCutoff = 0.9f;
-	
-		vector color;
-		color = final * MiddleGray / (Luminance + 0.001f);
-	
-		color *= (1.f + (color / (WhiteCutoff * WhiteCutoff)));
-		color /= (1.f + color);
-	
-		Out.vOutColor = pow(color, 1 / Gamma);
+	float4 emissive = ((emission) * 1.f + (blur2) * 1.3f + (blur4) * 1.5f + (blur8) * 2.5f + (blur16) * 3.5f);
+	float4 final = float4(0, 0, 0, 0);
+	if (g_check == true)
+	{	
+		if(g_shadow == true)
+		{
+			float4 shadow = g_ShadowTexture.Sample(DefaultSampler, In.vTexUV);
+			diffuse = diffuse * shadow;
+		}
+		
+		final.rgb = diffuse.rgb + specular.rgb + emissive.rgb;
+		final.a = originA + emissive.a/* + specular.a*/;
 	}
 	else
 	{
-		Out.vOutColor = final;
+		final = diffuse + emissive + specular;
 	}
 	
-	return Out;
-}
+	Out.vOutColor = final;
+	
+	
+		return Out;
+	}
+
 technique11 Emissionblend
 {
 	pass BlendEmission
