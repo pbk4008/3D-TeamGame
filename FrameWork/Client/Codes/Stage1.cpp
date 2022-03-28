@@ -1,3 +1,4 @@
+
 #include "pch.h"
 #include "Loading.h"
 #include "Stage1.h"
@@ -5,6 +6,7 @@
 
 #include "Effect_DashDust.h"
 #include "Effect_HitParticle.h"
+#include "Effect_HitFloating.h"
 #include "UI_Ingame.h"
 #include "UI_Player_HpBar.h"
 #include "UI_Tuto_Base.h"
@@ -15,17 +17,26 @@
 
 CStage1::CStage1()
 	: m_pTriggerSystem(nullptr)
+	, m_bDebug(false)
 {
 }
 
 CStage1::CStage1(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
 	:CLevel(pDevice, pDeviceContext)
 	, m_pTriggerSystem(nullptr)
+	, m_bDebug(false)
 {
 }
 
 HRESULT CStage1::NativeConstruct()
 {
+	//몬스터 안잡고 진행하려면 true, 잡으면서 진행하려면 false (잡고갈때는 무조건 다 잡고가야됨)
+
+	m_bDebug = false;//false로 바꾸면 무조건 몬스터 다잡고 가야됩니다.
+#ifndef _DEBUG 
+	m_bDebug = false;
+#endif // DEBUG
+
 	if (FAILED(CLevel::NativeConstruct()))
 		return E_FAIL;
 
@@ -46,6 +57,7 @@ HRESULT CStage1::NativeConstruct()
 	{
 		return E_FAIL;
 	}
+
 	if (FAILED(Ready_TriggerSystem(L"../bin/SaveData/Trigger/MonsterSpawnTrigger.dat")))
 		return E_FAIL;
 
@@ -59,12 +71,11 @@ HRESULT CStage1::NativeConstruct()
 		return E_FAIL;
 	}
 
-	//Data
 	if (FAILED(Ready_Data_UI(L"../bin/SaveData/UI/UI.dat")))
 	{
 		return E_FAIL;
 	}
-	
+
 	if (FAILED(Ready_Data_Effect()))
 	{
 		return E_FAIL;
@@ -75,8 +86,6 @@ HRESULT CStage1::NativeConstruct()
 		return E_FAIL;
 	}
 
-	if (FAILED(Ready_TriggerFunctionSetting()))
-		return E_FAIL;
 	//if (FAILED(Ready_Trigger_Lod(L"../bin/SaveData/Trigger/Stage1_LodTri.dat")))
 	//	return E_FAIL;
 	//if (FAILED(Ready_Trigger_Light(L"../bin/SaveData/Trigger/Stage1_LodTri.dat")))
@@ -108,7 +117,10 @@ _int CStage1::Tick(_double TimeDelta)
 		g_pDebugSystem->Set_LevelcMoveCheck(false);
 	}
 #endif //  _DEBUG
-	m_pTriggerSystem->Tick(TimeDelta);
+	if (nullptr != m_pTriggerSystem)
+	{
+		m_pTriggerSystem->Tick(TimeDelta);
+	}
 
 	return _int();
 }
@@ -116,7 +128,10 @@ _int CStage1::Tick(_double TimeDelta)
 HRESULT CStage1::Render()
 {
 #ifdef _DEBUG
-	m_pTriggerSystem->Render();
+	if (nullptr != m_pTriggerSystem)
+	{
+		m_pTriggerSystem->Render();
+	}
 #endif
 	return S_OK;
 }
@@ -170,7 +185,8 @@ HRESULT CStage1::Ready_Camera(const _tchar* LayerTag)
 HRESULT CStage1::Ready_Player(const _tchar* LayerTag)
 {
 	//// 네비메쉬
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Plane", L"Proto_GameObject_Plane_Test")))
+	wstring wstrNaviFile = L"../Data/NavMesh/Stage_1_Nav.dat";
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Plane", L"Proto_GameObject_Plane_Test",&wstrNaviFile)))
 		return E_FAIL;
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Proto_GameObject_Silvermane")))
 		return E_FAIL;
@@ -195,11 +211,8 @@ HRESULT CStage1::Ready_Monster(const _tchar* LayerTag)
 
 	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Proto_GameObject_Monster_EarthAberrant")))
 	//	return E_FAIL;
-	
+	//
 	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Proto_GameObject_Monster_Bastion_2HSword")))
-	//	return E_FAIL;
-	
-	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Proto_GameObject_Monster_BronzeAnimus")))
 	//	return E_FAIL;
 
 	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Proto_GameObject_Monster_Bastion_Healer")))
@@ -211,12 +224,6 @@ HRESULT CStage1::Ready_Monster(const _tchar* LayerTag)
 	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Proto_GameObject_Monster_Bastion_Shooter")))
 	//	return E_FAIL;
 	 
-	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Proto_GameObject_Monster_BronzeAnimus")))
-	//	return E_FAIL;
-
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Proto_GameObject_Monster_Bastion_Spear")))
-		return E_FAIL;
-	
 	return S_OK;
 }
 
@@ -325,7 +332,6 @@ HRESULT CStage1::Ready_Data_Effect()
 
 	for (int i = 0; i < vecEffect.size(); ++i)
 	{
-		wstring Tag = vecEffect[i].TextureTag;
 		wstring FullName = L"Proto_GameObject_Effect_DashDust";
 
 		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Effect", FullName, &vecEffect[i])))
@@ -334,17 +340,32 @@ HRESULT CStage1::Ready_Data_Effect()
 			return E_FAIL;
 		}
 	}*/
+	
 
+	//이펙트생성
+	vector<CEffect_HitParticle::EFFECTDESC> vecEffect;
+	g_pGameInstance->LoadFile<CEffect_HitParticle::EFFECTDESC>(vecEffect, L"../bin/SaveData/Effect/Effect_Player_Attack1.dat");
 
-	vector<CEffect_HitParticle::EFFECTDESC> vecEffect1;
-	g_pGameInstance->LoadFile<CEffect_HitParticle::EFFECTDESC>(vecEffect1, L"../bin/SaveData/Effect/Effect_Explosion.dat");
+	for (int i = 0; i < vecEffect.size(); ++i)
+	{
+		wstring FullName = L"Proto_GameObject_Effect_Hit";
+		//_tcscpy_s(vecEffect1[i].ShaderFullFilePath, L"../../Reference/ShaderFile/Shader_PointInstance.hlsl");
+		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Effect_Hit", FullName, &vecEffect[i])))
+		{
+			MSGBOX("Failed to Creating in CStage1::Ready_Effect()");
+			return E_FAIL;
+		}
+	}
+
+	//이펙트생성
+	vector<CEffect_HitFloating::EFFECTDESC> vecEffect1;
+	g_pGameInstance->LoadFile<CEffect_HitFloating::EFFECTDESC>(vecEffect1, L"../bin/SaveData/Effect/Effect_Player_Attack2_Floating_2.dat");
 
 	for (int i = 0; i < vecEffect1.size(); ++i)
 	{
-		wstring Tag = vecEffect1[i].TextureTag;
-		wstring FullName = L"Proto_GameObject_Effect_Hit";
-
-		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Effect", FullName, &vecEffect1[i])))
+		wstring FullName = L"Proto_GameObject_Effect_Floating";
+		//_tcscpy_s(vecEffect1[i].ShaderFullFilePath, L"../../Reference/ShaderFile/Shader_PointInstance.hlsl");
+		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Effect_Floating", FullName, &vecEffect1[i])))
 		{
 			MSGBOX("Failed to Creating in CStage1::Ready_Effect()");
 			return E_FAIL;
@@ -455,18 +476,29 @@ void CStage1::Trgger_Function1()
 	if (!pLayer)
 		return;
 	//땅벌레
-	auto iter = pLayer->begin();
-	advance(iter, 0);
-	(*iter)->setActive(true);
+	if (m_bDebug)
+	{
+		auto iter = pLayer->begin();
+		advance(iter, 0);
+		(*iter)->setActive(true);
 
-	iter = pLayer->begin();
-	advance(iter, 1);
-	(*iter)->setActive(true);
+		iter = pLayer->begin();
+		advance(iter, 1);
+		(*iter)->setActive(true);
 
-	iter = pLayer->begin();
-	advance(iter, 2);
-	(*iter)->setActive(true);
-
+		iter = pLayer->begin();
+		advance(iter, 2);
+		(*iter)->setActive(true);
+	}
+	else
+	{
+		auto iter = pLayer->begin();
+		(*iter)->setActive(true);
+		iter++;
+		(*iter)->setActive(true);
+		iter++;
+		(*iter)->setActive(true);
+	}
 }
 
 void CStage1::Trgger_Function2()
@@ -475,11 +507,19 @@ void CStage1::Trgger_Function2()
 	//몬스터 위치를 통해서 클론한다
 	if (!pLayer)
 		return;
-
-	auto iter = pLayer->begin();
-	//대지
-	advance(iter, 0);
-	(*iter)->setActive(true);
+	if (m_bDebug)
+	{
+		auto iter = pLayer->begin();
+		//대지
+		advance(iter, 0);
+		(*iter)->setActive(true);
+	}
+	else
+	{
+		auto iter = pLayer->begin();
+		//대지
+		(*iter)->setActive(true);
+	}
 }
 
 void CStage1::Trgger_Function3()
@@ -490,26 +530,46 @@ void CStage1::Trgger_Function3()
 		return;
 	//땅벌레
 
-	auto iter = pLayer->begin();
-	advance(iter, 3);
-	(*iter)->setActive(true);
+	if (m_bDebug)
+	{
+		auto iter = pLayer->begin();
+		advance(iter, 3);
+		(*iter)->setActive(true);
 
-	iter = pLayer->begin();
-	advance(iter, 4);
-	(*iter)->setActive(true);
+		iter = pLayer->begin();
+		advance(iter, 4);
+		(*iter)->setActive(true);
 
-	//한손검
-	pLayer = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Layer_Bastion_Sword");
-	if (!pLayer)
-		return;
+		//한손검
+		pLayer = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Layer_Bastion_Sword");
+		if (!pLayer)
+			return;
 
-	iter = pLayer->begin();
-	advance(iter, 0);
-	(*iter)->setActive(true);
+		iter = pLayer->begin();
+		advance(iter, 0);
+		(*iter)->setActive(true);
 
-	iter = pLayer->begin();
-	advance(iter, 1);
-	(*iter)->setActive(true);
+		iter = pLayer->begin();
+		advance(iter, 1);
+		(*iter)->setActive(true);
+	}
+	else
+	{
+		auto iter = pLayer->begin();
+		(*iter)->setActive(true);
+		iter++;
+		(*iter)->setActive(true);
+
+		//한손검
+		pLayer = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Layer_Bastion_Sword");
+		if (!pLayer)
+			return;
+
+		iter = pLayer->begin();
+		(*iter)->setActive(true);
+		iter++;
+		(*iter)->setActive(true);
+	}
 }
 
 void CStage1::Trgger_Function4()
@@ -519,17 +579,29 @@ void CStage1::Trgger_Function4()
 		return;
 	//땅벌레
 
-	auto iter = pLayer->begin();
-	advance(iter, 5);
-	(*iter)->setActive(true);
+	if (m_bDebug)
+	{
+		auto iter = pLayer->begin();
+		advance(iter, 5);
+		(*iter)->setActive(true);
 
-	iter = pLayer->begin();
-	advance(iter, 6);
-	(*iter)->setActive(true);
+		iter = pLayer->begin();
+		advance(iter, 6);
+		(*iter)->setActive(true);
 
-	iter = pLayer->begin();
-	advance(iter, 7);
-	(*iter)->setActive(true);
+		iter = pLayer->begin();
+		advance(iter, 7);
+		(*iter)->setActive(true);
+	}
+	else
+	{
+		auto iter = pLayer->begin();
+		(*iter)->setActive(true);
+		iter++;
+		(*iter)->setActive(true);
+		iter++;
+		(*iter)->setActive(true);
+	}
 }
 
 void CStage1::Trgger_Function5()
@@ -538,13 +610,23 @@ void CStage1::Trgger_Function5()
 	if (!pLayer)
 		return;
 
-	auto iter = pLayer->begin();
-	advance(iter, 1);
-	(*iter)->setActive(true);
+	if (m_bDebug)
+	{
+		auto iter = pLayer->begin();
+		advance(iter, 1);
+		(*iter)->setActive(true);
 
-	iter = pLayer->begin();
-	advance(iter, 2);
-	(*iter)->setActive(true);
+		iter = pLayer->begin();
+		advance(iter, 2);
+		(*iter)->setActive(true);
+	}
+	else
+	{
+		auto iter = pLayer->begin();
+		(*iter)->setActive(true);
+		iter++;
+		(*iter)->setActive(true);
+	}
 }
 
 void CStage1::Trgger_Function6()
@@ -552,38 +634,62 @@ void CStage1::Trgger_Function6()
 	list<CGameObject*>* pLayer = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Layer_Bastion_Sword");
 	if (!pLayer)
 		return;
+	if (m_bDebug)
+	{
+		auto iter = pLayer->begin();
+		advance(iter, 2);
+		(*iter)->setActive(true);
 
-	auto iter = pLayer->begin();
-	advance(iter, 2);
-	(*iter)->setActive(true);
+		iter = pLayer->begin();
+		advance(iter, 3);
+		(*iter)->setActive(true);
 
-	iter = pLayer->begin();
-	advance(iter, 3);
-	(*iter)->setActive(true);
+		iter = pLayer->begin();
+		advance(iter, 4);
+		(*iter)->setActive(true);
 
-	iter = pLayer->begin();
-	advance(iter, 4);
-	(*iter)->setActive(true);
+		iter = pLayer->begin();
+		advance(iter, 5);
+		(*iter)->setActive(true);
 
-	iter = pLayer->begin();
-	advance(iter, 5);
-	(*iter)->setActive(true);
+		pLayer = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Layer_Crawler");
+		if (!pLayer)
+			return;
 
-	 pLayer = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Layer_Crawler");
-	if (!pLayer)
-		return;
+		iter = pLayer->begin();
+		advance(iter, 8);
+		(*iter)->setActive(true);
 
-	iter = pLayer->begin();
-	advance(iter, 8);
-	(*iter)->setActive(true);
+		iter = pLayer->begin();
+		advance(iter, 9);
+		(*iter)->setActive(true);
 
-	iter = pLayer->begin();
-	advance(iter, 9);
-	(*iter)->setActive(true);
+		iter = pLayer->begin();
+		advance(iter, 10);
+		(*iter)->setActive(true);
+	}
+	else
+	{
+		auto iter = pLayer->begin();
+		(*iter)->setActive(true);
+		iter++;
+		(*iter)->setActive(true);
+		iter++;
+		(*iter)->setActive(true);
+		iter++;
+		(*iter)->setActive(true);
 
-	iter = pLayer->begin();
-	advance(iter, 10);
-	(*iter)->setActive(true);
+		pLayer = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Layer_Crawler");
+		if (!pLayer)
+			return;
+
+		iter = pLayer->begin();
+		(*iter)->setActive(true);
+		iter++;
+		(*iter)->setActive(true);
+		iter++;
+		(*iter)->setActive(true);
+	}
 }
 
 void CStage1::Trgger_Function7()
@@ -592,22 +698,38 @@ void CStage1::Trgger_Function7()
 	if (!pLayer)
 		return;
 
-	auto iter = pLayer->begin();
-	advance(iter, 6);
-	(*iter)->setActive(true);
+	if(m_bDebug)
+	{
+		auto iter = pLayer->begin();
+		advance(iter, 6);
+		(*iter)->setActive(true);
 
-	iter = pLayer->begin();
-	advance(iter, 7);
-	(*iter)->setActive(true);
+		iter = pLayer->begin();
+		advance(iter, 7);
+		(*iter)->setActive(true);
 
-	pLayer = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Layer_Healer");
-	if (!pLayer)
-		return;
+		pLayer = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Layer_Healer");
+		if (!pLayer)
+			return;
 
-	iter = pLayer->begin();
-	advance(iter, 0);
-	(*iter)->setActive(true);
+		iter = pLayer->begin();
+		advance(iter, 0);
+		(*iter)->setActive(true);
+	}
+	else
+	{
+		auto iter = pLayer->begin();
+		(*iter)->setActive(true);
+		iter++;
+		(*iter)->setActive(true);
 
+		pLayer = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Layer_Healer");
+		if (!pLayer)
+			return;
+
+		iter = pLayer->begin();
+		(*iter)->setActive(true);
+	}
 }
 
 void CStage1::Trgger_Function8()
@@ -615,27 +737,46 @@ void CStage1::Trgger_Function8()
 	list<CGameObject*>* pLayer = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Layer_Bastion_Sword");
 	if (!pLayer)
 		return;
+	if (m_bDebug)
+	{
+		auto iter = pLayer->begin();
+		advance(iter, 8);
+		(*iter)->setActive(true);
 
-	auto iter = pLayer->begin();
-	advance(iter, 8);
-	(*iter)->setActive(true);
+		iter = pLayer->begin();
+		advance(iter, 9);
+		(*iter)->setActive(true);
 
-	iter = pLayer->begin();
-	advance(iter, 9);
-	(*iter)->setActive(true);
+		iter = pLayer->begin();
+		advance(iter, 10);
+		(*iter)->setActive(true);
 
-	iter = pLayer->begin();
-	advance(iter, 10);
-	(*iter)->setActive(true);
+		//슈터
+		pLayer = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Layer_Bastion_Shooter");
+		if (!pLayer)
+			return;
 
-	//슈터
-	pLayer = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Layer_Bastion_Shooter");
-	if (!pLayer)
-		return;
+		iter = pLayer->begin();
+		advance(iter, 0);
+		(*iter)->setActive(true);
+	}
+	else
+	{
+		auto iter = pLayer->begin();
+		(*iter)->setActive(true);
+		iter++;
+		(*iter)->setActive(true);
+		iter++;
+		(*iter)->setActive(true);
 
-	iter = pLayer->begin();
-	advance(iter, 0);
-	(*iter)->setActive(true);
+		//슈터
+		pLayer = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Layer_Bastion_Shooter");
+		if (!pLayer)
+			return;
+
+		iter = pLayer->begin();
+		(*iter)->setActive(true);
+	}
 }
 
 void CStage1::Trgger_Function9()
@@ -643,35 +784,61 @@ void CStage1::Trgger_Function9()
 	list<CGameObject*>* pLayer = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Layer_Bastion_Sword");
 	if (!pLayer)
 		return;
+	if (m_bDebug)
+	{
+		auto iter = pLayer->begin();
+		advance(iter, 11);
+		(*iter)->setActive(true);
 
-	auto iter = pLayer->begin();
-	advance(iter, 11);
-	(*iter)->setActive(true);
+		iter = pLayer->begin();
+		advance(iter, 12);
+		(*iter)->setActive(true);
 
-	iter = pLayer->begin();
-	advance(iter, 12);
-	(*iter)->setActive(true);
+		pLayer = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Layer_Healer");
+		if (!pLayer)
+			return;
 
-	pLayer = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Layer_Healer");
-	if (!pLayer)
-		return;
-
-	iter = pLayer->begin();
-	advance(iter, 1);
-	(*iter)->setActive(true);
+		iter = pLayer->begin();
+		advance(iter, 1);
+		(*iter)->setActive(true);
 
 
-	pLayer = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Layer_Bastion_Shooter");
-	if (!pLayer)
-		return;
+		pLayer = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Layer_Bastion_Shooter");
+		if (!pLayer)
+			return;
 
-	iter = pLayer->begin();
-	advance(iter, 1);
-	(*iter)->setActive(true);
+		iter = pLayer->begin();
+		advance(iter, 1);
+		(*iter)->setActive(true);
 
-	iter = pLayer->begin();
-	advance(iter, 2);
-	(*iter)->setActive(true);
+		iter = pLayer->begin();
+		advance(iter, 2);
+		(*iter)->setActive(true);
+	}
+	else
+	{
+		auto iter = pLayer->begin();
+		(*iter)->setActive(true);
+		iter++;
+		(*iter)->setActive(true);
+
+		pLayer = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Layer_Healer");
+		if (!pLayer)
+			return;
+
+		iter = pLayer->begin();
+		(*iter)->setActive(true);
+
+
+		pLayer = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Layer_Bastion_Shooter");
+		if (!pLayer)
+			return;
+
+		iter = pLayer->begin();
+		(*iter)->setActive(true);
+		iter++;
+		(*iter)->setActive(true);
+	}
 }
 
 void CStage1::Trgger_Function10()
@@ -680,25 +847,41 @@ void CStage1::Trgger_Function10()
 	if (!pLayer)
 		return;
 
-	auto iter = pLayer->begin();
-	advance(iter, 3);
-	(*iter)->setActive(true);
+	if(m_bDebug)
+	{
+		auto iter = pLayer->begin();
+		advance(iter, 3);
+		(*iter)->setActive(true);
 
-	iter = pLayer->begin();
-	advance(iter, 4);
-	(*iter)->setActive(true);
+		iter = pLayer->begin();
+		advance(iter, 4);
+		(*iter)->setActive(true);
 
-	iter = pLayer->begin();
-	advance(iter, 5);
-	(*iter)->setActive(true);
+		iter = pLayer->begin();
+		advance(iter, 5);
+		(*iter)->setActive(true);
 
-	iter = pLayer->begin();
-	advance(iter, 6);
-	(*iter)->setActive(true);
+		iter = pLayer->begin();
+		advance(iter, 6);
+		(*iter)->setActive(true);
 
-	iter = pLayer->begin();
-	advance(iter, 7);
-	(*iter)->setActive(true);
+		iter = pLayer->begin();
+		advance(iter, 7);
+		(*iter)->setActive(true);
+	}
+	else
+	{
+		auto iter = pLayer->begin();
+		(*iter)->setActive(true);
+		iter++;
+		(*iter)->setActive(true);
+		iter++;
+		(*iter)->setActive(true);
+		iter++;
+		(*iter)->setActive(true);
+		iter++;
+		(*iter)->setActive(true);
+	}
 }
 
 void CStage1::Trgger_Function11()
@@ -707,9 +890,17 @@ void CStage1::Trgger_Function11()
 	if (!pLayer)
 		return;
 
-	auto iter = pLayer->begin();
-	advance(iter, 0);
-	(*iter)->setActive(true);
+	if (m_bDebug)
+	{
+		auto iter = pLayer->begin();
+		advance(iter, 0);
+		(*iter)->setActive(true);
+	}
+	else
+	{
+		auto iter = pLayer->begin();
+		(*iter)->setActive(true);
+	}
 }
 
 //-175 51 422
@@ -719,9 +910,17 @@ void CStage1::Trgger_FunctionBoss()
 	if (!pLayer)
 		return;
 
-	auto iter = pLayer->begin();
-	advance(iter, 0);
-	(*iter)->setActive(true);
+	if (m_bDebug)
+	{
+		auto iter = pLayer->begin();
+		advance(iter, 0);
+		(*iter)->setActive(true);
+	}
+	else
+	{
+		auto iter = pLayer->begin();
+		(*iter)->setActive(true);
+	}
 }
 
 HRESULT CStage1::Ready_Trigger_Lod(const _tchar* pDataFilePath)

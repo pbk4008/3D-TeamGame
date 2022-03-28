@@ -79,13 +79,13 @@ _int CUI_Player_HpBar_Red::Tick(_double TimeDelta)
 		if (1.f > fHpRatio)
 		{
 			//옆에 살짝보여서 추가적으로 더 깎아줌p 
-			fHpRatio = pUI->GetRatio() - 0.02f;
+			fHpRatio = pUI->GetRatio() - 0.031f;
 		}
 
 		if (m_fGapX > fHpRatio)
 		{
 			_float DecreaseGapSpeed = m_fGapX - fHpRatio;
-			m_fGapX -= TimeDelta * DecreaseGapSpeed; //데미지가 더 많이 들어오면 더 빨리 깎아주려고
+			m_fGapX -= (_float)TimeDelta * DecreaseGapSpeed; //데미지가 더 많이 들어오면 더 빨리 깎아주려고
 		}
 	}
 

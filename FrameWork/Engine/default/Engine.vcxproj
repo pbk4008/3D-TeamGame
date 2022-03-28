@@ -228,6 +228,7 @@ call Update_Library_Release.bat</Command>
     <ClInclude Include="..\public\ControllerFilterCallback.h" />
     <ClInclude Include="..\public\ControllerHitReport.h" />
     <ClInclude Include="..\public\CSTarget.h" />
+    <ClInclude Include="..\public\EffectManager.h" />
     <ClInclude Include="..\public\HDR.h" />
     <ClInclude Include="..\public\Instancing_Mesh.h" />
     <ClInclude Include="..\public\Luminance.h" />
@@ -305,6 +306,7 @@ call Update_Library_Release.bat</Command>
     <ClInclude Include="..\public\VIBuffer_Plane.h" />
     <ClInclude Include="..\public\VIBuffer_PointInstance.h" />
     <ClInclude Include="..\public\VIBuffer_PointInstance_Explosion.h" />
+    <ClInclude Include="..\public\VIBuffer_PointInstance_Floating.h" />
     <ClInclude Include="..\public\VIBuffer_Rect.h" />
     <ClInclude Include="..\public\VIBuffer_RectInstance.h" />
     <ClInclude Include="..\public\VIBuffer_RectViewPort.h" />
@@ -337,6 +339,7 @@ call Update_Library_Release.bat</Command>
     <ClCompile Include="..\private\ControllerFilterCallback.cpp" />
     <ClCompile Include="..\private\ControllerHitReport.cpp" />
     <ClCompile Include="..\private\CSTarget.cpp" />
+    <ClCompile Include="..\private\EffectManager.cpp" />
     <ClCompile Include="..\private\HDR.cpp" />
     <ClCompile Include="..\private\Instancing_Mesh.cpp" />
     <ClCompile Include="..\private\Luminance.cpp" />
@@ -406,6 +409,7 @@ call Update_Library_Release.bat</Command>
     <ClCompile Include="..\private\VIBuffer_Plane.cpp" />
     <ClCompile Include="..\private\VIBuffer_PointInstance.cpp" />
     <ClCompile Include="..\private\VIBuffer_PointInstance_Explosion.cpp" />
+    <ClCompile Include="..\private\VIBuffer_PointInstance_Floating.cpp" />
     <ClCompile Include="..\private\VIBuffer_Rect.cpp" />
     <ClCompile Include="..\private\VIBuffer_RectInstance.cpp" />
     <ClCompile Include="..\private\VIBuffer_RectViewPort.cpp" />

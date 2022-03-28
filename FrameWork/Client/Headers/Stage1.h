@@ -3,6 +3,7 @@
 #define __STAGE1_H__
 #include "Level.h"
 #include "TriggerSystem.h"
+
 BEGIN(Client)
 class CStage1 final : public CLevel
 {
@@ -59,6 +60,7 @@ private:
 	virtual void Free() override;
 private:
 	CTriggerSystem<CStage1>* m_pTriggerSystem;
+	_bool m_bDebug;
 };
 #endif
 

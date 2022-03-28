@@ -20,6 +20,7 @@ CGameInstance::CGameInstance()
 	, m_pSaveManager(CSaveManager::GetInstance())
 	, m_pSoundManager(CSoundMgr::GetInstance())
 	, m_pPhysicSystem(CPhysicsXSystem::GetInstance())
+	, m_pEffectManager(CEffectManager::GetInstance())
 {
 	Safe_AddRef(m_pFont_Manager);
 	Safe_AddRef(m_pFrustum);
@@ -37,6 +38,7 @@ CGameInstance::CGameInstance()
 	Safe_AddRef(m_pSaveManager);
 	Safe_AddRef(m_pSoundManager);
 	Safe_AddRef(m_pPhysicSystem);
+	Safe_AddRef(m_pEffectManager);
 }
 
 HRESULT CGameInstance::Initialize_Engine(HINSTANCE hInst, HWND hWnd, _uint iNumLevel, CGraphic_Device::WINMODE eWinMode, _uint iWinCX, _uint iWinCY, ID3D11Device** ppDeviceOut, ID3D11DeviceContext** ppDeviceContextOut)
@@ -56,6 +58,9 @@ HRESULT CGameInstance::Initialize_Engine(HINSTANCE hInst, HWND hWnd, _uint iNumL
 		return E_FAIL;
 
 	if (FAILED(m_pMaterial_Manager->NativeConstruct(*ppDeviceOut, *ppDeviceContextOut)))
+		return E_FAIL;
+
+	if (FAILED(m_pEffectManager->Ready_EffectManager(*ppDeviceOut, *ppDeviceContextOut)))
 		return E_FAIL;
 
 	if (FAILED(m_pObject_Manager->Reserve_Manager(iNumLevel)))
@@ -219,6 +224,14 @@ HRESULT CGameInstance::Add_GameObjectToLayer(_uint iLevelIndex, const wstring& p
 		return E_FAIL;
 
 	return m_pObject_Manager->Add_GameObjectToLayer(iLevelIndex, pLayerTag, pPrototypeTag, pArg, ppOut);
+}
+
+HRESULT CGameInstance::Add_GameObjectToLayer(_uint iLevelIndex, const wstring& pLayerTag, CGameObject* pGameObject)
+{
+	if (!m_pObject_Manager)
+		return E_FAIL;
+
+	return m_pObject_Manager->Add_GameObjectToLayer(iLevelIndex, pLayerTag, pGameObject);
 }
 
 list<CGameObject*>* CGameInstance::getObjectList(_uint iLevelIndex, const wstring& pLayerTag)
@@ -505,6 +518,22 @@ CMaterial* CGameInstance::Get_Material(const wstring& _wstrMtrlTag)
 	return m_pMaterial_Manager->Get_Material(_wstrMtrlTag);
 }
 
+HRESULT CGameInstance::Add_Effect(_uint iSceneID, const wstring& pLayerTag, CEffect* pEffect, _uint iCount)
+{
+	if (!m_pEffectManager)
+		return E_FAIL;
+
+	return m_pEffectManager->Add_Effect(iSceneID, pLayerTag, pEffect, iCount);
+}
+
+CEffect* CGameInstance::Get_Effect(_uint iEffectIndex)
+{
+	if (!m_pEffectManager)
+		return nullptr;
+
+	return m_pEffectManager->Get_Effect(iEffectIndex);
+}
+
 const _bool CGameInstance::Raycast(RAYCASTDESC & _desc)
 {
 	if (!m_pPhysicSystem)
@@ -521,6 +550,9 @@ void CGameInstance::Release_Engine()
 
 	if (0 != CLevel_Manager::GetInstance()->DestroyInstance())
 		MSGBOX("Failed to Release CLevel_Manager");
+
+	if(0 != CEffectManager::GetInstance()->DestroyInstance())
+		MSGBOX("Failed to Release CEffectManager");
 
 	if (0 != CObject_Manager::GetInstance()->DestroyInstance())
 		MSGBOX("Failed to Release CObject_Manager");
@@ -547,7 +579,7 @@ void CGameInstance::Release_Engine()
 		MSGBOX("Failed to Release CLight_Manager");
 
 	if (0 != CTarget_Manager::GetInstance()->DestroyInstance())
-		MSGBOX("Failed to Release CTarget_Manager");
+ 		MSGBOX("Failed to Release CTarget_Manager");
 
 	if (0 != CFrustum::GetInstance()->DestroyInstance())
 		MSGBOX("Failed to Release CFrustum");
@@ -570,6 +602,7 @@ void CGameInstance::Release_Engine()
 
 void CGameInstance::Free()
 {
+	Safe_Release(m_pEffectManager);
 	Safe_Release(m_pFont_Manager);
 	Safe_Release(m_pFrustum);
 	Safe_Release(m_pTarget_Manager);

@@ -63,6 +63,7 @@ HRESULT CEffect_HitParticle::NativeConstruct(const _uint _iSceneID, void* pArg)
 
 	m_backupDesc = Desc;
 
+	setActive(false);
 	return S_OK;
 }
 
@@ -70,17 +71,28 @@ _int CEffect_HitParticle::Tick(_double TimeDelta)
 {
 	m_pBuffer->Update(TimeDelta, m_Desc.iAxis);
 
-	if (g_pGameInstance->getkeyDown(DIK_NUMPAD0))
+	m_fNonActiveTimeAcc += TimeDelta;
+
+	if (4.f <= m_fNonActiveTimeAcc)
 	{
+		setActive(false);
+		m_fNonActiveTimeAcc = 0.f;
+	}
+
+	if (true == m_bReset)
+	{
+		setActive(true);
 		m_pBuffer->Set_Desc(m_backupDesc);
 		m_pBuffer->Particle_Reset();
 		m_Desc.fCurTime = 0.f;
+		m_bReset = false;
 	}
 
-	//z정렬
-	_vector vDir = g_pGameInstance->Get_CamPosition(L"Camera_Silvermane") - m_pTransform->Get_State(CTransform::STATE_POSITION);
-	vDir = XMVector3Normalize(vDir);
-	m_pBuffer->Set_Dir(vDir);
+
+	////z정렬
+	//_vector vDir = g_pGameInstance->Get_CamPosition(L"Camera_Silvermane") - m_pTransform->Get_State(CTransform::STATE_POSITION);
+	//vDir = XMVector3Normalize(vDir);
+	//m_pBuffer->Set_Dir(vDir);
 
 	_uint iAllFrameCount = (m_Desc.iImageCountX * m_Desc.iImageCountY);
 	m_Desc.fFrame += (_float)(iAllFrameCount * TimeDelta * m_Desc.fEffectPlaySpeed); //플레이속도 
@@ -91,7 +103,7 @@ _int CEffect_HitParticle::Tick(_double TimeDelta)
 
 	if (m_Desc.fMaxLifeTime > m_Desc.fCurTime)
 	{
-		m_Desc.fCurTime += TimeDelta;
+		m_Desc.fCurTime += (_float)TimeDelta;
 	}
 
 	if (m_Desc.fMaxLifeTime < m_Desc.fCurTime)
@@ -114,7 +126,6 @@ _int CEffect_HitParticle::LateTick(_double TimeDelta)
 
 HRESULT CEffect_HitParticle::Render()
 {
-	//_matrix XMWorldMatrix = XMMatrixTranspose(XMLoadFloat4x4(&m_WorldMatrix));
 	_matrix XMWorldMatrix = XMMatrixTranspose(m_pTransform->Get_WorldMatrix());
 	_matrix XMViewMatrix = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_VIEW));
 	_matrix XMProjectMatrix = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_PROJECTION));
@@ -147,13 +158,12 @@ HRESULT CEffect_HitParticle::SetUp_Components()
 	if (!m_pTexture || !m_pRenderer || !m_pTransform)
 		return E_FAIL;
 
-	//이미지 리스트박스로부터 가져옴
 	wstring tag = m_Desc.TextureTag;
 	wstring NewTag = L"Texture_" + tag;
 	if (FAILED(m_pTexture->Change_Texture(NewTag)))
 		return E_FAIL;
 
-	_vector vPos = { XMVectorGetX(m_Desc.fMyPos), XMVectorGetY(m_Desc.fMyPos), XMVectorGetY(m_Desc.fMyPos), 1.f };
+	_vector vPos = { XMVectorGetX(m_Desc.fMyPos), XMVectorGetY(m_Desc.fMyPos), XMVectorGetZ(m_Desc.fMyPos), 1.f };
 	m_pTransform->Set_State(CTransform::STATE_POSITION, vPos);
 
 	//버퍼 Clone

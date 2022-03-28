@@ -44,10 +44,10 @@ HRESULT CMainApp::NativeConstruct()
 
 	g_pObserver = CClient_Observer::GetInstance();
 	
-	CMeshLoader* pMeshLoader = CMeshLoader::GetInstance();
+	/*CMeshLoader* pMeshLoader = CMeshLoader::GetInstance();
 
 	if (FAILED(pMeshLoader->Reserve_MeshLoader(m_pDevice, m_pDeviceContext)))
-		return E_FAIL;
+		return E_FAIL;*/
 
 	return S_OK;
 }
@@ -83,7 +83,7 @@ HRESULT CMainApp::Render()
 	if (!m_isRender)
 		return S_OK;
 
-	if (FAILED(g_pGameInstance->Clear_BackBuffer_View(XMFLOAT4(0.f, 0.5f, 0.5f, 1.f))))
+	if (FAILED(g_pGameInstance->Clear_BackBuffer_View(XMFLOAT4(0.f, 0.f, 0.f, 1.f))))
 		return E_FAIL;
 	if (FAILED(g_pGameInstance->Clear_DepthStencil_View()))
 		return E_FAIL;	
@@ -250,7 +250,7 @@ void CMainApp::Free()
 	Safe_Release(g_pDebugSystem);
 #endif
 	CMeshLoader::DestroyInstance();
-	
+
 	Safe_Release(g_pObserver);
 
 	Safe_Release(m_pRenderer);

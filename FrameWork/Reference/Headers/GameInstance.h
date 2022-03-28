@@ -18,6 +18,8 @@
 #include "TextureManager.h"
 #include "Material_Manager.h"
 #include "PhysicsXSystem.h"
+#include "EffectManager.h"
+
 
 BEGIN(Engine)
 
@@ -58,6 +60,7 @@ public: /* For.Object_Manager*/
 	class CComponent* Get_Component(_uint iLevelIndex, const wstring& pLayerTag, const wstring& pComponentTag, _uint iIndex = 0);
 	HRESULT Add_Prototype(const wstring& pPrototypeTag, CGameObject* pPrototype);
 	HRESULT Add_GameObjectToLayer(_uint iLevelIndex, const wstring& pLayerTag, const wstring& pPrototypeTag, void* pArg = nullptr, class CGameObject** ppOut = nullptr);
+	HRESULT Add_GameObjectToLayer(_uint iLevelIndex, const wstring& pLayerTag, CGameObject* pGameObject);
 	CGameObject* Clone_GameObject(_uint iLevelIndex, const wstring& pPrototypeTag, void* pArg = nullptr);
 	list<CGameObject*>* getObjectList(_uint iLevelIndex, const wstring & pLayerTag);
 	list<CGameObject*> getAllObjectList();
@@ -140,6 +143,10 @@ public: /* For.Material_Manager */
 	HRESULT Add_Material(const wstring& _wstrMtrlTag, CMaterial* _pMtrl);
 	CMaterial* Get_Material(const wstring& _wstrMtrlTag = L"Default");
 
+public:/* For. Effect_Manager*/
+	HRESULT Add_Effect(_uint iSceneID, const wstring& pLayerTag, CEffect* pEffect, _uint iCount);
+	CEffect* Get_Effect(_uint iEffectIndex);
+
 public:/* For.SaveManager*/
 	template<typename T>
 	HRESULT SaveFile(void* pSaveData, const wstring& pFilePath)
@@ -178,6 +185,7 @@ private:
 	CSaveManager*				m_pSaveManager = nullptr;
 	CSoundMgr*					m_pSoundManager = nullptr;
 	CPhysicsXSystem*			m_pPhysicSystem = nullptr;
+	CEffectManager*			m_pEffectManager = nullptr;
 public:
 	static void Release_Engine();
 	virtual void Free() override;

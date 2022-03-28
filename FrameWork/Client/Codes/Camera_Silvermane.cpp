@@ -2,6 +2,7 @@
 #include "Camera_Silvermane.h"
 
 #include "Silvermane.h"
+#include "CameraShake.h"
 
 CCamera_Silvermane::CCamera_Silvermane(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
 	: CGameObject(_pDevice, _pDeviceContext)
@@ -19,6 +20,9 @@ HRESULT CCamera_Silvermane::NativeConstruct_Prototype()
 	{
 		return E_FAIL;
 	}
+
+	if(FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_CameraShake", CCameraShake::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
 
 	return S_OK;
 }
@@ -39,7 +43,7 @@ HRESULT CCamera_Silvermane::NativeConstruct(const _uint _iSceneID, void* _pArg)
 	m_pSilvermane->Set_Camera(this);
 
 	// 컬링용 카메라 따로생성
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_Camera", L"Proto_GameObject_Camera_Culling", this)))
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer(_iSceneID, L"Layer_Camera", L"Proto_GameObject_Camera_Culling", this)))
 		return E_FAIL;
 
 	return S_OK;
@@ -57,13 +61,17 @@ _int CCamera_Silvermane::Tick(_double _dDeltaTime)
 	iProgress = Input_Key(_dDeltaTime);
 	if (NO_EVENT != iProgress)
 		return iProgress;
-
 	m_pTransform->Set_WorldMatrix(m_pLocalTransform->Get_WorldMatrix() * m_pWorldTransform->Get_WorldMatrix());
 
-
-
 	SpringArm();
-
+	if (g_pGameInstance->getkeyDown(DIK_9))
+	{
+		_float3 vPos;
+		XMStoreFloat3(&vPos, m_pTransform->Get_State(CTransform::STATE_POSITION));
+		//m_pCameraShake->Shaking_TestEvent(vPos);
+		m_pCameraShake->ShakeTest();
+	}
+	m_pCameraShake->Tick(this, _dDeltaTime);
 
 
 	m_pCamera->Update_Matrix(m_pTransform->Get_WorldMatrix());
@@ -110,7 +118,7 @@ HRESULT CCamera_Silvermane::Ready_Components()
 	transformDesc.fRotationPerSec = 0.f;
 	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_Transform", L"Com_LocalTransform", (CComponent**)&m_pLocalTransform, &transformDesc)))
 		return E_FAIL;
-	_float4 vPosition = { 0.5f, 3.f, -3.f, 1.f };
+	_float4 vPosition = { 1.f, 3.f, -2.f, 1.f };
 	m_pLocalTransform->Set_State(CTransform::STATE_POSITION, XMLoadFloat4(&vPosition));
 	m_pLocalTransform->SetUp_Rotation(m_pLocalTransform->Get_State(CTransform::STATE_RIGHT), XMConvertToRadians(30.f));
 
@@ -118,6 +126,8 @@ HRESULT CCamera_Silvermane::Ready_Components()
 	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_Transform", L"Com_WorldTransform", (CComponent**)&m_pWorldTransform, &transformDesc)))
 		return E_FAIL;
 
+	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_CameraShake", L"Com_CameraShake", (CComponent**)&m_pCameraShake, nullptr)))
+		return E_FAIL;
 
 	return S_OK;
 }
@@ -144,27 +154,23 @@ _int CCamera_Silvermane::Chase_Target(const _double& _dDeltaTime)
 _int CCamera_Silvermane::Input_Key(const _double& _dDeltaTime)
 {
 	_long   MouseMove = 0;
-
 	MouseMove = g_pGameInstance->getMouseMoveState(CInputDev::MOUSEMOVESTATE::MM_X);
-	if (0 < MouseMove)
+	if (MouseMove)
 	{
-		m_pWorldTransform->Rotation_Axis(XMVectorSet(0.f, 1.f, 0.f, 0.f), _dDeltaTime * MouseMove * 0.1f);
+		m_vRot.y += MouseMove * (_float)_dDeltaTime * 4.f;
+		m_pWorldTransform->SetUp_Rotation(m_vRot);
 	}
-	else if (0 > MouseMove)
-	{
-		m_pWorldTransform->Rotation_Axis(XMVectorSet(0.f, 1.f, 0.f, 0.f), _dDeltaTime * MouseMove * 0.1f);
-	}
+
 	MouseMove = g_pGameInstance->getMouseMoveState(CInputDev::MOUSEMOVESTATE::MM_Y);
 	if (MouseMove)
 	{
-		_float fMouseDelta = MouseMove * _dDeltaTime * 0.1f;
-		m_vRot.y += fMouseDelta;
-		if (-0.55f < m_vRot.y && 0.25f > m_vRot.y)
-			m_pWorldTransform->Rotation_Axis(m_pWorldTransform->Get_State(CTransform::STATE_RIGHT), fMouseDelta);
-		else if (-0.55f >= m_vRot.y)
-			m_vRot.y = -0.55f;
-		else
-			m_vRot.y = 0.25f;
+		//m_pWorldTransform->Rotation_Axis(m_pWorldTransform->Get_State(CTransform::STATE_RIGHT), _dDeltaTime * MouseMove * 0.1f);
+		m_vRot.x += MouseMove * (_float)_dDeltaTime * 4.f;
+		if (30.f < m_vRot.x)
+			m_vRot.x = 30.f;
+		if (-75.f > m_vRot.x)
+			m_vRot.x = -75.f;
+		m_pWorldTransform->SetUp_Rotation(m_vRot);
 	}
 
 	return _int();
@@ -195,7 +201,7 @@ void CCamera_Silvermane::SpringArm()
 	}
 }
 
-const _fvector& CCamera_Silvermane::Get_Look() const
+const _fvector CCamera_Silvermane::Get_Look() const
 {
 	return m_pWorldTransform->Get_State(CTransform::STATE_LOOK);
 }
@@ -228,6 +234,7 @@ void CCamera_Silvermane::Free()
 	Safe_Release(m_pWorldTransform);
 
 	Safe_Release(m_pCamera);
+	Safe_Release(m_pCameraShake);
 
 	__super::Free();
 }

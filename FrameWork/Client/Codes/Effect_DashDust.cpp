@@ -93,7 +93,7 @@ _int CEffect_DashDust::Tick(_double TimeDelta)
 
 	if (m_Desc.fMaxLifeTime > m_Desc.fCurTime)
 	{
-		m_Desc.fCurTime += TimeDelta;
+		m_Desc.fCurTime += (_float)TimeDelta;
 	}
 
 	if (m_Desc.fMaxLifeTime < m_Desc.fCurTime)
@@ -155,7 +155,7 @@ HRESULT CEffect_DashDust::SetUp_Components()
 	if (FAILED(m_pTexture->Change_Texture(NewTag)))
 		return E_FAIL;
 
-	_vector vPos = { XMVectorGetX(m_Desc.fMyPos), XMVectorGetY(m_Desc.fMyPos), XMVectorGetY(m_Desc.fMyPos), 1.f };
+	_vector vPos = { XMVectorGetX(m_Desc.fMyPos), XMVectorGetY(m_Desc.fMyPos), XMVectorGetZ(m_Desc.fMyPos), 1.f };
 	m_pTransform->Set_State(CTransform::STATE_POSITION, vPos);
 
 	//¹öÆÛ Clone

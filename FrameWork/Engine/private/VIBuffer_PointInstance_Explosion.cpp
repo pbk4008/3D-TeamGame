@@ -305,7 +305,7 @@ void CVIBuffer_PointInstance_Explosion::Update(_double TimeDelta, _uint eAxis)
 
 				if (m_Desc.fLifeTime > m_fGravityTime && 0.f <= m_fGravityTime)
 				{
-					fY = ((VTXPARTICLE*)SubResource.pData)[i].vPosition.y + (-2.f * 9.8f * TimeDelta * ((m_Desc.fLifeTime - m_fGravityTime) * (m_Desc.fParticleSpeed * 0.1f)));
+					fY = ((VTXPARTICLE*)SubResource.pData)[i].vPosition.y + (-2.f * 9.8f * (_float)TimeDelta * ((m_Desc.fLifeTime - m_fGravityTime) * (m_Desc.fParticleSpeed * 0.1f)));
 					((VTXPARTICLE*)SubResource.pData)[i].vPosition.y = fY;
 				}
 			}

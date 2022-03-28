@@ -21,8 +21,17 @@ CUI_Monster_Panel::CUI_Monster_Panel(const CUI_Monster_Panel& rhs)
 	: CUI(rhs)
 	, m_PanelDesc(rhs.m_PanelDesc)
 	, m_TargetMatrix(rhs.m_TargetMatrix)
+	, m_pUIBack(rhs.m_pUIBack)
+	, m_pUIHpBar(rhs.m_pUIHpBar)
+	, m_pUILevel(rhs.m_pUILevel)
+	, m_pUIName(rhs.m_pUIName)
+	, m_pUIGroggyBar(rhs.m_pUIGroggyBar)
 {
-
+	Safe_AddRef(m_pUIBack);
+	Safe_AddRef(m_pUIHpBar);
+	Safe_AddRef(m_pUILevel);
+	Safe_AddRef(m_pUIName);
+	Safe_AddRef(m_pUIGroggyBar);
 }
 
 HRESULT CUI_Monster_Panel::NativeConstruct_Prototype()
@@ -57,7 +66,7 @@ HRESULT CUI_Monster_Panel::NativeConstruct(const _uint _iSceneID, void* pArg)
 
 	if (FAILED(Panel_Setting())) //»ý¼º 
 		return E_FAIL;
-	
+
 	Safe_AddRef(m_pUIBack);
 	Safe_AddRef(m_pUILevel);
 	Safe_AddRef(m_pUIHpBar);

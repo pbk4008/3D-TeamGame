@@ -173,7 +173,7 @@ HRESULT CJumpNode::Ready_Components()
 	tColliderDesc.pGameObject = this;
 	CBoxCollider::DESC tBoxColliderDesc;
 	tBoxColliderDesc.tColliderDesc = tColliderDesc;
-	tBoxColliderDesc.vScale = { 2.f, 4.f, 2.4 };
+	tBoxColliderDesc.vScale = { 2.f, 4.f, 2.4f };
 	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_BoxCollider", L"Collider", (CComponent**)&m_pCollider, &tBoxColliderDesc)))
 		return E_FAIL;
 	_matrix smatPivot = XMMatrixTranslation(0.f, tBoxColliderDesc.vScale.y * 0.5f, 0.f);

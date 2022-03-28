@@ -21,7 +21,7 @@ _int C1H_SwordAttack::Tick(const _double& _dDeltaTime)
 	if (NO_EVENT != iProgress)
 		return iProgress;
 
-	g_pObserver->Set_IsAttack(true);
+	//g_pObserver->Set_IsAttack(true);
 
 	return _int();
 }
@@ -48,7 +48,8 @@ HRESULT C1H_SwordAttack::EnterState()
 	if (FAILED(__super::EnterState()))
 		return E_FAIL;
 
-	m_pSilvermane->Set_IsAttack(true);
+	if(!m_pSilvermane->IsAttack())
+		m_pSilvermane->Set_IsAttack(true);
 
 	return S_OK;
 }
@@ -58,7 +59,8 @@ HRESULT C1H_SwordAttack::ExitState()
 	if (FAILED(__super::ExitState()))
 		return E_FAIL;
 
-	m_pSilvermane->Set_IsAttack(false);
+	if(m_pSilvermane->IsAttack())
+		m_pSilvermane->Set_IsAttack(false);
 
 	return S_OK;
 }

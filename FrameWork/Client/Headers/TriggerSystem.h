@@ -4,11 +4,9 @@
 
 #include "Base.h"
 #include "Client_Trigger.h"
-#include "Stage1.h"
 
 BEGIN(Client)
 class CClient_Trigger;
-class CStage1;
 template<typename T>
 class CTriggerSystem final : public CBase
 {
@@ -133,11 +131,15 @@ public:
 				g_pGameInstance->Add_GameObjectToLayer(iSceneID, L"Layer_Boss", L"Proto_GameObject_Boss_Bastion", &pMonPoint.fTrigger_Point);
 				break;
 			case MONSTER::MON_BRONZE:
-				//g_pGameInstance->Add_GameObjectToLayer(iSceneID,L"Layer_Monster","Monster_BronzeAnimus");
+				g_pGameInstance->Add_GameObjectToLayer(iSceneID,L"Layer_Bronze",L"Proto_GameObject_Monster_BronzeAnimus",&pMonPoint.fTrigger_Point);
+				break;
+			case MONSTER::MON_SPEAR:
+				g_pGameInstance->Add_GameObjectToLayer(iSceneID, L"Layer_Spear", L"Proto_GameObject_Monster_Bastion_Spear", &pMonPoint.fTrigger_Point);
 				break;
 			}
 		}
 
+		return S_OK;
 	}
 	const vector<_float3> Get_MonsterSpawnPoint(MONSTER eType) { return m_pVecMonsterSpawnPoint[(_uint)eType]; }
 private:

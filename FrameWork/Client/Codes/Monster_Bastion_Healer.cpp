@@ -85,7 +85,7 @@ HRESULT CMonster_Bastion_Healer::NativeConstruct(const _uint _iSceneID, void* _p
 
 	m_pPanel->Set_TargetWorldMatrix(m_pTransform->Get_WorldMatrix());
 
-	m_fMaxHp = 30.f;
+	m_fMaxHp = 2.f;
 	m_fCurrentHp = m_fMaxHp;
 
 	m_fMaxGroggyGauge = 10.f;

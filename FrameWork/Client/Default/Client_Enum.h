@@ -21,7 +21,7 @@ enum class GAMEOBJECT
 	BOSS,
 	UI_STATIC,
 	UI_DYNAMIC,
-	EFFECT_EXPLOSION,
+	EFFECT,
 	//이 이후로 추가되는거 달아주세요, 위에 추가하면 꼬임
 	// 무기
 	WEAPON_MIDBOSS,

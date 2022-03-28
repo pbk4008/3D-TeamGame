@@ -366,13 +366,6 @@ HRESULT CAnimationController::SetUp_NextAnimation(class CAnimNode* pChangeAnimNo
 	return S_OK;
 }
 
-HRESULT CAnimationController::Change_Anim(const string& _strAnimTag, _bool _isLoop)
-{
-
-
-	return S_OK;
-}
-
 const _int CAnimationController::Move_Transform(const _double& _dDeltaTime)
 {
 	if (!m_pTransform)
@@ -588,9 +581,9 @@ const _int CAnimationController::Add_TransformVelocity(const _double& _dDeltaTim
 			vRotation = { vEuler.x, vEuler.z, vEuler.y };
 
 
-			m_pTransform->Rotation_Axis(svRight, XMConvertToRadians(vRotation.x) * _dDeltaTime * m_fRotSpeed);
-			m_pTransform->Rotation_Axis(svUp, XMConvertToRadians(vRotation.y) * _dDeltaTime * m_fRotSpeed);
-			m_pTransform->Rotation_Axis(svLook, XMConvertToRadians(vRotation.z) * _dDeltaTime * m_fRotSpeed);
+			m_pTransform->Rotation_Axis(svRight, XMConvertToRadians(vRotation.x) * (_float)_dDeltaTime * m_fRotSpeed);
+			m_pTransform->Rotation_Axis(svUp, XMConvertToRadians(vRotation.y) * (_float)_dDeltaTime * m_fRotSpeed);
+			m_pTransform->Rotation_Axis(svLook, XMConvertToRadians(vRotation.z) * (_float)_dDeltaTime * m_fRotSpeed);
 
 			svVelocity = XMLoadFloat3(&vBonePosition);
 			svVelocity = XMVector4Transform(svVelocity, XMLoadFloat4x4(&m_matPivot) * m_pTransform->Get_PivotMatrix());
@@ -601,7 +594,7 @@ const _int CAnimationController::Add_TransformVelocity(const _double& _dDeltaTim
 			svVelocity = XMVector4Transform(svVelocity, smatRotation);
 
 			svVelocity *= m_fMoveSpeed;
-			m_pTransform->Add_Velocity(svVelocity * _dDeltaTime);
+			m_pTransform->Add_Velocity(svVelocity * (_float)_dDeltaTime);
 		}
 	}
 

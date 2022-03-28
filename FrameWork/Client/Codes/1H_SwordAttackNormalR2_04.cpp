@@ -22,6 +22,14 @@ _int C1H_SwordAttackNormalR2_04::Tick(const _double& _dDeltaTime)
 	if (NO_EVENT != iProgress)
 		return iProgress;
 
+
+	if (m_pSilvermane->IsAttack())
+	{
+		if (25 < m_pAnimationController->Get_CurKeyFrameIndex())
+			m_pSilvermane->Set_IsAttack(false);
+	}
+
+
 	if (m_pAnimationController->Is_Finished())
 	{
 		m_pStateController->Change_State(L"Idle");
