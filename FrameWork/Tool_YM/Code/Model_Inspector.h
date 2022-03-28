@@ -71,7 +71,7 @@ public:
 	_int	m_iMonster6Index = 0;
 	_int	m_iMonster7Index = 0;
 	_int	m_iMonster8Index = 0;
-
+	_int    m_iMonster9Index = 0;
 public:
 	CString m_ModelPosX, m_ModelPosY, m_ModelPosZ;
 	CString m_ModelScaleX, m_ModelScaleY, m_ModelScaleZ;

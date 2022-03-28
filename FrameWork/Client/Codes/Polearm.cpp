@@ -1,51 +1,59 @@
 #include "pch.h"
-#include "BronzeAnimus_Sword.h"
+#include "Polearm.h"
 
 #include "HierarchyNode.h"
-#include "Monster_BronzeAnimus.h"
+#include "Monster_Bastion_Spear.h"
 #include "Material.h"
 #include "StateController.h"
 
-CBronzeAnimus_Sword::CBronzeAnimus_Sword(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
+CPolearm::CPolearm(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
 	: CWeapon(_pDevice, _pDeviceContext)
+	, m_pCollider(nullptr)
+{
+}
+
+CPolearm::CPolearm(const CPolearm& _rhs)
+	: CWeapon(_rhs)
 	, m_pCollider(nullptr)
 {
 	Safe_AddRef(m_pCollider);
 }
 
-CBronzeAnimus_Sword::CBronzeAnimus_Sword(const CBronzeAnimus_Sword& _rhs)
-	: CWeapon(_rhs)
-	, m_pCollider(_rhs.m_pCollider)
-{
-}
-
-HRESULT CBronzeAnimus_Sword::NativeConstruct_Prototype()
+HRESULT CPolearm::NativeConstruct_Prototype()
 {
 	if (FAILED(__super::NativeConstruct_Prototype()))
 		return E_FAIL;
 
-	m_eType = EType::BronzeAnimus_Sword;
-	m_wstrName = L"BronzeAnimus_Sword";
-	m_iObectTag = (_uint)GAMEOBJECT::WEAPON_BRONZE;
+	m_eType = EType::Polearm;
+	m_wstrName = L"Polearm";
+	m_iObectTag = (_uint)GAMEOBJECT::WEAPON_POLEARM;
 
 	CMaterial* pMtrl = nullptr;
 	CTexture* pTexture = nullptr;
-	pMtrl = CMaterial::Create(m_pDevice, m_pDeviceContext, L"Mtrl_BronzeAnimus_Sword", L"../../Reference/ShaderFile/Shader_Weapon.hlsl", CMaterial::EType::Static);
+	pMtrl = CMaterial::Create(m_pDevice, m_pDeviceContext, L"Mtrl_Polearm", L"../../Reference/ShaderFile/Shader_Weapon.hlsl", CMaterial::EType::Static);
 	pTexture = CTexture::Create(m_pDevice, m_pDeviceContext);
-	pTexture->NativeConstruct_Prototype(L"../Bin/Resources/Mesh/BronzeAnimus_Sword/T_BronzeAnimus_Sword_D.dds", 1);
+	pTexture->NativeConstruct_Prototype(L"../Bin/Resources/Mesh/Polearm/T_2H_polearm_Bastion_D.dds", 1);
 	pMtrl->Set_Texture("g_DiffuseTexture", TEXTURETYPE::TEX_DIFFUSE, pTexture, 0);
 	pTexture = CTexture::Create(m_pDevice, m_pDeviceContext);
-	pTexture->NativeConstruct_Prototype(L"../Bin/Resources/Mesh/BronzeAnimus_Sword/T_BronzeAnimus_Sword_N.dds", 1);
+
+	pTexture->NativeConstruct_Prototype(L"../Bin/Resources/Mesh/Polearm/T_2H_polearm_Bastion_N.dds", 1);
 	pMtrl->Set_Texture("g_BiNormalTexture", TEXTURETYPE::TEX_NORMAL, pTexture, 0);
 	pTexture = CTexture::Create(m_pDevice, m_pDeviceContext);
-	pTexture->NativeConstruct_Prototype(L"../Bin/Resources/Mesh/BronzeAnimus_Sword/T_BronzeAnimus_Sword_OMER.dds", 1);
-	pMtrl->Set_Texture("g_MRATexture", TEXTURETYPE::TEX_OMER, pTexture, 0);
-	g_pGameInstance->Add_Material(L"Mtrl_BronzeAnimus_Sword", pMtrl);
+
+	pTexture->NativeConstruct_Prototype(L"../Bin/Resources/Mesh/Polearm/T_2H_polearm_Bastion_CEO.dds", 1);
+	pMtrl->Set_Texture("g_MRATexture", TEXTURETYPE::TEX_CEO, pTexture, 0);
+	pTexture = CTexture::Create(m_pDevice, m_pDeviceContext);
+
+	pTexture->NativeConstruct_Prototype(L"../Bin/Resources/Mesh/Polearm/T_2H_polearm_Bastion_MRA.dds", 1);
+	pMtrl->Set_Texture("g_MRATexture", TEXTURETYPE::TEX_MRA, pTexture, 0);
+	pTexture = CTexture::Create(m_pDevice, m_pDeviceContext);
+
+	g_pGameInstance->Add_Material(L"Mtrl_Polearm", pMtrl);
 
 	return S_OK;
 }
 
-HRESULT CBronzeAnimus_Sword::NativeConstruct(const _uint _iSceneID, void* _pArg)
+HRESULT CPolearm::NativeConstruct(const _uint _iSceneID, void* _pArg)
 {
 	if (FAILED(__super::NativeConstruct(_iSceneID, _pArg)))
 		return E_FAIL;
@@ -59,7 +67,7 @@ HRESULT CBronzeAnimus_Sword::NativeConstruct(const _uint _iSceneID, void* _pArg)
 	return S_OK;
 }
 
-_int CBronzeAnimus_Sword::Tick(_double _dDeltaTime)
+_int CPolearm::Tick(_double _dDeltaTime)
 {
 	if (0 > __super::Tick(_dDeltaTime))
 		return -1;
@@ -73,7 +81,7 @@ _int CBronzeAnimus_Sword::Tick(_double _dDeltaTime)
 	return _int();
 }
 
-_int CBronzeAnimus_Sword::LateTick(_double _dDeltaTime)
+_int CPolearm::LateTick(_double _dDeltaTime)
 {
 	if (0 > __super::LateTick(_dDeltaTime))
 		return -1;
@@ -84,7 +92,7 @@ _int CBronzeAnimus_Sword::LateTick(_double _dDeltaTime)
 	return _int();
 }
 
-HRESULT CBronzeAnimus_Sword::Render()
+HRESULT CPolearm::Render()
 {
 	if (FAILED(__super::Render()))
 		return E_FAIL;
@@ -104,7 +112,7 @@ HRESULT CBronzeAnimus_Sword::Render()
 	return S_OK;
 }
 
-HRESULT CBronzeAnimus_Sword::Ready_Components()
+HRESULT CPolearm::Ready_Components()
 {
 	CTransform::TRANSFORMDESC transformDesc;
 	transformDesc.fSpeedPerSec = 0.f;
@@ -112,10 +120,10 @@ HRESULT CBronzeAnimus_Sword::Ready_Components()
 	m_pTransform->Set_TransformDesc(transformDesc);
 	m_pLocalTransform->Set_TransformDesc(transformDesc);
 
-	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Model_BronzeAnimus_Sword", L"Model", (CComponent**)&m_pModel)))
+	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Model_Polearm", L"Model", (CComponent**)&m_pModel)))
 		return E_FAIL;
 
-	m_pModel->Add_Material(g_pGameInstance->Get_Material(L"Mtrl_BronzeAnimus_Sword"), 0);
+	m_pModel->Add_Material(g_pGameInstance->Get_Material(L"Mtrl_Polearm"), 0);
 
 	CCollider::DESC tColliderDesc;
 	tColliderDesc.isTrigger = true;
@@ -132,10 +140,11 @@ HRESULT CBronzeAnimus_Sword::Ready_Components()
 
 	_matrix smatPviot = XMMatrixRotationY(XMConvertToRadians(90.f)) * XMMatrixTranslation(0.f, 0.f, 1.f);
 	m_pCollider->setPivotMatrix(smatPviot);
+
 	return S_OK;
 }
 
-_int CBronzeAnimus_Sword::Attach_FixedBone(const _double& _dDeltaTime)
+_int CPolearm::Attach_FixedBone(const _double& _dDeltaTime)
 {
 	if (m_pFixedBone)
 	{
@@ -154,7 +163,7 @@ _int CBronzeAnimus_Sword::Attach_FixedBone(const _double& _dDeltaTime)
 	return NO_EVENT;
 }
 
-_int CBronzeAnimus_Sword::Attach_Owner(const _double& _dDeltaTime)
+_int CPolearm::Attach_Owner(const _double& _dDeltaTime)
 {
 	if (m_pOwner)
 	{
@@ -166,29 +175,29 @@ _int CBronzeAnimus_Sword::Attach_Owner(const _double& _dDeltaTime)
 	return _int();
 }
 
-CBronzeAnimus_Sword* CBronzeAnimus_Sword::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
+CPolearm* CPolearm::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
 {
-	CBronzeAnimus_Sword* pInstance = new CBronzeAnimus_Sword(_pDevice, _pDeviceContext);
+	CPolearm* pInstance = new CPolearm(_pDevice, _pDeviceContext);
 	if (FAILED(pInstance->NativeConstruct_Prototype()))
 	{
-		MSGBOX("CBronzeAnimus_Sword Create Fail");
+		MSGBOX("CPolearm Create Fail");
 		Safe_Release(pInstance);
 	}
 	return pInstance;
 }
 
-CGameObject* CBronzeAnimus_Sword::Clone(const _uint _iSceneID, void* _pArg)
+CGameObject* CPolearm::Clone(const _uint _iSceneID, void* _pArg)
 {
-	CBronzeAnimus_Sword* pInstance = new CBronzeAnimus_Sword(*this);
+	CPolearm* pInstance = new CPolearm(*this);
 	if (FAILED(pInstance->NativeConstruct(_iSceneID, _pArg)))
 	{
-		MSGBOX("CBronzeAnimus_Sword Clone Fail");
+		MSGBOX("CPolearm Clone Fail");
 		Safe_Release(pInstance);
 	}
 	return pInstance;
 }
 
-void CBronzeAnimus_Sword::Free()
+void CPolearm::Free()
 {
 	Safe_Release(m_pCollider);
 	__super::Free();

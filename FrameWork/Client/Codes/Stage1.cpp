@@ -49,15 +49,15 @@ HRESULT CStage1::NativeConstruct()
 	if (FAILED(Ready_TriggerSystem(L"../bin/SaveData/Trigger/MonsterSpawnTrigger.dat")))
 		return E_FAIL;
 
-	//if (FAILED(Ready_Boss(L"Layer_Boss")))
-	//{
-	//	return E_FAIL;
-	//}
+	if (FAILED(Ready_Boss(L"Layer_Boss")))
+	{
+		return E_FAIL;
+	}
 
-	//if (FAILED(Ready_Monster(L"Layer_Monster")))
-	//{
-	//	return E_FAIL;
-	//}
+	if (FAILED(Ready_Monster(L"Layer_Monster")))
+	{
+		return E_FAIL;
+	}
 
 	//Data
 	if (FAILED(Ready_Data_UI(L"../bin/SaveData/UI/UI.dat")))
@@ -214,6 +214,9 @@ HRESULT CStage1::Ready_Monster(const _tchar* LayerTag)
 	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Proto_GameObject_Monster_BronzeAnimus")))
 	//	return E_FAIL;
 
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Proto_GameObject_Monster_Bastion_Spear")))
+		return E_FAIL;
+	
 	return S_OK;
 }
 
