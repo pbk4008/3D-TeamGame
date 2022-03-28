@@ -15,6 +15,8 @@ public:
 	virtual HRESULT Render();
 
 private:
+
+	HRESULT Ready_Light();
 	HRESULT Ready_Gameobject();
 
 public:

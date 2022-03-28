@@ -78,7 +78,7 @@ _int C2H_HammerIdle::Input(const _double& _dDeltaTime)
 	if (NO_EVENT != iProgress)
 		return iProgress;
 
-	if (g_pGameInstance->getkeyDown(DIK_COLON))
+	if (g_pGameInstance->getkeyDown(DIK_1))
 	{
 		if (m_pSilvermane->Change_Weapon(L"Needle"))
 		{

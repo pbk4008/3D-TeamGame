@@ -32,6 +32,13 @@ _int C1H_SwordAttackNormalR2_ReleaseDoubleSwing::Tick(const _double& _dDeltaTime
 		m_pSilvermane->Set_IsTrasceCamera(false);
 	}
 
+	if(50 < iCurkeyFrameIndex)
+	if (!m_isShake2)
+	{
+		_float3 vPos; XMStoreFloat3(&vPos, m_pTransform->Get_State(CTransform::STATE_POSITION));
+		g_pShakeManager->Shake(m_tShakeEvent2, vPos);
+		m_isShake2 = true;
+	}
 
 	if (m_pAnimationController->Is_Finished())
 	{
@@ -76,14 +83,24 @@ HRESULT C1H_SwordAttackNormalR2_ReleaseDoubleSwing::EnterState()
 	m_iAttackEndIndex = 52;
 
 	// ½¦ÀÌÅ© ¿É¼Ç
-	m_tShakeEvent.fDuration = 0.4f;
-	m_tShakeEvent.tWaveX.fAmplitude = 0.04f;
-	m_tShakeEvent.tWaveX.fFrequency = 10.f;
-	m_tShakeEvent.tWaveY.fAmplitude = 0.04f;
-	m_tShakeEvent.tWaveY.fFrequency = 6.f;
-	m_tShakeEvent.tWaveZ.fAmplitude = 0.04f;
-	m_tShakeEvent.tWaveZ.fFrequency = 8.f;
+	m_tShakeEvent = CCameraShake::SHAKEEVENT();
+	m_tShakeEvent.fDuration = 0.6f;
+	m_tShakeEvent.fBlendInTime = 0.1f;
 	m_tShakeEvent.fBlendOutTime = 0.3f;
+	m_tShakeEvent.tWaveX.fAmplitude = 0.02f;
+	m_tShakeEvent.tWaveX.fFrequency = 10.f;
+	m_tShakeEvent.tWaveY.fAmplitude = 0.004f;
+	m_tShakeEvent.tWaveY.fFrequency = 1.f;
+	m_tShakeEvent.tWaveY.fAdditionalOffset = 0.5f;
+	// 2
+	m_tShakeEvent2.fDuration = 0.6f;
+	m_tShakeEvent2.fBlendInTime = 0.1f;
+	m_tShakeEvent2.fBlendOutTime = 0.3f;
+	m_tShakeEvent2.tWaveX.fAmplitude = 0.02f;
+	m_tShakeEvent2.tWaveX.fFrequency = 10.f;
+	m_tShakeEvent2.tWaveY.fAmplitude = 0.004f;
+	m_tShakeEvent2.tWaveY.fFrequency = 1.f;
+	m_tShakeEvent2.tWaveY.fAdditionalOffset = -0.5f;
 
 	return S_OK;
 }
@@ -98,6 +115,7 @@ HRESULT C1H_SwordAttackNormalR2_ReleaseDoubleSwing::ExitState()
 	m_pSilvermane->Set_IsTrasceCamera(true);
 	m_fRotTime = 0.f;
 
+	m_isShake2 = false;
 	return S_OK;
 }
 
