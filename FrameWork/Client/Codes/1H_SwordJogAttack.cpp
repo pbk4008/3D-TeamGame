@@ -26,14 +26,7 @@ _int C1H_SwordJogAttack::Tick(const _double& _dDeltaTime)
 
 	Add_PlusAngle(EDir::Forward, _dDeltaTime);
 
-
-	if (m_pSilvermane->IsAttack())
-	{
-		if (30 < m_pAnimationController->Get_CurKeyFrameIndex())
-			m_pSilvermane->Set_IsAttack(false);
-	}
-
-
+	_uint iCurkeyFrameIndex = m_pAnimationController->Get_CurKeyFrameIndex();
 
 	if (m_pAnimationController->Is_Finished())
 	{
@@ -75,6 +68,8 @@ HRESULT C1H_SwordJogAttack::EnterState()
 		m_pSilvermane->Set_WeaponFixedBone("weapon_r");
 	}
 
+	m_iAttackStartIndex = 6;
+	m_iAttackEndIndex = 14;
 	return S_OK;
 }
 
@@ -86,9 +81,9 @@ HRESULT C1H_SwordJogAttack::ExitState()
 	return S_OK;
 }
 
-_int C1H_SwordJogAttack::KeyCheck(const _double& _dDeltaTime)
+_int C1H_SwordJogAttack::Input(const _double& _dDeltaTime)
 {
-	_int iProgress = __super::KeyCheck(_dDeltaTime);
+	_int iProgress = __super::Input(_dDeltaTime);
 	if (NO_EVENT != iProgress)
 		return iProgress;
 	

@@ -7,6 +7,7 @@
 #include "Shield.h"
 #include "JumpNode.h"
 #include "JumpTrigger.h"
+#include "JumpBox.h"
 
 #pragma region 스테이트들
 #include "Silvermane_Idle.h"
@@ -137,6 +138,9 @@
 //////////////////////////////////////////// Jump
 #include "Traverse_Jump400Jog.h"
 #include "Traverse_JumpNodeJog.h"
+
+//////////////////////////////////////////// Hit
+#include "1H_FlinchLeft.h"
 #pragma endregion
 #include "Material.h"
 
@@ -208,6 +212,7 @@ _int CSilvermane::Tick(_double _dDeltaTime)
 	iProgress = m_pStateController->Tick(_dDeltaTime);
 	if (NO_EVENT != iProgress && STATE_CHANGE != iProgress) 
 		return iProgress;
+	g_pObserver->Set_IsAttack(m_IsAttack);
 
 	iProgress = Trace_CameraLook(_dDeltaTime);
 	if (NO_EVENT != iProgress) 
@@ -217,7 +222,7 @@ _int CSilvermane::Tick(_double _dDeltaTime)
 	if (NO_EVENT != iProgress) 
 		return iProgress;
 
-	iProgress = KeyCheck(_dDeltaTime);
+	iProgress = Input(_dDeltaTime);
 	if (NO_EVENT != iProgress)
 		return iProgress;
 
@@ -694,6 +699,9 @@ HRESULT CSilvermane::Ready_States()
 		return E_FAIL;
 	if (FAILED(m_pStateController->Add_State(L"Traverse_JumpNodeJog", CTraverse_JumpNodeJog::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
+	// 쳐맞음
+	if (FAILED(m_pStateController->Add_State(L"1H_FlinchLeft", C1H_FlinchLeft::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
 
 	for (auto& pair : m_pStateController->Get_States())
 	{
@@ -762,38 +770,33 @@ void CSilvermane::OnCollisionExit(CCollision& collision)
 
 void CSilvermane::OnTriggerEnter(CCollision& collision)
 {
-	_uint iTag = collision.pGameObject->getTag();
-	if ((_uint)GAMEOBJECT::WEAPON_MIDBOSS == iTag)
-	{
-		if (static_cast<CWeapon*>(collision.pGameObject)->IsAttack())
-		{
-			m_fCurrentHp -= 7;
-		}
-	}
-
-	else if ((_uint)GAMEOBJECT::WEAPON_EARTH == iTag)
-	{
-		if (static_cast<CWeapon*>(collision.pGameObject)->IsAttack())
-		{
-			m_fCurrentHp -= 4;
-		}
-	}
-	if ((_uint)GAMEOBJECT::WEAPON_BULLET == iTag)
-		m_fCurrentHp -= 3;
-
-	else if ((_uint)GAMEOBJECT::MONSTER_CRYSTAL == iTag)
-	{
-		_bool a = static_cast<CActor*>(collision.pGameObject)->IsAttack();
-		if (static_cast<CActor*>(collision.pGameObject)->IsAttack())
-		{
-			m_fCurrentHp -= 3;
-		}
-	}
+	m_pStateController->OnTriggerEnter(collision);
 }
 
 void CSilvermane::OnTriggerExit(CCollision& collision)
 {
 	m_pStateController->OnTriggerExit(collision);
+}
+
+void CSilvermane::OnControllerColliderHit(CCollision& collision)
+{
+	CGameObject* pHitObject = collision.pGameObject;
+	_uint iTag = pHitObject->getTag();
+	if (iTag == (_uint)GAMEOBJECT::JUMP_BOX)
+	{
+		if (g_pGameInstance->getkeyDown(DIK_C))
+		{
+			CJumpBox* pJumpBox = static_cast<CJumpBox*>(pHitObject);
+			m_pTargetJumpBox = pJumpBox;
+			m_pTargetJumpBox->DisableCollision();
+			m_pStateController->Change_State(L"Traverse_Jump400Jog");
+		}
+	}
+}
+
+const _bool CSilvermane::IsHit() const
+{
+	return m_isHit;
 }
 
 CTransform* CSilvermane::Get_Transform() const
@@ -827,6 +830,11 @@ const CSilvermane::SCENEMOVEDATA CSilvermane::Get_SceneMoveData() const
 	tDesc.iCurHp = 100;
 
 	return tDesc;
+}
+
+void CSilvermane::Set_IsHit(const _bool _isHit)
+{
+	m_isHit = _isHit;
 }
 
 void CSilvermane::Set_IsFall(const _bool _isFall)
@@ -911,6 +919,11 @@ void CSilvermane::Add_PlusAngle(const _float _fDeltaAngle)
 void CSilvermane::Add_Velocity(const CTransform::STATE _eState, const _double& _dDeltaTime)
 {
 	m_pTransform->Add_Velocity(_eState, m_fMoveSpeed * (_float)_dDeltaTime);
+}
+
+void CSilvermane::Add_HP(const _float _fValue)
+{
+	m_fCurrentHp += _fValue;
 }
 
 void CSilvermane::Set_Position(const _float3 _vPosition)
@@ -1004,7 +1017,7 @@ const _int CSilvermane::Trace_CameraLook(const _double& _dDeltaTime)
  	return _int();
 }
 
-const _int CSilvermane::KeyCheck(const _double& _dDeltaTime)
+const _int CSilvermane::Input(const _double& _dDeltaTime)
 {
 	if (g_pGameInstance->getkeyDown(DIK_HOME))
 	{
@@ -1036,6 +1049,11 @@ CJumpNode* CSilvermane::Get_TargetJumpNode() const
 CJumpTrigger* CSilvermane::Get_TargetJumpTrigger() const
 {
 	return m_pTargetJumpTrigger;
+}
+
+CJumpBox* CSilvermane::Get_TargetJumpBox() const
+{
+	return m_pTargetJumpBox;
 }
 
 const _bool CSilvermane::Raycast_JumpNode(const _double& _dDeltaTime)

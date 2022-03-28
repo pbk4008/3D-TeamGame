@@ -94,7 +94,7 @@ HRESULT CShield_BlockEnd::ExitState()
 	return S_OK;
 }
 
-_int CShield_BlockEnd::KeyCheck(const _double& _dDeltaTime)
+_int CShield_BlockEnd::Input(const _double& _dDeltaTime)
 {
 	//_int iProgress = __super::KeyCheck(_dDeltaTime);
 	//if (NO_EVENT != iProgress)

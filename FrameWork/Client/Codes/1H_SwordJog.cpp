@@ -60,9 +60,14 @@ HRESULT C1H_SwordJog::ExitState()
 	return S_OK;
 }
 
-_int C1H_SwordJog::KeyCheck(const _double& _dDeltaTime)
+void C1H_SwordJog::OnTriggerEnter(CCollision& collision)
 {
-	_int iProgress = __super::KeyCheck(_dDeltaTime);
+	OnTriggerEnterHit(collision);
+}
+
+_int C1H_SwordJog::Input(const _double& _dDeltaTime)
+{
+	_int iProgress = __super::Input(_dDeltaTime);
 	if (NO_EVENT != iProgress)
 		return iProgress;
 

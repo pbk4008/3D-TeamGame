@@ -12,6 +12,7 @@ class CWeapon;
 class CCamera_Silvermane;
 class CJumpNode;
 class CJumpTrigger;
+class CJumpBox;
 
 class CSilvermane final : public CActor
 {
@@ -47,8 +48,11 @@ public:
 	virtual void OnCollisionExit(CCollision& collision) override;
 	virtual void OnTriggerEnter(CCollision& collision) override;
 	virtual void OnTriggerExit(CCollision& collision) override;
+	virtual void OnControllerColliderHit(CCollision& collision) override;
 
 public:
+	const _bool IsHit() const;
+
 	CTransform* Get_Transform() const;
 	CModel* Get_Model() const;
 	const _float Get_PlusAngle() const;
@@ -56,6 +60,7 @@ public:
 	//플레이어 씬 이동시 다음씬으로 넘어가야 할 데이터 생성 후 밖으로 빼내기
 	const SCENEMOVEDATA Get_SceneMoveData() const;
 
+	void Set_IsHit(const _bool _isHit);
 	void Set_IsFall(const _bool _isFall);
 	void Set_IsMove(const _bool _isMove);
 	void Set_IsTrasceCamera(const _bool _isTraceCamera);
@@ -66,6 +71,7 @@ public:
 
 	void Add_PlusAngle(const _float _fDeltaAngle);
 	void Add_Velocity(const CTransform::STATE _eState, const _double& _dDeltaTime);
+	void Add_HP(const _float _fValue);
 
 public: /* For.Weapon */
 	const _bool IsEquipWeapon() const;
@@ -85,11 +91,12 @@ public: /* For.Shield */
 public: /* For.JumpNode */
 	CJumpNode* Get_TargetJumpNode() const;
 	CJumpTrigger* Get_TargetJumpTrigger() const;
+	CJumpBox* Get_TargetJumpBox() const;
 	const _bool Raycast_JumpNode(const _double& _dDeltaTime);
 
 private:
 	const _int Trace_CameraLook(const _double& _dDeltaTime);
-	const _int KeyCheck(const _double& _dDeltaTime);
+	const _int Input(const _double& _dDeltaTime);
 
 private: /* Components */
 	CModel* m_pModel = nullptr;
@@ -119,6 +126,7 @@ private: /* For.Weapon */
 private: /* For.JumpNode */
 	CJumpNode* m_pTargetJumpNode = nullptr;
 	CJumpTrigger* m_pTargetJumpTrigger = nullptr;
+	CJumpBox* m_pTargetJumpBox = nullptr;
 	_float m_fJumpNodeLookTime = 0.f;
 	_float m_fJumpTriggerLookTime = 0.f;
 

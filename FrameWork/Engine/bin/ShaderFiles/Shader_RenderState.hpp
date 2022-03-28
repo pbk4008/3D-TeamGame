@@ -70,10 +70,28 @@ BlendState AlphaBlending
 {
 	BlendEnable[0] = true;
 	BlendEnable[1] = true;
+	BlendOp = Add;
 
 	SrcBlend = Src_Alpha;
 	DestBlend = Inv_Src_Alpha;
+};
+
+BlendState AlphaAdditive
+{
+	BlendEnable[0] = true;
+	BlendEnable[1] = true;
+
+	SrcBlend = Src_Alpha;
+	DestBlend = One;
 	BlendOp = Add;
+
+	SrcBlendAlpha = One;
+	DestBlendAlpha = One;
+	BlendOpAlpha = Add;
+
+	RenderTargetWriteMask[0] = 0x0F;
+	RenderTargetWriteMask[1] = 0x0F;
+
 };
 
 BlendState BlendDisable

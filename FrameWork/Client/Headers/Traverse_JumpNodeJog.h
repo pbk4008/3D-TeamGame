@@ -18,7 +18,7 @@ public:
 	virtual HRESULT ExitState();
 
 public:
-	virtual _int KeyCheck(const _double& _dDeltaTime) override;
+	virtual _int Input(const _double& _dDeltaTime) override;
 
 	virtual void OnTriggerExit(CCollision& collision) override;
 

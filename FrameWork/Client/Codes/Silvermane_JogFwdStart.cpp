@@ -67,9 +67,9 @@ HRESULT CSilvermane_JogFwdStart::ExitState()
 	return S_OK;
 }
 
-_int CSilvermane_JogFwdStart::KeyCheck(const _double& _dDeltaTime)
+_int CSilvermane_JogFwdStart::Input(const _double& _dDeltaTime)
 {
-	_int iProgress = __super::KeyCheck(_dDeltaTime);
+	_int iProgress = __super::Input(_dDeltaTime);
 	if (NO_EVENT != iProgress)
 		return iProgress;
 

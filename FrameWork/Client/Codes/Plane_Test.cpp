@@ -17,10 +17,6 @@ HRESULT CPlane_Test::NativeConstruct_Prototype()
 	if (FAILED(__super::NativeConstruct_Prototype()))
 		return E_FAIL;
 
-
-	if (FAILED(Ready_NaviPoints(L"../Data/NavMesh/Stage_1_Nav.dat")))
-		return E_FAIL;
-
 	m_iObectTag = (_uint)GAMEOBJECT::ENVIRONMENT;
 
 	return S_OK;
@@ -33,6 +29,9 @@ HRESULT CPlane_Test::NativeConstruct(const _uint _iSceneID, void* _pArg)
 
 	//if (FAILED(Ready_Components()))
 	//	return E_FAIL;
+	wstring wstrNaviPath = (*(wstring*)_pArg);
+	if (FAILED(Ready_NaviPoints(wstrNaviPath)))
+		return E_FAIL;
 
 	if (FAILED(Ready_NavMesh()))
 		return E_FAIL;
@@ -120,6 +119,7 @@ HRESULT CPlane_Test::Ready_NaviPoints(const wstring & _wstrFilePath)
 {
 	if(FAILED(g_pGameInstance->LoadFile<NAVIMESHDESC>(m_vecNaviPoints, _wstrFilePath.c_str())))
 		return E_FAIL;
+
 	m_vecNaviPoints.shrink_to_fit();
 
 	return S_OK;

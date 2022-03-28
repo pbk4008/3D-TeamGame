@@ -74,9 +74,14 @@ HRESULT C1H_SwordIdle::ExitState()
 	return S_OK;
 }
 
-_int C1H_SwordIdle::KeyCheck(const _double& _dDeltaTime)
+void C1H_SwordIdle::OnTriggerEnter(CCollision& collision)
 {
-	_int iProgress = __super::KeyCheck(_dDeltaTime);
+	OnTriggerEnterHit(collision);
+}
+
+_int C1H_SwordIdle::Input(const _double& _dDeltaTime)
+{
+	_int iProgress = __super::Input(_dDeltaTime);
 	if (NO_EVENT != iProgress)
 		return iProgress;
 

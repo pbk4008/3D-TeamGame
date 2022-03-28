@@ -1,3 +1,4 @@
+
 #include "pch.h"
 #include "Loading.h"
 #include "Stage1.h"
@@ -6,13 +7,14 @@
 
 #include "Effect_DashDust.h"
 #include "Effect_HitParticle.h"
+#include "Effect_HitFloating.h"
 #include "UI_Ingame.h"
 #include "UI_Player_HpBar.h"
 #include "UI_Tuto_Base.h"
 #include "UI_Tuto_Font.h"
 
 #include "JumpNode.h"
-#include "JumpTrigger.h"
+#include "JumpBox.h"
 
 CStage1::CStage1()
 	: m_pTriggerSystem(nullptr)
@@ -29,7 +31,9 @@ CStage1::CStage1(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
 
 HRESULT CStage1::NativeConstruct()
 {
-	m_bDebug = true;//false로 바꾸면 무조건 몬스터 다잡고 가야됩니다.
+	//몬스터 안잡고 진행하려면 true, 잡으면서 진행하려면 false (잡고갈때는 무조건 다 잡고가야됨)
+
+	m_bDebug = false;//false로 바꾸면 무조건 몬스터 다잡고 가야됩니다.
 #ifndef _DEBUG 
 	m_bDebug = false;
 #endif // DEBUG
@@ -49,8 +53,8 @@ HRESULT CStage1::NativeConstruct()
 	if (FAILED(Ready_MapObject()))
 		return E_FAIL;
 
-	//if (FAILED(Ready_TriggerSystem(L"../bin/SaveData/Trigger/MonsterSpawnTrigger.dat")))
-	//	return E_FAIL;
+	if (FAILED(Ready_TriggerSystem(L"../bin/SaveData/Trigger/MonsterSpawnTrigger.dat")))
+		return E_FAIL;
 
 	//if (FAILED(Ready_Boss(L"Layer_Boss")))
 	//{
@@ -62,16 +66,15 @@ HRESULT CStage1::NativeConstruct()
 	//	return E_FAIL;
 	//}
 
-	////Data
-	//if (FAILED(Ready_Data_UI(L"../bin/SaveData/UI/UI.dat")))
-	//{
-	//	return E_FAIL;
-	//}
-	
-	//if (FAILED(Ready_Data_Effect()))
-	//{
-	//	return E_FAIL;
-	//}
+	if (FAILED(Ready_Data_UI(L"../bin/SaveData/UI/UI.dat")))
+	{
+		return E_FAIL;
+	}
+
+	if (FAILED(Ready_Data_Effect()))
+	{
+		return E_FAIL;
+	}
 
 	//if (FAILED(Ready_UI(L"Layer_UI")))
 	//{
@@ -109,16 +112,22 @@ _int CStage1::Tick(_double TimeDelta)
 		g_pDebugSystem->Set_LevelcMoveCheck(false);
 	}
 #endif //  _DEBUG
-	//m_pTriggerSystem->Tick(TimeDelta);
-
+	if (nullptr != m_pTriggerSystem)
+	{
+		m_pTriggerSystem->Tick(TimeDelta);
+	}
 	return _int();
 }
 
 HRESULT CStage1::Render()
 {
-//#ifdef _DEBUG
-//	m_pTriggerSystem->Render();
-//#endif
+#ifdef _DEBUG
+	if (nullptr != m_pTriggerSystem)
+	{
+		m_pTriggerSystem->Render();
+	}
+#endif
+
 	return S_OK;
 }
 
@@ -202,7 +211,8 @@ HRESULT CStage1::Ready_Camera(const _tchar* LayerTag)
 HRESULT CStage1::Ready_Player(const _tchar* LayerTag)
 {
 	//// 네비메쉬
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Plane", L"Proto_GameObject_Plane_Test")))
+	wstring wstrNaviFile = L"../Data/NavMesh/Stage_1_Nav.dat";
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Plane", L"Proto_GameObject_Plane_Test",&wstrNaviFile)))
 		return E_FAIL;
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Proto_GameObject_Silvermane")))
 		return E_FAIL;
@@ -227,11 +237,8 @@ HRESULT CStage1::Ready_Monster(const _tchar* LayerTag)
 	
 	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Proto_GameObject_Monster_EarthAberrant")))
 	//	return E_FAIL;
-	
+	//
 	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Proto_GameObject_Monster_Bastion_2HSword")))
-	//	return E_FAIL;
-	
-	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Proto_GameObject_Monster_BronzeAnimus")))
 	//	return E_FAIL;
 
 	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Proto_GameObject_Monster_Bastion_Healer")))
@@ -243,9 +250,6 @@ HRESULT CStage1::Ready_Monster(const _tchar* LayerTag)
 	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Proto_GameObject_Monster_Bastion_Shooter")))
 	//	return E_FAIL;
 	 
-	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Proto_GameObject_Monster_BronzeAnimus")))
-	//	return E_FAIL;
-
 	return S_OK;
 }
 
@@ -387,7 +391,6 @@ HRESULT CStage1::Ready_Data_Effect()
 
 	for (int i = 0; i < vecEffect.size(); ++i)
 	{
-		wstring Tag = vecEffect[i].TextureTag;
 		wstring FullName = L"Proto_GameObject_Effect_DashDust";
 
 		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Effect", FullName, &vecEffect[i])))
@@ -396,17 +399,32 @@ HRESULT CStage1::Ready_Data_Effect()
 			return E_FAIL;
 		}
 	}*/
+	
 
+	//이펙트생성
+	vector<CEffect_HitParticle::EFFECTDESC> vecEffect;
+	g_pGameInstance->LoadFile<CEffect_HitParticle::EFFECTDESC>(vecEffect, L"../bin/SaveData/Effect/Effect_Player_Attack1.dat");
 
-	vector<CEffect_HitParticle::EFFECTDESC> vecEffect1;
-	g_pGameInstance->LoadFile<CEffect_HitParticle::EFFECTDESC>(vecEffect1, L"../bin/SaveData/Effect/Effect_Explosion.dat");
+	for (int i = 0; i < vecEffect.size(); ++i)
+	{
+		wstring FullName = L"Proto_GameObject_Effect_Hit";
+		//_tcscpy_s(vecEffect1[i].ShaderFullFilePath, L"../../Reference/ShaderFile/Shader_PointInstance.hlsl");
+		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Effect_Hit", FullName, &vecEffect[i])))
+		{
+			MSGBOX("Failed to Creating in CStage1::Ready_Effect()");
+			return E_FAIL;
+		}
+	}
+
+	//이펙트생성
+	vector<CEffect_HitFloating::EFFECTDESC> vecEffect1;
+	g_pGameInstance->LoadFile<CEffect_HitFloating::EFFECTDESC>(vecEffect1, L"../bin/SaveData/Effect/Effect_Player_Attack2_Floating_2.dat");
 
 	for (int i = 0; i < vecEffect1.size(); ++i)
 	{
-		wstring Tag = vecEffect1[i].TextureTag;
-		wstring FullName = L"Proto_GameObject_Effect_Hit";
-
-		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Effect", FullName, &vecEffect1[i])))
+		wstring FullName = L"Proto_GameObject_Effect_Floating";
+		//_tcscpy_s(vecEffect1[i].ShaderFullFilePath, L"../../Reference/ShaderFile/Shader_PointInstance.hlsl");
+		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Effect_Floating", FullName, &vecEffect1[i])))
 		{
 			MSGBOX("Failed to Creating in CStage1::Ready_Effect()");
 			return E_FAIL;
@@ -1035,23 +1053,26 @@ HRESULT CStage1::Ready_Trigger_Jump()
 	tJumpNodeDesc.vPosition = { 25.f, 5.f, 84.f };
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_JumpNode", L"Proto_GameObject_JumpNode", &tJumpNodeDesc)))
 		return E_FAIL;
-	tJumpNodeDesc.vPosition = { -25.f, 8.f, 100.f };
+	tJumpNodeDesc.vPosition = { -25.f, 8.f, 98.f };
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_JumpNode", L"Proto_GameObject_JumpNode", &tJumpNodeDesc)))
 		return E_FAIL;
 	tJumpNodeDesc.vPosition = { -176.f, 50.f, 335.f };
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_JumpNode", L"Proto_GameObject_JumpNode", &tJumpNodeDesc)))
 		return E_FAIL;
 
-	// 점프 트리거들
-	CJumpTrigger::DESC tJumpTriggerDesc;
-	tJumpTriggerDesc.vPosition = { -47.f, 4.5f, 81.f };
-	tJumpTriggerDesc.vRotation = { 0.f, 90.f, 0.f };
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_JumpTrigger", L"Proto_GameObject_JumpTrigger", &tJumpTriggerDesc)))
+	// 점프 박스들
+	CJumpBox::DESC tJumpBoxrDesc;
+	tJumpBoxrDesc.vPosition = { -42.5f, 4.5f, 82.f };
+	tJumpBoxrDesc.vRotation = { 0.f, 0.f, 0.f };
+	tJumpBoxrDesc.vScale = { 7.f, 2.f, 8.f };
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_JumpBox", L"Proto_GameObject_JumpBox", &tJumpBoxrDesc)))
 		return E_FAIL;
-	tJumpTriggerDesc.vPosition = { -136.f, 18.5f, 236.f };
-	tJumpTriggerDesc.vRotation = { 0.f, 0.f, 0.f };
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_JumpTrigger", L"Proto_GameObject_JumpTrigger", &tJumpTriggerDesc)))
+	tJumpBoxrDesc.vPosition = { -136.5f, 19.f, 231.5f };
+	tJumpBoxrDesc.vRotation = { 0.f, 0.f, 0.f };
+	tJumpBoxrDesc.vScale = { 7.f, 2.f, 6.f };
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_JumpBox", L"Proto_GameObject_JumpBox", &tJumpBoxrDesc)))
 		return E_FAIL;
+
 
 	return S_OK;
 }

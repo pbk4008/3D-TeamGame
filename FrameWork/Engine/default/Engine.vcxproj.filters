@@ -208,12 +208,6 @@
     <Filter Include="00.Utility\03.Component\05.VIBuffer\09.Instance">
       <UniqueIdentifier>{ffceb99c-60d5-4075-a880-1251b6d9405d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="00.Utility\03.Component\05.VIBuffer\09.Instance\00..InstanceExplosion">
-      <UniqueIdentifier>{e8867ac6-25ad-483d-9401-60d4c28145ab}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="00.Utility\03.Component\05.VIBuffer\09.Instance\01. InstanceMesh">
-      <UniqueIdentifier>{67907881-308e-436b-ba4f-cd56aab4032a}</UniqueIdentifier>
-    </Filter>
     <Filter Include="00.Utility\03.Component\05.VIBuffer\10.Trapezium">
       <UniqueIdentifier>{329441a3-c2af-4793-a919-667ae0cce48e}</UniqueIdentifier>
     </Filter>
@@ -297,6 +291,18 @@
     </Filter>
     <Filter Include="98.ShaderFiles\Environment">
       <UniqueIdentifier>{a55263e9-530b-4c0c-92c7-a546a74a279c}</UniqueIdentifier>
+	</Filter>
+    <Filter Include="00.Utility\03.Component\05.VIBuffer\09.Instance\00.Particle">
+      <UniqueIdentifier>{0b39ed64-0406-4109-9e05-ed924b4d203d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00.Utility\03.Component\05.VIBuffer\09.Instance\01. InstanceMesh">
+      <UniqueIdentifier>{67907881-308e-436b-ba4f-cd56aab4032a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00.Utility\03.Component\05.VIBuffer\09.Instance\00.Particle\00.Explosion">
+      <UniqueIdentifier>{e8867ac6-25ad-483d-9401-60d4c28145ab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00.Utility\03.Component\05.VIBuffer\09.Instance\00.Particle\02.Floating">
+      <UniqueIdentifier>{431b9d51-d009-4344-b656-70d370b5b67b}</UniqueIdentifier>
 	</Filter>
     <Filter Include="00.Utility\04.Manager\12.EffectManager">
       <UniqueIdentifier>{3e2071c1-559c-4d70-a599-2953719bc407}</UniqueIdentifier>
@@ -478,7 +484,7 @@
       <Filter>00.Utility\04.Manager\11. PhsyicX</Filter>
     </ClInclude>
     <ClInclude Include="..\public\VIBuffer_PointInstance_Explosion.h">
-      <Filter>00.Utility\03.Component\05.VIBuffer\09.Instance\00..InstanceExplosion</Filter>
+      <Filter>00.Utility\03.Component\05.VIBuffer\09.Instance\00.Particle\00.Explosion</Filter>
     </ClInclude>
     <ClInclude Include="..\public\State.h">
       <Filter>00.Utility\98.State</Filter>
@@ -591,6 +597,9 @@
     <ClInclude Include="..\public\SimulationFilterCallback.h">
       <Filter>00.Utility\04.Manager\11. PhsyicX\SimulationFilterCallback</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\VIBuffer_PointInstance_Floating.h">
+      <Filter>00.Utility\03.Component\05.VIBuffer\09.Instance\00.Particle\02.Floating</Filter>
+	</ClInclude>
     <ClInclude Include="..\public\EffectManager.h">
       <Filter>00.Utility\04.Manager\12.EffectManager</Filter>
     </ClInclude>
@@ -747,7 +756,7 @@
       <Filter>00.Utility\04.Manager\11. PhsyicX</Filter>
     </ClCompile>
     <ClCompile Include="..\private\VIBuffer_PointInstance_Explosion.cpp">
-      <Filter>00.Utility\03.Component\05.VIBuffer\09.Instance\00..InstanceExplosion</Filter>
+      <Filter>00.Utility\03.Component\05.VIBuffer\09.Instance\00.Particle\00.Explosion</Filter>
     </ClCompile>
     <ClCompile Include="..\private\Model.cpp">
       <Filter>00.Utility\03.Component\05.VIBuffer\07.Model\MeshContainer</Filter>
@@ -851,6 +860,9 @@
     <ClCompile Include="..\private\SimulationFilterCallback.cpp">
       <Filter>00.Utility\04.Manager\11. PhsyicX\SimulationFilterCallback</Filter>
     </ClCompile>
+    <ClCompile Include="..\private\VIBuffer_PointInstance_Floating.cpp">
+      <Filter>00.Utility\03.Component\05.VIBuffer\09.Instance\00.Particle\02.Floating</Filter>
+	</ClCompile>
     <ClCompile Include="..\private\EffectManager.cpp">
       <Filter>00.Utility\04.Manager\12.EffectManager</Filter>
     </ClCompile>
@@ -891,9 +903,6 @@
     </FxCompile>
     <FxCompile Include="..\bin\ShaderFiles\Shader_MeshAnim.hlsl">
       <Filter>98.ShaderFiles</Filter>
-    </FxCompile>
-    <FxCompile Include="..\bin\ShaderFiles\Shader_Particle.hlsl">
-      <Filter>00.Utility\03.Component\05.VIBuffer\09.Instance\00..InstanceExplosion</Filter>
     </FxCompile>
     <FxCompile Include="..\bin\ShaderFiles\Shader_UI.hlsl">
       <Filter>98.ShaderFiles</Filter>
@@ -975,6 +984,9 @@
     </FxCompile>
     <FxCompile Include="..\bin\ShaderFiles\Shader_INST_Tree.hlsl">
       <Filter>98.ShaderFiles\Environment</Filter>
+	</FxCompile>
+    <FxCompile Include="..\bin\ShaderFiles\Shader_Particle.hlsl">
+      <Filter>00.Utility\03.Component\05.VIBuffer\09.Instance\00.Particle</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>

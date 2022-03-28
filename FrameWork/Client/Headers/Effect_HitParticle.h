@@ -38,6 +38,9 @@ private:
 private:
 	CEffect::EFFECTDESC m_Desc;
 	CVIBuffer_PointInstance_Explosion::PIDESC m_backupDesc;
+
+	_float m_fNonActiveTimeAcc = 0.f;
+
 public:
 	static CEffect_HitParticle* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);
 	virtual CGameObject* Clone(const _uint _iSceneID, void* pArg) override;

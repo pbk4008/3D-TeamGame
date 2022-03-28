@@ -22,11 +22,7 @@ _int C1H_SwordAttackNormalR1_01::Tick(const _double& _dDeltaTime)
 	if (NO_EVENT != iProgress)
 		return iProgress;
 
-	if (m_pSilvermane->IsAttack())
-	{
-		if (m_iCutIndex < m_pAnimationController->Get_CurKeyFrameIndex())
-			m_pSilvermane->Set_IsAttack((false));
-	}
+	_uint iCurkeyFrameIndex = m_pAnimationController->Get_CurKeyFrameIndex();
 
 	if (m_pAnimationController->Is_Finished())
 	{
@@ -71,6 +67,9 @@ HRESULT C1H_SwordAttackNormalR1_01::EnterState()
 	m_pAnimationController->Set_PlaySpeed(1.2f);
 
 	m_iCutIndex = 18;
+
+	m_iAttackStartIndex = 15;
+	m_iAttackEndIndex = 21;
 	return S_OK;
 }
 
@@ -83,9 +82,9 @@ HRESULT C1H_SwordAttackNormalR1_01::ExitState()
 	return S_OK;
 }
 
-_int C1H_SwordAttackNormalR1_01::KeyCheck(const _double& _dDeltaTime)
+_int C1H_SwordAttackNormalR1_01::Input(const _double& _dDeltaTime)
 {
-	_int iProgress = __super::KeyCheck(_dDeltaTime);
+	_int iProgress = __super::Input(_dDeltaTime);
 	if (NO_EVENT != iProgress)
 		return iProgress;
 	
@@ -111,13 +110,11 @@ _int C1H_SwordAttackNormalR1_01::KeyCheck(const _double& _dDeltaTime)
 C1H_SwordAttackNormalR1_01* C1H_SwordAttackNormalR1_01::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext, void* _pArg)
 {
 	C1H_SwordAttackNormalR1_01* pInstance = new C1H_SwordAttackNormalR1_01(_pDevice, _pDeviceContext);
-
 	if (FAILED(pInstance->NativeConstruct(_pArg)))
 	{
 		MSGBOX("C1H_SwordAttackNormalR1_01 Create Fail");
 		Safe_Release(pInstance);
 	}
-
 	return pInstance;
 }
 

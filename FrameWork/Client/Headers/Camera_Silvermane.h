@@ -44,6 +44,8 @@ private:
 	CTransform* m_pWorldTransform = nullptr;
 
 	_float3 m_vRot = { 0.f,0.f,0.f };
+	_float3 m_vLocalOriginPos = { 0.f, 0.f, 0.f };
+	_float3 m_vShakeAccPos = { 0.f, 0.f, 0.f };
 
 	_bool m_isChase = true;
 

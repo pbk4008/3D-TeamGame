@@ -36,15 +36,20 @@ protected:
 	const _int Add_PlusAngle(const EDir _eDir, const _double& _dDeltaTime);
 
 protected:
-	virtual _int KeyCheck(const _double& _dDeltaTime);
+	virtual _int Input(const _double& _dDeltaTime);
+	void OnTriggerEnterHit(CCollision& collision);
 
 protected:
 	CSilvermane* m_pSilvermane = nullptr;
 	CTransform* m_pTransform = nullptr;
 	CModel* m_pModel = nullptr;
 	CAnimationController* m_pAnimationController = nullptr;
+
+	_bool m_isShake = false;
 	_uint m_iCutIndex = 0;
 	EDir m_eDir = EDir::Max;
+
+	
 
 public:
 	virtual void Free() override;

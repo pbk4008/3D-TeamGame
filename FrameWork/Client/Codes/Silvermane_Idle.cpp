@@ -71,9 +71,14 @@ HRESULT CSilvermane_Idle::ExitState()
 	return S_OK;
 }
 
-_int CSilvermane_Idle::KeyCheck(const _double& _dDeltaTime)
+void CSilvermane_Idle::OnTriggerEnter(CCollision& collision)
 {
-	_int iProgress = __super::KeyCheck(_dDeltaTime);
+	OnTriggerEnterHit(collision);
+}
+
+_int CSilvermane_Idle::Input(const _double& _dDeltaTime)
+{
+	_int iProgress = __super::Input(_dDeltaTime);
 	if (NO_EVENT != iProgress)
 		return iProgress;
 

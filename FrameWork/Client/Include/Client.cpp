@@ -35,7 +35,6 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
 
     CMainApp* pMainGame = nullptr;
-    //CGameInstance* pGameInstance = GET_INSTANCE(CGameInstance);
     // 전역 문자열을 초기화합니다.
     LoadStringW(hInstance, IDS_APP_TITLE, szTitle, MAX_LOADSTRING);
     LoadStringW(hInstance, IDC_CLIENT, szWindowClass, MAX_LOADSTRING);
@@ -60,8 +59,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	if (FAILED(g_pGameInstance->Ready_Timer(L"Timer_60")))
 		return E_FAIL;
 
-    //pGameInstance->Init();
-    //pGameInstance->Init_FrameMgr(60.f);
+
     // 기본 메시지 루프입니다:
     _double  dTimerAcc = 0.0;
     while (true)
@@ -86,14 +84,14 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
 			g_pGameInstance->Update_TimeDelta(L"Timer_60");
 
-            if (0>pMainGame->Tick(g_pGameInstance->Get_TimeDelta(L"Timer_60")))
-                break;
+			if (0 > pMainGame->Tick(g_pGameInstance->Get_TimeDelta(L"Timer_60")))
+				break;
 
-            if (FAILED(pMainGame->Render()))
-                break;
+			if (FAILED(pMainGame->Render()))
+				break;
 
-            if (FAILED(pMainGame->Destroy()))
-                break;
+			if (FAILED(pMainGame->Destroy()))
+				break;
 
             // 마우스 클라이언트에 락
             if (g_pGameInstance->getkeyDown(DIK_PGDN))

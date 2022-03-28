@@ -3,6 +3,7 @@
 #define __STAGE1_H__
 #include "Level.h"
 #include "TriggerSystem.h"
+
 BEGIN(Client)
 class CStage1 final : public CLevel
 {
