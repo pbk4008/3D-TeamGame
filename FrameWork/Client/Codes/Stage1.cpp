@@ -320,7 +320,7 @@ HRESULT CStage1::Ready_Light()
 	_vector up = { 0, 1.f, 0,0 };
 	_vector lookat = { -1.f,1.f,1.f,0.f };
 
-	LightDesc.mOrthinfo[0] = 50.f;
+	LightDesc.mOrthinfo[0] = 40.f;
 
 	_float3 dir = _float3(-1.f, -1.f, 1.f);
 	_vector vdir = XMVector3Normalize(XMLoadFloat3(&LightDesc.vDirection));

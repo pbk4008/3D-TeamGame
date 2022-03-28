@@ -14,6 +14,11 @@ cbuffer LightBuffer
 	matrix g_LightProj;
 };
 
+cbuffer ClipPlaneBuffer
+{
+	float4 ClipPlane;
+};
+
 texture2D g_ShadowTexture;
 texture2D g_DiffuseTexture;
 texture2D g_BiNormalTexture;
@@ -65,6 +70,7 @@ struct VS_OUT
 	float4 vTangent : TANGENT;
 	float4 vBiNormal : BINORMAL;
 	float4 vUvDepth : TEXCOORD0;
+	float4 clip : SV_ClipDistance0;
 };
 
 bool g_bUsingTool = false;
@@ -101,6 +107,7 @@ VS_OUT VS_MESH(VS_IN In)
 	Out.vUvDepth.xy = In.vTexUV.xy;
 	Out.vUvDepth.zw = Out.vPosition.zw;
 	
+	Out.clip = dot(mul(vPosition, g_WorldMatrix), ClipPlane);
 	return Out;
 }
 // VS_SHADOW_MAP
@@ -279,6 +286,7 @@ struct PS_IN
 	float4 vTangent : TANGENT;
 	float4 vBiNormal : BINORMAL;
 	float4 vUvDepth : TEXCOORD0;
+	float clip : SV_ClipDistance0;
 };
 struct PS_OUT
 {

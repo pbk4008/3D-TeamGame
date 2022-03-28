@@ -7,10 +7,6 @@ sampler DefaultSampler = sampler_state
 
 	AddressU = mirror;
 	AddressV = mirror;
-
-	//filter = min_mag_mip_linear;
-	//AddressU = wrap;
-	//AddressV = wrap;
 };
 
 cbuffer RtPixel
@@ -31,42 +27,6 @@ texture2D g_BaseBlur2Texture;
 texture2D g_BaseBlur4Texture;
 texture2D g_BaseBlur8Texture;
 texture2D g_BaseBlur16Texture;
-
-int g_blurSize = 3;
-
-float pixelKernel[13] =
-{
-	-6,
-	-5,
-	-4,
-	-3,
-	-2,
-	-1,
-	0,
-	1,
-	2,
-	3,
-	4,
-	5,
-	6,
-};
-
-float blurWeights[13] =
-{
-	0.002216,
-	0.008764,
-	0.026995,
-	0.064759,
-	0.120985,
-	0.176033,
-	0.199471,
-	0.176033,
-	0.120985,
-	0.064759,
-	0.026995,
-	0.008764,
-	0.002216,
-};
 
 
 struct VS_IN

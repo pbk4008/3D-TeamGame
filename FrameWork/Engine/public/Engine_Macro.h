@@ -1,6 +1,6 @@
 #pragma once
 
-#define SHADOW_MAP 5000
+#define SHADOW_MAP 2048
 
 #define BEGIN(NAMESPACE) namespace NAMESPACE { 
 #define END }

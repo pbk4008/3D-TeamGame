@@ -333,7 +333,7 @@ PS_OUT PS_MAIN_TOP(PS_IN In)
 	
 	//float4 Ecolor = float4(0.98, 0.23, 0.19, 0.f);
 	float4 Ecolor = float4(0.498f, 0.9411f, 0.8196f,0.f);
-	float Epower = 1.5f;
+	float Epower = 1.0f;
 	
 	float accvalue = diffuse.r + diffuse.g - diffuse.b;
 	if(accvalue > 0.6f)
