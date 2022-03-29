@@ -10,6 +10,7 @@
 #include "Effect_DashDust.h"
 #include "Effect_HitParticle.h"
 #include "Effect_HitFloating.h"
+#include "Effect_Env_Fire.h"
 #include "UI_Ingame.h"
 #include "UI_Player_HpBar.h"
 #include "UI_Tuto_Base.h"
@@ -46,8 +47,8 @@ HRESULT CStage1::NativeConstruct()
 	if (FAILED(Ready_Light()))
 		return E_FAIL;
 	
-	if (FAILED(Ready_Trigger_Jump()))
-		return E_FAIL;
+	//if (FAILED(Ready_Trigger_Jump()))
+	//	return E_FAIL;
 	
 	if (FAILED(Ready_Player(L"Layer_Silvermane")))
 		return E_FAIL;
@@ -68,20 +69,20 @@ HRESULT CStage1::NativeConstruct()
 	//	return E_FAIL;
 	//}
 
-	if (FAILED(Ready_Data_UI(L"../bin/SaveData/UI/UI.dat")))
-	{
-		return E_FAIL;
-	}
-
-	//if (FAILED(Ready_Data_Effect()))
+	//if (FAILED(Ready_Data_UI(L"../bin/SaveData/UI/UI.dat")))
 	//{
 	//	return E_FAIL;
 	//}
 
-	if (FAILED(Ready_UI(L"Layer_UI")))
+	if (FAILED(Ready_Data_Effect()))
 	{
 		return E_FAIL;
 	}
+
+	//if (FAILED(Ready_UI(L"Layer_UI")))
+	//{
+	//	return E_FAIL;
+	//}
 
 	//if (FAILED(Ready_Trigger_Lod(L"../bin/SaveData/Trigger/Stage1_LodTri.dat")))
 	//	return E_FAIL;
@@ -121,7 +122,7 @@ _int CStage1::Tick(_double TimeDelta)
 		m_pTriggerSystem->Tick(TimeDelta);
 	}
 
-	CBoss_Bastion_Judicator* pBoss = (CBoss_Bastion_Judicator*)g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Layer_Boss")->front();
+	/*CBoss_Bastion_Judicator* pBoss = (CBoss_Bastion_Judicator*)g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Layer_Boss")->front();
 	if (nullptr != pBoss)
 	{
 		if (true == pBoss->Get_Dead())
@@ -129,7 +130,7 @@ _int CStage1::Tick(_double TimeDelta)
 			if (FAILED(g_pGameInstance->Open_Level((_uint)SCENEID::SCENE_LOADING, CLoading::Create(m_pDevice, m_pDeviceContext, SCENEID::SCENE_STAGE2))))
 				return -1;
 		}
-	}
+	}*/
 
 	return _int();
 }
@@ -414,7 +415,22 @@ HRESULT CStage1::Ready_Data_Effect()
 			return E_FAIL;
 		}
 	}*/
-	
+
+	CEffect_Env_Fire::EFFECTDESC Desc;
+	_tcscpy_s(Desc.TextureTag, L"Env_Fire");
+	Desc.iRenderPassNum = 1;
+	Desc.iImageCountX = 8;
+	Desc.iImageCountY = 8;
+	Desc.fFrame = 64.f;
+	Desc.fEffectPlaySpeed = 1.f;
+	Desc.fMyPos = { 0.f, 0.f, 0.f };
+
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Effect_Env_Fire", L"Proto_GameObject_Effect_Env_Fire", &Desc)))
+	{
+		MSGBOX("Failed to Creating in CStage1::Ready_Effect()");
+		return E_FAIL;
+	}
+
 
 	//이펙트생성
 	vector<CEffect_HitParticle::EFFECTDESC> vecEffect;

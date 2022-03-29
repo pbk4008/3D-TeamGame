@@ -124,7 +124,7 @@ PS_OUT PS_MAIN_Bloom(PS_IN In)
 {
 	PS_OUT Out = (PS_OUT) 0;
 	
-	float weight = 1.1f;
+	float weight = 0.2f;
 	
 	float4 base2 = g_BaseBlur2Texture.Sample(DefaultSampler, In.vTexUV);
 	float4 base4 = g_BaseBlur4Texture.Sample(DefaultSampler, In.vTexUV);

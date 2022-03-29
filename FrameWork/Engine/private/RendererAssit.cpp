@@ -150,7 +150,31 @@ HRESULT CRendererAssit::Setup_RenderTarget()
 	if (FAILED(m_pTargetMgr->Add_RenderTarget(m_pDevice, m_pDeviceContext, TEXT("Target_ToneMapSpecular"), widht, height, DXGI_FORMAT_R16G16B16A16_FLOAT, _float4(0.f, 0.f, 0.f, 0.f), CRenderTarget::RTT::Luminance)))
 		return E_FAIL;
 
+	/////////////////////////////////////////////////test////////////////////////////////////////////////////////
+	if (FAILED(m_pTargetMgr->Add_RenderTarget(m_pDevice, m_pDeviceContext, TEXT("Target_Fire"), widht, height, DXGI_FORMAT_R16G16B16A16_FLOAT, _float4(0.f, 0.f, 0.f, 1.f), CRenderTarget::RTT::Luminance)))
+		return E_FAIL;
+	
+	if (FAILED(m_pTargetMgr->Add_RenderTarget(m_pDevice, m_pDeviceContext, TEXT("Target_V2_Fire"), 640, 360, DXGI_FORMAT_R16G16B16A16_FLOAT, _float4(0.f, 0.f, 0.f, 1.f), CRenderTarget::RTT::Luminance)))
+		return E_FAIL;
+	if (FAILED(m_pTargetMgr->Add_RenderTarget(m_pDevice, m_pDeviceContext, TEXT("Target_H2_Fire"), 640, 360, DXGI_FORMAT_R16G16B16A16_FLOAT, _float4(0.f, 0.f, 0.f, 1.f), CRenderTarget::RTT::Luminance)))
+		return E_FAIL;
 
+	if (FAILED(m_pTargetMgr->Add_RenderTarget(m_pDevice, m_pDeviceContext, TEXT("Target_V4_Fire"), 320, 180, DXGI_FORMAT_R16G16B16A16_FLOAT, _float4(0.f, 0.f, 0.f, 1.f), CRenderTarget::RTT::Luminance)))
+		return E_FAIL;
+	if (FAILED(m_pTargetMgr->Add_RenderTarget(m_pDevice, m_pDeviceContext, TEXT("Target_H4_Fire"), 320, 180, DXGI_FORMAT_R16G16B16A16_FLOAT, _float4(0.f, 0.f, 0.f, 1.f), CRenderTarget::RTT::Luminance)))
+		return E_FAIL;
+
+	if (FAILED(m_pTargetMgr->Add_RenderTarget(m_pDevice, m_pDeviceContext, TEXT("Target_V8_Fire"), 160, 90, DXGI_FORMAT_R16G16B16A16_FLOAT, _float4(0.f, 0.f, 0.f, 1.f), CRenderTarget::RTT::Luminance)))
+		return E_FAIL;
+	if (FAILED(m_pTargetMgr->Add_RenderTarget(m_pDevice, m_pDeviceContext, TEXT("Target_H8_Fire"), 160, 90, DXGI_FORMAT_R16G16B16A16_FLOAT, _float4(0.f, 0.f, 0.f, 1.f), CRenderTarget::RTT::Luminance)))
+		return E_FAIL;
+
+	if (FAILED(m_pTargetMgr->Add_RenderTarget(m_pDevice, m_pDeviceContext, TEXT("Target_V16_Fire"), 64, 64, DXGI_FORMAT_R16G16B16A16_FLOAT, _float4(0.f, 0.f, 0.f, 1.f), CRenderTarget::RTT::Luminance)))
+		return E_FAIL;
+	if (FAILED(m_pTargetMgr->Add_RenderTarget(m_pDevice, m_pDeviceContext, TEXT("Target_H16_Fire"), 64, 64, DXGI_FORMAT_R16G16B16A16_FLOAT, _float4(0.f, 0.f, 0.f, 1.f), CRenderTarget::RTT::Luminance)))
+		return E_FAIL;
+
+	/////////////////////////////////////////////////test////////////////////////////////////////////////////////
 	if (FAILED(m_pTargetMgr->Add_MRT(TEXT("MRT_SkyBox"), TEXT("Target_SkyBox"))))
 		return E_FAIL;
 
@@ -243,6 +267,20 @@ HRESULT CRendererAssit::Setup_RenderTarget()
 	if (FAILED(m_pTargetMgr->Add_MRT(TEXT("Target_Horizontal16"), TEXT("Target_Horizontal16"))))	return E_FAIL;
 
 	if (FAILED(m_pTargetMgr->Add_MRT(TEXT("Target_Blend"), TEXT("Target_Blend"))))	return E_FAIL;
+
+	//È¦¸®
+	if (FAILED(m_pTargetMgr->Add_MRT(TEXT("Target_Fire"), TEXT("Target_Fire"))))	return E_FAIL;
+	if (FAILED(m_pTargetMgr->Add_MRT(TEXT("Target_V2_Fire"), TEXT("Target_V2_Fire"))))	return E_FAIL;
+	if (FAILED(m_pTargetMgr->Add_MRT(TEXT("Target_H2_Fire"), TEXT("Target_H2_Fire"))))	return E_FAIL;
+
+	if (FAILED(m_pTargetMgr->Add_MRT(TEXT("Target_V4_Fire"), TEXT("Target_V4_Fire"))))	return E_FAIL;
+	if (FAILED(m_pTargetMgr->Add_MRT(TEXT("Target_H4_Fire"), TEXT("Target_H4_Fire"))))	return E_FAIL;
+
+	if (FAILED(m_pTargetMgr->Add_MRT(TEXT("Target_V8_Fire"), TEXT("Target_V8_Fire"))))	return E_FAIL;
+	if (FAILED(m_pTargetMgr->Add_MRT(TEXT("Target_H8_Fire"), TEXT("Target_H8_Fire"))))	return E_FAIL;
+
+	if (FAILED(m_pTargetMgr->Add_MRT(TEXT("Target_V16_Fire"), TEXT("Target_V16_Fire"))))	return E_FAIL;
+	if (FAILED(m_pTargetMgr->Add_MRT(TEXT("Target_H16_Fire"), TEXT("Target_H16_Fire"))))	return E_FAIL;
 
 
 #ifdef _DEBUG

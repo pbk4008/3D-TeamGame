@@ -25,6 +25,15 @@ texture2D g_Blur16Texture;
 texture2D g_ShadowTexture;
 
 
+texture2D g_FireTexture;
+
+texture2D g_Fire2Texture;
+texture2D g_Fire4Texture;
+texture2D g_Fire8Texture;
+texture2D g_Fire16Texture;
+
+
+
 cbuffer check
 {
 	bool g_check;
@@ -79,7 +88,15 @@ PS_OUT PS_MAIN_BLEND(PS_IN In)
 	float4 blur8 = g_Blur8Texture.Sample(DefaultSampler, In.vTexUV);
 	float4 blur16 = g_Blur16Texture.Sample(DefaultSampler, In.vTexUV);
 	
+    float4 Fireemission = g_FireTexture.Sample(DefaultSampler, In.vTexUV);
+		 
+    float4 Fireblur2 = g_Fire2Texture.Sample(DefaultSampler, In.vTexUV);
+    float4 Fireblur4 = g_Fire4Texture.Sample(DefaultSampler, In.vTexUV);
+    float4 Fireblur8 = g_Fire8Texture.Sample(DefaultSampler, In.vTexUV);
+    float4 Fireblur16 = g_Fire16Texture.Sample(DefaultSampler, In.vTexUV);
+	
 	float4 emissive = ((emission) * 1.f + (blur2) * 1.3f + (blur4) * 1.5f + (blur8) * 2.5f + (blur16) * 3.5f);
+    float4 Fireemissive = ((Fireemission) * 1.f + (Fireblur2) * 0.2f + (Fireblur4) * 0.3f + (Fireblur8) * 0.4f + (Fireblur16) * 0.5f);
 	float4 final = float4(0, 0, 0, 0);
 	if (g_check == true)
 	{	
@@ -89,9 +106,9 @@ PS_OUT PS_MAIN_BLEND(PS_IN In)
 			diffuse = diffuse * shadow;
 		}
 		
-		final.rgb = diffuse.rgb + specular.rgb + emissive.rgb;
-		final.a = originA + emissive.a/* + specular.a*/;
-	}
+        final.rgb = diffuse.rgb + specular.rgb + emissive.rgb + Fireemissive.rgb;
+        final.a = originA + emissive.a/* + specular.a*/;
+    }
 	else
 	{
 		final = diffuse + emissive + specular;

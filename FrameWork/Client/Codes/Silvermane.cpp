@@ -317,7 +317,7 @@ HRESULT CSilvermane::Render()
 	}
 
 #ifdef _DEBUG
-	Render_Debug();
+	//Render_Debug();
 #endif
 
 	return S_OK;

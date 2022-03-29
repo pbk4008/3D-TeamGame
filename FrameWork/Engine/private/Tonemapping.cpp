@@ -57,6 +57,14 @@ HRESULT CTonemapping::Blend_FinalPass(CTarget_Manager* pTargetMgr, _bool check,_
 	if (FAILED(m_pFinalBlend->SetUp_TextureOnShader("g_Blur8Texture", pTargetMgr->Get_SRV(L"Target_Horizontal8"))))	return E_FAIL;
 	if (FAILED(m_pFinalBlend->SetUp_TextureOnShader("g_Blur16Texture", pTargetMgr->Get_SRV(L"Target_Horizontal16")))) return E_FAIL;
 
+
+	if (FAILED(m_pFinalBlend->SetUp_TextureOnShader("g_FireTexture", pTargetMgr->Get_SRV(L"Target_Fire"))))	return E_FAIL;
+	if (FAILED(m_pFinalBlend->SetUp_TextureOnShader("g_Fire2Texture", pTargetMgr->Get_SRV(L"Target_H2_Fire"))))	return E_FAIL;
+	if (FAILED(m_pFinalBlend->SetUp_TextureOnShader("g_Fire4Texture", pTargetMgr->Get_SRV(L"Target_H4_Fire"))))	return E_FAIL;
+	if (FAILED(m_pFinalBlend->SetUp_TextureOnShader("g_Fire8Texture", pTargetMgr->Get_SRV(L"Target_H8_Fire"))))	return E_FAIL;
+	if (FAILED(m_pFinalBlend->SetUp_TextureOnShader("g_Fire16Texture", pTargetMgr->Get_SRV(L"Target_H16_Fire")))) return E_FAIL;
+
+
 	if (FAILED(m_pFinalBlend->SetUp_ValueOnShader("g_check", &check, sizeof(_bool)))) return E_FAIL;
 	if (FAILED(m_pFinalBlend->SetUp_ValueOnShader("g_shadow", &shadow, sizeof(_bool)))) return E_FAIL;
 

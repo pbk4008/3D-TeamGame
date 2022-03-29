@@ -105,18 +105,13 @@ HRESULT CMonster_Crawler::NativeConstruct(const _uint _iSceneID, void* _pArg)
 	m_iObectTag = (_uint)GAMEOBJECT::MONSTER_CRYSTAL;
 	setActive(false);
 
+	m_pPanel->Set_Show(false);
+
 	return S_OK;
 }
 
 _int CMonster_Crawler::Tick(_double _dDeltaTime)
 {	
-	m_pCollider;
-	int a = 10;
-	//나중에지울코드
-	if (!m_bFirst)
-	{
-		m_pPanel->Set_Show(true);
-	}
 	m_pTransform->Set_Velocity(XMVectorZero());
 
 	m_pPanel->Set_TargetWorldMatrix(m_pTransform->Get_WorldMatrix());
@@ -131,16 +126,41 @@ _int CMonster_Crawler::Tick(_double _dDeltaTime)
 		m_pStateController->Change_State(L"Death");
 	}
 
-	
-	/*if (g_pGameInstance->getkeyDown(DIK_NUMPAD5))
-	{
-		--m_fHp;
-		m_pPanel->Set_HpBar(m_fMaxHp, m_fHp);
-		cout << m_fHp << endl;
+	_matrix smatView;
+	smatView = g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_VIEW);
+	smatView = XMMatrixInverse(nullptr, smatView);
+	if (XMMatrixIsNaN(smatView))
+		return false;
 
-		m_pStateController->Change_State(L"Flinch_Left");
-	}*/
-	
+	_vector svRayPos, svRayDir;
+	memcpy_s(&svRayPos, sizeof(_vector), &smatView.r[3], sizeof(_vector));
+	memcpy_s(&svRayDir, sizeof(_vector), &smatView.r[2], sizeof(_vector));
+	svRayDir = XMVector3Normalize(svRayDir);
+	_float fOutDist = 0.f;
+
+
+	_uint iObjectTag = -1;
+
+
+	RAYCASTDESC tRaycastDesc;
+	XMStoreFloat3(&tRaycastDesc.vOrigin, svRayPos);
+	XMStoreFloat3(&tRaycastDesc.vDir, svRayDir);
+	tRaycastDesc.fMaxDistance = 30.f;
+	tRaycastDesc.filterData.flags = PxQueryFlag::eANY_HIT | PxQueryFlag::eDYNAMIC;
+	CGameObject* pHitObject = nullptr;
+	tRaycastDesc.ppOutHitObject = &pHitObject;
+	if (g_pGameInstance->Raycast(tRaycastDesc))
+	{
+		if (pHitObject == this)
+		{
+			m_pPanel->Set_Show(true);
+		}
+	}
+	else
+	{
+		m_pPanel->Set_Show(false);
+	}
+
 	m_pCollider->Tick(_dDeltaTime);
 
 	if (m_bIsFall)
@@ -161,8 +181,6 @@ _int CMonster_Crawler::Tick(_double _dDeltaTime)
 
 _int CMonster_Crawler::LateTick(_double _dDeltaTime)
 {
-	m_pCollider;
-	int a = 10;
 	m_pRenderer->Add_RenderGroup(CRenderer::RENDER_NONALPHA, this);
 
 	m_pCharacterController->Update_OwnerTransform();
@@ -178,8 +196,6 @@ _int CMonster_Crawler::LateTick(_double _dDeltaTime)
 
 HRESULT CMonster_Crawler::Render()
 {
-	m_pCollider;
-	int a = 10;
 	if (FAILED(__super::Render()))
 	{
 		return E_FAIL;
@@ -451,7 +467,6 @@ CGameObject* CMonster_Crawler::Clone(const _uint _iSceneID, void* _pArg)
 
 void CMonster_Crawler::Free()
 {
-	m_pCollider;
 	__super::Free();
 	if (m_pCollider != nullptr && m_pCharacterController != nullptr)
 	{
