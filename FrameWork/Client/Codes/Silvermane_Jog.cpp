@@ -120,7 +120,7 @@ _int CSilvermane_Jog::Input(const _double& _dDeltaTime)
 		return STATE_CHANGE;
 	}
 
-	if (g_pGameInstance->getkeyDown(DIK_LSHIFT))
+	if (g_pGameInstance->getkeyPress(DIK_LSHIFT))
 	{
 		if (g_pGameInstance->getkeyPress(DIK_W) ||
 			g_pGameInstance->getkeyPress(DIK_S) ||

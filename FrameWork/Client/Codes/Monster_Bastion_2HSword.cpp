@@ -635,6 +635,18 @@ void CMonster_Bastion_2HSword::OnTriggerEnter(CCollision& collision)
 	m_pStateController->OnTriggerEnter(collision);
 }
 
+void CMonster_Bastion_2HSword::OnTriggerExit(CCollision& collision)
+{
+	if (true == g_pObserver->IsAttack()) //플레이어공격일때
+	{
+		if ((_uint)GAMEOBJECT::WEAPON == collision.pGameObject->getTag())
+		{
+			if (m_bDead)
+				g_pMainApp->FreezeTime();
+		}
+	}
+}
+
 void CMonster_Bastion_2HSword::Set_IsAttack(const _bool _isAttack)
 {
 	m_IsAttack = _isAttack;

@@ -60,6 +60,7 @@ HRESULT CAberrant_Death::EnterState()
 	//_vector vec = { 0.f, 1.f, 0.f,0.f };
 	//m_pTransform->SetUp_Rotation(vec, (XMConvertToRadians(180.f)));
 
+	g_pMainApp->FreezeTime();
 	return S_OK;
 }
 

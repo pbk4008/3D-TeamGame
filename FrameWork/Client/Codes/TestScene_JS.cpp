@@ -5,6 +5,10 @@
 #include "JumpTrigger.h"
 #include "JumpBox.h"
 
+#include "Effect_DashDust.h"
+#include "Effect_HitParticle.h"
+#include "Effect_HitFloating.h"
+
 CTestScene_JS::CTestScene_JS()
 {
 }
@@ -21,15 +25,33 @@ HRESULT CTestScene_JS::NativeConstruct()
 	if (FAILED(Ready_Light()))
 		return E_FAIL;
 
-	if (FAILED(Ready_Gameobject())) return E_FAIL;
+	if (FAILED(Ready_Gameobject())) 
+		return E_FAIL;
+
+	if (FAILED(Ready_Effect()))
+		return E_FAIL;
 
 	return S_OK;
 }
 
 _int CTestScene_JS::Tick(_double TimeDelta)
 {
-	if (0 > __super::Tick(TimeDelta)) return -1;
+	if (0 > __super::Tick(TimeDelta))
+		return -1;
 
+	CGameObject* pMonster = nullptr;
+	if (g_pGameInstance->getkeyDown(DIK_COLON))
+	{
+		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_JS, L"Layer_Monster", L"Proto_GameObject_Monster_Bastion_2HSword", nullptr, &pMonster)))
+			return -1;
+		pMonster->setActive(true);
+	}
+	if (g_pGameInstance->getkeyDown(DIK_SEMICOLON))
+	{
+		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_JS, L"Layer_Monster", L"Proto_GameObject_Monster_Crawler", nullptr, &pMonster)))
+			return -1;
+		pMonster->setActive(true);
+	}
 	return _int();
 }
 
@@ -115,7 +137,7 @@ HRESULT CTestScene_JS::Ready_Light()
 HRESULT CTestScene_JS::Ready_Gameobject()
 {
 	wstring wstrNaviFile = L"../Data/NavMesh/Stage_1_Nav.dat";
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Plane", L"Proto_GameObject_Plane_Test", &wstrNaviFile)))
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_JS, L"Layer_Plane", L"Proto_GameObject_Plane_Test", &wstrNaviFile)))
 		return E_FAIL;
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_JS, L"Layer_Silvermane", L"Proto_GameObject_Silvermane")))
 		return E_FAIL;
@@ -153,19 +175,68 @@ HRESULT CTestScene_JS::Ready_Gameobject()
 	///////////////////// 스테이지 2용
 	// 
 	// 점프 노드들
-	tJumpNodeDesc.vPosition = { 30.f , 23.f, 202.f };
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_JS, L"Layer_JumpNode", L"Proto_GameObject_JumpNode", &tJumpNodeDesc)))
-		return E_FAIL;
-	tJumpNodeDesc.vPosition = { 27.f, 18.f, 228.f };
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_JS, L"Layer_JumpNode", L"Proto_GameObject_JumpNode", &tJumpNodeDesc)))
-		return E_FAIL;
-	tJumpNodeDesc.vPosition = { -2.f, 15.f, 235.f };
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_JS, L"Layer_JumpNode", L"Proto_GameObject_JumpNode", &tJumpNodeDesc)))
-		return E_FAIL;
-	tJumpNodeDesc.vPosition = { 39.f, 15.f, 268.f };
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_JS, L"Layer_JumpNode", L"Proto_GameObject_JumpNode", &tJumpNodeDesc)))
-		return E_FAIL;
+	//tJumpNodeDesc.vPosition = { 30.f , 23.f, 202.f };
+	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_JS, L"Layer_JumpNode", L"Proto_GameObject_JumpNode", &tJumpNodeDesc)))
+	//	return E_FAIL;
+	//tJumpNodeDesc.vPosition = { 27.f, 18.f, 228.f };
+	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_JS, L"Layer_JumpNode", L"Proto_GameObject_JumpNode", &tJumpNodeDesc)))
+	//	return E_FAIL;
+	//tJumpNodeDesc.vPosition = { -2.f, 15.f, 235.f };
+	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_JS, L"Layer_JumpNode", L"Proto_GameObject_JumpNode", &tJumpNodeDesc)))
+	//	return E_FAIL;
+	//tJumpNodeDesc.vPosition = { 39.f, 15.f, 268.f };
+	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_JS, L"Layer_JumpNode", L"Proto_GameObject_JumpNode", &tJumpNodeDesc)))
+	//	return E_FAIL;
 
+	return S_OK;
+}
+
+HRESULT CTestScene_JS::Ready_Effect()
+{
+	/*vector<CEffect_DashDust::EFFECTDESC> vecEffect;
+	g_pGameInstance->LoadFile<CEffect_DashDust::EFFECTDESC>(vecEffect, L"../bin/SaveData/Effect/Effect_Dash.dat");
+
+	for (int i = 0; i < vecEffect.size(); ++i)
+	{
+		wstring FullName = L"Proto_GameObject_Effect_DashDust";
+
+		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Effect", FullName, &vecEffect[i])))
+		{
+			MSGBOX("Failed to Creating in CStage1::Ready_Effect()");
+			return E_FAIL;
+		}
+	}*/
+
+
+	//이펙트생성
+	vector<CEffect_HitParticle::EFFECTDESC> vecEffect;
+	g_pGameInstance->LoadFile<CEffect_HitParticle::EFFECTDESC>(vecEffect, L"../bin/SaveData/Effect/Effect_Player_Attack1.dat");
+
+	for (int i = 0; i < vecEffect.size(); ++i)
+	{
+		wstring FullName = L"Proto_GameObject_Effect_Hit";
+		//_tcscpy_s(vecEffect1[i].ShaderFullFilePath, L"../../Reference/ShaderFile/Shader_PointInstance.hlsl");
+		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Hit", FullName, &vecEffect[i])))
+		{
+			MSGBOX("Failed to Creating in CStage1::Ready_Effect()");
+			return E_FAIL;
+		}
+	}
+
+	//이펙트생성
+	vector<CEffect_HitFloating::EFFECTDESC> vecEffect1;
+	g_pGameInstance->LoadFile<CEffect_HitFloating::EFFECTDESC>(vecEffect1, L"../bin/SaveData/Effect/Effect_Player_Attack2_Floating_2.dat");
+
+	for (int i = 0; i < vecEffect1.size(); ++i)
+	{
+		wstring FullName = L"Proto_GameObject_Effect_Floating";
+		//_tcscpy_s(vecEffect1[i].ShaderFullFilePath, L"../../Reference/ShaderFile/Shader_PointInstance.hlsl");
+		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Floating", FullName, &vecEffect1[i])))
+		{
+			MSGBOX("Failed to Creating in CStage1::Ready_Effect()");
+			return E_FAIL;
+		}
+	}
 	return S_OK;
 }
 

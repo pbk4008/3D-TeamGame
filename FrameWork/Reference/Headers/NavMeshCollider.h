@@ -23,10 +23,10 @@ public:
 	virtual const _int Tick(const _double& _dDeltaTime) override;
 	virtual const _int LateTick(const _double& _dDeltaTime) override;
 
-	const DESC& getDesc() const;
+	vector<_float3*>& getPoints();
 
 private:
-	DESC m_tDesc;
+	vector<_float3*> m_vecPoints;
 
 public:
 	static CNavMeshCollider* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext);

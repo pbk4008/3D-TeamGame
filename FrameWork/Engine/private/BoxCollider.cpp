@@ -20,13 +20,15 @@ HRESULT CBoxCollider::NativeConstruct_Prototype()
 
 HRESULT CBoxCollider::NativeConstruct(void* _pArg)
 {
+	DESC tDesc;
 	if (_pArg)
 	{
-		memcpy_s(&m_tDesc, sizeof(DESC), _pArg, sizeof(DESC));
-		m_pGameObject = m_tDesc.tColliderDesc.pGameObject;
+		memcpy_s(&tDesc, sizeof(DESC), _pArg, sizeof(DESC));
+		m_pGameObject = tDesc.tColliderDesc.pGameObject;
+		m_vScale = tDesc.vScale;
 	}
 
-	if (FAILED(__super::NativeConstruct(&m_tDesc.tColliderDesc)))
+	if (FAILED(__super::NativeConstruct(&tDesc.tColliderDesc)))
 		return E_FAIL;
 
 	if (FAILED(m_pPhsyX->Create_Box(this)))
@@ -53,10 +55,9 @@ const _int CBoxCollider::LateTick(const _double& _dDeltaTime)
 	return _int();
 }
 
-
-const CBoxCollider::DESC& CBoxCollider::getDesc() const
+const _float3& CBoxCollider::getScale() const
 {
-	return m_tDesc;
+	return m_vScale;
 }
 
 CBoxCollider* CBoxCollider::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)

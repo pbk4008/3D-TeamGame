@@ -134,7 +134,7 @@
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>../../Reference/Library/Debug/</AdditionalLibraryDirectories>
-      <Profile>true</Profile>
+      <Profile>false</Profile>
     </Link>
     <PostBuildEvent>
       <Command>

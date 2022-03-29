@@ -461,12 +461,12 @@ HRESULT CLoader::Load_Stage1UILoad()
 HRESULT CLoader::Load_Stage1EffectLoad()
 {
 	//Effect
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Proto_Component_VIBuffer_PointInstance_Explosion",
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_VIBuffer_PointInstance_Explosion",
 		CVIBuffer_PointInstance_Explosion::Create(m_pDevice, m_pDeviceContext))))
 	{
 		return E_FAIL;
 	}
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Proto_Component_VIBuffer_PointInstance_Floating",
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_VIBuffer_PointInstance_Floating",
 		CVIBuffer_PointInstance_Floating::Create(m_pDevice, m_pDeviceContext))))
 	{
 		return E_FAIL;
@@ -997,15 +997,6 @@ HRESULT CLoader::Ready_Test_JS()
 #pragma region 모델
 	cout << "TestScene_JS 모델 프로토타입 생성중..." << endl;
 	_matrix matPivot = XMMatrixIdentity();
-	//matPivot = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(180.f));
-	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_TEST_JS, L"Model_Silvermane", CModel::Create(m_pDevice, m_pDeviceContext,
-	//	"../bin/Resources/Mesh/Silvermane/", "Silvermane.fbx",
-	//	L"../../Reference/ShaderFile/Shader_Mesh.hlsl",
-	//	matPivot,
-	//	CModel::TYPE_ANIM, true))))
-	//{
-	//	return E_FAIL;
-	//}
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Silvermane_Bin", CModel::Create(m_pDevice, m_pDeviceContext,
 		L"../bin/FBX/Silvermane/Silvermane_Bin.fbx", CModel::TYPE_ANIM, true))))
 	{
@@ -1038,6 +1029,31 @@ HRESULT CLoader::Ready_Test_JS()
 	{
 		return E_FAIL;
 	}
+
+	//몬스터
+	matPivot = XMMatrixIdentity();
+	//Monster Crystal_Crawler
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Monster_Crawler", CModel::Create(m_pDevice, m_pDeviceContext,
+		L"../bin/FBX/Monster/Crystal_Crawler.fbx", CModel::TYPE_ANIM, true))))
+		return E_FAIL;
+	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Monster_Crawler", CMonster_Crawler::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+
+	//Bastion_2HSword
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Bastion_2HSword", CModel::Create(m_pDevice, m_pDeviceContext,
+		L"../bin/FBX/Monster/Bastion_2HSword_Bin.fbx", CModel::TYPE_ANIM, true))))
+		return E_FAIL;
+	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Monster_Bastion_2HSword", CMonster_Bastion_2HSword::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	//Weapon
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_RetributionBlade", CModel::Create(m_pDevice, m_pDeviceContext,
+		"../bin/Resources/Mesh/RetributionBlade/", "RetributionBlade(2H).fbx",
+		L"../../Reference/ShaderFile/Shader_Weapon.hlsl", matPivot, CModel::TYPE_STATIC, true))))
+	{
+		return E_FAIL;
+	}
+	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Weapon_RetributionBlade", CRetributionBlade::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
 #pragma endregion
 
 
@@ -1055,6 +1071,10 @@ HRESULT CLoader::Ready_Test_JS()
 		return E_FAIL;
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_CapsuleCollider", CCapsuleCollider::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_SphereCollider", CSphereCollider::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_Animator", CAnimator::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
 #pragma endregion
 #pragma region 오브젝트
 	cout << "TestScene_JS 오브젝트 프로토타입 생성중..." << endl;
@@ -1071,6 +1091,16 @@ HRESULT CLoader::Ready_Test_JS()
 	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_JumpBox", CJumpBox::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 #pragma endregion
+
+
+	if(FAILED(Load_Stage1StaticUILoad()))
+		return E_FAIL;
+
+	if (FAILED(Load_Stage1UILoad()))
+		return E_FAIL;
+
+	if (FAILED(Load_Stage1EffectLoad()))
+		return E_FAIL;
 
 	cout << "TestScene_JS 로딩 완료..." << endl;
 	return S_OK;

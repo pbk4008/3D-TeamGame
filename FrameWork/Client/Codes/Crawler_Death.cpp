@@ -62,7 +62,6 @@ HRESULT CCrawler_Death::EnterState()
 
 	//m_pTransform->Face_Target(g_pObserver->Get_PlayerPos());
 	m_pAnimator->Change_AnyEntryAnimation(CMonster_Crawler::MON_STATE::DEATH);
-
 	return S_OK;
 }
 

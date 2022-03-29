@@ -35,6 +35,8 @@ protected:
 public:
 	void Remove_ActorFromScene();
 	void Add_ActorToScene();
+	void Sleep();
+	void WakeUp();
 
 public:
 	virtual HRESULT NativeConstruct_Prototype() override;
@@ -42,6 +44,7 @@ public:
 	virtual const _int Tick(const _double& _dDeltaTime);
 	virtual const _int LateTick(const _double& _dDeltaTime);
 
+	const DESC& getDesc() const;
 	CGameObject* getGameObject();
 
 	void setRigidActor(PxRigidActor* _pRigidbody);
@@ -64,6 +67,7 @@ protected:
 	PxMaterial* m_pMaterial = nullptr;
 	CGameObject* m_pGameObject = nullptr;
 
+	DESC m_tDesc;
 	_float4x4 m_matPivot;
 
 

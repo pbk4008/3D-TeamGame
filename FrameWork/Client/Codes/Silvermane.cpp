@@ -9,6 +9,8 @@
 #include "JumpTrigger.h"
 #include "JumpBox.h"
 
+#include "MainApp.h"
+
 #pragma region 스테이트들
 #include "Silvermane_Idle.h"
 

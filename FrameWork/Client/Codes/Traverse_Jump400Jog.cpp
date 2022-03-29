@@ -99,7 +99,7 @@ HRESULT CTraverse_Jump400Jog::EnterState()
 	_vector svDir = svTargetPosition - m_pTransform->Get_State(CTransform::STATE_POSITION);
 	XMStoreFloat3(&m_vDir, XMVector3Normalize(XMVectorSetY(svDir, 0.f)));
 
-	m_fMoveSpeed = 2.f;
+	m_fMoveSpeed = 1.f;
 	m_pSilvermane->Set_IsFall(false);
 	m_iCutIndex = 45;
 	return S_OK;

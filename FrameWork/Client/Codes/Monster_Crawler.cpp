@@ -17,6 +17,8 @@
 #include "Stage1.h"
 #include "Stage2.h"
 
+#include "MainApp.h"
+
 CMonster_Crawler::CMonster_Crawler(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
 	:CActor(_pDevice, _pDeviceContext)
 {
@@ -228,19 +230,19 @@ void CMonster_Crawler::OnTriggerEnter(CCollision& collision)
 				m_pStateController->Change_State(L"Flinch_Left");
 			}
 
-			/*CEffect_HitParticle* pEffect = (CEffect_HitParticle*)g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Layer_Effect_Hit")->front();
+			CEffect_HitParticle* pEffect = (CEffect_HitParticle*)g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Hit")->front();
 			_vector Mypos = m_pTransform->Get_State(CTransform::STATE_POSITION);
 			Mypos = XMVectorSetY(Mypos, XMVectorGetY(Mypos) + 1.f);
 			pEffect->Get_Transform()->Set_State(CTransform::STATE_POSITION, Mypos);
 			pEffect->setActive(true);
 			pEffect->Set_Reset(true);
 
-			CEffect_HitFloating* pEffect1 = (CEffect_HitFloating*)g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Layer_Effect_Floating")->front();
+			CEffect_HitFloating* pEffect1 = (CEffect_HitFloating*)g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Floating")->front();
 			_vector Mypos1 = m_pTransform->Get_State(CTransform::STATE_POSITION);
 			Mypos1 = XMVectorSetY(Mypos1, XMVectorGetY(Mypos1) + 1.f);
 			pEffect1->Get_Transform()->Set_State(CTransform::STATE_POSITION, Mypos1);
 			pEffect1->setActive(true);
-			pEffect1->Set_Reset(true);*/
+			pEffect1->Set_Reset(true);
 		}
 
 		else
@@ -249,6 +251,18 @@ void CMonster_Crawler::OnTriggerEnter(CCollision& collision)
 		}
 	}
 
+}
+
+void CMonster_Crawler::OnTriggerExit(CCollision& collision)
+{
+	if (true == g_pObserver->IsAttack()) //플레이어공격일때
+	{
+		if ((_uint)GAMEOBJECT::WEAPON == collision.pGameObject->getTag())
+		{
+			if(m_bDead)
+				g_pMainApp->FreezeTime();
+		}
+	}
 }
 
 void CMonster_Crawler::Set_IsAttack(const _bool _isAttack)

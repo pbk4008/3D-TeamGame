@@ -38,6 +38,7 @@ public:
 
 private: 
 	void	OnTriggerEnter(CCollision& collision) override;
+	void	OnTriggerExit(CCollision& collision) override;
 
 public:
 	void Set_IsAttack(const _bool _isAttack);

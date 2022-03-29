@@ -21,13 +21,15 @@ HRESULT CSphereCollider::NativeConstruct_Prototype()
 
 HRESULT CSphereCollider::NativeConstruct(void* _pArg)
 {
+	DESC tDesc;
 	if (_pArg)
 	{
-		memcpy_s(&m_tDesc, sizeof(DESC), _pArg, sizeof(DESC));
-		m_pGameObject = m_tDesc.tColliderDesc.pGameObject;
+		memcpy_s(&tDesc, sizeof(DESC), _pArg, sizeof(DESC));
+		m_pGameObject = tDesc.tColliderDesc.pGameObject;
+		m_fRadius = tDesc.fRadius;
 	}
 
-	if (FAILED(__super::NativeConstruct(&m_tDesc.tColliderDesc)))
+	if (FAILED(__super::NativeConstruct(&tDesc.tColliderDesc)))
 		return E_FAIL;
 
 	if (FAILED(m_pPhsyX->Create_Sphere(this)))
@@ -54,9 +56,9 @@ const _int CSphereCollider::LateTick(const _double& _dDeltaTime)
 	return _int();
 }
 
-const CSphereCollider::DESC& CSphereCollider::getDesc() const
+const _float CSphereCollider::getRadius() const
 {
-	return m_tDesc;
+	return m_fRadius;
 }
 
 CSphereCollider* CSphereCollider::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)

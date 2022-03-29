@@ -24,10 +24,12 @@ public:
 	virtual const _int Tick(const _double& _dDeltaTime) override;
 	virtual const _int LateTick(const _double& _dDeltaTime) override;
 
-	const DESC& getDesc() const;
+	const _float getHeight() const;
+	const _float getRadius() const;
 
 private:
-	DESC m_tDesc;
+	_float m_fHeight = 1.f;
+	_float m_fRadius = 0.5f;
 
 public:
 	static CCapsuleCollider* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext);
