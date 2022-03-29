@@ -24,6 +24,9 @@ public:
 private:
 	_float m_fRotTime = 0.f;
 
+	_bool m_isShake2 = false;
+	CCameraShake::SHAKEEVENT m_tShakeEvent2;
+
 public:
 	static C1H_SwordAttackNormalR2_ReleaseDoubleSwing* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext, void* _pArg = nullptr);
 	virtual void Free() override;

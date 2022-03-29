@@ -82,7 +82,7 @@ _int CSilvermane_Idle::Input(const _double& _dDeltaTime)
 	if (NO_EVENT != iProgress)
 		return iProgress;
 
-	if (g_pGameInstance->getkeyDown(DIK_COLON))
+	if (g_pGameInstance->getkeyDown(DIK_1))
 	{
 		if (m_pSilvermane->Change_Weapon(L"Needle"))
 		{
@@ -91,7 +91,7 @@ _int CSilvermane_Idle::Input(const _double& _dDeltaTime)
 			return STATE_CHANGE;
 		}
 	}
-	else if (g_pGameInstance->getkeyDown(DIK_SEMICOLON))
+	else if (g_pGameInstance->getkeyDown(DIK_2))
 	{
 		if (m_pSilvermane->Change_Weapon(L"Fury"))
 		{

@@ -85,7 +85,7 @@ _int C1H_SwordIdle::Input(const _double& _dDeltaTime)
 	if (NO_EVENT != iProgress)
 		return iProgress;
 
-	if (g_pGameInstance->getkeyDown(DIK_SEMICOLON))
+	if (g_pGameInstance->getkeyDown(DIK_2))
 	{
 		if (m_pSilvermane->Change_Weapon(L"Fury"))
 		{
