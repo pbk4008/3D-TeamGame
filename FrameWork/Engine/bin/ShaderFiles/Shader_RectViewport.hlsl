@@ -17,7 +17,6 @@ sampler SkyBoxSampler = sampler_state
 
 cbuffer ShaderCheck
 {
-	bool g_bShadow;
 	bool g_bPBRHDR;
 	bool g_bHDR;
 };
@@ -143,10 +142,6 @@ PS_OUT_LIGHTACC PS_MAIN_LIGHTACC_DIRECTIONAL(PS_IN In)
 	float AO = g_AO.Sample(DefaultSampler, uvRT).r;
 	float fViewZ = vDepthDesc.y * 300.f;
 	
-	float4 shadow = g_ShadowTexture.Sample(DefaultSampler, uvRT);
-	
-	shadow = saturate(shadow + 0.5f);
-	
 	float3 normaltest = vNormalDesc.xyz;
 	if (!any(normaltest))
 		clip(0);
@@ -199,7 +194,7 @@ PS_OUT_LIGHTACC PS_MAIN_LIGHTACC_DIRECTIONAL(PS_IN In)
 
 		float specular = NdotL * _D * _F * _V;
 		//-------------------------------------------------------------------------//
-		float3 color = float3(0.54f, 0.48f, 0.64f);
+		float3 color = float3(1.f, 1.f, 1.f);
 		float4 ambientcolor = float4(color * 0.2f, 1.0);
 		float diffusefactor = dot(normal3, L);
 		float4 diffusecolor = 0;
@@ -211,7 +206,6 @@ PS_OUT_LIGHTACC PS_MAIN_LIGHTACC_DIRECTIONAL(PS_IN In)
 		}
 		
 		float4 light = diffusecolor * diffusefactor + ambientcolor;
-		//float4 light = saturate(pow((dot(normalize(vector(g_vLightDir.xyz, 0.f)) * -1.f, normal) * 0.5f + 0.5f), lightpow) * (g_vLightDiffuse * g_vMtrlDiffuse) + (g_vLightAmbient * g_vMtrlAmbient));		//-------------------------------------------------------------------------//		
 		float3 CamToWorldDirection = normalize(vWorldPos.xyz - g_vCamPosition.xyz);
 		float3 worldReflectDirection = reflect(CamToWorldDirection, normal3);
 		
@@ -223,16 +217,8 @@ PS_OUT_LIGHTACC PS_MAIN_LIGHTACC_DIRECTIONAL(PS_IN In)
 		InvMetalic = max(InvMetalic, 0.2f);
 		float4 lightpower = /*InvMetalic **/ light * AO;
 		
-		if(g_bShadow == true)
-		{
-			Out.vSpecular = (light * specular + cubeRef1) * Metallic * smoothness * shadow;
-			Out.vShade = lightpower * shadow;
-		}
-		else
-		{
-			Out.vSpecular = (light * specular + cubeRef1) * Metallic * smoothness;
-			Out.vShade = lightpower;
-		}
+		Out.vSpecular = (light * specular + cubeRef1) * Metallic * smoothness;
+		Out.vShade = lightpower;
 		Out.vShade.a = 1.f;
 	}
 	else

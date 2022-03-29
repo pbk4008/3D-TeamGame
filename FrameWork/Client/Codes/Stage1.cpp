@@ -320,9 +320,22 @@ HRESULT CStage1::Ready_Light()
 	LightDesc.vDiffuse = _float4(1.f, 1.f, 1.f, 1.f);
 	LightDesc.vSpecular = _float4(0.8f, 0.8f, 0.8f, 1.f);
 	LightDesc.vAmbient = _float4(0.6f, 0.6f, 0.6f, 1.f);
-	LightDesc.mOrthinfo[0] = 10.f;
+	LightDesc.mOrthinfo[0] = 50.f;
 
-	if (FAILED(g_pGameInstance->CreateLightCam(m_pDevice, m_pDeviceContext, LightDesc)));
+	if (FAILED(g_pGameInstance->CreateLightCam(m_pDevice, m_pDeviceContext, LightDesc))) return E_FAIL;
+
+	//ZeroMemory(&LightDesc, sizeof(LIGHTDESC));
+
+	//LightDesc.eType = LIGHTDESC::TYPE_DIRECTIONAL;
+	//LightDesc.vDirection = _float3(-1.f, -1.f, 1.f);
+	//LightDesc.vDiffuse = _float4(1.f, 1.f, 1.f, 1.f);
+	//LightDesc.vSpecular = _float4(0.8f, 0.8f, 0.8f, 1.f);
+	//LightDesc.vAmbient = _float4(0.6f, 0.6f, 0.6f, 1.f);
+	//LightDesc.mOrthinfo[0] = 50.f;
+
+	//if (FAILED(g_pGameInstance->CreateLightCam(m_pDevice, m_pDeviceContext, LightDesc))) return E_FAIL;
+
+	//if (FAILED(g_pGameInstance->CreateLightCam(m_pDevice, m_pDeviceContext, LightDesc))) return E_FAIL;
 
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_SkyBox", L"Proto_GameObject_SkyBox")))
 		return E_FAIL;

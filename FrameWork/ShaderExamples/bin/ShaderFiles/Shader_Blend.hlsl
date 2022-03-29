@@ -100,11 +100,11 @@ PS_OUT PS_MAIN_BLEND(PS_IN In)
 	float4 final = float4(0, 0, 0, 0);
 	if (g_check == true)
 	{
-		//if (g_shadow == true)
-		//{
-		//	float4 shadow = g_ShadowTexture.Sample(DefaultSampler, In.vTexUV);
-		//	diffuse = diffuse * shadow;
-		//}
+		if (g_shadow == true)
+		{
+			float4 shadow = g_ShadowTexture.Sample(DefaultSampler, In.vTexUV);
+			diffuse = diffuse * shadow;
+		}
 		
 		if(g_particle == true)
 		{
@@ -114,13 +114,13 @@ PS_OUT PS_MAIN_BLEND(PS_IN In)
 		{
 			final.rgb = diffuse.rgb + specular.rgb + emissive.rgb;
 		}
-		
-		final.a = originA + emissive.a/* + specular.a*/;
 	}
 	else
 	{
 		final = diffuse + emissive + specular;
 	}
+	
+	final.a = originA + emissive.a;
 	
 	Out.vOutColor = final;
 	

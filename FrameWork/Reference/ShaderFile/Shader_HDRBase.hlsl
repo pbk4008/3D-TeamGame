@@ -84,15 +84,6 @@ PS_OUT PS_MAIN_HDDRBASE(PS_IN In)
 	{
 		float4 light = g_ShadeTexture.Sample(DefaultSampler, In.vTexUV);
 		
-		//diffuse = pow(diffuse, 2.2f);
-		//specualr = pow(specualr, 2.2f);
-		//if (g_bShadow == true)
-		//{
-		//	final = diffuse * light * shadow;
-		//}
-		//else
-		//{
-		//}
 		final = diffuse * light;
 	}
 	else

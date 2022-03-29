@@ -31,12 +31,11 @@ HRESULT CTonemapping::Blend_FinalPass(CTarget_Manager* pTargetMgr, _bool check,_
 {
 	if (FAILED(pTargetMgr->Begin_MRT(m_pDeviceContext, TEXT("Target_Blend"))))	return E_FAIL;
 	
-	if (FAILED(m_pFinalBlend->SetUp_TextureOnShader("g_OriginTexture", pTargetMgr->Get_SRV(L"Target_HDRDiffuse"))))		return E_FAIL;
+	if (FAILED(m_pFinalBlend->SetUp_TextureOnShader("g_OriginTexture", pTargetMgr->Get_SRV(L"Target_Diffuse"))))	return E_FAIL;
 	
-
 	if (shadow == true)
 	{
-		//if (FAILED(m_pFinalBlend->SetUp_TextureOnShader("g_ShadowTexture", pTargetMgr->Get_SRV(TEXT("Target_ShadeShadow")))))	return E_FAIL;
+		if (FAILED(m_pFinalBlend->SetUp_TextureOnShader("g_ShadowTexture", pTargetMgr->Get_SRV(TEXT("Target_ShadeShadow")))))	return E_FAIL;
 	}
 
 	if (check == true)
@@ -91,7 +90,7 @@ HRESULT CTonemapping::ToneMapping(CTarget_Manager* pTargetMgr)
 
 	_float rcp_w = (1.f / m_viewport.Width);
 	_float rcp_h = (1.f / m_viewport.Height);
-	_float expsure = 0.5f;
+	_float expsure = 0.25f;
 	_float GaussianScalar = 0.4f;
 
 	if (FAILED(m_pTonmapBuffer->SetUp_ValueOnShader("Exposure", &expsure, sizeof(_float))))	return E_FAIL;

@@ -26,7 +26,7 @@ HRESULT CPostProcess::InitPostProcess()
 
 HRESULT CPostProcess::PossProcessing(CTonemapping* tone,CTarget_Manager* pTargetMgr, _bool hdr, _bool shadow, _bool particle)
 {
-	if (FAILED(ComputeBrightPass(pTargetMgr, L"Target_HDRDiffuse", 640.f, 360.f))) return E_FAIL;
+	if (FAILED(ComputeBrightPass(pTargetMgr, L"Target_Diffuse", 640.f, 360.f))) return E_FAIL;
 
 	if (FAILED(BlurPass(pTargetMgr, L"Target_BrightPass", L"Target_VT2", L"Target_HZ2", 640, 360))) return E_FAIL;
 	if (FAILED(BlurPass(pTargetMgr, L"Target_HZ2", L"Target_VT4", L"Target_HZ4", 320, 180))) return E_FAIL;
@@ -90,11 +90,10 @@ HRESULT CPostProcess::BloomPass(CTarget_Manager* pTargetMgr)
 {
 	if (FAILED(pTargetMgr->Begin_MRT(m_pDeviceContext, TEXT("Target_Bloom"))))	return E_FAIL;
 
-	if (FAILED(m_pVIBuffer->SetUp_TextureOnShader("g_Basetexture", pTargetMgr->Get_SRV(L"Target_HDRDiffuse"))))	return E_FAIL;
 	if (FAILED(m_pVIBuffer->SetUp_TextureOnShader("g_BaseBlur2Texture", pTargetMgr->Get_SRV(L"Target_HZ2"))))	return E_FAIL;
 	if (FAILED(m_pVIBuffer->SetUp_TextureOnShader("g_BaseBlur4Texture", pTargetMgr->Get_SRV(L"Target_HZ4"))))	return E_FAIL;
 	if (FAILED(m_pVIBuffer->SetUp_TextureOnShader("g_BaseBlur8Texture", pTargetMgr->Get_SRV(L"Target_HZ8"))))	return E_FAIL;
-	if (FAILED(m_pVIBuffer->SetUp_TextureOnShader("g_BaseBlur16Texture", pTargetMgr->Get_SRV(L"Target_HZ6")))) return E_FAIL;
+	if (FAILED(m_pVIBuffer->SetUp_TextureOnShader("g_BaseBlur16Texture", pTargetMgr->Get_SRV(L"Target_HZ16")))) return E_FAIL;
 
 	m_pVIBuffer->Render(3);
 

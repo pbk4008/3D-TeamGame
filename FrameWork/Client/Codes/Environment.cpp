@@ -157,7 +157,7 @@ HRESULT CEnvironment::Culling()
 	{
 		_matrix matTmp = XMLoadFloat4x4(&m_tEnvironmentDesc.tInstanceDesc.vecMatrix[i]);
 		_vector vPos = matTmp.r[3];
-		if (!g_pGameInstance->isIn_WorldFrustum(vPos, 50.f))
+		if (!g_pGameInstance->isIn_WorldFrustum(vPos, 30.f))
 			ZeroMemory(&m_vecUsingMatrix[i], sizeof(_float4x4));
 		else
 			m_vecUsingMatrix[i] = m_tEnvironmentDesc.tInstanceDesc.vecMatrix[i];
