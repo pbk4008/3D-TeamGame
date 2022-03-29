@@ -21,6 +21,8 @@
 CStage1::CStage1()
 	: m_pTriggerSystem(nullptr)
 	, m_bDebug(false)
+	, m_iCountMonster(0)
+	, m_bFirst(false)
 {
 }
 
@@ -28,6 +30,8 @@ CStage1::CStage1(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
 	:CLevel(pDevice, pDeviceContext)
 	, m_pTriggerSystem(nullptr)
 	, m_bDebug(false)
+	, m_iCountMonster(0)
+	, m_bFirst(false)
 {
 }
 
@@ -120,6 +124,8 @@ _int CStage1::Tick(_double TimeDelta)
 	{
 		m_pTriggerSystem->Tick(TimeDelta);
 	}
+	if (m_iCountMonster == 0 && m_bFirst)
+		m_pTriggerSystem->Check_Clear();
 
 	CBoss_Bastion_Judicator* pBoss = (CBoss_Bastion_Judicator*)g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Layer_Boss")->front();
 	if (nullptr != pBoss)
@@ -547,6 +553,7 @@ void CStage1::Trgger_Function1()
 	//TriggerSystem에서 저장된 몬스터 위치를 가져온다(MonsterType)
 	list<CGameObject*>* pLayer = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Layer_Crawler");
 	//몬스터 위치를 통해서 클론한다
+	m_bFirst = true;
 	if (!pLayer)
 		return;
 	//땅벌레
@@ -567,12 +574,21 @@ void CStage1::Trgger_Function1()
 	else
 	{
 		auto iter = pLayer->begin();
+		
+		CActor* pActor = static_cast<CActor*>((*iter));
+		while (pActor->Get_HpRatio() == 0)
+		{
+			iter++;
+			pActor->Set_Remove(true);
+			pActor = static_cast<CActor*>((*iter));
+		}
 		(*iter)->setActive(true);
 		iter++;
 		(*iter)->setActive(true);
 		iter++;
 		(*iter)->setActive(true);
 	}
+	m_iCountMonster = 3;
 }
 
 void CStage1::Trgger_Function2()
@@ -592,8 +608,16 @@ void CStage1::Trgger_Function2()
 	{
 		auto iter = pLayer->begin();
 		//대지
+		CActor* pActor = static_cast<CActor*>((*iter));
+		while (pActor->Get_HpRatio() == 0)
+		{
+			iter++;
+			pActor->Set_Remove(true);
+			pActor = static_cast<CActor*>((*iter));
+		}
 		(*iter)->setActive(true);
 	}
+	m_iCountMonster = 1;
 }
 
 void CStage1::Trgger_Function3()
@@ -630,6 +654,13 @@ void CStage1::Trgger_Function3()
 	else
 	{
 		auto iter = pLayer->begin();
+		CActor* pActor = static_cast<CActor*>((*iter));
+		while (pActor->Get_HpRatio() == 0)
+		{
+			iter++;
+			pActor->Set_Remove(true);
+			pActor = static_cast<CActor*>((*iter));
+		}
 		(*iter)->setActive(true);
 		iter++;
 		(*iter)->setActive(true);
@@ -640,11 +671,18 @@ void CStage1::Trgger_Function3()
 			return;
 
 		iter = pLayer->begin();
+		pActor = static_cast<CActor*>((*iter));
+		while (pActor->Get_HpRatio() == 0)
+		{
+			iter++;
+			pActor->Set_Remove(true);
+			pActor = static_cast<CActor*>((*iter));
+		}
 		(*iter)->setActive(true);
 		iter++;
 		(*iter)->setActive(true);
 	}
-
+	m_iCountMonster = 4;
 }
 
 void CStage1::Trgger_Function4()
@@ -671,13 +709,20 @@ void CStage1::Trgger_Function4()
 	else
 	{
 		auto iter = pLayer->begin();
+		CActor* pActor = static_cast<CActor*>((*iter));
+		while (pActor->Get_HpRatio() == 0)
+		{
+			iter++;
+			pActor->Set_Remove(true);
+			pActor = static_cast<CActor*>((*iter));
+		}
 		(*iter)->setActive(true);
 		iter++;
 		(*iter)->setActive(true);
 		iter++;
 		(*iter)->setActive(true);
 	}
-
+	m_iCountMonster = 3;
 }
 
 void CStage1::Trgger_Function5()
@@ -699,10 +744,18 @@ void CStage1::Trgger_Function5()
 	else
 	{
 		auto iter = pLayer->begin();
+		CActor* pActor = static_cast<CActor*>((*iter));
+		while (pActor->Get_HpRatio() == 0)
+		{
+			iter++;
+			pActor->Set_Remove(true);
+			pActor = static_cast<CActor*>((*iter));
+		}
 		(*iter)->setActive(true);
 		iter++;
 		(*iter)->setActive(true);
 	}
+	m_iCountMonster = 2;
 }
 
 void CStage1::Trgger_Function6()
@@ -747,6 +800,13 @@ void CStage1::Trgger_Function6()
 	else
 	{
 		auto iter = pLayer->begin();
+		CActor* pActor = static_cast<CActor*>((*iter));
+		while (pActor->Get_HpRatio() == 0)
+		{
+			iter++;
+			pActor->Set_Remove(true);
+			pActor = static_cast<CActor*>((*iter));
+		}
 		(*iter)->setActive(true);
 		iter++;
 		(*iter)->setActive(true);
@@ -760,12 +820,20 @@ void CStage1::Trgger_Function6()
 			return;
 
 		iter = pLayer->begin();
+		pActor = static_cast<CActor*>((*iter));
+		while (pActor->Get_HpRatio() == 0)
+		{
+			iter++;
+			pActor->Set_Remove(true);
+			pActor = static_cast<CActor*>((*iter));
+		}
 		(*iter)->setActive(true);
 		iter++;
 		(*iter)->setActive(true);
 		iter++;
 		(*iter)->setActive(true);
 	}
+	m_iCountMonster = 7;
 }
 
 void CStage1::Trgger_Function7()
@@ -795,6 +863,15 @@ void CStage1::Trgger_Function7()
 	else
 	{
 		auto iter = pLayer->begin();
+
+		CActor* pActor = static_cast<CActor*>((*iter));
+		while (pActor->Get_HpRatio() == 0)
+		{
+			iter++;
+			pActor->Set_Remove(true);
+			pActor = static_cast<CActor*>((*iter));
+		}
+
 		(*iter)->setActive(true);
 		iter++;
 		(*iter)->setActive(true);
@@ -802,10 +879,17 @@ void CStage1::Trgger_Function7()
 		pLayer = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Layer_Healer");
 		if (!pLayer)
 			return;
-
+		pActor = static_cast<CActor*>((*iter));
+		while (pActor->Get_HpRatio() == 0)
+		{
+			iter++;
+			pActor->Set_Remove(true);
+			pActor = static_cast<CActor*>((*iter));
+		}
 		iter = pLayer->begin();
 		(*iter)->setActive(true);
 	}
+	m_iCountMonster = 3;
 }
 
 void CStage1::Trgger_Function8()
@@ -839,6 +923,13 @@ void CStage1::Trgger_Function8()
 	else
 	{
 		auto iter = pLayer->begin();
+		CActor* pActor = static_cast<CActor*>((*iter));
+		while (pActor->Get_HpRatio() == 0)
+		{
+			iter++;
+			pActor->Set_Remove(true);
+			pActor = static_cast<CActor*>((*iter));
+		}
 		(*iter)->setActive(true);
 		iter++;
 		(*iter)->setActive(true);
@@ -851,8 +942,16 @@ void CStage1::Trgger_Function8()
 			return;
 
 		iter = pLayer->begin();
+		pActor = static_cast<CActor*>((*iter));
+		while (pActor->Get_HpRatio() == 0)
+		{
+			iter++;
+			pActor->Set_Remove(true);
+			pActor = static_cast<CActor*>((*iter));
+		}
 		(*iter)->setActive(true);
 	}
+	m_iCountMonster = 4;
 }
 
 void CStage1::Trgger_Function9()
@@ -894,6 +993,13 @@ void CStage1::Trgger_Function9()
 	else
 	{
 		auto iter = pLayer->begin();
+		CActor* pActor = static_cast<CActor*>((*iter));
+		while (pActor->Get_HpRatio() == 0)
+		{
+			iter++;
+			pActor->Set_Remove(true);
+			pActor = static_cast<CActor*>((*iter));
+		}
 		(*iter)->setActive(true);
 		iter++;
 		(*iter)->setActive(true);
@@ -903,18 +1009,32 @@ void CStage1::Trgger_Function9()
 			return;
 
 		iter = pLayer->begin();
+		pActor = static_cast<CActor*>((*iter));
+		while (pActor->Get_HpRatio() == 0)
+		{
+			iter++;
+			pActor->Set_Remove(true);
+			pActor = static_cast<CActor*>((*iter));
+		}
 		(*iter)->setActive(true);
-
 
 		pLayer = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Layer_Bastion_Shooter");
 		if (!pLayer)
 			return;
 
 		iter = pLayer->begin();
+		pActor = static_cast<CActor*>((*iter));
+		while (pActor->Get_HpRatio() == 0)
+		{
+			iter++;
+			pActor->Set_Remove(true);
+			pActor = static_cast<CActor*>((*iter));
+		}
 		(*iter)->setActive(true);
 		iter++;
 		(*iter)->setActive(true);
 	}
+	m_iCountMonster = 5;
 }
 
 void CStage1::Trgger_Function10()
@@ -948,6 +1068,13 @@ void CStage1::Trgger_Function10()
 	else
 	{
 		auto iter = pLayer->begin();
+		CActor* pActor = static_cast<CActor*>((*iter));
+		while (pActor->Get_HpRatio() == 0)
+		{
+			iter++;
+			pActor->Set_Remove(true);
+			pActor = static_cast<CActor*>((*iter));
+		}
 		(*iter)->setActive(true);
 		iter++;
 		(*iter)->setActive(true);
@@ -958,6 +1085,7 @@ void CStage1::Trgger_Function10()
 		iter++;
 		(*iter)->setActive(true);
 	}
+	m_iCountMonster = 5;
 }
 
 void CStage1::Trgger_Function11()
@@ -975,8 +1103,16 @@ void CStage1::Trgger_Function11()
 	else
 	{
 		auto iter = pLayer->begin();
+		CActor* pActor = static_cast<CActor*>((*iter));
+		while (pActor->Get_HpRatio() == 0)
+		{
+			iter++;
+			pActor->Set_Remove(true);
+			pActor = static_cast<CActor*>((*iter));
+		}
 		(*iter)->setActive(true);
 	}
+	m_iCountMonster = 1;
 }
 
 //-175 51 422
@@ -995,6 +1131,13 @@ void CStage1::Trgger_FunctionBoss()
 	else
 	{
 		auto iter = pLayer->begin();
+		CActor* pActor = static_cast<CActor*>((*iter));
+		while (pActor->Get_HpRatio() == 0)
+		{
+			iter++;
+			pActor->Set_Remove(true);
+			pActor = static_cast<CActor*>((*iter));
+		}
 		(*iter)->setActive(true);
 	}
 }

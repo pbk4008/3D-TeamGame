@@ -28,6 +28,7 @@ private:
 public:
 	_bool Get_OnTrigger() { return m_bOnTrigger; }
 	_bool Get_Overlap() { return m_bOverlap; }
+	void TurnOnTrigger(_bool bCheck);
 public:
 	void Set_Overlap(const _bool bCheck) { m_bOverlap = bCheck; }
 public:

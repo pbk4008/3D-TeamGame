@@ -144,6 +144,14 @@ _fmatrix CClient_Trigger::Get_WorldMat(void)
 	return m_pTransform->Get_WorldMatrix();
 }
 
+void CClient_Trigger::TurnOnTrigger(_bool bCheck)
+{
+	if (!bCheck)
+		m_pBoxCollider->Remove_ActorFromScene();
+	else
+		m_pBoxCollider->Add_ActorToScene();
+}
+
 CGameObject* CClient_Trigger::Clone(const _uint _iSceneID, void* pArg)
 {
 	CClient_Trigger* pInstance = new CClient_Trigger(*this);

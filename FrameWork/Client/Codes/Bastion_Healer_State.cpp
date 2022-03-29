@@ -3,6 +3,7 @@
 #include "Monster_Bastion_Healer.h"
 #include "Animation.h"
 #include "UI_Monster_Panel.h"	
+#include <Stage1.h>
 
 CBastion_Healer_State::CBastion_Healer_State(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
 	: CMonster_FSM(_pDevice, _pDeviceContext)
@@ -51,8 +52,17 @@ _int CBastion_Healer_State::Tick(const _double& _dDeltaTime)
 		pMonster->Groggy_Start();
 	}
 
-	if (0 >= m_pMonster->Get_CurrentHp())
+	if (0 >= m_pMonster->Get_CurrentHp()&&!m_pMonster->Get_Dead())
+	{
+		static_cast<CMonster_Bastion_Healer*>(m_pMonster)->Set_Dead();
+		static_cast<CMonster_Bastion_Healer*>(m_pMonster)->Remove_Collider();
+
+		CLevel* pLevel = g_pGameInstance->getCurrentLevelScene();
+		if (g_pGameInstance->getCurrentLevel() == (_uint)SCENEID::SCENE_STAGE1)
+			static_cast<CStage1*>(pLevel)->Minus_MonsterCount();
+
 		m_pStateController->Change_State(L"Death");
+	}
 
 	if (true == m_bCastProtect)
 		m_pStateController->Change_State(L"Cast_Protect");

@@ -14,6 +14,8 @@
 #include "Aberrant_Stun.h"
 #include "Aberrant_Death.h"
 
+#include "Stage1.h"
+
 CMonster_EarthAberrant::CMonster_EarthAberrant(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
 	:CActor(_pDevice, _pDeviceContext)
 {
@@ -134,11 +136,20 @@ _int CMonster_EarthAberrant::Tick(_double _dDeltaTime)
 			return -1;
 		}
 	}
-
-	if (0 >= m_fCurrentHp)
+	if (!m_bDead)
 	{
-		m_bDead = true;
-		m_pStateController->Change_State(L"Death");
+		if (0 >= m_fCurrentHp)
+		{
+			CLevel* pLevel = g_pGameInstance->getCurrentLevelScene();
+			if (g_pGameInstance->getCurrentLevel() == (_uint)SCENEID::SCENE_STAGE1)
+				static_cast<CStage1*>(pLevel)->Minus_MonsterCount();
+
+			m_bDead = true;
+			m_pStateController->Change_State(L"Death");
+			m_pCharacterController->Remove_CCT();
+		}
+		else
+			m_pCharacterController->Move(_dDeltaTime, m_pTransform->Get_Velocity());
 	}
 
 	if (m_fGroggyGauge >= m_fMaxGroggyGauge)
@@ -171,9 +182,6 @@ _int CMonster_EarthAberrant::Tick(_double _dDeltaTime)
 
 		m_pPanel->Set_Show(false);
 	}
-
-	m_pCharacterController->Move(_dDeltaTime, m_pTransform->Get_Velocity());
-
 	m_pPanel->Set_TargetWorldMatrix(m_pTransform->Get_WorldMatrix());
 	
 	return 0;
@@ -191,8 +199,8 @@ _int CMonster_EarthAberrant::LateTick(_double _dDeltaTime)
 	{
 		return iProgress;
 	}
-	
-	m_pCharacterController->Update_OwnerTransform();
+	if(!m_bDead)
+		m_pCharacterController->Update_OwnerTransform();
 
 	m_pRenderer->Add_RenderGroup(CRenderer::RENDER_NONALPHA, this);
 
@@ -544,32 +552,35 @@ HRESULT CMonster_EarthAberrant::Set_State_FSM()
 
 void CMonster_EarthAberrant::OnTriggerEnter(CCollision& collision)
 {
-	if (true == g_pObserver->IsAttack()) //플레이어공격일때
+	if (!m_bDead)
 	{
-		m_bFirstHit = true; //딱 한번 true로 변경해줌
-
-		if (true == m_bFirstHit)
+		if (true == g_pObserver->IsAttack()) //플레이어공격일때
 		{
-			m_pPanel->Set_BackUIGapY(1.f);
-		}
+			m_bFirstHit = true; //딱 한번 true로 변경해줌
 
-		if ((_uint)GAMEOBJECT::WEAPON == collision.pGameObject->getTag())
-		{
-			--m_fCurrentHp;
-			m_fGroggyGauge += 2; //TODO::수치정해서바꿔줘야됨
-
-			m_pPanel->Set_HpBar(Get_HpRatio());
-
-			if (false == m_bGroggy)
+			if (true == m_bFirstHit)
 			{
-				//그로기 아닐때만 증가할수있게
-				m_pPanel->Set_GroggyBar(Get_GroggyGaugeRatio());
-				m_pStateController->Change_State(L"Flinch_Left");
+				m_pPanel->Set_BackUIGapY(1.f);
 			}
-		}
-		else
-		{
 
+			if ((_uint)GAMEOBJECT::WEAPON == collision.pGameObject->getTag())
+			{
+				--m_fCurrentHp;
+				m_fGroggyGauge += 2; //TODO::수치정해서바꿔줘야됨
+
+				m_pPanel->Set_HpBar(Get_HpRatio());
+
+				if (false == m_bGroggy)
+				{
+					//그로기 아닐때만 증가할수있게
+					m_pPanel->Set_GroggyBar(Get_GroggyGaugeRatio());
+					m_pStateController->Change_State(L"Flinch_Left");
+				}
+			}
+			else
+			{
+
+			}
 		}
 	}
 }

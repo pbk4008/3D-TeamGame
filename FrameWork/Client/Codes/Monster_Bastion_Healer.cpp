@@ -17,6 +17,8 @@
 #include "Bastion_Healer_Groggy_End.h"
 #include "Bastion_Healer_CastProtect.h"
 
+#include "Stage1.h"
+
 CMonster_Bastion_Healer::CMonster_Bastion_Healer(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
 	: CActor(_pDevice, _pDeviceContext)
 	, m_pCharacterController(nullptr)
@@ -123,7 +125,8 @@ _int CMonster_Bastion_Healer::Tick(_double _dDeltaTime)
 	/* Weapon Bone Update */
 	m_pWeapon->Tick(_dDeltaTime);
 
-	m_pCharacterController->Move(_dDeltaTime, m_pTransform->Get_Velocity());
+	if (!m_bDead)
+		m_pCharacterController->Move(_dDeltaTime, m_pTransform->Get_Velocity());
 
 	if (m_fGroggyGauge >= m_fMaxGroggyGauge)
 	{
@@ -150,7 +153,6 @@ _int CMonster_Bastion_Healer::Tick(_double _dDeltaTime)
 	if ((_uint)ANIM_TYPE::A_DEATH == m_pAnimator->Get_CurrentAnimNode() && m_pAnimator->Get_AnimController()->Is_Finished())
 	{
 		m_bRemove = true;
-		setActive(false);
 
 		m_pPanel->Set_Show(false);
 	}
@@ -168,7 +170,8 @@ _int CMonster_Bastion_Healer::LateTick(_double _dDeltaTime)
 	if (FAILED(m_pRenderer->Add_RenderGroup(CRenderer::RENDER_NONALPHA, this)))
 		return -1;
 
-	m_pCharacterController->Update_OwnerTransform();
+	if(!m_bDead)
+		m_pCharacterController->Update_OwnerTransform();
 	m_pWeapon->LateTick(_dDeltaTime);
 
 	/* State FSM Late Update */
@@ -240,6 +243,11 @@ void CMonster_Bastion_Healer::Hit(CCollision& pCol)
 		else
 			m_pStateController->Change_State(L"Idle");
 	}
+}
+
+void CMonster_Bastion_Healer::Remove_Collider()
+{
+	m_pCharacterController->Remove_CCT();
 }
 
 HRESULT CMonster_Bastion_Healer::Ready_Components()
