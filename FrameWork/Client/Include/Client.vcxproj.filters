@@ -513,35 +513,77 @@
     <Filter Include="02.GameObject\96.Weapon\05.BronzeAnimus_Sword">
       <UniqueIdentifier>{b1f35ebf-a1f3-4bfd-b47c-ae5a2fd62910}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObject\03.Character\01.Monster\BronzeAnimus\Chaser">
-      <UniqueIdentifier>{a4182a70-0ec5-48a9-9c78-0b4ef0774ffe}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObject\03.Character\01.Monster\BronzeAnimus\Death">
-      <UniqueIdentifier>{064f9573-fa9e-4f1d-9e76-3a2619ac25ac}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObject\03.Character\01.Monster\BronzeAnimus\Groggy">
-      <UniqueIdentifier>{cb31667d-6a67-4aff-b990-7ff2d35b50ff}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObject\03.Character\01.Monster\BronzeAnimus\Hit">
-      <UniqueIdentifier>{f3401bf2-27f9-4f41-8ffd-c09412a1b03a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObject\03.Character\01.Monster\BronzeAnimus\Attack">
-      <UniqueIdentifier>{5f6e1b9b-53fa-4651-bb12-f089e6344449}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObject\03.Character\01.Monster\BronzeAnimus\Roar">
-      <UniqueIdentifier>{e623c139-2b93-4b9d-b51c-289274bd5b74}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObject\03.Character\01.Monster\BronzeAnimus\Groggy\End">
-      <UniqueIdentifier>{5555e06c-3d9d-485b-8319-6b4f643760ad}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObject\03.Character\01.Monster\BronzeAnimus\Chaser\End">
-      <UniqueIdentifier>{03e2e18b-b54d-4cbc-b734-054b69f4f99e}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObject\03.Character\01.Monster\BronzeAnimus\Statue_Idle">
       <UniqueIdentifier>{ab912abd-75d7-4635-b14f-ca5549302ffe}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObject\03.Character\01.Monster\BronzeAnimus\Battle_Idle">
+    <Filter Include="02.GameObject\96.Weapon\06.Polearm">
+      <UniqueIdentifier>{6541d66d-92a3-424d-ad00-8ab2e88ba65c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\BronzeAnimus\State\Roar">
+      <UniqueIdentifier>{e623c139-2b93-4b9d-b51c-289274bd5b74}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\BronzeAnimus\State\Attack">
+      <UniqueIdentifier>{5f6e1b9b-53fa-4651-bb12-f089e6344449}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\BronzeAnimus\State\Battle_Idle">
       <UniqueIdentifier>{0d243957-00aa-4b43-8fde-f1348d9aab3d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\BronzeAnimus\State\Chaser">
+      <UniqueIdentifier>{a4182a70-0ec5-48a9-9c78-0b4ef0774ffe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\BronzeAnimus\State\Chaser\End">
+      <UniqueIdentifier>{03e2e18b-b54d-4cbc-b734-054b69f4f99e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\BronzeAnimus\State\Death">
+      <UniqueIdentifier>{064f9573-fa9e-4f1d-9e76-3a2619ac25ac}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\BronzeAnimus\State\Groggy">
+      <UniqueIdentifier>{cb31667d-6a67-4aff-b990-7ff2d35b50ff}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\BronzeAnimus\State\Groggy\End">
+      <UniqueIdentifier>{5555e06c-3d9d-485b-8319-6b4f643760ad}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\BronzeAnimus\State\Hit">
+      <UniqueIdentifier>{f3401bf2-27f9-4f41-8ffd-c09412a1b03a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_Spear\State">
+      <UniqueIdentifier>{039fdf97-f9f1-4fbc-bea3-13aada469634}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_Spear\State\Idle">
+      <UniqueIdentifier>{dcbb37db-5b85-4a81-be9f-2863822d36d6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_Spear\State\Death">
+      <UniqueIdentifier>{baf915d2-4f93-4072-b81d-fab0de0f3234}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_Spear\State\Attack">
+      <UniqueIdentifier>{f9710c6f-1f1a-4367-b8ff-96774951aae4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_Spear\State\Hit">
+      <UniqueIdentifier>{7477709e-4f41-4890-8122-ef475bec7d85}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_Spear\State\Groggy">
+      <UniqueIdentifier>{ac66a710-bcf5-414e-8c08-e5d2e6fc5282}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_Spear\State\Chaser">
+      <UniqueIdentifier>{8bca8ade-8c30-4cda-95ec-9c503ce7740e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_Spear\State\Dash">
+      <UniqueIdentifier>{80b8b8b3-629f-4bc0-a2d6-a1cf19a42817}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_Spear\State\Groggy\End">
+      <UniqueIdentifier>{e5543a53-3cc7-4cb6-87bb-4c41032fce03}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_Spear\State\Chaser\End">
+      <UniqueIdentifier>{e9e147d6-1786-44a2-9086-511c9cbf4786}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_Spear\State\Guard">
+      <UniqueIdentifier>{85a09936-f9ae-4c4f-a521-9cdca484e2fb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_Spear\State\Attack\Charge_Attack">
+      <UniqueIdentifier>{52f9fe23-d530-45bf-8dce-6f09b54d794d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_Spear\State\Attack\Charge_Attack\End">
+      <UniqueIdentifier>{8e1cd7a6-b86e-43a2-95a1-d0ceef66deb8}</UniqueIdentifier>
     </Filter>
     <Filter Include="03.System\01.ShakeManager">
       <UniqueIdentifier>{88c490a5-4de2-42f5-8177-be9cf2784d4b}</UniqueIdentifier>
@@ -694,9 +736,6 @@
     </ClInclude>
     <ClInclude Include="..\Headers\Monster_Bastion_Healer.h">
       <Filter>02.GameObject\03.Character\01.Monster\Bastion_Healer</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Headers\Monster_Bastion_Spear.h">
-      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Spear</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\Monster_Crawler.h">
       <Filter>02.GameObject\03.Character\01.Monster\Crawler</Filter>
@@ -1301,38 +1340,83 @@
       <Filter>02.GameObject\03.Character\01.Monster\BronzeAnimus\Statue_Idle</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\BronzeAnimus_Chaser.h">
-      <Filter>02.GameObject\03.Character\01.Monster\BronzeAnimus\Chaser</Filter>
+      <Filter>02.GameObject\03.Character\01.Monster\BronzeAnimus\State\Chaser</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\BronzeAnimus_Death.h">
-      <Filter>02.GameObject\03.Character\01.Monster\BronzeAnimus\Death</Filter>
+      <Filter>02.GameObject\03.Character\01.Monster\BronzeAnimus\State\Death</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\BronzeAnimus_Groggy_End.h">
-      <Filter>02.GameObject\03.Character\01.Monster\BronzeAnimus\Groggy\End</Filter>
+      <Filter>02.GameObject\03.Character\01.Monster\BronzeAnimus\State\Groggy\End</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\Bastion_2HSword_Groggy_End.h">
       <Filter>02.GameObject\03.Character\01.Monster\Bastion_2HSword\State_2HSword\Groggy\End</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\BronzeAnimus_Groggy.h">
-      <Filter>02.GameObject\03.Character\01.Monster\BronzeAnimus\Groggy</Filter>
+      <Filter>02.GameObject\03.Character\01.Monster\BronzeAnimus\State\Groggy</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\BronzeAnimus_Hit.h">
-      <Filter>02.GameObject\03.Character\01.Monster\BronzeAnimus\Hit</Filter>
+      <Filter>02.GameObject\03.Character\01.Monster\BronzeAnimus\State\Hit</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\BronzeAnimus_Roar.h">
-      <Filter>02.GameObject\03.Character\01.Monster\BronzeAnimus\Roar</Filter>
+      <Filter>02.GameObject\03.Character\01.Monster\BronzeAnimus\State\Roar</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\BronzeAnimus_Attack.h">
-      <Filter>02.GameObject\03.Character\01.Monster\BronzeAnimus\Attack</Filter>
+      <Filter>02.GameObject\03.Character\01.Monster\BronzeAnimus\State\Attack</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\BronzeAnimus_Chaser_End.h">
-      <Filter>02.GameObject\03.Character\01.Monster\BronzeAnimus\Chaser\End</Filter>
+      <Filter>02.GameObject\03.Character\01.Monster\BronzeAnimus\State\Chaser\End</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\BronzeAnimus_Battle_Idle.h">
-      <Filter>02.GameObject\03.Character\01.Monster\BronzeAnimus\Battle_Idle</Filter>
-    </ClInclude>
+      <Filter>02.GameObject\03.Character\01.Monster\BronzeAnimus\State\Battle_Idle</Filter>
+	</ClInclude>
     <ClInclude Include="..\Headers\Shooter_Attack.h">
       <Filter>02.GameObject\03.Character\01.Monster\Bastion_Shooter\State\Attack</Filter>
     </ClInclude>
+    <ClInclude Include="..\Headers\Monster_Bastion_Spear.h">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Spear</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Polearm.h">
+      <Filter>02.GameObject\96.Weapon\06.Polearm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Spear_State.h">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Spear\State</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Spear_Idle.h">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Spear\State\Idle</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Spear_Death.h">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Spear\State\Death</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Spear_Groggy.h">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Spear\State\Groggy</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Spear_Groggy_End.h">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Spear\State\Groggy\End</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Spear_Hit.h">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Spear\State\Hit</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Spear_Chaser.h">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Spear\State\Chaser</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Spear_Chaser_End.h">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Spear\State\Chaser\End</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Spear_Attack.h">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Spear\State\Attack</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Spear_Guard.h">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Spear\State\Guard</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Spear_Bwd_Dash.h">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Spear\State\Dash</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Spear_Charge_Attack.h">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Spear\State\Attack\Charge_Attack</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Spear_Charge_Attack_End.h">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Spear\State\Attack\Charge_Attack\End</Filter>
+	</ClInclude>
     <ClInclude Include="..\Headers\TriggerSystem.h">
       <Filter>03.System\00.Trigger</Filter>
     </ClInclude>
@@ -1469,9 +1553,6 @@
     </ClCompile>
     <ClCompile Include="..\Codes\Monster_Bastion_Healer.cpp">
       <Filter>02.GameObject\03.Character\01.Monster\Bastion_Healer</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Codes\Monster_Bastion_Spear.cpp">
-      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Spear</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\Monster_Crawler.cpp">
       <Filter>02.GameObject\03.Character\01.Monster\Crawler</Filter>
@@ -2073,38 +2154,83 @@
       <Filter>02.GameObject\03.Character\01.Monster\BronzeAnimus\Statue_Idle</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\BronzeAnimus_Chaser.cpp">
-      <Filter>02.GameObject\03.Character\01.Monster\BronzeAnimus\Chaser</Filter>
+      <Filter>02.GameObject\03.Character\01.Monster\BronzeAnimus\State\Chaser</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\BronzeAnimus_Death.cpp">
-      <Filter>02.GameObject\03.Character\01.Monster\BronzeAnimus\Death</Filter>
+      <Filter>02.GameObject\03.Character\01.Monster\BronzeAnimus\State\Death</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\BronzeAnimus_Groggy_End.cpp">
-      <Filter>02.GameObject\03.Character\01.Monster\BronzeAnimus\Groggy\End</Filter>
+      <Filter>02.GameObject\03.Character\01.Monster\BronzeAnimus\State\Groggy\End</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\Bastion_2HSword_Groggy_End.cpp">
       <Filter>02.GameObject\03.Character\01.Monster\Bastion_2HSword\State_2HSword\Groggy\End</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\BronzeAnimus_Groggy.cpp">
-      <Filter>02.GameObject\03.Character\01.Monster\BronzeAnimus\Groggy</Filter>
+      <Filter>02.GameObject\03.Character\01.Monster\BronzeAnimus\State\Groggy</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\BronzeAnimus_Hit.cpp">
-      <Filter>02.GameObject\03.Character\01.Monster\BronzeAnimus\Hit</Filter>
+      <Filter>02.GameObject\03.Character\01.Monster\BronzeAnimus\State\Hit</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\BronzeAnimus_Roar.cpp">
-      <Filter>02.GameObject\03.Character\01.Monster\BronzeAnimus\Roar</Filter>
+      <Filter>02.GameObject\03.Character\01.Monster\BronzeAnimus\State\Roar</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\BronzeAnimus_Attack.cpp">
-      <Filter>02.GameObject\03.Character\01.Monster\BronzeAnimus\Attack</Filter>
+      <Filter>02.GameObject\03.Character\01.Monster\BronzeAnimus\State\Attack</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\BronzeAnimus_Chaser_End.cpp">
-      <Filter>02.GameObject\03.Character\01.Monster\BronzeAnimus\Chaser\End</Filter>
+      <Filter>02.GameObject\03.Character\01.Monster\BronzeAnimus\State\Chaser\End</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\BronzeAnimus_Battle_Idle.cpp">
-      <Filter>02.GameObject\03.Character\01.Monster\BronzeAnimus\Battle_Idle</Filter>
+      <Filter>02.GameObject\03.Character\01.Monster\BronzeAnimus\State\Battle_Idle</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\Shooter_Attack.cpp">
       <Filter>02.GameObject\03.Character\01.Monster\Bastion_Shooter\State\Attack</Filter>
     </ClCompile>
+    <ClCompile Include="..\Codes\Monster_Bastion_Spear.cpp">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Spear</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Polearm.cpp">
+      <Filter>02.GameObject\96.Weapon\06.Polearm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Spear_State.cpp">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Spear\State</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Spear_Idle.cpp">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Spear\State\Idle</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Spear_Death.cpp">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Spear\State\Death</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Spear_Groggy.cpp">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Spear\State\Groggy</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Spear_Groggy_End.cpp">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Spear\State\Groggy\End</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Spear_Hit.cpp">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Spear\State\Hit</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Spear_Chaser.cpp">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Spear\State\Chaser</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Spear_Chaser_End.cpp">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Spear\State\Chaser\End</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Spear_Attack.cpp">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Spear\State\Attack</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Spear_Guard.cpp">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Spear\State\Guard</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Spear_Bwd_Dash.cpp">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Spear\State\Dash</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Spear_Charge_Attack.cpp">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Spear\State\Attack\Charge_Attack</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Spear_Charge_Attack_End.cpp">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Spear\State\Attack\Charge_Attack\End</Filter>
+	</ClCompile>
     <ClCompile Include="..\Codes\Client_Trigger.cpp">
       <Filter>03.System\00.Trigger\Client_Trigger</Filter>
     </ClCompile>

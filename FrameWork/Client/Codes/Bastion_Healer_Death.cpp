@@ -77,13 +77,6 @@ void CBastion_Healer_Death::Look_Player(void)
 
 void CBastion_Healer_Death::Look_Monster(void)
 {
-	CAnimation* pAnim = m_pAnimator->Get_CurrentAnimation();
-
-	if (pAnim->Is_Finished())
-	{
-		static_cast<CMonster_Bastion_Healer*>(m_pMonster)->Set_Dead();
-		static_cast<CMonster_Bastion_Healer*>(m_pMonster)->setActive(false);
-	}
 }
 
 CBastion_Healer_Death* CBastion_Healer_Death::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext, void* _pArg)

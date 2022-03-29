@@ -20,13 +20,16 @@ HRESULT CCapsuleCollider::NativeConstruct_Prototype()
 
 HRESULT CCapsuleCollider::NativeConstruct(void* _pArg)
 {
+	DESC tDesc;
 	if (_pArg)
 	{
-		memcpy_s(&m_tDesc, sizeof(DESC), _pArg, sizeof(DESC));
-		m_pGameObject = m_tDesc.tColliderDesc.pGameObject;
+		memcpy_s(&tDesc, sizeof(DESC), _pArg, sizeof(DESC));
+		m_pGameObject = tDesc.tColliderDesc.pGameObject;
+		m_fHeight = tDesc.fHeight;
+		m_fRadius = tDesc.fRadius;
 	}
 
-	if (FAILED(__super::NativeConstruct(&m_tDesc.tColliderDesc)))
+	if (FAILED(__super::NativeConstruct(&tDesc.tColliderDesc)))
 		return E_FAIL;
 
 	if (FAILED(m_pPhsyX->Create_Capsule(this)))
@@ -53,9 +56,14 @@ const _int CCapsuleCollider::LateTick(const _double& _dDeltaTime)
 	return _int();
 }
 
-const CCapsuleCollider::DESC& CCapsuleCollider::getDesc() const
+const _float CCapsuleCollider::getHeight() const
 {
-	return m_tDesc;
+	return m_fHeight;
+}
+
+const _float CCapsuleCollider::getRadius() const
+{
+	return m_fRadius;
 }
 
 CCapsuleCollider* CCapsuleCollider::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)

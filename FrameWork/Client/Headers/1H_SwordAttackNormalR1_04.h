@@ -23,6 +23,10 @@ public:
 public:
 	virtual _int Input(const _double& _dDeltaTime) override;
 
+private:
+	CCameraShake::SHAKEEVENT m_tShakeEvent2;
+	_bool m_isShake2 = false;
+
 public:
 	static C1H_SwordAttackNormalR1_04* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext, void* _pArg = nullptr);
 	virtual void Free() override;

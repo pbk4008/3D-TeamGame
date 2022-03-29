@@ -62,6 +62,18 @@ _int CMainApp::Tick(_double TimeDelta)
 
 	g_pGameInstance->Update_InputDev();
 
+	if (m_isFreeze)
+	{
+		m_dFreezeTimeAcc += TimeDelta;
+		if (0.15 < m_dFreezeTimeAcc)
+		{
+			m_isFreeze = false;
+			m_dFreezeTimeAcc = 0.0;
+		}
+		else
+			TimeDelta *= 0.1;
+	}
+
 	if (g_pGameInstance->getkeyDown(DIK_F1))
 	{
 		m_bHDR = !m_bHDR;
@@ -77,7 +89,6 @@ _int CMainApp::Tick(_double TimeDelta)
 		m_bShadow = !m_bShadow;
 		m_pRenderer->SetRenderButton(CRenderer::SHADOW, m_bShadow);
 	}
-
 
 	if (g_pGameInstance->getkeyDown(DIK_P))
 		m_isPause = !m_isPause;
@@ -249,6 +260,19 @@ HRESULT CMainApp::Ready_Fonts()
 		return E_FAIL;
 
 	return S_OK;
+}
+
+const _bool CMainApp::IsFreeze() const
+{
+	return m_isFreeze;
+}
+
+void CMainApp::FreezeTime()
+{
+	if (!m_isFreeze)
+	{
+		m_isFreeze = true;
+	}
 }
 
 CMainApp * CMainApp::Create()

@@ -8,11 +8,14 @@
 
 CBronzeAnimus_Sword::CBronzeAnimus_Sword(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
 	: CWeapon(_pDevice, _pDeviceContext)
+	, m_pCollider(nullptr)
 {
+	Safe_AddRef(m_pCollider);
 }
 
 CBronzeAnimus_Sword::CBronzeAnimus_Sword(const CBronzeAnimus_Sword& _rhs)
 	: CWeapon(_rhs)
+	, m_pCollider(_rhs.m_pCollider)
 {
 }
 
@@ -23,6 +26,7 @@ HRESULT CBronzeAnimus_Sword::NativeConstruct_Prototype()
 
 	m_eType = EType::BronzeAnimus_Sword;
 	m_wstrName = L"BronzeAnimus_Sword";
+	m_iObectTag = (_uint)GAMEOBJECT::WEAPON_BRONZE;
 
 	CMaterial* pMtrl = nullptr;
 	CTexture* pTexture = nullptr;
@@ -62,6 +66,9 @@ _int CBronzeAnimus_Sword::Tick(_double _dDeltaTime)
 
 	Attach_FixedBone(_dDeltaTime);
 	Attach_Owner(_dDeltaTime);
+
+	if (m_pCollider)
+		m_pCollider->Tick(_dDeltaTime);
 
 	return _int();
 }
@@ -110,6 +117,21 @@ HRESULT CBronzeAnimus_Sword::Ready_Components()
 
 	m_pModel->Add_Material(g_pGameInstance->Get_Material(L"Mtrl_BronzeAnimus_Sword"), 0);
 
+	CCollider::DESC tColliderDesc;
+	tColliderDesc.isTrigger = true;
+	tColliderDesc.eRigidType = ERigidType::Dynamic;
+	tColliderDesc.pGameObject = this;
+
+	CCapsuleCollider::DESC tCapsuleColliderDesc;
+	tCapsuleColliderDesc.tColliderDesc = tColliderDesc;
+	tCapsuleColliderDesc.fHeight = 1.5f;
+	tCapsuleColliderDesc.fRadius = 0.15f;
+
+	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_CapsuleCollider", L"Collider", (CComponent**)&m_pCollider, &tCapsuleColliderDesc)))
+		return E_FAIL;
+
+	_matrix smatPviot = XMMatrixRotationY(XMConvertToRadians(90.f)) * XMMatrixTranslation(0.f, 0.f, 1.f);
+	m_pCollider->setPivotMatrix(smatPviot);
 	return S_OK;
 }
 
@@ -168,6 +190,6 @@ CGameObject* CBronzeAnimus_Sword::Clone(const _uint _iSceneID, void* _pArg)
 
 void CBronzeAnimus_Sword::Free()
 {
-
+	Safe_Release(m_pCollider);
 	__super::Free();
 }

@@ -24,6 +24,17 @@ _int C1H_SwordAttackNormalR2_ReleaseStab::Tick(const _double& _dDeltaTime)
 	_uint iCurkeyFrameIndex = m_pAnimationController->Get_CurKeyFrameIndex();
 
 
+	if (m_iAttackStartIndex < iCurkeyFrameIndex && m_iAttackEndIndex > iCurkeyFrameIndex)
+	{
+		if (!m_isShake2)
+		{
+			_float3 vPos; XMStoreFloat3(&vPos, m_pTransform->Get_State(CTransform::STATE_POSITION));
+			g_pShakeManager->Shake(m_tShakeEvent2, vPos);
+			m_isShake2 = true;
+		}
+	}
+
+
 	if (m_pAnimationController->Is_Finished())
 	{
 		if (FAILED(m_pStateController->Change_State(L"Idle")))
@@ -69,6 +80,21 @@ HRESULT C1H_SwordAttackNormalR2_ReleaseStab::EnterState()
 	m_iCutIndex = 30;
 	m_iAttackStartIndex = 10;
 	m_iAttackEndIndex = 20;
+
+
+	// Ω¶¿Ã≈© ø…º«
+	// 2
+	m_tShakeEvent2.fDuration = 1.2f;
+	m_tShakeEvent2.fBlendInTime = 0.2f;
+	m_tShakeEvent2.fBlendOutTime = 0.4f;
+	m_tShakeEvent2.tWaveY.fAmplitude = 0.04f;
+	m_tShakeEvent2.tWaveY.fFrequency = 1.f;
+	m_tShakeEvent2.tWaveY.fAdditionalOffset = -0.1f;
+	m_tShakeEvent2.tWaveZ.fAmplitude = 0.04f;
+	m_tShakeEvent2.tWaveZ.fFrequency = 1.f;
+	m_tShakeEvent2.tWaveZ.fAdditionalOffset = 0.3f;
+
+
 	return S_OK;
 }
 
@@ -77,6 +103,7 @@ HRESULT C1H_SwordAttackNormalR2_ReleaseStab::ExitState()
 	if (FAILED(__super::ExitState()))
 		return E_FAIL;
 
+	m_isShake2 = false;
 	return S_OK;
 }
 

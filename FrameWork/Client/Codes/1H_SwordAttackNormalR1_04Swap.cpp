@@ -27,6 +27,15 @@ _int C1H_SwordAttackNormalR1_04Swap::Tick(const _double& _dDeltaTime)
 
 	_uint iCurkeyFrameIndex = m_pAnimationController->Get_CurKeyFrameIndex();
 
+	if (m_iAttackStartIndex < iCurkeyFrameIndex && m_iAttackEndIndex > iCurkeyFrameIndex)
+	{
+		if (!m_isShake2)
+		{
+			_float3 vPos; XMStoreFloat3(&vPos, m_pTransform->Get_State(CTransform::STATE_POSITION));
+			g_pShakeManager->Shake(m_tShakeEvent2, vPos);
+			m_isShake2 = true;
+		}
+	}
 
 	if (m_pAnimationController->Is_Finished())
 	{
@@ -70,14 +79,27 @@ HRESULT C1H_SwordAttackNormalR1_04Swap::EnterState()
 
 	// Ω¶¿Ã≈© ø…º«
 	m_tShakeEvent.fDuration = 0.8f;
-	m_tShakeEvent.fBlendInTime = 0.4f;
-	m_tShakeEvent.fBlendOutTime = 0.8f;
+	m_tShakeEvent.fBlendInTime = 0.2f;
+	m_tShakeEvent.fBlendOutTime = 0.6f;
 	m_tShakeEvent.tWaveX.fAmplitude = 0.04f;
 	m_tShakeEvent.tWaveX.fFrequency = 12.f;
 	m_tShakeEvent.tWaveY.fAmplitude = 0.04f;
 	m_tShakeEvent.tWaveY.fFrequency = 8.f;
 	m_tShakeEvent.tWaveZ.fAmplitude = 0.04f;
 	m_tShakeEvent.tWaveZ.fFrequency = 10.f;
+	// 2
+	m_tShakeEvent2.fDuration = 1.6f;
+	m_tShakeEvent2.fBlendInTime = 0.2f;
+	m_tShakeEvent2.fBlendOutTime = 0.4f;
+	m_tShakeEvent2.tWaveX.fAmplitude = 0.04f;
+	m_tShakeEvent2.tWaveX.fFrequency = 1.f;
+	m_tShakeEvent2.tWaveX.fAdditionalOffset = -0.5f;
+	m_tShakeEvent2.tWaveY.fAmplitude = 0.04f;
+	m_tShakeEvent2.tWaveY.fFrequency = 1.f;
+	m_tShakeEvent2.tWaveY.fAdditionalOffset = -1.f;
+	m_tShakeEvent2.tWaveZ.fAmplitude = 0.04f;
+	m_tShakeEvent2.tWaveZ.fFrequency = 1.f;
+	m_tShakeEvent2.tWaveZ.fAdditionalOffset = 1.f;
 
 	return S_OK;
 }
@@ -87,6 +109,8 @@ HRESULT C1H_SwordAttackNormalR1_04Swap::ExitState()
 	if (FAILED(__super::ExitState()))
 		return E_FAIL;
 
+
+	m_isShake2 = false;
 	return S_OK;
 }
 

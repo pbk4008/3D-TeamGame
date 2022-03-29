@@ -199,6 +199,7 @@ HRESULT CVIBuffer_PointInstance_Floating::NativeConstruct(void * pArg)
 		{ "TEXCOORD", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 1, 64, D3D11_INPUT_PER_INSTANCE_DATA, 1 },
 	};
 
+
 	if (FAILED(Compile_ShaderFiles(m_Desc.ShaderFilePath, ElementDescs, 7)))
 		return E_FAIL;
 
@@ -472,11 +473,24 @@ CComponent * CVIBuffer_PointInstance_Floating::Clone(void * pArg)
 
 void CVIBuffer_PointInstance_Floating::Free()
 {
-	__super::Free();
-
 	Safe_Delete_Array(m_pDir);
 	Safe_Delete_Array(m_pNormal);
 	Safe_Delete_Array(m_pRandomPos);
+	Safe_Delete_Array(m_pVertices);
+	Safe_Delete_Array(m_pIndices);
 
 	Safe_Release(m_pVBInstance);
+
+	for (auto& pEffectDesc : m_EffectDescs)
+	{
+		Safe_Release(pEffectDesc->pInputLayout);
+		Safe_Delete(pEffectDesc);
+	}
+	m_EffectDescs.clear();
+
+	Safe_Release(m_pEffect);
+	Safe_Release(m_pIB);
+	Safe_Release(m_pVB);
+
+	CComponent::Free();
 }

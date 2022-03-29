@@ -76,5 +76,4 @@ void CEffect::Free()
 {
 	Safe_Release(m_pTexture);
 	CGameObject::Free();
-	Safe_Release(m_pTexture);
 }

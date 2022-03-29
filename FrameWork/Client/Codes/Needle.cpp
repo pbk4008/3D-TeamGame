@@ -107,6 +107,11 @@ HRESULT CNeedle::Render()
 	return S_OK;
 }
 
+void CNeedle::OnTriggerEnter(CCollision& collision)
+{
+
+}
+
 HRESULT CNeedle::Ready_Components()
 {
 	CTransform::TRANSFORMDESC transformDesc;

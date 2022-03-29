@@ -21,6 +21,7 @@
 
 /* for. UI */
 #include "UI_Monster_Panel.h"
+#include "Stage1.h"
 
 CMonster_Bastion_2HSword::CMonster_Bastion_2HSword(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
 	: CActor(_pDevice, _pDeviceContext)
@@ -111,7 +112,8 @@ _int CMonster_Bastion_2HSword::Tick(_double _dDeltaTime)
 	/* Weapon Bone Update */
 	m_pWeapon->Tick(_dDeltaTime);
 	/* Character Controller Update */
-	m_pCharacterController->Move(_dDeltaTime, m_pTransform->Get_Velocity());
+	if(!m_bDead)
+		m_pCharacterController->Move(_dDeltaTime, m_pTransform->Get_Velocity());
 
 	if (m_fGroggyGauge >= m_fMaxGroggyGauge)
 	{
@@ -163,7 +165,8 @@ _int CMonster_Bastion_2HSword::LateTick(_double _dDeltaTime)
 		return -1;
 	m_pWeapon->LateTick(_dDeltaTime);
 
-	m_pCharacterController->Update_OwnerTransform();
+	if (!m_bDead)
+		m_pCharacterController->Update_OwnerTransform();
 
 	return _int();
 }
@@ -630,9 +633,27 @@ void CMonster_Bastion_2HSword::Hit(CCollision& pCol)
 	}
 }
 
+void CMonster_Bastion_2HSword::Remove_Collider()
+{
+	m_pCharacterController->Remove_CCT();
+}
+
+
 void CMonster_Bastion_2HSword::OnTriggerEnter(CCollision& collision)
 {
 	m_pStateController->OnTriggerEnter(collision);
+}
+
+void CMonster_Bastion_2HSword::OnTriggerExit(CCollision& collision)
+{
+	if (true == g_pObserver->IsAttack()) //플레이어공격일때
+	{
+		if ((_uint)GAMEOBJECT::WEAPON == collision.pGameObject->getTag())
+		{
+			if (m_bDead)
+				g_pMainApp->FreezeTime();
+		}
+	}
 }
 
 void CMonster_Bastion_2HSword::Set_IsAttack(const _bool _isAttack)

@@ -15,7 +15,10 @@ public:
 	virtual HRESULT Render();
 
 private:
+
+	HRESULT Ready_Light();
 	HRESULT Ready_Gameobject();
+	HRESULT Ready_Effect();
 
 public:
 	static CTestScene_JS* Create(ID3D11Device * pDevice, ID3D11DeviceContext * pDeviceContext);

@@ -144,8 +144,7 @@ HRESULT CPhysicsXSystem::Create_Box(CBoxCollider* _pCollider)
 	if (!m_pPhysics)
 		return E_FAIL;
 
-	CBoxCollider::DESC tBoxColliderDesc = _pCollider->getDesc();
-	CCollider::DESC tColliderDesc = tBoxColliderDesc.tColliderDesc;
+	CCollider::DESC tColliderDesc = _pCollider->getDesc();
 
 	PxMaterial* pMaterial = Create_Material(tColliderDesc.fStaticFriction, tColliderDesc.fDynamicFriction, tColliderDesc.fRestitution);
 	if (!pMaterial)
@@ -155,7 +154,7 @@ HRESULT CPhysicsXSystem::Create_Box(CBoxCollider* _pCollider)
 	pRigidActor->userData = tColliderDesc.pGameObject;
 
 	// Shape
-	PxVec3 pxvHalfExtents = ToPxVec3(tBoxColliderDesc.vScale);
+	PxVec3 pxvHalfExtents = ToPxVec3(_pCollider->getScale());
 	pxvHalfExtents *= 0.5f;
 
 	PxShape* pShape = m_pPhysics->createShape(PxBoxGeometry(pxvHalfExtents), *pMaterial, true);
@@ -184,8 +183,7 @@ HRESULT CPhysicsXSystem::Create_Sphere(CSphereCollider* _pCollider)
 	if (!m_pPhysics)
 		return E_FAIL;
 
-	CSphereCollider::DESC tSphereCollideDesc = _pCollider->getDesc();
-	CCollider::DESC tColliderDesc = tSphereCollideDesc.tColliderDesc;
+	CCollider::DESC tColliderDesc = _pCollider->getDesc();
 
 	PxMaterial* pMaterial = Create_Material(tColliderDesc.fStaticFriction, tColliderDesc.fDynamicFriction, tColliderDesc.fRestitution);
 	if (!pMaterial)
@@ -195,7 +193,7 @@ HRESULT CPhysicsXSystem::Create_Sphere(CSphereCollider* _pCollider)
 	pRigidActor->userData = tColliderDesc.pGameObject;
 
 	// Shape
-	PxShape* pShape = m_pPhysics->createShape(PxSphereGeometry(tSphereCollideDesc.fRadius), *pMaterial, true);
+	PxShape* pShape = m_pPhysics->createShape(PxSphereGeometry(_pCollider->getRadius()), *pMaterial, true);
 	pShape->setFlag(PxShapeFlag::eVISUALIZATION, tColliderDesc.isVisualization);
 	pShape->setFlag(PxShapeFlag::eSCENE_QUERY_SHAPE, tColliderDesc.isSceneQuery);
 	pShape->setFlag(PxShapeFlag::eSIMULATION_SHAPE, !tColliderDesc.isTrigger);
@@ -221,8 +219,7 @@ HRESULT CPhysicsXSystem::Create_Capsule(CCapsuleCollider* _pCollider)
 	if (!m_pPhysics)
 		return E_FAIL;
 
-	CCapsuleCollider::DESC tCapsuleCollideDesc = _pCollider->getDesc();
-	CCollider::DESC tColliderDesc = tCapsuleCollideDesc.tColliderDesc;
+	CCollider::DESC tColliderDesc = _pCollider->getDesc();
 
 	PxMaterial* pMaterial = Create_Material(tColliderDesc.fStaticFriction, tColliderDesc.fDynamicFriction, tColliderDesc.fRestitution);
 	if (!pMaterial)
@@ -232,7 +229,7 @@ HRESULT CPhysicsXSystem::Create_Capsule(CCapsuleCollider* _pCollider)
 	pRigidActor->userData = tColliderDesc.pGameObject;
 
 	// Shape
-	PxShape* pShape = m_pPhysics->createShape(PxCapsuleGeometry(tCapsuleCollideDesc.fRadius, tCapsuleCollideDesc.fHeight * 0.5f), *pMaterial, true);
+	PxShape* pShape = m_pPhysics->createShape(PxCapsuleGeometry(_pCollider->getRadius(), _pCollider->getHeight() * 0.5f), *pMaterial, true);
 	pShape->setFlag(PxShapeFlag::eVISUALIZATION, tColliderDesc.isVisualization);
 	pShape->setFlag(PxShapeFlag::eSCENE_QUERY_SHAPE, tColliderDesc.isSceneQuery);
 	pShape->setFlag(PxShapeFlag::eSIMULATION_SHAPE, !tColliderDesc.isTrigger);
@@ -263,8 +260,7 @@ HRESULT CPhysicsXSystem::Create_NavMesh(CNavMeshCollider* _pCollider)
 	if (!m_pPhysics)
 		return E_FAIL;
 
-	CNavMeshCollider::DESC tNavMeshDesc = _pCollider->getDesc();
-	CCollider::DESC tColliderDesc = tNavMeshDesc.tColliderDesc;
+	CCollider::DESC tColliderDesc = _pCollider->getDesc();
 
 	PxMaterial* pMaterial = Create_Material(tColliderDesc.fStaticFriction, tColliderDesc.fDynamicFriction, tColliderDesc.fRestitution);
 	if (!pMaterial)
@@ -274,13 +270,14 @@ HRESULT CPhysicsXSystem::Create_NavMesh(CNavMeshCollider* _pCollider)
 	pRigidActor->userData = tColliderDesc.pGameObject;
 
 	// Shape
-	_uint iSize = (_uint)tNavMeshDesc.vecPoints.size();
+	vector<_float3*> vecPoints = _pCollider->getPoints();
+	_uint iSize = (_uint)vecPoints.size();
 	_float3* pPoints = new _float3[iSize * 3];
 	for (_uint i = 0; i < iSize; i++)
 	{
-		pPoints[i * 3] = tNavMeshDesc.vecPoints[i][0];
-		pPoints[i * 3 + 1] = tNavMeshDesc.vecPoints[i][1];
-		pPoints[i * 3 + 2] = tNavMeshDesc.vecPoints[i][2];
+		pPoints[i * 3] = vecPoints[i][0];
+		pPoints[i * 3 + 1] = vecPoints[i][1];
+		pPoints[i * 3 + 2] = vecPoints[i][2];
 	}
 
 	FACEINDICES32* Indices = new FACEINDICES32[iSize];

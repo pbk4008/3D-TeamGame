@@ -48,6 +48,7 @@ private:
 	_float3 m_vShakeAccPos = { 0.f, 0.f, 0.f };
 
 	_bool m_isChase = true;
+	_float m_fLerpTime = 0.f;
 
 private: /* For.Shake */
 	CCameraShake* m_pCameraShake = nullptr;
