@@ -60,7 +60,7 @@ const _int CCharacterController::LateTick(const _double& _dDeltaTime)
 
 void CCharacterController::Remove_CCT()
 {
-	m_pPhysX->Remove_Actor(m_pPxController->getActor());
+	//m_pPhysX->Remove_Actor(m_pPxController->getActor());
 	Safe_PxRelease(m_pPxController);
 }
 

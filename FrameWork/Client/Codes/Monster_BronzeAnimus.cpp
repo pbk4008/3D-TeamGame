@@ -18,6 +18,8 @@
 #include "BronzeAnimus_Roar.h"
 #include "BronzeAnimus_Attack.h"
 
+#include "Stage1.h"
+
 CMonster_BronzeAnimus::CMonster_BronzeAnimus(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
 	: CActor(_pDevice, _pDeviceContext)
 	, m_pCharacterController(nullptr)
@@ -154,6 +156,10 @@ _int CMonster_BronzeAnimus::Tick(_double _dDeltaTime)
 		setActive(false);
 
 		m_pPanel->Set_Show(false);
+
+		CLevel* pLevel = g_pGameInstance->getCurrentLevelScene();
+		if (g_pGameInstance->getCurrentLevel() == (_uint)SCENEID::SCENE_STAGE1)
+			static_cast<CStage1*>(pLevel)->Minus_MonsterCount();
 	}
 	m_pPanel->Set_TargetWorldMatrix(m_pTransform->Get_WorldMatrix());
 
