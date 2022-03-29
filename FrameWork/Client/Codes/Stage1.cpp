@@ -231,7 +231,7 @@ HRESULT CStage1::Ready_Camera(const _tchar* LayerTag)
 HRESULT CStage1::Ready_Player(const _tchar* LayerTag)
 {
 	//// 네비메쉬
-	wstring wstrNaviFile = L"../Data/NavMesh/Stage_2_Nav.dat";
+	wstring wstrNaviFile = L"../Data/NavMesh/Stage_1_Nav.dat";
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Plane", L"Proto_GameObject_Plane_Test",&wstrNaviFile)))
 		return E_FAIL;
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Proto_GameObject_Silvermane")))
@@ -429,7 +429,7 @@ HRESULT CStage1::Ready_Data_Effect()
 	{
 		wstring FullName = L"Proto_GameObject_Effect_Hit";
 		//_tcscpy_s(vecEffect1[i].ShaderFullFilePath, L"../../Reference/ShaderFile/Shader_PointInstance.hlsl");
-		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Effect_Hit", FullName, &vecEffect[i])))
+		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Hit", FullName, &vecEffect[i])))
 		{
 			MSGBOX("Failed to Creating in CStage1::Ready_Effect()");
 			return E_FAIL;
@@ -444,7 +444,7 @@ HRESULT CStage1::Ready_Data_Effect()
 	{
 		wstring FullName = L"Proto_GameObject_Effect_Floating";
 		//_tcscpy_s(vecEffect1[i].ShaderFullFilePath, L"../../Reference/ShaderFile/Shader_PointInstance.hlsl");
-		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Effect_Floating", FullName, &vecEffect1[i])))
+		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Floating", FullName, &vecEffect1[i])))
 		{
 			MSGBOX("Failed to Creating in CStage1::Ready_Effect()");
 			return E_FAIL;
