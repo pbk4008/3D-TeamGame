@@ -33,7 +33,6 @@ cbuffer ConstBuffer
 	//float SpecularAmount = 1.f;
 };
 
-texture2D g_ShadowTexture;
 texture2D g_DiffuseTexture;
 texture2D g_NormalTexture;
 texture2D g_SpecularTexture;
@@ -80,7 +79,6 @@ PS_OUT PS_MAIN_HDDRBASE(PS_IN In)
 	float4 diffuse = g_DiffuseTexture.Sample(DiffuseSampler, In.vTexUV);
 	float3 normal = g_NormalTexture.Sample(DefaultSampler, In.vTexUV).xyz;
 	float4 specualr = g_SpecularTexture.Sample(DefaultSampler, In.vTexUV);
-	float4 shadow = g_ShadowTexture.Sample(ShadowSampler, In.vTexUV);
 	float4 final;
 	if (any(normal))
 	{

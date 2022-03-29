@@ -97,9 +97,6 @@
     <Filter Include="00.Utility\03.Component\02.Renderer">
       <UniqueIdentifier>{08c7dca9-f7fc-41f6-9585-4500cff6754b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="00.Utility\03.Component\03.Texture">
-      <UniqueIdentifier>{b90aa41e-6d2d-4ba7-a108-9b7aaef357ad}</UniqueIdentifier>
-    </Filter>
     <Filter Include="00.Utility\03.Component\04.Transform">
       <UniqueIdentifier>{6d543e45-230a-437c-8b68-df9a975a8c93}</UniqueIdentifier>
     </Filter>
@@ -291,7 +288,7 @@
     </Filter>
     <Filter Include="98.ShaderFiles\Environment">
       <UniqueIdentifier>{a55263e9-530b-4c0c-92c7-a546a74a279c}</UniqueIdentifier>
-	</Filter>
+    </Filter>
     <Filter Include="00.Utility\03.Component\05.VIBuffer\09.Instance\00.Particle">
       <UniqueIdentifier>{0b39ed64-0406-4109-9e05-ed924b4d203d}</UniqueIdentifier>
     </Filter>
@@ -303,9 +300,12 @@
     </Filter>
     <Filter Include="00.Utility\03.Component\05.VIBuffer\09.Instance\00.Particle\02.Floating">
       <UniqueIdentifier>{431b9d51-d009-4344-b656-70d370b5b67b}</UniqueIdentifier>
-	</Filter>
+    </Filter>
     <Filter Include="00.Utility\04.Manager\12.EffectManager">
       <UniqueIdentifier>{3e2071c1-559c-4d70-a599-2953719bc407}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00.Utility\03.Component\03.Texture">
+      <UniqueIdentifier>{b90aa41e-6d2d-4ba7-a108-9b7aaef357ad}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -599,7 +599,7 @@
     </ClInclude>
     <ClInclude Include="..\public\VIBuffer_PointInstance_Floating.h">
       <Filter>00.Utility\03.Component\05.VIBuffer\09.Instance\00.Particle\02.Floating</Filter>
-	</ClInclude>
+    </ClInclude>
     <ClInclude Include="..\public\EffectManager.h">
       <Filter>00.Utility\04.Manager\12.EffectManager</Filter>
     </ClInclude>
@@ -862,7 +862,7 @@
     </ClCompile>
     <ClCompile Include="..\private\VIBuffer_PointInstance_Floating.cpp">
       <Filter>00.Utility\03.Component\05.VIBuffer\09.Instance\00.Particle\02.Floating</Filter>
-	</ClCompile>
+    </ClCompile>
     <ClCompile Include="..\private\EffectManager.cpp">
       <Filter>00.Utility\04.Manager\12.EffectManager</Filter>
     </ClCompile>
@@ -870,9 +870,6 @@
   <ItemGroup>
     <FxCompile Include="..\bin\ShaderFiles\Shader_Triangle.hlsl">
       <Filter>00.Utility\03.Component\05.VIBuffer\06.Triangle\Shader</Filter>
-    </FxCompile>
-    <FxCompile Include="..\bin\ShaderFiles\Shader_RectViewport.hlsl">
-      <Filter>00.Utility\04.Manager\03. RenderTargetManager\99.Shader</Filter>
     </FxCompile>
     <FxCompile Include="..\bin\ShaderFiles\Shader_CSGSBlur.hlsl">
       <Filter>00.Utility\04.Manager\03. RenderTargetManager\99.Shader</Filter>
@@ -984,9 +981,12 @@
     </FxCompile>
     <FxCompile Include="..\bin\ShaderFiles\Shader_INST_Tree.hlsl">
       <Filter>98.ShaderFiles\Environment</Filter>
-	</FxCompile>
+    </FxCompile>
     <FxCompile Include="..\bin\ShaderFiles\Shader_Particle.hlsl">
       <Filter>00.Utility\03.Component\05.VIBuffer\09.Instance\00.Particle</Filter>
+    </FxCompile>
+    <FxCompile Include="..\bin\ShaderFiles\Shader_RectViewport.hlsl">
+      <Filter>00.Utility\03.Component\02.Renderer</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>

@@ -90,6 +90,7 @@ HRESULT CPostProcess::BloomPass(CTarget_Manager* pTargetMgr)
 {
 	if (FAILED(pTargetMgr->Begin_MRT(m_pDeviceContext, TEXT("Target_Bloom"))))	return E_FAIL;
 
+	if (FAILED(m_pVIBuffer->SetUp_TextureOnShader("g_Basetexture", pTargetMgr->Get_SRV(L"Target_HDRDiffuse"))))	return E_FAIL;
 	if (FAILED(m_pVIBuffer->SetUp_TextureOnShader("g_BaseBlur2Texture", pTargetMgr->Get_SRV(L"Target_HZ2"))))	return E_FAIL;
 	if (FAILED(m_pVIBuffer->SetUp_TextureOnShader("g_BaseBlur4Texture", pTargetMgr->Get_SRV(L"Target_HZ4"))))	return E_FAIL;
 	if (FAILED(m_pVIBuffer->SetUp_TextureOnShader("g_BaseBlur8Texture", pTargetMgr->Get_SRV(L"Target_HZ8"))))	return E_FAIL;

@@ -355,9 +355,10 @@ PS_OUT PS_MAIN_TOP(PS_IN In)
 		float roughness = omer.a + mra.g * 3.3f - mra.r - mra.b - (1 - omer.g);
 		Out.R = float4(roughness.xxx, 1.f);
 		//float ao = 1.f;
-		float ao = (omer.r - 0.3f) * 1.f;;
+		//float ao = (omer.r - 0.3f) * 1.f;;
+		float ao = mra.b/* - omer.r*/;
 		Out.A = float4(ao.xxx, 1.f);
-		//Out.E = float4(0.11f, 0.05f, 0.f,1.f);
+		//Out.E = float4(0.11f, 0.05f, 0.f, 1.f);
 		Out.E = Ecolor * Epower * omer.b;
 	}
 	else
@@ -372,7 +373,8 @@ PS_OUT PS_MAIN_TOP(PS_IN In)
 		Out.M = float4(metalic.xxx, 1.f);
 		float roughness = omer.a + mra.g * 3.f - mra.r - mra.b - (1 - omer.g);
 		Out.R = float4(roughness.xxx, 1.f);
-		float ao = (omer.r - 0.3f) * 1.f;
+		//float ao = (omer.r - 0.3f) * 1.f;
+		float ao = mra.b/* - omer.r*/;
 		Out.A = float4(ao.xxx, 1.f);
 		Out.E = Ecolor * Epower * omer.b;
 

@@ -36,7 +36,7 @@ HRESULT CTonemapping::Blend_FinalPass(CTarget_Manager* pTargetMgr, _bool check,_
 
 	if (shadow == true)
 	{
-		if (FAILED(m_pFinalBlend->SetUp_TextureOnShader("g_ShadowTexture", pTargetMgr->Get_SRV(TEXT("Target_ShadeShadow")))))	return E_FAIL;
+		//if (FAILED(m_pFinalBlend->SetUp_TextureOnShader("g_ShadowTexture", pTargetMgr->Get_SRV(TEXT("Target_ShadeShadow")))))	return E_FAIL;
 	}
 
 	if (check == true)
