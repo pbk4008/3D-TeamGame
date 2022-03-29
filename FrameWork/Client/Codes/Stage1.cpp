@@ -82,10 +82,10 @@ HRESULT CStage1::NativeConstruct()
 		return E_FAIL;
 	}
 
-	//if (FAILED(Ready_UI(L"Layer_UI")))
-	//{
-	//	return E_FAIL;
-	//}
+	if (FAILED(Ready_UI(L"Layer_UI")))
+	{
+		return E_FAIL;
+	}
 
 	//if (FAILED(Ready_Trigger_Lod(L"../bin/SaveData/Trigger/Stage1_LodTri.dat")))
 	//	return E_FAIL;
