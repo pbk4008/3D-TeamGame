@@ -76,12 +76,14 @@ _int CEffect_HitParticle::Tick(_double TimeDelta)
 	if (4.f <= m_fNonActiveTimeAcc)
 	{
 		setActive(false);
+		m_pRenderer->SetRenderButton(CRenderer::PARTICLE, false);
 		m_fNonActiveTimeAcc = 0.f;
 	}
 
 	if (true == m_bReset)
 	{
 		setActive(true);
+		m_pRenderer->SetRenderButton(CRenderer::PARTICLE, true);
 		m_pBuffer->Set_Desc(m_backupDesc);
 		m_pBuffer->Particle_Reset();
 		m_Desc.fCurTime = 0.f;
