@@ -991,5 +991,8 @@
     <FxCompile Include="..\bin\ShaderFiles\Shader_Effect_Fire.hlsl">
       <Filter>98.ShaderFiles</Filter>
     </FxCompile>
+    <FxCompile Include="..\bin\ShaderFiles\Shader_Panel_UI.hlsl">
+      <Filter>98.ShaderFiles</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

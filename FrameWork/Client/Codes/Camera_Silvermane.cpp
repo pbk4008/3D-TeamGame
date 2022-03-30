@@ -65,6 +65,7 @@ _int CCamera_Silvermane::Tick(_double _dDeltaTime)
 	m_pTransform->Set_WorldMatrix(m_pLocalTransform->Get_WorldMatrix() * m_pWorldTransform->Get_WorldMatrix());
 
 	SpringArm();
+	OnOffMonsterUI();
 
 	if (m_pCameraShake)
 	{
@@ -250,6 +251,65 @@ void CCamera_Silvermane::SpringArm()
 		if ((_uint)GAMEOBJECT::ENVIRONMENT == pHitObject->getTag())
 		{
 			m_pTransform->Set_State(CTransform::STATE_POSITION, XMVectorSetW(XMLoadFloat3(&tRaycastDesc.vHitPos), 1.f));
+		}
+	}
+}
+
+void CCamera_Silvermane::OnOffMonsterUI()
+{
+	/*_matrix smatView;
+	smatView = g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_VIEW);
+	smatView = XMMatrixInverse(nullptr, smatView);
+	if (XMMatrixIsNaN(smatView))
+	{
+		MSGBOX("Error In  CCamera_Silvermane::OnOffMonsterUI()");
+		return;
+	}*/
+
+	_matrix mat = m_pTransform->Get_WorldMatrix();
+
+	_vector svRayPos, svRayDir;
+	memcpy_s(&svRayDir, sizeof(_vector), &mat.r[2], sizeof(_vector));
+	memcpy_s(&svRayPos, sizeof(_vector), &mat.r[3], sizeof(_vector));
+	svRayDir = XMVector3Normalize(svRayDir);
+
+	_float fOutDist = 0.f;
+	_uint iObjectTag = -1;
+
+	RAYCASTDESC tRaycastDesc;
+	XMStoreFloat3(&tRaycastDesc.vOrigin, svRayPos);
+	XMStoreFloat3(&tRaycastDesc.vDir, svRayDir);
+	tRaycastDesc.fMaxDistance = 30.f;
+	tRaycastDesc.filterData.flags = PxQueryFlag::eANY_HIT | PxQueryFlag::eDYNAMIC;
+	CGameObject* pHitObject = nullptr;
+	tRaycastDesc.ppOutHitObject = &pHitObject;
+
+	if (g_pGameInstance->Raycast(tRaycastDesc))
+	{
+		switch (pHitObject->getTag())
+		{
+		case (_uint)GAMEOBJECT::MONSTER_CRYSTAL:
+		case (_uint)GAMEOBJECT::MONSTER_ABERRANT:
+		case (_uint)GAMEOBJECT::MONSTER_1H:
+		case (_uint)GAMEOBJECT::MONSTER_2H:
+		case (_uint)GAMEOBJECT::MONSTER_HEALER:
+		case (_uint)GAMEOBJECT::MONSTER_SHOOTER:
+		case (_uint)GAMEOBJECT::MONSTER_SPEAR:
+			static_cast<CActor*>(pHitObject)->Set_UIShow(true);
+			if (nullptr != pHitObject)
+			{
+				m_pTargetMonster = pHitObject;
+			}
+			break;
+		default:
+			break;
+		}
+	}
+	else
+	{
+		if (nullptr != m_pTargetMonster)
+		{
+			static_cast<CActor*>(m_pTargetMonster)->Set_UIShow(false);
 		}
 	}
 }

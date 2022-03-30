@@ -82,7 +82,7 @@ HRESULT CMonster_BronzeAnimus::NativeConstruct(const _uint _iSceneID, void* _pAr
 	Desc.pTargetTransform = m_pTransform;
 	Desc.iEnemyTag = CUI_Monster_Panel::Enemy::ANIMUS;
 
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_UI", L"Proto_GameObject_UI_Monster_Panel", &Desc,
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer(_iSceneID, L"Layer_UI", L"Proto_GameObject_UI_Monster_Panel", &Desc,
 		(CGameObject**)&m_pPanel)))
 		return E_FAIL;
 
@@ -105,9 +105,14 @@ HRESULT CMonster_BronzeAnimus::NativeConstruct(const _uint _iSceneID, void* _pAr
 
 _int CMonster_BronzeAnimus::Tick(_double _dDeltaTime)
 {
-	if (!m_bFirst)
+	if (true == m_bUIShow)
 	{
 		m_pPanel->Set_Show(true);
+	}
+
+	if (false == m_bUIShow)
+	{
+		m_pPanel->Set_Show(false);
 	}
 
 	_int iProgress = __super::Tick(_dDeltaTime);

@@ -37,18 +37,22 @@ public:
 	void Set_MaxHp(_float fMaxHp) { m_fMaxHp = fMaxHp; }
 	virtual void Set_IsAttack(const _bool _isAttack) { m_IsAttack = _isAttack; }
 	void Set_Groggy(const _bool bGroggy) { m_bGroggy = bGroggy; }
+	void Set_UIShow(_bool bShow) { m_bUIShow = bShow; }
+
 protected:
 	virtual void Free() override;
 protected:
 	_bool m_bDead;//죽었는지 안죽었는지 판단
 	_bool m_IsAttack;//공격했는지 공격 안했는지
 	_bool m_bGroggy;//스턴상태인지 아닌지
+	_bool m_bUIShow = false; //몬스터머리위에 ui보이는상태인지아닌지
 
 	_float m_fSpeed;//이동 속도
 	_float m_fMaxHp;//최대 체력
 	_float m_fCurrentHp;//현재 체력
 	_float m_fGroggyGauge; //스턴게이지
 	_float m_fMaxGroggyGauge; //스턴게이지
+
 };
 END
 #endif

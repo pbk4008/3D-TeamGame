@@ -39,6 +39,9 @@ public:
 
 private:
 	UIACTIVEDESC m_Desc;
+	_float m_fAlpha = 1.f;
+	_float m_fDisappearTimeAcc = 0.f;
+
 private:
 	virtual HRESULT SetUp_Components();
 

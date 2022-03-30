@@ -285,7 +285,7 @@ HRESULT CStage1::Ready_UI(const _tchar* LayerTag)
 	Desc.fSize = { 200.f , 30.f };
 	Desc.IDTag = (_uint)GAMEOBJECT::UI_DYNAMIC;
 
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_UI_Green", L"Proto_GameObject_UI_Player_HpBar", &Desc)))
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_UI_Green", L"Proto_GameObject_UI_Player_HpBar", &Desc)))
 		return E_FAIL;
 
 	//Player HpBar Red
@@ -297,7 +297,7 @@ HRESULT CStage1::Ready_UI(const _tchar* LayerTag)
 	Desc.fSize = { 200.f , 30.f };
 	Desc.IDTag = (_uint)GAMEOBJECT::UI_DYNAMIC;
 
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_UI", L"Proto_GameObject_UI_Player_HpBar_Red", &Desc)))
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_UI", L"Proto_GameObject_UI_Player_HpBar_Red", &Desc)))
 		return E_FAIL;
 
 
@@ -311,7 +311,7 @@ HRESULT CStage1::Ready_UI(const _tchar* LayerTag)
 	Desc1.UIDesc.fSize = { 333.f , 105.f };
 	Desc1.UIDesc.IDTag = (_uint)GAMEOBJECT::UI_STATIC;
 
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_UI", L"Proto_GameObject_UI_Tuto_Base", &Desc1)))
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_UI", L"Proto_GameObject_UI_Tuto_Base", &Desc1)))
 		return E_FAIL;
 
 	//Tuto Font
@@ -325,7 +325,7 @@ HRESULT CStage1::Ready_UI(const _tchar* LayerTag)
 	Desc2.UIDesc.IDTag = (_uint)GAMEOBJECT::UI_STATIC;
 	Desc2.iTextureNum = 0;
 	
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_UI", L"Proto_GameObject_UI_Tuto_Font", &Desc2)))
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_UI", L"Proto_GameObject_UI_Tuto_Font", &Desc2)))
 		return E_FAIL;
 
 	return S_OK;
@@ -480,7 +480,7 @@ HRESULT CStage1::Ready_Data_UI(const _tchar* pDataFilePath)
 		wstring Tag = vecUI[i].TextureTag;
 		wstring FullName = L"Proto_GameObject_UI_" + Tag;
 
-		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_UI", FullName, &vecUI[i])))
+		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_UI", FullName, &vecUI[i])))
 		{
 			MSGBOX("Failed to Creating in CStage1::Ready_UI()");
 			return E_FAIL;

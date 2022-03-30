@@ -45,8 +45,11 @@ private:
 	UIBARDESC m_UIBarDesc;
 	_float m_fGapX = 0.f;
 	_float m_fGapY = 0.f;
+	_float m_fAlpha = 1.f;
+	_float m_fDisappearTimeAcc = 0.f;
 
 	_float m_fHpRatio = 0.f;
+
 
 	//_float m_fTargetMaxHp = 0.f;
 	//_float m_fTargetHp = 0.f;
