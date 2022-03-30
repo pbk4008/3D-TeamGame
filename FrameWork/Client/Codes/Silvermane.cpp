@@ -319,7 +319,7 @@ HRESULT CSilvermane::Render()
 	}
 
 #ifdef _DEBUG
-	Render_Debug();
+	//Render_Debug();
 #endif
 
 	return S_OK;
@@ -328,6 +328,7 @@ HRESULT CSilvermane::Render()
 HRESULT CSilvermane::Render_Shadow()
 {
 	_matrix world, lightview, lightproj;
+	_float3 lightpos = m_Lightdesc->vPosition;
 	world = XMMatrixTranspose(m_pTransform->Get_WorldMatrix());
 	lightview = XMMatrixTranspose(m_Lightdesc->mLightView);
 	lightproj = XMMatrixTranspose(m_Lightdesc->mLightProj);
@@ -335,6 +336,8 @@ HRESULT CSilvermane::Render_Shadow()
 	m_pModel->SetUp_ValueOnShader("g_WorldMatrix", &world, sizeof(_matrix));
 	m_pModel->SetUp_ValueOnShader("g_LightView", &lightview, sizeof(_matrix));
 	m_pModel->SetUp_ValueOnShader("g_LightProj", &lightproj, sizeof(_matrix));
+	m_pModel->SetUp_ValueOnShader("g_LightPos", &lightpos, sizeof(_float3));
+	
 
 	for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
 		m_pModel->Render(i, 4);
@@ -487,6 +490,7 @@ HRESULT CSilvermane::Ready_Components()
 	m_pModel->Get_Materials()[3]->Set_Texture("g_NewHairTexture", TEXTURETYPE::TEX_TINT, m_pTexture);
 
 	m_Lightdesc = g_pGameInstance->Get_LightDesc(0);
+
 	return S_OK;
 }
 
@@ -723,7 +727,7 @@ HRESULT CSilvermane::Ready_Weapons()
 	CWeapon* pWeapon = nullptr;
 	// 한손검
 	pWeapon = CNeedle::Create(m_pDevice, m_pDeviceContext);
-	if (FAILED(pWeapon->NativeConstruct((_uint)SCENEID::SCENE_STATIC, pWeaponBone)))
+	if (FAILED(pWeapon->NativeConstruct(m_iSceneID, pWeaponBone)))
 	{
 		Safe_Release(pWeapon);
 		return E_FAIL;
@@ -734,7 +738,7 @@ HRESULT CSilvermane::Ready_Weapons()
 	m_pCurWeapon = pWeapon;
 	// 해머
 	pWeapon = CFury::Create(m_pDevice, m_pDeviceContext);
-	if (FAILED(pWeapon->NativeConstruct((_uint)SCENEID::SCENE_STATIC, pWeaponBone)))
+	if (FAILED(pWeapon->NativeConstruct(m_iSceneID, pWeaponBone)))
 	{
 		Safe_Release(pWeapon);
 		return E_FAIL;
@@ -746,7 +750,7 @@ HRESULT CSilvermane::Ready_Weapons()
 	// 방패
 	pWeaponBone = m_pModel->Get_BoneMatrix("weapon_l");
 	m_pShield = CShield::Create(m_pDevice, m_pDeviceContext);
-	if (FAILED(m_pShield->NativeConstruct((_uint)SCENEID::SCENE_STATIC, pWeaponBone)))
+	if (FAILED(m_pShield->NativeConstruct(m_iSceneID, pWeaponBone)))
 	{
 		Safe_Release(m_pShield);
 		return E_FAIL;

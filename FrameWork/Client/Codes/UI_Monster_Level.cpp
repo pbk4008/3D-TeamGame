@@ -48,7 +48,6 @@ HRESULT CUI_Monster_Level::NativeConstruct(const _uint _iSceneID, void* pArg)
 		return E_FAIL;
 	}
 
-	//setActive(false);
 	return S_OK;
 }
 
@@ -58,8 +57,30 @@ _int CUI_Monster_Level::Tick(_double TimeDelta)
 	{
 		setActive(true);
 		m_bFirstShow = true;
-
 	}
+
+	if (true == m_bShow)
+	{
+		m_fAlpha = 1.f;
+		m_fDisappearTimeAcc = 0.f;
+	}
+
+	else if (false == m_bShow)
+	{
+		m_fDisappearTimeAcc += TimeDelta;
+	}
+
+	if (1.f <= m_fDisappearTimeAcc)
+	{
+		m_fAlpha -= TimeDelta;
+	}
+
+	if (0 >= m_fAlpha)
+	{
+		m_fAlpha = 0.f;
+		m_fDisappearTimeAcc = 0.f;
+	}
+
 	if (FAILED(CUI::Tick(TimeDelta)))
 		return -1;
 
@@ -73,7 +94,7 @@ _int CUI_Monster_Level::LateTick(_double TimeDelta)
 
 	if (nullptr != m_pRenderer)
 	{
-		m_pRenderer->Add_RenderGroup(CRenderer::RENDER::RENDER_ALPHA, this);
+		m_pRenderer->Add_RenderGroup(CRenderer::RENDER::RENDER_UI, this);
 	}
 	return _int();
 }
@@ -82,26 +103,27 @@ HRESULT CUI_Monster_Level::Render()
 {
 	if (m_bShow)
 	{
-		_matrix XMWorldMatrix = XMMatrixTranspose(m_pTransform->Get_WorldMatrix());
-		_matrix XMViewMatrix = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_VIEW));
-		_matrix XMProjectMatrix = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_PROJECTION));
-
-		m_pBuffer->SetUp_ValueOnShader("g_WorldMatrix", &XMWorldMatrix, sizeof(_float) * 16);
-		m_pBuffer->SetUp_ValueOnShader("g_ViewMatrix", &XMViewMatrix, sizeof(_float) * 16);
-		m_pBuffer->SetUp_ValueOnShader("g_ProjMatrix", &XMProjectMatrix, sizeof(XMMATRIX));
-
-		m_pBuffer->SetUp_TextureOnShader("g_DiffuseTexture", m_pTexture);
-
-		m_pBuffer->Render(1);
+		
 	}
-	
+	_matrix XMWorldMatrix = XMMatrixTranspose(m_pTransform->Get_WorldMatrix());
+	_matrix XMViewMatrix = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_VIEW));
+	_matrix XMProjectMatrix = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_PROJECTION));
+
+	m_pBuffer->SetUp_ValueOnShader("g_WorldMatrix", &XMWorldMatrix, sizeof(_float) * 16);
+	m_pBuffer->SetUp_ValueOnShader("g_ViewMatrix", &XMViewMatrix, sizeof(_float) * 16);
+	m_pBuffer->SetUp_ValueOnShader("g_ProjMatrix", &XMProjectMatrix, sizeof(XMMATRIX));
+	m_pBuffer->SetUp_ValueOnShader("g_fAlpha", &m_fAlpha, sizeof(_float));
+
+	m_pBuffer->SetUp_TextureOnShader("g_DiffuseTexture", m_pTexture);
+
+	m_pBuffer->Render(1);
 
 	return S_OK;
 }
 
 HRESULT CUI_Monster_Level::SetUp_Components()
 {
-	if (FAILED(CGameObject::SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_Rect_UI", L"Com_Rect_UI", (CComponent**)&m_pBuffer)))
+	if (FAILED(CGameObject::SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_Rect_Panel_UI", L"Com_Rect_Panel_UI", (CComponent**)&m_pBuffer)))
 		return E_FAIL;
 
 

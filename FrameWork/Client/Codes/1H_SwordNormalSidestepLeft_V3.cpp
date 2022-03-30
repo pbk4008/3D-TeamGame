@@ -13,8 +13,6 @@ HRESULT C1H_SwordNormalSidestepLeft_V3::NativeConstruct(void* _pArg)
 	if (FAILED(__super::NativeConstruct(_pArg)))
 		return E_FAIL;
 
-	m_iCutIndex = 18;
-
 	return S_OK;
 }
 
@@ -68,7 +66,9 @@ HRESULT C1H_SwordNormalSidestepLeft_V3::EnterState()
 		m_eDir = EDir::LeftForward;
 	else
 		m_eDir = EDir::Forward;
-	
+
+
+	m_iCutIndex = 15;
 	return S_OK;
 }
 

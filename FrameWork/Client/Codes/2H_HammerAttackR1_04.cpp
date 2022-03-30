@@ -22,6 +22,19 @@ _int C2H_HammerAttackR1_04::Tick(const _double& _dDeltaTime)
 	if (NO_EVENT != iProgress)
 		return iProgress;
 
+
+	_uint iCurKeyFrameIndex = m_pAnimationController->Get_CurKeyFrameIndex();
+	if (iCurKeyFrameIndex == m_iShakeIndex)
+	{
+		if (!m_isShake2)
+		{
+			_float3 vPos; XMStoreFloat3(&vPos, m_pTransform->Get_State(CTransform::STATE_POSITION));
+			g_pShakeManager->Shake(m_tShakeEvent2, vPos);
+			m_isShake2 = true;
+		}
+	}
+
+
 	if (m_pAnimationController->Is_Finished())
 	{
 		m_pStateController->Change_State(L"2H_HammerIdle");
@@ -60,6 +73,11 @@ HRESULT C2H_HammerAttackR1_04::EnterState()
 
 	m_iCutIndex = 35;
 	m_pAnimationController->Set_PlaySpeed(1.2f);
+
+
+	m_iAttackStartIndex = 30;
+	m_iAttackEndIndex = 50;
+	m_iShakeIndex = 36;
 	return S_OK;
 }
 

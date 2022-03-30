@@ -21,7 +21,7 @@ HRESULT CBastion_Sword_Groggy::NativeConstruct(void* _pArg)
 	m_pMonster = tDesc.pActor;
 	m_wstrTag = tDesc.pName;
 
-	Safe_AddRef(m_pAnimator);
+	//Safe_AddRef(m_pAnimator);
 
 	if (FAILED(CMonster_FSM::NativeConstruct(_pArg)))
 		return E_FAIL;

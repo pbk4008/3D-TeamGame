@@ -21,7 +21,6 @@
 
 /* for. UI */
 #include "UI_Monster_Panel.h"
-#include "Stage1.h"
 
 CMonster_Bastion_2HSword::CMonster_Bastion_2HSword(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
 	: CActor(_pDevice, _pDeviceContext)
@@ -60,6 +59,8 @@ HRESULT CMonster_Bastion_2HSword::NativeConstruct(const _uint _iSceneID, void* _
 	if (FAILED(__super::NativeConstruct(_iSceneID, _pArg)))
 		return E_FAIL;
 
+	m_iCurScene = _iSceneID;
+
 	if (_pArg)
 	{
 		_float3 vPoint = (*(_float3*)_pArg);
@@ -90,12 +91,6 @@ HRESULT CMonster_Bastion_2HSword::NativeConstruct(const _uint _iSceneID, void* _
 
 _int CMonster_Bastion_2HSword::Tick(_double _dDeltaTime)
 {
-	//나중에지울코드
-	if (!m_bFirst)
-	{
-		m_pPanel->Set_Show(true);
-	}
-	
 	_int iProgress = __super::Tick(_dDeltaTime);
 	if (NO_EVENT != iProgress) 
 		return iProgress;
@@ -115,6 +110,16 @@ _int CMonster_Bastion_2HSword::Tick(_double _dDeltaTime)
 	if(!m_bDead)
 		m_pCharacterController->Move(_dDeltaTime, m_pTransform->Get_Velocity());
 
+	if (true == m_bUIShow)
+	{
+		m_pPanel->Set_Show(true);
+	}
+
+	if (false == m_bUIShow)
+	{
+		m_pPanel->Set_Show(false);
+
+	}
 	if (m_fGroggyGauge >= m_fMaxGroggyGauge)
 	{
 		//스턴상태일때 스턴state에서 현재 그로기 계속 0으로 고정시켜줌
@@ -249,7 +254,7 @@ HRESULT CMonster_Bastion_2HSword::Ready_Components()
 	Desc.pTargetTransform = m_pTransform;
 	Desc.iEnemyTag = CUI_Monster_Panel::Enemy::SWORD2H;
 
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_UI", L"Proto_GameObject_UI_Monster_Panel", &Desc,
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer(m_iCurScene, L"Layer_UI", L"Proto_GameObject_UI_Monster_Panel", &Desc,
 		(CGameObject**)&m_pPanel)))
 		return E_FAIL;
 
@@ -269,7 +274,7 @@ HRESULT CMonster_Bastion_2HSword::Ready_Components()
 
 HRESULT CMonster_Bastion_2HSword::Ready_Weapon()
 {
-	m_pWeapon = static_cast<CRetributionBlade*>(g_pGameInstance->Clone_GameObject((_uint)SCENEID::SCENE_STAGE1, L"Proto_GameObject_Weapon_RetributionBlade"));
+	m_pWeapon = static_cast<CRetributionBlade*>(g_pGameInstance->Clone_GameObject(m_iSceneID, L"Proto_GameObject_Weapon_RetributionBlade"));
 
 	if (!m_pWeapon)
 		return E_FAIL;
@@ -617,7 +622,7 @@ void CMonster_Bastion_2HSword::Hit(CCollision& pCol)
 		if ((_uint)GAMEOBJECT::WEAPON == pCol.pGameObject->getTag())
 		{
 			m_fCurrentHp -= 5.f;
-			m_bGroggy = 2; //TODO::수치정해서바꿔줘야됨
+			//m_bGroggy = 2; //TODO::수치정해서바꿔줘야됨
 
 			m_pPanel->Set_HpBar(Get_HpRatio());
 
@@ -625,7 +630,13 @@ void CMonster_Bastion_2HSword::Hit(CCollision& pCol)
 			{
 				//그로기 아닐때만 증가할수있게
 				m_pPanel->Set_GroggyBar(Get_GroggyGaugeRatio());
-				m_pStateController->Change_State(L"Hit");
+
+				_vector svTargetPos = pCol.pGameObject->Get_Transform()->Get_State(CTransform::STATE_POSITION);
+				_vector svPos = m_pTransform->Get_State(CTransform::STATE_POSITION);
+
+				_vector svDir = XMVector3Normalize(XMVectorSetY(svPos - svTargetPos, 0.f));
+
+				m_pStateController->Change_State(L"Hit", &svDir);
 			}
 		}
 		else
@@ -692,6 +703,7 @@ void CMonster_Bastion_2HSword::Free()
 	Safe_Release(m_pWeapon);
 	Safe_Release(m_pStateController);
 	Safe_Release(m_pCharacterController);
+	Safe_Release(m_pPanel);
 
 	__super::Free();
 }

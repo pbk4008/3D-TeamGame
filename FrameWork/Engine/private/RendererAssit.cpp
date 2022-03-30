@@ -142,6 +142,7 @@ HRESULT CRendererAssit::Setup_RenderTarget()
 	if (FAILED(m_pTargetMgr->Add_RenderTarget(m_pDevice, m_pDeviceContext, TEXT("Target_Horizontal16"), 64, 64, DXGI_FORMAT_R16G16B16A16_FLOAT, _float4(0.f, 0.f, 0.f, 1.f), CRenderTarget::RTT::Luminance)))
 		return E_FAIL;
 
+	//--------------------------//
 	if (FAILED(m_pTargetMgr->Add_RenderTarget(m_pDevice, m_pDeviceContext, TEXT("Target_Blend"), (_uint)ViewportDesc.Width, (_uint)ViewportDesc.Height, DXGI_FORMAT_R16G16B16A16_FLOAT, _float4(0.0f, 0.0f, 0.0f, 0.f), CRenderTarget::RTT::LIGHTING)))
 		return E_FAIL;
 
@@ -150,6 +151,32 @@ HRESULT CRendererAssit::Setup_RenderTarget()
 	if (FAILED(m_pTargetMgr->Add_RenderTarget(m_pDevice, m_pDeviceContext, TEXT("Target_ToneMapSpecular"), widht, height, DXGI_FORMAT_R16G16B16A16_FLOAT, _float4(0.f, 0.f, 0.f, 0.f), CRenderTarget::RTT::Luminance)))
 		return E_FAIL;
 
+	//----------------------------------//
+
+	if (FAILED(m_pTargetMgr->Add_RenderTarget(m_pDevice, m_pDeviceContext, TEXT("Target_Particle"), widht, height, DXGI_FORMAT_R16G16B16A16_FLOAT, _float4(0.f, 0.f, 0.f, 1.f), CRenderTarget::RTT::Luminance)))
+		return E_FAIL;
+
+	if (FAILED(m_pTargetMgr->Add_RenderTarget(m_pDevice, m_pDeviceContext, TEXT("Target_ParticleV2"), 640, 360, DXGI_FORMAT_R16G16B16A16_FLOAT, _float4(0.f, 0.f, 0.f, 1.f), CRenderTarget::RTT::Luminance)))
+		return E_FAIL;
+	if (FAILED(m_pTargetMgr->Add_RenderTarget(m_pDevice, m_pDeviceContext, TEXT("Target_ParticleH2"), 640, 360, DXGI_FORMAT_R16G16B16A16_FLOAT, _float4(0.f, 0.f, 0.f, 1.f), CRenderTarget::RTT::Luminance)))
+		return E_FAIL;
+
+	if (FAILED(m_pTargetMgr->Add_RenderTarget(m_pDevice, m_pDeviceContext, TEXT("Target_ParticleV4"), 320, 180, DXGI_FORMAT_R16G16B16A16_FLOAT, _float4(0.f, 0.f, 0.f, 1.f), CRenderTarget::RTT::Luminance)))
+		return E_FAIL;
+	if (FAILED(m_pTargetMgr->Add_RenderTarget(m_pDevice, m_pDeviceContext, TEXT("Target_ParticleH4"), 320, 180, DXGI_FORMAT_R16G16B16A16_FLOAT, _float4(0.f, 0.f, 0.f, 1.f), CRenderTarget::RTT::Luminance)))
+		return E_FAIL;
+
+	if (FAILED(m_pTargetMgr->Add_RenderTarget(m_pDevice, m_pDeviceContext, TEXT("Target_ParticleV8"), 160, 90, DXGI_FORMAT_R16G16B16A16_FLOAT, _float4(0.f, 0.f, 0.f, 1.f), CRenderTarget::RTT::Luminance)))
+		return E_FAIL;
+	if (FAILED(m_pTargetMgr->Add_RenderTarget(m_pDevice, m_pDeviceContext, TEXT("Target_ParticleH8"), 160, 90, DXGI_FORMAT_R16G16B16A16_FLOAT, _float4(0.f, 0.f, 0.f, 1.f), CRenderTarget::RTT::Luminance)))
+		return E_FAIL;
+
+	if (FAILED(m_pTargetMgr->Add_RenderTarget(m_pDevice, m_pDeviceContext, TEXT("Target_ParticleV16"), 64, 64, DXGI_FORMAT_R16G16B16A16_FLOAT, _float4(0.f, 0.f, 0.f, 1.f), CRenderTarget::RTT::Luminance)))
+		return E_FAIL;
+	if (FAILED(m_pTargetMgr->Add_RenderTarget(m_pDevice, m_pDeviceContext, TEXT("Target_ParticleH16"), 64, 64, DXGI_FORMAT_R16G16B16A16_FLOAT, _float4(0.f, 0.f, 0.f, 1.f), CRenderTarget::RTT::Luminance)))
+		return E_FAIL;
+
+	//----------------------------------//
 
 	if (FAILED(m_pTargetMgr->Add_MRT(TEXT("MRT_SkyBox"), TEXT("Target_SkyBox"))))
 		return E_FAIL;
@@ -244,7 +271,22 @@ HRESULT CRendererAssit::Setup_RenderTarget()
 
 	if (FAILED(m_pTargetMgr->Add_MRT(TEXT("Target_Blend"), TEXT("Target_Blend"))))	return E_FAIL;
 
+	//-----------------------------------//
+	if (FAILED(m_pTargetMgr->Add_MRT(TEXT("Target_Particle"), TEXT("Target_Particle"))))	return E_FAIL;
 
+	if (FAILED(m_pTargetMgr->Add_MRT(TEXT("Target_ParticleV2"), TEXT("Target_ParticleV2"))))	return E_FAIL;
+	if (FAILED(m_pTargetMgr->Add_MRT(TEXT("Target_ParticleH2"), TEXT("Target_ParticleH2"))))	return E_FAIL;
+
+	if (FAILED(m_pTargetMgr->Add_MRT(TEXT("Target_ParticleV4"), TEXT("Target_ParticleV4"))))	return E_FAIL;
+	if (FAILED(m_pTargetMgr->Add_MRT(TEXT("Target_ParticleH4"), TEXT("Target_ParticleH4"))))	return E_FAIL;
+
+	if (FAILED(m_pTargetMgr->Add_MRT(TEXT("Target_ParticleV8"), TEXT("Target_ParticleV8"))))	return E_FAIL;
+	if (FAILED(m_pTargetMgr->Add_MRT(TEXT("Target_ParticleH8"), TEXT("Target_ParticleH8"))))	return E_FAIL;
+
+	if (FAILED(m_pTargetMgr->Add_MRT(TEXT("Target_ParticleV16"), TEXT("Target_ParticleV16"))))	return E_FAIL;
+	if (FAILED(m_pTargetMgr->Add_MRT(TEXT("Target_ParticleH16"), TEXT("Target_ParticleH16"))))	return E_FAIL;
+
+	//------------------------------------//
 #ifdef _DEBUG
 	if (FAILED(m_pTargetMgr->Ready_Debug_Buffer(TEXT("Target_SkyBox"), (fwidth - fwidth), (fheight - fheight) + 200.f, 100.f, 100.f)))	return E_FAIL;
 
@@ -307,7 +349,6 @@ HRESULT CRendererAssit::Setup_RenderTarget()
 	if (FAILED(m_pTargetMgr->Ready_Debug_Buffer(TEXT("Target_Horizontal16"), fwidth - 200.f, fheight - 100.f, 100.f, 100.f)))	return E_FAIL;
 
 	if (FAILED(m_pTargetMgr->Ready_Debug_Buffer(TEXT("Target_Blend"), fwidth - 100.f, fheight - 200.f, 100.f, 100.f)))			return E_FAIL;
-
 #endif // _DEBUG
 
 

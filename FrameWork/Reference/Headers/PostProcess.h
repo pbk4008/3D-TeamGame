@@ -5,6 +5,7 @@
 BEGIN(Engine)
 class CTarget_Manager;
 class CVIBuffer_RectViewPort;
+class CTonemapping;
 
 class CPostProcess final : public CBase
 {
@@ -12,6 +13,8 @@ private: explicit CPostProcess(ID3D11Device* pDevice, ID3D11DeviceContext* pDevi
 private: virtual ~CPostProcess() = default;
 
 public: HRESULT				InitPostProcess();
+
+public: HRESULT				PossProcessing(CTonemapping* tone,CTarget_Manager* pTargetMgr,_bool hdr, _bool shadow, _bool particle);
 
 public: HRESULT				ComputeBrightPass(CTarget_Manager* pTargetMgr, const wstring& in, _float sizex, _float sizey);
 public: HRESULT				BloomPass(CTarget_Manager* pTargetMgr);

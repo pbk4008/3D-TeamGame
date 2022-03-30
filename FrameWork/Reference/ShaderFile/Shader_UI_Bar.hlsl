@@ -12,6 +12,7 @@ cbuffer Matrices
 
 float g_fX;
 float g_fY;
+float g_fAlpha;
 
 texture2D g_DiffuseTexture;
 
@@ -88,10 +89,17 @@ PS_OUT PS_MAIN(PS_IN In)
         discard;
     }
     
-    Out.vColor = g_DiffuseTexture.Sample(DefaultSampler, In.vTexUV);
-	
-    if (Out.vColor.a < 0.01)
+    float4 color = g_DiffuseTexture.Sample(DefaultSampler, In.vTexUV);
+    //Out.vColor = g_DiffuseTexture.Sample(DefaultSampler, In.vTexUV);
+    if(color.a == 0)
         discard;
+    
+    Out.vColor.rgb = color.rgb;
+    Out.vColor.a = color.a * g_fAlpha;
+    
+    if (Out.vColor.a <= 0)
+        discard;
+    
     
     return Out;
 }
@@ -116,8 +124,14 @@ PS_OUT PS_MAIN_RED(PS_IN In)
     }
     
     
-    Out.vColor = g_DiffuseTexture.Sample(DefaultSampler, In.vTexUV);
-	
+    float4 color = g_DiffuseTexture.Sample(DefaultSampler, In.vTexUV);
+    //Out.vColor = g_DiffuseTexture.Sample(DefaultSampler, In.vTexUV);
+    if (color.a == 0)
+        discard;
+    
+    Out.vColor.rgb = color.rgb;
+    Out.vColor.a = color.a * g_fAlpha;
+    
     if (Out.vColor.a < 0.01)
         discard;
     
@@ -147,8 +161,14 @@ PS_OUT PS_MAIN_YELLOW(PS_IN In)
     }
     
     
-    Out.vColor = g_DiffuseTexture.Sample(DefaultSampler, In.vTexUV);
-	
+    float4 color = g_DiffuseTexture.Sample(DefaultSampler, In.vTexUV);
+    //Out.vColor = g_DiffuseTexture.Sample(DefaultSampler, In.vTexUV);
+    if (color.a == 0)
+        discard;
+    
+    Out.vColor.rgb = color.rgb;
+    Out.vColor.a = color.a * g_fAlpha;
+    
     if (Out.vColor.a < 0.01)
         discard;
     
@@ -179,8 +199,14 @@ PS_OUT PS_MAIN_GROGGY(PS_IN In)
     }
     
     
-    Out.vColor = g_DiffuseTexture.Sample(DefaultSampler, In.vTexUV);
-	
+    float4 color = g_DiffuseTexture.Sample(DefaultSampler, In.vTexUV);
+    //Out.vColor = g_DiffuseTexture.Sample(DefaultSampler, In.vTexUV);
+    if (color.a == 0)
+        discard;
+    
+    Out.vColor.rgb = color.rgb;
+    Out.vColor.a = color.a * g_fAlpha;
+
     if (Out.vColor.a < 0.01)
         discard;
     

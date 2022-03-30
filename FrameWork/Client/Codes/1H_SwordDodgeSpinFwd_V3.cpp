@@ -13,8 +13,6 @@ HRESULT C1H_SwordDodgeSpinFwd_V3::NativeConstruct(void* _pArg)
 	if (FAILED(__super::NativeConstruct(_pArg)))
 		return E_FAIL;
 
-	m_iCutIndex = 20;
-
 	return S_OK;
 }
 
@@ -54,7 +52,8 @@ HRESULT C1H_SwordDodgeSpinFwd_V3::EnterState()
 	if (FAILED(m_pAnimationController->SetUp_NextAnimation("SK_Silvermane.ao|A_1H_Sword_DodgeSpinFwd_V3", false)))
 		return E_FAIL;
 	m_pAnimationController->Set_RootMotion(true, true);
-	
+
+	m_iCutIndex = 15;
 	return S_OK;
 }
 
@@ -75,7 +74,7 @@ _int C1H_SwordDodgeSpinFwd_V3::Input(const _double& _dDeltaTime)
 
 	if (m_iCutIndex < m_pAnimationController->Get_CurKeyFrameIndex())
 	{
-		if (g_pGameInstance->getkeyDown(DIK_SPACE))
+ 		if (g_pGameInstance->getkeyDown(DIK_SPACE))
 		{
 			if (g_pGameInstance->getkeyPress(DIK_A))
 			{

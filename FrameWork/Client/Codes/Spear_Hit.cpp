@@ -4,6 +4,7 @@
 
 /* Monster List */
 #include "Monster_Bastion_Spear.h"
+#include "Stage2.h"
 
 CSpear_Hit::CSpear_Hit(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
 	: CSpear_State(_pDevice, _pDeviceContext)
@@ -86,8 +87,17 @@ void CSpear_Hit::Look_Monster(void)
 	if (pAnim->Is_Finished() && 0 < m_pMonster->Get_CurrentHp())
 		m_pStateController->Change_State(L"Idle");
 
-	else if(0 >= m_pMonster->Get_CurrentHp())
+	else if (0 >= m_pMonster->Get_CurrentHp() && !m_pMonster->Get_Dead())
+	{
+		static_cast<CMonster_Bastion_Spear*>(m_pMonster)->Set_Dead();
+		static_cast<CMonster_Bastion_Spear*>(m_pMonster)->Remove_Collider();
+
+		CLevel* pLevel = g_pGameInstance->getCurrentLevelScene();
+		if (g_pGameInstance->getCurrentLevel() == (_uint)SCENEID::SCENE_STAGE2)
+			static_cast<CStage2*>(pLevel)->Minus_MonsterCount();
+
 		m_pStateController->Change_State(L"Death");
+	}
 
 	if (15.0f >= m_pMonster->Get_CurrentHp())
 		m_pStateController->Change_State(L"Bwd_Dash");

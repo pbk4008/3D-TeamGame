@@ -5,6 +5,7 @@
 #include "Component_Manager.h"
 #include "GameInstance.h"
 #include "Texture.h"
+#include "CullingBox.h"
 
 CInstancing_Mesh::CInstancing_Mesh(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
 	: CComponent(pDevice, pDeviceContext)
@@ -27,6 +28,7 @@ CInstancing_Mesh::CInstancing_Mesh(const CInstancing_Mesh& rhs)
 	, m_eType(rhs.m_eType)
 	, m_matPivot(rhs.m_matPivot)
 	, m_vecMaterials(rhs.m_vecMaterials)
+	, m_vecCullingBox(rhs.m_vecCullingBox)
 {
 	Safe_AddRef(m_pVBInstance);
 
@@ -45,6 +47,9 @@ CInstancing_Mesh::CInstancing_Mesh(const CInstancing_Mesh& rhs)
 
 	for (auto& pMaterial : m_vecMaterials)
 		Safe_AddRef(pMaterial);
+
+	for (auto& pCullingBox : m_vecCullingBox)
+		Safe_AddRef(pCullingBox);
 }
 
 HRESULT CInstancing_Mesh::NativeConstruct_Prototype(const wstring& pMeshFilePath, INSTANCE_TYPE eType)
@@ -69,6 +74,8 @@ HRESULT CInstancing_Mesh::NativeConstruct(void* pArg)
 {
 	if (FAILED(Create_InstancingBuffer(pArg)))
 		return E_FAIL;
+
+
 
 	return S_OK;
 }
@@ -110,6 +117,17 @@ void CInstancing_Mesh::Update_InstanceBuffer(const vector<_float4x4>& pMatrix)
 	}
 
 	m_pDeviceContext->Unmap(m_pVBInstance, 0);
+}
+
+HRESULT CInstancing_Mesh::Render(const wstring& pCameraTag)
+{
+	if (m_vecCullingBox.empty())
+		return E_FAIL;
+
+	for (auto& pBox : m_vecCullingBox)
+		pBox->Render(pCameraTag);
+
+	return S_OK;
 }
 
 HRESULT CInstancing_Mesh::SetUp_ValueOnShader(const char* pConstantName, void* pData, _uint iSize)
@@ -177,7 +195,9 @@ HRESULT CInstancing_Mesh::Init_StaticMesh(const wstring& pMeshFilePath)
 	}
 	if (FAILED(Create_VertextIndexBuffer()))
 		return E_FAIL;
-	
+	if (FAILED(Create_CullingBox()))
+		return E_FAIL;
+
 	for (auto& pMtrl : pData.pMtrlData)
 	{
 		if (FAILED(Create_Material(pMtrl)))
@@ -203,6 +223,63 @@ HRESULT CInstancing_Mesh::Create_VertextIndexBuffer()
 		for (auto& pMtrlMeshContaier : pMtrlMeshContaier)
 			pMtrlMeshContaier->Create_VertexIndexBuffer();
 	}
+	return S_OK;
+}
+
+HRESULT CInstancing_Mesh::Create_CullingBox()
+{
+	vector<_vector> vMax;
+	vector<_vector> vMin;
+
+	for (auto& pMtrlMesh : m_vecMeshContainers)
+	{
+		for (auto& pMesh : pMtrlMesh)
+		{
+			vMax.emplace_back(pMesh->Get_MaxPoint());
+			vMin.emplace_back(pMesh->Get_MinPoint());
+		}
+	}
+	
+	_vector vBoxMax, vBoxMin;
+
+	_float fMaxX, fMaxY, fMaxZ;
+	fMaxX = 0.f;
+	fMaxY = 0.f;
+	fMaxZ = 0.f;
+
+	_float fMinX, fMinY, fMinZ;
+	fMinX = 0.f;
+	fMinY = 0.f;
+	fMinZ = 0.f;
+
+	_uint iSize = (_uint)vMax.size();
+	for (_uint i = 0; i < iSize; i++)
+	{
+		if (fMaxX < XMVectorGetX(vMax[i]))
+			fMaxX = XMVectorGetX(vMax[i]);
+		if (fMaxY < XMVectorGetY(vMax[i]))
+			fMaxY = XMVectorGetY(vMax[i]);
+		if (fMaxZ < XMVectorGetZ(vMax[i]))
+			fMaxZ = XMVectorGetZ(vMax[i]);
+
+		if (fMinX > XMVectorGetX(vMin[i]))
+			fMinX = XMVectorGetX(vMin[i]);
+		if (fMinY > XMVectorGetY(vMin[i]))
+			fMinY = XMVectorGetY(vMin[i]);
+		if (fMinZ > XMVectorGetZ(vMin[i]))
+			fMinZ = XMVectorGetZ(vMin[i]);
+	}
+
+	vBoxMax = XMVectorSet(fMaxX, fMaxY, fMaxZ, 1.f);
+	vBoxMin = XMVectorSet(fMinX, fMinY, fMinZ, 1.f);
+
+	CCullingBox* pBox = g_pGameInstance->Clone_Component<CCullingBox>(0, L"Proto_Component_CullingBox");
+	if (!pBox)
+		return E_FAIL;
+
+	pBox->CreateWithPoints(vBoxMin, vBoxMax);
+	m_vecCullingBox.emplace_back(pBox);
+
 	return S_OK;
 }
 
@@ -239,6 +316,10 @@ HRESULT CInstancing_Mesh::Create_InstancingBuffer(void* pArg)
 	m_iInstStride = sizeof(VTXMATRIX);
 	m_iInstNumVertices = pDesc.iNumInstance;
 
+	CCullingBox* pBox = m_vecCullingBox[0];
+	for (_uint i = 0; i < m_iInstNumVertices - 1; i++)
+		m_vecCullingBox.emplace_back(static_cast<CCullingBox*>(pBox->Clone(nullptr)));
+
 	m_VBInstDesc.ByteWidth = m_iInstStride * m_iInstNumVertices;
 	m_VBInstDesc.Usage = D3D11_USAGE_DYNAMIC;
 	m_VBInstDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
@@ -256,6 +337,14 @@ HRESULT CInstancing_Mesh::Create_InstancingBuffer(void* pArg)
 		pVertices[i].vUp = (_float4)(pDesc.vecMatrix)[i].m[1];
 		pVertices[i].vLook = (_float4)(pDesc.vecMatrix)[i].m[2];
 		pVertices[i].vPosition = (_float4)(pDesc.vecMatrix)[i].m[3];
+
+		_matrix matTransform;
+		matTransform.r[0] = XMLoadFloat4(&pVertices[i].vRight);
+		matTransform.r[1] = XMLoadFloat4(&pVertices[i].vUp);
+		matTransform.r[2] = XMLoadFloat4(&pVertices[i].vLook);
+		matTransform.r[3] = XMLoadFloat4(&pVertices[i].vPosition);
+
+		m_vecCullingBox[i]->Update_Matrix(matTransform);
 	}
 
 	m_VBInstSubResourceData.pSysMem = pVertices;
@@ -308,4 +397,9 @@ void CInstancing_Mesh::Free()
 		Safe_Release(pMaterial);
 
 	m_vecMaterials.clear();
+
+	for (auto& pBox : m_vecCullingBox)
+		Safe_Release(pBox);
+
+	m_vecCullingBox.clear();
 }

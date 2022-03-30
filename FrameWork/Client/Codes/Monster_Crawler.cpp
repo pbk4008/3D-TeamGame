@@ -82,11 +82,13 @@ HRESULT CMonster_Crawler::NativeConstruct(const _uint _iSceneID, void* _pArg)
 	//MonsterBar Panel
 	CUI_Monster_Panel::PANELDESC Desc;
 	Desc.pTargetTransform = m_pTransform;
+
 	Desc.iEnemyTag = CUI_Monster_Panel::Enemy::CRAWLER;
 
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_UI", L"Proto_GameObject_UI_Monster_Panel", &Desc,
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer(_iSceneID, L"Layer_UI", L"Proto_GameObject_UI_Monster_Panel", &Desc,
 		(CGameObject**)&m_pPanel)))
 		return E_FAIL;
+
 	//레이어에도 넣어주고 변수도 가지고 있기때문에 Add_Ref필수!!
 	Safe_AddRef(m_pPanel);
 
@@ -113,13 +115,6 @@ HRESULT CMonster_Crawler::NativeConstruct(const _uint _iSceneID, void* _pArg)
 
 _int CMonster_Crawler::Tick(_double _dDeltaTime)
 {	
-	m_pCollider;
-	int a = 10;
-	//나중에지울코드
-	if (!m_bFirst)
-	{
-		m_pPanel->Set_Show(true);
-	}
 	m_pTransform->Set_Velocity(XMVectorZero());
 	m_pPanel->Set_TargetWorldMatrix(m_pTransform->Get_WorldMatrix());
 
@@ -137,7 +132,8 @@ _int CMonster_Crawler::Tick(_double _dDeltaTime)
 			CLevel* pLevel = g_pGameInstance->getCurrentLevelScene();
 			if (g_pGameInstance->getCurrentLevel() == (_uint)SCENEID::SCENE_STAGE1)
 				static_cast<CStage1*>(pLevel)->Minus_MonsterCount();
-
+			else if (g_pGameInstance->getCurrentLevel() == (_uint)SCENEID::SCENE_STAGE2)
+				static_cast<CStage2*>(pLevel)->Minus_MonsterCount();
 			m_bDead = true;
 			m_pStateController->Change_State(L"Death");
 			m_pCharacterController->Remove_CCT();
@@ -146,16 +142,17 @@ _int CMonster_Crawler::Tick(_double _dDeltaTime)
 		else
 			m_pCharacterController->Move(_dDeltaTime, m_pTransform->Get_Velocity());
 	}
-	
-	/*if (g_pGameInstance->getkeyDown(DIK_NUMPAD5))
-	{
-		--m_fHp;
-		m_pPanel->Set_HpBar(m_fMaxHp, m_fHp);
-		cout << m_fHp << endl;
 
-		m_pStateController->Change_State(L"Flinch_Left");
-	}*/
-	
+	if (true == m_bUIShow)
+	{
+		m_pPanel->Set_Show(true);
+	}
+
+	if (false == m_bUIShow)
+	{
+
+		m_pPanel->Set_Show(false);
+	}
 
 	if (DEATH == m_pAnimatorCom->Get_CurrentAnimNode())
 	{
@@ -166,13 +163,12 @@ _int CMonster_Crawler::Tick(_double _dDeltaTime)
 	}
 	
 	m_pCollider->Tick(_dDeltaTime);
+
 	return 0;
 }
 
 _int CMonster_Crawler::LateTick(_double _dDeltaTime)
 {
-	m_pCollider;
-	int a = 10;
 	m_pRenderer->Add_RenderGroup(CRenderer::RENDER_NONALPHA, this);
 
 	if(!m_bDead)
@@ -189,8 +185,6 @@ _int CMonster_Crawler::LateTick(_double _dDeltaTime)
 
 HRESULT CMonster_Crawler::Render()
 {
-	m_pCollider;
-	int a = 10;
 	if (FAILED(__super::Render()))
 	{
 		return E_FAIL;
@@ -271,7 +265,7 @@ void CMonster_Crawler::OnTriggerExit(CCollision& collision)
 	{
 		if ((_uint)GAMEOBJECT::WEAPON == collision.pGameObject->getTag())
 		{
-			if(m_bDead)
+			if (m_bDead)
 				g_pMainApp->FreezeTime();
 		}
 	}
@@ -478,7 +472,6 @@ CGameObject* CMonster_Crawler::Clone(const _uint _iSceneID, void* _pArg)
 
 void CMonster_Crawler::Free()
 {
-	m_pCollider;
 	__super::Free();
 	if (m_pCollider != nullptr && m_pCharacterController != nullptr)
 	{

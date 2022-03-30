@@ -6,6 +6,7 @@
 BEGIN(Engine)
 class CMeshContainer;
 class CMaterial;
+class CCullingBox;
 class ENGINE_DLL CInstancing_Mesh final : public CComponent
 {
 public:
@@ -25,6 +26,7 @@ public:
 	virtual HRESULT NativeConstruct_Prototype(const wstring& pMeshFilePath, INSTANCE_TYPE eType);
 	virtual HRESULT NativeConstruct(void* pArg) override;
 	void Update_InstanceBuffer(const vector<_float4x4>& pMatrix);
+	HRESULT Render(const wstring& pCameraTag);
 public:
 	HRESULT SetUp_ValueOnShader(const char* pConstantName, void* pData, _uint iSize);
 	HRESULT	SetUp_TextureOnShader(const char* pConstantName, ID3D11ShaderResourceView* pSRV, _ulong Numindex);
@@ -33,6 +35,7 @@ private:
 	HRESULT Init_StaticMesh(const wstring& pMeshFilePath);
 	HRESULT Create_MeshContainer(_uint iMaterialIndex, _uint iNumVtxCnt, _uint iNumIdxCnt, void* pVtx, void* pIdx);
 	HRESULT Create_VertextIndexBuffer();
+	HRESULT Create_CullingBox();
 	HRESULT Create_Material(const CSaveManager::MTRLDATA& pData);
 	HRESULT Create_InstancingBuffer(void* pArg);
 public:
@@ -43,6 +46,7 @@ private:
 	virtual void Free() override;
 public:
 	_uint Get_NumMeshContainer() { return (_uint)m_vecMeshContainers.size(); }
+	vector<CCullingBox*> Get_CullingBox() { return m_vecCullingBox; }
 private:
 	_uint m_iNumMeshes = 0;
 private:
@@ -57,6 +61,7 @@ private:
 	_uint m_iInstNumVertices=0;
 private:
 	INSTANCE_TYPE m_eType;
+	vector<CCullingBox*> m_vecCullingBox;
 };
 END
 #endif

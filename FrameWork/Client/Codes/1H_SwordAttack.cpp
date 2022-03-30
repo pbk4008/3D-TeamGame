@@ -22,8 +22,8 @@ _int C1H_SwordAttack::Tick(const _double& _dDeltaTime)
 		return iProgress;
 
 
-	_uint iCurkeyFrameIndex = m_pAnimationController->Get_CurKeyFrameIndex();
-	if (m_iAttackStartIndex < iCurkeyFrameIndex && m_iAttackEndIndex > iCurkeyFrameIndex)
+	_uint iCurKeyFrameIndex = m_pAnimationController->Get_CurKeyFrameIndex();
+	if (m_iAttackStartIndex < iCurKeyFrameIndex && m_iAttackEndIndex > iCurKeyFrameIndex)
 	{
 		m_pSilvermane->Set_IsAttack(true);
 		if (!m_isShake)
@@ -32,6 +32,7 @@ _int C1H_SwordAttack::Tick(const _double& _dDeltaTime)
 			g_pShakeManager->Shake(m_tShakeEvent, vPos);
 			m_isShake = true;
 		}
+		m_pSilvermane->Set_IsTrasceCamera(false);
 	}
 	else
 		m_pSilvermane->Set_IsAttack(false);
@@ -82,6 +83,8 @@ HRESULT C1H_SwordAttack::ExitState()
 	if(m_pSilvermane->IsAttack())
 		m_pSilvermane->Set_IsAttack(false);
 
+
+	m_pSilvermane->Set_IsTrasceCamera(true);
 	return S_OK;
 }
 

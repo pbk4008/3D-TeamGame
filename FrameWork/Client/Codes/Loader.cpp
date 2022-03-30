@@ -34,6 +34,7 @@
 #include "Effect_DashDust.h"
 #include "Effect_HitParticle.h"
 #include "Effect_HitFloating.h"
+#include "Effect_Env_Fire.h"
 #include "UI_Ingame.h"
 #include "UI_Player_HpBar.h"
 #include "UI_Player_HpBar_Red.h"
@@ -63,6 +64,7 @@
 #include "JumpNode.h"
 #include "JumpTrigger.h"
 #include "JumpBox.h"
+#include "SwordTrail.h"
 
 #pragma endregion
 
@@ -461,11 +463,13 @@ HRESULT CLoader::Load_Stage1UILoad()
 HRESULT CLoader::Load_Stage1EffectLoad()
 {
 	//Effect
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Proto_Component_Rect_Effect", CVIBuffer_Rect::Create(m_pDevice, m_pDeviceContext, L"../../Reference/ShaderFile/Shader_Effect_Fire.hlsl"))))
+		return E_FAIL;
+
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_VIBuffer_PointInstance_Explosion",
 		CVIBuffer_PointInstance_Explosion::Create(m_pDevice, m_pDeviceContext))))
-	{
 		return E_FAIL;
-	}
+	
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_VIBuffer_PointInstance_Floating",
 		CVIBuffer_PointInstance_Floating::Create(m_pDevice, m_pDeviceContext))))
 	{
@@ -483,6 +487,11 @@ HRESULT CLoader::Load_Stage1EffectLoad()
 	}
 
 	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_Effect_Floating"), CEffect_HitFloating::Create(m_pDevice, m_pDeviceContext))))
+	{
+		return E_FAIL;
+	}
+
+	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_Effect_Env_Fire"), CEffect_Env_Fire::Create(m_pDevice, m_pDeviceContext))))
 	{
 		return E_FAIL;
 	}
@@ -751,6 +760,15 @@ HRESULT CLoader::Load_Stage1PlayerLoad()
 	{
 		return E_FAIL;
 	}
+
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Prototype_Component_VIBuffer_Trail"
+		, CTrail_VIBuffer::Create(m_pDevice, m_pDeviceContext, L"../../Reference/ShaderFile/Shader_Rect.hlsl", 400))))
+	{
+		return E_FAIL;
+	}
+
+	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"TrailBase", L"../bin/Resources/Texture/Trail/T_Smoke_Trail_Soft.dds"))) 
+		return E_FAIL;
 #pragma endregion
 
 #pragma region 오브젝트
@@ -759,6 +777,8 @@ HRESULT CLoader::Load_Stage1PlayerLoad()
 	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Camera_Silvermane", CCamera_Silvermane::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_SkyBox", CSkyBox::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	if (FAILED(g_pGameInstance->Add_Prototype(L"Prototype_GameObject_SwordTral", CSwordTrail::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 #pragma endregion
 
@@ -776,7 +796,6 @@ HRESULT CLoader::Load_Stage1BossLoad()
 		return E_FAIL;
 	 
 	//weapon
-
 	//ShieldBreaker_BossWeapon
 	_matrix matPivot = XMMatrixIdentity();
 
@@ -811,7 +830,6 @@ HRESULT CLoader::Load_Stage1MonsterLoad()
 		return E_FAIL;
 
 	//Monster EarthAberrant Weapon
-
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Model_Weapon_EarthAberrant_Pick", CModel::Create(m_pDevice, m_pDeviceContext,
 		"../bin/Resources/Mesh/Earth_Aberrant_Pick/", "EarthAberrant_Pick.fbx",
 		L"../../Reference/ShaderFile/Shader_StaticMesh.hlsl", matPivot, CModel::TYPE_STATIC, true))))
@@ -819,47 +837,6 @@ HRESULT CLoader::Load_Stage1MonsterLoad()
 	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Weapon_EarthAberrant_Pick", CEarthAberrant_Pick::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 
-#pragma region 그냥 깡통몬스터임,, 수정해야함 삭제 ㄴㄴ
-	////Monster BronzeAnimus
-	//matPivot = XMMatrixIdentity();
-	//matPivot = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(180.f));
-	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Model_Monster_BronzeAnimus", CModel::Create(m_pDevice, m_pDeviceContext,
-	//	"../bin/Resources/Mesh/BronzeAnimus/", "BronzeAnimus.fbx",
-	//	L"../../Reference/ShaderFile/Shader_Mesh.hlsl",
-	//	matPivot,
-	//	CModel::TYPE_ANIM))))
-	//{
-	//	return E_FAIL;
-	//}
-
-	//if (FAILED(g_pGameInstance->Add_Prototype(L"Monster_BronzeAnimus", CMonster_BronzeAnimus::Create(m_pDevice, m_pDeviceContext))))
-	//	return E_FAIL;
-
-	//pTexture = CTexture::Create(m_pDevice, m_pDeviceContext);
-	//pTexture->NativeConstruct_Prototype(L"../Bin/Resources/Mesh/BronzeAnimus/T_BronzeAnimus_Cloth_D.tga", 1);
-	//pMtrl = CMaterial::Create(m_pDevice, m_pDeviceContext, L"BronzeAnimus_Cloth", L"../../Reference/ShaderFile/Shader_Mesh.hlsl", CMaterial::EType::Anim);
-	//pMtrl->Set_Texture("g_DiffuseTexture", aiTextureType_DIFFUSE, pTexture, 0);
-	//g_pGameInstance->Add_Material(L"Mtrl_BronzeAnimus_Cloth", pMtrl);
-
-	//pTexture = CTexture::Create(m_pDevice, m_pDeviceContext);
-	//pTexture->NativeConstruct_Prototype(L"../Bin/Resources/Mesh/BronzeAnimus/T_BronzeAnimus_Down_D.tga", 1);
-	//pMtrl = CMaterial::Create(m_pDevice, m_pDeviceContext, L"BronzeAnimus_Down", L"../../Reference/ShaderFile/Shader_Mesh.hlsl", CMaterial::EType::Anim);
-	//pMtrl->Set_Texture("g_DiffuseTexture", aiTextureType_DIFFUSE, pTexture, 0);
-	//g_pGameInstance->Add_Material(L"Mtrl_BronzeAnimus_Down", pMtrl);
-
-	//pTexture = CTexture::Create(m_pDevice, m_pDeviceContext);
-	//pTexture->NativeConstruct_Prototype(L"../Bin/Resources/Mesh/BronzeAnimus/T_BronzeAnimus_Top_D.tga", 1);
-	//pMtrl = CMaterial::Create(m_pDevice, m_pDeviceContext, L"BronzeAnimus_Top", L"../../Reference/ShaderFile/Shader_Mesh.hlsl", CMaterial::EType::Anim);
-	//pMtrl->Set_Texture("g_DiffuseTexture", aiTextureType_DIFFUSE, pTexture, 0);
-	//g_pGameInstance->Add_Material(L"Mtrl_BronzeAnimus_Top", pMtrl);
-
-	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Model_Monster_Bastion_Shooter", CModel::Create(m_pDevice, m_pDeviceContext,
-	//	L"../bin/FBX/Monster/Bastion_Maskman.fbx",CModel::TYPE_ANIM, true))))
-	//	return E_FAIL;
-
-	//if (FAILED(g_pGameInstance->Add_Prototype(L"Monster_Bastion_Shooter", CMonster_Bastion_Shooter::Create(m_pDevice, m_pDeviceContext))))
-	//	return E_FAIL;
-#pragma endregion
 	////Monster Bastion_Sword
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Monster_Bastion_Sword", CModel::Create(m_pDevice, m_pDeviceContext,
 		L"../bin/FBX/Monster/Bastion_Sword.fbx", CModel::TYPE_ANIM, true))))
@@ -991,6 +968,14 @@ HRESULT CLoader::Ready_Test_JS()
 {
 	cout << "TestScene_JS 로딩 시작..." << endl;
 	cout << "TestScene_JS 리소스 생성중..." << endl;
+	// 스카이박스
+	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"Sky_Texture", L"../Bin/Resources/Texture/SkyBox/SkyBox_Stage1.dds")))
+		return E_FAIL;
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"VIBuffer_Cube", CVIBuffer_Cube::Create(m_pDevice, m_pDeviceContext, L"../../Reference/ShaderFile/Shader_Cube.hlsl"))))
+		return E_FAIL;
+	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_SkyBox", CSkyBox::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+
 #pragma region 리소스
 	if(FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"Plane_Texture", L"../Bin/Resources/Texture/Terrain/Plane_Default.dds")))
 		return E_FAIL;
@@ -1095,13 +1080,27 @@ HRESULT CLoader::Ready_Test_JS()
 		return E_FAIL;
 #pragma endregion
 
+	// 소드 트레일
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Prototype_Component_VIBuffer_Trail"
+		, CTrail_VIBuffer::Create(m_pDevice, m_pDeviceContext, L"../../Reference/ShaderFile/Shader_Rect.hlsl", 400))))
+	{
+		return E_FAIL;
+	}
+	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"TrailBase", L"../bin/Resources/Texture/Trail/T_Smoke_Trail_Soft.dds")))
+		return E_FAIL;
+	if (FAILED(g_pGameInstance->Add_Prototype(L"Prototype_GameObject_SwordTral", CSwordTrail::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
 
+
+	// UI
 	if(FAILED(Load_Stage1StaticUILoad()))
 		return E_FAIL;
 
 	if (FAILED(Load_Stage1UILoad()))
 		return E_FAIL;
 
+
+	// Effect
 	if (FAILED(Load_Stage1EffectLoad()))
 		return E_FAIL;
 

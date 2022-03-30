@@ -206,6 +206,58 @@ const CSaveManager::ANIMMESHDATA CMeshContainer::SetAnimSaveData()
 	return pData;
 }
 
+_fvector CMeshContainer::Get_MaxPoint()
+{
+	_vector vPoint;
+	ZeroMemory(&vPoint, sizeof(_vector));
+
+	_float fMaxX, fMaxY, fMaxZ;
+
+	fMaxX = 0.f;
+	fMaxY = 0.f;
+	fMaxZ = 0.f;
+
+	for (_uint i = 0; i < m_iNumVertices; i++)
+	{
+		if (((VTXMESH*)m_pVertices)[i].vPosition.x > fMaxX)
+			fMaxX = ((VTXMESH*)m_pVertices)[i].vPosition.x;
+		if (((VTXMESH*)m_pVertices)[i].vPosition.y > fMaxY)
+			fMaxY = ((VTXMESH*)m_pVertices)[i].vPosition.y;
+		if (((VTXMESH*)m_pVertices)[i].vPosition.z > fMaxZ)
+			fMaxZ = ((VTXMESH*)m_pVertices)[i].vPosition.z;
+	}
+	
+	vPoint = XMVectorSet(fMaxX, fMaxY, fMaxZ, 1.f);
+
+	return vPoint;
+}
+
+_fvector CMeshContainer::Get_MinPoint()
+{
+	_vector vPoint;
+	ZeroMemory(&vPoint, sizeof(_vector));
+
+	_float fMinX, fMinY, fMinZ;
+
+	fMinX = 0.f;
+	fMinY = 0.f;
+	fMinZ = 0.f;
+
+	for (_uint i = 0; i < m_iNumVertices; i++)
+	{
+		if (((VTXMESH*)m_pVertices)[i].vPosition.x < fMinX)
+			fMinX = ((VTXMESH*)m_pVertices)[i].vPosition.x;
+		if (((VTXMESH*)m_pVertices)[i].vPosition.y < fMinY)
+			fMinY = ((VTXMESH*)m_pVertices)[i].vPosition.y;
+		if (((VTXMESH*)m_pVertices)[i].vPosition.z < fMinZ)
+			fMinZ = ((VTXMESH*)m_pVertices)[i].vPosition.z;
+	}
+
+	vPoint = XMVectorSet(fMinX, fMinY, fMinZ, 1.f);
+
+	return vPoint;
+}
+
 HRESULT CMeshContainer::Set_UpVerticesDesc(CModel* pModel, aiMesh* pMesh, _fmatrix PivotMatrix)
 {
 	m_iNumVertices = pMesh->mNumVertices;

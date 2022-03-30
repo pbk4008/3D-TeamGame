@@ -34,8 +34,6 @@ _int CCrawler_Death::Tick(const _double& TimeDelta)
 	//{
 	//	cout << "Á×À½" << endl;
 	//}
-
-
 	return _int();
 }
 

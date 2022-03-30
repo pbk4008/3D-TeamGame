@@ -173,8 +173,6 @@ VS_OUT_SHADESHADOW VS_MAIN_SHADESHADOW(VS_IN In)
 	return Out;
 }
 //*---------------------------------------------------------------------------------------------*
-
-
 struct PS_IN
 {
 	float4 vPosition : SV_POSITION;
@@ -345,7 +343,7 @@ technique11			DefaultTechnique
 	}
 	pass ShadowMap
 	{
-		SetRasterizerState(CullMode_Default);
+		SetRasterizerState(CullMode_None);
 		SetDepthStencilState(ZDefault, 0);
 		SetBlendState(BlendDisable, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
 

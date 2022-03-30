@@ -444,6 +444,16 @@ const LIGHTDESC* CGameInstance::Get_LightDesc(_uint iIndex)
 	return m_pLight_Manager->Get_LightDesc(iIndex);
 }
 
+HRESULT CGameInstance::CreateLightCam(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext, LIGHTDESC& desc)
+{
+	if (m_pLight_Manager == nullptr)
+		return E_FAIL;
+
+	m_pLight_Manager->CreateLightCam(pDevice, pDeviceContext, desc);
+
+	return S_OK;
+}
+
 HRESULT CGameInstance::Add_Light(ID3D11Device * pDevice, ID3D11DeviceContext * pDeviceContext, const LIGHTDESC & LightDesc)
 {
 	if (nullptr == m_pLight_Manager)
@@ -483,6 +493,15 @@ _bool CGameInstance::isIn_WorldFrustum(_fvector vPosition, _float fRange)
 
 	return m_pFrustum->isInWorld(vPosition, fRange);
 }
+
+_bool CGameInstance::isIn_WorldFrustum(_float4* vPoints, _float fRange)
+{
+	if (nullptr == m_pFrustum)
+		return false;
+
+	return m_pFrustum->isInWorld(vPoints, fRange);
+}
+
 
 _bool CGameInstance::isIn_LocalFrustum(_fvector vPosition, _float fRange)
 {

@@ -13,7 +13,9 @@
 #include "Shooter_Groggy.h"
 
 #include"UI_Monster_Panel.h"
+
 #include "Stage1.h"
+#include "Stage2.h"
 
 CMonster_Bastion_Shooter::CMonster_Bastion_Shooter(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
 	: CActor(_pDevice, _pDeviceContext)
@@ -54,6 +56,7 @@ HRESULT CMonster_Bastion_Shooter::NativeConstruct(const _uint _iSceneID, void* _
 	if (FAILED(__super::NativeConstruct(_iSceneID, _pArg)))
 		return E_FAIL;
 
+	m_iCurScene = _iSceneID;
 	if (_pArg)
 	{
 		_float3 vPoint = (*(_float3*)_pArg);
@@ -87,9 +90,6 @@ HRESULT CMonster_Bastion_Shooter::NativeConstruct(const _uint _iSceneID, void* _
 
 _int CMonster_Bastion_Shooter::Tick(_double _dDeltaTime)
 {
-	if (!m_bFirst)
-		m_pPanel->Set_Show(true);
-
 	_int iProgress = __super::Tick(_dDeltaTime);
 	if (NO_EVENT != iProgress)
 		return iProgress;
@@ -113,9 +113,21 @@ _int CMonster_Bastion_Shooter::Tick(_double _dDeltaTime)
 			CLevel* pLevel = g_pGameInstance->getCurrentLevelScene();
 			if (g_pGameInstance->getCurrentLevel() == (_uint)SCENEID::SCENE_STAGE1)
 				static_cast<CStage1*>(pLevel)->Minus_MonsterCount();
+			else if (g_pGameInstance->getCurrentLevel() == (_uint)SCENEID::SCENE_STAGE2)
+				static_cast<CStage2*>(pLevel)->Minus_MonsterCount();
 		}
 		else
 			m_pCharacterController->Move(_dDeltaTime, m_pTransform->Get_Velocity());
+	}
+
+	if (true == m_bUIShow)
+	{
+		m_pPanel->Set_Show(true);
+	}
+
+	if (false == m_bUIShow)
+	{
+		m_pPanel->Set_Show(false);
 	}
 
 	Change_State();
@@ -515,7 +527,7 @@ HRESULT CMonster_Bastion_Shooter::Ready_UI()
 	Desc.pTargetTransform = m_pTransform;
 	Desc.iEnemyTag = CUI_Monster_Panel::Enemy::SHOOTER;
 
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_UI", L"Proto_GameObject_UI_Monster_Panel", &Desc,
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer(m_iCurScene, L"Layer_UI", L"Proto_GameObject_UI_Monster_Panel", &Desc,
 		(CGameObject**)&m_pPanel)))
 		return E_FAIL;
 
