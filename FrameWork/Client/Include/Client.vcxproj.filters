@@ -493,9 +493,6 @@
     <Filter Include="02.GameObject\02.Map\02.JumpNode">
       <UniqueIdentifier>{15743125-3fab-4955-a1a7-2c3ab22ace2e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObject\02.Map\01.Environment\Tree">
-      <UniqueIdentifier>{afa39133-5db9-4588-b538-151dc4a78680}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_2HSword\State_2HSword\Groggy\End">
     </Filter>
     <Filter Include="02.GameObject\04.Effect\03.Effect_Floating">
@@ -605,6 +602,15 @@
     </Filter>
     <Filter Include="02.GameObject\96.Weapon\98.Trail">
       <UniqueIdentifier>{0a662d2a-bf0c-4955-b176-58fbdf8c84f3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\02.Map\01.Environment\00.Tree">
+      <UniqueIdentifier>{afa39133-5db9-4588-b538-151dc4a78680}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\02.Map\01.Environment\01.NoiseFire">
+      <UniqueIdentifier>{9d43fd19-4db2-406e-a72d-f78aadaf8bd3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\02.Map\01.Environment\02.MapObject">
+      <UniqueIdentifier>{6c74a239-aae4-4275-b01a-ea48c53eae4c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -724,9 +730,6 @@
     </ClInclude>
     <ClInclude Include="..\Headers\MainCamera.h">
       <Filter>02.GameObject\01. MainCamera\ProjectionCam</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Headers\Environment.h">
-      <Filter>02.GameObject\02.Map\01.Environment</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\MainCamera_Ortho.h">
       <Filter>02.GameObject\01. MainCamera\OrthoCam</Filter>
@@ -1314,7 +1317,7 @@
       <Filter>02.GameObject\03.Character\01.Monster\Bastion_Healer\State_Healer\Groggy</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\SubEnvironment.h">
-      <Filter>02.GameObject\02.Map\01.Environment\Tree</Filter>
+      <Filter>02.GameObject\02.Map\01.Environment\00.Tree</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\Shooter_Attack.h" />
     <ClInclude Include="..\Headers\Effect_HitFloating.h">
@@ -1447,6 +1450,12 @@
     <ClInclude Include="..\Headers\SwordTrail.h">
       <Filter>02.GameObject\96.Weapon\98.Trail</Filter>
     </ClInclude>
+    <ClInclude Include="..\Headers\NoiseFire.h">
+      <Filter>02.GameObject\02.Map\01.Environment\01.NoiseFire</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Environment.h">
+      <Filter>02.GameObject\02.Map\01.Environment\02.MapObject</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -1547,9 +1556,6 @@
     </ClCompile>
     <ClCompile Include="..\Codes\MainCamera_Ortho.cpp">
       <Filter>02.GameObject\01. MainCamera\OrthoCam</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Codes\Environment.cpp">
-      <Filter>02.GameObject\02.Map\01.Environment</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\Camera_Debug.cpp">
       <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\Camera</Filter>
@@ -2131,7 +2137,7 @@
       <Filter>02.GameObject\03.Character\01.Monster\Bastion_Healer\State_Healer\Groggy</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\SubEnvironment.cpp">
-      <Filter>02.GameObject\02.Map\01.Environment\Tree</Filter>
+      <Filter>02.GameObject\02.Map\01.Environment\00.Tree</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\Shooter_Attack.cpp" />
     <ClCompile Include="..\Codes\Effect_HitFloating.cpp">
@@ -2260,6 +2266,12 @@
     </ClCompile>
     <ClCompile Include="..\Codes\SwordTrail.cpp">
       <Filter>02.GameObject\96.Weapon\98.Trail</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\NoiseFire.cpp">
+      <Filter>02.GameObject\02.Map\01.Environment\01.NoiseFire</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Environment.cpp">
+      <Filter>02.GameObject\02.Map\01.Environment\02.MapObject</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

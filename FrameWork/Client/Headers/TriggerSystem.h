@@ -87,7 +87,7 @@ public:
 public:
 	void Check_Clear()
 	{
-		_uint iSize = (_uint)m_vecClear.size();
+		_int iSize = (_int)m_vecClear.size();
 
 		if (m_iClearIndex < iSize-1)
 		{

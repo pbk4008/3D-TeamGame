@@ -202,7 +202,7 @@ void CBastion_Healer_State::Check_Attack(const _double& _dDeltaTime)
 	{
 		if (10.0f > m_fRadian)
 		{
-			m_fAttackTime += _dDeltaTime;
+			m_fAttackTime += (_float)_dDeltaTime;
 			if (m_fAttackTime > 0.5f)
 			{
 				m_fAttackTime = 0.0f;

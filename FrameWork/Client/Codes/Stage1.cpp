@@ -77,10 +77,10 @@ HRESULT CStage1::NativeConstruct()
 	//	return E_FAIL;
 	//}
 
-	if (FAILED(Ready_Data_Effect()))
-	{
-		return E_FAIL;
-	}
+	//if (FAILED(Ready_Data_Effect()))
+	//{
+	//	return E_FAIL;
+	//}
 
 	//if (FAILED(Ready_UI(L"Layer_UI")))
 	//{
@@ -218,6 +218,8 @@ HRESULT CStage1::Ready_MapObject()
 	//wstring strTag = L"StageBackGround";
 	//g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Stage1_Back", L"Prototype_GameObject_BackGround", &strTag);
 
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_NoisFire", L"Proto_GameObject_NoiseFire"))) MSGBOX("Failed To Clone NoisFire");
+
 	return S_OK;
 }
 
@@ -240,9 +242,6 @@ HRESULT CStage1::Ready_Player(const _tchar* LayerTag)
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Proto_GameObject_Silvermane")))
 		return E_FAIL;
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Camera", L"Proto_GameObject_Camera_Silvermane")))
-		return E_FAIL;
-
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Monster", L"Proto_GameObject_Monster_EarthAberrant")))
 		return E_FAIL;
 	
 	return S_OK;

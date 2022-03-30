@@ -351,6 +351,7 @@
     <ClInclude Include="..\Headers\Monster_Crawler.h" />
     <ClInclude Include="..\Headers\Monster_EarthAberrant.h" />
     <ClInclude Include="..\Headers\Needle.h" />
+    <ClInclude Include="..\Headers\NoiseFire.h" />
     <ClInclude Include="..\Headers\Plane_Test.h" />
     <ClInclude Include="..\Headers\Polearm.h" />
     <ClInclude Include="..\Headers\ShakeManager.h" />
@@ -624,6 +625,7 @@
     <ClCompile Include="..\Codes\Monster_Crawler.cpp" />
     <ClCompile Include="..\Codes\Monster_EarthAberrant.cpp" />
     <ClCompile Include="..\Codes\Needle.cpp" />
+    <ClCompile Include="..\Codes\NoiseFire.cpp" />
     <ClCompile Include="..\Codes\Plane_Test.cpp" />
     <ClCompile Include="..\Codes\Polearm.cpp" />
     <ClCompile Include="..\Codes\ShakeManager.cpp" />
