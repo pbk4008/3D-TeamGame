@@ -67,7 +67,7 @@ PS_OUT_TONE PS_MAIN_TONEMAPPING(PS_IN In)
 	vector vTotalcolor = g_HDRDiffuseTexture.Sample(DefaultSampler, In.vTexUV);
 
 	// dx ±âº» Åæ¸ÅÇÎ
-	float Luminance = 0.3f;
+	float Luminance = 0.35f;
 	//float Luminance = 0.08f;
 	float MiddleGray = 0.18f;
 	float WhiteCutoff = 0.9f;
