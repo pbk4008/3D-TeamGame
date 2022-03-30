@@ -616,7 +616,7 @@ CGameObject* CMonster_EarthAberrant::Clone(const _uint _iSceneID, void* _pArg)
 
 void CMonster_EarthAberrant::Free()
 {
-	//Safe_Release(m_pPanel);
+	Safe_Release(m_pPanel);
 	Safe_Release(m_pCharacterController);
 	Safe_Release(m_pWeapon);
 	Safe_Release(m_pStateController);

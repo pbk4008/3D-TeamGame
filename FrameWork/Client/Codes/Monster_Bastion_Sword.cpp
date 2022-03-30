@@ -529,7 +529,7 @@ HRESULT CMonster_Bastion_Sword::Set_State_FSM()
 
 HRESULT CMonster_Bastion_Sword::Set_Weapon()
 {
-	m_pWeapon = static_cast<CStargazer*>(g_pGameInstance->Clone_GameObject((_uint)SCENEID::SCENE_STAGE1, L"Proto_GameObject_Weapon_Stargazer"));
+	m_pWeapon = static_cast<CStargazer*>(g_pGameInstance->Clone_GameObject(m_iSceneID, L"Proto_GameObject_Weapon_Stargazer"));
 
 	if (!m_pWeapon)
 		return E_FAIL;

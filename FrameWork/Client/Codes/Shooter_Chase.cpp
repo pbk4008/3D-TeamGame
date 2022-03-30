@@ -20,8 +20,8 @@ HRESULT CShooter_Chase::NativeConstruct(void* _pArg)
 	m_pStateController = tDesc.pController;
 	m_wstrTag = tDesc.pName;
 
-	Safe_AddRef(m_pAnimator);
-	Safe_AddRef(m_pTransform);
+	//Safe_AddRef(m_pAnimator);
+	//Safe_AddRef(m_pTransform);
 
 	if (FAILED(CMonster_FSM::NativeConstruct(_pArg)))
 		return E_FAIL;

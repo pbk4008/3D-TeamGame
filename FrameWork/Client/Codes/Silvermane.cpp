@@ -727,7 +727,7 @@ HRESULT CSilvermane::Ready_Weapons()
 	CWeapon* pWeapon = nullptr;
 	// 한손검
 	pWeapon = CNeedle::Create(m_pDevice, m_pDeviceContext);
-	if (FAILED(pWeapon->NativeConstruct((_uint)SCENEID::SCENE_STATIC, pWeaponBone)))
+	if (FAILED(pWeapon->NativeConstruct(m_iSceneID, pWeaponBone)))
 	{
 		Safe_Release(pWeapon);
 		return E_FAIL;
@@ -738,7 +738,7 @@ HRESULT CSilvermane::Ready_Weapons()
 	m_pCurWeapon = pWeapon;
 	// 해머
 	pWeapon = CFury::Create(m_pDevice, m_pDeviceContext);
-	if (FAILED(pWeapon->NativeConstruct((_uint)SCENEID::SCENE_STATIC, pWeaponBone)))
+	if (FAILED(pWeapon->NativeConstruct(m_iSceneID, pWeaponBone)))
 	{
 		Safe_Release(pWeapon);
 		return E_FAIL;
@@ -750,7 +750,7 @@ HRESULT CSilvermane::Ready_Weapons()
 	// 방패
 	pWeaponBone = m_pModel->Get_BoneMatrix("weapon_l");
 	m_pShield = CShield::Create(m_pDevice, m_pDeviceContext);
-	if (FAILED(m_pShield->NativeConstruct((_uint)SCENEID::SCENE_STATIC, pWeaponBone)))
+	if (FAILED(m_pShield->NativeConstruct(m_iSceneID, pWeaponBone)))
 	{
 		Safe_Release(m_pShield);
 		return E_FAIL;
