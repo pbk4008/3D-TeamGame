@@ -19,6 +19,8 @@
 #include "Bastion_Sword_Walk.h"
 
 #include "Stage1.h"
+#include "Stage2.h"
+
 CMonster_Bastion_Sword::CMonster_Bastion_Sword(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
 	:CActor(_pDevice, _pDeviceContext)
 	, m_pCharacterController(nullptr)
@@ -122,6 +124,9 @@ _int CMonster_Bastion_Sword::Tick(_double _dDeltaTime)
 			CLevel* pLevel = g_pGameInstance->getCurrentLevelScene();
 			if (g_pGameInstance->getCurrentLevel() == (_uint)SCENEID::SCENE_STAGE1)
 				static_cast<CStage1*>(pLevel)->Minus_MonsterCount();
+
+			else if (g_pGameInstance->getCurrentLevel() == (_uint)SCENEID::SCENE_STAGE2)
+				static_cast<CStage2*>(pLevel)->Minus_MonsterCount();
 		}
 		else
 			m_pCharacterController->Move(_dDeltaTime, m_pTransform->Get_Velocity());

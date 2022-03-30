@@ -21,7 +21,6 @@
 
 /* for. UI */
 #include "UI_Monster_Panel.h"
-#include "Stage1.h"
 
 CMonster_Bastion_2HSword::CMonster_Bastion_2HSword(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
 	: CActor(_pDevice, _pDeviceContext)

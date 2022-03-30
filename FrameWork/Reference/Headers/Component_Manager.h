@@ -29,6 +29,7 @@
 #include "AnimationController.h"
 #include "Animator.h"
 #include "CharacterController.h"
+#include "CullingBox.h"
 
 BEGIN(Engine)
 

@@ -81,11 +81,7 @@ void CSpear_Death::Look_Monster(void)
 	CAnimation* pAnim = m_pAnimator->Get_CurrentAnimation();
 
 	if (pAnim->Is_Finished())
-	{
 		m_bDeath = true;
-		static_cast<CMonster_Bastion_Spear*>(m_pMonster)->Set_Dead();
-		static_cast<CMonster_Bastion_Spear*>(m_pMonster)->setActive(false);
-	}
 }
 
 CSpear_Death* CSpear_Death::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext, void* _pArg)

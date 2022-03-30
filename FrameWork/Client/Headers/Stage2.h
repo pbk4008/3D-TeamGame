@@ -45,11 +45,13 @@ private:
 	void Trgger_Function8();
 	void Trgger_Function9();
 	void Trgger_FunctionBoss();
+
 	/*HRESULT Ready_Trigger_Lod(const _tchar* pDataFilePath);
 	HRESULT Ready_Trigger_Light(const _tchar* pDataFilePath);
 	HRESULT Ready_Trigger_Scene(const _tchar* pDataFilePath);
 	HRESULT Ready_Trigger_Monster(const _tchar* pDataFilePath);*/
-
+public:
+	void Minus_MonsterCount() { m_iCountMonster--; }
 public:
 	static CStage2* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);
 private:
@@ -57,6 +59,8 @@ private:
 private:
 	CTriggerSystem<CStage2>* m_pTriggerSystem;
 	_bool m_bDebug;
+	_uint m_iCountMonster;
+	_bool m_bFirst;
 };
 END
 #endif

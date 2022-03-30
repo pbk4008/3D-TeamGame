@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "Environment.h"
 #include "MeshCollider.h"
+#include "CullingBox.h"
 
 CEnvironment::CEnvironment()
 	: m_pInstanceMesh(nullptr)
@@ -75,6 +76,9 @@ HRESULT CEnvironment::Render()
 {
 	if (!m_pInstanceMesh)
 		return E_FAIL;
+
+	//m_pInstanceMesh->Render(L"Camera_Silvermane");
+	int a = 0;
 
 	_float4 ClipPlane = _float4(0.f, 0.f, 0.f, 0.f);
 	_matrix matWorld = XMMatrixTranspose(m_pTransform->Get_WorldMatrix());
@@ -153,15 +157,26 @@ HRESULT CEnvironment::Ready_Component()
 
 HRESULT CEnvironment::Culling()
 {
+	vector<CCullingBox*> vecCullingBox = m_pInstanceMesh->Get_CullingBox();
+
 	for (_uint i = 0; i < m_iInstanceCnt; i++)
 	{
-		_matrix matTmp = XMLoadFloat4x4(&m_tEnvironmentDesc.tInstanceDesc.vecMatrix[i]);
-		_vector vPos = matTmp.r[3];
-		if (!g_pGameInstance->isIn_WorldFrustum(vPos, 50.f))
+		if (!g_pGameInstance->isIn_WorldFrustum(vecCullingBox[i]->Get_Points(), 50.f))
 			ZeroMemory(&m_vecUsingMatrix[i], sizeof(_float4x4));
 		else
 			m_vecUsingMatrix[i] = m_tEnvironmentDesc.tInstanceDesc.vecMatrix[i];
 	}
+
+	//for (_uint i = 0; i < m_iInstanceCnt; i++)
+	//{
+	//	_matrix matTmp = XMLoadFloat4x4(&m_tEnvironmentDesc.tInstanceDesc.vecMatrix[i]);
+	//	_vector vPos = matTmp.r[3];
+
+	//	if (!g_pGameInstance->isIn_WorldFrustum(vPos, 50.f))
+	//		ZeroMemory(&m_vecUsingMatrix[i], sizeof(_float4x4));
+	//	else
+	//		m_vecUsingMatrix[i] = m_tEnvironmentDesc.tInstanceDesc.vecMatrix[i];
+	//}
 
 	m_pInstanceMesh->Update_InstanceBuffer(m_vecUsingMatrix);
 

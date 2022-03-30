@@ -1121,7 +1121,6 @@
     <ClInclude Include="..\Headers\Bastion_2HSword_Hit.h">
       <Filter>02.GameObject\03.Character\01.Monster\Bastion_2HSword\State_2HSword\Hit</Filter>
     </ClInclude>
-    <ClInclude Include="..\Headers\Monster_Bastion_Sword.h" />
     <ClInclude Include="..\Headers\Traverse_JumpNodeJog.h">
       <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Jump</Filter>
     </ClInclude>
@@ -1368,7 +1367,7 @@
     </ClInclude>
     <ClInclude Include="..\Headers\BronzeAnimus_Battle_Idle.h">
       <Filter>02.GameObject\03.Character\01.Monster\BronzeAnimus\State\Battle_Idle</Filter>
-	</ClInclude>
+    </ClInclude>
     <ClInclude Include="..\Headers\Shooter_Attack.h">
       <Filter>02.GameObject\03.Character\01.Monster\Bastion_Shooter\State\Attack</Filter>
     </ClInclude>
@@ -1416,7 +1415,7 @@
     </ClInclude>
     <ClInclude Include="..\Headers\Spear_Charge_Attack_End.h">
       <Filter>02.GameObject\03.Character\01.Monster\Bastion_Spear\State\Attack\Charge_Attack\End</Filter>
-	</ClInclude>
+    </ClInclude>
     <ClInclude Include="..\Headers\TriggerSystem.h">
       <Filter>03.System\00.Trigger</Filter>
     </ClInclude>
@@ -1440,6 +1439,9 @@
     </ClInclude>
     <ClInclude Include="..\Headers\Effect_Env_Fire.h">
       <Filter>02.GameObject\04.Effect\04.Env_Fire</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Monster_Bastion_Sword.h">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Sword</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1932,7 +1934,6 @@
     <ClCompile Include="..\Codes\Bastion_2HSword_Hit.cpp">
       <Filter>02.GameObject\03.Character\01.Monster\Bastion_2HSword\State_2HSword\Hit</Filter>
     </ClCompile>
-    <ClCompile Include="..\Codes\Monster_Bastion_Sword.cpp" />
     <ClCompile Include="..\Codes\Traverse_JumpNodeJog.cpp">
       <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Jump</Filter>
     </ClCompile>
@@ -2230,7 +2231,7 @@
     </ClCompile>
     <ClCompile Include="..\Codes\Spear_Charge_Attack_End.cpp">
       <Filter>02.GameObject\03.Character\01.Monster\Bastion_Spear\State\Attack\Charge_Attack\End</Filter>
-	</ClCompile>
+    </ClCompile>
     <ClCompile Include="..\Codes\Client_Trigger.cpp">
       <Filter>03.System\00.Trigger\Client_Trigger</Filter>
     </ClCompile>
@@ -2251,6 +2252,9 @@
     </ClCompile>
     <ClCompile Include="..\Codes\Effect_Env_Fire.cpp">
       <Filter>02.GameObject\04.Effect\04.Env_Fire</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Monster_Bastion_Sword.cpp">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Sword</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

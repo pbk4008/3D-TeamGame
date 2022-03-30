@@ -484,6 +484,15 @@ _bool CGameInstance::isIn_WorldFrustum(_fvector vPosition, _float fRange)
 	return m_pFrustum->isInWorld(vPosition, fRange);
 }
 
+_bool CGameInstance::isIn_WorldFrustum(_float4* vPoints, _float fRange)
+{
+	if (nullptr == m_pFrustum)
+		return false;
+
+	return m_pFrustum->isInWorld(vPoints, fRange);
+}
+
+
 _bool CGameInstance::isIn_LocalFrustum(_fvector vPosition, _float fRange)
 {
 	if (nullptr == m_pFrustum)

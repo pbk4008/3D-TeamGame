@@ -17,6 +17,7 @@ public:
 	HRESULT Transform_ToLocalSpace(_fmatrix WorldMatrixInverse);
 
 	_bool isInWorld(_fvector vPosition, _float fRange = 0.f);
+	_bool isInWorld(_float4* vPoints, _float fRange = 0.f);
 	_bool isInLocal(_fvector vPosition, _float fRange = 0.f);
 
 private:
