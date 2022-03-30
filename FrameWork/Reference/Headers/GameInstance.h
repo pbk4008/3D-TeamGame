@@ -20,7 +20,6 @@
 #include "PhysicsXSystem.h"
 #include "EffectManager.h"
 
-
 BEGIN(Engine)
 
 class CComponent;
@@ -134,6 +133,7 @@ public: /* For.Font_Manager */
 
 public: /* For.Frustum */
 	_bool isIn_WorldFrustum(_fvector vPosition, _float fRange = 0.f);
+	_bool isIn_WorldFrustum(_float4* vPoints, _float fRange = 0.f);
 	_bool isIn_LocalFrustum(_fvector vPosition, _float fRange = 0.f);
 
 public:/* For.TextureManager*/
@@ -170,6 +170,14 @@ public:/* For.SaveManager*/
 public:/* For.PhysX */
 	const _bool Raycast(RAYCASTDESC& _desc);
 
+public: /* For.SoundMgr */
+	HRESULT Init_SoundManager();
+	void Play_Shot(const wstring& pSoundKey, CSoundMgr::CHANNELID eID);
+	void PlayBGM(const wstring& pSoundKey);
+	void StopSound(CSoundMgr::CHANNELID eID);
+	void StopAll();
+	void VolumeChange(const std::wstring& pSoundKey, _float fVolume);
+
 private:
 	CGraphic_Device*			m_pGraphic_Device = nullptr;		
 	CLevel_Manager*				m_pLevel_Manager = nullptr;
@@ -188,6 +196,7 @@ private:
 	CSoundMgr*					m_pSoundManager = nullptr;
 	CPhysicsXSystem*			m_pPhysicSystem = nullptr;
 	CEffectManager*			m_pEffectManager = nullptr;
+
 public:
 	static void Release_Engine();
 	virtual void Free() override;

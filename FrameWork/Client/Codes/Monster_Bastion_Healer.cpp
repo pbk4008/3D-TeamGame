@@ -537,7 +537,14 @@ HRESULT CMonster_Bastion_Healer::Render_Debug(void)
 
 void CMonster_Bastion_Healer::OnTriggerEnter(CCollision& collision)
 {
+	m_pPanel->Set_Show(true);
+
 	m_pStateController->OnTriggerEnter(collision);
+}
+
+void CMonster_Bastion_Healer::OnTriggerExit(CCollision& collision)
+{
+	m_pStateController->OnTriggerExit(collision);
 }
 
 void CMonster_Bastion_Healer::Set_IsAttack(const _bool _isAttack)

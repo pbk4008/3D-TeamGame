@@ -52,6 +52,7 @@ private:
 
 private:
 	virtual void OnTriggerEnter(CCollision& collision);
+	virtual void OnTriggerExit(CCollision& collision);
 
 public:
 	void Set_IsAttack(const _bool _isAttack);

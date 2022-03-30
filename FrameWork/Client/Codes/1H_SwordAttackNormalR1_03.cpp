@@ -57,6 +57,8 @@ HRESULT C1H_SwordAttackNormalR1_03::EnterState()
 	if (FAILED(__super::EnterState()))
 		return E_FAIL;
 
+	g_pGameInstance->Play_Shot(L"Needle_Attack_L_3", CSoundMgr::CHANNELID::Player_Sword_Attack);
+
 	if (FAILED(m_pAnimationController->SetUp_NextAnimation("SK_Silvermane.ao|A_1H_Sword_Attack_Normal_R1_03", false)))
 		return E_FAIL;
 	m_pAnimationController->Set_RootMotion(true, true);
@@ -75,6 +77,8 @@ HRESULT C1H_SwordAttackNormalR1_03::ExitState()
 		return E_FAIL;
 
 	m_pAnimationController->Set_PlaySpeed(1.f);
+	g_pGameInstance->StopSound(CSoundMgr::CHANNELID::Player_Sword_Attack);
+
 	return S_OK;
 }
 

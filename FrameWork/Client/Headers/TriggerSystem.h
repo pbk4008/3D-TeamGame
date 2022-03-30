@@ -57,7 +57,7 @@ public:
 					(m_pStage->*m_vecTriggerFunction[i])();
 					m_iClearIndex = i;
 				}
-				if (!m_vecTrigger[i]->Get_OnTrigger())
+				if (!m_vecClear[i])
 					bCheck = true;
 			}
 		}
@@ -89,11 +89,14 @@ public:
 	{
 		_uint iSize = (_uint)m_vecClear.size();
 
-		if (m_iClearIndex < iSize-1)
+		if (m_iClearIndex < iSize)
 		{
 			m_vecClear[m_iClearIndex] = true;
-			m_vecTrigger[m_iClearIndex + 1]->setActive(true);
-			m_vecTrigger[m_iClearIndex + 1]->TurnOnTrigger(true);
+			if (m_iClearIndex != iSize - 1)
+			{
+				m_vecTrigger[m_iClearIndex + 1]->setActive(true);
+				m_vecTrigger[m_iClearIndex + 1]->TurnOnTrigger(true);
+			}
 		}
 	}
 	HRESULT Add_TriggerFuntion(void(T::* pf)())

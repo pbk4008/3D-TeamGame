@@ -190,9 +190,13 @@ void CJumpNode::setIsPick(const _bool _isPick)
 		{
 		case true:
 			m_pAnimationController->SetUp_NextAnimation("SK_Jump_Node.ao|A_Activating_JumpNode", false);
+			g_pGameInstance->StopSound(CSoundMgr::CHANNELID::Jump_Node);
+			g_pGameInstance->Play_Shot(L"JumpNode_Open", CSoundMgr::CHANNELID::Jump_Node);
 			break;
 		case false:
 			m_pAnimationController->SetUp_NextAnimation("SK_Jump_Node.ao|A_Deactivating_JumpNode", false);
+			g_pGameInstance->StopSound(CSoundMgr::CHANNELID::Jump_Node);
+			g_pGameInstance->Play_Shot(L"JumpNode_Close", CSoundMgr::CHANNELID::Jump_Node);
 			break;
 		}
 		m_pAnimationController->Set_PlaySpeed(1.f);

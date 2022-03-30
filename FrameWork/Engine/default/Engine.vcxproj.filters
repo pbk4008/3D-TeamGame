@@ -307,6 +307,9 @@
     <Filter Include="00.Utility\04.Manager\02.LightManager\Light">
       <UniqueIdentifier>{571ed3e5-a325-4217-9bd2-1267df4db675}</UniqueIdentifier>
     </Filter>
+    <Filter Include="00.Utility\03.Component\09.CullingBox">
+      <UniqueIdentifier>{c99a8ce3-e94b-45f2-a5b4-1bf2aa1afa77}</UniqueIdentifier>
+       </Filter>
     <Filter Include="00.Utility\03.Component\05.VIBuffer\11.Trail">
       <UniqueIdentifier>{8d54a38c-9871-4707-a828-2c7192092e77}</UniqueIdentifier>
     </Filter>
@@ -606,6 +609,9 @@
     <ClInclude Include="..\public\Actor.h">
       <Filter>00.Utility\02.GameObject\02.Actor</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\CullingBox.h">
+      <Filter>00.Utility\03.Component\09.CullingBox</Filter>
+        </ClInclude>
     <ClInclude Include="..\public\Trail_VIBuffer.h">
       <Filter>00.Utility\03.Component\05.VIBuffer\11.Trail</Filter>
     </ClInclude>
@@ -764,9 +770,6 @@
     <ClCompile Include="..\private\VIBuffer_PointInstance_Explosion.cpp">
       <Filter>00.Utility\03.Component\05.VIBuffer\09.Instance\00.Particle\00.Explosion</Filter>
     </ClCompile>
-    <ClCompile Include="..\private\Model.cpp">
-      <Filter>00.Utility\03.Component\05.VIBuffer\07.Model\MeshContainer</Filter>
-    </ClCompile>
     <ClCompile Include="..\private\State.cpp">
       <Filter>00.Utility\98.State</Filter>
     </ClCompile>
@@ -871,6 +874,12 @@
     </ClCompile>
     <ClCompile Include="..\private\EffectManager.cpp">
       <Filter>00.Utility\04.Manager\12.EffectManager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\CullingBox.cpp">
+      <Filter>00.Utility\03.Component\09.CullingBox</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Model.cpp">
+      <Filter>00.Utility\03.Component\05.VIBuffer\07.Model</Filter>
     </ClCompile>
     <ClCompile Include="..\private\Trail_VIBuffer.cpp">
       <Filter>00.Utility\03.Component\05.VIBuffer\11.Trail</Filter>

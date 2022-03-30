@@ -54,7 +54,6 @@ HRESULT C1H_SwordAttackNormalR2_Loop::EnterState()
 	m_pSilvermane->Set_IsTrasceCamera(false);
 	m_pSilvermane->Set_IsAttack(false);
 
-
 	if (!m_isShake)
 	{
 		_float3 vPos; XMStoreFloat3(&vPos, m_pTransform->Get_State(CTransform::STATE_POSITION));
@@ -68,7 +67,7 @@ HRESULT C1H_SwordAttackNormalR2_Loop::ExitState()
 {
 	if (FAILED(__super::ExitState()))
 		return E_FAIL;
-
+	g_pGameInstance->Play_Shot(L"Needle_Attack_R_P2", CSoundMgr::CHANNELID::Player_Sword_Attack);
 	m_pSilvermane->Set_IsTrasceCamera(true);
 	m_fHoldTime = 0.f;
 

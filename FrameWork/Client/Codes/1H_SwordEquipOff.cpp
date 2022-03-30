@@ -56,6 +56,8 @@ HRESULT C1H_SwordEquipOff::EnterState()
 	if (FAILED(__super::EnterState()))
 		return E_FAIL;
 
+	g_pGameInstance->Play_Shot(L"Needle_UnEquip", CSoundMgr::CHANNELID::Unequip_Needle);
+
 	if (FAILED(m_pAnimationController->SetUp_NextAnimation("SK_Silvermane.ao|A_1H_Sword_Equip_Off", false)))
 		return E_FAIL;
 	m_pAnimationController->Set_RootMotion(true, true);
@@ -67,6 +69,7 @@ HRESULT C1H_SwordEquipOff::ExitState()
 {
 	if (FAILED(__super::ExitState()))
 		return E_FAIL;
+	g_pGameInstance->StopSound(CSoundMgr::CHANNELID::Unequip_Needle);
 
 	m_pSilvermane->Set_EquipWeapon(false);
 	m_pSilvermane->Set_WeaponFixedBone("spine_03");

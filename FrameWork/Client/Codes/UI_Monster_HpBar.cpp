@@ -73,7 +73,7 @@ _int CUI_Monster_HpBar::Tick(_double TimeDelta)
 		m_fDisappearTimeAcc += TimeDelta;
 	}
 
-	if (1.f <= m_fDisappearTimeAcc)
+	if (5.f <= m_fDisappearTimeAcc)
 	{
 		m_fAlpha -= TimeDelta;
 	}

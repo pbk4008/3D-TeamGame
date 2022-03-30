@@ -30,6 +30,7 @@ public:
 
 public:
 	virtual	void OnTriggerEnter(CCollision& collision);
+	virtual void OnTriggerExit(CCollision& collision);
 
 protected:
 	_bool	m_bTargetOn = false;

@@ -102,8 +102,8 @@ _int CCamera_Silvermane::Tick(_double _dDeltaTime)
 		tShakeEvent.tWaveX.fFrequency = 10.f;
 		tShakeEvent.tWaveY.fAmplitude = 0.04f;
 		tShakeEvent.tWaveY.fFrequency = 6.f;
-		tShakeEvent.tWaveY.fAmplitude = 0.04f;
-		tShakeEvent.tWaveY.fFrequency = 8.f;
+		tShakeEvent.tWaveZ.fAmplitude = 0.04f;
+		tShakeEvent.tWaveZ.fFrequency = 8.f;
 		tShakeEvent.fBlendOutTime = 0.3f;
 		if (g_pGameInstance->getkeyDown(DIK_RIGHT))
 		{
@@ -280,7 +280,7 @@ void CCamera_Silvermane::OnOffMonsterUI()
 	RAYCASTDESC tRaycastDesc;
 	XMStoreFloat3(&tRaycastDesc.vOrigin, svRayPos);
 	XMStoreFloat3(&tRaycastDesc.vDir, svRayDir);
-	tRaycastDesc.fMaxDistance = 30.f;
+	tRaycastDesc.fMaxDistance = 15.f;
 	tRaycastDesc.filterData.flags = PxQueryFlag::eANY_HIT | PxQueryFlag::eDYNAMIC;
 	CGameObject* pHitObject = nullptr;
 	tRaycastDesc.ppOutHitObject = &pHitObject;
@@ -296,9 +296,9 @@ void CCamera_Silvermane::OnOffMonsterUI()
 		case (_uint)GAMEOBJECT::MONSTER_HEALER:
 		case (_uint)GAMEOBJECT::MONSTER_SHOOTER:
 		case (_uint)GAMEOBJECT::MONSTER_SPEAR:
-			static_cast<CActor*>(pHitObject)->Set_UIShow(true);
 			if (nullptr != pHitObject)
 			{
+				static_cast<CActor*>(pHitObject)->Set_UIShow(true);
 				m_pTargetMonster = pHitObject;
 			}
 			break;

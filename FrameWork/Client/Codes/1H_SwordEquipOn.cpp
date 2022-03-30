@@ -67,6 +67,8 @@ HRESULT C1H_SwordEquipOn::EnterState()
 	if (FAILED(__super::EnterState()))
 		return E_FAIL;
 
+	g_pGameInstance->Play_Shot(L"Needle_Equip", CSoundMgr::CHANNELID::Equip_Needle);
+
 	if (FAILED(m_pAnimationController->SetUp_NextAnimation("SK_Silvermane.ao|A_1H_Sword_Equip_On", false)))
 		return E_FAIL;
 	m_pAnimationController->Set_RootMotion(true, true);
@@ -78,6 +80,9 @@ HRESULT C1H_SwordEquipOn::ExitState()
 {
 	if (FAILED(__super::ExitState()))
 		return E_FAIL;
+
+	g_pGameInstance->StopSound(CSoundMgr::CHANNELID::Equip_Needle);
+
 
 	return S_OK;
 }

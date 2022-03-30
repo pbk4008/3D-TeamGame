@@ -24,6 +24,8 @@ public:
 	void SetUp_BoneMatrices(_matrix* pBoneMatrices, _fmatrix PivotMatrix);
 	const CSaveManager::STATICMESHDATA SetStaticSaveData();
 	const CSaveManager::ANIMMESHDATA SetAnimSaveData();
+	_fvector Get_MaxPoint();
+	_fvector Get_MinPoint();
 private:
 	HRESULT Set_UpVerticesDesc(class CModel* pModel, aiMesh* pMesh, _fmatrix PivotMatrix);
 	HRESULT Set_UpVerticesDesc(_uint iNumVtxCnt, class CModel* pModel, void* pVtx);

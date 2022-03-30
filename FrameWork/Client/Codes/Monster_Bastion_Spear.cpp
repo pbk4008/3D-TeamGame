@@ -20,7 +20,6 @@
 #include "Spear_Charge_Attack_End.h"
 #include "Spear_Guard.h"
 
-#include "Stage1.h"
 
 CMonster_Bastion_Spear::CMonster_Bastion_Spear(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
 	: CActor(_pDevice, _pDeviceContext)
@@ -123,7 +122,8 @@ _int CMonster_Bastion_Spear::Tick(_double _dDeltaTime)
 	/* Weapon Bone Update */
 	m_pWeapon->Tick(_dDeltaTime);
 
-	m_pCharacterController->Move(_dDeltaTime, m_pTransform->Get_Velocity());
+	if(!m_bDead)
+		m_pCharacterController->Move(_dDeltaTime, m_pTransform->Get_Velocity());
 
 	if (true == m_bUIShow)
 	{
@@ -160,12 +160,7 @@ _int CMonster_Bastion_Spear::Tick(_double _dDeltaTime)
 	if ((_uint)ANIM_TYPE::A_DEATH == m_pAnimator->Get_CurrentAnimNode() && m_pAnimator->Get_AnimController()->Is_Finished())
 	{
 		m_bRemove = true;
-		setActive(false);
-
 		m_pPanel->Set_Show(false);
-		CLevel* pLevel = g_pGameInstance->getCurrentLevelScene();
-		if (g_pGameInstance->getCurrentLevel() == (_uint)SCENEID::SCENE_STAGE1)
-			static_cast<CStage1*>(pLevel)->Minus_MonsterCount();
 	}
 	m_pPanel->Set_TargetWorldMatrix(m_pTransform->Get_WorldMatrix());
 
@@ -181,7 +176,9 @@ _int CMonster_Bastion_Spear::LateTick(_double _dDeltaTime)
 	if (FAILED(m_pRenderer->Add_RenderGroup(CRenderer::RENDER_NONALPHA, this)))
 		return -1;
 
-	m_pCharacterController->Update_OwnerTransform();
+	if(!m_bDead)
+		m_pCharacterController->Update_OwnerTransform();
+
 	m_pWeapon->LateTick(_dDeltaTime);
 
 	/* State FSM Late Update */
@@ -551,6 +548,8 @@ HRESULT CMonster_Bastion_Spear::Render_Debug(void)
 
 void CMonster_Bastion_Spear::OnTriggerEnter(CCollision& collision)
 {
+	m_pPanel->Set_Show(true);
+
 	m_pStateController->OnTriggerEnter(collision);
 }
 
@@ -559,6 +558,11 @@ void CMonster_Bastion_Spear::Set_IsAttack(const _bool _isAttack)
 	m_IsAttack = _isAttack;
 	if (m_pWeapon)
 		m_pWeapon->Set_IsAttack(_isAttack);
+}
+
+void CMonster_Bastion_Spear::Remove_Collider()
+{
+	m_pCharacterController->Remove_CCT();
 }
 
 CMonster_Bastion_Spear* CMonster_Bastion_Spear::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)

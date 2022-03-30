@@ -932,6 +932,8 @@ HRESULT CLoader::Ready_Logo()
 	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"Texture_Title", L"../bin/Resources/Texture/Loading/logo_godfall_3d.dds")))
 		return E_FAIL;
 
+	g_pGameInstance->Init_SoundManager();
+
 	return S_OK;
 }
 

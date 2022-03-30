@@ -25,6 +25,7 @@ public:
 
 private:
 	_bool	m_bDeath = false;
+	CCameraShake::SHAKEEVENT m_tShakeEvent;
 
 public:
 	static CSpear_Death* Create(ID3D11Device * _pDevice, ID3D11DeviceContext * _pDeviceContext, void* _pArg = nullptr);

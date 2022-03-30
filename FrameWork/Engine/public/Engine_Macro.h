@@ -72,3 +72,7 @@
 
 #define PX_RELEASE(x) if(x) {x->release();}
 #define PX_ADDREF(x) if(x) {x->acquireReference();}
+
+#pragma region LOG
+#define PRINT_LOG(caption, message) ::MessageBox(0, message, caption, MB_OK);
+#pragma endregion

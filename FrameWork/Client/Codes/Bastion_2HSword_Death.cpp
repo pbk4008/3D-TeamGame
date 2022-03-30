@@ -57,7 +57,9 @@ HRESULT CBastion_2HSword_Death::EnterState()
 	if (FAILED(__super::EnterState()))
 		return E_FAIL;
 
+	g_pShakeManager->Shake(CShakeManager::ETemplate::MonsterDeath, _float3(0.f, 0.f, 0.f));
 	m_pAnimator->Change_AnyEntryAnimation((_uint)CMonster_Bastion_2HSword::ANIM_TYPE::A_DEATH);
+	g_pMainApp->FreezeTime();
 
 	g_pMainApp->FreezeTime();
 	return S_OK;

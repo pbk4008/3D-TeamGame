@@ -133,7 +133,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>../../Reference/Library/Debug/</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>../../Reference/Library/Debug/;../../Reference/Headers/</AdditionalLibraryDirectories>
       <Profile>false</Profile>
     </Link>
     <PostBuildEvent>

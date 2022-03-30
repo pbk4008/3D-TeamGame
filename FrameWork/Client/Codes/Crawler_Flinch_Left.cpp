@@ -62,9 +62,7 @@ HRESULT CCrawler_Flinch_Left::EnterState()
 {
 	if (FAILED(__super::EnterState()))
 		return E_FAIL;
-
 	m_pAnimator->Change_AnyEntryAnimation(CMonster_Crawler::MON_STATE::FLINCH_LEFT);
-
 
 	return S_OK;
 }
@@ -73,7 +71,6 @@ HRESULT CCrawler_Flinch_Left::ExitState()
 {
 	if (FAILED(__super::ExitState()))
 		return E_FAIL;
-
 
 	return S_OK;
 }

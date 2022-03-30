@@ -132,7 +132,8 @@ _int CMonster_Crawler::Tick(_double _dDeltaTime)
 			CLevel* pLevel = g_pGameInstance->getCurrentLevelScene();
 			if (g_pGameInstance->getCurrentLevel() == (_uint)SCENEID::SCENE_STAGE1)
 				static_cast<CStage1*>(pLevel)->Minus_MonsterCount();
-
+			else if (g_pGameInstance->getCurrentLevel() == (_uint)SCENEID::SCENE_STAGE2)
+				static_cast<CStage2*>(pLevel)->Minus_MonsterCount();
 			m_bDead = true;
 			m_pStateController->Change_State(L"Death");
 			m_pCharacterController->Remove_CCT();
@@ -158,6 +159,7 @@ _int CMonster_Crawler::Tick(_double _dDeltaTime)
 		if (m_pAnimatorCom->Get_CurrentAnimation()->Is_Finished())
 		{
 			Set_Remove(true);
+			m_pPanel->Set_Remove(true);
 		}
 	}
 	
@@ -212,6 +214,8 @@ void CMonster_Crawler::OnTriggerEnter(CCollision& collision)
 	{
 		if (true == g_pObserver->IsAttack()) //ÇÃ·¹ÀÌ¾î°ø°ÝÀÏ¶§
 		{
+			m_pPanel->Set_Show(true);
+
 			m_bFirstHit = true; //µü ÇÑ¹ø true·Î º¯°æÇØÁÜ
 
 			if (true == m_bFirstHit)
@@ -221,6 +225,7 @@ void CMonster_Crawler::OnTriggerEnter(CCollision& collision)
 
 			if ((_uint)GAMEOBJECT::WEAPON == collision.pGameObject->getTag())
 			{
+				g_pGameInstance->Play_Shot(L"Monster_Hit", CSoundMgr::CHANNELID::Monster_Hit);
 
 				m_fCurrentHp -= 2;
 				m_fGroggyGauge += 2; //TODO::¼öÄ¡Á¤ÇØ¼­¹Ù²ãÁà¾ßµÊ
@@ -267,6 +272,7 @@ void CMonster_Crawler::OnTriggerExit(CCollision& collision)
 				g_pMainApp->FreezeTime();
 		}
 	}
+	g_pGameInstance->StopSound(CSoundMgr::CHANNELID::Monster_Hit);
 }
 
 void CMonster_Crawler::Set_IsAttack(const _bool _isAttack)
@@ -363,7 +369,7 @@ HRESULT CMonster_Crawler::Set_Animation_FSM()
 		return E_FAIL;
 
 	pAnim = m_pModelCom->Get_Animation("SK_Crystal_Crawler_v1.ao|A_Death_CrystalCrawler");
-	if (FAILED(m_pAnimatorCom->Insert_Animation(DEATH, HEAD, pAnim, true, true, false, ERootOption::XYZ, true)))
+	if (FAILED(m_pAnimatorCom->Insert_Animation(DEATH, HEAD, pAnim, false, false, false, ERootOption::XYZ, true)))
 		return E_FAIL;
 
 	pAnim = m_pModelCom->Get_Animation("SK_Crystal_Crawler_v1.ao|A_Ricochet_CrystalCrawler");

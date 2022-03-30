@@ -110,6 +110,8 @@ HRESULT C1H_SwordAttackNormalR2_ReleaseDoubleSwing::ExitState()
 	if (FAILED(__super::ExitState()))
 		return E_FAIL;
 
+	g_pGameInstance->StopSound(CSoundMgr::CHANNELID::Player_Sword_Attack);
+
 	m_pAnimationController->Set_PlaySpeed(1.f);
 
 	m_pSilvermane->Set_IsTrasceCamera(true);
