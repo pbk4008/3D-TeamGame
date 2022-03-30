@@ -64,11 +64,19 @@ HRESULT CEffect_HitFloating::NativeConstruct(const _uint _iSceneID, void* pArg)
 	m_backupDesc = Desc;
 
 	//setActive(true);
+
 	return S_OK;
 }
 
 _int CEffect_HitFloating::Tick(_double TimeDelta)
 {
+	if (g_pGameInstance->getkeyDown(DIK_NUMPAD1))
+	{
+		m_pBuffer->Set_Desc(m_backupDesc);
+		m_pBuffer->Particle_Reset();
+		m_Desc.fCurTime = 0.f;
+	}
+
 	m_pBuffer->Update(TimeDelta, m_Desc.iAxis);
 
 	m_fNonActiveTimeAcc += TimeDelta;
@@ -171,7 +179,7 @@ HRESULT CEffect_HitFloating::SetUp_Components()
 	if (FAILED(m_pTexture->Change_Texture(NewTag)))
 		return E_FAIL;
 
-	_vector vPos = { XMVectorGetX(m_Desc.fMyPos), XMVectorGetY(m_Desc.fMyPos), XMVectorGetZ(m_Desc.fMyPos), 1.f };
+	_vector vPos = { /*XMVectorGetX(m_Desc.fMyPos), XMVectorGetY(m_Desc.fMyPos), XMVectorGetZ(m_Desc.fMyPos)*/0,1.5f,0, 1.f };
 	m_pTransform->Set_State(CTransform::STATE_POSITION, vPos);
 
 	//¹öÆÛ Clone

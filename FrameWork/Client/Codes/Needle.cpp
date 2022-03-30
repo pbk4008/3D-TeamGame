@@ -74,6 +74,11 @@ _int CNeedle::Tick(_double _dDeltaTime)
 
 _int CNeedle::LateTick(_double _dDeltaTime)
 {
+	if (g_pObserver->IsAttack())
+		m_bTrailOnOff = true;
+	else
+		m_bTrailOnOff = false;
+
 	if (0 > __super::LateTick(_dDeltaTime))
 		return -1;
 

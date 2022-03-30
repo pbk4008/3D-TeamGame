@@ -603,6 +603,9 @@
     <Filter Include="02.GameObject\04.Effect\04.Env_Fire">
       <UniqueIdentifier>{f3533393-750c-4e4b-8424-ce5de30c8016}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\96.Weapon\98.Trail">
+      <UniqueIdentifier>{0a662d2a-bf0c-4955-b176-58fbdf8c84f3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -1368,7 +1371,7 @@
     </ClInclude>
     <ClInclude Include="..\Headers\BronzeAnimus_Battle_Idle.h">
       <Filter>02.GameObject\03.Character\01.Monster\BronzeAnimus\State\Battle_Idle</Filter>
-	</ClInclude>
+    </ClInclude>
     <ClInclude Include="..\Headers\Shooter_Attack.h">
       <Filter>02.GameObject\03.Character\01.Monster\Bastion_Shooter\State\Attack</Filter>
     </ClInclude>
@@ -1416,7 +1419,7 @@
     </ClInclude>
     <ClInclude Include="..\Headers\Spear_Charge_Attack_End.h">
       <Filter>02.GameObject\03.Character\01.Monster\Bastion_Spear\State\Attack\Charge_Attack\End</Filter>
-	</ClInclude>
+    </ClInclude>
     <ClInclude Include="..\Headers\TriggerSystem.h">
       <Filter>03.System\00.Trigger</Filter>
     </ClInclude>
@@ -1440,6 +1443,9 @@
     </ClInclude>
     <ClInclude Include="..\Headers\Effect_Env_Fire.h">
       <Filter>02.GameObject\04.Effect\04.Env_Fire</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\SwordTrail.h">
+      <Filter>02.GameObject\96.Weapon\98.Trail</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -2230,7 +2236,7 @@
     </ClCompile>
     <ClCompile Include="..\Codes\Spear_Charge_Attack_End.cpp">
       <Filter>02.GameObject\03.Character\01.Monster\Bastion_Spear\State\Attack\Charge_Attack\End</Filter>
-	</ClCompile>
+    </ClCompile>
     <ClCompile Include="..\Codes\Client_Trigger.cpp">
       <Filter>03.System\00.Trigger\Client_Trigger</Filter>
     </ClCompile>
@@ -2251,6 +2257,9 @@
     </ClCompile>
     <ClCompile Include="..\Codes\Effect_Env_Fire.cpp">
       <Filter>02.GameObject\04.Effect\04.Env_Fire</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\SwordTrail.cpp">
+      <Filter>02.GameObject\96.Weapon\98.Trail</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

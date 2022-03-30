@@ -24,9 +24,24 @@ _int C2H_HammerAttackJogR1::Tick(const _double& _dDeltaTime)
 
 	Add_PlusAngle(EDir::Forward, _dDeltaTime);
 
+
+
+	_uint iCurKeyFrameIndex = m_pAnimationController->Get_CurKeyFrameIndex();
+	if (iCurKeyFrameIndex == m_iShakeIndex)
+	{
+		if (!m_isShake2)
+		{
+			_float3 vPos; XMStoreFloat3(&vPos, m_pTransform->Get_State(CTransform::STATE_POSITION));
+			g_pShakeManager->Shake(m_tShakeEvent2, vPos);
+			m_isShake2 = true;
+		}
+	}
+
+
 	if (m_pAnimationController->Is_Finished())
 	{
-		m_pStateController->Change_State(L"2H_HammerIdle");
+		if (FAILED(m_pStateController->Change_State(L"2H_HammerIdle")))
+			return -1;
 		return STATE_CHANGE;
 	}
 
@@ -67,6 +82,10 @@ HRESULT C2H_HammerAttackJogR1::EnterState()
 
 	m_iCutIndex = 10;
 	m_pAnimationController->Set_PlaySpeed(1.2f);
+
+	m_iAttackStartIndex = 20;
+	m_iAttackEndIndex = 30;
+	m_iShakeIndex = 26;
 	return S_OK;
 }
 
@@ -76,6 +95,7 @@ HRESULT C2H_HammerAttackJogR1::ExitState()
 		return E_FAIL;
 
 	m_pAnimationController->Set_PlaySpeed(1.f);
+	m_isShake2 = false;
 	return S_OK;
 }
 

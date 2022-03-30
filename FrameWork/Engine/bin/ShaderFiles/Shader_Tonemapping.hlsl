@@ -67,7 +67,7 @@ PS_OUT_TONE PS_MAIN_TONEMAPPING(PS_IN In)
 	vector vTotalcolor = g_HDRDiffuseTexture.Sample(DefaultSampler, In.vTexUV);
 
 	// dx ±âº» Åæ¸ÅÇÎ
-	float Luminance = 0.3f;
+	float Luminance = 0.4f;
 	//float Luminance = 0.08f;
 	float MiddleGray = 0.18f;
 	float WhiteCutoff = 0.9f;
@@ -81,10 +81,9 @@ PS_OUT_TONE PS_MAIN_TONEMAPPING(PS_IN In)
 	
 	Out.vHDRDiffuse = color;
 	
-	
 	vector vSpeccular = g_HDRSpecularTexture.Sample(DefaultSampler, In.vTexUV);
 	
-	Luminance = 0.2f;
+	Luminance = 0.4f;
 	//Luminance = 0.08f;
 	MiddleGray = 0.18f;
 	WhiteCutoff = 0.9f;
@@ -97,10 +96,6 @@ PS_OUT_TONE PS_MAIN_TONEMAPPING(PS_IN In)
 	vSpecColor.a = 1.f;
 	
 	Out.vHDRSpecualr = vSpecColor;
-	//pow(abs(vSpecColor), 1.f / 2.2f);
-	
-	
-	vector base = g_HDRDiffuseTexture.Sample(DefaultSampler, In.vTexUV);
 	
 	float xWeight = frac(In.vTexUV.x / rcp_bloom_tex_w) - 0.5f;
 	float xDir = xWeight;

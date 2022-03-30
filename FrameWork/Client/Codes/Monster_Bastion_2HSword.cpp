@@ -623,7 +623,7 @@ void CMonster_Bastion_2HSword::Hit(CCollision& pCol)
 		if ((_uint)GAMEOBJECT::WEAPON == pCol.pGameObject->getTag())
 		{
 			m_fCurrentHp -= 5.f;
-			m_bGroggy = 2; //TODO::¼öÄ¡Á¤ÇØ¼­¹Ù²ãÁà¾ßµÊ
+			//m_bGroggy = 2; //TODO::¼öÄ¡Á¤ÇØ¼­¹Ù²ãÁà¾ßµÊ
 
 			m_pPanel->Set_HpBar(Get_HpRatio());
 
@@ -631,7 +631,13 @@ void CMonster_Bastion_2HSword::Hit(CCollision& pCol)
 			{
 				//±×·Î±â ¾Æ´Ò¶§¸¸ Áõ°¡ÇÒ¼öÀÖ°Ô
 				m_pPanel->Set_GroggyBar(Get_GroggyGaugeRatio());
-				m_pStateController->Change_State(L"Hit");
+
+				_vector svTargetPos = pCol.pGameObject->Get_Transform()->Get_State(CTransform::STATE_POSITION);
+				_vector svPos = m_pTransform->Get_State(CTransform::STATE_POSITION);
+
+				_vector svDir = XMVector3Normalize(XMVectorSetY(svPos - svTargetPos, 0.f));
+
+				m_pStateController->Change_State(L"Hit", &svDir);
 			}
 		}
 		else

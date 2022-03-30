@@ -124,6 +124,7 @@ public: /* for.Input_Device */
 
 public: /* For.Light_Manager */
 	const LIGHTDESC* Get_LightDesc(_uint iIndex = 0);
+	HRESULT	CreateLightCam(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext, LIGHTDESC& desc);
 	HRESULT Add_Light(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext, const LIGHTDESC& LightDesc);
 	void UpdateLightCam(_uint LightIndx, _fvector playerpos);
 

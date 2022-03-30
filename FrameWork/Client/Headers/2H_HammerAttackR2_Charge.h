@@ -23,6 +23,7 @@ public:
 
 private:
 	_float m_fRotTime = 0.f;
+	_int m_iShakeIndex2 = -1;
 
 public:
 	static C2H_HammerAttackR2_Charge* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext, void* _pArg = nullptr);

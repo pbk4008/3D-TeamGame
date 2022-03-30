@@ -3,6 +3,7 @@
 #include "GameObject.h"
 
 BEGIN(Client)
+class CSwordTrail;
 
 class CWeapon abstract : public CGameObject
 {
@@ -31,6 +32,7 @@ public:
 
 	void Set_IsAttack(const _bool _isAttack);
 	const _bool IsAttack() const;
+	void Set_SwordTrail(_bool check) { m_bTrailOnOff = check; }
 protected:
 	//매개변수로 받은 행렬 크기 없애주는 함수
 	_fmatrix Remove_Scale(_fmatrix matTransform);
@@ -48,6 +50,9 @@ protected:
 	EType m_eType = EType::Max;
 
 	wstring m_wstrName = L"";
+
+	_bool			m_bTrailOnOff = false;
+	CSwordTrail*	m_pTrail = nullptr;
 
 public:
 	virtual CGameObject* Clone(const _uint _iSceneID, void* _pArg = nullptr) PURE;

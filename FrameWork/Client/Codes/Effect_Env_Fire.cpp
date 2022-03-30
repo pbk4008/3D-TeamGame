@@ -54,7 +54,7 @@ _int CEffect_Env_Fire::Tick(_double TimeDelta)
 {
 	
 	_uint iAllFrameCount = (m_Desc.iImageCountX * m_Desc.iImageCountY);
-	m_Desc.fFrame += (_float)(iAllFrameCount * TimeDelta * m_Desc.fEffectPlaySpeed); //플레이속도 
+	m_Desc.fFrame += (_float)(iAllFrameCount * TimeDelta * /*m_Desc.fEffectPlaySpeed*/ 1); //플레이속도 
 	if (m_Desc.fFrame >= iAllFrameCount)
 	{
 		m_Desc.fFrame = 0;
@@ -81,7 +81,7 @@ _int CEffect_Env_Fire::LateTick(_double TimeDelta)
 {
 	if (nullptr != m_pRenderer)
 	{
-		m_pRenderer->Add_RenderGroup(CRenderer::RENDER::RENDER_ALPHA, this);
+		m_pRenderer->Add_RenderGroup(CRenderer::RENDER::RENDER_NONALPHA, this);
 	}
 
 	return 0;
@@ -107,7 +107,7 @@ HRESULT CEffect_Env_Fire::Render()
 	_uint iFrame = (_uint)m_Desc.fFrame;
 	m_pBuffer->SetUp_ValueOnShader("g_iFrame", &iFrame, sizeof(_uint));
 
-	m_pBuffer->Render(0);
+	m_pBuffer->Render(2);
 
 	return S_OK;
 }

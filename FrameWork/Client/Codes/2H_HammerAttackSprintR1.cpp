@@ -24,6 +24,19 @@ _int C2H_HammerAttackSprintR1::Tick(const _double& _dDeltaTime)
 
 	Add_PlusAngle(EDir::Forward, _dDeltaTime);
 
+
+	_uint iCurKeyFrameIndex = m_pAnimationController->Get_CurKeyFrameIndex();
+	if (iCurKeyFrameIndex == m_iShakeIndex)
+	{
+		if (!m_isShake2)
+		{
+			_float3 vPos; XMStoreFloat3(&vPos, m_pTransform->Get_State(CTransform::STATE_POSITION));
+			g_pShakeManager->Shake(m_tShakeEvent2, vPos);
+			m_isShake2 = true;
+		}
+	}
+
+
 	if (m_pAnimationController->Is_Finished())
 	{
 		m_pStateController->Change_State(L"2H_HammerIdle");
@@ -64,8 +77,13 @@ HRESULT C2H_HammerAttackSprintR1::EnterState()
 		m_pSilvermane->Set_WeaponFixedBone("weapon_r");
 	}
 
+	m_tShakeEvent2.tWaveY.fAdditionalOffset = -0.6f;
+
 
 	m_iCutIndex = 40;
+	m_iAttackStartIndex = 30;
+	m_iAttackEndIndex = 50;
+	m_iShakeIndex = 36;
 	return S_OK;
 }
 

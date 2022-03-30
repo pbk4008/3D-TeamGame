@@ -85,9 +85,6 @@
     <Filter Include="00.Utility\03.Component\02.Renderer">
       <UniqueIdentifier>{08c7dca9-f7fc-41f6-9585-4500cff6754b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="00.Utility\03.Component\03.Texture">
-      <UniqueIdentifier>{b90aa41e-6d2d-4ba7-a108-9b7aaef357ad}</UniqueIdentifier>
-    </Filter>
     <Filter Include="00.Utility\03.Component\04.Transform">
       <UniqueIdentifier>{6d543e45-230a-437c-8b68-df9a975a8c93}</UniqueIdentifier>
     </Filter>
@@ -265,6 +262,9 @@
     <Filter Include="00.Utility\04.Manager\12.EffectManager">
       <UniqueIdentifier>{3e2071c1-559c-4d70-a599-2953719bc407}</UniqueIdentifier>
     </Filter>
+    <Filter Include="00.Utility\03.Component\03.Texture">
+      <UniqueIdentifier>{b90aa41e-6d2d-4ba7-a108-9b7aaef357ad}</UniqueIdentifier>
+    </Filter>
     <Filter Include="00.Utility\04.Manager\11.PhsyicX">
       <UniqueIdentifier>{dcacacc8-e908-43f8-a712-29490a7b5ade}</UniqueIdentifier>
     </Filter>
@@ -306,6 +306,9 @@
     </Filter>
     <Filter Include="00.Utility\04.Manager\02.LightManager\Light">
       <UniqueIdentifier>{571ed3e5-a325-4217-9bd2-1267df4db675}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00.Utility\03.Component\05.VIBuffer\11.Trail">
+      <UniqueIdentifier>{8d54a38c-9871-4707-a828-2c7192092e77}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -603,6 +606,9 @@
     <ClInclude Include="..\public\Actor.h">
       <Filter>00.Utility\02.GameObject\02.Actor</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\Trail_VIBuffer.h">
+      <Filter>00.Utility\03.Component\05.VIBuffer\11.Trail</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\private\Base.cpp">
@@ -866,6 +872,9 @@
     <ClCompile Include="..\private\EffectManager.cpp">
       <Filter>00.Utility\04.Manager\12.EffectManager</Filter>
     </ClCompile>
+    <ClCompile Include="..\private\Trail_VIBuffer.cpp">
+      <Filter>00.Utility\03.Component\05.VIBuffer\11.Trail</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="..\bin\ShaderFiles\Shader_Triangle.hlsl">
@@ -987,6 +996,9 @@
     </FxCompile>
     <FxCompile Include="..\bin\ShaderFiles\Shader_Particle.hlsl">
       <Filter>00.Utility\03.Component\05.VIBuffer\09.Instance\00.Particle</Filter>
+    </FxCompile>
+    <FxCompile Include="..\bin\ShaderFiles\Shader_RectViewport.hlsl">
+      <Filter>00.Utility\03.Component\02.Renderer</Filter>
     </FxCompile>
     <FxCompile Include="..\bin\ShaderFiles\Shader_Effect_Fire.hlsl">
       <Filter>98.ShaderFiles</Filter>
