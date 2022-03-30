@@ -33,6 +33,18 @@ _int C2H_HammerAttackR2_Charge::Tick(const _double& _dDeltaTime)
 	else if (75 < iCurKeyFrameIndex)
 		m_pSilvermane->Set_IsTrasceCamera(false);
 
+
+	if (iCurKeyFrameIndex == m_iShakeIndex2)
+	{
+		if (!m_isShake2)
+		{
+			_float3 vPos; XMStoreFloat3(&vPos, m_pTransform->Get_State(CTransform::STATE_POSITION));
+			g_pShakeManager->Shake(m_tShakeEvent2, vPos);
+			m_isShake2 = true;
+		}
+	}
+
+
 	if (m_pAnimationController->Is_Finished())
 	{
 		if (FAILED(m_pStateController->Change_State(L"2H_HammerIdle")))
@@ -73,6 +85,35 @@ HRESULT C2H_HammerAttackR2_Charge::EnterState()
 
 	m_pAnimationController->Add_TrackAcc(35.0);
 
+
+	// ½¦ÀÌÅ© ¿É¼Ç
+	//1
+	m_tShakeEvent = CCameraShake::SHAKEEVENT();
+	m_tShakeEvent.fDuration = 0.4f;
+	m_tShakeEvent.fBlendOutTime = 0.3f;
+	m_tShakeEvent.tWaveX.fAmplitude = 0.04f;
+	m_tShakeEvent.tWaveX.fFrequency = 10.f;
+	m_tShakeEvent.tWaveY.fAmplitude = 0.04f;
+	m_tShakeEvent.tWaveY.fFrequency = 6.f;
+	m_tShakeEvent.tWaveZ.fAmplitude = 0.02f;
+	m_tShakeEvent.tWaveZ.fFrequency = 8.f;
+	//2
+	m_tShakeEvent2 = CCameraShake::SHAKEEVENT();
+	m_tShakeEvent2.fDuration = 0.4f;
+	m_tShakeEvent2.fBlendOutTime = 0.3f;
+	m_tShakeEvent2.tWaveX.fAmplitude = 0.04f;
+	m_tShakeEvent2.tWaveX.fFrequency = 10.f;
+	m_tShakeEvent2.tWaveY.fAmplitude = 0.04f;
+	m_tShakeEvent2.tWaveY.fFrequency = 6.f;
+	m_tShakeEvent2.tWaveZ.fAmplitude = 0.02f;
+	m_tShakeEvent2.tWaveZ.fFrequency = 8.f;
+
+
+	m_iAttackStartIndex = 50;
+	m_iAttackEndIndex = 90;
+	m_iShakeIndex = 54;
+	m_iShakeIndex2 = 73;
+
 	return S_OK;
 }
 
@@ -86,6 +127,7 @@ HRESULT C2H_HammerAttackR2_Charge::ExitState()
 	m_pSilvermane->Set_IsTrasceCamera(true);
 	m_fRotTime = 0.f;
 
+	m_isShake2 = false;
 	return S_OK;
 }
 

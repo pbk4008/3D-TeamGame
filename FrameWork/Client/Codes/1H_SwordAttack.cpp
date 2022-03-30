@@ -22,8 +22,8 @@ _int C1H_SwordAttack::Tick(const _double& _dDeltaTime)
 		return iProgress;
 
 
-	_uint iCurkeyFrameIndex = m_pAnimationController->Get_CurKeyFrameIndex();
-	if (m_iAttackStartIndex < iCurkeyFrameIndex && m_iAttackEndIndex > iCurkeyFrameIndex)
+	_uint iCurKeyFrameIndex = m_pAnimationController->Get_CurKeyFrameIndex();
+	if (m_iAttackStartIndex < iCurKeyFrameIndex && m_iAttackEndIndex > iCurKeyFrameIndex)
 	{
 		m_pSilvermane->Set_IsAttack(true);
 		if (!m_isShake)
@@ -32,6 +32,7 @@ _int C1H_SwordAttack::Tick(const _double& _dDeltaTime)
 			g_pShakeManager->Shake(m_tShakeEvent, vPos);
 			m_isShake = true;
 		}
+		m_pSilvermane->Set_IsTrasceCamera(false);
 	}
 	else
 		m_pSilvermane->Set_IsAttack(false);
@@ -64,9 +65,9 @@ HRESULT C1H_SwordAttack::EnterState()
 
 	m_tShakeEvent.fDuration = 0.4f;
 	m_tShakeEvent.fBlendOutTime = 0.3f;
-	m_tShakeEvent.tWaveX.fAmplitude = 0.06f;
+	m_tShakeEvent.tWaveX.fAmplitude = 0.02f;
 	m_tShakeEvent.tWaveX.fFrequency = 10.f;
-	m_tShakeEvent.tWaveY.fAmplitude = 0.06f;
+	m_tShakeEvent.tWaveY.fAmplitude = 0.02f;
 	m_tShakeEvent.tWaveY.fFrequency = 6.f;
 	m_tShakeEvent.tWaveZ.fAmplitude = 0.02f;
 	m_tShakeEvent.tWaveZ.fFrequency = 8.f;
@@ -82,6 +83,8 @@ HRESULT C1H_SwordAttack::ExitState()
 	if(m_pSilvermane->IsAttack())
 		m_pSilvermane->Set_IsAttack(false);
 
+
+	m_pSilvermane->Set_IsTrasceCamera(true);
 	return S_OK;
 }
 

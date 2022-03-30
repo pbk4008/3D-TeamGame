@@ -30,11 +30,6 @@ _int CCrawler_Death::Tick(const _double& TimeDelta)
 
 	m_pAnimator->Tick(TimeDelta);
 
-	//if (m_pAnimator->Get_AnimController()->Is_Finished())
-	//{
-	//	cout << "Á×À½" << endl;
-	//}
-
 	return _int();
 }
 
@@ -62,6 +57,7 @@ HRESULT CCrawler_Death::EnterState()
 
 	//m_pTransform->Face_Target(g_pObserver->Get_PlayerPos());
 	m_pAnimator->Change_AnyEntryAnimation(CMonster_Crawler::MON_STATE::DEATH);
+	g_pMainApp->FreezeTime();
 	return S_OK;
 }
 

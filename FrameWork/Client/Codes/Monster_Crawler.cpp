@@ -287,7 +287,7 @@ void CMonster_Crawler::OnTriggerExit(CCollision& collision)
 	{
 		if ((_uint)GAMEOBJECT::WEAPON == collision.pGameObject->getTag())
 		{
-			if(m_bDead)
+			if (m_bDead)
 				g_pMainApp->FreezeTime();
 		}
 	}
