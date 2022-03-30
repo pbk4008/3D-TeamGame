@@ -26,7 +26,7 @@ HRESULT CPostProcess::InitPostProcess()
 
 HRESULT CPostProcess::PossProcessing(CTonemapping* tone,CTarget_Manager* pTargetMgr, _bool hdr, _bool shadow, _bool particle)
 {
-	if (FAILED(ComputeBrightPass(pTargetMgr, L"Target_Diffuse", 640.f, 360.f))) return E_FAIL;
+	if (FAILED(ComputeBrightPass(pTargetMgr, L"Target_HDRDiffuse", 640.f, 360.f))) return E_FAIL;
 
 	if (FAILED(BlurPass(pTargetMgr, L"Target_BrightPass", L"Target_VT2", L"Target_HZ2", 640, 360))) return E_FAIL;
 	if (FAILED(BlurPass(pTargetMgr, L"Target_HZ2", L"Target_VT4", L"Target_HZ4", 320, 180))) return E_FAIL;
@@ -74,7 +74,7 @@ HRESULT CPostProcess::ComputeBrightPass(CTarget_Manager* pTargetMgr, const wstri
 		return E_FAIL;
 	if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_BrightPassThreshold", &m_BrightThreshold, sizeof(_float))))
 		return E_FAIL;
-	if (FAILED(m_pVIBuffer->SetUp_TextureOnShader("g_Basetexture", pTargetMgr->Get_SRV(L"Target_HDRDiffuse"))))
+	if (FAILED(m_pVIBuffer->SetUp_TextureOnShader("g_Basetexture", pTargetMgr->Get_SRV(in.c_str()))))
 		return E_FAIL;
 
 	m_pVIBuffer->Buffer_Resize(640.f, 360.f);

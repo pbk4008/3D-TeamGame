@@ -241,6 +241,9 @@ HRESULT CStage1::Ready_Player(const _tchar* LayerTag)
 		return E_FAIL;
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Camera", L"Proto_GameObject_Camera_Silvermane")))
 		return E_FAIL;
+
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Monster", L"Proto_GameObject_Monster_EarthAberrant")))
+		return E_FAIL;
 	
 	return S_OK;
 }
