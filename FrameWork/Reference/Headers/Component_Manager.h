@@ -30,6 +30,7 @@
 #include "Animator.h"
 #include "CharacterController.h"
 #include "CullingBox.h"
+#include "Trail_VIBuffer.h"
 
 BEGIN(Engine)
 

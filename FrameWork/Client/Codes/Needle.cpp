@@ -6,6 +6,7 @@
 #include "StateController.h"
 
 #include "Material.h"
+#include "SwordTrail.h"
 
 CNeedle::CNeedle(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
 	: CWeapon(_pDevice, _pDeviceContext)
@@ -74,6 +75,29 @@ _int CNeedle::Tick(_double _dDeltaTime)
 
 _int CNeedle::LateTick(_double _dDeltaTime)
 {
+	if (g_pObserver->IsAttack())
+		m_bTrailOnOff = true;
+	else
+		m_bTrailOnOff = false;
+
+	if (m_bTrailOnOff == true)
+	{
+		_vector startpos, endpos, look;
+		_matrix world = m_pTransform->Get_WorldMatrix();
+		look = world.r[2];
+		startpos = world.r[3];
+		endpos = world.r[3];
+		look = XMVector3Normalize(look);
+		endpos += look * 2.f;
+		startpos += look * 1.8f;
+
+		m_pTrail->AddVertex(startpos, endpos);
+	}
+	else
+	{
+		m_pTrail->Clear_Vertex();
+	}
+
 	if (0 > __super::LateTick(_dDeltaTime))
 		return -1;
 

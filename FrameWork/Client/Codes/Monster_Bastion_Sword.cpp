@@ -58,6 +58,7 @@ HRESULT CMonster_Bastion_Sword::NativeConstruct(const _uint _iSceneID, void* _pA
 {
 	if (FAILED(__super::NativeConstruct(_iSceneID, _pArg)))
 		return E_FAIL;
+	m_iCurScene = _iSceneID;
 
 	if (_pArg)
 	{
@@ -94,12 +95,6 @@ HRESULT CMonster_Bastion_Sword::NativeConstruct(const _uint _iSceneID, void* _pA
 
 _int CMonster_Bastion_Sword::Tick(_double _dDeltaTime)
 {
-	//나중에지울코드
-	if (!m_bFirst)
-	{
-		m_pPanel->Set_Show(true);
-	}
-
 	if (0 > __super::Tick(_dDeltaTime))
 	{
 		return -1;
@@ -130,6 +125,16 @@ _int CMonster_Bastion_Sword::Tick(_double _dDeltaTime)
 		}
 		else
 			m_pCharacterController->Move(_dDeltaTime, m_pTransform->Get_Velocity());
+	}
+
+	if (true == m_bUIShow)
+	{
+		m_pPanel->Set_Show(true);
+	}
+
+	if (false == m_bUIShow)
+	{
+		m_pPanel->Set_Show(false);
 	}
 
 	//상태 갱신
@@ -534,7 +539,7 @@ HRESULT CMonster_Bastion_Sword::Set_State_FSM()
 
 HRESULT CMonster_Bastion_Sword::Set_Weapon()
 {
-	m_pWeapon = static_cast<CStargazer*>(g_pGameInstance->Clone_GameObject((_uint)SCENEID::SCENE_STAGE1, L"Proto_GameObject_Weapon_Stargazer"));
+	m_pWeapon = static_cast<CStargazer*>(g_pGameInstance->Clone_GameObject(m_iSceneID, L"Proto_GameObject_Weapon_Stargazer"));
 
 	if (!m_pWeapon)
 		return E_FAIL;
@@ -563,7 +568,7 @@ HRESULT CMonster_Bastion_Sword::Ready_UI()
 	Desc.pTargetTransform = m_pTransform;
 	Desc.iEnemyTag = CUI_Monster_Panel::Enemy::SWORD;
 
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_UI", L"Proto_GameObject_UI_Monster_Panel", &Desc,
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer(m_iCurScene, L"Layer_UI", L"Proto_GameObject_UI_Monster_Panel", &Desc,
 		(CGameObject**)&m_pPanel)))
 		return E_FAIL;
 

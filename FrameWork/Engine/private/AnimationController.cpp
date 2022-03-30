@@ -222,7 +222,7 @@ _int CAnimationController::Update_CombinedTransformMatrix(const _double& _dDelta
 	}
 
 	//러프의 시간이 1초보다 커지면 애니메이션 변경
-	if (m_tBlendDesc.fTweenTime >= 1.f)
+	if (m_tBlendDesc.fTweenTime > 1.f)
 	{
 		//vecAnimations[m_tBlendDesc.iCurAnimIndex]->Reset_Animation();
 
@@ -238,7 +238,7 @@ _int CAnimationController::Update_CombinedTransformMatrix(const _double& _dDelta
 		m_iMaxKeyFrameIndex = m_pCurAnim->Get_MaxKeyFrameIndex();
 
 		m_strPreAnimTag = m_strCurAnimTag;
-		m_strCurAnimTag = vecAnimations[m_tBlendDesc.iCurAnimIndex]->Get_Name();
+		m_strCurAnimTag = m_pCurAnim->Get_Name();
 	}
 
 	return _int();
@@ -250,8 +250,8 @@ void CAnimationController::Lerp_Anim(vector<CAnimation*>& _vecvecAnimations)
 	vector<CChannel*>& vecCurrentAnim = _vecvecAnimations[m_tBlendDesc.iCurAnimIndex]->Get_Channels();
 	vector<CChannel*>& vecNextAnim = _vecvecAnimations[m_tBlendDesc.iNextAnimIndex]->Get_Channels();
 
-	vector<_matrix> vecInterPolMatrix;
-	vecInterPolMatrix.reserve(vecCurrentAnim.size());
+	//vector<_matrix> vecInterPolMatrix;
+	//vecInterPolMatrix.reserve(vecCurrentAnim.size());
 
 	_vector vScale{};
 	_vector vRotation{};
@@ -296,7 +296,7 @@ HRESULT CAnimationController::SetUp_NextAnimation(const string& _strAnimTag, con
 			{
 				m_tBlendDesc.iNextAnimIndex = pAnimation->Get_Index();
 
-				vecAnimations[m_tBlendDesc.iNextAnimIndex]->Reset_Animation();
+				pAnimation->Reset_Animation();
 
 				m_tBlendDesc.isLoopNextAnim = _isLoopNextAnim;
 				m_pFixedBone = pAnimation->Get_Channel("root");

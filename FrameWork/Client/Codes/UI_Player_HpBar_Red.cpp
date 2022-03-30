@@ -30,12 +30,12 @@ HRESULT CUI_Player_HpBar_Red::NativeConstruct(const _uint _iSceneID, void* pArg)
 	{
 		memcpy(&m_Desc, pArg, sizeof(UIDESC));
 	}
-
 	if (FAILED(__super::NativeConstruct(_iSceneID, pArg)))
 	{
 		return E_FAIL;
 	}
 	
+	m_iCurScene = _iSceneID;
 	m_iObectTag = m_Desc.IDTag;
 
 	if (FAILED(m_pTexture->Change_Texture(m_Desc.TextureTag)))
@@ -65,7 +65,7 @@ _int CUI_Player_HpBar_Red::Tick(_double TimeDelta)
 		return -1;
 
 	//초록색으로부터 현재 hp가져오려고 
-	CUI_Player_HpBar* pUI = (CUI_Player_HpBar*)g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Layer_UI_Green")->front();
+	CUI_Player_HpBar* pUI = (CUI_Player_HpBar*)g_pGameInstance->getObjectList(m_iCurScene, L"Layer_UI_Green")->front();
 	
 	if (nullptr != pUI)
 	{
@@ -116,6 +116,9 @@ HRESULT CUI_Player_HpBar_Red::Render()
 	m_pTrapziumBuffer->SetUp_ValueOnShader("g_fX", &m_fGapX, sizeof(_float));
 	m_pTrapziumBuffer->SetUp_ValueOnShader("g_fY", &m_fGapY, sizeof(_float));
 
+	_float fAlpha = 1.f;
+	m_pTrapziumBuffer->SetUp_ValueOnShader("g_fAlpha", &fAlpha, sizeof(_float));
+
 	m_pTrapziumBuffer->SetUp_TextureOnShader("g_DiffuseTexture", m_pTexture);
 
 	m_pTrapziumBuffer->Render(1);
@@ -164,7 +167,6 @@ CGameObject* CUI_Player_HpBar_Red::Clone(const _uint _iSceneID, void* pArg)
 		MSGBOX("Failed to Creating Clone CUI_Player_HpBar_Red");
 		Safe_Release(pInstance);
 	}
-
 	return pInstance;
 }
 

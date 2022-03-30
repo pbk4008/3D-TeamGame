@@ -62,15 +62,15 @@ HRESULT CStage1::NativeConstruct()
 	if (FAILED(Ready_TriggerSystem(L"../bin/SaveData/Trigger/MonsterSpawnTrigger.dat")))
 		return E_FAIL;
 
-	//if (FAILED(Ready_Boss(L"Layer_Boss")))
-	//{
-	//	return E_FAIL;
-	//}
+	/*if (FAILED(Ready_Boss(L"Layer_Boss")))
+	{
+		return E_FAIL;
+	}
 
-	//if (FAILED(Ready_Monster(L"Layer_Monster")))
-	//{
-	//	return E_FAIL;
-	//}
+	if (FAILED(Ready_Monster(L"Layer_Monster")))
+	{
+		return E_FAIL;
+	}*/
 
 	if (FAILED(Ready_Data_UI(L"../bin/SaveData/UI/UI.dat")))
 	{
@@ -233,13 +233,15 @@ HRESULT CStage1::Ready_Player(const _tchar* LayerTag)
 {
 	//// 네비메쉬
 	wstring wstrNaviFile = L"../Data/NavMesh/Stage_1_Nav.dat";
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_SordTrail", L"Prototype_GameObject_SwordTral")))
+		return E_FAIL;
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Plane", L"Proto_GameObject_Plane_Test",&wstrNaviFile)))
 		return E_FAIL;
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Proto_GameObject_Silvermane")))
 		return E_FAIL;
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Camera", L"Proto_GameObject_Camera_Silvermane")))
 		return E_FAIL;
-
+	
 	return S_OK;
 }
 
@@ -285,7 +287,7 @@ HRESULT CStage1::Ready_UI(const _tchar* LayerTag)
 	Desc.fSize = { 200.f , 30.f };
 	Desc.IDTag = (_uint)GAMEOBJECT::UI_DYNAMIC;
 
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_UI_Green", L"Proto_GameObject_UI_Player_HpBar", &Desc)))
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_UI_Green", L"Proto_GameObject_UI_Player_HpBar", &Desc)))
 		return E_FAIL;
 
 	//Player HpBar Red
@@ -297,7 +299,7 @@ HRESULT CStage1::Ready_UI(const _tchar* LayerTag)
 	Desc.fSize = { 200.f , 30.f };
 	Desc.IDTag = (_uint)GAMEOBJECT::UI_DYNAMIC;
 
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_UI", L"Proto_GameObject_UI_Player_HpBar_Red", &Desc)))
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_UI", L"Proto_GameObject_UI_Player_HpBar_Red", &Desc)))
 		return E_FAIL;
 
 
@@ -311,7 +313,7 @@ HRESULT CStage1::Ready_UI(const _tchar* LayerTag)
 	Desc1.UIDesc.fSize = { 333.f , 105.f };
 	Desc1.UIDesc.IDTag = (_uint)GAMEOBJECT::UI_STATIC;
 
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_UI", L"Proto_GameObject_UI_Tuto_Base", &Desc1)))
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_UI", L"Proto_GameObject_UI_Tuto_Base", &Desc1)))
 		return E_FAIL;
 
 	//Tuto Font
@@ -325,7 +327,7 @@ HRESULT CStage1::Ready_UI(const _tchar* LayerTag)
 	Desc2.UIDesc.IDTag = (_uint)GAMEOBJECT::UI_STATIC;
 	Desc2.iTextureNum = 0;
 	
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_UI", L"Proto_GameObject_UI_Tuto_Font", &Desc2)))
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_UI", L"Proto_GameObject_UI_Tuto_Font", &Desc2)))
 		return E_FAIL;
 
 	return S_OK;
@@ -341,63 +343,22 @@ HRESULT CStage1::Ready_Light()
 	LightDesc.vDiffuse = _float4(1.f, 1.f, 1.f, 1.f);
 	LightDesc.vSpecular = _float4(0.8f, 0.8f, 0.8f, 1.f);
 	LightDesc.vAmbient = _float4(0.6f, 0.6f, 0.6f, 1.f);
+	LightDesc.mOrthinfo[0] = 50.f;
 
-	_vector up = { 0, 1.f, 0,0 };
-	_vector lookat = { -1.f,1.f,1.f,0.f };
+	if (FAILED(g_pGameInstance->CreateLightCam(m_pDevice, m_pDeviceContext, LightDesc))) return E_FAIL;
 
-	LightDesc.mOrthinfo[0] = 40.f;
+	//ZeroMemory(&LightDesc, sizeof(LIGHTDESC));
 
-	_float3 dir = _float3(-1.f, -1.f, 1.f);
-	_vector vdir = XMVector3Normalize(XMLoadFloat3(&LightDesc.vDirection));
-	XMStoreFloat3(&LightDesc.vPosition, (vdir * LightDesc.mOrthinfo[0] * -1.f) + lookat);
-	LightDesc.mLightView = XMMatrixLookAtLH(XMLoadFloat3(&LightDesc.vPosition), lookat, up);
+	//LightDesc.eType = LIGHTDESC::TYPE_DIRECTIONAL;
+	//LightDesc.vDirection = _float3(-1.f, -1.f, 1.f);
+	//LightDesc.vDiffuse = _float4(1.f, 1.f, 1.f, 1.f);
+	//LightDesc.vSpecular = _float4(0.8f, 0.8f, 0.8f, 1.f);
+	//LightDesc.vAmbient = _float4(0.6f, 0.6f, 0.6f, 1.f);
+	//LightDesc.mOrthinfo[0] = 50.f;
 
-	_vector origin = { 0,0,0,0 };
-	_float3	forigin;
-	//LightDesc.vPosition = _float3(20.f,100.f, -20.f);
+	//if (FAILED(g_pGameInstance->CreateLightCam(m_pDevice, m_pDeviceContext, LightDesc))) return E_FAIL;
 
-	//_float3 up = _float3(0, 1.f, 0);
-	//_float3 lookat = _float3(-10.f, 1.f, 5.f);
-
-	//_vector		vPosition = XMLoadFloat3(&LightDesc.vPosition);
-	//vPosition = XMVectorSetW(vPosition, 1.f);
-
-	//_vector		vLook = XMLoadFloat3(&lookat) - XMLoadFloat3(&LightDesc.vPosition);
-	//vLook = XMVector3Normalize(vLook);
-
-	///*XMStoreFloat3(&LightDesc.vDirection, vLook);*/
-
-	//_vector		vRight = XMVector3Cross(XMLoadFloat3(&up), vLook);
-	//vRight = XMVector3Normalize(vRight);
-
-	//_vector		vUp = XMVector3Cross(vLook, vRight);
-	//vUp = XMVector3Normalize(vUp);
-
-	//_matrix lightcam;
-	//lightcam.r[0] = vRight;
-	//lightcam.r[1] = vUp;
-	//lightcam.r[2] = vLook;
-	//lightcam.r[3] = vPosition;
-
-	//_vector origin = { 0,0,0,0 };
-	//_float3	forigin;
-
-	//LightDesc.mLightView = XMMatrixInverse(nullptr, lightcam);
-
-	origin = XMVector3TransformCoord(origin, LightDesc.mLightView);
-	XMStoreFloat3(&forigin, origin);
-
-	//LightDesc.mOrthinfo[0] = 30.f;
-
-	LightDesc.mOrthinfo[1] = forigin.x - LightDesc.mOrthinfo[0];
-	LightDesc.mOrthinfo[2] = forigin.x + LightDesc.mOrthinfo[0];
-	LightDesc.mOrthinfo[3] = forigin.y - LightDesc.mOrthinfo[0];
-	LightDesc.mOrthinfo[4] = forigin.y + LightDesc.mOrthinfo[0];
-
-	LightDesc.mLightProj = XMMatrixOrthographicLH(LightDesc.mOrthinfo[2] - LightDesc.mOrthinfo[1], LightDesc.mOrthinfo[4] - LightDesc.mOrthinfo[3], 0.1f, 500.f);
-
-	if (FAILED(g_pGameInstance->Add_Light(m_pDevice, m_pDeviceContext, LightDesc)))
-		return E_FAIL;
+	//if (FAILED(g_pGameInstance->CreateLightCam(m_pDevice, m_pDeviceContext, LightDesc))) return E_FAIL;
 
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_SkyBox", L"Proto_GameObject_SkyBox")))
 		return E_FAIL;
@@ -407,9 +368,10 @@ HRESULT CStage1::Ready_Light()
 
 HRESULT CStage1::Ready_Data_Effect()
 {
-	/*vector<CEffect_DashDust::EFFECTDESC> vecEffect;
-	g_pGameInstance->LoadFile<CEffect_DashDust::EFFECTDESC>(vecEffect, L"../bin/SaveData/Effect/Effect_Dash.dat");
-
+	vector<CEffect_DashDust::EFFECTDESC> vecEffect;
+	//Effect_Dash
+	g_pGameInstance->LoadFile<CEffect_DashDust::EFFECTDESC>(vecEffect, L"../bin/SaveData/Effect/Effect_Player_Attack1.dat");
+	
 	for (int i = 0; i < vecEffect.size(); ++i)
 	{
 		wstring FullName = L"Proto_GameObject_Effect_DashDust";
@@ -419,7 +381,7 @@ HRESULT CStage1::Ready_Data_Effect()
 			MSGBOX("Failed to Creating in CStage1::Ready_Effect()");
 			return E_FAIL;
 		}
-	}*/
+	}
 
 	CEffect_Env_Fire::EFFECTDESC Desc;
 	_tcscpy_s(Desc.TextureTag, L"Env_Fire");
@@ -436,10 +398,9 @@ HRESULT CStage1::Ready_Data_Effect()
 		return E_FAIL;
 	}
 
-
 	//이펙트생성
-	vector<CEffect_HitParticle::EFFECTDESC> vecEffect;
-	g_pGameInstance->LoadFile<CEffect_HitParticle::EFFECTDESC>(vecEffect, L"../bin/SaveData/Effect/Effect_Player_Attack1.dat");
+	//vector<CEffect_HitParticle::EFFECTDESC> vecEffect;
+	//g_pGameInstance->LoadFile<CEffect_HitParticle::EFFECTDESC>(vecEffect, L"../bin/SaveData/Effect/Effect_Player_Attack1.dat");
 
 	for (int i = 0; i < vecEffect.size(); ++i)
 	{
@@ -452,7 +413,7 @@ HRESULT CStage1::Ready_Data_Effect()
 		}
 	}
 
-	//이펙트생성
+	////이펙트생성
 	vector<CEffect_HitFloating::EFFECTDESC> vecEffect1;
 	g_pGameInstance->LoadFile<CEffect_HitFloating::EFFECTDESC>(vecEffect1, L"../bin/SaveData/Effect/Effect_Player_Attack2_Floating_2.dat");
 
@@ -480,7 +441,7 @@ HRESULT CStage1::Ready_Data_UI(const _tchar* pDataFilePath)
 		wstring Tag = vecUI[i].TextureTag;
 		wstring FullName = L"Proto_GameObject_UI_" + Tag;
 
-		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_UI", FullName, &vecUI[i])))
+		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_UI", FullName, &vecUI[i])))
 		{
 			MSGBOX("Failed to Creating in CStage1::Ready_UI()");
 			return E_FAIL;

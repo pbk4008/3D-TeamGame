@@ -83,7 +83,7 @@ HRESULT CMonster_Bastion_Spear::NativeConstruct(const _uint _iSceneID, void* _pA
 	Desc.pTargetTransform = m_pTransform;
 	Desc.iEnemyTag = CUI_Monster_Panel::Enemy::SPEAR;
 
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_UI", L"Proto_GameObject_UI_Monster_Panel", &Desc,
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer(_iSceneID, L"Layer_UI", L"Proto_GameObject_UI_Monster_Panel", &Desc,
 		(CGameObject**)&m_pPanel)))
 		return E_FAIL;
 
@@ -106,11 +106,6 @@ HRESULT CMonster_Bastion_Spear::NativeConstruct(const _uint _iSceneID, void* _pA
 
 _int CMonster_Bastion_Spear::Tick(_double _dDeltaTime)
 {
-	if (!m_bFirst)
-	{
-		m_pPanel->Set_Show(true);
-	}
-
 	_int iProgress = __super::Tick(_dDeltaTime);
 	if (NO_EVENT != iProgress) 
 		return iProgress;
@@ -129,6 +124,16 @@ _int CMonster_Bastion_Spear::Tick(_double _dDeltaTime)
 
 	if(!m_bDead)
 		m_pCharacterController->Move(_dDeltaTime, m_pTransform->Get_Velocity());
+
+	if (true == m_bUIShow)
+	{
+		m_pPanel->Set_Show(true);
+	}
+
+	if (false == m_bUIShow)
+	{
+		m_pPanel->Set_Show(false);
+	}
 
 	if (m_fGroggyGauge >= m_fMaxGroggyGauge)
 	{
@@ -263,7 +268,7 @@ HRESULT CMonster_Bastion_Spear::Ready_Components()
 
 HRESULT CMonster_Bastion_Spear::Ready_Weapon(void)
 {
-	m_pWeapon = static_cast<CPolearm*>(g_pGameInstance->Clone_GameObject((_uint)SCENEID::SCENE_STAGE1, L"Proto_GameObject_Weapon_Polearm"));
+	m_pWeapon = static_cast<CPolearm*>(g_pGameInstance->Clone_GameObject(m_iSceneID, L"Proto_GameObject_Weapon_Polearm"));
 
 	if (!m_pWeapon)
 		return E_FAIL;
@@ -587,6 +592,7 @@ void CMonster_Bastion_Spear::Free()
 	Safe_Release(m_pWeapon);
 	Safe_Release(m_pStateController);
 	Safe_Release(m_pCharacterController);
+	Safe_Release(m_pPanel);
 
 	__super::Free();
 }

@@ -102,6 +102,10 @@ HRESULT CUI_Player_HpBar::Render()
 	m_pTrapziumBuffer->SetUp_ValueOnShader("g_fX", &m_fGapX, sizeof(_float));
 	m_pTrapziumBuffer->SetUp_ValueOnShader("g_fY", &m_fGapY, sizeof(_float));
 
+	_float fAlpha = 1.f;
+	m_pTrapziumBuffer->SetUp_ValueOnShader("g_fAlpha", &fAlpha, sizeof(_float));
+
+
 	m_pTrapziumBuffer->SetUp_TextureOnShader("g_DiffuseTexture", m_pTexture);
 
 	m_pTrapziumBuffer->Render(1);

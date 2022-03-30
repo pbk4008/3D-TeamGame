@@ -59,6 +59,7 @@ HRESULT CBastion_2HSword_Death::EnterState()
 
 	m_pAnimator->Change_AnyEntryAnimation((_uint)CMonster_Bastion_2HSword::ANIM_TYPE::A_DEATH);
 
+	g_pMainApp->FreezeTime();
 	return S_OK;
 }
 

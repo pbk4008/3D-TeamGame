@@ -300,6 +300,7 @@ call Update_Library_Release.bat</Command>
     <ClInclude Include="..\public\Timer.h" />
     <ClInclude Include="..\public\Timer_Manager.h" />
     <ClInclude Include="..\public\Tonemapping.h" />
+    <ClInclude Include="..\public\Trail_VIBuffer.h" />
     <ClInclude Include="..\public\Transform.h" />
     <ClInclude Include="..\public\UI.h" />
     <ClInclude Include="..\public\VIBuffer.h" />
@@ -377,6 +378,7 @@ call Update_Library_Release.bat</Command>
     <ClCompile Include="..\private\State.cpp" />
     <ClCompile Include="..\private\StateController.cpp" />
     <ClCompile Include="..\private\Tonemapping.cpp" />
+    <ClCompile Include="..\private\Trail_VIBuffer.cpp" />
     <ClCompile Include="..\private\UI.cpp" />
     <ClCompile Include="..\private\CustumFont.cpp" />
     <ClCompile Include="..\private\DebugDraw.cpp" />
@@ -445,6 +447,7 @@ call Update_Library_Release.bat</Command>
     <FxCompile Include="..\bin\ShaderFiles\Shader_Mesh.hlsl" />
     <FxCompile Include="..\bin\ShaderFiles\Shader_MeshAnim.hlsl" />
     <FxCompile Include="..\bin\ShaderFiles\Shader_Monster.hlsl" />
+    <FxCompile Include="..\bin\ShaderFiles\Shader_Panel_UI.hlsl" />
     <FxCompile Include="..\bin\ShaderFiles\Shader_Particle.hlsl" />
     <FxCompile Include="..\bin\ShaderFiles\Shader_Plane.hlsl" />
     <FxCompile Include="..\bin\ShaderFiles\Shader_PointInstance.hlsl" />

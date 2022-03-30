@@ -65,7 +65,7 @@ _int CMainApp::Tick(_double TimeDelta)
 	if (m_isFreeze)
 	{
 		m_dFreezeTimeAcc += TimeDelta;
-		if (0.15 < m_dFreezeTimeAcc)
+		if (0.25 < m_dFreezeTimeAcc)
 		{
 			m_isFreeze = false;
 			m_dFreezeTimeAcc = 0.0;

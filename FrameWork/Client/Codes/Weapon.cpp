@@ -1,6 +1,6 @@
 #include "pch.h"
 #include "Weapon.h"
-
+#include "SwordTrail.h"
 
 CWeapon::CWeapon(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
 	: CGameObject(_pDevice, _pDeviceContext)
@@ -33,6 +33,11 @@ HRESULT CWeapon::NativeConstruct(const _uint _iSceneID, void* _pArg)
 		return E_FAIL;
 
 	m_pLocalTransform = g_pGameInstance->Clone_Component<CTransform>(0, L"Proto_Component_Transform");
+
+	list<CGameObject*>* listobj = g_pGameInstance->getObjectList(_iSceneID, L"Layer_SordTrail");
+	m_pTrail = static_cast<CSwordTrail*>(listobj->front());
+
+	if (m_pTrail == nullptr) return E_FAIL;
 
 	return S_OK;
 }

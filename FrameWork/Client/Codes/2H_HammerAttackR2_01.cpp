@@ -64,6 +64,11 @@ HRESULT C2H_HammerAttackR2_01::EnterState()
 
 	m_iCutIndex = 55;
 	m_pAnimationController->Set_PlaySpeed(1.2f);
+
+
+	m_iAttackStartIndex = 30;
+	m_iAttackEndIndex = 40;
+	m_iShakeIndex = 35;
 	return S_OK;
 }
 

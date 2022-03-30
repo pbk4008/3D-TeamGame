@@ -35,6 +35,7 @@ cbuffer LightBuffer
 {
 	matrix g_LightView;
 	matrix g_LightProj;
+	float3 g_LightPos;
 };
 
 texture2D	g_ShadowTexture;
@@ -150,8 +151,13 @@ VS_OUT_SHADOW VS_MAIN_SHADOW(VS_IN In)
 	matWVP = mul(matWV, g_LightProj);
 	
 	Out.vPosition = mul(vPosition, matWVP);
-	Out.vClipPos = Out.vPosition;
+	//Out.vClipPos = Out.vPosition;
 	Out.vTexUV = In.vTexUV;
+	
+	matrix matVP = mul(g_LightView, g_LightProj);
+	float4 worldpos = mul(vPosition, g_WorldMatrix);
+	
+	Out.vClipPos = worldpos;
 	
 	return Out;
 }
@@ -215,18 +221,22 @@ PS_OUT_SHADOW PS_MAIN_SHADOW(PS_IN_SHADOW In)
 {
 	PS_OUT_SHADOW Out = (PS_OUT_SHADOW) 0.f;
 	
-	float fDepth = In.vClipPos.z / In.vClipPos.w;
+	//float fDepth = In.vClipPos.z / In.vClipPos.w;
 	
-	float4 color = g_DiffuseTexture.Sample(DefaultSampler, In.vTexUV);
+	//float4 color = g_DiffuseTexture.Sample(DefaultSampler, In.vTexUV);
 	
-	float Alpha = 1.f;
+	//float Alpha = 1.f;
 	
-	if (color.a < 0.1f)
-	{
-		Alpha = color.a;
-	}
+	//if (color.a < 0.1f)
+	//{
+	//	Alpha = color.a;
+	//}
 	
-	Out.vShadowDepthMap = vector(fDepth.xxx, Alpha);
+	//Out.vShadowDepthMap = vector(fDepth.xxx, Alpha);
+	
+	float4 shadow = 1;
+	float zFar = 1 / 300.f;
+	shadow.xyz = length(In.vClipPos.xyz - g_LightPos) * zFar;
 	
 	return Out;
 }
@@ -345,9 +355,10 @@ PS_OUT PS_MAIN_TOP(PS_IN In)
 		float roughness = omer.a + mra.g * 3.3f - mra.r - mra.b - (1 - omer.g);
 		Out.R = float4(roughness.xxx, 1.f);
 		//float ao = 1.f;
-		float ao = (omer.r - 0.3f) * 1.f;;
+		//float ao = (omer.r - 0.3f) * 1.f;;
+		float ao = mra.b/* - omer.r*/;
 		Out.A = float4(ao.xxx, 1.f);
-		//Out.E = float4(0.11f, 0.05f, 0.f,1.f);
+		//Out.E = float4(0.11f, 0.05f, 0.f, 1.f);
 		Out.E = Ecolor * Epower * omer.b;
 	}
 	else
@@ -362,7 +373,8 @@ PS_OUT PS_MAIN_TOP(PS_IN In)
 		Out.M = float4(metalic.xxx, 1.f);
 		float roughness = omer.a + mra.g * 3.f - mra.r - mra.b - (1 - omer.g);
 		Out.R = float4(roughness.xxx, 1.f);
-		float ao = (omer.r - 0.3f) * 1.f;
+		//float ao = (omer.r - 0.3f) * 1.f;
+		float ao = mra.b/* - omer.r*/;
 		Out.A = float4(ao.xxx, 1.f);
 		Out.E = Ecolor * Epower * omer.b;
 

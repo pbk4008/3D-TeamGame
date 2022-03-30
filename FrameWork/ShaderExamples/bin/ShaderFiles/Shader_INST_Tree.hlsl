@@ -353,7 +353,7 @@ technique11			DefaultTechnique
 	}
 	pass ShadowMap
 	{
-		SetRasterizerState(CullMode_Default);
+		SetRasterizerState(CullMode_None);
 		SetDepthStencilState(ZDefault, 0);
 		SetBlendState(BlendDisable, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
 

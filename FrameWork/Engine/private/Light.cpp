@@ -42,6 +42,7 @@ HRESULT CLight::Render(const wstring& pCameraTag, _bool PBRHDRcheck, _bool Shado
 		{
 			iPassIndex = 1;
 
+			m_pVIBuffer->SetUp_TextureOnShader("g_ShadowTexture", pTarget_Manager->Get_SRV(TEXT("Target_ShadeShadow")));
 			m_pVIBuffer->SetUp_ValueOnShader("g_vLightDir", &_float4(m_LightDesc.vDirection.x, m_LightDesc.vDirection.y, m_LightDesc.vDirection.z, 0.f), sizeof(_float4));
 		}
 		else if (m_LightDesc.eType == tagLightDesc::TYPE_POINT)
@@ -49,12 +50,10 @@ HRESULT CLight::Render(const wstring& pCameraTag, _bool PBRHDRcheck, _bool Shado
 			iPassIndex = 2;
 			m_pVIBuffer->SetUp_ValueOnShader("g_fRange", &m_LightDesc.fRange, sizeof(_float));
 		}
-		m_pVIBuffer->SetUp_TextureOnShader("g_ShadowTexture", pTarget_Manager->Get_SRV(TEXT("Target_Shadow")));
 		m_pVIBuffer->SetUp_ValueOnShader("g_vLightPos", &_float4(m_LightDesc.vPosition.x, m_LightDesc.vPosition.y, m_LightDesc.vPosition.z, 1.f), sizeof(_float4));
 
 		m_pVIBuffer->SetUp_TextureOnShader("g_NormalTexture", pTarget_Manager->Get_SRV(TEXT("Target_Normal")));
 		m_pVIBuffer->SetUp_TextureOnShader("g_DepthTexture", pTarget_Manager->Get_SRV(TEXT("Target_Depth")));
-		m_pVIBuffer->SetUp_TextureOnShader("g_ShadowTexture", pTarget_Manager->Get_SRV(TEXT("Target_ShadeShadow")));
 
 		m_pVIBuffer->SetUp_TextureOnShader("g_SkyBoxTexutre", pTarget_Manager->Get_SRV(TEXT("Target_SkyBox")));
 		m_pVIBuffer->SetUp_TextureOnShader("g_DiffuseTexture", pTarget_Manager->Get_SRV(TEXT("Target_Diffuse")));
@@ -79,7 +78,6 @@ HRESULT CLight::Render(const wstring& pCameraTag, _bool PBRHDRcheck, _bool Shado
 		m_pVIBuffer->SetUp_ValueOnShader("g_ViewMatrixInv", &XMMatrixTranspose(ViewMatrix), sizeof(_float4x4));
 		m_pVIBuffer->SetUp_ValueOnShader("g_ProjMatrixInv", &XMMatrixTranspose(ProjMatrix), sizeof(_float4x4));
 		m_pVIBuffer->SetUp_ValueOnShader("g_bPBRHDR", &PBRHDRcheck, sizeof(_bool));
-		m_pVIBuffer->SetUp_ValueOnShader("g_bShadow", &Shadow, sizeof(_bool));
 
 		m_pVIBuffer->Render(iPassIndex);
 	}

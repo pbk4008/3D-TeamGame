@@ -37,6 +37,8 @@ private:
 
 	_float m_fGapX = 0.f;
 	_float m_fGapY = 0.f;
+	_uint m_iCurScene = 0;
+
 private:
 	virtual HRESULT SetUp_Components();
 

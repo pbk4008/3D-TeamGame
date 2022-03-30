@@ -82,6 +82,7 @@ private:
 	PANELDESC m_PanelDesc;
 	_float4x4 m_TargetMatrix;
 	Enemy m_EnemyTag = Enemy::ENEMY_END;
+	_uint m_iCurSceneNum = 0;
 private:
 	class CUI_Monster_Back* m_pUIBack = nullptr;
 	class CUI_Monster_Level* m_pUILevel = nullptr;

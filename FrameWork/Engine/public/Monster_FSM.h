@@ -43,7 +43,7 @@ public:
 
 public:
 	void Set_Monster(CActor* _pMonster)				 { m_pMonster = _pMonster; }
-	void Set_Transform(CTransform* _pTransform)		{ m_pTransform = _pTransform; /*Safe_AddRef(m_pTransform)*/; }
+	void Set_Transform(CTransform* _pTransform)		{ m_pTransform = _pTransform; /*Safe_AddRef(m_pTransform);*/ }
 	void Set_Model(CModel* _pModel)				     { m_pModel = _pModel; /*Safe_AddRef(m_pModel);*/}
 	void Set_Animator(CAnimator* _pAnimator)		{	m_pAnimator = _pAnimator; /*Safe_AddRef(m_pAnimator);*/	}
 
