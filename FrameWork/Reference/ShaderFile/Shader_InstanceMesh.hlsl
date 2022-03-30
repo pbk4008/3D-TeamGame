@@ -173,8 +173,6 @@ VS_OUT_SHADESHADOW VS_MAIN_SHADESHADOW(VS_IN In)
 	return Out;
 }
 //*---------------------------------------------------------------------------------------------*
-
-
 struct PS_IN
 {
 	float4 vPosition : SV_POSITION;

@@ -490,6 +490,7 @@ HRESULT CSilvermane::Ready_Components()
 	m_pModel->Get_Materials()[3]->Set_Texture("g_NewHairTexture", TEXTURETYPE::TEX_TINT, m_pTexture);
 
 	m_Lightdesc = g_pGameInstance->Get_LightDesc(0);
+
 	return S_OK;
 }
 

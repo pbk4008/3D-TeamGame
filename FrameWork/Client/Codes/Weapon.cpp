@@ -1,6 +1,6 @@
 #include "pch.h"
 #include "Weapon.h"
-
+#include "SwordTrail.h"
 
 CWeapon::CWeapon(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
 	: CGameObject(_pDevice, _pDeviceContext)
@@ -34,6 +34,11 @@ HRESULT CWeapon::NativeConstruct(const _uint _iSceneID, void* _pArg)
 
 	m_pLocalTransform = g_pGameInstance->Clone_Component<CTransform>(0, L"Proto_Component_Transform");
 
+	list<CGameObject*>* listobj = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Layer_SordTrail");
+	m_pTrail = static_cast<CSwordTrail*>(listobj->front());
+
+	if (m_pTrail == nullptr) return E_FAIL;
+
 	return S_OK;
 }
 
@@ -50,6 +55,25 @@ _int CWeapon::LateTick(_double _dDeltaTime)
 	if (0 > __super::LateTick(_dDeltaTime))
 		return -1;
 	
+	if (m_bTrailOnOff == true)
+	{
+		_vector startpos, endpos, look;
+		_matrix world = m_pTransform->Get_WorldMatrix();
+		look = world.r[2];
+		startpos = world.r[3];
+		endpos = world.r[3];
+		look = XMVector3Normalize(look);
+		startpos -= look;
+		/*startpos = XMVector3TransformCoord(XMVectorSet(0.f, -0.5f, 0.f, 0.f),m_pTransform->Get_WorldMatrix());
+		endpos = XMVector3TransformCoord(XMVectorSet(0.f, 0.5f, 0.f, 0.f), m_pTransform->Get_WorldMatrix());*/
+
+		m_pTrail->AddVertex(startpos, endpos);
+	}
+	else
+	{
+		m_pTrail->Clear_Vertex();
+	}
+
 	return _int();
 }
 

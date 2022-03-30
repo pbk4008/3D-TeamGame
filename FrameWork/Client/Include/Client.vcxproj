@@ -426,6 +426,7 @@
     <ClInclude Include="..\Headers\Stargazer.h" />
     <ClInclude Include="..\Headers\State_Silvermane.h" />
     <ClInclude Include="..\Headers\SubEnvironment.h" />
+    <ClInclude Include="..\Headers\SwordTrail.h" />
     <ClInclude Include="..\Headers\TestObj.h" />
     <ClInclude Include="..\Headers\TestScene_JS.h" />
     <ClInclude Include="..\Headers\TestScene_Sb.h" />
@@ -698,6 +699,7 @@
     <ClCompile Include="..\Codes\Stargazer.cpp" />
     <ClCompile Include="..\Codes\State_Silvermane.cpp" />
     <ClCompile Include="..\Codes\SubEnvironment.cpp" />
+    <ClCompile Include="..\Codes\SwordTrail.cpp" />
     <ClCompile Include="..\Codes\TestObj.cpp" />
     <ClCompile Include="..\Codes\TestScene_JS.cpp" />
     <ClCompile Include="..\Codes\TestScene_Sb.cpp" />
