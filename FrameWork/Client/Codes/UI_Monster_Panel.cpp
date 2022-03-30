@@ -85,7 +85,6 @@ _int CUI_Monster_Panel::Tick(_double TimeDelta)
 	if (FAILED(__super::Tick(TimeDelta)))
 		return -1;
 
-
 	Update_Panel(TimeDelta);
 
 	return 0;
