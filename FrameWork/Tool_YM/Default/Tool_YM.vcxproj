@@ -101,7 +101,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <AdditionalDependencies>dxguid.lib;Engine.lib;</AdditionalDependencies>
-      <AdditionalLibraryDirectories>../../Reference/Library/Debug;</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>../../Reference/Library/Debug;../../Reference/Headers/fmod</AdditionalLibraryDirectories>
     </Link>
     <Midl>
       <MkTypLibCompatible>false</MkTypLibCompatible>

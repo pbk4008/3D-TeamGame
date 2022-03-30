@@ -52,7 +52,9 @@ HRESULT CBastion_Sword_Death::Render()
 
 HRESULT CBastion_Sword_Death::EnterState()
 {
+	g_pShakeManager->Shake(CShakeManager::ETemplate::MonsterDeath, _float3(0.f, 0.f, 0.f));
 	m_pAnimator->Change_AnyEntryAnimation((_uint)CMonster_Bastion_Sword::ANIM_TYPE::DEATH);
+	g_pMainApp->FreezeTime();
 
 	return S_OK;
 }

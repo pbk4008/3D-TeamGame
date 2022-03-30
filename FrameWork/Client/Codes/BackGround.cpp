@@ -103,7 +103,8 @@ HRESULT CBackGround::Render()
 CGameObject* CBackGround::Clone(const _uint _iSceneID, void* pArg)
 {
 	CBackGround* pInstance = new CBackGround(*this);
- 	if (FAILED(pInstance->NativeConstruct(_iSceneID, pArg)))
+
+	if (FAILED(pInstance->NativeConstruct(_iSceneID, pArg)))
 	{
 		MSGBOX("BackGround Clone Fail");
 		Safe_Release(pInstance);

@@ -552,6 +552,50 @@ const _bool CGameInstance::Raycast(RAYCASTDESC & _desc)
 	return m_pPhysicSystem->Raycast(_desc);
 }
 
+HRESULT CGameInstance::Init_SoundManager()
+{
+	if (!m_pSoundManager)
+		return E_FAIL;
+
+	return m_pSoundManager->Init_SoundManager();
+}
+
+void CGameInstance::Play_Shot(const wstring& pSoundKey, CSoundMgr::CHANNELID eID)
+{
+	if (!m_pSoundManager)
+		return;
+	m_pSoundManager->Play_Shot(pSoundKey, eID);
+}
+
+void CGameInstance::PlayBGM(const wstring& pSoundKey)
+{
+	if (!m_pSoundManager)
+		return;
+	m_pSoundManager->PlayBGM(pSoundKey);
+}
+
+void CGameInstance::StopSound(CSoundMgr::CHANNELID eID)
+{
+	if (!m_pSoundManager)
+		return;
+	m_pSoundManager->StopSound(eID);
+}
+
+void CGameInstance::StopAll()
+{
+	if (!m_pSoundManager)
+		return;
+	m_pSoundManager->StopAll();
+}
+
+void CGameInstance::VolumeChange(const std::wstring& pSoundKey, _float fVolume)
+{
+	if (!m_pSoundManager)
+		return;
+
+	m_pSoundManager->VolumeChange(pSoundKey, fVolume);
+}
+
 void CGameInstance::Release_Engine()
 {
 	RELEASE_INSTANCE(CGameInstance);

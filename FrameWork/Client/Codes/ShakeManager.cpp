@@ -83,6 +83,18 @@ HRESULT CShakeManager::Ready_Template()
 	tShakeEvent.tWaveZ.fFrequency = 8.f;
 	m_arrShakeEvents[(_uint)ETemplate::TestXYZ] = tShakeEvent;
 
+	tShakeEvent = CCameraShake::SHAKEEVENT();
+	tShakeEvent.fDuration = 0.5f;
+	tShakeEvent.fOuterRadius = 10.f;
+	tShakeEvent.fInnerRadius = 3.f;
+	tShakeEvent.tWaveX.fAmplitude = 0.06;
+	tShakeEvent.tWaveX.fFrequency = 5.f;
+	tShakeEvent.tWaveY.fAmplitude = 0.02f;
+	tShakeEvent.tWaveY.fFrequency = 3.f;
+	tShakeEvent.tWaveZ.fAmplitude = 0.06f;
+	tShakeEvent.tWaveZ.fFrequency = 5.f;
+	m_arrShakeEvents[(_uint)ETemplate::MonsterDeath] = tShakeEvent;
+
 	return S_OK;
 }
 

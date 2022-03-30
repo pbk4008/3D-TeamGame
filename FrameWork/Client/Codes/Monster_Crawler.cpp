@@ -228,6 +228,7 @@ void CMonster_Crawler::OnTriggerEnter(CCollision& collision)
 
 			if ((_uint)GAMEOBJECT::WEAPON == collision.pGameObject->getTag())
 			{
+				g_pGameInstance->Play_Shot(L"Monster_Hit", CSoundMgr::CHANNELID::Monster_Hit);
 
 				m_fCurrentHp -= 2;
 				m_fGroggyGauge += 2; //TODO::¼öÄ¡Á¤ÇØ¼­¹Ù²ãÁà¾ßµÊ
@@ -274,6 +275,7 @@ void CMonster_Crawler::OnTriggerExit(CCollision& collision)
 				g_pMainApp->FreezeTime();
 		}
 	}
+	g_pGameInstance->StopSound(CSoundMgr::CHANNELID::Monster_Hit);
 }
 
 void CMonster_Crawler::Set_IsAttack(const _bool _isAttack)

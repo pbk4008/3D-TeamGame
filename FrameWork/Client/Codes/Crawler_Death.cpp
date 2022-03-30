@@ -1,6 +1,6 @@
 #include "pch.h"
 #include "Crawler_Death.h"
-
+#include "CameraShake.h"
 #include "Monster_Crawler.h"
 #include "Animation.h"
 
@@ -35,6 +35,7 @@ _int CCrawler_Death::Tick(const _double& TimeDelta)
 	//	cout << "Á×À½" << endl;
 	//}
 
+
 	return _int();
 }
 
@@ -60,8 +61,15 @@ HRESULT CCrawler_Death::EnterState()
 	if (FAILED(__super::EnterState()))
 		return E_FAIL;
 
-	//m_pTransform->Face_Target(g_pObserver->Get_PlayerPos());
+	g_pGameInstance->Play_Shot(L"Crawler_Death", CSoundMgr::CHANNELID::Monster_Death);
+	g_pGameInstance->VolumeChange(L"Crawler_Death", 0.5f);
+
 	m_pAnimator->Change_AnyEntryAnimation(CMonster_Crawler::MON_STATE::DEATH);
+
+	//m_pTransform->Face_Target(g_pObserver->Get_PlayerPos());
+	g_pShakeManager->Shake(CShakeManager::ETemplate::MonsterDeath, _float3(0.f, 0.f, 0.f));
+
+	g_pMainApp->FreezeTime();
 	return S_OK;
 }
 
@@ -70,10 +78,18 @@ HRESULT CCrawler_Death::ExitState()
 	if (FAILED(__super::ExitState()))
 		return E_FAIL;
 
+	g_pGameInstance->StopSound(CSoundMgr::CHANNELID::Monster_Death);
+
+
 	return S_OK;
 }
 
 void CCrawler_Death::Look_Player(void)
+{
+
+}
+
+void CCrawler_Death::Look_Monster(void)
 {
 
 }

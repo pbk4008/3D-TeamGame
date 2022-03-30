@@ -28,6 +28,9 @@ public:
 public:
 	virtual void Look_Player(void) override;
 
+private:
+	CCameraShake::SHAKEEVENT m_tShakeEvent;
+
 public:
 	static CAberrant_Death* Create(ID3D11Device * pDevice, ID3D11DeviceContext * pDeviceContext, void* pArg = nullptr);
 	virtual void Free() override;

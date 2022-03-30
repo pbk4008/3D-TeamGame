@@ -101,8 +101,8 @@ _int CCamera_Silvermane::Tick(_double _dDeltaTime)
 		tShakeEvent.tWaveX.fFrequency = 10.f;
 		tShakeEvent.tWaveY.fAmplitude = 0.04f;
 		tShakeEvent.tWaveY.fFrequency = 6.f;
-		tShakeEvent.tWaveY.fAmplitude = 0.04f;
-		tShakeEvent.tWaveY.fFrequency = 8.f;
+		tShakeEvent.tWaveZ.fAmplitude = 0.04f;
+		tShakeEvent.tWaveZ.fFrequency = 8.f;
 		tShakeEvent.fBlendOutTime = 0.3f;
 		if (g_pGameInstance->getkeyDown(DIK_RIGHT))
 		{

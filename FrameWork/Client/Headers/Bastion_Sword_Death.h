@@ -22,6 +22,9 @@ public:
 	virtual HRESULT EnterState();
 	virtual HRESULT ExitState();
 
+private:
+	CCameraShake::SHAKEEVENT m_tShakeEvent;
+
 public:
 	static CBastion_Sword_Death* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext, void* _pArg = nullptr);
 private:

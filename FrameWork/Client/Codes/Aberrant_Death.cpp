@@ -55,6 +55,7 @@ HRESULT CAberrant_Death::EnterState()
 	if (FAILED(__super::EnterState()))
 		return E_FAIL;
 
+	g_pShakeManager->Shake(CShakeManager::ETemplate::MonsterDeath, _float3(0.f, 0.f, 0.f));
 	m_pAnimator->Change_AnyEntryAnimation(CMonster_EarthAberrant::MON_STATE::DEATH);
 
 	//_vector vec = { 0.f, 1.f, 0.f,0.f };

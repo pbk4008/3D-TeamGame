@@ -579,7 +579,6 @@ void CMonster_EarthAberrant::OnTriggerEnter(CCollision& collision)
 			}
 			else
 			{
-
 			}
 		}
 	}

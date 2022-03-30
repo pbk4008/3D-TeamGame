@@ -21,6 +21,9 @@ public:
 	virtual HRESULT ExitState();
 	virtual HRESULT EnterState(void* pArg);
 	virtual HRESULT ExitState(void* pArg);
+private:
+	CCameraShake::SHAKEEVENT m_tShakeEvent;
+
 public:
 	static CShooter_Death* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext, void* _pArg = nullptr);
 private:

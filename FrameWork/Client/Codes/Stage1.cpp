@@ -102,6 +102,8 @@ HRESULT CStage1::NativeConstruct()
 	g_pGameInstance->Change_BaseCamera(L"Camera_Silvermane");
 
 
+	g_pGameInstance->PlayBGM(L"Stage1_BGM");
+
 	return S_OK;
 }
 
@@ -429,7 +431,7 @@ HRESULT CStage1::Ready_Data_Effect()
 	{
 		wstring FullName = L"Proto_GameObject_Effect_Hit";
 		//_tcscpy_s(vecEffect1[i].ShaderFullFilePath, L"../../Reference/ShaderFile/Shader_PointInstance.hlsl");
-		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Effect_Hit", FullName, &vecEffect[i])))
+		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Hit", FullName, &vecEffect[i])))
 		{
 			MSGBOX("Failed to Creating in CStage1::Ready_Effect()");
 			return E_FAIL;
@@ -444,7 +446,7 @@ HRESULT CStage1::Ready_Data_Effect()
 	{
 		wstring FullName = L"Proto_GameObject_Effect_Floating";
 		//_tcscpy_s(vecEffect1[i].ShaderFullFilePath, L"../../Reference/ShaderFile/Shader_PointInstance.hlsl");
-		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Effect_Floating", FullName, &vecEffect1[i])))
+		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Floating", FullName, &vecEffect1[i])))
 		{
 			MSGBOX("Failed to Creating in CStage1::Ready_Effect()");
 			return E_FAIL;

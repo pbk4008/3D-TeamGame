@@ -59,6 +59,7 @@ HRESULT CSpear_Hit::EnterState()
 	if (FAILED(__super::EnterState()))
 		return E_FAIL;
 
+	g_pGameInstance->Play_Shot(L"Monster_Hit", CSoundMgr::CHANNELID::Monster_Hit);
 	m_pAnimator->Change_AnyEntryAnimation((_uint)CMonster_Bastion_Spear::ANIM_TYPE::A_FLINCH);
 
 	return S_OK;
@@ -68,6 +69,8 @@ HRESULT CSpear_Hit::ExitState()
 {
 	if (FAILED(__super::ExitState()))
 		return E_FAIL;
+
+	g_pGameInstance->StopSound(CSoundMgr::CHANNELID::Monster_Hit);
 
 	return S_OK;
 }

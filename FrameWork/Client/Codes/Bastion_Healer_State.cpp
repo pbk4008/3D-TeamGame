@@ -220,6 +220,10 @@ void CBastion_Healer_State::OnTriggerEnter(CCollision& collision)
 	pHealer->Hit(collision);
 }
 
+void CBastion_Healer_State::OnTriggerExit(CCollision& collision)
+{
+}
+
 CBastion_Healer_State* CBastion_Healer_State::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext, void* _pArg)
 {
 	CBastion_Healer_State* pInstance = new CBastion_Healer_State(_pDevice, _pDeviceContext);
