@@ -34,6 +34,7 @@
 #include "Effect_DashDust.h"
 #include "Effect_HitParticle.h"
 #include "Effect_HitFloating.h"
+#include "Effect_Env_Fire.h"
 #include "UI_Ingame.h"
 #include "UI_Player_HpBar.h"
 #include "UI_Player_HpBar_Red.h"
@@ -461,11 +462,13 @@ HRESULT CLoader::Load_Stage1UILoad()
 HRESULT CLoader::Load_Stage1EffectLoad()
 {
 	//Effect
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Proto_Component_Rect_Effect", CVIBuffer_Rect::Create(m_pDevice, m_pDeviceContext, L"../../Reference/ShaderFile/Shader_Effect_Fire.hlsl"))))
+		return E_FAIL;
+
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_VIBuffer_PointInstance_Explosion",
 		CVIBuffer_PointInstance_Explosion::Create(m_pDevice, m_pDeviceContext))))
-	{
 		return E_FAIL;
-	}
+	
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_VIBuffer_PointInstance_Floating",
 		CVIBuffer_PointInstance_Floating::Create(m_pDevice, m_pDeviceContext))))
 	{
@@ -483,6 +486,11 @@ HRESULT CLoader::Load_Stage1EffectLoad()
 	}
 
 	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_Effect_Floating"), CEffect_HitFloating::Create(m_pDevice, m_pDeviceContext))))
+	{
+		return E_FAIL;
+	}
+
+	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_Effect_Env_Fire"), CEffect_Env_Fire::Create(m_pDevice, m_pDeviceContext))))
 	{
 		return E_FAIL;
 	}

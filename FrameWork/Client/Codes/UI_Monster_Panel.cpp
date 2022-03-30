@@ -3,6 +3,9 @@
 #include "UI_Monster_Panel.h"
 #include "GameInstance.h"
 
+#include "Camera_Silvermane.h"
+#include "Camera.h"
+
 #include "UI_Monster_Back.h"
 #include "UI_Monster_Level.h"
 #include "UI_Monster_HpBar.h"
@@ -10,7 +13,7 @@
 #include "UI_Monster_GroggyBar.h"
 
 CUI_Monster_Panel::CUI_Monster_Panel(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
-	:CUI(pDevice,pDeviceContext)
+	:CUI(pDevice, pDeviceContext)
 {
 	ZeroMemory(&m_PanelDesc, sizeof(m_PanelDesc));
 	ZeroMemory(&m_TargetMatrix, sizeof(_float4x4));
@@ -79,17 +82,10 @@ HRESULT CUI_Monster_Panel::NativeConstruct(const _uint _iSceneID, void* pArg)
 
 _int CUI_Monster_Panel::Tick(_double TimeDelta)
 {
-	/*if (false == m_bFirstShow)
-	{
-		setActive(true);
-		m_bFirstShow = true;
-	}*/
-	
-
 	if (FAILED(__super::Tick(TimeDelta)))
 		return -1;
 
-	
+
 	Update_Panel(TimeDelta);
 
 	return 0;
@@ -102,7 +98,7 @@ _int CUI_Monster_Panel::LateTick(_double TimeDelta)
 
 	if (nullptr != m_pRenderer)
 	{
-		m_pRenderer->Add_RenderGroup(CRenderer::RENDER::RENDER_ALPHA, this);
+		m_pRenderer->Add_RenderGroup(CRenderer::RENDER::RENDER_UI, this);
 	}
 	return _int();
 }
@@ -397,7 +393,7 @@ HRESULT CUI_Monster_Panel::Setting_Animus()
 	Desc4.UIDesc.fAngle = 0.f;
 	Desc4.UIDesc.fPos = { 0.f, 0.f, 0.f };
 	Desc4.UIDesc.fSize = { 1.f, 1.f };
-	Desc4.iTextureNum = 2;
+	Desc4.iTextureNum = 6;
 
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_UI", L"Proto_GameObject_UI_Monster_Name", &Desc4,
 		(CGameObject**)&m_pUIName)))
@@ -545,7 +541,7 @@ HRESULT CUI_Monster_Panel::Setting_Spear()
 	Desc4.UIDesc.fAngle = 0.f;
 	Desc4.UIDesc.fPos = { 0.f, 0.f, 0.f };
 	Desc4.UIDesc.fSize = { 1.f, 1.f };
-	Desc4.iTextureNum = 2;
+	Desc4.iTextureNum = 7;
 
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_UI", L"Proto_GameObject_UI_Monster_Name", &Desc4,
 		(CGameObject**)&m_pUIName)))
@@ -564,6 +560,8 @@ HRESULT CUI_Monster_Panel::Setting_Spear()
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_UI", L"Proto_GameObject_UI_Monster_GroggyBar", &Desc5,
 		(CGameObject**)&m_pUIGroggyBar)))
 		return E_FAIL;
+
+	return S_OK;
 }
 
 HRESULT CUI_Monster_Panel::Setting_Shooter()
@@ -916,6 +914,32 @@ void CUI_Monster_Panel::Update_Setting_Crawler(_double TimeDelta)
 	_matrix SettingMat = XMMatrixIdentity();
 	SettingMat.r[3] = { 0.f, 2.f, 0.f , 1.f };
 	_matrix TargetSettinMat = SettingMat * XMLoadFloat4x4(&m_TargetMatrix); //¸ó½ºÅÍ(Å¸°Ù)À§Ä¡
+
+	//_vector temp = { 0.f, 0.f, 0.f, 0.f };
+	//temp = XMVector3TransformCoord(TargetSettinMat.r[3], g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_VIEW));
+	//temp = XMVector3TransformCoord(temp, g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_PROJECTION));
+	//
+	//CCamera_Silvermane* pCamera = (CCamera_Silvermane*)g_pGameInstance->getObjectList(g_pGameInstance->getCurrentLevel(), L"Layer_Camera")->front();
+	//CCamera* pCameraCom = (CCamera*)pCamera->Get_Component(L"Com_Camera");
+	//_float zFar = pCameraCom->GetDesc().fFar;
+	//_float zNear = pCameraCom->GetDesc().fNear;
+
+	//D3D11_VIEWPORT		ViewportDesc;
+	//_uint		iNumViewports = 1;
+	//m_pDeviceContext->RSGetViewports(&iNumViewports, &ViewportDesc);
+
+	//_matrix matViewPort =
+	//{
+	//	ViewportDesc.Width * 0.5f, 0.f, 0.f, 0.f,
+	//	0.f, -(ViewportDesc.Height * 0.5f), 0.f, 0.f,
+	//	0.f, 0.f, zFar - zNear, 0.f,
+	//	ViewportDesc.Width * 0.5f , ViewportDesc.Height * 0.5f, zNear , 1.f
+	//};
+
+	//temp = XMVector3TransformCoord(temp, matViewPort);
+
+	//_vector newPos = { XMVectorGetX(temp), XMVectorGetY(temp), 0.1f };
+	//m_pTransform->Set_State(CTransform::STATE_POSITION, newPos);
 	m_pTransform->Set_WorldMatrix(TargetSettinMat);
 
 	//ºôº¸µå
@@ -925,15 +949,19 @@ void CUI_Monster_Panel::Update_Setting_Crawler(_double TimeDelta)
 	m_pTransform->Set_State(CTransform::STATE::STATE_RIGHT, ViewMatrix.r[0]);
 	m_pTransform->Set_State(CTransform::STATE::STATE_LOOK, ViewMatrix.r[2]);
 
-	//Panel Size
-	_vector vScale = { 1.f,1.f,1.f,1.f };
+	_fvector MyPos = m_pTransform->Get_State(CTransform::STATE::STATE_POSITION);
+	_fvector vDist = MyPos - g_pGameInstance->Get_CamPosition(L"Camera_Silvermane");
+	_float fDistToUI = XMVectorGetX(XMVector3Length(vDist));
+
+	_vector vScale = XMVectorZero();
+	vScale = { fDistToUI * 0.15f,fDistToUI * 0.15f,1.f,1.f };
 	m_pTransform->Scaling(vScale);
 
 	//UI Back
 	CTransform* BackTransform = (CTransform*)m_pUIBack->Get_Component(L"Com_Transform");
 	_matrix Backmat = XMMatrixIdentity();
 	Backmat.r[0] = XMVectorSetX(Backmat.r[0], 3.f);
-	Backmat.r[1] = XMVectorSetY(Backmat.r[1], 0.40f);
+	Backmat.r[1] = XMVectorSetY(Backmat.r[1], 0.4f);
 	Backmat.r[3] = { 0.f, 0.f, 0.f, 1.f };
 	BackTransform->Set_WorldMatrix(Backmat * m_pTransform->Get_WorldMatrix());
 
@@ -950,7 +978,7 @@ void CUI_Monster_Panel::Update_Setting_Crawler(_double TimeDelta)
 	_matrix HpBarmat = XMMatrixIdentity();
 	HpBarmat.r[0] = XMVectorSetX(HpBarmat.r[0], 2.75f);
 	HpBarmat.r[1] = XMVectorSetY(HpBarmat.r[1], 0.40f);
-	HpBarmat.r[3] = { -0.03f, 0.0f, -0.001f, 1.f };
+	HpBarmat.r[3] = { -0.03f, 0.0f, -0.005f, 1.f };
 	HpBarTransform->Set_WorldMatrix(HpBarmat * m_pTransform->Get_WorldMatrix());
 
 	//UI Name
@@ -958,7 +986,7 @@ void CUI_Monster_Panel::Update_Setting_Crawler(_double TimeDelta)
 	_matrix Namemat = XMMatrixIdentity();
 	Namemat.r[0] = XMVectorSetX(Namemat.r[0], 1.28f);
 	Namemat.r[1] = XMVectorSetY(Namemat.r[1], 0.64f);
-	Namemat.r[3] = { -0.7f, 0.35f, -0.001f, 1.f };
+	Namemat.r[3] = { -0.7f, 0.35f, -0.005f, 1.f };
 	NameTransform->Set_WorldMatrix(Namemat * m_pTransform->Get_WorldMatrix());
 
 	//UI GroggyBar
@@ -966,7 +994,7 @@ void CUI_Monster_Panel::Update_Setting_Crawler(_double TimeDelta)
 	_matrix GroggyBarmat = XMMatrixIdentity();
 	GroggyBarmat.r[0] = XMVectorSetX(GroggyBarmat.r[0], 2.75f);
 	GroggyBarmat.r[1] = XMVectorSetY(GroggyBarmat.r[1], 0.2f);
-	GroggyBarmat.r[3] = { -0.02f, -0.1f, -0.001f, 1.f };
+	GroggyBarmat.r[3] = { -0.02f, -0.1f, -0.005f, 1.f };
 	GroggyBarTransform->Set_WorldMatrix(GroggyBarmat * m_pTransform->Get_WorldMatrix());
 }
 
@@ -986,7 +1014,12 @@ void CUI_Monster_Panel::Update_Setting_Aberrant(_double TimeDelta)
 	m_pTransform->Set_State(CTransform::STATE::STATE_LOOK, ViewMatrix.r[2]);
 
 	//Panel Size
-	_vector vScale = { 1.f,1.f,1.f,1.f };
+	_fvector MyPos = m_pTransform->Get_State(CTransform::STATE::STATE_POSITION);
+	_fvector vDist = MyPos - g_pGameInstance->Get_CamPosition(L"Camera_Silvermane");
+	_float fDistToUI = XMVectorGetX(XMVector3Length(vDist));
+
+	_vector vScale = XMVectorZero();
+	vScale = { fDistToUI * 0.15f,fDistToUI * 0.15f,1.f,1.f };
 	m_pTransform->Scaling(vScale);
 
 	//UI Back
@@ -1010,7 +1043,7 @@ void CUI_Monster_Panel::Update_Setting_Aberrant(_double TimeDelta)
 	_matrix HpBarmat = XMMatrixIdentity();
 	HpBarmat.r[0] = XMVectorSetX(HpBarmat.r[0], 2.75f);
 	HpBarmat.r[1] = XMVectorSetY(HpBarmat.r[1], 0.40f);
-	HpBarmat.r[3] = { -0.03f, 0.0f, -0.001f, 1.f };
+	HpBarmat.r[3] = { -0.03f, 0.0f, -0.005f, 1.f };
 	HpBarTransform->Set_WorldMatrix(HpBarmat * m_pTransform->Get_WorldMatrix());
 
 	//UI Name
@@ -1018,7 +1051,7 @@ void CUI_Monster_Panel::Update_Setting_Aberrant(_double TimeDelta)
 	_matrix Namemat = XMMatrixIdentity();
 	Namemat.r[0] = XMVectorSetX(Namemat.r[0], 1.28f);
 	Namemat.r[1] = XMVectorSetY(Namemat.r[1], 0.64f);
-	Namemat.r[3] = { -0.5f, 0.35f, -0.001f, 1.f };
+	Namemat.r[3] = { -0.5f, 0.35f, -0.005f, 1.f };
 	NameTransform->Set_WorldMatrix(Namemat * m_pTransform->Get_WorldMatrix());
 
 	//UI GroggyBar
@@ -1026,7 +1059,7 @@ void CUI_Monster_Panel::Update_Setting_Aberrant(_double TimeDelta)
 	_matrix GroggyBarmat = XMMatrixIdentity();
 	GroggyBarmat.r[0] = XMVectorSetX(GroggyBarmat.r[0], 2.75f);
 	GroggyBarmat.r[1] = XMVectorSetY(GroggyBarmat.r[1], 0.2f);
-	GroggyBarmat.r[3] = { -0.02f, -0.1f, -0.001f, 1.f };
+	GroggyBarmat.r[3] = { -0.02f, -0.1f, -0.005f, 1.f };
 	GroggyBarTransform->Set_WorldMatrix(GroggyBarmat * m_pTransform->Get_WorldMatrix());
 }
 
@@ -1046,8 +1079,13 @@ void CUI_Monster_Panel::Update_Setting_Animus(_double TimeDelta)
 	m_pTransform->Set_State(CTransform::STATE::STATE_LOOK, ViewMatrix.r[2]);
 
 	//Panel Size
-	_vector vScale = { 1.f,1.f,1.f,1.f };
-	m_pTransform->Scaling(vScale);
+	_fvector MyPos = m_pTransform->Get_State(CTransform::STATE::STATE_POSITION);
+	_fvector vDist = MyPos - g_pGameInstance->Get_CamPosition(L"Camera_Silvermane");
+	_float fDistToUI = XMVectorGetX(XMVector3Length(vDist));
+
+	_vector vScale = XMVectorZero();
+	vScale = { fDistToUI * 0.15f,fDistToUI * 0.15f,1.f,1.f };
+	m_pTransform->Scaling(vScale);;
 
 	//UI Back
 	CTransform* BackTransform = (CTransform*)m_pUIBack->Get_Component(L"Com_Transform");
@@ -1070,7 +1108,7 @@ void CUI_Monster_Panel::Update_Setting_Animus(_double TimeDelta)
 	_matrix HpBarmat = XMMatrixIdentity();
 	HpBarmat.r[0] = XMVectorSetX(HpBarmat.r[0], 2.75f);
 	HpBarmat.r[1] = XMVectorSetY(HpBarmat.r[1], 0.40f);
-	HpBarmat.r[3] = { -0.03f, 0.0f, -0.001f, 1.f };
+	HpBarmat.r[3] = { -0.03f, 0.0f, -0.005f, 1.f };
 	HpBarTransform->Set_WorldMatrix(HpBarmat * m_pTransform->Get_WorldMatrix());
 
 	//UI Name
@@ -1078,7 +1116,7 @@ void CUI_Monster_Panel::Update_Setting_Animus(_double TimeDelta)
 	_matrix Namemat = XMMatrixIdentity();
 	Namemat.r[0] = XMVectorSetX(Namemat.r[0], 1.76f);
 	Namemat.r[1] = XMVectorSetY(Namemat.r[1], 0.64f);
-	Namemat.r[3] = { -0.4f, 0.35f, -0.001f, 1.f };
+	Namemat.r[3] = { -0.4f, 0.35f, -0.005f, 1.f };
 	NameTransform->Set_WorldMatrix(Namemat * m_pTransform->Get_WorldMatrix());
 
 	//UI GroggyBar
@@ -1086,7 +1124,7 @@ void CUI_Monster_Panel::Update_Setting_Animus(_double TimeDelta)
 	_matrix GroggyBarmat = XMMatrixIdentity();
 	GroggyBarmat.r[0] = XMVectorSetX(GroggyBarmat.r[0], 2.75f);
 	GroggyBarmat.r[1] = XMVectorSetY(GroggyBarmat.r[1], 0.2f);
-	GroggyBarmat.r[3] = { -0.02f, -0.1f, -0.001f, 1.f };
+	GroggyBarmat.r[3] = { -0.02f, -0.1f, -0.005f, 1.f };
 	GroggyBarTransform->Set_WorldMatrix(GroggyBarmat * m_pTransform->Get_WorldMatrix());
 }
 
@@ -1106,7 +1144,12 @@ void CUI_Monster_Panel::Update_Setting_Sword(_double TimeDelta)
 	m_pTransform->Set_State(CTransform::STATE::STATE_LOOK, ViewMatrix.r[2]);
 
 	//Panel Size
-	_vector vScale = { 1.f,1.f,1.f,1.f };
+	_fvector MyPos = m_pTransform->Get_State(CTransform::STATE::STATE_POSITION);
+	_fvector vDist = MyPos - g_pGameInstance->Get_CamPosition(L"Camera_Silvermane");
+	_float fDistToUI = XMVectorGetX(XMVector3Length(vDist));
+
+	_vector vScale = XMVectorZero();
+	vScale = { fDistToUI * 0.15f,fDistToUI * 0.15f,1.f,1.f };
 	m_pTransform->Scaling(vScale);
 
 	//UI Back
@@ -1130,7 +1173,7 @@ void CUI_Monster_Panel::Update_Setting_Sword(_double TimeDelta)
 	_matrix HpBarmat = XMMatrixIdentity();
 	HpBarmat.r[0] = XMVectorSetX(HpBarmat.r[0], 2.75f);
 	HpBarmat.r[1] = XMVectorSetY(HpBarmat.r[1], 0.40f);
-	HpBarmat.r[3] = { -0.03f, 0.0f, -0.001f, 1.f };
+	HpBarmat.r[3] = { -0.03f, 0.0f, -0.005f, 1.f };
 	HpBarTransform->Set_WorldMatrix(HpBarmat * m_pTransform->Get_WorldMatrix());
 
 	//UI Name
@@ -1138,7 +1181,7 @@ void CUI_Monster_Panel::Update_Setting_Sword(_double TimeDelta)
 	_matrix Namemat = XMMatrixIdentity();
 	Namemat.r[0] = XMVectorSetX(Namemat.r[0], 1.76f);
 	Namemat.r[1] = XMVectorSetY(Namemat.r[1], 0.64f);
-	Namemat.r[3] = { -0.4f, 0.35f, -0.001f, 1.f };
+	Namemat.r[3] = { -0.4f, 0.35f, -0.005f, 1.f };
 	NameTransform->Set_WorldMatrix(Namemat * m_pTransform->Get_WorldMatrix());
 
 	//UI GroggyBar
@@ -1146,7 +1189,7 @@ void CUI_Monster_Panel::Update_Setting_Sword(_double TimeDelta)
 	_matrix GroggyBarmat = XMMatrixIdentity();
 	GroggyBarmat.r[0] = XMVectorSetX(GroggyBarmat.r[0], 2.75f);
 	GroggyBarmat.r[1] = XMVectorSetY(GroggyBarmat.r[1], 0.2f);
-	GroggyBarmat.r[3] = { -0.02f, -0.1f, -0.001f, 1.f };
+	GroggyBarmat.r[3] = { -0.02f, -0.1f, -0.005f, 1.f };
 	GroggyBarTransform->Set_WorldMatrix(GroggyBarmat * m_pTransform->Get_WorldMatrix());
 }
 
@@ -1166,7 +1209,12 @@ void CUI_Monster_Panel::Update_Setting_Spear(_double TimeDelta)
 	m_pTransform->Set_State(CTransform::STATE::STATE_LOOK, ViewMatrix.r[2]);
 
 	//Panel Size
-	_vector vScale = { 1.f,1.f,1.f,1.f };
+	_fvector MyPos = m_pTransform->Get_State(CTransform::STATE::STATE_POSITION);
+	_fvector vDist = MyPos - g_pGameInstance->Get_CamPosition(L"Camera_Silvermane");
+	_float fDistToUI = XMVectorGetX(XMVector3Length(vDist));
+
+	_vector vScale = XMVectorZero();
+	vScale = { fDistToUI * 0.15f,fDistToUI * 0.15f,1.f,1.f };
 	m_pTransform->Scaling(vScale);
 
 	//UI Back
@@ -1190,7 +1238,7 @@ void CUI_Monster_Panel::Update_Setting_Spear(_double TimeDelta)
 	_matrix HpBarmat = XMMatrixIdentity();
 	HpBarmat.r[0] = XMVectorSetX(HpBarmat.r[0], 2.75f);
 	HpBarmat.r[1] = XMVectorSetY(HpBarmat.r[1], 0.40f);
-	HpBarmat.r[3] = { -0.03f, 0.0f, -0.001f, 1.f };
+	HpBarmat.r[3] = { -0.03f, 0.0f, -0.005f, 1.f };
 	HpBarTransform->Set_WorldMatrix(HpBarmat * m_pTransform->Get_WorldMatrix());
 
 	//UI Name
@@ -1198,7 +1246,7 @@ void CUI_Monster_Panel::Update_Setting_Spear(_double TimeDelta)
 	_matrix Namemat = XMMatrixIdentity();
 	Namemat.r[0] = XMVectorSetX(Namemat.r[0], 1.76f);
 	Namemat.r[1] = XMVectorSetY(Namemat.r[1], 0.64f);
-	Namemat.r[3] = { -0.4f, 0.35f, -0.001f, 1.f };
+	Namemat.r[3] = { -0.4f, 0.35f, -0.005f, 1.f };
 	NameTransform->Set_WorldMatrix(Namemat * m_pTransform->Get_WorldMatrix());
 
 	//UI GroggyBar
@@ -1206,7 +1254,7 @@ void CUI_Monster_Panel::Update_Setting_Spear(_double TimeDelta)
 	_matrix GroggyBarmat = XMMatrixIdentity();
 	GroggyBarmat.r[0] = XMVectorSetX(GroggyBarmat.r[0], 2.75f);
 	GroggyBarmat.r[1] = XMVectorSetY(GroggyBarmat.r[1], 0.2f);
-	GroggyBarmat.r[3] = { -0.02f, -0.1f, -0.001f, 1.f };
+	GroggyBarmat.r[3] = { -0.02f, -0.1f, -0.005f, 1.f };
 	GroggyBarTransform->Set_WorldMatrix(GroggyBarmat * m_pTransform->Get_WorldMatrix());
 }
 
@@ -1226,7 +1274,12 @@ void CUI_Monster_Panel::Update_Setting_Shooter(_double TimeDelta)
 	m_pTransform->Set_State(CTransform::STATE::STATE_LOOK, ViewMatrix.r[2]);
 
 	//Panel Size
-	_vector vScale = { 1.f,1.f,1.f,1.f };
+	_fvector MyPos = m_pTransform->Get_State(CTransform::STATE::STATE_POSITION);
+	_fvector vDist = MyPos - g_pGameInstance->Get_CamPosition(L"Camera_Silvermane");
+	_float fDistToUI = XMVectorGetX(XMVector3Length(vDist));
+
+	_vector vScale = XMVectorZero();
+	vScale = { fDistToUI * 0.15f,fDistToUI * 0.15f,1.f,1.f };
 	m_pTransform->Scaling(vScale);
 
 	//UI Back
@@ -1250,7 +1303,7 @@ void CUI_Monster_Panel::Update_Setting_Shooter(_double TimeDelta)
 	_matrix HpBarmat = XMMatrixIdentity();
 	HpBarmat.r[0] = XMVectorSetX(HpBarmat.r[0], 2.75f);
 	HpBarmat.r[1] = XMVectorSetY(HpBarmat.r[1], 0.40f);
-	HpBarmat.r[3] = { -0.03f, 0.0f, -0.001f, 1.f };
+	HpBarmat.r[3] = { -0.03f, 0.0f, -0.005f, 1.f };
 	HpBarTransform->Set_WorldMatrix(HpBarmat * m_pTransform->Get_WorldMatrix());
 
 	//UI Name
@@ -1258,7 +1311,7 @@ void CUI_Monster_Panel::Update_Setting_Shooter(_double TimeDelta)
 	_matrix Namemat = XMMatrixIdentity();
 	Namemat.r[0] = XMVectorSetX(Namemat.r[0], 1.76f);
 	Namemat.r[1] = XMVectorSetY(Namemat.r[1], 0.64f);
-	Namemat.r[3] = { -0.4f, 0.35f, -0.001f, 1.f };
+	Namemat.r[3] = { -0.4f, 0.35f, -0.005f, 1.f };
 	NameTransform->Set_WorldMatrix(Namemat * m_pTransform->Get_WorldMatrix());
 
 	//UI GroggyBar
@@ -1266,7 +1319,7 @@ void CUI_Monster_Panel::Update_Setting_Shooter(_double TimeDelta)
 	_matrix GroggyBarmat = XMMatrixIdentity();
 	GroggyBarmat.r[0] = XMVectorSetX(GroggyBarmat.r[0], 2.75f);
 	GroggyBarmat.r[1] = XMVectorSetY(GroggyBarmat.r[1], 0.2f);
-	GroggyBarmat.r[3] = { -0.02f, -0.1f, -0.001f, 1.f };
+	GroggyBarmat.r[3] = { -0.02f, -0.1f, -0.005f, 1.f };
 	GroggyBarTransform->Set_WorldMatrix(GroggyBarmat * m_pTransform->Get_WorldMatrix());
 }
 
@@ -1286,7 +1339,12 @@ void CUI_Monster_Panel::Update_Setting_Healer(_double TimeDelta)
 	m_pTransform->Set_State(CTransform::STATE::STATE_LOOK, ViewMatrix.r[2]);
 
 	//Panel Size
-	_vector vScale = { 1.f,1.f,1.f,1.f };
+	_fvector MyPos = m_pTransform->Get_State(CTransform::STATE::STATE_POSITION);
+	_fvector vDist = MyPos - g_pGameInstance->Get_CamPosition(L"Camera_Silvermane");
+	_float fDistToUI = XMVectorGetX(XMVector3Length(vDist));
+
+	_vector vScale = XMVectorZero();
+	vScale = { fDistToUI * 0.15f,fDistToUI * 0.15f,1.f,1.f };
 	m_pTransform->Scaling(vScale);
 
 	//UI Back
@@ -1310,7 +1368,7 @@ void CUI_Monster_Panel::Update_Setting_Healer(_double TimeDelta)
 	_matrix HpBarmat = XMMatrixIdentity();
 	HpBarmat.r[0] = XMVectorSetX(HpBarmat.r[0], 2.75f);
 	HpBarmat.r[1] = XMVectorSetY(HpBarmat.r[1], 0.40f);
-	HpBarmat.r[3] = { -0.03f, 0.0f, -0.001f, 1.f };
+	HpBarmat.r[3] = { -0.03f, 0.0f, -0.005f, 1.f };
 	HpBarTransform->Set_WorldMatrix(HpBarmat * m_pTransform->Get_WorldMatrix());
 
 	//UI Name
@@ -1318,7 +1376,7 @@ void CUI_Monster_Panel::Update_Setting_Healer(_double TimeDelta)
 	_matrix Namemat = XMMatrixIdentity();
 	Namemat.r[0] = XMVectorSetX(Namemat.r[0], 1.76f);
 	Namemat.r[1] = XMVectorSetY(Namemat.r[1], 0.64f);
-	Namemat.r[3] = { -0.4f, 0.35f, -0.001f, 1.f };
+	Namemat.r[3] = { -0.4f, 0.35f, -0.005f, 1.f };
 	NameTransform->Set_WorldMatrix(Namemat * m_pTransform->Get_WorldMatrix());
 
 	//UI GroggyBar
@@ -1326,7 +1384,7 @@ void CUI_Monster_Panel::Update_Setting_Healer(_double TimeDelta)
 	_matrix GroggyBarmat = XMMatrixIdentity();
 	GroggyBarmat.r[0] = XMVectorSetX(GroggyBarmat.r[0], 2.75f);
 	GroggyBarmat.r[1] = XMVectorSetY(GroggyBarmat.r[1], 0.2f);
-	GroggyBarmat.r[3] = { -0.02f, -0.1f, -0.001f, 1.f };
+	GroggyBarmat.r[3] = { -0.02f, -0.1f, -0.005f, 1.f };
 	GroggyBarTransform->Set_WorldMatrix(GroggyBarmat * m_pTransform->Get_WorldMatrix());
 }
 
@@ -1346,7 +1404,12 @@ void CUI_Monster_Panel::Update_Setting_2HSword(_double TimeDelta)
 	m_pTransform->Set_State(CTransform::STATE::STATE_LOOK, ViewMatrix.r[2]);
 
 	//Panel Size
-	_vector vScale = { 1.f,1.f,1.f,1.f };
+	_fvector MyPos = m_pTransform->Get_State(CTransform::STATE::STATE_POSITION);
+	_fvector vDist = MyPos - g_pGameInstance->Get_CamPosition(L"Camera_Silvermane");
+	_float fDistToUI = XMVectorGetX(XMVector3Length(vDist));
+
+	_vector vScale = XMVectorZero();
+	vScale = { fDistToUI * 0.15f,fDistToUI * 0.15f,1.f,1.f };
 	m_pTransform->Scaling(vScale);
 
 	//UI Back
@@ -1370,7 +1433,7 @@ void CUI_Monster_Panel::Update_Setting_2HSword(_double TimeDelta)
 	_matrix HpBarmat = XMMatrixIdentity();
 	HpBarmat.r[0] = XMVectorSetX(HpBarmat.r[0], 2.75f);
 	HpBarmat.r[1] = XMVectorSetY(HpBarmat.r[1], 0.40f);
-	HpBarmat.r[3] = { -0.03f, 0.0f, -0.001f, 1.f };
+	HpBarmat.r[3] = { -0.03f, 0.0f, -0.005f, 1.f };
 	HpBarTransform->Set_WorldMatrix(HpBarmat * m_pTransform->Get_WorldMatrix());
 
 	//UI Name
@@ -1378,7 +1441,7 @@ void CUI_Monster_Panel::Update_Setting_2HSword(_double TimeDelta)
 	_matrix Namemat = XMMatrixIdentity();
 	Namemat.r[0] = XMVectorSetX(Namemat.r[0], 1.76f);
 	Namemat.r[1] = XMVectorSetY(Namemat.r[1], 0.64f);
-	Namemat.r[3] = { -0.4f, 0.35f, -0.001f, 1.f };
+	Namemat.r[3] = { -0.4f, 0.35f, -0.005f, 1.f };
 	NameTransform->Set_WorldMatrix(Namemat * m_pTransform->Get_WorldMatrix());
 
 	//UI GroggyBar
@@ -1386,7 +1449,7 @@ void CUI_Monster_Panel::Update_Setting_2HSword(_double TimeDelta)
 	_matrix GroggyBarmat = XMMatrixIdentity();
 	GroggyBarmat.r[0] = XMVectorSetX(GroggyBarmat.r[0], 2.75f);
 	GroggyBarmat.r[1] = XMVectorSetY(GroggyBarmat.r[1], 0.2f);
-	GroggyBarmat.r[3] = { -0.02f, -0.1f, -0.001f, 1.f };
+	GroggyBarmat.r[3] = { -0.02f, -0.1f, -0.005f, 1.f };
 	GroggyBarTransform->Set_WorldMatrix(GroggyBarmat * m_pTransform->Get_WorldMatrix());
 }
 
@@ -1406,7 +1469,12 @@ void CUI_Monster_Panel::Update_Setting_MidBoss(_double TimeDelta)
 	m_pTransform->Set_State(CTransform::STATE::STATE_LOOK, ViewMatrix.r[2]);
 
 	//Panel Size
-	_vector vScale = { 1.f,1.f,1.f,1.f };
+	_fvector MyPos = m_pTransform->Get_State(CTransform::STATE::STATE_POSITION);
+	_fvector vDist = MyPos - g_pGameInstance->Get_CamPosition(L"Camera_Silvermane");
+	_float fDistToUI = XMVectorGetX(XMVector3Length(vDist));
+
+	_vector vScale = XMVectorZero();
+	vScale = { fDistToUI * 0.15f,fDistToUI * 0.15f,1.f,1.f };
 	m_pTransform->Scaling(vScale);
 
 	//UI Back
@@ -1430,7 +1498,7 @@ void CUI_Monster_Panel::Update_Setting_MidBoss(_double TimeDelta)
 	_matrix HpBarmat = XMMatrixIdentity();
 	HpBarmat.r[0] = XMVectorSetX(HpBarmat.r[0], 3.7f);
 	HpBarmat.r[1] = XMVectorSetY(HpBarmat.r[1], 0.40f);
-	HpBarmat.r[3] = { -0.05f, 0.0f, -0.001f, 1.f };
+	HpBarmat.r[3] = { -0.05f, 0.0f, -0.005f, 1.f };
 	HpBarTransform->Set_WorldMatrix(HpBarmat * m_pTransform->Get_WorldMatrix());
 
 	//UI Name
@@ -1438,7 +1506,7 @@ void CUI_Monster_Panel::Update_Setting_MidBoss(_double TimeDelta)
 	_matrix Namemat = XMMatrixIdentity();
 	Namemat.r[0] = XMVectorSetX(Namemat.r[0], 2.56f);
 	Namemat.r[1] = XMVectorSetY(Namemat.r[1], 0.64f);
-	Namemat.r[3] = { -0.7f, 0.35f, -0.001f, 1.f };
+	Namemat.r[3] = { -0.7f, 0.35f, -0.005f, 1.f };
 	NameTransform->Set_WorldMatrix(Namemat * m_pTransform->Get_WorldMatrix());
 
 	//UI GroggyBar
@@ -1446,7 +1514,7 @@ void CUI_Monster_Panel::Update_Setting_MidBoss(_double TimeDelta)
 	_matrix GroggyBarmat = XMMatrixIdentity();
 	GroggyBarmat.r[0] = XMVectorSetX(GroggyBarmat.r[0], 3.7f);
 	GroggyBarmat.r[1] = XMVectorSetY(GroggyBarmat.r[1], 0.2f);
-	GroggyBarmat.r[3] = { -0.05f, -0.1f, -0.001f, 1.f };
+	GroggyBarmat.r[3] = { -0.05f, -0.1f, -0.005f, 1.f };
 	GroggyBarTransform->Set_WorldMatrix(GroggyBarmat * m_pTransform->Get_WorldMatrix());
 }
 

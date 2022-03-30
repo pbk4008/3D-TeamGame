@@ -143,7 +143,11 @@ HRESULT CRenderer::Draw_RenderGroup()
 	if (FAILED(Render_NonAlpha())) // 디퍼드 단계
 		return E_FAIL;
 
+
 	if (FAILED(m_pRenderAssit->Render_LightAcc(m_CameraTag,m_bPBR,m_bShadow))) // 빛연산
+		return E_FAIL;
+
+	if (FAILED(Render_Alpha()))
 		return E_FAIL;
 
 	if (m_bPixel) // Pixel HDR
@@ -168,13 +172,17 @@ HRESULT CRenderer::Draw_RenderGroup()
 		if (FAILED(m_pPostProcess->BlurPass(m_pTargetMgr, L"Target_Horizontal4", L"Target_Vertical8", L"Target_Horizontal8", 160, 90))) return E_FAIL;
 		if (FAILED(m_pPostProcess->BlurPass(m_pTargetMgr, L"Target_Horizontal8", L"Target_Vertical16", L"Target_Horizontal16", 64, 64))) return E_FAIL;
 
+		if (FAILED(m_pPostProcess->BlurPass(m_pTargetMgr, L"Target_Fire", L"Target_V2_Fire", L"Target_H2_Fire", 640, 360))) return E_FAIL;
+		if (FAILED(m_pPostProcess->BlurPass(m_pTargetMgr, L"Target_H2_Fire", L"Target_V4_Fire", L"Target_H4_Fire", 320, 180))) return E_FAIL;
+		if (FAILED(m_pPostProcess->BlurPass(m_pTargetMgr, L"Target_H4_Fire", L"Target_V8_Fire", L"Target_H8_Fire", 160, 90))) return E_FAIL;
+		if (FAILED(m_pPostProcess->BlurPass(m_pTargetMgr, L"Target_H8_Fire", L"Target_V16_Fire", L"Target_H16_Fire", 64, 64))) return E_FAIL;
+
+
 		if (FAILED(m_pTonemapping->Blend_FinalPass(m_pTargetMgr, m_bHDR, m_bShadow))) return E_FAIL;
 	}
 
 	if (FAILED(Render_Final())) return E_FAIL;
 
-	if (FAILED(Render_Alpha()))
-		return E_FAIL;
 
 	if (FAILED(Render_UI()))
 		return E_FAIL;
@@ -303,6 +311,9 @@ HRESULT CRenderer::Render_NonAlpha()
 
 HRESULT CRenderer::Render_Alpha()
 {
+	if (FAILED(m_pTargetMgr->Begin_MRT(m_pDeviceContext, TEXT("Target_Fire"))))
+		return E_FAIL;
+
 	for (auto& pGameObject : m_RenderGroup[RENDER_ALPHA])
 	{
 		if (nullptr != pGameObject)
@@ -311,6 +322,9 @@ HRESULT CRenderer::Render_Alpha()
 		Safe_Release(pGameObject);
 	}
 	m_RenderGroup[RENDER_ALPHA].clear();
+
+	if (FAILED(m_pTargetMgr->End_MRT(m_pDeviceContext)))
+		return E_FAIL;
 
 	return S_OK;
 }

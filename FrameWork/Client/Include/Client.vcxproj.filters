@@ -495,13 +495,13 @@
     </Filter>
     <Filter Include="02.GameObject\02.Map\01.Environment\Tree">
       <UniqueIdentifier>{afa39133-5db9-4588-b538-151dc4a78680}</UniqueIdentifier>
-	</Filter>
+    </Filter>
     <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_2HSword\State_2HSword\Groggy\End">
-	</Filter>
+    </Filter>
     <Filter Include="02.GameObject\04.Effect\03.Effect_Floating">
       <UniqueIdentifier>{be60742a-b954-4dc6-8968-d6849db69d5c}</UniqueIdentifier>
-	</Filter>
-	<Filter Include="02.GameObject\03.Character\01.Monster\Bastion_2HSword\State_2HSword\Groggy\End">
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_2HSword\State_2HSword\Groggy\End">
       <UniqueIdentifier>{1158fce2-5cfa-4605-9029-4ac375f14bcd}</UniqueIdentifier>
     </Filter>
     <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_Healer\State_Healer\Groggy\End">
@@ -599,6 +599,9 @@
     </Filter>
     <Filter Include="02.GameObject\03.Character\00.Player\00.Silvermane\State\Idel\Sprint">
       <UniqueIdentifier>{f86ae29b-ccc6-4e20-aafd-431e17d61329}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\04.Effect\04.Env_Fire">
+      <UniqueIdentifier>{f3533393-750c-4e4b-8424-ce5de30c8016}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -1309,11 +1312,11 @@
     </ClInclude>
     <ClInclude Include="..\Headers\SubEnvironment.h">
       <Filter>02.GameObject\02.Map\01.Environment\Tree</Filter>
-	</ClInclude>
+    </ClInclude>
     <ClInclude Include="..\Headers\Shooter_Attack.h" />
     <ClInclude Include="..\Headers\Effect_HitFloating.h">
       <Filter>02.GameObject\04.Effect\03.Effect_Floating</Filter>
-	</ClInclude>
+    </ClInclude>
     <ClInclude Include="..\Headers\CameraShake.h">
       <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\Camera</Filter>
     </ClInclude>
@@ -1434,6 +1437,9 @@
     </ClInclude>
     <ClInclude Include="..\Headers\JumpBox.h">
       <Filter>02.GameObject\02.Map\02.JumpNode</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Effect_Env_Fire.h">
+      <Filter>02.GameObject\04.Effect\04.Env_Fire</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -2120,11 +2126,11 @@
     </ClCompile>
     <ClCompile Include="..\Codes\SubEnvironment.cpp">
       <Filter>02.GameObject\02.Map\01.Environment\Tree</Filter>
-	</ClCompile>
+    </ClCompile>
     <ClCompile Include="..\Codes\Shooter_Attack.cpp" />
     <ClCompile Include="..\Codes\Effect_HitFloating.cpp">
       <Filter>02.GameObject\04.Effect\03.Effect_Floating</Filter>
-	</ClCompile>
+    </ClCompile>
     <ClCompile Include="..\Codes\CameraShake.cpp">
       <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\Camera</Filter>
     </ClCompile>
@@ -2242,6 +2248,9 @@
     </ClCompile>
     <ClCompile Include="..\Codes\JumpBox.cpp">
       <Filter>02.GameObject\02.Map\02.JumpNode</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Effect_Env_Fire.cpp">
+      <Filter>02.GameObject\04.Effect\04.Env_Fire</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

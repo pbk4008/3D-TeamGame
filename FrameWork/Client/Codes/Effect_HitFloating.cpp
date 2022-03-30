@@ -63,7 +63,7 @@ HRESULT CEffect_HitFloating::NativeConstruct(const _uint _iSceneID, void* pArg)
 
 	m_backupDesc = Desc;
 
-	setActive(false);
+	//setActive(true);
 	return S_OK;
 }
 
@@ -72,16 +72,24 @@ _int CEffect_HitFloating::Tick(_double TimeDelta)
 	m_pBuffer->Update(TimeDelta, m_Desc.iAxis);
 
 	m_fNonActiveTimeAcc += TimeDelta;
-
+	
 	if (4.f <= m_fNonActiveTimeAcc)
 	{
-		setActive(false);
+		//setActive(false);
 		m_fNonActiveTimeAcc = 0.f;
+	}
+
+	if (g_pGameInstance->getkeyDown(DIK_NUMPAD0))
+	{
+
+		m_pBuffer->Set_Desc(m_backupDesc);
+		m_pBuffer->Particle_Reset();
+		m_Desc.fCurTime = 0.f;
 	}
 
 	if (true == m_bReset)
 	{
-		setActive(true);
+		//setActive(true);
 		m_pBuffer->Set_Desc(m_backupDesc);
 		m_pBuffer->Particle_Reset();
 		m_Desc.fCurTime = 0.f;
