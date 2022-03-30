@@ -74,7 +74,7 @@ _int CUI_Monster_GroggyBar::Tick(_double TimeDelta)
 		m_fDisappearTimeAcc += TimeDelta;
 	}
 
-	if (3.f <= m_fDisappearTimeAcc)
+	if (5.f <= m_fDisappearTimeAcc)
 	{
 		m_fAlpha -= TimeDelta;
 	}

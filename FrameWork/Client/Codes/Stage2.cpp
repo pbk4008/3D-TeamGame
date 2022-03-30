@@ -6,6 +6,9 @@
 
 #include "JumpNode.h"
 
+#include "UI_Player_HpBar.h"
+#include "UI_Player_HpBar_Red.h"
+
 CStage2::CStage2(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
 	: CLevel(pDevice, pDeviceContext)
 	, m_bDebug(false)
@@ -29,6 +32,14 @@ HRESULT CStage2::NativeConstruct()
 
 	if (FAILED(Ready_Player(L"Layer_Silvermane")))
 		return E_FAIL;
+
+	if (FAILED(Ready_UI(L"Layer_UI")))
+		return E_FAIL;
+
+	if (FAILED(Ready_Data_UI(L"../bin/SaveData/UI/UI.dat")))
+	{
+		return E_FAIL;
+	}
 
 	if (FAILED(Ready_TriggerSystem(L"../bin/SaveData/Trigger/MonsterSpawnTrigger2.dat")))
 		return E_FAIL;
@@ -106,6 +117,21 @@ HRESULT CStage2::Ready_MapObject()
 		}
 	}
 
+	///////////////////// 스테이지 2용
+	CJumpNode::DESC tJumpNodeDesc;
+	tJumpNodeDesc.vPosition = { 30.f , 23.f, 202.f };
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE2, L"Layer_JumpNode", L"Proto_GameObject_JumpNode", &tJumpNodeDesc)))
+		return E_FAIL;
+	tJumpNodeDesc.vPosition = { 27.f, 18.f, 228.f };
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE2, L"Layer_JumpNode", L"Proto_GameObject_JumpNode", &tJumpNodeDesc)))
+		return E_FAIL;
+	tJumpNodeDesc.vPosition = { -2.f, 15.f, 235.f };
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE2, L"Layer_JumpNode", L"Proto_GameObject_JumpNode", &tJumpNodeDesc)))
+		return E_FAIL;
+	tJumpNodeDesc.vPosition = { 39.f, 15.f, 268.f };
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE2, L"Layer_JumpNode", L"Proto_GameObject_JumpNode", &tJumpNodeDesc)))
+		return E_FAIL;
+
 	return S_OK;
 }
 
@@ -117,10 +143,62 @@ HRESULT CStage2::Ready_Player(const _tchar* LayerTag)
 	//스폰 하고자 하는 위치 지정
 	tDesc.vPos = _float3(70.f, 3.f, 5.f);
 
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE2, L"Layer_SordTrail", L"Prototype_GameObject_SwordTral")))
+		return E_FAIL;
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE2, LayerTag, L"Proto_GameObject_Silvermane", &tDesc)))
 		return E_FAIL;
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE2, L"Layer_Camera", L"Proto_GameObject_Camera_Silvermane")))
 		return E_FAIL;
+
+	return S_OK;
+}
+
+HRESULT CStage2::Ready_UI(const _tchar* LayerTag)
+{
+	//Player HpBar Green
+	CUI_Player_HpBar::UIDESC Desc;
+	_tcscpy_s(Desc.TextureTag, L"Texture_Player_HpBar");
+	Desc.bMinus = true;
+	Desc.fAngle = 0.3f;
+	Desc.fPos = { 0.f, 0.f, 0.f };
+	Desc.fSize = { 200.f , 30.f };
+	Desc.IDTag = (_uint)GAMEOBJECT::UI_DYNAMIC;
+
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE2, L"Layer_UI_Green", L"Proto_GameObject_UI_Player_HpBar", &Desc)))
+		return E_FAIL;
+
+	//Player HpBar Red
+	ZeroMemory(&Desc, sizeof(CUI_Player_HpBar::UIDESC));
+	_tcscpy_s(Desc.TextureTag, L"Texture_Player_HpBar_Red");
+	Desc.bMinus = true;
+	Desc.fAngle = 0.3f;
+	Desc.fPos = { 0.f, 0.f, 0.f };
+	Desc.fSize = { 200.f , 30.f };
+	Desc.IDTag = (_uint)GAMEOBJECT::UI_DYNAMIC;
+
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE2, L"Layer_UI", L"Proto_GameObject_UI_Player_HpBar_Red", &Desc)))
+		return E_FAIL;
+	return S_OK;
+}
+
+
+HRESULT CStage2::Ready_Data_UI(const _tchar* pDataFilePath)
+{
+	//UI_Ingame_Static
+	vector<CUI::UIDESC> vecUI;
+	g_pGameInstance->LoadFile<CUI::UIDESC>(vecUI, pDataFilePath);
+
+	for (int i = 0; i < vecUI.size(); ++i)
+	{
+		wstring Tag = vecUI[i].TextureTag;
+		wstring FullName = L"Proto_GameObject_UI_" + Tag;
+
+		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE2, L"Layer_UI", FullName, &vecUI[i])))
+		{
+			MSGBOX("Failed to Creating in CStage2::Ready_UI()");
+			return E_FAIL;
+		}
+	}
 
 	return S_OK;
 }
@@ -152,8 +230,6 @@ HRESULT CStage2::Ready_TriggerSystem(const _tchar* pTriggerFile)
 	if (!m_pTriggerSystem)
 		return E_FAIL;
 	
-	if (FAILED(m_pTriggerSystem->Load_MonsterSpawnPoint((_uint)SCENEID::SCENE_STAGE2, CTriggerSystem<CStage2>::MONSTER::MON_SWORD, L"../bin/SaveData/MonsterSpawn2Stage/Sword.dat")))
-		return E_FAIL;
 	if (FAILED(m_pTriggerSystem->Load_MonsterSpawnPoint((_uint)SCENEID::SCENE_STAGE2, CTriggerSystem<CStage2>::MONSTER::MON_2H, L"../bin/SaveData/MonsterSpawn2Stage/2H.dat")))
 		return E_FAIL;
 	if (FAILED(m_pTriggerSystem->Load_MonsterSpawnPoint((_uint)SCENEID::SCENE_STAGE2, CTriggerSystem<CStage2>::MONSTER::MON_CRYSTAL, L"../bin/SaveData/MonsterSpawn2Stage/Crystal.dat")))

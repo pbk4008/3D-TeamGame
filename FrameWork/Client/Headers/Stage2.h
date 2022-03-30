@@ -23,7 +23,8 @@ private:
 	HRESULT Ready_Player(const _tchar* LayerTag);
 	//HRESULT Ready_Boss(const _tchar* LayerTag);
 	//HRESULT Ready_Monster(const _tchar* LayerTag);
-	//HRESULT Ready_UI(const _tchar* LayerTag);
+	HRESULT Ready_UI(const _tchar* LayerTag);
+	HRESULT Ready_Data_UI(const _tchar* pDataFilePath);
 	//HRESULT Ready_LightDesc();
 	HRESULT Ready_JumpTrigger();
 

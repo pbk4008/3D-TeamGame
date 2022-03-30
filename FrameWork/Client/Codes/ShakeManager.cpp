@@ -87,12 +87,12 @@ HRESULT CShakeManager::Ready_Template()
 	tShakeEvent.fDuration = 0.5f;
 	tShakeEvent.fOuterRadius = 10.f;
 	tShakeEvent.fInnerRadius = 3.f;
-	tShakeEvent.tWaveX.fAmplitude = 0.06;
-	tShakeEvent.tWaveX.fFrequency = 5.f;
+	tShakeEvent.tWaveX.fAmplitude = 0.1;
+	tShakeEvent.tWaveX.fFrequency = 3.f;
 	tShakeEvent.tWaveY.fAmplitude = 0.02f;
 	tShakeEvent.tWaveY.fFrequency = 3.f;
-	tShakeEvent.tWaveZ.fAmplitude = 0.06f;
-	tShakeEvent.tWaveZ.fFrequency = 5.f;
+	tShakeEvent.tWaveZ.fAmplitude = 0.1f;
+	tShakeEvent.tWaveZ.fFrequency = 3.f;
 	m_arrShakeEvents[(_uint)ETemplate::MonsterDeath] = tShakeEvent;
 
 	return S_OK;

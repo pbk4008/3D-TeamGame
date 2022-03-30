@@ -184,7 +184,7 @@ _int CMonster_EarthAberrant::Tick(_double _dDeltaTime)
 	{
 		m_bRemove = true;
 		setActive(false);
-
+		m_pPanel->Set_Remove(true);
 		m_pPanel->Set_Show(false);
 	}
 	m_pPanel->Set_TargetWorldMatrix(m_pTransform->Get_WorldMatrix());
