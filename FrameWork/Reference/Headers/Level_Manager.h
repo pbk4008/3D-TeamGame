@@ -21,6 +21,7 @@ public:
 	HRESULT Delete_GameObject();
 public:
 	_uint getCurrentLevel() { return m_iCurrentLevelID; }
+	CLevel* getCurrentLevelScene() { return m_pCurrentLevel; }
 private:
 	_uint					m_iCurrentLevelID = 0;
 	class CLevel*			m_pCurrentLevel = nullptr;

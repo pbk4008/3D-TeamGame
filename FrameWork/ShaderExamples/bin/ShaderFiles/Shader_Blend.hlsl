@@ -114,7 +114,9 @@ PS_OUT PS_MAIN_BLEND(PS_IN In)
 		{
 			final.rgb = diffuse.rgb + specular.rgb + emissive.rgb;
 		}
-	}
+        final.rgb = diffuse.rgb + specular.rgb + emissive.rgb;
+        final.a = originA + emissive.a/* + specular.a*/;
+    }
 	else
 	{
 		final = diffuse + emissive + specular;
@@ -123,7 +125,6 @@ PS_OUT PS_MAIN_BLEND(PS_IN In)
 	final.a = originA + emissive.a;
 	
 	Out.vOutColor = final;
-	
 	
 	return Out;
 }

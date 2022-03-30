@@ -20,15 +20,17 @@ HRESULT CNavMeshCollider::NativeConstruct_Prototype()
 
 HRESULT CNavMeshCollider::NativeConstruct(void* _pArg)
 {
+	DESC tDesc;
 	if (_pArg)
 	{
 		//memcpy_s(&m_tDesc, sizeof(DESC), _pArg, sizeof(DESC));
 		// vector 컨테이너가 있어서 무지성 memcpy 금지!!!!!!!!!!!!!
-		m_tDesc = *(static_cast<DESC*>(_pArg));
-		m_pGameObject = m_tDesc.tColliderDesc.pGameObject;
+		tDesc = *(static_cast<DESC*>(_pArg));
+		m_pGameObject = tDesc.tColliderDesc.pGameObject;
+		m_vecPoints = tDesc.vecPoints;
 	}
 
-	if (FAILED(__super::NativeConstruct(&m_tDesc.tColliderDesc)))
+	if (FAILED(__super::NativeConstruct(&tDesc.tColliderDesc)))
 		return E_FAIL;
 
 	if (FAILED(m_pPhsyX->Create_NavMesh(this)))
@@ -55,9 +57,9 @@ const _int CNavMeshCollider::LateTick(const _double& _dDeltaTime)
 	return _int();
 }
 
-const CNavMeshCollider::DESC& CNavMeshCollider::getDesc() const
+vector<_float3*>& CNavMeshCollider::getPoints()
 {
-	return m_tDesc;
+	return m_vecPoints;
 }
 
 CNavMeshCollider* CNavMeshCollider::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)

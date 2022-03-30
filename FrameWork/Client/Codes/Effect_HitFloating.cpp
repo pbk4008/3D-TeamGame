@@ -63,7 +63,8 @@ HRESULT CEffect_HitFloating::NativeConstruct(const _uint _iSceneID, void* pArg)
 
 	m_backupDesc = Desc;
 
-	/*setActive(true);*/
+	//setActive(true);
+
 	return S_OK;
 }
 
@@ -79,16 +80,24 @@ _int CEffect_HitFloating::Tick(_double TimeDelta)
 	m_pBuffer->Update(TimeDelta, m_Desc.iAxis);
 
 	m_fNonActiveTimeAcc += TimeDelta;
-
+	
 	if (4.f <= m_fNonActiveTimeAcc)
 	{
-		/*setActive(false);*/
+		//setActive(false);
 		m_fNonActiveTimeAcc = 0.f;
+	}
+
+	if (g_pGameInstance->getkeyDown(DIK_NUMPAD0))
+	{
+
+		m_pBuffer->Set_Desc(m_backupDesc);
+		m_pBuffer->Particle_Reset();
+		m_Desc.fCurTime = 0.f;
 	}
 
 	if (true == m_bReset)
 	{
-		/*setActive(true);*/
+		//setActive(true);
 		m_pBuffer->Set_Desc(m_backupDesc);
 		m_pBuffer->Particle_Reset();
 		m_Desc.fCurTime = 0.f;
@@ -184,7 +193,7 @@ HRESULT CEffect_HitFloating::SetUp_Components()
 	m_backupDesc.iNumInstance = m_Desc.iNumInstance;
 	m_backupDesc.fLifeTime = m_Desc.fMaxLifeTime;
 	m_backupDesc.fCurTime = m_Desc.fCurTime;
-	if (FAILED(__super::SetUp_Components((_uint)SCENEID::SCENE_STAGE1, L"Proto_Component_VIBuffer_PointInstance_Floating", L"Com_VIBuffer", (CComponent**)&m_pBuffer, &m_backupDesc)))
+	if (FAILED(__super::SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_VIBuffer_PointInstance_Floating", L"Com_VIBuffer", (CComponent**)&m_pBuffer, &m_backupDesc)))
 		return E_FAIL;
 	return S_OK;
 }
@@ -218,5 +227,7 @@ CGameObject* CEffect_HitFloating::Clone(const _uint _iSceneID, void* pArg)
 
 void CEffect_HitFloating::Free()
 {
+	Safe_Release(m_pBuffer);
+
 	__super::Free();
 }

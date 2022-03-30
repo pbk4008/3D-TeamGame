@@ -95,7 +95,6 @@ PS_OUT PS_MAIN_BLEND(PS_IN In)
 		float4 pt16 = g_Pt16Texture.Sample(DefaultSampler, In.vTexUV);
 		addpt = ((Particle * 1.f + (pt2) * 1.5f + (pt4) * 2.0f + (pt8) * 2.5f + (pt16) * 3.0f));
 	}
-	
 	float4 emissive = ((emission) * 1.f + (blur2) * 1.3f + (blur4) * 1.5f + (blur8) * 2.5f + (blur16) * 3.5f);
 	float4 final = float4(0, 0, 0, 0);
 	if (g_check == true)

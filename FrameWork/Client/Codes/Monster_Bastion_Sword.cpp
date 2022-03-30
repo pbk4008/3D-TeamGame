@@ -18,7 +18,7 @@
 #include "Bastion_Sword_Turn.h"
 #include "Bastion_Sword_Walk.h"
 
-
+#include "Stage1.h"
 CMonster_Bastion_Sword::CMonster_Bastion_Sword(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
 	:CActor(_pDevice, _pDeviceContext)
 	, m_pCharacterController(nullptr)
@@ -111,7 +111,22 @@ _int CMonster_Bastion_Sword::Tick(_double _dDeltaTime)
 	//무기 뼈 업데이트
 	m_pWeapon->Tick(_dDeltaTime);
 
-	m_pCharacterController->Move(_dDeltaTime, m_pTransform->Get_Velocity());
+	if (!m_bDead)
+	{
+		if (m_fCurrentHp <= 0.f)
+		{
+			m_bDead = true;
+			m_pStateController->Change_State(L"Death");
+			m_pCharacterController->Remove_CCT();
+
+			CLevel* pLevel = g_pGameInstance->getCurrentLevelScene();
+			if (g_pGameInstance->getCurrentLevel() == (_uint)SCENEID::SCENE_STAGE1)
+				static_cast<CStage1*>(pLevel)->Minus_MonsterCount();
+		}
+		else
+			m_pCharacterController->Move(_dDeltaTime, m_pTransform->Get_Velocity());
+	}
+
 	//상태 갱신
 	Change_State();
 
@@ -127,7 +142,9 @@ _int CMonster_Bastion_Sword::LateTick(_double _dDeltaTime)
 	{
 		return -1;
 	}
-	m_pCharacterController->Update_OwnerTransform();
+	if(!m_bDead)
+		m_pCharacterController->Update_OwnerTransform();
+
 
 	m_pRenderer->Add_RenderGroup(CRenderer::RENDER_NONALPHA, this);
 	m_pWeapon->LateTick(_dDeltaTime);
@@ -155,13 +172,16 @@ HRESULT CMonster_Bastion_Sword::Render()
 
 void CMonster_Bastion_Sword::OnTriggerEnter(CCollision& collision)
 {
-	if(m_fCurrentHp>=0.f)
+	if (!m_bDead)
 	{
-		if (collision.pGameObject->getTag() == (_uint)GAMEOBJECT::WEAPON)
+		if (m_fCurrentHp >= 0.f)
 		{
-			CWeapon* pWeapon = static_cast<CWeapon*>(collision.pGameObject);
-			if (pWeapon->IsAttack())
-				Hit();
+			if (collision.pGameObject->getTag() == (_uint)GAMEOBJECT::WEAPON)
+			{
+				CWeapon* pWeapon = static_cast<CWeapon*>(collision.pGameObject);
+				if (pWeapon->IsAttack())
+					Hit();
+			}
 		}
 	}
 }
@@ -569,10 +589,8 @@ _int CMonster_Bastion_Sword::Change_State()
 	}
 	if (tmpState == L"Death")
 	{
-		if (m_bDead
-			&&m_pAnimator->Get_CurrentAnimNode() == (_uint)ANIM_TYPE::DEATH
-			&&m_pAnimator->Get_CurrentAnimation()->Is_Finished()
-			)
+		if(m_pAnimator->Get_CurrentAnimNode() == (_uint)ANIM_TYPE::DEATH
+			&&m_pAnimator->Get_CurrentAnimation()->Is_Finished())
 		{
 			setActive(true);
 			m_bRemove = true;
@@ -638,11 +656,6 @@ void CMonster_Bastion_Sword::Hit()
 		//그로기 아닐때만 증가할수있게
 		m_fGroggyGauge += 2; //TODO::수치정해서바꿔줘야됨
 		m_pPanel->Set_GroggyBar(Get_GroggyGaugeRatio());
-	}
-	if (m_fCurrentHp <= 0.f)
-	{
-		m_bDead = true;
-		m_pStateController->Change_State(L"Death");
 	}
 }
 

@@ -270,7 +270,6 @@ HRESULT CRendererAssit::Setup_RenderTarget()
 
 	if (FAILED(m_pTargetMgr->Add_MRT(TEXT("Target_Blend"), TEXT("Target_Blend"))))	return E_FAIL;
 
-	
 	//-----------------------------------//
 	if (FAILED(m_pTargetMgr->Add_MRT(TEXT("Target_Particle"), TEXT("Target_Particle"))))	return E_FAIL;
 
@@ -287,7 +286,6 @@ HRESULT CRendererAssit::Setup_RenderTarget()
 	if (FAILED(m_pTargetMgr->Add_MRT(TEXT("Target_ParticleH16"), TEXT("Target_ParticleH16"))))	return E_FAIL;
 
 	//------------------------------------//
-
 #ifdef _DEBUG
 	if (FAILED(m_pTargetMgr->Ready_Debug_Buffer(TEXT("Target_SkyBox"), (fwidth - fwidth), (fheight - fheight) + 200.f, 100.f, 100.f)))	return E_FAIL;
 

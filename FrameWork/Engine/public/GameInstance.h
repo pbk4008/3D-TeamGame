@@ -55,6 +55,7 @@ public: /* For.Level_Manager*/
 	HRESULT Open_Level(_uint iLevelIndex, class CLevel* pOpenLevel);
 	HRESULT Delete_GameObject();
 	_uint getCurrentLevel();
+	CLevel* getCurrentLevelScene();
 
 public: /* For.Object_Manager*/
 	class CComponent* Get_Component(_uint iLevelIndex, const wstring& pLayerTag, const wstring& pComponentTag, _uint iIndex = 0);

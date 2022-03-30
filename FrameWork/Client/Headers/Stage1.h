@@ -29,7 +29,8 @@ private:
 
 	HRESULT Ready_TriggerSystem(const _tchar* pTriggerFile);
 	HRESULT Ready_TriggerFunctionSetting();
-
+public:
+	void Minus_MonsterCount() { m_iCountMonster--; }
 public:
 	void Trgger_Function1();//1번 트리거가 작동할 함수
 	void Trgger_Function2();//2번 트리거가 작동할 함수
@@ -51,9 +52,9 @@ public:
 	HRESULT Ready_Trigger_Monster(const _tchar* pDataFilePath);
 	HRESULT Ready_Trigger_Quest(const _tchar* pDataFilePath);
 	HRESULT Ready_Trigger_Jump();
-
 private:
 	HRESULT	Ready_Treasure_Chest();
+
 public:
 	static CStage1* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);
 private:
@@ -61,6 +62,8 @@ private:
 private:
 	CTriggerSystem<CStage1>* m_pTriggerSystem;
 	_bool m_bDebug;
+	_uint m_iCountMonster;
+	_bool m_bFirst;
 };
 #endif
 

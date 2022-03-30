@@ -36,6 +36,8 @@ private:
 	_bool				m_bDBG = false;
 	_bool				m_bShadow = false;
 
+	_bool				m_isFreeze = false;
+	_double				m_dFreezeTimeAcc = 0.0;
 private:
 	HRESULT SetUp_StartLevel(SCENEID eLevel);
 
@@ -45,6 +47,10 @@ private:
 	HRESULT Load_Texture();
 	HRESULT Init_Camera();
 	HRESULT Ready_Fonts();
+
+public:
+	const _bool IsFreeze() const;
+	void FreezeTime();
 	
 public:
 	static CMainApp* Create();

@@ -60,6 +60,9 @@ _int CTool_Main::Tool_Main_Update(const _double _dTimeDelta)
 	m_pMenu_Form->Update_Menu_Form(_dTimeDelta);
 	m_pInspec_Form->Update_Inspector_Form(_dTimeDelta);
 
+	if (g_pGameInstance->getkeyDown(DIK_F2))
+		m_pRenderer->SetRenderButton(CRenderer::DBG, TRUE);
+
 	return _int();
 }
 

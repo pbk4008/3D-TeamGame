@@ -30,6 +30,18 @@ void CCollider::Add_ActorToScene()
 	m_pPhsyX->Add_Actor(m_pRigidActor);
 }
 
+void CCollider::Sleep()
+{
+	if (ERigidType::Dynamic == m_tDesc.eRigidType)
+		static_cast<PxRigidDynamic*>(m_pRigidActor)->putToSleep();
+}
+
+void CCollider::WakeUp()
+{
+	if (ERigidType::Dynamic == m_tDesc.eRigidType)
+		static_cast<PxRigidDynamic*>(m_pRigidActor)->wakeUp();
+}
+
 HRESULT CCollider::NativeConstruct_Prototype()
 {
 	if (FAILED(__super::NativeConstruct_Prototype()))
@@ -40,6 +52,9 @@ HRESULT CCollider::NativeConstruct_Prototype()
 
 HRESULT CCollider::NativeConstruct(void * _pArg)
 {
+	if (_pArg)
+		memcpy_s(&m_tDesc, sizeof(DESC), _pArg, sizeof(DESC));
+
 	if (FAILED(__super::NativeConstruct(_pArg)))
 		return E_FAIL;
 
@@ -58,6 +73,11 @@ const _int CCollider::LateTick(const _double& _dDeltaTime)
 	Update_Transform();
 
 	return _int();
+}
+
+const CCollider::DESC& CCollider::getDesc() const
+{
+	return m_tDesc;
 }
 
 CGameObject* CCollider::getGameObject()

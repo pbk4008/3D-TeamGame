@@ -146,6 +146,7 @@ HRESULT CRenderer::Draw_RenderGroup()
 	if (FAILED(Render_NonAlpha())) // 디퍼드 단계
 		return E_FAIL;
 
+
 	if (FAILED(m_pRenderAssit->Render_LightAcc(m_CameraTag,m_bPBR,m_bShadow))) // 빛연산
 		return E_FAIL;
 
@@ -291,7 +292,12 @@ HRESULT CRenderer::Render_NonAlpha()
 
 HRESULT CRenderer::Render_Alpha()
 {
+<<<<<<< HEAD
 	if (FAILED(m_pTargetMgr->Begin_MRT(m_pDeviceContext, TEXT("Target_Particle")))) return E_FAIL;
+=======
+	if (FAILED(m_pTargetMgr->Begin_MRT(m_pDeviceContext, TEXT("Target_Fire"))))
+		return E_FAIL;
+>>>>>>> main
 
 	for (auto& pGameObject : m_RenderGroup[RENDER_ALPHA])
 	{
@@ -302,7 +308,12 @@ HRESULT CRenderer::Render_Alpha()
 	}
 	m_RenderGroup[RENDER_ALPHA].clear();
 
+<<<<<<< HEAD
 	if (FAILED(m_pTargetMgr->End_MRT(m_pDeviceContext)))	return E_FAIL;
+=======
+	if (FAILED(m_pTargetMgr->End_MRT(m_pDeviceContext)))
+		return E_FAIL;
+>>>>>>> main
 
 	return S_OK;
 }

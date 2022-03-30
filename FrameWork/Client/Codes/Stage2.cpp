@@ -14,7 +14,7 @@ CStage2::CStage2(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
 
 HRESULT CStage2::NativeConstruct()
 {
-	m_bDebug = true;
+	m_bDebug = false;
 #ifndef _DEBUG
 	m_bDebug = false;
 #endif
@@ -47,6 +47,8 @@ _int CStage2::Tick(_double TimeDelta)
 			return -1;
 		g_pDebugSystem->Set_LevelcMoveCheck(false);
 	}
+	list<CGameObject*>* pLayer = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE2, L"Layer_Crawler");
+
 #endif //  _DEBUG
 	m_pTriggerSystem->Tick(TimeDelta);
 
@@ -64,7 +66,7 @@ HRESULT CStage2::Render()
 HRESULT CStage2::Ready_NaviMesh()
 {
 	wstring wstrNaviFile = L"../Data/NavMesh/Stage_2_Nav.dat";
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Plane", L"Proto_GameObject_Plane_Test", &wstrNaviFile)))
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE2, L"Layer_Plane", L"Proto_GameObject_Plane_Test", &wstrNaviFile)))
 		return E_FAIL;
 
 	return S_OK;

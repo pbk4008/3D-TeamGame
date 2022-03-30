@@ -9,6 +9,8 @@
 #include "JumpTrigger.h"
 #include "JumpBox.h"
 
+#include "MainApp.h"
+
 #pragma region 스테이트들
 #include "Silvermane_Idle.h"
 
@@ -317,7 +319,7 @@ HRESULT CSilvermane::Render()
 	}
 
 #ifdef _DEBUG
-	Render_Debug();
+	//Render_Debug();
 #endif
 
 	return S_OK;
@@ -793,6 +795,30 @@ void CSilvermane::OnControllerColliderHit(CCollision& collision)
 			m_pTargetJumpBox = pJumpBox;
 			m_pTargetJumpBox->DisableCollision();
 			m_pStateController->Change_State(L"Traverse_Jump400Jog");
+		}
+	}
+	else if ((_uint)GAMEOBJECT::WEAPON_BRONZE == iTag)
+	{
+		_bool a = static_cast<CActor*>(collision.pGameObject)->IsAttack();
+		if (static_cast<CActor*>(collision.pGameObject)->IsAttack())
+		{
+			m_fCurrentHp -= 3;
+		}
+	}
+	else if ((_uint)GAMEOBJECT::WEAPON_2HSword == iTag)
+	{
+		_bool a = static_cast<CActor*>(collision.pGameObject)->IsAttack();
+		if (static_cast<CActor*>(collision.pGameObject)->IsAttack())
+		{
+			m_fCurrentHp -= 3;
+		}
+	}
+	else if ((_uint)GAMEOBJECT::WEAPON_POLEARM == iTag)
+	{
+		_bool a = static_cast<CActor*>(collision.pGameObject)->IsAttack();
+		if (static_cast<CActor*>(collision.pGameObject)->IsAttack())
+		{
+			m_fCurrentHp -= 3;
 		}
 	}
 }

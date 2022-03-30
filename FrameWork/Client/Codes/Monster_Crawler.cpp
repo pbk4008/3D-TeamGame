@@ -14,6 +14,11 @@
 #include "Crawler_Death.h"
 #include "Crawler_Flinch_Left.h"
 
+#include "Stage1.h"
+#include "Stage2.h"
+
+#include "MainApp.h"
+
 CMonster_Crawler::CMonster_Crawler(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
 	:CActor(_pDevice, _pDeviceContext)
 {
@@ -34,15 +39,6 @@ CMonster_Crawler::CMonster_Crawler(const CMonster_Crawler& _rhs)
 	Safe_AddRef(m_pCollider);
 }
 
-void CMonster_Crawler::Clear_Physix()
-{
-
-	m_pCollider->Remove_ActorFromScene();
-	m_pCharacterController->Remove_CCT();
-	Safe_Release(m_pCollider);
-	Safe_Release(m_pCharacterController);
-
-}
 
 HRESULT CMonster_Crawler::NativeConstruct_Prototype()
 {
@@ -69,6 +65,7 @@ HRESULT CMonster_Crawler::NativeConstruct(const _uint _iSceneID, void* _pArg)
 
 	/*_vector Pos = { 0.f, 1.f, 3.f, 1.f };
 	m_pTransform->Set_State(CTransform::STATE_POSITION, Pos);*/
+
 
 	if (nullptr != _pArg)
 	{
@@ -111,52 +108,84 @@ HRESULT CMonster_Crawler::NativeConstruct(const _uint _iSceneID, void* _pArg)
 	m_iObectTag = (_uint)GAMEOBJECT::MONSTER_CRYSTAL;
 	setActive(false);
 
+	m_pPanel->Set_Show(false);
+
 	return S_OK;
 }
 
 _int CMonster_Crawler::Tick(_double _dDeltaTime)
 {	
-	//나중에지울코드
-	if (!m_bFirst)
-	{
-		m_pPanel->Set_Show(true);
-	}
 	m_pTransform->Set_Velocity(XMVectorZero());
-
 	m_pPanel->Set_TargetWorldMatrix(m_pTransform->Get_WorldMatrix());
+
+	if (m_bIsFall)
+		m_pTransform->Fall(_dDeltaTime);
 
 	_int iProgress = m_pStateController->Tick(_dDeltaTime);
 	if (NO_EVENT != iProgress)
 		return iProgress;
 
-	if (0 >= m_fCurrentHp)
+	if (!m_bDead)
 	{
-		m_bDead = true;
-		m_pStateController->Change_State(L"Death");
+		if (0 >= m_fCurrentHp)
+		{
+			CLevel* pLevel = g_pGameInstance->getCurrentLevelScene();
+			if (g_pGameInstance->getCurrentLevel() == (_uint)SCENEID::SCENE_STAGE1)
+				static_cast<CStage1*>(pLevel)->Minus_MonsterCount();
+
+			m_bDead = true;
+			m_pStateController->Change_State(L"Death");
+			m_pCharacterController->Remove_CCT();
+			m_pCollider->Remove_ActorFromScene();
+		}
+		else
+			m_pCharacterController->Move(_dDeltaTime, m_pTransform->Get_Velocity());
 	}
 
-	
-	/*if (g_pGameInstance->getkeyDown(DIK_NUMPAD5))
+	_matrix smatView;
+	smatView = g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_VIEW);
+	smatView = XMMatrixInverse(nullptr, smatView);
+	if (XMMatrixIsNaN(smatView))
+		return false;
+
+	_vector svRayPos, svRayDir;
+	memcpy_s(&svRayPos, sizeof(_vector), &smatView.r[3], sizeof(_vector));
+	memcpy_s(&svRayDir, sizeof(_vector), &smatView.r[2], sizeof(_vector));
+	svRayDir = XMVector3Normalize(svRayDir);
+	_float fOutDist = 0.f;
+
+
+	_uint iObjectTag = -1;
+
+
+	RAYCASTDESC tRaycastDesc;
+	XMStoreFloat3(&tRaycastDesc.vOrigin, svRayPos);
+	XMStoreFloat3(&tRaycastDesc.vDir, svRayDir);
+	tRaycastDesc.fMaxDistance = 30.f;
+	tRaycastDesc.filterData.flags = PxQueryFlag::eANY_HIT | PxQueryFlag::eDYNAMIC;
+	CGameObject* pHitObject = nullptr;
+	tRaycastDesc.ppOutHitObject = &pHitObject;
+	if (g_pGameInstance->Raycast(tRaycastDesc))
 	{
-		--m_fHp;
-		m_pPanel->Set_HpBar(m_fMaxHp, m_fHp);
-		cout << m_fHp << endl;
-
-		m_pStateController->Change_State(L"Flinch_Left");
-	}*/
-	
-	m_pCollider->Tick(_dDeltaTime);
-
-	if (m_bIsFall)
-		m_pTransform->Fall(_dDeltaTime);
+		if (pHitObject == this)
+		{
+			m_pPanel->Set_Show(true);
+		}
+	}
+	else
+	{
+		m_pPanel->Set_Show(false);
+	}
 
 	if (DEATH == m_pAnimatorCom->Get_CurrentAnimNode())
 	{
 		if (m_pAnimatorCom->Get_CurrentAnimation()->Is_Finished())
+		{
 			Set_Remove(true);
+		}
 	}
-
-	m_pCharacterController->Move(_dDeltaTime, m_pTransform->Get_Velocity());
+	
+	m_pCollider->Tick(_dDeltaTime);
 
 	return 0;
 }
@@ -165,7 +194,8 @@ _int CMonster_Crawler::LateTick(_double _dDeltaTime)
 {
 	m_pRenderer->Add_RenderGroup(CRenderer::RENDER_NONALPHA, this);
 
-	m_pCharacterController->Update_OwnerTransform();
+	if(!m_bDead)
+		m_pCharacterController->Update_OwnerTransform();
 
 	_int iProgress = m_pStateController->LateTick(_dDeltaTime);
 	if (NO_EVENT != iProgress)
@@ -202,51 +232,65 @@ HRESULT CMonster_Crawler::Render()
 
 void CMonster_Crawler::OnTriggerEnter(CCollision& collision)
 {
-	if (true == g_pObserver->IsAttack()) //플레이어공격일때
+	if (!m_bDead)
 	{
-		m_bFirstHit = true; //딱 한번 true로 변경해줌
-
-		if (true == m_bFirstHit)
+		if (true == g_pObserver->IsAttack()) //플레이어공격일때
 		{
-			m_pPanel->Set_BackUIGapY(1.f);
-		}
+			m_bFirstHit = true; //딱 한번 true로 변경해줌
 
-		if ((_uint)GAMEOBJECT::WEAPON == collision.pGameObject->getTag())
-		{
-
-			m_fCurrentHp -= 2;
-			m_fGroggyGauge += 2; //TODO::수치정해서바꿔줘야됨
-
-			m_pPanel->Set_HpBar(Get_HpRatio());
-
-			if (false == m_bGroggy)
+			if (true == m_bFirstHit)
 			{
-				//그로기 아닐때만 증가할수있게
-				m_pPanel->Set_GroggyBar(Get_GroggyGaugeRatio());
-				m_pStateController->Change_State(L"Flinch_Left");
+				m_pPanel->Set_BackUIGapY(1.f);
 			}
 
-			CEffect_HitParticle* pEffect = (CEffect_HitParticle*)g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Layer_Effect_Hit")->front();
-			_vector Mypos = m_pTransform->Get_State(CTransform::STATE_POSITION);
-			Mypos = XMVectorSetY(Mypos, XMVectorGetY(Mypos) + 1.f);
-			pEffect->Get_Transform()->Set_State(CTransform::STATE_POSITION, Mypos);
-			pEffect->setActive(true);
-			pEffect->Set_Reset(true);
+			if ((_uint)GAMEOBJECT::WEAPON == collision.pGameObject->getTag())
+			{
 
-			CEffect_HitFloating* pEffect1 = (CEffect_HitFloating*)g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Layer_Effect_Floating")->front();
-			_vector Mypos1 = m_pTransform->Get_State(CTransform::STATE_POSITION);
-			Mypos1 = XMVectorSetY(Mypos1, XMVectorGetY(Mypos1) + 1.f);
-			pEffect1->Get_Transform()->Set_State(CTransform::STATE_POSITION, Mypos1);
-			pEffect1->setActive(true);
-			pEffect1->Set_Reset(true);
-		}
+				m_fCurrentHp -= 2;
+				m_fGroggyGauge += 2; //TODO::수치정해서바꿔줘야됨
 
-		else
-		{
+				m_pPanel->Set_HpBar(Get_HpRatio());
 
+				if (false == m_bGroggy)
+				{
+					//그로기 아닐때만 증가할수있게
+					m_pPanel->Set_GroggyBar(Get_GroggyGaugeRatio());
+					m_pStateController->Change_State(L"Flinch_Left");
+				}
+
+				CEffect_HitParticle* pEffect = (CEffect_HitParticle*)g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Hit")->front();
+				_vector Mypos = m_pTransform->Get_State(CTransform::STATE_POSITION);
+				Mypos = XMVectorSetY(Mypos, XMVectorGetY(Mypos) + 1.f);
+				pEffect->Get_Transform()->Set_State(CTransform::STATE_POSITION, Mypos);
+				pEffect->setActive(true);
+				pEffect->Set_Reset(true);
+
+				CEffect_HitFloating* pEffect1 = (CEffect_HitFloating*)g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Floating")->front();
+				_vector Mypos1 = m_pTransform->Get_State(CTransform::STATE_POSITION);
+				Mypos1 = XMVectorSetY(Mypos1, XMVectorGetY(Mypos1) + 1.f);
+				pEffect1->Get_Transform()->Set_State(CTransform::STATE_POSITION, Mypos1);
+				pEffect1->setActive(true);
+				pEffect1->Set_Reset(true);
+			}
+
+			else
+			{
+
+			}
 		}
 	}
+}
 
+void CMonster_Crawler::OnTriggerExit(CCollision& collision)
+{
+	if (true == g_pObserver->IsAttack()) //플레이어공격일때
+	{
+		if ((_uint)GAMEOBJECT::WEAPON == collision.pGameObject->getTag())
+		{
+			if(m_bDead)
+				g_pMainApp->FreezeTime();
+		}
+	}
 }
 
 void CMonster_Crawler::Set_IsAttack(const _bool _isAttack)
@@ -267,7 +311,7 @@ HRESULT CMonster_Crawler::SetUp_Components()
 	Desc.fRotationPerSec = XMConvertToRadians(60.f);
 	m_pTransform->Set_TransformDesc(Desc);
 	
-	if (FAILED(__super::SetUp_Components((_uint)SCENEID::SCENE_STAGE1, L"Model_Monster_Crawler", L"Com_Model", (CComponent**)&m_pModelCom)))
+	if (FAILED(__super::SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Model_Monster_Crawler", L"Com_Model", (CComponent**)&m_pModelCom)))
 	{
 		return E_FAIL;
 	}
@@ -449,6 +493,7 @@ CGameObject* CMonster_Crawler::Clone(const _uint _iSceneID, void* _pArg)
 
 void CMonster_Crawler::Free()
 {
+	__super::Free();
 	if (m_pCollider != nullptr && m_pCharacterController != nullptr)
 	{
 		Safe_Release(m_pCollider);
@@ -460,5 +505,5 @@ void CMonster_Crawler::Free()
 	Safe_Release(m_pAnimatorCom);
 	Safe_Release(m_pModelCom);
 
-	__super::Free();
+
 }

@@ -110,7 +110,8 @@ void CModel_Inspector::Ready_Level_Combo(void)
 	m_TriggerCombo.AddString(_T("대지"));
 	m_TriggerCombo.AddString(_T("중간보스"));
 	m_TriggerCombo.AddString(_T("슈터"));
-	m_TriggerCombo.AddString(_T("이름모름"));
+	m_TriggerCombo.AddString(_T("청동인형"));
+	m_TriggerCombo.AddString(_T("스피어"));
 
 	m_TriggerCombo.SetCurSel(0);
 }
@@ -492,6 +493,9 @@ void CModel_Inspector::OnBnClickedTriggerAdd()
 		break;
 	case TRIGGERTYPE::MONSTER_8:
 		TriggerDesc.iIndex = m_iMonster8Index++;
+		break;
+	case TRIGGERTYPE::MONSTER_9:
+		TriggerDesc.iIndex = m_iMonster9Index++;
 		break;
 	}
 

@@ -134,7 +134,7 @@
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>../../Reference/Library/Debug/</AdditionalLibraryDirectories>
-      <Profile>true</Profile>
+      <Profile>false</Profile>
     </Link>
     <PostBuildEvent>
       <Command>
@@ -164,6 +164,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>../../Reference/Library/Release/;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <Profile>true</Profile>
     </Link>
     <PostBuildEvent>
       <Command>
@@ -318,6 +319,7 @@
     <ClInclude Include="..\Headers\DebugSystem.h" />
     <ClInclude Include="..\Headers\EarthAberrant_Pick.h" />
     <ClInclude Include="..\Headers\Effect_DashDust.h" />
+    <ClInclude Include="..\Headers\Effect_Env_Fire.h" />
     <ClInclude Include="..\Headers\Effect_HitFloating.h" />
     <ClInclude Include="..\Headers\Effect_HitParticle.h" />
     <ClInclude Include="..\Headers\Environment.h" />
@@ -350,6 +352,7 @@
     <ClInclude Include="..\Headers\Monster_EarthAberrant.h" />
     <ClInclude Include="..\Headers\Needle.h" />
     <ClInclude Include="..\Headers\Plane_Test.h" />
+    <ClInclude Include="..\Headers\Polearm.h" />
     <ClInclude Include="..\Headers\ShakeManager.h" />
     <ClInclude Include="..\Headers\Shield.h" />
     <ClInclude Include="..\Headers\Shield_Block.h" />
@@ -403,6 +406,19 @@
     <ClInclude Include="..\Headers\Silvermane_SprintFwdStart.h" />
     <ClInclude Include="..\Headers\Silvermane_SprintFwdStop.h" />
     <ClInclude Include="..\Headers\SkyBox.h" />
+    <ClInclude Include="..\Headers\Spear_Attack.h" />
+    <ClInclude Include="..\Headers\Spear_Bwd_Dash.h" />
+    <ClInclude Include="..\Headers\Spear_Charge_Attack.h" />
+    <ClInclude Include="..\Headers\Spear_Charge_Attack_End.h" />
+    <ClInclude Include="..\Headers\Spear_Chaser.h" />
+    <ClInclude Include="..\Headers\Spear_Chaser_End.h" />
+    <ClInclude Include="..\Headers\Spear_Death.h" />
+    <ClInclude Include="..\Headers\Spear_Groggy.h" />
+    <ClInclude Include="..\Headers\Spear_Groggy_End.h" />
+    <ClInclude Include="..\Headers\Spear_Guard.h" />
+    <ClInclude Include="..\Headers\Spear_Hit.h" />
+    <ClInclude Include="..\Headers\Spear_Idle.h" />
+    <ClInclude Include="..\Headers\Spear_State.h" />
     <ClInclude Include="..\Headers\Staff.h" />
     <ClInclude Include="..\Headers\Stage1.h" />
     <ClInclude Include="..\Headers\Stage2.h" />
@@ -569,6 +585,7 @@
     <ClCompile Include="..\Codes\Crawler_Ricochet.cpp" />
     <ClCompile Include="..\Codes\Crawler_Walk.cpp" />
     <ClCompile Include="..\Codes\EarthAberrant_Pick.cpp" />
+    <ClCompile Include="..\Codes\Effect_Env_Fire.cpp" />
     <ClCompile Include="..\Codes\Effect_HitFloating.cpp" />
     <ClCompile Include="..\Codes\Effect_HitParticle.cpp" />
     <ClCompile Include="..\Codes\Fury.cpp" />
@@ -607,6 +624,7 @@
     <ClCompile Include="..\Codes\Monster_EarthAberrant.cpp" />
     <ClCompile Include="..\Codes\Needle.cpp" />
     <ClCompile Include="..\Codes\Plane_Test.cpp" />
+    <ClCompile Include="..\Codes\Polearm.cpp" />
     <ClCompile Include="..\Codes\ShakeManager.cpp" />
     <ClCompile Include="..\Codes\Shield.cpp" />
     <ClCompile Include="..\Codes\Shield_Block.cpp" />
@@ -660,6 +678,19 @@
     <ClCompile Include="..\Codes\Silvermane_SprintFwdStart.cpp" />
     <ClCompile Include="..\Codes\Silvermane_SprintFwdStop.cpp" />
     <ClCompile Include="..\Codes\SkyBox.cpp" />
+    <ClCompile Include="..\Codes\Spear_Attack.cpp" />
+    <ClCompile Include="..\Codes\Spear_Bwd_Dash.cpp" />
+    <ClCompile Include="..\Codes\Spear_Charge_Attack.cpp" />
+    <ClCompile Include="..\Codes\Spear_Charge_Attack_End.cpp" />
+    <ClCompile Include="..\Codes\Spear_Chaser.cpp" />
+    <ClCompile Include="..\Codes\Spear_Chaser_End.cpp" />
+    <ClCompile Include="..\Codes\Spear_Death.cpp" />
+    <ClCompile Include="..\Codes\Spear_Groggy.cpp" />
+    <ClCompile Include="..\Codes\Spear_Groggy_End.cpp" />
+    <ClCompile Include="..\Codes\Spear_Guard.cpp" />
+    <ClCompile Include="..\Codes\Spear_Hit.cpp" />
+    <ClCompile Include="..\Codes\Spear_Idle.cpp" />
+    <ClCompile Include="..\Codes\Spear_State.cpp" />
     <ClCompile Include="..\Codes\Staff.cpp" />
     <ClCompile Include="..\Codes\Stage1.cpp" />
     <ClCompile Include="..\Codes\Stage2.cpp" />

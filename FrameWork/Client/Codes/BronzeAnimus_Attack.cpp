@@ -32,12 +32,9 @@ _int CBronzeAnimus_Attack::Tick(const _double& _dDeltaTime)
 	if(!m_bAttackEnd)
 		m_pAnimator->Tick(_dDeltaTime);
 
-	//추가한코드임 - 희정
 	CMonster_BronzeAnimus* pMonster = (CMonster_BronzeAnimus*)m_pStateController->Get_GameObject();
 	if (nullptr != pMonster)
-	{
 		pMonster->Set_IsAttack(true);
-	}
 
 	return _int();
 }

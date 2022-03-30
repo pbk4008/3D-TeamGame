@@ -21,6 +21,7 @@ public:
 		, m_pStage(nullptr)
 		, m_bAllTriggerOn(false)
 		, m_bOverlap(false)
+		, m_iClearIndex(-1)
 	{
 		Safe_AddRef(m_pDevice);
 		Safe_AddRef(m_pDeviceContext);
@@ -47,15 +48,18 @@ public:
 		_uint iSize = (_uint)m_vecTrigger.size();
 		for (_uint i = 0; i < iSize; i++)
 		{
-			m_vecTrigger[i]->Tick(dDeltaTime);
-			if (m_vecTrigger[i]->Get_OnTrigger() && !m_vecTrigger[i]->Get_Overlap())
+			if(m_vecTrigger[i]->getActive())
 			{
-				m_vecTrigger[i]->Set_Overlap(true);
-				
-				(m_pStage->*m_vecTriggerFunction[i])();
+				m_vecTrigger[i]->Tick(dDeltaTime);
+				if (m_vecTrigger[i]->Get_OnTrigger() && !m_vecTrigger[i]->Get_Overlap())
+				{
+					m_vecTrigger[i]->Set_Overlap(true);
+					(m_pStage->*m_vecTriggerFunction[i])();
+					m_iClearIndex = i;
+				}
+				if (!m_vecTrigger[i]->Get_OnTrigger())
+					bCheck = true;
 			}
-			if (!m_vecTrigger[i]->Get_OnTrigger())
-				bCheck = true;
 		}
 		if (!bCheck)
 		{
@@ -66,17 +70,32 @@ public:
 				m_bOverlap = true;
 			}
 		}
+
 		return _uint();
 	}
 	HRESULT Render()
 	{
 #ifdef _DEBUG
 		for (auto& pTrigger : m_vecTrigger)
-			pTrigger->Render();
+		{
+			if(pTrigger->getActive())
+				pTrigger->Render();
+		}
 #endif
 		return S_OK;
 	}
 public:
+	void Check_Clear()
+	{
+		_uint iSize = (_uint)m_vecClear.size();
+
+		if (m_iClearIndex < iSize-1)
+		{
+			m_vecClear[m_iClearIndex] = true;
+			m_vecTrigger[m_iClearIndex + 1]->setActive(true);
+			m_vecTrigger[m_iClearIndex + 1]->TurnOnTrigger(true);
+		}
+	}
 	HRESULT Add_TriggerFuntion(void(T::* pf)())
 	{
 		m_vecTriggerFunction.emplace_back(pf);
@@ -94,7 +113,13 @@ public:
 		{
 			pTrigger = g_pGameInstance->Clone_GameObject<CClient_Trigger>((_uint)SCENEID::SCENE_STATIC, L"Prototype_GameObject_Trigger", &pTriggerData);
 			m_vecTrigger.emplace_back(pTrigger);
+			pTrigger->setActive(false);
+			pTrigger->TurnOnTrigger(false);
+			m_vecClear.emplace_back(false);
 		}
+		m_vecTrigger[0]->setActive(true);
+		m_vecTrigger[0]->TurnOnTrigger(true);
+
 		return S_OK;
 	}
 	HRESULT Load_MonsterSpawnPoint(_uint iSceneID, MONSTER eType ,const wstring& pFilePath)
@@ -138,10 +163,10 @@ public:
 				break;
 			}
 		}
-
 		return S_OK;
 	}
 	const vector<_float3> Get_MonsterSpawnPoint(MONSTER eType) { return m_pVecMonsterSpawnPoint[(_uint)eType]; }
+
 private:
 	virtual void Free() override
 	{
@@ -167,6 +192,7 @@ public:
 		}
 		return pInstance;
 	}
+	
 private:
 	ID3D11Device* m_pDevice;
 	ID3D11DeviceContext* m_pDeviceContext;
@@ -174,9 +200,11 @@ private:
 	T* m_pStage;
 	vector<CClient_Trigger*> m_vecTrigger;
 	vector<void(T::*)()> m_vecTriggerFunction;
+	vector<_bool> m_vecClear;
 	vector<_float3> m_pVecMonsterSpawnPoint[(_uint)MONSTER::MON_END];
 	_bool m_bAllTriggerOn;
 	_bool m_bOverlap;
+	_int m_iClearIndex;
 };
 END
 #endif

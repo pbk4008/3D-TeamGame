@@ -205,6 +205,14 @@ _uint CGameInstance::getCurrentLevel()
 	return m_pLevel_Manager->getCurrentLevel();
 }
 
+CLevel* CGameInstance::getCurrentLevelScene()
+{
+	if (!m_pLevel_Manager)
+		return nullptr;
+
+	return m_pLevel_Manager->getCurrentLevelScene();
+}
+
 CComponent * CGameInstance::Get_Component(_uint iLevelIndex, const wstring& pLayerTag, const wstring& pComponentTag, _uint iIndex)
 {
 	if (nullptr == m_pObject_Manager)

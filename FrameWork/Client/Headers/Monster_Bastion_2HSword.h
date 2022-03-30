@@ -52,15 +52,16 @@ private:
 public:
 	void Groggy_Start();
 	void Hit(CCollision& pCol);
-
+	void Remove_Collider();
 private:
 	virtual void OnTriggerEnter(CCollision& collision) override;
+	virtual void OnTriggerExit(CCollision& collision) override;
 
 public:
 	void Set_IsAttack(const _bool _isAttack);
 	void Set_Current_HP(_int _iHp) { m_fCurrentHp += _iHp; }
 	void Set_GroggyGauge(_uint _Value) { m_fGroggyGauge += _Value; }
-	void Set_Dead(void) { m_bDead = true; m_bRemove = true; }
+	void Set_Dead(void) { m_bDead = true; }
 
 private:
 	CModel*				  m_pModel = nullptr;

@@ -29,8 +29,6 @@ private:
 	explicit CMonster_Crawler(const CMonster_Crawler& _rhs);
 	virtual ~CMonster_Crawler() = default;
 
-public: void			Clear_Physix();
-
 public:
 	virtual HRESULT NativeConstruct_Prototype() override;
 	virtual HRESULT NativeConstruct(const _uint _iSceneID, void* _pArg = nullptr) override;
@@ -40,6 +38,7 @@ public:
 
 private: 
 	void	OnTriggerEnter(CCollision& collision) override;
+	void	OnTriggerExit(CCollision& collision) override;
 
 public:
 	void Set_IsAttack(const _bool _isAttack);
@@ -67,8 +66,6 @@ private:
 private:
 	_bool	m_bIsFall = false;
 	_bool m_bFirstHit = false; //맨처음들어와서 맞았을때 판넬크기바꿔줘야돼서
-	_bool m_bFirst = false;
-
 public:
 	static CMonster_Crawler* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext);
 	virtual CGameObject* Clone(const _uint _iSceneID, void* _pArg = nullptr) override;

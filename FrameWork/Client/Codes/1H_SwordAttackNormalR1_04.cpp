@@ -27,6 +27,15 @@ _int C1H_SwordAttackNormalR1_04::Tick(const _double& _dDeltaTime)
 
 	_uint iCurkeyFrameIndex = m_pAnimationController->Get_CurKeyFrameIndex();
 
+	if (m_iAttackStartIndex < iCurkeyFrameIndex && m_iAttackEndIndex > iCurkeyFrameIndex)
+	{
+		if (!m_isShake2)
+		{
+			_float3 vPos; XMStoreFloat3(&vPos, m_pTransform->Get_State(CTransform::STATE_POSITION));
+			g_pShakeManager->Shake(m_tShakeEvent2, vPos);
+			m_isShake2 = true;
+		}
+	}
 
 	if (m_pAnimationController->Is_Finished())
 	{
@@ -67,6 +76,19 @@ HRESULT C1H_SwordAttackNormalR1_04::EnterState()
 
 	m_iAttackStartIndex = 18;
 	m_iAttackEndIndex = 30;
+
+	// ½¦ÀÌÅ© ¿É¼Ç
+	// 2
+	m_tShakeEvent2.fDuration = 1.2f;
+	m_tShakeEvent2.fBlendInTime = 0.2f;
+	m_tShakeEvent2.fBlendOutTime = 0.4f;
+	m_tShakeEvent2.tWaveY.fAmplitude = 0.04f;
+	m_tShakeEvent2.tWaveY.fFrequency = 1.f;
+	m_tShakeEvent2.tWaveY.fAdditionalOffset = -0.5f;
+	m_tShakeEvent2.tWaveZ.fAmplitude = 0.04f;
+	m_tShakeEvent2.tWaveZ.fFrequency = 1.f;
+	m_tShakeEvent2.tWaveZ.fAdditionalOffset = 0.5f;
+
 	return S_OK;
 }
 
@@ -76,6 +98,7 @@ HRESULT C1H_SwordAttackNormalR1_04::ExitState()
 		return E_FAIL;
 
 	m_pAnimationController->Set_PlaySpeed(1.f);
+	m_isShake2 = false;
 	return S_OK;
 }
 
