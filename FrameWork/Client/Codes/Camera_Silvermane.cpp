@@ -296,9 +296,9 @@ void CCamera_Silvermane::OnOffMonsterUI()
 		case (_uint)GAMEOBJECT::MONSTER_HEALER:
 		case (_uint)GAMEOBJECT::MONSTER_SHOOTER:
 		case (_uint)GAMEOBJECT::MONSTER_SPEAR:
-			static_cast<CActor*>(pHitObject)->Set_UIShow(true);
 			if (nullptr != pHitObject)
 			{
+				static_cast<CActor*>(pHitObject)->Set_UIShow(true);
 				m_pTargetMonster = pHitObject;
 			}
 			break;

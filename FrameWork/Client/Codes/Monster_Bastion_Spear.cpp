@@ -551,6 +551,8 @@ HRESULT CMonster_Bastion_Spear::Render_Debug(void)
 
 void CMonster_Bastion_Spear::OnTriggerEnter(CCollision& collision)
 {
+	m_pPanel->Set_Show(true);
+
 	m_pStateController->OnTriggerEnter(collision);
 }
 

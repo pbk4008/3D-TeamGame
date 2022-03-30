@@ -70,7 +70,7 @@ _int CUI_Monster_Level::Tick(_double TimeDelta)
 		m_fDisappearTimeAcc += TimeDelta;
 	}
 
-	if (1.f <= m_fDisappearTimeAcc)
+	if (3.f <= m_fDisappearTimeAcc)
 	{
 		m_fAlpha -= TimeDelta;
 	}

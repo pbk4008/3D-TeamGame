@@ -186,6 +186,8 @@ void CMonster_Bastion_Shooter::OnTriggerEnter(CCollision& collision)
 	{
 		if (m_fCurrentHp >= 0.f)
 		{
+			m_pPanel->Set_Show(true);
+
 			if (collision.pGameObject->getTag() == (_uint)GAMEOBJECT::WEAPON)
 			{
 				CWeapon* pWeapon = static_cast<CWeapon*>(collision.pGameObject);
