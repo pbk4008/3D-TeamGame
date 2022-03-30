@@ -29,6 +29,9 @@ _int CBastion_2HSword_Hit::Tick(const _double& _dDeltaTime)
 	if (NO_EVENT != iProgress)
 		return iProgress;
 
+	//m_pTransform->Add_Velocity(XMLoadFloat3(&m_vDir) * (_float)_dDeltaTime);
+	m_pTransform->Add_Velocity(CTransform::STATE_LOOK, -(_float)_dDeltaTime);
+
 	m_pAnimator->Tick(_dDeltaTime);
 
 	return _int();
@@ -57,7 +60,22 @@ HRESULT CBastion_2HSword_Hit::EnterState()
 		return E_FAIL;
 
 	m_pAnimator->Change_AnyEntryAnimation((_uint)CMonster_Bastion_2HSword::ANIM_TYPE::A_FLINCH_LEFT);
+	return S_OK;
+}
 
+HRESULT CBastion_2HSword_Hit::EnterState(void* _pArg)
+{
+	if (FAILED(__super::EnterState()))
+		return E_FAIL;
+
+	if (_pArg)
+	{
+		_vector svDir = *(_vector*)_pArg;
+		XMStoreFloat3(&m_vDir, svDir);
+	}
+
+
+	m_pAnimator->Change_AnyEntryAnimation((_uint)CMonster_Bastion_2HSword::ANIM_TYPE::A_FLINCH_LEFT);
 	return S_OK;
 }
 

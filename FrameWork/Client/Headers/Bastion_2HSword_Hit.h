@@ -18,11 +18,15 @@ public:
 	virtual HRESULT Render();
 
 	virtual HRESULT EnterState();
+	virtual HRESULT EnterState(void* _pArg = nullptr);
 	virtual HRESULT ExitState();
 
 public:
 	virtual void Look_Player(void) override;
 	virtual void Look_Monster(void) override;
+
+private:
+	_float3 m_vDir{};
 
 public:
 	static CBastion_2HSword_Hit* Create(ID3D11Device * _pDevice, ID3D11DeviceContext * _pDeviceContext, void* _pArg = nullptr);

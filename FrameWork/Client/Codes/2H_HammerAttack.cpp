@@ -20,7 +20,25 @@ _int C2H_HammerAttack::Tick(const _double& _dDeltaTime)
 	if (NO_EVENT != iProgress)
 		return iProgress;
 
+
 	_uint iCurKeyFrameIndex = m_pAnimationController->Get_CurKeyFrameIndex();
+	if (m_iAttackStartIndex < iCurKeyFrameIndex && m_iAttackEndIndex > iCurKeyFrameIndex)
+	{
+		m_pSilvermane->Set_IsAttack(true);
+	}
+	else
+		m_pSilvermane->Set_IsAttack(false);
+
+	if (iCurKeyFrameIndex == m_iShakeIndex)
+	{
+		if (!m_isShake)
+		{
+			_float3 vPos; XMStoreFloat3(&vPos, m_pTransform->Get_State(CTransform::STATE_POSITION));
+			g_pShakeManager->Shake(m_tShakeEvent, vPos);
+			m_isShake = true;
+		}
+	}
+
 	if (4 < iCurKeyFrameIndex && 10 > iCurKeyFrameIndex)
 		m_pSilvermane->Set_IsTrasceCamera(false);
 
@@ -49,6 +67,24 @@ HRESULT C2H_HammerAttack::EnterState()
 	if (FAILED(__super::EnterState()))
 		return E_FAIL;
 
+	// ½¦ÀÌÅ© ¿É¼Ç
+	// 1
+	m_tShakeEvent.fDuration = 0.4f;
+	m_tShakeEvent.fBlendOutTime = 0.3f;
+	m_tShakeEvent.tWaveX.fAmplitude = 0.04f;
+	m_tShakeEvent.tWaveX.fFrequency = 10.f;
+	m_tShakeEvent.tWaveY.fAmplitude = 0.04f;
+	m_tShakeEvent.tWaveY.fFrequency = 6.f;
+	m_tShakeEvent.tWaveZ.fAmplitude = 0.04f;
+	m_tShakeEvent.tWaveZ.fFrequency = 8.f;
+	// 2 
+	m_tShakeEvent2.fDuration = 1.f;
+	m_tShakeEvent2.fBlendInTime = 0.2f;
+	m_tShakeEvent2.fBlendOutTime = 0.5f;
+	m_tShakeEvent2.tWaveY.fAmplitude = 0.02f;
+	m_tShakeEvent2.tWaveY.fFrequency = 1.f;
+	m_tShakeEvent2.tWaveY.fAdditionalOffset = -0.3f;
+
 	return S_OK;
 }
 
@@ -59,6 +95,7 @@ HRESULT C2H_HammerAttack::ExitState()
 
 	m_pSilvermane->Set_IsTrasceCamera(true);
 
+	m_isShake2 = false;
 	return S_OK;
 }
 

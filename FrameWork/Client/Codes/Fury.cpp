@@ -65,8 +65,6 @@ _int CFury::Tick(_double _dDeltaTime)
 	Attach_FixedBone(_dDeltaTime);
 	Attach_Owner(_dDeltaTime);
 
-	_matrix smatPivot = XMMatrixTranslation(0.f, 0.f, 1.f);
-	m_pCollider->setPivotMatrix(smatPivot);
 	m_pCollider->Tick(_dDeltaTime);
 
 	return _int();
@@ -125,10 +123,10 @@ HRESULT CFury::Ready_Components()
 	tColliderDesc.pGameObject = this;
 	CBoxCollider::DESC tBoxColliderDesc;
 	tBoxColliderDesc.tColliderDesc = tColliderDesc;
-	tBoxColliderDesc.vScale = { 1.f, 0.5f, 0.5f };
+	tBoxColliderDesc.vScale = { 0.8f, 0.5f, 1.f };
 	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_BoxCollider", L"Collider", (CComponent**)&m_pCollider, &tBoxColliderDesc)))
 		return E_FAIL;
-	_matrix smatPivot = XMMatrixTranslation(0.f, 0.f, 2.f);
+	_matrix smatPivot = XMMatrixTranslation(0.f, 0.f, 0.8f);
 	m_pCollider->setPivotMatrix(smatPivot);
 
 	return S_OK;

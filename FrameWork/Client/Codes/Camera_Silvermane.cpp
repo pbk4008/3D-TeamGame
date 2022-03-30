@@ -197,9 +197,10 @@ _int CCamera_Silvermane::Chase_Target(const _double& _dDeltaTime)
 	if (!m_isChase)
 		return 0;
 
-	CTransform* pTargetTransform = m_pSilvermane->Get_Transform();
-	_vector svTargetPosition = pTargetTransform->Get_State(CTransform::STATE_POSITION);
-	m_pWorldTransform->Set_State(CTransform::STATE_POSITION, svTargetPosition);
+	_vector svTargetPosition = m_pSilvermane->Get_Transform()->Get_State(CTransform::STATE_POSITION);
+	_vector svPosition = m_pWorldTransform->Get_State(CTransform::STATE_POSITION);
+	_vector svLerp = XMVectorLerp(svPosition, svTargetPosition, (_float)_dDeltaTime * 10.f);
+	m_pWorldTransform->Set_State(CTransform::STATE_POSITION, svLerp);
 
 	return _int();
 }
