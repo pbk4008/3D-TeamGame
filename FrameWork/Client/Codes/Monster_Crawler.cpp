@@ -213,6 +213,8 @@ void CMonster_Crawler::OnTriggerEnter(CCollision& collision)
 	{
 		if (true == g_pObserver->IsAttack()) //플레이어공격일때
 		{
+			m_pPanel->Set_Show(true);
+
 			m_bFirstHit = true; //딱 한번 true로 변경해줌
 
 			if (true == m_bFirstHit)

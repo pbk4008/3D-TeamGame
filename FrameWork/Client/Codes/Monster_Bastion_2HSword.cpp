@@ -652,6 +652,8 @@ void CMonster_Bastion_2HSword::Remove_Collider()
 
 void CMonster_Bastion_2HSword::OnTriggerEnter(CCollision& collision)
 {
+	m_pPanel->Set_Show(true);
+
 	m_pStateController->OnTriggerEnter(collision);
 }
 

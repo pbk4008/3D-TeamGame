@@ -526,6 +526,8 @@ HRESULT CMonster_BronzeAnimus::Render_Debug(void)
 
 void CMonster_BronzeAnimus::OnTriggerEnter(CCollision& collision)
 {
+	m_pPanel->Set_Show(true);
+
 	m_pStateController->OnTriggerEnter(collision);
 }
 
