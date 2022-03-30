@@ -306,7 +306,7 @@ HRESULT CMonster_Bastion_Healer::Ready_Components()
 
 HRESULT CMonster_Bastion_Healer::Ready_Weapon(void)
 {
-	m_pWeapon = static_cast<CStaff*>(g_pGameInstance->Clone_GameObject((_uint)SCENEID::SCENE_STAGE1, L"Proto_GameObject_Weapon_Staff"));
+	m_pWeapon = static_cast<CStaff*>(g_pGameInstance->Clone_GameObject(m_iSceneID, L"Proto_GameObject_Weapon_Staff"));
 
 	if (!m_pWeapon)
 		return E_FAIL;
@@ -576,6 +576,7 @@ void CMonster_Bastion_Healer::Free()
 	Safe_Release(m_pWeapon);
 	Safe_Release(m_pStateController);
 	Safe_Release(m_pCharacterController);
+	Safe_Release(m_pPanel);
 
 	__super::Free();
 }

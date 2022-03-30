@@ -578,7 +578,7 @@ CGameObject* CBoss_Bastion_Judicator::Clone(const _uint _iSceneID, void* pArg)
 
 void CBoss_Bastion_Judicator::Free()
 {
-	//Safe_Release(m_pPanel);
+	Safe_Release(m_pPanel);
 	Safe_Release(m_pCharacterController);
 	Safe_Release(m_pWeapon);
 	Safe_Release(m_pStateController);

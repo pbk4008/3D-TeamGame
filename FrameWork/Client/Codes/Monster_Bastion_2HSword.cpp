@@ -275,7 +275,7 @@ HRESULT CMonster_Bastion_2HSword::Ready_Components()
 
 HRESULT CMonster_Bastion_2HSword::Ready_Weapon()
 {
-	m_pWeapon = static_cast<CRetributionBlade*>(g_pGameInstance->Clone_GameObject((_uint)SCENEID::SCENE_STAGE1, L"Proto_GameObject_Weapon_RetributionBlade"));
+	m_pWeapon = static_cast<CRetributionBlade*>(g_pGameInstance->Clone_GameObject(m_iSceneID, L"Proto_GameObject_Weapon_RetributionBlade"));
 
 	if (!m_pWeapon)
 		return E_FAIL;
@@ -704,6 +704,7 @@ void CMonster_Bastion_2HSword::Free()
 	Safe_Release(m_pWeapon);
 	Safe_Release(m_pStateController);
 	Safe_Release(m_pCharacterController);
+	Safe_Release(m_pPanel);
 
 	__super::Free();
 }

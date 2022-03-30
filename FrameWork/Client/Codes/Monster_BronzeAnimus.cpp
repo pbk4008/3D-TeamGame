@@ -271,7 +271,7 @@ HRESULT CMonster_BronzeAnimus::Ready_Components()
 
 HRESULT CMonster_BronzeAnimus::Ready_Weapon(void)
 {
-	m_pWeapon = static_cast<CBronzeAnimus_Sword*>(g_pGameInstance->Clone_GameObject((_uint)SCENEID::SCENE_STAGE1, L"Proto_GameObject_Weapon_BronzeAnimus_Sword"));
+	m_pWeapon = static_cast<CBronzeAnimus_Sword*>(g_pGameInstance->Clone_GameObject(m_iSceneID, L"Proto_GameObject_Weapon_BronzeAnimus_Sword"));
 
 	if (!m_pWeapon)
 		return E_FAIL;
@@ -568,6 +568,7 @@ void CMonster_BronzeAnimus::Free()
 	Safe_Release(m_pWeapon);
 	Safe_Release(m_pStateController);
 	Safe_Release(m_pCharacterController);
+	Safe_Release(m_pPanel);
 
 	__super::Free();
 }
