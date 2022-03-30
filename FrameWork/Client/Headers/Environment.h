@@ -2,9 +2,8 @@
 #ifndef __ENVIRONMENT_H__
 #define __ENVIRONMENT_H__
 #include "LandScape.h"
-BEGIN(Engine)
-class CMeshCollider;
-END
+#include "Instancing_Mesh.h"
+
 
 BEGIN(Client)
 class CEnvironment final : public CLandScape

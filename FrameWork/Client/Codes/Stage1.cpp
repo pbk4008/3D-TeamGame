@@ -127,7 +127,7 @@ _int CStage1::Tick(_double TimeDelta)
 	if (m_iCountMonster == 0 && m_bFirst)
 		m_pTriggerSystem->Check_Clear();
 
-	/*CBoss_Bastion_Judicator* pBoss = (CBoss_Bastion_Judicator*)g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Layer_Boss")->front();
+	CBoss_Bastion_Judicator* pBoss = (CBoss_Bastion_Judicator*)g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Layer_Boss")->front();
 	if (nullptr != pBoss)
 	{
 		if (true == pBoss->Get_Dead())
@@ -135,7 +135,7 @@ _int CStage1::Tick(_double TimeDelta)
 			if (FAILED(g_pGameInstance->Open_Level((_uint)SCENEID::SCENE_LOADING, CLoading::Create(m_pDevice, m_pDeviceContext, SCENEID::SCENE_STAGE2))))
 				return -1;
 		}
-	}*/
+	}
 
 	return _int();
 }

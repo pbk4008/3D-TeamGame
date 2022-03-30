@@ -134,6 +134,7 @@ public: /* For.Font_Manager */
 
 public: /* For.Frustum */
 	_bool isIn_WorldFrustum(_fvector vPosition, _float fRange = 0.f);
+	_bool isIn_WorldFrustum(_float4* vPoints, _float fRange = 0.f);
 	_bool isIn_LocalFrustum(_fvector vPosition, _float fRange = 0.f);
 
 public:/* For.TextureManager*/

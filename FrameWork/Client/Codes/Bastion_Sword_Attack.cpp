@@ -21,8 +21,8 @@ HRESULT CBastion_Sword_Attack::NativeConstruct(void* _pArg)
 
 	m_wstrTag = tDesc.pName;
 
-	Safe_AddRef(m_pAnimator);
-	Safe_AddRef(m_pTransform);
+	/*Safe_AddRef(m_pAnimator);
+	Safe_AddRef(m_pTransform);*/
 
 	if (FAILED(CMonster_FSM::NativeConstruct(_pArg)))
 		return E_FAIL;

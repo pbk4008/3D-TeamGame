@@ -4,6 +4,8 @@
 #include "Animation.h"
 #include "UI_Monster_Panel.h"	
 
+#include "Stage2.h"
+
 CBronzeAnimus_State::CBronzeAnimus_State(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
 	: CMonster_FSM(_pDevice, _pDeviceContext)
 {
@@ -54,8 +56,17 @@ _int CBronzeAnimus_State::Tick(const _double& _dDeltaTime)
 		m_pStateController->Change_State(L"Groggy");
 	}
 
-	if (0 >= m_pMonster->Get_CurrentHp())
+	if (0 >= m_pMonster->Get_CurrentHp() && !m_pMonster->Get_Dead())
+	{
+		static_cast<CMonster_BronzeAnimus*>(m_pMonster)->Set_Dead();
+		static_cast<CMonster_BronzeAnimus*>(m_pMonster)->Remove_Collider();
+
+		CLevel* pLevel = g_pGameInstance->getCurrentLevelScene();
+		if (g_pGameInstance->getCurrentLevel() == (_uint)SCENEID::SCENE_STAGE2)
+			static_cast<CStage2*>(pLevel)->Minus_MonsterCount();
+		
 		m_pStateController->Change_State(L"Death");
+	}
 
 	return _int();
 }

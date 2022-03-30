@@ -51,6 +51,8 @@ _int CStage2::Tick(_double TimeDelta)
 
 #endif //  _DEBUG
 	m_pTriggerSystem->Tick(TimeDelta);
+	if (m_iCountMonster == 0 && m_bFirst)
+		m_pTriggerSystem->Check_Clear();
 
 	return _int();
 }
@@ -204,7 +206,7 @@ HRESULT CStage2::Ready_TriggerFunctionSetting()
 	fp = &CStage2::Trgger_Function9;
 	m_pTriggerSystem->Add_TriggerFuntion(fp);
 
-	fp = &CStage2::Trgger_FunctionBoss;;
+	fp = &CStage2::Trgger_FunctionBoss;
 	m_pTriggerSystem->Add_TriggerFuntion(fp);
 
 	return S_OK;
@@ -238,10 +240,40 @@ void CStage2::Trgger_Function1()
 		iter = pLayer->begin();
 		advance(iter, 4);
 		(*iter)->setActive(true);
+
+		iter = pLayer->begin();
+		advance(iter, 5);
+		(*iter)->setActive(true);
+
+		pLayer = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE2, L"Layer_Crawler");
+
+		if (!pLayer)
+			return;
+
+		iter = pLayer->begin();
+		advance(iter, 0);
+		(*iter)->setActive(true);
+
+		iter = pLayer->begin();
+		advance(iter, 1);
+		(*iter)->setActive(true);
+
+		iter = pLayer->begin();
+		advance(iter, 2);
+		(*iter)->setActive(true);
 	}
 	else
 	{
 		auto iter = pLayer->begin();
+		CActor* pActor = static_cast<CActor*>((*iter));
+		while (pActor->Get_HpRatio() == 0)
+		{
+			iter++;
+			pActor->Set_Remove(true);
+			pActor = static_cast<CActor*>((*iter));
+		}
+		(*iter)->setActive(true);
+		iter++;
 		(*iter)->setActive(true);
 		iter++;
 		(*iter)->setActive(true);
@@ -252,7 +284,26 @@ void CStage2::Trgger_Function1()
 		iter++;
 		(*iter)->setActive(true);
 
+		pLayer = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE2, L"Layer_Bastion_Sword");
+
+		if (!pLayer)
+			return;
+
+		iter = pLayer->begin();
+		pActor = static_cast<CActor*>((*iter));
+		while (pActor->Get_HpRatio() == 0)
+		{
+			iter++;
+			pActor->Set_Remove(true);
+			pActor = static_cast<CActor*>((*iter));
+		}
+		(*iter)->setActive(true);
+		iter++;
+		(*iter)->setActive(true);
+		iter++;
+		(*iter)->setActive(true);
 	}
+	m_iCountMonster = 9;
 }
 
 void CStage2::Trgger_Function2()
@@ -264,11 +315,11 @@ void CStage2::Trgger_Function2()
 	if (m_bDebug)
 	{
 		auto iter = pLayer->begin();
-		advance(iter, 0);
+		advance(iter, 2);
 		(*iter)->setActive(true);
 
 		iter = pLayer->begin();
-		advance(iter, 1);
+		advance(iter, 3);
 		(*iter)->setActive(true);
 
 		pLayer = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE2, L"Layer_Bastion_Shooter");
@@ -296,6 +347,13 @@ void CStage2::Trgger_Function2()
 	else
 	{
 		auto iter = pLayer->begin();
+		CActor* pActor = static_cast<CActor*>((*iter));
+		while (pActor->Get_HpRatio() == 0)
+		{
+			iter++;
+			pActor->Set_Remove(true);
+			pActor = static_cast<CActor*>((*iter));
+		}
 		(*iter)->setActive(true);
 		iter++;
 		(*iter)->setActive(true);
@@ -306,6 +364,13 @@ void CStage2::Trgger_Function2()
 			return;
 
 		iter = pLayer->begin();
+		pActor = static_cast<CActor*>((*iter));
+		while (pActor->Get_HpRatio() == 0)
+		{
+			iter++;
+			pActor->Set_Remove(true);
+			pActor = static_cast<CActor*>((*iter));
+		}
 		(*iter)->setActive(true);
 		iter++;
 		(*iter)->setActive(true);
@@ -316,8 +381,16 @@ void CStage2::Trgger_Function2()
 			return;
 
 		iter = pLayer->begin();
+		pActor = static_cast<CActor*>((*iter));
+		while (pActor->Get_HpRatio() == 0)
+		{
+			iter++;
+			pActor->Set_Remove(true);
+			pActor = static_cast<CActor*>((*iter));
+		}
 		(*iter)->setActive(true);
 	}
+	m_iCountMonster = 5;
 }
 
 void CStage2::Trgger_Function3()
@@ -341,16 +414,23 @@ void CStage2::Trgger_Function3()
 			return;
 
 		iter = pLayer->begin();
-		advance(iter, 2);
+		advance(iter, 4);
 		(*iter)->setActive(true);
 
 		iter = pLayer->begin();
-		advance(iter, 3);
+		advance(iter, 5);
 		(*iter)->setActive(true);
 	}
 	else
 	{
 		auto iter = pLayer->begin();
+		CActor* pActor = static_cast<CActor*>((*iter));
+		while (pActor->Get_HpRatio() == 0)
+		{
+			iter++;
+			pActor->Set_Remove(true);
+			pActor = static_cast<CActor*>((*iter));
+		}
 		(*iter)->setActive(true);
 		iter++;
 		(*iter)->setActive(true);
@@ -361,11 +441,18 @@ void CStage2::Trgger_Function3()
 			return;
 
 		iter = pLayer->begin();
+		pActor = static_cast<CActor*>((*iter));
+		while (pActor->Get_HpRatio() == 0)
+		{
+			iter++;
+			pActor->Set_Remove(true);
+			pActor = static_cast<CActor*>((*iter));
+		}
 		(*iter)->setActive(true);
 		iter++;
 		(*iter)->setActive(true);
 	}
-
+	m_iCountMonster = 4;
 }
 
 void CStage2::Trgger_Function4()
@@ -378,9 +465,6 @@ void CStage2::Trgger_Function4()
 	if (m_bDebug)
 	{
 		auto iter = pLayer->begin();
-		advance(iter, 5);
-		(*iter)->setActive(true);
-		iter = pLayer->begin();
 		advance(iter, 6);
 		(*iter)->setActive(true);
 		iter = pLayer->begin();
@@ -389,106 +473,32 @@ void CStage2::Trgger_Function4()
 		iter = pLayer->begin();
 		advance(iter, 8);
 		(*iter)->setActive(true);
-
-		pLayer = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE2, L"Layer_Spear");
-
-		if (!pLayer)
-			return;
 		iter = pLayer->begin();
-		advance(iter, 0);
-		(*iter)->setActive(true);
-
-		pLayer = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE2, L"Layer_Bastion_2HSword");
-
-		if (!pLayer)
-			return;
-		iter = pLayer->begin();
-		advance(iter, 0);
-		(*iter)->setActive(true);
-
-		pLayer = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE2, L"Layer_Bastion_Shooter");
-
-		if (!pLayer)
-			return;
-		iter = pLayer->begin();
-		advance(iter, 4);
-		(*iter)->setActive(true);
-
-		pLayer = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE2, L"Layer_Bastion_Sword");
-
-		if (!pLayer)
-			return;
-		iter = pLayer->begin();
-		advance(iter, 4);
-		(*iter)->setActive(true);
-
-		iter = pLayer->begin();
-		advance(iter, 5);
-		(*iter)->setActive(true);
-
-		pLayer = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE2, L"Layer_Healer");
-
-		if (!pLayer)
-			return;
-
-		iter = pLayer->begin();
-		advance(iter, 1);
+		advance(iter, 9);
 		(*iter)->setActive(true);
 	}
 	else
 	{
 		auto iter = pLayer->begin();
+		CActor* pActor = static_cast<CActor*>((*iter));
+		while (pActor->Get_HpRatio() == 0)
+		{
+			iter++;
+			pActor->Set_Remove(true);
+			pActor = static_cast<CActor*>((*iter));
+		}
 		(*iter)->setActive(true);
 		iter++;
 		(*iter)->setActive(true);
 		iter++;
 		(*iter)->setActive(true);
 		iter++;
-		(*iter)->setActive(true);
-
-		pLayer = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE2, L"Layer_Spear");
-
-		if (!pLayer)
-			return;
-
-		iter = pLayer->begin();
-		(*iter)->setActive(true);
-
-		pLayer = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE2, L"Layer_Bastion_2HSword");
-
-		if (!pLayer)
-			return;
-		iter = pLayer->begin();
-		(*iter)->setActive(true);
-
-		pLayer = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE2, L"Layer_Bastion_Shooter");
-
-		if (!pLayer)
-			return;
-
-		iter = pLayer->begin();
-		(*iter)->setActive(true);
-
-		pLayer = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE2, L"Layer_Bastion_Sword");
-
-		if (!pLayer)
-			return;
-		iter = pLayer->begin();
-		(*iter)->setActive(true);
-		iter++;
-		(*iter)->setActive(true);
-
-		pLayer = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE2, L"Layer_Healer");
-
-		if (!pLayer)
-			return;
-
-		iter = pLayer->begin();
 		(*iter)->setActive(true);
 	}
+	m_iCountMonster = 4;
 }
 
-void CStage2::Trgger_Function5()
+void CStage2::Trgger_Function6()
 {
 	list<CGameObject*>* pLayer = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE2, L"Layer_Bastion_Sword");
 
@@ -498,10 +508,10 @@ void CStage2::Trgger_Function5()
 	if (m_bDebug)
 	{
 		auto iter = pLayer->begin();
-		advance(iter, 6);
+		advance(iter, 8);
 		(*iter)->setActive(true);
 		iter = pLayer->begin();
-		advance(iter, 7);
+		advance(iter, 9);
 		(*iter)->setActive(true);
 
 		pLayer = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE2, L"Layer_Bastion_Shooter");
@@ -529,6 +539,7 @@ void CStage2::Trgger_Function5()
 	else
 	{
 		auto iter = pLayer->begin();
+		CActor* pActor = static_cast<CActor*>((*iter));
 		(*iter)->setActive(true);
 		iter++;
 		(*iter)->setActive(true);
@@ -539,6 +550,13 @@ void CStage2::Trgger_Function5()
 			return;
 
 		iter = pLayer->begin();
+		pActor = static_cast<CActor*>((*iter));
+		while (pActor->Get_HpRatio() == 0)
+		{
+			iter++;
+			pActor->Set_Remove(true);
+			pActor = static_cast<CActor*>((*iter));
+		}
 		(*iter)->setActive(true);
 		iter++;
 		(*iter)->setActive(true);
@@ -549,11 +567,19 @@ void CStage2::Trgger_Function5()
 			return;
 
 		iter = pLayer->begin();
+		pActor = static_cast<CActor*>((*iter));
+		while (pActor->Get_HpRatio() == 0)
+		{
+			iter++;
+			pActor->Set_Remove(true);
+			pActor = static_cast<CActor*>((*iter));
+		}
 		(*iter)->setActive(true);
 	}
+	m_iCountMonster = 5;
 }
 
-void CStage2::Trgger_Function6()
+void CStage2::Trgger_Function7()
 {
 	list<CGameObject*>* pLayer = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE2, L"Layer_Bronze");
 	if (!pLayer)
@@ -571,13 +597,21 @@ void CStage2::Trgger_Function6()
 	else
 	{
 		auto iter = pLayer->begin();
+		CActor* pActor = static_cast<CActor*>((*iter));
+		while (pActor->Get_HpRatio() == 0)
+		{
+			iter++;
+			pActor->Set_Remove(true);
+			pActor = static_cast<CActor*>((*iter));
+		}
 		(*iter)->setActive(true);
 		iter++;
 		(*iter)->setActive(true);
 	}
+	m_iCountMonster = 2;
 }
 
-void CStage2::Trgger_Function7()
+void CStage2::Trgger_Function8()
 {
 	list<CGameObject*>* pLayer = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE2, L"Layer_Spear");
 	if (!pLayer)
@@ -591,45 +625,16 @@ void CStage2::Trgger_Function7()
 	else
 	{
 		auto iter = pLayer->begin();
+		CActor* pActor = static_cast<CActor*>((*iter));
+		while (pActor->Get_HpRatio() == 0)
+		{
+			iter++;
+			pActor->Set_Remove(true);
+			pActor = static_cast<CActor*>((*iter));
+		}
 		(*iter)->setActive(true);
 	}
-}
-
-void CStage2::Trgger_Function8()
-{
-	list<CGameObject*>* pLayer = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE2, L"Layer_Bastion_Sword");
-	if (!pLayer)
-		return;
-	if (m_bDebug)
-	{
-		auto iter = pLayer->begin();
-		advance(iter, 8);
-		(*iter)->setActive(true);
-		iter = pLayer->begin();
-		advance(iter, 9);
-		(*iter)->setActive(true);
-
-		pLayer = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE2, L"Layer_Bastion_Shooter");
-		if (!pLayer)
-			return;
-		iter = pLayer->begin();
-		advance(iter, 7);
-		(*iter)->setActive(true);
-	}
-	else
-	{
-		auto iter = pLayer->begin();
-		(*iter)->setActive(true);
-		iter++;
-		(*iter)->setActive(true);
-
-		pLayer = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE2, L"Layer_Bastion_Shooter");
-		if (!pLayer)
-			return;
-		iter = pLayer->begin();
-		(*iter)->setActive(true);
-	}
-
+	m_iCountMonster = 1;
 }
 
 void CStage2::Trgger_Function9()
@@ -637,6 +642,7 @@ void CStage2::Trgger_Function9()
 	list<CGameObject*>* pLayer = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE2, L"Layer_Bastion_Sword");
 	if (!pLayer)
 		return;
+
 	if (m_bDebug)
 	{
 		auto iter = pLayer->begin();
@@ -645,11 +651,20 @@ void CStage2::Trgger_Function9()
 		iter = pLayer->begin();
 		advance(iter, 11);
 		(*iter)->setActive(true);
+		iter = pLayer->begin();
+		advance(iter, 12);
+		(*iter)->setActive(true);
+		iter = pLayer->begin();
+		advance(iter, 13);
+		(*iter)->setActive(true);
 
 		pLayer = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE2, L"Layer_Bastion_Shooter");
 		if (!pLayer)
 			return;
 
+		iter = pLayer->begin();
+		advance(iter, 7);
+		(*iter)->setActive(true);
 		iter = pLayer->begin();
 		advance(iter, 8);
 		(*iter)->setActive(true);
@@ -665,6 +680,17 @@ void CStage2::Trgger_Function9()
 	else
 	{
 		auto iter = pLayer->begin();
+		CActor* pActor = static_cast<CActor*>((*iter));
+		while (pActor->Get_HpRatio() == 0)
+		{
+			iter++;
+			pActor->Set_Remove(true);
+			pActor = static_cast<CActor*>((*iter));
+		}
+		(*iter)->setActive(true);
+		iter++;
+		(*iter)->setActive(true);
+		iter++;
 		(*iter)->setActive(true);
 		iter++;
 		(*iter)->setActive(true);
@@ -672,8 +698,16 @@ void CStage2::Trgger_Function9()
 		pLayer = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE2, L"Layer_Bastion_Shooter");
 		if (!pLayer)
 			return;
-
 		iter = pLayer->begin();
+		pActor = static_cast<CActor*>((*iter));
+		while (pActor->Get_HpRatio() == 0)
+		{
+			iter++;
+			pActor->Set_Remove(true);
+			pActor = static_cast<CActor*>((*iter));
+		}
+		(*iter)->setActive(true);
+		iter++;
 		(*iter)->setActive(true);
 
 		pLayer = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE2, L"Layer_Bastion_2HSword");
@@ -681,8 +715,139 @@ void CStage2::Trgger_Function9()
 			return;
 
 		iter = pLayer->begin();
+		pActor = static_cast<CActor*>((*iter));
+		while (pActor->Get_HpRatio() == 0)
+		{
+			iter++;
+			pActor->Set_Remove(true);
+			pActor = static_cast<CActor*>((*iter));
+		}
 		(*iter)->setActive(true);
 	}
+	m_iCountMonster = 7;
+}
+
+void CStage2::Trgger_Function5()
+{
+	list<CGameObject*>* pLayer = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE2, L"Layer_Spear");
+	if (!pLayer)
+		return;
+	if(m_bDebug)
+	{
+		auto iter = pLayer->begin();
+		advance(iter, 0);
+		(*iter)->setActive(true);
+
+		pLayer = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE2, L"Layer_Bastion_2HSword");
+
+		if (!pLayer)
+			return;
+		iter = pLayer->begin();
+		advance(iter, 0);
+		(*iter)->setActive(true);
+
+		pLayer = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE2, L"Layer_Bastion_Shooter");
+
+		if (!pLayer)
+			return;
+		iter = pLayer->begin();
+		advance(iter, 4);
+		(*iter)->setActive(true);
+
+		pLayer = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE2, L"Layer_Bastion_Sword");
+
+		if (!pLayer)
+			return;
+		iter = pLayer->begin();
+		advance(iter, 6);
+		(*iter)->setActive(true);
+
+		iter = pLayer->begin();
+		advance(iter, 7);
+		(*iter)->setActive(true);
+
+		pLayer = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE2, L"Layer_Healer");
+
+		if (!pLayer)
+			return;
+
+		iter = pLayer->begin();
+		advance(iter, 1);
+		(*iter)->setActive(true);
+	}
+	else
+	{
+		auto iter = pLayer->begin();
+		CActor* pActor = static_cast<CActor*>((*iter));
+		while (pActor->Get_HpRatio() == 0)
+		{
+			iter++;
+			pActor->Set_Remove(true);
+			pActor = static_cast<CActor*>((*iter));
+		}
+		(*iter)->setActive(true);
+
+		pLayer = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE2, L"Layer_Bastion_2HSword");
+
+		if (!pLayer)
+			return;
+		iter = pLayer->begin();
+		pActor = static_cast<CActor*>((*iter));
+		while (pActor->Get_HpRatio() == 0)
+		{
+			iter++;
+			pActor->Set_Remove(true);
+			pActor = static_cast<CActor*>((*iter));
+		}
+		(*iter)->setActive(true);
+
+		pLayer = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE2, L"Layer_Bastion_Shooter");
+
+		if (!pLayer)
+			return;
+
+		iter = pLayer->begin();
+		pActor = static_cast<CActor*>((*iter));
+		while (pActor->Get_HpRatio() == 0)
+		{
+			iter++;
+			pActor->Set_Remove(true);
+			pActor = static_cast<CActor*>((*iter));
+		}
+		(*iter)->setActive(true);
+
+		pLayer = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE2, L"Layer_Bastion_Sword");
+
+		if (!pLayer)
+			return;
+		iter = pLayer->begin();
+		pActor = static_cast<CActor*>((*iter));
+		while (pActor->Get_HpRatio() == 0)
+		{
+			iter++;
+			pActor->Set_Remove(true);
+			pActor = static_cast<CActor*>((*iter));
+		}
+		(*iter)->setActive(true);
+		iter++;
+		(*iter)->setActive(true);
+
+		pLayer = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE2, L"Layer_Healer");
+
+		if (!pLayer)
+			return;
+
+		iter = pLayer->begin();
+		pActor = static_cast<CActor*>((*iter));
+		while (pActor->Get_HpRatio() == 0)
+		{
+			iter++;
+			pActor->Set_Remove(true);
+			pActor = static_cast<CActor*>((*iter));
+		}
+		(*iter)->setActive(true);
+	}
+	m_iCountMonster = 6;
 }
 
 void CStage2::Trgger_FunctionBoss()
