@@ -156,7 +156,6 @@ PS_OUT_TRAIL PS_MAIN_TRAIL(PS_IN_TRAIL In)
 	Out.E = color * power;
 
 	return Out;
-	
 }
 
 
