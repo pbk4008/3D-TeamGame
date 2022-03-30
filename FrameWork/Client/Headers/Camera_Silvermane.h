@@ -33,6 +33,7 @@ private:
 	_int Chase_Target(const _double& _dDeltaTime);
 	_int Input_Key(const _double& _dDeltaTime);
 	void SpringArm();
+	void OnOffMonsterUI();
 
 public:
 	const _fvector Get_Look() const;
@@ -52,6 +53,7 @@ private:
 
 private: /* For.Shake */
 	CCameraShake* m_pCameraShake = nullptr;
+	CGameObject* m_pTargetMonster = nullptr;
 
 public:
 	static CCamera_Silvermane* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext);

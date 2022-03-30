@@ -60,6 +60,8 @@ HRESULT CMonster_Bastion_2HSword::NativeConstruct(const _uint _iSceneID, void* _
 	if (FAILED(__super::NativeConstruct(_iSceneID, _pArg)))
 		return E_FAIL;
 
+	m_iCurScene = _iSceneID;
+
 	if (_pArg)
 	{
 		_float3 vPoint = (*(_float3*)_pArg);
@@ -90,12 +92,6 @@ HRESULT CMonster_Bastion_2HSword::NativeConstruct(const _uint _iSceneID, void* _
 
 _int CMonster_Bastion_2HSword::Tick(_double _dDeltaTime)
 {
-	//나중에지울코드
-	if (!m_bFirst)
-	{
-		m_pPanel->Set_Show(true);
-	}
-	
 	_int iProgress = __super::Tick(_dDeltaTime);
 	if (NO_EVENT != iProgress) 
 		return iProgress;
@@ -115,6 +111,16 @@ _int CMonster_Bastion_2HSword::Tick(_double _dDeltaTime)
 	if(!m_bDead)
 		m_pCharacterController->Move(_dDeltaTime, m_pTransform->Get_Velocity());
 
+	if (true == m_bUIShow)
+	{
+		m_pPanel->Set_Show(true);
+	}
+
+	if (false == m_bUIShow)
+	{
+		m_pPanel->Set_Show(false);
+
+	}
 	if (m_fGroggyGauge >= m_fMaxGroggyGauge)
 	{
 		//스턴상태일때 스턴state에서 현재 그로기 계속 0으로 고정시켜줌
@@ -249,7 +255,7 @@ HRESULT CMonster_Bastion_2HSword::Ready_Components()
 	Desc.pTargetTransform = m_pTransform;
 	Desc.iEnemyTag = CUI_Monster_Panel::Enemy::SWORD2H;
 
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_UI", L"Proto_GameObject_UI_Monster_Panel", &Desc,
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer(m_iCurScene, L"Layer_UI", L"Proto_GameObject_UI_Monster_Panel", &Desc,
 		(CGameObject**)&m_pPanel)))
 		return E_FAIL;
 

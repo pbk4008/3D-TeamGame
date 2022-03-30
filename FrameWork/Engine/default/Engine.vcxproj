@@ -445,6 +445,7 @@ call Update_Library_Release.bat</Command>
     <FxCompile Include="..\bin\ShaderFiles\Shader_Mesh.hlsl" />
     <FxCompile Include="..\bin\ShaderFiles\Shader_MeshAnim.hlsl" />
     <FxCompile Include="..\bin\ShaderFiles\Shader_Monster.hlsl" />
+    <FxCompile Include="..\bin\ShaderFiles\Shader_Panel_UI.hlsl" />
     <FxCompile Include="..\bin\ShaderFiles\Shader_Particle.hlsl" />
     <FxCompile Include="..\bin\ShaderFiles\Shader_Plane.hlsl" />
     <FxCompile Include="..\bin\ShaderFiles\Shader_PointInstance.hlsl" />

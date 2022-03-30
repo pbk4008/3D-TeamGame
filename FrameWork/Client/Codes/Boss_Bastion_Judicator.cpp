@@ -77,16 +77,17 @@ HRESULT CBoss_Bastion_Judicator::NativeConstruct(const _uint _iSceneID, void* pA
 
 _int CBoss_Bastion_Judicator::Tick(_double TimeDelta)
 {
-	//나중에지울코드
-	if (!m_bFirst)
-	{
-		m_pPanel->Set_Show(true);
-	}
-
 	if (0 > __super::Tick(TimeDelta))
 	{
 		return -1;
 	}
+
+	if (0 >= m_fCurrentHp)
+	{
+		//m_bDead = true;
+		m_pStateController->Change_State(L"Death");
+	}
+
 	m_pTransform->Set_Velocity(XMVectorZero());
 
 	_int iProgress = m_pStateController->Tick(TimeDelta);
@@ -102,13 +103,28 @@ _int CBoss_Bastion_Judicator::Tick(_double TimeDelta)
 			return -1;
 		}
 	}
-	
-	if (0 >= m_fCurrentHp)
+
+	if (m_bIsFall)
+		m_pTransform->Fall(TimeDelta);
+
+	_vector vMonsterPos = m_pTransform->Get_State(CTransform::STATE::STATE_POSITION);
+	_vector vDist = vMonsterPos - g_pObserver->Get_PlayerPos();
+	_float fDistToPlayer = XMVectorGetX(XMVector3Length(vDist));
+
+	if (20.f >= fDistToPlayer)
 	{
-		//m_bDead = true;
-		m_pStateController->Change_State(L"Death");
+		m_bUIShow = true;
 	}
-	
+
+	if (true == m_bUIShow)
+	{
+		m_pPanel->Set_Show(true);
+	}
+	if (false == m_bUIShow)
+	{
+		//m_pPanel->Set_Show(false);
+	}
+
 	if (m_fGroggyGauge >= m_fMaxGroggyGauge)
 	{
 		//스턴상태일때 스턴state에서 현재 그로기 계속 0으로 고정시켜줌
@@ -132,21 +148,13 @@ _int CBoss_Bastion_Judicator::Tick(_double TimeDelta)
 		}
 	}
 
-	if (m_bIsFall)
-		m_pTransform->Fall(TimeDelta);
-
-
 	if (DEATH == m_pAnimator->Get_CurrentAnimNode())
 	{
 		if (m_pAnimator->Get_CurrentAnimation()->Is_Finished())
 		{
 			m_bDead = true;
-			//m_pPanel->Set_Show(false);
-			//setActive(false);
-
-			//if (FAILED(g_pGameInstance->Open_Level((_uint)SCENEID::SCENE_LOADING, CLoading::Create(m_pDevice, m_pDeviceContext, SCENEID::SCENE_STAGE2))))
-			//	return -1;
-
+			m_pPanel->Set_Show(false);
+		
 			return 0;
 		}
 	}
