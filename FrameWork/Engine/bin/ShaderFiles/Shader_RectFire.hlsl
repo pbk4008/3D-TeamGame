@@ -111,12 +111,6 @@ PS_OUT PS_MAIN(PS_IN In)
 	float perturb;
 	float2 noisecoords;
 	
-	float2 dpUv;
-	dpUv.x = (In.vProjpos.x / In.vProjpos.w) * 0.5f + 0.5f;
-	dpUv.y = (In.vProjpos.y / In.vProjpos.w) * -0.5f + 0.5f;
-	
-	float ViewZ = g_DepthTexture.Sample(WrapSampler, In.vTexUV).y * 300.f;
-	
 	noise1 = g_NoiseTexture.Sample(WrapSampler, In.texcoord1);
 	noise2 = g_NoiseTexture.Sample(WrapSampler, In.texcoord2);
 	noise3 = g_NoiseTexture.Sample(WrapSampler, In.texcoord3);
@@ -138,7 +132,7 @@ PS_OUT PS_MAIN(PS_IN In)
 	firecolor = g_FireTexture.Sample(ClampSampler, noisecoords.xy);
 	alphacolor = g_AlphaTexture.Sample(ClampSampler, noisecoords.xy);
 	
-	firecolor.a = alphacolor/* * max((ViewZ - In.vProjpos.w), 0.f)*/;
+	firecolor.a = alphacolor;
 	
 	Out.vColor = firecolor;
 	

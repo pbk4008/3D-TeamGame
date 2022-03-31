@@ -31,7 +31,7 @@ HRESULT CTonemapping::Blend_FinalPass(CTarget_Manager* pTargetMgr, _bool check,_
 {
 	if (FAILED(pTargetMgr->Begin_MRT(m_pDeviceContext, TEXT("Target_Blend"))))	return E_FAIL;
 	
-	if (FAILED(m_pFinalBlend->SetUp_TextureOnShader("g_SkyBoxTexutre", pTargetMgr->Get_SRV(TEXT("Target_SkyBox")))))return E_FAIL;
+	/*if (FAILED(m_pFinalBlend->SetUp_TextureOnShader("g_SkyBoxTexutre", pTargetMgr->Get_SRV(TEXT("Target_SkyBox")))))return E_FAIL;*/
 
 	if (FAILED(m_pFinalBlend->SetUp_TextureOnShader("g_OriginTexture", pTargetMgr->Get_SRV(L"Target_Diffuse"))))	return E_FAIL;
 	
@@ -52,7 +52,6 @@ HRESULT CTonemapping::Blend_FinalPass(CTarget_Manager* pTargetMgr, _bool check,_
 		if (FAILED(m_pFinalBlend->SetUp_TextureOnShader("g_SpecularTexture", pTargetMgr->Get_SRV(L"Target_HDRSpecular"))))	return E_FAIL;
 	}
 	if (FAILED(m_pFinalBlend->SetUp_TextureOnShader("g_EmissionTexture", pTargetMgr->Get_SRV(L"Target_Emission"))))	return E_FAIL;
-
 	if (FAILED(m_pFinalBlend->SetUp_TextureOnShader("g_Blur2Texture", pTargetMgr->Get_SRV(L"Target_Horizontal2"))))	return E_FAIL;
 	if (FAILED(m_pFinalBlend->SetUp_TextureOnShader("g_Blur4Texture", pTargetMgr->Get_SRV(L"Target_Horizontal4"))))	return E_FAIL;
 	if (FAILED(m_pFinalBlend->SetUp_TextureOnShader("g_Blur8Texture", pTargetMgr->Get_SRV(L"Target_Horizontal8"))))	return E_FAIL;

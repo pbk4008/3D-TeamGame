@@ -152,6 +152,8 @@ HRESULT CRenderer::Draw_RenderGroup()
 
 	if (m_bPixel) // Pixel HDR
 	{
+		//if (FAILED(m_pPostProcess->AlphaBlur(m_pTargetMgr,m_bParticle))) return E_FAIL;
+
 		if (FAILED(m_pHDR->Render_HDRBase(m_pTargetMgr, m_bShadow))) return E_FAIL;
 
 		if (FAILED(m_pLuminance->DownSampling(m_pTargetMgr))) return E_FAIL;
@@ -285,8 +287,8 @@ HRESULT CRenderer::Render_NonAlpha()
 	}
 	m_RenderGroup[RENDER_NONALPHA].clear();
 
-	//if (FAILED(m_pTargetMgr->End_MRT(m_pDeviceContext))) return E_FAIL;
-	if (FAILED(m_pTargetMgr->End_MRTNotClear(m_pDeviceContext))) return E_FAIL;
+	if (FAILED(m_pTargetMgr->End_MRT(m_pDeviceContext))) return E_FAIL;
+	//if (FAILED(m_pTargetMgr->End_MRTNotClear(m_pDeviceContext))) return E_FAIL;
 	
 	return S_OK;
 }

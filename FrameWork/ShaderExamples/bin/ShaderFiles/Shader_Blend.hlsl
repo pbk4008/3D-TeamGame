@@ -83,7 +83,6 @@ PS_OUT PS_MAIN_BLEND(PS_IN In)
 	float4 blur8 = g_Blur8Texture.Sample(DefaultSampler, In.vTexUV);
 	float4 blur16 = g_Blur16Texture.Sample(DefaultSampler, In.vTexUV);
 	
-	float Sky = g_SkyBoxTexutre.Sample(DefaultSampler, In.vTexUV);
 	//float4 addpt = 1;
 	//if (g_particle == true)
 	//{A
@@ -96,7 +95,7 @@ PS_OUT PS_MAIN_BLEND(PS_IN In)
 	//	addpt = ((Particle * 1.f + (pt2) * 0.1f + (pt4) * 0.1f + (pt8) * 0.1f + (pt16) * 0.1f));
 	//}
 
-	float4 alpha = g_AlphaTexture.Sample(DefaultSampler, In.vTexUV);
+	//float4 alpha = g_AlphaTexture.Sample(DefaultSampler, In.vTexUV);
 	
 	float4 emissive = ((emission) * 1.f + (blur2) * 1.3f + (blur4) * 1.5f + (blur8) * 2.5f + (blur16) * 3.5f);
 	float4 final = float4(0, 0, 0, 0);
@@ -114,8 +113,8 @@ PS_OUT PS_MAIN_BLEND(PS_IN In)
 		else
 		{
 			//final.rgb = diffuse.rgb + specular.rgb + emissive.rgb + alpha.rgb;
-			final = diffuse /*+ specular*/ + emissive + alpha + specular;
-			final.a = diffuse.a;
+			final.rgb = diffuse.rgb + specular.rgb + emissive.rgb /*+ alpha*/;
+			//final.a = diffuse.a;
 		}
 	}
 	else
@@ -123,7 +122,7 @@ PS_OUT PS_MAIN_BLEND(PS_IN In)
 		final = diffuse + emissive + specular;
 	}
 	
-	//final.a = originA + emissive.a + alpha.a;
+	final.a = originA + emissive.a /*+ specular.a*/;
 	//final.a = saturate(final.a);
 	
 	Out.vOutColor = final;

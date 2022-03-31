@@ -194,9 +194,10 @@ PS_OUT_LIGHTACC PS_MAIN_LIGHTACC_DIRECTIONAL(PS_IN In)
 		float k = alpha / 2.0f;
 		_V = (1.0f / (NdotL * (1.0f - k) + k)) * (1.0f / (NdotV * (1.0f - k) + k));
 
-		float specular = saturate(NdotL * _D * _F * _V);
+		//float specular = saturate(NdotL * _D * _F * _V);
+		float specular = (NdotL * _D * _F * _V);
 	
-		//-------------------------------------------------------------------------//
+		////-------------------------------------------------------------------------//
 		float3 color = float3(1.f, 1.f, 1.f);
 		float4 ambientcolor = float4(color * 0.5f, 1.0);
 		float diffusefactor = dot(normal3, L);
@@ -209,6 +210,8 @@ PS_OUT_LIGHTACC PS_MAIN_LIGHTACC_DIRECTIONAL(PS_IN In)
 		}
 		
 		float4 light = diffusecolor * diffusefactor + ambientcolor;
+		//float4 light = g_vLightDiffuse * (saturate(dot(normalize(g_vLightPos - vWorldPos) * -1.f, normal)) + (g_vLightAmbient * g_vMtrlAmbient));
+		
 		float3 CamToWorldDirection = normalize(vWorldPos.xyz - g_vCamPosition.xyz);
 		float3 worldReflectDirection = reflect(CamToWorldDirection, normal3);
 		
@@ -222,7 +225,7 @@ PS_OUT_LIGHTACC PS_MAIN_LIGHTACC_DIRECTIONAL(PS_IN In)
 		float4 lightpower = InvMetalic * light * AO;
 		
 		Out.vSpecular = (light * specular + cubeRef1) * Metallic * smoothness;
-		Out.vSpecular.a = 1.f;
+		//Out.vSpecular.a = 1.f;
 		Out.vShade = lightpower;
 		Out.vShade.a = 1.f;
 	}

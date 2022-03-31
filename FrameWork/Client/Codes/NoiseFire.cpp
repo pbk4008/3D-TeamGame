@@ -24,7 +24,7 @@ HRESULT CNoiseFire::NativeConstruct(const _uint iSceneID, void* pArg)
 	if (FAILED(ReadyComponent())) return E_FAIL;
 
 	m_pTransform->Set_State(CTransform::STATE_POSITION, XMVectorSet(0,2.f,0,1.f));
-	m_pTransform->Scale_Up(XMVectorSet(3.f, 2.f, 1.f, 0.f));
+	m_pTransform->Scale_Up(XMVectorSet(5.f, 2.f, 1.f, 0.f));
 
 	m_pRenderer->SetRenderButton(CRenderer::PARTICLE, true);
 

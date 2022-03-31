@@ -373,8 +373,8 @@ HRESULT CRendererAssit::Render_LightAcc(const wstring& cameraTag, _bool bPBR,_bo
 
 	pLight_Manager->Render_Lights(cameraTag, bPBR,shadow);
 
-	//m_pTargetMgr->End_MRT(m_pDeviceContext);
-	if (FAILED(m_pTargetMgr->End_MRTNotClear(m_pDeviceContext))) return E_FAIL;
+	m_pTargetMgr->End_MRT(m_pDeviceContext);
+	//if (FAILED(m_pTargetMgr->End_MRTNotClear(m_pDeviceContext))) return E_FAIL;
 
 	RELEASE_INSTANCE(CLight_Manager);
 

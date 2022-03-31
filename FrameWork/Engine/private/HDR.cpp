@@ -27,6 +27,9 @@ HRESULT CHDR::Render_HDRBase(CTarget_Manager* pTargetMgr, _bool isShadow)
 {
 	if (FAILED(pTargetMgr->Begin_MRT(m_pDeviceContext, TEXT("MRT_HDRBASE"))))
 		return E_FAIL;
+
+	//if (FAILED(m_pVIBuffer->SetUp_TextureOnShader("g_AlphaTexture", pTargetMgr->Get_SRV(TEXT("Target_Alpha"))))) return E_FAIL;
+
 	if (FAILED(m_pVIBuffer->SetUp_TextureOnShader("g_DiffuseTexture", pTargetMgr->Get_SRV(TEXT("Target_Diffuse")))))
 		return E_FAIL;
 	if (FAILED(m_pVIBuffer->SetUp_TextureOnShader("g_NormalTexture", pTargetMgr->Get_SRV(TEXT("Target_Normal")))))
