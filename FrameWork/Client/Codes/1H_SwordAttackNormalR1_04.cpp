@@ -74,7 +74,8 @@ HRESULT C1H_SwordAttackNormalR1_04::EnterState()
 		return E_FAIL;
 	m_pAnimationController->Set_RootMotion(true, true);
 
-	m_pAnimationController->Set_PlaySpeed(1.2f);
+	//m_pAnimationController->Set_PlaySpeed(1.2f);
+	m_pAnimationController->Set_PlaySpeed(1.4f);
 
 	m_iAttackStartIndex = 18;
 	m_iAttackEndIndex = 30;

@@ -123,10 +123,10 @@ HRESULT CFury::Ready_Components()
 	tColliderDesc.pGameObject = this;
 	CBoxCollider::DESC tBoxColliderDesc;
 	tBoxColliderDesc.tColliderDesc = tColliderDesc;
-	tBoxColliderDesc.vScale = { 0.8f, 0.5f, 1.f };
+	tBoxColliderDesc.vScale = { 0.8f, 0.5f, 1.8f };
 	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_BoxCollider", L"Collider", (CComponent**)&m_pCollider, &tBoxColliderDesc)))
 		return E_FAIL;
-	_matrix smatPivot = XMMatrixTranslation(0.f, 0.f, 0.8f);
+	_matrix smatPivot = XMMatrixTranslation(0.f, 0.f, 0.4f);
 	m_pCollider->setPivotMatrix(smatPivot);
 
 	return S_OK;

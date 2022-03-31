@@ -314,6 +314,7 @@ call Update_Library_Release.bat</Command>
     <ClInclude Include="..\public\VIBuffer_RectInstance.h" />
     <ClInclude Include="..\public\VIBuffer_RectViewPort.h" />
     <ClInclude Include="..\public\VIBuffer_Terrain.h" />
+    <ClInclude Include="..\public\VIBuffer_Trail.h" />
     <ClInclude Include="..\public\VIBuffer_Trapezium.h" />
     <ClInclude Include="..\public\VIBuffer_Triangle.h" />
   </ItemGroup>
@@ -419,6 +420,7 @@ call Update_Library_Release.bat</Command>
     <ClCompile Include="..\private\VIBuffer_RectInstance.cpp" />
     <ClCompile Include="..\private\VIBuffer_RectViewPort.cpp" />
     <ClCompile Include="..\private\VIBuffer_Terrain.cpp" />
+    <ClCompile Include="..\private\VIBuffer_Trail.cpp" />
     <ClCompile Include="..\private\VIBuffer_Trapezium.cpp" />
     <ClCompile Include="..\private\VIBuffer_Triangle.cpp" />
   </ItemGroup>
@@ -460,6 +462,7 @@ call Update_Library_Release.bat</Command>
     <FxCompile Include="..\bin\ShaderFiles\Shader_StaticMesh.hlsl" />
     <FxCompile Include="..\bin\ShaderFiles\Shader_Terrain.hlsl" />
     <FxCompile Include="..\bin\ShaderFiles\Shader_Tonemapping.hlsl" />
+    <FxCompile Include="..\bin\ShaderFiles\Shader_Trail.hlsl" />
     <FxCompile Include="..\bin\ShaderFiles\Shader_Triangle.hlsl" />
     <FxCompile Include="..\bin\ShaderFiles\Shader_Geo_UI.hlsl" />
     <FxCompile Include="..\bin\ShaderFiles\Shader_UI.hlsl" />

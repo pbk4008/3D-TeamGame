@@ -606,6 +606,9 @@
     <Filter Include="02.GameObject\96.Weapon\98.Trail">
       <UniqueIdentifier>{0a662d2a-bf0c-4955-b176-58fbdf8c84f3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\04.Effect\05.TrailEffect">
+      <UniqueIdentifier>{4da4394f-ff21-4396-a0e8-24986eaeec60}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -1445,9 +1448,12 @@
     </ClInclude>
     <ClInclude Include="..\Headers\Monster_Bastion_Sword.h">
       <Filter>02.GameObject\03.Character\01.Monster\Bastion_Sword</Filter>
-      </ClInclude>
+    </ClInclude>
     <ClInclude Include="..\Headers\SwordTrail.h">
       <Filter>02.GameObject\96.Weapon\98.Trail</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\TrailEffect.h">
+      <Filter>02.GameObject\04.Effect\05.TrailEffect</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -2261,9 +2267,12 @@
     </ClCompile>
     <ClCompile Include="..\Codes\Monster_Bastion_Sword.cpp">
       <Filter>02.GameObject\03.Character\01.Monster\Bastion_Sword</Filter>
-        </ClCompile>
+    </ClCompile>
     <ClCompile Include="..\Codes\SwordTrail.cpp">
       <Filter>02.GameObject\96.Weapon\98.Trail</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\TrailEffect.cpp">
+      <Filter>02.GameObject\04.Effect\05.TrailEffect</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

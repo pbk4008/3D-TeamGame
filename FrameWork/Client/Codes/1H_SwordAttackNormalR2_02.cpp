@@ -62,9 +62,10 @@ HRESULT C1H_SwordAttackNormalR2_02::EnterState()
 	m_pAnimationController->Set_RootMotion(true, true);
 
 
-	m_iCutIndex = 36;
+	m_iCutIndex = 32;
 	m_pAnimationController->Add_TrackAcc(4.0);
-	m_pAnimationController->Set_PlaySpeed(1.2f);
+	//m_pAnimationController->Set_PlaySpeed(1.2f);
+	m_pAnimationController->Set_PlaySpeed(1.4f);
 	m_iAttackStartIndex = 20;
 	m_iAttackEndIndex = 35;
 	return S_OK;

@@ -431,6 +431,7 @@
     <ClInclude Include="..\Headers\TestScene_JS.h" />
     <ClInclude Include="..\Headers\TestScene_Sb.h" />
     <ClInclude Include="..\Headers\TestScene_YM.h" />
+    <ClInclude Include="..\Headers\TrailEffect.h" />
     <ClInclude Include="..\Headers\Traverse_Jump400Jog.h" />
     <ClInclude Include="..\Headers\Traverse_JumpNodeJog.h" />
     <ClInclude Include="..\Headers\Treasure_Chest.h" />
@@ -704,6 +705,7 @@
     <ClCompile Include="..\Codes\TestScene_JS.cpp" />
     <ClCompile Include="..\Codes\TestScene_Sb.cpp" />
     <ClCompile Include="..\Codes\TestScene_YM.cpp" />
+    <ClCompile Include="..\Codes\TrailEffect.cpp" />
     <ClCompile Include="..\Codes\Traverse_Jump400Jog.cpp" />
     <ClCompile Include="..\Codes\Traverse_JumpNodeJog.cpp" />
     <ClCompile Include="..\Codes\Treasure_Chest.cpp" />
