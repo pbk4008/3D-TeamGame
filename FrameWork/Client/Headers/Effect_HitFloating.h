@@ -14,7 +14,7 @@ class CEffect_HitFloating final : public CEffect
 protected:
 	explicit CEffect_HitFloating();
 	explicit CEffect_HitFloating(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);
-	explicit CEffect_HitFloating(const CEffect& rhs);
+	explicit CEffect_HitFloating(const CEffect_HitFloating& rhs);
 	virtual ~CEffect_HitFloating() = default;
 protected:
 	/* 원형객체가 생성될때 호출되는 함수. */
@@ -24,6 +24,8 @@ protected:
 	virtual _int Tick(_double TimeDelta);
 	virtual _int LateTick(_double TimeDelta);
 	virtual HRESULT Render();
+public:
+	virtual CEffect* Copy() override;
 
 private:
 	virtual HRESULT SetUp_Components();

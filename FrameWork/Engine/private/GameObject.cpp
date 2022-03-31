@@ -36,10 +36,10 @@ CGameObject::CGameObject(const CGameObject& rhs)
 	: m_pDevice(rhs.m_pDevice)
 	, m_pDeviceContext(rhs.m_pDeviceContext)
 	, m_pRenderer(rhs.m_pRenderer)
-	, m_Components(rhs.m_Components)
 	, m_pTransform(nullptr)
 	, m_bActive(rhs.m_bActive)
 	, m_bCheckCollider(false)
+	, m_Components(rhs.m_Components)
 	, m_iObectTag(rhs.m_iObectTag)
 	, m_iSceneID(rhs.m_iSceneID)
 	, m_bRemove(false)
@@ -49,7 +49,13 @@ CGameObject::CGameObject(const CGameObject& rhs)
 
 	for (auto& pCom : m_Components)
 		Safe_AddRef(pCom.second);
-
+	for (auto& pCom : rhs.m_Components)
+	{
+		if(pCom.first == L"Com_Transform")
+			continue;;
+		m_Components.emplace(pCom);
+		Safe_AddRef(pCom.second);
+	}
 	Safe_AddRef(m_pRenderer);
 }
 
@@ -83,14 +89,17 @@ HRESULT CGameObject::NativeConstruct_Prototype()
 HRESULT CGameObject::NativeConstruct(const _uint iSceneID, void* pArg)
 {
 	m_iSceneID = iSceneID;
+	
+	_bool bCheck = false;
+
 	CGameInstance* pInstance = GET_INSTANCE(CGameInstance);
 
 	m_pTransform = pInstance->Clone_Component<CTransform>(0, L"Proto_Component_Transform");
 
-	RELEASE_INSTANCE(CGameInstance);
-
 	if (!m_pTransform)
 		return E_FAIL;
+
+	RELEASE_INSTANCE(CGameInstance);
 
 	if (FAILED(SetUp_Components(L"Com_Transform", m_pTransform)))
 		return E_FAIL;

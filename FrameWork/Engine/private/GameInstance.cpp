@@ -552,7 +552,6 @@ HRESULT CGameInstance::Add_Effect(_uint iSceneID, const wstring& pLayerTag, CEff
 {
 	if (!m_pEffectManager)
 		return E_FAIL;
-
 	return m_pEffectManager->Add_Effect(iSceneID, pLayerTag, pEffect, iCount);
 }
 

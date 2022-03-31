@@ -239,19 +239,22 @@ void CMonster_Crawler::OnTriggerEnter(CCollision& collision)
 					m_pStateController->Change_State(L"Flinch_Left");
 				}
 
-				CEffect_HitParticle* pEffect = (CEffect_HitParticle*)g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Hit")->front();
-				_vector Mypos = m_pTransform->Get_State(CTransform::STATE_POSITION);
-				Mypos = XMVectorSetY(Mypos, XMVectorGetY(Mypos) + 1.f);
-				pEffect->Get_Transform()->Set_State(CTransform::STATE_POSITION, Mypos);
-				pEffect->setActive(true);
-				pEffect->Set_Reset(true);
+				Active_Effect((_uint)EFFECT::HIT);
+				Active_Effect((_uint)EFFECT::FLOATING);
+				
+					//CEffect_HitParticle* pEffect = (CEffect_HitParticle*)g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Hit")->front();
+					// _vector Mypos = m_pTransform->Get_State(CTransform::STATE_POSITION);
+					//Mypos = XMVectorSetY(Mypos, XMVectorGetY(Mypos) + 1.f);
+					//pEffect->Get_Transform()->Set_State(CTransform::STATE_POSITION, Mypos);
+					//pEffect->setActive(true);
+					//pEffect->Set_Reset(true);
 
-				CEffect_HitFloating* pEffect1 = (CEffect_HitFloating*)g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Floating")->front();
-				_vector Mypos1 = m_pTransform->Get_State(CTransform::STATE_POSITION);
-				Mypos1 = XMVectorSetY(Mypos1, XMVectorGetY(Mypos1) + 1.f);
-				pEffect1->Get_Transform()->Set_State(CTransform::STATE_POSITION, Mypos1);
-				pEffect1->setActive(true);
-				pEffect1->Set_Reset(true);
+					//CEffect_HitFloating* pEffect1 = (CEffect_HitFloating*)g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Floating")->front();
+					//_vector Mypos1 = m_pTransform->Get_State(CTransform::STATE_POSITION);
+					//Mypos1 = XMVectorSetY(Mypos1, XMVectorGetY(Mypos1) + 1.f);
+					//pEffect1->Get_Transform()->Set_State(CTransform::STATE_POSITION, Mypos1);
+					//pEffect1->setActive(true);
+					//pEffect1->Set_Reset(true);
 			}
 
 			else
@@ -445,6 +448,7 @@ HRESULT CMonster_Crawler::Set_State_FSM()
 	return S_OK;
 }
 
+
 void CMonster_Crawler::Set_Remove(_bool bCheck)
 {
 	m_bRemove = bCheck;
@@ -486,6 +490,4 @@ void CMonster_Crawler::Free()
 	Safe_Release(m_pStateController);
 	Safe_Release(m_pAnimatorCom);
 	Safe_Release(m_pModelCom);
-
-
 }

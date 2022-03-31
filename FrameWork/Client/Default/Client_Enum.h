@@ -39,7 +39,11 @@ enum class GAMEOBJECT
 	GAMEOBJECT_END,
 };
 END
-
+enum class EFFECT
+{
+	HIT,
+	FLOATING
+};
 
 enum class ELayer
 {

@@ -64,6 +64,11 @@ HRESULT CEffect::Render()
 	return S_OK;
 }
 
+CEffect* CEffect::Copy()
+{
+	return nullptr;
+}
+
 _fvector CEffect::UsingGravity(_fvector vPos, _double dDeltaTime)
 {
 	_float fY = 0.f;

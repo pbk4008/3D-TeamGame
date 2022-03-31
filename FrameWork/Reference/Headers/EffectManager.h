@@ -2,9 +2,11 @@
 #ifndef __EFFECTMANAGER_H__
 #define __EFFECTMANAGER_H__
 
+#include "Effect.h"
+#include "Object_Manager.h"
 #include "SingleTon.h"
+
 BEGIN(Engine)
-class CEffect;
 class ENGINE_DLL CEffectManager final : public CSingleTon<CEffectManager>
 {
 	friend CSingleTon;
@@ -15,7 +17,7 @@ private:
 public:
 	HRESULT Ready_EffectManager(ID3D11Device * pDevcie, ID3D11DeviceContext * pDeviceContext);
 	//이펙트 추가
-	HRESULT Add_Effect(_uint iSceneID, const wstring& pLayerTag, CEffect* pEffect, _uint iCount);
+	HRESULT Add_Effect(_uint iSceneID, const wstring & pLayerTag, CEffect * pEffect, _uint iCount);
 	//이펙트 가져오기
 	CEffect* Get_Effect(_uint iEffectIndex);
 private:

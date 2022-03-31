@@ -4,6 +4,7 @@
 #include "GameObject.h"
 
 BEGIN(Engine)
+class CTexture;
 class ENGINE_DLL CEffect abstract : public CGameObject
 {
 	public:
@@ -50,6 +51,8 @@ protected:
 	virtual _int Tick(_double TimeDelta);
 	virtual _int LateTick(_double TimeDelta);
 	virtual HRESULT Render();
+public:
+	virtual CEffect* Copy();
 protected:
 	_fvector UsingGravity(_fvector vPos, _double dDeltaTime);
 	
