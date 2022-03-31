@@ -42,8 +42,6 @@ private:
 
 public:
 	void Set_IsAttack(const _bool _isAttack);
-
-
 private:
 	virtual HRESULT SetUp_Components();
 	HRESULT	Ready_Weapone();

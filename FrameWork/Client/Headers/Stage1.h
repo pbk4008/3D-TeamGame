@@ -44,7 +44,6 @@ public:
 	void Trgger_Function10();//10번 트리거가 작동할 함수
 	void Trgger_Function11();//11번 트리거가 작동할 함수
 	void Trgger_FunctionBoss();//보스 트리거가 작동할 함수
-
 	/// ////////////////////////////////////
 	HRESULT Ready_Trigger_Lod(const _tchar* pDataFilePath);
 	HRESULT Ready_Trigger_Light(const _tchar* pDataFilePath);
@@ -54,7 +53,6 @@ public:
 	HRESULT Ready_Trigger_Jump();
 private:
 	HRESULT	Ready_Treasure_Chest();
-	
 public:
 	static CStage1* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);
 private:

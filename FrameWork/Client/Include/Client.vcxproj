@@ -319,6 +319,7 @@
     <ClInclude Include="..\Headers\DebugSystem.h" />
     <ClInclude Include="..\Headers\EarthAberrant_Pick.h" />
     <ClInclude Include="..\Headers\Effect_DashDust.h" />
+    <ClInclude Include="..\Headers\Effect_DeathParticle.h" />
     <ClInclude Include="..\Headers\Effect_Env_Fire.h" />
     <ClInclude Include="..\Headers\Effect_HitFloating.h" />
     <ClInclude Include="..\Headers\Effect_HitParticle.h" />
@@ -587,6 +588,7 @@
     <ClCompile Include="..\Codes\Crawler_Ricochet.cpp" />
     <ClCompile Include="..\Codes\Crawler_Walk.cpp" />
     <ClCompile Include="..\Codes\EarthAberrant_Pick.cpp" />
+    <ClCompile Include="..\Codes\Effect_DeathParticle.cpp" />
     <ClCompile Include="..\Codes\Effect_Env_Fire.cpp" />
     <ClCompile Include="..\Codes\Effect_HitFloating.cpp" />
     <ClCompile Include="..\Codes\Effect_HitParticle.cpp" />

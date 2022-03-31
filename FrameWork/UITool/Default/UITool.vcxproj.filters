@@ -64,6 +64,9 @@
     <Filter Include="04.Object\02.Effect\Floating">
       <UniqueIdentifier>{5c6426a2-70c4-4be3-97dc-4e84839d8046}</UniqueIdentifier>
     </Filter>
+    <Filter Include="04.Object\02.Effect\Env_Floating">
+      <UniqueIdentifier>{3fefaa1d-e465-4205-a006-61b06452ac29}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MainFrm.h">
@@ -129,6 +132,9 @@
     <ClInclude Include="MFCEffect_floating.h">
       <Filter>04.Object\02.Effect\Floating</Filter>
     </ClInclude>
+    <ClInclude Include="MFCEffect_Env_floating.h">
+      <Filter>04.Object\02.Effect\Env_Floating</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MainFrm.cpp">
@@ -181,6 +187,9 @@
     </ClCompile>
     <ClCompile Include="MFCEffect_floating.cpp">
       <Filter>04.Object\02.Effect\Floating</Filter>
+    </ClCompile>
+    <ClCompile Include="MFCEffect_Env_floating.cpp">
+      <Filter>04.Object\02.Effect\Env_Floating</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

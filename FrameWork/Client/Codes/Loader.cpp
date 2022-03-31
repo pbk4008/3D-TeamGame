@@ -34,6 +34,7 @@
 #include "Effect_DashDust.h"
 #include "Effect_HitParticle.h"
 #include "Effect_HitFloating.h"
+#include "Effect_DeathParticle.h"
 #include "Effect_Env_Fire.h"
 #include "UI_Ingame.h"
 #include "UI_Player_HpBar.h"
@@ -155,8 +156,8 @@ HRESULT CLoader::SetUp_Stage1_Object()
 	if (FAILED(Load_Stage1MonsterLoad()))
 		return E_FAIL;
 
-	if (FAILED(Load_Stage1BossLoad()))
-		return E_FAIL;
+	/*if (FAILED(Load_Stage1BossLoad()))
+		return E_FAIL;*/
 
 	if (FAILED(Load_Stage1StaticUILoad()))
 		return E_FAIL;
@@ -167,8 +168,8 @@ HRESULT CLoader::SetUp_Stage1_Object()
 	if (FAILED(Load_Stage1EffectLoad()))
 		return E_FAIL;
 
-	if (FAILED(Load_Stage1JumpTrigger()))
-		return E_FAIL;
+	//if (FAILED(Load_Stage1JumpTrigger()))
+	//	return E_FAIL;
 
 	if (FAILED(Load_Stage1TriggerLod()))
 		return E_FAIL;
@@ -492,6 +493,12 @@ HRESULT CLoader::Load_Stage1EffectLoad()
 		return E_FAIL;
 	}
 
+	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_Effect_Death"), CEffect_DeathParticle::Create(m_pDevice, m_pDeviceContext))))
+	{
+		return E_FAIL;
+	}
+
+	//Effect Image
 	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_Effect_Env_Fire"), CEffect_Env_Fire::Create(m_pDevice, m_pDeviceContext))))
 	{
 		return E_FAIL;
