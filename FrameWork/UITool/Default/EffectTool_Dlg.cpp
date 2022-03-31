@@ -71,7 +71,7 @@ void CEffectTool_Dlg::DoDataExchange(CDataExchange* pDX)
 	DDV_MinMaxFloat(pDX, m_PositionX, -99999, 99999);
 	DDV_MinMaxFloat(pDX, m_PositionY, -99999, 99999);
 	DDV_MinMaxFloat(pDX, m_PositionZ, -99999, 99999);
-	DDV_MinMaxFloat(pDX, m_Velocity, 0.1, 99999);
+	DDV_MinMaxFloat(pDX, m_Velocity, 0, 99999);
 	DDV_MinMaxFloat(pDX, m_ParticleSizeX, 0.1, 99999);
 	DDV_MinMaxFloat(pDX, m_ParticleSizeY, 0.1, 99999);
 	DDV_MinMaxFloat(pDX, m_fRandomPosX, 1, 99999);
@@ -253,7 +253,8 @@ void CEffectTool_Dlg::OnBnClickedButtonApply()
 	
 	wstring Name = m_strPickFileName;
 	//wstring FullName = L"Prototype_GameObject_Effect"/* + Name*/;
-	wstring FullName = L"Prototype_GameObject_Effect_Floating"/* + Name*/;
+	//wstring FullName = L"Prototype_GameObject_Effect_Floating"/* + Name*/;
+	wstring FullName = L"Prototype_GameObject_Effect_Env_Floating"/* + Name*/;
 
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer(TOOL_LEVEL::TOOL_LEVEL_GAMEPLAY, L"Layer_Effect", FullName, &m_EffectDesc)))
 	{
@@ -514,7 +515,8 @@ void CEffectTool_Dlg::OnBnClickedButtonLoad()
 	{
 		wstring Tag = m_vecEffect[i].TextureTag; 
 		//wstring FullName = L"Prototype_GameObject_Effect"/* + Tag*/;
-		wstring FullName = L"Prototype_GameObject_Effect_Floating"/* + Tag*/;
+		//wstring FullName = L"Prototype_GameObject_Effect_Floating"/* + Tag*/;
+		wstring FullName = L"Prototype_GameObject_Effect_Env_Floating"/* + Name*/;
 
 		if (FAILED(g_pGameInstance->Add_GameObjectToLayer(TOOL_LEVEL::TOOL_LEVEL_GAMEPLAY, L"Layer_Effect", FullName, &m_vecEffect[i])))
 		{

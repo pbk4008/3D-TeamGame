@@ -1,27 +1,27 @@
 #include "pch.h"
-#include "MFCEffect_Floating.h"
+#include "MFCEffect_Env_Floating.h"
 #include "GameInstance.h"
-#include "VIBuffer_PointInstance_Floating.h"
+#include "VIBuffer_PointInstance_Env_Floating.h"
 #include "MainFrm.h"
 #include "MyFormView.h"
 #include "EffectTool_Dlg.h"
 
 
-CMFCEffect_Floating::CMFCEffect_Floating()
+CMFCEffect_Env_Floating::CMFCEffect_Env_Floating()
 {
 }
 
-CMFCEffect_Floating::CMFCEffect_Floating(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
+CMFCEffect_Env_Floating::CMFCEffect_Env_Floating(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
     :CEffect(pDevice,pDeviceContext)
 {
 }
 
-CMFCEffect_Floating::CMFCEffect_Floating(const CEffect& rhs)
+CMFCEffect_Env_Floating::CMFCEffect_Env_Floating(const CEffect& rhs)
     :CEffect(rhs)
 {
 }
 
-HRESULT CMFCEffect_Floating::NativeConstruct_Prototype()
+HRESULT CMFCEffect_Env_Floating::NativeConstruct_Prototype()
 {
 	if (FAILED(__super::NativeConstruct_Prototype()))
 	{
@@ -31,7 +31,7 @@ HRESULT CMFCEffect_Floating::NativeConstruct_Prototype()
     return S_OK;
 }
 
-HRESULT CMFCEffect_Floating::NativeConstruct(const _uint iSceneID, void* pArg)
+HRESULT CMFCEffect_Env_Floating::NativeConstruct(const _uint iSceneID, void* pArg)
 {
 	if (FAILED(__super::NativeConstruct(iSceneID, pArg)))
 	{
@@ -50,7 +50,7 @@ HRESULT CMFCEffect_Floating::NativeConstruct(const _uint iSceneID, void* pArg)
 		return E_FAIL;
 	}
 
-	CVIBuffer_PointInstance_Floating::PIDESC Desc;
+	CVIBuffer_PointInstance_Env_Floating::PIDESC Desc;
 	_tcscpy_s(Desc.ShaderFilePath, m_Desc.ShaderFilePath);
 	Desc.matParticle = m_Desc.ParticleMat;
 	Desc.fParticleStartRandomPos = m_Desc.fParticleRandomPos;
@@ -71,7 +71,7 @@ HRESULT CMFCEffect_Floating::NativeConstruct(const _uint iSceneID, void* pArg)
 	return S_OK;
 }
 
-_int CMFCEffect_Floating::Tick(_double TimeDelta)
+_int CMFCEffect_Env_Floating::Tick(_double TimeDelta)
 {
 	//m_pBuffer->Update(TimeDelta, m_Desc.iAxis);
 
@@ -99,7 +99,7 @@ _int CMFCEffect_Floating::Tick(_double TimeDelta)
 
 	if (m_bReset)
 	{
-		CVIBuffer_PointInstance_Floating::PIDESC Desc;
+		CVIBuffer_PointInstance_Env_Floating::PIDESC Desc;
 		_tcscpy_s(Desc.ShaderFilePath, m_Desc.ShaderFilePath);
 		Desc.matParticle = m_Desc.ParticleMat;
 		Desc.fParticleStartRandomPos = m_Desc.fParticleRandomPos;
@@ -138,7 +138,7 @@ _int CMFCEffect_Floating::Tick(_double TimeDelta)
     return 0;
 }
 
-_int CMFCEffect_Floating::LateTick(_double TimeDelta)
+_int CMFCEffect_Env_Floating::LateTick(_double TimeDelta)
 {
 	if (nullptr != m_pRenderer)
 	{
@@ -148,7 +148,7 @@ _int CMFCEffect_Floating::LateTick(_double TimeDelta)
 	return 0;
 }
 
-HRESULT CMFCEffect_Floating::Render()
+HRESULT CMFCEffect_Env_Floating::Render()
 {
 	//_matrix XMWorldMatrix = XMMatrixTranspose(XMLoadFloat4x4(&m_WorldMatrix));
 	_matrix XMWorldMatrix = XMMatrixTranspose(m_pTransform->Get_WorldMatrix());
@@ -178,7 +178,7 @@ HRESULT CMFCEffect_Floating::Render()
 	return S_OK;
 }
 
-HRESULT CMFCEffect_Floating::SetUp_Components()
+HRESULT CMFCEffect_Env_Floating::SetUp_Components()
 {
 	if (!m_pTexture || !m_pRenderer || !m_pTransform)
 		return E_FAIL;
@@ -192,7 +192,7 @@ HRESULT CMFCEffect_Floating::SetUp_Components()
 	m_pTransform->Set_State(CTransform::STATE_POSITION, vPos);
 
 	//버퍼 Clone
-	CVIBuffer_PointInstance_Floating::PIDESC Desc;
+	CVIBuffer_PointInstance_Env_Floating::PIDESC Desc;
 	_tcscpy_s(Desc.ShaderFilePath, m_Desc.ShaderFullFilePath);
 	Desc.matParticle = m_Desc.ParticleMat;
 	Desc.fParticleStartRandomPos = m_Desc.fParticleRandomPos;
@@ -211,34 +211,34 @@ HRESULT CMFCEffect_Floating::SetUp_Components()
 	return S_OK;
 }
 
-CMFCEffect_Floating* CMFCEffect_Floating::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
+CMFCEffect_Env_Floating* CMFCEffect_Env_Floating::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
 {
 	/* 원형객체 생성할때 초기화 */
-	CMFCEffect_Floating* pInstance = new CMFCEffect_Floating(pDevice, pDeviceContext);
+	CMFCEffect_Env_Floating* pInstance = new CMFCEffect_Env_Floating(pDevice, pDeviceContext);
 
 	if (FAILED(pInstance->NativeConstruct_Prototype()))
 	{
-		MSGBOX("Failed to Creating CMFCEffect_Floating");
+		MSGBOX("Failed to Creating CMFCEffect_Env_Floating");
 		Safe_Release(pInstance);
 	}
 
 	return pInstance;
 }
 
-CGameObject* CMFCEffect_Floating::Clone(const _uint iSceneID, void* pArg)
+CGameObject* CMFCEffect_Env_Floating::Clone(const _uint iSceneID, void* pArg)
 {
 	/* 복제본 생성할때는 아래함수 호출해서 추가 초기화를 진행 */
-	CMFCEffect_Floating* pInstance = new CMFCEffect_Floating(*this);
+	CMFCEffect_Env_Floating* pInstance = new CMFCEffect_Env_Floating(*this);
 	if (FAILED(pInstance->NativeConstruct(iSceneID ,pArg)))
 	{
-		MSGBOX("Failed to Creating Clone CMFCEffect_Floating");
+		MSGBOX("Failed to Creating Clone CMFCEffect_Env_Floating");
 		Safe_Release(pInstance);
 	}
 
 	return pInstance;
 }
 
-void CMFCEffect_Floating::Free()
+void CMFCEffect_Env_Floating::Free()
 {
 	__super::Free();
 }

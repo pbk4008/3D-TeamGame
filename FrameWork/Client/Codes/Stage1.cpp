@@ -9,6 +9,7 @@
 #include "Effect_DashDust.h"
 #include "Effect_HitParticle.h"
 #include "Effect_HitFloating.h"
+#include "Effect_DeathParticle.h"
 #include "Effect_Env_Fire.h"
 #include "UI_Ingame.h"
 #include "UI_Player_HpBar.h"
@@ -50,8 +51,8 @@ HRESULT CStage1::NativeConstruct()
 	if (FAILED(Ready_Light()))
 		return E_FAIL;
 
-	if (FAILED(Ready_Trigger_Jump()))
-		return E_FAIL;
+	//if (FAILED(Ready_Trigger_Jump()))
+	//	return E_FAIL;
 
 	if (FAILED(Ready_Player(L"Layer_Silvermane")))
 		return E_FAIL;
@@ -129,15 +130,15 @@ _int CStage1::Tick(_double TimeDelta)
 	if (m_iCountMonster == 0 && m_bFirst)
 		m_pTriggerSystem->Check_Clear();
 
-	CBoss_Bastion_Judicator* pBoss = (CBoss_Bastion_Judicator*)g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Layer_Boss")->front();
-	if (nullptr != pBoss)
-	{
-		if (true == pBoss->Get_Dead())
-		{
-			if (FAILED(g_pGameInstance->Open_Level((_uint)SCENEID::SCENE_LOADING, CLoading::Create(m_pDevice, m_pDeviceContext, SCENEID::SCENE_STAGE2))))
-				return -1;
-		}
-	}
+	//CBoss_Bastion_Judicator* pBoss = (CBoss_Bastion_Judicator*)g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Layer_Boss")->front();
+	//if (nullptr != pBoss)
+	//{
+	//	if (true == pBoss->Get_Dead())
+	//	{
+	//		if (FAILED(g_pGameInstance->Open_Level((_uint)SCENEID::SCENE_LOADING, CLoading::Create(m_pDevice, m_pDeviceContext, SCENEID::SCENE_STAGE2))))
+	//			return -1;
+	//	}
+	//}
 
 	return _int();
 }
@@ -416,6 +417,21 @@ HRESULT CStage1::Ready_Data_Effect()
 	}
 
 	////捞棋飘积己
+	vector<CEffect_HitFloating::EFFECTDESC> vecEffect0;
+	g_pGameInstance->LoadFile<CEffect_HitFloating::EFFECTDESC>(vecEffect0, L"../bin/SaveData/Effect/Effect_Player_Attack2_Floating.dat");
+
+	for (int i = 0; i < vecEffect0.size(); ++i)
+	{
+		wstring FullName = L"Proto_GameObject_Effect_Floating";
+		//_tcscpy_s(vecEffect1[i].ShaderFullFilePath, L"../../Reference/ShaderFile/Shader_PointInstance.hlsl");
+		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Floating", FullName, &vecEffect0[i])))
+		{
+			MSGBOX("Failed to Creating in CStage1::Ready_Effect() Floating");
+			return E_FAIL;
+		}
+	}
+
+	////捞棋飘积己
 	vector<CEffect_HitFloating::EFFECTDESC> vecEffect1;
 	g_pGameInstance->LoadFile<CEffect_HitFloating::EFFECTDESC>(vecEffect1, L"../bin/SaveData/Effect/Effect_Player_Attack2_Floating_2.dat");
 
@@ -423,9 +439,24 @@ HRESULT CStage1::Ready_Data_Effect()
 	{
 		wstring FullName = L"Proto_GameObject_Effect_Floating";
 		//_tcscpy_s(vecEffect1[i].ShaderFullFilePath, L"../../Reference/ShaderFile/Shader_PointInstance.hlsl");
-		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Floating", FullName, &vecEffect1[i])))
+		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Floating_2", FullName, &vecEffect1[i])))
 		{
-			MSGBOX("Failed to Creating in CStage1::Ready_Effect()");
+			MSGBOX("Failed to Creating in CStage1::Ready_Effect() Floating_2");
+			return E_FAIL;
+		}
+	}
+
+
+	////捞棋飘积己
+	vector<CEffect_DeathParticle::EFFECTDESC> vecEffect2;
+	g_pGameInstance->LoadFile<CEffect_DeathParticle::EFFECTDESC>(vecEffect2, L"../bin/SaveData/Effect/Effect_Death.dat");
+
+	for (int i = 0; i < vecEffect2.size(); ++i)
+	{
+		wstring FullName = L"Proto_GameObject_Effect_Death";
+		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Death", FullName, &vecEffect2[i])))
+		{
+			MSGBOX("Failed to Creating in CStage1::Ready_Effect() Death");
 			return E_FAIL;
 		}
 	}

@@ -5,6 +5,7 @@
 
 #include "Effect_HitParticle.h"
 #include "Effect_HitFloating.h"
+#include "Effect_DeathParticle.h"
 
 #include "Animation.h"
 #include "Crawler_Idle.h"
@@ -98,7 +99,7 @@ HRESULT CMonster_Crawler::NativeConstruct(const _uint _iSceneID, void* _pArg)
 
 	m_iObectTag = (_uint)GAMEOBJECT::MONSTER_CRYSTAL;
 
-	m_fMaxHp = 2.f;
+	m_fMaxHp = 3.f;
 	m_fCurrentHp = m_fMaxHp;
 
 	m_fMaxGroggyGauge = 3.f;
@@ -160,6 +161,16 @@ _int CMonster_Crawler::Tick(_double _dDeltaTime)
 		{
 			Set_Remove(true);
 			m_pPanel->Set_Remove(true);
+		}
+
+		if (7 == m_pAnimatorCom->Get_AnimController()->Get_CurKeyFrameIndex())
+		{
+			CEffect_DeathParticle* pEffect1 = (CEffect_DeathParticle*)g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Death")->front();
+			_vector Mypos1 = m_pTransform->Get_State(CTransform::STATE_POSITION);
+			Mypos1 = XMVectorSetY(Mypos1, XMVectorGetY(Mypos1) + 1.f);
+			pEffect1->Get_Transform()->Set_State(CTransform::STATE_POSITION, Mypos1);
+			pEffect1->setActive(true);
+			pEffect1->Set_Reset(true);
 		}
 	}
 	
@@ -246,7 +257,14 @@ void CMonster_Crawler::OnTriggerEnter(CCollision& collision)
 				pEffect->setActive(true);
 				pEffect->Set_Reset(true);
 
-				CEffect_HitFloating* pEffect1 = (CEffect_HitFloating*)g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Floating")->front();
+				CEffect_HitFloating* pEffect0 = (CEffect_HitFloating*)g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Floating")->front();
+				_vector Mypos0 = m_pTransform->Get_State(CTransform::STATE_POSITION);
+				Mypos0 = XMVectorSetY(Mypos0, XMVectorGetY(Mypos0) + 1.f);
+				pEffect0->Get_Transform()->Set_State(CTransform::STATE_POSITION, Mypos0);
+				pEffect0->setActive(true);
+				pEffect0->Set_Reset(true);
+
+				CEffect_HitFloating* pEffect1 = (CEffect_HitFloating*)g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Floating_2")->front();
 				_vector Mypos1 = m_pTransform->Get_State(CTransform::STATE_POSITION);
 				Mypos1 = XMVectorSetY(Mypos1, XMVectorGetY(Mypos1) + 1.f);
 				pEffect1->Get_Transform()->Set_State(CTransform::STATE_POSITION, Mypos1);
@@ -369,7 +387,7 @@ HRESULT CMonster_Crawler::Set_Animation_FSM()
 		return E_FAIL;
 
 	pAnim = m_pModelCom->Get_Animation("SK_Crystal_Crawler_v1.ao|A_Death_CrystalCrawler");
-	if (FAILED(m_pAnimatorCom->Insert_Animation(DEATH, HEAD, pAnim, false, false, false, ERootOption::XYZ, true)))
+	if (FAILED(m_pAnimatorCom->Insert_Animation(DEATH, HEAD, pAnim, false, true, false, ERootOption::XYZ, true)))
 		return E_FAIL;
 
 	pAnim = m_pModelCom->Get_Animation("SK_Crystal_Crawler_v1.ao|A_Ricochet_CrystalCrawler");

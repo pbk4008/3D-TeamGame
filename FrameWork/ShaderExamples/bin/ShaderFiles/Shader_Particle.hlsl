@@ -22,6 +22,10 @@ uint g_iFrame; //전체장수
 float g_fLifeTime;
 float g_fCurTime;
 
+cbuffer Color
+{
+    float3 g_color;
+};
 
 sampler DefaultSampler = sampler_state
 {
@@ -156,9 +160,7 @@ PS_OUT PS_MAIN(PS_IN In)
 	PS_OUT		Out = (PS_OUT)0;
 
 	Out.vColor = g_DiffuseTexture.Sample(DefaultSampler, In.vTexUV);
-    Out.vColor.r = 1.f;
-    Out.vColor.g = 0.6f;
-    Out.vColor.b = 0.3f;
+    Out.vColor.rgb = g_color;
 
     //if (Out.vColor.a < 0.01)
     //    discard;

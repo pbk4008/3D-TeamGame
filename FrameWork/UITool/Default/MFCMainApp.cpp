@@ -10,6 +10,7 @@
 #include "MFCCamera_Proj.h"
 #include "MFCEffect.h"
 #include "MFCEffect_floating.h"
+#include "MFCEffect_Env_floating.h"
 #include "MFCTerrain.h"
 
 
@@ -332,6 +333,11 @@ HRESULT CMFCMainApp::Ready_GameObject_Prototype()
 	}
 
 	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Effect_Floating"), CMFCEffect_Floating::Create(m_pDevice, m_pDeviceContext))))
+	{
+		return E_FAIL;
+	}
+
+	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Effect_Env_Floating"), CMFCEffect_Env_Floating::Create(m_pDevice, m_pDeviceContext))))
 	{
 		return E_FAIL;
 	}

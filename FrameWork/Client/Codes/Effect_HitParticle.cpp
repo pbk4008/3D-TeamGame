@@ -148,6 +148,9 @@ HRESULT CEffect_HitParticle::Render()
 	m_pBuffer->SetUp_ValueOnShader("g_fLifeTime", &m_Desc.fMaxLifeTime, sizeof(_float));
 	m_pBuffer->SetUp_ValueOnShader("g_fCurTime", &m_Desc.fCurTime, sizeof(_float));
 
+	_float3 color = { 1.f, 0.6f, 0.3f };
+	m_pBuffer->SetUp_ValueOnShader("g_color", &color, sizeof(_float3));
+
 	m_pBuffer->SetUp_ValueOnShader("g_vCamPosition", (void*)&CamPos, sizeof(_vector));
 
 	m_pBuffer->Render(m_Desc.iRenderPassNum);

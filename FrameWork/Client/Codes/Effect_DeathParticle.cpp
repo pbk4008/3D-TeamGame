@@ -1,24 +1,24 @@
 #include "pch.h"
-#include "Effect_HitFloating.h"
+#include "Effect_DeathParticle.h"
 #include "GameInstance.h"
 #include "VIBuffer_PointInstance_Explosion.h"
 
 
-CEffect_HitFloating::CEffect_HitFloating()
+CEffect_DeathParticle::CEffect_DeathParticle()
 {
 }
 
-CEffect_HitFloating::CEffect_HitFloating(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
+CEffect_DeathParticle::CEffect_DeathParticle(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
     :CEffect(pDevice,pDeviceContext)
 {
 }
 
-CEffect_HitFloating::CEffect_HitFloating(const CEffect& rhs)
+CEffect_DeathParticle::CEffect_DeathParticle(const CEffect& rhs)
     :CEffect(rhs)
 {
 }
 
-HRESULT CEffect_HitFloating::NativeConstruct_Prototype()
+HRESULT CEffect_DeathParticle::NativeConstruct_Prototype()
 {
 	if (FAILED(__super::NativeConstruct_Prototype()))
 	{
@@ -28,7 +28,7 @@ HRESULT CEffect_HitFloating::NativeConstruct_Prototype()
     return S_OK;
 }
 
-HRESULT CEffect_HitFloating::NativeConstruct(const _uint _iSceneID, void* pArg)
+HRESULT CEffect_DeathParticle::NativeConstruct(const _uint _iSceneID, void* pArg)
 {
 	if (FAILED(__super::NativeConstruct(_iSceneID, pArg)))
 	{
@@ -46,7 +46,7 @@ HRESULT CEffect_HitFloating::NativeConstruct(const _uint _iSceneID, void* pArg)
 		return E_FAIL;
 	}
 
-	CVIBuffer_PointInstance_Floating::PIDESC Desc;
+	CVIBuffer_PointInstance_Explosion::PIDESC Desc;
 	_tcscpy_s(Desc.ShaderFilePath, m_Desc.ShaderFullFilePath);
 	Desc.matParticle = m_Desc.ParticleMat;
 	Desc.fParticleStartRandomPos = m_Desc.fParticleRandomPos;
@@ -63,52 +63,32 @@ HRESULT CEffect_HitFloating::NativeConstruct(const _uint _iSceneID, void* pArg)
 
 	m_backupDesc = Desc;
 
-	//setActive(true);
-
+	setActive(false);
 	return S_OK;
 }
 
-_int CEffect_HitFloating::Tick(_double TimeDelta)
+_int CEffect_DeathParticle::Tick(_double TimeDelta)
 {
-	if (g_pGameInstance->getkeyDown(DIK_NUMPAD1))
-	{
-		m_pBuffer->Set_Desc(m_backupDesc);
-		m_pBuffer->Particle_Reset();
-		m_Desc.fCurTime = 0.f;
-	}
-
 	m_pBuffer->Update(TimeDelta, m_Desc.iAxis);
 
 	m_fNonActiveTimeAcc += TimeDelta;
-	
+
 	if (4.f <= m_fNonActiveTimeAcc)
 	{
-		//setActive(false);
+		setActive(false);
+		m_pRenderer->SetRenderButton(CRenderer::PARTICLE, false);
 		m_fNonActiveTimeAcc = 0.f;
-	}
-
-	if (g_pGameInstance->getkeyDown(DIK_NUMPAD0))
-	{
-
-		m_pBuffer->Set_Desc(m_backupDesc);
-		m_pBuffer->Particle_Reset();
-		m_Desc.fCurTime = 0.f;
 	}
 
 	if (true == m_bReset)
 	{
-		//setActive(true);
+		setActive(true);
+		m_pRenderer->SetRenderButton(CRenderer::PARTICLE, true);
 		m_pBuffer->Set_Desc(m_backupDesc);
 		m_pBuffer->Particle_Reset();
 		m_Desc.fCurTime = 0.f;
 		m_bReset = false;
 	}
-
-
-	////z정렬
-	//_vector vDir = g_pGameInstance->Get_CamPosition(L"Camera_Silvermane") - m_pTransform->Get_State(CTransform::STATE_POSITION);
-	//vDir = XMVector3Normalize(vDir);
-	//m_pBuffer->Set_Dir(vDir);
 
 	_uint iAllFrameCount = (m_Desc.iImageCountX * m_Desc.iImageCountY);
 	m_Desc.fFrame += (_float)(iAllFrameCount * TimeDelta * m_Desc.fEffectPlaySpeed); //플레이속도 
@@ -119,7 +99,7 @@ _int CEffect_HitFloating::Tick(_double TimeDelta)
 
 	if (m_Desc.fMaxLifeTime > m_Desc.fCurTime)
 	{
-		m_Desc.fCurTime += TimeDelta;
+		m_Desc.fCurTime += (_float)TimeDelta;
 	}
 
 	if (m_Desc.fMaxLifeTime < m_Desc.fCurTime)
@@ -130,7 +110,7 @@ _int CEffect_HitFloating::Tick(_double TimeDelta)
     return 0;
 }
 
-_int CEffect_HitFloating::LateTick(_double TimeDelta)
+_int CEffect_DeathParticle::LateTick(_double TimeDelta)
 {
 	if (nullptr != m_pRenderer)
 	{
@@ -140,7 +120,7 @@ _int CEffect_HitFloating::LateTick(_double TimeDelta)
 	return 0;
 }
 
-HRESULT CEffect_HitFloating::Render()
+HRESULT CEffect_DeathParticle::Render()
 {
 	_matrix XMWorldMatrix = XMMatrixTranspose(m_pTransform->Get_WorldMatrix());
 	_matrix XMViewMatrix = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_VIEW));
@@ -162,8 +142,7 @@ HRESULT CEffect_HitFloating::Render()
 	m_pBuffer->SetUp_ValueOnShader("g_fLifeTime", &m_Desc.fMaxLifeTime, sizeof(_float));
 	m_pBuffer->SetUp_ValueOnShader("g_fCurTime", &m_Desc.fCurTime, sizeof(_float));
 
-	//_float3 color = { 0.6f, 1.f, 0.3f };
-	_float3 color = { 1.f, 0.6f, 0.3f };
+	_float3 color = { 1.f, 0.3f, 0.1f };
 	m_pBuffer->SetUp_ValueOnShader("g_color", &color, sizeof(_float3));
 
 	m_pBuffer->SetUp_ValueOnShader("g_vCamPosition", (void*)&CamPos, sizeof(_vector));
@@ -173,7 +152,7 @@ HRESULT CEffect_HitFloating::Render()
 	return S_OK;
 }
 
-HRESULT CEffect_HitFloating::SetUp_Components()
+HRESULT CEffect_DeathParticle::SetUp_Components()
 {
 	if (!m_pTexture || !m_pRenderer || !m_pTransform)
 		return E_FAIL;
@@ -183,7 +162,7 @@ HRESULT CEffect_HitFloating::SetUp_Components()
 	if (FAILED(m_pTexture->Change_Texture(NewTag)))
 		return E_FAIL;
 
-	_vector vPos = { /*XMVectorGetX(m_Desc.fMyPos), XMVectorGetY(m_Desc.fMyPos), XMVectorGetZ(m_Desc.fMyPos)*/0,1.5f,0, 1.f };
+	_vector vPos = { XMVectorGetX(m_Desc.fMyPos), XMVectorGetY(m_Desc.fMyPos), XMVectorGetZ(m_Desc.fMyPos), 1.f };
 	m_pTransform->Set_State(CTransform::STATE_POSITION, vPos);
 
 	//버퍼 Clone
@@ -197,39 +176,40 @@ HRESULT CEffect_HitFloating::SetUp_Components()
 	m_backupDesc.iNumInstance = m_Desc.iNumInstance;
 	m_backupDesc.fLifeTime = m_Desc.fMaxLifeTime;
 	m_backupDesc.fCurTime = m_Desc.fCurTime;
-	if (FAILED(__super::SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_VIBuffer_PointInstance_Floating", L"Com_VIBuffer", (CComponent**)&m_pBuffer, &m_backupDesc)))
+	if (FAILED(__super::SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_VIBuffer_PointInstance_Explosion", L"Com_VIBuffer", (CComponent**)&m_pBuffer, &m_backupDesc)))
 		return E_FAIL;
+
 	return S_OK;
 }
 
-CEffect_HitFloating* CEffect_HitFloating::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
+CEffect_DeathParticle* CEffect_DeathParticle::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
 {
 	/* 원형객체 생성할때 초기화 */
-	CEffect_HitFloating* pInstance = new CEffect_HitFloating(pDevice, pDeviceContext);
+	CEffect_DeathParticle* pInstance = new CEffect_DeathParticle(pDevice, pDeviceContext);
 
 	if (FAILED(pInstance->NativeConstruct_Prototype()))
 	{
-		MSGBOX("Failed to Creating CEffect_HitFloating");
+		MSGBOX("Failed to Creating CEffect_DeathParticle");
 		Safe_Release(pInstance);
 	}
 
 	return pInstance;
 }
 
-CGameObject* CEffect_HitFloating::Clone(const _uint _iSceneID, void* pArg)
+CGameObject* CEffect_DeathParticle::Clone(const _uint _iSceneID, void* pArg)
 {
 	/* 복제본 생성할때는 아래함수 호출해서 추가 초기화를 진행 */
-	CEffect_HitFloating* pInstance = new CEffect_HitFloating(*this);
+	CEffect_DeathParticle* pInstance = new CEffect_DeathParticle(*this);
 	if (FAILED(pInstance->NativeConstruct(_iSceneID, pArg)))
 	{
-		MSGBOX("Failed to Creating Clone CEffect_HitFloating");
+		MSGBOX("Failed to Creating Clone CEffect_DeathParticle");
 		Safe_Release(pInstance);
 	}
 
 	return pInstance;
 }
 
-void CEffect_HitFloating::Free()
+void CEffect_DeathParticle::Free()
 {
 	Safe_Release(m_pBuffer);
 
