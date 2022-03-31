@@ -35,7 +35,6 @@ public:
 			return E_FAIL;
 
 		m_pStage = pStage;
-		Safe_AddRef(m_pStage);
 
 		return S_OK;
 	}
@@ -175,7 +174,6 @@ private:
 	{
 		Safe_Release(m_pDevice);
 		Safe_Release(m_pDeviceContext);
-		Safe_Release(m_pStage);
 
 		m_vecTriggerFunction.clear();
 

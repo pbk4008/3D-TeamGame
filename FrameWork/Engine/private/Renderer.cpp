@@ -53,6 +53,7 @@ HRESULT CRenderer::NativeConstruct_Prototype()
 	if (FAILED(CreateShadowDepthStencilview(SHADOW_MAP, SHADOW_MAP, &m_pShadowMap)))
 		return E_FAIL;
 
+
 	m_pRenderAssit = CRendererAssit::Create(m_pDevice, m_pDeviceContext);
 	m_pLuminance = CLuminance::Create(m_pDevice, m_pDeviceContext);
 	m_pHDR = CHDR::Create(m_pDevice, m_pDeviceContext);

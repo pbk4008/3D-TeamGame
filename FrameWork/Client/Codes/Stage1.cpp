@@ -18,6 +18,13 @@
 #include "JumpNode.h"
 #include "JumpBox.h"
 
+//#include <Monster_Crawler.h>
+//#include <Monster_EarthAberrant.h>
+//#include <Monster_Bastion_Healer.h>
+//#include <Monster_Bastion_2HSword.h>
+//#include <Monster_Bastion_Sword.h>
+//#include <Monster_Bastion_Shooter.h>
+
 CStage1::CStage1()
 	: m_pTriggerSystem(nullptr)
 	, m_bDebug(false)
@@ -67,10 +74,10 @@ HRESULT CStage1::NativeConstruct()
 	//	return E_FAIL;
 	//}
 
-	/*if (FAILED(Ready_Monster(L"Layer_Monster")))
-	{
-		return E_FAIL;
-	}*/
+	//if (FAILED(Ready_Monster(L"Layer_Monster")))
+	//{
+	//	return E_FAIL;
+	//}
 
 	if (FAILED(Ready_Data_UI(L"../bin/SaveData/UI/UI.dat")))
 	{
@@ -140,6 +147,18 @@ _int CStage1::Tick(_double TimeDelta)
 		m_pTriggerSystem->Check_Clear();
 
 	
+	/*if (g_pGameInstance->getkeyDown(DIK_BACKSPACE))
+	{
+		CMonster_Bastion_Sword* pSword = nullptr;
+		_float3 fPos = {0.f,5.f,10.f};
+		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Test", L"Proto_GameObject_Monster_Bastion_Sword",&fPos,(CGameObject**)&pSword)))
+			return -1;
+
+		CMonster_Bastion_Shooter* pShooter = nullptr;
+		fPos = { 3.f,5.f,10.f };
+		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Test", L"Proto_GameObject_Monster_Bastion_Shooter", &fPos, (CGameObject**)&pShooter)))
+			return -1;
+	}*/
 
 	return _int();
 }
@@ -259,8 +278,8 @@ HRESULT CStage1::Ready_Boss(const _tchar* LayerTag)
 
 HRESULT CStage1::Ready_Monster(const _tchar* LayerTag)
 {
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Proto_GameObject_Monster_Crawler")))
-		return E_FAIL;
+	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Proto_GameObject_Monster_Crawler")))
+	//	return E_FAIL;
 	
 	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Proto_GameObject_Monster_EarthAberrant")))
 	//	return E_FAIL;

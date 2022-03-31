@@ -49,13 +49,7 @@ CGameObject::CGameObject(const CGameObject& rhs)
 
 	for (auto& pCom : m_Components)
 		Safe_AddRef(pCom.second);
-	for (auto& pCom : rhs.m_Components)
-	{
-		if(pCom.first == L"Com_Transform")
-			continue;;
-		m_Components.emplace(pCom);
-		Safe_AddRef(pCom.second);
-	}
+
 	Safe_AddRef(m_pRenderer);
 }
 

@@ -32,7 +32,7 @@ public:
 public:
 	void Set_Overlap(const _bool bCheck) { m_bOverlap = bCheck; }
 public:
-	CGizmo*		m_pGizmo = nullptr;
+	//CGizmo*		m_pGizmo = nullptr;
 	CBoxCollider* m_pBoxCollider = nullptr;//TriggerÃ¼Å©¿ë
 public:
 	TRIGGER		m_TriggerDesc;

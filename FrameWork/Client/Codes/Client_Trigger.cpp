@@ -6,7 +6,7 @@
 
 CClient_Trigger::CClient_Trigger(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
 	: CGameObject(_pDevice, _pDeviceContext)
-	, m_pGizmo(nullptr)
+	//, m_pGizmo(nullptr)
 	, m_bOnTrigger(false)
 	, m_pBoxCollider(nullptr)
 	, m_bPick(false)
@@ -19,12 +19,14 @@ CClient_Trigger::CClient_Trigger(ID3D11Device* _pDevice, ID3D11DeviceContext* _p
 
 CClient_Trigger::CClient_Trigger(const CClient_Trigger& _rhs)
 	: CGameObject(_rhs)
-	, m_pGizmo(_rhs.m_pGizmo)
+	//, m_pGizmo(_rhs.m_pGizmo)
 	, m_bOnTrigger(_rhs.m_bOnTrigger)
 	, m_pBoxCollider(_rhs.m_pBoxCollider)
 	, m_bPick(_rhs.m_bPick)
 	, m_bOverlap(_rhs.m_bOverlap)
 {
+	//Safe_AddRef(m_pGizmo);
+	Safe_AddRef(m_pBoxCollider);
 }
 
 HRESULT CClient_Trigger::NativeConstruct_Prototype()
@@ -73,7 +75,7 @@ HRESULT CClient_Trigger::Render()
 {
 	//Set_WVPMatrix();
 
-	switch ((TRIGGERTYPE)m_TriggerDesc.eTrigger_Type)
+	/*switch ((TRIGGERTYPE)m_TriggerDesc.eTrigger_Type)
 	{
 	case TRIGGERTYPE::TRIGGER_LOD:
 		m_pGizmo->DrawCapsule(m_pTransform->Get_WorldMatrix(), L"Camera_Silvermane", _fvector{0.129f, 0.65f, 0.929f, 1.0f});
@@ -90,7 +92,7 @@ HRESULT CClient_Trigger::Render()
 	case TRIGGERTYPE::TRIGGER_QUEST:
 		m_pGizmo->DrawCube(m_pTransform->Get_WorldMatrix(), L"Camera_Silvermane", _fvector{ 0.501f, 0.082f, 0.0f, 1.0f });
 		break;
-	}
+	}*/
 	return S_OK;
 }
 
@@ -106,9 +108,9 @@ void CClient_Trigger::OnTriggerEnter(CCollision& collision)
 HRESULT CClient_Trigger::SetUp_Components()
 {
 	/* Com_Gizmo*/
-	m_pGizmo = (CGizmo*)g_pGameInstance->Clone_Component((_uint)LEVEL_ID::LEVEL_STATIC, L"Proto_Component_Gizmo");
-	if (nullptr == m_pGizmo)
-		return E_FAIL;
+	//m_pGizmo = (CGizmo*)g_pGameInstance->Clone_Component((_uint)LEVEL_ID::LEVEL_STATIC, L"Proto_Component_Gizmo");
+	//if (nullptr == m_pGizmo)
+	//	return E_FAIL;
 
 	CBoxCollider::DESC tDesc;
 
@@ -178,5 +180,6 @@ CClient_Trigger* CClient_Trigger::Create(ID3D11Device* _pDevice, ID3D11DeviceCon
 void CClient_Trigger::Free(void)
 {
 	__super::Free();
-	Safe_Release(m_pGizmo);
+	//Safe_Release(m_pGizmo);
+	Safe_Release(m_pBoxCollider);
 }

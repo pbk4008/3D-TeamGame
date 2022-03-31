@@ -126,7 +126,6 @@ _int CMonster_Bastion_Sword::Tick(_double _dDeltaTime)
 		else
 			m_pCharacterController->Move(_dDeltaTime, m_pTransform->Get_Velocity());
 	}
-
 	if (true == m_bUIShow)
 	{
 		m_pPanel->Set_Show(true);
@@ -136,13 +135,8 @@ _int CMonster_Bastion_Sword::Tick(_double _dDeltaTime)
 	{
 		m_pPanel->Set_Show(false);
 	}
-
-	//상태 갱신
-	Change_State();
-
-	//콜리더 갱신
 	m_pPanel->Set_TargetWorldMatrix(m_pTransform->Get_WorldMatrix());
-
+	Change_State();
 	return 0;
 }
 
@@ -599,19 +593,27 @@ _int CMonster_Bastion_Sword::Change_State()
 		if (tmpState == L"Idle")
 			Chase();
 	}
-	if (tmpState == L"Death")
+	if(m_bDead)
 	{
-		if(m_pAnimator->Get_CurrentAnimNode() == (_uint)ANIM_TYPE::DEATH
-			&&m_pAnimator->Get_CurrentAnimation()->Is_Finished())
+		if (tmpState == L"Death")
 		{
-			setActive(true);
-			m_bRemove = true;
-			m_pPanel->Set_Show(false);
+			if (m_pAnimator->Get_CurrentAnimNode() == (_uint)ANIM_TYPE::DEATH
+				&& m_pAnimator->Get_CurrentAnimation()->Is_Finished())
+			{
+				m_bRemove = true;
+				m_pPanel->Set_Show(false);
+			}
+			else
+			{
+				m_fGroggyGauge = 0.f;
+				m_pPanel->Set_GroggyBar(Get_GroggyGaugeRatio());
+			}
 		}
 		else
 		{
-			m_fGroggyGauge = 0.f;
-			m_pPanel->Set_GroggyBar(Get_GroggyGaugeRatio());
+			m_bRemove = true;
+			m_pPanel->Set_Show(false);
+			return;
 		}
 	}
 	if (m_fGroggyGauge >= m_fMaxGroggyGauge)

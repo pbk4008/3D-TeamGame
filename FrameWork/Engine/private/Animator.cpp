@@ -181,6 +181,17 @@ void CAnimator::Set_PivotMat(const _fmatrix& matPivot)
 	m_pController->Set_PivotMatrix(matPivot);
 }
 
+void CAnimator::Add_AnimFrame(_uint iTag, _uint iFrame)
+{
+	CAnimNode* pAnimNode = Find_Animation(iTag);
+
+	if (!pAnimNode)
+		MSGBOX("AnimNode Null");
+
+	pAnimNode->Get_Animation()->Add_TrackAcc(iFrame);
+}
+
+
 const _uint CAnimator::Get_CurrentAnimNode()
 {
 	if (!m_pCulAnimNode)

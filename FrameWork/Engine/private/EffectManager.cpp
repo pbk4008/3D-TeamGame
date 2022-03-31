@@ -73,6 +73,7 @@ void CEffectManager::Free()
 {
 	Safe_Release(m_pDevice);
 	Safe_Release(m_pDeviceContext);
+
 	for (auto& pList : m_vecEffect)
 	{
 		for (auto& pEffect : pList)
