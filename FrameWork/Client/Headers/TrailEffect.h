@@ -32,7 +32,7 @@ private:
 	CTexture* m_pTexture = nullptr;
 
 	//list<_float3> m_listPoints;
-	list<pair<_float3, _float3>> m_listPoints;
+	list<pair<_float3, _float3>> m_listPoints; // first : pos, second : dir
 
 	_float m_fAccTime = 0.f;
 	_float m_fLength = 0.f;

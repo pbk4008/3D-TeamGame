@@ -769,6 +769,7 @@ HRESULT CLoader::Load_Stage1PlayerLoad()
 		return E_FAIL;
 	}
 
+	// 트레일
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Prototype_Component_VIBuffer_Trail"
 		, CTrail_VIBuffer::Create(m_pDevice, m_pDeviceContext, L"../../Reference/ShaderFile/Shader_Trail.hlsl", 400))))
 	{
@@ -777,6 +778,12 @@ HRESULT CLoader::Load_Stage1PlayerLoad()
 
 	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"TrailBase", L"../bin/Resources/Texture/Trail/T_Smoke_Trail_Soft.dds"))) 
 		return E_FAIL;
+	// 2
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_VIBuffer_Trail",
+		CVIBuffer_Trail::Create(m_pDevice, m_pDeviceContext, L"../../Reference/ShaderFile/Shader_Trail.hlsl", 100))))
+		MSGBOX(L"트레일 버퍼 프로토타입 생성 실패");
+	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_TrailEffect", CTrailEffect::Create(m_pDevice, m_pDeviceContext))))
+		MSGBOX(L"트레일이펙트 프로토타입 생성 실패");
 #pragma endregion
 
 #pragma region 오브젝트
@@ -1112,7 +1119,6 @@ HRESULT CLoader::Ready_Test_JS()
 
 	if (FAILED(Load_Stage1UILoad()))
 		return E_FAIL;
-
 
 	// Effect
 	if (FAILED(Load_Stage1EffectLoad()))
