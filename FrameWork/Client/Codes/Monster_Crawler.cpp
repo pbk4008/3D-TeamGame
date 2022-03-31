@@ -5,6 +5,7 @@
 
 #include "Effect_HitParticle.h"
 #include "Effect_HitFloating.h"
+#include "Effect_DeathParticle.h"
 
 #include "Animation.h"
 #include "Crawler_Idle.h"
@@ -66,8 +67,6 @@ HRESULT CMonster_Crawler::NativeConstruct(const _uint _iSceneID, void* _pArg)
 	if (FAILED(Set_State_FSM())) return E_FAIL;
 	if (FAILED(Ready_Weapone())) return E_FAIL;
 
-	/*_vector Pos = { 0.f, 1.f, 3.f, 1.f };
-	m_pTransform->Set_State(CTransform::STATE_POSITION, Pos);*/
 	//MonsterBar Panel
 	CUI_Monster_Panel::PANELDESC Desc;
 	Desc.pTargetTransform = m_pTransform;
@@ -87,7 +86,7 @@ HRESULT CMonster_Crawler::NativeConstruct(const _uint _iSceneID, void* _pArg)
 
 	m_iObectTag = (_uint)GAMEOBJECT::MONSTER_CRYSTAL;
 
-	m_fMaxHp = 2.f;
+	m_fMaxHp = 5.f;
 	m_fCurrentHp = m_fMaxHp;
 
 	m_fMaxGroggyGauge = 3.f;
@@ -104,6 +103,11 @@ HRESULT CMonster_Crawler::NativeConstruct(const _uint _iSceneID, void* _pArg)
 
 _int CMonster_Crawler::Tick(_double _dDeltaTime)
 {	
+	if (0 > __super::Tick(_dDeltaTime))
+	{
+		return -1;
+	}
+
 	m_pTransform->Set_Velocity(XMVectorZero());
 	m_pPanel->Set_TargetWorldMatrix(m_pTransform->Get_WorldMatrix());
 
@@ -145,6 +149,10 @@ _int CMonster_Crawler::Tick(_double _dDeltaTime)
 				Set_Remove(true);
 				m_pPanel->Set_Remove(true);
 			}
+			else if (1 == m_pAnimatorCom->Get_AnimController()->Get_CurKeyFrameIndex())
+			{
+				Active_Effect((_uint)EFFECT::DEATH);
+			}
 		}
 		else
 		{
@@ -153,14 +161,13 @@ _int CMonster_Crawler::Tick(_double _dDeltaTime)
 		}
 	}
 	if (true == m_bUIShow)
-	{
 		m_pPanel->Set_Show(true);
-	}
 
 	if (false == m_bUIShow)
-	{
 		m_pPanel->Set_Show(false);
-	}
+
+	
+	m_pCollider->Tick(_dDeltaTime); //이거 돌려야되는거임??
 
 	return 0;
 }
@@ -239,20 +246,6 @@ void CMonster_Crawler::OnTriggerEnter(CCollision& collision)
 
 				Active_Effect((_uint)EFFECT::HIT);
 				Active_Effect((_uint)EFFECT::FLOATING);
-				
-					//CEffect_HitParticle* pEffect = (CEffect_HitParticle*)g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Hit")->front();
-					// _vector Mypos = m_pTransform->Get_State(CTransform::STATE_POSITION);
-					//Mypos = XMVectorSetY(Mypos, XMVectorGetY(Mypos) + 1.f);
-					//pEffect->Get_Transform()->Set_State(CTransform::STATE_POSITION, Mypos);
-					//pEffect->setActive(true);
-					//pEffect->Set_Reset(true);
-
-					//CEffect_HitFloating* pEffect1 = (CEffect_HitFloating*)g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Floating")->front();
-					//_vector Mypos1 = m_pTransform->Get_State(CTransform::STATE_POSITION);
-					//Mypos1 = XMVectorSetY(Mypos1, XMVectorGetY(Mypos1) + 1.f);
-					//pEffect1->Get_Transform()->Set_State(CTransform::STATE_POSITION, Mypos1);
-					//pEffect1->setActive(true);
-					//pEffect1->Set_Reset(true);
 			}
 			else
 			{
@@ -365,7 +358,7 @@ HRESULT CMonster_Crawler::Set_Animation_FSM()
 		return E_FAIL;
 
 	pAnim = m_pModelCom->Get_Animation("SK_Crystal_Crawler_v1.ao|A_Death_CrystalCrawler");
-	if (FAILED(m_pAnimatorCom->Insert_Animation(DEATH, HEAD, pAnim, false, false, false, ERootOption::XYZ, true)))
+	if (FAILED(m_pAnimatorCom->Insert_Animation(DEATH, HEAD, pAnim, false, true, false, ERootOption::XYZ, true)))
 		return E_FAIL;
 
 	pAnim = m_pModelCom->Get_Animation("SK_Crystal_Crawler_v1.ao|A_Ricochet_CrystalCrawler");

@@ -72,6 +72,8 @@ HRESULT C1H_SwordAttack::EnterState()
 	m_tShakeEvent.tWaveZ.fAmplitude = 0.02f;
 	m_tShakeEvent.tWaveZ.fFrequency = 8.f;
 
+	m_pAnimationController->Set_PlaySpeed(1.2f);
+
 	return S_OK;
 }
 
@@ -85,6 +87,7 @@ HRESULT C1H_SwordAttack::ExitState()
 
 
 	m_pSilvermane->Set_IsTrasceCamera(true);
+	m_pAnimationController->Set_PlaySpeed(1.f);
 	return S_OK;
 }
 

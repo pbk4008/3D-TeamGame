@@ -9,6 +9,7 @@
 #include "Effect_DashDust.h"
 #include "Effect_HitParticle.h"
 #include "Effect_HitFloating.h"
+#include "Effect_DeathParticle.h"
 #include "Effect_Env_Fire.h"
 #include "UI_Ingame.h"
 #include "UI_Player_HpBar.h"
@@ -57,8 +58,8 @@ HRESULT CStage1::NativeConstruct()
 	if (FAILED(Ready_Light()))
 		return E_FAIL;
 
-	if (FAILED(Ready_Trigger_Jump()))
-		return E_FAIL;
+	//if (FAILED(Ready_Trigger_Jump()))
+	//	return E_FAIL;
 
 	if (FAILED(Ready_Player(L"Layer_Silvermane")))
 		return E_FAIL;
@@ -133,15 +134,15 @@ _int CStage1::Tick(_double TimeDelta)
 	{
 		m_pTriggerSystem->Tick(TimeDelta);
 
-		CBoss_Bastion_Judicator* pBoss = (CBoss_Bastion_Judicator*)g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Layer_Boss")->front();
-		if (nullptr != pBoss)
-		{
-			if (true == pBoss->Get_Dead())
-			{
-				if (FAILED(g_pGameInstance->Open_Level((_uint)SCENEID::SCENE_LOADING, CLoading::Create(m_pDevice, m_pDeviceContext, SCENEID::SCENE_STAGE2))))
-					return -1;
-			}
-		}
+		//CBoss_Bastion_Judicator* pBoss = (CBoss_Bastion_Judicator*)g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Layer_Boss")->front();
+		//if (nullptr != pBoss)
+		//{
+		//	if (true == pBoss->Get_Dead())
+		//	{
+		//		if (FAILED(g_pGameInstance->Open_Level((_uint)SCENEID::SCENE_LOADING, CLoading::Create(m_pDevice, m_pDeviceContext, SCENEID::SCENE_STAGE2))))
+		//			return -1;
+		//	}
+		//}
 	}
 	if (m_iCountMonster == 0 && m_bFirst)
 		m_pTriggerSystem->Check_Clear();
@@ -438,7 +439,7 @@ HRESULT CStage1::Ready_Data_Effect()
 		return E_FAIL;
 	}
 	//매니저에 이펙트 넣기 (마지막 매개변수 : 같은 이펙트 추가로 넣을 갯수)
-	if (FAILED(g_pGameInstance->Add_Effect((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Hit", pEffect, 3)))
+	if (FAILED(g_pGameInstance->Add_Effect((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Hit", pEffect, 10)))
 	{
 		MSGBOX("Falild to Clone in Effect_Hit");
 		return E_FAIL;
@@ -453,22 +454,28 @@ HRESULT CStage1::Ready_Data_Effect()
 		MSGBOX("Failed to Creating in CStage1::Ready_Effect()");
 		return E_FAIL;
 	}
-	if (FAILED(g_pGameInstance->Add_Effect((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Floating", pEffect, 3)))
+	if (FAILED(g_pGameInstance->Add_Effect((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Floating", pEffect, 10)))
 	{
 		MSGBOX("Falild to Clone in Effect_Floating");
 		return E_FAIL;
 	}
 
-	//for (int i = 0; i < vecEffect.size(); ++i)
-	//{
-	//	wstring FullName = L"Proto_GameObject_Effect_Hit";
-	//	//_tcscpy_s(vecEffect1[i].ShaderFullFilePath, L"../../Reference/ShaderFile/Shader_PointInstance.hlsl");
-	//	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Hit", FullName, &vecEffect[i])))
-	//	{
-	//		MSGBOX("Failed to Creating in CStage1::Ready_Effect()");
-	//		return E_FAIL;
-	//	}
-	//}
+	//죽을때
+	vector<CEffect_DeathParticle::EFFECTDESC> vecDeath;
+	g_pGameInstance->LoadFile<CEffect_DeathParticle::EFFECTDESC>(vecDeath, L"../bin/SaveData/Effect/Test_Effect_Death2.dat");
+
+	FullName = L"Proto_GameObject_Effect_Death";
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Death", FullName, &vecDeath[0], (CGameObject**)&pEffect)))
+	{
+		MSGBOX("Failed to Creating in CStage1::Ready_Effect()");
+		return E_FAIL;
+	}
+	if (FAILED(g_pGameInstance->Add_Effect((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Death", pEffect, 6)))
+	{
+		MSGBOX("Falild to Clone in Effect_Death");
+		return E_FAIL;
+	}
+
 	return S_OK;
 }
 

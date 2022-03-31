@@ -66,7 +66,8 @@ HRESULT C1H_SwordAttackNormalR1_01::EnterState()
 		CHierarchyNode* pWeaponBone = m_pModel->Get_BoneMatrix("weapon_r");
 		m_pSilvermane->Set_WeaponFixedBone(pWeaponBone);
 	}
-	m_pAnimationController->Set_PlaySpeed(1.2f);
+	//m_pAnimationController->Set_PlaySpeed(1.2f);
+	m_pAnimationController->Set_PlaySpeed(1.4f);
 
 	m_iCutIndex = 18;
 

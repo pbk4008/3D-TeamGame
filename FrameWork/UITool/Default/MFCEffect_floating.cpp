@@ -142,7 +142,7 @@ _int CMFCEffect_Floating::LateTick(_double TimeDelta)
 {
 	if (nullptr != m_pRenderer)
 	{
-		m_pRenderer->Add_RenderGroup(CRenderer::RENDER::RENDER_ALPHA, this);
+		m_pRenderer->Add_RenderGroup(CRenderer::RENDER::RENDER_UI, this);
 	}
 
 	return 0;
@@ -209,6 +209,11 @@ HRESULT CMFCEffect_Floating::SetUp_Components()
 		return E_FAIL;
 
 	return S_OK;
+}
+
+CEffect* CMFCEffect_Floating::Copy()
+{
+	return nullptr;
 }
 
 CMFCEffect_Floating* CMFCEffect_Floating::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)

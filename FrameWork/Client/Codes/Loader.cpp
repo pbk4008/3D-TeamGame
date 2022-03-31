@@ -34,6 +34,7 @@
 #include "Effect_DashDust.h"
 #include "Effect_HitParticle.h"
 #include "Effect_HitFloating.h"
+#include "Effect_DeathParticle.h"
 #include "Effect_Env_Fire.h"
 #include "UI_Ingame.h"
 #include "UI_Player_HpBar.h"
@@ -65,6 +66,7 @@
 #include "JumpTrigger.h"
 #include "JumpBox.h"
 #include "SwordTrail.h"
+#include "TrailEffect.h"
 
 #pragma endregion
 
@@ -154,8 +156,8 @@ HRESULT CLoader::SetUp_Stage1_Object()
 	if (FAILED(Load_Stage1MonsterLoad()))
 		return E_FAIL;
 
-	if (FAILED(Load_Stage1BossLoad()))
-		return E_FAIL;
+	/*if (FAILED(Load_Stage1BossLoad()))
+		return E_FAIL;*/
 
 	if (FAILED(Load_Stage1StaticUILoad()))
 		return E_FAIL;
@@ -166,8 +168,8 @@ HRESULT CLoader::SetUp_Stage1_Object()
 	if (FAILED(Load_Stage1EffectLoad()))
 		return E_FAIL;
 
-	if (FAILED(Load_Stage1JumpTrigger()))
-		return E_FAIL;
+	//if (FAILED(Load_Stage1JumpTrigger()))
+	//	return E_FAIL;
 
 	if (FAILED(Load_Stage1TriggerLod()))
 		return E_FAIL;
@@ -491,6 +493,12 @@ HRESULT CLoader::Load_Stage1EffectLoad()
 		return E_FAIL;
 	}
 
+	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_Effect_Death"), CEffect_DeathParticle::Create(m_pDevice, m_pDeviceContext))))
+	{
+		return E_FAIL;
+	}
+
+	//Effect Image
 	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_Effect_Env_Fire"), CEffect_Env_Fire::Create(m_pDevice, m_pDeviceContext))))
 	{
 		return E_FAIL;
@@ -761,14 +769,21 @@ HRESULT CLoader::Load_Stage1PlayerLoad()
 		return E_FAIL;
 	}
 
+	// 트레일
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Prototype_Component_VIBuffer_Trail"
-		, CTrail_VIBuffer::Create(m_pDevice, m_pDeviceContext, L"../../Reference/ShaderFile/Shader_Rect.hlsl", 400))))
+		, CTrail_VIBuffer::Create(m_pDevice, m_pDeviceContext, L"../../Reference/ShaderFile/Shader_Trail.hlsl", 400))))
 	{
 		return E_FAIL;
 	}
 
 	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"TrailBase", L"../bin/Resources/Texture/Trail/T_Smoke_Trail_Soft.dds"))) 
 		return E_FAIL;
+	// 2
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_VIBuffer_Trail",
+		CVIBuffer_Trail::Create(m_pDevice, m_pDeviceContext, L"../../Reference/ShaderFile/Shader_Trail.hlsl", 100))))
+		MSGBOX(L"트레일 버퍼 프로토타입 생성 실패");
+	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_TrailEffect", CTrailEffect::Create(m_pDevice, m_pDeviceContext))))
+		MSGBOX(L"트레일이펙트 프로토타입 생성 실패");
 #pragma endregion
 
 #pragma region 오브젝트
@@ -1084,7 +1099,7 @@ HRESULT CLoader::Ready_Test_JS()
 
 	// 소드 트레일
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Prototype_Component_VIBuffer_Trail"
-		, CTrail_VIBuffer::Create(m_pDevice, m_pDeviceContext, L"../../Reference/ShaderFile/Shader_Rect.hlsl", 400))))
+		, CTrail_VIBuffer::Create(m_pDevice, m_pDeviceContext, L"../../Reference/ShaderFile/Shader_Trail.hlsl", 400))))
 	{
 		return E_FAIL;
 	}
@@ -1092,6 +1107,12 @@ HRESULT CLoader::Ready_Test_JS()
 		return E_FAIL;
 	if (FAILED(g_pGameInstance->Add_Prototype(L"Prototype_GameObject_SwordTral", CSwordTrail::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
+	// 2
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_VIBuffer_Trail",
+		CVIBuffer_Trail::Create(m_pDevice, m_pDeviceContext, L"../../Reference/ShaderFile/Shader_Trail.hlsl", 100))))
+		MSGBOX(L"트레일 버퍼 프로토타입 생성 실패");
+	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_TrailEffect", CTrailEffect::Create(m_pDevice, m_pDeviceContext))))
+		MSGBOX(L"트레일이펙트 프로토타입 생성 실패");
 
 
 	// UI
@@ -1100,7 +1121,6 @@ HRESULT CLoader::Ready_Test_JS()
 
 	if (FAILED(Load_Stage1UILoad()))
 		return E_FAIL;
-
 
 	// Effect
 	if (FAILED(Load_Stage1EffectLoad()))

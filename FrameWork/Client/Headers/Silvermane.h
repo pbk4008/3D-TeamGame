@@ -130,6 +130,9 @@ private: /* For.JumpNode */
 	_float m_fJumpNodeLookTime = 0.f;
 	_float m_fJumpTriggerLookTime = 0.f;
 
+private: /* For.Cheat */
+	_bool m_isHighSpeedMode = false;
+
 private:
 	CTexture*	m_pTexture = nullptr;
 	const LIGHTDESC* m_Lightdesc = nullptr;

@@ -120,6 +120,21 @@ _int CMonster_Bastion_Shooter::Tick(_double _dDeltaTime)
 			m_pCharacterController->Move(_dDeltaTime, m_pTransform->Get_Velocity());
 	}
 
+	//Á×À»¶§
+	if ((_uint)ANIM_TYPE::DEATH == m_pAnimator->Get_CurrentAnimNode())
+	{
+		if (m_pAnimator->Get_CurrentAnimation()->Is_Finished())
+		{
+			Set_Remove(true);
+			m_pPanel->Set_Remove(true);
+		}
+
+		if (1 == m_pAnimator->Get_AnimController()->Get_CurKeyFrameIndex())
+		{
+			Active_Effect((_uint)EFFECT::DEATH);
+		}
+	}
+
 	if (true == m_bUIShow)
 	{
 		m_pPanel->Set_Show(true);
@@ -246,6 +261,9 @@ void CMonster_Bastion_Shooter::Hit()
 		m_fGroggyGauge += 2; //TODO::¼öÄ¡Á¤ÇØ¼­¹Ù²ãÁà¾ßµÊ
 		m_pPanel->Set_GroggyBar(Get_GroggyGaugeRatio());
 	}
+
+	Active_Effect((_uint)EFFECT::HIT);
+	Active_Effect((_uint)EFFECT::FLOATING);
 }
 
 HRESULT CMonster_Bastion_Shooter::Ready_Components()

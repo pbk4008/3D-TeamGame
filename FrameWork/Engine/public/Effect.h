@@ -57,13 +57,14 @@ protected:
 	_fvector UsingGravity(_fvector vPos, _double dDeltaTime);
 	
 public:
-	void Set_Reset(_bool bReset) { m_bReset = bReset; }
+	virtual void Set_Reset(_bool bReset);
 
 protected:
 	CTexture* m_pTexture;
 	EFFECTDESC	m_Desc;
 
-	_float m_DeadTimeAcc = 0.f; //이펙트삭제시킬시간
+	_float m_fNonActiveTimeAcc = 0.f;
+
 	_bool m_bReset = false; //이펙트 초기화 할 변수 
 
 protected:

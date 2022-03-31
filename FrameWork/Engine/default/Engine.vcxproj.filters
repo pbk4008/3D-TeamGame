@@ -309,9 +309,12 @@
     </Filter>
     <Filter Include="00.Utility\03.Component\09.CullingBox">
       <UniqueIdentifier>{c99a8ce3-e94b-45f2-a5b4-1bf2aa1afa77}</UniqueIdentifier>
-       </Filter>
+    </Filter>
     <Filter Include="00.Utility\03.Component\05.VIBuffer\11.Trail">
       <UniqueIdentifier>{8d54a38c-9871-4707-a828-2c7192092e77}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00.Utility\03.Component\05.VIBuffer\09.Instance\00.Particle\03.Env_Floating">
+      <UniqueIdentifier>{04e8b985-4fc1-4c49-be63-4bc0dd35a587}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -611,9 +614,15 @@
     </ClInclude>
     <ClInclude Include="..\public\CullingBox.h">
       <Filter>00.Utility\03.Component\09.CullingBox</Filter>
-        </ClInclude>
+    </ClInclude>
     <ClInclude Include="..\public\Trail_VIBuffer.h">
       <Filter>00.Utility\03.Component\05.VIBuffer\11.Trail</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\VIBuffer_Trail.h">
+      <Filter>00.Utility\03.Component\05.VIBuffer\11.Trail</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\VIBuffer_PointInstance_Env_Floating.h">
+      <Filter>00.Utility\03.Component\05.VIBuffer\09.Instance\00.Particle\03.Env_Floating</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -884,6 +893,12 @@
     <ClCompile Include="..\private\Trail_VIBuffer.cpp">
       <Filter>00.Utility\03.Component\05.VIBuffer\11.Trail</Filter>
     </ClCompile>
+    <ClCompile Include="..\private\VIBuffer_Trail.cpp">
+      <Filter>00.Utility\03.Component\05.VIBuffer\11.Trail</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\VIBuffer_PointInstance_Env_Floating.cpp">
+      <Filter>00.Utility\03.Component\05.VIBuffer\09.Instance\00.Particle\03.Env_Floating</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="..\bin\ShaderFiles\Shader_Triangle.hlsl">
@@ -1013,6 +1028,9 @@
       <Filter>98.ShaderFiles</Filter>
     </FxCompile>
     <FxCompile Include="..\bin\ShaderFiles\Shader_Panel_UI.hlsl">
+      <Filter>98.ShaderFiles</Filter>
+    </FxCompile>
+    <FxCompile Include="..\bin\ShaderFiles\Shader_Trail.hlsl">
       <Filter>98.ShaderFiles</Filter>
     </FxCompile>
   </ItemGroup>

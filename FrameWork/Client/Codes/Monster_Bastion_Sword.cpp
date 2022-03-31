@@ -127,14 +127,10 @@ _int CMonster_Bastion_Sword::Tick(_double _dDeltaTime)
 			m_pCharacterController->Move(_dDeltaTime, m_pTransform->Get_Velocity());
 	}
 	if (true == m_bUIShow)
-	{
 		m_pPanel->Set_Show(true);
-	}
-
 	if (false == m_bUIShow)
-	{
 		m_pPanel->Set_Show(false);
-	}
+
 	m_pPanel->Set_TargetWorldMatrix(m_pTransform->Get_WorldMatrix());
 	Change_State();
 	return 0;
@@ -603,6 +599,10 @@ _int CMonster_Bastion_Sword::Change_State()
 				m_bRemove = true;
 				m_pPanel->Set_Show(false);
 			}
+			else if (1 == m_pAnimator->Get_AnimController()->Get_CurKeyFrameIndex())
+			{
+				Active_Effect((_uint)EFFECT::DEATH);
+			}
 			else
 			{
 				m_fGroggyGauge = 0.f;
@@ -671,6 +671,9 @@ void CMonster_Bastion_Sword::Hit()
 		m_fGroggyGauge += 2; //TODO::¼öÄ¡Á¤ÇØ¼­¹Ù²ãÁà¾ßµÊ
 		m_pPanel->Set_GroggyBar(Get_GroggyGaugeRatio());
 	}
+
+	Active_Effect((_uint)EFFECT::HIT);
+	Active_Effect((_uint)EFFECT::FLOATING);
 }
 
 CMonster_Bastion_Sword* CMonster_Bastion_Sword::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)

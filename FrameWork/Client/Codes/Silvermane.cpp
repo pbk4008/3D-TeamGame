@@ -231,7 +231,16 @@ _int CSilvermane::Tick(_double _dDeltaTime)
 	if(m_isFall)
 		m_pTransform->Fall(_dDeltaTime);
 	//m_pCharacterController->Tick(_dDeltaTime);
-	m_pCharacterController->Move(_dDeltaTime, m_pTransform->Get_Velocity());
+	if (m_isHighSpeedMode)
+	{
+		_float3 vVelocity = m_pTransform->Get_Velocity();
+		XMStoreFloat3(&vVelocity, XMLoadFloat3(&vVelocity) * 2.f);
+		m_pCharacterController->Move(_dDeltaTime, vVelocity);
+	}
+	else
+	{
+		m_pCharacterController->Move(_dDeltaTime, m_pTransform->Get_Velocity());
+	}
 
 	Raycast_JumpNode(_dDeltaTime);
 
@@ -459,8 +468,8 @@ HRESULT CSilvermane::Ready_Components()
 	m_pAnimationController->Set_GameObject(this);
 	m_pAnimationController->Set_Model(m_pModel);
 	m_pAnimationController->Set_Transform(m_pTransform);
-	m_pAnimationController->Set_MoveSpeed(30.f);
-	m_fMoveSpeed = 3.f;
+	m_pAnimationController->Set_MoveSpeed(36.f);
+	m_fMoveSpeed = 3.6f;
 	m_fCurrentHp = 100.f;
 
 	// 스테이트 컨트롤러
@@ -1059,6 +1068,8 @@ const _int CSilvermane::Input(const _double& _dDeltaTime)
 
 	if (g_pGameInstance->getkeyDown(DIK_MINUS))
 		m_isFall = !m_isFall;
+	if (g_pGameInstance->getkeyDown(DIK_0))
+		m_isHighSpeedMode = !m_isHighSpeedMode;
 
 	if (!m_isFall)
 	{

@@ -77,7 +77,7 @@ HRESULT C1H_SwordAttackNormalR2_ReleaseStab::EnterState()
 	}
 
 
-	m_iCutIndex = 30;
+	m_iCutIndex = 26;
 	m_iAttackStartIndex = 10;
 	m_iAttackEndIndex = 20;
 
