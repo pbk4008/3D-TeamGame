@@ -211,6 +211,11 @@ HRESULT CMFCEffect::SetUp_Components()
 	return S_OK;
 }
 
+CEffect* CMFCEffect::Copy()
+{
+	return nullptr;
+}
+
 CMFCEffect* CMFCEffect::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
 {
 	/* 원형객체 생성할때 초기화 */

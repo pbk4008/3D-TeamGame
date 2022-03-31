@@ -28,18 +28,17 @@ protected:
 
 private:
 	virtual HRESULT SetUp_Components();
+	virtual CEffect* Copy() override;
+	virtual void Set_Reset(_bool bReset);
 
 public:
 	CEffect::EFFECTDESC Get_EffectDesc() {return m_Desc; }
 
 private:
 	CVIBuffer_PointInstance_Explosion* m_pBuffer = nullptr;
-
 private:
 	CEffect::EFFECTDESC m_Desc;
 	CVIBuffer_PointInstance_Explosion::PIDESC m_backupDesc;
-
-	_float m_fNonActiveTimeAcc = 0.f;
 
 public:
 	static CEffect_DeathParticle* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);

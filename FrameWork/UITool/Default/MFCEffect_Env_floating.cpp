@@ -211,6 +211,11 @@ HRESULT CMFCEffect_Env_Floating::SetUp_Components()
 	return S_OK;
 }
 
+CEffect* CMFCEffect_Env_Floating::Copy()
+{
+	return nullptr;
+}
+
 CMFCEffect_Env_Floating* CMFCEffect_Env_Floating::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
 {
 	/* 원형객체 생성할때 초기화 */

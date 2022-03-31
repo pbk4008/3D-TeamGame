@@ -77,6 +77,12 @@ _fvector CEffect::UsingGravity(_fvector vPos, _double dDeltaTime)
 	return XMVectorSetY(vPos, fY);
 }
 
+void CEffect::Set_Reset(_bool bReset)
+{
+	//m_pRenderer->SetRenderButton(CRenderer::PARTICLE, true);
+	m_bReset = false;
+}
+
 void CEffect::Free()
 {
 	Safe_Release(m_pTexture);

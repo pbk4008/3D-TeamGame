@@ -27,6 +27,7 @@ protected:
 	virtual HRESULT Render();
 public:
 	virtual CEffect* Copy() override;
+	virtual void Set_Reset(_bool bReset);
 
 private:
 	virtual HRESULT SetUp_Components();
@@ -40,8 +41,6 @@ private:
 private:
 	CEffect::EFFECTDESC m_Desc;
 	CVIBuffer_PointInstance_Explosion::PIDESC m_backupDesc;
-
-	_float m_fNonActiveTimeAcc = 0.f;
 
 public:
 	static CEffect_HitParticle* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);

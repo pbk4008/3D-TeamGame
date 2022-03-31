@@ -69,43 +69,32 @@ HRESULT CEffect_DeathParticle::NativeConstruct(const _uint _iSceneID, void* pArg
 
 _int CEffect_DeathParticle::Tick(_double TimeDelta)
 {
-	m_pBuffer->Update(TimeDelta, m_Desc.iAxis);
+	m_pBuffer->Update(g_dDeltaTime, m_Desc.iAxis);
 
-	m_fNonActiveTimeAcc += TimeDelta;
-
+	m_fNonActiveTimeAcc += g_dDeltaTime;
 	if (4.f <= m_fNonActiveTimeAcc)
 	{
 		setActive(false);
-		m_pRenderer->SetRenderButton(CRenderer::PARTICLE, false);
+		//m_pRenderer->SetRenderButton(CRenderer::PARTICLE, false);
 		m_fNonActiveTimeAcc = 0.f;
 	}
 
-	if (true == m_bReset)
-	{
-		setActive(true);
-		m_pRenderer->SetRenderButton(CRenderer::PARTICLE, true);
-		m_pBuffer->Set_Desc(m_backupDesc);
-		m_pBuffer->Particle_Reset();
-		m_Desc.fCurTime = 0.f;
-		m_bReset = false;
-	}
+	//_uint iAllFrameCount = (m_Desc.iImageCountX * m_Desc.iImageCountY);
+	//m_Desc.fFrame += (_float)(iAllFrameCount * g_dDeltaTime * m_Desc.fEffectPlaySpeed); //플레이속도 
+	//if (m_Desc.fFrame >= iAllFrameCount)
+	//{
+	//	m_Desc.fFrame = 0;
+	//}
 
-	_uint iAllFrameCount = (m_Desc.iImageCountX * m_Desc.iImageCountY);
-	m_Desc.fFrame += (_float)(iAllFrameCount * TimeDelta * m_Desc.fEffectPlaySpeed); //플레이속도 
-	if (m_Desc.fFrame >= iAllFrameCount)
-	{
-		m_Desc.fFrame = 0;
-	}
+	//if (m_Desc.fMaxLifeTime > m_Desc.fCurTime)
+	//{
+	//	m_Desc.fCurTime += (_float)g_dDeltaTime;
+	//}
 
-	if (m_Desc.fMaxLifeTime > m_Desc.fCurTime)
-	{
-		m_Desc.fCurTime += (_float)TimeDelta;
-	}
-
-	if (m_Desc.fMaxLifeTime < m_Desc.fCurTime)
-	{
-		m_Desc.fCurTime = m_Desc.fMaxLifeTime;
-	}
+	//if (m_Desc.fMaxLifeTime < m_Desc.fCurTime)
+	//{
+	//	m_Desc.fCurTime = m_Desc.fMaxLifeTime;
+	//}
 
     return 0;
 }
@@ -114,7 +103,7 @@ _int CEffect_DeathParticle::LateTick(_double TimeDelta)
 {
 	if (nullptr != m_pRenderer)
 	{
-		m_pRenderer->Add_RenderGroup(CRenderer::RENDER::RENDER_ALPHA, this);
+		m_pRenderer->Add_RenderGroup(CRenderer::RENDER::RENDER_NONALPHA, this);
 	}
 
 	return 0;
@@ -142,12 +131,14 @@ HRESULT CEffect_DeathParticle::Render()
 	m_pBuffer->SetUp_ValueOnShader("g_fLifeTime", &m_Desc.fMaxLifeTime, sizeof(_float));
 	m_pBuffer->SetUp_ValueOnShader("g_fCurTime", &m_Desc.fCurTime, sizeof(_float));
 
-	_float3 color = { 1.f, 0.3f, 0.1f };
+	_float3 color = { 0.5f, 1.0f, 0.1f };
 	m_pBuffer->SetUp_ValueOnShader("g_color", &color, sizeof(_float3));
 
 	m_pBuffer->SetUp_ValueOnShader("g_vCamPosition", (void*)&CamPos, sizeof(_vector));
 
-	m_pBuffer->Render(m_Desc.iRenderPassNum);
+	//m_pBuffer->Render(m_Desc.iRenderPassNum);
+	m_pBuffer->Render(4);
+
 
 	return S_OK;
 }
@@ -180,6 +171,31 @@ HRESULT CEffect_DeathParticle::SetUp_Components()
 		return E_FAIL;
 
 	return S_OK;
+}
+
+CEffect* CEffect_DeathParticle::Copy()
+{
+	CEffect_DeathParticle* pEffect = new CEffect_DeathParticle(m_pDevice, m_pDeviceContext);
+	if (FAILED(pEffect->NativeConstruct_Prototype()))
+	{
+		MSGBOX("DeathParticle Copy Fail");
+		Safe_Release(pEffect);
+	}
+	if (FAILED(pEffect->NativeConstruct(m_iSceneID, &m_Desc)))
+	{
+		MSGBOX("DeathParticle Copy Fail");
+		Safe_Release(pEffect);
+	}
+
+	return pEffect;
+}
+
+void CEffect_DeathParticle::Set_Reset(_bool bReset)
+{
+	CEffect::Set_Reset(bReset);
+	m_Desc.fCurTime = 0.f;
+	m_pBuffer->Set_Desc(m_backupDesc);
+	m_pBuffer->Particle_Reset();
 }
 
 CEffect_DeathParticle* CEffect_DeathParticle::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)

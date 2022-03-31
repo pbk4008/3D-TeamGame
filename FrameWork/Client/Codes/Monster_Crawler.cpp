@@ -64,10 +64,6 @@ HRESULT CMonster_Crawler::NativeConstruct(const _uint _iSceneID, void* _pArg)
 	if (FAILED(Set_State_FSM())) return E_FAIL;
 	if (FAILED(Ready_Weapone())) return E_FAIL;
 
-	/*_vector Pos = { 0.f, 1.f, 3.f, 1.f };
-	m_pTransform->Set_State(CTransform::STATE_POSITION, Pos);*/
-
-
 	if (nullptr != _pArg)
 	{
 		_float3 vPoint = (*(_float3*)_pArg);
@@ -80,6 +76,7 @@ HRESULT CMonster_Crawler::NativeConstruct(const _uint _iSceneID, void* _pArg)
 		_vector Pos = { 0.f, 1.f, 3.f, 1.f };
 		m_pTransform->Set_State(CTransform::STATE_POSITION, Pos);
 	}
+
 	//MonsterBar Panel
 	CUI_Monster_Panel::PANELDESC Desc;
 	Desc.pTargetTransform = m_pTransform;
@@ -99,7 +96,7 @@ HRESULT CMonster_Crawler::NativeConstruct(const _uint _iSceneID, void* _pArg)
 
 	m_iObectTag = (_uint)GAMEOBJECT::MONSTER_CRYSTAL;
 
-	m_fMaxHp = 3.f;
+	m_fMaxHp = 5.f;
 	m_fCurrentHp = m_fMaxHp;
 
 	m_fMaxGroggyGauge = 3.f;
@@ -116,6 +113,11 @@ HRESULT CMonster_Crawler::NativeConstruct(const _uint _iSceneID, void* _pArg)
 
 _int CMonster_Crawler::Tick(_double _dDeltaTime)
 {	
+	if (0 > __super::Tick(_dDeltaTime))
+	{
+		return -1;
+	}
+
 	m_pTransform->Set_Velocity(XMVectorZero());
 	m_pPanel->Set_TargetWorldMatrix(m_pTransform->Get_WorldMatrix());
 
@@ -145,16 +147,12 @@ _int CMonster_Crawler::Tick(_double _dDeltaTime)
 	}
 
 	if (true == m_bUIShow)
-	{
 		m_pPanel->Set_Show(true);
-	}
 
 	if (false == m_bUIShow)
-	{
-
 		m_pPanel->Set_Show(false);
-	}
 
+	//죽을때
 	if (DEATH == m_pAnimatorCom->Get_CurrentAnimNode())
 	{
 		if (m_pAnimatorCom->Get_CurrentAnimation()->Is_Finished())
@@ -163,18 +161,13 @@ _int CMonster_Crawler::Tick(_double _dDeltaTime)
 			m_pPanel->Set_Remove(true);
 		}
 
-		if (7 == m_pAnimatorCom->Get_AnimController()->Get_CurKeyFrameIndex())
+		if (1 == m_pAnimatorCom->Get_AnimController()->Get_CurKeyFrameIndex())
 		{
-			CEffect_DeathParticle* pEffect1 = (CEffect_DeathParticle*)g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Death")->front();
-			_vector Mypos1 = m_pTransform->Get_State(CTransform::STATE_POSITION);
-			Mypos1 = XMVectorSetY(Mypos1, XMVectorGetY(Mypos1) + 1.f);
-			pEffect1->Get_Transform()->Set_State(CTransform::STATE_POSITION, Mypos1);
-			pEffect1->setActive(true);
-			pEffect1->Set_Reset(true);
+			Active_Effect((_uint)EFFECT::DEATH);
 		}
 	}
 	
-	m_pCollider->Tick(_dDeltaTime);
+	m_pCollider->Tick(_dDeltaTime); //이거 돌려야되는거임??
 
 	return 0;
 }
@@ -188,9 +181,7 @@ _int CMonster_Crawler::LateTick(_double _dDeltaTime)
 
 	_int iProgress = m_pStateController->LateTick(_dDeltaTime);
 	if (NO_EVENT != iProgress)
-	{
 		return iProgress;
-	}
 
 	return 0;
 }
@@ -252,28 +243,6 @@ void CMonster_Crawler::OnTriggerEnter(CCollision& collision)
 
 				Active_Effect((_uint)EFFECT::HIT);
 				Active_Effect((_uint)EFFECT::FLOATING);
-
-				//CEffect_HitParticle* pEffect = (CEffect_HitParticle*)g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Hit")->front();
-				//_vector Mypos = m_pTransform->Get_State(CTransform::STATE_POSITION);
-				//Mypos = XMVectorSetY(Mypos, XMVectorGetY(Mypos) + 1.f);
-				//pEffect->Get_Transform()->Set_State(CTransform::STATE_POSITION, Mypos);
-				//pEffect->setActive(true);
-				//pEffect->Set_Reset(true);
-				//
-				//CEffect_HitFloating* pEffect0 = (CEffect_HitFloating*)g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Floating")->front();
-				//_vector Mypos0 = m_pTransform->Get_State(CTransform::STATE_POSITION);
-				//Mypos0 = XMVectorSetY(Mypos0, XMVectorGetY(Mypos0) + 1.f);
-				//pEffect0->Get_Transform()->Set_State(CTransform::STATE_POSITION, Mypos0);
-				//pEffect0->setActive(true);
-				//pEffect0->Set_Reset(true);
-				//
-				//CEffect_HitFloating* pEffect1 = (CEffect_HitFloating*)g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Floating_2")->front();
-				//_vector Mypos1 = m_pTransform->Get_State(CTransform::STATE_POSITION);
-				//Mypos1 = XMVectorSetY(Mypos1, XMVectorGetY(Mypos1) + 1.f);
-				//pEffect1->Get_Transform()->Set_State(CTransform::STATE_POSITION, Mypos1);
-				//pEffect1->setActive(true);
-				//pEffect1->Set_Reset(true);
-
 			}
 
 			else

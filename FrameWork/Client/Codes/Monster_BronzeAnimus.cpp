@@ -156,11 +156,21 @@ _int CMonster_BronzeAnimus::Tick(_double _dDeltaTime)
 		}
 	}
 
-	if ((_uint)ANIM_TYPE::A_DEATH == m_pAnimator->Get_CurrentAnimNode() && m_pAnimator->Get_AnimController()->Is_Finished())
+	//Á×À»¶§
+	if ((_uint)ANIM_TYPE::A_DEATH == m_pAnimator->Get_CurrentAnimNode())
 	{
-		m_bRemove = true;
-		m_pPanel->Set_Show(false);
+		if (m_pAnimator->Get_CurrentAnimation()->Is_Finished())
+		{
+			Set_Remove(true);
+			m_pPanel->Set_Remove(true);
+		}
+
+		if (1 == m_pAnimator->Get_AnimController()->Get_CurKeyFrameIndex())
+		{
+			Active_Effect((_uint)EFFECT::DEATH);
+		}
 	}
+
 	m_pPanel->Set_TargetWorldMatrix(m_pTransform->Get_WorldMatrix());
 
 	return _int();
@@ -527,6 +537,8 @@ HRESULT CMonster_BronzeAnimus::Render_Debug(void)
 void CMonster_BronzeAnimus::OnTriggerEnter(CCollision& collision)
 {
 	m_pPanel->Set_Show(true);
+	Active_Effect((_uint)EFFECT::HIT);
+	Active_Effect((_uint)EFFECT::FLOATING);
 
 	m_pStateController->OnTriggerEnter(collision);
 }

@@ -6,6 +6,7 @@
 cbuffer CameraDesc
 {
 	vector		g_vCamPosition;
+    float3		g_color;
 };
 
 cbuffer Matrices
@@ -22,10 +23,6 @@ uint g_iFrame; //전체장수
 float g_fLifeTime;
 float g_fCurTime;
 
-cbuffer Color
-{
-    float3 g_color;
-};
 
 sampler DefaultSampler = sampler_state
 {
@@ -152,6 +149,16 @@ struct PS_OUT
 	vector		vColor : SV_TARGET0;
 };
 
+struct PS_OUT_TEST
+{
+	float4 diffuse : SV_TARGET0;
+	float4 normal : SV_TARGET1;
+	float4 depth : SV_TARGET2;
+	float4 M : SV_Target3;
+	float4 R : SV_Target4;
+	float4 A : SV_Target5;
+	float4 E : SV_Target6;
+};
 
 /* 1. 픽셀의 색을 결정한다. */
 // vector PS_MAIN(PS_IN In) : SV_TARGET0
@@ -160,10 +167,12 @@ PS_OUT PS_MAIN(PS_IN In)
 	PS_OUT		Out = (PS_OUT)0;
 
 	Out.vColor = g_DiffuseTexture.Sample(DefaultSampler, In.vTexUV);
-    Out.vColor.rgb = g_color;
+    Out.vColor.r = 1.f;
+    Out.vColor.g = 0.6f;
+    Out.vColor.b = 0.3f;
 
-    //if (Out.vColor.a < 0.01)
-    //    discard;
+	if (Out.vColor.a < 0.01)
+		discard;
 
 	return Out;
 }
@@ -179,6 +188,30 @@ PS_OUT PS_MAIN_MULTIIMAGE(PS_IN In)
 
     return Out;
 }
+
+PS_OUT_TEST PS_MAIN_TEST(PS_IN In)
+{
+	PS_OUT_TEST Out = (PS_OUT_TEST)0;
+
+	float4 diffuse = g_DiffuseTexture.Sample(DefaultSampler, In.vTexUV.xy);	
+	Out.diffuse = diffuse;
+
+	Out.depth = float4(In.vPosition.z / In.vPosition.w, In.vPosition.w / 300.f, 0.f, 0.f);
+	Out.normal = float4(1, 1, 1, 0);
+
+	Out.M = float4(0, 0, 0, 1);
+	Out.R = float4(1, 1, 1, 1);
+	Out.A = float4(1, 1, 1, 1);
+    float4 color = float4(g_color, 1.f);
+	float4 power = 1.0f;
+	Out.E = color * power * diffuse;
+
+	if (Out.diffuse.a < 0.1f)
+		discard;
+	
+	return Out;
+}
+
 
 technique11			DefaultTechnique
 {
@@ -235,6 +268,19 @@ technique11			DefaultTechnique
         GeometryShader = compile gs_5_0 GS_MAIN();
         PixelShader = compile ps_5_0 PS_MAIN();
     }
+
+	pass Test
+	{
+		/* 렌더스테이츠에 대한 정의. */
+		SetRasterizerState(CullMode_Default);
+		SetDepthStencilState(ZDefault, 0);
+
+
+		/* 진입점함수를 지정한다. */
+		VertexShader = compile vs_5_0 VS_MAIN();
+		GeometryShader = compile gs_5_0 GS_MAIN();
+		PixelShader = compile ps_5_0 PS_MAIN_TEST();
+	}
 }
 
 

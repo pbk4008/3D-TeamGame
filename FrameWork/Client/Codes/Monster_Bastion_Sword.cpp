@@ -127,20 +127,31 @@ _int CMonster_Bastion_Sword::Tick(_double _dDeltaTime)
 			m_pCharacterController->Move(_dDeltaTime, m_pTransform->Get_Velocity());
 	}
 
-	if (true == m_bUIShow)
+	//죽을때
+	if ((_uint)ANIM_TYPE::DEATH == m_pAnimator->Get_CurrentAnimNode())
 	{
-		m_pPanel->Set_Show(true);
+		if (m_pAnimator->Get_CurrentAnimation()->Is_Finished())
+		{
+			Set_Remove(true);
+			m_pPanel->Set_Remove(true);
+		}
+
+		if (1 == m_pAnimator->Get_AnimController()->Get_CurKeyFrameIndex())
+		{
+			Active_Effect((_uint)EFFECT::DEATH);
+		}
 	}
 
+	if (true == m_bUIShow)
+		m_pPanel->Set_Show(true);
+
 	if (false == m_bUIShow)
-	{
 		m_pPanel->Set_Show(false);
-	}
 
 	//상태 갱신
 	Change_State();
 
-	//콜리더 갱신
+	//panel 갱신
 	m_pPanel->Set_TargetWorldMatrix(m_pTransform->Get_WorldMatrix());
 
 	return 0;
@@ -669,6 +680,9 @@ void CMonster_Bastion_Sword::Hit()
 		m_fGroggyGauge += 2; //TODO::수치정해서바꿔줘야됨
 		m_pPanel->Set_GroggyBar(Get_GroggyGaugeRatio());
 	}
+
+	Active_Effect((_uint)EFFECT::HIT);
+	Active_Effect((_uint)EFFECT::FLOATING);
 }
 
 CMonster_Bastion_Sword* CMonster_Bastion_Sword::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)

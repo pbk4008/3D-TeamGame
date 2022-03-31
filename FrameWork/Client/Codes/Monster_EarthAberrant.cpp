@@ -107,22 +107,20 @@ HRESULT CMonster_EarthAberrant::NativeConstruct(const _uint _iSceneID, void* _pA
 
 _int CMonster_EarthAberrant::Tick(_double _dDeltaTime)
 {
-
 	if (0 > __super::Tick(_dDeltaTime))
 	{
 		return -1;
 	}
 
 	m_pTransform->Set_Velocity(XMVectorZero());
-	
+	m_pPanel->Set_TargetWorldMatrix(m_pTransform->Get_WorldMatrix());
+
 	if (m_bIsFall)
 		m_pTransform->Fall(_dDeltaTime);
 
 	_int iProgress = m_pStateController->Tick(_dDeltaTime);
 	if (NO_EVENT != iProgress)
-	{
 		return iProgress;
-	}
 
 	if (nullptr != m_pWeapon)
 	{
@@ -148,14 +146,10 @@ _int CMonster_EarthAberrant::Tick(_double _dDeltaTime)
 	}
 
 	if (true == m_bUIShow)
-	{
 		m_pPanel->Set_Show(true);
-	}
 
 	if (false == m_bUIShow)
-	{
 		m_pPanel->Set_Show(false);
-	}
 
 	if (m_fGroggyGauge >= m_fMaxGroggyGauge)
 	{
@@ -180,14 +174,19 @@ _int CMonster_EarthAberrant::Tick(_double _dDeltaTime)
 		}
 	}
 
-	if (DEATH == m_pAnimatorCom->Get_CurrentAnimNode() && m_pAnimatorCom->Get_AnimController()->Is_Finished())
+	if (DEATH == m_pAnimatorCom->Get_CurrentAnimNode())
 	{
-		m_bRemove = true;
-		setActive(false);
-		m_pPanel->Set_Remove(true);
-		m_pPanel->Set_Show(false);
+		if (m_pAnimatorCom->Get_CurrentAnimation()->Is_Finished())
+		{
+			Set_Remove(true);
+			m_pPanel->Set_Remove(true);
+		}
+
+		if (9 == m_pAnimatorCom->Get_AnimController()->Get_CurKeyFrameIndex())
+		{
+			Active_Effect((_uint)EFFECT::DEATH);
+		}
 	}
-	m_pPanel->Set_TargetWorldMatrix(m_pTransform->Get_WorldMatrix());
 	
 	return 0;
 }
@@ -583,6 +582,9 @@ void CMonster_EarthAberrant::OnTriggerEnter(CCollision& collision)
 					m_pPanel->Set_GroggyBar(Get_GroggyGaugeRatio());
 					m_pStateController->Change_State(L"Flinch_Left");
 				}
+
+				Active_Effect((_uint)EFFECT::HIT);
+				Active_Effect((_uint)EFFECT::FLOATING);
 			}
 			else
 			{

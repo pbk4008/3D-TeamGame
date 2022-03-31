@@ -24,11 +24,12 @@ protected:
 	virtual _int Tick(_double TimeDelta);
 	virtual _int LateTick(_double TimeDelta);
 	virtual HRESULT Render();
-public:
-	virtual CEffect* Copy() override;
 
 private:
 	virtual HRESULT SetUp_Components();
+private:
+	virtual CEffect* Copy() override;
+	virtual void Set_Reset(_bool bReset);
 
 public:
 	CEffect::EFFECTDESC Get_EffectDesc() {return m_Desc; }
@@ -40,6 +41,7 @@ private:
 	CEffect::EFFECTDESC m_Desc;
 	CVIBuffer_PointInstance_Floating::PIDESC m_backupDesc;
 
+private:
 	_float m_fNonActiveTimeAcc = 0.f;
 
 public:

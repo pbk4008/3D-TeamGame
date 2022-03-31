@@ -418,7 +418,7 @@ HRESULT CStage1::Ready_Data_Effect()
 		return E_FAIL;
 	}
 	//매니저에 이펙트 넣기 (마지막 매개변수 : 같은 이펙트 추가로 넣을 갯수)
-	if (FAILED(g_pGameInstance->Add_Effect((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Hit", pEffect, 3)))
+	if (FAILED(g_pGameInstance->Add_Effect((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Hit", pEffect, 10)))
 	{
 		MSGBOX("Falild to Clone in Effect_Hit");
 		return E_FAIL;
@@ -433,9 +433,25 @@ HRESULT CStage1::Ready_Data_Effect()
 		MSGBOX("Failed to Creating in CStage1::Ready_Effect()");
 		return E_FAIL;
 	}
-	if (FAILED(g_pGameInstance->Add_Effect((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Floating", pEffect, 3)))
+	if (FAILED(g_pGameInstance->Add_Effect((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Floating", pEffect, 10)))
 	{
 		MSGBOX("Falild to Clone in Effect_Floating");
+		return E_FAIL;
+	}
+
+	//죽을때
+	vector<CEffect_DeathParticle::EFFECTDESC> vecDeath;
+	g_pGameInstance->LoadFile<CEffect_DeathParticle::EFFECTDESC>(vecDeath, L"../bin/SaveData/Effect/Test_Effect_Death2.dat");
+
+	FullName = L"Proto_GameObject_Effect_Death";
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Death", FullName, &vecDeath[0], (CGameObject**)&pEffect)))
+	{
+		MSGBOX("Failed to Creating in CStage1::Ready_Effect()");
+		return E_FAIL;
+	}
+	if (FAILED(g_pGameInstance->Add_Effect((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Death", pEffect, 6)))
+	{
+		MSGBOX("Falild to Clone in Effect_Death");
 		return E_FAIL;
 	}
 
