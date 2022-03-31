@@ -23,14 +23,23 @@ HRESULT CNoiseFire::NativeConstruct(const _uint iSceneID, void* pArg)
 	if (FAILED(__super::NativeConstruct(iSceneID,pArg))) return E_FAIL;
 	if (FAILED(ReadyComponent())) return E_FAIL;
 
-	m_pTransform->Set_State(CTransform::STATE_POSITION, XMVectorSet(-9.5f, 4.f, 6.5f, 1.f));
+	m_pTransform->Set_State(CTransform::STATE_POSITION, XMVectorSet(0,2.f,0,1.f));
+	m_pTransform->Scale_Up(XMVectorSet(3.f, 2.f, 1.f, 0.f));
+
+	m_pRenderer->SetRenderButton(CRenderer::PARTICLE, true);
 
 	return S_OK;
 }
 
 _int CNoiseFire::Tick(_double deltatime)
 {
-	m_deltatime = (_float)deltatime;
+	m_deltatime += 0.01f;
+
+	if (m_deltatime >= 1000.0f)
+	{
+		m_deltatime = 0.0f;
+	}
+
 	UpdateBillboard();
 
 	return _int();
@@ -67,7 +76,7 @@ HRESULT CNoiseFire::BindConstBuffer()
 
 	// Nosie Buffer
 	_float3 scrollspeeds = _float3(1.3f, 2.1f, 2.3f);
-	_float3 scales = _float3(1.f, 2.f, 3.f);
+	_float3 scales = _float3(1.0f, 2.0f, 3.0f);
 	if (FAILED(m_pbuffer->SetUp_ValueOnShader("g_frametime", &m_deltatime, sizeof(_float)))) MSGBOX("NoiseFire ConstBuffer NosieBuffer Not Apply");
 	if (FAILED(m_pbuffer->SetUp_ValueOnShader("g_scrollspeeds", &scrollspeeds, sizeof(_float3)))) MSGBOX("NoiseFire ConstBuffer NosieBuffer Not Apply");
 	if (FAILED(m_pbuffer->SetUp_ValueOnShader("g_scales", &scales, sizeof(_float3)))) MSGBOX("NoiseFire ConstBuffer NosieBuffer Not Apply");
@@ -90,6 +99,18 @@ HRESULT CNoiseFire::BindConstBuffer()
 	if (FAILED(m_pbuffer->SetUp_TextureOnShader("g_AlphaTexture", m_vectexture[1])))	MSGBOX("NoiseFire ConstBuffer NoiseTexture Not Apply");
 	if (FAILED(m_pbuffer->SetUp_TextureOnShader("g_NoiseTexture", m_vectexture[2])))	MSGBOX("NoiseFire ConstBuffer AlphaTexture Not Apply");
 
+	if(FAILED(m_pbuffer->SetUp_TextureOnShader("g_DepthTexture",g_pGameInstance->Get_SRV(L"Target_Depth")))) MSGBOX("NoiseFire ConstBuffer DepthTexture Not Apply");
+
+	
+	D3D11_DEPTH_STENCIL_DESC;
+	//  BOOL DepthEnable;
+	//	D3D11_DEPTH_WRITE_MASK DepthWriteMask;
+	//	D3D11_COMPARISON_FUNC DepthFunc;
+	//	BOOL StencilEnable;
+	//	UINT8 StencilReadMask;
+	//	UINT8 StencilWriteMask;
+	//	D3D11_DEPTH_STENCILOP_DESC FrontFace;
+	//	D3D11_DEPTH_STENCILOP_DESC BackFace;
 	return S_OK;
 }
 
@@ -111,6 +132,8 @@ HRESULT CNoiseFire::ReadyComponent()
 
 	m_pTransform->Set_TransformDesc(TransDesc);
 
+	//if (FAILED(__super::SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Prototype_Component_NoiseFire", L"com_buffer", (CComponent**)&m_pbuffer)))
+	//	MSGBOX("Failed To NoiseFire ReadyComponent Buffer");
 	if (FAILED(__super::SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Prototype_Component_NoiseFire", L"com_buffer", (CComponent**)&m_pbuffer)))
 		MSGBOX("Failed To NoiseFire ReadyComponent Buffer");
 

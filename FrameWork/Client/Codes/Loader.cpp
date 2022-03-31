@@ -257,13 +257,16 @@ HRESULT CLoader::Load_Stage1Navi_SkyLoad()
 		MSGBOX("Failed To Creating NavMeshCollider");
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"VIBuffer_Cube", CVIBuffer_Cube::Create(m_pDevice, m_pDeviceContext, L"../../Reference/ShaderFile/Shader_Cube.hlsl"))))
 		MSGBOX("Failed To Creating Cube Buffer");
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Prototype_Component_NoiseFire", CVIBuffer_RectInstance::Create(m_pDevice, m_pDeviceContext, L"../../Reference/ShaderFile/Shader_InstanceFire.hlsl", 1))))
+	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Prototype_Component_NoiseFire", CVIBuffer_RectInstance::Create(m_pDevice, m_pDeviceContext, L"../../Reference/ShaderFile/Shader_InstanceFire.hlsl", 1))))
+	//	MSGBOX("Failed To Creating RectInstance Buffer");
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Prototype_Component_NoiseFire", CVIBuffer_Rect::Create(m_pDevice, m_pDeviceContext, L"../../Reference/ShaderFile/Shader_RectFire.hlsl"))))
 		MSGBOX("Failed To Creating RectInstance Buffer");
 
 	// Object Prototype
 	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_SkyBox", CSkyBox::Create(m_pDevice, m_pDeviceContext)))) MSGBOX("Failed To Creating SkyBox Prototype");
 	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Plane_Test", CPlane_Test::Create(m_pDevice, m_pDeviceContext)))) MSGBOX("Failed To Creating PlaneTest Prototype");
 	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_NoiseFire", CNoiseFire::Create(m_pDevice, m_pDeviceContext)))) MSGBOX("Failed To Creating NoiseFire Prototype")
+
 
 	// Texture
 	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"Sky_Texture", L"../Bin/Resources/Texture/SkyBox/SkyBox_Stage1.dds"))) MSGBOX("Failed Add To SkyBoxTex");

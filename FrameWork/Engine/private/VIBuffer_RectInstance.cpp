@@ -132,7 +132,7 @@ HRESULT CVIBuffer_RectInstance::NativeConstruct_Prototype(const _tchar* pShaderF
 		pVertices[i].vRight = _float4(0.5f, 0.f, 0.f, 0.f);
 		pVertices[i].vUp = _float4(0.f, 0.5f, 0.f, 0.f);
 		pVertices[i].vLook = _float4(0.f, 0.f, 0.5f, 0.f);
-		pVertices[i].vPosition = _float4(-9.5f, 4.f, 6.5f, 1.f);
+		pVertices[i].vPosition = _float4(0, 0, 0, 1.f);
 	}
 	m_VBInstSubresourceData.pSysMem = pVertices;
 
@@ -170,23 +170,24 @@ HRESULT CVIBuffer_RectInstance::Render(_uint iPassIndex)
 	if (nullptr == m_pDeviceContext)
 		return E_FAIL;
 
-	ID3D11Buffer*		pVertexBuffers[] = {
-		m_pVB, 
+	ID3D11Buffer* pVertexBuffers[] = {
+		m_pVB,
 		m_pVBInstance
 	};
 
 	_uint				iStrides[] = {
-		m_iStride, 
+		m_iStride,
 		m_iInstStride
 	};
 
 	_uint				iOffsets[] = {
-		0, 
+		0,
 		0
 	};
 
 	/* 그려야할 버텍싀버퍼들을 장치에 바인드한다. */
 	m_pDeviceContext->IASetVertexBuffers(0, 2, pVertexBuffers, iStrides, iOffsets);
+	m_pDeviceContext->IASetIndexBuffer(m_pIB, m_eFormat, 0);
 	m_pDeviceContext->IASetPrimitiveTopology(m_ePrimitiveTopology);
 	m_pDeviceContext->IASetInputLayout(m_EffectDescs[iPassIndex]->pInputLayout);
 
@@ -194,7 +195,7 @@ HRESULT CVIBuffer_RectInstance::Render(_uint iPassIndex)
 	if (FAILED(m_EffectDescs[iPassIndex]->pPass->Apply(0, m_pDeviceContext)))
 		return E_FAIL;
 
-	m_pDeviceContext->DrawIndexedInstanced(1, m_iNumInstance, 0, 0, 0);	
+	m_pDeviceContext->DrawIndexedInstanced(6, m_iNumInstance, 0, 0, 0);
 
 	return S_OK;
 }
@@ -203,7 +204,7 @@ void CVIBuffer_RectInstance::Update(_double TimeDelta)
 {
 	D3D11_MAPPED_SUBRESOURCE		SubResource; 
 
-	m_pDeviceContext->Map(m_pVBInstance, 0, /*D3D11_MAP_WRITE_DISCARD*/D3D11_MAP_WRITE_NO_OVERWRITE, 0, &SubResource);
+	m_pDeviceContext->Map(m_pVBInstance, 0, D3D11_MAP_WRITE_NO_OVERWRITE, 0, &SubResource);
 
 	//for (_uint i = 0; i < m_iNumInstance; ++i)
 	//{

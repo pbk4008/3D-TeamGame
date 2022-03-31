@@ -129,7 +129,7 @@ PS_OUT PS_MAIN(PS_IN In)
 	
 	finalnoise = noise1 + noise2 + noise3;
 
-	perturb = ((1.f - In.vTexUV.y) * g_distortionscale) + g_distortionbias;
+	perturb = ((1.0f - In.vTexUV.y) * g_distortionscale) + g_distortionbias;
 	
 	noisecoords.xy = (finalnoise.xy * perturb) + In.vTexUV.xy;
 	
@@ -143,6 +143,65 @@ PS_OUT PS_MAIN(PS_IN In)
 	return Out;	
 }
 
+struct PS_OUT_TEST
+{
+	float4 diffuse : SV_TARGET0;
+	float4 normal : SV_TARGET1;
+	float4 depth : SV_TARGET2;
+	float4 M : SV_Target3;
+	float4 R : SV_Target4;
+	float4 A : SV_Target5;
+	float4 E : SV_Target6;
+};
+
+PS_OUT_TEST PS_MAIN_TEST(PS_IN In)
+{
+	PS_OUT_TEST Out = (PS_OUT_TEST) 0;
+
+	float4 noise1, noise2, noise3, finalnoise, firecolor, alphacolor;
+	float perturb;
+	float2 noisecoords;
+	
+	noise1 = g_NoiseTexture.Sample(WrapSampler, In.texcoord1);
+	noise2 = g_NoiseTexture.Sample(WrapSampler, In.texcoord2);
+	noise3 = g_NoiseTexture.Sample(WrapSampler, In.texcoord3);
+	
+	noise1 = (noise1 - 0.5f) * 2.0f;
+	noise2 = (noise2 - 0.5f) * 2.0f;
+	noise3 = (noise3 - 0.5f) * 2.0f;
+	
+	noise1.xy = noise1.xy * g_distortion1.xy;
+	noise2.xy = noise2.xy * g_distortion2.xy;
+	noise3.xy = noise3.xy * g_distortion3.xy;
+	
+	finalnoise = noise1 + noise2 + noise3;
+
+	perturb = ((1.0f - In.vTexUV.y) * g_distortionscale) + g_distortionbias;
+	
+	noisecoords.xy = (finalnoise.xy * perturb) + In.vTexUV.xy;
+	
+	firecolor = g_FireTexture.Sample(ClampSampler, noisecoords.xy);
+	alphacolor = g_AlphaTexture.Sample(ClampSampler, noisecoords.xy);
+	
+	firecolor.a = alphacolor.a;
+	
+	Out.diffuse = firecolor;
+
+	Out.depth = float4(In.vPosition.z / In.vPosition.w, In.vPosition.w / 300.f, 0.f, 0.f);
+	Out.normal = float4(1, 1, 1, 0);
+
+	Out.M = float4(0, 0, 0, 1);
+	Out.R = float4(1, 1, 1, 1);
+	Out.A = float4(1, 1, 1, 1);
+	float4 color = float4(1.f, 0.6f, 0.3f, 1.f);
+	float4 power = 0.4f;
+	Out.E = /*color * power * diffuse*/float4(0,0,0,1);
+
+	if (Out.diffuse.a < 0.1f)
+		discard;
+	
+	return Out;
+}
 
 
 
@@ -150,13 +209,23 @@ technique11			DefaultTechnique
 {
 	pass Fire
 	{
-		SetRasterizerState(CullMode_None);
+		//SetRasterizerState(CullMode_None);
 		SetDepthStencilState(ZDefault, 0);
-		SetBlendState(AlphaBlending, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+		SetBlendState(BlendAlphaFire, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
 
 		VertexShader = compile vs_5_0 VS_MAIN();
 		GeometryShader = NULL;
 		PixelShader = compile ps_5_0  PS_MAIN();
+	}
+	pass Test
+	{
+		SetRasterizerState(CullMode_None);
+		SetDepthStencilState(ZDefault, 0);
+		SetBlendState(BlendDisable, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+
+		VertexShader = compile vs_5_0 VS_MAIN();
+		GeometryShader = NULL;
+		PixelShader = compile ps_5_0 PS_MAIN_TEST();
 	}
 }
 

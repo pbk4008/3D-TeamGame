@@ -33,7 +33,7 @@ HRESULT CPostProcess::PossProcessing(CTonemapping* tone,CTarget_Manager* pTarget
 	if (FAILED(BlurPass(pTargetMgr, L"Target_HZ4", L"Target_VT8", L"Target_HZ8", 160, 90))) return E_FAIL;
 	if (FAILED(BlurPass(pTargetMgr, L"Target_HZ8", L"Target_VT16", L"Target_HZ16", 64, 64))) return E_FAIL;
 
-	if (FAILED(BloomPass(pTargetMgr))) return E_FAIL;
+	if (FAILED(BloomPass(pTargetMgr,L"Target_Bloom", L"Target_HZ2", L"Target_HZ4", L"Target_HZ8", L"Target_HZ16",0.2f))) return E_FAIL;
 
 	if (FAILED(tone->ToneMapping(pTargetMgr))) return E_FAIL;
 
@@ -49,6 +49,8 @@ HRESULT CPostProcess::PossProcessing(CTonemapping* tone,CTarget_Manager* pTarget
 		if (FAILED(BlurPass(pTargetMgr, L"Target_ParticleH2", L"Target_ParticleV4", L"Target_ParticleH4", 320, 180))) return E_FAIL;
 		if (FAILED(BlurPass(pTargetMgr, L"Target_ParticleH4", L"Target_ParticleV8", L"Target_ParticleH8", 160, 90))) return E_FAIL;
 		if (FAILED(BlurPass(pTargetMgr, L"Target_ParticleH8", L"Target_ParticleV16", L"Target_ParticleH16", 64, 64))) return E_FAIL;
+
+		if (FAILED(BloomPass(pTargetMgr,L"Target_Alpha", L"Target_ParticleH2", L"Target_ParticleH4", L"Target_ParticleH8", L"Target_ParticleH16",0.5f))) return E_FAIL;
 	}
 
 	if (FAILED(tone->Blend_FinalPass(pTargetMgr, hdr, shadow, particle))) return E_FAIL;
@@ -86,14 +88,16 @@ HRESULT CPostProcess::ComputeBrightPass(CTarget_Manager* pTargetMgr, const wstri
 	return S_OK;
 }
 
-HRESULT CPostProcess::BloomPass(CTarget_Manager* pTargetMgr)
+HRESULT CPostProcess::BloomPass(CTarget_Manager* pTargetMgr, const wstring& target, const wstring& base1, const wstring& base2, const wstring& base3, const wstring& base4,_float weight)
 {
-	if (FAILED(pTargetMgr->Begin_MRT(m_pDeviceContext, TEXT("Target_Bloom"))))	return E_FAIL;
+	if (FAILED(pTargetMgr->Begin_MRT(m_pDeviceContext, target.c_str())))	return E_FAIL;
 
-	if (FAILED(m_pVIBuffer->SetUp_TextureOnShader("g_BaseBlur2Texture", pTargetMgr->Get_SRV(L"Target_HZ2"))))	return E_FAIL;
-	if (FAILED(m_pVIBuffer->SetUp_TextureOnShader("g_BaseBlur4Texture", pTargetMgr->Get_SRV(L"Target_HZ4"))))	return E_FAIL;
-	if (FAILED(m_pVIBuffer->SetUp_TextureOnShader("g_BaseBlur8Texture", pTargetMgr->Get_SRV(L"Target_HZ8"))))	return E_FAIL;
-	if (FAILED(m_pVIBuffer->SetUp_TextureOnShader("g_BaseBlur16Texture", pTargetMgr->Get_SRV(L"Target_HZ16")))) return E_FAIL;
+	if(FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_Weight", &weight, sizeof(_float)))) MSGBOX("Not Apply BloomPass ValueOnShader Weight");
+
+	if (FAILED(m_pVIBuffer->SetUp_TextureOnShader("g_BaseBlur2Texture", pTargetMgr->Get_SRV(base1.c_str()))))	return E_FAIL;
+	if (FAILED(m_pVIBuffer->SetUp_TextureOnShader("g_BaseBlur4Texture", pTargetMgr->Get_SRV(base2.c_str()))))	return E_FAIL;
+	if (FAILED(m_pVIBuffer->SetUp_TextureOnShader("g_BaseBlur8Texture", pTargetMgr->Get_SRV(base3.c_str()))))	return E_FAIL;
+	if (FAILED(m_pVIBuffer->SetUp_TextureOnShader("g_BaseBlur16Texture", pTargetMgr->Get_SRV(base4.c_str())))) return E_FAIL;
 
 	m_pVIBuffer->Render(3);
 

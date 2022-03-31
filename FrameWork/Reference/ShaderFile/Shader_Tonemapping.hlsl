@@ -1,4 +1,4 @@
-#include "Shader_Calculate.hpp"
+#include "Shader_RenderState.hpp"
 
 #pragma pack_matrix(row_major);
 
@@ -81,9 +81,10 @@ PS_OUT_TONE PS_MAIN_TONEMAPPING(PS_IN In)
 	
 	Out.vHDRDiffuse = color;
 	
+	
 	vector vSpeccular = g_HDRSpecularTexture.Sample(DefaultSampler, In.vTexUV);
 	
-	Luminance = 0.4f;
+	Luminance = 0.1f;
 	//Luminance = 0.08f;
 	MiddleGray = 0.18f;
 	WhiteCutoff = 0.9f;
@@ -126,7 +127,6 @@ PS_OUT_TONE PS_MAIN_TONEMAPPING(PS_IN In)
 	finaldiffuse.a = 1.f;
 	
 	Out.vHDRDiffuse += finaldiffuse; /*pow(abs(finaldiffuse), 1.f / Gamma)*/
-
 	
 	return Out;
 }
@@ -136,7 +136,7 @@ technique11 Luminance
 	pass ToneMapping
 	{
 		SetRasterizerState(CullMode_Default);
-		SetDepthStencilState(ZTestDiable, 0);
+		SetDepthStencilState(ZWriteDisable, 0);
 		SetBlendState(BlendDisable, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
 		//
 		//AlphaBlending

@@ -17,7 +17,7 @@ public: HRESULT				InitPostProcess();
 public: HRESULT				PossProcessing(CTonemapping* tone,CTarget_Manager* pTargetMgr,_bool hdr, _bool shadow, _bool particle);
 
 public: HRESULT				ComputeBrightPass(CTarget_Manager* pTargetMgr, const wstring& in, _float sizex, _float sizey);
-public: HRESULT				BloomPass(CTarget_Manager* pTargetMgr);
+public: HRESULT				BloomPass(CTarget_Manager* pTargetMgr, const wstring& target, const wstring& base1, const wstring& base2, const wstring& base3, const wstring& base4, _float weight);
 
 public: HRESULT				BlurPass(CTarget_Manager* pTargetMgr, const wstring& in, const wstring& middle, const wstring& out, _float sizex, _float sizey);
 public: HRESULT				GaussianBlurVertical(CTarget_Manager* pTargetMgr, const wstring& in, const wstring& bind, _float sizex, _float sizey);

@@ -193,9 +193,6 @@
     <Filter Include="00.Utility\03.Component\05.VIBuffer\10.Trapezium">
       <UniqueIdentifier>{329441a3-c2af-4793-a919-667ae0cce48e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="00.Utility\03.Component\97.CharacterController">
-      <UniqueIdentifier>{de46ff26-c4c3-465e-90af-a8225d355507}</UniqueIdentifier>
-    </Filter>
     <Filter Include="00.Utility\03.Component\08. AnimationController">
       <UniqueIdentifier>{f6e49bb3-9ba7-4443-a04a-fad53dcc39b0}</UniqueIdentifier>
     </Filter>
@@ -327,6 +324,9 @@
     </Filter>
     <Filter Include="98.ShaderFiles\Hpp">
       <UniqueIdentifier>{b441602a-c061-4063-92fa-80eedad2b876}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00.Utility\97.CharacterController">
+      <UniqueIdentifier>{de46ff26-c4c3-465e-90af-a8225d355507}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -519,14 +519,11 @@
     <ClInclude Include="..\public\Material_Manager.h">
       <Filter>00.Utility\04.Manager\99.Material_Manager</Filter>
     </ClInclude>
-    <ClInclude Include="..\bin\ShaderFiles\Shader_Calculate.hpp">
-      <Filter>00.Utility\04.Manager\03.RenderTargetManager</Filter>
-    </ClInclude>
     <ClInclude Include="..\public\Instancing_Mesh.h">
       <Filter>00.Utility\03.Component\05.VIBuffer\09.Instance\01. InstanceMesh</Filter>
     </ClInclude>
     <ClInclude Include="..\public\CharacterController.h">
-      <Filter>00.Utility\03.Component\97.CharacterController</Filter>
+      <Filter>00.Utility\97.CharacterController</Filter>
     </ClInclude>
     <ClInclude Include="..\public\ControllerFilterCallback.h">
       <Filter>00.Utility\04.Manager\11.PhsyicX\ControllerFilterCallback</Filter>
@@ -625,6 +622,9 @@
       <Filter>00.Utility\03.Component\05.VIBuffer\11.Trail</Filter>
     </ClInclude>
     <ClInclude Include="..\bin\ShaderFiles\Shader_RenderState.hpp">
+      <Filter>98.ShaderFiles\Hpp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\bin\ShaderFiles\Shader_Calculate.hpp">
       <Filter>98.ShaderFiles\Hpp</Filter>
     </ClInclude>
   </ItemGroup>
@@ -810,7 +810,7 @@
       <Filter>00.Utility\03.Component\05.VIBuffer\10.Trapezium</Filter>
     </ClCompile>
     <ClCompile Include="..\private\CharacterController.cpp">
-      <Filter>00.Utility\03.Component\97.CharacterController</Filter>
+      <Filter>00.Utility\97.CharacterController</Filter>
     </ClCompile>
     <ClCompile Include="..\private\ControllerFilterCallback.cpp">
       <Filter>00.Utility\04.Manager\11.PhsyicX\ControllerFilterCallback</Filter>
@@ -1022,6 +1022,9 @@
       <Filter>98.ShaderFiles\99.Other</Filter>
     </FxCompile>
     <FxCompile Include="..\bin\ShaderFiles\Shader_InstanceFire.hlsl">
+      <Filter>98.ShaderFiles\00.Buffer</Filter>
+    </FxCompile>
+    <FxCompile Include="..\bin\ShaderFiles\Shader_RectFire.hlsl">
       <Filter>98.ShaderFiles\00.Buffer</Filter>
     </FxCompile>
   </ItemGroup>

@@ -4,6 +4,7 @@
 
 BEGIN(Engine)
 class CVIBuffer_RectInstance;
+class CVIBuffer_Rect;
 class CTexture;
 END	
 
@@ -25,7 +26,8 @@ private: void		UpdateBillboard();
 private: HRESULT	ReadyComponent();
 
 private: std::vector<CTexture*>		m_vectexture;
-private: CVIBuffer_RectInstance*	m_pbuffer = nullptr;
+//private: CVIBuffer_RectInstance*	m_pbuffer = nullptr;
+private: CVIBuffer_Rect*			m_pbuffer = nullptr;
 private: _float						m_deltatime = 0.f;
 
 public: static CNoiseFire* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);
