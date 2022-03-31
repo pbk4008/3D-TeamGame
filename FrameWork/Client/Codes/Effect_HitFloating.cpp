@@ -13,7 +13,7 @@ CEffect_HitFloating::CEffect_HitFloating(ID3D11Device* pDevice, ID3D11DeviceCont
 {
 }
 
-CEffect_HitFloating::CEffect_HitFloating(const CEffect& rhs)
+CEffect_HitFloating::CEffect_HitFloating(const CEffect_HitFloating& rhs)
     :CEffect(rhs)
 {
 }
@@ -83,8 +83,9 @@ _int CEffect_HitFloating::Tick(_double TimeDelta)
 	
 	if (4.f <= m_fNonActiveTimeAcc)
 	{
-		//setActive(false);
+		setActive(false);
 		m_fNonActiveTimeAcc = 0.f;
+		m_bReset = true;
 	}
 
 	if (g_pGameInstance->getkeyDown(DIK_NUMPAD0))
@@ -171,6 +172,23 @@ HRESULT CEffect_HitFloating::Render()
 	m_pBuffer->Render(m_Desc.iRenderPassNum);
 
 	return S_OK;
+}
+
+CEffect* CEffect_HitFloating::Copy()
+{
+	CEffect_HitFloating* pEffect = new CEffect_HitFloating(m_pDevice, m_pDeviceContext);
+	if (FAILED(pEffect->NativeConstruct_Prototype()))
+	{
+		MSGBOX("HitParticle Copy Fail");
+		Safe_Release(pEffect);
+	}
+	if (FAILED(pEffect->NativeConstruct(m_iSceneID, &m_Desc)))
+	{
+		MSGBOX("HitParticle Copy Fail");
+		Safe_Release(pEffect);
+	}
+
+	return pEffect;
 }
 
 HRESULT CEffect_HitFloating::SetUp_Components()

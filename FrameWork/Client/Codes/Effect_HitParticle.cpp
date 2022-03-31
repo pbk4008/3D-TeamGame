@@ -13,8 +13,11 @@ CEffect_HitParticle::CEffect_HitParticle(ID3D11Device* pDevice, ID3D11DeviceCont
 {
 }
 
-CEffect_HitParticle::CEffect_HitParticle(const CEffect& rhs)
+CEffect_HitParticle::CEffect_HitParticle(const CEffect_HitParticle& rhs)
     :CEffect(rhs)
+	, m_Desc(rhs.m_Desc)
+	, m_backupDesc(rhs.m_backupDesc)
+	, m_fNonActiveTimeAcc(rhs.m_fNonActiveTimeAcc)
 {
 }
 
@@ -156,6 +159,23 @@ HRESULT CEffect_HitParticle::Render()
 	m_pBuffer->Render(m_Desc.iRenderPassNum);
 
 	return S_OK;
+}
+
+CEffect* CEffect_HitParticle::Copy()
+{
+	CEffect_HitParticle* pEffect = new CEffect_HitParticle(m_pDevice, m_pDeviceContext);
+	if (FAILED(pEffect->NativeConstruct_Prototype()))
+	{
+		MSGBOX("HitParticle Copy Fail");
+		Safe_Release(pEffect);
+	}
+	if (FAILED(pEffect->NativeConstruct(m_iSceneID, &m_Desc)))
+	{
+		MSGBOX("HitParticle Copy Fail");
+		Safe_Release(pEffect);
+	}
+	
+	return pEffect;
 }
 
 HRESULT CEffect_HitParticle::SetUp_Components()

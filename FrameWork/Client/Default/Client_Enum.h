@@ -39,7 +39,12 @@ enum class GAMEOBJECT
 	GAMEOBJECT_END,
 };
 END
-
+enum class EFFECT
+{
+	//AddEffect할때에 넣어줬던 순서 그대로 넣어줘야함!!!
+	HIT,
+	FLOATING
+};
 
 enum class ELayer
 {

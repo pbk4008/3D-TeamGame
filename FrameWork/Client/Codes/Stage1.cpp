@@ -63,12 +63,12 @@ HRESULT CStage1::NativeConstruct()
 	if (FAILED(Ready_TriggerSystem(L"../bin/SaveData/Trigger/MonsterSpawnTrigger.dat")))
 		return E_FAIL;
 
-	/*if (FAILED(Ready_Boss(L"Layer_Boss")))
-	{
-		return E_FAIL;
-	}
+	//if (FAILED(Ready_Boss(L"Layer_Boss")))
+	//{
+	//	return E_FAIL;
+	//}
 
-	if (FAILED(Ready_Monster(L"Layer_Monster")))
+	/*if (FAILED(Ready_Monster(L"Layer_Monster")))
 	{
 		return E_FAIL;
 	}*/
@@ -126,19 +126,19 @@ _int CStage1::Tick(_double TimeDelta)
 	if (nullptr != m_pTriggerSystem)
 	{
 		m_pTriggerSystem->Tick(TimeDelta);
+
+		//CBoss_Bastion_Judicator* pBoss = (CBoss_Bastion_Judicator*)g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Layer_Boss")->front();
+		//if (nullptr != pBoss)
+		//{
+		//	if (true == pBoss->Get_Dead())
+		//	{
+		//		if (FAILED(g_pGameInstance->Open_Level((_uint)SCENEID::SCENE_LOADING, CLoading::Create(m_pDevice, m_pDeviceContext, SCENEID::SCENE_STAGE2))))
+		//			return -1;
+		//	}
+		//}
 	}
 	if (m_iCountMonster == 0 && m_bFirst)
 		m_pTriggerSystem->Check_Clear();
-
-	//CBoss_Bastion_Judicator* pBoss = (CBoss_Bastion_Judicator*)g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Layer_Boss")->front();
-	//if (nullptr != pBoss)
-	//{
-	//	if (true == pBoss->Get_Dead())
-	//	{
-	//		if (FAILED(g_pGameInstance->Open_Level((_uint)SCENEID::SCENE_LOADING, CLoading::Create(m_pDevice, m_pDeviceContext, SCENEID::SCENE_STAGE2))))
-	//			return -1;
-	//	}
-	//}
 
 	return _int();
 }
@@ -258,8 +258,8 @@ HRESULT CStage1::Ready_Boss(const _tchar* LayerTag)
 
 HRESULT CStage1::Ready_Monster(const _tchar* LayerTag)
 {
-	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Proto_GameObject_Monster_Crawler")))
-	//	return E_FAIL;
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Proto_GameObject_Monster_Crawler")))
+		return E_FAIL;
 	
 	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Proto_GameObject_Monster_EarthAberrant")))
 	//	return E_FAIL;
@@ -371,21 +371,22 @@ HRESULT CStage1::Ready_Light()
 
 HRESULT CStage1::Ready_Data_Effect()
 {
-	vector<CEffect_DashDust::EFFECTDESC> vecEffect;
+	//vector<CEffect_DashDust::EFFECTDESC> vecEffect;
 	//Effect_Dash
-	g_pGameInstance->LoadFile<CEffect_DashDust::EFFECTDESC>(vecEffect, L"../bin/SaveData/Effect/Effect_Player_Attack1.dat");
-	
-	for (int i = 0; i < vecEffect.size(); ++i)
-	{
-		wstring FullName = L"Proto_GameObject_Effect_DashDust";
+	//g_pGameInstance->LoadFile<CEffect_DashDust::EFFECTDESC>(vecEffect, L"../bin/SaveData/Effect/Effect_Player_Attack1.dat");
 
-		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Effect", FullName, &vecEffect[i])))
-		{
-			MSGBOX("Failed to Creating in CStage1::Ready_Effect()");
-			return E_FAIL;
-		}
-	}
+	//for (int i = 0; i < vecEffect.size(); ++i)
+	//{
+	//	wstring FullName = L"Proto_GameObject_Effect_DashDust";
 
+	//	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect", FullName, &vecEffect[i])))
+	//	{
+	//		MSGBOX("Failed to Creating in CStage1::Ready_Effect()");
+	//		return E_FAIL;
+	//	}
+	//}
+
+	//불
 	CEffect_Env_Fire::EFFECTDESC Desc;
 	_tcscpy_s(Desc.TextureTag, L"Env_Fire");
 	Desc.iRenderPassNum = 1;
@@ -395,71 +396,49 @@ HRESULT CStage1::Ready_Data_Effect()
 	Desc.fEffectPlaySpeed = 1.f;
 	Desc.fMyPos = { 0.f, 0.f, 0.f };
 
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Effect_Env_Fire", L"Proto_GameObject_Effect_Env_Fire", &Desc)))
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Env_Fire", L"Proto_GameObject_Effect_Env_Fire", &Desc)))
 	{
 		MSGBOX("Failed to Creating in CStage1::Ready_Effect()");
 		return E_FAIL;
 	}
 
-	//이펙트생성
-	//vector<CEffect_HitParticle::EFFECTDESC> vecEffect;
-	//g_pGameInstance->LoadFile<CEffect_HitParticle::EFFECTDESC>(vecEffect, L"../bin/SaveData/Effect/Effect_Player_Attack1.dat");
+	//이펙트 매니저에 넣으면서 생성
+	// 주의 사항!! 넣을때 순서가 ENUM순서
+	//Manager에 넣을 Effect;
+	CEffect* pEffect = nullptr;
+	vector<CEffect_HitParticle::EFFECTDESC> vecHitParticle;
+	g_pGameInstance->LoadFile<CEffect_HitParticle::EFFECTDESC>(vecHitParticle, L"../bin/SaveData/Effect/Effect_Player_Attack1.dat");
+	
+	wstring FullName = L"Proto_GameObject_Effect_Hit";
 
-	for (int i = 0; i < vecEffect.size(); ++i)
+	//마지막에 받을 Effect변수 넣기
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Hit", FullName, &vecHitParticle[0],(CGameObject**)&pEffect)))
 	{
-		wstring FullName = L"Proto_GameObject_Effect_Hit";
-		//_tcscpy_s(vecEffect1[i].ShaderFullFilePath, L"../../Reference/ShaderFile/Shader_PointInstance.hlsl");
-		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Hit", FullName, &vecEffect[i])))
-		{
-			MSGBOX("Failed to Creating in CStage1::Ready_Effect()");
-			return E_FAIL;
-		}
+		MSGBOX("Failed to Creating in CStage1::Ready_Effect()");
+		return E_FAIL;
+	}
+	//매니저에 이펙트 넣기 (마지막 매개변수 : 같은 이펙트 추가로 넣을 갯수)
+	if (FAILED(g_pGameInstance->Add_Effect((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Hit", pEffect, 3)))
+	{
+		MSGBOX("Falild to Clone in Effect_Hit");
+		return E_FAIL;
 	}
 
-	////이펙트생성
-	vector<CEffect_HitFloating::EFFECTDESC> vecEffect0;
-	g_pGameInstance->LoadFile<CEffect_HitFloating::EFFECTDESC>(vecEffect0, L"../bin/SaveData/Effect/Effect_Player_Attack2_Floating.dat");
+	vector<CEffect_HitFloating::EFFECTDESC> vecHitFloating;
+	g_pGameInstance->LoadFile<CEffect_HitFloating::EFFECTDESC>(vecHitFloating, L"../bin/SaveData/Effect/Effect_Player_Attack2_Floating_2.dat");
 
-	for (int i = 0; i < vecEffect0.size(); ++i)
+	FullName = L"Proto_GameObject_Effect_Floating";
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Floating", FullName, &vecHitFloating[0],(CGameObject**)&pEffect)))
 	{
-		wstring FullName = L"Proto_GameObject_Effect_Floating";
-		//_tcscpy_s(vecEffect1[i].ShaderFullFilePath, L"../../Reference/ShaderFile/Shader_PointInstance.hlsl");
-		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Floating", FullName, &vecEffect0[i])))
-		{
-			MSGBOX("Failed to Creating in CStage1::Ready_Effect() Floating");
-			return E_FAIL;
-		}
+		MSGBOX("Failed to Creating in CStage1::Ready_Effect()");
+		return E_FAIL;
+	}
+	if (FAILED(g_pGameInstance->Add_Effect((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Floating", pEffect, 3)))
+	{
+		MSGBOX("Falild to Clone in Effect_Floating");
+		return E_FAIL;
 	}
 
-	////이펙트생성
-	vector<CEffect_HitFloating::EFFECTDESC> vecEffect1;
-	g_pGameInstance->LoadFile<CEffect_HitFloating::EFFECTDESC>(vecEffect1, L"../bin/SaveData/Effect/Effect_Player_Attack2_Floating_2.dat");
-
-	for (int i = 0; i < vecEffect1.size(); ++i)
-	{
-		wstring FullName = L"Proto_GameObject_Effect_Floating";
-		//_tcscpy_s(vecEffect1[i].ShaderFullFilePath, L"../../Reference/ShaderFile/Shader_PointInstance.hlsl");
-		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Floating_2", FullName, &vecEffect1[i])))
-		{
-			MSGBOX("Failed to Creating in CStage1::Ready_Effect() Floating_2");
-			return E_FAIL;
-		}
-	}
-
-
-	////이펙트생성
-	vector<CEffect_DeathParticle::EFFECTDESC> vecEffect2;
-	g_pGameInstance->LoadFile<CEffect_DeathParticle::EFFECTDESC>(vecEffect2, L"../bin/SaveData/Effect/Effect_Death.dat");
-
-	for (int i = 0; i < vecEffect2.size(); ++i)
-	{
-		wstring FullName = L"Proto_GameObject_Effect_Death";
-		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Death", FullName, &vecEffect2[i])))
-		{
-			MSGBOX("Failed to Creating in CStage1::Ready_Effect() Death");
-			return E_FAIL;
-		}
-	}
 	return S_OK;
 }
 
@@ -1278,6 +1257,8 @@ HRESULT CStage1::Ready_Treasure_Chest()
 	}
 	return S_OK;
 }
+
+
 
 CStage1* CStage1::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
 {
