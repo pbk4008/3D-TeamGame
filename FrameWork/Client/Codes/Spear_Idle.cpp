@@ -29,7 +29,7 @@ _int CSpear_Idle::Tick(const _double& _dDeltaTime)
 
 	m_pAnimator->Tick(_dDeltaTime);
 
-	m_fChaserDelay -= _dDeltaTime;
+	m_fChaserDelay -= (_float)_dDeltaTime;
 
 	return _int();
 }

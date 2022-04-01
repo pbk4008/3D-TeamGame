@@ -19,7 +19,7 @@ public:
 	void Update(_double TimeDelta);
 
 private:
-	_uint			m_iNumInstance = 0;
+	_uint						m_iNumInstance = 0;
 
 	ID3D11Buffer*				m_pVBInstance = nullptr;
 	D3D11_BUFFER_DESC			m_VBInstDesc;

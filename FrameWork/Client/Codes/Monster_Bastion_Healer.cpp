@@ -228,7 +228,7 @@ HRESULT CMonster_Bastion_Healer::Render()
 void CMonster_Bastion_Healer::Groggy_Start()
 {
 	Set_Groggy(true);
-	Set_GroggyGauge(0.f);
+	Set_GroggyGauge(0);
 	m_pPanel->Set_GroggyBar(Get_GroggyGaugeRatio());
 }
 
@@ -248,9 +248,8 @@ void CMonster_Bastion_Healer::Hit(CCollision& pCol)
 				Active_Effect((_uint)EFFECT::HIT);
 				Active_Effect((_uint)EFFECT::FLOATING);
 
-
 				m_fCurrentHp -= 5.f;
-				m_bGroggy = 2; //TODO::¼öÄ¡Á¤ÇØ¼­¹Ù²ãÁà¾ßµÊ
+				//m_bGroggy = 2; //TODO::¼öÄ¡Á¤ÇØ¼­¹Ù²ãÁà¾ßµÊ
 
 				m_pPanel->Set_HpBar(Get_HpRatio());
 

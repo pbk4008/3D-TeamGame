@@ -37,7 +37,7 @@ public:
 	virtual HRESULT Render();
 	virtual HRESULT	Render_Shadow();
 	virtual HRESULT	Render_ShadeShadow(ID3D11ShaderResourceView* ShaodwMap);
-	virtual HRESULT	Render_PBR();
+	virtual void	ComputeViewZ(_fmatrix* pView);
 public:
 	virtual void OnCollisionEnter(CCollision& collision);
 	virtual void OnCollisionStay(CCollision& collision);
@@ -52,6 +52,7 @@ public:
 	_int getTag() { return m_iObectTag; }
 	_bool getRemove() { return m_bRemove; }
 	CTransform* Get_Transform() const;
+	_float		Get_ViewZ() { return m_fViewZ; }
 public:
 	virtual void Set_Remove(_bool bCheck) { m_bRemove = bCheck; };
 protected:
@@ -64,6 +65,7 @@ protected:
 	_bool m_bCheckCollider;
 	_uint m_iObectTag;
 	_uint m_iSceneID;
+	_float m_fViewZ = 0.f;
 protected:
 	unordered_map<wstring, class CComponent*>		m_Components;
 protected:

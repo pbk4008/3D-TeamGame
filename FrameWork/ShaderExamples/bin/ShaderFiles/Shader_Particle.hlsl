@@ -149,17 +149,6 @@ struct PS_OUT
 	vector		vColor : SV_TARGET0;
 };
 
-struct PS_OUT_TEST
-{
-	float4 diffuse : SV_TARGET0;
-	float4 normal : SV_TARGET1;
-	float4 depth : SV_TARGET2;
-	float4 M : SV_Target3;
-	float4 R : SV_Target4;
-	float4 A : SV_Target5;
-	float4 E : SV_Target6;
-};
-
 /* 1. 픽셀의 색을 결정한다. */
 // vector PS_MAIN(PS_IN In) : SV_TARGET0
 PS_OUT PS_MAIN(PS_IN In)
@@ -189,6 +178,17 @@ PS_OUT PS_MAIN_MULTIIMAGE(PS_IN In)
     return Out;
 }
 
+struct PS_OUT_TEST
+{
+	float4 diffuse : SV_TARGET0;
+	float4 normal : SV_TARGET1;
+	float4 depth : SV_TARGET2;
+	float4 M : SV_Target3;
+	float4 R : SV_Target4;
+	float4 A : SV_Target5;
+	float4 E : SV_Target6;
+};
+
 PS_OUT_TEST PS_MAIN_TEST(PS_IN In)
 {
 	PS_OUT_TEST Out = (PS_OUT_TEST)0;
@@ -202,8 +202,10 @@ PS_OUT_TEST PS_MAIN_TEST(PS_IN In)
 	Out.M = float4(0, 0, 0, 1);
 	Out.R = float4(1, 1, 1, 1);
 	Out.A = float4(1, 1, 1, 1);
+
     float4 color = float4(g_color, 1.f);
 	float4 power = 1.0f;
+
 	Out.E = color * power * diffuse;
 
 	if (Out.diffuse.a < 0.1f)

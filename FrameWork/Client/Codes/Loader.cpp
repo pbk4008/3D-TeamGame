@@ -69,6 +69,7 @@
 #include "JumpTrigger.h"
 #include "JumpBox.h"
 #include "SwordTrail.h"
+#include "NoiseFire.h"
 #include "TrailEffect.h"
 
 #pragma endregion
@@ -156,7 +157,7 @@ HRESULT CLoader::SetUp_Stage1_Object()
 	if (FAILED(Load_Stage1PlayerLoad()))
 		return E_FAIL;
 
-	if (FAILED(Load_Stage1MonsterLoad()))
+	/*if (FAILED(Load_Stage1MonsterLoad()))
 		return E_FAIL;
 
 	if (FAILED(Load_Stage1BossLoad()))
@@ -166,16 +167,16 @@ HRESULT CLoader::SetUp_Stage1_Object()
 		return E_FAIL;
 
 	if (FAILED(Load_Stage1UILoad()))
-		return E_FAIL;
+		return E_FAIL;*/
 
-	if (FAILED(Load_Stage1EffectLoad()))
-		return E_FAIL;
+	//if (FAILED(Load_Stage1EffectLoad()))
+	//	return E_FAIL;
 
-	if (FAILED(Load_Stage1JumpTrigger()))
+	/*if (FAILED(Load_Stage1JumpTrigger()))
 		return E_FAIL;
 
 	if (FAILED(Load_Stage1TriggerLod()))
-		return E_FAIL;
+		return E_FAIL;*/
 
 	//if (FAILED(Load_Stage1_TreasureChest_Load()))
 	//	return E_FAIL;
@@ -256,16 +257,28 @@ HRESULT CLoader::Load_Stage1FBXLoad()
 
 HRESULT CLoader::Load_Stage1Navi_SkyLoad()
 {
+	// Component Prototype
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_NavMeshCollider", CNavMeshCollider::Create(m_pDevice, m_pDeviceContext))))
-		return E_FAIL;
-
-	// 네비메쉬 플레인
-	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Plane_Test", CPlane_Test::Create(m_pDevice, m_pDeviceContext))))
-		return E_FAIL;
-	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"Sky_Texture", L"../Bin/Resources/Texture/SkyBox/SkyBox_Stage1.dds")))
-		return E_FAIL;
+		MSGBOX("Failed To Creating NavMeshCollider");
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"VIBuffer_Cube", CVIBuffer_Cube::Create(m_pDevice, m_pDeviceContext, L"../../Reference/ShaderFile/Shader_Cube.hlsl"))))
-		return E_FAIL;
+		MSGBOX("Failed To Creating Cube Buffer");
+	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Prototype_Component_NoiseFire", CVIBuffer_RectInstance::Create(m_pDevice, m_pDeviceContext, L"../../Reference/ShaderFile/Shader_InstanceFire.hlsl", 1))))
+	//	MSGBOX("Failed To Creating RectInstance Buffer");
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Prototype_Component_NoiseFire", CVIBuffer_Rect::Create(m_pDevice, m_pDeviceContext, L"../../Reference/ShaderFile/Shader_RectFire.hlsl"))))
+		MSGBOX("Failed To Creating RectInstance Buffer");
+
+	// Object Prototype
+	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_SkyBox", CSkyBox::Create(m_pDevice, m_pDeviceContext)))) MSGBOX("Failed To Creating SkyBox Prototype");
+	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Plane_Test", CPlane_Test::Create(m_pDevice, m_pDeviceContext)))) MSGBOX("Failed To Creating PlaneTest Prototype");
+	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_NoiseFire", CNoiseFire::Create(m_pDevice, m_pDeviceContext)))) MSGBOX("Failed To Creating NoiseFire Prototype")
+
+
+	// Texture
+	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"Sky_Texture", L"../Bin/Resources/Texture/SkyBox/SkyBox_Stage1.dds"))) MSGBOX("Failed Add To SkyBoxTex");
+	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"FireTexture", L"../Bin/Resources/Texture/Fire/fire.dds"))) MSGBOX("Failed Add To FireTex");
+	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"FireAlphaTexture", L"../Bin/Resources/Texture/Fire/firealpha.dds"))) MSGBOX("Failed Add To FireAlphaTex");
+	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"FireNoiseTexture", L"../Bin/Resources/Texture/Fire/firenoise.dds"))) MSGBOX("Failed Add To FireNoiseTex");
+
 
 	return S_OK;
 }
@@ -813,22 +826,18 @@ HRESULT CLoader::Load_Stage1PlayerLoad()
 		return E_FAIL;
 	}
 
-	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"TrailBase", L"../bin/Resources/Texture/Trail/T_Smoke_Trail_Soft.dds"))) 
-		return E_FAIL;
+	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"TrailBase", L"../bin/Resources/Texture/Trail/T_Smoke_Trail_Soft.dds"))) MSGBOX("Failed To Add SwordTrail Tex");
 	// 2
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_VIBuffer_Trail",
 		CVIBuffer_Trail::Create(m_pDevice, m_pDeviceContext, L"../../Reference/ShaderFile/Shader_Trail.hlsl", 100))))
 		MSGBOX(L"트레일 버퍼 프로토타입 생성 실패");
 	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_TrailEffect", CTrailEffect::Create(m_pDevice, m_pDeviceContext))))
 		MSGBOX(L"트레일이펙트 프로토타입 생성 실패");
-#pragma endregion
 
 #pragma region 오브젝트
 	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Silvermane", CSilvermane::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Camera_Silvermane", CCamera_Silvermane::Create(m_pDevice, m_pDeviceContext))))
-		return E_FAIL;
-	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_SkyBox", CSkyBox::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 	if (FAILED(g_pGameInstance->Add_Prototype(L"Prototype_GameObject_SwordTral", CSwordTrail::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
@@ -875,13 +884,13 @@ HRESULT CLoader::Load_Stage1MonsterLoad()
 		return E_FAIL;
 
 	//Monster EarthAberrant
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Model_Monster_EarthAberrant", CModel::Create(m_pDevice, m_pDeviceContext,
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Monster_EarthAberrant", CModel::Create(m_pDevice, m_pDeviceContext,
 		L"../bin/FBX/Monster/EarthAberrant.fbx", CModel::TYPE_ANIM, true))))
 		return E_FAIL;
 	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Monster_EarthAberrant", CMonster_EarthAberrant::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 
-	////Monster EarthAberrant Weapon
+	//Monster EarthAberrant Weapon
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Model_Weapon_EarthAberrant_Pick", CModel::Create(m_pDevice, m_pDeviceContext,
 		"../bin/Resources/Mesh/Earth_Aberrant_Pick/", "EarthAberrant_Pick.fbx",
 		L"../../Reference/ShaderFile/Shader_StaticMesh.hlsl", matPivot, CModel::TYPE_STATIC, true))))
@@ -986,7 +995,7 @@ HRESULT CLoader::Ready_Logo()
 	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"Texture_Title", L"../bin/Resources/Texture/Loading/logo_godfall_3d.dds")))
 		return E_FAIL;
 
-	g_pGameInstance->Init_SoundManager();
+	//g_pGameInstance->Init_SoundManager();
 
 	return S_OK;
 }

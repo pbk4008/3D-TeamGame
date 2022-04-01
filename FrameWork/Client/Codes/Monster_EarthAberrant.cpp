@@ -50,7 +50,7 @@ HRESULT CMonster_EarthAberrant::NativeConstruct(const _uint _iSceneID, void* _pA
 	}
 	else
 	{
-		_vector Pos = { 3.f, 0.f, 15.f, 1.f };
+		_vector Pos = { 0.f, 1.f, 5.f, 1.f };
 		m_pTransform->Set_State(CTransform::STATE_POSITION, Pos);
 	}
 	if (FAILED(SetUp_Components()))
@@ -75,7 +75,6 @@ HRESULT CMonster_EarthAberrant::NativeConstruct(const _uint _iSceneID, void* _pA
 	pWeapon->Set_OwnerPivotMatrix(m_pModelCom->Get_PivotMatrix());
 	m_pWeapon = pWeapon;
 
-	
 
 	//MonsterBar Panel
 	CUI_Monster_Panel::PANELDESC Desc;
@@ -101,7 +100,7 @@ HRESULT CMonster_EarthAberrant::NativeConstruct(const _uint _iSceneID, void* _pA
 	m_pPanel->Set_HpBar(Get_HpRatio());
 	m_pPanel->Set_GroggyBar(Get_GroggyGaugeRatio());
 
-	setActive(false);
+	/*setActive(false);*/
 	return S_OK;
 }
 
@@ -248,7 +247,7 @@ HRESULT CMonster_EarthAberrant::Render()
 		switch (i)
 		{
 		case 0:
-			m_pModelCom->Render(i, 5);
+			m_pModelCom->Render(i,5);
 			break;
 		case 1:
 			m_pModelCom->Render(i, 4);
@@ -266,7 +265,7 @@ HRESULT CMonster_EarthAberrant::SetUp_Components()
 	Desc.fRotationPerSec = XMConvertToRadians(60.f);
 	m_pTransform->Set_TransformDesc(Desc);
 
-	if (FAILED(__super::SetUp_Components((_uint)SCENEID::SCENE_STAGE1, L"Model_Monster_EarthAberrant", L"Com_Model", (CComponent**)&m_pModelCom)))
+	if (FAILED(__super::SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Model_Monster_EarthAberrant", L"Com_Model", (CComponent**)&m_pModelCom)))
 	{
 		return E_FAIL;
 	}
