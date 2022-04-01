@@ -27,6 +27,12 @@ _int C2H_HammerJogFwdPivot180::Tick(const _double& _dDeltaTime)
 	if (NO_EVENT > iProgress)
 		return iProgress;
 
+
+	if (15 < m_pAnimationController->Get_CurKeyFrameIndex())
+		m_pSilvermane->Add_Velocity(CTransform::STATE_LOOK, -_dDeltaTime);
+	else
+		m_pSilvermane->Add_Velocity(CTransform::STATE_LOOK, _dDeltaTime * 0.5f);
+
 	return _int();
 }
 
@@ -54,7 +60,7 @@ HRESULT C2H_HammerJogFwdPivot180::EnterState()
 
 	
 	m_pAnimationController->SetUp_NextAnimation("SK_Silvermane.ao|A_2H_Hammer_Loco_Jog_Fwd_Pivot_180_Normal", false);
-	m_pAnimationController->Set_RootMotion(true, true, ERootOption::XYZ);
+	m_pAnimationController->Set_RootMotion(true, false, ERootOption::XYZ);
 	
 
 	return S_OK;
@@ -76,7 +82,7 @@ _int C2H_HammerJogFwdPivot180::Input(const _double& _dDeltaTime)
 
 	if (g_pGameInstance->getkeyPress(DIK_S))
 	{
-		if (m_pAnimationController->Is_Finished())
+		if (35 < m_pAnimationController->Get_CurKeyFrameIndex())
 		{
 			if (FAILED(m_pStateController->Change_State(L"2H_HammerJogBwd")))
 				return -1;

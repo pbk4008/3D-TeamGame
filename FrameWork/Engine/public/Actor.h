@@ -24,6 +24,8 @@ public:
 	const _float Get_GroggyGaugeRatio();
 protected:
 	HRESULT Set_SpawnPosition(const _float3 vPoint);
+
+public:
 	//Effect 불러오는 함수
 public:
 	void Active_Effect(_uint iEffectIndex);

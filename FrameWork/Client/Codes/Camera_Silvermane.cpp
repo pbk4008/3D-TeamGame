@@ -56,7 +56,7 @@ _int CCamera_Silvermane::Tick(_double _dDeltaTime)
 	if (NO_EVENT != iProgress)
 		return iProgress;
 
-	m_vLocalOriginPos = { 1.f, 5.f, -6.f };
+	//m_vLocalOriginPos = { 1.f, 5.f, -6.f };
 	iProgress = Chase_Target(_dDeltaTime);
 	if (NO_EVENT != iProgress)
 		return iProgress;
@@ -201,7 +201,7 @@ _int CCamera_Silvermane::Chase_Target(const _double& _dDeltaTime)
 
 	_vector svTargetPosition = m_pSilvermane->Get_Transform()->Get_State(CTransform::STATE_POSITION);
 	_vector svPosition = m_pWorldTransform->Get_State(CTransform::STATE_POSITION);
-	_vector svLerp = XMVectorLerp(svPosition, svTargetPosition, (_float)_dDeltaTime * 10.f);
+	_vector svLerp = XMVectorLerp(svPosition, svTargetPosition, (_float)_dDeltaTime * 12.f);
 	m_pWorldTransform->Set_State(CTransform::STATE_POSITION, svLerp);
 
 	return _int();

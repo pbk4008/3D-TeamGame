@@ -35,6 +35,7 @@
 #include "Effect_HitParticle.h"
 #include "Effect_HitFloating.h"
 #include "Effect_DeathParticle.h"
+#include "Effect_Env_Floating.h"
 #include "Effect_Env_Fire.h"
 #include "UI_Ingame.h"
 #include "UI_Player_HpBar.h"
@@ -47,6 +48,8 @@
 #include "UI_Monster_Name.h"
 #include "UI_Tuto_Base.h"
 #include "UI_Tuto_Font.h"
+#include "UI_Blank_CKey.h"
+#include "UI_Fill_CKey.h"
 
 
 
@@ -358,6 +361,10 @@ HRESULT CLoader::Load_Stage1StaticUILoad()
 
 HRESULT CLoader::Load_Stage1UILoad()
 {
+	//Buffer
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_Rect_Bar", CVIBuffer_Rect::Create(m_pDevice, m_pDeviceContext, L"../../Reference/ShaderFile/Shader_UI_Bar.hlsl"))))
+		return E_FAIL;
+
 	//Panel
 	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_UI_Monster_Panel"), CUI_Monster_Panel::Create(m_pDevice, m_pDeviceContext))))
 	{
@@ -459,6 +466,26 @@ HRESULT CLoader::Load_Stage1UILoad()
 		return E_FAIL;
 	}
 
+	//Blank_CKey
+	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_UI_Blank_CKey"), CUI_Blank_CKey::Create(m_pDevice, m_pDeviceContext))))
+	{
+		return E_FAIL;
+	}
+	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"Texture_Blank_Ckey", L"../bin/Resources/Texture/UI/Static/Active/T_Keyboard_Dark_Key_Shift.dds")))
+	{
+		return E_FAIL;
+	}
+
+	//Fill_CKey
+	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_UI_Fill_CKey"), CUI_Fill_Ckey::Create(m_pDevice, m_pDeviceContext))))
+	{
+		return E_FAIL;
+	}
+	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"Texture_Fill_Ckey", L"../bin/Resources/Texture/UI/Static/Active/T_Keyboard_Light_Key_Shift.dds")))
+	{
+		return E_FAIL;
+	}
+
 	return S_OK;
 }
 
@@ -488,12 +515,22 @@ HRESULT CLoader::Load_Stage1EffectLoad()
 		return E_FAIL;
 	}
 
+	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_Effect_PlayerHit"), CEffect_HitParticle::Create(m_pDevice, m_pDeviceContext))))
+	{
+		return E_FAIL;
+	}
+
 	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_Effect_Floating"), CEffect_HitFloating::Create(m_pDevice, m_pDeviceContext))))
 	{
 		return E_FAIL;
 	}
 
 	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_Effect_Death"), CEffect_DeathParticle::Create(m_pDevice, m_pDeviceContext))))
+	{
+		return E_FAIL;
+	}
+
+	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_Effect_Env_Floating"), CEffect_Env_Floating::Create(m_pDevice, m_pDeviceContext))))
 	{
 		return E_FAIL;
 	}

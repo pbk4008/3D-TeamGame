@@ -41,6 +41,7 @@ texture2D	g_ShadowTexture;
 
 texture2D	g_DiffuseTexture;
 texture2D	g_BiNormalTexture;
+texture2D	g_MaskTexture;
 
 texture2D	g_MRATexture;
 texture2D	g_CEOTexture;
@@ -336,7 +337,7 @@ PS_OUT PS_MAIN_Body(PS_IN In)
 	float Roughness = mra.g ;
 	Out.R = float4(Roughness.xxx, 1.f);
 
-	float AO = ceo.b * 1.f;
+	float AO = ceo.b/* * 1.f*/;
 	Out.A = float4(AO.xxx, 1.f);
 	
 	float4 color = float4(0.25, 0.92, 0.94, 1.f);
@@ -369,6 +370,76 @@ PS_OUT PS_MAIN_FUR(PS_IN In)
 	return Out;
 }
 
+PS_OUT PS_MAIN_EARH_Body(PS_IN In)
+{
+	PS_OUT Out = (PS_OUT) 0;
+	
+	float4 diffuse = g_DiffuseTexture.Sample(DefaultSampler, In.vUvDepth.xy);
+	float4 mra = g_MRATexture.Sample(DefaultSampler, In.vUvDepth.xy);
+	float3 mask = g_MaskTexture.Sample(DefaultSampler, In.vUvDepth.xy).xyz;
+	
+	float3 normal = g_BiNormalTexture.Sample(DefaultSampler, In.vUvDepth.xy).xyz;
+	float3x3 tbn = { In.vTangent.xyz, In.vBiNormal.xyz, In.vNormal.xyz };
+	
+	normal = Normalmapping(normal, tbn);
+	
+	Out.diffuse.a = diffuse.a;
+	Out.diffuse.xyz = diffuse.xyz * mask;
+
+	Out.depth = float4(In.vUvDepth.z / In.vUvDepth.w, In.vUvDepth.w / 300.f, 0.f, 0.f);
+	Out.normal = float4(normal, 0);
+	
+	float Metalic = mra.r + 0.2f;
+	Out.M = float4(Metalic.xxx, 1.f);
+	
+	float Roughness = mra.g;
+	Out.R = float4(Roughness.xxx, 1.f);
+
+	float AO = 1;
+	Out.A = float4(AO.xxx, 1.f);
+	
+	float Emission = 0;
+	Out.E = float4(Emission.xxx, 1.f);
+	
+	
+	return Out;
+}
+
+PS_OUT PS_MAIN_EARH_CRYSTAL(PS_IN In)
+{
+	PS_OUT Out = (PS_OUT) 0;
+	
+	float4 diffuse = g_DiffuseTexture.Sample(DefaultSampler, In.vUvDepth.xy);
+	float4 mra = g_MRATexture.Sample(DefaultSampler, In.vUvDepth.xy);
+	float3 mask = g_MaskTexture.Sample(DefaultSampler, In.vUvDepth.xy).xyz;
+	
+	float3 normal = g_BiNormalTexture.Sample(DefaultSampler, In.vUvDepth.xy).xyz;
+	float3x3 tbn = { In.vTangent.xyz, In.vBiNormal.xyz, In.vNormal.xyz };
+	
+	normal = Normalmapping(normal, tbn);
+	
+	Out.diffuse.a = diffuse.a;
+	Out.diffuse.xyz = diffuse.xyz * mask;
+
+	Out.depth = float4(In.vUvDepth.z / In.vUvDepth.w, In.vUvDepth.w / 300.f, 0.f, 0.f);
+	Out.normal = float4(normal, 0);
+	
+	float Metalic = mra.r + 0.2f;
+	Out.M = float4(Metalic.xxx, 1.f);
+	
+	float Roughness = mra.g;
+	Out.R = float4(Roughness.xxx, 1.f);
+
+	float AO = 1;
+	Out.A = float4(AO.xxx, 1.f);
+	
+	
+	float4 color = float4(1.f, 0, 0, 0);
+	Out.E = color * 0.1f * mask.r;
+	
+	return Out;
+}
+
 technique11			DefaultTechnique
 {	
 	pass GunmanBody //------------------------------------------------------------------------------------0 Top
@@ -396,7 +467,7 @@ technique11			DefaultTechnique
 	}
 
 
-	pass ShadowANIM //-----------------------------------------------------------------------------------------3 Anim ShadowMap
+	pass ShadowANIM //-----------------------------------------------------------------------------------------2 Anim ShadowMap
 	{
 		SetRasterizerState(CullMode_Default);
 		SetDepthStencilState(ZDefault, 0);
@@ -408,7 +479,7 @@ technique11			DefaultTechnique
 		PixelShader = compile ps_5_0 PS_MAIN_SHADOW();
 	}
 
-	pass ShadeShadow //-----------------------------------------------------------------------------------------4 Anim Shade_Shadow
+	pass ShadeShadow //-----------------------------------------------------------------------------------------3 Anim Shade_Shadow
 	{
 		SetRasterizerState(CullMode_Default);
 		SetDepthStencilState(ZDefault, 0);
@@ -418,6 +489,30 @@ technique11			DefaultTechnique
 		VertexShader = compile vs_5_0 VS_MAIN_SHADESHADOW();
 		GeometryShader = NULL;
 		PixelShader = compile ps_5_0 PS_MAIN_SHADESHADOW();
+	}
+
+	pass EarthBody //4
+	{
+		SetRasterizerState(CullMode_Default);
+		SetDepthStencilState(ZDefault, 0);
+		SetBlendState(BlendDisable, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+
+		/* 진입점함수를 지정한다. */
+		VertexShader = compile vs_5_0 VS_MAIN_ANIM();
+		GeometryShader = NULL;
+		PixelShader = compile ps_5_0 PS_MAIN_EARH_Body();
+	}
+
+	pass EarthCrystal // 5
+	{
+		SetRasterizerState(CullMode_Default);
+		SetDepthStencilState(ZDefault, 0);
+		SetBlendState(BlendDisable, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+
+		/* 진입점함수를 지정한다. */
+		VertexShader = compile vs_5_0 VS_MAIN_ANIM();
+		GeometryShader = NULL;
+		PixelShader = compile ps_5_0 PS_MAIN_EARH_CRYSTAL();
 	}
 }
 

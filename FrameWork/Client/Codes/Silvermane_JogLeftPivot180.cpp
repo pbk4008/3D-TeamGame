@@ -79,7 +79,7 @@ _int CSilvermane_JogLeftPivot180::Input(const _double& _dDeltaTime)
 
 	if (g_pGameInstance->getkeyPress(DIK_D))
 	{
-		if (m_pAnimationController->Is_Finished())
+		if (46 < m_pAnimationController->Get_CurKeyFrameIndex())
 		{
 			if (FAILED(m_pStateController->Change_State(L"JogRight")))
 				return -1;

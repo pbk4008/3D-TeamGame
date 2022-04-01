@@ -359,7 +359,7 @@ HRESULT CMonster_Crawler::Set_Animation_FSM()
 		return E_FAIL;
 
 	pAnim = m_pModelCom->Get_Animation("SK_Crystal_Crawler_v1.ao|A_Death_CrystalCrawler");
-	if (FAILED(m_pAnimatorCom->Insert_Animation(DEATH, HEAD, pAnim, false, true, false, ERootOption::XYZ, true)))
+	if (FAILED(m_pAnimatorCom->Insert_Animation(DEATH, HEAD, pAnim, true, true, false, ERootOption::XYZ, true)))
 		return E_FAIL;
 
 	pAnim = m_pModelCom->Get_Animation("SK_Crystal_Crawler_v1.ao|A_Ricochet_CrystalCrawler");

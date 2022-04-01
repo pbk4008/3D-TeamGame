@@ -53,6 +53,8 @@ HRESULT CSilvermane_Hit::EnterState()
 
 	m_pSilvermane->Set_IsHit(true);
 
+	m_pSilvermane->Active_Effect((_uint)EFFECT::PLAYERHIT);
+
 	return S_OK;
 }
 

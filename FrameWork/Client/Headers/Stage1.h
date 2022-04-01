@@ -61,6 +61,7 @@ private:
 	_bool m_bDebug;
 	_uint m_iCountMonster;
 	_bool m_bFirst;
+	_bool test = false;
 };
 #endif
 
