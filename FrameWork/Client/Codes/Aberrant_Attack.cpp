@@ -66,6 +66,8 @@ HRESULT CAberrant_Attack::EnterState()
 {
 	if (FAILED(__super::EnterState()))
 		return E_FAIL;
+
+	return S_OK;
 }
 
 

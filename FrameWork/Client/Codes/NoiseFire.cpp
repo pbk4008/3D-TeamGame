@@ -23,6 +23,10 @@ HRESULT CNoiseFire::NativeConstruct(const _uint iSceneID, void* pArg)
 	if (FAILED(__super::NativeConstruct(iSceneID,pArg))) return E_FAIL;
 	if (FAILED(ReadyComponent())) return E_FAIL;
 	
+	_vector pos = *((_vector*)(pArg));
+	pos += XMVectorSet(0, 1.8f, 0, 0);
+	m_pTransform->Set_State(CTransform::STATE_POSITION, pos);
+
 	//m_pRenderer->SetRenderButton(CRenderer::PARTICLE, true);
 
 	return S_OK;
@@ -61,8 +65,8 @@ HRESULT CNoiseFire::Render()
 
 HRESULT CNoiseFire::BindConstBuffer()
 {
-	m_pTransform->Set_State(CTransform::STATE_POSITION, XMVectorSet(9.5f, 3.3f, 6.5f, 1.f));
-	m_pTransform->Scale_Up(XMVectorSet(2.0f, 1.f, 1.f, 0.f));
+	//m_pTransform->Set_State(CTransform::STATE_POSITION, XMVectorSet(0.f, 3.3f, 0.0f, 1.f));
+	m_pTransform->Scale_Up(XMVectorSet(3.0f, 1.f, 1.f, 0.f));
 
 	_matrix world, view, proj;
 

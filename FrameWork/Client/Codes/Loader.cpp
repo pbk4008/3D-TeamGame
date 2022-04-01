@@ -157,7 +157,7 @@ HRESULT CLoader::SetUp_Stage1_Object()
 	if (FAILED(Load_Stage1PlayerLoad()))
 		return E_FAIL;
 
-	if (FAILED(Load_Stage1MonsterLoad()))
+	/*if (FAILED(Load_Stage1MonsterLoad()))
 		return E_FAIL;
 
 	if (FAILED(Load_Stage1BossLoad()))
@@ -167,16 +167,16 @@ HRESULT CLoader::SetUp_Stage1_Object()
 		return E_FAIL;
 
 	if (FAILED(Load_Stage1UILoad()))
-		return E_FAIL;
+		return E_FAIL;*/
 
 	//if (FAILED(Load_Stage1EffectLoad()))
 	//	return E_FAIL;
 
-	if (FAILED(Load_Stage1JumpTrigger()))
+	/*if (FAILED(Load_Stage1JumpTrigger()))
 		return E_FAIL;
 
 	if (FAILED(Load_Stage1TriggerLod()))
-		return E_FAIL;
+		return E_FAIL;*/
 
 	//if (FAILED(Load_Stage1_TreasureChest_Load()))
 	//	return E_FAIL;
@@ -927,7 +927,7 @@ HRESULT CLoader::Load_Stage1MonsterLoad()
 		return E_FAIL;
 
 	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Shooter_Bullet", CBullet::Create(m_pDevice, m_pDeviceContext))))
-		return E_FAIL;*/
+		return E_FAIL;
 
 	//Bastion_2HSword
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Bastion_2HSword", CModel::Create(m_pDevice, m_pDeviceContext,
@@ -995,7 +995,7 @@ HRESULT CLoader::Ready_Logo()
 	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"Texture_Title", L"../bin/Resources/Texture/Loading/logo_godfall_3d.dds")))
 		return E_FAIL;
 
-	g_pGameInstance->Init_SoundManager();
+	//g_pGameInstance->Init_SoundManager();
 
 	return S_OK;
 }

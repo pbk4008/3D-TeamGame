@@ -95,7 +95,7 @@ HRESULT CTrailEffect::Render()
 		++iIndex;
 	}
 
-	m_pVIBuffer->Set_VertexTrail(vPoints, vDirs, m_fLength, m_listPoints.size());
+	m_pVIBuffer->Set_VertexTrail(vPoints, vDirs, m_fLength, (DWORD)m_listPoints.size());
 #pragma endregion
 
 
@@ -229,7 +229,7 @@ void CTrailEffect::CatmullRom()
 	auto iter_end = m_listPoints.end();
 	_vector* vPoints = new _vector[m_listPoints.size()];
 	_vector* vDirs = new _vector[m_listPoints.size()];
-	_uint iPointsSize = m_listPoints.size();
+	_uint iPointsSize = (_uint)m_listPoints.size();
 
 	_uint iIndex = 0;
 	for (; iter != iter_end; ++iter)

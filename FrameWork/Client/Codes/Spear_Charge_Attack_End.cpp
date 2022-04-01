@@ -30,7 +30,7 @@ _int CSpear_Charge_Attack_End::Tick(const _double& _dDeltaTime)
 		return iProgress;
 
 	m_pAnimator->Tick(_dDeltaTime);
-	m_fTime -= _dDeltaTime;
+	m_fTime -= (_float)_dDeltaTime;
 
 	return _int();
 }

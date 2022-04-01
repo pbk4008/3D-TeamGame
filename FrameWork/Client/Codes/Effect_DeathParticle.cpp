@@ -71,7 +71,7 @@ _int CEffect_DeathParticle::Tick(_double TimeDelta)
 {
 	m_pBuffer->Update(g_dDeltaTime, m_Desc.iAxis);
 
-	m_fNonActiveTimeAcc += g_dDeltaTime;
+	m_fNonActiveTimeAcc += (_float)g_dDeltaTime;
 	if (4.f <= m_fNonActiveTimeAcc)
 	{
 		setActive(false);

@@ -175,7 +175,7 @@ void CVIBuffer_PointInstance_Env_Floating::Update(_double TimeDelta, _uint eAxis
 		return;
 	}
 
-	m_fAutoResetTimeAcc += TimeDelta;
+	m_fAutoResetTimeAcc += (_float)TimeDelta;
 
 	if (0.35f <= m_fAutoResetTimeAcc)
 	{
