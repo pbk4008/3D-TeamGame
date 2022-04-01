@@ -513,8 +513,8 @@ HRESULT CMonster_Bastion_Shooter::Ready_StateFSM()
 	if (FAILED(m_pStateController->Add_State(L"Hit", CShooter_Hit::Create(m_pDevice, m_pDeviceContext, &tFSMDesc))))
 		return E_FAIL;
 
-	lstrcpy(tFSMDesc.pName, L"Death");
-	if (FAILED(m_pStateController->Add_State(L"Death", CShooter_Death::Create(m_pDevice, m_pDeviceContext, &tFSMDesc))))
+	lstrcpy(tMoveDesc.pName, L"Death");
+	if (FAILED(m_pStateController->Add_State(L"Death", CShooter_Death::Create(m_pDevice, m_pDeviceContext, &tMoveDesc))))
 		return E_FAIL;
 
 	lstrcpy(tActorDesc.pName, L"Groggy");

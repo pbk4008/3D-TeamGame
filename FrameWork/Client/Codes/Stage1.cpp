@@ -377,7 +377,7 @@ HRESULT CStage1::Ready_UI(const _tchar* LayerTag)
 	Desc3.UIDesc.fSize = { 60.f , 60.f };
 	Desc3.UIDesc.IDTag = (_uint)GAMEOBJECT::UI_STATIC;
 
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_UI_BlankC", L"Proto_GameObject_UI_Blank_CKey", &Desc3)))
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_UI_BlankC", L"Proto_GameObject_UI_Blank_CKey", &Desc3)))
 		return E_FAIL;
 
 	//Fill_Ckey
@@ -390,7 +390,7 @@ HRESULT CStage1::Ready_UI(const _tchar* LayerTag)
 	Desc4.UIDesc.fSize = { 60.f , 60.f };
 	Desc4.UIDesc.IDTag = (_uint)GAMEOBJECT::UI_STATIC;
 
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_UI_FillC", L"Proto_GameObject_UI_Fill_CKey", &Desc4)))
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_UI_FillC", L"Proto_GameObject_UI_Fill_CKey", &Desc4)))
 		return E_FAIL;
 
 	return S_OK;
