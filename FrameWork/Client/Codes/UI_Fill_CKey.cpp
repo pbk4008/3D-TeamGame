@@ -67,7 +67,7 @@ _int CUI_Fill_Ckey::Tick(_double TimeDelta)
 
 	if (g_pGameInstance->getkeyPress(DIK_C) && true == m_bJumpNode)
 	{
-		m_fGapX += TimeDelta;
+		m_fGapX += (_float)TimeDelta;
 	}
 	if (g_pGameInstance->getkeyUp(DIK_C))
 	{

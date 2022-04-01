@@ -113,6 +113,7 @@ _uint CShooter_Attack::Shot(_double dDeltaTime)
 	{
 		_uint iProgress = Create_Bullet();
 		m_bShot = true;
+		g_pGameInstance->Play_Shot(L"Shooter_Shot", CSoundMgr::CHANNELID::Shooter_Attack_1);
 		if (iProgress == -1)
 			return -1;
 	}

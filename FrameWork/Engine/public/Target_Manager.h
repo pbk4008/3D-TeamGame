@@ -26,6 +26,7 @@ public: HRESULT	End_RT(ID3D11DeviceContext* pDeviceContext, ID3D11DepthStencilVi
 
 public: HRESULT Begin_MRT(ID3D11DeviceContext* pDeviceContext, const wstring& pMRTTag);
 public: HRESULT End_MRT(ID3D11DeviceContext* pDeviceContext);
+public: HRESULT	End_MRTNotClear(ID3D11DeviceContext* pDeviceContext);
 
 public:	HRESULT Begin_CSTarget(ID3D11DeviceContext* pDeviceContext, const _tchar* pCSTag);
 public: HRESULT End_CSTarget(ID3D11DeviceContext* pDeviceContext);

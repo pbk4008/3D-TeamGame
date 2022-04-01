@@ -54,6 +54,8 @@ HRESULT CSpear_Guard::EnterState()
 	if (FAILED(__super::EnterState()))
 		return E_FAIL;
 
+	g_pGameInstance->BlendSound(L"Spear_Guard", L"Spear_Guard_1", CSoundMgr::CHANNELID::Spear_Attack_1, CSoundMgr::CHANNELID::Spear_Attack_2);
+
 	if (FAILED(m_pAnimator->Change_AnyEntryAnimation((_uint)CMonster_Bastion_Spear::ANIM_TYPE::A_GUARD)))
 		return E_FAIL;
 
@@ -71,7 +73,7 @@ HRESULT CSpear_Guard::ExitState()
 /* 플레이어 상태 추적 */
 void CSpear_Guard::Look_Player(void)
 {
-	if (!g_pObserver->IsAttack())
+	if (!g_pObserver->IsAttack() && m_pAnimator->Get_AnimController()->Is_Finished())
 		m_pStateController->Change_State(L"Chaser");
 }
 

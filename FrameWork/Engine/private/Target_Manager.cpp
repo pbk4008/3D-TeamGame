@@ -159,6 +159,16 @@ HRESULT CTarget_Manager::End_MRT(ID3D11DeviceContext* pDeviceContext)
 	return S_OK;
 }
 
+HRESULT CTarget_Manager::End_MRTNotClear(ID3D11DeviceContext* pDeviceContext)
+{
+	pDeviceContext->OMSetRenderTargets(1, &m_pOldView, m_pDepthStencilView);
+
+	Safe_Release(m_pOldView);
+	Safe_Release(m_pDepthStencilView);
+
+	return S_OK;
+}
+
 HRESULT CTarget_Manager::Begin_CSTarget(ID3D11DeviceContext* pDeviceContext, const _tchar* pCSTag)
 {
 	CCSTarget* pCsTarget = Find_CSTarget(pCSTag);

@@ -65,7 +65,7 @@ HRESULT C1H_SwordNormalSidestepLeft_V3::EnterState()
 	m_tShakeEvent.fBlendInTime = 0.2f;
 	m_tShakeEvent.fBlendOutTime = 0.8f;
 	m_tShakeEvent.tWaveY.fAmplitude = 1.f;
-	m_tShakeEvent.tWaveY.fFrequency = 0.4;
+	m_tShakeEvent.tWaveY.fFrequency = 0.4f;
 	m_tShakeEvent.tWaveY.fAdditionalOffset = 1.f;
 	m_tShakeEvent.tWaveZ.fAmplitude = 1.f;
 	m_tShakeEvent.tWaveZ.fFrequency = 1.f;
@@ -118,6 +118,8 @@ _int C1H_SwordNormalSidestepLeft_V3::Input(const _double& _dDeltaTime)
 	{
 		if (g_pGameInstance->getkeyDown(DIK_SPACE))
 		{
+			g_pGameInstance->BlendSound(L"Player_Dash", L"Player_Dash_1", CSoundMgr::CHANNELID::PLAYER1, CSoundMgr::CHANNELID::PLAYER2);
+
 			if (g_pGameInstance->getkeyPress(DIK_A))
 			{
 				m_pAnimationController->Reset_Animation();

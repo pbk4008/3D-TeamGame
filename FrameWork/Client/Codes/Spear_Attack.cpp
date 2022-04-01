@@ -30,6 +30,7 @@ _int CSpear_Attack::Tick(const _double& _dDeltaTime)
 		return iProgress;
 
 	m_pAnimator->Tick(_dDeltaTime);
+	Play_Sound();
 
 	CMonster_Bastion_Spear* pMonster = (CMonster_Bastion_Spear*)m_pStateController->Get_GameObject();
 	if (nullptr != pMonster)
@@ -70,6 +71,8 @@ HRESULT CSpear_Attack::ExitState()
 	if (FAILED(__super::ExitState()))
 		return E_FAIL;
 
+	m_bAttack1=false;
+	m_bAttack2=false;
 	return S_OK;
 }
 
@@ -84,6 +87,35 @@ void CSpear_Attack::Look_Player(void)
 void CSpear_Attack::Look_Monster(void)
 {
 
+}
+
+void CSpear_Attack::Play_Sound(void)
+{
+	_uint iCurKeyFrameIndex = m_pAnimator->Get_AnimController()->Get_CurKeyFrameIndex();
+
+	if (m_iAttack1Frame == iCurKeyFrameIndex)
+	{
+		if (!m_bAttack1)
+		{
+			g_pGameInstance->BlendSound(L"Spear_Swing", L"Spear_Attack_1", CSoundMgr::CHANNELID::Spear_Attack_1, CSoundMgr::CHANNELID::Sword1H_Attack_2);
+			g_pGameInstance->VolumeChange(CSoundMgr::CHANNELID::Spear_Attack_2, 0.02f);
+			m_bAttack1 = true;
+		}
+	}
+	if (m_bAttack1)
+	{
+		if (m_iAttack2Frame == iCurKeyFrameIndex)
+		{
+			if (!m_bAttack2)
+			{
+
+				g_pGameInstance->BlendSound(L"Spear_Roar", L"Spear_Attack_2", CSoundMgr::CHANNELID::Spear_Attack_1, CSoundMgr::CHANNELID::Sword1H_Attack_2);
+				g_pGameInstance->VolumeChange(CSoundMgr::CHANNELID::Spear_Attack_1, 0.3f);
+				g_pGameInstance->VolumeChange(CSoundMgr::CHANNELID::Spear_Attack_2, 0.2f);
+				m_bAttack2 = true;
+			}
+		}
+	}
 }
 
 CSpear_Attack* CSpear_Attack::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext, void* _pArg)

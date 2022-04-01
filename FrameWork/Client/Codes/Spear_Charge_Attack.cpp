@@ -29,6 +29,7 @@ _int CSpear_Charge_Attack::Tick(const _double& _dDeltaTime)
 	if (NO_EVENT != iProgress)
 		return iProgress;
 
+	Play_Sound();
 	m_pAnimator->Tick(_dDeltaTime);
 
 	return _int();
@@ -81,6 +82,11 @@ void CSpear_Charge_Attack::Look_Player(void)
 }
 
 void CSpear_Charge_Attack::Look_Monster(void)
+{
+
+}
+
+void CSpear_Charge_Attack::Play_Sound()
 {
 
 }

@@ -435,6 +435,7 @@ call Update_Library_Release.bat</Command>
     <FxCompile Include="..\bin\ShaderFiles\Shader_Effect_Fire.hlsl" />
     <FxCompile Include="..\bin\ShaderFiles\Shader_HDRBase.hlsl" />
     <FxCompile Include="..\bin\ShaderFiles\Shader_Instance.hlsl" />
+    <FxCompile Include="..\bin\ShaderFiles\Shader_InstanceFire.hlsl" />
     <FxCompile Include="..\bin\ShaderFiles\Shader_InstanceMesh.hlsl" />
     <FxCompile Include="..\bin\ShaderFiles\Shader_INST_Coin.hlsl" />
     <FxCompile Include="..\bin\ShaderFiles\Shader_INST_MASK.hlsl" />
@@ -458,6 +459,7 @@ call Update_Library_Release.bat</Command>
     <FxCompile Include="..\bin\ShaderFiles\Shader_PointInstance.hlsl" />
     <FxCompile Include="..\bin\ShaderFiles\Shader_PsotProcess.hlsl" />
     <FxCompile Include="..\bin\ShaderFiles\Shader_Rect.hlsl" />
+    <FxCompile Include="..\bin\ShaderFiles\Shader_RectFire.hlsl" />
     <FxCompile Include="..\bin\ShaderFiles\Shader_RectViewport.hlsl" />
     <FxCompile Include="..\bin\ShaderFiles\Shader_Shield.hlsl" />
     <FxCompile Include="..\bin\ShaderFiles\Shader_SilverMane.hlsl" />

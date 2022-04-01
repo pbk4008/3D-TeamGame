@@ -28,7 +28,10 @@ _int CAberrant_Attack::Tick(const _double& TimeDelta)
 	if (NO_EVENT != iProgress)
 		return iProgress;
 
+	Play_Sound();
+
 	m_pAnimator->Tick(TimeDelta);
+
 
 	CMonster_EarthAberrant* pMonster = (CMonster_EarthAberrant*)m_pStateController->Get_GameObject();
 
@@ -66,6 +69,32 @@ HRESULT CAberrant_Attack::EnterState()
 {
 	if (FAILED(__super::EnterState()))
 		return E_FAIL;
+
+	_vector vMonsterPos = m_pTransform->Get_State(CTransform::STATE::STATE_POSITION);
+	_vector vDist = vMonsterPos - g_pObserver->Get_PlayerPos();
+	_float fDistToPlayer = XMVectorGetX(XMVector3Length(vDist));
+
+	
+	m_pTransform->Face_Target(g_pObserver->Get_PlayerPos());
+
+	_uint iRandom = rand() % 2;
+
+	switch (iRandom)
+	{
+	case 0:
+		m_pAnimator->Change_AnyEntryAnimation((_uint)CMonster_EarthAberrant::MON_STATE::ATTACK_R1);
+		m_iAttackType = 0;
+		break;
+	case 1:
+		m_pAnimator->Change_AnyEntryAnimation((_uint)CMonster_EarthAberrant::MON_STATE::ATTACK_R2);
+		m_iAttackType = 1;
+		break;
+	}
+
+	//_vector vec = { 0.f, 1.f, 0.f,0.f };
+	//m_pTransform->SetUp_Rotation(vec, (XMConvertToRadians(180.f)));
+
+	return S_OK;
 }
 
 
@@ -103,6 +132,26 @@ HRESULT CAberrant_Attack::EnterState(void* pArg)
 void CAberrant_Attack::Look_Player(void)
 {
 
+}
+
+void CAberrant_Attack::Play_Sound(void)
+{
+	_uint iCurKeyFrameIndex = m_pAnimator->Get_AnimController()->Get_CurKeyFrameIndex();
+
+	if (!m_iAttackType)
+	{
+		if (m_iAttack1Frame == iCurKeyFrameIndex)
+		{
+			g_pGameInstance->BlendSound(L"Earth_Attack", L"Earth_Attack_2", CSoundMgr::CHANNELID::Earth_Attack_1, CSoundMgr::CHANNELID::Earth_Attack_2);
+		}
+	}
+	else
+	{
+		if (m_iAttack2Frame == iCurKeyFrameIndex)
+		{
+			g_pGameInstance->BlendSound(L"Earth_Attack", L"Earth_Attack_3", CSoundMgr::CHANNELID::Earth_Attack_1, CSoundMgr::CHANNELID::Earth_Attack_2);
+		}
+	}
 }
 
 CAberrant_Attack* CAberrant_Attack::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext, void* pArg)

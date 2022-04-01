@@ -37,7 +37,7 @@ private:
 
 private:
 	virtual void OnTriggerEnter(CCollision& collision) override;
-
+	virtual void OnTriggerExit(CCollision& collision) override;
 public:
 	void Set_IsAttack(const _bool _isAttack);
 	virtual void Set_Remove(_bool bCheck) override;

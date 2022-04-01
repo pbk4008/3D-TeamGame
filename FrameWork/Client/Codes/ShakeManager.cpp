@@ -84,16 +84,46 @@ HRESULT CShakeManager::Ready_Template()
 	m_arrShakeEvents[(_uint)ETemplate::TestXYZ] = tShakeEvent;
 
 	tShakeEvent = CCameraShake::SHAKEEVENT();
-	tShakeEvent.fDuration = 0.5f;
+	tShakeEvent.fDuration = 0.7f;
 	tShakeEvent.fOuterRadius = 10.f;
 	tShakeEvent.fInnerRadius = 3.f;
-	tShakeEvent.tWaveX.fAmplitude = 0.1;
-	tShakeEvent.tWaveX.fFrequency = 3.f;
-	tShakeEvent.tWaveY.fAmplitude = 0.02f;
-	tShakeEvent.tWaveY.fFrequency = 3.f;
-	tShakeEvent.tWaveZ.fAmplitude = 0.1f;
-	tShakeEvent.tWaveZ.fFrequency = 3.f;
+	tShakeEvent.tWaveX.fAmplitude = 0.06f;
+	tShakeEvent.tWaveX.fFrequency = 1.5f;
+	tShakeEvent.tWaveY.fAmplitude = 0.06f;
+	tShakeEvent.tWaveY.fFrequency = 1.5f;
+	tShakeEvent.tWaveZ.fAmplitude = 0.06f;
+	tShakeEvent.tWaveZ.fFrequency = 1.5f;
 	m_arrShakeEvents[(_uint)ETemplate::MonsterDeath] = tShakeEvent;
+
+	tShakeEvent = CCameraShake::SHAKEEVENT();
+	tShakeEvent.fDuration = 0.5f;
+	tShakeEvent.fOuterRadius = 15.f;
+	tShakeEvent.fInnerRadius = 3.f;
+	tShakeEvent.tWaveX.fAmplitude = 0.09f;
+	tShakeEvent.tWaveX.fFrequency = 3.f;
+	tShakeEvent.tWaveY.fAmplitude = 0.09f;
+	tShakeEvent.tWaveY.fFrequency = 3.f;
+	tShakeEvent.tWaveZ.fAmplitude = 0.09f;
+	tShakeEvent.tWaveZ.fFrequency = 3.f;
+	m_arrShakeEvents[(_uint)ETemplate::MidBossXYZ] = tShakeEvent;
+
+	tShakeEvent = CCameraShake::SHAKEEVENT();
+	tShakeEvent.fDuration = 0.5f;
+	tShakeEvent.fOuterRadius = 15.f;
+	tShakeEvent.fInnerRadius = 3.f;
+	tShakeEvent.tWaveX.fAmplitude = 0.1;
+	tShakeEvent.tWaveX.fFrequency = 2.f;
+	tShakeEvent.tWaveY.fAmplitude = 0.1f;
+	tShakeEvent.tWaveY.fFrequency = 2.f;
+	m_arrShakeEvents[(_uint)ETemplate::MidBossXZ] = tShakeEvent;
+
+	tShakeEvent = CCameraShake::SHAKEEVENT();
+	tShakeEvent.fDuration = 0.5f;
+	tShakeEvent.fOuterRadius = 15.f;
+	tShakeEvent.fInnerRadius = 3.f;
+	tShakeEvent.tWaveY.fAmplitude = 0.1f;
+	tShakeEvent.tWaveY.fFrequency = 4.f;
+	m_arrShakeEvents[(_uint)ETemplate::MidBossY] = tShakeEvent;
 
 	return S_OK;
 }

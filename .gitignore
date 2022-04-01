@@ -586,3 +586,4 @@ FrameWork/Engine/bin/Engine.exp
 FrameWork/Tool_YM/Data/Trigger/스테이지2트리거.txt
 *.ogg
 FrameWork/Client/bin/Resources/Sound/Weapon/Needle/평타사운드.txt
+FrameWork/Client/bin/Resources/Mesh/BronzeAnimus/MI_BronzeAnimus_Sword.mat

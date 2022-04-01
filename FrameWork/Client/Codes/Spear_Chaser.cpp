@@ -34,7 +34,7 @@ _int CSpear_Chaser::Tick(const _double& _dDeltaTime)
 	if(m_bTargetOn)
 		m_pTransform->Add_Velocity(m_pTransform->Chase_Pos(g_pObserver->Get_Transform(), _dDeltaTime));
 
-	m_fChaserDelay -= _dDeltaTime;
+	m_fChaserDelay -= (_float)_dDeltaTime;
 
 	return _int();
 }

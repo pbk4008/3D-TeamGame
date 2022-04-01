@@ -30,7 +30,8 @@ public:
 
 private:
 	_uint m_iAttackCount = 0;
-
+	_uint m_iAttackFrame = 44;
+	_bool m_bPlay = false;
 public:
 	static CCrawler_Attack* Create(ID3D11Device * pDevice, ID3D11DeviceContext * pDeviceContext, void* pArg = nullptr);
 	virtual void Free() override;

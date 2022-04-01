@@ -30,9 +30,6 @@ _int CSpear_Hit::Tick(const _double& _dDeltaTime)
 	if (NO_EVENT != iProgress)
 		return iProgress;
 
-	if (0 >= m_pMonster->Get_CurrentHp())
-		m_pStateController->Change_State(L"Death");
-
 	m_pAnimator->Tick(_dDeltaTime);
 
 	return _int();
@@ -60,7 +57,8 @@ HRESULT CSpear_Hit::EnterState()
 	if (FAILED(__super::EnterState()))
 		return E_FAIL;
 
-	g_pGameInstance->Play_Shot(L"Monster_Hit", CSoundMgr::CHANNELID::Monster_Hit);
+	g_pGameInstance->StopSound(CSoundMgr::CHANNELID::Spear_Hit);
+	g_pGameInstance->Play_Shot(L"Monster_Hit_6", CSoundMgr::CHANNELID::Spear_Hit);
 	m_pAnimator->Change_AnyEntryAnimation((_uint)CMonster_Bastion_Spear::ANIM_TYPE::A_FLINCH);
 
 	return S_OK;
@@ -98,9 +96,6 @@ void CSpear_Hit::Look_Monster(void)
 
 		m_pStateController->Change_State(L"Death");
 	}
-
-	if (15.0f >= m_pMonster->Get_CurrentHp())
-		m_pStateController->Change_State(L"Bwd_Dash");
 }
 
 CSpear_Hit* CSpear_Hit::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext, void* _pArg)

@@ -47,10 +47,14 @@ _int CSpear_State::Tick(const _double& _dDeltaTime)
 		CMonster_Bastion_Spear* pMonster = static_cast<CMonster_Bastion_Spear*>(m_pMonster);
 
 		pMonster->m_bGroggy = true;
-		pMonster->Set_GroggyGauge(0.f);
+		pMonster->Set_GroggyGauge(0);
 		pMonster->m_pPanel->Set_GroggyBar(pMonster->Get_GroggyGaugeRatio());
 		m_pStateController->Change_State(L"Groggy");
 	}
+
+	if (0 >= m_pMonster->Get_CurrentHp())
+		m_pStateController->Change_State(L"Death");
+
 	return _int();
 }
 
@@ -185,19 +189,19 @@ void CSpear_State::Check_Attack(const _double& _dDeltaTime)
 			m_bTargetOn = true;
 			m_bBattleOn = true;
 		}
+		CMonster_Bastion_Spear* pSpear = static_cast<CMonster_Bastion_Spear*>(m_pMonster);
 
-		if (0 > m_CheckFWD && 5.0f > m_fDistance)
+		if((0 > m_CheckFWD  && !pSpear->m_bGroggy) && g_pObserver->IsAttack())
+			m_pStateController->Change_State(L"Guard");
+		else if (0 > m_CheckFWD && 5.0f > m_fDistance)
 		{
-			if (20.0f > m_fRadian)
+			if (30.0f > m_fRadian)
 			{
-				m_fAttackTime += _dDeltaTime;
+				m_fAttackTime += (_float)_dDeltaTime;
 				if (m_fAttackTime > 0.5f)
 				{
 					m_fAttackTime = 0.0f;
-					CMonster_Bastion_Spear* pSpear = static_cast<CMonster_Bastion_Spear*>(m_pMonster);
-					if (!pSpear->m_bGroggy && g_pObserver->IsAttack())
-						m_pStateController->Change_State(L"Guard");
-					else if (!m_bChargeOn && !pSpear->m_bGroggy)
+					if (!m_bChargeOn && !pSpear->m_bGroggy)
 						m_pStateController->Change_State(L"Attack");
 				}
 			}
@@ -227,7 +231,7 @@ void CSpear_State::OnTriggerEnter(CCollision& collision)
 					pSpear->Active_Effect((_uint)EFFECT::HIT);
 					pSpear->Active_Effect((_uint)EFFECT::FLOATING);
 
-					pSpear->Set_Current_HP(-5.f);
+					pSpear->Set_Current_HP(-5);
 					pSpear->Set_GroggyGauge(2); //TODO::¼öÄ¡Á¤ÇØ¼­¹Ù²ãÁà¾ßµÊ
 				}
 				pSpear->m_pPanel->Set_HpBar(pSpear->Get_HpRatio());

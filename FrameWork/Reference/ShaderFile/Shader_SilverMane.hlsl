@@ -151,13 +151,12 @@ VS_OUT_SHADOW VS_MAIN_SHADOW(VS_IN In)
 	matWVP = mul(matWV, g_LightProj);
 	
 	Out.vPosition = mul(vPosition, matWVP);
-	//Out.vClipPos = Out.vPosition;
+	Out.vClipPos = Out.vPosition;
 	Out.vTexUV = In.vTexUV;
 	
-	matrix matVP = mul(g_LightView, g_LightProj);
-	float4 worldpos = mul(vPosition, g_WorldMatrix);
-	
-	Out.vClipPos = worldpos;
+	//matrix matVP = mul(g_LightView, g_LightProj);
+	//float4 worldpos = mul(vPosition, g_WorldMatrix);
+	//Out.vClipPos = worldpos;
 	
 	return Out;
 }
@@ -221,22 +220,23 @@ PS_OUT_SHADOW PS_MAIN_SHADOW(PS_IN_SHADOW In)
 {
 	PS_OUT_SHADOW Out = (PS_OUT_SHADOW) 0.f;
 	
-	//float fDepth = In.vClipPos.z / In.vClipPos.w;
+	float fDepth = In.vClipPos.z / In.vClipPos.w;
 	
-	//float4 color = g_DiffuseTexture.Sample(DefaultSampler, In.vTexUV);
+	float4 color = g_DiffuseTexture.Sample(DefaultSampler, In.vTexUV);
 	
-	//float Alpha = 1.f;
+	float Alpha = 1.f;
 	
-	//if (color.a < 0.1f)
-	//{
-	//	Alpha = color.a;
-	//}
+	if (color.a < 0.1f)
+	{
+		Alpha = color.a;
+	}
 	
-	//Out.vShadowDepthMap = vector(fDepth.xxx, Alpha);
+	Out.vShadowDepthMap = vector(fDepth.xxx, Alpha);
 	
-	float4 shadow = 1;
-	float zFar = 1 / 300.f;
-	shadow.xyz = length(In.vClipPos.xyz - g_LightPos) * zFar;
+	//float4 shadow = 1;
+	//float zFar = 1 / 300.f;
+	//shadow.xyz = length(In.vClipPos.xyz - g_LightPos) * zFar;
+	//Out.vShadowDepthMap = shadow;
 	
 	return Out;
 }

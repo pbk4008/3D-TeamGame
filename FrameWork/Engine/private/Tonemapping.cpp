@@ -30,18 +30,20 @@ HRESULT CTonemapping::InitToneMapping()
 HRESULT CTonemapping::Blend_FinalPass(CTarget_Manager* pTargetMgr, _bool check,_bool shadow, _bool particle)
 {
 	if (FAILED(pTargetMgr->Begin_MRT(m_pDeviceContext, TEXT("Target_Blend"))))	return E_FAIL;
-	
+
 	if (FAILED(m_pFinalBlend->SetUp_TextureOnShader("g_OriginTexture", pTargetMgr->Get_SRV(L"Target_Diffuse"))))	return E_FAIL;
 	
-	if (shadow == true)
-	{
-		if (FAILED(m_pFinalBlend->SetUp_TextureOnShader("g_ShadowTexture", pTargetMgr->Get_SRV(TEXT("Target_ShadeShadow")))))	return E_FAIL;
-	}
+	//if (shadow == true)
+	//{
+	//	if (FAILED(m_pFinalBlend->SetUp_TextureOnShader("g_ShadowTexture", pTargetMgr->Get_SRV(TEXT("Target_ShadeShadow")))))	return E_FAIL;
+	//}
 
 	if (check == true)
 	{
 		if (FAILED(m_pFinalBlend->SetUp_TextureOnShader("g_DiffuseTexture", pTargetMgr->Get_SRV(L"Target_ToneMapDiffuse"))))return E_FAIL;
 		if (FAILED(m_pFinalBlend->SetUp_TextureOnShader("g_SpecularTexture", pTargetMgr->Get_SRV(L"Target_ToneMapSpecular"))))	return E_FAIL;
+	/*	if (FAILED(m_pFinalBlend->SetUp_TextureOnShader("g_DiffuseTexture", pTargetMgr->Get_SRV(L"Target_HDRDiffuse"))))return E_FAIL;
+		if (FAILED(m_pFinalBlend->SetUp_TextureOnShader("g_SpecularTexture", pTargetMgr->Get_SRV(L"Target_Specular"))))	return E_FAIL;*/
 	}
 	else
 	{
@@ -49,20 +51,15 @@ HRESULT CTonemapping::Blend_FinalPass(CTarget_Manager* pTargetMgr, _bool check,_
 		if (FAILED(m_pFinalBlend->SetUp_TextureOnShader("g_SpecularTexture", pTargetMgr->Get_SRV(L"Target_HDRSpecular"))))	return E_FAIL;
 	}
 	if (FAILED(m_pFinalBlend->SetUp_TextureOnShader("g_EmissionTexture", pTargetMgr->Get_SRV(L"Target_Emission"))))	return E_FAIL;
-
 	if (FAILED(m_pFinalBlend->SetUp_TextureOnShader("g_Blur2Texture", pTargetMgr->Get_SRV(L"Target_Horizontal2"))))	return E_FAIL;
 	if (FAILED(m_pFinalBlend->SetUp_TextureOnShader("g_Blur4Texture", pTargetMgr->Get_SRV(L"Target_Horizontal4"))))	return E_FAIL;
 	if (FAILED(m_pFinalBlend->SetUp_TextureOnShader("g_Blur8Texture", pTargetMgr->Get_SRV(L"Target_Horizontal8"))))	return E_FAIL;
 	if (FAILED(m_pFinalBlend->SetUp_TextureOnShader("g_Blur16Texture", pTargetMgr->Get_SRV(L"Target_Horizontal16")))) return E_FAIL;
 
-	if (particle == true)
-	{
-		if (FAILED(m_pFinalBlend->SetUp_TextureOnShader("g_PtTexture", pTargetMgr->Get_SRV(L"Target_Particle"))))	return E_FAIL;
-		if (FAILED(m_pFinalBlend->SetUp_TextureOnShader("g_Pt2Texture", pTargetMgr->Get_SRV(L"Target_ParticleH2"))))	return E_FAIL;
-		if (FAILED(m_pFinalBlend->SetUp_TextureOnShader("g_Pt4Texture", pTargetMgr->Get_SRV(L"Target_ParticleH4"))))	return E_FAIL;
-		if (FAILED(m_pFinalBlend->SetUp_TextureOnShader("g_Pt8Texture", pTargetMgr->Get_SRV(L"Target_ParticleH8"))))	return E_FAIL;
-		if (FAILED(m_pFinalBlend->SetUp_TextureOnShader("g_Pt16Texture", pTargetMgr->Get_SRV(L"Target_ParticleH16")))) return E_FAIL;
-	}
+	//if (particle == true)
+	//{
+	//	if (FAILED(m_pFinalBlend->SetUp_TextureOnShader("g_AlphaTexture", pTargetMgr->Get_SRV(TEXT("Target_Alpha"))))) return E_FAIL;
+	//}
 
 	if (FAILED(m_pFinalBlend->SetUp_ValueOnShader("g_check", &check, sizeof(_bool)))) return E_FAIL;
 	if (FAILED(m_pFinalBlend->SetUp_ValueOnShader("g_shadow", &shadow, sizeof(_bool)))) return E_FAIL;
@@ -70,7 +67,8 @@ HRESULT CTonemapping::Blend_FinalPass(CTarget_Manager* pTargetMgr, _bool check,_
 
 	m_pFinalBlend->Render(0);
 
-	if (FAILED(pTargetMgr->End_MRT(m_pDeviceContext))) return E_FAIL;
+	//if (FAILED(pTargetMgr->End_MRT(m_pDeviceContext))) return E_FAIL;
+	if (FAILED(pTargetMgr->End_MRTNotClear(m_pDeviceContext))) return E_FAIL;
 
 	return S_OK;
 }
@@ -100,8 +98,8 @@ HRESULT CTonemapping::ToneMapping(CTarget_Manager* pTargetMgr)
 
 	m_pTonmapBuffer->Render(0);
 
-	if (FAILED(pTargetMgr->End_MRT(m_pDeviceContext)))
-		return E_FAIL;
+	//if (FAILED(pTargetMgr->End_MRT(m_pDeviceContext)))return E_FAIL;
+	if (FAILED(pTargetMgr->End_MRTNotClear(m_pDeviceContext))) return E_FAIL;
 
 	return S_OK;
 }

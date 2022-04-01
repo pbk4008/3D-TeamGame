@@ -19,6 +19,7 @@ cbuffer ShaderCheck
 {
 	bool g_bPBRHDR;
 	bool g_bHDR;
+	bool g_shadow;
 };
 
 cbuffer LightDesc
@@ -67,6 +68,8 @@ texture2D g_SSS;
 texture2D g_ShadeTexture;
 texture2D g_SpecularTexture;
 texture2D g_ShadowTexture;
+
+texture2D g_AlphaTexture;
 
 
 /* 1. m_pDeviceContext->DrawIndexed() */
@@ -165,8 +168,8 @@ PS_OUT_LIGHTACC PS_MAIN_LIGHTACC_DIRECTIONAL(PS_IN In)
 		float3 normal3 = normalize(normal.xyz);
 		float3 N = normal3;
 		float3 V = normalize(g_vCamPosition.xyz - vWorldPos.xyz);
-		//float3 L = normalize(g_vLightPos.xyz - vWorldPos.xyz);
-		float3 L = normalize(g_vLightDir.xyz) * -1;
+		float3 L = normalize(g_vLightPos.xyz - vWorldPos.xyz);
+		//float3 L = normalize(g_vLightDir.xyz) * -1;
 		float F0 = 0.93;
 		
 		float alpha = Roughness * Roughness;
@@ -192,10 +195,12 @@ PS_OUT_LIGHTACC PS_MAIN_LIGHTACC_DIRECTIONAL(PS_IN In)
 		float k = alpha / 2.0f;
 		_V = (1.0f / (NdotL * (1.0f - k) + k)) * (1.0f / (NdotV * (1.0f - k) + k));
 
-		float specular = NdotL * _D * _F * _V;
-		//-------------------------------------------------------------------------//
+		//float specular = saturate(NdotL * _D * _F * _V);
+		float specular = (NdotL * _D * _F * _V);
+	
+		////-------------------------------------------------------------------------//
 		float3 color = float3(1.f, 1.f, 1.f);
-		float4 ambientcolor = float4(color * 0.2f, 1.0);
+		float4 ambientcolor = float4(color * 0.5f, 1.0);
 		float diffusefactor = dot(normal3, L);
 		float4 diffusecolor = 0;
 		
@@ -206,20 +211,34 @@ PS_OUT_LIGHTACC PS_MAIN_LIGHTACC_DIRECTIONAL(PS_IN In)
 		}
 		
 		float4 light = diffusecolor * diffusefactor + ambientcolor;
+		//float4 light = g_vLightDiffuse * (saturate(dot(normalize(g_vLightPos - vWorldPos) * -1.f, normal)) + (g_vLightAmbient * g_vMtrlAmbient));
+		
 		float3 CamToWorldDirection = normalize(vWorldPos.xyz - g_vCamPosition.xyz);
 		float3 worldReflectDirection = reflect(CamToWorldDirection, normal3);
 		
 		float smoothness = 1 - Roughness;
 		
 		float4 cubeRef1 = g_SkyBoxTexutre.Sample(SkyBoxSampler, worldReflectDirection.xy);
-	
+		cubeRef1.a = 1.f;
+		
 		float InvMetalic = (1 - Metallic);
 		InvMetalic = max(InvMetalic, 0.2f);
-		float4 lightpower = /*InvMetalic **/ light * AO;
+		float4 lightpower = InvMetalic * light * AO;
 		
-		Out.vSpecular = (light * specular + cubeRef1) * Metallic * smoothness;
-		Out.vShade = lightpower;
-		Out.vShade.a = 1.f;
+		if (g_shadow == true)
+		{
+			float4 shadow = g_ShadowTexture.Sample(DefaultSampler, In.vTexUV);
+			
+			Out.vSpecular = (light * specular + cubeRef1) * Metallic * smoothness * shadow;
+			Out.vShade = lightpower * shadow;
+		}
+		else
+		{
+			
+			Out.vSpecular = (light * specular + cubeRef1) * Metallic * smoothness;
+			Out.vShade = lightpower;
+			//Out.vShade.a = 1.f;
+		}
 	}
 	else
 	{
@@ -227,7 +246,8 @@ PS_OUT_LIGHTACC PS_MAIN_LIGHTACC_DIRECTIONAL(PS_IN In)
 
 		vector vLook = normalize(vWorldPos - g_vCamPosition);
 
-		Out.vSpecular.xyz = ((g_vLightSpecular * g_vMtrlSpecular) * pow(saturate(dot(normalize(vReflect) * -1.f, vLook)), 30.f)).xyz;
+		Out.vSpecular = ((g_vLightSpecular * g_vMtrlSpecular) * pow(saturate(dot(normalize(vReflect) * -1.f, vLook)), 30.f));
+		
 		float4 light = saturate(pow((dot(normalize(vector(g_vLightDir.xyz, 0.f)) * -1.f, normal) * 0.5f + 0.5f), lightpow) * (g_vLightDiffuse * g_vMtrlDiffuse) + (g_vLightAmbient * g_vMtrlAmbient));
 		Out.vShade = light;
 		Out.vShade.a = 1.f;
@@ -285,7 +305,8 @@ PS_OUT_BLEND PS_MAIN_BLEND(PS_IN In)
 {
 	PS_OUT_BLEND Out = (PS_OUT_BLEND) 0;
 	
-	Out.vColor = g_DiffuseTexture.Sample(DefaultSampler, In.vTexUV);
+	float4 color = g_DiffuseTexture.Sample(DefaultSampler, In.vTexUV);
+	Out.vColor = color;
 	
 	if (Out.vColor.a == 0)
 		discard;

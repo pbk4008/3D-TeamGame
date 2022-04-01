@@ -29,7 +29,7 @@ _int CSpear_Idle::Tick(const _double& _dDeltaTime)
 
 	m_pAnimator->Tick(_dDeltaTime);
 
-	m_fChaserDelay -= _dDeltaTime;
+	m_fChaserDelay -= (_float)_dDeltaTime;
 
 	return _int();
 }
@@ -81,7 +81,8 @@ void CSpear_Idle::Look_Player(void)
 
 void CSpear_Idle::Look_Monster(void)
 {
-
+	if (15 >= m_pMonster->Get_CurrentHp())
+		m_pStateController->Change_State(L"Bwd_Dash");
 }
 
 CSpear_Idle* CSpear_Idle::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext, void* _pArg)

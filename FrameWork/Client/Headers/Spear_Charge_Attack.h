@@ -25,6 +25,9 @@ public:
 	virtual void Look_Monster(void) override;
 
 private:
+	void Play_Sound();
+
+private:
 	_bool	m_bAttack = false;
 public:
 	static CSpear_Charge_Attack* Create(ID3D11Device * _pDevice, ID3D11DeviceContext * _pDeviceContext, void* _pArg = nullptr);

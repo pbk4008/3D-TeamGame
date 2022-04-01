@@ -72,7 +72,7 @@ HRESULT CBoss_Bastion_Judicator::NativeConstruct(const _uint _iSceneID, void* pA
 	m_pPanel->Set_HpBar(Get_HpRatio());
 	m_pPanel->Set_GroggyBar(Get_GroggyGaugeRatio());
 
-	//setActive(false);
+	setActive(false);
 
 	return S_OK;
 }
@@ -156,8 +156,11 @@ _int CBoss_Bastion_Judicator::Tick(_double TimeDelta)
 			m_bDead = true;
 			m_pPanel->Set_Show(false);
 			m_pPanel->Set_UIRemove(true);
-		
 			return 0;
+		}
+		else if (1 == m_pAnimator->Get_AnimController()->Get_CurKeyFrameIndex())
+		{
+			Active_Effect((_uint)EFFECT::DEATH);
 		}
 	}
 
@@ -216,6 +219,35 @@ HRESULT CBoss_Bastion_Judicator::Render()
 	{
 		m_pModelCom->Render(i, 0);
 	}
+
+	// FSM
+	wstring wstrCurStateTag = m_pStateController->Get_CurStateTag();
+	wstring wstrState = L"Cur State : ";
+
+	if (FAILED(g_pGameInstance->Render_Font(TEXT("Font_Arial"), XMVectorSet(0.f, 1.0f, 0.f, 1.f), (wstrState + wstrCurStateTag).c_str(), _float2(650.f, 40.f), _float2(0.6f, 0.6f))))
+		return E_FAIL;
+
+	// 애니메이션 이름
+	string CurAnimName = m_pAnimator->Get_CurrentAnimation()->Get_Name();
+	wstring wstrCurAnimTag;
+	wstring wstrAnimname = L"Cur Anim Tag : ";
+	wstrCurAnimTag.assign(CurAnimName.begin(), CurAnimName.end());
+	if (FAILED(g_pGameInstance->Render_Font(TEXT("Font_Arial"), XMVectorSet(0.f, 1.0f, 0.f, 1.f), (wstrAnimname + wstrCurAnimTag).c_str(), _float2(650.f, 60.f), _float2(0.6f, 0.6f))))
+		return E_FAIL;
+
+	// 애니메이션 상태
+	wstring wstrCurKeyFrameIndex = to_wstring(m_pAnimator->Get_CurrentAnimation()->Get_CurrentKeyFrameIndex());
+	wstring wstrKeyFrame = L"Key Frame : ";
+	if (FAILED(g_pGameInstance->Render_Font(TEXT("Font_Arial"), XMVectorSet(0.f, 1.0f, 0.f, 1.f), (wstrKeyFrame + wstrCurKeyFrameIndex).c_str(), _float2(650.f, 80.f), _float2(0.6f, 0.6f))))
+		return E_FAIL;
+
+	wstring wstrAnimFinished = L"";
+	if (m_pAnimator->Get_CurrentAnimation()->Is_Finished())
+		wstrAnimFinished = L"AnimFinished : TRUE";
+	else
+		wstrAnimFinished = L"AnimFinished : FALSE";
+	if (FAILED(g_pGameInstance->Render_Font(TEXT("Font_Arial"), XMVectorSet(0.f, 1.0f, 0.f, 1.f), wstrAnimFinished.c_str(), _float2(650.f, 100.f), _float2(0.6f, 0.6f))))
+		return E_FAIL;
 
 	return S_OK;
 }
@@ -520,7 +552,6 @@ HRESULT CBoss_Bastion_Judicator::Set_PanelBar()
 
 void CBoss_Bastion_Judicator::OnTriggerEnter(CCollision& collision)
 {
-
 	if (true == g_pObserver->IsAttack()) //플레이어공격일때
 	{
 		m_bFirstHit = true; //딱 한번 true로 변경해줌
@@ -536,6 +567,10 @@ void CBoss_Bastion_Judicator::OnTriggerEnter(CCollision& collision)
 			m_fGroggyGauge += 2; //TODO::수치정해서바꿔줘야됨
 
 			m_pPanel->Set_HpBar(Get_HpRatio());
+
+			Active_Effect((_uint)EFFECT::HIT);
+			Active_Effect((_uint)EFFECT::FLOATING);
+
 
 			if (false == m_bGroggy)
 			{	
@@ -554,7 +589,9 @@ void CBoss_Bastion_Judicator::Set_IsAttack(const _bool _isAttack)
 {
 	m_IsAttack = _isAttack;
 	if (m_pWeapon)
+	{
 		m_pWeapon->Set_IsAttack(_isAttack);
+	}
 }
 
 

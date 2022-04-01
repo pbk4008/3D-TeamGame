@@ -9,7 +9,7 @@ class CShakeManager : public CSingleTon<CShakeManager>
 {
 	friend CSingleTon;
 public:
-	enum class ETemplate{ TestX, TestY, TestZ, TestXY, TestXZ, TestYZ, TestXYZ, MonsterDeath, Max};
+	enum class ETemplate{ TestX, TestY, TestZ, TestXY, TestXZ, TestYZ, TestXYZ, MonsterDeath, MidBossXZ, MidBossXYZ, MidBossY, Max};
 
 private:
 	NO_COPY(CShakeManager);

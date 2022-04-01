@@ -62,6 +62,8 @@ HRESULT CMidBoss_Rage::EnterState()
 	if (FAILED(__super::EnterState()))
 		return E_FAIL;
 
+	g_pGameInstance->StopSound(CSoundMgr::CHANNELID::MidBoss);
+	g_pGameInstance->Play_Shot(L"MidBoss_Roar", CSoundMgr::CHANNELID::MidBoss);
 	m_pAnimator->Change_AnyEntryAnimation((_uint)CBoss_Bastion_Judicator::M_BossAnimState::RAGE);
 
 

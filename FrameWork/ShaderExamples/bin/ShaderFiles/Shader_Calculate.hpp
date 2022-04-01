@@ -35,6 +35,11 @@ RasterizerState CullMode_Default
 	FrontCounterClockwise = false;
 };
 
+RasterizerState CullMode_None
+{
+	CullMode = None;
+};
+
 //----------------------------------ZTest Setup-----------------------------------//
 DepthStencilState ZDefault
 {
@@ -47,6 +52,7 @@ DepthStencilState ZTestDiable
 {
 	DepthEnable = false;
 	DepthWriteMask = zero;
+	DepthFunc = less;
 };
 
 //----------------------------------Calculate Function-----------------------------//

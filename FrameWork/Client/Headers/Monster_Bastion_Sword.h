@@ -38,6 +38,8 @@ public:
 	virtual void Set_Remove(_bool bCheck) override;
 private:
 	virtual void OnTriggerEnter(CCollision& collision) override;
+	virtual void OnTriggerExit(CCollision& collision) override;
+
 private:
 	virtual HRESULT SetUp_Components();
 	HRESULT Set_Animation_FSM();

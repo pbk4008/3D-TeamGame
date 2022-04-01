@@ -24,6 +24,15 @@ public:
 	virtual void Look_Player(void) override;
 	virtual void Look_Monster(void) override;
 
+private:
+	void Play_Sound(void);
+
+private:
+	_uint m_iAttack1Frame = 154;
+	_uint m_iAttack2Frame = 220;
+	_bool m_bAttack1 = false;
+	_bool m_bAttack2 = false;
+
 public:
 	static CSpear_Attack* Create(ID3D11Device * _pDevice, ID3D11DeviceContext * _pDeviceContext, void* _pArg = nullptr);
 	virtual void Free() override;

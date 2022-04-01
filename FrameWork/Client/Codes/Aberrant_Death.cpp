@@ -55,7 +55,9 @@ HRESULT CAberrant_Death::EnterState()
 	if (FAILED(__super::EnterState()))
 		return E_FAIL;
 
-	g_pShakeManager->Shake(CShakeManager::ETemplate::MonsterDeath, _float3(0.f, 0.f, 0.f));
+	g_pGameInstance->StopSound(CSoundMgr::CHANNELID::Earth_Death);
+	g_pGameInstance->Play_Shot(L"Earth_Death", CSoundMgr::CHANNELID::Earth_Death);
+	g_pShakeManager->Shake(CShakeManager::ETemplate::MonsterDeath, m_pTransform->Get_State(CTransform::STATE_POSITION));
 	m_pAnimator->Change_AnyEntryAnimation(CMonster_EarthAberrant::MON_STATE::DEATH);
 
 	//_vector vec = { 0.f, 1.f, 0.f,0.f };
@@ -69,6 +71,7 @@ HRESULT CAberrant_Death::ExitState()
 {
 	if (FAILED(__super::ExitState()))
 		return E_FAIL;
+
 
 	//_vector vec = { 0.f, 1.f, 0.f,0.f };
 	//m_pTransform->SetUp_Rotation(vec, (XMConvertToRadians(0.f)));

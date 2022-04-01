@@ -74,7 +74,7 @@ HRESULT CShield_BlockEnd::EnterState()
 {
 	if (FAILED(__super::EnterState()))
 		return E_FAIL;
-
+	g_pGameInstance->BlendSound(L"Shield_Off", L"Needle_Attack_L_4_1", CSoundMgr::CHANNELID::Unequip_Shield, CSoundMgr::CHANNELID::Power_Resonance_01);
 	m_pAnimationController->SetUp_NextAnimation("SK_Silvermane.ao|A_Spectral_Shield_Block_End", false);
 	m_pAnimationController->Set_RootMotion(true, true, ERootOption::XYZ);
 

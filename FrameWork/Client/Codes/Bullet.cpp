@@ -151,7 +151,7 @@ void CBullet::OnTriggerEnter(CCollision& collision)
 
 _uint CBullet::Move(_double dDeltaTime)
 {
-	m_fSpawnTime += dDeltaTime;
+	m_fSpawnTime += (_float)dDeltaTime;
 	if (m_fSpawnTime < 5.f)
 	{
 		m_pTransform->Go_Straight(dDeltaTime);

@@ -58,7 +58,9 @@ HRESULT CSpear_Death::EnterState()
 	if (FAILED(__super::EnterState()))
 		return E_FAIL;
 
-	g_pShakeManager->Shake(CShakeManager::ETemplate::MonsterDeath, _float3(0.f, 0.f, 0.f));
+	g_pGameInstance->BlendSound(L"Bastion_Death", L"Monster_Death", CSoundMgr::CHANNELID::Spear_Death, CSoundMgr::CHANNELID::MONSTER);
+	g_pGameInstance->VolumeChange(CSoundMgr::CHANNELID::Spear_Death, 7.0f);
+	g_pShakeManager->Shake(CShakeManager::ETemplate::MonsterDeath, m_pTransform->Get_State(CTransform::STATE_POSITION));
 	m_pAnimator->Change_AnyEntryAnimation((_uint)CMonster_Bastion_Spear::ANIM_TYPE::A_DEATH);
 	g_pMainApp->FreezeTime();
 

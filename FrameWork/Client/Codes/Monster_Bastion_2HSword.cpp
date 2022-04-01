@@ -627,7 +627,7 @@ HRESULT CMonster_Bastion_2HSword::Render_Debug(void)
 void CMonster_Bastion_2HSword::Groggy_Start()
 {
 	Set_Groggy(true);
-	Set_GroggyGauge(0.f);
+	Set_GroggyGauge(0);
 	m_pPanel->Set_GroggyBar(Get_GroggyGaugeRatio());
 }
 
