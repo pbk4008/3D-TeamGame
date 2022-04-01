@@ -37,14 +37,10 @@ _int CAberrant_Attack::Tick(const _double& TimeDelta)
 		pMonster->Set_IsAttack(true);
 	}
 
-	_fvector vMonsterPos = m_pTransform->Get_State(CTransform::STATE::STATE_POSITION);
-	_fvector vDist = vMonsterPos - g_pObserver->Get_PlayerPos();
-	_float fDistToPlayer = XMVectorGetX(XMVector3Length(vDist));
-
 	if (m_pAnimator->Get_AnimController()->Is_Finished())
 	{
-		m_pStateController->Change_State(L"Walk");
-		//cout << "대쉬로변경" << endl;
+		m_pTransform->Face_Target(g_pObserver->Get_PlayerPos());
+		m_pStateController->Change_State(L"Dash_Bwd");
 	}
 	return _int();
 }
@@ -70,31 +66,8 @@ HRESULT CAberrant_Attack::EnterState()
 {
 	if (FAILED(__super::EnterState()))
 		return E_FAIL;
-
-	_vector vMonsterPos = m_pTransform->Get_State(CTransform::STATE::STATE_POSITION);
-	_vector vDist = vMonsterPos - g_pObserver->Get_PlayerPos();
-	_float fDistToPlayer = XMVectorGetX(XMVector3Length(vDist));
-
-	
-	m_pTransform->Face_Target(g_pObserver->Get_PlayerPos());
-
-	_uint iRandom = rand() % 2;
-
-	switch (iRandom)
-	{
-	case 0:
-		m_pAnimator->Change_AnyEntryAnimation((_uint)CMonster_EarthAberrant::MON_STATE::ATTACK_R1);
-		break;
-	case 1:
-		m_pAnimator->Change_AnyEntryAnimation((_uint)CMonster_EarthAberrant::MON_STATE::ATTACK_R2);
-		break;
-	}
-
-	//_vector vec = { 0.f, 1.f, 0.f,0.f };
-	//m_pTransform->SetUp_Rotation(vec, (XMConvertToRadians(180.f)));
-
-	return S_OK;
 }
+
 
 HRESULT CAberrant_Attack::ExitState()
 {
@@ -105,6 +78,24 @@ HRESULT CAberrant_Attack::ExitState()
 
 	//_vector vec = { 0.f, 1.f, 0.f,0.f };
 	//m_pTransform->SetUp_Rotation(vec, (XMConvertToRadians(0.f)));
+
+	return S_OK;
+}
+
+HRESULT CAberrant_Attack::EnterState(void* pArg)
+{
+	_uint iAttackType = (*(_uint*)pArg);
+
+	if(iAttackType == 0)
+		m_pAnimator->Change_AnyEntryAnimation((_uint)CMonster_EarthAberrant::MON_STATE::ATTACK_R1);
+	else
+		m_pAnimator->Change_AnyEntryAnimation((_uint)CMonster_EarthAberrant::MON_STATE::ATTACK_R2);
+
+	_vector vMonsterPos = m_pTransform->Get_State(CTransform::STATE::STATE_POSITION);
+	_vector vDist = vMonsterPos - g_pObserver->Get_PlayerPos();
+	_float fDistToPlayer = XMVectorGetX(XMVector3Length(vDist));
+
+	m_pTransform->Face_Target(g_pObserver->Get_PlayerPos());
 
 	return S_OK;
 }

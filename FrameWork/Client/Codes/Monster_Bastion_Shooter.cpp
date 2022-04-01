@@ -79,9 +79,6 @@ HRESULT CMonster_Bastion_Shooter::NativeConstruct(const _uint _iSceneID, void* _
 	if (FAILED(Ready_UI()))
 		return E_FAIL;
 
-	m_pRenderer->SetRenderButton(CRenderer::PIXEL, true);
-	m_pRenderer->SetRenderButton(CRenderer::PBRHDR, true);
-	m_pRenderer->SetCameraTag(L"Camera_Silvermane");
 
 	setActive(false);
 
@@ -113,6 +110,7 @@ _int CMonster_Bastion_Shooter::Tick(_double _dDeltaTime)
 			CLevel* pLevel = g_pGameInstance->getCurrentLevelScene();
 			if (g_pGameInstance->getCurrentLevel() == (_uint)SCENEID::SCENE_STAGE1)
 				static_cast<CStage1*>(pLevel)->Minus_MonsterCount();
+
 			else if (g_pGameInstance->getCurrentLevel() == (_uint)SCENEID::SCENE_STAGE2)
 				static_cast<CStage2*>(pLevel)->Minus_MonsterCount();
 		}
@@ -120,33 +118,13 @@ _int CMonster_Bastion_Shooter::Tick(_double _dDeltaTime)
 			m_pCharacterController->Move(_dDeltaTime, m_pTransform->Get_Velocity());
 	}
 
-	//Á×À»¶§
-	if ((_uint)ANIM_TYPE::DEATH == m_pAnimator->Get_CurrentAnimNode())
-	{
-		if (m_pAnimator->Get_CurrentAnimation()->Is_Finished())
-		{
-			Set_Remove(true);
-			m_pPanel->Set_Remove(true);
-		}
-
-		if (1 == m_pAnimator->Get_AnimController()->Get_CurKeyFrameIndex())
-		{
-			Active_Effect((_uint)EFFECT::DEATH);
-		}
-	}
-
 	if (true == m_bUIShow)
-	{
 		m_pPanel->Set_Show(true);
-	}
 
 	if (false == m_bUIShow)
-	{
 		m_pPanel->Set_Show(false);
-	}
 
 	Change_State();
-
 	m_pPanel->Set_TargetWorldMatrix(m_pTransform->Get_WorldMatrix());
 
 	return _int();
@@ -481,7 +459,10 @@ HRESULT CMonster_Bastion_Shooter::Ready_AnimationFSM()
 	m_pAnimator->Insert_AnyEntryAnimation((_uint)ANIM_TYPE::RIGHTWALK_START);
 
 	m_pAnimator->Change_Animation((_uint)ANIM_TYPE::IDLE);
-
+	
+	_uint iRand = rand() % 15;
+	m_pAnimator->Add_AnimFrame((_uint)ANIM_TYPE::IDLE, iRand);
+	
 	return S_OK;
 }
 
@@ -576,19 +557,32 @@ _int CMonster_Bastion_Shooter::Change_State()
 		if (tmpState == L"Idle")
 			Chase();
 	}
-	if (tmpState == L"Death")
+	if (m_bDead)
 	{
-		if(m_pAnimator->Get_CurrentAnimNode() == (_uint)ANIM_TYPE::DEATH
-			&& m_pAnimator->Get_CurrentAnimation()->Is_Finished())
+		if (tmpState == L"Death")
 		{
-			setActive(true);
-			m_bRemove = true;
-			m_pPanel->Set_Show(false);
+			if (m_pAnimator->Get_CurrentAnimNode() == (_uint)ANIM_TYPE::DEATH
+				&& m_pAnimator->Get_CurrentAnimation()->Is_Finished())
+			{
+				m_bRemove = true;
+				m_pPanel->Set_UIRemove(false);
+			}
+			else if (1 == m_pAnimator->Get_AnimController()->Get_CurKeyFrameIndex())
+			{
+				Active_Effect((_uint)EFFECT::DEATH);
+			}
+			else
+			{
+				m_fGroggyGauge = 0.f;
+				m_pPanel->Set_GroggyBar(Get_GroggyGaugeRatio());
+			}
 		}
 		else
 		{
-			m_fGroggyGauge = 0.f;
-			m_pPanel->Set_GroggyBar(Get_GroggyGaugeRatio());
+			m_bRemove = true;
+			m_pPanel->Set_UIRemove(false);
+			Active_Effect((_uint)EFFECT::DEATH);
+			return 0;
 		}
 	}
 	if (m_fGroggyGauge >= m_fMaxGroggyGauge)

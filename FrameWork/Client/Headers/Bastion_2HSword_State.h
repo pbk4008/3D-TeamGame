@@ -35,6 +35,7 @@ protected:
 	_bool	m_bRageOn = false;
 	_bool	m_bRageAttack = false;
 
+	_bool m_bFirstAttack = false;
 public:
 	static CBastion_2HSword_State* Create(ID3D11Device * _pDevice, ID3D11DeviceContext * _pDeviceContext, void* _pArg = nullptr);
 	virtual void Free() override;

@@ -37,7 +37,6 @@ public:
 	void Trgger_Function3();//3번 트리거가 작동할 함수
 	void Trgger_Function4();//4번 트리거가 작동할 함수
 	void Trgger_Function5();//5번 트리거가 작동할 함수
-	void Trgger_Function6();//6번 트리거가 작동할 함수
 	void Trgger_Function7();//7번 트리거가 작동할 함수
 	void Trgger_Function8();//8번 트리거가 작동할 함수
 	void Trgger_Function9();//9번 트리거가 작동할 함수
