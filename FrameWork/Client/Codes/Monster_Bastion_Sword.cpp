@@ -613,7 +613,7 @@ _int CMonster_Bastion_Sword::Change_State()
 		{
 			m_bRemove = true;
 			m_pPanel->Set_Show(false);
-			return;
+			return 0;
 		}
 	}
 	if (m_fGroggyGauge >= m_fMaxGroggyGauge)

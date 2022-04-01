@@ -618,6 +618,18 @@
     <Filter Include="02.GameObject\04.Effect\00.Particle\02.Effect_HitParticle">
       <UniqueIdentifier>{b370ed74-461a-48d9-91e0-c06ca932a31c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\04.Effect\00.Particle\05.Effect_Env_Floating">
+      <UniqueIdentifier>{8d7b5bdf-ccca-4b02-a6e5-003a503ad353}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.UI\01.UI_Ingame\02.UI_JumpNode">
+      <UniqueIdentifier>{03278934-600d-43f1-abf8-b223c947e83e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.UI\01.UI_Ingame\02.UI_JumpNode\00.Blank">
+      <UniqueIdentifier>{bc51da15-514c-49b6-9f36-484c1a4a1510}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.UI\01.UI_Ingame\02.UI_JumpNode\01.Fill">
+      <UniqueIdentifier>{a56a74b1-3d13-4387-b77b-96aeb0113934}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -1467,6 +1479,15 @@
     <ClInclude Include="..\Headers\Effect_DeathParticle.h">
       <Filter>02.GameObject\04.Effect\00.Particle\04.Effect_Death</Filter>
     </ClInclude>
+    <ClInclude Include="..\Headers\Effect_Env_Floating.h">
+      <Filter>02.GameObject\04.Effect\00.Particle\05.Effect_Env_Floating</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\UI_Blank_CKey.h">
+      <Filter>02.GameObject\05.UI\01.UI_Ingame\02.UI_JumpNode\00.Blank</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\UI_Fill_CKey.h">
+      <Filter>02.GameObject\05.UI\01.UI_Ingame\02.UI_JumpNode\01.Fill</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -2288,6 +2309,15 @@
     </ClCompile>
     <ClCompile Include="..\Codes\Effect_DeathParticle.cpp">
       <Filter>02.GameObject\04.Effect\00.Particle\04.Effect_Death</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Effect_Env_Floating.cpp">
+      <Filter>02.GameObject\04.Effect\00.Particle\05.Effect_Env_Floating</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\UI_Blank_CKey.cpp">
+      <Filter>02.GameObject\05.UI\01.UI_Ingame\02.UI_JumpNode\00.Blank</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\UI_Fill_CKey.cpp">
+      <Filter>02.GameObject\05.UI\01.UI_Ingame\02.UI_JumpNode\01.Fill</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

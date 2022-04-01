@@ -226,7 +226,6 @@ HRESULT CMonster_EarthAberrant::Render()
 		return E_FAIL;
 	}
 
-
 	_matrix XMWorldMatrix = XMMatrixTranspose(m_pTransform->Get_WorldMatrix());
 	_matrix XMViewMatrix = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_VIEW));
 	_matrix XMProjectMatrix = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_PROJECTION));
@@ -238,7 +237,15 @@ HRESULT CMonster_EarthAberrant::Render()
 
 	for (_uint i = 0; i < m_pModelCom->Get_NumMeshContainer(); ++i)
 	{
-		m_pModelCom->Render(i, 0);
+		switch (i)
+		{
+		case 0:
+			m_pModelCom->Render(i, 5);
+			break;
+		case 1:
+			m_pModelCom->Render(i, 4);
+			break;
+		}
 	}
 
 	return S_OK;

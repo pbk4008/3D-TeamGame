@@ -321,6 +321,7 @@
     <ClInclude Include="..\Headers\Effect_DashDust.h" />
     <ClInclude Include="..\Headers\Effect_DeathParticle.h" />
     <ClInclude Include="..\Headers\Effect_Env_Fire.h" />
+    <ClInclude Include="..\Headers\Effect_Env_Floating.h" />
     <ClInclude Include="..\Headers\Effect_HitFloating.h" />
     <ClInclude Include="..\Headers\Effect_HitParticle.h" />
     <ClInclude Include="..\Headers\Environment.h" />
@@ -437,6 +438,8 @@
     <ClInclude Include="..\Headers\Traverse_JumpNodeJog.h" />
     <ClInclude Include="..\Headers\Treasure_Chest.h" />
     <ClInclude Include="..\Headers\TriggerSystem.h" />
+    <ClInclude Include="..\Headers\UI_Blank_CKey.h" />
+    <ClInclude Include="..\Headers\UI_Fill_CKey.h" />
     <ClInclude Include="..\Headers\UI_Ingame.h" />
     <ClInclude Include="..\Headers\UI_Monster_Back.h" />
     <ClInclude Include="..\Headers\UI_Monster_GroggyBar.h" />
@@ -590,6 +593,7 @@
     <ClCompile Include="..\Codes\EarthAberrant_Pick.cpp" />
     <ClCompile Include="..\Codes\Effect_DeathParticle.cpp" />
     <ClCompile Include="..\Codes\Effect_Env_Fire.cpp" />
+    <ClCompile Include="..\Codes\Effect_Env_Floating.cpp" />
     <ClCompile Include="..\Codes\Effect_HitFloating.cpp" />
     <ClCompile Include="..\Codes\Effect_HitParticle.cpp" />
     <ClCompile Include="..\Codes\Fury.cpp" />
@@ -711,6 +715,8 @@
     <ClCompile Include="..\Codes\Traverse_Jump400Jog.cpp" />
     <ClCompile Include="..\Codes\Traverse_JumpNodeJog.cpp" />
     <ClCompile Include="..\Codes\Treasure_Chest.cpp" />
+    <ClCompile Include="..\Codes\UI_Blank_CKey.cpp" />
+    <ClCompile Include="..\Codes\UI_Fill_CKey.cpp" />
     <ClCompile Include="..\Codes\UI_Ingame.cpp" />
     <ClCompile Include="..\Codes\UI_Monster_Back.cpp" />
     <ClCompile Include="..\Codes\UI_Monster_GroggyBar.cpp" />

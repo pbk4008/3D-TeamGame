@@ -8,6 +8,8 @@
 
 #include "UI_Player_HpBar.h"
 #include "UI_Player_HpBar_Red.h"
+#include "UI_Blank_CKey.h"
+#include "UI_Fill_CKey.h"
 
 CStage2::CStage2(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
 	: CLevel(pDevice, pDeviceContext)
@@ -178,6 +180,33 @@ HRESULT CStage2::Ready_UI(const _tchar* LayerTag)
 
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE2, L"Layer_UI", L"Proto_GameObject_UI_Player_HpBar_Red", &Desc)))
 		return E_FAIL;
+
+	//Blank_Ckey
+	CUI_Blank_CKey::UIACTIVEDESC Desc3;
+	ZeroMemory(&Desc3, sizeof(CUI_Blank_CKey::UIACTIVEDESC));
+	_tcscpy_s(Desc3.UIDesc.TextureTag, L"Texture_Blank_Ckey");
+	Desc3.UIDesc.bMinus = false;
+	Desc3.UIDesc.fAngle = 0.f;
+	Desc3.UIDesc.fPos = { 700.f, 390.f, 0.1f };
+	Desc3.UIDesc.fSize = { 60.f , 60.f };
+	Desc3.UIDesc.IDTag = (_uint)GAMEOBJECT::UI_STATIC;
+
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE2, L"Layer_UI_BlankC", L"Proto_GameObject_UI_Blank_CKey", &Desc3)))
+		return E_FAIL;
+
+	//Fill_Ckey
+	CUI_Fill_Ckey::UIACTIVEDESC Desc4;
+	ZeroMemory(&Desc4, sizeof(CUI_Fill_Ckey::UIACTIVEDESC));
+	_tcscpy_s(Desc4.UIDesc.TextureTag, L"Texture_Fill_Ckey");
+	Desc4.UIDesc.bMinus = false;
+	Desc4.UIDesc.fAngle = 0.f;
+	Desc4.UIDesc.fPos = { 700.f, 390.f, 0.09f };
+	Desc4.UIDesc.fSize = { 60.f , 60.f };
+	Desc4.UIDesc.IDTag = (_uint)GAMEOBJECT::UI_STATIC;
+
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE2, L"Layer_UI_FillC", L"Proto_GameObject_UI_Fill_CKey", &Desc4)))
+		return E_FAIL;
+
 	return S_OK;
 }
 
@@ -231,6 +260,8 @@ HRESULT CStage2::Ready_TriggerSystem(const _tchar* pTriggerFile)
 		return E_FAIL;
 	
 	if (FAILED(m_pTriggerSystem->Load_MonsterSpawnPoint((_uint)SCENEID::SCENE_STAGE2, CTriggerSystem<CStage2>::MONSTER::MON_2H, L"../bin/SaveData/MonsterSpawn2Stage/2H.dat")))
+		return E_FAIL;
+	if (FAILED(m_pTriggerSystem->Load_MonsterSpawnPoint((_uint)SCENEID::SCENE_STAGE2, CTriggerSystem<CStage2>::MONSTER::MON_SWORD, L"../bin/SaveData/MonsterSpawn2Stage/Sword.dat")))
 		return E_FAIL;
 	if (FAILED(m_pTriggerSystem->Load_MonsterSpawnPoint((_uint)SCENEID::SCENE_STAGE2, CTriggerSystem<CStage2>::MONSTER::MON_CRYSTAL, L"../bin/SaveData/MonsterSpawn2Stage/Crystal.dat")))
 		return E_FAIL;																																

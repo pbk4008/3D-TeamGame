@@ -8,6 +8,8 @@
 #include "JumpNode.h"
 #include "JumpTrigger.h"
 #include "JumpBox.h"
+#include "UI_Blank_CKey.h"
+#include "UI_Fill_CKey.h"
 
 #include "MainApp.h"
 
@@ -241,6 +243,8 @@ _int CSilvermane::Tick(_double _dDeltaTime)
 	{
 		m_pCharacterController->Move(_dDeltaTime, m_pTransform->Get_Velocity());
 	}
+
+
 
 	Raycast_JumpNode(_dDeltaTime);
 
@@ -797,16 +801,54 @@ void CSilvermane::OnControllerColliderHit(CCollision& collision)
 {
 	CGameObject* pHitObject = collision.pGameObject;
 	_uint iTag = pHitObject->getTag();
-	if (iTag == (_uint)GAMEOBJECT::JUMP_BOX)
+
+	if (m_pTargetJumpBox)
 	{
-		if (g_pGameInstance->getkeyDown(DIK_C))
+		_fvector vBoxPos = m_pTargetJumpBox->Get_Transform()->Get_State(CTransform::STATE_POSITION);
+		_fvector vDist = vBoxPos - m_pTransform->Get_State(CTransform::STATE_POSITION);
+		_float fBoxToPlayer = XMVectorGetX(XMVector3Length(vDist));
+
+		if (5.f < fBoxToPlayer)
 		{
-			CJumpBox* pJumpBox = static_cast<CJumpBox*>(pHitObject);
-			m_pTargetJumpBox = pJumpBox;
-			m_pTargetJumpBox->DisableCollision();
-			m_pStateController->Change_State(L"Traverse_Jump400Jog");
+			m_pFillCKey->Set_GapX(0.f);
+			m_pFillCKey->setActive(false);
+			//m_pTargetJumpBox = nullptr;
 		}
 	}
+	if (iTag == (_uint)GAMEOBJECT::JUMP_BOX)
+	{
+		CJumpBox* pJumpBox = static_cast<CJumpBox*>(pHitObject);
+		m_pTargetJumpBox = pJumpBox;
+
+		if (g_pGameInstance->getkeyDown(DIK_C))
+		{
+			m_pTargetJumpBox->DisableCollision();
+			m_pStateController->Change_State(L"Traverse_Jump400Jog");
+			m_pTargetJumpBox = nullptr;
+		}
+
+		//점프ui관련
+		m_pFillCKey = (CUI_Fill_Ckey*)g_pGameInstance->getObjectList(m_iSceneID, L"Layer_UI_FillC")->front();
+
+		m_pFillCKey->Set_JumpNode(false);
+
+		if (nullptr != m_pTargetJumpBox)
+		{
+			_fvector vBoxPos = m_pTargetJumpBox->Get_Transform()->Get_State(CTransform::STATE_POSITION);
+			_fvector vDist = vBoxPos - m_pTransform->Get_State(CTransform::STATE_POSITION);
+			_float fBoxToPlayer = XMVectorGetX(XMVector3Length(vDist));
+
+			if (5.f >= fBoxToPlayer)
+			{
+				if (nullptr != m_pFillCKey)
+				{
+					m_pFillCKey->Set_GapX(1.f);
+					m_pFillCKey->setActive(true);
+				}
+			}
+		}
+	}
+
 	else if ((_uint)GAMEOBJECT::WEAPON_BRONZE == iTag)
 	{
 		_bool a = static_cast<CActor*>(collision.pGameObject)->IsAttack();
@@ -1130,12 +1172,15 @@ const _bool CSilvermane::Raycast_JumpNode(const _double& _dDeltaTime)
 		}
 	}
 
+	//점프ui관련
+	m_pBlankCKey = (CUI_Blank_CKey*)g_pGameInstance->getObjectList(m_iSceneID, L"Layer_UI_BlankC")->front();
+	m_pFillCKey = (CUI_Fill_Ckey*)g_pGameInstance->getObjectList(m_iSceneID, L"Layer_UI_FillC")->front();
+
 	if ((_uint)GAMEOBJECT::JUMP_TRIGGER == iObjectTag)
 	{
 		m_pTargetJumpTrigger = static_cast<CJumpTrigger*>(pHitObject);
 		if (g_pGameInstance->getkeyPress(DIK_C))
 			m_fJumpTriggerLookTime += (_float)_dDeltaTime;
-
 
 		if (1.f < m_fJumpTriggerLookTime)
 		{
@@ -1143,6 +1188,7 @@ const _bool CSilvermane::Raycast_JumpNode(const _double& _dDeltaTime)
 				return false;
 			m_fJumpTriggerLookTime = 0.f;
 		}
+
 		return true;
 	}
 	else if ((_uint)GAMEOBJECT::JUMP_NODE == iObjectTag)
@@ -1152,12 +1198,22 @@ const _bool CSilvermane::Raycast_JumpNode(const _double& _dDeltaTime)
 		if (g_pGameInstance->getkeyPress(DIK_C))
 			m_fJumpNodeLookTime += (_float)_dDeltaTime;
 
+		m_pFillCKey->Set_JumpNode(true);
 
-		if (0.5f < m_fJumpNodeLookTime)
+		if (1.f < m_fJumpNodeLookTime)
 		{
 			if (FAILED(m_pStateController->Change_State(L"Traverse_JumpNodeJog")))
 				return false;
 			m_fJumpNodeLookTime = 0.f;
+		}
+		else if (1.f >= m_fJumpNodeLookTime)
+		{
+			if (nullptr != m_pBlankCKey && false == m_pBlankCKey->getActive())
+			{
+				m_pBlankCKey->setActive(true);
+				m_pFillCKey->setActive(true);
+			}
+
 		}
 		return true;
 	}
@@ -1174,6 +1230,18 @@ const _bool CSilvermane::Raycast_JumpNode(const _double& _dDeltaTime)
 		}
 		m_fJumpNodeLookTime = 0.f;
 		m_fJumpTriggerLookTime = 0.f;
+
+		if (nullptr != m_pBlankCKey)
+		{
+			m_pBlankCKey->setActive(false);
+		}
+
+		if (nullptr != m_pFillCKey && nullptr == m_pTargetJumpBox)
+		{
+			m_pFillCKey->Set_GapX(0.f);
+			m_pFillCKey->setActive(false);
+			m_pFillCKey->Set_JumpNode(false);
+		}
 	}
 
 	return false;
