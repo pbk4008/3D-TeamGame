@@ -106,7 +106,7 @@ _int CMonster_Bastion_Sword::Tick(_double _dDeltaTime)
 	m_pStateController->Tick(_dDeltaTime);
 
 	//무기 뼈 업데이트
-	m_pWeapon->Tick(_dDeltaTime);
+
 
 	if (!m_bDead)
 	{
@@ -124,7 +124,10 @@ _int CMonster_Bastion_Sword::Tick(_double _dDeltaTime)
 				static_cast<CStage2*>(pLevel)->Minus_MonsterCount();
 		}
 		else
+		{
 			m_pCharacterController->Move(_dDeltaTime, m_pTransform->Get_Velocity());
+			m_pWeapon->Tick(_dDeltaTime);
+		}
 	}
 	if (true == m_bUIShow)
 		m_pPanel->Set_Show(true);
@@ -142,12 +145,13 @@ _int CMonster_Bastion_Sword::LateTick(_double _dDeltaTime)
 	{
 		return -1;
 	}
-	if(!m_bDead)
+	if (!m_bDead)
+	{
 		m_pCharacterController->Update_OwnerTransform();
-
-
+		m_pWeapon->LateTick(_dDeltaTime);
+	}
 	m_pRenderer->Add_RenderGroup(CRenderer::RENDER_NONALPHA, this);
-	m_pWeapon->LateTick(_dDeltaTime);
+	
 	return 0;
 }
 
@@ -461,7 +465,9 @@ HRESULT CMonster_Bastion_Sword::Set_Animation_FSM()
 
 
 	//애니메이션 체인지(바꿀 애)
+	_uint iRand = rand()%15;
 	m_pAnimator->Change_Animation((_uint)ANIM_TYPE::IDLE);
+	m_pAnimator->Add_AnimFrame((_uint)ANIM_TYPE::IDLE, iRand);
 
 	return S_OK;
 }
@@ -597,7 +603,7 @@ _int CMonster_Bastion_Sword::Change_State()
 				&& m_pAnimator->Get_CurrentAnimation()->Is_Finished())
 			{
 				m_bRemove = true;
-				m_pPanel->Set_Show(false);
+				m_pPanel->Set_UIRemove(false);
 			}
 			else if (1 == m_pAnimator->Get_AnimController()->Get_CurKeyFrameIndex())
 			{
@@ -612,7 +618,9 @@ _int CMonster_Bastion_Sword::Change_State()
 		else
 		{
 			m_bRemove = true;
-			m_pPanel->Set_Show(false);
+			m_pPanel->Set_UIRemove(false);
+			Active_Effect((_uint)EFFECT::DEATH);
+
 			return 0;
 		}
 	}
@@ -701,9 +709,9 @@ CGameObject* CMonster_Bastion_Sword::Clone(const _uint _iSceneID, void* _pArg)
 void CMonster_Bastion_Sword::Free()
 {
 	__super::Free();
+	Safe_Release(m_pWeapon);
 	Safe_Release(m_pModelCom);
 	Safe_Release(m_pAnimator);
-	Safe_Release(m_pWeapon);
 	Safe_Release(m_pStateController);
 	Safe_Release(m_pCharacterController);
 	Safe_Release(m_pPanel);
