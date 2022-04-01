@@ -802,19 +802,22 @@ void CSilvermane::OnControllerColliderHit(CCollision& collision)
 	CGameObject* pHitObject = collision.pGameObject;
 	_uint iTag = pHitObject->getTag();
 
-	if (m_pTargetJumpBox)
-	{
-		_fvector vBoxPos = m_pTargetJumpBox->Get_Transform()->Get_State(CTransform::STATE_POSITION);
-		_fvector vDist = vBoxPos - m_pTransform->Get_State(CTransform::STATE_POSITION);
-		_float fBoxToPlayer = XMVectorGetX(XMVector3Length(vDist));
-
-		if (5.f < fBoxToPlayer)
+		if (m_pTargetJumpBox)
 		{
-			m_pFillCKey->Set_GapX(0.f);
-			m_pFillCKey->setActive(false);
-			//m_pTargetJumpBox = nullptr;
+			_fvector vBoxPos = m_pTargetJumpBox->Get_Transform()->Get_State(CTransform::STATE_POSITION);
+			_fvector vDist = vBoxPos - m_pTransform->Get_State(CTransform::STATE_POSITION);
+			_float fBoxToPlayer = XMVectorGetX(XMVector3Length(vDist));
+
+			if (5.f < fBoxToPlayer)
+			{
+				if (nullptr != m_pFillCKey)
+				{
+					m_pFillCKey->Set_GapX(0.f);
+					m_pFillCKey->setActive(false);
+					//m_pTargetJumpBox = nullptr;
+				}
+			}
 		}
-	}
 	if (iTag == (_uint)GAMEOBJECT::JUMP_BOX)
 	{
 		CJumpBox* pJumpBox = static_cast<CJumpBox*>(pHitObject);
@@ -828,7 +831,11 @@ void CSilvermane::OnControllerColliderHit(CCollision& collision)
 		}
 
 		//점프ui관련
-		m_pFillCKey = (CUI_Fill_Ckey*)g_pGameInstance->getObjectList(m_iSceneID, L"Layer_UI_FillC")->front();
+		//m_pFillCKey = (CUI_Fill_Ckey*)g_pGameInstance->getObjectList(m_iSceneID, L"Layer_UI_FillC")->front();
+		m_pFillCKey = (CUI_Fill_Ckey*)g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Layer_UI_FillC")->front();
+
+		if (!m_pFillCKey)
+			return;
 
 		m_pFillCKey->Set_JumpNode(false);
 
@@ -840,13 +847,11 @@ void CSilvermane::OnControllerColliderHit(CCollision& collision)
 
 			if (5.f >= fBoxToPlayer)
 			{
-				if (nullptr != m_pFillCKey)
-				{
-					m_pFillCKey->Set_GapX(1.f);
-					m_pFillCKey->setActive(true);
-				}
+				m_pFillCKey->Set_GapX(1.f);
+				m_pFillCKey->setActive(true);
 			}
 		}
+		
 	}
 
 	else if ((_uint)GAMEOBJECT::WEAPON_BRONZE == iTag)
@@ -1176,7 +1181,7 @@ const _bool CSilvermane::Raycast_JumpNode(const _double& _dDeltaTime)
 	//m_pBlankCKey = (CUI_Blank_CKey*)g_pGameInstance->getObjectList(m_iSceneID, L"Layer_UI_BlankC")->front();
 	//m_pFillCKey = (CUI_Fill_Ckey*)g_pGameInstance->getObjectList(m_iSceneID, L"Layer_UI_FillC")->front();
 
-	if ((_uint)GAMEOBJECT::JUMP_TRIGGER == iObjectTag)
+	/*if ((_uint)GAMEOBJECT::JUMP_TRIGGER == iObjectTag)
 	{
 		m_pTargetJumpTrigger = static_cast<CJumpTrigger*>(pHitObject);
 		if (g_pGameInstance->getkeyPress(DIK_C))
@@ -1191,15 +1196,18 @@ const _bool CSilvermane::Raycast_JumpNode(const _double& _dDeltaTime)
 
 		return true;
 	}
-	else if ((_uint)GAMEOBJECT::JUMP_NODE == iObjectTag)
+	else */
+	if ((_uint)GAMEOBJECT::JUMP_NODE == iObjectTag)
 	{
 		m_pTargetJumpNode = static_cast<CJumpNode*>(pHitObject);
 		m_pTargetJumpNode->setIsPick(true);
 		if (g_pGameInstance->getkeyPress(DIK_C))
 			m_fJumpNodeLookTime += (_float)_dDeltaTime;
 
-		m_pFillCKey->Set_JumpNode(true);
-
+		if (nullptr != m_pFillCKey)
+		{
+			m_pFillCKey->Set_JumpNode(true);
+		}
 		if (1.f < m_fJumpNodeLookTime)
 		{
 			if (FAILED(m_pStateController->Change_State(L"Traverse_JumpNodeJog")))
