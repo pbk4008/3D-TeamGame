@@ -62,8 +62,8 @@ HRESULT CStage1::NativeConstruct()
 	if (FAILED(Ready_Light()))
 		return E_FAIL;
 
-	/*if (FAILED(Ready_Trigger_Jump()))
-		return E_FAIL;*/
+	if (FAILED(Ready_Trigger_Jump()))
+		return E_FAIL;
 
 	if (FAILED(Ready_Player(L"Layer_Silvermane")))
 		return E_FAIL;
@@ -71,8 +71,8 @@ HRESULT CStage1::NativeConstruct()
 	if (FAILED(Ready_MapObject()))
 		return E_FAIL;
 
-	//if (FAILED(Ready_TriggerSystem(L"../bin/SaveData/Trigger/MonsterSpawnTrigger.dat")))
-	//	return E_FAIL;
+	if (FAILED(Ready_TriggerSystem(L"../bin/SaveData/Trigger/MonsterSpawnTrigger.dat")))
+		return E_FAIL;
 
 	//if (FAILED(Ready_Boss(L"Layer_Boss")))
 	//{
@@ -84,39 +84,28 @@ HRESULT CStage1::NativeConstruct()
 	//	return E_FAIL;
 	//}
 
-	//if (FAILED(Ready_Data_UI(L"../bin/SaveData/UI/UI.dat")))
-	//{
-	//	return E_FAIL;
-	//}
+	if (FAILED(Ready_Data_UI(L"../bin/SaveData/UI/UI.dat")))
+	{
+		return E_FAIL;
+	}
 
-	//if (FAILED(Ready_Data_Effect()))
-	//{
-	//	return E_FAIL;
-	//}
+	if (FAILED(Ready_Data_Effect()))
+	{
+		return E_FAIL;
+	}
 
-	//if (FAILED(Ready_UI(L"Layer_UI")))
-	//{
-	//	return E_FAIL;
-	//}
+	if (FAILED(Ready_UI(L"Layer_UI")))
+	{
+		return E_FAIL;
+	}
 
-	//if (FAILED(Ready_Trigger_Lod(L"../bin/SaveData/Trigger/Stage1_LodTri.dat")))
-	//	return E_FAIL;
-	//if (FAILED(Ready_Trigger_Light(L"../bin/SaveData/Trigger/Stage1_LodTri.dat")))
-	//	return E_FAIL;
-	//if (FAILED(Ready_Trigger_Monster(L"../bin/SaveData/Trigger/Stage1_LodTri.dat")))
-	//	return E_FAIL;
-	//if (FAILED(Ready_Trigger_Scene(L"../bin/SaveData/Trigger/Stage1_LodTri.dat")))
-	//	return E_FAIL;
-	//if (FAILED(Ready_Trigger_Quest(L"../bin/SaveData/Trigger/Stage1_QuestTri.dat")))
-	//	return E_FAIL;
 	//if (FAILED(Ready_Treasure_Chest()))
 	//	return E_FAIL;
 
 	g_pGameInstance->Change_BaseCamera(L"Camera_Silvermane");
 
 
-	//g_pGameInstance->PlayBGM(L"Stage1_BGM");
-
+	g_pGameInstance->PlayBGM(L"Stage1_BGM");
 
 	return S_OK;
 }
@@ -334,7 +323,7 @@ HRESULT CStage1::Ready_UI(const _tchar* LayerTag)
 	Desc.fSize = { 200.f , 30.f };
 	Desc.IDTag = (_uint)GAMEOBJECT::UI_DYNAMIC;
 
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_UI_Green", L"Proto_GameObject_UI_Player_HpBar", &Desc)))
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_UI_Green", L"Proto_GameObject_UI_Player_HpBar", &Desc)))
 		return E_FAIL;
 
 	//Player HpBar Red
@@ -346,7 +335,7 @@ HRESULT CStage1::Ready_UI(const _tchar* LayerTag)
 	Desc.fSize = { 200.f , 30.f };
 	Desc.IDTag = (_uint)GAMEOBJECT::UI_DYNAMIC;
 
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Proto_GameObject_UI_Player_HpBar_Red", &Desc)))
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, LayerTag, L"Proto_GameObject_UI_Player_HpBar_Red", &Desc)))
 		return E_FAIL;
 
 
@@ -360,7 +349,7 @@ HRESULT CStage1::Ready_UI(const _tchar* LayerTag)
 	Desc1.UIDesc.fSize = { 333.f , 105.f };
 	Desc1.UIDesc.IDTag = (_uint)GAMEOBJECT::UI_STATIC;
 
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Proto_GameObject_UI_Tuto_Base", &Desc1)))
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, LayerTag, L"Proto_GameObject_UI_Tuto_Base", &Desc1)))
 		return E_FAIL;
 	
 	//Tuto Font
@@ -374,7 +363,7 @@ HRESULT CStage1::Ready_UI(const _tchar* LayerTag)
 	Desc2.UIDesc.IDTag = (_uint)GAMEOBJECT::UI_STATIC;
 	Desc2.iTextureNum = 0;
 	
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Proto_GameObject_UI_Tuto_Font", &Desc2)))
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, LayerTag, L"Proto_GameObject_UI_Tuto_Font", &Desc2)))
 		return E_FAIL;
 
 	//Blank_Ckey
@@ -387,7 +376,7 @@ HRESULT CStage1::Ready_UI(const _tchar* LayerTag)
 	Desc3.UIDesc.fSize = { 60.f , 60.f };
 	Desc3.UIDesc.IDTag = (_uint)GAMEOBJECT::UI_STATIC;
 
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_UI_BlankC", L"Proto_GameObject_UI_Blank_CKey", &Desc3)))
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_UI_BlankC", L"Proto_GameObject_UI_Blank_CKey", &Desc3)))
 		return E_FAIL;
 
 	//Fill_Ckey
@@ -400,7 +389,7 @@ HRESULT CStage1::Ready_UI(const _tchar* LayerTag)
 	Desc4.UIDesc.fSize = { 60.f , 60.f };
 	Desc4.UIDesc.IDTag = (_uint)GAMEOBJECT::UI_STATIC;
 
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_UI_FillC", L"Proto_GameObject_UI_Fill_CKey", &Desc4)))
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_UI_FillC", L"Proto_GameObject_UI_Fill_CKey", &Desc4)))
 		return E_FAIL;
 
 	return S_OK;

@@ -69,8 +69,9 @@ HRESULT CMonster_EarthAberrant::NativeConstruct(const _uint _iSceneID, void* _pA
 	}
 
 	CHierarchyNode* pBone = m_pModelCom->Get_BoneMatrix("weapon_r_end");
-	CEarthAberrant_Pick* pWeapon = CEarthAberrant_Pick::Create(m_pDevice, m_pDeviceContext);
-	pWeapon->NativeConstruct(m_iSceneID, pBone);
+	//CEarthAberrant_Pick* pWeapon = /*CEarthAberrant_Pick::Create(m_pDevice, m_pDeviceContext);*/
+	CEarthAberrant_Pick* pWeapon = g_pGameInstance->Clone_GameObject<CEarthAberrant_Pick>(_iSceneID, L"Proto_GameObject_Weapon_EarthAberrant_Pick");
+	//pWeapon->NativeConstruct(m_iSceneID, pBone);
 	pWeapon->Set_Owner(this);
 	pWeapon->Set_OwnerPivotMatrix(m_pModelCom->Get_PivotMatrix());
 	m_pWeapon = pWeapon;
