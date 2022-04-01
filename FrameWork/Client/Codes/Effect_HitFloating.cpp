@@ -13,7 +13,7 @@ CEffect_HitFloating::CEffect_HitFloating(ID3D11Device* pDevice, ID3D11DeviceCont
 {
 }
 
-CEffect_HitFloating::CEffect_HitFloating(const CEffect& rhs)
+CEffect_HitFloating::CEffect_HitFloating(const CEffect_HitFloating& rhs)
     :CEffect(rhs)
 {
 }
@@ -70,62 +70,39 @@ HRESULT CEffect_HitFloating::NativeConstruct(const _uint _iSceneID, void* pArg)
 
 _int CEffect_HitFloating::Tick(_double TimeDelta)
 {
-	if (g_pGameInstance->getkeyDown(DIK_NUMPAD1))
+	/*if (g_pGameInstance->getkeyDown(DIK_NUMPAD1))
 	{
 		m_pBuffer->Set_Desc(m_backupDesc);
 		m_pBuffer->Particle_Reset();
 		m_Desc.fCurTime = 0.f;
-	}
+	}*/
 
-	m_pBuffer->Update(TimeDelta, m_Desc.iAxis);
+	m_pBuffer->Update(g_dDeltaTime, m_Desc.iAxis);
 
-	m_fNonActiveTimeAcc += TimeDelta;
-	
+	m_fNonActiveTimeAcc += (_float)g_dDeltaTime;
 	if (4.f <= m_fNonActiveTimeAcc)
 	{
-		//setActive(false);
+		setActive(false);
+		//m_pRenderer->SetRenderButton(CRenderer::PARTICLE, false);
 		m_fNonActiveTimeAcc = 0.f;
 	}
 
-	if (g_pGameInstance->getkeyDown(DIK_NUMPAD0))
-	{
+	//_uint iAllFrameCount = (m_Desc.iImageCountX * m_Desc.iImageCountY);
+	//m_Desc.fFrame += (_float)(iAllFrameCount * g_dDeltaTime * m_Desc.fEffectPlaySpeed); //플레이속도 
+	//if (m_Desc.fFrame >= iAllFrameCount)
+	//{
+	//	m_Desc.fFrame = 0;
+	//}
 
-		m_pBuffer->Set_Desc(m_backupDesc);
-		m_pBuffer->Particle_Reset();
-		m_Desc.fCurTime = 0.f;
-	}
+	//if (m_Desc.fMaxLifeTime > m_Desc.fCurTime)
+	//{
+	//	m_Desc.fCurTime += g_dDeltaTime;
+	//}
 
-	if (true == m_bReset)
-	{
-		//setActive(true);
-		m_pBuffer->Set_Desc(m_backupDesc);
-		m_pBuffer->Particle_Reset();
-		m_Desc.fCurTime = 0.f;
-		m_bReset = false;
-	}
-
-
-	////z정렬
-	//_vector vDir = g_pGameInstance->Get_CamPosition(L"Camera_Silvermane") - m_pTransform->Get_State(CTransform::STATE_POSITION);
-	//vDir = XMVector3Normalize(vDir);
-	//m_pBuffer->Set_Dir(vDir);
-
-	_uint iAllFrameCount = (m_Desc.iImageCountX * m_Desc.iImageCountY);
-	m_Desc.fFrame += (_float)(iAllFrameCount * TimeDelta * m_Desc.fEffectPlaySpeed); //플레이속도 
-	if (m_Desc.fFrame >= iAllFrameCount)
-	{
-		m_Desc.fFrame = 0;
-	}
-
-	if (m_Desc.fMaxLifeTime > m_Desc.fCurTime)
-	{
-		m_Desc.fCurTime += TimeDelta;
-	}
-
-	if (m_Desc.fMaxLifeTime < m_Desc.fCurTime)
-	{
-		m_Desc.fCurTime = m_Desc.fMaxLifeTime;
-	}
+	//if (m_Desc.fMaxLifeTime < m_Desc.fCurTime)
+	//{
+	//	m_Desc.fCurTime = m_Desc.fMaxLifeTime;
+	//}
 
     return 0;
 }
@@ -134,7 +111,7 @@ _int CEffect_HitFloating::LateTick(_double TimeDelta)
 {
 	if (nullptr != m_pRenderer)
 	{
-		m_pRenderer->Add_RenderGroup(CRenderer::RENDER::RENDER_ALPHA, this);
+		m_pRenderer->Add_RenderGroup(CRenderer::RENDER::RENDER_NONALPHA, this);
 	}
 
 	return 0;
@@ -162,11 +139,41 @@ HRESULT CEffect_HitFloating::Render()
 	m_pBuffer->SetUp_ValueOnShader("g_fLifeTime", &m_Desc.fMaxLifeTime, sizeof(_float));
 	m_pBuffer->SetUp_ValueOnShader("g_fCurTime", &m_Desc.fCurTime, sizeof(_float));
 
+	//_float3 color = { 0.6f, 1.f, 0.3f };
+	_float3 color = { 1.f, 0.6f, 0.3f };
+	m_pBuffer->SetUp_ValueOnShader("g_color", &color, sizeof(_float3));
+
 	m_pBuffer->SetUp_ValueOnShader("g_vCamPosition", (void*)&CamPos, sizeof(_vector));
 
-	m_pBuffer->Render(m_Desc.iRenderPassNum);
+	//m_pBuffer->Render(m_Desc.iRenderPassNum);
+	m_pBuffer->Render(4);
 
 	return S_OK;
+}
+
+CEffect* CEffect_HitFloating::Copy()
+{
+	CEffect_HitFloating* pEffect = new CEffect_HitFloating(m_pDevice, m_pDeviceContext);
+	if (FAILED(pEffect->NativeConstruct_Prototype()))
+	{
+		MSGBOX("HitParticle Copy Fail");
+		Safe_Release(pEffect);
+	}
+	if (FAILED(pEffect->NativeConstruct(m_iSceneID, &m_Desc)))
+	{
+		MSGBOX("HitParticle Copy Fail");
+		Safe_Release(pEffect);
+	}
+
+	return pEffect;
+}
+
+void CEffect_HitFloating::Set_Reset(_bool bReset)
+{
+	CEffect::Set_Reset(bReset);
+	m_Desc.fCurTime = 0.f;
+	m_pBuffer->Set_Desc(m_backupDesc);
+	m_pBuffer->Particle_Reset();
 }
 
 HRESULT CEffect_HitFloating::SetUp_Components()

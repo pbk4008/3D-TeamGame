@@ -100,10 +100,7 @@ _int CGameInstance::Tick_Engine(_double TimeDelta)
 
 	m_pPipeLine->Update_PipeLine();
 	if (m_pPipeLine->getCameraCount())
-	{
 		m_pFrustum->Transform_ToWorldSpace(m_pPipeLine->getBaseCamera());
-		/*m_pFrustum->Transform_ToLocalSpace(m_pPipeLine->getBaseCamera());*/
-	}
 	
 	m_pPhysicSystem->Tick(TimeDelta);
 
@@ -470,6 +467,14 @@ void CGameInstance::UpdateLightCam(_uint LightIndx, _fvector playerpos)
 	m_pLight_Manager->UpdateLightCam(LightIndx, playerpos);
 }
 
+ID3D11ShaderResourceView* CGameInstance::Get_SRV(const wstring& target)
+{
+	if(m_pTarget_Manager == nullptr)
+		return nullptr;
+
+	return m_pTarget_Manager->Get_SRV(target.c_str());
+}
+
 HRESULT CGameInstance::Add_Font(ID3D11Device * pDevice, ID3D11DeviceContext * pDeviceContext, const wstring& pFontTag, const wstring& pFontPath)
 {
 	if (nullptr == m_pFont_Manager)
@@ -552,7 +557,6 @@ HRESULT CGameInstance::Add_Effect(_uint iSceneID, const wstring& pLayerTag, CEff
 {
 	if (!m_pEffectManager)
 		return E_FAIL;
-
 	return m_pEffectManager->Add_Effect(iSceneID, pLayerTag, pEffect, iCount);
 }
 

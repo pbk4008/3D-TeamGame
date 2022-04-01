@@ -4,6 +4,8 @@
 
 BEGIN(Client)
 
+class CTrailEffect;
+
 class CNeedle final : public CWeapon
 {
 private:
@@ -27,8 +29,9 @@ private:
 	virtual void Set_Equip(const _bool _isEquip, void* _pArg = nullptr);
 
 private:
-	_float4x4 m_matPivot;
+	_float4x4 m_matPivot{};
 	CCapsuleCollider* m_pCollider = nullptr;
+	CTrailEffect* m_pTrailEffect = nullptr;
 
 public:
 	static CNeedle* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext);

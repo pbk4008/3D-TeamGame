@@ -13,6 +13,8 @@ class CCamera_Silvermane;
 class CJumpNode;
 class CJumpTrigger;
 class CJumpBox;
+class CUI_Blank_CKey;
+class CUI_Fill_Ckey;
 
 class CSilvermane final : public CActor
 {
@@ -127,8 +129,13 @@ private: /* For.JumpNode */
 	CJumpNode* m_pTargetJumpNode = nullptr;
 	CJumpTrigger* m_pTargetJumpTrigger = nullptr;
 	CJumpBox* m_pTargetJumpBox = nullptr;
+	CUI_Blank_CKey* m_pBlankCKey = nullptr;
+	CUI_Fill_Ckey* m_pFillCKey = nullptr;
 	_float m_fJumpNodeLookTime = 0.f;
 	_float m_fJumpTriggerLookTime = 0.f;
+
+private: /* For.Cheat */
+	_bool m_isHighSpeedMode = false;
 
 private:
 	CTexture*	m_pTexture = nullptr;

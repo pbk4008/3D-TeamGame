@@ -27,6 +27,11 @@ _int C1H_SwordJogFwdPivot180::Tick(const _double& _dDeltaTime)
 	if (NO_EVENT > iProgress)
 		return iProgress;
 
+	if (8 < m_pAnimationController->Get_CurKeyFrameIndex())
+		m_pSilvermane->Add_Velocity(CTransform::STATE_LOOK, -_dDeltaTime);
+	else
+		m_pSilvermane->Add_Velocity(CTransform::STATE_LOOK, _dDeltaTime * 0.5f);
+
 	return _int();
 }
 
@@ -54,7 +59,7 @@ HRESULT C1H_SwordJogFwdPivot180::EnterState()
 
 	
 	m_pAnimationController->SetUp_NextAnimation("SK_Silvermane.ao|A_1H_Sword_Loco_Jog_Fwd_Pivot_180_Normal", false);
-	m_pAnimationController->Set_RootMotion(true, true, ERootOption::XYZ);
+	m_pAnimationController->Set_RootMotion(true, false, ERootOption::XYZ);
 	
 
 	return S_OK;
@@ -76,7 +81,7 @@ _int C1H_SwordJogFwdPivot180::Input(const _double& _dDeltaTime)
 
 	if (g_pGameInstance->getkeyPress(DIK_S))
 	{
-		if (m_pAnimationController->Is_Finished())
+		if (36 < m_pAnimationController->Get_CurKeyFrameIndex())
 		{
 			if (FAILED(m_pStateController->Change_State(L"1H_SwordJogBwd")))
 				return -1;

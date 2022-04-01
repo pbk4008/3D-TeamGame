@@ -65,6 +65,7 @@ HRESULT CSilvermane_SprintFwdStart::EnterState()
 	//	return STATE_CHANGE;
 	//}
 	
+	m_iCutIndex = 57;
 	return S_OK;
 }
 
@@ -84,9 +85,11 @@ _int CSilvermane_SprintFwdStart::Input(const _double& _dDeltaTime)
 
 	if (g_pGameInstance->getkeyPress(DIK_LSHIFT))
 	{
+		_uint iCurKeyFrameIndex = m_pAnimationController->Get_CurKeyFrameIndex();
+
 		if (g_pGameInstance->getkeyPress(DIK_W))
 		{
-			if (m_pAnimationController->Is_Finished())
+			if (m_iCutIndex < iCurKeyFrameIndex)
 			{
 				if (FAILED(m_pStateController->Change_State(L"SprintFwd")))
 					return -1;
@@ -108,7 +111,7 @@ _int CSilvermane_SprintFwdStart::Input(const _double& _dDeltaTime)
 		}
 		else if (g_pGameInstance->getkeyPress(DIK_S))
 		{
-			if (m_pAnimationController->Is_Finished())
+			if (m_iCutIndex < iCurKeyFrameIndex)
 			{
 				if (FAILED(m_pStateController->Change_State(L"SprintFwd")))
 					return -1;
@@ -129,7 +132,7 @@ _int CSilvermane_SprintFwdStart::Input(const _double& _dDeltaTime)
 		}
 		else if (g_pGameInstance->getkeyPress(DIK_A))
 		{
-			if (m_pAnimationController->Is_Finished())
+			if (m_iCutIndex < iCurKeyFrameIndex)
 			{
 				if (FAILED(m_pStateController->Change_State(L"SprintFwd")))
 					return -1;
@@ -140,7 +143,7 @@ _int CSilvermane_SprintFwdStart::Input(const _double& _dDeltaTime)
 		}
 		else if (g_pGameInstance->getkeyPress(DIK_D))
 		{
-			if (m_pAnimationController->Is_Finished())
+			if (m_iCutIndex < iCurKeyFrameIndex)
 			{
 				if (FAILED(m_pStateController->Change_State(L"SprintFwd")))
 					return -1;
@@ -196,13 +199,11 @@ _int CSilvermane_SprintFwdStart::Input(const _double& _dDeltaTime)
 CSilvermane_SprintFwdStart* CSilvermane_SprintFwdStart::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext, void* _pArg)
 {
 	CSilvermane_SprintFwdStart* pInstance = new CSilvermane_SprintFwdStart(_pDevice, _pDeviceContext);
-
 	if (FAILED(pInstance->NativeConstruct(_pArg)))
 	{
 		MSGBOX("CSilvermane_SprintFwdStart Create Fail");
 		Safe_Release(pInstance);
 	}
-
 	return pInstance;
 }
 

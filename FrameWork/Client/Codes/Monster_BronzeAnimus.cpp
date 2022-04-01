@@ -133,6 +133,27 @@ _int CMonster_BronzeAnimus::Tick(_double _dDeltaTime)
 
 	if(!m_bDead)
 		m_pCharacterController->Move(_dDeltaTime, m_pTransform->Get_Velocity());
+	else
+	{
+		if (m_pStateController->Get_CurStateTag()== L"Death")
+		{
+			if (m_pAnimator->Get_CurrentAnimation()->Is_Finished())
+			{
+				Set_Remove(true);
+				m_pPanel->Set_UIRemove(true);
+			}
+
+			if (1 == m_pAnimator->Get_AnimController()->Get_CurKeyFrameIndex())
+			{
+				Active_Effect((_uint)EFFECT::DEATH);
+			}
+		}
+		else
+		{
+			Set_Remove(true);
+			m_pPanel->Set_UIRemove(true);
+		}
+	}
 
 	if (m_fGroggyGauge >= m_fMaxGroggyGauge)
 	{
@@ -156,11 +177,9 @@ _int CMonster_BronzeAnimus::Tick(_double _dDeltaTime)
 		}
 	}
 
-	if ((_uint)ANIM_TYPE::A_DEATH == m_pAnimator->Get_CurrentAnimNode() && m_pAnimator->Get_AnimController()->Is_Finished())
-	{
-		m_bRemove = true;
-		m_pPanel->Set_Show(false);
-	}
+	//Á×À»¶§
+	
+
 	m_pPanel->Set_TargetWorldMatrix(m_pTransform->Get_WorldMatrix());
 
 	return _int();
@@ -526,8 +545,6 @@ HRESULT CMonster_BronzeAnimus::Render_Debug(void)
 
 void CMonster_BronzeAnimus::OnTriggerEnter(CCollision& collision)
 {
-	m_pPanel->Set_Show(true);
-
 	m_pStateController->OnTriggerEnter(collision);
 }
 

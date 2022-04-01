@@ -31,6 +31,8 @@ public:
 public:
 	static CAberrant_Idle* Create(ID3D11Device * pDevice, ID3D11DeviceContext * pDeviceContext, void* pArg = nullptr);
 	virtual void Free() override;
+private:
+	_uint m_iRandDist;
 };
 
 END

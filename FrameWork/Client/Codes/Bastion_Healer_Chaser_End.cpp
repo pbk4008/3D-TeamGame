@@ -28,6 +28,7 @@ _int CBastion_Healer_Chaser_End::Tick(const _double& _dDeltaTime)
 	if (NO_EVENT != iProgress)
 		return iProgress;
 
+
 	m_pAnimator->Tick(_dDeltaTime);
 
 	return _int();

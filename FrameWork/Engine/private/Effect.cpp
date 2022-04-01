@@ -64,12 +64,23 @@ HRESULT CEffect::Render()
 	return S_OK;
 }
 
+CEffect* CEffect::Copy()
+{
+	return nullptr;
+}
+
 _fvector CEffect::UsingGravity(_fvector vPos, _double dDeltaTime)
 {
 	_float fY = 0.f;
 	if (m_Desc.bUsingGravity)
 		fY = XMVectorGetY(vPos) + (-2 * 9.8f * (_float)dDeltaTime * (_float)dDeltaTime);
 	return XMVectorSetY(vPos, fY);
+}
+
+void CEffect::Set_Reset(_bool bReset)
+{
+	//m_pRenderer->SetRenderButton(CRenderer::PARTICLE, true);
+	m_bReset = false;
 }
 
 void CEffect::Free()

@@ -59,6 +59,7 @@ public:
 	void Set_Current_HP(_int _iHp) { m_fCurrentHp += _iHp; }
 	void Set_GroggyGauge(_uint _Value) { m_fGroggyGauge += _Value; }
 	void Set_Dead(void) { m_bDead = true; }
+	virtual void Set_Remove(_bool bCheck) override;
 
 private:
 	CModel* m_pModel = nullptr;

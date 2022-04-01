@@ -24,6 +24,7 @@ public:
 
 	virtual HRESULT EnterState();
 	virtual HRESULT ExitState();
+	virtual HRESULT ExitState(void* pArg);
 
 public:
 	virtual void Look_Player(void) override;
@@ -31,6 +32,8 @@ public:
 public:
 	static CAberrant_Walk* Create(ID3D11Device * pDevice, ID3D11DeviceContext * pDeviceContext, void* pArg = nullptr);
 	virtual void Free() override;
+private:
+	_uint m_iRand;
 };
 
 END

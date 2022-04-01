@@ -105,21 +105,43 @@ _int CMonster_Bastion_2HSword::Tick(_double _dDeltaTime)
 		m_pTransform->Fall(_dDeltaTime);
 
 	/* Weapon Bone Update */
-	m_pWeapon->Tick(_dDeltaTime);
 	/* Character Controller Update */
-	if(!m_bDead)
+	if (!m_bDead)
+	{
 		m_pCharacterController->Move(_dDeltaTime, m_pTransform->Get_Velocity());
+	}
+	else
+	{
+		if ((_uint)ANIM_TYPE::A_DEATH == m_pAnimator->Get_CurrentAnimNode())
+		{
+			if (m_pAnimator->Get_CurrentAnimation()->Is_Finished())
+			{
+				Set_Remove(true);
+				m_pPanel->Set_UIRemove(true);
+			}
+
+			if (1 == m_pAnimator->Get_AnimController()->Get_CurKeyFrameIndex())
+			{
+				Active_Effect((_uint)EFFECT::DEATH);
+			}
+		}
+		else
+		{
+			Set_Remove(true);
+			m_pPanel->Set_UIRemove(true);
+		}
+	}
+	m_pWeapon->Tick(_dDeltaTime);
 
 	if (true == m_bUIShow)
 	{
 		m_pPanel->Set_Show(true);
 	}
-
-	if (false == m_bUIShow)
+	else
 	{
 		m_pPanel->Set_Show(false);
-
 	}
+
 	if (m_fGroggyGauge >= m_fMaxGroggyGauge)
 	{
 		//스턴상태일때 스턴state에서 현재 그로기 계속 0으로 고정시켜줌
@@ -142,14 +164,8 @@ _int CMonster_Bastion_2HSword::Tick(_double _dDeltaTime)
 		}
 	}
 
-	if ((_uint)ANIM_TYPE::A_DEATH == m_pAnimator->Get_CurrentAnimNode() && m_pAnimator->Get_AnimController()->Is_Finished())
-	{
-		m_bRemove = true;
-		setActive(false);
-
-		m_pPanel->Set_Show(false);
-	}
-
+	//죽을때
+	
 	m_pPanel->Set_TargetWorldMatrix(m_pTransform->Get_WorldMatrix());
 
 	return _int();
@@ -199,7 +215,7 @@ HRESULT CMonster_Bastion_2HSword::Render()
 	}
 	
 #ifdef _DEBUG
-	Render_Debug();
+	//Render_Debug();
 #endif
 	return S_OK;
 }
@@ -358,11 +374,11 @@ HRESULT CMonster_Bastion_2HSword::Ready_AnimFSM(void)
 
 	//Hit
 	pAnimation = m_pModel->Get_Animation("A_Stagger_Left");
-	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::A_FLINCH_LEFT, (_uint)ANIM_TYPE::A_HEAD, pAnimation, TRUE, FALSE, FALSE, ERootOption::XYZ)))
+	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::A_FLINCH_LEFT, (_uint)ANIM_TYPE::A_HEAD, pAnimation, TRUE, TRUE, FALSE, ERootOption::XYZ)))
 		return E_FAIL;
 	//A_Death
 	pAnimation = m_pModel->Get_Animation("A_Death");
-	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::A_DEATH, (_uint)ANIM_TYPE::A_HEAD, pAnimation, TRUE, FALSE, FALSE, ERootOption::XYZ)))
+	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::A_DEATH, (_uint)ANIM_TYPE::A_HEAD, pAnimation, TRUE, TRUE, FALSE, ERootOption::XYZ)))
 		return E_FAIL;
 #pragma endregion
 
@@ -418,11 +434,11 @@ HRESULT CMonster_Bastion_2HSword::Ready_AnimFSM(void)
 #pragma region Rage
 	//Rage
 	pAnimation = m_pModel->Get_Animation("A_Taunt_Roar");
-	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::A_TAUNT_ROAR, (_uint)ANIM_TYPE::A_HEAD, pAnimation, FALSE, FALSE, FALSE, ERootOption::XYZ, FALSE)))
+	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::A_TAUNT_ROAR, (_uint)ANIM_TYPE::A_HEAD, pAnimation, TRUE, TRUE, FALSE, ERootOption::XYZ, FALSE)))
 		return E_FAIL;
 
 	pAnimation = m_pModel->Get_Animation("A_BattleCry_Start");
-	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::A_BATTLECRY_ST, (_uint)ANIM_TYPE::A_TAUNT_ROAR, pAnimation, FALSE, FALSE, FALSE, ERootOption::XYZ, FALSE)))
+	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::A_BATTLECRY_ST, (_uint)ANIM_TYPE::A_TAUNT_ROAR, pAnimation, TRUE, TRUE, FALSE, ERootOption::XYZ, FALSE)))
 		return E_FAIL;
 
 	pAnimation = m_pModel->Get_Animation("A_BattleCry");
@@ -502,6 +518,8 @@ HRESULT CMonster_Bastion_2HSword::Ready_AnimFSM(void)
 		return E_FAIL;
 	if (FAILED(m_pAnimator->Connect_Animation((_uint)ANIM_TYPE::A_BATTLECRY, (_uint)ANIM_TYPE::A_BATTLECRY_ED, FALSE)))
 		return E_FAIL;
+
+	m_pAnimator->Change_Animation((_uint)ANIM_TYPE::A_IDLE);
 #pragma endregion
 	return S_OK;
 }
@@ -607,40 +625,47 @@ HRESULT CMonster_Bastion_2HSword::Render_Debug(void)
 void CMonster_Bastion_2HSword::Groggy_Start()
 {
 	Set_Groggy(true);
-	Set_GroggyGauge(0.f);
+	Set_GroggyGauge(0);
 	m_pPanel->Set_GroggyBar(Get_GroggyGaugeRatio());
 }
 
 void CMonster_Bastion_2HSword::Hit(CCollision& pCol)
 {
-	if (true == g_pObserver->IsAttack()) //플레이어공격일때
+	if (!m_bDead)
 	{
-		m_bFirstHit = true; //딱 한번 true로 변경해줌
-		if (true == m_bFirstHit)
-			m_pPanel->Set_BackUIGapY(1.f);
-
-		if ((_uint)GAMEOBJECT::WEAPON == pCol.pGameObject->getTag())
+		if (true == g_pObserver->IsAttack()) //플레이어공격일때
 		{
-			m_fCurrentHp -= 5.f;
-			//m_bGroggy = 2; //TODO::수치정해서바꿔줘야됨
+			m_bFirstHit = true; //딱 한번 true로 변경해줌
+			if (true == m_bFirstHit)
+				m_pPanel->Set_BackUIGapY(1.f);
 
-			m_pPanel->Set_HpBar(Get_HpRatio());
-
-			if (false == m_bGroggy)
+			if ((_uint)GAMEOBJECT::WEAPON == pCol.pGameObject->getTag())
 			{
-				//그로기 아닐때만 증가할수있게
-				m_pPanel->Set_GroggyBar(Get_GroggyGaugeRatio());
+				m_pPanel->Set_Show(true);
+				Active_Effect((_uint)EFFECT::HIT);
+				Active_Effect((_uint)EFFECT::FLOATING);
 
-				_vector svTargetPos = pCol.pGameObject->Get_Transform()->Get_State(CTransform::STATE_POSITION);
-				_vector svPos = m_pTransform->Get_State(CTransform::STATE_POSITION);
+				m_fCurrentHp -= 5.f;
+				//m_bGroggy = 2; //TODO::수치정해서바꿔줘야됨
 
-				_vector svDir = XMVector3Normalize(XMVectorSetY(svPos - svTargetPos, 0.f));
+				m_pPanel->Set_HpBar(Get_HpRatio());
 
-				m_pStateController->Change_State(L"Hit", &svDir);
+				if (false == m_bGroggy)
+				{
+					//그로기 아닐때만 증가할수있게
+					m_pPanel->Set_GroggyBar(Get_GroggyGaugeRatio());
+
+					_vector svTargetPos = pCol.pGameObject->Get_Transform()->Get_State(CTransform::STATE_POSITION);
+					_vector svPos = m_pTransform->Get_State(CTransform::STATE_POSITION);
+
+					_vector svDir = XMVector3Normalize(XMVectorSetY(svPos - svTargetPos, 0.f));
+
+					m_pStateController->Change_State(L"Hit", &svDir);
+				}
 			}
+			else
+				m_pStateController->Change_State(L"Idle");
 		}
-		else
-			m_pStateController->Change_State(L"Idle");
 	}
 }
 
@@ -652,8 +677,7 @@ void CMonster_Bastion_2HSword::Remove_Collider()
 
 void CMonster_Bastion_2HSword::OnTriggerEnter(CCollision& collision)
 {
-	m_pPanel->Set_Show(true);
-
+	
 	m_pStateController->OnTriggerEnter(collision);
 }
 
@@ -674,6 +698,12 @@ void CMonster_Bastion_2HSword::Set_IsAttack(const _bool _isAttack)
 	m_IsAttack = _isAttack;
 	if (m_pWeapon)
 		m_pWeapon->Set_IsAttack(_isAttack);
+}
+
+void CMonster_Bastion_2HSword::Set_Remove(_bool bCheck)
+{
+	m_bRemove = bCheck;
+	m_pPanel->Set_UIRemove(bCheck);
 }
 
 CMonster_Bastion_2HSword* CMonster_Bastion_2HSword::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)

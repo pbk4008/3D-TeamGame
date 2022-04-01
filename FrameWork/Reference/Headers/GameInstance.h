@@ -127,6 +127,9 @@ public: /* For.Light_Manager */
 	HRESULT Add_Light(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext, const LIGHTDESC& LightDesc);
 	void UpdateLightCam(_uint LightIndx, _fvector playerpos);
 
+public: /* Target Mgr*/
+	ID3D11ShaderResourceView* Get_SRV(const wstring& target);
+
 public: /* For.Font_Manager */
 	HRESULT Add_Font(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext, const wstring& pFontTag, const wstring& pFontPath);
 	HRESULT Render_Font(const wstring& pFontTag, _fvector vColor, const wstring& pString, const _float2& _vPos = { 0.f, 0.f }, const _float2& _vScale = { 1.f, 1.f });

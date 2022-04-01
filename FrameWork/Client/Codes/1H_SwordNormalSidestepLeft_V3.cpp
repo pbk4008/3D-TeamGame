@@ -60,15 +60,42 @@ HRESULT C1H_SwordNormalSidestepLeft_V3::EnterState()
 		return E_FAIL;
 	m_pAnimationController->Set_RootMotion(true, true);
 
+
+	m_tShakeEvent.fDuration = 1.f;
+	m_tShakeEvent.fBlendInTime = 0.2f;
+	m_tShakeEvent.fBlendOutTime = 0.8f;
+	m_tShakeEvent.tWaveY.fAmplitude = 1.f;
+	m_tShakeEvent.tWaveY.fFrequency = 0.4f;
+	m_tShakeEvent.tWaveY.fAdditionalOffset = 1.f;
+	m_tShakeEvent.tWaveZ.fAmplitude = 1.f;
+	m_tShakeEvent.tWaveZ.fFrequency = 1.f;
+	m_tShakeEvent.tWaveZ.fAdditionalOffset = -4.f;
+
+
 	if (g_pGameInstance->getkeyPress(DIK_W))
+	{
+		m_tShakeEvent.tWaveY.fAdditionalOffset = 0.2f;
+		m_tShakeEvent.tWaveY.fFrequency = 0.1f;
+		m_tShakeEvent.tWaveZ.fAdditionalOffset = -1.f;
 		m_eDir = EDir::RightForward;
+	}
 	else if (g_pGameInstance->getkeyPress(DIK_S))
+	{
 		m_eDir = EDir::LeftForward;
+	}
 	else
+	{
+		m_tShakeEvent.tWaveY.fAdditionalOffset = 0.2f;
+		m_tShakeEvent.tWaveY.fFrequency = 0.1f;
+		m_tShakeEvent.tWaveZ.fAdditionalOffset = -2.f;
 		m_eDir = EDir::Forward;
+	}
 
-
+	g_pShakeManager->Shake(m_tShakeEvent, m_pTransform->Get_State(CTransform::STATE_POSITION));
 	m_iCutIndex = 15;
+
+
+
 	return S_OK;
 }
 
@@ -98,11 +125,27 @@ _int C1H_SwordNormalSidestepLeft_V3::Input(const _double& _dDeltaTime)
 				m_pAnimationController->Reset_Animation();
 
 				if (g_pGameInstance->getkeyPress(DIK_W))
+				{
+					m_tShakeEvent.tWaveY.fAdditionalOffset = 0.2f;
+					m_tShakeEvent.tWaveY.fFrequency = 0.1f;
+					m_tShakeEvent.tWaveZ.fAdditionalOffset = -1.f;
 					m_eDir = EDir::RightForward;
+				}
 				else if (g_pGameInstance->getkeyPress(DIK_S))
+				{
+					m_tShakeEvent.tWaveY.fAdditionalOffset = 1.f;
+					m_tShakeEvent.tWaveY.fFrequency = 0.4f;
+					m_tShakeEvent.tWaveZ.fAdditionalOffset = -4.f;
 					m_eDir = EDir::LeftForward;
+				}
 				else
+				{
+					m_tShakeEvent.tWaveY.fAdditionalOffset = 0.2f;
+					m_tShakeEvent.tWaveY.fFrequency = 0.1f;
+					m_tShakeEvent.tWaveZ.fAdditionalOffset = -2.f;
 					m_eDir = EDir::Forward;
+				}
+				g_pShakeManager->Shake(m_tShakeEvent, m_pTransform->Get_State(CTransform::STATE_POSITION));
 			}
 			else if (g_pGameInstance->getkeyPress(DIK_S))
 			{

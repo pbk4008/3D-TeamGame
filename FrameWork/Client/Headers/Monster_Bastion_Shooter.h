@@ -33,6 +33,8 @@ public:
 	virtual _int Tick(_double _dDeltaTime) override;
 	virtual _int LateTick(_double _dDeltaTime) override;
 	virtual HRESULT Render() override;
+public:
+	virtual void Set_Remove(_bool bCheck) override;
 private:
 	virtual void OnTriggerEnter(CCollision& collision) override;
 private:

@@ -87,7 +87,7 @@ HRESULT CShakeManager::Ready_Template()
 	tShakeEvent.fDuration = 0.7f;
 	tShakeEvent.fOuterRadius = 10.f;
 	tShakeEvent.fInnerRadius = 3.f;
-	tShakeEvent.tWaveX.fAmplitude = 0.06;
+	tShakeEvent.tWaveX.fAmplitude = 0.06f;
 	tShakeEvent.tWaveX.fFrequency = 1.5f;
 	tShakeEvent.tWaveY.fAmplitude = 0.06f;
 	tShakeEvent.tWaveY.fFrequency = 1.5f;
@@ -99,7 +99,7 @@ HRESULT CShakeManager::Ready_Template()
 	tShakeEvent.fDuration = 0.5f;
 	tShakeEvent.fOuterRadius = 15.f;
 	tShakeEvent.fInnerRadius = 3.f;
-	tShakeEvent.tWaveX.fAmplitude = 0.09;
+	tShakeEvent.tWaveX.fAmplitude = 0.09f;
 	tShakeEvent.tWaveX.fFrequency = 3.f;
 	tShakeEvent.tWaveY.fAmplitude = 0.09f;
 	tShakeEvent.tWaveY.fFrequency = 3.f;

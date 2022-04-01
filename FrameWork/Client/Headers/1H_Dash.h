@@ -22,6 +22,9 @@ public:
 protected:
 	virtual _int Input(const _double& _dDeltaTime);
 
+protected:
+	CCameraShake::SHAKEEVENT m_tShakeEvent;
+
 public:
 	virtual void Free() override;
 };

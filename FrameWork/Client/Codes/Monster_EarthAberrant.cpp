@@ -50,7 +50,7 @@ HRESULT CMonster_EarthAberrant::NativeConstruct(const _uint _iSceneID, void* _pA
 	}
 	else
 	{
-		_vector Pos = { 3.f, 0.f, 15.f, 1.f };
+		_vector Pos = { 0.f, 1.f, 5.f, 1.f };
 		m_pTransform->Set_State(CTransform::STATE_POSITION, Pos);
 	}
 	if (FAILED(SetUp_Components()))
@@ -75,7 +75,6 @@ HRESULT CMonster_EarthAberrant::NativeConstruct(const _uint _iSceneID, void* _pA
 	pWeapon->Set_OwnerPivotMatrix(m_pModelCom->Get_PivotMatrix());
 	m_pWeapon = pWeapon;
 
-	
 
 	//MonsterBar Panel
 	CUI_Monster_Panel::PANELDESC Desc;
@@ -101,28 +100,26 @@ HRESULT CMonster_EarthAberrant::NativeConstruct(const _uint _iSceneID, void* _pA
 	m_pPanel->Set_HpBar(Get_HpRatio());
 	m_pPanel->Set_GroggyBar(Get_GroggyGaugeRatio());
 
-	setActive(false);
+	/*setActive(false);*/
 	return S_OK;
 }
 
 _int CMonster_EarthAberrant::Tick(_double _dDeltaTime)
 {
-
 	if (0 > __super::Tick(_dDeltaTime))
 	{
 		return -1;
 	}
 
 	m_pTransform->Set_Velocity(XMVectorZero());
-	
+	m_pPanel->Set_TargetWorldMatrix(m_pTransform->Get_WorldMatrix());
+
 	if (m_bIsFall)
 		m_pTransform->Fall(_dDeltaTime);
 
 	_int iProgress = m_pStateController->Tick(_dDeltaTime);
 	if (NO_EVENT != iProgress)
-	{
 		return iProgress;
-	}
 
 	if (nullptr != m_pWeapon)
 	{
@@ -140,22 +137,41 @@ _int CMonster_EarthAberrant::Tick(_double _dDeltaTime)
 				static_cast<CStage1*>(pLevel)->Minus_MonsterCount();
 
 			m_bDead = true;
+			m_IsAttack = false;
+			m_pWeapon->Set_IsAttack(false);
 			m_pStateController->Change_State(L"Death");
 			m_pCharacterController->Remove_CCT();
 		}
 		else
 			m_pCharacterController->Move(_dDeltaTime, m_pTransform->Get_Velocity());
 	}
+	else
+	{
+		if (DEATH == m_pAnimatorCom->Get_CurrentAnimNode())
+		{
+			if (m_pAnimatorCom->Get_CurrentAnimation()->Is_Finished())
+			{
+				Set_Remove(true);
+				m_pPanel->Set_UIRemove(true);
+			}
+			if (9 == m_pAnimatorCom->Get_AnimController()->Get_CurKeyFrameIndex())
+			{
+				Active_Effect((_uint)EFFECT::DEATH);
+			}
+		}
+		else
+		{
+			Set_Remove(true);
+			m_pPanel->Set_UIRemove(true);
+			Active_Effect((_uint)EFFECT::DEATH);
+		}
+	}
 
 	if (true == m_bUIShow)
-	{
 		m_pPanel->Set_Show(true);
-	}
 
 	if (false == m_bUIShow)
-	{
 		m_pPanel->Set_Show(false);
-	}
 
 	if (m_fGroggyGauge >= m_fMaxGroggyGauge)
 	{
@@ -171,7 +187,6 @@ _int CMonster_EarthAberrant::Tick(_double _dDeltaTime)
 		m_fGroggyGauge = 0.f;
 		m_pPanel->Set_GroggyBar(Get_GroggyGaugeRatio());
 	}
-
 	if (STUN_END == m_pAnimatorCom->Get_CurrentAnimNode())
 	{
 		if (m_pAnimatorCom->Get_AnimController()->Is_Finished())
@@ -180,15 +195,6 @@ _int CMonster_EarthAberrant::Tick(_double _dDeltaTime)
 		}
 	}
 
-	if (DEATH == m_pAnimatorCom->Get_CurrentAnimNode() && m_pAnimatorCom->Get_AnimController()->Is_Finished())
-	{
-		m_bRemove = true;
-		setActive(false);
-		m_pPanel->Set_Remove(true);
-		m_pPanel->Set_Show(false);
-	}
-	m_pPanel->Set_TargetWorldMatrix(m_pTransform->Get_WorldMatrix());
-	
 	return 0;
 }
 
@@ -227,7 +233,6 @@ HRESULT CMonster_EarthAberrant::Render()
 		return E_FAIL;
 	}
 
-
 	_matrix XMWorldMatrix = XMMatrixTranspose(m_pTransform->Get_WorldMatrix());
 	_matrix XMViewMatrix = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_VIEW));
 	_matrix XMProjectMatrix = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_PROJECTION));
@@ -239,7 +244,15 @@ HRESULT CMonster_EarthAberrant::Render()
 
 	for (_uint i = 0; i < m_pModelCom->Get_NumMeshContainer(); ++i)
 	{
-		m_pModelCom->Render(i, 0);
+		switch (i)
+		{
+		case 0:
+			m_pModelCom->Render(i,5);
+			break;
+		case 1:
+			m_pModelCom->Render(i, 4);
+			break;
+		}
 	}
 
 	return S_OK;
@@ -252,7 +265,7 @@ HRESULT CMonster_EarthAberrant::SetUp_Components()
 	Desc.fRotationPerSec = XMConvertToRadians(60.f);
 	m_pTransform->Set_TransformDesc(Desc);
 
-	if (FAILED(__super::SetUp_Components((_uint)SCENEID::SCENE_STAGE1, L"Model_Monster_EarthAberrant", L"Com_Model", (CComponent**)&m_pModelCom)))
+	if (FAILED(__super::SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Model_Monster_EarthAberrant", L"Com_Model", (CComponent**)&m_pModelCom)))
 	{
 		return E_FAIL;
 	}
@@ -512,6 +525,9 @@ HRESULT CMonster_EarthAberrant::Set_Animation_FSM()
 
 	m_pAnimatorCom->Change_Animation(IDLE);
 
+	_uint iRand = rand() % 15;
+	m_pAnimatorCom->Add_AnimFrame(IDLE, iRand);
+
 	return S_OK;
 }
 
@@ -585,6 +601,9 @@ void CMonster_EarthAberrant::OnTriggerEnter(CCollision& collision)
 					m_pPanel->Set_GroggyBar(Get_GroggyGaugeRatio());
 					m_pStateController->Change_State(L"Flinch_Left");
 				}
+
+				Active_Effect((_uint)EFFECT::HIT);
+				Active_Effect((_uint)EFFECT::FLOATING);
 			}
 			else
 			{
@@ -603,6 +622,12 @@ void CMonster_EarthAberrant::Set_IsAttack(const _bool _isAttack)
 	m_IsAttack = _isAttack;
 	if (m_pWeapon)
 		m_pWeapon->Set_IsAttack(_isAttack);
+}
+
+void CMonster_EarthAberrant::Set_Remove(_bool bCheck)
+{
+	m_bRemove = bCheck;
+	m_pPanel->Set_UIRemove(bCheck);
 }
 
 CMonster_EarthAberrant* CMonster_EarthAberrant::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)

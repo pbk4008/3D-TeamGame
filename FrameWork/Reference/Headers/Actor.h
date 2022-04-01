@@ -24,6 +24,13 @@ public:
 	const _float Get_GroggyGaugeRatio();
 protected:
 	HRESULT Set_SpawnPosition(const _float3 vPoint);
+
+public:
+	//Effect 불러오는 함수
+public:
+	void Active_Effect(_uint iEffectIndex);
+	//Effect 좌표받아와서 불러오는 함수
+	void Active_Effect(_uint iEffectIndex, _fvector vPivot);
 public:
 	const _bool Get_Dead() { return m_bDead; }
 	_float Get_CurrentHp() { return m_fCurrentHp; }

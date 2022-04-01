@@ -193,9 +193,6 @@
     <Filter Include="00.Utility\03.Component\05.VIBuffer\10.Trapezium">
       <UniqueIdentifier>{329441a3-c2af-4793-a919-667ae0cce48e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="00.Utility\03.Component\97.CharacterController">
-      <UniqueIdentifier>{de46ff26-c4c3-465e-90af-a8225d355507}</UniqueIdentifier>
-    </Filter>
     <Filter Include="00.Utility\03.Component\08. AnimationController">
       <UniqueIdentifier>{f6e49bb3-9ba7-4443-a04a-fad53dcc39b0}</UniqueIdentifier>
     </Filter>
@@ -243,9 +240,6 @@
     </Filter>
     <Filter Include="00.Utility\03.Component\00.Collider\99.NavMesh">
       <UniqueIdentifier>{4cfd12c9-3390-4bf3-bb96-e5b30630e0c8}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="98.ShaderFiles\Environment">
-      <UniqueIdentifier>{a55263e9-530b-4c0c-92c7-a546a74a279c}</UniqueIdentifier>
     </Filter>
     <Filter Include="00.Utility\03.Component\05.VIBuffer\09.Instance\00.Particle">
       <UniqueIdentifier>{0b39ed64-0406-4109-9e05-ed924b4d203d}</UniqueIdentifier>
@@ -309,9 +303,36 @@
     </Filter>
     <Filter Include="00.Utility\03.Component\09.CullingBox">
       <UniqueIdentifier>{c99a8ce3-e94b-45f2-a5b4-1bf2aa1afa77}</UniqueIdentifier>
-       </Filter>
+    </Filter>
     <Filter Include="00.Utility\03.Component\05.VIBuffer\11.Trail">
       <UniqueIdentifier>{8d54a38c-9871-4707-a828-2c7192092e77}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="98.ShaderFiles\99.Other">
+      <UniqueIdentifier>{912a7858-aae0-4379-9bf5-14707ba9f979}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="98.ShaderFiles\00.Buffer">
+      <UniqueIdentifier>{2e371c64-7eb0-4e0a-99ad-7d7151c42031}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="98.ShaderFiles\01.Environment">
+      <UniqueIdentifier>{a55263e9-530b-4c0c-92c7-a546a74a279c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="98.ShaderFiles\02.Actor">
+      <UniqueIdentifier>{03377527-4db7-4375-a985-09d2135f365b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="98.ShaderFiles\04.UI">
+      <UniqueIdentifier>{222f96a9-cc21-4475-bb8a-ea13bb7b5954}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="98.ShaderFiles\03.Effect">
+      <UniqueIdentifier>{ffad68c7-b5f5-4e3c-87a7-4056b442e162}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="98.ShaderFiles\Hpp">
+      <UniqueIdentifier>{b441602a-c061-4063-92fa-80eedad2b876}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00.Utility\97.CharacterController">
+      <UniqueIdentifier>{de46ff26-c4c3-465e-90af-a8225d355507}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00.Utility\03.Component\05.VIBuffer\09.Instance\00.Particle\03.Env_Floating">
+      <UniqueIdentifier>{04e8b985-4fc1-4c49-be63-4bc0dd35a587}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -504,14 +525,11 @@
     <ClInclude Include="..\public\Material_Manager.h">
       <Filter>00.Utility\04.Manager\99.Material_Manager</Filter>
     </ClInclude>
-    <ClInclude Include="..\bin\ShaderFiles\Shader_Calculate.hpp">
-      <Filter>00.Utility\04.Manager\03.RenderTargetManager</Filter>
-    </ClInclude>
     <ClInclude Include="..\public\Instancing_Mesh.h">
       <Filter>00.Utility\03.Component\05.VIBuffer\09.Instance\01. InstanceMesh</Filter>
     </ClInclude>
     <ClInclude Include="..\public\CharacterController.h">
-      <Filter>00.Utility\03.Component\97.CharacterController</Filter>
+      <Filter>00.Utility\97.CharacterController</Filter>
     </ClInclude>
     <ClInclude Include="..\public\ControllerFilterCallback.h">
       <Filter>00.Utility\04.Manager\11.PhsyicX\ControllerFilterCallback</Filter>
@@ -528,9 +546,6 @@
     <ClInclude Include="..\public\CSTarget.h">
       <Filter>00.Utility\04.Manager\03.RenderTargetManager\01.CSTarget</Filter>
     </ClInclude>
-    <ClInclude Include="..\bin\ShaderFiles\Shader_Calculate.hpp">
-      <Filter>00.Utility\04.Manager\03. RenderTargetManager\99.Shader</Filter>
-    </ClInclude>
     <ClInclude Include="..\public\Cell.h">
       <Filter>00.Utility\03.Component\01.Navigation\Cell</Filter>
     </ClInclude>
@@ -539,9 +554,6 @@
     </ClInclude>
     <ClInclude Include="..\public\VIBuffer_Trapezium.h">
       <Filter>00.Utility\03.Component\05.VIBuffer\10.Trapezium</Filter>
-    </ClInclude>
-    <ClInclude Include="..\bin\ShaderFiles\Shader_RenderState.hpp">
-      <Filter>98.ShaderFiles</Filter>
     </ClInclude>
     <ClInclude Include="..\public\AnimationController.h">
       <Filter>00.Utility\03.Component\08. AnimationController</Filter>
@@ -611,9 +623,22 @@
     </ClInclude>
     <ClInclude Include="..\public\CullingBox.h">
       <Filter>00.Utility\03.Component\09.CullingBox</Filter>
-        </ClInclude>
+    </ClInclude>
     <ClInclude Include="..\public\Trail_VIBuffer.h">
       <Filter>00.Utility\03.Component\05.VIBuffer\11.Trail</Filter>
+    </ClInclude>
+    <ClInclude Include="..\bin\ShaderFiles\Shader_RenderState.hpp">
+      <Filter>98.ShaderFiles\Hpp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\bin\ShaderFiles\Shader_Calculate.hpp">
+      <Filter>98.ShaderFiles\Hpp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\bin\ShaderFiles\Shader_Calculate.hpp" />
+    <ClInclude Include="..\public\VIBuffer_Trail.h">
+      <Filter>00.Utility\03.Component\05.VIBuffer\11.Trail</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\VIBuffer_PointInstance_Env_Floating.h">
+      <Filter>00.Utility\03.Component\05.VIBuffer\09.Instance\00.Particle\03.Env_Floating</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -795,7 +820,7 @@
       <Filter>00.Utility\03.Component\05.VIBuffer\10.Trapezium</Filter>
     </ClCompile>
     <ClCompile Include="..\private\CharacterController.cpp">
-      <Filter>00.Utility\03.Component\97.CharacterController</Filter>
+      <Filter>00.Utility\97.CharacterController</Filter>
     </ClCompile>
     <ClCompile Include="..\private\ControllerFilterCallback.cpp">
       <Filter>00.Utility\04.Manager\11.PhsyicX\ControllerFilterCallback</Filter>
@@ -884,6 +909,12 @@
     <ClCompile Include="..\private\Trail_VIBuffer.cpp">
       <Filter>00.Utility\03.Component\05.VIBuffer\11.Trail</Filter>
     </ClCompile>
+    <ClCompile Include="..\private\VIBuffer_Trail.cpp">
+      <Filter>00.Utility\03.Component\05.VIBuffer\11.Trail</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\VIBuffer_PointInstance_Env_Floating.cpp">
+      <Filter>00.Utility\03.Component\05.VIBuffer\09.Instance\00.Particle\03.Env_Floating</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="..\bin\ShaderFiles\Shader_Triangle.hlsl">
@@ -904,36 +935,6 @@
     <FxCompile Include="..\bin\ShaderFiles\Shader_Geo_UI.hlsl">
       <Filter>00.Utility\03.Component\05.VIBuffer\03.RectInstance</Filter>
     </FxCompile>
-    <FxCompile Include="..\bin\ShaderFiles\Shader_Instance.hlsl">
-      <Filter>98.ShaderFiles</Filter>
-    </FxCompile>
-    <FxCompile Include="..\bin\ShaderFiles\Shader_Plane.hlsl">
-      <Filter>98.ShaderFiles</Filter>
-    </FxCompile>
-    <FxCompile Include="..\bin\ShaderFiles\Shader_StaticMesh.hlsl">
-      <Filter>98.ShaderFiles</Filter>
-    </FxCompile>
-    <FxCompile Include="..\bin\ShaderFiles\Shader_Terrain.hlsl">
-      <Filter>98.ShaderFiles</Filter>
-    </FxCompile>
-    <FxCompile Include="..\bin\ShaderFiles\Shader_Mesh.hlsl">
-      <Filter>98.ShaderFiles</Filter>
-    </FxCompile>
-    <FxCompile Include="..\bin\ShaderFiles\Shader_MeshAnim.hlsl">
-      <Filter>98.ShaderFiles</Filter>
-    </FxCompile>
-    <FxCompile Include="..\bin\ShaderFiles\Shader_UI.hlsl">
-      <Filter>98.ShaderFiles</Filter>
-    </FxCompile>
-    <FxCompile Include="..\bin\ShaderFiles\Shader_Rect.hlsl">
-      <Filter>98.ShaderFiles</Filter>
-    </FxCompile>
-    <FxCompile Include="..\bin\ShaderFiles\Shader_PointInstance.hlsl">
-      <Filter>98.ShaderFiles</Filter>
-    </FxCompile>
-    <FxCompile Include="..\bin\ShaderFiles\Shader_UI_Bar.hlsl">
-      <Filter>98.ShaderFiles</Filter>
-    </FxCompile>
     <FxCompile Include="..\bin\ShaderFiles\Shader_HDRBase.hlsl">
       <Filter>00.Utility\03.Component\02.Renderer\01.HDRBase\shader</Filter>
     </FxCompile>
@@ -949,59 +950,44 @@
     <FxCompile Include="..\bin\ShaderFiles\Shader_Luminance.hlsl">
       <Filter>00.Utility\03.Component\02.Renderer\02.Luminance\shader</Filter>
     </FxCompile>
-    <FxCompile Include="..\bin\ShaderFiles\Shader_Cube.hlsl">
-      <Filter>98.ShaderFiles</Filter>
-    </FxCompile>
-    <FxCompile Include="..\bin\ShaderFiles\Shader_SilverMane.hlsl">
-      <Filter>98.ShaderFiles</Filter>
-    </FxCompile>
-    <FxCompile Include="..\bin\ShaderFiles\Shader_Monster.hlsl">
-      <Filter>98.ShaderFiles</Filter>
-    </FxCompile>
-    <FxCompile Include="..\bin\ShaderFiles\Shader_Weapon.hlsl">
-      <Filter>98.ShaderFiles</Filter>
-    </FxCompile>
-    <FxCompile Include="..\bin\ShaderFiles\Shader_Shield.hlsl">
-      <Filter>98.ShaderFiles</Filter>
-    </FxCompile>
     <FxCompile Include="..\bin\ShaderFiles\Shader_InstanceMesh.hlsl">
-      <Filter>98.ShaderFiles\Environment</Filter>
+      <Filter>98.ShaderFiles\01.Environment</Filter>
     </FxCompile>
     <FxCompile Include="..\bin\ShaderFiles\Shader_INST_ORM.hlsl">
-      <Filter>98.ShaderFiles\Environment</Filter>
+      <Filter>98.ShaderFiles\01.Environment</Filter>
     </FxCompile>
     <FxCompile Include="..\bin\ShaderFiles\Shader_INST_ORME.hlsl">
-      <Filter>98.ShaderFiles\Environment</Filter>
+      <Filter>98.ShaderFiles\01.Environment</Filter>
     </FxCompile>
     <FxCompile Include="..\bin\ShaderFiles\Shader_INST_ORS.hlsl">
-      <Filter>98.ShaderFiles\Environment</Filter>
+      <Filter>98.ShaderFiles\01.Environment</Filter>
     </FxCompile>
     <FxCompile Include="..\bin\ShaderFiles\Shader_INST_MASK.hlsl">
-      <Filter>98.ShaderFiles\Environment</Filter>
+      <Filter>98.ShaderFiles\01.Environment</Filter>
     </FxCompile>
     <FxCompile Include="..\bin\ShaderFiles\Shader_INST_ORM_Gold.hlsl">
-      <Filter>98.ShaderFiles\Environment</Filter>
+      <Filter>98.ShaderFiles\01.Environment</Filter>
     </FxCompile>
     <FxCompile Include="..\bin\ShaderFiles\Shader_INST_ORM_M.hlsl">
-      <Filter>98.ShaderFiles\Environment</Filter>
+      <Filter>98.ShaderFiles\01.Environment</Filter>
     </FxCompile>
     <FxCompile Include="..\bin\ShaderFiles\Shader_INST_ORM_N2.hlsl">
-      <Filter>98.ShaderFiles\Environment</Filter>
+      <Filter>98.ShaderFiles\01.Environment</Filter>
     </FxCompile>
     <FxCompile Include="..\bin\ShaderFiles\Shader_INST_Coin.hlsl">
-      <Filter>98.ShaderFiles\Environment</Filter>
+      <Filter>98.ShaderFiles\01.Environment</Filter>
     </FxCompile>
     <FxCompile Include="..\bin\ShaderFiles\Shader_INST_OMR.hlsl">
-      <Filter>98.ShaderFiles\Environment</Filter>
+      <Filter>98.ShaderFiles\01.Environment</Filter>
     </FxCompile>
     <FxCompile Include="..\bin\ShaderFiles\Shader_INST_OMER.hlsl">
-      <Filter>98.ShaderFiles\Environment</Filter>
+      <Filter>98.ShaderFiles\01.Environment</Filter>
     </FxCompile>
     <FxCompile Include="..\bin\ShaderFiles\Shader_INST_Rock.hlsl">
-      <Filter>98.ShaderFiles\Environment</Filter>
+      <Filter>98.ShaderFiles\01.Environment</Filter>
     </FxCompile>
     <FxCompile Include="..\bin\ShaderFiles\Shader_INST_Tree.hlsl">
-      <Filter>98.ShaderFiles\Environment</Filter>
+      <Filter>98.ShaderFiles\01.Environment</Filter>
     </FxCompile>
     <FxCompile Include="..\bin\ShaderFiles\Shader_Particle.hlsl">
       <Filter>00.Utility\03.Component\05.VIBuffer\09.Instance\00.Particle</Filter>
@@ -1009,11 +995,65 @@
     <FxCompile Include="..\bin\ShaderFiles\Shader_RectViewport.hlsl">
       <Filter>00.Utility\03.Component\02.Renderer</Filter>
     </FxCompile>
+    <FxCompile Include="..\bin\ShaderFiles\Shader_Cube.hlsl">
+      <Filter>98.ShaderFiles\00.Buffer</Filter>
+    </FxCompile>
+    <FxCompile Include="..\bin\ShaderFiles\Shader_PointInstance.hlsl">
+      <Filter>98.ShaderFiles\00.Buffer</Filter>
+    </FxCompile>
+    <FxCompile Include="..\bin\ShaderFiles\Shader_Rect.hlsl">
+      <Filter>98.ShaderFiles\00.Buffer</Filter>
+    </FxCompile>
+    <FxCompile Include="..\bin\ShaderFiles\Shader_Plane.hlsl">
+      <Filter>98.ShaderFiles\00.Buffer</Filter>
+    </FxCompile>
+    <FxCompile Include="..\bin\ShaderFiles\Shader_Instance.hlsl">
+      <Filter>98.ShaderFiles\00.Buffer</Filter>
+    </FxCompile>
     <FxCompile Include="..\bin\ShaderFiles\Shader_Effect_Fire.hlsl">
-      <Filter>98.ShaderFiles</Filter>
+      <Filter>98.ShaderFiles\03.Effect</Filter>
+    </FxCompile>
+    <FxCompile Include="..\bin\ShaderFiles\Shader_Terrain.hlsl">
+      <Filter>98.ShaderFiles\00.Buffer</Filter>
+    </FxCompile>
+    <FxCompile Include="..\bin\ShaderFiles\Shader_UI.hlsl">
+      <Filter>98.ShaderFiles\04.UI</Filter>
+    </FxCompile>
+    <FxCompile Include="..\bin\ShaderFiles\Shader_UI_Bar.hlsl">
+      <Filter>98.ShaderFiles\04.UI</Filter>
+    </FxCompile>
+    <FxCompile Include="..\bin\ShaderFiles\Shader_SilverMane.hlsl">
+      <Filter>98.ShaderFiles\02.Actor</Filter>
+    </FxCompile>
+    <FxCompile Include="..\bin\ShaderFiles\Shader_Shield.hlsl">
+      <Filter>98.ShaderFiles\02.Actor</Filter>
+    </FxCompile>
+    <FxCompile Include="..\bin\ShaderFiles\Shader_Weapon.hlsl">
+      <Filter>98.ShaderFiles\02.Actor</Filter>
+    </FxCompile>
+    <FxCompile Include="..\bin\ShaderFiles\Shader_Monster.hlsl">
+      <Filter>98.ShaderFiles\02.Actor</Filter>
+    </FxCompile>
+    <FxCompile Include="..\bin\ShaderFiles\Shader_Mesh.hlsl">
+      <Filter>98.ShaderFiles\99.Other</Filter>
+    </FxCompile>
+    <FxCompile Include="..\bin\ShaderFiles\Shader_MeshAnim.hlsl">
+      <Filter>98.ShaderFiles\99.Other</Filter>
+    </FxCompile>
+    <FxCompile Include="..\bin\ShaderFiles\Shader_StaticMesh.hlsl">
+      <Filter>98.ShaderFiles\99.Other</Filter>
+    </FxCompile>
+    <FxCompile Include="..\bin\ShaderFiles\Shader_InstanceFire.hlsl">
+      <Filter>98.ShaderFiles\00.Buffer</Filter>
+    </FxCompile>
+    <FxCompile Include="..\bin\ShaderFiles\Shader_RectFire.hlsl">
+      <Filter>98.ShaderFiles\03.Effect</Filter>
     </FxCompile>
     <FxCompile Include="..\bin\ShaderFiles\Shader_Panel_UI.hlsl">
-      <Filter>98.ShaderFiles</Filter>
+      <Filter>98.ShaderFiles\04.UI</Filter>
+    </FxCompile>
+    <FxCompile Include="..\bin\ShaderFiles\Shader_Trail.hlsl">
+      <Filter>98.ShaderFiles\03.Effect</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>

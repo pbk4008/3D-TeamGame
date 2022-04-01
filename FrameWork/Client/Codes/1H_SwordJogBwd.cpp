@@ -61,6 +61,7 @@ HRESULT C1H_SwordJogBwd::EnterState()
 	_matrix smatPivot = XMMatrixRotationY(XMConvertToRadians(180.f));
 	m_pAnimationController->Set_PivotMatrix(smatPivot);
 
+	m_pAnimationController->Add_TrackAcc(2.0);
 	return S_OK;
 }
 

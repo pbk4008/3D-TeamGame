@@ -59,7 +59,7 @@ HRESULT CSwordTrail::Render()
 	m_pViBufferCom->SetUp_ValueOnShader("g_ProjMatrix", &proj, sizeof(_matrix));
 	m_pViBufferCom->SetUp_TextureOnShader("g_DiffuseTexture", m_pTextureCom);
 
-	m_pViBufferCom->RenderBuffer(&m_TrailList,2);
+	m_pViBufferCom->RenderBuffer(&m_TrailList, 0);
 
 	return S_OK;
 }

@@ -14,7 +14,7 @@ class CEffect_HitFloating final : public CEffect
 protected:
 	explicit CEffect_HitFloating();
 	explicit CEffect_HitFloating(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);
-	explicit CEffect_HitFloating(const CEffect& rhs);
+	explicit CEffect_HitFloating(const CEffect_HitFloating& rhs);
 	virtual ~CEffect_HitFloating() = default;
 protected:
 	/* 원형객체가 생성될때 호출되는 함수. */
@@ -27,6 +27,9 @@ protected:
 
 private:
 	virtual HRESULT SetUp_Components();
+private:
+	virtual CEffect* Copy() override;
+	virtual void Set_Reset(_bool bReset);
 
 public:
 	CEffect::EFFECTDESC Get_EffectDesc() {return m_Desc; }
@@ -37,8 +40,6 @@ private:
 private:
 	CEffect::EFFECTDESC m_Desc;
 	CVIBuffer_PointInstance_Floating::PIDESC m_backupDesc;
-
-	_float m_fNonActiveTimeAcc = 0.f;
 
 public:
 	static CEffect_HitFloating* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);

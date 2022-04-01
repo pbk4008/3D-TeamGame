@@ -9,14 +9,26 @@
 #include "Effect_DashDust.h"
 #include "Effect_HitParticle.h"
 #include "Effect_HitFloating.h"
+#include "Effect_DeathParticle.h"
+#include "Effect_Env_Floating.h"
 #include "Effect_Env_Fire.h"
+
 #include "UI_Ingame.h"
 #include "UI_Player_HpBar.h"
 #include "UI_Tuto_Base.h"
 #include "UI_Tuto_Font.h"
+#include "UI_Blank_CKey.h"
+#include "UI_Fill_CKey.h"
 
 #include "JumpNode.h"
 #include "JumpBox.h"
+
+#include <Monster_Crawler.h>
+#include <Monster_EarthAberrant.h>
+#include <Monster_Bastion_Healer.h>
+#include <Monster_Bastion_2HSword.h>
+#include <Monster_Bastion_Sword.h>
+#include <Monster_Bastion_Shooter.h>
 
 CStage1::CStage1()
 	: m_pTriggerSystem(nullptr)
@@ -50,8 +62,8 @@ HRESULT CStage1::NativeConstruct()
 	if (FAILED(Ready_Light()))
 		return E_FAIL;
 
-	if (FAILED(Ready_Trigger_Jump()))
-		return E_FAIL;
+	/*if (FAILED(Ready_Trigger_Jump()))
+		return E_FAIL;*/
 
 	if (FAILED(Ready_Player(L"Layer_Silvermane")))
 		return E_FAIL;
@@ -59,33 +71,33 @@ HRESULT CStage1::NativeConstruct()
 	if (FAILED(Ready_MapObject()))
 		return E_FAIL;
 
-	if (FAILED(Ready_TriggerSystem(L"../bin/SaveData/Trigger/MonsterSpawnTrigger.dat")))
-		return E_FAIL;
+	//if (FAILED(Ready_TriggerSystem(L"../bin/SaveData/Trigger/MonsterSpawnTrigger.dat")))
+	//	return E_FAIL;
 
-	/*if (FAILED(Ready_Boss(L"Layer_Boss")))
-	{
-		return E_FAIL;
-	}
+	//if (FAILED(Ready_Boss(L"Layer_Boss")))
+	//{
+	//	return E_FAIL;
+	//}
+	//
+	//if (FAILED(Ready_Monster(L"Layer_Monster")))
+	//{
+	//	return E_FAIL;
+	//}
 
-	if (FAILED(Ready_Monster(L"Layer_Monster")))
-	{
-		return E_FAIL;
-	}*/
+	//if (FAILED(Ready_Data_UI(L"../bin/SaveData/UI/UI.dat")))
+	//{
+	//	return E_FAIL;
+	//}
 
-	if (FAILED(Ready_Data_UI(L"../bin/SaveData/UI/UI.dat")))
-	{
-		return E_FAIL;
-	}
+	//if (FAILED(Ready_Data_Effect()))
+	//{
+	//	return E_FAIL;
+	//}
 
-	if (FAILED(Ready_Data_Effect()))
-	{
-		return E_FAIL;
-	}
-
-	if (FAILED(Ready_UI(L"Layer_UI")))
-	{
-		return E_FAIL;
-	}
+	//if (FAILED(Ready_UI(L"Layer_UI")))
+	//{
+	//	return E_FAIL;
+	//}
 
 	//if (FAILED(Ready_Trigger_Lod(L"../bin/SaveData/Trigger/Stage1_LodTri.dat")))
 	//	return E_FAIL;
@@ -103,7 +115,8 @@ HRESULT CStage1::NativeConstruct()
 	g_pGameInstance->Change_BaseCamera(L"Camera_Silvermane");
 
 
-	g_pGameInstance->PlayBGM(L"Stage1_BGM");
+	//g_pGameInstance->PlayBGM(L"Stage1_BGM");
+
 
 	return S_OK;
 }
@@ -124,20 +137,41 @@ _int CStage1::Tick(_double TimeDelta)
 
 	if (nullptr != m_pTriggerSystem)
 	{
+		if (g_pGameInstance->getkeyDown(DIK_BACKSPACE))
+		{
+			m_pTriggerSystem->CurrentTriggerMonsterAllDelete();
+			m_iCountMonster = 0;
+		}
+
 		m_pTriggerSystem->Tick(TimeDelta);
+
+		CBoss_Bastion_Judicator* pBoss = (CBoss_Bastion_Judicator*)g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Layer_Boss")->front();
+		if (nullptr != pBoss)
+		{
+			if (true == pBoss->Get_Dead())
+			{
+				if (FAILED(g_pGameInstance->Open_Level((_uint)SCENEID::SCENE_LOADING, CLoading::Create(m_pDevice, m_pDeviceContext, SCENEID::SCENE_STAGE2))))
+					return -1;
+			}
+		}
 	}
 	if (m_iCountMonster == 0 && m_bFirst)
 		m_pTriggerSystem->Check_Clear();
 
-	CBoss_Bastion_Judicator* pBoss = (CBoss_Bastion_Judicator*)g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Layer_Boss")->front();
-	if (nullptr != pBoss)
-	{
-		if (true == pBoss->Get_Dead())
-		{
-			if (FAILED(g_pGameInstance->Open_Level((_uint)SCENEID::SCENE_LOADING, CLoading::Create(m_pDevice, m_pDeviceContext, SCENEID::SCENE_STAGE2))))
-				return -1;
-		}
-	}
+	
+	//if (g_pGameInstance->getkeyDown(DIK_BACKSPACE))
+	//{
+	//	_float3 fPos = {0.f,5.f,10.f};
+	//	CMonster_Bastion_Healer* pMonster = nullptr;
+
+	//	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Test", L"Proto_GameObject_Monster_Bastion_Healer", &fPos, (CGameObject**)&pMonster)))
+	//		return -1;
+
+	//	//CMonster_Bastion_Shooter* pShooter = nullptr;
+	//	//fPos = { 3.f,5.f,10.f };
+	//	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Test", L"Proto_GameObject_Monster_Bastion_Shooter", &fPos, (CGameObject**)&pShooter)))
+	//	//	return -1;
+	//}
 
 	return _int();
 }
@@ -178,6 +212,17 @@ HRESULT CStage1::Ready_MapObject()
 	_uint iTmpIndx = 0;
 	for (auto& pDesc : tEnvironmentDesc)
 	{
+		if (pDesc.wstrInstaneTag == L"Brazier_Large_01.fbx")
+		{
+			for (auto& iter : pDesc.tInstanceDesc.vecMatrix)
+			{
+				_vector pos = XMVectorSet(iter._41, iter._42, iter._43, iter._44);
+
+				if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_NoisFire", L"Proto_GameObject_NoiseFire",&pos)))
+					MSGBOX("Failed To Clone NoisFire");
+			}
+		}
+
 		if (pDesc.wstrInstaneTag == L"")
 			break;
 		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Environment", L"Proto_GameObject_Environment", &pDesc)))
@@ -301,7 +346,7 @@ HRESULT CStage1::Ready_UI(const _tchar* LayerTag)
 	Desc.fSize = { 200.f , 30.f };
 	Desc.IDTag = (_uint)GAMEOBJECT::UI_DYNAMIC;
 
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_UI", L"Proto_GameObject_UI_Player_HpBar_Red", &Desc)))
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Proto_GameObject_UI_Player_HpBar_Red", &Desc)))
 		return E_FAIL;
 
 
@@ -315,9 +360,9 @@ HRESULT CStage1::Ready_UI(const _tchar* LayerTag)
 	Desc1.UIDesc.fSize = { 333.f , 105.f };
 	Desc1.UIDesc.IDTag = (_uint)GAMEOBJECT::UI_STATIC;
 
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_UI", L"Proto_GameObject_UI_Tuto_Base", &Desc1)))
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Proto_GameObject_UI_Tuto_Base", &Desc1)))
 		return E_FAIL;
-
+	
 	//Tuto Font
 	CUI_Tuto_Font::UIACTIVEDESC Desc2;
 	ZeroMemory(&Desc2, sizeof(CUI_Tuto_Font::UIACTIVEDESC));
@@ -329,7 +374,33 @@ HRESULT CStage1::Ready_UI(const _tchar* LayerTag)
 	Desc2.UIDesc.IDTag = (_uint)GAMEOBJECT::UI_STATIC;
 	Desc2.iTextureNum = 0;
 	
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_UI", L"Proto_GameObject_UI_Tuto_Font", &Desc2)))
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Proto_GameObject_UI_Tuto_Font", &Desc2)))
+		return E_FAIL;
+
+	//Blank_Ckey
+	CUI_Blank_CKey::UIACTIVEDESC Desc3;
+	ZeroMemory(&Desc3, sizeof(CUI_Blank_CKey::UIACTIVEDESC));
+	_tcscpy_s(Desc3.UIDesc.TextureTag, L"Texture_Blank_Ckey");
+	Desc3.UIDesc.bMinus = false;
+	Desc3.UIDesc.fAngle = 0.f;
+	Desc3.UIDesc.fPos = { 700.f, 390.f, 0.1f };
+	Desc3.UIDesc.fSize = { 60.f , 60.f };
+	Desc3.UIDesc.IDTag = (_uint)GAMEOBJECT::UI_STATIC;
+
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_UI_BlankC", L"Proto_GameObject_UI_Blank_CKey", &Desc3)))
+		return E_FAIL;
+
+	//Fill_Ckey
+	CUI_Fill_Ckey::UIACTIVEDESC Desc4;
+	ZeroMemory(&Desc4, sizeof(CUI_Fill_Ckey::UIACTIVEDESC));
+	_tcscpy_s(Desc4.UIDesc.TextureTag, L"Texture_Fill_Ckey");
+	Desc4.UIDesc.bMinus = false;
+	Desc4.UIDesc.fAngle = 0.f;
+	Desc4.UIDesc.fPos = { 700.f, 390.f, 0.09f };
+	Desc4.UIDesc.fSize = { 60.f , 60.f };
+	Desc4.UIDesc.IDTag = (_uint)GAMEOBJECT::UI_STATIC;
+
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_UI_FillC", L"Proto_GameObject_UI_Fill_CKey", &Desc4)))
 		return E_FAIL;
 
 	return S_OK;
@@ -370,21 +441,22 @@ HRESULT CStage1::Ready_Light()
 
 HRESULT CStage1::Ready_Data_Effect()
 {
-	vector<CEffect_DashDust::EFFECTDESC> vecEffect;
+	//vector<CEffect_DashDust::EFFECTDESC> vecEffect;
 	//Effect_Dash
-	g_pGameInstance->LoadFile<CEffect_DashDust::EFFECTDESC>(vecEffect, L"../bin/SaveData/Effect/Effect_Player_Attack1.dat");
-	
-	for (int i = 0; i < vecEffect.size(); ++i)
-	{
-		wstring FullName = L"Proto_GameObject_Effect_DashDust";
+	//g_pGameInstance->LoadFile<CEffect_DashDust::EFFECTDESC>(vecEffect, L"../bin/SaveData/Effect/Effect_Player_Attack1.dat");
 
-		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Effect", FullName, &vecEffect[i])))
-		{
-			MSGBOX("Failed to Creating in CStage1::Ready_Effect()");
-			return E_FAIL;
-		}
-	}
+	//for (int i = 0; i < vecEffect.size(); ++i)
+	//{
+	//	wstring FullName = L"Proto_GameObject_Effect_DashDust";
 
+	//	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect", FullName, &vecEffect[i])))
+	//	{
+	//		MSGBOX("Failed to Creating in CStage1::Ready_Effect()");
+	//		return E_FAIL;
+	//	}
+	//}
+
+	//불
 	CEffect_Env_Fire::EFFECTDESC Desc;
 	_tcscpy_s(Desc.TextureTag, L"Env_Fire");
 	Desc.iRenderPassNum = 1;
@@ -394,41 +466,104 @@ HRESULT CStage1::Ready_Data_Effect()
 	Desc.fEffectPlaySpeed = 1.f;
 	Desc.fMyPos = { 0.f, 0.f, 0.f };
 
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Effect_Env_Fire", L"Proto_GameObject_Effect_Env_Fire", &Desc)))
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Env_Fire", L"Proto_GameObject_Effect_Env_Fire", &Desc)))
 	{
 		MSGBOX("Failed to Creating in CStage1::Ready_Effect()");
 		return E_FAIL;
 	}
 
-	//이펙트생성
-	//vector<CEffect_HitParticle::EFFECTDESC> vecEffect;
-	//g_pGameInstance->LoadFile<CEffect_HitParticle::EFFECTDESC>(vecEffect, L"../bin/SaveData/Effect/Effect_Player_Attack1.dat");
+	//이펙트 매니저에 넣으면서 생성
+	// 주의 사항!! 넣을때 순서가 ENUM순서
+	//Manager에 넣을 Effect;
+	CEffect* pEffect = nullptr;
+	vector<CEffect_HitParticle::EFFECTDESC> vecHitParticle;
+	g_pGameInstance->LoadFile<CEffect_HitParticle::EFFECTDESC>(vecHitParticle, L"../bin/SaveData/Effect/Effect_Player_Attack1.dat");
+	
+	wstring FullName = L"Proto_GameObject_Effect_Hit";
 
-	for (int i = 0; i < vecEffect.size(); ++i)
+	//마지막에 받을 Effect변수 넣기
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Hit", FullName, &vecHitParticle[0],(CGameObject**)&pEffect)))
 	{
-		wstring FullName = L"Proto_GameObject_Effect_Hit";
-		//_tcscpy_s(vecEffect1[i].ShaderFullFilePath, L"../../Reference/ShaderFile/Shader_PointInstance.hlsl");
-		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Hit", FullName, &vecEffect[i])))
-		{
-			MSGBOX("Failed to Creating in CStage1::Ready_Effect()");
-			return E_FAIL;
-		}
+		MSGBOX("Failed to Creating in CStage1::Ready_Effect()");
+		return E_FAIL;
+	}
+	//매니저에 이펙트 넣기 (마지막 매개변수 : 같은 이펙트 추가로 넣을 갯수)
+	if (FAILED(g_pGameInstance->Add_Effect((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Hit", pEffect, 20)))
+	{
+		MSGBOX("Falild to Clone in Effect_Hit");
+		return E_FAIL;
 	}
 
-	////이펙트생성
-	vector<CEffect_HitFloating::EFFECTDESC> vecEffect1;
-	g_pGameInstance->LoadFile<CEffect_HitFloating::EFFECTDESC>(vecEffect1, L"../bin/SaveData/Effect/Effect_Player_Attack2_Floating_2.dat");
+	vector<CEffect_HitFloating::EFFECTDESC> vecHitFloating;
+	g_pGameInstance->LoadFile<CEffect_HitFloating::EFFECTDESC>(vecHitFloating, L"../bin/SaveData/Effect/Effect_Player_Attack2_Floating.dat");
 
-	for (int i = 0; i < vecEffect1.size(); ++i)
+	FullName = L"Proto_GameObject_Effect_Floating";
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Floating", FullName, &vecHitFloating[0],(CGameObject**)&pEffect)))
 	{
-		wstring FullName = L"Proto_GameObject_Effect_Floating";
-		//_tcscpy_s(vecEffect1[i].ShaderFullFilePath, L"../../Reference/ShaderFile/Shader_PointInstance.hlsl");
-		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Floating", FullName, &vecEffect1[i])))
-		{
-			MSGBOX("Failed to Creating in CStage1::Ready_Effect()");
-			return E_FAIL;
-		}
+		MSGBOX("Failed to Creating in CStage1::Ready_Effect()");
+		return E_FAIL;
 	}
+	if (FAILED(g_pGameInstance->Add_Effect((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Floating", pEffect, 20)))
+	{
+		MSGBOX("Falild to Clone in Effect_Floating");
+		return E_FAIL;
+	}
+
+	//죽을때
+	vector<CEffect_DeathParticle::EFFECTDESC> vecDeath;
+	g_pGameInstance->LoadFile<CEffect_DeathParticle::EFFECTDESC>(vecDeath, L"../bin/SaveData/Effect/Effect_Death.dat");
+
+	FullName = L"Proto_GameObject_Effect_Death";
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Death", FullName, &vecDeath[0], (CGameObject**)&pEffect)))
+	{
+		MSGBOX("Failed to Creating in CStage1::Ready_Effect()");
+		return E_FAIL;
+	}
+	if (FAILED(g_pGameInstance->Add_Effect((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Death", pEffect, 8)))
+	{
+		MSGBOX("Falild to Clone in Effect_Death");
+		return E_FAIL;
+	}
+
+	//플레이어맞을때
+	vector<CEffect_HitParticle::EFFECTDESC> vecHitPlayer;
+	g_pGameInstance->LoadFile<CEffect_HitParticle::EFFECTDESC>(vecHitPlayer, L"../bin/SaveData/Effect/Effect_PlayerHit.dat");
+
+	FullName = L"Proto_GameObject_Effect_PlayerHit";
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_PlayerHit", FullName, &vecHitPlayer[0], (CGameObject**)&pEffect)))
+	{
+		MSGBOX("Failed to Creating in CStage1::Ready_Effect()");
+		return E_FAIL;
+	}
+	if (FAILED(g_pGameInstance->Add_Effect((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_PlayerHit", pEffect, 8)))
+	{
+		MSGBOX("Falild to Clone in Effect_PlayerHit");
+		return E_FAIL;
+	}
+
+	//공중에떠있는환경파티클
+	vector<CEffect_Env_Floating::EFFECTDESC> vecEnvFloating;
+	g_pGameInstance->LoadFile<CEffect_Env_Floating::EFFECTDESC>(vecEnvFloating, L"../bin/SaveData/Effect/Test_Effect_Env_Floating.dat");
+
+	FullName = L"Proto_GameObject_Effect_Env_Floating";
+
+	vecEnvFloating[0].fMyPos = { 0.f, 1.f, 10.f };
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Env_Floating", FullName, &vecEnvFloating[0])))
+	{
+		MSGBOX("Failed to Creating in CStage1::Ready_Effect()");
+		return E_FAIL;
+	}
+	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Env_Floating", FullName, &vecEnvFloating[0], (CGameObject**)&pEffect)))
+	//{
+	//	MSGBOX("Failed to Creating in CStage1::Ready_Effect()");
+	//	return E_FAIL;
+	//}
+	//if (FAILED(g_pGameInstance->Add_Effect((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Env_Floating", pEffect, 1)))
+	//{
+	//	MSGBOX("Falild to Clone in Effect_Env_Floating");
+	//	return E_FAIL;
+	//}
+
 	return S_OK;
 }
 
@@ -489,7 +624,7 @@ HRESULT CStage1::Ready_TriggerFunctionSetting()
 	//1번Trigger와 함수 연결
 	fp = &CStage1::Trgger_Function1;
 	m_pTriggerSystem->Add_TriggerFuntion(fp);
-	
+
 	fp = &CStage1::Trgger_Function2;
 	m_pTriggerSystem->Add_TriggerFuntion(fp);
 
@@ -500,9 +635,6 @@ HRESULT CStage1::Ready_TriggerFunctionSetting()
 	m_pTriggerSystem->Add_TriggerFuntion(fp);
 
 	fp = &CStage1::Trgger_Function5;
-	m_pTriggerSystem->Add_TriggerFuntion(fp);
-
-	fp = &CStage1::Trgger_Function6;
 	m_pTriggerSystem->Add_TriggerFuntion(fp);
 
 	fp = &CStage1::Trgger_Function7;
@@ -516,7 +648,7 @@ HRESULT CStage1::Ready_TriggerFunctionSetting()
 
 	fp = &CStage1::Trgger_Function10;
 	m_pTriggerSystem->Add_TriggerFuntion(fp);
-	
+
 	fp = &CStage1::Trgger_Function11;
 	m_pTriggerSystem->Add_TriggerFuntion(fp);
 
@@ -540,14 +672,15 @@ void CStage1::Trgger_Function1()
 		auto iter = pLayer->begin();
 		advance(iter, 0);
 		(*iter)->setActive(true);
-
+		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 		iter = pLayer->begin();
 		advance(iter, 1);
 		(*iter)->setActive(true);
-
+		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 		iter = pLayer->begin();
 		advance(iter, 2);
 		(*iter)->setActive(true);
+		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 	}
 	else
 	{
@@ -561,10 +694,13 @@ void CStage1::Trgger_Function1()
 			pActor = static_cast<CActor*>((*iter));
 		}
 		(*iter)->setActive(true);
+		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 		iter++;
 		(*iter)->setActive(true);
+		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 		iter++;
 		(*iter)->setActive(true);
+		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 	}
 	m_iCountMonster = 3;
 }
@@ -581,6 +717,7 @@ void CStage1::Trgger_Function2()
 		//대지
 		advance(iter, 0);
 		(*iter)->setActive(true);
+		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 	}
 	else
 	{
@@ -594,6 +731,7 @@ void CStage1::Trgger_Function2()
 			pActor = static_cast<CActor*>((*iter));
 		}
 		(*iter)->setActive(true);
+		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 	}
 	m_iCountMonster = 1;
 }
@@ -611,11 +749,11 @@ void CStage1::Trgger_Function3()
 		auto iter = pLayer->begin();
 		advance(iter, 3);
 		(*iter)->setActive(true);
-
+		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 		iter = pLayer->begin();
 		advance(iter, 4);
 		(*iter)->setActive(true);
-
+		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 		//한손검
 		pLayer = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Layer_Bastion_Sword");
 		if (!pLayer)
@@ -624,10 +762,11 @@ void CStage1::Trgger_Function3()
 		iter = pLayer->begin();
 		advance(iter, 0);
 		(*iter)->setActive(true);
-
+		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 		iter = pLayer->begin();
 		advance(iter, 1);
 		(*iter)->setActive(true);
+		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 	}
 	else
 	{
@@ -640,9 +779,10 @@ void CStage1::Trgger_Function3()
 			pActor = static_cast<CActor*>((*iter));
 		}
 		(*iter)->setActive(true);
+		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 		iter++;
 		(*iter)->setActive(true);
-
+		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 		//한손검
 		pLayer = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Layer_Bastion_Sword");
 		if (!pLayer)
@@ -657,8 +797,10 @@ void CStage1::Trgger_Function3()
 			pActor = static_cast<CActor*>((*iter));
 		}
 		(*iter)->setActive(true);
+		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 		iter++;
 		(*iter)->setActive(true);
+		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 	}
 	m_iCountMonster = 4;
 }
@@ -675,14 +817,15 @@ void CStage1::Trgger_Function4()
 		auto iter = pLayer->begin();
 		advance(iter, 5);
 		(*iter)->setActive(true);
-
+		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 		iter = pLayer->begin();
 		advance(iter, 6);
 		(*iter)->setActive(true);
-
+		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 		iter = pLayer->begin();
 		advance(iter, 7);
 		(*iter)->setActive(true);
+		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 	}
 	else
 	{
@@ -695,10 +838,13 @@ void CStage1::Trgger_Function4()
 			pActor = static_cast<CActor*>((*iter));
 		}
 		(*iter)->setActive(true);
+		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 		iter++;
 		(*iter)->setActive(true);
+		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 		iter++;
 		(*iter)->setActive(true);
+		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 	}
 	m_iCountMonster = 3;
 }
@@ -714,51 +860,30 @@ void CStage1::Trgger_Function5()
 		auto iter = pLayer->begin();
 		advance(iter, 1);
 		(*iter)->setActive(true);
-
+		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 		iter = pLayer->begin();
 		advance(iter, 2);
 		(*iter)->setActive(true);
-	}
-	else
-	{
-		auto iter = pLayer->begin();
-		CActor* pActor = static_cast<CActor*>((*iter));
-		while (pActor->Get_HpRatio() == 0)
-		{
-			iter++;
-			pActor->Set_Remove(true);
-			pActor = static_cast<CActor*>((*iter));
-		}
-		(*iter)->setActive(true);
-		iter++;
-		(*iter)->setActive(true);
-	}
-	m_iCountMonster = 2;
-}
-
-void CStage1::Trgger_Function6()
-{
-	list<CGameObject*>* pLayer = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Layer_Bastion_Sword");
-	if (!pLayer)
-		return;
-	if (m_bDebug)
-	{
-		auto iter = pLayer->begin();
+		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
+		pLayer = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Layer_Bastion_Sword");
+		if (!pLayer)
+			return;
+		iter = pLayer->begin();
 		advance(iter, 2);
 		(*iter)->setActive(true);
-
+		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 		iter = pLayer->begin();
 		advance(iter, 3);
 		(*iter)->setActive(true);
-
+		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 		iter = pLayer->begin();
 		advance(iter, 4);
 		(*iter)->setActive(true);
-
+		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 		iter = pLayer->begin();
 		advance(iter, 5);
 		(*iter)->setActive(true);
-
+		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 		pLayer = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Layer_Crawler");
 		if (!pLayer)
 			return;
@@ -766,14 +891,15 @@ void CStage1::Trgger_Function6()
 		iter = pLayer->begin();
 		advance(iter, 8);
 		(*iter)->setActive(true);
-
+		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 		iter = pLayer->begin();
 		advance(iter, 9);
 		(*iter)->setActive(true);
-
+		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 		iter = pLayer->begin();
 		advance(iter, 10);
 		(*iter)->setActive(true);
+		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 	}
 	else
 	{
@@ -786,12 +912,36 @@ void CStage1::Trgger_Function6()
 			pActor = static_cast<CActor*>((*iter));
 		}
 		(*iter)->setActive(true);
+		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 		iter++;
 		(*iter)->setActive(true);
+		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
+		pLayer = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Layer_Bastion_Sword");
+		if (!pLayer)
+			return;
+
+		iter = pLayer->begin();
+		pActor = static_cast<CActor*>((*iter));
+		while (pActor->Get_HpRatio() == 0)
+		{
+			iter++;
+			pActor = static_cast<CActor*>((*iter));
+			pActor->Set_Remove(true);
+		}
+		(*iter)->setActive(true);
+		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 		iter++;
 		(*iter)->setActive(true);
+		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 		iter++;
 		(*iter)->setActive(true);
+		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
+		iter++;
+		(*iter)->setActive(true);
+		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
+		iter++;
+		(*iter)->setActive(true);
+		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 
 		pLayer = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Layer_Crawler");
 		if (!pLayer)
@@ -806,12 +956,15 @@ void CStage1::Trgger_Function6()
 			pActor = static_cast<CActor*>((*iter));
 		}
 		(*iter)->setActive(true);
+		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 		iter++;
 		(*iter)->setActive(true);
+		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 		iter++;
 		(*iter)->setActive(true);
+		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 	}
-	m_iCountMonster = 7;
+	m_iCountMonster = 9;
 }
 
 void CStage1::Trgger_Function7()
@@ -825,11 +978,11 @@ void CStage1::Trgger_Function7()
 		auto iter = pLayer->begin();
 		advance(iter, 6);
 		(*iter)->setActive(true);
-
+		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 		iter = pLayer->begin();
 		advance(iter, 7);
 		(*iter)->setActive(true);
-
+		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 		pLayer = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Layer_Healer");
 		if (!pLayer)
 			return;
@@ -837,6 +990,7 @@ void CStage1::Trgger_Function7()
 		iter = pLayer->begin();
 		advance(iter, 0);
 		(*iter)->setActive(true);
+		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 	}
 	else
 	{
@@ -851,12 +1005,15 @@ void CStage1::Trgger_Function7()
 		}
 
 		(*iter)->setActive(true);
+		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 		iter++;
 		(*iter)->setActive(true);
+		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 
 		pLayer = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Layer_Healer");
 		if (!pLayer)
 			return;
+		iter = pLayer->begin();
 		pActor = static_cast<CActor*>((*iter));
 		while (pActor->Get_HpRatio() == 0)
 		{
@@ -864,8 +1021,8 @@ void CStage1::Trgger_Function7()
 			pActor->Set_Remove(true);
 			pActor = static_cast<CActor*>((*iter));
 		}
-		iter = pLayer->begin();
 		(*iter)->setActive(true);
+		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 	}
 	m_iCountMonster = 3;
 }
@@ -880,15 +1037,15 @@ void CStage1::Trgger_Function8()
 		auto iter = pLayer->begin();
 		advance(iter, 8);
 		(*iter)->setActive(true);
-
+		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 		iter = pLayer->begin();
 		advance(iter, 9);
 		(*iter)->setActive(true);
-
+		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 		iter = pLayer->begin();
 		advance(iter, 10);
 		(*iter)->setActive(true);
-
+		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 		//슈터
 		pLayer = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Layer_Bastion_Shooter");
 		if (!pLayer)
@@ -897,6 +1054,7 @@ void CStage1::Trgger_Function8()
 		iter = pLayer->begin();
 		advance(iter, 0);
 		(*iter)->setActive(true);
+		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 	}
 	else
 	{
@@ -909,10 +1067,13 @@ void CStage1::Trgger_Function8()
 			pActor = static_cast<CActor*>((*iter));
 		}
 		(*iter)->setActive(true);
+		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 		iter++;
 		(*iter)->setActive(true);
+		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 		iter++;
 		(*iter)->setActive(true);
+		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 
 		//슈터
 		pLayer = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Layer_Bastion_Shooter");
@@ -928,6 +1089,7 @@ void CStage1::Trgger_Function8()
 			pActor = static_cast<CActor*>((*iter));
 		}
 		(*iter)->setActive(true);
+		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 	}
 	m_iCountMonster = 4;
 }
@@ -942,11 +1104,11 @@ void CStage1::Trgger_Function9()
 		auto iter = pLayer->begin();
 		advance(iter, 11);
 		(*iter)->setActive(true);
-
+		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 		iter = pLayer->begin();
 		advance(iter, 12);
 		(*iter)->setActive(true);
-
+		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 		pLayer = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Layer_Healer");
 		if (!pLayer)
 			return;
@@ -954,7 +1116,7 @@ void CStage1::Trgger_Function9()
 		iter = pLayer->begin();
 		advance(iter, 1);
 		(*iter)->setActive(true);
-
+		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 
 		pLayer = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Layer_Bastion_Shooter");
 		if (!pLayer)
@@ -963,10 +1125,11 @@ void CStage1::Trgger_Function9()
 		iter = pLayer->begin();
 		advance(iter, 1);
 		(*iter)->setActive(true);
-
+		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 		iter = pLayer->begin();
 		advance(iter, 2);
 		(*iter)->setActive(true);
+		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 	}
 	else
 	{
@@ -979,9 +1142,10 @@ void CStage1::Trgger_Function9()
 			pActor = static_cast<CActor*>((*iter));
 		}
 		(*iter)->setActive(true);
+		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 		iter++;
 		(*iter)->setActive(true);
-
+		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 		pLayer = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Layer_Healer");
 		if (!pLayer)
 			return;
@@ -995,7 +1159,7 @@ void CStage1::Trgger_Function9()
 			pActor = static_cast<CActor*>((*iter));
 		}
 		(*iter)->setActive(true);
-
+		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 		pLayer = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Layer_Bastion_Shooter");
 		if (!pLayer)
 			return;
@@ -1009,8 +1173,10 @@ void CStage1::Trgger_Function9()
 			pActor = static_cast<CActor*>((*iter));
 		}
 		(*iter)->setActive(true);
+		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 		iter++;
 		(*iter)->setActive(true);
+		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 	}
 	m_iCountMonster = 5;
 }
@@ -1026,22 +1192,23 @@ void CStage1::Trgger_Function10()
 		auto iter = pLayer->begin();
 		advance(iter, 3);
 		(*iter)->setActive(true);
-
+		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 		iter = pLayer->begin();
 		advance(iter, 4);
 		(*iter)->setActive(true);
-
+		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 		iter = pLayer->begin();
 		advance(iter, 5);
 		(*iter)->setActive(true);
-
+		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 		iter = pLayer->begin();
 		advance(iter, 6);
 		(*iter)->setActive(true);
-
+		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 		iter = pLayer->begin();
 		advance(iter, 7);
 		(*iter)->setActive(true);
+		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 	}
 	else
 	{
@@ -1054,14 +1221,19 @@ void CStage1::Trgger_Function10()
 			pActor = static_cast<CActor*>((*iter));
 		}
 		(*iter)->setActive(true);
+		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 		iter++;
 		(*iter)->setActive(true);
+		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 		iter++;
 		(*iter)->setActive(true);
+		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 		iter++;
 		(*iter)->setActive(true);
+		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 		iter++;
 		(*iter)->setActive(true);
+		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 	}
 	m_iCountMonster = 5;
 }
@@ -1077,6 +1249,7 @@ void CStage1::Trgger_Function11()
 		auto iter = pLayer->begin();
 		advance(iter, 0);
 		(*iter)->setActive(true);
+		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 	}
 	else
 	{
@@ -1089,6 +1262,7 @@ void CStage1::Trgger_Function11()
 			pActor = static_cast<CActor*>((*iter));
 		}
 		(*iter)->setActive(true);
+		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 	}
 	m_iCountMonster = 1;
 }
@@ -1105,6 +1279,7 @@ void CStage1::Trgger_FunctionBoss()
 		auto iter = pLayer->begin();
 		advance(iter, 0);
 		(*iter)->setActive(true);
+		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 	}
 	else
 	{
@@ -1117,6 +1292,7 @@ void CStage1::Trgger_FunctionBoss()
 			pActor = static_cast<CActor*>((*iter));
 		}
 		(*iter)->setActive(true);
+		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 	}
 }
 
@@ -1247,6 +1423,8 @@ HRESULT CStage1::Ready_Treasure_Chest()
 	}
 	return S_OK;
 }
+
+
 
 CStage1* CStage1::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
 {

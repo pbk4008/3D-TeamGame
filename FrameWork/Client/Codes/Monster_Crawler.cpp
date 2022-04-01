@@ -5,6 +5,7 @@
 
 #include "Effect_HitParticle.h"
 #include "Effect_HitFloating.h"
+#include "Effect_DeathParticle.h"
 
 #include "Animation.h"
 #include "Crawler_Idle.h"
@@ -16,8 +17,6 @@
 
 #include "Stage1.h"
 #include "Stage2.h"
-
-#include "MainApp.h"
 
 CMonster_Crawler::CMonster_Crawler(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
 	:CActor(_pDevice, _pDeviceContext)
@@ -58,27 +57,16 @@ HRESULT CMonster_Crawler::NativeConstruct(const _uint _iSceneID, void* _pArg)
 		if (FAILED(Set_SpawnPosition(vPoint)))
 			return E_FAIL;
 	}
-	if (FAILED(SetUp_Components())) return E_FAIL;
-	if (FAILED(Set_Animation_FSM())) return E_FAIL;
-	if (FAILED(Set_State_FSM())) return E_FAIL;
-	if (FAILED(Ready_Weapone())) return E_FAIL;
-
-	/*_vector Pos = { 0.f, 1.f, 3.f, 1.f };
-	m_pTransform->Set_State(CTransform::STATE_POSITION, Pos);*/
-
-
-	if (nullptr != _pArg)
-	{
-		_float3 vPoint = (*(_float3*)_pArg);
-
-		if (FAILED(Set_SpawnPosition(vPoint)))
-			return E_FAIL;
-	}
 	else
 	{
 		_vector Pos = { 0.f, 1.f, 3.f, 1.f };
 		m_pTransform->Set_State(CTransform::STATE_POSITION, Pos);
 	}
+	if (FAILED(SetUp_Components())) return E_FAIL;
+	if (FAILED(Set_Animation_FSM())) return E_FAIL;
+	if (FAILED(Set_State_FSM())) return E_FAIL;
+	if (FAILED(Ready_Weapone())) return E_FAIL;
+
 	//MonsterBar Panel
 	CUI_Monster_Panel::PANELDESC Desc;
 	Desc.pTargetTransform = m_pTransform;
@@ -98,7 +86,7 @@ HRESULT CMonster_Crawler::NativeConstruct(const _uint _iSceneID, void* _pArg)
 
 	m_iObectTag = (_uint)GAMEOBJECT::MONSTER_CRYSTAL;
 
-	m_fMaxHp = 2.f;
+	m_fMaxHp = 5.f;
 	m_fCurrentHp = m_fMaxHp;
 
 	m_fMaxGroggyGauge = 3.f;
@@ -115,6 +103,11 @@ HRESULT CMonster_Crawler::NativeConstruct(const _uint _iSceneID, void* _pArg)
 
 _int CMonster_Crawler::Tick(_double _dDeltaTime)
 {	
+	if (0 > __super::Tick(_dDeltaTime))
+	{
+		return -1;
+	}
+
 	m_pTransform->Set_Velocity(XMVectorZero());
 	m_pPanel->Set_TargetWorldMatrix(m_pTransform->Get_WorldMatrix());
 
@@ -134,36 +127,48 @@ _int CMonster_Crawler::Tick(_double _dDeltaTime)
 				static_cast<CStage1*>(pLevel)->Minus_MonsterCount();
 			else if (g_pGameInstance->getCurrentLevel() == (_uint)SCENEID::SCENE_STAGE2)
 				static_cast<CStage2*>(pLevel)->Minus_MonsterCount();
+
 			m_bDead = true;
 			m_pStateController->Change_State(L"Death");
-			m_pCharacterController->Remove_CCT();
 			m_pCollider->Remove_ActorFromScene();
+
+			return 0;
 		}
 		else
-			m_pCharacterController->Move(_dDeltaTime, m_pTransform->Get_Velocity());
-	}
-
-	if (true == m_bUIShow)
-	{
-		m_pPanel->Set_Show(true);
-	}
-
-	if (false == m_bUIShow)
-	{
-
-		m_pPanel->Set_Show(false);
-	}
-
-	if (DEATH == m_pAnimatorCom->Get_CurrentAnimNode())
-	{
-		if (m_pAnimatorCom->Get_CurrentAnimation()->Is_Finished())
 		{
-			Set_Remove(true);
-			m_pPanel->Set_Remove(true);
+			m_pCharacterController->Move(_dDeltaTime, m_pTransform->Get_Velocity());
+			m_pCollider->Tick(_dDeltaTime);
 		}
 	}
+	else
+	{
+		if (DEATH == m_pAnimatorCom->Get_CurrentAnimNode())
+		{
+			if (m_pAnimatorCom->Get_CurrentAnimation()->Is_Finished())
+			{
+				Set_Remove(true);
+				m_pPanel->Set_UIRemove(true);
+			}
+			else if (1 == m_pAnimatorCom->Get_AnimController()->Get_CurKeyFrameIndex())
+			{
+				Active_Effect((_uint)EFFECT::DEATH);
+			}
+		}
+		else
+		{
+			Set_Remove(true);
+			m_pPanel->Set_UIRemove(true);
+			Active_Effect((_uint)EFFECT::DEATH);
+		}
+	}
+	if (true == m_bUIShow)
+		m_pPanel->Set_Show(true);
+
+	if (false == m_bUIShow)
+		m_pPanel->Set_Show(false);
+
 	
-	m_pCollider->Tick(_dDeltaTime);
+	m_pCollider->Tick(_dDeltaTime); //이거 돌려야되는거임??
 
 	return 0;
 }
@@ -172,13 +177,14 @@ _int CMonster_Crawler::LateTick(_double _dDeltaTime)
 {
 	m_pRenderer->Add_RenderGroup(CRenderer::RENDER_NONALPHA, this);
 
-	if(!m_bDead)
-		m_pCharacterController->Update_OwnerTransform();
-
-	_int iProgress = m_pStateController->LateTick(_dDeltaTime);
-	if (NO_EVENT != iProgress)
+	if (!m_bDead)
 	{
-		return iProgress;
+		m_pCharacterController->Update_OwnerTransform();
+		_int iProgress = m_pStateController->LateTick(_dDeltaTime);
+		if (NO_EVENT != iProgress)
+		{
+			return iProgress;
+		}
 	}
 
 	return 0;
@@ -239,24 +245,11 @@ void CMonster_Crawler::OnTriggerEnter(CCollision& collision)
 					m_pStateController->Change_State(L"Flinch_Left");
 				}
 
-				CEffect_HitParticle* pEffect = (CEffect_HitParticle*)g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Hit")->front();
-				_vector Mypos = m_pTransform->Get_State(CTransform::STATE_POSITION);
-				Mypos = XMVectorSetY(Mypos, XMVectorGetY(Mypos) + 1.f);
-				pEffect->Get_Transform()->Set_State(CTransform::STATE_POSITION, Mypos);
-				pEffect->setActive(true);
-				pEffect->Set_Reset(true);
-
-				CEffect_HitFloating* pEffect1 = (CEffect_HitFloating*)g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Floating")->front();
-				_vector Mypos1 = m_pTransform->Get_State(CTransform::STATE_POSITION);
-				Mypos1 = XMVectorSetY(Mypos1, XMVectorGetY(Mypos1) + 1.f);
-				pEffect1->Get_Transform()->Set_State(CTransform::STATE_POSITION, Mypos1);
-				pEffect1->setActive(true);
-				pEffect1->Set_Reset(true);
+				Active_Effect((_uint)EFFECT::HIT);
+				Active_Effect((_uint)EFFECT::FLOATING);
 			}
-
 			else
 			{
-
 			}
 		}
 	}
@@ -282,9 +275,6 @@ void CMonster_Crawler::Set_IsAttack(const _bool _isAttack)
 
 HRESULT CMonster_Crawler::SetUp_Components()
 {
-	//_float x = _float(rand()% 3);
-	_float z = _float(rand()% 10) + 3.f;
-
 	//_vector Pos = { 0.f, 10.f, z, 1.f };
 	//m_pTransform->Set_State(CTransform::STATE_POSITION, Pos);
 
@@ -369,7 +359,7 @@ HRESULT CMonster_Crawler::Set_Animation_FSM()
 		return E_FAIL;
 
 	pAnim = m_pModelCom->Get_Animation("SK_Crystal_Crawler_v1.ao|A_Death_CrystalCrawler");
-	if (FAILED(m_pAnimatorCom->Insert_Animation(DEATH, HEAD, pAnim, false, false, false, ERootOption::XYZ, true)))
+	if (FAILED(m_pAnimatorCom->Insert_Animation(DEATH, HEAD, pAnim, true, true, false, ERootOption::XYZ, true)))
 		return E_FAIL;
 
 	pAnim = m_pModelCom->Get_Animation("SK_Crystal_Crawler_v1.ao|A_Ricochet_CrystalCrawler");
@@ -408,6 +398,9 @@ HRESULT CMonster_Crawler::Set_Animation_FSM()
 
 	m_pAnimatorCom->Change_Animation(IDLE);
 
+	_uint iRand = rand() % 15;
+	m_pAnimatorCom->Add_AnimFrame(IDLE, iRand);
+
 	return S_OK;
 }
 
@@ -444,6 +437,7 @@ HRESULT CMonster_Crawler::Set_State_FSM()
 
 	return S_OK;
 }
+
 
 void CMonster_Crawler::Set_Remove(_bool bCheck)
 {
@@ -486,6 +480,4 @@ void CMonster_Crawler::Free()
 	Safe_Release(m_pStateController);
 	Safe_Release(m_pAnimatorCom);
 	Safe_Release(m_pModelCom);
-
-
 }

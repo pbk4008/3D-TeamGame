@@ -1,6 +1,7 @@
 #include "Actor.h"
-#include "..\public\Actor.h"
 #include "Transform.h"
+#include "Effect.h"
+#include "GameInstance.h"
 
 CActor::CActor()
 	:m_fSpeed(0.f)
@@ -113,6 +114,36 @@ HRESULT CActor::Set_SpawnPosition(const _float3 vPoint)
 	m_pTransform->Set_State(CTransform::STATE_POSITION, vPos);
 
 	return S_OK;
+}
+
+void CActor::Active_Effect(_uint iEffectIndex)
+{
+	CEffect* pEffect = g_pGameInstance->Get_Effect(iEffectIndex);
+	if (!pEffect)
+	{
+		MSGBOX("Effect Null!!");
+		return;
+	}
+	_vector Mypos = m_pTransform->Get_State(CTransform::STATE_POSITION);
+	Mypos = XMVectorSetY(Mypos, XMVectorGetY(Mypos) + 1.f);
+	pEffect->Get_Transform()->Set_State(CTransform::STATE_POSITION, Mypos);
+	pEffect->setActive(true);
+	pEffect->Set_Reset(true);
+}
+
+void CActor::Active_Effect(_uint iEffectIndex, _fvector vPivot)
+{
+	CEffect* pEffect = g_pGameInstance->Get_Effect(iEffectIndex);
+	if (!pEffect)
+	{
+		MSGBOX("Effect Null!!");
+		return;
+	}
+	_vector Mypos = m_pTransform->Get_State(CTransform::STATE_POSITION);
+	Mypos += vPivot;
+	pEffect->Get_Transform()->Set_State(CTransform::STATE_POSITION, Mypos);
+	pEffect->setActive(true);
+	pEffect->Set_Reset(true);
 }
 
 

@@ -51,7 +51,7 @@ _int CBronzeAnimus_State::Tick(const _double& _dDeltaTime)
 		CMonster_BronzeAnimus* pMonster = static_cast<CMonster_BronzeAnimus*>(m_pMonster);
 
 		pMonster->m_bGroggy = true;
-		pMonster->Set_GroggyGauge(0.f);
+		pMonster->Set_GroggyGauge(0);
 		pMonster->m_pPanel->Set_GroggyBar(pMonster->Get_GroggyGaugeRatio());
 		m_pStateController->Change_State(L"Groggy");
 	}
@@ -212,7 +212,7 @@ void CBronzeAnimus_State::Check_Attack(const _double& _dDeltaTime)
 	{
 		if (20.0f > m_fRadian)
 		{
-			m_fAttackTime += _dDeltaTime;
+			m_fAttackTime += (_float)_dDeltaTime;
 			if (m_fAttackTime > 0.5f)
 			{
 				m_fAttackTime = 0.0f;
@@ -227,32 +227,38 @@ void CBronzeAnimus_State::OnTriggerEnter(CCollision& collision)
 {
 	CMonster_BronzeAnimus* pHealer = static_cast<CMonster_BronzeAnimus*>(m_pMonster);
 
-	if (true == g_pObserver->IsAttack()) //플레이어공격일때
+	if (!pHealer->Get_Dead())
 	{
-		pHealer->m_bFirstHit = true; //딱 한번 true로 변경해줌
-
-		if (true == pHealer->m_bFirstHit)
+		if (true == g_pObserver->IsAttack()) //플레이어공격일때
 		{
-			pHealer->m_pPanel->Set_BackUIGapY(1.f);
-		}
+			pHealer->m_bFirstHit = true; //딱 한번 true로 변경해줌
 
-		if ((_uint)GAMEOBJECT::WEAPON == collision.pGameObject->getTag())
-		{
-			pHealer->Set_Current_HP(-5.f);
-			pHealer->Set_GroggyGauge(2); //TODO::수치정해서바꿔줘야됨
-
-			pHealer->m_pPanel->Set_HpBar(pHealer->Get_HpRatio());
-
-			if (false == pHealer->m_bGroggy)
+			if (true == pHealer->m_bFirstHit)
 			{
-				//그로기 아닐때만 증가할수있게
-				pHealer->m_pPanel->Set_GroggyBar(pHealer->Get_GroggyGaugeRatio());
-				m_pStateController->Change_State(L"Hit");
+				pHealer->m_pPanel->Set_BackUIGapY(1.f);
 			}
-		}
-		else
-		{
-			m_pStateController->Change_State(L"A_Idle_Battle");
+
+			if ((_uint)GAMEOBJECT::WEAPON == collision.pGameObject->getTag())
+			{
+				pHealer->m_pPanel->Set_Show(true);
+				pHealer->Active_Effect((_uint)EFFECT::HIT);
+				pHealer->Active_Effect((_uint)EFFECT::FLOATING);
+				pHealer->Set_Current_HP(-5);
+				pHealer->Set_GroggyGauge(2); //TODO::수치정해서바꿔줘야됨
+
+				pHealer->m_pPanel->Set_HpBar(pHealer->Get_HpRatio());
+
+				if (false == pHealer->m_bGroggy)
+				{
+					//그로기 아닐때만 증가할수있게
+					pHealer->m_pPanel->Set_GroggyBar(pHealer->Get_GroggyGaugeRatio());
+					m_pStateController->Change_State(L"Hit");
+				}
+			}
+			else
+			{
+				m_pStateController->Change_State(L"A_Idle_Battle");
+			}
 		}
 	}
 }

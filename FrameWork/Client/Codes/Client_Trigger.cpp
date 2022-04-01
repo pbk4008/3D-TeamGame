@@ -25,6 +25,8 @@ CClient_Trigger::CClient_Trigger(const CClient_Trigger& _rhs)
 	, m_bPick(_rhs.m_bPick)
 	, m_bOverlap(_rhs.m_bOverlap)
 {
+	Safe_AddRef(m_pGizmo);
+	Safe_AddRef(m_pBoxCollider);
 }
 
 HRESULT CClient_Trigger::NativeConstruct_Prototype()
@@ -71,7 +73,7 @@ _int CClient_Trigger::LateTick(_double TimeDelta)
 
 HRESULT CClient_Trigger::Render()
 {
-	//Set_WVPMatrix();
+	Set_WVPMatrix();
 
 	switch ((TRIGGERTYPE)m_TriggerDesc.eTrigger_Type)
 	{
@@ -135,8 +137,8 @@ void CClient_Trigger::Set_WVPMatrix(void)
 	_fmatrix matWorld = m_pTransform->Get_WorldMatrix();
 
 	auto matWorldInvers = XMMatrixTranspose(matWorld);
-	auto matViewInvers = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"MainCamera", TRANSFORMSTATEMATRIX::D3DTS_VIEW));
-	auto matProjInvers = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"MainCamera", TRANSFORMSTATEMATRIX::D3DTS_PROJECTION));
+	auto matViewInvers = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_VIEW));
+	auto matProjInvers = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_PROJECTION));
 }
 
 _fmatrix CClient_Trigger::Get_WorldMat(void)
@@ -178,5 +180,6 @@ CClient_Trigger* CClient_Trigger::Create(ID3D11Device* _pDevice, ID3D11DeviceCon
 void CClient_Trigger::Free(void)
 {
 	__super::Free();
-	Safe_Release(m_pGizmo);
+	//Safe_Release(m_pGizmo);
+	Safe_Release(m_pBoxCollider);
 }

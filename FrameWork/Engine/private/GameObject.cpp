@@ -36,10 +36,10 @@ CGameObject::CGameObject(const CGameObject& rhs)
 	: m_pDevice(rhs.m_pDevice)
 	, m_pDeviceContext(rhs.m_pDeviceContext)
 	, m_pRenderer(rhs.m_pRenderer)
-	, m_Components(rhs.m_Components)
 	, m_pTransform(nullptr)
 	, m_bActive(rhs.m_bActive)
 	, m_bCheckCollider(false)
+	, m_Components(rhs.m_Components)
 	, m_iObectTag(rhs.m_iObectTag)
 	, m_iSceneID(rhs.m_iSceneID)
 	, m_bRemove(false)
@@ -83,14 +83,17 @@ HRESULT CGameObject::NativeConstruct_Prototype()
 HRESULT CGameObject::NativeConstruct(const _uint iSceneID, void* pArg)
 {
 	m_iSceneID = iSceneID;
+	
+	_bool bCheck = false;
+
 	CGameInstance* pInstance = GET_INSTANCE(CGameInstance);
 
 	m_pTransform = pInstance->Clone_Component<CTransform>(0, L"Proto_Component_Transform");
 
-	RELEASE_INSTANCE(CGameInstance);
-
 	if (!m_pTransform)
 		return E_FAIL;
+
+	RELEASE_INSTANCE(CGameInstance);
 
 	if (FAILED(SetUp_Components(L"Com_Transform", m_pTransform)))
 		return E_FAIL;
@@ -119,11 +122,6 @@ HRESULT CGameObject::Render_Shadow()
 }
 
 HRESULT CGameObject::Render_ShadeShadow(ID3D11ShaderResourceView* ShaodwMap)
-{
-	return S_OK;
-}
-
-HRESULT CGameObject::Render_PBR()
 {
 	return S_OK;
 }
@@ -202,6 +200,13 @@ HRESULT CGameObject::SetUp_Components(const wstring& pComponentTag, CComponent* 
 	Safe_AddRef(pClone);
 
 	return S_OK;
+}
+
+void CGameObject::ComputeViewZ(_fmatrix* pView)
+{
+	_vector campos = pView->r[3];
+	_vector viewlenght = XMVector3Length(campos - m_pTransform->Get_State(CTransform::STATE_POSITION));
+	m_fViewZ = XMVectorGetX(viewlenght);
 }
 
 void CGameObject::Free()

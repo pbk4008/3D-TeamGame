@@ -27,6 +27,8 @@ _int C2H_HammerJogFwdStart::Tick(const _double& _dDeltaTime)
 	if (NO_EVENT > iProgress)
 		return iProgress;
 
+	m_pSilvermane->Add_Velocity(CTransform::STATE_LOOK, _dDeltaTime);
+
 	return _int();
 }
 
@@ -55,7 +57,7 @@ HRESULT C2H_HammerJogFwdStart::EnterState()
 	
 	if (FAILED(m_pAnimationController->SetUp_NextAnimation("SK_Silvermane.ao|A_2H_Hammer_Loco_Jog_Fwd_Start_Normal", false)))
 		return E_FAIL;
-	m_pAnimationController->Set_RootMotion(true, true, ERootOption::XYZ);
+	m_pAnimationController->Set_RootMotion(true, false, ERootOption::XYZ);
 	
 
 	return S_OK;
@@ -77,7 +79,7 @@ _int C2H_HammerJogFwdStart::Input(const _double& _dDeltaTime)
 
 	if (g_pGameInstance->getkeyPress(DIK_W))
 	{
-		if (m_pAnimationController->Is_Finished())
+		if (42 < m_pAnimationController->Get_CurKeyFrameIndex())
 		{
 			if (FAILED(m_pStateController->Change_State(L"2H_HammerJogFwd")))
 				return -1;
