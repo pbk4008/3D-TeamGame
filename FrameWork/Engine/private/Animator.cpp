@@ -64,7 +64,7 @@ HRESULT CAnimator::NativeConstruct(void* pArg)
 
 _int CAnimator::Tick(_double dDeltaTime)
 {
-	m_pController->Tick(dDeltaTime * m_fPlaySpeed, m_eType);
+	m_pController->Tick(dDeltaTime, m_eType);
 	if (m_pController->Get_ChangeAnimation())
 	{
 		m_pCulAnimNode = m_pChangeNode;

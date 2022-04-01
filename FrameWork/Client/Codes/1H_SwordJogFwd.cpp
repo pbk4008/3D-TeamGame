@@ -56,7 +56,7 @@ HRESULT C1H_SwordJogFwd::EnterState()
 	m_pAnimationController->SetUp_NextAnimation("SK_Silvermane.ao|A_1H_Sword_Loco_Jog_Fwd_Normal", true);
 	m_pAnimationController->Set_RootMotion(true, true, ERootOption::XYZ);
 	
-
+	m_pAnimationController->Add_TrackAcc(1.0);
 	return S_OK;
 }
 

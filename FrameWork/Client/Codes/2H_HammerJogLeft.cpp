@@ -61,7 +61,7 @@ HRESULT C2H_HammerJogLeft::EnterState()
 	_matrix smatPivot = XMMatrixRotationY(XMConvertToRadians(-90.f));
 	m_pAnimationController->Set_PivotMatrix(smatPivot);
 	
-
+	m_pAnimationController->Add_TrackAcc(10.0);
 	return S_OK;
 }
 

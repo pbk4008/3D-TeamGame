@@ -31,8 +31,12 @@ _int CBastion_2HSword_Rage::Tick(const _double& _dDeltaTime)
 
 	m_pAnimator->Tick(_dDeltaTime);
 
-	if((m_pAnimator->Get_CurrentAnimNode() != (_uint)CMonster_Bastion_2HSword::ANIM_TYPE::A_TAUNT_ROAR) && m_pAnimator->Get_CurrentAnimation()->Is_Finished())
-		m_pTransform->Add_Velocity(m_pTransform->Chase_Pos(g_pObserver->Get_Transform(), _dDeltaTime));
+
+
+
+
+	/*if((m_pAnimator->Get_CurrentAnimNode() != (_uint)CMonster_Bastion_2HSword::ANIM_TYPE::A_TAUNT_ROAR) && m_pAnimator->Get_CurrentAnimation()->Is_Finished())
+		m_pTransform->Add_Velocity(m_pTransform->Chase_Pos(g_pObserver->Get_Transform(), _dDeltaTime));*/
 
 	return _int();
 }
@@ -59,7 +63,6 @@ HRESULT CBastion_2HSword_Rage::EnterState()
 	if (FAILED(__super::EnterState()))
 		return E_FAIL;
 
-	m_bRageAttack = true;
 	m_pAnimator->Change_AnyEntryAnimation((_uint)CMonster_Bastion_2HSword::ANIM_TYPE::A_TAUNT_ROAR);
 
 	return S_OK;

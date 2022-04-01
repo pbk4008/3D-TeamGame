@@ -147,7 +147,7 @@ _int CMonster_Crawler::Tick(_double _dDeltaTime)
 			if (m_pAnimatorCom->Get_CurrentAnimation()->Is_Finished())
 			{
 				Set_Remove(true);
-				m_pPanel->Set_Remove(true);
+				m_pPanel->Set_UIRemove(true);
 			}
 			else if (1 == m_pAnimatorCom->Get_AnimController()->Get_CurKeyFrameIndex())
 			{
@@ -157,7 +157,8 @@ _int CMonster_Crawler::Tick(_double _dDeltaTime)
 		else
 		{
 			Set_Remove(true);
-			m_pPanel->Set_Remove(true);
+			m_pPanel->Set_UIRemove(true);
+			Active_Effect((_uint)EFFECT::DEATH);
 		}
 	}
 	if (true == m_bUIShow)

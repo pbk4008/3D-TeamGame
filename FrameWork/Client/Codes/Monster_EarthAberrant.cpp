@@ -138,11 +138,34 @@ _int CMonster_EarthAberrant::Tick(_double _dDeltaTime)
 				static_cast<CStage1*>(pLevel)->Minus_MonsterCount();
 
 			m_bDead = true;
+			m_IsAttack = false;
+			m_pWeapon->Set_IsAttack(false);
 			m_pStateController->Change_State(L"Death");
 			m_pCharacterController->Remove_CCT();
 		}
 		else
 			m_pCharacterController->Move(_dDeltaTime, m_pTransform->Get_Velocity());
+	}
+	else
+	{
+		if (DEATH == m_pAnimatorCom->Get_CurrentAnimNode())
+		{
+			if (m_pAnimatorCom->Get_CurrentAnimation()->Is_Finished())
+			{
+				Set_Remove(true);
+				m_pPanel->Set_UIRemove(true);
+			}
+			if (9 == m_pAnimatorCom->Get_AnimController()->Get_CurKeyFrameIndex())
+			{
+				Active_Effect((_uint)EFFECT::DEATH);
+			}
+		}
+		else
+		{
+			Set_Remove(true);
+			m_pPanel->Set_UIRemove(true);
+			Active_Effect((_uint)EFFECT::DEATH);
+		}
 	}
 
 	if (true == m_bUIShow)
@@ -165,7 +188,6 @@ _int CMonster_EarthAberrant::Tick(_double _dDeltaTime)
 		m_fGroggyGauge = 0.f;
 		m_pPanel->Set_GroggyBar(Get_GroggyGaugeRatio());
 	}
-
 	if (STUN_END == m_pAnimatorCom->Get_CurrentAnimNode())
 	{
 		if (m_pAnimatorCom->Get_AnimController()->Is_Finished())
@@ -174,20 +196,6 @@ _int CMonster_EarthAberrant::Tick(_double _dDeltaTime)
 		}
 	}
 
-	if (DEATH == m_pAnimatorCom->Get_CurrentAnimNode())
-	{
-		if (m_pAnimatorCom->Get_CurrentAnimation()->Is_Finished())
-		{
-			Set_Remove(true);
-			m_pPanel->Set_Remove(true);
-		}
-
-		if (9 == m_pAnimatorCom->Get_AnimController()->Get_CurKeyFrameIndex())
-		{
-			Active_Effect((_uint)EFFECT::DEATH);
-		}
-	}
-	
 	return 0;
 }
 
@@ -517,6 +525,9 @@ HRESULT CMonster_EarthAberrant::Set_Animation_FSM()
 
 
 	m_pAnimatorCom->Change_Animation(IDLE);
+
+	_uint iRand = rand() % 15;
+	m_pAnimatorCom->Add_AnimFrame(IDLE, iRand);
 
 	return S_OK;
 }

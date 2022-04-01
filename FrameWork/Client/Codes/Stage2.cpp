@@ -275,6 +275,8 @@ HRESULT CStage2::Ready_TriggerSystem(const _tchar* pTriggerFile)
 		return E_FAIL;																												
 	if (FAILED(m_pTriggerSystem->Load_MonsterSpawnPoint((_uint)SCENEID::SCENE_STAGE2, CTriggerSystem<CStage2>::MONSTER::MON_BRONZE, L"../bin/SaveData/MonsterSpawn2Stage/Bronze.dat")))
 		return E_FAIL;
+	if (FAILED(m_pTriggerSystem->Load_MonsterSpawnPoint((_uint)SCENEID::SCENE_STAGE2, CTriggerSystem<CStage2>::MONSTER::MON_SWORD, L"../bin/SaveData/MonsterSpawn2Stage/Sword.dat")))
+		return E_FAIL;
 
 	if (FAILED(Ready_TriggerFunctionSetting()))
 		return E_FAIL;
@@ -352,7 +354,7 @@ void CStage2::Trgger_Function1()
 		advance(iter, 5);
 		(*iter)->setActive(true);
 
-		pLayer = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE2, L"Layer_Crawler");
+		pLayer = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE2, L"Layer_Bastion_Sword");
 
 		if (!pLayer)
 			return;
