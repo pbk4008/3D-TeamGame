@@ -209,10 +209,13 @@ HRESULT CGameObject::SetUp_Components(const wstring& pComponentTag, CComponent* 
 
 void CGameObject::Free()
 {
-	for (auto& Pair : m_Components)
-		Safe_Release(Pair.second);
+	if (!m_Components.empty())
+	{
+		for (auto& Pair : m_Components)
+			Safe_Release(Pair.second);
+	}
 	m_Components.clear();
-
+	
 	Safe_Release(m_pRenderer);
 	Safe_Release(m_pTransform);
 

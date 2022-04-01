@@ -84,7 +84,7 @@ HRESULT CMonster_Bastion_2HSword::NativeConstruct(const _uint _iSceneID, void* _
 
 	m_isFall = true;
 
-	//setActive(false);
+	setActive(false);
 
 	return S_OK;
 }
@@ -274,9 +274,11 @@ HRESULT CMonster_Bastion_2HSword::Ready_Components()
 		(CGameObject**)&m_pPanel)))
 		return E_FAIL;
 
+	Safe_AddRef(m_pPanel);
+
 	m_pPanel->Set_TargetWorldMatrix(m_pTransform->Get_WorldMatrix());
 
-	m_fMaxHp = 30.f;
+	m_fMaxHp = 10.f;
 	m_fCurrentHp = m_fMaxHp;
 
 	m_fMaxGroggyGauge = 10.f;

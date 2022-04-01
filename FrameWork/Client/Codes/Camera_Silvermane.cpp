@@ -288,30 +288,28 @@ void CCamera_Silvermane::OnOffMonsterUI()
 
 	if (g_pGameInstance->Raycast(tRaycastDesc))
 	{
-		switch (pHitObject->getTag())
+		if ((_uint)GAMEOBJECT::MONSTER_CRYSTAL == pHitObject->getTag() ||
+			(_uint)GAMEOBJECT::MONSTER_ABERRANT == pHitObject->getTag() ||
+			(_uint)GAMEOBJECT::MONSTER_1H == pHitObject->getTag() ||
+			(_uint)GAMEOBJECT::MONSTER_2H == pHitObject->getTag() ||
+			(_uint)GAMEOBJECT::MONSTER_HEALER == pHitObject->getTag() ||
+			(_uint)GAMEOBJECT::MONSTER_SHOOTER == pHitObject->getTag() ||
+			(_uint)GAMEOBJECT::MONSTER_SPEAR == pHitObject->getTag()
+			)
 		{
-		case (_uint)GAMEOBJECT::MONSTER_CRYSTAL:
-		case (_uint)GAMEOBJECT::MONSTER_ABERRANT:
-		case (_uint)GAMEOBJECT::MONSTER_1H:
-		case (_uint)GAMEOBJECT::MONSTER_2H:
-		case (_uint)GAMEOBJECT::MONSTER_HEALER:
-		case (_uint)GAMEOBJECT::MONSTER_SHOOTER:
-		case (_uint)GAMEOBJECT::MONSTER_SPEAR:
 			if (nullptr != pHitObject)
 			{
 				static_cast<CActor*>(pHitObject)->Set_UIShow(true);
 				m_pTargetMonster = pHitObject;
 			}
-			break;
-		default:
-			break;
 		}
-	}
-	else
-	{
-		if (nullptr != m_pTargetMonster)
+
+		else
 		{
-			static_cast<CActor*>(m_pTargetMonster)->Set_UIShow(false);
+			if (nullptr != pHitObject)
+			{
+				static_cast<CActor*>(pHitObject)->Set_UIShow(false);
+			}
 		}
 	}
 }
@@ -345,8 +343,6 @@ CGameObject* CCamera_Silvermane::Clone(const _uint _iSceneID, void* _pArg)
 
 void CCamera_Silvermane::Free()
 {
-	Safe_Release(m_pCameraShake);
-
 	Safe_Release(m_pLocalTransform);
 	Safe_Release(m_pWorldTransform);
 

@@ -124,7 +124,6 @@ _int CBoss_Bastion_Judicator::Tick(_double TimeDelta)
 	}
 	if (false == m_bUIShow)
 	{
-		//m_pPanel->Set_Show(false);
 	}
 
 	if (m_fGroggyGauge >= m_fMaxGroggyGauge)
@@ -156,6 +155,7 @@ _int CBoss_Bastion_Judicator::Tick(_double TimeDelta)
 		{
 			m_bDead = true;
 			m_pPanel->Set_Show(false);
+			m_pPanel->Set_UIRemove(true);
 		
 			return 0;
 		}
@@ -508,6 +508,8 @@ HRESULT CBoss_Bastion_Judicator::Set_PanelBar()
 		(CGameObject**)&m_pPanel)))
 		return E_FAIL;
 
+	Safe_AddRef(m_pPanel);
+
 	m_pPanel->Set_TargetWorldMatrix(m_pTransform->Get_WorldMatrix());
 
 	m_bIsFall = true;
@@ -580,12 +582,13 @@ CGameObject* CBoss_Bastion_Judicator::Clone(const _uint _iSceneID, void* pArg)
 
 void CBoss_Bastion_Judicator::Free()
 {
-	Safe_Release(m_pPanel);
+	__super::Free();
+
+	//Safe_Release(m_pPanel);
 	Safe_Release(m_pCharacterController);
 	Safe_Release(m_pWeapon);
 	Safe_Release(m_pStateController);
 	Safe_Release(m_pAnimator);
 	Safe_Release(m_pModelCom);
 
-	__super::Free();
 }

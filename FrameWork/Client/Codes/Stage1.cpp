@@ -144,7 +144,7 @@ _int CStage1::Tick(_double TimeDelta)
 		}
 
 		m_pTriggerSystem->Tick(TimeDelta);
-		m_pTriggerSystem->Check_DeleteTriggerMonster();
+		//m_pTriggerSystem->Check_DeleteTriggerMonster();
 
 		CBoss_Bastion_Judicator* pBoss = (CBoss_Bastion_Judicator*)g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Layer_Boss")->front();
 		if (nullptr != pBoss)
@@ -910,7 +910,7 @@ void CStage1::Trgger_Function5()
 		if (!pLayer)
 			return;
 
-		pLayer->begin();
+		iter = pLayer->begin();
 		pActor = static_cast<CActor*>((*iter));
 		while (pActor->Get_HpRatio() == 0)
 		{

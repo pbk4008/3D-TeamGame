@@ -1213,7 +1213,6 @@ const _bool CSilvermane::Raycast_JumpNode(const _double& _dDeltaTime)
 				m_pBlankCKey->setActive(true);
 				m_pFillCKey->setActive(true);
 			}
-
 		}
 		return true;
 	}

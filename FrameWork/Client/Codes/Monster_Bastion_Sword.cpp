@@ -88,8 +88,10 @@ HRESULT CMonster_Bastion_Sword::NativeConstruct(const _uint _iSceneID, void* _pA
 
 
 	//MonsterBar Panel
-	
+	m_pPanel->Set_Show(false);
+	m_bUIShow = false;
 	setActive(false);
+
 	return S_OK;
 }
 
@@ -131,7 +133,7 @@ _int CMonster_Bastion_Sword::Tick(_double _dDeltaTime)
 	}
 	if (true == m_bUIShow)
 		m_pPanel->Set_Show(true);
-	if (false == m_bUIShow)
+	else if (false == m_bUIShow)
 		m_pPanel->Set_Show(false);
 
 	m_pPanel->Set_TargetWorldMatrix(m_pTransform->Get_WorldMatrix());
@@ -609,6 +611,8 @@ _int CMonster_Bastion_Sword::Change_State()
 				&& m_pAnimator->Get_CurrentAnimation()->Is_Finished())
 			{
 				m_bRemove = true;
+				m_bUIShow = false;
+				m_pPanel->Set_Show(false);
 				m_pPanel->Set_UIRemove(false);
 			}
 			else if (1 == m_pAnimator->Get_AnimController()->Get_CurKeyFrameIndex())
@@ -623,6 +627,8 @@ _int CMonster_Bastion_Sword::Change_State()
 		}
 		else
 		{
+			m_bUIShow = false;
+			m_pPanel->Set_Show(false);
 			m_bRemove = true;
 			m_pPanel->Set_UIRemove(false);
 			Active_Effect((_uint)EFFECT::DEATH);
