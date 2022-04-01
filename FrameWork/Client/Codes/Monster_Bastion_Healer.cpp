@@ -85,6 +85,8 @@ HRESULT CMonster_Bastion_Healer::NativeConstruct(const _uint _iSceneID, void* _p
 		(CGameObject**)&m_pPanel)))
 		return E_FAIL;
 
+	Safe_AddRef(m_pPanel);
+
 	m_pPanel->Set_TargetWorldMatrix(m_pTransform->Get_WorldMatrix());
 
 	m_fMaxHp = 2.f;
@@ -118,20 +120,35 @@ _int CMonster_Bastion_Healer::Tick(_double _dDeltaTime)
 		m_pTransform->Fall(_dDeltaTime);
 
 	/* Weapon Bone Update */
-	m_pWeapon->Tick(_dDeltaTime);
-
 	if (!m_bDead)
 		m_pCharacterController->Move(_dDeltaTime, m_pTransform->Get_Velocity());
+	else
+	{
+		if (L"Death" == m_pStateController->Get_CurStateTag())
+		{
+			if (m_pAnimator->Get_CurrentAnimation()->Is_Finished())
+			{
+				Set_Remove(true);
+				m_pPanel->Set_UIRemove(true);
+			}
 
+			if (1 == m_pAnimator->Get_AnimController()->Get_CurKeyFrameIndex())
+			{
+				Active_Effect((_uint)EFFECT::DEATH);
+			}
+		}
+		else
+		{
+			Set_Remove(true);
+			m_pPanel->Set_UIRemove(true);
+		}
+	}
+
+	m_pWeapon->Tick(_dDeltaTime);
 	if (true == m_bUIShow)
-	{
 		m_pPanel->Set_Show(true);
-	}
-
-	if (false == m_bUIShow)
-	{
+	else
 		m_pPanel->Set_Show(false);
-	}
 
 	if (m_fGroggyGauge >= m_fMaxGroggyGauge)
 	{
@@ -154,21 +171,6 @@ _int CMonster_Bastion_Healer::Tick(_double _dDeltaTime)
 			m_bGroggy = false;
 		}
 	}
-
-	//죽을때
-	if ((_uint)ANIM_TYPE::A_DEATH == m_pAnimator->Get_CurrentAnimNode())
-	{
-		if (m_pAnimator->Get_CurrentAnimation()->Is_Finished())
-		{
-			Set_Remove(true);
-			m_pPanel->Set_Remove(true);
-		}
-
-		if (1 == m_pAnimator->Get_AnimController()->Get_CurKeyFrameIndex())
-		{
-			Active_Effect((_uint)EFFECT::DEATH);
-		}
-	}
 	m_pPanel->Set_TargetWorldMatrix(m_pTransform->Get_WorldMatrix());
 
 	return _int();
@@ -185,6 +187,7 @@ _int CMonster_Bastion_Healer::LateTick(_double _dDeltaTime)
 
 	if(!m_bDead)
 		m_pCharacterController->Update_OwnerTransform();
+
 	m_pWeapon->LateTick(_dDeltaTime);
 
 	/* State FSM Late Update */
@@ -227,34 +230,41 @@ HRESULT CMonster_Bastion_Healer::Render()
 void CMonster_Bastion_Healer::Groggy_Start()
 {
 	Set_Groggy(true);
-	Set_GroggyGauge(0.f);
+	Set_GroggyGauge(0);
 	m_pPanel->Set_GroggyBar(Get_GroggyGaugeRatio());
 }
 
 void CMonster_Bastion_Healer::Hit(CCollision& pCol)
 {
-	if (true == g_pObserver->IsAttack()) //플레이어공격일때
+	if (!m_bDead)
 	{
-		m_bFirstHit = true; //딱 한번 true로 변경해줌
-		if (true == m_bFirstHit)
-			m_pPanel->Set_BackUIGapY(1.f);
-
-		if ((_uint)GAMEOBJECT::WEAPON == pCol.pGameObject->getTag())
+		if (true == g_pObserver->IsAttack()) //플레이어공격일때
 		{
-			m_fCurrentHp-=5.f;
-			m_bGroggy=2; //TODO::수치정해서바꿔줘야됨
+			m_bFirstHit = true; //딱 한번 true로 변경해줌
+			if (true == m_bFirstHit)
+				m_pPanel->Set_BackUIGapY(1.f);
 
-			m_pPanel->Set_HpBar(Get_HpRatio());
-
-			if (false == m_bGroggy)
+			if ((_uint)GAMEOBJECT::WEAPON == pCol.pGameObject->getTag())
 			{
-				//그로기 아닐때만 증가할수있게
-				m_pPanel->Set_GroggyBar(Get_GroggyGaugeRatio());
-				m_pStateController->Change_State(L"Hit");
+				m_pPanel->Set_Show(true);
+				Active_Effect((_uint)EFFECT::HIT);
+				Active_Effect((_uint)EFFECT::FLOATING);
+
+				m_fCurrentHp -= 5.f;
+				//m_bGroggy = 2; //TODO::수치정해서바꿔줘야됨
+
+				m_pPanel->Set_HpBar(Get_HpRatio());
+
+				if (false == m_bGroggy)
+				{
+					//그로기 아닐때만 증가할수있게
+					m_pPanel->Set_GroggyBar(Get_GroggyGaugeRatio());
+					m_pStateController->Change_State(L"Hit");
+				}
 			}
+			else
+				m_pStateController->Change_State(L"Idle");
 		}
-		else
-			m_pStateController->Change_State(L"Idle");
 	}
 }
 
@@ -344,20 +354,20 @@ HRESULT CMonster_Bastion_Healer::Ready_AnimFSM(void)
 		return E_FAIL;
 
 	pAnimation = m_pModel->Get_Animation("A_Death");
-	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::A_DEATH, (_uint)ANIM_TYPE::A_HEAD, pAnimation, TRUE, FALSE, FALSE, ERootOption::XYZ)))
+	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::A_DEATH, (_uint)ANIM_TYPE::A_HEAD, pAnimation, TRUE, TRUE, FALSE, ERootOption::XYZ)))
 		return E_FAIL;
 #pragma endregion
 #pragma region Attack
 	pAnimation = m_pModel->Get_Animation("A_Cast_Protect");
-	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::A_CAST_PROTECT, (_uint)ANIM_TYPE::A_HEAD, pAnimation, TRUE, FALSE, FALSE, ERootOption::XYZ)))
+	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::A_CAST_PROTECT, (_uint)ANIM_TYPE::A_HEAD, pAnimation, TRUE, TRUE, FALSE, ERootOption::XYZ)))
 		return E_FAIL;
 	pAnimation = m_pModel->Get_Animation("A_Attack_Blind");
-	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::A_ATTACK_BLIND, (_uint)ANIM_TYPE::A_HEAD, pAnimation, TRUE, FALSE, FALSE, ERootOption::XYZ)))
+	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::A_ATTACK_BLIND, (_uint)ANIM_TYPE::A_HEAD, pAnimation, TRUE, TRUE, FALSE, ERootOption::XYZ)))
 		return E_FAIL;
 #pragma endregion
 #pragma region Hit
 	pAnimation = m_pModel->Get_Animation("A_Flinch_Left");
-	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::A_FLINCH_LEFT, (_uint)ANIM_TYPE::A_HEAD, pAnimation, TRUE, FALSE, FALSE, ERootOption::XYZ)))
+	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::A_FLINCH_LEFT, (_uint)ANIM_TYPE::A_HEAD, pAnimation, TRUE, TRUE, FALSE, ERootOption::XYZ)))
 		return E_FAIL;
 #pragma endregion
 #pragma region Walk
@@ -545,10 +555,6 @@ HRESULT CMonster_Bastion_Healer::Render_Debug(void)
 
 void CMonster_Bastion_Healer::OnTriggerEnter(CCollision& collision)
 {
-	m_pPanel->Set_Show(true);
-	Active_Effect((_uint)EFFECT::HIT);
-	Active_Effect((_uint)EFFECT::FLOATING);
-
 	m_pStateController->OnTriggerEnter(collision);
 }
 
@@ -562,6 +568,12 @@ void CMonster_Bastion_Healer::Set_IsAttack(const _bool _isAttack)
 	m_IsAttack = _isAttack;
 	if (m_pWeapon)
 		m_pWeapon->Set_IsAttack(_isAttack);
+}
+
+void CMonster_Bastion_Healer::Set_Remove(_bool bCheck)
+{
+	m_bRemove = bCheck;
+	m_pPanel->Set_UIRemove(bCheck);
 }
 
 CMonster_Bastion_Healer* CMonster_Bastion_Healer::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)

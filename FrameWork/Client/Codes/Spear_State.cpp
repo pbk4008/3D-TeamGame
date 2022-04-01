@@ -28,21 +28,18 @@ _int CSpear_State::Tick(const _double& _dDeltaTime)
 	if (NO_EVENT != iProgress)
 		return iProgress;
 
-	m_pAnimator->Tick(_dDeltaTime);
-
 	m_bTargetOn = false;
 	m_bAttackOn = false;
 	m_bPlayerAttack = false;
 
-
-	Check_Attack(_dDeltaTime);
+	//Check_Attack(_dDeltaTime);
 
 	_fvector vMonsterPos = m_pTransform->Get_State(CTransform::STATE::STATE_POSITION);
 	_fvector vDist = vMonsterPos - g_pObserver->Get_PlayerPos();
 	_float fDistToPlayer = XMVectorGetX(XMVector3Length(vDist));
 
-	if (2.0f >= fDistToPlayer && false == m_bChargeOn)
-		m_bAttackOn = true;
+	/*if (2.0f >= fDistToPlayer && false == m_bChargeOn)
+		m_bAttackOn = true;*/
 
 	if (m_pMonster->Get_GroggyGauge() >= MAXGROOGUGAGUE)
 	{
@@ -50,10 +47,14 @@ _int CSpear_State::Tick(const _double& _dDeltaTime)
 		CMonster_Bastion_Spear* pMonster = static_cast<CMonster_Bastion_Spear*>(m_pMonster);
 
 		pMonster->m_bGroggy = true;
-		pMonster->Set_GroggyGauge(0.f);
+		pMonster->Set_GroggyGauge(0);
 		pMonster->m_pPanel->Set_GroggyBar(pMonster->Get_GroggyGaugeRatio());
 		m_pStateController->Change_State(L"Groggy");
 	}
+
+	if (0 >= m_pMonster->Get_CurrentHp())
+		m_pStateController->Change_State(L"Death");
+
 	return _int();
 }
 
@@ -188,19 +189,19 @@ void CSpear_State::Check_Attack(const _double& _dDeltaTime)
 			m_bTargetOn = true;
 			m_bBattleOn = true;
 		}
+		CMonster_Bastion_Spear* pSpear = static_cast<CMonster_Bastion_Spear*>(m_pMonster);
 
-		if (0 > m_CheckFWD && 5.0f > m_fDistance)
+		if((0 > m_CheckFWD  && !pSpear->m_bGroggy) && g_pObserver->IsAttack())
+			m_pStateController->Change_State(L"Guard");
+		else if (0 > m_CheckFWD && 5.0f > m_fDistance)
 		{
-			if (20.0f > m_fRadian)
+			if (30.0f > m_fRadian)
 			{
-				m_fAttackTime += _dDeltaTime;
+				m_fAttackTime += (_float)_dDeltaTime;
 				if (m_fAttackTime > 0.5f)
 				{
 					m_fAttackTime = 0.0f;
-					CMonster_Bastion_Spear* pSpear = static_cast<CMonster_Bastion_Spear*>(m_pMonster);
-					if (!pSpear->m_bGroggy && g_pObserver->IsAttack())
-						m_pStateController->Change_State(L"Guard");
-					else if (!m_bChargeOn && !pSpear->m_bGroggy)
+					if (!m_bChargeOn && !pSpear->m_bGroggy)
 						m_pStateController->Change_State(L"Attack");
 				}
 			}
@@ -211,36 +212,42 @@ void CSpear_State::Check_Attack(const _double& _dDeltaTime)
 void CSpear_State::OnTriggerEnter(CCollision& collision)
 {
 	CMonster_Bastion_Spear* pSpear = static_cast<CMonster_Bastion_Spear*>(m_pMonster);
-
-	if (true == g_pObserver->IsAttack()) //플레이어공격일때
+	if(!pSpear->Get_Dead())
 	{
-		pSpear->m_bFirstHit = true; //딱 한번 true로 변경해줌
-
-		if (true == pSpear->m_bFirstHit)
+		if (true == g_pObserver->IsAttack()) //플레이어공격일때
 		{
-			pSpear->m_pPanel->Set_BackUIGapY(1.f);
-		}
+			pSpear->m_bFirstHit = true; //딱 한번 true로 변경해줌
 
-		if ((_uint)GAMEOBJECT::WEAPON == collision.pGameObject->getTag())
-		{
-			if (m_pAnimator->Get_CurrentAnimNode() != (_uint)CMonster_Bastion_Spear::ANIM_TYPE::A_GUARD)
+			if (true == pSpear->m_bFirstHit)
 			{
-				pSpear->Set_Current_HP(-5.f);
-				pSpear->Set_GroggyGauge(2); //TODO::수치정해서바꿔줘야됨
+				pSpear->m_pPanel->Set_BackUIGapY(1.f);
 			}
-			pSpear->m_pPanel->Set_HpBar(pSpear->Get_HpRatio());
 
-			if (false == pSpear->m_bGroggy)
+			if ((_uint)GAMEOBJECT::WEAPON == collision.pGameObject->getTag())
 			{
-				//그로기 아닐때만 증가할수있게
-				pSpear->m_pPanel->Set_GroggyBar(pSpear->Get_GroggyGaugeRatio());
 				if (m_pAnimator->Get_CurrentAnimNode() != (_uint)CMonster_Bastion_Spear::ANIM_TYPE::A_GUARD)
-					m_pStateController->Change_State(L"Hit");
+				{
+					pSpear->m_pPanel->Set_Show(true);
+					pSpear->Active_Effect((_uint)EFFECT::HIT);
+					pSpear->Active_Effect((_uint)EFFECT::FLOATING);
+
+					pSpear->Set_Current_HP(-5);
+					pSpear->Set_GroggyGauge(2); //TODO::수치정해서바꿔줘야됨
+				}
+				pSpear->m_pPanel->Set_HpBar(pSpear->Get_HpRatio());
+
+				if (false == pSpear->m_bGroggy)
+				{
+					//그로기 아닐때만 증가할수있게
+					pSpear->m_pPanel->Set_GroggyBar(pSpear->Get_GroggyGaugeRatio());
+					if (m_pAnimator->Get_CurrentAnimNode() != (_uint)CMonster_Bastion_Spear::ANIM_TYPE::A_GUARD)
+						m_pStateController->Change_State(L"Hit");
+				}
 			}
-		}
-		else
-		{
-			m_pStateController->Change_State(L"A_Idle");
+			else
+			{
+				m_pStateController->Change_State(L"A_Idle");
+			}
 		}
 	}
 }

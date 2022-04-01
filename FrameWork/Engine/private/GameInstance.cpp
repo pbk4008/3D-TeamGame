@@ -467,6 +467,14 @@ void CGameInstance::UpdateLightCam(_uint LightIndx, _fvector playerpos)
 	m_pLight_Manager->UpdateLightCam(LightIndx, playerpos);
 }
 
+ID3D11ShaderResourceView* CGameInstance::Get_SRV(const wstring& target)
+{
+	if(m_pTarget_Manager == nullptr)
+		return nullptr;
+
+	return m_pTarget_Manager->Get_SRV(target.c_str());
+}
+
 HRESULT CGameInstance::Add_Font(ID3D11Device * pDevice, ID3D11DeviceContext * pDeviceContext, const wstring& pFontTag, const wstring& pFontPath)
 {
 	if (nullptr == m_pFont_Manager)
@@ -603,12 +611,20 @@ void CGameInstance::StopAll()
 	m_pSoundManager->StopAll();
 }
 
-void CGameInstance::VolumeChange(const std::wstring& pSoundKey, _float fVolume)
+void CGameInstance::VolumeChange(CSoundMgr::CHANNELID eID, _float fVolume)
 {
 	if (!m_pSoundManager)
 		return;
 
-	m_pSoundManager->VolumeChange(pSoundKey, fVolume);
+	m_pSoundManager->VolumeChange(eID, fVolume);
+}
+
+void CGameInstance::BlendSound(const std::wstring& pStartSoundKey, const std::wstring& pEndSoundKey, CSoundMgr::CHANNELID eStartID, CSoundMgr::CHANNELID eEndID, _float fBlendTiming)
+{
+	if (!m_pSoundManager)
+		return;
+
+	m_pSoundManager->BlendSound(pStartSoundKey, pEndSoundKey, eStartID, eEndID, fBlendTiming);
 }
 
 void CGameInstance::Release_Engine()

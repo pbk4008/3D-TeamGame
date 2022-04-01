@@ -29,6 +29,9 @@ _int CBastion_2HSword_Attack::Tick(const _double& _dDeltaTime)
 	if (NO_EVENT != iProgress)
 		return iProgress;
 
+	if (m_pMonster->Get_Dead())
+		return 0;
+
 	m_pAnimator->Tick(_dDeltaTime);
 	CMonster_Bastion_2HSword* pMonster = (CMonster_Bastion_2HSword*)m_pStateController->Get_GameObject();
 
@@ -69,8 +72,8 @@ HRESULT CBastion_2HSword_Attack::EnterState()
 	if(!m_bFirstAttack)
 		m_bFirstAttack = true;
 
-	//_int randAtt = rand() % 4;
-	_int randAtt = 0;
+	_int randAtt = rand() % 4;
+	//_int randAtt = 0;
 	switch (randAtt)
 	{
 	case 0:

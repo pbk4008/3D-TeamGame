@@ -308,7 +308,7 @@ void CVIBuffer_PointInstance_Floating::Update(_double TimeDelta, _uint eAxis)
 
 				if (m_Desc.fLifeTime > m_fGravityTime && 0.f <= m_fGravityTime)
 				{
-					fY = ((VTXPARTICLE*)SubResource.pData)[i].vPosition.y + (-2.f * 9.8f * TimeDelta * ((m_Desc.fLifeTime - m_fGravityTime) * (/*m_Desc.fParticleSpeed*/m_fFloatingGauge * 0.01f)));
+					fY = ((VTXPARTICLE*)SubResource.pData)[i].vPosition.y + (-2.f * 9.8f * (_float)TimeDelta * ((m_Desc.fLifeTime - m_fGravityTime) * (/*m_Desc.fParticleSpeed*/m_fFloatingGauge * 0.01f)));
 					((VTXPARTICLE*)SubResource.pData)[i].vPosition.y = fY;
 				}
 			}
@@ -350,7 +350,7 @@ void CVIBuffer_PointInstance_Floating::Update(_double TimeDelta, _uint eAxis)
 				}
 				else
 				{
-					m_Desc.fParticleSpeed -= TimeDelta * (m_fFloatingGauge * 0.1f);
+					m_Desc.fParticleSpeed -= (_float)TimeDelta * (m_fFloatingGauge * 0.1f);
 					if (0 >= m_Desc.fParticleSpeed)
 					{
 						m_Desc.fParticleSpeed = m_fFloatingGauge * 0.1f;

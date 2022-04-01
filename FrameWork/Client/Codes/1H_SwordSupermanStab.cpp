@@ -71,6 +71,7 @@ HRESULT C1H_SwordSupermanStab::EnterState()
 	if (FAILED(__super::EnterState()))
 		return E_FAIL;
 
+	g_pGameInstance->BlendSound(L"Needle_Attack_R_Slam_2", L"Needle_Attack_L_4_1", CSoundMgr::CHANNELID::Player_Sword_Attack, CSoundMgr::CHANNELID::PLAYER1);
 	if (FAILED(m_pAnimationController->SetUp_NextAnimation("SK_Silvermane.ao|A_1H_Sword_Superman_Stab", false)))
 		return E_FAIL;
 	m_pAnimationController->Set_RootMotion(true, true);

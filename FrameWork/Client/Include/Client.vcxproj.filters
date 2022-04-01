@@ -235,39 +235,6 @@
     <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_Spear">
       <UniqueIdentifier>{985a4737-6984-45e3-b7aa-e1c5e0c5c488}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_Sword">
-      <UniqueIdentifier>{f21fcb8a-8935-4037-bb0e-677bf69fee18}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_Sword\00.State">
-      <UniqueIdentifier>{9607ce11-6263-4e1e-8495-2de83143c495}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_Sword\00.State\00.Idle">
-      <UniqueIdentifier>{2398d3e4-0aad-4c0a-b779-2676cae6f42f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_Sword\00.State\01.Chase">
-      <UniqueIdentifier>{198aa2cf-1f67-4f22-b567-e3dc4942f330}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_Sword\00.State\02.Attack">
-      <UniqueIdentifier>{37cf987f-07dd-4d07-9d9b-25d6172a3b02}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_Sword\00.State\03.Hit">
-      <UniqueIdentifier>{c566e27b-d8f9-4f71-a9a3-1f26dea458e5}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_Sword\00.State\04.Death">
-      <UniqueIdentifier>{ef3cb63a-530b-45b7-92f9-fdd0cdbeffc0}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_Sword\00.State\05.Groggy">
-      <UniqueIdentifier>{3d15588b-416d-40ca-b9f2-015a9e9d2a0b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_Sword\00.State\06.Paring">
-      <UniqueIdentifier>{0914aca3-ccbf-42a5-83c1-a594627f4e52}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_Sword\00.State\07.Turn">
-      <UniqueIdentifier>{f15707ff-b13d-4f61-ae5b-8aaf6d1afdc7}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_Sword\00.State\08.Walk">
-      <UniqueIdentifier>{fe36a500-8b7c-4714-bff8-ed49386ac515}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObject\03.Character\01.Monster\BronzeAnimus">
       <UniqueIdentifier>{d4ff09ad-5442-4050-8ed4-1c05e5b91f71}</UniqueIdentifier>
     </Filter>
@@ -484,9 +451,6 @@
     <Filter Include="02.GameObject\02.Map\02.JumpNode">
       <UniqueIdentifier>{15743125-3fab-4955-a1a7-2c3ab22ace2e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObject\02.Map\01.Environment\Tree">
-      <UniqueIdentifier>{afa39133-5db9-4588-b538-151dc4a78680}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_2HSword\State_2HSword\Groggy\End">
     </Filter>
     <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_2HSword\State_2HSword\Groggy\End">
@@ -591,6 +555,48 @@
     <Filter Include="02.GameObject\96.Weapon\98.Trail">
       <UniqueIdentifier>{0a662d2a-bf0c-4955-b176-58fbdf8c84f3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_Sword">
+      <UniqueIdentifier>{f21fcb8a-8935-4037-bb0e-677bf69fee18}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_Sword\00.State">
+      <UniqueIdentifier>{9607ce11-6263-4e1e-8495-2de83143c495}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_Sword\00.State\00.Idle">
+      <UniqueIdentifier>{2398d3e4-0aad-4c0a-b779-2676cae6f42f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_Sword\00.State\01.Chase">
+      <UniqueIdentifier>{198aa2cf-1f67-4f22-b567-e3dc4942f330}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_Sword\00.State\02.Attack">
+      <UniqueIdentifier>{37cf987f-07dd-4d07-9d9b-25d6172a3b02}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_Sword\00.State\03.Hit">
+      <UniqueIdentifier>{c566e27b-d8f9-4f71-a9a3-1f26dea458e5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_Sword\00.State\04.Death">
+      <UniqueIdentifier>{ef3cb63a-530b-45b7-92f9-fdd0cdbeffc0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_Sword\00.State\05.Groggy">
+      <UniqueIdentifier>{3d15588b-416d-40ca-b9f2-015a9e9d2a0b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_Sword\00.State\06.Paring">
+      <UniqueIdentifier>{0914aca3-ccbf-42a5-83c1-a594627f4e52}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_Sword\00.State\08.Walk">
+      <UniqueIdentifier>{fe36a500-8b7c-4714-bff8-ed49386ac515}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_Sword\00.State\08.Walk\07.Turn">
+      <UniqueIdentifier>{f15707ff-b13d-4f61-ae5b-8aaf6d1afdc7}</UniqueIdentifier>
+	</Filter>
+    <Filter Include="02.GameObject\02.Map\01.Environment\00.Tree">
+      <UniqueIdentifier>{afa39133-5db9-4588-b538-151dc4a78680}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\02.Map\01.Environment\01.NoiseFire">
+      <UniqueIdentifier>{9d43fd19-4db2-406e-a72d-f78aadaf8bd3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\02.Map\01.Environment\02.MapObject">
+      <UniqueIdentifier>{6c74a239-aae4-4275-b01a-ea48c53eae4c}</UniqueIdentifier>
+	</Filter>
     <Filter Include="02.GameObject\04.Effect\05.TrailEffect">
       <UniqueIdentifier>{4da4394f-ff21-4396-a0e8-24986eaeec60}</UniqueIdentifier>
     </Filter>
@@ -617,6 +623,18 @@
     </Filter>
     <Filter Include="02.GameObject\04.Effect\00.Particle\02.Effect_HitParticle">
       <UniqueIdentifier>{b370ed74-461a-48d9-91e0-c06ca932a31c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\04.Effect\00.Particle\05.Effect_Env_Floating">
+      <UniqueIdentifier>{8d7b5bdf-ccca-4b02-a6e5-003a503ad353}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.UI\01.UI_Ingame\02.UI_JumpNode">
+      <UniqueIdentifier>{03278934-600d-43f1-abf8-b223c947e83e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.UI\01.UI_Ingame\02.UI_JumpNode\00.Blank">
+      <UniqueIdentifier>{bc51da15-514c-49b6-9f36-484c1a4a1510}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.UI\01.UI_Ingame\02.UI_JumpNode\01.Fill">
+      <UniqueIdentifier>{a56a74b1-3d13-4387-b77b-96aeb0113934}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -736,9 +754,6 @@
     </ClInclude>
     <ClInclude Include="..\Headers\MainCamera.h">
       <Filter>02.GameObject\01. MainCamera\ProjectionCam</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Headers\Environment.h">
-      <Filter>02.GameObject\02.Map\01.Environment</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\MainCamera_Ortho.h">
       <Filter>02.GameObject\01. MainCamera\OrthoCam</Filter>
@@ -1125,7 +1140,7 @@
       <Filter>02.GameObject\03.Character\01.Monster\Bastion_Sword\00.State\06.Paring</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\Bastion_Sword_Turn.h">
-      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Sword\00.State\07.Turn</Filter>
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Sword\00.State\08.Walk\07.Turn</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\Bastion_Sword_Walk.h">
       <Filter>02.GameObject\03.Character\01.Monster\Bastion_Sword\00.State\08.Walk</Filter>
@@ -1325,7 +1340,7 @@
       <Filter>02.GameObject\03.Character\01.Monster\Bastion_Healer\State_Healer\Groggy</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\SubEnvironment.h">
-      <Filter>02.GameObject\02.Map\01.Environment\Tree</Filter>
+      <Filter>02.GameObject\02.Map\01.Environment\00.Tree</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\Shooter_Attack.h" />
     <ClInclude Include="..\Headers\Effect_HitFloating.h">
@@ -1461,11 +1476,26 @@
     <ClInclude Include="..\Headers\SwordTrail.h">
       <Filter>02.GameObject\96.Weapon\98.Trail</Filter>
     </ClInclude>
+    <ClInclude Include="..\Headers\NoiseFire.h">
+      <Filter>02.GameObject\02.Map\01.Environment\01.NoiseFire</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Environment.h">
+      <Filter>02.GameObject\02.Map\01.Environment\02.MapObject</Filter>
+	</ClInclude>
     <ClInclude Include="..\Headers\TrailEffect.h">
       <Filter>02.GameObject\04.Effect\05.TrailEffect</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\Effect_DeathParticle.h">
       <Filter>02.GameObject\04.Effect\00.Particle\04.Effect_Death</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Effect_Env_Floating.h">
+      <Filter>02.GameObject\04.Effect\00.Particle\05.Effect_Env_Floating</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\UI_Blank_CKey.h">
+      <Filter>02.GameObject\05.UI\01.UI_Ingame\02.UI_JumpNode\00.Blank</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\UI_Fill_CKey.h">
+      <Filter>02.GameObject\05.UI\01.UI_Ingame\02.UI_JumpNode\01.Fill</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1567,9 +1597,6 @@
     </ClCompile>
     <ClCompile Include="..\Codes\MainCamera_Ortho.cpp">
       <Filter>02.GameObject\01. MainCamera\OrthoCam</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Codes\Environment.cpp">
-      <Filter>02.GameObject\02.Map\01.Environment</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\Camera_Debug.cpp">
       <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\Camera</Filter>
@@ -2032,7 +2059,7 @@
       <Filter>02.GameObject\03.Character\01.Monster\Bastion_Sword\00.State\03.Hit</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\Bastion_Sword_Turn.cpp">
-      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Sword\00.State\07.Turn</Filter>
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Sword\00.State\08.Walk\07.Turn</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\Stage3.cpp">
       <Filter>01.Scene\02.Stage\02.Stage3</Filter>
@@ -2150,7 +2177,7 @@
       <Filter>02.GameObject\03.Character\01.Monster\Bastion_Healer\State_Healer\Groggy</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\SubEnvironment.cpp">
-      <Filter>02.GameObject\02.Map\01.Environment\Tree</Filter>
+      <Filter>02.GameObject\02.Map\01.Environment\00.Tree</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\Shooter_Attack.cpp" />
     <ClCompile Include="..\Codes\Effect_HitFloating.cpp">
@@ -2283,11 +2310,26 @@
     <ClCompile Include="..\Codes\SwordTrail.cpp">
       <Filter>02.GameObject\96.Weapon\98.Trail</Filter>
     </ClCompile>
+    <ClCompile Include="..\Codes\NoiseFire.cpp">
+      <Filter>02.GameObject\02.Map\01.Environment\01.NoiseFire</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Environment.cpp">
+      <Filter>02.GameObject\02.Map\01.Environment\02.MapObject</Filter>
+	</ClCompile>
     <ClCompile Include="..\Codes\TrailEffect.cpp">
       <Filter>02.GameObject\04.Effect\05.TrailEffect</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\Effect_DeathParticle.cpp">
       <Filter>02.GameObject\04.Effect\00.Particle\04.Effect_Death</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Effect_Env_Floating.cpp">
+      <Filter>02.GameObject\04.Effect\00.Particle\05.Effect_Env_Floating</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\UI_Blank_CKey.cpp">
+      <Filter>02.GameObject\05.UI\01.UI_Ingame\02.UI_JumpNode\00.Blank</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\UI_Fill_CKey.cpp">
+      <Filter>02.GameObject\05.UI\01.UI_Ingame\02.UI_JumpNode\01.Fill</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -86,10 +86,13 @@ HRESULT CMonster_Bastion_Sword::NativeConstruct(const _uint _iSceneID, void* _pA
 	if (FAILED(Ready_UI()))
 		return E_FAIL;
 
+	m_pAnimator->Get_AnimController()->Set_PlaySpeed(1.5f);
 
 	//MonsterBar Panel
-	
+	m_pPanel->Set_Show(false);
+	m_bUIShow = false;
 	setActive(false);
+
 	return S_OK;
 }
 
@@ -131,7 +134,7 @@ _int CMonster_Bastion_Sword::Tick(_double _dDeltaTime)
 	}
 	if (true == m_bUIShow)
 		m_pPanel->Set_Show(true);
-	if (false == m_bUIShow)
+	else if (false == m_bUIShow)
 		m_pPanel->Set_Show(false);
 
 	m_pPanel->Set_TargetWorldMatrix(m_pTransform->Get_WorldMatrix());
@@ -174,6 +177,12 @@ HRESULT CMonster_Bastion_Sword::Render()
 	return S_OK;
 }
 
+void CMonster_Bastion_Sword::Set_Remove(_bool bCheck)
+{
+	m_bRemove = bCheck;
+	m_pPanel->Set_UIRemove(bCheck);
+}
+
 void CMonster_Bastion_Sword::OnTriggerEnter(CCollision& collision)
 {
 	if (!m_bDead)
@@ -190,6 +199,10 @@ void CMonster_Bastion_Sword::OnTriggerEnter(CCollision& collision)
 			}
 		}
 	}
+}
+
+void CMonster_Bastion_Sword::OnTriggerExit(CCollision& collision)
+{
 }
 
 HRESULT CMonster_Bastion_Sword::SetUp_Components()
@@ -603,6 +616,8 @@ _int CMonster_Bastion_Sword::Change_State()
 				&& m_pAnimator->Get_CurrentAnimation()->Is_Finished())
 			{
 				m_bRemove = true;
+				m_bUIShow = false;
+				m_pPanel->Set_Show(false);
 				m_pPanel->Set_UIRemove(false);
 			}
 			else if (1 == m_pAnimator->Get_AnimController()->Get_CurKeyFrameIndex())
@@ -617,10 +632,11 @@ _int CMonster_Bastion_Sword::Change_State()
 		}
 		else
 		{
+			m_bUIShow = false;
+			m_pPanel->Set_Show(false);
 			m_bRemove = true;
 			m_pPanel->Set_UIRemove(false);
 			Active_Effect((_uint)EFFECT::DEATH);
-
 			return 0;
 		}
 	}
@@ -668,6 +684,8 @@ void CMonster_Bastion_Sword::Hit()
 	}
 	if (m_wstrCurState != L"Hit"&&!m_bGroggy)
 	{
+		g_pGameInstance->StopSound(CSoundMgr::CHANNELID::Sword1H_Hit);
+		g_pGameInstance->Play_Shot(L"Monster_Hit_6", CSoundMgr::CHANNELID::Sword1H_Hit);
 		tData.fCurHp = m_fCurrentHp;
 		tData.iHitType = (_uint)m_eHitType;
 		m_wstrCurState = L"Hit";

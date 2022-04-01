@@ -50,7 +50,7 @@ HRESULT CMonster_EarthAberrant::NativeConstruct(const _uint _iSceneID, void* _pA
 	}
 	else
 	{
-		_vector Pos = { 3.f, 0.f, 15.f, 1.f };
+		_vector Pos = { 0.f, 1.f, 5.f, 1.f };
 		m_pTransform->Set_State(CTransform::STATE_POSITION, Pos);
 	}
 	if (FAILED(SetUp_Components()))
@@ -69,13 +69,13 @@ HRESULT CMonster_EarthAberrant::NativeConstruct(const _uint _iSceneID, void* _pA
 	}
 
 	CHierarchyNode* pBone = m_pModelCom->Get_BoneMatrix("weapon_r_end");
-	CEarthAberrant_Pick* pWeapon = CEarthAberrant_Pick::Create(m_pDevice, m_pDeviceContext);
-	pWeapon->NativeConstruct(m_iSceneID, pBone);
+	//CEarthAberrant_Pick* pWeapon = /*CEarthAberrant_Pick::Create(m_pDevice, m_pDeviceContext);*/
+	CEarthAberrant_Pick* pWeapon = g_pGameInstance->Clone_GameObject<CEarthAberrant_Pick>(_iSceneID, L"Proto_GameObject_Weapon_EarthAberrant_Pick");
+	//pWeapon->NativeConstruct(m_iSceneID, pBone);
 	pWeapon->Set_Owner(this);
 	pWeapon->Set_OwnerPivotMatrix(m_pModelCom->Get_PivotMatrix());
 	m_pWeapon = pWeapon;
 
-	
 
 	//MonsterBar Panel
 	CUI_Monster_Panel::PANELDESC Desc;
@@ -86,13 +86,15 @@ HRESULT CMonster_EarthAberrant::NativeConstruct(const _uint _iSceneID, void* _pA
 		(CGameObject**)&m_pPanel)))
 		return E_FAIL;
 
+	Safe_AddRef(m_pPanel);
+
 	m_pPanel->Set_TargetWorldMatrix(m_pTransform->Get_WorldMatrix());
 
 	m_bIsFall = true;
 	m_iObectTag = (_uint)GAMEOBJECT::MONSTER_ABERRANT;
 
 	//¾Æ·¡¼¼ÆÃ ²ÀÇØÁà¾ßµÊ 
-	m_fMaxHp = 3.f;
+	m_fMaxHp = 2.f;
 	m_fCurrentHp = m_fMaxHp;
 
 	m_fMaxGroggyGauge = 10.f;
@@ -101,7 +103,7 @@ HRESULT CMonster_EarthAberrant::NativeConstruct(const _uint _iSceneID, void* _pA
 	m_pPanel->Set_HpBar(Get_HpRatio());
 	m_pPanel->Set_GroggyBar(Get_GroggyGaugeRatio());
 
-	setActive(false);
+	/*setActive(false);*/
 	return S_OK;
 }
 
@@ -234,7 +236,6 @@ HRESULT CMonster_EarthAberrant::Render()
 		return E_FAIL;
 	}
 
-
 	_matrix XMWorldMatrix = XMMatrixTranspose(m_pTransform->Get_WorldMatrix());
 	_matrix XMViewMatrix = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_VIEW));
 	_matrix XMProjectMatrix = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_PROJECTION));
@@ -246,7 +247,15 @@ HRESULT CMonster_EarthAberrant::Render()
 
 	for (_uint i = 0; i < m_pModelCom->Get_NumMeshContainer(); ++i)
 	{
-		m_pModelCom->Render(i, 0);
+		switch (i)
+		{
+		case 0:
+			m_pModelCom->Render(i,5);
+			break;
+		case 1:
+			m_pModelCom->Render(i, 4);
+			break;
+		}
 	}
 
 	return S_OK;
@@ -259,7 +268,7 @@ HRESULT CMonster_EarthAberrant::SetUp_Components()
 	Desc.fRotationPerSec = XMConvertToRadians(60.f);
 	m_pTransform->Set_TransformDesc(Desc);
 
-	if (FAILED(__super::SetUp_Components((_uint)SCENEID::SCENE_STAGE1, L"Model_Monster_EarthAberrant", L"Com_Model", (CComponent**)&m_pModelCom)))
+	if (FAILED(__super::SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Model_Monster_EarthAberrant", L"Com_Model", (CComponent**)&m_pModelCom)))
 	{
 		return E_FAIL;
 	}
@@ -582,6 +591,8 @@ void CMonster_EarthAberrant::OnTriggerEnter(CCollision& collision)
 
 			if ((_uint)GAMEOBJECT::WEAPON == collision.pGameObject->getTag())
 			{
+				g_pGameInstance->Play_Shot(L"Monster_Hit_2", CSoundMgr::CHANNELID::Earth_Hit);
+
 				--m_fCurrentHp;
 				m_fGroggyGauge += 2; //TODO::¼öÄ¡Á¤ÇØ¼­¹Ù²ãÁà¾ßµÊ
 
@@ -604,11 +615,22 @@ void CMonster_EarthAberrant::OnTriggerEnter(CCollision& collision)
 	}
 }
 
+void CMonster_EarthAberrant::OnTriggerExit(CCollision& collision)
+{
+	g_pGameInstance->StopSound(CSoundMgr::CHANNELID::Monster_Hit);
+}
+
 void CMonster_EarthAberrant::Set_IsAttack(const _bool _isAttack)
 {
 	m_IsAttack = _isAttack;
 	if (m_pWeapon)
 		m_pWeapon->Set_IsAttack(_isAttack);
+}
+
+void CMonster_EarthAberrant::Set_Remove(_bool bCheck)
+{
+	m_bRemove = bCheck;
+	m_pPanel->Set_UIRemove(bCheck);
 }
 
 CMonster_EarthAberrant* CMonster_EarthAberrant::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
@@ -635,12 +657,12 @@ CGameObject* CMonster_EarthAberrant::Clone(const _uint _iSceneID, void* _pArg)
 
 void CMonster_EarthAberrant::Free()
 {
+	__super::Free();
+
 	Safe_Release(m_pPanel);
 	Safe_Release(m_pCharacterController);
 	Safe_Release(m_pWeapon);
 	Safe_Release(m_pStateController);
 	Safe_Release(m_pAnimatorCom);
 	Safe_Release(m_pModelCom);
-
-	__super::Free();
 }

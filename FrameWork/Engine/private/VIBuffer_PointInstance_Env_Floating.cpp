@@ -175,9 +175,9 @@ void CVIBuffer_PointInstance_Env_Floating::Update(_double TimeDelta, _uint eAxis
 		return;
 	}
 
-	m_fAutoResetTimeAcc += TimeDelta;
+	m_fAutoResetTimeAcc += (_float)TimeDelta;
 
-	if (1.f <= m_fAutoResetTimeAcc)
+	if (0.35f <= m_fAutoResetTimeAcc)
 	{
 		Particle_Setting_RandomPos();
 		m_fAutoResetTimeAcc = 0.f;

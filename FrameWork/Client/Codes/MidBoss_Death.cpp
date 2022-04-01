@@ -60,6 +60,8 @@ HRESULT CMidBoss_Death::EnterState()
 	if (FAILED(__super::EnterState()))
 		return E_FAIL;
 
+	g_pGameInstance->BlendSound(L"MidBoss_Death", L"Monster_Death", CSoundMgr::CHANNELID::MidBoss, CSoundMgr::CHANNELID::MONSTER);
+	g_pGameInstance->VolumeChange(CSoundMgr::CHANNELID::MidBoss, 5.0f);
 	//_vector vec = { 0.f, 1.f, 0.f,0.f };
 	//m_pTransform->SetUp_Rotation(vec, (XMConvertToRadians(180.f)));
 

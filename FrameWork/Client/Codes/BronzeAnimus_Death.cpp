@@ -57,7 +57,7 @@ HRESULT CBronzeAnimus_Death::EnterState()
 	if (FAILED(__super::EnterState()))
 		return E_FAIL;
 
-	g_pShakeManager->Shake(CShakeManager::ETemplate::MonsterDeath, _float3(0.f, 0.f, 0.f));
+	g_pShakeManager->Shake(CShakeManager::ETemplate::MonsterDeath, m_pTransform->Get_State(CTransform::STATE_POSITION));
 	m_pAnimator->Change_AnyEntryAnimation((_uint)CMonster_BronzeAnimus::ANIM_TYPE::A_DEATH);
 	g_pMainApp->FreezeTime();
 

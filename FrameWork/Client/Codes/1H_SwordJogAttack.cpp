@@ -59,6 +59,7 @@ HRESULT C1H_SwordJogAttack::EnterState()
 	if (FAILED(__super::EnterState()))
 		return E_FAIL;
 
+	g_pGameInstance->StopSound(CSoundMgr::CHANNELID::Player_Sword_Attack);
 	g_pGameInstance->Play_Shot(L"Needle_Attack_L_1", CSoundMgr::CHANNELID::Player_Sword_Attack);
 
 

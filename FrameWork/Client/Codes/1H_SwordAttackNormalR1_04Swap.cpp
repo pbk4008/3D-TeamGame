@@ -23,8 +23,7 @@ _int C1H_SwordAttackNormalR1_04Swap::Tick(const _double& _dDeltaTime)
 	_int iProgress = __super::Tick(_dDeltaTime);
 	if (NO_EVENT != iProgress)
 		return iProgress;
-
-
+	
 	_uint iCurkeyFrameIndex = m_pAnimationController->Get_CurKeyFrameIndex();
 
 	if (m_iAttackStartIndex < iCurkeyFrameIndex && m_iAttackEndIndex > iCurkeyFrameIndex)
@@ -65,6 +64,10 @@ HRESULT C1H_SwordAttackNormalR1_04Swap::Render()
 
 HRESULT C1H_SwordAttackNormalR1_04Swap::EnterState()
 {
+	g_pGameInstance->StopSound(CSoundMgr::CHANNELID::Player_Sword_Attack);
+	g_pGameInstance->Play_Shot(L"Needle_Attack_R_Slam_1", CSoundMgr::CHANNELID::Player_Sword_Attack);
+	g_pGameInstance->Play_Shot(L"Needle_Attack_R_Slam_2", CSoundMgr::CHANNELID::PLAYER1);
+
 	if (FAILED(__super::EnterState()))
 		return E_FAIL;
 
@@ -75,7 +78,6 @@ HRESULT C1H_SwordAttackNormalR1_04Swap::EnterState()
 	m_pAnimationController->Add_TrackAcc(15.0);
 	m_iAttackStartIndex = 36;
 	m_iAttackEndIndex = 42;
-
 
 	// Ω¶¿Ã≈© ø…º«
 	m_tShakeEvent.fDuration = 0.8f;
@@ -101,6 +103,7 @@ HRESULT C1H_SwordAttackNormalR1_04Swap::EnterState()
 	m_tShakeEvent2.tWaveZ.fFrequency = 1.f;
 	m_tShakeEvent2.tWaveZ.fAdditionalOffset = 1.f;
 
+
 	return S_OK;
 }
 
@@ -108,7 +111,6 @@ HRESULT C1H_SwordAttackNormalR1_04Swap::ExitState()
 {
 	if (FAILED(__super::ExitState()))
 		return E_FAIL;
-
 
 	m_isShake2 = false;
 	return S_OK;

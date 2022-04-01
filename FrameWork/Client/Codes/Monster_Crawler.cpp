@@ -86,7 +86,7 @@ HRESULT CMonster_Crawler::NativeConstruct(const _uint _iSceneID, void* _pArg)
 
 	m_iObectTag = (_uint)GAMEOBJECT::MONSTER_CRYSTAL;
 
-	m_fMaxHp = 5.f;
+	m_fMaxHp = 2.f;
 	m_fCurrentHp = m_fMaxHp;
 
 	m_fMaxGroggyGauge = 3.f;
@@ -232,7 +232,7 @@ void CMonster_Crawler::OnTriggerEnter(CCollision& collision)
 			if ((_uint)GAMEOBJECT::WEAPON == collision.pGameObject->getTag())
 			{
 				g_pGameInstance->Play_Shot(L"Monster_Hit", CSoundMgr::CHANNELID::Monster_Hit);
-
+				g_pGameInstance->VolumeChange(CSoundMgr::CHANNELID::Monster_Hit, 0.5f);
 				m_fCurrentHp -= 2;
 				m_fGroggyGauge += 2; //TODO::¼öÄ¡Á¤ÇØ¼­¹Ù²ãÁà¾ßµÊ
 
@@ -359,7 +359,7 @@ HRESULT CMonster_Crawler::Set_Animation_FSM()
 		return E_FAIL;
 
 	pAnim = m_pModelCom->Get_Animation("SK_Crystal_Crawler_v1.ao|A_Death_CrystalCrawler");
-	if (FAILED(m_pAnimatorCom->Insert_Animation(DEATH, HEAD, pAnim, false, true, false, ERootOption::XYZ, true)))
+	if (FAILED(m_pAnimatorCom->Insert_Animation(DEATH, HEAD, pAnim, true, true, false, ERootOption::XYZ, true)))
 		return E_FAIL;
 
 	pAnim = m_pModelCom->Get_Animation("SK_Crystal_Crawler_v1.ao|A_Ricochet_CrystalCrawler");

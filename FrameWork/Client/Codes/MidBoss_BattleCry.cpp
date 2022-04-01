@@ -29,6 +29,7 @@ _int CMidBoss_BattleCry::Tick(const _double& TimeDelta)
 		return iProgress;
 
 	m_pAnimator->Tick(TimeDelta);
+	Play_Sound();
 
 	m_pTransform->Face_Target(g_pObserver->Get_PlayerPos());
 
@@ -95,6 +96,17 @@ HRESULT CMidBoss_BattleCry::ExitState()
 void CMidBoss_BattleCry::Look_Player(void)
 {
 	
+}
+
+void CMidBoss_BattleCry::Play_Sound(void)
+{
+	_uint iCurKeyFrameIndex = m_pAnimator->Get_AnimController()->Get_CurKeyFrameIndex();
+
+	if (m_iAttackFrame == iCurKeyFrameIndex && ("SK_Bastion_Tier4.ao|A_BattleCry_End_Phalanxar" == m_pAnimator->Get_AnimController()->Get_CurAnimTag()))
+	{
+		g_pGameInstance->BlendSound(L"MidBoss_Swing_1", L"MidBoss_Attack_End_1", CSoundMgr::CHANNELID::MidBoss_Attack_1, CSoundMgr::CHANNELID::MidBoss_Attack_2);
+		g_pGameInstance->VolumeChange(CSoundMgr::CHANNELID::MidBoss_Attack_2, 0.5f);
+	}
 }
 
 CMidBoss_BattleCry* CMidBoss_BattleCry::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext, void* pArg)

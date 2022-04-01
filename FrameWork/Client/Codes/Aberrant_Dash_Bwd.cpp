@@ -67,6 +67,7 @@ HRESULT CAberrant_Dash_Bwd::EnterState()
 	if (FAILED(__super::EnterState()))
 		return E_FAIL;
 
+	g_pGameInstance->BlendSound(L"Earth_Dash_1", L"Earth_Dash_2", CSoundMgr::CHANNELID::Earth_Attack_1, CSoundMgr::CHANNELID::Earth_Attack_2);
 	m_pAnimator->Get_AnimController()->Set_MoveSpeed(20.f);
 
 	m_pTransform->Face_Target(g_pObserver->Get_PlayerPos());

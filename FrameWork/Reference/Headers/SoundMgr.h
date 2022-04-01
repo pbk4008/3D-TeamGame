@@ -11,11 +11,20 @@ class CSoundMgr final : public CSingleTon<CSoundMgr>
 {
 friend CSingleTon;
 public:
-	enum CHANNELID { BGM, PLAYER1, PLAYER2,MONSTER, EFFECT, UI, 
+	enum CHANNELID { BGM, PLAYER1, PLAYER2, PLAYER3, MONSTER, EFFECT, UI,
 		Player_Sword_Attack,
 		Power_Resonance_01,
 		Unequip_Needle, Equip_Needle,
-		Monster_Hit, Monster_Death,
+		Unequip_Shield, Equip_Shield,
+		Monster_Hit, Monster_Death, Monster_Attack, Monster_Attack_2,
+		Earth_Hit, Earth_Death, Earth_Attack_1, Earth_Attack_2,
+		Sword1H_Hit, Sword1H_Death, Sword1H_Attack_1, Sword1H_Attack_2,
+		Sword2H_Hit, Sword2H_Death,
+		Shooter_Hit, Shooter_Death, Shooter_Attack_1, Shooter_Attack_2,
+		Healer_Hit, Healer_Death,
+		Spear_Hit, Spear_Death, Spear_Attack_1, Spear_Attack_2,
+		Bronz_Hit, Bronz_Death,
+		MidBoss, MidBoss_Hit, MidBoss_Death, MidBoss_Attack_1, MidBoss_Attack_2, MidBoss_Attack_3,
 		Jump_Node,
 		MAXCHANNEL};
 private:
@@ -32,9 +41,13 @@ public:
 	void StopAll();
 
 public:
-	void VolumeChange(const std::wstring& pSoundKey, _float fVolume);
-
-	using SoundType = std::pair<FMOD::Sound*, FMOD::Channel*>;
+	void VolumeChange(CHANNELID eID,_float fVolume);
+	void BlendSound(
+		const std::wstring& pStartSoundKey, 
+		const std::wstring& pEndSoundKey, 
+		CHANNELID eStartID, 
+		CHANNELID eEndID, 
+		_float fBlendTiming);
 
 private:
 	HRESULT LoadSoundFile();
@@ -49,6 +62,7 @@ private:
 	FMOD_CHANNEL* m_pChannelArr[MAXCHANNEL]; 
 	// 사운드 ,채널 객체 및 장치를 관리하는 객체 
 	FMOD_SYSTEM* m_pSystem; 
+	FMOD_CHANNELGROUP* m_pGroup;
 };
 END
 #endif

@@ -126,11 +126,6 @@ HRESULT CGameObject::Render_ShadeShadow(ID3D11ShaderResourceView* ShaodwMap)
 	return S_OK;
 }
 
-HRESULT CGameObject::Render_PBR()
-{
-	return S_OK;
-}
-
 void CGameObject::OnCollisionEnter(CCollision& collision)
 {
 }
@@ -207,12 +202,22 @@ HRESULT CGameObject::SetUp_Components(const wstring& pComponentTag, CComponent* 
 	return S_OK;
 }
 
+void CGameObject::ComputeViewZ(_fmatrix* pView)
+{
+	_vector campos = pView->r[3];
+	_vector viewlenght = XMVector3Length(campos - m_pTransform->Get_State(CTransform::STATE_POSITION));
+	m_fViewZ = XMVectorGetX(viewlenght);
+}
+
 void CGameObject::Free()
 {
-	for (auto& Pair : m_Components)
-		Safe_Release(Pair.second);
+	if (!m_Components.empty())
+	{
+		for (auto& Pair : m_Components)
+			Safe_Release(Pair.second);
+	}
 	m_Components.clear();
-
+	
 	Safe_Release(m_pRenderer);
 	Safe_Release(m_pTransform);
 

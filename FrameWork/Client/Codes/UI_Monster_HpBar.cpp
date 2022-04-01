@@ -70,12 +70,12 @@ _int CUI_Monster_HpBar::Tick(_double TimeDelta)
 
 	else if (false == m_bShow)
 	{
-		m_fDisappearTimeAcc += TimeDelta;
+		m_fDisappearTimeAcc += (_float)TimeDelta;
 	}
 
 	if (5.f <= m_fDisappearTimeAcc)
 	{
-		m_fAlpha -= TimeDelta;
+		m_fAlpha -= (_float)TimeDelta;
 	}
 
 	if (0 >= m_fAlpha)

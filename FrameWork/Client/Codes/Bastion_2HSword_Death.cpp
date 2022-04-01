@@ -57,11 +57,10 @@ HRESULT CBastion_2HSword_Death::EnterState()
 	if (FAILED(__super::EnterState()))
 		return E_FAIL;
 
-	g_pShakeManager->Shake(CShakeManager::ETemplate::MonsterDeath, _float3(0.f, 0.f, 0.f));
+	g_pShakeManager->Shake(CShakeManager::ETemplate::MonsterDeath, m_pTransform->Get_State(CTransform::STATE_POSITION));
 	m_pAnimator->Change_AnyEntryAnimation((_uint)CMonster_Bastion_2HSword::ANIM_TYPE::A_DEATH);
 	g_pMainApp->FreezeTime();
 
-	g_pMainApp->FreezeTime();
 	return S_OK;
 }
 
@@ -80,13 +79,6 @@ void CBastion_2HSword_Death::Look_Player(void)
 
 void CBastion_2HSword_Death::Look_Monster(void)
 {
-	//CAnimation* pAnim = m_pAnimator->Get_CurrentAnimation();
-
-	//if (pAnim->Is_Finished())
-	//{
-	//	static_cast<CMonster_Bastion_2HSword*>(m_pMonster)->Set_Dead();
-	//	static_cast<CMonster_Bastion_2HSword*>(m_pMonster)->setActive(false);
-	//}
 }
 
 CBastion_2HSword_Death* CBastion_2HSword_Death::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext, void* _pArg)

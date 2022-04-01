@@ -177,6 +177,12 @@ HRESULT CMonster_Bastion_Shooter::Render()
 	return S_OK;
 }
 
+void CMonster_Bastion_Shooter::Set_Remove(_bool bCheck)
+{
+	m_bRemove = bCheck;
+	m_pPanel->Set_UIRemove(bCheck);
+}
+
 void CMonster_Bastion_Shooter::OnTriggerEnter(CCollision& collision)
 {
 	if (!m_bDead)
@@ -227,6 +233,8 @@ void CMonster_Bastion_Shooter::Hit()
 	}
 	if (m_wstrCurState != L"Hit" && !m_bGroggy)
 	{
+		g_pGameInstance->StopSound(CSoundMgr::CHANNELID::Shooter_Hit);
+		g_pGameInstance->Play_Shot(L"Monster_Hit_6", CSoundMgr::CHANNELID::Shooter_Hit);
 		tData.fCurHp = m_fCurrentHp;
 		tData.iHitType = (_uint)m_eHitType;
 		m_wstrCurState = L"Hit";

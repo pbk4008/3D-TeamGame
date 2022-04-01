@@ -28,6 +28,9 @@ _int CBastion_2HSword_Chaser::Tick(const _double& _dDeltaTime)
 	if (NO_EVENT != iProgress)
 		return iProgress;
 
+	if (m_pMonster->Get_Dead())
+		return 0;
+
 	m_pTransform->Face_Target(g_pObserver->Get_PlayerPos());
 
 	if (m_bRageOn)

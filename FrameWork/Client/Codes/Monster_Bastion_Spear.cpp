@@ -87,9 +87,11 @@ HRESULT CMonster_Bastion_Spear::NativeConstruct(const _uint _iSceneID, void* _pA
 		(CGameObject**)&m_pPanel)))
 		return E_FAIL;
 
+	Safe_AddRef(m_pPanel);
+
 	m_pPanel->Set_TargetWorldMatrix(m_pTransform->Get_WorldMatrix());
 
-	m_fMaxHp = 30.f;
+	m_fMaxHp = 2.f;
 	m_fCurrentHp = m_fMaxHp;
 
 	m_fMaxGroggyGauge = 10.f;
@@ -124,11 +126,33 @@ _int CMonster_Bastion_Spear::Tick(_double _dDeltaTime)
 
 	if(!m_bDead)
 		m_pCharacterController->Move(_dDeltaTime, m_pTransform->Get_Velocity());
+	else
+	{
+		if ((_uint)ANIM_TYPE::A_DEATH == m_pAnimator->Get_CurrentAnimNode())
+		{
+			if (m_pAnimator->Get_CurrentAnimation()->Is_Finished())
+			{
+				Set_Remove(true);
+				m_pPanel->Set_UIRemove(true);
+			}
+			else if (1 == m_pAnimator->Get_AnimController()->Get_CurKeyFrameIndex())
+			{
+				Active_Effect((_uint)EFFECT::DEATH);
+			}
+		}
+		else
+		{
+			Set_Remove(true);
+			m_pPanel->Set_UIRemove(true);
+		}
+	}
+
+
+
 
 	if (true == m_bUIShow)
 		m_pPanel->Set_Show(true);
-
-	if (false == m_bUIShow)
+	else
 		m_pPanel->Set_Show(false);
 
 	if (m_fGroggyGauge >= m_fMaxGroggyGauge)
@@ -154,19 +178,7 @@ _int CMonster_Bastion_Spear::Tick(_double _dDeltaTime)
 	}
 
 	//Á×À»¶§
-	if ((_uint)ANIM_TYPE::A_DEATH == m_pAnimator->Get_CurrentAnimNode())
-	{
-		if (m_pAnimator->Get_CurrentAnimation()->Is_Finished())
-		{
-			Set_Remove(true);
-			m_pPanel->Set_Remove(true);
-		}
 
-		if (1 == m_pAnimator->Get_AnimController()->Get_CurKeyFrameIndex())
-		{
-			Active_Effect((_uint)EFFECT::DEATH);
-		}
-	}
 
 	m_pPanel->Set_TargetWorldMatrix(m_pTransform->Get_WorldMatrix());
 
@@ -312,7 +324,7 @@ HRESULT CMonster_Bastion_Spear::Ready_AnimFSM(void)
 		return E_FAIL;
 
 	pAnimation = m_pModel->Get_Animation("A_Guard");
-	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::A_GUARD, (_uint)ANIM_TYPE::A_HEAD, pAnimation, TRUE, FALSE, TRUE, ERootOption::XYZ)))
+	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::A_GUARD, (_uint)ANIM_TYPE::A_HEAD, pAnimation, TRUE, TRUE, TRUE, ERootOption::XYZ)))
 		return E_FAIL;
 
 	pAnimation = m_pModel->Get_Animation("A_Bwd_Dash");
@@ -554,10 +566,6 @@ HRESULT CMonster_Bastion_Spear::Render_Debug(void)
 
 void CMonster_Bastion_Spear::OnTriggerEnter(CCollision& collision)
 {
-	m_pPanel->Set_Show(true);
-	Active_Effect((_uint)EFFECT::HIT);
-	Active_Effect((_uint)EFFECT::FLOATING);
-
 	m_pStateController->OnTriggerEnter(collision);
 }
 

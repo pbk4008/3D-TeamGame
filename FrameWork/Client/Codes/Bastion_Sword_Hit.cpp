@@ -68,6 +68,9 @@ HRESULT CBastion_Sword_Hit::EnterState(void* _pArg)
 {
 	HITDATA tData = (*(HITDATA*)_pArg);
 
+	g_pGameInstance->StopSound(CSoundMgr::CHANNELID::Sword1H_Hit);
+	g_pGameInstance->Play_Shot(L"Monster_Hit_6", CSoundMgr::CHANNELID::Sword1H_Hit);
+
 	m_pAnimator->Change_AnyEntryAnimation(tData.iHitType);
 	m_fCurHp = tData.fCurHp;
 

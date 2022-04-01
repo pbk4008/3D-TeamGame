@@ -41,6 +41,7 @@ _int CSkyBox::LateTick(_double TimeDelta)
 	if (nullptr != m_pRenderer)
 	{
 		m_pRenderer->Add_RenderGroup(CRenderer::RENDER_PRIORITY, this);
+		//m_pRenderer->Add_RenderGroup(CRenderer::RENDER_NONALPHA, this);
 		m_pRenderer->Add_RenderGroup(CRenderer::RENDER_SKYBOX, this);
 	}
 

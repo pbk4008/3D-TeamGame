@@ -54,6 +54,9 @@ HRESULT CShield_BlockStart::EnterState()
 	if (FAILED(__super::EnterState()))
 		return E_FAIL;
 
+	g_pGameInstance->StopSound(CSoundMgr::CHANNELID::Equip_Shield);
+	g_pGameInstance->Play_Shot(L"Shield_On", CSoundMgr::CHANNELID::Equip_Shield);
+
 	m_pAnimationController->SetUp_NextAnimation("SK_Silvermane.ao|A_Spectral_Shield_Block_Start", false);
 	m_pAnimationController->Set_RootMotion(true, true, ERootOption::XYZ);
 
