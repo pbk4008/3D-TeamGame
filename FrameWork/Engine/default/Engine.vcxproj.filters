@@ -540,9 +540,6 @@
     <ClInclude Include="..\public\CSTarget.h">
       <Filter>00.Utility\04.Manager\03.RenderTargetManager\01.CSTarget</Filter>
     </ClInclude>
-    <ClInclude Include="..\bin\ShaderFiles\Shader_Calculate.hpp">
-      <Filter>00.Utility\04.Manager\03. RenderTargetManager\99.Shader</Filter>
-    </ClInclude>
     <ClInclude Include="..\public\Cell.h">
       <Filter>00.Utility\03.Component\01.Navigation\Cell</Filter>
     </ClInclude>
@@ -627,6 +624,7 @@
     <ClInclude Include="..\bin\ShaderFiles\Shader_Calculate.hpp">
       <Filter>98.ShaderFiles\Hpp</Filter>
     </ClInclude>
+    <ClInclude Include="..\bin\ShaderFiles\Shader_Calculate.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\private\Base.cpp">
@@ -1025,7 +1023,7 @@
       <Filter>98.ShaderFiles\00.Buffer</Filter>
     </FxCompile>
     <FxCompile Include="..\bin\ShaderFiles\Shader_RectFire.hlsl">
-      <Filter>98.ShaderFiles\00.Buffer</Filter>
+      <Filter>98.ShaderFiles\03.Effect</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>

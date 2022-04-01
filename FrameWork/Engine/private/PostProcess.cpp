@@ -48,7 +48,7 @@ HRESULT CPostProcess::PossProcessing(CTonemapping* tone,CTarget_Manager* pTarget
 	if (FAILED(BlurPass(pTargetMgr, L"Target_HZ4", L"Target_VT8", L"Target_HZ8", 160, 90))) return E_FAIL;
 	if (FAILED(BlurPass(pTargetMgr, L"Target_HZ8", L"Target_VT16", L"Target_HZ16", 64, 64))) return E_FAIL;
 
-	if (FAILED(BloomPass(pTargetMgr,L"Target_Bloom", L"Target_HZ2", L"Target_HZ4", L"Target_HZ8", L"Target_HZ16",0.2f))) return E_FAIL;
+	if (FAILED(BloomPass(pTargetMgr,L"Target_Bloom", L"Target_HZ2", L"Target_HZ4", L"Target_HZ8", L"Target_HZ16",0.8f))) return E_FAIL;
 
 	if (FAILED(tone->ToneMapping(pTargetMgr))) return E_FAIL;
 
@@ -58,15 +58,15 @@ HRESULT CPostProcess::PossProcessing(CTonemapping* tone,CTarget_Manager* pTarget
 	if (FAILED(BlurPass(pTargetMgr, L"Target_Horizontal8", L"Target_Vertical16", L"Target_Horizontal16", 64, 64))) return E_FAIL;
 
 	//-----------------------------------------//
-	if (particle == true)
-	{
-		if (FAILED(BlurPass(pTargetMgr, L"Target_Particle", L"Target_ParticleV2", L"Target_ParticleH2", 640, 360))) return E_FAIL;
-		if (FAILED(BlurPass(pTargetMgr, L"Target_ParticleH2", L"Target_ParticleV4", L"Target_ParticleH4", 320, 180))) return E_FAIL;
-		if (FAILED(BlurPass(pTargetMgr, L"Target_ParticleH4", L"Target_ParticleV8", L"Target_ParticleH8", 160, 90))) return E_FAIL;
-		if (FAILED(BlurPass(pTargetMgr, L"Target_ParticleH8", L"Target_ParticleV16", L"Target_ParticleH16", 64, 64))) return E_FAIL;
+	//if (particle == true)
+	//{
+	//	if (FAILED(BlurPass(pTargetMgr, L"Target_Particle", L"Target_ParticleV2", L"Target_ParticleH2", 640, 360))) return E_FAIL;
+	//	if (FAILED(BlurPass(pTargetMgr, L"Target_ParticleH2", L"Target_ParticleV4", L"Target_ParticleH4", 320, 180))) return E_FAIL;
+	//	if (FAILED(BlurPass(pTargetMgr, L"Target_ParticleH4", L"Target_ParticleV8", L"Target_ParticleH8", 160, 90))) return E_FAIL;
+	//	if (FAILED(BlurPass(pTargetMgr, L"Target_ParticleH8", L"Target_ParticleV16", L"Target_ParticleH16", 64, 64))) return E_FAIL;
 
-		if (FAILED(BloomPass(pTargetMgr,L"Target_Alpha", L"Target_ParticleH2", L"Target_ParticleH4", L"Target_ParticleH8", L"Target_ParticleH16",0.5f))) return E_FAIL;
-	}
+	//	if (FAILED(BloomPass(pTargetMgr,L"Target_Alpha", L"Target_ParticleH2", L"Target_ParticleH4", L"Target_ParticleH8", L"Target_ParticleH16",0.7f))) return E_FAIL;
+	//}
 
 	if (FAILED(tone->Blend_FinalPass(pTargetMgr, hdr, shadow, particle))) return E_FAIL;
 
@@ -97,8 +97,8 @@ HRESULT CPostProcess::ComputeBrightPass(CTarget_Manager* pTargetMgr, const wstri
 	m_pVIBuffer->Buffer_Resize(640.f, 360.f);
 	m_pVIBuffer->Render(2);
 
-	if (FAILED(pTargetMgr->End_MRT(m_pDeviceContext)))
-		return E_FAIL;
+	//if (FAILED(pTargetMgr->End_MRT(m_pDeviceContext)))	return E_FAIL;
+	if (FAILED(pTargetMgr->End_MRTNotClear(m_pDeviceContext))) return E_FAIL;
 
 	return S_OK;
 }
@@ -116,7 +116,25 @@ HRESULT CPostProcess::BloomPass(CTarget_Manager* pTargetMgr, const wstring& targ
 
 	m_pVIBuffer->Render(3);
 
+	//if (FAILED(pTargetMgr->End_MRT(m_pDeviceContext))) return E_FAIL;
+	if (FAILED(pTargetMgr->End_MRTNotClear(m_pDeviceContext))) return E_FAIL;
+
+	return S_OK;
+}
+
+HRESULT CPostProcess::BloomPass(CTarget_Manager* pTargetMgr, const wstring& target, const wstring& base1, const wstring& base2, _float weight)
+{
+	if (FAILED(pTargetMgr->Begin_MRT(m_pDeviceContext, target.c_str())))	return E_FAIL;
+
+	if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_Weight", &weight, sizeof(_float)))) MSGBOX("Not Apply BloomPass ValueOnShader Weight");
+
+	if (FAILED(m_pVIBuffer->SetUp_TextureOnShader("g_BaseBlur2Texture", pTargetMgr->Get_SRV(base1.c_str()))))	return E_FAIL;
+	if (FAILED(m_pVIBuffer->SetUp_TextureOnShader("g_BaseBlur4Texture", pTargetMgr->Get_SRV(base2.c_str()))))	return E_FAIL;
+
+	m_pVIBuffer->Render(4);
+
 	if (FAILED(pTargetMgr->End_MRT(m_pDeviceContext))) return E_FAIL;
+	//if (FAILED(pTargetMgr->End_MRTNotClear(m_pDeviceContext))) return E_FAIL;
 
 	return S_OK;
 }
@@ -142,7 +160,8 @@ HRESULT CPostProcess::GaussianBlurVertical(CTarget_Manager* pTargetMgr, const ws
 	m_pVIBuffer->Buffer_Resize(sizex, sizey);
 	m_pVIBuffer->Render(0);
 
-	if (FAILED(pTargetMgr->End_MRT(m_pDeviceContext)))	return E_FAIL;
+	//if (FAILED(pTargetMgr->End_MRT(m_pDeviceContext)))	return E_FAIL;
+	if (FAILED(pTargetMgr->End_MRTNotClear(m_pDeviceContext))) return E_FAIL;
 
 	return S_OK;
 }
@@ -159,7 +178,8 @@ HRESULT CPostProcess::GaussianblurHorizontal(CTarget_Manager* pTargetMgr, const 
 	m_pVIBuffer->Buffer_Resize(sizex, sizey);
 	m_pVIBuffer->Render(1);
 
-	if (FAILED(pTargetMgr->End_MRT(m_pDeviceContext)))	return E_FAIL;
+	//if (FAILED(pTargetMgr->End_MRT(m_pDeviceContext)))	return E_FAIL;
+	if (FAILED(pTargetMgr->End_MRTNotClear(m_pDeviceContext))) return E_FAIL;
 
 	m_pVIBuffer->Buffer_Resize(m_viewport.Width, m_viewport.Height);
 

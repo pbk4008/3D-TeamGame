@@ -64,6 +64,19 @@ HRESULT CRendererAssit::Setup_RenderTarget()
 	if (FAILED(m_pTargetMgr->Add_RenderTarget(m_pDevice, m_pDeviceContext, TEXT("Target_ShadeShadow"), widht, height, DXGI_FORMAT_R32G32B32A32_FLOAT, _float4(0.f, 0.f, 0.f, 0.f), CRenderTarget::RTT::SHADOWDEPTH)))
 		return E_FAIL;
 
+	if (FAILED(m_pTargetMgr->Add_RenderTarget(m_pDevice, m_pDeviceContext, TEXT("Target_BlurShadow"), widht, height, DXGI_FORMAT_R32G32B32A32_FLOAT, _float4(0.f, 0.f, 0.f, 0.f), CRenderTarget::RTT::SHADOWDEPTH)))
+		return E_FAIL;
+
+	if (FAILED(m_pTargetMgr->Add_RenderTarget(m_pDevice, m_pDeviceContext, TEXT("Target_ShadowV2"), widht, height, DXGI_FORMAT_R32G32B32A32_FLOAT, _float4(0.f, 0.f, 0.f, 0.f), CRenderTarget::RTT::SHADOWDEPTH)))
+		return E_FAIL;
+	if (FAILED(m_pTargetMgr->Add_RenderTarget(m_pDevice, m_pDeviceContext, TEXT("Target_ShadowH2"), widht, height, DXGI_FORMAT_R32G32B32A32_FLOAT, _float4(0.f, 0.f, 0.f, 0.f), CRenderTarget::RTT::SHADOWDEPTH)))
+		return E_FAIL;
+
+	if (FAILED(m_pTargetMgr->Add_RenderTarget(m_pDevice, m_pDeviceContext, TEXT("Target_ShadowV4"), widht, height, DXGI_FORMAT_R32G32B32A32_FLOAT, _float4(0.f, 0.f, 0.f, 0.f), CRenderTarget::RTT::SHADOWDEPTH)))
+		return E_FAIL;
+	if (FAILED(m_pTargetMgr->Add_RenderTarget(m_pDevice, m_pDeviceContext, TEXT("Target_ShadowH4"), widht, height, DXGI_FORMAT_R32G32B32A32_FLOAT, _float4(0.f, 0.f, 0.f, 0.f), CRenderTarget::RTT::SHADOWDEPTH)))
+		return E_FAIL;
+
 	// Light RenderTargets MRT
 	if (FAILED(m_pTargetMgr->Add_RenderTarget(m_pDevice, m_pDeviceContext, TEXT("Target_Shade"), widht, height, DXGI_FORMAT_R16G16B16A16_FLOAT, _float4(0.0f, 0.0f, 0.0f, 1.f), CRenderTarget::RTT::LIGHTING)))
 		return E_FAIL;
@@ -291,6 +304,14 @@ HRESULT CRendererAssit::Setup_RenderTarget()
 	if (FAILED(m_pTargetMgr->Add_MRT(TEXT("Target_ParticleH16"), TEXT("Target_ParticleH16"))))	return E_FAIL;
 
 	//------------------------------------//
+	
+	if (FAILED(m_pTargetMgr->Add_MRT(TEXT("Target_BlurShadow"), TEXT("Target_BlurShadow"))))	return E_FAIL;
+	if (FAILED(m_pTargetMgr->Add_MRT(TEXT("Target_ShadowV2"), TEXT("Target_ShadowV2"))))	return E_FAIL;
+	if (FAILED(m_pTargetMgr->Add_MRT(TEXT("Target_ShadowH2"), TEXT("Target_ShadowH2"))))	return E_FAIL;
+	if (FAILED(m_pTargetMgr->Add_MRT(TEXT("Target_ShadowV4"), TEXT("Target_ShadowV4"))))	return E_FAIL;
+	if (FAILED(m_pTargetMgr->Add_MRT(TEXT("Target_ShadowH4"), TEXT("Target_ShadowH4"))))	return E_FAIL;
+	
+
 #ifdef _DEBUG
 	if (FAILED(m_pTargetMgr->Ready_Debug_Buffer(TEXT("Target_SkyBox"), (fwidth - fwidth), (fheight - fheight) + 200.f, 100.f, 100.f)))	return E_FAIL;
 
@@ -355,7 +376,7 @@ HRESULT CRendererAssit::Setup_RenderTarget()
 	if (FAILED(m_pTargetMgr->Ready_Debug_Buffer(TEXT("Target_Blend"), fwidth - 100.f, fheight - 200.f, 100.f, 100.f)))			return E_FAIL;
 
 	if (FAILED(m_pTargetMgr->Ready_Debug_Buffer(TEXT("Target_Alpha"), fwidth - 100.f, fheight - 100.f, 100.f, 100.f)))			return E_FAIL;
-	if (FAILED(m_pTargetMgr->Ready_Debug_Buffer(TEXT("Target_Particle"), fwidth - fwidth, fheight - 220.f, 100.f, 100.f)))			return E_FAIL;
+	if (FAILED(m_pTargetMgr->Ready_Debug_Buffer(TEXT("Target_Particle"), fwidth - fwidth, fheight - 220.f, 100.f, 100.f)))		return E_FAIL;
 #endif // _DEBUG
 
 
@@ -373,8 +394,8 @@ HRESULT CRendererAssit::Render_LightAcc(const wstring& cameraTag, _bool bPBR,_bo
 
 	pLight_Manager->Render_Lights(cameraTag, bPBR,shadow);
 
-	m_pTargetMgr->End_MRT(m_pDeviceContext);
-	//if (FAILED(m_pTargetMgr->End_MRTNotClear(m_pDeviceContext))) return E_FAIL;
+	//m_pTargetMgr->End_MRT(m_pDeviceContext);
+	if (FAILED(m_pTargetMgr->End_MRTNotClear(m_pDeviceContext))) return E_FAIL;
 
 	RELEASE_INSTANCE(CLight_Manager);
 

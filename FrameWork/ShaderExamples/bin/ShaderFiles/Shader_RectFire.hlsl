@@ -76,10 +76,10 @@ VS_OUT VS_MAIN(VS_IN In)
 	Out.texcoord1.y = Out.texcoord1.y + (g_frametime * g_scrollspeeds.x);
 	
 	Out.texcoord2 = (In.vTexUV * g_scales.y);
-	Out.texcoord2.y = Out.texcoord1.y + (g_frametime * g_scrollspeeds.y);
+	Out.texcoord2.y = Out.texcoord2.y + (g_frametime * g_scrollspeeds.y);
 	
 	Out.texcoord3 = (In.vTexUV * g_scales.z);
-	Out.texcoord3.y = Out.texcoord1.y + (g_frametime * g_scrollspeeds.z);
+	Out.texcoord3.y = Out.texcoord3.y + (g_frametime * g_scrollspeeds.z);
 	
 	Out.vProjpos = Out.vPosition;
 	return Out;

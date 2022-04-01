@@ -138,6 +138,21 @@ PS_OUT PS_MAIN_Bloom(PS_IN In)
 	return Out;
 }
 
+PS_OUT PS_MAIN_Bloom2(PS_IN In)
+{
+	PS_OUT Out = (PS_OUT) 0;
+	
+	
+	float4 base2 = g_BaseBlur2Texture.Sample(DefaultSampler, In.vTexUV);
+	float4 base4 = g_BaseBlur4Texture.Sample(DefaultSampler, In.vTexUV);
+	
+	float4 baseBloom = (base2 * g_Weight) + (base4 * g_Weight);
+	
+	Out.vOutColor = baseBloom;
+	
+	return Out;
+}
+
 //--------------------------------------------------------------------------------------------------------------------------//
 technique11 PostProcess
 {
@@ -183,5 +198,16 @@ technique11 PostProcess
 		VertexShader = compile vs_5_0 VS_MAIN_VIEWPORT();
 		GeometryShader = NULL;
 		PixelShader = compile ps_5_0 PS_MAIN_Bloom();
+	}
+
+	pass Bloom2
+	{
+		SetRasterizerState(CullMode_Default);
+		SetDepthStencilState(ZTestDiable, 0);
+		SetBlendState(BlendDisable, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+
+		VertexShader = compile vs_5_0 VS_MAIN_VIEWPORT();
+		GeometryShader = NULL;
+		PixelShader = compile ps_5_0 PS_MAIN_Bloom2();
 	}
 }

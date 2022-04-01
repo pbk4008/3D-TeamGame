@@ -19,6 +19,7 @@ cbuffer ShaderCheck
 {
 	bool g_bPBRHDR;
 	bool g_bHDR;
+	bool g_shadow;
 };
 
 cbuffer LightDesc
@@ -224,10 +225,20 @@ PS_OUT_LIGHTACC PS_MAIN_LIGHTACC_DIRECTIONAL(PS_IN In)
 		InvMetalic = max(InvMetalic, 0.2f);
 		float4 lightpower = InvMetalic * light * AO;
 		
-		Out.vSpecular = (light * specular + cubeRef1) * Metallic * smoothness;
-		//Out.vSpecular.a = 1.f;
-		Out.vShade = lightpower;
-		Out.vShade.a = 1.f;
+		if (g_shadow == true)
+		{
+			float4 shadow = g_ShadowTexture.Sample(DefaultSampler, In.vTexUV);
+			
+			Out.vSpecular = (light * specular + cubeRef1) * Metallic * smoothness * shadow;
+			Out.vShade = lightpower * shadow;
+		}
+		else
+		{
+			
+			Out.vSpecular = (light * specular + cubeRef1) * Metallic * smoothness;
+			Out.vShade = lightpower;
+			//Out.vShade.a = 1.f;
+		}
 	}
 	else
 	{

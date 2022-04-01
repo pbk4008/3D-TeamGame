@@ -147,9 +147,6 @@ HRESULT CRenderer::Draw_RenderGroup()
 	if (FAILED(m_pRenderAssit->Render_LightAcc(m_CameraTag,m_bPBR,m_bShadow))) // ºû¿¬»ê
 		return E_FAIL;
 
-	if (FAILED(Render_Alpha()))
-		return E_FAIL;
-
 	if (m_bPixel) // Pixel HDR
 	{
 		//if (FAILED(m_pPostProcess->AlphaBlur(m_pTargetMgr,m_bParticle))) return E_FAIL;
@@ -162,7 +159,10 @@ HRESULT CRenderer::Draw_RenderGroup()
 	}
 
 	if (FAILED(Render_Final())) 
-		return E_FAIL;;
+		return E_FAIL;
+
+	if (FAILED(Render_Alpha()))
+		return E_FAIL;
 
 	if (FAILED(Render_UI()))
 		return E_FAIL;
@@ -268,8 +268,8 @@ HRESULT CRenderer::Render_SkyBox()
 	}
 	m_RenderGroup[RENDER_SKYBOX].clear();
 
-	//if (FAILED(m_pTargetMgr->End_MRT(m_pDeviceContext)))return E_FAIL;
-	if (FAILED(m_pTargetMgr->End_MRTNotClear(m_pDeviceContext))) return E_FAIL;
+	if (FAILED(m_pTargetMgr->End_MRT(m_pDeviceContext)))return E_FAIL;
+	//if (FAILED(m_pTargetMgr->End_MRTNotClear(m_pDeviceContext))) return E_FAIL;
 
 	return S_OK;
 }
@@ -287,15 +287,15 @@ HRESULT CRenderer::Render_NonAlpha()
 	}
 	m_RenderGroup[RENDER_NONALPHA].clear();
 
-	if (FAILED(m_pTargetMgr->End_MRT(m_pDeviceContext))) return E_FAIL;
-	//if (FAILED(m_pTargetMgr->End_MRTNotClear(m_pDeviceContext))) return E_FAIL;
+	//if (FAILED(m_pTargetMgr->End_MRT(m_pDeviceContext))) return E_FAIL;
+	if (FAILED(m_pTargetMgr->End_MRTNotClear(m_pDeviceContext))) return E_FAIL;
 	
 	return S_OK;
 }
 
 HRESULT CRenderer::Render_Alpha()
 {
-	if (FAILED(m_pTargetMgr->Begin_MRT(m_pDeviceContext, TEXT("Target_Particle")))) return E_FAIL;
+	//if (FAILED(m_pTargetMgr->Begin_MRT(m_pDeviceContext, TEXT("Target_Particle")))) return E_FAIL;
 
 	_matrix view = g_pGameInstance->Get_Transform(m_CameraTag, TRANSFORMSTATEMATRIX::D3DTS_VIEW);
 	view = XMMatrixInverse(nullptr, view);
@@ -318,7 +318,7 @@ HRESULT CRenderer::Render_Alpha()
 	}
 	m_RenderGroup[RENDER_ALPHA].clear();
 
-	if (FAILED(m_pTargetMgr->End_MRT(m_pDeviceContext)))	return E_FAIL;
+	//if (FAILED(m_pTargetMgr->End_MRT(m_pDeviceContext)))	return E_FAIL;
 	//if (FAILED(m_pTargetMgr->End_MRTNotClear(m_pDeviceContext))) return E_FAIL;
 
 	return S_OK;
@@ -409,8 +409,9 @@ HRESULT CRenderer::Render_ShadeShadow()
 	if (FAILED(m_pTargetMgr->End_MRT(m_pDeviceContext)))
 		return E_FAIL;
 
-	//if (FAILED(m_pTargetMgr->End_RT(m_pDeviceContext, m_pShadowMap)))
-	//	return E_FAIL;
+	//m_pPostProcess->BlurPass(m_pTargetMgr,L"Target_ShadeShadow",L"Target_ShadowV2",L"Target_ShadowH2",640.f,360.f);
+	//m_pPostProcess->BlurPass(m_pTargetMgr,L"Target_ShadowH2",L"Target_ShadowV4",L"Target_ShadowH4",320.f,180.f);
+	/*m_pPostProcess->BloomPass(m_pTargetMgr, L"Target_BlurShadow", L"Target_ShadowH2", L"Target_ShadowH4", 0.8f);*/
 
 	return S_OK;
 }

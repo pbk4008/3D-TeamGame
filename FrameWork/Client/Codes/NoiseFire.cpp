@@ -22,11 +22,8 @@ HRESULT CNoiseFire::NativeConstruct(const _uint iSceneID, void* pArg)
 {
 	if (FAILED(__super::NativeConstruct(iSceneID,pArg))) return E_FAIL;
 	if (FAILED(ReadyComponent())) return E_FAIL;
-
-	m_pTransform->Set_State(CTransform::STATE_POSITION, XMVectorSet(0,2.f,0,1.f));
-	m_pTransform->Scale_Up(XMVectorSet(5.f, 2.f, 1.f, 0.f));
-
-	m_pRenderer->SetRenderButton(CRenderer::PARTICLE, true);
+	
+	//m_pRenderer->SetRenderButton(CRenderer::PARTICLE, true);
 
 	return S_OK;
 }
@@ -64,6 +61,9 @@ HRESULT CNoiseFire::Render()
 
 HRESULT CNoiseFire::BindConstBuffer()
 {
+	m_pTransform->Set_State(CTransform::STATE_POSITION, XMVectorSet(9.5f, 3.3f, 6.5f, 1.f));
+	m_pTransform->Scale_Up(XMVectorSet(2.0f, 1.f, 1.f, 0.f));
+
 	_matrix world, view, proj;
 
 	world = XMMatrixTranspose(m_pTransform->Get_WorldMatrix());
@@ -75,8 +75,8 @@ HRESULT CNoiseFire::BindConstBuffer()
 	if (FAILED(m_pbuffer->SetUp_ValueOnShader("g_ProjMatrix", &proj, sizeof(_float4x4)))) MSGBOX("NoiseFire ConstBuffer Projmatrix Not Apply");
 
 	// Nosie Buffer
-	_float3 scrollspeeds = _float3(1.3f, 2.1f, 2.3f);
-	_float3 scales = _float3(1.0f, 2.0f, 3.0f);
+	_float3 scrollspeeds = _float3(3.3f, 5.0f, 6.0f); //_float3(1.3f, 2.1f, 2.3f);
+	_float3 scales = _float3(1.0f, 2.0f, 3.0f);//_float3(1.0f, 2.0f, 3.0f);
 	if (FAILED(m_pbuffer->SetUp_ValueOnShader("g_frametime", &m_deltatime, sizeof(_float)))) MSGBOX("NoiseFire ConstBuffer NosieBuffer Not Apply");
 	if (FAILED(m_pbuffer->SetUp_ValueOnShader("g_scrollspeeds", &scrollspeeds, sizeof(_float3)))) MSGBOX("NoiseFire ConstBuffer NosieBuffer Not Apply");
 	if (FAILED(m_pbuffer->SetUp_ValueOnShader("g_scales", &scales, sizeof(_float3)))) MSGBOX("NoiseFire ConstBuffer NosieBuffer Not Apply");
@@ -101,8 +101,6 @@ HRESULT CNoiseFire::BindConstBuffer()
 
 	if(FAILED(m_pbuffer->SetUp_TextureOnShader("g_DepthTexture",g_pGameInstance->Get_SRV(L"Target_Depth")))) MSGBOX("NoiseFire ConstBuffer DepthTexture Not Apply");
 
-	
-	D3D11_DEPTH_STENCIL_DESC;
 	//  BOOL DepthEnable;
 	//	D3D11_DEPTH_WRITE_MASK DepthWriteMask;
 	//	D3D11_COMPARISON_FUNC DepthFunc;

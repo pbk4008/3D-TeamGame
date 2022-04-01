@@ -46,8 +46,8 @@ HRESULT CLuminance::DownSampling(CTarget_Manager* pTargetMgr)
 	m_pVIBuffer->Buffer_Resize(243.f, 234.f);
 	m_pVIBuffer->Render(0);
 
-	if (FAILED(pTargetMgr->End_MRT(m_pDeviceContext)))
-		return E_FAIL;
+	//if (FAILED(pTargetMgr->End_MRT(m_pDeviceContext)))	return E_FAIL;
+	if (FAILED(pTargetMgr->End_MRTNotClear(m_pDeviceContext))) return E_FAIL;
 	//---------------------------------------------------------------------//
 
 	if (FAILED(pTargetMgr->Begin_MRT(m_pDeviceContext, TEXT("MRT_Lum1"))))
@@ -69,8 +69,8 @@ HRESULT CLuminance::DownSampling(CTarget_Manager* pTargetMgr)
 	m_pVIBuffer->Buffer_Resize(81.f, 81.f);
 	m_pVIBuffer->Render(1);
 
-	if (FAILED(pTargetMgr->End_MRT(m_pDeviceContext)))
-		return E_FAIL;
+	//if (FAILED(pTargetMgr->End_MRT(m_pDeviceContext)))	return E_FAIL;
+	if (FAILED(pTargetMgr->End_MRTNotClear(m_pDeviceContext))) return E_FAIL;
 	//---------------------------------------------------------------------//
 
 	if (FAILED(pTargetMgr->Begin_MRT(m_pDeviceContext, TEXT("MRT_Lum2"))))
@@ -92,8 +92,9 @@ HRESULT CLuminance::DownSampling(CTarget_Manager* pTargetMgr)
 	m_pVIBuffer->Buffer_Resize(27.f, 27.f);
 	m_pVIBuffer->Render(1);
 
-	if (FAILED(pTargetMgr->End_MRT(m_pDeviceContext)))
-		return E_FAIL;
+	//if (FAILED(pTargetMgr->End_MRT(m_pDeviceContext)))	return E_FAIL;
+	if (FAILED(pTargetMgr->End_MRTNotClear(m_pDeviceContext))) return E_FAIL;
+
 	//---------------------------------------------------------------------//
 
 	if (FAILED(pTargetMgr->Begin_MRT(m_pDeviceContext, TEXT("MRT_Lum3"))))
@@ -115,8 +116,8 @@ HRESULT CLuminance::DownSampling(CTarget_Manager* pTargetMgr)
 	m_pVIBuffer->Buffer_Resize(9.f, 9.f);
 	m_pVIBuffer->Render(1);
 
-	if (FAILED(pTargetMgr->End_MRT(m_pDeviceContext)))
-		return E_FAIL;
+	//if (FAILED(pTargetMgr->End_MRT(m_pDeviceContext)))	return E_FAIL;
+	if (FAILED(pTargetMgr->End_MRTNotClear(m_pDeviceContext))) return E_FAIL;
 	//---------------------------------------------------------------------//
 
 	if (FAILED(pTargetMgr->Begin_MRT(m_pDeviceContext, TEXT("MRT_Lum4"))))
@@ -138,8 +139,8 @@ HRESULT CLuminance::DownSampling(CTarget_Manager* pTargetMgr)
 	m_pVIBuffer->Buffer_Resize(3.f, 3.f);
 	m_pVIBuffer->Render(1);
 
-	if (FAILED(pTargetMgr->End_MRT(m_pDeviceContext)))
-		return E_FAIL;
+	//if (FAILED(pTargetMgr->End_MRT(m_pDeviceContext)))return E_FAIL;
+	if (FAILED(pTargetMgr->End_MRTNotClear(m_pDeviceContext))) return E_FAIL;
 	//---------------------------------------------------------------------//
 
 	if (FAILED(pTargetMgr->Begin_MRT(m_pDeviceContext, TEXT("MRT_Lum5"))))
@@ -161,8 +162,8 @@ HRESULT CLuminance::DownSampling(CTarget_Manager* pTargetMgr)
 	m_pVIBuffer->Buffer_Resize(1.f, 1.f);
 	m_pVIBuffer->Render(1);
 
-	if (FAILED(pTargetMgr->End_MRT(m_pDeviceContext)))
-		return E_FAIL;
+	//if (FAILED(pTargetMgr->End_MRT(m_pDeviceContext))) return E_FAIL;
+	if (FAILED(pTargetMgr->End_MRTNotClear(m_pDeviceContext))) return E_FAIL;
 
 	m_pVIBuffer->Buffer_Resize(m_viewport.Width, m_viewport.Height);
 
