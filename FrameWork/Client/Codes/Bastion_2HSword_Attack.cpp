@@ -29,14 +29,20 @@ _int CBastion_2HSword_Attack::Tick(const _double& _dDeltaTime)
 	if (NO_EVENT != iProgress)
 		return iProgress;
 
-	m_pAnimator->Tick(_dDeltaTime);
+	if (m_pMonster->Get_Dead())
+		return 0;
 
-	//추가한코드임 - 희정
+	m_pAnimator->Tick(_dDeltaTime);
 	CMonster_Bastion_2HSword* pMonster = (CMonster_Bastion_2HSword*)m_pStateController->Get_GameObject();
-	if (nullptr != pMonster)
+
+	if (m_pAnimator->Get_CurrentAnimation()->Is_Finished())
 	{
-		pMonster->Set_IsAttack(true);
+		m_pStateController->Change_State(L"Chaser");
+		pMonster->Set_IsAttack(false);
 	}
+	else
+		pMonster->Set_IsAttack(true);
+
 
 	return _int();
 }
@@ -62,9 +68,12 @@ HRESULT CBastion_2HSword_Attack::EnterState()
 {
 	if (FAILED(__super::EnterState()))
 		return E_FAIL;
+	
+	if(!m_bFirstAttack)
+		m_bFirstAttack = true;
 
 	_int randAtt = rand() % 4;
-
+	//_int randAtt = 0;
 	switch (randAtt)
 	{
 	case 0:
@@ -99,10 +108,6 @@ HRESULT CBastion_2HSword_Attack::ExitState()
 
 void CBastion_2HSword_Attack::Look_Player(void)
 {
-	CAnimation* pAnim = m_pAnimator->Get_CurrentAnimation();
-
-	if (m_bTargetOn && pAnim->Is_Finished())
-		m_pStateController->Change_State(L"Chaser");
 }
 
 void CBastion_2HSword_Attack::Look_Monster(void)

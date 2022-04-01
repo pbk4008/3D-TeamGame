@@ -82,7 +82,7 @@ HRESULT CMonster_BronzeAnimus::NativeConstruct(const _uint _iSceneID, void* _pAr
 	Desc.pTargetTransform = m_pTransform;
 	Desc.iEnemyTag = CUI_Monster_Panel::Enemy::ANIMUS;
 
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_UI", L"Proto_GameObject_UI_Monster_Panel", &Desc,
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer(_iSceneID, L"Layer_UI", L"Proto_GameObject_UI_Monster_Panel", &Desc,
 		(CGameObject**)&m_pPanel)))
 		return E_FAIL;
 
@@ -105,9 +105,14 @@ HRESULT CMonster_BronzeAnimus::NativeConstruct(const _uint _iSceneID, void* _pAr
 
 _int CMonster_BronzeAnimus::Tick(_double _dDeltaTime)
 {
-	if (!m_bFirst)
+	if (true == m_bUIShow)
 	{
 		m_pPanel->Set_Show(true);
+	}
+
+	if (false == m_bUIShow)
+	{
+		m_pPanel->Set_Show(false);
 	}
 
 	_int iProgress = __super::Tick(_dDeltaTime);
@@ -126,7 +131,29 @@ _int CMonster_BronzeAnimus::Tick(_double _dDeltaTime)
 	/* Weapon Bone Update */
 	m_pWeapon->Tick(_dDeltaTime);
 
-	m_pCharacterController->Move(_dDeltaTime, m_pTransform->Get_Velocity());
+	if(!m_bDead)
+		m_pCharacterController->Move(_dDeltaTime, m_pTransform->Get_Velocity());
+	else
+	{
+		if ((_uint)ANIM_TYPE::A_DEATH == m_pAnimator->Get_CurrentAnimNode())
+		{
+			if (m_pAnimator->Get_CurrentAnimation()->Is_Finished())
+			{
+				Set_Remove(true);
+				m_pPanel->Set_UIRemove(true);
+			}
+
+			if (1 == m_pAnimator->Get_AnimController()->Get_CurKeyFrameIndex())
+			{
+				Active_Effect((_uint)EFFECT::DEATH);
+			}
+		}
+		else
+		{
+			Set_Remove(true);
+			m_pPanel->Set_UIRemove(true);
+		}
+	}
 
 	if (m_fGroggyGauge >= m_fMaxGroggyGauge)
 	{
@@ -150,17 +177,9 @@ _int CMonster_BronzeAnimus::Tick(_double _dDeltaTime)
 		}
 	}
 
-	if ((_uint)ANIM_TYPE::A_DEATH == m_pAnimator->Get_CurrentAnimNode() && m_pAnimator->Get_AnimController()->Is_Finished())
-	{
-		m_bRemove = true;
-		setActive(false);
+	//Á×À»¶§
+	
 
-		m_pPanel->Set_Show(false);
-
-		CLevel* pLevel = g_pGameInstance->getCurrentLevelScene();
-		if (g_pGameInstance->getCurrentLevel() == (_uint)SCENEID::SCENE_STAGE1)
-			static_cast<CStage1*>(pLevel)->Minus_MonsterCount();
-	}
 	m_pPanel->Set_TargetWorldMatrix(m_pTransform->Get_WorldMatrix());
 
 	return _int();
@@ -175,7 +194,9 @@ _int CMonster_BronzeAnimus::LateTick(_double _dDeltaTime)
 	if (FAILED(m_pRenderer->Add_RenderGroup(CRenderer::RENDER_NONALPHA, this)))
 		return -1;
 
-	m_pCharacterController->Update_OwnerTransform();
+	if(!m_bDead)
+		m_pCharacterController->Update_OwnerTransform();
+
 	m_pWeapon->LateTick(_dDeltaTime);
 
 	/* State FSM Late Update */
@@ -266,7 +287,7 @@ HRESULT CMonster_BronzeAnimus::Ready_Components()
 
 HRESULT CMonster_BronzeAnimus::Ready_Weapon(void)
 {
-	m_pWeapon = static_cast<CBronzeAnimus_Sword*>(g_pGameInstance->Clone_GameObject((_uint)SCENEID::SCENE_STAGE1, L"Proto_GameObject_Weapon_BronzeAnimus_Sword"));
+	m_pWeapon = static_cast<CBronzeAnimus_Sword*>(g_pGameInstance->Clone_GameObject(m_iSceneID, L"Proto_GameObject_Weapon_BronzeAnimus_Sword"));
 
 	if (!m_pWeapon)
 		return E_FAIL;
@@ -534,6 +555,11 @@ void CMonster_BronzeAnimus::Set_IsAttack(const _bool _isAttack)
 		m_pWeapon->Set_IsAttack(_isAttack);
 }
 
+void CMonster_BronzeAnimus::Remove_Collider()
+{
+	m_pCharacterController->Remove_CCT();
+}
+
 CMonster_BronzeAnimus* CMonster_BronzeAnimus::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
 {
 	CMonster_BronzeAnimus* pInstance = new CMonster_BronzeAnimus(_pDevice, _pDeviceContext);
@@ -563,6 +589,7 @@ void CMonster_BronzeAnimus::Free()
 	Safe_Release(m_pWeapon);
 	Safe_Release(m_pStateController);
 	Safe_Release(m_pCharacterController);
+	Safe_Release(m_pPanel);
 
 	__super::Free();
 }

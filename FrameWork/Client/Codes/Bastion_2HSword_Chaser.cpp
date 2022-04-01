@@ -28,9 +28,26 @@ _int CBastion_2HSword_Chaser::Tick(const _double& _dDeltaTime)
 	if (NO_EVENT != iProgress)
 		return iProgress;
 
+	if (m_pMonster->Get_Dead())
+		return 0;
+
+	m_pTransform->Face_Target(g_pObserver->Get_PlayerPos());
+
+	if (m_bRageOn)
+	{
+		m_pStateController->Change_State(L"Rage");
+		return 0;
+	}
+	if (m_bAttackOn)
+	{
+		m_pStateController->Change_State(L"Attack");
+		return 0;
+	}
+
+	
 	m_pAnimator->Tick(_dDeltaTime);
 
-	m_pTransform->Add_Velocity(m_pTransform->Chase_Pos(g_pObserver->Get_Transform(), _dDeltaTime));
+	//m_pTransform->Add_Velocity(m_pTransform->Chase_Pos(g_pObserver->Get_Transform(), _dDeltaTime));
 
 	return _int();
 }

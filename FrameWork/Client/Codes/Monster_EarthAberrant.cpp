@@ -81,7 +81,7 @@ HRESULT CMonster_EarthAberrant::NativeConstruct(const _uint _iSceneID, void* _pA
 	Desc.pTargetTransform = m_pTransform;
 	Desc.iEnemyTag = CUI_Monster_Panel::Enemy::ABERRANT;
 
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_UI", L"Proto_GameObject_UI_Monster_Panel", &Desc,
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer(_iSceneID, L"Layer_UI", L"Proto_GameObject_UI_Monster_Panel", &Desc,
 		(CGameObject**)&m_pPanel)))
 		return E_FAIL;
 
@@ -106,27 +106,20 @@ HRESULT CMonster_EarthAberrant::NativeConstruct(const _uint _iSceneID, void* _pA
 
 _int CMonster_EarthAberrant::Tick(_double _dDeltaTime)
 {
-	//나중에지울코드
-	if (!m_bFirst)
-	{
-		m_pPanel->Set_Show(true);
-	}
-	
 	if (0 > __super::Tick(_dDeltaTime))
 	{
 		return -1;
 	}
 
 	m_pTransform->Set_Velocity(XMVectorZero());
-	
+	m_pPanel->Set_TargetWorldMatrix(m_pTransform->Get_WorldMatrix());
+
 	if (m_bIsFall)
 		m_pTransform->Fall(_dDeltaTime);
 
 	_int iProgress = m_pStateController->Tick(_dDeltaTime);
 	if (NO_EVENT != iProgress)
-	{
 		return iProgress;
-	}
 
 	if (nullptr != m_pWeapon)
 	{
@@ -144,12 +137,41 @@ _int CMonster_EarthAberrant::Tick(_double _dDeltaTime)
 				static_cast<CStage1*>(pLevel)->Minus_MonsterCount();
 
 			m_bDead = true;
+			m_IsAttack = false;
+			m_pWeapon->Set_IsAttack(false);
 			m_pStateController->Change_State(L"Death");
 			m_pCharacterController->Remove_CCT();
 		}
 		else
 			m_pCharacterController->Move(_dDeltaTime, m_pTransform->Get_Velocity());
 	}
+	else
+	{
+		if (DEATH == m_pAnimatorCom->Get_CurrentAnimNode())
+		{
+			if (m_pAnimatorCom->Get_CurrentAnimation()->Is_Finished())
+			{
+				Set_Remove(true);
+				m_pPanel->Set_UIRemove(true);
+			}
+			if (9 == m_pAnimatorCom->Get_AnimController()->Get_CurKeyFrameIndex())
+			{
+				Active_Effect((_uint)EFFECT::DEATH);
+			}
+		}
+		else
+		{
+			Set_Remove(true);
+			m_pPanel->Set_UIRemove(true);
+			Active_Effect((_uint)EFFECT::DEATH);
+		}
+	}
+
+	if (true == m_bUIShow)
+		m_pPanel->Set_Show(true);
+
+	if (false == m_bUIShow)
+		m_pPanel->Set_Show(false);
 
 	if (m_fGroggyGauge >= m_fMaxGroggyGauge)
 	{
@@ -165,7 +187,6 @@ _int CMonster_EarthAberrant::Tick(_double _dDeltaTime)
 		m_fGroggyGauge = 0.f;
 		m_pPanel->Set_GroggyBar(Get_GroggyGaugeRatio());
 	}
-
 	if (STUN_END == m_pAnimatorCom->Get_CurrentAnimNode())
 	{
 		if (m_pAnimatorCom->Get_AnimController()->Is_Finished())
@@ -174,15 +195,6 @@ _int CMonster_EarthAberrant::Tick(_double _dDeltaTime)
 		}
 	}
 
-	if (DEATH == m_pAnimatorCom->Get_CurrentAnimNode() && m_pAnimatorCom->Get_AnimController()->Is_Finished())
-	{
-		m_bRemove = true;
-		setActive(false);
-
-		m_pPanel->Set_Show(false);
-	}
-	m_pPanel->Set_TargetWorldMatrix(m_pTransform->Get_WorldMatrix());
-	
 	return 0;
 }
 
@@ -238,7 +250,7 @@ HRESULT CMonster_EarthAberrant::Render()
 			m_pModelCom->Render(i,5);
 			break;
 		case 1:
-			m_pModelCom->Render(i,4);
+			m_pModelCom->Render(i, 4);
 			break;
 		}
 	}
@@ -513,6 +525,9 @@ HRESULT CMonster_EarthAberrant::Set_Animation_FSM()
 
 	m_pAnimatorCom->Change_Animation(IDLE);
 
+	_uint iRand = rand() % 15;
+	m_pAnimatorCom->Add_AnimFrame(IDLE, iRand);
+
 	return S_OK;
 }
 
@@ -562,6 +577,8 @@ void CMonster_EarthAberrant::OnTriggerEnter(CCollision& collision)
 	{
 		if (true == g_pObserver->IsAttack()) //플레이어공격일때
 		{
+			m_pPanel->Set_Show(true);
+
 			m_bFirstHit = true; //딱 한번 true로 변경해줌
 
 			if (true == m_bFirstHit)
@@ -582,10 +599,12 @@ void CMonster_EarthAberrant::OnTriggerEnter(CCollision& collision)
 					m_pPanel->Set_GroggyBar(Get_GroggyGaugeRatio());
 					m_pStateController->Change_State(L"Flinch_Left");
 				}
+
+				Active_Effect((_uint)EFFECT::HIT);
+				Active_Effect((_uint)EFFECT::FLOATING);
 			}
 			else
 			{
-
 			}
 		}
 	}
@@ -596,6 +615,12 @@ void CMonster_EarthAberrant::Set_IsAttack(const _bool _isAttack)
 	m_IsAttack = _isAttack;
 	if (m_pWeapon)
 		m_pWeapon->Set_IsAttack(_isAttack);
+}
+
+void CMonster_EarthAberrant::Set_Remove(_bool bCheck)
+{
+	m_bRemove = bCheck;
+	m_pPanel->Set_UIRemove(bCheck);
 }
 
 CMonster_EarthAberrant* CMonster_EarthAberrant::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
@@ -622,7 +647,7 @@ CGameObject* CMonster_EarthAberrant::Clone(const _uint _iSceneID, void* _pArg)
 
 void CMonster_EarthAberrant::Free()
 {
-	//Safe_Release(m_pPanel);
+	Safe_Release(m_pPanel);
 	Safe_Release(m_pCharacterController);
 	Safe_Release(m_pWeapon);
 	Safe_Release(m_pStateController);

@@ -71,7 +71,6 @@ HRESULT CAberrant_Flinch_Left::ExitState()
 	if (FAILED(__super::ExitState()))
 		return E_FAIL;
 
-
 	return S_OK;
 }
 

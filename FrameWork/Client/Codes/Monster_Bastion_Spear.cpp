@@ -20,7 +20,6 @@
 #include "Spear_Charge_Attack_End.h"
 #include "Spear_Guard.h"
 
-#include "Stage1.h"
 
 CMonster_Bastion_Spear::CMonster_Bastion_Spear(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
 	: CActor(_pDevice, _pDeviceContext)
@@ -84,7 +83,7 @@ HRESULT CMonster_Bastion_Spear::NativeConstruct(const _uint _iSceneID, void* _pA
 	Desc.pTargetTransform = m_pTransform;
 	Desc.iEnemyTag = CUI_Monster_Panel::Enemy::SPEAR;
 
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_UI", L"Proto_GameObject_UI_Monster_Panel", &Desc,
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer(_iSceneID, L"Layer_UI", L"Proto_GameObject_UI_Monster_Panel", &Desc,
 		(CGameObject**)&m_pPanel)))
 		return E_FAIL;
 
@@ -107,11 +106,6 @@ HRESULT CMonster_Bastion_Spear::NativeConstruct(const _uint _iSceneID, void* _pA
 
 _int CMonster_Bastion_Spear::Tick(_double _dDeltaTime)
 {
-	if (!m_bFirst)
-	{
-		m_pPanel->Set_Show(true);
-	}
-
 	_int iProgress = __super::Tick(_dDeltaTime);
 	if (NO_EVENT != iProgress) 
 		return iProgress;
@@ -128,7 +122,36 @@ _int CMonster_Bastion_Spear::Tick(_double _dDeltaTime)
 	/* Weapon Bone Update */
 	m_pWeapon->Tick(_dDeltaTime);
 
-	m_pCharacterController->Move(_dDeltaTime, m_pTransform->Get_Velocity());
+	if(!m_bDead)
+		m_pCharacterController->Move(_dDeltaTime, m_pTransform->Get_Velocity());
+	else
+	{
+		if ((_uint)ANIM_TYPE::A_DEATH == m_pAnimator->Get_CurrentAnimNode())
+		{
+			if (m_pAnimator->Get_CurrentAnimation()->Is_Finished())
+			{
+				Set_Remove(true);
+				m_pPanel->Set_UIRemove(true);
+			}
+			else if (1 == m_pAnimator->Get_AnimController()->Get_CurKeyFrameIndex())
+			{
+				Active_Effect((_uint)EFFECT::DEATH);
+			}
+		}
+		else
+		{
+			Set_Remove(true);
+			m_pPanel->Set_UIRemove(true);
+		}
+	}
+
+
+
+
+	if (true == m_bUIShow)
+		m_pPanel->Set_Show(true);
+	else
+		m_pPanel->Set_Show(false);
 
 	if (m_fGroggyGauge >= m_fMaxGroggyGauge)
 	{
@@ -152,16 +175,9 @@ _int CMonster_Bastion_Spear::Tick(_double _dDeltaTime)
 		}
 	}
 
-	if ((_uint)ANIM_TYPE::A_DEATH == m_pAnimator->Get_CurrentAnimNode() && m_pAnimator->Get_AnimController()->Is_Finished())
-	{
-		m_bRemove = true;
-		setActive(false);
+	//Á×À»¶§
 
-		m_pPanel->Set_Show(false);
-		CLevel* pLevel = g_pGameInstance->getCurrentLevelScene();
-		if (g_pGameInstance->getCurrentLevel() == (_uint)SCENEID::SCENE_STAGE1)
-			static_cast<CStage1*>(pLevel)->Minus_MonsterCount();
-	}
+
 	m_pPanel->Set_TargetWorldMatrix(m_pTransform->Get_WorldMatrix());
 
 	return _int();
@@ -176,7 +192,9 @@ _int CMonster_Bastion_Spear::LateTick(_double _dDeltaTime)
 	if (FAILED(m_pRenderer->Add_RenderGroup(CRenderer::RENDER_NONALPHA, this)))
 		return -1;
 
-	m_pCharacterController->Update_OwnerTransform();
+	if(!m_bDead)
+		m_pCharacterController->Update_OwnerTransform();
+
 	m_pWeapon->LateTick(_dDeltaTime);
 
 	/* State FSM Late Update */
@@ -266,7 +284,7 @@ HRESULT CMonster_Bastion_Spear::Ready_Components()
 
 HRESULT CMonster_Bastion_Spear::Ready_Weapon(void)
 {
-	m_pWeapon = static_cast<CPolearm*>(g_pGameInstance->Clone_GameObject((_uint)SCENEID::SCENE_STAGE1, L"Proto_GameObject_Weapon_Polearm"));
+	m_pWeapon = static_cast<CPolearm*>(g_pGameInstance->Clone_GameObject(m_iSceneID, L"Proto_GameObject_Weapon_Polearm"));
 
 	if (!m_pWeapon)
 		return E_FAIL;
@@ -556,6 +574,11 @@ void CMonster_Bastion_Spear::Set_IsAttack(const _bool _isAttack)
 		m_pWeapon->Set_IsAttack(_isAttack);
 }
 
+void CMonster_Bastion_Spear::Remove_Collider()
+{
+	m_pCharacterController->Remove_CCT();
+}
+
 CMonster_Bastion_Spear* CMonster_Bastion_Spear::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
 {
 	CMonster_Bastion_Spear* pInstance = new CMonster_Bastion_Spear(_pDevice, _pDeviceContext);
@@ -585,6 +608,7 @@ void CMonster_Bastion_Spear::Free()
 	Safe_Release(m_pWeapon);
 	Safe_Release(m_pStateController);
 	Safe_Release(m_pCharacterController);
+	Safe_Release(m_pPanel);
 
 	__super::Free();
 }

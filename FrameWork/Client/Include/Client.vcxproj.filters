@@ -469,15 +469,6 @@
     <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_Shooter\Bullet">
       <UniqueIdentifier>{bc9506cc-b8bd-46dc-8693-749f8a69ac2b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObject\04.Effect\00.Effect_DashDust_Player">
-      <UniqueIdentifier>{b305731d-7dad-4c04-a1b5-dfb2e52d2441}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObject\04.Effect\01.Effect_MapLeaf">
-      <UniqueIdentifier>{387da879-a8da-43c1-a901-c84527a9b9f2}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObject\04.Effect\02.HitParticle">
-      <UniqueIdentifier>{b370ed74-461a-48d9-91e0-c06ca932a31c}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_2HSword\State_2HSword\Groggy">
       <UniqueIdentifier>{903a9638-b5eb-482e-924a-0a015449b4a1}</UniqueIdentifier>
     </Filter>
@@ -494,9 +485,6 @@
       <UniqueIdentifier>{15743125-3fab-4955-a1a7-2c3ab22ace2e}</UniqueIdentifier>
     </Filter>
     <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_2HSword\State_2HSword\Groggy\End">
-    </Filter>
-    <Filter Include="02.GameObject\04.Effect\03.Effect_Floating">
-      <UniqueIdentifier>{be60742a-b954-4dc6-8968-d6849db69d5c}</UniqueIdentifier>
     </Filter>
     <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_2HSword\State_2HSword\Groggy\End">
       <UniqueIdentifier>{1158fce2-5cfa-4605-9029-4ac375f14bcd}</UniqueIdentifier>
@@ -597,9 +585,6 @@
     <Filter Include="02.GameObject\03.Character\00.Player\00.Silvermane\State\Idel\Sprint">
       <UniqueIdentifier>{f86ae29b-ccc6-4e20-aafd-431e17d61329}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObject\04.Effect\04.Env_Fire">
-      <UniqueIdentifier>{f3533393-750c-4e4b-8424-ce5de30c8016}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObject\96.Weapon\98.Trail">
       <UniqueIdentifier>{0a662d2a-bf0c-4955-b176-58fbdf8c84f3}</UniqueIdentifier>
     </Filter>
@@ -611,6 +596,45 @@
     </Filter>
     <Filter Include="02.GameObject\02.Map\01.Environment\02.MapObject">
       <UniqueIdentifier>{6c74a239-aae4-4275-b01a-ea48c53eae4c}</UniqueIdentifier>
+	</Filter>
+    <Filter Include="02.GameObject\04.Effect\05.TrailEffect">
+      <UniqueIdentifier>{4da4394f-ff21-4396-a0e8-24986eaeec60}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\04.Effect\00.Particle">
+      <UniqueIdentifier>{26ffc168-b02c-40a4-b7fb-3fa6ef6e68d1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\04.Effect\00.Particle\00.Effect_DashDust_Player">
+      <UniqueIdentifier>{b305731d-7dad-4c04-a1b5-dfb2e52d2441}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\04.Effect\00.Particle\01.Effect_MapLeaf">
+      <UniqueIdentifier>{387da879-a8da-43c1-a901-c84527a9b9f2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\04.Effect\00.Particle\03.Effect_Floating">
+      <UniqueIdentifier>{be60742a-b954-4dc6-8968-d6849db69d5c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\04.Effect\00.Effect_Image">
+      <UniqueIdentifier>{b8f9805f-3e27-4c3b-ac49-1503c798311d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\04.Effect\00.Effect_Image\00.Env_Fire">
+      <UniqueIdentifier>{f3533393-750c-4e4b-8424-ce5de30c8016}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\04.Effect\00.Particle\04.Effect_Death">
+      <UniqueIdentifier>{b1e1a118-af89-4ff4-8367-ab5967b67e62}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\04.Effect\00.Particle\02.Effect_HitParticle">
+      <UniqueIdentifier>{b370ed74-461a-48d9-91e0-c06ca932a31c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\04.Effect\00.Particle\05.Effect_Env_Floating">
+      <UniqueIdentifier>{8d7b5bdf-ccca-4b02-a6e5-003a503ad353}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.UI\01.UI_Ingame\02.UI_JumpNode">
+      <UniqueIdentifier>{03278934-600d-43f1-abf8-b223c947e83e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.UI\01.UI_Ingame\02.UI_JumpNode\00.Blank">
+      <UniqueIdentifier>{bc51da15-514c-49b6-9f36-484c1a4a1510}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.UI\01.UI_Ingame\02.UI_JumpNode\01.Fill">
+      <UniqueIdentifier>{a56a74b1-3d13-4387-b77b-96aeb0113934}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -1127,7 +1151,6 @@
     <ClInclude Include="..\Headers\Bastion_2HSword_Hit.h">
       <Filter>02.GameObject\03.Character\01.Monster\Bastion_2HSword\State_2HSword\Hit</Filter>
     </ClInclude>
-    <ClInclude Include="..\Headers\Monster_Bastion_Sword.h" />
     <ClInclude Include="..\Headers\Traverse_JumpNodeJog.h">
       <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Jump</Filter>
     </ClInclude>
@@ -1301,10 +1324,10 @@
       <Filter>02.GameObject\03.Character\01.Monster\Bastion_Shooter\State\Attack</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\Effect_DashDust.h">
-      <Filter>02.GameObject\04.Effect\00.Effect_DashDust_Player</Filter>
+      <Filter>02.GameObject\04.Effect\00.Particle\00.Effect_DashDust_Player</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\Effect_HitParticle.h">
-      <Filter>02.GameObject\04.Effect\02.HitParticle</Filter>
+      <Filter>02.GameObject\04.Effect\00.Particle\02.Effect_HitParticle</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\Bastion_2HSword_Groggy.h">
       <Filter>02.GameObject\03.Character\01.Monster\Bastion_2HSword\State_2HSword\Groggy</Filter>
@@ -1321,7 +1344,7 @@
     </ClInclude>
     <ClInclude Include="..\Headers\Shooter_Attack.h" />
     <ClInclude Include="..\Headers\Effect_HitFloating.h">
-      <Filter>02.GameObject\04.Effect\03.Effect_Floating</Filter>
+      <Filter>02.GameObject\04.Effect\00.Particle\03.Effect_Floating</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\CameraShake.h">
       <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\Camera</Filter>
@@ -1445,7 +1468,10 @@
       <Filter>02.GameObject\02.Map\02.JumpNode</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\Effect_Env_Fire.h">
-      <Filter>02.GameObject\04.Effect\04.Env_Fire</Filter>
+      <Filter>02.GameObject\04.Effect\00.Effect_Image\00.Env_Fire</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Monster_Bastion_Sword.h">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Sword</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\SwordTrail.h">
       <Filter>02.GameObject\96.Weapon\98.Trail</Filter>
@@ -1455,6 +1481,21 @@
     </ClInclude>
     <ClInclude Include="..\Headers\Environment.h">
       <Filter>02.GameObject\02.Map\01.Environment\02.MapObject</Filter>
+	</ClInclude>
+    <ClInclude Include="..\Headers\TrailEffect.h">
+      <Filter>02.GameObject\04.Effect\05.TrailEffect</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Effect_DeathParticle.h">
+      <Filter>02.GameObject\04.Effect\00.Particle\04.Effect_Death</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Effect_Env_Floating.h">
+      <Filter>02.GameObject\04.Effect\00.Particle\05.Effect_Env_Floating</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\UI_Blank_CKey.h">
+      <Filter>02.GameObject\05.UI\01.UI_Ingame\02.UI_JumpNode\00.Blank</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\UI_Fill_CKey.h">
+      <Filter>02.GameObject\05.UI\01.UI_Ingame\02.UI_JumpNode\01.Fill</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1944,7 +1985,6 @@
     <ClCompile Include="..\Codes\Bastion_2HSword_Hit.cpp">
       <Filter>02.GameObject\03.Character\01.Monster\Bastion_2HSword\State_2HSword\Hit</Filter>
     </ClCompile>
-    <ClCompile Include="..\Codes\Monster_Bastion_Sword.cpp" />
     <ClCompile Include="..\Codes\Traverse_JumpNodeJog.cpp">
       <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Jump</Filter>
     </ClCompile>
@@ -2121,10 +2161,10 @@
       <Filter>02.GameObject\03.Character\01.Monster\Bastion_Shooter\State\Attack</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\Effect_DashDust.cpp">
-      <Filter>02.GameObject\04.Effect\00.Effect_DashDust_Player</Filter>
+      <Filter>02.GameObject\04.Effect\00.Particle\00.Effect_DashDust_Player</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\Effect_HitParticle.cpp">
-      <Filter>02.GameObject\04.Effect\02.HitParticle</Filter>
+      <Filter>02.GameObject\04.Effect\00.Particle\02.Effect_HitParticle</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\Bastion_2HSword_Groggy.cpp">
       <Filter>02.GameObject\03.Character\01.Monster\Bastion_2HSword\State_2HSword\Groggy</Filter>
@@ -2141,7 +2181,7 @@
     </ClCompile>
     <ClCompile Include="..\Codes\Shooter_Attack.cpp" />
     <ClCompile Include="..\Codes\Effect_HitFloating.cpp">
-      <Filter>02.GameObject\04.Effect\03.Effect_Floating</Filter>
+      <Filter>02.GameObject\04.Effect\00.Particle\03.Effect_Floating</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\CameraShake.cpp">
       <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\Camera</Filter>
@@ -2262,7 +2302,10 @@
       <Filter>02.GameObject\02.Map\02.JumpNode</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\Effect_Env_Fire.cpp">
-      <Filter>02.GameObject\04.Effect\04.Env_Fire</Filter>
+      <Filter>02.GameObject\04.Effect\00.Effect_Image\00.Env_Fire</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Monster_Bastion_Sword.cpp">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Sword</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\SwordTrail.cpp">
       <Filter>02.GameObject\96.Weapon\98.Trail</Filter>
@@ -2272,6 +2315,21 @@
     </ClCompile>
     <ClCompile Include="..\Codes\Environment.cpp">
       <Filter>02.GameObject\02.Map\01.Environment\02.MapObject</Filter>
+	</ClCompile>
+    <ClCompile Include="..\Codes\TrailEffect.cpp">
+      <Filter>02.GameObject\04.Effect\05.TrailEffect</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Effect_DeathParticle.cpp">
+      <Filter>02.GameObject\04.Effect\00.Particle\04.Effect_Death</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Effect_Env_Floating.cpp">
+      <Filter>02.GameObject\04.Effect\00.Particle\05.Effect_Env_Floating</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\UI_Blank_CKey.cpp">
+      <Filter>02.GameObject\05.UI\01.UI_Ingame\02.UI_JumpNode\00.Blank</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\UI_Fill_CKey.cpp">
+      <Filter>02.GameObject\05.UI\01.UI_Ingame\02.UI_JumpNode\01.Fill</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

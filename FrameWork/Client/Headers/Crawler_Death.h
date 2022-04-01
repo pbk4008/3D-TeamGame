@@ -25,8 +25,12 @@ public:
 	virtual HRESULT EnterState();
 	virtual HRESULT ExitState();
 
+private:
+	CCameraShake::SHAKEEVENT m_tShakeEvent;
+
 public:
 	virtual void Look_Player(void) override;
+	virtual void Look_Monster(void) override;
 
 public:
 	static CCrawler_Death* Create(ID3D11Device * pDevice, ID3D11DeviceContext * pDeviceContext, void* pArg = nullptr);

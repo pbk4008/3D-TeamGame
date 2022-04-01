@@ -51,8 +51,6 @@ HRESULT CUI_Monster_HpBar::NativeConstruct(const _uint _iSceneID, void* pArg)
 	m_fGapX = 1.f;
 	m_fGapY = 0.5f;
 
-	//setActive(false);
-
 	return S_OK;
 }
 
@@ -63,6 +61,29 @@ _int CUI_Monster_HpBar::Tick(_double TimeDelta)
 		setActive(true);
 		m_bFirstShow = true;
 	}
+
+	if (true == m_bShow)
+	{
+		m_fAlpha = 1.f;
+		m_fDisappearTimeAcc = 0.f;
+	}
+
+	else if (false == m_bShow)
+	{
+		m_fDisappearTimeAcc += TimeDelta;
+	}
+
+	if (5.f <= m_fDisappearTimeAcc)
+	{
+		m_fAlpha -= TimeDelta;
+	}
+
+	if (0 >= m_fAlpha)
+	{
+		m_fAlpha = 0.f;
+		m_fDisappearTimeAcc = 0.f;
+	}
+
 	if (FAILED(CUI::Tick(TimeDelta)))
 		return -1;
 	
@@ -92,21 +113,24 @@ HRESULT CUI_Monster_HpBar::Render()
 {
 	if (m_bShow)
 	{
-		_matrix XMWorldMatrix = XMMatrixTranspose(m_pTransform->Get_WorldMatrix());
-		_matrix XMViewMatrix = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_VIEW));
-		_matrix XMProjectMatrix = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_PROJECTION));
-
-		m_pTrapziumBuffer->SetUp_ValueOnShader("g_WorldMatrix", &XMWorldMatrix, sizeof(_float) * 16);
-		m_pTrapziumBuffer->SetUp_ValueOnShader("g_ViewMatrix", &XMViewMatrix, sizeof(_float) * 16);
-		m_pTrapziumBuffer->SetUp_ValueOnShader("g_ProjMatrix", &XMProjectMatrix, sizeof(XMMATRIX));
-		m_pTrapziumBuffer->SetUp_ValueOnShader("g_fX", &m_fGapX, sizeof(_float));
-		m_pTrapziumBuffer->SetUp_ValueOnShader("g_fY", &m_fGapY, sizeof(_float));
-
-		m_pTrapziumBuffer->SetUp_TextureOnShader("g_DiffuseTexture", m_pTexture);
-
-		m_pTrapziumBuffer->Render(m_UIBarDesc.iRenderPass);
+		
 	}
-	
+
+	_matrix XMWorldMatrix = XMMatrixTranspose(m_pTransform->Get_WorldMatrix());
+	_matrix XMViewMatrix = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_VIEW));
+	_matrix XMProjectMatrix = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_PROJECTION));
+
+	m_pTrapziumBuffer->SetUp_ValueOnShader("g_WorldMatrix", &XMWorldMatrix, sizeof(_float) * 16);
+	m_pTrapziumBuffer->SetUp_ValueOnShader("g_ViewMatrix", &XMViewMatrix, sizeof(_float) * 16);
+	m_pTrapziumBuffer->SetUp_ValueOnShader("g_ProjMatrix", &XMProjectMatrix, sizeof(XMMATRIX));
+	m_pTrapziumBuffer->SetUp_ValueOnShader("g_fX", &m_fGapX, sizeof(_float));
+	m_pTrapziumBuffer->SetUp_ValueOnShader("g_fY", &m_fGapY, sizeof(_float));
+	m_pTrapziumBuffer->SetUp_ValueOnShader("g_fAlpha", &m_fAlpha, sizeof(_float));
+
+	m_pTrapziumBuffer->SetUp_TextureOnShader("g_DiffuseTexture", m_pTexture);
+
+	m_pTrapziumBuffer->Render(m_UIBarDesc.iRenderPass);
+
 	return S_OK;
 }
 

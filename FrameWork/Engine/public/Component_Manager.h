@@ -23,12 +23,16 @@
 #include "VIBuffer_PointInstance.h"
 #include "VIBuffer_PointInstance_Explosion.h"
 #include "VIBuffer_PointInstance_Floating.h"
+#include "VIBuffer_PointInstance_Env_Floating.h"
 #include "Instancing_Mesh.h"
 #include "VIBuffer_Plane.h"
+#include "VIBuffer_Trail.h"
+#include "Instancing_Mesh.h"
 #include "StateController.h"
 #include "AnimationController.h"
 #include "Animator.h"
 #include "CharacterController.h"
+#include "CullingBox.h"
 #include "Trail_VIBuffer.h"
 
 BEGIN(Engine)

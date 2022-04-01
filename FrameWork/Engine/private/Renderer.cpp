@@ -53,6 +53,7 @@ HRESULT CRenderer::NativeConstruct_Prototype()
 	if (FAILED(CreateShadowDepthStencilview(SHADOW_MAP, SHADOW_MAP, &m_pShadowMap)))
 		return E_FAIL;
 
+
 	m_pRenderAssit = CRendererAssit::Create(m_pDevice, m_pDeviceContext);
 	m_pLuminance = CLuminance::Create(m_pDevice, m_pDeviceContext);
 	m_pHDR = CHDR::Create(m_pDevice, m_pDeviceContext);
@@ -191,36 +192,36 @@ HRESULT CRenderer::Draw_RenderGroup()
 		//if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("MRT_Lum4"))))	return E_FAIL;
 		//if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("MRT_Lum5"))))	return E_FAIL;
 
-	/*	if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("Target_VT2")))) return E_FAIL;
-		if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("Target_HZ2")))) return E_FAIL;
+		//if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("Target_VT2")))) return E_FAIL;
+		//if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("Target_HZ2")))) return E_FAIL;
 
-		if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("Target_VT4")))) return E_FAIL;
-		if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("Target_HZ4")))) return E_FAIL;
+		//if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("Target_VT4")))) return E_FAIL;
+		//if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("Target_HZ4")))) return E_FAIL;
 
-		if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("Target_VT8")))) return E_FAIL;
-		if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("Target_HZ8")))) return E_FAIL;
+		//if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("Target_VT8")))) return E_FAIL;
+		//if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("Target_HZ8")))) return E_FAIL;
 
-		if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("Target_VT16")))) return E_FAIL;
-		if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("Target_HZ16")))) return E_FAIL;
+		//if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("Target_VT16")))) return E_FAIL;
+		//if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("Target_HZ16")))) return E_FAIL;
 
-		if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("Target_Bloom")))) return E_FAIL;
+		//if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("Target_Bloom")))) return E_FAIL;
 
-		if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("Target_Vertical2")))) return E_FAIL;
-		if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("Target_Horizontal2")))) return E_FAIL;
+		//if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("Target_Vertical2")))) return E_FAIL;
+		//if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("Target_Horizontal2")))) return E_FAIL;
 
-		if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("Target_Vertical4")))) return E_FAIL;
-		if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("Target_Horizontal4")))) return E_FAIL;
+		//if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("Target_Vertical4")))) return E_FAIL;
+		//if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("Target_Horizontal4")))) return E_FAIL;
 
-		if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("Target_Vertical8")))) return E_FAIL;
-		if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("Target_Horizontal8")))) return E_FAIL;
+		//if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("Target_Vertical8")))) return E_FAIL;
+		//if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("Target_Horizontal8")))) return E_FAIL;
 
-		if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("Target_Vertical16")))) return E_FAIL;
-		if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("Target_Horizontal16")))) return E_FAIL;*/
+		//if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("Target_Vertical16")))) return E_FAIL;
+		//if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("Target_Horizontal16")))) return E_FAIL;
 
 		if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("Target_Blend")))) return E_FAIL;
 		if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("Target_Alpha")))) return E_FAIL;
 		if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("Target_Particle")))) return E_FAIL;
-		
+
 	}
 #endif // _DEBUG
 

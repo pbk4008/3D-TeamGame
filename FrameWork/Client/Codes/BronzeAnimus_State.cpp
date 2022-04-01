@@ -4,6 +4,8 @@
 #include "Animation.h"
 #include "UI_Monster_Panel.h"	
 
+#include "Stage2.h"
+
 CBronzeAnimus_State::CBronzeAnimus_State(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
 	: CMonster_FSM(_pDevice, _pDeviceContext)
 {
@@ -54,8 +56,17 @@ _int CBronzeAnimus_State::Tick(const _double& _dDeltaTime)
 		m_pStateController->Change_State(L"Groggy");
 	}
 
-	if (0 >= m_pMonster->Get_CurrentHp())
+	if (0 >= m_pMonster->Get_CurrentHp() && !m_pMonster->Get_Dead())
+	{
+		static_cast<CMonster_BronzeAnimus*>(m_pMonster)->Set_Dead();
+		static_cast<CMonster_BronzeAnimus*>(m_pMonster)->Remove_Collider();
+
+		CLevel* pLevel = g_pGameInstance->getCurrentLevelScene();
+		if (g_pGameInstance->getCurrentLevel() == (_uint)SCENEID::SCENE_STAGE2)
+			static_cast<CStage2*>(pLevel)->Minus_MonsterCount();
+		
 		m_pStateController->Change_State(L"Death");
+	}
 
 	return _int();
 }
@@ -216,32 +227,38 @@ void CBronzeAnimus_State::OnTriggerEnter(CCollision& collision)
 {
 	CMonster_BronzeAnimus* pHealer = static_cast<CMonster_BronzeAnimus*>(m_pMonster);
 
-	if (true == g_pObserver->IsAttack()) //플레이어공격일때
+	if (!pHealer->Get_Dead())
 	{
-		pHealer->m_bFirstHit = true; //딱 한번 true로 변경해줌
-
-		if (true == pHealer->m_bFirstHit)
+		if (true == g_pObserver->IsAttack()) //플레이어공격일때
 		{
-			pHealer->m_pPanel->Set_BackUIGapY(1.f);
-		}
+			pHealer->m_bFirstHit = true; //딱 한번 true로 변경해줌
 
-		if ((_uint)GAMEOBJECT::WEAPON == collision.pGameObject->getTag())
-		{
-			pHealer->Set_Current_HP(-5.f);
-			pHealer->Set_GroggyGauge(2); //TODO::수치정해서바꿔줘야됨
-
-			pHealer->m_pPanel->Set_HpBar(pHealer->Get_HpRatio());
-
-			if (false == pHealer->m_bGroggy)
+			if (true == pHealer->m_bFirstHit)
 			{
-				//그로기 아닐때만 증가할수있게
-				pHealer->m_pPanel->Set_GroggyBar(pHealer->Get_GroggyGaugeRatio());
-				m_pStateController->Change_State(L"Hit");
+				pHealer->m_pPanel->Set_BackUIGapY(1.f);
 			}
-		}
-		else
-		{
-			m_pStateController->Change_State(L"A_Idle_Battle");
+
+			if ((_uint)GAMEOBJECT::WEAPON == collision.pGameObject->getTag())
+			{
+				pHealer->m_pPanel->Set_Show(true);
+				pHealer->Active_Effect((_uint)EFFECT::HIT);
+				pHealer->Active_Effect((_uint)EFFECT::FLOATING);
+				pHealer->Set_Current_HP(-5.f);
+				pHealer->Set_GroggyGauge(2); //TODO::수치정해서바꿔줘야됨
+
+				pHealer->m_pPanel->Set_HpBar(pHealer->Get_HpRatio());
+
+				if (false == pHealer->m_bGroggy)
+				{
+					//그로기 아닐때만 증가할수있게
+					pHealer->m_pPanel->Set_GroggyBar(pHealer->Get_GroggyGaugeRatio());
+					m_pStateController->Change_State(L"Hit");
+				}
+			}
+			else
+			{
+				m_pStateController->Change_State(L"A_Idle_Battle");
+			}
 		}
 	}
 }

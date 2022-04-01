@@ -17,8 +17,8 @@ HRESULT CShooter_Idle::NativeConstruct(void* _pArg)
 	m_wstrTag = tDesc.pName;
 	m_pAnimator = tDesc.pAnimator;
 	m_pTransform = tDesc.pTransform;
-	Safe_AddRef(m_pAnimator);
-	Safe_AddRef(m_pTransform);
+	//Safe_AddRef(m_pAnimator);
+	//Safe_AddRef(m_pTransform);
 
 	if (FAILED(CMonster_FSM::NativeConstruct(_pArg)))
 		return E_FAIL;

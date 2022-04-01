@@ -40,6 +40,7 @@ private:
 
 public:
 	void Set_IsAttack(const _bool _isAttack);
+	virtual void Set_Remove(_bool bCheck) override;
 
 private:
 	CModel* m_pModelCom = nullptr;

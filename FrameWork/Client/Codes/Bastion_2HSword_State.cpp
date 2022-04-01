@@ -5,6 +5,7 @@
 #include "UI_Monster_Panel.h"	
 
 #include "Stage1.h"
+#include "Stage2.h"
 
 CBastion_2HSword_State::CBastion_2HSword_State(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
 	: CMonster_FSM(_pDevice, _pDeviceContext)
@@ -30,8 +31,6 @@ _int CBastion_2HSword_State::Tick(const _double& _dDeltaTime)
 	if (NO_EVENT != iProgress)
 		return iProgress;
 
-	m_pAnimator->Tick(_dDeltaTime);
-
 	_vector vMonsterPos = m_pTransform->Get_State(CTransform::STATE::STATE_POSITION);
 	_vector vDist = vMonsterPos - g_pObserver->Get_PlayerPos();
 	_float fDistToPlayer = XMVectorGetX(XMVector3Length(vDist));
@@ -39,20 +38,44 @@ _int CBastion_2HSword_State::Tick(const _double& _dDeltaTime)
 	m_bTargetOn = false;
 	m_bAttackOn = false;
 	m_bPlayerAttack = false;
-	m_bRageOn = false;
 
-	if (3.5f < fDistToPlayer && 10.0f > fDistToPlayer)
+	if (!m_bFirstAttack)
 	{
-		m_pTransform->Face_Target(g_pObserver->Get_PlayerPos());
-		m_bTargetOn = true;
+		if (3.5f < fDistToPlayer && 10.0f > fDistToPlayer)
+		{
+			//m_pTransform->Face_Target(g_pObserver->Get_PlayerPos());
+			m_bTargetOn = true;
+			m_bAttackOn = false;
+		}
+		else
+		{
+			m_bTargetOn = false;
+			m_bAttackOn = true;
+		}
 	}
-	
-	else if (10.0f < fDistToPlayer && 15.0f > fDistToPlayer)
-		m_bRageOn = true;
-
-	if (3.5f > fDistToPlayer)
-		m_bAttackOn = true;
-
+	else
+	{
+		if (!m_bRageOn)
+		{
+			if (3.5f < fDistToPlayer && 10.0f > fDistToPlayer)
+			{
+				//m_pTransform->Face_Target(g_pObserver->Get_PlayerPos());
+				m_bTargetOn = true;
+				m_bAttackOn = false;
+			}
+			else if (10.f < fDistToPlayer && 15.f > fDistToPlayer)
+			{
+				m_bRageOn = true;
+				m_bTargetOn = false;
+				m_bAttackOn = false;
+			}
+			else
+			{
+				m_bTargetOn = false;
+				m_bAttackOn = true;
+			}
+		}
+	}
 	if (m_pMonster->Get_GroggyGauge() >= MAXGROOGUGAGUE)
 	{
 		//스턴상태일때 스턴state에서 현재 그로기 계속 0으로 고정시켜줌
@@ -69,7 +92,9 @@ _int CBastion_2HSword_State::Tick(const _double& _dDeltaTime)
 		CLevel* pLevel = g_pGameInstance->getCurrentLevelScene();
 		if (g_pGameInstance->getCurrentLevel() == (_uint)SCENEID::SCENE_STAGE1)
 			static_cast<CStage1*>(pLevel)->Minus_MonsterCount();
-		
+		else if (g_pGameInstance->getCurrentLevel() == (_uint)SCENEID::SCENE_STAGE2)
+			static_cast<CStage2*>(pLevel)->Minus_MonsterCount();
+
 		m_pStateController->Change_State(L"Death");
 	}
 

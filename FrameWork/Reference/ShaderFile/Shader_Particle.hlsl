@@ -6,6 +6,7 @@
 cbuffer CameraDesc
 {
 	vector		g_vCamPosition;
+    float3		g_color;
 };
 
 cbuffer Matrices
@@ -201,8 +202,8 @@ PS_OUT_TEST PS_MAIN_TEST(PS_IN In)
 	Out.M = float4(0, 0, 0, 1);
 	Out.R = float4(1, 1, 1, 1);
 	Out.A = float4(1, 1, 1, 1);
-	float4 color = float4(1.f, 0.6f, 0.3f, 1.f);
-	float4 power = 0.4f;
+    float4 color = float4(g_color, 1.f);
+	float4 power = 1.0f;
 	Out.E = color * power * diffuse;
 
 	if (Out.diffuse.a < 0.1f)

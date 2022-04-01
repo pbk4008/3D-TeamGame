@@ -37,7 +37,7 @@ _int CTraverse_JumpNodeJog::Tick(const _double& _dDeltaTime)
 			m_pSilvermane->Set_IsTrasceCamera(false);
 			//배진성 바보 -> 범인 0mo
 			if (20 < iCurKeyFrameIndex)
-				m_pAnimationController->Set_PlaySpeed(0.1f);
+				m_pAnimationController->Set_PlaySpeed(0.2f);
 			else
 				m_pAnimationController->Set_PlaySpeed(6.f);
 		}
@@ -103,7 +103,8 @@ HRESULT CTraverse_JumpNodeJog::EnterState()
 	XMStoreFloat3(&m_vTargetPos, svTargetPosition);
 	XMStoreFloat3(&m_vDir, XMVector3Normalize(svTargetPosition - m_pTransform->Get_State(CTransform::STATE_POSITION)));
 
-	m_fMoveSpeed = 30.f;
+	m_fMoveSpeed = 34.f;
+	m_pAnimationController->Set_PlaySpeed(0.8f);
 	m_pSilvermane->Set_IsFall(false);
 	m_iCutIndex = 60;
 	return S_OK;
@@ -135,7 +136,7 @@ void CTraverse_JumpNodeJog::OnTriggerExit(CCollision& collision)
 	if ((_uint)GAMEOBJECT::JUMP_NODE == iTag)
 	{
 		m_fMoveSpeed = 0.f;
-		m_pAnimationController->Set_PlaySpeed(1.f);
+		m_pAnimationController->Set_PlaySpeed(1.2f);
 		m_isJumpEnd = true;
 	}
 }

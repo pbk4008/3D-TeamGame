@@ -52,7 +52,8 @@ public:
 
 	void Set_AnimSpeed(_float fSpeed) { m_fPlaySpeed = fSpeed; };
 	void Set_PivotMat(const _fmatrix& matPivot);
-
+	//만들어진 애니메이션노드의 프레임 조절
+	void Add_AnimFrame(_uint iTag, _uint iFrame);
 public:
 	const _uint Get_CurrentAnimNode();
 	CAnimation* Get_CurrentAnimation();

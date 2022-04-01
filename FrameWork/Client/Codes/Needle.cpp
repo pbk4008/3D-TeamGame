@@ -6,6 +6,9 @@
 #include "StateController.h"
 
 #include "Material.h"
+#include "SwordTrail.h"
+#include "TrailEffect.h"
+
 
 CNeedle::CNeedle(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
 	: CWeapon(_pDevice, _pDeviceContext)
@@ -55,6 +58,9 @@ HRESULT CNeedle::NativeConstruct(const _uint _iSceneID, void* _pArg)
 
 	XMStoreFloat4x4(&m_matPivot, XMMatrixRotationRollPitchYaw(XMConvertToRadians(-20.f), XMConvertToRadians(-67.f), XMConvertToRadians(0.f)) * XMMatrixTranslation(0.5f, 0.05f, -0.2f));
 
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer(m_iSceneID, L"Layer_Effect", L"Proto_GameObject_TrailEffect", m_pTransform, (CGameObject**)&m_pTrailEffect)))
+		MSGBOX(L"트레일 이펙트 생성 실패. from Needle");
+
 	return S_OK;
 }
 
@@ -74,13 +80,42 @@ _int CNeedle::Tick(_double _dDeltaTime)
 
 _int CNeedle::LateTick(_double _dDeltaTime)
 {
-	if (g_pObserver->IsAttack())
-		m_bTrailOnOff = true;
-	else
-		m_bTrailOnOff = false;
+	//if (g_pObserver->IsAttack())
+	//	m_bTrailOnOff = true;
+	//else
+	//	m_bTrailOnOff = false;
+
+	//if (m_bTrailOnOff == true)
+	//{
+	//	_vector startpos, endpos, look;
+	//	_matrix world = m_pTransform->Get_WorldMatrix();
+	//	look = world.r[2];
+	//	startpos = world.r[3];
+	//	endpos = world.r[3];
+	//	look = XMVector3Normalize(look);
+	//	startpos += look * 1.8f;
+	//	endpos += look * 2.f;
+
+	//	m_pTrail->AddVertex(startpos, endpos);
+	//}
+	//else
+	//{
+	//	m_pTrail->Clear_Vertex();
+	//}
 
 	if (0 > __super::LateTick(_dDeltaTime))
 		return -1;
+
+	if (m_isAttack)
+	{
+		m_pTrailEffect->Record_Points(_dDeltaTime);
+		m_pTrailEffect->Set_IsRender(true);
+	}
+	else
+	{
+		m_pTrailEffect->Clear_Points();
+		m_pTrailEffect->Set_IsRender(false);
+	}
 
 	if(m_pRenderer)
 		m_pRenderer->Add_RenderGroup(CRenderer::RENDER_NONALPHA, this);
@@ -135,7 +170,7 @@ HRESULT CNeedle::Ready_Components()
 	CCapsuleCollider::DESC tCapsuleColliderDesc;
 	tCapsuleColliderDesc.tColliderDesc = tColliderDesc;
 	tCapsuleColliderDesc.fHeight = 1.2f;
-	tCapsuleColliderDesc.fRadius = 0.1f;
+	tCapsuleColliderDesc.fRadius = 0.2f;
 	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_CapsuleCollider", L"Collider", (CComponent**)&m_pCollider, &tCapsuleColliderDesc)))
 		return E_FAIL;
 
@@ -214,7 +249,7 @@ CGameObject* CNeedle::Clone(const _uint _iSceneID, void* _pArg)
 
 void CNeedle::Free()
 {
-	Safe_Release(m_pCollider);
-
 	__super::Free();
+
+	Safe_Release(m_pCollider);
 }

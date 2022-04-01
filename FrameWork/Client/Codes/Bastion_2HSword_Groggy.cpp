@@ -21,6 +21,10 @@ _int CBastion_2HSword_Groggy::Tick(const _double& _dDeltaTime)
 	if (NO_EVENT != iProgress)
 		return iProgress;
 
+	if (m_pMonster->Get_Dead())
+		return 0;
+
+
 	if(!m_bGroggy)
 		m_pAnimator->Tick(_dDeltaTime);
 

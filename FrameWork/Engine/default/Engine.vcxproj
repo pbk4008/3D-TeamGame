@@ -118,13 +118,14 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;_USRDLL;ENGINE_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>../public/</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../public/;$(SolutionDir)Reference\Headers\fmod\</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp14</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>d3d11.lib;dxguid.lib;dinput8.lib;effects11d.lib;DirectXTexd.lib;assimp-vc142-mtd.lib;DirectXTKd.lib;fmodL_vc.lib;fmod_vc.lib;PhysXExtensions_static_64.lib;PhysX_64.lib;PhysXCooking_64.lib;PhysXCommon_64.lib;PhysXVehicle_static_64.lib;SimulationController_static_64.lib;LowLevelDynamics_static_64.lib;SceneQuery_static_64.lib;PhysXCharacterKinematic_static_64.lib;PhysXPvdSDK_static_64.lib;LowLevel_static_64.lib;LowLevelAABB_static_64.lib;PhysXFoundation_64.lib;PhysXTask_static_64.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>../ThirdPartyLibrarys/</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>../ThirdPartyLibrarys/;../../Reference/Headers/</AdditionalLibraryDirectories>
     </Link>
     <FxCompile>
       <ShaderType>Effect</ShaderType>
@@ -228,6 +229,7 @@ call Update_Library_Release.bat</Command>
     <ClInclude Include="..\public\ControllerFilterCallback.h" />
     <ClInclude Include="..\public\ControllerHitReport.h" />
     <ClInclude Include="..\public\CSTarget.h" />
+    <ClInclude Include="..\public\CullingBox.h" />
     <ClInclude Include="..\public\EffectManager.h" />
     <ClInclude Include="..\public\HDR.h" />
     <ClInclude Include="..\public\Instancing_Mesh.h" />
@@ -306,12 +308,14 @@ call Update_Library_Release.bat</Command>
     <ClInclude Include="..\public\VIBuffer_Cube.h" />
     <ClInclude Include="..\public\VIBuffer_Plane.h" />
     <ClInclude Include="..\public\VIBuffer_PointInstance.h" />
+    <ClInclude Include="..\public\VIBuffer_PointInstance_Env_Floating.h" />
     <ClInclude Include="..\public\VIBuffer_PointInstance_Explosion.h" />
     <ClInclude Include="..\public\VIBuffer_PointInstance_Floating.h" />
     <ClInclude Include="..\public\VIBuffer_Rect.h" />
     <ClInclude Include="..\public\VIBuffer_RectInstance.h" />
     <ClInclude Include="..\public\VIBuffer_RectViewPort.h" />
     <ClInclude Include="..\public\VIBuffer_Terrain.h" />
+    <ClInclude Include="..\public\VIBuffer_Trail.h" />
     <ClInclude Include="..\public\VIBuffer_Trapezium.h" />
     <ClInclude Include="..\public\VIBuffer_Triangle.h" />
   </ItemGroup>
@@ -340,6 +344,7 @@ call Update_Library_Release.bat</Command>
     <ClCompile Include="..\private\ControllerFilterCallback.cpp" />
     <ClCompile Include="..\private\ControllerHitReport.cpp" />
     <ClCompile Include="..\private\CSTarget.cpp" />
+    <ClCompile Include="..\private\CullingBox.cpp" />
     <ClCompile Include="..\private\EffectManager.cpp" />
     <ClCompile Include="..\private\HDR.cpp" />
     <ClCompile Include="..\private\Instancing_Mesh.cpp" />
@@ -410,12 +415,14 @@ call Update_Library_Release.bat</Command>
     <ClCompile Include="..\private\VIBuffer_Cube.cpp" />
     <ClCompile Include="..\private\VIBuffer_Plane.cpp" />
     <ClCompile Include="..\private\VIBuffer_PointInstance.cpp" />
+    <ClCompile Include="..\private\VIBuffer_PointInstance_Env_Floating.cpp" />
     <ClCompile Include="..\private\VIBuffer_PointInstance_Explosion.cpp" />
     <ClCompile Include="..\private\VIBuffer_PointInstance_Floating.cpp" />
     <ClCompile Include="..\private\VIBuffer_Rect.cpp" />
     <ClCompile Include="..\private\VIBuffer_RectInstance.cpp" />
     <ClCompile Include="..\private\VIBuffer_RectViewPort.cpp" />
     <ClCompile Include="..\private\VIBuffer_Terrain.cpp" />
+    <ClCompile Include="..\private\VIBuffer_Trail.cpp" />
     <ClCompile Include="..\private\VIBuffer_Trapezium.cpp" />
     <ClCompile Include="..\private\VIBuffer_Triangle.cpp" />
   </ItemGroup>
@@ -446,6 +453,7 @@ call Update_Library_Release.bat</Command>
     <FxCompile Include="..\bin\ShaderFiles\Shader_Mesh.hlsl" />
     <FxCompile Include="..\bin\ShaderFiles\Shader_MeshAnim.hlsl" />
     <FxCompile Include="..\bin\ShaderFiles\Shader_Monster.hlsl" />
+    <FxCompile Include="..\bin\ShaderFiles\Shader_Panel_UI.hlsl" />
     <FxCompile Include="..\bin\ShaderFiles\Shader_Particle.hlsl" />
     <FxCompile Include="..\bin\ShaderFiles\Shader_Plane.hlsl" />
     <FxCompile Include="..\bin\ShaderFiles\Shader_PointInstance.hlsl" />
@@ -458,6 +466,7 @@ call Update_Library_Release.bat</Command>
     <FxCompile Include="..\bin\ShaderFiles\Shader_StaticMesh.hlsl" />
     <FxCompile Include="..\bin\ShaderFiles\Shader_Terrain.hlsl" />
     <FxCompile Include="..\bin\ShaderFiles\Shader_Tonemapping.hlsl" />
+    <FxCompile Include="..\bin\ShaderFiles\Shader_Trail.hlsl" />
     <FxCompile Include="..\bin\ShaderFiles\Shader_Triangle.hlsl" />
     <FxCompile Include="..\bin\ShaderFiles\Shader_Geo_UI.hlsl" />
     <FxCompile Include="..\bin\ShaderFiles\Shader_UI.hlsl" />

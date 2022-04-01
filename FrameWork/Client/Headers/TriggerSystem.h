@@ -3,6 +3,7 @@
 #define __TRIGGER_SYSTEM_H__
 
 #include "Base.h"
+#include "GameObject.h"
 #include "Client_Trigger.h"
 
 BEGIN(Client)
@@ -35,7 +36,6 @@ public:
 			return E_FAIL;
 
 		m_pStage = pStage;
-		Safe_AddRef(m_pStage);
 
 		return S_OK;
 	}
@@ -57,7 +57,7 @@ public:
 					(m_pStage->*m_vecTriggerFunction[i])();
 					m_iClearIndex = i;
 				}
-				if (!m_vecTrigger[i]->Get_OnTrigger())
+				if (!m_vecClear[i])
 					bCheck = true;
 			}
 		}
@@ -89,12 +89,47 @@ public:
 	{
 		_int iSize = (_int)m_vecClear.size();
 
-		if (m_iClearIndex < iSize-1)
+		if (m_iClearIndex < iSize)
 		{
+			CurrentTriggerMonsterAllDelete();
 			m_vecClear[m_iClearIndex] = true;
-			m_vecTrigger[m_iClearIndex + 1]->setActive(true);
-			m_vecTrigger[m_iClearIndex + 1]->TurnOnTrigger(true);
+			if (m_iClearIndex != iSize - 1)
+			{
+				m_vecTrigger[m_iClearIndex + 1]->setActive(true);
+				m_vecTrigger[m_iClearIndex + 1]->TurnOnTrigger(true);
+			}
 		}
+	}
+	HRESULT Add_CurrentTriggerMonster(CGameObject* pMonster)
+	{
+		m_vecCurMonster.emplace_back(pMonster);
+		return S_OK;
+	}
+	HRESULT Check_DeleteTriggerMonster()
+	{
+		auto iter_begin = m_vecCurMonster.begin();
+		for (; iter_begin != m_vecCurMonster.end();)
+		{
+			
+			if ((*iter_begin)->getRemove())
+			{
+				if (iter_begin == m_vecCurMonster.end() - 1)
+					m_vecCurMonster.pop_back();
+				else
+					iter_begin = m_vecCurMonster.erase(iter_begin);
+			}
+			else
+				iter_begin++;
+		}
+		return S_OK;
+	}
+	HRESULT CurrentTriggerMonsterAllDelete()
+	{
+		for (auto& pMonster : m_vecCurMonster)
+			pMonster->Set_Remove(true);
+
+		m_vecCurMonster.clear();
+		return S_OK;
 	}
 	HRESULT Add_TriggerFuntion(void(T::* pf)())
 	{
@@ -172,7 +207,6 @@ private:
 	{
 		Safe_Release(m_pDevice);
 		Safe_Release(m_pDeviceContext);
-		Safe_Release(m_pStage);
 
 		m_vecTriggerFunction.clear();
 
@@ -202,6 +236,7 @@ private:
 	vector<void(T::*)()> m_vecTriggerFunction;
 	vector<_bool> m_vecClear;
 	vector<_float3> m_pVecMonsterSpawnPoint[(_uint)MONSTER::MON_END];
+	vector<CGameObject*> m_vecCurMonster;
 	_bool m_bAllTriggerOn;
 	_bool m_bOverlap;
 	_int m_iClearIndex;

@@ -59,6 +59,7 @@ HRESULT C2H_HammerJogFwd::EnterState()
 	m_pAnimationController->Set_RootMotion(true, false, ERootOption::XYZ);
 	
 
+	//m_pAnimationController->Add_TrackAcc(9.0);
 	return S_OK;
 }
 

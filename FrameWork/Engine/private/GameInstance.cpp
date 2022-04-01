@@ -100,10 +100,7 @@ _int CGameInstance::Tick_Engine(_double TimeDelta)
 
 	m_pPipeLine->Update_PipeLine();
 	if (m_pPipeLine->getCameraCount())
-	{
 		m_pFrustum->Transform_ToWorldSpace(m_pPipeLine->getBaseCamera());
-		/*m_pFrustum->Transform_ToLocalSpace(m_pPipeLine->getBaseCamera());*/
-	}
 	
 	m_pPhysicSystem->Tick(TimeDelta);
 
@@ -502,6 +499,15 @@ _bool CGameInstance::isIn_WorldFrustum(_fvector vPosition, _float fRange)
 	return m_pFrustum->isInWorld(vPosition, fRange);
 }
 
+_bool CGameInstance::isIn_WorldFrustum(_float4* vPoints, _float fRange)
+{
+	if (nullptr == m_pFrustum)
+		return false;
+
+	return m_pFrustum->isInWorld(vPoints, fRange);
+}
+
+
 _bool CGameInstance::isIn_LocalFrustum(_fvector vPosition, _float fRange)
 {
 	if (nullptr == m_pFrustum)
@@ -551,7 +557,6 @@ HRESULT CGameInstance::Add_Effect(_uint iSceneID, const wstring& pLayerTag, CEff
 {
 	if (!m_pEffectManager)
 		return E_FAIL;
-
 	return m_pEffectManager->Add_Effect(iSceneID, pLayerTag, pEffect, iCount);
 }
 
@@ -568,6 +573,50 @@ const _bool CGameInstance::Raycast(RAYCASTDESC & _desc)
 	if (!m_pPhysicSystem)
 		return false;
 	return m_pPhysicSystem->Raycast(_desc);
+}
+
+HRESULT CGameInstance::Init_SoundManager()
+{
+	if (!m_pSoundManager)
+		return E_FAIL;
+
+	return m_pSoundManager->Init_SoundManager();
+}
+
+void CGameInstance::Play_Shot(const wstring& pSoundKey, CSoundMgr::CHANNELID eID)
+{
+	if (!m_pSoundManager)
+		return;
+	m_pSoundManager->Play_Shot(pSoundKey, eID);
+}
+
+void CGameInstance::PlayBGM(const wstring& pSoundKey)
+{
+	if (!m_pSoundManager)
+		return;
+	m_pSoundManager->PlayBGM(pSoundKey);
+}
+
+void CGameInstance::StopSound(CSoundMgr::CHANNELID eID)
+{
+	if (!m_pSoundManager)
+		return;
+	m_pSoundManager->StopSound(eID);
+}
+
+void CGameInstance::StopAll()
+{
+	if (!m_pSoundManager)
+		return;
+	m_pSoundManager->StopAll();
+}
+
+void CGameInstance::VolumeChange(const std::wstring& pSoundKey, _float fVolume)
+{
+	if (!m_pSoundManager)
+		return;
+
+	m_pSoundManager->VolumeChange(pSoundKey, fVolume);
 }
 
 void CGameInstance::Release_Engine()

@@ -37,14 +37,12 @@ public:
 	void Trgger_Function3();//3번 트리거가 작동할 함수
 	void Trgger_Function4();//4번 트리거가 작동할 함수
 	void Trgger_Function5();//5번 트리거가 작동할 함수
-	void Trgger_Function6();//6번 트리거가 작동할 함수
 	void Trgger_Function7();//7번 트리거가 작동할 함수
 	void Trgger_Function8();//8번 트리거가 작동할 함수
 	void Trgger_Function9();//9번 트리거가 작동할 함수
 	void Trgger_Function10();//10번 트리거가 작동할 함수
 	void Trgger_Function11();//11번 트리거가 작동할 함수
 	void Trgger_FunctionBoss();//보스 트리거가 작동할 함수
-
 	/// ////////////////////////////////////
 	HRESULT Ready_Trigger_Lod(const _tchar* pDataFilePath);
 	HRESULT Ready_Trigger_Light(const _tchar* pDataFilePath);
@@ -54,7 +52,6 @@ public:
 	HRESULT Ready_Trigger_Jump();
 private:
 	HRESULT	Ready_Treasure_Chest();
-
 public:
 	static CStage1* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);
 private:
@@ -64,6 +61,7 @@ private:
 	_bool m_bDebug;
 	_uint m_iCountMonster;
 	_bool m_bFirst;
+	_bool test = false;
 };
 #endif
 

@@ -9,7 +9,7 @@
 
 BEGIN(Engine)
 
-class CObject_Manager final : public CSingleTon<CObject_Manager>
+class ENGINE_DLL CObject_Manager final : public CSingleTon<CObject_Manager>
 {
 	friend CSingleTon;
 private:

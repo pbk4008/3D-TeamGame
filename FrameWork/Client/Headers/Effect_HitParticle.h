@@ -15,7 +15,7 @@ class CEffect_HitParticle final : public CEffect
 protected:
 	explicit CEffect_HitParticle();
 	explicit CEffect_HitParticle(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);
-	explicit CEffect_HitParticle(const CEffect& rhs);
+	explicit CEffect_HitParticle(const CEffect_HitParticle& rhs);
 	virtual ~CEffect_HitParticle() = default;
 protected:
 	/* 원형객체가 생성될때 호출되는 함수. */
@@ -25,6 +25,9 @@ protected:
 	virtual _int Tick(_double TimeDelta);
 	virtual _int LateTick(_double TimeDelta);
 	virtual HRESULT Render();
+public:
+	virtual CEffect* Copy() override;
+	virtual void Set_Reset(_bool bReset);
 
 private:
 	virtual HRESULT SetUp_Components();
@@ -38,8 +41,6 @@ private:
 private:
 	CEffect::EFFECTDESC m_Desc;
 	CVIBuffer_PointInstance_Explosion::PIDESC m_backupDesc;
-
-	_float m_fNonActiveTimeAcc = 0.f;
 
 public:
 	static CEffect_HitParticle* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);

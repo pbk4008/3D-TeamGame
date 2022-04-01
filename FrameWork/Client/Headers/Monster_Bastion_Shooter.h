@@ -33,6 +33,8 @@ public:
 	virtual _int Tick(_double _dDeltaTime) override;
 	virtual _int LateTick(_double _dDeltaTime) override;
 	virtual HRESULT Render() override;
+public:
+	virtual void Set_Remove(_bool bCheck) override;
 private:
 	virtual void OnTriggerEnter(CCollision& collision) override;
 private:
@@ -57,6 +59,7 @@ private:/* For UI*/
 private:
 	_bool m_bFirstHit = false; //맨처음들어와서 맞았을때 판넬크기바꿔줘야돼서
 	_bool m_bFirst = false; //나중에 지울 변수
+	_uint m_iCurScene = 0;
 
 public:
 	static CMonster_Bastion_Shooter* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext);

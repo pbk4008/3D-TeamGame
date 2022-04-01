@@ -28,6 +28,9 @@ private:
 public:
 	CEffect::EFFECTDESC Get_EffectDesc() {return m_Desc; }
 
+public:
+	virtual CEffect* Copy() override;
+
 private:
 	CVIBuffer_PointInstance_Explosion* m_pBuffer = nullptr;
 

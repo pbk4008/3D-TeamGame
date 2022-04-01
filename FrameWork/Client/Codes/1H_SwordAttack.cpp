@@ -65,12 +65,14 @@ HRESULT C1H_SwordAttack::EnterState()
 
 	m_tShakeEvent.fDuration = 0.4f;
 	m_tShakeEvent.fBlendOutTime = 0.3f;
-	m_tShakeEvent.tWaveX.fAmplitude = 0.02f;
+	m_tShakeEvent.tWaveX.fAmplitude = 0.04f;
 	m_tShakeEvent.tWaveX.fFrequency = 10.f;
-	m_tShakeEvent.tWaveY.fAmplitude = 0.02f;
+	m_tShakeEvent.tWaveY.fAmplitude = 0.04f;
 	m_tShakeEvent.tWaveY.fFrequency = 6.f;
-	m_tShakeEvent.tWaveZ.fAmplitude = 0.02f;
+	m_tShakeEvent.tWaveZ.fAmplitude = 0.04f;
 	m_tShakeEvent.tWaveZ.fFrequency = 8.f;
+
+	m_pAnimationController->Set_PlaySpeed(1.2f);
 
 	return S_OK;
 }
@@ -85,6 +87,7 @@ HRESULT C1H_SwordAttack::ExitState()
 
 
 	m_pSilvermane->Set_IsTrasceCamera(true);
+	m_pAnimationController->Set_PlaySpeed(1.f);
 	return S_OK;
 }
 

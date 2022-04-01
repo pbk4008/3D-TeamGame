@@ -17,6 +17,7 @@ public:
 	virtual HRESULT NativeConstruct(void* pArg) override;
 public:
 	HRESULT DrawCube(_matrix matTransform, const wstring& pCameraTag, _fvector vColor);
+	HRESULT DrawCube(_fvector * vPoints, const wstring & pCameraTag, _fvector vColor);
 	HRESULT DrawLine(_fvector vStart, _fvector vEnd, const wstring& pCameraTag, _fvector vColor);
 	HRESULT DrawSphere(_matrix matTransform, const wstring& pCameraTag, _fvector vColor);
 	HRESULT DrawCapsule(_matrix matTransform, const wstring& pCameraTag, _fvector vColor);

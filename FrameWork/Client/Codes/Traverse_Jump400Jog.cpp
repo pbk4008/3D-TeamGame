@@ -26,9 +26,6 @@ _int CTraverse_Jump400Jog::Tick(const _double& _dDeltaTime)
 	Add_PlusAngle(EDir::Forward, _dDeltaTime);
 	_uint iCurKeyFrameIndex = m_pAnimationController->Get_CurKeyFrameIndex();
 
-	_vector svVelocity = XMLoadFloat3(&m_vDir) * (_float)_dDeltaTime * m_fMoveSpeed;
-	m_pTransform->Add_Velocity(svVelocity);
-
 	if (!m_isJumpEnd)
 	{
 		if (7 < iCurKeyFrameIndex)
@@ -99,7 +96,7 @@ HRESULT CTraverse_Jump400Jog::EnterState()
 	_vector svDir = svTargetPosition - m_pTransform->Get_State(CTransform::STATE_POSITION);
 	XMStoreFloat3(&m_vDir, XMVector3Normalize(XMVectorSetY(svDir, 0.f)));
 
-	m_fMoveSpeed = 1.f;
+	m_pAnimationController->Set_MoveSpeed(32.f);
 	m_pSilvermane->Set_IsFall(false);
 	m_iCutIndex = 45;
 	return S_OK;
@@ -110,6 +107,7 @@ HRESULT CTraverse_Jump400Jog::ExitState()
 	if (FAILED(__super::ExitState()))
 		return E_FAIL;
 
+	m_pAnimationController->Set_MoveSpeed(40.f);
 	m_pSilvermane->Set_IsTrasceCamera(true);
 	m_isJumpEnd = false;
 	m_pSilvermane->Set_IsFall(true);

@@ -24,13 +24,14 @@ public:
 
 	virtual HRESULT EnterState();
 	virtual HRESULT ExitState();
+	virtual HRESULT ExitState(void* pArg);
 
 public:
 	virtual void Look_Player(void) override;
 
 private:
 	_float m_fRunTime = 0.0f;
-
+	_uint m_iAttackRand = 0;
 public:
 	static CAberrant_Run* Create(ID3D11Device * pDevice, ID3D11DeviceContext * pDeviceContext, void* pArg = nullptr);
 	virtual void Free() override;

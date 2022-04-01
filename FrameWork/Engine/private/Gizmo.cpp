@@ -119,6 +119,55 @@ HRESULT CGizmo::DrawCube(_matrix matTransform, const wstring& pCameraTag, _fvect
 	return S_OK;
 }
 
+HRESULT CGizmo::DrawCube(_fvector* vPoints, const wstring& pCameraTag, _fvector vColor)
+{
+	if (!m_pBatch)
+		return E_FAIL;
+
+	CPipeLine* pInstance = GET_INSTANCE(CPipeLine);
+
+	m_pEffect->SetView(pInstance->Get_Transform(pCameraTag, TRANSFORMSTATEMATRIX::D3DTS_VIEW));
+	m_pEffect->SetProjection(pInstance->Get_Transform(pCameraTag, TRANSFORMSTATEMATRIX::D3DTS_PROJECTION));
+
+	RELEASE_INSTANCE(CPipeLine);
+
+	m_pDeviceContext->IASetInputLayout(m_pInputLayOut);
+
+	m_pEffect->Apply(m_pDeviceContext);
+
+	m_pBatch->Begin();
+
+	_ushort sIndices[] =
+	{
+		 0, 1,
+		 1, 2,
+		 2, 3,
+		 3, 0,
+		 4, 5,
+		 5, 6,
+		 6, 7,
+		 7, 4,
+		 0, 4,
+		 1, 5,
+		 2, 6,
+		 3, 7
+	};
+
+	VertexPositionColor vtxPC[8];
+	for (_uint i = 0; i < 8; i++)
+	{
+		XMStoreFloat3(&vtxPC[i].position, vPoints[i]);
+		XMStoreFloat4(&vtxPC[i].color, vColor);
+	}
+
+
+	m_pBatch->DrawIndexed(D3D_PRIMITIVE_TOPOLOGY_LINELIST, sIndices, _countof(sIndices), vtxPC, 8);
+
+	m_pBatch->End();
+
+	return S_OK;
+}
+
 HRESULT CGizmo::DrawLine(_fvector vStart, _fvector vEnd, const wstring& pCameraTag, _fvector vColor)
 {
 	if (!m_pBatch)
