@@ -26,6 +26,8 @@ _int CSilvermane_JogLeftStart::Tick(const _double& _dDeltaTime)
 	if (0 > __super::Tick(_dDeltaTime))
 		return -1;
 
+	m_pSilvermane->Add_Velocity(CTransform::STATE_RIGHT, -_dDeltaTime);
+
 	return _int();
 }
 
@@ -52,7 +54,7 @@ HRESULT CSilvermane_JogLeftStart::EnterState()
 
 	
 	m_pAnimationController->SetUp_NextAnimation("SK_Silvermane.ao|A_Loco_Jog_Left_Start_Player", false);
-	m_pAnimationController->Set_RootMotion(true, true, ERootOption::XYZ);
+	m_pAnimationController->Set_RootMotion(true, false, ERootOption::XYZ);
 
 	_matrix smatPivot = XMMatrixRotationY(XMConvertToRadians(-90.f));
 	m_pAnimationController->Set_PivotMatrix(smatPivot);

@@ -74,7 +74,7 @@ _int CSilvermane_JogFwdPivot180::Input(const _double& _dDeltaTime)
 
 	if (g_pGameInstance->getkeyPress(DIK_S))
 	{
-		if (m_pAnimationController->Is_Finished())
+		if (38 < m_pAnimationController->Get_CurKeyFrameIndex())
 		{
 			if (FAILED(m_pStateController->Change_State(L"JogBwd")))
 				return -1;

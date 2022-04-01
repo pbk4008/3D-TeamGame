@@ -57,7 +57,7 @@ HRESULT CSilvermane_JogRight::EnterState()
 	_matrix smatPivot = XMMatrixRotationY(XMConvertToRadians(90.f));
 	m_pAnimationController->Set_PivotMatrix(smatPivot);
 	
-
+	m_pAnimationController->Add_TrackAcc(3.0);
 	return S_OK;
 }
 

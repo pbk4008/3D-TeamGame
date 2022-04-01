@@ -19,7 +19,7 @@ HRESULT CVIBuffer_Trail::NativeConstruct_Prototype(const _tchar* _pShaderFilePat
 
 	/* D3D11_BUFFER_DESC */
 	m_iStride = sizeof(VTXTEX);
-	m_iNumVertices = _iMaxVertices;
+	m_iNumVertices = 1000;
 
 	m_VBDesc.ByteWidth = m_iStride * m_iNumVertices;
 	m_VBDesc.Usage = D3D11_USAGE_DYNAMIC;
@@ -43,7 +43,8 @@ HRESULT CVIBuffer_Trail::NativeConstruct_Prototype(const _tchar* _pShaderFilePat
 	m_IndicesByteLength = sizeof(FACEINDICES16);
 	m_iNumPrimitive = _iMaxVertices - 2;
 	m_iNumIndicesFigure = 3;
-	m_ePrimitiveTopology = D3D_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP;
+	//m_ePrimitiveTopology = D3D_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP;
+	m_ePrimitiveTopology = D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
 	m_eFormat = DXGI_FORMAT_R16_UINT;
 
 	m_IBDesc.ByteWidth = m_IndicesByteLength * m_iNumPrimitive;

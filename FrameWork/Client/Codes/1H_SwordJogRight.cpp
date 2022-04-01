@@ -27,6 +27,8 @@ _int C1H_SwordJogRight::Tick(const _double& _dDeltaTime)
 	if (NO_EVENT > iProgress)
 		return iProgress;
 
+	m_pSilvermane->Add_Velocity(CTransform::STATE_RIGHT, _dDeltaTime);
+
 	return _int();
 }
 
@@ -54,12 +56,12 @@ HRESULT C1H_SwordJogRight::EnterState()
 
 	
 	m_pAnimationController->SetUp_NextAnimation("SK_Silvermane.ao|A_1H_Sword_Loco_Jog_Right_Normal", true);
-	m_pAnimationController->Set_RootMotion(true, true, ERootOption::XYZ);
+	m_pAnimationController->Set_RootMotion(true, false, ERootOption::XYZ);
 
 	_matrix smatPivot = XMMatrixRotationY(XMConvertToRadians(90.f));
 	m_pAnimationController->Set_PivotMatrix(smatPivot);
 	
-
+	m_pAnimationController->Add_TrackAcc(1.0);
 	return S_OK;
 }
 

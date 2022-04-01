@@ -67,6 +67,20 @@ HRESULT C1H_SwordNormalSidestepRight_V3::EnterState()
 
 
 	m_iCutIndex = 15;
+
+
+	m_tShakeEvent.fDuration = 1.f;
+	m_tShakeEvent.fBlendInTime = 0.2f;
+	m_tShakeEvent.fBlendOutTime = 0.8f;
+	m_tShakeEvent.tWaveY.fAmplitude = 1.f;
+	m_tShakeEvent.tWaveY.fFrequency = 0.1f;
+	m_tShakeEvent.tWaveY.fAdditionalOffset = 0.2f;
+	m_tShakeEvent.tWaveZ.fAmplitude = 1.f;
+	m_tShakeEvent.tWaveZ.fFrequency = 1.f;
+	m_tShakeEvent.tWaveZ.fAdditionalOffset = -2.f;
+
+
+	g_pShakeManager->Shake(m_tShakeEvent, m_pTransform->Get_State(CTransform::STATE_POSITION));
 	return S_OK;
 }
 
@@ -104,6 +118,7 @@ _int C1H_SwordNormalSidestepRight_V3::Input(const _double& _dDeltaTime)
 			{
 				m_pAnimationController->Reset_Animation();
 
+				g_pShakeManager->Shake(m_tShakeEvent, m_pTransform->Get_State(CTransform::STATE_POSITION));
 				if (g_pGameInstance->getkeyPress(DIK_W))
 					m_eDir = EDir::LeftForward;
 				else
