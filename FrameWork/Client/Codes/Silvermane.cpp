@@ -831,8 +831,8 @@ void CSilvermane::OnControllerColliderHit(CCollision& collision)
 		}
 
 		//점프ui관련
-		//m_pFillCKey = (CUI_Fill_Ckey*)g_pGameInstance->getObjectList(m_iSceneID, L"Layer_UI_FillC")->front();
-		m_pFillCKey = (CUI_Fill_Ckey*)g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Layer_UI_FillC")->front();
+		m_pFillCKey = (CUI_Fill_Ckey*)g_pGameInstance->getObjectList(m_iSceneID, L"Layer_UI_FillC")->front();
+		//m_pFillCKey = (CUI_Fill_Ckey*)g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Layer_UI_FillC")->front();
 
 		if (!m_pFillCKey)
 			return;

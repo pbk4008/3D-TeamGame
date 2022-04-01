@@ -142,7 +142,9 @@ _int CStage1::Tick(_double TimeDelta)
 			{
 				if (FAILED(g_pGameInstance->Open_Level((_uint)SCENEID::SCENE_LOADING, CLoading::Create(m_pDevice, m_pDeviceContext, SCENEID::SCENE_STAGE2))))
 					return -1;
+				return 0;
 			}
+
 		}
 	}
 	if (m_iCountMonster == 0 && m_bFirst)
@@ -1263,6 +1265,9 @@ void CStage1::Trgger_FunctionBoss()
 	list<CGameObject*>* pLayer = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Layer_Boss");
 	if (!pLayer)
 		return;
+
+	g_pGameInstance->StopSound(CSoundMgr::CHANNELID::BGM);
+	g_pGameInstance->PlayBGM(L"Stage1_Boss_BGM");
 
 	if (m_bDebug)
 	{
