@@ -14,9 +14,10 @@ HRESULT CBastion_Sword_Death::NativeConstruct(void* _pArg)
 		return E_FAIL;
 
 
-	FSMDESC tDesc = (*(FSMDESC*)_pArg);
+	FSMMOVEDESC tDesc = (*(FSMMOVEDESC*)_pArg);
 
 	m_pAnimator = tDesc.pAnimator;
+	m_pTransform = tDesc.pTransform;
 	m_wstrTag = tDesc.pName;
 
 	//Safe_AddRef(m_pAnimator);

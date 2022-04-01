@@ -1169,6 +1169,7 @@ const _bool CSilvermane::Raycast_JumpNode(const _double& _dDeltaTime)
 	tRaycastDesc.filterData.flags = PxQueryFlag::eANY_HIT | PxQueryFlag::eDYNAMIC;
 	CGameObject* pHitObject = nullptr;
 	tRaycastDesc.ppOutHitObject = &pHitObject;
+
 	if (g_pGameInstance->Raycast(tRaycastDesc))
 	{
 		if (pHitObject)
@@ -1178,8 +1179,8 @@ const _bool CSilvermane::Raycast_JumpNode(const _double& _dDeltaTime)
 	}
 
 	//점프ui관련
-	//m_pBlankCKey = (CUI_Blank_CKey*)g_pGameInstance->getObjectList(m_iSceneID, L"Layer_UI_BlankC")->front();
-	//m_pFillCKey = (CUI_Fill_Ckey*)g_pGameInstance->getObjectList(m_iSceneID, L"Layer_UI_FillC")->front();
+	m_pBlankCKey = (CUI_Blank_CKey*)g_pGameInstance->getObjectList(m_iSceneID, L"Layer_UI_BlankC")->front();
+	m_pFillCKey = (CUI_Fill_Ckey*)g_pGameInstance->getObjectList(m_iSceneID, L"Layer_UI_FillC")->front();
 
 	/*if ((_uint)GAMEOBJECT::JUMP_TRIGGER == iObjectTag)
 	{
