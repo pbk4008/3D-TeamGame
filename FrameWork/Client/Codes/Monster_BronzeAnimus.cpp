@@ -135,7 +135,7 @@ _int CMonster_BronzeAnimus::Tick(_double _dDeltaTime)
 		m_pCharacterController->Move(_dDeltaTime, m_pTransform->Get_Velocity());
 	else
 	{
-		if ((_uint)ANIM_TYPE::A_DEATH == m_pAnimator->Get_CurrentAnimNode())
+		if (m_pStateController->Get_CurStateTag()== L"Death")
 		{
 			if (m_pAnimator->Get_CurrentAnimation()->Is_Finished())
 			{

@@ -91,7 +91,8 @@ public:
 
 		if (m_iClearIndex < iSize)
 		{
-			CurrentTriggerMonsterAllDelete();
+			m_vecCurMonster.clear();
+
 			m_vecClear[m_iClearIndex] = true;
 			if (m_iClearIndex != iSize - 1)
 			{

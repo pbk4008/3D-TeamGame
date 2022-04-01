@@ -60,6 +60,9 @@ HRESULT CJumpNode::NativeConstruct(const _uint _iSceneID, void* _pArg)
 
 _int CJumpNode::Tick(_double _dDeltaTime)
 {
+	if (!g_pGameInstance->isIn_WorldFrustum(m_pTransform->Get_State(CTransform::STATE_POSITION), 50.f))
+		return 0;
+
 	_int iProgress = __super::Tick(_dDeltaTime);
 	if (NO_EVENT != iProgress)
 		return iProgress;
@@ -67,8 +70,6 @@ _int CJumpNode::Tick(_double _dDeltaTime)
 	iProgress = m_pAnimationController->Tick(_dDeltaTime);
 	if (NO_EVENT != iProgress)
 		return iProgress;
-
-
 
 	if (m_isChange)
 	{
@@ -92,8 +93,6 @@ _int CJumpNode::Tick(_double _dDeltaTime)
 		}
 	}
 
-
-
 	m_pCollider->Tick(_dDeltaTime);
 
 	return _int();
@@ -101,6 +100,8 @@ _int CJumpNode::Tick(_double _dDeltaTime)
 
 _int CJumpNode::LateTick(_double _dDeltaTime)
 {
+	
+		
 	_int iProgress = __super::LateTick(_dDeltaTime);
 	if (NO_EVENT != iProgress)
 		return iProgress;

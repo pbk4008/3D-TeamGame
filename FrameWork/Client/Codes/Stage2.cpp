@@ -63,9 +63,20 @@ _int CStage2::Tick(_double TimeDelta)
 	list<CGameObject*>* pLayer = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE2, L"Layer_Crawler");
 
 #endif //  _DEBUG
-	m_pTriggerSystem->Tick(TimeDelta);
-	if (m_iCountMonster == 0 && m_bFirst)
-		m_pTriggerSystem->Check_Clear();
+	if (m_pTriggerSystem)
+	{
+		if (g_pGameInstance->getkeyDown(DIK_BACKSPACE))
+		{
+			m_pTriggerSystem->CurrentTriggerMonsterAllDelete();
+			m_iCountMonster = 0;
+		}
+		m_pTriggerSystem->Tick(TimeDelta);
+
+		if (m_iCountMonster == 0 && m_bFirst)
+			m_pTriggerSystem->Check_Clear();
+	}
+
+	
 
 	return _int();
 }
@@ -96,6 +107,7 @@ HRESULT CStage2::Ready_MapObject()
 	vector<CEnvironment::ENVIRONMENTDESC> tEnvironmentDesc;
 	tEnvironmentDesc.resize(1000);
 	_uint iIndex = 0;
+
 	tEnvironmentDesc[iIndex].wstrInstaneTag = vecEnvironmentData[0].FileName;
 	for (auto& pData : vecEnvironmentData)
 	{
@@ -130,7 +142,11 @@ HRESULT CStage2::Ready_MapObject()
 	tJumpNodeDesc.vPosition = { -2.f, 15.f, 235.f };
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE2, L"Layer_JumpNode", L"Proto_GameObject_JumpNode", &tJumpNodeDesc)))
 		return E_FAIL;
-	tJumpNodeDesc.vPosition = { 39.f, 15.f, 268.f };
+	tJumpNodeDesc.vPosition = { 39.f, 17.f, 268.f };
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE2, L"Layer_JumpNode", L"Proto_GameObject_JumpNode", &tJumpNodeDesc)))
+		return E_FAIL;
+
+	tJumpNodeDesc.vPosition = { 33.f, 15.f, 278.f };
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE2, L"Layer_JumpNode", L"Proto_GameObject_JumpNode", &tJumpNodeDesc)))
 		return E_FAIL;
 
@@ -275,8 +291,6 @@ HRESULT CStage2::Ready_TriggerSystem(const _tchar* pTriggerFile)
 		return E_FAIL;																												
 	if (FAILED(m_pTriggerSystem->Load_MonsterSpawnPoint((_uint)SCENEID::SCENE_STAGE2, CTriggerSystem<CStage2>::MONSTER::MON_BRONZE, L"../bin/SaveData/MonsterSpawn2Stage/Bronze.dat")))
 		return E_FAIL;
-	if (FAILED(m_pTriggerSystem->Load_MonsterSpawnPoint((_uint)SCENEID::SCENE_STAGE2, CTriggerSystem<CStage2>::MONSTER::MON_SWORD, L"../bin/SaveData/MonsterSpawn2Stage/Sword.dat")))
-		return E_FAIL;
 
 	if (FAILED(Ready_TriggerFunctionSetting()))
 		return E_FAIL;
@@ -333,27 +347,27 @@ void CStage2::Trgger_Function1()
 		auto iter = pLayer->begin();
 		advance(iter, 0);
 		(*iter)->setActive(true);
-
+		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 		iter = pLayer->begin();
 		advance(iter, 1);
 		(*iter)->setActive(true);
-
+		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 		iter = pLayer->begin();
 		advance(iter, 2);
 		(*iter)->setActive(true);
-
+		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 		iter = pLayer->begin();
 		advance(iter, 3);
 		(*iter)->setActive(true);
-
+		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 		iter = pLayer->begin();
 		advance(iter, 4);
 		(*iter)->setActive(true);
-
+		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 		iter = pLayer->begin();
 		advance(iter, 5);
 		(*iter)->setActive(true);
-
+		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 		pLayer = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE2, L"Layer_Bastion_Sword");
 
 		if (!pLayer)
@@ -362,14 +376,15 @@ void CStage2::Trgger_Function1()
 		iter = pLayer->begin();
 		advance(iter, 0);
 		(*iter)->setActive(true);
-
+		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 		iter = pLayer->begin();
 		advance(iter, 1);
 		(*iter)->setActive(true);
-
+		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 		iter = pLayer->begin();
 		advance(iter, 2);
 		(*iter)->setActive(true);
+		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 	}
 	else
 	{
@@ -382,16 +397,22 @@ void CStage2::Trgger_Function1()
 			pActor = static_cast<CActor*>((*iter));
 		}
 		(*iter)->setActive(true);
+		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 		iter++;
 		(*iter)->setActive(true);
+		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 		iter++;
 		(*iter)->setActive(true);
+		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 		iter++;
 		(*iter)->setActive(true);
+		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 		iter++;
 		(*iter)->setActive(true);
+		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 		iter++;
 		(*iter)->setActive(true);
+		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 
 		pLayer = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE2, L"Layer_Bastion_Sword");
 
@@ -407,10 +428,13 @@ void CStage2::Trgger_Function1()
 			pActor = static_cast<CActor*>((*iter));
 		}
 		(*iter)->setActive(true);
+		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 		iter++;
 		(*iter)->setActive(true);
+		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 		iter++;
 		(*iter)->setActive(true);
+		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 	}
 	m_iCountMonster = 9;
 }
@@ -426,11 +450,11 @@ void CStage2::Trgger_Function2()
 		auto iter = pLayer->begin();
 		advance(iter, 2);
 		(*iter)->setActive(true);
-
+		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 		iter = pLayer->begin();
 		advance(iter, 3);
 		(*iter)->setActive(true);
-
+		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 		pLayer = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE2, L"Layer_Bastion_Shooter");
 
 		if (!pLayer)
@@ -439,11 +463,11 @@ void CStage2::Trgger_Function2()
 		 iter = pLayer->begin();
 		advance(iter, 0);
 		(*iter)->setActive(true);
-
+		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 		iter = pLayer->begin();
 		advance(iter, 1);
 		(*iter)->setActive(true);
-
+		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 		pLayer = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE2, L"Layer_Healer");
 
 		if (!pLayer)
@@ -452,6 +476,7 @@ void CStage2::Trgger_Function2()
 		iter = pLayer->begin();
 		advance(iter, 0);
 		(*iter)->setActive(true);
+		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 	}
 	else
 	{
@@ -464,9 +489,10 @@ void CStage2::Trgger_Function2()
 			pActor = static_cast<CActor*>((*iter));
 		}
 		(*iter)->setActive(true);
+		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 		iter++;
 		(*iter)->setActive(true);
-
+		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 		pLayer = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE2, L"Layer_Bastion_Shooter");
 
 		if (!pLayer)
@@ -481,8 +507,10 @@ void CStage2::Trgger_Function2()
 			pActor = static_cast<CActor*>((*iter));
 		}
 		(*iter)->setActive(true);
+		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 		iter++;
 		(*iter)->setActive(true);
+		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 
 		pLayer = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE2, L"Layer_Healer");
 
@@ -498,6 +526,7 @@ void CStage2::Trgger_Function2()
 			pActor = static_cast<CActor*>((*iter));
 		}
 		(*iter)->setActive(true);
+		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 	}
 	m_iCountMonster = 5;
 }
@@ -513,10 +542,11 @@ void CStage2::Trgger_Function3()
 		auto iter = pLayer->begin();
 		advance(iter, 2);
 		(*iter)->setActive(true);
+		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 		iter = pLayer->begin();
 		advance(iter, 3);
 		(*iter)->setActive(true);
-
+		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 		pLayer = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE2, L"Layer_Bastion_Sword");
 
 		if (!pLayer)
@@ -525,10 +555,11 @@ void CStage2::Trgger_Function3()
 		iter = pLayer->begin();
 		advance(iter, 4);
 		(*iter)->setActive(true);
-
+		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 		iter = pLayer->begin();
 		advance(iter, 5);
 		(*iter)->setActive(true);
+		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 	}
 	else
 	{
@@ -541,9 +572,10 @@ void CStage2::Trgger_Function3()
 			pActor = static_cast<CActor*>((*iter));
 		}
 		(*iter)->setActive(true);
+		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 		iter++;
 		(*iter)->setActive(true);
-
+		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 		pLayer = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE2, L"Layer_Bastion_Sword");
 
 		if (!pLayer)
@@ -558,8 +590,10 @@ void CStage2::Trgger_Function3()
 			pActor = static_cast<CActor*>((*iter));
 		}
 		(*iter)->setActive(true);
+		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 		iter++;
 		(*iter)->setActive(true);
+		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 	}
 	m_iCountMonster = 4;
 }
@@ -576,15 +610,19 @@ void CStage2::Trgger_Function4()
 		auto iter = pLayer->begin();
 		advance(iter, 6);
 		(*iter)->setActive(true);
+		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 		iter = pLayer->begin();
 		advance(iter, 7);
 		(*iter)->setActive(true);
+		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 		iter = pLayer->begin();
 		advance(iter, 8);
 		(*iter)->setActive(true);
+		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 		iter = pLayer->begin();
 		advance(iter, 9);
 		(*iter)->setActive(true);
+		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 	}
 	else
 	{
@@ -597,12 +635,16 @@ void CStage2::Trgger_Function4()
 			pActor = static_cast<CActor*>((*iter));
 		}
 		(*iter)->setActive(true);
+		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 		iter++;
 		(*iter)->setActive(true);
+		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 		iter++;
 		(*iter)->setActive(true);
+		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 		iter++;
 		(*iter)->setActive(true);
+		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 	}
 	m_iCountMonster = 4;
 }
@@ -619,9 +661,11 @@ void CStage2::Trgger_Function6()
 		auto iter = pLayer->begin();
 		advance(iter, 8);
 		(*iter)->setActive(true);
+		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 		iter = pLayer->begin();
 		advance(iter, 9);
 		(*iter)->setActive(true);
+		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 
 		pLayer = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE2, L"Layer_Bastion_Shooter");
 
@@ -631,10 +675,12 @@ void CStage2::Trgger_Function6()
 		iter = pLayer->begin();
 		advance(iter, 5);
 		(*iter)->setActive(true);
+		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 
 		iter = pLayer->begin();
 		advance(iter, 6);
 		(*iter)->setActive(true);
+		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 
 		pLayer = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE2, L"Layer_Healer");
 
@@ -644,14 +690,17 @@ void CStage2::Trgger_Function6()
 		iter = pLayer->begin();
 		advance(iter, 2);
 		(*iter)->setActive(true);
+		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 	}
 	else
 	{
 		auto iter = pLayer->begin();
 		CActor* pActor = static_cast<CActor*>((*iter));
 		(*iter)->setActive(true);
+		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 		iter++;
 		(*iter)->setActive(true);
+		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 
 		pLayer = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE2, L"Layer_Bastion_Shooter");
 
@@ -667,8 +716,10 @@ void CStage2::Trgger_Function6()
 			pActor = static_cast<CActor*>((*iter));
 		}
 		(*iter)->setActive(true);
+		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 		iter++;
 		(*iter)->setActive(true);
+		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 
 		pLayer = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE2, L"Layer_Healer");
 
@@ -684,6 +735,7 @@ void CStage2::Trgger_Function6()
 			pActor = static_cast<CActor*>((*iter));
 		}
 		(*iter)->setActive(true);
+		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 	}
 	m_iCountMonster = 5;
 }
@@ -699,9 +751,11 @@ void CStage2::Trgger_Function7()
 		auto iter = pLayer->begin();
 		advance(iter, 0);
 		(*iter)->setActive(true);
+		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 		iter = pLayer->begin();
 		advance(iter, 1);
 		(*iter)->setActive(true);
+		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 	}
 	else
 	{
@@ -714,8 +768,10 @@ void CStage2::Trgger_Function7()
 			pActor = static_cast<CActor*>((*iter));
 		}
 		(*iter)->setActive(true);
+		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 		iter++;
 		(*iter)->setActive(true);
+		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 	}
 	m_iCountMonster = 2;
 }
@@ -730,6 +786,7 @@ void CStage2::Trgger_Function8()
 		auto iter = pLayer->begin();
 		advance(iter, 1);
 		(*iter)->setActive(true);
+		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 	}
 	else
 	{
@@ -742,6 +799,7 @@ void CStage2::Trgger_Function8()
 			pActor = static_cast<CActor*>((*iter));
 		}
 		(*iter)->setActive(true);
+		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 	}
 	m_iCountMonster = 1;
 }
@@ -757,15 +815,19 @@ void CStage2::Trgger_Function9()
 		auto iter = pLayer->begin();
 		advance(iter, 10);
 		(*iter)->setActive(true);
+		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 		iter = pLayer->begin();
 		advance(iter, 11);
 		(*iter)->setActive(true);
+		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 		iter = pLayer->begin();
 		advance(iter, 12);
 		(*iter)->setActive(true);
 		iter = pLayer->begin();
+		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 		advance(iter, 13);
 		(*iter)->setActive(true);
+		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 
 		pLayer = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE2, L"Layer_Bastion_Shooter");
 		if (!pLayer)
@@ -774,9 +836,11 @@ void CStage2::Trgger_Function9()
 		iter = pLayer->begin();
 		advance(iter, 7);
 		(*iter)->setActive(true);
+		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 		iter = pLayer->begin();
 		advance(iter, 8);
 		(*iter)->setActive(true);
+		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 
 		pLayer = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE2, L"Layer_Bastion_2HSword");
 		if (!pLayer)
@@ -785,6 +849,7 @@ void CStage2::Trgger_Function9()
 		iter = pLayer->begin();
 		advance(iter, 1);
 		(*iter)->setActive(true);
+		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 	}
 	else
 	{
@@ -797,12 +862,16 @@ void CStage2::Trgger_Function9()
 			pActor = static_cast<CActor*>((*iter));
 		}
 		(*iter)->setActive(true);
+		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 		iter++;
 		(*iter)->setActive(true);
+		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 		iter++;
 		(*iter)->setActive(true);
+		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 		iter++;
 		(*iter)->setActive(true);
+		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 
 		pLayer = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE2, L"Layer_Bastion_Shooter");
 		if (!pLayer)
@@ -816,8 +885,10 @@ void CStage2::Trgger_Function9()
 			pActor = static_cast<CActor*>((*iter));
 		}
 		(*iter)->setActive(true);
+		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 		iter++;
 		(*iter)->setActive(true);
+		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 
 		pLayer = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE2, L"Layer_Bastion_2HSword");
 		if (!pLayer)
@@ -832,6 +903,7 @@ void CStage2::Trgger_Function9()
 			pActor = static_cast<CActor*>((*iter));
 		}
 		(*iter)->setActive(true);
+		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 	}
 	m_iCountMonster = 7;
 }
@@ -846,6 +918,7 @@ void CStage2::Trgger_Function5()
 		auto iter = pLayer->begin();
 		advance(iter, 0);
 		(*iter)->setActive(true);
+		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 
 		pLayer = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE2, L"Layer_Bastion_2HSword");
 
@@ -854,6 +927,7 @@ void CStage2::Trgger_Function5()
 		iter = pLayer->begin();
 		advance(iter, 0);
 		(*iter)->setActive(true);
+		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 
 		pLayer = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE2, L"Layer_Bastion_Shooter");
 
@@ -862,6 +936,7 @@ void CStage2::Trgger_Function5()
 		iter = pLayer->begin();
 		advance(iter, 4);
 		(*iter)->setActive(true);
+		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 
 		pLayer = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE2, L"Layer_Bastion_Sword");
 
@@ -870,10 +945,12 @@ void CStage2::Trgger_Function5()
 		iter = pLayer->begin();
 		advance(iter, 6);
 		(*iter)->setActive(true);
+		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 
 		iter = pLayer->begin();
 		advance(iter, 7);
 		(*iter)->setActive(true);
+		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 
 		pLayer = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE2, L"Layer_Healer");
 
@@ -883,6 +960,7 @@ void CStage2::Trgger_Function5()
 		iter = pLayer->begin();
 		advance(iter, 1);
 		(*iter)->setActive(true);
+		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 	}
 	else
 	{
@@ -895,6 +973,7 @@ void CStage2::Trgger_Function5()
 			pActor = static_cast<CActor*>((*iter));
 		}
 		(*iter)->setActive(true);
+		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 
 		pLayer = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE2, L"Layer_Bastion_2HSword");
 
@@ -909,6 +988,7 @@ void CStage2::Trgger_Function5()
 			pActor = static_cast<CActor*>((*iter));
 		}
 		(*iter)->setActive(true);
+		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 
 		pLayer = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE2, L"Layer_Bastion_Shooter");
 
@@ -924,6 +1004,7 @@ void CStage2::Trgger_Function5()
 			pActor = static_cast<CActor*>((*iter));
 		}
 		(*iter)->setActive(true);
+		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 
 		pLayer = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE2, L"Layer_Bastion_Sword");
 
@@ -938,8 +1019,10 @@ void CStage2::Trgger_Function5()
 			pActor = static_cast<CActor*>((*iter));
 		}
 		(*iter)->setActive(true);
+		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 		iter++;
 		(*iter)->setActive(true);
+		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 
 		pLayer = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE2, L"Layer_Healer");
 
@@ -955,6 +1038,7 @@ void CStage2::Trgger_Function5()
 			pActor = static_cast<CActor*>((*iter));
 		}
 		(*iter)->setActive(true);
+		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 	}
 	m_iCountMonster = 6;
 }
@@ -967,6 +1051,7 @@ void CStage2::Trgger_FunctionBoss()
 	
 	auto iter = pLayer->begin();
 	(*iter)->setActive(true);
+	m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 }
 
 CStage2* CStage2::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)

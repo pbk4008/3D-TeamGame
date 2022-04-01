@@ -72,7 +72,7 @@ HRESULT CBoss_Bastion_Judicator::NativeConstruct(const _uint _iSceneID, void* pA
 	m_pPanel->Set_HpBar(Get_HpRatio());
 	m_pPanel->Set_GroggyBar(Get_GroggyGaugeRatio());
 
-	//setActive(false);
+	setActive(false);
 
 	return S_OK;
 }
@@ -156,8 +156,11 @@ _int CBoss_Bastion_Judicator::Tick(_double TimeDelta)
 		{
 			m_bDead = true;
 			m_pPanel->Set_Show(false);
-		
 			return 0;
+		}
+		else if (1 == m_pAnimator->Get_AnimController()->Get_CurKeyFrameIndex())
+		{
+			Active_Effect((_uint)EFFECT::DEATH);
 		}
 	}
 
@@ -518,7 +521,6 @@ HRESULT CBoss_Bastion_Judicator::Set_PanelBar()
 
 void CBoss_Bastion_Judicator::OnTriggerEnter(CCollision& collision)
 {
-
 	if (true == g_pObserver->IsAttack()) //ÇÃ·¹ÀÌ¾î°ø°ÝÀÏ¶§
 	{
 		m_bFirstHit = true; //µü ÇÑ¹ø true·Î º¯°æÇØÁÜ
@@ -534,6 +536,10 @@ void CBoss_Bastion_Judicator::OnTriggerEnter(CCollision& collision)
 			m_fGroggyGauge += 2; //TODO::¼öÄ¡Á¤ÇØ¼­¹Ù²ãÁà¾ßµÊ
 
 			m_pPanel->Set_HpBar(Get_HpRatio());
+
+			Active_Effect((_uint)EFFECT::HIT);
+			Active_Effect((_uint)EFFECT::FLOATING);
+
 
 			if (false == m_bGroggy)
 			{	
