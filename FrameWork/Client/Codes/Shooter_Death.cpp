@@ -48,7 +48,10 @@ HRESULT CShooter_Death::Render()
 
 HRESULT CShooter_Death::EnterState()
 {
-	g_pShakeManager->Shake(CShakeManager::ETemplate::MonsterDeath, _float3(0.f, 0.f, 0.f));
+	g_pGameInstance->BlendSound(L"Bastion_Death", L"Monster_Death", CSoundMgr::CHANNELID::Shooter_Death, CSoundMgr::CHANNELID::MONSTER);
+	g_pGameInstance->VolumeChange(CSoundMgr::CHANNELID::Shooter_Death, 7.0f);
+
+	g_pShakeManager->Shake(CShakeManager::ETemplate::MonsterDeath, m_pTransform->Get_State(CTransform::STATE_POSITION));
 	m_pAnimator->Change_AnyEntryAnimation((_uint)CMonster_Bastion_Shooter::ANIM_TYPE::DEATH);
 	g_pMainApp->FreezeTime();
 

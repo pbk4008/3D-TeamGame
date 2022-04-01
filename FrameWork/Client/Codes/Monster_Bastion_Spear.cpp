@@ -306,7 +306,7 @@ HRESULT CMonster_Bastion_Spear::Ready_AnimFSM(void)
 		return E_FAIL;
 
 	pAnimation = m_pModel->Get_Animation("A_Guard");
-	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::A_GUARD, (_uint)ANIM_TYPE::A_HEAD, pAnimation, TRUE, FALSE, TRUE, ERootOption::XYZ)))
+	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::A_GUARD, (_uint)ANIM_TYPE::A_HEAD, pAnimation, TRUE, TRUE, TRUE, ERootOption::XYZ)))
 		return E_FAIL;
 
 	pAnimation = m_pModel->Get_Animation("A_Bwd_Dash");

@@ -86,6 +86,7 @@ HRESULT CMonster_Bastion_Sword::NativeConstruct(const _uint _iSceneID, void* _pA
 	if (FAILED(Ready_UI()))
 		return E_FAIL;
 
+	m_pAnimator->Get_AnimController()->Set_PlaySpeed(1.5f);
 
 	//MonsterBar Panel
 	
@@ -196,6 +197,10 @@ void CMonster_Bastion_Sword::OnTriggerEnter(CCollision& collision)
 			}
 		}
 	}
+}
+
+void CMonster_Bastion_Sword::OnTriggerExit(CCollision& collision)
+{
 }
 
 HRESULT CMonster_Bastion_Sword::SetUp_Components()
@@ -658,6 +663,8 @@ void CMonster_Bastion_Sword::Hit()
 	}
 	if (m_wstrCurState != L"Hit"&&!m_bGroggy)
 	{
+		g_pGameInstance->StopSound(CSoundMgr::CHANNELID::Sword1H_Hit);
+		g_pGameInstance->Play_Shot(L"Monster_Hit_6", CSoundMgr::CHANNELID::Sword1H_Hit);
 		tData.fCurHp = m_fCurrentHp;
 		tData.iHitType = (_uint)m_eHitType;
 		m_wstrCurState = L"Hit";

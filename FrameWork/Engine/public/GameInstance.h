@@ -176,7 +176,12 @@ public: /* For.SoundMgr */
 	void PlayBGM(const wstring& pSoundKey);
 	void StopSound(CSoundMgr::CHANNELID eID);
 	void StopAll();
-	void VolumeChange(const std::wstring& pSoundKey, _float fVolume);
+	void VolumeChange(CSoundMgr::CHANNELID eID, _float fVolume);
+	void BlendSound(const std::wstring& pStartSoundKey,
+		const std::wstring& pEndSoundKey,
+		CSoundMgr::CHANNELID eStartID,
+		CSoundMgr::CHANNELID  eEndID,
+		_float fBlendTiming = 0.0f);
 
 private:
 	CGraphic_Device*			m_pGraphic_Device = nullptr;		

@@ -68,6 +68,7 @@ HRESULT C1H_SwordAttackNormalR2_Loop::ExitState()
 	if (FAILED(__super::ExitState()))
 		return E_FAIL;
 	g_pGameInstance->Play_Shot(L"Needle_Attack_R_P2", CSoundMgr::CHANNELID::Player_Sword_Attack);
+	g_pGameInstance->VolumeChange(CSoundMgr::CHANNELID::Player_Sword_Attack, 0.3f);
 	m_pSilvermane->Set_IsTrasceCamera(true);
 	m_fHoldTime = 0.f;
 

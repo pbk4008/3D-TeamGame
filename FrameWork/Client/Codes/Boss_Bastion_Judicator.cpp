@@ -217,6 +217,35 @@ HRESULT CBoss_Bastion_Judicator::Render()
 		m_pModelCom->Render(i, 0);
 	}
 
+	// FSM
+	wstring wstrCurStateTag = m_pStateController->Get_CurStateTag();
+	wstring wstrState = L"Cur State : ";
+
+	if (FAILED(g_pGameInstance->Render_Font(TEXT("Font_Arial"), XMVectorSet(0.f, 1.0f, 0.f, 1.f), (wstrState + wstrCurStateTag).c_str(), _float2(650.f, 40.f), _float2(0.6f, 0.6f))))
+		return E_FAIL;
+
+	// 애니메이션 이름
+	string CurAnimName = m_pAnimator->Get_CurrentAnimation()->Get_Name();
+	wstring wstrCurAnimTag;
+	wstring wstrAnimname = L"Cur Anim Tag : ";
+	wstrCurAnimTag.assign(CurAnimName.begin(), CurAnimName.end());
+	if (FAILED(g_pGameInstance->Render_Font(TEXT("Font_Arial"), XMVectorSet(0.f, 1.0f, 0.f, 1.f), (wstrAnimname + wstrCurAnimTag).c_str(), _float2(650.f, 60.f), _float2(0.6f, 0.6f))))
+		return E_FAIL;
+
+	// 애니메이션 상태
+	wstring wstrCurKeyFrameIndex = to_wstring(m_pAnimator->Get_CurrentAnimation()->Get_CurrentKeyFrameIndex());
+	wstring wstrKeyFrame = L"Key Frame : ";
+	if (FAILED(g_pGameInstance->Render_Font(TEXT("Font_Arial"), XMVectorSet(0.f, 1.0f, 0.f, 1.f), (wstrKeyFrame + wstrCurKeyFrameIndex).c_str(), _float2(650.f, 80.f), _float2(0.6f, 0.6f))))
+		return E_FAIL;
+
+	wstring wstrAnimFinished = L"";
+	if (m_pAnimator->Get_CurrentAnimation()->Is_Finished())
+		wstrAnimFinished = L"AnimFinished : TRUE";
+	else
+		wstrAnimFinished = L"AnimFinished : FALSE";
+	if (FAILED(g_pGameInstance->Render_Font(TEXT("Font_Arial"), XMVectorSet(0.f, 1.0f, 0.f, 1.f), wstrAnimFinished.c_str(), _float2(650.f, 100.f), _float2(0.6f, 0.6f))))
+		return E_FAIL;
+
 	return S_OK;
 }
 
@@ -552,7 +581,9 @@ void CBoss_Bastion_Judicator::Set_IsAttack(const _bool _isAttack)
 {
 	m_IsAttack = _isAttack;
 	if (m_pWeapon)
+	{
 		m_pWeapon->Set_IsAttack(_isAttack);
+	}
 }
 
 

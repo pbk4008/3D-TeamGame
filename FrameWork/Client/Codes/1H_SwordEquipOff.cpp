@@ -70,6 +70,7 @@ HRESULT C1H_SwordEquipOff::ExitState()
 	if (FAILED(__super::ExitState()))
 		return E_FAIL;
 	g_pGameInstance->StopSound(CSoundMgr::CHANNELID::Unequip_Needle);
+	g_pGameInstance->VolumeChange(CSoundMgr::CHANNELID::Unequip_Needle, 1.5f);
 
 	m_pSilvermane->Set_EquipWeapon(false);
 	m_pSilvermane->Set_WeaponFixedBone("spine_03");

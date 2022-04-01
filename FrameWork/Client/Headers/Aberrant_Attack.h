@@ -29,7 +29,13 @@ public:
 	virtual void Look_Player(void) override;
 
 private:
+	void Play_Sound(void);
+
+private:
 	_uint m_iAttackCount = 0;
+	_uint m_iAttack1Frame = 45;
+	_uint m_iAttack2Frame = 15;
+	_uint m_iAttackType = 0;
 
 public:
 	static CAberrant_Attack* Create(ID3D11Device * pDevice, ID3D11DeviceContext * pDeviceContext, void* pArg = nullptr);

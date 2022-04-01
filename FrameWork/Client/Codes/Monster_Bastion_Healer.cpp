@@ -233,6 +233,8 @@ void CMonster_Bastion_Healer::Hit(CCollision& pCol)
 
 		if ((_uint)GAMEOBJECT::WEAPON == pCol.pGameObject->getTag())
 		{
+			g_pGameInstance->StopSound(CSoundMgr::CHANNELID::Healer_Hit);
+			g_pGameInstance->Play_Shot(L"Monster_Hit_6", CSoundMgr::CHANNELID::Healer_Hit);
 			m_fCurrentHp-=5.f;
 			m_bGroggy=2; //TODO::수치정해서바꿔줘야됨
 

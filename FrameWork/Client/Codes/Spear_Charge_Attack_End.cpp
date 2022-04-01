@@ -79,13 +79,12 @@ HRESULT CSpear_Charge_Attack_End::ExitState()
 
 void CSpear_Charge_Attack_End::Look_Player(void)
 {
-	if (m_pAnimator->Get_CurrentAnimation()->Is_Finished() && 0.0f >= m_fTime)
-		m_pStateController->Change_State(L"Idle");
 }
 
 void CSpear_Charge_Attack_End::Look_Monster(void)
 {
-
+	if (m_pAnimator->Get_CurrentAnimation()->Is_Finished()/* && 0.0f >= m_fTime*/)
+		m_pStateController->Change_State(L"Idle");
 }
 
 CSpear_Charge_Attack_End* CSpear_Charge_Attack_End::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext, void* _pArg)

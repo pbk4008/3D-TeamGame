@@ -28,6 +28,12 @@ public:
 public:
 	virtual void Look_Player(void) override;
 
+private:
+	void Play_Sound(void);
+
+private:
+	_uint m_iAttackFrame = 12;
+
 public:
 	static CMidBoss_BattleCry* Create(ID3D11Device * pDevice, ID3D11DeviceContext * pDeviceContext, void* pArg = nullptr);
 	virtual void Free() override;

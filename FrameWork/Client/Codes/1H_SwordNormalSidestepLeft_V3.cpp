@@ -91,6 +91,8 @@ _int C1H_SwordNormalSidestepLeft_V3::Input(const _double& _dDeltaTime)
 	{
 		if (g_pGameInstance->getkeyDown(DIK_SPACE))
 		{
+			g_pGameInstance->BlendSound(L"Player_Dash", L"Player_Dash_1", CSoundMgr::CHANNELID::PLAYER1, CSoundMgr::CHANNELID::PLAYER2);
+
 			if (g_pGameInstance->getkeyPress(DIK_A))
 			{
 				m_pAnimationController->Reset_Animation();

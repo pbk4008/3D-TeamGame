@@ -35,6 +35,8 @@ _int CBastion_Sword_Attack::Tick(const _double& _dDeltaTime)
 	if (!m_pAnimator)
 		return -1;
 
+	Play_Sound();
+
 	m_pAnimator->Tick(_dDeltaTime);
 
 	//무한 루프에 대한 조건 들어갈 자리
@@ -84,7 +86,60 @@ HRESULT CBastion_Sword_Attack::ExitState(void* _pArg)
 {
 	m_pMonster->Set_IsAttack(false);
 
+	m_bSingle = false;
+	m_bDouble = false;
+	m_bJump = false;
+
 	return S_OK;
+}
+
+void CBastion_Sword_Attack::Play_Sound()
+{
+	_uint iCurKeyFrameIndex = m_pAnimator->Get_AnimController()->Get_CurKeyFrameIndex();
+
+	switch (m_eAttackType)
+	{
+	case Client::CBastion_Sword_Attack::ATTACK_TYPE::ATTACK_SINGLE:
+		if (iCurKeyFrameIndex == m_iSingleAtt)
+		{
+			g_pGameInstance->StopSound(CSoundMgr::CHANNELID::Sword1H_Attack_1);
+			g_pGameInstance->Play_Shot(L"H1_Attack_1", CSoundMgr::CHANNELID::Sword1H_Attack_1);
+		}
+		break;
+	case Client::CBastion_Sword_Attack::ATTACK_TYPE::ATTACK_DOUBLE:
+		if (iCurKeyFrameIndex == m_iDoubleAtt)
+		{
+			g_pGameInstance->StopSound(CSoundMgr::CHANNELID::Sword1H_Attack_1);
+			g_pGameInstance->Play_Shot(L"H1_Attack_2", CSoundMgr::CHANNELID::Sword1H_Attack_1);
+			m_bDouble = true;
+		}
+		break;
+	case Client::CBastion_Sword_Attack::ATTACK_TYPE::ATTACK_JUMP:
+		if (iCurKeyFrameIndex == m_iJumpAtt)
+		{
+			if (!m_bJump)
+			{
+				g_pGameInstance->StopSound(CSoundMgr::CHANNELID::Sword1H_Attack_2);
+				g_pGameInstance->Play_Shot(L"H1_Attack_3", CSoundMgr::CHANNELID::Sword1H_Attack_2);
+				m_bJump = true;
+			}
+		}
+		break;
+	}
+
+	if (m_bDouble)
+	{
+		_uint iCurKeyFrameIndex2 = m_pAnimator->Get_AnimController()->Get_CurKeyFrameIndex();
+
+		if (Client::CBastion_Sword_Attack::ATTACK_TYPE::ATTACK_DOUBLE == m_eAttackType)
+		{
+			if (iCurKeyFrameIndex2 == m_iDoubleAtt + 100)
+			{
+				g_pGameInstance->StopSound(CSoundMgr::CHANNELID::Sword1H_Attack_2);
+				g_pGameInstance->Play_Shot(L"H1_Attack_3", CSoundMgr::CHANNELID::Sword1H_Attack_2);
+			}
+		}
+	}
 }
 
 HRESULT CBastion_Sword_Attack::EnterState()
@@ -94,6 +149,7 @@ HRESULT CBastion_Sword_Attack::EnterState()
 
 HRESULT CBastion_Sword_Attack::ExitState()
 {
+	m_bJump = false;
 	return S_OK;
 }
 

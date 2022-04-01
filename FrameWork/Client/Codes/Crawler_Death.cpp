@@ -59,13 +59,13 @@ HRESULT CCrawler_Death::EnterState()
 	if (FAILED(__super::EnterState()))
 		return E_FAIL;
 
-	g_pGameInstance->Play_Shot(L"Crawler_Death", CSoundMgr::CHANNELID::Monster_Death);
-	g_pGameInstance->VolumeChange(L"Crawler_Death", 0.5f);
+	g_pGameInstance->BlendSound(L"Crawler_Death", L"Monster_Death", CSoundMgr::CHANNELID::Monster_Death, CSoundMgr::CHANNELID::MONSTER);
+	g_pGameInstance->VolumeChange(CSoundMgr::CHANNELID::Monster_Death, 1.0f);
 
 	m_pAnimator->Change_AnyEntryAnimation(CMonster_Crawler::MON_STATE::DEATH);
 
 	//m_pTransform->Face_Target(g_pObserver->Get_PlayerPos());
-	g_pShakeManager->Shake(CShakeManager::ETemplate::MonsterDeath, _float3(0.f, 0.f, 0.f));
+	g_pShakeManager->Shake(CShakeManager::ETemplate::MonsterDeath, m_pTransform->Get_State(CTransform::STATE_POSITION));
 
 	g_pMainApp->FreezeTime();
 	return S_OK;

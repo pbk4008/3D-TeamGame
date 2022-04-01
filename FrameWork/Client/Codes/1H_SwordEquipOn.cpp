@@ -68,6 +68,7 @@ HRESULT C1H_SwordEquipOn::EnterState()
 		return E_FAIL;
 
 	g_pGameInstance->Play_Shot(L"Needle_Equip", CSoundMgr::CHANNELID::Equip_Needle);
+	g_pGameInstance->VolumeChange(CSoundMgr::CHANNELID::Equip_Needle, 1.5f);
 
 	if (FAILED(m_pAnimationController->SetUp_NextAnimation("SK_Silvermane.ao|A_1H_Sword_Equip_On", false)))
 		return E_FAIL;

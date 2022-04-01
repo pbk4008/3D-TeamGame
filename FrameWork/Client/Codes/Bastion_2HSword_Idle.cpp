@@ -83,7 +83,6 @@ void CBastion_2HSword_Idle::Look_Player(void)
 
 void CBastion_2HSword_Idle::Look_Monster(void)
 {
-
 }
 
 void CBastion_2HSword_Idle::OnTriggerEnter(CCollision& collision)

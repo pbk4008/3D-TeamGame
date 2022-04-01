@@ -607,12 +607,20 @@ void CGameInstance::StopAll()
 	m_pSoundManager->StopAll();
 }
 
-void CGameInstance::VolumeChange(const std::wstring& pSoundKey, _float fVolume)
+void CGameInstance::VolumeChange(CSoundMgr::CHANNELID eID, _float fVolume)
 {
 	if (!m_pSoundManager)
 		return;
 
-	m_pSoundManager->VolumeChange(pSoundKey, fVolume);
+	m_pSoundManager->VolumeChange(eID, fVolume);
+}
+
+void CGameInstance::BlendSound(const std::wstring& pStartSoundKey, const std::wstring& pEndSoundKey, CSoundMgr::CHANNELID eStartID, CSoundMgr::CHANNELID eEndID, _float fBlendTiming)
+{
+	if (!m_pSoundManager)
+		return;
+
+	m_pSoundManager->BlendSound(pStartSoundKey, pEndSoundKey, eStartID, eEndID, fBlendTiming);
 }
 
 void CGameInstance::Release_Engine()
