@@ -124,11 +124,33 @@ _int CMonster_Bastion_Spear::Tick(_double _dDeltaTime)
 
 	if(!m_bDead)
 		m_pCharacterController->Move(_dDeltaTime, m_pTransform->Get_Velocity());
+	else
+	{
+		if ((_uint)ANIM_TYPE::A_DEATH == m_pAnimator->Get_CurrentAnimNode())
+		{
+			if (m_pAnimator->Get_CurrentAnimation()->Is_Finished())
+			{
+				Set_Remove(true);
+				m_pPanel->Set_UIRemove(true);
+			}
+			else if (1 == m_pAnimator->Get_AnimController()->Get_CurKeyFrameIndex())
+			{
+				Active_Effect((_uint)EFFECT::DEATH);
+			}
+		}
+		else
+		{
+			Set_Remove(true);
+			m_pPanel->Set_UIRemove(true);
+		}
+	}
+
+
+
 
 	if (true == m_bUIShow)
 		m_pPanel->Set_Show(true);
-
-	if (false == m_bUIShow)
+	else
 		m_pPanel->Set_Show(false);
 
 	if (m_fGroggyGauge >= m_fMaxGroggyGauge)
@@ -154,19 +176,7 @@ _int CMonster_Bastion_Spear::Tick(_double _dDeltaTime)
 	}
 
 	//Á×À»¶§
-	if ((_uint)ANIM_TYPE::A_DEATH == m_pAnimator->Get_CurrentAnimNode())
-	{
-		if (m_pAnimator->Get_CurrentAnimation()->Is_Finished())
-		{
-			Set_Remove(true);
-			m_pPanel->Set_Remove(true);
-		}
 
-		if (1 == m_pAnimator->Get_AnimController()->Get_CurKeyFrameIndex())
-		{
-			Active_Effect((_uint)EFFECT::DEATH);
-		}
-	}
 
 	m_pPanel->Set_TargetWorldMatrix(m_pTransform->Get_WorldMatrix());
 
@@ -554,10 +564,6 @@ HRESULT CMonster_Bastion_Spear::Render_Debug(void)
 
 void CMonster_Bastion_Spear::OnTriggerEnter(CCollision& collision)
 {
-	m_pPanel->Set_Show(true);
-	Active_Effect((_uint)EFFECT::HIT);
-	Active_Effect((_uint)EFFECT::FLOATING);
-
 	m_pStateController->OnTriggerEnter(collision);
 }
 

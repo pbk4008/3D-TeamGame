@@ -30,20 +30,18 @@ _int CBastion_Healer_State::Tick(const _double& _dDeltaTime)
 	if (NO_EVENT != iProgress)
 		return iProgress;
 
-	m_pAnimator->Tick(_dDeltaTime);
-
 	m_bTargetOn = false;
 	m_bAttackOn = false;
 	m_bPlayerAttack = false;
 
-	Check_Attack(_dDeltaTime);
+	//Check_Attack(_dDeltaTime);
 
 	_fvector vMonsterPos = m_pTransform->Get_State(CTransform::STATE::STATE_POSITION);
 	_fvector vDist = vMonsterPos - g_pObserver->Get_PlayerPos();
 	_float fDistToPlayer = XMVectorGetX(XMVector3Length(vDist));
 
-	if (2.0f >= fDistToPlayer)
-		m_bAttackOn = true;
+	//if (2.0f >= fDistToPlayer)
+	//	m_bAttackOn = true;
 
 	if (m_pMonster->Get_GroggyGauge() >= MAXGROOGUGAGUE)
 	{
@@ -53,23 +51,8 @@ _int CBastion_Healer_State::Tick(const _double& _dDeltaTime)
 		pMonster->Groggy_Start();
 	}
 
-	if (0 >= m_pMonster->Get_CurrentHp()&&!m_pMonster->Get_Dead())
-	{
-		static_cast<CMonster_Bastion_Healer*>(m_pMonster)->Set_Dead();
-		static_cast<CMonster_Bastion_Healer*>(m_pMonster)->Remove_Collider();
-
-		CLevel* pLevel = g_pGameInstance->getCurrentLevelScene();
-		if (g_pGameInstance->getCurrentLevel() == (_uint)SCENEID::SCENE_STAGE1)
-			static_cast<CStage1*>(pLevel)->Minus_MonsterCount();
-
-		else if (g_pGameInstance->getCurrentLevel() == (_uint)SCENEID::SCENE_STAGE2)
-			static_cast<CStage2*>(pLevel)->Minus_MonsterCount();
-
-		m_pStateController->Change_State(L"Death");
-	}
-
-	if (true == m_bCastProtect)
-		m_pStateController->Change_State(L"Cast_Protect");
+	//if (true == m_bCastProtect)
+	//	m_pStateController->Change_State(L"Cast_Protect");
 
 	return _int();
 }

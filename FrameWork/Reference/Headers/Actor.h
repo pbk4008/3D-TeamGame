@@ -25,6 +25,7 @@ public:
 protected:
 	HRESULT Set_SpawnPosition(const _float3 vPoint);
 	//Effect 불러오는 함수
+public:
 	void Active_Effect(_uint iEffectIndex);
 	//Effect 좌표받아와서 불러오는 함수
 	void Active_Effect(_uint iEffectIndex, _fvector vPivot);

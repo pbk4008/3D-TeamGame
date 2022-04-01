@@ -20,6 +20,7 @@ _int CBastion_Healer_Groggy::Tick(const _double& _dDeltaTime)
 	_int iProgress = __super::Tick(_dDeltaTime);
 	if (NO_EVENT != iProgress)
 		return iProgress;
+
 	m_pAnimator->Tick(_dDeltaTime);
 
 	m_fGroggyTime -= (_float)_dDeltaTime;

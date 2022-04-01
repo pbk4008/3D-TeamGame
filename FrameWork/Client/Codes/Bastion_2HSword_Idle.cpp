@@ -27,6 +27,9 @@ _int CBastion_2HSword_Idle::Tick(const _double& _dDeltaTime)
 	if (NO_EVENT != iProgress)
 		return iProgress;
 
+	if (m_pMonster->Get_Dead())
+		return 0;
+
 	m_pAnimator->Tick(_dDeltaTime);
 
 	if (m_bTargetOn)

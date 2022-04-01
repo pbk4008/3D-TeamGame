@@ -174,6 +174,12 @@ HRESULT CMonster_Bastion_Sword::Render()
 	return S_OK;
 }
 
+void CMonster_Bastion_Sword::Set_Remove(_bool bCheck)
+{
+	m_bRemove = bCheck;
+	m_pPanel->Set_UIRemove(bCheck);
+}
+
 void CMonster_Bastion_Sword::OnTriggerEnter(CCollision& collision)
 {
 	if (!m_bDead)

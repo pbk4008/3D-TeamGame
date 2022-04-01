@@ -611,6 +611,12 @@ void CMonster_EarthAberrant::Set_IsAttack(const _bool _isAttack)
 		m_pWeapon->Set_IsAttack(_isAttack);
 }
 
+void CMonster_EarthAberrant::Set_Remove(_bool bCheck)
+{
+	m_bRemove = bCheck;
+	m_pPanel->Set_UIRemove(bCheck);
+}
+
 CMonster_EarthAberrant* CMonster_EarthAberrant::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
 {
 	CMonster_EarthAberrant* pInstance = new CMonster_EarthAberrant(_pDevice, _pDeviceContext);
