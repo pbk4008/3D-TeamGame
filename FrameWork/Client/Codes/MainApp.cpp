@@ -89,6 +89,11 @@ _int CMainApp::Tick(_double TimeDelta)
 		m_bShadow = !m_bShadow;
 		m_pRenderer->SetRenderButton(CRenderer::SHADOW, m_bShadow);
 	}
+	if (g_pGameInstance->getkeyDown(DIK_F4))
+	{
+		m_bOutline = !m_bOutline;
+		m_pRenderer->SetRenderButton(CRenderer::OUTLINE, m_bOutline);
+	}
 
 	if (g_pGameInstance->getkeyDown(DIK_P))
 		m_isPause = !m_isPause;

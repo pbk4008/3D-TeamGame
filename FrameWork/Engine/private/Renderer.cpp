@@ -40,6 +40,9 @@ void CRenderer::SetRenderButton(RENDERBUTTON ebutton, _bool check)
 	case CRenderer::PARTICLE:
 		m_bParticle = check;
 		break;
+	case CRenderer::OUTLINE:
+		m_boutline = check;
+		break;
 	}
 }
 
@@ -158,8 +161,7 @@ HRESULT CRenderer::Draw_RenderGroup()
 
 		if (FAILED(m_pPostProcess->PossProcessing(m_pTonemapping, m_pTargetMgr,m_bHDR,m_bShadow,m_bParticle))) return E_FAIL;
 
-		if (FAILED(Render_Final()))
-			return E_FAIL;
+		if (FAILED(Render_Final(m_boutline))) return E_FAIL;
 	}
 
 	if (FAILED(Render_Alpha()))
@@ -313,24 +315,25 @@ HRESULT CRenderer::Render_Alpha()
 	for (auto& pGameObject : m_RenderGroup[RENDER_ALPHA])
 	{
 		if (nullptr != pGameObject)
+		{
+			m_bParticle = true;
 			pGameObject->Render();
+		}
 
 		Safe_Release(pGameObject);
 	}
 	m_RenderGroup[RENDER_ALPHA].clear();
 
-	//if (FAILED(m_pTargetMgr->End_MRT(m_pDeviceContext)))	return E_FAIL;
 	if (FAILED(m_pTargetMgr->End_MRTNotClear(m_pDeviceContext))) return E_FAIL;
 
-		//if (particle == true)
-	//{
-	//	if (FAILED(BlurPass(pTargetMgr, L"Target_Particle", L"Target_ParticleV2", L"Target_ParticleH2", 640, 360))) return E_FAIL;
-	//	if (FAILED(BlurPass(pTargetMgr, L"Target_ParticleH2", L"Target_ParticleV4", L"Target_ParticleH4", 320, 180))) return E_FAIL;
-	//	if (FAILED(BlurPass(pTargetMgr, L"Target_ParticleH4", L"Target_ParticleV8", L"Target_ParticleH8", 160, 90))) return E_FAIL;
-	//	if (FAILED(BlurPass(pTargetMgr, L"Target_ParticleH8", L"Target_ParticleV16", L"Target_ParticleH16", 64, 64))) return E_FAIL;
+	if (m_bParticle == true)
+	{
+		if (FAILED(m_pPostProcess->AlphaBlur(m_pTargetMgr, m_bParticle))) MSGBOX("Alpha Blur Failed");
 
-	//	if (FAILED(BloomPass(pTargetMgr,L"Target_Alpha", L"Target_ParticleH2", L"Target_ParticleH4", L"Target_ParticleH8", L"Target_ParticleH16",0.7f))) return E_FAIL;
-	//}
+		if (FAILED(m_pVIBuffer->SetUp_TextureOnShader("g_AlphaTexture", m_pTargetMgr->Get_SRV(L"Target_Alpha")))) MSGBOX("Alpha Render Failed");
+
+		if (FAILED(m_pVIBuffer->Render(4))) MSGBOX("Alpha Rendering Failed");
+	}
 
 	return S_OK;
 }
@@ -427,13 +430,14 @@ HRESULT CRenderer::Render_ShadeShadow()
 	return S_OK;
 }
 
-HRESULT CRenderer::Render_Final()
+HRESULT CRenderer::Render_Final(_bool outline)
 {
 	if (!m_pTargetMgr)	return E_FAIL;
 
-	if (FAILED(m_pVIBuffer->SetUp_TextureOnShader("g_DiffuseTexture", m_pTargetMgr->Get_SRV(TEXT("Target_Blend"))))) return E_FAIL;
+	if (FAILED(m_pVIBuffer->SetUp_TextureOnShader("g_DiffuseTexture", m_pTargetMgr->Get_SRV(TEXT("Target_Blend"))))) MSGBOX("Render Final DiffuseTeuxtre Not Apply");
+	if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_outline", &m_boutline, sizeof(_bool)))) MSGBOX("Render Final Value Not Apply");
 
-	m_pVIBuffer->Render(3);
+	if (FAILED(m_pVIBuffer->Render(3))) MSGBOX("Final Rendering Failed");
 
 	return S_OK;
 }

@@ -35,6 +35,7 @@ private:
 	_bool				m_bHDR = false;
 	_bool				m_bDBG = false;
 	_bool				m_bShadow = false;
+	_bool				m_bOutline = false;
 
 	_bool				m_isFreeze = false;
 	_double				m_dFreezeTimeAcc = 0.0;

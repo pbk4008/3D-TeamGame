@@ -11,4 +11,5 @@ xcopy /y/s  .\Engine\bin\*.dll		.\Client\bin\
 
 xcopy /y/s /e .\Engine\bin\ShaderFiles\*.*   .\ShaderExamples\bin\ShaderFiles\
 xcopy /y/s /e .\Engine\bin\ShaderFiles\*.*   .\Reference\ShaderFile\
+xcopy /y/s /e .\Engine\bin\ShaderFiles\*.hpp .\Client\bin\ShaderFile\
 xcopy /y/s /e .\Engine\bin\*.dll			 .\ShaderExamples\bin\Debug\

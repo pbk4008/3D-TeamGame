@@ -1,0 +1,1 @@
+xcopy /y/s /e .\Client\bin\ShaderFile\*.*    .\Reference\ShaderFile\

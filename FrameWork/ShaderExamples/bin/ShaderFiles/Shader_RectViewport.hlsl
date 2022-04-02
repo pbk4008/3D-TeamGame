@@ -20,6 +20,7 @@ cbuffer ShaderCheck
 	bool g_bPBRHDR;
 	bool g_bHDR;
 	bool g_shadow;
+	bool g_outline;
 };
 
 cbuffer LightDesc
@@ -311,27 +312,53 @@ PS_OUT_BLEND PS_MAIN_BLEND(PS_IN In)
 	if (Out.vColor.a == 0)
 		discard;
 	
-	return Out;
-	
-	// ¿Ü°û¼± È¿°ú
-	//float fCoord[3] = { -1.f, 0.f, 1.f };
-
-	//float fLaplacianMask[9] =
+	// ¿Ü°û¼± È¿°ú 1.
+	//if (g_outline ==true)
 	//{
-	//	-1.f, -1.f, -1.f,
-	//	-1.f, 8.f, -1.f,
-	//	-1.f, -1.f, -1.f
-	//};
+	//	float fCoord[3] = { -1.f, 0.f, 1.f };
+	//	float fLaplacianMask[9] =
+	//	{
+	//		-1.f, -1.f, -1.f,
+	//		-1.f, 8.f, -1.f,
+	//		-1.f, -1.f, -1.f
+	//	};
+	//	for (int i = 0; i < 9; ++i)
+	//		Out.vColor += fLaplacianMask[i] * g_DiffuseTexture.Sample(DefaultSampler, (In.vTexUV + float2(fCoord[i / 3] / 1280.f, fCoord[i / 3] / 720.f)));
+	//}
 	
-	//for (int i = 0; i < 9; ++i)
-	//	Out.vColor += fLaplacianMask[i] * g_DiffuseTexture.Sample(DefaultSampler, (In.vTexUV + float2(fCoord[i / 3] / 1280.f, fCoord[i / 3] / 720.f)));
+	if(g_outline == true)
+	{
+		float aa = 4.0f * color.a;
+		
+		aa -= g_DiffuseTexture.Sample(DefaultSampler, In.vTexUV + float2(0.01, 0.0)).a;
+		aa -= g_DiffuseTexture.Sample(DefaultSampler, In.vTexUV + float2(-0.01, 0.0)).a;
+		aa -= g_DiffuseTexture.Sample(DefaultSampler, In.vTexUV + float2(0.0, 0.01)).a;
+		aa -= g_DiffuseTexture.Sample(DefaultSampler, In.vTexUV + float2(0.0, -0.01)).a;
+		float4 col;
+		if(aa == 0.0)
+			col = color;
+
+	}
+	
+	
+	return Out;
+}
+
+PS_OUT_BLEND PS_MAIN_ALPHA(PS_IN In)
+{
+	PS_OUT_BLEND Out = (PS_OUT_BLEND) 0;
+	
+	float4 color = g_AlphaTexture.Sample(DefaultSampler, In.vTexUV);
+	Out.vColor = color;
+	
+	return Out;
 }
 
 //----------------------------------technique pass-----------------------------------//
 technique11 DefaultTechnique
 {
 	// debug buffer rendering
-	pass Viewport
+	pass Viewport // 0
 	{
 		SetRasterizerState(CullMode_Default);
 		SetDepthStencilState(ZTestDiable, 0);
@@ -343,7 +370,7 @@ technique11 DefaultTechnique
 	}
 
 	// lighting calculating  :  Directional Light
-	pass Light_Directional
+	pass Light_Directional // 1
 	{
 		SetRasterizerState(CullMode_Default);
 		SetDepthStencilState(ZTestDiable, 0);
@@ -354,7 +381,7 @@ technique11 DefaultTechnique
 		PixelShader = compile ps_5_0 PS_MAIN_LIGHTACC_DIRECTIONAL();
 	}
 // lighting calculating  :  Point Light
-	pass Light_Point
+	pass Light_Point // 2
 	{
 		SetRasterizerState(CullMode_Default);
 		SetDepthStencilState(ZTestDiable, 0);
@@ -366,7 +393,7 @@ technique11 DefaultTechnique
 	}
 
 	// Render Targtes All blending
-	pass Blend
+	pass Blend // 3
 	{
 		SetRasterizerState(CullMode_Default);
 		SetDepthStencilState(ZTestDiable, 0);
@@ -376,4 +403,16 @@ technique11 DefaultTechnique
 		GeometryShader = NULL;
 		PixelShader = compile ps_5_0 PS_MAIN_BLEND();
 	}
+
+	pass Alpha //4
+	{
+		SetRasterizerState(CullMode_Default);
+		SetDepthStencilState(ZTestDiable, 0);
+		SetBlendState(OneBlending, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+
+		VertexShader = compile vs_5_0 VS_MAIN_VIEWPORT();
+		GeometryShader = NULL;
+		PixelShader = compile ps_5_0 PS_MAIN_ALPHA();
+	}
+
 }
