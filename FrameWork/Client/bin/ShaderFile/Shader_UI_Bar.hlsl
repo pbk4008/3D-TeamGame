@@ -159,6 +159,57 @@ PS_OUT PS_MAIN_RED(PS_IN In)
     return Out;
 }
 
+PS_OUT PS_MAIN_REDBACK(PS_IN In)
+{
+    PS_OUT Out = (PS_OUT) 0;
+   
+    //위쪽 잘라내기
+    if (In.vTexUV.y < 0.2f)
+    {
+        discard;
+    }
+    
+    if (In.vTexUV.y > g_fY)
+    {
+        discard;
+    }
+    
+    if (In.vTexUV.x > g_fX)
+    {
+        discard;
+    }
+    
+    
+    float4 color = g_DiffuseTexture.Sample(DefaultSampler, In.vTexUV);
+    if (color.a == 0)
+        discard;
+    
+    Out.vColor.rgb = color.rgb;
+    Out.vColor.a = color.a * g_fAlpha;
+    
+    Out.vColor.r = 1.f;
+    Out.vColor.gb = 0.f;
+    
+     
+    if (In.vTexUV.y < 0.26f) //윗쪽하얀색라인
+    {
+        Out.vColor.rgb = 1.f;
+    }
+    if (In.vTexUV.y > 0.44f) //아래쪽하얀색라인, 기본 0.5부터 잘리기때문에 
+    {
+        Out.vColor.rgb = 1.f;
+    }
+    if (In.vTexUV.x < 0.02f)
+    {
+        Out.vColor.rgb = 1.f;
+    }
+    if (In.vTexUV.x > 0.98f)
+    {
+        Out.vColor.rgb = 1.f;
+    }
+    return Out;
+}
+
 PS_OUT PS_MAIN_YELLOW(PS_IN In)
 {
     PS_OUT Out = (PS_OUT) 0;
@@ -295,5 +346,16 @@ technique11 DefaultTechnique
         VertexShader = compile vs_5_0 VS_MAIN();
         GeometryShader = NULL;
         PixelShader = compile ps_5_0 PS_MAIN_GROGGY();
+    }
+
+    pass AlphaBlendRedBack
+    {
+        SetRasterizerState(CullMode_Default);
+        SetDepthStencilState(ZDefault, 0);
+        SetBlendState(AlphaBlending, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+
+        VertexShader = compile vs_5_0 VS_MAIN();
+        GeometryShader = NULL;
+        PixelShader = compile ps_5_0 PS_MAIN_REDBACK();
     }
 }
