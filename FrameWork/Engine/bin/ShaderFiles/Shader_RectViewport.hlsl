@@ -313,34 +313,37 @@ PS_OUT_BLEND PS_MAIN_BLEND(PS_IN In)
 		discard;
 	
 	// ¿Ü°û¼± È¿°ú 1.
-	//if (g_outline ==true)
-	//{
-	//	float fCoord[3] = { -1.f, 0.f, 1.f };
-	//	float fLaplacianMask[9] =
-	//	{
-	//		-1.f, -1.f, -1.f,
-	//		-1.f, 8.f, -1.f,
-	//		-1.f, -1.f, -1.f
-	//	};
-	//	for (int i = 0; i < 9; ++i)
-	//		Out.vColor += fLaplacianMask[i] * g_DiffuseTexture.Sample(DefaultSampler, (In.vTexUV + float2(fCoord[i / 3] / 1280.f, fCoord[i / 3] / 720.f)));
-	//}
-	
-	if(g_outline == true)
+	if (g_outline == true)
 	{
-		float aa = 4.0f * color.a;
-		
-		aa -= g_DiffuseTexture.Sample(DefaultSampler, In.vTexUV + float2(0.01, 0.0)).a;
-		aa -= g_DiffuseTexture.Sample(DefaultSampler, In.vTexUV + float2(-0.01, 0.0)).a;
-		aa -= g_DiffuseTexture.Sample(DefaultSampler, In.vTexUV + float2(0.0, 0.01)).a;
-		aa -= g_DiffuseTexture.Sample(DefaultSampler, In.vTexUV + float2(0.0, -0.01)).a;
-		float4 col;
-		if(aa == 0.0)
-			col = color;
-
+		float fCoord[3] = { -1.f, 0.f, 1.f };
+		float fLaplacianMask[9] =
+		{
+			-1.f, -1.f, -1.f,
+			-1.f, 8.f, -1.f,
+			-1.f, -1.f, -1.f
+		};
+		for (int i = 0; i < 9; ++i)
+			Out.vColor += fLaplacianMask[i] * g_DiffuseTexture.Sample(DefaultSampler, (In.vTexUV + float2(fCoord[i / 3] / 1280.f, fCoord[i / 3] / 720.f)));
 	}
 	
-	
+	//if(g_outline == true)
+	//{
+	//	float aa = 4.0f * color.a;
+		
+	//	aa -= g_DiffuseTexture.Sample(DefaultSampler, In.vTexUV + float2(0.01, 0.0)).a;
+	//	aa -= g_DiffuseTexture.Sample(DefaultSampler, In.vTexUV + float2(-0.01, 0.0)).a;
+	//	aa -= g_DiffuseTexture.Sample(DefaultSampler, In.vTexUV + float2(0.0, 0.01)).a;
+	//	aa -= g_DiffuseTexture.Sample(DefaultSampler, In.vTexUV + float2(0.0, -0.01)).a;
+	//	float4 col;
+	//	if(aa == 0.0)
+	//	{
+	//		col = color;
+	//	}
+	//	else
+	//	{
+	//		Out.vColor = float4(1.f, 0, 0, aa);
+	//	}
+	//}
 	return Out;
 }
 
