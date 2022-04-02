@@ -443,6 +443,7 @@
     <ClInclude Include="..\Headers\UI_Fill_CKey.h" />
     <ClInclude Include="..\Headers\UI_Ingame.h" />
     <ClInclude Include="..\Headers\UI_Monster_Back.h" />
+    <ClInclude Include="..\Headers\UI_Monster_BackHpBar.h" />
     <ClInclude Include="..\Headers\UI_Monster_GroggyBar.h" />
     <ClInclude Include="..\Headers\UI_Monster_HpBar.h" />
     <ClInclude Include="..\Headers\UI_Monster_Level.h" />
@@ -721,6 +722,7 @@
     <ClCompile Include="..\Codes\UI_Fill_CKey.cpp" />
     <ClCompile Include="..\Codes\UI_Ingame.cpp" />
     <ClCompile Include="..\Codes\UI_Monster_Back.cpp" />
+    <ClCompile Include="..\Codes\UI_Monster_BackHpBar.cpp" />
     <ClCompile Include="..\Codes\UI_Monster_GroggyBar.cpp" />
     <ClCompile Include="..\Codes\UI_Monster_HpBar.cpp" />
     <ClCompile Include="..\Codes\UI_Monster_Level.cpp" />

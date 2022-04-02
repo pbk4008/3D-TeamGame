@@ -89,11 +89,6 @@ _int CUI_Monster_HpBar::Tick(_double TimeDelta)
 	
 	m_fGapX = m_fHpRatio;
 
-	/*if (g_pGameInstance->getkeyDown(DIK_L))
-	{
-		m_fGapX -= 0.1f;
-	}*/
-
 	return 0;
 }
 
@@ -111,11 +106,6 @@ _int CUI_Monster_HpBar::LateTick(_double TimeDelta)
 
 HRESULT CUI_Monster_HpBar::Render()
 {
-	if (m_bShow)
-	{
-		
-	}
-
 	_matrix XMWorldMatrix = XMMatrixTranspose(m_pTransform->Get_WorldMatrix());
 	_matrix XMViewMatrix = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_VIEW));
 	_matrix XMProjectMatrix = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_PROJECTION));

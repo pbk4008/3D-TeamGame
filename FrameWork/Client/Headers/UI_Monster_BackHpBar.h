@@ -1,7 +1,7 @@
 #pragma once
 
-#ifndef UI_Monster_HpBar_h__
-#define UI_Monster_HpBar_h__
+#ifndef UI_Monster_BackHpBar_h__
+#define UI_Monster_BackHpBar_h__
 
 #include "UI.h"
 
@@ -13,7 +13,7 @@ class CTransform;
 END
 
 BEGIN(Client)
-class CUI_Monster_HpBar final : public CUI
+class CUI_Monster_BackHpBar final : public CUI
 {
 public:
 	typedef struct UIBar
@@ -22,9 +22,9 @@ public:
 		_uint iRenderPass;
 	}UIBARDESC;
 private:
-	explicit CUI_Monster_HpBar(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);
-	explicit CUI_Monster_HpBar(const CUI_Monster_HpBar& rhs);
-	virtual ~CUI_Monster_HpBar() = default;
+	explicit CUI_Monster_BackHpBar(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);
+	explicit CUI_Monster_BackHpBar(const CUI_Monster_BackHpBar& rhs);
+	virtual ~CUI_Monster_BackHpBar() = default;
 
 public:
 	virtual HRESULT NativeConstruct_Prototype() override;
@@ -53,10 +53,10 @@ private:
 	virtual HRESULT SetUp_Components();
 
 public:
-	static CUI_Monster_HpBar* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);
+	static CUI_Monster_BackHpBar* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);
 	virtual CGameObject* Clone(const _uint _iSceneID, void* pArg) override;
 	virtual void Free() override;
 };
 
 END
-#endif // UI_Monster_HpBar_h__
+#endif // UI_Monster_BackHpBar_h__

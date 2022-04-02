@@ -77,26 +77,8 @@ _int CEffect_HitParticle::Tick(_double TimeDelta)
 	if (4.f <= m_fNonActiveTimeAcc)
 	{
 		setActive(false);
-		//m_pRenderer->SetRenderButton(CRenderer::PARTICLE, false);
 		m_fNonActiveTimeAcc = 0.f;
 	}
-
-	//_uint iAllFrameCount = (m_Desc.iImageCountX * m_Desc.iImageCountY);
-	//m_Desc.fFrame += (_float)(iAllFrameCount * g_dDeltaTime * m_Desc.fEffectPlaySpeed); //플레이속도 
-	//if (m_Desc.fFrame >= iAllFrameCount)
-	//{
-	//	m_Desc.fFrame = 0;
-	//}
-
-	//if (m_Desc.fMaxLifeTime > m_Desc.fCurTime)
-	//{
-	//	m_Desc.fCurTime += (_float)g_dDeltaTime;
-	//}
-
-	//if (m_Desc.fMaxLifeTime < m_Desc.fCurTime)
-	//{
-	//	m_Desc.fCurTime = m_Desc.fMaxLifeTime;
-	//}
 
     return 0;
 }

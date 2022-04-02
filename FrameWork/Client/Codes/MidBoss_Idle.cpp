@@ -34,7 +34,7 @@ _int CMidBoss_Idle::Tick(const _double& TimeDelta)
 
 	m_pAnimator->Tick(TimeDelta);
 	
-	if (15.f > XMVectorGetX(vDist) && 15.f > XMVectorGetZ(vDist) && 15.f > XMVectorGetY(vDist))
+	if ( 15.f > fDistToPlayer)
 	{
 		m_pStateController->Change_State(L"Rage");
 	}
@@ -75,9 +75,6 @@ HRESULT CMidBoss_Idle::ExitState()
 {
 	if (FAILED(__super::ExitState()))
 		return E_FAIL;
-
-	//_vector vec = { 0.f, 1.f, 0.f,0.f };
-	//m_pTransform->SetUp_Rotation(vec, (XMConvertToRadians(0.f)));
 
 	return S_OK;
 }

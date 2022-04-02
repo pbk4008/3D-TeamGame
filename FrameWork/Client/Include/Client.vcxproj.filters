@@ -587,7 +587,7 @@
     </Filter>
     <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_Sword\00.State\08.Walk\07.Turn">
       <UniqueIdentifier>{f15707ff-b13d-4f61-ae5b-8aaf6d1afdc7}</UniqueIdentifier>
-	</Filter>
+    </Filter>
     <Filter Include="02.GameObject\02.Map\01.Environment\00.Tree">
       <UniqueIdentifier>{afa39133-5db9-4588-b538-151dc4a78680}</UniqueIdentifier>
     </Filter>
@@ -596,9 +596,6 @@
     </Filter>
     <Filter Include="02.GameObject\02.Map\01.Environment\02.MapObject">
       <UniqueIdentifier>{6c74a239-aae4-4275-b01a-ea48c53eae4c}</UniqueIdentifier>
-	</Filter>
-    <Filter Include="02.GameObject\04.Effect\05.TrailEffect">
-      <UniqueIdentifier>{4da4394f-ff21-4396-a0e8-24986eaeec60}</UniqueIdentifier>
     </Filter>
     <Filter Include="02.GameObject\04.Effect\00.Particle">
       <UniqueIdentifier>{26ffc168-b02c-40a4-b7fb-3fa6ef6e68d1}</UniqueIdentifier>
@@ -635,6 +632,12 @@
     </Filter>
     <Filter Include="02.GameObject\05.UI\01.UI_Ingame\02.UI_JumpNode\01.Fill">
       <UniqueIdentifier>{a56a74b1-3d13-4387-b77b-96aeb0113934}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\04.Effect\01.TrailEffect">
+      <UniqueIdentifier>{4da4394f-ff21-4396-a0e8-24986eaeec60}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.UI\01.UI_Ingame\01.Meter\02.Monster\03.HpUI\00.BackHp">
+      <UniqueIdentifier>{56f68291-1790-462f-af84-0e71c7f994af}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -1481,9 +1484,9 @@
     </ClInclude>
     <ClInclude Include="..\Headers\Environment.h">
       <Filter>02.GameObject\02.Map\01.Environment\02.MapObject</Filter>
-	</ClInclude>
+    </ClInclude>
     <ClInclude Include="..\Headers\TrailEffect.h">
-      <Filter>02.GameObject\04.Effect\05.TrailEffect</Filter>
+      <Filter>02.GameObject\04.Effect\01.TrailEffect</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\Effect_DeathParticle.h">
       <Filter>02.GameObject\04.Effect\00.Particle\04.Effect_Death</Filter>
@@ -1496,6 +1499,9 @@
     </ClInclude>
     <ClInclude Include="..\Headers\UI_Fill_CKey.h">
       <Filter>02.GameObject\05.UI\01.UI_Ingame\02.UI_JumpNode\01.Fill</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\UI_Monster_BackHpBar.h">
+      <Filter>02.GameObject\05.UI\01.UI_Ingame\01.Meter\02.Monster\03.HpUI\00.BackHp</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -2315,9 +2321,9 @@
     </ClCompile>
     <ClCompile Include="..\Codes\Environment.cpp">
       <Filter>02.GameObject\02.Map\01.Environment\02.MapObject</Filter>
-	</ClCompile>
+    </ClCompile>
     <ClCompile Include="..\Codes\TrailEffect.cpp">
-      <Filter>02.GameObject\04.Effect\05.TrailEffect</Filter>
+      <Filter>02.GameObject\04.Effect\01.TrailEffect</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\Effect_DeathParticle.cpp">
       <Filter>02.GameObject\04.Effect\00.Particle\04.Effect_Death</Filter>
@@ -2330,6 +2336,9 @@
     </ClCompile>
     <ClCompile Include="..\Codes\UI_Fill_CKey.cpp">
       <Filter>02.GameObject\05.UI\01.UI_Ingame\02.UI_JumpNode\01.Fill</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\UI_Monster_BackHpBar.cpp">
+      <Filter>02.GameObject\05.UI\01.UI_Ingame\01.Meter\02.Monster\03.HpUI\00.BackHp</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

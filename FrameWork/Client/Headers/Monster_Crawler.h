@@ -47,6 +47,7 @@ private:
 	HRESULT	Ready_Weapone();
 	HRESULT Set_Animation_FSM();
 	HRESULT Set_State_FSM();
+	HRESULT Set_Panel();
 
 private:
 	CModel*						m_pModelCom = nullptr;
