@@ -208,5 +208,6 @@ CGameObject* CEnvironment::Clone(const _uint _iSceneID, void* pArg)
 void CEnvironment::Free()
 {
 	CLandScape::Free();
+
 	Safe_Release(m_pInstanceMesh);
 }

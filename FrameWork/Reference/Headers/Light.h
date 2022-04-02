@@ -4,6 +4,8 @@
 
 BEGIN(Engine)
 
+class CTarget_Manager;
+
 class CLight final : public CBase
 {
 private:
@@ -17,7 +19,7 @@ public:
 public:
 	HRESULT NativeConstruct(const LIGHTDESC& LightDesc);
 	void	Tick();
-	HRESULT Render(const wstring& pCameraTag, _bool PBRHDRcheck,_bool Shadow);
+	HRESULT Render(CTarget_Manager* pTarget_Manager,const wstring& pCameraTag, _bool PBRHDRcheck,_bool Shadow);
 
 public: void UpdateLightCam(_fvector playerpos);
 

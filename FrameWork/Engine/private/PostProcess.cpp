@@ -57,17 +57,6 @@ HRESULT CPostProcess::PossProcessing(CTonemapping* tone,CTarget_Manager* pTarget
 	if (FAILED(BlurPass(pTargetMgr, L"Target_Horizontal4", L"Target_Vertical8", L"Target_Horizontal8", 160, 90))) return E_FAIL;
 	if (FAILED(BlurPass(pTargetMgr, L"Target_Horizontal8", L"Target_Vertical16", L"Target_Horizontal16", 64, 64))) return E_FAIL;
 
-	//-----------------------------------------//
-	//if (particle == true)
-	//{
-	//	if (FAILED(BlurPass(pTargetMgr, L"Target_Particle", L"Target_ParticleV2", L"Target_ParticleH2", 640, 360))) return E_FAIL;
-	//	if (FAILED(BlurPass(pTargetMgr, L"Target_ParticleH2", L"Target_ParticleV4", L"Target_ParticleH4", 320, 180))) return E_FAIL;
-	//	if (FAILED(BlurPass(pTargetMgr, L"Target_ParticleH4", L"Target_ParticleV8", L"Target_ParticleH8", 160, 90))) return E_FAIL;
-	//	if (FAILED(BlurPass(pTargetMgr, L"Target_ParticleH8", L"Target_ParticleV16", L"Target_ParticleH16", 64, 64))) return E_FAIL;
-
-	//	if (FAILED(BloomPass(pTargetMgr,L"Target_Alpha", L"Target_ParticleH2", L"Target_ParticleH4", L"Target_ParticleH8", L"Target_ParticleH16",0.7f))) return E_FAIL;
-	//}
-
 	if (FAILED(tone->Blend_FinalPass(pTargetMgr, hdr, shadow, particle))) return E_FAIL;
 
 	return S_OK;
@@ -202,6 +191,7 @@ CPostProcess* CPostProcess::Create(ID3D11Device* pDevice, ID3D11DeviceContext* p
 void CPostProcess::Free()
 {
 	Safe_Release(m_pVIBuffer);
-	Safe_Release(m_pDevice);
+
 	Safe_Release(m_pDeviceContext);
+	Safe_Release(m_pDevice);
 }

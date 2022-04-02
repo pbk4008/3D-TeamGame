@@ -727,6 +727,7 @@ CGameObject* CMonster_Bastion_Sword::Clone(const _uint _iSceneID, void* _pArg)
 void CMonster_Bastion_Sword::Free()
 {
 	__super::Free();
+
 	Safe_Release(m_pWeapon);
 	Safe_Release(m_pModelCom);
 	Safe_Release(m_pAnimator);

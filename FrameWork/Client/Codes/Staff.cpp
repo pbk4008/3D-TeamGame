@@ -171,6 +171,5 @@ CGameObject* CStaff::Clone(const _uint _iSceneID, void* _pArg)
 
 void CStaff::Free()
 {
-
-	__super::Free();
+	CWeapon::Free();
 }

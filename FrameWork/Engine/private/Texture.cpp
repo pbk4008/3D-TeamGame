@@ -93,7 +93,10 @@ HRESULT CTexture::Change_Texture(const wstring& pTextureTag)
 
 	vector < ID3D11ShaderResourceView* >* pTexture = pInstance->Get_Texture(pTextureTag);
 	if (!pTexture)
+	{
+		RELEASE_INSTANCE(CTextureManager);
 		return E_FAIL;
+	}
 
 	//m_Textures = *pTexture;
 	//_uint iSize = pTexture->size();

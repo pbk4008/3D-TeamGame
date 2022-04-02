@@ -197,7 +197,8 @@ CGameObject* CBullet::Clone(const _uint iSceneID, void* pArg)
 
 void CBullet::Free()
 {
-	CGameObject::Free();
+	__super::Free();
+
 	Safe_Release(m_pModelCom);
 	Safe_Release(m_pCollider);
 }

@@ -4,6 +4,8 @@
 
 BEGIN(Engine)
 
+class CTarget_Manager;
+
 class CLight_Manager final : public CSingleTon<CLight_Manager>
 {
 	friend CSingleTon;
@@ -21,7 +23,7 @@ public: HRESULT	CreateLightCam(ID3D11Device* pDevice, ID3D11DeviceContext* pDevi
 
 public:
 	HRESULT Add_Light(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext, const LIGHTDESC& LightDesc);
-	HRESULT Render_Lights(const wstring& pCameraTag, _bool pbr, _bool shadow);
+	HRESULT Render_Lights(CTarget_Manager* pTarget_Manager, const wstring& pCameraTag, _bool pbr, _bool shadow);
 private:
 	vector<class CLight*>				m_Lights;
 	typedef vector<class CLight*>		LIGHTS;

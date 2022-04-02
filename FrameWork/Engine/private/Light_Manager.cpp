@@ -1,5 +1,6 @@
 #include "Light_Manager.h"
 #include "Light.h"
+#include "Target_Manager.h"
 
 
 CLight_Manager::CLight_Manager()
@@ -65,10 +66,10 @@ HRESULT CLight_Manager::Add_Light(ID3D11Device* pDevice, ID3D11DeviceContext* pD
 	return S_OK;
 }
 
-HRESULT CLight_Manager::Render_Lights(const wstring& pCameraTag,_bool pbr, _bool shadow)
+HRESULT CLight_Manager::Render_Lights(CTarget_Manager* pTarget_Manager, const wstring& pCameraTag, _bool pbr, _bool shadow)
 {
 	for (auto& pLight : m_Lights)
-		pLight->Render(pCameraTag, pbr, shadow);
+		pLight->Render(pTarget_Manager,pCameraTag, pbr, shadow);
 
 	return S_OK;
 }

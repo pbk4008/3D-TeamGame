@@ -262,6 +262,7 @@ CLuminance* CLuminance::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDevi
 void CLuminance::Free()
 {
 	Safe_Release(m_pVIBuffer);
-	Safe_Release(m_pDevice);
+
 	Safe_Release(m_pDeviceContext);
+	Safe_Release(m_pDevice);
 }

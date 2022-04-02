@@ -23,7 +23,15 @@ CMonster_EarthAberrant::CMonster_EarthAberrant(ID3D11Device* _pDevice, ID3D11Dev
 
 CMonster_EarthAberrant::CMonster_EarthAberrant(const CMonster_EarthAberrant& _rhs)
 	:CActor(_rhs)
+	, m_pCharacterController(_rhs.m_pCharacterController)
+	, m_pModelCom(_rhs.m_pModelCom)
+	, m_pStateController(_rhs.m_pStateController)
+	, m_pAnimatorCom(_rhs.m_pAnimatorCom)
 {
+	Safe_AddRef(m_pCharacterController);
+	Safe_AddRef(m_pModelCom);
+	Safe_AddRef(m_pStateController);
+	Safe_AddRef(m_pAnimatorCom);
 }
 
 HRESULT CMonster_EarthAberrant::NativeConstruct_Prototype()

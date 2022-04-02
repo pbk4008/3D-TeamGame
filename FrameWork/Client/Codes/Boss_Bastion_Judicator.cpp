@@ -21,9 +21,16 @@ CBoss_Bastion_Judicator::CBoss_Bastion_Judicator(ID3D11Device* pDevice, ID3D11De
 
 CBoss_Bastion_Judicator::CBoss_Bastion_Judicator(const CBoss_Bastion_Judicator& rhs)
 	:CActor(rhs)
+	, m_pCharacterController(rhs.m_pCharacterController)
+	, m_pModelCom(rhs.m_pModelCom)
+	, m_pStateController(rhs.m_pStateController)
+	, m_pAnimator(rhs.m_pAnimator)
 {
+	Safe_AddRef(m_pCharacterController);
+	Safe_AddRef(m_pModelCom);
+	Safe_AddRef(m_pStateController);
+	Safe_AddRef(m_pAnimator);
 }
-
 HRESULT CBoss_Bastion_Judicator::NativeConstruct_Prototype()
 {
 	if (FAILED(__super::NativeConstruct_Prototype()))
@@ -621,7 +628,7 @@ void CBoss_Bastion_Judicator::Free()
 {
 	__super::Free();
 
-	//Safe_Release(m_pPanel);
+	Safe_Release(m_pPanel);
 	Safe_Release(m_pCharacterController);
 	Safe_Release(m_pWeapon);
 	Safe_Release(m_pStateController);

@@ -249,7 +249,7 @@ CGameObject* CNeedle::Clone(const _uint _iSceneID, void* _pArg)
 
 void CNeedle::Free()
 {
-	__super::Free();
+	CWeapon::Free();
 
 	Safe_Release(m_pCollider);
 }

@@ -810,12 +810,12 @@ void CSilvermane::OnControllerColliderHit(CCollision& collision)
 
 			if (5.f < fBoxToPlayer)
 			{
-				if (nullptr != m_pFillCKey)
-				{
-					m_pFillCKey->Set_GapX(0.f);
-					m_pFillCKey->setActive(false);
-					//m_pTargetJumpBox = nullptr;
-				}
+				//if (nullptr != m_pFillCKey)
+				//{
+				//	m_pFillCKey->Set_GapX(0.f);
+				//	m_pFillCKey->setActive(false);
+				//	m_pTargetJumpBox = nullptr;
+				//}
 			}
 		}
 	if (iTag == (_uint)GAMEOBJECT::JUMP_BOX)
@@ -831,13 +831,13 @@ void CSilvermane::OnControllerColliderHit(CCollision& collision)
 		}
 
 		//점프ui관련
-		m_pFillCKey = (CUI_Fill_Ckey*)g_pGameInstance->getObjectList(m_iSceneID, L"Layer_UI_FillC")->front();
+		//m_pFillCKey = (CUI_Fill_Ckey*)g_pGameInstance->getObjectList(m_iSceneID, L"Layer_UI_FillC")->front();
 		//m_pFillCKey = (CUI_Fill_Ckey*)g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Layer_UI_FillC")->front();
 
 		if (!m_pFillCKey)
 			return;
 
-		m_pFillCKey->Set_JumpNode(false);
+		//m_pFillCKey->Set_JumpNode(false);
 
 		if (nullptr != m_pTargetJumpBox)
 		{
@@ -847,8 +847,8 @@ void CSilvermane::OnControllerColliderHit(CCollision& collision)
 
 			if (5.f >= fBoxToPlayer)
 			{
-				m_pFillCKey->Set_GapX(1.f);
-				m_pFillCKey->setActive(true);
+				//m_pFillCKey->Set_GapX(1.f);
+				//m_pFillCKey->setActive(true);
 			}
 		}
 		
@@ -1179,8 +1179,8 @@ const _bool CSilvermane::Raycast_JumpNode(const _double& _dDeltaTime)
 	}
 
 	//점프ui관련
-	m_pBlankCKey = (CUI_Blank_CKey*)g_pGameInstance->getObjectList(m_iSceneID, L"Layer_UI_BlankC")->front();
-	m_pFillCKey = (CUI_Fill_Ckey*)g_pGameInstance->getObjectList(m_iSceneID, L"Layer_UI_FillC")->front();
+	//m_pBlankCKey = (CUI_Blank_CKey*)g_pGameInstance->getObjectList(m_iSceneID, L"Layer_UI_BlankC")->front();
+	//m_pFillCKey = (CUI_Fill_Ckey*)g_pGameInstance->getObjectList(m_iSceneID, L"Layer_UI_FillC")->front();
 
 	/*if ((_uint)GAMEOBJECT::JUMP_TRIGGER == iObjectTag)
 	{
@@ -1215,14 +1215,14 @@ const _bool CSilvermane::Raycast_JumpNode(const _double& _dDeltaTime)
 				return false;
 			m_fJumpNodeLookTime = 0.f;
 		}
-		else if (1.f >= m_fJumpNodeLookTime)
-		{
-			if (nullptr != m_pBlankCKey && false == m_pBlankCKey->getActive())
-			{
-				m_pBlankCKey->setActive(true);
-				m_pFillCKey->setActive(true);
-			}
-		}
+		//else if (1.f >= m_fJumpNodeLookTime)
+		//{
+		//	if (nullptr != m_pBlankCKey && false == m_pBlankCKey->getActive())
+		//	{
+		//		m_pBlankCKey->setActive(true);
+		//		m_pFillCKey->setActive(true);
+		//	}
+		//}
 		return true;
 	}
 	else
@@ -1239,17 +1239,17 @@ const _bool CSilvermane::Raycast_JumpNode(const _double& _dDeltaTime)
 		m_fJumpNodeLookTime = 0.f;
 		m_fJumpTriggerLookTime = 0.f;
 
-		if (nullptr != m_pBlankCKey)
-		{
-			m_pBlankCKey->setActive(false);
-		}
+		//if (nullptr != m_pBlankCKey)
+		//{
+		//	m_pBlankCKey->setActive(false);
+		//}
 
-		if (nullptr != m_pFillCKey && nullptr == m_pTargetJumpBox)
-		{
-			m_pFillCKey->Set_GapX(0.f);
-			m_pFillCKey->setActive(false);
-			m_pFillCKey->Set_JumpNode(false);
-		}
+		//if (nullptr != m_pFillCKey && nullptr == m_pTargetJumpBox)
+		//{
+		//	m_pFillCKey->Set_GapX(0.f);
+		//	m_pFillCKey->setActive(false);
+		//	m_pFillCKey->Set_JumpNode(false);
+		//}
 	}
 
 	return false;

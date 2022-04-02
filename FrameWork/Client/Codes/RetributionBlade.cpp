@@ -201,6 +201,7 @@ CGameObject* CRetributionBlade::Clone(const _uint _iSceneID, void* _pArg)
 
 void CRetributionBlade::Free()
 {
+	CWeapon::Free();
+
 	Safe_Release(m_pCollider);
-	__super::Free();
 }

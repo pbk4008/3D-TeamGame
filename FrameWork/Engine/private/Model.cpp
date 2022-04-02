@@ -542,7 +542,7 @@ HRESULT CModel::Create_MaterialDesc()
 
 			CTextureManager* pTextureMgr = GET_INSTANCE(CTextureManager);
 
-    			pTextureMgr->Add_Texture(m_pDevice, szTextureTag, szFullName);
+			pTextureMgr->Add_Texture(m_pDevice, szTextureTag, szFullName);
 
 			RELEASE_INSTANCE(CTextureManager);
 

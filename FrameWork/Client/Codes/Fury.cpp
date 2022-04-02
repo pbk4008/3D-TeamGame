@@ -202,7 +202,7 @@ CGameObject* CFury::Clone(const _uint _iSceneID, void* _pArg)
 
 void CFury::Free()
 {
-	Safe_Release(m_pCollider);
+	CWeapon::Free();
 
-	__super::Free();
+	Safe_Release(m_pCollider);
 }

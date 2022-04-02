@@ -5,6 +5,7 @@
 BEGIN(Engine)
 
 class CTarget_Manager;
+class CTarget_Manager;
 class CVIBuffer_RectViewPort;
 
 class CRendererAssit final : public CBase
@@ -15,7 +16,7 @@ private: virtual ~CRendererAssit() = default;
 public: HRESULT			InitRenderAssit();
 public: HRESULT			Setup_RenderTarget();
 
-public: HRESULT			Render_LightAcc(const wstring& cameraTag,_bool bPBR, _bool shadow);
+public: HRESULT			Render_LightAcc(CTarget_Manager* pTarget_Manager, const wstring& cameraTag,_bool bPBR, _bool shadow);
 
 private: CVIBuffer_RectViewPort*	m_pVIBuffer = nullptr;
 private: CTarget_Manager*			m_pTargetMgr = nullptr;

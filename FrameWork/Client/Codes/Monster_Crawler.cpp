@@ -470,12 +470,9 @@ CGameObject* CMonster_Crawler::Clone(const _uint _iSceneID, void* _pArg)
 void CMonster_Crawler::Free()
 {
 	__super::Free();
-	if (m_pCollider != nullptr && m_pCharacterController != nullptr)
-	{
-		Safe_Release(m_pCollider);
-		Safe_Release(m_pCharacterController);
-	}
 
+	Safe_Release(m_pCollider);
+	Safe_Release(m_pCharacterController);
 	Safe_Release(m_pPanel);
 	Safe_Release(m_pStateController);
 	Safe_Release(m_pAnimatorCom);

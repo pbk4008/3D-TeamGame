@@ -223,7 +223,10 @@ HRESULT CMaterial::Set_Texture(TEXTURETYPE _eTextureType, const wstring& _pTextu
 	CTextureManager* pTextureMgr = GET_INSTANCE(CTextureManager);
 
 	if (FAILED(pTextureMgr->Add_Texture(m_pDevice, _pTextureTag, _pTexturePath)))
+	{
+		RELEASE_INSTANCE(CTextureManager);
 		return E_FAIL;
+	}
 
 	RELEASE_INSTANCE(CTextureManager);
 

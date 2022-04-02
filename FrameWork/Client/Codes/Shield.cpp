@@ -207,7 +207,8 @@ CGameObject* CShield::Clone(const _uint _iSceneID, void* _pArg)
 
 void CShield::Free()
 {
+	CWeapon::Free();
+
 	Safe_Release(m_pAnimationController);
 
-	__super::Free();
 }

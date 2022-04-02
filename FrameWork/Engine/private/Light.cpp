@@ -31,9 +31,9 @@ void CLight::Tick()
 {
 }
 
-HRESULT CLight::Render(const wstring& pCameraTag, _bool PBRHDRcheck, _bool Shadow)
+HRESULT CLight::Render(CTarget_Manager* pTarget_Manager,const wstring& pCameraTag, _bool PBRHDRcheck, _bool Shadow)
 {
-	CTarget_Manager* pTarget_Manager = GET_INSTANCE(CTarget_Manager);
+	/*CTarget_Manager* pTarget_Manager = GET_INSTANCE(CTarget_Manager);*/
 	if (m_pVIBuffer != nullptr)
 	{
 		_uint		iPassIndex = 0;
@@ -84,7 +84,7 @@ HRESULT CLight::Render(const wstring& pCameraTag, _bool PBRHDRcheck, _bool Shado
 
 		m_pVIBuffer->Render(iPassIndex);
 	}
-	RELEASE_INSTANCE(CTarget_Manager);
+	/*RELEASE_INSTANCE(CTarget_Manager);*/
 
 	return S_OK;
 }

@@ -587,6 +587,8 @@ CGameObject* CMonster_BronzeAnimus::Clone(const _uint _iSceneID, void* _pArg)
 
 void CMonster_BronzeAnimus::Free()
 {
+	__super::Free();
+
 	Safe_Release(m_pModel);
 	Safe_Release(m_pAnimator);
 	Safe_Release(m_pWeapon);
@@ -594,5 +596,4 @@ void CMonster_BronzeAnimus::Free()
 	Safe_Release(m_pCharacterController);
 	Safe_Release(m_pPanel);
 
-	__super::Free();
 }

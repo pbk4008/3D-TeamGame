@@ -122,6 +122,7 @@ void CTonemapping::Free()
 {
 	Safe_Release(m_pTonmapBuffer);
 	Safe_Release(m_pFinalBlend);
-	Safe_Release(m_pDevice);
+
 	Safe_Release(m_pDeviceContext);
+	Safe_Release(m_pDevice);
 }

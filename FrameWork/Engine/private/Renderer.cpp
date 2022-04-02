@@ -145,7 +145,7 @@ HRESULT CRenderer::Draw_RenderGroup()
 	if (FAILED(Render_NonAlpha())) // 디퍼드 단계
 		return E_FAIL;
 
-	if (FAILED(m_pRenderAssit->Render_LightAcc(m_CameraTag,m_bPBR,m_bShadow))) // 빛연산
+	if (FAILED(m_pRenderAssit->Render_LightAcc(m_pTargetMgr,m_CameraTag,m_bPBR,m_bShadow))) // 빛연산
 		return E_FAIL;
 
 	if (m_bPixel) // Pixel HDR
@@ -157,10 +157,10 @@ HRESULT CRenderer::Draw_RenderGroup()
 		if (FAILED(m_pLuminance->DownSampling(m_pTargetMgr))) return E_FAIL;
 
 		if (FAILED(m_pPostProcess->PossProcessing(m_pTonemapping, m_pTargetMgr,m_bHDR,m_bShadow,m_bParticle))) return E_FAIL;
-	}
 
-	if (FAILED(Render_Final())) 
-		return E_FAIL;
+		if (FAILED(Render_Final()))
+			return E_FAIL;
+	}
 
 	if (FAILED(Render_Alpha()))
 		return E_FAIL;
@@ -296,7 +296,7 @@ HRESULT CRenderer::Render_NonAlpha()
 
 HRESULT CRenderer::Render_Alpha()
 {
-	//if (FAILED(m_pTargetMgr->Begin_MRT(m_pDeviceContext, TEXT("Target_Particle")))) return E_FAIL;
+	if (FAILED(m_pTargetMgr->Begin_MRT(m_pDeviceContext, TEXT("Target_Particle")))) return E_FAIL;
 
 	_matrix view = g_pGameInstance->Get_Transform(m_CameraTag, TRANSFORMSTATEMATRIX::D3DTS_VIEW);
 	view = XMMatrixInverse(nullptr, view);
@@ -320,7 +320,17 @@ HRESULT CRenderer::Render_Alpha()
 	m_RenderGroup[RENDER_ALPHA].clear();
 
 	//if (FAILED(m_pTargetMgr->End_MRT(m_pDeviceContext)))	return E_FAIL;
-	//if (FAILED(m_pTargetMgr->End_MRTNotClear(m_pDeviceContext))) return E_FAIL;
+	if (FAILED(m_pTargetMgr->End_MRTNotClear(m_pDeviceContext))) return E_FAIL;
+
+		//if (particle == true)
+	//{
+	//	if (FAILED(BlurPass(pTargetMgr, L"Target_Particle", L"Target_ParticleV2", L"Target_ParticleH2", 640, 360))) return E_FAIL;
+	//	if (FAILED(BlurPass(pTargetMgr, L"Target_ParticleH2", L"Target_ParticleV4", L"Target_ParticleH4", 320, 180))) return E_FAIL;
+	//	if (FAILED(BlurPass(pTargetMgr, L"Target_ParticleH4", L"Target_ParticleV8", L"Target_ParticleH8", 160, 90))) return E_FAIL;
+	//	if (FAILED(BlurPass(pTargetMgr, L"Target_ParticleH8", L"Target_ParticleV16", L"Target_ParticleH16", 64, 64))) return E_FAIL;
+
+	//	if (FAILED(BloomPass(pTargetMgr,L"Target_Alpha", L"Target_ParticleH2", L"Target_ParticleH4", L"Target_ParticleH8", L"Target_ParticleH16",0.7f))) return E_FAIL;
+	//}
 
 	return S_OK;
 }
@@ -527,7 +537,7 @@ void CRenderer::Free()
 	Safe_Release(m_pPostProcess);
 	Safe_Release(m_pTonemapping);
 	Safe_Release(m_pRenderAssit);
+	Safe_Release(m_pVIBuffer);
 
 	Safe_Release(m_pTargetMgr);
-	Safe_Release(m_pVIBuffer);
 }

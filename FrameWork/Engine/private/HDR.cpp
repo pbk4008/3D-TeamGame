@@ -64,6 +64,7 @@ CHDR* CHDR::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
 void CHDR::Free()
 {
 	Safe_Release(m_pVIBuffer);
-	Safe_Release(m_pDevice);
+
 	Safe_Release(m_pDeviceContext);
+	Safe_Release(m_pDevice);
 }

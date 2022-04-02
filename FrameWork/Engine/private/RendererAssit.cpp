@@ -383,7 +383,7 @@ HRESULT CRendererAssit::Setup_RenderTarget()
 	return S_OK;
 }
 
-HRESULT CRendererAssit::Render_LightAcc(const wstring& cameraTag, _bool bPBR,_bool shadow)
+HRESULT CRendererAssit::Render_LightAcc(CTarget_Manager* pTarget_Manager, const wstring& cameraTag, _bool bPBR,_bool shadow)
 {
 	if (nullptr == m_pTargetMgr)
 		return E_FAIL;
@@ -392,7 +392,7 @@ HRESULT CRendererAssit::Render_LightAcc(const wstring& cameraTag, _bool bPBR,_bo
 
 	m_pTargetMgr->Begin_MRT(m_pDeviceContext, TEXT("MRT_LightAcc"));
 
-	pLight_Manager->Render_Lights(cameraTag, bPBR,shadow);
+	pLight_Manager->Render_Lights(pTarget_Manager,cameraTag, bPBR,shadow);
 
 	//m_pTargetMgr->End_MRT(m_pDeviceContext);
 	if (FAILED(m_pTargetMgr->End_MRTNotClear(m_pDeviceContext))) return E_FAIL;
@@ -418,7 +418,8 @@ CRendererAssit* CRendererAssit::Create(ID3D11Device* pDevice, ID3D11DeviceContex
 void CRendererAssit::Free()
 {
 	Safe_Release(m_pVIBuffer);
+	
 	Safe_Release(m_pTargetMgr);
-	Safe_Release(m_pDevice);
 	Safe_Release(m_pDeviceContext);
+	Safe_Release(m_pDevice);
 }

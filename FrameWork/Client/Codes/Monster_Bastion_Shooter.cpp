@@ -629,6 +629,7 @@ CGameObject* CMonster_Bastion_Shooter::Clone(const _uint _iSceneID, void* _pArg)
 void CMonster_Bastion_Shooter::Free()
 {
 	__super::Free();
+
 	Safe_Release(m_pStateController);
 	Safe_Release(m_pAnimator);
 	Safe_Release(m_pModelCom);

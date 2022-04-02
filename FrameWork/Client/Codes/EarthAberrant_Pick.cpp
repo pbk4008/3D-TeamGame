@@ -14,7 +14,9 @@ CEarthAberrant_Pick::CEarthAberrant_Pick(ID3D11Device* pDevice, ID3D11DeviceCont
 
 CEarthAberrant_Pick::CEarthAberrant_Pick(const CEarthAberrant_Pick& rhs)
 	: CWeapon(rhs)
+	, m_pCollider(rhs.m_pCollider)
 {
+	Safe_AddRef(m_pCollider);
 }
 
 HRESULT CEarthAberrant_Pick::NativeConstruct_Prototype()
@@ -207,6 +209,6 @@ CGameObject* CEarthAberrant_Pick::Clone(const _uint _iSceneID, void* pArg)
 
 void CEarthAberrant_Pick::Free()
 {
+	CWeapon::Free();
 	Safe_Release(m_pCollider);
-	__super::Free();
 }

@@ -732,6 +732,8 @@ CGameObject* CMonster_Bastion_2HSword::Clone(const _uint _iSceneID, void* _pArg)
 
 void CMonster_Bastion_2HSword::Free()
 {
+	__super::Free();
+
 	Safe_Release(m_pModel);
 	Safe_Release(m_pAnimator);
 	Safe_Release(m_pWeapon);
@@ -739,5 +741,4 @@ void CMonster_Bastion_2HSword::Free()
 	Safe_Release(m_pCharacterController);
 	Safe_Release(m_pPanel);
 
-	__super::Free();
 }

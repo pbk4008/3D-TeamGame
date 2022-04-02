@@ -13,7 +13,9 @@ CShieldBreaker::CShieldBreaker(ID3D11Device* pDevice, ID3D11DeviceContext* pDevi
 
 CShieldBreaker::CShieldBreaker(const CShieldBreaker& rhs)
 	: CWeapon(rhs)
+	, m_pCollider(rhs.m_pCollider)
 {
+	Safe_AddRef(m_pCollider);
 }
 
 HRESULT CShieldBreaker::NativeConstruct_Prototype()
@@ -206,7 +208,6 @@ CGameObject* CShieldBreaker::Clone(const _uint _iSceneID, void* pArg)
 
 void CShieldBreaker::Free()
 {
+	CWeapon::Free();
 	Safe_Release(m_pCollider);
-
-	__super::Free();
 }
