@@ -22,7 +22,7 @@ HRESULT CCamera_Silvermane::NativeConstruct_Prototype()
 
 	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Camera_Culling", CCamera_Culling::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
-	if(FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_CameraShake", CCameraShake::Create(m_pDevice, m_pDeviceContext))))
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_CameraShake", CCameraShake::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 
 	return S_OK;
@@ -299,16 +299,26 @@ void CCamera_Silvermane::OnOffMonsterUI()
 		{
 			if (nullptr != pHitObject)
 			{
-				static_cast<CActor*>(pHitObject)->Set_UIShow(true);
 				m_pTargetMonster = pHitObject;
+				static_cast<CActor*>(m_pTargetMonster)->Set_UIShow(true);
 			}
 		}
+	}
 
-		else
+	else if(false == g_pGameInstance->Raycast(tRaycastDesc))
+	{
+		if (nullptr != pHitObject)
 		{
-			if (nullptr != pHitObject)
+			if ((_uint)GAMEOBJECT::MONSTER_CRYSTAL == pHitObject->getTag() ||
+				(_uint)GAMEOBJECT::MONSTER_ABERRANT == pHitObject->getTag() ||
+				(_uint)GAMEOBJECT::MONSTER_1H == pHitObject->getTag() ||
+				(_uint)GAMEOBJECT::MONSTER_2H == pHitObject->getTag() ||
+				(_uint)GAMEOBJECT::MONSTER_HEALER == pHitObject->getTag() ||
+				(_uint)GAMEOBJECT::MONSTER_SHOOTER == pHitObject->getTag() ||
+				(_uint)GAMEOBJECT::MONSTER_SPEAR == pHitObject->getTag()
+				)
 			{
-				static_cast<CActor*>(pHitObject)->Set_UIShow(false);
+				static_cast<CActor*>(m_pTargetMonster)->Set_UIShow(false);
 			}
 		}
 	}
