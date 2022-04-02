@@ -27,7 +27,9 @@ CMonster_EarthAberrant::CMonster_EarthAberrant(const CMonster_EarthAberrant& _rh
 	, m_pModelCom(_rhs.m_pModelCom)
 	, m_pStateController(_rhs.m_pStateController)
 	, m_pAnimatorCom(_rhs.m_pAnimatorCom)
+	, m_pPanel(_rhs.m_pPanel)
 {
+	Safe_AddRef(m_pPanel);
 	Safe_AddRef(m_pCharacterController);
 	Safe_AddRef(m_pModelCom);
 	Safe_AddRef(m_pStateController);
@@ -76,32 +78,20 @@ HRESULT CMonster_EarthAberrant::NativeConstruct(const _uint _iSceneID, void* _pA
 		return E_FAIL;
 	}
 
-	CHierarchyNode* pBone = m_pModelCom->Get_BoneMatrix("weapon_r_end");
-	CEarthAberrant_Pick* pWeapon = CEarthAberrant_Pick::Create(m_pDevice, m_pDeviceContext);
-	//CEarthAberrant_Pick* pWeapon = g_pGameInstance->Clone_GameObject<CEarthAberrant_Pick>(_iSceneID, L"Proto_GameObject_Weapon_EarthAberrant_Pick");
-	pWeapon->NativeConstruct(m_iSceneID, pBone);
-	pWeapon->Set_Owner(this);
-	pWeapon->Set_OwnerPivotMatrix(m_pModelCom->Get_PivotMatrix());
-	m_pWeapon = pWeapon;
-
-
-	//MonsterBar Panel
-	CUI_Monster_Panel::PANELDESC Desc;
-	Desc.pTargetTransform = m_pTransform;
-	Desc.iEnemyTag = CUI_Monster_Panel::Enemy::ABERRANT;
-
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer(_iSceneID, L"Layer_UI", L"Proto_GameObject_UI_Monster_Panel", &Desc,
-		(CGameObject**)&m_pPanel)))
+	if (FAILED(Set_Weapon()))
+	{
 		return E_FAIL;
+	}
 
-	Safe_AddRef(m_pPanel);
+	if (FAILED(Set_Weapon()))
+	{
+		return E_FAIL;
+	}
 
-	m_pPanel->Set_TargetWorldMatrix(m_pTransform->Get_WorldMatrix());
 
 	m_bIsFall = true;
 	m_iObectTag = (_uint)GAMEOBJECT::MONSTER_ABERRANT;
 
-	//¾Æ·¡¼¼ÆÃ ²ÀÇØÁà¾ßµÊ 
 	m_fMaxHp = 2.f;
 	m_fCurrentHp = m_fMaxHp;
 
@@ -111,7 +101,6 @@ HRESULT CMonster_EarthAberrant::NativeConstruct(const _uint _iSceneID, void* _pA
 	m_pPanel->Set_HpBar(Get_HpRatio());
 	m_pPanel->Set_GroggyBar(Get_GroggyGaugeRatio());
 
-	/*setActive(false);*/
 	return S_OK;
 }
 
@@ -578,6 +567,38 @@ HRESULT CMonster_EarthAberrant::Set_State_FSM()
 	}
 
 	m_pStateController->Change_State(L"Idle");
+
+	return S_OK;
+}
+
+HRESULT CMonster_EarthAberrant::Set_Weapon()
+{
+	CHierarchyNode* pBone = m_pModelCom->Get_BoneMatrix("weapon_r_end");
+	CEarthAberrant_Pick* pWeapon = CEarthAberrant_Pick::Create(m_pDevice, m_pDeviceContext);
+	//CEarthAberrant_Pick* pWeapon = g_pGameInstance->Clone_GameObject<CEarthAberrant_Pick>(_iSceneID, L"Proto_GameObject_Weapon_EarthAberrant_Pick");
+	if (FAILED(pWeapon->NativeConstruct(m_iSceneID, pBone)))
+		return E_FAIL;
+	pWeapon->Set_Owner(this);
+	pWeapon->Set_OwnerPivotMatrix(m_pModelCom->Get_PivotMatrix());
+	m_pWeapon = pWeapon;
+
+	return S_OK;
+}
+
+HRESULT CMonster_EarthAberrant::Set_Panel()
+{
+	//MonsterBar Panel
+	CUI_Monster_Panel::PANELDESC Desc;
+	Desc.pTargetTransform = m_pTransform;
+	Desc.iEnemyTag = CUI_Monster_Panel::Enemy::ABERRANT;
+
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer(m_iSceneID, L"Layer_UI", L"Proto_GameObject_UI_Monster_Panel", &Desc,
+		(CGameObject**)&m_pPanel)))
+		return E_FAIL;
+
+	Safe_AddRef(m_pPanel);
+
+	m_pPanel->Set_TargetWorldMatrix(m_pTransform->Get_WorldMatrix());
 
 	return S_OK;
 }

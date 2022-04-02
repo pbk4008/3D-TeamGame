@@ -87,8 +87,6 @@ _int CShieldBreaker::Tick(_double TimeDelta)
 		m_pCollider->Tick(TimeDelta);
 	}
 
-
-
 	return _int();
 }
 
@@ -168,7 +166,7 @@ _int CShieldBreaker::Attach_FixedBone(const _double& TimeDelta)
 		m_pLocalTransform->Set_WorldMatrix(smatWorld);
 	}
 
-	return NO_EVENT;
+	return S_OK;
 }
 
 _int CShieldBreaker::Attach_Owner(const _double& TimeDelta)

@@ -25,11 +25,13 @@ CBoss_Bastion_Judicator::CBoss_Bastion_Judicator(const CBoss_Bastion_Judicator& 
 	, m_pModelCom(rhs.m_pModelCom)
 	, m_pStateController(rhs.m_pStateController)
 	, m_pAnimator(rhs.m_pAnimator)
+	, m_pPanel(rhs.m_pPanel)
 {
 	Safe_AddRef(m_pCharacterController);
 	Safe_AddRef(m_pModelCom);
 	Safe_AddRef(m_pStateController);
 	Safe_AddRef(m_pAnimator);
+	Safe_AddRef(m_pPanel);
 }
 HRESULT CBoss_Bastion_Judicator::NativeConstruct_Prototype()
 {

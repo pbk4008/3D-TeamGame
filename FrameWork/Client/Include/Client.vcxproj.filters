@@ -653,6 +653,12 @@
     </Filter>
     <Filter Include="100.ShaderFiles\99.Other">
       <UniqueIdentifier>{905d5be1-9601-40ef-81f2-c8c3537101a9}</UniqueIdentifier>
+	</Filter>
+    <Filter Include="02.GameObject\04.Effect\01.TrailEffect">
+      <UniqueIdentifier>{4da4394f-ff21-4396-a0e8-24986eaeec60}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.UI\01.UI_Ingame\01.Meter\02.Monster\03.HpUI\00.BackHp">
+      <UniqueIdentifier>{56f68291-1790-462f-af84-0e71c7f994af}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -1501,7 +1507,7 @@
       <Filter>02.GameObject\02.Map\01.Environment\02.MapObject</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\TrailEffect.h">
-      <Filter>02.GameObject\04.Effect\05.TrailEffect</Filter>
+      <Filter>02.GameObject\04.Effect\01.TrailEffect</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\Effect_DeathParticle.h">
       <Filter>02.GameObject\04.Effect\00.Particle\04.Effect_Death</Filter>
@@ -1514,6 +1520,9 @@
     </ClInclude>
     <ClInclude Include="..\Headers\UI_Fill_CKey.h">
       <Filter>02.GameObject\05.UI\01.UI_Ingame\02.UI_JumpNode\01.Fill</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\UI_Monster_BackHpBar.h">
+      <Filter>02.GameObject\05.UI\01.UI_Ingame\01.Meter\02.Monster\03.HpUI\00.BackHp</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -2335,7 +2344,7 @@
       <Filter>02.GameObject\02.Map\01.Environment\02.MapObject</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\TrailEffect.cpp">
-      <Filter>02.GameObject\04.Effect\05.TrailEffect</Filter>
+      <Filter>02.GameObject\04.Effect\01.TrailEffect</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\Effect_DeathParticle.cpp">
       <Filter>02.GameObject\04.Effect\00.Particle\04.Effect_Death</Filter>
@@ -2348,6 +2357,9 @@
     </ClCompile>
     <ClCompile Include="..\Codes\UI_Fill_CKey.cpp">
       <Filter>02.GameObject\05.UI\01.UI_Ingame\02.UI_JumpNode\01.Fill</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\UI_Monster_BackHpBar.cpp">
+      <Filter>02.GameObject\05.UI\01.UI_Ingame\01.Meter\02.Monster\03.HpUI\00.BackHp</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

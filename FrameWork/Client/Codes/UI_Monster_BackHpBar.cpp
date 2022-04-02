@@ -1,22 +1,21 @@
 #include "framework.h"
 #include "pch.h"
-#include "UI_Monster_GroggyBar.h"
+#include "UI_Monster_BackHpBar.h"
 #include "GameInstance.h"
 
-CUI_Monster_GroggyBar::CUI_Monster_GroggyBar(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
+CUI_Monster_BackHpBar::CUI_Monster_BackHpBar(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
 	:CUI(pDevice,pDeviceContext)
-
 {
 	ZeroMemory(&m_UIBarDesc, sizeof(m_UIBarDesc));
 }
 
-CUI_Monster_GroggyBar::CUI_Monster_GroggyBar(const CUI_Monster_GroggyBar& rhs)
+CUI_Monster_BackHpBar::CUI_Monster_BackHpBar(const CUI_Monster_BackHpBar& rhs)
 	: CUI(rhs)
 	, m_UIBarDesc(rhs.m_UIBarDesc)
 {
 }
 
-HRESULT CUI_Monster_GroggyBar::NativeConstruct_Prototype()
+HRESULT CUI_Monster_BackHpBar::NativeConstruct_Prototype()
 {
 	if (FAILED(__super::NativeConstruct_Prototype()))
 	{
@@ -26,7 +25,7 @@ HRESULT CUI_Monster_GroggyBar::NativeConstruct_Prototype()
 	return S_OK;
 }
 
-HRESULT CUI_Monster_GroggyBar::NativeConstruct(const _uint _iSceneID, void* pArg)
+HRESULT CUI_Monster_BackHpBar::NativeConstruct(const _uint _iSceneID, void* pArg)
 {
 	if (nullptr != pArg)
 	{
@@ -49,13 +48,13 @@ HRESULT CUI_Monster_GroggyBar::NativeConstruct(const _uint _iSceneID, void* pArg
 		return E_FAIL;
 	}
 
-	m_fGapX = 0.f;
+	m_fGapX = 1.f;
 	m_fGapY = 0.5f;
 
 	return S_OK;
 }
 
-_int CUI_Monster_GroggyBar::Tick(_double TimeDelta)
+_int CUI_Monster_BackHpBar::Tick(_double TimeDelta)
 {
 	if (false == m_bFirstShow)
 	{
@@ -88,7 +87,7 @@ _int CUI_Monster_GroggyBar::Tick(_double TimeDelta)
 	if (FAILED(CUI::Tick(TimeDelta)))
 		return -1;
 	
-	m_fGapX = m_fGroggyRatio;
+	m_fGapX = m_fHpRatio;
 
 	/*if (g_pGameInstance->getkeyDown(DIK_L))
 	{
@@ -98,7 +97,7 @@ _int CUI_Monster_GroggyBar::Tick(_double TimeDelta)
 	return 0;
 }
 
-_int CUI_Monster_GroggyBar::LateTick(_double TimeDelta)
+_int CUI_Monster_BackHpBar::LateTick(_double TimeDelta)
 {
 	if (FAILED(CUI::LateTick(TimeDelta)))
 		return -1;
@@ -110,7 +109,7 @@ _int CUI_Monster_GroggyBar::LateTick(_double TimeDelta)
 	return _int();
 }
 
-HRESULT CUI_Monster_GroggyBar::Render()
+HRESULT CUI_Monster_BackHpBar::Render()
 {
 	_matrix XMWorldMatrix = XMMatrixTranspose(m_pTransform->Get_WorldMatrix());
 	_matrix XMViewMatrix = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_VIEW));
@@ -130,7 +129,7 @@ HRESULT CUI_Monster_GroggyBar::Render()
 	return S_OK;
 }
 
-HRESULT CUI_Monster_GroggyBar::SetUp_Components()
+HRESULT CUI_Monster_BackHpBar::SetUp_Components()
 {
 	CVIBuffer_Trapezium::TRAPDESC Desc;
 	Desc.fAngle =  m_UIBarDesc.UIDesc.fAngle;
@@ -141,36 +140,44 @@ HRESULT CUI_Monster_GroggyBar::SetUp_Components()
 	if (FAILED(CGameObject::SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_Trapezium_UI", L"Com_Trapezium_UI", (CComponent**)&m_pTrapziumBuffer,&Desc)))
 		return E_FAIL;
 
+	//m_pTrapziumBuffer = g_pGameInstance->Clone_Component<CVIBuffer_Trapezium>(0, L"Proto_Component_Trapezium_UI", &Desc);
+
+	//if (!m_pTrapziumBuffer)
+	//	return E_FAIL;
+
+	//if (FAILED(CGameObject::SetUp_Components(L"Com_Trapezium_UI", m_pTrapziumBuffer)))
+	//	return E_FAIL;
+
 	return S_OK;
 }
 
-CUI_Monster_GroggyBar* CUI_Monster_GroggyBar::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
+CUI_Monster_BackHpBar* CUI_Monster_BackHpBar::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
 {
 	/* 원형객체 생성할때 초기화 */
-	CUI_Monster_GroggyBar* pInstance = new CUI_Monster_GroggyBar(pDevice, pDeviceContext);
+	CUI_Monster_BackHpBar* pInstance = new CUI_Monster_BackHpBar(pDevice, pDeviceContext);
 
 	if (FAILED(pInstance->NativeConstruct_Prototype()))
 	{
-		MSGBOX("Failed to Creating CUI_Monster_GroggyBar");
+		MSGBOX("Failed to Creating CUI_Monster_BackHpBar");
 		Safe_Release(pInstance);
 	}
 
 	return pInstance;
 }
 
-CGameObject* CUI_Monster_GroggyBar::Clone(const _uint _iSceneID, void* pArg)
+CGameObject* CUI_Monster_BackHpBar::Clone(const _uint _iSceneID, void* pArg)
 {
-	CUI_Monster_GroggyBar* pInstance = new CUI_Monster_GroggyBar(*this);
+	CUI_Monster_BackHpBar* pInstance = new CUI_Monster_BackHpBar(*this);
 	if (FAILED(pInstance->NativeConstruct(_iSceneID, pArg)))
 	{
-		MSGBOX("Failed to Creating Clone CUI_Monster_GroggyBar");
+		MSGBOX("Failed to Creating Clone CUI_Monster_BackHpBar");
 		Safe_Release(pInstance);
 	}
 
 	return pInstance;
 }
 
-void CUI_Monster_GroggyBar::Free()
+void CUI_Monster_BackHpBar::Free()
 {
 	__super::Free();
 }

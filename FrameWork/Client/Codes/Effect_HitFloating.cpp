@@ -58,51 +58,21 @@ HRESULT CEffect_HitFloating::NativeConstruct(const _uint _iSceneID, void* pArg)
 	Desc.fLifeTime = m_Desc.fMaxLifeTime;
 	Desc.fCurTime = m_Desc.fCurTime;
 
-	//m_pBuffer->Set_Desc(Desc);
-	//m_pBuffer->Particle_Reset();
-
 	m_backupDesc = Desc;
-
-	//setActive(true);
 
 	return S_OK;
 }
 
 _int CEffect_HitFloating::Tick(_double TimeDelta)
 {
-	/*if (g_pGameInstance->getkeyDown(DIK_NUMPAD1))
-	{
-		m_pBuffer->Set_Desc(m_backupDesc);
-		m_pBuffer->Particle_Reset();
-		m_Desc.fCurTime = 0.f;
-	}*/
-
 	m_pBuffer->Update(g_dDeltaTime, m_Desc.iAxis);
 
 	m_fNonActiveTimeAcc += (_float)g_dDeltaTime;
 	if (4.f <= m_fNonActiveTimeAcc)
 	{
 		setActive(false);
-		//m_pRenderer->SetRenderButton(CRenderer::PARTICLE, false);
 		m_fNonActiveTimeAcc = 0.f;
 	}
-
-	//_uint iAllFrameCount = (m_Desc.iImageCountX * m_Desc.iImageCountY);
-	//m_Desc.fFrame += (_float)(iAllFrameCount * g_dDeltaTime * m_Desc.fEffectPlaySpeed); //플레이속도 
-	//if (m_Desc.fFrame >= iAllFrameCount)
-	//{
-	//	m_Desc.fFrame = 0;
-	//}
-
-	//if (m_Desc.fMaxLifeTime > m_Desc.fCurTime)
-	//{
-	//	m_Desc.fCurTime += g_dDeltaTime;
-	//}
-
-	//if (m_Desc.fMaxLifeTime < m_Desc.fCurTime)
-	//{
-	//	m_Desc.fCurTime = m_Desc.fMaxLifeTime;
-	//}
 
     return 0;
 }

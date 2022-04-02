@@ -107,7 +107,8 @@ PS_OUT PS_MAIN(PS_IN In)
 PS_OUT PS_MAIN_RED(PS_IN In)
 {
     PS_OUT Out = (PS_OUT) 0;
-
+   
+    //위쪽 잘라내기
     if (In.vTexUV.y < 0.2f)
     {
         discard;
@@ -132,12 +133,29 @@ PS_OUT PS_MAIN_RED(PS_IN In)
     Out.vColor.rgb = color.rgb;
     Out.vColor.a = color.a * g_fAlpha;
     
-    if (Out.vColor.a < 0.01)
-        discard;
+    //if (Out.vColor.a < 0.01)
+    //    discard;
     
     Out.vColor.r = 1.f;
     Out.vColor.gb = 0.f;
     
+     
+    if (In.vTexUV.y < 0.26f) //윗쪽하얀색라인
+    {
+        Out.vColor.rgb = 1.f;
+    }
+    if (In.vTexUV.y > 0.44f) //아래쪽하얀색라인, 기본 0.5부터 잘리기때문에 
+    {
+        Out.vColor.rgb = 1.f;
+    }
+    if (In.vTexUV.x < 0.02f)
+    {
+        Out.vColor.rgb = 1.f;
+    }
+    if (In.vTexUV.x > 0.98f)
+    {
+        Out.vColor.rgb = 1.f;
+    }
     return Out;
 }
 

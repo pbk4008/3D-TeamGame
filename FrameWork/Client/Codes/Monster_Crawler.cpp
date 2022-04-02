@@ -62,25 +62,18 @@ HRESULT CMonster_Crawler::NativeConstruct(const _uint _iSceneID, void* _pArg)
 		_vector Pos = { 0.f, 1.f, 3.f, 1.f };
 		m_pTransform->Set_State(CTransform::STATE_POSITION, Pos);
 	}
-	if (FAILED(SetUp_Components())) return E_FAIL;
-	if (FAILED(Set_Animation_FSM())) return E_FAIL;
-	if (FAILED(Set_State_FSM())) return E_FAIL;
-	if (FAILED(Ready_Weapone())) return E_FAIL;
-
-	//MonsterBar Panel
-	CUI_Monster_Panel::PANELDESC Desc;
-	Desc.pTargetTransform = m_pTransform;
-
-	Desc.iEnemyTag = CUI_Monster_Panel::Enemy::CRAWLER;
-
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer(_iSceneID, L"Layer_UI", L"Proto_GameObject_UI_Monster_Panel", &Desc,
-		(CGameObject**)&m_pPanel)))
+	
+	if (FAILED(SetUp_Components())) 
 		return E_FAIL;
-
-	//레이어에도 넣어주고 변수도 가지고 있기때문에 Add_Ref필수!!
-	Safe_AddRef(m_pPanel);
-
-	m_pPanel->Set_TargetWorldMatrix(m_pTransform->Get_WorldMatrix());
+	if (FAILED(Set_Animation_FSM())) 
+		return E_FAIL;
+	if (FAILED(Set_State_FSM())) 
+		return E_FAIL;
+	if (FAILED(Ready_Weapone())) 
+		return E_FAIL;
+	if (FAILED(Set_Panel()))
+		return E_FAIL;
+	
 
 	m_bIsFall = true;
 
@@ -161,6 +154,7 @@ _int CMonster_Crawler::Tick(_double _dDeltaTime)
 			Active_Effect((_uint)EFFECT::DEATH);
 		}
 	}
+
 	if (true == m_bUIShow)
 		m_pPanel->Set_Show(true);
 
@@ -275,9 +269,7 @@ void CMonster_Crawler::Set_IsAttack(const _bool _isAttack)
 
 HRESULT CMonster_Crawler::SetUp_Components()
 {
-	//_vector Pos = { 0.f, 10.f, z, 1.f };
-	//m_pTransform->Set_State(CTransform::STATE_POSITION, Pos);
-
+	//Model
 	CTransform::TRANSFORMDESC Desc;
 	Desc.fSpeedPerSec = 1.f;
 	Desc.fRotationPerSec = XMConvertToRadians(60.f);
@@ -288,6 +280,7 @@ HRESULT CMonster_Crawler::SetUp_Components()
 		return E_FAIL;
 	}
 
+	//animator
 	_matrix matPivot = XMMatrixIdentity();
 	matPivot = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(180.f));
 	m_pModelCom->Set_PivotMatrix(matPivot);
@@ -302,6 +295,7 @@ HRESULT CMonster_Crawler::SetUp_Components()
 	if (FAILED(__super::SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_Animator", L"Com_Animator", (CComponent**)&m_pAnimatorCom, &tDesc)))
 		return E_FAIL;
 
+	//Ch_controller
 	CCharacterController::DESC tCCTDesc;
 	tCCTDesc.fHeight = 1.f;
 	tCCTDesc.fRadius = 0.5f;
@@ -315,6 +309,8 @@ HRESULT CMonster_Crawler::SetUp_Components()
 	if (FAILED(__super::SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_CharacterController", L"CharacterController", (CComponent**)&m_pCharacterController, &tCCTDesc)))
 		return E_FAIL;
 	m_pCharacterController->setOwnerTransform(m_pTransform);
+
+	//state controller
 	if (FAILED(__super::SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_StateController", L"Com_StateController", (CComponent**)&m_pStateController)))
 		return E_FAIL;
 	m_pStateController->Set_GameObject(this);
@@ -338,8 +334,6 @@ HRESULT CMonster_Crawler::Ready_Weapone()
 
 	_matrix smatPviot = XMMatrixRotationY(XMConvertToRadians(90.f)) * XMMatrixTranslation(0.f, 0.5f, 0.5f);
 	m_pCollider->setPivotMatrix(smatPviot);
-
-	//m_pCollider->setActive(true);
 
 	return S_OK;
 }
@@ -434,6 +428,23 @@ HRESULT CMonster_Crawler::Set_State_FSM()
 	}
 
 	m_pStateController->Change_State(L"Idle");
+
+	return S_OK;
+}
+
+HRESULT CMonster_Crawler::Set_Panel()
+{
+	//MonsterBar Panel
+	CUI_Monster_Panel::PANELDESC Desc;
+	Desc.pTargetTransform = m_pTransform;
+	Desc.iEnemyTag = CUI_Monster_Panel::Enemy::CRAWLER;
+
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer(m_iSceneID, L"Layer_UI", L"Proto_GameObject_UI_Monster_Panel", &Desc,
+		(CGameObject**)&m_pPanel)))
+		return E_FAIL;
+
+	Safe_AddRef(m_pPanel);
+	m_pPanel->Set_TargetWorldMatrix(m_pTransform->Get_WorldMatrix());
 
 	return S_OK;
 }
