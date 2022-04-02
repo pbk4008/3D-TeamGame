@@ -1174,8 +1174,8 @@ const _bool CSilvermane::Raycast_JumpNode(const _double& _dDeltaTime)
 	}
 
 	//점프ui관련
-	//m_pBlankCKey = (CUI_Blank_CKey*)g_pGameInstance->getObjectList(m_iSceneID, L"Layer_UI_BlankC")->front();
-	//m_pFillCKey = (CUI_Fill_Ckey*)g_pGameInstance->getObjectList(m_iSceneID, L"Layer_UI_FillC")->front();
+	m_pBlankCKey = (CUI_Blank_CKey*)g_pGameInstance->getObjectList(m_iSceneID, L"Layer_UI_BlankC")->front();
+	m_pFillCKey = (CUI_Fill_Ckey*)g_pGameInstance->getObjectList(m_iSceneID, L"Layer_UI_FillC")->front();
 
 	if ((_uint)GAMEOBJECT::JUMP_TRIGGER == iObjectTag)
 	{
@@ -1233,17 +1233,17 @@ const _bool CSilvermane::Raycast_JumpNode(const _double& _dDeltaTime)
 		m_fJumpNodeLookTime = 0.f;
 		m_fJumpTriggerLookTime = 0.f;
 
-		//if (nullptr != m_pBlankCKey)
-		//{
-		//	m_pBlankCKey->setActive(false);
-		//}
+		if (nullptr != m_pBlankCKey)
+		{
+			m_pBlankCKey->setActive(false);
+		}
 
-		//if (nullptr != m_pFillCKey && nullptr == m_pTargetJumpBox)
-		//{
-		//	m_pFillCKey->Set_GapX(0.f);
-		//	m_pFillCKey->setActive(false);
-		//	m_pFillCKey->Set_JumpNode(false);
-		//}
+		if (nullptr != m_pFillCKey && nullptr == m_pTargetJumpBox)
+		{
+			m_pFillCKey->Set_GapX(0.f);
+			m_pFillCKey->setActive(false);
+			m_pFillCKey->Set_JumpNode(false);
+		}
 	}
 
 	return false;

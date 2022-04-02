@@ -76,10 +76,13 @@ public:
 	HRESULT Render()
 	{
 #ifdef _DEBUG
-		for (auto& pTrigger : m_vecTrigger)
+		if (!m_vecTrigger.empty())
 		{
-			if(pTrigger->getActive())
-				pTrigger->Render();
+			for (auto& pTrigger : m_vecTrigger)
+			{
+				if (pTrigger->getActive())
+					pTrigger->Render();
+			}
 		}
 #endif
 		return S_OK;

@@ -13,6 +13,7 @@
 
 CStage2::CStage2(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
 	: CLevel(pDevice, pDeviceContext)
+	, m_pTriggerSystem(nullptr)
 	, m_bDebug(false)
 {
 }
@@ -43,8 +44,8 @@ HRESULT CStage2::NativeConstruct()
 		return E_FAIL;
 	}
 
-	if (FAILED(Ready_TriggerSystem(L"../bin/SaveData/Trigger/MonsterSpawnTrigger2.dat")))
-		return E_FAIL;
+	//if (FAILED(Ready_TriggerSystem(L"../bin/SaveData/Trigger/MonsterSpawnTrigger2.dat")))
+	//	return E_FAIL;
 
 	return S_OK;
 }
@@ -63,7 +64,7 @@ _int CStage2::Tick(_double TimeDelta)
 	list<CGameObject*>* pLayer = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE2, L"Layer_Crawler");
 
 #endif //  _DEBUG
-	if (m_pTriggerSystem)
+	if (nullptr != m_pTriggerSystem)
 	{
 		if (g_pGameInstance->getkeyDown(DIK_BACKSPACE))
 		{
@@ -84,7 +85,10 @@ _int CStage2::Tick(_double TimeDelta)
 HRESULT CStage2::Render()
 {
 #ifdef _DEBUG
-	m_pTriggerSystem->Render();
+	if (nullptr != m_pTriggerSystem)
+	{
+		m_pTriggerSystem->Render();
+	}
 #endif
 	return S_OK;
 }
@@ -145,7 +149,6 @@ HRESULT CStage2::Ready_MapObject()
 	tJumpNodeDesc.vPosition = { 39.f, 17.f, 268.f };
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE2, L"Layer_JumpNode", L"Proto_GameObject_JumpNode", &tJumpNodeDesc)))
 		return E_FAIL;
-
 	tJumpNodeDesc.vPosition = { 33.f, 15.f, 278.f };
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE2, L"Layer_JumpNode", L"Proto_GameObject_JumpNode", &tJumpNodeDesc)))
 		return E_FAIL;
