@@ -170,14 +170,14 @@ HRESULT CSilvermane::NativeConstruct_Prototype()
 
 HRESULT CSilvermane::NativeConstruct(const _uint _iSceneID, void* _pArg)
 {
-	if (FAILED(__super::NativeConstruct(_iSceneID, _pArg))) 
+	if (FAILED(__super::NativeConstruct(_iSceneID, _pArg)))
 		return E_FAIL;
 
 	if (_pArg)
 	{
 		SCENEMOVEDATA tDesc = (*(SCENEMOVEDATA*)_pArg);
 		_vector vPos = XMLoadFloat3(&tDesc.vPos);
-		vPos=XMVectorSetW(vPos, 1.f);
+		vPos = XMVectorSetW(vPos, 1.f);
 		m_pTransform->Set_State(CTransform::STATE_POSITION, vPos);
 	}
 	else
@@ -185,9 +185,9 @@ HRESULT CSilvermane::NativeConstruct(const _uint _iSceneID, void* _pArg)
 
 	if (FAILED(Ready_Components()))
 		return E_FAIL;
-	if (FAILED(Ready_States())) 
+	if (FAILED(Ready_States()))
 		return E_FAIL;
-	if (FAILED(Ready_Weapons())) 
+	if (FAILED(Ready_Weapons()))
 		return E_FAIL;
 
 	/*g_pObserver->Set_PlayerTransCom(m_pTransform);*/
@@ -214,23 +214,23 @@ _int CSilvermane::Tick(_double _dDeltaTime)
 	m_pTransform->Set_Velocity(XMVectorZero());
 
 	iProgress = m_pStateController->Tick(_dDeltaTime);
-	if (NO_EVENT != iProgress && STATE_CHANGE != iProgress) 
+	if (NO_EVENT != iProgress && STATE_CHANGE != iProgress)
 		return iProgress;
 	g_pObserver->Set_IsAttack(m_IsAttack);
 
 	iProgress = Trace_CameraLook(_dDeltaTime);
-	if (NO_EVENT != iProgress) 
+	if (NO_EVENT != iProgress)
 		return iProgress;
 
 	iProgress = m_pAnimationController->Tick(_dDeltaTime, CAnimationController::EType::CharacterController);
-	if (NO_EVENT != iProgress) 
+	if (NO_EVENT != iProgress)
 		return iProgress;
 
 	iProgress = Input(_dDeltaTime);
 	if (NO_EVENT != iProgress)
 		return iProgress;
 
-	if(m_isFall)
+	if (m_isFall)
 		m_pTransform->Fall(_dDeltaTime);
 	//m_pCharacterController->Tick(_dDeltaTime);
 	if (m_isHighSpeedMode)
@@ -253,7 +253,7 @@ _int CSilvermane::Tick(_double _dDeltaTime)
 	if (m_pCurWeapon)
 	{
 		iProgress = m_pCurWeapon->Tick(_dDeltaTime);
-		if (NO_EVENT != iProgress) 
+		if (NO_EVENT != iProgress)
 			return iProgress;
 	}
 	if (m_pShield && m_pShield->getActive())
@@ -269,13 +269,13 @@ _int CSilvermane::Tick(_double _dDeltaTime)
 _int CSilvermane::LateTick(_double _dDeltaTime)
 {
 	_int iProgress = __super::LateTick(_dDeltaTime);
-	if (NO_EVENT != iProgress) 
+	if (NO_EVENT != iProgress)
 		return iProgress;
 
 	m_pCharacterController->Update_OwnerTransform();
 
 	iProgress = m_pStateController->LateTick(_dDeltaTime);
-	if (NO_EVENT != iProgress) 
+	if (NO_EVENT != iProgress)
 		return iProgress;
 
 	if (m_pRenderer->Get_Shadow() == true)
@@ -283,20 +283,20 @@ _int CSilvermane::LateTick(_double _dDeltaTime)
 		if (FAILED(m_pRenderer->Add_RenderGroup(CRenderer::RENDER_SHADOW, this))) return -1;
 	}
 
-	if(FAILED(m_pRenderer->Add_RenderGroup(CRenderer::RENDER_NONALPHA, this)))
+	if (FAILED(m_pRenderer->Add_RenderGroup(CRenderer::RENDER_NONALPHA, this)))
 		return -1;
 
 	// 무기 레잇업뎃
 	if (m_pCurWeapon)
 	{
 		iProgress = m_pCurWeapon->LateTick(_dDeltaTime);
-		if (NO_EVENT != iProgress) 
+		if (NO_EVENT != iProgress)
 			return iProgress;
 	}
 	if (m_pShield && m_pShield->getActive())
 	{
 		iProgress = m_pShield->LateTick(_dDeltaTime);
-		if (NO_EVENT != iProgress) 
+		if (NO_EVENT != iProgress)
 			return iProgress;
 	}
 
@@ -311,7 +311,7 @@ _int CSilvermane::LateTick(_double _dDeltaTime)
 
 HRESULT CSilvermane::Render()
 {
-	if (FAILED(__super::Render())) 
+	if (FAILED(__super::Render()))
 		return E_FAIL;
 
 	_matrix smatWorld, smatView, smatProj;
@@ -319,11 +319,11 @@ HRESULT CSilvermane::Render()
 	smatView = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_VIEW));
 	smatProj = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_PROJECTION));
 
-	if(FAILED(m_pModel->SetUp_ValueOnShader("g_WorldMatrix", &smatWorld, sizeof(_matrix))))
+	if (FAILED(m_pModel->SetUp_ValueOnShader("g_WorldMatrix", &smatWorld, sizeof(_matrix))))
 		return E_FAIL;
-	if (FAILED(m_pModel->SetUp_ValueOnShader("g_ViewMatrix", &smatView, sizeof(_matrix)))) 
+	if (FAILED(m_pModel->SetUp_ValueOnShader("g_ViewMatrix", &smatView, sizeof(_matrix))))
 		return E_FAIL;
-	if (FAILED(m_pModel->SetUp_ValueOnShader("g_ProjMatrix", &smatProj, sizeof(_matrix)))) 
+	if (FAILED(m_pModel->SetUp_ValueOnShader("g_ProjMatrix", &smatProj, sizeof(_matrix))))
 		return E_FAIL;
 
 	for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
@@ -350,7 +350,7 @@ HRESULT CSilvermane::Render_Shadow()
 	m_pModel->SetUp_ValueOnShader("g_LightView", &lightview, sizeof(_matrix));
 	m_pModel->SetUp_ValueOnShader("g_LightProj", &lightproj, sizeof(_matrix));
 	m_pModel->SetUp_ValueOnShader("g_LightPos", &lightpos, sizeof(_float3));
-	
+
 
 	for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
 		m_pModel->Render(i, 4);
@@ -771,7 +771,7 @@ HRESULT CSilvermane::Ready_Weapons()
 	m_pShield->Set_Owner(this);
 	m_pShield->Set_OwnerPivotMatrix(m_pModel->Get_PivotMatrix());
 	Set_EquipShield(false);
-	
+
 	return S_OK;
 }
 
@@ -802,22 +802,22 @@ void CSilvermane::OnControllerColliderHit(CCollision& collision)
 	CGameObject* pHitObject = collision.pGameObject;
 	_uint iTag = pHitObject->getTag();
 
-		if (m_pTargetJumpBox)
-		{
-			_fvector vBoxPos = m_pTargetJumpBox->Get_Transform()->Get_State(CTransform::STATE_POSITION);
-			_fvector vDist = vBoxPos - m_pTransform->Get_State(CTransform::STATE_POSITION);
-			_float fBoxToPlayer = XMVectorGetX(XMVector3Length(vDist));
+	//점프ui관련
+	m_pFillCKey = (CUI_Fill_Ckey*)g_pGameInstance->getObjectList(m_iSceneID, L"Layer_UI_FillC")->front();
 
-			if (5.f < fBoxToPlayer)
-			{
-				if (nullptr != m_pFillCKey)
-				{
-					m_pFillCKey->Set_GapX(0.f);
-					m_pFillCKey->setActive(false);
-					//m_pTargetJumpBox = nullptr;
-				}
-			}
+	if (m_pTargetJumpBox)
+	{
+		_fvector vBoxPos = m_pTargetJumpBox->Get_Transform()->Get_State(CTransform::STATE_POSITION);
+		_fvector vDist = vBoxPos - m_pTransform->Get_State(CTransform::STATE_POSITION);
+		_float fBoxToPlayer = XMVectorGetX(XMVector3Length(vDist));
+
+		if (5.f < fBoxToPlayer)
+		{
+			m_pFillCKey->Set_GapX(0.f);
+			m_pFillCKey->setActive(false);
+			//m_pTargetJumpBox = nullptr;
 		}
+	}
 	if (iTag == (_uint)GAMEOBJECT::JUMP_BOX)
 	{
 		CJumpBox* pJumpBox = static_cast<CJumpBox*>(pHitObject);
@@ -830,14 +830,10 @@ void CSilvermane::OnControllerColliderHit(CCollision& collision)
 			m_pTargetJumpBox = nullptr;
 		}
 
-		//점프ui관련
-		m_pFillCKey = (CUI_Fill_Ckey*)g_pGameInstance->getObjectList(m_iSceneID, L"Layer_UI_FillC")->front();
-		//m_pFillCKey = (CUI_Fill_Ckey*)g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Layer_UI_FillC")->front();
 
-		if (!m_pFillCKey)
-			return;
 
-		m_pFillCKey->Set_JumpNode(false);
+		if (nullptr != m_pFillCKey)
+			m_pFillCKey->Set_JumpNode(false);
 
 		if (nullptr != m_pTargetJumpBox)
 		{
@@ -847,11 +843,13 @@ void CSilvermane::OnControllerColliderHit(CCollision& collision)
 
 			if (5.f >= fBoxToPlayer)
 			{
-				m_pFillCKey->Set_GapX(1.f);
-				m_pFillCKey->setActive(true);
+				if (nullptr != m_pFillCKey)
+				{
+					m_pFillCKey->Set_GapX(1.f);
+					m_pFillCKey->setActive(true);
+				}
 			}
 		}
-		
 	}
 
 	else if ((_uint)GAMEOBJECT::WEAPON_BRONZE == iTag)
@@ -947,7 +945,7 @@ void CSilvermane::Set_EquipWeapon(const _bool _isEquipWeapon)
 void CSilvermane::Set_WeaponFixedBone(const string& _sstrFixedBoneTag)
 {
 	CHierarchyNode* pFixedBone = m_pModel->Get_BoneMatrix(_sstrFixedBoneTag.c_str());
-	if(pFixedBone)
+	if (pFixedBone)
 		m_pCurWeapon->Set_FixedBone(pFixedBone);
 }
 
@@ -1025,7 +1023,7 @@ const _bool CSilvermane::Change_Weapon(const wstring& _name)
 		return false;
 	if (m_pCurWeapon == pWeapon)
 		return false;
-	
+
 	if (m_pCurWeapon)
 	{
 		Set_EquipWeapon(false);
@@ -1086,7 +1084,7 @@ const _int CSilvermane::Trace_CameraLook(const _double& _dDeltaTime)
 		_vector svCross = XMVector3Cross(svLook, svCameraLook);
 		if (0.f < XMVectorGetY(svCross)) // 카메라가 왼쪽
 		{
-			if(m_isTraceCamera)
+			if (m_isTraceCamera)
 				m_pTransform->Rotation_Axis(XMVectorSet(0.f, 1.f, 0.f, 0.f), (fRadian)*_dDeltaTime * 5.f);
 			m_fAngle = XMConvertToDegrees(fRadian);
 		}
@@ -1100,7 +1098,7 @@ const _int CSilvermane::Trace_CameraLook(const _double& _dDeltaTime)
 			m_fAngle = 0.f;
 	}
 
- 	return _int();
+	return _int();
 }
 
 const _int CSilvermane::Input(const _double& _dDeltaTime)
@@ -1169,7 +1167,6 @@ const _bool CSilvermane::Raycast_JumpNode(const _double& _dDeltaTime)
 	tRaycastDesc.filterData.flags = PxQueryFlag::eANY_HIT | PxQueryFlag::eDYNAMIC;
 	CGameObject* pHitObject = nullptr;
 	tRaycastDesc.ppOutHitObject = &pHitObject;
-
 	if (g_pGameInstance->Raycast(tRaycastDesc))
 	{
 		if (pHitObject)
@@ -1182,7 +1179,7 @@ const _bool CSilvermane::Raycast_JumpNode(const _double& _dDeltaTime)
 	m_pBlankCKey = (CUI_Blank_CKey*)g_pGameInstance->getObjectList(m_iSceneID, L"Layer_UI_BlankC")->front();
 	m_pFillCKey = (CUI_Fill_Ckey*)g_pGameInstance->getObjectList(m_iSceneID, L"Layer_UI_FillC")->front();
 
-	/*if ((_uint)GAMEOBJECT::JUMP_TRIGGER == iObjectTag)
+	if ((_uint)GAMEOBJECT::JUMP_TRIGGER == iObjectTag)
 	{
 		m_pTargetJumpTrigger = static_cast<CJumpTrigger*>(pHitObject);
 		if (g_pGameInstance->getkeyPress(DIK_C))
@@ -1197,8 +1194,7 @@ const _bool CSilvermane::Raycast_JumpNode(const _double& _dDeltaTime)
 
 		return true;
 	}
-	else */
-	if ((_uint)GAMEOBJECT::JUMP_NODE == iObjectTag)
+	else if ((_uint)GAMEOBJECT::JUMP_NODE == iObjectTag)
 	{
 		m_pTargetJumpNode = static_cast<CJumpNode*>(pHitObject);
 		m_pTargetJumpNode->setIsPick(true);
@@ -1206,9 +1202,8 @@ const _bool CSilvermane::Raycast_JumpNode(const _double& _dDeltaTime)
 			m_fJumpNodeLookTime += (_float)_dDeltaTime;
 
 		if (nullptr != m_pFillCKey)
-		{
 			m_pFillCKey->Set_JumpNode(true);
-		}
+
 		if (1.f < m_fJumpNodeLookTime)
 		{
 			if (FAILED(m_pStateController->Change_State(L"Traverse_JumpNodeJog")))
@@ -1222,6 +1217,7 @@ const _bool CSilvermane::Raycast_JumpNode(const _double& _dDeltaTime)
 				m_pBlankCKey->setActive(true);
 				m_pFillCKey->setActive(true);
 			}
+
 		}
 		return true;
 	}

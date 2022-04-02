@@ -60,38 +60,38 @@ HRESULT CJumpNode::NativeConstruct(const _uint _iSceneID, void* _pArg)
 
 _int CJumpNode::Tick(_double _dDeltaTime)
 {
-	//if (!g_pGameInstance->isIn_WorldFrustum(m_pTransform->Get_State(CTransform::STATE_POSITION), 50.f))
-	//	return 0;
+	if (!g_pGameInstance->isIn_WorldFrustum(m_pTransform->Get_State(CTransform::STATE_POSITION), 50.f))
+		return 0;
 
 	_int iProgress = __super::Tick(_dDeltaTime);
 	if (NO_EVENT != iProgress)
 		return iProgress;
 
-	/*iProgress = m_pAnimationController->Tick(_dDeltaTime);
+	iProgress = m_pAnimationController->Tick(_dDeltaTime);
 	if (NO_EVENT != iProgress)
-		return iProgress;*/
+		return iProgress;
 
-	//if (m_isChange)
-	//{
-	//	switch (m_isPick)
-	//	{
-	//	case false:
-	//		if (m_pAnimationController->Is_Finished())
-	//		{
-	//			m_pAnimationController->SetUp_NextAnimation("SK_Jump_Node.ao|A_Idle_JumpNode");
-	//			m_isChange = false;
-	//		}
-	//		break;
-	//	case true:
-	//		if (m_pAnimationController->Is_Finished())
-	//		{
-	//			m_pAnimationController->SetUp_NextAnimation("SK_Jump_Node.ao|A_Activated_Shake_JumpNode");
-	//			m_pAnimationController->Set_PlaySpeed(0.6f);
-	//			m_isChange = false;
-	//		}
-	//		break;
-	//	}
-	//}
+	if (m_isChange)
+	{
+		switch (m_isPick)
+		{
+		case false:
+			if (m_pAnimationController->Is_Finished())
+			{
+				m_pAnimationController->SetUp_NextAnimation("SK_Jump_Node.ao|A_Idle_JumpNode");
+				m_isChange = false;
+			}
+			break;
+		case true:
+			if (m_pAnimationController->Is_Finished())
+			{
+				m_pAnimationController->SetUp_NextAnimation("SK_Jump_Node.ao|A_Activated_Shake_JumpNode");
+				m_pAnimationController->Set_PlaySpeed(0.6f);
+				m_isChange = false;
+			}
+			break;
+		}
+	}
 
 	m_pCollider->Tick(_dDeltaTime);
 
@@ -100,8 +100,8 @@ _int CJumpNode::Tick(_double _dDeltaTime)
 
 _int CJumpNode::LateTick(_double _dDeltaTime)
 {
-	
-		
+
+
 	_int iProgress = __super::LateTick(_dDeltaTime);
 	if (NO_EVENT != iProgress)
 		return iProgress;
@@ -121,21 +121,21 @@ HRESULT CJumpNode::Render()
 	smatView = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_VIEW));
 	smatProj = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_PROJECTION));
 
-	//if (FAILED(m_pModel->SetUp_ValueOnShader("g_WorldMatrix", &smatWorld, sizeof(_matrix))))
-	//	return E_FAIL;
-	//if (FAILED(m_pModel->SetUp_ValueOnShader("g_ViewMatrix", &smatView, sizeof(_matrix))))
-	//	return E_FAIL;
-	//if (FAILED(m_pModel->SetUp_ValueOnShader("g_ProjMatrix", &smatProj, sizeof(_matrix))))
-	//	return E_FAIL;
+	if (FAILED(m_pModel->SetUp_ValueOnShader("g_WorldMatrix", &smatWorld, sizeof(_matrix))))
+		return E_FAIL;
+	if (FAILED(m_pModel->SetUp_ValueOnShader("g_ViewMatrix", &smatView, sizeof(_matrix))))
+		return E_FAIL;
+	if (FAILED(m_pModel->SetUp_ValueOnShader("g_ProjMatrix", &smatProj, sizeof(_matrix))))
+		return E_FAIL;
 
-	//for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
-	//{
-	//	//if (FAILED(m_pModel->SetUp_TextureOnShader("g_DiffuseTexture", i, aiTextureType_DIFFUSE)))
-	//	//	return E_FAIL;
+	for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
+	{
+		//if (FAILED(m_pModel->SetUp_TextureOnShader("g_DiffuseTexture", i, aiTextureType_DIFFUSE)))
+		//	return E_FAIL;
 
-	//	if (FAILED(m_pModel->Render(i, i)))
-	//		return E_FAIL;
-	//}
+		if (FAILED(m_pModel->Render(i, i)))
+			return E_FAIL;
+	}
 
 #ifdef _DEBUG
 
@@ -153,19 +153,19 @@ HRESULT CJumpNode::Ready_Components()
 	m_pTransform->Set_TransformDesc(tTransformDesc);
 	m_pTransform->Set_State(CTransform::STATE_POSITION, XMVectorSetW(XMLoadFloat3(&m_tDesc.vPosition), 1.f));
 
-	//if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Model_JumpNode_Bin", L"Model", (CComponent**)&m_pModel)))
-	//	return E_FAIL;
+	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Model_JumpNode_Bin", L"Model", (CComponent**)&m_pModel)))
+		return E_FAIL;
 	_matrix matPivot = XMMatrixScaling(0.008f, 0.008f, 0.008f);
-	//m_pModel->Set_PivotMatrix(matPivot);
+	m_pModel->Set_PivotMatrix(matPivot);
 	//m_pModel->Add_Material(g_pGameInstance->Get_Material(L"Mtrl_JumpNode"), 0);
 	//m_pModel->Add_Material(g_pGameInstance->Get_Material(L"Mtrl_JumpPoint"), 1);
 
-	//if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_AnimationController", L"AnimationController", (CComponent**)&m_pAnimationController)))
-	//	return E_FAIL;
-	//m_pAnimationController->Set_GameObject(this);
-	//m_pAnimationController->Set_Model(m_pModel);
-	//m_pAnimationController->Set_Transform(m_pTransform);
-	//m_pAnimationController->SetUp_NextAnimation("SK_Jump_Node.ao|A_Idle_JumpNode");
+	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_AnimationController", L"AnimationController", (CComponent**)&m_pAnimationController)))
+		return E_FAIL;
+	m_pAnimationController->Set_GameObject(this);
+	m_pAnimationController->Set_Model(m_pModel);
+	m_pAnimationController->Set_Transform(m_pTransform);
+	m_pAnimationController->SetUp_NextAnimation("SK_Jump_Node.ao|A_Idle_JumpNode");
 
 	CCollider::DESC tColliderDesc;
 	tColliderDesc.eRigidType = ERigidType::Dynamic;
@@ -190,17 +190,17 @@ void CJumpNode::setIsPick(const _bool _isPick)
 		switch (_isPick)
 		{
 		case true:
-			//m_pAnimationController->SetUp_NextAnimation("SK_Jump_Node.ao|A_Activating_JumpNode", false);
+			m_pAnimationController->SetUp_NextAnimation("SK_Jump_Node.ao|A_Activating_JumpNode", false);
 			g_pGameInstance->StopSound(CSoundMgr::CHANNELID::Jump_Node);
 			g_pGameInstance->Play_Shot(L"JumpNode_Open", CSoundMgr::CHANNELID::Jump_Node);
 			break;
 		case false:
-			//m_pAnimationController->SetUp_NextAnimation("SK_Jump_Node.ao|A_Deactivating_JumpNode", false);
+			m_pAnimationController->SetUp_NextAnimation("SK_Jump_Node.ao|A_Deactivating_JumpNode", false);
 			g_pGameInstance->StopSound(CSoundMgr::CHANNELID::Jump_Node);
 			g_pGameInstance->Play_Shot(L"JumpNode_Close", CSoundMgr::CHANNELID::Jump_Node);
 			break;
 		}
-		//m_pAnimationController->Set_PlaySpeed(1.f);
+		m_pAnimationController->Set_PlaySpeed(1.f);
 		m_isChange = true;
 		m_isPick = _isPick;
 	}
@@ -241,8 +241,8 @@ CGameObject* CJumpNode::Clone(const _uint _iSceneID, void* _pArg)
 void CJumpNode::Free()
 {
 	Safe_Release(m_pCollider);
-	//Safe_Release(m_pAnimationController);
-	//Safe_Release(m_pModel);
+	Safe_Release(m_pAnimationController);
+	Safe_Release(m_pModel);
 
 	__super::Free();
 }
