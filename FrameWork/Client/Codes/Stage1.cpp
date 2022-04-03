@@ -133,19 +133,18 @@ _int CStage1::Tick(_double TimeDelta)
 		}
 
 		m_pTriggerSystem->Tick(TimeDelta);
-		//m_pTriggerSystem->Check_DeleteTriggerMonster();
 
-		//CBoss_Bastion_Judicator* pBoss = (CBoss_Bastion_Judicator*)g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Layer_Boss")->front();
-		//if (nullptr != pBoss)
-		//{
-		//	if (true == pBoss->Get_Dead())
-		//	{
-		//		if (FAILED(g_pGameInstance->Open_Level((_uint)SCENEID::SCENE_LOADING, CLoading::Create(m_pDevice, m_pDeviceContext, SCENEID::SCENE_STAGE2))))
-		//			return -1;
-		//		return 0;
-		//	}
-		//
-		//}
+		CBoss_Bastion_Judicator* pBoss = (CBoss_Bastion_Judicator*)g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Layer_Boss")->front();
+		if (nullptr != pBoss)
+		{
+			if (true == pBoss->Get_Dead())
+			{
+				if (FAILED(g_pGameInstance->Open_Level((_uint)SCENEID::SCENE_LOADING, CLoading::Create(m_pDevice, m_pDeviceContext, SCENEID::SCENE_STAGE2))))
+					return -1;
+				return 0;
+			}
+
+		}
 	}
 	if (m_iCountMonster == 0 && m_bFirst)
 		m_pTriggerSystem->Check_Clear();
@@ -545,16 +544,16 @@ HRESULT CStage1::Ready_Data_Effect()
 		MSGBOX("Failed to Creating in CStage1::Ready_Effect()");
 		return E_FAIL;
 	}
-	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Env_Floating", FullName, &vecEnvFloating[0], (CGameObject**)&pEffect)))
-	//{
-	//	MSGBOX("Failed to Creating in CStage1::Ready_Effect()");
-	//	return E_FAIL;
-	//}
-	//if (FAILED(g_pGameInstance->Add_Effect((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Env_Floating", pEffect, 1)))
-	//{
-	//	MSGBOX("Falild to Clone in Effect_Env_Floating");
-	//	return E_FAIL;
-	//}
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Env_Floating", FullName, &vecEnvFloating[0], (CGameObject**)&pEffect)))
+	{
+		MSGBOX("Failed to Creating in CStage1::Ready_Effect()");
+		return E_FAIL;
+	}
+	if (FAILED(g_pGameInstance->Add_Effect((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Env_Floating", pEffect, 1)))
+	{
+		MSGBOX("Falild to Clone in Effect_Env_Floating");
+		return E_FAIL;
+	}
 
 	return S_OK;
 }
