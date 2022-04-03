@@ -34,19 +34,18 @@ HRESULT CPolearm::NativeConstruct_Prototype()
 	pTexture = CTexture::Create(m_pDevice, m_pDeviceContext);
 	pTexture->NativeConstruct_Prototype(L"../Bin/Resources/Mesh/Polearm/T_2H_polearm_Bastion_D.dds", 1);
 	pMtrl->Set_Texture("g_DiffuseTexture", TEXTURETYPE::TEX_DIFFUSE, pTexture, 0);
-	pTexture = CTexture::Create(m_pDevice, m_pDeviceContext);
 
+	pTexture = CTexture::Create(m_pDevice, m_pDeviceContext);
 	pTexture->NativeConstruct_Prototype(L"../Bin/Resources/Mesh/Polearm/T_2H_polearm_Bastion_N.dds", 1);
 	pMtrl->Set_Texture("g_BiNormalTexture", TEXTURETYPE::TEX_NORMAL, pTexture, 0);
-	pTexture = CTexture::Create(m_pDevice, m_pDeviceContext);
 
+	pTexture = CTexture::Create(m_pDevice, m_pDeviceContext);
 	pTexture->NativeConstruct_Prototype(L"../Bin/Resources/Mesh/Polearm/T_2H_polearm_Bastion_CEO.dds", 1);
 	pMtrl->Set_Texture("g_MRATexture", TEXTURETYPE::TEX_CEO, pTexture, 0);
-	pTexture = CTexture::Create(m_pDevice, m_pDeviceContext);
 
+	pTexture = CTexture::Create(m_pDevice, m_pDeviceContext);
 	pTexture->NativeConstruct_Prototype(L"../Bin/Resources/Mesh/Polearm/T_2H_polearm_Bastion_MRA.dds", 1);
 	pMtrl->Set_Texture("g_MRATexture", TEXTURETYPE::TEX_MRA, pTexture, 0);
-	pTexture = CTexture::Create(m_pDevice, m_pDeviceContext);
 
 	g_pGameInstance->Add_Material(L"Mtrl_Polearm", pMtrl);
 
@@ -199,6 +198,6 @@ CGameObject* CPolearm::Clone(const _uint _iSceneID, void* _pArg)
 
 void CPolearm::Free()
 {
-	Safe_Release(m_pCollider);
 	__super::Free();
+	Safe_Release(m_pCollider);
 }

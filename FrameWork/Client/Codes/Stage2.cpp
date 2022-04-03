@@ -15,6 +15,8 @@ CStage2::CStage2(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
 	: CLevel(pDevice, pDeviceContext)
 	, m_pTriggerSystem(nullptr)
 	, m_bDebug(false)
+	,m_bFirst(false)
+	,m_iCountMonster(0)
 {
 }
 
@@ -44,8 +46,8 @@ HRESULT CStage2::NativeConstruct()
 		return E_FAIL;
 	}
 
-	//if (FAILED(Ready_TriggerSystem(L"../bin/SaveData/Trigger/MonsterSpawnTrigger2.dat")))
-	//	return E_FAIL;
+	if (FAILED(Ready_TriggerSystem(L"../bin/SaveData/Trigger/MonsterSpawnTrigger2.dat")))
+		return E_FAIL;
 
 	return S_OK;
 }
