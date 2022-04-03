@@ -344,6 +344,7 @@ void CStage2::Trgger_Function1()
 {
 	list<CGameObject*>* pLayer = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE2, L"Layer_Crawler");
 
+	m_bFirst = true;
 	if (!pLayer)
 		return;
 	//¶¥¹ú·¹
