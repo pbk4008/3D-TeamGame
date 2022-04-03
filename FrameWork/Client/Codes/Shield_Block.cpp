@@ -56,6 +56,10 @@ HRESULT CShield_Block::ExitState()
 	return S_OK;
 }
 
+void CShield_Block::OnTriggerEnter(CCollision& collision)
+{
+}
+
 _int CShield_Block::Input(const _double& _dDeltaTime)
 {
 	_int iProgress = __super::Input(_dDeltaTime);
@@ -137,6 +141,11 @@ _int CShield_Block::Input(const _double& _dDeltaTime)
 
 
 	return _int();
+}
+
+void CShield_Block::OnTriggerEnterBlock(CCollision& collision)
+{
+	
 }
 
 void CShield_Block::Free()

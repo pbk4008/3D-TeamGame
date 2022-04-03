@@ -2,11 +2,13 @@
 
 #include "Shield_Block.h"
 
-class CShield_BlockStart : public CShield_Block
+BEGIN(Client)
+
+class CShield_BlockSkid : public CShield_Block
 {
-protected:
-	explicit CShield_BlockStart(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext);
-	virtual ~CShield_BlockStart() = default;
+private:
+	explicit CShield_BlockSkid(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext);
+	virtual ~CShield_BlockSkid() = default;
 
 public:
 	virtual HRESULT NativeConstruct(void* _pArg = nullptr);
@@ -17,13 +19,12 @@ public:
 	virtual HRESULT EnterState();
 	virtual HRESULT ExitState();
 
-	virtual void OnTriggerEnter(CCollision& collision) override;
-
 public:
 	virtual _int Input(const _double& _dDeltaTime) override;
 
 public:
-	static CShield_BlockStart* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext, void* _pArg = nullptr);
+	static CShield_BlockSkid* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext, void* _pArg = nullptr);
 	virtual void Free() override;
 };
 
+END

@@ -17,6 +17,8 @@ public:
 	virtual HRESULT EnterState();
 	virtual HRESULT ExitState();
 
+	virtual void OnTriggerEnter(CCollision& collision) override;
+
 public:
 	virtual _int Input(const _double& _dDeltaTime) override;
 

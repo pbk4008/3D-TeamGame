@@ -121,6 +121,8 @@
 #include "Shield_BlockStart.h"
 #include "Shield_BlockLoop.h"
 #include "Shield_BlockEnd.h"
+#include "Shield_BlockSkid.h"
+#include "Shield_Parry.h"
 
 // Walk
 #include "Shield_WalkBwd.h"
@@ -684,6 +686,10 @@ HRESULT CSilvermane::Ready_States()
 		return E_FAIL;
 	if (FAILED(m_pStateController->Add_State(L"Shield_BlockEnd", CShield_BlockEnd::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
+	if (FAILED(m_pStateController->Add_State(L"Shield_BlockSkid", CShield_BlockSkid::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	if (FAILED(m_pStateController->Add_State(L"Shield_Parry", CShield_Parry::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
 	// Walk
 	if (FAILED(m_pStateController->Add_State(L"Shield_WalkBwd", CShield_WalkBwd::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
@@ -797,6 +803,8 @@ void CSilvermane::OnTriggerExit(CCollision& collision)
 	m_pStateController->OnTriggerExit(collision);
 }
 
+// 점프노드와 같은 오브젝트 충돌용 함수입네다. 
+// 무기에 쳐맞는건 State_Silvermane.cpp 로 가주세용
 void CSilvermane::OnControllerColliderHit(CCollision& collision)
 {
 	CGameObject* pHitObject = collision.pGameObject;
@@ -847,31 +855,6 @@ void CSilvermane::OnControllerColliderHit(CCollision& collision)
 					m_pFillCKey->setActive(true);
 				}
 			}
-		}
-	}
-
-	else if ((_uint)GAMEOBJECT::WEAPON_BRONZE == iTag)
-	{
-		_bool a = static_cast<CActor*>(collision.pGameObject)->IsAttack();
-		if (static_cast<CActor*>(collision.pGameObject)->IsAttack())
-		{
-			m_fCurrentHp -= 3;
-		}
-	}
-	else if ((_uint)GAMEOBJECT::WEAPON_2HSword == iTag)
-	{
-		_bool a = static_cast<CActor*>(collision.pGameObject)->IsAttack();
-		if (static_cast<CActor*>(collision.pGameObject)->IsAttack())
-		{
-			m_fCurrentHp -= 3;
-		}
-	}
-	else if ((_uint)GAMEOBJECT::WEAPON_POLEARM == iTag)
-	{
-		_bool a = static_cast<CActor*>(collision.pGameObject)->IsAttack();
-		if (static_cast<CActor*>(collision.pGameObject)->IsAttack())
-		{
-			m_fCurrentHp -= 3;
 		}
 	}
 }
@@ -1036,18 +1019,34 @@ HRESULT CSilvermane::Change_State(const wstring& _wstrStateTag)
 	return m_pStateController->Change_State(_wstrStateTag);
 }
 
+const _float CSilvermane::Get_BlockTime() const
+{
+	return m_fBlockTime;
+}
+
 void CSilvermane::Set_EquipShield(const _bool _isEquipShield)
 {
 	if (m_pShield)
 	{
 		m_pShield->Set_Equip(_isEquipShield);
 		m_isEquipShield = _isEquipShield;
+		m_isBlock = _isEquipShield;
 	}
 }
 
 void CSilvermane::Set_EquipShieldAnim(const _bool _isEquipShield)
 {
 	static_cast<CShield*>(m_pShield)->Set_EquipAnim(_isEquipShield);
+}
+
+void CSilvermane::Set_BlockTime(const _float _fValue)
+{
+	m_fBlockTime = _fValue;
+}
+
+void CSilvermane::Add_BlockTime(const _float _fValue)
+{
+	m_fBlockTime += _fValue;
 }
 
 const _int CSilvermane::Trace_CameraLook(const _double& _dDeltaTime)
@@ -1157,7 +1156,7 @@ const _bool CSilvermane::Raycast_JumpNode(const _double& _dDeltaTime)
 
 	_uint iObjectTag = -1;
 
-
+	svRayPos += svRayDir * 6.f;
 	RAYCASTDESC tRaycastDesc;
 	XMStoreFloat3(&tRaycastDesc.vOrigin, svRayPos);
 	XMStoreFloat3(&tRaycastDesc.vDir, svRayDir);

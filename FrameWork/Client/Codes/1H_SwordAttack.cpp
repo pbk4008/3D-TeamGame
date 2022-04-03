@@ -93,8 +93,8 @@ HRESULT C1H_SwordAttack::ExitState()
 
 void C1H_SwordAttack::OnTriggerEnter(CCollision& collision)
 {
-	if (m_iCutIndex > m_pAnimationController->Get_CurKeyFrameIndex())
-		return;
+	if (!m_pSilvermane->IsAttack())
+		OnTriggerEnterHit(collision);
 }
 
 _int C1H_SwordAttack::Input(const _double& _dDeltaTime)
