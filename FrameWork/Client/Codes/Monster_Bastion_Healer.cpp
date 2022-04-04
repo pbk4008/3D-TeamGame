@@ -10,14 +10,14 @@
 #include "Bastion_Healer_Idle.h"
 #include "Bastion_Healer_Hit.h"
 #include "Bastion_Healer_Death.h"
-#include "Bastion_Healer_Chaser.h"
-#include "Bastion_Healer_Chaser_End.h"
+#include "Bastion_Healer_Run.h"
 #include "Bastion_Healer_Attack.h"
 #include "Bastion_Healer_Groggy.h"
 #include "Bastion_Healer_Groggy_End.h"
 #include "Bastion_Healer_CastProtect.h"
 
 #include "Stage1.h"
+#include "Stage2.h"
 
 CMonster_Bastion_Healer::CMonster_Bastion_Healer(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
 	: CActor(_pDevice, _pDeviceContext)
@@ -362,7 +362,7 @@ HRESULT CMonster_Bastion_Healer::Ready_AnimFSM(void)
 	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::A_CAST_PROTECT, (_uint)ANIM_TYPE::A_HEAD, pAnimation, TRUE, TRUE, FALSE, ERootOption::XYZ)))
 		return E_FAIL;
 	pAnimation = m_pModel->Get_Animation("A_Attack_Blind");
-	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::A_ATTACK_BLIND, (_uint)ANIM_TYPE::A_HEAD, pAnimation, TRUE, TRUE, FALSE, ERootOption::XYZ)))
+	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::A_ATTACK_BLIND, (_uint)ANIM_TYPE::A_HEAD, pAnimation, TRUE, FALSE, FALSE, ERootOption::XYZ)))
 		return E_FAIL;
 #pragma endregion
 #pragma region Hit
@@ -473,10 +473,7 @@ HRESULT CMonster_Bastion_Healer::Ready_StateFSM(void)
 	if (FAILED(m_pStateController->Add_State(L"Idle", CBastion_Healer_Idle::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 	/* for. Player Chaser */
-	if (FAILED(m_pStateController->Add_State(L"Chaser", CBastion_Healer_Chaser::Create(m_pDevice, m_pDeviceContext))))
-		return E_FAIL;
-	/* for. Player Chaser End */
-	if (FAILED(m_pStateController->Add_State(L"Chaser_End", CBastion_Healer_Chaser_End::Create(m_pDevice, m_pDeviceContext))))
+	if (FAILED(m_pStateController->Add_State(L"Run", CBastion_Healer_Run::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 	/* for. Attack*/
 	if (FAILED(m_pStateController->Add_State(L"Attack", CBastion_Healer_Attack::Create(m_pDevice, m_pDeviceContext))))

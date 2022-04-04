@@ -60,7 +60,16 @@ public:
 	void Set_GroggyGauge(_uint _Value) { m_fGroggyGauge += _Value; }
 	void Set_Dead(void) { m_bDead = true; }
 	virtual void Set_Remove(_bool bCheck) override;
+public:
+	void set_Target(_bool bCheck) { m_bTargetOn = bCheck; }
+	void set_Attack(_bool bCheck) { m_bAttackOn = bCheck; }
 
+public:
+	_bool get_Target() { return m_bTargetOn; }
+	_bool get_Attack() { return m_bAttackOn; }
+private:
+	_bool		m_bTargetOn = false;
+	_bool		m_bAttackOn = false;
 private:
 	CModel* m_pModel = nullptr;
 	CAnimation* m_pAnimation = nullptr;
