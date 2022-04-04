@@ -274,8 +274,7 @@ call Update_Client.bat</Command>
     <ClInclude Include="..\Headers\Bastion_2HSword_State.h" />
     <ClInclude Include="..\Headers\Bastion_Healer_Attack.h" />
     <ClInclude Include="..\Headers\Bastion_Healer_CastProtect.h" />
-    <ClInclude Include="..\Headers\Bastion_Healer_Chaser.h" />
-    <ClInclude Include="..\Headers\Bastion_Healer_Chaser_End.h" />
+    <ClInclude Include="..\Headers\Bastion_Healer_Run.h" />
     <ClInclude Include="..\Headers\Bastion_Healer_Death.h" />
     <ClInclude Include="..\Headers\Bastion_Healer_Groggy.h" />
     <ClInclude Include="..\Headers\Bastion_Healer_Groggy_End.h" />
@@ -407,6 +406,8 @@ call Update_Client.bat</Command>
     <ClInclude Include="..\Headers\Silvermane_JogRight.h" />
     <ClInclude Include="..\Headers\Silvermane_JogRightPivot180.h" />
     <ClInclude Include="..\Headers\Silvermane_JogRightStart.h" />
+    <ClInclude Include="..\Headers\Silvermane_KnockBackBwd.h" />
+    <ClInclude Include="..\Headers\Silvermane_KnockBackFwd.h" />
     <ClInclude Include="..\Headers\Silvermane_Sprint.h" />
     <ClInclude Include="..\Headers\Silvermane_SprintFwd.h" />
     <ClInclude Include="..\Headers\Silvermane_SprintFwdStart.h" />
@@ -554,8 +555,7 @@ call Update_Client.bat</Command>
     <ClCompile Include="..\Codes\Bastion_2HSword_State.cpp" />
     <ClCompile Include="..\Codes\Bastion_Healer_Attack.cpp" />
     <ClCompile Include="..\Codes\Bastion_Healer_CastProtect.cpp" />
-    <ClCompile Include="..\Codes\Bastion_Healer_Chaser.cpp" />
-    <ClCompile Include="..\Codes\Bastion_Healer_Chaser_End.cpp" />
+    <ClCompile Include="..\Codes\Bastion_Healer_Run.cpp" />
     <ClCompile Include="..\Codes\Bastion_Healer_Death.cpp" />
     <ClCompile Include="..\Codes\Bastion_Healer_Groggy.cpp" />
     <ClCompile Include="..\Codes\Bastion_Healer_Groggy_End.cpp" />
@@ -689,6 +689,8 @@ call Update_Client.bat</Command>
     <ClCompile Include="..\Codes\Silvermane_JogRight.cpp" />
     <ClCompile Include="..\Codes\Silvermane_JogRightPivot180.cpp" />
     <ClCompile Include="..\Codes\Silvermane_JogRightStart.cpp" />
+    <ClCompile Include="..\Codes\Silvermane_KnockBackBwd.cpp" />
+    <ClCompile Include="..\Codes\Silvermane_KnockBackFwd.cpp" />
     <ClCompile Include="..\Codes\Silvermane_Sprint.cpp" />
     <ClCompile Include="..\Codes\Silvermane_SprintFwd.cpp" />
     <ClCompile Include="..\Codes\Silvermane_SprintFwdStart.cpp" />

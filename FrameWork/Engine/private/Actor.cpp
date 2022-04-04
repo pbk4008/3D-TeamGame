@@ -58,7 +58,8 @@ HRESULT CActor::NativeConstruct(const _uint _iSceneID, void* pArg)
 		return E_FAIL;
 	}
 
-	m_tAttackDesc.pGameObject = this;
+	m_tAttackDesc.pOwner = this;
+	m_tAttackDesc.pHitObject = this;
 	return S_OK;
 }
 

@@ -4,6 +4,7 @@
 #include "Monster_FSM.h"
 
 BEGIN(Client)
+class CMonster_Bastion_Healer;
 class CBastion_Healer_State  : public CMonster_FSM
 {
 protected:
@@ -32,14 +33,16 @@ public:
 	virtual	void OnTriggerEnter(CCollision& collision);
 	virtual void OnTriggerExit(CCollision& collision);
 
+private:
+	HRESULT Check_State();
 protected:
-	_bool	m_bTargetOn = false;
+	CMonster_Bastion_Healer* m_pOwner=nullptr;
+	/*_bool	m_bTargetOn = false;
 	_bool   m_bAttackOn = false;
 	_bool	m_bPlayerAttack = false;
-	_bool	m_bRageOn = false;
 	_bool	m_bRageAttack = false;
 	_bool	m_bCastProtect = false;
-	_float	m_fChaserDelay;
+	_float	m_fChaserDelay;*/
 
 private:
 	_float m_CheckFWD = 0.0f;

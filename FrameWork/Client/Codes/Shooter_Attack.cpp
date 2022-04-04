@@ -135,9 +135,10 @@ _uint CShooter_Attack::Create_Bullet()
 	vBulletMatrix *= matWorld;
 	_uint iSceneID = g_pGameInstance->getCurrentLevel();
 
-
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer(iSceneID, L"Layer_Bullet", L"Proto_GameObject_Shooter_Bullet", &vBulletMatrix)))
+	CBullet* pBullet = nullptr;
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer(iSceneID, L"Layer_Bullet", L"Proto_GameObject_Shooter_Bullet", &vBulletMatrix, (CGameObject**)&pBullet)))
 		return E_FAIL;
+	pBullet->Set_Owner(m_pMonster);
 
 	return _uint();
 }

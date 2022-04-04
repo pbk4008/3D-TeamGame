@@ -53,6 +53,8 @@ HRESULT CBullet::NativeConstruct(const _uint _iSceneID, void* _pArg)
 	if (FAILED(Ready_Component(_iSceneID)))
 		return E_FAIL;
 
+	m_fDamage = 3.f;
+
 	return S_OK;
 }
 
@@ -140,10 +142,28 @@ HRESULT CBullet::Set_Spawn()
 	return S_OK;
 }
 
+CActor* CBullet::Get_Owner() const
+{
+	return m_pOwner;
+}
+
+void CBullet::Set_Owner(CActor* _pOwner)
+{
+	m_pOwner = _pOwner;
+}
+
 void CBullet::OnTriggerEnter(CCollision& collision)
 {
+	if (collision.pGameObject->getTag() == m_pOwner->getTag())
+		return;
+
 	if (collision.pGameObject->getTag() == (_uint)GAMEOBJECT::PLAYER)
 	{
+		ATTACKDESC tAttackDesc = m_pOwner->Get_AttackDesc();
+		tAttackDesc.fDamage += m_fDamage;
+		tAttackDesc.pHitObject = this;
+		static_cast<CActor*>(collision.pGameObject)->Hit(tAttackDesc);
+
 		setActive(false);
 		m_bRemove = true;
 	}

@@ -29,19 +29,36 @@ _int CBastion_Healer_State::Tick(const _double& _dDeltaTime)
 	_int iProgress = __super::Tick(_dDeltaTime);
 	if (NO_EVENT != iProgress)
 		return iProgress;
+	m_pOwner = static_cast<CMonster_Bastion_Healer*>(m_pMonster);
 
-	m_bTargetOn = false;
-	m_bAttackOn = false;
-	m_bPlayerAttack = false;
-
+	/*m_bTargetOn = false;
+	m_bAttackOn = false;*/
 	//Check_Attack(_dDeltaTime);
-
-	_fvector vMonsterPos = m_pTransform->Get_State(CTransform::STATE::STATE_POSITION);
-	_fvector vDist = vMonsterPos - g_pObserver->Get_PlayerPos();
-	_float fDistToPlayer = XMVectorGetX(XMVector3Length(vDist));
-
-	//if (2.0f >= fDistToPlayer)
-	//	m_bAttackOn = true;
+	//_fvector vMonsterPos = m_pTransform->Get_State(CTransform::STATE::STATE_POSITION);
+	//_fvector vDist = vMonsterPos - g_pObserver->Get_PlayerPos();
+	//_float fDistToPlayer = XMVectorGetX(XMVector3Length(vDist));
+	_float fDist = g_pObserver->Get_Dist(m_pTransform->Get_State(CTransform::STATE_POSITION));
+	if (!m_pOwner->get_Attack())
+	{
+		if (8.f >= fDist && 2.f <= fDist)
+		{
+			m_pOwner->set_Target(true);
+			m_pOwner->set_Attack(false);
+		}
+		else if (2.f >= fDist)
+		{
+			m_pOwner->set_Target(false);
+			m_pOwner->set_Attack(true);
+		}
+		else if (10.f <= fDist)
+		{
+			m_pOwner->set_Target(false);
+			m_pOwner->set_Attack(false);
+		}
+	}
+		//m_bAttackOn = true;
+	if (FAILED(Check_State()))
+		return -1;
 
 	if (m_pMonster->Get_GroggyGauge() >= MAXGROOGUGAGUE)
 	{
@@ -50,7 +67,22 @@ _int CBastion_Healer_State::Tick(const _double& _dDeltaTime)
 
 		pMonster->Groggy_Start();
 	}
+	if (0 >= m_pMonster->Get_CurrentHp() && !m_pMonster->Get_Dead())
+	{
+		m_pOwner->Set_Dead();
+		m_pOwner->Remove_Collider();
 
+		CLevel* pLevel = g_pGameInstance->getCurrentLevelScene();
+		if (g_pGameInstance->getCurrentLevel() == (_uint)SCENEID::SCENE_STAGE1)
+			static_cast<CStage1*>(pLevel)->Minus_MonsterCount();
+
+		else if (g_pGameInstance->getCurrentLevel() == (_uint)SCENEID::SCENE_STAGE2)
+			static_cast<CStage2*>(pLevel)->Minus_MonsterCount();
+
+		m_pStateController->Change_State(L"Death");
+
+		return 0;
+	}
 	//if (true == m_bCastProtect)
 	//	m_pStateController->Change_State(L"Cast_Protect");
 
@@ -114,7 +146,8 @@ HRESULT CBastion_Healer_State::Render_Debug()
 	wstring wstrChaserOn = L"Target On : ";
 	wstring wstrIsChaser;
 
-	if (m_bTargetOn)
+	//if (m_bTargetOn)
+	if (m_pOwner->get_Target())
 		wstrIsChaser = L"TRUE";
 	else
 		wstrIsChaser = L"FALSE";
@@ -127,7 +160,8 @@ HRESULT CBastion_Healer_State::Render_Debug()
 	wstring wstrAttackOn = L"Attack On : ";
 	wstring wstrIsAttack;
 
-	if (m_bAttackOn)
+	//if (m_bAttackOn)
+	if (m_pOwner->get_Attack())
 		wstrIsAttack = L"TRUE";
 	else
 		wstrIsAttack = L"FALSE";
@@ -154,49 +188,49 @@ HRESULT CBastion_Healer_State::Render_Debug()
 
 void CBastion_Healer_State::Check_Attack(const _double& _dDeltaTime)
 {
-	/* 몬스터의 현재 Look 방향 벡터 */
-	_vector vecMonsterLook = XMVector3Normalize(m_pTransform->Get_State(CTransform::STATE_LOOK));
-	/* 몬스터가 플레이어에게 향하는 방향 벡터 */
-	_vector vMonsterPos = m_pTransform->Get_State(CTransform::STATE::STATE_POSITION);
-	_vector vDist = vMonsterPos - g_pObserver->Get_PlayerPos();
-	/* 몬스터와 플레이어 사이의 거리 */
-	m_fDistance = XMVectorGetX(XMVector3Length(vDist));
+	///* 몬스터의 현재 Look 방향 벡터 */
+	//_vector vecMonsterLook = XMVector3Normalize(m_pTransform->Get_State(CTransform::STATE_LOOK));
+	///* 몬스터가 플레이어에게 향하는 방향 벡터 */
+	//_vector vMonsterPos = m_pTransform->Get_State(CTransform::STATE::STATE_POSITION);
+	//_vector vDist = vMonsterPos - g_pObserver->Get_PlayerPos();
+	///* 몬스터와 플레이어 사이의 거리 */
+	//m_fDistance = XMVectorGetX(XMVector3Length(vDist));
 
-	/* 플레이어가 몬스터의 앞에 있는지 뒤에있는지 판단 */
-	_vector vecMonsterToPlayer = XMVector3Normalize(vDist);
-	_vector dotVec = XMVector3Dot(vecMonsterLook, vecMonsterToPlayer);
-	m_CheckFWD = XMVectorGetX(dotVec); /* 음수-> 플레이어가 앞에 있다*/
+	///* 플레이어가 몬스터의 앞에 있는지 뒤에있는지 판단 */
+	//_vector vecMonsterToPlayer = XMVector3Normalize(vDist);
+	//_vector dotVec = XMVector3Dot(vecMonsterLook, vecMonsterToPlayer);
+	//m_CheckFWD = XMVectorGetX(dotVec); /* 음수-> 플레이어가 앞에 있다*/
 
-	/* 플레이어,몬스터 위치 차 벡터 */
-	_vector vPlayerToMonster = g_pObserver->Get_PlayerPos() - vMonsterPos;
+	///* 플레이어,몬스터 위치 차 벡터 */
+	//_vector vPlayerToMonster = g_pObserver->Get_PlayerPos() - vMonsterPos;
 
-	/* 위치차이에 따른 Y 값 0으로 셋팅 */
-	vecMonsterLook = XMVectorSetY(vecMonsterLook, 0.f);
-	vPlayerToMonster = XMVectorSetY(vPlayerToMonster, 0.f);
+	///* 위치차이에 따른 Y 값 0으로 셋팅 */
+	//vecMonsterLook = XMVectorSetY(vecMonsterLook, 0.f);
+	//vPlayerToMonster = XMVectorSetY(vPlayerToMonster, 0.f);
 
-	/* 두 벡터의 사이 각 */
-	_vector svAngle = XMVector3AngleBetweenVectors(vecMonsterLook, vPlayerToMonster);
-	XMStoreFloat(&m_fRadian, svAngle);
-	m_fRadian = XMConvertToDegrees(m_fRadian);
+	///* 두 벡터의 사이 각 */
+	//_vector svAngle = XMVector3AngleBetweenVectors(vecMonsterLook, vPlayerToMonster);
+	//XMStoreFloat(&m_fRadian, svAngle);
+	//m_fRadian = XMConvertToDegrees(m_fRadian);
 
-	if (0 > m_CheckFWD && (5.0f < m_fDistance && 10.0f > m_fDistance))
-	{
-		m_pTransform->Face_Target(g_pObserver->Get_PlayerPos());
-		m_bTargetOn = true;
-	}
+	//if (0 > m_CheckFWD && (5.0f < m_fDistance && 10.0f > m_fDistance))
+	//{
+	//	m_pTransform->Face_Target(g_pObserver->Get_PlayerPos());
+	//	m_bTargetOn = true;
+	//}
 
-	if (0 > m_CheckFWD && 3.0f > m_fDistance)
-	{
-		if (10.0f > m_fRadian)
-		{
-			m_fAttackTime += (_float)_dDeltaTime;
-			if (m_fAttackTime > 0.5f)
-			{
-				m_fAttackTime = 0.0f;
-				m_pStateController->Change_State(L"Attack");
-			}
-		}
-	}
+	//if (0 > m_CheckFWD && 3.0f > m_fDistance)
+	//{
+	//	if (10.0f > m_fRadian)
+	//	{
+	//		m_fAttackTime += (_float)_dDeltaTime;
+	//		if (m_fAttackTime > 0.5f)
+	//		{
+	//			m_fAttackTime = 0.0f;
+	//			m_pStateController->Change_State(L"Attack");
+	//		}
+	//	}
+	//}
 
 }
 
@@ -209,6 +243,21 @@ void CBastion_Healer_State::OnTriggerEnter(CCollision& collision)
 
 void CBastion_Healer_State::OnTriggerExit(CCollision& collision)
 {
+}
+
+HRESULT CBastion_Healer_State::Check_State()
+{
+	if (!m_pOwner->Get_Dead()&&!m_pOwner->Get_Groggy())
+	{
+		if (m_pOwner->get_Target())
+			m_pStateController->Change_State(L"Run");
+		else if (m_pOwner->get_Attack())
+			m_pStateController->Change_State(L"Attack");
+		else
+			m_pStateController->Change_State(L"Idle");
+	}
+
+	return S_OK;
 }
 
 CBastion_Healer_State* CBastion_Healer_State::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext, void* _pArg)
