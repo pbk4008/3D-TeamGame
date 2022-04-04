@@ -1046,9 +1046,12 @@ void CSilvermane::Set_EquipShield(const _bool _isEquipShield)
 {
 	if (m_pShield)
 	{
-		m_pShield->Set_Equip(_isEquipShield);
-		m_isEquipShield = _isEquipShield;
-		m_isBlock = _isEquipShield;
+		if (m_isEquipShield != _isEquipShield)
+		{
+			m_pShield->Set_Equip(_isEquipShield);
+			m_isEquipShield = _isEquipShield;
+			m_isBlock = _isEquipShield;
+		}
 	}
 }
 

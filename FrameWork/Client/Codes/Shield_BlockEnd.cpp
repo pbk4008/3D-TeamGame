@@ -116,8 +116,8 @@ _int CShield_BlockEnd::Input(const _double& _dDeltaTime)
 	{
 		if (g_pGameInstance->getMouseKeyDown(CInputDev::MOUSESTATE::MB_LBUTTON))
 		{
-			if (m_pSilvermane->IsEquipWeapon())
-			{
+			//if (m_pSilvermane->IsEquipWeapon())
+			//{
 				switch (m_pSilvermane->Get_WeaponType())
 				{
 				case CWeapon::EType::Sword_1H:
@@ -131,7 +131,7 @@ _int CShield_BlockEnd::Input(const _double& _dDeltaTime)
 					return STATE_CHANGE;
 					break;
 				}
-			}
+			//}
 		}
 		else if (g_pGameInstance->getMouseKeyDown(CInputDev::MOUSESTATE::MB_RBUTTON))
 		{
