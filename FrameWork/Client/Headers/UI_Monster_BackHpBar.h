@@ -42,12 +42,17 @@ public:
 
 private:
 	UIBARDESC m_UIBarDesc;
+	_float m_fHpRatio = 0.f;
+	_float m_fExHpRatio = 0.f; //이전 피 비율
+
 	_float m_fGapX = 0.f;
 	_float m_fGapY = 0.f;
-	_float m_fAlpha = 1.f;
-	_float m_fDisappearTimeAcc = 0.f;
+	_float m_fAlpha = 1.f; //레이닿았을때 사라지면서 줄어들 alpha
+	_float m_fDisappearTimeAcc = 0.f; //레이닿았을때 사라지는 시간체크 
 
-	_float m_fHpRatio = 0.f;
+	_bool m_bChange = false; //알파값이 줄어들기 시작해야하는 타이밍 체크해줌 
+	_float m_fRatioAlpha = 1.f; //피 깎였을때 보여야하는 알파값
+
 
 private:
 	virtual HRESULT SetUp_Components();

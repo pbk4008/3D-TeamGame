@@ -115,6 +115,9 @@ HRESULT CUI_Monster_Back::Render()
 	m_pTrapziumBuffer->SetUp_ValueOnShader("g_fY", &m_fGapY, sizeof(_float));
 	m_pTrapziumBuffer->SetUp_ValueOnShader("g_fAlpha", &m_fAlpha, sizeof(_float));
 
+	_float CurAttackGauge = 0.f;
+	m_pTrapziumBuffer->SetUp_ValueOnShader("g_fCurAttack", &CurAttackGauge, sizeof(_float));
+
 	m_pTrapziumBuffer->SetUp_TextureOnShader("g_DiffuseTexture", m_pTexture);
 
 	m_pTrapziumBuffer->Render(1); //테스트로하면 알파값적용이안돼서 바로꺼지는거같음, 근데 블랜드하면,, 소팅해줘야함,,
@@ -125,7 +128,7 @@ HRESULT CUI_Monster_Back::SetUp_Components()
 {
 	CVIBuffer_Trapezium::TRAPDESC Desc;
 	Desc.fAngle = m_Desc.UIDesc.fAngle;
-	_tcscpy_s(Desc.ShaderFilePath, L"../../Reference/ShaderFile/Shader_UI_Bar.hlsl");
+	_tcscpy_s(Desc.ShaderFilePath, L"../../Reference/ShaderFile/Shader_UI_Enemy_Bar.hlsl");
 
 	Desc.bMinus = m_Desc.UIDesc.bMinus;
 

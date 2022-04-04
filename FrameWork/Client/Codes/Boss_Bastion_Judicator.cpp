@@ -72,7 +72,7 @@ HRESULT CBoss_Bastion_Judicator::NativeConstruct(const _uint _iSceneID, void* pA
 
 
 	//TODO : 아래 세팅은 꼭 해줄것, 그래야 UI나옴 초기값 넣어줘야됨
-	m_fMaxHp = 5.f;
+	m_fMaxHp = 20.f;
 	m_fCurrentHp = m_fMaxHp;
 
 	m_fMaxGroggyGauge = 10.f;

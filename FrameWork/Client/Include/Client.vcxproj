@@ -790,6 +790,7 @@ call Update_Client.bat</Command>
     <FxCompile Include="..\bin\ShaderFile\Shader_Trail.hlsl" />
     <FxCompile Include="..\bin\ShaderFile\Shader_UI.hlsl" />
     <FxCompile Include="..\bin\ShaderFile\Shader_UI_Bar.hlsl" />
+    <FxCompile Include="..\bin\ShaderFile\Shader_UI_Enemy_Bar.hlsl" />
     <FxCompile Include="..\bin\ShaderFile\Shader_Weapon.hlsl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

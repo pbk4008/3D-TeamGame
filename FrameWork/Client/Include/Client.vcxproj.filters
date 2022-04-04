@@ -2487,5 +2487,8 @@
     <FxCompile Include="..\bin\ShaderFile\Shader_UI_Bar.hlsl">
       <Filter>100.ShaderFiles\04.UI</Filter>
     </FxCompile>
+    <FxCompile Include="..\bin\ShaderFile\Shader_UI_Enemy_Bar.hlsl">
+      <Filter>100.ShaderFiles\04.UI</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>
