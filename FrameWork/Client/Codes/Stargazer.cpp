@@ -22,7 +22,7 @@ HRESULT CStargazer::NativeConstruct_Prototype()
 		return E_FAIL;
 
 	m_eType = EType::Monster_Sword1H;
-	m_iObectTag = (_uint)GAMEOBJECT::WEAPON;
+	m_iObectTag = (_uint)GAMEOBJECT::WEAPON_1HSWORD;
 
 	return S_OK;
 }
@@ -36,24 +36,35 @@ HRESULT CStargazer::NativeConstruct(const _uint _iSceneID, void* _pArg)
 		return E_FAIL;
 
 	m_fDamage = 3;
+
 	return S_OK;
 }
 
 _int CStargazer::Tick(_double _dDeltaTime)
 {
+	if (0 > __super::Tick(_dDeltaTime))
+		return -1;
+
 	//뼈행렬 업데이트
 	Attach_FixedBone(_dDeltaTime);
 	//무기 가지고 있는 객체의 월드 업데이트
 	Attach_Owner(_dDeltaTime);
 
-	
-	m_pCollider->Tick(_dDeltaTime);
+	if(nullptr != m_pCollider)
+		m_pCollider->Tick(_dDeltaTime);
+
+	_matrix matPivot = XMMatrixScaling(10.f, 10.f, 10.f) * XMMatrixRotationAxis(XMVectorSet(0.f, 1.f, 0.f, 0.f), XMConvertToRadians(90.f)) * XMMatrixTranslation(0.f, 0.f, 1.f);
+	m_pCollider->setPivotMatrix(matPivot);
+
 
 	return _int();
 }
 
 _int CStargazer::LateTick(_double _dDeltaTime)
 {
+	if (0 > __super::LateTick(_dDeltaTime))
+		return -1;
+
 	m_pRenderer->Add_RenderGroup(CRenderer::RENDER_NONALPHA,this);
 
 	return _int();
@@ -61,6 +72,9 @@ _int CStargazer::LateTick(_double _dDeltaTime)
 
 HRESULT CStargazer::Render()
 {
+	if (FAILED(__super::Render()))
+		return E_FAIL;
+
 	_matrix XMWorldMatrix = XMMatrixTranspose(m_pTransform->Get_WorldMatrix());
 	_matrix XMViewMatrix = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_VIEW));
 	_matrix XMProjectMatrix = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_PROJECTION));
@@ -88,6 +102,12 @@ void CStargazer::Set_OwnerPivotMatrix(const _fmatrix& _smatPivot)
 
 HRESULT CStargazer::SetUp_Component()
 {
+	CTransform::TRANSFORMDESC transformDesc;
+	transformDesc.fSpeedPerSec = 0.f;
+	transformDesc.fRotationPerSec = 0.f;
+	m_pTransform->Set_TransformDesc(transformDesc);
+	m_pLocalTransform->Set_TransformDesc(transformDesc);
+
 	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Model_Weapon_Stargazer", L"Model", (CComponent**)&m_pModel)))
 		return E_FAIL;
 
@@ -102,6 +122,7 @@ HRESULT CStargazer::SetUp_Component()
 	tDesc.tColliderDesc.fRestitution = 0.f;
 	tDesc.tColliderDesc.isGravity = false;
 	tDesc.tColliderDesc.isKinematic = false;
+	tDesc.tColliderDesc.isVisualization = true;
 	tDesc.tColliderDesc.isSceneQuery = false;
 	tDesc.tColliderDesc.isTrigger = true;
 	tDesc.tColliderDesc.pGameObject = this;
@@ -110,20 +131,11 @@ HRESULT CStargazer::SetUp_Component()
 		return E_FAIL;
 
 	_matrix matPivot = XMMatrixRotationAxis(XMVectorSet(0.f, 1.f, 0.f, 0.f), XMConvertToRadians(90.f))* XMMatrixTranslation(0.f,0.f,1.f);
-
 	m_pCollider->setPivotMatrix(matPivot);
 
 	if (FAILED(SetUp_Material()))
 		return E_FAIL;
 
-	CTransform::TRANSFORMDESC tTransformDesc;
-	ZeroMemory(&tTransformDesc, sizeof(tTransformDesc));
-
-	//메인 트랜스폼 셋팅
-	m_pTransform->Set_TransformDesc(tTransformDesc);
-	//로컬 트랜스폼 셋팅
-	m_pLocalTransform->Set_TransformDesc(tTransformDesc);
-	
 	return S_OK;
 }
 
@@ -188,13 +200,13 @@ HRESULT CStargazer::SetUp_Material()
 
 void CStargazer::Check_Attack()
 {
-	if (!m_pOwner)
+	/*if (!m_pOwner)
 		return;
 
 	if (m_pOwner->IsAttack())
 		m_isAttack = true;
 	else
-		m_isAttack = false;
+		m_isAttack = false;*/
 }
 
 void CStargazer::OnTriggerEnter(CCollision& collision)
@@ -212,8 +224,8 @@ void CStargazer::OnTriggerEnter(CCollision& collision)
 
 void CStargazer::OnTriggerExit(CCollision& collision)
 {
-	m_isAttack = false;
-	m_pOwner->Set_IsAttack(false);
+	/*m_isAttack = false;
+	m_pOwner->Set_IsAttack(false);*/
 }
 
 

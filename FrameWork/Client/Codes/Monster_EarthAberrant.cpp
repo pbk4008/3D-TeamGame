@@ -102,6 +102,7 @@ HRESULT CMonster_EarthAberrant::NativeConstruct(const _uint _iSceneID, void* _pA
 
 	
 	m_tAttackDesc.iLevel = 1;
+	m_tAttackDesc.fDamage = 3.f;
 
 	return S_OK;
 }

@@ -21,9 +21,6 @@ HRESULT CBastion_Sword_Attack::NativeConstruct(void* _pArg)
 
 	m_wstrTag = tDesc.pName;
 
-	/*Safe_AddRef(m_pAnimator);
-	Safe_AddRef(m_pTransform);*/
-
 	if (FAILED(CMonster_FSM::NativeConstruct(_pArg)))
 		return E_FAIL;
 
@@ -44,6 +41,56 @@ _int CBastion_Sword_Attack::Tick(const _double& _dDeltaTime)
 	if (m_pAnimator->Get_CurrentAnimNode() == (_uint)CMonster_Bastion_Sword::ANIM_TYPE::IDLE)
 		m_pStateController->Change_State(L"Idle");
 
+	//keyframe에따라 데미지 다르게 들어가게 
+	CMonster_Bastion_Sword* pMonster = (CMonster_Bastion_Sword*)m_pStateController->Get_GameObject();
+	if (nullptr != pMonster)
+	{
+		//pMonster->Set_IsAttack(true);
+
+		_uint iCurKeyFrameIndex = m_pAnimator->Get_AnimController()->Get_CurKeyFrameIndex();
+
+		cout << iCurKeyFrameIndex << endl;
+
+		if ((_uint)CMonster_Bastion_Sword::ANIM_TYPE::ATTACK_SINGLE == m_pAnimator->Get_CurrentAnimNode())
+		{
+			if (/*35*/50 < iCurKeyFrameIndex && /*65*/100 > iCurKeyFrameIndex)
+			{
+				pMonster->Set_IsAttack(true);
+
+				_float fDamage = 4.f;
+				_uint iLevel = 1;
+				pMonster->Set_AttackDesc_Damaga(fDamage);
+				pMonster->Set_AttackDesc_Level(iLevel);
+			}
+			else
+				pMonster->Set_IsAttack(false);
+		}
+		
+		else if ((_uint)CMonster_Bastion_Sword::ANIM_TYPE::ATTACK_DOUBLE== m_pAnimator->Get_CurrentAnimNode())
+		{
+			if (33 < iCurKeyFrameIndex && 55 > iCurKeyFrameIndex)
+			{
+				pMonster->Set_IsAttack(true);
+				
+				_float fDamage = 5.f;
+				_uint iLevel = 1;
+				pMonster->Set_AttackDesc_Damaga(fDamage);
+				pMonster->Set_AttackDesc_Level(iLevel);
+			}
+
+			if (73 < iCurKeyFrameIndex && 84 > iCurKeyFrameIndex)
+			{
+				pMonster->Set_IsAttack(true);
+
+				_float fDamage = 5.f;
+				_uint iLevel = 2;
+				pMonster->Set_AttackDesc_Damaga(fDamage);
+				pMonster->Set_AttackDesc_Level(iLevel);
+			}
+			else
+				pMonster->Set_IsAttack(false);
+		}
+	}
 
 	return _int();
 }
@@ -60,7 +107,7 @@ HRESULT CBastion_Sword_Attack::Render()
 
 HRESULT CBastion_Sword_Attack::EnterState(void* pArg)
 {
-	m_pMonster->Set_IsAttack(true);
+	//m_pMonster->Set_IsAttack(true);
 	m_eAttackType = (*(ATTACK_TYPE*)pArg);
 
 	switch (m_eAttackType)
@@ -84,8 +131,9 @@ HRESULT CBastion_Sword_Attack::EnterState(void* pArg)
 
 HRESULT CBastion_Sword_Attack::ExitState(void* _pArg)
 {
-	m_pMonster->Set_IsAttack(false);
+	//m_pMonster->Set_IsAttack(false);
 
+	//사운드관련 변수
 	m_bSingle = false;
 	m_bDouble = false;
 	m_bJump = false;
