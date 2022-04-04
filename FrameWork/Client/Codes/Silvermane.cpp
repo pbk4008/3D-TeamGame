@@ -148,7 +148,10 @@
 //////////////////////////////////////////// Hit
 #include "1H_FlinchLeft.h"
 #include "1H_KnockBack_Land.h"
+#include "Silvermane_KnockBackFwd.h"
+#include "Silvermane_KnockBackBwd.h"
 #pragma endregion
+
 #include "Material.h"
 
 CSilvermane::CSilvermane(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
@@ -730,6 +733,10 @@ HRESULT CSilvermane::Ready_States()
 		return E_FAIL;
 	if (FAILED(m_pStateController->Add_State(L"1H_KnockBack_Land", C1H_KnockBack_Land::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
+	if (FAILED(m_pStateController->Add_State(L"KnockBackBwd", CSilvermane_KnockBackBwd::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	if (FAILED(m_pStateController->Add_State(L"KnockBackFwd", CSilvermane_KnockBackFwd::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
 
 	for (auto& pair : m_pStateController->Get_States())
 	{
@@ -1053,6 +1060,12 @@ void CSilvermane::Set_EquipShieldAnim(const _bool _isEquipShield)
 void CSilvermane::Set_BlockTime(const _float _fValue)
 {
 	m_fBlockTime = _fValue;
+}
+
+void CSilvermane::Set_IsShieldAttack(const _bool _isAttack)
+{
+	if (m_pShield)
+		m_pShield->Set_IsAttack(_isAttack);
 }
 
 void CSilvermane::Add_BlockTime(const _float _fValue)

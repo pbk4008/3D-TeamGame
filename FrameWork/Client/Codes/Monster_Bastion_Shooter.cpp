@@ -82,6 +82,8 @@ HRESULT CMonster_Bastion_Shooter::NativeConstruct(const _uint _iSceneID, void* _
 
 	setActive(false);
 
+	m_tAttackDesc.iLevel = 1;
+
 	return S_OK;
 }
 

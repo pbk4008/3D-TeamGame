@@ -1530,6 +1530,12 @@
     <ClInclude Include="..\Headers\1H_KnockBack_Land.h">
       <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\HIt</Filter>
     </ClInclude>
+    <ClInclude Include="..\Headers\Silvermane_KnockBackBwd.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\HIt</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Silvermane_KnockBackFwd.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\HIt</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -2371,6 +2377,12 @@
       <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Shield\Block</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\1H_KnockBack_Land.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\HIt</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Silvermane_KnockBackBwd.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\HIt</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Silvermane_KnockBackFwd.cpp">
       <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\HIt</Filter>
     </ClCompile>
   </ItemGroup>

@@ -1,6 +1,9 @@
 #include "pch.h"
 #include "Shield_BlockStart.h"
 
+#include "HierarchyNode.h"
+#include "Bullet.h"
+
 CShield_BlockStart::CShield_BlockStart(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
 	: CShield_Block(_pDevice, _pDeviceContext)
 {
@@ -89,6 +92,11 @@ void CShield_BlockStart::Block(const ATTACKDESC& _tAttackDesc)
 	// 아직 패링이 가능해!
 	if (0.5f > fBlockTime)
 	{
+		if ((_uint)GAMEOBJECT::WEAPON_BULLET == _tAttackDesc.pHitObject->getTag())
+		{
+			Shot_Bullet(_tAttackDesc);
+		}
+
 		switch (_tAttackDesc.iLevel)
 		{
 		case 1:
@@ -129,6 +137,37 @@ _int CShield_BlockStart::Input(const _double& _dDeltaTime)
 		return iProgress;
 
 	return _int();
+}
+
+void CShield_BlockStart::Shot_Bullet(const ATTACKDESC& _tAttackDesc)
+{
+	CTransform* pTargetTransform = _tAttackDesc.pOwner->Get_Transform();
+	CTransform* pBulletTransform = _tAttackDesc.pHitObject->Get_Transform();
+
+	CHierarchyNode* pBulletNode = m_pModel->Get_Bone("weapon_l");
+	_matrix smatBullet = pBulletNode->Get_TransformMatrix();
+	_matrix smatPivot = m_pModel->Get_PivotMatrix();
+	_matrix smatWorld = m_pTransform->Get_WorldMatrix();
+	smatBullet *= smatPivot * smatWorld;
+
+	_vector svLook = XMVector3Normalize(m_pTransform->Get_State(CTransform::STATE_POSITION) - pTargetTransform->Get_State(CTransform::STATE_POSITION));
+	_vector svRight = XMVector3Normalize(XMVector3Cross(XMVectorSet(0.f, 1.f, 0.f, 0.f), svLook));
+	_vector svUp = XMVector3Normalize(XMVector3Cross(svLook, svRight));
+	svRight *= pBulletTransform->Get_Scale(CTransform::STATE_RIGHT);
+	svUp *= pBulletTransform->Get_Scale(CTransform::STATE_UP);
+	svLook *= pBulletTransform->Get_Scale(CTransform::STATE_LOOK);
+
+	memcpy_s(&smatBullet.r[0], sizeof(_vector), &svRight, sizeof(_vector));
+	memcpy_s(&smatBullet.r[1], sizeof(_vector), &svUp, sizeof(_vector));
+	memcpy_s(&smatBullet.r[2], sizeof(_vector), &svLook, sizeof(_vector));
+	_uint iSceneID = g_pGameInstance->getCurrentLevel();
+	CBullet* pBullet = nullptr;
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer(iSceneID, L"Layer_Bullet", L"Proto_GameObject_Shooter_Bullet", &smatBullet, (CGameObject**)&pBullet)))
+	{
+		MSGBOX(L"패링 총알생성 실패!");
+		return;
+	}
+	pBullet->Set_Owner(m_pSilvermane);
 }
 
 CShield_BlockStart* CShield_BlockStart::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext, void* _pArg)

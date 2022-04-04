@@ -64,8 +64,12 @@ _int CTestScene_JS::Tick(_double TimeDelta)
 	CGameObject* pMonster = nullptr;
 	if (g_pGameInstance->getkeyDown(DIK_COLON))
 	{
-		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_JS, L"Layer_Monster", L"Proto_GameObject_Monster_Bastion_2HSword", nullptr, &pMonster)))
-			return -1;
+		//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_JS, L"Layer_Monster", L"Proto_GameObject_Monster_Bastion_2HSword", nullptr, &pMonster)))
+		//	return -1;
+		//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_JS, L"Layer_Monster", L"Proto_GameObject_Monster_Bastion_Shooter", nullptr, &pMonster)))
+		//	return E_FAIL;
+		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_JS, L"Layer_Monster", L"Proto_GameObject_Monster_Bastion_Sword", nullptr, &pMonster)))
+			return E_FAIL;
 		pMonster->setActive(true);
 	}
 	if (g_pGameInstance->getkeyDown(DIK_SEMICOLON))
@@ -117,11 +121,11 @@ HRESULT CTestScene_JS::Ready_Light()
 
 HRESULT CTestScene_JS::Ready_Gameobject()
 {
-	//wstring wstrNaviFile = L"../Data/NavMesh/Stage_1_Nav.dat";
-	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_JS, L"Layer_Plane", L"Proto_GameObject_Plane_Test", &wstrNaviFile)))
-	//	return E_FAIL;
-	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_JS, L"Layer_SordTrail", L"Prototype_GameObject_SwordTral")))
-	//	return E_FAIL;
+	wstring wstrNaviFile = L"../Data/NavMesh/Stage_1_Nav.dat";
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_JS, L"Layer_Plane", L"Proto_GameObject_Plane_Test", &wstrNaviFile)))
+		return E_FAIL;
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_JS, L"Layer_SordTrail", L"Prototype_GameObject_SwordTral")))
+		return E_FAIL;
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_JS, L"Layer_Silvermane", L"Proto_GameObject_Silvermane")))
 		return E_FAIL;
  	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_JS, L"Layer_Camera", L"Proto_GameObject_Camera_Silvermane")))

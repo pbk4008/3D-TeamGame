@@ -424,7 +424,8 @@ void CState_Silvermane::Hit(const ATTACKDESC& _tAttackDesc)
 		return;
 		break;
 	case 2:
-		m_pStateController->Change_State(L"1H_KnockBack_Land");
+		//m_pStateController->Change_State(L"1H_KnockBack_Land");
+		m_pStateController->Change_State(L"KnockBackBwd");
 		return;
 		break;
 	case 3:

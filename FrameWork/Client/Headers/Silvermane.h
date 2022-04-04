@@ -92,6 +92,7 @@ public: /* For.Shield */
 	void Set_EquipShield(const _bool _isEquipShield);
 	void Set_EquipShieldAnim(const _bool _isEquipShield);
 	void Set_BlockTime(const _float _fValue);
+	void Set_IsShieldAttack(const _bool _isAttack);
 	void Add_BlockTime(const _float _fValue);
 
 public: /* For.JumpNode */
