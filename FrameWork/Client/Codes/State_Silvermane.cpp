@@ -298,6 +298,30 @@ void CState_Silvermane::OnTriggerEnterHit(CCollision& collision)
 			m_pStateController->Change_State(L"1H_FlinchLeft");
 		}
 	}
+	else if ((_uint)GAMEOBJECT::WEAPON_BRONZE == iTag)
+	{
+		_bool a = static_cast<CActor*>(collision.pGameObject)->IsAttack();
+		if (static_cast<CActor*>(collision.pGameObject)->IsAttack())
+		{
+			m_pSilvermane->Add_HP(-3);
+		}
+	}
+	else if ((_uint)GAMEOBJECT::WEAPON_2HSword == iTag)
+	{
+		_bool a = static_cast<CActor*>(collision.pGameObject)->IsAttack();
+		if (static_cast<CActor*>(collision.pGameObject)->IsAttack())
+		{
+			m_pSilvermane->Add_HP(-3);
+		}
+	}
+	else if ((_uint)GAMEOBJECT::WEAPON_POLEARM == iTag)
+	{
+		_bool a = static_cast<CActor*>(collision.pGameObject)->IsAttack();
+		if (static_cast<CActor*>(collision.pGameObject)->IsAttack())
+		{
+			m_pSilvermane->Add_HP(-3);
+		}
+	}
 }
 
 void CState_Silvermane::Free()

@@ -80,6 +80,8 @@ HRESULT CShield_BlockEnd::EnterState()
 
 	m_pSilvermane->Set_EquipShieldAnim(false);
 	m_pSilvermane->Set_IsTrasceCamera(false);
+
+	m_pSilvermane->Set_BlockTime(0.f);
 	return S_OK;
 }
 

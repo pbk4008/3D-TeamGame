@@ -18,7 +18,9 @@ private:
 
 	HRESULT Ready_Light();
 	HRESULT Ready_Gameobject();
-	HRESULT Ready_Effect();
+	HRESULT Ready_Data_UI(const _tchar* pDataFilePath);
+	HRESULT Ready_UI(const _tchar* LayerTag);
+	HRESULT Ready_Data_Effect();
 
 public:
 	static CTestScene_JS* Create(ID3D11Device * pDevice, ID3D11DeviceContext * pDeviceContext);

@@ -83,11 +83,8 @@ HRESULT CMonster_EarthAberrant::NativeConstruct(const _uint _iSceneID, void* _pA
 		return E_FAIL;
 	}
 
-	if (FAILED(Set_Weapon()))
-	{
+	if (FAILED(Set_Panel()))
 		return E_FAIL;
-	}
-
 
 	m_bIsFall = true;
 	m_iObectTag = (_uint)GAMEOBJECT::MONSTER_ABERRANT;

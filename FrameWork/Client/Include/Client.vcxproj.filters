@@ -653,12 +653,15 @@
     </Filter>
     <Filter Include="100.ShaderFiles\99.Other">
       <UniqueIdentifier>{905d5be1-9601-40ef-81f2-c8c3537101a9}</UniqueIdentifier>
-	</Filter>
+    </Filter>
     <Filter Include="02.GameObject\04.Effect\01.TrailEffect">
       <UniqueIdentifier>{4da4394f-ff21-4396-a0e8-24986eaeec60}</UniqueIdentifier>
     </Filter>
     <Filter Include="02.GameObject\05.UI\01.UI_Ingame\01.Meter\02.Monster\03.HpUI\00.BackHp">
       <UniqueIdentifier>{56f68291-1790-462f-af84-0e71c7f994af}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\00.Player\00.Silvermane\State\Shield\Parry">
+      <UniqueIdentifier>{476d3f32-8157-40d0-b1ca-3cfc24316276}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -1524,6 +1527,12 @@
     <ClInclude Include="..\Headers\UI_Monster_BackHpBar.h">
       <Filter>02.GameObject\05.UI\01.UI_Ingame\01.Meter\02.Monster\03.HpUI\00.BackHp</Filter>
     </ClInclude>
+    <ClInclude Include="..\Headers\Shield_Parry.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Shield\Parry</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Shield_BlockSkid.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Shield\Block</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -2360,6 +2369,12 @@
     </ClCompile>
     <ClCompile Include="..\Codes\UI_Monster_BackHpBar.cpp">
       <Filter>02.GameObject\05.UI\01.UI_Ingame\01.Meter\02.Monster\03.HpUI\00.BackHp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Shield_Parry.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Shield\Parry</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Shield_BlockSkid.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Shield\Block</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

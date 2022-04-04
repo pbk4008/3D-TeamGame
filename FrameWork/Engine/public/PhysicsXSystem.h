@@ -10,7 +10,7 @@
 #define ToPxVec3(v)					PxVec3((v).x, (v).y, (v).z)
 #define FromPxVec3(v)				_float3((v).x, (v).y, (v).z)
 #define ToPxExtendedVec3(v)			PxExtendedVec3((v).x, (v).y, (v).z)
-#define FromPxextendedVec3(v)		_float3((v).x, (v).y, (v).z)
+#define FromPxextendedVec3(v)		_float3((_float)(v).x, (_float)(v).y, (_float)(v).z)
 #define ToPxQuat(v)					PxQuat((v).x, (v).y, (v).z, (v).w)
 #define FromPxQuat(v)				_float4((v).x, (v).y, (v).z, (v).w)
 

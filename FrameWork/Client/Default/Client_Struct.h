@@ -14,5 +14,13 @@ typedef struct tagEnvironMentLoadData
 	LEVEL_ID eLevel;
 	_uint	  iType;
 }ENVIRONMENTLOADDATA;
+
+typedef struct tagAttackDesc
+{
+	// 1 : 약공격, 2 : 강공격, 3 : 넉백될 정도의 강려크한 공격
+	_uint iLevel = 0;
+	_float fDamage = 0.f;
+}ATTACKDESC;
+
 END
 #endif
