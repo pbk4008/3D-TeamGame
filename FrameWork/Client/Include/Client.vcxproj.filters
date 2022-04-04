@@ -220,9 +220,6 @@
     <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_2HSword\State_2HSword\Rage">
       <UniqueIdentifier>{bd8eebf8-c00f-4303-9ddc-b43dfb509314}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_2HSword\State_2HSword\Rage\Rage_Attack">
-      <UniqueIdentifier>{b13c53f4-6c0a-428b-b366-9dd68df48dd5}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_2HSword\State_2HSword\Hit">
       <UniqueIdentifier>{7622b84d-629f-47c9-91a2-0c5b83b391dc}</UniqueIdentifier>
     </Filter>
@@ -653,7 +650,7 @@
     </Filter>
     <Filter Include="100.ShaderFiles\99.Other">
       <UniqueIdentifier>{905d5be1-9601-40ef-81f2-c8c3537101a9}</UniqueIdentifier>
-	</Filter>
+    </Filter>
     <Filter Include="02.GameObject\04.Effect\01.TrailEffect">
       <UniqueIdentifier>{4da4394f-ff21-4396-a0e8-24986eaeec60}</UniqueIdentifier>
     </Filter>
@@ -1135,9 +1132,6 @@
     </ClInclude>
     <ClInclude Include="..\Headers\Bastion_2HSword_Rage.h">
       <Filter>02.GameObject\03.Character\01.Monster\Bastion_2HSword\State_2HSword\Rage</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Headers\Bastion_2HSword_Attack_Rage.h">
-      <Filter>02.GameObject\03.Character\01.Monster\Bastion_2HSword\State_2HSword\Rage\Rage_Attack</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\Bastion_2HSword_Attack.h">
       <Filter>02.GameObject\03.Character\01.Monster\Bastion_2HSword\State_2HSword\Attack</Filter>
@@ -1978,9 +1972,6 @@
     </ClCompile>
     <ClCompile Include="..\Codes\Bastion_2HSword_Rage.cpp">
       <Filter>02.GameObject\03.Character\01.Monster\Bastion_2HSword\State_2HSword\Rage</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Codes\Bastion_2HSword_Attack_Rage.cpp">
-      <Filter>02.GameObject\03.Character\01.Monster\Bastion_2HSword\State_2HSword\Rage\Rage_Attack</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\Bastion_2HSword_Attack.cpp">
       <Filter>02.GameObject\03.Character\01.Monster\Bastion_2HSword\State_2HSword\Attack</Filter>

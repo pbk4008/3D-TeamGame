@@ -90,10 +90,10 @@ void CBastion_2HSword_Dash::Look_Player(void)
 
 void CBastion_2HSword_Dash::Look_Monster(void)
 {
-	CAnimation* pAnim = m_pAnimator->Get_CurrentAnimation();
+	//CAnimation* pAnim = m_pAnimator->Get_CurrentAnimation();
 
-	if (pAnim->Is_Finished())
-		m_pStateController->Change_State(L"Chaser");
+	//if (pAnim->Is_Finished())
+	//	m_pStateController->Change_State(L"Chaser");
 }
 
 CBastion_2HSword_Dash* CBastion_2HSword_Dash::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext, void* _pArg)

@@ -261,7 +261,6 @@ call Update_Client.bat</Command>
     <ClInclude Include="..\Headers\Aberrant_Walk.h" />
     <ClInclude Include="..\Headers\BackGround.h" />
     <ClInclude Include="..\Headers\Bastion_2HSword_Attack.h" />
-    <ClInclude Include="..\Headers\Bastion_2HSword_Attack_Rage.h" />
     <ClInclude Include="..\Headers\Bastion_2HSword_Chaser.h" />
     <ClInclude Include="..\Headers\Bastion_2HSword_Dash.h" />
     <ClInclude Include="..\Headers\Bastion_2HSword_Death.h" />
@@ -539,7 +538,6 @@ call Update_Client.bat</Command>
     <ClCompile Include="..\Codes\BackGround.cpp" />
     <ClCompile Include="..\Codes\1H_SwordAttackNormalR2_Start.cpp" />
     <ClCompile Include="..\Codes\Bastion_2HSword_Attack.cpp" />
-    <ClCompile Include="..\Codes\Bastion_2HSword_Attack_Rage.cpp" />
     <ClCompile Include="..\Codes\Bastion_2HSword_Chaser.cpp" />
     <ClCompile Include="..\Codes\Bastion_2HSword_Dash.cpp" />
     <ClCompile Include="..\Codes\Bastion_2HSword_Death.cpp" />

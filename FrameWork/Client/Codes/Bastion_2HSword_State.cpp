@@ -31,69 +31,125 @@ _int CBastion_2HSword_State::Tick(const _double& _dDeltaTime)
 	if (NO_EVENT != iProgress)
 		return iProgress;
 
-	_vector vMonsterPos = m_pTransform->Get_State(CTransform::STATE::STATE_POSITION);
-	_vector vDist = vMonsterPos - g_pObserver->Get_PlayerPos();
-	_float fDistToPlayer = XMVectorGetX(XMVector3Length(vDist));
+	//_vector vMonsterPos = m_pTransform->Get_State(CTransform::STATE::STATE_POSITION);
+	//_vector vDist = vMonsterPos - g_pObserver->Get_PlayerPos();
+	//_float fDistToPlayer = XMVectorGetX(XMVector3Length(vDist));
+	
+	_float fDist = g_pObserver->Get_Dist(m_pTransform->Get_State(CTransform::STATE::STATE_POSITION));
 
-	m_bTargetOn = false;
-	m_bAttackOn = false;
-	m_bPlayerAttack = false;
+	m_pOwner = static_cast<CMonster_Bastion_2HSword*>(m_pMonster);
 
-	if (!m_bFirstAttack)
+	if (10.f <= fDist && 15.f >= fDist && m_pOwner->get_FirstAttack()&&!m_pOwner->get_Attack())
+		m_pOwner->set_RageOn(true);
+
+	cout << fDist << endl;
+	if(!m_pOwner->get_RageOn())
 	{
-		if (3.5f < fDistToPlayer && 10.0f > fDistToPlayer)
+		if (3.5f <= fDist && 10.0f > fDist && !m_pOwner->get_Attack())
 		{
 			//m_pTransform->Face_Target(g_pObserver->Get_PlayerPos());
-			m_bTargetOn = true;
-			m_bAttackOn = false;
+			//m_bTargetOn = true;
+			//m_bAttackOn = false;
+			m_pOwner->set_Target(true);
+			m_pOwner->set_Attack(false);
 		}
-		else
+		else if (3.5f > fDist)
 		{
-			m_bTargetOn = false;
-			m_bAttackOn = true;
+			if (m_pOwner->get_RandAttack() == -1)
+			{
+				_int iRand = rand() % 4;
+				m_pOwner->set_RandAttack(iRand);
+				if (iRand == 0)
+				{
+					if (!m_pOwner->get_FirstAttack())
+						m_pOwner->set_FirstAttack(true);
+
+					m_pOwner->set_Target(false);
+					m_pOwner->set_Attack(true);
+				}
+				else
+				{
+					if (1.5f < fDist)
+					{
+						m_pOwner->set_RandAttack(-1);
+						m_pOwner->set_Target(true);
+						m_pOwner->set_Attack(false);
+					}
+					else
+					{
+						if (!m_pOwner->get_FirstAttack())
+							m_pOwner->set_FirstAttack(true);
+
+						m_pOwner->set_Target(false);
+						m_pOwner->set_Attack(true);
+					}
+				}
+			}
+		}
+		//else if (1.5f >fDist)
+		//{
+		//	//m_bTargetOn = false;
+		//	//m_bAttackOn = true;
+		//	if (!m_pOwner->get_FirstAttack())
+		//		m_pOwner->set_FirstAttack(true);
+
+		//	m_pOwner->set_Target(false);
+		//	m_pOwner->set_Attack(true);
+		//}
+		else if(10.0f < fDist)
+		{
+			m_pOwner->set_Target(false);
+			m_pOwner->set_Attack(false);
 		}
 	}
 	else
 	{
-		if (!m_bRageOn)
+		if (3.f <= fDist && !m_pOwner->get_Attack())
 		{
-			if (3.5f < fDistToPlayer && 10.0f > fDistToPlayer)
+			//m_pTransform->Face_Target(g_pObserver->Get_PlayerPos());
+			//m_bTargetOn = true;
+			//m_bAttackOn = false;
+			if (m_pOwner->get_FirstAttack())
+				m_pOwner->set_FirstAttack(false);
+
+			m_pOwner->set_Target(true);
+			m_pOwner->set_Attack(false);
+			m_pOwner->set_RandAttack(-1);
+		}
+		else
+		{
+			//m_bTargetOn = false;
+			//m_bAttackOn = true;
+			if (m_pOwner->get_RandAttack() == -1)
 			{
-				//m_pTransform->Face_Target(g_pObserver->Get_PlayerPos());
-				m_bTargetOn = true;
-				m_bAttackOn = false;
-			}
-			else if (10.f < fDistToPlayer && 15.f > fDistToPlayer)
-			{
-				m_bRageOn = true;
-				m_bTargetOn = false;
-				m_bAttackOn = false;
-			}
-			else
-			{
-				m_bTargetOn = false;
-				m_bAttackOn = true;
+				m_pOwner->set_Target(false);
+				m_pOwner->set_Attack(true);
 			}
 		}
 	}
+
+	if (FAILED(Check_State()))
+		return -1;
+
 	if (m_pMonster->Get_GroggyGauge() >= MAXGROOGUGAGUE)
 	{
 		//스턴상태일때 스턴state에서 현재 그로기 계속 0으로 고정시켜줌
-		CMonster_Bastion_2HSword* pMonster = static_cast<CMonster_Bastion_2HSword*>(m_pMonster);
-
-		pMonster->Groggy_Start();
+		m_pOwner->Groggy_Start();
 	}
 
 	if (0 >= m_pMonster->Get_CurrentHp() && !m_pMonster->Get_Dead())
 	{
-		static_cast<CMonster_Bastion_2HSword*>(m_pMonster)->Set_Dead();
-		static_cast<CMonster_Bastion_2HSword*>(m_pMonster)->Remove_Collider();
+		m_pOwner->Set_Dead();
+		m_pOwner->Remove_Collider();
 
 		CLevel* pLevel = g_pGameInstance->getCurrentLevelScene();
 		if (g_pGameInstance->getCurrentLevel() == (_uint)SCENEID::SCENE_STAGE1)
 			static_cast<CStage1*>(pLevel)->Minus_MonsterCount();
 		else if (g_pGameInstance->getCurrentLevel() == (_uint)SCENEID::SCENE_STAGE2)
 			static_cast<CStage2*>(pLevel)->Minus_MonsterCount();
+
+		m_pAnimator->Get_AnimController()->Set_MoveSpeed(40.f);
+		m_pAnimator->Get_AnimController()->Set_PlaySpeed(1.f);
 
 		m_pStateController->Change_State(L"Death");
 	}
@@ -128,9 +184,6 @@ HRESULT CBastion_2HSword_State::EnterState()
 	if (FAILED(__super::EnterState()))
 		return E_FAIL;
 
-	if (FAILED(m_pAnimator->Change_AnyEntryAnimation((_uint)CMonster_Bastion_2HSword::ANIM_TYPE::A_IDLE)))
-		return E_FAIL;
-
 	return S_OK;
 }
 
@@ -154,9 +207,7 @@ void CBastion_2HSword_State::Look_Monster(void)
 
 void CBastion_2HSword_State::OnTriggerEnter(CCollision& collision)
 {
-	CMonster_Bastion_2HSword* Sword_2H = static_cast<CMonster_Bastion_2HSword*>(m_pMonster);
-
-	Sword_2H->Hit(collision);
+	m_pOwner->Hit(collision);
 }
 
 HRESULT CBastion_2HSword_State::Render_Debug()
@@ -164,10 +215,15 @@ HRESULT CBastion_2HSword_State::Render_Debug()
 	wstring wstrChaserOn = L"Target On : ";
 	wstring wstrIsChaser;
 
-	if (m_bTargetOn)
+	if(m_pOwner->get_Target())
 		wstrIsChaser = L"TRUE";
 	else
 		wstrIsChaser = L"FALSE";
+
+	//if (m_bTargetOn)
+	//	wstrIsChaser = L"TRUE";
+	//else
+	//	wstrIsChaser = L"FALSE";
 
 	if (FAILED(g_pGameInstance->Render_Font(TEXT("Font_Arial"), XMVectorSet(0.f, 1.0f, 0.f, 1.f), (wstrChaserOn + wstrIsChaser).c_str(), _float2(950.f, 120.f), _float2(0.6f, 0.6f))))
 		return E_FAIL;
@@ -177,7 +233,7 @@ HRESULT CBastion_2HSword_State::Render_Debug()
 	wstring wstrAttackOn = L"Attack On : ";
 	wstring wstrIsAttack;
 
-	if (m_bAttackOn)
+	if (m_pOwner->get_Attack())
 		wstrIsAttack = L"TRUE";
 	else
 		wstrIsAttack = L"FALSE";
@@ -185,6 +241,30 @@ HRESULT CBastion_2HSword_State::Render_Debug()
 	if (FAILED(g_pGameInstance->Render_Font(TEXT("Font_Arial"), XMVectorSet(0.f, 1.0f, 0.f, 1.f), (wstrAttackOn + wstrIsAttack).c_str(), _float2(950.f, 140.f), _float2(0.6f, 0.6f))))
 		return E_FAIL;
 
+	return S_OK;
+}
+
+HRESULT CBastion_2HSword_State::Check_State()
+{
+	if (!m_pOwner->Get_Dead()&&!m_pOwner->Get_Groggy())
+	{
+		if (!m_pOwner->get_RageOn())
+		{
+			if (m_pOwner->get_Attack())
+			{
+				_uint iRand = m_pOwner->get_RandAttack();
+				m_pStateController->Change_State(L"Attack",&iRand);
+			}
+			else if (m_pOwner->get_Target())
+				m_pStateController->Change_State(L"Chaser");
+			else
+				m_pStateController->Change_State(L"Idle");
+		}
+		else
+		{
+			m_pStateController->Change_State(L"Rage");
+		}
+	}
 	return S_OK;
 }
 

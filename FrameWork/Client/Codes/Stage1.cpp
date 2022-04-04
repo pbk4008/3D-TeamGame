@@ -71,7 +71,6 @@ HRESULT CStage1::NativeConstruct()
 	if (FAILED(Ready_MapObject()))
 		return E_FAIL;
 
-
 	if (FAILED(Ready_TriggerSystem(L"../bin/SaveData/Trigger/MonsterSpawnTrigger.dat")))
 		return E_FAIL;
 
@@ -134,6 +133,9 @@ _int CStage1::Tick(_double TimeDelta)
 
 		m_pTriggerSystem->Tick(TimeDelta);
 
+		if (m_iCountMonster == 0 && m_bFirst)
+			m_pTriggerSystem->Check_Clear();
+
 		CBoss_Bastion_Judicator* pBoss = (CBoss_Bastion_Judicator*)g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Layer_Boss")->front();
 		if (nullptr != pBoss)
 		{
@@ -146,16 +148,13 @@ _int CStage1::Tick(_double TimeDelta)
 
 		}
 	}
-	if (m_iCountMonster == 0 && m_bFirst)
-		m_pTriggerSystem->Check_Clear();
 
-	
 	//if (g_pGameInstance->getkeyDown(DIK_BACKSPACE))
 	//{
 	//	_float3 fPos = {0.f,5.f,10.f};
-	//	CMonster_Bastion_Healer* pMonster = nullptr;
+	//	CMonster_Bastion_2HSword* pMonster = nullptr;
 
-	//	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Test", L"Proto_GameObject_Monster_Bastion_Healer", &fPos, (CGameObject**)&pMonster)))
+	//	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Test", L"Proto_GameObject_Monster_Bastion_2HSword", &fPos, (CGameObject**)&pMonster)))
 	//		return -1;
 
 	//	//CMonster_Bastion_Shooter* pShooter = nullptr;

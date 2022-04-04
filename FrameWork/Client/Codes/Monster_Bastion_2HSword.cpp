@@ -15,7 +15,6 @@
 #include "Bastion_2HSword_Dash.h"
 #include "Bastion_2HSword_Attack.h"
 #include "Bastion_2HSword_Rage.h"
-#include "Bastion_2HSword_Attack_Rage.h"
 #include "Bastion_2HSword_Groggy.h"
 #include "Bastion_2HSword_Groggy_End.h"
 
@@ -112,7 +111,7 @@ _int CMonster_Bastion_2HSword::Tick(_double _dDeltaTime)
 	}
 	else
 	{
-		if ((_uint)ANIM_TYPE::A_DEATH == m_pAnimator->Get_CurrentAnimNode())
+		if (L"Death" == m_pStateController->Get_CurStateTag())
 		{
 			if (m_pAnimator->Get_CurrentAnimation()->Is_Finished())
 			{
@@ -129,6 +128,7 @@ _int CMonster_Bastion_2HSword::Tick(_double _dDeltaTime)
 		{
 			Set_Remove(true);
 			m_pPanel->Set_UIRemove(true);
+			Active_Effect((_uint)EFFECT::DEATH);
 		}
 	}
 	m_pWeapon->Tick(_dDeltaTime);
@@ -496,7 +496,7 @@ HRESULT CMonster_Bastion_2HSword::Ready_AnimFSM(void)
 
 	m_pAnimator->Set_UpAutoChangeAnimation((_uint)ANIM_TYPE::A_TAUNT_ROAR, (_uint)ANIM_TYPE::A_BATTLECRY_ST);
 	m_pAnimator->Set_UpAutoChangeAnimation((_uint)ANIM_TYPE::A_BATTLECRY_ST, (_uint)ANIM_TYPE::A_BATTLECRY);
-	//m_pAnimator->Set_UpAutoChangeAnimation((_uint)ANIM_TYPE::A_BATTLECRY, (_uint)ANIM_TYPE::A_BATTLECRY_ED);
+	m_pAnimator->Set_UpAutoChangeAnimation((_uint)ANIM_TYPE::A_BATTLECRY, (_uint)ANIM_TYPE::A_BATTLECRY_ED);
 	//m_pAnimator->Set_UpAutoChangeAnimation((_uint)ANIM_TYPE::A_BATTLECRY_ED, (_uint)ANIM_TYPE::A_IDLE);
 
 	m_pAnimator->Set_UpAutoChangeAnimation((_uint)ANIM_TYPE::A_DASH_BWD, (_uint)ANIM_TYPE::A_WALK_FWD_ST);
@@ -546,10 +546,6 @@ HRESULT CMonster_Bastion_2HSword::Ready_StateFSM(void)
 
 	/* for. Rage */
 	if (FAILED(m_pStateController->Add_State(L"Rage", CBastion_2HSword_Rage::Create(m_pDevice, m_pDeviceContext))))
-		return E_FAIL;
-
-	/* for. Rage_Attack */
-	if (FAILED(m_pStateController->Add_State(L"Rage_Attack", CBastion_2HSword_Attack_Rage::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 
 	/* for. Death */

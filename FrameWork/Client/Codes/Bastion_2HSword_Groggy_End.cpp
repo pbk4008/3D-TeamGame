@@ -47,8 +47,8 @@ void CBastion_2HSword_Groggy_End::Look_Player(void)
 
 void CBastion_2HSword_Groggy_End::Look_Monster(void)
 {
-	if (m_pAnimator->Get_CurrentAnimation()->Is_Finished())
-		m_pStateController->Change_State(L"Idle");
+	//if (m_pAnimator->Get_CurrentAnimation()->Is_Finished())
+	//	m_pStateController->Change_State(L"Idle");
 }
 
 void CBastion_2HSword_Groggy_End::OnTriggerEnter(CCollision& collision)
