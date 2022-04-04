@@ -165,6 +165,7 @@ call Update_Client.bat</Command>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>../../Reference/Library/Release/;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <Profile>true</Profile>
+      <LargeAddressAware>true</LargeAddressAware>
     </Link>
     <PostBuildEvent>
       <Command>cd $(SolutionDir)
@@ -185,6 +186,7 @@ call Update_Client.bat</Command>
     <ClInclude Include="..\Default\Clinet_Define.h" />
     <ClInclude Include="..\Headers\1H_Dash.h" />
     <ClInclude Include="..\Headers\1H_FlinchLeft.h" />
+    <ClInclude Include="..\Headers\1H_KnockBack_Land.h" />
     <ClInclude Include="..\Headers\1H_SwordAttack.h" />
     <ClInclude Include="..\Headers\1H_SwordAttackNormalR1_01.h" />
     <ClInclude Include="..\Headers\1H_SwordAttackNormalR1_02.h" />
@@ -360,7 +362,9 @@ call Update_Client.bat</Command>
     <ClInclude Include="..\Headers\Shield_Block.h" />
     <ClInclude Include="..\Headers\Shield_BlockEnd.h" />
     <ClInclude Include="..\Headers\Shield_BlockLoop.h" />
+    <ClInclude Include="..\Headers\Shield_BlockSkid.h" />
     <ClInclude Include="..\Headers\Shield_BlockStart.h" />
+    <ClInclude Include="..\Headers\Shield_Parry.h" />
     <ClInclude Include="..\Headers\Shield_SupermanPunchStraight.h" />
     <ClInclude Include="..\Headers\Shield_Walk.h" />
     <ClInclude Include="..\Headers\Shield_WalkBwd.h" />
@@ -462,6 +466,7 @@ call Update_Client.bat</Command>
   <ItemGroup>
     <ClCompile Include="..\Codes\1H_Dash.cpp" />
     <ClCompile Include="..\Codes\1H_FlinchLeft.cpp" />
+    <ClCompile Include="..\Codes\1H_KnockBack_Land.cpp" />
     <ClCompile Include="..\Codes\1H_SwordAttack.cpp" />
     <ClCompile Include="..\Codes\1H_SwordAttackNormalR1_01.cpp" />
     <ClCompile Include="..\Codes\1H_SwordAttackNormalR1_02.cpp" />
@@ -639,7 +644,9 @@ call Update_Client.bat</Command>
     <ClCompile Include="..\Codes\Shield_Block.cpp" />
     <ClCompile Include="..\Codes\Shield_BlockEnd.cpp" />
     <ClCompile Include="..\Codes\Shield_BlockLoop.cpp" />
+    <ClCompile Include="..\Codes\Shield_BlockSkid.cpp" />
     <ClCompile Include="..\Codes\Shield_BlockStart.cpp" />
+    <ClCompile Include="..\Codes\Shield_Parry.cpp" />
     <ClCompile Include="..\Codes\Shield_SupermanPunchStraight.cpp" />
     <ClCompile Include="..\Codes\Shield_Walk.cpp" />
     <ClCompile Include="..\Codes\Shield_WalkBwd.cpp" />
@@ -781,6 +788,7 @@ call Update_Client.bat</Command>
     <FxCompile Include="..\bin\ShaderFile\Shader_Trail.hlsl" />
     <FxCompile Include="..\bin\ShaderFile\Shader_UI.hlsl" />
     <FxCompile Include="..\bin\ShaderFile\Shader_UI_Bar.hlsl" />
+    <FxCompile Include="..\bin\ShaderFile\Shader_UI_Enemy_Bar.hlsl" />
     <FxCompile Include="..\bin\ShaderFile\Shader_Weapon.hlsl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

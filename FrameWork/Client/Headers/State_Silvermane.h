@@ -39,6 +39,10 @@ protected:
 	virtual _int Input(const _double& _dDeltaTime);
 	void OnTriggerEnterHit(CCollision& collision);
 
+public:
+	virtual void Hit(const ATTACKDESC& _tAttackDesc);
+	virtual void Block(const ATTACKDESC& _tAttackDesc);
+
 protected:
 	CSilvermane* m_pSilvermane = nullptr;
 	CTransform* m_pTransform = nullptr;

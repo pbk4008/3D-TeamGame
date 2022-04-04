@@ -90,8 +90,13 @@ HRESULT CShield_BlockEnd::ExitState()
 
 	m_pSilvermane->Set_EquipShield(false);
 	m_pSilvermane->Set_IsTrasceCamera(true);
-
+	m_pSilvermane->Set_BlockTime(0.f);
 	return S_OK;
+}
+
+void CShield_BlockEnd::Block(const ATTACKDESC& _tAttackDesc)
+{
+	Hit(_tAttackDesc);
 }
 
 _int CShield_BlockEnd::Input(const _double& _dDeltaTime)
@@ -109,6 +114,45 @@ _int CShield_BlockEnd::Input(const _double& _dDeltaTime)
 
 	if (m_iCutIndex < m_pAnimationController->Get_CurKeyFrameIndex())
 	{
+		if (g_pGameInstance->getMouseKeyDown(CInputDev::MOUSESTATE::MB_LBUTTON))
+		{
+			if (m_pSilvermane->IsEquipWeapon())
+			{
+				switch (m_pSilvermane->Get_WeaponType())
+				{
+				case CWeapon::EType::Sword_1H:
+					if (FAILED(m_pStateController->Change_State(L"1H_SwordAttackNormalR1_01")))
+						return -1;
+					return STATE_CHANGE;
+					break;
+				case CWeapon::EType::Hammer_2H:
+					if (FAILED(m_pStateController->Change_State(L"2H_HammerAttackR1_01")))
+						return -1;
+					return STATE_CHANGE;
+					break;
+				}
+			}
+		}
+		else if (g_pGameInstance->getMouseKeyDown(CInputDev::MOUSESTATE::MB_RBUTTON))
+		{
+			if (m_pSilvermane->IsEquipWeapon())
+			{
+				switch (m_pSilvermane->Get_WeaponType())
+				{
+				case CWeapon::EType::Sword_1H:
+					if (FAILED(m_pStateController->Change_State(L"1H_SwordAttackNormalR2_Start")))
+						return -1;
+					return STATE_CHANGE;
+					break;
+				case CWeapon::EType::Hammer_2H:
+					if (FAILED(m_pStateController->Change_State(L"2H_HammerChargeStage1_Start")))
+						return -1;
+					return STATE_CHANGE;
+					break;
+				}
+			}
+		}
+
 		if (g_pGameInstance->getkeyPress(DIK_W) ||
 			g_pGameInstance->getkeyPress(DIK_S) ||
 			g_pGameInstance->getkeyPress(DIK_D) ||

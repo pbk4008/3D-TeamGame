@@ -62,6 +62,9 @@ public:
 
 	void Add_TrackAcc(const _double& _dTrackAcc);
 
+	void Mul_MoveSpeed(const _float _fValue);
+	void Div_MoveSpeed(const _float _fValue);
+
 public:
 	_int Update_CombinedTransformMatrix(const _double& _dDeltaTime);
 	void Lerp_Anim(vector<CAnimation*>& _vecAnimations);

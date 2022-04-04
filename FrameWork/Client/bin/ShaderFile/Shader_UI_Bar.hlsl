@@ -1,8 +1,7 @@
 #include "Shader_RenderState.hpp"
 
-/* 모든 전역변수들을 -> 상수테이블. */
-/* 클라이언트로부터 값을 전달받아올 수 있다. */
-
+//기본 텍스쳐의 색깔로 사용할때는 이 쉐이더 사용하면됨 
+//주로 플레이어 UI나 직교UI들에 사용되고있음
 cbuffer Matrices
 {
     matrix g_WorldMatrix = (matrix) 0;
@@ -12,7 +11,6 @@ cbuffer Matrices
 
 float g_fX;
 float g_fY;
-float g_fAlpha;
 
 texture2D g_DiffuseTexture;
 
@@ -23,9 +21,7 @@ sampler DefaultSampler = sampler_state
     AddressV = wrap;
 };
 
-/* 1. m_pDeviceContext->DrawIndexed() */
-/* 2. 인덱스가 가지고 있던 인덱스 세개에 해당하는 정점 세개를 정점버퍼로부터 얻어온다. */
-/* 3. VS_MAIN함수를 호출하면서 가져온 정점 세개중 하나씩 전달해준다.  */
+
 struct VS_IN
 {
     float3 vPosition : POSITION;
@@ -89,152 +85,10 @@ PS_OUT PS_MAIN(PS_IN In)
         discard;
     }
     
-    float4 color = g_DiffuseTexture.Sample(DefaultSampler, In.vTexUV);
-    //Out.vColor = g_DiffuseTexture.Sample(DefaultSampler, In.vTexUV);
-    if(color.a == 0)
-        discard;
-    
-    Out.vColor.rgb = color.rgb;
-    Out.vColor.a = color.a * g_fAlpha;
-    
-    if (Out.vColor.a <= 0)
-        discard;
-    
+    Out.vColor = g_DiffuseTexture.Sample(DefaultSampler, In.vTexUV);
     
     return Out;
 }
-
-PS_OUT PS_MAIN_RED(PS_IN In)
-{
-    PS_OUT Out = (PS_OUT) 0;
-   
-    //위쪽 잘라내기
-    if (In.vTexUV.y < 0.2f)
-    {
-        discard;
-    }
-    
-    if (In.vTexUV.y > g_fY)
-    {
-        discard;
-    }
-    
-    if (In.vTexUV.x > g_fX)
-    {
-        discard;
-    }
-    
-    
-    float4 color = g_DiffuseTexture.Sample(DefaultSampler, In.vTexUV);
-    //Out.vColor = g_DiffuseTexture.Sample(DefaultSampler, In.vTexUV);
-    if (color.a == 0)
-        discard;
-    
-    Out.vColor.rgb = color.rgb;
-    Out.vColor.a = color.a * g_fAlpha;
-    
-    //if (Out.vColor.a < 0.01)
-    //    discard;
-    
-    Out.vColor.r = 1.f;
-    Out.vColor.gb = 0.f;
-    
-     
-    if (In.vTexUV.y < 0.26f) //윗쪽하얀색라인
-    {
-        Out.vColor.rgb = 1.f;
-    }
-    if (In.vTexUV.y > 0.44f) //아래쪽하얀색라인, 기본 0.5부터 잘리기때문에 
-    {
-        Out.vColor.rgb = 1.f;
-    }
-    if (In.vTexUV.x < 0.02f)
-    {
-        Out.vColor.rgb = 1.f;
-    }
-    if (In.vTexUV.x > 0.98f)
-    {
-        Out.vColor.rgb = 1.f;
-    }
-    return Out;
-}
-
-PS_OUT PS_MAIN_YELLOW(PS_IN In)
-{
-    PS_OUT Out = (PS_OUT) 0;
-
-    if (In.vTexUV.y < 0.2f)
-    {
-        discard;
-    }
-    
-    if (In.vTexUV.y > g_fY)
-    {
-        discard;
-    }
-    
-    if (In.vTexUV.x > g_fX)
-    {
-        discard;
-    }
-    
-    
-    float4 color = g_DiffuseTexture.Sample(DefaultSampler, In.vTexUV);
-    //Out.vColor = g_DiffuseTexture.Sample(DefaultSampler, In.vTexUV);
-    if (color.a == 0)
-        discard;
-    
-    Out.vColor.rgb = color.rgb;
-    Out.vColor.a = color.a * g_fAlpha;
-    
-    if (Out.vColor.a < 0.01)
-        discard;
-    
-    Out.vColor.r = 1.f;
-    Out.vColor.g = 0.6f;
-    Out.vColor.b = 0.2f;
-    
-    return Out;
-}
-
-PS_OUT PS_MAIN_GROGGY(PS_IN In)
-{
-    PS_OUT Out = (PS_OUT) 0;
-
-    if (In.vTexUV.y < 0.2f)
-    {
-        discard;
-    }
-    
-    if (In.vTexUV.y > g_fY)
-    {
-        discard;
-    }
-    
-    if (In.vTexUV.x > g_fX)
-    {
-        discard;
-    }
-    
-    
-    float4 color = g_DiffuseTexture.Sample(DefaultSampler, In.vTexUV);
-    //Out.vColor = g_DiffuseTexture.Sample(DefaultSampler, In.vTexUV);
-    if (color.a == 0)
-        discard;
-    
-    Out.vColor.rgb = color.rgb;
-    Out.vColor.a = color.a * g_fAlpha;
-
-    if (Out.vColor.a < 0.01)
-        discard;
-    
-    Out.vColor.r = 1.f;
-    Out.vColor.g = 0.8f;
-    Out.vColor.b = 0.4f;
-    
-    return Out;
-}
-
 
 technique11 DefaultTechnique
 {
@@ -262,38 +116,5 @@ technique11 DefaultTechnique
         VertexShader = compile vs_5_0 VS_MAIN();
         GeometryShader = NULL;
         PixelShader = compile ps_5_0 PS_MAIN();
-    }
-
-    pass AlphaBlendRed
-    {
-        SetRasterizerState(CullMode_Default);
-        SetDepthStencilState(ZDefault, 0);
-        SetBlendState(AlphaBlending, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
-
-        VertexShader = compile vs_5_0 VS_MAIN();
-        GeometryShader = NULL;
-        PixelShader = compile ps_5_0 PS_MAIN_RED();
-    }
-
-    pass AlphaBlendYellow
-    {
-        SetRasterizerState(CullMode_Default);
-        SetDepthStencilState(ZDefault, 0);
-        SetBlendState(AlphaBlending, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
-
-        VertexShader = compile vs_5_0 VS_MAIN();
-        GeometryShader = NULL;
-        PixelShader = compile ps_5_0 PS_MAIN_YELLOW();
-    }
-
-    pass AlphaBlendGroggy
-    {
-        SetRasterizerState(CullMode_Default);
-        SetDepthStencilState(ZDefault, 0);
-        SetBlendState(AlphaBlending, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
-
-        VertexShader = compile vs_5_0 VS_MAIN();
-        GeometryShader = NULL;
-        PixelShader = compile ps_5_0 PS_MAIN_GROGGY();
     }
 }

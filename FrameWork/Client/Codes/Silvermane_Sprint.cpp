@@ -60,7 +60,7 @@ HRESULT CSilvermane_Sprint::ExitState()
 
 void CSilvermane_Sprint::OnTriggerEnter(CCollision& collision)
 {
-	OnTriggerEnterHit(collision);
+	//OnTriggerEnterHit(collision);
 }
 
 _int CSilvermane_Sprint::Input(const _double& _dDeltaTime)

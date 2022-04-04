@@ -76,6 +76,16 @@ const CWeapon::EType CWeapon::Get_Type() const
 	return m_eType;
 }
 
+CActor* CWeapon::Get_Owner() const
+{
+	return m_pOwner;
+}
+
+const _float CWeapon::Get_Damage() const
+{
+	return m_fDamage;
+}
+
 void CWeapon::Set_Owner(CActor* _pOwner)
 {
 	m_pOwner = _pOwner;

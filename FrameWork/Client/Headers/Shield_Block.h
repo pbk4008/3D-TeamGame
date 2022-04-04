@@ -19,8 +19,11 @@ public:
 	virtual HRESULT EnterState() override;
 	virtual HRESULT ExitState() override;
 
+	virtual void OnTriggerEnter(CCollision& collision) override;
+
 protected:
 	virtual _int Input(const _double& _dDeltaTime);
+	virtual void OnTriggerEnterBlock(CCollision& collision);
 
 public:
 	virtual void Free() override;

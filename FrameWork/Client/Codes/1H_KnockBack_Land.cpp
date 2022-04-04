@@ -1,12 +1,12 @@
 #include "pch.h"
-#include "1H_FlinchLeft.h"
+#include "1H_KnockBack_Land.h"
 
-C1H_FlinchLeft::C1H_FlinchLeft(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
+C1H_KnockBack_Land::C1H_KnockBack_Land(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
 	: CSilvermane_Hit(_pDevice, _pDeviceContext)
 {
 }
 
-HRESULT C1H_FlinchLeft::NativeConstruct(void* _pArg)
+HRESULT C1H_KnockBack_Land::NativeConstruct(void* _pArg)
 {
 	if (FAILED(__super::NativeConstruct(_pArg)))
 		return E_FAIL;
@@ -14,7 +14,7 @@ HRESULT C1H_FlinchLeft::NativeConstruct(void* _pArg)
 	return S_OK;
 }
 
-_int C1H_FlinchLeft::Tick(const _double& _dDeltaTime)
+_int C1H_KnockBack_Land::Tick(const _double& _dDeltaTime)
 {
 	_int iProgress = __super::Tick(_dDeltaTime);
 	if (NO_EVENT != iProgress)
@@ -49,7 +49,7 @@ _int C1H_FlinchLeft::Tick(const _double& _dDeltaTime)
 	return _int();
 }
 
-_int C1H_FlinchLeft::LateTick(const _double& _dDeltaTime)
+_int C1H_KnockBack_Land::LateTick(const _double& _dDeltaTime)
 {
 	_int iProgress = __super::LateTick(_dDeltaTime);
 	if (NO_EVENT != iProgress)
@@ -58,7 +58,7 @@ _int C1H_FlinchLeft::LateTick(const _double& _dDeltaTime)
 	return _int();
 }
 
-HRESULT C1H_FlinchLeft::Render()
+HRESULT C1H_KnockBack_Land::Render()
 {
 	if (FAILED(__super::Render()))
 		return E_FAIL;
@@ -66,15 +66,15 @@ HRESULT C1H_FlinchLeft::Render()
 	return S_OK;
 }
 
-HRESULT C1H_FlinchLeft::EnterState()
+HRESULT C1H_KnockBack_Land::EnterState()
 {
 	if (FAILED(__super::EnterState()))
 		return E_FAIL;
 
-	if (FAILED(m_pAnimationController->SetUp_NextAnimation("SK_Silvermane.ao|A_1H_Flinch_Left_1_Player", false)))
+	if (FAILED(m_pAnimationController->SetUp_NextAnimation("SK_Silvermane.ao|A_1H_KnockBack_Land_Player", false)))
 		return E_FAIL;
 	m_pAnimationController->Set_RootMotion(true, true);
-
+	m_pAnimationController->Mul_MoveSpeed(0.5f);
 
 	if (!m_isShake)
 	{
@@ -94,19 +94,21 @@ HRESULT C1H_FlinchLeft::EnterState()
 		m_isShake = true;
 	}
 
-	m_iCutIndex = 20;
+	m_iCutIndex = 70;
 	return S_OK;
 }
 
-HRESULT C1H_FlinchLeft::ExitState()
+HRESULT C1H_KnockBack_Land::ExitState()
 {
 	if (FAILED(__super::ExitState()))
 		return E_FAIL;
+	m_pAnimationController->Div_MoveSpeed(0.5f);
+
 
 	return S_OK;
 }
 
-_int C1H_FlinchLeft::Input(const _double& _dDeltaTime)
+_int C1H_KnockBack_Land::Input(const _double& _dDeltaTime)
 {
 	_int iProgress = __super::Input(_dDeltaTime);
 	if (NO_EVENT != iProgress)
@@ -115,19 +117,18 @@ _int C1H_FlinchLeft::Input(const _double& _dDeltaTime)
 	return _int();
 }
 
-C1H_FlinchLeft* C1H_FlinchLeft::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext, void* _pArg)
+C1H_KnockBack_Land* C1H_KnockBack_Land::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext, void* _pArg)
 {
-	C1H_FlinchLeft* pInstance = new C1H_FlinchLeft(_pDevice, _pDeviceContext);
+	C1H_KnockBack_Land* pInstance = new C1H_KnockBack_Land(_pDevice, _pDeviceContext);
 	if (FAILED(pInstance->NativeConstruct(_pArg)))
 	{
-		MSGBOX("C1H_FlinchLeft Create Fail");
+		MSGBOX("C1H_KnockBack_Land Create Fail");
 		Safe_Release(pInstance);
 	}
 	return pInstance;
 }
 
-void C1H_FlinchLeft::Free()
+void C1H_KnockBack_Land::Free()
 {
-	
 	__super::Free();
 }

@@ -49,6 +49,8 @@ HRESULT CPolearm::NativeConstruct_Prototype()
 
 	g_pGameInstance->Add_Material(L"Mtrl_Polearm", pMtrl);
 
+	m_fDamage = 5.f;
+
 	return S_OK;
 }
 
@@ -109,6 +111,20 @@ HRESULT CPolearm::Render()
 		m_pModel->Render(i, 0);
 
 	return S_OK;
+}
+
+void CPolearm::OnTriggerEnter(CCollision& collision)
+{
+	_uint iTag = collision.pGameObject->getTag();
+	if ((_uint)GAMEOBJECT::PLAYER == iTag)
+	{
+		if (!m_isAttack)
+			return;
+
+		ATTACKDESC tAttackDesc = m_pOwner->Get_AttackDesc();
+		tAttackDesc.fDamage += m_fDamage;
+		static_cast<CActor*>(collision.pGameObject)->Hit(tAttackDesc);
+	}
 }
 
 HRESULT CPolearm::Ready_Components()

@@ -56,6 +56,8 @@ HRESULT CBronzeAnimus_Sword::NativeConstruct(const _uint _iSceneID, void* _pArg)
 	if (_pArg)
 		m_pFixedBone = static_cast<CHierarchyNode*>(_pArg);
 
+	m_fDamage = 5.f;
+
 	return S_OK;
 }
 
@@ -102,6 +104,20 @@ HRESULT CBronzeAnimus_Sword::Render()
 		m_pModel->Render(i, 0);
 
 	return S_OK;
+}
+
+void CBronzeAnimus_Sword::OnTriggerEnter(CCollision& collision)
+{
+	_uint iTag = collision.pGameObject->getTag();
+	if ((_uint)GAMEOBJECT::PLAYER == iTag)
+	{
+		if (!m_isAttack)
+			return;
+
+		ATTACKDESC tAttackDesc = m_pOwner->Get_AttackDesc();
+		tAttackDesc.fDamage += m_fDamage;
+		static_cast<CActor*>(collision.pGameObject)->Hit(tAttackDesc);
+	}
 }
 
 HRESULT CBronzeAnimus_Sword::Ready_Components()

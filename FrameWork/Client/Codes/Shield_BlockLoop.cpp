@@ -61,6 +61,20 @@ HRESULT CShield_BlockLoop::ExitState()
 	return S_OK;
 }
 
+void CShield_BlockLoop::OnTriggerEnter(CCollision& collision)
+{
+	_uint iTag = collision.pGameObject->getTag();
+	if ((_uint)GAMEOBJECT::MONSTER_CRYSTAL == iTag)
+	{
+		if (static_cast<CActor*>(collision.pGameObject)->IsAttack())
+		{
+			if (FAILED(m_pStateController->Change_State(L"Shield_BlockSkid")))
+				return;
+			return;
+		}
+	}
+}
+
 _int CShield_BlockLoop::Input(const _double& _dDeltaTime)
 {
 	_int iProgress = __super::Input(_dDeltaTime);

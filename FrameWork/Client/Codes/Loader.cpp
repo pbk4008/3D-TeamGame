@@ -44,6 +44,7 @@
 #include "UI_Monster_Back.h"
 #include "UI_Monster_Level.h"
 #include "UI_Monster_HpBar.h"
+#include "UI_Monster_BackHpBar.h"
 #include "UI_Monster_GroggyBar.h"
 #include "UI_Monster_Name.h"
 #include "UI_Tuto_Base.h"
@@ -435,6 +436,11 @@ HRESULT CLoader::Load_Stage1UILoad()
 	
 	//MonsterHpBar
 	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_UI_Monster_HpBar"), CUI_Monster_HpBar::Create(m_pDevice, m_pDeviceContext))))
+	{
+		return E_FAIL;
+	}
+	//MonsterHpBar
+	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_UI_Monster_BackHpBar"), CUI_Monster_BackHpBar::Create(m_pDevice, m_pDeviceContext))))
 	{
 		return E_FAIL;
 	}
