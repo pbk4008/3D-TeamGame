@@ -56,7 +56,6 @@ HRESULT CRenderer::NativeConstruct_Prototype()
 	if (FAILED(CreateShadowDepthStencilview(SHADOW_MAP, SHADOW_MAP, &m_pShadowMap)))
 		return E_FAIL;
 
-
 	m_pRenderAssit = CRendererAssit::Create(m_pDevice, m_pDeviceContext);
 	m_pLuminance = CLuminance::Create(m_pDevice, m_pDeviceContext);
 	m_pHDR = CHDR::Create(m_pDevice, m_pDeviceContext);
@@ -149,7 +148,10 @@ HRESULT CRenderer::Draw_RenderGroup()
 
 	if (m_bPixel) // Pixel HDR
 	{
-		if (FAILED(ShadowPass())) MSGBOX("Failed To Rendering ShadowPass");
+		if (m_bShadow == true)
+		{
+			if (FAILED(ShadowPass())) MSGBOX("Failed To Rendering ShadowPass");
+		}
 
 		if (FAILED(m_pRenderAssit->Render_LightAcc(m_pTargetMgr, m_CameraTag, m_bPBR, m_bShadow))) return E_FAIL;
 
@@ -226,7 +228,7 @@ HRESULT CRenderer::Draw_RenderGroup()
 		if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("Target_Blend")))) return E_FAIL;
 		if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("Target_Alpha")))) return E_FAIL;
 		if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("Target_Particle")))) return E_FAIL;
-		if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("Target_GodRay")))) return E_FAIL;
+		if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("Target_BlurShadow")))) return E_FAIL;
 
 	}
 #endif // _DEBUG
@@ -332,7 +334,7 @@ HRESULT CRenderer::Render_Alpha()
 
 	if (m_bParticle == true)
 	{
-		if (FAILED(m_pPostProcess->AlphaBlur(m_pTargetMgr, m_bParticle))) MSGBOX("Alpha Blur Failed");
+		if (FAILED(m_pPostProcess->AlphaBlur(m_pTargetMgr,m_bParticle,1.f))) MSGBOX("Alpha Blur Failed");
 
 		if (FAILED(m_pVIBuffer->SetUp_TextureOnShader("g_AlphaTexture", m_pTargetMgr->Get_SRV(L"Target_Alpha")))) MSGBOX("Alpha Render Failed");
 
@@ -426,6 +428,9 @@ HRESULT CRenderer::ShadowPass()
 	if (FAILED(m_pVIBuffer->Render(6))) MSGBOX("Failed To Rendering ShadowPass");
 
 	if (FAILED(m_pTargetMgr->End_MRTNotClear(m_pDeviceContext))) return E_FAIL;
+
+	if (FAILED(m_pPostProcess->Shadowblur(m_pTargetMgr, m_bShadow, 1.f))) MSGBOX("Failed To Rendering ShadowBlurPass");
+
 	return S_OK;
 }
 

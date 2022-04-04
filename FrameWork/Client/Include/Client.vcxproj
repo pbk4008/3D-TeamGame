@@ -785,6 +785,7 @@ call Update_Client.bat</Command>
     <FxCompile Include="..\bin\ShaderFile\Shader_SilverMane.hlsl" />
     <FxCompile Include="..\bin\ShaderFile\Shader_StaticMesh.hlsl" />
     <FxCompile Include="..\bin\ShaderFile\Shader_Trail.hlsl" />
+    <FxCompile Include="..\bin\ShaderFile\Shader_Treasure_Chest.hlsl" />
     <FxCompile Include="..\bin\ShaderFile\Shader_UI.hlsl" />
     <FxCompile Include="..\bin\ShaderFile\Shader_UI_Bar.hlsl" />
     <FxCompile Include="..\bin\ShaderFile\Shader_Weapon.hlsl" />

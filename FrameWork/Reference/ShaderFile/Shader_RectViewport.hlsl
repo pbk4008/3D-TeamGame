@@ -215,8 +215,8 @@ PS_OUT_LIGHTACC PS_MAIN_LIGHTACC_DIRECTIONAL(PS_IN In)
 		float3 normal3 = normalize(normal.xyz);
 		float3 N = normal3;
 		float3 V = normalize(g_vCamPosition.xyz - vWorldPos.xyz);
-		float3 L = normalize(g_vLightPos.xyz - vWorldPos.xyz);
-		//float3 L = normalize(g_vLightDir.xyz) * -1;
+		//float3 L = normalize(g_vLightPos.xyz - vWorldPos.xyz);
+		float3 L = g_vLightDir.xyz * -1;
 		float F0 = 0.93;
 		
 		float alpha = Roughness * Roughness;
@@ -274,6 +274,7 @@ PS_OUT_LIGHTACC PS_MAIN_LIGHTACC_DIRECTIONAL(PS_IN In)
 		if (g_shadow == true)
 		{
 			float4 shadow = g_ShadowTexture.Sample(DefaultSampler, In.vTexUV);
+			shadow = saturate(shadow + 0.1f);
 			
 			Out.vSpecular = (light * specular + cubeRef1) * Metallic * smoothness * shadow;
 			Out.vShade = lightpower * shadow;
@@ -568,7 +569,7 @@ technique11 DefaultTechnique
 
 	pass Light_Directional_Shadow // 6
 	{
-		SetRasterizerState(CullMode_Default);
+		SetRasterizerState(CullMode_None);
 		SetDepthStencilState(ZTestDiable, 0);
 		SetBlendState(BlendDisable, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
 		

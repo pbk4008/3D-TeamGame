@@ -26,14 +26,27 @@ HRESULT CPostProcess::InitPostProcess()
 	return S_OK;
 }
 
-HRESULT CPostProcess::AlphaBlur(CTarget_Manager* pTargetMgr, _bool alpha)
+HRESULT CPostProcess::AlphaBlur(CTarget_Manager* pTargetMgr, _bool alpha, _float weight)
 {
 	if (alpha == true)
 	{
 		if (FAILED(BlurPass(pTargetMgr, L"Target_Particle", L"Target_ParticleV2", L"Target_ParticleH2", 640, 360))) return E_FAIL;
 		if (FAILED(BlurPass(pTargetMgr, L"Target_ParticleH2", L"Target_ParticleV4", L"Target_ParticleH4", 320, 180))) return E_FAIL;
 
-		if (FAILED(BloomPass(pTargetMgr,L"Target_Alpha", L"Target_Particle", L"Target_ParticleH2", L"Target_ParticleH4",1.f))) return E_FAIL;
+		if (FAILED(BloomPass(pTargetMgr,L"Target_Alpha", L"Target_Particle", L"Target_ParticleH2", L"Target_ParticleH4", weight,false))) return E_FAIL;
+	}
+
+	return S_OK;
+}
+
+HRESULT CPostProcess::Shadowblur(CTarget_Manager* pTargetMgr, _bool shadow, _float weight)
+{
+	if (shadow == true)
+	{
+		if (FAILED(BlurPass(pTargetMgr, L"Target_ShadeShadow", L"Target_ShadowV2", L"Target_ShadowH2", 640, 360))) return E_FAIL;
+		if (FAILED(BlurPass(pTargetMgr, L"Target_ShadowH2", L"Target_ShadowV4", L"Target_ShadowH4", 320, 180))) return E_FAIL;
+
+		if (FAILED(BloomPass(pTargetMgr, L"Target_BlurShadow", L"Target_ShadeShadow", L"Target_ShadowH2", L"Target_ShadowH4", weight, true))) return E_FAIL;
 	}
 
 	return S_OK;
@@ -48,7 +61,7 @@ HRESULT CPostProcess::PossProcessing(CTonemapping* tone,CTarget_Manager* pTarget
 	if (FAILED(BlurPass(pTargetMgr, L"Target_HZ4", L"Target_VT8", L"Target_HZ8", 160, 90))) return E_FAIL;
 	if (FAILED(BlurPass(pTargetMgr, L"Target_HZ8", L"Target_VT16", L"Target_HZ16", 64, 64))) return E_FAIL;
 
-	if (FAILED(BloomPass(pTargetMgr,L"Target_Bloom", L"Target_HZ2", L"Target_HZ4", L"Target_HZ8", L"Target_HZ16",0.8f))) return E_FAIL;
+	if (FAILED(BloomPass(pTargetMgr,L"Target_Bloom", L"Target_HZ2", L"Target_HZ4", L"Target_HZ8", L"Target_HZ16",0.5f))) return E_FAIL;
 
 	if (FAILED(tone->ToneMapping(pTargetMgr))) return E_FAIL;
 
@@ -111,7 +124,7 @@ HRESULT CPostProcess::BloomPass(CTarget_Manager* pTargetMgr, const wstring& targ
 	return S_OK;
 }
 
-HRESULT CPostProcess::BloomPass(CTarget_Manager* pTargetMgr, const wstring& target, const wstring& base, const wstring& base1, const wstring& base2, _float weight)
+HRESULT CPostProcess::BloomPass(CTarget_Manager* pTargetMgr, const wstring& target, const wstring& base, const wstring& base1, const wstring& base2, _float weight,_bool check)
 {
 	if (FAILED(pTargetMgr->Begin_MRT(m_pDeviceContext, target.c_str())))	return E_FAIL;
 
@@ -124,7 +137,14 @@ HRESULT CPostProcess::BloomPass(CTarget_Manager* pTargetMgr, const wstring& targ
 
 	m_pVIBuffer->Render(4);
 
-	if (FAILED(pTargetMgr->End_MRT(m_pDeviceContext))) return E_FAIL;
+	if (check == true)
+	{
+		if (FAILED(pTargetMgr->End_MRTNotClear(m_pDeviceContext))) return E_FAIL;
+	}
+	else
+	{
+		if (FAILED(pTargetMgr->End_MRT(m_pDeviceContext))) return E_FAIL;
+	}
 	//if (FAILED(pTargetMgr->End_MRTNotClear(m_pDeviceContext))) return E_FAIL;
 
 	return S_OK;
