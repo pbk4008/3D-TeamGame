@@ -83,6 +83,8 @@ HRESULT CBoss_Bastion_Judicator::NativeConstruct(const _uint _iSceneID, void* pA
 
 	setActive(false);
 
+	m_tAttackDesc.iLevel = 2;
+
 	return S_OK;
 }
 

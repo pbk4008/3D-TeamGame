@@ -147,6 +147,7 @@
 
 //////////////////////////////////////////// Hit
 #include "1H_FlinchLeft.h"
+#include "1H_KnockBack_Land.h"
 #pragma endregion
 #include "Material.h"
 
@@ -727,6 +728,8 @@ HRESULT CSilvermane::Ready_States()
 	// 쳐맞음
 	if (FAILED(m_pStateController->Add_State(L"1H_FlinchLeft", C1H_FlinchLeft::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
+	if (FAILED(m_pStateController->Add_State(L"1H_KnockBack_Land", C1H_KnockBack_Land::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
 
 	for (auto& pair : m_pStateController->Get_States())
 	{
@@ -801,7 +804,7 @@ void CSilvermane::OnTriggerEnter(CCollision& collision)
 void CSilvermane::OnTriggerExit(CCollision& collision)
 {
 	m_pStateController->OnTriggerExit(collision);
-}
+}	
 
 // 점프노드와 같은 오브젝트 충돌용 함수입네다. 
 // 무기에 쳐맞는건 State_Silvermane.cpp 로 가주세용

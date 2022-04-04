@@ -1533,6 +1533,9 @@
     <ClInclude Include="..\Headers\Shield_BlockSkid.h">
       <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Shield\Block</Filter>
     </ClInclude>
+    <ClInclude Include="..\Headers\1H_KnockBack_Land.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\HIt</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -2375,6 +2378,9 @@
     </ClCompile>
     <ClCompile Include="..\Codes\Shield_BlockSkid.cpp">
       <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Shield\Block</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\1H_KnockBack_Land.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\HIt</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

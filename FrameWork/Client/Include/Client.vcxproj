@@ -165,6 +165,7 @@ call Update_Client.bat</Command>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>../../Reference/Library/Release/;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <Profile>true</Profile>
+      <LargeAddressAware>true</LargeAddressAware>
     </Link>
     <PostBuildEvent>
       <Command>cd $(SolutionDir)
@@ -185,6 +186,7 @@ call Update_Client.bat</Command>
     <ClInclude Include="..\Default\Clinet_Define.h" />
     <ClInclude Include="..\Headers\1H_Dash.h" />
     <ClInclude Include="..\Headers\1H_FlinchLeft.h" />
+    <ClInclude Include="..\Headers\1H_KnockBack_Land.h" />
     <ClInclude Include="..\Headers\1H_SwordAttack.h" />
     <ClInclude Include="..\Headers\1H_SwordAttackNormalR1_01.h" />
     <ClInclude Include="..\Headers\1H_SwordAttackNormalR1_02.h" />
@@ -465,6 +467,7 @@ call Update_Client.bat</Command>
   <ItemGroup>
     <ClCompile Include="..\Codes\1H_Dash.cpp" />
     <ClCompile Include="..\Codes\1H_FlinchLeft.cpp" />
+    <ClCompile Include="..\Codes\1H_KnockBack_Land.cpp" />
     <ClCompile Include="..\Codes\1H_SwordAttack.cpp" />
     <ClCompile Include="..\Codes\1H_SwordAttackNormalR1_01.cpp" />
     <ClCompile Include="..\Codes\1H_SwordAttackNormalR1_02.cpp" />

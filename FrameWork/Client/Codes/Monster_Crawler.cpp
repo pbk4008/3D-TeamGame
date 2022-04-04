@@ -215,7 +215,9 @@ void CMonster_Crawler::OnTriggerEnter(CCollision& collision)
 		// 플레이어를 공격할 때
 		if ((_uint)GAMEOBJECT::PLAYER == collision.pGameObject->getTag())
 		{
-			m_tAttackDesc.pGameObject = this;
+			if (!m_IsAttack)
+				return;
+
 			m_tAttackDesc.fDamage = 3;
 			m_tAttackDesc.iLevel = 1;
 			static_cast<CActor*>(collision.pGameObject)->Hit(m_tAttackDesc);

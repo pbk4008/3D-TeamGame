@@ -35,6 +35,7 @@ HRESULT CStargazer::NativeConstruct(const _uint _iSceneID, void* _pArg)
 	if (FAILED(SetUp_Component()))
 		return E_FAIL;
 
+	m_fDamage = 3;
 	return S_OK;
 }
 
@@ -199,8 +200,14 @@ void CStargazer::Check_Attack()
 void CStargazer::OnTriggerEnter(CCollision& collision)
 {
 	if (collision.pGameObject->getTag() == (_uint)GAMEOBJECT::PLAYER)
-		g_pObserver->MinusHp(1.f);
+	{
+		if (!m_isAttack)
+			return;
 
+		ATTACKDESC tAttackDesc = m_pOwner->Get_AttackDesc();
+		tAttackDesc.fDamage += m_fDamage;
+		static_cast<CActor*>(collision.pGameObject)->Hit(tAttackDesc);
+	}
 }
 
 void CStargazer::OnTriggerExit(CCollision& collision)

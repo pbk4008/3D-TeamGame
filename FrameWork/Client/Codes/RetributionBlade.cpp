@@ -61,6 +61,8 @@ HRESULT CRetributionBlade::NativeConstruct(const _uint _iSceneID, void* _pArg)
 
 	//m_smatPivot = XMMatrixRotationRollPitchYaw(XMConvertToRadians(-20.f), XMConvertToRadians(-67.f), XMConvertToRadians(0.f)) * XMMatrixTranslation(0.5f, 0.05f, -0.2f);
 
+	m_fDamage = 7.f;
+
 	return S_OK;
 }
 
@@ -111,6 +113,20 @@ HRESULT CRetributionBlade::Render()
 	}
 
 	return S_OK;
+}
+
+void CRetributionBlade::OnTriggerEnter(CCollision& collision)
+{
+	_uint iTag = collision.pGameObject->getTag();
+	if ((_uint)GAMEOBJECT::PLAYER == iTag)
+	{
+		if (!m_isAttack)
+			return;
+
+		ATTACKDESC tAttackDesc = m_pOwner->Get_AttackDesc();
+		tAttackDesc.fDamage += m_fDamage;
+		static_cast<CActor*>(collision.pGameObject)->Hit(tAttackDesc);
+	}
 }
 
 

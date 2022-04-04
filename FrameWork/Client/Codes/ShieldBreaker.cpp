@@ -123,6 +123,17 @@ HRESULT CShieldBreaker::Render()
 	return S_OK;
 }
 
+void CShieldBreaker::OnTriggerEnter(CCollision& collision)
+{
+	_uint iTag = collision.pGameObject->getTag();
+	if ((_uint)GAMEOBJECT::PLAYER == iTag)
+	{
+		ATTACKDESC tAttackDesc = m_pOwner->Get_AttackDesc();
+		tAttackDesc.fDamage += m_fDamage;
+		static_cast<CActor*>(collision.pGameObject)->Hit(tAttackDesc);
+	}
+}
+
 HRESULT CShieldBreaker::Ready_Components()
 {
 	CTransform::TRANSFORMDESC transformDesc;

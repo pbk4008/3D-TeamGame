@@ -93,6 +93,8 @@ HRESULT CMonster_Bastion_Sword::NativeConstruct(const _uint _iSceneID, void* _pA
 	m_bUIShow = false;
 	setActive(false);
 
+	m_tAttackDesc.iLevel = 1;
+
 	return S_OK;
 }
 
