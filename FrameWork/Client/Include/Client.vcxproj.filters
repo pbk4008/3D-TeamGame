@@ -322,9 +322,6 @@
     <Filter Include="01.Scene\02.Stage\02.Stage3">
       <UniqueIdentifier>{1c229266-2fe0-42c7-b3c0-4ff0917f6000}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_Healer\State_Healer\Chaser">
-      <UniqueIdentifier>{6c4f4213-7978-4785-9bab-d674b1588fbf}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_Healer\State_Healer\Attack">
       <UniqueIdentifier>{17b7c742-628e-4868-8d1e-7c0d413d9f1d}</UniqueIdentifier>
     </Filter>
@@ -659,6 +656,9 @@
     </Filter>
     <Filter Include="02.GameObject\03.Character\00.Player\00.Silvermane\State\Shield\Parry">
       <UniqueIdentifier>{476d3f32-8157-40d0-b1ca-3cfc24316276}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_Healer\State_Healer\Run">
+      <UniqueIdentifier>{6c4f4213-7978-4785-9bab-d674b1588fbf}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -1248,14 +1248,11 @@
     <ClInclude Include="..\Headers\DebugSystem.h">
       <Filter>97.DebugSystem</Filter>
     </ClInclude>
-    <ClInclude Include="..\Headers\Bastion_Healer_Chaser.h">
-      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Healer\State_Healer\Chaser</Filter>
+    <ClInclude Include="..\Headers\Bastion_Healer_Run.h">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Healer\State_Healer\Run</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\Bastion_Healer_Attack.h">
       <Filter>02.GameObject\03.Character\01.Monster\Bastion_Healer\State_Healer\Attack</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Headers\Bastion_Healer_Chaser_End.h">
-      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Healer\State_Healer\Chaser</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\SkyBox.h">
       <Filter>02.GameObject\00. BackGround\Skybox</Filter>
@@ -2100,14 +2097,11 @@
     <ClCompile Include="..\Codes\Stage3.cpp">
       <Filter>01.Scene\02.Stage\02.Stage3</Filter>
     </ClCompile>
-    <ClCompile Include="..\Codes\Bastion_Healer_Chaser.cpp">
-      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Healer\State_Healer\Chaser</Filter>
+    <ClCompile Include="..\Codes\Bastion_Healer_Run.cpp">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Healer\State_Healer\Run</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\Bastion_Healer_Attack.cpp">
       <Filter>02.GameObject\03.Character\01.Monster\Bastion_Healer\State_Healer\Attack</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Codes\Bastion_Healer_Chaser_End.cpp">
-      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Healer\State_Healer\Chaser</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\MeshLoader.cpp">
       <Filter>01.Scene\01.Loading\00.Loader\00.MeshLoader</Filter>

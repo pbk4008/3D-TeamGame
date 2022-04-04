@@ -4,13 +4,13 @@
 #include "Bastion_Healer_State.h"
 
 BEGIN(Client)
-class CBastion_Healer_Chaser final : public CBastion_Healer_State
+class CBastion_Healer_Run final : public CBastion_Healer_State
 {
 
 protected:
-	explicit CBastion_Healer_Chaser(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext);
-	explicit CBastion_Healer_Chaser(const CBastion_Healer_Chaser& _rhs);
-	virtual ~CBastion_Healer_Chaser() = default;
+	explicit CBastion_Healer_Run(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext);
+	explicit CBastion_Healer_Run(const CBastion_Healer_Run& _rhs);
+	virtual ~CBastion_Healer_Run() = default;
 
 public:
 	virtual HRESULT NativeConstruct(void* _pArg = nullptr);
@@ -29,7 +29,7 @@ private:
 	_bool	m_bStopChaser = false;
 
 public:
-	static CBastion_Healer_Chaser* Create(ID3D11Device * _pDevice, ID3D11DeviceContext * _pDeviceContext, void* _pArg = nullptr);
+	static CBastion_Healer_Run* Create(ID3D11Device * _pDevice, ID3D11DeviceContext * _pDeviceContext, void* _pArg = nullptr);
 	virtual void Free() override;
 };
 

@@ -3,9 +3,6 @@
 #include "Monster_Bastion_Healer.h"
 #include "Animation.h"
 
-#include "Stage1.h"
-#include "Stage2.h"
-
 CBastion_Healer_Idle::CBastion_Healer_Idle(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
 	: CBastion_Healer_State(_pDevice, _pDeviceContext)
 {
@@ -32,24 +29,7 @@ _int CBastion_Healer_Idle::Tick(const _double& _dDeltaTime)
 
 	m_pAnimator->Tick(_dDeltaTime);
 
-	if (0 >= m_pMonster->Get_CurrentHp() && !m_pMonster->Get_Dead())
-	{
-		static_cast<CMonster_Bastion_Healer*>(m_pMonster)->Set_Dead();
-		static_cast<CMonster_Bastion_Healer*>(m_pMonster)->Remove_Collider();
-
-		CLevel* pLevel = g_pGameInstance->getCurrentLevelScene();
-		if (g_pGameInstance->getCurrentLevel() == (_uint)SCENEID::SCENE_STAGE1)
-			static_cast<CStage1*>(pLevel)->Minus_MonsterCount();
-
-		else if (g_pGameInstance->getCurrentLevel() == (_uint)SCENEID::SCENE_STAGE2)
-			static_cast<CStage2*>(pLevel)->Minus_MonsterCount();
-
-		m_pStateController->Change_State(L"Death");
-
-		return 0;
-	}
-
-	m_fChaserDelay -= (_float)_dDeltaTime;
+	//m_fChaserDelay -= (_float)_dDeltaTime;
 
 	return _int();
 }
@@ -76,7 +56,7 @@ HRESULT CBastion_Healer_Idle::EnterState()
 	if (FAILED(__super::EnterState()))
 		return E_FAIL;
 
-	m_fChaserDelay = 0.5f;
+	//m_fChaserDelay = 0.5f;
 
 	if (FAILED(m_pAnimator->Change_AnyEntryAnimation((_uint)CMonster_Bastion_Healer::ANIM_TYPE::A_IDLE)))
 		return E_FAIL;
@@ -95,8 +75,8 @@ HRESULT CBastion_Healer_Idle::ExitState()
 /* 플레이어 상태 추적 */
 void CBastion_Healer_Idle::Look_Player(void)
 {
-	if (m_bTargetOn && 0 > m_fChaserDelay)
-		m_pStateController->Change_State(L"Chaser");
+	/*if (m_bTargetOn && 0 > m_fChaserDelay)
+		m_pStateController->Change_State(L"Chaser");*/
 }
 
 void CBastion_Healer_Idle::Look_Monster(void)

@@ -274,8 +274,7 @@ call Update_Client.bat</Command>
     <ClInclude Include="..\Headers\Bastion_2HSword_State.h" />
     <ClInclude Include="..\Headers\Bastion_Healer_Attack.h" />
     <ClInclude Include="..\Headers\Bastion_Healer_CastProtect.h" />
-    <ClInclude Include="..\Headers\Bastion_Healer_Chaser.h" />
-    <ClInclude Include="..\Headers\Bastion_Healer_Chaser_End.h" />
+    <ClInclude Include="..\Headers\Bastion_Healer_Run.h" />
     <ClInclude Include="..\Headers\Bastion_Healer_Death.h" />
     <ClInclude Include="..\Headers\Bastion_Healer_Groggy.h" />
     <ClInclude Include="..\Headers\Bastion_Healer_Groggy_End.h" />
@@ -556,8 +555,7 @@ call Update_Client.bat</Command>
     <ClCompile Include="..\Codes\Bastion_2HSword_State.cpp" />
     <ClCompile Include="..\Codes\Bastion_Healer_Attack.cpp" />
     <ClCompile Include="..\Codes\Bastion_Healer_CastProtect.cpp" />
-    <ClCompile Include="..\Codes\Bastion_Healer_Chaser.cpp" />
-    <ClCompile Include="..\Codes\Bastion_Healer_Chaser_End.cpp" />
+    <ClCompile Include="..\Codes\Bastion_Healer_Run.cpp" />
     <ClCompile Include="..\Codes\Bastion_Healer_Death.cpp" />
     <ClCompile Include="..\Codes\Bastion_Healer_Groggy.cpp" />
     <ClCompile Include="..\Codes\Bastion_Healer_Groggy_End.cpp" />
