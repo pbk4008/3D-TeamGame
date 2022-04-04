@@ -280,7 +280,8 @@ void CState_Silvermane::OnTriggerEnterHit(CCollision& collision)
 	case (_uint)GAMEOBJECT::WEAPON_POLEARM:
 		if (static_cast<CWeapon*>(collision.pGameObject)->IsAttack())
 		{
-			ATTACKDESC tAttackDesc = static_cast<CWeapon*>(collision.pGameObject)->Get_AttackDesc();
+			ATTACKDESC tAttackDesc = static_cast<CWeapon*>(collision.pGameObject)->Get_Owner()->Get_AttackDesc();
+			tAttackDesc.fDamage += static_cast<CWeapon*>(collision.pGameObject)->Get_Damage();
 			m_pSilvermane->Add_HP(-tAttackDesc.fDamage);
 			switch (tAttackDesc.iLevel)
 			{
@@ -300,7 +301,8 @@ void CState_Silvermane::OnTriggerEnterHit(CCollision& collision)
 		// 투사체들과 충돌했을 경우, 총알 or 마법 or 레이저
 	case (_uint)GAMEOBJECT::WEAPON_BULLET:
 	{
-		ATTACKDESC tAttackDesc = static_cast<CWeapon*>(collision.pGameObject)->Get_AttackDesc();
+		ATTACKDESC tAttackDesc = static_cast<CWeapon*>(collision.pGameObject)->Get_Owner()->Get_AttackDesc();
+		tAttackDesc.fDamage += static_cast<CWeapon*>(collision.pGameObject)->Get_Damage();
 		m_pSilvermane->Add_HP(-tAttackDesc.fDamage);
 		switch (tAttackDesc.iLevel)
 		{

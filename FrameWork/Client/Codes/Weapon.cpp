@@ -76,9 +76,14 @@ const CWeapon::EType CWeapon::Get_Type() const
 	return m_eType;
 }
 
-const ATTACKDESC& CWeapon::Get_AttackDesc() const
+CActor* CWeapon::Get_Owner() const
 {
-	return m_tAttackDesc;
+	return m_pOwner;
+}
+
+const _float CWeapon::Get_Damage() const
+{
+	return m_fDamage;
 }
 
 void CWeapon::Set_Owner(CActor* _pOwner)
@@ -108,11 +113,6 @@ void CWeapon::Set_FixedBone(CHierarchyNode* _pFixedBone)
 void CWeapon::Set_IsAttack(const _bool _isAttack)
 {
 	m_isAttack = _isAttack;
-}
-
-void CWeapon::Set_AttackDesc(const ATTACKDESC& _tAttackDesc)
-{
-	m_tAttackDesc = _tAttackDesc;
 }
 
 const _bool CWeapon::IsAttack() const

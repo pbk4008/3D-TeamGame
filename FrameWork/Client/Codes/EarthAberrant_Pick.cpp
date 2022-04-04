@@ -74,6 +74,7 @@ HRESULT CEarthAberrant_Pick::NativeConstruct(const _uint _iSceneID, void* pArg)
 	if (pArg)
 		m_pFixedBone = static_cast<CHierarchyNode*>(pArg);
 
+	m_fDamage = 3.f;
 	return S_OK;
 }
 
@@ -132,10 +133,9 @@ void CEarthAberrant_Pick::OnTriggerEnter(CCollision& collision)
 	_uint iTag = collision.pGameObject->getTag();
 	if ((_uint)GAMEOBJECT::PLAYER == iTag)
 	{
-		m_tAttackDesc.pGameObject = this;
-		m_tAttackDesc.fDamage = 3.f;
-		m_tAttackDesc.iLevel = 1;
-		static_cast<CActor*>(collision.pGameObject)->Hit(m_tAttackDesc);
+		ATTACKDESC tAttackDesc = m_pOwner->Get_AttackDesc();
+		tAttackDesc.fDamage += m_fDamage;
+		static_cast<CActor*>(collision.pGameObject)->Hit(tAttackDesc);
 	}
 }
 

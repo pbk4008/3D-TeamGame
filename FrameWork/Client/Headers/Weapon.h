@@ -24,7 +24,8 @@ public:
 public:
 	const wstring& Get_Name() const;
 	const EType Get_Type() const;
-	const ATTACKDESC& Get_AttackDesc() const;
+	CActor* Get_Owner() const;
+	const _float Get_Damage() const;
 
 	void Set_Owner(CActor* _pOwner);
 	virtual void Set_OwnerPivotMatrix(const _fmatrix& _smatPivot);
@@ -33,7 +34,6 @@ public:
 
 	void Set_IsAttack(const _bool _isAttack);
 	void Set_SwordTrail(_bool check) { m_bTrailOnOff = check; }
-	void Set_AttackDesc(const ATTACKDESC& _tAttackDesc);
 
 	const _bool IsAttack() const;
 protected:
@@ -57,7 +57,7 @@ protected:
 	_bool			m_bTrailOnOff = false;
 	CSwordTrail*	m_pTrail = nullptr;
 
-	ATTACKDESC m_tAttackDesc;
+	_float m_fDamage = 0.f;
 
 public:
 	virtual CGameObject* Clone(const _uint _iSceneID, void* _pArg = nullptr) PURE;

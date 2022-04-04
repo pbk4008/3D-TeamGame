@@ -111,9 +111,9 @@ HRESULT CShakeManager::Ready_Template()
 	tShakeEvent.fDuration = 0.5f;
 	tShakeEvent.fOuterRadius = 15.f;
 	tShakeEvent.fInnerRadius = 3.f;
-	tShakeEvent.tWaveX.fAmplitude = 0.05;
+	tShakeEvent.tWaveX.fAmplitude = 0.05f;
 	tShakeEvent.tWaveX.fFrequency = 2.f;
-	tShakeEvent.tWaveY.fAmplitude = 0.05;
+	tShakeEvent.tWaveY.fAmplitude = 0.05f;
 	tShakeEvent.tWaveY.fFrequency = 2.f;
 	m_arrShakeEvents[(_uint)ETemplate::MidBossXZ] = tShakeEvent;
 

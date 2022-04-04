@@ -78,6 +78,8 @@ HRESULT CShield_Parry::EnterState()
 	m_pAnimationController->Set_RootMotion(true, true, ERootOption::XYZ);
 
 	m_pSilvermane->Set_EquipShield(true);
+
+	return S_OK;
 }
 
 HRESULT CShield_Parry::ExitState()
