@@ -51,6 +51,7 @@ public:
 	virtual void OnTriggerEnter(CCollision& collision) override;
 	virtual void OnTriggerExit(CCollision& collision) override;
 	virtual void OnControllerColliderHit(CCollision& collision) override;
+	virtual void Hit(const ATTACKDESC& _tAttackDesc) override;
 
 public:
 	const _bool IsHit() const;

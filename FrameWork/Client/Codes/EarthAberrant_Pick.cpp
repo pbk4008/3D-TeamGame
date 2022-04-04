@@ -127,6 +127,18 @@ HRESULT CEarthAberrant_Pick::Render()
 	return S_OK;
 }
 
+void CEarthAberrant_Pick::OnTriggerEnter(CCollision& collision)
+{
+	_uint iTag = collision.pGameObject->getTag();
+	if ((_uint)GAMEOBJECT::PLAYER == iTag)
+	{
+		m_tAttackDesc.pGameObject = this;
+		m_tAttackDesc.fDamage = 3.f;
+		m_tAttackDesc.iLevel = 1;
+		static_cast<CActor*>(collision.pGameObject)->Hit(m_tAttackDesc);
+	}
+}
+
 HRESULT CEarthAberrant_Pick::Ready_Components()
 {
 	CTransform::TRANSFORMDESC transformDesc;

@@ -183,7 +183,7 @@ HRESULT CSilvermane::NativeConstruct(const _uint _iSceneID, void* _pArg)
 		m_pTransform->Set_State(CTransform::STATE_POSITION, vPos);
 	}
 	else
-		m_pTransform->Set_State(CTransform::STATE_POSITION, XMVectorSet(0.f, 1.f, 0.f, 1.f));
+		m_pTransform->Set_State(CTransform::STATE_POSITION, XMVectorSet(2.f, 1.f, -1.f, 1.f));
 
 	if (FAILED(Ready_Components()))
 		return E_FAIL;
@@ -857,6 +857,14 @@ void CSilvermane::OnControllerColliderHit(CCollision& collision)
 			}
 		}
 	}
+}
+
+void CSilvermane::Hit(const ATTACKDESC& _tAttackDesc)
+{
+	if (m_isBlock)
+		static_cast<CState_Silvermane*>(m_pStateController->Get_CurState())->Block(_tAttackDesc);
+	else
+		static_cast<CState_Silvermane*>(m_pStateController->Get_CurState())->Hit(_tAttackDesc);
 }
 
 const _bool CSilvermane::IsHit() const

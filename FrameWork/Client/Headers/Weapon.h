@@ -24,6 +24,7 @@ public:
 public:
 	const wstring& Get_Name() const;
 	const EType Get_Type() const;
+	const ATTACKDESC& Get_AttackDesc() const;
 
 	void Set_Owner(CActor* _pOwner);
 	virtual void Set_OwnerPivotMatrix(const _fmatrix& _smatPivot);
@@ -31,8 +32,10 @@ public:
 	void Set_FixedBone(CHierarchyNode* _pFixedBone);
 
 	void Set_IsAttack(const _bool _isAttack);
-	const _bool IsAttack() const;
 	void Set_SwordTrail(_bool check) { m_bTrailOnOff = check; }
+	void Set_AttackDesc(const ATTACKDESC& _tAttackDesc);
+
+	const _bool IsAttack() const;
 protected:
 	//매개변수로 받은 행렬 크기 없애주는 함수
 	_fmatrix Remove_Scale(_fmatrix matTransform);
@@ -53,6 +56,8 @@ protected:
 
 	_bool			m_bTrailOnOff = false;
 	CSwordTrail*	m_pTrail = nullptr;
+
+	ATTACKDESC m_tAttackDesc;
 
 public:
 	virtual CGameObject* Clone(const _uint _iSceneID, void* _pArg = nullptr) PURE;

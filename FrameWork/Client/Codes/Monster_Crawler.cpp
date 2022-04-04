@@ -212,6 +212,16 @@ void CMonster_Crawler::OnTriggerEnter(CCollision& collision)
 {
 	if (!m_bDead)
 	{
+		// 플레이어를 공격할 때
+		if ((_uint)GAMEOBJECT::PLAYER == collision.pGameObject->getTag())
+		{
+			m_tAttackDesc.pGameObject = this;
+			m_tAttackDesc.fDamage = 3;
+			m_tAttackDesc.iLevel = 1;
+			static_cast<CActor*>(collision.pGameObject)->Hit(m_tAttackDesc);
+			return;
+		}
+		// 자기자신이 피격당할 때
 		if (true == g_pObserver->IsAttack()) //플레이어공격일때
 		{
 			m_pPanel->Set_Show(true);
@@ -265,6 +275,8 @@ void CMonster_Crawler::OnTriggerExit(CCollision& collision)
 void CMonster_Crawler::Set_IsAttack(const _bool _isAttack)
 {
 	m_IsAttack = _isAttack;
+	m_tAttackDesc.fDamage = 3;
+	m_tAttackDesc.iLevel = 1;
 }
 
 HRESULT CMonster_Crawler::SetUp_Components()

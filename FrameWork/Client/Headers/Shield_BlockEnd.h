@@ -17,6 +17,8 @@ public:
 	virtual HRESULT EnterState();
 	virtual HRESULT ExitState();
 
+	virtual void Block(const ATTACKDESC& _tAttackDesc);
+
 public:
 	virtual _int Input(const _double& _dDeltaTime) override;
 

@@ -20,6 +20,8 @@ _int CShield_Block::Tick(const _double& _dDeltaTime)
 	if (NO_EVENT != iProgress)
 		return iProgress;
 
+	m_pSilvermane->Add_BlockTime(_dDeltaTime);
+
 	return _int();
 }
 

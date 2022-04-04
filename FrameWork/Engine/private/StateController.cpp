@@ -78,6 +78,16 @@ unordered_map<wstring, CState*>& CStateController::Get_States()
 	return m_mapStates;
 }
 
+CState* CStateController::Get_CurState()
+{
+	return m_pCurState;
+}
+
+CState* CStateController::Get_PreState()
+{
+	return m_pPreState;
+}
+
 const wstring& CStateController::Get_CurStateTag() const
 {
 	return m_wstrCurStateTag;

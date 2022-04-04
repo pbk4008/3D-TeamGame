@@ -80,8 +80,6 @@ HRESULT CShield_BlockEnd::EnterState()
 
 	m_pSilvermane->Set_EquipShieldAnim(false);
 	m_pSilvermane->Set_IsTrasceCamera(false);
-
-	m_pSilvermane->Set_BlockTime(0.f);
 	return S_OK;
 }
 
@@ -92,8 +90,13 @@ HRESULT CShield_BlockEnd::ExitState()
 
 	m_pSilvermane->Set_EquipShield(false);
 	m_pSilvermane->Set_IsTrasceCamera(true);
-
+	m_pSilvermane->Set_BlockTime(0.f);
 	return S_OK;
+}
+
+void CShield_BlockEnd::Block(const ATTACKDESC& _tAttackDesc)
+{
+	Hit(_tAttackDesc);
 }
 
 _int CShield_BlockEnd::Input(const _double& _dDeltaTime)

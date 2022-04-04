@@ -185,10 +185,8 @@ void CShield::Set_Equip(const _bool _isEquip, void* _pArg)
 	switch (_isEquip)
 	{
 	case true:
-		m_pCollider->Add_ActorToScene();
 		break;
 	case false:
-		m_pCollider->Remove_ActorFromScene();
 		break;
 	}
 }
@@ -199,9 +197,11 @@ void CShield::Set_EquipAnim(const _bool _isEquip)
 	{
 	case true:
 		m_pAnimationController->SetUp_NextAnimation("SK_shieldBase.ao|A_Spectral_Shield_Block_Start_Weapon", false);
+		m_pCollider->Add_ActorToScene();
 		break;
 	case false:
 		m_pAnimationController->SetUp_NextAnimation("SK_shieldBase.ao|A_Spectral_Shield_Block_End_Weapon", false);
+		m_pCollider->Remove_ActorFromScene();
 		break;
 	}
 }
