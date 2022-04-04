@@ -76,7 +76,7 @@ HRESULT C1H_SwordIdle::ExitState()
 
 void C1H_SwordIdle::OnTriggerEnter(CCollision& collision)
 {
-	OnTriggerEnterHit(collision);
+	//OnTriggerEnterHit(collision);
 }
 
 _int C1H_SwordIdle::Input(const _double& _dDeltaTime)

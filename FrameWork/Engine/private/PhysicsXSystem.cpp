@@ -385,13 +385,14 @@ const PxRenderBuffer& CPhysicsXSystem::Get_RenderBuffer()
 
 void CPhysicsXSystem::Remove_Actor(PxActor* _pActor)
 {
-	if (_pActor)
+	if (_pActor && _pActor->getScene())
 		m_pScene->removeActor(*_pActor);
 }
 
 void CPhysicsXSystem::Add_Actor(PxActor* _pActor)
 {
-	m_pScene->addActor(*_pActor);
+	if(_pActor && !_pActor->getScene())
+		m_pScene->addActor(*_pActor);
 }
 
 const _bool CPhysicsXSystem::Raycast(RAYCASTDESC & _desc)

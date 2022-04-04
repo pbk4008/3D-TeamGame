@@ -51,6 +51,7 @@ public:
 	virtual void OnTriggerEnter(CCollision& collision) override;
 	virtual void OnTriggerExit(CCollision& collision) override;
 	virtual void OnControllerColliderHit(CCollision& collision) override;
+	virtual void Hit(const ATTACKDESC& _tAttackDesc) override;
 
 public:
 	const _bool IsHit() const;
@@ -87,8 +88,11 @@ public: /* For.Weapon */
 	HRESULT Change_State(const wstring& _wstrStateTag);
 
 public: /* For.Shield */
+	const _float Get_BlockTime() const;
 	void Set_EquipShield(const _bool _isEquipShield);
 	void Set_EquipShieldAnim(const _bool _isEquipShield);
+	void Set_BlockTime(const _float _fValue);
+	void Add_BlockTime(const _float _fValue);
 
 public: /* For.JumpNode */
 	CJumpNode* Get_TargetJumpNode() const;
@@ -112,6 +116,7 @@ public:
 	_bool m_isHit = false;
 	_bool m_isFall = false;
 	_bool m_isMove = false;
+	_bool m_isBlock = false;
 	_bool m_isTraceCamera = true;
 
 	_float m_fMoveSpeed = 0.f;
@@ -123,6 +128,7 @@ private: /* For.Weapon */
 	CWeapon* m_pShield = nullptr;
 	_bool m_isEquipWeapon = false;
 	_bool m_isEquipShield = false;
+	_float m_fBlockTime = 0.f;
 	unordered_map<wstring, CWeapon*> m_umapWeapons;
 
 private: /* For.JumpNode */

@@ -14,5 +14,6 @@ typedef struct tagEnvironMentLoadData
 	LEVEL_ID eLevel;
 	_uint	  iType;
 }ENVIRONMENTLOADDATA;
+
 END
 #endif

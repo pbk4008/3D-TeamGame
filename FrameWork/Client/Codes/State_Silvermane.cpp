@@ -269,34 +269,255 @@ _int CState_Silvermane::Input(const _double& _dDeltaTime)
 void CState_Silvermane::OnTriggerEnterHit(CCollision& collision)
 {
 	_uint iTag = collision.pGameObject->getTag();
-	if ((_uint)GAMEOBJECT::WEAPON_MIDBOSS == iTag)
+
+	switch (iTag)
 	{
+		// 무기들과 충돌했을 경우
+	case (_uint)GAMEOBJECT::WEAPON_MIDBOSS:
+	case (_uint)GAMEOBJECT::WEAPON_EARTH:
+	case (_uint)GAMEOBJECT::WEAPON_BRONZE:
+	case (_uint)GAMEOBJECT::WEAPON_2HSword:
+	case (_uint)GAMEOBJECT::WEAPON_POLEARM:
 		if (static_cast<CWeapon*>(collision.pGameObject)->IsAttack())
 		{
-			m_pSilvermane->Add_HP(-7);
-			m_pStateController->Change_State(L"1H_FlinchLeft");
+			ATTACKDESC tAttackDesc = static_cast<CWeapon*>(collision.pGameObject)->Get_Owner()->Get_AttackDesc();
+			tAttackDesc.fDamage += static_cast<CWeapon*>(collision.pGameObject)->Get_Damage();
+			m_pSilvermane->Add_HP(-tAttackDesc.fDamage);
+			switch (tAttackDesc.iLevel)
+			{
+			case 1:
+				m_pStateController->Change_State(L"1H_FlinchLeft");
+				return;
+				break;
+			case 2:
+
+				break;
+			case 3:
+
+				break;
+			}
 		}
-	}
-	else if ((_uint)GAMEOBJECT::WEAPON_EARTH == iTag)
+		break;
+		// 투사체들과 충돌했을 경우, 총알 or 마법 or 레이저
+	case (_uint)GAMEOBJECT::WEAPON_BULLET:
 	{
-		if (static_cast<CWeapon*>(collision.pGameObject)->IsAttack())
+		ATTACKDESC tAttackDesc = static_cast<CWeapon*>(collision.pGameObject)->Get_Owner()->Get_AttackDesc();
+		tAttackDesc.fDamage += static_cast<CWeapon*>(collision.pGameObject)->Get_Damage();
+		m_pSilvermane->Add_HP(-tAttackDesc.fDamage);
+		switch (tAttackDesc.iLevel)
 		{
-			m_pSilvermane->Add_HP(-4);
+		case 1:
 			m_pStateController->Change_State(L"1H_FlinchLeft");
+			return;
+			break;
+		case 2:
+
+			break;
+		case 3:
+
+			break;
 		}
 	}
-	else if ((_uint)GAMEOBJECT::WEAPON_BULLET == iTag)
-	{
-		m_pSilvermane->Add_HP(-4);
-		m_pStateController->Change_State(L"1H_FlinchLeft");
-	}
-	else if ((_uint)GAMEOBJECT::MONSTER_CRYSTAL == iTag)
-	{
+		break;
+		// 몬스터들과 직접 충돌햇을 경우
+	case (_uint)GAMEOBJECT::MONSTER_CRYSTAL:
 		if (static_cast<CActor*>(collision.pGameObject)->IsAttack())
 		{
-			m_pSilvermane->Add_HP(-3);
-			m_pStateController->Change_State(L"1H_FlinchLeft");
+			ATTACKDESC tAttackDesc = static_cast<CActor*>(collision.pGameObject)->Get_AttackDesc();
+			m_pSilvermane->Add_HP(-tAttackDesc.fDamage);
+			switch (tAttackDesc.iLevel)
+			{
+			case 1:
+				m_pStateController->Change_State(L"1H_FlinchLeft");
+				return;
+				break;
+			case 2:
+
+				break;
+			case 3:
+
+				break;
+			}
 		}
+		break;
+	}
+}
+
+void CState_Silvermane::Hit(const ATTACKDESC& _tAttackDesc)
+{
+#pragma region 플레이어에서만 충돌 처리를 해줄 경우
+	//_uint iTag = _tAttackDesc.pGameObject->getTag();
+
+	//switch (iTag)
+	//{
+	//	// 무기들과 충돌했을 경우
+	//case (_uint)GAMEOBJECT::WEAPON_MIDBOSS:
+	//case (_uint)GAMEOBJECT::WEAPON_EARTH:
+	//case (_uint)GAMEOBJECT::WEAPON_BRONZE:
+	//case (_uint)GAMEOBJECT::WEAPON_2HSword:
+	//case (_uint)GAMEOBJECT::WEAPON_POLEARM:
+	//	if (static_cast<CWeapon*>(_tAttackDesc.pGameObject)->IsAttack())
+	//	{
+	//		m_pSilvermane->Add_HP(-_tAttackDesc.fDamage);
+	//		switch (_tAttackDesc.iLevel)
+	//		{
+	//		case 1:
+	//			m_pStateController->Change_State(L"1H_FlinchLeft");
+	//			return;
+	//			break;
+	//		case 2:
+
+	//			break;
+	//		case 3:
+
+	//			break;
+	//		}
+	//	}
+	//	break;
+	//	// 투사체들과 충돌했을 경우, 총알 or 마법 or 레이저
+	//case (_uint)GAMEOBJECT::WEAPON_BULLET:
+	//{
+	//	m_pSilvermane->Add_HP(-_tAttackDesc.fDamage);
+	//	switch (_tAttackDesc.iLevel)
+	//	{
+	//	case 1:
+	//		m_pStateController->Change_State(L"1H_FlinchLeft");
+	//		return;
+	//		break;
+	//	case 2:
+
+	//		break;
+	//	case 3:
+
+	//		break;
+	//	}
+	//}
+	//break;
+	//// 몬스터들과 직접 충돌햇을 경우
+	//case (_uint)GAMEOBJECT::MONSTER_CRYSTAL:
+	//	if (static_cast<CActor*>(_tAttackDesc.pGameObject)->IsAttack())
+	//	{
+	//		m_pSilvermane->Add_HP(-_tAttackDesc.fDamage);
+	//		switch (_tAttackDesc.iLevel)
+	//		{
+	//		case 1:
+	//			m_pStateController->Change_State(L"1H_FlinchLeft");
+	//			return;
+	//			break;
+	//		case 2:
+
+	//			break;
+	//		case 3:
+
+	//			break;
+	//		}
+	//	}
+	//	break;
+	//}
+#pragma endregion
+
+	m_pSilvermane->Add_HP(-_tAttackDesc.fDamage);
+	switch (_tAttackDesc.iLevel)
+	{
+	case 1:
+		m_pStateController->Change_State(L"1H_FlinchLeft");
+		return;
+		break;
+	case 2:
+
+		break;
+	case 3:
+
+		break;
+	}
+}
+
+void CState_Silvermane::Block(const ATTACKDESC& _tAttackDesc)
+{
+#pragma region 플레이어에서만 충돌 처리를 해줄 경우
+	//_uint iTag = _tAttackDesc.pGameObject->getTag();
+
+	//switch (iTag)
+	//{
+	//	// 무기들과 충돌했을 경우
+	//case (_uint)GAMEOBJECT::WEAPON_MIDBOSS:
+	//case (_uint)GAMEOBJECT::WEAPON_EARTH:
+	//case (_uint)GAMEOBJECT::WEAPON_BRONZE:
+	//case (_uint)GAMEOBJECT::WEAPON_2HSword:
+	//case (_uint)GAMEOBJECT::WEAPON_POLEARM:
+	//	if (static_cast<CWeapon*>(_tAttackDesc.pGameObject)->IsAttack())
+	//	{
+	//		//m_pSilvermane->Add_HP(-_tAttackDesc.fDamage);
+	//		switch (_tAttackDesc.iLevel)
+	//		{
+	//		case 1:
+	//			m_pStateController->Change_State(L"Shield_BlockSkid");
+	//			return;
+	//			break;
+	//		case 2:
+
+	//			break;
+	//		case 3:
+
+	//			break;
+	//		}
+	//	}
+	//	break;
+	//	// 투사체들과 충돌했을 경우, 총알 or 마법 or 레이저
+	//case (_uint)GAMEOBJECT::WEAPON_BULLET:
+	//{
+	//	//m_pSilvermane->Add_HP(-_tAttackDesc.fDamage);
+	//	switch (_tAttackDesc.iLevel)
+	//	{
+	//	case 1:
+	//		m_pStateController->Change_State(L"Shield_BlockSkid");
+	//		return;
+	//		break;
+	//	case 2:
+
+	//		break;
+	//	case 3:
+
+	//		break;
+	//	}
+	//}
+	//break;
+	//// 몬스터들과 직접 충돌햇을 경우
+	//case (_uint)GAMEOBJECT::MONSTER_CRYSTAL:
+	//	if (static_cast<CActor*>(_tAttackDesc.pGameObject)->IsAttack())
+	//	{
+	//		//m_pSilvermane->Add_HP(-_tAttackDesc.fDamage);
+	//		switch (_tAttackDesc.iLevel)
+	//		{
+	//		case 1:
+	//			m_pStateController->Change_State(L"Shield_BlockSkid");
+	//			return;
+	//			break;
+	//		case 2:
+
+	//			break;
+	//		case 3:
+
+	//			break;
+	//		}
+	//	}
+	//	break;
+	//}
+#pragma endregion
+
+	//m_pSilvermane->Add_HP(-_tAttackDesc.fDamage);
+	switch (_tAttackDesc.iLevel)
+	{
+	case 1:
+		m_pStateController->Change_State(L"Shield_BlockSkid");
+		return;
+		break;
+	case 2:
+
+		break;
+	case 3:
+
+		break;
 	}
 }
 

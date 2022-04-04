@@ -38,6 +38,7 @@ public:
 	_float Get_GroggyGauge() { return m_fGroggyGauge; }
 	const _bool IsAttack() { return m_IsAttack; }
 	_bool Get_Groggy() { return m_bGroggy; }
+	const ATTACKDESC& Get_AttackDesc() const;
 public:
 	void Set_CurrentHp(_float fCurrentHp) { m_fCurrentHp = fCurrentHp; }
 	void Set_GroggyGage(_float fGauge) { m_fGroggyGauge = fGauge; }
@@ -45,6 +46,10 @@ public:
 	virtual void Set_IsAttack(const _bool _isAttack) { m_IsAttack = _isAttack; }
 	void Set_Groggy(const _bool bGroggy) { m_bGroggy = bGroggy; }
 	void Set_UIShow(_bool bShow) { m_bUIShow = bShow; }
+	void Set_AttackDesc(const ATTACKDESC& _tAttackDesc);
+
+public:
+	virtual void Hit(const ATTACKDESC& _tAttackDesc);
 
 protected:
 	virtual void Free() override;
@@ -60,6 +65,7 @@ protected:
 	_float m_fGroggyGauge; //스턴게이지
 	_float m_fMaxGroggyGauge; //스턴게이지
 
+	ATTACKDESC m_tAttackDesc;
 };
 END
 #endif

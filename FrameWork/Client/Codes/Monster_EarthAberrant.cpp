@@ -88,7 +88,6 @@ HRESULT CMonster_EarthAberrant::NativeConstruct(const _uint _iSceneID, void* _pA
 		return E_FAIL;
 	}
 
-
 	m_bIsFall = true;
 	m_iObectTag = (_uint)GAMEOBJECT::MONSTER_ABERRANT;
 
@@ -100,6 +99,9 @@ HRESULT CMonster_EarthAberrant::NativeConstruct(const _uint _iSceneID, void* _pA
 
 	m_pPanel->Set_HpBar(Get_HpRatio());
 	m_pPanel->Set_GroggyBar(Get_GroggyGaugeRatio());
+
+	
+	m_tAttackDesc.iLevel = 1;
 
 	return S_OK;
 }

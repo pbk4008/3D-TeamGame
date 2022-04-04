@@ -99,6 +99,12 @@ HRESULT C2H_HammerAttack::ExitState()
 	return S_OK;
 }
 
+void C2H_HammerAttack::Hit(const ATTACKDESC& _tAttackDesc)
+{
+	if (!m_pSilvermane->IsAttack())
+		__super::Hit(_tAttackDesc);
+}
+
 _int C2H_HammerAttack::Input(const _double& _dDeltaTime)
 {
 	_int iProgress = __super::Input(_dDeltaTime);

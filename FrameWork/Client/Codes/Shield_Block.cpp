@@ -20,6 +20,8 @@ _int CShield_Block::Tick(const _double& _dDeltaTime)
 	if (NO_EVENT != iProgress)
 		return iProgress;
 
+	m_pSilvermane->Add_BlockTime((_float)_dDeltaTime);
+
 	return _int();
 }
 
@@ -54,6 +56,10 @@ HRESULT CShield_Block::ExitState()
 		return E_FAIL;
 
 	return S_OK;
+}
+
+void CShield_Block::OnTriggerEnter(CCollision& collision)
+{
 }
 
 _int CShield_Block::Input(const _double& _dDeltaTime)
@@ -137,6 +143,11 @@ _int CShield_Block::Input(const _double& _dDeltaTime)
 
 
 	return _int();
+}
+
+void CShield_Block::OnTriggerEnterBlock(CCollision& collision)
+{
+	
 }
 
 void CShield_Block::Free()

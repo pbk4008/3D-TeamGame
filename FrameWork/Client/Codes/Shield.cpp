@@ -73,6 +73,8 @@ _int CShield::Tick(_double _dDeltaTime)
 
 	m_pAnimationController->Tick(_dDeltaTime);
 
+	m_pCollider->Tick(_dDeltaTime);
+
 	return _int();
 }
 
@@ -133,6 +135,18 @@ HRESULT CShield::Ready_Components()
 	m_pAnimationController->Set_Transform(m_pTransform);
 	m_pAnimationController->Set_PlaySpeed(0.55f);
 
+
+	CCollider::DESC tColliderDesc;
+	tColliderDesc.isTrigger = true;
+	tColliderDesc.pGameObject = this;
+	CBoxCollider::DESC tBoxColliderDesc;
+	tBoxColliderDesc.tColliderDesc = tColliderDesc;
+	tBoxColliderDesc.vScale = { 1.f, 0.2f, 1.f};
+	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_BoxCollider", L"Collider", (CComponent**)&m_pCollider, &tBoxColliderDesc)))
+		return E_FAIL;
+	//_matrix smatPivot = XMMatrixTranslation(0.f, 0.f, 0.0f);
+	//m_pCollider->setPivotMatrix(smatPivot);
+
 	return S_OK;
 }
 
@@ -168,6 +182,13 @@ void CShield::Set_Equip(const _bool _isEquip, void* _pArg)
 {
 	__super::Set_Equip(_isEquip, _pArg);
 	m_bActive = _isEquip;
+	switch (_isEquip)
+	{
+	case true:
+		break;
+	case false:
+		break;
+	}
 }
 
 void CShield::Set_EquipAnim(const _bool _isEquip)
@@ -176,9 +197,11 @@ void CShield::Set_EquipAnim(const _bool _isEquip)
 	{
 	case true:
 		m_pAnimationController->SetUp_NextAnimation("SK_shieldBase.ao|A_Spectral_Shield_Block_Start_Weapon", false);
+		m_pCollider->Add_ActorToScene();
 		break;
 	case false:
 		m_pAnimationController->SetUp_NextAnimation("SK_shieldBase.ao|A_Spectral_Shield_Block_End_Weapon", false);
+		m_pCollider->Remove_ActorFromScene();
 		break;
 	}
 }
@@ -210,5 +233,5 @@ void CShield::Free()
 	CWeapon::Free();
 
 	Safe_Release(m_pAnimationController);
-
+	Safe_Release(m_pCollider);
 }

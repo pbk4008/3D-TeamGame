@@ -20,6 +20,7 @@ public:
 	virtual HRESULT ExitState() override;
 
 	virtual void OnTriggerEnter(CCollision& collision) override;
+	virtual void Hit(const ATTACKDESC& _tAttackDesc) override;
 
 protected:
 	virtual _int Input(const _double& _dDeltaTime);
