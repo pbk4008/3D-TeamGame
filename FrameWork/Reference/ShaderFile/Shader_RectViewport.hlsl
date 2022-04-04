@@ -1,4 +1,7 @@
 #include "Shader_Calculate.hpp"
+#include "Shader_LightUtil.hlsli"
+#include "Shader_DitherUtil.hlsli"
+#include "Shader_ShadowUtil.hlsli"
 
 #pragma pack_matrix(row_major);
 
@@ -14,6 +17,31 @@ sampler SkyBoxSampler = sampler_state
 	AddressU = mirror;
 	AddressV = mirror;
 };
+
+sampler point_clamp_sampler = sampler_state
+{	
+	filter = min_mag_mip_point;
+
+	AddressU = clamp;
+	AddressV = clamp;
+};
+
+sampler linear_clamp_sampler = sampler_state
+{
+	filter = min_mag_mip_linear;
+
+	AddressU = clamp;
+	AddressV = clamp;
+};
+SamplerComparisonState shadowsampler = sampler_state
+{
+	filter = min_mag_mip_linear;
+
+	AddressU = border;
+	AddressV = border;
+};
+
+//SamplerComparisonState shadow_sampler = shadowsampler;
 
 cbuffer ShaderCheck
 {
@@ -31,6 +59,7 @@ cbuffer LightDesc
 	vector g_vLightDiffuse;
 	vector g_vLightAmbient;
 	vector g_vLightSpecular;
+	matrix g_LightViewProj;
 };
 
 cbuffer MaterialDesc
@@ -50,32 +79,32 @@ cbuffer MatrixInverse
 	matrix g_MainCamProjMatrix;
 	matrix g_ProjMatrixInv;
 	matrix g_ViewMatrixInv;
+	matrix g_shadowmatrix;
 };
 
 texture2D g_SkyBoxTexutre;
 
 // Lighting
-texture2D g_DiffuseTexture;
-texture2D g_NormalTexture;
-texture2D g_DepthTexture;
+Texture2D g_DiffuseTexture;
+Texture2D g_NormalTexture;
+Texture2D g_DepthTexture;
 
-texture2D g_Metallic;
-texture2D g_Roughness;
-texture2D g_AO;
+Texture2D g_Metallic;
+Texture2D g_Roughness;
+Texture2D g_AO;
 
 texture2D g_SSS;
 
 // belnding
-texture2D g_ShadeTexture;
-texture2D g_SpecularTexture;
-texture2D g_ShadowTexture;
+Texture2D g_ShadeTexture;
+Texture2D g_SpecularTexture;
 
-texture2D g_AlphaTexture;
+Texture2D g_ShadowMapTex;
+Texture2D g_ShadowTexture;
 
+Texture2D g_AlphaTexture;
 
-/* 1. m_pDeviceContext->DrawIndexed() */
-/* 2. 인덱스가 가지고 있던 인덱스 세개에 해당하는 정점 세개를 정점버퍼로부터 얻어온다. */
-/* 3. VS_MAIN함수를 호출하면서 가져온 정점 세개중 하나씩 전달해준다.  */
+Texture2D<float> depthTex;
 
 struct VS_IN
 {
@@ -88,12 +117,29 @@ struct VS_OUT
 	float4 vPosition : SV_POSITION;
 	float2 vTexUV : TEXCOORD0;
 };
+struct VS_OUT_Qude
+{
+	float4 vPosition : SV_POSITION;
+	float2 vTexUV : TEXCOORD0;
+};
+
 
 VS_OUT VS_MAIN_VIEWPORT(VS_IN In)
 {
 	VS_OUT Out = (VS_OUT) 0;
 	
 	Out.vPosition = vector(In.vPosition, 1.f);
+
+	Out.vTexUV = In.vTexUV;
+
+	return Out;
+}
+
+VS_OUT_Qude VS_MAIN_Qude(VS_IN In)
+{
+	VS_OUT_Qude Out = (VS_OUT_Qude) 0;
+	
+	Out.vPosition = float4(2 * (In.vTexUV.x - 0.5f), -2 * (In.vTexUV.y - 0.5f), 0.0f, 1.f);
 
 	Out.vTexUV = In.vTexUV;
 
@@ -136,7 +182,7 @@ PS_OUT_LIGHTACC PS_MAIN_LIGHTACC_DIRECTIONAL(PS_IN In)
 {
 	PS_OUT_LIGHTACC Out = (PS_OUT_LIGHTACC) 0;
 	
-	float2 uvRT = In.vTexUV/* + float2(perPixelX, perPixelY)*/;
+	float2 uvRT = In.vTexUV;
 
 	vector vDiffuseDesc = g_DiffuseTexture.Sample(DefaultSampler, uvRT);
 	vector vNormalDesc = g_NormalTexture.Sample(DefaultSampler, uvRT);
@@ -196,7 +242,6 @@ PS_OUT_LIGHTACC PS_MAIN_LIGHTACC_DIRECTIONAL(PS_IN In)
 		float k = alpha / 2.0f;
 		_V = (1.0f / (NdotL * (1.0f - k) + k)) * (1.0f / (NdotV * (1.0f - k) + k));
 
-		//float specular = saturate(NdotL * _D * _F * _V);
 		float specular = (NdotL * _D * _F * _V);
 	
 		////-------------------------------------------------------------------------//
@@ -296,17 +341,127 @@ PS_OUT_LIGHTACC PS_MAIN_LIGHTACC_POINT(PS_IN In)
 	return Out;
 }
 
-struct PS_OUT_BLEND
+struct PS_OUT_VOLUMETRIC
 {
 	vector vColor : SV_TARGET0;
 };
 
+PS_OUT_VOLUMETRIC PS_MAIN_VOLUMETRIC(PS_IN In)
+{
+	PS_OUT_VOLUMETRIC Out = (PS_OUT_VOLUMETRIC) 0;
+	
+	float depth = max(In.vPosition.z, g_DepthTexture.SampleLevel(linear_clamp_sampler, In.vTexUV, 2));
+	float3 P = GetPositionVS(In.vTexUV, depth,g_ProjMatrixInv);
+	float3 V = float3(0.0f, 0.0f, 0.0f) - P;
+	float cameradistance = length(V); 
+	V /= cameradistance;
+	
+	float marcheddistance = 0;
+	float3 acc = 0;
+	
+	const float3 L = g_vLightDir.xyz;
+	
+	float3 rayEnd = float3(0.0f, 0.0f, 0.0f);
+	
+	const uint sampleCount = 16;
+	const float stepSize = length(P - rayEnd) / sampleCount;
+	
+	P = P + V * stepSize * dither(In.vPosition.xy);
+	
+	[loop]
+	for (uint i = 0; i < sampleCount; ++i)
+	{
+		float4 posShadowMap = mul(float4(P, 1.0), g_shadowmatrix);
+		float3 UVD = posShadowMap.xyz / posShadowMap.w;
+
+		UVD.xy = 0.5 * UVD.xy + 0.5;
+		UVD.y = 1.0 - UVD.y;
+        
+        [branch]
+		if (IsSaturated(UVD.xy))
+		{
+			float attenuation = CalcShadowFactor_PCF3x3(shadowsampler, g_ShadowTexture, UVD, 2048, 1.0f);
+
+			attenuation *= ExponentialFog(cameradistance - marcheddistance);
+
+			acc += attenuation;
+
+		}
+
+		marcheddistance += stepSize;
+		
+		P = P + V * stepSize;
+        
+	}
+
+	acc /= sampleCount;
+	float3 color = float3(1.f, 1.f, 1.f);
+	Out.vColor = max(0, float4(acc * color * 1.0f, 1));
+	
+	return Out;
+}
+
+PS_OUT_VOLUMETRIC PS_MAIN_SHADOW(PS_IN In)
+{
+	PS_OUT_VOLUMETRIC Out = (PS_OUT_VOLUMETRIC) 0;
+
+	float2 uv = In.vTexUV;
+	
+	float2 depth = g_DepthTexture.Sample(DefaultSampler,In.vTexUV).xy;
+	float fViewZ = depth.y * 300.f;
+
+	vector vWorldPos;
+
+	vWorldPos.x = In.vTexUV.x * 2.f - 1.f;
+	vWorldPos.y = In.vTexUV.y * -2.f + 1.f;
+	vWorldPos.z = depth.x;
+	vWorldPos.w = 1.0f;
+	
+	vWorldPos = vWorldPos * fViewZ;
+	vWorldPos = mul(vWorldPos, g_ProjMatrixInv);
+
+	vWorldPos = mul(vWorldPos, g_ViewMatrixInv);
+	
+	//float4 worldpos = GetWorldPosFromDepth(depth, In.vTexUV, 300.f, g_ProjMatrixInv, g_ViewMatrixInv);
+	float4 lightpos = mul(vWorldPos, g_LightViewProj);
+	
+	float2 shadowUV = float2(0, 0);
+	
+	shadowUV.x = saturate((lightpos.x / lightpos.w) * 0.5f + 0.5f);
+	shadowUV.y = saturate(-(lightpos.y / lightpos.w) * 0.5f + 0.5f);
+	
+	float4 lightDepth = g_ShadowMapTex.Sample(DefaultSampler, shadowUV);
+	float lightDistance = lightDepth.x * 300.f;
+	float objDistance = length(vWorldPos.xyz - g_vLightPos.xyz);
+	
+	float adjust = 0;
+	
+	float3 color = 1.f;
+	if(objDistance - 0.1f < lightDistance)
+	{
+		color = 1;
+	}
+	else
+	{
+		color = 0;
+	}
+	
+	Out.vColor = float4(color, 1.f);
+	
+	return Out;
+}
+
+struct PS_OUT_BLEND
+{
+	vector vColor : SV_TARGET0;
+};
 
 PS_OUT_BLEND PS_MAIN_BLEND(PS_IN In)
 {
 	PS_OUT_BLEND Out = (PS_OUT_BLEND) 0;
 	
 	float4 color = g_DiffuseTexture.Sample(DefaultSampler, In.vTexUV);
+	
 	Out.vColor = color;
 	
 	if (Out.vColor.a == 0)
@@ -326,24 +481,6 @@ PS_OUT_BLEND PS_MAIN_BLEND(PS_IN In)
 			Out.vColor += fLaplacianMask[i] * g_DiffuseTexture.Sample(DefaultSampler, (In.vTexUV + float2(fCoord[i / 3] / 1280.f, fCoord[i / 3] / 720.f)));
 	}
 	
-	//if(g_outline == true)
-	//{
-	//	float aa = 4.0f * color.a;
-		
-	//	aa -= g_DiffuseTexture.Sample(DefaultSampler, In.vTexUV + float2(0.01, 0.0)).a;
-	//	aa -= g_DiffuseTexture.Sample(DefaultSampler, In.vTexUV + float2(-0.01, 0.0)).a;
-	//	aa -= g_DiffuseTexture.Sample(DefaultSampler, In.vTexUV + float2(0.0, 0.01)).a;
-	//	aa -= g_DiffuseTexture.Sample(DefaultSampler, In.vTexUV + float2(0.0, -0.01)).a;
-	//	float4 col;
-	//	if(aa == 0.0)
-	//	{
-	//		col = color;
-	//	}
-	//	else
-	//	{
-	//		Out.vColor = float4(1.f, 0, 0, aa);
-	//	}
-	//}
 	return Out;
 }
 
@@ -416,6 +553,28 @@ technique11 DefaultTechnique
 		VertexShader = compile vs_5_0 VS_MAIN_VIEWPORT();
 		GeometryShader = NULL;
 		PixelShader = compile ps_5_0 PS_MAIN_ALPHA();
+	}
+
+	pass Light_Directional_Volumetric // 5
+	{
+		SetRasterizerState(CullMode_Default);
+		SetDepthStencilState(ZTestDiable, 0);
+		SetBlendState(OneBlending, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+		
+		VertexShader = compile vs_5_0 VS_MAIN_Qude();
+		GeometryShader = NULL;
+		PixelShader = compile ps_5_0 PS_MAIN_VOLUMETRIC();
+	}
+
+	pass Light_Directional_Shadow // 6
+	{
+		SetRasterizerState(CullMode_Default);
+		SetDepthStencilState(ZTestDiable, 0);
+		SetBlendState(BlendDisable, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+		
+		VertexShader = compile vs_5_0 VS_MAIN_VIEWPORT();
+		GeometryShader = NULL;
+		PixelShader = compile ps_5_0 PS_MAIN_SHADOW();
 	}
 
 }

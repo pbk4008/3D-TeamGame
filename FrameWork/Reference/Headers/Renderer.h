@@ -71,7 +71,7 @@ private: HRESULT Render_UI();
 private: HRESULT Render_UI_Active();
 
 private: HRESULT Render_Shadow();
-private: HRESULT Render_ShadeShadow();
+private: HRESULT ShadowPass();
 private: HRESULT Render_Final(_bool outline);
 
 private: /* For.PhysX */

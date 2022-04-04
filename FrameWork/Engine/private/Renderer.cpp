@@ -142,18 +142,21 @@ HRESULT CRenderer::Draw_RenderGroup()
 	if (m_bShadow == true)
 	{
 		if (FAILED(Render_Shadow())) return E_FAIL;
-		if (FAILED(Render_ShadeShadow())) return E_FAIL;
 	}
 
 	if (FAILED(Render_NonAlpha())) // 디퍼드 단계
 		return E_FAIL;
 
-	if (FAILED(m_pRenderAssit->Render_LightAcc(m_pTargetMgr,m_CameraTag,m_bPBR,m_bShadow))) // 빛연산
-		return E_FAIL;
-
 	if (m_bPixel) // Pixel HDR
 	{
-		//if (FAILED(m_pPostProcess->AlphaBlur(m_pTargetMgr,m_bParticle))) return E_FAIL;
+		if (FAILED(ShadowPass())) MSGBOX("Failed To Rendering ShadowPass");
+
+		if (FAILED(m_pRenderAssit->Render_LightAcc(m_pTargetMgr, m_CameraTag, m_bPBR, m_bShadow))) return E_FAIL;
+
+		//if (m_bShadow == true)
+		//{
+		//	if (FAILED(m_pRenderAssit->Render_VolumetricLightAcc(m_pTargetMgr, m_CameraTag))) MSGBOX("Failed To Rendering VolumetricLightAcc");
+		//}
 
 		if (FAILED(m_pHDR->Render_HDRBase(m_pTargetMgr, m_bShadow))) return E_FAIL;
 
@@ -223,6 +226,7 @@ HRESULT CRenderer::Draw_RenderGroup()
 		if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("Target_Blend")))) return E_FAIL;
 		if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("Target_Alpha")))) return E_FAIL;
 		if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("Target_Particle")))) return E_FAIL;
+		if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("Target_GodRay")))) return E_FAIL;
 
 	}
 #endif // _DEBUG
@@ -384,49 +388,44 @@ HRESULT CRenderer::Render_Shadow()
 {
 	if (FAILED(m_pTargetMgr->Begin_RT(m_pDeviceContext, L"MRT_Shadow", m_pShadowMap)))
 		return E_FAIL;
-	
-	//if (FAILED(m_pTargetMgr->Begin_MRT(m_pDeviceContext, TEXT("MRT_Shadow"))))
-	//	return E_FAIL;
 
 	for (auto& pGameObject : m_RenderGroup[RENDER_SHADOW])
 	{
 		if (nullptr != pGameObject)
 			pGameObject->Render_Shadow();
-	}
-
-	if (FAILED(m_pTargetMgr->End_RT(m_pDeviceContext, m_pShadowMap)))
-		return E_FAIL;
-
-	//if (FAILED(m_pTargetMgr->End_MRT(m_pDeviceContext)))
-	//	return E_FAIL;
-
-	return S_OK;
-}
-
-HRESULT CRenderer::Render_ShadeShadow()
-{
-	if (FAILED(m_pTargetMgr->Begin_MRT(m_pDeviceContext, TEXT("MRT_ShaeShadow"))))
-		return E_FAIL;
-
-	//if (FAILED(m_pTargetMgr->Begin_RT(m_pDeviceContext, L"MRT_ShaeShadow", m_pShadowMap)))
-	//	return E_FAIL;
-
-	for (auto& pGameObject : m_RenderGroup[RENDER_SHADOW])
-	{
-		if (nullptr != pGameObject)
-			pGameObject->Render_ShadeShadow(m_pTargetMgr->Get_SRV(L"Target_Shadow"));
 
 		Safe_Release(pGameObject);
 	}
 	m_RenderGroup[RENDER_SHADOW].clear();
 
-	if (FAILED(m_pTargetMgr->End_MRT(m_pDeviceContext)))
+	if (FAILED(m_pTargetMgr->End_RT(m_pDeviceContext, m_pShadowMap)))
 		return E_FAIL;
 
-	//m_pPostProcess->BlurPass(m_pTargetMgr,L"Target_ShadeShadow",L"Target_ShadowV2",L"Target_ShadowH2",640.f,360.f);
-	//m_pPostProcess->BlurPass(m_pTargetMgr,L"Target_ShadowH2",L"Target_ShadowV4",L"Target_ShadowH4",320.f,180.f);
-	/*m_pPostProcess->BloomPass(m_pTargetMgr, L"Target_BlurShadow", L"Target_ShadowH2", L"Target_ShadowH4", 0.8f);*/
+	return S_OK;
+}
 
+HRESULT CRenderer::ShadowPass()
+{
+	if (FAILED(m_pTargetMgr->Begin_MRT(m_pDeviceContext, TEXT("MRT_ShaeShadow"))))	return E_FAIL;
+
+	const LIGHTDESC* lightdesc = g_pGameInstance->Get_LightDesc(0);
+
+	_matrix		lightviewproj = lightdesc->mLightView * lightdesc->mLightProj;
+	_matrix		ViewMatrix = g_pGameInstance->Get_Transform(m_CameraTag, TRANSFORMSTATEMATRIX::D3DTS_VIEW);
+	_matrix		ProjMatrix = g_pGameInstance->Get_Transform(m_CameraTag, TRANSFORMSTATEMATRIX::D3DTS_PROJECTION);
+	ViewMatrix = XMMatrixInverse(nullptr, ViewMatrix);
+	ProjMatrix = XMMatrixInverse(nullptr, ProjMatrix);
+
+	if (FAILED(m_pVIBuffer->SetUp_TextureOnShader("g_DepthTexture", m_pTargetMgr->Get_SRV(TEXT("Target_Depth"))))) MSGBOX("Failed To Apply ShadowPass DepthTexture");
+	if (FAILED(m_pVIBuffer->SetUp_TextureOnShader("g_ShadowMapTex", m_pTargetMgr->Get_SRV(TEXT("Target_Shadow"))))) MSGBOX("Failed To Apply ShadowPass ShadowMapTexture");
+	if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_LightViewProj", &XMMatrixTranspose(lightviewproj), sizeof(_matrix)))) MSGBOX("Failed To Apply ShadowPass LightViewProj");
+	if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_ViewMatrixInv", &XMMatrixTranspose(ViewMatrix), sizeof(_float4x4)))) MSGBOX("Failed To Apply ShadowPass CamViewInv");
+	if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_ProjMatrixInv", &XMMatrixTranspose(ProjMatrix), sizeof(_float4x4)))) MSGBOX("Failed To Apply ShadowPass CamProjInv");
+	if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_vLightPos", &_float4(lightdesc->vPosition.x, lightdesc->vPosition.y, lightdesc->vPosition.z, 1.f), sizeof(_float4)))) MSGBOX("Failed To Apply ShadowPass LightPos");
+
+	if (FAILED(m_pVIBuffer->Render(6))) MSGBOX("Failed To Rendering ShadowPass");
+
+	if (FAILED(m_pTargetMgr->End_MRTNotClear(m_pDeviceContext))) return E_FAIL;
 	return S_OK;
 }
 
@@ -435,7 +434,9 @@ HRESULT CRenderer::Render_Final(_bool outline)
 	if (!m_pTargetMgr)	return E_FAIL;
 
 	if (FAILED(m_pVIBuffer->SetUp_TextureOnShader("g_DiffuseTexture", m_pTargetMgr->Get_SRV(TEXT("Target_Blend"))))) MSGBOX("Render Final DiffuseTeuxtre Not Apply");
+
 	if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_outline", &m_boutline, sizeof(_bool)))) MSGBOX("Render Final Value Not Apply");
+
 
 	if (FAILED(m_pVIBuffer->Render(3))) MSGBOX("Final Rendering Failed");
 

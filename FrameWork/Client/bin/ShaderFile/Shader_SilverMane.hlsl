@@ -80,8 +80,6 @@ struct VS_OUT
 	float4	vTangent	: TANGENT;
 	float4	vBiNormal	: BINORMAL;
 	float4	vUvDepth	: TEXCOORD0;
-	//float2	vTexUV : TEXCOORD0;
-	//float4	vProjPos : TEXCOORD1;
 };
 
 VS_OUT VS_MAIN_ANIM(VS_IN In)
@@ -129,6 +127,7 @@ struct VS_OUT_SHADOW
 	float4 vPosition : SV_Position;
 	float2 vTexUV : TEXCOORD0;
 	float4 vClipPos : TEXCOORD1;
+	float3 worldpos : TEXCOORD2;
 };
 
 VS_OUT_SHADOW VS_MAIN_SHADOW(VS_IN In)
@@ -154,9 +153,8 @@ VS_OUT_SHADOW VS_MAIN_SHADOW(VS_IN In)
 	Out.vClipPos = Out.vPosition;
 	Out.vTexUV = In.vTexUV;
 	
-	//matrix matVP = mul(g_LightView, g_LightProj);
-	//float4 worldpos = mul(vPosition, g_WorldMatrix);
-	//Out.vClipPos = worldpos;
+	float4 worldpos = mul(vPosition, g_WorldMatrix);
+	Out.worldpos = worldpos.xyz;
 	
 	return Out;
 }
@@ -209,6 +207,7 @@ struct PS_IN_SHADOW
 	float4 vPosition : SV_Position;
 	float2 vTexUV : TEXCOORD0;
 	float4 vClipPos : TEXCOORD1;
+	float3 worldpos : TEXCOORD2;
 };
 
 struct PS_OUT_SHADOW
@@ -220,23 +219,23 @@ PS_OUT_SHADOW PS_MAIN_SHADOW(PS_IN_SHADOW In)
 {
 	PS_OUT_SHADOW Out = (PS_OUT_SHADOW) 0.f;
 	
-	float fDepth = In.vClipPos.z / In.vClipPos.w;
+	//float fDepth = In.vClipPos.z / In.vClipPos.w;
 	
-	float4 color = g_DiffuseTexture.Sample(DefaultSampler, In.vTexUV);
+	//float4 color = g_DiffuseTexture.Sample(DefaultSampler, In.vTexUV);
 	
-	float Alpha = 1.f;
+	//float Alpha = 1.f;
 	
-	if (color.a < 0.1f)
-	{
-		Alpha = color.a;
-	}
+	//if (color.a < 0.1f)
+	//{
+	//	Alpha = color.a;
+	//}
 	
-	Out.vShadowDepthMap = vector(fDepth.xxx, Alpha);
+	//Out.vShadowDepthMap = vector(fDepth.xxx, Alpha);
 	
-	//float4 shadow = 1;
-	//float zFar = 1 / 300.f;
-	//shadow.xyz = length(In.vClipPos.xyz - g_LightPos) * zFar;
-	//Out.vShadowDepthMap = shadow;
+	float4 color = 1;
+	float OneDividzFar = 1 / 300.f;
+	color.xyz = length(In.worldpos - g_LightPos) * OneDividzFar;
+	Out.vShadowDepthMap = color;
 	
 	return Out;
 }

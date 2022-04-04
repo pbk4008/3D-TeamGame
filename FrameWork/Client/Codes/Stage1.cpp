@@ -103,7 +103,6 @@ HRESULT CStage1::NativeConstruct()
 
 	g_pGameInstance->Change_BaseCamera(L"Camera_Silvermane");
 
-
 	g_pGameInstance->PlayBGM(L"Stage1_BGM");
 
 	return S_OK;

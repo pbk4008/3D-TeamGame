@@ -12,6 +12,7 @@ cbuffer LightBuffer
 {
 	matrix g_LightView;
 	matrix g_LightProj;
+	float3 g_LightPos;
 };
 
 cbuffer ClipPlaneBuffer
@@ -118,6 +119,7 @@ struct VS_OUT_SHADOW
 	float4 vPosition : SV_Position;
 	float2 vTexUV : TEXCOORD0;
 	float4 vClipPos : TEXCOORD1;
+	float3 worldpos : TEXCOORD2;
 };
 
 VS_OUT_SHADOW VS_MAIN_SHADOW(VS_IN In)
@@ -136,7 +138,9 @@ VS_OUT_SHADOW VS_MAIN_SHADOW(VS_IN In)
 	Out.vPosition = mul(vPosition, matWVP);
 	Out.vTexUV = In.vTexUV;
 	Out.vClipPos = Out.vPosition;
-	return Out;
+	
+	float4 worldpos = mul(vPosition, g_WorldMatrix);
+	Out.worldpos = worldpos.xyz;
 	
 	return Out;
 }
@@ -189,6 +193,7 @@ struct PS_IN_SHADOW
 	float4 vPosition : SV_Position;
 	float2 vTexUV : TEXCOORD0;
 	float4 vClipPos : TEXCOORD1;
+	float3 worldpos : TEXCOORD2;
 };
 
 struct PS_OUT_SHADOW
@@ -200,18 +205,22 @@ PS_OUT_SHADOW PS_MAIN_SHADOW(PS_IN_SHADOW In)
 {
 	PS_OUT_SHADOW Out = (PS_OUT_SHADOW) 0.f;
 	
-	float fDepth = In.vClipPos.z / In.vClipPos.w;
+	//float fDepth = In.vClipPos.z / In.vClipPos.w;
 	
-	float4 color = g_DiffuseTexture.Sample(DefaultSampler, In.vTexUV);
+	//float4 color = g_DiffuseTexture.Sample(DefaultSampler, In.vTexUV);
 	
-	float Alpha = 1.f;
+	//float Alpha = 1.f;
 	
-	if (color.a < 0.1f)
-	{
-		Alpha = color.a;
-	}
+	//if (color.a < 0.1f)
+	//{
+	//	Alpha = color.a;
+	//}
 	
-	Out.vShadowDepthMap = vector(fDepth.xxx, Alpha);
+	//Out.vShadowDepthMap = vector(fDepth.xxx, Alpha);
+	const float OneDividzFar = 1 / 300.f;
+	float4 color = 1;
+	color.xyz = length(In.worldpos - g_LightPos) * OneDividzFar;
+	Out.vShadowDepthMap = color;
 	
 	return Out;
 }

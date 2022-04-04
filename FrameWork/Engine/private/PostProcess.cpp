@@ -18,8 +18,10 @@ HRESULT CPostProcess::InitPostProcess()
 	m_pDeviceContext->RSGetViewports(&iViewportIndex, &m_viewport);
 
 	m_pVIBuffer = CVIBuffer_RectViewPort::Create(m_pDevice, m_pDeviceContext, 0.f, 0.f, m_viewport.Width, m_viewport.Height, TEXT("../../Reference/ShaderFile/Shader_PsotProcess.hlsl"));
-	if (nullptr == m_pVIBuffer)
-		return E_FAIL;
+	if (nullptr == m_pVIBuffer)	MSGBOX("Failed To Creating PostProcess VIBuffer");
+
+	m_pGRBuffer = CVIBuffer_RectViewPort::Create(m_pDevice, m_pDeviceContext, 0.f, 0.f, m_viewport.Width, m_viewport.Height, TEXT("../../Reference/ShaderFile/Shader_GodRay.hlsl"));
+	if (nullptr == m_pGRBuffer)	MSGBOX("Failed To Creating PostProcess GRbuffer");
 
 	return S_OK;
 }
@@ -30,10 +32,8 @@ HRESULT CPostProcess::AlphaBlur(CTarget_Manager* pTargetMgr, _bool alpha)
 	{
 		if (FAILED(BlurPass(pTargetMgr, L"Target_Particle", L"Target_ParticleV2", L"Target_ParticleH2", 640, 360))) return E_FAIL;
 		if (FAILED(BlurPass(pTargetMgr, L"Target_ParticleH2", L"Target_ParticleV4", L"Target_ParticleH4", 320, 180))) return E_FAIL;
-		if (FAILED(BlurPass(pTargetMgr, L"Target_ParticleH4", L"Target_ParticleV8", L"Target_ParticleH8", 160, 90))) return E_FAIL;
-		if (FAILED(BlurPass(pTargetMgr, L"Target_ParticleH8", L"Target_ParticleV16", L"Target_ParticleH16", 64, 64))) return E_FAIL;
 
-		if (FAILED(BloomPass(pTargetMgr,L"Target_Alpha", L"Target_ParticleH2", L"Target_ParticleH4", L"Target_ParticleH8", L"Target_ParticleH16",1.f))) return E_FAIL;
+		if (FAILED(BloomPass(pTargetMgr,L"Target_Alpha", L"Target_Particle", L"Target_ParticleH2", L"Target_ParticleH4",1.f))) return E_FAIL;
 	}
 
 	return S_OK;
@@ -117,7 +117,7 @@ HRESULT CPostProcess::BloomPass(CTarget_Manager* pTargetMgr, const wstring& targ
 
 	if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_Weight", &weight, sizeof(_float)))) MSGBOX("Not Apply BloomPass ValueOnShader Weight");
 
-	if (FAILED(m_pVIBuffer->SetUp_TextureOnShader("g_BaseTexture", pTargetMgr->Get_SRV(base.c_str()))))	return E_FAIL;
+	if (FAILED(m_pVIBuffer->SetUp_TextureOnShader("g_Basetexture", pTargetMgr->Get_SRV(base.c_str()))))	return E_FAIL;
 
 	if (FAILED(m_pVIBuffer->SetUp_TextureOnShader("g_BaseBlur2Texture", pTargetMgr->Get_SRV(base1.c_str()))))	return E_FAIL;
 	if (FAILED(m_pVIBuffer->SetUp_TextureOnShader("g_BaseBlur4Texture", pTargetMgr->Get_SRV(base2.c_str()))))	return E_FAIL;
@@ -177,6 +177,48 @@ HRESULT CPostProcess::GaussianblurHorizontal(CTarget_Manager* pTargetMgr, const 
 	return S_OK;
 }
 
+HRESULT CPostProcess::GodRayPass(CTarget_Manager* pTargetMgr, const wstring& cmatag)
+{
+	const LIGHTDESC* plightdesc = g_pGameInstance->Get_LightDesc(0);
+
+	_vector vcampos = g_pGameInstance->Get_CamPosition(cmatag);
+	auto vlightpos = XMVector4Transform(XMVectorSetW(XMLoadFloat3(&plightdesc->vPosition), 1.f),
+		XMMatrixTranslation(XMVectorGetX(vcampos),0.0f,XMVectorGetZ(vcampos)));
+	
+	
+	_matrix camveiwpojs = XMMatrixMultiply(g_pGameInstance->Get_Transform(cmatag, TRANSFORMSTATEMATRIX::D3DTS_VIEW), g_pGameInstance->Get_Transform(cmatag, TRANSFORMSTATEMATRIX::D3DTS_PROJECTION));
+
+	_vector vlightposH = XMVector4Transform(vlightpos, camveiwpojs);
+	_float4	fsspos = _float4(0,0,0,0);
+	XMStoreFloat4(&fsspos, vlightposH);
+
+	auto _sspos = _float4(0.5f * fsspos.x / fsspos.w + 0.5f, -0.5f * fsspos.y / fsspos.w + 0.5f, fsspos.z / fsspos.w, 1.0f);
+
+	_float3	_lightpos = plightdesc->vPosition;
+	_float	_raydecay = 0.825f;
+	_float	_rayweight = 0.25f;
+	_float	_raydensity = 0.975f;
+	_float	_rayexposure = 2.0f;
+
+
+	if (FAILED(pTargetMgr->Begin_MRT(m_pDeviceContext,L"Target_GodRay"))) MSGBOX("Failed to Begin MRT TargetGodRay");
+
+	if(FAILED((m_pGRBuffer->SetUp_TextureOnShader("g_SkyTexture", pTargetMgr->Get_SRV(L"Target_SkyBox"))))) MSGBOX("Failed to Apply GodRay SkyTexture");
+
+	if(FAILED(m_pGRBuffer->SetUp_ValueOnShader("g_sspos",&_sspos, sizeof(_float4)))) MSGBOX("Failed to Apply GodRay sspos");
+	if(FAILED(m_pGRBuffer->SetUp_ValueOnShader("g_lightpos",&_lightpos, sizeof(_float3)))) MSGBOX("Failed to Apply GodRay lightpos");
+	if(FAILED(m_pGRBuffer->SetUp_ValueOnShader("g_raydensity",&_raydensity, sizeof(_float))))MSGBOX("Failed to Apply GodRay raydensity");
+	if(FAILED(m_pGRBuffer->SetUp_ValueOnShader("g_rayweight",&_rayweight, sizeof(_float))))MSGBOX("Failed to Apply GodRay rayweight");
+	if(FAILED(m_pGRBuffer->SetUp_ValueOnShader("g_raydecay",&_raydecay, sizeof(_float))))MSGBOX("Failed to Apply GodRay raydecay");
+	if(FAILED(m_pGRBuffer->SetUp_ValueOnShader("g_rayexposure",&_rayexposure, sizeof(_float))))MSGBOX("Failed to Apply GodRay rayexposure");
+
+	m_pGRBuffer->Render(0);
+
+	if (FAILED(pTargetMgr->End_MRTNotClear(m_pDeviceContext))) MSGBOX("Failed to End MRTNotClear TargetGodRay");
+
+	return S_OK;
+}
+
 CPostProcess* CPostProcess::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
 {
 	CPostProcess* pInstance = new CPostProcess(pDevice, pDeviceContext);
@@ -193,6 +235,7 @@ CPostProcess* CPostProcess::Create(ID3D11Device* pDevice, ID3D11DeviceContext* p
 void CPostProcess::Free()
 {
 	Safe_Release(m_pVIBuffer);
+	Safe_Release(m_pGRBuffer);
 
 	Safe_Release(m_pDeviceContext);
 	Safe_Release(m_pDevice);

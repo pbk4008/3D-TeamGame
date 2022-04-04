@@ -74,6 +74,14 @@ HRESULT CLight_Manager::Render_Lights(CTarget_Manager* pTarget_Manager, const ws
 	return S_OK;
 }
 
+HRESULT CLight_Manager::Render_VolumetricLights(CTarget_Manager* pTarget_Manager, const wstring& pCameraTag)
+{
+	for (auto& pLight : m_Lights)
+		pLight->RenderVolumetric(pTarget_Manager, pCameraTag);
+
+	return S_OK;
+}
+
 void CLight_Manager::Free()
 {
 	for (auto& pLight : m_Lights)

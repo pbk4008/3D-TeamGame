@@ -25,7 +25,10 @@ public: HRESULT				BlurPass(CTarget_Manager* pTargetMgr, const wstring& in, cons
 public: HRESULT				GaussianBlurVertical(CTarget_Manager* pTargetMgr, const wstring& in, const wstring& bind, _float sizex, _float sizey);
 public: HRESULT				GaussianblurHorizontal(CTarget_Manager* pTargetMgr, const wstring& in, const wstring& bind, _float sizex, _float sizey);
 
+public: HRESULT				GodRayPass(CTarget_Manager* pTargetMgr, const wstring& cmatag);
+
 private: CVIBuffer_RectViewPort*	m_pVIBuffer = nullptr;
+private: CVIBuffer_RectViewPort*	m_pGRBuffer = nullptr;
 private: ID3D11Device*				m_pDevice = nullptr;
 private: ID3D11DeviceContext*		m_pDeviceContext = nullptr;
 
