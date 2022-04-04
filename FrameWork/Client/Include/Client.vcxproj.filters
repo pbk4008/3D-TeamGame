@@ -653,7 +653,7 @@
     </Filter>
     <Filter Include="100.ShaderFiles\99.Other">
       <UniqueIdentifier>{905d5be1-9601-40ef-81f2-c8c3537101a9}</UniqueIdentifier>
-	</Filter>
+    </Filter>
     <Filter Include="02.GameObject\04.Effect\01.TrailEffect">
       <UniqueIdentifier>{4da4394f-ff21-4396-a0e8-24986eaeec60}</UniqueIdentifier>
     </Filter>
@@ -2464,6 +2464,9 @@
       <Filter>100.ShaderFiles\04.UI</Filter>
     </FxCompile>
     <FxCompile Include="..\bin\ShaderFile\Shader_UI_Bar.hlsl">
+      <Filter>100.ShaderFiles\04.UI</Filter>
+    </FxCompile>
+    <FxCompile Include="..\bin\ShaderFile\Shader_UI_Enemy_Bar.hlsl">
       <Filter>100.ShaderFiles\04.UI</Filter>
     </FxCompile>
   </ItemGroup>

@@ -132,6 +132,7 @@ HRESULT CUI_Monster_Panel::Render()
 void CUI_Monster_Panel::Set_HpBar(_float fRatio)
 {
 	m_pUIHpBar->Set_HpRatio(fRatio);
+	m_pUIBackHpBar->Set_HpRatio(fRatio);
 }
 
 void CUI_Monster_Panel::Set_GroggyBar(_float fRatio)
@@ -234,13 +235,12 @@ HRESULT CUI_Monster_Panel::Setting_Crawler()
 	Desc3.UIDesc.fAngle = 0.36f;
 	Desc3.UIDesc.fPos = { 0.f, 0.f, 0.f };
 	Desc3.UIDesc.fSize = { 1.f, 1.f };
-	Desc3.iRenderPass = 2;
+	Desc3.iRenderPass = 5;
 
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer(m_iSceneID, L"Layer_UI", L"Proto_GameObject_UI_Monster_HpBar", &Desc3,
 		(CGameObject**)&m_pUIHpBar)))
 		return E_FAIL;
 
-	//TODO : 이것부터 다시 만들어서 테스트 
 	//Monster BackHpBar
 	CUI_Monster_BackHpBar::UIBARDESC Desc3_1;
 	_tcscpy_s(Desc3_1.UIDesc.TextureTag, L"Texture_Monster_HpBar");
@@ -249,9 +249,9 @@ HRESULT CUI_Monster_Panel::Setting_Crawler()
 	Desc3_1.UIDesc.fAngle = 0.36f;
 	Desc3_1.UIDesc.fPos = { 0.f, 0.f, 0.f };
 	Desc3_1.UIDesc.fSize = { 1.f, 1.f };
-	Desc3_1.iRenderPass = 5;
+	Desc3_1.iRenderPass = 6;
 
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer(m_iSceneID, L"Layer_UI", L"Proto_GameObject_UI_Monster_HpBar", &Desc3_1,
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer(m_iSceneID, L"Layer_UI", L"Proto_GameObject_UI_Monster_BackHpBar", &Desc3_1,
 		(CGameObject**)&m_pUIBackHpBar)))
 		return E_FAIL;
 
@@ -324,12 +324,25 @@ HRESULT CUI_Monster_Panel::Setting_Aberrant()
 	Desc3.UIDesc.fAngle = 0.36f;
 	Desc3.UIDesc.fPos = { 0.f, 0.f, 0.f };
 	Desc3.UIDesc.fSize = { 1.f, 1.f };
-	Desc3.iRenderPass = 2;
+	Desc3.iRenderPass = 5;
 
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer(m_iSceneID, L"Layer_UI", L"Proto_GameObject_UI_Monster_HpBar", &Desc3,
 		(CGameObject**)&m_pUIHpBar)))
 		return E_FAIL;
 
+	//Monster BackHpBar
+	CUI_Monster_BackHpBar::UIBARDESC Desc3_1;
+	_tcscpy_s(Desc3_1.UIDesc.TextureTag, L"Texture_Monster_HpBar");
+	Desc3_1.UIDesc.IDTag = 14;
+	Desc3_1.UIDesc.bMinus = true;
+	Desc3_1.UIDesc.fAngle = 0.36f;
+	Desc3_1.UIDesc.fPos = { 0.f, 0.f, 0.f };
+	Desc3_1.UIDesc.fSize = { 1.f, 1.f };
+	Desc3_1.iRenderPass = 6;
+
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer(m_iSceneID, L"Layer_UI", L"Proto_GameObject_UI_Monster_BackHpBar", &Desc3_1,
+		(CGameObject**)&m_pUIBackHpBar)))
+		return E_FAIL;
 
 	//MonsterBar Name
 	CUI_Monster_Name::UINAMEDESC Desc4;
@@ -398,12 +411,25 @@ HRESULT CUI_Monster_Panel::Setting_Animus()
 	Desc3.UIDesc.fAngle = 0.36f;
 	Desc3.UIDesc.fPos = { 0.f, 0.f, 0.f };
 	Desc3.UIDesc.fSize = { 1.f, 1.f };
-	Desc3.iRenderPass = 2;
+	Desc3.iRenderPass = 5;
 
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer(m_iSceneID, L"Layer_UI", L"Proto_GameObject_UI_Monster_HpBar", &Desc3,
 		(CGameObject**)&m_pUIHpBar)))
 		return E_FAIL;
 
+	//Monster BackHpBar
+	CUI_Monster_BackHpBar::UIBARDESC Desc3_1;
+	_tcscpy_s(Desc3_1.UIDesc.TextureTag, L"Texture_Monster_HpBar");
+	Desc3_1.UIDesc.IDTag = 14;
+	Desc3_1.UIDesc.bMinus = true;
+	Desc3_1.UIDesc.fAngle = 0.36f;
+	Desc3_1.UIDesc.fPos = { 0.f, 0.f, 0.f };
+	Desc3_1.UIDesc.fSize = { 1.f, 1.f };
+	Desc3_1.iRenderPass = 6;
+
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer(m_iSceneID, L"Layer_UI", L"Proto_GameObject_UI_Monster_BackHpBar", &Desc3_1,
+		(CGameObject**)&m_pUIBackHpBar)))
+		return E_FAIL;
 
 	//MonsterBar Name
 	CUI_Monster_Name::UINAMEDESC Desc4;
@@ -472,10 +498,24 @@ HRESULT CUI_Monster_Panel::Setting_Sword()
 	Desc3.UIDesc.fAngle = 0.36f;
 	Desc3.UIDesc.fPos = { 0.f, 0.f, 0.f };
 	Desc3.UIDesc.fSize = { 1.f, 1.f };
-	Desc3.iRenderPass = 2;
+	Desc3.iRenderPass = 5;
 
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer(m_iSceneID, L"Layer_UI", L"Proto_GameObject_UI_Monster_HpBar", &Desc3,
 		(CGameObject**)&m_pUIHpBar)))
+		return E_FAIL;
+
+	//Monster BackHpBar
+	CUI_Monster_BackHpBar::UIBARDESC Desc3_1;
+	_tcscpy_s(Desc3_1.UIDesc.TextureTag, L"Texture_Monster_HpBar");
+	Desc3_1.UIDesc.IDTag = 14;
+	Desc3_1.UIDesc.bMinus = true;
+	Desc3_1.UIDesc.fAngle = 0.36f;
+	Desc3_1.UIDesc.fPos = { 0.f, 0.f, 0.f };
+	Desc3_1.UIDesc.fSize = { 1.f, 1.f };
+	Desc3_1.iRenderPass = 6;
+
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer(m_iSceneID, L"Layer_UI", L"Proto_GameObject_UI_Monster_BackHpBar", &Desc3_1,
+		(CGameObject**)&m_pUIBackHpBar)))
 		return E_FAIL;
 
 
@@ -546,10 +586,24 @@ HRESULT CUI_Monster_Panel::Setting_Spear()
 	Desc3.UIDesc.fAngle = 0.36f;
 	Desc3.UIDesc.fPos = { 0.f, 0.f, 0.f };
 	Desc3.UIDesc.fSize = { 1.f, 1.f };
-	Desc3.iRenderPass = 2;
+	Desc3.iRenderPass = 5;
 
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer(m_iSceneID, L"Layer_UI", L"Proto_GameObject_UI_Monster_HpBar", &Desc3,
 		(CGameObject**)&m_pUIHpBar)))
+		return E_FAIL;
+
+	//Monster BackHpBar
+	CUI_Monster_BackHpBar::UIBARDESC Desc3_1;
+	_tcscpy_s(Desc3_1.UIDesc.TextureTag, L"Texture_Monster_HpBar");
+	Desc3_1.UIDesc.IDTag = 14;
+	Desc3_1.UIDesc.bMinus = true;
+	Desc3_1.UIDesc.fAngle = 0.36f;
+	Desc3_1.UIDesc.fPos = { 0.f, 0.f, 0.f };
+	Desc3_1.UIDesc.fSize = { 1.f, 1.f };
+	Desc3_1.iRenderPass = 6;
+
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer(m_iSceneID, L"Layer_UI", L"Proto_GameObject_UI_Monster_BackHpBar", &Desc3_1,
+		(CGameObject**)&m_pUIBackHpBar)))
 		return E_FAIL;
 
 
@@ -620,11 +674,25 @@ HRESULT CUI_Monster_Panel::Setting_Shooter()
 	Desc3.UIDesc.fAngle = 0.36f;
 	Desc3.UIDesc.fPos = { 0.f, 0.f, 0.f };
 	Desc3.UIDesc.fSize = { 1.f, 1.f };
-	Desc3.iRenderPass = 2;
+	Desc3.iRenderPass = 5;
 
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer(m_iSceneID, L"Layer_UI", L"Proto_GameObject_UI_Monster_HpBar", &Desc3,
 		(CGameObject**)&m_pUIHpBar)))
 		return E_FAIL;
+	//Monster BackHpBar
+	CUI_Monster_BackHpBar::UIBARDESC Desc3_1;
+	_tcscpy_s(Desc3_1.UIDesc.TextureTag, L"Texture_Monster_HpBar");
+	Desc3_1.UIDesc.IDTag = 14;
+	Desc3_1.UIDesc.bMinus = true;
+	Desc3_1.UIDesc.fAngle = 0.36f;
+	Desc3_1.UIDesc.fPos = { 0.f, 0.f, 0.f };
+	Desc3_1.UIDesc.fSize = { 1.f, 1.f };
+	Desc3_1.iRenderPass = 6;
+
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer(m_iSceneID, L"Layer_UI", L"Proto_GameObject_UI_Monster_BackHpBar", &Desc3_1,
+		(CGameObject**)&m_pUIBackHpBar)))
+		return E_FAIL;
+
 
 
 	//MonsterBar Name
@@ -694,10 +762,24 @@ HRESULT CUI_Monster_Panel::Setting_Healer()
 	Desc3.UIDesc.fAngle = 0.36f;
 	Desc3.UIDesc.fPos = { 0.f, 0.f, 0.f };
 	Desc3.UIDesc.fSize = { 1.f, 1.f };
-	Desc3.iRenderPass = 2;
+	Desc3.iRenderPass = 5;
 
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer(m_iSceneID, L"Layer_UI", L"Proto_GameObject_UI_Monster_HpBar", &Desc3,
 		(CGameObject**)&m_pUIHpBar)))
+		return E_FAIL;
+
+	//Monster BackHpBar
+	CUI_Monster_BackHpBar::UIBARDESC Desc3_1;
+	_tcscpy_s(Desc3_1.UIDesc.TextureTag, L"Texture_Monster_HpBar");
+	Desc3_1.UIDesc.IDTag = 14;
+	Desc3_1.UIDesc.bMinus = true;
+	Desc3_1.UIDesc.fAngle = 0.36f;
+	Desc3_1.UIDesc.fPos = { 0.f, 0.f, 0.f };
+	Desc3_1.UIDesc.fSize = { 1.f, 1.f };
+	Desc3_1.iRenderPass = 6;
+
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer(m_iSceneID, L"Layer_UI", L"Proto_GameObject_UI_Monster_BackHpBar", &Desc3_1,
+		(CGameObject**)&m_pUIBackHpBar)))
 		return E_FAIL;
 
 
@@ -768,10 +850,24 @@ HRESULT CUI_Monster_Panel::Setting_2HSword()
 	Desc3.UIDesc.fAngle = 0.36f;
 	Desc3.UIDesc.fPos = { 0.f, 0.f, 0.f };
 	Desc3.UIDesc.fSize = { 1.f, 1.f };
-	Desc3.iRenderPass = 2;
+	Desc3.iRenderPass = 5;
 
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer(m_iSceneID, L"Layer_UI", L"Proto_GameObject_UI_Monster_HpBar", &Desc3,
 		(CGameObject**)&m_pUIHpBar)))
+		return E_FAIL;
+
+	//Monster BackHpBar
+	CUI_Monster_BackHpBar::UIBARDESC Desc3_1;
+	_tcscpy_s(Desc3_1.UIDesc.TextureTag, L"Texture_Monster_HpBar");
+	Desc3_1.UIDesc.IDTag = 14;
+	Desc3_1.UIDesc.bMinus = true;
+	Desc3_1.UIDesc.fAngle = 0.36f;
+	Desc3_1.UIDesc.fPos = { 0.f, 0.f, 0.f };
+	Desc3_1.UIDesc.fSize = { 1.f, 1.f };
+	Desc3_1.iRenderPass = 6;
+
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer(m_iSceneID, L"Layer_UI", L"Proto_GameObject_UI_Monster_BackHpBar", &Desc3_1,
+		(CGameObject**)&m_pUIBackHpBar)))
 		return E_FAIL;
 
 
@@ -848,6 +944,19 @@ HRESULT CUI_Monster_Panel::Setting_MidBoss()
 		(CGameObject**)&m_pUIHpBar)))
 		return E_FAIL;
 
+	//Monster BackHpBar
+	CUI_Monster_BackHpBar::UIBARDESC Desc3_1;
+	_tcscpy_s(Desc3_1.UIDesc.TextureTag, L"Texture_Monster_HpBar");
+	Desc3_1.UIDesc.IDTag = 14;
+	Desc3_1.UIDesc.bMinus = true;
+	Desc3_1.UIDesc.fAngle = 0.4f;
+	Desc3_1.UIDesc.fPos = { 0.f, 0.f, 0.f };
+	Desc3_1.UIDesc.fSize = { 1.f, 1.f };
+	Desc3_1.iRenderPass = 6;
+
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer(m_iSceneID, L"Layer_UI", L"Proto_GameObject_UI_Monster_BackHpBar", &Desc3_1,
+		(CGameObject**)&m_pUIBackHpBar)))
+		return E_FAIL;
 
 	//MonsterBar Name
 	CUI_Monster_Name::UINAMEDESC Desc4;
@@ -1001,6 +1110,14 @@ void CUI_Monster_Panel::Update_Setting_Crawler(_double TimeDelta)
 	HpBarmat.r[3] = { -0.03f, 0.0f, -0.005f, 1.f };
 	HpBarTransform->Set_WorldMatrix(HpBarmat * m_pTransform->Get_WorldMatrix());
 
+	//UI HpBarBack
+	CTransform* HpBarBackTransform = (CTransform*)m_pUIBackHpBar->Get_Component(L"Com_Transform");
+	_matrix HpBarBackmat = XMMatrixIdentity();
+	HpBarBackmat.r[0] = XMVectorSetX(HpBarBackmat.r[0], 2.75f);
+	HpBarBackmat.r[1] = XMVectorSetY(HpBarBackmat.r[1], 0.40f);
+	HpBarBackmat.r[3] = { -0.03f, 0.0f, -0.005f, 1.f };
+	HpBarBackTransform->Set_WorldMatrix(HpBarBackmat * m_pTransform->Get_WorldMatrix());
+
 	//UI Name
 	CTransform* NameTransform = (CTransform*)m_pUIName->Get_Component(L"Com_Transform");
 	_matrix Namemat = XMMatrixIdentity();
@@ -1065,6 +1182,14 @@ void CUI_Monster_Panel::Update_Setting_Aberrant(_double TimeDelta)
 	HpBarmat.r[1] = XMVectorSetY(HpBarmat.r[1], 0.40f);
 	HpBarmat.r[3] = { -0.03f, 0.0f, -0.005f, 1.f };
 	HpBarTransform->Set_WorldMatrix(HpBarmat * m_pTransform->Get_WorldMatrix());
+
+	//UI HpBarBack
+	CTransform* HpBarBackTransform = (CTransform*)m_pUIBackHpBar->Get_Component(L"Com_Transform");
+	_matrix HpBarBackmat = XMMatrixIdentity();
+	HpBarBackmat.r[0] = XMVectorSetX(HpBarBackmat.r[0], 2.75f);
+	HpBarBackmat.r[1] = XMVectorSetY(HpBarBackmat.r[1], 0.40f);
+	HpBarBackmat.r[3] = { -0.03f, 0.0f, -0.005f, 1.f };
+	HpBarBackTransform->Set_WorldMatrix(HpBarBackmat * m_pTransform->Get_WorldMatrix());
 
 	//UI Name
 	CTransform* NameTransform = (CTransform*)m_pUIName->Get_Component(L"Com_Transform");
@@ -1131,6 +1256,14 @@ void CUI_Monster_Panel::Update_Setting_Animus(_double TimeDelta)
 	HpBarmat.r[3] = { -0.03f, 0.0f, -0.005f, 1.f };
 	HpBarTransform->Set_WorldMatrix(HpBarmat * m_pTransform->Get_WorldMatrix());
 
+	//UI HpBarBack
+	CTransform* HpBarBackTransform = (CTransform*)m_pUIBackHpBar->Get_Component(L"Com_Transform");
+	_matrix HpBarBackmat = XMMatrixIdentity();
+	HpBarBackmat.r[0] = XMVectorSetX(HpBarBackmat.r[0], 2.75f);
+	HpBarBackmat.r[1] = XMVectorSetY(HpBarBackmat.r[1], 0.40f);
+	HpBarBackmat.r[3] = { -0.03f, 0.0f, -0.005f, 1.f };
+	HpBarBackTransform->Set_WorldMatrix(HpBarBackmat * m_pTransform->Get_WorldMatrix());
+
 	//UI Name
 	CTransform* NameTransform = (CTransform*)m_pUIName->Get_Component(L"Com_Transform");
 	_matrix Namemat = XMMatrixIdentity();
@@ -1195,6 +1328,14 @@ void CUI_Monster_Panel::Update_Setting_Sword(_double TimeDelta)
 	HpBarmat.r[1] = XMVectorSetY(HpBarmat.r[1], 0.40f);
 	HpBarmat.r[3] = { -0.03f, 0.0f, -0.005f, 1.f };
 	HpBarTransform->Set_WorldMatrix(HpBarmat * m_pTransform->Get_WorldMatrix());
+
+	//UI HpBarBack
+	CTransform* HpBarBackTransform = (CTransform*)m_pUIBackHpBar->Get_Component(L"Com_Transform");
+	_matrix HpBarBackmat = XMMatrixIdentity();
+	HpBarBackmat.r[0] = XMVectorSetX(HpBarBackmat.r[0], 2.75f);
+	HpBarBackmat.r[1] = XMVectorSetY(HpBarBackmat.r[1], 0.40f);
+	HpBarBackmat.r[3] = { -0.03f, 0.0f, -0.005f, 1.f };
+	HpBarBackTransform->Set_WorldMatrix(HpBarBackmat * m_pTransform->Get_WorldMatrix());
 
 	//UI Name
 	CTransform* NameTransform = (CTransform*)m_pUIName->Get_Component(L"Com_Transform");
@@ -1261,6 +1402,14 @@ void CUI_Monster_Panel::Update_Setting_Spear(_double TimeDelta)
 	HpBarmat.r[3] = { -0.03f, 0.0f, -0.005f, 1.f };
 	HpBarTransform->Set_WorldMatrix(HpBarmat * m_pTransform->Get_WorldMatrix());
 
+	//UI HpBarBack
+	CTransform* HpBarBackTransform = (CTransform*)m_pUIBackHpBar->Get_Component(L"Com_Transform");
+	_matrix HpBarBackmat = XMMatrixIdentity();
+	HpBarBackmat.r[0] = XMVectorSetX(HpBarBackmat.r[0], 2.75f);
+	HpBarBackmat.r[1] = XMVectorSetY(HpBarBackmat.r[1], 0.40f);
+	HpBarBackmat.r[3] = { -0.03f, 0.0f, -0.005f, 1.f };
+	HpBarBackTransform->Set_WorldMatrix(HpBarBackmat * m_pTransform->Get_WorldMatrix());
+
 	//UI Name
 	CTransform* NameTransform = (CTransform*)m_pUIName->Get_Component(L"Com_Transform");
 	_matrix Namemat = XMMatrixIdentity();
@@ -1325,6 +1474,14 @@ void CUI_Monster_Panel::Update_Setting_Shooter(_double TimeDelta)
 	HpBarmat.r[1] = XMVectorSetY(HpBarmat.r[1], 0.40f);
 	HpBarmat.r[3] = { -0.03f, 0.0f, -0.005f, 1.f };
 	HpBarTransform->Set_WorldMatrix(HpBarmat * m_pTransform->Get_WorldMatrix());
+
+	//UI HpBarBack
+	CTransform* HpBarBackTransform = (CTransform*)m_pUIBackHpBar->Get_Component(L"Com_Transform");
+	_matrix HpBarBackmat = XMMatrixIdentity();
+	HpBarBackmat.r[0] = XMVectorSetX(HpBarBackmat.r[0], 2.75f);
+	HpBarBackmat.r[1] = XMVectorSetY(HpBarBackmat.r[1], 0.40f);
+	HpBarBackmat.r[3] = { -0.03f, 0.0f, -0.005f, 1.f };
+	HpBarBackTransform->Set_WorldMatrix(HpBarBackmat * m_pTransform->Get_WorldMatrix());
 
 	//UI Name
 	CTransform* NameTransform = (CTransform*)m_pUIName->Get_Component(L"Com_Transform");
@@ -1391,6 +1548,14 @@ void CUI_Monster_Panel::Update_Setting_Healer(_double TimeDelta)
 	HpBarmat.r[3] = { -0.03f, 0.0f, -0.005f, 1.f };
 	HpBarTransform->Set_WorldMatrix(HpBarmat * m_pTransform->Get_WorldMatrix());
 
+	//UI HpBarBack
+	CTransform* HpBarBackTransform = (CTransform*)m_pUIBackHpBar->Get_Component(L"Com_Transform");
+	_matrix HpBarBackmat = XMMatrixIdentity();
+	HpBarBackmat.r[0] = XMVectorSetX(HpBarBackmat.r[0], 2.75f);
+	HpBarBackmat.r[1] = XMVectorSetY(HpBarBackmat.r[1], 0.40f);
+	HpBarBackmat.r[3] = { -0.03f, 0.0f, -0.005f, 1.f };
+	HpBarBackTransform->Set_WorldMatrix(HpBarBackmat * m_pTransform->Get_WorldMatrix());
+
 	//UI Name
 	CTransform* NameTransform = (CTransform*)m_pUIName->Get_Component(L"Com_Transform");
 	_matrix Namemat = XMMatrixIdentity();
@@ -1455,6 +1620,14 @@ void CUI_Monster_Panel::Update_Setting_2HSword(_double TimeDelta)
 	HpBarmat.r[1] = XMVectorSetY(HpBarmat.r[1], 0.40f);
 	HpBarmat.r[3] = { -0.03f, 0.0f, -0.005f, 1.f };
 	HpBarTransform->Set_WorldMatrix(HpBarmat * m_pTransform->Get_WorldMatrix());
+
+	//UI HpBarBack
+	CTransform* HpBarBackTransform = (CTransform*)m_pUIBackHpBar->Get_Component(L"Com_Transform");
+	_matrix HpBarBackmat = XMMatrixIdentity();
+	HpBarBackmat.r[0] = XMVectorSetX(HpBarBackmat.r[0], 2.75f);
+	HpBarBackmat.r[1] = XMVectorSetY(HpBarBackmat.r[1], 0.40f);
+	HpBarBackmat.r[3] = { -0.03f, 0.0f, -0.005f, 1.f };
+	HpBarBackTransform->Set_WorldMatrix(HpBarBackmat * m_pTransform->Get_WorldMatrix());
 
 	//UI Name
 	CTransform* NameTransform = (CTransform*)m_pUIName->Get_Component(L"Com_Transform");
@@ -1521,6 +1694,14 @@ void CUI_Monster_Panel::Update_Setting_MidBoss(_double TimeDelta)
 	HpBarmat.r[3] = { -0.05f, 0.0f, -0.005f, 1.f };
 	HpBarTransform->Set_WorldMatrix(HpBarmat * m_pTransform->Get_WorldMatrix());
 
+	//UI HpBarBack
+	CTransform* HpBarBackTransform = (CTransform*)m_pUIBackHpBar->Get_Component(L"Com_Transform");
+	_matrix HpBarBackmat = XMMatrixIdentity();
+	HpBarBackmat.r[0] = XMVectorSetX(HpBarBackmat.r[0], 2.75f);
+	HpBarBackmat.r[1] = XMVectorSetY(HpBarBackmat.r[1], 0.40f);
+	HpBarBackmat.r[3] = { -0.03f, 0.0f, -0.005f, 1.f };
+	HpBarBackTransform->Set_WorldMatrix(HpBarBackmat * m_pTransform->Get_WorldMatrix());
+
 	//UI Name
 	CTransform* NameTransform = (CTransform*)m_pUIName->Get_Component(L"Com_Transform");
 	_matrix Namemat = XMMatrixIdentity();
@@ -1566,6 +1747,7 @@ void CUI_Monster_Panel::Set_UIRemove(_bool bCheck)
 	m_pUIBack->Set_Remove(m_bRemove);
 	m_pUILevel->Set_Remove(m_bRemove);
 	m_pUIHpBar->Set_Remove(m_bRemove);
+	m_pUIBackHpBar->Set_Remove(m_bRemove);
 	m_pUIName->Set_Remove(m_bRemove);
 	m_pUIGroggyBar->Set_Remove(m_bRemove);
 }
@@ -1602,6 +1784,7 @@ void CUI_Monster_Panel::Free()
 	Safe_Release(m_pUIBack);//값
 	Safe_Release(m_pUILevel);//값
 	Safe_Release(m_pUIHpBar);
+	Safe_Release(m_pUIBackHpBar);
 	Safe_Release(m_pUIName);
 	Safe_Release(m_pUIGroggyBar);
 }

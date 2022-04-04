@@ -83,7 +83,7 @@ HRESULT CMonster_EarthAberrant::NativeConstruct(const _uint _iSceneID, void* _pA
 		return E_FAIL;
 	}
 
-	if (FAILED(Set_Weapon()))
+	if (FAILED(Set_Panel()))
 	{
 		return E_FAIL;
 	}
@@ -92,7 +92,7 @@ HRESULT CMonster_EarthAberrant::NativeConstruct(const _uint _iSceneID, void* _pA
 	m_bIsFall = true;
 	m_iObectTag = (_uint)GAMEOBJECT::MONSTER_ABERRANT;
 
-	m_fMaxHp = 2.f;
+	m_fMaxHp = 5.f;
 	m_fCurrentHp = m_fMaxHp;
 
 	m_fMaxGroggyGauge = 10.f;
