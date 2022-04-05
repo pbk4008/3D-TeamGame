@@ -1,12 +1,12 @@
 #include "pch.h"
-#include "Silvermane_KnockBackFwd.h"
+#include "Silvermane_KnockBack.h"
 
-CSilvermane_KnockBackFwd::CSilvermane_KnockBackFwd(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
+CSilvermane_KnockBack::CSilvermane_KnockBack(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
 	: CSilvermane_Hit(_pDevice, _pDeviceContext)
 {
 }
 
-HRESULT CSilvermane_KnockBackFwd::NativeConstruct(void* _pArg)
+HRESULT CSilvermane_KnockBack::NativeConstruct(void* _pArg)
 {
 	if (FAILED(__super::NativeConstruct(_pArg)))
 		return E_FAIL;
@@ -14,7 +14,7 @@ HRESULT CSilvermane_KnockBackFwd::NativeConstruct(void* _pArg)
 	return S_OK;
 }
 
-_int CSilvermane_KnockBackFwd::Tick(const _double& _dDeltaTime)
+_int CSilvermane_KnockBack::Tick(const _double& _dDeltaTime)
 {
 	_int iProgress = __super::Tick(_dDeltaTime);
 	if (NO_EVENT != iProgress)
@@ -49,7 +49,7 @@ _int CSilvermane_KnockBackFwd::Tick(const _double& _dDeltaTime)
 	return _int();
 }
 
-_int CSilvermane_KnockBackFwd::LateTick(const _double& _dDeltaTime)
+_int CSilvermane_KnockBack::LateTick(const _double& _dDeltaTime)
 {
 	_int iProgress = __super::LateTick(_dDeltaTime);
 	if (NO_EVENT != iProgress)
@@ -58,7 +58,7 @@ _int CSilvermane_KnockBackFwd::LateTick(const _double& _dDeltaTime)
 	return _int();
 }
 
-HRESULT CSilvermane_KnockBackFwd::Render()
+HRESULT CSilvermane_KnockBack::Render()
 {
 	if (FAILED(__super::Render()))
 		return E_FAIL;
@@ -66,12 +66,12 @@ HRESULT CSilvermane_KnockBackFwd::Render()
 	return S_OK;
 }
 
-HRESULT CSilvermane_KnockBackFwd::EnterState()
+HRESULT CSilvermane_KnockBack::EnterState()
 {
 	if (FAILED(__super::EnterState()))
 		return E_FAIL;
 
-	if (FAILED(m_pAnimationController->SetUp_NextAnimation("SK_Silvermane.ao|A_Knockdown_Fwd_Player", false)))
+	if (FAILED(m_pAnimationController->SetUp_NextAnimation("SK_Silvermane.ao|A_Knockdown_Bwd_Player", false)))
 		return E_FAIL;
 	m_pAnimationController->Set_RootMotion(true, true);
 	m_pAnimationController->Mul_MoveSpeed(0.5f);
@@ -98,7 +98,52 @@ HRESULT CSilvermane_KnockBackFwd::EnterState()
 	return S_OK;
 }
 
-HRESULT CSilvermane_KnockBackFwd::ExitState()
+HRESULT CSilvermane_KnockBack::EnterState(void* _pArg)
+{
+	if (FAILED(__super::EnterState()))
+		return E_FAIL;
+
+	EDir eDir = EDir::Max;
+	if (_pArg)
+		memcpy_s(&eDir, sizeof(EDir), _pArg, sizeof(EDir));
+
+	switch (eDir)
+	{
+	case EDir::Forward:
+		if (FAILED(m_pAnimationController->SetUp_NextAnimation("SK_Silvermane.ao|A_Knockdown_Bwd_Player", false)))
+			return E_FAIL;
+		break;
+	case EDir::Backward:
+		if (FAILED(m_pAnimationController->SetUp_NextAnimation("SK_Silvermane.ao|A_Knockdown_Fwd_Player", false)))
+			return E_FAIL;
+		break;
+	}
+	m_pAnimationController->Set_RootMotion(true, true);
+	m_pAnimationController->Mul_MoveSpeed(0.5f);
+
+	if (!m_isShake)
+	{
+		CCameraShake::SHAKEEVENT tShakeEvent;
+		tShakeEvent.fDuration = 0.4f;
+		tShakeEvent.fBlendInTime = 0.1f;
+		tShakeEvent.fBlendOutTime = 0.1f;
+		tShakeEvent.tWaveX.fAmplitude = 0.04f;
+		tShakeEvent.tWaveX.fFrequency = 12.f;
+		tShakeEvent.tWaveY.fAmplitude = 0.04f;
+		tShakeEvent.tWaveY.fFrequency = 14.f;
+		tShakeEvent.tWaveZ.fAmplitude = 0.04f;
+		tShakeEvent.tWaveZ.fFrequency = 10.f;
+
+		_float3 vPos; XMStoreFloat3(&vPos, m_pTransform->Get_State(CTransform::STATE_POSITION));
+		g_pShakeManager->Shake(tShakeEvent, vPos);
+		m_isShake = true;
+	}
+
+	m_iCutIndex = 70;
+	return S_OK;
+}
+
+HRESULT CSilvermane_KnockBack::ExitState()
 {
 	if (FAILED(__super::ExitState()))
 		return E_FAIL;
@@ -108,7 +153,7 @@ HRESULT CSilvermane_KnockBackFwd::ExitState()
 	return S_OK;
 }
 
-_int CSilvermane_KnockBackFwd::Input(const _double& _dDeltaTime)
+_int CSilvermane_KnockBack::Input(const _double& _dDeltaTime)
 {
 	_int iProgress = __super::Input(_dDeltaTime);
 	if (NO_EVENT != iProgress)
@@ -117,18 +162,18 @@ _int CSilvermane_KnockBackFwd::Input(const _double& _dDeltaTime)
 	return _int();
 }
 
-CSilvermane_KnockBackFwd* CSilvermane_KnockBackFwd::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext, void* _pArg)
+CSilvermane_KnockBack* CSilvermane_KnockBack::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext, void* _pArg)
 {
-	CSilvermane_KnockBackFwd* pInstance = new CSilvermane_KnockBackFwd(_pDevice, _pDeviceContext);
+	CSilvermane_KnockBack* pInstance = new CSilvermane_KnockBack(_pDevice, _pDeviceContext);
 	if (FAILED(pInstance->NativeConstruct(_pArg)))
 	{
-		MSGBOX("CSilvermane_KnockBackFwd Create Fail");
+		MSGBOX("CSilvermane_KnockBack Create Fail");
 		Safe_Release(pInstance);
 	}
 	return pInstance;
 }
 
-void CSilvermane_KnockBackFwd::Free()
+void CSilvermane_KnockBack::Free()
 {
 	__super::Free();
 }
