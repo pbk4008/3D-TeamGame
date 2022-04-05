@@ -68,15 +68,15 @@ _int CShield_Block::Input(const _double& _dDeltaTime)
 	if (NO_EVENT != iProgress)
 		return iProgress;
 
-	if (g_pGameInstance->getkeyUp(DIK_Q))
-	{
-		if (FAILED(m_pStateController->Change_State(L"Shield_BlockEnd")))
-			return E_FAIL;
-		return STATE_CHANGE;
-	}
-
 	if (m_iCutIndex < m_pAnimationController->Get_CurKeyFrameIndex())
 	{
+		if (!g_pGameInstance->getkeyPress(DIK_Q))
+		{
+			if (FAILED(m_pStateController->Change_State(L"Shield_BlockEnd")))
+				return E_FAIL;
+			return STATE_CHANGE;
+		}
+
 		if (g_pGameInstance->getkeyDown(DIK_SPACE))
 		{
 			if (g_pGameInstance->getkeyPress(DIK_A))

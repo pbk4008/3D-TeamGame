@@ -95,6 +95,8 @@ HRESULT C1H_KnockBack::EnterState()
 	}
 
 	m_iCutIndex = 70;
+
+	m_pSilvermane->Set_IsTrasceCamera(false);
 	return S_OK;
 }
 
@@ -104,6 +106,7 @@ HRESULT C1H_KnockBack::ExitState()
 		return E_FAIL;
 	m_pAnimationController->Div_MoveSpeed(0.5f);
 
+	m_pSilvermane->Set_IsTrasceCamera(true);
 
 	return S_OK;
 }

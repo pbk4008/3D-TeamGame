@@ -166,6 +166,7 @@ void CBullet::OnTriggerEnter(CCollision& collision)
 	{
 		ATTACKDESC tAttackDesc = m_pOwner->Get_AttackDesc();
 		tAttackDesc.fDamage += m_fDamage;
+		//tAttackDesc.iLevel = 3;
 		tAttackDesc.pHitObject = this;
 		static_cast<CActor*>(collision.pGameObject)->Hit(tAttackDesc);
 

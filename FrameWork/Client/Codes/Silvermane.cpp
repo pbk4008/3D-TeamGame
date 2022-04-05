@@ -118,11 +118,21 @@
 #include "2H_HammerAttackSprintR1.h"
 
 ///////////////////////////////////////////// Shield
+// 막기
 #include "Shield_BlockStart.h"
 #include "Shield_BlockLoop.h"
 #include "Shield_BlockEnd.h"
+#include "Shield_BlockSoft.h"
+#include "Shield_BlockHard.h"
 #include "Shield_BlockSkid.h"
+#include "Shield_BlockSkidStrong.h"
+#include "Shield_BlockBreakStart.h"
+#include "Shield_BlockBreakEnd.h"
+#include "Shield_Ricochet.h"
+// 패링
 #include "Shield_Parry.h"
+#include "Shield_ParryStunback.h"
+#include "Shield_ParryStunbackStrong.h"
 
 // Walk
 #include "Shield_WalkBwd.h"
@@ -684,15 +694,33 @@ HRESULT CSilvermane::Ready_States()
 		return E_FAIL;
 #pragma endregion
 #pragma region Shield
+	// 막기
 	if (FAILED(m_pStateController->Add_State(L"Shield_BlockStart", CShield_BlockStart::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 	if (FAILED(m_pStateController->Add_State(L"Shield_BlockLoop", CShield_BlockLoop::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 	if (FAILED(m_pStateController->Add_State(L"Shield_BlockEnd", CShield_BlockEnd::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
+	if (FAILED(m_pStateController->Add_State(L"Shield_BlockSoft", CShield_BlockSoft::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	if (FAILED(m_pStateController->Add_State(L"Shield_BlockHard", CShield_BlockHard::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
 	if (FAILED(m_pStateController->Add_State(L"Shield_BlockSkid", CShield_BlockSkid::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
+	if (FAILED(m_pStateController->Add_State(L"Shield_BlockSkidStrong", CShield_BlockSkidStrong::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	if (FAILED(m_pStateController->Add_State(L"Shield_BlockBreakStart", CShield_BlockBreakStart::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	if (FAILED(m_pStateController->Add_State(L"Shield_BlockBreakEnd", CShield_BlockBreakEnd::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	if (FAILED(m_pStateController->Add_State(L"Shield_Ricochet", CShield_Ricochet::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	// 패링
 	if (FAILED(m_pStateController->Add_State(L"Shield_Parry", CShield_Parry::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	if (FAILED(m_pStateController->Add_State(L"Shield_ParryStunback", CShield_ParryStunback::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	if (FAILED(m_pStateController->Add_State(L"Shield_ParryStunbackStrong", CShield_ParryStunbackStrong::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 	// Walk
 	if (FAILED(m_pStateController->Add_State(L"Shield_WalkBwd", CShield_WalkBwd::Create(m_pDevice, m_pDeviceContext))))

@@ -95,6 +95,8 @@ HRESULT CSilvermane_KnockBack::EnterState()
 	}
 
 	m_iCutIndex = 70;
+
+	m_pSilvermane->Set_IsTrasceCamera(false);
 	return S_OK;
 }
 
@@ -140,6 +142,8 @@ HRESULT CSilvermane_KnockBack::EnterState(void* _pArg)
 	}
 
 	m_iCutIndex = 70;
+
+	m_pSilvermane->Set_IsTrasceCamera(false);
 	return S_OK;
 }
 
@@ -149,6 +153,7 @@ HRESULT CSilvermane_KnockBack::ExitState()
 		return E_FAIL;
 	m_pAnimationController->Div_MoveSpeed(0.5f);
 
+	m_pSilvermane->Set_IsTrasceCamera(true);
 
 	return S_OK;
 }
