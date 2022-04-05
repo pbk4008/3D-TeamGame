@@ -385,13 +385,13 @@ const PxRenderBuffer& CPhysicsXSystem::Get_RenderBuffer()
 
 void CPhysicsXSystem::Remove_Actor(PxActor* _pActor)
 {
-	if (_pActor && _pActor->getScene())
+	if (_pActor && NULL != _pActor->getScene())
 		m_pScene->removeActor(*_pActor);
 }
 
 void CPhysicsXSystem::Add_Actor(PxActor* _pActor)
 {
-	if(_pActor && !_pActor->getScene())
+	if(_pActor && NULL == _pActor->getScene())
 		m_pScene->addActor(*_pActor);
 }
 

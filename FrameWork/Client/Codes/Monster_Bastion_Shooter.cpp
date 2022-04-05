@@ -185,6 +185,29 @@ void CMonster_Bastion_Shooter::Set_Remove(_bool bCheck)
 	m_pPanel->Set_UIRemove(bCheck);
 }
 
+void CMonster_Bastion_Shooter::Hit(const ATTACKDESC& _tAttackDesc)
+{
+	if (m_bDead || 0.f >= m_fCurrentHp )
+		return;
+
+	m_pPanel->Set_Show(true);
+
+	//m_fCurrentHp -= _tAttackDesc.fDamage;
+	//switch (_tAttackDesc.iLevel)
+	//{
+	//case 1:
+
+	//	break;
+	//case 2:
+
+	//	break;
+	//case 3:
+
+	//	break;
+	//}
+	Hit();
+}
+
 void CMonster_Bastion_Shooter::OnTriggerEnter(CCollision& collision)
 {
 	if (!m_bDead)

@@ -154,10 +154,12 @@ void CBullet::Set_Owner(CActor* _pOwner)
 
 void CBullet::OnTriggerEnter(CCollision& collision)
 {
-	if (collision.pGameObject->getTag() == m_pOwner->getTag())
+	_uint iTag = collision.pGameObject->getTag();
+	if (iTag == m_pOwner->getTag())
 		return;
 
-	if (collision.pGameObject->getTag() == (_uint)GAMEOBJECT::PLAYER)
+	if ((_uint)GAMEOBJECT::PLAYER == iTag ||
+		(_uint)GAMEOBJECT::MONSTER_SHOOTER == iTag)
 	{
 		ATTACKDESC tAttackDesc = m_pOwner->Get_AttackDesc();
 		tAttackDesc.fDamage += m_fDamage;

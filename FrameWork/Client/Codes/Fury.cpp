@@ -165,17 +165,19 @@ _int CFury::Attach_Owner(const _double& _dDeltaTime)
 
 void CFury::Set_Equip(const _bool _isEquip, void* _pArg)
 {
-	__super::Set_Equip(_isEquip, _pArg);
-	switch (_isEquip)
+	if (m_isEquip != _isEquip)
 	{
-	case true:
-		m_pCollider->Add_ActorToScene();
-		break;
-	case false:
-		m_pCollider->Remove_ActorFromScene();
-		break;
+		__super::Set_Equip(_isEquip, _pArg);
+		switch (_isEquip)
+		{
+		case true:
+			m_pCollider->Add_ActorToScene();
+			break;
+		case false:
+			m_pCollider->Remove_ActorFromScene();
+			break;
+		}
 	}
-
 }
 
 CFury* CFury::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
