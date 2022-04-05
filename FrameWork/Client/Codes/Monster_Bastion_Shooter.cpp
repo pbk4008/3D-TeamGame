@@ -23,6 +23,8 @@ CMonster_Bastion_Shooter::CMonster_Bastion_Shooter(ID3D11Device* _pDevice, ID3D1
 	, m_pModelCom(nullptr)
 	, m_pStateController(nullptr)
 	, m_pAnimator(nullptr)
+	, m_bShot(false)
+
 {
 }
 
@@ -33,6 +35,7 @@ CMonster_Bastion_Shooter::CMonster_Bastion_Shooter(const CMonster_Bastion_Shoote
 	, m_pStateController(_rhs.m_pStateController)
 	, m_pAnimator(_rhs.m_pAnimator)
 	, m_pPanel(_rhs.m_pPanel)
+	, m_bShot(_rhs.m_bShot)
 {
 	Safe_AddRef(m_pCharacterController);
 	Safe_AddRef(m_pModelCom);
@@ -81,7 +84,7 @@ HRESULT CMonster_Bastion_Shooter::NativeConstruct(const _uint _iSceneID, void* _
 
 
 	setActive(false);
-
+	m_wstrCurState = L"";
 	m_tAttackDesc.iLevel = 2;
 
 	return S_OK;
@@ -192,19 +195,6 @@ void CMonster_Bastion_Shooter::Hit(const ATTACKDESC& _tAttackDesc)
 
 	m_pPanel->Set_Show(true);
 
-	//m_fCurrentHp -= _tAttackDesc.fDamage;
-	//switch (_tAttackDesc.iLevel)
-	//{
-	//case 1:
-
-	//	break;
-	//case 2:
-
-	//	break;
-	//case 3:
-
-	//	break;
-	//}
 	Hit();
 }
 
@@ -474,6 +464,7 @@ HRESULT CMonster_Bastion_Shooter::Ready_AnimationFSM()
 	m_pAnimator->Set_UpAutoChangeAnimation((_uint)ANIM_TYPE::RIGHTWALK_LOOP, (_uint)ANIM_TYPE::RIGHTWALK_END);
 	m_pAnimator->Set_UpAutoChangeAnimation((_uint)ANIM_TYPE::RIGHTWALK_END, (_uint)ANIM_TYPE::IDLE);
 
+	m_pAnimator->Insert_AnyEntryAnimation((_uint)ANIM_TYPE::IDLE);
 	m_pAnimator->Insert_AnyEntryAnimation((_uint)ANIM_TYPE::RUN_START);
 
 	m_pAnimator->Insert_AnyEntryAnimation((_uint)ANIM_TYPE::ATTACK);
@@ -510,17 +501,11 @@ HRESULT CMonster_Bastion_Shooter::Ready_StateFSM()
 	tMoveDesc.pTransform = m_pTransform;
 	tMoveDesc.pController = m_pStateController;
 
-	CMonster_FSM::FSMDESC tFSMDesc;
-	ZeroMemory(&tFSMDesc, sizeof(tFSMDesc));
-	tFSMDesc.pAnimator = m_pAnimator;
-	tFSMDesc.pController = m_pStateController;
-
 	CMonster_FSM::FSMACTORDESC tActorDesc;
 	ZeroMemory(&tActorDesc, sizeof(tActorDesc));
 	tActorDesc.pAnimator = m_pAnimator;
 	tActorDesc.pController = m_pStateController;
 	tActorDesc.pActor = this;
-
 
 	lstrcpy(tMoveDesc.pName, L"Idle");
 	if (FAILED(m_pStateController->Add_State(L"Idle", CShooter_Idle::Create(m_pDevice, m_pDeviceContext, &tMoveDesc))))
@@ -534,8 +519,8 @@ HRESULT CMonster_Bastion_Shooter::Ready_StateFSM()
 	if (FAILED(m_pStateController->Add_State(L"Attack", CShooter_Attack::Create(m_pDevice, m_pDeviceContext, &tActorDesc))))
 		return E_FAIL;
 
-	lstrcpy(tFSMDesc.pName, L"Hit");
-	if (FAILED(m_pStateController->Add_State(L"Hit", CShooter_Hit::Create(m_pDevice, m_pDeviceContext, &tFSMDesc))))
+	lstrcpy(tActorDesc.pName, L"Hit");
+	if (FAILED(m_pStateController->Add_State(L"Hit", CShooter_Hit::Create(m_pDevice, m_pDeviceContext, &tActorDesc))))
 		return E_FAIL;
 
 	lstrcpy(tMoveDesc.pName, L"Death");
@@ -551,6 +536,8 @@ HRESULT CMonster_Bastion_Shooter::Ready_StateFSM()
 		return E_FAIL;
 
 	m_pStateController->Change_State(L"Idle");
+
+	cout << "idle로 시작" << endl;
 
 	return S_OK;
 }
@@ -588,7 +575,10 @@ _int CMonster_Bastion_Shooter::Change_State()
 	if (tmpState != m_wstrCurState)
 	{
 		if (tmpState == L"Idle")
+		{
+			cout << "Idle에서 chase로 변경" << endl;
 			Chase();
+		}
 	}
 	if (m_bDead)
 	{

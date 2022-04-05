@@ -713,9 +713,8 @@ void CMonster_Bastion_Sword::Hit()
 		m_pPanel->Set_GroggyBar(Get_GroggyGaugeRatio());
 	}
 
-	//Active_Effect((_uint)EFFECT::HIT);
-	//Active_Effect((_uint)EFFECT::FLOATING);
-	Active_Effect((_uint)EFFECT::GUARD);
+	Active_Effect((_uint)EFFECT::HIT);
+	Active_Effect((_uint)EFFECT::FLOATING);
 }
 
 CMonster_Bastion_Sword* CMonster_Bastion_Sword::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)

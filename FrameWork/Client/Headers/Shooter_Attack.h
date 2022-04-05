@@ -29,7 +29,7 @@ private:
 	virtual void			Free() override;
 private:
 	_double m_dAccShotTime;
-	_bool m_bShot;
+	//_bool m_bShot;
 };
 
 END
