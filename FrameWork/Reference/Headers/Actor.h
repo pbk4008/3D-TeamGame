@@ -49,6 +49,7 @@ public:
 
 	void Set_AttackDesc(const ATTACKDESC& _tAttackDesc);
 	void Set_AttackDesc_Object(CGameObject* pObj) { m_tAttackDesc.pOwner = pObj; };
+	void Set_AttackDesc_HitObject(CGameObject* pObj) { m_tAttackDesc.pHitObject = pObj; };
 	void Set_AttackDesc_Damaga(_float fDamage) { m_tAttackDesc.fDamage = fDamage; };
 	void Set_AttackDesc_Level(_uint iLevel) { m_tAttackDesc.iLevel = iLevel; };
 

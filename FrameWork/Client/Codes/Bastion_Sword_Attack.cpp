@@ -36,7 +36,8 @@ _int CBastion_Sword_Attack::Tick(const _double& _dDeltaTime)
 
 	m_pAnimator->Tick(_dDeltaTime);
 
-	//무한 루프에 대한 조건 들어갈 자리
+	if (m_pAnimator->Get_CurrentAnimNode() == (_uint)CMonster_Bastion_Sword::ANIM_TYPE::ATTACK_JUMPLOOP)
+		m_pTransform->Face_Target(g_pObserver->Get_PlayerPos());
 
 	if (m_pAnimator->Get_CurrentAnimNode() == (_uint)CMonster_Bastion_Sword::ANIM_TYPE::IDLE)
 		m_pStateController->Change_State(L"Idle");
@@ -49,11 +50,11 @@ _int CBastion_Sword_Attack::Tick(const _double& _dDeltaTime)
 
 		_uint iCurKeyFrameIndex = m_pAnimator->Get_AnimController()->Get_CurKeyFrameIndex();
 
-		cout << iCurKeyFrameIndex << endl;
-
 		if ((_uint)CMonster_Bastion_Sword::ANIM_TYPE::ATTACK_SINGLE == m_pAnimator->Get_CurrentAnimNode())
 		{
-			if (/*35*/50 < iCurKeyFrameIndex && /*65*/100 > iCurKeyFrameIndex)
+			cout << "Single : " << iCurKeyFrameIndex << endl;
+
+			if (120 < iCurKeyFrameIndex && 150 > iCurKeyFrameIndex)
 			{
 				pMonster->Set_IsAttack(true);
 
@@ -65,20 +66,22 @@ _int CBastion_Sword_Attack::Tick(const _double& _dDeltaTime)
 			else
 				pMonster->Set_IsAttack(false);
 		}
-		
-		else if ((_uint)CMonster_Bastion_Sword::ANIM_TYPE::ATTACK_DOUBLE== m_pAnimator->Get_CurrentAnimNode())
+
+		else if ((_uint)CMonster_Bastion_Sword::ANIM_TYPE::ATTACK_DOUBLE == m_pAnimator->Get_CurrentAnimNode())
 		{
-			if (33 < iCurKeyFrameIndex && 55 > iCurKeyFrameIndex)
+			cout << "Double : " << iCurKeyFrameIndex << endl;
+
+			if (70 < iCurKeyFrameIndex && 100 > iCurKeyFrameIndex)
 			{
 				pMonster->Set_IsAttack(true);
-				
+
 				_float fDamage = 5.f;
 				_uint iLevel = 1;
 				pMonster->Set_AttackDesc_Damaga(fDamage);
 				pMonster->Set_AttackDesc_Level(iLevel);
 			}
 
-			if (73 < iCurKeyFrameIndex && 84 > iCurKeyFrameIndex)
+			if (160 < iCurKeyFrameIndex && 195 > iCurKeyFrameIndex)
 			{
 				pMonster->Set_IsAttack(true);
 
@@ -89,6 +92,21 @@ _int CBastion_Sword_Attack::Tick(const _double& _dDeltaTime)
 			}
 			else
 				pMonster->Set_IsAttack(false);
+		}
+
+		else if ((_uint)CMonster_Bastion_Sword::ANIM_TYPE::ATTACK_JUMPEND == m_pAnimator->Get_CurrentAnimNode())
+		{
+			cout << "Jump : " << iCurKeyFrameIndex << endl;
+
+			if (50 < iCurKeyFrameIndex && 70 > iCurKeyFrameIndex)
+			{
+				pMonster->Set_IsAttack(true);
+
+				_float fDamage = 5.f;
+				_uint iLevel = 2;
+				pMonster->Set_AttackDesc_Damaga(fDamage);
+				pMonster->Set_AttackDesc_Level(iLevel);
+			}
 		}
 	}
 
