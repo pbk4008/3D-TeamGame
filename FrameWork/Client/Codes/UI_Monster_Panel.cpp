@@ -1697,9 +1697,9 @@ void CUI_Monster_Panel::Update_Setting_MidBoss(_double TimeDelta)
 	//UI HpBarBack
 	CTransform* HpBarBackTransform = (CTransform*)m_pUIBackHpBar->Get_Component(L"Com_Transform");
 	_matrix HpBarBackmat = XMMatrixIdentity();
-	HpBarBackmat.r[0] = XMVectorSetX(HpBarBackmat.r[0], 2.75f);
+	HpBarBackmat.r[0] = XMVectorSetX(HpBarBackmat.r[0], 3.7f);
 	HpBarBackmat.r[1] = XMVectorSetY(HpBarBackmat.r[1], 0.40f);
-	HpBarBackmat.r[3] = { -0.03f, 0.0f, -0.005f, 1.f };
+	HpBarBackmat.r[3] = { -0.05f, 0.0f, -0.005f, 1.f };
 	HpBarBackTransform->Set_WorldMatrix(HpBarBackmat * m_pTransform->Get_WorldMatrix());
 
 	//UI Name
