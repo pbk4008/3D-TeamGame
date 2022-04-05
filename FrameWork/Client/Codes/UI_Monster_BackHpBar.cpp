@@ -92,18 +92,20 @@ _int CUI_Monster_BackHpBar::Tick(_double TimeDelta)
 
 #pragma endregion
 
+	if (m_fGapX != m_fHpRatio && false == m_bChange)
+	{
+		//공격이 들어왔다는뜻
+		m_bChange = true;
+	}
+
+	if (0 >= m_fHpRatio)
+	{
+		m_bShow = false;
+	}
+
 	if (g_pObserver->IsAttack() || g_pObserver->IsThrownObject())
 	{
-		if (m_fGapX != m_fHpRatio && false == m_bChange)
-		{
-			//공격이 들어왔다는뜻
-			m_bChange = true;
-		}
-
-		if (0 >= m_fHpRatio)
-		{
-			m_bShow = false;
-		}
+		
 		
 	}
 	
