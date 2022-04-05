@@ -71,7 +71,7 @@ HRESULT C1H_Dash::EnterState()
 
 	m_pSilvermane->Set_IsMove(true);
 	m_pSilvermane->Set_EquipShield(false);
-
+	m_pSilvermane->Set_IsDash(true);
 
 	return S_OK;
 }
@@ -82,6 +82,7 @@ HRESULT C1H_Dash::ExitState()
 		return E_FAIL;
 
 	m_pSilvermane->Set_IsMove(false);
+	m_pSilvermane->Set_IsDash(false);
 
 	m_isShake = false;
 	return S_OK;

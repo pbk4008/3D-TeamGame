@@ -910,6 +910,11 @@ const _bool CSilvermane::IsHit() const
 	return m_isHit;
 }
 
+const _bool CSilvermane::IsDash() const
+{
+	return m_isDash;
+}
+
 CTransform* CSilvermane::Get_Transform() const
 {
 	return m_pTransform;
@@ -951,6 +956,11 @@ void CSilvermane::Set_IsHit(const _bool _isHit)
 void CSilvermane::Set_IsFall(const _bool _isFall)
 {
 	m_isFall = _isFall;
+}
+
+void CSilvermane::Set_IsDash(const _bool _isDash)
+{
+	m_isDash = _isDash;
 }
 
 void CSilvermane::Set_IsMove(const _bool _isMove)

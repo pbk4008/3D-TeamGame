@@ -450,7 +450,7 @@ void CState_Silvermane::Hit(const ATTACKDESC& _tAttackDesc)
 	//}
 #pragma endregion
 
-	if (m_pSilvermane->IsHit())
+	if (m_pSilvermane->IsHit() || m_pSilvermane->IsAttack())
 		return;
 
 	EDir eDirFB = EDir::Max;
