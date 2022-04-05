@@ -38,6 +38,7 @@ protected:
 protected:
 	virtual _int Input(const _double& _dDeltaTime);
 	void OnTriggerEnterHit(CCollision& collision);
+	void Reflect_Bullet(const ATTACKDESC& _tAttackDesc);
 
 public:
 	virtual void Hit(const ATTACKDESC& _tAttackDesc);

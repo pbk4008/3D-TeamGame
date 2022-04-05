@@ -35,6 +35,7 @@ public:
 	virtual HRESULT Render() override;
 public:
 	virtual void Set_Remove(_bool bCheck) override;
+	virtual void Hit(const ATTACKDESC& _tAttackDesc) override;
 private:
 	virtual void OnTriggerEnter(CCollision& collision) override;
 private:

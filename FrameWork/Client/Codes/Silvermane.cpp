@@ -147,8 +147,11 @@
 
 //////////////////////////////////////////// Hit
 #include "1H_FlinchLeft.h"
-#include "1H_KnockBack_Land.h"
+#include "1H_Stagger.h"
+#include "1H_KnockBack.h"
+#include "Silvermane_KnockBack.h"
 #pragma endregion
+
 #include "Material.h"
 
 CSilvermane::CSilvermane(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
@@ -728,7 +731,11 @@ HRESULT CSilvermane::Ready_States()
 	// ÃÄ¸ÂÀ½
 	if (FAILED(m_pStateController->Add_State(L"1H_FlinchLeft", C1H_FlinchLeft::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
-	if (FAILED(m_pStateController->Add_State(L"1H_KnockBack_Land", C1H_KnockBack_Land::Create(m_pDevice, m_pDeviceContext))))
+	if (FAILED(m_pStateController->Add_State(L"1H_Stagger", C1H_Stagger::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	if (FAILED(m_pStateController->Add_State(L"1H_KnockBack", C1H_KnockBack::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	if (FAILED(m_pStateController->Add_State(L"KnockBack", CSilvermane_KnockBack::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 
 	for (auto& pair : m_pStateController->Get_States())
@@ -981,7 +988,7 @@ void CSilvermane::Set_IsAttack(const _bool _isAttack)
 
 void CSilvermane::Add_PlusAngle(const _float _fDeltaAngle)
 {
-	m_fPlusAngle += _fDeltaAngle * 400.f;
+	m_fPlusAngle += _fDeltaAngle * 360.f;
 
 	//if (0 > _fDeltaAngle)
 	//	m_fPlusAngle -= 2.f;
@@ -1039,9 +1046,12 @@ void CSilvermane::Set_EquipShield(const _bool _isEquipShield)
 {
 	if (m_pShield)
 	{
-		m_pShield->Set_Equip(_isEquipShield);
-		m_isEquipShield = _isEquipShield;
-		m_isBlock = _isEquipShield;
+		if (m_isEquipShield != _isEquipShield)
+		{
+			m_pShield->Set_Equip(_isEquipShield);
+			m_isEquipShield = _isEquipShield;
+			m_isBlock = _isEquipShield;
+		}
 	}
 }
 
@@ -1053,6 +1063,12 @@ void CSilvermane::Set_EquipShieldAnim(const _bool _isEquipShield)
 void CSilvermane::Set_BlockTime(const _float _fValue)
 {
 	m_fBlockTime = _fValue;
+}
+
+void CSilvermane::Set_IsShieldAttack(const _bool _isAttack)
+{
+	if (m_pShield)
+		m_pShield->Set_IsAttack(_isAttack);
 }
 
 void CSilvermane::Add_BlockTime(const _float _fValue)

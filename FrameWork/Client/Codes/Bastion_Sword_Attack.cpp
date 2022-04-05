@@ -21,9 +21,6 @@ HRESULT CBastion_Sword_Attack::NativeConstruct(void* _pArg)
 
 	m_wstrTag = tDesc.pName;
 
-	/*Safe_AddRef(m_pAnimator);
-	Safe_AddRef(m_pTransform);*/
-
 	if (FAILED(CMonster_FSM::NativeConstruct(_pArg)))
 		return E_FAIL;
 
@@ -39,13 +36,73 @@ _int CBastion_Sword_Attack::Tick(const _double& _dDeltaTime)
 
 	m_pAnimator->Tick(_dDeltaTime);
 
-	//무한 루프에 대한 조건 들어갈 자리
+	if (m_pAnimator->Get_CurrentAnimNode() == (_uint)CMonster_Bastion_Sword::ANIM_TYPE::ATTACK_JUMPLOOP)
+		m_pTransform->Face_Target(g_pObserver->Get_PlayerPos());
 
 	if (m_pAnimator->Get_CurrentAnimNode() == (_uint)CMonster_Bastion_Sword::ANIM_TYPE::ATTACK_JUMPLOOP)
 		m_pTransform->Face_Target(g_pObserver->Get_PlayerPos());
 	if (m_pAnimator->Get_CurrentAnimNode() == (_uint)CMonster_Bastion_Sword::ANIM_TYPE::IDLE)
 		m_pStateController->Change_State(L"Idle");
 
+	//keyframe에따라 데미지 다르게 들어가게 
+	CMonster_Bastion_Sword* pMonster = (CMonster_Bastion_Sword*)m_pStateController->Get_GameObject();
+	if (nullptr != pMonster)
+	{
+		_uint iCurKeyFrameIndex = m_pAnimator->Get_AnimController()->Get_CurKeyFrameIndex();
+
+		if ((_uint)CMonster_Bastion_Sword::ANIM_TYPE::ATTACK_SINGLE == m_pAnimator->Get_CurrentAnimNode())
+		{
+			//cout << "Single : " << iCurKeyFrameIndex << endl;
+
+			if (120 < iCurKeyFrameIndex && 150 > iCurKeyFrameIndex)
+			{
+				pMonster->Set_IsAttack(true);
+
+				_float fDamage = 4.f;
+				_uint iLevel = 1;
+				pMonster->Set_AttackDesc_Damaga(fDamage);
+				pMonster->Set_AttackDesc_Level(iLevel);
+			}
+			else
+				pMonster->Set_IsAttack(false);
+		}
+
+		else if ((_uint)CMonster_Bastion_Sword::ANIM_TYPE::ATTACK_DOUBLE == m_pAnimator->Get_CurrentAnimNode())
+		{
+			//cout << "Double : " << iCurKeyFrameIndex << endl;
+
+			if (80 < iCurKeyFrameIndex && 200 > iCurKeyFrameIndex)
+			{
+				pMonster->Set_IsAttack(true);
+
+				_float fDamage = 5.f;
+				_uint iLevel = 1;
+				pMonster->Set_AttackDesc_Damaga(fDamage);
+				pMonster->Set_AttackDesc_Level(iLevel);
+			}
+			else
+			{
+				pMonster->Set_IsAttack(false);
+			}
+		}
+
+		else if ((_uint)CMonster_Bastion_Sword::ANIM_TYPE::ATTACK_JUMPEND == m_pAnimator->Get_CurrentAnimNode())
+		{
+			//cout << "Jump : " << iCurKeyFrameIndex << endl;
+
+			if (50 < iCurKeyFrameIndex && 70 > iCurKeyFrameIndex)
+			{
+				pMonster->Set_IsAttack(true);
+
+				_float fDamage = 5.f;
+				_uint iLevel = 2;
+				pMonster->Set_AttackDesc_Damaga(fDamage);
+				pMonster->Set_AttackDesc_Level(iLevel);
+			}
+			else
+				pMonster->Set_IsAttack(false);
+		}
+	}
 
 	return _int();
 }
@@ -62,7 +119,6 @@ HRESULT CBastion_Sword_Attack::Render()
 
 HRESULT CBastion_Sword_Attack::EnterState(void* pArg)
 {
-	m_pMonster->Set_IsAttack(true);
 	m_eAttackType = (*(ATTACK_TYPE*)pArg);
 
 	switch (m_eAttackType)
@@ -88,6 +144,7 @@ HRESULT CBastion_Sword_Attack::ExitState(void* _pArg)
 {
 	m_pMonster->Set_IsAttack(false);
 
+	//사운드관련 변수
 	m_bSingle = false;
 	m_bDouble = false;
 	m_bJump = false;

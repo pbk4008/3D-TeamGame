@@ -79,7 +79,7 @@ HRESULT CShield_BlockEnd::EnterState()
 	m_pAnimationController->Set_RootMotion(true, true, ERootOption::XYZ);
 
 	m_pSilvermane->Set_EquipShieldAnim(false);
-	m_pSilvermane->Set_IsTrasceCamera(false);
+	//m_pSilvermane->Set_IsTrasceCamera(false);
 	return S_OK;
 }
 
@@ -89,7 +89,7 @@ HRESULT CShield_BlockEnd::ExitState()
 		return E_FAIL;
 
 	m_pSilvermane->Set_EquipShield(false);
-	m_pSilvermane->Set_IsTrasceCamera(true);
+	//m_pSilvermane->Set_IsTrasceCamera(true);
 	m_pSilvermane->Set_BlockTime(0.f);
 	return S_OK;
 }
@@ -116,8 +116,8 @@ _int CShield_BlockEnd::Input(const _double& _dDeltaTime)
 	{
 		if (g_pGameInstance->getMouseKeyDown(CInputDev::MOUSESTATE::MB_LBUTTON))
 		{
-			if (m_pSilvermane->IsEquipWeapon())
-			{
+			//if (m_pSilvermane->IsEquipWeapon())
+			//{
 				switch (m_pSilvermane->Get_WeaponType())
 				{
 				case CWeapon::EType::Sword_1H:
@@ -131,7 +131,7 @@ _int CShield_BlockEnd::Input(const _double& _dDeltaTime)
 					return STATE_CHANGE;
 					break;
 				}
-			}
+			//}
 		}
 		else if (g_pGameInstance->getMouseKeyDown(CInputDev::MOUSESTATE::MB_RBUTTON))
 		{

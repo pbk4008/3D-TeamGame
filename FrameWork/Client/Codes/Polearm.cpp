@@ -49,7 +49,6 @@ HRESULT CPolearm::NativeConstruct_Prototype()
 
 	g_pGameInstance->Add_Material(L"Mtrl_Polearm", pMtrl);
 
-	m_fDamage = 5.f;
 
 	return S_OK;
 }
@@ -64,6 +63,8 @@ HRESULT CPolearm::NativeConstruct(const _uint _iSceneID, void* _pArg)
 
 	if (_pArg)
 		m_pFixedBone = static_cast<CHierarchyNode*>(_pArg);
+
+	m_fDamage = 5.f;
 
 	return S_OK;
 }

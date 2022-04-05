@@ -186,7 +186,8 @@ call Update_Client.bat</Command>
     <ClInclude Include="..\Default\Clinet_Define.h" />
     <ClInclude Include="..\Headers\1H_Dash.h" />
     <ClInclude Include="..\Headers\1H_FlinchLeft.h" />
-    <ClInclude Include="..\Headers\1H_KnockBack_Land.h" />
+    <ClInclude Include="..\Headers\1H_KnockBack.h" />
+    <ClInclude Include="..\Headers\1H_Stagger.h" />
     <ClInclude Include="..\Headers\1H_SwordAttack.h" />
     <ClInclude Include="..\Headers\1H_SwordAttackNormalR1_01.h" />
     <ClInclude Include="..\Headers\1H_SwordAttackNormalR1_02.h" />
@@ -322,6 +323,7 @@ call Update_Client.bat</Command>
     <ClInclude Include="..\Headers\Effect_DeathParticle.h" />
     <ClInclude Include="..\Headers\Effect_Env_Fire.h" />
     <ClInclude Include="..\Headers\Effect_Env_Floating.h" />
+    <ClInclude Include="..\Headers\Effect_Guard.h" />
     <ClInclude Include="..\Headers\Effect_HitFloating.h" />
     <ClInclude Include="..\Headers\Effect_HitParticle.h" />
     <ClInclude Include="..\Headers\Environment.h" />
@@ -406,6 +408,7 @@ call Update_Client.bat</Command>
     <ClInclude Include="..\Headers\Silvermane_JogRight.h" />
     <ClInclude Include="..\Headers\Silvermane_JogRightPivot180.h" />
     <ClInclude Include="..\Headers\Silvermane_JogRightStart.h" />
+    <ClInclude Include="..\Headers\Silvermane_KnockBack.h" />
     <ClInclude Include="..\Headers\Silvermane_Sprint.h" />
     <ClInclude Include="..\Headers\Silvermane_SprintFwd.h" />
     <ClInclude Include="..\Headers\Silvermane_SprintFwdStart.h" />
@@ -465,7 +468,8 @@ call Update_Client.bat</Command>
   <ItemGroup>
     <ClCompile Include="..\Codes\1H_Dash.cpp" />
     <ClCompile Include="..\Codes\1H_FlinchLeft.cpp" />
-    <ClCompile Include="..\Codes\1H_KnockBack_Land.cpp" />
+    <ClCompile Include="..\Codes\1H_KnockBack.cpp" />
+    <ClCompile Include="..\Codes\1H_Stagger.cpp" />
     <ClCompile Include="..\Codes\1H_SwordAttack.cpp" />
     <ClCompile Include="..\Codes\1H_SwordAttackNormalR1_01.cpp" />
     <ClCompile Include="..\Codes\1H_SwordAttackNormalR1_02.cpp" />
@@ -597,6 +601,7 @@ call Update_Client.bat</Command>
     <ClCompile Include="..\Codes\Effect_DeathParticle.cpp" />
     <ClCompile Include="..\Codes\Effect_Env_Fire.cpp" />
     <ClCompile Include="..\Codes\Effect_Env_Floating.cpp" />
+    <ClCompile Include="..\Codes\Effect_Guard.cpp" />
     <ClCompile Include="..\Codes\Effect_HitFloating.cpp" />
     <ClCompile Include="..\Codes\Effect_HitParticle.cpp" />
     <ClCompile Include="..\Codes\Fury.cpp" />
@@ -687,6 +692,7 @@ call Update_Client.bat</Command>
     <ClCompile Include="..\Codes\Silvermane_JogRight.cpp" />
     <ClCompile Include="..\Codes\Silvermane_JogRightPivot180.cpp" />
     <ClCompile Include="..\Codes\Silvermane_JogRightStart.cpp" />
+    <ClCompile Include="..\Codes\Silvermane_KnockBack.cpp" />
     <ClCompile Include="..\Codes\Silvermane_Sprint.cpp" />
     <ClCompile Include="..\Codes\Silvermane_SprintFwd.cpp" />
     <ClCompile Include="..\Codes\Silvermane_SprintFwdStart.cpp" />

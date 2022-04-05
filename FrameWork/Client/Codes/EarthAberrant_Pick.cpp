@@ -75,6 +75,7 @@ HRESULT CEarthAberrant_Pick::NativeConstruct(const _uint _iSceneID, void* pArg)
 		m_pFixedBone = static_cast<CHierarchyNode*>(pArg);
 
 	m_fDamage = 3.f;
+
 	return S_OK;
 }
 

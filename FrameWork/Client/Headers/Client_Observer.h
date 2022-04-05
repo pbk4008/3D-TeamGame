@@ -33,6 +33,10 @@ public:
 	const _float Get_HPRatio();
 	//플레이어 씬 넘어갈때 그대로 가져가야할 데이터들 
 	const CSilvermane::SCENEMOVEDATA Get_SceneMoveData();
+	// 플레이어가 던지거나 패링을 통해 반사하는 오브젝트가 있는지 세팅
+	void Set_IsThrownObject(const _bool _isThrownObject);
+	const _bool IsThrownObject();
+	//플레이어의 공격 애니메이션 시작하는지 
 	const _bool Get_PlayerAttackAnimStart();
 public:
 	//플레이어 공격 셋팅
@@ -42,8 +46,9 @@ public:
 	void Set_PlayerAttackAnimStart(const _bool bAnimStart) { m_bAttackAnimStart = bAnimStart; }
 private:
 	CSilvermane* m_pPlayer;
-private:
-	_bool m_bAttackAnimStart;
+private: /* 옵저버의 고유 멤버변수 */
+	_bool m_isThrownObject = false;
+	_bool m_bAttackAnimStart = false;
 public:
 	virtual void Free(void) override;
 };

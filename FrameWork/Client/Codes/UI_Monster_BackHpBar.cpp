@@ -91,7 +91,8 @@ _int CUI_Monster_BackHpBar::Tick(_double TimeDelta)
 	}
 
 #pragma endregion
-	if (g_pObserver->IsAttack())
+
+	if (g_pObserver->IsAttack() || g_pObserver->IsThrownObject())
 	{
 		if (m_fGapX != m_fHpRatio && false == m_bChange)
 		{

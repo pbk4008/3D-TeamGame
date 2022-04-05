@@ -91,6 +91,16 @@ const _float CClient_Observer::Get_HPRatio()
 	return m_pPlayer->Get_HpRatio();
 }
 
+void CClient_Observer::Set_IsThrownObject(const _bool _isThrownObject)
+{
+	m_isThrownObject = _isThrownObject;
+}
+
+const _bool CClient_Observer::IsThrownObject()
+{
+	return m_isThrownObject;
+}
+
 const CSilvermane::SCENEMOVEDATA CClient_Observer::Get_SceneMoveData()
 {
 	return m_pPlayer->Get_SceneMoveData();

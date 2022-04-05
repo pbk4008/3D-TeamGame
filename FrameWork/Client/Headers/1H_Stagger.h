@@ -4,11 +4,11 @@
 
 BEGIN(Client)
 
-class C1H_FlinchLeft : public CSilvermane_Hit
+class C1H_Stagger : public CSilvermane_Hit
 {
 private:
-	explicit C1H_FlinchLeft(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext);
-	virtual ~C1H_FlinchLeft() = default;
+	explicit C1H_Stagger(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext);
+	virtual ~C1H_Stagger() = default;
 
 public:
 	virtual HRESULT NativeConstruct(void* _pArg = nullptr) override;
@@ -24,7 +24,7 @@ protected:
 	virtual _int Input(const _double& _dDeltaTime);
 
 public:
-	static C1H_FlinchLeft* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext, void* _pArg = nullptr);
+	static C1H_Stagger* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext, void* _pArg = nullptr);
 	virtual void Free() override;
 };
 

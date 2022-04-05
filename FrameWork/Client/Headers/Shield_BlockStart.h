@@ -18,7 +18,7 @@ public:
 	virtual HRESULT ExitState();
 
 	virtual void OnTriggerEnter(CCollision& collision) override;
-	virtual void Block(const ATTACKDESC& _tAttackDesc) override;
+	//virtual void Block(const ATTACKDESC& _tAttackDesc) override;
 
 public:
 	virtual _int Input(const _double& _dDeltaTime) override;

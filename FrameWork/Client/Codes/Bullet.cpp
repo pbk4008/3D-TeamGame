@@ -53,6 +53,8 @@ HRESULT CBullet::NativeConstruct(const _uint _iSceneID, void* _pArg)
 	if (FAILED(Ready_Component(_iSceneID)))
 		return E_FAIL;
 
+	m_fDamage = 3.f;
+
 	return S_OK;
 }
 
@@ -63,6 +65,9 @@ _int CBullet::Tick(_double _dDeltaTime)
 		return 0;
 
 	m_pCollider->Tick(_dDeltaTime);
+
+	if ((_uint)GAMEOBJECT::PLAYER == m_pOwner->getTag() && !m_bRemove)
+		g_pObserver->Set_IsThrownObject(true);
 
 	return _int();
 }
@@ -140,12 +145,33 @@ HRESULT CBullet::Set_Spawn()
 	return S_OK;
 }
 
+CActor* CBullet::Get_Owner() const
+{
+	return m_pOwner;
+}
+
+void CBullet::Set_Owner(CActor* _pOwner)
+{
+	m_pOwner = _pOwner;
+}
+
 void CBullet::OnTriggerEnter(CCollision& collision)
 {
-	if (collision.pGameObject->getTag() == (_uint)GAMEOBJECT::PLAYER)
+	_uint iTag = collision.pGameObject->getTag();
+	if (iTag == m_pOwner->getTag())
+		return;
+
+	if ((_uint)GAMEOBJECT::PLAYER == iTag ||
+		(_uint)GAMEOBJECT::MONSTER_SHOOTER == iTag)
 	{
+		ATTACKDESC tAttackDesc = m_pOwner->Get_AttackDesc();
+		tAttackDesc.fDamage += m_fDamage;
+		tAttackDesc.pHitObject = this;
+		static_cast<CActor*>(collision.pGameObject)->Hit(tAttackDesc);
+
 		setActive(false);
 		m_bRemove = true;
+		g_pObserver->Set_IsThrownObject(false);
 	}
 }
 
