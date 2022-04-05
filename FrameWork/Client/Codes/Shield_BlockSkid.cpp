@@ -55,6 +55,7 @@ HRESULT CShield_BlockSkid::EnterState()
 	m_pAnimationController->SetUp_NextAnimation("SK_Silvermane.ao|A_Spectral_Shield_Block_Skid", false);
 	m_pAnimationController->Set_RootMotion(true, true, ERootOption::XYZ);
 
+	m_iCutIndex = 20;
 	return S_OK;
 }
 

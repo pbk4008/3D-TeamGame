@@ -468,6 +468,13 @@ void CState_Silvermane::Hit(const ATTACKDESC& _tAttackDesc)
 		eDirLR = EDir::Left;
 
 	m_pSilvermane->Add_HP(-_tAttackDesc.fDamage);
+
+	if (EDir::Backward == eDirFB && 1 < _tAttackDesc.iLevel)
+	{
+		m_pStateController->Change_State(L"KnockBack", &eDirFB);
+		return;
+	}
+
 	switch (_tAttackDesc.iLevel)
 	{
 	case 1:
@@ -475,18 +482,14 @@ void CState_Silvermane::Hit(const ATTACKDESC& _tAttackDesc)
 		return;
 		break;
 	case 2:
-		switch (eDirFB)
-		{
-		case EDir::Forward:
-			m_pStateController->Change_State(L"1H_KnockBack_Land");
-			break;
-		case EDir::Backward:
-			m_pStateController->Change_State(L"KnockBack", &eDirFB);
-			break;
-		}
+		m_pStateController->Change_State(L"1H_Stagger", &eDirLR);
 		return;
 		break;
 	case 3:
+		m_pStateController->Change_State(L"1H_KnockBack");
+		return;
+		break;
+	case 4:
 		m_pStateController->Change_State(L"KnockBack", &eDirFB);
 		return;
 		break;
@@ -577,52 +580,53 @@ void CState_Silvermane::Block(const ATTACKDESC& _tAttackDesc)
 		eDirFB = EDir::Backward;
 	
 	_float fBlockTime = m_pSilvermane->Get_BlockTime();
-	if (EDir::Forward == eDirFB)
-	{
-		// 아직 패링이 가능해!
-		if (0.5f > fBlockTime)
-		{
-			if ((_uint)GAMEOBJECT::WEAPON_BULLET == _tAttackDesc.pHitObject->getTag())
-			{
-				Reflect_Bullet(_tAttackDesc);
-			}
-
-			switch (_tAttackDesc.iLevel)
-			{
-			case 1:
-				m_pStateController->Change_State(L"Shield_Parry");
-				return;
-				break;
-			case 2:
-
-				break;
-			case 3:
-
-				break;
-			}
-		}
-		else
-		{
-			switch (_tAttackDesc.iLevel)
-			{
-			case 1:
-				m_pStateController->Change_State(L"Shield_BlockSkid");
-				return;
-				break;
-			case 2:
-
-				break;
-			case 3:
-
-				break;
-			}
-		}
-	}
-	else
+	if (EDir::Backward == eDirFB && 1 < _tAttackDesc.iLevel)
 	{
 		m_pSilvermane->Set_EquipShield(false);
 		m_pSilvermane->Set_EquipShieldAnim(false);
 		m_pStateController->Change_State(L"KnockBack", &eDirFB);
+		return;
+	}
+
+	// 아직 패링이 가능해!
+	if (0.5f > fBlockTime)
+	{
+		if ((_uint)GAMEOBJECT::WEAPON_BULLET == _tAttackDesc.pHitObject->getTag())
+		{
+			Reflect_Bullet(_tAttackDesc);
+		}
+
+		switch (_tAttackDesc.iLevel)
+		{
+		case 1:
+		case 2:
+			m_pStateController->Change_State(L"Shield_Parry");
+			return;
+			break;
+		case 3:
+
+			break;
+		case 4:
+
+			break;
+		}
+	}
+	else
+	{
+		switch (_tAttackDesc.iLevel)
+		{
+		case 1:
+		case 2:
+			m_pStateController->Change_State(L"Shield_BlockSkid");
+			return;
+			break;
+		case 3:
+
+			break;
+		case 4:
+
+			break;
+		}
 	}
 
 	//m_pSilvermane->Add_HP(-_tAttackDesc.fDamage);

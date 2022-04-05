@@ -147,7 +147,8 @@
 
 //////////////////////////////////////////// Hit
 #include "1H_FlinchLeft.h"
-#include "1H_KnockBack_Land.h"
+#include "1H_Stagger.h"
+#include "1H_KnockBack.h"
 #include "Silvermane_KnockBack.h"
 #pragma endregion
 
@@ -730,7 +731,9 @@ HRESULT CSilvermane::Ready_States()
 	// ÃÄ¸ÂÀ½
 	if (FAILED(m_pStateController->Add_State(L"1H_FlinchLeft", C1H_FlinchLeft::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
-	if (FAILED(m_pStateController->Add_State(L"1H_KnockBack_Land", C1H_KnockBack_Land::Create(m_pDevice, m_pDeviceContext))))
+	if (FAILED(m_pStateController->Add_State(L"1H_Stagger", C1H_Stagger::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	if (FAILED(m_pStateController->Add_State(L"1H_KnockBack", C1H_KnockBack::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 	if (FAILED(m_pStateController->Add_State(L"KnockBack", CSilvermane_KnockBack::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;

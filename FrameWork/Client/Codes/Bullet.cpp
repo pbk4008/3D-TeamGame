@@ -66,6 +66,9 @@ _int CBullet::Tick(_double _dDeltaTime)
 
 	m_pCollider->Tick(_dDeltaTime);
 
+	if ((_uint)GAMEOBJECT::PLAYER == m_pOwner->getTag() && !m_bRemove)
+		g_pObserver->Set_IsThrownObject(true);
+
 	return _int();
 }
 
@@ -168,6 +171,7 @@ void CBullet::OnTriggerEnter(CCollision& collision)
 
 		setActive(false);
 		m_bRemove = true;
+		g_pObserver->Set_IsThrownObject(false);
 	}
 }
 

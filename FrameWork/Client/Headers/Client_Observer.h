@@ -31,6 +31,11 @@ public:
 	const _float Get_MaxHP();
 	//플레이어의 최대체력과 현재체력의 비율 가져오기
 	const _float Get_HPRatio();
+	// 플레이어가 던지거나 패링을 통해 반사하는 오브젝트가 있는지 세팅
+	void Set_IsThrownObject(const _bool _isThrownObject);
+	const _bool IsThrownObject();
+
+
 
 	const CSilvermane::SCENEMOVEDATA Get_SceneMoveData();
 public:
@@ -40,6 +45,11 @@ public:
 	void MinusHp(const _float fDamage);
 private:
 	CSilvermane* m_pPlayer;
+
+	
+private: /* 옵저버의 고유 멤버변수 */
+	_bool m_isThrownObject = false;
+
 public:
 	virtual void Free(void) override;
 };

@@ -4,11 +4,11 @@
 
 BEGIN(Client)
 
-class C1H_KnockBack_Land : public CSilvermane_Hit
+class C1H_KnockBack : public CSilvermane_Hit
 {
 private:
-	explicit C1H_KnockBack_Land(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext);
-	virtual ~C1H_KnockBack_Land() = default;
+	explicit C1H_KnockBack(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext);
+	virtual ~C1H_KnockBack() = default;
 
 public:
 	virtual HRESULT NativeConstruct(void* _pArg = nullptr) override;
@@ -23,7 +23,7 @@ protected:
 	virtual _int Input(const _double & _dDeltaTime);
 
 public:
-	static C1H_KnockBack_Land* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext, void* _pArg = nullptr);
+	static C1H_KnockBack* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext, void* _pArg = nullptr);
 	virtual void Free() override;
 };
 

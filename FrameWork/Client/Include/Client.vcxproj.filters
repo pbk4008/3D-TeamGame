@@ -1524,7 +1524,7 @@
     <ClInclude Include="..\Headers\Shield_BlockSkid.h">
       <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Shield\Block</Filter>
     </ClInclude>
-    <ClInclude Include="..\Headers\1H_KnockBack_Land.h">
+    <ClInclude Include="..\Headers\1H_KnockBack.h">
       <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\HIt</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\Silvermane_KnockBack.h">
@@ -1532,6 +1532,9 @@
     </ClInclude>
     <ClInclude Include="..\Headers\Effect_Guard.h">
       <Filter>02.GameObject\04.Effect\00.Particle\06.Effect_Guard</Filter>
+	</ClInclude>
+    <ClInclude Include="..\Headers\1H_Stagger.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\HIt</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -2370,7 +2373,7 @@
     <ClCompile Include="..\Codes\Shield_BlockSkid.cpp">
       <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Shield\Block</Filter>
     </ClCompile>
-    <ClCompile Include="..\Codes\1H_KnockBack_Land.cpp">
+    <ClCompile Include="..\Codes\1H_KnockBack.cpp">
       <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\HIt</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\Silvermane_KnockBack.cpp">
@@ -2378,6 +2381,9 @@
     </ClCompile>
     <ClCompile Include="..\Codes\Effect_Guard.cpp">
       <Filter>02.GameObject\04.Effect\00.Particle\06.Effect_Guard</Filter>
+	</ClCompile>
+    <ClCompile Include="..\Codes\1H_Stagger.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\HIt</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
