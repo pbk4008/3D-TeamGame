@@ -47,7 +47,7 @@ HRESULT CEffect_Guard::NativeConstruct(const _uint _iSceneID, void* pArg)
 	{
 		return E_FAIL;
 	}
-
+	m_Desc.iNumInstance = 100;
 	CVIBuffer_PointInstance_Explosion::PIDESC Desc;
 	_tcscpy_s(Desc.ShaderFilePath, m_Desc.ShaderFullFilePath);
 	Desc.matParticle = m_Desc.ParticleMat;
@@ -114,7 +114,7 @@ HRESULT CEffect_Guard::Render()
 	m_pBuffer->SetUp_ValueOnShader("g_fLifeTime", &m_Desc.fMaxLifeTime, sizeof(_float));
 	m_pBuffer->SetUp_ValueOnShader("g_fCurTime", &m_Desc.fCurTime, sizeof(_float));
 
-	_float3 color = { 1.f, 1.f, 1.f };
+	_float3 color = { 0.3f, 0.3f, 1.f };
 	m_pBuffer->SetUp_ValueOnShader("g_color", &color, sizeof(_float3));
 
 	m_pBuffer->SetUp_ValueOnShader("g_vCamPosition", (void*)&CamPos, sizeof(_vector));

@@ -72,8 +72,8 @@ HRESULT CStage1::NativeConstruct()
 	if (FAILED(Ready_Player(L"Layer_Silvermane")))
 		return E_FAIL;
 
-	//if (FAILED(Ready_MapObject()))
-	//	return E_FAIL;
+	if (FAILED(Ready_MapObject()))
+		return E_FAIL;
 
 	//if (FAILED(Ready_TriggerSystem(L"../bin/SaveData/Trigger/MonsterSpawnTrigger.dat")))
 	//	return E_FAIL;
@@ -157,9 +157,9 @@ _int CStage1::Tick(_double TimeDelta)
 	if (g_pGameInstance->getkeyDown(DIK_BACKSPACE))
 	{
 		_float3 fPos = { 0.f,5.f,10.f };
-		CMonster_Bastion_Sword* pMonster = nullptr;
+		CMonster_Bastion_Spear* pMonster = nullptr;
 
-		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Test", L"Proto_GameObject_Monster_Bastion_Sword", &fPos, (CGameObject**)&pMonster)))
+		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Test", L"Proto_GameObject_Monster_Bastion_Spear", &fPos, (CGameObject**)&pMonster)))
 			return -1;
 
 		/*CMonster_Bastion_Shooter* pShooter = nullptr;

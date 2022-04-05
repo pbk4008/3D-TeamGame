@@ -592,7 +592,7 @@ void CMonster_Bastion_Spear::Groggy_Start()
 
 void CMonster_Bastion_Spear::Hit(CCollision& collision)
 {
-	if (!Get_Dead())
+	if (!m_bDead)
 	{
 		if (true == g_pObserver->IsAttack()) //플레이어공격일때
 		{
@@ -613,15 +613,16 @@ void CMonster_Bastion_Spear::Hit(CCollision& collision)
 					Set_Current_HP(-1);
 					Set_GroggyGauge(2); //TODO::수치정해서바꿔줘야됨
 					m_pStateController->Change_State(L"Hit");
+					Active_Effect((_uint)EFFECT::HIT);
+					Active_Effect((_uint)EFFECT::FLOATING);
 				}
 				else
 				{
 					m_iGuardCount--;
 					if (m_iGuardCount < 0)
 						m_iGuardCount = 0;
+					Active_Effect((_uint)EFFECT::GUARD);
 				}
-				Active_Effect((_uint)EFFECT::HIT);
-				Active_Effect((_uint)EFFECT::FLOATING);
 				m_pPanel->Set_HpBar(Get_HpRatio());
 
 				if (false == m_bGroggy)
