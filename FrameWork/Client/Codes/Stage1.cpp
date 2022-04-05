@@ -31,6 +31,9 @@
 #include <Monster_Bastion_Sword.h>
 #include <Monster_Bastion_Shooter.h>
 
+#include "Monster_Bastion_Spear.h"
+#include "Monster_BronzeAnimus.h"
+
 CStage1::CStage1()
 	: m_pTriggerSystem(nullptr)
 	, m_bDebug(false)

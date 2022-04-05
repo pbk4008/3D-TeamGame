@@ -61,6 +61,8 @@ HRESULT C1H_SwordIdle::EnterState()
 	m_pAnimationController->Set_RootMotion(true, true, ERootOption::XYZ);
 
 	m_pSilvermane->Set_IsTrasceCamera(true);
+
+	g_pObserver->Set_PlayerAttackAnimStart(false);
 	return S_OK;
 }
 

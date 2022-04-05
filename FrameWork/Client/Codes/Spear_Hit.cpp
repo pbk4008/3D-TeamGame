@@ -31,6 +31,10 @@ _int CSpear_Hit::Tick(const _double& _dDeltaTime)
 		return iProgress;
 
 	m_pAnimator->Tick(_dDeltaTime);
+	if (m_pAnimator->Get_CurrentAnimation()->Is_Finished())
+	{
+		m_pStateController->Change_State(L"Idle");
+	}
 
 	return _int();
 }
@@ -80,22 +84,6 @@ void CSpear_Hit::Look_Player(void)
 
 void CSpear_Hit::Look_Monster(void)
 {
-	CAnimation* pAnim = m_pAnimator->Get_CurrentAnimation();
-
-	if (pAnim->Is_Finished() && 0 < m_pMonster->Get_CurrentHp())
-		m_pStateController->Change_State(L"Idle");
-
-	else if (0 >= m_pMonster->Get_CurrentHp() && !m_pMonster->Get_Dead())
-	{
-		static_cast<CMonster_Bastion_Spear*>(m_pMonster)->Set_Dead();
-		static_cast<CMonster_Bastion_Spear*>(m_pMonster)->Remove_Collider();
-
-		CLevel* pLevel = g_pGameInstance->getCurrentLevelScene();
-		if (g_pGameInstance->getCurrentLevel() == (_uint)SCENEID::SCENE_STAGE2)
-			static_cast<CStage2*>(pLevel)->Minus_MonsterCount();
-
-		m_pStateController->Change_State(L"Death");
-	}
 }
 
 CSpear_Hit* CSpear_Hit::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext, void* _pArg)

@@ -59,6 +59,7 @@ HRESULT C2H_HammerIdle::EnterState()
 	m_pAnimationController->SetUp_NextAnimation("SK_Silvermane.ao|A_2H_Hammer_Pose_Normal", true);
 	m_pAnimationController->Set_RootMotion(true, true, ERootOption::XYZ);
 
+	g_pObserver->Set_PlayerAttackAnimStart(false);
 	return S_OK;
 }
 

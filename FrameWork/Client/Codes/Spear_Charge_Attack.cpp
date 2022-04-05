@@ -57,7 +57,7 @@ HRESULT CSpear_Charge_Attack::EnterState()
 	if (FAILED(__super::EnterState()))
 		return E_FAIL;
 
-	m_bChargeOn = true;
+	//m_bChargeOn = true;
 	if(!m_bAttack)
 		m_pAnimator->Change_AnyEntryAnimation((_uint)CMonster_Bastion_Spear::ANIM_TYPE::A_ATTACK_CHARGE_ST);
 
