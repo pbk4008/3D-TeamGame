@@ -59,7 +59,7 @@ _int CBastion_Sword_Chase::Tick(const _double& _dDeltaTime)
 		}
 	}
 	//해당 애니메이션이 종착 애니메이션에 도달하면 상태머신의 상태 변경
-	if (!m_pAnimator->Get_IsLerp()&&m_pAnimator->Get_CurrentAnimNode() == (_uint)CMonster_Bastion_Sword::ANIM_TYPE::IDLE)
+	if (!m_pAnimator->Get_IsLerp() && m_pAnimator->Get_CurrentAnimNode() == (_uint)CMonster_Bastion_Sword::ANIM_TYPE::IDLE)
 		m_pStateController->Change_State(L"Idle");
 
 	return _int();

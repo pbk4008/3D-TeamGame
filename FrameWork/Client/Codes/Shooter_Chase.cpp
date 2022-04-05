@@ -33,19 +33,18 @@ _int CShooter_Chase::Tick(const _double& _dDeltaTime)
 	if (!m_pAnimator || !m_pStateController)
 		return -1;
 
-	cout << "chase" << endl;
 	//애니메이션 진행
 	//쫓기 시작 -쫓기 루프 -쫓기 끝의 루프를 진행
 
 	m_pAnimator->Tick(_dDeltaTime);
-	_uint index = m_pAnimator->Get_CurrentAnimNode();
-
 	m_pTransform->Face_Target(g_pObserver->Get_PlayerPos());
-	//일정 거리가 되면 바로 공격
-	_vector vPlayerPos = g_pObserver->Get_PlayerPos();
-	_vector vPos = m_pTransform->Get_State(CTransform::STATE_POSITION);
 
-	_float fDist = XMVectorGetX(XMVector3Length(vPlayerPos - vPos));
+	_uint index = m_pAnimator->Get_CurrentAnimNode();
+	//일정 거리가 되면 바로 공격
+	if (m_pAnimator->Get_CurrentAnimNode() == (_uint)CMonster_Bastion_Shooter::ANIM_TYPE::RUN_LOOP)
+		Chase_Target(_dDeltaTime);
+
+	_float fDist = g_pObserver->Get_Dist(m_pTransform->Get_State(CTransform::STATE_POSITION));
 	if (fDist < 10.f)
 	{
 		g_pGameInstance->Play_Shot(L"Shooter_Reload", CSoundMgr::CHANNELID::Shooter_Attack_2);
@@ -95,6 +94,20 @@ HRESULT CShooter_Chase::EnterState(void* pArg)
 HRESULT CShooter_Chase::ExitState(void* pArg)
 {
 	return S_OK;
+}
+
+void CShooter_Chase::Chase_Target(_double dDeltaTime)
+{
+
+	_vector vPlayerPos = g_pObserver->Get_PlayerPos();
+	_vector vPos = m_pTransform->Get_State(CTransform::STATE_POSITION);
+
+	_vector vDir = vPlayerPos - vPos;
+	vDir = XMVector3Normalize(vDir);
+
+	vDir *= dDeltaTime*3.f;
+
+	m_pTransform->Add_Velocity(vDir);
 }
 
 CShooter_Chase* CShooter_Chase::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext, void* _pArg)

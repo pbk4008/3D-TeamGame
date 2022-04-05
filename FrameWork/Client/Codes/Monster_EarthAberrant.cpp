@@ -104,7 +104,7 @@ HRESULT CMonster_EarthAberrant::NativeConstruct(const _uint _iSceneID, void* _pA
 	m_tAttackDesc.iLevel = 1;
 	m_tAttackDesc.fDamage = 3.f;
 
-	setActive(false);
+	//setActive(false);
 
 	return S_OK;
 }
@@ -115,7 +115,9 @@ _int CMonster_EarthAberrant::Tick(_double _dDeltaTime)
 	{
 		return -1;
 	}
-
+	string str;
+	str.assign(m_pStateController->Get_CurStateTag().begin(), m_pStateController->Get_CurStateTag().end());
+	cout << str << endl;
 	m_pTransform->Set_Velocity(XMVectorZero());
 	m_pPanel->Set_TargetWorldMatrix(m_pTransform->Get_WorldMatrix());
 

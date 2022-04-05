@@ -65,10 +65,9 @@ HRESULT CAnimator::NativeConstruct(void* pArg)
 _int CAnimator::Tick(_double dDeltaTime)
 {
 	m_pController->Tick(dDeltaTime, m_eType);
-	if (m_pController->Get_ChangeAnimation())
+	if (!m_pController->Get_ChangeAnimation())
 	{
 		m_pCulAnimNode = m_pChangeNode;
-		m_pController->Set_IsChange(false);
 		m_bLerp = false;
 	}
 

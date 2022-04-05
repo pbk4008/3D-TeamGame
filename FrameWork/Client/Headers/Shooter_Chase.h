@@ -23,6 +23,8 @@ public:
 	virtual HRESULT ExitState();
 	virtual HRESULT EnterState(void* pArg);
 	virtual HRESULT ExitState(void* pArg);
+private:
+	void Chase_Target(_double dDeltaTime);
 public:
 	static CShooter_Chase* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext, void* _pArg = nullptr);
 private:
