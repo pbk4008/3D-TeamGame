@@ -450,6 +450,9 @@ void CState_Silvermane::Hit(const ATTACKDESC& _tAttackDesc)
 	//}
 #pragma endregion
 
+	if (m_pSilvermane->IsHit())
+		return;
+
 	EDir eDirFB = EDir::Max;
 	EDir eDirLR = EDir::Max;
 	_vector svDir = XMVector3Normalize(XMVectorSetY(_tAttackDesc.pOwner->Get_Transform()->Get_State(CTransform::STATE_POSITION) - m_pTransform->Get_State(CTransform::STATE_POSITION), 0.f));
@@ -568,6 +571,9 @@ void CState_Silvermane::Block(const ATTACKDESC& _tAttackDesc)
 	//	break;
 	//}
 #pragma endregion
+
+	if (m_pSilvermane->IsHit())
+		return;
 
 	EDir eDirFB = EDir::Max;
 	_vector svDir = XMVector3Normalize(XMVectorSetY(_tAttackDesc.pOwner->Get_Transform()->Get_State(CTransform::STATE_POSITION) - m_pTransform->Get_State(CTransform::STATE_POSITION), 0.f));
