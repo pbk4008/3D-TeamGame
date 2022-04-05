@@ -323,6 +323,7 @@ call Update_Client.bat</Command>
     <ClInclude Include="..\Headers\Effect_DeathParticle.h" />
     <ClInclude Include="..\Headers\Effect_Env_Fire.h" />
     <ClInclude Include="..\Headers\Effect_Env_Floating.h" />
+    <ClInclude Include="..\Headers\Effect_Guard.h" />
     <ClInclude Include="..\Headers\Effect_HitFloating.h" />
     <ClInclude Include="..\Headers\Effect_HitParticle.h" />
     <ClInclude Include="..\Headers\Environment.h" />
@@ -608,6 +609,7 @@ call Update_Client.bat</Command>
     <ClCompile Include="..\Codes\Effect_DeathParticle.cpp" />
     <ClCompile Include="..\Codes\Effect_Env_Fire.cpp" />
     <ClCompile Include="..\Codes\Effect_Env_Floating.cpp" />
+    <ClCompile Include="..\Codes\Effect_Guard.cpp" />
     <ClCompile Include="..\Codes\Effect_HitFloating.cpp" />
     <ClCompile Include="..\Codes\Effect_HitParticle.cpp" />
     <ClCompile Include="..\Codes\Fury.cpp" />

@@ -19,6 +19,8 @@ public:
 
 	virtual HRESULT EnterState();
 	virtual HRESULT ExitState();
+	virtual HRESULT EnterState(void* pArg);
+	virtual HRESULT ExitState(void* pArg);
 
 public:
 	virtual void Look_Player(void) override;

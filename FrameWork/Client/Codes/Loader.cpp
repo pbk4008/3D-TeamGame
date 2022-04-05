@@ -37,6 +37,7 @@
 #include "Effect_DeathParticle.h"
 #include "Effect_Env_Floating.h"
 #include "Effect_Env_Fire.h"
+#include "Effect_Guard.h"
 #include "UI_Ingame.h"
 #include "UI_Player_HpBar.h"
 #include "UI_Player_HpBar_Red.h"
@@ -554,6 +555,11 @@ HRESULT CLoader::Load_Stage1EffectLoad()
 		return E_FAIL;
 	}
 
+	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_Effect_Guard"), CEffect_Guard::Create(m_pDevice, m_pDeviceContext))))
+	{
+		return E_FAIL;
+	}
+
 	//Effect Image
 	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_Effect_Env_Fire"), CEffect_Env_Fire::Create(m_pDevice, m_pDeviceContext))))
 	{
@@ -679,32 +685,33 @@ HRESULT CLoader::Set_Stage2_Prototype()
 HRESULT CLoader::Load_Stage2_Object()
 {
 	//BronzeAnimus
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE2, L"Model_BronzeAnimus", CModel::Create(m_pDevice, m_pDeviceContext,
-		L"../bin/FBX/Monster/BronzeAnimus_Bin.fbx", CModel::TYPE_ANIM, true))))
-		return E_FAIL;
-	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Monster_BronzeAnimus", CMonster_BronzeAnimus::Create(m_pDevice, m_pDeviceContext))))
-		return E_FAIL;
-
 	_matrix matPivot = XMMatrixIdentity();
-	//weapon
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE2, L"Model_BronzeAnimus_Sword", CModel::Create(m_pDevice, m_pDeviceContext,
-		"../bin/Resources/Mesh/BronzeAnimus_Sword/", "BronzeAnimus_Sword.fbx",
-		L"../../Reference/ShaderFile/Shader_Weapon.hlsl", matPivot, CModel::TYPE_STATIC, true))))
-	{
-		return E_FAIL;
-	}
-	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Weapon_BronzeAnimus_Sword", CBronzeAnimus_Sword::Create(m_pDevice, m_pDeviceContext))))
-		return E_FAIL;
+	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Model_BronzeAnimus", CModel::Create(m_pDevice, m_pDeviceContext,
+	//	L"../bin/FBX/Monster/BronzeAnimus_Bin.fbx", CModel::TYPE_ANIM, true))))
+	//	return E_FAIL;
+	//if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Monster_BronzeAnimus", CMonster_BronzeAnimus::Create(m_pDevice, m_pDeviceContext))))
+	//	return E_FAIL;
+
+
+	////weapon
+	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Model_BronzeAnimus_Sword", CModel::Create(m_pDevice, m_pDeviceContext,
+	//	"../bin/Resources/Mesh/BronzeAnimus_Sword/", "BronzeAnimus_Sword.fbx",
+	//	L"../../Reference/ShaderFile/Shader_Weapon.hlsl", matPivot, CModel::TYPE_STATIC, true))))
+	//{
+	//	return E_FAIL;
+	//}
+	//if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Weapon_BronzeAnimus_Sword", CBronzeAnimus_Sword::Create(m_pDevice, m_pDeviceContext))))
+	//	return E_FAIL;
 
 	//Bastion Spear
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Spear", CModel::Create(m_pDevice, m_pDeviceContext,
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Model_Bastion_Spear", CModel::Create(m_pDevice, m_pDeviceContext,
 		L"../bin/FBX/Monster/Bastion_HonerGuard_Bin.fbx", CModel::TYPE_ANIM, true))))
 		return E_FAIL;
 	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Monster_Bastion_Spear", CMonster_Bastion_Spear::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 
 	////weapon
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Polearm", CModel::Create(m_pDevice, m_pDeviceContext,
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Model_Polearm", CModel::Create(m_pDevice, m_pDeviceContext,
 		"../bin/Resources/Mesh/Polearm/", "Bastion_Polearm.fbx",
 		L"../../Reference/ShaderFile/Shader_Weapon.hlsl", matPivot, CModel::TYPE_STATIC, true))))
 		return E_FAIL;
@@ -1017,6 +1024,8 @@ HRESULT CLoader::Ready_Stage1()
 		return E_FAIL;
 	}
 
+	if (FAILED(Load_Stage2_Object()))
+		return E_FAIL;
 	return S_OK;
 }
 

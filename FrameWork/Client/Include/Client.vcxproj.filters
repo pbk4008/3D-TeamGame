@@ -591,9 +591,6 @@
     <Filter Include="02.GameObject\02.Map\01.Environment\02.MapObject">
       <UniqueIdentifier>{6c74a239-aae4-4275-b01a-ea48c53eae4c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObject\04.Effect\05.TrailEffect">
-      <UniqueIdentifier>{4da4394f-ff21-4396-a0e8-24986eaeec60}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObject\04.Effect\00.Particle">
       <UniqueIdentifier>{26ffc168-b02c-40a4-b7fb-3fa6ef6e68d1}</UniqueIdentifier>
     </Filter>
@@ -659,6 +656,9 @@
     </Filter>
     <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_Healer\State_Healer\Run">
       <UniqueIdentifier>{6c4f4213-7978-4785-9bab-d674b1588fbf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\04.Effect\00.Particle\06.Effect_Guard">
+      <UniqueIdentifier>{a0e663ef-dcdc-4443-8e69-2f05e2663463}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -1530,6 +1530,9 @@
     <ClInclude Include="..\Headers\Silvermane_KnockBack.h">
       <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\HIt</Filter>
     </ClInclude>
+    <ClInclude Include="..\Headers\Effect_Guard.h">
+      <Filter>02.GameObject\04.Effect\00.Particle\06.Effect_Guard</Filter>
+	</ClInclude>
     <ClInclude Include="..\Headers\1H_Stagger.h">
       <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\HIt</Filter>
     </ClInclude>
@@ -2400,6 +2403,9 @@
     <ClCompile Include="..\Codes\Silvermane_KnockBack.cpp">
       <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\HIt</Filter>
     </ClCompile>
+    <ClCompile Include="..\Codes\Effect_Guard.cpp">
+      <Filter>02.GameObject\04.Effect\00.Particle\06.Effect_Guard</Filter>
+	</ClCompile>
     <ClCompile Include="..\Codes\1H_Stagger.cpp">
       <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\HIt</Filter>
     </ClCompile>

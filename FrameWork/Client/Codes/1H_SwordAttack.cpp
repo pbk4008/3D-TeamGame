@@ -73,7 +73,7 @@ HRESULT C1H_SwordAttack::EnterState()
 	m_tShakeEvent.tWaveZ.fFrequency = 8.f;
 
 	m_pAnimationController->Set_PlaySpeed(1.2f);
-
+	g_pObserver->Set_PlayerAttackAnimStart(true);
 	return S_OK;
 }
 
