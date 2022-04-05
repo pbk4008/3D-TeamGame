@@ -1041,7 +1041,7 @@ void CUI_Monster_Panel::Update_Setting_Crawler(_double TimeDelta)
 {
 	//Panel pos Setting
 	_matrix SettingMat = XMMatrixIdentity();
-	SettingMat.r[3] = { 0.f, 2.f, 0.f , 1.f };
+	SettingMat.r[3] = { 0.f, 1.5f, 0.f , 1.f };
 	_matrix TargetSettinMat = SettingMat * XMLoadFloat4x4(&m_TargetMatrix); //몬스터(타겟)위치
 
 	//_vector temp = { 0.f, 0.f, 0.f, 0.f };
@@ -1083,7 +1083,7 @@ void CUI_Monster_Panel::Update_Setting_Crawler(_double TimeDelta)
 	_float fDistToUI = XMVectorGetX(XMVector3Length(vDist));
 
 	_vector vScale = XMVectorZero();
-	vScale = { fDistToUI * 0.15f,fDistToUI * 0.15f,1.f,1.f };
+	vScale = { fDistToUI * 0.12f,fDistToUI * 0.12f,1.f,1.f };
 	m_pTransform->Scaling(vScale);
 
 	//UI Back
@@ -1156,7 +1156,7 @@ void CUI_Monster_Panel::Update_Setting_Aberrant(_double TimeDelta)
 	_float fDistToUI = XMVectorGetX(XMVector3Length(vDist));
 
 	_vector vScale = XMVectorZero();
-	vScale = { fDistToUI * 0.15f,fDistToUI * 0.15f,1.f,1.f };
+	vScale = { fDistToUI * 0.12f,fDistToUI * 0.12f,1.f,1.f };
 	m_pTransform->Scaling(vScale);
 
 	//UI Back
@@ -1229,7 +1229,7 @@ void CUI_Monster_Panel::Update_Setting_Animus(_double TimeDelta)
 	_float fDistToUI = XMVectorGetX(XMVector3Length(vDist));
 
 	_vector vScale = XMVectorZero();
-	vScale = { fDistToUI * 0.15f,fDistToUI * 0.15f,1.f,1.f };
+	vScale = { fDistToUI * 0.12f,fDistToUI * 0.12f,1.f,1.f };
 	m_pTransform->Scaling(vScale);;
 
 	//UI Back
@@ -1302,7 +1302,7 @@ void CUI_Monster_Panel::Update_Setting_Sword(_double TimeDelta)
 	_float fDistToUI = XMVectorGetX(XMVector3Length(vDist));
 
 	_vector vScale = XMVectorZero();
-	vScale = { fDistToUI * 0.15f,fDistToUI * 0.15f,1.f,1.f };
+	vScale = { fDistToUI * 0.12f,fDistToUI * 0.12f,1.f,1.f };
 	m_pTransform->Scaling(vScale);
 
 	//UI Back
@@ -1375,7 +1375,7 @@ void CUI_Monster_Panel::Update_Setting_Spear(_double TimeDelta)
 	_float fDistToUI = XMVectorGetX(XMVector3Length(vDist));
 
 	_vector vScale = XMVectorZero();
-	vScale = { fDistToUI * 0.15f,fDistToUI * 0.15f,1.f,1.f };
+	vScale = { fDistToUI * 0.12f,fDistToUI * 0.12f,1.f,1.f };
 	m_pTransform->Scaling(vScale);
 
 	//UI Back
@@ -1431,7 +1431,7 @@ void CUI_Monster_Panel::Update_Setting_Shooter(_double TimeDelta)
 {
 	//Panel pos Setting
 	_matrix SettingMat = XMMatrixIdentity();
-	SettingMat.r[3] = { 0.f, 2.8f, 0.f , 1.f };
+	SettingMat.r[3] = { 0.f, 2.5f, 0.f , 1.f };
 	_matrix TargetSettinMat = SettingMat * XMLoadFloat4x4(&m_TargetMatrix); //몬스터(타겟)위치
 	m_pTransform->Set_WorldMatrix(TargetSettinMat);
 
@@ -1448,7 +1448,7 @@ void CUI_Monster_Panel::Update_Setting_Shooter(_double TimeDelta)
 	_float fDistToUI = XMVectorGetX(XMVector3Length(vDist));
 
 	_vector vScale = XMVectorZero();
-	vScale = { fDistToUI * 0.15f,fDistToUI * 0.15f,1.f,1.f };
+	vScale = { fDistToUI * 0.12f,fDistToUI * 0.12f,1.f,1.f };
 	m_pTransform->Scaling(vScale);
 
 	//UI Back
@@ -1521,7 +1521,7 @@ void CUI_Monster_Panel::Update_Setting_Healer(_double TimeDelta)
 	_float fDistToUI = XMVectorGetX(XMVector3Length(vDist));
 
 	_vector vScale = XMVectorZero();
-	vScale = { fDistToUI * 0.15f,fDistToUI * 0.15f,1.f,1.f };
+	vScale = { fDistToUI * 0.12f,fDistToUI * 0.12f,1.f,1.f };
 	m_pTransform->Scaling(vScale);
 
 	//UI Back
@@ -1594,7 +1594,7 @@ void CUI_Monster_Panel::Update_Setting_2HSword(_double TimeDelta)
 	_float fDistToUI = XMVectorGetX(XMVector3Length(vDist));
 
 	_vector vScale = XMVectorZero();
-	vScale = { fDistToUI * 0.15f,fDistToUI * 0.15f,1.f,1.f };
+	vScale = { fDistToUI * 0.12f,fDistToUI * 0.12f,1.f,1.f };
 	m_pTransform->Scaling(vScale);
 
 	//UI Back
@@ -1667,7 +1667,7 @@ void CUI_Monster_Panel::Update_Setting_MidBoss(_double TimeDelta)
 	_float fDistToUI = XMVectorGetX(XMVector3Length(vDist));
 
 	_vector vScale = XMVectorZero();
-	vScale = { fDistToUI * 0.15f,fDistToUI * 0.15f,1.f,1.f };
+	vScale = { fDistToUI * 0.13f,fDistToUI * 0.13f,1.f,1.f };
 	m_pTransform->Scaling(vScale);
 
 	//UI Back
