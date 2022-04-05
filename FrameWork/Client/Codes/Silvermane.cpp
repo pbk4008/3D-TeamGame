@@ -148,8 +148,7 @@
 //////////////////////////////////////////// Hit
 #include "1H_FlinchLeft.h"
 #include "1H_KnockBack_Land.h"
-#include "Silvermane_KnockBackFwd.h"
-#include "Silvermane_KnockBackBwd.h"
+#include "Silvermane_KnockBack.h"
 #pragma endregion
 
 #include "Material.h"
@@ -733,9 +732,7 @@ HRESULT CSilvermane::Ready_States()
 		return E_FAIL;
 	if (FAILED(m_pStateController->Add_State(L"1H_KnockBack_Land", C1H_KnockBack_Land::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
-	if (FAILED(m_pStateController->Add_State(L"KnockBackBwd", CSilvermane_KnockBackBwd::Create(m_pDevice, m_pDeviceContext))))
-		return E_FAIL;
-	if (FAILED(m_pStateController->Add_State(L"KnockBackFwd", CSilvermane_KnockBackFwd::Create(m_pDevice, m_pDeviceContext))))
+	if (FAILED(m_pStateController->Add_State(L"KnockBack", CSilvermane_KnockBack::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 
 	for (auto& pair : m_pStateController->Get_States())
@@ -988,7 +985,7 @@ void CSilvermane::Set_IsAttack(const _bool _isAttack)
 
 void CSilvermane::Add_PlusAngle(const _float _fDeltaAngle)
 {
-	m_fPlusAngle += _fDeltaAngle * 400.f;
+	m_fPlusAngle += _fDeltaAngle * 360.f;
 
 	//if (0 > _fDeltaAngle)
 	//	m_fPlusAngle -= 2.f;

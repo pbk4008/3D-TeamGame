@@ -17,6 +17,7 @@ public:
 	virtual HRESULT Render();
 
 	virtual HRESULT EnterState() override;
+	virtual HRESULT EnterState(void* _pArg = nullptr) override;
 	virtual HRESULT ExitState() override;
 
 protected:

@@ -79,7 +79,7 @@ HRESULT CShield_BlockEnd::EnterState()
 	m_pAnimationController->Set_RootMotion(true, true, ERootOption::XYZ);
 
 	m_pSilvermane->Set_EquipShieldAnim(false);
-	m_pSilvermane->Set_IsTrasceCamera(false);
+	//m_pSilvermane->Set_IsTrasceCamera(false);
 	return S_OK;
 }
 
@@ -89,7 +89,7 @@ HRESULT CShield_BlockEnd::ExitState()
 		return E_FAIL;
 
 	m_pSilvermane->Set_EquipShield(false);
-	m_pSilvermane->Set_IsTrasceCamera(true);
+	//m_pSilvermane->Set_IsTrasceCamera(true);
 	m_pSilvermane->Set_BlockTime(0.f);
 	return S_OK;
 }
