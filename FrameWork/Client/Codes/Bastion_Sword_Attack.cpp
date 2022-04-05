@@ -41,6 +41,8 @@ _int CBastion_Sword_Attack::Tick(const _double& _dDeltaTime)
 
 	//무한 루프에 대한 조건 들어갈 자리
 
+	if (m_pAnimator->Get_CurrentAnimNode() == (_uint)CMonster_Bastion_Sword::ANIM_TYPE::ATTACK_JUMPLOOP)
+		m_pTransform->Face_Target(g_pObserver->Get_PlayerPos());
 	if (m_pAnimator->Get_CurrentAnimNode() == (_uint)CMonster_Bastion_Sword::ANIM_TYPE::IDLE)
 		m_pStateController->Change_State(L"Idle");
 

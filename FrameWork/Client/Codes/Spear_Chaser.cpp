@@ -28,13 +28,14 @@ _int CSpear_Chaser::Tick(const _double& _dDeltaTime)
 	if (NO_EVENT != iProgress)
 		return iProgress;
 
-	m_pAnimator->Change_AnyEntryAnimation((_uint)CMonster_Bastion_Spear::ANIM_TYPE::A_WALK_FWD);
+
+	m_pTransform->Face_Target(g_pObserver->Get_PlayerPos());
 	m_pAnimator->Tick(_dDeltaTime);
 
-	if(m_bTargetOn)
+	/*if(m_bTargetOn)
 		m_pTransform->Add_Velocity(m_pTransform->Chase_Pos(g_pObserver->Get_Transform(), _dDeltaTime));
 
-	m_fChaserDelay -= (_float)_dDeltaTime;
+	m_fChaserDelay -= (_float)_dDeltaTime;*/
 
 	return _int();
 }
@@ -61,7 +62,9 @@ HRESULT CSpear_Chaser::EnterState()
 	if (FAILED(__super::EnterState()))
 		return E_FAIL;
 
-	m_fChaserDelay = 0.5f;
+	//m_fChaserDelay = 0.5f;
+	m_pAnimator->Get_AnimController()->Set_MoveSpeed(60.f);
+	m_pAnimator->Get_AnimController()->Set_PlaySpeed(1.5f);
 	m_pAnimator->Change_AnyEntryAnimation((_uint)CMonster_Bastion_Spear::ANIM_TYPE::A_WALK_FWD_ST);
 
 	return S_OK;
@@ -71,16 +74,18 @@ HRESULT CSpear_Chaser::ExitState()
 {
 	if (FAILED(__super::ExitState()))
 		return E_FAIL;
+	m_pAnimator->Get_AnimController()->Set_MoveSpeed(40.f);
+	m_pAnimator->Get_AnimController()->Set_PlaySpeed(1.f);
 	return S_OK;
 }
 
 void CSpear_Chaser::Look_Player(void)
 {
-	if (false == m_bTargetOn)
-	{
-		if (0 > m_fChaserDelay)
-			m_pStateController->Change_State(L"Chaser_End");
-	}
+	//if (false == m_bTargetOn)
+	//{
+	//	if (0 > m_fChaserDelay)
+	//		m_pStateController->Change_State(L"Chaser_End");
+	//}
 }
 
 

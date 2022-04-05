@@ -57,7 +57,7 @@ HRESULT CSilvermane_Idle::EnterState()
 
 	m_pAnimationController->SetUp_NextAnimation("SK_Silvermane.ao|A_Idle_Player", true);
 	m_pAnimationController->Set_RootMotion(true, true, ERootOption::XYZ);
-
+	g_pObserver->Set_PlayerAttackAnimStart(false);
 	return S_OK;
 }
 

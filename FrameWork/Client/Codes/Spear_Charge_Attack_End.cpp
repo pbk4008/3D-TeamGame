@@ -67,7 +67,7 @@ HRESULT CSpear_Charge_Attack_End::ExitState()
 	if (FAILED(__super::ExitState()))
 		return E_FAIL;
 
-	m_bChargeOn = false;
+	//m_bChargeOn = false;
 	m_fTime = 5.0f;
 
 	CMonster_Bastion_Spear* pMonster = (CMonster_Bastion_Spear*)m_pStateController->Get_GameObject();
