@@ -115,7 +115,7 @@ HRESULT CStargazer::SetUp_Component()
 	ZeroMemory(&tDesc, sizeof(tDesc));
 
 	tDesc.fHeight = 1.f;
-	tDesc.fRadius = 0.125f;
+	tDesc.fRadius = 0.2f;
 	tDesc.tColliderDesc.eRigidType = ERigidType::Dynamic;
 	tDesc.tColliderDesc.fDynamicFriction = 0.f;
 	tDesc.tColliderDesc.fStaticFriction = 0.f;
