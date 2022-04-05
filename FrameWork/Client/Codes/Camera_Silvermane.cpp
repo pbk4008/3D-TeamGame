@@ -35,13 +35,13 @@ HRESULT CCamera_Silvermane::NativeConstruct(const _uint _iSceneID, void* _pArg)
 		return E_FAIL;
 	}
 
+	m_pSilvermane = static_cast<CSilvermane*>(g_pGameInstance->getObjectList(m_iSceneID, L"Layer_Silvermane")->front());
+	m_pSilvermane->Set_Camera(this);
+
 	if (FAILED(Ready_Components()))
 	{
 		return E_FAIL;
 	}
-
-	m_pSilvermane = static_cast<CSilvermane*>(g_pGameInstance->getObjectList(m_iSceneID, L"Layer_Silvermane")->front());
-	m_pSilvermane->Set_Camera(this);
 
 	// 컬링용 카메라 따로생성
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer(m_iSceneID, L"Layer_Camera", L"Proto_GameObject_Camera_Culling", this)))
@@ -180,6 +180,7 @@ HRESULT CCamera_Silvermane::Ready_Components()
 	transformDesc.fRotationPerSec = XMConvertToRadians(120.f);
 	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_Transform", L"Com_WorldTransform", (CComponent**)&m_pWorldTransform, &transformDesc)))
 		return E_FAIL;
+	m_pWorldTransform->Set_State(CTransform::STATE_POSITION, m_pSilvermane->Get_Transform()->Get_State(CTransform::STATE_POSITION));
 
 	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_CameraShake", L"Com_CameraShake", (CComponent**)&m_pCameraShake, nullptr)))
 		return E_FAIL;

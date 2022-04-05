@@ -1,12 +1,12 @@
 #include "pch.h"
-#include "Shield_BlockSkid.h"
+#include "Shield_BlockBreakEnd.h"
 
-CShield_BlockSkid::CShield_BlockSkid(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
+CShield_BlockBreakEnd::CShield_BlockBreakEnd(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
 	: CShield_Block(_pDevice, _pDeviceContext)
 {
 }
 
-HRESULT CShield_BlockSkid::NativeConstruct(void* _pArg)
+HRESULT CShield_BlockBreakEnd::NativeConstruct(void* _pArg)
 {
 	if (FAILED(__super::NativeConstruct(_pArg)))
 		return E_FAIL;
@@ -14,7 +14,7 @@ HRESULT CShield_BlockSkid::NativeConstruct(void* _pArg)
 	return S_OK;
 }
 
-_int CShield_BlockSkid::Tick(const _double& _dDeltaTime)
+_int CShield_BlockBreakEnd::Tick(const _double& _dDeltaTime)
 {
 	_int iProgress = __super::Tick(_dDeltaTime);
 	if (NO_EVENT != iProgress)
@@ -30,7 +30,7 @@ _int CShield_BlockSkid::Tick(const _double& _dDeltaTime)
 	return _int();
 }
 
-_int CShield_BlockSkid::LateTick(const _double& _dDeltaTime)
+_int CShield_BlockBreakEnd::LateTick(const _double& _dDeltaTime)
 {
 	_int iProgress = __super::LateTick(_dDeltaTime);
 	if (NO_EVENT != iProgress)
@@ -39,7 +39,7 @@ _int CShield_BlockSkid::LateTick(const _double& _dDeltaTime)
 	return _int();
 }
 
-HRESULT CShield_BlockSkid::Render()
+HRESULT CShield_BlockBreakEnd::Render()
 {
 	if (FAILED(__super::Render()))
 		return E_FAIL;
@@ -47,21 +47,21 @@ HRESULT CShield_BlockSkid::Render()
 	return S_OK;
 }
 
-HRESULT CShield_BlockSkid::EnterState()
+HRESULT CShield_BlockBreakEnd::EnterState()
 {
 	if (FAILED(__super::EnterState()))
 		return E_FAIL;
 
-	m_pAnimationController->SetUp_NextAnimation("SK_Silvermane.ao|A_Spectral_Shield_Block_Skid", false);
+	m_pAnimationController->SetUp_NextAnimation("SK_Silvermane.ao|A_Spectral_Shield_Block_Break_End", false);
 	m_pAnimationController->Set_RootMotion(true, true, ERootOption::XYZ);
 
-	m_iCutIndex = 20;
+	m_iCutIndex = 40;
 
 	m_pSilvermane->Set_IsTrasceCamera(false);
 	return S_OK;
 }
 
-HRESULT CShield_BlockSkid::ExitState()
+HRESULT CShield_BlockBreakEnd::ExitState()
 {
 	if (FAILED(__super::ExitState()))
 		return E_FAIL;
@@ -70,7 +70,7 @@ HRESULT CShield_BlockSkid::ExitState()
 	return S_OK;
 }
 
-_int CShield_BlockSkid::Input(const _double& _dDeltaTime)
+_int CShield_BlockBreakEnd::Input(const _double& _dDeltaTime)
 {
 	_int iProgress = __super::Input(_dDeltaTime);
 	if (NO_EVENT != iProgress)
@@ -79,18 +79,18 @@ _int CShield_BlockSkid::Input(const _double& _dDeltaTime)
 	return _int();
 }
 
-CShield_BlockSkid* CShield_BlockSkid::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext, void* _pArg)
+CShield_BlockBreakEnd* CShield_BlockBreakEnd::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext, void* _pArg)
 {
-	CShield_BlockSkid* pInstance = new CShield_BlockSkid(_pDevice, _pDeviceContext);
+	CShield_BlockBreakEnd* pInstance = new CShield_BlockBreakEnd(_pDevice, _pDeviceContext);
 	if (FAILED(pInstance->NativeConstruct(_pArg)))
 	{
-		MSGBOX("CShield_BlockSkid Create Fail");
+		MSGBOX("CShield_BlockBreakEnd Create Fail");
 		Safe_Release(pInstance);
 	}
 	return pInstance;
 }
 
-void CShield_BlockSkid::Free()
+void CShield_BlockBreakEnd::Free()
 {
 	__super::Free();
 }

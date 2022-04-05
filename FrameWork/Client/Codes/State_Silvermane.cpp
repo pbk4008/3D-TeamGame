@@ -591,23 +591,24 @@ void CState_Silvermane::Block(const ATTACKDESC& _tAttackDesc)
 	// 아직 패링이 가능해!
 	if (0.5f > fBlockTime)
 	{
-		if ((_uint)GAMEOBJECT::WEAPON_BULLET == _tAttackDesc.pHitObject->getTag())
-		{
-			Reflect_Bullet(_tAttackDesc);
-		}
-
 		switch (_tAttackDesc.iLevel)
 		{
 		case 1:
 		case 2:
+			if ((_uint)GAMEOBJECT::WEAPON_BULLET == _tAttackDesc.pHitObject->getTag())
+			{
+				Reflect_Bullet(_tAttackDesc);
+			}
 			m_pStateController->Change_State(L"Shield_Parry");
 			return;
 			break;
 		case 3:
-
+			m_pStateController->Change_State(L"Shield_ParryStunback");
+			return;
 			break;
 		case 4:
-
+			m_pStateController->Change_State(L"Shield_ParryStunbackStrong");
+			return;
 			break;
 		}
 	}
@@ -616,15 +617,20 @@ void CState_Silvermane::Block(const ATTACKDESC& _tAttackDesc)
 		switch (_tAttackDesc.iLevel)
 		{
 		case 1:
-		case 2:
 			m_pStateController->Change_State(L"Shield_BlockSkid");
 			return;
 			break;
+		case 2:
+			m_pStateController->Change_State(L"Shield_BlockSkidStrong");
+			return;
+			break;
 		case 3:
-
+			m_pStateController->Change_State(L"Shield_Ricochet");
+			return;
 			break;
 		case 4:
-
+			m_pStateController->Change_State(L"Shield_BlockBreakStart");
+			return;
 			break;
 		}
 	}
