@@ -1,7 +1,6 @@
 #include "SimulationEventCallback.h"
 
 #include "GameObject.h"
-#include "Collision.h"
 
 CSimulationEventCallback::CSimulationEventCallback()
 {
