@@ -15,7 +15,7 @@ cbuffer Matrices
 	matrix		g_ProjMatrix;
 };
 
-texture2D	g_DiffuseTexture;
+Texture2D	g_DiffuseTexture;
 uint g_iImageCountX; //가로줄수
 uint g_iImageCountY; //세로줄수
 uint g_iFrame; //전체장수

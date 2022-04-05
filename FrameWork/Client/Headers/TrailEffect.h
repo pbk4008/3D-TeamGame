@@ -30,6 +30,8 @@ public:
 private:
 	CVIBuffer_Trail* m_pVIBuffer = nullptr;
 	CTexture* m_pTexture = nullptr;
+	CTexture* m_pTexture1 = nullptr;
+	CTexture* m_pTexture2 = nullptr;
 
 	//list<_float3> m_listPoints;
 	list<pair<_float3, _float3>> m_listPoints; // first : pos, second : dir

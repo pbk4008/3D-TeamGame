@@ -88,51 +88,6 @@
     <Filter Include="00.Utility\03.Component\04.Transform">
       <UniqueIdentifier>{6d543e45-230a-437c-8b68-df9a975a8c93}</UniqueIdentifier>
     </Filter>
-    <Filter Include="00.Utility\03.Component\05.VIBuffer">
-      <UniqueIdentifier>{11e7f14c-5cb9-4490-9030-2db85c844991}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="00.Utility\03.Component\05.VIBuffer\02.Rect">
-      <UniqueIdentifier>{bd1f7e79-d40e-4dcd-9cae-553ba76e90f0}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="00.Utility\03.Component\05.VIBuffer\05.Terrain">
-      <UniqueIdentifier>{6e15e9d1-536a-4d74-b3d8-705d9973309d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="00.Utility\03.Component\05.VIBuffer\05.Terrain\QuadTree">
-      <UniqueIdentifier>{5cf4d5c9-80c8-4498-9d02-c0602b73246c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="00.Utility\03.Component\05.VIBuffer\00.Cube">
-      <UniqueIdentifier>{75c49422-c37a-4c1b-8156-aa3329a4c4c2}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="00.Utility\03.Component\05.VIBuffer\06.Triangle">
-      <UniqueIdentifier>{04fea5c6-4c6b-4dad-82f1-03de12890edd}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="00.Utility\03.Component\05.VIBuffer\06.Triangle\Shader">
-      <UniqueIdentifier>{6c5c40da-8382-48e7-a638-15860f1ac0ab}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="00.Utility\03.Component\05.VIBuffer\03.RectInstance">
-      <UniqueIdentifier>{fdede92b-a732-4a18-8d4d-e1b95b75a871}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="00.Utility\03.Component\05.VIBuffer\01.PointInstance">
-      <UniqueIdentifier>{88dc5b6e-abb6-4263-b179-594044f2a135}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="00.Utility\03.Component\05.VIBuffer\04.RectViewport">
-      <UniqueIdentifier>{06c7204f-95e4-4e9b-bdd3-b12dc0dacd27}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="00.Utility\03.Component\05.VIBuffer\07.Model">
-      <UniqueIdentifier>{024cea8e-15a1-49c2-922c-f2a2e48d523f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="00.Utility\03.Component\05.VIBuffer\07.Model\MeshContainer">
-      <UniqueIdentifier>{7fedc3a4-54cb-4c70-bd57-8901cce6b021}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="00.Utility\03.Component\05.VIBuffer\07.Model\Animation">
-      <UniqueIdentifier>{577840cd-0f05-4774-af55-69de66a0108b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="00.Utility\03.Component\05.VIBuffer\07.Model\Animation\Channel">
-      <UniqueIdentifier>{dc2604d4-5596-48b4-b985-f84ad490de92}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="00.Utility\03.Component\05.VIBuffer\07.Model\HierarchyNode">
-      <UniqueIdentifier>{c922e3e8-35fd-4933-9790-1382464c7430}</UniqueIdentifier>
-    </Filter>
     <Filter Include="00.Utility\03.Component\06.Camera">
       <UniqueIdentifier>{54be378a-1b48-405a-ab79-310bb60858af}</UniqueIdentifier>
     </Filter>
@@ -154,9 +109,6 @@
     <Filter Include="00.Utility\02.GameObject\05.Mouse">
       <UniqueIdentifier>{1b95795f-4541-4014-9a9d-da8ef4ca3aca}</UniqueIdentifier>
     </Filter>
-    <Filter Include="00.Utility\03.Component\05.VIBuffer\08.Plane">
-      <UniqueIdentifier>{01726ab9-e617-4063-b8f1-9417c63ad625}</UniqueIdentifier>
-    </Filter>
     <Filter Include="00.Utility\03.Component\99.StateController">
       <UniqueIdentifier>{653655c4-81a7-4d5f-a934-1b7ed0e71dc6}</UniqueIdentifier>
     </Filter>
@@ -165,9 +117,6 @@
     </Filter>
     <Filter Include="00.Utility\03.Component\07.Gizmo">
       <UniqueIdentifier>{86842f87-0dbf-441f-85ad-26157a2796b2}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="00.Utility\03.Component\05.VIBuffer\07.Model\Material">
-      <UniqueIdentifier>{3e6b5c11-88b5-4f9e-911f-9740de61e903}</UniqueIdentifier>
     </Filter>
     <Filter Include="00.Utility\04.Manager\99.Material_Manager">
       <UniqueIdentifier>{96a97cb7-60ac-46f3-aa71-d3e139366876}</UniqueIdentifier>
@@ -186,12 +135,6 @@
     </Filter>
     <Filter Include="00.Utility\03.Component\00.Collider\03.MeshCollider">
       <UniqueIdentifier>{6f36fbe3-7ea2-4ac4-8bed-03496a9ea6dd}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="00.Utility\03.Component\05.VIBuffer\09.Instance">
-      <UniqueIdentifier>{ffceb99c-60d5-4075-a880-1251b6d9405d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="00.Utility\03.Component\05.VIBuffer\10.Trapezium">
-      <UniqueIdentifier>{329441a3-c2af-4793-a919-667ae0cce48e}</UniqueIdentifier>
     </Filter>
     <Filter Include="00.Utility\03.Component\08. AnimationController">
       <UniqueIdentifier>{f6e49bb3-9ba7-4443-a04a-fad53dcc39b0}</UniqueIdentifier>
@@ -240,18 +183,6 @@
     </Filter>
     <Filter Include="00.Utility\03.Component\00.Collider\99.NavMesh">
       <UniqueIdentifier>{4cfd12c9-3390-4bf3-bb96-e5b30630e0c8}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="00.Utility\03.Component\05.VIBuffer\09.Instance\00.Particle">
-      <UniqueIdentifier>{0b39ed64-0406-4109-9e05-ed924b4d203d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="00.Utility\03.Component\05.VIBuffer\09.Instance\01. InstanceMesh">
-      <UniqueIdentifier>{67907881-308e-436b-ba4f-cd56aab4032a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="00.Utility\03.Component\05.VIBuffer\09.Instance\00.Particle\00.Explosion">
-      <UniqueIdentifier>{e8867ac6-25ad-483d-9401-60d4c28145ab}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="00.Utility\03.Component\05.VIBuffer\09.Instance\00.Particle\02.Floating">
-      <UniqueIdentifier>{431b9d51-d009-4344-b656-70d370b5b67b}</UniqueIdentifier>
     </Filter>
     <Filter Include="00.Utility\04.Manager\12.EffectManager">
       <UniqueIdentifier>{3e2071c1-559c-4d70-a599-2953719bc407}</UniqueIdentifier>
@@ -304,23 +235,92 @@
     <Filter Include="00.Utility\03.Component\09.CullingBox">
       <UniqueIdentifier>{c99a8ce3-e94b-45f2-a5b4-1bf2aa1afa77}</UniqueIdentifier>
     </Filter>
-    <Filter Include="00.Utility\03.Component\05.VIBuffer\11.Trail">
-      <UniqueIdentifier>{8d54a38c-9871-4707-a828-2c7192092e77}</UniqueIdentifier>
-    </Filter>
     <Filter Include="98.ShaderFiles\00.Buffer">
       <UniqueIdentifier>{2e371c64-7eb0-4e0a-99ad-7d7151c42031}</UniqueIdentifier>
     </Filter>
     <Filter Include="00.Utility\97.CharacterController">
       <UniqueIdentifier>{de46ff26-c4c3-465e-90af-a8225d355507}</UniqueIdentifier>
     </Filter>
-    <Filter Include="00.Utility\03.Component\05.VIBuffer\09.Instance\00.Particle\03.Env_Floating">
-      <UniqueIdentifier>{04e8b985-4fc1-4c49-be63-4bc0dd35a587}</UniqueIdentifier>
-    </Filter>
     <Filter Include="98.ShaderFiles\01.Hpp">
       <UniqueIdentifier>{b441602a-c061-4063-92fa-80eedad2b876}</UniqueIdentifier>
     </Filter>
     <Filter Include="98.ShaderFiles\02.Util">
       <UniqueIdentifier>{d201d74c-6cc8-45b2-be57-88e887473ceb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00.Utility\03.Component\05.VIBuffer">
+      <UniqueIdentifier>{11e7f14c-5cb9-4490-9030-2db85c844991}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00.Utility\03.Component\05.VIBuffer\02.Rect">
+      <UniqueIdentifier>{bd1f7e79-d40e-4dcd-9cae-553ba76e90f0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00.Utility\03.Component\05.VIBuffer\05.Terrain">
+      <UniqueIdentifier>{6e15e9d1-536a-4d74-b3d8-705d9973309d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00.Utility\03.Component\05.VIBuffer\05.Terrain\QuadTree">
+      <UniqueIdentifier>{5cf4d5c9-80c8-4498-9d02-c0602b73246c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00.Utility\03.Component\05.VIBuffer\00.Cube">
+      <UniqueIdentifier>{75c49422-c37a-4c1b-8156-aa3329a4c4c2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00.Utility\03.Component\05.VIBuffer\06.Triangle">
+      <UniqueIdentifier>{04fea5c6-4c6b-4dad-82f1-03de12890edd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00.Utility\03.Component\05.VIBuffer\06.Triangle\Shader">
+      <UniqueIdentifier>{6c5c40da-8382-48e7-a638-15860f1ac0ab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00.Utility\03.Component\05.VIBuffer\03.RectInstance">
+      <UniqueIdentifier>{fdede92b-a732-4a18-8d4d-e1b95b75a871}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00.Utility\03.Component\05.VIBuffer\01.PointInstance">
+      <UniqueIdentifier>{88dc5b6e-abb6-4263-b179-594044f2a135}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00.Utility\03.Component\05.VIBuffer\04.RectViewport">
+      <UniqueIdentifier>{06c7204f-95e4-4e9b-bdd3-b12dc0dacd27}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00.Utility\03.Component\05.VIBuffer\07.Model">
+      <UniqueIdentifier>{024cea8e-15a1-49c2-922c-f2a2e48d523f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00.Utility\03.Component\05.VIBuffer\07.Model\MeshContainer">
+      <UniqueIdentifier>{7fedc3a4-54cb-4c70-bd57-8901cce6b021}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00.Utility\03.Component\05.VIBuffer\07.Model\Animation">
+      <UniqueIdentifier>{577840cd-0f05-4774-af55-69de66a0108b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00.Utility\03.Component\05.VIBuffer\07.Model\Animation\Channel">
+      <UniqueIdentifier>{dc2604d4-5596-48b4-b985-f84ad490de92}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00.Utility\03.Component\05.VIBuffer\07.Model\HierarchyNode">
+      <UniqueIdentifier>{c922e3e8-35fd-4933-9790-1382464c7430}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00.Utility\03.Component\05.VIBuffer\07.Model\Material">
+      <UniqueIdentifier>{3e6b5c11-88b5-4f9e-911f-9740de61e903}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00.Utility\03.Component\05.VIBuffer\08.Plane">
+      <UniqueIdentifier>{01726ab9-e617-4063-b8f1-9417c63ad625}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00.Utility\03.Component\05.VIBuffer\09.Instance">
+      <UniqueIdentifier>{ffceb99c-60d5-4075-a880-1251b6d9405d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00.Utility\03.Component\05.VIBuffer\09.Instance\00.Particle">
+      <UniqueIdentifier>{0b39ed64-0406-4109-9e05-ed924b4d203d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00.Utility\03.Component\05.VIBuffer\09.Instance\00.Particle\00.Explosion">
+      <UniqueIdentifier>{e8867ac6-25ad-483d-9401-60d4c28145ab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00.Utility\03.Component\05.VIBuffer\09.Instance\00.Particle\02.Floating">
+      <UniqueIdentifier>{431b9d51-d009-4344-b656-70d370b5b67b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00.Utility\03.Component\05.VIBuffer\09.Instance\00.Particle\03.Env_Floating">
+      <UniqueIdentifier>{04e8b985-4fc1-4c49-be63-4bc0dd35a587}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00.Utility\03.Component\05.VIBuffer\09.Instance\01. InstanceMesh">
+      <UniqueIdentifier>{67907881-308e-436b-ba4f-cd56aab4032a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00.Utility\03.Component\05.VIBuffer\10.Trapezium">
+      <UniqueIdentifier>{329441a3-c2af-4793-a919-667ae0cce48e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00.Utility\03.Component\05.VIBuffer\11.Trail">
+      <UniqueIdentifier>{8d54a38c-9871-4707-a828-2c7192092e77}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -618,7 +618,6 @@
     <ClInclude Include="..\bin\ShaderFiles\Shader_RenderState.hpp">
       <Filter>98.ShaderFiles\01.Hpp</Filter>
     </ClInclude>
-    <ClInclude Include="..\bin\ShaderFiles\Shader_Calculate.hpp" />
     <ClInclude Include="..\public\VIBuffer_Trail.h">
       <Filter>00.Utility\03.Component\05.VIBuffer\11.Trail</Filter>
     </ClInclude>
@@ -627,6 +626,9 @@
     </ClInclude>
     <ClInclude Include="..\bin\ShaderFiles\Shader_Calculate.hpp">
       <Filter>98.ShaderFiles\Hpp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\bin\ShaderFiles\Shader_Calculate.hpp">
+      <Filter>98.ShaderFiles\01.Hpp</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

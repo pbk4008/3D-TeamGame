@@ -229,7 +229,7 @@ HRESULT CRenderer::Draw_RenderGroup()
 		if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("Target_Alpha")))) return E_FAIL;
 		if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("Target_Particle")))) return E_FAIL;
 		if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("Target_BlurShadow")))) return E_FAIL;
-
+		if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("Target_GodRay")))) return E_FAIL;
 	}
 #endif // _DEBUG
 
@@ -410,6 +410,7 @@ HRESULT CRenderer::ShadowPass()
 {
 	if (FAILED(m_pTargetMgr->Begin_MRT(m_pDeviceContext, TEXT("MRT_ShaeShadow"))))	return E_FAIL;
 
+	
 	const LIGHTDESC* lightdesc = g_pGameInstance->Get_LightDesc(0);
 
 	_matrix		lightviewproj = lightdesc->mLightView * lightdesc->mLightProj;
@@ -425,7 +426,7 @@ HRESULT CRenderer::ShadowPass()
 	if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_ProjMatrixInv", &XMMatrixTranspose(ProjMatrix), sizeof(_float4x4)))) MSGBOX("Failed To Apply ShadowPass CamProjInv");
 	if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_vLightPos", &_float4(lightdesc->vPosition.x, lightdesc->vPosition.y, lightdesc->vPosition.z, 1.f), sizeof(_float4)))) MSGBOX("Failed To Apply ShadowPass LightPos");
 
-	if (FAILED(m_pVIBuffer->Render(6))) MSGBOX("Failed To Rendering ShadowPass");
+	if (FAILED(m_pVIBuffer->Render(5))) MSGBOX("Failed To Rendering ShadowPass");
 
 	if (FAILED(m_pTargetMgr->End_MRTNotClear(m_pDeviceContext))) return E_FAIL;
 

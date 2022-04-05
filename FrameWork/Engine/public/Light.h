@@ -22,6 +22,11 @@ public:
 	HRESULT Render(CTarget_Manager* pTarget_Manager,const wstring& pCameraTag, _bool PBRHDRcheck,_bool Shadow);
 	HRESULT RenderVolumetric(CTarget_Manager* pTarget_Manager, const wstring& pCameraTag);
 
+private:
+	HRESULT	Render_Directional(CTarget_Manager* pTarget_Manager, const wstring& pCameraTag, _bool PBRHDRcheck, _bool Shadow,_uint PassIndx);
+	HRESULT	Render_PointLight(CTarget_Manager* pTarget_Manager, const wstring& pCameraTag, _bool PBRHDRcheck, _uint PassIndx);
+	HRESULT	Ready_PBRLighting(CTarget_Manager* pTarget_Manager, const wstring& pCameraTag,LIGHTDESC::TYPE Type);
+
 public: void UpdateLightCam(_fvector playerpos);
 
 private:

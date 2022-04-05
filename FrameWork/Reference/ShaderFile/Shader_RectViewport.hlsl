@@ -76,10 +76,12 @@ cbuffer CameraDesc
 
 cbuffer MatrixInverse
 {
-	matrix g_MainCamProjMatrix;
+	matrix g_PointWorld;
+	matrix g_ViewMatrix;
+	matrix g_ProjMatrix;
+	
 	matrix g_ProjMatrixInv;
 	matrix g_ViewMatrixInv;
-	matrix g_shadowmatrix;
 };
 
 texture2D g_SkyBoxTexutre;
@@ -117,10 +119,11 @@ struct VS_OUT
 	float4 vPosition : SV_POSITION;
 	float2 vTexUV : TEXCOORD0;
 };
-struct VS_OUT_Qude
+struct VS_OUT_POINT
 {
 	float4 vPosition : SV_POSITION;
 	float2 vTexUV : TEXCOORD0;
+	float4 vClippos : TEXCOORD1;
 };
 
 
@@ -135,19 +138,20 @@ VS_OUT VS_MAIN_VIEWPORT(VS_IN In)
 	return Out;
 }
 
-VS_OUT_Qude VS_MAIN_Qude(VS_IN In)
+VS_OUT_POINT VS_MAIN_POINT(VS_IN In)
 {
-	VS_OUT_Qude Out = (VS_OUT_Qude) 0;
+	VS_OUT_POINT Out = (VS_OUT_POINT) 0;
 	
-	Out.vPosition = float4(2 * (In.vTexUV.x - 0.5f), -2 * (In.vTexUV.y - 0.5f), 0.0f, 1.f);
-
+	
+	matrix vp = mul(g_PointWorld, g_ViewMatrix);
+	matrix wvp = mul(vp, g_ProjMatrix);
+	
+	Out.vPosition = mul(float4(In.vPosition, 1.f), wvp);
 	Out.vTexUV = In.vTexUV;
+	Out.vClippos = Out.vPosition;
 
 	return Out;
 }
-/* SV_POSITION을 가진 데잍처에대해서만 원근투영.(정점의 w값으로 xyzw를 나눈다.) */
-/* 뷰포트로 변환한다. */
-/* 래스터라이즈.(둘러쌓여진 정점의 정보를 바탕으로 하여. 픽셀정보를 생성한다.) */
 
 struct PS_IN
 {
@@ -172,15 +176,29 @@ PS_OUT PS_MAIN(PS_IN In)
 	return Out;
 }
 
-struct PS_OUT_LIGHTACC
+struct PS_OUT_DIRLIGHTACC
 {
 	vector vShade : SV_TARGET0;
 	vector vSpecular : SV_TARGET1;
 };
 
-PS_OUT_LIGHTACC PS_MAIN_LIGHTACC_DIRECTIONAL(PS_IN In)
+struct PS_IN_POINTLIGHTACC
 {
-	PS_OUT_LIGHTACC Out = (PS_OUT_LIGHTACC) 0;
+	float4 vPosition : SV_POSITION;
+	float2 vTexUV : TEXCOORD0;
+	float4 vClippos : TEXCOORD1;
+};
+
+struct PS_OUT_POINTLIGHTACC
+{
+	float4 vShade		: SV_TARGET0;
+	float4 vSpecular	: SV_TARGET1;
+	float4 vShadow		: SV_TARGET2;
+};
+
+PS_OUT_DIRLIGHTACC PS_MAIN_LIGHTACC_DIRECTIONAL(PS_IN In)
+{
+	PS_OUT_DIRLIGHTACC Out = (PS_OUT_DIRLIGHTACC) 0;
 	
 	float2 uvRT = In.vTexUV;
 
@@ -206,57 +224,21 @@ PS_OUT_LIGHTACC PS_MAIN_LIGHTACC_DIRECTIONAL(PS_IN In)
 	vWorldPos = mul(vWorldPos, g_ViewMatrixInv);
 	
 	vector normal = vector(normaltest * 2.f - 1.f, 0.f);
-	float lightpow = 2.f;
-	
-	//Out.vShade 
 	
 	if (g_bPBRHDR == true)
 	{
 		float3 normal3 = normalize(normal.xyz);
 		float3 N = normal3;
 		float3 V = normalize(g_vCamPosition.xyz - vWorldPos.xyz);
-		//float3 L = normalize(g_vLightPos.xyz - vWorldPos.xyz);
 		float3 L = g_vLightDir.xyz * -1;
 		float F0 = 0.93;
 		
-		float alpha = Roughness * Roughness;
-		
-		float3 H = normalize(V + L);
-		
-		float NdotL = saturate(dot(N, L));
-		float NdotV = saturate(dot(N, V));
-		float NdotH = saturate(dot(N, H));
-		float LdotH = saturate(dot(L, H));
-		
-		float _F;
-		float _D;
-		float _V;
-		
-		float alphaSqr = alpha * alpha;
-		float denom = NdotH * NdotH * (alphaSqr - 1.0f) + 1.0f;
-		_D = alphaSqr / (PI * denom * denom);
-		
-		float LdotH5 = pow(1.0f - LdotH, 5);
-		_F = F0 + (1.0f - F0) * LdotH5;
-		
-		float k = alpha / 2.0f;
-		_V = (1.0f / (NdotL * (1.0f - k) + k)) * (1.0f / (NdotV * (1.0f - k) + k));
-
-		float specular = (NdotL * _D * _F * _V);
+		float specular = LightingGGX_Ref(N, V, L, F0, Roughness);
 	
 		////-------------------------------------------------------------------------//
-		float3 color = float3(1.f, 1.f, 1.f);
-		float4 ambientcolor = float4(color * 0.5f, 1.0);
-		float diffusefactor = dot(normal3, L);
-		float4 diffusecolor = 0;
-		
-		if (diffusefactor > 0.0)
-		{
-			float diffuseintensity = 0.5f;
-			diffusecolor = float4(color * diffuseintensity * diffusefactor, 1.0);
-		}
-		
-		float4 light = diffusecolor * diffusefactor + ambientcolor;
+		float3 color = float3(0.97f, 0.95f, 0.8f);
+		float ambientintensity = 0.2f;
+		float4 light = CalcLightInternal(color, ambientintensity, g_vCamPosition.xyz, g_vLightDir.xyz, vWorldPos.xyz, normal3);
 		//float4 light = g_vLightDiffuse * (saturate(dot(normalize(g_vLightPos - vWorldPos) * -1.f, normal)) + (g_vLightAmbient * g_vMtrlAmbient));
 		
 		float3 CamToWorldDirection = normalize(vWorldPos.xyz - g_vCamPosition.xyz);
@@ -265,7 +247,6 @@ PS_OUT_LIGHTACC PS_MAIN_LIGHTACC_DIRECTIONAL(PS_IN In)
 		float smoothness = 1 - Roughness;
 		
 		float4 cubeRef1 = g_SkyBoxTexutre.Sample(SkyBoxSampler, worldReflectDirection.xy);
-		cubeRef1.a = 1.f;
 		
 		float InvMetalic = (1 - Metallic);
 		InvMetalic = max(InvMetalic, 0.2f);
@@ -274,7 +255,7 @@ PS_OUT_LIGHTACC PS_MAIN_LIGHTACC_DIRECTIONAL(PS_IN In)
 		if (g_shadow == true)
 		{
 			float4 shadow = g_ShadowTexture.Sample(DefaultSampler, In.vTexUV);
-			shadow = saturate(shadow + 0.1f);
+			shadow = saturate(shadow + 0.3f);
 			
 			Out.vSpecular = (light * specular + cubeRef1) * Metallic * smoothness * shadow;
 			Out.vShade = lightpower * shadow;
@@ -289,6 +270,7 @@ PS_OUT_LIGHTACC PS_MAIN_LIGHTACC_DIRECTIONAL(PS_IN In)
 	}
 	else
 	{
+		float lightpow = 1.f;
 		vector vReflect = reflect(normalize(g_vLightDir), normal);
 
 		vector vLook = normalize(vWorldPos - g_vCamPosition);
@@ -303,10 +285,77 @@ PS_OUT_LIGHTACC PS_MAIN_LIGHTACC_DIRECTIONAL(PS_IN In)
 	return Out;
 }
 
-PS_OUT_LIGHTACC PS_MAIN_LIGHTACC_POINT(PS_IN In)
+PS_OUT_POINTLIGHTACC PS_MAIN_LIGHTACC_POINT(PS_IN In)
 {
-	PS_OUT_LIGHTACC Out = (PS_OUT_LIGHTACC) 0;
+	PS_OUT_POINTLIGHTACC Out = (PS_OUT_POINTLIGHTACC) 0;
 
+	//float2 uvRT = ComputeScreenUV(In.vClippos);
+	//float2 uvRT = In.vTexUV;
+
+	//float4 vNormalDesc = g_NormalTexture.Sample(DefaultSampler, uvRT);
+	//float4 vDepthDesc = g_DepthTexture.Sample(DefaultSampler, uvRT);
+	//float Metallic = g_Metallic.Sample(DefaultSampler, uvRT).r;
+	//float Roughness = g_Roughness.Sample(DefaultSampler, uvRT).r;
+	//float AO = g_AO.Sample(DefaultSampler, uvRT).r;
+	//float3 shadow = g_ShadowTexture.Sample(DefaultSampler, uvRT).xyz;
+	//float fViewZ = vDepthDesc.y * 300.f;
+	
+	//float3 normaltest = vNormalDesc.xyz;
+	//if (!any(normaltest))
+	//	clip(0);
+	
+	//vector vWorldPos;
+	//vWorldPos.x = (uvRT.x * 2.f - 1.f) * fViewZ;
+	//vWorldPos.y = (uvRT.y * -2.f + 1.f) * fViewZ;
+	//vWorldPos.z = vDepthDesc.x * fViewZ;
+	//vWorldPos.w = fViewZ;
+	
+	//vWorldPos = mul(vWorldPos, g_ProjMatrixInv);
+	//vWorldPos = mul(vWorldPos, g_ViewMatrixInv);
+	
+	//float3 normal = normaltest * 2.f - 1.f;
+	//normal = normalize(normal);
+	
+	//if (g_bPBRHDR == true)
+	//{
+	//	float3 color = float3(0.97f, 0.95f, 0.8f);
+	//	float ambientintensity = 0.005f;
+	//	float4 light = CalcPointLight(color, ambientintensity, g_vLightPos.xyz, g_fRange, g_vCamPosition.xyz, vWorldPos.xyz, normal);
+		
+	//	float3 _N = normal;
+	//	float3 _V = normalize(g_vCamPosition.xyz - vWorldPos.xyz);
+	//	float3 _L = normalize(vWorldPos.xyz - g_vLightPos.xyz) * -1.0f;
+	//	float _F0 = 0.93f;
+
+	//	float specular = LightingGGX_Ref(_N, _V, _L, _F0, Roughness);
+	//	float smoothness = 1 - Roughness;
+	//	float invmetalic = 1 - Metallic;
+		
+	//	float3 camToWorldDirection = normalize(vWorldPos.xyz - g_vCamPosition.xyz);
+	//	float3 worldReflectDirection = reflect(camToWorldDirection, normal);
+		
+	//	float4 cubeRefl = g_SkyBoxTexutre.Sample(SkyBoxSampler, worldReflectDirection.xy);
+		
+	//	float4 lightpower = invmetalic * light * AO;
+	//	Out.vSpecular = light * specular * Roughness;
+	//	Out.vShade = lightpower;
+	//	//Out.vShadow = 2 * max(max(light.x, light.y), light.z);
+	//	//Out.vShadow.a = 0.2f;
+	//}
+	//else
+	//{
+	//	vector vLightDir = vWorldPos - g_vLightPos;
+	//	float fDistance = length(vLightDir);
+	//	float fAtt = saturate((g_fRange - fDistance) / g_fRange);
+	//	vector vNormal = vector(vNormalDesc.xyz * 2.f - 1.f, 0.f);
+	//	Out.vShade = g_vLightDiffuse * (saturate(dot(normalize(vLightDir) * -1.f, vNormal)) + (g_vLightAmbient * g_vMtrlAmbient)) * fAtt;
+	//	Out.vShade.a = 1.f;
+	//	vector vReflect = reflect(normalize(vLightDir), vNormal);
+	//	vector vLook = normalize(vWorldPos - g_vCamPosition);
+	//	Out.vSpecular.xyz = ((g_vLightSpecular * g_vMtrlSpecular) * pow(saturate(dot(normalize(vReflect) * -1.f, vLook)), 30.f) * fAtt).xyz;
+	//	Out.vShadow = max(max(Out.vShade.x, Out.vShade.y), Out.vShade.z);
+	//}
+	
 	vector vNormalDesc = g_NormalTexture.Sample(DefaultSampler, In.vTexUV);
 	vector vDepthDesc = g_DepthTexture.Sample(DefaultSampler, In.vTexUV);
 	vector vShadowDesc = g_ShadowTexture.Sample(DefaultSampler, In.vTexUV);
@@ -346,61 +395,6 @@ struct PS_OUT_VOLUMETRIC
 {
 	vector vColor : SV_TARGET0;
 };
-
-PS_OUT_VOLUMETRIC PS_MAIN_VOLUMETRIC(PS_IN In)
-{
-	PS_OUT_VOLUMETRIC Out = (PS_OUT_VOLUMETRIC) 0;
-	
-	float depth = max(In.vPosition.z, g_DepthTexture.SampleLevel(linear_clamp_sampler, In.vTexUV, 2));
-	float3 P = GetPositionVS(In.vTexUV, depth,g_ProjMatrixInv);
-	float3 V = float3(0.0f, 0.0f, 0.0f) - P;
-	float cameradistance = length(V); 
-	V /= cameradistance;
-	
-	float marcheddistance = 0;
-	float3 acc = 0;
-	
-	const float3 L = g_vLightDir.xyz;
-	
-	float3 rayEnd = float3(0.0f, 0.0f, 0.0f);
-	
-	const uint sampleCount = 16;
-	const float stepSize = length(P - rayEnd) / sampleCount;
-	
-	P = P + V * stepSize * dither(In.vPosition.xy);
-	
-	[loop]
-	for (uint i = 0; i < sampleCount; ++i)
-	{
-		float4 posShadowMap = mul(float4(P, 1.0), g_shadowmatrix);
-		float3 UVD = posShadowMap.xyz / posShadowMap.w;
-
-		UVD.xy = 0.5 * UVD.xy + 0.5;
-		UVD.y = 1.0 - UVD.y;
-        
-        [branch]
-		if (IsSaturated(UVD.xy))
-		{
-			float attenuation = CalcShadowFactor_PCF3x3(shadowsampler, g_ShadowTexture, UVD, 2048, 1.0f);
-
-			attenuation *= ExponentialFog(cameradistance - marcheddistance);
-
-			acc += attenuation;
-
-		}
-
-		marcheddistance += stepSize;
-		
-		P = P + V * stepSize;
-        
-	}
-
-	acc /= sampleCount;
-	float3 color = float3(1.f, 1.f, 1.f);
-	Out.vColor = max(0, float4(acc * color * 1.0f, 1));
-	
-	return Out;
-}
 
 PS_OUT_VOLUMETRIC PS_MAIN_SHADOW(PS_IN In)
 {
@@ -475,7 +469,7 @@ PS_OUT_BLEND PS_MAIN_BLEND(PS_IN In)
 		float fLaplacianMask[9] =
 		{
 			-1.f, -1.f, -1.f,
-			-1.f, 8.f, -1.f,
+			-1.f, 9.f, -1.f,
 			-1.f, -1.f, -1.f
 		};
 		for (int i = 0; i < 9; ++i)
@@ -556,22 +550,11 @@ technique11 DefaultTechnique
 		PixelShader = compile ps_5_0 PS_MAIN_ALPHA();
 	}
 
-	pass Light_Directional_Volumetric // 5
-	{
-		SetRasterizerState(CullMode_Default);
-		SetDepthStencilState(ZTestDiable, 0);
-		SetBlendState(OneBlending, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
-		
-		VertexShader = compile vs_5_0 VS_MAIN_Qude();
-		GeometryShader = NULL;
-		PixelShader = compile ps_5_0 PS_MAIN_VOLUMETRIC();
-	}
-
-	pass Light_Directional_Shadow // 6
+	pass Light_Directional_Shadow // 5
 	{
 		SetRasterizerState(CullMode_None);
 		SetDepthStencilState(ZTestDiable, 0);
-		SetBlendState(BlendDisable, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+		SetBlendState(AlphaBlending, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
 		
 		VertexShader = compile vs_5_0 VS_MAIN_VIEWPORT();
 		GeometryShader = NULL;

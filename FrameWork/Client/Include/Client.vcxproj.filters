@@ -597,9 +597,6 @@
     <Filter Include="02.GameObject\02.Map\01.Environment\02.MapObject">
       <UniqueIdentifier>{6c74a239-aae4-4275-b01a-ea48c53eae4c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObject\04.Effect\05.TrailEffect">
-      <UniqueIdentifier>{4da4394f-ff21-4396-a0e8-24986eaeec60}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObject\04.Effect\00.Particle">
       <UniqueIdentifier>{26ffc168-b02c-40a4-b7fb-3fa6ef6e68d1}</UniqueIdentifier>
     </Filter>

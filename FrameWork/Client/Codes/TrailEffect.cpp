@@ -57,7 +57,7 @@ _int CTrailEffect::LateTick(_double _dDeltaTime)
 		return iProgress;
 
 	if(m_isRender)
-		m_pRenderer->Add_RenderGroup(CRenderer::RENDER_NONALPHA, this);
+		m_pRenderer->Add_RenderGroup(CRenderer::RENDER_ALPHA, this);
 
 	return _int();
 }
@@ -124,8 +124,10 @@ HRESULT CTrailEffect::Render()
 	m_pVIBuffer->SetUp_ValueOnShader("g_ViewMatrix", &smatView, sizeof(_matrix));
 	m_pVIBuffer->SetUp_ValueOnShader("g_ProjMatrix", &smatProj, sizeof(_matrix));
 	m_pVIBuffer->SetUp_TextureOnShader("g_DiffuseTexture", m_pTexture);
+	m_pVIBuffer->SetUp_TextureOnShader("g_DistortionTex", m_pTexture1);
+	m_pVIBuffer->SetUp_TextureOnShader("g_DistorionMaskTex", m_pTexture2);
 
-	m_pVIBuffer->Render_Curve(0);
+	m_pVIBuffer->Render_Curve(1);
 
 	m_listCurved.clear();
 	Safe_Delete_Array(vPoints);
@@ -141,6 +143,12 @@ HRESULT CTrailEffect::Ready_Components()
 
 	m_pTexture = g_pGameInstance->Clone_Component<CTexture>(0, L"Proto_Component_Texture");
 	m_pTexture->Change_Texture(L"TrailBase");
+
+	m_pTexture1 = g_pGameInstance->Clone_Component<CTexture>(0, L"Proto_Component_Texture");;
+	m_pTexture1->Change_Texture(L"DistortionBase");
+
+	m_pTexture2 = g_pGameInstance->Clone_Component<CTexture>(0, L"Proto_Component_Texture");;
+	m_pTexture2->Change_Texture(L"DistortionMask");
 
 	return S_OK;
 }
@@ -288,5 +296,7 @@ void CTrailEffect::Free()
 	__super::Free();
 
 	Safe_Release(m_pTexture);
+	Safe_Release(m_pTexture1);
+	Safe_Release(m_pTexture2);
 	Safe_Release(m_pVIBuffer);
 }

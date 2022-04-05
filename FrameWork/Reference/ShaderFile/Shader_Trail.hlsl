@@ -7,7 +7,9 @@ cbuffer Matrices
 	matrix		g_ProjMatrix;
 };
 
-texture2D	g_DiffuseTexture;
+Texture2D	g_DiffuseTexture;
+Texture2D	g_DistortionTex;
+Texture2D	g_DistorionMaskTex;
 
 sampler DefaultSampler = sampler_state
 {		
@@ -66,21 +68,33 @@ PS_OUT_TRAIL PS_MAIN_TRAIL(PS_IN_TRAIL In)
 	PS_OUT_TRAIL Out = (PS_OUT_TRAIL) 0;
 	
 	float4 diffuse = g_DiffuseTexture.Sample(DefaultSampler, In.vUvDepth.xy);
+		
+	float4 distortion = g_DistortionTex.Sample(DefaultSampler, In.vUvDepth.xy);
+	float4 distortionmask = g_DistorionMaskTex.Sample(DefaultSampler, In.vUvDepth.xy);
 	
-	Out.diffuse = diffuse;
+	clip(distortionmask.r - 0.1f);
+	
+	float2 distortUV = In.vUvDepth.xy + (distortion.x * 0.02f * distortionmask.x);
+	distortUV.y = clamp(distortUV.y, 0, 1);
+	
+	float4 diffuse2 = g_DiffuseTexture.Sample(DefaultSampler, distortUV);
+	diffuse2 = g_DiffuseTexture.Sample(DefaultSampler, In.vUvDepth.xy);
+	//diffuse2 = g_DiffuseTexture.Sample(DefaultSampler, In.vUvDepth.xy);
+	
+	Out.diffuse = diffuse2;
 
-	if (Out.diffuse.a == 0)
-		discard;
+	//if (Out.diffuse.a == 0)
+	//	discard;
 	
-	Out.depth = float4(In.vUvDepth.z / In.vUvDepth.w, In.vUvDepth.w / 300.f, 0.f, 0.f);
-	Out.normal = float4(1, 1, 1, 0);
+	//Out.depth = float4(In.vUvDepth.z / In.vUvDepth.w, In.vUvDepth.w / 300.f, 0.f, 0.f);
+	//Out.normal = float4(1, 1, 1, 0);
 	
-	Out.M = float4(0, 0, 0, 1);
-	Out.R = float4(1, 1, 1, 1);
-	Out.A = float4(1, 1, 1, 1);
-	float4 color = float4(0.99f, 0.43f, 0.2f, 0.3f);
-	float4 power = 0.8f;
-	Out.E = color * power;
+	//Out.M = float4(0, 0, 0, 1);
+	//Out.R = float4(1, 1, 1, 1);
+	//Out.A = float4(1, 1, 1, 1);
+	//float4 color = float4(0.99f, 0.43f, 0.2f, 0.3f);
+	//float4 power = 0.3f;
+	//Out.E = color * power * diffuse2.g;
 
 	return Out;
 }
@@ -93,6 +107,16 @@ technique11 DefaultTechnique
 	{
 		SetRasterizerState(CullMode_None);
 		SetDepthStencilState(ZDefault, 0);
+
+		VertexShader = compile vs_5_0 VS_MAIN_TRAIL();
+		GeometryShader = NULL;
+		PixelShader = compile ps_5_0 PS_MAIN_TRAIL();
+	}
+	pass TrailBlend
+	{
+		SetRasterizerState(CullMode_None);
+		SetDepthStencilState(ZDefault, 0);
+		SetBlendState(AlphaBlending, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
 
 		VertexShader = compile vs_5_0 VS_MAIN_TRAIL();
 		GeometryShader = NULL;

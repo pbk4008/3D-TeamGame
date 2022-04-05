@@ -269,8 +269,8 @@ HRESULT CStage1::Ready_Player(const _tchar* LayerTag)
 {
 	//// 네비메쉬
 	wstring wstrNaviFile = L"../Data/NavMesh/Stage_1_Nav.dat";
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_SordTrail", L"Prototype_GameObject_SwordTral")))
-		return E_FAIL;
+	/*if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_SordTrail", L"Prototype_GameObject_SwordTral")))
+		return E_FAIL;*/
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Plane", L"Proto_GameObject_Plane_Test",&wstrNaviFile)))
 		return E_FAIL;
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Proto_GameObject_Silvermane")))
@@ -398,6 +398,7 @@ HRESULT CStage1::Ready_UI(const _tchar* LayerTag)
 HRESULT CStage1::Ready_Light()
 {
 	LIGHTDESC			LightDesc;
+
 	ZeroMemory(&LightDesc, sizeof(LIGHTDESC));
 
 	LightDesc.eType = LIGHTDESC::TYPE_DIRECTIONAL;
@@ -407,7 +408,17 @@ HRESULT CStage1::Ready_Light()
 	LightDesc.vAmbient = _float4(0.6f, 0.6f, 0.6f, 1.f);
 	LightDesc.mOrthinfo[0] = 30.f;
 
-	if (FAILED(g_pGameInstance->CreateLightCam(m_pDevice, m_pDeviceContext, LightDesc))) return E_FAIL;
+	if (FAILED(g_pGameInstance->CreateLightCam(m_pDevice, m_pDeviceContext, LightDesc))) MSGBOX("Failed To Creating DirectionLight Cam");
+
+	ZeroMemory(&LightDesc, sizeof(LIGHTDESC));
+	LightDesc.eType = LIGHTDESC::TYPE_POINT;
+	LightDesc.fRange = 10.f;
+	LightDesc.vDiffuse = _float4(1.f, 0.f, 0.f, 1.f);
+	LightDesc.vSpecular = _float4(0.8f, 0.8f, 0.8f, 1.f);
+	LightDesc.vAmbient = _float4(0.6f, 0.6f, 0.6f, 1.f);
+	LightDesc.vPosition = _float3(2.f, 15.f, 110.f);
+
+	if (FAILED(g_pGameInstance->Add_Light(m_pDevice, m_pDeviceContext, LightDesc))) MSGBOX("Failed To Adding PointLight");
 
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_SkyBox", L"Proto_GameObject_SkyBox")))
 		return E_FAIL;

@@ -23,10 +23,10 @@ cbuffer Distortionbuffer
 	float	g_distortionbias;
 };
 
-texture2D g_FireTexture;
-texture2D g_NoiseTexture;
-texture2D g_AlphaTexture;
-texture2D g_DepthTexture;
+Texture2D g_FireTexture;
+Texture2D g_NoiseTexture;
+Texture2D g_AlphaTexture;
+Texture2D g_DepthTexture;
 
 sampler WrapSampler = sampler_state
 {		
