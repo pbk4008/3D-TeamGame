@@ -46,8 +46,8 @@ enum class EFFECT
 	HIT,
 	FLOATING,
 	DEATH,
-	PLAYERHIT
-	//ENV_FLOATING
+	PLAYERHIT,
+	GUARD
 };
 
 enum class ELayer
