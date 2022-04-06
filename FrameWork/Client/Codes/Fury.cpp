@@ -105,6 +105,41 @@ HRESULT CFury::Render()
 	return S_OK;
 }
 
+void CFury::RangeAttack()
+{
+	OVERLAPDESC tOverlapDesc;
+	tOverlapDesc.geometry = PxSphereGeometry(5.f);
+	XMStoreFloat3(&tOverlapDesc.vOrigin, m_pTransform->Get_State(CTransform::STATE_POSITION));
+	CGameObject* pHitObject = nullptr;
+	tOverlapDesc.ppOutHitObject = &pHitObject;
+	tOverlapDesc.filterData.flags = PxQueryFlag::eDYNAMIC;
+	if (g_pGameInstance->Overlap(tOverlapDesc))
+	{
+		_uint iSize = tOverlapDesc.vecHitObject.size();
+		for (_uint i = 0; i < iSize; ++i)
+		{
+			CActor* pActor = static_cast<CActor*>(tOverlapDesc.vecHitObject[i]);
+			_uint iTag = tOverlapDesc.vecHitObject[i]->getTag();
+			switch (iTag)
+			{
+			case (_uint)GAMEOBJECT::MONSTER_CRYSTAL:
+			case (_uint)GAMEOBJECT::MONSTER_ABERRANT:
+			case (_uint)GAMEOBJECT::MONSTER_1H:
+			case (_uint)GAMEOBJECT::MONSTER_2H:
+			case (_uint)GAMEOBJECT::MONSTER_HEALER:
+			case (_uint)GAMEOBJECT::MONSTER_SHOOTER:
+			case (_uint)GAMEOBJECT::MONSTER_SPEAR:
+				ATTACKDESC tAttackDesc = m_pOwner->Get_AttackDesc();
+				tAttackDesc.fDamage += m_fDamage * 0.8f;
+				tAttackDesc.iLevel = 2;
+				tAttackDesc.pHitObject = this;
+				pActor->Hit(tAttackDesc);
+				break;
+			}
+		}
+	}
+}
+
 HRESULT CFury::Ready_Components()
 {
 	CTransform::TRANSFORMDESC transformDesc;

@@ -88,6 +88,7 @@ public: /* For.Weapon */
 	void Set_WeaponFixedBone(CHierarchyNode* _pFixedBone);
 	const _bool Change_Weapon(const wstring& _name);
 	HRESULT Change_State(const wstring& _wstrStateTag);
+	void RangeAttack();
 
 public: /* For.Shield */
 	const _float Get_BlockTime() const;

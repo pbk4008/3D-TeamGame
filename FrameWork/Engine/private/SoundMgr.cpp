@@ -101,7 +101,7 @@ void CSoundMgr::BlendSound(const std::wstring& pStartSoundKey,
 
 	FMOD_RESULT Result = FMOD_ERR_FILE_BAD;
 	FMOD_BOOL bPlay = false;
-	_uint Position = 0.f, Len = 0.f;
+	_uint Position = 0, Len = 0;
 	FMOD_Sound_GetLength(Startiter->second, &Len, FMOD_TIMEUNIT_MS);
 
 	Play_Shot(pStartSoundKey, eStartID);

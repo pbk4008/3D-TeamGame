@@ -1075,6 +1075,12 @@ HRESULT CSilvermane::Change_State(const wstring& _wstrStateTag)
 	return m_pStateController->Change_State(_wstrStateTag);
 }
 
+void CSilvermane::RangeAttack()
+{
+	if (m_pCurWeapon)
+		m_pCurWeapon->RangeAttack();
+}
+
 const _float CSilvermane::Get_BlockTime() const
 {
 	return m_fBlockTime;
@@ -1222,6 +1228,7 @@ const _bool CSilvermane::Raycast_JumpNode(const _double& _dDeltaTime)
 	_uint iObjectTag = -1;
 
 	svRayPos += svRayDir * 6.f;
+	// 레이캐스트
 	RAYCASTDESC tRaycastDesc;
 	XMStoreFloat3(&tRaycastDesc.vOrigin, svRayPos);
 	XMStoreFloat3(&tRaycastDesc.vDir, svRayDir);
@@ -1236,6 +1243,22 @@ const _bool CSilvermane::Raycast_JumpNode(const _double& _dDeltaTime)
 			iObjectTag = pHitObject->getTag();
 		}
 	}
+	//// 스윕
+	//SWEEPDESC tSweepDesc;
+	//tSweepDesc.geometry = PxSphereGeometry(1.f);
+	//XMStoreFloat3(&tSweepDesc.vOrigin, svRayPos);
+	//XMStoreFloat3(&tSweepDesc.vDir, svRayDir);
+	//tSweepDesc.fMaxDistance = 50.f;
+	//tSweepDesc.filterData.flags = PxQueryFlag::eANY_HIT | PxQueryFlag::eDYNAMIC;
+	//CGameObject* pHitObject = nullptr;
+	//tSweepDesc.ppOutHitObject = &pHitObject;
+	//if (g_pGameInstance->Sweep(tSweepDesc))
+	//{
+	//	if (pHitObject)
+	//	{
+	//		iObjectTag = pHitObject->getTag();
+	//	}
+	//}
 
 	//점프ui관련
 	m_pBlankCKey = (CUI_Blank_CKey*)g_pGameInstance->getObjectList(m_iSceneID, L"Layer_UI_BlankC")->front();

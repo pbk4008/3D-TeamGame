@@ -36,7 +36,7 @@ class CGameObject;
 
 typedef struct tagRaycastDesc
 {
-	// int
+	// in
 	_float3 vOrigin = { 0.f, 0.f, 0.f };
 	_float3 vDir = { 0.f, 0.f, 0.f };
 	_float fMaxDistance = 0.f;
@@ -46,6 +46,31 @@ typedef struct tagRaycastDesc
 	_float3 vHitPos = { 0.f, 0.f, 0.f };
 	CGameObject** ppOutHitObject = nullptr;
 }RAYCASTDESC;
+typedef struct tagSweepDesc
+{
+	// in
+	PxGeometryHolder geometry;
+	_float3 vOrigin = { 0.f, 0.f, 0.f };
+	_float4 vQuat = { 0.f, 0.f, 0.f, 1.f };
+	_float3 vDir = { 0.f, 0.f, 0.f };
+	_float fMaxDistance = 0.f;
+	PxHitFlags hitFlags = PxHitFlag::eDEFAULT;
+	PxQueryFilterData filterData;
+	// out
+	_float3 vHitPos = { 0.f, 0.f, 0.f };
+	CGameObject** ppOutHitObject = nullptr;
+}SWEEPDESC;
+typedef struct tagOverlapDesc
+{
+	// in
+	PxGeometryHolder geometry;
+	_float3 vOrigin = { 0.f, 0.f, 0.f };
+	_float4 vQuat = { 0.f, 0.f, 0.f, 1.f };
+	PxQueryFilterData filterData;
+	// out
+	CGameObject** ppOutHitObject = nullptr;
+	vector<CGameObject*> vecHitObject;
+}OVERLAPDESC;
 
 class CPhysicsXSystem final : public CSingleTon<CPhysicsXSystem>
 {
@@ -61,7 +86,9 @@ public:
 
 private:
 	PxMaterial* Create_Material(const PxReal _staticFriction, const PxReal _dynamicFriction, const PxReal _restitution);
-	PxRigidActor* Create_RigidActor(const ERigidType _eRigidType, const _bool isGravity, const _bool _isKinematic, const _bool _isVisualization = true, const PxVec3& _pxvPosition = { 0.f, 0.f, 0.f });
+	PxRigidActor* Create_RigidActor(const ERigidType _eRigidType, const _bool isGravity, const _bool _isKinematic, const _bool _isVisualization = true
+		, const _float _fMass = 1.f, const PxVec3& _pxvPosition = { 0.f, 0.f, 0.f });
+	PxRigidActor* Create_RigidActor(CCollider* _pCollider);
 
 public:
 	HRESULT Create_Box(CBoxCollider* _pCollider);
@@ -77,6 +104,8 @@ public:
 
 public:
 	const _bool Raycast(RAYCASTDESC& _desc);
+	const _bool Sweep(SWEEPDESC& _desc);
+	const _bool Overlap(OVERLAPDESC& _desc);
 
 private:
 	PxDefaultAllocator m_Allocator;

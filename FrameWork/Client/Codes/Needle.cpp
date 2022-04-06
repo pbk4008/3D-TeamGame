@@ -50,11 +50,11 @@ HRESULT CNeedle::NativeConstruct(const _uint _iSceneID, void* _pArg)
 	if (FAILED(__super::NativeConstruct(_iSceneID, _pArg)))
 		return E_FAIL;
 
-	if (FAILED(Ready_Components()))
-		return E_FAIL;
-
 	if (_pArg)
 		m_pFixedBone = static_cast<CHierarchyNode*>(_pArg);
+
+	if (FAILED(Ready_Components()))
+		return E_FAIL;
 
 	XMStoreFloat4x4(&m_matPivot, XMMatrixRotationRollPitchYaw(XMConvertToRadians(-20.f), XMConvertToRadians(-67.f), XMConvertToRadians(0.f)) * XMMatrixTranslation(0.5f, 0.05f, -0.2f));
 
@@ -150,6 +150,41 @@ HRESULT CNeedle::Render()
 void CNeedle::OnTriggerEnter(CCollision& collision)
 {
 
+}
+
+void CNeedle::RangeAttack()
+{
+	OVERLAPDESC tOverlapDesc;
+	tOverlapDesc.geometry = PxSphereGeometry(5.f);
+	XMStoreFloat3(&tOverlapDesc.vOrigin, m_pTransform->Get_State(CTransform::STATE_POSITION));
+	CGameObject* pHitObject = nullptr;
+	tOverlapDesc.ppOutHitObject = &pHitObject;
+	tOverlapDesc.filterData.flags = PxQueryFlag::eDYNAMIC;
+	if (g_pGameInstance->Overlap(tOverlapDesc))
+	{
+		_uint iSize = tOverlapDesc.vecHitObject.size();
+		for (_uint i = 0; i < iSize; ++i)
+		{
+			CActor* pActor = static_cast<CActor*>(tOverlapDesc.vecHitObject[i]);
+			_uint iTag = tOverlapDesc.vecHitObject[i]->getTag();
+			switch (iTag)
+			{
+			case (_uint)GAMEOBJECT::MONSTER_CRYSTAL:
+			case (_uint)GAMEOBJECT::MONSTER_ABERRANT:
+			case (_uint)GAMEOBJECT::MONSTER_1H:
+			case (_uint)GAMEOBJECT::MONSTER_2H:
+			case (_uint)GAMEOBJECT::MONSTER_HEALER:
+			case (_uint)GAMEOBJECT::MONSTER_SHOOTER:
+			case (_uint)GAMEOBJECT::MONSTER_SPEAR:
+				ATTACKDESC tAttackDesc = m_pOwner->Get_AttackDesc();
+				tAttackDesc.fDamage += m_fDamage * 0.5f;
+				tAttackDesc.iLevel = 2;
+				tAttackDesc.pHitObject = this;
+				pActor->Hit(tAttackDesc);
+				break;
+			}
+		}
+	}
 }
 
 HRESULT CNeedle::Ready_Components()

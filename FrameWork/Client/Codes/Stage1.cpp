@@ -466,13 +466,13 @@ HRESULT CStage1::Ready_Data_Effect()
 	wstring FullName = L"Proto_GameObject_Effect_Hit";
 
 	//마지막에 받을 Effect변수 넣기
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Hit", FullName, &vecHitParticle[0],(CGameObject**)&pEffect)))
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Effect_Hit", FullName, &vecHitParticle[0],(CGameObject**)&pEffect)))
 	{
 		MSGBOX("Failed to Creating in CStage1::Ready_Effect()");
 		return E_FAIL;
 	}
 	//매니저에 이펙트 넣기 (마지막 매개변수 : 같은 이펙트 추가로 넣을 갯수)
-	if (FAILED(g_pGameInstance->Add_Effect((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Hit", pEffect, 20)))
+	if (FAILED(g_pGameInstance->Add_Effect((_uint)SCENEID::SCENE_STAGE1, L"Layer_Effect_Hit", pEffect, 20)))
 	{
 		MSGBOX("Falild to Clone in Effect_Hit");
 		return E_FAIL;
@@ -482,12 +482,12 @@ HRESULT CStage1::Ready_Data_Effect()
 	g_pGameInstance->LoadFile<CEffect_HitFloating::EFFECTDESC>(vecHitFloating, L"../bin/SaveData/Effect/Effect_Player_Attack2_Floating.dat");
 
 	FullName = L"Proto_GameObject_Effect_Floating";
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Floating", FullName, &vecHitFloating[0],(CGameObject**)&pEffect)))
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Effect_Floating", FullName, &vecHitFloating[0],(CGameObject**)&pEffect)))
 	{
 		MSGBOX("Failed to Creating in CStage1::Ready_Effect()");
 		return E_FAIL;
 	}
-	if (FAILED(g_pGameInstance->Add_Effect((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Floating", pEffect, 20)))
+	if (FAILED(g_pGameInstance->Add_Effect((_uint)SCENEID::SCENE_STAGE1, L"Layer_Effect_Floating", pEffect, 20)))
 	{
 		MSGBOX("Falild to Clone in Effect_Floating");
 		return E_FAIL;
@@ -498,12 +498,12 @@ HRESULT CStage1::Ready_Data_Effect()
 	g_pGameInstance->LoadFile<CEffect_DeathParticle::EFFECTDESC>(vecDeath, L"../bin/SaveData/Effect/Effect_Death.dat");
 
 	FullName = L"Proto_GameObject_Effect_Death";
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Death", FullName, &vecDeath[0], (CGameObject**)&pEffect)))
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Effect_Death", FullName, &vecDeath[0], (CGameObject**)&pEffect)))
 	{
 		MSGBOX("Failed to Creating in CStage1::Ready_Effect()");
 		return E_FAIL;
 	}
-	if (FAILED(g_pGameInstance->Add_Effect((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Death", pEffect, 8)))
+	if (FAILED(g_pGameInstance->Add_Effect((_uint)SCENEID::SCENE_STAGE1, L"Layer_Effect_Death", pEffect, 8)))
 	{
 		MSGBOX("Falild to Clone in Effect_Death");
 		return E_FAIL;
@@ -514,12 +514,12 @@ HRESULT CStage1::Ready_Data_Effect()
 	g_pGameInstance->LoadFile<CEffect_HitParticle::EFFECTDESC>(vecHitPlayer, L"../bin/SaveData/Effect/Effect_PlayerHit.dat");
 
 	FullName = L"Proto_GameObject_Effect_PlayerHit";
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_PlayerHit", FullName, &vecHitPlayer[0], (CGameObject**)&pEffect)))
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Effect_PlayerHit", FullName, &vecHitPlayer[0], (CGameObject**)&pEffect)))
 	{
 		MSGBOX("Failed to Creating in CStage1::Ready_Effect()");
 		return E_FAIL;
 	}
-	if (FAILED(g_pGameInstance->Add_Effect((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_PlayerHit", pEffect, 8)))
+	if (FAILED(g_pGameInstance->Add_Effect((_uint)SCENEID::SCENE_STAGE1, L"Layer_Effect_PlayerHit", pEffect, 8)))
 	{
 		MSGBOX("Falild to Clone in Effect_PlayerHit");
 		return E_FAIL;
@@ -530,12 +530,12 @@ HRESULT CStage1::Ready_Data_Effect()
 	g_pGameInstance->LoadFile<CEffect_Guard::EFFECTDESC>(vecGuard, L"../bin/SaveData/Effect/Effect_Guard.dat");
 
 	FullName = L"Proto_GameObject_Effect_Guard";
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Guard", FullName, &vecGuard[0], (CGameObject**)&pEffect)))
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Effect_Guard", FullName, &vecGuard[0], (CGameObject**)&pEffect)))
 	{
 		MSGBOX("Failed to Creating in CStage1::Ready_Effect_Guard()");
 		return E_FAIL;
 	}
-	if (FAILED(g_pGameInstance->Add_Effect((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Guard", pEffect, 8)))
+	if (FAILED(g_pGameInstance->Add_Effect((_uint)SCENEID::SCENE_STAGE1, L"Layer_Effect_Guard", pEffect, 8)))
 	{
 		MSGBOX("Falild to Clone in Effect_Guard");
 		return E_FAIL;
@@ -553,7 +553,7 @@ HRESULT CStage1::Ready_Data_Effect()
 	Desc.fEffectPlaySpeed = 1.f;
 	Desc.fMyPos = { 0.f, 0.f, 0.f };
 
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Env_Fire", L"Proto_GameObject_Effect_Env_Fire", &Desc)))
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Effect_Env_Fire", L"Proto_GameObject_Effect_Env_Fire", &Desc)))
 	{
 		MSGBOX("Failed to Creating in CStage1::Ready_Effect()");
 		return E_FAIL;
@@ -566,17 +566,17 @@ HRESULT CStage1::Ready_Data_Effect()
 	FullName = L"Proto_GameObject_Effect_Env_Floating";
 
 	vecEnvFloating[0].fMyPos = { 0.f, 1.f, 10.f };
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Env_Floating", FullName, &vecEnvFloating[0])))
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Effect_Env_Floating", FullName, &vecEnvFloating[0])))
 	{
 		MSGBOX("Failed to Creating in CStage1::Ready_Effect()");
 		return E_FAIL;
 	}
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Env_Floating", FullName, &vecEnvFloating[0], (CGameObject**)&pEffect)))
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Effect_Env_Floating", FullName, &vecEnvFloating[0], (CGameObject**)&pEffect)))
 	{
 		MSGBOX("Failed to Creating in CStage1::Ready_Effect()");
 		return E_FAIL;
 	}
-	if (FAILED(g_pGameInstance->Add_Effect((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Env_Floating", pEffect, 1)))
+	if (FAILED(g_pGameInstance->Add_Effect((_uint)SCENEID::SCENE_STAGE1, L"Layer_Effect_Env_Floating", pEffect, 1)))
 	{
 		MSGBOX("Falild to Clone in Effect_Env_Floating");
 		return E_FAIL;

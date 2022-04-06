@@ -22,6 +22,8 @@ public:
 
 	virtual void OnTriggerEnter(CCollision& collision) override;
 
+	virtual void RangeAttack() override;
+
 private:
 	HRESULT Ready_Components();
 	_int Attach_FixedBone(const _double& _dDeltaTime);

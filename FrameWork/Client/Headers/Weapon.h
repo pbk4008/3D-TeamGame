@@ -36,6 +36,10 @@ public:
 	void Set_SwordTrail(_bool check) { m_bTrailOnOff = check; }
 
 	const _bool IsAttack() const;
+
+public:
+	virtual void RangeAttack();
+
 protected:
 	//매개변수로 받은 행렬 크기 없애주는 함수
 	_fmatrix Remove_Scale(_fmatrix matTransform);

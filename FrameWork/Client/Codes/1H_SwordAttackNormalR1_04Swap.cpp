@@ -36,6 +36,14 @@ _int C1H_SwordAttackNormalR1_04Swap::Tick(const _double& _dDeltaTime)
 		}
 	}
 
+
+	if (41 < iCurkeyFrameIndex && !m_isRangeAttack)
+	{
+		m_pSilvermane->RangeAttack();
+		m_isRangeAttack = true;
+	}
+
+
 	if (m_pAnimationController->Is_Finished())
 	{
 		m_pStateController->Change_State(L"1H_SwordIdle");
@@ -113,6 +121,7 @@ HRESULT C1H_SwordAttackNormalR1_04Swap::ExitState()
 		return E_FAIL;
 
 	m_isShake2 = false;
+	m_isRangeAttack = false;
 	return S_OK;
 }
 
