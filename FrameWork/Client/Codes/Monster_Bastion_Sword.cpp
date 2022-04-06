@@ -644,18 +644,13 @@ void CMonster_Bastion_Sword::Hit()
 		g_pGameInstance->Play_Shot(L"Monster_Hit_6", CSoundMgr::CHANNELID::Sword1H_Hit);
 		tData.fCurHp = m_fCurrentHp;
 		tData.iHitType = (_uint)m_eHitType;
+		Active_Effect((_uint)EFFECT::HIT);
+		Active_Effect((_uint)EFFECT::FLOATING);
 		m_pStateController->Change_State(L"Hit", &tData);
-	}
-	if (!m_bGroggy)
-	{
-		//그로기 아닐때만 증가할수있게
 		m_fGroggyGauge += 2; //TODO::수치정해서바꿔줘야됨
 		m_pPanel->Set_GroggyBar(Get_GroggyGaugeRatio());
 	}
-
-	//Active_Effect((_uint)EFFECT::HIT);
-	//Active_Effect((_uint)EFFECT::FLOATING);
-	Active_Effect((_uint)EFFECT::GUARD);
+	//Active_Effect((_uint)EFFECT::GUARD);
 }
 
 CMonster_Bastion_Sword* CMonster_Bastion_Sword::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)

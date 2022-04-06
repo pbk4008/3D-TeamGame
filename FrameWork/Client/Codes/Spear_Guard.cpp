@@ -25,7 +25,6 @@ HRESULT CSpear_Guard::NativeConstruct(void* _pArg)
 
 _int CSpear_Guard::Tick(const _double& _dDeltaTime)
 {
-	cout << "Guard" << endl;
 	_int iProgress = __super::Tick(_dDeltaTime);
 	if (NO_EVENT != iProgress)
 		return iProgress;

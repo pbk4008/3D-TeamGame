@@ -37,13 +37,12 @@ _int CSpear_Charge_Attack::Tick(const _double& _dDeltaTime)
 		&&!m_pAnimator->Get_IsLerp())
 		m_pAnimator->Change_LoopAnim();
 	else if (m_pAnimator->Get_CurrentAnimNode() == (_uint)CMonster_Bastion_Spear::ANIM_TYPE::A_ATTACK_CHARGE_ED
-		&& m_pAnimator->Get_IsLerp()
+		&& !m_pAnimator->Get_IsLerp()
 		&& m_pAnimator->Get_CurrentAnimation()->Is_Finished())
 	{
 		m_pOwner->Set_ChargeOn(true);
 		m_pOwner->Set_Attack(false);
 		m_pOwner->Set_Target(false);
-		m_pOwner->Set_GuardCount(5);
 		m_pStateController->Change_State(L"Idle");
 	}
 	return _int();
@@ -73,7 +72,7 @@ HRESULT CSpear_Charge_Attack::EnterState()
 
 	//m_bChargeOn = true;
 	m_pAnimator->Change_AnyEntryAnimation((_uint)CMonster_Bastion_Spear::ANIM_TYPE::A_ATTACK_CHARGE_ST);
-
+	
 	return S_OK;
 }
 

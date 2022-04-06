@@ -180,30 +180,10 @@ HRESULT CSpear_State::ExitState()
 
 HRESULT CSpear_State::Check_State()
 {
-	if (!m_pOwner->Get_Dead() && !m_pOwner->Get_Groggy() 
-		&& !m_pOwner->Get_Half()
-		&& m_pStateController->Get_CurStateTag() != L"Hit")
+	if (!m_pOwner->Get_Dead())
 	{
-		if (m_pOwner->Get_Guard())
-		{
-			m_pStateController->Change_State(L"Guard");
-			return S_OK;
-		}
-		if (m_pOwner->Get_Target())
-			m_pStateController->Change_State(L"Chaser");
-		else if (m_pOwner->Get_Attack())
-		{
-			_uint iRand = rand() % 2;
-			m_pStateController->Change_State(L"Attack",&iRand);
-		}
-		else
-			m_pStateController->Change_State(L"Idle");
-	}
-	else if (m_pOwner->Get_Half())
-	{
-		if (!m_pOwner->Get_ChargeOn() && m_pStateController->Get_CurStateTag() != L"Charge_Attack")
-			m_pStateController->Change_State(L"Bwd_Dash");
-		else
+		if(!m_pOwner->Get_Groggy()&& !m_pOwner->Get_Half()
+			&& m_pStateController->Get_CurStateTag() != L"Hit")
 		{
 			if (m_pOwner->Get_Guard())
 			{
@@ -212,15 +192,40 @@ HRESULT CSpear_State::Check_State()
 			}
 			if (m_pOwner->Get_Target())
 				m_pStateController->Change_State(L"Chaser");
-			else if (m_pOwner->Get_Attack()&& m_pStateController->Get_CurStateTag() != L"Charge_Attack")
+			else if (m_pOwner->Get_Attack())
 			{
 				_uint iRand = rand() % 2;
 				m_pStateController->Change_State(L"Attack", &iRand);
 			}
 			else
+				m_pStateController->Change_State(L"Idle");
+			}
+		else if (m_pOwner->Get_Half())
+		{
+			if (!m_pOwner->Get_ChargeOn() && m_pStateController->Get_CurStateTag() != L"Charge_Attack")
 			{
-				if (m_pStateController->Get_CurStateTag() != L"Charge_Attack")
-					m_pStateController->Change_State(L"Idle");
+				m_pStateController->Change_State(L"Bwd_Dash");
+				m_pOwner->Set_GuardCount(5);
+			}
+			else
+			{
+				if (m_pOwner->Get_Guard())
+				{
+					m_pStateController->Change_State(L"Guard");
+					return S_OK;
+				}
+				if (m_pOwner->Get_Target())
+					m_pStateController->Change_State(L"Chaser");
+				else if (m_pOwner->Get_Attack() && m_pStateController->Get_CurStateTag() != L"Charge_Attack")
+				{
+					_uint iRand = rand() % 2;
+					m_pStateController->Change_State(L"Attack", &iRand);
+				}
+				else
+				{
+					if (m_pStateController->Get_CurStateTag() != L"Charge_Attack")
+						m_pStateController->Change_State(L"Idle");
+				}
 			}
 		}
 	}

@@ -452,8 +452,7 @@ HRESULT CMonster_Bastion_Spear::Ready_AnimFSM(void)
 	m_pAnimator->Set_UpAutoChangeAnimation((_uint)ANIM_TYPE::A_STUN_ED, (_uint)ANIM_TYPE::A_IDLE);
 
 	m_pAnimator->Set_UpAutoChangeAnimation((_uint)ANIM_TYPE::A_ATTACK_CHARGE_ST, (_uint)ANIM_TYPE::A_ATTACK_CHARGE);
-	//m_pAnimator->Set_UpAutoChangeAnimation((_uint)ANIM_TYPE::A_ATTACK_CHARGE, (_uint)ANIM_TYPE::A_ATTACK_CHARGE_ED);
-	m_pAnimator->Set_UpAutoChangeAnimation((_uint)ANIM_TYPE::A_ATTACK_CHARGE_ED, (_uint)ANIM_TYPE::A_IDLE);
+	m_pAnimator->Set_UpAutoChangeAnimation((_uint)ANIM_TYPE::A_ATTACK_CHARGE, (_uint)ANIM_TYPE::A_ATTACK_CHARGE_ED);
 #pragma endregion
 
 #pragma region Anim to Anim Connect
@@ -562,6 +561,7 @@ HRESULT CMonster_Bastion_Spear::Render_Debug(void)
 
 void CMonster_Bastion_Spear::OnTriggerEnter(CCollision& collision)
 {
+	/*int a = 0;*/
 	m_pStateController->OnTriggerEnter(collision);
 }
 
@@ -602,6 +602,11 @@ void CMonster_Bastion_Spear::Hit(CCollision& collision)
 				if (L"Guard" != m_pStateController->Get_CurStateTag()
 					|| m_iGuardCount<=0)
 				{
+					if (m_bHalf)
+					{
+						if (!m_bChargeOn)
+							m_bChargeOn = true;
+					}
 					m_pPanel->Set_Show(true);
 					m_bGuard = false;
 					Set_Current_HP(-1);
@@ -609,23 +614,21 @@ void CMonster_Bastion_Spear::Hit(CCollision& collision)
 					m_pStateController->Change_State(L"Hit");
 					Active_Effect((_uint)EFFECT::HIT);
 					Active_Effect((_uint)EFFECT::FLOATING);
+					if (false == m_bGroggy)
+					{
+						//그로기 아닐때만 증가할수있게
+						m_pPanel->Set_GroggyBar(Get_GroggyGaugeRatio());
+					}
 				}
 				else
 				{
 					m_iGuardCount--;
+					cout << m_iGuardCount << endl;
 					if (m_iGuardCount < 0)
 						m_iGuardCount = 0;
-					Active_Effect((_uint)EFFECT::GUARD);
+					//Active_Effect((_uint)EFFECT::GUARD);
 				}
 				m_pPanel->Set_HpBar(Get_HpRatio());
-
-				if (false == m_bGroggy)
-				{
-					//그로기 아닐때만 증가할수있게
-					m_pPanel->Set_GroggyBar(Get_GroggyGaugeRatio());
-					if (m_pStateController->Get_CurStateTag() != L"Guard")
-						m_pStateController->Change_State(L"Hit");
-				}
 			}
 		}
 	}
