@@ -8,6 +8,9 @@ BEGIN(Engine)
 class CTransform;
 class CRenderer;
 class CComponent;
+
+#define DESTROY CGameObject::Destroy
+
 class ENGINE_DLL CGameObject abstract : public CBase
 {
 protected:
@@ -55,6 +58,8 @@ public:
 	_float		Get_ViewZ() { return m_fViewZ; }
 public:
 	virtual void Set_Remove(_bool bCheck) { m_bRemove = bCheck; };
+	static  void Destroy(CGameObject* _obj);
+
 protected:
 	ID3D11Device* m_pDevice;
 	ID3D11DeviceContext*	m_pDeviceContext;

@@ -67,9 +67,6 @@
     <Filter Include="00.Utility\04.Manager\07.SaveManager">
       <UniqueIdentifier>{43785e42-186f-415d-b7e7-6247e6b21b3d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="00.Utility\04.Manager\08. SoundManager">
-      <UniqueIdentifier>{28d19886-6c26-4069-baed-17d064d73140}</UniqueIdentifier>
-    </Filter>
     <Filter Include="00.Utility\04.Manager\09.Frustum">
       <UniqueIdentifier>{648536de-8e99-4454-8ba5-fbaad312b780}</UniqueIdentifier>
     </Filter>
@@ -319,6 +316,12 @@
     <Filter Include="00.Utility\03.Component\05.VIBuffer\09.Instance\00.Particle\03.Env_Floating">
       <UniqueIdentifier>{04e8b985-4fc1-4c49-be63-4bc0dd35a587}</UniqueIdentifier>
     </Filter>
+    <Filter Include="00.Utility\04.Manager\08.SoundManager">
+      <UniqueIdentifier>{28d19886-6c26-4069-baed-17d064d73140}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00.Utility\07.SplineCurve">
+      <UniqueIdentifier>{375e8bbc-7914-4651-827f-89cce9de73ce}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\public\Base.h">
@@ -460,7 +463,7 @@
       <Filter>00.Utility\04.Manager\07.SaveManager</Filter>
     </ClInclude>
     <ClInclude Include="..\public\SoundMgr.h">
-      <Filter>00.Utility\04.Manager\08. SoundManager</Filter>
+      <Filter>00.Utility\04.Manager\08.SoundManager</Filter>
     </ClInclude>
     <ClInclude Include="..\public\TextureManager.h">
       <Filter>00.Utility\04.Manager\10.TextureManager</Filter>
@@ -625,6 +628,9 @@
     <ClInclude Include="..\bin\ShaderFiles\Shader_Calculate.hpp">
       <Filter>98.ShaderFiles\Hpp</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\SplineCurve.h">
+      <Filter>00.Utility\07.SplineCurve</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\private\Base.cpp">
@@ -745,7 +751,7 @@
       <Filter>00.Utility\04.Manager\07.SaveManager</Filter>
     </ClCompile>
     <ClCompile Include="..\private\SoundMgr.cpp">
-      <Filter>00.Utility\04.Manager\08. SoundManager</Filter>
+      <Filter>00.Utility\04.Manager\08.SoundManager</Filter>
     </ClCompile>
     <ClCompile Include="..\private\TextureManager.cpp">
       <Filter>00.Utility\04.Manager\10.TextureManager</Filter>
@@ -899,6 +905,9 @@
     </ClCompile>
     <ClCompile Include="..\private\VIBuffer_PointInstance_Env_Floating.cpp">
       <Filter>00.Utility\03.Component\05.VIBuffer\09.Instance\00.Particle\03.Env_Floating</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\SplineCurve.cpp">
+      <Filter>00.Utility\07.SplineCurve</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

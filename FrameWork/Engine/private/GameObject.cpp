@@ -164,6 +164,20 @@ CTransform* CGameObject::Get_Transform() const
 	return m_pTransform;
 }
 
+void CGameObject::Destroy(CGameObject* _obj)
+{
+	if (!_obj)
+		return;
+	if (_obj->m_bRemove)
+		return;
+
+	_obj->m_bRemove = true;
+	for (auto& com : _obj->m_Components)
+	{
+		Safe_Release(com.second);
+	}
+}
+
 HRESULT CGameObject::SetUp_Components(_uint iLevelIndex, const wstring& pPrototypeTag, const wstring&pComponentTag, CComponent** ppOut, void* pArg)
 {
 	auto	iter = find_if(m_Components.begin(), m_Components.end(), CTag_Finder(pComponentTag));

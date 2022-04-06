@@ -96,6 +96,9 @@ public: /* For.JumpNode */
 	CJumpBox* Get_TargetJumpBox() const;
 	const _bool Raycast_JumpNode(const _double& _dDeltaTime);
 
+public: /* For.DropBox */
+	const void Raycast_DropBox(const _double& _dDeltaTime);
+
 private:
 	const _int Trace_CameraLook(const _double& _dDeltaTime);
 	const _int Input(const _double& _dDeltaTime);
@@ -133,6 +136,9 @@ private: /* For.JumpNode */
 	CUI_Fill_Ckey* m_pFillCKey = nullptr;
 	_float m_fJumpNodeLookTime = 0.f;
 	_float m_fJumpTriggerLookTime = 0.f;
+	
+private: /* Drop Box  */
+	_float m_fOpenDelay = 0.f;
 
 private: /* For.Cheat */
 	_bool m_isHighSpeedMode = false;

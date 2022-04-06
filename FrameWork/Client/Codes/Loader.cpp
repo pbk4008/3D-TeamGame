@@ -68,6 +68,8 @@
 #include "JumpNode.h"
 #include "JumpTrigger.h"
 #include "JumpBox.h"
+#include "DropBox.h"
+#include "DropObject.h"
 #include "SwordTrail.h"
 #include "NoiseFire.h"
 #include "TrailEffect.h"
@@ -148,8 +150,8 @@ HRESULT CLoader::LoadForScene()
 
 HRESULT CLoader::SetUp_Stage1_Object()
 {
-	//if (FAILED(Load_Stage1FBXLoad()))
-	//	return E_FAIL;
+	if (FAILED(Load_Stage1FBXLoad()))
+		return E_FAIL;
 	
 	if (FAILED(Load_Stage1Navi_SkyLoad()))
 		return E_FAIL;
@@ -157,12 +159,12 @@ HRESULT CLoader::SetUp_Stage1_Object()
 	if (FAILED(Load_Stage1PlayerLoad()))
 		return E_FAIL;
 
-	//if (FAILED(Load_Stage1MonsterLoad()))
-	//	return E_FAIL;
+	if (FAILED(Load_Stage1MonsterLoad()))
+		return E_FAIL;
 
-	//if (FAILED(Load_Stage1BossLoad()))
-	//	return E_FAIL;
-
+	if (FAILED(Load_Stage1BossLoad()))
+		return E_FAIL;
+		
 	if (FAILED(Load_Stage1StaticUILoad()))
 		return E_FAIL;
 
@@ -172,14 +174,14 @@ HRESULT CLoader::SetUp_Stage1_Object()
 	if (FAILED(Load_Stage1EffectLoad()))
 		return E_FAIL;
 
-	//if (FAILED(Load_Stage1JumpTrigger()))
-	//	return E_FAIL;
+	if (FAILED(Load_Stage1JumpTrigger()))
+		return E_FAIL;
 
 	if (FAILED(Load_Stage1TriggerLod()))
 		return E_FAIL;
 
-	//if (FAILED(Load_Stage1_TreasureChest_Load()))
-	//	return E_FAIL;
+	if (FAILED(Load_Stage1_TreasureChest_Load()))
+		return E_FAIL;
 
 	return S_OK;
 }
@@ -631,35 +633,35 @@ HRESULT CLoader::Load_Stage1_TreasureChest_Load()
 		return E_FAIL;
 
 	int iResult = 0;
+	CMeshLoader* pMeshLoader = GET_INSTANCE(CMeshLoader);
 	while (iResult != -1)
 	{
 		if (!strcmp(fd.name, ""))
 			break;
-
 		char szFullPath[MAX_PATH] = "../bin/FBX/Treasure_Chest/";
 
 		strcat_s(szFullPath, fd.name);
-
 
 		_tchar fbxName[MAX_PATH] = L"";
 		_tchar fbxPath[MAX_PATH] = L"";
 		MultiByteToWideChar(CP_ACP, 0, fd.name, MAX_PATH, fbxName, MAX_PATH);
 		MultiByteToWideChar(CP_ACP, 0, szFullPath, MAX_PATH, fbxPath, MAX_PATH);
 
-		CMeshLoader::MESHTYPE tMeshType;
-		ZeroMemory(&tMeshType, sizeof(tMeshType));
-
-		lstrcpy(tMeshType.szFBXName, fbxName);
-		lstrcpy(tMeshType.szFBXPath, fbxPath);
-		tMeshType.iType = 2;
-
 		if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Treasure_Chest", CModel::Create(m_pDevice, m_pDeviceContext,
-			tMeshType.szFBXPath, CModel::TYPE_STATIC, TRUE))))
+			fbxPath, CModel::TYPE_ANIM, TRUE))))
 			return E_FAIL;
 
 		iResult = _findnext(handle, &fd);
 	}
 	_findclose(handle);
+
+
+	/* for. Drop Object*/
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_DropObject", CModel::Create(m_pDevice, m_pDeviceContext,
+		L"../bin/FBX/dropObject.fbx", CModel::TYPE_STATIC, true)))) return E_FAIL;
+
+	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_DropObject", CDropObject::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
 
 	return S_OK;
 }
@@ -763,8 +765,8 @@ HRESULT CLoader::SetUp_Stage1_Prototype()
 	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_SubEnvironment", CEnvironment::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 
-	//if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Treasure_Chest", CTreasure_Chest::Create(m_pDevice, m_pDeviceContext))))
-	//	return E_FAIL;
+	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Treasure_Chest", CDropBox::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
 
 	return S_OK;
 }

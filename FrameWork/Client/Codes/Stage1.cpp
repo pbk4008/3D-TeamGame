@@ -30,6 +30,12 @@
 #include <Monster_Bastion_Sword.h>
 #include <Monster_Bastion_Shooter.h>
 
+#include "InteractManager.h"
+#include "DropManager.h"
+
+CDropManager* g_pDropManager = nullptr;
+CInteractManager* g_pInteractManager = nullptr;
+
 CStage1::CStage1()
 	: m_pTriggerSystem(nullptr)
 	, m_bDebug(false)
@@ -62,14 +68,14 @@ HRESULT CStage1::NativeConstruct()
 	if (FAILED(Ready_Light()))
 		return E_FAIL;
 
-	//if (FAILED(Ready_Trigger_Jump()))
-	//	return E_FAIL;
+	if (FAILED(Ready_Trigger_Jump()))
+		return E_FAIL;
 
 	if (FAILED(Ready_Player(L"Layer_Silvermane")))
 		return E_FAIL;
 
-	//if (FAILED(Ready_MapObject()))
-	//	return E_FAIL;
+	if (FAILED(Ready_MapObject()))
+		return E_FAIL;
 
 
 	if (FAILED(Ready_TriggerSystem(L"../bin/SaveData/Trigger/MonsterSpawnTrigger.dat")))
@@ -99,14 +105,20 @@ HRESULT CStage1::NativeConstruct()
 		return E_FAIL;
 	}
 
-	//if (FAILED(Ready_Treasure_Chest()))
-	//	return E_FAIL;
+	if (FAILED(Ready_Treasure_Chest()))
+		return E_FAIL;
 
 	g_pGameInstance->Change_BaseCamera(L"Camera_Silvermane");
 
+	g_pInteractManager = CInteractManager::GetInstance();
+	if (FAILED(g_pInteractManager->NativeConstruct()))
+		return E_FAIL;
 
-	//g_pGameInstance->PlayBGM(L"Stage1_BGM");
+	g_pDropManager = CDropManager::GetInstance();
+	if (FAILED(g_pDropManager->NativeConstruct((SCENEID::SCENE_STAGE1))))
+		return E_FAIL;
 
+	g_pGameInstance->PlayBGM(L"Stage1_BGM");
 	return S_OK;
 }
 
@@ -164,6 +176,9 @@ _int CStage1::Tick(_double TimeDelta)
 	//	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Test", L"Proto_GameObject_Monster_Bastion_Shooter", &fPos, (CGameObject**)&pShooter)))
 	//	//	return -1;
 	//}
+
+	g_pInteractManager->Tick(TimeDelta);
+	g_pDropManager->Tick();
 
 	return _int();
 }
@@ -1397,11 +1412,10 @@ HRESULT CStage1::Ready_Treasure_Chest()
 	vector<CEnvironment::ENVIRONMENTDESC> tChestDesc;
 	tChestDesc.resize(10);
 	_uint iIndex = 0;
-	tChestDesc[iIndex].wstrInstaneTag = vecMapObjectData[0].FileName;
 
 	for (auto& pData : vecMapObjectData)
 	{
-		vecObject. emplace_back(pData.WorldMat);
+		vecObject.emplace_back(pData.WorldMat);
 	}
 
 	for (int i = 0; i < vecObject.size(); ++i)
@@ -1435,5 +1449,9 @@ CStage1* CStage1::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceCont
 void CStage1::Free()
 {
 	CLevel::Free();
+
 	Safe_Release(m_pTriggerSystem);
+
+	CInteractManager::DestroyInstance();
+	CDropManager::DestroyInstance();
 }
