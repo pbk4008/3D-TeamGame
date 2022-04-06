@@ -1532,7 +1532,7 @@
     </ClInclude>
     <ClInclude Include="..\Headers\Effect_Guard.h">
       <Filter>02.GameObject\04.Effect\00.Particle\06.Effect_Guard</Filter>
-	</ClInclude>
+    </ClInclude>
     <ClInclude Include="..\Headers\1H_Stagger.h">
       <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\HIt</Filter>
     </ClInclude>
@@ -2405,7 +2405,7 @@
     </ClCompile>
     <ClCompile Include="..\Codes\Effect_Guard.cpp">
       <Filter>02.GameObject\04.Effect\00.Particle\06.Effect_Guard</Filter>
-	</ClCompile>
+    </ClCompile>
     <ClCompile Include="..\Codes\1H_Stagger.cpp">
       <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\HIt</Filter>
     </ClCompile>
@@ -2540,6 +2540,9 @@
     </FxCompile>
     <FxCompile Include="..\bin\ShaderFile\Shader_UI_Enemy_Bar.hlsl">
       <Filter>100.ShaderFiles\04.UI</Filter>
+    </FxCompile>
+    <FxCompile Include="..\bin\ShaderFile\Shader_Particle_Size.hlsl">
+      <Filter>100.ShaderFiles\03.Effect</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>

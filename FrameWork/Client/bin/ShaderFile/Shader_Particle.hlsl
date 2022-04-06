@@ -62,7 +62,6 @@ VS_OUT VS_MAIN(VS_IN In)
 	Out.vPosition = mul(vPosition, g_WorldMatrix);
     Out.vPSize.x = In.vPSize.x * In.TransformMatrix._11;
     Out.vPSize.y = In.vPSize.y * In.TransformMatrix._22;
-    //Out.vPSize = In.vPSize;
     Out.vTime.x = In.vTime.x;
 	return Out;
 }
@@ -71,7 +70,7 @@ struct GS_IN
 {
 	float4		vPosition : POSITION;
 	float2		vPSize : PSIZE;
-    float4 vTime : TEXCOORD0;
+    float4		vTime : TEXCOORD0;
 };
 
 struct GS_OUT
@@ -86,9 +85,9 @@ void GS_MAIN(point GS_IN In[1], inout TriangleStream<GS_OUT> OutStream)
 {
 	GS_OUT		Out[6];
 	
-    float Ratio = In[0].vTime.x / g_fLifeTime;
-    In[0].vPSize.x = ((-In[0].vPSize.x) * Ratio + In[0].vPSize.x) / 2.f;
-    In[0].vPSize.y = ((-In[0].vPSize.y) * Ratio + In[0].vPSize.y) / 2.f;
+    //float Ratio = In[0].vTime.x / g_fLifeTime;
+    //In[0].vPSize.x = ((-In[0].vPSize.x) * Ratio + In[0].vPSize.x) / 2.f;
+    //In[0].vPSize.y = ((-In[0].vPSize.y) * Ratio + In[0].vPSize.y) / 2.f;
 
 	vector		vAxisY = vector(0.f, 1.f, 0.f, 0.f);
 
@@ -149,19 +148,11 @@ struct PS_OUT
 	vector		vColor : SV_TARGET0;
 };
 
-/* 1. ÇÈ¼¿ÀÇ »öÀ» °áÁ¤ÇÑ´Ù. */
-// vector PS_MAIN(PS_IN In) : SV_TARGET0
 PS_OUT PS_MAIN(PS_IN In)
 {
 	PS_OUT		Out = (PS_OUT)0;
 
 	Out.vColor = g_DiffuseTexture.Sample(DefaultSampler, In.vTexUV);
-    Out.vColor.r = 1.f;
-    Out.vColor.g = 0.6f;
-    Out.vColor.b = 0.3f;
-
-	if (Out.vColor.a < 0.01)
-		discard;
 
 	return Out;
 }
@@ -217,9 +208,7 @@ PS_OUT_TEST PS_MAIN_TEST(PS_IN In)
 
 technique11			DefaultTechnique
 {
-	/* ¼ÎÀÌ´õ ±â´ÉÀÇ Ä¸½¶È­. */
-	/* Á¶¸í¿¬»ê(¾îµÓ°Ô, ½ºÆåÅ§·¯) + ±×¸²ÀÚ + ³ë¸Ö¸ÊÇÎ */
-	pass Normal
+	pass Normal //0
 	{
 		/* ·»´õ½ºÅ×ÀÌÃ÷¿¡ ´ëÇÑ Á¤ÀÇ. */
 		SetRasterizerState(CullMode_Default);
@@ -232,7 +221,7 @@ technique11			DefaultTechnique
 		PixelShader = compile ps_5_0  PS_MAIN();
 	}
 
-	pass AlphaBlend
+	pass AlphaBlend //1
 	{
 		/* ·»´õ½ºÅ×ÀÌÃ÷¿¡ ´ëÇÑ Á¤ÀÇ. */
 		SetRasterizerState(CullMode_Default);
@@ -245,7 +234,7 @@ technique11			DefaultTechnique
 		PixelShader = compile ps_5_0  PS_MAIN();
 	}
 
-    pass AlphaBlendMultiImage
+    pass AlphaBlendMultiImage //2
     {
 		/* ·»´õ½ºÅ×ÀÌÃ÷¿¡ ´ëÇÑ Á¤ÀÇ. */
         SetRasterizerState(CullMode_Default);
@@ -258,7 +247,7 @@ technique11			DefaultTechnique
         PixelShader = compile ps_5_0 PS_MAIN_MULTIIMAGE();
     }
 
-    pass AlphaAdd
+    pass AlphaAdd //3
     {
 		/* ·»´õ½ºÅ×ÀÌÃ÷¿¡ ´ëÇÑ Á¤ÀÇ. */
         SetRasterizerState(CullMode_Default);
@@ -271,7 +260,7 @@ technique11			DefaultTechnique
         PixelShader = compile ps_5_0 PS_MAIN();
     }
 
-	pass Test
+	pass Test //4
 	{
 		/* ·»´õ½ºÅ×ÀÌÃ÷¿¡ ´ëÇÑ Á¤ÀÇ. */
 		SetRasterizerState(CullMode_Default);

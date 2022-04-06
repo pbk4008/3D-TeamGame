@@ -440,7 +440,6 @@ HRESULT CStage1::Ready_Light()
 
 HRESULT CStage1::Ready_Data_Effect()
 {
-#pragma region 이펙트매니저에 들어가는것들, 순서지켜서 enum에 맞춰줘야됨 
 	//vector<CEffect_DashDust::EFFECTDESC> vecEffect;
 	//Effect_Dash
 	//g_pGameInstance->LoadFile<CEffect_DashDust::EFFECTDESC>(vecEffect, L"../bin/SaveData/Effect/Effect_Player_Attack1.dat");
@@ -456,94 +455,98 @@ HRESULT CStage1::Ready_Data_Effect()
 	//	}
 	//}
 
+#pragma region 이펙트매니저에 들어가는것들, 순서지켜서 enum에 맞춰줘야됨 
 	//이펙트 매니저에 넣으면서 생성
 	// 주의 사항!! 넣을때 순서가 ENUM순서
 	//Manager에 넣을 Effect;
+
+	//Player Atttack1
 	CEffect* pEffect = nullptr;
 	vector<CEffect_HitParticle::EFFECTDESC> vecHitParticle;
 	g_pGameInstance->LoadFile<CEffect_HitParticle::EFFECTDESC>(vecHitParticle, L"../bin/SaveData/Effect/Effect_Player_Attack1.dat");
 	
-	wstring FullName = L"Proto_GameObject_Effect_Hit";
+	wstring FullName = L"Proto_GameObject_Effect_Explosion";
 
 	//마지막에 받을 Effect변수 넣기
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Hit", FullName, &vecHitParticle[0],(CGameObject**)&pEffect)))
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Player_Attack1", FullName, &vecHitParticle[0],(CGameObject**)&pEffect)))
 	{
-		MSGBOX("Failed to Creating in CStage1::Ready_Effect()");
+		MSGBOX("Failed to Creating Effect_Player_Attack1 in CStage1::Ready_Effect()");
 		return E_FAIL;
 	}
 	//매니저에 이펙트 넣기 (마지막 매개변수 : 같은 이펙트 추가로 넣을 갯수)
-	if (FAILED(g_pGameInstance->Add_Effect((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Hit", pEffect, 20)))
+	if (FAILED(g_pGameInstance->Add_Effect((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Player_Attack1", pEffect, 20)))
 	{
-		MSGBOX("Falild to Clone in Effect_Hit");
+		MSGBOX("Falild to Add_Effect_Player_Attack1 in CStage1::Ready_Effect()");
 		return E_FAIL;
 	}
 
+	//Player Atttack2 Floating
 	vector<CEffect_HitFloating::EFFECTDESC> vecHitFloating;
 	g_pGameInstance->LoadFile<CEffect_HitFloating::EFFECTDESC>(vecHitFloating, L"../bin/SaveData/Effect/Effect_Player_Attack2_Floating.dat");
 
 	FullName = L"Proto_GameObject_Effect_Floating";
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Floating", FullName, &vecHitFloating[0],(CGameObject**)&pEffect)))
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Player_Attack2_Floating", FullName, &vecHitFloating[0],(CGameObject**)&pEffect)))
 	{
-		MSGBOX("Failed to Creating in CStage1::Ready_Effect()");
+		MSGBOX("Failed to Creating Effect_Player_Attack2_Floating in CStage1::Ready_Effect()");
 		return E_FAIL;
 	}
-	if (FAILED(g_pGameInstance->Add_Effect((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Floating", pEffect, 20)))
+	if (FAILED(g_pGameInstance->Add_Effect((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Player_Attack2_Floating", pEffect, 20)))
 	{
-		MSGBOX("Falild to Clone in Effect_Floating");
+		MSGBOX("Falild to Add_Effect_Player_Attack2_Floating in CStage1::Ready_Effect()");
 		return E_FAIL;
 	}
 
-	//죽을때
+	//MonsterDeath
 	vector<CEffect_DeathParticle::EFFECTDESC> vecDeath;
-	g_pGameInstance->LoadFile<CEffect_DeathParticle::EFFECTDESC>(vecDeath, L"../bin/SaveData/Effect/Effect_Death.dat");
+	g_pGameInstance->LoadFile<CEffect_DeathParticle::EFFECTDESC>(vecDeath, L"../bin/SaveData/Effect/Effect_Monster_Death.dat");
 
 	FullName = L"Proto_GameObject_Effect_Death";
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Death", FullName, &vecDeath[0], (CGameObject**)&pEffect)))
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Monster_Death", FullName, &vecDeath[0], (CGameObject**)&pEffect)))
 	{
-		MSGBOX("Failed to Creating in CStage1::Ready_Effect()");
+		MSGBOX("Failed to Creating Effect_Monster_Death in CStage1::Ready_Effect()");
 		return E_FAIL;
 	}
-	if (FAILED(g_pGameInstance->Add_Effect((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Death", pEffect, 8)))
+	if (FAILED(g_pGameInstance->Add_Effect((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Monster_Death", pEffect, 8)))
 	{
-		MSGBOX("Falild to Clone in Effect_Death");
+		MSGBOX("Falild to Add_Effect_Monster_Death in CStage1::Ready_Effect()");
 		return E_FAIL;
 	}
 
-	//플레이어맞을때
+	//Player Hit
 	vector<CEffect_HitParticle::EFFECTDESC> vecHitPlayer;
-	g_pGameInstance->LoadFile<CEffect_HitParticle::EFFECTDESC>(vecHitPlayer, L"../bin/SaveData/Effect/Effect_PlayerHit.dat");
+	g_pGameInstance->LoadFile<CEffect_HitParticle::EFFECTDESC>(vecHitPlayer, L"../bin/SaveData/Effect/Effect_Player_Hit.dat");
 
-	FullName = L"Proto_GameObject_Effect_PlayerHit";
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_PlayerHit", FullName, &vecHitPlayer[0], (CGameObject**)&pEffect)))
+	FullName = L"Proto_GameObject_Effect_Explosion";
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Player_Hit", FullName, &vecHitPlayer[0], (CGameObject**)&pEffect)))
 	{
-		MSGBOX("Failed to Creating in CStage1::Ready_Effect()");
+		MSGBOX("Failed to Creating Effect_Player_Hit in CStage1::Ready_Effect()");
 		return E_FAIL;
 	}
-	if (FAILED(g_pGameInstance->Add_Effect((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_PlayerHit", pEffect, 8)))
+	if (FAILED(g_pGameInstance->Add_Effect((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Player_Hit", pEffect, 8)))
 	{
-		MSGBOX("Falild to Clone in Effect_PlayerHit");
+		MSGBOX("Falild to Add_Effect_Player_Hit in CStage1::Ready_Effect()");
 		return E_FAIL;
 	}
 
-	//가드
+	//Monster Guard
 	vector<CEffect_Guard::EFFECTDESC> vecGuard;
-	g_pGameInstance->LoadFile<CEffect_Guard::EFFECTDESC>(vecGuard, L"../bin/SaveData/Effect/Effect_Guard.dat");
+	g_pGameInstance->LoadFile<CEffect_Guard::EFFECTDESC>(vecGuard, L"../bin/SaveData/Effect/Effect_Monster_Guard.dat");
 
 	FullName = L"Proto_GameObject_Effect_Guard";
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Guard", FullName, &vecGuard[0], (CGameObject**)&pEffect)))
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Monster_Guard", FullName, &vecGuard[0], (CGameObject**)&pEffect)))
 	{
-		MSGBOX("Failed to Creating in CStage1::Ready_Effect_Guard()");
+		MSGBOX("Failed to Creating Effect_Monster_Guard in CStage1::Ready_Effect()");
 		return E_FAIL;
 	}
-	if (FAILED(g_pGameInstance->Add_Effect((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Guard", pEffect, 8)))
+	if (FAILED(g_pGameInstance->Add_Effect((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Monster_Guard", pEffect, 8)))
 	{
-		MSGBOX("Falild to Clone in Effect_Guard");
+		MSGBOX("Falild to Add_Effect_Monster_Guard in CStage1::Ready_Effect()");
 		return E_FAIL;
 	}
 #pragma endregion
 
 #pragma region 이펙트매니저에 안들어가는것들 
-	//불
+	//fire
 	CEffect_Env_Fire::EFFECTDESC Desc;
 	_tcscpy_s(Desc.TextureTag, L"Env_Fire");
 	Desc.iRenderPassNum = 1;
@@ -555,32 +558,23 @@ HRESULT CStage1::Ready_Data_Effect()
 
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Env_Fire", L"Proto_GameObject_Effect_Env_Fire", &Desc)))
 	{
-		MSGBOX("Failed to Creating in CStage1::Ready_Effect()");
+		MSGBOX("Failed to Creating Effect_Env_Fire in CStage1::Ready_Effect()");
 		return E_FAIL;
 	}
 
-	//공중에떠있는환경파티클 (이펙트매니저에안넣음)
+	//Env floating
 	vector<CEffect_Env_Floating::EFFECTDESC> vecEnvFloating;
-	g_pGameInstance->LoadFile<CEffect_Env_Floating::EFFECTDESC>(vecEnvFloating, L"../bin/SaveData/Effect/Test_Effect_Env_Floating.dat");
+	g_pGameInstance->LoadFile<CEffect_Env_Floating::EFFECTDESC>(vecEnvFloating, L"../bin/SaveData/Effect/Effect_Env_Floating_1.dat");
 
 	FullName = L"Proto_GameObject_Effect_Env_Floating";
 
 	vecEnvFloating[0].fMyPos = { 0.f, 1.f, 10.f };
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Env_Floating", FullName, &vecEnvFloating[0])))
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Env_Floating_1", FullName, &vecEnvFloating[0])))
 	{
-		MSGBOX("Failed to Creating in CStage1::Ready_Effect()");
+		MSGBOX("Failed to Creating Effect_Env_Floating_1 in CStage1::Ready_Effect()");
 		return E_FAIL;
 	}
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Env_Floating", FullName, &vecEnvFloating[0], (CGameObject**)&pEffect)))
-	{
-		MSGBOX("Failed to Creating in CStage1::Ready_Effect()");
-		return E_FAIL;
-	}
-	if (FAILED(g_pGameInstance->Add_Effect((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Env_Floating", pEffect, 1)))
-	{
-		MSGBOX("Falild to Clone in Effect_Env_Floating");
-		return E_FAIL;
-	}
+
 #pragma endregion
 	return S_OK;
 }

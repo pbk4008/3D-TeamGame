@@ -41,7 +41,6 @@ HRESULT CMFCEffect_Floating::NativeConstruct(const _uint iSceneID, void* pArg)
 	if (nullptr != pArg)
 	{
 		memcpy(&m_Desc, pArg, sizeof(EFFECTDESC));
-		int a = 0;
 	}
 
 	//여기서 필요한 모든 컴포넌트들 Clone해옴
@@ -73,7 +72,12 @@ HRESULT CMFCEffect_Floating::NativeConstruct(const _uint iSceneID, void* pArg)
 
 _int CMFCEffect_Floating::Tick(_double TimeDelta)
 {
-	//m_pBuffer->Update(TimeDelta, m_Desc.iAxis);
+	_matrix mat, mat1;
+	mat1 = XMMatrixIdentity();
+	mat1.r[3] = { m_Desc.CullingBoxPos.x, m_Desc.CullingBoxPos.y,m_Desc.CullingBoxPos.z, 1.f };
+
+	mat = m_pTransform->Get_WorldMatrix();
+	m_pBox->Update_Matrix(mat1 * mat);
 
 	CMainFrame* pMain = dynamic_cast<CMainFrame*>(AfxGetApp()->GetMainWnd());
 	CMyFormView* pForm = dynamic_cast<CMyFormView*>(pMain->m_SplitterWnd.GetPane(0, 0));
@@ -111,6 +115,7 @@ _int CMFCEffect_Floating::Tick(_double TimeDelta)
 		Desc.fLifeTime = m_Desc.fMaxLifeTime;
 		Desc.fCurTime = m_Desc.fCurTime;
 		Desc.bGravity = m_Desc.bUsingGravity;
+		m_pBox->Set_Length(m_Desc.CullingBoxSize.x, m_Desc.CullingBoxSize.y, m_Desc.CullingBoxSize.z);
 
 		m_pBuffer->Set_Desc(Desc);
 		m_pBuffer->Particle_Reset();
@@ -150,6 +155,9 @@ _int CMFCEffect_Floating::LateTick(_double TimeDelta)
 
 HRESULT CMFCEffect_Floating::Render()
 {
+	m_pBox->Render(L"MFCCamera_Proj");
+
+
 	//_matrix XMWorldMatrix = XMMatrixTranspose(XMLoadFloat4x4(&m_WorldMatrix));
 	_matrix XMWorldMatrix = XMMatrixTranspose(m_pTransform->Get_WorldMatrix());
 	_matrix XMViewMatrix = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"MFCCamera_Proj", TRANSFORMSTATEMATRIX::D3DTS_VIEW));
@@ -190,6 +198,14 @@ HRESULT CMFCEffect_Floating::SetUp_Components()
 
 	_vector vPos = { XMVectorGetX(m_Desc.fMyPos), XMVectorGetY(m_Desc.fMyPos), XMVectorGetY(m_Desc.fMyPos), 1.f };
 	m_pTransform->Set_State(CTransform::STATE_POSITION, vPos);
+
+
+	//culling 
+	m_pBox = g_pGameInstance->Clone_Component<CCullingBox>(0, L"Proto_Component_CullingBox");
+	if (!m_pBox)
+		return E_FAIL;
+	m_pBox->Set_Length(m_Desc.CullingBoxSize.x, m_Desc.CullingBoxSize.y, m_Desc.CullingBoxSize.z);
+
 
 	//버퍼 Clone
 	CVIBuffer_PointInstance_Floating::PIDESC Desc;

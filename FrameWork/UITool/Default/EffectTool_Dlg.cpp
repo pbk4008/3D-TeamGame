@@ -17,7 +17,7 @@ CEffectTool_Dlg::CEffectTool_Dlg(CWnd* pParent /*=nullptr*/)
 	, m_PositionX(0.f)
 	, m_PositionY(0.f)
 	, m_PositionZ(0.f)
-	, m_Velocity(10.f)
+	, m_Velocity(5.f)
 	, m_LiftTime(1.f)
 	, m_BaseCount(100)
 	, m_Age(0)
@@ -33,13 +33,19 @@ CEffectTool_Dlg::CEffectTool_Dlg(CWnd* pParent /*=nullptr*/)
 	, m_fRandomMinusDirX(1)
 	, m_fRandomMinusDirY(1)
 	, m_fRandomMinusDirZ(1)
-	, m_EffectName(_T(""))
+	, m_EffectName(_T("Layer_Effect"))
 	, m_RenderPassNum(1)
 	, m_frame(1)
 	, m_ImagecountX(1)
 	, m_ImagecountY(1)
 	, m_EffectPlaySpeed(1)
-	, m_IDTag(0)
+	, m_IDTag(15)
+	, m_fBoxPosX(0)
+	, m_fBoxPosY(0)
+	, m_fBoxPosZ(0)
+	, m_fBoxWidth(1)
+	, m_fBoxHeight(1)
+	, m_fBoxDepth(1)
 {
 
 }
@@ -104,6 +110,12 @@ void CEffectTool_Dlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Text(pDX, IDC_EDIT24, m_ImagecountY);
 	DDX_Text(pDX, IDC_EDIT25, m_EffectPlaySpeed);
 	DDX_Text(pDX, IDC_EDIT26, m_IDTag);
+	DDX_Text(pDX, IDC_EDIT28, m_fBoxPosX);
+	DDX_Text(pDX, IDC_EDIT29, m_fBoxPosY);
+	DDX_Text(pDX, IDC_EDIT30, m_fBoxPosZ);
+	DDX_Text(pDX, IDC_EDIT31, m_fBoxWidth);
+	DDX_Text(pDX, IDC_EDIT32, m_fBoxHeight);
+	DDX_Text(pDX, IDC_EDIT33, m_fBoxDepth);
 }
 
 void CEffectTool_Dlg::InitialShaderTree()
@@ -228,6 +240,9 @@ void CEffectTool_Dlg::OnBnClickedButtonApply()
 	m_EffectDesc.iRenderPassNum = m_RenderPassNum;
 	m_EffectDesc.IDTag = m_IDTag;
 
+	m_EffectDesc.CullingBoxPos = { m_fBoxPosX,m_fBoxPosY ,m_fBoxPosZ };
+	m_EffectDesc.CullingBoxSize = { m_fBoxWidth,m_fBoxHeight,m_fBoxDepth };
+
 	if (m_AxisXBtn.GetCheck() == BST_CHECKED)
 	{
 		m_EffectDesc.iAxis = 0;
@@ -252,9 +267,9 @@ void CEffectTool_Dlg::OnBnClickedButtonApply()
 	_tcscpy_s(m_EffectDesc.ShaderFullFilePath, ShaderFullPath.c_str());
 	
 	wstring Name = m_strPickFileName;
-	wstring FullName = L"Prototype_GameObject_Effect"/* + Name*/;
+	//wstring FullName = L"Prototype_GameObject_Effect"/* + Name*/;
 	//wstring FullName = L"Prototype_GameObject_Effect_Floating"/* + Name*/;
-	//wstring FullName = L"Prototype_GameObject_Effect_Env_Floating"/* + Name*/;
+	wstring FullName = L"Prototype_GameObject_Effect_Env_Floating"/* + Name*/;
 
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer(TOOL_LEVEL::TOOL_LEVEL_GAMEPLAY, L"Layer_Effect", FullName, &m_EffectDesc)))
 	{
@@ -437,6 +452,9 @@ void CEffectTool_Dlg::OnBnClickedButton2()
 	m_EffectDesc.iRenderPassNum = m_RenderPassNum;
 	m_EffectDesc.IDTag = m_IDTag;
 
+	m_EffectDesc.CullingBoxPos = { m_fBoxPosX,m_fBoxPosY ,m_fBoxPosZ };
+	m_EffectDesc.CullingBoxSize = { m_fBoxWidth,m_fBoxHeight,m_fBoxDepth };
+
 	if (m_AxisXBtn.GetCheck() == BST_CHECKED)
 	{
 		m_EffectDesc.iAxis = 0;
@@ -454,12 +472,13 @@ void CEffectTool_Dlg::OnBnClickedButton2()
 		m_EffectDesc.iAxis = 3;
 	}
 
-	//Age아직안함
 	wstring ShaderFullPath = ShaderFolderPath + ShaderFileName;
 
 	_tcscpy_s(m_EffectDesc.ShaderFilePath, ShaderFolderPath.c_str());
 	_tcscpy_s(m_EffectDesc.ShaderFileName, ShaderFileName.c_str());
 	_tcscpy_s(m_EffectDesc.ShaderFullFilePath, ShaderFullPath.c_str());
+
+	m_vecEffect[0] = m_EffectDesc;
 
 	UpdateData(FALSE);
 }
@@ -508,77 +527,81 @@ void CEffectTool_Dlg::OnBnClickedButtonLoad()
 	{
 		wstring strFilePath = Dlg.GetPathName();
 		g_pGameInstance->LoadFile<CMFCEffect::EFFECTDESC>(m_vecEffect, strFilePath);
-		int a = 0;
 	}
 
-	for (int i = 0; i < m_vecEffect.size(); ++i)
+	wstring Tag = m_vecEffect[0].TextureTag;
+	//wstring FullName = L"Prototype_GameObject_Effect"/* + Tag*/;
+	//wstring FullName = L"Prototype_GameObject_Effect_Floating"/* + Tag*/;
+	wstring FullName = L"Prototype_GameObject_Effect_Env_Floating"/* + Name*/;
+
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer(TOOL_LEVEL::TOOL_LEVEL_GAMEPLAY, L"Layer_Effect", FullName, &m_vecEffect[0])))
 	{
-		wstring Tag = m_vecEffect[i].TextureTag; 
-		wstring FullName = L"Prototype_GameObject_Effect"/* + Tag*/;
-		//wstring FullName = L"Prototype_GameObject_Effect_Floating"/* + Tag*/;
-		//wstring FullName = L"Prototype_GameObject_Effect_Env_Floating"/* + Name*/;
-
-		if (FAILED(g_pGameInstance->Add_GameObjectToLayer(TOOL_LEVEL::TOOL_LEVEL_GAMEPLAY, L"Layer_Effect", FullName, &m_vecEffect[i])))
-		{
-			ERR_MSG(L"Failed to Creating in CEffectTool_Dlg::OnBnClickedButtonLoad()");
-			return;
-		}
-
-		//::PathRemoveExtension(m_strPickFileName); //이게 있으면 확장자도 지워짐
-		//_tcscpy_s(m_EffectDesc.TextureTag, m_strPickFileName);
-		UpdateData(TRUE);
-		_tcscpy_s(m_strPickFileName, m_vecEffect[i].ShaderFilePath);
-		m_EffectName = m_vecEffect[i].EffectName;
-		m_PositionX = XMVectorGetX(m_vecEffect[i].ParticleMat.r[3]);
-		m_PositionY = XMVectorGetY(m_vecEffect[i].ParticleMat.r[3]);
-		m_PositionZ = XMVectorGetZ(m_vecEffect[i].ParticleMat.r[3]);
-		m_Velocity = m_vecEffect[i].fParticleVelocity;
-		m_ParticleSizeX = m_vecEffect[i].fParticleSize.x;
-		m_ParticleSizeY = m_vecEffect[i].fParticleSize.y;
-		m_fRandomPosX = m_vecEffect[i].fParticleRandomPos.x;
-		m_fRandomPosY = m_vecEffect[i].fParticleRandomPos.y;
-		m_fRandomPosZ = m_vecEffect[i].fParticleRandomPos.z;
-		m_fRandomMinusDirX = m_vecEffect[i].fParticleMinusRandomDir.x;
-		m_fRandomMinusDirY = m_vecEffect[i].fParticleMinusRandomDir.y;
-		m_fRandomMinusDirZ = m_vecEffect[i].fParticleMinusRandomDir.z;
-		m_fRandomDirX = m_vecEffect[i].fParticleRandomDir.x;
-		m_fRandomDirY = m_vecEffect[i].fParticleRandomDir.y;
-		m_fRandomDirZ = m_vecEffect[i].fParticleRandomDir.z;
-		m_BaseCount = m_vecEffect[i].iNumInstance;
-		m_LiftTime = m_vecEffect[i].fMaxLifeTime;
-		m_Age = m_vecEffect[i].fCurTime;
-		m_bCheck = m_vecEffect[i].bUsingGravity;
-
-		m_EffectPlaySpeed = m_vecEffect[i].fEffectPlaySpeed;
-		m_frame = m_vecEffect[i].fFrame;
-		m_ImagecountX = m_vecEffect[i].iImageCountX;
-		m_ImagecountY = m_vecEffect[i].iImageCountY;
-		m_RenderPassNum = m_vecEffect[i].iRenderPassNum;
-		m_IDTag = m_vecEffect[i].IDTag;
-		
-		if (0 == m_vecEffect[i].iAxis)
-		{
-			m_AxisXBtn.SetCheck(true);
-		}
-		else if (1 == m_vecEffect[i].iAxis)
-		{
-			m_AxisYBtn.SetCheck(true);
-		}
-		else if (2 == m_vecEffect[i].iAxis)
-		{
-			m_AxisZBtn.SetCheck(true);
-		}
-		else if (3 == m_vecEffect[i].iAxis)
-		{
-			m_AxisAllBtn.SetCheck(true);
-		}
-
-		//Age아직안함
-		ShaderFolderPath = m_vecEffect[i].ShaderFilePath;
-		ShaderFileName = m_vecEffect[i].ShaderFileName;
-		UpdateData(FALSE);
-
+		ERR_MSG(L"Failed to Creating in CEffectTool_Dlg::OnBnClickedButtonLoad()");
+		return;
 	}
+
+	//::PathRemoveExtension(m_strPickFileName); //이게 있으면 확장자도 지워짐
+	//_tcscpy_s(m_EffectDesc.TextureTag, m_strPickFileName);
+	UpdateData(TRUE);
+	_tcscpy_s(m_strPickFileName, m_vecEffect[0].ShaderFilePath);
+
+	m_EffectName = m_vecEffect[0].EffectName;
+
+	m_PositionX = XMVectorGetX(m_vecEffect[0].ParticleMat.r[3]);
+	m_PositionY = XMVectorGetY(m_vecEffect[0].ParticleMat.r[3]);
+	m_PositionZ = XMVectorGetZ(m_vecEffect[0].ParticleMat.r[3]);
+	m_Velocity = m_vecEffect[0].fParticleVelocity;
+	m_ParticleSizeX = m_vecEffect[0].fParticleSize.x;
+	m_ParticleSizeY = m_vecEffect[0].fParticleSize.y;
+	m_fRandomPosX = m_vecEffect[0].fParticleRandomPos.x;
+	m_fRandomPosY = m_vecEffect[0].fParticleRandomPos.y;
+	m_fRandomPosZ = m_vecEffect[0].fParticleRandomPos.z;
+	m_fRandomMinusDirX = m_vecEffect[0].fParticleMinusRandomDir.x;
+	m_fRandomMinusDirY = m_vecEffect[0].fParticleMinusRandomDir.y;
+	m_fRandomMinusDirZ = m_vecEffect[0].fParticleMinusRandomDir.z;
+	m_fRandomDirX = m_vecEffect[0].fParticleRandomDir.x;
+	m_fRandomDirY = m_vecEffect[0].fParticleRandomDir.y;
+	m_fRandomDirZ = m_vecEffect[0].fParticleRandomDir.z;
+	m_BaseCount = m_vecEffect[0].iNumInstance;
+	m_LiftTime = m_vecEffect[0].fMaxLifeTime;
+	m_Age = m_vecEffect[0].fCurTime;
+	m_bCheck = m_vecEffect[0].bUsingGravity;
+
+	m_EffectPlaySpeed = m_vecEffect[0].fEffectPlaySpeed;
+	m_frame = m_vecEffect[0].fFrame;
+	m_ImagecountX = m_vecEffect[0].iImageCountX;
+	m_ImagecountY = m_vecEffect[0].iImageCountY;
+	m_RenderPassNum = m_vecEffect[0].iRenderPassNum;
+	m_IDTag = m_vecEffect[0].IDTag;
+
+	m_fBoxPosX = m_vecEffect[0].CullingBoxPos.x;
+	m_fBoxPosY = m_vecEffect[0].CullingBoxPos.y;
+	m_fBoxPosZ = m_vecEffect[0].CullingBoxPos.z;
+
+	m_fBoxWidth = m_vecEffect[0].CullingBoxSize.x;
+	m_fBoxHeight = m_vecEffect[0].CullingBoxSize.y;
+	m_fBoxDepth = m_vecEffect[0].CullingBoxSize.z;
+
+	if (0 == m_vecEffect[0].iAxis)
+	{
+		m_AxisXBtn.SetCheck(true);
+	}
+	else if (1 == m_vecEffect[0].iAxis)
+	{
+		m_AxisYBtn.SetCheck(true);
+	}
+	else if (2 == m_vecEffect[0].iAxis)
+	{
+		m_AxisZBtn.SetCheck(true);
+	}
+	else if (3 == m_vecEffect[0].iAxis)
+	{
+		m_AxisAllBtn.SetCheck(true);
+	}
+
+	ShaderFolderPath = m_vecEffect[0].ShaderFilePath;
+	ShaderFileName = m_vecEffect[0].ShaderFileName;
+	UpdateData(FALSE);
 }
 
 
@@ -589,6 +612,5 @@ void CEffectTool_Dlg::OnBnClickedButtonNameTag()
 	if (0 != m_EffectName.GetLength())
 	{
 		_tcscpy_s(m_EffectDesc.EffectName, m_EffectName);
-		int a = 0;
 	}
 }

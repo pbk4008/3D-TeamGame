@@ -19,7 +19,8 @@ public:
 public:
 	_uint Update_Matrix(_fmatrix matTransform);
 	HRESULT CreateWithPoints(_fvector vMin, _fvector vMax);
-	HRESULT CreateWithLenght(_float fWidth, _float fHeight, _float fDepth);
+	HRESULT Set_Length(_float fWidth, _float fHeight, _float fDepth);
+
 public:
 	_float4* Get_Points() { return m_pPoints; }
 public:
@@ -30,6 +31,7 @@ private:
 private:
 	CGizmo* m_pGizmo;
 	_float4 m_pPoints[8];
+	_float4 m_pCreatePoints[8];
 };
 END
 #endif
