@@ -317,7 +317,14 @@ call Update_Client.bat</Command>
     <ClInclude Include="..\Headers\Crawler_Idle.h" />
     <ClInclude Include="..\Headers\Crawler_Ricochet.h" />
     <ClInclude Include="..\Headers\Crawler_Walk.h" />
+    <ClInclude Include="..\Headers\DataManager.h" />
     <ClInclude Include="..\Headers\DebugSystem.h" />
+    <ClInclude Include="..\Headers\DropBox.h" />
+    <ClInclude Include="..\Headers\DropBox_Idle.h" />
+    <ClInclude Include="..\Headers\DropBox_Open.h" />
+    <ClInclude Include="..\Headers\DropBox_State.h" />
+    <ClInclude Include="..\Headers\DropManager.h" />
+    <ClInclude Include="..\Headers\DropObject.h" />
     <ClInclude Include="..\Headers\EarthAberrant_Pick.h" />
     <ClInclude Include="..\Headers\Effect_DashDust.h" />
     <ClInclude Include="..\Headers\Effect_DeathParticle.h" />
@@ -328,6 +335,11 @@ call Update_Client.bat</Command>
     <ClInclude Include="..\Headers\Effect_HitParticle.h" />
     <ClInclude Include="..\Headers\Environment.h" />
     <ClInclude Include="..\Headers\Fury.h" />
+    <ClInclude Include="..\Headers\GameObjectPool.h" />
+    <ClInclude Include="..\Headers\InteractableObject.h" />
+    <ClInclude Include="..\Headers\InteractManager.h" />
+    <ClInclude Include="..\Headers\InventoryData.h" />
+    <ClInclude Include="..\Headers\ItemData.h" />
     <ClInclude Include="..\Headers\JumpBox.h" />
     <ClInclude Include="..\Headers\JumpNode.h" />
     <ClInclude Include="..\Headers\JumpTrigger.h" />
@@ -358,6 +370,7 @@ call Update_Client.bat</Command>
     <ClInclude Include="..\Headers\NoiseFire.h" />
     <ClInclude Include="..\Headers\Plane_Test.h" />
     <ClInclude Include="..\Headers\Polearm.h" />
+    <ClInclude Include="..\Headers\ScriptableData.h" />
     <ClInclude Include="..\Headers\ShakeManager.h" />
     <ClInclude Include="..\Headers\Shield.h" />
     <ClInclude Include="..\Headers\Shield_Block.h" />
@@ -425,9 +438,7 @@ call Update_Client.bat</Command>
     <ClInclude Include="..\Headers\Spear_Attack.h" />
     <ClInclude Include="..\Headers\Spear_Bwd_Dash.h" />
     <ClInclude Include="..\Headers\Spear_Charge_Attack.h" />
-    <ClInclude Include="..\Headers\Spear_Charge_Attack_End.h" />
     <ClInclude Include="..\Headers\Spear_Chaser.h" />
-    <ClInclude Include="..\Headers\Spear_Chaser_End.h" />
     <ClInclude Include="..\Headers\Spear_Death.h" />
     <ClInclude Include="..\Headers\Spear_Groggy.h" />
     <ClInclude Include="..\Headers\Spear_Groggy_End.h" />
@@ -452,6 +463,7 @@ call Update_Client.bat</Command>
     <ClInclude Include="..\Headers\Traverse_JumpNodeJog.h" />
     <ClInclude Include="..\Headers\Treasure_Chest.h" />
     <ClInclude Include="..\Headers\TriggerSystem.h" />
+    <ClInclude Include="..\Headers\UIDGen.h" />
     <ClInclude Include="..\Headers\UI_Blank_CKey.h" />
     <ClInclude Include="..\Headers\UI_Fill_CKey.h" />
     <ClInclude Include="..\Headers\UI_Ingame.h" />
@@ -467,6 +479,7 @@ call Update_Client.bat</Command>
     <ClInclude Include="..\Headers\UI_Tuto_Base.h" />
     <ClInclude Include="..\Headers\UI_Tuto_Font.h" />
     <ClInclude Include="..\Headers\Weapon.h" />
+    <ClInclude Include="..\Headers\WeaponData.h" />
     <ClInclude Include="Client.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="pch.h" />
@@ -605,6 +618,13 @@ call Update_Client.bat</Command>
     <ClCompile Include="..\Codes\Crawler_Idle.cpp" />
     <ClCompile Include="..\Codes\Crawler_Ricochet.cpp" />
     <ClCompile Include="..\Codes\Crawler_Walk.cpp" />
+    <ClCompile Include="..\Codes\DataManager.cpp" />
+    <ClCompile Include="..\Codes\DropBox.cpp" />
+    <ClCompile Include="..\Codes\DropBox_Idle.cpp" />
+    <ClCompile Include="..\Codes\DropBox_Open.cpp" />
+    <ClCompile Include="..\Codes\DropBox_State.cpp" />
+    <ClCompile Include="..\Codes\DropManager.cpp" />
+    <ClCompile Include="..\Codes\DropObject.cpp" />
     <ClCompile Include="..\Codes\EarthAberrant_Pick.cpp" />
     <ClCompile Include="..\Codes\Effect_DeathParticle.cpp" />
     <ClCompile Include="..\Codes\Effect_Env_Fire.cpp" />
@@ -613,6 +633,11 @@ call Update_Client.bat</Command>
     <ClCompile Include="..\Codes\Effect_HitFloating.cpp" />
     <ClCompile Include="..\Codes\Effect_HitParticle.cpp" />
     <ClCompile Include="..\Codes\Fury.cpp" />
+    <ClCompile Include="..\Codes\GameObjectPool.cpp" />
+    <ClCompile Include="..\Codes\InteractableObject.cpp" />
+    <ClCompile Include="..\Codes\InteractManager.cpp" />
+    <ClCompile Include="..\Codes\InventoryData.cpp" />
+    <ClCompile Include="..\Codes\ItemData.cpp" />
     <ClCompile Include="..\Codes\JumpBox.cpp" />
     <ClCompile Include="..\Codes\JumpTrigger.cpp" />
     <ClCompile Include="..\Codes\MeshLoader.cpp">
@@ -650,6 +675,7 @@ call Update_Client.bat</Command>
     <ClCompile Include="..\Codes\NoiseFire.cpp" />
     <ClCompile Include="..\Codes\Plane_Test.cpp" />
     <ClCompile Include="..\Codes\Polearm.cpp" />
+    <ClCompile Include="..\Codes\ScriptableData.cpp" />
     <ClCompile Include="..\Codes\ShakeManager.cpp" />
     <ClCompile Include="..\Codes\Shield.cpp" />
     <ClCompile Include="..\Codes\Shield_Block.cpp" />
@@ -717,9 +743,7 @@ call Update_Client.bat</Command>
     <ClCompile Include="..\Codes\Spear_Attack.cpp" />
     <ClCompile Include="..\Codes\Spear_Bwd_Dash.cpp" />
     <ClCompile Include="..\Codes\Spear_Charge_Attack.cpp" />
-    <ClCompile Include="..\Codes\Spear_Charge_Attack_End.cpp" />
     <ClCompile Include="..\Codes\Spear_Chaser.cpp" />
-    <ClCompile Include="..\Codes\Spear_Chaser_End.cpp" />
     <ClCompile Include="..\Codes\Spear_Death.cpp" />
     <ClCompile Include="..\Codes\Spear_Groggy.cpp" />
     <ClCompile Include="..\Codes\Spear_Groggy_End.cpp" />
@@ -743,6 +767,7 @@ call Update_Client.bat</Command>
     <ClCompile Include="..\Codes\Traverse_Jump400Jog.cpp" />
     <ClCompile Include="..\Codes\Traverse_JumpNodeJog.cpp" />
     <ClCompile Include="..\Codes\Treasure_Chest.cpp" />
+    <ClCompile Include="..\Codes\UIDGen.cpp" />
     <ClCompile Include="..\Codes\UI_Blank_CKey.cpp" />
     <ClCompile Include="..\Codes\UI_Fill_CKey.cpp" />
     <ClCompile Include="..\Codes\UI_Ingame.cpp" />
@@ -758,6 +783,8 @@ call Update_Client.bat</Command>
     <ClCompile Include="..\Codes\UI_Tuto_Base.cpp" />
     <ClCompile Include="..\Codes\UI_Tuto_Font.cpp" />
     <ClCompile Include="..\Codes\Weapon.cpp" />
+    <ClCompile Include="..\Codes\WeaponData.cpp" />
+    <ClCompile Include="..\Default\Client_Function.cpp" />
     <ClCompile Include="Client.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
@@ -806,6 +833,7 @@ call Update_Client.bat</Command>
     <FxCompile Include="..\bin\ShaderFile\Shader_SilverMane.hlsl" />
     <FxCompile Include="..\bin\ShaderFile\Shader_StaticMesh.hlsl" />
     <FxCompile Include="..\bin\ShaderFile\Shader_Trail.hlsl" />
+    <FxCompile Include="..\bin\ShaderFile\Shader_Treasure_Chest.hlsl" />
     <FxCompile Include="..\bin\ShaderFile\Shader_UI.hlsl" />
     <FxCompile Include="..\bin\ShaderFile\Shader_UI_Bar.hlsl" />
     <FxCompile Include="..\bin\ShaderFile\Shader_UI_Enemy_Bar.hlsl" />

@@ -63,16 +63,23 @@ public:
 	void Set_Target(_bool bCheck) { m_bTargetOn = bCheck; }
 	void Set_Attack(_bool bCheck) { m_bAttackOn = bCheck; }
 	void Set_Guard(_bool bCheck) { m_bGuard = bCheck; }
+	void Set_Half(_bool bCheck) { m_bHalf = bCheck; }
+	void Set_ChargeOn(_bool bCheck) { m_bChargeOn = bCheck; }
+	void Set_GuardCount(_int iCount) { m_iGuardCount = iCount;  }
 
 	_bool Get_Target() { return m_bTargetOn; }
 	_bool Get_Attack() { return m_bAttackOn; }
 	_bool Get_Guard() { return m_bGuard; }
+	_bool Get_Half() { return m_bHalf; }
+	_bool Get_ChargeOn() {return m_bChargeOn;}
 
 	_int Get_GuardCount() { return m_iGuardCount; }
 private:
 	_bool m_bTargetOn = false;
 	_bool m_bAttackOn = false;
 	_bool m_bGuard = false;
+	_bool m_bHalf = false;
+	_bool m_bChargeOn = false;
 	_int m_iGuardCount = 7;
 private:
 	CModel* m_pModel = nullptr;

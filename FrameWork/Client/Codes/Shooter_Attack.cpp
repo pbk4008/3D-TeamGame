@@ -40,11 +40,13 @@ _int CShooter_Attack::Tick(const _double& _dDeltaTime)
 	if (NO_EVENT != iProgress)
 		return iProgress;
 
+	//cout << "Attack" << endl;
+
 	m_pAnimator->Tick(_dDeltaTime);
 	
 	Shot(_dDeltaTime);
 
-	if (m_pAnimator->Get_CurrentAnimNode() == (_uint)CMonster_Bastion_Shooter::ANIM_TYPE::IDLE)
+	if (m_pAnimator->Get_CurrentAnimation()->Is_Finished())
 	{
 		m_pStateController->Change_State(L"Idle");
 	}

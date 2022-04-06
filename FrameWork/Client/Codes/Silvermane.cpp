@@ -8,6 +8,7 @@
 #include "JumpNode.h"
 #include "JumpTrigger.h"
 #include "JumpBox.h"
+#include "DropBox.h"
 #include "UI_Blank_CKey.h"
 #include "UI_Fill_CKey.h"
 
@@ -263,7 +264,7 @@ _int CSilvermane::Tick(_double _dDeltaTime)
 
 
 	Raycast_JumpNode(_dDeltaTime);
-
+	Raycast_DropBox(_dDeltaTime);
 
 	// ¹«±â ¾÷µ«
 	if (m_pCurWeapon)
@@ -1334,6 +1335,53 @@ const _bool CSilvermane::Raycast_JumpNode(const _double& _dDeltaTime)
 	}
 
 	return false;
+}
+
+const void CSilvermane::Raycast_DropBox(const _double& _dDeltaTime)
+{
+	_matrix smatView;
+	smatView = g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_VIEW);
+	smatView = XMMatrixInverse(nullptr, smatView);
+
+	if (XMMatrixIsNaN(smatView))
+		return;
+
+	_vector svRayPos, svRayDir;
+	memcpy_s(&svRayPos, sizeof(_vector), &smatView.r[3], sizeof(_vector));
+	memcpy_s(&svRayDir, sizeof(_vector), &smatView.r[2], sizeof(_vector));
+	svRayDir = XMVector3Normalize(svRayDir);
+	_float fOutDist = 0.f;
+
+
+	_uint iObjectTag = -1;
+
+	RAYCASTDESC tRaycastDesc;
+	XMStoreFloat3(&tRaycastDesc.vOrigin, svRayPos);
+	XMStoreFloat3(&tRaycastDesc.vDir, svRayDir);
+	tRaycastDesc.fMaxDistance = 50.f;
+	tRaycastDesc.filterData.flags = PxQueryFlag::eANY_HIT | PxQueryFlag::eDYNAMIC;
+	CGameObject* pHitObject = nullptr;
+	tRaycastDesc.ppOutHitObject = &pHitObject;
+	if (g_pGameInstance->Raycast(tRaycastDesc))
+	{
+		if (pHitObject)
+			iObjectTag = pHitObject->getTag();
+	}
+	
+	if ((_uint)GAMEOBJECT::DROP_BOX == iObjectTag)
+	{
+		static_cast<CDropBox*>(pHitObject)->FocusEnter();
+		if (g_pGameInstance->getkeyPress(DIK_C))
+			m_fOpenDelay += (_float)_dDeltaTime;
+
+		if (0.5f < m_fOpenDelay)
+		{
+			static_cast<CDropBox*>(pHitObject)->Focus();
+			m_fOpenDelay = 0.f;
+		}
+	}
+	//else
+	//	static_cast<CDropBox*>(pHitObject)->FocusExit();
 }
 
 CSilvermane* CSilvermane::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)

@@ -29,10 +29,12 @@ _int CBastion_2HSword_Attack::Tick(const _double& _dDeltaTime)
 	if (NO_EVENT != iProgress)
 		return iProgress;
 
+
+	cout << "Attack" << endl;
 	m_pTransform->Face_Target(g_pObserver->Get_PlayerPos());
 	m_pAnimator->Tick(_dDeltaTime);
 
-	if (m_pAnimator->Get_CurrentAnimation()->Is_Finished())
+	if (m_pAnimator->Get_CurrentAnimation()->Is_Finished() && !m_pAnimator->Get_IsLerp())
 	{
 		m_pOwner->set_Attack(false);
 		m_pOwner->set_RandAttack(-1);

@@ -37,10 +37,8 @@ _int CCrawler_Idle::Tick(const _double& TimeDelta)
 	{
 		m_pTransform->Face_Target(g_pObserver->Get_PlayerPos());
 		m_pStateController->Change_State(L"Walk");
-		cout << "°È±â·Î º¯°æ" << endl;
+		//cout << "°È±â·Î º¯°æ" << endl;
 	}
-	else
-		m_pStateController->Change_State(L"Idle");
 
 	return _int();
 }
@@ -67,9 +65,9 @@ HRESULT CCrawler_Idle::EnterState()
 	if (FAILED(__super::EnterState()))
 		return E_FAIL;
 
-	_vector vec = { 0.f, 1.f, 0.f,0.f };
-	m_pTransform->SetUp_Rotation(vec, (XMConvertToRadians(180.f)));
-
+	//_vector vec = { 0.f, 1.f, 0.f,0.f };
+	//m_pTransform->SetUp_Rotation(vec, (XMConvertToRadians(180.f)));
+	//m_pTransform->Face_Target(g_pObserver->Get_PlayerPos());
 	m_pAnimator->Change_AnyEntryAnimation(CMonster_Crawler::MON_STATE::IDLE);
 	return S_OK;
 }

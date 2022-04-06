@@ -327,7 +327,7 @@ HRESULT CMonster_Bastion_Shooter::Ready_AnimationFSM()
 	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::RUN_START, (_uint)ANIM_TYPE::HEAD, pAnim, true, true, false, ERootOption::XYZ)))
 		return E_FAIL;
 	pAnim = m_pModelCom->Get_Animation("RunLoop");
-	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::RUN_LOOP, (_uint)ANIM_TYPE::RUN_START, pAnim, true, true, true, ERootOption::XYZ)))
+	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::RUN_LOOP, (_uint)ANIM_TYPE::RUN_START, pAnim, true, false, true, ERootOption::XYZ)))
 		return E_FAIL;
 	pAnim = m_pModelCom->Get_Animation("RunEnd");
 	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::RUN_END, (_uint)ANIM_TYPE::RUN_LOOP, pAnim, true, true, false, ERootOption::XYZ)))
@@ -539,7 +539,7 @@ HRESULT CMonster_Bastion_Shooter::Ready_StateFSM()
 
 	m_pStateController->Change_State(L"Idle");
 
-	cout << "idle로 시작" << endl;
+	//cout << "idle로 시작" << endl;
 
 	return S_OK;
 }
@@ -578,7 +578,7 @@ _int CMonster_Bastion_Shooter::Change_State()
 	{
 		if (tmpState == L"Idle")
 		{
-			cout << "Idle에서 chase로 변경" << endl;
+			//cout << "Idle에서 chase로 변경" << endl;
 			Chase();
 		}
 	}

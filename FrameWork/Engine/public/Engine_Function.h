@@ -138,6 +138,19 @@ namespace Engine
 
 		return _float3(XMConvertToDegrees((_float)roll), XMConvertToDegrees((_float)pitch), XMConvertToDegrees((_float)yaw));
 	}
+
+	static const _float Distance(const _fvector& _v1, const _fvector& _v2)
+	{
+		_vector value = _v1 - _v2;
+
+		return XMVectorGetX(XMVector3Length(value));
+	}
+
+	template<class T>
+	constexpr static const T& Clamp(const T& _v, const T& _min, const T& _max)
+	{
+		return (_v < _min) ? _min : (_max < _v) ? _max : _v;
+	}
 }
 
 #endif // Engine_Function_h__

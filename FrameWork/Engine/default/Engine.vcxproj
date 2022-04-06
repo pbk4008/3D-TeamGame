@@ -293,6 +293,7 @@ call Update_Library_Release.bat</Command>
     <ClInclude Include="..\public\SphereCollider.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClInclude>
+    <ClInclude Include="..\public\SplineCurve.h" />
     <ClInclude Include="..\public\State.h" />
     <ClInclude Include="..\public\StateController.h" />
     <ClInclude Include="..\public\Target_Manager.h" />
@@ -378,6 +379,7 @@ call Update_Library_Release.bat</Command>
     <ClCompile Include="..\private\SphereCollider.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="..\private\SplineCurve.cpp" />
     <ClCompile Include="..\private\State.cpp" />
     <ClCompile Include="..\private\StateController.cpp" />
     <ClCompile Include="..\private\Tonemapping.cpp" />

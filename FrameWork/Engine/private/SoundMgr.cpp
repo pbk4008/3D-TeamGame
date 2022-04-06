@@ -171,6 +171,13 @@ HRESULT CSoundMgr::LoadSoundFile()
 	eRes = FMOD_System_CreateSound(m_pSystem, "../bin/Resources/Sound/Weapon/Needle/A_Player_Weapon_Longsword_Slash_Heavy_ChargingFinished_01.ogg", FMOD_DEFAULT, 0, &pSound);
 	if (eRes == FMOD_OK) m_mapSound.emplace(L"Needle_Attack_R_Slam_3", pSound); else return E_FAIL;
 
+	/* for. Item */
+	eRes = FMOD_System_CreateSound(m_pSystem, "../bin/Resources/Sound/Item/A_Foley_GetUp_SunWisp_01.ogg", FMOD_DEFAULT, 0, &pSound);
+	if (eRes == FMOD_OK) m_mapSound.emplace(L"Drop_Item", pSound); else return E_FAIL;
+
+	eRes = FMOD_System_CreateSound(m_pSystem, "../bin/Resources/Sound/Item/A_UI_Hover_Major.ogg", FMOD_DEFAULT, 0, &pSound);
+	if (eRes == FMOD_OK) m_mapSound.emplace(L"Drop_Item_2", pSound); else return E_FAIL;
+
 	/* for. Player */
 	eRes = FMOD_System_CreateSound(m_pSystem, "../bin/Resources/Sound/Player/A_Heavy_Armour_Plate_Gak_Step_10.ogg", FMOD_DEFAULT, 0, &pSound);
 	if (eRes == FMOD_OK) m_mapSound.emplace(L"Player_Step_1", pSound); else return E_FAIL;

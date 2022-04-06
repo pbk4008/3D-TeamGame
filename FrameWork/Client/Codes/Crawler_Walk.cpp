@@ -33,17 +33,15 @@ _int CCrawler_Walk::Tick(const _double& TimeDelta)
 	_fvector vMonsterPos = m_pTransform->Get_State(CTransform::STATE::STATE_POSITION);
 	_fvector vDist = vMonsterPos - g_pObserver->Get_PlayerPos();
 	_float fDistToPlayer = XMVectorGetX(XMVector3Length(vDist));
+	m_pTransform->Face_Target(g_pObserver->Get_PlayerPos());
 
-	if (2.f < fDistToPlayer)
-	{
-		m_pTransform->Face_Target(g_pObserver->Get_PlayerPos());
-	}
-
-	if ( 2.f > fDistToPlayer)
+	if (2.f > fDistToPlayer)
 	{
 		m_pStateController->Change_State(L"Attack");
-		cout << "공격으로 변경" << endl;
+		//cout << "공격으로 변경" << endl;
 	}
+	else if(5.f< fDistToPlayer)
+		m_pStateController->Change_State(L"Idle");
 
 	return _int();
 }
