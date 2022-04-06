@@ -115,7 +115,7 @@ void CFury::RangeAttack()
 	tOverlapDesc.filterData.flags = PxQueryFlag::eDYNAMIC;
 	if (g_pGameInstance->Overlap(tOverlapDesc))
 	{
-		_uint iSize = tOverlapDesc.vecHitObject.size();
+		_uint iSize = (_uint)tOverlapDesc.vecHitObject.size();
 		for (_uint i = 0; i < iSize; ++i)
 		{
 			CActor* pActor = static_cast<CActor*>(tOverlapDesc.vecHitObject[i]);

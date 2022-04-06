@@ -195,6 +195,8 @@ void CMonster_Bastion_Shooter::Hit(const ATTACKDESC& _tAttackDesc)
 
 	m_pPanel->Set_Show(true);
 
+	m_fCurrentHp -= _tAttackDesc.fDamage;
+
 	Hit();
 }
 
@@ -239,7 +241,7 @@ void CMonster_Bastion_Shooter::Hit()
 	CShooter_Hit::HITDATA tData;
 	ZeroMemory(&tData, sizeof(tData));
 
-	m_fCurrentHp--;
+	//m_fCurrentHp--;
 	m_pPanel->Set_HpBar(Get_HpRatio());
 	if (!m_bFirstHit)
 	{
