@@ -58,6 +58,7 @@ HRESULT CShield_BlockBreakEnd::EnterState()
 	m_iCutIndex = 40;
 
 	m_pSilvermane->Set_IsTrasceCamera(false);
+	m_pSilvermane->Set_IsHit(true);
 	return S_OK;
 }
 
@@ -67,6 +68,7 @@ HRESULT CShield_BlockBreakEnd::ExitState()
 		return E_FAIL;
 
 	m_pSilvermane->Set_IsTrasceCamera(true);
+	m_pSilvermane->Set_IsHit(false);
 	return S_OK;
 }
 

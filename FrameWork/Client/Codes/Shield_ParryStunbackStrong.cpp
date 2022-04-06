@@ -77,6 +77,7 @@ HRESULT CShield_ParryStunbackStrong::EnterState()
 	//m_pSilvermane->Set_EquipShield(true);
 	m_pSilvermane->Set_EquipShieldAnim(false);
 	m_pSilvermane->Set_IsTrasceCamera(false);
+	m_pSilvermane->Set_IsHit(true);
 
 	m_iCutIndex = 60;
 	return S_OK;
@@ -90,6 +91,7 @@ HRESULT CShield_ParryStunbackStrong::ExitState()
 	m_pSilvermane->Set_EquipShield(false);
 	m_pSilvermane->Set_IsTrasceCamera(true);
 	m_pSilvermane->Set_BlockTime(0.f);
+	m_pSilvermane->Set_IsHit(false);
 	return S_OK;
 }
 

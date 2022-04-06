@@ -91,7 +91,7 @@ HRESULT CMonster_Bastion_Sword::NativeConstruct(const _uint _iSceneID, void* _pA
 	//MonsterBar Panel
 	m_pPanel->Set_Show(false);
 	m_bUIShow = false;
-	//setActive(false);
+	setActive(false);
 
 	m_tAttackDesc.iLevel = 2;
 	m_tAttackDesc.fDamage = 5.f;
@@ -651,6 +651,7 @@ void CMonster_Bastion_Sword::Hit()
 		m_pPanel->Set_GroggyBar(Get_GroggyGaugeRatio());
 	}
 	//Active_Effect((_uint)EFFECT::GUARD);
+
 }
 
 CMonster_Bastion_Sword* CMonster_Bastion_Sword::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)

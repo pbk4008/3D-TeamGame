@@ -83,7 +83,7 @@ HRESULT CMonster_Bastion_Shooter::NativeConstruct(const _uint _iSceneID, void* _
 		return E_FAIL;
 
 
-	//setActive(false);
+	setActive(false);
 	m_wstrCurState = L"";
 	m_tAttackDesc.iLevel = 2;
 

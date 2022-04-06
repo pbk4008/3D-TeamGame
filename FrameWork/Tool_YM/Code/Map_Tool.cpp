@@ -575,8 +575,8 @@ void CMap_Tool::OnNMClickTreeItem(NMHDR* pNMHDR, LRESULT* pResult)
 void CMap_Tool::OnBnClickedSaveButton()
 {
 	// TODO: 맵 데이터를 저장합니다.
-	list<CGameObject*> ListObj = g_pGameInstance->getAllObjectList();
-	//list<CGameObject*> ListObj = *(g_pGameInstance->getObjectList(1, L"Treasure_Chest"));
+	//list<CGameObject*> ListObj = g_pGameInstance->getAllObjectList();
+	list<CGameObject*> ListObj = *(g_pGameInstance->getObjectList(1, L"Treasure_Chest"));
 	//list<CGameObject*> ListObj = *(g_pGameInstance->getObjectList(1, L"Env_Tree"));
 	m_vecMesh.clear();
 

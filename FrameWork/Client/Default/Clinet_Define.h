@@ -16,6 +16,6 @@ extern CMainApp* g_pMainApp;
 extern CClient_Observer* g_pObserver;
 extern CDebugSystem* g_pDebugSystem;
 extern CShakeManager* g_pShakeManager;
-
+extern CDataManager*  g_pDataManager;
 
 #endif

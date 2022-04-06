@@ -645,6 +645,45 @@
     <Filter Include="02.GameObject\05.UI\01.UI_Ingame\01.Meter\02.Monster\03.HpUI\00.BackHp">
       <UniqueIdentifier>{56f68291-1790-462f-af84-0e71c7f994af}</UniqueIdentifier>
     </Filter>
+    <Filter Include="96.ScriptableData">
+      <UniqueIdentifier>{7c23face-6ea6-4e04-a605-1ddce2d9a0d7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="96.ScriptableData\ItemData">
+      <UniqueIdentifier>{3f7dd977-f734-4af9-a8b5-0e67491a7ed6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="96.ScriptableData\WeaponData">
+      <UniqueIdentifier>{fcee0832-7747-4d88-8347-466b12020e7b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.UI\02.UIDGen">
+      <UniqueIdentifier>{f266934c-1a57-446b-95cc-e419c91d86f5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.System\02.InteractManager">
+      <UniqueIdentifier>{463fe524-896b-4339-89fc-7dd31e8d3856}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\06.Interactable Object">
+      <UniqueIdentifier>{4a5859c8-26b8-4d46-99f2-0e7d33ad266d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.System\03.DropManager">
+      <UniqueIdentifier>{1616c50f-191e-47c8-9ae6-63f27fdd364c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\06.Interactable Object\DropObject">
+      <UniqueIdentifier>{083ba14e-1894-4e11-b635-6aa79097214f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.System\04.GameObjectPool">
+      <UniqueIdentifier>{1624795f-0856-4f9e-b3dd-76c8629f1312}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\06.Interactable Object\DropBox">
+      <UniqueIdentifier>{b65eefca-bd57-42a1-8609-b4176f8e4154}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\06.Interactable Object\DropBox\Open_State">
+      <UniqueIdentifier>{51e0a802-bea5-479b-a341-22f1110f66f9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="96.ScriptableData\InventoryData">
+      <UniqueIdentifier>{981fc99d-54c6-44d5-97b1-06663b0d6739}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.System\05.DataManager">
+      <UniqueIdentifier>{570e7cdd-e1ad-4238-8e22-de6213ebd30e}</UniqueIdentifier>
+	</Filter>
     <Filter Include="02.GameObject\03.Character\00.Player\00.Silvermane\State\Shield\Parry">
       <UniqueIdentifier>{476d3f32-8157-40d0-b1ca-3cfc24316276}</UniqueIdentifier>
     </Filter>
@@ -1506,6 +1545,51 @@
     <ClInclude Include="..\Headers\UI_Monster_BackHpBar.h">
       <Filter>02.GameObject\05.UI\01.UI_Ingame\01.Meter\02.Monster\03.HpUI\00.BackHp</Filter>
     </ClInclude>
+    <ClInclude Include="..\Headers\ScriptableData.h">
+      <Filter>96.ScriptableData</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\ItemData.h">
+      <Filter>96.ScriptableData\ItemData</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\WeaponData.h">
+      <Filter>96.ScriptableData\WeaponData</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\UIDGen.h">
+      <Filter>02.GameObject\05.UI\02.UIDGen</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\InteractManager.h">
+      <Filter>03.System\02.InteractManager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\InteractableObject.h">
+      <Filter>02.GameObject\06.Interactable Object</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\DropObject.h">
+      <Filter>02.GameObject\06.Interactable Object\DropObject</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\DropManager.h">
+      <Filter>03.System\03.DropManager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\GameObjectPool.h">
+      <Filter>03.System\04.GameObjectPool</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\DropBox.h">
+      <Filter>02.GameObject\06.Interactable Object\DropBox</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\DropBox_Open.h">
+      <Filter>02.GameObject\06.Interactable Object\DropBox\Open_State</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\DropBox_Idle.h">
+      <Filter>02.GameObject\06.Interactable Object\DropBox\Open_State</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\DropBox_State.h">
+      <Filter>02.GameObject\06.Interactable Object\DropBox\Open_State</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\InventoryData.h">
+      <Filter>96.ScriptableData\InventoryData</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\DataManager.h">
+      <Filter>03.System\05.DataManager</Filter>
+	</ClInclude>
     <ClInclude Include="..\Headers\Shield_Parry.h">
       <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Shield\Parry</Filter>
     </ClInclude>
@@ -2373,6 +2457,54 @@
     <ClCompile Include="..\Codes\UI_Monster_BackHpBar.cpp">
       <Filter>02.GameObject\05.UI\01.UI_Ingame\01.Meter\02.Monster\03.HpUI\00.BackHp</Filter>
     </ClCompile>
+    <ClCompile Include="..\Codes\ScriptableData.cpp">
+      <Filter>96.ScriptableData</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\ItemData.cpp">
+      <Filter>96.ScriptableData\ItemData</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\WeaponData.cpp">
+      <Filter>96.ScriptableData\WeaponData</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\UIDGen.cpp">
+      <Filter>02.GameObject\05.UI\02.UIDGen</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\InteractManager.cpp">
+      <Filter>03.System\02.InteractManager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\InteractableObject.cpp">
+      <Filter>02.GameObject\06.Interactable Object</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\DropObject.cpp">
+      <Filter>02.GameObject\06.Interactable Object\DropObject</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Default\Client_Function.cpp">
+      <Filter>98.Headers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\DropManager.cpp">
+      <Filter>03.System\03.DropManager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\GameObjectPool.cpp">
+      <Filter>03.System\04.GameObjectPool</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\DropBox.cpp">
+      <Filter>02.GameObject\06.Interactable Object\DropBox</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\DropBox_Open.cpp">
+      <Filter>02.GameObject\06.Interactable Object\DropBox\Open_State</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\DropBox_Idle.cpp">
+      <Filter>02.GameObject\06.Interactable Object\DropBox\Open_State</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\DropBox_State.cpp">
+      <Filter>02.GameObject\06.Interactable Object\DropBox\Open_State</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\InventoryData.cpp">
+      <Filter>96.ScriptableData\InventoryData</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\DataManager.cpp">
+      <Filter>03.System\05.DataManager</Filter>
+	</ClCompile>
     <ClCompile Include="..\Codes\Shield_Parry.cpp">
       <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Shield\Parry</Filter>
     </ClCompile>
@@ -2520,8 +2652,11 @@
     <FxCompile Include="..\bin\ShaderFile\Shader_UI_Bar.hlsl">
       <Filter>100.ShaderFiles\04.UI</Filter>
     </FxCompile>
+    <FxCompile Include="..\bin\ShaderFile\Shader_Treasure_Chest.hlsl">
+      <Filter>100.ShaderFiles\99.Other</Filter>
+	</FxCompile>
     <FxCompile Include="..\bin\ShaderFile\Shader_UI_Enemy_Bar.hlsl">
       <Filter>100.ShaderFiles\04.UI</Filter>
-    </FxCompile>
+	</FxCompile>
   </ItemGroup>
 </Project>

@@ -55,6 +55,7 @@ public:
 
 public:
 	const _bool IsHit() const;
+	const _bool IsDash() const;
 
 	CTransform* Get_Transform() const;
 	CModel* Get_Model() const;
@@ -65,6 +66,7 @@ public:
 
 	void Set_IsHit(const _bool _isHit);
 	void Set_IsFall(const _bool _isFall);
+	void Set_IsDash(const _bool _isDash);
 	void Set_IsMove(const _bool _isMove);
 	void Set_IsTrasceCamera(const _bool _isTraceCamera);
 
@@ -101,6 +103,9 @@ public: /* For.JumpNode */
 	CJumpBox* Get_TargetJumpBox() const;
 	const _bool Raycast_JumpNode(const _double& _dDeltaTime);
 
+public: /* For.DropBox */
+	const void Raycast_DropBox(const _double& _dDeltaTime);
+
 private:
 	const _int Trace_CameraLook(const _double& _dDeltaTime);
 	const _int Input(const _double& _dDeltaTime);
@@ -115,6 +120,7 @@ public:
 	CCamera_Silvermane* m_pCamera = nullptr;
 
 	_bool m_isHit = false;
+	_bool m_isDash = false;
 	_bool m_isFall = false;
 	_bool m_isMove = false;
 	_bool m_isBlock = false;
@@ -140,6 +146,9 @@ private: /* For.JumpNode */
 	CUI_Fill_Ckey* m_pFillCKey = nullptr;
 	_float m_fJumpNodeLookTime = 0.f;
 	_float m_fJumpTriggerLookTime = 0.f;
+	
+private: /* Drop Box  */
+	_float m_fOpenDelay = 0.f;
 
 private: /* For.Cheat */
 	_bool m_isHighSpeedMode = false;
