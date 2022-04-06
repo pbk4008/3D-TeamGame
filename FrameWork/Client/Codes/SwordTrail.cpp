@@ -33,13 +33,14 @@ HRESULT CSwordTrail::NativeConstruct(const _uint _iSceneID, void* pArg)
 
 _int CSwordTrail::Tick(_double TimeDelta)
 {
+	if (nullptr != m_pRenderer && m_bOnOff)
+		m_pRenderer->Add_RenderGroup(CRenderer::RENDER_ALPHA, this);
+
 	return _int();
 }
 
 _int CSwordTrail::LateTick(_double TimeDelta)
 {
-	if (nullptr != m_pRenderer && m_bOnOff)
-		m_pRenderer->Add_RenderGroup(CRenderer::RENDER_ALPHA, this);
 
 	return _int();
 }
@@ -108,7 +109,7 @@ void CSwordTrail::AddVertex(const _fvector pToppos, const _vector pBottompos)
 	m_TrailList.emplace_back(pToppos, pBottompos);
 
 	if (m_TrailList.size() > 15)
-		m_TrailList.pop_back();
+		m_TrailList.pop_front();
 
 	std::cout << "Trail Size : " << m_TrailList.size() << endl;
 }

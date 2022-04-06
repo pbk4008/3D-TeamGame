@@ -58,8 +58,8 @@ HRESULT CNeedle::NativeConstruct(const _uint _iSceneID, void* _pArg)
 
 	XMStoreFloat4x4(&m_matPivot, XMMatrixRotationRollPitchYaw(XMConvertToRadians(-20.f), XMConvertToRadians(-67.f), XMConvertToRadians(0.f)) * XMMatrixTranslation(0.5f, 0.05f, -0.2f));
 
-	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer(m_iSceneID, L"Layer_Effect", L"Proto_GameObject_TrailEffect", m_pTransform, (CGameObject**)&m_pTrailEffect)))
-	//	MSGBOX(L"트레일 이펙트 생성 실패. from Needle");
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer(m_iSceneID, L"Layer_Effect", L"Proto_GameObject_TrailEffect", m_pTransform, (CGameObject**)&m_pTrailEffect)))
+		MSGBOX(L"트레일 이펙트 생성 실패. from Needle");
 
 	return S_OK;
 }
@@ -68,11 +68,6 @@ _int CNeedle::Tick(_double _dDeltaTime)
 {
 	if (0 > __super::Tick(_dDeltaTime))
 		return -1;
-
-	if (g_pObserver->IsAttack())
-		m_bTrailOnOff = true;
-	else
-		m_bTrailOnOff = false;
 
 	Attach_FixedBone(_dDeltaTime);
 	Attach_Owner(_dDeltaTime);
@@ -88,19 +83,43 @@ _int CNeedle::LateTick(_double _dDeltaTime)
 	if (0 > __super::LateTick(_dDeltaTime))
 		return -1;
 
-	//if (m_isAttack)
-	//{
-	//	m_pTrailEffect->Record_Points(_dDeltaTime);
-	//	m_pTrailEffect->Set_IsRender(true);
-	//}
-	//else
-	//{
-	//	m_pTrailEffect->Clear_Points();
-	//	m_pTrailEffect->Set_IsRender(false);
-	//}
+	if (m_isAttack)
+	{
+		m_pTrailEffect->Record_Points(_dDeltaTime);
+		m_pTrailEffect->Set_IsRender(true);
+	}
+	else
+	{
+		m_pTrailEffect->Clear_Points();
+		m_pTrailEffect->Set_IsRender(false);
+	}
 
 	if(m_pRenderer)
 		m_pRenderer->Add_RenderGroup(CRenderer::RENDER_NONALPHA, this);
+
+
+	//if (g_pObserver->IsAttack())
+	//	m_bTrailOnOff = true;
+	//else
+	//	m_bTrailOnOff = false;
+
+	//if (m_bTrailOnOff == true)
+	//{
+	//	_vector top, bottom, look;
+	//	_matrix world = m_pTransform->Get_WorldMatrix();
+	//	
+	//	look = world.r[2];
+	//	top = world.r[3];
+	//	bottom = world.r[3];
+	//	/*look = XMVector3Normalize(look);*/
+	//	top += look * 2.5f;
+	//	bottom += look * 0.5f;
+
+	//	m_pTrail->AddVertex(top, bottom);
+	//	m_pTrail->Tick(_dDeltaTime);
+	//}
+	//else
+	//	m_pTrail->Clear_Vertex();
 
 	return _int();
 }
@@ -109,24 +128,6 @@ HRESULT CNeedle::Render()
 {
 	if (FAILED(__super::Render()))
 		return E_FAIL;
-
-	if (m_bTrailOnOff == true)
-	{
-		_vector top, bottom, look;
-		_matrix world = m_pTransform->Get_WorldMatrix();
-		look = world.r[2];
-		top = world.r[3];
-		bottom = world.r[3];
-		look = XMVector3Normalize(look);
-		top += look * 4.3f;
-		bottom += look * 1.8f;
-
-		m_pTrail->AddVertex(top, bottom);
-	}
-	else
-	{
-		m_pTrail->Clear_Vertex();
-	}
 
 	_matrix smatWorld, smatView, smatProj;
 	smatWorld = XMMatrixTranspose(m_pTransform->Get_WorldMatrix());

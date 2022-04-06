@@ -106,13 +106,13 @@ HRESULT CVIBuffer_Trail::Set_VertexTrail(const _float3 _arrPos[], const _float3 
 		_float3 vPosition;
 		XMStoreFloat3(&vPosition, XMLoadFloat3(&_arrPos[i]) - XMLoadFloat3(&_arrDir[i]) * _fLength);
 		((VTXTEX*)pVertices.pData)[i * 2 + 0].vPosition = vPosition;
-		//((VTXTEX*)pVertices.pData)[i * 2 + 0].vTexUV =  _float2(1.f, (i * 2 + 0) / _float(_dwCount - 2.f));
-		((VTXTEX*)pVertices.pData)[i * 2 + 0].vTexUV = _float2(1.f, (i * 2 + 0) / _float((_dwCount - 1) * 2));
+		((VTXTEX*)pVertices.pData)[i * 2 + 0].vTexUV =  _float2(1.f, (i * 2 + 0) / _float(_dwCount - 2.f));
+		//((VTXTEX*)pVertices.pData)[i * 2 + 0].vTexUV = _float2(1.f, (i * 2 + 0) / _float((_dwCount - 1) * 2));
 
 		XMStoreFloat3(&vPosition, XMLoadFloat3(&_arrPos[i]) + XMLoadFloat3(&_arrDir[i]) * _fLength);
 		((VTXTEX*)pVertices.pData)[i * 2 + 1].vPosition = vPosition;
-		//((VTXTEX*)pVertices.pData)[i * 2 + 1].vTexUV = _float2(1.f, (i * 2 + 1) / _float(_dwCount - 1.f));
-		((VTXTEX*)pVertices.pData)[i * 2 + 1].vTexUV = _float2(1.f, (i * 2 + 1) / _float(_dwCount * 2 - 1));
+		((VTXTEX*)pVertices.pData)[i * 2 + 1].vTexUV = _float2(0.f, (i * 2 + 1) / _float(_dwCount - 1.f));
+		//((VTXTEX*)pVertices.pData)[i * 2 + 1].vTexUV = _float2(1.f, (i * 2 + 1) / _float(_dwCount * 2 - 1));
 	}
 	//m_iNumPrimitive = _dwCount - 2;
 	m_iNumPrimitive = (_dwCount - 1) * 2;
