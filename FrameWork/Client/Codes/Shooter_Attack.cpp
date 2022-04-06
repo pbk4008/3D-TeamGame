@@ -40,7 +40,7 @@ _int CShooter_Attack::Tick(const _double& _dDeltaTime)
 	if (NO_EVENT != iProgress)
 		return iProgress;
 
-	cout << "Attack" << endl;
+	//cout << "Attack" << endl;
 
 	m_pAnimator->Tick(_dDeltaTime);
 	

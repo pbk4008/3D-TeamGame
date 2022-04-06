@@ -34,7 +34,7 @@ _int CAberrant_Stun::Tick(const _double& TimeDelta)
 	{
 		if (m_pAnimator->Get_AnimController()->Is_Finished())
 		{
-			cout << " 局丛场" << endl;
+			//cout << " 局丛场" << endl;
 			m_pStateController->Change_State(L"Run");
 		}
 	}

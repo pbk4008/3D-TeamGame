@@ -23,6 +23,7 @@ HRESULT CSpear_Idle::NativeConstruct(void* _pArg)
 
 _int CSpear_Idle::Tick(const _double& _dDeltaTime)
 {
+	cout << "Idle" << endl;
 	_int iProgress = __super::Tick(_dDeltaTime);
 	if (NO_EVENT != iProgress)
 		return iProgress;

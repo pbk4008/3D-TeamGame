@@ -30,6 +30,9 @@ public:
 	virtual void Look_Player(void) override;
 
 private:
+	void Chase_Player(_double TimeDelta);
+
+private:
 	_float m_fRunTime = 0.0f;
 	_uint m_iAttackRand = 0;
 public:

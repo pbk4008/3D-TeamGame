@@ -425,9 +425,7 @@ call Update_Client.bat</Command>
     <ClInclude Include="..\Headers\Spear_Attack.h" />
     <ClInclude Include="..\Headers\Spear_Bwd_Dash.h" />
     <ClInclude Include="..\Headers\Spear_Charge_Attack.h" />
-    <ClInclude Include="..\Headers\Spear_Charge_Attack_End.h" />
     <ClInclude Include="..\Headers\Spear_Chaser.h" />
-    <ClInclude Include="..\Headers\Spear_Chaser_End.h" />
     <ClInclude Include="..\Headers\Spear_Death.h" />
     <ClInclude Include="..\Headers\Spear_Groggy.h" />
     <ClInclude Include="..\Headers\Spear_Groggy_End.h" />
@@ -717,9 +715,7 @@ call Update_Client.bat</Command>
     <ClCompile Include="..\Codes\Spear_Attack.cpp" />
     <ClCompile Include="..\Codes\Spear_Bwd_Dash.cpp" />
     <ClCompile Include="..\Codes\Spear_Charge_Attack.cpp" />
-    <ClCompile Include="..\Codes\Spear_Charge_Attack_End.cpp" />
     <ClCompile Include="..\Codes\Spear_Chaser.cpp" />
-    <ClCompile Include="..\Codes\Spear_Chaser_End.cpp" />
     <ClCompile Include="..\Codes\Spear_Death.cpp" />
     <ClCompile Include="..\Codes\Spear_Groggy.cpp" />
     <ClCompile Include="..\Codes\Spear_Groggy_End.cpp" />

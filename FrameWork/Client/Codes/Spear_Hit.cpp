@@ -4,7 +4,6 @@
 
 /* Monster List */
 #include "Monster_Bastion_Spear.h"
-#include "Stage2.h"
 
 CSpear_Hit::CSpear_Hit(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
 	: CSpear_State(_pDevice, _pDeviceContext)

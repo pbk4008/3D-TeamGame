@@ -71,7 +71,7 @@ HRESULT CShooter_Chase::EnterState()
 {
 	if (!m_pAnimator)
 		return E_FAIL;
-	cout << "chaseÁøÀÔ" << endl;
+	//cout << "chaseÁøÀÔ" << endl;
 
 	if (FAILED(m_pAnimator->Change_AnyEntryAnimation((_uint)CMonster_Bastion_Shooter::ANIM_TYPE::RUN_START)))
 		return E_FAIL;
@@ -81,7 +81,7 @@ HRESULT CShooter_Chase::EnterState()
 
 HRESULT CShooter_Chase::ExitState()
 {
-	cout << "chaseÅ»Ãâ" << endl;
+	//cout << "chaseÅ»Ãâ" << endl;
 
 	return S_OK;
 }

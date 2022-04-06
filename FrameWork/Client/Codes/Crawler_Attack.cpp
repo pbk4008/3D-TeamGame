@@ -52,22 +52,20 @@ _int CCrawler_Attack::Tick(const _double& TimeDelta)
 		}
 		else 
 			pMonster->Set_IsAttack(false);
-
-		if (0 == iCurKeyFrameIndex)
-		{
-			m_pTransform->Face_Target(g_pObserver->Get_PlayerPos());
-		}
 	}
 
 	_fvector vMonsterPos = m_pTransform->Get_State(CTransform::STATE::STATE_POSITION);
 	_fvector vDist = vMonsterPos - g_pObserver->Get_PlayerPos();
 	_float fDistToPlayer = XMVectorGetX(XMVector3Length(vDist));
 
-	if (5.f <= fDistToPlayer)
+	if (m_pAnimator->Get_CurrentAnimation()->Is_Finished())
 	{
-		m_pStateController->Change_State(L"Idle");
+		if (5.f <= fDistToPlayer)
+			m_pStateController->Change_State(L"Idle");
+		else if (2.f <= fDistToPlayer)
+			m_pStateController->Change_State(L"Walk");
 	}
-
+	
 	return _int();
 }
 
@@ -99,7 +97,7 @@ HRESULT CCrawler_Attack::EnterState()
 	if(randAtt)
 		g_pGameInstance->Play_Shot(L"Crawler_Attack_1", CSoundMgr::CHANNELID::Monster_Attack);
 	else
-	g_pGameInstance->Play_Shot(L"Crawler_Attack_2", CSoundMgr::CHANNELID::Monster_Attack);
+		g_pGameInstance->Play_Shot(L"Crawler_Attack_2", CSoundMgr::CHANNELID::Monster_Attack);
 
 	m_pTransform->Face_Target(g_pObserver->Get_PlayerPos());
 	m_pAnimator->Change_AnyEntryAnimation(CMonster_Crawler::MON_STATE::ATTACK_R1);

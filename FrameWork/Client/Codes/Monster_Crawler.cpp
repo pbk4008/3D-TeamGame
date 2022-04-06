@@ -135,7 +135,7 @@ _int CMonster_Crawler::Tick(_double _dDeltaTime)
 	}
 	else
 	{
-		if (DEATH == m_pAnimatorCom->Get_CurrentAnimNode())
+		if (L"Death" == m_pStateController->Get_CurStateTag())
 		{
 			if (m_pAnimatorCom->Get_CurrentAnimation()->Is_Finished())
 			{

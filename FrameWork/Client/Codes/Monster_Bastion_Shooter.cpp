@@ -537,7 +537,7 @@ HRESULT CMonster_Bastion_Shooter::Ready_StateFSM()
 
 	m_pStateController->Change_State(L"Idle");
 
-	cout << "idle로 시작" << endl;
+	//cout << "idle로 시작" << endl;
 
 	return S_OK;
 }
@@ -576,7 +576,7 @@ _int CMonster_Bastion_Shooter::Change_State()
 	{
 		if (tmpState == L"Idle")
 		{
-			cout << "Idle에서 chase로 변경" << endl;
+			//cout << "Idle에서 chase로 변경" << endl;
 			Chase();
 		}
 	}

@@ -519,17 +519,11 @@
     <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_Spear\State\Groggy\End">
       <UniqueIdentifier>{e5543a53-3cc7-4cb6-87bb-4c41032fce03}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_Spear\State\Chaser\End">
-      <UniqueIdentifier>{e9e147d6-1786-44a2-9086-511c9cbf4786}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_Spear\State\Guard">
       <UniqueIdentifier>{85a09936-f9ae-4c4f-a521-9cdca484e2fb}</UniqueIdentifier>
     </Filter>
     <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_Spear\State\Attack\Charge_Attack">
       <UniqueIdentifier>{52f9fe23-d530-45bf-8dce-6f09b54d794d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_Spear\State\Attack\Charge_Attack\End">
-      <UniqueIdentifier>{8e1cd7a6-b86e-43a2-95a1-d0ceef66deb8}</UniqueIdentifier>
     </Filter>
     <Filter Include="03.System\01.ShakeManager">
       <UniqueIdentifier>{88c490a5-4de2-42f5-8177-be9cf2784d4b}</UniqueIdentifier>
@@ -1446,9 +1440,6 @@
     <ClInclude Include="..\Headers\Spear_Chaser.h">
       <Filter>02.GameObject\03.Character\01.Monster\Bastion_Spear\State\Chaser</Filter>
     </ClInclude>
-    <ClInclude Include="..\Headers\Spear_Chaser_End.h">
-      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Spear\State\Chaser\End</Filter>
-    </ClInclude>
     <ClInclude Include="..\Headers\Spear_Attack.h">
       <Filter>02.GameObject\03.Character\01.Monster\Bastion_Spear\State\Attack</Filter>
     </ClInclude>
@@ -1460,9 +1451,6 @@
     </ClInclude>
     <ClInclude Include="..\Headers\Spear_Charge_Attack.h">
       <Filter>02.GameObject\03.Character\01.Monster\Bastion_Spear\State\Attack\Charge_Attack</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Headers\Spear_Charge_Attack_End.h">
-      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Spear\State\Attack\Charge_Attack\End</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\TriggerSystem.h">
       <Filter>03.System\00.Trigger</Filter>
@@ -1532,7 +1520,7 @@
     </ClInclude>
     <ClInclude Include="..\Headers\Effect_Guard.h">
       <Filter>02.GameObject\04.Effect\00.Particle\06.Effect_Guard</Filter>
-	</ClInclude>
+    </ClInclude>
     <ClInclude Include="..\Headers\1H_Stagger.h">
       <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\HIt</Filter>
     </ClInclude>
@@ -2322,9 +2310,6 @@
     <ClCompile Include="..\Codes\Spear_Chaser.cpp">
       <Filter>02.GameObject\03.Character\01.Monster\Bastion_Spear\State\Chaser</Filter>
     </ClCompile>
-    <ClCompile Include="..\Codes\Spear_Chaser_End.cpp">
-      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Spear\State\Chaser\End</Filter>
-    </ClCompile>
     <ClCompile Include="..\Codes\Spear_Attack.cpp">
       <Filter>02.GameObject\03.Character\01.Monster\Bastion_Spear\State\Attack</Filter>
     </ClCompile>
@@ -2336,9 +2321,6 @@
     </ClCompile>
     <ClCompile Include="..\Codes\Spear_Charge_Attack.cpp">
       <Filter>02.GameObject\03.Character\01.Monster\Bastion_Spear\State\Attack\Charge_Attack</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Codes\Spear_Charge_Attack_End.cpp">
-      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Spear\State\Attack\Charge_Attack\End</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\Client_Trigger.cpp">
       <Filter>03.System\00.Trigger\Client_Trigger</Filter>
@@ -2405,7 +2387,7 @@
     </ClCompile>
     <ClCompile Include="..\Codes\Effect_Guard.cpp">
       <Filter>02.GameObject\04.Effect\00.Particle\06.Effect_Guard</Filter>
-	</ClCompile>
+    </ClCompile>
     <ClCompile Include="..\Codes\1H_Stagger.cpp">
       <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\HIt</Filter>
     </ClCompile>

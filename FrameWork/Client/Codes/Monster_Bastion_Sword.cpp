@@ -143,7 +143,7 @@ _int CMonster_Bastion_Sword::Tick(_double _dDeltaTime)
 		m_pPanel->Set_Show(false);
 
 	m_pPanel->Set_TargetWorldMatrix(m_pTransform->Get_WorldMatrix());
-	Change_State();
+	Dead_Check();
 	return 0;
 }
 
@@ -384,46 +384,11 @@ HRESULT CMonster_Bastion_Sword::Set_Animation_FSM()
 		return E_FAIL;
 
 	//애니메이션 연결(연결 당할 애, 연결할 애, 쌍방으로 연결할지 안할지)
-	if(FAILED(m_pAnimator->Connect_Animation((_uint)ANIM_TYPE::IDLE , (_uint)ANIM_TYPE::RUN_END,false)))
-		return E_FAIL;
-	if (FAILED(m_pAnimator->Connect_Animation((_uint)ANIM_TYPE::IDLE, (_uint)ANIM_TYPE::ATTACK_JUMPEND, false)))
-		return E_FAIL;
-	if (FAILED(m_pAnimator->Connect_Animation((_uint)ANIM_TYPE::IDLE, (_uint)ANIM_TYPE::ATTACK_DOUBLE, false)))
-		return E_FAIL;
-	if (FAILED(m_pAnimator->Connect_Animation((_uint)ANIM_TYPE::IDLE, (_uint)ANIM_TYPE::ATTACK_SINGLE, false)))
-		return E_FAIL;
-
-	if (FAILED(m_pAnimator->Connect_Animation((_uint)ANIM_TYPE::IDLE, (_uint)ANIM_TYPE::HIT1, false)))
-		return E_FAIL;
-	if (FAILED(m_pAnimator->Connect_Animation((_uint)ANIM_TYPE::IDLE, (_uint)ANIM_TYPE::HIT2, false)))
-		return E_FAIL;
-	if (FAILED(m_pAnimator->Connect_Animation((_uint)ANIM_TYPE::IDLE, (_uint)ANIM_TYPE::HIT3, false)))
-		return E_FAIL;
-	if (FAILED(m_pAnimator->Connect_Animation((_uint)ANIM_TYPE::IDLE, (_uint)ANIM_TYPE::HIT4, false)))
-		return E_FAIL;
-
 	if (FAILED(m_pAnimator->Connect_Animation((_uint)ANIM_TYPE::DEATH, (_uint)ANIM_TYPE::HIT2, false)))
 		return E_FAIL;
 	if (FAILED(m_pAnimator->Connect_Animation((_uint)ANIM_TYPE::DEATH, (_uint)ANIM_TYPE::HIT3, false)))
 		return E_FAIL;
 	if (FAILED(m_pAnimator->Connect_Animation((_uint)ANIM_TYPE::DEATH, (_uint)ANIM_TYPE::HIT4, false)))
-		return E_FAIL;
-	if (FAILED(m_pAnimator->Connect_Animation((_uint)ANIM_TYPE::IDLE, (_uint)ANIM_TYPE::GROGGY_END, false)))
-		return E_FAIL;
-
-	if (FAILED(m_pAnimator->Connect_Animation((_uint)ANIM_TYPE::IDLE, (_uint)ANIM_TYPE::PARING, false)))
-		return E_FAIL;
-
-	if (FAILED(m_pAnimator->Connect_Animation((_uint)ANIM_TYPE::IDLE, (_uint)ANIM_TYPE::BACKWARD_END, false)))
-		return E_FAIL;
-	if (FAILED(m_pAnimator->Connect_Animation((_uint)ANIM_TYPE::IDLE, (_uint)ANIM_TYPE::FORWARD_END, false)))
-		return E_FAIL;
-	if (FAILED(m_pAnimator->Connect_Animation((_uint)ANIM_TYPE::IDLE, (_uint)ANIM_TYPE::LEFTWALK_END, false)))
-		return E_FAIL;
-	if (FAILED(m_pAnimator->Connect_Animation((_uint)ANIM_TYPE::IDLE, (_uint)ANIM_TYPE::RIGHTWALK_END, false)))
-		return E_FAIL;
-
-	if (FAILED(m_pAnimator->Connect_Animation((_uint)ANIM_TYPE::IDLE, (_uint)ANIM_TYPE::TURN, false)))
 		return E_FAIL;
 
 	//자동으로 돌릴 애들(끝나는애, 끝나고 시작할 애)
@@ -614,18 +579,11 @@ HRESULT CMonster_Bastion_Sword::Ready_UI()
 	return S_OK;
 }
 
-_int CMonster_Bastion_Sword::Change_State()
+_int CMonster_Bastion_Sword::Dead_Check()
 {
-	wstring tmpState = m_pStateController->Get_CurStateTag();
-
-	if (tmpState != m_wstrCurState)
-	{
-		if (tmpState == L"Idle")
-			Chase();
-	}
 	if(m_bDead)
 	{
-		if (tmpState == L"Death")
+		if (m_pStateController->Get_CurStateTag() == L"Death")
 		{
 			if (m_pAnimator->Get_CurrentAnimNode() == (_uint)ANIM_TYPE::DEATH
 				&& m_pAnimator->Get_CurrentAnimation()->Is_Finished())
@@ -666,23 +624,6 @@ _int CMonster_Bastion_Sword::Change_State()
 	return _int();
 }
 
-void CMonster_Bastion_Sword::Chase()
-{
-	_vector vPos = m_pTransform->Get_State(CTransform::STATE_POSITION);
-	_vector vPlayerPos = g_pObserver->Get_PlayerPos();
-
-	if (XMVector3Equal(vPlayerPos, XMVectorZero()))
-		return;
-
-	_float fDist = XMVectorGetX(XMVector3Length(vPos - vPlayerPos));
-
-	if (fDist < 10.f)
-	{		
-		m_wstrCurState = L"Chase";
-		m_pStateController->Change_State(L"Chase");
-	}
-}
-
 void CMonster_Bastion_Sword::Hit()
 {
 	m_eHitType = ANIM_TYPE::HIT1;
@@ -697,13 +638,12 @@ void CMonster_Bastion_Sword::Hit()
 		m_bFirstHit = true; //딱 한번 true로 변경해줌
 		m_pPanel->Set_BackUIGapY(1.f);
 	}
-	if (m_wstrCurState != L"Hit"&&!m_bGroggy)
+	if (!m_bGroggy)
 	{
 		g_pGameInstance->StopSound(CSoundMgr::CHANNELID::Sword1H_Hit);
 		g_pGameInstance->Play_Shot(L"Monster_Hit_6", CSoundMgr::CHANNELID::Sword1H_Hit);
 		tData.fCurHp = m_fCurrentHp;
 		tData.iHitType = (_uint)m_eHitType;
-		m_wstrCurState = L"Hit";
 		m_pStateController->Change_State(L"Hit", &tData);
 	}
 	if (!m_bGroggy)

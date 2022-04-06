@@ -115,9 +115,9 @@ _int CMonster_EarthAberrant::Tick(_double _dDeltaTime)
 	{
 		return -1;
 	}
-	string str;
-	str.assign(m_pStateController->Get_CurStateTag().begin(), m_pStateController->Get_CurStateTag().end());
-	cout << str << endl;
+	//string str;
+	//str.assign(m_pStateController->Get_CurStateTag().begin(), m_pStateController->Get_CurStateTag().end());
+	//cout << str << endl;
 	m_pTransform->Set_Velocity(XMVectorZero());
 	m_pPanel->Set_TargetWorldMatrix(m_pTransform->Get_WorldMatrix());
 
@@ -382,10 +382,10 @@ HRESULT CMonster_EarthAberrant::Set_Animation_FSM()
 
 	//run
 	pAnim = m_pModelCom->Get_Animation("SK_Earth_Aberrant_B.ao|A_Run_Fwd_Start_Aberrant");
-	if (FAILED(m_pAnimatorCom->Insert_Animation(RUN_FWD_START, HEAD, pAnim, true, true, false, ERootOption::XYZ, true)))
+	if (FAILED(m_pAnimatorCom->Insert_Animation(RUN_FWD_START, HEAD, pAnim, true, false, false, ERootOption::XYZ, true)))
 		return E_FAIL;
 	pAnim = m_pModelCom->Get_Animation("SK_Earth_Aberrant_B.ao|A_Run_Fwd_Aberrant");
-	if (FAILED(m_pAnimatorCom->Insert_Animation(RUN_FWD, RUN_FWD_START, pAnim, true, true, true, ERootOption::XYZ, true)))
+	if (FAILED(m_pAnimatorCom->Insert_Animation(RUN_FWD, RUN_FWD_START, pAnim, true, false, true, ERootOption::XYZ, true)))
 		return E_FAIL;
 	pAnim = m_pModelCom->Get_Animation("SK_Earth_Aberrant_B.ao|A_Run_Fwd_Stop_Aberrant");
 	if (FAILED(m_pAnimatorCom->Insert_Animation(RUN_FWD_STOP, RUN_FWD, pAnim, true, true, false, ERootOption::XYZ, true)))
