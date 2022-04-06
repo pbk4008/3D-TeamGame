@@ -180,6 +180,6 @@ CClient_Trigger* CClient_Trigger::Create(ID3D11Device* _pDevice, ID3D11DeviceCon
 void CClient_Trigger::Free(void)
 {
 	__super::Free();
-	//Safe_Release(m_pGizmo);
+	Safe_Release(m_pGizmo);
 	Safe_Release(m_pBoxCollider);
 }

@@ -105,6 +105,7 @@ const _int CPhysicsXSystem::Tick(const _double& _dDeltaTime)
 
 	m_pScene->simulate((PxReal)_dDeltaTime);
 	m_pScene->fetchResults(true);
+	m_pSimulationEventCallback->FetchResult();
 
 	return _int();
 }
@@ -385,13 +386,14 @@ const PxRenderBuffer& CPhysicsXSystem::Get_RenderBuffer()
 
 void CPhysicsXSystem::Remove_Actor(PxActor* _pActor)
 {
-	if (_pActor)
+	if (_pActor && NULL != _pActor->getScene())
 		m_pScene->removeActor(*_pActor);
 }
 
 void CPhysicsXSystem::Add_Actor(PxActor* _pActor)
 {
-	m_pScene->addActor(*_pActor);
+	if(_pActor && NULL == _pActor->getScene())
+		m_pScene->addActor(*_pActor);
 }
 
 const _bool CPhysicsXSystem::Raycast(RAYCASTDESC & _desc)

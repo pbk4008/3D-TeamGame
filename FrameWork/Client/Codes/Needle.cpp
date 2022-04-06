@@ -213,15 +213,18 @@ _int CNeedle::Attach_Owner(const _double& _dDeltaTime)
 
 void CNeedle::Set_Equip(const _bool _isEquip, void* _pArg)
 {
-	__super::Set_Equip(_isEquip, _pArg);
-	switch (_isEquip)
+	if (m_isEquip != _isEquip)
 	{
-	case true:
-		m_pCollider->Add_ActorToScene();
-		break;
-	case false:
-		m_pCollider->Remove_ActorFromScene();
-		break;
+		__super::Set_Equip(_isEquip, _pArg);
+		switch (_isEquip)
+		{
+		case true:
+			m_pCollider->Add_ActorToScene();
+			break;
+		case false:
+			m_pCollider->Remove_ActorFromScene();
+			break;
+		}
 	}
 }
 

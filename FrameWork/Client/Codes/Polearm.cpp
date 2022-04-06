@@ -34,21 +34,21 @@ HRESULT CPolearm::NativeConstruct_Prototype()
 	pTexture = CTexture::Create(m_pDevice, m_pDeviceContext);
 	pTexture->NativeConstruct_Prototype(L"../Bin/Resources/Mesh/Polearm/T_2H_polearm_Bastion_D.dds", 1);
 	pMtrl->Set_Texture("g_DiffuseTexture", TEXTURETYPE::TEX_DIFFUSE, pTexture, 0);
-	pTexture = CTexture::Create(m_pDevice, m_pDeviceContext);
 
+	pTexture = CTexture::Create(m_pDevice, m_pDeviceContext);
 	pTexture->NativeConstruct_Prototype(L"../Bin/Resources/Mesh/Polearm/T_2H_polearm_Bastion_N.dds", 1);
 	pMtrl->Set_Texture("g_BiNormalTexture", TEXTURETYPE::TEX_NORMAL, pTexture, 0);
-	pTexture = CTexture::Create(m_pDevice, m_pDeviceContext);
 
+	pTexture = CTexture::Create(m_pDevice, m_pDeviceContext);
 	pTexture->NativeConstruct_Prototype(L"../Bin/Resources/Mesh/Polearm/T_2H_polearm_Bastion_CEO.dds", 1);
 	pMtrl->Set_Texture("g_MRATexture", TEXTURETYPE::TEX_CEO, pTexture, 0);
-	pTexture = CTexture::Create(m_pDevice, m_pDeviceContext);
 
+	pTexture = CTexture::Create(m_pDevice, m_pDeviceContext);
 	pTexture->NativeConstruct_Prototype(L"../Bin/Resources/Mesh/Polearm/T_2H_polearm_Bastion_MRA.dds", 1);
 	pMtrl->Set_Texture("g_MRATexture", TEXTURETYPE::TEX_MRA, pTexture, 0);
-	pTexture = CTexture::Create(m_pDevice, m_pDeviceContext);
 
 	g_pGameInstance->Add_Material(L"Mtrl_Polearm", pMtrl);
+
 
 	return S_OK;
 }
@@ -63,6 +63,8 @@ HRESULT CPolearm::NativeConstruct(const _uint _iSceneID, void* _pArg)
 
 	if (_pArg)
 		m_pFixedBone = static_cast<CHierarchyNode*>(_pArg);
+
+	m_fDamage = 5.f;
 
 	return S_OK;
 }
@@ -112,6 +114,20 @@ HRESULT CPolearm::Render()
 	return S_OK;
 }
 
+void CPolearm::OnTriggerEnter(CCollision& collision)
+{
+	_uint iTag = collision.pGameObject->getTag();
+	if ((_uint)GAMEOBJECT::PLAYER == iTag)
+	{
+		if (!m_isAttack)
+			return;
+
+		ATTACKDESC tAttackDesc = m_pOwner->Get_AttackDesc();
+		tAttackDesc.fDamage += m_fDamage;
+		static_cast<CActor*>(collision.pGameObject)->Hit(tAttackDesc);
+	}
+}
+
 HRESULT CPolearm::Ready_Components()
 {
 	CTransform::TRANSFORMDESC transformDesc;
@@ -120,7 +136,7 @@ HRESULT CPolearm::Ready_Components()
 	m_pTransform->Set_TransformDesc(transformDesc);
 	m_pLocalTransform->Set_TransformDesc(transformDesc);
 
-	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Model_Polearm", L"Model", (CComponent**)&m_pModel)))
+	if (FAILED(SetUp_Components(m_iSceneID, L"Model_Polearm", L"Model", (CComponent**)&m_pModel)))
 		return E_FAIL;
 
 	m_pModel->Add_Material(g_pGameInstance->Get_Material(L"Mtrl_Polearm"), 0);
@@ -199,6 +215,6 @@ CGameObject* CPolearm::Clone(const _uint _iSceneID, void* _pArg)
 
 void CPolearm::Free()
 {
-	Safe_Release(m_pCollider);
 	__super::Free();
+	Safe_Release(m_pCollider);
 }

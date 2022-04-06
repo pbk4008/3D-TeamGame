@@ -93,6 +93,9 @@ HRESULT CMonster_Bastion_Sword::NativeConstruct(const _uint _iSceneID, void* _pA
 	m_bUIShow = false;
 	setActive(false);
 
+	m_tAttackDesc.iLevel = 2;
+	m_tAttackDesc.fDamage = 5.f;
+
 	return S_OK;
 }
 
@@ -109,7 +112,10 @@ _int CMonster_Bastion_Sword::Tick(_double _dDeltaTime)
 	m_pStateController->Tick(_dDeltaTime);
 
 	//무기 뼈 업데이트
-
+	if (nullptr != m_pWeapon)
+	{
+		m_pWeapon->Tick(_dDeltaTime);
+	}
 
 	if (!m_bDead)
 	{
@@ -129,7 +135,6 @@ _int CMonster_Bastion_Sword::Tick(_double _dDeltaTime)
 		else
 		{
 			m_pCharacterController->Move(_dDeltaTime, m_pTransform->Get_Velocity());
-			m_pWeapon->Tick(_dDeltaTime);
 		}
 	}
 	if (true == m_bUIShow)
@@ -183,11 +188,18 @@ void CMonster_Bastion_Sword::Set_Remove(_bool bCheck)
 	m_pPanel->Set_UIRemove(bCheck);
 }
 
+void CMonster_Bastion_Sword::Set_IsAttack(const _bool _isAttack)
+{
+	m_IsAttack = _isAttack;
+	if (m_pWeapon)
+		m_pWeapon->Set_IsAttack(_isAttack);
+}
+
 void CMonster_Bastion_Sword::OnTriggerEnter(CCollision& collision)
 {
 	if (!m_bDead)
 	{
-		if (m_fCurrentHp >= 0.f)
+		if (m_fCurrentHp >= 0.f && g_pObserver->IsAttack())
 		{
 			m_pPanel->Set_Show(true);
 
@@ -229,6 +241,7 @@ HRESULT CMonster_Bastion_Sword::SetUp_Components()
 
 	if (FAILED(__super::SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_StateController", L"Com_StateController", (CComponent**)&m_pStateController)))
 		return E_FAIL;
+	m_pStateController->Set_GameObject(this);
 
 	CCharacterController::DESC tController;
 
@@ -507,6 +520,7 @@ HRESULT CMonster_Bastion_Sword::Set_State_FSM()
 	tActorDesc.pController = m_pStateController;
 	tActorDesc.pActor = this;
 
+
 	lstrcpy(tMoveDesc.pName,L"Idle");
 	if (FAILED(m_pStateController->Add_State(L"Idle", CBastion_Sword_Idle::Create(m_pDevice, m_pDeviceContext, &tMoveDesc))))
 		return E_FAIL;
@@ -568,7 +582,8 @@ HRESULT CMonster_Bastion_Sword::Set_Weapon()
 		}
 	}
 	m_pWeapon->Set_FixedBone(pWeaponBone);
-	m_pWeapon->Set_OwnerPivotMatrix(m_pModelCom->Get_PivotMatrix());
+	static_cast<CWeapon*>(m_pWeapon)->Set_OwnerPivotMatrix(m_pModelCom->Get_PivotMatrix());
+
 
 	return S_OK;
 }
@@ -587,7 +602,7 @@ HRESULT CMonster_Bastion_Sword::Ready_UI()
 
 	m_pPanel->Set_TargetWorldMatrix(m_pTransform->Get_WorldMatrix());
 
-	m_fMaxHp = 2.f;
+	m_fMaxHp = 5.f;
 	m_fCurrentHp = m_fMaxHp;
 
 	m_fMaxGroggyGauge = 10.f;

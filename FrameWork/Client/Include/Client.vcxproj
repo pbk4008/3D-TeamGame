@@ -165,6 +165,7 @@ call Update_Client.bat</Command>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>../../Reference/Library/Release/;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <Profile>true</Profile>
+      <LargeAddressAware>true</LargeAddressAware>
     </Link>
     <PostBuildEvent>
       <Command>cd $(SolutionDir)
@@ -185,6 +186,8 @@ call Update_Client.bat</Command>
     <ClInclude Include="..\Default\Clinet_Define.h" />
     <ClInclude Include="..\Headers\1H_Dash.h" />
     <ClInclude Include="..\Headers\1H_FlinchLeft.h" />
+    <ClInclude Include="..\Headers\1H_KnockBack.h" />
+    <ClInclude Include="..\Headers\1H_Stagger.h" />
     <ClInclude Include="..\Headers\1H_SwordAttack.h" />
     <ClInclude Include="..\Headers\1H_SwordAttackNormalR1_01.h" />
     <ClInclude Include="..\Headers\1H_SwordAttackNormalR1_02.h" />
@@ -261,7 +264,6 @@ call Update_Client.bat</Command>
     <ClInclude Include="..\Headers\Aberrant_Walk.h" />
     <ClInclude Include="..\Headers\BackGround.h" />
     <ClInclude Include="..\Headers\Bastion_2HSword_Attack.h" />
-    <ClInclude Include="..\Headers\Bastion_2HSword_Attack_Rage.h" />
     <ClInclude Include="..\Headers\Bastion_2HSword_Chaser.h" />
     <ClInclude Include="..\Headers\Bastion_2HSword_Dash.h" />
     <ClInclude Include="..\Headers\Bastion_2HSword_Death.h" />
@@ -273,8 +275,7 @@ call Update_Client.bat</Command>
     <ClInclude Include="..\Headers\Bastion_2HSword_State.h" />
     <ClInclude Include="..\Headers\Bastion_Healer_Attack.h" />
     <ClInclude Include="..\Headers\Bastion_Healer_CastProtect.h" />
-    <ClInclude Include="..\Headers\Bastion_Healer_Chaser.h" />
-    <ClInclude Include="..\Headers\Bastion_Healer_Chaser_End.h" />
+    <ClInclude Include="..\Headers\Bastion_Healer_Run.h" />
     <ClInclude Include="..\Headers\Bastion_Healer_Death.h" />
     <ClInclude Include="..\Headers\Bastion_Healer_Groggy.h" />
     <ClInclude Include="..\Headers\Bastion_Healer_Groggy_End.h" />
@@ -329,6 +330,7 @@ call Update_Client.bat</Command>
     <ClInclude Include="..\Headers\Effect_DeathParticle.h" />
     <ClInclude Include="..\Headers\Effect_Env_Fire.h" />
     <ClInclude Include="..\Headers\Effect_Env_Floating.h" />
+    <ClInclude Include="..\Headers\Effect_Guard.h" />
     <ClInclude Include="..\Headers\Effect_HitFloating.h" />
     <ClInclude Include="..\Headers\Effect_HitParticle.h" />
     <ClInclude Include="..\Headers\Environment.h" />
@@ -372,9 +374,19 @@ call Update_Client.bat</Command>
     <ClInclude Include="..\Headers\ShakeManager.h" />
     <ClInclude Include="..\Headers\Shield.h" />
     <ClInclude Include="..\Headers\Shield_Block.h" />
+    <ClInclude Include="..\Headers\Shield_BlockBreakEnd.h" />
+    <ClInclude Include="..\Headers\Shield_BlockBreakStart.h" />
     <ClInclude Include="..\Headers\Shield_BlockEnd.h" />
+    <ClInclude Include="..\Headers\Shield_BlockHard.h" />
     <ClInclude Include="..\Headers\Shield_BlockLoop.h" />
+    <ClInclude Include="..\Headers\Shield_BlockSkid.h" />
+    <ClInclude Include="..\Headers\Shield_BlockSkidStrong.h" />
+    <ClInclude Include="..\Headers\Shield_BlockSoft.h" />
     <ClInclude Include="..\Headers\Shield_BlockStart.h" />
+    <ClInclude Include="..\Headers\Shield_Parry.h" />
+    <ClInclude Include="..\Headers\Shield_ParryStunback.h" />
+    <ClInclude Include="..\Headers\Shield_ParryStunbackStrong.h" />
+    <ClInclude Include="..\Headers\Shield_Ricochet.h" />
     <ClInclude Include="..\Headers\Shield_SupermanPunchStraight.h" />
     <ClInclude Include="..\Headers\Shield_Walk.h" />
     <ClInclude Include="..\Headers\Shield_WalkBwd.h" />
@@ -417,6 +429,7 @@ call Update_Client.bat</Command>
     <ClInclude Include="..\Headers\Silvermane_JogRight.h" />
     <ClInclude Include="..\Headers\Silvermane_JogRightPivot180.h" />
     <ClInclude Include="..\Headers\Silvermane_JogRightStart.h" />
+    <ClInclude Include="..\Headers\Silvermane_KnockBack.h" />
     <ClInclude Include="..\Headers\Silvermane_Sprint.h" />
     <ClInclude Include="..\Headers\Silvermane_SprintFwd.h" />
     <ClInclude Include="..\Headers\Silvermane_SprintFwdStart.h" />
@@ -478,6 +491,8 @@ call Update_Client.bat</Command>
   <ItemGroup>
     <ClCompile Include="..\Codes\1H_Dash.cpp" />
     <ClCompile Include="..\Codes\1H_FlinchLeft.cpp" />
+    <ClCompile Include="..\Codes\1H_KnockBack.cpp" />
+    <ClCompile Include="..\Codes\1H_Stagger.cpp" />
     <ClCompile Include="..\Codes\1H_SwordAttack.cpp" />
     <ClCompile Include="..\Codes\1H_SwordAttackNormalR1_01.cpp" />
     <ClCompile Include="..\Codes\1H_SwordAttackNormalR1_02.cpp" />
@@ -554,7 +569,6 @@ call Update_Client.bat</Command>
     <ClCompile Include="..\Codes\BackGround.cpp" />
     <ClCompile Include="..\Codes\1H_SwordAttackNormalR2_Start.cpp" />
     <ClCompile Include="..\Codes\Bastion_2HSword_Attack.cpp" />
-    <ClCompile Include="..\Codes\Bastion_2HSword_Attack_Rage.cpp" />
     <ClCompile Include="..\Codes\Bastion_2HSword_Chaser.cpp" />
     <ClCompile Include="..\Codes\Bastion_2HSword_Dash.cpp" />
     <ClCompile Include="..\Codes\Bastion_2HSword_Death.cpp" />
@@ -566,8 +580,7 @@ call Update_Client.bat</Command>
     <ClCompile Include="..\Codes\Bastion_2HSword_State.cpp" />
     <ClCompile Include="..\Codes\Bastion_Healer_Attack.cpp" />
     <ClCompile Include="..\Codes\Bastion_Healer_CastProtect.cpp" />
-    <ClCompile Include="..\Codes\Bastion_Healer_Chaser.cpp" />
-    <ClCompile Include="..\Codes\Bastion_Healer_Chaser_End.cpp" />
+    <ClCompile Include="..\Codes\Bastion_Healer_Run.cpp" />
     <ClCompile Include="..\Codes\Bastion_Healer_Death.cpp" />
     <ClCompile Include="..\Codes\Bastion_Healer_Groggy.cpp" />
     <ClCompile Include="..\Codes\Bastion_Healer_Groggy_End.cpp" />
@@ -618,6 +631,7 @@ call Update_Client.bat</Command>
     <ClCompile Include="..\Codes\Effect_DeathParticle.cpp" />
     <ClCompile Include="..\Codes\Effect_Env_Fire.cpp" />
     <ClCompile Include="..\Codes\Effect_Env_Floating.cpp" />
+    <ClCompile Include="..\Codes\Effect_Guard.cpp" />
     <ClCompile Include="..\Codes\Effect_HitFloating.cpp" />
     <ClCompile Include="..\Codes\Effect_HitParticle.cpp" />
     <ClCompile Include="..\Codes\Fury.cpp" />
@@ -667,9 +681,19 @@ call Update_Client.bat</Command>
     <ClCompile Include="..\Codes\ShakeManager.cpp" />
     <ClCompile Include="..\Codes\Shield.cpp" />
     <ClCompile Include="..\Codes\Shield_Block.cpp" />
+    <ClCompile Include="..\Codes\Shield_BlockBreakEnd.cpp" />
+    <ClCompile Include="..\Codes\Shield_BlockBreakStart.cpp" />
     <ClCompile Include="..\Codes\Shield_BlockEnd.cpp" />
+    <ClCompile Include="..\Codes\Shield_BlockHard.cpp" />
     <ClCompile Include="..\Codes\Shield_BlockLoop.cpp" />
+    <ClCompile Include="..\Codes\Shield_BlockSkid.cpp" />
+    <ClCompile Include="..\Codes\Shield_BlockSkidStrong.cpp" />
+    <ClCompile Include="..\Codes\Shield_BlockSoft.cpp" />
     <ClCompile Include="..\Codes\Shield_BlockStart.cpp" />
+    <ClCompile Include="..\Codes\Shield_Parry.cpp" />
+    <ClCompile Include="..\Codes\Shield_ParryStunback.cpp" />
+    <ClCompile Include="..\Codes\Shield_ParryStunbackStrong.cpp" />
+    <ClCompile Include="..\Codes\Shield_Ricochet.cpp" />
     <ClCompile Include="..\Codes\Shield_SupermanPunchStraight.cpp" />
     <ClCompile Include="..\Codes\Shield_Walk.cpp" />
     <ClCompile Include="..\Codes\Shield_WalkBwd.cpp" />
@@ -712,6 +736,7 @@ call Update_Client.bat</Command>
     <ClCompile Include="..\Codes\Silvermane_JogRight.cpp" />
     <ClCompile Include="..\Codes\Silvermane_JogRightPivot180.cpp" />
     <ClCompile Include="..\Codes\Silvermane_JogRightStart.cpp" />
+    <ClCompile Include="..\Codes\Silvermane_KnockBack.cpp" />
     <ClCompile Include="..\Codes\Silvermane_Sprint.cpp" />
     <ClCompile Include="..\Codes\Silvermane_SprintFwd.cpp" />
     <ClCompile Include="..\Codes\Silvermane_SprintFwdStart.cpp" />
@@ -815,6 +840,7 @@ call Update_Client.bat</Command>
     <FxCompile Include="..\bin\ShaderFile\Shader_Treasure_Chest.hlsl" />
     <FxCompile Include="..\bin\ShaderFile\Shader_UI.hlsl" />
     <FxCompile Include="..\bin\ShaderFile\Shader_UI_Bar.hlsl" />
+    <FxCompile Include="..\bin\ShaderFile\Shader_UI_Enemy_Bar.hlsl" />
     <FxCompile Include="..\bin\ShaderFile\Shader_Weapon.hlsl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -58,6 +58,8 @@ HRESULT CActor::NativeConstruct(const _uint _iSceneID, void* pArg)
 		return E_FAIL;
 	}
 
+	m_tAttackDesc.pOwner = this;
+	m_tAttackDesc.pHitObject = this;
 	return S_OK;
 }
 
@@ -103,6 +105,11 @@ const _float CActor::Get_GroggyGaugeRatio()
 	return m_fGroggyGauge / m_fMaxGroggyGauge;
 }
 
+const ATTACKDESC& CActor::Get_AttackDesc() const
+{
+	return m_tAttackDesc;
+}
+
 HRESULT CActor::Set_SpawnPosition(const _float3 vPoint)
 {
 	if (!m_pTransform)
@@ -146,6 +153,15 @@ void CActor::Active_Effect(_uint iEffectIndex, _fvector vPivot)
 	pEffect->Set_Reset(true);
 }
 
+
+void CActor::Set_AttackDesc(const ATTACKDESC& _tAttackDesc)
+{
+	m_tAttackDesc = _tAttackDesc;
+}
+
+void CActor::Hit(const ATTACKDESC& _tAttackDesc)
+{
+}
 
 void CActor::Free()
 {

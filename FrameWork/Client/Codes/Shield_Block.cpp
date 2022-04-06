@@ -20,6 +20,8 @@ _int CShield_Block::Tick(const _double& _dDeltaTime)
 	if (NO_EVENT != iProgress)
 		return iProgress;
 
+	m_pSilvermane->Add_BlockTime((_float)_dDeltaTime);
+
 	return _int();
 }
 
@@ -56,21 +58,25 @@ HRESULT CShield_Block::ExitState()
 	return S_OK;
 }
 
+void CShield_Block::OnTriggerEnter(CCollision& collision)
+{
+}
+
 _int CShield_Block::Input(const _double& _dDeltaTime)
 {
 	_int iProgress = __super::Input(_dDeltaTime);
 	if (NO_EVENT != iProgress)
 		return iProgress;
 
-	if (g_pGameInstance->getkeyUp(DIK_Q))
-	{
-		if (FAILED(m_pStateController->Change_State(L"Shield_BlockEnd")))
-			return E_FAIL;
-		return STATE_CHANGE;
-	}
-
 	if (m_iCutIndex < m_pAnimationController->Get_CurKeyFrameIndex())
 	{
+		if (!g_pGameInstance->getkeyPress(DIK_Q))
+		{
+			if (FAILED(m_pStateController->Change_State(L"Shield_BlockEnd")))
+				return E_FAIL;
+			return STATE_CHANGE;
+		}
+
 		if (g_pGameInstance->getkeyDown(DIK_SPACE))
 		{
 			if (g_pGameInstance->getkeyPress(DIK_A))
@@ -137,6 +143,11 @@ _int CShield_Block::Input(const _double& _dDeltaTime)
 
 
 	return _int();
+}
+
+void CShield_Block::OnTriggerEnterBlock(CCollision& collision)
+{
+	
 }
 
 void CShield_Block::Free()

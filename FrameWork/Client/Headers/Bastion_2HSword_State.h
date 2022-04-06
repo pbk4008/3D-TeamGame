@@ -4,6 +4,7 @@
 #include "Monster_FSM.h"
 
 BEGIN(Client)
+class CMonster_Bastion_2HSword;
 class CBastion_2HSword_State  : public CMonster_FSM
 {
 protected:
@@ -27,15 +28,17 @@ public:
 
 public:
 	HRESULT	Render_Debug();
-
+private:
+	HRESULT Check_State();
 protected:
-	_bool	m_bTargetOn = false;
-	_bool   m_bAttackOn = false;
-	_bool	m_bPlayerAttack = false;
-	_bool	m_bRageOn = false;
-	_bool	m_bRageAttack = false;
-
-	_bool m_bFirstAttack = false;
+	//전부 몬스터 쪽으로 뺏음
+	//_bool	m_bTargetOn = false;
+	//_bool   m_bAttackOn = false;
+	//_bool	m_bPlayerAttack = false;
+	//_bool	m_bRageOn = false;
+	//_bool	m_bRageAttack = false;
+	//_bool m_bFirstAttack = false;
+	CMonster_Bastion_2HSword* m_pOwner;
 public:
 	static CBastion_2HSword_State* Create(ID3D11Device * _pDevice, ID3D11DeviceContext * _pDeviceContext, void* _pArg = nullptr);
 	virtual void Free() override;

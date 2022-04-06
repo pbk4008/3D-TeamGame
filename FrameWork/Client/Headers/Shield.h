@@ -30,6 +30,7 @@ public:
 private:
 	_float4x4 m_matPivot;
 	CAnimationController* m_pAnimationController = nullptr;
+	CBoxCollider* m_pCollider = nullptr;
 
 public:
 	static CShield* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext);

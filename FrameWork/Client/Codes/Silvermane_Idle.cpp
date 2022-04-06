@@ -57,7 +57,7 @@ HRESULT CSilvermane_Idle::EnterState()
 
 	m_pAnimationController->SetUp_NextAnimation("SK_Silvermane.ao|A_Idle_Player", true);
 	m_pAnimationController->Set_RootMotion(true, true, ERootOption::XYZ);
-
+	g_pObserver->Set_PlayerAttackAnimStart(false);
 	return S_OK;
 }
 
@@ -73,7 +73,7 @@ HRESULT CSilvermane_Idle::ExitState()
 
 void CSilvermane_Idle::OnTriggerEnter(CCollision& collision)
 {
-	OnTriggerEnterHit(collision);
+	//OnTriggerEnterHit(collision);
 }
 
 _int CSilvermane_Idle::Input(const _double& _dDeltaTime)

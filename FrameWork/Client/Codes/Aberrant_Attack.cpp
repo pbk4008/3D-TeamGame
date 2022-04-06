@@ -34,10 +34,38 @@ _int CAberrant_Attack::Tick(const _double& TimeDelta)
 
 
 	CMonster_EarthAberrant* pMonster = (CMonster_EarthAberrant*)m_pStateController->Get_GameObject();
-
 	if (nullptr != pMonster)
 	{
-		pMonster->Set_IsAttack(true);
+		_uint iCurKeyFrameIndex = m_pAnimator->Get_AnimController()->Get_CurKeyFrameIndex();
+
+		if (CMonster_EarthAberrant::ATTACK_R1 == m_pAnimator->Get_CurrentAnimNode())
+		{
+			if (42 < iCurKeyFrameIndex && 55 > iCurKeyFrameIndex)
+			{
+				pMonster->Set_IsAttack(true);
+				
+				_float fDamage = 5.f;
+				_uint iLevel = 1;
+				pMonster->Set_AttackDesc_Damaga(fDamage);
+				pMonster->Set_AttackDesc_Level(iLevel);
+			}
+			else
+				pMonster->Set_IsAttack(false);
+		}
+		if (CMonster_EarthAberrant::ATTACK_R2 == m_pAnimator->Get_CurrentAnimNode())
+		{
+			if (13 < iCurKeyFrameIndex && 30 > iCurKeyFrameIndex)
+			{
+				pMonster->Set_IsAttack(true);
+
+				_float fDamage = 3.f;
+				_uint iLevel = 1;
+				pMonster->Set_AttackDesc_Damaga(fDamage);
+				pMonster->Set_AttackDesc_Level(iLevel);
+			}
+			else
+				pMonster->Set_IsAttack(false);
+		}
 	}
 
 	if (m_pAnimator->Get_AnimController()->Is_Finished())
@@ -65,37 +93,34 @@ HRESULT CAberrant_Attack::Render()
 	return S_OK;
 }
 
-HRESULT CAberrant_Attack::EnterState()
-{
-	if (FAILED(__super::EnterState()))
-		return E_FAIL;
-
-	_vector vMonsterPos = m_pTransform->Get_State(CTransform::STATE::STATE_POSITION);
-	_vector vDist = vMonsterPos - g_pObserver->Get_PlayerPos();
-	_float fDistToPlayer = XMVectorGetX(XMVector3Length(vDist));
-
-	
-	m_pTransform->Face_Target(g_pObserver->Get_PlayerPos());
-
-	_uint iRandom = rand() % 2;
-
-	switch (iRandom)
-	{
-	case 0:
-		m_pAnimator->Change_AnyEntryAnimation((_uint)CMonster_EarthAberrant::MON_STATE::ATTACK_R1);
-		m_iAttackType = 0;
-		break;
-	case 1:
-		m_pAnimator->Change_AnyEntryAnimation((_uint)CMonster_EarthAberrant::MON_STATE::ATTACK_R2);
-		m_iAttackType = 1;
-		break;
-	}
-
-	//_vector vec = { 0.f, 1.f, 0.f,0.f };
-	//m_pTransform->SetUp_Rotation(vec, (XMConvertToRadians(180.f)));
-
-	return S_OK;
-}
+//HRESULT CAberrant_Attack::EnterState()
+//{
+//	if (FAILED(__super::EnterState()))
+//		return E_FAIL;
+//
+//	_vector vMonsterPos = m_pTransform->Get_State(CTransform::STATE::STATE_POSITION);
+//	_vector vDist = vMonsterPos - g_pObserver->Get_PlayerPos();
+//	_float fDistToPlayer = XMVectorGetX(XMVector3Length(vDist));
+//
+//	
+//	m_pTransform->Face_Target(g_pObserver->Get_PlayerPos());
+//
+//	_uint iRandom = rand() % 2;
+//
+//	switch (iRandom)
+//	{
+//	case 0:
+//		m_pAnimator->Change_AnyEntryAnimation((_uint)CMonster_EarthAberrant::MON_STATE::ATTACK_R1);
+//		m_iAttackType = 0;
+//		break;
+//	case 1:
+//		m_pAnimator->Change_AnyEntryAnimation((_uint)CMonster_EarthAberrant::MON_STATE::ATTACK_R2);
+//		m_iAttackType = 1;
+//		break;
+//	}
+//
+//	return S_OK;
+//}
 
 
 HRESULT CAberrant_Attack::ExitState()
@@ -103,10 +128,7 @@ HRESULT CAberrant_Attack::ExitState()
 	if (FAILED(__super::ExitState()))
 		return E_FAIL;
 
-	m_iAttackCount = 0;
-
-	//_vector vec = { 0.f, 1.f, 0.f,0.f };
-	//m_pTransform->SetUp_Rotation(vec, (XMConvertToRadians(0.f)));
+	m_pAnimator->Get_AnimController()->Set_MoveSpeed(40.f);
 
 	return S_OK;
 }
@@ -115,10 +137,16 @@ HRESULT CAberrant_Attack::EnterState(void* pArg)
 {
 	_uint iAttackType = (*(_uint*)pArg);
 
-	if(iAttackType == 0)
+	if (iAttackType == 0)
+	{
 		m_pAnimator->Change_AnyEntryAnimation((_uint)CMonster_EarthAberrant::MON_STATE::ATTACK_R1);
+		m_pAnimator->Get_AnimController()->Set_MoveSpeed(30.f);
+	}
 	else
+	{
 		m_pAnimator->Change_AnyEntryAnimation((_uint)CMonster_EarthAberrant::MON_STATE::ATTACK_R2);
+		m_pAnimator->Get_AnimController()->Set_MoveSpeed(35.f);
+	}
 
 	_vector vMonsterPos = m_pTransform->Get_State(CTransform::STATE::STATE_POSITION);
 	_vector vDist = vMonsterPos - g_pObserver->Get_PlayerPos();

@@ -123,6 +123,10 @@ HRESULT CUI_Monster_GroggyBar::Render()
 	m_pTrapziumBuffer->SetUp_ValueOnShader("g_fY", &m_fGapY, sizeof(_float));
 	m_pTrapziumBuffer->SetUp_ValueOnShader("g_fAlpha", &m_fAlpha, sizeof(_float));
 
+	_float CurAttackGauge = 0.f;
+	m_pTrapziumBuffer->SetUp_ValueOnShader("g_fCurAttack", &CurAttackGauge, sizeof(_float));
+
+
 	m_pTrapziumBuffer->SetUp_TextureOnShader("g_DiffuseTexture", m_pTexture);
 
 	m_pTrapziumBuffer->Render(m_UIBarDesc.iRenderPass);
@@ -134,7 +138,7 @@ HRESULT CUI_Monster_GroggyBar::SetUp_Components()
 {
 	CVIBuffer_Trapezium::TRAPDESC Desc;
 	Desc.fAngle =  m_UIBarDesc.UIDesc.fAngle;
-	_tcscpy_s(Desc.ShaderFilePath, L"../../Reference/ShaderFile/Shader_UI_Bar.hlsl");
+	_tcscpy_s(Desc.ShaderFilePath, L"../../Reference/ShaderFile/Shader_UI_Enemy_Bar.hlsl");
 
 	Desc.bMinus = m_UIBarDesc.UIDesc.bMinus;
 

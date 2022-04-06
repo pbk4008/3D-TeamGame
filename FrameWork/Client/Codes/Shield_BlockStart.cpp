@@ -77,6 +77,56 @@ HRESULT CShield_BlockStart::ExitState()
 	return S_OK;
 }
 
+void CShield_BlockStart::OnTriggerEnter(CCollision& collision)
+{
+}
+
+//void CShield_BlockStart::Block(const ATTACKDESC& _tAttackDesc)
+//{
+//	_float fBlockTime = m_pSilvermane->Get_BlockTime();
+//	//m_pSilvermane->Add_HP(-_tAttackDesc.fDamage);
+//
+//	// 아직 패링이 가능해!
+//	if (0.5f > fBlockTime)
+//	{
+//		if ((_uint)GAMEOBJECT::WEAPON_BULLET == _tAttackDesc.pHitObject->getTag())
+//		{
+//			Reflect_Bullet(_tAttackDesc);
+//		}
+//
+//		switch (_tAttackDesc.iLevel)
+//		{
+//		case 1:
+//			m_pStateController->Change_State(L"Shield_Parry");
+//			return;
+//			break;
+//		case 2:
+//
+//			break;
+//		case 3:
+//
+//			break;
+//		}
+//	}
+//	// 패링 가능 시간이 초과됬당
+//	else
+//	{
+//		switch (_tAttackDesc.iLevel)
+//		{
+//		case 1:
+//			m_pStateController->Change_State(L"Shield_BlockSkid");
+//			return;
+//			break;
+//		case 2:
+//
+//			break;
+//		case 3:
+//
+//			break;
+//		}
+//	}
+//}
+
 _int CShield_BlockStart::Input(const _double& _dDeltaTime)
 {
 	_int iProgress = __super::Input(_dDeltaTime);
@@ -89,13 +139,11 @@ _int CShield_BlockStart::Input(const _double& _dDeltaTime)
 CShield_BlockStart* CShield_BlockStart::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext, void* _pArg)
 {
 	CShield_BlockStart* pInstance = new CShield_BlockStart(_pDevice, _pDeviceContext);
-
 	if (FAILED(pInstance->NativeConstruct(_pArg)))
 	{
 		MSGBOX("CShield_BlockStart Create Fail");
 		Safe_Release(pInstance);
 	}
-
 	return pInstance;
 }
 

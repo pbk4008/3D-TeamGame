@@ -62,7 +62,7 @@ HRESULT C1H_SwordJog::ExitState()
 
 void C1H_SwordJog::OnTriggerEnter(CCollision& collision)
 {
-	OnTriggerEnterHit(collision);
+	//OnTriggerEnterHit(collision);
 }
 
 _int C1H_SwordJog::Input(const _double& _dDeltaTime)

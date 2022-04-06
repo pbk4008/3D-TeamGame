@@ -3,6 +3,7 @@
 
 CClient_Observer::CClient_Observer(void)
 	: m_pPlayer(nullptr)
+	, m_bAttackAnimStart(false)
 {
 }
 
@@ -90,9 +91,24 @@ const _float CClient_Observer::Get_HPRatio()
 	return m_pPlayer->Get_HpRatio();
 }
 
+void CClient_Observer::Set_IsThrownObject(const _bool _isThrownObject)
+{
+	m_isThrownObject = _isThrownObject;
+}
+
+const _bool CClient_Observer::IsThrownObject()
+{
+	return m_isThrownObject;
+}
+
 const CSilvermane::SCENEMOVEDATA CClient_Observer::Get_SceneMoveData()
 {
 	return m_pPlayer->Get_SceneMoveData();
+}
+
+const _bool CClient_Observer::Get_PlayerAttackAnimStart()
+{
+	return m_bAttackAnimStart;
 }
 
 void CClient_Observer::Set_IsAttack(const _bool bAttack)

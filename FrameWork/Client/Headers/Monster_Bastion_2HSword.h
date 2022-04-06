@@ -63,7 +63,26 @@ public:
 	void Set_GroggyGauge(_uint _Value) { m_fGroggyGauge += _Value; }
 	void Set_Dead(void) { m_bDead = true; }
 	virtual void Set_Remove(_bool bCheck) override;
+public:
+	void set_Target(_bool bCheck) { m_bTargetOn = bCheck; }
+	void set_Attack(_bool bCheck) { m_bAttackOn = bCheck; }
+	void set_RageOn(_bool bCheck) { m_bRageOn = bCheck; }
+	void set_FirstAttack(_bool bCheck) { m_bFirstAttack = bCheck; }
+	void set_RandAttack(_int iNum) { m_iRandAtt = iNum; }
+	
 
+	_bool get_Target() { return m_bTargetOn; }
+	_bool get_Attack() { return m_bAttackOn; }
+	_bool get_RageOn() { return m_bRageOn; }
+	_bool get_FirstAttack() { return m_bFirstAttack; }
+	_int get_RandAttack() { return m_iRandAtt; }
+
+private:
+	_bool m_bTargetOn = false;
+	_bool m_bAttackOn = false;
+	_bool m_bRageOn = false;
+	_bool m_bFirstAttack = false;
+	_int m_iRandAtt = -1;
 private:
 	CModel*				  m_pModel = nullptr;
 	CAnimation*			  m_pAnimation = nullptr;

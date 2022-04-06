@@ -33,10 +33,13 @@ _int CShooter_Chase::Tick(const _double& _dDeltaTime)
 	if (!m_pAnimator || !m_pStateController)
 		return -1;
 
+	cout << "chase" << endl;
 	//애니메이션 진행
 	//쫓기 시작 -쫓기 루프 -쫓기 끝의 루프를 진행
 
 	m_pAnimator->Tick(_dDeltaTime);
+	_uint index = m_pAnimator->Get_CurrentAnimNode();
+
 	m_pTransform->Face_Target(g_pObserver->Get_PlayerPos());
 	//일정 거리가 되면 바로 공격
 	_vector vPlayerPos = g_pObserver->Get_PlayerPos();
@@ -48,9 +51,9 @@ _int CShooter_Chase::Tick(const _double& _dDeltaTime)
 		g_pGameInstance->Play_Shot(L"Shooter_Reload", CSoundMgr::CHANNELID::Shooter_Attack_2);
 		m_pStateController->Change_State(L"Attack");
 	}
-	//해당 애니메이션이 종착 애니메이션에 도달하면 상태머신의 상태 변경
-	if (!m_pAnimator->Get_IsLerp() && m_pAnimator->Get_CurrentAnimNode() == (_uint)CMonster_Bastion_Shooter::ANIM_TYPE::IDLE)
-		m_pStateController->Change_State(L"Idle");
+	////해당 애니메이션이 종착 애니메이션에 도달하면 상태머신의 상태 변경
+	//if (!m_pAnimator->Get_IsLerp() && m_pAnimator->Get_CurrentAnimNode() == (_uint)CMonster_Bastion_Shooter::ANIM_TYPE::IDLE)
+	//	m_pStateController->Change_State(L"Idle");
 
 	return _int();
 }
@@ -69,6 +72,7 @@ HRESULT CShooter_Chase::EnterState()
 {
 	if (!m_pAnimator)
 		return E_FAIL;
+	cout << "chase진입" << endl;
 
 	if (FAILED(m_pAnimator->Change_AnyEntryAnimation((_uint)CMonster_Bastion_Shooter::ANIM_TYPE::RUN_START)))
 		return E_FAIL;
@@ -78,6 +82,8 @@ HRESULT CShooter_Chase::EnterState()
 
 HRESULT CShooter_Chase::ExitState()
 {
+	cout << "chase탈출" << endl;
+
 	return S_OK;
 }
 

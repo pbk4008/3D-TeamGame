@@ -4,6 +4,7 @@
 #include "Monster_FSM.h"
 
 BEGIN(Client)
+class CMonster_Bastion_Spear;
 class CSpear_State  : public CMonster_FSM
 {
 protected:
@@ -20,24 +21,26 @@ public:
 	virtual HRESULT EnterState();
 	virtual HRESULT ExitState();
 
+private:
+	HRESULT Check_State();
 public:
 	virtual void Look_Player(void) override;
 	virtual void Look_Monster(void) override;
-
 public:
 	HRESULT	Render_Debug();
-	void	Check_Attack(const _double& _dDeltaTime);
+	//void	Check_Attack(const _double& _dDeltaTime);
 
 public:
 	virtual	void OnTriggerEnter(CCollision& collision);
 
 protected:
-	_bool	m_bTargetOn = false;
+	CMonster_Bastion_Spear* m_pOwner = nullptr;
+	/*_bool	m_bTargetOn = false;
 	_bool   m_bChargeOn = false;
 	_bool   m_bAttackOn = false;
 	_bool   m_bBattleOn = false;
 	_bool	m_bPlayerAttack = false;
-	_float	m_fChaserDelay;
+	_float	m_fChaserDelay;*/
 
 protected:
 	_float m_CheckFWD = 0.0f;

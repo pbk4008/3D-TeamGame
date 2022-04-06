@@ -56,13 +56,18 @@ HRESULT CUI_Monster_BackHpBar::NativeConstruct(const _uint _iSceneID, void* pArg
 
 _int CUI_Monster_BackHpBar::Tick(_double TimeDelta)
 {
+	if (FAILED(CUI::Tick(TimeDelta)))
+		return -1;
+
+
 	if (false == m_bFirstShow)
 	{
 		setActive(true);
 		m_bFirstShow = true;
 	}
 
-	if (true == m_bShow)
+#pragma region raycast때 화면중앙에 닿으면 ui보였다가 5초뒤에 사라질수있게 해주는
+	if (true == m_bShow && false == m_bChange)
 	{
 		m_fAlpha = 1.f;
 		m_fDisappearTimeAcc = 0.f;
@@ -73,26 +78,54 @@ _int CUI_Monster_BackHpBar::Tick(_double TimeDelta)
 		m_fDisappearTimeAcc += (_float)TimeDelta;
 	}
 
+	//5초 지나면 다시 안보이게, raycast
 	if (5.f <= m_fDisappearTimeAcc)
 	{
 		m_fAlpha -= (_float)TimeDelta;
+
+		if (0 >= m_fAlpha)
+		{
+			m_fAlpha = 0.f;
+			m_fDisappearTimeAcc = 0.f;
+		}
 	}
 
-	if (0 >= m_fAlpha)
+#pragma endregion
+
+	if (m_fGapX != m_fHpRatio && false == m_bChange)
 	{
-		m_fAlpha = 0.f;
-		m_fDisappearTimeAcc = 0.f;
+		//공격이 들어왔다는뜻
+		m_bChange = true;
 	}
 
-	if (FAILED(CUI::Tick(TimeDelta)))
-		return -1;
+	if (0 >= m_fHpRatio)
+	{
+		m_bShow = false;
+	}
+
+	if (g_pObserver->IsAttack() || g_pObserver->IsThrownObject())
+	{
+		
+		
+	}
 	
-	m_fGapX = m_fHpRatio;
-
-	/*if (g_pGameInstance->getkeyDown(DIK_L))
+	if (true == m_bChange)
 	{
-		m_fGapX -= 0.1f;
-	}*/
+		m_fAlpha -= TimeDelta * 2.f;
+
+		if (0 >= m_fAlpha)
+		{
+			m_fAlpha = 0.f;
+			m_fGapX = m_fHpRatio;
+			m_bChange = false;
+		}
+
+		if (m_fExHpRatio != m_fHpRatio)
+		{
+			m_fExHpRatio = m_fHpRatio;
+			m_fAlpha = 1.f;
+		}
+	} 
 
 	return 0;
 }
@@ -122,6 +155,9 @@ HRESULT CUI_Monster_BackHpBar::Render()
 	m_pTrapziumBuffer->SetUp_ValueOnShader("g_fY", &m_fGapY, sizeof(_float));
 	m_pTrapziumBuffer->SetUp_ValueOnShader("g_fAlpha", &m_fAlpha, sizeof(_float));
 
+	_float CurAttackGauge = 0.f;
+	m_pTrapziumBuffer->SetUp_ValueOnShader("g_fCurAttack", &CurAttackGauge, sizeof(_float));
+
 	m_pTrapziumBuffer->SetUp_TextureOnShader("g_DiffuseTexture", m_pTexture);
 
 	m_pTrapziumBuffer->Render(m_UIBarDesc.iRenderPass);
@@ -133,7 +169,7 @@ HRESULT CUI_Monster_BackHpBar::SetUp_Components()
 {
 	CVIBuffer_Trapezium::TRAPDESC Desc;
 	Desc.fAngle =  m_UIBarDesc.UIDesc.fAngle;
-	_tcscpy_s(Desc.ShaderFilePath, L"../../Reference/ShaderFile/Shader_UI_Bar.hlsl");
+	_tcscpy_s(Desc.ShaderFilePath, L"../../Reference/ShaderFile/Shader_UI_Enemy_Bar.hlsl");
 
 	Desc.bMinus = m_UIBarDesc.UIDesc.bMinus;
 

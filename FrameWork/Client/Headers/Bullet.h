@@ -24,6 +24,11 @@ public:
 private:
 	HRESULT Ready_Component(const _uint iSceneID);
 	HRESULT Set_Spawn();
+
+public:
+	CActor* Get_Owner() const;
+	void Set_Owner(CActor* _pOwner);
+
 private:
 	virtual void OnTriggerEnter(CCollision& collision);
 private:
@@ -36,11 +41,13 @@ private:
 private:
 	CModel* m_pModelCom;
 	CSphereCollider* m_pCollider;
+	CActor* m_pOwner = nullptr;
 private:
 	_float4x4 m_matBulletPosMatrix;
 	_float m_fSpawnTime;
 	_float4 m_fDir;
 	_float m_fSpeed;
+	_float m_fDamage = 0.f;
 };
 END
 #endif

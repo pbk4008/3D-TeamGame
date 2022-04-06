@@ -21,14 +21,12 @@ _int CBastion_2HSword_Groggy::Tick(const _double& _dDeltaTime)
 	if (NO_EVENT != iProgress)
 		return iProgress;
 
-	if (m_pMonster->Get_Dead())
-		return 0;
-
-
-	if(!m_bGroggy)
-		m_pAnimator->Tick(_dDeltaTime);
+	m_pAnimator->Tick(_dDeltaTime);
 
 	m_fGroggyTime -= (_float)_dDeltaTime;
+
+	if (m_fGroggyTime <= 0.f)
+		m_pStateController->Change_State(L"Groggy_End");
 
 	return _int();
 }
@@ -53,11 +51,11 @@ void CBastion_2HSword_Groggy::Look_Player(void)
 
 void CBastion_2HSword_Groggy::Look_Monster(void)
 {
-	if (0 >= m_fGroggyTime)
-	{
-		m_bGroggy = true;
-		m_pStateController->Change_State(L"Groggy_End");
-	}
+	//if (0 >= m_fGroggyTime)
+	//{
+	//	m_pMonster->Set_Groggy(true);
+	//	m_pStateController->Change_State(L"Groggy_End");
+	//}
 }
 
 void CBastion_2HSword_Groggy::OnTriggerEnter(CCollision& collision)
@@ -74,7 +72,8 @@ HRESULT CBastion_2HSword_Groggy::EnterState()
 HRESULT CBastion_2HSword_Groggy::ExitState()
 {
 	m_fGroggyTime = 5.0f;
-	m_bGroggy = false;
+	m_pMonster->Set_Groggy(false);
+
 	return S_OK;
 }
 

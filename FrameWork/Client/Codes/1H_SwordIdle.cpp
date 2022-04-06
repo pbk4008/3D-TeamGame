@@ -61,6 +61,8 @@ HRESULT C1H_SwordIdle::EnterState()
 	m_pAnimationController->Set_RootMotion(true, true, ERootOption::XYZ);
 
 	m_pSilvermane->Set_IsTrasceCamera(true);
+
+	g_pObserver->Set_PlayerAttackAnimStart(false);
 	return S_OK;
 }
 
@@ -76,7 +78,7 @@ HRESULT C1H_SwordIdle::ExitState()
 
 void C1H_SwordIdle::OnTriggerEnter(CCollision& collision)
 {
-	OnTriggerEnterHit(collision);
+	//OnTriggerEnterHit(collision);
 }
 
 _int C1H_SwordIdle::Input(const _double& _dDeltaTime)
