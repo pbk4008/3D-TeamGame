@@ -152,8 +152,8 @@ HRESULT CLoader::LoadForScene()
 
 HRESULT CLoader::SetUp_Stage1_Object()
 {
-	if (FAILED(Load_Stage1FBXLoad()))
-		return E_FAIL;
+	/*if (FAILED(Load_Stage1FBXLoad()))
+		return E_FAIL;*/
 	
 	if (FAILED(Load_Stage1Navi_SkyLoad()))
 		return E_FAIL;
@@ -161,11 +161,11 @@ HRESULT CLoader::SetUp_Stage1_Object()
 	if (FAILED(Load_Stage1PlayerLoad()))
 		return E_FAIL;
 
-	if (FAILED(Load_Stage1MonsterLoad()))
-		return E_FAIL;
+	//if (FAILED(Load_Stage1MonsterLoad()))
+	//	return E_FAIL;
 
-	if (FAILED(Load_Stage1BossLoad()))
-		return E_FAIL;
+	//if (FAILED(Load_Stage1BossLoad()))
+	//	return E_FAIL;
 		
 	if (FAILED(Load_Stage1StaticUILoad()))
 		return E_FAIL;
@@ -645,7 +645,6 @@ HRESULT CLoader::Load_Stage1_TreasureChest_Load()
 		return E_FAIL;
 
 	int iResult = 0;
-	CMeshLoader* pMeshLoader = GET_INSTANCE(CMeshLoader);
 	while (iResult != -1)
 	{
 		if (!strcmp(fd.name, ""))
@@ -666,7 +665,6 @@ HRESULT CLoader::Load_Stage1_TreasureChest_Load()
 		iResult = _findnext(handle, &fd);
 	}
 	_findclose(handle);
-
 
 	/* for. Drop Object*/
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_DropObject", CModel::Create(m_pDevice, m_pDeviceContext,

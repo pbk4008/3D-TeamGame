@@ -18,8 +18,9 @@ HRESULT CDropManager::NativeConstruct(SCENEID _iSceneID)
 				PRINT_LOG(L"Alert", L"Drop Item 생성에 실패했어요...");
 				return nullptr;
 			}
+			Safe_AddRef(pObj);
 			return pObj;
-		}, 30);
+		}, 10);
 
 	if (nullptr == m_pDropObjectPool)
 		return E_FAIL;
@@ -76,6 +77,5 @@ void CDropManager::Free()
 	m_dropObjects.clear();
 
 	m_pDropObjectPool->DestroyPool();
-
 	Safe_Delete(m_pDropObjectPool);
 }

@@ -8,12 +8,15 @@
 
 CDropObject::CDropObject(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
 	:CInteractableObject(_pDevice, _pDeviceContext)
+	, m_pModel(nullptr)
 {
 }
 
 CDropObject::CDropObject(const CDropObject& _rhs)
 	:CInteractableObject(_rhs)
+	, m_pModel(_rhs.m_pModel)
 {
+	Safe_AddRef(m_pModel);
 }
 
 HRESULT CDropObject::NativeConstruct_Prototype()
@@ -38,7 +41,7 @@ HRESULT CDropObject::NativeConstruct(const _uint _iSceneID, void* _pArg)
 	m_bTakable = false;
 	m_pSplineCurve = new CSplineCurve();
 
-	m_pInventoryData = g_pDataManager->GET_DATA(CInventoryData, L"InventoryData");
+	//m_pInventoryData = g_pDataManager->GET_DATA(CInventoryData, L"InventoryData");
 
 	return S_OK;
 }
@@ -276,7 +279,7 @@ void CDropObject::Take(void)
 	else if (m_droppedItem.ItemType == EItemType::Equipment)
 	{
 		/* Inventory push Item */
-		m_pInventoryData->PushItem(m_droppedItem);
+		//m_pInventoryData->PushItem(m_droppedItem);
 	}
 
 	m_bDead = true;
@@ -324,7 +327,7 @@ void CDropObject::Free()
 {
 	Safe_Release(m_pModel);
 	Safe_Delete(m_pSplineCurve);
-	//Safe_Release(m_pCollider);
+	Safe_Delete(m_pInventoryData);
 
 	__super::Free();
 }

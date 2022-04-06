@@ -6,6 +6,7 @@ CItemData::CItemData(void)
 {
 	uid = UIDGen::GetInstance()->GetUID();
 	bEquiped = false;
+	UIDGen::DestroyInstance();
 }
 
 _bool CItemData::Compare(CItemData data)

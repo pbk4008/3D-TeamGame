@@ -9,12 +9,27 @@
 
 CDropBox::CDropBox(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
 	: CInteractableObject(_pDevice, _pDeviceContext)
+	, m_pAnimationController(nullptr)
+	, m_pAnimator(nullptr)
+	, m_pStateController(nullptr)
+	, m_pCollider(nullptr)
+	, m_pModel(nullptr)
 {
 }
 
 CDropBox::CDropBox(const CDropBox& _rhs)
 	: CInteractableObject(_rhs)
+	, m_pAnimationController(_rhs.m_pAnimationController)
+	, m_pAnimator(_rhs.m_pAnimator)
+	, m_pStateController(_rhs.m_pStateController)
+	, m_pCollider(_rhs.m_pCollider)
+	, m_pModel(_rhs.m_pModel)
 {
+	Safe_AddRef(m_pAnimationController);
+	Safe_AddRef(m_pAnimator);
+	Safe_AddRef(m_pStateController);
+	Safe_AddRef(m_pCollider);
+	Safe_AddRef(m_pModel);
 }
 
 HRESULT CDropBox::NativeConstruct_Prototype()
@@ -272,6 +287,7 @@ std::vector<CItemData> CDropBox::GetDropList(void)
 	dropList.push_back(item3);
 	dropList.push_back(item4);
 	dropList.push_back(item5);
+
 	return dropList;
 }
 

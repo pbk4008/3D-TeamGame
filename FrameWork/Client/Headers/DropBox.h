@@ -86,7 +86,6 @@ public:
 	static CDropBox* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext);
 	virtual CGameObject* Clone(const _uint _iSceneID, void* _pArg = nullptr) override;
 	virtual void Free() override;
-
 };
 
 END

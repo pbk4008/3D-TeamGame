@@ -172,10 +172,13 @@ void CGameObject::Destroy(CGameObject* _obj)
 		return;
 
 	_obj->m_bRemove = true;
-	for (auto& com : _obj->m_Components)
-	{
-		Safe_Release(com.second);
-	}
+
+	//for (auto& com : _obj->m_Components)
+	//{
+	//	Safe_Release(com.second);
+	//}
+
+	Safe_Release(_obj);
 }
 
 HRESULT CGameObject::SetUp_Components(_uint iLevelIndex, const wstring& pPrototypeTag, const wstring&pComponentTag, CComponent** ppOut, void* pArg)
