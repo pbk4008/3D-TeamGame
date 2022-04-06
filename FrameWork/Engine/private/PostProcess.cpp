@@ -33,7 +33,7 @@ HRESULT CPostProcess::AlphaBlur(CTarget_Manager* pTargetMgr, _bool alpha, _float
 		if (FAILED(BlurPass(pTargetMgr, L"Target_Particle", L"Target_ParticleV2", L"Target_ParticleH2", 640, 360))) return E_FAIL;
 		if (FAILED(BlurPass(pTargetMgr, L"Target_ParticleH2", L"Target_ParticleV4", L"Target_ParticleH4", 320, 180))) return E_FAIL;
 
-		if (FAILED(BloomPass(pTargetMgr,L"Target_Alpha", L"Target_Particle", L"Target_ParticleH2", L"Target_ParticleH4", weight,false))) return E_FAIL;
+		if (FAILED(BloomPass(pTargetMgr,L"Target_Alpha", L"Target_Particle", L"Target_ParticleH2", L"Target_ParticleH4", weight, true))) return E_FAIL;
 	}
 
 	return S_OK;
@@ -52,7 +52,7 @@ HRESULT CPostProcess::Shadowblur(CTarget_Manager* pTargetMgr, _bool shadow, _flo
 	return S_OK;
 }
 
-HRESULT CPostProcess::PossProcessing(CTonemapping* tone,CTarget_Manager* pTargetMgr, _bool hdr, _bool shadow, _bool particle)
+HRESULT CPostProcess::PossProcessing(CTonemapping* tone,CTarget_Manager* pTargetMgr, _bool hdr, _bool radial)
 {
 	if (FAILED(ComputeBrightPass(pTargetMgr, L"Target_HDRDiffuse", 640.f, 360.f))) return E_FAIL;
 
@@ -70,8 +70,25 @@ HRESULT CPostProcess::PossProcessing(CTonemapping* tone,CTarget_Manager* pTarget
 	if (FAILED(BlurPass(pTargetMgr, L"Target_Horizontal4", L"Target_Vertical8", L"Target_Horizontal8", 160, 90))) return E_FAIL;
 	if (FAILED(BlurPass(pTargetMgr, L"Target_Horizontal8", L"Target_Vertical16", L"Target_Horizontal16", 64, 64))) return E_FAIL;
 
-	if (FAILED(tone->Blend_FinalPass(pTargetMgr, hdr, shadow, particle))) return E_FAIL;
+	if (FAILED(tone->Blend_FinalPass(pTargetMgr, hdr))) return E_FAIL;
 
+	//if (radial == true)
+	//{
+	//	if (FAILED(RadialPass(pTargetMgr))) MSGBOX("Failed To Rednering Radial Pass");
+	//}
+
+	return S_OK;
+}
+
+HRESULT CPostProcess::RadialPass(CTarget_Manager* pTargetMgr)
+{
+	if (FAILED(pTargetMgr->Begin_MRT(m_pDeviceContext, TEXT("Target_Final"))))	return E_FAIL;
+
+	if (FAILED(m_pVIBuffer->SetUp_TextureOnShader("g_Basetexture", pTargetMgr->Get_SRV(TEXT("Target_Blend"))))) MSGBOX("Render Final Basetexture Not Apply");
+
+	if(FAILED(m_pVIBuffer->Render(5))) MSGBOX("Failed To Rendering RadialPass");
+
+	if (FAILED(pTargetMgr->End_MRTNotClear(m_pDeviceContext))) return E_FAIL;
 	return S_OK;
 }
 

@@ -62,6 +62,9 @@ public:
 	//플레이어 씬 이동시 다음씬으로 넘어가야 할 데이터 생성 후 밖으로 빼내기
 	const SCENEMOVEDATA Get_SceneMoveData() const;
 
+	void Set_Radial(_bool check);
+	void Set_RadialCnt(_int radialCnt);
+
 	void Set_IsHit(const _bool _isHit);
 	void Set_IsFall(const _bool _isFall);
 	void Set_IsMove(const _bool _isMove);

@@ -55,7 +55,6 @@ struct VS_OUT
 	float2		texcoord1	: TEXCOORD1;
 	float2		texcoord2	: TEXCOORD2;
 	float2		texcoord3	: TEXCOORD3;
-	float4		vProjpos	: TEXCOORD4;
 };
 
 
@@ -81,7 +80,6 @@ VS_OUT VS_MAIN(VS_IN In)
 	Out.texcoord3 = (In.vTexUV * g_scales.z);
 	Out.texcoord3.y = Out.texcoord3.y + (g_frametime * g_scrollspeeds.z);
 	
-	Out.vProjpos = Out.vPosition;
 	return Out;
 
 }
@@ -94,7 +92,6 @@ struct PS_IN
 	float2 texcoord1	: TEXCOORD1;
 	float2 texcoord2	: TEXCOORD2;
 	float2 texcoord3	: TEXCOORD3;
-	float4 vProjpos		: TEXCOORD4;
 };
 
 struct PS_OUT

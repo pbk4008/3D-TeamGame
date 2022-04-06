@@ -94,7 +94,7 @@ PS_OUT_TONE PS_MAIN_TONEMAPPING(PS_IN In)
 	
 	vSpecColor.rgb *= (1.f + (vSpecColor.rgb / (WhiteCutoff * WhiteCutoff)));
 	vSpecColor.rgb /= (1.f + vSpecColor.rgb);
-	vSpecColor.a = 1.f;
+	vSpecColor.a = vSpeccular.a;
 	
 	Out.vHDRSpecualr = vSpecColor;
 	

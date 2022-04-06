@@ -40,10 +40,16 @@ _int CTraverse_JumpNodeJog::Tick(const _double& _dDeltaTime)
 				m_pAnimationController->Set_PlaySpeed(0.2f);
 			else
 				m_pAnimationController->Set_PlaySpeed(6.f);
+
+			m_pSilvermane->Set_Radial(true);
+			
+			if(iCurKeyFrameIndex <= 32)
+				m_pSilvermane->Set_RadialCnt(iCurKeyFrameIndex);
 		}
 	}
 	else
 	{
+		m_pSilvermane->Set_Radial(false);
 		m_pSilvermane->Set_IsFall(true);
 	}
 
@@ -107,6 +113,7 @@ HRESULT CTraverse_JumpNodeJog::EnterState()
 	m_pAnimationController->Set_PlaySpeed(0.8f);
 	m_pSilvermane->Set_IsFall(false);
 	m_iCutIndex = 60;
+
 	return S_OK;
 }
 
@@ -117,6 +124,7 @@ HRESULT CTraverse_JumpNodeJog::ExitState()
 
 	m_pSilvermane->Set_IsTrasceCamera(true);
 	m_isJumpEnd = false;
+
 	return S_OK;
 }
 

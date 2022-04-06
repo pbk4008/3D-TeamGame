@@ -75,3 +75,17 @@ float2 mod_dither(float2 u)
 	float noiseY = fmod(u.y + u.x + fmod(203. + u.y * 3.18, 12. + fmod(u.x * 27.4, 8.)), 6.) * .139;
 	return float2(noiseX, noiseY) * 2.0 - 1.0;
 }
+
+float sampleuv[10] = 
+{
+	-0.08,
+	-0.05,
+	-0.03,
+	-0.02,
+	-0.01,
+	0.01,
+	0.02,
+	0.03,
+	0.05,
+	0.08,
+};

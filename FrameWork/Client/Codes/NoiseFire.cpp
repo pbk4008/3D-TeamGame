@@ -103,8 +103,6 @@ HRESULT CNoiseFire::BindConstBuffer()
 	if (FAILED(m_pbuffer->SetUp_TextureOnShader("g_AlphaTexture", m_vectexture[1])))	MSGBOX("NoiseFire ConstBuffer NoiseTexture Not Apply");
 	if (FAILED(m_pbuffer->SetUp_TextureOnShader("g_NoiseTexture", m_vectexture[2])))	MSGBOX("NoiseFire ConstBuffer AlphaTexture Not Apply");
 
-	if(FAILED(m_pbuffer->SetUp_TextureOnShader("g_DepthTexture",g_pGameInstance->Get_SRV(L"Target_Depth")))) MSGBOX("NoiseFire ConstBuffer DepthTexture Not Apply");
-
 	//  BOOL DepthEnable;
 	//	D3D11_DEPTH_WRITE_MASK DepthWriteMask;
 	//	D3D11_COMPARISON_FUNC DepthFunc;

@@ -125,7 +125,7 @@ HRESULT CLight::Ready_PBRLighting(CTarget_Manager* pTarget_Manager, const wstrin
 	if (FAILED(m_pVIBuffer->SetUp_TextureOnShader("g_Roughness", pTarget_Manager->Get_SRV(TEXT("Target_Roughness"))))) MSGBOX("Failed To Apply LightRender RoughnessTexture");
 	if (FAILED(m_pVIBuffer->SetUp_TextureOnShader("g_AO", pTarget_Manager->Get_SRV(TEXT("Target_AO"))))) MSGBOX("Failed To Apply LightRender AOTexture");
 
-	if (FAILED((m_pVIBuffer->SetUp_TextureOnShader("g_SkyBoxTexutre", pTarget_Manager->Get_SRV(TEXT("Target_SkyBox")))))) MSGBOX("Failed To Apply Direction Light SkyTexture");
+	if (FAILED((m_pVIBuffer->SetUp_TextureOnShader("g_SkyBoxTexture", pTarget_Manager->Get_SRV(TEXT("Target_SkyBox")))))) MSGBOX("Failed To Apply Direction Light SkyTexture");
 	if (FAILED(m_pVIBuffer->SetUp_TextureOnShader("g_ShadowTexture", pTarget_Manager->Get_SRV(TEXT("Target_BlurShadow"))))) MSGBOX("Failed To Apply LightRender ShadowTexture");
 
 	if (Type == LIGHTDESC::TYPE::TYPE_DIRECTIONAL)

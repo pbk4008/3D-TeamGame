@@ -101,7 +101,7 @@ HRESULT CTarget_Manager::Begin_RT(ID3D11DeviceContext* pDeviceContext, const wst
 
 	for (auto& pRenderTarget : *pMRTList)
 	{
-		pRenderTarget->Clear();
+		//pRenderTarget->Clear();
 		RTVs[iIndex++] = pRenderTarget->Get_RTV();
 	}
 
@@ -117,8 +117,7 @@ HRESULT CTarget_Manager::End_RT(ID3D11DeviceContext* pDeviceContext, ID3D11Depth
 	pDeviceContext->RSSetViewports(1, m_oldvp);
 
 	pDeviceContext->OMSetRenderTargets(1, &m_pOldView, m_pDepthStencilView);
-	pDeviceContext->ClearDepthStencilView(m_pDepthStencilView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.f, 0);
-	/*pDeviceContext->ClearDepthStencilView(DepthView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.f, 0);*/
+	//pDeviceContext->ClearDepthStencilView(m_pDepthStencilView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.f, 0);
 
 	Safe_Release(m_pOldView);
 	Safe_Release(m_pDepthStencilView);
@@ -140,7 +139,7 @@ HRESULT CTarget_Manager::Begin_MRT(ID3D11DeviceContext* pDeviceContext, const ws
 
 	for (auto& pRenderTarget : *pMRTList)
 	{
-		pRenderTarget->Clear();
+		//pRenderTarget->Clear();
 		RTVs[iIndex++] = pRenderTarget->Get_RTV();
 	}
 
@@ -152,7 +151,7 @@ HRESULT CTarget_Manager::End_MRT(ID3D11DeviceContext* pDeviceContext)
 {
 	pDeviceContext->OMSetRenderTargets(1, &m_pOldView, m_pDepthStencilView);
 	pDeviceContext->ClearDepthStencilView(m_pDepthStencilView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.f, 0);
-
+	
 	Safe_Release(m_pOldView);
 	Safe_Release(m_pDepthStencilView);
 
@@ -258,6 +257,18 @@ HRESULT CTarget_Manager::Render_Debug_Buffer_CSTarget(const _tchar* pCsTarget)
 	pCS->Render_Debug_Buffer();
 
 	return S_OK;
+}
+void CTarget_Manager::All_Clear(ID3D11DeviceContext* pDeviceContext)
+{
+	for (auto& iter : m_MRTs)
+	{
+		for (auto& pairs : iter.second)
+		{
+			pairs->Clear();
+		}
+	}
+
+	//pDeviceContext->ClearDepthStencilView(m_pDepthStencilView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.f, 0);
 }
 #endif // _DEBUG
 

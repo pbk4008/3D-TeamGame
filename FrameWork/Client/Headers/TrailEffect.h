@@ -28,6 +28,7 @@ public:
 	void CatmullRom();
 
 private:
+	_float			m_Frametime = 0.f;
 	CVIBuffer_Trail* m_pVIBuffer = nullptr;
 	CTexture* m_pTexture = nullptr;
 	CTexture* m_pTexture1 = nullptr;

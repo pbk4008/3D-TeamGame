@@ -49,6 +49,9 @@ cbuffer ShaderCheck
 	bool g_bHDR;
 	bool g_shadow;
 	bool g_outline;
+	bool g_radial;
+	
+	int	 g_RadialCnt;
 };
 
 cbuffer LightDesc
@@ -84,9 +87,12 @@ cbuffer MatrixInverse
 	matrix g_ViewMatrixInv;
 };
 
-texture2D g_SkyBoxTexutre;
+Texture2D g_SkyBoxTexture;
+//TextureCube g_SkyBoxTexture;
+//TextureCube g_SkyBoxTexutre;
 
 // Lighting
+
 Texture2D g_DiffuseTexture;
 Texture2D g_NormalTexture;
 Texture2D g_DepthTexture;
@@ -240,32 +246,31 @@ PS_OUT_DIRLIGHTACC PS_MAIN_LIGHTACC_DIRECTIONAL(PS_IN In)
 		float ambientintensity = 0.2f;
 		float4 light = CalcLightInternal(color, ambientintensity, g_vCamPosition.xyz, g_vLightDir.xyz, vWorldPos.xyz, normal3);
 		//float4 light = g_vLightDiffuse * (saturate(dot(normalize(g_vLightPos - vWorldPos) * -1.f, normal)) + (g_vLightAmbient * g_vMtrlAmbient));
+		//float lightpow = 2.f;
+		//float4 light = saturate(pow((dot(normalize(vector(g_vLightDir.xyz, 0.f)) * -1.f, normal) * 0.5f + 0.5f), lightpow) * (g_vLightDiffuse * g_vMtrlDiffuse) + (g_vLightAmbient * g_vMtrlAmbient));
 		
 		float3 CamToWorldDirection = normalize(vWorldPos.xyz - g_vCamPosition.xyz);
 		float3 worldReflectDirection = reflect(CamToWorldDirection, normal3);
 		
+		float4 cubeRef1 = g_SkyBoxTexture.Sample(SkyBoxSampler, worldReflectDirection.xy);
+		
 		float smoothness = 1 - Roughness;
-		
-		float4 cubeRef1 = g_SkyBoxTexutre.Sample(SkyBoxSampler, worldReflectDirection.xy);
-		
 		float InvMetalic = (1 - Metallic);
-		InvMetalic = max(InvMetalic, 0.2f);
+		InvMetalic = max(InvMetalic, 0.5f);
 		float4 lightpower = InvMetalic * light * AO;
 		
 		if (g_shadow == true)
 		{
 			float4 shadow = g_ShadowTexture.Sample(DefaultSampler, In.vTexUV);
-			shadow = saturate(shadow + 0.3f);
+			shadow = saturate(shadow + 0.5f);
 			
-			Out.vSpecular = (light * specular + cubeRef1) * Metallic * smoothness * shadow;
-			Out.vShade = lightpower * shadow;
+			Out.vSpecular = saturate((light * specular + cubeRef1) * Metallic * smoothness * shadow);
+			Out.vShade = saturate(lightpower * shadow);
 		}
 		else
 		{
-			
-			Out.vSpecular = (light * specular + cubeRef1) * Metallic * smoothness;
-			Out.vShade = lightpower;
-			//Out.vShade.a = 1.f;
+			Out.vSpecular = saturate((light * specular + cubeRef1) * Metallic * smoothness);
+			Out.vShade = saturate(lightpower);
 		}
 	}
 	else
@@ -402,6 +407,7 @@ PS_OUT_VOLUMETRIC PS_MAIN_SHADOW(PS_IN In)
 
 	float2 uv = In.vTexUV;
 	
+	//float4 diffuse = g_DiffuseTexture.Sample(DefaultSampler, In.vTexUV);
 	float2 depth = g_DepthTexture.Sample(DefaultSampler,In.vTexUV).xy;
 	float fViewZ = depth.y * 300.f;
 
@@ -417,7 +423,6 @@ PS_OUT_VOLUMETRIC PS_MAIN_SHADOW(PS_IN In)
 
 	vWorldPos = mul(vWorldPos, g_ViewMatrixInv);
 	
-	//float4 worldpos = GetWorldPosFromDepth(depth, In.vTexUV, 300.f, g_ProjMatrixInv, g_ViewMatrixInv);
 	float4 lightpos = mul(vWorldPos, g_LightViewProj);
 	
 	float2 shadowUV = float2(0, 0);
@@ -459,12 +464,9 @@ PS_OUT_BLEND PS_MAIN_BLEND(PS_IN In)
 	
 	Out.vColor = color;
 	
-	if (Out.vColor.a == 0)
-		discard;
-	
 	// ¿Ü°û¼± È¿°ú 1.
 	if (g_outline == true)
-	{
+	{	
 		float fCoord[3] = { -1.f, 0.f, 1.f };
 		float fLaplacianMask[9] =
 		{
@@ -475,6 +477,26 @@ PS_OUT_BLEND PS_MAIN_BLEND(PS_IN In)
 		for (int i = 0; i < 9; ++i)
 			Out.vColor += fLaplacianMask[i] * g_DiffuseTexture.Sample(DefaultSampler, (In.vTexUV + float2(fCoord[i / 3] / 1280.f, fCoord[i / 3] / 720.f)));
 	}
+	
+	if (g_radial == true)
+	{		
+		const float blurpower = 0.03f;
+		//const int samplingcnt = 6;
+		
+		float2 dir = In.vTexUV - float2(0.5f, 0.5f);
+
+		float3 color = float3(0, 0, 0);
+		float f = 1.0 / (float) g_RadialCnt;
+		for (int i = 0; i < g_RadialCnt; ++i)
+		{
+			color += g_DiffuseTexture.Sample(DefaultSampler, In.vTexUV - blurpower * dir * float(i)).rgb * f;
+
+		}
+		Out.vColor.rgb = color;
+	}
+	
+	if (Out.vColor.a == 0)
+		discard;
 	
 	return Out;
 }
@@ -554,7 +576,7 @@ technique11 DefaultTechnique
 	{
 		SetRasterizerState(CullMode_None);
 		SetDepthStencilState(ZTestDiable, 0);
-		SetBlendState(AlphaBlending, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+		SetBlendState(BlendDisable, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
 		
 		VertexShader = compile vs_5_0 VS_MAIN_VIEWPORT();
 		GeometryShader = NULL;

@@ -897,6 +897,16 @@ const CSilvermane::SCENEMOVEDATA CSilvermane::Get_SceneMoveData() const
 	return tDesc;
 }
 
+void CSilvermane::Set_Radial(_bool check)
+{
+	m_pRenderer->SetRenderButton(CRenderer::RADIAL, check);
+}
+
+void CSilvermane::Set_RadialCnt(_int radialCnt)
+{
+	m_pRenderer->SetRadialCnt(radialCnt);
+}
+
 void CSilvermane::Set_IsHit(const _bool _isHit)
 {
 	m_isHit = _isHit;

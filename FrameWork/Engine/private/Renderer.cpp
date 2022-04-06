@@ -43,6 +43,10 @@ void CRenderer::SetRenderButton(RENDERBUTTON ebutton, _bool check)
 	case CRenderer::OUTLINE:
 		m_boutline = check;
 		break;
+	case CRenderer::RADIAL:
+		m_bradial = check;
+		m_RadialCnt = 6;
+		break;
 	}
 }
 
@@ -133,15 +137,12 @@ HRESULT CRenderer::Add_RenderGroup(RENDER eRenderID, CGameObject* pGameObject)
 
 HRESULT CRenderer::Draw_RenderGroup()
 {
+	m_pTargetMgr->All_Clear(m_pDeviceContext);
+
 	if (FAILED(Render_Priority()))
 		return E_FAIL;
 
 	if (FAILED(Render_SkyBox())) return E_FAIL;
-
-	if (m_bShadow == true)
-	{
-		if (FAILED(Render_Shadow())) return E_FAIL;
-	}
 
 	if (FAILED(Render_NonAlpha())) // 디퍼드 단계
 		return E_FAIL;
@@ -150,6 +151,7 @@ HRESULT CRenderer::Draw_RenderGroup()
 	{
 		if (m_bShadow == true)
 		{
+			if (FAILED(Render_Shadow())) return E_FAIL;
 			if (FAILED(ShadowPass())) MSGBOX("Failed To Rendering ShadowPass");
 		}
 
@@ -164,9 +166,9 @@ HRESULT CRenderer::Draw_RenderGroup()
 
 		if (FAILED(m_pLuminance->DownSampling(m_pTargetMgr))) return E_FAIL;
 
-		if (FAILED(m_pPostProcess->PossProcessing(m_pTonemapping, m_pTargetMgr,m_bHDR,m_bShadow,m_bParticle))) return E_FAIL;
+		if (FAILED(m_pPostProcess->PossProcessing(m_pTonemapping, m_pTargetMgr,m_bHDR,m_bradial))) return E_FAIL;
 
-		if (FAILED(Render_Final(m_boutline))) return E_FAIL;
+		if (FAILED(Render_Final(m_boutline, m_bradial))) return E_FAIL;
 	}
 
 	if (FAILED(Render_Alpha()))
@@ -226,6 +228,7 @@ HRESULT CRenderer::Draw_RenderGroup()
 		//if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("Target_Horizontal16")))) return E_FAIL;
 
 		if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("Target_Blend")))) return E_FAIL;
+		if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("Target_Final")))) return E_FAIL;
 		if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("Target_Alpha")))) return E_FAIL;
 		if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("Target_Particle")))) return E_FAIL;
 		if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("Target_BlurShadow")))) return E_FAIL;
@@ -277,8 +280,8 @@ HRESULT CRenderer::Render_SkyBox()
 	}
 	m_RenderGroup[RENDER_SKYBOX].clear();
 
-	if (FAILED(m_pTargetMgr->End_MRT(m_pDeviceContext)))return E_FAIL;
-	//if (FAILED(m_pTargetMgr->End_MRTNotClear(m_pDeviceContext))) return E_FAIL;
+	/*if (FAILED(m_pTargetMgr->End_MRT(m_pDeviceContext)))return E_FAIL;*/
+	if (FAILED(m_pTargetMgr->End_MRTNotClear(m_pDeviceContext))) return E_FAIL;
 
 	return S_OK;
 }
@@ -330,7 +333,8 @@ HRESULT CRenderer::Render_Alpha()
 	}
 	m_RenderGroup[RENDER_ALPHA].clear();
 
-	if (FAILED(m_pTargetMgr->End_MRTNotClear(m_pDeviceContext))) return E_FAIL;
+	//if (FAILED(m_pTargetMgr->End_MRTNotClear(m_pDeviceContext))) return E_FAIL;
+	if (FAILED(m_pTargetMgr->End_MRT(m_pDeviceContext))) return E_FAIL;
 
 	if (m_bParticle == true)
 	{
@@ -435,14 +439,15 @@ HRESULT CRenderer::ShadowPass()
 	return S_OK;
 }
 
-HRESULT CRenderer::Render_Final(_bool outline)
+HRESULT CRenderer::Render_Final(_bool outline, _bool Radial)
 {
 	if (!m_pTargetMgr)	return E_FAIL;
 
 	if (FAILED(m_pVIBuffer->SetUp_TextureOnShader("g_DiffuseTexture", m_pTargetMgr->Get_SRV(TEXT("Target_Blend"))))) MSGBOX("Render Final DiffuseTeuxtre Not Apply");
-
-	if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_outline", &m_boutline, sizeof(_bool)))) MSGBOX("Render Final Value Not Apply");
-
+	if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_outline", &m_boutline, sizeof(_bool)))) MSGBOX("Render Final Value outline Not Apply");
+	if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_radial", &m_bradial, sizeof(_bool)))) MSGBOX("Render Final Value raidal Not Apply");
+	if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_RadialCnt", &m_RadialCnt, sizeof(_int)))) MSGBOX("Render Final Value RaidalCnt Not Apply");
+	
 
 	if (FAILED(m_pVIBuffer->Render(3))) MSGBOX("Final Rendering Failed");
 
