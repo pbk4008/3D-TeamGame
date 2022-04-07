@@ -45,6 +45,7 @@ typedef struct tagRaycastDesc
 	// out
 	_float3 vHitPos = { 0.f, 0.f, 0.f };
 	CGameObject** ppOutHitObject = nullptr;
+	vector<CGameObject*> vecHitObject;
 }RAYCASTDESC;
 typedef struct tagSweepDesc
 {
@@ -59,6 +60,7 @@ typedef struct tagSweepDesc
 	// out
 	_float3 vHitPos = { 0.f, 0.f, 0.f };
 	CGameObject** ppOutHitObject = nullptr;
+	vector<CGameObject*> vecHitObject;
 }SWEEPDESC;
 typedef struct tagOverlapDesc
 {
