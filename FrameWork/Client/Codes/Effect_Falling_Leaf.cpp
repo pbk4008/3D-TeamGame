@@ -120,7 +120,7 @@ _int CEffect_Falling_Leaf::LateTick(_double TimeDelta)
 
 HRESULT CEffect_Falling_Leaf::Render()
 {
-	m_pBox->Render(L"Camera_Silvermane");
+	//m_pBox->Render(L"Camera_Silvermane");
 
 	_matrix XMWorldMatrix = XMMatrixTranspose(m_pTransform->Get_WorldMatrix());
 	_matrix XMViewMatrix = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_VIEW));

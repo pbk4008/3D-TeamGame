@@ -73,17 +73,17 @@ HRESULT CStage1::NativeConstruct()
 	if (FAILED(Ready_Light()))
 		return E_FAIL;
 
-	//if (FAILED(Ready_Trigger_Jump()))
-	//	return E_FAIL;
+	if (FAILED(Ready_Trigger_Jump()))
+		return E_FAIL;
 
 	if (FAILED(Ready_Player(L"Layer_Silvermane")))
 		return E_FAIL;
 
-	//if (FAILED(Ready_MapObject()))
-	//	return E_FAIL;
-	//
-	//if (FAILED(Ready_TriggerSystem(L"../bin/SaveData/Trigger/MonsterSpawnTrigger.dat")))
-	//	return E_FAIL;
+	if (FAILED(Ready_MapObject()))
+		return E_FAIL;
+
+	if (FAILED(Ready_TriggerSystem(L"../bin/SaveData/Trigger/MonsterSpawnTrigger.dat")))
+		return E_FAIL;
 
 	//if (FAILED(Ready_Boss(L"Layer_Boss")))
 	//{
@@ -110,18 +110,18 @@ HRESULT CStage1::NativeConstruct()
 		return E_FAIL;
 	}
 
-	//if (FAILED(Ready_Treasure_Chest()))
-	//	return E_FAIL;
+	if (FAILED(Ready_Treasure_Chest()))
+		return E_FAIL;
 
 	g_pGameInstance->Change_BaseCamera(L"Camera_Silvermane");
 
-	//g_pInteractManager = CInteractManager::GetInstance();
-	//if (FAILED(g_pInteractManager->NativeConstruct()))
-	//	return E_FAIL;
+	g_pInteractManager = CInteractManager::GetInstance();
+	if (FAILED(g_pInteractManager->NativeConstruct()))
+		return E_FAIL;
 
-	//g_pDropManager = CDropManager::GetInstance();
-	//if (FAILED(g_pDropManager->NativeConstruct((SCENEID::SCENE_STAGE1))))
-	//	return E_FAIL;
+	g_pDropManager = CDropManager::GetInstance();
+	if (FAILED(g_pDropManager->NativeConstruct((SCENEID::SCENE_STAGE1))))
+		return E_FAIL;
 
 	g_pGameInstance->PlayBGM(L"Stage1_BGM");
 	return S_OK;
@@ -166,7 +166,7 @@ _int CStage1::Tick(_double TimeDelta)
 		}
 	}
 
-	_float3 fPos = { 0.f,5.f,20.f };
+	/*_float3 fPos = { 0.f,5.f,20.f };
 
 	if (g_pGameInstance->getkeyDown(DIK_NUMPAD0))
 	{
@@ -221,10 +221,10 @@ _int CStage1::Tick(_double TimeDelta)
 		CMonster_BronzeAnimus* pMonster = nullptr;
 		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Test", L"Proto_GameObject_Monster_BronzeAnimus", &fPos, (CGameObject**)&pMonster)))
 			return -1;
-	}
+	}*/
 
-	//g_pInteractManager->Tick(TimeDelta);
-	//g_pDropManager->Tick();
+	g_pInteractManager->Tick(TimeDelta);
+	g_pDropManager->Tick();
 
 	return _int();
 }
@@ -286,7 +286,7 @@ HRESULT CStage1::Ready_MapObject()
 
 	//------------------------------------------- Tree --------------------------------------------------------------------//
 
-	/*vector<ENVIRONMENTLOADDATA> vecSubEnvData;
+	vector<ENVIRONMENTLOADDATA> vecSubEnvData;
 	if (FAILED(g_pGameInstance->LoadFile<ENVIRONMENTLOADDATA>(vecSubEnvData, L"../bin/SaveData/Tree_Data.dat")))	
 		return E_FAIL;
 
@@ -313,7 +313,7 @@ HRESULT CStage1::Ready_MapObject()
 
 		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_SubEnvironment", L"Proto_GameObject_SubEnvironment", &pDesc))) 
 			return E_FAIL;
-	}*/
+	}
 
 	//wstring strTag = L"StageBackGround";
 	//g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Stage1_Back", L"Prototype_GameObject_BackGround", &strTag);
@@ -1518,8 +1518,8 @@ void CStage1::Free()
 {
 	CLevel::Free();
 
-	//CDropManager::DestroyInstance();
-	//CInteractManager::DestroyInstance();
+	CDropManager::DestroyInstance();
+	CInteractManager::DestroyInstance();
 	Safe_Release(m_pTriggerSystem);
 
 }
