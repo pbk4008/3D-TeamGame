@@ -44,6 +44,8 @@ public: /* For.Graphic_Device */
 	HRESULT Clear_BackBuffer_View(XMFLOAT4 vClearColor);
 	HRESULT Clear_DepthStencil_View();
 	HRESULT Present();
+	ID3D11Device* Get_Device();
+	ID3D11DeviceContext* Get_DeviceContext();
 
 public: /* For.Timer_Manager */ 
 	_double Get_TimeDelta(const wstring& pTimerTag);

@@ -15,7 +15,7 @@ class CJumpTrigger;
 class CJumpBox;
 class CUI_Blank_CKey;
 class CUI_Fill_Ckey;
-
+class CInventoryData;
 class CSilvermane final : public CActor
 {
 public:
@@ -83,9 +83,9 @@ public:
 
 public: /* For.Weapon */
 	const _bool IsEquipWeapon() const;
-	const _bool IsEquipShield() const;
 	const CWeapon::EType Get_WeaponType() const;
 	virtual void Set_IsAttack(const _bool _isAttack);
+	void Set_IsTrail(const _bool _isTrail);
 	void Set_EquipWeapon(const _bool _isEquipWeapon);
 	void Set_WeaponFixedBone(const string& _wstrFixedBoneTag);
 	void Set_WeaponFixedBone(CHierarchyNode* _pFixedBone);
@@ -94,6 +94,7 @@ public: /* For.Weapon */
 	void RangeAttack();
 
 public: /* For.Shield */
+	const _bool IsEquipShield() const;
 	const _float Get_BlockTime() const;
 	void Set_EquipShield(const _bool _isEquipShield);
 	void Set_EquipShieldAnim(const _bool _isEquipShield);
@@ -157,8 +158,9 @@ private: /* Drop Box  */
 private: /* For.Cheat */
 	_bool m_isHighSpeedMode = false;
 
-	// color
-private: _float4  m_color = _float4(0.498f, 0.9411f, 0.8196f, 0.f);
+private: _float4  m_color = _float4(0.498f, 0.9411f, 0.8196f, 0.f); // color
+private:/* for. Inventroy */
+	CInventoryData* m_pInventoryData = nullptr;
 
 private:
 	CTexture*	m_pTexture = nullptr;

@@ -1,4 +1,4 @@
-#include "..\public\Texture.h"
+#include "Texture.h"
 #include "TextureManager.h"
 
 CTexture::CTexture(ID3D11Device * pDevice, ID3D11DeviceContext * pDeviceContext)

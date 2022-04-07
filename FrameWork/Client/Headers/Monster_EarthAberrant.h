@@ -37,9 +37,12 @@ private:
 	HRESULT Set_Weapon();
 	HRESULT Set_Panel();
 
-private:
+public:
 	virtual void OnTriggerEnter(CCollision& collision) override;
 	virtual void OnTriggerExit(CCollision& collision) override;
+
+	virtual void Hit(const ATTACKDESC& _tAttackDesc) override;
+
 public:
 	void Set_IsAttack(const _bool _isAttack);
 	virtual void Set_Remove(_bool bCheck) override;

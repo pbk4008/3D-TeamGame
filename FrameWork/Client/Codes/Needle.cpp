@@ -61,6 +61,8 @@ HRESULT CNeedle::NativeConstruct(const _uint _iSceneID, void* _pArg)
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer(m_iSceneID, L"Layer_Effect", L"Proto_GameObject_TrailEffect", m_pTransform, (CGameObject**)&m_pTrailEffect)))
 		MSGBOX(L"트레일 이펙트 생성 실패. from Needle");
 
+	m_fDamage = 3;
+
 	return S_OK;
 }
 
@@ -83,7 +85,7 @@ _int CNeedle::LateTick(_double _dDeltaTime)
 	if (0 > __super::LateTick(_dDeltaTime))
 		return -1;
 
-	if (m_isAttack)
+	if (m_isTrail)
 	{
 		m_pTrailEffect->Record_Points(_dDeltaTime);
 		m_pTrailEffect->Set_IsRender(true);
@@ -150,13 +152,31 @@ HRESULT CNeedle::Render()
 
 void CNeedle::OnTriggerEnter(CCollision& collision)
 {
+	_uint iTag = collision.pGameObject->getTag();
+	switch (iTag)
+	{
+	case (_uint)GAMEOBJECT::MONSTER_CRYSTAL:
+	case (_uint)GAMEOBJECT::MONSTER_ABERRANT:
+	case (_uint)GAMEOBJECT::MONSTER_1H:
+	case (_uint)GAMEOBJECT::MONSTER_2H:
+	case (_uint)GAMEOBJECT::MONSTER_HEALER:
+	case (_uint)GAMEOBJECT::MONSTER_SHOOTER:
+	case (_uint)GAMEOBJECT::MONSTER_SPEAR:
+		if (!m_isAttack)
+			return;
 
+		ATTACKDESC tAttackDesc = m_pOwner->Get_AttackDesc();
+		tAttackDesc.fDamage += m_fDamage;
+		tAttackDesc.pHitObject = this;
+		static_cast<CActor*>(collision.pGameObject)->Hit(tAttackDesc);
+		break;
+	}
 }
 
 void CNeedle::RangeAttack()
 {
 	OVERLAPDESC tOverlapDesc;
-	tOverlapDesc.geometry = PxSphereGeometry(5.f);
+	tOverlapDesc.geometry = PxSphereGeometry(4.f);
 	XMStoreFloat3(&tOverlapDesc.vOrigin, m_pTransform->Get_State(CTransform::STATE_POSITION));
 	CGameObject* pHitObject = nullptr;
 	tOverlapDesc.ppOutHitObject = &pHitObject;

@@ -182,7 +182,7 @@ void CTrailEffect::Set_IsRender(const _bool _isRender)
 
 void CTrailEffect::Record_Points(const _double& _dDeltaTIme)
 {
-	while (30 <= m_listPoints.size())
+	while (32 <= m_listPoints.size())
 	{
 		m_listPoints.pop_front();
 	}
@@ -192,7 +192,7 @@ void CTrailEffect::Record_Points(const _double& _dDeltaTIme)
 	if (0.01f < m_fAccTime)
 	{
 		_float3 vStartPos = { 0.f, 0.f, 0.f };
-		_float3 vEndPos = { 0.f, 0.f, -0.5f };
+		_float3 vEndPos = { 0.f, 0.f, -1.f };
 
 		_vector svStartPos = XMLoadFloat3(&vStartPos);
 		_vector svEndPos = XMLoadFloat3(&vEndPos);
@@ -249,15 +249,15 @@ void CTrailEffect::CatmullRom()
 		}
 	}
 
-	_float3 vFirstStartPoint, vFirstEndPoint;
-	XMStoreFloat3(&vFirstStartPoint, svStartPoints[0]);
-	XMStoreFloat3(&vFirstEndPoint, svEndPoints[0]);
-	_float3 vLastStartPoint, vLastEndPoint;
-	XMStoreFloat3(&vLastStartPoint, svStartPoints[iListSize - 1]);
-	XMStoreFloat3(&vLastEndPoint, svEndPoints[iListSize - 1]);
+	//_float3 vFirstStartPoint, vFirstEndPoint;
+	//XMStoreFloat3(&vFirstStartPoint, svStartPoints[0]);
+	//XMStoreFloat3(&vFirstEndPoint, svEndPoints[0]);
+	//_float3 vLastStartPoint, vLastEndPoint;
+	//XMStoreFloat3(&vLastStartPoint, svStartPoints[iListSize - 1]);
+	//XMStoreFloat3(&vLastEndPoint, svEndPoints[iListSize - 1]);
 
-	m_listCurved.emplace_front(vFirstStartPoint, vFirstEndPoint);
-	m_listCurved.emplace_back(vLastStartPoint, vLastEndPoint);
+	//m_listCurved.emplace_front(vFirstStartPoint, vFirstEndPoint);
+	//m_listCurved.emplace_back(vLastStartPoint, vLastEndPoint);
 
 	Safe_Delete_Array(svStartPoints);
 	Safe_Delete_Array(svEndPoints);

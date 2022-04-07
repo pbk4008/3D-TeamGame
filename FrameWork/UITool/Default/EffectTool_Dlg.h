@@ -87,4 +87,11 @@ public:
 	int m_ImagecountY;
 	float m_EffectPlaySpeed;
 	int m_IDTag;
+
+	float m_fBoxPosX;
+	float m_fBoxPosY;
+	float m_fBoxPosZ;
+	float m_fBoxWidth;
+	float m_fBoxHeight;
+	float m_fBoxDepth;
 };

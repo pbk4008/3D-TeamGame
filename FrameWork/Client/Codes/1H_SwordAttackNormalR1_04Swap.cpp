@@ -87,6 +87,9 @@ HRESULT C1H_SwordAttackNormalR1_04Swap::EnterState()
 	m_iAttackStartIndex = 36;
 	m_iAttackEndIndex = 42;
 
+	m_iTrailStartIndex = 36;
+	m_iTrailEndIndex = 42;
+
 	// Ω¶¿Ã≈© ø…º«
 	m_tShakeEvent.fDuration = 0.8f;
 	m_tShakeEvent.fBlendInTime = 0.2f;

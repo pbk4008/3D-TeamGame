@@ -36,6 +36,8 @@ public:
 
 private:
 	CVIBuffer_PointInstance_Explosion* m_pBuffer = nullptr;
+	class CCullingBox* m_pBox = nullptr;
+
 private:
 	CEffect::EFFECTDESC m_Desc;
 	CVIBuffer_PointInstance_Explosion::PIDESC m_backupDesc;

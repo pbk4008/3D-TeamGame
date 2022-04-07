@@ -104,7 +104,7 @@ HRESULT CMonster_EarthAberrant::NativeConstruct(const _uint _iSceneID, void* _pA
 	m_tAttackDesc.iLevel = 1;
 	m_tAttackDesc.fDamage = 3.f;
 
-	//setActive(false);
+	setActive(false);
 
 	return S_OK;
 }
@@ -612,48 +612,43 @@ HRESULT CMonster_EarthAberrant::Set_Panel()
 
 void CMonster_EarthAberrant::OnTriggerEnter(CCollision& collision)
 {
-	if (!m_bDead)
-	{
-		if (true == g_pObserver->IsAttack()) //플레이어공격일때
-		{
-			m_pPanel->Set_Show(true);
-
-			m_bFirstHit = true; //딱 한번 true로 변경해줌
-
-			if (true == m_bFirstHit)
-			{
-				m_pPanel->Set_BackUIGapY(1.f);
-			}
-
-			if ((_uint)GAMEOBJECT::WEAPON == collision.pGameObject->getTag())
-			{
-				g_pGameInstance->Play_Shot(L"Monster_Hit_2", CSoundMgr::CHANNELID::Earth_Hit);
-
-				--m_fCurrentHp;
-				m_fGroggyGauge += 2; //TODO::수치정해서바꿔줘야됨
-
-				m_pPanel->Set_HpBar(Get_HpRatio());
-
-				if (false == m_bGroggy)
-				{
-					//그로기 아닐때만 증가할수있게
-					m_pPanel->Set_GroggyBar(Get_GroggyGaugeRatio());
-					m_pStateController->Change_State(L"Flinch_Left");
-				}
-
-				Active_Effect((_uint)EFFECT::HIT);
-				Active_Effect((_uint)EFFECT::FLOATING);
-			}
-			else
-			{
-			}
-		}
-	}
 }
 
 void CMonster_EarthAberrant::OnTriggerExit(CCollision& collision)
 {
 	g_pGameInstance->StopSound(CSoundMgr::CHANNELID::Monster_Hit);
+}
+
+void CMonster_EarthAberrant::Hit(const ATTACKDESC& _tAttackDesc)
+{
+	if (m_bDead || 0.f >= m_fCurrentHp)
+		return;
+
+	m_pPanel->Set_Show(true);
+
+	m_bFirstHit = true; //딱 한번 true로 변경해줌
+
+	if (true == m_bFirstHit)
+	{
+		m_pPanel->Set_BackUIGapY(1.f);
+	}
+
+	g_pGameInstance->Play_Shot(L"Monster_Hit_2", CSoundMgr::CHANNELID::Earth_Hit);
+
+	m_fCurrentHp -= _tAttackDesc.fDamage;
+	m_fGroggyGauge += 2; //TODO::수치정해서바꿔줘야됨
+
+	m_pPanel->Set_HpBar(Get_HpRatio());
+
+	if (false == m_bGroggy)
+	{
+		//그로기 아닐때만 증가할수있게
+		m_pPanel->Set_GroggyBar(Get_GroggyGaugeRatio());
+		m_pStateController->Change_State(L"Flinch_Left");
+	}
+
+	Active_Effect((_uint)EFFECT::HIT);
+	Active_Effect((_uint)EFFECT::FLOATING);
 }
 
 void CMonster_EarthAberrant::Set_IsAttack(const _bool _isAttack)

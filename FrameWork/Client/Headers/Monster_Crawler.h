@@ -36,9 +36,11 @@ public:
 	virtual _int LateTick(_double _dDeltaTime) override;
 	virtual HRESULT Render() override;
 
-private: 
+public: 
 	void	OnTriggerEnter(CCollision& collision) override;
 	void	OnTriggerExit(CCollision& collision) override;
+
+	virtual void Hit(const ATTACKDESC& _tAttackDesc) override;
 
 public:
 	void Set_IsAttack(const _bool _isAttack);

@@ -82,6 +82,9 @@ HRESULT C1H_SwordAttackNormalR2_ReleaseDoubleSwing::EnterState()
 	m_iAttackStartIndex = 30;
 	m_iAttackEndIndex = 52;
 
+	m_iTrailStartIndex = 30;
+	m_iTrailEndIndex = 57;
+
 	// Ω¶¿Ã≈© ø…º«
 	m_tShakeEvent = CCameraShake::SHAKEEVENT();
 	m_tShakeEvent.fDuration = 0.6f;

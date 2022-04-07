@@ -83,7 +83,7 @@ HRESULT CMonster_Bastion_2HSword::NativeConstruct(const _uint _iSceneID, void* _
 
 	m_isFall = true;
 
-	//setActive(false);
+	setActive(false);
 
 	m_tAttackDesc.iLevel = 1;
 

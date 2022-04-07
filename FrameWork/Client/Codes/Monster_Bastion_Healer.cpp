@@ -100,7 +100,7 @@ HRESULT CMonster_Bastion_Healer::NativeConstruct(const _uint _iSceneID, void* _p
 
 	m_isFall = true;
 
-	//setActive(false);
+	setActive(false);
 	return S_OK;
 }
 
