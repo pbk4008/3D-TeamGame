@@ -23,7 +23,7 @@ public:
 	const _float Get_HpRatio();
 	const _float Get_GroggyGaugeRatio();
 protected:
-	HRESULT Set_SpawnPosition(const _float3 vPoint);
+	virtual HRESULT Set_SpawnPosition(const _float3 vPoint);
 
 public:
 	//Effect 불러오는 함수

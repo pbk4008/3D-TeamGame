@@ -295,10 +295,8 @@ call Update_Client.bat</Command>
     <ClInclude Include="..\Headers\BronzeAnimus_Attack.h" />
     <ClInclude Include="..\Headers\BronzeAnimus_Battle_Idle.h" />
     <ClInclude Include="..\Headers\BronzeAnimus_Chaser.h" />
-    <ClInclude Include="..\Headers\BronzeAnimus_Chaser_End.h" />
     <ClInclude Include="..\Headers\BronzeAnimus_Death.h" />
     <ClInclude Include="..\Headers\BronzeAnimus_Groggy.h" />
-    <ClInclude Include="..\Headers\BronzeAnimus_Groggy_End.h" />
     <ClInclude Include="..\Headers\BronzeAnimus_Hit.h" />
     <ClInclude Include="..\Headers\BronzeAnimus_Idle.h" />
     <ClInclude Include="..\Headers\BronzeAnimus_Roar.h" />
@@ -598,10 +596,8 @@ call Update_Client.bat</Command>
     <ClCompile Include="..\Codes\BronzeAnimus_Attack.cpp" />
     <ClCompile Include="..\Codes\BronzeAnimus_Battle_Idle.cpp" />
     <ClCompile Include="..\Codes\BronzeAnimus_Chaser.cpp" />
-    <ClCompile Include="..\Codes\BronzeAnimus_Chaser_End.cpp" />
     <ClCompile Include="..\Codes\BronzeAnimus_Death.cpp" />
     <ClCompile Include="..\Codes\BronzeAnimus_Groggy.cpp" />
-    <ClCompile Include="..\Codes\BronzeAnimus_Groggy_End.cpp" />
     <ClCompile Include="..\Codes\BronzeAnimus_Hit.cpp" />
     <ClCompile Include="..\Codes\BronzeAnimus_Idle.cpp" />
     <ClCompile Include="..\Codes\BronzeAnimus_Roar.cpp" />

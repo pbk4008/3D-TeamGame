@@ -26,16 +26,18 @@ HRESULT CBronzeAnimus_Attack::NativeConstruct(void* _pArg)
 _int CBronzeAnimus_Attack::Tick(const _double& _dDeltaTime)
 {
 	_int iProgress = __super::Tick(_dDeltaTime);
+	cout << "Attack" << endl;
 	if (NO_EVENT != iProgress)
 		return iProgress;
 
-	if(!m_bAttackEnd)
-		m_pAnimator->Tick(_dDeltaTime);
+	m_pTransform->Face_Target(g_pObserver->Get_PlayerPos());
+	m_pAnimator->Tick(_dDeltaTime);
 
-	CMonster_BronzeAnimus* pMonster = (CMonster_BronzeAnimus*)m_pStateController->Get_GameObject();
-	if (nullptr != pMonster)
-		pMonster->Set_IsAttack(true);
-
+	if (m_pAnimator->Get_CurrentAnimation()->Is_Finished()&&!m_pAnimator->Get_IsLerp())
+	{
+		m_pOwner->Set_AttackOn(false);
+		m_pStateController->Change_State(L"A_Idle_Battle");
+	}
 	return _int();
 }
 
@@ -61,8 +63,24 @@ HRESULT CBronzeAnimus_Attack::EnterState()
 	if (FAILED(__super::EnterState()))
 		return E_FAIL;
 
-	_int randAtt = rand() % 3;
+	return S_OK;
+}
 
+HRESULT CBronzeAnimus_Attack::ExitState()
+{
+	if (FAILED(__super::ExitState()))
+		return E_FAIL;
+
+	m_pAnimator->Get_AnimController()->Set_PlaySpeed(1.f);
+
+	return S_OK;
+}
+
+HRESULT CBronzeAnimus_Attack::EnterState(void* pArg)
+{
+	_int randAtt = (*(_int*)pArg);
+
+	m_pAnimator->Get_AnimController()->Set_PlaySpeed(1.5f);
 	switch (randAtt)
 	{
 	case 0:
@@ -79,16 +97,12 @@ HRESULT CBronzeAnimus_Attack::EnterState()
 		break;
 	}
 
+
 	return S_OK;
 }
 
-HRESULT CBronzeAnimus_Attack::ExitState()
+HRESULT CBronzeAnimus_Attack::ExitState(void* pArg)
 {
-	if (FAILED(__super::ExitState()))
-		return E_FAIL;
-
-	m_bAttackEnd = false;
-
 	return S_OK;
 }
 
