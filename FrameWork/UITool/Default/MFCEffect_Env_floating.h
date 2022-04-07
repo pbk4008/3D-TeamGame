@@ -5,6 +5,7 @@
 BEGIN(Engine)
 class CVIBuffer_PointInstance_Env_Floating;
 class CTexture;
+class CCullingBox;
 END
 class CMFCEffect_Env_Floating final : public CEffect
 {
@@ -33,6 +34,7 @@ public:
 
 private:
 	CVIBuffer_PointInstance_Env_Floating* m_pBuffer = nullptr;
+	CCullingBox* m_pBox = nullptr;
 
 private:
 	CEffect::EFFECTDESC m_Desc;

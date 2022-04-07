@@ -115,7 +115,9 @@ _int CMonster_EarthAberrant::Tick(_double _dDeltaTime)
 	{
 		return -1;
 	}
-
+	//string str;
+	//str.assign(m_pStateController->Get_CurStateTag().begin(), m_pStateController->Get_CurStateTag().end());
+	//cout << str << endl;
 	m_pTransform->Set_Velocity(XMVectorZero());
 	m_pPanel->Set_TargetWorldMatrix(m_pTransform->Get_WorldMatrix());
 
@@ -380,10 +382,10 @@ HRESULT CMonster_EarthAberrant::Set_Animation_FSM()
 
 	//run
 	pAnim = m_pModelCom->Get_Animation("SK_Earth_Aberrant_B.ao|A_Run_Fwd_Start_Aberrant");
-	if (FAILED(m_pAnimatorCom->Insert_Animation(RUN_FWD_START, HEAD, pAnim, true, true, false, ERootOption::XYZ, true)))
+	if (FAILED(m_pAnimatorCom->Insert_Animation(RUN_FWD_START, HEAD, pAnim, true, false, false, ERootOption::XYZ, true)))
 		return E_FAIL;
 	pAnim = m_pModelCom->Get_Animation("SK_Earth_Aberrant_B.ao|A_Run_Fwd_Aberrant");
-	if (FAILED(m_pAnimatorCom->Insert_Animation(RUN_FWD, RUN_FWD_START, pAnim, true, true, true, ERootOption::XYZ, true)))
+	if (FAILED(m_pAnimatorCom->Insert_Animation(RUN_FWD, RUN_FWD_START, pAnim, true, false, true, ERootOption::XYZ, true)))
 		return E_FAIL;
 	pAnim = m_pModelCom->Get_Animation("SK_Earth_Aberrant_B.ao|A_Run_Fwd_Stop_Aberrant");
 	if (FAILED(m_pAnimatorCom->Insert_Animation(RUN_FWD_STOP, RUN_FWD, pAnim, true, true, false, ERootOption::XYZ, true)))
@@ -610,48 +612,43 @@ HRESULT CMonster_EarthAberrant::Set_Panel()
 
 void CMonster_EarthAberrant::OnTriggerEnter(CCollision& collision)
 {
-	if (!m_bDead)
-	{
-		if (true == g_pObserver->IsAttack()) //플레이어공격일때
-		{
-			m_pPanel->Set_Show(true);
-
-			m_bFirstHit = true; //딱 한번 true로 변경해줌
-
-			if (true == m_bFirstHit)
-			{
-				m_pPanel->Set_BackUIGapY(1.f);
-			}
-
-			if ((_uint)GAMEOBJECT::WEAPON == collision.pGameObject->getTag())
-			{
-				g_pGameInstance->Play_Shot(L"Monster_Hit_2", CSoundMgr::CHANNELID::Earth_Hit);
-
-				--m_fCurrentHp;
-				m_fGroggyGauge += 2; //TODO::수치정해서바꿔줘야됨
-
-				m_pPanel->Set_HpBar(Get_HpRatio());
-
-				if (false == m_bGroggy)
-				{
-					//그로기 아닐때만 증가할수있게
-					m_pPanel->Set_GroggyBar(Get_GroggyGaugeRatio());
-					m_pStateController->Change_State(L"Flinch_Left");
-				}
-
-				Active_Effect((_uint)EFFECT::HIT);
-				Active_Effect((_uint)EFFECT::FLOATING);
-			}
-			else
-			{
-			}
-		}
-	}
 }
 
 void CMonster_EarthAberrant::OnTriggerExit(CCollision& collision)
 {
 	g_pGameInstance->StopSound(CSoundMgr::CHANNELID::Monster_Hit);
+}
+
+void CMonster_EarthAberrant::Hit(const ATTACKDESC& _tAttackDesc)
+{
+	if (m_bDead || 0.f >= m_fCurrentHp)
+		return;
+
+	m_pPanel->Set_Show(true);
+
+	m_bFirstHit = true; //딱 한번 true로 변경해줌
+
+	if (true == m_bFirstHit)
+	{
+		m_pPanel->Set_BackUIGapY(1.f);
+	}
+
+	g_pGameInstance->Play_Shot(L"Monster_Hit_2", CSoundMgr::CHANNELID::Earth_Hit);
+
+	m_fCurrentHp -= _tAttackDesc.fDamage;
+	m_fGroggyGauge += 2; //TODO::수치정해서바꿔줘야됨
+
+	m_pPanel->Set_HpBar(Get_HpRatio());
+
+	if (false == m_bGroggy)
+	{
+		//그로기 아닐때만 증가할수있게
+		m_pPanel->Set_GroggyBar(Get_GroggyGaugeRatio());
+		m_pStateController->Change_State(L"Flinch_Left");
+	}
+
+	Active_Effect((_uint)EFFECT::HIT);
+	Active_Effect((_uint)EFFECT::FLOATING);
 }
 
 void CMonster_EarthAberrant::Set_IsAttack(const _bool _isAttack)

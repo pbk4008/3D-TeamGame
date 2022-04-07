@@ -5,6 +5,7 @@
 BEGIN(Engine)
 class CVIBuffer_PointInstance_Explosion;
 class CTexture;
+class CCullingBox;
 END
 class CMFCEffect final : public CEffect
 {
@@ -33,6 +34,7 @@ public:
 
 private:
 	CVIBuffer_PointInstance_Explosion* m_pBuffer = nullptr;
+	CCullingBox* m_pBox = nullptr;
 
 private:
 	CEffect::EFFECTDESC m_Desc;

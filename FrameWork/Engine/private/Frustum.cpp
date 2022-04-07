@@ -78,19 +78,21 @@ _bool CFrustum::isInWorld(_fvector vPosition, _float fRange)
 
 _bool CFrustum::isInWorld(_float4* vPoints, _float fRange)
 {
-	for (_uint i = 0; i < 6; ++i)
+	for (_uint i = 0; i < 8; i++)
 	{
-		for (_uint j = 0; j < 8; j++)
+		_bool bCheck = true;
+		_vector vPoint = XMLoadFloat4(&vPoints[i]);
+		for (_uint j = 0; j < 6; j++)
 		{
-			if (fRange > XMVectorGetX(XMPlaneDotCoord(XMLoadFloat4(&m_PlaneInWorld[i]), XMLoadFloat4(&vPoints[j]))))
-				return true;
+			_vector vPlane = XMLoadFloat4(&m_PlaneInWorld[j]);
+			_float fDot = XMVectorGetX(XMPlaneDotCoord(vPlane, vPoint));
+			if (fRange < fDot)
+				bCheck = false;
 		}
+		if (bCheck)
+			return true;
 	}
 	return false;
-	
-
-
-	return _bool();
 }
 
 _bool CFrustum::isInLocal(_fvector vPosition, _float fRange)

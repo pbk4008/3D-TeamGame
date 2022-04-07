@@ -30,16 +30,23 @@ _int CAberrant_Run::Tick(const _double& TimeDelta)
 
 	m_pAnimator->Tick(TimeDelta);
 
-	_fvector vMonsterPos = m_pTransform->Get_State(CTransform::STATE::STATE_POSITION);
-	//_fvector vDist = vMonsterPos - g_pObserver->Get_PlayerPos();
-	_float fDistToPlayer = g_pObserver->Get_Dist(vMonsterPos);
+	if ((_uint)CMonster_EarthAberrant::RUN_FWD == m_pAnimator->Get_CurrentAnimNode())
+	{
+		Chase_Player(TimeDelta);
+	}
+
+	if ((_uint)CMonster_EarthAberrant::RUN_FWD_START == m_pAnimator->Get_CurrentAnimNode())
+	{
+		Chase_Player(TimeDelta);
+	}
+
+	_float fDistToPlayer = g_pObserver->Get_Dist(m_pTransform->Get_State(CTransform::STATE::STATE_POSITION));
 	
 	m_pTransform->Face_Target(g_pObserver->Get_PlayerPos());
 	
 	m_fRunTime += (_float)TimeDelta;
 	if (0.5f < m_fRunTime)
 	{
-
 		if (m_iAttackRand == 0)
 		{
 			if (4.f > fDistToPlayer)
@@ -112,6 +119,19 @@ HRESULT CAberrant_Run::ExitState(void* pArg)
 void CAberrant_Run::Look_Player(void)
 {
 
+}
+
+void CAberrant_Run::Chase_Player(_double TimeDelta)
+{
+	_vector vPlayerPos = g_pObserver->Get_PlayerPos();
+	_vector vPos = m_pTransform->Get_State(CTransform::STATE_POSITION);
+
+	_vector vDir = vPlayerPos - vPos;
+	vDir = XMVector3Normalize(vDir);
+
+	vDir *= (_float)TimeDelta * 5.f;
+
+	m_pTransform->Add_Velocity(vDir);
 }
 
 CAberrant_Run* CAberrant_Run::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext, void* pArg)

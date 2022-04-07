@@ -53,7 +53,7 @@ _int CBastion_2HSword_Rage::Tick(const _double& _dDeltaTime)
 			m_pAnimator->Get_AnimController()->Set_PlaySpeed(1.f);
 			m_pOwner->set_Attack(false);
 			m_pOwner->set_RageOn(false);
-			m_pOwner->set_RageOn(false);
+			m_pOwner->set_RandAttack(-1);
 		}
 	}
 	return _int();

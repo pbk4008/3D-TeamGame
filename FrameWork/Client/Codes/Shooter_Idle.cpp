@@ -32,8 +32,6 @@ _int CShooter_Idle::Tick(const _double& _dDeltaTime)
 	if (NO_EVENT != iProgress)
 		return iProgress;
 
-	cout << "idle" << endl;
-
 	m_pAnimator->Tick(_dDeltaTime);
 
 	return _int();
@@ -61,7 +59,6 @@ HRESULT CShooter_Idle::EnterState()
 	if (FAILED(__super::EnterState()))
 		return E_FAIL;
 	
-	cout << "idleÁøÀÔ" << endl;
 	m_pAnimator->Change_AnyEntryAnimation((_uint)CMonster_Bastion_Shooter::ANIM_TYPE::IDLE);
 
 	return S_OK;
@@ -71,7 +68,6 @@ HRESULT CShooter_Idle::ExitState()
 {
 	if (FAILED(__super::ExitState()))
 		return E_FAIL;
-	cout << "idleÅ»Ãâ" << endl;
 	return S_OK;
 }
 

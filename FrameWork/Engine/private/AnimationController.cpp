@@ -314,6 +314,7 @@ HRESULT CAnimationController::SetUp_NextAnimation(const string& _strAnimTag, con
 				m_strPreAnimTag = m_strCurAnimTag;
 				m_strCurAnimTag = _strAnimTag;
 				m_iCurKeyFrameIndex = pAnimation->Get_CurrentKeyFrameIndex();
+				m_iMaxKeyFrameIndex = pAnimation->Get_MaxKeyFrameIndex();
 				return S_OK;
 			}
 		}

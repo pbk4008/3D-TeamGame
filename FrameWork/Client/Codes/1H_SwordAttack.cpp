@@ -37,6 +37,11 @@ _int C1H_SwordAttack::Tick(const _double& _dDeltaTime)
 	else
 		m_pSilvermane->Set_IsAttack(false);
 
+	if (m_iTrailStartIndex < iCurKeyFrameIndex && m_iTrailEndIndex > iCurKeyFrameIndex)
+		m_pSilvermane->Set_IsTrail(true);
+	else
+		m_pSilvermane->Set_IsTrail(false);
+
 
 	return _int();
 }

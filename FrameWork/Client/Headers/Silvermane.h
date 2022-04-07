@@ -64,6 +64,9 @@ public:
 	//플레이어 씬 이동시 다음씬으로 넘어가야 할 데이터 생성 후 밖으로 빼내기
 	const SCENEMOVEDATA Get_SceneMoveData() const;
 
+	void Set_Radial(_bool check);
+	void Set_RadialCnt(_int radialCnt);
+
 	void Set_IsHit(const _bool _isHit);
 	void Set_IsFall(const _bool _isFall);
 	void Set_IsDash(const _bool _isDash);
@@ -80,16 +83,18 @@ public:
 
 public: /* For.Weapon */
 	const _bool IsEquipWeapon() const;
-	const _bool IsEquipShield() const;
 	const CWeapon::EType Get_WeaponType() const;
 	virtual void Set_IsAttack(const _bool _isAttack);
+	void Set_IsTrail(const _bool _isTrail);
 	void Set_EquipWeapon(const _bool _isEquipWeapon);
 	void Set_WeaponFixedBone(const string& _wstrFixedBoneTag);
 	void Set_WeaponFixedBone(CHierarchyNode* _pFixedBone);
 	const _bool Change_Weapon(const wstring& _name);
 	HRESULT Change_State(const wstring& _wstrStateTag);
+	void RangeAttack();
 
 public: /* For.Shield */
+	const _bool IsEquipShield() const;
 	const _float Get_BlockTime() const;
 	void Set_EquipShield(const _bool _isEquipShield);
 	void Set_EquipShieldAnim(const _bool _isEquipShield);

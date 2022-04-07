@@ -98,7 +98,7 @@ _int CMainApp::Tick(_double TimeDelta)
 	if (g_pGameInstance->getkeyDown(DIK_F4))
 	{
 		m_bOutline = !m_bOutline;
-		m_pRenderer->SetRenderButton(CRenderer::OUTLINE, m_bOutline);
+		m_pRenderer->SetRenderButton(CRenderer::RADIAL, m_bOutline);
 	}
 
 	if (g_pGameInstance->getkeyDown(DIK_P))

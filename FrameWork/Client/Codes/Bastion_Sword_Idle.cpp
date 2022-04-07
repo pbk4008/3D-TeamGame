@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "Bastion_Sword_Idle.h"
+#include "Monster_Bastion_Sword.h"
 #include "Animator.h"
 
 CBastion_Sword_Idle::CBastion_Sword_Idle(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
@@ -19,6 +20,7 @@ HRESULT CBastion_Sword_Idle::NativeConstruct(void* _pArg)
 	m_wstrTag = tDesc.pName;
 	m_pAnimator = tDesc.pAnimator;
 	m_pTransform = tDesc.pTransform;
+	m_pStateController = tDesc.pController;
 	//Safe_AddRef(m_pAnimator);
 	//Safe_AddRef(m_pTransform);
 
@@ -36,6 +38,11 @@ _int CBastion_Sword_Idle::Tick(const _double& _dDeltaTime)
 	//애니메이터 돌리기
 	m_pAnimator->Tick(_dDeltaTime);
 
+	_float fDist = g_pObserver->Get_Dist(m_pTransform->Get_State(CTransform::STATE_POSITION));
+
+	if (fDist < 10.f)
+		m_pStateController->Change_State(L"Chase");
+
 	return _int();
 }
 
@@ -51,7 +58,7 @@ HRESULT CBastion_Sword_Idle::Render()
 
 HRESULT CBastion_Sword_Idle::EnterState()
 {
-	
+	m_pAnimator->Change_AnyEntryAnimation((_uint)CMonster_Bastion_Sword::ANIM_TYPE::IDLE);
 	return S_OK;
 }
 

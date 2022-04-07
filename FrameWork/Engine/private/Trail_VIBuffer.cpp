@@ -109,7 +109,6 @@ HRESULT CTrail_VIBuffer::Add_Vertex(_fvector Startpos, _fvector Endpos)
 	if (m_dwUsingVtxcnt >= m_iNumVertices || m_dwUsingTriCnt >= m_iNumPrimitive)
 		return S_OK;
 
-
 	D3D11_MAPPED_SUBRESOURCE Vertices, Indices;
 
 	m_pDeviceContext->Map(m_pVB, 0, D3D11_MAP_WRITE_DISCARD, 0, &Vertices);
@@ -176,9 +175,12 @@ HRESULT CTrail_VIBuffer::Add_Vertex_CatmullRom(list<pair<_fvector, _fvector>>* p
 
 		for (; iter3 != iterEnd;)
 		{
+			_vector V = XMVectorSet(0.1f, 0.3f, 0.5f, 0.7f);
 			_vector vItplTop, vItplBottom;
-			vItplTop = XMVectorCatmullRom(iter0->first, iter1->first, iter2->first, iter3->first, 0.5f);
-			vItplBottom = XMVectorCatmullRom(iter0->second, iter1->second, iter2->second, iter3->second, 0.5f);
+			vItplTop = XMVectorCatmullRomV(iter0->first, iter1->first, iter2->first, iter3->first, V);
+			vItplBottom = XMVectorCatmullRomV(iter0->second, iter1->second, iter2->second, iter3->second, V);
+			/*vItplTop = XMVectorCatmullRom(iter0->first, iter1->first, iter2->first, iter3->first, 0.5f);
+			vItplBottom = XMVectorCatmullRom(iter0->second, iter1->second, iter2->second, iter3->second, 0.5f);*/
 
 			ItplList.insert(iter2, make_pair(vItplTop, vItplBottom));
 
@@ -188,9 +190,10 @@ HRESULT CTrail_VIBuffer::Add_Vertex_CatmullRom(list<pair<_fvector, _fvector>>* p
 			++iter3;
 		}
 	}
+
 	D3D11_MAPPED_SUBRESOURCE Vertices, Indices;
 
-	m_pDeviceContext->Map(m_pVB, 0, D3D11_MAP_WRITE_NO_OVERWRITE, 0, &Vertices);
+	m_pDeviceContext->Map(m_pVB, 0, D3D11_MAP_WRITE_DISCARD, 0, &Vertices);
 
 	m_dwUsingVtxcnt = (_ushort)ItplList.size() * 2;
 	m_dwUsingTriCnt = m_dwUsingVtxcnt - 2;
@@ -204,14 +207,14 @@ HRESULT CTrail_VIBuffer::Add_Vertex_CatmullRom(list<pair<_fvector, _fvector>>* p
 	_uint i = 0; 
 	for (auto& Pair : ItplList)
 	{
-		_float3 startpos, endpos;
-		XMStoreFloat3(&startpos, Pair.first);
-		((VTXTEX*)Vertices.pData)[i].vPosition = startpos;
+		_float3 top, bottom;
+		XMStoreFloat3(&top, Pair.first);
+		((VTXTEX*)Vertices.pData)[i].vPosition = top;
 		((VTXTEX*)Vertices.pData)[i].vTexUV = _float2(((_float)i / 2) / (m_dwUsingVtxcnt / 2), 0.f);
 		++i;
 		
-		XMStoreFloat3(&endpos, Pair.second);
-		((VTXTEX*)Vertices.pData)[i].vPosition = endpos;
+		XMStoreFloat3(&bottom, Pair.second);
+		((VTXTEX*)Vertices.pData)[i].vPosition = bottom;
 		((VTXTEX*)Vertices.pData)[i].vTexUV = _float2(((_float)i / 2) / (m_dwUsingVtxcnt / 2), 1.f);
 		++i;
 	}
@@ -219,7 +222,7 @@ HRESULT CTrail_VIBuffer::Add_Vertex_CatmullRom(list<pair<_fvector, _fvector>>* p
 	m_pDeviceContext->Unmap(m_pVB, 0);
 
 	// Index Buffer
-	m_pDeviceContext->Map(m_pIB, 0, D3D11_MAP_WRITE_NO_OVERWRITE, 0, &Indices);
+	m_pDeviceContext->Map(m_pIB, 0, D3D11_MAP_WRITE_DISCARD, 0, &Indices);
 
 	for (_uint i = 0; i < m_dwUsingTriCnt; ++i)
 	{

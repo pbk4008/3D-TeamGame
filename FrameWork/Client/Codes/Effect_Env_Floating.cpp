@@ -70,48 +70,38 @@ HRESULT CEffect_Env_Floating::NativeConstruct(const _uint _iSceneID, void* pArg)
 
 _int CEffect_Env_Floating::Tick(_double TimeDelta)
 {
-	if (g_pGameInstance->getkeyDown(DIK_NUMPAD1))
+	/*if (g_pGameInstance->getkeyDown(DIK_NUMPAD1))
 	{
 		m_pBuffer->Set_Desc(m_backupDesc);
 		m_pBuffer->Particle_Reset();
 		m_Desc.fCurTime = 0.f;
-	}
+	}*/
 
 	m_pBuffer->Update(g_dDeltaTime, m_Desc.iAxis);
 
-	m_fNonActiveTimeAcc += (_float)g_dDeltaTime;
-	if (4000.f <= m_fNonActiveTimeAcc)
-	{
-		setActive(false);
-		//m_pRenderer->SetRenderButton(CRenderer::PARTICLE, false);
-		m_fNonActiveTimeAcc = 0.f;
-	}
-
-	//_uint iAllFrameCount = (m_Desc.iImageCountX * m_Desc.iImageCountY);
-	//m_Desc.fFrame += (_float)(iAllFrameCount * g_dDeltaTime * m_Desc.fEffectPlaySpeed); //플레이속도 
-	//if (m_Desc.fFrame >= iAllFrameCount)
+	//m_fNonActiveTimeAcc += (_float)g_dDeltaTime;
+	//if (4000.f <= m_fNonActiveTimeAcc)
 	//{
-	//	m_Desc.fFrame = 0;
+	//	setActive(false);
+	//	m_fNonActiveTimeAcc = 0.f;
 	//}
 
-	//if (m_Desc.fMaxLifeTime > m_Desc.fCurTime)
-	//{
-	//	m_Desc.fCurTime += g_dDeltaTime;
-	//}
-
-	//if (m_Desc.fMaxLifeTime < m_Desc.fCurTime)
-	//{
-	//	m_Desc.fCurTime = m_Desc.fMaxLifeTime;
-	//}
+	_matrix matCullingBoxPivot = XMMatrixIdentity();
+	matCullingBoxPivot.r[3] = { m_Desc.CullingBoxPos.x, m_Desc.CullingBoxPos.y,m_Desc.CullingBoxPos.z, 1.f };
+	m_pBox->Update_Matrix(matCullingBoxPivot * m_pTransform->Get_WorldMatrix());
 
     return 0;
 }
 
 _int CEffect_Env_Floating::LateTick(_double TimeDelta)
 {
-	if (nullptr != m_pRenderer)
+	_bool bCulling = g_pGameInstance->isIn_WorldFrustum(m_pBox->Get_Points(), 20.f);
+	if (true == bCulling)
 	{
-		m_pRenderer->Add_RenderGroup(CRenderer::RENDER::RENDER_NONALPHA, this);
+		if (nullptr != m_pRenderer)
+		{
+			m_pRenderer->Add_RenderGroup(CRenderer::RENDER::RENDER_NONALPHA, this);
+		}
 	}
 
 	return 0;
@@ -119,6 +109,8 @@ _int CEffect_Env_Floating::LateTick(_double TimeDelta)
 
 HRESULT CEffect_Env_Floating::Render()
 {
+	//m_pBox->Render(L"Camera_Silvermane");
+
 	_matrix XMWorldMatrix = XMMatrixTranspose(m_pTransform->Get_WorldMatrix());
 	_matrix XMViewMatrix = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_VIEW));
 	_matrix XMProjectMatrix = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_PROJECTION));
@@ -189,6 +181,12 @@ HRESULT CEffect_Env_Floating::SetUp_Components()
 	_vector vPos = { XMVectorGetX(m_Desc.fMyPos), XMVectorGetY(m_Desc.fMyPos), XMVectorGetZ(m_Desc.fMyPos), 1.f };
 	m_pTransform->Set_State(CTransform::STATE_POSITION, vPos);
 
+	//cullingbox Setting
+	m_pBox = g_pGameInstance->Clone_Component<CCullingBox>(0, L"Proto_Component_CullingBox");
+	if (!m_pBox)
+		return E_FAIL;
+	m_pBox->Set_Length(m_Desc.CullingBoxSize.x, m_Desc.CullingBoxSize.y, m_Desc.CullingBoxSize.z);
+
 	//버퍼 Clone
 	_tcscpy_s(m_backupDesc.ShaderFilePath, m_Desc.ShaderFullFilePath);
 	m_backupDesc.matParticle = m_Desc.ParticleMat;
@@ -200,7 +198,7 @@ HRESULT CEffect_Env_Floating::SetUp_Components()
 	m_backupDesc.iNumInstance = m_Desc.iNumInstance;
 	m_backupDesc.fLifeTime = m_Desc.fMaxLifeTime;
 	m_backupDesc.fCurTime = m_Desc.fCurTime;
-	if (FAILED(__super::SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_VIBuffer_PointInstance_Floating", L"Com_VIBuffer", (CComponent**)&m_pBuffer, &m_backupDesc)))
+	if (FAILED(__super::SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_VIBuffer_PointInstance_Env_Floating", L"Com_VIBuffer", (CComponent**)&m_pBuffer, &m_backupDesc)))
 		return E_FAIL;
 	return S_OK;
 }
@@ -234,6 +232,7 @@ CGameObject* CEffect_Env_Floating::Clone(const _uint _iSceneID, void* pArg)
 
 void CEffect_Env_Floating::Free()
 {
+	Safe_Release(m_pBox);
 	Safe_Release(m_pBuffer);
 
 	__super::Free();

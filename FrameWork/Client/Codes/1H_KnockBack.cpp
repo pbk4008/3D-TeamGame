@@ -71,8 +71,19 @@ HRESULT C1H_KnockBack::EnterState()
 	if (FAILED(__super::EnterState()))
 		return E_FAIL;
 
-	if (FAILED(m_pAnimationController->SetUp_NextAnimation("SK_Silvermane.ao|A_1H_KnockBack_Land_Player", false)))
-		return E_FAIL;
+	uniform_int_distribution<_uint> iRange(0, 1);
+
+	switch (iRange(g_random))
+	{
+	case 0:
+		if (FAILED(m_pAnimationController->SetUp_NextAnimation("SK_Silvermane.ao|A_1H_KnockBack_Clash_Player", false)))
+			return E_FAIL;
+		break;
+	case 1:
+		if (FAILED(m_pAnimationController->SetUp_NextAnimation("SK_Silvermane.ao|A_1H_KnockBack_Land_Player", false)))
+			return E_FAIL;
+		break;
+	}
 	m_pAnimationController->Set_RootMotion(true, true);
 	m_pAnimationController->Mul_MoveSpeed(0.5f);
 

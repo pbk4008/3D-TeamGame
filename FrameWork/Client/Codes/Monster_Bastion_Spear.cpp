@@ -10,14 +10,12 @@
 #include "Spear_Idle.h"
 #include "Spear_Death.h"
 #include "Spear_Chaser.h"
-#include "Spear_Chaser_End.h"
 #include "Spear_Groggy.h"
 #include "Spear_Groggy_End.h"
 #include "Spear_Hit.h"
 #include "Spear_Attack.h"
 #include "Spear_Bwd_Dash.h"
 #include "Spear_Charge_Attack.h"
-#include "Spear_Charge_Attack_End.h"
 #include "Spear_Guard.h"
 
 
@@ -27,6 +25,7 @@ CMonster_Bastion_Spear::CMonster_Bastion_Spear(ID3D11Device* _pDevice, ID3D11Dev
 	, m_pModel(nullptr)
 	, m_pStateController(nullptr)
 	, m_pAnimator(nullptr)
+	, m_bHalf(false)
 {
 }
 
@@ -36,6 +35,7 @@ CMonster_Bastion_Spear::CMonster_Bastion_Spear(const CMonster_Bastion_Spear& _rh
 	, m_pModel(_rhs.m_pModel)
 	, m_pStateController(_rhs.m_pStateController)
 	, m_pAnimator(_rhs.m_pAnimator)
+	, m_bHalf(_rhs.m_bHalf)
 {
 	Safe_AddRef(m_pCharacterController);
 	Safe_AddRef(m_pModel);
@@ -232,7 +232,7 @@ HRESULT CMonster_Bastion_Spear::Render()
 	}
 
 #ifdef _DEBUG
-	Render_Debug();
+	//Render_Debug();
 #endif
 	return S_OK;
 }
@@ -452,8 +452,7 @@ HRESULT CMonster_Bastion_Spear::Ready_AnimFSM(void)
 	m_pAnimator->Set_UpAutoChangeAnimation((_uint)ANIM_TYPE::A_STUN_ED, (_uint)ANIM_TYPE::A_IDLE);
 
 	m_pAnimator->Set_UpAutoChangeAnimation((_uint)ANIM_TYPE::A_ATTACK_CHARGE_ST, (_uint)ANIM_TYPE::A_ATTACK_CHARGE);
-	//m_pAnimator->Set_UpAutoChangeAnimation((_uint)ANIM_TYPE::A_ATTACK_CHARGE, (_uint)ANIM_TYPE::A_ATTACK_CHARGE_ED);
-	m_pAnimator->Set_UpAutoChangeAnimation((_uint)ANIM_TYPE::A_ATTACK_CHARGE_ED, (_uint)ANIM_TYPE::A_IDLE);
+	m_pAnimator->Set_UpAutoChangeAnimation((_uint)ANIM_TYPE::A_ATTACK_CHARGE, (_uint)ANIM_TYPE::A_ATTACK_CHARGE_ED);
 #pragma endregion
 
 #pragma region Anim to Anim Connect
@@ -484,17 +483,11 @@ HRESULT CMonster_Bastion_Spear::Ready_StateFSM(void)
 	/* for. Player Chaser */
 	if (FAILED(m_pStateController->Add_State(L"Chaser", CSpear_Chaser::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
-	/* for. Player Chaser End */
-	if (FAILED(m_pStateController->Add_State(L"Chaser_End", CSpear_Chaser_End::Create(m_pDevice, m_pDeviceContext))))
-		return E_FAIL;
 	/* for. Attack*/
 	if (FAILED(m_pStateController->Add_State(L"Attack", CSpear_Attack::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 	/* for. Charge Attack*/
 	if (FAILED(m_pStateController->Add_State(L"Charge_Attack", CSpear_Charge_Attack::Create(m_pDevice, m_pDeviceContext))))
-		return E_FAIL;
-	/* for. Charge Attack End*/
-	if (FAILED(m_pStateController->Add_State(L"Charge_Attack_End", CSpear_Charge_Attack_End::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 	/* for. Death */
 	if (FAILED(m_pStateController->Add_State(L"Death", CSpear_Death::Create(m_pDevice, m_pDeviceContext))))
@@ -568,6 +561,7 @@ HRESULT CMonster_Bastion_Spear::Render_Debug(void)
 
 void CMonster_Bastion_Spear::OnTriggerEnter(CCollision& collision)
 {
+	/*int a = 0;*/
 	m_pStateController->OnTriggerEnter(collision);
 }
 
@@ -590,6 +584,20 @@ void CMonster_Bastion_Spear::Groggy_Start()
 	m_pPanel->Set_GroggyBar(Get_GroggyGaugeRatio());
 }
 
+void CMonster_Bastion_Spear::Hit(const ATTACKDESC& _tAttackDesc)
+{
+	if (m_bDead || 0.f >= m_fCurrentHp)
+		return;
+
+	m_pPanel->Set_Show(true);
+
+	m_fCurrentHp -= _tAttackDesc.fDamage;
+	CCollision collision;
+	collision.pGameObject = _tAttackDesc.pHitObject;
+
+	Hit(collision);
+}
+
 void CMonster_Bastion_Spear::Hit(CCollision& collision)
 {
 	if (!m_bDead)
@@ -608,6 +616,11 @@ void CMonster_Bastion_Spear::Hit(CCollision& collision)
 				if (L"Guard" != m_pStateController->Get_CurStateTag()
 					|| m_iGuardCount<=0)
 				{
+					if (m_bHalf)
+					{
+						if (!m_bChargeOn)
+							m_bChargeOn = true;
+					}
 					m_pPanel->Set_Show(true);
 					m_bGuard = false;
 					Set_Current_HP(-1);
@@ -615,23 +628,21 @@ void CMonster_Bastion_Spear::Hit(CCollision& collision)
 					m_pStateController->Change_State(L"Hit");
 					Active_Effect((_uint)EFFECT::HIT);
 					Active_Effect((_uint)EFFECT::FLOATING);
+					if (false == m_bGroggy)
+					{
+						//그로기 아닐때만 증가할수있게
+						m_pPanel->Set_GroggyBar(Get_GroggyGaugeRatio());
+					}
 				}
 				else
 				{
 					m_iGuardCount--;
+					cout << m_iGuardCount << endl;
 					if (m_iGuardCount < 0)
 						m_iGuardCount = 0;
-					Active_Effect((_uint)EFFECT::GUARD);
+					//Active_Effect((_uint)EFFECT::GUARD);
 				}
 				m_pPanel->Set_HpBar(Get_HpRatio());
-
-				if (false == m_bGroggy)
-				{
-					//그로기 아닐때만 증가할수있게
-					m_pPanel->Set_GroggyBar(Get_GroggyGaugeRatio());
-					if (m_pAnimator->Get_CurrentAnimNode() != (_uint)CMonster_Bastion_Spear::ANIM_TYPE::A_GUARD)
-						m_pStateController->Change_State(L"Hit");
-				}
 			}
 		}
 	}

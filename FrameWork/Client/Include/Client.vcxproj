@@ -330,6 +330,7 @@ call Update_Client.bat</Command>
     <ClInclude Include="..\Headers\Effect_DeathParticle.h" />
     <ClInclude Include="..\Headers\Effect_Env_Fire.h" />
     <ClInclude Include="..\Headers\Effect_Env_Floating.h" />
+    <ClInclude Include="..\Headers\Effect_Falling_Leaf.h" />
     <ClInclude Include="..\Headers\Effect_Guard.h" />
     <ClInclude Include="..\Headers\Effect_HitFloating.h" />
     <ClInclude Include="..\Headers\Effect_HitParticle.h" />
@@ -438,9 +439,7 @@ call Update_Client.bat</Command>
     <ClInclude Include="..\Headers\Spear_Attack.h" />
     <ClInclude Include="..\Headers\Spear_Bwd_Dash.h" />
     <ClInclude Include="..\Headers\Spear_Charge_Attack.h" />
-    <ClInclude Include="..\Headers\Spear_Charge_Attack_End.h" />
     <ClInclude Include="..\Headers\Spear_Chaser.h" />
-    <ClInclude Include="..\Headers\Spear_Chaser_End.h" />
     <ClInclude Include="..\Headers\Spear_Death.h" />
     <ClInclude Include="..\Headers\Spear_Groggy.h" />
     <ClInclude Include="..\Headers\Spear_Groggy_End.h" />
@@ -631,6 +630,7 @@ call Update_Client.bat</Command>
     <ClCompile Include="..\Codes\Effect_DeathParticle.cpp" />
     <ClCompile Include="..\Codes\Effect_Env_Fire.cpp" />
     <ClCompile Include="..\Codes\Effect_Env_Floating.cpp" />
+    <ClCompile Include="..\Codes\Effect_Falling_Leaf.cpp" />
     <ClCompile Include="..\Codes\Effect_Guard.cpp" />
     <ClCompile Include="..\Codes\Effect_HitFloating.cpp" />
     <ClCompile Include="..\Codes\Effect_HitParticle.cpp" />
@@ -745,9 +745,7 @@ call Update_Client.bat</Command>
     <ClCompile Include="..\Codes\Spear_Attack.cpp" />
     <ClCompile Include="..\Codes\Spear_Bwd_Dash.cpp" />
     <ClCompile Include="..\Codes\Spear_Charge_Attack.cpp" />
-    <ClCompile Include="..\Codes\Spear_Charge_Attack_End.cpp" />
     <ClCompile Include="..\Codes\Spear_Chaser.cpp" />
-    <ClCompile Include="..\Codes\Spear_Chaser_End.cpp" />
     <ClCompile Include="..\Codes\Spear_Death.cpp" />
     <ClCompile Include="..\Codes\Spear_Groggy.cpp" />
     <ClCompile Include="..\Codes\Spear_Groggy_End.cpp" />
@@ -832,6 +830,7 @@ call Update_Client.bat</Command>
     <FxCompile Include="..\bin\ShaderFile\Shader_Monster.hlsl" />
     <FxCompile Include="..\bin\ShaderFile\Shader_Panel_UI.hlsl" />
     <FxCompile Include="..\bin\ShaderFile\Shader_Particle.hlsl" />
+    <FxCompile Include="..\bin\ShaderFile\Shader_Particle_Size.hlsl" />
     <FxCompile Include="..\bin\ShaderFile\Shader_RectFire.hlsl" />
     <FxCompile Include="..\bin\ShaderFile\Shader_Shield.hlsl" />
     <FxCompile Include="..\bin\ShaderFile\Shader_SilverMane.hlsl" />

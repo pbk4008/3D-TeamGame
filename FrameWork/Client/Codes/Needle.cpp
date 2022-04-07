@@ -50,16 +50,18 @@ HRESULT CNeedle::NativeConstruct(const _uint _iSceneID, void* _pArg)
 	if (FAILED(__super::NativeConstruct(_iSceneID, _pArg)))
 		return E_FAIL;
 
-	if (FAILED(Ready_Components()))
-		return E_FAIL;
-
 	if (_pArg)
 		m_pFixedBone = static_cast<CHierarchyNode*>(_pArg);
+
+	if (FAILED(Ready_Components()))
+		return E_FAIL;
 
 	XMStoreFloat4x4(&m_matPivot, XMMatrixRotationRollPitchYaw(XMConvertToRadians(-20.f), XMConvertToRadians(-67.f), XMConvertToRadians(0.f)) * XMMatrixTranslation(0.5f, 0.05f, -0.2f));
 
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer(m_iSceneID, L"Layer_Effect", L"Proto_GameObject_TrailEffect", m_pTransform, (CGameObject**)&m_pTrailEffect)))
 		MSGBOX(L"트레일 이펙트 생성 실패. from Needle");
+
+	m_fDamage = 3;
 
 	return S_OK;
 }
@@ -80,33 +82,10 @@ _int CNeedle::Tick(_double _dDeltaTime)
 
 _int CNeedle::LateTick(_double _dDeltaTime)
 {
-	//if (g_pObserver->IsAttack())
-	//	m_bTrailOnOff = true;
-	//else
-	//	m_bTrailOnOff = false;
-
-	//if (m_bTrailOnOff == true)
-	//{
-	//	_vector startpos, endpos, look;
-	//	_matrix world = m_pTransform->Get_WorldMatrix();
-	//	look = world.r[2];
-	//	startpos = world.r[3];
-	//	endpos = world.r[3];
-	//	look = XMVector3Normalize(look);
-	//	startpos += look * 1.8f;
-	//	endpos += look * 2.f;
-
-	//	m_pTrail->AddVertex(startpos, endpos);
-	//}
-	//else
-	//{
-	//	m_pTrail->Clear_Vertex();
-	//}
-
 	if (0 > __super::LateTick(_dDeltaTime))
 		return -1;
 
-	if (m_isAttack)
+	if (m_isTrail)
 	{
 		m_pTrailEffect->Record_Points(_dDeltaTime);
 		m_pTrailEffect->Set_IsRender(true);
@@ -119,6 +98,30 @@ _int CNeedle::LateTick(_double _dDeltaTime)
 
 	if(m_pRenderer)
 		m_pRenderer->Add_RenderGroup(CRenderer::RENDER_NONALPHA, this);
+
+
+	//if (g_pObserver->IsAttack())
+	//	m_bTrailOnOff = true;
+	//else
+	//	m_bTrailOnOff = false;
+
+	//if (m_bTrailOnOff == true)
+	//{
+	//	_vector top, bottom, look;
+	//	_matrix world = m_pTransform->Get_WorldMatrix();
+	//	
+	//	look = world.r[2];
+	//	top = world.r[3];
+	//	bottom = world.r[3];
+	//	/*look = XMVector3Normalize(look);*/
+	//	top += look * 2.5f;
+	//	bottom += look * 0.5f;
+
+	//	m_pTrail->AddVertex(top, bottom);
+	//	m_pTrail->Tick(_dDeltaTime);
+	//}
+	//else
+	//	m_pTrail->Clear_Vertex();
 
 	return _int();
 }
@@ -149,7 +152,60 @@ HRESULT CNeedle::Render()
 
 void CNeedle::OnTriggerEnter(CCollision& collision)
 {
+	_uint iTag = collision.pGameObject->getTag();
+	switch (iTag)
+	{
+	case (_uint)GAMEOBJECT::MONSTER_CRYSTAL:
+	case (_uint)GAMEOBJECT::MONSTER_ABERRANT:
+	case (_uint)GAMEOBJECT::MONSTER_1H:
+	case (_uint)GAMEOBJECT::MONSTER_2H:
+	case (_uint)GAMEOBJECT::MONSTER_HEALER:
+	case (_uint)GAMEOBJECT::MONSTER_SHOOTER:
+	case (_uint)GAMEOBJECT::MONSTER_SPEAR:
+		if (!m_isAttack)
+			return;
 
+		ATTACKDESC tAttackDesc = m_pOwner->Get_AttackDesc();
+		tAttackDesc.fDamage += m_fDamage;
+		tAttackDesc.pHitObject = this;
+		static_cast<CActor*>(collision.pGameObject)->Hit(tAttackDesc);
+		break;
+	}
+}
+
+void CNeedle::RangeAttack()
+{
+	OVERLAPDESC tOverlapDesc;
+	tOverlapDesc.geometry = PxSphereGeometry(4.f);
+	XMStoreFloat3(&tOverlapDesc.vOrigin, m_pTransform->Get_State(CTransform::STATE_POSITION));
+	CGameObject* pHitObject = nullptr;
+	tOverlapDesc.ppOutHitObject = &pHitObject;
+	tOverlapDesc.filterData.flags = PxQueryFlag::eDYNAMIC;
+	if (g_pGameInstance->Overlap(tOverlapDesc))
+	{
+		_uint iSize = (_uint)tOverlapDesc.vecHitObject.size();
+		for (_uint i = 0; i < iSize; ++i)
+		{
+			CActor* pActor = static_cast<CActor*>(tOverlapDesc.vecHitObject[i]);
+			_uint iTag = tOverlapDesc.vecHitObject[i]->getTag();
+			switch (iTag)
+			{
+			case (_uint)GAMEOBJECT::MONSTER_CRYSTAL:
+			case (_uint)GAMEOBJECT::MONSTER_ABERRANT:
+			case (_uint)GAMEOBJECT::MONSTER_1H:
+			case (_uint)GAMEOBJECT::MONSTER_2H:
+			case (_uint)GAMEOBJECT::MONSTER_HEALER:
+			case (_uint)GAMEOBJECT::MONSTER_SHOOTER:
+			case (_uint)GAMEOBJECT::MONSTER_SPEAR:
+				ATTACKDESC tAttackDesc = m_pOwner->Get_AttackDesc();
+				tAttackDesc.fDamage += m_fDamage * 0.5f;
+				tAttackDesc.iLevel = 2;
+				tAttackDesc.pHitObject = this;
+				pActor->Hit(tAttackDesc);
+				break;
+			}
+		}
+	}
 }
 
 HRESULT CNeedle::Ready_Components()

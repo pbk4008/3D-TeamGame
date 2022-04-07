@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "Bastion_Sword_Hit.h"
 #include	"Monster_Bastion_Sword.h"
+#include "Animation.h"
 
 CBastion_Sword_Hit::CBastion_Sword_Hit(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
 	: CMonster_FSM(_pDevice, _pDeviceContext)
@@ -33,11 +34,7 @@ _int CBastion_Sword_Hit::Tick(const _double& _dDeltaTime)
 		return -1;
 	m_pAnimator->Tick(_dDeltaTime);
 
-
-	if (m_fCurHp <= 0.f)
-		m_pStateController->Change_State(L"Death");
-
-	if(m_pAnimator->Get_CurrentAnimNode() == (_uint)CMonster_Bastion_Sword::ANIM_TYPE::IDLE)
+	if(m_pAnimator->Get_CurrentAnimation()->Is_Finished())
 		m_pStateController->Change_State(L"Idle");
 
 

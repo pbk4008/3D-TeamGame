@@ -19,7 +19,7 @@ HRESULT CVIBuffer_Trail::NativeConstruct_Prototype(const _tchar* _pShaderFilePat
 
 	/* D3D11_BUFFER_DESC */
 	m_iStride = sizeof(VTXTEX);
-	m_iNumVertices = 1000;
+	m_iNumVertices = 512;
 
 	m_VBDesc.ByteWidth = m_iStride * m_iNumVertices;
 	m_VBDesc.Usage = D3D11_USAGE_DYNAMIC;
@@ -40,12 +40,12 @@ HRESULT CVIBuffer_Trail::NativeConstruct_Prototype(const _tchar* _pShaderFilePat
 
 
 	/* D3D11_BUFFER_DESC */
-	m_IndicesByteLength = sizeof(FACEINDICES16);
-	m_iNumPrimitive = _iMaxVertices - 2;
+	m_IndicesByteLength = sizeof(FACEINDICES32);
+	m_iNumPrimitive = 512 - 2;
 	m_iNumIndicesFigure = 3;
 	//m_ePrimitiveTopology = D3D_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP;
 	m_ePrimitiveTopology = D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
-	m_eFormat = DXGI_FORMAT_R16_UINT;
+	m_eFormat = DXGI_FORMAT_R32_UINT;
 
 	m_IBDesc.ByteWidth = m_IndicesByteLength * m_iNumPrimitive;
 	m_IBDesc.Usage = D3D11_USAGE_DYNAMIC;
@@ -56,8 +56,8 @@ HRESULT CVIBuffer_Trail::NativeConstruct_Prototype(const _tchar* _pShaderFilePat
 
 	/* D3D11_SUBRESOURCE_DATA */
 	ZeroMemory(&m_IBSubresourceData, sizeof(D3D11_SUBRESOURCE_DATA));
-	m_pIndices = new FACEINDICES16[m_iNumPrimitive];
-	ZeroMemory(m_pIndices, sizeof(FACEINDICES16) * m_iNumPrimitive);
+	m_pIndices = new FACEINDICES32[m_iNumPrimitive];
+	ZeroMemory(m_pIndices, sizeof(FACEINDICES32) * m_iNumPrimitive);
 
 	m_IBSubresourceData.pSysMem = m_pIndices;
 
@@ -93,46 +93,41 @@ HRESULT CVIBuffer_Trail::Render_Curve(const _uint _iPassIndex)
 	return S_OK;
 }
 
-HRESULT CVIBuffer_Trail::Set_VertexTrail(const _float3 _arrPos[], const _float3 _arrDir[], const _float _fLength, const DWORD _dwCount)
+HRESULT CVIBuffer_Trail::Set_VertexTrail(const _float3 _vStartPoints[], const _float3 _vEndPoints[], const _uint _iCount)
 {
 	D3D11_MAPPED_SUBRESOURCE pVertices, pIndices;
 
 	// Vertex Buffer
 	m_pDeviceContext->Map(m_pVB, 0, D3D11_MAP_WRITE_DISCARD, 0, &pVertices);
 
-	//for (_ushort i = 0; i < _dwCount / 2; ++i)
-	for (_ushort i = 0; i < _dwCount; ++i)
+	for (_uint i = 0; i < _iCount; ++i)
 	{
-		_float3 vPosition;
-		XMStoreFloat3(&vPosition, XMLoadFloat3(&_arrPos[i]) - XMLoadFloat3(&_arrDir[i]) * _fLength);
-		((VTXTEX*)pVertices.pData)[i * 2 + 0].vPosition = vPosition;
-		//((VTXTEX*)pVertices.pData)[i * 2 + 0].vTexUV =  _float2(1.f, (i * 2 + 0) / _float(_dwCount - 2.f));
-		((VTXTEX*)pVertices.pData)[i * 2 + 0].vTexUV = _float2(1.f, (i * 2 + 0) / _float((_dwCount - 1) * 2));
+		((VTXTEX*)pVertices.pData)[i * 2 + 0].vPosition = _vStartPoints[i];
+		((VTXTEX*)pVertices.pData)[i * 2 + 0].vTexUV = _float2(1.f, (i * 2 + 0) / _float(_iCount - 2.f));
+		//((VTXTEX*)pVertices.pData)[i * 2 + 0].vTexUV = _float2(1.f, (i * 2 + 0) / _float((_iCount - 1) * 2));
 
-		XMStoreFloat3(&vPosition, XMLoadFloat3(&_arrPos[i]) + XMLoadFloat3(&_arrDir[i]) * _fLength);
-		((VTXTEX*)pVertices.pData)[i * 2 + 1].vPosition = vPosition;
-		//((VTXTEX*)pVertices.pData)[i * 2 + 1].vTexUV = _float2(1.f, (i * 2 + 1) / _float(_dwCount - 1.f));
-		((VTXTEX*)pVertices.pData)[i * 2 + 1].vTexUV = _float2(1.f, (i * 2 + 1) / _float(_dwCount * 2 - 1));
+		((VTXTEX*)pVertices.pData)[i * 2 + 1].vPosition = _vEndPoints[i];
+		((VTXTEX*)pVertices.pData)[i * 2 + 1].vTexUV = _float2(0.f, (i * 2 + 1) / _float(_iCount - 1.f));
+		//((VTXTEX*)pVertices.pData)[i * 2 + 1].vTexUV = _float2(1.f, (i * 2 + 1) / _float(_iCount * 2 - 1));
 	}
-	//m_iNumPrimitive = _dwCount - 2;
-	m_iNumPrimitive = (_dwCount - 1) * 2;
+	m_iNumPrimitive = (_iCount - 1) * 2;
 
 	m_pDeviceContext->Unmap(m_pVB, 0);
 
 	// Index Buffer
 	m_pDeviceContext->Map(m_pIB, 0, D3D11_MAP_WRITE_DISCARD, 0, &pIndices);
 
-	_ushort dwNumPrimitive = 0;
-	for (_ushort i = 0; i < m_iNumPrimitive / 2; ++i)
+	_uint iNumPrimitive = 0;
+	for (_uint i = 0; i < m_iNumPrimitive / 2; ++i)
 	{
-		((FACEINDICES16*)pIndices.pData)[dwNumPrimitive]._0 = i * 2;
-		((FACEINDICES16*)pIndices.pData)[dwNumPrimitive]._1 = i * 2 + 1;
-		((FACEINDICES16*)pIndices.pData)[dwNumPrimitive]._2 = i * 2 + 2;
-		++dwNumPrimitive;
-		((FACEINDICES16*)pIndices.pData)[dwNumPrimitive]._0 = i * 2 + 1;
-		((FACEINDICES16*)pIndices.pData)[dwNumPrimitive]._1 = i * 2 + 3;
-		((FACEINDICES16*)pIndices.pData)[dwNumPrimitive]._2 = i * 2 + 2;
-		++dwNumPrimitive;
+		((FACEINDICES32*)pIndices.pData)[iNumPrimitive]._0 = i * 2;
+		((FACEINDICES32*)pIndices.pData)[iNumPrimitive]._1 = i * 2 + 1;
+		((FACEINDICES32*)pIndices.pData)[iNumPrimitive]._2 = i * 2 + 2;
+		++iNumPrimitive;
+		((FACEINDICES32*)pIndices.pData)[iNumPrimitive]._0 = i * 2 + 1;
+		((FACEINDICES32*)pIndices.pData)[iNumPrimitive]._1 = i * 2 + 3;
+		((FACEINDICES32*)pIndices.pData)[iNumPrimitive]._2 = i * 2 + 2;
+		++iNumPrimitive;
 	}
 
 	m_pDeviceContext->Unmap(m_pIB, 0);

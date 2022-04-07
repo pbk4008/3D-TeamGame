@@ -6,6 +6,7 @@ CCullingBox::CCullingBox()
 	: m_pGizmo(nullptr)
 {
 	ZeroMemory(m_pPoints, sizeof(_float4) * 8);
+	ZeroMemory(m_pCreatePoints, sizeof(_float4) * 8);
 }
 
 CCullingBox::CCullingBox(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
@@ -13,6 +14,7 @@ CCullingBox::CCullingBox(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceCont
 	, m_pGizmo(nullptr)
 {
 	ZeroMemory(m_pPoints, sizeof(_float4) * 8);
+	ZeroMemory(m_pCreatePoints, sizeof(_float4) * 8);
 }
 
 CCullingBox::CCullingBox(const CCullingBox& rhs)
@@ -22,6 +24,9 @@ CCullingBox::CCullingBox(const CCullingBox& rhs)
 	Safe_AddRef(m_pGizmo);
 	for (_uint i = 0; i < 8; i++)
 		m_pPoints[i] = rhs.m_pPoints[i];
+
+	for (_uint i = 0; i < 8; i++)
+		m_pCreatePoints[i] = rhs.m_pCreatePoints[i];
 }
 
 HRESULT CCullingBox::NativeConstruct_Prototype()
@@ -39,14 +44,14 @@ HRESULT CCullingBox::NativeConstruct(void* pArg)
 	if (FAILED(CComponent::NativeConstruct(pArg)))
 		return E_FAIL;
 
-	m_pPoints[0] = { -1.f, -1.f, -1.f, 1.f };
-	m_pPoints[1] = {  1.f, -1.f, -1.f, 1.f };
-	m_pPoints[2] = {  1.f, -1.f,  1.f, 1.f };
-	m_pPoints[3] = { -1.f, -1.f,  1.f, 1.f };
-	m_pPoints[4] = { -1.f,  1.f, -1.f, 1.f };
-	m_pPoints[5] = { 1.f,  1.f, -1.f, 1.f };
-	m_pPoints[6] = { 1.f,  1.f,  1.f, 1.f };
-	m_pPoints[7] = { -1.f,  1.f,  1.f, 1.f };
+	m_pCreatePoints[0] = { -1.f, -1.f, -1.f, 1.f };
+	m_pCreatePoints[1] = {  1.f, -1.f, -1.f, 1.f };
+	m_pCreatePoints[2] = {  1.f, -1.f,  1.f, 1.f };
+	m_pCreatePoints[3] = { -1.f, -1.f,  1.f, 1.f };
+	m_pCreatePoints[4] = { -1.f,  1.f, -1.f, 1.f };
+	m_pCreatePoints[5] = { 1.f,  1.f, -1.f, 1.f };
+	m_pCreatePoints[6] = { 1.f,  1.f,  1.f, 1.f };
+	m_pCreatePoints[7] = { -1.f,  1.f,  1.f, 1.f };
 
 	return S_OK;
 }
@@ -78,7 +83,7 @@ _uint CCullingBox::Update_Matrix(_fmatrix matTransform)
 
 	for (_uint i = 0; i < 8; i++)
 	{
-		_vector vPoint = XMLoadFloat4(&m_pPoints[i]);
+		_vector vPoint = XMLoadFloat4(&m_pCreatePoints[i]);
 		vPoint = XMVector3TransformCoord(vPoint, matTransform);
 		XMStoreFloat4(&m_pPoints[i], vPoint);
 	}
@@ -111,34 +116,43 @@ HRESULT CCullingBox::CreateWithPoints(_fvector vMin, _fvector vMax)
 	vPoint[7] = XMVectorSet(fMinX, fMaxY, fMaxZ,1.f);
 
 	for (_uint i = 0; i < 8; i++)
-		XMStoreFloat4(&m_pPoints[i], vPoint[i]);
+		XMStoreFloat4(&m_pCreatePoints[i], vPoint[i]);
 
 	return S_OK;
 }
 
-HRESULT CCullingBox::CreateWithLenght(_float fWidth, _float fHeight, _float fDepth)
+HRESULT CCullingBox::Set_Length(_float fWidth, _float fHeight, _float fDepth)
 {
-	_vector vPoints[8];
+	_float fSizeX, fSizeY, fSizeZ;
 
-	for (_uint i = 0; i < 8; i++)
-		vPoints[i] = XMLoadFloat4(&m_pPoints[i]);
+	fSizeX = fWidth * 0.5f;
+	fSizeY = fHeight * 0.5f;
+	fSizeZ = fDepth * 0.5f;
 
 	_float fMinX, fMinY, fMinZ;
+	_float fMaxX, fMaxY, fMaxZ;
 
-	fMinX = XMVectorGetX(vPoints[0]);
-	fMinY = XMVectorGetY(vPoints[0]);
-	fMinZ = XMVectorGetZ(vPoints[0]);
+	fMinX = -fSizeX;
+	fMinY = -fSizeY;
+	fMinZ = -fSizeZ;
 
-	vPoints[1] = XMVectorSetX(vPoints[1], fMinX + fWidth);
-	vPoints[2] = XMVectorSet(fMinX + fWidth, XMVectorGetY(vPoints[2]), fMinZ + fDepth,1.f);
-	vPoints[3] = XMVectorSetZ(vPoints[3],fMinZ + fDepth);
-	vPoints[4] = XMVectorSetY(vPoints[4], fMinY + fHeight);
-	vPoints[5] = XMVectorSet(fMinX + fWidth, fMinY+fHeight, XMVectorGetZ(vPoints[5]),1.f);
-	vPoints[6] = XMVectorSet(fMinX + fWidth, fMinY+fHeight, fMinZ+fDepth,1.f);
-	vPoints[7] = XMVectorSet(XMVectorGetX(vPoints[7]), fMinY+fHeight, fMinZ+fDepth,1.f);
+	fMaxX = fSizeX;
+	fMaxY = fSizeY;
+	fMaxZ = fSizeZ;
+	
 
+	_vector vPoints[8];
+	vPoints[0] = XMVectorSet(fMinX, fMinY, fMinZ,1.f);
+	vPoints[1] = XMVectorSet(fMaxX, fMinY, fMinZ,1.f);
+	vPoints[2] = XMVectorSet(fMaxX, fMinY, fMaxZ,1.f);
+	vPoints[3] = XMVectorSet(fMinX, fMinY, fMaxZ,1.f);
+	vPoints[4] = XMVectorSet(fMinX, fMaxY, fMinZ,1.f);
+	vPoints[5] = XMVectorSet(fMaxX, fMaxY, fMinZ,1.f);
+	vPoints[6] = XMVectorSet(fMaxX, fMaxY, fMaxZ,1.f);
+	vPoints[7] = XMVectorSet(fMinX, fMaxY, fMaxZ,1.f);
+	
 	for (_uint i = 0; i < 8; i++)
-		XMStoreFloat4(&m_pPoints[i], vPoints[i]);
+		XMStoreFloat4(&m_pCreatePoints[i], vPoints[i]);
 
 	return S_OK;
 }
