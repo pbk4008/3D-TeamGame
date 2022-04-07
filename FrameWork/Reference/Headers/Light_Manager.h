@@ -5,6 +5,7 @@
 BEGIN(Engine)
 
 class CTarget_Manager;
+class CLight;
 
 class CLight_Manager final : public CSingleTon<CLight_Manager>
 {
@@ -23,6 +24,7 @@ public: HRESULT	CreateLightCam(ID3D11Device* pDevice, ID3D11DeviceContext* pDevi
 
 public:
 	HRESULT Add_Light(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext, const LIGHTDESC& LightDesc);
+	HRESULT Add_Light(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext, const LIGHTDESC& LightDesc, CLight** ppOutLight);
 
 	HRESULT Render_Lights(CTarget_Manager* pTarget_Manager, const wstring& pCameraTag, _bool pbr, _bool shadow);
 	HRESULT	Render_VolumetricLights(CTarget_Manager* pTarget_Manager, const wstring& pCameraTag);

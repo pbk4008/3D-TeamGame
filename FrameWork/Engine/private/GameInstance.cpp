@@ -466,6 +466,14 @@ HRESULT CGameInstance::Add_Light(ID3D11Device * pDevice, ID3D11DeviceContext * p
 	return m_pLight_Manager->Add_Light(pDevice, pDeviceContext, LightDesc);	
 }
 
+HRESULT CGameInstance::Add_Light(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext, const LIGHTDESC& LightDesc, CLight** ppOutLight)
+{
+	if (nullptr == m_pLight_Manager)
+		return E_FAIL;
+
+	return m_pLight_Manager->Add_Light(pDevice, pDeviceContext, LightDesc, ppOutLight);
+}
+
 void CGameInstance::UpdateLightCam(_uint LightIndx, _fvector playerpos)
 {
 	if (!m_pLight_Manager)
