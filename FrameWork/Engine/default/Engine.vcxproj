@@ -293,6 +293,7 @@ call Update_Library_Release.bat</Command>
     <ClInclude Include="..\public\SphereCollider.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClInclude>
+    <ClInclude Include="..\public\SplineCurve.h" />
     <ClInclude Include="..\public\State.h" />
     <ClInclude Include="..\public\StateController.h" />
     <ClInclude Include="..\public\Target_Manager.h" />
@@ -379,6 +380,7 @@ call Update_Library_Release.bat</Command>
     <ClCompile Include="..\private\SphereCollider.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="..\private\SplineCurve.cpp" />
     <ClCompile Include="..\private\State.cpp" />
     <ClCompile Include="..\private\StateController.cpp" />
     <ClCompile Include="..\private\Tonemapping.cpp" />
@@ -434,6 +436,7 @@ call Update_Library_Release.bat</Command>
     <FxCompile Include="..\bin\ShaderFiles\Shader_Cube.hlsl" />
     <FxCompile Include="..\bin\ShaderFiles\Shader_DownSample.hlsl" />
     <FxCompile Include="..\bin\ShaderFiles\Shader_DSViewPort.hlsl" />
+    <FxCompile Include="..\bin\ShaderFiles\Shader_GodRay.hlsl" />
     <FxCompile Include="..\bin\ShaderFiles\Shader_HDRBase.hlsl" />
     <FxCompile Include="..\bin\ShaderFiles\Shader_Instance.hlsl" />
     <FxCompile Include="..\bin\ShaderFiles\Shader_Luminance.hlsl" />
@@ -445,6 +448,12 @@ call Update_Library_Release.bat</Command>
     <FxCompile Include="..\bin\ShaderFiles\Shader_Terrain.hlsl" />
     <FxCompile Include="..\bin\ShaderFiles\Shader_Tonemapping.hlsl" />
     <FxCompile Include="..\bin\ShaderFiles\Shader_Triangle.hlsl" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\bin\ShaderFiles\Shader_DitherUtil.hlsli" />
+    <None Include="..\bin\ShaderFiles\Shader_LightUtil.hlsli" />
+    <None Include="..\bin\ShaderFiles\Shader_Post.hlsli" />
+    <None Include="..\bin\ShaderFiles\Shader_ShadowUtil.hlsli" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

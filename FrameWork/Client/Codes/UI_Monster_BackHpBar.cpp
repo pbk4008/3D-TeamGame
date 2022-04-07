@@ -111,7 +111,7 @@ _int CUI_Monster_BackHpBar::Tick(_double TimeDelta)
 	
 	if (true == m_bChange)
 	{
-		m_fAlpha -= TimeDelta * 2.f;
+		m_fAlpha -= (_float)TimeDelta * 2.f;
 
 		if (0 >= m_fAlpha)
 		{

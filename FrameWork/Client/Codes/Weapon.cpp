@@ -120,6 +120,10 @@ const _bool CWeapon::IsAttack() const
 	return m_isAttack;
 }
 
+void CWeapon::RangeAttack()
+{
+}
+
 _fmatrix CWeapon::Remove_Scale(_fmatrix matTransform)
 {
 	//Right벡터 Nomalize해서 구하기

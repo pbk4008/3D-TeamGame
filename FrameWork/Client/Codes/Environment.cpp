@@ -108,11 +108,13 @@ HRESULT CEnvironment::Render_Shadow()
 	world = XMMatrixTranspose(m_pTransform->Get_WorldMatrix());
 	lightview = XMMatrixTranspose(m_LightDesc->mLightView);
 	ligtproj = XMMatrixTranspose(m_LightDesc->mLightProj);
+	_float3 lightpos = m_LightDesc->vPosition;
 
 	m_pInstanceMesh->SetUp_ValueOnShader("g_WorldMatrix", &world, sizeof(_matrix));
 	m_pInstanceMesh->SetUp_ValueOnShader("g_LightView", &lightview, sizeof(_matrix));
 	m_pInstanceMesh->SetUp_ValueOnShader("g_LightProj", &ligtproj, sizeof(_matrix));
-	
+	m_pInstanceMesh->SetUp_ValueOnShader("g_LightPos", &lightpos, sizeof(_float3));
+
 	for (_uint i = 0; i < m_Nummeshcontainer; i++)
 		m_pInstanceMesh->Render(i, 2);
 

@@ -12,27 +12,25 @@ sampler DefaultSampler = sampler_state
 	AddressV = clamp;
 };
 
-texture2D g_SkyBoxTexutre;
+Texture2D g_SkyBoxTexutre;
+Texture2D g_DiffuseTexture;
+Texture2D g_OriginTexture;
+Texture2D g_SpecularTexture;
 
-texture2D g_DiffuseTexture;
-texture2D g_OriginTexture;
-texture2D g_SpecularTexture;
+Texture2D g_EmissionTexture;
 
-texture2D g_EmissionTexture;
+Texture2D g_Blur2Texture;
+Texture2D g_Blur4Texture;
+Texture2D g_Blur8Texture;
+Texture2D g_Blur16Texture;
 
-texture2D g_Blur2Texture;
-texture2D g_Blur4Texture;
-texture2D g_Blur8Texture;
-texture2D g_Blur16Texture;
-texture2D g_ShadowTexture;
+Texture2D g_ShadowTexture;
 
-texture2D g_AlphaTexture;
+Texture2D g_AlphaTexture;
 
 cbuffer check
 {
 	bool g_check;
-	bool g_shadow;
-	bool g_particle;
 };
 
 struct VS_IN
@@ -83,49 +81,19 @@ PS_OUT PS_MAIN_BLEND(PS_IN In)
 	float4 blur8 = g_Blur8Texture.Sample(DefaultSampler, In.vTexUV);
 	float4 blur16 = g_Blur16Texture.Sample(DefaultSampler, In.vTexUV);
 	
-	//float4 addpt = 1;
-	//if (g_particle == true)
-	//{A
-	//	float4 Particle = g_PtTexture.Sample(DefaultSampler, In.vTexUV);
-	//	float4 pt2 = g_Pt2Texture.Sample(DefaultSampler, In.vTexUV);
-	//	float4 pt4 = g_Pt4Texture.Sample(DefaultSampler, In.vTexUV);
-	//	float4 pt8 = g_Pt8Texture.Sample(DefaultSampler, In.vTexUV);
-	//	float4 pt16 = g_Pt16Texture.Sample(DefaultSampler, In.vTexUV);
-	//	//addpt = ((Particle * 1.f + (pt2) * 1.5f + (pt4) * 2.0f + (pt8) * 2.5f + (pt16) * 3.0f));
-	//	addpt = ((Particle * 1.f + (pt2) * 0.1f + (pt4) * 0.1f + (pt8) * 0.1f + (pt16) * 0.1f));
-	//}
-
-	//float4 alpha = g_AlphaTexture.Sample(DefaultSampler, In.vTexUV);
-	
 	float4 emissive = ((emission) * 1.f + (blur2) * 1.3f + (blur4) * 1.5f + (blur8) * 2.5f + (blur16) * 3.5f);
 	float4 final = float4(0, 0, 0, 0);
 	if (g_check == true)
 	{
-		//if (g_shadow == true)
-		//{
-		//	float4 shadow = g_ShadowTexture.Sample(DefaultSampler, In.vTexUV);
-		//	diffuse = diffuse * shadow;
-		//}
-		
-		//if (g_particle == true)
-		//{
-		//	final.rgb = diffuse.rgb + specular.rgb + emissive.rgb/* + addpt.rgb*/;
-		//}
-		//else
-		//{
-		//	//final.rgb = diffuse.rgb + specular.rgb + emissive.rgb + alpha.rgb;
-		//	final.rgb = diffuse.rgb + specular.rgb + emissive.rgb /*+ alpha*/;
-		//	//final.a = diffuse.a;
-		//}
-		final.rgb = diffuse.rgb + specular.rgb + emissive.rgb /*+ alpha*/;
+		final.rgb = diffuse.rgb + specular.rgb + emissive.rgb;
+		//final = diffuse + emissive + specular;
 	}
 	else
 	{
 		final = diffuse + emissive + specular;
 	}
 	
-	final.a = originA + emissive.a /*+ specular.a*/;
-	//final.a = saturate(final.a);
+	final.a = originA + emissive.a;
 	
 	Out.vOutColor = final;
 	

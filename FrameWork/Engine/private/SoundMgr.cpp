@@ -101,7 +101,7 @@ void CSoundMgr::BlendSound(const std::wstring& pStartSoundKey,
 
 	FMOD_RESULT Result = FMOD_ERR_FILE_BAD;
 	FMOD_BOOL bPlay = false;
-	_uint Position = 0.f, Len = 0.f;
+	_uint Position = 0, Len = 0;
 	FMOD_Sound_GetLength(Startiter->second, &Len, FMOD_TIMEUNIT_MS);
 
 	Play_Shot(pStartSoundKey, eStartID);
@@ -170,6 +170,13 @@ HRESULT CSoundMgr::LoadSoundFile()
 
 	eRes = FMOD_System_CreateSound(m_pSystem, "../bin/Resources/Sound/Weapon/Needle/A_Player_Weapon_Longsword_Slash_Heavy_ChargingFinished_01.ogg", FMOD_DEFAULT, 0, &pSound);
 	if (eRes == FMOD_OK) m_mapSound.emplace(L"Needle_Attack_R_Slam_3", pSound); else return E_FAIL;
+
+	/* for. Item */
+	eRes = FMOD_System_CreateSound(m_pSystem, "../bin/Resources/Sound/Item/A_Foley_GetUp_SunWisp_01.ogg", FMOD_DEFAULT, 0, &pSound);
+	if (eRes == FMOD_OK) m_mapSound.emplace(L"Drop_Item", pSound); else return E_FAIL;
+
+	eRes = FMOD_System_CreateSound(m_pSystem, "../bin/Resources/Sound/Item/A_UI_Hover_Major.ogg", FMOD_DEFAULT, 0, &pSound);
+	if (eRes == FMOD_OK) m_mapSound.emplace(L"Drop_Item_2", pSound); else return E_FAIL;
 
 	/* for. Player */
 	eRes = FMOD_System_CreateSound(m_pSystem, "../bin/Resources/Sound/Player/A_Heavy_Armour_Plate_Gak_Step_10.ogg", FMOD_DEFAULT, 0, &pSound);

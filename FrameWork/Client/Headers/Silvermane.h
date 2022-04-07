@@ -64,6 +64,9 @@ public:
 	//플레이어 씬 이동시 다음씬으로 넘어가야 할 데이터 생성 후 밖으로 빼내기
 	const SCENEMOVEDATA Get_SceneMoveData() const;
 
+	void Set_Radial(_bool check);
+	void Set_RadialCnt(_int radialCnt);
+
 	void Set_IsHit(const _bool _isHit);
 	void Set_IsFall(const _bool _isFall);
 	void Set_IsDash(const _bool _isDash);
@@ -88,6 +91,7 @@ public: /* For.Weapon */
 	void Set_WeaponFixedBone(CHierarchyNode* _pFixedBone);
 	const _bool Change_Weapon(const wstring& _name);
 	HRESULT Change_State(const wstring& _wstrStateTag);
+	void RangeAttack();
 
 public: /* For.Shield */
 	const _float Get_BlockTime() const;
@@ -102,6 +106,9 @@ public: /* For.JumpNode */
 	CJumpTrigger* Get_TargetJumpTrigger() const;
 	CJumpBox* Get_TargetJumpBox() const;
 	const _bool Raycast_JumpNode(const _double& _dDeltaTime);
+
+public: /* For.DropBox */
+	const void Raycast_DropBox(const _double& _dDeltaTime);
 
 private:
 	const _int Trace_CameraLook(const _double& _dDeltaTime);
@@ -143,6 +150,9 @@ private: /* For.JumpNode */
 	CUI_Fill_Ckey* m_pFillCKey = nullptr;
 	_float m_fJumpNodeLookTime = 0.f;
 	_float m_fJumpTriggerLookTime = 0.f;
+	
+private: /* Drop Box  */
+	_float m_fOpenDelay = 0.f;
 
 private: /* For.Cheat */
 	_bool m_isHighSpeedMode = false;

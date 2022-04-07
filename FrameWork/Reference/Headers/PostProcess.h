@@ -14,18 +14,23 @@ private: virtual ~CPostProcess() = default;
 
 public: HRESULT				InitPostProcess();
 
-public: HRESULT				AlphaBlur(CTarget_Manager* pTargetMgr, _bool alpha);
-public: HRESULT				PossProcessing(CTonemapping* tone,CTarget_Manager* pTargetMgr,_bool hdr, _bool shadow, _bool particle);
+public: HRESULT				AlphaBlur(CTarget_Manager* pTargetMgr, _bool alpha, _float weight);
+public: HRESULT				Shadowblur(CTarget_Manager* pTargetMgr, _bool shadow, _float weight);
+public: HRESULT				PossProcessing(CTonemapping* tone,CTarget_Manager* pTargetMgr,_bool hdr, _bool radial);
+public: HRESULT				RadialPass(CTarget_Manager* pTargetMgr);
 
 public: HRESULT				ComputeBrightPass(CTarget_Manager* pTargetMgr, const wstring& in, _float sizex, _float sizey);
 public: HRESULT				BloomPass(CTarget_Manager* pTargetMgr, const wstring& target, const wstring& base1, const wstring& base2, const wstring& base3, const wstring& base4, _float weight);
-public: HRESULT				BloomPass(CTarget_Manager* pTargetMgr, const wstring& target, const wstring& base, const wstring& base1, const wstring& base2 , _float weight);
+public: HRESULT				BloomPass(CTarget_Manager* pTargetMgr, const wstring& target, const wstring& base, const wstring& base1, const wstring& base2 , _float weight, _bool check);
 
 public: HRESULT				BlurPass(CTarget_Manager* pTargetMgr, const wstring& in, const wstring& middle, const wstring& out, _float sizex, _float sizey);
 public: HRESULT				GaussianBlurVertical(CTarget_Manager* pTargetMgr, const wstring& in, const wstring& bind, _float sizex, _float sizey);
 public: HRESULT				GaussianblurHorizontal(CTarget_Manager* pTargetMgr, const wstring& in, const wstring& bind, _float sizex, _float sizey);
 
+public: HRESULT				GodRayPass(CTarget_Manager* pTargetMgr, const wstring& cmatag);
+
 private: CVIBuffer_RectViewPort*	m_pVIBuffer = nullptr;
+private: CVIBuffer_RectViewPort*	m_pGRBuffer = nullptr;
 private: ID3D11Device*				m_pDevice = nullptr;
 private: ID3D11DeviceContext*		m_pDeviceContext = nullptr;
 

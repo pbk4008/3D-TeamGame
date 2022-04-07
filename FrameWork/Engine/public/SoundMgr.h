@@ -26,6 +26,7 @@ public:
 		Bronz_Hit, Bronz_Death,
 		MidBoss, MidBoss_Hit, MidBoss_Death, MidBoss_Attack_1, MidBoss_Attack_2, MidBoss_Attack_3,
 		Jump_Node,
+		Item_Drop, Item_Drop_2,
 		MAXCHANNEL};
 private:
 	NO_COPY(CSoundMgr);

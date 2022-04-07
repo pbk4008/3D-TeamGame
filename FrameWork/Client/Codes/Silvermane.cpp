@@ -8,6 +8,7 @@
 #include "JumpNode.h"
 #include "JumpTrigger.h"
 #include "JumpBox.h"
+#include "DropBox.h"
 #include "UI_Blank_CKey.h"
 #include "UI_Fill_CKey.h"
 
@@ -263,7 +264,7 @@ _int CSilvermane::Tick(_double _dDeltaTime)
 
 
 	Raycast_JumpNode(_dDeltaTime);
-
+	Raycast_DropBox(_dDeltaTime);
 
 	// 무기 업뎃
 	if (m_pCurWeapon)
@@ -330,6 +331,8 @@ HRESULT CSilvermane::Render()
 	if (FAILED(__super::Render()))
 		return E_FAIL;
 
+	_float4 color = { 0,0,0,0 };
+
 	_matrix smatWorld, smatView, smatProj;
 	smatWorld = XMMatrixTranspose(m_pTransform->Get_WorldMatrix());
 	smatView = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_VIEW));
@@ -342,8 +345,24 @@ HRESULT CSilvermane::Render()
 	if (FAILED(m_pModel->SetUp_ValueOnShader("g_ProjMatrix", &smatProj, sizeof(_matrix))))
 		return E_FAIL;
 
+	if (g_pObserver->IsAttack())
+	{
+		color = _float4(0.498f, 0.941f, 0.819f, 0.f);
+		color.x += 0.003;
+		color.y -= 0.005f;
+		color.z -= 0.0048f;
+
+		if(color.x >= 0.784f && color.y <= 0.137 && color.z <= 0.137)
+			color = _float4(0.784f, 0.137f, 0.137f, 0.f);
+	}
+	else
+		color = _float4(0.498f, 0.9411f, 0.8196f, 0.f);
+
 	for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
 	{
+		if(i == 0)
+			if (FAILED(m_pModel->SetUp_ValueOnShader("g_color", &color, sizeof(_float4)))) return E_FAIL;
+
 		if (FAILED(m_pModel->Render(i, i)))	return E_FAIL;
 	}
 
@@ -948,6 +967,16 @@ const CSilvermane::SCENEMOVEDATA CSilvermane::Get_SceneMoveData() const
 	return tDesc;
 }
 
+void CSilvermane::Set_Radial(_bool check)
+{
+	m_pRenderer->SetRenderButton(CRenderer::RADIAL, check);
+}
+
+void CSilvermane::Set_RadialCnt(_int radialCnt)
+{
+	m_pRenderer->SetRadialCnt(radialCnt);
+}
+
 void CSilvermane::Set_IsHit(const _bool _isHit)
 {
 	m_isHit = _isHit;
@@ -1073,6 +1102,12 @@ const _bool CSilvermane::Change_Weapon(const wstring& _name)
 HRESULT CSilvermane::Change_State(const wstring& _wstrStateTag)
 {
 	return m_pStateController->Change_State(_wstrStateTag);
+}
+
+void CSilvermane::RangeAttack()
+{
+	if (m_pCurWeapon)
+		m_pCurWeapon->RangeAttack();
 }
 
 const _float CSilvermane::Get_BlockTime() const
@@ -1222,6 +1257,7 @@ const _bool CSilvermane::Raycast_JumpNode(const _double& _dDeltaTime)
 	_uint iObjectTag = -1;
 
 	svRayPos += svRayDir * 6.f;
+	// 레이캐스트
 	RAYCASTDESC tRaycastDesc;
 	XMStoreFloat3(&tRaycastDesc.vOrigin, svRayPos);
 	XMStoreFloat3(&tRaycastDesc.vDir, svRayDir);
@@ -1236,6 +1272,22 @@ const _bool CSilvermane::Raycast_JumpNode(const _double& _dDeltaTime)
 			iObjectTag = pHitObject->getTag();
 		}
 	}
+	//// 스윕
+	//SWEEPDESC tSweepDesc;
+	//tSweepDesc.geometry = PxSphereGeometry(1.f);
+	//XMStoreFloat3(&tSweepDesc.vOrigin, svRayPos);
+	//XMStoreFloat3(&tSweepDesc.vDir, svRayDir);
+	//tSweepDesc.fMaxDistance = 50.f;
+	//tSweepDesc.filterData.flags = PxQueryFlag::eANY_HIT | PxQueryFlag::eDYNAMIC;
+	//CGameObject* pHitObject = nullptr;
+	//tSweepDesc.ppOutHitObject = &pHitObject;
+	//if (g_pGameInstance->Sweep(tSweepDesc))
+	//{
+	//	if (pHitObject)
+	//	{
+	//		iObjectTag = pHitObject->getTag();
+	//	}
+	//}
 
 	//점프ui관련
 	m_pBlankCKey = (CUI_Blank_CKey*)g_pGameInstance->getObjectList(m_iSceneID, L"Layer_UI_BlankC")->front();
@@ -1311,6 +1363,53 @@ const _bool CSilvermane::Raycast_JumpNode(const _double& _dDeltaTime)
 	}
 
 	return false;
+}
+
+const void CSilvermane::Raycast_DropBox(const _double& _dDeltaTime)
+{
+	_matrix smatView;
+	smatView = g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_VIEW);
+	smatView = XMMatrixInverse(nullptr, smatView);
+
+	if (XMMatrixIsNaN(smatView))
+		return;
+
+	_vector svRayPos, svRayDir;
+	memcpy_s(&svRayPos, sizeof(_vector), &smatView.r[3], sizeof(_vector));
+	memcpy_s(&svRayDir, sizeof(_vector), &smatView.r[2], sizeof(_vector));
+	svRayDir = XMVector3Normalize(svRayDir);
+	_float fOutDist = 0.f;
+
+
+	_uint iObjectTag = -1;
+
+	RAYCASTDESC tRaycastDesc;
+	XMStoreFloat3(&tRaycastDesc.vOrigin, svRayPos);
+	XMStoreFloat3(&tRaycastDesc.vDir, svRayDir);
+	tRaycastDesc.fMaxDistance = 50.f;
+	tRaycastDesc.filterData.flags = PxQueryFlag::eANY_HIT | PxQueryFlag::eDYNAMIC;
+	CGameObject* pHitObject = nullptr;
+	tRaycastDesc.ppOutHitObject = &pHitObject;
+	if (g_pGameInstance->Raycast(tRaycastDesc))
+	{
+		if (pHitObject)
+			iObjectTag = pHitObject->getTag();
+	}
+	
+	if ((_uint)GAMEOBJECT::DROP_BOX == iObjectTag)
+	{
+		static_cast<CDropBox*>(pHitObject)->FocusEnter();
+		if (g_pGameInstance->getkeyPress(DIK_C))
+			m_fOpenDelay += (_float)_dDeltaTime;
+
+		if (0.5f < m_fOpenDelay)
+		{
+			static_cast<CDropBox*>(pHitObject)->Focus();
+			m_fOpenDelay = 0.f;
+		}
+	}
+	//else
+	//	static_cast<CDropBox*>(pHitObject)->FocusExit();
 }
 
 CSilvermane* CSilvermane::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)

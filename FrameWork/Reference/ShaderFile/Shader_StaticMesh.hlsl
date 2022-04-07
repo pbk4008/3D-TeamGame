@@ -32,7 +32,8 @@ cbuffer ShadeCheck
 texture2D g_DiffuseTexture;
 texture2D g_BiNormalTexture;
 texture2D g_ShadowTexture;
-texture2D g_PBRTexture;
+texture2D g_MRATexture;
+texture2D g_CEOTexture;
 
 sampler DefaultSampler = sampler_state
 {
@@ -183,6 +184,8 @@ PS_OUT PS_MAIN(PS_IN In)
 	float4 diffuse = g_DiffuseTexture.Sample(DefaultSampler, In.vUvDepth.xy);
 	float3 normal = g_BiNormalTexture.Sample(DefaultSampler, In.vUvDepth.xy).xyz;
 	float3x3 tbn = { In.vTangent.xyz, In.vBiNormal.xyz, In.vNormal.xyz };
+	float4 mra = g_MRATexture.Sample(DefaultSampler, In.vUvDepth.xy);
+	float4 ceo = g_CEOTexture.Sample(DefaultSampler, In.vUvDepth.xy);
 	
 	normal = Normalmapping(normal, tbn);
 	
@@ -191,10 +194,11 @@ PS_OUT PS_MAIN(PS_IN In)
 	Out.depth = float4(In.vUvDepth.z / In.vUvDepth.w, In.vUvDepth.w / 300.f, 0.f, 0.f);
 	Out.normal = float4(normal, 0);
 	
-	Out.M = float4(1, 1, 1, 1);
-	Out.R = float4(0, 0, 0, 1);
-	Out.A = float4(1, 1, 1, 1);
-	Out.E = float4(0.1, 0.1, 0.1, 1);
+	Out.M = float4(mra.r, mra.r, mra.r, 1);
+	Out.R = float4(mra.g, mra.g, mra.g, 1);
+	Out.A = float4(ceo.b + mra.b, ceo.b + mra.b, ceo.b + mra.b, 1);
+	float4 color = (1.f, 0, 0, 1);
+	Out.E = color * 0.3f * ceo.g;
 
 
 	return Out;

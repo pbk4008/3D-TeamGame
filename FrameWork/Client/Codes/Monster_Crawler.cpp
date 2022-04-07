@@ -89,7 +89,7 @@ HRESULT CMonster_Crawler::NativeConstruct(const _uint _iSceneID, void* _pArg)
 	m_pPanel->Set_GroggyBar(Get_GroggyGaugeRatio());
 
 	m_iObectTag = (_uint)GAMEOBJECT::MONSTER_CRYSTAL;
-	setActive(false);
+	//setActive(false);
 
 	return S_OK;
 }
@@ -135,7 +135,7 @@ _int CMonster_Crawler::Tick(_double _dDeltaTime)
 	}
 	else
 	{
-		if (DEATH == m_pAnimatorCom->Get_CurrentAnimNode())
+		if (L"Death" == m_pStateController->Get_CurStateTag())
 		{
 			if (m_pAnimatorCom->Get_CurrentAnimation()->Is_Finished())
 			{

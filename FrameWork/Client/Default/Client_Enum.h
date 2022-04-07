@@ -36,10 +36,11 @@ enum class GAMEOBJECT
 	JUMP_TRIGGER,
 	JUMP_NODE,
 	JUMP_BOX,
+	DROP_BOX,
 	// END, MAX, SIZE
 	GAMEOBJECT_END,
 };
-END
+
 enum class EFFECT
 {
 	//AddEffect할때에 넣어줬던 순서 그대로 넣어줘야함!!!
@@ -59,5 +60,68 @@ enum class ELayer
 	JumpTrigger,
 	Max
 };
+
+
+/* for. Item Data */
+enum class EScatterType
+{
+	Quad,
+	Cone
+};
+
+enum class EItemType
+{
+	NONE,			//미장착
+	Equipment,		
+	Resorce,
+	ITEMTYPE_END
+};
+
+enum class EEquipmentGrade
+{
+	Uncommon,
+	Rare,
+	Epic,
+	Legendary,
+	EQUIPGRADE_END
+};
+
+typedef enum EWeaponType
+{
+	LongSword,
+	Hammer,
+	Weapon_End
+}WEAPON_TYPE;
+
+enum class EEquipmentType
+{
+	Weapon,
+	Ring,
+	Amulet,
+	Charm,
+	LifeStone,
+	Banner,
+	Augment,
+	Equipment_Type_End
+};
+
+typedef enum eEquipmentMainStatType
+{
+	//weapon
+	PHYSICAL_DPS,
+	//acc, banner
+	Might,
+	Spirit,
+	Vitality,
+	//Banner
+	AllStat,
+	//LifeStone
+	HealthRecovery,
+
+	MainStatType_End
+}EQUIPMENT_MAINSTAT_TYPE;
+
+
+END
 
 #endif

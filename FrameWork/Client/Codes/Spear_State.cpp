@@ -44,28 +44,67 @@ _int CSpear_State::Tick(const _double& _dDeltaTime)
 
 	/*if (2.0f >= fDistToPlayer && false == m_bChargeOn)
 		m_bAttackOn = true;*/
+	if (m_pOwner->Get_HpRatio() < 0.5f)
+		m_pOwner->Set_Half(true);
 
-	
-
-	if (10.f>=fDist && 2.f<= fDist && !m_pOwner->Get_Attack())
+	if (!m_pOwner->Get_Half())
 	{
-		m_pOwner->Set_Target(true);
-		m_pOwner->Set_Attack(false);
-	}
-	else if (2.f >= fDist)
-	{
-		if (g_pObserver->Get_PlayerAttackAnimStart()&&m_pOwner->Get_GuardCount() > 0)
-			m_pOwner->Set_Guard(true);
+		if (10.f >= fDist && 2.f <= fDist && !m_pOwner->Get_Attack())
+		{
+			m_pOwner->Set_Target(true);
+			m_pOwner->Set_Attack(false);
+		}
+		else if (2.f >= fDist)
+		{
+			if (g_pObserver->Get_PlayerAttackAnimStart() && m_pOwner->Get_GuardCount() > 0)
+				m_pOwner->Set_Guard(true);
 
-		m_pOwner->Set_Target(false);
-		m_pOwner->Set_Attack(true);
+			m_pOwner->Set_Target(false);
+			m_pOwner->Set_Attack(true);
+		}
+		else if (10.f < fDist)
+		{
+			m_pOwner->Set_Target(false);
+			m_pOwner->Set_Attack(false);
+		}
 	}
-	else if (10.f < fDist)
+	else
 	{
-		m_pOwner->Set_Target(false);
-		m_pOwner->Set_Attack(false);
-	}
+		if (!m_pOwner->Get_ChargeOn())
+		{
+			if (fDist < 7.f)
+			{
+				m_pOwner->Set_Target(false);
+				m_pOwner->Set_Attack(true);
+			}
+			else
+			{
+				m_pOwner->Set_Target(false);
+				m_pOwner->Set_Attack(false);
+			}
+		}
+		else
+		{
+			if (10.f >= fDist && 2.f <= fDist && !m_pOwner->Get_Attack())
+			{
+				m_pOwner->Set_Target(true);
+				m_pOwner->Set_Attack(false);
+			}
+			else if (2.f >= fDist)
+			{
+				if (g_pObserver->Get_PlayerAttackAnimStart() && m_pOwner->Get_GuardCount() > 0)
+					m_pOwner->Set_Guard(true);
 
+				m_pOwner->Set_Target(false);
+				m_pOwner->Set_Attack(true);
+			}
+			else if (10.f < fDist)
+			{
+				m_pOwner->Set_Target(false);
+				m_pOwner->Set_Attack(false);
+			}
+		}
+	}
 	if (FAILED(Check_State()))
 		return -1;
 
@@ -141,23 +180,54 @@ HRESULT CSpear_State::ExitState()
 
 HRESULT CSpear_State::Check_State()
 {
-	if (!m_pOwner->Get_Dead() && !m_pOwner->Get_Groggy() 
-		&& m_pStateController->Get_CurStateTag() != L"Hit")
+	if (!m_pOwner->Get_Dead())
 	{
-		if (m_pOwner->Get_Guard())
+		if(!m_pOwner->Get_Groggy()&& !m_pOwner->Get_Half()
+			&& m_pStateController->Get_CurStateTag() != L"Hit")
 		{
-			m_pStateController->Change_State(L"Guard");
-			return S_OK;
-		}
-		if (m_pOwner->Get_Target())
-			m_pStateController->Change_State(L"Chaser");
-		else if (m_pOwner->Get_Attack())
+			if (m_pOwner->Get_Guard())
+			{
+				m_pStateController->Change_State(L"Guard");
+				return S_OK;
+			}
+			if (m_pOwner->Get_Target())
+				m_pStateController->Change_State(L"Chaser");
+			else if (m_pOwner->Get_Attack())
+			{
+				_uint iRand = rand() % 2;
+				m_pStateController->Change_State(L"Attack", &iRand);
+			}
+			else
+				m_pStateController->Change_State(L"Idle");
+			}
+		else if (m_pOwner->Get_Half())
 		{
-			_uint iRand = rand() % 2;
-			m_pStateController->Change_State(L"Attack",&iRand);
+			if (!m_pOwner->Get_ChargeOn() && m_pStateController->Get_CurStateTag() != L"Charge_Attack")
+			{
+				m_pStateController->Change_State(L"Bwd_Dash");
+				m_pOwner->Set_GuardCount(5);
+			}
+			else
+			{
+				if (m_pOwner->Get_Guard())
+				{
+					m_pStateController->Change_State(L"Guard");
+					return S_OK;
+				}
+				if (m_pOwner->Get_Target())
+					m_pStateController->Change_State(L"Chaser");
+				else if (m_pOwner->Get_Attack() && m_pStateController->Get_CurStateTag() != L"Charge_Attack")
+				{
+					_uint iRand = rand() % 2;
+					m_pStateController->Change_State(L"Attack", &iRand);
+				}
+				else
+				{
+					if (m_pStateController->Get_CurStateTag() != L"Charge_Attack")
+						m_pStateController->Change_State(L"Idle");
+				}
+			}
 		}
-		else
-			m_pStateController->Change_State(L"Idle");
 	}
 
 	return S_OK;

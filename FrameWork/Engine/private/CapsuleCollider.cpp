@@ -24,7 +24,6 @@ HRESULT CCapsuleCollider::NativeConstruct(void* _pArg)
 	if (_pArg)
 	{
 		memcpy_s(&tDesc, sizeof(DESC), _pArg, sizeof(DESC));
-		m_pGameObject = tDesc.tColliderDesc.pGameObject;
 		m_fHeight = tDesc.fHeight;
 		m_fRadius = tDesc.fRadius;
 	}
@@ -35,6 +34,7 @@ HRESULT CCapsuleCollider::NativeConstruct(void* _pArg)
 	if (FAILED(m_pPhsyX->Create_Capsule(this)))
 		return E_FAIL;
 
+	Update_PxTransform();
 	return S_OK;
 }
 

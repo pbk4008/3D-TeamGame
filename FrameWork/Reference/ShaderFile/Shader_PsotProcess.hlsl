@@ -9,6 +9,13 @@ sampler DefaultSampler = sampler_state
 	AddressV = mirror;
 };
 
+sampler radialsampler = sampler_state
+{
+	filter = min_mag_mip_linear;
+	AddressU = wrap;
+	AddressV = wrap;
+};
+
 cbuffer RtPixel
 {
 	float2	g_RtperPixel;
@@ -21,13 +28,13 @@ cbuffer ConstBuffer
 	float g_Weight;
 };
 
-texture2D g_Basetexture;
+Texture2D g_Basetexture;
 
 // bloom
-texture2D g_BaseBlur2Texture;
-texture2D g_BaseBlur4Texture;
-texture2D g_BaseBlur8Texture;
-texture2D g_BaseBlur16Texture;
+Texture2D g_BaseBlur2Texture;
+Texture2D g_BaseBlur4Texture;
+Texture2D g_BaseBlur8Texture;
+Texture2D g_BaseBlur16Texture;
 
 
 struct VS_IN
@@ -153,6 +160,39 @@ PS_OUT PS_MAIN_Bloom2(PS_IN In)
 	return Out;
 }
 
+PS_OUT PS_MAIN_RADIAL(PS_IN In)
+{
+	PS_OUT Out = (PS_OUT) 0;
+	
+	float4 maintex = g_Basetexture.Sample(radialsampler, In.vTexUV);
+	
+	float2 perpixel = float2(1.0f / 1280.0f, 1.0f / 720.f);
+	int samples = 64;
+	float2 center = float2(0.5, 0.5);
+	float blurstart = 0.8;
+	float blurwidth = 0.1;
+	float2 uv = In.vTexUV;
+		
+	uv -= center;
+	float precompute = blurwidth * (1.0 / float(samples - 1));
+		
+	float4 color = float4(0, 0, 0, 0);
+		
+	for (int i = 0; i < samples; i++)
+	{
+		float scale = blurstart + (float(i) * precompute);
+		color += g_Basetexture.Sample(DefaultSampler, uv * scale + center);
+	}
+		
+	color /= float(samples);
+	Out.vOutColor = color;
+	
+	if (Out.vOutColor.r <= 0 && Out.vOutColor.g <= 0 && Out.vOutColor.b <= 0)
+		discard;
+		
+	return Out;
+}
+
 //--------------------------------------------------------------------------------------------------------------------------//
 technique11 PostProcess
 {
@@ -209,5 +249,16 @@ technique11 PostProcess
 		VertexShader = compile vs_5_0 VS_MAIN_VIEWPORT();
 		GeometryShader = NULL;
 		PixelShader = compile ps_5_0 PS_MAIN_Bloom2();
+	}
+
+	pass Radial
+	{
+		SetRasterizerState(CullMode_Default);
+		SetDepthStencilState(ZDefault, 0);
+		SetBlendState(BlendDisable, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+
+		VertexShader = compile vs_5_0 VS_MAIN_VIEWPORT();
+		GeometryShader = NULL;
+		PixelShader = compile ps_5_0 PS_MAIN_RADIAL();
 	}
 }

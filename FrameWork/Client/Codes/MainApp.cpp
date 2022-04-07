@@ -7,10 +7,12 @@
 #include "Loading.h"
 #include "MeshLoader.h"
 #include "ShakeManager.h"
+#include "DataManager.h"
 
 CClient_Observer* g_pObserver = nullptr;
 CDebugSystem* g_pDebugSystem = nullptr;
 CShakeManager* g_pShakeManager = nullptr;
+CDataManager* g_pDataManager = nullptr;
 
 CMainApp::CMainApp()
 {
@@ -53,6 +55,10 @@ HRESULT CMainApp::NativeConstruct()
 	if (FAILED(pMeshLoader->Reserve_MeshLoader(m_pDevice, m_pDeviceContext)))
 		return E_FAIL;*/
 
+	//g_pDataManager = CDataManager::GetInstance();
+	//if (FAILED(g_pDataManager->NativeConstruct()))
+	//	return E_FAIL;
+
 	return S_OK;
 }
 
@@ -92,7 +98,7 @@ _int CMainApp::Tick(_double TimeDelta)
 	if (g_pGameInstance->getkeyDown(DIK_F4))
 	{
 		m_bOutline = !m_bOutline;
-		m_pRenderer->SetRenderButton(CRenderer::OUTLINE, m_bOutline);
+		m_pRenderer->SetRenderButton(CRenderer::RADIAL, m_bOutline);
 	}
 
 	if (g_pGameInstance->getkeyDown(DIK_P))
@@ -301,6 +307,7 @@ void CMainApp::Free()
 #endif
 	CShakeManager::DestroyInstance();
 	CMeshLoader::DestroyInstance();
+	CDataManager::DestroyInstance();
 
 	Safe_Release(g_pObserver);
 

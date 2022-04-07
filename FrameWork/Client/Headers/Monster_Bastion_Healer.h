@@ -42,6 +42,7 @@ public:
 public:
 	void Groggy_Start();
 	void Hit(CCollision& pCol);
+	virtual void Hit(const ATTACKDESC& _tAttackDesc) override;
 	void Remove_Collider();
 private:
 	HRESULT Ready_Components();

@@ -26,7 +26,6 @@ HRESULT CNavMeshCollider::NativeConstruct(void* _pArg)
 		//memcpy_s(&m_tDesc, sizeof(DESC), _pArg, sizeof(DESC));
 		// vector 컨테이너가 있어서 무지성 memcpy 금지!!!!!!!!!!!!!
 		tDesc = *(static_cast<DESC*>(_pArg));
-		m_pGameObject = tDesc.tColliderDesc.pGameObject;
 		m_vecPoints = tDesc.vecPoints;
 	}
 
@@ -36,6 +35,7 @@ HRESULT CNavMeshCollider::NativeConstruct(void* _pArg)
 	if (FAILED(m_pPhsyX->Create_NavMesh(this)))
 		return E_FAIL;
 
+	Update_PxTransform();
 	return S_OK;
 }
 

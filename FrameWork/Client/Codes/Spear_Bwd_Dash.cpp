@@ -26,8 +26,10 @@ _int CSpear_Bwd_Dash::Tick(const _double& _dDeltaTime)
  	_int iProgress = __super::Tick(_dDeltaTime);
 	if (NO_EVENT != iProgress)
 		return iProgress;
-
 	m_pAnimator->Tick(_dDeltaTime);
+
+	if (!m_pAnimator->Get_IsLerp() && m_pAnimator->Get_CurrentAnimation()->Is_Finished())
+		m_pStateController->Change_State(L"Charge_Attack");
 
 	return _int();
 }

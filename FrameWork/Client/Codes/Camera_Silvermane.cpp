@@ -279,50 +279,98 @@ void CCamera_Silvermane::OnOffMonsterUI()
 	_float fOutDist = 0.f;
 	_uint iObjectTag = -1;
 
-	RAYCASTDESC tRaycastDesc;
-	XMStoreFloat3(&tRaycastDesc.vOrigin, svRayPos);
-	XMStoreFloat3(&tRaycastDesc.vDir, svRayDir);
-	tRaycastDesc.fMaxDistance = 15.f;
-	tRaycastDesc.filterData.flags = PxQueryFlag::eANY_HIT | PxQueryFlag::eDYNAMIC;
-	CGameObject* pHitObject = nullptr;
-	tRaycastDesc.ppOutHitObject = &pHitObject;
 
-	if (g_pGameInstance->Raycast(tRaycastDesc))
+	//RAYCASTDESC tRaycastDesc;
+	//XMStoreFloat3(&tRaycastDesc.vOrigin, svRayPos);
+	//XMStoreFloat3(&tRaycastDesc.vDir, svRayDir);
+	//tRaycastDesc.fMaxDistance = 15.f;
+	//tRaycastDesc.filterData.flags = PxQueryFlag::eANY_HIT | PxQueryFlag::eDYNAMIC;
+	//CGameObject* pHitObject = nullptr;
+	//tRaycastDesc.ppOutHitObject = &pHitObject;
+
+	//if (g_pGameInstance->Raycast(tRaycastDesc))
+	//{
+	//	if ((_uint)GAMEOBJECT::MONSTER_CRYSTAL == pHitObject->getTag() ||
+	//		(_uint)GAMEOBJECT::MONSTER_ABERRANT == pHitObject->getTag() ||
+	//		(_uint)GAMEOBJECT::MONSTER_1H == pHitObject->getTag() ||
+	//		(_uint)GAMEOBJECT::MONSTER_2H == pHitObject->getTag() ||
+	//		(_uint)GAMEOBJECT::MONSTER_HEALER == pHitObject->getTag() ||
+	//		(_uint)GAMEOBJECT::MONSTER_SHOOTER == pHitObject->getTag() ||
+	//		(_uint)GAMEOBJECT::MONSTER_SPEAR == pHitObject->getTag()
+	//		)
+	//	{
+	//		if (nullptr != pHitObject)
+	//		{
+	//			m_pTargetMonster = pHitObject;
+	//			static_cast<CActor*>(m_pTargetMonster)->Set_UIShow(true);
+	//		}
+	//	}
+	//}
+	//else if (false == g_pGameInstance->Raycast(tRaycastDesc))
+	//{
+	//	if (nullptr != pHitObject)
+	//	{
+	//		if ((_uint)GAMEOBJECT::MONSTER_CRYSTAL == pHitObject->getTag() ||
+	//			(_uint)GAMEOBJECT::MONSTER_ABERRANT == pHitObject->getTag() ||
+	//			(_uint)GAMEOBJECT::MONSTER_1H == pHitObject->getTag() ||
+	//			(_uint)GAMEOBJECT::MONSTER_2H == pHitObject->getTag() ||
+	//			(_uint)GAMEOBJECT::MONSTER_HEALER == pHitObject->getTag() ||
+	//			(_uint)GAMEOBJECT::MONSTER_SHOOTER == pHitObject->getTag() ||
+	//			(_uint)GAMEOBJECT::MONSTER_SPEAR == pHitObject->getTag()
+	//			)
+	//		{
+	//			static_cast<CActor*>(m_pTargetMonster)->Set_UIShow(false);
+	//		}
+	//	}
+	//}
+
+	svRayPos += svRayDir * 6.f;
+	SWEEPDESC tSweepDesc;
+	tSweepDesc.geometry = PxSphereGeometry(1.f);
+	XMStoreFloat3(&tSweepDesc.vOrigin, svRayPos);
+	XMStoreFloat3(&tSweepDesc.vDir, svRayDir);
+	tSweepDesc.fMaxDistance = 15.f;
+	tSweepDesc.filterData.flags = PxQueryFlag::eANY_HIT | PxQueryFlag::eDYNAMIC;
+	CGameObject* pHitObject = nullptr;
+	tSweepDesc.ppOutHitObject = &pHitObject;
+
+	if (g_pGameInstance->Sweep(tSweepDesc))
 	{
-		if ((_uint)GAMEOBJECT::MONSTER_CRYSTAL == pHitObject->getTag() ||
-			(_uint)GAMEOBJECT::MONSTER_ABERRANT == pHitObject->getTag() ||
-			(_uint)GAMEOBJECT::MONSTER_1H == pHitObject->getTag() ||
-			(_uint)GAMEOBJECT::MONSTER_2H == pHitObject->getTag() ||
-			(_uint)GAMEOBJECT::MONSTER_HEALER == pHitObject->getTag() ||
-			(_uint)GAMEOBJECT::MONSTER_SHOOTER == pHitObject->getTag() ||
-			(_uint)GAMEOBJECT::MONSTER_SPEAR == pHitObject->getTag()
-			)
+		_uint iTag = pHitObject->getTag();
+		switch (iTag)
 		{
+		case (_uint)GAMEOBJECT::MONSTER_CRYSTAL:
+		case (_uint)GAMEOBJECT::MONSTER_ABERRANT:
+		case (_uint)GAMEOBJECT::MONSTER_1H:
+		case (_uint)GAMEOBJECT::MONSTER_2H:
+		case (_uint)GAMEOBJECT::MONSTER_HEALER:
+		case (_uint)GAMEOBJECT::MONSTER_SHOOTER:
+		case (_uint)GAMEOBJECT::MONSTER_SPEAR:
 			if (nullptr != pHitObject)
 			{
 				m_pTargetMonster = pHitObject;
 				static_cast<CActor*>(m_pTargetMonster)->Set_UIShow(true);
 			}
+			break;
 		}
 	}
-
-	else if(false == g_pGameInstance->Raycast(tRaycastDesc))
-	{
-		if (nullptr != pHitObject)
-		{
-			if ((_uint)GAMEOBJECT::MONSTER_CRYSTAL == pHitObject->getTag() ||
-				(_uint)GAMEOBJECT::MONSTER_ABERRANT == pHitObject->getTag() ||
-				(_uint)GAMEOBJECT::MONSTER_1H == pHitObject->getTag() ||
-				(_uint)GAMEOBJECT::MONSTER_2H == pHitObject->getTag() ||
-				(_uint)GAMEOBJECT::MONSTER_HEALER == pHitObject->getTag() ||
-				(_uint)GAMEOBJECT::MONSTER_SHOOTER == pHitObject->getTag() ||
-				(_uint)GAMEOBJECT::MONSTER_SPEAR == pHitObject->getTag()
-				)
-			{
-				static_cast<CActor*>(m_pTargetMonster)->Set_UIShow(false);
-			}
-		}
-	}
+	//else
+	//{
+	//	if (nullptr != pHitObject)
+	//	{
+	//		if ((_uint)GAMEOBJECT::MONSTER_CRYSTAL == pHitObject->getTag() ||
+	//			(_uint)GAMEOBJECT::MONSTER_ABERRANT == pHitObject->getTag() ||
+	//			(_uint)GAMEOBJECT::MONSTER_1H == pHitObject->getTag() ||
+	//			(_uint)GAMEOBJECT::MONSTER_2H == pHitObject->getTag() ||
+	//			(_uint)GAMEOBJECT::MONSTER_HEALER == pHitObject->getTag() ||
+	//			(_uint)GAMEOBJECT::MONSTER_SHOOTER == pHitObject->getTag() ||
+	//			(_uint)GAMEOBJECT::MONSTER_SPEAR == pHitObject->getTag()
+	//			)
+	//		{
+	//			static_cast<CActor*>(m_pTargetMonster)->Set_UIShow(false);
+	//		}
+	//	}
+	//}
 }
 
 const _fvector CCamera_Silvermane::Get_Look() const

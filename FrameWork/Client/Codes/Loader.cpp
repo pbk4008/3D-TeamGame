@@ -71,6 +71,8 @@
 #include "JumpNode.h"
 #include "JumpTrigger.h"
 #include "JumpBox.h"
+#include "DropBox.h"
+#include "DropObject.h"
 #include "SwordTrail.h"
 #include "NoiseFire.h"
 #include "TrailEffect.h"
@@ -144,15 +146,13 @@ HRESULT CLoader::LoadForScene()
 	if (FAILED(hr))
 		return E_FAIL;
 
-	
-
 	return S_OK;
 }
 
 HRESULT CLoader::SetUp_Stage1_Object()
 {
-	//if (FAILED(Load_Stage1FBXLoad()))
-	//	return E_FAIL;
+	if (FAILED(Load_Stage1FBXLoad()))
+		return E_FAIL;
 	
 	if (FAILED(Load_Stage1Navi_SkyLoad()))
 		return E_FAIL;
@@ -160,12 +160,12 @@ HRESULT CLoader::SetUp_Stage1_Object()
 	if (FAILED(Load_Stage1PlayerLoad()))
 		return E_FAIL;
 
-	if (FAILED(Load_Stage1MonsterLoad()))
+	if (FAILED(Load_Stage1BossLoad()))
 		return E_FAIL;
 
-	//if (FAILED(Load_Stage1BossLoad()))
-	//	return E_FAIL;
-
+	if (FAILED(Load_Stage1BossLoad()))
+		return E_FAIL;
+		
 	if (FAILED(Load_Stage1StaticUILoad()))
 		return E_FAIL;
 
@@ -175,11 +175,11 @@ HRESULT CLoader::SetUp_Stage1_Object()
 	if (FAILED(Load_Stage1EffectLoad()))
 		return E_FAIL;
 
-	//if (FAILED(Load_Stage1JumpTrigger()))
-	//	return E_FAIL;
+	if (FAILED(Load_Stage1JumpTrigger()))
+		return E_FAIL;
 
-	//if (FAILED(Load_Stage1TriggerLod()))
-	//	return E_FAIL;
+	if (FAILED(Load_Stage1TriggerLod()))
+		return E_FAIL;
 
 	//if (FAILED(Load_Stage1_TreasureChest_Load()))
 	//	return E_FAIL;
@@ -654,31 +654,29 @@ HRESULT CLoader::Load_Stage1_TreasureChest_Load()
 	{
 		if (!strcmp(fd.name, ""))
 			break;
-
 		char szFullPath[MAX_PATH] = "../bin/FBX/Treasure_Chest/";
 
 		strcat_s(szFullPath, fd.name);
-
 
 		_tchar fbxName[MAX_PATH] = L"";
 		_tchar fbxPath[MAX_PATH] = L"";
 		MultiByteToWideChar(CP_ACP, 0, fd.name, MAX_PATH, fbxName, MAX_PATH);
 		MultiByteToWideChar(CP_ACP, 0, szFullPath, MAX_PATH, fbxPath, MAX_PATH);
 
-		CMeshLoader::MESHTYPE tMeshType;
-		ZeroMemory(&tMeshType, sizeof(tMeshType));
-
-		lstrcpy(tMeshType.szFBXName, fbxName);
-		lstrcpy(tMeshType.szFBXPath, fbxPath);
-		tMeshType.iType = 2;
-
 		if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Treasure_Chest", CModel::Create(m_pDevice, m_pDeviceContext,
-			tMeshType.szFBXPath, CModel::TYPE_STATIC, TRUE))))
+			fbxPath, CModel::TYPE_ANIM, TRUE))))
 			return E_FAIL;
 
 		iResult = _findnext(handle, &fd);
 	}
 	_findclose(handle);
+
+	/* for. Drop Object*/
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_DropObject", CModel::Create(m_pDevice, m_pDeviceContext,
+		L"../bin/FBX/dropObject.fbx", CModel::TYPE_STATIC, true)))) return E_FAIL;
+
+	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_DropObject", CDropObject::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
 
 	return S_OK;
 }
@@ -783,8 +781,8 @@ HRESULT CLoader::SetUp_Stage1_Prototype()
 	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_SubEnvironment", CEnvironment::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 
-	//if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Treasure_Chest", CTreasure_Chest::Create(m_pDevice, m_pDeviceContext))))
-	//	return E_FAIL;
+	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Treasure_Chest", CDropBox::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
 
 	return S_OK;
 }
@@ -840,13 +838,15 @@ HRESULT CLoader::Load_Stage1PlayerLoad()
 	}
 
 	// 트레일
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Prototype_Component_VIBuffer_Trail"
+	/*if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Prototype_Component_VIBuffer_Trail"
 		, CTrail_VIBuffer::Create(m_pDevice, m_pDeviceContext, L"../../Reference/ShaderFile/Shader_Trail.hlsl", 400))))
 	{
 		return E_FAIL;
-	}
+	}*/
 
 	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"TrailBase", L"../bin/Resources/Texture/Trail/T_Smoke_Trail_Soft.dds"))) MSGBOX("Failed To Add SwordTrail Tex");
+	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"DistortionBase", L"../bin/Resources/Texture/Trail/t_distort_channels.dds"))) MSGBOX("Failed To Add SwordTrail Tex");
+	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"DistortionMask", L"../bin/Resources/Texture/Trail/T_DistortionNoise.dds"))) MSGBOX("Failed To Add SwordTrail Tex");
 	// 2
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_VIBuffer_Trail",
 		CVIBuffer_Trail::Create(m_pDevice, m_pDeviceContext, L"../../Reference/ShaderFile/Shader_Trail.hlsl", 100))))
@@ -859,8 +859,8 @@ HRESULT CLoader::Load_Stage1PlayerLoad()
 		return E_FAIL;
 	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Camera_Silvermane", CCamera_Silvermane::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
-	if (FAILED(g_pGameInstance->Add_Prototype(L"Prototype_GameObject_SwordTral", CSwordTrail::Create(m_pDevice, m_pDeviceContext))))
-		return E_FAIL;
+	//if (FAILED(g_pGameInstance->Add_Prototype(L"Prototype_GameObject_SwordTral", CSwordTrail::Create(m_pDevice, m_pDeviceContext))))
+	//	return E_FAIL;
 #pragma endregion
 
 	return S_OK;
@@ -949,7 +949,7 @@ HRESULT CLoader::Load_Stage1MonsterLoad()
 	//if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Shooter_Bullet", CBullet::Create(m_pDevice, m_pDeviceContext))))
 	//	return E_FAIL;
 
-	//Bastion_2HSword
+	//////Bastion_2HSword
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Bastion_2HSword", CModel::Create(m_pDevice, m_pDeviceContext,
 		L"../bin/FBX/Monster/Bastion_2HSword_Bin.fbx", CModel::TYPE_ANIM, true))))
 		return E_FAIL;
@@ -981,6 +981,7 @@ HRESULT CLoader::Load_Stage1MonsterLoad()
 	//}
 	//if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Weapon_Staff", CStaff::Create(m_pDevice, m_pDeviceContext))))
 	//	return E_FAIL;
+
 
 	return S_OK;
 }
@@ -1106,12 +1107,12 @@ HRESULT CLoader::Ready_Test_JS()
 
 	//몬스터
 	//matPivot = XMMatrixIdentity();
-	////Monster Crystal_Crawler
-	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Monster_Crawler", CModel::Create(m_pDevice, m_pDeviceContext,
-	//	L"../bin/FBX/Monster/Crystal_Crawler.fbx", CModel::TYPE_ANIM, true))))
-	//	return E_FAIL;
-	//if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Monster_Crawler", CMonster_Crawler::Create(m_pDevice, m_pDeviceContext))))
-	//	return E_FAIL;
+	//Monster Crystal_Crawler
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Monster_Crawler", CModel::Create(m_pDevice, m_pDeviceContext,
+		L"../bin/FBX/Monster/Crystal_Crawler.fbx", CModel::TYPE_ANIM, true))))
+		return E_FAIL;
+	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Monster_Crawler", CMonster_Crawler::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
 
 	////Bastion_2HSword
 	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Bastion_2HSword", CModel::Create(m_pDevice, m_pDeviceContext,
@@ -1190,8 +1191,10 @@ HRESULT CLoader::Ready_Test_JS()
 	{
 		return E_FAIL;
 	}
-	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"TrailBase", L"../bin/Resources/Texture/Trail/T_Smoke_Trail_Soft.dds")))
-		return E_FAIL;
+	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"TrailBase", L"../bin/Resources/Texture/Trail/T_Smoke_Trail_Soft.dds"))) MSGBOX("Failed To Add SwordTrail Tex");
+	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"DistortionBase", L"../bin/Resources/Texture/Trail/t_distort_channels.dds"))) MSGBOX("Failed To Add SwordTrail Tex");
+	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"DistortionMask", L"../bin/Resources/Texture/Trail/T_DistortionNoise.dds"))) MSGBOX("Failed To Add SwordTrail Tex");
+
 	if (FAILED(g_pGameInstance->Add_Prototype(L"Prototype_GameObject_SwordTral", CSwordTrail::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 	// 2
