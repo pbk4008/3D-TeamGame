@@ -32,6 +32,19 @@ _int CSpear_Charge_Attack::Tick(const _double& _dDeltaTime)
 	Play_Sound();
 	m_pAnimator->Tick(_dDeltaTime);
 
+	if (m_pAnimator->Get_CurrentAnimNode() == (_uint)CMonster_Bastion_Spear::ANIM_TYPE::A_ATTACK_CHARGE
+		&&m_pOwner->Get_Attack()
+		&&!m_pAnimator->Get_IsLerp())
+		m_pAnimator->Change_LoopAnim();
+	else if (m_pAnimator->Get_CurrentAnimNode() == (_uint)CMonster_Bastion_Spear::ANIM_TYPE::A_ATTACK_CHARGE_ED
+		&& !m_pAnimator->Get_IsLerp()
+		&& m_pAnimator->Get_CurrentAnimation()->Is_Finished())
+	{
+		m_pOwner->Set_ChargeOn(true);
+		m_pOwner->Set_Attack(false);
+		m_pOwner->Set_Target(false);
+		m_pStateController->Change_State(L"Idle");
+	}
 	return _int();
 }
 
@@ -57,10 +70,9 @@ HRESULT CSpear_Charge_Attack::EnterState()
 	if (FAILED(__super::EnterState()))
 		return E_FAIL;
 
-	m_bChargeOn = true;
-	if(!m_bAttack)
-		m_pAnimator->Change_AnyEntryAnimation((_uint)CMonster_Bastion_Spear::ANIM_TYPE::A_ATTACK_CHARGE_ST);
-
+	//m_bChargeOn = true;
+	m_pAnimator->Change_AnyEntryAnimation((_uint)CMonster_Bastion_Spear::ANIM_TYPE::A_ATTACK_CHARGE_ST);
+	
 	return S_OK;
 }
 
@@ -74,11 +86,11 @@ HRESULT CSpear_Charge_Attack::ExitState()
 
 void CSpear_Charge_Attack::Look_Player(void)
 {
-	if (7.0f >= m_fDistance && m_pAnimator->Get_CurrentAnimation()->Is_Finished())
+	/*if (7.0f >= m_fDistance && m_pAnimator->Get_CurrentAnimation()->Is_Finished())
 	{
 		m_bAttack = true;
 		m_pStateController->Change_State(L"Charge_Attack_End");
-	}
+	}*/
 }
 
 void CSpear_Charge_Attack::Look_Monster(void)

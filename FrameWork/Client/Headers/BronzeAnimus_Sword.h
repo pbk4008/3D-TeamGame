@@ -19,6 +19,8 @@ public:
 	virtual _int LateTick(_double _dDeltaTime) override;
 	virtual HRESULT Render() override;
 
+	virtual void OnTriggerEnter(CCollision& collision) override;
+
 private:
 	HRESULT Ready_Components();
 	_int Attach_FixedBone(const _double& _dDeltaTime);

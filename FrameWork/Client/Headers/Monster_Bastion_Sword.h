@@ -36,6 +36,10 @@ public:
 	virtual HRESULT Render() override;
 public:
 	virtual void Set_Remove(_bool bCheck) override;
+
+public:
+	void Set_IsAttack(const _bool _isAttack);
+
 private:
 	virtual void OnTriggerEnter(CCollision& collision) override;
 	virtual void OnTriggerExit(CCollision& collision) override;
@@ -46,10 +50,9 @@ private:
 	HRESULT Set_State_FSM();
 	HRESULT Set_Weapon();
 	HRESULT Ready_UI();
-	_int Change_State();
-private:
-	void Chase();
+	_int Dead_Check();
 	void Hit();
+
 private:
 	CModel* m_pModelCom = nullptr;
 	CAnimator* m_pAnimator = nullptr;
@@ -62,7 +65,6 @@ private:
 	CStargazer* m_pWeapon = nullptr;
 private:
 	ANIM_TYPE m_eHitType = ANIM_TYPE::TYPE_END;//Hit만 판정
-	wstring m_wstrCurState = L"";
 
 	_bool m_bFirstHit = false; //맨처음들어와서 맞았을때 판넬크기바꿔줘야돼서
 	_bool m_bFirst = false;

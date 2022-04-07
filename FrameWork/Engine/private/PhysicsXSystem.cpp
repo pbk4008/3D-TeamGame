@@ -105,6 +105,7 @@ const _int CPhysicsXSystem::Tick(const _double& _dDeltaTime)
 
 	m_pScene->simulate((PxReal)_dDeltaTime);
 	m_pScene->fetchResults(true);
+	m_pSimulationEventCallback->FetchResult();
 
 	return _int();
 }
@@ -117,7 +118,7 @@ PxMaterial* CPhysicsXSystem::Create_Material(const PxReal _staticFriction, const
 	return pMaterial;
 }
 
-PxRigidActor* CPhysicsXSystem::Create_RigidActor(const ERigidType _eRigidType, const _bool _isGravity, const _bool _isKinematic, const _bool _isVisualization, const PxVec3& _pxvPosition)
+PxRigidActor* CPhysicsXSystem::Create_RigidActor(const ERigidType _eRigidType, const _bool _isGravity, const _bool _isKinematic, const _bool _isVisualization, const _float _fMass, const PxVec3& _pxvPosition)
 {
 	PxRigidActor* pRigidActor = nullptr;
 	PxTransform pxTransform;
@@ -131,10 +132,36 @@ PxRigidActor* CPhysicsXSystem::Create_RigidActor(const ERigidType _eRigidType, c
 	case ERigidType::Dynamic:
 		pRigidActor = m_pPhysics->createRigidDynamic(pxTransform);
 		static_cast<PxRigidBody*>(pRigidActor)->setRigidBodyFlag(PxRigidBodyFlag::eKINEMATIC, _isKinematic);
+		static_cast<PxRigidBody*>(pRigidActor)->setMass(_fMass);
 		break;
 	}
 	pRigidActor->setActorFlag(PxActorFlag::eDISABLE_GRAVITY, !_isGravity);
 	pRigidActor->setActorFlag(PxActorFlag::eVISUALIZATION, _isVisualization);
+
+	return pRigidActor;
+}
+
+PxRigidActor* CPhysicsXSystem::Create_RigidActor(CCollider* _pCollider)
+{
+	CCollider::DESC tDesc = _pCollider->getDesc();
+
+	PxRigidActor* pRigidActor = nullptr;
+	PxTransform pxTransform;
+	pxTransform.p = PxVec3(0.f, 0.f, 0.f);
+	pxTransform.q = PxQuat(0.f, 0.f, 0.f, 1.f);
+	switch (tDesc.eRigidType)
+	{
+	case ERigidType::Static:
+		pRigidActor = m_pPhysics->createRigidStatic(pxTransform);
+		break;
+	case ERigidType::Dynamic:
+		pRigidActor = m_pPhysics->createRigidDynamic(pxTransform);
+		static_cast<PxRigidBody*>(pRigidActor)->setRigidBodyFlag(PxRigidBodyFlag::eKINEMATIC, tDesc.isKinematic);
+		static_cast<PxRigidBody*>(pRigidActor)->setMass(tDesc.fMass);
+		break;
+	}
+	pRigidActor->setActorFlag(PxActorFlag::eDISABLE_GRAVITY, !tDesc.isGravity);
+	pRigidActor->setActorFlag(PxActorFlag::eVISUALIZATION, tDesc.isVisualization);
 
 	return pRigidActor;
 }
@@ -150,7 +177,8 @@ HRESULT CPhysicsXSystem::Create_Box(CBoxCollider* _pCollider)
 	if (!pMaterial)
 		return E_FAIL;
 
-	PxRigidActor* pRigidActor = Create_RigidActor(tColliderDesc.eRigidType, tColliderDesc.isGravity, tColliderDesc.isKinematic, tColliderDesc.isVisualization);
+	//PxRigidActor* pRigidActor = Create_RigidActor(tColliderDesc.eRigidType, tColliderDesc.isGravity, tColliderDesc.isKinematic, tColliderDesc.isVisualization, tColliderDesc.fMass);
+	PxRigidActor* pRigidActor = Create_RigidActor(_pCollider);
 	pRigidActor->userData = tColliderDesc.pGameObject;
 
 	// Shape
@@ -189,7 +217,8 @@ HRESULT CPhysicsXSystem::Create_Sphere(CSphereCollider* _pCollider)
 	if (!pMaterial)
 		return E_FAIL;
 
-	PxRigidActor* pRigidActor = Create_RigidActor(tColliderDesc.eRigidType, tColliderDesc.isGravity, tColliderDesc.isKinematic, tColliderDesc.isVisualization);
+	//PxRigidActor* pRigidActor = Create_RigidActor(tColliderDesc.eRigidType, tColliderDesc.isGravity, tColliderDesc.isKinematic, tColliderDesc.isVisualization, tColliderDesc.fMass);
+	PxRigidActor* pRigidActor = Create_RigidActor(_pCollider);
 	pRigidActor->userData = tColliderDesc.pGameObject;
 
 	// Shape
@@ -225,7 +254,8 @@ HRESULT CPhysicsXSystem::Create_Capsule(CCapsuleCollider* _pCollider)
 	if (!pMaterial)
 		return E_FAIL;
 
-	PxRigidActor* pRigidActor = Create_RigidActor(tColliderDesc.eRigidType, tColliderDesc.isGravity, tColliderDesc.isKinematic, tColliderDesc.isVisualization);
+	//PxRigidActor* pRigidActor = Create_RigidActor(tColliderDesc.eRigidType, tColliderDesc.isGravity, tColliderDesc.isKinematic, tColliderDesc.isVisualization, tColliderDesc.fMass);
+	PxRigidActor* pRigidActor = Create_RigidActor(_pCollider);
 	pRigidActor->userData = tColliderDesc.pGameObject;
 
 	// Shape
@@ -266,7 +296,8 @@ HRESULT CPhysicsXSystem::Create_NavMesh(CNavMeshCollider* _pCollider)
 	if (!pMaterial)
 		return E_FAIL;
 
-	PxRigidActor* pRigidActor = Create_RigidActor(tColliderDesc.eRigidType, tColliderDesc.isGravity, tColliderDesc.isKinematic, tColliderDesc.isVisualization);
+	//PxRigidActor* pRigidActor = Create_RigidActor(tColliderDesc.eRigidType, tColliderDesc.isGravity, tColliderDesc.isKinematic, tColliderDesc.isVisualization, tColliderDesc.fMass);
+	PxRigidActor* pRigidActor = Create_RigidActor(_pCollider);
 	pRigidActor->userData = tColliderDesc.pGameObject;
 
 	// Shape
@@ -385,13 +416,14 @@ const PxRenderBuffer& CPhysicsXSystem::Get_RenderBuffer()
 
 void CPhysicsXSystem::Remove_Actor(PxActor* _pActor)
 {
-	if (_pActor)
+	if (_pActor && NULL != _pActor->getScene())
 		m_pScene->removeActor(*_pActor);
 }
 
 void CPhysicsXSystem::Add_Actor(PxActor* _pActor)
 {
-	m_pScene->addActor(*_pActor);
+	if(_pActor && NULL == _pActor->getScene())
+		m_pScene->addActor(*_pActor);
 }
 
 const _bool CPhysicsXSystem::Raycast(RAYCASTDESC & _desc)
@@ -409,6 +441,72 @@ const _bool CPhysicsXSystem::Raycast(RAYCASTDESC & _desc)
 			{
 				*_desc.ppOutHitObject = static_cast<CGameObject*>(hitInfo.actor->userData);
 				_desc.vHitPos = FromPxVec3(hitInfo.position);
+			}
+			return true;
+		}
+	}
+	return false;
+}
+
+const _bool CPhysicsXSystem::Sweep(SWEEPDESC& _desc)
+{
+	PxTransform origin;
+	origin.p = ToPxVec3(_desc.vOrigin);
+	origin.q = ToPxQuat(_desc.vQuat);
+	PxVec3 unitDir = ToPxVec3(_desc.vDir);
+
+	PxSweepBuffer hit;
+	if (m_pScene->sweep(_desc.geometry.any(), origin, unitDir, _desc.fMaxDistance, hit, _desc.hitFlags, _desc.filterData))
+	{
+		if (hit.hasBlock)
+		{
+			PxSweepHit hitInfo = hit.block;
+			if (_desc.ppOutHitObject)
+			{
+				*_desc.ppOutHitObject = static_cast<CGameObject*>(hitInfo.actor->userData);
+				_desc.vHitPos = FromPxVec3(hitInfo.position);
+			}
+			return true;
+		}
+	}
+	return false;
+}
+
+const _bool CPhysicsXSystem::Overlap(OVERLAPDESC& _desc)
+{
+	PxTransform origin;
+	origin.p = ToPxVec3(_desc.vOrigin);
+	origin.q = ToPxQuat(_desc.vQuat);
+
+	if (PxQueryFlag::eANY_HIT & _desc.filterData.flags)
+	{
+		PxOverlapBuffer hit;
+		if (m_pScene->overlap(_desc.geometry.any(), origin, hit, _desc.filterData))
+		{
+			if (hit.hasBlock)
+			{
+				PxOverlapHit hitInfo = hit.block;
+				if (_desc.ppOutHitObject)
+				{
+					*_desc.ppOutHitObject = static_cast<CGameObject*>(hitInfo.actor->userData);
+				}
+				return true;
+			}
+		}
+	}
+	else
+	{
+		const PxU32 bufferSize = 256;
+		PxOverlapHit hitBuffer[bufferSize];
+		PxOverlapBuffer buf(hitBuffer, bufferSize);
+		if (m_pScene->overlap(_desc.geometry.any(), origin, buf, _desc.filterData))
+		{
+			PxU32 nbTouches = buf.nbTouches;
+			_desc.vecHitObject.reserve(nbTouches);
+			for (PxU32 i = 0; i < nbTouches; ++i)
+			{
+				PxOverlapHit hitInfo = buf.touches[i];
+				_desc.vecHitObject.emplace_back(static_cast<CGameObject*>(hitInfo.actor->userData));
 			}
 			return true;
 		}

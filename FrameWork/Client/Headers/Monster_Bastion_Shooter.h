@@ -35,6 +35,12 @@ public:
 	virtual HRESULT Render() override;
 public:
 	virtual void Set_Remove(_bool bCheck) override;
+	virtual void Hit(const ATTACKDESC& _tAttackDesc) override;
+
+public:
+	void Set_Shot(_bool bShot) { m_bShot = bShot; }
+	const _bool Get_Shot() const { return m_bShot; };
+
 private:
 	virtual void OnTriggerEnter(CCollision& collision) override;
 private:
@@ -46,6 +52,7 @@ private:
 	HRESULT Ready_StateFSM();
 	HRESULT Ready_UI();
 	_int Change_State();
+
 private:
 	CModel* m_pModelCom = nullptr;
 	CAnimator* m_pAnimator = nullptr;
@@ -60,6 +67,7 @@ private:
 	_bool m_bFirstHit = false; //맨처음들어와서 맞았을때 판넬크기바꿔줘야돼서
 	_bool m_bFirst = false; //나중에 지울 변수
 	_uint m_iCurScene = 0;
+	_bool m_bShot;
 
 public:
 	static CMonster_Bastion_Shooter* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext);

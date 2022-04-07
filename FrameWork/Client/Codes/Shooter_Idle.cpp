@@ -58,6 +58,8 @@ HRESULT CShooter_Idle::EnterState()
 {
 	if (FAILED(__super::EnterState()))
 		return E_FAIL;
+	
+	m_pAnimator->Change_AnyEntryAnimation((_uint)CMonster_Bastion_Shooter::ANIM_TYPE::IDLE);
 
 	return S_OK;
 }
@@ -66,7 +68,6 @@ HRESULT CShooter_Idle::ExitState()
 {
 	if (FAILED(__super::ExitState()))
 		return E_FAIL;
-
 	return S_OK;
 }
 

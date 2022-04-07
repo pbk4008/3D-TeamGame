@@ -67,6 +67,8 @@ HRESULT CShield_SupermanPunchStraight::EnterState()
 
 	m_pSilvermane->Set_EquipShield(true);
 	m_pSilvermane->Set_EquipShieldAnim(true);
+
+	m_pSilvermane->Set_IsShieldAttack(true);
 	return S_OK;
 }
 
@@ -77,6 +79,8 @@ HRESULT CShield_SupermanPunchStraight::ExitState()
 
 	m_pSilvermane->Set_EquipShield(false);
 	m_pSilvermane->Set_EquipShieldAnim(false);
+
+	m_pSilvermane->Set_IsShieldAttack(false);
 	return S_OK;
 }
 

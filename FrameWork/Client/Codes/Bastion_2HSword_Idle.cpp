@@ -23,17 +23,12 @@ HRESULT CBastion_2HSword_Idle::NativeConstruct(void* _pArg)
 
 _int CBastion_2HSword_Idle::Tick(const _double& _dDeltaTime)
 {
+	cout << "Idle" << endl;
 	_int iProgress = __super::Tick(_dDeltaTime);
 	if (NO_EVENT != iProgress)
 		return iProgress;
 
-	if (m_pMonster->Get_Dead())
-		return 0;
-
 	m_pAnimator->Tick(_dDeltaTime);
-
-	if (m_bTargetOn)
-		m_pStateController->Change_State(L"Chaser");
 
 	return _int();
 }
@@ -77,11 +72,6 @@ HRESULT CBastion_2HSword_Idle::ExitState()
 /* 플레이어 상태 추적 */
 void CBastion_2HSword_Idle::Look_Player(void)
 {
-	if (m_bAttackOn && !m_bRageOn)
-	{
-		m_pTransform->Face_Target(g_pObserver->Get_PlayerPos());
-		m_pStateController->Change_State(L"Attack");
-	}
 }
 
 void CBastion_2HSword_Idle::Look_Monster(void)
@@ -93,6 +83,7 @@ void CBastion_2HSword_Idle::OnTriggerEnter(CCollision& collision)
 	if ((_uint)GAMEOBJECT::WEAPON == collision.pGameObject->getTag() && g_pObserver->IsAttack())
 	{
 		static_cast<CMonster_Bastion_2HSword*>(m_pMonster)->Set_CurrentHp(-1);
+		//m_pOwner->Set_CurrentHp(-1);
 		m_pStateController->Change_State(L"Hit");
 	}
 }

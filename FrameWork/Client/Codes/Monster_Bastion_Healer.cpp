@@ -10,14 +10,14 @@
 #include "Bastion_Healer_Idle.h"
 #include "Bastion_Healer_Hit.h"
 #include "Bastion_Healer_Death.h"
-#include "Bastion_Healer_Chaser.h"
-#include "Bastion_Healer_Chaser_End.h"
+#include "Bastion_Healer_Run.h"
 #include "Bastion_Healer_Attack.h"
 #include "Bastion_Healer_Groggy.h"
 #include "Bastion_Healer_Groggy_End.h"
 #include "Bastion_Healer_CastProtect.h"
 
 #include "Stage1.h"
+#include "Stage2.h"
 
 CMonster_Bastion_Healer::CMonster_Bastion_Healer(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
 	: CActor(_pDevice, _pDeviceContext)
@@ -89,7 +89,7 @@ HRESULT CMonster_Bastion_Healer::NativeConstruct(const _uint _iSceneID, void* _p
 
 	m_pPanel->Set_TargetWorldMatrix(m_pTransform->Get_WorldMatrix());
 
-	m_fMaxHp = 2.f;
+	m_fMaxHp = 5.f;
 	m_fCurrentHp = m_fMaxHp;
 
 	m_fMaxGroggyGauge = 10.f;
@@ -100,7 +100,7 @@ HRESULT CMonster_Bastion_Healer::NativeConstruct(const _uint _iSceneID, void* _p
 
 	m_isFall = true;
 
-	setActive(false);
+	//setActive(false);
 	return S_OK;
 }
 
@@ -250,7 +250,7 @@ void CMonster_Bastion_Healer::Hit(CCollision& pCol)
 				Active_Effect((_uint)EFFECT::HIT);
 				Active_Effect((_uint)EFFECT::FLOATING);
 
-				m_fCurrentHp -= 5.f;
+				//m_fCurrentHp -= 5.f;
 				//m_bGroggy = 2; //TODO::¼öÄ¡Á¤ÇØ¼­¹Ù²ãÁà¾ßµÊ
 
 				m_pPanel->Set_HpBar(Get_HpRatio());
@@ -266,6 +266,20 @@ void CMonster_Bastion_Healer::Hit(CCollision& pCol)
 				m_pStateController->Change_State(L"Idle");
 		}
 	}
+}
+
+void CMonster_Bastion_Healer::Hit(const ATTACKDESC& _tAttackDesc)
+{
+	if (m_bDead || 0.f >= m_fCurrentHp)
+		return;
+
+	m_pPanel->Set_Show(true);
+
+	m_fCurrentHp -= _tAttackDesc.fDamage;
+	CCollision collision;
+	collision.pGameObject = _tAttackDesc.pHitObject;
+
+	Hit(collision);
 }
 
 void CMonster_Bastion_Healer::Remove_Collider()
@@ -362,7 +376,7 @@ HRESULT CMonster_Bastion_Healer::Ready_AnimFSM(void)
 	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::A_CAST_PROTECT, (_uint)ANIM_TYPE::A_HEAD, pAnimation, TRUE, TRUE, FALSE, ERootOption::XYZ)))
 		return E_FAIL;
 	pAnimation = m_pModel->Get_Animation("A_Attack_Blind");
-	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::A_ATTACK_BLIND, (_uint)ANIM_TYPE::A_HEAD, pAnimation, TRUE, TRUE, FALSE, ERootOption::XYZ)))
+	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::A_ATTACK_BLIND, (_uint)ANIM_TYPE::A_HEAD, pAnimation, TRUE, FALSE, FALSE, ERootOption::XYZ)))
 		return E_FAIL;
 #pragma endregion
 #pragma region Hit
@@ -473,10 +487,7 @@ HRESULT CMonster_Bastion_Healer::Ready_StateFSM(void)
 	if (FAILED(m_pStateController->Add_State(L"Idle", CBastion_Healer_Idle::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 	/* for. Player Chaser */
-	if (FAILED(m_pStateController->Add_State(L"Chaser", CBastion_Healer_Chaser::Create(m_pDevice, m_pDeviceContext))))
-		return E_FAIL;
-	/* for. Player Chaser End */
-	if (FAILED(m_pStateController->Add_State(L"Chaser_End", CBastion_Healer_Chaser_End::Create(m_pDevice, m_pDeviceContext))))
+	if (FAILED(m_pStateController->Add_State(L"Run", CBastion_Healer_Run::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 	/* for. Attack*/
 	if (FAILED(m_pStateController->Add_State(L"Attack", CBastion_Healer_Attack::Create(m_pDevice, m_pDeviceContext))))

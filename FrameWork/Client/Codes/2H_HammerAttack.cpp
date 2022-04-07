@@ -85,6 +85,8 @@ HRESULT C2H_HammerAttack::EnterState()
 	m_tShakeEvent2.tWaveY.fFrequency = 1.f;
 	m_tShakeEvent2.tWaveY.fAdditionalOffset = -0.3f;
 
+
+	g_pObserver->Set_PlayerAttackAnimStart(true);
 	return S_OK;
 }
 
@@ -96,7 +98,14 @@ HRESULT C2H_HammerAttack::ExitState()
 	m_pSilvermane->Set_IsTrasceCamera(true);
 
 	m_isShake2 = false;
+	m_isRangeAttack = false;
 	return S_OK;
+}
+
+void C2H_HammerAttack::Hit(const ATTACKDESC& _tAttackDesc)
+{
+	if (!m_pSilvermane->IsAttack())
+		__super::Hit(_tAttackDesc);
 }
 
 _int C2H_HammerAttack::Input(const _double& _dDeltaTime)

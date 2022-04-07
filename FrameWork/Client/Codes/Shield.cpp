@@ -59,6 +59,9 @@ HRESULT CShield::NativeConstruct(const _uint _iSceneID, void* _pArg)
 	if(_pArg)
 		m_pFixedBone = static_cast<CHierarchyNode*>(_pArg);
 
+	m_bActive = false;
+	m_pCollider->Remove_ActorFromScene();
+
 	return S_OK;
 }
 
@@ -180,16 +183,19 @@ _int CShield::Attach_Owner(const _double& _dDeltaTime)
 
 void CShield::Set_Equip(const _bool _isEquip, void* _pArg)
 {
-	__super::Set_Equip(_isEquip, _pArg);
-	m_bActive = _isEquip;
-	switch (_isEquip)
+	if (m_isEquip != _isEquip)
 	{
-	case true:
-		m_pCollider->Add_ActorToScene();
-		break;
-	case false:
-		m_pCollider->Remove_ActorFromScene();
-		break;
+		__super::Set_Equip(_isEquip, _pArg);
+		m_bActive = _isEquip;
+		switch (_isEquip)
+		{
+		case true:
+			m_pCollider->Add_ActorToScene();
+			break;
+		case false:
+			m_pCollider->Remove_ActorFromScene();
+			break;
+		}
 	}
 }
 
@@ -199,9 +205,11 @@ void CShield::Set_EquipAnim(const _bool _isEquip)
 	{
 	case true:
 		m_pAnimationController->SetUp_NextAnimation("SK_shieldBase.ao|A_Spectral_Shield_Block_Start_Weapon", false);
+		m_pCollider->Add_ActorToScene();
 		break;
 	case false:
 		m_pAnimationController->SetUp_NextAnimation("SK_shieldBase.ao|A_Spectral_Shield_Block_End_Weapon", false);
+		m_pCollider->Remove_ActorFromScene();
 		break;
 	}
 }

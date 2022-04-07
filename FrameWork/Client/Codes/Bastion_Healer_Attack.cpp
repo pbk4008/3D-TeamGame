@@ -30,6 +30,11 @@ _int CBastion_Healer_Attack::Tick(const _double& _dDeltaTime)
 		return iProgress;
 
 	m_pAnimator->Tick(_dDeltaTime);
+	if (m_pAnimator->Get_CurrentAnimation()->Is_Finished())
+	{
+		m_pOwner->set_Attack(false);
+		m_pStateController->Change_State(L"Idle");
+	}
 
 	return _int();
 }
@@ -56,6 +61,7 @@ HRESULT CBastion_Healer_Attack::EnterState()
 	if (FAILED(__super::EnterState()))
 		return E_FAIL;
 
+	m_pTransform->Face_Target(g_pObserver->Get_PlayerPos());
 	m_pAnimator->Change_AnyEntryAnimation((_uint)CMonster_Bastion_Healer::ANIM_TYPE::A_ATTACK_BLIND);
 
 	return S_OK;

@@ -38,6 +38,7 @@ public:
 	UIBARDESC Get_UIDesc() { return m_UIBarDesc; }
 
 public:
+	void Set_ExHpRatio(_float Ratio) { m_fExHpRatio = Ratio; }
 	void Set_HpRatio(_float Ratio) { m_fHpRatio = Ratio; }
 
 private:
@@ -47,7 +48,9 @@ private:
 	_float m_fAlpha = 1.f;
 	_float m_fDisappearTimeAcc = 0.f;
 
-	_float m_fHpRatio = 0.f;
+	_float m_fExHpRatio = 0.f; //이전 피 비율
+	_float m_fHpRatio = 0.f; //현재 피 비율
+	_float m_fCurAttackGauge = 0.f; //이전게이지 - 현재게이지
 
 private:
 	virtual HRESULT SetUp_Components();

@@ -29,12 +29,17 @@ _int CSpear_Attack::Tick(const _double& _dDeltaTime)
 	if (NO_EVENT != iProgress)
 		return iProgress;
 
+	m_pTransform->Face_Target(g_pObserver->Get_PlayerPos());
 	m_pAnimator->Tick(_dDeltaTime);
-	Play_Sound();
 
-	CMonster_Bastion_Spear* pMonster = (CMonster_Bastion_Spear*)m_pStateController->Get_GameObject();
-	if (nullptr != pMonster)
-		pMonster->Set_IsAttack(true);
+	if (m_pAnimator->Get_CurrentAnimation()->Is_Finished())
+	{
+		m_pOwner->Set_Attack(false);
+		m_pStateController->Change_State(L"Idle");
+	}
+	//CMonster_Bastion_Spear* pMonster = (CMonster_Bastion_Spear*)m_pStateController->Get_GameObject();
+	//if (nullptr != pMonster)
+	//	pMonster->Set_IsAttack(true);
 
 	return _int();
 }
@@ -61,7 +66,8 @@ HRESULT CSpear_Attack::EnterState()
 	if (FAILED(__super::EnterState()))
 		return E_FAIL;
 
-	m_pAnimator->Change_AnyEntryAnimation((_uint)CMonster_Bastion_Spear::ANIM_TYPE::A_ATTACK_R1);
+	//m_pAnimator->Change_AnyEntryAnimation((_uint)CMonster_Bastion_Spear::ANIM_TYPE::A_ATTACK_R1);
+	//Play_Sound();
 
 	return S_OK;
 }
@@ -76,12 +82,39 @@ HRESULT CSpear_Attack::ExitState()
 	return S_OK;
 }
 
+HRESULT CSpear_Attack::EnterState(void* pArg)
+{
+	_uint iRand = (*(_uint*)pArg);
+
+	switch (iRand)
+	{
+	case 0:
+		m_pAnimator->Change_AnyEntryAnimation((_uint)CMonster_Bastion_Spear::ANIM_TYPE::A_ATTACK_R1);
+		break;
+	case 1:
+		m_pAnimator->Change_AnyEntryAnimation((_uint)CMonster_Bastion_Spear::ANIM_TYPE::A_ATTACK_R2);
+		break;
+	}
+
+	Play_Sound();
+
+	return S_OK;
+}
+
+HRESULT CSpear_Attack::ExitState(void* pArg)
+{
+	m_bAttack1 = false;
+	m_bAttack2 = false;
+
+	return S_OK;
+}
+
 void CSpear_Attack::Look_Player(void)
 {
-	CAnimation* pAnim = m_pAnimator->Get_CurrentAnimation();
+	//CAnimation* pAnim = m_pAnimator->Get_CurrentAnimation();
 
-	if (pAnim->Is_Finished())
-		m_pStateController->Change_State(L"Idle");
+	//if (pAnim->Is_Finished())
+	//	m_pStateController->Change_State(L"Idle");
 }
 
 void CSpear_Attack::Look_Monster(void)
@@ -108,7 +141,6 @@ void CSpear_Attack::Play_Sound(void)
 		{
 			if (!m_bAttack2)
 			{
-
 				g_pGameInstance->BlendSound(L"Spear_Roar", L"Spear_Attack_2", CSoundMgr::CHANNELID::Spear_Attack_1, CSoundMgr::CHANNELID::Sword1H_Attack_2);
 				g_pGameInstance->VolumeChange(CSoundMgr::CHANNELID::Spear_Attack_1, 0.3f);
 				g_pGameInstance->VolumeChange(CSoundMgr::CHANNELID::Spear_Attack_2, 0.2f);

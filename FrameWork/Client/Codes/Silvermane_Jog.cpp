@@ -62,7 +62,7 @@ HRESULT CSilvermane_Jog::ExitState()
 
 void CSilvermane_Jog::OnTriggerEnter(CCollision& collision)
 {
-	OnTriggerEnterHit(collision);
+	//OnTriggerEnterHit(collision);
 }
 
 _int CSilvermane_Jog::Input(const _double& _dDeltaTime)

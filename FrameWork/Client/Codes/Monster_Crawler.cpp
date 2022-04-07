@@ -89,7 +89,7 @@ HRESULT CMonster_Crawler::NativeConstruct(const _uint _iSceneID, void* _pArg)
 	m_pPanel->Set_GroggyBar(Get_GroggyGaugeRatio());
 
 	m_iObectTag = (_uint)GAMEOBJECT::MONSTER_CRYSTAL;
-	setActive(false);
+	//setActive(false);
 
 	return S_OK;
 }
@@ -135,7 +135,7 @@ _int CMonster_Crawler::Tick(_double _dDeltaTime)
 	}
 	else
 	{
-		if (DEATH == m_pAnimatorCom->Get_CurrentAnimNode())
+		if (L"Death" == m_pStateController->Get_CurStateTag())
 		{
 			if (m_pAnimatorCom->Get_CurrentAnimation()->Is_Finished())
 			{
@@ -212,6 +212,18 @@ void CMonster_Crawler::OnTriggerEnter(CCollision& collision)
 {
 	if (!m_bDead)
 	{
+		// 플레이어를 공격할 때
+		if ((_uint)GAMEOBJECT::PLAYER == collision.pGameObject->getTag())
+		{
+			if (!m_IsAttack)
+				return;
+
+			m_tAttackDesc.fDamage = 3;
+			m_tAttackDesc.iLevel = 1;
+			static_cast<CActor*>(collision.pGameObject)->Hit(m_tAttackDesc);
+			return;
+		}
+		// 자기자신이 피격당할 때
 		if (true == g_pObserver->IsAttack()) //플레이어공격일때
 		{
 			m_pPanel->Set_Show(true);
@@ -265,6 +277,8 @@ void CMonster_Crawler::OnTriggerExit(CCollision& collision)
 void CMonster_Crawler::Set_IsAttack(const _bool _isAttack)
 {
 	m_IsAttack = _isAttack;
+	m_tAttackDesc.fDamage = 3;
+	m_tAttackDesc.iLevel = 1;
 }
 
 HRESULT CMonster_Crawler::SetUp_Components()

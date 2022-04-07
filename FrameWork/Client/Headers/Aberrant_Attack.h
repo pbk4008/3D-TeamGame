@@ -22,7 +22,7 @@ public:
 	virtual _int LateTick(const _double & TimeDelta);
 	virtual HRESULT Render();
 
-	virtual HRESULT EnterState();
+	//virtual HRESULT EnterState();
 	virtual HRESULT ExitState();
 	virtual HRESULT EnterState(void* pArg);
 
@@ -33,7 +33,6 @@ private:
 	void Play_Sound(void);
 
 private:
-	_uint m_iAttackCount = 0;
 	_uint m_iAttack1Frame = 45;
 	_uint m_iAttack2Frame = 15;
 	_uint m_iAttackType = 0;

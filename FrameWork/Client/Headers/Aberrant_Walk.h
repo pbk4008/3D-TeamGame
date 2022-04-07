@@ -26,6 +26,9 @@ public:
 	virtual HRESULT ExitState();
 	virtual HRESULT ExitState(void* pArg);
 
+private:
+	void Chase_Player(_double TimeDelta);
+
 public:
 	virtual void Look_Player(void) override;
 

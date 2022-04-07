@@ -24,7 +24,6 @@ HRESULT CBoxCollider::NativeConstruct(void* _pArg)
 	if (_pArg)
 	{
 		memcpy_s(&tDesc, sizeof(DESC), _pArg, sizeof(DESC));
-		m_pGameObject = tDesc.tColliderDesc.pGameObject;
 		m_vScale = tDesc.vScale;
 	}
 
@@ -34,6 +33,7 @@ HRESULT CBoxCollider::NativeConstruct(void* _pArg)
 	if (FAILED(m_pPhsyX->Create_Box(this)))
 		return E_FAIL;
 
+	Update_PxTransform();
 	return S_OK;
 }
 

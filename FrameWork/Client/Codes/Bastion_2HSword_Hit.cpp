@@ -94,10 +94,10 @@ void CBastion_2HSword_Hit::Look_Player(void)
 
 void CBastion_2HSword_Hit::Look_Monster(void)
 {
-	CAnimation* pAnim = m_pAnimator->Get_CurrentAnimation();
+	//CAnimation* pAnim = m_pAnimator->Get_CurrentAnimation();
 
-	if (pAnim->Is_Finished() && 0 < m_pMonster->Get_CurrentHp())
-		m_pStateController->Change_State(L"Idle");
+	//if (pAnim->Is_Finished() && 0 < m_pMonster->Get_CurrentHp())
+	//	m_pStateController->Change_State(L"Idle");
 }
 
 CBastion_2HSword_Hit* CBastion_2HSword_Hit::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext, void* _pArg)

@@ -2,7 +2,7 @@
 #include "Shield_Parry.h"
 
 CShield_Parry::CShield_Parry(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
-	: CShield_Block(_pDevice, _pDeviceContext)
+	: CState_Silvermane(_pDevice, _pDeviceContext)
 {
 }
 
@@ -78,6 +78,7 @@ HRESULT CShield_Parry::EnterState()
 	m_pAnimationController->Set_RootMotion(true, true, ERootOption::XYZ);
 
 	m_pSilvermane->Set_EquipShield(true);
+	m_pSilvermane->Set_IsHit(true);
 
 	return S_OK;
 }
@@ -87,8 +88,8 @@ HRESULT CShield_Parry::ExitState()
 	if (FAILED(__super::ExitState()))
 		return E_FAIL;
 
-	m_pSilvermane->Set_EquipShield(false);
-
+	//m_pSilvermane->Set_EquipShield(false);
+	m_pSilvermane->Set_IsHit(false);
 	return S_OK;
 }
 

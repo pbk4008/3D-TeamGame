@@ -41,7 +41,7 @@ public:
 	virtual HRESULT Render() override;
 
 private:
-	HRESULT Ready_Components();
+	HRESULT Ready_Components(_uint iSceneID);
 	HRESULT Ready_Weapon(void);
 	HRESULT Ready_AnimFSM(void);
 	HRESULT Ready_StateFSM(void);
@@ -56,7 +56,31 @@ public:
 	void Set_GroggyGauge(_uint _Value) { m_fGroggyGauge += _Value; }
 	void Set_Dead(void) { m_bDead = true; }
 	void Remove_Collider();
+	void Groggy_Start();
+public:
+	void Hit(CCollision& collision);
+public:
+	void Set_Target(_bool bCheck) { m_bTargetOn = bCheck; }
+	void Set_Attack(_bool bCheck) { m_bAttackOn = bCheck; }
+	void Set_Guard(_bool bCheck) { m_bGuard = bCheck; }
+	void Set_Half(_bool bCheck) { m_bHalf = bCheck; }
+	void Set_ChargeOn(_bool bCheck) { m_bChargeOn = bCheck; }
+	void Set_GuardCount(_int iCount) { m_iGuardCount = iCount;  }
 
+	_bool Get_Target() { return m_bTargetOn; }
+	_bool Get_Attack() { return m_bAttackOn; }
+	_bool Get_Guard() { return m_bGuard; }
+	_bool Get_Half() { return m_bHalf; }
+	_bool Get_ChargeOn() {return m_bChargeOn;}
+
+	_int Get_GuardCount() { return m_iGuardCount; }
+private:
+	_bool m_bTargetOn = false;
+	_bool m_bAttackOn = false;
+	_bool m_bGuard = false;
+	_bool m_bHalf = false;
+	_bool m_bChargeOn = false;
+	_int m_iGuardCount = 7;
 private:
 	CModel* m_pModel = nullptr;
 	CAnimation* m_pAnimation = nullptr;
@@ -70,11 +94,11 @@ private:
 private: /* For.Weapon */
 	CPolearm* m_pWeapon = nullptr;
 
-public:
+private:
 	class CUI_Monster_Panel* m_pPanel = nullptr;
 	_bool m_bFirst = false;
 
-public:
+private:
 	_bool	m_isFall = false;
 	_bool	m_bFirstHit = false; //맨처음들어와서 맞았을때 판넬크기바꿔줘야돼서
 	_bool	m_bGroggy = false; //그로기 상태인지 아닌지

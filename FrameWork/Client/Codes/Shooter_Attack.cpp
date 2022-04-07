@@ -8,7 +8,6 @@
 CShooter_Attack::CShooter_Attack(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
 	: CMonster_FSM(_pDevice, _pDeviceContext)
 	, m_dAccShotTime(0.0)
-	, m_bShot(false)
 {
 }
 
@@ -41,11 +40,13 @@ _int CShooter_Attack::Tick(const _double& _dDeltaTime)
 	if (NO_EVENT != iProgress)
 		return iProgress;
 
+	//cout << "Attack" << endl;
+
 	m_pAnimator->Tick(_dDeltaTime);
 	
 	Shot(_dDeltaTime);
 
-	if (m_pAnimator->Get_CurrentAnimNode() == (_uint)CMonster_Bastion_Shooter::ANIM_TYPE::IDLE)
+	if (m_pAnimator->Get_CurrentAnimation()->Is_Finished())
 	{
 		m_pStateController->Change_State(L"Idle");
 	}
@@ -86,8 +87,10 @@ HRESULT CShooter_Attack::ExitState()
 {
 	if (FAILED(__super::ExitState()))
 		return E_FAIL;
-
-	m_bShot = false;
+	if (nullptr != m_pMonster)
+	{
+		static_cast<CMonster_Bastion_Shooter*>(m_pMonster)->Set_Shot(false);
+	}
 	m_dAccShotTime = 0.0;
 
 	return S_OK;
@@ -107,12 +110,23 @@ _uint CShooter_Attack::Shot(_double dDeltaTime)
 {
 	if (!m_pAnimator)
 		return -1;
+
+	_bool bShot = static_cast<CMonster_Bastion_Shooter*>(m_pMonster)->Get_Shot();
+
 	m_dAccShotTime += dDeltaTime;
-	cout << "Time" << m_dAccShotTime << endl;
-	if (m_dAccShotTime >= 2.5 && !m_bShot)
+
+	//cout << "Time" << m_dAccShotTime << endl;
+	//cout << m_pAnimator->Get_AnimController()->Get_CurKeyFrameIndex() << endl;
+	_uint Index = m_pAnimator->Get_AnimController()->Get_CurKeyFrameIndex();
+
+	if (150 < Index && 160 > Index && !bShot)
 	{
 		_uint iProgress = Create_Bullet();
-		m_bShot = true;
+		if (nullptr != m_pMonster)
+		{
+			static_cast<CMonster_Bastion_Shooter*>(m_pMonster)->Set_Shot(true);
+		}
+		
 		g_pGameInstance->Play_Shot(L"Shooter_Shot", CSoundMgr::CHANNELID::Shooter_Attack_1);
 		if (iProgress == -1)
 			return -1;
@@ -135,9 +149,10 @@ _uint CShooter_Attack::Create_Bullet()
 	vBulletMatrix *= matWorld;
 	_uint iSceneID = g_pGameInstance->getCurrentLevel();
 
-
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer(iSceneID, L"Layer_Bullet", L"Proto_GameObject_Shooter_Bullet", &vBulletMatrix)))
+	CBullet* pBullet = nullptr;
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer(iSceneID, L"Layer_Bullet", L"Proto_GameObject_Shooter_Bullet", &vBulletMatrix, (CGameObject**)&pBullet)))
 		return E_FAIL;
+	pBullet->Set_Owner(m_pMonster);
 
 	return _uint();
 }

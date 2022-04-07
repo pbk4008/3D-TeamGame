@@ -23,7 +23,6 @@ _int CTraverse_JumpNodeJog::Tick(const _double& _dDeltaTime)
 
 	Add_PlusAngle(EDir::Forward, _dDeltaTime);
 	_uint iCurKeyFrameIndex = m_pAnimationController->Get_CurKeyFrameIndex();
-
 	if (7 < iCurKeyFrameIndex)
 	{
 		_vector svVelocity = XMLoadFloat3(&m_vDir) * (_float)_dDeltaTime * m_fMoveSpeed;

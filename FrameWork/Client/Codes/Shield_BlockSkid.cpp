@@ -55,6 +55,9 @@ HRESULT CShield_BlockSkid::EnterState()
 	m_pAnimationController->SetUp_NextAnimation("SK_Silvermane.ao|A_Spectral_Shield_Block_Skid", false);
 	m_pAnimationController->Set_RootMotion(true, true, ERootOption::XYZ);
 
+	m_iCutIndex = 20;
+
+	m_pSilvermane->Set_IsTrasceCamera(false);
 	return S_OK;
 }
 
@@ -63,6 +66,7 @@ HRESULT CShield_BlockSkid::ExitState()
 	if (FAILED(__super::ExitState()))
 		return E_FAIL;
 
+	m_pSilvermane->Set_IsTrasceCamera(true);
 	return S_OK;
 }
 

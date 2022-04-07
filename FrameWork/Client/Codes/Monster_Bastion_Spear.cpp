@@ -10,14 +10,12 @@
 #include "Spear_Idle.h"
 #include "Spear_Death.h"
 #include "Spear_Chaser.h"
-#include "Spear_Chaser_End.h"
 #include "Spear_Groggy.h"
 #include "Spear_Groggy_End.h"
 #include "Spear_Hit.h"
 #include "Spear_Attack.h"
 #include "Spear_Bwd_Dash.h"
 #include "Spear_Charge_Attack.h"
-#include "Spear_Charge_Attack_End.h"
 #include "Spear_Guard.h"
 
 
@@ -27,6 +25,7 @@ CMonster_Bastion_Spear::CMonster_Bastion_Spear(ID3D11Device* _pDevice, ID3D11Dev
 	, m_pModel(nullptr)
 	, m_pStateController(nullptr)
 	, m_pAnimator(nullptr)
+	, m_bHalf(false)
 {
 }
 
@@ -36,6 +35,7 @@ CMonster_Bastion_Spear::CMonster_Bastion_Spear(const CMonster_Bastion_Spear& _rh
 	, m_pModel(_rhs.m_pModel)
 	, m_pStateController(_rhs.m_pStateController)
 	, m_pAnimator(_rhs.m_pAnimator)
+	, m_bHalf(_rhs.m_bHalf)
 {
 	Safe_AddRef(m_pCharacterController);
 	Safe_AddRef(m_pModel);
@@ -69,7 +69,7 @@ HRESULT CMonster_Bastion_Spear::NativeConstruct(const _uint _iSceneID, void* _pA
 		m_pTransform->Set_State(CTransform::STATE_POSITION, XMLoadFloat4(&vPosition));
 	}
 
-	if (FAILED(Ready_Components()))
+	if (FAILED(Ready_Components(_iSceneID)))
 		return E_FAIL;
 	if (FAILED(Ready_Weapon()))
 		return E_FAIL;
@@ -91,7 +91,7 @@ HRESULT CMonster_Bastion_Spear::NativeConstruct(const _uint _iSceneID, void* _pA
 
 	m_pPanel->Set_TargetWorldMatrix(m_pTransform->Get_WorldMatrix());
 
-	m_fMaxHp = 2.f;
+	m_fMaxHp = 5.f;
 	m_fCurrentHp = m_fMaxHp;
 
 	m_fMaxGroggyGauge = 10.f;
@@ -102,6 +102,8 @@ HRESULT CMonster_Bastion_Spear::NativeConstruct(const _uint _iSceneID, void* _pA
 
 	m_isFall = true;
 	setActive(false);
+
+	m_tAttackDesc.iLevel = 1;
 
 	return S_OK;
 }
@@ -128,27 +130,26 @@ _int CMonster_Bastion_Spear::Tick(_double _dDeltaTime)
 		m_pCharacterController->Move(_dDeltaTime, m_pTransform->Get_Velocity());
 	else
 	{
-		if ((_uint)ANIM_TYPE::A_DEATH == m_pAnimator->Get_CurrentAnimNode())
+		if (L"Death" == m_pStateController->Get_CurStateTag())
 		{
 			if (m_pAnimator->Get_CurrentAnimation()->Is_Finished())
 			{
 				Set_Remove(true);
 				m_pPanel->Set_UIRemove(true);
 			}
-			else if (1 == m_pAnimator->Get_AnimController()->Get_CurKeyFrameIndex())
+			if (1 < m_pAnimator->Get_AnimController()->Get_CurKeyFrameIndex() && 2 >= m_pAnimator->Get_AnimController()->Get_CurKeyFrameIndex())
 			{
 				Active_Effect((_uint)EFFECT::DEATH);
 			}
+			return 0;
 		}
 		else
 		{
 			Set_Remove(true);
 			m_pPanel->Set_UIRemove(true);
+			return 0;
 		}
 	}
-
-
-
 
 	if (true == m_bUIShow)
 		m_pPanel->Set_Show(true);
@@ -231,12 +232,12 @@ HRESULT CMonster_Bastion_Spear::Render()
 	}
 
 #ifdef _DEBUG
-	Render_Debug();
+	//Render_Debug();
 #endif
 	return S_OK;
 }
 
-HRESULT CMonster_Bastion_Spear::Ready_Components()
+HRESULT CMonster_Bastion_Spear::Ready_Components(_uint iSceneID)
 {
 	CTransform::TRANSFORMDESC transformDesc;
 	transformDesc.fSpeedPerSec = 2.0f;
@@ -248,7 +249,7 @@ HRESULT CMonster_Bastion_Spear::Ready_Components()
 	//m_pTransform->Set_State(CTransform::STATE_POSITION, XMLoadFloat4(&vPosition));
 
 	// 모델
-	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Model_Spear", L"Model", (CComponent**)&m_pModel)))
+	if (FAILED(SetUp_Components(iSceneID, L"Model_Bastion_Spear", L"Model", (CComponent**)&m_pModel)))
 		return E_FAIL;
 	_matrix matPivot = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(180.f));
 	m_pModel->Set_PivotMatrix(matPivot);
@@ -320,7 +321,7 @@ HRESULT CMonster_Bastion_Spear::Ready_AnimFSM(void)
 		return E_FAIL;
 	
 	pAnimation = m_pModel->Get_Animation("A_Ricochet");
-	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::A_RICOCHET, (_uint)ANIM_TYPE::A_HEAD, pAnimation, TRUE, FALSE, FALSE, ERootOption::XYZ)))
+	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::A_RICOCHET, (_uint)ANIM_TYPE::A_HEAD, pAnimation, TRUE, TRUE, FALSE, ERootOption::XYZ)))
 		return E_FAIL;
 
 	pAnimation = m_pModel->Get_Animation("A_Guard");
@@ -334,7 +335,7 @@ HRESULT CMonster_Bastion_Spear::Ready_AnimFSM(void)
 
 #pragma region Attack
 	pAnimation = m_pModel->Get_Animation("A_Attack_R1");
-	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::A_ATTACK_R1, (_uint)ANIM_TYPE::A_HEAD, pAnimation, TRUE, TRUE, FALSE, ERootOption::XYZ, FALSE)))
+	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::A_ATTACK_R1, (_uint)ANIM_TYPE::A_HEAD, pAnimation, TRUE, FALSE, FALSE, ERootOption::XYZ, FALSE)))
 		return E_FAIL;
 
 	pAnimation = m_pModel->Get_Animation("A_Attack_R2");
@@ -415,6 +416,7 @@ HRESULT CMonster_Bastion_Spear::Ready_AnimFSM(void)
 	m_pAnimator->Insert_AnyEntryAnimation((_uint)ANIM_TYPE::A_GUARD);
 	m_pAnimator->Insert_AnyEntryAnimation((_uint)ANIM_TYPE::A_BWD_DASH);
 	m_pAnimator->Insert_AnyEntryAnimation((_uint)ANIM_TYPE::A_FLINCH);
+	m_pAnimator->Insert_AnyEntryAnimation((_uint)ANIM_TYPE::A_RICOCHET);
 	m_pAnimator->Insert_AnyEntryAnimation((_uint)ANIM_TYPE::A_STUN_ST);
 	m_pAnimator->Insert_AnyEntryAnimation((_uint)ANIM_TYPE::A_STUN_ED);
 	m_pAnimator->Insert_AnyEntryAnimation((_uint)ANIM_TYPE::A_ATTACK_R1);
@@ -450,8 +452,7 @@ HRESULT CMonster_Bastion_Spear::Ready_AnimFSM(void)
 	m_pAnimator->Set_UpAutoChangeAnimation((_uint)ANIM_TYPE::A_STUN_ED, (_uint)ANIM_TYPE::A_IDLE);
 
 	m_pAnimator->Set_UpAutoChangeAnimation((_uint)ANIM_TYPE::A_ATTACK_CHARGE_ST, (_uint)ANIM_TYPE::A_ATTACK_CHARGE);
-	//m_pAnimator->Set_UpAutoChangeAnimation((_uint)ANIM_TYPE::A_ATTACK_CHARGE, (_uint)ANIM_TYPE::A_ATTACK_CHARGE_ED);
-	m_pAnimator->Set_UpAutoChangeAnimation((_uint)ANIM_TYPE::A_ATTACK_CHARGE_ED, (_uint)ANIM_TYPE::A_IDLE);
+	m_pAnimator->Set_UpAutoChangeAnimation((_uint)ANIM_TYPE::A_ATTACK_CHARGE, (_uint)ANIM_TYPE::A_ATTACK_CHARGE_ED);
 #pragma endregion
 
 #pragma region Anim to Anim Connect
@@ -482,17 +483,11 @@ HRESULT CMonster_Bastion_Spear::Ready_StateFSM(void)
 	/* for. Player Chaser */
 	if (FAILED(m_pStateController->Add_State(L"Chaser", CSpear_Chaser::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
-	/* for. Player Chaser End */
-	if (FAILED(m_pStateController->Add_State(L"Chaser_End", CSpear_Chaser_End::Create(m_pDevice, m_pDeviceContext))))
-		return E_FAIL;
 	/* for. Attack*/
 	if (FAILED(m_pStateController->Add_State(L"Attack", CSpear_Attack::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 	/* for. Charge Attack*/
 	if (FAILED(m_pStateController->Add_State(L"Charge_Attack", CSpear_Charge_Attack::Create(m_pDevice, m_pDeviceContext))))
-		return E_FAIL;
-	/* for. Charge Attack End*/
-	if (FAILED(m_pStateController->Add_State(L"Charge_Attack_End", CSpear_Charge_Attack_End::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 	/* for. Death */
 	if (FAILED(m_pStateController->Add_State(L"Death", CSpear_Death::Create(m_pDevice, m_pDeviceContext))))
@@ -566,6 +561,7 @@ HRESULT CMonster_Bastion_Spear::Render_Debug(void)
 
 void CMonster_Bastion_Spear::OnTriggerEnter(CCollision& collision)
 {
+	/*int a = 0;*/
 	m_pStateController->OnTriggerEnter(collision);
 }
 
@@ -579,6 +575,63 @@ void CMonster_Bastion_Spear::Set_IsAttack(const _bool _isAttack)
 void CMonster_Bastion_Spear::Remove_Collider()
 {
 	m_pCharacterController->Remove_CCT();
+}
+
+void CMonster_Bastion_Spear::Groggy_Start()
+{
+	Set_Groggy(true);
+	Set_GroggyGauge(0);
+	m_pPanel->Set_GroggyBar(Get_GroggyGaugeRatio());
+}
+
+void CMonster_Bastion_Spear::Hit(CCollision& collision)
+{
+	if (!m_bDead)
+	{
+		if (true == g_pObserver->IsAttack()) //플레이어공격일때
+		{
+			m_bFirstHit = true; //딱 한번 true로 변경해줌
+
+			if (true == m_bFirstHit)
+			{
+				m_pPanel->Set_BackUIGapY(1.f);
+			}
+
+			if ((_uint)GAMEOBJECT::WEAPON == collision.pGameObject->getTag())
+			{
+				if (L"Guard" != m_pStateController->Get_CurStateTag()
+					|| m_iGuardCount<=0)
+				{
+					if (m_bHalf)
+					{
+						if (!m_bChargeOn)
+							m_bChargeOn = true;
+					}
+					m_pPanel->Set_Show(true);
+					m_bGuard = false;
+					Set_Current_HP(-1);
+					Set_GroggyGauge(2); //TODO::수치정해서바꿔줘야됨
+					m_pStateController->Change_State(L"Hit");
+					Active_Effect((_uint)EFFECT::HIT);
+					Active_Effect((_uint)EFFECT::FLOATING);
+					if (false == m_bGroggy)
+					{
+						//그로기 아닐때만 증가할수있게
+						m_pPanel->Set_GroggyBar(Get_GroggyGaugeRatio());
+					}
+				}
+				else
+				{
+					m_iGuardCount--;
+					cout << m_iGuardCount << endl;
+					if (m_iGuardCount < 0)
+						m_iGuardCount = 0;
+					//Active_Effect((_uint)EFFECT::GUARD);
+				}
+				m_pPanel->Set_HpBar(Get_HpRatio());
+			}
+		}
+	}
 }
 
 CMonster_Bastion_Spear* CMonster_Bastion_Spear::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)

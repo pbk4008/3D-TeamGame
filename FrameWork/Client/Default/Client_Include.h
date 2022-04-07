@@ -4,8 +4,7 @@
 
 #include <process.h>
 #include <io.h>
-
-
+#include <functional>
 
 #include "Client_Enum.h"
 #include "Client_Function.h"
@@ -15,6 +14,7 @@ using namespace Client;
 #include "Client_Observer.h"
 #include "DebugSystem.h"
 #include "ShakeManager.h"
+#include "DataManager.h"
 #include "MainApp.h"
 #include "Clinet_Define.h"
 

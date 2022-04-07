@@ -29,20 +29,17 @@ _int CBastion_2HSword_Attack::Tick(const _double& _dDeltaTime)
 	if (NO_EVENT != iProgress)
 		return iProgress;
 
-	if (m_pMonster->Get_Dead())
-		return 0;
 
+	cout << "Attack" << endl;
+	m_pTransform->Face_Target(g_pObserver->Get_PlayerPos());
 	m_pAnimator->Tick(_dDeltaTime);
-	CMonster_Bastion_2HSword* pMonster = (CMonster_Bastion_2HSword*)m_pStateController->Get_GameObject();
 
-	if (m_pAnimator->Get_CurrentAnimation()->Is_Finished())
+	if (m_pAnimator->Get_CurrentAnimation()->Is_Finished() && !m_pAnimator->Get_IsLerp())
 	{
-		m_pStateController->Change_State(L"Chaser");
-		pMonster->Set_IsAttack(false);
+		m_pOwner->set_Attack(false);
+		m_pOwner->set_RandAttack(-1);
+		m_pStateController->Change_State(L"Idle");
 	}
-	else
-		pMonster->Set_IsAttack(true);
-
 
 	return _int();
 }
@@ -68,13 +65,25 @@ HRESULT CBastion_2HSword_Attack::EnterState()
 {
 	if (FAILED(__super::EnterState()))
 		return E_FAIL;
-	
-	if(!m_bFirstAttack)
-		m_bFirstAttack = true;
 
-	_int randAtt = rand() % 4;
-	//_int randAtt = 0;
-	switch (randAtt)
+	
+
+	return S_OK;
+}
+
+HRESULT CBastion_2HSword_Attack::ExitState()
+{
+	if (FAILED(__super::ExitState()))
+		return E_FAIL;
+	m_pAnimator->Get_AnimController()->Set_PlaySpeed(1.f);
+	return S_OK;
+}
+
+HRESULT CBastion_2HSword_Attack::EnterState(void* pArg)
+{
+	_int iRand = (*(_int*)pArg);
+	m_pAnimator->Get_AnimController()->Set_PlaySpeed(1.4f);
+	switch (iRand)
 	{
 	case 0:
 		if (FAILED(m_pAnimator->Change_AnyEntryAnimation((_uint)CMonster_Bastion_2HSword::ANIM_TYPE::A_ATTACK_R1)))
@@ -94,15 +103,11 @@ HRESULT CBastion_2HSword_Attack::EnterState()
 		break;
 	}
 
-
 	return S_OK;
 }
 
-HRESULT CBastion_2HSword_Attack::ExitState()
+HRESULT CBastion_2HSword_Attack::ExitState(void* pArg)
 {
-	if (FAILED(__super::ExitState()))
-		return E_FAIL;
-
 	return S_OK;
 }
 

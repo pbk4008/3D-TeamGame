@@ -1,10 +1,10 @@
 #pragma once
 
-#include "Shield_Block.h"
+#include "State_Silvermane.h"
 
 BEGIN(Client)
 
-class CShield_Parry : public CShield_Block
+class CShield_Parry : public CState_Silvermane
 {
 private:
 	explicit CShield_Parry(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext);

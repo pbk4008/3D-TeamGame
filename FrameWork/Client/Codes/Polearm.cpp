@@ -49,6 +49,7 @@ HRESULT CPolearm::NativeConstruct_Prototype()
 
 	g_pGameInstance->Add_Material(L"Mtrl_Polearm", pMtrl);
 
+
 	return S_OK;
 }
 
@@ -62,6 +63,8 @@ HRESULT CPolearm::NativeConstruct(const _uint _iSceneID, void* _pArg)
 
 	if (_pArg)
 		m_pFixedBone = static_cast<CHierarchyNode*>(_pArg);
+
+	m_fDamage = 5.f;
 
 	return S_OK;
 }
@@ -111,6 +114,20 @@ HRESULT CPolearm::Render()
 	return S_OK;
 }
 
+void CPolearm::OnTriggerEnter(CCollision& collision)
+{
+	_uint iTag = collision.pGameObject->getTag();
+	if ((_uint)GAMEOBJECT::PLAYER == iTag)
+	{
+		if (!m_isAttack)
+			return;
+
+		ATTACKDESC tAttackDesc = m_pOwner->Get_AttackDesc();
+		tAttackDesc.fDamage += m_fDamage;
+		static_cast<CActor*>(collision.pGameObject)->Hit(tAttackDesc);
+	}
+}
+
 HRESULT CPolearm::Ready_Components()
 {
 	CTransform::TRANSFORMDESC transformDesc;
@@ -119,7 +136,7 @@ HRESULT CPolearm::Ready_Components()
 	m_pTransform->Set_TransformDesc(transformDesc);
 	m_pLocalTransform->Set_TransformDesc(transformDesc);
 
-	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Model_Polearm", L"Model", (CComponent**)&m_pModel)))
+	if (FAILED(SetUp_Components(m_iSceneID, L"Model_Polearm", L"Model", (CComponent**)&m_pModel)))
 		return E_FAIL;
 
 	m_pModel->Add_Material(g_pGameInstance->Get_Material(L"Mtrl_Polearm"), 0);

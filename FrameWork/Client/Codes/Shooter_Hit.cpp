@@ -13,11 +13,12 @@ HRESULT CShooter_Hit::NativeConstruct(void* _pArg)
 	if (!_pArg)
 		return E_FAIL;
 
-	FSMDESC tDesc = (*(FSMDESC*)_pArg);
+	FSMACTORDESC tDesc = (*(FSMACTORDESC*)_pArg);
 
 	m_pAnimator = tDesc.pAnimator;
 	m_pStateController = tDesc.pController;
 	m_wstrTag = tDesc.pName;
+	m_pMonster = tDesc.pActor;
 
 	//Safe_AddRef(m_pAnimator);
 
@@ -69,6 +70,12 @@ HRESULT CShooter_Hit::EnterState(void* _pArg)
 
 	m_pAnimator->Change_AnyEntryAnimation(tData.iHitType);
 	m_fCurHp = tData.fCurHp;
+
+	//쏘다가 맞는애니메이션으로 들어오게되면 공격이 씹혀서 여기에 false처리 
+	if (nullptr != m_pMonster)
+	{
+		static_cast<CMonster_Bastion_Shooter*>(m_pMonster)->Set_Shot(false);
+	}
 
 	return S_OK;
 }

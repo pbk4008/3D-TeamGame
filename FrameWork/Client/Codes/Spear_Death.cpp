@@ -29,8 +29,10 @@ _int CSpear_Death::Tick(const _double& _dDeltaTime)
 	if (NO_EVENT != iProgress)
 		return iProgress;
 
-	if(!m_bDeath)
-		m_pAnimator->Tick(_dDeltaTime);
+	m_pAnimator->Tick(_dDeltaTime);
+
+	//if(!m_bDeath)
+	//	m_pAnimator->Tick(_dDeltaTime);
 
 
 	return _int();
@@ -58,10 +60,11 @@ HRESULT CSpear_Death::EnterState()
 	if (FAILED(__super::EnterState()))
 		return E_FAIL;
 
+	m_pAnimator->Change_AnyEntryAnimation((_uint)CMonster_Bastion_Spear::ANIM_TYPE::A_DEATH);
+
 	g_pGameInstance->BlendSound(L"Bastion_Death", L"Monster_Death", CSoundMgr::CHANNELID::Spear_Death, CSoundMgr::CHANNELID::MONSTER);
 	g_pGameInstance->VolumeChange(CSoundMgr::CHANNELID::Spear_Death, 7.0f);
 	g_pShakeManager->Shake(CShakeManager::ETemplate::MonsterDeath, m_pTransform->Get_State(CTransform::STATE_POSITION));
-	m_pAnimator->Change_AnyEntryAnimation((_uint)CMonster_Bastion_Spear::ANIM_TYPE::A_DEATH);
 	g_pMainApp->FreezeTime();
 
 	return S_OK;
@@ -82,10 +85,6 @@ void CSpear_Death::Look_Player(void)
 
 void CSpear_Death::Look_Monster(void)
 {
-	CAnimation* pAnim = m_pAnimator->Get_CurrentAnimation();
-
-	if (pAnim->Is_Finished())
-		m_bDeath = true;
 }
 
 CSpear_Death* CSpear_Death::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext, void* _pArg)

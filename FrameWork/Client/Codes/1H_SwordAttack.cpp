@@ -73,7 +73,7 @@ HRESULT C1H_SwordAttack::EnterState()
 	m_tShakeEvent.tWaveZ.fFrequency = 8.f;
 
 	m_pAnimationController->Set_PlaySpeed(1.2f);
-
+	g_pObserver->Set_PlayerAttackAnimStart(true);
 	return S_OK;
 }
 
@@ -93,8 +93,14 @@ HRESULT C1H_SwordAttack::ExitState()
 
 void C1H_SwordAttack::OnTriggerEnter(CCollision& collision)
 {
+	//if (!m_pSilvermane->IsAttack())
+	//	OnTriggerEnterHit(collision);
+}
+
+void C1H_SwordAttack::Hit(const ATTACKDESC& _tAttackDesc)
+{
 	if (!m_pSilvermane->IsAttack())
-		OnTriggerEnterHit(collision);
+		__super::Hit(_tAttackDesc);
 }
 
 _int C1H_SwordAttack::Input(const _double& _dDeltaTime)

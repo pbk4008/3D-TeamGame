@@ -28,7 +28,6 @@ public:
 
 private:
 	_float m_fGroggyTime = 5.0f;
-	_bool  m_bGroggy = false;
 public:
 	static CBastion_2HSword_Groggy* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext, void* _pArg = nullptr);
 private:

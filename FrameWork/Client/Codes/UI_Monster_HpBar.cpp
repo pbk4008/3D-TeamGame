@@ -51,17 +51,22 @@ HRESULT CUI_Monster_HpBar::NativeConstruct(const _uint _iSceneID, void* pArg)
 	m_fGapX = 1.f;
 	m_fGapY = 0.5f;
 
+	m_fExHpRatio = 1.f;
 	return S_OK;
 }
 
 _int CUI_Monster_HpBar::Tick(_double TimeDelta)
 {
+	if (FAILED(CUI::Tick(TimeDelta)))
+		return -1;
+
 	if (false == m_bFirstShow)
 	{
 		setActive(true);
 		m_bFirstShow = true;
 	}
 
+#pragma region raycast때 화면중앙에 닿으면 ui보였다가 5초뒤에 사라질수있게 해주는
 	if (true == m_bShow)
 	{
 		m_fAlpha = 1.f;
@@ -73,6 +78,7 @@ _int CUI_Monster_HpBar::Tick(_double TimeDelta)
 		m_fDisappearTimeAcc += (_float)TimeDelta;
 	}
 
+	//5초 지나면 다시 안보이게, raycast
 	if (5.f <= m_fDisappearTimeAcc)
 	{
 		m_fAlpha -= (_float)TimeDelta;
@@ -83,11 +89,17 @@ _int CUI_Monster_HpBar::Tick(_double TimeDelta)
 		m_fAlpha = 0.f;
 		m_fDisappearTimeAcc = 0.f;
 	}
+#pragma endregion
 
-	if (FAILED(CUI::Tick(TimeDelta)))
-		return -1;
-	
 	m_fGapX = m_fHpRatio;
+	
+	
+	if (m_fExHpRatio != m_fHpRatio)
+	{
+		//이전값 계속 저장 
+		m_fCurAttackGauge = (m_fExHpRatio - m_fHpRatio);
+		m_fExHpRatio = m_fHpRatio;
+	}
 
 	return 0;
 }
@@ -113,9 +125,11 @@ HRESULT CUI_Monster_HpBar::Render()
 	m_pTrapziumBuffer->SetUp_ValueOnShader("g_WorldMatrix", &XMWorldMatrix, sizeof(_float) * 16);
 	m_pTrapziumBuffer->SetUp_ValueOnShader("g_ViewMatrix", &XMViewMatrix, sizeof(_float) * 16);
 	m_pTrapziumBuffer->SetUp_ValueOnShader("g_ProjMatrix", &XMProjectMatrix, sizeof(XMMATRIX));
-	m_pTrapziumBuffer->SetUp_ValueOnShader("g_fX", &m_fGapX, sizeof(_float));
+	m_pTrapziumBuffer->SetUp_ValueOnShader("g_fX", &m_fGapX, sizeof(_float)); 
 	m_pTrapziumBuffer->SetUp_ValueOnShader("g_fY", &m_fGapY, sizeof(_float));
+
 	m_pTrapziumBuffer->SetUp_ValueOnShader("g_fAlpha", &m_fAlpha, sizeof(_float));
+	m_pTrapziumBuffer->SetUp_ValueOnShader("g_fCurAttack", &m_fCurAttackGauge, sizeof(_float));
 
 	m_pTrapziumBuffer->SetUp_TextureOnShader("g_DiffuseTexture", m_pTexture);
 
@@ -128,7 +142,7 @@ HRESULT CUI_Monster_HpBar::SetUp_Components()
 {
 	CVIBuffer_Trapezium::TRAPDESC Desc;
 	Desc.fAngle =  m_UIBarDesc.UIDesc.fAngle;
-	_tcscpy_s(Desc.ShaderFilePath, L"../../Reference/ShaderFile/Shader_UI_Bar.hlsl");
+	_tcscpy_s(Desc.ShaderFilePath, L"../../Reference/ShaderFile/Shader_UI_Enemy_Bar.hlsl");
 
 	Desc.bMinus = m_UIBarDesc.UIDesc.bMinus;
 

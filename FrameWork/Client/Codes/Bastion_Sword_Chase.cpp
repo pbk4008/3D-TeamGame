@@ -36,31 +36,46 @@ _int CBastion_Sword_Chase::Tick(const _double& _dDeltaTime)
 
 	//애니메이션 진행
 	//쫓기 시작 -쫓기 루프 -쫓기 끝의 루프를 진행
-
 	m_pAnimator->Tick(_dDeltaTime);
 	m_pTransform->Face_Target(g_pObserver->Get_PlayerPos());
 	//m_pTransform->Face_Target(g_pObserver->Get_PlayerPos());
 	//일정 거리가 되면 바로 공
+	_float fDist = g_pObserver->Get_Dist(m_pTransform->Get_State(CTransform::STATE_POSITION));
 	_uint iAtkType = rand() % 3;
-	if (iAtkType == 2)
-	{
-		if (g_pObserver->Get_Dist(m_pTransform->Get_State(CTransform::STATE_POSITION)) < 4.f)
-		{
-			m_pStateController->Change_State(L"Attack",&iAtkType);
-			return 0;
-		}
-	}
+	if (fDist >= 10.f)
+		m_pStateController->Change_State(L"Idle");
 	else
 	{
-		if (g_pObserver->Get_Dist(m_pTransform->Get_State(CTransform::STATE_POSITION)) < 2.f)
+		if (iAtkType == 2)
 		{
-			m_pStateController->Change_State(L"Attack", &iAtkType);
-			return 0;
+			if (fDist < 4.f)
+				m_pStateController->Change_State(L"Attack", &iAtkType);
+		}
+		else
+		{
+			if (fDist < 2.f)
+				m_pStateController->Change_State(L"Attack", &iAtkType);
 		}
 	}
+	//if (iAtkType == 2)
+	//{
+	//	if (g_pObserver->Get_Dist(m_pTransform->Get_State(CTransform::STATE_POSITION)) < 4.f)
+	//	{
+	//		m_pStateController->Change_State(L"Attack",&iAtkType);
+	//		return 0;
+	//	}
+	//}
+	//else
+	//{
+	//	if (g_pObserver->Get_Dist(m_pTransform->Get_State(CTransform::STATE_POSITION)) < 2.f)
+	//	{
+	//		m_pStateController->Change_State(L"Attack", &iAtkType);
+	//		return 0;
+	//	}
+	//}
 	//해당 애니메이션이 종착 애니메이션에 도달하면 상태머신의 상태 변경
-	if (!m_pAnimator->Get_IsLerp()&&m_pAnimator->Get_CurrentAnimNode() == (_uint)CMonster_Bastion_Sword::ANIM_TYPE::IDLE)
-		m_pStateController->Change_State(L"Idle");
+	/*if (!m_pAnimator->Get_IsLerp() && m_pAnimator->Get_CurrentAnimNode() == (_uint)CMonster_Bastion_Sword::ANIM_TYPE::IDLE)
+		m_pStateController->Change_State(L"Idle");*/
 
 	return _int();
 }

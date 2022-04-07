@@ -19,6 +19,8 @@ public:
 	virtual HRESULT EnterState() override;
 	virtual HRESULT ExitState() override;
 
+	virtual void Hit(const ATTACKDESC& _tAttackDesc) override;
+
 protected:
 	virtual _int Input(const _double& _dDeltaTime);
 
@@ -28,6 +30,7 @@ protected:
 	_int m_iShakeIndex = -1;
 	
 	_bool m_isShake2 = false;
+	_bool m_isRangeAttack = false;
 
 	CCameraShake::SHAKEEVENT m_tShakeEvent;
 	CCameraShake::SHAKEEVENT m_tShakeEvent2;

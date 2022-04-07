@@ -76,6 +76,16 @@ const CWeapon::EType CWeapon::Get_Type() const
 	return m_eType;
 }
 
+CActor* CWeapon::Get_Owner() const
+{
+	return m_pOwner;
+}
+
+const _float CWeapon::Get_Damage() const
+{
+	return m_fDamage;
+}
+
 void CWeapon::Set_Owner(CActor* _pOwner)
 {
 	m_pOwner = _pOwner;
@@ -108,6 +118,10 @@ void CWeapon::Set_IsAttack(const _bool _isAttack)
 const _bool CWeapon::IsAttack() const
 {
 	return m_isAttack;
+}
+
+void CWeapon::RangeAttack()
+{
 }
 
 _fmatrix CWeapon::Remove_Scale(_fmatrix matTransform)

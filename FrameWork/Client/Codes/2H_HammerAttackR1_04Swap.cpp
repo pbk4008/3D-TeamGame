@@ -37,6 +37,13 @@ _int C2H_HammerAttackR1_04Swap::Tick(const _double& _dDeltaTime)
 	}
 
 
+	if (41 < iCurKeyFrameIndex && !m_isRangeAttack)
+	{
+		m_pSilvermane->RangeAttack();
+		m_isRangeAttack = true;
+	}
+
+
 	if (m_pAnimationController->Is_Finished())
 	{
 		m_pStateController->Change_State(L"2H_HammerIdle");

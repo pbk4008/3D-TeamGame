@@ -72,7 +72,7 @@ HRESULT CBoss_Bastion_Judicator::NativeConstruct(const _uint _iSceneID, void* pA
 
 
 	//TODO : 아래 세팅은 꼭 해줄것, 그래야 UI나옴 초기값 넣어줘야됨
-	m_fMaxHp = 5.f;
+	m_fMaxHp = 20.f;
 	m_fCurrentHp = m_fMaxHp;
 
 	m_fMaxGroggyGauge = 10.f;
@@ -81,7 +81,9 @@ HRESULT CBoss_Bastion_Judicator::NativeConstruct(const _uint _iSceneID, void* pA
 	m_pPanel->Set_HpBar(Get_HpRatio());
 	m_pPanel->Set_GroggyBar(Get_GroggyGaugeRatio());
 
-	setActive(false);
+	//setActive(false);
+
+	m_tAttackDesc.iLevel = 2;
 
 	return S_OK;
 }

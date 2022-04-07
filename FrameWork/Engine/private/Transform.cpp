@@ -234,6 +234,22 @@ void CTransform::Rotation_Axis(const STATE _eState, const _float _fValue)
 	}
 }
 
+void CTransform::LookAt_RotYAxis(const _fvector& _dir)
+{
+	auto dir = _dir;
+	XMVectorSetY(dir, 0);
+
+	_float angle = acosf(XMVectorGetX(XMVector3Dot(dir, XMVectorSet(0.f, 0.f, 1.f, 0.f))));
+
+	_vector rot;
+	auto Temp = XMVector3Cross(dir, XMVectorSet(0.f, 0.f, 1.f, 0.f));
+
+	if (XMVectorGetY(Temp) > 0)
+		rot = XMQuaternionRotationRollPitchYaw(-angle, 0, 0);
+	else
+		rot = XMQuaternionRotationRollPitchYaw(angle, 0, 0);
+}
+
 void CTransform::SetUp_Rotation(_fvector vAxis, _float fRadian)
 {
 	_matrix		RotationMatrix = XMMatrixRotationAxis(vAxis, fRadian);

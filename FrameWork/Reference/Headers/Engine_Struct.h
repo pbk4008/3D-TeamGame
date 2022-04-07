@@ -185,4 +185,15 @@ namespace Engine
 	{
 		_float4x4 WorldMat;
 	}MABOBJECT;
+
+
+	// 공격 정보
+	typedef struct tagAttackDesc
+	{
+		class CGameObject* pOwner = nullptr;
+		class CGameObject* pHitObject = nullptr;
+		// 1 : 약공격, 2 : 강공격, 3 : 넉백될 정도의 강려크한 공격
+		_uint iLevel = 0;
+		_float fDamage = 0.f;
+	}ATTACKDESC;
 }

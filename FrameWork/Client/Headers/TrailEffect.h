@@ -34,8 +34,7 @@ private:
 	CTexture* m_pTexture1 = nullptr;
 	CTexture* m_pTexture2 = nullptr;
 
-	//list<_float3> m_listPoints;
-	list<pair<_float3, _float3>> m_listPoints; // first : pos, second : dir
+	list<pair<_float3, _float3>> m_listPoints; // first : start, second : end
 	list<pair<_float3, _float3>> m_listCurved;
 
 	_float m_fAccTime = 0.f;

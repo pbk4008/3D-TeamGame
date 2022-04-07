@@ -27,27 +27,9 @@ _int CBastion_2HSword_Chaser::Tick(const _double& _dDeltaTime)
 	_int iProgress = __super::Tick(_dDeltaTime);
 	if (NO_EVENT != iProgress)
 		return iProgress;
-
-	if (m_pMonster->Get_Dead())
-		return 0;
-
+	cout << "Chaser" << endl;
 	m_pTransform->Face_Target(g_pObserver->Get_PlayerPos());
-
-	if (m_bRageOn)
-	{
-		m_pStateController->Change_State(L"Rage");
-		return 0;
-	}
-	if (m_bAttackOn)
-	{
-		m_pStateController->Change_State(L"Attack");
-		return 0;
-	}
-
-	
 	m_pAnimator->Tick(_dDeltaTime);
-
-	//m_pTransform->Add_Velocity(m_pTransform->Chase_Pos(g_pObserver->Get_Transform(), _dDeltaTime));
 
 	return _int();
 }
@@ -74,6 +56,7 @@ HRESULT CBastion_2HSword_Chaser::EnterState()
 	if (FAILED(__super::EnterState()))
 		return E_FAIL;
 
+	m_pAnimator->Get_AnimController()->Set_MoveSpeed(60.f);
 	m_pAnimator->Change_AnyEntryAnimation((_uint)CMonster_Bastion_2HSword::ANIM_TYPE::A_WALK_FWD_ST);
 
 	return S_OK;
@@ -83,13 +66,15 @@ HRESULT CBastion_2HSword_Chaser::ExitState()
 {
 	if (FAILED(__super::ExitState()))
 		return E_FAIL;
+	m_pAnimator->Get_AnimController()->Set_MoveSpeed(40.f);
 	return S_OK;
 }
 
 void CBastion_2HSword_Chaser::Look_Player(void)
 {
-	if (!m_bTargetOn)
-		m_pStateController->Change_State(L"Idle");
+	//if (!m_bTargetOn)
+	//if(m_pOwner->get_Target())
+	//	m_pStateController->Change_State(L"Idle");
 }
 
 void CBastion_2HSword_Chaser::Look_Monster(void)

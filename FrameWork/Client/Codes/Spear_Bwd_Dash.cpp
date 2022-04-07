@@ -26,8 +26,10 @@ _int CSpear_Bwd_Dash::Tick(const _double& _dDeltaTime)
  	_int iProgress = __super::Tick(_dDeltaTime);
 	if (NO_EVENT != iProgress)
 		return iProgress;
-
 	m_pAnimator->Tick(_dDeltaTime);
+
+	if (!m_pAnimator->Get_IsLerp() && m_pAnimator->Get_CurrentAnimation()->Is_Finished())
+		m_pStateController->Change_State(L"Charge_Attack");
 
 	return _int();
 }
@@ -75,8 +77,8 @@ void CSpear_Bwd_Dash::Look_Player(void)
 
 void CSpear_Bwd_Dash::Look_Monster(void)
 {
-	if (m_pAnimator->Get_CurrentAnimation()->Is_Finished())
-		m_pStateController->Change_State(L"Charge_Attack");
+	//if (m_pAnimator->Get_CurrentAnimation()->Is_Finished())
+	//	m_pStateController->Change_State(L"Charge_Attack");
 }
 
 CSpear_Bwd_Dash* CSpear_Bwd_Dash::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext, void* _pArg)

@@ -38,19 +38,21 @@ _int CShooter_Chase::Tick(const _double& _dDeltaTime)
 
 	m_pAnimator->Tick(_dDeltaTime);
 	m_pTransform->Face_Target(g_pObserver->Get_PlayerPos());
-	//일정 거리가 되면 바로 공격
-	_vector vPlayerPos = g_pObserver->Get_PlayerPos();
-	_vector vPos = m_pTransform->Get_State(CTransform::STATE_POSITION);
 
-	_float fDist = XMVectorGetX(XMVector3Length(vPlayerPos - vPos));
+	_uint index = m_pAnimator->Get_CurrentAnimNode();
+	//일정 거리가 되면 바로 공격
+	if (m_pAnimator->Get_CurrentAnimNode() == (_uint)CMonster_Bastion_Shooter::ANIM_TYPE::RUN_LOOP)
+		Chase_Target(_dDeltaTime);
+
+	_float fDist = g_pObserver->Get_Dist(m_pTransform->Get_State(CTransform::STATE_POSITION));
 	if (fDist < 10.f)
 	{
 		g_pGameInstance->Play_Shot(L"Shooter_Reload", CSoundMgr::CHANNELID::Shooter_Attack_2);
 		m_pStateController->Change_State(L"Attack");
 	}
-	//해당 애니메이션이 종착 애니메이션에 도달하면 상태머신의 상태 변경
-	if (!m_pAnimator->Get_IsLerp() && m_pAnimator->Get_CurrentAnimNode() == (_uint)CMonster_Bastion_Shooter::ANIM_TYPE::IDLE)
-		m_pStateController->Change_State(L"Idle");
+	////해당 애니메이션이 종착 애니메이션에 도달하면 상태머신의 상태 변경
+	//if (!m_pAnimator->Get_IsLerp() && m_pAnimator->Get_CurrentAnimNode() == (_uint)CMonster_Bastion_Shooter::ANIM_TYPE::IDLE)
+	//	m_pStateController->Change_State(L"Idle");
 
 	return _int();
 }
@@ -69,6 +71,7 @@ HRESULT CShooter_Chase::EnterState()
 {
 	if (!m_pAnimator)
 		return E_FAIL;
+	//cout << "chase진입" << endl;
 
 	if (FAILED(m_pAnimator->Change_AnyEntryAnimation((_uint)CMonster_Bastion_Shooter::ANIM_TYPE::RUN_START)))
 		return E_FAIL;
@@ -78,6 +81,8 @@ HRESULT CShooter_Chase::EnterState()
 
 HRESULT CShooter_Chase::ExitState()
 {
+	//cout << "chase탈출" << endl;
+
 	return S_OK;
 }
 
@@ -89,6 +94,20 @@ HRESULT CShooter_Chase::EnterState(void* pArg)
 HRESULT CShooter_Chase::ExitState(void* pArg)
 {
 	return S_OK;
+}
+
+void CShooter_Chase::Chase_Target(_double dDeltaTime)
+{
+
+	_vector vPlayerPos = g_pObserver->Get_PlayerPos();
+	_vector vPos = m_pTransform->Get_State(CTransform::STATE_POSITION);
+
+	_vector vDir = vPlayerPos - vPos;
+	vDir = XMVector3Normalize(vDir);
+
+	vDir *= (_float)dDeltaTime * 3.f;
+
+	m_pTransform->Add_Velocity(vDir);
 }
 
 CShooter_Chase* CShooter_Chase::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext, void* _pArg)

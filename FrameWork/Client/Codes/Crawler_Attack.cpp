@@ -46,27 +46,26 @@ _int CCrawler_Attack::Tick(const _double& TimeDelta)
 	CMonster_Crawler* pMonster = (CMonster_Crawler*)m_pStateController->Get_GameObject();
 	if (nullptr != pMonster)
 	{
-		pMonster->Set_IsAttack(true);
+		if (40 < iCurKeyFrameIndex && 55 > iCurKeyFrameIndex)
+		{
+			pMonster->Set_IsAttack(true);
+		}
+		else 
+			pMonster->Set_IsAttack(false);
 	}
 
 	_fvector vMonsterPos = m_pTransform->Get_State(CTransform::STATE::STATE_POSITION);
 	_fvector vDist = vMonsterPos - g_pObserver->Get_PlayerPos();
 	_float fDistToPlayer = XMVectorGetX(XMVector3Length(vDist));
 
-	if (m_pAnimator->Get_AnimController()->Is_Finished() && 3 > m_iAttackCount)
+	if (m_pAnimator->Get_CurrentAnimation()->Is_Finished())
 	{
-		++m_iAttackCount;
+		if (5.f <= fDistToPlayer)
+			m_pStateController->Change_State(L"Idle");
+		else if (2.f <= fDistToPlayer)
+			m_pStateController->Change_State(L"Walk");
 	}
-
-	if (1 == m_iAttackCount)
-	{
-		m_pStateController->Change_State(L"Idle");
-		
-		//cout << "아이들로 변경" << endl;
-	}
-
-
-
+	
 	return _int();
 }
 
@@ -98,7 +97,7 @@ HRESULT CCrawler_Attack::EnterState()
 	if(randAtt)
 		g_pGameInstance->Play_Shot(L"Crawler_Attack_1", CSoundMgr::CHANNELID::Monster_Attack);
 	else
-	g_pGameInstance->Play_Shot(L"Crawler_Attack_2", CSoundMgr::CHANNELID::Monster_Attack);
+		g_pGameInstance->Play_Shot(L"Crawler_Attack_2", CSoundMgr::CHANNELID::Monster_Attack);
 
 	m_pTransform->Face_Target(g_pObserver->Get_PlayerPos());
 	m_pAnimator->Change_AnyEntryAnimation(CMonster_Crawler::MON_STATE::ATTACK_R1);
@@ -114,7 +113,6 @@ HRESULT CCrawler_Attack::ExitState()
 	if (FAILED(__super::ExitState()))
 		return E_FAIL;
 
-	m_iAttackCount = 0;
 	m_bPlay = false;
 	//_vector vec = { 0.f, 1.f, 0.f,0.f };
 	//m_pTransform->SetUp_Rotation(vec, (XMConvertToRadians(0.f)));

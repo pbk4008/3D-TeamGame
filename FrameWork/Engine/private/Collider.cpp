@@ -53,7 +53,10 @@ HRESULT CCollider::NativeConstruct_Prototype()
 HRESULT CCollider::NativeConstruct(void * _pArg)
 {
 	if (_pArg)
+	{
 		memcpy_s(&m_tDesc, sizeof(DESC), _pArg, sizeof(DESC));
+		m_pGameObject = m_tDesc.pGameObject;
+	}
 
 	if (FAILED(__super::NativeConstruct(_pArg)))
 		return E_FAIL;
@@ -100,6 +103,15 @@ void CCollider::setMaterial(PxMaterial* _pMaterial)
 	m_pMaterial = _pMaterial;
 }
 
+void CCollider::setMass(const _float _fValue)
+{
+	if (0.f > _fValue || ERigidType::Dynamic != m_tDesc.eRigidType)
+		return;
+
+	static_cast<PxRigidBody*>(m_pRigidActor)->setMass(_fValue);
+	m_tDesc.fMass = _fValue;
+}
+
 void CCollider::setPivotMatrix(const _fmatrix& _smatPivot)
 {
 	XMStoreFloat4x4(&m_matPivot, _smatPivot);
@@ -108,11 +120,13 @@ void CCollider::setPivotMatrix(const _fmatrix& _smatPivot)
 void CCollider::setGravity(const _bool _isGravity)
 {
 	m_pRigidActor->setActorFlag(PxActorFlag::eDISABLE_GRAVITY, !_isGravity);
+	m_tDesc.isGravity = _isGravity;
 }
 
 void CCollider::setKinematic(const _bool _isKinematic)
 {
 	static_cast<PxRigidBody*>(m_pRigidActor)->setRigidBodyFlag(PxRigidBodyFlag::eKINEMATIC, _isKinematic);
+	m_tDesc.isKinematic = _isKinematic;
 }
 
 void CCollider::setTrigger(const _bool _isTrigger)
@@ -128,11 +142,13 @@ void CCollider::setTrigger(const _bool _isTrigger)
 		m_pShape->setFlag(PxShapeFlag::eSIMULATION_SHAPE, true);
 		break;
 	}
+	m_tDesc.isTrigger = _isTrigger;
 }
 
 void CCollider::setSceneQuery(const _bool _isSceneQuery)
 {
 	m_pShape->setFlag(PxShapeFlag::eSCENE_QUERY_SHAPE, _isSceneQuery);
+	m_tDesc.isSceneQuery = _isSceneQuery;
 }
 
 _int CCollider::Update_Transform()

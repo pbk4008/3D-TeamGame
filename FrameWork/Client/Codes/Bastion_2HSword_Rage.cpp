@@ -29,15 +29,33 @@ _int CBastion_2HSword_Rage::Tick(const _double& _dDeltaTime)
 	if (NO_EVENT != iProgress)
 		return iProgress;
 
+	m_pTransform->Face_Target(g_pObserver->Get_PlayerPos());
 	m_pAnimator->Tick(_dDeltaTime);
 
-
-
-
-
-	/*if((m_pAnimator->Get_CurrentAnimNode() != (_uint)CMonster_Bastion_2HSword::ANIM_TYPE::A_TAUNT_ROAR) && m_pAnimator->Get_CurrentAnimation()->Is_Finished())
-		m_pTransform->Add_Velocity(m_pTransform->Chase_Pos(g_pObserver->Get_Transform(), _dDeltaTime));*/
-
+	if (m_pAnimator->Get_CurrentAnimNode() == (_uint)CMonster_Bastion_2HSword::ANIM_TYPE::A_BATTLECRY)
+	{
+		if (!m_pAnimator->Get_IsLerp())
+		{
+			if (m_pOwner->get_Attack())
+			{
+				m_pAnimator->Change_LoopAnim();
+				m_pAnimator->Get_AnimController()->Set_PlaySpeed(1.4f);
+				m_pAnimator->Get_AnimController()->Set_MoveSpeed(40.f);
+			}
+		}
+		else
+			m_pAnimator->Get_AnimController()->Set_MoveSpeed(60.f);
+	}
+	else if (m_pAnimator->Get_CurrentAnimNode() == (_uint)CMonster_Bastion_2HSword::ANIM_TYPE::A_BATTLECRY_ED)
+	{
+		if (m_pAnimator->Get_CurrentAnimation()->Is_Finished())
+		{
+			m_pAnimator->Get_AnimController()->Set_PlaySpeed(1.f);
+			m_pOwner->set_Attack(false);
+			m_pOwner->set_RageOn(false);
+			m_pOwner->set_RandAttack(-1);
+		}
+	}
 	return _int();
 }
 
@@ -73,14 +91,12 @@ HRESULT CBastion_2HSword_Rage::ExitState()
 	if (FAILED(__super::ExitState()))
 		return E_FAIL;
 
-	m_bRageAttack = false;
+	m_pAnimator->Get_AnimController()->Set_PlaySpeed(1.f);
 	return S_OK;
 }
 
 void CBastion_2HSword_Rage::Look_Player(void)
 {
-	if (m_bAttackOn)
-		m_pStateController->Change_State(L"Rage_Attack");
 }
 
 void CBastion_2HSword_Rage::Look_Monster(void)

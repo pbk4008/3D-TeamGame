@@ -22,9 +22,28 @@ _int C1H_FlinchLeft::Tick(const _double& _dDeltaTime)
 
 	if (m_iCutIndex < m_pAnimationController->Get_CurKeyFrameIndex())
 	{
-		if (FAILED(m_pStateController->Change_State(L"Idle")))
-			return -1;
-		return STATE_CHANGE;
+		if (m_pSilvermane->IsEquipWeapon())
+		{
+			switch (m_pSilvermane->Get_WeaponType())
+			{
+			case CWeapon::EType::Sword_1H:
+				if (FAILED(m_pStateController->Change_State(L"1H_SwordIdle")))
+					return -1;
+				return STATE_CHANGE;
+				break;
+			case CWeapon::EType::Hammer_2H:
+				if (FAILED(m_pStateController->Change_State(L"2H_HammerIdle")))
+					return -1;
+				return STATE_CHANGE;
+				break;
+			}
+		}
+		else
+		{
+			if (FAILED(m_pStateController->Change_State(L"Idle")))
+				return -1;
+			return STATE_CHANGE;
+		}
 	}
 
 	return _int();
@@ -54,6 +73,51 @@ HRESULT C1H_FlinchLeft::EnterState()
 
 	if (FAILED(m_pAnimationController->SetUp_NextAnimation("SK_Silvermane.ao|A_1H_Flinch_Left_1_Player", false)))
 		return E_FAIL;
+	m_pAnimationController->Set_RootMotion(true, true);
+
+
+	if (!m_isShake)
+	{
+		CCameraShake::SHAKEEVENT tShakeEvent;
+		tShakeEvent.fDuration = 0.4f;
+		tShakeEvent.fBlendInTime = 0.1f;
+		tShakeEvent.fBlendOutTime = 0.1f;
+		tShakeEvent.tWaveX.fAmplitude = 0.04f;
+		tShakeEvent.tWaveX.fFrequency = 12.f;
+		tShakeEvent.tWaveY.fAmplitude = 0.04f;
+		tShakeEvent.tWaveY.fFrequency = 14.f;
+		tShakeEvent.tWaveZ.fAmplitude = 0.04f;
+		tShakeEvent.tWaveZ.fFrequency = 10.f;
+
+		_float3 vPos; XMStoreFloat3(&vPos, m_pTransform->Get_State(CTransform::STATE_POSITION));
+		g_pShakeManager->Shake(tShakeEvent, vPos);
+		m_isShake = true;
+	}
+
+	m_iCutIndex = 20;
+	return S_OK;
+}
+
+HRESULT C1H_FlinchLeft::EnterState(void* _pArg)
+{
+	if (FAILED(__super::EnterState()))
+		return E_FAIL;
+
+	EDir eDir = EDir::Max;
+	if (_pArg)
+		memcpy_s(&eDir, sizeof(EDir), _pArg, sizeof(EDir));
+
+	switch (eDir)
+	{
+	case EDir::Left:
+		if (FAILED(m_pAnimationController->SetUp_NextAnimation("SK_Silvermane.ao|A_1H_Flinch_Right_1_Player", false)))
+			return E_FAIL;
+		break;
+	case EDir::Right:
+		if (FAILED(m_pAnimationController->SetUp_NextAnimation("SK_Silvermane.ao|A_1H_Flinch_Left_1_Player", false)))
+			return E_FAIL;
+		break;
+	}
 	m_pAnimationController->Set_RootMotion(true, true);
 
 
