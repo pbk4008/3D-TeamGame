@@ -53,7 +53,7 @@ _int CTrailEffect::LateTick(_double _dDeltaTime)
 		return iProgress;
 
 	if(m_isRender)
-		m_pRenderer->Add_RenderGroup(CRenderer::RENDER_ALPHA, this);
+		m_pRenderer->Add_RenderGroup(CRenderer::RENDER_ALPHA, this,1.f);
 
 	return _int();
 }

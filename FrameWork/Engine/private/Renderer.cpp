@@ -191,8 +191,6 @@ HRESULT CRenderer::Draw_RenderGroup()
 		if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("MRT_Shadow"))))		return E_FAIL;
 		if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("MRT_ShaeShadow"))))	return E_FAIL;
 		if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("MRT_Deferred"))))	return E_FAIL;
-		//if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("MRT_SSS"))))
-		//	return E_FAIL;
 
 		if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("MRT_LightAcc"))))	return E_FAIL;
 		if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("MRT_HDRBASE"))))		return E_FAIL;

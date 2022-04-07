@@ -33,14 +33,13 @@ public: HRESULT End_CSTarget(ID3D11DeviceContext* pDeviceContext);
 
 public: HRESULT	RunComputeShader(const _tchar* CsTag, ID3D11ShaderResourceView* pSRV, CCSTarget::CSType eType);
 
+public:	void	All_Clear(ID3D11DeviceContext* pDeviceContext);
 #ifdef _DEBUG
 public: HRESULT Ready_Debug_Buffer(const wstring& pTargetTag, _float fX, _float fY, _float fSizeX, _float fSizeY);
 public: HRESULT Render_Debug_Buffer(const wstring& pMRTTag);
 
 public: HRESULT Ready_Debug_Buffer_CSTarget(const _tchar* pTargetTag, _float fX, _float fY, _float fSizeX, _float fSizeY);
 public: HRESULT Render_Debug_Buffer_CSTarget(const _tchar* pCsTarget);
-
-public:	void	All_Clear(ID3D11DeviceContext* pDeviceContext);
 #endif // _DEBUG
 
 private: map<wstring, class CRenderTarget*>			m_Targets; // RT

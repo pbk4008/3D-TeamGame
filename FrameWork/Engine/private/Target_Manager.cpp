@@ -258,6 +258,8 @@ HRESULT CTarget_Manager::Render_Debug_Buffer_CSTarget(const _tchar* pCsTarget)
 
 	return S_OK;
 }
+#endif // _DEBUG
+
 void CTarget_Manager::All_Clear(ID3D11DeviceContext* pDeviceContext)
 {
 	for (auto& iter : m_MRTs)
@@ -270,7 +272,6 @@ void CTarget_Manager::All_Clear(ID3D11DeviceContext* pDeviceContext)
 
 	//pDeviceContext->ClearDepthStencilView(m_pDepthStencilView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.f, 0);
 }
-#endif // _DEBUG
 
 CRenderTarget* CTarget_Manager::Find_Target(const wstring& pTargetTag)
 {
