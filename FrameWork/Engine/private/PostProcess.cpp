@@ -26,14 +26,14 @@ HRESULT CPostProcess::InitPostProcess()
 	return S_OK;
 }
 
-HRESULT CPostProcess::AlphaBlur(CTarget_Manager* pTargetMgr, _bool alpha, _float weight)
+HRESULT CPostProcess::AlphaBlur(CTarget_Manager* pTargetMgr, _bool alpha)
 {
 	if (alpha == true)
 	{
-		if (FAILED(BlurPass(pTargetMgr, L"Target_Particle", L"Target_ParticleV2", L"Target_ParticleH2", 640, 360))) return E_FAIL;
+		if (FAILED(BlurPass(pTargetMgr, L"Target_AlphaBlend", L"Target_ParticleV2", L"Target_ParticleH2", 640, 360))) return E_FAIL;
 		if (FAILED(BlurPass(pTargetMgr, L"Target_ParticleH2", L"Target_ParticleV4", L"Target_ParticleH4", 320, 180))) return E_FAIL;
 
-		if (FAILED(BloomPass(pTargetMgr,L"Target_Alpha", L"Target_Particle", L"Target_ParticleH2", L"Target_ParticleH4", weight, true))) return E_FAIL;
+		if (FAILED(BloomPass(pTargetMgr,L"Target_Alpha", L"Target_AlphaBlend", L"Target_ParticleH2", L"Target_ParticleH4", 0, false))) return E_FAIL;
 	}
 
 	return S_OK;
@@ -145,24 +145,23 @@ HRESULT CPostProcess::BloomPass(CTarget_Manager* pTargetMgr, const wstring& targ
 {
 	if (FAILED(pTargetMgr->Begin_MRT(m_pDeviceContext, target.c_str())))	return E_FAIL;
 
-	if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_Weight", &weight, sizeof(_float)))) MSGBOX("Not Apply BloomPass ValueOnShader Weight");
-
 	if (FAILED(m_pVIBuffer->SetUp_TextureOnShader("g_Basetexture", pTargetMgr->Get_SRV(base.c_str()))))	return E_FAIL;
 
 	if (FAILED(m_pVIBuffer->SetUp_TextureOnShader("g_BaseBlur2Texture", pTargetMgr->Get_SRV(base1.c_str()))))	return E_FAIL;
 	if (FAILED(m_pVIBuffer->SetUp_TextureOnShader("g_BaseBlur4Texture", pTargetMgr->Get_SRV(base2.c_str()))))	return E_FAIL;
 
-	m_pVIBuffer->Render(4);
-
 	if (check == true)
 	{
-		if (FAILED(pTargetMgr->End_MRTNotClear(m_pDeviceContext))) return E_FAIL;
+		if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_Weight", &weight, sizeof(_float)))) MSGBOX("Not Apply BloomPass ValueOnShader Weight");
+		m_pVIBuffer->Render(4);
 	}
 	else
 	{
-		if (FAILED(pTargetMgr->End_MRT(m_pDeviceContext))) return E_FAIL;
+		if (FAILED(m_pVIBuffer->SetUp_TextureOnShader("g_WeightTexture", pTargetMgr->Get_SRV(L"Target_AlphaWeight"))))	return E_FAIL;
+		m_pVIBuffer->Render(5);
 	}
-	//if (FAILED(pTargetMgr->End_MRTNotClear(m_pDeviceContext))) return E_FAIL;
+
+	if (FAILED(pTargetMgr->End_MRTNotClear(m_pDeviceContext))) return E_FAIL;
 
 	return S_OK;
 }

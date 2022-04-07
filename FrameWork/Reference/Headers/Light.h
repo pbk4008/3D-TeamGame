@@ -29,9 +29,14 @@ private:
 
 public: void UpdateLightCam(_fvector playerpos);
 
+public:
+	void Set_Show(_bool bShow) { m_bShow = bShow; }
+	void Set_Pos(_vector vPos) { XMStoreFloat3(&m_LightDesc.vPosition, vPos); }
+
 private:
 	ID3D11Device*				m_pDevice = nullptr;
 	ID3D11DeviceContext*		m_pDeviceContext = nullptr;
+	_bool						m_bShow = false;
 
 private:
 	LIGHTDESC						m_LightDesc;

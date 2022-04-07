@@ -36,6 +36,7 @@ Texture2D g_BaseBlur4Texture;
 Texture2D g_BaseBlur8Texture;
 Texture2D g_BaseBlur16Texture;
 
+Texture2D g_WeightTexture;
 
 struct VS_IN
 {
@@ -160,43 +161,27 @@ PS_OUT PS_MAIN_Bloom2(PS_IN In)
 	return Out;
 }
 
-PS_OUT PS_MAIN_RADIAL(PS_IN In)
+PS_OUT PS_MAIN_AlphaWeight(PS_IN In)
 {
 	PS_OUT Out = (PS_OUT) 0;
 	
-	float4 maintex = g_Basetexture.Sample(radialsampler, In.vTexUV);
+	float4 base = g_Basetexture.Sample(DefaultSampler, In.vTexUV);
+	float4 base2 = g_BaseBlur2Texture.Sample(DefaultSampler, In.vTexUV);
+	float4 base4 = g_BaseBlur4Texture.Sample(DefaultSampler, In.vTexUV);
 	
-	float2 perpixel = float2(1.0f / 1280.0f, 1.0f / 720.f);
-	int samples = 64;
-	float2 center = float2(0.5, 0.5);
-	float blurstart = 0.8;
-	float blurwidth = 0.1;
-	float2 uv = In.vTexUV;
-		
-	uv -= center;
-	float precompute = blurwidth * (1.0 / float(samples - 1));
-		
-	float4 color = float4(0, 0, 0, 0);
-		
-	for (int i = 0; i < samples; i++)
-	{
-		float scale = blurstart + (float(i) * precompute);
-		color += g_Basetexture.Sample(DefaultSampler, uv * scale + center);
-	}
-		
-	color /= float(samples);
-	Out.vOutColor = color;
+	float weight = g_WeightTexture.Sample(DefaultSampler, In.vTexUV);
 	
-	if (Out.vOutColor.r <= 0 && Out.vOutColor.g <= 0 && Out.vOutColor.b <= 0)
-		discard;
-		
+	float4 baseBloom = (base * weight) + (base2 * weight) + (base4 * weight);
+	
+	Out.vOutColor = baseBloom;
+	
 	return Out;
 }
 
 //--------------------------------------------------------------------------------------------------------------------------//
 technique11 PostProcess
 {
-	pass VerticalBlur
+	pass VerticalBlur // 0
 	{
 		SetRasterizerState(CullMode_Default);
 		SetDepthStencilState(ZTestDiable, 0);
@@ -207,7 +192,7 @@ technique11 PostProcess
 		PixelShader = compile ps_5_0 PS_MAIN_VerticalBlur();
 	}
 
-	pass HorizontalBlur
+	pass HorizontalBlur // 1
 	{
 		SetRasterizerState(CullMode_Default);
 		SetDepthStencilState(ZTestDiable, 0);
@@ -218,7 +203,7 @@ technique11 PostProcess
 		PixelShader = compile ps_5_0 PS_MAIN_HorizontalBlur();
 	}
 	
-	pass BrightPass
+	pass BrightPass // 2
 	{
 		SetRasterizerState(CullMode_Default);
 		SetDepthStencilState(ZTestDiable, 0);
@@ -229,7 +214,7 @@ technique11 PostProcess
 		PixelShader = compile ps_5_0 PS_MAIN_BrightPass();
 	}
 
-	pass Bloom
+	pass Bloom // 3
 	{
 		SetRasterizerState(CullMode_Default);
 		SetDepthStencilState(ZTestDiable, 0);
@@ -240,7 +225,7 @@ technique11 PostProcess
 		PixelShader = compile ps_5_0 PS_MAIN_Bloom();
 	}
 
-	pass Bloom2
+	pass Bloom2 // 4
 	{
 		SetRasterizerState(CullMode_Default);
 		SetDepthStencilState(ZTestDiable, 0);
@@ -251,14 +236,14 @@ technique11 PostProcess
 		PixelShader = compile ps_5_0 PS_MAIN_Bloom2();
 	}
 
-	pass Radial
+	pass AlphaWeight // 5
 	{
 		SetRasterizerState(CullMode_Default);
-		SetDepthStencilState(ZDefault, 0);
+		SetDepthStencilState(ZTestDiable, 0);
 		SetBlendState(BlendDisable, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
 
 		VertexShader = compile vs_5_0 VS_MAIN_VIEWPORT();
 		GeometryShader = NULL;
-		PixelShader = compile ps_5_0 PS_MAIN_RADIAL();
+		PixelShader = compile ps_5_0 PS_MAIN_AlphaWeight();
 	}
 }

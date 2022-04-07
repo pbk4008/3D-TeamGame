@@ -61,6 +61,24 @@ HRESULT CNeedle::NativeConstruct(const _uint _iSceneID, void* _pArg)
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer(m_iSceneID, L"Layer_Effect", L"Proto_GameObject_TrailEffect", m_pTransform, (CGameObject**)&m_pTrailEffect)))
 		MSGBOX(L"트레일 이펙트 생성 실패. from Needle");
 
+	//Light
+	LIGHTDESC			LightDesc;
+	ZeroMemory(&LightDesc, sizeof(LIGHTDESC));
+	LightDesc.eType = LIGHTDESC::TYPE_POINT;
+	LightDesc.fRange = 10.f;
+	LightDesc.vDiffuse = _float4(1.f, 1.f, 1.f, 1.f);
+	LightDesc.vSpecular = _float4(0.8f, 0.8f, 0.8f, 1.f);
+	LightDesc.vAmbient = _float4(0.6f, 0.6f, 0.6f, 1.f);
+	XMStoreFloat3(&LightDesc.vPosition,m_pTransform->Get_State(CTransform::STATE_POSITION));
+
+	if (nullptr == m_pLight)
+	{
+		if (FAILED(g_pGameInstance->Add_Light(m_pDevice, m_pDeviceContext, LightDesc, &m_pLight)))
+			MSGBOX("Failed To Adding PointLight");
+	}
+	
+	m_pLight->Set_Show(false);
+
 	m_fDamage = 3;
 
 	return S_OK;

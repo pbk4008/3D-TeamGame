@@ -158,6 +158,7 @@ private: /* Drop Box  */
 private: /* For.Cheat */
 	_bool m_isHighSpeedMode = false;
 
+private: _float4  m_color = _float4(0.498f, 0.9411f, 0.8196f, 0.f); // color
 private:/* for. Inventroy */
 	CInventoryData* m_pInventoryData = nullptr;
 

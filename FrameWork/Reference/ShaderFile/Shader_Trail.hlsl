@@ -23,9 +23,10 @@ sampler ClampSampler = sampler_state
 
 cbuffer Noisebuffer
 {
-	float g_frametime;
-	float3 g_scrollspeeds;
-	float3 g_scales;
+	float	g_frametime;
+	float3	g_scrollspeeds;
+	float3	g_scales;
+	float	g_Weight;
 };
 
 cbuffer Distortionbuffer
@@ -105,21 +106,16 @@ struct PS_IN_TRAIL
 struct PS_OUT_TRAIL
 {
 	float4 diffuse : SV_TARGET0;
-	float4 normal : SV_TARGET1;
-	float4 depth : SV_TARGET2;
-	float4 M : SV_Target3;
-	float4 R : SV_Target4;
-	float4 A : SV_Target5;
-	float4 E : SV_Target6;
+	float4 weight : SV_Target1;
 };
 
 PS_OUT_TRAIL PS_MAIN_TRAIL(PS_IN_TRAIL In)
 {
 	PS_OUT_TRAIL Out = (PS_OUT_TRAIL) 0;
 	
-	float4 diffuse = g_DiffuseTexture.Sample(DefaultSampler, In.vUvDepth.xy);
-	float4 distortion = g_DistortionTex.Sample(DefaultSampler, In.vUvDepth.xy);
-	float4 distortionmask = g_DistorionMaskTex.Sample(DefaultSampler, In.vUvDepth.xy);
+	half4 diffuse = g_DiffuseTexture.Sample(DefaultSampler, In.vUvDepth.xy);
+	half4 distortion = g_DistortionTex.Sample(DefaultSampler, In.vUvDepth.xy);
+	half4 distortionmask = g_DistorionMaskTex.Sample(DefaultSampler, In.vUvDepth.xy);
 	
 	//clip(distortionmask.r - 0.1f);
 	
@@ -132,9 +128,9 @@ PS_OUT_TRAIL PS_MAIN_TRAIL(PS_IN_TRAIL In)
 	//Out.diffuse = diffuse2;
 	
 	
-	float4 noise1, noise2, noise3, finalnoise, firecolor, alphacolor;
-	float perturb;
-	float2 noisecoords;
+	half4 noise1, noise2, noise3, finalnoise, firecolor, alphacolor;
+	half perturb;
+	half4 noisecoords;
 	
 	noise1 = g_DistorionMaskTex.Sample(DefaultSampler, In.texcoord1);
 	noise2 = g_DistorionMaskTex.Sample(DefaultSampler, In.texcoord2);
@@ -160,7 +156,7 @@ PS_OUT_TRAIL PS_MAIN_TRAIL(PS_IN_TRAIL In)
 	firecolor.a = alphacolor;
 	
 	Out.diffuse = firecolor;
-	
+	Out.weight = float4(g_Weight.xxx, 1.f);
 	//Out.depth = float4(In.vUvDepth.z / In.vUvDepth.w, In.vUvDepth.w / 300.f, 0.f, 0.f);
 	//Out.normal = float4(1, 1, 1, 0);
 	

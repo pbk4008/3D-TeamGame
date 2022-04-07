@@ -82,8 +82,8 @@ HRESULT CStage1::NativeConstruct()
 	if (FAILED(Ready_MapObject()))
 		return E_FAIL;
 
-	if (FAILED(Ready_TriggerSystem(L"../bin/SaveData/Trigger/MonsterSpawnTrigger.dat")))
-		return E_FAIL;
+	//if (FAILED(Ready_TriggerSystem(L"../bin/SaveData/Trigger/MonsterSpawnTrigger.dat")))
+	//	return E_FAIL;
 
 	//if (FAILED(Ready_Boss(L"Layer_Boss")))
 	//{
@@ -110,18 +110,18 @@ HRESULT CStage1::NativeConstruct()
 		return E_FAIL;
 	}
 
-	if (FAILED(Ready_Treasure_Chest()))
-		return E_FAIL;
+	//if (FAILED(Ready_Treasure_Chest()))
+	//	return E_FAIL;
 
 	g_pGameInstance->Change_BaseCamera(L"Camera_Silvermane");
 
-	g_pInteractManager = CInteractManager::GetInstance();
-	if (FAILED(g_pInteractManager->NativeConstruct()))
-		return E_FAIL;
+	//g_pInteractManager = CInteractManager::GetInstance();
+	//if (FAILED(g_pInteractManager->NativeConstruct()))
+	//	return E_FAIL;
 
-	g_pDropManager = CDropManager::GetInstance();
-	if (FAILED(g_pDropManager->NativeConstruct((SCENEID::SCENE_STAGE1))))
-		return E_FAIL;
+	//g_pDropManager = CDropManager::GetInstance();
+	//if (FAILED(g_pDropManager->NativeConstruct((SCENEID::SCENE_STAGE1))))
+	//	return E_FAIL;
 
 	g_pGameInstance->PlayBGM(L"Stage1_BGM");
 	return S_OK;
@@ -223,8 +223,8 @@ _int CStage1::Tick(_double TimeDelta)
 			return -1;
 	}*/
 
-	g_pInteractManager->Tick(TimeDelta);
-	g_pDropManager->Tick();
+	//g_pInteractManager->Tick(TimeDelta);
+	//g_pDropManager->Tick();
 
 	return _int();
 }
@@ -269,9 +269,16 @@ HRESULT CStage1::Ready_MapObject()
 		{
 			for (auto& iter : pDesc.tInstanceDesc.vecMatrix)
 			{
-				_vector pos = XMVectorSet(iter._41, iter._42, iter._43, iter._44);
+				CEffect_Env_Fire::EFFECTDESC Desc;
+				_tcscpy_s(Desc.TextureTag, L"Env_Fire");
+				Desc.iRenderPassNum = 1;
+				Desc.iImageCountX = 8;
+				Desc.iImageCountY = 8;
+				Desc.fFrame = 64.f;
+				Desc.fEffectPlaySpeed = 1.f;
+				Desc.ParticleMat = XMLoadFloat4x4(&iter);
 
-				if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_NoisFire", L"Proto_GameObject_NoiseFire",&pos)))
+				if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_NoisFire", L"Proto_GameObject_Effect_Env_Fire",&Desc)))
 					MSGBOX("Failed To Clone NoisFire");
 			}
 		}
@@ -597,7 +604,9 @@ HRESULT CStage1::Ready_Data_Effect()
 	}
 #pragma endregion
 
-#pragma region 이펙트매니저에 안들어가는것들 
+#pragma region 이펙트매니저에 안들어가는것들
+
+	//공중에떠있는환경파티클 (이펙트매니저에안넣음)
 	//fire
 	CEffect_Env_Fire::EFFECTDESC Desc;
 	_tcscpy_s(Desc.TextureTag, L"Env_Fire");
@@ -1518,8 +1527,8 @@ void CStage1::Free()
 {
 	CLevel::Free();
 
-	CDropManager::DestroyInstance();
-	CInteractManager::DestroyInstance();
+	//CDropManager::DestroyInstance();
+	//CInteractManager::DestroyInstance();
 	Safe_Release(m_pTriggerSystem);
 
 }

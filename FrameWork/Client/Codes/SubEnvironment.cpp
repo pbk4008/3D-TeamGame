@@ -51,10 +51,12 @@ _int CSubEnvironment::Tick(_double TimeDelta)
 
 _int CSubEnvironment::LateTick(_double TimeDelta)
 {
-	if (FAILED(Culling()))
-		return -1;
+	//if (FAILED(Culling()))
+	//	return -1;
 
-	m_pRenderer->Add_RenderGroup(CRenderer::RENDER_NONALPHA, this);
+	if(m_pRenderer->Get_Shadow() == false)
+		m_pRenderer->Add_RenderGroup(CRenderer::RENDER_ALPHA, this);
+
 	return _int();
 }
 
@@ -63,6 +65,7 @@ HRESULT CSubEnvironment::Render()
 	if (!m_pInstanceMesh)
 		return E_FAIL;
 
+	_float4 ClipPlane = _float4(0.f, 0.f, 0.f, 0.f);
 	_matrix matWorld = XMMatrixTranspose(m_pTransform->Get_WorldMatrix());
 	_matrix matView = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_VIEW));
 	_matrix matProj = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_PROJECTION));
@@ -72,6 +75,7 @@ HRESULT CSubEnvironment::Render()
 	m_pInstanceMesh->SetUp_ValueOnShader("g_ViewMatrix", &matView, sizeof(_matrix));
 	m_pInstanceMesh->SetUp_ValueOnShader("g_ProjMatrix", &matProj, sizeof(_matrix));
 	m_pInstanceMesh->SetUp_ValueOnShader("g_CamPos", &campos, sizeof(_vector));
+	m_pInstanceMesh->SetUp_ValueOnShader("ClipPlane", &ClipPlane, sizeof(_float4));
 
 	for (_uint i = 0; i < m_Nummeshcontainer; i++)
 		m_pInstanceMesh->Render(i, 0);

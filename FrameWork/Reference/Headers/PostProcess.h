@@ -14,7 +14,7 @@ private: virtual ~CPostProcess() = default;
 
 public: HRESULT				InitPostProcess();
 
-public: HRESULT				AlphaBlur(CTarget_Manager* pTargetMgr, _bool alpha, _float weight);
+public: HRESULT				AlphaBlur(CTarget_Manager* pTargetMgr, _bool alpha);
 public: HRESULT				Shadowblur(CTarget_Manager* pTargetMgr, _bool shadow, _float weight);
 public: HRESULT				PossProcessing(CTonemapping* tone,CTarget_Manager* pTargetMgr,_bool hdr, _bool radial);
 public: HRESULT				RadialPass(CTarget_Manager* pTargetMgr);
