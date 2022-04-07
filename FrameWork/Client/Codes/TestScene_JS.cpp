@@ -43,10 +43,10 @@ HRESULT CTestScene_JS::NativeConstruct()
 		return E_FAIL;
 	}
 
-	if (FAILED(Ready_Data_Effect()))
-	{
-		return E_FAIL;
-	}
+	//if (FAILED(Ready_Data_Effect()))
+	//{
+	//	return E_FAIL;
+	//}
 
 	if (FAILED(Ready_UI(L"Layer_UI")))
 	{
@@ -61,23 +61,23 @@ _int CTestScene_JS::Tick(_double TimeDelta)
 	if (0 > __super::Tick(TimeDelta))
 		return -1;
 
-	CGameObject* pMonster = nullptr;
-	if (g_pGameInstance->getkeyDown(DIK_COLON))
-	{
-		//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_JS, L"Layer_Monster", L"Proto_GameObject_Monster_Bastion_2HSword", nullptr, &pMonster)))
-		//	return -1;
-		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_JS, L"Layer_Monster", L"Proto_GameObject_Monster_Bastion_Shooter", nullptr, &pMonster)))
-			return E_FAIL;
-		//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_JS, L"Layer_Monster", L"Proto_GameObject_Monster_Bastion_Sword", nullptr, &pMonster)))
-		//	return E_FAIL;
-		pMonster->setActive(true);
-	}
-	if (g_pGameInstance->getkeyDown(DIK_SEMICOLON))
-	{
-		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_JS, L"Layer_Monster", L"Proto_GameObject_Monster_Crawler", nullptr, &pMonster)))
-			return -1;
-		pMonster->setActive(true);
-	}
+	//CGameObject* pMonster = nullptr;
+	//if (g_pGameInstance->getkeyDown(DIK_COLON))
+	//{
+	//	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_JS, L"Layer_Monster", L"Proto_GameObject_Monster_Bastion_2HSword", nullptr, &pMonster)))
+	//	//	return -1;
+	//	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_JS, L"Layer_Monster", L"Proto_GameObject_Monster_Bastion_Shooter", nullptr, &pMonster)))
+	//		return E_FAIL;
+	//	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_JS, L"Layer_Monster", L"Proto_GameObject_Monster_Bastion_Sword", nullptr, &pMonster)))
+	//	//	return E_FAIL;
+	//	pMonster->setActive(true);
+	//}
+	//if (g_pGameInstance->getkeyDown(DIK_SEMICOLON))
+	//{
+	//	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_JS, L"Layer_Monster", L"Proto_GameObject_Monster_Crawler", nullptr, &pMonster)))
+	//		return -1;
+	//	pMonster->setActive(true);
+	//}
 	return _int();
 }
 
