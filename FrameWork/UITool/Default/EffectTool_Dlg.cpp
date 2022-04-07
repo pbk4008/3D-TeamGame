@@ -269,7 +269,8 @@ void CEffectTool_Dlg::OnBnClickedButtonApply()
 	wstring Name = m_strPickFileName;
 	//wstring FullName = L"Prototype_GameObject_Effect"/* + Name*/;
 	//wstring FullName = L"Prototype_GameObject_Effect_Floating"/* + Name*/;
-	wstring FullName = L"Prototype_GameObject_Effect_Env_Floating"/* + Name*/;
+	//wstring FullName = L"Prototype_GameObject_Effect_Env_Floating"/* + Name*/;
+	wstring FullName = L"Prototype_GameObject_Effect_Respawn"/* + Name*/;
 
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer(TOOL_LEVEL::TOOL_LEVEL_GAMEPLAY, L"Layer_Effect", FullName, &m_EffectDesc)))
 	{
@@ -532,7 +533,9 @@ void CEffectTool_Dlg::OnBnClickedButtonLoad()
 	wstring Tag = m_vecEffect[0].TextureTag;
 	//wstring FullName = L"Prototype_GameObject_Effect"/* + Tag*/;
 	//wstring FullName = L"Prototype_GameObject_Effect_Floating"/* + Tag*/;
-	wstring FullName = L"Prototype_GameObject_Effect_Env_Floating"/* + Name*/;
+	//wstring FullName = L"Prototype_GameObject_Effect_Env_Floating"/* + Name*/;
+	wstring FullName = L"Prototype_GameObject_Effect_Respawn"/* + Name*/;
+	
 
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer(TOOL_LEVEL::TOOL_LEVEL_GAMEPLAY, L"Layer_Effect", FullName, &m_vecEffect[0])))
 	{

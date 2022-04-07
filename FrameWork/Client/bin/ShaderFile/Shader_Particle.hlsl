@@ -164,8 +164,20 @@ PS_OUT PS_MAIN_MULTIIMAGE(PS_IN In)
     In.vTexUV.x = (In.vTexUV.x / g_iImageCountX) + (g_iFrame % g_iImageCountX) * (1.f / g_iImageCountX); //가로 이미지개수 , 프레임 , 1나누기 이미지개수 
     In.vTexUV.y = (In.vTexUV.y / g_iImageCountY) + (g_iFrame / g_iImageCountY) * (1.f / g_iImageCountY); //세로 이미지개수 , 프레임 , 1나누기 이미지개수
 
+    float4 GreenAlpha = g_DiffuseTexture.Sample(DefaultSampler, In.vTexUV);
+	
     Out.vColor = g_DiffuseTexture.Sample(DefaultSampler, In.vTexUV);
-
+	
+    Out.vColor.r = 1.f; 
+    Out.vColor.gb = 0.f;
+	
+    Out.vColor = Out.vColor * GreenAlpha.g;
+	
+    if (0.01f >= Out.vColor.a)
+    {
+        discard;
+    }
+	
     return Out;
 }
 
@@ -239,7 +251,7 @@ technique11			DefaultTechnique
 		/* 렌더스테이츠에 대한 정의. */
         SetRasterizerState(CullMode_Default);
         SetDepthStencilState(ZDefault, 0);
-        SetBlendState(AlphaBlending, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+        //SetBlendState(AlphaBlending, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
 
 		/* 진입점함수를 지정한다. */
         VertexShader = compile vs_5_0 VS_MAIN();

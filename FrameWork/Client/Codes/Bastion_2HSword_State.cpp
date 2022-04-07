@@ -42,7 +42,6 @@ _int CBastion_2HSword_State::Tick(const _double& _dDeltaTime)
 	if (10.f <= fDist && 15.f >= fDist && m_pOwner->get_FirstAttack()&&!m_pOwner->get_Attack())
 		m_pOwner->set_RageOn(true);
 
-	cout << fDist << endl;
 	if(!m_pOwner->get_RageOn())
 	{
 		if (3.5f <= fDist && 10.0f > fDist && !m_pOwner->get_Attack())
@@ -207,7 +206,8 @@ void CBastion_2HSword_State::Look_Monster(void)
 
 void CBastion_2HSword_State::OnTriggerEnter(CCollision& collision)
 {
-	m_pOwner->Hit(collision);
+	if(nullptr != m_pOwner)
+		m_pOwner->Hit(collision);
 }
 
 HRESULT CBastion_2HSword_State::Render_Debug()

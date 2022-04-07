@@ -34,9 +34,93 @@ _int CBastion_2HSword_Attack::Tick(const _double& _dDeltaTime)
 
 	if (m_pAnimator->Get_CurrentAnimation()->Is_Finished())
 	{
-		m_pOwner->set_Attack(false);
+		//m_pOwner->set_Attack(false);
 		m_pOwner->set_RandAttack(-1);
 		m_pStateController->Change_State(L"Idle");
+	}
+
+	//keyframe에따라 데미지 다르게 들어가게 
+	CMonster_Bastion_2HSword* pMonster = (CMonster_Bastion_2HSword*)m_pStateController->Get_GameObject();
+	if (nullptr != pMonster)
+	{
+		//cout << pMonster->IsAttack() << endl;
+
+		_uint iCurKeyFrameIndex = m_pAnimator->Get_AnimController()->Get_CurKeyFrameIndex();
+
+		if ((_uint)CMonster_Bastion_2HSword::ANIM_TYPE::A_ATTACK_R1 == m_pAnimator->Get_CurrentAnimNode())
+		{
+			if (53 < iCurKeyFrameIndex && 62 > iCurKeyFrameIndex)
+			{
+				pMonster->Set_IsAttack(true);
+
+				_float fDamage = 4.f;
+				_uint iLevel = 1;
+				pMonster->Set_AttackDesc_Damaga(fDamage);
+				pMonster->Set_AttackDesc_Level(iLevel);
+			}
+			
+			else if (105 < iCurKeyFrameIndex && 119 > iCurKeyFrameIndex)
+			{
+				pMonster->Set_IsAttack(true);
+
+				_float fDamage = 6.f;
+				_uint iLevel = 2;
+				pMonster->Set_AttackDesc_Damaga(fDamage);
+				pMonster->Set_AttackDesc_Level(iLevel);
+			}
+
+			else
+			{
+				pMonster->Set_IsAttack(false);
+			}
+		}
+
+		else if ((_uint)CMonster_Bastion_2HSword::ANIM_TYPE::A_ATTACK_R2 == m_pAnimator->Get_CurrentAnimNode())
+		{
+			if (73 < iCurKeyFrameIndex && 84 > iCurKeyFrameIndex)
+			{
+				pMonster->Set_IsAttack(true);
+
+				_float fDamage = 6.f;
+				_uint iLevel = 2;
+				pMonster->Set_AttackDesc_Damaga(fDamage);
+				pMonster->Set_AttackDesc_Level(iLevel);
+			}
+			else
+			{
+				pMonster->Set_IsAttack(false);
+			}
+		}
+
+		else if ((_uint)CMonster_Bastion_2HSword::ANIM_TYPE::A_ATTACK_S1 == m_pAnimator->Get_CurrentAnimNode())
+		{
+			if (54 < iCurKeyFrameIndex && 93 > iCurKeyFrameIndex)
+			{
+				pMonster->Set_IsAttack(true);
+
+				_float fDamage = 7.f;
+				_uint iLevel = 3;
+				pMonster->Set_AttackDesc_Damaga(fDamage);
+				pMonster->Set_AttackDesc_Level(iLevel);
+			}
+			else
+				pMonster->Set_IsAttack(false);
+		}
+
+		else if ((_uint)CMonster_Bastion_2HSword::ANIM_TYPE::A_ATTACK_S3== m_pAnimator->Get_CurrentAnimNode())
+		{
+			if (38 < iCurKeyFrameIndex && 48 > iCurKeyFrameIndex)
+			{
+				pMonster->Set_IsAttack(true);
+
+				_float fDamage = 4.f;
+				_uint iLevel = 2;
+				pMonster->Set_AttackDesc_Damaga(fDamage);
+				pMonster->Set_AttackDesc_Level(iLevel);
+			}
+			else
+				pMonster->Set_IsAttack(false);
+		}
 	}
 
 	return _int();
@@ -63,9 +147,7 @@ HRESULT CBastion_2HSword_Attack::EnterState()
 {
 	if (FAILED(__super::EnterState()))
 		return E_FAIL;
-
 	
-
 	return S_OK;
 }
 
@@ -73,7 +155,9 @@ HRESULT CBastion_2HSword_Attack::ExitState()
 {
 	if (FAILED(__super::ExitState()))
 		return E_FAIL;
+
 	m_pAnimator->Get_AnimController()->Set_PlaySpeed(1.f);
+
 	return S_OK;
 }
 

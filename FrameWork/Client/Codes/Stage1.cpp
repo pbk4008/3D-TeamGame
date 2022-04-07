@@ -13,6 +13,7 @@
 #include "Effect_Env_Floating.h"
 #include "Effect_Env_Fire.h"
 #include "Effect_Guard.h"
+#include "Effect_Falling_Leaf.h"
 
 #include "UI_Ingame.h"
 #include "UI_Player_HpBar.h"
@@ -66,27 +67,27 @@ HRESULT CStage1::NativeConstruct()
 	if (FAILED(Ready_Light()))
 		return E_FAIL;
 
-	if (FAILED(Ready_Trigger_Jump()))
-		return E_FAIL;
+	//if (FAILED(Ready_Trigger_Jump()))
+	//	return E_FAIL;
 
 	if (FAILED(Ready_Player(L"Layer_Silvermane")))
 		return E_FAIL;
 
-	if (FAILED(Ready_MapObject()))
-		return E_FAIL;
+	//if (FAILED(Ready_MapObject()))
+	//	return E_FAIL;
+	//
+	//if (FAILED(Ready_TriggerSystem(L"../bin/SaveData/Trigger/MonsterSpawnTrigger.dat")))
+	//	return E_FAIL;
 
-	if (FAILED(Ready_TriggerSystem(L"../bin/SaveData/Trigger/MonsterSpawnTrigger.dat")))
-		return E_FAIL;
-
-	if (FAILED(Ready_Boss(L"Layer_Boss")))
-	{
-		return E_FAIL;
-	}
-
-	if (FAILED(Ready_Monster(L"Layer_Monster")))
-	{
-		return E_FAIL;
-	}
+	//if (FAILED(Ready_Boss(L"Layer_Boss")))
+	//{
+	//	return E_FAIL;
+	//}
+	//
+	//if (FAILED(Ready_Monster(L"Layer_Monster")))
+	//{
+	//	return E_FAIL;
+	//}
 
 	if (FAILED(Ready_Data_UI(L"../bin/SaveData/UI/UI.dat")))
 	{
@@ -109,7 +110,7 @@ HRESULT CStage1::NativeConstruct()
 	g_pGameInstance->Change_BaseCamera(L"Camera_Silvermane");
 
 
-	g_pGameInstance->PlayBGM(L"Stage1_BGM");
+	//g_pGameInstance->PlayBGM(L"Stage1_BGM");
 
 	return S_OK;
 }
@@ -141,7 +142,7 @@ _int CStage1::Tick(_double TimeDelta)
 		if (m_iCountMonster == 0 && m_bFirst)
 			m_pTriggerSystem->Check_Clear();
 
-		CBoss_Bastion_Judicator* pBoss = (CBoss_Bastion_Judicator*)g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Layer_Boss")->front();
+		/*CBoss_Bastion_Judicator* pBoss = (CBoss_Bastion_Judicator*)g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Layer_Boss")->front();
 		if (nullptr != pBoss)
 		{
 			if (true == pBoss->Get_Dead())
@@ -150,25 +151,29 @@ _int CStage1::Tick(_double TimeDelta)
 					return -1;
 				return 0;
 			}
-
-		}
+		}*/
 	}
-
+	
 	if (g_pGameInstance->getkeyDown(DIK_BACKSPACE))
 	{
 		_float3 fPos = { 0.f,5.f,10.f };
-//		CMonster_Bastion_Spear* pMonster = nullptr;
-//
-//		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Test", L"Proto_GameObject_Monster_Bastion_Spear", &fPos, (CGameObject**)&pMonster)))
-//			return -1;
-		CMonster_Bastion_Sword* pMonster = nullptr;
+		//CMonster_Bastion_Spear* pMonster = nullptr;
+		//
+		//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Test", L"Proto_GameObject_Monster_Bastion_Spear", &fPos, (CGameObject**)&pMonster)))
+		//	return -1;
+		//CMonster_Bastion_Sword* pMonster = nullptr;
+		//
+		//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Test", L"Proto_GameObject_Monster_Bastion_Sword", &fPos, (CGameObject**)&pMonster)))
+		//	return -1;
+		//
+		//CMonster_Bastion_Shooter* pShooter = nullptr;
+		//fPos = { 3.f,5.f,10.f };
+		//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Test", L"Proto_GameObject_Monster_Bastion_Shooter", &fPos, (CGameObject**)&pShooter)))
+		//	return -1;
 
-		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Test", L"Proto_GameObject_Monster_Bastion_Sword", &fPos, (CGameObject**)&pMonster)))
-			return -1;
-
-		CMonster_Bastion_Shooter* pShooter = nullptr;
+		CMonster_Bastion_2HSword* p2H = nullptr;
 		fPos = { 3.f,5.f,10.f };
-		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Test", L"Proto_GameObject_Monster_Bastion_Shooter", &fPos, (CGameObject**)&pShooter)))
+		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Test", L"Proto_GameObject_Monster_Bastion_2HSword", &fPos, (CGameObject**)&p2H)))
 			return -1;
 	}
 
@@ -561,17 +566,29 @@ HRESULT CStage1::Ready_Data_Effect()
 		MSGBOX("Failed to Creating Effect_Env_Fire in CStage1::Ready_Effect()");
 		return E_FAIL;
 	}
-
+	
 	//Env floating
 	vector<CEffect_Env_Floating::EFFECTDESC> vecEnvFloating;
 	g_pGameInstance->LoadFile<CEffect_Env_Floating::EFFECTDESC>(vecEnvFloating, L"../bin/SaveData/Effect/Effect_Env_Floating_1.dat");
 
 	FullName = L"Proto_GameObject_Effect_Env_Floating";
 
-	vecEnvFloating[0].fMyPos = { 0.f, 1.f, 10.f };
+	vecEnvFloating[0].fMyPos = { -5.f, 1.f, 20.f };
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Env_Floating_1", FullName, &vecEnvFloating[0])))
 	{
 		MSGBOX("Failed to Creating Effect_Env_Floating_1 in CStage1::Ready_Effect()");
+		return E_FAIL;
+	}
+
+	//Env Falling Leaf
+	vector<CEffect_Falling_Leaf::EFFECTDESC> vecEnvFallingLeaf;
+	g_pGameInstance->LoadFile<CEffect_Falling_Leaf::EFFECTDESC>(vecEnvFallingLeaf, L"../bin/SaveData/Effect/Effect_Falling_Leaf.dat");
+
+	FullName = L"Proto_GameObject_Effect_Falling_Leaf";
+
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Env_Falling_Leaf", FullName, &vecEnvFallingLeaf[0])))
+	{
+		MSGBOX("Failed to Creating Effect_Env_FallingLeaf in CStage1::Ready_Effect()");
 		return E_FAIL;
 	}
 

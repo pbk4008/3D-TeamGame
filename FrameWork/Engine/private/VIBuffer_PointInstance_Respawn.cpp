@@ -17,6 +17,7 @@ CVIBuffer_PointInstance_Respawn::CVIBuffer_PointInstance_Respawn(const CVIBuffer
 	, m_pRandomPos(rhs.m_pRandomPos)
 	, m_pDir(rhs.m_pDir)
 	, m_pNormal(rhs.m_pNormal)
+	, m_pDropSpeed(rhs.m_pDropSpeed)
 {
 	Safe_AddRef(m_pVBInstance);	
 }
@@ -87,7 +88,7 @@ HRESULT CVIBuffer_PointInstance_Respawn::NativeConstruct(void * pArg)
 	VTXPARTICLE* pVertices = new VTXPARTICLE[m_iInstNumVertices];
 	ZeroMemory(pVertices, sizeof(VTXPARTICLE) * m_iInstNumVertices);
 
-	m_pFirstPosY = new _float[m_Desc.iNumInstance];
+	m_pFirstPos = new _float3[m_Desc.iNumInstance];
 
 	for (_uint i = 0; i < m_iInstNumVertices; ++i)
 	{
@@ -100,7 +101,9 @@ HRESULT CVIBuffer_PointInstance_Respawn::NativeConstruct(void * pArg)
 				XMVectorGetZ(m_Desc.matParticle.r[3]) + rand() % (_int)(m_Desc.fParticleStartRandomPos.z), 1.f);
 
 		//맨처음 들어오는 y값을 미리 저장해둠
-		m_pFirstPosY[i] = pVertices[i].vPosition.y;
+		m_pFirstPos[i].x = pVertices[i].vPosition.x;
+		m_pFirstPos[i].y = pVertices[i].vPosition.y;
+		m_pFirstPos[i].z = pVertices[i].vPosition.z;
 
 		pVertices[i].vTime.x = (rand() % 9) * 0.1f + m_Desc.fCurTime;
 	}
@@ -131,6 +134,10 @@ HRESULT CVIBuffer_PointInstance_Respawn::NativeConstruct(void * pArg)
 	m_pRandomPos = new _float3[m_Desc.iNumInstance];
 	m_pDir = new _float3[m_Desc.iNumInstance];
 	m_pNormal = new _float3[m_Desc.iNumInstance];
+
+	m_pDropSpeed = new _double[m_Desc.iNumInstance];
+	for (_uint i = 0; i < m_Desc.iNumInstance; ++i)
+		m_pDropSpeed[i] = rand() % 10 * 0.1f + 0.1f;
 
 	Particle_Setting_RandomPos();
 
@@ -231,7 +238,7 @@ void CVIBuffer_PointInstance_Respawn::Update(_double TimeDelta, _uint eAxis)
 
 				if (m_Desc.fLifeTime > m_fGravityTime && 0.f <= m_fGravityTime)
 				{
-					fY = ((VTXPARTICLE*)SubResource.pData)[i].vPosition.y + (-2.f * 9.8f * (_float)TimeDelta * ((m_Desc.fLifeTime - m_fGravityTime) * (m_Desc.fParticleSpeed * 0.1f)));
+					fY = ((VTXPARTICLE*)SubResource.pData)[i].vPosition.y + (-2.f * 9.8f * m_pDropSpeed[i] * (_float)TimeDelta * ((m_Desc.fLifeTime - m_fGravityTime) * (m_Desc.fParticleSpeed * 0.1f)));
 					((VTXPARTICLE*)SubResource.pData)[i].vPosition.y = fY;
 				}
 			}
@@ -273,9 +280,11 @@ void CVIBuffer_PointInstance_Respawn::Update(_double TimeDelta, _uint eAxis)
 		}
 
 		//처음 지정해준 높이 보다 낮아지면 다시위로올림 
-		if (m_pFirstPosY[i] - 20.f >= ((VTXPARTICLE*)SubResource.pData)[i].vPosition.y)
+		if (m_pFirstPos[i].y - 20.f >= ((VTXPARTICLE*)SubResource.pData)[i].vPosition.y)
 		{
-			((VTXPARTICLE*)SubResource.pData)[i].vPosition.y = m_pFirstPosY[i];
+			((VTXPARTICLE*)SubResource.pData)[i].vPosition.x = m_pFirstPos[i].x + rand() % (_int)(m_Desc.fParticleStartRandomPos.x);
+			((VTXPARTICLE*)SubResource.pData)[i].vPosition.y = m_pFirstPos[i].y;
+			((VTXPARTICLE*)SubResource.pData)[i].vPosition.z = m_pFirstPos[i].z + rand() % (_int)(m_Desc.fParticleStartRandomPos.z);
 		}
 	}
 
@@ -339,7 +348,9 @@ void CVIBuffer_PointInstance_Respawn::Particle_Reset()
 		((VTXPARTICLE*)SubResource.pData)[i].vPosition.y = XMVectorGetY(m_Desc.matParticle.r[3]) + rand() % (_int)(m_Desc.fParticleStartRandomPos.y);
 		((VTXPARTICLE*)SubResource.pData)[i].vPosition.z = XMVectorGetZ(m_Desc.matParticle.r[3]) + rand() % (_int)(m_Desc.fParticleStartRandomPos.z);
 
-		m_pFirstPosY[i] = ((VTXPARTICLE*)SubResource.pData)[i].vPosition.y;
+		m_pFirstPos[i].x = ((VTXPARTICLE*)SubResource.pData)[i].vPosition.x;
+		m_pFirstPos[i].y = ((VTXPARTICLE*)SubResource.pData)[i].vPosition.y;
+		m_pFirstPos[i].z = ((VTXPARTICLE*)SubResource.pData)[i].vPosition.z;
 	}
 
 	////소팅해야댐 여기서 , 멀리있는것부터 그릴수있게,, 저는 생각이없습니다.. 
@@ -394,6 +405,8 @@ void CVIBuffer_PointInstance_Respawn::Free()
 	Safe_Delete_Array(m_pRandomPos);
 	Safe_Delete_Array(m_pVertices);
 	Safe_Delete_Array(m_pIndices);
+	Safe_Delete_Array(m_pDropSpeed);
+	Safe_Delete_Array(m_pFirstPos);
 
 	Safe_Release(m_pVBInstance);
 

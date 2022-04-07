@@ -67,6 +67,9 @@
     <Filter Include="04.Object\02.Effect\Env_Floating">
       <UniqueIdentifier>{3fefaa1d-e465-4205-a006-61b06452ac29}</UniqueIdentifier>
     </Filter>
+    <Filter Include="04.Object\02.Effect\Respawn">
+      <UniqueIdentifier>{a096ee32-1f65-4f8f-8939-3cf837f554a0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MainFrm.h">
@@ -135,6 +138,9 @@
     <ClInclude Include="MFCEffect_Env_floating.h">
       <Filter>04.Object\02.Effect\Env_Floating</Filter>
     </ClInclude>
+    <ClInclude Include="MFCEffect_Respawn.h">
+      <Filter>04.Object\02.Effect\Respawn</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MainFrm.cpp">
@@ -190,6 +196,9 @@
     </ClCompile>
     <ClCompile Include="MFCEffect_Env_floating.cpp">
       <Filter>04.Object\02.Effect\Env_Floating</Filter>
+    </ClCompile>
+    <ClCompile Include="MFCEffect_Respawn.cpp">
+      <Filter>04.Object\02.Effect\Respawn</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

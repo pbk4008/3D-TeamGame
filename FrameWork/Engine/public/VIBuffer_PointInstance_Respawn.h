@@ -56,11 +56,13 @@ private:
 private:
 	PIDESC		m_Desc;
 	_float3		m_fCamLookDir;
-	_float*		m_pFirstPosY = nullptr;
+	_float3*	m_pFirstPos = nullptr;
 
 	_float3* m_pRandomPos = nullptr;
 	_float3* m_pDir = nullptr;
 	_float3* m_pNormal = nullptr;
+
+	_double* m_pDropSpeed = nullptr;
 	
 	_bool m_bReset = false;
 	_bool m_bSettingDir = false;

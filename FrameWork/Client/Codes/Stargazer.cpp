@@ -53,10 +53,6 @@ _int CStargazer::Tick(_double _dDeltaTime)
 	if(nullptr != m_pCollider)
 		m_pCollider->Tick(_dDeltaTime);
 
-	_matrix matPivot = XMMatrixScaling(10.f, 10.f, 10.f) * XMMatrixRotationAxis(XMVectorSet(0.f, 1.f, 0.f, 0.f), XMConvertToRadians(90.f)) * XMMatrixTranslation(0.f, 0.f, 1.f);
-	m_pCollider->setPivotMatrix(matPivot);
-
-
 	return _int();
 }
 
@@ -130,7 +126,7 @@ HRESULT CStargazer::SetUp_Component()
 	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_CapsuleCollider", L"Collider", (CComponent**)&m_pCollider,&tDesc)))
 		return E_FAIL;
 
-	_matrix matPivot = XMMatrixRotationAxis(XMVectorSet(0.f, 1.f, 0.f, 0.f), XMConvertToRadians(90.f))* XMMatrixTranslation(0.f,0.f,1.f);
+	_matrix matPivot = /*XMMatrixScaling(10.f, 10.f, 10.f) * */XMMatrixRotationAxis(XMVectorSet(0.f, 1.f, 0.f, 0.f), XMConvertToRadians(90.f)) * XMMatrixTranslation(0.f, 0.f, 1.f);
 	m_pCollider->setPivotMatrix(matPivot);
 
 	if (FAILED(SetUp_Material()))
