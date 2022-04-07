@@ -17,7 +17,6 @@ public:
 	HRESULT Render_Curve(const _uint _iPassIndex = 0);
 
 public:
-	HRESULT Set_VertexTrail(const _float3 _arrPos[], const _float3 _arrDir[], const _float _fLength, const DWORD _dwCount);
 	HRESULT Set_VertexTrail(const _float3 _vStartPoints[], const _float3 _vEndPoints[], const _uint _iCount);
 
 public:

@@ -78,8 +78,8 @@ HRESULT CStage1::NativeConstruct()
 	if (FAILED(Ready_Player(L"Layer_Silvermane")))
 		return E_FAIL;
 
-	//if (FAILED(Ready_MapObject()))
-	//	return E_FAIL;
+	if (FAILED(Ready_MapObject()))
+		return E_FAIL;
 
 	//if (FAILED(Ready_TriggerSystem(L"../bin/SaveData/Trigger/MonsterSpawnTrigger.dat")))
 	//	return E_FAIL;
@@ -113,8 +113,6 @@ HRESULT CStage1::NativeConstruct()
 	//	return E_FAIL;
 
 	g_pGameInstance->Change_BaseCamera(L"Camera_Silvermane");
-
-	g_pGameInstance->PlayBGM(L"Stage1_BGM");
 
 	//g_pInteractManager = CInteractManager::GetInstance();
 	//if (FAILED(g_pInteractManager->NativeConstruct()))

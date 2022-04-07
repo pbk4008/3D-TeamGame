@@ -56,7 +56,7 @@ _int CCamera_Silvermane::Tick(_double _dDeltaTime)
 	if (NO_EVENT != iProgress)
 		return iProgress;
 
-	m_vLocalOriginPos = { 1.f, 5.f, -6.f };
+	//m_vLocalOriginPos = { 1.f, 5.f, -6.f };
 	iProgress = Chase_Target(_dDeltaTime);
 	if (NO_EVENT != iProgress)
 		return iProgress;
