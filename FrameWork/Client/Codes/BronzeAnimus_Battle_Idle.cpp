@@ -24,11 +24,11 @@ HRESULT CBronzeAnimus_Battle_Idle::NativeConstruct(void* _pArg)
 _int CBronzeAnimus_Battle_Idle::Tick(const _double& _dDeltaTime)
 {
 	_int iProgress = __super::Tick(_dDeltaTime);
+	cout << "Idle" << endl;
 	if (NO_EVENT != iProgress)
 		return iProgress;
 
-	if(!m_bBattleOn)
-		m_pAnimator->Tick(_dDeltaTime);
+	m_pAnimator->Tick(_dDeltaTime);
 
 	return _int();
 }
@@ -66,22 +66,13 @@ HRESULT CBronzeAnimus_Battle_Idle::ExitState()
 	if (FAILED(__super::ExitState()))
 		return E_FAIL;
 
-	m_bBattleOn = true;
-
 	return S_OK;
 }
 
 /* 플레이어 상태 추적 */
 void CBronzeAnimus_Battle_Idle::Look_Player(void)
 {
-	if (m_bTargetOn)
-	{
-		m_bBattleOn = true;
-		if(__super::m_bBattleOn)
-			m_pStateController->Change_State(L"Chaser");
-		else
-			m_pStateController->Change_State(L"Roar");
-	}
+
 }
 
 void CBronzeAnimus_Battle_Idle::Look_Monster(void)

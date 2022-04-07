@@ -27,8 +27,7 @@ _int CBronzeAnimus_Idle::Tick(const _double& _dDeltaTime)
 	if (NO_EVENT != iProgress)
 		return iProgress;
 
-	if(!m_bBattleOn)
-		m_pAnimator->Tick(_dDeltaTime);
+	m_pAnimator->Tick(_dDeltaTime);
 
 	return _int();
 }
@@ -74,11 +73,6 @@ HRESULT CBronzeAnimus_Idle::ExitState()
 /* 플레이어 상태 추적 */
 void CBronzeAnimus_Idle::Look_Player(void)
 {
-	if (m_bTargetOn)
-	{
-		m_bBattleOn = true;
-		m_pStateController->Change_State(L"Roar");
-	}
 }
 
 void CBronzeAnimus_Idle::Look_Monster(void)

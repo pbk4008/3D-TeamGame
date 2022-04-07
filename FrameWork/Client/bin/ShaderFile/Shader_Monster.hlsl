@@ -37,17 +37,18 @@ cbuffer LightBuffer
 	matrix g_LightProj;
 };
 
-texture2D	g_ShadowTexture;
+Texture2D	g_ShadowTexture;
 
-texture2D	g_DiffuseTexture;
-texture2D	g_BiNormalTexture;
-texture2D	g_MaskTexture;
+Texture2D	g_DiffuseTexture;
+Texture2D	g_BiNormalTexture;
+Texture2D	g_MaskTexture;
 
-texture2D	g_MRATexture;
-texture2D	g_CEOTexture;
-texture2D	g_TINTTexture;
-texture2D	g_FurTexture;
+Texture2D	g_MRATexture;
+Texture2D	g_CEOTexture;
+Texture2D	g_TINTTexture;
+Texture2D	g_FurTexture;
 
+Texture2D	g_OMERTexture;
 
 float3 Normalmapping(float3 normaltex, float3x3 tbn)
 {	
@@ -440,6 +441,38 @@ PS_OUT PS_MAIN_EARH_CRYSTAL(PS_IN In)
 	return Out;
 }
 
+PS_OUT PS_MAIN_EARH_Bronze(PS_IN In)
+{
+	PS_OUT Out = (PS_OUT) 0;
+	
+	float4 diffuse = g_DiffuseTexture.Sample(DefaultSampler, In.vUvDepth.xy);
+	float4 omer = g_OMERTexture.Sample(DefaultSampler, In.vUvDepth.xy);
+	float3 normal = g_BiNormalTexture.Sample(DefaultSampler, In.vUvDepth.xy).xyz;
+	float3x3 tbn = { In.vTangent.xyz, In.vBiNormal.xyz, In.vNormal.xyz };
+	
+	normal = Normalmapping(normal, tbn);
+	
+	Out.diffuse = diffuse;
+
+	Out.depth = float4(In.vUvDepth.z / In.vUvDepth.w, In.vUvDepth.w / 300.f, 0.f, 0.f);
+	Out.normal = float4(normal, 0);
+	
+	float Metalic = omer.g + 0.2f;
+	Out.M = float4(Metalic.xxx, 1.f);
+	
+	float Roughness = omer.a;
+	Out.R = float4(Roughness.xxx, 1.f);
+
+	float AO = omer.r;
+	Out.A = float4(AO.xxx, 1.f);
+	
+	
+	float4 color = float4(1.f, 0, 0, 0);
+	Out.E = color * 0.1f * omer.b;
+	
+	return Out;
+}
+
 technique11			DefaultTechnique
 {	
 	pass GunmanBody //------------------------------------------------------------------------------------0 Top
@@ -513,6 +546,18 @@ technique11			DefaultTechnique
 		VertexShader = compile vs_5_0 VS_MAIN_ANIM();
 		GeometryShader = NULL;
 		PixelShader = compile ps_5_0 PS_MAIN_EARH_CRYSTAL();
+	}
+
+	pass Bronze // 6
+	{
+		SetRasterizerState(CullMode_Default);
+		SetDepthStencilState(ZDefault, 0);
+		SetBlendState(BlendDisable, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+
+		/* 진입점함수를 지정한다. */
+		VertexShader = compile vs_5_0 VS_MAIN_ANIM();
+		GeometryShader = NULL;
+		PixelShader = compile ps_5_0 PS_MAIN_EARH_Bronze();
 	}
 }
 

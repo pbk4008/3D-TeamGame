@@ -45,6 +45,8 @@ private:
 	HRESULT Ready_AnimFSM(void);
 	HRESULT Ready_StateFSM(void);
 	HRESULT Render_Debug(void);
+private:
+	virtual HRESULT Set_SpawnPosition(const _float3 vPoint);
 
 private:
 	virtual void OnTriggerEnter(CCollision& collision);
@@ -56,6 +58,25 @@ public:
 	void Set_Dead(void) { m_bDead = true;}
 	void Remove_Collider();
 
+public:
+	void GroggyStart();
+	void Hit(CCollision& collision);
+public:
+	void Set_Target(_bool bCheck) { m_bTarget = bCheck; }
+	void Set_AttackOn(_bool bCheck) { m_bAttackOn = bCheck; }
+	void Set_BattleOn(_bool bCheck) { m_bBattleOn = bCheck; }
+	void Set_Find(_bool bCheck) { m_bFind = bCheck; }
+public:
+	_bool Get_Target() { return m_bTarget; }
+	_bool Get_AttackOn() { return m_bAttackOn; }
+	_bool Get_BattleOn() { return m_bBattleOn; }
+	_bool Get_Find() { return m_bFind; }
+
+private:
+	_bool m_bTarget = false;
+	_bool m_bAttackOn = false;
+	_bool m_bBattleOn = false;
+	_bool m_bFind = false;
 private:
 	CModel* m_pModel = nullptr;
 	CAnimation* m_pAnimation = nullptr;
@@ -69,15 +90,13 @@ private:
 private: /* For.Weapon */
 	CBronzeAnimus_Sword* m_pWeapon = nullptr;
 
-public:
+private:
 	class CUI_Monster_Panel* m_pPanel = nullptr;
 	_bool m_bFirst = false;
-
 public:
 	_bool	m_isFall = false;
 	_bool	m_bFirstHit = false; //맨처음들어와서 맞았을때 판넬크기바꿔줘야돼서
 	_bool	m_bGroggy = false; //그로기 상태인지 아닌지
-
 public:
 	static CMonster_BronzeAnimus* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext);
 	virtual CGameObject* Clone(const _uint _iSceneID, void* _pArg = nullptr) override;
