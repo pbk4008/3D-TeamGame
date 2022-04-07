@@ -223,8 +223,8 @@ _int CStage1::Tick(_double TimeDelta)
 			return -1;
 	}*/
 
-	g_pInteractManager->Tick(TimeDelta);
-	g_pDropManager->Tick();
+	//g_pInteractManager->Tick(TimeDelta);
+	//g_pDropManager->Tick();
 
 	return _int();
 }
@@ -293,34 +293,34 @@ HRESULT CStage1::Ready_MapObject()
 
 	//------------------------------------------- Tree --------------------------------------------------------------------//
 
-	//vector<ENVIRONMENTLOADDATA> vecSubEnvData;
-	//if (FAILED(g_pGameInstance->LoadFile<ENVIRONMENTLOADDATA>(vecSubEnvData, L"../bin/SaveData/Tree_Data.dat")))	
-	//	return E_FAIL;
+	vector<ENVIRONMENTLOADDATA> vecSubEnvData;
+	if (FAILED(g_pGameInstance->LoadFile<ENVIRONMENTLOADDATA>(vecSubEnvData, L"../bin/SaveData/Tree_Data.dat")))	
+		return E_FAIL;
 
-	//vector<CSubEnvironment::ENVIRONMENTDESC> tSubEnvDesc;
-	//tSubEnvDesc.resize(100);
-	//_uint idx = 0;
-	//tSubEnvDesc[idx].wstrInstaneTag = vecSubEnvData[0].FileName;
-	//for (auto& pData : vecSubEnvData)
-	//{
-	//	if (lstrcmp(tSubEnvDesc[idx].wstrInstaneTag.c_str(), pData.FileName))
-	//	{
-	//		idx++;
-	//		tSubEnvDesc[idx].wstrInstaneTag = pData.FileName;
-	//		tSubEnvDesc[idx].tInstanceDesc.vecMatrix.emplace_back(pData.WorldMat);
-	//	}
-	//	else
-	//		tSubEnvDesc[idx].tInstanceDesc.vecMatrix.emplace_back(pData.WorldMat);
-	//}
+	vector<CSubEnvironment::ENVIRONMENTDESC> tSubEnvDesc;
+	tSubEnvDesc.resize(100);
+	_uint idx = 0;
+	tSubEnvDesc[idx].wstrInstaneTag = vecSubEnvData[0].FileName;
+	for (auto& pData : vecSubEnvData)
+	{
+		if (lstrcmp(tSubEnvDesc[idx].wstrInstaneTag.c_str(), pData.FileName))
+		{
+			idx++;
+			tSubEnvDesc[idx].wstrInstaneTag = pData.FileName;
+			tSubEnvDesc[idx].tInstanceDesc.vecMatrix.emplace_back(pData.WorldMat);
+		}
+		else
+			tSubEnvDesc[idx].tInstanceDesc.vecMatrix.emplace_back(pData.WorldMat);
+	}
 
-	//for (auto& pDesc : tSubEnvDesc)
-	//{
-	//	if (pDesc.wstrInstaneTag == L"") 
-	//		break;
+	for (auto& pDesc : tSubEnvDesc)
+	{
+		if (pDesc.wstrInstaneTag == L"") 
+			break;
 
-	//	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_SubEnvironment", L"Proto_GameObject_SubEnvironment", &pDesc))) 
-	//		return E_FAIL;
-	//}
+		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_SubEnvironment", L"Proto_GameObject_SubEnvironment", &pDesc))) 
+			return E_FAIL;
+	}
 
 	//wstring strTag = L"StageBackGround";
 	//g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Stage1_Back", L"Prototype_GameObject_BackGround", &strTag);
@@ -1527,8 +1527,8 @@ void CStage1::Free()
 {
 	CLevel::Free();
 
-	CDropManager::DestroyInstance();
-	CInteractManager::DestroyInstance();
+	//CDropManager::DestroyInstance();
+	//CInteractManager::DestroyInstance();
 	Safe_Release(m_pTriggerSystem);
 
 }

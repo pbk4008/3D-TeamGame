@@ -60,8 +60,8 @@ _int CEnvironment::Tick(_double TimeDelta)
 
 _int CEnvironment::LateTick(_double TimeDelta)
 {
-	if (FAILED(Culling()))
-		return -1;
+	//if (FAILED(Culling()))
+	//	return -1;
 
 	if (m_pRenderer->Get_Shadow() == true)
 	{
