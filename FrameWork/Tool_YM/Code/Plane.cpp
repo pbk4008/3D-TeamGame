@@ -194,9 +194,9 @@ void CPlane::Input_Key(_double _dtimeDelta)
 	if (g_pGameInstance->getkeyPress(DIK_NUMPAD6))
 		m_pTransform->Go_Right(_dtimeDelta);
 	if (g_pGameInstance->getkeyPress(DIK_NUMPAD7))
-		m_pTransform->Mesh_Up(_dtimeDelta);
+		m_pTransform->Go_Up(_dtimeDelta);
 	if (g_pGameInstance->getkeyPress(DIK_NUMPAD9))
-		m_pTransform->Mesh_Down(_dtimeDelta);
+		m_pTransform->Go_Down(_dtimeDelta);
 
 	if (g_pGameInstance->getkeyPress(DIK_NUMPAD1))
 		m_bRender = TRUE;

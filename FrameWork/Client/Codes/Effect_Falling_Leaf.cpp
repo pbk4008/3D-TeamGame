@@ -91,7 +91,7 @@ _int CEffect_Falling_Leaf::Tick(_double TimeDelta)
 
 	if (m_Desc.fMaxLifeTime > m_Desc.fCurTime)
 	{
-		m_Desc.fCurTime += TimeDelta;
+		m_Desc.fCurTime += (_float)TimeDelta;
 	}
 
 
