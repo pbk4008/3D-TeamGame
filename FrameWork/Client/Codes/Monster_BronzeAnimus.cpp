@@ -10,10 +10,8 @@
 #include "BronzeAnimus_Idle.h"
 #include "BronzeAnimus_Battle_Idle.h"
 #include "BronzeAnimus_Chaser.h"
-#include "BronzeAnimus_Chaser_End.h"
 #include "BronzeAnimus_Death.h"
 #include "BronzeAnimus_Groggy.h"
-#include "BronzeAnimus_Groggy_End.h"
 #include "BronzeAnimus_Hit.h"
 #include "BronzeAnimus_Roar.h"
 #include "BronzeAnimus_Attack.h"
@@ -101,7 +99,7 @@ HRESULT CMonster_BronzeAnimus::NativeConstruct(const _uint _iSceneID, void* _pAr
 	m_pPanel->Set_GroggyBar(Get_GroggyGaugeRatio());
 
 	m_isFall = true;
-	setActive(false);
+	//setActive(false);
 
 	m_tAttackDesc.iLevel = 1;
 
@@ -148,10 +146,8 @@ _int CMonster_BronzeAnimus::Tick(_double _dDeltaTime)
 				m_pPanel->Set_UIRemove(true);
 			}
 
-			if (1 == m_pAnimator->Get_AnimController()->Get_CurKeyFrameIndex())
-			{
+			if (1 <= m_pAnimator->Get_AnimController()->Get_CurKeyFrameIndex() && 2>m_pAnimator->Get_AnimController()->Get_CurKeyFrameIndex())
 				Active_Effect((_uint)EFFECT::DEATH);
-			}
 		}
 		else
 		{
@@ -231,12 +227,12 @@ HRESULT CMonster_BronzeAnimus::Render()
 
 	for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
 	{
-		if (FAILED(m_pModel->Render(i, 0)))
+		if (FAILED(m_pModel->Render(i, 6)))
 			return E_FAIL;
 	}
 
 #ifdef _DEBUG
-	Render_Debug();
+	//Render_Debug();
 #endif
 	return S_OK;
 }
@@ -254,7 +250,7 @@ HRESULT CMonster_BronzeAnimus::Ready_Components()
 
 
 	// 모델
-	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STAGE2, L"Model_BronzeAnimus", L"Model", (CComponent**)&m_pModel)))
+	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STAGE1, L"Model_BronzeAnimus", L"Model", (CComponent**)&m_pModel)))
 		return E_FAIL;
 	_matrix matPivot = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(180.f));
 	m_pModel->Set_PivotMatrix(matPivot);
@@ -433,28 +429,14 @@ HRESULT CMonster_BronzeAnimus::Ready_AnimFSM(void)
 	/* ##1.끝나는 애님 ##2.루트할 애님  */
 	m_pAnimator->Set_UpAutoChangeAnimation((_uint)ANIM_TYPE::A_WALK_FWD_ST, (_uint)ANIM_TYPE::A_WALK_FWD);
 	m_pAnimator->Set_UpAutoChangeAnimation((_uint)ANIM_TYPE::A_WALK_FWD, (_uint)ANIM_TYPE::A_WALK_FWD_ED);
-	m_pAnimator->Set_UpAutoChangeAnimation((_uint)ANIM_TYPE::A_WALK_FWD_ED, (_uint)ANIM_TYPE::A_IDLE_BATTLE);
-
 
 	m_pAnimator->Set_UpAutoChangeAnimation((_uint)ANIM_TYPE::A_WALK_BWD_ST, (_uint)ANIM_TYPE::A_WALK_BWD);
 	m_pAnimator->Set_UpAutoChangeAnimation((_uint)ANIM_TYPE::A_WALK_BWD, (_uint)ANIM_TYPE::A_WALK_BWD_ED);
-	m_pAnimator->Set_UpAutoChangeAnimation((_uint)ANIM_TYPE::A_WALK_BWD_ED, (_uint)ANIM_TYPE::A_IDLE_BATTLE);
 
 	m_pAnimator->Set_UpAutoChangeAnimation((_uint)ANIM_TYPE::A_STUN_ST, (_uint)ANIM_TYPE::A_STUN);
 	m_pAnimator->Set_UpAutoChangeAnimation((_uint)ANIM_TYPE::A_STUN, (_uint)ANIM_TYPE::A_STUN_ED);
-	m_pAnimator->Set_UpAutoChangeAnimation((_uint)ANIM_TYPE::A_STUN_ED, (_uint)ANIM_TYPE::A_IDLE_BATTLE);
 #pragma endregion
 
-#pragma region Anim to Anim Connect
-	if (FAILED(m_pAnimator->Connect_Animation((_uint)ANIM_TYPE::A_IDLE_BATTLE, (_uint)ANIM_TYPE::A_WALK_FWD_ED, FALSE)))
-		return E_FAIL;
-	if (FAILED(m_pAnimator->Connect_Animation((_uint)ANIM_TYPE::A_IDLE_BATTLE, (_uint)ANIM_TYPE::A_WALK_BWD_ED, FALSE)))
-		return E_FAIL;
-	if (FAILED(m_pAnimator->Connect_Animation((_uint)ANIM_TYPE::A_WALK_FWD_ED, (_uint)ANIM_TYPE::A_WALK_FWD, TRUE)))
-		return E_FAIL;
-	if (FAILED(m_pAnimator->Connect_Animation((_uint)ANIM_TYPE::A_WALK_FWD_ED, (_uint)ANIM_TYPE::A_WALK_FWD_ST, TRUE)))
-		return E_FAIL;
-#pragma endregion
 	return S_OK;
 }
 
@@ -472,9 +454,6 @@ HRESULT CMonster_BronzeAnimus::Ready_StateFSM(void)
 	/* for. Player Chaser */
 	if (FAILED(m_pStateController->Add_State(L"Chaser", CBronzeAnimus_Chaser::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
-	/* for. Player Chaser End */
-	if (FAILED(m_pStateController->Add_State(L"Chaser_End", CBronzeAnimus_Chaser_End::Create(m_pDevice, m_pDeviceContext))))
-		return E_FAIL;
 	/* for. Attack*/
 	if (FAILED(m_pStateController->Add_State(L"Attack", CBronzeAnimus_Attack::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
@@ -486,9 +465,6 @@ HRESULT CMonster_BronzeAnimus::Ready_StateFSM(void)
 		return E_FAIL;
 	/* for. Groggy */
 	if (FAILED(m_pStateController->Add_State(L"Groggy", CBronzeAnimus_Groggy::Create(m_pDevice, m_pDeviceContext))))
-		return E_FAIL;
-	/* for. Groggy End */
-	if (FAILED(m_pStateController->Add_State(L"Groggy_End", CBronzeAnimus_Groggy_End::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 
 
@@ -548,6 +524,16 @@ HRESULT CMonster_BronzeAnimus::Render_Debug(void)
 	return S_OK;
 }
 
+HRESULT CMonster_BronzeAnimus::Set_SpawnPosition(const _float3 vPoint)
+{
+	if (FAILED(CActor::Set_SpawnPosition(vPoint)))
+		return E_FAIL;
+
+	m_pTransform->Rotation_Axis(CTransform::STATE_UP, XMConvertToRadians(-90.f));
+
+	return S_OK;
+}
+
 void CMonster_BronzeAnimus::OnTriggerEnter(CCollision& collision)
 {
 	m_pStateController->OnTriggerEnter(collision);
@@ -563,6 +549,47 @@ void CMonster_BronzeAnimus::Set_IsAttack(const _bool _isAttack)
 void CMonster_BronzeAnimus::Remove_Collider()
 {
 	m_pCharacterController->Remove_CCT();
+}
+
+void CMonster_BronzeAnimus::GroggyStart()
+{
+	m_bGroggy = true;
+	Set_GroggyGauge(0);
+	m_pPanel->Set_GroggyBar(Get_GroggyGaugeRatio());
+	m_pStateController->Change_State(L"Groggy");
+}
+
+void CMonster_BronzeAnimus::Hit(CCollision& collision)
+{
+	if (!m_bDead)
+	{
+		if (true == g_pObserver->IsAttack()) //플레이어공격일때
+		{
+			if (!m_bFirstHit)
+			{
+				m_bFirstHit = true; //딱 한번 true로 변경해줌
+				m_pPanel->Set_BackUIGapY(1.f);
+			}
+
+			if ((_uint)GAMEOBJECT::WEAPON == collision.pGameObject->getTag())
+			{
+				m_pPanel->Set_Show(true);
+				Active_Effect((_uint)EFFECT::HIT);
+				Active_Effect((_uint)EFFECT::FLOATING);
+				Set_Current_HP(-5);
+				Set_GroggyGauge(2); //TODO::수치정해서바꿔줘야됨
+
+				m_pPanel->Set_HpBar(Get_HpRatio());
+
+				if (false == m_bGroggy)
+				{
+					//그로기 아닐때만 증가할수있게
+					m_pPanel->Set_GroggyBar(Get_GroggyGaugeRatio());
+					m_pStateController->Change_State(L"Hit");
+				}
+			}
+		}
+	}
 }
 
 CMonster_BronzeAnimus* CMonster_BronzeAnimus::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)

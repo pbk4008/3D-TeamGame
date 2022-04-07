@@ -46,8 +46,8 @@ HRESULT CStage2::NativeConstruct()
 		return E_FAIL;
 	}
 
-	if (FAILED(Ready_TriggerSystem(L"../bin/SaveData/Trigger/MonsterSpawnTrigger2.dat")))
-		return E_FAIL;
+	//if (FAILED(Ready_TriggerSystem(L"../bin/SaveData/Trigger/MonsterSpawnTrigger2.dat")))
+	//	return E_FAIL;
 
 	return S_OK;
 }
@@ -63,7 +63,7 @@ _int CStage2::Tick(_double TimeDelta)
 			return -1;
 		g_pDebugSystem->Set_LevelcMoveCheck(false);
 	}
-	list<CGameObject*>* pLayer = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE2, L"Layer_Crawler");
+	//list<CGameObject*>* pLayer = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE2, L"Layer_Crawler");
 
 #endif //  _DEBUG
 	if (nullptr != m_pTriggerSystem)
@@ -132,9 +132,7 @@ HRESULT CStage2::Ready_MapObject()
 		if (pDesc.wstrInstaneTag == L"")
 			break;
 		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE2, L"Layer_Environment", L"Proto_GameObject_Environment", &pDesc)))
-		{
-			int a=10;
-		}
+			return E_FAIL;
 	}
 
 	///////////////////// 스테이지 2용
@@ -774,9 +772,12 @@ void CStage2::Trgger_Function7()
 			pActor = static_cast<CActor*>((*iter));
 		}
 		(*iter)->setActive(true);
+		(*iter)->Get_Transform()->Rotation_Axis(CTransform::STATE_UP, XMConvertToRadians(-90.f));
 		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 		iter++;
+
 		(*iter)->setActive(true);
+		(*iter)->Get_Transform()->Rotation_Axis(CTransform::STATE_UP, XMConvertToRadians(90.f));
 		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 	}
 	m_iCountMonster = 2;
