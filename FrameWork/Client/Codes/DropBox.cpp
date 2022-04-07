@@ -14,6 +14,11 @@ CDropBox::CDropBox(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
 	, m_pStateController(nullptr)
 	, m_pCollider(nullptr)
 	, m_pModel(nullptr)
+	, m_openElapsed(0.0f)
+	, m_interactDist(5.f)
+	, m_bBoxOpened(false)
+	, m_bOpenAnimEnd(false)
+	, m_bFocus(false)
 {
 }
 
@@ -24,6 +29,11 @@ CDropBox::CDropBox(const CDropBox& _rhs)
 	, m_pStateController(_rhs.m_pStateController)
 	, m_pCollider(_rhs.m_pCollider)
 	, m_pModel(_rhs.m_pModel)
+	, m_openElapsed(_rhs.m_openElapsed)
+	, m_interactDist(_rhs.m_interactDist)
+	, m_bBoxOpened(_rhs.m_bBoxOpened)
+	, m_bOpenAnimEnd(_rhs.m_bOpenAnimEnd)
+	, m_bFocus(_rhs.m_bFocus)
 {
 	Safe_AddRef(m_pAnimationController);
 	Safe_AddRef(m_pAnimator);
@@ -54,10 +64,16 @@ HRESULT CDropBox::NativeConstruct(const _uint _iSceneID, void* _pArg)
 	if (FAILED(Ready_States()))
 		return E_FAIL;
 
+	m_tDesc = (*(MABOBJECT*)_pArg);
+	_vector pos = { m_tDesc.WorldMat._41, m_tDesc.WorldMat._42, m_tDesc.WorldMat._43,m_tDesc.WorldMat._44 };
+	m_pTransform->Set_State(CTransform::STATE_POSITION, pos);
+
 	m_pPlayer = m_pPlayer = *g_pGameInstance->getObjectList(_iSceneID, L"Layer_Silvermane")->begin();
 	assert(m_pPlayer);
 
 	m_iObectTag = (_uint)GAMEOBJECT::DROP_BOX;
+
+	setActive(true);
 
 	return S_OK;
 }
@@ -68,7 +84,7 @@ _int CDropBox::Tick(_double _dDeltaTime)
 	if (NO_EVENT != iProgress)
 		return iProgress;
 
-	int i = this->getTag();
+	m_pCollider->Tick(_dDeltaTime);
 
 	/* State FSM Update */
 	iProgress = m_pStateController->Tick(_dDeltaTime);
@@ -81,6 +97,8 @@ _int CDropBox::Tick(_double _dDeltaTime)
 		if (m_dropElapsed >= m_dropDelay) 
 		{
 			//g_pGameInstance->BlendSound(L"Drop_Item", L"Drop_Item_2", CSoundMgr::CHANNELID::Item_Drop, CSoundMgr::CHANNELID::Item_Drop_2);
+			g_pGameInstance->StopSound(CSoundMgr::CHANNELID::Item_Drop);
+			g_pGameInstance->Play_Shot(L"Drop_Item_2", CSoundMgr::CHANNELID::Item_Drop);
 			g_pGameInstance->VolumeChange(CSoundMgr::CHANNELID::Item_Drop, 5.5f);
 			m_dropElapsed = 0.f;
 			m_pCollider->Remove_ActorFromScene();
@@ -129,9 +147,6 @@ HRESULT CDropBox::Render()
 
 	for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
 	{
-		//if (FAILED(m_pModel->SetUp_TextureOnShader("g_DiffuseTexture", i, aiTextureType_DIFFUSE)))
-		//	return E_FAIL;
-
 		if (FAILED(m_pModel->Render(i, 0)))
 			return E_FAIL;
 	}
@@ -146,7 +161,7 @@ HRESULT CDropBox::Ready_Components()
 	tTransformDesc.fRotationPerSec = 0.f;
 	m_pTransform->Set_TransformDesc(tTransformDesc);
 
-	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Model_Treasure_Chest", L"Model", (CComponent**)&m_pModel)))
+	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Model_DropBox", L"Model", (CComponent**)&m_pModel)))
 		return E_FAIL;
 	_matrix matPivot = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(180.f));
 	m_pModel->Set_PivotMatrix(matPivot);
@@ -157,6 +172,8 @@ HRESULT CDropBox::Ready_Components()
 	tColliderDesc.isSceneQuery = true;
 	tColliderDesc.isTrigger = false;
 	tColliderDesc.pGameObject = this;
+	tColliderDesc.isGravity = false;
+
 	CBoxCollider::DESC tBoxColliderDesc;
 	tBoxColliderDesc.tColliderDesc = tColliderDesc;
 	tBoxColliderDesc.vScale = { 1.f, 1.f, 1.f };
@@ -210,6 +227,7 @@ HRESULT CDropBox::Ready_States()
 		static_cast<CDropBox_State*>(pair.second)->Set_AnimationController(m_pAnimationController);
 		static_cast<CDropBox_State*>(pair.second)->Set_Animator(m_pAnimator);
 	}
+	m_pStateController->Change_State(L"DropBox_Open");
 
 	return S_OK;
 }
@@ -217,7 +235,7 @@ HRESULT CDropBox::Ready_States()
 HRESULT CDropBox::Set_Animation_FSM()
 {
 	CAnimation* pAnimation =  m_pModel->Get_Animation("Take 001");
-	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::A_OPEN, (_uint)ANIM_TYPE::A_HEAD, pAnimation, FALSE, FALSE, TRUE, ERootOption::XYZ)))
+	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::A_OPEN, (_uint)ANIM_TYPE::A_HEAD, pAnimation, FALSE, FALSE, FALSE, ERootOption::XYZ)))
 		return E_FAIL;
 
 	m_pAnimator->Insert_AnyEntryAnimation((_uint)ANIM_TYPE::A_OPEN);
@@ -238,7 +256,7 @@ std::vector<CItemData> CDropBox::GetDropList(void)
 	item1.ItemType = EItemType::Equipment;
 	item1.equipmentType = EEquipmentType::Weapon;
 
-	item1.szItemName = L"Â¯ ½Ú °Ë";
+	item1.szItemName = L"JinSung's Sword";
 	item1.iMainStat = 52;
 	item1.iLevel = 10;
 
@@ -248,7 +266,7 @@ std::vector<CItemData> CDropBox::GetDropList(void)
 	item2.equipmentGrade = EEquipmentGrade::Legendary;
 	item2.ItemType = EItemType::Equipment;
 	item2.equipmentType = EEquipmentType::Weapon;
-	item2.szItemName = L"Â¯ Å« °Ë";
+	item2.szItemName = L"SuBin's Sword";
 	item2.iMainStat = 20;
 	item2.iLevel = 16;
 
@@ -258,7 +276,7 @@ std::vector<CItemData> CDropBox::GetDropList(void)
 	item3.equipmentGrade = EEquipmentGrade::Legendary;
 	item3.ItemType = EItemType::Equipment;
 	item3.equipmentType = EEquipmentType::Weapon;
-	item3.szItemName = L"Áø ¼º °Ë";
+	item3.szItemName = L"YoungMo's Sword";
 	item3.iMainStat = 20;
 	item3.iLevel = 16;
 
@@ -267,7 +285,7 @@ std::vector<CItemData> CDropBox::GetDropList(void)
 	item4.equipmentGrade = EEquipmentGrade::Legendary;
 	item4.ItemType = EItemType::Equipment;
 	item4.equipmentType = EEquipmentType::Weapon;
-	item4.szItemName = L"º´ ±Ô °Ë";
+	item4.szItemName = L"BeangGyu's Sword";
 	item4.iMainStat = 20;
 	item4.iLevel = 16;
 
@@ -276,7 +294,7 @@ std::vector<CItemData> CDropBox::GetDropList(void)
 	item5.equipmentGrade = EEquipmentGrade::Legendary;
 	item5.ItemType = EItemType::Equipment;
 	item5.equipmentType = EEquipmentType::Weapon;
-	item5.szItemName = L"¼ö ºó °Ë";
+	item5.szItemName = L"HeeDong's Sword";
 	item5.iMainStat = 20;
 	item5.iLevel = 16;
 
@@ -398,4 +416,5 @@ void CDropBox::Free()
 	Safe_Release(m_pModel);
 
 	__super::Free();
+
 }

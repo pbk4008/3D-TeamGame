@@ -78,11 +78,11 @@ HRESULT CStage1::NativeConstruct()
 	if (FAILED(Ready_Player(L"Layer_Silvermane")))
 		return E_FAIL;
 
-	//if (FAILED(Ready_MapObject()))
-	//	return E_FAIL;
+	if (FAILED(Ready_MapObject()))
+		return E_FAIL;
 
-	//if (FAILED(Ready_TriggerSystem(L"../bin/SaveData/Trigger/MonsterSpawnTrigger.dat")))
-	//	return E_FAIL;
+	if (FAILED(Ready_TriggerSystem(L"../bin/SaveData/Trigger/MonsterSpawnTrigger.dat")))
+		return E_FAIL;
 
 	/*if (FAILED(Ready_Boss(L"Layer_Boss")))
 	{
@@ -1430,7 +1430,7 @@ HRESULT CStage1::Ready_Trigger_Jump()
 HRESULT CStage1::Ready_Treasure_Chest()
 {
 	vector<ENVIRONMENTLOADDATA> vecMapObjectData;
-	if (FAILED(g_pGameInstance->LoadFile<ENVIRONMENTLOADDATA>(vecMapObjectData, L"../bin/SaveData/Treasure_Chest/Stage1_Treasure_Chest.dat")))
+	if (FAILED(g_pGameInstance->LoadFile<ENVIRONMENTLOADDATA>(vecMapObjectData, L"../bin/SaveData/Treasure_Chest/DropBox.dat")))
 		return E_FAIL;
 
 	vector<_float4x4> vecObject;
@@ -1450,7 +1450,7 @@ HRESULT CStage1::Ready_Treasure_Chest()
 
 		MapObjectDesc.WorldMat = vecObject[i];
 
-		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Treasure_Chest", L"Proto_GameObject_Treasure_Chest", &MapObjectDesc)))
+		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_DropBox", L"Proto_GameObject_Treasure_Chest", &MapObjectDesc)))
 		{
 			MSGBOX("Treasure_Chest 파일을 불러오는 도중 오류가 발생했습니다. Stage1.cpp Line 306");
 			return E_FAIL;

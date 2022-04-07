@@ -30,6 +30,7 @@ CGameObject* CGameObjectPool::AccquireObject(void)
 void CGameObjectPool::ReleaseObject(CGameObject* obj)
 {
 	obj->setActive(false);
+	Safe_Release(obj);
 	freeList.push(obj);
 }
 
@@ -39,8 +40,7 @@ void CGameObjectPool::DestroyPool(void)
 	{
 		CGameObject* obj = freeList.front();
 		freeList.pop();
-		//obj->setActive(false);
-		DESTROY(obj);
+		Safe_Release(obj);
 	}
 }
 

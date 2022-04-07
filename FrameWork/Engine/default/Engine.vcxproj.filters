@@ -22,9 +22,6 @@
     <Filter Include="01.System\00.Device\Input">
       <UniqueIdentifier>{5616ba1c-748f-4901-96c6-055568d50171}</UniqueIdentifier>
     </Filter>
-    <Filter Include="01.System\00.Device\Sound">
-      <UniqueIdentifier>{c2bc0560-eb4a-479c-a4bb-55c2b37bb946}</UniqueIdentifier>
-    </Filter>
     <Filter Include="00.Utility\00.GameInstance">
       <UniqueIdentifier>{d07aa3dc-4fd0-4815-9830-95903c1c3d77}</UniqueIdentifier>
     </Filter>
@@ -322,6 +319,18 @@
     <Filter Include="00.Utility\07.SplineCurve">
       <UniqueIdentifier>{375e8bbc-7914-4651-827f-89cce9de73ce}</UniqueIdentifier>
     </Filter>
+    <Filter Include="00.Utility\04.Manager\13.ResourceManager">
+      <UniqueIdentifier>{b688cda3-daa4-4456-8fa6-70af662b27c1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.System\00.Device\Resource">
+      <UniqueIdentifier>{c2bc0560-eb4a-479c-a4bb-55c2b37bb946}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.System\00.Device\FileIO">
+      <UniqueIdentifier>{bba6775d-bd48-4ee0-8444-be6509991fb4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00.Utility\04.Manager\13.ResourceManager\Texture">
+      <UniqueIdentifier>{c73756c8-edb6-42c1-9bf9-0f9d2e09c342}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\public\Base.h">
@@ -371,9 +380,6 @@
     </ClInclude>
     <ClInclude Include="..\public\Engine_Struct.h">
       <Filter>99.Defines</Filter>
-    </ClInclude>
-    <ClInclude Include="..\public\Texture.h">
-      <Filter>00.Utility\03.Component\03.Texture</Filter>
     </ClInclude>
     <ClInclude Include="..\public\VIBuffer_Terrain.h">
       <Filter>00.Utility\03.Component\05.VIBuffer\05.Terrain</Filter>
@@ -631,6 +637,21 @@
     <ClInclude Include="..\public\SplineCurve.h">
       <Filter>00.Utility\07.SplineCurve</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\ResourceManager.h">
+      <Filter>00.Utility\04.Manager\13.ResourceManager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\IResource.h">
+      <Filter>01.System\00.Device\Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\FileIO.h">
+      <Filter>01.System\00.Device\FileIO</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\UI_Texture.h">
+      <Filter>00.Utility\04.Manager\13.ResourceManager\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Texture.h">
+      <Filter>00.Utility\03.Component\03.Texture</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\private\Base.cpp">
@@ -665,9 +686,6 @@
     </ClCompile>
     <ClCompile Include="..\private\VIBuffer_Rect.cpp">
       <Filter>00.Utility\03.Component\05.VIBuffer\02.Rect</Filter>
-    </ClCompile>
-    <ClCompile Include="..\private\Texture.cpp">
-      <Filter>00.Utility\03.Component\03.Texture</Filter>
     </ClCompile>
     <ClCompile Include="..\private\VIBuffer_Terrain.cpp">
       <Filter>00.Utility\03.Component\05.VIBuffer\05.Terrain</Filter>
@@ -908,6 +926,21 @@
     </ClCompile>
     <ClCompile Include="..\private\SplineCurve.cpp">
       <Filter>00.Utility\07.SplineCurve</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\ResourceManager.cpp">
+      <Filter>00.Utility\04.Manager\13.ResourceManager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\IResource.cpp">
+      <Filter>01.System\00.Device\Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\FileIO.cpp">
+      <Filter>01.System\00.Device\FileIO</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\UI_Texture.cpp">
+      <Filter>00.Utility\04.Manager\13.ResourceManager\Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Texture.cpp">
+      <Filter>00.Utility\03.Component\03.Texture</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

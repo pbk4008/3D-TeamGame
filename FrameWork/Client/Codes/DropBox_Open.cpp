@@ -26,7 +26,10 @@ _int CDropBox_Open::Tick(const _double& TimeDelta)
 	if (NO_EVENT != iProgress)
 		return iProgress;
 
-	m_pAnimator->Tick(TimeDelta);
+	if(static_cast<CDropBox*>(m_pObj)->IsOpen())
+		 m_pAnimator->Tick(TimeDelta);
+	else
+		m_pAnimator->Tick(0.f);
 
 	return _int();
 }

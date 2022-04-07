@@ -1,7 +1,6 @@
 #pragma once
-#ifndef __ACTOR_H__
-#define __ACTOR_H__
-
+#ifndef Actor_h__
+#define Actor_h__
 #include "GameObject.h"
 BEGIN(Engine)
 class ENGINE_DLL CActor abstract : public CGameObject
@@ -73,4 +72,5 @@ protected:
 	ATTACKDESC m_tAttackDesc;
 };
 END
-#endif
+
+#endif // Actor_h__

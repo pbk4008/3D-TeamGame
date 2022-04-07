@@ -15,7 +15,7 @@ class CJumpTrigger;
 class CJumpBox;
 class CUI_Blank_CKey;
 class CUI_Fill_Ckey;
-
+class CInventoryData;
 class CSilvermane final : public CActor
 {
 public:
@@ -152,6 +152,9 @@ private: /* Drop Box  */
 
 private: /* For.Cheat */
 	_bool m_isHighSpeedMode = false;
+
+private:/* for. Inventroy */
+	CInventoryData* m_pInventoryData = nullptr;
 
 private:
 	CTexture*	m_pTexture = nullptr;

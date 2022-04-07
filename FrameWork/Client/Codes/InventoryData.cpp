@@ -63,6 +63,11 @@ CItemData CInventoryData::GetItem(_int iIndex)
 	return InventoryItems[iIndex];
 }
 
+CItemData CInventoryData::GetItem(void)
+{
+	return InventoryItems.back();
+}
+
 CItemData* CInventoryData::GetItemByID(_ulong _uid)
 {
 	for (auto& item : InventoryItems)
@@ -92,5 +97,6 @@ void CInventoryData::SetResource(_int iResource)
 {
 	m_iResources = iResource;
 }
+
 
 

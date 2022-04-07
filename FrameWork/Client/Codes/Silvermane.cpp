@@ -11,6 +11,7 @@
 #include "DropBox.h"
 #include "UI_Blank_CKey.h"
 #include "UI_Fill_CKey.h"
+#include "InventoryData.h"
 
 #include "MainApp.h"
 
@@ -219,6 +220,9 @@ HRESULT CSilvermane::NativeConstruct(const _uint _iSceneID, void* _pArg)
 	m_pRenderer->SetRenderButton(CRenderer::PIXEL, true);
 	m_pRenderer->SetRenderButton(CRenderer::PBRHDR, true);
 	m_pRenderer->SetCameraTag(L"Camera_Silvermane");
+
+	/* 인벤 데이터 디버그용 */
+	m_pInventoryData = g_pDataManager->GET_DATA(CInventoryData, L"InventoryData");
 
 	return S_OK;
 }
@@ -453,6 +457,29 @@ HRESULT CSilvermane::Render_Debug()
 	wstring wstrIsAttack = L"IsAttack : ";
 	m_IsAttack == true ? wstrIsAttack += L"true" : wstrIsAttack += L"false";
 	if (FAILED(g_pGameInstance->Render_Font(TEXT("Font_Arial"), XMVectorSet(1.f, 0.0f, 0.f, 1.f), wstrIsAttack.c_str(), _float2(0.f, 200.f), _float2(0.6f, 0.6f))))
+		return E_FAIL;
+
+
+	
+	// 인벤 상태
+	wstring wstrIsInvenState = L"Inven Count : ";
+	wstring wstrInvenCnt = to_wstring(m_pInventoryData->GetCount());
+	if (FAILED(g_pGameInstance->Render_Font(TEXT("Font_Arial"), XMVectorSet(0.f, 1.0f, 1.f, 1.f), (wstrIsInvenState + wstrInvenCnt).c_str(), _float2(800.f, 40.f), _float2(0.6f, 0.6f))))
+		return E_FAIL;
+
+	wstring wstrCurItem = L"Inven Cur Add Item : ";
+	wstring wstrItemName = m_pInventoryData->GetItem().szItemName;
+	if (FAILED(g_pGameInstance->Render_Font(TEXT("Font_Arial"), XMVectorSet(0.f, 1.0f, 1.f, 1.f), (wstrCurItem + wstrItemName).c_str(), _float2(800.f, 60.f), _float2(0.6f, 0.6f))))
+		return E_FAIL;
+
+	wstring wstrItemLevel = L"Item Level : ";
+	wstring ItemLevel = to_wstring(m_pInventoryData->GetItem().iLevel);
+	if (FAILED(g_pGameInstance->Render_Font(TEXT("Font_Arial"), XMVectorSet(0.f, 1.0f, 1.f, 1.f), (wstrItemLevel + ItemLevel).c_str(), _float2(800.f, 80.f), _float2(0.6f, 0.6f))))
+		return E_FAIL;
+
+	wstring wstrItemDmg = L"Item Dmg : ";
+	wstring ItemDmg = to_wstring(m_pInventoryData->GetItem().iDmg);
+	if (FAILED(g_pGameInstance->Render_Font(TEXT("Font_Arial"), XMVectorSet(0.f, 1.0f, 1.f, 1.f), (wstrItemDmg + ItemDmg).c_str(), _float2(800.f, 100.f), _float2(0.6f, 0.6f))))
 		return E_FAIL;
 
 	return S_OK;
@@ -1324,6 +1351,7 @@ const void CSilvermane::Raycast_DropBox(const _double& _dDeltaTime)
 		return;
 
 	_vector svRayPos, svRayDir;
+
 	memcpy_s(&svRayPos, sizeof(_vector), &smatView.r[3], sizeof(_vector));
 	memcpy_s(&svRayDir, sizeof(_vector), &smatView.r[2], sizeof(_vector));
 	svRayDir = XMVector3Normalize(svRayDir);

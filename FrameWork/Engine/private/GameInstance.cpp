@@ -154,6 +154,20 @@ HRESULT CGameInstance::Present()
 	return m_pGraphic_Device->Present();
 }
 
+ID3D11Device* CGameInstance::Get_Device()
+{
+	if(nullptr == m_pGraphic_Device)
+		return nullptr;
+	return m_pGraphic_Device->Get_Device();
+}
+
+ID3D11DeviceContext* CGameInstance::Get_DeviceContext()
+{
+	if (nullptr == m_pGraphic_Device)
+		return nullptr;
+	return m_pGraphic_Device->Get_DeviceContext();
+}
+
 _double CGameInstance::Get_TimeDelta(const wstring& pTimerTag)
 {
 	if (nullptr == m_pTimer_Manager)
