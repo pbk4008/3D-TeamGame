@@ -36,7 +36,7 @@ void CResourceManager::LoadAllTextures(const std::wstring& _directoryPath, _bool
 
 void CResourceManager::LoadTextures(const std::wstring& _path, const TCHAR* _extention, _bool _bStatic)
 {
-	list<std::wstring> filePaths;
+	/*list<std::wstring> filePaths;
 
 	CFileIO::SearchingDir(&filePaths, _path.c_str(), _extention);
 
@@ -70,7 +70,7 @@ void CResourceManager::LoadTextures(const std::wstring& _path, const TCHAR* _ext
 				}
 			}
 		}
-	}
+	}*/
 }
 
 void CResourceManager::LoadResourcesBySceneFoloderName(const std::wstring& _sceneName, _bool _bStatic)
