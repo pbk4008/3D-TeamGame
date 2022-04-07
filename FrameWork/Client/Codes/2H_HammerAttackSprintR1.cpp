@@ -37,7 +37,7 @@ _int C2H_HammerAttackSprintR1::Tick(const _double& _dDeltaTime)
 	}
 
 
-	if (19 < iCurKeyFrameIndex && !m_isRangeAttack)
+	if (35 < iCurKeyFrameIndex && !m_isRangeAttack)
 	{
 		m_pSilvermane->RangeAttack();
 		m_isRangeAttack = true;

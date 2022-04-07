@@ -54,6 +54,8 @@ HRESULT CFury::NativeConstruct(const _uint _iSceneID, void* _pArg)
 
 	XMStoreFloat4x4(&m_matPivot, XMMatrixRotationRollPitchYaw(XMConvertToRadians(-21.5f), XMConvertToRadians(-118.f), XMConvertToRadians(20.f)) * XMMatrixTranslation(0.28f, 0.11f, 0.05f));
 
+	m_fDamage = 5;
+
 	return S_OK;
 }
 
@@ -105,10 +107,33 @@ HRESULT CFury::Render()
 	return S_OK;
 }
 
+void CFury::OnTriggerEnter(CCollision& collision)
+{
+	_uint iTag = collision.pGameObject->getTag();
+	switch (iTag)
+	{
+	case (_uint)GAMEOBJECT::MONSTER_CRYSTAL:
+	case (_uint)GAMEOBJECT::MONSTER_ABERRANT:
+	case (_uint)GAMEOBJECT::MONSTER_1H:
+	case (_uint)GAMEOBJECT::MONSTER_2H:
+	case (_uint)GAMEOBJECT::MONSTER_HEALER:
+	case (_uint)GAMEOBJECT::MONSTER_SHOOTER:
+	case (_uint)GAMEOBJECT::MONSTER_SPEAR:
+		if (!m_isAttack)
+			return;
+
+		ATTACKDESC tAttackDesc = m_pOwner->Get_AttackDesc();
+		tAttackDesc.fDamage += m_fDamage;
+		tAttackDesc.pHitObject = this;
+		static_cast<CActor*>(collision.pGameObject)->Hit(tAttackDesc);
+		break;
+	}
+}
+
 void CFury::RangeAttack()
 {
 	OVERLAPDESC tOverlapDesc;
-	tOverlapDesc.geometry = PxSphereGeometry(5.f);
+	tOverlapDesc.geometry = PxSphereGeometry(6.f);
 	XMStoreFloat3(&tOverlapDesc.vOrigin, m_pTransform->Get_State(CTransform::STATE_POSITION));
 	CGameObject* pHitObject = nullptr;
 	tOverlapDesc.ppOutHitObject = &pHitObject;

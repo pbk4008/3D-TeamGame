@@ -584,6 +584,20 @@ void CMonster_Bastion_Spear::Groggy_Start()
 	m_pPanel->Set_GroggyBar(Get_GroggyGaugeRatio());
 }
 
+void CMonster_Bastion_Spear::Hit(const ATTACKDESC& _tAttackDesc)
+{
+	if (m_bDead || 0.f >= m_fCurrentHp)
+		return;
+
+	m_pPanel->Set_Show(true);
+
+	m_fCurrentHp -= _tAttackDesc.fDamage;
+	CCollision collision;
+	collision.pGameObject = _tAttackDesc.pHitObject;
+
+	Hit(collision);
+}
+
 void CMonster_Bastion_Spear::Hit(CCollision& collision)
 {
 	if (!m_bDead)
