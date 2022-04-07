@@ -7,6 +7,7 @@ cbuffer CameraDesc
 {
 	vector		g_vCamPosition;
     float3		g_color;
+	float		g_Weight;
 };
 
 cbuffer Matrices
@@ -16,7 +17,7 @@ cbuffer Matrices
 	matrix		g_ProjMatrix;
 };
 
-texture2D	g_DiffuseTexture;
+Texture2D	g_DiffuseTexture;
 uint g_iImageCountX; //가로줄수
 uint g_iImageCountY; //세로줄수
 uint g_iFrame; //전체장수
@@ -147,6 +148,7 @@ struct PS_IN
 struct PS_OUT
 {
 	vector		vColor : SV_TARGET0;
+	float4		weight : SV_TARGET1;
 };
 
 /* 1. 픽셀의 색을 결정한다. */
@@ -156,12 +158,14 @@ PS_OUT PS_MAIN(PS_IN In)
 	PS_OUT		Out = (PS_OUT)0;
 
 	Out.vColor = g_DiffuseTexture.Sample(DefaultSampler, In.vTexUV);
-    Out.vColor.r = 1.f;
-    Out.vColor.g = 0.6f;
-    Out.vColor.b = 0.3f;
+	Out.vColor.r = g_color.r;
+	Out.vColor.g = g_color.g;
+	Out.vColor.b = g_color.b;
 
 	if (Out.vColor.a < 0.01)
 		discard;
+	
+	Out.weight = float4(g_Weight.xxx, 0.5f);
 
 	return Out;
 }
@@ -174,7 +178,8 @@ PS_OUT PS_MAIN_MULTIIMAGE(PS_IN In)
     In.vTexUV.y = (In.vTexUV.y / g_iImageCountY) + (g_iFrame / g_iImageCountY) * (1.f / g_iImageCountY); //세로 이미지개수 , 프레임 , 1나누기 이미지개수
 
     Out.vColor = g_DiffuseTexture.Sample(DefaultSampler, In.vTexUV);
-
+	Out.weight = float4(g_Weight.xxx, 0.5f);
+	
     return Out;
 }
 

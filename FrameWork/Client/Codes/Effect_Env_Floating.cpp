@@ -40,6 +40,8 @@ HRESULT CEffect_Env_Floating::NativeConstruct(const _uint _iSceneID, void* pArg)
 		memcpy(&m_Desc, pArg, sizeof(EFFECTDESC));
 	}
 
+	m_Desc.fParticleSize = _float2(0.5f, 0.5f);
+
 	//여기서 필요한 모든 컴포넌트들 Clone해옴
 	if (FAILED(SetUp_Components())) 
 	{
@@ -111,7 +113,7 @@ _int CEffect_Env_Floating::LateTick(_double TimeDelta)
 {
 	if (nullptr != m_pRenderer)
 	{
-		m_pRenderer->Add_RenderGroup(CRenderer::RENDER::RENDER_NONALPHA, this);
+		m_pRenderer->Add_RenderGroup(CRenderer::RENDER::RENDER_ALPHA, this);
 	}
 
 	return 0;
@@ -140,13 +142,15 @@ HRESULT CEffect_Env_Floating::Render()
 	m_pBuffer->SetUp_ValueOnShader("g_fCurTime", &m_Desc.fCurTime, sizeof(_float));
 
 	//_float3 color = { 0.6f, 1.f, 0.3f };
-	_float3 color = { 1.f, 0.6f, 0.3f };
+	_float3 color = { 0.6f, 1.f, 0.3f };
 	m_pBuffer->SetUp_ValueOnShader("g_color", &color, sizeof(_float3));
 
 	m_pBuffer->SetUp_ValueOnShader("g_vCamPosition", (void*)&CamPos, sizeof(_vector));
 
+	_float weight = 1.f;
+	m_pBuffer->SetUp_ValueOnShader("g_Weight", &weight, sizeof(_float));
 	//m_pBuffer->Render(m_Desc.iRenderPassNum);
-	m_pBuffer->Render(4);
+	m_pBuffer->Render(1);
 
 	return S_OK;
 }

@@ -20,6 +20,11 @@ uint g_iImageCountX; //가로줄수
 uint g_iImageCountY; //세로줄수
 uint g_iFrame; //전체장수
 
+cbuffer weightbuffer
+{
+	float g_Weight;
+};
+
 sampler DefaultSampler = sampler_state
 {
 	filter = min_mag_mip_linear;
@@ -85,6 +90,7 @@ struct PS_IN
 struct PS_OUT
 {
     vector vColor : SV_TARGET0;
+	float4 weight : SV_Target1;
 };
 
 
@@ -102,6 +108,8 @@ PS_OUT PS_MAIN(PS_IN In)
         discard;
     }
 
+	Out.weight = float4(g_Weight.xxx, 1.f);
+	
     return Out;
 }
 
@@ -113,7 +121,8 @@ PS_OUT PS_MAIN1(PS_IN In)
     In.vTexUV.y = (In.vTexUV.y / g_iImageCountY) + (g_iFrame / g_iImageCountY) * (1.f / g_iImageCountY);
 
     Out.vColor = g_DiffuseTexture.Sample(DefaultSampler, In.vTexUV);
-
+	Out.weight = float4(g_Weight.xxx, 1.f);
+	
     return Out;
 }
 

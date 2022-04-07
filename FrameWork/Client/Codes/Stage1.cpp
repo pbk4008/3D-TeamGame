@@ -78,9 +78,6 @@ HRESULT CStage1::NativeConstruct()
 	if (FAILED(Ready_Player(L"Layer_Silvermane")))
 		return E_FAIL;
 
-	if (FAILED(Ready_MapObject()))
-		return E_FAIL;
-
 	//if (FAILED(Ready_TriggerSystem(L"../bin/SaveData/Trigger/MonsterSpawnTrigger.dat")))
 	//	return E_FAIL;
 
@@ -108,6 +105,9 @@ HRESULT CStage1::NativeConstruct()
 	{
 		return E_FAIL;
 	}
+
+	if (FAILED(Ready_MapObject()))
+		return E_FAIL;
 
 	//if (FAILED(Ready_Treasure_Chest()))
 	//	return E_FAIL;
@@ -297,9 +297,16 @@ HRESULT CStage1::Ready_MapObject()
 		{
 			for (auto& iter : pDesc.tInstanceDesc.vecMatrix)
 			{
-				_vector pos = XMVectorSet(iter._41, iter._42, iter._43, iter._44);
+				CEffect_Env_Fire::EFFECTDESC Desc;
+				_tcscpy_s(Desc.TextureTag, L"Env_Fire");
+				Desc.iRenderPassNum = 1;
+				Desc.iImageCountX = 8;
+				Desc.iImageCountY = 8;
+				Desc.fFrame = 64.f;
+				Desc.fEffectPlaySpeed = 1.f;
+				Desc.ParticleMat = XMLoadFloat4x4(&iter);
 
-				if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_NoisFire", L"Proto_GameObject_NoiseFire",&pos)))
+				if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_NoisFire", L"Proto_GameObject_Effect_Env_Fire",&Desc)))
 					MSGBOX("Failed To Clone NoisFire");
 			}
 		}
@@ -314,34 +321,34 @@ HRESULT CStage1::Ready_MapObject()
 
 	//------------------------------------------- Tree --------------------------------------------------------------------//
 
-	/*vector<ENVIRONMENTLOADDATA> vecSubEnvData;
-	if (FAILED(g_pGameInstance->LoadFile<ENVIRONMENTLOADDATA>(vecSubEnvData, L"../bin/SaveData/Tree_Data.dat")))	
-		return E_FAIL;
+	//vector<ENVIRONMENTLOADDATA> vecSubEnvData;
+	//if (FAILED(g_pGameInstance->LoadFile<ENVIRONMENTLOADDATA>(vecSubEnvData, L"../bin/SaveData/Tree_Data.dat")))	
+	//	return E_FAIL;
 
-	vector<CSubEnvironment::ENVIRONMENTDESC> tSubEnvDesc;
-	tSubEnvDesc.resize(100);
-	_uint idx = 0;
-	tSubEnvDesc[idx].wstrInstaneTag = vecSubEnvData[0].FileName;
-	for (auto& pData : vecSubEnvData)
-	{
-		if (lstrcmp(tSubEnvDesc[idx].wstrInstaneTag.c_str(), pData.FileName))
-		{
-			idx++;
-			tSubEnvDesc[idx].wstrInstaneTag = pData.FileName;
-			tSubEnvDesc[idx].tInstanceDesc.vecMatrix.emplace_back(pData.WorldMat);
-		}
-		else
-			tSubEnvDesc[idx].tInstanceDesc.vecMatrix.emplace_back(pData.WorldMat);
-	}
+	//vector<CSubEnvironment::ENVIRONMENTDESC> tSubEnvDesc;
+	//tSubEnvDesc.resize(100);
+	//_uint idx = 0;
+	//tSubEnvDesc[idx].wstrInstaneTag = vecSubEnvData[0].FileName;
+	//for (auto& pData : vecSubEnvData)
+	//{
+	//	if (lstrcmp(tSubEnvDesc[idx].wstrInstaneTag.c_str(), pData.FileName))
+	//	{
+	//		idx++;
+	//		tSubEnvDesc[idx].wstrInstaneTag = pData.FileName;
+	//		tSubEnvDesc[idx].tInstanceDesc.vecMatrix.emplace_back(pData.WorldMat);
+	//	}
+	//	else
+	//		tSubEnvDesc[idx].tInstanceDesc.vecMatrix.emplace_back(pData.WorldMat);
+	//}
 
-	for (auto& pDesc : tSubEnvDesc)
-	{
-		if (pDesc.wstrInstaneTag == L"") 
-			break;
+	//for (auto& pDesc : tSubEnvDesc)
+	//{
+	//	if (pDesc.wstrInstaneTag == L"") 
+	//		break;
 
-		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_SubEnvironment", L"Proto_GameObject_SubEnvironment", &pDesc))) 
-			return E_FAIL;
-	}*/
+	//	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_SubEnvironment", L"Proto_GameObject_SubEnvironment", &pDesc))) 
+	//		return E_FAIL;
+	//}
 
 	//wstring strTag = L"StageBackGround";
 	//g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Stage1_Back", L"Prototype_GameObject_BackGround", &strTag);
@@ -624,20 +631,20 @@ HRESULT CStage1::Ready_Data_Effect()
 
 #pragma region 이펙트매니저에 안들어가는것들 
 	//불
-	CEffect_Env_Fire::EFFECTDESC Desc;
-	_tcscpy_s(Desc.TextureTag, L"Env_Fire");
-	Desc.iRenderPassNum = 1;
-	Desc.iImageCountX = 8;
-	Desc.iImageCountY = 8;
-	Desc.fFrame = 64.f;
-	Desc.fEffectPlaySpeed = 1.f;
-	Desc.fMyPos = { 0.f, 0.f, 0.f };
+	//CEffect_Env_Fire::EFFECTDESC Desc;
+	//_tcscpy_s(Desc.TextureTag, L"Env_Fire");
+	//Desc.iRenderPassNum = 1;
+	//Desc.iImageCountX = 8;
+	//Desc.iImageCountY = 8;
+	//Desc.fFrame = 64.f;
+	//Desc.fEffectPlaySpeed = 1.f;
+	//Desc.fMyPos = { 0.f, 0.f, 0.f };
 
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Effect_Env_Fire", L"Proto_GameObject_Effect_Env_Fire", &Desc)))
-	{
-		MSGBOX("Failed to Creating in CStage1::Ready_Effect()");
-		return E_FAIL;
-	}
+	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Effect_Env_Fire", L"Proto_GameObject_Effect_Env_Fire", &Desc)))
+	//{
+	//	MSGBOX("Failed to Creating in CStage1::Ready_Effect()");
+	//	return E_FAIL;
+	//}
 
 	//공중에떠있는환경파티클 (이펙트매니저에안넣음)
 	vector<CEffect_Env_Floating::EFFECTDESC> vecEnvFloating;

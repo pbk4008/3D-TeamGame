@@ -37,6 +37,7 @@ private:
 
 private:
 	CEffect::EFFECTDESC m_Desc;
+	_vector		m_scale = XMVectorZero();
 public:
 	static CEffect_Env_Fire* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);
 	virtual CGameObject* Clone(const _uint _iSceneID, void* pArg) override;

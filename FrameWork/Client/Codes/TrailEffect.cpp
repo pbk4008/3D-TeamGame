@@ -53,7 +53,7 @@ _int CTrailEffect::LateTick(_double _dDeltaTime)
 		return iProgress;
 
 	if(m_isRender)
-		m_pRenderer->Add_RenderGroup(CRenderer::RENDER_ALPHA, this,1.f);
+		m_pRenderer->Add_RenderGroup(CRenderer::RENDER_ALPHA, this);
 
 	return _int();
 }
@@ -147,6 +147,9 @@ HRESULT CTrailEffect::Render()
 	if (FAILED(m_pVIBuffer->SetUp_TextureOnShader("g_DiffuseTexture", m_pTexture)))		MSGBOX("NoiseFire ConstBuffer FireTexture Not Apply");
 	if (FAILED(m_pVIBuffer->SetUp_TextureOnShader("g_DistortionTex", m_pTexture1)))	MSGBOX("NoiseFire ConstBuffer NoiseTexture Not Apply");
 	if (FAILED(m_pVIBuffer->SetUp_TextureOnShader("g_DistorionMaskTex", m_pTexture2)))	MSGBOX("NoiseFire ConstBuffer AlphaTexture Not Apply");
+	
+	_float weight = 0.9f;
+	if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_Weight", &weight, sizeof(_float)))) MSGBOX("NoiseFire ConstBuffer Weight Not Apply");
 
 	m_pVIBuffer->Render_Curve(1);
 

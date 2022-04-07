@@ -123,13 +123,10 @@ HRESULT CRenderer::CreateShadowDepthStencilview(_uint iWidth, _uint iHeight,ID3D
 	return S_OK;
 }
 
-HRESULT CRenderer::Add_RenderGroup(RENDER eRenderID, CGameObject* pGameObject,_float weight)
+HRESULT CRenderer::Add_RenderGroup(RENDER eRenderID, CGameObject* pGameObject)
 {
 	if (nullptr == pGameObject || eRenderID >= RENDER_END)
 		return E_FAIL;
-
-	if (eRenderID == CRenderer::RENDER_ALPHA)
-		m_AlphaWeight = weight;
 
 	m_RenderGroup[eRenderID].push_back(pGameObject);
 
@@ -231,7 +228,7 @@ HRESULT CRenderer::Draw_RenderGroup()
 		if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("Target_Blend")))) return E_FAIL;
 		if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("Target_Final")))) return E_FAIL;
 		if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("Target_Alpha")))) return E_FAIL;
-		if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("Target_Particle")))) return E_FAIL;
+		if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("Target_AlphaBlend")))) return E_FAIL;
 		if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("Target_BlurShadow")))) return E_FAIL;
 		if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("Target_GodRay")))) return E_FAIL;
 	}
@@ -308,7 +305,7 @@ HRESULT CRenderer::Render_NonAlpha()
 
 HRESULT CRenderer::Render_Alpha()
 {
-	if (FAILED(m_pTargetMgr->Begin_MRT(m_pDeviceContext, TEXT("Target_Particle")))) return E_FAIL;
+	if (FAILED(m_pTargetMgr->Begin_MRT(m_pDeviceContext, TEXT("Target_AlphaBlend")))) return E_FAIL;
 
 	_matrix view = g_pGameInstance->Get_Transform(m_CameraTag, TRANSFORMSTATEMATRIX::D3DTS_VIEW);
 	view = XMMatrixInverse(nullptr, view);
@@ -339,7 +336,7 @@ HRESULT CRenderer::Render_Alpha()
 
 	if (m_bParticle == true)
 	{
-		if (FAILED(m_pPostProcess->AlphaBlur(m_pTargetMgr,m_bParticle, m_AlphaWeight))) MSGBOX("Alpha Blur Failed");
+		if (FAILED(m_pPostProcess->AlphaBlur(m_pTargetMgr,m_bParticle))) MSGBOX("Alpha Blur Failed");
 
 		if (FAILED(m_pVIBuffer->SetUp_TextureOnShader("g_AlphaTexture", m_pTargetMgr->Get_SRV(L"Target_Alpha")))) MSGBOX("Alpha Render Failed");
 

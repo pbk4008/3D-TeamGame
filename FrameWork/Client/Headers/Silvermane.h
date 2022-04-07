@@ -157,6 +157,9 @@ private: /* Drop Box  */
 private: /* For.Cheat */
 	_bool m_isHighSpeedMode = false;
 
+	// color
+private: _float4  m_color = _float4(0.498f, 0.9411f, 0.8196f, 0.f);
+
 private:
 	CTexture*	m_pTexture = nullptr;
 	const LIGHTDESC* m_Lightdesc = nullptr;
