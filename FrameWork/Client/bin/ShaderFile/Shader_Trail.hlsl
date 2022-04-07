@@ -80,7 +80,7 @@ PS_OUT_TRAIL PS_MAIN_TRAIL(PS_IN_TRAIL In)
 	Out.A = float4(1, 1, 1, 1);
 	float4 color = float4(0.99f, 0.43f, 0.2f, 0.3f);
 	float4 power = 0.8f;
-	Out.E = color * power;
+	Out.E = 0.f;
 
 	return Out;
 }

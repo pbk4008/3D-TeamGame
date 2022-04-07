@@ -77,14 +77,14 @@ _int CDropBox::Tick(_double _dDeltaTime)
 
 	if (true == m_bBoxOpened && 0 < m_dropList.size())
 	{
-		m_dropElapsed += _dDeltaTime; /* drop time */
+		m_dropElapsed += (_float)_dDeltaTime; /* drop time */
 		if (m_dropElapsed >= m_dropDelay) 
 		{
 			//g_pGameInstance->BlendSound(L"Drop_Item", L"Drop_Item_2", CSoundMgr::CHANNELID::Item_Drop, CSoundMgr::CHANNELID::Item_Drop_2);
 			g_pGameInstance->VolumeChange(CSoundMgr::CHANNELID::Item_Drop, 5.5f);
 			m_dropElapsed = 0.f;
 			m_pCollider->Remove_ActorFromScene();
-			m_dropDelay = MathUtils::ReliableRandom(m_dropDelayMin, m_dropDelayMax);
+			m_dropDelay = (_float)MathUtils::ReliableRandom(m_dropDelayMin, m_dropDelayMax);
 			CDropManager::GetInstance()->DropItem(m_dropList.back(), m_pTransform->Get_State(CTransform::STATE_POSITION), EScatterType::Cone, m_pTransform);
 			m_dropList.pop_back();
 		}

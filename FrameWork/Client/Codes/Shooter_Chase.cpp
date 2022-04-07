@@ -105,7 +105,7 @@ void CShooter_Chase::Chase_Target(_double dDeltaTime)
 	_vector vDir = vPlayerPos - vPos;
 	vDir = XMVector3Normalize(vDir);
 
-	vDir *= dDeltaTime*3.f;
+	vDir *= (_float)dDeltaTime * 3.f;
 
 	m_pTransform->Add_Velocity(vDir);
 }

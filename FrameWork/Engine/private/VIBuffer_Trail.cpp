@@ -140,6 +140,46 @@ HRESULT CVIBuffer_Trail::Set_VertexTrail(const _float3 _arrPos[], const _float3 
 	return S_OK;
 }
 
+HRESULT CVIBuffer_Trail::Set_VertexTrail(const _float3 _vStartPoints[], const _float3 _vEndPoints[], const _uint _iCount)
+{
+	D3D11_MAPPED_SUBRESOURCE pVertices, pIndices;
+
+	// Vertex Buffer
+	m_pDeviceContext->Map(m_pVB, 0, D3D11_MAP_WRITE_DISCARD, 0, &pVertices);
+
+	for (_uint i = 0; i < _iCount; ++i)
+	{
+		((VTXTEX*)pVertices.pData)[i * 2 + 0].vPosition = _vStartPoints[i];
+		((VTXTEX*)pVertices.pData)[i * 2 + 0].vTexUV = _float2(1.f, (i * 2 + 0) / _float((_iCount - 1) * 2));
+
+		((VTXTEX*)pVertices.pData)[i * 2 + 1].vPosition = _vEndPoints[i];
+		((VTXTEX*)pVertices.pData)[i * 2 + 1].vTexUV = _float2(1.f, (i * 2 + 1) / _float(_iCount * 2 - 1));
+	}
+	m_iNumPrimitive = (_iCount - 1) * 2;
+
+	m_pDeviceContext->Unmap(m_pVB, 0);
+
+	// Index Buffer
+	m_pDeviceContext->Map(m_pIB, 0, D3D11_MAP_WRITE_DISCARD, 0, &pIndices);
+
+	_uint iNumPrimitive = 0;
+	for (_uint i = 0; i < m_iNumPrimitive / 2; ++i)
+	{
+		((FACEINDICES16*)pIndices.pData)[iNumPrimitive]._0 = i * 2;
+		((FACEINDICES16*)pIndices.pData)[iNumPrimitive]._1 = i * 2 + 1;
+		((FACEINDICES16*)pIndices.pData)[iNumPrimitive]._2 = i * 2 + 2;
+		++iNumPrimitive;
+		((FACEINDICES16*)pIndices.pData)[iNumPrimitive]._0 = i * 2 + 1;
+		((FACEINDICES16*)pIndices.pData)[iNumPrimitive]._1 = i * 2 + 3;
+		((FACEINDICES16*)pIndices.pData)[iNumPrimitive]._2 = i * 2 + 2;
+		++iNumPrimitive;
+	}
+
+	m_pDeviceContext->Unmap(m_pIB, 0);
+
+	return S_OK;
+}
+
 CVIBuffer_Trail* CVIBuffer_Trail::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext, const _tchar* _pShaderFilePath, const _uint _iMaxVertices)
 {
 	CVIBuffer_Trail* pInstance = new CVIBuffer_Trail(_pDevice, _pDeviceContext);
