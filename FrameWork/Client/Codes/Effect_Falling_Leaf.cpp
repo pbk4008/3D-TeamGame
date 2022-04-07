@@ -91,7 +91,7 @@ _int CEffect_Falling_Leaf::Tick(_double TimeDelta)
 
 	if (m_Desc.fMaxLifeTime > m_Desc.fCurTime)
 	{
-		m_Desc.fCurTime += TimeDelta;
+		m_Desc.fCurTime += (_float)TimeDelta;
 	}
 
 
@@ -109,7 +109,7 @@ _int CEffect_Falling_Leaf::LateTick(_double TimeDelta)
 	{
 		if (nullptr != m_pRenderer)
 		{
-			m_pRenderer->Add_RenderGroup(CRenderer::RENDER::RENDER_UI, this);
+			m_pRenderer->Add_RenderGroup(CRenderer::RENDER::RENDER_NONALPHA, this);
 		}
 	}
 
@@ -142,12 +142,12 @@ HRESULT CEffect_Falling_Leaf::Render()
 	m_pBuffer->SetUp_ValueOnShader("g_fLifeTime", &m_Desc.fMaxLifeTime, sizeof(_float));
 	m_pBuffer->SetUp_ValueOnShader("g_fCurTime", &m_Desc.fCurTime, sizeof(_float));
 
-	_float3 color = { 1.f, 0.6f, 0.3f };
+	_float3 color = { 1.f, 0.f, 0.f };
 	m_pBuffer->SetUp_ValueOnShader("g_color", &color, sizeof(_float3));
 
 	m_pBuffer->SetUp_ValueOnShader("g_vCamPosition", (void*)&CamPos, sizeof(_vector));
 
-	m_pBuffer->Render(m_Desc.iRenderPassNum);
+	m_pBuffer->Render(/*m_Desc.iRenderPassNum*/4);
 
 	return S_OK;
 }

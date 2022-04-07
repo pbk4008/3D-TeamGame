@@ -206,24 +206,33 @@ struct PS_OUT_TEST
 PS_OUT_TEST PS_MAIN_TEST(PS_IN In)
 {
 	PS_OUT_TEST Out = (PS_OUT_TEST)0;
+	
+	In.vTexUV.x = (In.vTexUV.x / g_iImageCountX) + (g_iFrame % g_iImageCountX) * (1.f / g_iImageCountX); //가로 이미지개수 , 프레임 , 1나누기 이미지개수 
+	In.vTexUV.y = (In.vTexUV.y / g_iImageCountY) + (g_iFrame / g_iImageCountY) * (1.f / g_iImageCountY); //세로 이미지개수 , 프레임 , 1나누기 이미지개수
 
-	float4 diffuse = g_DiffuseTexture.Sample(DefaultSampler, In.vTexUV.xy);	
-	Out.diffuse = diffuse;
-
-	Out.depth = float4(In.vPosition.z / In.vPosition.w, In.vPosition.w / 300.f, 0.f, 0.f);
-	Out.normal = float4(1, 1, 1, 0);
-
-	Out.M = float4(0, 0, 0, 1);
-	Out.R = float4(1, 1, 1, 1);
-	Out.A = float4(1, 1, 1, 1);
-
-    float4 color = float4(g_color, 1.f);
-	float4 power = 1.0f;
-
-	Out.E = color * power * diffuse;
-
-	if (Out.diffuse.a < 0.1f)
+	half GreenAlpha = g_DiffuseTexture.Sample(DefaultSampler, In.vTexUV).a;
+	
+	Out.diffuse = g_DiffuseTexture.Sample(DefaultSampler, In.vTexUV);
+	
+	Out.diffuse.r = 1.f;
+	Out.diffuse.gb = 0.f;
+	
+	Out.diffuse = Out.diffuse * GreenAlpha;
+	
+	if (0.01f >= Out.diffuse.a)
 		discard;
+
+	Out.depth = half4(In.vPosition.z / In.vPosition.w, In.vPosition.w / 300.f, 0.f, 0.f);
+	Out.normal = half4(1, 1, 1, 0);
+
+	Out.M = half4(0, 0, 0, 1);
+	Out.R = half4(1, 1, 1, 1);
+	Out.A = half4(1, 1, 1, 1);
+
+	half4 color = half4(g_color, 1.f);
+	half4 power = 0.1f;
+
+	Out.E =  color * power * GreenAlpha;
 	
 	return Out;
 }
@@ -262,7 +271,7 @@ technique11			DefaultTechnique
 		/* 렌더스테이츠에 대한 정의. */
         SetRasterizerState(CullMode_Default);
         SetDepthStencilState(ZDefault, 0);
-        //SetBlendState(AlphaBlending, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+		SetBlendState(AlphaBlending, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
 
 		/* 진입점함수를 지정한다. */
         VertexShader = compile vs_5_0 VS_MAIN();
@@ -286,9 +295,9 @@ technique11			DefaultTechnique
 	pass Test //4
 	{
 		/* 렌더스테이츠에 대한 정의. */
-		SetRasterizerState(CullMode_Default);
+		SetRasterizerState(CullMode_None);
 		SetDepthStencilState(ZDefault, 0);
-
+		SetBlendState(BlendDisable, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
 
 		/* 진입점함수를 지정한다. */
 		VertexShader = compile vs_5_0 VS_MAIN();

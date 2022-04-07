@@ -338,7 +338,7 @@ HRESULT CRenderer::Render_Alpha()
 	{
 		if (FAILED(m_pPostProcess->AlphaBlur(m_pTargetMgr,m_bParticle))) MSGBOX("Alpha Blur Failed");
 
-		if (FAILED(m_pVIBuffer->SetUp_TextureOnShader("g_AlphaTexture", m_pTargetMgr->Get_SRV(L"Target_Alpha")))) MSGBOX("Alpha Render Failed");
+		if (FAILED(m_pVIBuffer->SetUp_TextureOnShader("g_AlphaTexture", m_pTargetMgr->Get_SRV(L"Target_AlphaBlend")))) MSGBOX("Alpha Render Failed");
 
 		if (FAILED(m_pVIBuffer->Render(4))) MSGBOX("Alpha Rendering Failed");
 	}

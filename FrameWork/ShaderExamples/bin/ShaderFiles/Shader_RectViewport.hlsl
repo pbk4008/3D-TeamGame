@@ -399,14 +399,14 @@ PS_OUT_BLEND PS_MAIN_BLEND(PS_IN In)
 	
 	if (g_radial == true)
 	{		
-		
 		Out.vColor.rgb = Radialblur(g_DiffuseTexture,DefaultSampler,In.vTexUV,g_RadialCnt);
+		Out.vColor = Outline(g_DiffuseTexture, DefaultSampler, In.vTexUV, Out.vColor);
 	}
 	
 	if (g_outline == true)
 	{ 
 		// ¿Ü°û¼± È¿°ú
-		Out.vColor = Outline(g_DiffuseTexture, DefaultSampler, In.vTexUV, Out.vColor);
+		
 	}
 	
 	if (Out.vColor.a == 0)
