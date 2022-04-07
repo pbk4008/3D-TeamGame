@@ -36,7 +36,7 @@ public:
 private:
 	ID3D11Device*				m_pDevice = nullptr;
 	ID3D11DeviceContext*		m_pDeviceContext = nullptr;
-	_bool						m_bShow = false;
+	_bool						m_bShow = true;
 
 private:
 	LIGHTDESC						m_LightDesc;
