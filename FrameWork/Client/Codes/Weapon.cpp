@@ -115,9 +115,20 @@ void CWeapon::Set_IsAttack(const _bool _isAttack)
 	m_isAttack = _isAttack;
 }
 
+void CWeapon::Set_IsTrail(const _bool _isTrail)
+{
+	if(m_isTrail != _isTrail)
+		m_isTrail = _isTrail;
+}
+
 const _bool CWeapon::IsAttack() const
 {
 	return m_isAttack;
+}
+
+const _bool CWeapon::IsTrail() const
+{
+	return m_isTrail;
 }
 
 void CWeapon::RangeAttack()

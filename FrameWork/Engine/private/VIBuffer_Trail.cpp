@@ -19,7 +19,7 @@ HRESULT CVIBuffer_Trail::NativeConstruct_Prototype(const _tchar* _pShaderFilePat
 
 	/* D3D11_BUFFER_DESC */
 	m_iStride = sizeof(VTXTEX);
-	m_iNumVertices = 1000;
+	m_iNumVertices = 512;
 
 	m_VBDesc.ByteWidth = m_iStride * m_iNumVertices;
 	m_VBDesc.Usage = D3D11_USAGE_DYNAMIC;
@@ -40,12 +40,12 @@ HRESULT CVIBuffer_Trail::NativeConstruct_Prototype(const _tchar* _pShaderFilePat
 
 
 	/* D3D11_BUFFER_DESC */
-	m_IndicesByteLength = sizeof(FACEINDICES16);
-	m_iNumPrimitive = _iMaxVertices - 2;
+	m_IndicesByteLength = sizeof(FACEINDICES32);
+	m_iNumPrimitive = 512 - 2;
 	m_iNumIndicesFigure = 3;
 	//m_ePrimitiveTopology = D3D_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP;
 	m_ePrimitiveTopology = D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
-	m_eFormat = DXGI_FORMAT_R16_UINT;
+	m_eFormat = DXGI_FORMAT_R32_UINT;
 
 	m_IBDesc.ByteWidth = m_IndicesByteLength * m_iNumPrimitive;
 	m_IBDesc.Usage = D3D11_USAGE_DYNAMIC;
@@ -56,8 +56,8 @@ HRESULT CVIBuffer_Trail::NativeConstruct_Prototype(const _tchar* _pShaderFilePat
 
 	/* D3D11_SUBRESOURCE_DATA */
 	ZeroMemory(&m_IBSubresourceData, sizeof(D3D11_SUBRESOURCE_DATA));
-	m_pIndices = new FACEINDICES16[m_iNumPrimitive];
-	ZeroMemory(m_pIndices, sizeof(FACEINDICES16) * m_iNumPrimitive);
+	m_pIndices = new FACEINDICES32[m_iNumPrimitive];
+	ZeroMemory(m_pIndices, sizeof(FACEINDICES32) * m_iNumPrimitive);
 
 	m_IBSubresourceData.pSysMem = m_pIndices;
 
@@ -120,13 +120,13 @@ HRESULT CVIBuffer_Trail::Set_VertexTrail(const _float3 _vStartPoints[], const _f
 	_uint iNumPrimitive = 0;
 	for (_uint i = 0; i < m_iNumPrimitive / 2; ++i)
 	{
-		((FACEINDICES16*)pIndices.pData)[iNumPrimitive]._0 = i * 2;
-		((FACEINDICES16*)pIndices.pData)[iNumPrimitive]._1 = i * 2 + 1;
-		((FACEINDICES16*)pIndices.pData)[iNumPrimitive]._2 = i * 2 + 2;
+		((FACEINDICES32*)pIndices.pData)[iNumPrimitive]._0 = i * 2;
+		((FACEINDICES32*)pIndices.pData)[iNumPrimitive]._1 = i * 2 + 1;
+		((FACEINDICES32*)pIndices.pData)[iNumPrimitive]._2 = i * 2 + 2;
 		++iNumPrimitive;
-		((FACEINDICES16*)pIndices.pData)[iNumPrimitive]._0 = i * 2 + 1;
-		((FACEINDICES16*)pIndices.pData)[iNumPrimitive]._1 = i * 2 + 3;
-		((FACEINDICES16*)pIndices.pData)[iNumPrimitive]._2 = i * 2 + 2;
+		((FACEINDICES32*)pIndices.pData)[iNumPrimitive]._0 = i * 2 + 1;
+		((FACEINDICES32*)pIndices.pData)[iNumPrimitive]._1 = i * 2 + 3;
+		((FACEINDICES32*)pIndices.pData)[iNumPrimitive]._2 = i * 2 + 2;
 		++iNumPrimitive;
 	}
 

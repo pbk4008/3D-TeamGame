@@ -22,7 +22,7 @@ _int CShield_WalkLeft::Tick(const _double& _dDeltaTime)
 	if (NO_EVENT > iProgress)
 		return iProgress;
 
-	m_pSilvermane->Add_Velocity(CTransform::STATE_RIGHT, -_dDeltaTime * 0.5);
+	//m_pSilvermane->Add_Velocity(CTransform::STATE_RIGHT, -_dDeltaTime * 0.5);
 
 	return _int();
 }

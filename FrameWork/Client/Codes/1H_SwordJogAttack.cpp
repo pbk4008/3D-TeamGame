@@ -74,6 +74,9 @@ HRESULT C1H_SwordJogAttack::EnterState()
 
 	m_iAttackStartIndex = 6;
 	m_iAttackEndIndex = 14;
+
+	m_iTrailStartIndex = 6;
+	m_iTrailEndIndex = 25;
 	return S_OK;
 }
 

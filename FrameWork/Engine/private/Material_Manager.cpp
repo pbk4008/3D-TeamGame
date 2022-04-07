@@ -1,5 +1,4 @@
 #include "Material_Manager.h"
-
 #include "Material.h"
 
 CMaterial_Manager::CMaterial_Manager()
@@ -51,7 +50,7 @@ void CMaterial_Manager::Free()
 	{
 		Safe_Release(pair.second);
 	}
-
+	
 	Safe_Release(m_pDeviceContext);
 	Safe_Release(m_pDevice);
 }

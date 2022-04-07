@@ -19,6 +19,11 @@ public:
 	HRESULT Clear_BackBuffer_View(XMFLOAT4 vClearColor);
 	HRESULT Clear_DepthStencil_View();
 	HRESULT Present();
+
+public:
+	ID3D11Device*		 Get_Device(void) { return m_pDevice; }
+	ID3D11DeviceContext* Get_DeviceContext(void) { return m_pDeviceContext; }
+
 private:
 	/* 메모리 할당. (정점버퍼, 인덱스버퍼, 텍스쳐로드) */
 	ID3D11Device*			m_pDevice = nullptr;

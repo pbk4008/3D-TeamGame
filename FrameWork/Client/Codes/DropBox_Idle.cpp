@@ -54,8 +54,6 @@ HRESULT CDropBox_Idle::EnterState()
 	if (FAILED(__super::EnterState()))
 		return E_FAIL;
 
-	m_pAnimator->Change_Animation(CDropBox::ANIM_TYPE::A_OPEN);
-
 	return S_OK;
 }
 

@@ -11,6 +11,7 @@
 #include "DropBox.h"
 #include "UI_Blank_CKey.h"
 #include "UI_Fill_CKey.h"
+#include "InventoryData.h"
 
 #include "MainApp.h"
 
@@ -220,6 +221,9 @@ HRESULT CSilvermane::NativeConstruct(const _uint _iSceneID, void* _pArg)
 	m_pRenderer->SetRenderButton(CRenderer::PBRHDR, true);
 	m_pRenderer->SetCameraTag(L"Camera_Silvermane");
 
+	/* 인벤 데이터 디버그용 */
+	m_pInventoryData = g_pDataManager->GET_DATA(CInventoryData, L"InventoryData");
+
 	return S_OK;
 }
 
@@ -331,8 +335,6 @@ HRESULT CSilvermane::Render()
 	if (FAILED(__super::Render()))
 		return E_FAIL;
 
-	_float4 color = { 0,0,0,0 };
-
 	_matrix smatWorld, smatView, smatProj;
 	smatWorld = XMMatrixTranspose(m_pTransform->Get_WorldMatrix());
 	smatView = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_VIEW));
@@ -347,21 +349,31 @@ HRESULT CSilvermane::Render()
 
 	if (g_pObserver->IsAttack())
 	{
-		color = _float4(0.498f, 0.941f, 0.819f, 0.f);
-		color.x += 0.003;
-		color.y -= 0.005f;
-		color.z -= 0.0048f;
-
-		if(color.x >= 0.784f && color.y <= 0.137 && color.z <= 0.137)
-			color = _float4(0.784f, 0.137f, 0.137f, 0.f);
+		m_color = _float4(0.784f, 0.137f, 0.137f, 0.f);
 	}
 	else
-		color = _float4(0.498f, 0.9411f, 0.8196f, 0.f);
+	{
+		if (m_color.x <= 0.498f)
+			m_color.x = 0.498f;
+		else
+			m_color.x -= 0.005f;
+
+		if (m_color.y >= 0.9411f)
+			m_color.y = 0.9411f;
+		else
+			m_color.y += 0.005f;
+
+		if (m_color.z >= 0.8196f)
+			m_color.z = 0.8196f;
+		else
+			m_color.z += 0.005f;
+
+	}
 
 	for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
 	{
 		if(i == 0)
-			if (FAILED(m_pModel->SetUp_ValueOnShader("g_color", &color, sizeof(_float4)))) return E_FAIL;
+			if (FAILED(m_pModel->SetUp_ValueOnShader("g_color", &m_color, sizeof(_float4)))) return E_FAIL;
 
 		if (FAILED(m_pModel->Render(i, i)))	return E_FAIL;
 	}
@@ -471,6 +483,29 @@ HRESULT CSilvermane::Render_Debug()
 	wstring wstrIsAttack = L"IsAttack : ";
 	m_IsAttack == true ? wstrIsAttack += L"true" : wstrIsAttack += L"false";
 	if (FAILED(g_pGameInstance->Render_Font(TEXT("Font_Arial"), XMVectorSet(1.f, 0.0f, 0.f, 1.f), wstrIsAttack.c_str(), _float2(0.f, 200.f), _float2(0.6f, 0.6f))))
+		return E_FAIL;
+
+
+	
+	// 인벤 상태
+	wstring wstrIsInvenState = L"Inven Count : ";
+	wstring wstrInvenCnt = to_wstring(m_pInventoryData->GetCount());
+	if (FAILED(g_pGameInstance->Render_Font(TEXT("Font_Arial"), XMVectorSet(0.f, 1.0f, 1.f, 1.f), (wstrIsInvenState + wstrInvenCnt).c_str(), _float2(800.f, 40.f), _float2(0.6f, 0.6f))))
+		return E_FAIL;
+
+	wstring wstrCurItem = L"Inven Cur Add Item : ";
+	wstring wstrItemName = m_pInventoryData->GetItem().szItemName;
+	if (FAILED(g_pGameInstance->Render_Font(TEXT("Font_Arial"), XMVectorSet(0.f, 1.0f, 1.f, 1.f), (wstrCurItem + wstrItemName).c_str(), _float2(800.f, 60.f), _float2(0.6f, 0.6f))))
+		return E_FAIL;
+
+	wstring wstrItemLevel = L"Item Level : ";
+	wstring ItemLevel = to_wstring(m_pInventoryData->GetItem().iLevel);
+	if (FAILED(g_pGameInstance->Render_Font(TEXT("Font_Arial"), XMVectorSet(0.f, 1.0f, 1.f, 1.f), (wstrItemLevel + ItemLevel).c_str(), _float2(800.f, 80.f), _float2(0.6f, 0.6f))))
+		return E_FAIL;
+
+	wstring wstrItemDmg = L"Item Dmg : ";
+	wstring ItemDmg = to_wstring(m_pInventoryData->GetItem().iDmg);
+	if (FAILED(g_pGameInstance->Render_Font(TEXT("Font_Arial"), XMVectorSet(0.f, 1.0f, 1.f, 1.f), (wstrItemDmg + ItemDmg).c_str(), _float2(800.f, 100.f), _float2(0.6f, 0.6f))))
 		return E_FAIL;
 
 	return S_OK;
@@ -1053,6 +1088,12 @@ void CSilvermane::Set_IsAttack(const _bool _isAttack)
 		m_pCurWeapon->Set_IsAttack(_isAttack);
 }
 
+void CSilvermane::Set_IsTrail(const _bool _isTrail)
+{
+	if (m_pCurWeapon)
+		m_pCurWeapon->Set_IsTrail(_isTrail);
+}
+
 void CSilvermane::Add_PlusAngle(const _float _fDeltaAngle)
 {
 	m_fPlusAngle += _fDeltaAngle * 360.f;
@@ -1375,6 +1416,7 @@ const void CSilvermane::Raycast_DropBox(const _double& _dDeltaTime)
 		return;
 
 	_vector svRayPos, svRayDir;
+
 	memcpy_s(&svRayPos, sizeof(_vector), &smatView.r[3], sizeof(_vector));
 	memcpy_s(&svRayDir, sizeof(_vector), &smatView.r[2], sizeof(_vector));
 	svRayDir = XMVector3Normalize(svRayDir);

@@ -49,7 +49,7 @@ _int CNoiseFire::Tick(_double deltatime)
 _int CNoiseFire::LateTick(_double deltatime)
 {
 	if (m_pRenderer)
-		m_pRenderer->Add_RenderGroup(CRenderer::RENDER_ALPHA,this,1.f);
+		m_pRenderer->Add_RenderGroup(CRenderer::RENDER_ALPHA,this);
 
 	return _int();
 }
@@ -79,7 +79,7 @@ HRESULT CNoiseFire::BindConstBuffer()
 	if (FAILED(m_pbuffer->SetUp_ValueOnShader("g_ProjMatrix", &proj, sizeof(_float4x4)))) MSGBOX("NoiseFire ConstBuffer Projmatrix Not Apply");
 
 	// Nosie Buffer
-	_float3 scrollspeeds = _float3(1.5f, 2.6f, 2.8f); //_float3(1.3f, 2.1f, 2.3f);
+	_float3 scrollspeeds = _float3(1.3f, 2.1f, 2.3f);
 	_float3 scales = _float3(1.0f, 2.0f, 3.0f);//_float3(1.0f, 2.0f, 3.0f);
 	if (FAILED(m_pbuffer->SetUp_ValueOnShader("g_frametime", &m_deltatime, sizeof(_float)))) MSGBOX("NoiseFire ConstBuffer NosieBuffer Not Apply");
 	if (FAILED(m_pbuffer->SetUp_ValueOnShader("g_scrollspeeds", &scrollspeeds, sizeof(_float3)))) MSGBOX("NoiseFire ConstBuffer NosieBuffer Not Apply");

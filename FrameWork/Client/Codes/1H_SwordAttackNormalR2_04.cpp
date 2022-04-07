@@ -71,6 +71,10 @@ HRESULT C1H_SwordAttackNormalR2_04::EnterState()
 	m_pAnimationController->Set_PlaySpeed(1.4f);
 	m_iAttackStartIndex = 12;
 	m_iAttackEndIndex = 26;
+
+	m_iTrailStartIndex = 12;
+	m_iTrailEndIndex = 31;
+
 	return S_OK;
 }
 

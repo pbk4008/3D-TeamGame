@@ -54,7 +54,7 @@ HRESULT CShield_WalkBwdStart::EnterState()
 	_matrix smatPivot = XMMatrixRotationY(XMConvertToRadians(180.f));
 	m_pAnimationController->Set_PivotMatrix(smatPivot);
 	
-
+	m_iCutIndex = 36;
 	return S_OK;
 }
 
@@ -76,7 +76,7 @@ _int CShield_WalkBwdStart::Input(const _double& _dDeltaTime)
 
 	if (g_pGameInstance->getkeyPress(DIK_S))
 	{
-		if (m_pAnimationController->Is_Finished())
+		if (m_iCutIndex < m_pAnimationController->Get_CurKeyFrameIndex())
 		{
 			if (FAILED(m_pStateController->Change_State(L"Shield_WalkBwd")))
 				return -1;

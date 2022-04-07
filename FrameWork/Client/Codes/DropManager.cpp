@@ -20,7 +20,7 @@ HRESULT CDropManager::NativeConstruct(SCENEID _iSceneID)
 			}
 			Safe_AddRef(pObj);
 			return pObj;
-		}, 10);
+		}, 30);
 
 	if (nullptr == m_pDropObjectPool)
 		return E_FAIL;
@@ -66,14 +66,16 @@ void CDropManager::DropItem(CItemData itemData, _fvector centerPos, EScatterType
 
 	pDropObject->Get_Transform()->Set_State(CTransform::STATE_POSITION, centerPos);
 	pDropObject->Drop(itemData, centerPos, scatterType, pSender);
-
 	m_dropObjects.push_back(pDropObject);
 }
 
 void CDropManager::Free()
 {
-	for (auto iter : m_dropObjects)
-		Safe_Release(iter);
+	if (0 != m_dropObjects.size())
+	{
+		for (auto iter : m_dropObjects)
+			m_pDropObjectPool->ReleaseObject(iter);
+	}
 	m_dropObjects.clear();
 
 	m_pDropObjectPool->DestroyPool();

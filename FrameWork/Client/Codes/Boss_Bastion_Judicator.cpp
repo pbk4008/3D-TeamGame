@@ -81,7 +81,7 @@ HRESULT CBoss_Bastion_Judicator::NativeConstruct(const _uint _iSceneID, void* pA
 	m_pPanel->Set_HpBar(Get_HpRatio());
 	m_pPanel->Set_GroggyBar(Get_GroggyGaugeRatio());
 
-	//setActive(false);
+	setActive(false);
 
 	m_tAttackDesc.iLevel = 2;
 
@@ -563,36 +563,32 @@ HRESULT CBoss_Bastion_Judicator::Set_PanelBar()
 
 void CBoss_Bastion_Judicator::OnTriggerEnter(CCollision& collision)
 {
-	if (true == g_pObserver->IsAttack()) //플레이어공격일때
+}
+
+void CBoss_Bastion_Judicator::Hit(const ATTACKDESC& _tAttackDesc)
+{
+	if (m_bDead || 0.f >= m_fCurrentHp)
+		return;
+
+	m_bFirstHit = true; //딱 한번 true로 변경해줌
+
+	if (true == m_bFirstHit)
 	{
-		m_bFirstHit = true; //딱 한번 true로 변경해줌
+		m_pPanel->Set_BackUIGapY(1.f);
+	}
+	m_fCurrentHp -= _tAttackDesc.fDamage;
+	m_fGroggyGauge += 2; //TODO::수치정해서바꿔줘야됨
 
-		if (true == m_bFirstHit)
-		{
-			m_pPanel->Set_BackUIGapY(1.f);
-		}
+	m_pPanel->Set_HpBar(Get_HpRatio());
 
-		if ((_uint)GAMEOBJECT::WEAPON == collision.pGameObject->getTag())
-		{
-			--m_fCurrentHp;
-			m_fGroggyGauge += 2; //TODO::수치정해서바꿔줘야됨
-
-			m_pPanel->Set_HpBar(Get_HpRatio());
-
-			Active_Effect((_uint)EFFECT::HIT);
-			Active_Effect((_uint)EFFECT::FLOATING);
+	Active_Effect((_uint)EFFECT::HIT);
+	Active_Effect((_uint)EFFECT::FLOATING);
 
 
-			if (false == m_bGroggy)
-			{	
-				//그로기 아닐때만 증가할수있게
-				m_pPanel->Set_GroggyBar(Get_GroggyGaugeRatio());
-			}
-		}
-		else
-		{
-
-		}
+	if (false == m_bGroggy)
+	{
+		//그로기 아닐때만 증가할수있게
+		m_pPanel->Set_GroggyBar(Get_GroggyGaugeRatio());
 	}
 }
 

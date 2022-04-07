@@ -54,7 +54,7 @@ HRESULT CShield_WalkRightStart::EnterState()
 	_matrix smatPivot = XMMatrixRotationY(XMConvertToRadians(90.f));
 	m_pAnimationController->Set_PivotMatrix(smatPivot);
 	
-
+	m_iCutIndex = 34;
 	return S_OK;
 }
 
@@ -76,7 +76,7 @@ _int CShield_WalkRightStart::Input(const _double& _dDeltaTime)
 
 	if (g_pGameInstance->getkeyPress(DIK_D))
 	{
-		if (m_pAnimationController->Is_Finished())
+		if (m_iCutIndex < m_pAnimationController->Get_CurKeyFrameIndex())
 		{
 			if (FAILED(m_pStateController->Change_State(L"Shield_WalkRight")))
 				return -1;
