@@ -1,24 +1,26 @@
 #include "pch.h"
-#include "Effect_DeathParticle.h"
+#include "Effect_Falling_Leaf.h"
 #include "GameInstance.h"
-#include "VIBuffer_PointInstance_Explosion.h"
+#include "VIBuffer_PointInstance_Respawn.h"
 
 
-CEffect_DeathParticle::CEffect_DeathParticle()
+CEffect_Falling_Leaf::CEffect_Falling_Leaf()
 {
 }
 
-CEffect_DeathParticle::CEffect_DeathParticle(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
+CEffect_Falling_Leaf::CEffect_Falling_Leaf(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
     :CEffect(pDevice,pDeviceContext)
 {
 }
 
-CEffect_DeathParticle::CEffect_DeathParticle(const CEffect& rhs)
+CEffect_Falling_Leaf::CEffect_Falling_Leaf(const CEffect_Falling_Leaf& rhs)
     :CEffect(rhs)
+	, m_Desc(rhs.m_Desc)
+	, m_backupDesc(rhs.m_backupDesc)
 {
 }
 
-HRESULT CEffect_DeathParticle::NativeConstruct_Prototype()
+HRESULT CEffect_Falling_Leaf::NativeConstruct_Prototype()
 {
 	if (FAILED(__super::NativeConstruct_Prototype()))
 	{
@@ -28,7 +30,7 @@ HRESULT CEffect_DeathParticle::NativeConstruct_Prototype()
     return S_OK;
 }
 
-HRESULT CEffect_DeathParticle::NativeConstruct(const _uint _iSceneID, void* pArg)
+HRESULT CEffect_Falling_Leaf::NativeConstruct(const _uint _iSceneID, void* pArg)
 {
 	if (FAILED(__super::NativeConstruct(_iSceneID, pArg)))
 	{
@@ -46,7 +48,7 @@ HRESULT CEffect_DeathParticle::NativeConstruct(const _uint _iSceneID, void* pArg
 		return E_FAIL;
 	}
 
-	CVIBuffer_PointInstance_Explosion::PIDESC Desc;
+	CVIBuffer_PointInstance_Respawn::PIDESC Desc;
 	_tcscpy_s(Desc.ShaderFilePath, m_Desc.ShaderFullFilePath);
 	Desc.matParticle = m_Desc.ParticleMat;
 	Desc.fParticleStartRandomPos = m_Desc.fParticleRandomPos;
@@ -63,20 +65,35 @@ HRESULT CEffect_DeathParticle::NativeConstruct(const _uint _iSceneID, void* pArg
 
 	m_backupDesc = Desc;
 
-	setActive(false);
 	return S_OK;
 }
 
-_int CEffect_DeathParticle::Tick(_double TimeDelta)
+_int CEffect_Falling_Leaf::Tick(_double TimeDelta)
 {
+
+	_vector newpos = { -15.f, -3.f,10.f, 1.f };
+	m_pTransform->Set_State(CTransform::STATE_POSITION, newpos);
 	m_pBuffer->Update(g_dDeltaTime, m_Desc.iAxis);
 
-	m_fNonActiveTimeAcc += (_float)g_dDeltaTime;
+	/*m_fNonActiveTimeAcc += (_float)g_dDeltaTime;
 	if (4.f <= m_fNonActiveTimeAcc)
 	{
 		setActive(false);
 		m_fNonActiveTimeAcc = 0.f;
+	}*/
+
+	_uint iAllFrameCount = (m_Desc.iImageCountX * m_Desc.iImageCountY);
+	m_Desc.fFrame += (_float)(iAllFrameCount * TimeDelta * m_Desc.fEffectPlaySpeed); //플레이속도 
+	if (m_Desc.fFrame >= iAllFrameCount)
+	{
+		m_Desc.fFrame = 0;
 	}
+
+	if (m_Desc.fMaxLifeTime > m_Desc.fCurTime)
+	{
+		m_Desc.fCurTime += TimeDelta;
+	}
+
 
 	_matrix matCullingBoxPivot = XMMatrixIdentity();
 	matCullingBoxPivot.r[3] = { m_Desc.CullingBoxPos.x, m_Desc.CullingBoxPos.y,m_Desc.CullingBoxPos.z, 1.f };
@@ -85,23 +102,25 @@ _int CEffect_DeathParticle::Tick(_double TimeDelta)
     return 0;
 }
 
-_int CEffect_DeathParticle::LateTick(_double TimeDelta)
+_int CEffect_Falling_Leaf::LateTick(_double TimeDelta)
 {
-	_bool bCulling = g_pGameInstance->isIn_WorldFrustum(m_pBox->Get_Points(), 20.f);
+	_bool bCulling = g_pGameInstance->isIn_WorldFrustum(m_pBox->Get_Points(), 1.f);
 	if (true == bCulling)
 	{
 		if (nullptr != m_pRenderer)
 		{
-			m_pRenderer->Add_RenderGroup(CRenderer::RENDER::RENDER_NONALPHA, this);
+			m_pRenderer->Add_RenderGroup(CRenderer::RENDER::RENDER_UI, this);
 		}
 	}
+
+	//cout << bCulling << endl;
 
 	return 0;
 }
 
-HRESULT CEffect_DeathParticle::Render()
+HRESULT CEffect_Falling_Leaf::Render()
 {
-	m_pBox->Render(L"Camera_Silvermane");
+	//m_pBox->Render(L"Camera_Silvermane");
 
 	_matrix XMWorldMatrix = XMMatrixTranspose(m_pTransform->Get_WorldMatrix());
 	_matrix XMViewMatrix = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_VIEW));
@@ -123,28 +142,53 @@ HRESULT CEffect_DeathParticle::Render()
 	m_pBuffer->SetUp_ValueOnShader("g_fLifeTime", &m_Desc.fMaxLifeTime, sizeof(_float));
 	m_pBuffer->SetUp_ValueOnShader("g_fCurTime", &m_Desc.fCurTime, sizeof(_float));
 
-	_float3 color = { 0.5f, 1.0f, 0.1f };
+	_float3 color = { 1.f, 0.6f, 0.3f };
 	m_pBuffer->SetUp_ValueOnShader("g_color", &color, sizeof(_float3));
 
 	m_pBuffer->SetUp_ValueOnShader("g_vCamPosition", (void*)&CamPos, sizeof(_vector));
 
 	m_pBuffer->Render(m_Desc.iRenderPassNum);
-	//m_pBuffer->Render(4);
-
 
 	return S_OK;
 }
 
-HRESULT CEffect_DeathParticle::SetUp_Components()
+CEffect* CEffect_Falling_Leaf::Copy()
+{
+	CEffect_Falling_Leaf* pEffect = new CEffect_Falling_Leaf(m_pDevice, m_pDeviceContext);
+	if (FAILED(pEffect->NativeConstruct_Prototype()))
+	{
+		MSGBOX("Falling_Leaf Copy Fail");
+		Safe_Release(pEffect);
+	}
+	if (FAILED(pEffect->NativeConstruct(m_iSceneID, &m_Desc)))
+	{
+		MSGBOX("Falling_Leaf Copy Fail");
+		Safe_Release(pEffect);
+	}
+	
+	return pEffect;
+}
+
+void CEffect_Falling_Leaf::Set_Reset(_bool bReset)
+{
+	CEffect::Set_Reset(bReset);
+	m_Desc.fCurTime = 0.f;
+	m_pBuffer->Set_Desc(m_backupDesc);
+	m_pBuffer->Particle_Reset();
+}
+
+HRESULT CEffect_Falling_Leaf::SetUp_Components()
 {
 	if (!m_pTexture || !m_pRenderer || !m_pTransform)
 		return E_FAIL;
 
+	//texture Setting
 	wstring tag = m_Desc.TextureTag;
 	wstring NewTag = L"Texture_" + tag;
 	if (FAILED(m_pTexture->Change_Texture(NewTag)))
 		return E_FAIL;
 
+	//transform Setting
 	_vector vPos = { XMVectorGetX(m_Desc.fMyPos), XMVectorGetY(m_Desc.fMyPos), XMVectorGetZ(m_Desc.fMyPos), 1.f };
 	m_pTransform->Set_State(CTransform::STATE_POSITION, vPos);
 
@@ -154,7 +198,7 @@ HRESULT CEffect_DeathParticle::SetUp_Components()
 		return E_FAIL;
 	m_pBox->Set_Length(m_Desc.CullingBoxSize.x, m_Desc.CullingBoxSize.y, m_Desc.CullingBoxSize.z);
 
-	//buffer setting
+	//buffer Setting Clone
 	_tcscpy_s(m_backupDesc.ShaderFilePath, m_Desc.ShaderFullFilePath);
 	m_backupDesc.matParticle = m_Desc.ParticleMat;
 	m_backupDesc.fParticleStartRandomPos = m_Desc.fParticleRandomPos;
@@ -165,65 +209,40 @@ HRESULT CEffect_DeathParticle::SetUp_Components()
 	m_backupDesc.iNumInstance = m_Desc.iNumInstance;
 	m_backupDesc.fLifeTime = m_Desc.fMaxLifeTime;
 	m_backupDesc.fCurTime = m_Desc.fCurTime;
-	if (FAILED(__super::SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_VIBuffer_PointInstance_Explosion", L"Com_VIBuffer", (CComponent**)&m_pBuffer, &m_backupDesc)))
+	if (FAILED(__super::SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_VIBuffer_PointInstance_Respawn", L"Com_VIBuffer", (CComponent**)&m_pBuffer, &m_backupDesc)))
 		return E_FAIL;
 
 	return S_OK;
 }
 
-CEffect* CEffect_DeathParticle::Copy()
-{
-	CEffect_DeathParticle* pEffect = new CEffect_DeathParticle(m_pDevice, m_pDeviceContext);
-	if (FAILED(pEffect->NativeConstruct_Prototype()))
-	{
-		MSGBOX("DeathParticle Copy Fail");
-		Safe_Release(pEffect);
-	}
-	if (FAILED(pEffect->NativeConstruct(m_iSceneID, &m_Desc)))
-	{
-		MSGBOX("DeathParticle Copy Fail");
-		Safe_Release(pEffect);
-	}
-
-	return pEffect;
-}
-
-void CEffect_DeathParticle::Set_Reset(_bool bReset)
-{
-	CEffect::Set_Reset(bReset);
-	m_Desc.fCurTime = 0.f;
-	m_pBuffer->Set_Desc(m_backupDesc);
-	m_pBuffer->Particle_Reset();
-}
-
-CEffect_DeathParticle* CEffect_DeathParticle::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
+CEffect_Falling_Leaf* CEffect_Falling_Leaf::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
 {
 	/* 원형객체 생성할때 초기화 */
-	CEffect_DeathParticle* pInstance = new CEffect_DeathParticle(pDevice, pDeviceContext);
+	CEffect_Falling_Leaf* pInstance = new CEffect_Falling_Leaf(pDevice, pDeviceContext);
 
 	if (FAILED(pInstance->NativeConstruct_Prototype()))
 	{
-		MSGBOX("Failed to Creating CEffect_DeathParticle");
+		MSGBOX("Failed to Creating CEffect_Falling_Leaf");
 		Safe_Release(pInstance);
 	}
 
 	return pInstance;
 }
 
-CGameObject* CEffect_DeathParticle::Clone(const _uint _iSceneID, void* pArg)
+CGameObject* CEffect_Falling_Leaf::Clone(const _uint _iSceneID, void* pArg)
 {
 	/* 복제본 생성할때는 아래함수 호출해서 추가 초기화를 진행 */
-	CEffect_DeathParticle* pInstance = new CEffect_DeathParticle(*this);
+	CEffect_Falling_Leaf* pInstance = new CEffect_Falling_Leaf(*this);
 	if (FAILED(pInstance->NativeConstruct(_iSceneID, pArg)))
 	{
-		MSGBOX("Failed to Creating Clone CEffect_DeathParticle");
+		MSGBOX("Failed to Creating Clone CEffect_Falling_Leaf");
 		Safe_Release(pInstance);
 	}
 
 	return pInstance;
 }
 
-void CEffect_DeathParticle::Free()
+void CEffect_Falling_Leaf::Free()
 {
 	Safe_Release(m_pBox);
 	Safe_Release(m_pBuffer);

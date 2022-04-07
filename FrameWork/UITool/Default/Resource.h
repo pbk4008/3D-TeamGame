@@ -54,6 +54,12 @@
 #define IDC_EDIT24                      1035
 #define IDC_EDIT25                      1036
 #define IDC_EDIT26                      1037
+#define IDC_EDIT28                      1038
+#define IDC_EDIT29                      1039
+#define IDC_EDIT30                      1040
+#define IDC_EDIT31                      1041
+#define IDC_EDIT32                      1042
+#define IDC_EDIT33                      1043
 
 // Next default values for new objects
 // 

@@ -79,14 +79,22 @@ _int CEffect_Guard::Tick(_double TimeDelta)
 
 	m_pTransform->Face_Target(g_pGameInstance->Get_CamPosition(L"Camera_Silvermane"));
 
+	_matrix matCullingBoxPivot = XMMatrixIdentity();
+	matCullingBoxPivot.r[3] = { m_Desc.CullingBoxPos.x, m_Desc.CullingBoxPos.y,m_Desc.CullingBoxPos.z, 1.f };
+	m_pBox->Update_Matrix(matCullingBoxPivot * m_pTransform->Get_WorldMatrix());
+
     return 0;
 }
 
 _int CEffect_Guard::LateTick(_double TimeDelta)
 {
-	if (nullptr != m_pRenderer)
+	_bool bCulling = g_pGameInstance->isIn_WorldFrustum(m_pBox->Get_Points(), 20.f);
+	if (true == bCulling)
 	{
-		m_pRenderer->Add_RenderGroup(CRenderer::RENDER::RENDER_NONALPHA, this);
+		if (nullptr != m_pRenderer)
+		{
+			m_pRenderer->Add_RenderGroup(CRenderer::RENDER::RENDER_NONALPHA, this);
+		}
 	}
 
 	return 0;
@@ -94,6 +102,8 @@ _int CEffect_Guard::LateTick(_double TimeDelta)
 
 HRESULT CEffect_Guard::Render()
 {
+	m_pBox->Render(L"Camera_Silvermane");
+
 	_matrix XMWorldMatrix = XMMatrixTranspose(m_pTransform->Get_WorldMatrix());
 	_matrix XMViewMatrix = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_VIEW));
 	_matrix XMProjectMatrix = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_PROJECTION));
@@ -162,6 +172,12 @@ HRESULT CEffect_Guard::SetUp_Components()
 	_vector vPos = { XMVectorGetX(m_Desc.fMyPos), XMVectorGetY(m_Desc.fMyPos), XMVectorGetZ(m_Desc.fMyPos), 1.f };
 	m_pTransform->Set_State(CTransform::STATE_POSITION, vPos);
 
+	//cullingbox Setting
+	m_pBox = g_pGameInstance->Clone_Component<CCullingBox>(0, L"Proto_Component_CullingBox");
+	if (!m_pBox)
+		return E_FAIL;
+	m_pBox->Set_Length(m_Desc.CullingBoxSize.x, m_Desc.CullingBoxSize.y, m_Desc.CullingBoxSize.z);
+
 	//¹öÆÛ Clone
 	_tcscpy_s(m_backupDesc.ShaderFilePath, m_Desc.ShaderFullFilePath);
 	m_backupDesc.matParticle = m_Desc.ParticleMat;
@@ -208,6 +224,7 @@ CGameObject* CEffect_Guard::Clone(const _uint _iSceneID, void* pArg)
 
 void CEffect_Guard::Free()
 {
+	Safe_Release(m_pBox);
 	Safe_Release(m_pBuffer);
 
 	__super::Free();

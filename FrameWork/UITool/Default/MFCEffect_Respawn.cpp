@@ -1,27 +1,27 @@
 #include "pch.h"
-#include "MFCEffect_Floating.h"
+#include "MFCEffect_Respawn.h"
 #include "GameInstance.h"
-#include "VIBuffer_PointInstance_Floating.h"
+#include "VIBuffer_PointInstance_Respawn.h"
 #include "MainFrm.h"
 #include "MyFormView.h"
 #include "EffectTool_Dlg.h"
 
 
-CMFCEffect_Floating::CMFCEffect_Floating()
+CMFCEffect_Respawn::CMFCEffect_Respawn()
 {
 }
 
-CMFCEffect_Floating::CMFCEffect_Floating(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
+CMFCEffect_Respawn::CMFCEffect_Respawn(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
     :CEffect(pDevice,pDeviceContext)
 {
 }
 
-CMFCEffect_Floating::CMFCEffect_Floating(const CEffect& rhs)
+CMFCEffect_Respawn::CMFCEffect_Respawn(const CEffect& rhs)
     :CEffect(rhs)
 {
 }
 
-HRESULT CMFCEffect_Floating::NativeConstruct_Prototype()
+HRESULT CMFCEffect_Respawn::NativeConstruct_Prototype()
 {
 	if (FAILED(__super::NativeConstruct_Prototype()))
 	{
@@ -31,7 +31,7 @@ HRESULT CMFCEffect_Floating::NativeConstruct_Prototype()
     return S_OK;
 }
 
-HRESULT CMFCEffect_Floating::NativeConstruct(const _uint iSceneID, void* pArg)
+HRESULT CMFCEffect_Respawn::NativeConstruct(const _uint iSceneID, void* pArg)
 {
 	if (FAILED(__super::NativeConstruct(iSceneID, pArg)))
 	{
@@ -49,7 +49,7 @@ HRESULT CMFCEffect_Floating::NativeConstruct(const _uint iSceneID, void* pArg)
 		return E_FAIL;
 	}
 
-	CVIBuffer_PointInstance_Floating::PIDESC Desc;
+	CVIBuffer_PointInstance_Respawn::PIDESC Desc;
 	_tcscpy_s(Desc.ShaderFilePath, m_Desc.ShaderFilePath);
 	Desc.matParticle = m_Desc.ParticleMat;
 	Desc.fParticleStartRandomPos = m_Desc.fParticleRandomPos;
@@ -70,7 +70,7 @@ HRESULT CMFCEffect_Floating::NativeConstruct(const _uint iSceneID, void* pArg)
 	return S_OK;
 }
 
-_int CMFCEffect_Floating::Tick(_double TimeDelta)
+_int CMFCEffect_Respawn::Tick(_double TimeDelta)
 {
 	_matrix mat, mat1;
 	mat1 = XMMatrixIdentity();
@@ -78,7 +78,7 @@ _int CMFCEffect_Floating::Tick(_double TimeDelta)
 
 	mat = m_pTransform->Get_WorldMatrix();
 	m_pBox->Update_Matrix(mat1 * mat);
-
+	
 	CMainFrame* pMain = dynamic_cast<CMainFrame*>(AfxGetApp()->GetMainWnd());
 	CMyFormView* pForm = dynamic_cast<CMyFormView*>(pMain->m_SplitterWnd.GetPane(0, 0));
 	CEffectTool_Dlg* Dlg = dynamic_cast<CEffectTool_Dlg*>(&pForm->m_EffectDlg);
@@ -103,7 +103,7 @@ _int CMFCEffect_Floating::Tick(_double TimeDelta)
 
 	if (m_bReset)
 	{
-		CVIBuffer_PointInstance_Floating::PIDESC Desc;
+		CVIBuffer_PointInstance_Respawn::PIDESC Desc;
 		_tcscpy_s(Desc.ShaderFilePath, m_Desc.ShaderFilePath);
 		Desc.matParticle = m_Desc.ParticleMat;
 		Desc.fParticleStartRandomPos = m_Desc.fParticleRandomPos;
@@ -143,7 +143,7 @@ _int CMFCEffect_Floating::Tick(_double TimeDelta)
     return 0;
 }
 
-_int CMFCEffect_Floating::LateTick(_double TimeDelta)
+_int CMFCEffect_Respawn::LateTick(_double TimeDelta)
 {
 	if (nullptr != m_pRenderer)
 	{
@@ -153,10 +153,9 @@ _int CMFCEffect_Floating::LateTick(_double TimeDelta)
 	return 0;
 }
 
-HRESULT CMFCEffect_Floating::Render()
+HRESULT CMFCEffect_Respawn::Render()
 {
 	m_pBox->Render(L"MFCCamera_Proj");
-
 
 	//_matrix XMWorldMatrix = XMMatrixTranspose(XMLoadFloat4x4(&m_WorldMatrix));
 	_matrix XMWorldMatrix = XMMatrixTranspose(m_pTransform->Get_WorldMatrix());
@@ -186,7 +185,7 @@ HRESULT CMFCEffect_Floating::Render()
 	return S_OK;
 }
 
-HRESULT CMFCEffect_Floating::SetUp_Components()
+HRESULT CMFCEffect_Respawn::SetUp_Components()
 {
 	if (!m_pTexture || !m_pRenderer || !m_pTransform)
 		return E_FAIL;
@@ -199,16 +198,14 @@ HRESULT CMFCEffect_Floating::SetUp_Components()
 	_vector vPos = { XMVectorGetX(m_Desc.fMyPos), XMVectorGetY(m_Desc.fMyPos), XMVectorGetY(m_Desc.fMyPos), 1.f };
 	m_pTransform->Set_State(CTransform::STATE_POSITION, vPos);
 
-
 	//culling 
 	m_pBox = g_pGameInstance->Clone_Component<CCullingBox>(0, L"Proto_Component_CullingBox");
 	if (!m_pBox)
 		return E_FAIL;
 	m_pBox->Set_Length(m_Desc.CullingBoxSize.x, m_Desc.CullingBoxSize.y, m_Desc.CullingBoxSize.z);
 
-
 	//버퍼 Clone
-	CVIBuffer_PointInstance_Floating::PIDESC Desc;
+	CVIBuffer_PointInstance_Respawn::PIDESC Desc;
 	_tcscpy_s(Desc.ShaderFilePath, m_Desc.ShaderFullFilePath);
 	Desc.matParticle = m_Desc.ParticleMat;
 	Desc.fParticleStartRandomPos = m_Desc.fParticleRandomPos;
@@ -221,45 +218,45 @@ HRESULT CMFCEffect_Floating::SetUp_Components()
 	Desc.fCurTime = m_Desc.fCurTime;
 	Desc.bGravity = m_Desc.bUsingGravity;
 
-	if (FAILED(__super::SetUp_Components(TOOL_LEVEL::TOOL_LEVEL_LOGO, L"Prototype_Component_VIBuffer_PointInstance_Floating", L"Com_VIBuffer", (CComponent**)&m_pBuffer, &Desc)))
+	if (FAILED(__super::SetUp_Components(TOOL_LEVEL::TOOL_LEVEL_LOGO, L"Prototype_Component_VIBuffer_PointInstance_Respawn", L"Com_VIBuffer", (CComponent**)&m_pBuffer, &Desc)))
 		return E_FAIL;
 
 	return S_OK;
 }
 
-CEffect* CMFCEffect_Floating::Copy()
+CEffect* CMFCEffect_Respawn::Copy()
 {
 	return nullptr;
 }
 
-CMFCEffect_Floating* CMFCEffect_Floating::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
+CMFCEffect_Respawn* CMFCEffect_Respawn::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
 {
 	/* 원형객체 생성할때 초기화 */
-	CMFCEffect_Floating* pInstance = new CMFCEffect_Floating(pDevice, pDeviceContext);
+	CMFCEffect_Respawn* pInstance = new CMFCEffect_Respawn(pDevice, pDeviceContext);
 
 	if (FAILED(pInstance->NativeConstruct_Prototype()))
 	{
-		MSGBOX("Failed to Creating CMFCEffect_Floating");
+		MSGBOX("Failed to Creating CMFCEffect_Respawn");
 		Safe_Release(pInstance);
 	}
 
 	return pInstance;
 }
 
-CGameObject* CMFCEffect_Floating::Clone(const _uint iSceneID, void* pArg)
+CGameObject* CMFCEffect_Respawn::Clone(const _uint iSceneID, void* pArg)
 {
 	/* 복제본 생성할때는 아래함수 호출해서 추가 초기화를 진행 */
-	CMFCEffect_Floating* pInstance = new CMFCEffect_Floating(*this);
+	CMFCEffect_Respawn* pInstance = new CMFCEffect_Respawn(*this);
 	if (FAILED(pInstance->NativeConstruct(iSceneID ,pArg)))
 	{
-		MSGBOX("Failed to Creating Clone CMFCEffect_Floating");
+		MSGBOX("Failed to Creating Clone CMFCEffect_Respawn");
 		Safe_Release(pInstance);
 	}
 
 	return pInstance;
 }
 
-void CMFCEffect_Floating::Free()
+void CMFCEffect_Respawn::Free()
 {
 	__super::Free();
 }

@@ -74,14 +74,22 @@ _int CEffect_HitFloating::Tick(_double TimeDelta)
 		m_fNonActiveTimeAcc = 0.f;
 	}
 
+	_matrix matCullingBoxPivot = XMMatrixIdentity();
+	matCullingBoxPivot.r[3] = { m_Desc.CullingBoxPos.x, m_Desc.CullingBoxPos.y,m_Desc.CullingBoxPos.z, 1.f };
+	m_pBox->Update_Matrix(matCullingBoxPivot * m_pTransform->Get_WorldMatrix());
+
     return 0;
 }
 
 _int CEffect_HitFloating::LateTick(_double TimeDelta)
 {
-	if (nullptr != m_pRenderer)
+	_bool bCulling = g_pGameInstance->isIn_WorldFrustum(m_pBox->Get_Points(), 20.f);
+	if (true == bCulling)
 	{
-		m_pRenderer->Add_RenderGroup(CRenderer::RENDER::RENDER_NONALPHA, this);
+		if (nullptr != m_pRenderer)
+		{
+			m_pRenderer->Add_RenderGroup(CRenderer::RENDER::RENDER_NONALPHA, this);
+		}
 	}
 
 	return 0;
@@ -89,6 +97,8 @@ _int CEffect_HitFloating::LateTick(_double TimeDelta)
 
 HRESULT CEffect_HitFloating::Render()
 {
+	m_pBox->Render(L"Camera_Silvermane");
+
 	_matrix XMWorldMatrix = XMMatrixTranspose(m_pTransform->Get_WorldMatrix());
 	_matrix XMViewMatrix = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_VIEW));
 	_matrix XMProjectMatrix = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_PROJECTION));
@@ -115,8 +125,8 @@ HRESULT CEffect_HitFloating::Render()
 
 	m_pBuffer->SetUp_ValueOnShader("g_vCamPosition", (void*)&CamPos, sizeof(_vector));
 
-	//m_pBuffer->Render(m_Desc.iRenderPassNum);
-	m_pBuffer->Render(4);
+	m_pBuffer->Render(m_Desc.iRenderPassNum);
+	//m_pBuffer->Render(4);
 
 	return S_OK;
 }
@@ -156,8 +166,15 @@ HRESULT CEffect_HitFloating::SetUp_Components()
 	if (FAILED(m_pTexture->Change_Texture(NewTag)))
 		return E_FAIL;
 
-	_vector vPos = { /*XMVectorGetX(m_Desc.fMyPos), XMVectorGetY(m_Desc.fMyPos), XMVectorGetZ(m_Desc.fMyPos)*/0,1.5f,0, 1.f };
+	//_vector vPos = { XMVectorGetX(m_Desc.fMyPos), XMVectorGetY(m_Desc.fMyPos), XMVectorGetZ(m_Desc.fMyPos)};
+	_vector vPos = { 0,1.5f,0.f, 1.f };
 	m_pTransform->Set_State(CTransform::STATE_POSITION, vPos);
+
+	//cullingbox Setting
+	m_pBox = g_pGameInstance->Clone_Component<CCullingBox>(0, L"Proto_Component_CullingBox");
+	if (!m_pBox)
+		return E_FAIL;
+	m_pBox->Set_Length(m_Desc.CullingBoxSize.x, m_Desc.CullingBoxSize.y, m_Desc.CullingBoxSize.z);
 
 	//¹öÆÛ Clone
 	_tcscpy_s(m_backupDesc.ShaderFilePath, m_Desc.ShaderFullFilePath);
@@ -204,6 +221,7 @@ CGameObject* CEffect_HitFloating::Clone(const _uint _iSceneID, void* pArg)
 
 void CEffect_HitFloating::Free()
 {
+	Safe_Release(m_pBox);
 	Safe_Release(m_pBuffer);
 
 	__super::Free();
