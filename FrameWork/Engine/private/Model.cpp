@@ -990,8 +990,8 @@ HRESULT CModel::Load_StaticModel(const wstring& pFilePath)
 					return E_FAIL;
 			}
 			pMaterial->SetUp_TextureOnShader();
+			g_pGameInstance->Add_Material(pMtrl.pMtrlName, pMaterial);
 		}
-		g_pGameInstance->Add_Material(pMtrl.pMtrlName, pMaterial);
 		Add_Material(pMaterial, iMtrlIndex);
 		iMtrlIndex++;
 	}

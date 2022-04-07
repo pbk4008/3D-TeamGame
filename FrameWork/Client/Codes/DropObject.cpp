@@ -8,17 +8,15 @@
 
 CDropObject::CDropObject(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
 	:CInteractableObject(_pDevice, _pDeviceContext)
-	, m_pModel(nullptr)
 	, m_pSplineCurve(nullptr)
 {
 }
 
 CDropObject::CDropObject(const CDropObject& _rhs)
 	:CInteractableObject(_rhs)
-	, m_pModel(_rhs.m_pModel)
 	, m_pSplineCurve(_rhs.m_pSplineCurve)
 {
-	Safe_AddRef(m_pModel);
+	//Safe_AddRef(m_pModel);
 	m_pInventoryData = g_pDataManager->GET_DATA(CInventoryData, L"InventoryData");
 }
 
