@@ -77,7 +77,7 @@ PS_OUT_TONE PS_MAIN_TONEMAPPING(PS_IN In)
 	
 	color.rgb *= (1.f + (color.rgb / (WhiteCutoff * WhiteCutoff)));
 	color.rgb /= (1.f + color.rgb);
-	color.a = 1.f;
+	color.a = vTotalcolor.a;
 	
 	Out.vHDRDiffuse = color;
 	
@@ -124,7 +124,7 @@ PS_OUT_TONE PS_MAIN_TONEMAPPING(PS_IN In)
 	float toneScalar = (Lp * (1.f + (Lp / (LmSqr)))) / (1.f + Lp);
 	
 	finaldiffuse = finaldiffuse * toneScalar;
-	finaldiffuse.a = 1.f;
+	finaldiffuse.a = 0;
 	
 	Out.vHDRDiffuse += finaldiffuse; /*pow(abs(finaldiffuse), 1.f / Gamma)*/
 	

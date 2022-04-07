@@ -142,37 +142,32 @@ HRESULT CRenderer::Draw_RenderGroup()
 	if (FAILED(Render_Priority()))
 		return E_FAIL;
 
-	if (FAILED(Render_SkyBox())) return E_FAIL;
-
-	if (FAILED(Render_NonAlpha())) // 디퍼드 단계
-		return E_FAIL;
 
 	if (m_bPixel) // Pixel HDR
 	{
+		if (FAILED(Render_SkyBox())) MSGBOX("Failed To Rendering SkyPass");
+
 		if (m_bShadow == true)
 		{
-			if (FAILED(Render_Shadow())) return E_FAIL;
+			if (FAILED(Render_Shadow())) MSGBOX("Failed To Rendering ShadowMapPass");
 			if (FAILED(ShadowPass())) MSGBOX("Failed To Rendering ShadowPass");
 		}
 
-		if (FAILED(m_pRenderAssit->Render_LightAcc(m_pTargetMgr, m_CameraTag, m_bPBR, m_bShadow))) return E_FAIL;
+		if (FAILED(Render_NonAlpha())) MSGBOX("Failed To Rendering NonAlphaPaas");
 
-		//if (m_bShadow == true)
-		//{
-		//	if (FAILED(m_pRenderAssit->Render_VolumetricLightAcc(m_pTargetMgr, m_CameraTag))) MSGBOX("Failed To Rendering VolumetricLightAcc");
-		//}
+		if (FAILED(m_pRenderAssit->Render_LightAcc(m_pTargetMgr, m_CameraTag, m_bPBR, m_bShadow))) MSGBOX("Failed To Rendering LightPass");
 
-		if (FAILED(m_pHDR->Render_HDRBase(m_pTargetMgr, m_bShadow))) return E_FAIL;
+		if (FAILED(Render_Alpha()))	MSGBOX("Failed To Rendering AlphaPass");
 
-		if (FAILED(m_pLuminance->DownSampling(m_pTargetMgr))) return E_FAIL;
+		if (FAILED(m_pHDR->Render_HDRBase(m_pTargetMgr, m_bShadow))) MSGBOX("Failed To Rendering HDRBasePass");
 
-		if (FAILED(m_pPostProcess->PossProcessing(m_pTonemapping, m_pTargetMgr,m_bHDR,m_bradial))) return E_FAIL;
+		if (FAILED(m_pLuminance->DownSampling(m_pTargetMgr)))MSGBOX("Failed To Rendering DownSamplingPass");
 
-		if (FAILED(Render_Final(m_boutline, m_bradial))) return E_FAIL;
+		if (FAILED(m_pPostProcess->PossProcessing(m_pTonemapping, m_pTargetMgr, m_bHDR, m_bradial))) MSGBOX("Failed To Rendering PostProcessPass");
+
+		if (FAILED(Render_Final(m_boutline, m_bradial))) MSGBOX("Failed To Rendering FinalPass");
 	}
 
-	if (FAILED(Render_Alpha()))
-		return E_FAIL;
 
 	if (FAILED(Render_UI()))
 		return E_FAIL;

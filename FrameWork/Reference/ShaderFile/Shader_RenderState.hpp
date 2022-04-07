@@ -105,6 +105,17 @@ BlendState AlphaAdditive
 
 };
 
+BlendState OneBlending
+{
+	BlendEnable[0] = true;
+	BlendEnable[1] = true;
+
+	SrcBlend = One;
+	DestBlend = One;
+	BlendOp = Add;
+};
+
+
 BlendState BlendDisable
 {
 	BlendEnable[0] = false;
