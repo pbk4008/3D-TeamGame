@@ -36,7 +36,7 @@ public: virtual HRESULT NativeConstruct_Prototype();
 public: virtual HRESULT NativeConstruct(void* pArg);
 
 public: HRESULT	CreateShadowDepthStencilview(_uint iWidth, _uint iHeight, ID3D11DepthStencilView** ppDepthStencilView);
-public: HRESULT Add_RenderGroup(RENDER eRenderID, class CGameObject* pGameObject);
+public: HRESULT Add_RenderGroup(RENDER eRenderID, class CGameObject* pGameObject, _float weight = 0.f);
 public: HRESULT Draw_RenderGroup();
 public: HRESULT Remove_RenderGroup();
 
@@ -59,6 +59,7 @@ private: _bool								m_bradial = false;
 private: RENDERBUTTON						m_eRenderButton;
 private: _tchar								m_CameraTag[128];
 private: _int								m_RadialCnt = 6;
+private: _float								m_AlphaWeight = 0.f;
 
 private: CRendererAssit*					m_pRenderAssit = nullptr;
 private: CLuminance*						m_pLuminance = nullptr;

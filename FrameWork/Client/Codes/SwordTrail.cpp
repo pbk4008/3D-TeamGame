@@ -34,7 +34,7 @@ HRESULT CSwordTrail::NativeConstruct(const _uint _iSceneID, void* pArg)
 _int CSwordTrail::Tick(_double TimeDelta)
 {
 	if (nullptr != m_pRenderer && m_bOnOff)
-		m_pRenderer->Add_RenderGroup(CRenderer::RENDER_ALPHA, this);
+		m_pRenderer->Add_RenderGroup(CRenderer::RENDER_ALPHA, this,2.f);
 
 	return _int();
 }

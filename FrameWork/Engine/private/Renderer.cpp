@@ -123,10 +123,13 @@ HRESULT CRenderer::CreateShadowDepthStencilview(_uint iWidth, _uint iHeight,ID3D
 	return S_OK;
 }
 
-HRESULT CRenderer::Add_RenderGroup(RENDER eRenderID, CGameObject* pGameObject)
+HRESULT CRenderer::Add_RenderGroup(RENDER eRenderID, CGameObject* pGameObject,_float weight)
 {
 	if (nullptr == pGameObject || eRenderID >= RENDER_END)
 		return E_FAIL;
+
+	if (eRenderID == CRenderer::RENDER_ALPHA)
+		m_AlphaWeight = weight;
 
 	m_RenderGroup[eRenderID].push_back(pGameObject);
 
@@ -338,7 +341,7 @@ HRESULT CRenderer::Render_Alpha()
 
 	if (m_bParticle == true)
 	{
-		if (FAILED(m_pPostProcess->AlphaBlur(m_pTargetMgr,m_bParticle,1.f))) MSGBOX("Alpha Blur Failed");
+		if (FAILED(m_pPostProcess->AlphaBlur(m_pTargetMgr,m_bParticle, m_AlphaWeight))) MSGBOX("Alpha Blur Failed");
 
 		if (FAILED(m_pVIBuffer->SetUp_TextureOnShader("g_AlphaTexture", m_pTargetMgr->Get_SRV(L"Target_Alpha")))) MSGBOX("Alpha Render Failed");
 

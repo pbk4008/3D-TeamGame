@@ -49,7 +49,7 @@ _int CNoiseFire::Tick(_double deltatime)
 _int CNoiseFire::LateTick(_double deltatime)
 {
 	if (m_pRenderer)
-		m_pRenderer->Add_RenderGroup(CRenderer::RENDER_ALPHA,this);
+		m_pRenderer->Add_RenderGroup(CRenderer::RENDER_ALPHA,this,1.f);
 
 	return _int();
 }

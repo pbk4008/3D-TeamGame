@@ -448,6 +448,7 @@ call Update_Library_Release.bat</Command>
   <ItemGroup>
     <None Include="..\bin\ShaderFiles\Shader_DitherUtil.hlsli" />
     <None Include="..\bin\ShaderFiles\Shader_LightUtil.hlsli" />
+    <None Include="..\bin\ShaderFiles\Shader_Post.hlsli" />
     <None Include="..\bin\ShaderFiles\Shader_ShadowUtil.hlsli" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -2,6 +2,7 @@
 #include "Shader_LightUtil.hlsli"
 #include "Shader_DitherUtil.hlsli"
 #include "Shader_ShadowUtil.hlsli"
+#include "Shader_Post.hlsli"
 
 #pragma pack_matrix(row_major);
 
@@ -112,24 +113,24 @@ Texture2D g_ShadowTexture;
 
 Texture2D g_AlphaTexture;
 
-Texture2D<float> depthTex;
+Texture2D<half> depthTex;
 
 struct VS_IN
 {
-	float3 vPosition : POSITION;
-	float2 vTexUV : TEXCOORD0;
+	half3 vPosition : POSITION;
+	half2 vTexUV : TEXCOORD0;
 };
 
 struct VS_OUT
 {
-	float4 vPosition : SV_POSITION;
-	float2 vTexUV : TEXCOORD0;
+	half4 vPosition : SV_POSITION;
+	half2 vTexUV : TEXCOORD0;
 };
 struct VS_OUT_POINT
 {
-	float4 vPosition : SV_POSITION;
-	float2 vTexUV : TEXCOORD0;
-	float4 vClippos : TEXCOORD1;
+	half4 vPosition : SV_POSITION;
+	half2 vTexUV : TEXCOORD0;
+	half4 vClippos : TEXCOORD1;
 };
 
 
@@ -152,7 +153,7 @@ VS_OUT_POINT VS_MAIN_POINT(VS_IN In)
 	matrix vp = mul(g_PointWorld, g_ViewMatrix);
 	matrix wvp = mul(vp, g_ProjMatrix);
 	
-	Out.vPosition = mul(float4(In.vPosition, 1.f), wvp);
+	Out.vPosition = mul(half4(In.vPosition, 1.f), wvp);
 	Out.vTexUV = In.vTexUV;
 	Out.vClippos = Out.vPosition;
 
@@ -161,8 +162,8 @@ VS_OUT_POINT VS_MAIN_POINT(VS_IN In)
 
 struct PS_IN
 {
-	float4 vPosition : SV_POSITION;
-	float2 vTexUV : TEXCOORD0;
+	half4 vPosition : SV_POSITION;
+	half2 vTexUV : TEXCOORD0;
 };
 
 struct PS_OUT
@@ -190,37 +191,37 @@ struct PS_OUT_DIRLIGHTACC
 
 struct PS_IN_POINTLIGHTACC
 {
-	float4 vPosition : SV_POSITION;
-	float2 vTexUV : TEXCOORD0;
-	float4 vClippos : TEXCOORD1;
+	half4 vPosition : SV_POSITION;
+	half2 vTexUV : TEXCOORD0;
+	half4 vClippos : TEXCOORD1;
 };
 
 struct PS_OUT_POINTLIGHTACC
 {
-	float4 vShade		: SV_TARGET0;
-	float4 vSpecular	: SV_TARGET1;
-	float4 vShadow		: SV_TARGET2;
+	half4 vShade		: SV_TARGET0;
+	half4 vSpecular	: SV_TARGET1;
+	half4 vShadow		: SV_TARGET2;
 };
 
 PS_OUT_DIRLIGHTACC PS_MAIN_LIGHTACC_DIRECTIONAL(PS_IN In)
 {
 	PS_OUT_DIRLIGHTACC Out = (PS_OUT_DIRLIGHTACC) 0;
 	
-	float2 uvRT = In.vTexUV;
-
-	vector vDiffuseDesc = g_DiffuseTexture.Sample(DefaultSampler, uvRT);
-	vector vNormalDesc = g_NormalTexture.Sample(DefaultSampler, uvRT);
-	vector vDepthDesc = g_DepthTexture.Sample(DefaultSampler, uvRT);
-	float Metallic = g_Metallic.Sample(DefaultSampler, uvRT).r;
-	float Roughness = g_Roughness.Sample(DefaultSampler, uvRT).r;
-	float AO = g_AO.Sample(DefaultSampler, uvRT).r;
-	float fViewZ = vDepthDesc.y * 300.f;
+	half2 uvRT = In.vTexUV;
 	
-	float3 normaltest = vNormalDesc.xyz;
+	half4 vDiffuseDesc = g_DiffuseTexture.Sample(DefaultSampler, uvRT);
+	half4 vNormalDesc = g_NormalTexture.Sample(DefaultSampler, uvRT);
+	half4 vDepthDesc = g_DepthTexture.Sample(DefaultSampler, uvRT);
+	half Metallic = g_Metallic.Sample(DefaultSampler, uvRT).r;
+	half Roughness = g_Roughness.Sample(DefaultSampler, uvRT).r;
+	half AO = g_AO.Sample(DefaultSampler, uvRT).r;
+	half fViewZ = vDepthDesc.y * 300.f;
+	
+	half3 normaltest = vNormalDesc.xyz;
 	if (!any(normaltest))
 		clip(0);
 
-	vector vWorldPos;
+	half4 vWorldPos;
 	vWorldPos.x = (uvRT.x * 2.f - 1.f) * fViewZ;
 	vWorldPos.y = (uvRT.y * -2.f + 1.f) * fViewZ;
 	vWorldPos.z = vDepthDesc.x * fViewZ;
@@ -229,39 +230,39 @@ PS_OUT_DIRLIGHTACC PS_MAIN_LIGHTACC_DIRECTIONAL(PS_IN In)
 	vWorldPos = mul(vWorldPos, g_ProjMatrixInv);
 	vWorldPos = mul(vWorldPos, g_ViewMatrixInv);
 	
-	vector normal = vector(normaltest * 2.f - 1.f, 0.f);
+	half4 normal = half4(normaltest * 2.f - 1.f, 0.f);
 	
 	if (g_bPBRHDR == true)
 	{
-		float3 normal3 = normalize(normal.xyz);
-		float3 N = normal3;
-		float3 V = normalize(g_vCamPosition.xyz - vWorldPos.xyz);
-		float3 L = g_vLightDir.xyz * -1;
-		float F0 = 0.93;
+		half3 normal3 = normalize(normal.xyz);
+		half3 N = normal3;
+		half3 V = normalize(g_vCamPosition.xyz - vWorldPos.xyz);
+		half3 L = g_vLightDir.xyz * -1;
+		half F0 = 0.93;
 		
-		float specular = LightingGGX_Ref(N, V, L, F0, Roughness);
+		half specular = LightingGGX_Ref(N, V, L, F0, Roughness);
 	
 		////-------------------------------------------------------------------------//
-		float3 color = float3(0.97f, 0.95f, 0.8f);
-		float ambientintensity = 0.2f;
-		float4 light = CalcLightInternal(color, ambientintensity, g_vCamPosition.xyz, g_vLightDir.xyz, vWorldPos.xyz, normal3);
-		//float4 light = g_vLightDiffuse * (saturate(dot(normalize(g_vLightPos - vWorldPos) * -1.f, normal)) + (g_vLightAmbient * g_vMtrlAmbient));
-		//float lightpow = 2.f;
-		//float4 light = saturate(pow((dot(normalize(vector(g_vLightDir.xyz, 0.f)) * -1.f, normal) * 0.5f + 0.5f), lightpow) * (g_vLightDiffuse * g_vMtrlDiffuse) + (g_vLightAmbient * g_vMtrlAmbient));
+		half3 color = half3(0.97f, 0.95f, 0.8f);
+		half ambientintensity = 0.2f;
+		half4 light = CalcLightInternal(color, ambientintensity, g_vCamPosition.xyz, g_vLightDir.xyz, vWorldPos.xyz, normal3);
+		//half4 light = g_vLightDiffuse * (saturate(dot(normalize(g_vLightPos - vWorldPos) * -1.f, normal)) + (g_vLightAmbient * g_vMtrlAmbient));
+		//half lightpow = 2.f;
+		//half4 light = saturate(pow((dot(normalize(vector(g_vLightDir.xyz, 0.f)) * -1.f, normal) * 0.5f + 0.5f), lightpow) * (g_vLightDiffuse * g_vMtrlDiffuse) + (g_vLightAmbient * g_vMtrlAmbient));
 		
-		float3 CamToWorldDirection = normalize(vWorldPos.xyz - g_vCamPosition.xyz);
-		float3 worldReflectDirection = reflect(CamToWorldDirection, normal3);
+		half3 CamToWorldDirection = normalize(vWorldPos.xyz - g_vCamPosition.xyz);
+		half3 worldReflectDirection = reflect(CamToWorldDirection, normal3);
 		
-		float4 cubeRef1 = g_SkyBoxTexture.Sample(SkyBoxSampler, worldReflectDirection.xy);
+		half4 cubeRef1 = g_SkyBoxTexture.Sample(SkyBoxSampler, worldReflectDirection.xy);
 		
-		float smoothness = 1 - Roughness;
-		float InvMetalic = (1 - Metallic);
+		half smoothness = 1 - Roughness;
+		half InvMetalic = (1 - Metallic);
 		InvMetalic = max(InvMetalic, 0.5f);
-		float4 lightpower = InvMetalic * light * AO;
+		half4 lightpower = InvMetalic * light * AO;
 		
 		if (g_shadow == true)
 		{
-			float4 shadow = g_ShadowTexture.Sample(DefaultSampler, In.vTexUV);
+			half4 shadow = g_ShadowTexture.Sample(DefaultSampler, In.vTexUV);
 			shadow = saturate(shadow + 0.5f);
 			
 			Out.vSpecular = saturate((light * specular + cubeRef1) * Metallic * smoothness * shadow);
@@ -275,14 +276,14 @@ PS_OUT_DIRLIGHTACC PS_MAIN_LIGHTACC_DIRECTIONAL(PS_IN In)
 	}
 	else
 	{
-		float lightpow = 1.f;
+		half lightpow = 1.f;
 		vector vReflect = reflect(normalize(g_vLightDir), normal);
 
 		vector vLook = normalize(vWorldPos - g_vCamPosition);
 
 		Out.vSpecular = ((g_vLightSpecular * g_vMtrlSpecular) * pow(saturate(dot(normalize(vReflect) * -1.f, vLook)), 30.f));
 		
-		float4 light = saturate(pow((dot(normalize(vector(g_vLightDir.xyz, 0.f)) * -1.f, normal) * 0.5f + 0.5f), lightpow) * (g_vLightDiffuse * g_vMtrlDiffuse) + (g_vLightAmbient * g_vMtrlAmbient));
+		half4 light = saturate(pow((dot(normalize(vector(g_vLightDir.xyz, 0.f)) * -1.f, normal) * 0.5f + 0.5f), lightpow) * (g_vLightDiffuse * g_vMtrlDiffuse) + (g_vLightAmbient * g_vMtrlAmbient));
 		Out.vShade = light;
 		Out.vShade.a = 1.f;
 	}
@@ -293,78 +294,11 @@ PS_OUT_DIRLIGHTACC PS_MAIN_LIGHTACC_DIRECTIONAL(PS_IN In)
 PS_OUT_POINTLIGHTACC PS_MAIN_LIGHTACC_POINT(PS_IN In)
 {
 	PS_OUT_POINTLIGHTACC Out = (PS_OUT_POINTLIGHTACC) 0;
-
-	//float2 uvRT = ComputeScreenUV(In.vClippos);
-	//float2 uvRT = In.vTexUV;
-
-	//float4 vNormalDesc = g_NormalTexture.Sample(DefaultSampler, uvRT);
-	//float4 vDepthDesc = g_DepthTexture.Sample(DefaultSampler, uvRT);
-	//float Metallic = g_Metallic.Sample(DefaultSampler, uvRT).r;
-	//float Roughness = g_Roughness.Sample(DefaultSampler, uvRT).r;
-	//float AO = g_AO.Sample(DefaultSampler, uvRT).r;
-	//float3 shadow = g_ShadowTexture.Sample(DefaultSampler, uvRT).xyz;
-	//float fViewZ = vDepthDesc.y * 300.f;
-	
-	//float3 normaltest = vNormalDesc.xyz;
-	//if (!any(normaltest))
-	//	clip(0);
-	
-	//vector vWorldPos;
-	//vWorldPos.x = (uvRT.x * 2.f - 1.f) * fViewZ;
-	//vWorldPos.y = (uvRT.y * -2.f + 1.f) * fViewZ;
-	//vWorldPos.z = vDepthDesc.x * fViewZ;
-	//vWorldPos.w = fViewZ;
-	
-	//vWorldPos = mul(vWorldPos, g_ProjMatrixInv);
-	//vWorldPos = mul(vWorldPos, g_ViewMatrixInv);
-	
-	//float3 normal = normaltest * 2.f - 1.f;
-	//normal = normalize(normal);
-	
-	//if (g_bPBRHDR == true)
-	//{
-	//	float3 color = float3(0.97f, 0.95f, 0.8f);
-	//	float ambientintensity = 0.005f;
-	//	float4 light = CalcPointLight(color, ambientintensity, g_vLightPos.xyz, g_fRange, g_vCamPosition.xyz, vWorldPos.xyz, normal);
-		
-	//	float3 _N = normal;
-	//	float3 _V = normalize(g_vCamPosition.xyz - vWorldPos.xyz);
-	//	float3 _L = normalize(vWorldPos.xyz - g_vLightPos.xyz) * -1.0f;
-	//	float _F0 = 0.93f;
-
-	//	float specular = LightingGGX_Ref(_N, _V, _L, _F0, Roughness);
-	//	float smoothness = 1 - Roughness;
-	//	float invmetalic = 1 - Metallic;
-		
-	//	float3 camToWorldDirection = normalize(vWorldPos.xyz - g_vCamPosition.xyz);
-	//	float3 worldReflectDirection = reflect(camToWorldDirection, normal);
-		
-	//	float4 cubeRefl = g_SkyBoxTexutre.Sample(SkyBoxSampler, worldReflectDirection.xy);
-		
-	//	float4 lightpower = invmetalic * light * AO;
-	//	Out.vSpecular = light * specular * Roughness;
-	//	Out.vShade = lightpower;
-	//	//Out.vShadow = 2 * max(max(light.x, light.y), light.z);
-	//	//Out.vShadow.a = 0.2f;
-	//}
-	//else
-	//{
-	//	vector vLightDir = vWorldPos - g_vLightPos;
-	//	float fDistance = length(vLightDir);
-	//	float fAtt = saturate((g_fRange - fDistance) / g_fRange);
-	//	vector vNormal = vector(vNormalDesc.xyz * 2.f - 1.f, 0.f);
-	//	Out.vShade = g_vLightDiffuse * (saturate(dot(normalize(vLightDir) * -1.f, vNormal)) + (g_vLightAmbient * g_vMtrlAmbient)) * fAtt;
-	//	Out.vShade.a = 1.f;
-	//	vector vReflect = reflect(normalize(vLightDir), vNormal);
-	//	vector vLook = normalize(vWorldPos - g_vCamPosition);
-	//	Out.vSpecular.xyz = ((g_vLightSpecular * g_vMtrlSpecular) * pow(saturate(dot(normalize(vReflect) * -1.f, vLook)), 30.f) * fAtt).xyz;
-	//	Out.vShadow = max(max(Out.vShade.x, Out.vShade.y), Out.vShade.z);
-	//}
 	
 	vector vNormalDesc = g_NormalTexture.Sample(DefaultSampler, In.vTexUV);
 	vector vDepthDesc = g_DepthTexture.Sample(DefaultSampler, In.vTexUV);
 	vector vShadowDesc = g_ShadowTexture.Sample(DefaultSampler, In.vTexUV);
-	float fViewZ = vDepthDesc.y * 300.f;
+	half fViewZ = vDepthDesc.y * 300.f;
 
 	vector vWorldPos;
 
@@ -379,9 +313,9 @@ PS_OUT_POINTLIGHTACC PS_MAIN_LIGHTACC_POINT(PS_IN In)
 	vWorldPos = mul(vWorldPos, g_ViewMatrixInv);
 
 	vector vLightDir = vWorldPos - g_vLightPos;
-	float fDistance = length(vLightDir);
+	half fDistance = length(vLightDir);
 
-	float fAtt = saturate((g_fRange - fDistance) / g_fRange);
+	half fAtt = saturate((g_fRange - fDistance) / g_fRange);
 
 	vector vNormal = vector(vNormalDesc.xyz * 2.f - 1.f, 0.f);
 	Out.vShade = g_vLightDiffuse * (saturate(dot(normalize(vLightDir) * -1.f, vNormal)) + (g_vLightAmbient * g_vMtrlAmbient)) * fAtt;
@@ -405,11 +339,10 @@ PS_OUT_VOLUMETRIC PS_MAIN_SHADOW(PS_IN In)
 {
 	PS_OUT_VOLUMETRIC Out = (PS_OUT_VOLUMETRIC) 0;
 
-	float2 uv = In.vTexUV;
+	half2 uv = In.vTexUV;
 	
-	//float4 diffuse = g_DiffuseTexture.Sample(DefaultSampler, In.vTexUV);
-	float2 depth = g_DepthTexture.Sample(DefaultSampler,In.vTexUV).xy;
-	float fViewZ = depth.y * 300.f;
+	half2 depth = g_DepthTexture.Sample(DefaultSampler,In.vTexUV).xy;
+	half fViewZ = depth.y * 300.f;
 
 	vector vWorldPos;
 
@@ -423,20 +356,20 @@ PS_OUT_VOLUMETRIC PS_MAIN_SHADOW(PS_IN In)
 
 	vWorldPos = mul(vWorldPos, g_ViewMatrixInv);
 	
-	float4 lightpos = mul(vWorldPos, g_LightViewProj);
+	half4 lightpos = mul(vWorldPos, g_LightViewProj);
 	
-	float2 shadowUV = float2(0, 0);
+	half2 shadowUV = half2(0, 0);
 	
 	shadowUV.x = saturate((lightpos.x / lightpos.w) * 0.5f + 0.5f);
 	shadowUV.y = saturate(-(lightpos.y / lightpos.w) * 0.5f + 0.5f);
 	
-	float4 lightDepth = g_ShadowMapTex.Sample(DefaultSampler, shadowUV);
-	float lightDistance = lightDepth.x * 300.f;
-	float objDistance = length(vWorldPos.xyz - g_vLightPos.xyz);
+	half4 lightDepth = g_ShadowMapTex.Sample(DefaultSampler, shadowUV);
+	half lightDistance = lightDepth.x * 300.f;
+	half objDistance = length(vWorldPos.xyz - g_vLightPos.xyz);
 	
-	float adjust = 0;
+	half adjust = 0;
 	
-	float3 color = 1.f;
+	half3 color = 1.f;
 	if(objDistance - 0.1f < lightDistance)
 	{
 		color = 1;
@@ -446,7 +379,7 @@ PS_OUT_VOLUMETRIC PS_MAIN_SHADOW(PS_IN In)
 		color = 0;
 	}
 	
-	Out.vColor = float4(color, 1.f);
+	Out.vColor = half4(color, 1.f);
 	
 	return Out;
 }
@@ -460,39 +393,20 @@ PS_OUT_BLEND PS_MAIN_BLEND(PS_IN In)
 {
 	PS_OUT_BLEND Out = (PS_OUT_BLEND) 0;
 	
-	float4 color = g_DiffuseTexture.Sample(DefaultSampler, In.vTexUV);
+	half4 color = g_DiffuseTexture.Sample(DefaultSampler, In.vTexUV);
 	
 	Out.vColor = color;
 	
-	// ¿Ü°û¼± È¿°ú 1.
-	if (g_outline == true)
-	{	
-		float fCoord[3] = { -1.f, 0.f, 1.f };
-		float fLaplacianMask[9] =
-		{
-			-1.f, -1.f, -1.f,
-			-1.f, 9.f, -1.f,
-			-1.f, -1.f, -1.f
-		};
-		for (int i = 0; i < 9; ++i)
-			Out.vColor += fLaplacianMask[i] * g_DiffuseTexture.Sample(DefaultSampler, (In.vTexUV + float2(fCoord[i / 3] / 1280.f, fCoord[i / 3] / 720.f)));
-	}
-	
 	if (g_radial == true)
 	{		
-		const float blurpower = 0.03f;
-		//const int samplingcnt = 6;
 		
-		float2 dir = In.vTexUV - float2(0.5f, 0.5f);
-
-		float3 color = float3(0, 0, 0);
-		float f = 1.0 / (float) g_RadialCnt;
-		for (int i = 0; i < g_RadialCnt; ++i)
-		{
-			color += g_DiffuseTexture.Sample(DefaultSampler, In.vTexUV - blurpower * dir * float(i)).rgb * f;
-
-		}
-		Out.vColor.rgb = color;
+		Out.vColor.rgb = Radialblur(g_DiffuseTexture,DefaultSampler,In.vTexUV,g_RadialCnt);
+	}
+	
+	if (g_outline == true)
+	{ 
+		// ¿Ü°û¼± È¿°ú
+		Out.vColor = Outline(g_DiffuseTexture, DefaultSampler, In.vTexUV, Out.vColor);
 	}
 	
 	if (Out.vColor.a == 0)
@@ -505,7 +419,7 @@ PS_OUT_BLEND PS_MAIN_ALPHA(PS_IN In)
 {
 	PS_OUT_BLEND Out = (PS_OUT_BLEND) 0;
 	
-	float4 color = g_AlphaTexture.Sample(DefaultSampler, In.vTexUV);
+	half4 color = g_AlphaTexture.Sample(DefaultSampler, In.vTexUV);
 	Out.vColor = color;
 	
 	return Out;

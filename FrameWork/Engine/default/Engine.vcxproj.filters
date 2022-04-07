@@ -625,11 +625,9 @@
       <Filter>00.Utility\03.Component\05.VIBuffer\09.Instance\00.Particle\03.Env_Floating</Filter>
     </ClInclude>
     <ClInclude Include="..\bin\ShaderFiles\Shader_Calculate.hpp">
-      <Filter>98.ShaderFiles\Hpp</Filter>
-    </ClInclude>
-    <ClInclude Include="..\bin\ShaderFiles\Shader_Calculate.hpp">
       <Filter>98.ShaderFiles\01.Hpp</Filter>
     </ClInclude>
+    <ClInclude Include="..\bin\ShaderFiles\Shader_Calculate.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\private\Base.cpp">
@@ -970,6 +968,9 @@
       <Filter>98.ShaderFiles\02.Util</Filter>
     </None>
     <None Include="..\bin\ShaderFiles\Shader_ShadowUtil.hlsli">
+      <Filter>98.ShaderFiles\02.Util</Filter>
+    </None>
+    <None Include="..\bin\ShaderFiles\Shader_Post.hlsli">
       <Filter>98.ShaderFiles\02.Util</Filter>
     </None>
   </ItemGroup>
