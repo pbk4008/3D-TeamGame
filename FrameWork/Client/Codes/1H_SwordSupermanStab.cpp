@@ -86,7 +86,7 @@ HRESULT C1H_SwordSupermanStab::EnterState()
 	m_iAttackEndIndex = 28;
 
 	m_iTrailStartIndex = 14;
-	m_iTrailEndIndex = 33;
+	m_iTrailEndIndex = 35;
 
 
 	// Ω¶¿Ã≈© ø…º«

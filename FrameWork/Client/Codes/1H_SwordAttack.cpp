@@ -89,7 +89,7 @@ HRESULT C1H_SwordAttack::ExitState()
 
 	if(m_pSilvermane->IsAttack())
 		m_pSilvermane->Set_IsAttack(false);
-
+	m_pSilvermane->Set_IsTrail(false);
 
 	m_pSilvermane->Set_IsTrasceCamera(true);
 	m_pAnimationController->Set_PlaySpeed(1.f);

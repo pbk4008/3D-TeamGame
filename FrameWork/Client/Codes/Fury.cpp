@@ -140,11 +140,11 @@ void CFury::RangeAttack()
 	tOverlapDesc.filterData.flags = PxQueryFlag::eDYNAMIC;
 	if (g_pGameInstance->Overlap(tOverlapDesc))
 	{
-		_uint iSize = (_uint)tOverlapDesc.vecHitObject.size();
+		_uint iSize = (_uint)tOverlapDesc.vecHitObjects.size();
 		for (_uint i = 0; i < iSize; ++i)
 		{
-			CActor* pActor = static_cast<CActor*>(tOverlapDesc.vecHitObject[i]);
-			_uint iTag = tOverlapDesc.vecHitObject[i]->getTag();
+			CActor* pActor = static_cast<CActor*>(tOverlapDesc.vecHitObjects[i]);
+			_uint iTag = tOverlapDesc.vecHitObjects[i]->getTag();
 			switch (iTag)
 			{
 			case (_uint)GAMEOBJECT::MONSTER_CRYSTAL:

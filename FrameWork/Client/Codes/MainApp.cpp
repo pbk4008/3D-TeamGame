@@ -138,7 +138,6 @@ HRESULT CMainApp::Render()
 	if (FAILED(g_pGameInstance->Render_Engine()))
 		return E_FAIL;
 
-#ifdef _DEBUG
 	++m_iNumRender;
 
 	if (m_TimeAcc >= 1.0)
@@ -148,9 +147,7 @@ HRESULT CMainApp::Render()
 		m_TimeAcc = 0.0;	
 	}
 
-	if (FAILED(g_pGameInstance->Render_Font(TEXT("Font_Arial"), XMVectorSet(1.f, 0.0f, 0.f, 1.f), m_szFPS)))
-		return E_FAIL;
-#endif // _DEBUG
+	SetWindowText(g_hWnd, m_szFPS);
 
 	if (FAILED(g_pGameInstance->Present()))
 		return E_FAIL;

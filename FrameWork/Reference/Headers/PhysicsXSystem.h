@@ -45,6 +45,7 @@ typedef struct tagRaycastDesc
 	// out
 	_float3 vHitPos = { 0.f, 0.f, 0.f };
 	CGameObject** ppOutHitObject = nullptr;
+	vector<CGameObject*> vecHitObjects;
 }RAYCASTDESC;
 typedef struct tagSweepDesc
 {
@@ -59,6 +60,7 @@ typedef struct tagSweepDesc
 	// out
 	_float3 vHitPos = { 0.f, 0.f, 0.f };
 	CGameObject** ppOutHitObject = nullptr;
+	vector<CGameObject*> vecHitObjects;
 }SWEEPDESC;
 typedef struct tagOverlapDesc
 {
@@ -69,7 +71,7 @@ typedef struct tagOverlapDesc
 	PxQueryFilterData filterData;
 	// out
 	CGameObject** ppOutHitObject = nullptr;
-	vector<CGameObject*> vecHitObject;
+	vector<CGameObject*> vecHitObjects;
 }OVERLAPDESC;
 
 class CPhysicsXSystem final : public CSingleTon<CPhysicsXSystem>
