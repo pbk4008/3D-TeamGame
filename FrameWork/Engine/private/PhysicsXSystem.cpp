@@ -456,11 +456,11 @@ const _bool CPhysicsXSystem::Raycast(RAYCASTDESC & _desc)
 		if (m_pScene->raycast(origin, unitDir, _desc.fMaxDistance, buf, _desc.hitFlags, _desc.filterData))
 		{
 			PxU32 nbTouches = buf.nbTouches;
-			_desc.vecHitObject.reserve(nbTouches);
+			_desc.vecHitObjects.reserve(nbTouches);
 			for (PxU32 i = 0; i < nbTouches; ++i)
 			{
 				PxRaycastHit hitInfo = buf.touches[i];
-				_desc.vecHitObject.emplace_back(static_cast<CGameObject*>(hitInfo.actor->userData));
+				_desc.vecHitObjects.emplace_back(static_cast<CGameObject*>(hitInfo.actor->userData));
 			}
 			return true;
 		}
@@ -500,11 +500,11 @@ const _bool CPhysicsXSystem::Sweep(SWEEPDESC& _desc)
 		if (m_pScene->sweep(_desc.geometry.any(), origin, unitDir, _desc.fMaxDistance, buf, _desc.hitFlags, _desc.filterData))
 		{
 			PxU32 nbTouches = buf.nbTouches;
-			_desc.vecHitObject.reserve(nbTouches);
+			_desc.vecHitObjects.reserve(nbTouches);
 			for (PxU32 i = 0; i < nbTouches; ++i)
 			{
 				PxSweepHit hitInfo = buf.touches[i];
-				_desc.vecHitObject.emplace_back(static_cast<CGameObject*>(hitInfo.actor->userData));
+				_desc.vecHitObjects.emplace_back(static_cast<CGameObject*>(hitInfo.actor->userData));
 			}
 			return true;
 		}
@@ -542,11 +542,11 @@ const _bool CPhysicsXSystem::Overlap(OVERLAPDESC& _desc)
 		if (m_pScene->overlap(_desc.geometry.any(), origin, buf, _desc.filterData))
 		{
 			PxU32 nbTouches = buf.nbTouches;
-			_desc.vecHitObject.reserve(nbTouches);
+			_desc.vecHitObjects.reserve(nbTouches);
 			for (PxU32 i = 0; i < nbTouches; ++i)
 			{
 				PxOverlapHit hitInfo = buf.touches[i];
-				_desc.vecHitObject.emplace_back(static_cast<CGameObject*>(hitInfo.actor->userData));
+				_desc.vecHitObjects.emplace_back(static_cast<CGameObject*>(hitInfo.actor->userData));
 			}
 			return true;
 		}
