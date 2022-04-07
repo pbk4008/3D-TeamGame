@@ -85,6 +85,18 @@ _int CSilvermane_JogRightPivot180::Input(const _double& _dDeltaTime)
 				return -1;
 			return STATE_CHANGE;
 		}
+		if (g_pGameInstance->getkeyPress(DIK_W))
+		{
+			if (FAILED(m_pStateController->Change_State(L"JogFwd")))
+				return -1;
+			return STATE_CHANGE;
+		}
+		else if (g_pGameInstance->getkeyPress(DIK_S))
+		{
+			if (FAILED(m_pStateController->Change_State(L"JogBwd")))
+				return -1;
+			return STATE_CHANGE;
+		}
 
 		Add_PlusAngle(EDir::Forward, _dDeltaTime);
 	}

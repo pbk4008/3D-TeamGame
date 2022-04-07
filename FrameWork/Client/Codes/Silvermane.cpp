@@ -1053,6 +1053,12 @@ void CSilvermane::Set_IsAttack(const _bool _isAttack)
 		m_pCurWeapon->Set_IsAttack(_isAttack);
 }
 
+void CSilvermane::Set_IsTrail(const _bool _isTrail)
+{
+	if (m_pCurWeapon)
+		m_pCurWeapon->Set_IsTrail(_isTrail);
+}
+
 void CSilvermane::Add_PlusAngle(const _float _fDeltaAngle)
 {
 	m_fPlusAngle += _fDeltaAngle * 360.f;

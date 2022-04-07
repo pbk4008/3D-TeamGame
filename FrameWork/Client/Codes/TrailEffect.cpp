@@ -179,7 +179,7 @@ void CTrailEffect::Set_IsRender(const _bool _isRender)
 
 void CTrailEffect::Record_Points(const _double& _dDeltaTIme)
 {
-	while (30 <= m_listPoints.size())
+	while (32 <= m_listPoints.size())
 	{
 		m_listPoints.pop_front();
 	}
