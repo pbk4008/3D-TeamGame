@@ -58,6 +58,7 @@ public:
 	void Remove_Collider();
 	void Groggy_Start();
 public:
+	virtual void Hit(const ATTACKDESC& _tAttackDesc) override;
 	void Hit(CCollision& collision);
 public:
 	void Set_Target(_bool bCheck) { m_bTargetOn = bCheck; }

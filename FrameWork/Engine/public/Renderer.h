@@ -17,7 +17,7 @@ class ENGINE_DLL CRenderer final : public CComponent
 {
 public: enum RENDERBUTTON
 {
-	SHADOW,PBRHDR,PIXEL,HDR,DBG,PARTICLE,OUTLINE, RENDERBUTTON_END
+	SHADOW,PBRHDR,PIXEL,HDR,DBG,PARTICLE,OUTLINE,RADIAL, RENDERBUTTON_END
 };
 
 public: enum RENDER { RENDER_PRIORITY, RENDER_SKYBOX,RENDER_SHADOW, RENDER_PBR, RENDER_NONALPHA, RENDER_ALPHA, RENDER_UI, RENDER_UI_ACTIVE, RENDER_END };
@@ -30,6 +30,7 @@ public: _bool	Get_PBR() { return m_bPBR; }
 
 public: void	SetRenderButton(RENDERBUTTON ebutton, _bool check);
 public: void	SetCameraTag(const wstring& CameraTag) { lstrcpy(m_CameraTag,CameraTag.c_str());  }
+public: void	SetRadialCnt(_int RadialCnt) { m_RadialCnt = RadialCnt; }
 
 public: virtual HRESULT NativeConstruct_Prototype();
 public: virtual HRESULT NativeConstruct(void* pArg);
@@ -54,8 +55,10 @@ private: _bool								m_bHDR = false;
 private: _bool								m_bDBG = false;
 private: _bool								m_bParticle = false;
 private: _bool								m_boutline = false;
+private: _bool								m_bradial = false;
 private: RENDERBUTTON						m_eRenderButton;
 private: _tchar								m_CameraTag[128];
+private: _int								m_RadialCnt = 6;
 
 private: CRendererAssit*					m_pRenderAssit = nullptr;
 private: CLuminance*						m_pLuminance = nullptr;
@@ -71,8 +74,8 @@ private: HRESULT Render_UI();
 private: HRESULT Render_UI_Active();
 
 private: HRESULT Render_Shadow();
-private: HRESULT Render_ShadeShadow();
-private: HRESULT Render_Final(_bool outline);
+private: HRESULT ShadowPass();
+private: HRESULT Render_Final(_bool outline,_bool radial);
 
 private: /* For.PhysX */
 	_bool m_isPhysXRender = false;

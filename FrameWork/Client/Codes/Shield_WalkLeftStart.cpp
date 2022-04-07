@@ -22,6 +22,8 @@ _int CShield_WalkLeftStart::Tick(const _double& _dDeltaTime)
 	if (NO_EVENT > iProgress)
 		return iProgress;
 
+	//m_pSilvermane->Add_Velocity(CTransform::STATE_RIGHT, -_dDeltaTime * 0.5);
+
 	return _int();
 }
 
@@ -54,7 +56,7 @@ HRESULT CShield_WalkLeftStart::EnterState()
 	_matrix smatPivot = XMMatrixRotationY(XMConvertToRadians(-90.f));
 	m_pAnimationController->Set_PivotMatrix(smatPivot);
 	
-
+	m_iCutIndex = 33;
 	return S_OK;
 }
 
@@ -76,7 +78,7 @@ _int CShield_WalkLeftStart::Input(const _double& _dDeltaTime)
 
 	if (g_pGameInstance->getkeyPress(DIK_A))
 	{
-		if (m_pAnimationController->Is_Finished())
+		if (m_iCutIndex < m_pAnimationController->Get_CurKeyFrameIndex())
 		{
 			if (FAILED(m_pStateController->Change_State(L"Shield_WalkLeft")))
 				return -1;

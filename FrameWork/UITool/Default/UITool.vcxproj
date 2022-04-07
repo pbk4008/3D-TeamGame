@@ -200,6 +200,7 @@
     <ClInclude Include="MFCEffect.h" />
     <ClInclude Include="MFCEffect_Env_floating.h" />
     <ClInclude Include="MFCEffect_floating.h" />
+    <ClInclude Include="MFCEffect_Respawn.h" />
     <ClInclude Include="MFCLevel_Logo.h" />
     <ClInclude Include="MFCLevel_Play.h" />
     <ClInclude Include="MFCMainApp.h" />
@@ -223,6 +224,7 @@
     <ClCompile Include="MFCEffect.cpp" />
     <ClCompile Include="MFCEffect_Env_floating.cpp" />
     <ClCompile Include="MFCEffect_floating.cpp" />
+    <ClCompile Include="MFCEffect_Respawn.cpp" />
     <ClCompile Include="MFCLevel_Logo.cpp" />
     <ClCompile Include="MFCLevel_Play.cpp" />
     <ClCompile Include="MFCMainApp.cpp" />

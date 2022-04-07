@@ -52,7 +52,7 @@ HRESULT CShield_WalkFwdStart::EnterState()
 		return E_FAIL;
 	m_pAnimationController->Set_RootMotion(true, true, ERootOption::XYZ);
 	
-
+	m_iCutIndex = 42;
 	return S_OK;
 }
 
@@ -72,7 +72,7 @@ _int CShield_WalkFwdStart::Input(const _double& _dDeltaTime)
 
 	if (g_pGameInstance->getkeyPress(DIK_W))
 	{
-		if (m_pAnimationController->Is_Finished())
+		if (m_iCutIndex < m_pAnimationController->Get_CurKeyFrameIndex())
 		{
 			if (FAILED(m_pStateController->Change_State(L"Shield_WalkFwd")))
 				return -1;

@@ -20,12 +20,23 @@ public:
 	HRESULT NativeConstruct(const LIGHTDESC& LightDesc);
 	void	Tick();
 	HRESULT Render(CTarget_Manager* pTarget_Manager,const wstring& pCameraTag, _bool PBRHDRcheck,_bool Shadow);
+	HRESULT RenderVolumetric(CTarget_Manager* pTarget_Manager, const wstring& pCameraTag);
+
+private:
+	HRESULT	Render_Directional(CTarget_Manager* pTarget_Manager, const wstring& pCameraTag, _bool PBRHDRcheck, _bool Shadow,_uint PassIndx);
+	HRESULT	Render_PointLight(CTarget_Manager* pTarget_Manager, const wstring& pCameraTag, _bool PBRHDRcheck, _uint PassIndx);
+	HRESULT	Ready_PBRLighting(CTarget_Manager* pTarget_Manager, const wstring& pCameraTag,LIGHTDESC::TYPE Type);
 
 public: void UpdateLightCam(_fvector playerpos);
+
+public:
+	void Set_Show(_bool bShow) { m_bShow = bShow; }
+	void Set_Pos(_vector vPos) { XMStoreFloat3(&m_LightDesc.vPosition, vPos); }
 
 private:
 	ID3D11Device*				m_pDevice = nullptr;
 	ID3D11DeviceContext*		m_pDeviceContext = nullptr;
+	_bool						m_bShow = true;
 
 private:
 	LIGHTDESC						m_LightDesc;

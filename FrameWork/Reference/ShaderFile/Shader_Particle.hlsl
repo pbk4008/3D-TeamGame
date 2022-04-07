@@ -7,6 +7,7 @@ cbuffer CameraDesc
 {
 	vector		g_vCamPosition;
     float3		g_color;
+	float		g_Weight;
 };
 
 cbuffer Matrices
@@ -16,7 +17,7 @@ cbuffer Matrices
 	matrix		g_ProjMatrix;
 };
 
-texture2D	g_DiffuseTexture;
+Texture2D	g_DiffuseTexture;
 uint g_iImageCountX; //가로줄수
 uint g_iImageCountY; //세로줄수
 uint g_iFrame; //전체장수
@@ -62,7 +63,6 @@ VS_OUT VS_MAIN(VS_IN In)
 	Out.vPosition = mul(vPosition, g_WorldMatrix);
     Out.vPSize.x = In.vPSize.x * In.TransformMatrix._11;
     Out.vPSize.y = In.vPSize.y * In.TransformMatrix._22;
-    //Out.vPSize = In.vPSize;
     Out.vTime.x = In.vTime.x;
 	return Out;
 }
@@ -71,7 +71,7 @@ struct GS_IN
 {
 	float4		vPosition : POSITION;
 	float2		vPSize : PSIZE;
-    float4 vTime : TEXCOORD0;
+    float4		vTime : TEXCOORD0;
 };
 
 struct GS_OUT
@@ -86,9 +86,9 @@ void GS_MAIN(point GS_IN In[1], inout TriangleStream<GS_OUT> OutStream)
 {
 	GS_OUT		Out[6];
 	
-    float Ratio = In[0].vTime.x / g_fLifeTime;
-    In[0].vPSize.x = ((-In[0].vPSize.x) * Ratio + In[0].vPSize.x) / 2.f;
-    In[0].vPSize.y = ((-In[0].vPSize.y) * Ratio + In[0].vPSize.y) / 2.f;
+    //float Ratio = In[0].vTime.x / g_fLifeTime;
+    //In[0].vPSize.x = ((-In[0].vPSize.x) * Ratio + In[0].vPSize.x) / 2.f;
+    //In[0].vPSize.y = ((-In[0].vPSize.y) * Ratio + In[0].vPSize.y) / 2.f;
 
 	vector		vAxisY = vector(0.f, 1.f, 0.f, 0.f);
 
@@ -147,21 +147,22 @@ struct PS_IN
 struct PS_OUT
 {
 	vector		vColor : SV_TARGET0;
+	float4		weight : SV_TARGET1;
 };
 
-/* 1. 픽셀의 색을 결정한다. */
-// vector PS_MAIN(PS_IN In) : SV_TARGET0
 PS_OUT PS_MAIN(PS_IN In)
 {
 	PS_OUT		Out = (PS_OUT)0;
 
 	Out.vColor = g_DiffuseTexture.Sample(DefaultSampler, In.vTexUV);
-    Out.vColor.r = 1.f;
-    Out.vColor.g = 0.6f;
-    Out.vColor.b = 0.3f;
+	Out.vColor.r = g_color.r;
+	Out.vColor.g = g_color.g;
+	Out.vColor.b = g_color.b;
 
 	if (Out.vColor.a < 0.01)
 		discard;
+	
+	Out.weight = float4(g_Weight.xxx, 0.5f);
 
 	return Out;
 }
@@ -173,8 +174,21 @@ PS_OUT PS_MAIN_MULTIIMAGE(PS_IN In)
     In.vTexUV.x = (In.vTexUV.x / g_iImageCountX) + (g_iFrame % g_iImageCountX) * (1.f / g_iImageCountX); //가로 이미지개수 , 프레임 , 1나누기 이미지개수 
     In.vTexUV.y = (In.vTexUV.y / g_iImageCountY) + (g_iFrame / g_iImageCountY) * (1.f / g_iImageCountY); //세로 이미지개수 , 프레임 , 1나누기 이미지개수
 
+    float4 GreenAlpha = g_DiffuseTexture.Sample(DefaultSampler, In.vTexUV);
+	
     Out.vColor = g_DiffuseTexture.Sample(DefaultSampler, In.vTexUV);
-
+	Out.weight = float4(g_Weight.xxx, 0.5f);
+	
+    Out.vColor.r = 1.f; 
+    Out.vColor.gb = 0.f;
+	
+    Out.vColor = Out.vColor * GreenAlpha.g;
+	
+    if (0.01f >= Out.vColor.a)
+    {
+        discard;
+    }
+	
     return Out;
 }
 
@@ -217,9 +231,7 @@ PS_OUT_TEST PS_MAIN_TEST(PS_IN In)
 
 technique11			DefaultTechnique
 {
-	/* 셰이더 기능의 캡슐화. */
-	/* 조명연산(어둡게, 스펙큘러) + 그림자 + 노멀맵핑 */
-	pass Normal
+	pass Normal //0
 	{
 		/* 렌더스테이츠에 대한 정의. */
 		SetRasterizerState(CullMode_Default);
@@ -232,7 +244,7 @@ technique11			DefaultTechnique
 		PixelShader = compile ps_5_0  PS_MAIN();
 	}
 
-	pass AlphaBlend
+	pass AlphaBlend //1
 	{
 		/* 렌더스테이츠에 대한 정의. */
 		SetRasterizerState(CullMode_Default);
@@ -245,12 +257,12 @@ technique11			DefaultTechnique
 		PixelShader = compile ps_5_0  PS_MAIN();
 	}
 
-    pass AlphaBlendMultiImage
+    pass AlphaBlendMultiImage //2
     {
 		/* 렌더스테이츠에 대한 정의. */
         SetRasterizerState(CullMode_Default);
         SetDepthStencilState(ZDefault, 0);
-        SetBlendState(AlphaBlending, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+        //SetBlendState(AlphaBlending, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
 
 		/* 진입점함수를 지정한다. */
         VertexShader = compile vs_5_0 VS_MAIN();
@@ -258,7 +270,7 @@ technique11			DefaultTechnique
         PixelShader = compile ps_5_0 PS_MAIN_MULTIIMAGE();
     }
 
-    pass AlphaAdd
+    pass AlphaAdd //3
     {
 		/* 렌더스테이츠에 대한 정의. */
         SetRasterizerState(CullMode_Default);
@@ -271,7 +283,7 @@ technique11			DefaultTechnique
         PixelShader = compile ps_5_0 PS_MAIN();
     }
 
-	pass Test
+	pass Test //4
 	{
 		/* 렌더스테이츠에 대한 정의. */
 		SetRasterizerState(CullMode_Default);

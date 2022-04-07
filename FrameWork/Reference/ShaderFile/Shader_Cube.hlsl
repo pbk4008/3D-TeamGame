@@ -9,7 +9,7 @@ cbuffer Matrices
 	vector g_campos;
 };
 
-textureCUBE g_DiffuseTexture;
+TextureCube g_DiffuseTexture;
 
 sampler DefaultSampler = sampler_state
 {
@@ -48,12 +48,8 @@ VS_OUT VS_MAIN(VS_IN In)
 	
 	matworld = (matrix) 0;
 	
-	//matworld._11_22_33_44 = float4(1, 1, 1, 1);
-	//matworld._41_42_43 = float3(g_campos.x, g_campos.y, g_campos.z);
-	
-	//matWVP = mul(matworld, matVP);
 	matWVP = mul(matWV, g_ProjMatrix);
-	Out.vPosition = mul(float4(In.vPosition, 1), matWVP)/*.xyww*/;
+	Out.vPosition = mul(float4(In.vPosition, 1), matWVP).xyww;
 	Out.vTexUV = In.vTexUV;
 
 	return Out;
@@ -69,15 +65,17 @@ struct PS_IN
 
 struct PS_OUT
 {
-	vector vColor : SV_TARGET0;
+	float4 vdiffuse : SV_TARGET0;
+	float4 vskybox : SV_Target1;
 };
 
 PS_OUT PS_MAIN(PS_IN In)
 {
 	PS_OUT Out = (PS_OUT) 0;
 
-	Out.vColor = g_DiffuseTexture.Sample(SkyBoxSampler, In.vTexUV);
-
+	Out.vdiffuse = g_DiffuseTexture.Sample(SkyBoxSampler, In.vTexUV);
+	Out.vskybox = Out.vdiffuse;
+	
 	return Out;
 }
 

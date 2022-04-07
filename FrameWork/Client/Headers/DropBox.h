@@ -55,6 +55,9 @@ public:
 	virtual void Focus() override;
 	virtual void FocusExit() override;
 
+public:
+	_bool IsOpen(void) { return m_bBoxOpened; }
+
 private:
 	void Open(void);
 	std::vector<CItemData> GetDropList(void);
@@ -66,6 +69,7 @@ private:
 	CStateController*	  m_pStateController = nullptr;
 	CBoxCollider*		  m_pCollider = nullptr;
 	CModel*				  m_pModel = nullptr;
+	MABOBJECT			  m_tDesc;
 
 private:
 	const _float m_openDelay = 2.0f;

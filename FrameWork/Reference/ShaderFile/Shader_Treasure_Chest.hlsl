@@ -74,8 +74,6 @@ struct VS_OUT
 	float4	vTangent	: TANGENT;
 	float4	vBiNormal	: BINORMAL;
 	float4	vUvDepth	: TEXCOORD0;
-	//float2	vTexUV : TEXCOORD0;
-	//float4	vProjPos : TEXCOORD1;
 };
 
 VS_OUT VS_MAIN_ANIM(VS_IN In)

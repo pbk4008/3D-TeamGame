@@ -50,8 +50,6 @@ HRESULT CStatic_Mesh::NativeConstruct(const _uint _iSceneID, void* pArg)
 	_tcscpy_s(m_MeshDesc.Name, m_ModelDesc.strName.c_str());
 	_tcscpy_s(m_MeshDesc.Tag, m_ModelDesc.strTag.c_str());
 
-
-
 	XMStoreFloat3(&m_MeshDesc.fInitPos, m_pTransform->Get_State(CTransform::STATE_POSITION));
 	XMStoreFloat4x4(&m_MeshDesc.WorldMat, m_pTransform->Get_WorldMatrix());
 	 
@@ -68,7 +66,7 @@ _int CStatic_Mesh::Tick(_double TimeDelta)
 
 _int CStatic_Mesh::LateTick(_double TimeDelta)
 {
-	m_pRenderer->Add_RenderGroup(CRenderer::RENDER_ALPHA, this);
+	m_pRenderer->Add_RenderGroup(CRenderer::RENDER_UI, this);
 
 	//if (TKEY_DOWN(VK_RBUTTON))
 	//	Pick_Model();

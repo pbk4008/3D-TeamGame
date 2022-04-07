@@ -83,7 +83,7 @@ HRESULT CMonster_Bastion_2HSword::NativeConstruct(const _uint _iSceneID, void* _
 
 	m_isFall = true;
 
-	//setActive(false);
+	setActive(false);
 
 	m_tAttackDesc.iLevel = 1;
 
@@ -645,7 +645,7 @@ void CMonster_Bastion_2HSword::Hit(CCollision& pCol)
 				Active_Effect((_uint)EFFECT::HIT);
 				Active_Effect((_uint)EFFECT::FLOATING);
 
-				m_fCurrentHp -= 5.f;
+				//m_fCurrentHp -= 5.f;
 				//m_bGroggy = 2; //TODO::¼öÄ¡Á¤ÇØ¼­¹Ù²ãÁà¾ßµÊ
 
 				m_pPanel->Set_HpBar(Get_HpRatio());
@@ -667,6 +667,20 @@ void CMonster_Bastion_2HSword::Hit(CCollision& pCol)
 				m_pStateController->Change_State(L"Idle");
 		}
 	}
+}
+
+void CMonster_Bastion_2HSword::Hit(const ATTACKDESC& _tAttackDesc)
+{
+	if (m_bDead || 0.f >= m_fCurrentHp)
+		return;
+
+	m_pPanel->Set_Show(true);
+
+	m_fCurrentHp -= _tAttackDesc.fDamage;
+	CCollision collision;
+	collision.pGameObject = _tAttackDesc.pHitObject;
+
+	Hit(collision);
 }
 
 void CMonster_Bastion_2HSword::Remove_Collider()

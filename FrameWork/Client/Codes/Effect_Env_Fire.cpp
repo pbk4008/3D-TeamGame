@@ -38,14 +38,24 @@ HRESULT CEffect_Env_Fire::NativeConstruct(const _uint _iSceneID, void* pArg)
 	{
 		memcpy(&m_Desc, pArg, sizeof(EFFECTDESC));
 	}
-
 	//¿©±â¼­ ÇÊ¿äÇÑ ¸ğµç ÄÄÆ÷³ÍÆ®µé CloneÇØ¿È
 	if (FAILED(SetUp_Components())) 
 	{
 		return E_FAIL;
 	}
 
+	_float4x4 desc;
+	XMStoreFloat4x4(&desc,m_Desc.ParticleMat);
+	_vector pos = m_Desc.ParticleMat.r[3];
+	pos += XMVectorSet(0, 2.5f, 0, 0);
 
+	m_pTransform->Set_State(CTransform::STATE_POSITION, pos);
+
+
+	m_scale = XMVectorSet(XMVectorGetX(XMVector3Length(m_Desc.ParticleMat.r[0]))
+			, XMVectorGetX(XMVector3Length(m_Desc.ParticleMat.r[1]))
+			, XMVectorGetX(XMVector3Length(m_Desc.ParticleMat.r[2]))
+			, 1);
 
 	return S_OK;
 }
@@ -60,9 +70,13 @@ _int CEffect_Env_Fire::Tick(_double TimeDelta)
 		m_Desc.fFrame = 0;
 	}
 
-	_vector Pos = { 9.5f,4.f,6.5f, 1.f };
-	m_pTransform->Set_State(CTransform::STATE_POSITION, Pos);
+	////_vector Pos = { 9.5f,4.f,6.5f, 1.f };
+	//m_pTransform->Set_State(CTransform::STATE_POSITION, Pos);
 
+	_vector pos = m_Desc.ParticleMat.r[3];
+	_vector pos2 = { XMVectorGetX(pos),XMVectorGetY(pos) + (XMVectorGetY(m_scale) * 5.f) ,XMVectorGetZ(pos) ,1.f };
+
+	m_pTransform->Set_State(CTransform::STATE_POSITION, pos2);
 
 	//ºôº¸µå
 	_matrix ViewMatrix;
@@ -71,8 +85,8 @@ _int CEffect_Env_Fire::Tick(_double TimeDelta)
 	m_pTransform->Set_State(CTransform::STATE::STATE_RIGHT, ViewMatrix.r[0]);
 	m_pTransform->Set_State(CTransform::STATE::STATE_LOOK, ViewMatrix.r[2]);
 
-	_vector  scale = { 3.f, 3.f, 1.f, 0.f };
-	m_pTransform->Scaling(scale);
+	//_vector  scale = { 3.f, 3.f, 1.f, 0.f };
+	m_pTransform->Scaling(m_scale * 7.f);
 
     return 0;
 }
@@ -81,7 +95,7 @@ _int CEffect_Env_Fire::LateTick(_double TimeDelta)
 {
 	if (nullptr != m_pRenderer)
 	{
-		m_pRenderer->Add_RenderGroup(CRenderer::RENDER::RENDER_NONALPHA, this);
+		m_pRenderer->Add_RenderGroup(CRenderer::RENDER::RENDER_ALPHA, this);
 	}
 
 	return 0;
@@ -106,8 +120,11 @@ HRESULT CEffect_Env_Fire::Render()
 
 	_uint iFrame = (_uint)m_Desc.fFrame;
 	m_pBuffer->SetUp_ValueOnShader("g_iFrame", &iFrame, sizeof(_uint));
+	
+	_float weight = 0.8f;
+	m_pBuffer->SetUp_ValueOnShader("g_Weight", &weight, sizeof(_float));
 
-	m_pBuffer->Render(2);
+	m_pBuffer->Render(1);
 
 	return S_OK;
 }

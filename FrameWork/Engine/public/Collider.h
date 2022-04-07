@@ -17,6 +17,7 @@ public:
 		_bool isVisualization = true;							// 렌더 할것인가?
 		_bool isGravity = false;								// 중력을 받을것인가?
 		_bool isKinematic = false;								// 다른 액터로부터 물리연산을 안받는 객체
+		_float fMass = 1.f;
 		/* For.Shape */
 		_bool isSceneQuery = false;								// cct로 밀거나 물리작용하는 오브젝트들
 		_bool isTrigger = false;								// 트리거 로 만들 것인가?
@@ -50,6 +51,7 @@ public:
 	void setRigidActor(PxRigidActor* _pRigidbody);
 	void setShape(PxShape* _pShape);
 	void setMaterial(PxMaterial* _pMaterial);
+	void setMass(const _float _fValue);
 	void setPivotMatrix(const _fmatrix& _smatPivot);
 
 	void setGravity(const _bool _isGravity);

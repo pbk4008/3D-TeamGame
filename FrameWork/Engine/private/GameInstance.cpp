@@ -2,6 +2,7 @@
 #include "GameObject.h"
 
 ENGINE_DLL CGameInstance* g_pGameInstance = nullptr;
+ENGINE_DLL mt19937 g_random;		// mt19937 난수 엔진
 
 CGameInstance::CGameInstance()
 	: m_pGraphic_Device(CGraphic_Device::GetInstance())
@@ -73,6 +74,12 @@ HRESULT CGameInstance::Initialize_Engine(HINSTANCE hInst, HWND hWnd, _uint iNumL
 		return E_FAIL;
 
 	g_pGameInstance = GET_INSTANCE(CGameInstance);
+
+#pragma region 난수엔진 초기화후 클라에서 사용할 수 있게 전역변수에 넣어주기~
+	random_device rd;
+	mt19937 random(rd());
+	g_random = random;
+#pragma endregion
 
 	return S_OK;
 }
@@ -152,6 +159,20 @@ HRESULT CGameInstance::Present()
 		return E_FAIL;
 
 	return m_pGraphic_Device->Present();
+}
+
+ID3D11Device* CGameInstance::Get_Device()
+{
+	if(nullptr == m_pGraphic_Device)
+		return nullptr;
+	return m_pGraphic_Device->Get_Device();
+}
+
+ID3D11DeviceContext* CGameInstance::Get_DeviceContext()
+{
+	if (nullptr == m_pGraphic_Device)
+		return nullptr;
+	return m_pGraphic_Device->Get_DeviceContext();
 }
 
 _double CGameInstance::Get_TimeDelta(const wstring& pTimerTag)
@@ -459,6 +480,14 @@ HRESULT CGameInstance::Add_Light(ID3D11Device * pDevice, ID3D11DeviceContext * p
 	return m_pLight_Manager->Add_Light(pDevice, pDeviceContext, LightDesc);	
 }
 
+HRESULT CGameInstance::Add_Light(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext, const LIGHTDESC& LightDesc, CLight** ppOutLight)
+{
+	if (nullptr == m_pLight_Manager)
+		return E_FAIL;
+
+	return m_pLight_Manager->Add_Light(pDevice, pDeviceContext, LightDesc, ppOutLight);
+}
+
 void CGameInstance::UpdateLightCam(_uint LightIndx, _fvector playerpos)
 {
 	if (!m_pLight_Manager)
@@ -573,6 +602,20 @@ const _bool CGameInstance::Raycast(RAYCASTDESC & _desc)
 	if (!m_pPhysicSystem)
 		return false;
 	return m_pPhysicSystem->Raycast(_desc);
+}
+
+const _bool CGameInstance::Sweep(SWEEPDESC& _desc)
+{
+	if (!m_pPhysicSystem)
+		return false;
+	return m_pPhysicSystem->Sweep(_desc);
+}
+
+const _bool CGameInstance::Overlap(OVERLAPDESC& _desc)
+{
+	if (!m_pPhysicSystem)
+		return false;
+	return m_pPhysicSystem->Overlap(_desc);
 }
 
 HRESULT CGameInstance::Init_SoundManager()

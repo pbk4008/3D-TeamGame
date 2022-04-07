@@ -182,6 +182,18 @@ HRESULT CMonster_Bastion_Sword::Render()
 	return S_OK;
 }
 
+void CMonster_Bastion_Sword::Hit(const ATTACKDESC& _tAttackDesc)
+{
+	if (m_bDead || 0.f >= m_fCurrentHp)
+		return;
+
+	m_pPanel->Set_Show(true);
+
+	m_fCurrentHp -= _tAttackDesc.fDamage;
+
+	Hit();
+}
+
 void CMonster_Bastion_Sword::Set_Remove(_bool bCheck)
 {
 	m_bRemove = bCheck;
@@ -630,7 +642,7 @@ void CMonster_Bastion_Sword::Hit()
 	CBastion_Sword_Hit::HITDATA tData;
 	ZeroMemory(&tData, sizeof(tData));
 
-	m_fCurrentHp--;
+	//m_fCurrentHp--;
 	m_pPanel->Set_HpBar(Get_HpRatio());
 
 	if (!m_bFirstHit)

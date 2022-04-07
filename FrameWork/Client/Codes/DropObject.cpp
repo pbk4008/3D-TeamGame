@@ -9,14 +9,17 @@
 CDropObject::CDropObject(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
 	:CInteractableObject(_pDevice, _pDeviceContext)
 	, m_pModel(nullptr)
+	, m_pSplineCurve(nullptr)
 {
 }
 
 CDropObject::CDropObject(const CDropObject& _rhs)
 	:CInteractableObject(_rhs)
 	, m_pModel(_rhs.m_pModel)
+	, m_pSplineCurve(_rhs.m_pSplineCurve)
 {
 	Safe_AddRef(m_pModel);
+	m_pInventoryData = g_pDataManager->GET_DATA(CInventoryData, L"InventoryData");
 }
 
 HRESULT CDropObject::NativeConstruct_Prototype()
@@ -41,7 +44,7 @@ HRESULT CDropObject::NativeConstruct(const _uint _iSceneID, void* _pArg)
 	m_bTakable = false;
 	m_pSplineCurve = new CSplineCurve();
 
-	//m_pInventoryData = g_pDataManager->GET_DATA(CInventoryData, L"InventoryData");
+	m_pTransform->Scaling(_vector{ 2.f, 2.f, 2.f });
 
 	return S_OK;
 }
@@ -50,6 +53,7 @@ _int CDropObject::Tick(_double _dDeltaTime)
 {
 	if (0 > __super::Tick(_dDeltaTime))
 		return -1;
+
 
 	if (IsDrop() && false == IsTakable())
 	{
@@ -67,7 +71,9 @@ _int CDropObject::Tick(_double _dDeltaTime)
 		m_bLateTick = true;
 	}
 
-	m_pTransform->Rotation_Axis(CTransform::STATE_UP, _dDeltaTime);
+	m_pTransform->Rotation_Axis(CTransform::STATE_UP, _dDeltaTime * 3.f);
+	m_pTransform->Scaling(_vector{ 2.f, 2.f, 2.f });
+
 	return _int();
 }
 
@@ -118,10 +124,7 @@ HRESULT CDropObject::Ready_Components()
 
 	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Model_DropObject", L"Model", (CComponent**)&m_pModel)))
 		return E_FAIL;
-
-	_matrix matPivot = XMMatrixScaling(1.f, 1.f, 1.f) * XMMatrixRotationY(XMConvertToRadians(180.f));
-	m_pModel->Set_PivotMatrix(matPivot);
-
+	
 	///* for. Collider Com */
 	//CCollider::DESC tColliderDesc;
 	//tColliderDesc.eRigidType = ERigidType::Dynamic;
@@ -279,7 +282,7 @@ void CDropObject::Take(void)
 	else if (m_droppedItem.ItemType == EItemType::Equipment)
 	{
 		/* Inventory push Item */
-		//m_pInventoryData->PushItem(m_droppedItem);
+ 		m_pInventoryData->PushItem(m_droppedItem);
 	}
 
 	m_bDead = true;
@@ -325,9 +328,9 @@ CGameObject* CDropObject::Clone(const _uint _iSceneID, void* _pArg)
 
 void CDropObject::Free()
 {
-	Safe_Release(m_pModel);
 	Safe_Delete(m_pSplineCurve);
-	Safe_Delete(m_pInventoryData);
+	Safe_Release(m_pModel);
+	m_pInventoryData = nullptr;
 
 	__super::Free();
 }

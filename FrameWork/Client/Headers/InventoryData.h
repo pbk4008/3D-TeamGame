@@ -25,6 +25,7 @@ public:
 public: /* Get Item */
 	_bool TryGetItem(_int iIndex, _Out_ CItemData* pItemData);
 	CItemData GetItem(_int iIndex);
+	CItemData GetItem(void);
 	CItemData* GetItemByID(_ulong _uid);
 	_int GetCount(void);
 

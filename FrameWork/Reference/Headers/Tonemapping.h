@@ -15,7 +15,7 @@ public: void				Set_HDR(_bool check) { m_bHDR = check; }
 
 public: HRESULT				InitToneMapping();
 
-public: HRESULT				Blend_FinalPass(CTarget_Manager* pTargetMgr, _bool check, _bool shadow,_bool particle);
+public: HRESULT				Blend_FinalPass(CTarget_Manager* pTargetMgr, _bool check);
 public: HRESULT				ToneMapping(CTarget_Manager* pTargetMgr);
 
 private: CVIBuffer_RectViewPort*	m_pTonmapBuffer = nullptr;

@@ -55,9 +55,9 @@ HRESULT CMainApp::NativeConstruct()
 	if (FAILED(pMeshLoader->Reserve_MeshLoader(m_pDevice, m_pDeviceContext)))
 		return E_FAIL;*/
 
-	//g_pDataManager = CDataManager::GetInstance();
-	//if (FAILED(g_pDataManager->NativeConstruct()))
-	//	return E_FAIL;
+	g_pDataManager = CDataManager::GetInstance();
+	if (FAILED(g_pDataManager->NativeConstruct()))
+		return E_FAIL;
 
 	return S_OK;
 }
@@ -98,7 +98,7 @@ _int CMainApp::Tick(_double TimeDelta)
 	if (g_pGameInstance->getkeyDown(DIK_F4))
 	{
 		m_bOutline = !m_bOutline;
-		m_pRenderer->SetRenderButton(CRenderer::OUTLINE, m_bOutline);
+		m_pRenderer->SetRenderButton(CRenderer::RADIAL, m_bOutline);
 	}
 
 	if (g_pGameInstance->getkeyDown(DIK_P))
@@ -118,6 +118,7 @@ _int CMainApp::Tick(_double TimeDelta)
 		}
 	}
 
+	g_pDataManager->Tick();
 	return _int();
 }
 

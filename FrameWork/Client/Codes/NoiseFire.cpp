@@ -66,7 +66,7 @@ HRESULT CNoiseFire::Render()
 HRESULT CNoiseFire::BindConstBuffer()
 {
 	//m_pTransform->Set_State(CTransform::STATE_POSITION, XMVectorSet(0.f, 3.3f, 0.0f, 1.f));
-	m_pTransform->Scale_Up(XMVectorSet(3.0f, 1.f, 1.f, 0.f));
+	m_pTransform->Scale_Up(XMVectorSet(2.0f, 1.f, 1.f, 0.f));
 
 	_matrix world, view, proj;
 
@@ -79,18 +79,18 @@ HRESULT CNoiseFire::BindConstBuffer()
 	if (FAILED(m_pbuffer->SetUp_ValueOnShader("g_ProjMatrix", &proj, sizeof(_float4x4)))) MSGBOX("NoiseFire ConstBuffer Projmatrix Not Apply");
 
 	// Nosie Buffer
-	_float3 scrollspeeds = _float3(3.3f, 5.0f, 6.0f); //_float3(1.3f, 2.1f, 2.3f);
+	_float3 scrollspeeds = _float3(1.3f, 2.1f, 2.3f);
 	_float3 scales = _float3(1.0f, 2.0f, 3.0f);//_float3(1.0f, 2.0f, 3.0f);
 	if (FAILED(m_pbuffer->SetUp_ValueOnShader("g_frametime", &m_deltatime, sizeof(_float)))) MSGBOX("NoiseFire ConstBuffer NosieBuffer Not Apply");
 	if (FAILED(m_pbuffer->SetUp_ValueOnShader("g_scrollspeeds", &scrollspeeds, sizeof(_float3)))) MSGBOX("NoiseFire ConstBuffer NosieBuffer Not Apply");
 	if (FAILED(m_pbuffer->SetUp_ValueOnShader("g_scales", &scales, sizeof(_float3)))) MSGBOX("NoiseFire ConstBuffer NosieBuffer Not Apply");
 
 	// Distorition buffer 
-	_float2 distoriton1 = _float2(0.1f, 0.2f);
-	_float2 distoriton2 = _float2(0.1f, 0.3f);
-	_float2 distoriton3 = _float2(0.1f, 0.1f);
+	_float2 distoriton1 = _float2(0.1f, 0.5f);
+	_float2 distoriton2 = _float2(0.1f, 0.6f);
+	_float2 distoriton3 = _float2(0.1f, 0.4f);
 	_float distoritonScale = 0.8f;
-	_float distoritonBiase = 0.5f;
+	_float distoritonBiase = 0.2f;
 
 	if (FAILED(m_pbuffer->SetUp_ValueOnShader("g_distortion1", &distoriton1, sizeof(_float2)))) MSGBOX("NoiseFire ConstBuffer Distorition buffer Not Apply");
 	if (FAILED(m_pbuffer->SetUp_ValueOnShader("g_distortion2", &distoriton2, sizeof(_float2)))) MSGBOX("NoiseFire ConstBuffer Distorition buffer Not Apply");
@@ -102,8 +102,6 @@ HRESULT CNoiseFire::BindConstBuffer()
 	if (FAILED(m_pbuffer->SetUp_TextureOnShader("g_FireTexture", m_vectexture[0])))		MSGBOX("NoiseFire ConstBuffer FireTexture Not Apply");
 	if (FAILED(m_pbuffer->SetUp_TextureOnShader("g_AlphaTexture", m_vectexture[1])))	MSGBOX("NoiseFire ConstBuffer NoiseTexture Not Apply");
 	if (FAILED(m_pbuffer->SetUp_TextureOnShader("g_NoiseTexture", m_vectexture[2])))	MSGBOX("NoiseFire ConstBuffer AlphaTexture Not Apply");
-
-	if(FAILED(m_pbuffer->SetUp_TextureOnShader("g_DepthTexture",g_pGameInstance->Get_SRV(L"Target_Depth")))) MSGBOX("NoiseFire ConstBuffer DepthTexture Not Apply");
 
 	//  BOOL DepthEnable;
 	//	D3D11_DEPTH_WRITE_MASK DepthWriteMask;

@@ -81,7 +81,7 @@ HRESULT CBoss_Bastion_Judicator::NativeConstruct(const _uint _iSceneID, void* pA
 	m_pPanel->Set_HpBar(Get_HpRatio());
 	m_pPanel->Set_GroggyBar(Get_GroggyGaugeRatio());
 
-	//setActive(false);
+	setActive(false);
 
 	m_tAttackDesc.iLevel = 2;
 
@@ -231,34 +231,34 @@ HRESULT CBoss_Bastion_Judicator::Render()
 		m_pModelCom->Render(i, 0);
 	}
 
-	// FSM
-	wstring wstrCurStateTag = m_pStateController->Get_CurStateTag();
-	wstring wstrState = L"Cur State : ";
+	//// FSM
+	//wstring wstrCurStateTag = m_pStateController->Get_CurStateTag();
+	//wstring wstrState = L"Cur State : ";
 
-	if (FAILED(g_pGameInstance->Render_Font(TEXT("Font_Arial"), XMVectorSet(0.f, 1.0f, 0.f, 1.f), (wstrState + wstrCurStateTag).c_str(), _float2(650.f, 40.f), _float2(0.6f, 0.6f))))
-		return E_FAIL;
+	//if (FAILED(g_pGameInstance->Render_Font(TEXT("Font_Arial"), XMVectorSet(0.f, 1.0f, 0.f, 1.f), (wstrState + wstrCurStateTag).c_str(), _float2(650.f, 40.f), _float2(0.6f, 0.6f))))
+	//	return E_FAIL;
 
-	// 애니메이션 이름
-	string CurAnimName = m_pAnimator->Get_CurrentAnimation()->Get_Name();
-	wstring wstrCurAnimTag;
-	wstring wstrAnimname = L"Cur Anim Tag : ";
-	wstrCurAnimTag.assign(CurAnimName.begin(), CurAnimName.end());
-	if (FAILED(g_pGameInstance->Render_Font(TEXT("Font_Arial"), XMVectorSet(0.f, 1.0f, 0.f, 1.f), (wstrAnimname + wstrCurAnimTag).c_str(), _float2(650.f, 60.f), _float2(0.6f, 0.6f))))
-		return E_FAIL;
+	//// 애니메이션 이름
+	//string CurAnimName = m_pAnimator->Get_CurrentAnimation()->Get_Name();
+	//wstring wstrCurAnimTag;
+	//wstring wstrAnimname = L"Cur Anim Tag : ";
+	//wstrCurAnimTag.assign(CurAnimName.begin(), CurAnimName.end());
+	//if (FAILED(g_pGameInstance->Render_Font(TEXT("Font_Arial"), XMVectorSet(0.f, 1.0f, 0.f, 1.f), (wstrAnimname + wstrCurAnimTag).c_str(), _float2(650.f, 60.f), _float2(0.6f, 0.6f))))
+	//	return E_FAIL;
 
-	// 애니메이션 상태
-	wstring wstrCurKeyFrameIndex = to_wstring(m_pAnimator->Get_CurrentAnimation()->Get_CurrentKeyFrameIndex());
-	wstring wstrKeyFrame = L"Key Frame : ";
-	if (FAILED(g_pGameInstance->Render_Font(TEXT("Font_Arial"), XMVectorSet(0.f, 1.0f, 0.f, 1.f), (wstrKeyFrame + wstrCurKeyFrameIndex).c_str(), _float2(650.f, 80.f), _float2(0.6f, 0.6f))))
-		return E_FAIL;
+	//// 애니메이션 상태
+	//wstring wstrCurKeyFrameIndex = to_wstring(m_pAnimator->Get_CurrentAnimation()->Get_CurrentKeyFrameIndex());
+	//wstring wstrKeyFrame = L"Key Frame : ";
+	//if (FAILED(g_pGameInstance->Render_Font(TEXT("Font_Arial"), XMVectorSet(0.f, 1.0f, 0.f, 1.f), (wstrKeyFrame + wstrCurKeyFrameIndex).c_str(), _float2(650.f, 80.f), _float2(0.6f, 0.6f))))
+	//	return E_FAIL;
 
-	wstring wstrAnimFinished = L"";
-	if (m_pAnimator->Get_CurrentAnimation()->Is_Finished())
-		wstrAnimFinished = L"AnimFinished : TRUE";
-	else
-		wstrAnimFinished = L"AnimFinished : FALSE";
-	if (FAILED(g_pGameInstance->Render_Font(TEXT("Font_Arial"), XMVectorSet(0.f, 1.0f, 0.f, 1.f), wstrAnimFinished.c_str(), _float2(650.f, 100.f), _float2(0.6f, 0.6f))))
-		return E_FAIL;
+	//wstring wstrAnimFinished = L"";
+	//if (m_pAnimator->Get_CurrentAnimation()->Is_Finished())
+	//	wstrAnimFinished = L"AnimFinished : TRUE";
+	//else
+	//	wstrAnimFinished = L"AnimFinished : FALSE";
+	//if (FAILED(g_pGameInstance->Render_Font(TEXT("Font_Arial"), XMVectorSet(0.f, 1.0f, 0.f, 1.f), wstrAnimFinished.c_str(), _float2(650.f, 100.f), _float2(0.6f, 0.6f))))
+	//	return E_FAIL;
 
 	return S_OK;
 }
@@ -563,36 +563,32 @@ HRESULT CBoss_Bastion_Judicator::Set_PanelBar()
 
 void CBoss_Bastion_Judicator::OnTriggerEnter(CCollision& collision)
 {
-	if (true == g_pObserver->IsAttack()) //플레이어공격일때
+}
+
+void CBoss_Bastion_Judicator::Hit(const ATTACKDESC& _tAttackDesc)
+{
+	if (m_bDead || 0.f >= m_fCurrentHp)
+		return;
+
+	m_bFirstHit = true; //딱 한번 true로 변경해줌
+
+	if (true == m_bFirstHit)
 	{
-		m_bFirstHit = true; //딱 한번 true로 변경해줌
+		m_pPanel->Set_BackUIGapY(1.f);
+	}
+	m_fCurrentHp -= _tAttackDesc.fDamage;
+	m_fGroggyGauge += 2; //TODO::수치정해서바꿔줘야됨
 
-		if (true == m_bFirstHit)
-		{
-			m_pPanel->Set_BackUIGapY(1.f);
-		}
+	m_pPanel->Set_HpBar(Get_HpRatio());
 
-		if ((_uint)GAMEOBJECT::WEAPON == collision.pGameObject->getTag())
-		{
-			--m_fCurrentHp;
-			m_fGroggyGauge += 2; //TODO::수치정해서바꿔줘야됨
-
-			m_pPanel->Set_HpBar(Get_HpRatio());
-
-			Active_Effect((_uint)EFFECT::HIT);
-			Active_Effect((_uint)EFFECT::FLOATING);
+	Active_Effect((_uint)EFFECT::HIT);
+	Active_Effect((_uint)EFFECT::FLOATING);
 
 
-			if (false == m_bGroggy)
-			{	
-				//그로기 아닐때만 증가할수있게
-				m_pPanel->Set_GroggyBar(Get_GroggyGaugeRatio());
-			}
-		}
-		else
-		{
-
-		}
+	if (false == m_bGroggy)
+	{
+		//그로기 아닐때만 증가할수있게
+		m_pPanel->Set_GroggyBar(Get_GroggyGaugeRatio());
 	}
 }
 

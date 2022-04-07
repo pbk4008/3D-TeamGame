@@ -1,4 +1,6 @@
 #pragma once
+#ifndef Texture_h__
+#define Texture_h__
 
 #include "Component.h"
 
@@ -33,3 +35,5 @@ public:
 };
 
 END
+
+#endif // Texture_h__

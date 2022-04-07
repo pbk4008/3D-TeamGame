@@ -100,7 +100,7 @@ HRESULT CMonster_Bastion_Healer::NativeConstruct(const _uint _iSceneID, void* _p
 
 	m_isFall = true;
 
-	//setActive(false);
+	setActive(false);
 	return S_OK;
 }
 
@@ -250,7 +250,7 @@ void CMonster_Bastion_Healer::Hit(CCollision& pCol)
 				Active_Effect((_uint)EFFECT::HIT);
 				Active_Effect((_uint)EFFECT::FLOATING);
 
-				m_fCurrentHp -= 5.f;
+				//m_fCurrentHp -= 5.f;
 				//m_bGroggy = 2; //TODO::¼öÄ¡Á¤ÇØ¼­¹Ù²ãÁà¾ßµÊ
 
 				m_pPanel->Set_HpBar(Get_HpRatio());
@@ -266,6 +266,20 @@ void CMonster_Bastion_Healer::Hit(CCollision& pCol)
 				m_pStateController->Change_State(L"Idle");
 		}
 	}
+}
+
+void CMonster_Bastion_Healer::Hit(const ATTACKDESC& _tAttackDesc)
+{
+	if (m_bDead || 0.f >= m_fCurrentHp)
+		return;
+
+	m_pPanel->Set_Show(true);
+
+	m_fCurrentHp -= _tAttackDesc.fDamage;
+	CCollision collision;
+	collision.pGameObject = _tAttackDesc.pHitObject;
+
+	Hit(collision);
 }
 
 void CMonster_Bastion_Healer::Remove_Collider()

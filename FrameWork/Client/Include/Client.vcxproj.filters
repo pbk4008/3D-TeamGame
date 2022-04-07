@@ -1620,6 +1620,9 @@
     <ClInclude Include="..\Headers\Shield_ParryStunbackStrong.h">
       <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Shield\Parry</Filter>
     </ClInclude>
+    <ClInclude Include="..\Headers\Effect_Falling_Leaf.h">
+      <Filter>02.GameObject\04.Effect\00.Particle\01.Effect_MapLeaf</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -2529,6 +2532,9 @@
     <ClCompile Include="..\Codes\Shield_ParryStunbackStrong.cpp">
       <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Shield\Parry</Filter>
     </ClCompile>
+    <ClCompile Include="..\Codes\Effect_Falling_Leaf.cpp">
+      <Filter>02.GameObject\04.Effect\00.Particle\01.Effect_MapLeaf</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -2639,6 +2645,9 @@
     </FxCompile>
     <FxCompile Include="..\bin\ShaderFile\Shader_UI_Enemy_Bar.hlsl">
       <Filter>100.ShaderFiles\04.UI</Filter>
+    </FxCompile>
+    <FxCompile Include="..\bin\ShaderFile\Shader_Particle_Size.hlsl">
+      <Filter>100.ShaderFiles\03.Effect</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>

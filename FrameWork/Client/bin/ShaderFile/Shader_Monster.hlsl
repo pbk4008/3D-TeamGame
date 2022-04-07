@@ -402,7 +402,6 @@ PS_OUT PS_MAIN_EARH_Body(PS_IN In)
 	float Emission = 0;
 	Out.E = float4(Emission.xxx, 1.f);
 	
-	
 	return Out;
 }
 

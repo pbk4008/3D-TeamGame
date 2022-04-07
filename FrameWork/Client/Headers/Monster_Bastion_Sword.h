@@ -34,6 +34,9 @@ public:
 	virtual _int Tick(_double _dDeltaTime) override;
 	virtual _int LateTick(_double _dDeltaTime) override;
 	virtual HRESULT Render() override;
+
+	virtual void Hit(const ATTACKDESC& _tAttackDesc);
+
 public:
 	virtual void Set_Remove(_bool bCheck) override;
 

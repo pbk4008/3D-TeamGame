@@ -54,6 +54,8 @@ HRESULT CFury::NativeConstruct(const _uint _iSceneID, void* _pArg)
 
 	XMStoreFloat4x4(&m_matPivot, XMMatrixRotationRollPitchYaw(XMConvertToRadians(-21.5f), XMConvertToRadians(-118.f), XMConvertToRadians(20.f)) * XMMatrixTranslation(0.28f, 0.11f, 0.05f));
 
+	m_fDamage = 5;
+
 	return S_OK;
 }
 
@@ -103,6 +105,64 @@ HRESULT CFury::Render()
 	}
 
 	return S_OK;
+}
+
+void CFury::OnTriggerEnter(CCollision& collision)
+{
+	_uint iTag = collision.pGameObject->getTag();
+	switch (iTag)
+	{
+	case (_uint)GAMEOBJECT::MONSTER_CRYSTAL:
+	case (_uint)GAMEOBJECT::MONSTER_ABERRANT:
+	case (_uint)GAMEOBJECT::MONSTER_1H:
+	case (_uint)GAMEOBJECT::MONSTER_2H:
+	case (_uint)GAMEOBJECT::MONSTER_HEALER:
+	case (_uint)GAMEOBJECT::MONSTER_SHOOTER:
+	case (_uint)GAMEOBJECT::MONSTER_SPEAR:
+		if (!m_isAttack)
+			return;
+
+		ATTACKDESC tAttackDesc = m_pOwner->Get_AttackDesc();
+		tAttackDesc.fDamage += m_fDamage;
+		tAttackDesc.pHitObject = this;
+		static_cast<CActor*>(collision.pGameObject)->Hit(tAttackDesc);
+		break;
+	}
+}
+
+void CFury::RangeAttack()
+{
+	OVERLAPDESC tOverlapDesc;
+	tOverlapDesc.geometry = PxSphereGeometry(6.f);
+	XMStoreFloat3(&tOverlapDesc.vOrigin, m_pTransform->Get_State(CTransform::STATE_POSITION));
+	CGameObject* pHitObject = nullptr;
+	tOverlapDesc.ppOutHitObject = &pHitObject;
+	tOverlapDesc.filterData.flags = PxQueryFlag::eDYNAMIC;
+	if (g_pGameInstance->Overlap(tOverlapDesc))
+	{
+		_uint iSize = (_uint)tOverlapDesc.vecHitObject.size();
+		for (_uint i = 0; i < iSize; ++i)
+		{
+			CActor* pActor = static_cast<CActor*>(tOverlapDesc.vecHitObject[i]);
+			_uint iTag = tOverlapDesc.vecHitObject[i]->getTag();
+			switch (iTag)
+			{
+			case (_uint)GAMEOBJECT::MONSTER_CRYSTAL:
+			case (_uint)GAMEOBJECT::MONSTER_ABERRANT:
+			case (_uint)GAMEOBJECT::MONSTER_1H:
+			case (_uint)GAMEOBJECT::MONSTER_2H:
+			case (_uint)GAMEOBJECT::MONSTER_HEALER:
+			case (_uint)GAMEOBJECT::MONSTER_SHOOTER:
+			case (_uint)GAMEOBJECT::MONSTER_SPEAR:
+				ATTACKDESC tAttackDesc = m_pOwner->Get_AttackDesc();
+				tAttackDesc.fDamage += m_fDamage * 0.8f;
+				tAttackDesc.iLevel = 2;
+				tAttackDesc.pHitObject = this;
+				pActor->Hit(tAttackDesc);
+				break;
+			}
+		}
+	}
 }
 
 HRESULT CFury::Ready_Components()

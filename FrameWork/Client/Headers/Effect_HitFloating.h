@@ -36,6 +36,7 @@ public:
 
 private:
 	CVIBuffer_PointInstance_Floating* m_pBuffer = nullptr;
+	class CCullingBox* m_pBox = nullptr;
 
 private:
 	CEffect::EFFECTDESC m_Desc;

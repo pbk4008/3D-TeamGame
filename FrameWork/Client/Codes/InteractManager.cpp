@@ -75,8 +75,5 @@ void CInteractManager::AddInteractObject(CInteractableObject* pInteractableObjec
 
 void CInteractManager::Free()
 {
-	for (auto& iter : m_vecInteractableObjects)
-		Safe_Release(iter);
-
 	m_vecInteractableObjects.clear();
 }

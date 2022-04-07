@@ -79,6 +79,7 @@ HRESULT CShield_Parry::EnterState()
 
 	m_pSilvermane->Set_EquipShield(true);
 	m_pSilvermane->Set_IsHit(true);
+
 	return S_OK;
 }
 

@@ -15,7 +15,7 @@ class ENGINE_DLL CEffect abstract : public CGameObject
 		_tchar		ShaderFileName[MAX_PATH]; //파일이름
 		_tchar		ShaderFullFilePath[MAX_PATH]; //파일경로 + 파일이름
 		_vector		fMyPos; //내 위치
-		_matrix		ParticleMat;
+		_matrix		ParticleMat; //파티클인스턴스 하나하나의위치
 		_float3		fParticleRandomPos;
 		_float3		fParticleMinusRandomDir; //반대방향으로갈수있게해주는랜덤값
 		_float3		fParticleRandomDir;
@@ -35,7 +35,12 @@ class ENGINE_DLL CEffect abstract : public CGameObject
 		_float		fFrame;
 		_uint		iRenderPassNum;
 
-		_int		IDTag; //고유태그값
+		//고유태그값
+		_int		IDTag; 
+
+		//컬링박스
+		_float3 CullingBoxPos;
+		_float3 CullingBoxSize; //Width, Height, Depth
 
 	}EFFECTDESC;
 protected:

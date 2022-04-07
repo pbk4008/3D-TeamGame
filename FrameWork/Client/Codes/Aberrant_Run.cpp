@@ -129,7 +129,7 @@ void CAberrant_Run::Chase_Player(_double TimeDelta)
 	_vector vDir = vPlayerPos - vPos;
 	vDir = XMVector3Normalize(vDir);
 
-	vDir *= TimeDelta * 5.f;
+	vDir *= (_float)TimeDelta * 5.f;
 
 	m_pTransform->Add_Velocity(vDir);
 }

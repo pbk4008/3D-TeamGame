@@ -98,7 +98,7 @@ HRESULT C2H_HammerAttack::ExitState()
 	m_pSilvermane->Set_IsTrasceCamera(true);
 
 	m_isShake2 = false;
-
+	m_isRangeAttack = false;
 	return S_OK;
 }
 
