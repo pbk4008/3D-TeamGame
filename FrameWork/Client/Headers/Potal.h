@@ -27,7 +27,7 @@ private:
 	HRESULT Ready_Component();
 private:
 	_uint Scaling(_double dDeltaTime);
-	_uint Create_Meteor();
+	_uint Create_Meteor(_double dDeltaTime);
 	_uint Remove_Portal(_double dDeltaTime);
 public:
 	static CPotal* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContex);
@@ -40,7 +40,8 @@ private:
 	CTexture* m_pMaskTexture;
 private:/*For Create Meteor*/
 	_bool m_bCreate;
-	CMeteor* m_pMeteor;
+	_bool m_bRetain;
+	_float m_fAccRetain;
 };
 END
 #endif

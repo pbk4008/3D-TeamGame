@@ -145,7 +145,7 @@ _int CMeteor::Move()
 	_float fLen = XMVectorGetX(XMVector3Length(vDir));
 
 	vDir = XMVector3Normalize(vDir);
-	fLen /=8;
+	fLen /=6;
 	vDir *= fLen*m_fSpeed;
 	vDir=XMVectorSetY(vDir, 30.f);
 	m_pCollider->Add_Force(vDir);
