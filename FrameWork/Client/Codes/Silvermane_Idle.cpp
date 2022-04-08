@@ -30,6 +30,27 @@ _int CSilvermane_Idle::Tick(const _double& _dDeltaTime)
 
 	Add_PlusAngle(EDir::Forward, _dDeltaTime);
 
+	if (!m_pSilvermane->IsEquipWeapon())
+	{
+		m_fHoldTime += (_float)_dDeltaTime;
+		if (2.f < m_fHoldTime)
+		{
+			switch (m_pSilvermane->Get_WeaponType())
+			{
+			case CWeapon::EType::Sword_1H:
+				if (FAILED(m_pStateController->Change_State(L"1H_SwordEquipOn")))
+					return -1;
+				return STATE_CHANGE;
+				break;
+			case CWeapon::EType::Hammer_2H:
+				if (FAILED(m_pStateController->Change_State(L"2H_HammerEquipOn")))
+					return -1;
+				return STATE_CHANGE;
+				break;
+			}
+		}
+	}
+	
 	return _int();
 }
 
@@ -110,8 +131,8 @@ _int CSilvermane_Idle::Input(const _double& _dDeltaTime)
 
 	if (g_pGameInstance->getMouseKeyDown(CInputDev::MOUSESTATE::MB_LBUTTON))
 	{
-		if (m_pSilvermane->IsEquipWeapon())
-		{
+		//if (m_pSilvermane->IsEquipWeapon())
+		//{
 			switch (m_pSilvermane->Get_WeaponType())
 			{
 			case CWeapon::EType::Sword_1H:
@@ -120,33 +141,33 @@ _int CSilvermane_Idle::Input(const _double& _dDeltaTime)
 				return STATE_CHANGE;
 				break;
 			case CWeapon::EType::Hammer_2H:
-				if (FAILED(m_pStateController->Change_State(L"2H_HammerAttackNormalR1_01")))
+				if (FAILED(m_pStateController->Change_State(L"2H_HammerAttackR1_01")))
 					return -1;
 				return STATE_CHANGE;
 				break;
 			}
-		}
-		else
-		{
-			switch (m_pSilvermane->Get_WeaponType())
-			{
-			case CWeapon::EType::Sword_1H:
-				if (FAILED(m_pStateController->Change_State(L"1H_SwordEquipOn")))
-					return -1;
-				return STATE_CHANGE;
-				break;
-			case CWeapon::EType::Hammer_2H:
-				if (FAILED(m_pStateController->Change_State(L"2H_HammerEquipOn")))
-					return -1;
-				return STATE_CHANGE;
-				break;
-			}
-		}
+		//}
+		//else
+		//{
+		//	switch (m_pSilvermane->Get_WeaponType())
+		//	{
+		//	case CWeapon::EType::Sword_1H:
+		//		if (FAILED(m_pStateController->Change_State(L"1H_SwordEquipOn")))
+		//			return -1;
+		//		return STATE_CHANGE;
+		//		break;
+		//	case CWeapon::EType::Hammer_2H:
+		//		if (FAILED(m_pStateController->Change_State(L"2H_HammerEquipOn")))
+		//			return -1;
+		//		return STATE_CHANGE;
+		//		break;
+		//	}
+		//}
 	}
 	else if (g_pGameInstance->getMouseKeyDown(CInputDev::MOUSESTATE::MB_RBUTTON))
 	{
-		if (m_pSilvermane->IsEquipWeapon())
-		{
+		//if (m_pSilvermane->IsEquipWeapon())
+		//{
 			switch (m_pSilvermane->Get_WeaponType())
 			{
 			case CWeapon::EType::Sword_1H:
@@ -160,23 +181,23 @@ _int CSilvermane_Idle::Input(const _double& _dDeltaTime)
 				return STATE_CHANGE;
 				break;
 			}
-		}
-		else
-		{
-			switch (m_pSilvermane->Get_WeaponType())
-			{
-			case CWeapon::EType::Sword_1H:
-				if (FAILED(m_pStateController->Change_State(L"1H_SwordEquipOn")))
-					return -1;
-				return STATE_CHANGE;
-				break;
-			case CWeapon::EType::Hammer_2H:
-				if (FAILED(m_pStateController->Change_State(L"2H_HammerEquipOn")))
-					return -1;
-				return STATE_CHANGE;
-				break;
-			}
-		}
+		//}
+		//else
+		//{
+		//	switch (m_pSilvermane->Get_WeaponType())
+		//	{
+		//	case CWeapon::EType::Sword_1H:
+		//		if (FAILED(m_pStateController->Change_State(L"1H_SwordEquipOn")))
+		//			return -1;
+		//		return STATE_CHANGE;
+		//		break;
+		//	case CWeapon::EType::Hammer_2H:
+		//		if (FAILED(m_pStateController->Change_State(L"2H_HammerEquipOn")))
+		//			return -1;
+		//		return STATE_CHANGE;
+		//		break;
+		//	}
+		//}
 	}
 
 	if (g_pGameInstance->getkeyDown(DIK_SPACE))

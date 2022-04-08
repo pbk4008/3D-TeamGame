@@ -249,11 +249,13 @@ void CCamera_Silvermane::SpringArm()
 	tRaycastDesc.filterData.flags = PxQueryFlag::eSTATIC;
 	if (g_pGameInstance->Raycast(tRaycastDesc))
 	{
-		for(auto pHitObject : tRaycastDesc.vecHitObjects)
-		if ((_uint)GAMEOBJECT::ENVIRONMENT == pHitObject->getTag())
+		for (_uint i = 0; i < tRaycastDesc.iHitNum; ++i)
 		{
-			m_pTransform->Set_State(CTransform::STATE_POSITION, XMVectorSetW(XMLoadFloat3(&tRaycastDesc.vHitPos), 1.f));
-			return;
+			if ((_uint)GAMEOBJECT::ENVIRONMENT == tRaycastDesc.vecHitObjects[i]->getTag())
+			{
+				m_pTransform->Set_State(CTransform::STATE_POSITION, XMVectorSetW(XMLoadFloat3(&tRaycastDesc.vecHitPositions[i]), 1.f));
+				return;
+			}
 		}
 	}
 }

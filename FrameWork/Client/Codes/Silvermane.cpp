@@ -847,6 +847,7 @@ HRESULT CSilvermane::Ready_Weapons()
 	pWeapon->Set_OwnerPivotMatrix(m_pModel->Get_PivotMatrix());
 	m_umapWeapons.emplace(L"Needle", pWeapon);
 	m_pCurWeapon = pWeapon;
+	m_pCurWeapon->setActive(true);
 	// ÇØ¸Ó
 	pWeapon = CFury::Create(m_pDevice, m_pDeviceContext);
 	if (FAILED(pWeapon->NativeConstruct(m_iSceneID, pWeaponBone)))

@@ -81,6 +81,8 @@ HRESULT CNeedle::NativeConstruct(const _uint _iSceneID, void* _pArg)
 
 	m_fDamage = 3;
 
+	m_bActive = false;
+	m_pCollider->Remove_ActorFromScene();
 	return S_OK;
 }
 
