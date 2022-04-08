@@ -155,8 +155,8 @@ HRESULT CLoader::LoadForScene()
 
 HRESULT CLoader::SetUp_Stage1_Object()
 {
-	if (FAILED(Load_Stage1FBXLoad()))
-		return E_FAIL;
+	/*if (FAILED(Load_Stage1FBXLoad()))
+		return E_FAIL;*/
 
 	if (FAILED(Load_Stage1Navi_SkyLoad()))
 		return E_FAIL;
@@ -779,7 +779,8 @@ HRESULT CLoader::SetUp_Stage1_Prototype()
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_StateController", CStateController::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 
-	if(FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC,L"Proto_Component_Rect_Buffer_Potal", CVIBuffer_Rect::Create(m_pDevice, m_pDeviceContext,L"../../Reference/ShaderFile/Shader_Potal.hlsl"))))
+
+	if(FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC,L"Proto_Component_Rect_Buffer_Potal", CVIBuffer_Rect::Create(m_pDevice, m_pDeviceContext, L"../../Reference/ShaderFile/Shader_Potal.hlsl"))))
 		return E_FAIL;
 
 	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Environment", CEnvironment::Create(m_pDevice, m_pDeviceContext))))
@@ -977,12 +978,13 @@ HRESULT CLoader::Load_Stage1MonsterLoad()
 		return E_FAIL;
 	 
 
-	////Bastion_Healer
+	//////Bastion_Healer
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Bastion_Healer", CModel::Create(m_pDevice, m_pDeviceContext,
 		L"../bin/FBX/Monster/Bastion_Healer_Bin.fbx", CModel::TYPE_ANIM, true))))
 		return E_FAIL;
 	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Monster_Bastion_Healer", CMonster_Bastion_Healer::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
+
 	////weapon
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Staff", CModel::Create(m_pDevice, m_pDeviceContext,
 		"../bin/Resources/Mesh/Staff/", "Staff.fbx",
@@ -993,6 +995,7 @@ HRESULT CLoader::Load_Stage1MonsterLoad()
 	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Weapon_Staff", CStaff::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 
+	//Meteor
 	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Weapon_Meteor", CMeteor::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 
@@ -1045,8 +1048,8 @@ HRESULT CLoader::Ready_Stage1()
 		return E_FAIL;
 	}
 
-	if (FAILED(Load_Stage2_Object()))
-		return E_FAIL;
+	//if (FAILED(Load_Stage2_Object()))
+	//	return E_FAIL;
 
 	return S_OK;
 }

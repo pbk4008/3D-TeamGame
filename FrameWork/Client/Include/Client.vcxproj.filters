@@ -735,9 +735,12 @@
     </Filter>
     <Filter Include="02.GameObject\02.Map\03.Potal">
       <UniqueIdentifier>{ad5b56da-5141-4199-8cab-4b99f8de595c}</UniqueIdentifier>
-      </Filter>
+    </Filter>
     <Filter Include="02.GameObject\03.Character\00.Player\00.Silvermane\State\Looting">
       <UniqueIdentifier>{63d17537-8141-4500-98a5-9b4ef284d80f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Scene\00.Logo">
+      <UniqueIdentifier>{cac3034c-dd8b-47e8-afc7-da6cb3e9501e}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -772,7 +775,7 @@
       <Filter>00.MainGame</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\Level_Logo.h">
-      <Filter>01.Scene\01.Loading\00.Logo</Filter>
+      <Filter>01.Scene\00.Logo</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\Loading.h">
       <Filter>01.Scene\01.Loading</Filter>
@@ -1676,7 +1679,7 @@
     </ClInclude>
     <ClInclude Include="..\Headers\Potal.h">
       <Filter>02.GameObject\02.Map\03.Potal</Filter>
-      </ClInclude>
+    </ClInclude>
     <ClInclude Include="..\Headers\Silvermane_Death.h">
       <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\HIt</Filter>
     </ClInclude>
@@ -1692,7 +1695,7 @@
       <Filter>00.MainGame</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\Level_Logo.cpp">
-      <Filter>01.Scene\01.Loading\00.Logo</Filter>
+      <Filter>01.Scene\00.Logo</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\Loading.cpp">
       <Filter>01.Scene\01.Loading</Filter>

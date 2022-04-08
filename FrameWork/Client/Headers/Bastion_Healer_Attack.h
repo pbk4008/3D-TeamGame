@@ -19,6 +19,8 @@ public:
 
 	virtual HRESULT EnterState();
 	virtual HRESULT ExitState();
+private:
+	void Check_Attack();
 
 public:
 	virtual void Look_Player(void) override;
@@ -27,6 +29,8 @@ public:
 public:
 	static CBastion_Healer_Attack* Create(ID3D11Device * _pDevice, ID3D11DeviceContext * _pDeviceContext, void* _pArg = nullptr);
 	virtual void Free() override;
+private:
+	_bool m_bSpawn;
 };
 END
 
