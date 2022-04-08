@@ -450,18 +450,25 @@ const _bool CPhysicsXSystem::Raycast(RAYCASTDESC & _desc)
 	}
 	else
 	{
+		// 원래 크기를 256으로 잡았지만, 스택 사이즈를 벗어낫다 하여 128로 축소
 		const PxU32 bufferSize = 128;
 		PxRaycastHit hitBuffer[bufferSize];
 		PxRaycastBuffer buf(hitBuffer, bufferSize);
 		if (m_pScene->raycast(origin, unitDir, _desc.fMaxDistance, buf, _desc.hitFlags, _desc.filterData))
 		{
-			PxU32 nbTouches = buf.nbTouches;
-			_desc.vecHitObjects.reserve(nbTouches);
-			for (PxU32 i = 0; i < nbTouches; ++i)
+			_desc.iHitNum = buf.nbTouches;
+			_desc.vecHitObjects.reserve(_desc.iHitNum);
+			_desc.vecHitPositions.reserve(_desc.iHitNum);
+			for (PxU32 i = 0; i < _desc.iHitNum; ++i)
 			{
 				PxRaycastHit hitInfo = buf.touches[i];
 				_desc.vecHitObjects.emplace_back(static_cast<CGameObject*>(hitInfo.actor->userData));
+				_desc.vecHitPositions.emplace_back(FromPxVec3(hitInfo.position));
 			}
+			// 혹시 하나만 검출하고 싶은데 eANY_HIT 를 안넣었을 경우를 위한 대비
+			if (_desc.ppOutHitObject)
+				*_desc.ppOutHitObject = _desc.vecHitObjects[0];
+			_desc.vHitPos = _desc.vecHitPositions[0];
 			return true;
 		}
 	}
@@ -499,13 +506,18 @@ const _bool CPhysicsXSystem::Sweep(SWEEPDESC& _desc)
 		PxSweepBuffer buf(hitBuffer, bufferSize);
 		if (m_pScene->sweep(_desc.geometry.any(), origin, unitDir, _desc.fMaxDistance, buf, _desc.hitFlags, _desc.filterData))
 		{
-			PxU32 nbTouches = buf.nbTouches;
-			_desc.vecHitObjects.reserve(nbTouches);
-			for (PxU32 i = 0; i < nbTouches; ++i)
+			_desc.iHitNum = buf.nbTouches;
+			_desc.vecHitObjects.reserve(_desc.iHitNum);
+			_desc.vecHitPositions.reserve(_desc.iHitNum);
+			for (PxU32 i = 0; i < _desc.iHitNum; ++i)
 			{
 				PxSweepHit hitInfo = buf.touches[i];
 				_desc.vecHitObjects.emplace_back(static_cast<CGameObject*>(hitInfo.actor->userData));
+				_desc.vecHitPositions.emplace_back(FromPxVec3(hitInfo.position));
 			}
+			if (_desc.ppOutHitObject)
+				*_desc.ppOutHitObject = _desc.vecHitObjects[0];
+			_desc.vHitPos = _desc.vecHitPositions[0];
 			return true;
 		}
 	}
@@ -527,9 +539,7 @@ const _bool CPhysicsXSystem::Overlap(OVERLAPDESC& _desc)
 			{
 				PxOverlapHit hitInfo = hit.block;
 				if (_desc.ppOutHitObject)
-				{
 					*_desc.ppOutHitObject = static_cast<CGameObject*>(hitInfo.actor->userData);
-				}
 				return true;
 			}
 		}
@@ -541,13 +551,15 @@ const _bool CPhysicsXSystem::Overlap(OVERLAPDESC& _desc)
 		PxOverlapBuffer buf(hitBuffer, bufferSize);
 		if (m_pScene->overlap(_desc.geometry.any(), origin, buf, _desc.filterData))
 		{
-			PxU32 nbTouches = buf.nbTouches;
-			_desc.vecHitObjects.reserve(nbTouches);
-			for (PxU32 i = 0; i < nbTouches; ++i)
+			_desc.iHitNum = buf.nbTouches;
+			_desc.vecHitObjects.reserve(_desc.iHitNum);
+			for (PxU32 i = 0; i < _desc.iHitNum; ++i)
 			{
 				PxOverlapHit hitInfo = buf.touches[i];
 				_desc.vecHitObjects.emplace_back(static_cast<CGameObject*>(hitInfo.actor->userData));
 			}
+			if (_desc.ppOutHitObject)
+				*_desc.ppOutHitObject = _desc.vecHitObjects[0];
 			return true;
 		}
 	}

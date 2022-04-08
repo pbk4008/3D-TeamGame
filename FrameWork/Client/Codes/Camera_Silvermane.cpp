@@ -193,6 +193,12 @@ void CCamera_Silvermane::Set_ChaseTarget(const _bool _isChase)
 	m_isChase = _isChase;
 }
 
+void CCamera_Silvermane::Respawn()
+{
+	m_vRot = { 0.f, 0.f, 0.f };
+	m_pWorldTransform->SetUp_Rotation(m_vRot);
+}
+
 _int CCamera_Silvermane::Chase_Target(const _double& _dDeltaTime)
 {
 	if (!m_pSilvermane)
@@ -249,11 +255,13 @@ void CCamera_Silvermane::SpringArm()
 	tRaycastDesc.filterData.flags = PxQueryFlag::eSTATIC;
 	if (g_pGameInstance->Raycast(tRaycastDesc))
 	{
-		for(auto pHitObject : tRaycastDesc.vecHitObjects)
-		if ((_uint)GAMEOBJECT::ENVIRONMENT == pHitObject->getTag())
+		for (_uint i = 0; i < tRaycastDesc.iHitNum; ++i)
 		{
-			m_pTransform->Set_State(CTransform::STATE_POSITION, XMVectorSetW(XMLoadFloat3(&tRaycastDesc.vHitPos), 1.f));
-			return;
+			if ((_uint)GAMEOBJECT::ENVIRONMENT == tRaycastDesc.vecHitObjects[i]->getTag())
+			{
+				m_pTransform->Set_State(CTransform::STATE_POSITION, XMVectorSetW(XMLoadFloat3(&tRaycastDesc.vecHitPositions[i]), 1.f));
+				return;
+			}
 		}
 	}
 }
