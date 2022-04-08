@@ -179,6 +179,7 @@ call Update_Client.bat</Command>
     </FxCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\Codes\Meteor.h" />
     <ClInclude Include="..\Default\Client_Enum.h" />
     <ClInclude Include="..\Default\Client_Function.h" />
     <ClInclude Include="..\Default\Client_Include.h" />
@@ -345,6 +346,7 @@ call Update_Client.bat</Command>
     <ClInclude Include="..\Headers\Level_Logo.h" />
     <ClInclude Include="..\Headers\Loader.h" />
     <ClInclude Include="..\Headers\Loading.h" />
+    <ClInclude Include="..\Headers\LootingChest.h" />
     <ClInclude Include="..\Headers\MainApp.h" />
     <ClInclude Include="..\Headers\MainCamera.h" />
     <ClInclude Include="..\Headers\MainCamera_Ortho.h" />
@@ -369,6 +371,7 @@ call Update_Client.bat</Command>
     <ClInclude Include="..\Headers\NoiseFire.h" />
     <ClInclude Include="..\Headers\Plane_Test.h" />
     <ClInclude Include="..\Headers\Polearm.h" />
+    <ClInclude Include="..\Headers\Potal.h" />
     <ClInclude Include="..\Headers\ScriptableData.h" />
     <ClInclude Include="..\Headers\ShakeManager.h" />
     <ClInclude Include="..\Headers\Shield.h" />
@@ -412,6 +415,7 @@ call Update_Client.bat</Command>
     <ClInclude Include="..\Headers\Silvermane.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClInclude>
+    <ClInclude Include="..\Headers\Silvermane_Death.h" />
     <ClInclude Include="..\Headers\Silvermane_Hit.h" />
     <ClInclude Include="..\Headers\Silvermane_Idle.h" />
     <ClInclude Include="..\Headers\Silvermane_Jog.h" />
@@ -638,9 +642,11 @@ call Update_Client.bat</Command>
     <ClCompile Include="..\Codes\ItemData.cpp" />
     <ClCompile Include="..\Codes\JumpBox.cpp" />
     <ClCompile Include="..\Codes\JumpTrigger.cpp" />
+    <ClCompile Include="..\Codes\LootingChest.cpp" />
     <ClCompile Include="..\Codes\MeshLoader.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="..\Codes\Meteor.cpp" />
     <ClCompile Include="..\Codes\MidBoss_Attack.cpp" />
     <ClCompile Include="..\Codes\MidBoss_BattleCry.cpp" />
     <ClCompile Include="..\Codes\JumpNode.cpp" />
@@ -673,6 +679,7 @@ call Update_Client.bat</Command>
     <ClCompile Include="..\Codes\NoiseFire.cpp" />
     <ClCompile Include="..\Codes\Plane_Test.cpp" />
     <ClCompile Include="..\Codes\Polearm.cpp" />
+    <ClCompile Include="..\Codes\Potal.cpp" />
     <ClCompile Include="..\Codes\ScriptableData.cpp" />
     <ClCompile Include="..\Codes\ShakeManager.cpp" />
     <ClCompile Include="..\Codes\Shield.cpp" />
@@ -717,6 +724,7 @@ call Update_Client.bat</Command>
     <ClCompile Include="..\Codes\Silvermane.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="..\Codes\Silvermane_Death.cpp" />
     <ClCompile Include="..\Codes\Silvermane_Idle.cpp" />
     <ClCompile Include="..\Codes\Silvermane_Jog.cpp" />
     <ClCompile Include="..\Codes\Silvermane_JogBwd.cpp" />
@@ -827,6 +835,7 @@ call Update_Client.bat</Command>
     <FxCompile Include="..\bin\ShaderFile\Shader_Panel_UI.hlsl" />
     <FxCompile Include="..\bin\ShaderFile\Shader_Particle.hlsl" />
     <FxCompile Include="..\bin\ShaderFile\Shader_Particle_Size.hlsl" />
+    <FxCompile Include="..\bin\ShaderFile\Shader_Potal.hlsl" />
     <FxCompile Include="..\bin\ShaderFile\Shader_RectFire.hlsl" />
     <FxCompile Include="..\bin\ShaderFile\Shader_Shield.hlsl" />
     <FxCompile Include="..\bin\ShaderFile\Shader_SilverMane.hlsl" />

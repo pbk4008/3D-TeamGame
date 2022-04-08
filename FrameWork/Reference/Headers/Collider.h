@@ -38,6 +38,7 @@ public:
 	void Add_ActorToScene();
 	void Sleep();
 	void WakeUp();
+	void Add_Force(_fvector vPow);
 
 public:
 	virtual HRESULT NativeConstruct_Prototype() override;

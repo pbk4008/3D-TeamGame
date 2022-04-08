@@ -37,12 +37,12 @@ protected:
 
 protected:
 	virtual _int Input(const _double& _dDeltaTime);
-	void OnTriggerEnterHit(CCollision& collision);
 	void Reflect_Bullet(const ATTACKDESC& _tAttackDesc);
 
 public:
 	virtual void Hit(const ATTACKDESC& _tAttackDesc);
 	virtual void Block(const ATTACKDESC& _tAttackDesc);
+	virtual void Death(const ATTACKDESC& _tAttackDesc);
 
 protected:
 	CSilvermane* m_pSilvermane = nullptr;

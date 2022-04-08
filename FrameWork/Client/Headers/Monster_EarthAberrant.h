@@ -55,7 +55,7 @@ private:
 
 	class CUI_Monster_Panel* m_pPanel = nullptr;
 	class CEarthAberrant_Pick* m_pWeapon = nullptr;
-
+	
 private:
 	_bool	m_bIsFall = false;
 	_bool m_bFirstHit = false; //맨처음들어와서 맞았을때 판넬크기바꿔줘야돼서

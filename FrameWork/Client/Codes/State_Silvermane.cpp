@@ -269,83 +269,6 @@ _int CState_Silvermane::Input(const _double& _dDeltaTime)
 	return _int();
 }
 
-void CState_Silvermane::OnTriggerEnterHit(CCollision& collision)
-{
-	_uint iTag = collision.pGameObject->getTag();
-
-	switch (iTag)
-	{
-		// 무기들과 충돌했을 경우
-	case (_uint)GAMEOBJECT::WEAPON_MIDBOSS:
-	case (_uint)GAMEOBJECT::WEAPON_EARTH:
-	case (_uint)GAMEOBJECT::WEAPON_BRONZE:
-	case (_uint)GAMEOBJECT::WEAPON_2HSword:
-	case (_uint)GAMEOBJECT::WEAPON_POLEARM:
-		if (static_cast<CWeapon*>(collision.pGameObject)->IsAttack())
-		{
-			ATTACKDESC tAttackDesc = static_cast<CWeapon*>(collision.pGameObject)->Get_Owner()->Get_AttackDesc();
-			tAttackDesc.fDamage += static_cast<CWeapon*>(collision.pGameObject)->Get_Damage();
-			m_pSilvermane->Add_HP(-tAttackDesc.fDamage);
-			switch (tAttackDesc.iLevel)
-			{
-			case 1:
-				m_pStateController->Change_State(L"1H_FlinchLeft");
-				return;
-				break;
-			case 2:
-
-				break;
-			case 3:
-
-				break;
-			}
-		}
-		break;
-		// 투사체들과 충돌했을 경우, 총알 or 마법 or 레이저
-	case (_uint)GAMEOBJECT::WEAPON_BULLET:
-	{
-		ATTACKDESC tAttackDesc = static_cast<CWeapon*>(collision.pGameObject)->Get_Owner()->Get_AttackDesc();
-		tAttackDesc.fDamage += static_cast<CWeapon*>(collision.pGameObject)->Get_Damage();
-		m_pSilvermane->Add_HP(-tAttackDesc.fDamage);
-		switch (tAttackDesc.iLevel)
-		{
-		case 1:
-			m_pStateController->Change_State(L"1H_FlinchLeft");
-			return;
-			break;
-		case 2:
-
-			break;
-		case 3:
-
-			break;
-		}
-	}
-		break;
-		// 몬스터들과 직접 충돌햇을 경우
-	case (_uint)GAMEOBJECT::MONSTER_CRYSTAL:
-		if (static_cast<CActor*>(collision.pGameObject)->IsAttack())
-		{
-			ATTACKDESC tAttackDesc = static_cast<CActor*>(collision.pGameObject)->Get_AttackDesc();
-			m_pSilvermane->Add_HP(-tAttackDesc.fDamage);
-			switch (tAttackDesc.iLevel)
-			{
-			case 1:
-				m_pStateController->Change_State(L"1H_FlinchLeft");
-				return;
-				break;
-			case 2:
-
-				break;
-			case 3:
-
-				break;
-			}
-		}
-		break;
-	}
-}
-
 void CState_Silvermane::Reflect_Bullet(const ATTACKDESC& _tAttackDesc)
 {
 	CTransform* pTargetTransform = _tAttackDesc.pOwner->Get_Transform();
@@ -379,79 +302,16 @@ void CState_Silvermane::Reflect_Bullet(const ATTACKDESC& _tAttackDesc)
 
 void CState_Silvermane::Hit(const ATTACKDESC& _tAttackDesc)
 {
-#pragma region 플레이어에서만 충돌 처리를 해줄 경우
-	//_uint iTag = _tAttackDesc.pGameObject->getTag();
-
-	//switch (iTag)
-	//{
-	//	// 무기들과 충돌했을 경우
-	//case (_uint)GAMEOBJECT::WEAPON_MIDBOSS:
-	//case (_uint)GAMEOBJECT::WEAPON_EARTH:
-	//case (_uint)GAMEOBJECT::WEAPON_BRONZE:
-	//case (_uint)GAMEOBJECT::WEAPON_2HSword:
-	//case (_uint)GAMEOBJECT::WEAPON_POLEARM:
-	//	if (static_cast<CWeapon*>(_tAttackDesc.pGameObject)->IsAttack())
-	//	{
-	//		m_pSilvermane->Add_HP(-_tAttackDesc.fDamage);
-	//		switch (_tAttackDesc.iLevel)
-	//		{
-	//		case 1:
-	//			m_pStateController->Change_State(L"1H_FlinchLeft");
-	//			return;
-	//			break;
-	//		case 2:
-
-	//			break;
-	//		case 3:
-
-	//			break;
-	//		}
-	//	}
-	//	break;
-	//	// 투사체들과 충돌했을 경우, 총알 or 마법 or 레이저
-	//case (_uint)GAMEOBJECT::WEAPON_BULLET:
-	//{
-	//	m_pSilvermane->Add_HP(-_tAttackDesc.fDamage);
-	//	switch (_tAttackDesc.iLevel)
-	//	{
-	//	case 1:
-	//		m_pStateController->Change_State(L"1H_FlinchLeft");
-	//		return;
-	//		break;
-	//	case 2:
-
-	//		break;
-	//	case 3:
-
-	//		break;
-	//	}
-	//}
-	//break;
-	//// 몬스터들과 직접 충돌햇을 경우
-	//case (_uint)GAMEOBJECT::MONSTER_CRYSTAL:
-	//	if (static_cast<CActor*>(_tAttackDesc.pGameObject)->IsAttack())
-	//	{
-	//		m_pSilvermane->Add_HP(-_tAttackDesc.fDamage);
-	//		switch (_tAttackDesc.iLevel)
-	//		{
-	//		case 1:
-	//			m_pStateController->Change_State(L"1H_FlinchLeft");
-	//			return;
-	//			break;
-	//		case 2:
-
-	//			break;
-	//		case 3:
-
-	//			break;
-	//		}
-	//	}
-	//	break;
-	//}
-#pragma endregion
-
-	if (m_pSilvermane->IsHit() || m_pSilvermane->IsAttack())
+	if (m_pSilvermane->IsHit() || m_pSilvermane->IsAttack() || m_pSilvermane->Get_Dead())
 		return;
+
+	m_pSilvermane->Add_HP(-_tAttackDesc.fDamage);
+
+	if (0.f >= m_pSilvermane->Get_CurrentHp())
+	{
+		Death(_tAttackDesc);
+		return;
+	}
 
 	EDir eDirFB = EDir::Max;
 	EDir eDirLR = EDir::Max;
@@ -469,8 +329,6 @@ void CState_Silvermane::Hit(const ATTACKDESC& _tAttackDesc)
 		eDirLR = EDir::Right;
 	else
 		eDirLR = EDir::Left;
-
-	m_pSilvermane->Add_HP(-_tAttackDesc.fDamage);
 
 	if (EDir::Backward == eDirFB && 1 < _tAttackDesc.iLevel)
 	{
@@ -501,78 +359,7 @@ void CState_Silvermane::Hit(const ATTACKDESC& _tAttackDesc)
 
 void CState_Silvermane::Block(const ATTACKDESC& _tAttackDesc)
 {
-#pragma region 플레이어에서만 충돌 처리를 해줄 경우
-	//_uint iTag = _tAttackDesc.pGameObject->getTag();
-
-	//switch (iTag)
-	//{
-	//	// 무기들과 충돌했을 경우
-	//case (_uint)GAMEOBJECT::WEAPON_MIDBOSS:
-	//case (_uint)GAMEOBJECT::WEAPON_EARTH:
-	//case (_uint)GAMEOBJECT::WEAPON_BRONZE:
-	//case (_uint)GAMEOBJECT::WEAPON_2HSword:
-	//case (_uint)GAMEOBJECT::WEAPON_POLEARM:
-	//	if (static_cast<CWeapon*>(_tAttackDesc.pGameObject)->IsAttack())
-	//	{
-	//		//m_pSilvermane->Add_HP(-_tAttackDesc.fDamage);
-	//		switch (_tAttackDesc.iLevel)
-	//		{
-	//		case 1:
-	//			m_pStateController->Change_State(L"Shield_BlockSkid");
-	//			return;
-	//			break;
-	//		case 2:
-
-	//			break;
-	//		case 3:
-
-	//			break;
-	//		}
-	//	}
-	//	break;
-	//	// 투사체들과 충돌했을 경우, 총알 or 마법 or 레이저
-	//case (_uint)GAMEOBJECT::WEAPON_BULLET:
-	//{
-	//	//m_pSilvermane->Add_HP(-_tAttackDesc.fDamage);
-	//	switch (_tAttackDesc.iLevel)
-	//	{
-	//	case 1:
-	//		m_pStateController->Change_State(L"Shield_BlockSkid");
-	//		return;
-	//		break;
-	//	case 2:
-
-	//		break;
-	//	case 3:
-
-	//		break;
-	//	}
-	//}
-	//break;
-	//// 몬스터들과 직접 충돌햇을 경우
-	//case (_uint)GAMEOBJECT::MONSTER_CRYSTAL:
-	//	if (static_cast<CActor*>(_tAttackDesc.pGameObject)->IsAttack())
-	//	{
-	//		//m_pSilvermane->Add_HP(-_tAttackDesc.fDamage);
-	//		switch (_tAttackDesc.iLevel)
-	//		{
-	//		case 1:
-	//			m_pStateController->Change_State(L"Shield_BlockSkid");
-	//			return;
-	//			break;
-	//		case 2:
-
-	//			break;
-	//		case 3:
-
-	//			break;
-	//		}
-	//	}
-	//	break;
-	//}
-#pragma endregion
-
-	if (m_pSilvermane->IsHit())
+	if (m_pSilvermane->IsHit() || m_pSilvermane->Get_Dead())
 		return;
 
 	EDir eDirFB = EDir::Max;
@@ -590,7 +377,12 @@ void CState_Silvermane::Block(const ATTACKDESC& _tAttackDesc)
 	{
 		m_pSilvermane->Set_EquipShield(false);
 		m_pSilvermane->Set_EquipShieldAnim(false);
-		m_pStateController->Change_State(L"KnockBack", &eDirFB);
+		m_pSilvermane->Add_HP(-_tAttackDesc.fDamage);
+
+		if (0.f < m_pSilvermane->Get_CurrentHp())
+			m_pStateController->Change_State(L"KnockBack", &eDirFB);
+		else
+			Death(_tAttackDesc);
 		return;
 	}
 
@@ -642,6 +434,49 @@ void CState_Silvermane::Block(const ATTACKDESC& _tAttackDesc)
 	}
 
 	//m_pSilvermane->Add_HP(-_tAttackDesc.fDamage);
+}
+
+void CState_Silvermane::Death(const ATTACKDESC& _tAttackDesc)
+{
+	if (m_pSilvermane->Get_Dead())
+		return;
+
+	_vector svDir = XMVector3Normalize(XMVectorSetY(_tAttackDesc.pOwner->Get_Transform()->Get_State(CTransform::STATE_POSITION) - m_pTransform->Get_State(CTransform::STATE_POSITION), 0.f));
+	_vector svLook = XMVector3Normalize(XMVectorSetY(m_pTransform->Get_State(CTransform::STATE_LOOK), 0.f));
+
+	_vector svAngle = XMVector3AngleBetweenVectors(svLook, svDir);
+	_float fRadian = 0.f;
+	_float fAngle = 0.f;
+	XMStoreFloat(&fRadian, svAngle);
+	_vector svCross = XMVector3Cross(svLook, svDir);
+	if (0.f < XMVectorGetY(svCross)) // 타겟이 오른쪽
+	{
+		fAngle = XMConvertToDegrees(fRadian);
+	}
+	else // 타겟이 왼쪽
+	{
+		fAngle = -XMConvertToDegrees(fRadian);
+	}
+
+	EDir eDir = EDir::Max;
+	if (-45.f <= fAngle && 45.f >= fAngle) // Fwd
+	{
+		eDir = EDir::Forward;
+	}
+	else if (-45.f > fAngle && -135.f < fAngle) // Left
+	{
+		eDir = EDir::Left;
+	}
+	else if (45.f < fAngle && 135.f > fAngle) // Right
+	{
+		eDir = EDir::Right;
+	}
+	else // Bwd
+	{
+		eDir = EDir::Backward;
+	}
+	if (FAILED(m_pStateController->Change_State(L"Death", &eDir)))
+		return;
 }
 
 void CState_Silvermane::Free()

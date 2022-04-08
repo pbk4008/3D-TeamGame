@@ -443,8 +443,6 @@
       <UniqueIdentifier>{15743125-3fab-4955-a1a7-2c3ab22ace2e}</UniqueIdentifier>
     </Filter>
     <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_2HSword\State_2HSword\Groggy\End">
-    </Filter>
-    <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_2HSword\State_2HSword\Groggy\End">
       <UniqueIdentifier>{1158fce2-5cfa-4605-9029-4ac375f14bcd}</UniqueIdentifier>
     </Filter>
     <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_Healer\State_Healer\Groggy\End">
@@ -686,6 +684,60 @@
     </Filter>
     <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_Spear\00.Idle">
       <UniqueIdentifier>{2398d3e4-0aad-4c0a-b779-2676cae6f42f}</UniqueIdentifier>
+	</Filter>
+    <Filter Include="02.GameObject\05.UI\03.SingleImage">
+      <UniqueIdentifier>{3fff2a7c-2e05-4760-99a8-e04b4a301ae2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.UI\04.Inventory">
+      <UniqueIdentifier>{782f4f26-a57a-4218-81bc-72b76cac97a6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.UI\04.Inventory\00.Indexes">
+      <UniqueIdentifier>{9fbfeccf-c9da-4ea7-a744-e8696373439b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.System">
+      <UniqueIdentifier>{62988325-939c-4ebd-9df0-bc7e105ce642}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.System\00.Trigger">
+      <UniqueIdentifier>{64538ba6-dcae-4651-a187-37e1fdf0fbf0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.System\00.Trigger\Client_Trigger">
+      <UniqueIdentifier>{b9091f0b-2046-48f5-9b0a-b245f8fa1e4e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.System\01.ShakeManager">
+      <UniqueIdentifier>{88c490a5-4de2-42f5-8177-be9cf2784d4b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.System\02.InteractManager">
+      <UniqueIdentifier>{463fe524-896b-4339-89fc-7dd31e8d3856}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.System\03.DropManager">
+      <UniqueIdentifier>{1616c50f-191e-47c8-9ae6-63f27fdd364c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.System\04.GameObjectPool">
+      <UniqueIdentifier>{1624795f-0856-4f9e-b3dd-76c8629f1312}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.System\05.DataManager">
+      <UniqueIdentifier>{570e7cdd-e1ad-4238-8e22-de6213ebd30e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.System\06.Inven_UIManager">
+      <UniqueIdentifier>{625ef898-8306-4fcf-948a-cb5065ac2aea}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.UI\04.Inventory\01.Background">
+      <UniqueIdentifier>{095a960c-4854-49d0-b937-3c2eebd13ce3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.UI\04.Inventory\02.Equipment">
+      <UniqueIdentifier>{f3c63aa5-6608-4b19-b2ca-9cd9e1c01051}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.UI\04.Inventory\03.Armory">
+      <UniqueIdentifier>{d0ac4e6a-b203-4940-b2f1-08c40c0e062e}</UniqueIdentifier>
+	</Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_Healer\Meteor">
+      <UniqueIdentifier>{62e29ab4-9fdb-4a34-b3fd-46a933f3453a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\02.Map\03.Potal">
+      <UniqueIdentifier>{ad5b56da-5141-4199-8cab-4b99f8de595c}</UniqueIdentifier>
+      </Filter>
+    <Filter Include="02.GameObject\03.Character\00.Player\00.Silvermane\State\Looting">
+      <UniqueIdentifier>{63d17537-8141-4500-98a5-9b4ef284d80f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -1208,16 +1260,6 @@
     <ClInclude Include="..\Headers\1H_SwordAttackNormalR1_04Swap.h">
       <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\1H_Sword\R2</Filter>
     </ClInclude>
-    <ClInclude Include="..\Headers\1H_SwordAttackNormalR1_04Swap.h">
-      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\1H_Sword\R2</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Headers\Traverse_JumpNodeJog.h">
-      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Jump</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Headers\1H_SwordAttackNormalR1_04Swap.h" />
-    <ClInclude Include="..\Headers\Monster_Bastion_Sword.h">
-      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Sword</Filter>
-    </ClInclude>
     <ClInclude Include="..\Headers\Bastion_Healer_State.h">
       <Filter>02.GameObject\03.Character\01.Monster\Bastion_Healer\State_Healer</Filter>
     </ClInclude>
@@ -1232,9 +1274,6 @@
     </ClInclude>
     <ClInclude Include="..\Headers\Stage2.h">
       <Filter>01.Scene\02.Stage\01.Stage2</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Headers\Monster_Bastion_Sword.h">
-      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Sword</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\UI_Monster_Name.h">
       <Filter>02.GameObject\05.UI\01.UI_Ingame\01.Meter\02.Monster\04.Name</Filter>
@@ -1305,9 +1344,6 @@
     <ClInclude Include="..\Headers\EarthAberrant_Pick.h">
       <Filter>02.GameObject\03.Character\01.Monster\EarthAberrant\00.Weapon\00.Aberrant_Pick</Filter>
     </ClInclude>
-    <ClInclude Include="..\Headers\1H_SwordAttackNormalR1_04Swap.h">
-      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\1H_Sword\R2</Filter>
-    </ClInclude>
     <ClInclude Include="..\Headers\UI_Tuto_Base.h">
       <Filter>02.GameObject\05.UI\01.UI_Ingame\01.Meter\05.Tutorial\01.SideTutorial\00.Base</Filter>
     </ClInclude>
@@ -1377,7 +1413,6 @@
     <ClInclude Include="..\Headers\Bastion_2HSword_Groggy.h">
       <Filter>02.GameObject\03.Character\01.Monster\Bastion_2HSword\State_2HSword\Groggy</Filter>
     </ClInclude>
-    <ClInclude Include="..\Headers\Shooter_Attack.h" />
     <ClInclude Include="..\Headers\Camera_Culling.h">
       <Filter>02.GameObject\01. MainCamera\CullingCam</Filter>
     </ClInclude>
@@ -1387,14 +1422,12 @@
     <ClInclude Include="..\Headers\SubEnvironment.h">
       <Filter>02.GameObject\02.Map\01.Environment\00.Tree</Filter>
     </ClInclude>
-    <ClInclude Include="..\Headers\Shooter_Attack.h" />
     <ClInclude Include="..\Headers\Effect_HitFloating.h">
       <Filter>02.GameObject\04.Effect\00.Particle\03.Effect_Floating</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\CameraShake.h">
       <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\Camera</Filter>
     </ClInclude>
-    <ClInclude Include="..\Headers\Shooter_Attack.h" />
     <ClInclude Include="..\Headers\Bastion_Healer_Groggy_End.h">
       <Filter>02.GameObject\03.Character\01.Monster\Bastion_Healer\State_Healer\Groggy\End</Filter>
     </ClInclude>
@@ -1433,9 +1466,6 @@
     </ClInclude>
     <ClInclude Include="..\Headers\BronzeAnimus_Battle_Idle.h">
       <Filter>02.GameObject\03.Character\01.Monster\BronzeAnimus\State\Battle_Idle</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Headers\Shooter_Attack.h">
-      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Shooter\State\Attack</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\Monster_Bastion_Spear.h">
       <Filter>02.GameObject\03.Character\01.Monster\Bastion_Spear</Filter>
@@ -1499,9 +1529,6 @@
     </ClInclude>
     <ClInclude Include="..\Headers\Effect_Env_Fire.h">
       <Filter>02.GameObject\04.Effect\00.Effect_Image\00.Env_Fire</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Headers\Monster_Bastion_Sword.h">
-      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Sword</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\SwordTrail.h">
       <Filter>02.GameObject\96.Weapon\98.Trail</Filter>
@@ -1622,6 +1649,39 @@
     </ClInclude>
     <ClInclude Include="..\Headers\BronzeAnimus_State.h">
       <Filter>02.GameObject\03.Character\01.Monster\BronzeAnimus\State</Filter>
+	</ClInclude>
+    <ClInclude Include="..\Headers\SingleImage.h">
+      <Filter>02.GameObject\05.UI\03.SingleImage</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\UI_ModalWindow.h">
+      <Filter>02.GameObject\05.UI\04.Inventory</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\UI_Indexes.h">
+      <Filter>02.GameObject\05.UI\04.Inventory\00.Indexes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Inven_UIManager.h">
+      <Filter>03.System\06.Inven_UIManager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\UI_Background.h">
+      <Filter>02.GameObject\05.UI\04.Inventory\01.Background</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\UI_Equipment.h">
+      <Filter>02.GameObject\05.UI\04.Inventory\02.Equipment</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\UI_Armory.h">
+      <Filter>02.GameObject\05.UI\04.Inventory\03.Armory</Filter>
+	</ClInclude>
+    <ClInclude Include="..\Codes\Meteor.h">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Healer\Meteor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Potal.h">
+      <Filter>02.GameObject\02.Map\03.Potal</Filter>
+      </ClInclude>
+    <ClInclude Include="..\Headers\Silvermane_Death.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\HIt</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\LootingChest.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Looting</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -2117,16 +2177,6 @@
     <ClCompile Include="..\Codes\1H_SwordAttackNormalR1_04Swap.cpp">
       <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\1H_Sword\R2</Filter>
     </ClCompile>
-    <ClCompile Include="..\Codes\1H_SwordAttackNormalR1_04Swap.cpp">
-      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\1H_Sword\R2</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Codes\Traverse_JumpNodeJog.cpp">
-      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Jump</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Codes\1H_SwordAttackNormalR1_04Swap.cpp" />
-    <ClCompile Include="..\Codes\Monster_Bastion_Sword.cpp">
-      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Sword</Filter>
-    </ClCompile>
     <ClCompile Include="Client.cpp">
       <Filter>99.Default</Filter>
     </ClCompile>
@@ -2144,9 +2194,6 @@
     </ClCompile>
     <ClCompile Include="..\Codes\Stage2.cpp">
       <Filter>01.Scene\02.Stage\01.Stage2</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Codes\Monster_Bastion_Sword.cpp">
-      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Sword</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\UI_Monster_Name.cpp">
       <Filter>02.GameObject\05.UI\01.UI_Ingame\01.Meter\02.Monster\04.Name</Filter>
@@ -2220,9 +2267,6 @@
     <ClCompile Include="..\Codes\EarthAberrant_Pick.cpp">
       <Filter>02.GameObject\03.Character\01.Monster\EarthAberrant\00.Weapon\00.Aberrant_Pick</Filter>
     </ClCompile>
-    <ClCompile Include="..\Codes\1H_SwordAttackNormalR1_04Swap.cpp">
-      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\1H_Sword\R2</Filter>
-    </ClCompile>
     <ClCompile Include="..\Codes\UI_Tuto_Base.cpp">
       <Filter>02.GameObject\05.UI\01.UI_Ingame\01.Meter\05.Tutorial\01.SideTutorial\00.Base</Filter>
     </ClCompile>
@@ -2289,7 +2333,6 @@
     <ClCompile Include="..\Codes\Bastion_2HSword_Groggy.cpp">
       <Filter>02.GameObject\03.Character\01.Monster\Bastion_2HSword\State_2HSword\Groggy</Filter>
     </ClCompile>
-    <ClCompile Include="..\Codes\Shooter_Attack.cpp" />
     <ClCompile Include="..\Codes\Camera_Culling.cpp">
       <Filter>02.GameObject\01. MainCamera\CullingCam</Filter>
     </ClCompile>
@@ -2299,14 +2342,12 @@
     <ClCompile Include="..\Codes\SubEnvironment.cpp">
       <Filter>02.GameObject\02.Map\01.Environment\00.Tree</Filter>
     </ClCompile>
-    <ClCompile Include="..\Codes\Shooter_Attack.cpp" />
     <ClCompile Include="..\Codes\Effect_HitFloating.cpp">
       <Filter>02.GameObject\04.Effect\00.Particle\03.Effect_Floating</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\CameraShake.cpp">
       <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\Camera</Filter>
     </ClCompile>
-    <ClCompile Include="..\Codes\Shooter_Attack.cpp" />
     <ClCompile Include="..\Codes\Bastion_Healer_Groggy_End.cpp">
       <Filter>02.GameObject\03.Character\01.Monster\Bastion_Healer\State_Healer\Groggy\End</Filter>
     </ClCompile>
@@ -2348,9 +2389,6 @@
     </ClCompile>
     <ClCompile Include="..\Codes\BronzeAnimus_Battle_Idle.cpp">
       <Filter>02.GameObject\03.Character\01.Monster\BronzeAnimus\State\Battle_Idle</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Codes\Shooter_Attack.cpp">
-      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Shooter\State\Attack</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\Monster_Bastion_Spear.cpp">
       <Filter>02.GameObject\03.Character\01.Monster\Bastion_Spear</Filter>
@@ -2411,9 +2449,6 @@
     </ClCompile>
     <ClCompile Include="..\Codes\Effect_Env_Fire.cpp">
       <Filter>02.GameObject\04.Effect\00.Effect_Image\00.Env_Fire</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Codes\Monster_Bastion_Sword.cpp">
-      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Sword</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\SwordTrail.cpp">
       <Filter>02.GameObject\96.Weapon\98.Trail</Filter>
@@ -2535,6 +2570,39 @@
     <ClCompile Include="..\Codes\Effect_Falling_Leaf.cpp">
       <Filter>02.GameObject\04.Effect\00.Particle\01.Effect_MapLeaf</Filter>
     </ClCompile>
+    <ClCompile Include="..\Codes\SingleImage.cpp">
+      <Filter>02.GameObject\05.UI\03.SingleImage</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\UI_ModalWindow.cpp">
+      <Filter>02.GameObject\05.UI\04.Inventory</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\UI_Indexes.cpp">
+      <Filter>02.GameObject\05.UI\04.Inventory\00.Indexes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Inven_UIManager.cpp">
+      <Filter>03.System\06.Inven_UIManager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\UI_Background.cpp">
+      <Filter>02.GameObject\05.UI\04.Inventory\01.Background</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\UI_Equipment.cpp">
+      <Filter>02.GameObject\05.UI\04.Inventory\02.Equipment</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\UI_Armory.cpp">
+      <Filter>02.GameObject\05.UI\04.Inventory\03.Armory</Filter>
+	</ClCompile>
+    <ClCompile Include="..\Codes\Meteor.cpp">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Healer\Meteor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Potal.cpp">
+      <Filter>02.GameObject\02.Map\03.Potal</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Silvermane_Death.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\HIt</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\LootingChest.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Looting</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -2648,6 +2716,9 @@
     </FxCompile>
     <FxCompile Include="..\bin\ShaderFile\Shader_Particle_Size.hlsl">
       <Filter>100.ShaderFiles\03.Effect</Filter>
+    </FxCompile>
+    <FxCompile Include="..\bin\ShaderFile\Shader_Potal.hlsl">
+      <Filter>100.ShaderFiles\99.Other</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>

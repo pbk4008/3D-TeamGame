@@ -64,6 +64,12 @@ HRESULT C1H_SwordAttackNormalR2_Start::EnterState()
 		return E_FAIL;
 	m_pAnimationController->Set_RootMotion(true, true);
 
+	if (!m_pSilvermane->IsEquipWeapon())
+	{
+		m_pSilvermane->Set_EquipWeapon(true);
+		m_pSilvermane->Set_WeaponFixedBone("weapon_r");
+	}
+
 	m_pSilvermane->Set_IsTrasceCamera(false);
 	m_pSilvermane->Set_IsAttack(false);
 	return S_OK;
@@ -87,7 +93,7 @@ _int C1H_SwordAttackNormalR2_Start::Input(const _double& _dDeltaTime)
 	if (NO_EVENT != iProgress)
 		return iProgress;
 
-	if (g_pGameInstance->getMouseKeyUp(CInputDev::MOUSESTATE::MB_RBUTTON))
+	if (!g_pGameInstance->getMousePress(CInputDev::MOUSESTATE::MB_RBUTTON))
 	{
 		if (FAILED(m_pStateController->Change_State(L"1H_SwordAttackNormalR2_ReleaseStab")))
 			return E_FAIL;

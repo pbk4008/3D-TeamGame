@@ -45,7 +45,9 @@ typedef struct tagRaycastDesc
 	// out
 	_float3 vHitPos = { 0.f, 0.f, 0.f };
 	CGameObject** ppOutHitObject = nullptr;
+	_uint iHitNum = 0;
 	vector<CGameObject*> vecHitObjects;
+	vector<_float3> vecHitPositions;
 }RAYCASTDESC;
 typedef struct tagSweepDesc
 {
@@ -60,7 +62,9 @@ typedef struct tagSweepDesc
 	// out
 	_float3 vHitPos = { 0.f, 0.f, 0.f };
 	CGameObject** ppOutHitObject = nullptr;
+	_uint iHitNum = 0;
 	vector<CGameObject*> vecHitObjects;
+	vector<_float3> vecHitPositions;
 }SWEEPDESC;
 typedef struct tagOverlapDesc
 {
@@ -71,6 +75,7 @@ typedef struct tagOverlapDesc
 	PxQueryFilterData filterData;
 	// out
 	CGameObject** ppOutHitObject = nullptr;
+	_uint iHitNum = 0;
 	vector<CGameObject*> vecHitObjects;
 }OVERLAPDESC;
 

@@ -56,6 +56,8 @@ HRESULT CFury::NativeConstruct(const _uint _iSceneID, void* _pArg)
 
 	m_fDamage = 5;
 
+	m_bActive = false;
+	m_pCollider->Remove_ActorFromScene();
 	return S_OK;
 }
 
