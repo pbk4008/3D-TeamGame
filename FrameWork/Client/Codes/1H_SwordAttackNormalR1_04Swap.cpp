@@ -156,13 +156,11 @@ _int C1H_SwordAttackNormalR1_04Swap::Input(const _double& _dDeltaTime)
 C1H_SwordAttackNormalR1_04Swap* C1H_SwordAttackNormalR1_04Swap::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext, void* _pArg)
 {
 	C1H_SwordAttackNormalR1_04Swap* pInstance = new C1H_SwordAttackNormalR1_04Swap(_pDevice, _pDeviceContext);
-
 	if (FAILED(pInstance->NativeConstruct(_pArg)))
 	{
 		MSGBOX("C1H_SwordAttackNormalR1_04Swap Create Fail");
 		Safe_Release(pInstance);
 	}
-
 	return pInstance;
 }
 

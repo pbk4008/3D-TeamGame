@@ -28,6 +28,7 @@ _int CCrawler_Death::Tick(const _double& TimeDelta)
 	if (NO_EVENT != iProgress)
 		return iProgress;
 
+	m_pTransform->Face_Target(g_pObserver->Get_PlayerPos());
 	m_pAnimator->Tick(TimeDelta);
 
 	//if (m_pAnimator->Get_AnimController()->Is_Finished())
@@ -63,7 +64,7 @@ HRESULT CCrawler_Death::EnterState()
 	g_pGameInstance->VolumeChange(CSoundMgr::CHANNELID::Monster_Death, 1.0f);
 
 	m_pAnimator->Change_AnyEntryAnimation(CMonster_Crawler::MON_STATE::DEATH);
-
+	m_pAnimator->Get_AnimController()->Set_MoveSpeed(15.f);
 	//m_pTransform->Face_Target(g_pObserver->Get_PlayerPos());
 	g_pShakeManager->Shake(CShakeManager::ETemplate::MonsterDeath, m_pTransform->Get_State(CTransform::STATE_POSITION));
 

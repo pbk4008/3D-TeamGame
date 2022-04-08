@@ -31,6 +31,9 @@ _int CBastion_2HSword_Chaser::Tick(const _double& _dDeltaTime)
 	m_pTransform->Face_Target(g_pObserver->Get_PlayerPos());
 	m_pAnimator->Tick(_dDeltaTime);
 
+	if(m_pAnimator->Get_CurrentAnimNode() == (_uint)CMonster_Bastion_2HSword::ANIM_TYPE::A_WALK_FWD)
+		Chase(_dDeltaTime);
+
 	return _int();
 }
 
@@ -56,7 +59,6 @@ HRESULT CBastion_2HSword_Chaser::EnterState()
 	if (FAILED(__super::EnterState()))
 		return E_FAIL;
 
-	m_pAnimator->Get_AnimController()->Set_MoveSpeed(60.f);
 	m_pAnimator->Change_AnyEntryAnimation((_uint)CMonster_Bastion_2HSword::ANIM_TYPE::A_WALK_FWD_ST);
 
 	return S_OK;
@@ -66,7 +68,7 @@ HRESULT CBastion_2HSword_Chaser::ExitState()
 {
 	if (FAILED(__super::ExitState()))
 		return E_FAIL;
-	m_pAnimator->Get_AnimController()->Set_MoveSpeed(40.f);
+
 	return S_OK;
 }
 
@@ -79,6 +81,20 @@ void CBastion_2HSword_Chaser::Look_Player(void)
 
 void CBastion_2HSword_Chaser::Look_Monster(void)
 {
+}
+
+void CBastion_2HSword_Chaser::Chase(_double dDeltaTime)
+{
+	_vector vPlayerPos = g_pObserver->Get_PlayerPos();
+	_vector vPos = m_pTransform->Get_State(CTransform::STATE_POSITION);
+
+	_vector vDir = vPlayerPos - vPos;
+	vDir = XMVector3Normalize(vDir);
+
+	vDir *= (_float)dDeltaTime * 3.f;
+
+	m_pTransform->Add_Velocity(vDir);
+
 }
 
 CBastion_2HSword_Chaser* CBastion_2HSword_Chaser::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext, void* _pArg)

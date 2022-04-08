@@ -69,7 +69,7 @@ _int CDropObject::Tick(_double _dDeltaTime)
 		m_bLateTick = true;
 	}
 
-	m_pTransform->Rotation_Axis(CTransform::STATE_UP, _dDeltaTime * 3.f);
+	m_pTransform->Rotation_Axis(CTransform::STATE_UP, (_float)_dDeltaTime * 3.f);
 	m_pTransform->Scaling(_vector{ 2.f, 2.f, 2.f });
 
 	return _int();

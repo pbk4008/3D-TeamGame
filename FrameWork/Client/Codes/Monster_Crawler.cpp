@@ -79,7 +79,7 @@ HRESULT CMonster_Crawler::NativeConstruct(const _uint _iSceneID, void* _pArg)
 
 	m_iObectTag = (_uint)GAMEOBJECT::MONSTER_CRYSTAL;
 
-	m_fMaxHp = 2.f;
+	m_fMaxHp = 20.f;
 	m_fCurrentHp = m_fMaxHp;
 
 	m_fMaxGroggyGauge = 3.f;
@@ -89,7 +89,7 @@ HRESULT CMonster_Crawler::NativeConstruct(const _uint _iSceneID, void* _pArg)
 	m_pPanel->Set_GroggyBar(Get_GroggyGaugeRatio());
 
 	m_iObectTag = (_uint)GAMEOBJECT::MONSTER_CRYSTAL;
-	setActive(false);
+	//setActive(false);
 
 	return S_OK;
 }
@@ -127,11 +127,6 @@ _int CMonster_Crawler::Tick(_double _dDeltaTime)
 
 			return 0;
 		}
-		else
-		{
-			m_pCharacterController->Move(_dDeltaTime, m_pTransform->Get_Velocity());
-			m_pCollider->Tick(_dDeltaTime);
-		}
 	}
 	else
 	{
@@ -141,11 +136,13 @@ _int CMonster_Crawler::Tick(_double _dDeltaTime)
 			{
 				Set_Remove(true);
 				m_pPanel->Set_UIRemove(true);
-			}
-			else if (1 == m_pAnimatorCom->Get_AnimController()->Get_CurKeyFrameIndex())
-			{
 				Active_Effect((_uint)EFFECT::DEATH);
 			}
+			/*		else if (1 <= m_pAnimatorCom->Get_AnimController()->Get_CurKeyFrameIndex()
+						&& 2 > m_pAnimatorCom->Get_AnimController()->Get_CurAnimIndex())
+					{
+
+					}*/
 		}
 		else
 		{
@@ -154,6 +151,11 @@ _int CMonster_Crawler::Tick(_double _dDeltaTime)
 			Active_Effect((_uint)EFFECT::DEATH);
 		}
 	}
+	if (!m_bRemove)
+	{
+		m_pCharacterController->Move(_dDeltaTime, m_pTransform->Get_Velocity());
+		m_pCollider->Tick(_dDeltaTime);
+	}
 
 	if (true == m_bUIShow)
 		m_pPanel->Set_Show(true);
@@ -161,8 +163,6 @@ _int CMonster_Crawler::Tick(_double _dDeltaTime)
 	if (false == m_bUIShow)
 		m_pPanel->Set_Show(false);
 
-	
-	m_pCollider->Tick(_dDeltaTime); //이거 돌려야되는거임??
 
 	return 0;
 }
@@ -171,7 +171,7 @@ _int CMonster_Crawler::LateTick(_double _dDeltaTime)
 {
 	m_pRenderer->Add_RenderGroup(CRenderer::RENDER_NONALPHA, this);
 
-	if (!m_bDead)
+	if (!m_bRemove)
 	{
 		m_pCharacterController->Update_OwnerTransform();
 		_int iProgress = m_pStateController->LateTick(_dDeltaTime);

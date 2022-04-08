@@ -42,6 +42,17 @@ void CCollider::WakeUp()
 		static_cast<PxRigidDynamic*>(m_pRigidActor)->wakeUp();
 }
 
+void CCollider::Add_Force(_fvector vPow)
+{
+	_float4 vPos;
+	XMStoreFloat4(&vPos, vPow);
+	PxVec3 vPower = ToPxVec3(vPos);
+	if (m_tDesc.eRigidType == ERigidType::Dynamic)
+	{
+		static_cast<PxRigidDynamic*>(m_pRigidActor)->addForce(vPower, PxForceMode::eACCELERATION);
+	}
+}
+
 HRESULT CCollider::NativeConstruct_Prototype()
 {
 	if (FAILED(__super::NativeConstruct_Prototype()))

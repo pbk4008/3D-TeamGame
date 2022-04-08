@@ -59,6 +59,11 @@ HRESULT C2H_HammerChargeStage1_Start::EnterState()
 		return E_FAIL;
 	m_pAnimationController->Set_RootMotion(true, true);
 
+	if (!m_pSilvermane->IsEquipWeapon())
+	{
+		m_pSilvermane->Set_EquipWeapon(true);
+		m_pSilvermane->Set_WeaponFixedBone("weapon_r");
+	}
 	m_pSilvermane->Set_IsTrasceCamera(false);
 
 	return S_OK;

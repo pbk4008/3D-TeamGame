@@ -336,14 +336,14 @@ void CDropBox::UpdateInteraction(_double _dTimeDelta)
 {
 	__super::UpdateInteraction(_dTimeDelta);
 
-	m_openElapsed += (_float)_dTimeDelta;
+	//m_openElapsed += (_float)_dTimeDelta;
 
-	if (m_openDelay <= m_openElapsed)
-	{
+	//if (m_openDelay <= m_openElapsed)
+	//{
 		m_pStateController->Change_State(L"DropBox_Open");
 		m_bBoxOpened = true;
 		Open();
-	}
+	//}
 }
 
 void CDropBox::EndInteraction(void)

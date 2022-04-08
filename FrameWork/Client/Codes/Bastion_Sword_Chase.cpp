@@ -128,21 +128,6 @@ HRESULT CBastion_Sword_Chase::ExitState(void* pArg)
 	return S_OK;
 }
 
-void CBastion_Sword_Chase::Look_Player()
-{
-	_vector		vPosition = m_pTransform->Get_State(CTransform::STATE_POSITION);
-	_vector		vLook = vPosition - g_pObserver->Get_PlayerPos();
-
-	_vector		vRight = XMVector3Cross(XMVectorSet(0.f, 1.f, 0.f, 0.f), vLook);
-	vLook = XMVector3Cross(vRight, XMVectorSet(0.f, 1.f, 0.f, 0.f));
-
-	vLook = XMVector3Normalize(vLook) * m_pTransform->Get_Scale(CTransform::STATE_LOOK);
-	vRight = XMVector3Normalize(vRight) * m_pTransform->Get_Scale(CTransform::STATE_RIGHT);
-
-	m_pTransform->Set_State(CTransform::STATE_LOOK, vLook);
-	m_pTransform->Set_State(CTransform::STATE_RIGHT, vRight);
-}
-
 CBastion_Sword_Chase* CBastion_Sword_Chase::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext, void* _pArg)
 {
 	CBastion_Sword_Chase* pInstance = new CBastion_Sword_Chase(_pDevice, _pDeviceContext);
