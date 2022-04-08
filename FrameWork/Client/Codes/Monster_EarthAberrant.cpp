@@ -104,7 +104,7 @@ HRESULT CMonster_EarthAberrant::NativeConstruct(const _uint _iSceneID, void* _pA
 	m_tAttackDesc.iLevel = 1;
 	m_tAttackDesc.fDamage = 3.f;
 
-	setActive(false);
+	//setActive(false);
 
 	return S_OK;
 }
@@ -154,14 +154,16 @@ _int CMonster_EarthAberrant::Tick(_double _dDeltaTime)
 	}
 	else
 	{
-		if (DEATH == m_pAnimatorCom->Get_CurrentAnimNode())
+		if (L"Death" == m_pStateController->Get_CurStateTag())
 		{
-			if (m_pAnimatorCom->Get_CurrentAnimation()->Is_Finished())
+			if (m_pAnimatorCom->Get_CurrentAnimation()->Is_Finished() && 
+				!m_pAnimatorCom->Get_IsLerp())
 			{
 				Set_Remove(true);
 				m_pPanel->Set_UIRemove(true);
 			}
-			if (9 == m_pAnimatorCom->Get_AnimController()->Get_CurKeyFrameIndex())
+			if (9 <= m_pAnimatorCom->Get_AnimController()->Get_CurKeyFrameIndex() 
+				&& 10 > m_pAnimatorCom->Get_AnimController()->Get_CurKeyFrameIndex())
 			{
 				Active_Effect((_uint)EFFECT::DEATH);
 			}

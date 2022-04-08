@@ -37,6 +37,10 @@ _int CSpear_Attack::Tick(const _double& _dDeltaTime)
 		m_pOwner->Set_Attack(false);
 		m_pStateController->Change_State(L"Idle");
 	}
+	Check_Attack();
+	
+
+
 	//CMonster_Bastion_Spear* pMonster = (CMonster_Bastion_Spear*)m_pStateController->Get_GameObject();
 	//if (nullptr != pMonster)
 	//	pMonster->Set_IsAttack(true);
@@ -106,6 +110,7 @@ HRESULT CSpear_Attack::ExitState(void* pArg)
 	m_bAttack1 = false;
 	m_bAttack2 = false;
 
+
 	return S_OK;
 }
 
@@ -146,6 +151,29 @@ void CSpear_Attack::Play_Sound(void)
 				g_pGameInstance->VolumeChange(CSoundMgr::CHANNELID::Spear_Attack_2, 0.2f);
 				m_bAttack2 = true;
 			}
+		}
+	}
+}
+
+void CSpear_Attack::Check_Attack()
+{
+	if (m_pOwner)
+	{
+		_uint iCurKeyFrameIndex = m_pAnimator->Get_AnimController()->Get_CurKeyFrameIndex();
+
+		if ((_uint)CMonster_Bastion_Spear::ANIM_TYPE::A_ATTACK_R1 == m_pAnimator->Get_CurrentAnimNode())
+		{
+			if ((iCurKeyFrameIndex >= 160 && iCurKeyFrameIndex < 170)
+				|| (iCurKeyFrameIndex > 240 && iCurKeyFrameIndex < 245))
+			{
+				m_pOwner->Attack(true);
+				_float fDamage = 4.f;
+				_uint iLevel = 1;
+				m_pOwner->Set_AttackDesc_Damaga(fDamage);
+				m_pOwner->Set_AttackDesc_Level(iLevel);
+			}
+			else
+				m_pOwner->Attack(false);
 		}
 	}
 }

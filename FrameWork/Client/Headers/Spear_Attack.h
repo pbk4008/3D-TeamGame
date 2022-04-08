@@ -28,6 +28,7 @@ public:
 
 private:
 	void Play_Sound(void);
+	void Check_Attack();
 
 private:
 	_uint m_iAttack1Frame = 154;

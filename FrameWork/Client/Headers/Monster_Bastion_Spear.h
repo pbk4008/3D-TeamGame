@@ -60,6 +60,7 @@ public:
 public:
 	virtual void Hit(const ATTACKDESC& _tAttackDesc) override;
 	void Hit(CCollision& collision);
+	void Attack(_bool bCheck);
 public:
 	void Set_Target(_bool bCheck) { m_bTargetOn = bCheck; }
 	void Set_Attack(_bool bCheck) { m_bAttackOn = bCheck; }
@@ -77,11 +78,12 @@ public:
 	_int Get_GuardCount() { return m_iGuardCount; }
 private:
 	_bool m_bTargetOn = false;
-	_bool m_bAttackOn = false;
+	_bool m_bAttackOn = false;//공격 한다는 애님 체크
 	_bool m_bGuard = false;
 	_bool m_bHalf = false;
 	_bool m_bChargeOn = false;
 	_int m_iGuardCount = 7;
+
 private:
 	CModel* m_pModel = nullptr;
 	CAnimation* m_pAnimation = nullptr;
@@ -103,7 +105,7 @@ private:
 	_bool	m_isFall = false;
 	_bool	m_bFirstHit = false; //맨처음들어와서 맞았을때 판넬크기바꿔줘야돼서
 	_bool	m_bGroggy = false; //그로기 상태인지 아닌지
-
+	_bool m_bIsAttack = false;//공격 판단 체크
 public:
 	static CMonster_Bastion_Spear* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext);
 	virtual CGameObject* Clone(const _uint _iSceneID, void* _pArg = nullptr) override;

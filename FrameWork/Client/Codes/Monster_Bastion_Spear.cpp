@@ -101,7 +101,7 @@ HRESULT CMonster_Bastion_Spear::NativeConstruct(const _uint _iSceneID, void* _pA
 	m_pPanel->Set_GroggyBar(Get_GroggyGaugeRatio());
 
 	m_isFall = true;
-	setActive(false);
+	//setActive(false);
 
 	m_tAttackDesc.iLevel = 1;
 
@@ -646,6 +646,13 @@ void CMonster_Bastion_Spear::Hit(CCollision& collision)
 			}
 		}
 	}
+}
+
+void CMonster_Bastion_Spear::Attack(_bool bCheck)
+{
+	m_bIsAttack = true;
+	if (m_pWeapon)
+		m_pWeapon->Set_IsAttack(true);
 }
 
 CMonster_Bastion_Spear* CMonster_Bastion_Spear::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
