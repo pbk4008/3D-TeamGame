@@ -12,8 +12,6 @@ CDropBox::CDropBox(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
 	, m_pAnimationController(nullptr)
 	, m_pAnimator(nullptr)
 	, m_pStateController(nullptr)
-	, m_pCollider(nullptr)
-	, m_pModel(nullptr)
 	, m_openElapsed(0.0f)
 	, m_interactDist(5.f)
 	, m_bBoxOpened(false)
@@ -24,22 +22,12 @@ CDropBox::CDropBox(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
 
 CDropBox::CDropBox(const CDropBox& _rhs)
 	: CInteractableObject(_rhs)
-	, m_pAnimationController(_rhs.m_pAnimationController)
-	, m_pAnimator(_rhs.m_pAnimator)
-	, m_pStateController(_rhs.m_pStateController)
-	, m_pCollider(_rhs.m_pCollider)
-	, m_pModel(_rhs.m_pModel)
 	, m_openElapsed(_rhs.m_openElapsed)
 	, m_interactDist(_rhs.m_interactDist)
 	, m_bBoxOpened(_rhs.m_bBoxOpened)
 	, m_bOpenAnimEnd(_rhs.m_bOpenAnimEnd)
 	, m_bFocus(_rhs.m_bFocus)
 {
-	Safe_AddRef(m_pAnimationController);
-	Safe_AddRef(m_pAnimator);
-	Safe_AddRef(m_pStateController);
-	Safe_AddRef(m_pCollider);
-	Safe_AddRef(m_pModel);
 }
 
 HRESULT CDropBox::NativeConstruct_Prototype()
@@ -117,7 +105,7 @@ _int CDropBox::LateTick(_double _dDeltaTime)
 	if (NO_EVENT != iProgress)
 		return iProgress;
 
-	if (FAILED(m_pRenderer->Add_RenderGroup(CRenderer::RENDER_ALPHA, this)))
+	if (FAILED(m_pRenderer->Add_RenderGroup(CRenderer::RENDER_NONALPHA, this)))
 		return -1;
 
 	/* State FSM Late Update */
@@ -348,14 +336,14 @@ void CDropBox::UpdateInteraction(_double _dTimeDelta)
 {
 	__super::UpdateInteraction(_dTimeDelta);
 
-	m_openElapsed += (_float)_dTimeDelta;
+	//m_openElapsed += (_float)_dTimeDelta;
 
-	if (m_openDelay <= m_openElapsed)
-	{
+	//if (m_openDelay <= m_openElapsed)
+	//{
 		m_pStateController->Change_State(L"DropBox_Open");
 		m_bBoxOpened = true;
 		Open();
-	}
+	//}
 }
 
 void CDropBox::EndInteraction(void)

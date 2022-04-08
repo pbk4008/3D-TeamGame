@@ -33,7 +33,7 @@ void CLight::Tick()
 
 HRESULT CLight::Render(CTarget_Manager* pTarget_Manager,const wstring& pCameraTag, _bool PBRHDRcheck, _bool Shadow)
 {
-	if (m_pVIBuffer != nullptr)
+	if (m_pVIBuffer != nullptr && true == m_bShow)
 	{
 		_uint		iPassIndex = 0;
 

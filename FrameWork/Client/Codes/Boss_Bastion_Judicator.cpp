@@ -79,7 +79,7 @@ HRESULT CBoss_Bastion_Judicator::NativeConstruct(const _uint _iSceneID, void* pA
 	m_pPanel->Set_HpBar(Get_HpRatio());
 	m_pPanel->Set_GroggyBar(Get_GroggyGaugeRatio());
 
-	setActive(false);
+	//setActive(false);
 
 	m_tAttackDesc.iLevel = 2;
 
@@ -160,17 +160,27 @@ _int CBoss_Bastion_Judicator::Tick(_double TimeDelta)
 
 	if (DEATH == m_pAnimator->Get_CurrentAnimNode())
 	{
-		if (m_pAnimator->Get_CurrentAnimation()->Is_Finished())
+		if (L"Death" == m_pStateController->Get_CurStateTag())
 		{
-			m_bDead = true;
-			m_pPanel->Set_Show(false);
-			m_pPanel->Set_UIRemove(true);
-			return 0;
+			if (m_pAnimator->Get_CurrentAnimation()->Is_Finished())
+			{
+				m_bDead = true;
+				Set_Remove(true);
+				m_pPanel->Set_Show(false);
+				m_pPanel->Set_UIRemove(true);
+				return 0;
+			}
+
+			if (1 <= m_pAnimator->Get_AnimController()->Get_CurKeyFrameIndex() && 2 > m_pAnimator->Get_AnimController()->Get_CurKeyFrameIndex())
+				Active_Effect((_uint)EFFECT::DEATH);
 		}
-		else if (1 == m_pAnimator->Get_AnimController()->Get_CurKeyFrameIndex())
+		else
 		{
+			Set_Remove(true);
+			m_pPanel->Set_UIRemove(true);
 			Active_Effect((_uint)EFFECT::DEATH);
 		}
+		
 	}
 
 	m_pCharacterController->Move(TimeDelta, m_pTransform->Get_Velocity());
@@ -233,35 +243,6 @@ HRESULT CBoss_Bastion_Judicator::Render()
 			break;
 		}
 	}
-
-	//// FSM
-	//wstring wstrCurStateTag = m_pStateController->Get_CurStateTag();
-	//wstring wstrState = L"Cur State : ";
-
-	//if (FAILED(g_pGameInstance->Render_Font(TEXT("Font_Arial"), XMVectorSet(0.f, 1.0f, 0.f, 1.f), (wstrState + wstrCurStateTag).c_str(), _float2(650.f, 40.f), _float2(0.6f, 0.6f))))
-	//	return E_FAIL;
-
-	//// 애니메이션 이름
-	//string CurAnimName = m_pAnimator->Get_CurrentAnimation()->Get_Name();
-	//wstring wstrCurAnimTag;
-	//wstring wstrAnimname = L"Cur Anim Tag : ";
-	//wstrCurAnimTag.assign(CurAnimName.begin(), CurAnimName.end());
-	//if (FAILED(g_pGameInstance->Render_Font(TEXT("Font_Arial"), XMVectorSet(0.f, 1.0f, 0.f, 1.f), (wstrAnimname + wstrCurAnimTag).c_str(), _float2(650.f, 60.f), _float2(0.6f, 0.6f))))
-	//	return E_FAIL;
-
-	//// 애니메이션 상태
-	//wstring wstrCurKeyFrameIndex = to_wstring(m_pAnimator->Get_CurrentAnimation()->Get_CurrentKeyFrameIndex());
-	//wstring wstrKeyFrame = L"Key Frame : ";
-	//if (FAILED(g_pGameInstance->Render_Font(TEXT("Font_Arial"), XMVectorSet(0.f, 1.0f, 0.f, 1.f), (wstrKeyFrame + wstrCurKeyFrameIndex).c_str(), _float2(650.f, 80.f), _float2(0.6f, 0.6f))))
-	//	return E_FAIL;
-
-	//wstring wstrAnimFinished = L"";
-	//if (m_pAnimator->Get_CurrentAnimation()->Is_Finished())
-	//	wstrAnimFinished = L"AnimFinished : TRUE";
-	//else
-	//	wstrAnimFinished = L"AnimFinished : FALSE";
-	//if (FAILED(g_pGameInstance->Render_Font(TEXT("Font_Arial"), XMVectorSet(0.f, 1.0f, 0.f, 1.f), wstrAnimFinished.c_str(), _float2(650.f, 100.f), _float2(0.6f, 0.6f))))
-	//	return E_FAIL;
 
 	return S_OK;
 }
@@ -538,14 +519,13 @@ HRESULT CBoss_Bastion_Judicator::Set_State_FSM()
 
 HRESULT CBoss_Bastion_Judicator::Set_Weapon()
 {
-	CHierarchyNode* pBone = m_pModel->Get_BoneMatrix("weapon_r_end");
-	CShieldBreaker* pWeapon = CShieldBreaker::Create(m_pDevice, m_pDeviceContext);
+	CHierarchyNode* pBone = m_pModelCom->Get_BoneMatrix("weapon_r_end");
+	CShieldBreaker* pWeapon = static_cast<CShieldBreaker*>(g_pGameInstance->Clone_GameObject(m_iSceneID, L"Proto_GameObject_Weapon_ShieldBreaker"));
 
-	if (FAILED(pWeapon->NativeConstruct(m_iSceneID, pBone)))
-	{
+	if (nullptr == pWeapon)
 		return E_FAIL;
-	}
 
+	pWeapon->Set_FixedBone(pBone);
 	pWeapon->Set_Owner(this);
 	pWeapon->Set_OwnerPivotMatrix(m_pModel->Get_PivotMatrix());
 	m_pWeapon = pWeapon;

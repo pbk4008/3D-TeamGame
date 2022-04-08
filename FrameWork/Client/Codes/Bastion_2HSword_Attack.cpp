@@ -29,14 +29,12 @@ _int CBastion_2HSword_Attack::Tick(const _double& _dDeltaTime)
 	if (NO_EVENT != iProgress)
 		return iProgress;
 
-
-	cout << "Attack" << endl;
 	m_pTransform->Face_Target(g_pObserver->Get_PlayerPos());
 	m_pAnimator->Tick(_dDeltaTime);
 
 	if (m_pAnimator->Get_CurrentAnimation()->Is_Finished() && !m_pAnimator->Get_IsLerp())
 	{
-		//m_pOwner->set_Attack(false);
+		m_pOwner->set_Attack(false);
 		m_pOwner->set_RandAttack(-1);
 		m_pStateController->Change_State(L"Idle");
 	}
@@ -45,13 +43,11 @@ _int CBastion_2HSword_Attack::Tick(const _double& _dDeltaTime)
 	CMonster_Bastion_2HSword* pMonster = (CMonster_Bastion_2HSword*)m_pStateController->Get_GameObject();
 	if (nullptr != pMonster)
 	{
-		//cout << pMonster->IsAttack() << endl;
-
 		_uint iCurKeyFrameIndex = m_pAnimator->Get_AnimController()->Get_CurKeyFrameIndex();
-
+		
 		if ((_uint)CMonster_Bastion_2HSword::ANIM_TYPE::A_ATTACK_R1 == m_pAnimator->Get_CurrentAnimNode())
 		{
-			if (53 < iCurKeyFrameIndex && 62 > iCurKeyFrameIndex)
+			if (130 < iCurKeyFrameIndex && 160 > iCurKeyFrameIndex)
 			{
 				pMonster->Set_IsAttack(true);
 
@@ -61,11 +57,11 @@ _int CBastion_2HSword_Attack::Tick(const _double& _dDeltaTime)
 				pMonster->Set_AttackDesc_Level(iLevel);
 			}
 			
-			else if (105 < iCurKeyFrameIndex && 119 > iCurKeyFrameIndex)
+			else if (265 < iCurKeyFrameIndex && 295 > iCurKeyFrameIndex)
 			{
 				pMonster->Set_IsAttack(true);
 
-				_float fDamage = 6.f;
+				_float fDamage = 5.f;
 				_uint iLevel = 2;
 				pMonster->Set_AttackDesc_Damaga(fDamage);
 				pMonster->Set_AttackDesc_Level(iLevel);
@@ -79,12 +75,12 @@ _int CBastion_2HSword_Attack::Tick(const _double& _dDeltaTime)
 
 		else if ((_uint)CMonster_Bastion_2HSword::ANIM_TYPE::A_ATTACK_R2 == m_pAnimator->Get_CurrentAnimNode())
 		{
-			if (73 < iCurKeyFrameIndex && 84 > iCurKeyFrameIndex)
+			if (180 < iCurKeyFrameIndex && 210 > iCurKeyFrameIndex)
 			{
 				pMonster->Set_IsAttack(true);
 
-				_float fDamage = 6.f;
-				_uint iLevel = 2;
+				_float fDamage = 5.f;
+				_uint iLevel = 3;
 				pMonster->Set_AttackDesc_Damaga(fDamage);
 				pMonster->Set_AttackDesc_Level(iLevel);
 			}
@@ -96,11 +92,11 @@ _int CBastion_2HSword_Attack::Tick(const _double& _dDeltaTime)
 
 		else if ((_uint)CMonster_Bastion_2HSword::ANIM_TYPE::A_ATTACK_S1 == m_pAnimator->Get_CurrentAnimNode())
 		{
-			if (54 < iCurKeyFrameIndex && 93 > iCurKeyFrameIndex)
+			if (133 < iCurKeyFrameIndex && 160 > iCurKeyFrameIndex)
 			{
 				pMonster->Set_IsAttack(true);
 
-				_float fDamage = 7.f;
+				_float fDamage = 5.f;
 				_uint iLevel = 3;
 				pMonster->Set_AttackDesc_Damaga(fDamage);
 				pMonster->Set_AttackDesc_Level(iLevel);
@@ -111,7 +107,7 @@ _int CBastion_2HSword_Attack::Tick(const _double& _dDeltaTime)
 
 		else if ((_uint)CMonster_Bastion_2HSword::ANIM_TYPE::A_ATTACK_S3== m_pAnimator->Get_CurrentAnimNode())
 		{
-			if (38 < iCurKeyFrameIndex && 48 > iCurKeyFrameIndex)
+			if (90 < iCurKeyFrameIndex && 120 > iCurKeyFrameIndex)
 			{
 				pMonster->Set_IsAttack(true);
 

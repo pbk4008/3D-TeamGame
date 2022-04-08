@@ -105,7 +105,6 @@ private:
 private:
 	_bool	m_isFall = false;
 	_bool	m_bFirstHit = false; //맨처음들어와서 맞았을때 판넬크기바꿔줘야돼서
-	_uint m_iCurScene = 0;
 
 public:
 	static CMonster_Bastion_2HSword* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext);

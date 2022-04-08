@@ -29,8 +29,11 @@ _int CBronzeAnimus_Roar::Tick(const _double& _dDeltaTime)
 	if (NO_EVENT != iProgress)
 		return iProgress;
 
-	if(!m_bBattleOn)
-		m_pAnimator->Tick(_dDeltaTime);
+	m_pAnimator->Tick(_dDeltaTime);
+
+	if (!m_pAnimator->Get_IsLerp() && m_pAnimator->Get_CurrentAnimation()->Is_Finished())
+		m_pStateController->Change_State(L"Chaser");
+
 
 	return _int();
 }
@@ -67,8 +70,6 @@ HRESULT CBronzeAnimus_Roar::ExitState()
 	if (FAILED(__super::ExitState()))
 		return E_FAIL;
 
-	m_bBattleOn = true;
-
 	return S_OK;
 }
 
@@ -79,13 +80,6 @@ void CBronzeAnimus_Roar::Look_Player(void)
 
 void CBronzeAnimus_Roar::Look_Monster(void)
 {
-	CAnimation* pAnim = m_pAnimator->Get_CurrentAnimation();
-
-	if (pAnim->Is_Finished())
-	{
-		m_bBattleOn = true;
-		m_pStateController->Change_State(L"Chaser");
-	}
 }
 
 CBronzeAnimus_Roar* CBronzeAnimus_Roar::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext, void* _pArg)

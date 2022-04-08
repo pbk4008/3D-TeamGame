@@ -66,9 +66,14 @@ _int CUI_Player_HpBar::Tick(_double TimeDelta)
 	if (FAILED(__super::Tick(TimeDelta)))
 		return -1;
 
+	m_fPlayerMaxHp = g_pObserver->Get_MaxHP();
 	m_fPlayerHp = g_pObserver->Get_HP();
 
 	m_fRatio = m_fPlayerHp / m_fPlayerMaxHp;
+	if (1.f == m_fRatio)
+	{
+		m_fGapX = 1.f;
+	}
 
 	if (m_fGapX > m_fRatio)
 	{

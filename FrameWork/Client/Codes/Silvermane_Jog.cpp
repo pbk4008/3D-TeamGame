@@ -115,9 +115,19 @@ _int CSilvermane_Jog::Input(const _double& _dDeltaTime)
 
 	if (g_pGameInstance->getMouseKeyDown(CInputDev::MOUSESTATE::MB_LBUTTON))
 	{
-		if (FAILED(m_pStateController->Change_State(L"1H_SwordJogAttack")))
-			return -1;
-		return STATE_CHANGE;
+		switch (m_pSilvermane->Get_WeaponType())
+		{
+		case CWeapon::EType::Sword_1H:
+			if (FAILED(m_pStateController->Change_State(L"1H_SwordJogAttack")))
+				return -1;
+			return STATE_CHANGE;
+			break;
+		case CWeapon::EType::Hammer_2H:
+			if (FAILED(m_pStateController->Change_State(L"2H_HammerAttackJogR1")))
+				return -1;
+			return STATE_CHANGE;
+			break;
+		}
 	}
 
 	if (g_pGameInstance->getkeyPress(DIK_LSHIFT))
@@ -134,8 +144,17 @@ _int CSilvermane_Jog::Input(const _double& _dDeltaTime)
 			}
 			else
 			{
-				if (FAILED(m_pStateController->Change_State(L"1H_SwordEquipOff")))
-					return -1;
+				switch (m_pSilvermane->Get_WeaponType())
+				{
+				case CWeapon::EType::Sword_1H:
+					if (FAILED(m_pStateController->Change_State(L"1H_SwordEquipOff")))
+						return -1;
+					break;
+				case CWeapon::EType::Hammer_2H:
+					if (FAILED(m_pStateController->Change_State(L"2H_HammerEquipOff")))
+						return -1;
+					break;
+				}
 			}
 			return STATE_CHANGE;
 		}

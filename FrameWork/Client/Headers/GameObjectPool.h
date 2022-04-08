@@ -22,21 +22,5 @@ private:
 	std::size_t chunkSize;
 	std::queue<CGameObject*> freeList;
 };
-
-class ComponentPool
-{
-public:
-	ComponentPool(std::function<CComponent* ()> createFunc, std::size_t chunkSize = DefaultChunkSize);
-
-public:
-	CComponent* AccquireObject(void);
-	void ReleaseObject(CComponent* component);
-	void DestroyPool(void);
-
-private:
-	std::size_t chunkSize;
-	std::queue<CComponent*> freeList;
-};
-
 END
 #endif // GameObjectPool_h__

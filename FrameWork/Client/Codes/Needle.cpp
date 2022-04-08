@@ -61,8 +61,29 @@ HRESULT CNeedle::NativeConstruct(const _uint _iSceneID, void* _pArg)
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer(m_iSceneID, L"Layer_Effect", L"Proto_GameObject_TrailEffect", m_pTransform, (CGameObject**)&m_pTrailEffect)))
 		MSGBOX(L"트레일 이펙트 생성 실패. from Needle");
 
+	//Light
+	LIGHTDESC			LightDesc;
+	ZeroMemory(&LightDesc, sizeof(LIGHTDESC));
+	LightDesc.eType = LIGHTDESC::TYPE_POINT;
+	LightDesc.fRange = 7.f;
+	LightDesc.vDiffuse = _float4(1.f, 0.7f, 0.5f, 1.f);
+	LightDesc.vSpecular = _float4(0.8f, 0.8f, 0.8f, 1.f);
+	LightDesc.vAmbient = _float4(0.6f, 0.6f, 0.6f, 1.f);
+	XMStoreFloat3(&LightDesc.vPosition,m_pTransform->Get_State(CTransform::STATE_POSITION));
+
+	if (nullptr == m_pLight)
+	{
+		if (FAILED(g_pGameInstance->Add_Light(m_pDevice, m_pDeviceContext, LightDesc, &m_pLight)))
+			MSGBOX("Failed To Adding PointLight");
+	}
+	
+	m_pLight->Set_Show(false);
+	m_fLightRange = LightDesc.fRange;
+
 	m_fDamage = 3;
 
+	m_bActive = false;
+	m_pCollider->Remove_ActorFromScene();
 	return S_OK;
 }
 
@@ -76,6 +97,20 @@ _int CNeedle::Tick(_double _dDeltaTime)
 
 	if (m_pCollider)
 		m_pCollider->Tick(_dDeltaTime);
+
+
+	if (m_bLight && 0.f <= m_fLightRange)
+	{
+		m_fLightRange -= _dDeltaTime * 10.f;
+		m_pLight->Set_Range(m_fLightRange);
+	}
+
+	if (0.f >= m_fLightRange)
+	{
+		m_fLightRange = 0.f;
+		m_pLight->Set_Show(false);
+		m_bLight = false;
+	}
 
 	return _int();
 }
@@ -162,6 +197,9 @@ void CNeedle::OnTriggerEnter(CCollision& collision)
 	case (_uint)GAMEOBJECT::MONSTER_HEALER:
 	case (_uint)GAMEOBJECT::MONSTER_SHOOTER:
 	case (_uint)GAMEOBJECT::MONSTER_SPEAR:
+	case (_uint)GAMEOBJECT::MONSTER_ANIMUS:
+	case (_uint)GAMEOBJECT::MIDDLE_BOSS:
+	case (_uint)GAMEOBJECT::BOSS:
 		if (!m_isAttack)
 			return;
 
@@ -169,8 +207,28 @@ void CNeedle::OnTriggerEnter(CCollision& collision)
 		tAttackDesc.fDamage += m_fDamage;
 		tAttackDesc.pHitObject = this;
 		static_cast<CActor*>(collision.pGameObject)->Hit(tAttackDesc);
+
+		if (nullptr != m_pLight)
+		{
+			m_pLight->Set_Pos(static_cast<CActor*>(collision.pGameObject)->Get_Transform()->Get_State(CTransform::STATE_POSITION));
+			m_pLight->Set_Show(true);
+			_vector vColor = { 1.f, 0.7f, 0.5f, 1.f };
+			m_pLight->Set_Color(vColor);
+			m_fLightRange = 4.f;
+			m_pLight->Set_Range(m_fLightRange);
+			m_bLight = true;
+		}
+		
 		break;
 	}
+}
+
+void CNeedle::OnTriggerExit(CCollision& collision)
+{
+	/*if (nullptr != m_pLight)
+	{
+		m_pLight->Set_Show(false);
+	}*/
 }
 
 void CNeedle::RangeAttack()
@@ -183,11 +241,11 @@ void CNeedle::RangeAttack()
 	tOverlapDesc.filterData.flags = PxQueryFlag::eDYNAMIC;
 	if (g_pGameInstance->Overlap(tOverlapDesc))
 	{
-		_uint iSize = (_uint)tOverlapDesc.vecHitObject.size();
+		_uint iSize = (_uint)tOverlapDesc.vecHitObjects.size();
 		for (_uint i = 0; i < iSize; ++i)
 		{
-			CActor* pActor = static_cast<CActor*>(tOverlapDesc.vecHitObject[i]);
-			_uint iTag = tOverlapDesc.vecHitObject[i]->getTag();
+			CActor* pActor = static_cast<CActor*>(tOverlapDesc.vecHitObjects[i]);
+			_uint iTag = tOverlapDesc.vecHitObjects[i]->getTag();
 			switch (iTag)
 			{
 			case (_uint)GAMEOBJECT::MONSTER_CRYSTAL:

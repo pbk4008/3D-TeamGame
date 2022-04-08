@@ -162,6 +162,9 @@
 #include "1H_Stagger.h"
 #include "1H_KnockBack.h"
 #include "Silvermane_KnockBack.h"
+#include "Silvermane_Death.h"
+///////////////////////////////////////////// Looting
+#include "LootingChest.h"
 #pragma endregion
 
 #include "Material.h"
@@ -200,6 +203,7 @@ HRESULT CSilvermane::NativeConstruct(const _uint _iSceneID, void* _pArg)
 	}
 	else
 		m_pTransform->Set_State(CTransform::STATE_POSITION, XMVectorSet(2.f, 1.f, -1.f, 1.f));
+	m_vRespawnPos = { 2.f, 1.f, -1.f };
 
 	if (FAILED(Ready_Components()))
 		return E_FAIL;
@@ -214,8 +218,8 @@ HRESULT CSilvermane::NativeConstruct(const _uint _iSceneID, void* _pArg)
 		return E_FAIL;
 
 	m_isFall = true;
-	m_fCurrentHp = 100.f;
-	m_fMaxHp = 100.f;
+	m_fMaxHp = 1.f;
+	m_fCurrentHp = m_fMaxHp;
 
 	m_pRenderer->SetRenderButton(CRenderer::PIXEL, true);
 	m_pRenderer->SetRenderButton(CRenderer::PBRHDR, true);
@@ -265,10 +269,9 @@ _int CSilvermane::Tick(_double _dDeltaTime)
 		m_pCharacterController->Move(_dDeltaTime, m_pTransform->Get_Velocity());
 	}
 
-
-
 	Raycast_JumpNode(_dDeltaTime);
 	Raycast_DropBox(_dDeltaTime);
+
 
 	// 무기 업뎃
 	if (m_pCurWeapon)
@@ -775,6 +778,11 @@ HRESULT CSilvermane::Ready_States()
 		return E_FAIL;
 	if (FAILED(m_pStateController->Add_State(L"KnockBack", CSilvermane_KnockBack::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
+	if (FAILED(m_pStateController->Add_State(L"Death", CSilvermane_Death::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	// 루팅
+	if (FAILED(m_pStateController->Add_State(L"LootingChest", CLootingChest::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
 
 	for (auto& pair : m_pStateController->Get_States())
 	{
@@ -803,6 +811,7 @@ HRESULT CSilvermane::Ready_Weapons()
 	pWeapon->Set_OwnerPivotMatrix(m_pModel->Get_PivotMatrix());
 	m_umapWeapons.emplace(L"Needle", pWeapon);
 	m_pCurWeapon = pWeapon;
+	m_pCurWeapon->setActive(true);
 	// 해머
 	pWeapon = CFury::Create(m_pDevice, m_pDeviceContext);
 	if (FAILED(pWeapon->NativeConstruct(m_iSceneID, pWeaponBone)))
@@ -993,6 +1002,11 @@ void CSilvermane::Set_IsTrasceCamera(const _bool _isTraceCamera)
 	m_isTraceCamera = _isTraceCamera;
 }
 
+void CSilvermane::Set_IsDead(const _bool _isDead)
+{
+	m_bDead = _isDead;
+}
+
 void CSilvermane::Set_EquipWeapon(const _bool _isEquipWeapon)
 {
 	m_isEquipWeapon = _isEquipWeapon;
@@ -1071,6 +1085,30 @@ void CSilvermane::Add_Velocity(const CTransform::STATE _eState, const _double& _
 void CSilvermane::Add_HP(const _float _fValue)
 {
 	m_fCurrentHp += _fValue;
+}
+
+void CSilvermane::Respawn()
+{
+	m_pCharacterController->setPosition(m_vRespawnPos);
+	m_pTransform->SetUp_Rotation(_float3(0.f, 0.f, 0.f));
+	if (m_pCamera)
+		m_pCamera->Respawn();
+	m_fCurrentHp = m_fMaxHp;
+
+	if (!m_isEquipWeapon)
+	{
+		Set_EquipWeapon(true);
+		Set_WeaponFixedBone("weapon_r");
+	}
+	if (m_isEquipShield)
+	{
+		Set_EquipShield(false);
+		Set_EquipShieldAnim(false);
+	}
+
+	if (FAILED(m_pStateController->Change_State(L"Idle")))
+		return;
+	m_bDead = false;
 }
 
 void CSilvermane::Set_Position(const _float3 _vPosition)
@@ -1248,8 +1286,6 @@ const _bool CSilvermane::Raycast_JumpNode(const _double& _dDeltaTime)
 	memcpy_s(&svRayPos, sizeof(_vector), &smatView.r[3], sizeof(_vector));
 	memcpy_s(&svRayDir, sizeof(_vector), &smatView.r[2], sizeof(_vector));
 	svRayDir = XMVector3Normalize(svRayDir);
-	_float fOutDist = 0.f;
-
 
 	_uint iObjectTag = -1;
 
@@ -1269,22 +1305,6 @@ const _bool CSilvermane::Raycast_JumpNode(const _double& _dDeltaTime)
 			iObjectTag = pHitObject->getTag();
 		}
 	}
-	//// 스윕
-	//SWEEPDESC tSweepDesc;
-	//tSweepDesc.geometry = PxSphereGeometry(1.f);
-	//XMStoreFloat3(&tSweepDesc.vOrigin, svRayPos);
-	//XMStoreFloat3(&tSweepDesc.vDir, svRayDir);
-	//tSweepDesc.fMaxDistance = 50.f;
-	//tSweepDesc.filterData.flags = PxQueryFlag::eANY_HIT | PxQueryFlag::eDYNAMIC;
-	//CGameObject* pHitObject = nullptr;
-	//tSweepDesc.ppOutHitObject = &pHitObject;
-	//if (g_pGameInstance->Sweep(tSweepDesc))
-	//{
-	//	if (pHitObject)
-	//	{
-	//		iObjectTag = pHitObject->getTag();
-	//	}
-	//}
 
 	//점프ui관련
 	m_pBlankCKey = (CUI_Blank_CKey*)g_pGameInstance->getObjectList(m_iSceneID, L"Layer_UI_BlankC")->front();
@@ -1362,6 +1382,16 @@ const _bool CSilvermane::Raycast_JumpNode(const _double& _dDeltaTime)
 	return false;
 }
 
+CDropBox* CSilvermane::Get_TargetDropBox() const
+{
+	return m_pTargetDropBox;
+}
+
+void CSilvermane::Set_IsBoxOpen(const _bool _isBoxOpen)
+{
+	m_isBoxOpen = _isBoxOpen;
+}
+
 const void CSilvermane::Raycast_DropBox(const _double& _dDeltaTime)
 {
 	_matrix smatView;
@@ -1376,15 +1406,14 @@ const void CSilvermane::Raycast_DropBox(const _double& _dDeltaTime)
 	memcpy_s(&svRayPos, sizeof(_vector), &smatView.r[3], sizeof(_vector));
 	memcpy_s(&svRayDir, sizeof(_vector), &smatView.r[2], sizeof(_vector));
 	svRayDir = XMVector3Normalize(svRayDir);
-	_float fOutDist = 0.f;
-
 
 	_uint iObjectTag = -1;
 
+	svRayPos += svRayDir * 4.f;
 	RAYCASTDESC tRaycastDesc;
 	XMStoreFloat3(&tRaycastDesc.vOrigin, svRayPos);
 	XMStoreFloat3(&tRaycastDesc.vDir, svRayDir);
-	tRaycastDesc.fMaxDistance = 50.f;
+	tRaycastDesc.fMaxDistance = 1.f;
 	tRaycastDesc.filterData.flags = PxQueryFlag::eANY_HIT | PxQueryFlag::eDYNAMIC;
 	CGameObject* pHitObject = nullptr;
 	tRaycastDesc.ppOutHitObject = &pHitObject;
@@ -1396,16 +1425,19 @@ const void CSilvermane::Raycast_DropBox(const _double& _dDeltaTime)
 	
 	if ((_uint)GAMEOBJECT::DROP_BOX == iObjectTag)
 	{
-		static_cast<CDropBox*>(pHitObject)->FocusEnter();
-		if (g_pGameInstance->getkeyPress(DIK_C))
-			m_fOpenDelay += (_float)_dDeltaTime;
-
-		if (0.5f < m_fOpenDelay)
+		m_pTargetDropBox = static_cast<CDropBox*>(pHitObject);
+		if (!m_isBoxOpen && !m_pTargetDropBox->IsOpen())
 		{
-			static_cast<CDropBox*>(pHitObject)->Focus();
-			m_fOpenDelay = 0.f;
+			if (g_pGameInstance->getkeyDown(DIK_C))
+			{
+				if (FAILED(m_pStateController->Change_State(L"LootingChest", nullptr)))
+					return;
+				return;
+			}
 		}
 	}
+	else
+		m_pTargetDropBox = nullptr;
 	//else
 	//	static_cast<CDropBox*>(pHitObject)->FocusExit();
 }

@@ -25,7 +25,7 @@ public:
 	const _float Get_HpRatio();
 	const _float Get_GroggyGaugeRatio();
 protected:
-	HRESULT Set_SpawnPosition(const _float3 vPoint);
+	virtual HRESULT Set_SpawnPosition(const _float3 vPoint);
 
 public:
 	virtual HRESULT BindConstantBuffer(const wstring & camTag,SCB* bindbuffer = nullptr);

@@ -29,6 +29,7 @@ _int CSpear_Charge_Attack::Tick(const _double& _dDeltaTime)
 	if (NO_EVENT != iProgress)
 		return iProgress;
 
+	Check_Attack();
 	Play_Sound();
 	m_pAnimator->Tick(_dDeltaTime);
 
@@ -43,6 +44,7 @@ _int CSpear_Charge_Attack::Tick(const _double& _dDeltaTime)
 		m_pOwner->Set_ChargeOn(true);
 		m_pOwner->Set_Attack(false);
 		m_pOwner->Set_Target(false);
+		m_pOwner->Attack(false);
 		m_pStateController->Change_State(L"Idle");
 	}
 	return _int();
@@ -101,6 +103,27 @@ void CSpear_Charge_Attack::Look_Monster(void)
 void CSpear_Charge_Attack::Play_Sound()
 {
 
+}
+
+void CSpear_Charge_Attack::Check_Attack()
+{
+	if (m_pOwner)
+	{
+		_uint iCurKeyFrameIndex = m_pAnimator->Get_AnimController()->Get_CurKeyFrameIndex();
+		if ((_uint)CMonster_Bastion_Spear::ANIM_TYPE::A_ATTACK_CHARGE_ED == m_pAnimator->Get_CurrentAnimNode())
+		{
+			if (iCurKeyFrameIndex >= 45 && iCurKeyFrameIndex < 60)
+			{
+				m_pOwner->Attack(true);
+				_float fDamage = 15.f;
+				_uint iLevel = 3;
+				m_pOwner->Set_AttackDesc_Damaga(fDamage);
+				m_pOwner->Set_AttackDesc_Level(iLevel);
+			}
+			else
+				m_pOwner->Attack(false);
+		}
+	}
 }
 
 CSpear_Charge_Attack* CSpear_Charge_Attack::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext, void* _pArg)

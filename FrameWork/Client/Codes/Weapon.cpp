@@ -157,7 +157,7 @@ void CWeapon::Set_IsAttack(const _bool _isAttack)
 
 void CWeapon::Set_IsTrail(const _bool _isTrail)
 {
-	if(m_isTrail != _isTrail)
+	if (_isTrail != m_isTrail)
 		m_isTrail = _isTrail;
 }
 

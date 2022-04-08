@@ -143,7 +143,7 @@ HRESULT CEffect_Env_Fire::SetUp_Components()
 	_vector vPos = { XMVectorGetX(m_Desc.fMyPos), XMVectorGetY(m_Desc.fMyPos), XMVectorGetZ(m_Desc.fMyPos), 1.f };
 	m_pTransform->Set_State(CTransform::STATE_POSITION, vPos);
 
-	if (FAILED(CGameObject::SetUp_Components((_uint)SCENEID::SCENE_STAGE1, L"Proto_Component_Rect_Effect", L"Com_Rect_Effect", (CComponent**)&m_pBuffer)))
+	if (FAILED(CGameObject::SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_Rect_Effect", L"Com_Rect_Effect", (CComponent**)&m_pBuffer)))
 		return E_FAIL;
 
 	return S_OK;

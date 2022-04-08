@@ -109,8 +109,8 @@ HRESULT CStargazer::SetUp_Component()
 	CCapsuleCollider::DESC tDesc;
 	ZeroMemory(&tDesc, sizeof(tDesc));
 
-	tDesc.fHeight = 1.f;
-	tDesc.fRadius = 0.2f;
+	tDesc.fHeight = 1.5f;
+	tDesc.fRadius = 0.25f;
 	tDesc.tColliderDesc.eRigidType = ERigidType::Dynamic;
 	tDesc.tColliderDesc.fDynamicFriction = 0.f;
 	tDesc.tColliderDesc.fStaticFriction = 0.f;
@@ -125,7 +125,7 @@ HRESULT CStargazer::SetUp_Component()
 	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_CapsuleCollider", L"Collider", (CComponent**)&m_pCollider,&tDesc)))
 		return E_FAIL;
 
-	_matrix matPivot = /*XMMatrixScaling(10.f, 10.f, 10.f) * */XMMatrixRotationAxis(XMVectorSet(0.f, 1.f, 0.f, 0.f), XMConvertToRadians(90.f)) * XMMatrixTranslation(0.f, 0.f, 1.f);
+	_matrix matPivot = /*XMMatrixScaling(10.f, 10.f, 10.f) * */XMMatrixRotationAxis(XMVectorSet(0.f, 1.f, 0.f, 0.f), XMConvertToRadians(90.f)) * XMMatrixTranslation(0.f, 0.f, 0.8f);
 	m_pCollider->setPivotMatrix(matPivot);
 
 	if (FAILED(SetUp_Material()))

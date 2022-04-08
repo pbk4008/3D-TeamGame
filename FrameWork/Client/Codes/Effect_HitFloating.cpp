@@ -83,7 +83,7 @@ _int CEffect_HitFloating::Tick(_double TimeDelta)
 
 _int CEffect_HitFloating::LateTick(_double TimeDelta)
 {
-	_bool bCulling = g_pGameInstance->isIn_WorldFrustum(m_pBox->Get_Points(), 20.f);
+	_bool bCulling = g_pGameInstance->isIn_WorldFrustum(m_pBox->Get_Points(), 1.f);
 	if (true == bCulling)
 	{
 		if (nullptr != m_pRenderer)
@@ -97,7 +97,7 @@ _int CEffect_HitFloating::LateTick(_double TimeDelta)
 
 HRESULT CEffect_HitFloating::Render()
 {
-	m_pBox->Render(L"Camera_Silvermane");
+	//m_pBox->Render(L"Camera_Silvermane");
 
 	_matrix XMWorldMatrix = XMMatrixTranspose(m_pTransform->Get_WorldMatrix());
 	_matrix XMViewMatrix = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_VIEW));

@@ -112,7 +112,7 @@ C2H_HammerAttackR2_01* C2H_HammerAttackR2_01::Create(ID3D11Device* _pDevice, ID3
 
 	if (FAILED(pInstance->NativeConstruct(_pArg)))
 	{
-		MSGBOX("C1H_SwordAttackNormalR1_01 Create Fail");
+		MSGBOX("C2H_HammerAttackR2_01 Create Fail");
 		Safe_Release(pInstance);
 	}
 

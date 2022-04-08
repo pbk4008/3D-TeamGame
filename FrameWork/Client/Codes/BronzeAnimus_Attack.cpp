@@ -26,15 +26,85 @@ HRESULT CBronzeAnimus_Attack::NativeConstruct(void* _pArg)
 _int CBronzeAnimus_Attack::Tick(const _double& _dDeltaTime)
 {
 	_int iProgress = __super::Tick(_dDeltaTime);
+
 	if (NO_EVENT != iProgress)
 		return iProgress;
 
-	if(!m_bAttackEnd)
-		m_pAnimator->Tick(_dDeltaTime);
+	m_pTransform->Face_Target(g_pObserver->Get_PlayerPos());
+	m_pAnimator->Tick(_dDeltaTime);
 
+	if (m_pAnimator->Get_CurrentAnimation()->Is_Finished()&&!m_pAnimator->Get_IsLerp())
+	{
+		m_pOwner->Set_AttackOn(false);
+		m_pStateController->Change_State(L"A_Idle_Battle");
+	}
+
+	//keyframe에따라 데미지 다르게 들어가게 
 	CMonster_BronzeAnimus* pMonster = (CMonster_BronzeAnimus*)m_pStateController->Get_GameObject();
 	if (nullptr != pMonster)
-		pMonster->Set_IsAttack(true);
+	{
+		_uint iCurKeyFrameIndex = m_pAnimator->Get_AnimController()->Get_CurKeyFrameIndex();
+
+		if ((_uint)CMonster_BronzeAnimus::ANIM_TYPE::A_ATTACK_R1 == m_pAnimator->Get_CurrentAnimNode())
+		{
+			if (120 < iCurKeyFrameIndex && 150 > iCurKeyFrameIndex)
+			{
+				pMonster->Set_IsAttack(true);
+
+				_float fDamage = 4.f;
+				_uint iLevel = 1;
+				pMonster->Set_AttackDesc_Damaga(fDamage);
+				pMonster->Set_AttackDesc_Level(iLevel);
+			}
+
+			else if (270 < iCurKeyFrameIndex && 300 > iCurKeyFrameIndex)
+			{
+				pMonster->Set_IsAttack(true);
+
+				_float fDamage = 5.f;
+				_uint iLevel = 3;
+				pMonster->Set_AttackDesc_Damaga(fDamage);
+				pMonster->Set_AttackDesc_Level(iLevel);
+			}
+
+			else
+			{
+				pMonster->Set_IsAttack(false);
+			}
+		}
+
+		else if ((_uint)CMonster_BronzeAnimus::ANIM_TYPE::A_ATTACK_R2 == m_pAnimator->Get_CurrentAnimNode())
+		{
+			if (126 < iCurKeyFrameIndex && 150 > iCurKeyFrameIndex)
+			{
+				pMonster->Set_IsAttack(true);
+
+				_float fDamage = 5.f;
+				_uint iLevel = 3;
+				pMonster->Set_AttackDesc_Damaga(fDamage);
+				pMonster->Set_AttackDesc_Level(iLevel);
+			}
+			else
+			{
+				pMonster->Set_IsAttack(false);
+			}
+		}
+
+		else if ((_uint)CMonster_BronzeAnimus::ANIM_TYPE::A_ATTACK_S1 == m_pAnimator->Get_CurrentAnimNode())
+		{
+			if (150 < iCurKeyFrameIndex && 180 > iCurKeyFrameIndex)
+			{
+				pMonster->Set_IsAttack(true);
+
+				_float fDamage = 5.f;
+				_uint iLevel = 3;
+				pMonster->Set_AttackDesc_Damaga(fDamage);
+				pMonster->Set_AttackDesc_Level(iLevel);
+			}
+			else
+				pMonster->Set_IsAttack(false);
+		}
+	}
 
 	return _int();
 }
@@ -61,8 +131,24 @@ HRESULT CBronzeAnimus_Attack::EnterState()
 	if (FAILED(__super::EnterState()))
 		return E_FAIL;
 
-	_int randAtt = rand() % 3;
+	return S_OK;
+}
 
+HRESULT CBronzeAnimus_Attack::ExitState()
+{
+	if (FAILED(__super::ExitState()))
+		return E_FAIL;
+
+	m_pAnimator->Get_AnimController()->Set_PlaySpeed(1.f);
+
+	return S_OK;
+}
+
+HRESULT CBronzeAnimus_Attack::EnterState(void* pArg)
+{
+	_int randAtt = (*(_int*)pArg);
+
+	m_pAnimator->Get_AnimController()->Set_PlaySpeed(1.5f);
 	switch (randAtt)
 	{
 	case 0:
@@ -79,16 +165,12 @@ HRESULT CBronzeAnimus_Attack::EnterState()
 		break;
 	}
 
+
 	return S_OK;
 }
 
-HRESULT CBronzeAnimus_Attack::ExitState()
+HRESULT CBronzeAnimus_Attack::ExitState(void* pArg)
 {
-	if (FAILED(__super::ExitState()))
-		return E_FAIL;
-
-	m_bAttackEnd = false;
-
 	return S_OK;
 }
 

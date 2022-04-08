@@ -1,6 +1,6 @@
 #include "pch.h"
 #include "BronzeAnimus_Chaser.h"
-
+#include "Animation.h"
 /* Monster List */
 #include "Monster_BronzeAnimus.h"
 
@@ -27,11 +27,12 @@ _int CBronzeAnimus_Chaser::Tick(const _double& _dDeltaTime)
 	_int iProgress = __super::Tick(_dDeltaTime);
 	if (NO_EVENT != iProgress)
 		return iProgress;
-
+	//cout << "Chase" << endl;
+	
+	m_pTransform->Face_Target(g_pObserver->Get_PlayerPos());
 	m_pAnimator->Tick(_dDeltaTime);
 
-	m_pTransform->Add_Velocity(m_pTransform->Chase_Pos(g_pObserver->Get_Transform(), _dDeltaTime));
-
+	cout << m_pAnimator->Get_CurrentAnimNode()<< endl;
 	return _int();
 }
 
@@ -71,8 +72,6 @@ HRESULT CBronzeAnimus_Chaser::ExitState()
 
 void CBronzeAnimus_Chaser::Look_Player(void)
 {
-	if (!m_bTargetOn)
-		m_pStateController->Change_State(L"A_Idle_Battle");
 }
 
 void CBronzeAnimus_Chaser::Look_Monster(void)

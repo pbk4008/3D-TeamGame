@@ -571,7 +571,7 @@ HRESULT CMonster_Bastion_Sword::Set_Weapon()
 		}
 	}
 	m_pWeapon->Set_FixedBone(pWeaponBone);
-	static_cast<CWeapon*>(m_pWeapon)->Set_OwnerPivotMatrix(m_pModelCom->Get_PivotMatrix());
+	m_pWeapon->Set_OwnerPivotMatrix(m_pModelCom->Get_PivotMatrix());
 
 
 	return S_OK;

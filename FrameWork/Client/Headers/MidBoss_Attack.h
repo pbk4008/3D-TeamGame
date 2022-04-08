@@ -44,7 +44,7 @@ private:
 	_uint m_iAttackS1_2 = 120;
 	_uint m_iAttackS2_1 = 10;
 	_uint m_iAttackS2_2 = 40;
-	_uint m_iAttackJog  = 20;
+	_uint m_iAttackJog  = 26;
 	_uint m_iAttackSprint = 14;
 	_uint m_iAttackLegacy_1 = 5;
 	_uint m_iAttackLegacy_2 = 14;

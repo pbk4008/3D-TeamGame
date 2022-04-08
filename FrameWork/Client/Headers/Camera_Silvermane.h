@@ -28,6 +28,7 @@ private:
 
 public:
 	void Set_ChaseTarget(const _bool _isChase);
+	void Respawn();
 
 private:
 	_int Chase_Target(const _double& _dDeltaTime);

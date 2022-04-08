@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Weapon.h"
+#include "Light.h"
 
 BEGIN(Client)
 
@@ -22,6 +23,7 @@ public:
 	virtual HRESULT	Render_Shadow() override;
 
 	virtual void OnTriggerEnter(CCollision& collision) override;
+	virtual void OnTriggerExit(CCollision& collision) override;
 
 	virtual void RangeAttack() override;
 
@@ -35,7 +37,10 @@ private:
 	_float4x4 m_matPivot{};
 	CCapsuleCollider* m_pCollider = nullptr;
 	CTrailEffect* m_pTrailEffect = nullptr;
+	CLight* m_pLight = nullptr;
 
+	_bool m_bLight = false;
+	_float m_fLightRange = 0.f;
 public:
 	static CNeedle* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext);
 	virtual CGameObject* Clone(const _uint _iSceneID, void* _pArg = nullptr) override;

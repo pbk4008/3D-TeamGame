@@ -101,7 +101,7 @@ HRESULT CMonster_Bastion_Spear::NativeConstruct(const _uint _iSceneID, void* _pA
 	m_pPanel->Set_GroggyBar(Get_GroggyGaugeRatio());
 
 	m_isFall = true;
-	setActive(false);
+	//setActive(false);
 
 	m_tAttackDesc.iLevel = 1;
 
@@ -587,6 +587,14 @@ void CMonster_Bastion_Spear::Hit(const ATTACKDESC& _tAttackDesc)
 
 	m_pPanel->Set_Show(true);
 
+	if (L"Guard" == m_pStateController->Get_CurStateTag()
+		|| m_iGuardCount > 0)
+	{
+		m_iGuardCount--;
+		return;
+	}
+
+
 	m_fCurrentHp -= _tAttackDesc.fDamage;
 	CCollision collision;
 	collision.pGameObject = _tAttackDesc.pHitObject;
@@ -619,8 +627,6 @@ void CMonster_Bastion_Spear::Hit(CCollision& collision)
 					}
 					m_pPanel->Set_Show(true);
 					m_bGuard = false;
-					Set_Current_HP(-1);
-					Set_GroggyGauge(2); //TODO::¼öÄ¡Á¤ÇØ¼­¹Ù²ãÁà¾ßµÊ
 					m_pStateController->Change_State(L"Hit");
 					Active_Effect((_uint)EFFECT::HIT);
 					Active_Effect((_uint)EFFECT::FLOATING);
@@ -630,18 +636,17 @@ void CMonster_Bastion_Spear::Hit(CCollision& collision)
 						m_pPanel->Set_GroggyBar(Get_GroggyGaugeRatio());
 					}
 				}
-				else
-				{
-					m_iGuardCount--;
-					cout << m_iGuardCount << endl;
-					if (m_iGuardCount < 0)
-						m_iGuardCount = 0;
-					//Active_Effect((_uint)EFFECT::GUARD);
-				}
 				m_pPanel->Set_HpBar(Get_HpRatio());
 			}
 		}
 	}
+}
+
+void CMonster_Bastion_Spear::Attack(_bool bCheck)
+{
+	m_bIsAttack = bCheck;
+	if (m_pWeapon)
+		m_pWeapon->Set_IsAttack(bCheck);
 }
 
 CMonster_Bastion_Spear* CMonster_Bastion_Spear::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)

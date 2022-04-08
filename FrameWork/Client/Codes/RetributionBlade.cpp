@@ -77,6 +77,9 @@ _int CRetributionBlade::Tick(_double _dDeltaTime)
 	if (m_pCollider)
 		m_pCollider->Tick(_dDeltaTime);
 
+
+
+
 	return _int();
 }
 
@@ -150,13 +153,13 @@ HRESULT CRetributionBlade::Ready_Components()
 
 	CCapsuleCollider::DESC tCapsuleColliderDesc;
 	tCapsuleColliderDesc.tColliderDesc = tColliderDesc;
-	tCapsuleColliderDesc.fHeight = 1.5f;
-	tCapsuleColliderDesc.fRadius = 0.15f;
+	tCapsuleColliderDesc.fHeight = 2.f;
+	tCapsuleColliderDesc.fRadius = 0.2f;
 
 	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_CapsuleCollider", L"Collider", (CComponent**)&m_pCollider, &tCapsuleColliderDesc)))
 		return E_FAIL;
 
-	_matrix smatPviot = XMMatrixRotationY(XMConvertToRadians(90.f)) * XMMatrixTranslation(0.f, 0.f, 1.f);
+	_matrix smatPviot = XMMatrixRotationY(XMConvertToRadians(90.f)) * XMMatrixTranslation(0.f, 0.f, 0.8f);
 	m_pCollider->setPivotMatrix(smatPviot);
 
 	return S_OK;

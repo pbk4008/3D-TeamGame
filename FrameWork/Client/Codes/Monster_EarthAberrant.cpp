@@ -102,7 +102,7 @@ HRESULT CMonster_EarthAberrant::NativeConstruct(const _uint _iSceneID, void* _pA
 	m_tAttackDesc.iLevel = 1;
 	m_tAttackDesc.fDamage = 3.f;
 
-	setActive(false);
+	//setActive(false);
 
 	return S_OK;
 }
@@ -152,14 +152,16 @@ _int CMonster_EarthAberrant::Tick(_double _dDeltaTime)
 	}
 	else
 	{
-		if (DEATH == m_pAnimatorCom->Get_CurrentAnimNode())
+		if (L"Death" == m_pStateController->Get_CurStateTag())
 		{
-			if (m_pAnimatorCom->Get_CurrentAnimation()->Is_Finished())
+			if (m_pAnimatorCom->Get_CurrentAnimation()->Is_Finished() && 
+				!m_pAnimatorCom->Get_IsLerp())
 			{
 				Set_Remove(true);
 				m_pPanel->Set_UIRemove(true);
 			}
-			if (9 == m_pAnimatorCom->Get_AnimController()->Get_CurKeyFrameIndex())
+			if (9 <= m_pAnimatorCom->Get_AnimController()->Get_CurKeyFrameIndex() 
+				&& 10 > m_pAnimatorCom->Get_AnimController()->Get_CurKeyFrameIndex())
 			{
 				Active_Effect((_uint)EFFECT::DEATH);
 			}
@@ -580,14 +582,19 @@ HRESULT CMonster_EarthAberrant::Set_State_FSM()
 
 HRESULT CMonster_EarthAberrant::Set_Weapon()
 {
-	CHierarchyNode* pBone = m_pModel->Get_BoneMatrix("weapon_r_end");
-	CEarthAberrant_Pick* pWeapon = CEarthAberrant_Pick::Create(m_pDevice, m_pDeviceContext);
-	//CEarthAberrant_Pick* pWeapon = g_pGameInstance->Clone_GameObject<CEarthAberrant_Pick>(_iSceneID, L"Proto_GameObject_Weapon_EarthAberrant_Pick");
-	if (FAILED(pWeapon->NativeConstruct(m_iSceneID, pBone)))
+	CHierarchyNode* pBone = m_pModelCom->Get_BoneMatrix("weapon_r_end");
+	//CEarthAberrant_Pick* pWeapon = CEarthAberrant_Pick::Create(m_pDevice, m_pDeviceContext);
+	m_pWeapon = g_pGameInstance->Clone_GameObject<CEarthAberrant_Pick>(m_iSceneID, L"Proto_GameObject_Weapon_EarthAberrant_Pick");
+
+	if (!m_pWeapon)
+	{
+		MSGBOX("Earth Weapon Clone Fail");
 		return E_FAIL;
-	pWeapon->Set_Owner(this);
-	pWeapon->Set_OwnerPivotMatrix(m_pModel->Get_PivotMatrix());
-	m_pWeapon = pWeapon;
+	}
+
+	m_pWeapon->Set_Owner(this);
+	m_pWeapon->Set_FixedBone(pBone);
+	m_pWeapon->Set_OwnerPivotMatrix(m_pModelCom->Get_PivotMatrix());
 
 	return S_OK;
 }

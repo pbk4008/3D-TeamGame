@@ -56,6 +56,8 @@ HRESULT CFury::NativeConstruct(const _uint _iSceneID, void* _pArg)
 
 	m_fDamage = 5;
 
+	m_bActive = false;
+	m_pCollider->Remove_ActorFromScene();
 	return S_OK;
 }
 
@@ -119,6 +121,9 @@ void CFury::OnTriggerEnter(CCollision& collision)
 	case (_uint)GAMEOBJECT::MONSTER_HEALER:
 	case (_uint)GAMEOBJECT::MONSTER_SHOOTER:
 	case (_uint)GAMEOBJECT::MONSTER_SPEAR:
+	case (_uint)GAMEOBJECT::MONSTER_ANIMUS:
+	case (_uint)GAMEOBJECT::MIDDLE_BOSS:
+	case (_uint)GAMEOBJECT::BOSS:
 		if (!m_isAttack)
 			return;
 
@@ -140,11 +145,11 @@ void CFury::RangeAttack()
 	tOverlapDesc.filterData.flags = PxQueryFlag::eDYNAMIC;
 	if (g_pGameInstance->Overlap(tOverlapDesc))
 	{
-		_uint iSize = (_uint)tOverlapDesc.vecHitObject.size();
+		_uint iSize = (_uint)tOverlapDesc.vecHitObjects.size();
 		for (_uint i = 0; i < iSize; ++i)
 		{
-			CActor* pActor = static_cast<CActor*>(tOverlapDesc.vecHitObject[i]);
-			_uint iTag = tOverlapDesc.vecHitObject[i]->getTag();
+			CActor* pActor = static_cast<CActor*>(tOverlapDesc.vecHitObjects[i]);
+			_uint iTag = tOverlapDesc.vecHitObjects[i]->getTag();
 			switch (iTag)
 			{
 			case (_uint)GAMEOBJECT::MONSTER_CRYSTAL:
@@ -154,6 +159,10 @@ void CFury::RangeAttack()
 			case (_uint)GAMEOBJECT::MONSTER_HEALER:
 			case (_uint)GAMEOBJECT::MONSTER_SHOOTER:
 			case (_uint)GAMEOBJECT::MONSTER_SPEAR:
+			case (_uint)GAMEOBJECT::MONSTER_ANIMUS:
+			case (_uint)GAMEOBJECT::MIDDLE_BOSS:
+			case (_uint)GAMEOBJECT::BOSS:
+
 				ATTACKDESC tAttackDesc = m_pOwner->Get_AttackDesc();
 				tAttackDesc.fDamage += m_fDamage * 0.8f;
 				tAttackDesc.iLevel = 2;

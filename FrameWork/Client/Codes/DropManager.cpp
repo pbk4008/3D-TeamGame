@@ -18,7 +18,6 @@ HRESULT CDropManager::NativeConstruct(SCENEID _iSceneID)
 				PRINT_LOG(L"Alert", L"Drop Item 생성에 실패했어요...");
 				return nullptr;
 			}
-			Safe_AddRef(pObj);
 			return pObj;
 		}, 30);
 
