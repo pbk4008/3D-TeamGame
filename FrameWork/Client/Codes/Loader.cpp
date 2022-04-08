@@ -58,6 +58,8 @@
 #include "UI_Blank_CKey.h"
 #include "UI_Fill_CKey.h"
 
+
+
 #pragma region TestScene_JS
 
 #include "Camera_Debug.h"
@@ -156,7 +158,7 @@ HRESULT CLoader::SetUp_Stage1_Object()
 	if (FAILED(Load_Stage1FBXLoad()))
 		return E_FAIL;
 
-	if (FAILED(Load_Stage1Navi_SkyLoad()))
+		if (FAILED(Load_Stage1Navi_SkyLoad()))
 		return E_FAIL;
 
 	if (FAILED(Load_Stage1PlayerLoad()))

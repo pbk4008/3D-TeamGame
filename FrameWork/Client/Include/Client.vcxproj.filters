@@ -349,6 +349,12 @@
     <Filter Include="02.GameObject\05.UI\01.UI_Ingame\01.Meter\05.Tutorial\01.SideTutorial\01.Font">
       <UniqueIdentifier>{bc016171-dd24-4100-ae51-f14583cc3157}</UniqueIdentifier>
     </Filter>
+    <Filter Include="03.System">
+      <UniqueIdentifier>{62988325-939c-4ebd-9df0-bc7e105ce642}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.System\00.Trigger">
+      <UniqueIdentifier>{64538ba6-dcae-4651-a187-37e1fdf0fbf0}</UniqueIdentifier>
+    </Filter>
     <Filter Include="02.GameObject\05.UI\01.UI_Ingame\01.Meter\02.Monster\05.Groggy">
       <UniqueIdentifier>{de4559b8-3cc3-4e19-a28c-9e4004bf6722}</UniqueIdentifier>
     </Filter>
@@ -510,6 +516,12 @@
     <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_Spear\State\Attack\Charge_Attack">
       <UniqueIdentifier>{52f9fe23-d530-45bf-8dce-6f09b54d794d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="03.System\01.ShakeManager">
+      <UniqueIdentifier>{88c490a5-4de2-42f5-8177-be9cf2784d4b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.System\00.Trigger\Client_Trigger">
+      <UniqueIdentifier>{b9091f0b-2046-48f5-9b0a-b245f8fa1e4e}</UniqueIdentifier>
+    </Filter>
     <Filter Include="02.GameObject\03.Character\00.Player\00.Silvermane\State\Idel">
       <UniqueIdentifier>{c9495a7f-fa32-4be2-9ed1-f71f827bba41}</UniqueIdentifier>
     </Filter>
@@ -636,11 +648,20 @@
     <Filter Include="02.GameObject\05.UI\02.UIDGen">
       <UniqueIdentifier>{f266934c-1a57-446b-95cc-e419c91d86f5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="03.System\02.InteractManager">
+      <UniqueIdentifier>{463fe524-896b-4339-89fc-7dd31e8d3856}</UniqueIdentifier>
+    </Filter>
     <Filter Include="02.GameObject\06.Interactable Object">
       <UniqueIdentifier>{4a5859c8-26b8-4d46-99f2-0e7d33ad266d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="03.System\03.DropManager">
+      <UniqueIdentifier>{1616c50f-191e-47c8-9ae6-63f27fdd364c}</UniqueIdentifier>
+    </Filter>
     <Filter Include="02.GameObject\06.Interactable Object\DropObject">
       <UniqueIdentifier>{083ba14e-1894-4e11-b635-6aa79097214f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.System\04.GameObjectPool">
+      <UniqueIdentifier>{1624795f-0856-4f9e-b3dd-76c8629f1312}</UniqueIdentifier>
     </Filter>
     <Filter Include="02.GameObject\06.Interactable Object\DropBox">
       <UniqueIdentifier>{b65eefca-bd57-42a1-8609-b4176f8e4154}</UniqueIdentifier>
@@ -650,6 +671,9 @@
     </Filter>
     <Filter Include="96.ScriptableData\InventoryData">
       <UniqueIdentifier>{981fc99d-54c6-44d5-97b1-06663b0d6739}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.System\05.DataManager">
+      <UniqueIdentifier>{570e7cdd-e1ad-4238-8e22-de6213ebd30e}</UniqueIdentifier>
     </Filter>
     <Filter Include="02.GameObject\03.Character\00.Player\00.Silvermane\State\Shield\Parry">
       <UniqueIdentifier>{476d3f32-8157-40d0-b1ca-3cfc24316276}</UniqueIdentifier>

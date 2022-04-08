@@ -5,7 +5,7 @@
 BEGIN(Client)
 
 class CScriptableData;
-class CDataManager final : public CSingleTon<CDataManager>
+class CDataManager : public CSingleTon<CDataManager>
 {
 	friend CSingleTon;
 

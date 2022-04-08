@@ -196,11 +196,4 @@ namespace Engine
 		_uint iLevel = 0;
 		_float fDamage = 0.f;
 	}ATTACKDESC;
-
-	/* 牢亥配府 UI 府家胶 包府 */
-	typedef struct ResoucePath
-	{
-		std::wstring clientResourcePath = L"../Resource";
-		std::wstring engineResourcePath = L"../../Engine/Resource";
-	}RESOUCEPATH;
 }

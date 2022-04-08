@@ -22,7 +22,6 @@ CGameInstance::CGameInstance()
 	, m_pSoundManager(CSoundMgr::GetInstance())
 	, m_pPhysicSystem(CPhysicsXSystem::GetInstance())
 	, m_pEffectManager(CEffectManager::GetInstance())
-	, m_pResourceManager(CResourceManager::GetInstance())
 {
 	Safe_AddRef(m_pFont_Manager);
 	Safe_AddRef(m_pFrustum);
@@ -41,7 +40,6 @@ CGameInstance::CGameInstance()
 	Safe_AddRef(m_pSoundManager);
 	Safe_AddRef(m_pPhysicSystem);
 	Safe_AddRef(m_pEffectManager);
-	Safe_AddRef(m_pResourceManager);
 }
 
 HRESULT CGameInstance::Initialize_Engine(HINSTANCE hInst, HWND hWnd, _uint iNumLevel, CGraphic_Device::WINMODE eWinMode, _uint iWinCX, _uint iWinCY, ID3D11Device** ppDeviceOut, ID3D11DeviceContext** ppDeviceContextOut)
@@ -73,9 +71,6 @@ HRESULT CGameInstance::Initialize_Engine(HINSTANCE hInst, HWND hWnd, _uint iNumL
 		return E_FAIL;	
 
 	if (FAILED(m_pFrustum->Ready_FrustumInProjSpace()))
-		return E_FAIL;
-
-	if (FAILED(m_pResourceManager->NativeConstruct(TRUE, m_ResourcePath.engineResourcePath, m_ResourcePath.clientResourcePath)))
 		return E_FAIL;
 
 	g_pGameInstance = GET_INSTANCE(CGameInstance);
@@ -675,14 +670,6 @@ void CGameInstance::BlendSound(const std::wstring& pStartSoundKey, const std::ws
 	m_pSoundManager->BlendSound(pStartSoundKey, pEndSoundKey, eStartID, eEndID, fBlendTiming);
 }
 
-HRESULT CGameInstance::NativeConstruct(_bool bAllLoad, const std::wstring& EngineResourcePath, const std::wstring& ClientResourcePath)
-{
-	if (!m_pResourceManager)
-		return E_FAIL;
-
-	return m_pResourceManager->NativeConstruct(bAllLoad, EngineResourcePath, ClientResourcePath);
-}
-
 void CGameInstance::Release_Engine()
 {
 	RELEASE_INSTANCE(CGameInstance);
@@ -707,9 +694,6 @@ void CGameInstance::Release_Engine()
 
 	if (0 != CTextureManager::GetInstance()->DestroyInstance())
 		MSGBOX("Failed to Release CTextureManager");
-
-	if (0 != CResourceManager::GetInstance()->DestroyInstance())
-		MSGBOX("Failed to Release CResourceManager");
 
 	if (0 != CPipeLine::GetInstance()->DestroyInstance())
 		MSGBOX("Failed to Release CPipeLine");
@@ -761,7 +745,6 @@ void CGameInstance::Free()
 	Safe_Release(m_pLevel_Manager);
 	Safe_Release(m_pGraphic_Device);
 	Safe_Release(m_pTextureManager);
-	Safe_Release(m_pResourceManager);
 	Safe_Release(m_pSaveManager);
 	Safe_Release(m_pSoundManager);
 	Safe_Release(m_pPhysicSystem);

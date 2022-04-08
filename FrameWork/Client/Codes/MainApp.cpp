@@ -8,23 +8,11 @@
 #include "MeshLoader.h"
 #include "ShakeManager.h"
 #include "DataManager.h"
-#include "Inven_UIManager.h"
-
-//Inventory UI Object
-#include "UI_ModalWindow.h"
-#include "UI_Indexes.h"
-#include "UI_Background.h"
-#include "UI_Equipment.h"
-#include "UI_Armory.h"
-
-//Inventory UI Component
-#include "SingleImage.h"
 
 CClient_Observer* g_pObserver = nullptr;
 CDebugSystem* g_pDebugSystem = nullptr;
 CShakeManager* g_pShakeManager = nullptr;
 CDataManager* g_pDataManager = nullptr;
-CInven_UIManager* g_pInvenUIManager = nullptr;
 
 CMainApp::CMainApp()
 {
@@ -59,7 +47,16 @@ HRESULT CMainApp::NativeConstruct()
 	if (FAILED(SetUp_StartLevel(SCENEID::SCENE_LOGO)))
 		return E_FAIL;
 
-	if (FAILED(Ready_GameManager()))
+	g_pObserver = CClient_Observer::GetInstance();
+	g_pShakeManager = CShakeManager::GetInstance();
+	if (FAILED(g_pShakeManager->NativeConstruct()))
+		return E_FAIL;
+	/*CMeshLoader* pMeshLoader = CMeshLoader::GetInstance();
+	if (FAILED(pMeshLoader->Reserve_MeshLoader(m_pDevice, m_pDeviceContext)))
+		return E_FAIL;*/
+
+	g_pDataManager = CDataManager::GetInstance();
+	if (FAILED(g_pDataManager->NativeConstruct()))
 		return E_FAIL;
 
 	return S_OK;
@@ -82,7 +79,6 @@ _int CMainApp::Tick(_double TimeDelta)
 		else
 			TimeDelta *= 0.1;
 	}
-
 
 	if (g_pGameInstance->getkeyDown(DIK_F1))
 	{
@@ -121,7 +117,6 @@ _int CMainApp::Tick(_double TimeDelta)
 			m_isRender = true;
 		}
 	}
-	
 
 	g_pDataManager->Tick();
 	return _int();
@@ -190,29 +185,6 @@ HRESULT CMainApp::SetUp_StartLevel(SCENEID eLevel)
 	return S_OK;
 }
 
-HRESULT CMainApp::Ready_GameManager(void)
-{
-	/*CMeshLoader* pMeshLoader = CMeshLoader::GetInstance();
-if (FAILED(pMeshLoader->Reserve_MeshLoader(m_pDevice, m_pDeviceContext)))
-	return E_FAIL;*/
-
-	g_pObserver = CClient_Observer::GetInstance();
-	g_pShakeManager = CShakeManager::GetInstance();
-
-	if (FAILED(g_pShakeManager->NativeConstruct()))
-		return E_FAIL;
-
-	g_pDataManager = CDataManager::GetInstance();
-	if (FAILED(g_pDataManager->NativeConstruct()))
-		return E_FAIL;
-
-	g_pInvenUIManager = CInven_UIManager::GetInstance();
-	if (FAILED(g_pInvenUIManager->NativeConstruct()))
-		return E_FAIL;
-
-	return S_OK;
-}
-
 HRESULT CMainApp::Ready_Component_Prototype()
 {
 	if(FAILED(g_pGameInstance->SetUpBaseComponent(m_pDevice, m_pDeviceContext)))
@@ -221,12 +193,6 @@ HRESULT CMainApp::Ready_Component_Prototype()
 
 	if (!m_pRenderer)
 		return E_FAIL;
-
-	//////////////////////////////////////////
-	/* for. inventory ui component*/
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_SingleImage", CSingleImage::Create(m_pDevice, m_pDeviceContext))))
-		return E_FAIL;
-	//////////////////////////////////////////
 
 	return S_OK;
 }
@@ -242,25 +208,6 @@ HRESULT CMainApp::Ready_GameObject_Prototype()
 
 	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_MainOrthoCamera"), CMainCamera_Ortho::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
-
-	//for. Inventory ////////////////
-	//Modal Window
-	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_UI_ModalWindow"), CUI_ModalWindow::Create(m_pDevice, m_pDeviceContext))))
-		return E_FAIL;
-	//Indexes
-	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_UI_Indexes"), CUI_Indexes::Create(m_pDevice, m_pDeviceContext))))
-		return E_FAIL;
-	//BG
-	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_UI_Background"), CUI_Background::Create(m_pDevice, m_pDeviceContext))))
-		return E_FAIL;
-	//Equip
-	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_UI_Equipment"), CUI_Equipment::Create(m_pDevice, m_pDeviceContext))))
-		return E_FAIL;
-	//Armory
-	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_UI_Armory"), CUI_Armory::Create(m_pDevice, m_pDeviceContext))))
-		return E_FAIL;
-	////////////////////////////////
-
 
 	return S_OK;
 }
@@ -359,10 +306,11 @@ void CMainApp::Free()
 	CShakeManager::DestroyInstance();
 	CMeshLoader::DestroyInstance();
 	CDataManager::DestroyInstance();
-	CInven_UIManager::DestroyInstance();
 
 	Safe_Release(g_pObserver);
+
 	Safe_Release(m_pRenderer);
+
 	Safe_Release(m_pDeviceContext);
 	Safe_Release(m_pDevice);
 	

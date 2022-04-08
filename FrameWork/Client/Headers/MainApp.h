@@ -41,7 +41,6 @@ private:
 	_double				m_dFreezeTimeAcc = 0.0;
 private:
 	HRESULT SetUp_StartLevel(SCENEID eLevel);
-	HRESULT Ready_GameManager(void);
 
 	/* For. Level_static*/
 	HRESULT Ready_Component_Prototype();
@@ -53,7 +52,7 @@ private:
 public:
 	const _bool IsFreeze() const;
 	void FreezeTime();
-
+	
 public:
 	static CMainApp* Create();
 	virtual void Free() override;

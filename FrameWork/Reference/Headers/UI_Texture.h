@@ -23,7 +23,7 @@ public:
 	ID3D11ShaderResourceView* Get_Texture(size_t _index);
 
 private:
-	vector<ID3D11ShaderResourceView*> m_vecTextures;
+	vector< ID3D11ShaderResourceView*> m_textures;
 };
 
 END
