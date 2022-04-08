@@ -152,8 +152,7 @@ namespace Engine
 		return (_v < _min) ? _min : (_max < _v) ? _max : _v;
 	}
 
-
-	/*_bool IsDigitString(int* _digit, wstring _string)
+	static _bool IsDigitString(int* _digit, wstring _string)
 	{
 		int num = _wtoi(_string.c_str());
 
@@ -174,8 +173,7 @@ namespace Engine
 		}
 
 		return false;
-	}*/
-
+	}
 }
 
 #endif // Engine_Function_h__

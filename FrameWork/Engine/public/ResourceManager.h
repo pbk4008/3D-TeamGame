@@ -35,7 +35,7 @@ public:
 		return (T*)resource;
 	}
 
-private:
+public:
 	template<typename TYPE, typename T>
 	TYPE* GetResource(const std::wstring& Name, const TCHAR* Extention)
 	{
@@ -62,15 +62,15 @@ private:
 					resource->NativeConstruct(filePath);
 					m_resourceContainers[typeid(T).name()][fileName] = resource;
 
-					std::wstring sceneLevel = CLevel_Manager::GetInstance()->getCurrentLevel();
-					std::wstring message = L"Can not find resource! \nScene Level :";
-					message += sceneLevel;
-					message += L"\nResource Name : ";
-					message += fileName;
-					message += L"\nAlternate file path : ";
-					message += filePath;
+					/*	std::wstring sceneLevel = CLevel_Manager::GetInstance()->getCurrentLevel();
+						std::wstring message = L"Can not find resource! \nScene Level :";
+						message += sceneLevel;
+						message += L"\nResource Name : ";
+						message += fileName;
+						message += L"\nAlternate file path : ";
+						message += filePath;
 
-					PRINT_LOG("Warnning", (message).c_str());
+						PRINT_LOG("Warnning", (message).c_str());*/
 
 					return (TYPE*)resource;
 				}
@@ -80,7 +80,7 @@ private:
 		{
 			return (TYPE*)resource;
 		}
-		PRINT_LOG("Warnning", (L"Resource with that name '" + Name + L"' does not exist").c_str());
+		//PRINT_LOG("Warnning", (L"Resource with that name '" + Name + L"' does not exist").c_str());
 		return nullptr;
 	}
 
@@ -112,15 +112,15 @@ public:
 					resource->NativeConstruct(filePath);
 					m_resourceContainers[typeid(T).name()][fileName] = resource;
 
-					std::wstring sceneName = CLevel_Manager()->GetInstance()->getCurrentLevel();
-					std::wstring messgae = L"Can not find resource! \nScene Level : ";
-					message += sceneName;
-					message += L"\nResource Name : ";
-					message += fileName;
-					message += L"\nAlternate file path : ";
-					message += filePath;
+					/*	std::wstring sceneName = CLevel_Manager()->GetInstance()->getCurrentLevel();
+						std::wstring message = L"Can not find resource! \nScene Level : ";
+						message += sceneName;
+						message += L"\nResource Name : ";
+						message += fileName;
+						message += L"\nAlternate file path : ";
+						message += filePath;
 
-					PRINT_LOG("Warnning", (message).c_str());
+						PRINT_LOG("Warnning", (message).c_str());*/
 
 					return (T*)resource;
 				}
@@ -130,7 +130,7 @@ public:
 		{
 			return (T*)resource;
 		}
-		PRINT_LOG("Warnning", (L"Resource with that name '" + Name + L"' does not exist").c_str());
+		//PRINT_LOG("Warnning", (L"Resource with that name '" + _name + L"' does not exist").c_str());
 		return nullptr;
 	}
 
@@ -206,10 +206,10 @@ public:
 		{
 			std::wstring message;
 			message += L" Resource is already exist! \n";
-			message += L" Old File Path : " + m_resourceContainers[typeid(TYPE).name()][fileName]->m_filePath + L"." + _extention + L"\n";
-			message += L" New File Path : " + filePath + L"." + _extention;
+			//message += L" Old File Path : " + m_resourceContainers[typeid(TYPE).name()][fileName]->m_filePath + L"." + _extention + L"\n";
+			//message += L" New File Path : " + filePath + L"." + _extention;
 
-			PRINT_LOG("Warnning", (message).c_str());
+			//PRINT_LOG("Warnning", (message).c_str());
 			continue;
 		}
 		TYPE* resource = new T();

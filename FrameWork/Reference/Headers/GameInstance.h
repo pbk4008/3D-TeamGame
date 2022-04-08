@@ -19,6 +19,7 @@
 #include "Material_Manager.h"
 #include "PhysicsXSystem.h"
 #include "EffectManager.h"
+#include "ResourceManager.h"
 
 BEGIN(Engine)
 
@@ -191,6 +192,47 @@ public: /* For.SoundMgr */
 		CSoundMgr::CHANNELID  eEndID,
 		_float fBlendTiming = 0.0f);
 
+public:/* For. Resource Manager*/
+	HRESULT NativeConstruct(_bool bAllLoad, const std::wstring& EngineResourcePath, const std::wstring& ClientResourcePath);
+	template <typename TYPE, typename T>
+	T* AddResource(const wstring& _name, bool _isStatic = false)
+	{
+		if (!m_pResourceManager)
+			return nullptr;
+		return m_pResourceManager->AddResource<TYPE, T>(_name, _isStatic);
+	}
+	template<typename T>
+	T* GetResource(const std::wstring& _name)
+	{
+		if (!m_pResourceManager)
+		return nullptr;
+
+		return m_pResourceManager->GetResource<T>(_name);
+	}
+	template<typename T>
+	T* GetResourceIfExist(const std::wstring& _name)
+	{
+		if (!m_pResourceManager)
+			return nullptr;
+		return m_pResourceManager->GetResourceIfExist<T>(_name);
+	}
+	template <typename TYPE, typename T>
+	void UpdateResource(const std::wstring _filePath, const std::wstring& _extention, _bool _bStatic = false)
+	{
+		if (!m_pResourceManager)
+			return nullptr;
+		m_pResourceManager->UpdateResource<TYPE, T>(_filePath, _extention, _bStatic);
+	}
+	template <typename TYPE, typename T>
+	void LoadResource(const std::wstring& _filePath, _bool _bStatic = false)
+	{
+		if (!m_pResourceManager)
+			return;
+		
+		m_pResourceManager->LoadResource<TYPE, T>(_filePath, _bStatic);
+	}
+
+
 private:
 	CGraphic_Device*			m_pGraphic_Device = nullptr;		
 	CLevel_Manager*				m_pLevel_Manager = nullptr;
@@ -208,7 +250,11 @@ private:
 	CSaveManager*				m_pSaveManager = nullptr;
 	CSoundMgr*					m_pSoundManager = nullptr;
 	CPhysicsXSystem*			m_pPhysicSystem = nullptr;
-	CEffectManager*			m_pEffectManager = nullptr;
+	CEffectManager*				m_pEffectManager = nullptr;
+	CResourceManager*			m_pResourceManager = nullptr;
+
+private:
+	RESOUCEPATH m_ResourcePath;
 
 public:
 	static void Release_Engine();
@@ -219,4 +265,3 @@ END
 
 ENGINE_DLL extern CGameInstance* g_pGameInstance;
 ENGINE_DLL extern mt19937 g_random;
-

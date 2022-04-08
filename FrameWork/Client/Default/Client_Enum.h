@@ -121,6 +121,13 @@ typedef enum eEquipmentMainStatType
 	MainStatType_End
 }EQUIPMENT_MAINSTAT_TYPE;
 
+typedef enum eModalIndex
+{
+	TAB_EQUIPMENT,
+	TAB_ARMORY,
+	TAB_RESOURCE,
+	TAB_END
+}INVEN_INDEX;
 
 END
 
