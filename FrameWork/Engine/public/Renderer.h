@@ -17,7 +17,7 @@ class ENGINE_DLL CRenderer final : public CComponent
 {
 public: enum RENDERBUTTON
 {
-	SHADOW,PBRHDR,PIXEL,HDR,DBG,PARTICLE,OUTLINE,RADIAL, RENDERBUTTON_END
+	SHADOW,PBRHDR,PIXEL,HDR,DBG,PARTICLE,OUTLINE,RADIAL, SSAO, RENDERBUTTON_END
 };
 
 public: enum RENDER {	RENDER_PRIORITY, RENDER_SKYBOX
@@ -73,10 +73,11 @@ private: HRESULT Render_Priority();
 private: HRESULT Render_SkyBox();
 private: HRESULT Render_NonAlpha();
 private: HRESULT Render_Alpha();
-private: HRESULT DistortionPass();
 private: HRESULT Render_UI();
 private: HRESULT Render_UI_Active();
 
+private: HRESULT SSAOPass();
+private: HRESULT DistortionPass();
 private: HRESULT Render_Shadow();
 private: HRESULT ShadowPass();
 private: HRESULT Render_Final(_bool outline,_bool radial);
