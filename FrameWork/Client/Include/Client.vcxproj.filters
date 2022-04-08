@@ -443,8 +443,6 @@
       <UniqueIdentifier>{15743125-3fab-4955-a1a7-2c3ab22ace2e}</UniqueIdentifier>
     </Filter>
     <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_2HSword\State_2HSword\Groggy\End">
-    </Filter>
-    <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_2HSword\State_2HSword\Groggy\End">
       <UniqueIdentifier>{1158fce2-5cfa-4605-9029-4ac375f14bcd}</UniqueIdentifier>
     </Filter>
     <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_Healer\State_Healer\Groggy\End">
@@ -1217,16 +1215,6 @@
     <ClInclude Include="..\Headers\1H_SwordAttackNormalR1_04Swap.h">
       <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\1H_Sword\R2</Filter>
     </ClInclude>
-    <ClInclude Include="..\Headers\1H_SwordAttackNormalR1_04Swap.h">
-      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\1H_Sword\R2</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Headers\Traverse_JumpNodeJog.h">
-      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Jump</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Headers\1H_SwordAttackNormalR1_04Swap.h" />
-    <ClInclude Include="..\Headers\Monster_Bastion_Sword.h">
-      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Sword</Filter>
-    </ClInclude>
     <ClInclude Include="..\Headers\Bastion_Healer_State.h">
       <Filter>02.GameObject\03.Character\01.Monster\Bastion_Healer\State_Healer</Filter>
     </ClInclude>
@@ -1241,9 +1229,6 @@
     </ClInclude>
     <ClInclude Include="..\Headers\Stage2.h">
       <Filter>01.Scene\02.Stage\01.Stage2</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Headers\Monster_Bastion_Sword.h">
-      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Sword</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\UI_Monster_Name.h">
       <Filter>02.GameObject\05.UI\01.UI_Ingame\01.Meter\02.Monster\04.Name</Filter>
@@ -1314,9 +1299,6 @@
     <ClInclude Include="..\Headers\EarthAberrant_Pick.h">
       <Filter>02.GameObject\03.Character\01.Monster\EarthAberrant\00.Weapon\00.Aberrant_Pick</Filter>
     </ClInclude>
-    <ClInclude Include="..\Headers\1H_SwordAttackNormalR1_04Swap.h">
-      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\1H_Sword\R2</Filter>
-    </ClInclude>
     <ClInclude Include="..\Headers\UI_Tuto_Base.h">
       <Filter>02.GameObject\05.UI\01.UI_Ingame\01.Meter\05.Tutorial\01.SideTutorial\00.Base</Filter>
     </ClInclude>
@@ -1386,7 +1368,6 @@
     <ClInclude Include="..\Headers\Bastion_2HSword_Groggy.h">
       <Filter>02.GameObject\03.Character\01.Monster\Bastion_2HSword\State_2HSword\Groggy</Filter>
     </ClInclude>
-    <ClInclude Include="..\Headers\Shooter_Attack.h" />
     <ClInclude Include="..\Headers\Camera_Culling.h">
       <Filter>02.GameObject\01. MainCamera\CullingCam</Filter>
     </ClInclude>
@@ -1396,14 +1377,12 @@
     <ClInclude Include="..\Headers\SubEnvironment.h">
       <Filter>02.GameObject\02.Map\01.Environment\00.Tree</Filter>
     </ClInclude>
-    <ClInclude Include="..\Headers\Shooter_Attack.h" />
     <ClInclude Include="..\Headers\Effect_HitFloating.h">
       <Filter>02.GameObject\04.Effect\00.Particle\03.Effect_Floating</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\CameraShake.h">
       <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\Camera</Filter>
     </ClInclude>
-    <ClInclude Include="..\Headers\Shooter_Attack.h" />
     <ClInclude Include="..\Headers\Bastion_Healer_Groggy_End.h">
       <Filter>02.GameObject\03.Character\01.Monster\Bastion_Healer\State_Healer\Groggy\End</Filter>
     </ClInclude>
@@ -1445,9 +1424,6 @@
     </ClInclude>
     <ClInclude Include="..\Headers\BronzeAnimus_Battle_Idle.h">
       <Filter>02.GameObject\03.Character\01.Monster\BronzeAnimus\State\Battle_Idle</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Headers\Shooter_Attack.h">
-      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Shooter\State\Attack</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\Monster_Bastion_Spear.h">
       <Filter>02.GameObject\03.Character\01.Monster\Bastion_Spear</Filter>
@@ -1511,9 +1487,6 @@
     </ClInclude>
     <ClInclude Include="..\Headers\Effect_Env_Fire.h">
       <Filter>02.GameObject\04.Effect\00.Effect_Image\00.Env_Fire</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Headers\Monster_Bastion_Sword.h">
-      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Sword</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\SwordTrail.h">
       <Filter>02.GameObject\96.Weapon\98.Trail</Filter>
@@ -2138,16 +2111,6 @@
     <ClCompile Include="..\Codes\1H_SwordAttackNormalR1_04Swap.cpp">
       <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\1H_Sword\R2</Filter>
     </ClCompile>
-    <ClCompile Include="..\Codes\1H_SwordAttackNormalR1_04Swap.cpp">
-      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\1H_Sword\R2</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Codes\Traverse_JumpNodeJog.cpp">
-      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Jump</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Codes\1H_SwordAttackNormalR1_04Swap.cpp" />
-    <ClCompile Include="..\Codes\Monster_Bastion_Sword.cpp">
-      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Sword</Filter>
-    </ClCompile>
     <ClCompile Include="Client.cpp">
       <Filter>99.Default</Filter>
     </ClCompile>
@@ -2165,9 +2128,6 @@
     </ClCompile>
     <ClCompile Include="..\Codes\Stage2.cpp">
       <Filter>01.Scene\02.Stage\01.Stage2</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Codes\Monster_Bastion_Sword.cpp">
-      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Sword</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\UI_Monster_Name.cpp">
       <Filter>02.GameObject\05.UI\01.UI_Ingame\01.Meter\02.Monster\04.Name</Filter>
@@ -2241,9 +2201,6 @@
     <ClCompile Include="..\Codes\EarthAberrant_Pick.cpp">
       <Filter>02.GameObject\03.Character\01.Monster\EarthAberrant\00.Weapon\00.Aberrant_Pick</Filter>
     </ClCompile>
-    <ClCompile Include="..\Codes\1H_SwordAttackNormalR1_04Swap.cpp">
-      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\1H_Sword\R2</Filter>
-    </ClCompile>
     <ClCompile Include="..\Codes\UI_Tuto_Base.cpp">
       <Filter>02.GameObject\05.UI\01.UI_Ingame\01.Meter\05.Tutorial\01.SideTutorial\00.Base</Filter>
     </ClCompile>
@@ -2310,7 +2267,6 @@
     <ClCompile Include="..\Codes\Bastion_2HSword_Groggy.cpp">
       <Filter>02.GameObject\03.Character\01.Monster\Bastion_2HSword\State_2HSword\Groggy</Filter>
     </ClCompile>
-    <ClCompile Include="..\Codes\Shooter_Attack.cpp" />
     <ClCompile Include="..\Codes\Camera_Culling.cpp">
       <Filter>02.GameObject\01. MainCamera\CullingCam</Filter>
     </ClCompile>
@@ -2320,14 +2276,12 @@
     <ClCompile Include="..\Codes\SubEnvironment.cpp">
       <Filter>02.GameObject\02.Map\01.Environment\00.Tree</Filter>
     </ClCompile>
-    <ClCompile Include="..\Codes\Shooter_Attack.cpp" />
     <ClCompile Include="..\Codes\Effect_HitFloating.cpp">
       <Filter>02.GameObject\04.Effect\00.Particle\03.Effect_Floating</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\CameraShake.cpp">
       <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\Camera</Filter>
     </ClCompile>
-    <ClCompile Include="..\Codes\Shooter_Attack.cpp" />
     <ClCompile Include="..\Codes\Bastion_Healer_Groggy_End.cpp">
       <Filter>02.GameObject\03.Character\01.Monster\Bastion_Healer\State_Healer\Groggy\End</Filter>
     </ClCompile>
@@ -2369,9 +2323,6 @@
     </ClCompile>
     <ClCompile Include="..\Codes\BronzeAnimus_Battle_Idle.cpp">
       <Filter>02.GameObject\03.Character\01.Monster\BronzeAnimus\State\Battle_Idle</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Codes\Shooter_Attack.cpp">
-      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Shooter\State\Attack</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\Monster_Bastion_Spear.cpp">
       <Filter>02.GameObject\03.Character\01.Monster\Bastion_Spear</Filter>
@@ -2432,9 +2383,6 @@
     </ClCompile>
     <ClCompile Include="..\Codes\Effect_Env_Fire.cpp">
       <Filter>02.GameObject\04.Effect\00.Effect_Image\00.Env_Fire</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Codes\Monster_Bastion_Sword.cpp">
-      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Sword</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\SwordTrail.cpp">
       <Filter>02.GameObject\96.Weapon\98.Trail</Filter>
@@ -2560,8 +2508,8 @@
       <Filter>02.GameObject\03.Character\01.Monster\Bastion_Healer\Meteor</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\Potal.cpp">
-      </ClCompile>
       <Filter>02.GameObject\02.Map\03.Potal</Filter>
+    </ClCompile>
     <ClCompile Include="..\Codes\Silvermane_Death.cpp">
       <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\HIt</Filter>
     </ClCompile>
