@@ -332,21 +332,6 @@ _int CSilvermane::LateTick(_double _dDeltaTime)
 
 HRESULT CSilvermane::Render()
 {
-	if (FAILED(__super::Render()))
-		return E_FAIL;
-
-	_matrix smatWorld, smatView, smatProj;
-	smatWorld = XMMatrixTranspose(m_pTransform->Get_WorldMatrix());
-	smatView = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_VIEW));
-	smatProj = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_PROJECTION));
-
-	if (FAILED(m_pModel->SetUp_ValueOnShader("g_WorldMatrix", &smatWorld, sizeof(_matrix))))
-		return E_FAIL;
-	if (FAILED(m_pModel->SetUp_ValueOnShader("g_ViewMatrix", &smatView, sizeof(_matrix))))
-		return E_FAIL;
-	if (FAILED(m_pModel->SetUp_ValueOnShader("g_ProjMatrix", &smatProj, sizeof(_matrix))))
-		return E_FAIL;
-
 	if (g_pObserver->IsAttack())
 	{
 		m_color = _float4(0.784f, 0.137f, 0.137f, 0.f);
@@ -367,15 +352,23 @@ HRESULT CSilvermane::Render()
 			m_color.z = 0.8196f;
 		else
 			m_color.z += 0.005f;
-
 	}
 
 	for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
 	{
-		if(i == 0)
-			if (FAILED(m_pModel->SetUp_ValueOnShader("g_color", &m_color, sizeof(_float4)))) return E_FAIL;
+		SCB desc;
+		ZeroMemory(&desc, sizeof(SCB));
 
-		if (FAILED(m_pModel->Render(i, i)))	return E_FAIL;
+		if (i == 0)
+		{
+			desc.color = m_color;
+			desc.empower = 0.8f;
+			CActor::BindConstantBuffer(L"Camera_Silvermane", &desc);
+		}
+		else
+			CActor::BindConstantBuffer(L"Camera_Silvermane", &desc);
+
+		if (FAILED(m_pModel->Render(i, i))) MSGBOX("Fialed To Rendering Silvermane");
 	}
 
 #ifdef _DEBUG
@@ -387,45 +380,10 @@ HRESULT CSilvermane::Render()
 
 HRESULT CSilvermane::Render_Shadow()
 {
-	_matrix world, lightview, lightproj;
-	_float3 lightpos = m_Lightdesc->vPosition;
-	world = XMMatrixTranspose(m_pTransform->Get_WorldMatrix());
-	lightview = XMMatrixTranspose(m_Lightdesc->mLightView);
-	lightproj = XMMatrixTranspose(m_Lightdesc->mLightProj);
-
-	m_pModel->SetUp_ValueOnShader("g_WorldMatrix", &world, sizeof(_matrix));
-	m_pModel->SetUp_ValueOnShader("g_LightView", &lightview, sizeof(_matrix));
-	m_pModel->SetUp_ValueOnShader("g_LightProj", &lightproj, sizeof(_matrix));
-	m_pModel->SetUp_ValueOnShader("g_LightPos", &lightpos, sizeof(_float3));
-
-
+	CActor::BindConstantBuffer(L"Camera_Silvermane");
+	CActor::BindLightBuffer();
 	for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
 		m_pModel->Render(i, 4);
-
-	return S_OK;
-}
-
-HRESULT CSilvermane::Render_ShadeShadow(ID3D11ShaderResourceView* pshadow)
-{
-	_matrix world, view, proj, lightview, lightproj;
-	world = XMMatrixTranspose(m_pTransform->Get_WorldMatrix());
-	view = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_VIEW));
-	proj = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_PROJECTION));
-	lightview = XMMatrixTranspose(m_Lightdesc->mLightView);
-	lightproj = XMMatrixTranspose(m_Lightdesc->mLightProj);
-
-	m_pModel->SetUp_ValueOnShader("g_WorldMatrix", &world, sizeof(_matrix));
-	m_pModel->SetUp_ValueOnShader("g_ViewMatrix", &view, sizeof(_matrix));
-	m_pModel->SetUp_ValueOnShader("g_ProjMatrix", &proj, sizeof(_matrix));
-	m_pModel->SetUp_ValueOnShader("g_LightView", &lightview, sizeof(_matrix));
-	m_pModel->SetUp_ValueOnShader("g_LightProj", &lightproj, sizeof(_matrix));
-
-
-	for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
-	{
-		m_pModel->SetUp_TextureOnShader("g_ShadowTexture", pshadow);
-		m_pModel->Render(i, 5);
-	}
 
 	return S_OK;
 }
@@ -571,8 +529,6 @@ HRESULT CSilvermane::Ready_Components()
 	m_pTexture->Change_Texture(L"Texture_SilvermeanNewHair");
 
 	m_pModel->Get_Materials()[3]->Set_Texture("g_NewHairTexture", TEXTURETYPE::TEX_TINT, m_pTexture);
-
-	m_Lightdesc = g_pGameInstance->Get_LightDesc(0);
 
 	return S_OK;
 }
@@ -1486,7 +1442,6 @@ void CSilvermane::Free()
 	Safe_Release(m_pCharacterController);
 	Safe_Release(m_pStateController);
 	Safe_Release(m_pAnimationController);
-	Safe_Release(m_pModel);
 
 	__super::Free();
 }

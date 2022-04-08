@@ -25,13 +25,11 @@ CMonster_Crawler::CMonster_Crawler(ID3D11Device* _pDevice, ID3D11DeviceContext* 
 
 CMonster_Crawler::CMonster_Crawler(const CMonster_Crawler& _rhs)
 	:CActor(_rhs)
-	, m_pModelCom(_rhs.m_pModelCom)
 	, m_pStateController(_rhs.m_pStateController)
 	, m_pCharacterController(_rhs.m_pCharacterController)
 	, m_pPanel(_rhs.m_pPanel)
 	, m_pCollider(_rhs.m_pCollider)
 {
-	Safe_AddRef(m_pModelCom);
 	Safe_AddRef(m_pStateController);
 	Safe_AddRef(m_pCharacterController);
 	Safe_AddRef(m_pPanel);
@@ -186,24 +184,23 @@ _int CMonster_Crawler::LateTick(_double _dDeltaTime)
 
 HRESULT CMonster_Crawler::Render()
 {
-	if (FAILED(__super::Render()))
-	{
-		return E_FAIL;
-	}
+	SCB desc;
+	ZeroMemory(&desc, sizeof(SCB));
 
-	_matrix XMWorldMatrix = XMMatrixTranspose(m_pTransform->Get_WorldMatrix());
-	_matrix XMViewMatrix = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_VIEW));
-	_matrix XMProjectMatrix = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_PROJECTION));
-	_vector CamPos = g_pGameInstance->Get_CamPosition(L"Camera_Silvermane");
+	CActor::BindConstantBuffer(L"Camera_Silvermane",&desc);
 
-	m_pModelCom->SetUp_ValueOnShader("g_WorldMatrix", &XMWorldMatrix, sizeof(_float) * 16);
-	m_pModelCom->SetUp_ValueOnShader("g_ViewMatrix", &XMViewMatrix, sizeof(_float) * 16);
-	m_pModelCom->SetUp_ValueOnShader("g_ProjMatrix", &XMProjectMatrix, sizeof(XMMATRIX));
+	for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
+		m_pModel->Render(i, 0);
 
-	for (_uint i = 0; i < m_pModelCom->Get_NumMeshContainer(); ++i)
-	{
-		m_pModelCom->Render(i, 0);
-	}
+	return S_OK;
+}
+
+HRESULT CMonster_Crawler::Render_Shadow()
+{
+	CActor::BindConstantBuffer(L"Camera_Silvermane");
+	CActor::BindLightBuffer();
+	for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
+		m_pModel->Render(i, 3);
 
 	return S_OK;
 }
@@ -286,7 +283,7 @@ HRESULT CMonster_Crawler::SetUp_Components()
 	Desc.fRotationPerSec = XMConvertToRadians(60.f);
 	m_pTransform->Set_TransformDesc(Desc);
 	
-	if (FAILED(__super::SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Model_Monster_Crawler", L"Com_Model", (CComponent**)&m_pModelCom)))
+	if (FAILED(__super::SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Model_Monster_Crawler", L"Com_Model", (CComponent**)&m_pModel)))
 	{
 		return E_FAIL;
 	}
@@ -294,12 +291,12 @@ HRESULT CMonster_Crawler::SetUp_Components()
 	//animator
 	_matrix matPivot = XMMatrixIdentity();
 	matPivot = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(180.f));
-	m_pModelCom->Set_PivotMatrix(matPivot);
+	m_pModel->Set_PivotMatrix(matPivot);
 
 	CAnimator::ANIMATORDESC tDesc;
 	ZeroMemory(&tDesc, sizeof(tDesc));
 
-	tDesc.pModel = m_pModelCom;
+	tDesc.pModel = m_pModel;
 	tDesc.pTransform = m_pTransform;
 	tDesc.eType = CAnimationController::EType::CharacterController;
 
@@ -351,40 +348,40 @@ HRESULT CMonster_Crawler::Ready_Weapone()
 
 HRESULT CMonster_Crawler::Set_Animation_FSM()
 {
-	CAnimation* pAnim = m_pModelCom->Get_Animation("SK_Crystal_Crawler_v1.ao|A_Idle_CrystalCrawler");
+	CAnimation* pAnim = m_pModel->Get_Animation("SK_Crystal_Crawler_v1.ao|A_Idle_CrystalCrawler");
 	if (FAILED(m_pAnimatorCom->Insert_Animation(IDLE, HEAD, pAnim, true, true, true, ERootOption::XYZ)))
 		return E_FAIL;
 
-	pAnim = m_pModelCom->Get_Animation("SK_Crystal_Crawler_v1.ao|A_Walk_Fwd_Stop_CrystalCrawler");
+	pAnim = m_pModel->Get_Animation("SK_Crystal_Crawler_v1.ao|A_Walk_Fwd_Stop_CrystalCrawler");
 	if (FAILED(m_pAnimatorCom->Insert_Animation(WALK_FWD, HEAD, pAnim, true, true, true, ERootOption::XYZ, true)))
 		return E_FAIL;
 
-	pAnim = m_pModelCom->Get_Animation("SK_Crystal_Crawler_v1.ao|A_Attack_R1_CrystalCrawler");
+	pAnim = m_pModel->Get_Animation("SK_Crystal_Crawler_v1.ao|A_Attack_R1_CrystalCrawler");
 	if (FAILED(m_pAnimatorCom->Insert_Animation(ATTACK_R1, HEAD, pAnim, true, true, true, ERootOption::XYZ, true)))
 		return E_FAIL;
 
-	pAnim = m_pModelCom->Get_Animation("SK_Crystal_Crawler_v1.ao|A_Death_CrystalCrawler");
+	pAnim = m_pModel->Get_Animation("SK_Crystal_Crawler_v1.ao|A_Death_CrystalCrawler");
 	if (FAILED(m_pAnimatorCom->Insert_Animation(DEATH, HEAD, pAnim, true, true, false, ERootOption::XYZ, true)))
 		return E_FAIL;
 
-	pAnim = m_pModelCom->Get_Animation("SK_Crystal_Crawler_v1.ao|A_Ricochet_CrystalCrawler");
+	pAnim = m_pModel->Get_Animation("SK_Crystal_Crawler_v1.ao|A_Ricochet_CrystalCrawler");
 	if (FAILED(m_pAnimatorCom->Insert_Animation(RICOCHET, HEAD, pAnim, true, true, false, ERootOption::XYZ, true)))
 		return E_FAIL;
 
-	pAnim = m_pModelCom->Get_Animation("SK_Crystal_Crawler_v1.ao|A_Flinch_Right_CrystalCrawler");
+	pAnim = m_pModel->Get_Animation("SK_Crystal_Crawler_v1.ao|A_Flinch_Right_CrystalCrawler");
 	if (FAILED(m_pAnimatorCom->Insert_Animation(FLINCH_RIGHT, HEAD, pAnim, true, true, false, ERootOption::XYZ, true)))
 		return E_FAIL;
 
-	pAnim = m_pModelCom->Get_Animation("SK_Crystal_Crawler_v1.ao|A_Flinch_Left_CrystalCrawler");
+	pAnim = m_pModel->Get_Animation("SK_Crystal_Crawler_v1.ao|A_Flinch_Left_CrystalCrawler");
 	if (FAILED(m_pAnimatorCom->Insert_Animation(FLINCH_LEFT, HEAD, pAnim, true, true, false, ERootOption::XYZ, true)))
 		return E_FAIL;
 
 	//³Ë¹é
-	pAnim = m_pModelCom->Get_Animation("SK_Crystal_Crawler_v1.ao|A_Knockback_Start_CrystalCrawler");
+	pAnim = m_pModel->Get_Animation("SK_Crystal_Crawler_v1.ao|A_Knockback_Start_CrystalCrawler");
 	if (FAILED(m_pAnimatorCom->Insert_Animation(KNOCKBACK_START, HEAD, pAnim, true, true, false, ERootOption::XYZ, true)))
 		return E_FAIL;
 
-	pAnim = m_pModelCom->Get_Animation("SK_Crystal_Crawler_v1.ao|A_Knockback_End_CrystalCrawler");
+	pAnim = m_pModel->Get_Animation("SK_Crystal_Crawler_v1.ao|A_Knockback_End_CrystalCrawler");
 	if (FAILED(m_pAnimatorCom->Insert_Animation(KNOCKBACK_END, KNOCKBACK_START, pAnim, true, true, false, ERootOption::XYZ, true)))
 		return E_FAIL;
 
@@ -434,7 +431,7 @@ HRESULT CMonster_Crawler::Set_State_FSM()
 		pair.second->Set_StateController(m_pStateController);
 		static_cast<CMonster_FSM*>(pair.second)->Set_Monster(this);
 		static_cast<CMonster_FSM*>(pair.second)->Set_Transform(m_pTransform);
-		static_cast<CMonster_FSM*>(pair.second)->Set_Model(m_pModelCom);
+		static_cast<CMonster_FSM*>(pair.second)->Set_Model(m_pModel);
 		static_cast<CMonster_FSM*>(pair.second)->Set_Animator(m_pAnimatorCom);
 	}
 
@@ -491,12 +488,12 @@ CGameObject* CMonster_Crawler::Clone(const _uint _iSceneID, void* _pArg)
 
 void CMonster_Crawler::Free()
 {
-	__super::Free();
 
 	Safe_Release(m_pCollider);
 	Safe_Release(m_pCharacterController);
 	Safe_Release(m_pPanel);
 	Safe_Release(m_pStateController);
 	Safe_Release(m_pAnimatorCom);
-	Safe_Release(m_pModelCom);
+
+	__super::Free();
 }

@@ -3,7 +3,6 @@
 #include "Actor.h"
 
 BEGIN(Engine)
-class CModel;
 class CCapsuleCollider;
 class CAnimator;
 END
@@ -35,6 +34,7 @@ public:
 	virtual _int Tick(_double _dDeltaTime) override;
 	virtual _int LateTick(_double _dDeltaTime) override;
 	virtual HRESULT Render() override;
+	virtual HRESULT	Render_Shadow() override;
 
 public: 
 	void	OnTriggerEnter(CCollision& collision) override;
@@ -52,7 +52,6 @@ private:
 	HRESULT Set_Panel();
 
 private:
-	CModel*						m_pModelCom = nullptr;
 	CAnimator*					m_pAnimatorCom = nullptr;
 	CStateController*			m_pStateController = nullptr;
 	CCharacterController*		m_pCharacterController = nullptr;

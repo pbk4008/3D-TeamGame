@@ -1,35 +1,20 @@
 #include "Shader_RenderState.hpp"
+#include "Shader_Share.hlsli"
+#include "Shader_ShareFuntion.hlsli"
 
 /* 모든 전역변수들을 -> 상수테이블. */
 /* 클라이언트로부터 값을 전달받아올 수 있다. */
 
-cbuffer CameraDesc
-{
-	vector		g_vCamPosition;
-    float3		g_color;
-	float		g_Weight;
-};
-
-cbuffer Matrices
-{
-	matrix		g_WorldMatrix = (matrix)0;
-	matrix		g_ViewMatrix;
-	matrix		g_ProjMatrix;
-};
 
 Texture2D	g_DiffuseTexture;
-uint g_iImageCountX; //가로줄수
-uint g_iImageCountY; //세로줄수
-uint g_iFrame; //전체장수
-float g_fLifeTime;
-float g_fCurTime;
 
-
-sampler DefaultSampler = sampler_state
+cbuffer Information
 {
-	filter = min_mag_mip_linear;
-	AddressU = wrap;
-	AddressV = wrap;
+	uint g_iImageCountX; //가로줄수
+	uint g_iImageCountY; //세로줄수
+	uint g_iFrame; //전체장수
+	float g_fLifeTime;
+	float g_fCurTime;
 };
 
 /* 1. m_pDeviceContext->DrawIndexed() */
@@ -194,13 +179,11 @@ PS_OUT PS_MAIN_MULTIIMAGE(PS_IN In)
 
 struct PS_OUT_TEST
 {
-	float4 diffuse : SV_TARGET0;
-	float4 normal : SV_TARGET1;
-	float4 depth : SV_TARGET2;
-	float4 M : SV_Target3;
-	float4 R : SV_Target4;
-	float4 A : SV_Target5;
-	float4 E : SV_Target6;
+	half4 diffuse : SV_TARGET0;
+	half4 normal : SV_TARGET1;
+	half4 depth : SV_TARGET2;
+	half4 mra : SV_Target3;
+	half4 emission : SV_Target4;
 };
 
 PS_OUT_TEST PS_MAIN_TEST(PS_IN In)
@@ -218,21 +201,20 @@ PS_OUT_TEST PS_MAIN_TEST(PS_IN In)
 	Out.diffuse.gb = 0.f;
 	
 	Out.diffuse = Out.diffuse * GreenAlpha;
-	
-	if (0.01f >= Out.diffuse.a)
-		discard;
 
 	Out.depth = half4(In.vPosition.z / In.vPosition.w, In.vPosition.w / 300.f, 0.f, 0.f);
 	Out.normal = half4(1, 1, 1, 0);
 
-	Out.M = half4(0, 0, 0, 1);
-	Out.R = half4(1, 1, 1, 1);
-	Out.A = half4(1, 1, 1, 1);
-
-	half4 color = half4(g_color, 1.f);
+	Out.mra.r = 0.f;
+	Out.mra.g = 1.f;
+	Out.mra.b = 1.f;
+	Out.mra.a = 1.f;
+	
 	half4 power = 0.1f;
-
-	Out.E =  color * power * GreenAlpha;
+	Out.emission = g_color * power * GreenAlpha;
+	
+	if (0.01f >= Out.diffuse.a)
+		discard;
 	
 	return Out;
 }

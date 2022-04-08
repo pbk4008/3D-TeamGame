@@ -106,9 +106,6 @@
     <Filter Include="02.GameObject\05.UI\01.UI_Ingame\01.Meter\02.Monster\03.HpUI">
       <UniqueIdentifier>{8d05bd08-0e08-4584-9925-592ea048aeab}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObject\96.Weapon\99.Shield">
-      <UniqueIdentifier>{a9a4ad69-9913-4775-b0c0-8025825621ca}</UniqueIdentifier>
-    </Filter>
     <Filter Include="01.Scene\98.TestScene_YM">
       <UniqueIdentifier>{8e37d1fe-95e3-4c35-bcbf-fba13eeabb78}</UniqueIdentifier>
     </Filter>
@@ -364,9 +361,6 @@
     <Filter Include="02.GameObject\03.Character\02.Boss\00.MiddleBoss">
       <UniqueIdentifier>{a7db1ec6-722d-46ed-bdad-a86d3c709df2}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObject\03.Character\02.Boss\00.MiddleBoss\00.Weapon">
-      <UniqueIdentifier>{eee5d743-fda4-4f7b-ba26-d4c790268f21}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObject\03.Character\02.Boss\00.MiddleBoss\State">
       <UniqueIdentifier>{8a29aee6-6d31-4f13-bfdb-45f715488804}</UniqueIdentifier>
     </Filter>
@@ -387,12 +381,6 @@
     </Filter>
     <Filter Include="02.GameObject\03.Character\02.Boss\00.MiddleBoss\State\05.Stun">
       <UniqueIdentifier>{2a308277-84e1-4f4f-afc1-cfdeb29f6ae2}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObject\03.Character\01.Monster\EarthAberrant\00.Weapon">
-      <UniqueIdentifier>{0bf5894c-ed8e-4af5-8351-a1c946f08e63}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObject\03.Character\01.Monster\EarthAberrant\00.Weapon\00.Aberrant_Pick">
-      <UniqueIdentifier>{5fb68284-c871-4e91-8aaa-81ee9c81ea14}</UniqueIdentifier>
     </Filter>
     <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_Healer\State_Healer\Hit">
       <UniqueIdentifier>{d4ca5c36-6c33-400f-a4c0-e81fd9a67485}</UniqueIdentifier>
@@ -683,7 +671,7 @@
     </Filter>
     <Filter Include="03.System\05.DataManager">
       <UniqueIdentifier>{570e7cdd-e1ad-4238-8e22-de6213ebd30e}</UniqueIdentifier>
-	</Filter>
+    </Filter>
     <Filter Include="02.GameObject\03.Character\00.Player\00.Silvermane\State\Shield\Parry">
       <UniqueIdentifier>{476d3f32-8157-40d0-b1ca-3cfc24316276}</UniqueIdentifier>
     </Filter>
@@ -692,6 +680,18 @@
     </Filter>
     <Filter Include="02.GameObject\04.Effect\00.Particle\06.Effect_Guard">
       <UniqueIdentifier>{a0e663ef-dcdc-4443-8e69-2f05e2663463}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="100.ShaderFiles\98.Share">
+      <UniqueIdentifier>{451023dd-fff5-4931-95a3-2c781dff7537}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\96.Weapon\08.ShieldBreaker">
+      <UniqueIdentifier>{eee5d743-fda4-4f7b-ba26-d4c790268f21}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\96.Weapon\07.Aberrant_Pick">
+      <UniqueIdentifier>{5fb68284-c871-4e91-8aaa-81ee9c81ea14}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\96.Weapon\99.Shield">
+      <UniqueIdentifier>{a9a4ad69-9913-4775-b0c0-8025825621ca}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -1128,7 +1128,7 @@
       <Filter>02.GameObject\03.Character\02.Boss\00.MiddleBoss</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\ShieldBreaker.h">
-      <Filter>02.GameObject\03.Character\02.Boss\00.MiddleBoss\00.Weapon</Filter>
+      <Filter>02.GameObject\96.Weapon\08.ShieldBreaker</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\Stargazer.h">
       <Filter>02.GameObject\96.Weapon\03.Stargazer</Filter>
@@ -1309,7 +1309,7 @@
       <Filter>02.GameObject\03.Character\01.Monster\EarthAberrant\State\05.Stun</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\EarthAberrant_Pick.h">
-      <Filter>02.GameObject\03.Character\01.Monster\EarthAberrant\00.Weapon\00.Aberrant_Pick</Filter>
+      <Filter>02.GameObject\96.Weapon\07.Aberrant_Pick</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\1H_SwordAttackNormalR1_04Swap.h">
       <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\1H_Sword\R2</Filter>
@@ -1589,7 +1589,7 @@
     </ClInclude>
     <ClInclude Include="..\Headers\DataManager.h">
       <Filter>03.System\05.DataManager</Filter>
-	</ClInclude>
+    </ClInclude>
     <ClInclude Include="..\Headers\Shield_Parry.h">
       <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Shield\Parry</Filter>
     </ClInclude>
@@ -2049,7 +2049,7 @@
       <Filter>02.GameObject\03.Character\02.Boss\00.MiddleBoss</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\ShieldBreaker.cpp">
-      <Filter>02.GameObject\03.Character\02.Boss\00.MiddleBoss\00.Weapon</Filter>
+      <Filter>02.GameObject\96.Weapon\08.ShieldBreaker</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\Stargazer.cpp">
       <Filter>02.GameObject\96.Weapon\03.Stargazer</Filter>
@@ -2230,7 +2230,7 @@
       <Filter>02.GameObject\03.Character\01.Monster\EarthAberrant\State\05.Stun</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\EarthAberrant_Pick.cpp">
-      <Filter>02.GameObject\03.Character\01.Monster\EarthAberrant\00.Weapon\00.Aberrant_Pick</Filter>
+      <Filter>02.GameObject\96.Weapon\07.Aberrant_Pick</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\1H_SwordAttackNormalR1_04Swap.cpp">
       <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\1H_Sword\R2</Filter>
@@ -2507,7 +2507,7 @@
     </ClCompile>
     <ClCompile Include="..\Codes\DataManager.cpp">
       <Filter>03.System\05.DataManager</Filter>
-	</ClCompile>
+    </ClCompile>
     <ClCompile Include="..\Codes\Shield_Parry.cpp">
       <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Shield\Parry</Filter>
     </ClCompile>
@@ -2660,12 +2660,20 @@
     </FxCompile>
     <FxCompile Include="..\bin\ShaderFile\Shader_Treasure_Chest.hlsl">
       <Filter>100.ShaderFiles\99.Other</Filter>
-	</FxCompile>
+    </FxCompile>
     <FxCompile Include="..\bin\ShaderFile\Shader_UI_Enemy_Bar.hlsl">
       <Filter>100.ShaderFiles\04.UI</Filter>
     </FxCompile>
     <FxCompile Include="..\bin\ShaderFile\Shader_Particle_Size.hlsl">
       <Filter>100.ShaderFiles\03.Effect</Filter>
     </FxCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\bin\ShaderFile\Shader_Share.hlsli">
+      <Filter>100.ShaderFiles\98.Share</Filter>
+    </None>
+    <None Include="..\bin\ShaderFile\Shader_ShareFuntion.hlsli">
+      <Filter>100.ShaderFiles\98.Share</Filter>
+    </None>
   </ItemGroup>
 </Project>

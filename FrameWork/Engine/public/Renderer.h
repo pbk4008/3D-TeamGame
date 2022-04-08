@@ -20,13 +20,16 @@ public: enum RENDERBUTTON
 	SHADOW,PBRHDR,PIXEL,HDR,DBG,PARTICLE,OUTLINE,RADIAL, RENDERBUTTON_END
 };
 
-public: enum RENDER { RENDER_PRIORITY, RENDER_SKYBOX,RENDER_SHADOW, RENDER_PBR, RENDER_NONALPHA, RENDER_ALPHA, RENDER_UI, RENDER_UI_ACTIVE, RENDER_END };
+public: enum RENDER {	RENDER_PRIORITY, RENDER_SKYBOX
+						, RENDER_SHADOW, RENDER_NONALPHA, RENDER_ALPHA
+						, RENDER_EFFECT
+						, RENDER_UI, RENDER_UI_ACTIVE
+						, RENDER_MAX };
 
 private: explicit CRenderer(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);
 private: virtual ~CRenderer() = default;
 
 public: _bool	Get_Shadow() { return m_bShadow; }
-public: _bool	Get_PBR() { return m_bPBR; }
 
 public: void	SetRenderButton(RENDERBUTTON ebutton, _bool check);
 public: void	SetCameraTag(const wstring& CameraTag) { lstrcpy(m_CameraTag,CameraTag.c_str());  }
@@ -40,7 +43,7 @@ public: HRESULT Add_RenderGroup(RENDER eRenderID, class CGameObject* pGameObject
 public: HRESULT Draw_RenderGroup();
 public: HRESULT Remove_RenderGroup();
 
-private: list<class CGameObject*>			m_RenderGroup[RENDER_END];
+private: list<class CGameObject*>			m_RenderGroup[RENDER_MAX];
 private: typedef list<class CGameObject*>	RENDERGROUP;
 
 private: CVIBuffer_RectViewPort*			m_pVIBuffer = nullptr;
@@ -70,6 +73,7 @@ private: HRESULT Render_Priority();
 private: HRESULT Render_SkyBox();
 private: HRESULT Render_NonAlpha();
 private: HRESULT Render_Alpha();
+private: HRESULT DistortionPass();
 private: HRESULT Render_UI();
 private: HRESULT Render_UI_Active();
 

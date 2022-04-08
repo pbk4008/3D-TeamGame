@@ -165,19 +165,31 @@ _int CMonster_Bastion_Sword::LateTick(_double _dDeltaTime)
 
 HRESULT CMonster_Bastion_Sword::Render()
 {
-	if (FAILED(__super::Render()))
-		return E_FAIL;
+	SCB desc;
+	ZeroMemory(&desc, sizeof(SCB));
 
-	_matrix XMWorldMatrix = XMMatrixTranspose(m_pTransform->Get_WorldMatrix());
-	_matrix XMViewMatrix = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_VIEW));
-	_matrix XMProjectMatrix = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_PROJECTION));
+	CActor::BindConstantBuffer(L"Camera_Silvermane", &desc);
+	for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
+	{
+		switch (i)
+		{
+		case 2:
+			if (FAILED(m_pModel->Render(i, 1))) MSGBOX("Failed To Rendering Shooter");
+			break;
+		default:
+			if (FAILED(m_pModel->Render(i, 0))) MSGBOX("Failed To Rendering Shooter");
+			break;
+		}
+	}
+	return S_OK;
+}
 
-	m_pModelCom->SetUp_ValueOnShader("g_WorldMatrix", &XMWorldMatrix, sizeof(_float) * 16);
-	m_pModelCom->SetUp_ValueOnShader("g_ViewMatrix", &XMViewMatrix, sizeof(_float) * 16);
-	m_pModelCom->SetUp_ValueOnShader("g_ProjMatrix", &XMProjectMatrix, sizeof(XMMATRIX));
-
-	for (_uint i = 0; i < m_pModelCom->Get_NumMeshContainer(); ++i)
-		m_pModelCom->Render(i, 0);
+HRESULT CMonster_Bastion_Sword::Render_Shadow()
+{
+	CActor::BindConstantBuffer(L"Camera_Silvermane");
+	CActor::BindLightBuffer();
+	for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
+		m_pModel->Render(i, 3);
 
 	return S_OK;
 }

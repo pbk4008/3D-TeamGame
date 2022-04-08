@@ -121,30 +121,6 @@ HRESULT CEnvironment::Render_Shadow()
 	return S_OK;
 }
 
-HRESULT CEnvironment::Render_ShadeShadow(ID3D11ShaderResourceView* ShadowMap)
-{
-	_matrix world, view, proj, lightview, lightproj;
-	world = XMMatrixTranspose(m_pTransform->Get_WorldMatrix());
-	view = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_VIEW));
-	proj = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_PROJECTION));
-	lightview = XMMatrixTranspose(m_LightDesc->mLightView);
-	lightproj = XMMatrixTranspose(m_LightDesc->mLightProj);
-
-	m_pInstanceMesh->SetUp_ValueOnShader("g_WorldMatrix", &world, sizeof(_matrix));
-	m_pInstanceMesh->SetUp_ValueOnShader("g_ViewMatrix", &view, sizeof(_matrix));
-	m_pInstanceMesh->SetUp_ValueOnShader("g_ProjMatrix", &proj, sizeof(_matrix));
-	m_pInstanceMesh->SetUp_ValueOnShader("g_LightView", &lightview, sizeof(_matrix));
-	m_pInstanceMesh->SetUp_ValueOnShader("g_LightProj", &lightproj, sizeof(_matrix));
-
-	for (_uint i = 0; i < m_Nummeshcontainer; i++)
-	{
-		m_pInstanceMesh->SetUp_TextureOnShader("g_ShadowTexture", ShadowMap, i);
-		m_pInstanceMesh->Render(i, 3);
-	}
-
-	return S_OK;
-}
-
 HRESULT CEnvironment::Ready_Component()
 {
 	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, m_tEnvironmentDesc.wstrInstaneTag, m_tEnvironmentDesc.wstrInstaneTag, (CComponent * *)& m_pInstanceMesh, &m_tEnvironmentDesc.tInstanceDesc)))

@@ -80,11 +80,15 @@ DepthStencilState ZAlphaBlend
 BlendState AlphaBlending
 {
 	BlendEnable[0] = true;
-	BlendEnable[1] = true;
+	/*BlendEnable[1] = true;*/
 	BlendOp = Add;
 
 	SrcBlend = Src_Alpha;
 	DestBlend = Inv_Src_Alpha;
+
+	SrcBlendAlpha = Zero;
+	DestBlendAlpha = Zero;
+	BlendOpAlpha = Add;
 };
 
 BlendState AlphaAdditive

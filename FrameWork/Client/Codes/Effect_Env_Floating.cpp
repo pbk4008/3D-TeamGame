@@ -131,8 +131,8 @@ HRESULT CEffect_Env_Floating::Render()
 	m_pBuffer->SetUp_ValueOnShader("g_fCurTime", &m_Desc.fCurTime, sizeof(_float));
 
 	//_float3 color = { 0.6f, 1.f, 0.3f };
-	_float3 color = { 1.f, 0.843f, 0.f };
-	m_pBuffer->SetUp_ValueOnShader("g_color", &color, sizeof(_float3));
+	_float4 color = { 1.f, 0.843f, 0.f ,1.f};
+	m_pBuffer->SetUp_ValueOnShader("g_color", &color, sizeof(_float4));
 
 	m_pBuffer->SetUp_ValueOnShader("g_vCamPosition", (void*)&CamPos, sizeof(_vector));
 

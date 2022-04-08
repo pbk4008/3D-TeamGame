@@ -88,11 +88,6 @@ HRESULT CSubEnvironment::Render_Shadow()
 	return S_OK;
 }
 
-HRESULT CSubEnvironment::Render_ShadeShadow(ID3D11ShaderResourceView* ShadowMap)
-{
-	return S_OK;
-}
-
 HRESULT CSubEnvironment::Ready_Component()
 {
 	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, m_tEnvironmentDesc.wstrInstaneTag, m_tEnvironmentDesc.wstrInstaneTag, (CComponent**)&m_pInstanceMesh, &m_tEnvironmentDesc.tInstanceDesc)))

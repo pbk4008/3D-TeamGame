@@ -23,7 +23,6 @@
 CMonster_BronzeAnimus::CMonster_BronzeAnimus(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
 	: CActor(_pDevice, _pDeviceContext)
 	, m_pCharacterController(nullptr)
-	, m_pModel(nullptr)
 	, m_pStateController(nullptr)
 	, m_pAnimator(nullptr)
 {
@@ -32,12 +31,10 @@ CMonster_BronzeAnimus::CMonster_BronzeAnimus(ID3D11Device* _pDevice, ID3D11Devic
 CMonster_BronzeAnimus::CMonster_BronzeAnimus(const CMonster_BronzeAnimus& _rhs)
 	: CActor(_rhs)
 	, m_pCharacterController(_rhs.m_pCharacterController)
-	, m_pModel(_rhs.m_pModel)
 	, m_pStateController(_rhs.m_pStateController)
 	, m_pAnimator(_rhs.m_pAnimator)
 {
 	Safe_AddRef(m_pCharacterController);
-	Safe_AddRef(m_pModel);
 	Safe_AddRef(m_pStateController);
 	Safe_AddRef(m_pAnimator);
 }
@@ -214,30 +211,27 @@ _int CMonster_BronzeAnimus::LateTick(_double _dDeltaTime)
 
 HRESULT CMonster_BronzeAnimus::Render()
 {
-	if (FAILED(__super::Render()))
-		return E_FAIL;
+	SCB desc;
+	ZeroMemory(&desc, sizeof(SCB));
 
-	_matrix smatWorld, smatView, smatProj;
-	smatWorld = XMMatrixTranspose(m_pTransform->Get_WorldMatrix());
-	smatView = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_VIEW));
-	smatProj = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_PROJECTION));
-
-	if (FAILED(m_pModel->SetUp_ValueOnShader("g_WorldMatrix", &smatWorld, sizeof(_matrix))))
-		return E_FAIL;
-	if (FAILED(m_pModel->SetUp_ValueOnShader("g_ViewMatrix", &smatView, sizeof(_matrix))))
-		return E_FAIL;
-	if (FAILED(m_pModel->SetUp_ValueOnShader("g_ProjMatrix", &smatProj, sizeof(_matrix))))
-		return E_FAIL;
+	CActor::BindConstantBuffer(L"Camera_Silvermane", &desc);
 
 	for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
-	{
-		if (FAILED(m_pModel->Render(i, 0)))
-			return E_FAIL;
-	}
+		m_pModel->Render(i, 6);
 
 #ifdef _DEBUG
 	Render_Debug();
 #endif
+	return S_OK;
+}
+
+HRESULT CMonster_BronzeAnimus::Render_Shadow()
+{
+	CActor::BindConstantBuffer(L"Camera_Silvermane");
+	CActor::BindLightBuffer();
+	for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
+		m_pModel->Render(i, 3);
+
 	return S_OK;
 }
 
@@ -589,13 +583,11 @@ CGameObject* CMonster_BronzeAnimus::Clone(const _uint _iSceneID, void* _pArg)
 
 void CMonster_BronzeAnimus::Free()
 {
-	__super::Free();
-
-	Safe_Release(m_pModel);
 	Safe_Release(m_pAnimator);
 	Safe_Release(m_pWeapon);
 	Safe_Release(m_pStateController);
 	Safe_Release(m_pCharacterController);
 	Safe_Release(m_pPanel);
 
+	__super::Free();
 }

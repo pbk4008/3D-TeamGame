@@ -17,6 +17,7 @@ public:
 	virtual _int Tick(_double TimeDelta) override;
 	virtual _int LateTick(_double Timedelta) override;
 	virtual HRESULT Render() override;
+	virtual HRESULT	Render_Shadow() override;
 
 	virtual void OnTriggerEnter(CCollision& collision) override;
 

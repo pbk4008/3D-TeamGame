@@ -96,9 +96,6 @@ PS_OUT PS_MAIN_HDDRBASE(PS_IN In)
 
 	Out.vHDRDiffuse = final;
 	
-	if(Out.vHDRDiffuse.a <= 0.f)
-		discard;
-	
 	//Out.vHDRDiffuse = float4(final, alpha);
 	//Out.vHDRSpecular = specualr;
 	

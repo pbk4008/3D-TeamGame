@@ -37,7 +37,6 @@ public:
 	virtual _int LateTick(_double _dDeltaTime) override;
 	virtual HRESULT Render() override;
 	virtual HRESULT	Render_Shadow()  override;
-	virtual HRESULT	Render_ShadeShadow(ID3D11ShaderResourceView* pshadow) override;
 	HRESULT Render_Debug();
 private:
 	HRESULT Ready_Components();
@@ -116,7 +115,6 @@ private:
 	const _int Input(const _double& _dDeltaTime);
 
 private: /* Components */
-	CModel* m_pModel = nullptr;
 	CStateController* m_pStateController = nullptr;
 	CAnimationController* m_pAnimationController = nullptr;
 	CCharacterController* m_pCharacterController = nullptr;
@@ -164,7 +162,6 @@ private:/* for. Inventroy */
 
 private:
 	CTexture*	m_pTexture = nullptr;
-	const LIGHTDESC* m_Lightdesc = nullptr;
 
 public:
 	static CSilvermane* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext);

@@ -842,6 +842,10 @@ call Update_Client.bat</Command>
     <FxCompile Include="..\bin\ShaderFile\Shader_UI_Enemy_Bar.hlsl" />
     <FxCompile Include="..\bin\ShaderFile\Shader_Weapon.hlsl" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="..\bin\ShaderFile\Shader_Share.hlsli" />
+    <None Include="..\bin\ShaderFile\Shader_ShareFuntion.hlsli" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
