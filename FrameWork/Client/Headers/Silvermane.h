@@ -8,6 +8,7 @@ BEGIN(Engine)
 END
 
 BEGIN(Client)
+#pragma region 전방선언
 class CWeapon;
 class CCamera_Silvermane;
 class CJumpNode;
@@ -16,6 +17,8 @@ class CJumpBox;
 class CUI_Blank_CKey;
 class CUI_Fill_Ckey;
 class CInventoryData;
+class CDropBox;
+#pragma endregion
 class CSilvermane final : public CActor
 {
 public:
@@ -72,6 +75,7 @@ public:
 	void Set_IsDash(const _bool _isDash);
 	void Set_IsMove(const _bool _isMove);
 	void Set_IsTrasceCamera(const _bool _isTraceCamera);
+	void Set_IsDead(const _bool _isDead);
 
 	void Set_Camera(CCamera_Silvermane* _pCamera);
 	void Set_PlusAngle(const _float _fAngle);
@@ -80,6 +84,8 @@ public:
 	void Add_PlusAngle(const _float _fDeltaAngle);
 	void Add_Velocity(const CTransform::STATE _eState, const _double& _dDeltaTime);
 	void Add_HP(const _float _fValue);
+
+	void Respawn();
 
 public: /* For.Weapon */
 	const _bool IsEquipWeapon() const;
@@ -109,6 +115,8 @@ public: /* For.JumpNode */
 	const _bool Raycast_JumpNode(const _double& _dDeltaTime);
 
 public: /* For.DropBox */
+	CDropBox* Get_TargetDropBox() const;
+	void Set_IsBoxOpen(const _bool _isBoxOpen);
 	const void Raycast_DropBox(const _double& _dDeltaTime);
 
 private:
@@ -134,6 +142,7 @@ public:
 	_float m_fMoveSpeed = 0.f;
 	_float m_fAngle = 0.f;
 	_float m_fPlusAngle = 0.f;
+	_float3 m_vRespawnPos = { 0.f, 0.f, 0.f };
 
 private: /* For.Weapon */
 	CWeapon* m_pCurWeapon = nullptr;
@@ -152,8 +161,9 @@ private: /* For.JumpNode */
 	_float m_fJumpNodeLookTime = 0.f;
 	_float m_fJumpTriggerLookTime = 0.f;
 	
-private: /* Drop Box  */
-	_float m_fOpenDelay = 0.f;
+private: /* For.DropBox  */
+	_bool m_isBoxOpen = false;
+	CDropBox* m_pTargetDropBox = nullptr;
 
 private: /* For.Cheat */
 	_bool m_isHighSpeedMode = false;

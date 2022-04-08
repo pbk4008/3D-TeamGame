@@ -687,6 +687,9 @@
     <Filter Include="01.Scene\01.Loading\00.Logo">
       <UniqueIdentifier>{cac3034c-dd8b-47e8-afc7-da6cb3e9501e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\03.Character\00.Player\00.Silvermane\State\Looting">
+      <UniqueIdentifier>{63d17537-8141-4500-98a5-9b4ef284d80f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -1623,6 +1626,12 @@
     <ClInclude Include="..\Headers\Effect_Falling_Leaf.h">
       <Filter>02.GameObject\04.Effect\00.Particle\01.Effect_MapLeaf</Filter>
     </ClInclude>
+    <ClInclude Include="..\Headers\Silvermane_Death.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\HIt</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\LootingChest.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Looting</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -2534,6 +2543,12 @@
     </ClCompile>
     <ClCompile Include="..\Codes\Effect_Falling_Leaf.cpp">
       <Filter>02.GameObject\04.Effect\00.Particle\01.Effect_MapLeaf</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Silvermane_Death.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\HIt</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\LootingChest.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Looting</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -193,6 +193,12 @@ void CCamera_Silvermane::Set_ChaseTarget(const _bool _isChase)
 	m_isChase = _isChase;
 }
 
+void CCamera_Silvermane::Respawn()
+{
+	m_vRot = { 0.f, 0.f, 0.f };
+	m_pWorldTransform->SetUp_Rotation(m_vRot);
+}
+
 _int CCamera_Silvermane::Chase_Target(const _double& _dDeltaTime)
 {
 	if (!m_pSilvermane)

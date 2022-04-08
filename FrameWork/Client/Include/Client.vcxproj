@@ -345,6 +345,7 @@ call Update_Client.bat</Command>
     <ClInclude Include="..\Headers\Level_Logo.h" />
     <ClInclude Include="..\Headers\Loader.h" />
     <ClInclude Include="..\Headers\Loading.h" />
+    <ClInclude Include="..\Headers\LootingChest.h" />
     <ClInclude Include="..\Headers\MainApp.h" />
     <ClInclude Include="..\Headers\MainCamera.h" />
     <ClInclude Include="..\Headers\MainCamera_Ortho.h" />
@@ -412,6 +413,7 @@ call Update_Client.bat</Command>
     <ClInclude Include="..\Headers\Silvermane.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClInclude>
+    <ClInclude Include="..\Headers\Silvermane_Death.h" />
     <ClInclude Include="..\Headers\Silvermane_Hit.h" />
     <ClInclude Include="..\Headers\Silvermane_Idle.h" />
     <ClInclude Include="..\Headers\Silvermane_Jog.h" />
@@ -638,6 +640,7 @@ call Update_Client.bat</Command>
     <ClCompile Include="..\Codes\ItemData.cpp" />
     <ClCompile Include="..\Codes\JumpBox.cpp" />
     <ClCompile Include="..\Codes\JumpTrigger.cpp" />
+    <ClCompile Include="..\Codes\LootingChest.cpp" />
     <ClCompile Include="..\Codes\MeshLoader.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
     </ClCompile>
@@ -717,6 +720,7 @@ call Update_Client.bat</Command>
     <ClCompile Include="..\Codes\Silvermane.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="..\Codes\Silvermane_Death.cpp" />
     <ClCompile Include="..\Codes\Silvermane_Idle.cpp" />
     <ClCompile Include="..\Codes\Silvermane_Jog.cpp" />
     <ClCompile Include="..\Codes\Silvermane_JogBwd.cpp" />
