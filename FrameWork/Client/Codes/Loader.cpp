@@ -158,7 +158,10 @@ HRESULT CLoader::SetUp_Stage1_Object()
 	if (FAILED(Load_Stage1FBXLoad()))
 		return E_FAIL;
 
-		if (FAILED(Load_Stage1Navi_SkyLoad()))
+	if (FAILED(Load_Stage1FBXLoad()))
+		return E_FAIL;
+	
+	if (FAILED(Load_Stage1Navi_SkyLoad()))
 		return E_FAIL;
 
 	if (FAILED(Load_Stage1PlayerLoad()))
