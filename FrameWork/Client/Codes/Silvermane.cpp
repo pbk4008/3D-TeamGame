@@ -265,7 +265,7 @@ _int CSilvermane::Tick(_double _dDeltaTime)
 		m_pCharacterController->Move(_dDeltaTime, m_pTransform->Get_Velocity());
 	}
 
-
+	m_fCurrentHp = m_fMaxHp;
 
 	Raycast_JumpNode(_dDeltaTime);
 	Raycast_DropBox(_dDeltaTime);

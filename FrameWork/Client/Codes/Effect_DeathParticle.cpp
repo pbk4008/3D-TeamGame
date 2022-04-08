@@ -87,7 +87,7 @@ _int CEffect_DeathParticle::Tick(_double TimeDelta)
 
 _int CEffect_DeathParticle::LateTick(_double TimeDelta)
 {
-	_bool bCulling = g_pGameInstance->isIn_WorldFrustum(m_pBox->Get_Points(), 20.f);
+	_bool bCulling = g_pGameInstance->isIn_WorldFrustum(m_pBox->Get_Points(), 3.f);
 	if (true == bCulling)
 	{
 		if (nullptr != m_pRenderer)
@@ -101,7 +101,7 @@ _int CEffect_DeathParticle::LateTick(_double TimeDelta)
 
 HRESULT CEffect_DeathParticle::Render()
 {
-	m_pBox->Render(L"Camera_Silvermane");
+	//m_pBox->Render(L"Camera_Silvermane");
 
 	_matrix XMWorldMatrix = XMMatrixTranspose(m_pTransform->Get_WorldMatrix());
 	_matrix XMViewMatrix = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_VIEW));

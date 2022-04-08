@@ -140,19 +140,20 @@ _int CMonster_BronzeAnimus::Tick(_double _dDeltaTime)
 	{
 		if (m_pStateController->Get_CurStateTag()== L"Death")
 		{
+			if (1 < m_pAnimator->Get_AnimController()->Get_CurKeyFrameIndex() && 2 >= m_pAnimator->Get_AnimController()->Get_CurKeyFrameIndex())
+				Active_Effect((_uint)EFFECT::DEATH);
+
 			if (m_pAnimator->Get_CurrentAnimation()->Is_Finished())
 			{
 				Set_Remove(true);
 				m_pPanel->Set_UIRemove(true);
 			}
-
-			if (1 <= m_pAnimator->Get_AnimController()->Get_CurKeyFrameIndex() && 2>m_pAnimator->Get_AnimController()->Get_CurKeyFrameIndex())
-				Active_Effect((_uint)EFFECT::DEATH);
 		}
 		else
 		{
 			Set_Remove(true);
 			m_pPanel->Set_UIRemove(true);
+			Active_Effect((_uint)EFFECT::DEATH);
 		}
 	}
 
@@ -178,8 +179,6 @@ _int CMonster_BronzeAnimus::Tick(_double _dDeltaTime)
 		}
 	}
 
-	//죽을때
-	
 
 	m_pPanel->Set_TargetWorldMatrix(m_pTransform->Get_WorldMatrix());
 
@@ -486,40 +485,40 @@ HRESULT CMonster_BronzeAnimus::Render_Debug(void)
 	if (FAILED(m_pStateController->Render()))
 		return E_FAIL;
 
-	//Hp
-	if (FAILED(g_pGameInstance->Render_Font(TEXT("Font_Arial"), XMVectorSet(0.f, 1.0f, 0.f, 1.f), L"HP : " + to_wstring(m_fCurrentHp), _float2(950.f, 20.f), _float2(0.6f, 0.6f))))
-		return E_FAIL;
+	////Hp
+	//if (FAILED(g_pGameInstance->Render_Font(TEXT("Font_Arial"), XMVectorSet(0.f, 1.0f, 0.f, 1.f), L"HP : " + to_wstring(m_fCurrentHp), _float2(950.f, 20.f), _float2(0.6f, 0.6f))))
+	//	return E_FAIL;
 
-	// FSM
-	wstring wstrCurStateTag = m_pStateController->Get_CurStateTag();
-	wstring wstrState = L"Cur State : ";
+	//// FSM
+	//wstring wstrCurStateTag = m_pStateController->Get_CurStateTag();
+	//wstring wstrState = L"Cur State : ";
 
-	if (FAILED(g_pGameInstance->Render_Font(TEXT("Font_Arial"), XMVectorSet(0.f, 1.0f, 0.f, 1.f), (wstrState + wstrCurStateTag).c_str(), _float2(950.f, 40.f), _float2(0.6f, 0.6f))))
-		return E_FAIL;
+	//if (FAILED(g_pGameInstance->Render_Font(TEXT("Font_Arial"), XMVectorSet(0.f, 1.0f, 0.f, 1.f), (wstrState + wstrCurStateTag).c_str(), _float2(950.f, 40.f), _float2(0.6f, 0.6f))))
+	//	return E_FAIL;
 
-	m_pAnimation = m_pAnimator->Get_CurrentAnimation();
+	//m_pAnimation = m_pAnimator->Get_CurrentAnimation();
 
-	// 애니메이션 이름
-	string CurAnimName = m_pAnimation->Get_Name();
-	wstring wstrCurAnimTag;
-	wstring wstrAnimname = L"Cur Anim Tag : ";
-	wstrCurAnimTag.assign(CurAnimName.begin(), CurAnimName.end());
-	if (FAILED(g_pGameInstance->Render_Font(TEXT("Font_Arial"), XMVectorSet(0.f, 1.0f, 0.f, 1.f), (wstrAnimname + wstrCurAnimTag).c_str(), _float2(950.f, 60.f), _float2(0.6f, 0.6f))))
-		return E_FAIL;
+	//// 애니메이션 이름
+	//string CurAnimName = m_pAnimation->Get_Name();
+	//wstring wstrCurAnimTag;
+	//wstring wstrAnimname = L"Cur Anim Tag : ";
+	//wstrCurAnimTag.assign(CurAnimName.begin(), CurAnimName.end());
+	//if (FAILED(g_pGameInstance->Render_Font(TEXT("Font_Arial"), XMVectorSet(0.f, 1.0f, 0.f, 1.f), (wstrAnimname + wstrCurAnimTag).c_str(), _float2(950.f, 60.f), _float2(0.6f, 0.6f))))
+	//	return E_FAIL;
 
-	// 애니메이션 상태
-	wstring wstrCurKeyFrameIndex = to_wstring(m_pAnimation->Get_CurrentKeyFrameIndex());
-	wstring wstrKeyFrame = L"Key Frame : ";
-	if (FAILED(g_pGameInstance->Render_Font(TEXT("Font_Arial"), XMVectorSet(0.f, 1.0f, 0.f, 1.f), (wstrKeyFrame + wstrCurKeyFrameIndex).c_str(), _float2(950.f, 80.f), _float2(0.6f, 0.6f))))
-		return E_FAIL;
+	//// 애니메이션 상태
+	//wstring wstrCurKeyFrameIndex = to_wstring(m_pAnimation->Get_CurrentKeyFrameIndex());
+	//wstring wstrKeyFrame = L"Key Frame : ";
+	//if (FAILED(g_pGameInstance->Render_Font(TEXT("Font_Arial"), XMVectorSet(0.f, 1.0f, 0.f, 1.f), (wstrKeyFrame + wstrCurKeyFrameIndex).c_str(), _float2(950.f, 80.f), _float2(0.6f, 0.6f))))
+	//	return E_FAIL;
 
-	wstring wstrAnimFinished = L"";
-	if (m_pAnimation->Is_Finished())
-		wstrAnimFinished = L"AnimFinished : TRUE";
-	else
-		wstrAnimFinished = L"AnimFinished : FALSE";
-	if (FAILED(g_pGameInstance->Render_Font(TEXT("Font_Arial"), XMVectorSet(0.f, 1.0f, 0.f, 1.f), wstrAnimFinished.c_str(), _float2(950.f, 100.f), _float2(0.6f, 0.6f))))
-		return E_FAIL;
+	//wstring wstrAnimFinished = L"";
+	//if (m_pAnimation->Is_Finished())
+	//	wstrAnimFinished = L"AnimFinished : TRUE";
+	//else
+	//	wstrAnimFinished = L"AnimFinished : FALSE";
+	//if (FAILED(g_pGameInstance->Render_Font(TEXT("Font_Arial"), XMVectorSet(0.f, 1.0f, 0.f, 1.f), wstrAnimFinished.c_str(), _float2(950.f, 100.f), _float2(0.6f, 0.6f))))
+	//	return E_FAIL;
 
 	return S_OK;
 }
@@ -574,8 +573,10 @@ void CMonster_BronzeAnimus::Hit(CCollision& collision)
 			if ((_uint)GAMEOBJECT::WEAPON == collision.pGameObject->getTag())
 			{
 				m_pPanel->Set_Show(true);
-				Active_Effect((_uint)EFFECT::HIT);
-				Active_Effect((_uint)EFFECT::FLOATING);
+				_vector MonsterPos = m_pTransform->Get_State(CTransform::STATE_POSITION);
+				_vector Pos = { XMVectorGetX(MonsterPos), XMVectorGetY(MonsterPos) + 4.f, XMVectorGetZ(MonsterPos), 1.f };
+				Active_Effect((_uint)EFFECT::HIT, Pos);
+				Active_Effect((_uint)EFFECT::FLOATING, Pos);
 				Set_Current_HP(-5);
 				Set_GroggyGauge(2); //TODO::수치정해서바꿔줘야됨
 
@@ -624,5 +625,4 @@ void CMonster_BronzeAnimus::Free()
 	Safe_Release(m_pStateController);
 	Safe_Release(m_pCharacterController);
 	Safe_Release(m_pPanel);
-
 }

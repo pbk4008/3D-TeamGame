@@ -262,14 +262,24 @@ PS_OUT PS_MAIN_YELLOW(PS_IN In)
             }
         }
     
-        if (In.vTexUV.x > (g_fX - g_fCurAttack) && In.vTexUV.x < (g_fX - g_fCurAttack + 0.02f)) //¿ÞÂÊÇÏ¾á¶óÀÎ
-        {
-            Out.vColor.rgb = 1.f;
-        }
-    
         if (In.vTexUV.x > (g_fX - 0.02f) && In.vTexUV.x < g_fX) //¿À¸¥ÂÊÇÏ¾á¶óÀÎ¤¤
         {
             Out.vColor.rgb = 1.f;
+        }
+        
+        if (0 >= (g_fX - g_fCurAttack))
+        {
+            if (In.vTexUV.x > 0.f && In.vTexUV.x < 0.02f) //¿ÞÂÊÇÏ¾á¶óÀÎ
+            {
+                Out.vColor.rgb = 1.f;
+            }
+        }
+        else if (0 < (g_fX - g_fCurAttack))
+        {
+            if (In.vTexUV.x > (g_fX - g_fCurAttack) && In.vTexUV.x < (g_fX - g_fCurAttack + 0.02f)) //¿ÞÂÊÇÏ¾á¶óÀÎ
+            {
+                Out.vColor.rgb = 1.f;
+            }
         }
     }
     

@@ -79,7 +79,7 @@ HRESULT CMonster_Crawler::NativeConstruct(const _uint _iSceneID, void* _pArg)
 
 	m_iObectTag = (_uint)GAMEOBJECT::MONSTER_CRYSTAL;
 
-	m_fMaxHp = 20.f;
+	m_fMaxHp = 3.f;
 	m_fCurrentHp = m_fMaxHp;
 
 	m_fMaxGroggyGauge = 3.f;
@@ -89,7 +89,7 @@ HRESULT CMonster_Crawler::NativeConstruct(const _uint _iSceneID, void* _pArg)
 	m_pPanel->Set_GroggyBar(Get_GroggyGaugeRatio());
 
 	m_iObectTag = (_uint)GAMEOBJECT::MONSTER_CRYSTAL;
-	//setActive(false);
+	setActive(false);
 
 	return S_OK;
 }
@@ -138,11 +138,7 @@ _int CMonster_Crawler::Tick(_double _dDeltaTime)
 				m_pPanel->Set_UIRemove(true);
 				Active_Effect((_uint)EFFECT::DEATH);
 			}
-			/*		else if (1 <= m_pAnimatorCom->Get_AnimController()->Get_CurKeyFrameIndex()
-						&& 2 > m_pAnimatorCom->Get_AnimController()->Get_CurAnimIndex())
-					{
-
-					}*/
+			
 		}
 		else
 		{
@@ -339,7 +335,7 @@ HRESULT CMonster_Crawler::Ready_Weapone()
 
 	CSphereCollider::DESC tSphereCol;
 	tSphereCol.tColliderDesc = tColliderDesc;
-	tSphereCol.fRadius = 0.3f;
+	tSphereCol.fRadius = 0.7f;
 	if (FAILED(__super::SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_SphereCollider", L"Collider", (CComponent**)&m_pCollider, &tSphereCol)))
 		return E_FAIL;
 

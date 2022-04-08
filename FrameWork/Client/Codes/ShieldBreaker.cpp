@@ -71,7 +71,7 @@ HRESULT CShieldBreaker::NativeConstruct(const _uint _iSceneID, void* pArg)
 	if (pArg)
 		m_pFixedBone = static_cast<CHierarchyNode*>(pArg);
 
-	m_fDamage = 10.f;
+	m_fDamage = 7.f;
 
 	return S_OK;
 }
@@ -130,7 +130,7 @@ void CShieldBreaker::OnTriggerEnter(CCollision& collision)
 	_uint iTag = collision.pGameObject->getTag();
 	if ((_uint)GAMEOBJECT::PLAYER == iTag)
 	{
-		if (m_isAttack)
+		if (!m_isAttack)
 			return;
 
 		ATTACKDESC tAttackDesc = m_pOwner->Get_AttackDesc();
@@ -160,12 +160,12 @@ HRESULT CShieldBreaker::Ready_Components()
 
 	CCapsuleCollider::DESC tCapsuleColliderDesc;
 	tCapsuleColliderDesc.tColliderDesc = tColliderDesc;
-	tCapsuleColliderDesc.fHeight = 0.8f;
-	tCapsuleColliderDesc.fRadius = 0.4f;
+	tCapsuleColliderDesc.fHeight = 2.f;
+	tCapsuleColliderDesc.fRadius = 0.5f;
 	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_CapsuleCollider", L"Collider", (CComponent**)&m_pCollider, &tCapsuleColliderDesc)))
 		return E_FAIL;
 
-	_matrix matPivot = XMMatrixRotationY(XMConvertToRadians(90.f)) * XMMatrixTranslation(0.f, 0.f, 1.f);
+	_matrix matPivot = XMMatrixRotationY(XMConvertToRadians(90.f)) * XMMatrixTranslation(0.f, 0.f, 0.8f);
 	m_pCollider->setPivotMatrix(matPivot);
 
 	return S_OK;

@@ -195,6 +195,9 @@ void CNeedle::OnTriggerEnter(CCollision& collision)
 	case (_uint)GAMEOBJECT::MONSTER_HEALER:
 	case (_uint)GAMEOBJECT::MONSTER_SHOOTER:
 	case (_uint)GAMEOBJECT::MONSTER_SPEAR:
+	case (_uint)GAMEOBJECT::MONSTER_ANIMUS:
+	case (_uint)GAMEOBJECT::MIDDLE_BOSS:
+	case (_uint)GAMEOBJECT::BOSS:
 		if (!m_isAttack)
 			return;
 
