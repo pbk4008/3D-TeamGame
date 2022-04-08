@@ -1,4 +1,6 @@
 #include "Shader_RenderState.hpp"
+#include "Shader_Share.hlsli"
+#include "Shader_ShareFuntion.hlsli"
 
 cbuffer ShadeCheck
 {
@@ -6,61 +8,11 @@ cbuffer ShadeCheck
 	bool g_NonTex = false;
 };
 
-cbuffer Matrices
-{
-	matrix		g_WorldMatrix  = (matrix)0;
-	matrix		g_ViewMatrix;	
-	matrix		g_ProjMatrix;
-};
-
-struct BoneMatrixArray
-{
-	matrix		Bone[256];
-};
-
-cbuffer	BoneMatricesBuffer
-{
-	BoneMatrixArray		g_BoneMatrices;
-};
-
-cbuffer LightBuffer
-{
-	matrix g_LightView;
-	matrix g_LightProj;
-};
-
-texture2D	g_DiffuseTexture;
-texture2D	g_ShadowTexture;
-texture2D	g_BiNormalTexture;
-
-texture2D	g_ORMTexture;
-texture2D	g_ORMETexture;
-
-sampler DefaultSampler = sampler_state
-{		
-	filter = min_mag_mip_linear;
-	AddressU = wrap;
-	AddressV = wrap;
-};
-
-sampler ClampSampler = sampler_state
-{
-	filter = min_mag_mip_linear;
-	AddressU = clamp;
-	AddressV = clamp;
-};
-
-float3 Normalmapping(float3 normaltex, float3x3 tbn)
-{
-	normaltex = normaltex * 2 - 1;
-	normaltex = normalize(normaltex);
-	
-	normaltex = normalize(mul(normaltex, tbn));
-	normaltex = normaltex * 0.5f + 0.5f;
-	
-	return normaltex;
-}
-
+Texture2D	g_DiffuseTexture;
+Texture2D	g_ShadowTexture;
+Texture2D	g_BiNormalTexture;
+Texture2D	g_ORMTexture;
+Texture2D	g_ORMETexture;
 
 struct VS_IN
 {
@@ -92,10 +44,10 @@ VS_OUT VS_MAIN_ANIM(VS_IN In)
 	float		fWeightw = 1.f - (In.vBlendWeight.x + In.vBlendWeight.y + In.vBlendWeight.z);
 
 
-	matrix			BoneMatrix = g_BoneMatrices.Bone[In.vBlendIndex.x] * In.vBlendWeight.x +
-		g_BoneMatrices.Bone[In.vBlendIndex.y] * In.vBlendWeight.y +
-		g_BoneMatrices.Bone[In.vBlendIndex.z] * In.vBlendWeight.z +
-		g_BoneMatrices.Bone[In.vBlendIndex.w] * In.vBlendWeight.w;
+	matrix BoneMatrix = mul(g_BoneMatrices.Bone[In.vBlendIndex.x], In.vBlendWeight.x) +
+						mul(g_BoneMatrices.Bone[In.vBlendIndex.y], In.vBlendWeight.y) +
+						mul(g_BoneMatrices.Bone[In.vBlendIndex.z], In.vBlendWeight.z) +
+						mul(g_BoneMatrices.Bone[In.vBlendIndex.w], In.vBlendWeight.w);
 
 
 	matWV = mul(g_WorldMatrix, g_ViewMatrix);
@@ -138,10 +90,10 @@ VS_OUT_SHADOW VS_MAIN_SHADOW(VS_IN In)
 	float fWeightw = 1.f - (In.vBlendWeight.x + In.vBlendWeight.y + In.vBlendWeight.z);
 
 
-	matrix BoneMatrix = g_BoneMatrices.Bone[In.vBlendIndex.x] * In.vBlendWeight.x +
-		g_BoneMatrices.Bone[In.vBlendIndex.y] * In.vBlendWeight.y +
-		g_BoneMatrices.Bone[In.vBlendIndex.z] * In.vBlendWeight.z +
-		g_BoneMatrices.Bone[In.vBlendIndex.w] * In.vBlendWeight.w;
+	matrix BoneMatrix = mul(g_BoneMatrices.Bone[In.vBlendIndex.x], In.vBlendWeight.x) +
+						mul(g_BoneMatrices.Bone[In.vBlendIndex.y], In.vBlendWeight.y) +
+						mul(g_BoneMatrices.Bone[In.vBlendIndex.z], In.vBlendWeight.z) +
+						mul(g_BoneMatrices.Bone[In.vBlendIndex.w], In.vBlendWeight.w);
 	
 	vector vPosition = mul(vector(In.vPosition, 1.f), BoneMatrix);
 	
@@ -152,46 +104,6 @@ VS_OUT_SHADOW VS_MAIN_SHADOW(VS_IN In)
 	Out.vPosition = mul(vPosition, matWVP);
 	Out.vClipPos = Out.vPosition;
 	Out.vTexUV = In.vTexUV;
-	
-	return Out;
-}
-//*---------------------------------------------------------------------------------------------*
-
-// VS_SHADE_SHADOW
-//*---------------------------------------------------------------------------------------------*
-struct VS_OUT_SHADESHADOW
-{
-	float4 vPosition : SV_Position;
-	float2 vTexUV : TEXCOORD0;
-	float4 vLightPosition : TEXCOORD1;
-};
-
-VS_OUT_SHADESHADOW VS_MAIN_SHADESHADOW(VS_IN In)
-{
-	VS_OUT_SHADESHADOW Out = (VS_OUT_SHADESHADOW) 0.f;
-	
-	matrix matWV, matWVP, matLightWV, matLightWVP;
-	
-	float fWeightw = 1.f - (In.vBlendWeight.x + In.vBlendWeight.y + In.vBlendWeight.z);
-
-
-	matrix BoneMatrix = g_BoneMatrices.Bone[In.vBlendIndex.x] * In.vBlendWeight.x +
-		g_BoneMatrices.Bone[In.vBlendIndex.y] * In.vBlendWeight.y +
-		g_BoneMatrices.Bone[In.vBlendIndex.z] * In.vBlendWeight.z +
-		g_BoneMatrices.Bone[In.vBlendIndex.w] * In.vBlendWeight.w;
-	
-	vector vPosition = mul(vector(In.vPosition, 1.f), BoneMatrix);
-	
-	matWV = mul(g_WorldMatrix, g_ViewMatrix);
-	matWVP = mul(matWV, g_ProjMatrix);
-	
-	matLightWV = mul(g_WorldMatrix, g_LightView);
-	matLightWVP = mul(matLightWV, g_LightProj);
-	
-	Out.vPosition = mul(vector(vPosition.xyz, 1.f), matWVP);
-	Out.vTexUV = In.vTexUV;
-	Out.vLightPosition = mul(vector(vPosition.xyz, 1.f), matLightWVP);
-	//Out.vLightPosition = Out.vOffset;
 	
 	return Out;
 }
@@ -232,65 +144,6 @@ PS_OUT_SHADOW PS_MAIN_SHADOW(PS_IN_SHADOW In)
 }
 //*---------------------------------------------------------------------------------------------*
 
-// SHADE SHADOW
-//*---------------------------------------------------------------------------------------------*
-struct PS_IN_SHADESHADOW
-{
-	float4 vPosition : SV_Position;
-	float2 vTexUV : TEXCOORD0;
-	float4 vLightPosition : TEXCOORD1;
-};
-
-struct PS_OUT_SHADESHADOW
-{
-	vector vShadeShadow : SV_TARGET0;
-};
-
-PS_OUT_SHADESHADOW PS_MAIN_SHADESHADOW(PS_IN_SHADESHADOW In)
-{
-	PS_OUT_SHADESHADOW Out = (PS_OUT_SHADESHADOW) 0.f;
-	
-	float fOut = 1.f;
-	
-	vector Diffuse = g_DiffuseTexture.Sample(DefaultSampler, In.vTexUV);
-	float Bias = 0.001f;
-	float ShadowIntensity = 0.6f;
-
-	float CurrentDepth = In.vLightPosition.z / In.vLightPosition.w;
-	
-	float2 ShadowUV = In.vLightPosition.xy / In.vLightPosition.w;
-	
-	if (ShadowUV.x < -fOut || ShadowUV.x > fOut || ShadowUV.y < -fOut || ShadowUV.y > fOut || CurrentDepth < -fOut || CurrentDepth > fOut)
-	{
-		Out.vShadeShadow = float4(1.f, 1.f, 1.f, 1.f);
-	}
-	else
-	{
-		ShadowUV.y = -ShadowUV.y;
-		ShadowUV = ShadowUV * 0.5f + 0.5f;
-
-		float shadowDepth;
-		shadowDepth = g_ShadowTexture.Sample(ClampSampler, ShadowUV).r;
-		
-		Out.vShadeShadow = float4(1.f, 1.f, 1.f, 1.f);
-		if (CurrentDepth > shadowDepth + Bias)
-		{
-			Out.vShadeShadow.rgb *= ShadowIntensity;
-
-			if (Diffuse.a < 0.9f)
-				Out.vShadeShadow.a = Diffuse.a;
-		}
-		else
-		{
-			if (Diffuse.a < 0.9f)
-				Out.vShadeShadow.a = Diffuse.a;
-		}
-	}
-	return Out;
-	
-}
-//*---------------------------------------------------------------------------------------------*
-
 struct PS_IN
 {
 	float4 vPosition : SV_POSITION;
@@ -304,13 +157,11 @@ struct PS_IN
 
 struct PS_OUT
 {
-	float4 diffuse : SV_TARGET0;
-	float4 normal : SV_TARGET1;
-	float4 depth : SV_TARGET2;
-	float4 M : SV_Target3;
-	float4 R : SV_Target4;
-	float4 A : SV_Target5;
-	float4 E : SV_Target6;
+	float4 diffuse	: SV_TARGET0;
+	float4 normal	: SV_TARGET1;
+	float4 depth	: SV_TARGET2;
+	float4 mra		: SV_Target3;
+	float4 emission : SV_Target4;
 };
 
 PS_OUT PS_MAIN_ORME(PS_IN In)
@@ -330,14 +181,17 @@ PS_OUT PS_MAIN_ORME(PS_IN In)
 	Out.normal = float4(normal, 0);
 	
 	float Metalic = orme.b;
-	Out.M = float4(Metalic.rrr, 1.f);
 	float Roughness = orme.g;
-	Out.R = float4(Roughness.rrr, 1.f);
 	float Ao = orme.r;
-	Out.A = float4(Ao.rrr, 1.f);
+	
+	Out.mra.r = Metalic;
+	Out.mra.g = Roughness;
+	Out.mra.b = Ao;
+	Out.mra.a = 1.f;
+	
 	float4 EmissionColor = float4(1.f, 0.843f, 0.f, 1.f);
 	float EmissionPower = 0.1f;
-	Out.E = float4(diffuse.xyz * orme.a * EmissionPower, 1);
+	Out.emission = float4(diffuse.xyz * orme.a * EmissionPower, 1);
 
 	return Out;
 }
@@ -348,7 +202,7 @@ PS_OUT PS_MAIN_ORM(PS_IN In)
 	
 	float4 diffuse = g_DiffuseTexture.Sample(DefaultSampler, In.vUvDepth.xy);
 	float3 normal = g_BiNormalTexture.Sample(DefaultSampler, In.vUvDepth.xy).xyz;
-	float3 orm = g_ORMTexture.Sample(DefaultSampler, In.vUvDepth).xyz;
+	float3 orm = g_ORMTexture.Sample(DefaultSampler, In.vUvDepth.xy).xyz;
 	float3x3 tbn = { In.vTangent.xyz, In.vBiNormal.xyz, In.vNormal.xyz };
 	
 	normal = Normalmapping(normal, tbn);
@@ -360,15 +214,15 @@ PS_OUT PS_MAIN_ORM(PS_IN In)
 	Out.normal = float4(normal, 0);
 	
 	float Metalic = orm.b;
-	Out.M = float4(Metalic.rrr, 1.f);
 	float Roughness = orm.g;
-	Out.R = float4(Roughness.rrr, 1.f);
 	float Ao = orm.r;
-	Out.A = float4(Ao.rrr, 1.f);
 	
-	float3 color = float3(0.811, 1.f, 0.898f);
-	float EmissionPower = 0.8f;
-	Out.E = float4(color * EmissionPower, 1);
+	Out.mra.r = Metalic;
+	Out.mra.g = Roughness;
+	Out.mra.b = Ao;
+	Out.mra.a = 1.f;
+	
+	Out.emission = g_color * g_empower;
 	
 	return Out;
 }
@@ -387,7 +241,7 @@ technique11			DefaultTechnique
 		PixelShader = compile ps_5_0 PS_MAIN_ORME();
 	}
 
-	pass PS_MAIN_ORM //------------------------------------------------------------------------------------0 ORM
+	pass PS_MAIN_ORM //------------------------------------------------------------------------------------1 ORM
 	{
 		SetRasterizerState(CullMode_Default);
 		SetDepthStencilState(ZDefault, 0);
@@ -409,18 +263,6 @@ technique11			DefaultTechnique
 		VertexShader = compile vs_5_0 VS_MAIN_SHADOW();
 		GeometryShader = NULL;
 		PixelShader = compile ps_5_0 PS_MAIN_SHADOW();
-	}
-
-	pass ShadeShadow //-----------------------------------------------------------------------------------------2 Anim Shade_Shadow
-	{
-		SetRasterizerState(CullMode_Default);
-		SetDepthStencilState(ZDefault, 0);
-		SetBlendState(BlendDisable, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
-
-		/* 진입점함수를 지정한다. */
-		VertexShader = compile vs_5_0 VS_MAIN_SHADESHADOW();
-		GeometryShader = NULL;
-		PixelShader = compile ps_5_0 PS_MAIN_SHADESHADOW();
 	}
 }
 

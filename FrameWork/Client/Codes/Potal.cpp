@@ -7,7 +7,6 @@ CPotal::CPotal()
 	, m_pDiffuseTexture(nullptr)
 	, m_pMaskTexture(nullptr)
 	, m_bCreate(false)
-	, m_pMeteor(nullptr)
 {
 }
 
@@ -17,7 +16,6 @@ CPotal::CPotal(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
 	, m_pDiffuseTexture(nullptr)
 	, m_pMaskTexture(nullptr)
 	, m_bCreate(false)
-	, m_pMeteor(nullptr)
 {
 }
 
@@ -27,12 +25,10 @@ CPotal::CPotal(const CPotal& rhs)
 	, m_pDiffuseTexture(rhs.m_pDiffuseTexture)
 	, m_pMaskTexture(rhs.m_pMaskTexture)
 	, m_bCreate(rhs.m_bCreate)
-	, m_pMeteor(rhs.m_pMeteor)
 {
 	Safe_AddRef(m_pRect);
 	Safe_AddRef(m_pDiffuseTexture);
 	Safe_AddRef(m_pMaskTexture);
-	Safe_AddRef(m_pMeteor);
 }
 
 HRESULT CPotal::NativeConstruct_Prototype()
@@ -114,12 +110,6 @@ HRESULT CPotal::Ready_Component()
 	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_Rect_Buffer_Potal", L"Rect_Buffer", (CComponent**)&m_pRect)))
 		return E_FAIL;
 
-	if (FAILED(m_pRect->Compile_ShaderFiles(L"../../Reference/ShaderFile/Shader_Potal.hlsl")))
-	{
-		MSGBOX("ShaderFile Compile Fail");
-		return E_FAIL;
-	}
-
 	wstring wstrTextureTag = L"Potal_Diffuse";
 	g_pGameInstance->Add_Texture(m_pDevice, wstrTextureTag, L"../bin/Resources/Texture/Portal/T_Portal_Space_D.dds");
 	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_Texture", L"DiffuseTexture", (CComponent**)&m_pDiffuseTexture)))
@@ -142,9 +132,9 @@ _uint CPotal::Scaling(_double dDeltaTime)
 	_float fSize = m_pTransform->Get_Scale(CTransform::STATE_RIGHT);
 
 	if (!m_bCreate)
-		fSize += dDeltaTime*5.f;
+		fSize += (_float)dDeltaTime *5.f;
 	else
-		fSize -= dDeltaTime*5.f;
+		fSize -= (_float)dDeltaTime *5.f;
 
 
 	_matrix matScale = XMMatrixScaling(fSize, fSize, fSize);
@@ -212,8 +202,9 @@ CGameObject* CPotal::Clone(_uint iSeneid, void* pArg)
 
 void CPotal::Free()
 {
-	CGameObject::Free();
 	Safe_Release(m_pRect);
 	Safe_Release(m_pDiffuseTexture);
 	Safe_Release(m_pMaskTexture);
+
+	CGameObject::Free();
 }

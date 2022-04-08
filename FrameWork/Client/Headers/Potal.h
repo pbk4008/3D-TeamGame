@@ -40,7 +40,6 @@ private:
 	CTexture* m_pMaskTexture;
 private:/*For Create Meteor*/
 	_bool m_bCreate;
-	CMeteor* m_pMeteor;
 };
 END
 #endif

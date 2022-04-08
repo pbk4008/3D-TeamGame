@@ -519,7 +519,7 @@ HRESULT CBoss_Bastion_Judicator::Set_State_FSM()
 
 HRESULT CBoss_Bastion_Judicator::Set_Weapon()
 {
-	CHierarchyNode* pBone = m_pModelCom->Get_BoneMatrix("weapon_r_end");
+	CHierarchyNode* pBone = m_pModel->Get_BoneMatrix("weapon_r_end");
 	CShieldBreaker* pWeapon = static_cast<CShieldBreaker*>(g_pGameInstance->Clone_GameObject(m_iSceneID, L"Proto_GameObject_Weapon_ShieldBreaker"));
 
 	if (nullptr == pWeapon)
