@@ -687,6 +687,12 @@
     <Filter Include="01.Scene\01.Loading\00.Logo">
       <UniqueIdentifier>{cac3034c-dd8b-47e8-afc7-da6cb3e9501e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_Healer\Meteor">
+      <UniqueIdentifier>{62e29ab4-9fdb-4a34-b3fd-46a933f3453a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\02.Map\03.Potal">
+      <UniqueIdentifier>{ad5b56da-5141-4199-8cab-4b99f8de595c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -1623,6 +1629,12 @@
     <ClInclude Include="..\Headers\Effect_Falling_Leaf.h">
       <Filter>02.GameObject\04.Effect\00.Particle\01.Effect_MapLeaf</Filter>
     </ClInclude>
+    <ClInclude Include="..\Codes\Meteor.h">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Healer\Meteor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Potal.h">
+      <Filter>02.GameObject\02.Map\03.Potal</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -2535,6 +2547,12 @@
     <ClCompile Include="..\Codes\Effect_Falling_Leaf.cpp">
       <Filter>02.GameObject\04.Effect\00.Particle\01.Effect_MapLeaf</Filter>
     </ClCompile>
+    <ClCompile Include="..\Codes\Meteor.cpp">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Healer\Meteor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Potal.cpp">
+      <Filter>02.GameObject\02.Map\03.Potal</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -2648,6 +2666,9 @@
     </FxCompile>
     <FxCompile Include="..\bin\ShaderFile\Shader_Particle_Size.hlsl">
       <Filter>100.ShaderFiles\03.Effect</Filter>
+    </FxCompile>
+    <FxCompile Include="..\bin\ShaderFile\Shader_Potal.hlsl">
+      <Filter>100.ShaderFiles\99.Other</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>

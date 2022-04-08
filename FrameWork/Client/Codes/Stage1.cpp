@@ -79,11 +79,11 @@ HRESULT CStage1::NativeConstruct()
 	if (FAILED(Ready_Player(L"Layer_Silvermane")))
 		return E_FAIL;
 
-	//if (FAILED(Ready_MapObject()))
-	//	return E_FAIL;
-
-	if (FAILED(Ready_TriggerSystem(L"../bin/SaveData/Trigger/MonsterSpawnTrigger.dat")))
+	if (FAILED(Ready_MapObject()))
 		return E_FAIL;
+
+	//if (FAILED(Ready_TriggerSystem(L"../bin/SaveData/Trigger/MonsterSpawnTrigger.dat")))
+	//	return E_FAIL;
 
 	//if (FAILED(Ready_Boss(L"Layer_Boss")))
 	//{
@@ -110,18 +110,18 @@ HRESULT CStage1::NativeConstruct()
 		return E_FAIL;
 	}
 
-	if (FAILED(Ready_Treasure_Chest()))
-		return E_FAIL;
+	//if (FAILED(Ready_Treasure_Chest()))
+	//	return E_FAIL;
 
 	g_pGameInstance->Change_BaseCamera(L"Camera_Silvermane");
 
-	g_pInteractManager = CInteractManager::GetInstance();
+	/*g_pInteractManager = CInteractManager::GetInstance();
 	if (FAILED(g_pInteractManager->NativeConstruct()))
 		return E_FAIL;
 
 	g_pDropManager = CDropManager::GetInstance();
 	if (FAILED(g_pDropManager->NativeConstruct((SCENEID::SCENE_STAGE1))))
-		return E_FAIL;
+		return E_FAIL;*/
 
 	g_pGameInstance->PlayBGM(L"Stage1_BGM");
 	return S_OK;
@@ -165,22 +165,25 @@ _int CStage1::Tick(_double TimeDelta)
 		//	}
 		//}
 	}
-
-	_float3 fPos = { 0.f,5.f,20.f };
-
-	//if (g_pGameInstance->getkeyDown(DIK_NUMPAD0))
-	//{
-	//	CMonster_Crawler* pMonster = nullptr;
-	//	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Test", L"Proto_GameObject_Monster_Crawler", &fPos, (CGameObject**)&pMonster)))
-	//		return -1;
-	//}
-	//if (g_pGameInstance->getkeyDown(DIK_NUMPAD1))
-	//{
-	//	CMonster_EarthAberrant* pMonster = nullptr;
-	//	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Test", L"Proto_GameObject_Monster_EarthAberrant", &fPos, (CGameObject**)&pMonster)))
-	//		return -1;
-	//}
-	/*if (g_pGameInstance->getkeyDown(DIK_NUMPAD2))
+	_float4 fPos = { 0.f,10.f,20.f,1.f};
+	if (g_pGameInstance->getkeyDown(DIK_BACKSPACE))
+	{
+		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Test", L"Proto_GameObject_Portal", &fPos)))
+			return -1;
+	}
+	if (g_pGameInstance->getkeyDown(DIK_NUMPAD0))
+	{
+		CMonster_Crawler* pMonster = nullptr;
+		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Test", L"Proto_GameObject_Monster_Crawler", &fPos, (CGameObject**)&pMonster)))
+			return -1;
+	}
+	if (g_pGameInstance->getkeyDown(DIK_NUMPAD1))
+	{
+		CMonster_EarthAberrant* pMonster = nullptr;
+		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Test", L"Proto_GameObject_Monster_EarthAberrant", &fPos, (CGameObject**)&pMonster)))
+			return -1;
+	}
+	if (g_pGameInstance->getkeyDown(DIK_NUMPAD2))
 	{
 		CMonster_Bastion_Sword* pMonster = nullptr;
 		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Test", L"Proto_GameObject_Monster_Bastion_Sword", &fPos, (CGameObject**)&pMonster)))
@@ -197,14 +200,14 @@ _int CStage1::Tick(_double TimeDelta)
 		CMonster_Bastion_Healer* pMonster = nullptr;
 		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Test", L"Proto_GameObject_Monster_Bastion_Healer", &fPos, (CGameObject**)&pMonster)))
 			return -1;
-	}*/
+	}
 	if (g_pGameInstance->getkeyDown(DIK_NUMPAD5))
 	{
 		CMonster_Bastion_2HSword* pMonster = nullptr;
 		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Test", L"Proto_GameObject_Monster_Bastion_2HSword", &fPos, (CGameObject**)&pMonster)))
 			return -1;
 	}
-	/*if (g_pGameInstance->getkeyDown(DIK_NUMPAD6))
+	if (g_pGameInstance->getkeyDown(DIK_NUMPAD6))
 	{
 		CMonster_Bastion_Spear* pMonster = nullptr;
 		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Test", L"Proto_GameObject_Monster_Bastion_Spear", &fPos, (CGameObject**)&pMonster)))

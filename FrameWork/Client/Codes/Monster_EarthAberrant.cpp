@@ -583,13 +583,18 @@ HRESULT CMonster_EarthAberrant::Set_State_FSM()
 HRESULT CMonster_EarthAberrant::Set_Weapon()
 {
 	CHierarchyNode* pBone = m_pModelCom->Get_BoneMatrix("weapon_r_end");
-	CEarthAberrant_Pick* pWeapon = CEarthAberrant_Pick::Create(m_pDevice, m_pDeviceContext);
-	//CEarthAberrant_Pick* pWeapon = g_pGameInstance->Clone_GameObject<CEarthAberrant_Pick>(_iSceneID, L"Proto_GameObject_Weapon_EarthAberrant_Pick");
-	if (FAILED(pWeapon->NativeConstruct(m_iSceneID, pBone)))
+	//CEarthAberrant_Pick* pWeapon = CEarthAberrant_Pick::Create(m_pDevice, m_pDeviceContext);
+	m_pWeapon = g_pGameInstance->Clone_GameObject<CEarthAberrant_Pick>(m_iSceneID, L"Proto_GameObject_Weapon_EarthAberrant_Pick");
+
+	if (!m_pWeapon)
+	{
+		MSGBOX("Earth Weapon Clone Fail");
 		return E_FAIL;
-	pWeapon->Set_Owner(this);
-	pWeapon->Set_OwnerPivotMatrix(m_pModelCom->Get_PivotMatrix());
-	m_pWeapon = pWeapon;
+	}
+
+	m_pWeapon->Set_Owner(this);
+	m_pWeapon->Set_FixedBone(pBone);
+	m_pWeapon->Set_OwnerPivotMatrix(m_pModelCom->Get_PivotMatrix());
 
 	return S_OK;
 }
