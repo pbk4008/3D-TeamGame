@@ -4,11 +4,11 @@
 
 BEGIN(Client)
 
-class CLootingChest : public CState_Silvermane
+class CDodgeSlide : public CState_Silvermane
 {
 private:
-	explicit CLootingChest(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext);
-	virtual ~CLootingChest() = default;
+	explicit CDodgeSlide(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext);
+	virtual ~CDodgeSlide() = default;
 
 public:
 	virtual HRESULT NativeConstruct(void* _pArg = nullptr) override;
@@ -20,13 +20,12 @@ public:
 	virtual HRESULT ExitState() override;
 
 private:
-	virtual _int Input(const _double& _dDeltaTime) override;
-
-private:
-	_float m_fLookTime = 0.f;
+	virtual _int Input(const _double& _dDeltaTime);
+	const _int Reset();
+	const _int ToDash();
 
 public:
-	static CLootingChest* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext, void* _pArg = nullptr);
+	static CDodgeSlide* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext, void* _pArg = nullptr);
 	virtual void Free() override;
 };
 

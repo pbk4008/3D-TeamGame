@@ -62,7 +62,7 @@ HRESULT CTreasure_Chest::Render()
 	smatWorld = XMMatrixTranspose(m_pTransform->Get_CombinedMatrix());
 	smatView = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_VIEW));
 	smatProj = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_PROJECTION));
-	_float4 color = _float4(0.25, 0.92, 0.94, 1.f);
+	_float4 color = _float4(0.25f, 0.92f, 0.94f, 1.f);
 	_float power = 1.5f;
 
 	if (FAILED(m_pModel->SetUp_ValueOnShader("g_WorldMatrix", &smatWorld, sizeof(_matrix))))		return E_FAIL;

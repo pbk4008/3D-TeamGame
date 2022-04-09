@@ -7,6 +7,7 @@ CPotal::CPotal()
 	, m_pDiffuseTexture(nullptr)
 	, m_pMaskTexture(nullptr)
 	, m_bCreate(false)
+	, m_fAccRetain(0.f)
 {
 }
 
@@ -16,6 +17,7 @@ CPotal::CPotal(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
 	, m_pDiffuseTexture(nullptr)
 	, m_pMaskTexture(nullptr)
 	, m_bCreate(false)
+	, m_fAccRetain(0.f)
 {
 }
 
@@ -25,6 +27,7 @@ CPotal::CPotal(const CPotal& rhs)
 	, m_pDiffuseTexture(rhs.m_pDiffuseTexture)
 	, m_pMaskTexture(rhs.m_pMaskTexture)
 	, m_bCreate(rhs.m_bCreate)
+	, m_fAccRetain(0.f)
 {
 	Safe_AddRef(m_pRect);
 	Safe_AddRef(m_pDiffuseTexture);
@@ -67,7 +70,7 @@ HRESULT CPotal::NativeConstruct(const _uint _iSceneID, void* _pArg)
 _int CPotal::Tick(_double _dDeltaTime)
 {
 	Scaling(_dDeltaTime);
-	Create_Meteor();
+	Create_Meteor(_dDeltaTime);
 	Remove_Portal(_dDeltaTime);
 
 	return _int();
@@ -132,7 +135,12 @@ _uint CPotal::Scaling(_double dDeltaTime)
 	_float fSize = m_pTransform->Get_Scale(CTransform::STATE_RIGHT);
 
 	if (!m_bCreate)
-		fSize += (_float)dDeltaTime *5.f;
+	{
+		if(fSize<3.f)
+			fSize += (_float)dDeltaTime*10.f;
+		else
+			fSize += (_float)dDeltaTime*4.5f;
+	}
 	else
 		fSize -= (_float)dDeltaTime *5.f;
 
@@ -145,7 +153,7 @@ _uint CPotal::Scaling(_double dDeltaTime)
 	return _uint();
 }
 
-_uint CPotal::Create_Meteor()
+_uint CPotal::Create_Meteor(_double dDeltaTime)
 {
 	if (!m_bCreate)
 	{
@@ -158,12 +166,21 @@ _uint CPotal::Create_Meteor()
 			m_bCreate = true;
 		}
 	}
+	else
+	{
+		m_fAccRetain += (_float)dDeltaTime;
+		if (m_fAccRetain > 1.f)
+		{
+			m_fAccRetain = 0.f;
+			m_bRetain = true;
+		}
+	}
 	return _uint();
 }
 
 _uint CPotal::Remove_Portal(_double dDeltaTime)
 {
-	if (m_bCreate)
+	if (m_bCreate&&m_bRetain)
 	{
 		Scaling(dDeltaTime);
 		_float fSize = m_pTransform->Get_Scale(CTransform::STATE_RIGHT);

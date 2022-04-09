@@ -65,9 +65,9 @@ HRESULT CEffect_HitFloating::NativeConstruct(const _uint _iSceneID, void* pArg)
 
 _int CEffect_HitFloating::Tick(_double TimeDelta)
 {
-	m_pBuffer->Update(g_dDeltaTime, m_Desc.iAxis);
+	m_pBuffer->Update(g_dImmutableTime, m_Desc.iAxis);
 
-	m_fNonActiveTimeAcc += (_float)g_dDeltaTime;
+	m_fNonActiveTimeAcc += (_float)g_dImmutableTime;
 	if (4.f <= m_fNonActiveTimeAcc)
 	{
 		setActive(false);

@@ -101,33 +101,6 @@ _int CLootingChest::Input(const _double& _dDeltaTime)
 	return _int();
 }
 
-_int CLootingChest::ToIdle()
-{
-	if (m_pSilvermane->IsEquipWeapon())
-	{
-		switch (m_pSilvermane->Get_WeaponType())
-		{
-		case CWeapon::EType::Sword_1H:
-			if (FAILED(m_pStateController->Change_State(L"1H_SwordIdle")))
-				return -1;
-			break;
-		case CWeapon::EType::Hammer_2H:
-			if (FAILED(m_pStateController->Change_State(L"2H_HammerIdle")))
-				return -1;
-			break;
-		}
-		return STATE_CHANGE;
-	}
-	else
-	{
-		if (FAILED(m_pStateController->Change_State(L"Idle")))
-			return -1;
-		return STATE_CHANGE;
-	}
-
-	return _int();
-}
-
 CLootingChest* CLootingChest::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext, void* _pArg)
 {
 	CLootingChest* pInstance = new CLootingChest(_pDevice, _pDeviceContext);

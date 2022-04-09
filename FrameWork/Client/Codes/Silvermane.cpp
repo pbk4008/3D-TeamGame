@@ -41,6 +41,13 @@
 #include "Silvermane_SprintFwdStart.h"
 #include "Silvermane_SprintFwdStop.h"
 
+///////////////////////////////////// Dash
+#include "1H_SwordDodgeSpinFwd_V3.h"
+#include "1H_SwordNormalSidestepBwd_V3.h"
+#include "1H_SwordNormalSidestepLeft_V3.h"
+#include "1H_SwordNormalSidestepRight_V3.h"
+#include "DodgeSlide.h"
+
 //////////////////////////////////// 1H_Sword
 #include "1H_SwordEquipOff.h"
 #include "1H_SwordEquipOn.h"
@@ -68,11 +75,6 @@
 
 #include "1H_SwordJogAttack.h"
 #include "1H_SwordSupermanStab.h"
-
-#include "1H_SwordDodgeSpinFwd_V3.h"
-#include "1H_SwordNormalSidestepBwd_V3.h"
-#include "1H_SwordNormalSidestepLeft_V3.h"
-#include "1H_SwordNormalSidestepRight_V3.h"
 
 #include "1H_SwordAttackNormalR2_Start.h"
 #include "1H_SwordAttackNormalR2_Loop.h"
@@ -573,6 +575,17 @@ HRESULT CSilvermane::Ready_States()
 		return E_FAIL;
 	if (FAILED(m_pStateController->Add_State(L"SprintFwdStop", CSilvermane_SprintFwdStop::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
+	// Dash
+	if (FAILED(m_pStateController->Add_State(L"1H_DodgeSpin", C1H_SwordDodgeSpinFwd_V3::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	if (FAILED(m_pStateController->Add_State(L"1H_SidestepBwd", C1H_SwordNormalSidestepBwd_V3::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	if (FAILED(m_pStateController->Add_State(L"1H_SidestepLeft", C1H_SwordNormalSidestepLeft_V3::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	if (FAILED(m_pStateController->Add_State(L"1H_SidestepRight", C1H_SwordNormalSidestepRight_V3::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	if (FAILED(m_pStateController->Add_State(L"DodgeSlide", CDodgeSlide::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
 #pragma endregion
 #pragma region 1H_Sword
 	if (FAILED(m_pStateController->Add_State(L"1H_SwordEquipOn", C1H_SwordEquipOn::Create(m_pDevice, m_pDeviceContext))))
@@ -634,14 +647,6 @@ HRESULT CSilvermane::Ready_States()
 	if (FAILED(m_pStateController->Add_State(L"1H_SwordAttackNormalR2_04", C1H_SwordAttackNormalR2_04::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 	if (FAILED(m_pStateController->Add_State(L"1H_SwordAttackNormalR2_ReleaseDoubleSwing", C1H_SwordAttackNormalR2_ReleaseDoubleSwing::Create(m_pDevice, m_pDeviceContext))))
-		return E_FAIL;
-	if (FAILED(m_pStateController->Add_State(L"1H_DodgeSpin", C1H_SwordDodgeSpinFwd_V3::Create(m_pDevice, m_pDeviceContext))))
-		return E_FAIL;
-	if (FAILED(m_pStateController->Add_State(L"1H_SidestepBwd", C1H_SwordNormalSidestepBwd_V3::Create(m_pDevice, m_pDeviceContext))))
-		return E_FAIL;
-	if (FAILED(m_pStateController->Add_State(L"1H_SidestepLeft", C1H_SwordNormalSidestepLeft_V3::Create(m_pDevice, m_pDeviceContext))))
-		return E_FAIL;
-	if (FAILED(m_pStateController->Add_State(L"1H_SidestepRight", C1H_SwordNormalSidestepRight_V3::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 #pragma endregion
 #pragma region 2H_Hammer
