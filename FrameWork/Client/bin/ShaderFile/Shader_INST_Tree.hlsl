@@ -129,7 +129,7 @@ PS_OUT PS_MAIN(PS_IN In)
 	
 	normal = Normalmapping(normal, tbn);
 	
-	Out.diffuse.xyz = diffuse.xyz;
+	Out.diffuse = diffuse;
 	
 	Out.depth = half4(In.vUvDepth.z / In.vUvDepth.w, In.vUvDepth.w / 300.f, 0.f, 0.f);
 	Out.normal = half4(normal, 0);

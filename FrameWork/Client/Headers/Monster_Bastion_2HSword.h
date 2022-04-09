@@ -86,7 +86,6 @@ private:
 	_bool m_bFirstAttack = false;
 	_int m_iRandAtt = -1;
 private:
-	CModel*				  m_pModel = nullptr;
 	CAnimation*			  m_pAnimation = nullptr;
 	CAnimator*			  m_pAnimator = nullptr;
 	CStateController*	  m_pStateController = nullptr;

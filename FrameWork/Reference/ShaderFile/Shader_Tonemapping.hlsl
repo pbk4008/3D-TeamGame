@@ -17,11 +17,11 @@ cbuffer ConstBuffer
 	float rcp_bloom_tex_h;
 };
 
-texture2D g_HDRDiffuseTexture;
-texture2D g_HDRSpecularTexture;
+Texture2D g_HDRDiffuseTexture;
+Texture2D g_HDRSpecularTexture;
 
-texture2D g_LuminanceTexture;
-texture2D g_BloomTexture;
+Texture2D g_LuminanceTexture;
+Texture2D g_BloomTexture;
 
 struct VS_IN
 {

@@ -170,8 +170,8 @@ PS_OUT PS_MAIN(PS_IN In)
 	half Ao = orme.r;
 	half4 EmissionColor = half4(1.f, 0.843f, 0.f, 1.f);
 	Out.mra.r = Metalic;
-	Out.mra.r = Roughness;
-	Out.mra.r = Ao;
+	Out.mra.g = Roughness;
+	Out.mra.b = Ao;
 	Out.mra.a = 1.f;
 	half EmissionPower = 0.7f;
 	Out.emission = half4(diffuse.xyz * orme.a * EmissionPower, 1);

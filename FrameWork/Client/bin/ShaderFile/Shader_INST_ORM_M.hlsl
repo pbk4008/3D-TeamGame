@@ -183,7 +183,7 @@ PS_OUT PS_MAIN(PS_IN In)
 	
 	Out.mra.r = Metalic;
 	Out.mra.g = Roughness;
-	Out.mra.b = Ao;
+	Out.mra.b = Ao + 0.5f;
 	Out.mra.a = 1.f;
 	
 	return Out;

@@ -173,7 +173,7 @@ PS_OUT PS_MAIN(PS_IN In)
 	Out.mra.b = Ao;
 	Out.mra.a = 1.f;
 	
-	Out.emission = 0.f;
+	Out.emission = half4(0, 0, 0, 1);
 	
 	return Out;
 }

@@ -124,11 +124,13 @@ _int CNeedle::LateTick(_double _dDeltaTime)
 	{
 		m_pTrailEffect->Record_Points(_dDeltaTime);
 		m_pTrailEffect->Set_IsRender(true);
+		m_pRenderer->SetRenderButton(CRenderer::DISTORTION, true);
 	}
 	else
 	{
 		m_pTrailEffect->Clear_Points();
 		m_pTrailEffect->Set_IsRender(false);
+		m_pRenderer->SetRenderButton(CRenderer::DISTORTION, false);
 	}
 
 	if(m_pRenderer)

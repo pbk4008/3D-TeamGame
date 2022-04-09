@@ -163,7 +163,7 @@ PS_OUT PS_MAIN(PS_IN In)
 	
 	if (orm.b > 0.5f)
 	{
-		Out.diffuse = diffuse * half4(0.768f, 0.611f, 0.282f, 0);
+		Out.diffuse = diffuse * half4(0.768f, 0.611f, 0.282f, 1.);
 		Out.emission = half4(0.015f, 0.01f, 0.004f, 1);
 	}
 	else

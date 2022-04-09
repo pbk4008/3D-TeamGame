@@ -30,3 +30,13 @@ half4 Outline(Texture2D mainTex, SamplerState sample, half2 UV,half4 OutColor)
 	
 	return OutColor;
 }
+
+half4 Distortion(Texture2D DistortionTex,Texture2D DiffuseTex,SamplerState Sample, half2 UV, half delta)
+{
+	half2 noiseuv = UV + delta;
+	half4 noise = DistortionTex.Sample(Sample, noiseuv);
+	half2 duv = UV.xy + noise.xy * 0.05f;
+	
+	return DiffuseTex.Sample(Sample, duv);
+	
+}

@@ -484,7 +484,6 @@ CGameObject* CMonster_Crawler::Clone(const _uint _iSceneID, void* _pArg)
 
 void CMonster_Crawler::Free()
 {
-
 	Safe_Release(m_pCollider);
 	Safe_Release(m_pCharacterController);
 	Safe_Release(m_pPanel);

@@ -1,32 +1,12 @@
 #include "Shader_RenderState.hpp"
-
-cbuffer Matrices
-{
-	matrix		g_WorldMatrix  = (matrix)0;
-	matrix		g_ViewMatrix;
-	matrix		g_ProjMatrix;
-};
-
-sampler DefaultSampler = sampler_state
-{		
-	filter = min_mag_mip_linear;
-	AddressU = wrap;
-	AddressV = wrap;
-};
-
-sampler ClampSampler = sampler_state
-{
-	filter = min_mag_mip_linear;
-	AddressU = clamp;
-	AddressV = clamp;
-};
+#include "Shader_Share.hlsli"
+#include "Shader_ShareFuntion.hlsli"
 
 cbuffer Noisebuffer
 {
 	float	g_frametime;
 	float3	g_scrollspeeds;
 	float3	g_scales;
-	float	g_Weight;
 };
 
 cbuffer Distortionbuffer
@@ -60,16 +40,6 @@ struct VS_OUT_TRAIL
 
  VS_OUT_TRAIL VS_MAIN_TRAIL(VS_IN In)
 {
-	//VS_OUT_TRAIL Out = (VS_OUT_TRAIL) 0;
-
-	//matrix matWV, matWVP;
-
-	//matWV = mul(g_WorldMatrix, g_ViewMatrix);
-	//matWVP = mul(matWV, g_ProjMatrix);
-		
-	//Out.vPosition = mul(vector(In.vPosition, 1.f), matWVP);
-	//Out.vUvDepth.xy = In.vTexUV.xy;
-	//Out.vUvDepth.zw = Out.vPosition.zw;
 	VS_OUT_TRAIL Out = (VS_OUT_TRAIL) 0;
 
 	matrix matWV, matWVP;

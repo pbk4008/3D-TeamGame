@@ -131,7 +131,7 @@ HRESULT CEffect_HitParticle::Render()
 
 	m_pBuffer->SetUp_ValueOnShader("g_vCamPosition", (void*)&CamPos, sizeof(_vector));
 
-	m_pBuffer->Render(m_Desc.iRenderPassNum); //4번이어야함,,게속,,
+	m_pBuffer->Render(/*m_Desc.iRenderPassNum*/4); //4번이어야함,,게속,,
 
 	return S_OK;
 }

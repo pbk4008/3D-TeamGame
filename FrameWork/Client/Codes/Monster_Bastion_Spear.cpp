@@ -673,13 +673,11 @@ CGameObject* CMonster_Bastion_Spear::Clone(const _uint _iSceneID, void* _pArg)
 
 void CMonster_Bastion_Spear::Free()
 {
-	__super::Free();
-
-	Safe_Release(m_pModel);
 	Safe_Release(m_pAnimator);
 	Safe_Release(m_pWeapon);
 	Safe_Release(m_pStateController);
 	Safe_Release(m_pCharacterController);
 	Safe_Release(m_pPanel);
 
+	__super::Free();
 }

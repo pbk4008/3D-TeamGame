@@ -34,7 +34,6 @@ CMonster_Bastion_Healer::CMonster_Bastion_Healer(const CMonster_Bastion_Healer& 
 	, m_pAnimator(_rhs.m_pAnimator)
 {
 	Safe_AddRef(m_pCharacterController);
-	Safe_AddRef(m_pModel);
 	Safe_AddRef(m_pStateController);
 	Safe_AddRef(m_pAnimator);
 }
@@ -198,18 +197,19 @@ _int CMonster_Bastion_Healer::LateTick(_double _dDeltaTime)
 
 HRESULT CMonster_Bastion_Healer::Render()
 {
-	SCB desc;
-	ZeroMemory(&desc, sizeof(SCB));
-
-	CActor::BindConstantBuffer(L"Camera_Silvermane", &desc);
 	for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
 	{
+		SCB desc;
+		ZeroMemory(&desc, sizeof(SCB));
+
 		switch (i)
 		{
 		case 2:
+			CActor::BindConstantBuffer(L"Camera_Silvermane", &desc);
 			if (FAILED(m_pModel->Render(i, 1))) MSGBOX("Failed To Rendering Shooter");
 			break;
 		default:
+			CActor::BindConstantBuffer(L"Camera_Silvermane", &desc);
 			if (FAILED(m_pModel->Render(i, 0))) MSGBOX("Failed To Rendering Shooter");
 			break;
 		}

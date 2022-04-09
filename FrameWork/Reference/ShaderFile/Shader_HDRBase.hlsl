@@ -87,7 +87,7 @@ PS_OUT PS_MAIN_HDDRBASE(PS_IN In)
 	{
 		//float3 light = g_ShadeTexture.Sample(DefaultSampler, In.vTexUV).xyz;
 		half4 light = g_ShadeTexture.Sample(DefaultSampler, In.vTexUV);
-		final = diffuse * light + specualr;
+		final = diffuse * light /*+ specualr*/;
 	}
 	else
 	{
@@ -95,9 +95,9 @@ PS_OUT PS_MAIN_HDDRBASE(PS_IN In)
 	}
 
 	Out.vHDRDiffuse = final;
+	Out.vHDRSpecular = specualr;
 	
 	//Out.vHDRDiffuse = float4(final, alpha);
-	//Out.vHDRSpecular = specualr;
 	
 	return Out;
 }

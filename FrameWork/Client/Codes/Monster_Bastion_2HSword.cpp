@@ -24,7 +24,6 @@
 CMonster_Bastion_2HSword::CMonster_Bastion_2HSword(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
 	: CActor(_pDevice, _pDeviceContext)
 	, m_pCharacterController(nullptr)
-	, m_pModel(nullptr)
 	, m_pStateController(nullptr)
 	, m_pAnimator(nullptr)
 {
@@ -33,7 +32,6 @@ CMonster_Bastion_2HSword::CMonster_Bastion_2HSword(ID3D11Device* _pDevice, ID3D1
 CMonster_Bastion_2HSword::CMonster_Bastion_2HSword(const CMonster_Bastion_2HSword& _rhs)
 	: CActor(_rhs)
 	, m_pCharacterController(_rhs.m_pCharacterController)
-	, m_pModel(_rhs.m_pModel)
 	, m_pStateController(_rhs.m_pStateController)
 	, m_pAnimator(_rhs.m_pAnimator)
 {
@@ -712,7 +710,6 @@ void CMonster_Bastion_2HSword::Free()
 {
 	__super::Free();
 
-	Safe_Release(m_pModel);
 	Safe_Release(m_pAnimator);
 	Safe_Release(m_pWeapon);
 	Safe_Release(m_pStateController);

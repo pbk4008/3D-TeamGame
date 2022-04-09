@@ -143,7 +143,7 @@ PS_OUT PS_MAIN(PS_IN In)
 	Out.mra.g = Roughness;
 	Out.mra.b = Ao;
 	Out.mra.a = 1.f;
-	Out.emission = half4(0, 0, 0, 0);
+	Out.emission = half4(0, 0, 0, 1);
 
 	return Out;
 }

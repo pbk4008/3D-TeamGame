@@ -132,7 +132,7 @@ PS_OUT PS_MAIN(PS_IN In)
 	
 	half4 diffuse = g_DiffuseTexture.Sample(DefaultSampler, In.vUvDepth.xy);
 	half3 normal = g_BiNormalTexture.Sample(DefaultSampler, In.vUvDepth.xy).xyz;
-	half3 mask = g_MaskTexture.Sample(DefaultSampler, In.vUvDepth).xyz;
+	half3 mask = g_MaskTexture.Sample(DefaultSampler, In.vUvDepth.xy).xyz;
 	half3x3 tbn = { In.vTangent.xyz, In.vBiNormal.xyz, In.vNormal.xyz };
 	
 	normal = Normalmapping(normal, tbn);
@@ -152,7 +152,7 @@ PS_OUT PS_MAIN(PS_IN In)
 	Out.mra.b = Ao;
 	Out.mra.a = 1.f;
 	
-	Out.emission = half4(0, 0, 0, 0);
+	Out.emission = half4(0, 0, 0, 1);
 
 	return Out;
 }

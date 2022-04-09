@@ -47,6 +47,9 @@ void CRenderer::SetRenderButton(RENDERBUTTON ebutton, _bool check)
 		m_bradial = check;
 		m_RadialCnt = 6;
 		break;
+	case CRenderer::DISTORTION:
+		m_bdistortion = check;
+		break;
 	}
 }
 
@@ -164,6 +167,8 @@ HRESULT CRenderer::Draw_RenderGroup()
 
 		if (FAILED(Render_Alpha()))	MSGBOX("Failed To Rendering AlphaPass");
 
+		if (FAILED(DistortionPass())) MSGBOX("Failed To Rendering Distortion");
+
 		if (FAILED(m_pHDR->Render_HDRBase(m_pTargetMgr, m_bShadow))) MSGBOX("Failed To Rendering HDRBasePass");
 
 		if (FAILED(m_pLuminance->DownSampling(m_pTargetMgr)))MSGBOX("Failed To Rendering DownSamplingPass");
@@ -229,7 +234,7 @@ HRESULT CRenderer::Draw_RenderGroup()
 		if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("Target_Alpha")))) return E_FAIL;
 		if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("Target_AlphaBlend")))) return E_FAIL;
 		if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("Target_BlurShadow")))) return E_FAIL;
-		if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("Target_GodRay")))) return E_FAIL;
+		if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("Target_Distortion")))) return E_FAIL;
 	}
 #endif // _DEBUG
 
@@ -277,7 +282,6 @@ HRESULT CRenderer::Render_SkyBox()
 	}
 	m_RenderGroup[RENDER_SKYBOX].clear();
 
-	/*if (FAILED(m_pTargetMgr->End_MRT(m_pDeviceContext)))return E_FAIL;*/
 	if (FAILED(m_pTargetMgr->End_MRTNotClear(m_pDeviceContext))) return E_FAIL;
 
 	return S_OK;
@@ -296,7 +300,6 @@ HRESULT CRenderer::Render_NonAlpha()
 	}
 	m_RenderGroup[RENDER_NONALPHA].clear();
 
-	//if (FAILED(m_pTargetMgr->End_MRT(m_pDeviceContext))) return E_FAIL;
 	if (FAILED(m_pTargetMgr->End_MRTNotClear(m_pDeviceContext))) return E_FAIL;
 	
 	return S_OK;
@@ -330,15 +333,14 @@ HRESULT CRenderer::Render_Alpha()
 	}
 	m_RenderGroup[RENDER_ALPHA].clear();
 
-	//if (FAILED(m_pTargetMgr->End_MRTNotClear(m_pDeviceContext))) return E_FAIL;
-	if (FAILED(m_pTargetMgr->End_MRT(m_pDeviceContext))) return E_FAIL;
+	if (FAILED(m_pTargetMgr->End_MRTNotClear(m_pDeviceContext))) return E_FAIL;
 
 	return S_OK;
 }
 
 HRESULT CRenderer::DistortionPass()
 {
-	if (FAILED(m_pTargetMgr->Begin_MRT(m_pDeviceContext, TEXT("MRT_Effect"))))
+	if (FAILED(m_pTargetMgr->Begin_MRT(m_pDeviceContext, TEXT("Target_Distortion"))))
 		return E_FAIL;
 
 	for (auto& pGameObject : m_RenderGroup[RENDER_EFFECT])
@@ -350,8 +352,7 @@ HRESULT CRenderer::DistortionPass()
 	}
 	m_RenderGroup[RENDER_EFFECT].clear();
 
-	//if (FAILED(m_pTargetMgr->End_MRT(m_pDeviceContext))) return E_FAIL;
-	if (FAILED(m_pTargetMgr->End_MRTNotClear(m_pDeviceContext))) return E_FAIL;
+	if (FAILED(m_pTargetMgr->End_MRT(m_pDeviceContext))) return E_FAIL;
 
 	return S_OK;
 }
@@ -452,11 +453,18 @@ HRESULT CRenderer::Render_Final(_bool outline, _bool Radial)
 	if (!m_pTargetMgr)	return E_FAIL;
 
 	if (FAILED(m_pVIBuffer->SetUp_TextureOnShader("g_DiffuseTexture", m_pTargetMgr->Get_SRV(TEXT("Target_Blend"))))) MSGBOX("Render Final DiffuseTeuxtre Not Apply");
+	if (m_bdistortion == true)
+	{
+		_float delta = (_float)g_pGameInstance->Get_TimeDelta(L"Timer_60");
+		if (FAILED(m_pVIBuffer->SetUp_TextureOnShader("g_DistortionTex", m_pTargetMgr->Get_SRV(TEXT("Target_Distortion"))))) MSGBOX("Render Final g_DistortionTex Not Apply");
+		if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_delta", &delta, sizeof(_float)))) MSGBOX("Render Final Value delta Not Apply");
+	}
+
 	if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_outline", &m_boutline, sizeof(_bool)))) MSGBOX("Render Final Value outline Not Apply");
 	if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_radial", &m_bradial, sizeof(_bool)))) MSGBOX("Render Final Value raidal Not Apply");
+	if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_distort", &m_bdistortion, sizeof(_bool)))) MSGBOX("Render Final Value distort Not Apply");
 	if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_RadialCnt", &m_RadialCnt, sizeof(_int)))) MSGBOX("Render Final Value RaidalCnt Not Apply");
 	
-
 	if (FAILED(m_pVIBuffer->Render(3))) MSGBOX("Final Rendering Failed");
 
 	if (m_bParticle == true)

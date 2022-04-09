@@ -51,8 +51,9 @@ cbuffer ShaderCheck
 	bool g_shadow;
 	bool g_outline;
 	bool g_radial;
-	
+	bool g_distort;
 	int	 g_RadialCnt;
+	float g_delta;
 };
 
 cbuffer LightDesc
@@ -108,6 +109,7 @@ Texture2D g_ShadowMapTex;
 Texture2D g_ShadowTexture;
 
 Texture2D g_AlphaTexture;
+Texture2D g_DistortionTex;
 
 struct VS_IN
 {
@@ -207,9 +209,6 @@ PS_OUT_DIRLIGHTACC PS_MAIN_LIGHTACC_DIRECTIONAL(PS_IN In)
 	half4 vNormalDesc = g_NormalTexture.Sample(DefaultSampler, uvRT);
 	half4 vDepthDesc = g_DepthTexture.Sample(DefaultSampler, uvRT);
 	half3 MRA = g_MRATexture.Sample(DefaultSampler, uvRT).xyz;
-	//half Metallic = g_Metallic.Sample(DefaultSampler, uvRT).r;
-	//half Roughness = g_Roughness.Sample(DefaultSampler, uvRT).r;
-	//half AO = g_AO.Sample(DefaultSampler, uvRT).r;
 	half fViewZ = vDepthDesc.y * 300.f;
 	
 	half3 normaltest = vNormalDesc.xyz;
@@ -261,7 +260,6 @@ PS_OUT_DIRLIGHTACC PS_MAIN_LIGHTACC_DIRECTIONAL(PS_IN In)
 			shadow = saturate(shadow + 0.5f);
 			
 			Out.vSpecular = saturate((light * specular + cubeRef1) * MRA.r * smoothness * shadow);
-			//Out.vShade = saturate(lightpower * shadow);
 			Out.vShade = lightpower * shadow;
 		}
 		else
@@ -396,14 +394,25 @@ PS_OUT_BLEND PS_MAIN_BLEND(PS_IN In)
 	if (g_radial == true)
 	{		
 		Out.vColor.rgb = Radialblur(g_DiffuseTexture,DefaultSampler,In.vTexUV,g_RadialCnt);
-		Out.vColor = Outline(g_DiffuseTexture, DefaultSampler, In.vTexUV, Out.vColor);
 	}
 	
 	if (g_outline == true)
 	{ 
 		// ¿Ü°û¼± È¿°ú
-		
+		Out.vColor = Outline(g_DiffuseTexture, DefaultSampler, In.vTexUV, Out.vColor);
 	}
+	
+	if(g_distort == true)
+	{
+		//half2 noiseuv = In.vTexUV + 0.001f;
+		//half4 noise = g_DistortionTex.Sample(DefaultSampler, noiseuv);
+		//half2 uv = In.vTexUV.xy + noise.xy * 0.05f;
+	
+		//Out.vColor = g_DiffuseTexture.Sample(DefaultSampler, uv);	
+		Out.vColor = Distortion(g_DistortionTex, g_DiffuseTexture, DefaultSampler, In.vTexUV, g_delta);
+
+	}
+	
 	
 	if (Out.vColor.a == 0)
 		discard;

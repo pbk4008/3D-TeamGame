@@ -17,7 +17,7 @@ class ENGINE_DLL CRenderer final : public CComponent
 {
 public: enum RENDERBUTTON
 {
-	SHADOW,PBRHDR,PIXEL,HDR,DBG,PARTICLE,OUTLINE,RADIAL, SSAO, RENDERBUTTON_END
+	SHADOW,PBRHDR,PIXEL,HDR,DBG,PARTICLE,OUTLINE,RADIAL,DISTORTION, RENDERBUTTON_END
 };
 
 public: enum RENDER {	RENDER_PRIORITY, RENDER_SKYBOX
@@ -59,6 +59,7 @@ private: _bool								m_bDBG = false;
 private: _bool								m_bParticle = false;
 private: _bool								m_boutline = false;
 private: _bool								m_bradial = false;
+private: _bool								m_bdistortion = false;
 private: RENDERBUTTON						m_eRenderButton;
 private: _tchar								m_CameraTag[128];
 private: _int								m_RadialCnt = 6;

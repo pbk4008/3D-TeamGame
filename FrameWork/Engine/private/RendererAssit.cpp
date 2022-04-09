@@ -50,13 +50,6 @@ HRESULT CRendererAssit::Setup_RenderTarget()
 		return E_FAIL;
 	if (FAILED(m_pTargetMgr->Add_RenderTarget(m_pDevice, m_pDeviceContext, TEXT("Target_Emission"), widht, height, DXGI_FORMAT_R16G16B16A16_FLOAT, _float4(0.f, 0.f, 0.f, 0.f), CRenderTarget::RTT::DEFFURED)))
 		return E_FAIL;
-	//if (FAILED(m_pTargetMgr->Add_RenderTarget(m_pDevice, m_pDeviceContext, TEXT("Target_Metallic"), widht, height, DXGI_FORMAT_R16G16B16A16_FLOAT, _float4(0.f, 0.f, 0.f, 0.f), CRenderTarget::RTT::DEFFURED)))
-	//	return E_FAIL;
-	//if (FAILED(m_pTargetMgr->Add_RenderTarget(m_pDevice, m_pDeviceContext, TEXT("Target_Roughness"), widht, height, DXGI_FORMAT_R16G16B16A16_FLOAT, _float4(0.f, 0.f, 0.f, 0.f), CRenderTarget::RTT::DEFFURED)))
-	//	return E_FAIL;
-	//if (FAILED(m_pTargetMgr->Add_RenderTarget(m_pDevice, m_pDeviceContext, TEXT("Target_AO"), widht, height, DXGI_FORMAT_R16G16B16A16_FLOAT, _float4(0.f, 0.f, 0.f, 0.f), CRenderTarget::RTT::DEFFURED)))
-	//	return E_FAIL;
-
 
 	// Shadow Map RenderTarget
 	if (FAILED(m_pTargetMgr->Add_RenderTarget(m_pDevice, m_pDeviceContext, TEXT("Target_Shadow"), SHADOW_MAP, SHADOW_MAP, DXGI_FORMAT_R32G32B32A32_FLOAT, _float4(0.f, 0.f, 0.f, 0.f), CRenderTarget::RTT::SHADOWMAP)))
@@ -196,7 +189,7 @@ HRESULT CRendererAssit::Setup_RenderTarget()
 	if (FAILED(m_pTargetMgr->Add_RenderTarget(m_pDevice, m_pDeviceContext, TEXT("Target_Alpha"), widht, height, DXGI_FORMAT_R16G16B16A16_FLOAT, _float4(0.f, 0.f, 0.f, 0.f), CRenderTarget::RTT::Luminance)))
 		return E_FAIL;
 
-	if (FAILED(m_pTargetMgr->Add_RenderTarget(m_pDevice, m_pDeviceContext, TEXT("Target_GodRay"), widht, height, DXGI_FORMAT_R16G16B16A16_FLOAT, _float4(0.f, 0.f, 0.f, 0.f), CRenderTarget::RTT::Luminance)))
+	if (FAILED(m_pTargetMgr->Add_RenderTarget(m_pDevice, m_pDeviceContext, TEXT("Target_Distortion"), widht, height, DXGI_FORMAT_R16G16B16A16_FLOAT, _float4(0.f, 0.f, 0.f, 0.f), CRenderTarget::RTT::Luminance)))
 		return E_FAIL;
 
 	//----------------------------------//
@@ -309,7 +302,6 @@ HRESULT CRendererAssit::Setup_RenderTarget()
 	
 	if (FAILED(m_pTargetMgr->Add_MRT(TEXT("Target_Alpha"), TEXT("Target_Alpha"))))			return E_FAIL;
 
-	if (FAILED(m_pTargetMgr->Add_MRT(TEXT("Target_GodRay"), TEXT("Target_GodRay"))))			return E_FAIL;
 
 	if (FAILED(m_pTargetMgr->Add_MRT(TEXT("Target_ParticleV2"), TEXT("Target_ParticleV2"))))	return E_FAIL;
 	if (FAILED(m_pTargetMgr->Add_MRT(TEXT("Target_ParticleH2"), TEXT("Target_ParticleH2"))))	return E_FAIL;
@@ -330,6 +322,7 @@ HRESULT CRendererAssit::Setup_RenderTarget()
 	if (FAILED(m_pTargetMgr->Add_MRT(TEXT("Target_ShadowV4"), TEXT("Target_ShadowV4"))))	return E_FAIL;
 	if (FAILED(m_pTargetMgr->Add_MRT(TEXT("Target_ShadowH4"), TEXT("Target_ShadowH4"))))	return E_FAIL;
 	
+	if (FAILED(m_pTargetMgr->Add_MRT(TEXT("Target_Distortion"), TEXT("Target_Distortion"))))			return E_FAIL;
 
 #ifdef _DEBUG
 	if (FAILED(m_pTargetMgr->Ready_Debug_Buffer(TEXT("Target_SkyBox"), (fwidth - fwidth), (fheight - fheight) + 200.f, 100.f, 100.f)))	return E_FAIL;
@@ -401,7 +394,7 @@ HRESULT CRendererAssit::Setup_RenderTarget()
 	if (FAILED(m_pTargetMgr->Ready_Debug_Buffer(TEXT("Target_AlphaWeight"), fwidth - fwidth + 100.f, fheight - 220.f, 100.f, 100.f)))		return E_FAIL;
 	
 	if (FAILED(m_pTargetMgr->Ready_Debug_Buffer(TEXT("Target_BlurShadow"), 200.f, 100.f, 100.f, 100.f)))		return E_FAIL;
-	if (FAILED(m_pTargetMgr->Ready_Debug_Buffer(TEXT("Target_GodRay"), 400.f, 100.f, 100.f, 100.f)))		return E_FAIL;
+	if (FAILED(m_pTargetMgr->Ready_Debug_Buffer(TEXT("Target_Distortion"), 400.f, 100.f, 100.f, 100.f)))		return E_FAIL;
 
 
 #endif // _DEBUG

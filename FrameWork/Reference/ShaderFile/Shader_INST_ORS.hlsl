@@ -146,7 +146,7 @@ PS_OUT PS_MAIN(PS_IN In)
 	Out.mra.g = Roughness;
 	Out.mra.b = Ao;
 	Out.mra.a = 1.f;
-	Out.emission = ors.b * EmissionPower;
+	Out.emission = half4(diffuse.xyz * ors.b * EmissionPower, 1.f);
 
 	return Out;
 }

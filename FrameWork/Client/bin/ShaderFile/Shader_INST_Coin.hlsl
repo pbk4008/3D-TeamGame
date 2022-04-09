@@ -171,7 +171,7 @@ PS_OUT PS_MAIN(PS_IN In)
 	Out.mra.b = Ao;
 	Out.mra.a = 1.f;
 	
-	Out.emission = half4(0, 0, 0, 0);
+	Out.emission = half4(0, 0, 0, 1);
 	
 	return Out;
 }
@@ -195,85 +195,11 @@ PS_OUT_SHADOW PS_MAIN_SHADOW(PS_IN_SHADOW In)
 {
 	PS_OUT_SHADOW Out = (PS_OUT_SHADOW) 0.f;
 	
-	//float fDepth = In.vClipPos.z / In.vClipPos.w;
-	
-	//float4 color = g_DiffuseTexture.Sample(DefaultSampler, In.vTexUV);
-	
-	//float Alpha = 1.f;
-	
-	//if (color.a < 0.1f)
-	//{
-	//	Alpha = color.a;
-	//}
-	
-	//Out.vShadowDepthMap = vector(fDepth.xxx, Alpha);
 	const float OneDividzFar = 1 / 300.f;
 	float4 color = 1;
 	color.xyz = length(In.worldpos - g_LightPos) * OneDividzFar;
 	Out.vShadowDepthMap = color;
 	
-	return Out;
-}
-//*---------------------------------------------------------------------------------------------*
-
-// SHADE SHADOW
-//*---------------------------------------------------------------------------------------------*
-struct PS_IN_SHADESHADOW
-{
-	float4 vPosition : SV_Position;
-	float2 vTexUV : TEXCOORD0;
-	float4 vLightPosition : TEXCOORD1;
-};
-
-struct PS_OUT_SHADESHADOW
-{
-	vector vShadeShadow : SV_TARGET0;
-};
-
-PS_OUT_SHADESHADOW PS_MAIN_SHADESHADOW(PS_IN_SHADESHADOW In)
-{
-	PS_OUT_SHADESHADOW Out = (PS_OUT_SHADESHADOW) 0.f;
-	
-	float fOut = 1.f;
-	
-	vector Diffuse = g_DiffuseTexture.Sample(DefaultSampler, In.vTexUV);
-	
-	
-	float Bias = 0.001f;
-	float ShadowIntensity = 0.3f;
-
-	float CurrentDepth = In.vLightPosition.z / In.vLightPosition.w;
-	
-	float2 ShadowUV = In.vLightPosition.xy / In.vLightPosition.w;
-	
-	if (ShadowUV.x < -fOut || ShadowUV.x > fOut || ShadowUV.y < -fOut || ShadowUV.y > fOut || CurrentDepth < -fOut || CurrentDepth > fOut)
-		Out.vShadeShadow = float4(1.f, 1.f, 1.f, 1.f);
-	else
-	{
-		ShadowUV.y = -(ShadowUV.y);
-		ShadowUV = ShadowUV * 0.5f + 0.5f;
-
-		float shadowDepth;
-		shadowDepth = g_ShadowTexture.Sample(ClampSampler, ShadowUV).r;
-		
-		Out.vShadeShadow = float4(1.f, 1.f, 1.f, 1.f);
-		if (CurrentDepth > shadowDepth + Bias)
-		{
-			Out.vShadeShadow.rgb *= ShadowIntensity;
-
-			if (Diffuse.a < 0.9f)
-			{
-				Out.vShadeShadow.a = Diffuse.a;
-			}
-		}
-		else
-		{
-			if (Diffuse.a < 0.9f)
-			{
-				Out.vShadeShadow.a = Diffuse.a;
-			}
-		}
-	}
 	return Out;
 }
 //*---------------------------------------------------------------------------------------------*
