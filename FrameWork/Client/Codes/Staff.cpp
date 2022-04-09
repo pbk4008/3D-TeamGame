@@ -79,23 +79,24 @@ _int CStaff::LateTick(_double _dDeltaTime)
 
 HRESULT CStaff::Render()
 {
-	if (FAILED(__super::Render()))
-		return E_FAIL;
+	SCB desc;
+	ZeroMemory(&desc, sizeof(desc));
+	desc.color = _float4(0.588f, 0.294f, 0.f, 1.f);
+	desc.empower = 0.3f;
 
-	_matrix smatWorld, smatView, smatProj;
-	smatWorld = XMMatrixTranspose(m_pTransform->Get_WorldMatrix());
-	smatView = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_VIEW));
-	smatProj = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_PROJECTION));
-
-	m_pModel->SetUp_ValueOnShader("g_WorldMatrix", &smatWorld, sizeof(_matrix));
-	m_pModel->SetUp_ValueOnShader("g_ViewMatrix", &smatView, sizeof(_matrix));
-	m_pModel->SetUp_ValueOnShader("g_ProjMatrix", &smatProj, sizeof(_matrix));
-
+	CWeapon::BindConstantBuffer(L"Camera_Silvermane",&desc);
 	for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
-	{
-		//m_pModel->SetUp_TextureOnShader("g_DiffuseTexture", i, aiTextureType_DIFFUSE);
 		m_pModel->Render(i, 0);
-	}
+
+	return S_OK;
+}
+
+HRESULT CStaff::Render_Shadow()
+{
+	CWeapon::BindConstantBuffer(L"Camera_Silvermane");
+	CWeapon::BindLightBuffer();
+	for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
+		m_pModel->Render(i, 1);
 
 	return S_OK;
 }

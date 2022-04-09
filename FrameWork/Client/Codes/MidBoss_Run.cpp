@@ -32,12 +32,12 @@ _int CMidBoss_Run::Tick(const _double& TimeDelta)
 
 	m_pTransform->Face_Target(g_pObserver->Get_PlayerPos());
 
-	//_vector vMonsterPos = m_pTransform->Get_State(CTransform::STATE::STATE_POSITION);
-	//_vector vDist = vMonsterPos - g_pObserver->Get_PlayerPos();
-	//_float fDistToPlayer = XMVectorGetX(XMVector3Length(vDist));
+	_vector vMonsterPos = m_pTransform->Get_State(CTransform::STATE::STATE_POSITION);
+	_vector vDist = vMonsterPos - g_pObserver->Get_PlayerPos();
+	_float fDistToPlayer = XMVectorGetX(XMVector3Length(vDist));
 
 	//TODO : Attackµµ °Å¸® ¶È°°ÀÌ ¸ÂÃçÁà¾ßµÊ 
-	if (m_pAnimator->Get_AnimController()->Is_Finished())
+	if (6.f > fDistToPlayer )
 	{
 		m_pStateController->Change_State(L"Attack");
 	}

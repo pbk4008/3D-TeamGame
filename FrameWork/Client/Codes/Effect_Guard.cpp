@@ -88,7 +88,7 @@ _int CEffect_Guard::Tick(_double TimeDelta)
 
 _int CEffect_Guard::LateTick(_double TimeDelta)
 {
-	_bool bCulling = g_pGameInstance->isIn_WorldFrustum(m_pBox->Get_Points(), 20.f);
+	_bool bCulling = g_pGameInstance->isIn_WorldFrustum(m_pBox->Get_Points(), 1.f);
 	if (true == bCulling)
 	{
 		if (nullptr != m_pRenderer)

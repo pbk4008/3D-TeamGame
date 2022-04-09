@@ -89,8 +89,6 @@ cbuffer MatrixInverse
 };
 
 Texture2D g_SkyBoxTexture;
-//TextureCube g_SkyBoxTexture;
-//TextureCube g_SkyBoxTexutre;
 
 // Lighting
 
@@ -98,9 +96,7 @@ Texture2D g_DiffuseTexture;
 Texture2D g_NormalTexture;
 Texture2D g_DepthTexture;
 
-Texture2D g_Metallic;
-Texture2D g_Roughness;
-Texture2D g_AO;
+Texture2D g_MRATexture;
 
 texture2D g_SSS;
 
@@ -112,8 +108,6 @@ Texture2D g_ShadowMapTex;
 Texture2D g_ShadowTexture;
 
 Texture2D g_AlphaTexture;
-
-Texture2D<half> depthTex;
 
 struct VS_IN
 {
@@ -212,9 +206,10 @@ PS_OUT_DIRLIGHTACC PS_MAIN_LIGHTACC_DIRECTIONAL(PS_IN In)
 	half4 vDiffuseDesc = g_DiffuseTexture.Sample(DefaultSampler, uvRT);
 	half4 vNormalDesc = g_NormalTexture.Sample(DefaultSampler, uvRT);
 	half4 vDepthDesc = g_DepthTexture.Sample(DefaultSampler, uvRT);
-	half Metallic = g_Metallic.Sample(DefaultSampler, uvRT).r;
-	half Roughness = g_Roughness.Sample(DefaultSampler, uvRT).r;
-	half AO = g_AO.Sample(DefaultSampler, uvRT).r;
+	half3 MRA = g_MRATexture.Sample(DefaultSampler, uvRT).xyz;
+	//half Metallic = g_Metallic.Sample(DefaultSampler, uvRT).r;
+	//half Roughness = g_Roughness.Sample(DefaultSampler, uvRT).r;
+	//half AO = g_AO.Sample(DefaultSampler, uvRT).r;
 	half fViewZ = vDepthDesc.y * 300.f;
 	
 	half3 normaltest = vNormalDesc.xyz;
@@ -240,7 +235,7 @@ PS_OUT_DIRLIGHTACC PS_MAIN_LIGHTACC_DIRECTIONAL(PS_IN In)
 		half3 L = g_vLightDir.xyz * -1;
 		half F0 = 0.93;
 		
-		half specular = LightingGGX_Ref(N, V, L, F0, Roughness);
+		half specular = LightingGGX_Ref(N, V, L, F0, MRA.g);
 	
 		////-------------------------------------------------------------------------//
 		half3 color = half3(0.97f, 0.95f, 0.8f);
@@ -255,22 +250,23 @@ PS_OUT_DIRLIGHTACC PS_MAIN_LIGHTACC_DIRECTIONAL(PS_IN In)
 		
 		half4 cubeRef1 = g_SkyBoxTexture.Sample(SkyBoxSampler, worldReflectDirection.xy);
 		
-		half smoothness = 1 - Roughness;
-		half InvMetalic = (1 - Metallic);
+		half smoothness = 1 - MRA.g;
+		half InvMetalic = (1 - MRA.r);
 		InvMetalic = max(InvMetalic, 0.5f);
-		half4 lightpower = InvMetalic * light * AO;
+		half4 lightpower = InvMetalic * light * MRA.b;
 		
 		if (g_shadow == true)
 		{
 			half4 shadow = g_ShadowTexture.Sample(DefaultSampler, In.vTexUV);
 			shadow = saturate(shadow + 0.5f);
 			
-			Out.vSpecular = saturate((light * specular + cubeRef1) * Metallic * smoothness * shadow);
-			Out.vShade = saturate(lightpower * shadow);
+			Out.vSpecular = saturate((light * specular + cubeRef1) * MRA.r * smoothness * shadow);
+			//Out.vShade = saturate(lightpower * shadow);
+			Out.vShade = lightpower * shadow;
 		}
 		else
 		{
-			Out.vSpecular = saturate((light * specular + cubeRef1) * Metallic * smoothness);
+			Out.vSpecular = saturate((light * specular + cubeRef1) * MRA.r * smoothness);
 			Out.vShade = saturate(lightpower);
 		}
 	}
@@ -399,14 +395,14 @@ PS_OUT_BLEND PS_MAIN_BLEND(PS_IN In)
 	
 	if (g_radial == true)
 	{		
-		
 		Out.vColor.rgb = Radialblur(g_DiffuseTexture,DefaultSampler,In.vTexUV,g_RadialCnt);
+		Out.vColor = Outline(g_DiffuseTexture, DefaultSampler, In.vTexUV, Out.vColor);
 	}
 	
 	if (g_outline == true)
 	{ 
 		// ¿Ü°û¼± È¿°ú
-		Out.vColor = Outline(g_DiffuseTexture, DefaultSampler, In.vTexUV, Out.vColor);
+		
 	}
 	
 	if (Out.vColor.a == 0)

@@ -121,20 +121,22 @@ HRESULT CJumpNode::Render()
 	smatView = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_VIEW));
 	smatProj = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_PROJECTION));
 
-	if (FAILED(m_pModel->SetUp_ValueOnShader("g_WorldMatrix", &smatWorld, sizeof(_matrix))))
-		return E_FAIL;
-	if (FAILED(m_pModel->SetUp_ValueOnShader("g_ViewMatrix", &smatView, sizeof(_matrix))))
-		return E_FAIL;
-	if (FAILED(m_pModel->SetUp_ValueOnShader("g_ProjMatrix", &smatProj, sizeof(_matrix))))
-		return E_FAIL;
+	if (FAILED(m_pModel->SetUp_ValueOnShader("g_WorldMatrix", &smatWorld, sizeof(_matrix))))		return E_FAIL;
+	if (FAILED(m_pModel->SetUp_ValueOnShader("g_ViewMatrix", &smatView, sizeof(_matrix))))		return E_FAIL;
+	if (FAILED(m_pModel->SetUp_ValueOnShader("g_ProjMatrix", &smatProj, sizeof(_matrix))))		return E_FAIL;
 
 	for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
 	{
-		//if (FAILED(m_pModel->SetUp_TextureOnShader("g_DiffuseTexture", i, aiTextureType_DIFFUSE)))
-		//	return E_FAIL;
 
-		if (FAILED(m_pModel->Render(i, i)))
-			return E_FAIL;
+		if (i == 1)
+		{
+			_float4 color = _float4(0.3725f, 0.2941f, 0.5450f, 1.f);
+			_float EmissionPower = 0.6f;
+			if (FAILED(m_pModel->SetUp_ValueOnShader("g_color", &color, sizeof(_float4))))		return E_FAIL;
+			if (FAILED(m_pModel->SetUp_ValueOnShader("g_empower", &EmissionPower, sizeof(_float))))		return E_FAIL;
+		}
+
+		m_pModel->Render(i, i);
 	}
 
 #ifdef _DEBUG

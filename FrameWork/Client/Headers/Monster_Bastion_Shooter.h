@@ -33,6 +33,7 @@ public:
 	virtual _int Tick(_double _dDeltaTime) override;
 	virtual _int LateTick(_double _dDeltaTime) override;
 	virtual HRESULT Render() override;
+	virtual HRESULT	Render_Shadow() override;
 public:
 	virtual void Set_Remove(_bool bCheck) override;
 	virtual void Hit(const ATTACKDESC& _tAttackDesc) override;
@@ -54,7 +55,6 @@ private:
 	_int Change_State();
 
 private:
-	CModel* m_pModelCom = nullptr;
 	CAnimator* m_pAnimator = nullptr;
 	CStateController* m_pStateController = nullptr;
 	CCharacterController* m_pCharacterController = nullptr;

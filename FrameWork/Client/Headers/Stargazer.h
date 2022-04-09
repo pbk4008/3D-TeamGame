@@ -19,6 +19,7 @@ public:
 	virtual _int Tick(_double _dDeltaTime) override;
 	virtual _int LateTick(_double _dDeltaTime) override;
 	virtual HRESULT Render() override;
+	virtual HRESULT	Render_Shadow() override;
 public:
 	//객체의 피봇 메트릭트 받아오기
 	virtual void Set_OwnerPivotMatrix(const _fmatrix& _smatPivot);

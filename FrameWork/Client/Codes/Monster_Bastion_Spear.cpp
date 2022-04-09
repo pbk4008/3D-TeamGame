@@ -210,30 +210,26 @@ _int CMonster_Bastion_Spear::LateTick(_double _dDeltaTime)
 
 HRESULT CMonster_Bastion_Spear::Render()
 {
-	if (FAILED(__super::Render()))
-		return E_FAIL;
+	SCB desc;
+	ZeroMemory(&desc, sizeof(SCB));
 
-	_matrix smatWorld, smatView, smatProj;
-	smatWorld = XMMatrixTranspose(m_pTransform->Get_WorldMatrix());
-	smatView = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_VIEW));
-	smatProj = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_PROJECTION));
-
-	if (FAILED(m_pModel->SetUp_ValueOnShader("g_WorldMatrix", &smatWorld, sizeof(_matrix))))
-		return E_FAIL;
-	if (FAILED(m_pModel->SetUp_ValueOnShader("g_ViewMatrix", &smatView, sizeof(_matrix))))
-		return E_FAIL;
-	if (FAILED(m_pModel->SetUp_ValueOnShader("g_ProjMatrix", &smatProj, sizeof(_matrix))))
-		return E_FAIL;
-
+	CActor::BindConstantBuffer(L"Camera_Silvermane", &desc);
 	for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
-	{
-		if (FAILED(m_pModel->Render(i, 0)))
-			return E_FAIL;
-	}
+		m_pModel->Render(i, 0);
 
 #ifdef _DEBUG
 	//Render_Debug();
 #endif
+	return S_OK;
+}
+
+HRESULT CMonster_Bastion_Spear::Render_Shadow()
+{
+	CActor::BindConstantBuffer(L"Camera_Silvermane");
+	CActor::BindLightBuffer();
+	for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
+		m_pModel->Render(i, 3);
+
 	return S_OK;
 }
 
@@ -591,6 +587,14 @@ void CMonster_Bastion_Spear::Hit(const ATTACKDESC& _tAttackDesc)
 
 	m_pPanel->Set_Show(true);
 
+	if (L"Guard" == m_pStateController->Get_CurStateTag()
+		|| m_iGuardCount > 0)
+	{
+		m_iGuardCount--;
+		return;
+	}
+
+
 	m_fCurrentHp -= _tAttackDesc.fDamage;
 	CCollision collision;
 	collision.pGameObject = _tAttackDesc.pHitObject;
@@ -623,8 +627,6 @@ void CMonster_Bastion_Spear::Hit(CCollision& collision)
 					}
 					m_pPanel->Set_Show(true);
 					m_bGuard = false;
-					Set_Current_HP(-1);
-					Set_GroggyGauge(2); //TODO::¼öÄ¡Á¤ÇØ¼­¹Ù²ãÁà¾ßµÊ
 					m_pStateController->Change_State(L"Hit");
 					Active_Effect((_uint)EFFECT::HIT);
 					Active_Effect((_uint)EFFECT::FLOATING);
@@ -634,14 +636,6 @@ void CMonster_Bastion_Spear::Hit(CCollision& collision)
 						m_pPanel->Set_GroggyBar(Get_GroggyGaugeRatio());
 					}
 				}
-				else
-				{
-					m_iGuardCount--;
-					cout << m_iGuardCount << endl;
-					if (m_iGuardCount < 0)
-						m_iGuardCount = 0;
-					//Active_Effect((_uint)EFFECT::GUARD);
-				}
 				m_pPanel->Set_HpBar(Get_HpRatio());
 			}
 		}
@@ -650,9 +644,9 @@ void CMonster_Bastion_Spear::Hit(CCollision& collision)
 
 void CMonster_Bastion_Spear::Attack(_bool bCheck)
 {
-	m_bIsAttack = true;
+	m_bIsAttack = bCheck;
 	if (m_pWeapon)
-		m_pWeapon->Set_IsAttack(true);
+		m_pWeapon->Set_IsAttack(bCheck);
 }
 
 CMonster_Bastion_Spear* CMonster_Bastion_Spear::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)

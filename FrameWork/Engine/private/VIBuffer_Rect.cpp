@@ -101,7 +101,7 @@ HRESULT CVIBuffer_Rect::NativeConstruct_Prototype(const _tchar* pShaderFilePath)
 		{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 }		
 	};
 
-	if (FAILED(Compile_ShaderFiles(pShaderFilePath, ElementDescs, 2)))
+	if (FAILED(CVIBuffer::Compile_ShaderFiles(pShaderFilePath, ElementDescs, 2)))
 		return E_FAIL;
 
 	return S_OK;

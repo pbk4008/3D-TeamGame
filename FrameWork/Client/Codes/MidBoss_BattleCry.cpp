@@ -39,6 +39,24 @@ _int CMidBoss_BattleCry::Tick(const _double& TimeDelta)
 		{
 			m_pStateController->Change_State(L"Turn");
 		}
+
+		CBoss_Bastion_Judicator* pBoss = (CBoss_Bastion_Judicator*)m_pStateController->Get_GameObject();
+		if (nullptr != pBoss)
+		{
+			_uint iCurKeyFrameIndex = m_pAnimator->Get_AnimController()->Get_CurKeyFrameIndex();
+
+			if (10 < iCurKeyFrameIndex && 25 > iCurKeyFrameIndex)
+			{
+				pBoss->Set_IsAttack(true);
+
+				_float fDamage = 8.f;
+				_uint iLevel = 4;
+				pBoss->Set_AttackDesc_Damaga(fDamage);
+				pBoss->Set_AttackDesc_Level(iLevel);
+			}
+			else
+				pBoss->Set_IsAttack(false);
+		}
 	}
 
 	return _int();

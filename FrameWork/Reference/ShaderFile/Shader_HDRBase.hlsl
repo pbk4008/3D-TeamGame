@@ -76,25 +76,28 @@ PS_OUT PS_MAIN_HDDRBASE(PS_IN In)
 {
 	PS_OUT Out = (PS_OUT) 0;
 	
-	//float4 diffuse = g_DiffuseTexture.Sample(DiffuseSampler, In.vTexUV);
-	float3 diffuse = g_DiffuseTexture.Sample(DiffuseSampler, In.vTexUV).xyz;
+	//float3 diffuse = g_DiffuseTexture.Sample(DiffuseSampler, In.vTexUV).xyz;
+	half4 diffuse = g_DiffuseTexture.Sample(DiffuseSampler, In.vTexUV);
+	
 	float3 normal = g_NormalTexture.Sample(DefaultSampler, In.vTexUV).xyz;
 	float4 specualr = g_SpecularTexture.Sample(DefaultSampler, In.vTexUV);
-	//float4 final;
-	float3 final;
+	half4 final;
+	//float3 final;
 	if (any(normal))
 	{
-		float3 light = g_ShadeTexture.Sample(DefaultSampler, In.vTexUV).xyz;
-		
-		final = diffuse * light;
+		//float3 light = g_ShadeTexture.Sample(DefaultSampler, In.vTexUV).xyz;
+		half4 light = g_ShadeTexture.Sample(DefaultSampler, In.vTexUV);
+		final = diffuse * light + specualr;
 	}
 	else
 	{
 		final = diffuse;
 	}
-	//final = diffuse;
-	Out.vHDRDiffuse = float4(final, 1.f);
-	Out.vHDRSpecular = specualr;
+
+	Out.vHDRDiffuse = final;
+	
+	//Out.vHDRDiffuse = float4(final, alpha);
+	//Out.vHDRSpecular = specualr;
 	
 	return Out;
 }

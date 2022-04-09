@@ -87,7 +87,7 @@ _int CEffect_DeathParticle::Tick(_double TimeDelta)
 
 _int CEffect_DeathParticle::LateTick(_double TimeDelta)
 {
-	_bool bCulling = g_pGameInstance->isIn_WorldFrustum(m_pBox->Get_Points(), 20.f);
+	_bool bCulling = g_pGameInstance->isIn_WorldFrustum(m_pBox->Get_Points(), 3.f);
 	if (true == bCulling)
 	{
 		if (nullptr != m_pRenderer)
@@ -101,7 +101,7 @@ _int CEffect_DeathParticle::LateTick(_double TimeDelta)
 
 HRESULT CEffect_DeathParticle::Render()
 {
-	m_pBox->Render(L"Camera_Silvermane");
+	//m_pBox->Render(L"Camera_Silvermane");
 
 	_matrix XMWorldMatrix = XMMatrixTranspose(m_pTransform->Get_WorldMatrix());
 	_matrix XMViewMatrix = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_VIEW));
@@ -123,8 +123,8 @@ HRESULT CEffect_DeathParticle::Render()
 	m_pBuffer->SetUp_ValueOnShader("g_fLifeTime", &m_Desc.fMaxLifeTime, sizeof(_float));
 	m_pBuffer->SetUp_ValueOnShader("g_fCurTime", &m_Desc.fCurTime, sizeof(_float));
 
-	_float3 color = { 0.5f, 1.0f, 0.1f };
-	m_pBuffer->SetUp_ValueOnShader("g_color", &color, sizeof(_float3));
+	_float4 color = { 0.5f, 1.0f, 0.1f ,1.f};
+	m_pBuffer->SetUp_ValueOnShader("g_color", &color, sizeof(_float4));
 
 	m_pBuffer->SetUp_ValueOnShader("g_vCamPosition", (void*)&CamPos, sizeof(_vector));
 

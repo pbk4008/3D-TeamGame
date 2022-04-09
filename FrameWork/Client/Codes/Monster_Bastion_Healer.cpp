@@ -22,7 +22,6 @@
 CMonster_Bastion_Healer::CMonster_Bastion_Healer(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
 	: CActor(_pDevice, _pDeviceContext)
 	, m_pCharacterController(nullptr)
-	, m_pModel(nullptr)
 	, m_pStateController(nullptr)
 	, m_pAnimator(nullptr)
 {
@@ -31,7 +30,6 @@ CMonster_Bastion_Healer::CMonster_Bastion_Healer(ID3D11Device* _pDevice, ID3D11D
 CMonster_Bastion_Healer::CMonster_Bastion_Healer(const CMonster_Bastion_Healer& _rhs)
 	: CActor(_rhs)
 	, m_pCharacterController(_rhs.m_pCharacterController)
-	, m_pModel(_rhs.m_pModel)
 	, m_pStateController(_rhs.m_pStateController)
 	, m_pAnimator(_rhs.m_pAnimator)
 {
@@ -100,7 +98,7 @@ HRESULT CMonster_Bastion_Healer::NativeConstruct(const _uint _iSceneID, void* _p
 
 	m_isFall = true;
 
-	setActive(false);
+	//setActive(false);
 	return S_OK;
 }
 
@@ -200,30 +198,37 @@ _int CMonster_Bastion_Healer::LateTick(_double _dDeltaTime)
 
 HRESULT CMonster_Bastion_Healer::Render()
 {
-	if (FAILED(__super::Render()))
-		return E_FAIL;
+	SCB desc;
+	ZeroMemory(&desc, sizeof(SCB));
 
-	_matrix smatWorld, smatView, smatProj;
-	smatWorld = XMMatrixTranspose(m_pTransform->Get_WorldMatrix());
-	smatView = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_VIEW));
-	smatProj = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_PROJECTION));
-
-	if (FAILED(m_pModel->SetUp_ValueOnShader("g_WorldMatrix", &smatWorld, sizeof(_matrix))))
-		return E_FAIL;
-	if (FAILED(m_pModel->SetUp_ValueOnShader("g_ViewMatrix", &smatView, sizeof(_matrix))))
-		return E_FAIL;
-	if (FAILED(m_pModel->SetUp_ValueOnShader("g_ProjMatrix", &smatProj, sizeof(_matrix))))
-		return E_FAIL;
-
+	CActor::BindConstantBuffer(L"Camera_Silvermane", &desc);
 	for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
 	{
-		if (FAILED(m_pModel->Render(i, 0)))
-			return E_FAIL;
+		switch (i)
+		{
+		case 2:
+			if (FAILED(m_pModel->Render(i, 1))) MSGBOX("Failed To Rendering Shooter");
+			break;
+		default:
+			if (FAILED(m_pModel->Render(i, 0))) MSGBOX("Failed To Rendering Shooter");
+			break;
+		}
 	}
+
 
 #ifdef _DEBUG
 	//Render_Debug();
 #endif
+	return S_OK;
+}
+
+HRESULT CMonster_Bastion_Healer::Render_Shadow()
+{
+	CActor::BindConstantBuffer(L"Camera_Silvermane");
+	CActor::BindLightBuffer();
+	for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
+		m_pModel->Render(i, 3);
+
 	return S_OK;
 }
 
@@ -611,13 +616,11 @@ CGameObject* CMonster_Bastion_Healer::Clone(const _uint _iSceneID, void* _pArg)
 
 void CMonster_Bastion_Healer::Free()
 {
-	__super::Free();
-
-	Safe_Release(m_pModel);
 	Safe_Release(m_pAnimator);
 	Safe_Release(m_pWeapon);
 	Safe_Release(m_pStateController);
 	Safe_Release(m_pCharacterController);
 	Safe_Release(m_pPanel);
 
+	__super::Free();
 }

@@ -71,7 +71,7 @@ HRESULT CShieldBreaker::NativeConstruct(const _uint _iSceneID, void* pArg)
 	if (pArg)
 		m_pFixedBone = static_cast<CHierarchyNode*>(pArg);
 
-	m_fDamage = 10.f;
+	m_fDamage = 7.f;
 
 	return S_OK;
 }
@@ -105,22 +105,24 @@ _int CShieldBreaker::LateTick(_double TimeDelta)
 
 HRESULT CShieldBreaker::Render()
 {
-	if (FAILED(__super::Render()))
-		return E_FAIL;
+	SCB desc;
+	ZeroMemory(&desc, sizeof(desc));
+	desc.color = _float4(1.f, 1.f, 0.f, 1.f);
+	desc.empower = 1.f;
 
-	_matrix smatWorld, smatView, smatProj;
-	smatWorld = XMMatrixTranspose(m_pTransform->Get_WorldMatrix());
-	smatView = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_VIEW));
-	smatProj = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_PROJECTION));
-
-	m_pModel->SetUp_ValueOnShader("g_WorldMatrix", &smatWorld, sizeof(_matrix));
-	m_pModel->SetUp_ValueOnShader("g_ViewMatrix", &smatView, sizeof(_matrix));
-	m_pModel->SetUp_ValueOnShader("g_ProjMatrix", &smatProj, sizeof(_matrix));
-
+	CWeapon::BindConstantBuffer(L"Camera_Silvermane",&desc);
 	for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
-	{
 		m_pModel->Render(i, 0);
-	}
+
+	return S_OK;
+}
+
+HRESULT CShieldBreaker::Render_Shadow()
+{
+	CWeapon::BindConstantBuffer(L"Camera_Silvermane");
+	CWeapon::BindLightBuffer();
+	for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
+		m_pModel->Render(i, 1);
 
 	return S_OK;
 }
@@ -130,7 +132,7 @@ void CShieldBreaker::OnTriggerEnter(CCollision& collision)
 	_uint iTag = collision.pGameObject->getTag();
 	if ((_uint)GAMEOBJECT::PLAYER == iTag)
 	{
-		if (m_isAttack)
+		if (!m_isAttack)
 			return;
 
 		ATTACKDESC tAttackDesc = m_pOwner->Get_AttackDesc();
@@ -160,12 +162,12 @@ HRESULT CShieldBreaker::Ready_Components()
 
 	CCapsuleCollider::DESC tCapsuleColliderDesc;
 	tCapsuleColliderDesc.tColliderDesc = tColliderDesc;
-	tCapsuleColliderDesc.fHeight = 0.8f;
-	tCapsuleColliderDesc.fRadius = 0.4f;
+	tCapsuleColliderDesc.fHeight = 2.f;
+	tCapsuleColliderDesc.fRadius = 0.5f;
 	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_CapsuleCollider", L"Collider", (CComponent**)&m_pCollider, &tCapsuleColliderDesc)))
 		return E_FAIL;
 
-	_matrix matPivot = XMMatrixRotationY(XMConvertToRadians(90.f)) * XMMatrixTranslation(0.f, 0.f, 1.f);
+	_matrix matPivot = XMMatrixRotationY(XMConvertToRadians(90.f)) * XMMatrixTranslation(0.f, 0.f, 0.8f);
 	m_pCollider->setPivotMatrix(matPivot);
 
 	return S_OK;

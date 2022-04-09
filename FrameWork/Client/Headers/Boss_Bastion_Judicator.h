@@ -3,7 +3,6 @@
 #include "Actor.h"
 
 BEGIN(Engine)
-class CModel;
 class CAnimator;
 class CCharacterController;
 END
@@ -31,6 +30,7 @@ public:
 	virtual _int Tick(_double TimeDelta) override;
 	virtual _int LateTick(_double TimeDelta) override;
 	virtual HRESULT Render() override;
+	virtual HRESULT	Render_Shadow() override;
 
 private:
 	virtual HRESULT SetUp_Components();
@@ -48,7 +48,6 @@ public:
 	void Set_IsAttack(const _bool _isAttack);
 
 private:
-	CModel* m_pModelCom = nullptr;
 	CAnimator* m_pAnimator = nullptr;
 	CStateController* m_pStateController = nullptr;
 	CCharacterController* m_pCharacterController = nullptr;

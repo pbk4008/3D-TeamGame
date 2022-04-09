@@ -121,9 +121,7 @@ HRESULT CLight::Ready_PBRLighting(CTarget_Manager* pTarget_Manager, const wstrin
 	if (FAILED(m_pVIBuffer->SetUp_TextureOnShader("g_NormalTexture", pTarget_Manager->Get_SRV(TEXT("Target_Normal"))))) MSGBOX("Failed To Apply LightRender NormalTexture");
 	if (FAILED(m_pVIBuffer->SetUp_TextureOnShader("g_DepthTexture", pTarget_Manager->Get_SRV(TEXT("Target_Depth"))))) MSGBOX("Failed To Apply LightRender DepthTexture");
 	if (FAILED(m_pVIBuffer->SetUp_TextureOnShader("g_DiffuseTexture", pTarget_Manager->Get_SRV(TEXT("Target_Diffuse"))))) MSGBOX("Failed To Apply LightRender DiffuseTexture");
-	if (FAILED(m_pVIBuffer->SetUp_TextureOnShader("g_Metallic", pTarget_Manager->Get_SRV(TEXT("Target_Metallic"))))) MSGBOX("Failed To Apply LightRender MetalicTexture");
-	if (FAILED(m_pVIBuffer->SetUp_TextureOnShader("g_Roughness", pTarget_Manager->Get_SRV(TEXT("Target_Roughness"))))) MSGBOX("Failed To Apply LightRender RoughnessTexture");
-	if (FAILED(m_pVIBuffer->SetUp_TextureOnShader("g_AO", pTarget_Manager->Get_SRV(TEXT("Target_AO"))))) MSGBOX("Failed To Apply LightRender AOTexture");
+	if (FAILED(m_pVIBuffer->SetUp_TextureOnShader("g_MRATexture", pTarget_Manager->Get_SRV(TEXT("Target_MRA"))))) MSGBOX("Failed To Apply LightRender MetalicTexture");
 
 	if (FAILED((m_pVIBuffer->SetUp_TextureOnShader("g_SkyBoxTexture", pTarget_Manager->Get_SRV(TEXT("Target_SkyBox")))))) MSGBOX("Failed To Apply Direction Light SkyTexture");
 	if (FAILED(m_pVIBuffer->SetUp_TextureOnShader("g_ShadowTexture", pTarget_Manager->Get_SRV(TEXT("Target_BlurShadow"))))) MSGBOX("Failed To Apply LightRender ShadowTexture");

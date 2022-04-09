@@ -20,6 +20,8 @@ public:
 	virtual _int Tick(_double _dDeltaTime) override;
 	virtual _int LateTick(_double _dDeltaTime) override;
 	virtual HRESULT Render() override;
+	virtual HRESULT BindConstantBuffer(const wstring& camTag,SCB* consbuffer = nullptr);
+	virtual HRESULT	BindLightBuffer();
 
 public:
 	const wstring& Get_Name() const;
@@ -65,6 +67,7 @@ protected:
 	CSwordTrail*	m_pTrail = nullptr;
 
 	_float m_fDamage = 0.f;
+	const LIGHTDESC* m_lightdesc;
 
 public:
 	virtual CGameObject* Clone(const _uint _iSceneID, void* _pArg = nullptr) PURE;

@@ -22,13 +22,11 @@ CBoss_Bastion_Judicator::CBoss_Bastion_Judicator(ID3D11Device* pDevice, ID3D11De
 CBoss_Bastion_Judicator::CBoss_Bastion_Judicator(const CBoss_Bastion_Judicator& rhs)
 	:CActor(rhs)
 	, m_pCharacterController(rhs.m_pCharacterController)
-	, m_pModelCom(rhs.m_pModelCom)
 	, m_pStateController(rhs.m_pStateController)
 	, m_pAnimator(rhs.m_pAnimator)
 	, m_pPanel(rhs.m_pPanel)
 {
 	Safe_AddRef(m_pCharacterController);
-	Safe_AddRef(m_pModelCom);
 	Safe_AddRef(m_pStateController);
 	Safe_AddRef(m_pAnimator);
 	Safe_AddRef(m_pPanel);
@@ -81,7 +79,7 @@ HRESULT CBoss_Bastion_Judicator::NativeConstruct(const _uint _iSceneID, void* pA
 	m_pPanel->Set_HpBar(Get_HpRatio());
 	m_pPanel->Set_GroggyBar(Get_GroggyGaugeRatio());
 
-	setActive(false);
+	//setActive(false);
 
 	m_tAttackDesc.iLevel = 2;
 
@@ -162,17 +160,27 @@ _int CBoss_Bastion_Judicator::Tick(_double TimeDelta)
 
 	if (DEATH == m_pAnimator->Get_CurrentAnimNode())
 	{
-		if (m_pAnimator->Get_CurrentAnimation()->Is_Finished())
+		if (L"Death" == m_pStateController->Get_CurStateTag())
 		{
-			m_bDead = true;
-			m_pPanel->Set_Show(false);
-			m_pPanel->Set_UIRemove(true);
-			return 0;
+			if (m_pAnimator->Get_CurrentAnimation()->Is_Finished())
+			{
+				m_bDead = true;
+				Set_Remove(true);
+				m_pPanel->Set_Show(false);
+				m_pPanel->Set_UIRemove(true);
+				return 0;
+			}
+
+			if (1 <= m_pAnimator->Get_AnimController()->Get_CurKeyFrameIndex() && 2 > m_pAnimator->Get_AnimController()->Get_CurKeyFrameIndex())
+				Active_Effect((_uint)EFFECT::DEATH);
 		}
-		else if (1 == m_pAnimator->Get_AnimController()->Get_CurKeyFrameIndex())
+		else
 		{
+			Set_Remove(true);
+			m_pPanel->Set_UIRemove(true);
 			Active_Effect((_uint)EFFECT::DEATH);
 		}
+		
 	}
 
 	m_pCharacterController->Move(TimeDelta, m_pTransform->Get_Velocity());
@@ -212,53 +220,39 @@ _int CBoss_Bastion_Judicator::LateTick(_double TimeDelta)
 
 HRESULT CBoss_Bastion_Judicator::Render()
 {
-	if (FAILED(__super::Render()))
+	for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
 	{
-		return E_FAIL;
+		SCB desc;
+		ZeroMemory(&desc, sizeof(SCB));
+		switch (i)
+		{
+		case 0 : case 3:  // body
+			desc.metalic = 0.2f;
+			desc.color = _float4(0.811f, 1.f, 0.898f, 1.f);
+			desc.empower = 0.7f;
+			CActor::BindConstantBuffer(L"Camera_Silvermane",&desc);
+			m_pModel->Render(i, 0);
+			break;
+		case 1 : // fur
+			CActor::BindConstantBuffer(L"Camera_Silvermane",&desc);
+			m_pModel->Render(i, 2);
+			break;
+		case 2 :  // cloak
+			CActor::BindConstantBuffer(L"Camera_Silvermane",&desc);
+			m_pModel->Render(i, 1);
+			break;
+		}
 	}
 
-	_matrix XMWorldMatrix = XMMatrixTranspose(m_pTransform->Get_WorldMatrix());
-	_matrix XMViewMatrix = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_VIEW));
-	_matrix XMProjectMatrix = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_PROJECTION));
-	_vector CamPos = g_pGameInstance->Get_CamPosition(L"Camera_Silvermane");
+	return S_OK;
+}
 
-	m_pModelCom->SetUp_ValueOnShader("g_WorldMatrix", &XMWorldMatrix, sizeof(_float) * 16);
-	m_pModelCom->SetUp_ValueOnShader("g_ViewMatrix", &XMViewMatrix, sizeof(_float) * 16);
-	m_pModelCom->SetUp_ValueOnShader("g_ProjMatrix", &XMProjectMatrix, sizeof(XMMATRIX));
-
-	for (_uint i = 0; i < m_pModelCom->Get_NumMeshContainer(); ++i)
-	{
-		m_pModelCom->Render(i, 0);
-	}
-
-	//// FSM
-	//wstring wstrCurStateTag = m_pStateController->Get_CurStateTag();
-	//wstring wstrState = L"Cur State : ";
-
-	//if (FAILED(g_pGameInstance->Render_Font(TEXT("Font_Arial"), XMVectorSet(0.f, 1.0f, 0.f, 1.f), (wstrState + wstrCurStateTag).c_str(), _float2(650.f, 40.f), _float2(0.6f, 0.6f))))
-	//	return E_FAIL;
-
-	//// 애니메이션 이름
-	//string CurAnimName = m_pAnimator->Get_CurrentAnimation()->Get_Name();
-	//wstring wstrCurAnimTag;
-	//wstring wstrAnimname = L"Cur Anim Tag : ";
-	//wstrCurAnimTag.assign(CurAnimName.begin(), CurAnimName.end());
-	//if (FAILED(g_pGameInstance->Render_Font(TEXT("Font_Arial"), XMVectorSet(0.f, 1.0f, 0.f, 1.f), (wstrAnimname + wstrCurAnimTag).c_str(), _float2(650.f, 60.f), _float2(0.6f, 0.6f))))
-	//	return E_FAIL;
-
-	//// 애니메이션 상태
-	//wstring wstrCurKeyFrameIndex = to_wstring(m_pAnimator->Get_CurrentAnimation()->Get_CurrentKeyFrameIndex());
-	//wstring wstrKeyFrame = L"Key Frame : ";
-	//if (FAILED(g_pGameInstance->Render_Font(TEXT("Font_Arial"), XMVectorSet(0.f, 1.0f, 0.f, 1.f), (wstrKeyFrame + wstrCurKeyFrameIndex).c_str(), _float2(650.f, 80.f), _float2(0.6f, 0.6f))))
-	//	return E_FAIL;
-
-	//wstring wstrAnimFinished = L"";
-	//if (m_pAnimator->Get_CurrentAnimation()->Is_Finished())
-	//	wstrAnimFinished = L"AnimFinished : TRUE";
-	//else
-	//	wstrAnimFinished = L"AnimFinished : FALSE";
-	//if (FAILED(g_pGameInstance->Render_Font(TEXT("Font_Arial"), XMVectorSet(0.f, 1.0f, 0.f, 1.f), wstrAnimFinished.c_str(), _float2(650.f, 100.f), _float2(0.6f, 0.6f))))
-	//	return E_FAIL;
+HRESULT CBoss_Bastion_Judicator::Render_Shadow()
+{
+	CActor::BindConstantBuffer(L"Camera_Silvermane");
+	CActor::BindLightBuffer();
+	for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
+		m_pModel->Render(i, 3);
 
 	return S_OK;
 }
@@ -270,18 +264,18 @@ HRESULT CBoss_Bastion_Judicator::SetUp_Components()
 	Desc.fRotationPerSec = XMConvertToRadians(60.f);
 	m_pTransform->Set_TransformDesc(Desc);
 
-	if (FAILED(__super::SetUp_Components((_uint)SCENEID::SCENE_STAGE1, L"Model_Boss_Bastion_Tier4", L"Model", (CComponent**)&m_pModelCom)))
+	if (FAILED(__super::SetUp_Components((_uint)SCENEID::SCENE_STAGE1, L"Model_Boss_Bastion_Tier4", L"Model", (CComponent**)&m_pModel)))
 	{
 		return E_FAIL;
 	}
 	_matrix matPivot = XMMatrixIdentity();
 	matPivot = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(180.f));
-	m_pModelCom->Set_PivotMatrix(matPivot);
+	m_pModel->Set_PivotMatrix(matPivot);
 
 	CAnimator::ANIMATORDESC tDesc;
 	ZeroMemory(&tDesc, sizeof(tDesc));
 
-	tDesc.pModel = m_pModelCom;
+	tDesc.pModel = m_pModel;
 	tDesc.pTransform = m_pTransform;
 	tDesc.eType = CAnimationController::EType::CharacterController;
 
@@ -317,31 +311,31 @@ HRESULT CBoss_Bastion_Judicator::Set_Animation_FSM()
 {
 	//시작루프
 	//연결할애님, 연결당할애님, 애니메이션, 루트애님, 트랜스폼(루트애니메이션때 따라감), 루프, 옵션
-	CAnimation* pAnim = m_pModelCom->Get_Animation("SK_Bastion_Tier4.ao|A_2H_Hammer_Menu_Idle_Start");
+	CAnimation* pAnim = m_pModel->Get_Animation("SK_Bastion_Tier4.ao|A_2H_Hammer_Menu_Idle_Start");
 	if (FAILED(m_pAnimator->Insert_Animation(IDLE_START_H, HEAD, pAnim, true, true, false, ERootOption::XYZ)))
 		return E_FAIL;
-	pAnim = m_pModelCom->Get_Animation("SK_Bastion_Tier4.ao|A_2H_Hammer_Menu_Idle_Loop");
+	pAnim = m_pModel->Get_Animation("SK_Bastion_Tier4.ao|A_2H_Hammer_Menu_Idle_Loop");
 	if (FAILED(m_pAnimator->Insert_Animation(IDLE_LOOP_H, IDLE_START_H, pAnim, true, true, false, ERootOption::XYZ)))
 		return E_FAIL;
 
 	//Rage
-	pAnim = m_pModelCom->Get_Animation("SK_Bastion_Tier4.ao|A_Rage_Phalanxar");
+	pAnim = m_pModel->Get_Animation("SK_Bastion_Tier4.ao|A_Rage_Phalanxar");
 	if (FAILED(m_pAnimator->Insert_Animation(RAGE, HEAD, pAnim, true, true, false, ERootOption::XYZ)))
 		return E_FAIL;
 
 	//Run
-	pAnim = m_pModelCom->Get_Animation("SK_Bastion_Tier4.ao|A_2H_Hammer_Loco_Jog_Fwd_Start_Normal");
+	pAnim = m_pModel->Get_Animation("SK_Bastion_Tier4.ao|A_2H_Hammer_Loco_Jog_Fwd_Start_Normal");
 	if (FAILED(m_pAnimator->Insert_Animation(JOG_FWD_START_H, HEAD, pAnim, true, true, false, ERootOption::XYZ)))
 		return E_FAIL;
 
 #pragma region 공격재시작루프
-	pAnim = m_pModelCom->Get_Animation("SK_Bastion_Tier4.ao|A_BattleCry_Start_Phalanxar");
+	pAnim = m_pModel->Get_Animation("SK_Bastion_Tier4.ao|A_BattleCry_Start_Phalanxar");
 	if (FAILED(m_pAnimator->Insert_Animation(BATTLECRY_START, HEAD, pAnim, true, true, false, ERootOption::XYZ)))
 		return E_FAIL;
-	pAnim = m_pModelCom->Get_Animation("SK_Bastion_Tier4.ao|A_BattleCry_Loop_Phalanxar");
+	pAnim = m_pModel->Get_Animation("SK_Bastion_Tier4.ao|A_BattleCry_Loop_Phalanxar");
 	if (FAILED(m_pAnimator->Insert_Animation(BATTLECRY_LOOP, BATTLECRY_START, pAnim, true, true, false, ERootOption::XYZ)))
 		return E_FAIL;
-	pAnim = m_pModelCom->Get_Animation("SK_Bastion_Tier4.ao|A_BattleCry_End_Phalanxar");
+	pAnim = m_pModel->Get_Animation("SK_Bastion_Tier4.ao|A_BattleCry_End_Phalanxar");
 	if (FAILED(m_pAnimator->Insert_Animation(BATTLECRY_END, BATTLECRY_LOOP, pAnim, true, true, false, ERootOption::XYZ)))
 		return E_FAIL;
 	//애니메이션연결(연결당할애님, 연결할애님, 쌍방으로연결할지안할지)
@@ -350,13 +344,13 @@ HRESULT CBoss_Bastion_Judicator::Set_Animation_FSM()
 #pragma endregion
 
 #pragma region 스턴루프
-	pAnim = m_pModelCom->Get_Animation("SK_Bastion_Tier4.ao|A_Stun_Start_Phalanxar");
+	pAnim = m_pModel->Get_Animation("SK_Bastion_Tier4.ao|A_Stun_Start_Phalanxar");
 	if (FAILED(m_pAnimator->Insert_Animation(STUN_START, HEAD, pAnim, true, true, false, ERootOption::XYZ)))
 		return E_FAIL;
-	pAnim = m_pModelCom->Get_Animation("SK_Bastion_Tier4.ao|A_Stun_Loop_Phalanxar");
+	pAnim = m_pModel->Get_Animation("SK_Bastion_Tier4.ao|A_Stun_Loop_Phalanxar");
 	if (FAILED(m_pAnimator->Insert_Animation(STUN_LOOP, STUN_START, pAnim, true, true, false, ERootOption::XYZ)))
 		return E_FAIL;
-	pAnim = m_pModelCom->Get_Animation("SK_Bastion_Tier4.ao|A_Stun_End_Phalanxar");
+	pAnim = m_pModel->Get_Animation("SK_Bastion_Tier4.ao|A_Stun_End_Phalanxar");
 	if (FAILED(m_pAnimator->Insert_Animation(STUN_END, STUN_LOOP, pAnim, true, true, false, ERootOption::XYZ)))
 		return E_FAIL;
 	if (FAILED(m_pAnimator->Connect_Animation(RAGE, STUN_END, false)))
@@ -364,71 +358,71 @@ HRESULT CBoss_Bastion_Judicator::Set_Animation_FSM()
 #pragma endregion
 
 #pragma region 회전
-	pAnim = m_pModelCom->Get_Animation("SK_Bastion_Tier4.ao|A_2H_Hammer_Turn_135_Left_Normal");
+	pAnim = m_pModel->Get_Animation("SK_Bastion_Tier4.ao|A_2H_Hammer_Turn_135_Left_Normal");
 	if (FAILED(m_pAnimator->Insert_Animation(TURN_135LEFT_H, HEAD, pAnim, true, true, false, ERootOption::XYZ)))
 		return E_FAIL;
 
-	pAnim = m_pModelCom->Get_Animation("SK_Bastion_Tier4.ao|A_2H_Hammer_Turn_135_Right_Normal");
+	pAnim = m_pModel->Get_Animation("SK_Bastion_Tier4.ao|A_2H_Hammer_Turn_135_Right_Normal");
 	if (FAILED(m_pAnimator->Insert_Animation(TURN_135RIGHT_H, HEAD, pAnim, true, true, false, ERootOption::XYZ)))
 		return E_FAIL;
 
-	pAnim = m_pModelCom->Get_Animation("SK_Bastion_Tier4.ao|A_2H_Hammer_Turn_180_Left_Normal");
+	pAnim = m_pModel->Get_Animation("SK_Bastion_Tier4.ao|A_2H_Hammer_Turn_180_Left_Normal");
 	if (FAILED(m_pAnimator->Insert_Animation(TURN_180LEFT_H, HEAD, pAnim, true, true, false, ERootOption::XYZ)))
 		return E_FAIL;
 
-	pAnim = m_pModelCom->Get_Animation("SK_Bastion_Tier4.ao|A_2H_Hammer_Turn_180_Right_Normal");
+	pAnim = m_pModel->Get_Animation("SK_Bastion_Tier4.ao|A_2H_Hammer_Turn_180_Right_Normal");
 	if (FAILED(m_pAnimator->Insert_Animation(TURN_180RIGHT_H, HEAD, pAnim, true, true, false, ERootOption::XYZ)))
 		return E_FAIL;
 
-	pAnim = m_pModelCom->Get_Animation("SK_Bastion_Tier4.ao|A_2H_Hammer_Turn_45_Left_Normal");
+	pAnim = m_pModel->Get_Animation("SK_Bastion_Tier4.ao|A_2H_Hammer_Turn_45_Left_Normal");
 	if (FAILED(m_pAnimator->Insert_Animation(TURN_45LEFT_H, HEAD, pAnim, true, true, false, ERootOption::XYZ)))
 		return E_FAIL;
 
-	pAnim = m_pModelCom->Get_Animation("SK_Bastion_Tier4.ao|A_2H_Hammer_Turn_45_Right_Normal");
+	pAnim = m_pModel->Get_Animation("SK_Bastion_Tier4.ao|A_2H_Hammer_Turn_45_Right_Normal");
 	if (FAILED(m_pAnimator->Insert_Animation(TURN_45RIGHT_H, HEAD, pAnim, true, true, false, ERootOption::XYZ)))
 		return E_FAIL;
 
-	pAnim = m_pModelCom->Get_Animation("SK_Bastion_Tier4.ao|A_2H_Hammer_Turn_90_Left_Normal");
+	pAnim = m_pModel->Get_Animation("SK_Bastion_Tier4.ao|A_2H_Hammer_Turn_90_Left_Normal");
 	if (FAILED(m_pAnimator->Insert_Animation(TURN_90LEFT_H, HEAD, pAnim, true, true, false, ERootOption::XYZ)))
 		return E_FAIL;
 
-	pAnim = m_pModelCom->Get_Animation("SK_Bastion_Tier4.ao|A_2H_Hammer_Turn_90_Right_Normal");
+	pAnim = m_pModel->Get_Animation("SK_Bastion_Tier4.ao|A_2H_Hammer_Turn_90_Right_Normal");
 	if (FAILED(m_pAnimator->Insert_Animation(TURN_90RIGHT_H, HEAD, pAnim, true, true, false, ERootOption::XYZ)))
 		return E_FAIL;
 #pragma endregion
 
 #pragma region 상시어택애님
-	pAnim = m_pModelCom->Get_Animation("SK_Bastion_Tier4.ao|A_2H_Hammer_Attack_JogR1");
+	pAnim = m_pModel->Get_Animation("SK_Bastion_Tier4.ao|A_2H_Hammer_Attack_JogR1");
 	if (FAILED(m_pAnimator->Insert_Animation(ATTACK_JOG_H, HEAD, pAnim, true, true, true, ERootOption::XYZ)))
 		return E_FAIL;
 
-	pAnim = m_pModelCom->Get_Animation("SK_Bastion_Tier4.ao|A_2H_Hammer_Attack_L1_R2_Legacy");
+	pAnim = m_pModel->Get_Animation("SK_Bastion_Tier4.ao|A_2H_Hammer_Attack_L1_R2_Legacy");
 	if (FAILED(m_pAnimator->Insert_Animation(ATTACK_LEGACY_H, HEAD, pAnim, true, true, true, ERootOption::XYZ)))
 		return E_FAIL;
 
-	pAnim = m_pModelCom->Get_Animation("SK_Bastion_Tier4.ao|A_2H_Hammer_Attack_R1_01");
+	pAnim = m_pModel->Get_Animation("SK_Bastion_Tier4.ao|A_2H_Hammer_Attack_R1_01");
 	if (FAILED(m_pAnimator->Insert_Animation(ATTACK_R1_H, HEAD, pAnim, true, true, true, ERootOption::XYZ)))
 		return E_FAIL;
 
-	pAnim = m_pModelCom->Get_Animation("SK_Bastion_Tier4.ao|A_2H_Hammer_Sprint_Attack");
+	pAnim = m_pModel->Get_Animation("SK_Bastion_Tier4.ao|A_2H_Hammer_Sprint_Attack");
 	if (FAILED(m_pAnimator->Insert_Animation(SPRINT_ATTACK_H, HEAD, pAnim, true, true, true, ERootOption::XYZ)))
 		return E_FAIL;
 
-	pAnim = m_pModelCom->Get_Animation("SK_Bastion_Tier4.ao|A_Attack_R1_Phalanxar");
+	pAnim = m_pModel->Get_Animation("SK_Bastion_Tier4.ao|A_Attack_R1_Phalanxar");
 	if (FAILED(m_pAnimator->Insert_Animation(ATTACK_R1, HEAD, pAnim, true, true, true, ERootOption::XYZ)))
 		return E_FAIL;
 
-	pAnim = m_pModelCom->Get_Animation("SK_Bastion_Tier4.ao|A_Attack_S1_Phalanxar");
+	pAnim = m_pModel->Get_Animation("SK_Bastion_Tier4.ao|A_Attack_S1_Phalanxar");
 	if (FAILED(m_pAnimator->Insert_Animation(ATTACK_S1, HEAD, pAnim, true, true, true, ERootOption::XYZ)))
 		return E_FAIL;
 
-	pAnim = m_pModelCom->Get_Animation("SK_Bastion_Tier4.ao|A_Attack_S2_Phalanxar");
+	pAnim = m_pModel->Get_Animation("SK_Bastion_Tier4.ao|A_Attack_S2_Phalanxar");
 	if (FAILED(m_pAnimator->Insert_Animation(ATTACK_S2, HEAD, pAnim, true, true, true, ERootOption::XYZ)))
 		return E_FAIL;
 #pragma endregion 
 
 #pragma region 죽음
-	pAnim = m_pModelCom->Get_Animation("SK_Bastion_Tier4.ao|A_Death_Phalanxar");
+	pAnim = m_pModel->Get_Animation("SK_Bastion_Tier4.ao|A_Death_Phalanxar");
 	if (FAILED(m_pAnimator->Insert_Animation(DEATH, HEAD, pAnim, true, true, false, ERootOption::XYZ)))
 		return E_FAIL;
 #pragma endregion 
@@ -514,7 +508,7 @@ HRESULT CBoss_Bastion_Judicator::Set_State_FSM()
 		pair.second->Set_StateController(m_pStateController);
 		static_cast<CMonster_FSM*>(pair.second)->Set_Monster(this);
 		static_cast<CMonster_FSM*>(pair.second)->Set_Transform(m_pTransform);
-		static_cast<CMonster_FSM*>(pair.second)->Set_Model(m_pModelCom);
+		static_cast<CMonster_FSM*>(pair.second)->Set_Model(m_pModel);
 		static_cast<CMonster_FSM*>(pair.second)->Set_Animator(m_pAnimator);
 	}
 
@@ -525,16 +519,15 @@ HRESULT CBoss_Bastion_Judicator::Set_State_FSM()
 
 HRESULT CBoss_Bastion_Judicator::Set_Weapon()
 {
-	CHierarchyNode* pBone = m_pModelCom->Get_BoneMatrix("weapon_r_end");
-	CShieldBreaker* pWeapon = CShieldBreaker::Create(m_pDevice, m_pDeviceContext);
+	CHierarchyNode* pBone = m_pModel->Get_BoneMatrix("weapon_r_end");
+	CShieldBreaker* pWeapon = static_cast<CShieldBreaker*>(g_pGameInstance->Clone_GameObject(m_iSceneID, L"Proto_GameObject_Weapon_ShieldBreaker"));
 
-	if (FAILED(pWeapon->NativeConstruct(m_iSceneID, pBone)))
-	{
+	if (nullptr == pWeapon)
 		return E_FAIL;
-	}
 
+	pWeapon->Set_FixedBone(pBone);
 	pWeapon->Set_Owner(this);
-	pWeapon->Set_OwnerPivotMatrix(m_pModelCom->Get_PivotMatrix());
+	pWeapon->Set_OwnerPivotMatrix(m_pModel->Get_PivotMatrix());
 	m_pWeapon = pWeapon;
 
 	return S_OK;
@@ -633,6 +626,5 @@ void CBoss_Bastion_Judicator::Free()
 	Safe_Release(m_pWeapon);
 	Safe_Release(m_pStateController);
 	Safe_Release(m_pAnimator);
-	Safe_Release(m_pModelCom);
 
 }

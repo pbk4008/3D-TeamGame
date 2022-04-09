@@ -1,71 +1,13 @@
 #include "Shader_RenderState.hpp"
+#include "Shader_Share.hlsli"
+#include "Shader_ShareFuntion.hlsli"
 
-sampler DefaultSampler = sampler_state
-{
-	filter = min_mag_mip_linear;
-	AddressU = wrap;
-	AddressV = wrap;
-};
-
-sampler ClampSampler = sampler_state
-{
-	filter = min_mag_mip_linear;
-	AddressU = clamp;
-	AddressV = clamp;
-};
-
-cbuffer Matrices
-{
-	matrix		g_WorldMatrix  = (matrix)0;
-	matrix		g_ViewMatrix;	
-	matrix		g_ProjMatrix;
-};
-
-struct BoneMatrixArray
-{
-	matrix		Bone[256];
-};
-
-cbuffer	BoneMatricesBuffer
-{
-	BoneMatrixArray		g_BoneMatrices;
-};
-
-cbuffer LightBuffer
-{
-	matrix g_LightView;
-	matrix g_LightProj;
-	float3 g_LightPos;
-};
-
-cbuffer Colorbuffer
-{
-	float4 g_color;
-};
-
-texture2D	g_ShadowTexture;
-
-texture2D	g_DiffuseTexture;
-texture2D	g_BiNormalTexture;
-
-texture2D	g_MRATexture;
-texture2D	g_OMERTexture;
-texture2D	g_CEOTexture;
-
-texture2D	g_NewHairTexture;
-
-
-float3 Normalmapping(float3 normaltex, float3x3 tbn)
-{	
-	normaltex = normaltex * 2 - 1;
-	normaltex = normalize(normaltex);
-	
-	normaltex = normalize(mul(normaltex, tbn));
-	normaltex = normaltex * 0.5f + 0.5f;
-	
-	return normaltex;
-}
-
+Texture2D	g_DiffuseTexture;
+Texture2D	g_BiNormalTexture;
+Texture2D	g_MRATexture;
+Texture2D	g_OMERTexture;
+Texture2D	g_CEOTexture;
+Texture2D	g_NewHairTexture;
 
 struct VS_IN
 {
@@ -96,11 +38,10 @@ VS_OUT VS_MAIN_ANIM(VS_IN In)
 
 	float		fWeightw = 1.f - (In.vBlendWeight.x + In.vBlendWeight.y + In.vBlendWeight.z);
 
-
-	matrix			BoneMatrix =	g_BoneMatrices.Bone[In.vBlendIndex.x] * In.vBlendWeight.x +
-									g_BoneMatrices.Bone[In.vBlendIndex.y] * In.vBlendWeight.y +
-									g_BoneMatrices.Bone[In.vBlendIndex.z] * In.vBlendWeight.z +
-									g_BoneMatrices.Bone[In.vBlendIndex.w] * In.vBlendWeight.w;
+	matrix BoneMatrix = mul(g_BoneMatrices.Bone[In.vBlendIndex.x], In.vBlendWeight.x) +
+						mul(g_BoneMatrices.Bone[In.vBlendIndex.y], In.vBlendWeight.y) +
+						mul(g_BoneMatrices.Bone[In.vBlendIndex.z], In.vBlendWeight.z) +
+						mul(g_BoneMatrices.Bone[In.vBlendIndex.w], In.vBlendWeight.w);
 
 	matWV = mul(g_WorldMatrix, g_ViewMatrix);
 	matWVP = mul(matWV, g_ProjMatrix);
@@ -144,10 +85,10 @@ VS_OUT_SHADOW VS_MAIN_SHADOW(VS_IN In)
 	half fWeightw = 1.f - (In.vBlendWeight.x + In.vBlendWeight.y + In.vBlendWeight.z);
 
 
-	matrix BoneMatrix = g_BoneMatrices.Bone[In.vBlendIndex.x] * In.vBlendWeight.x +
-		g_BoneMatrices.Bone[In.vBlendIndex.y] * In.vBlendWeight.y +
-		g_BoneMatrices.Bone[In.vBlendIndex.z] * In.vBlendWeight.z +
-		g_BoneMatrices.Bone[In.vBlendIndex.w] * In.vBlendWeight.w;
+	matrix BoneMatrix = mul(g_BoneMatrices.Bone[In.vBlendIndex.x], In.vBlendWeight.x) +
+						mul(g_BoneMatrices.Bone[In.vBlendIndex.y], In.vBlendWeight.y) +
+						mul(g_BoneMatrices.Bone[In.vBlendIndex.z], In.vBlendWeight.z) +
+						mul(g_BoneMatrices.Bone[In.vBlendIndex.w], In.vBlendWeight.w);
 	
 	vector vPosition = mul(vector(In.vPosition, 1.f), BoneMatrix);
 	
@@ -206,10 +147,8 @@ struct PS_OUT
 	float4 diffuse	: SV_TARGET0;
 	float4 normal	: SV_TARGET1;
 	float4 depth	: SV_TARGET2;
-	float4 M		: SV_Target3;
-	float4 R		: SV_Target4;
-	float4 A		: SV_Target5;
-	float4 E		: SV_Target6;
+	float4 mra		: SV_Target3;
+	float4 emission : SV_Target4;
 };
 
 PS_OUT PS_MAIN_TOP(PS_IN In)
@@ -228,21 +167,19 @@ PS_OUT PS_MAIN_TOP(PS_IN In)
 	
 	Out.depth = float4(In.vUvDepth.z / In.vUvDepth.w, In.vUvDepth.w / 300.f, 0.f, 0.f);
 	
-	//half4 Ecolor = float4(0.498f, 0.9411f, 0.8196f, 0.f);
-	half Epower = 1.0f;
-	
 	half accvalue = diffuse.r + diffuse.g - diffuse.b;
 	if(accvalue > 0.6f)
 	{
 		Out.diffuse = half4(0.9f, 0.57f, 0.f, 1.f) * accvalue;
 		Out.normal = half4(normal, 0.f);
 		half metalic = omer.g * 0.05f + mra.r;
-		Out.M = half4(metalic.xxx, 1.f);
 		half roughness = omer.a + mra.g * 3.3f - mra.r - mra.b - (1 - omer.g);
-		Out.R = half4(roughness.xxx, 1.f);
 		half ao = mra.b;
-		Out.A = half4(ao.xxx, 1.f);
-		Out.E = g_color * Epower * omer.b;
+		Out.mra.r = metalic + g_Metalic;
+		Out.mra.g = roughness + g_Roughness;
+		Out.mra.b = ao + g_AO;
+		Out.mra.a = 1.f;
+		Out.emission = g_color * g_empower * omer.b;
 	}
 	else
 	{	
@@ -250,12 +187,13 @@ PS_OUT PS_MAIN_TOP(PS_IN In)
 		Out.diffuse = diffuse;
 		
 		half metalic = omer.g * 0.05f + mra.r;
-		Out.M = half4(metalic.xxx, 1.f);
 		half roughness = omer.a + mra.g * 3.f - mra.r - mra.b - (1 - omer.g);
-		Out.R = half4(roughness.xxx, 1.f);
 		half ao = mra.b;
-		Out.A = half4(ao.xxx, 1.f);
-		Out.E = g_color * Epower * omer.b;
+		Out.mra.r = metalic + g_Metalic;
+		Out.mra.g = roughness + g_Roughness;
+		Out.mra.b = ao + g_AO;
+		Out.mra.a = 1.f;
+		Out.emission = g_color * g_empower * omer.b;
 
 	}
 	
@@ -275,23 +213,19 @@ PS_OUT PS_MAIN_DOWN(PS_IN In)
 	normal = Normalmapping(normal, tbn);
 	
 	Out.diffuse = diffuse;
-	
 	Out.normal = half4(normal, 0.f);
-	
 	Out.depth = half4(In.vUvDepth.z / In.vUvDepth.w, In.vUvDepth.w / 300.f, 0.f, 0.f);
 	
 	half metalic = mra.r;
-	Out.M = half4(metalic.xxx, 1.f);
-	
 	half roughness = 0.5f + mra.g * 3.f - mra.r * 2;
-	Out.R = half4(roughness.xxx, 1.f);
-	
 	half ao = ceo.b * 1.f * mra.b;
-	Out.A = half4(ao.xxx, 1.f);
+	half4 E = ceo.g * g_color * g_empower;
 	
-	half E = ceo.g * 0.5f;
-	
-	Out.E = half4(E.xxx, 0.f);
+	Out.mra.r = metalic + g_Metalic;
+	Out.mra.g = roughness + g_Roughness;
+	Out.mra.b = ao + g_AO;
+	Out.mra.a = 1.f;
+	Out.emission = E;
 	
 	return Out;
 }
@@ -309,11 +243,11 @@ PS_OUT PS_MAIN_CLOAK(PS_IN In)
 	Out.normal = half4(normal, 0.f);
 	Out.depth = half4(In.vUvDepth.z / In.vUvDepth.w, In.vUvDepth.w / 300.f, 0.f, 0.f);
 	
-	
-	Out.M = half4(omer.g, omer.g, omer.g, 1);
-	Out.R = half4(omer.a, omer.a, omer.a, 1);
-	Out.A = half4(omer.r, omer.r, omer.r, 1);
-	Out.E = half4(omer.b, omer.b, omer.b, 1);
+	Out.mra.r = omer.g + g_Metalic;
+	Out.mra.g = omer.a + g_Roughness;
+	Out.mra.b = omer.r + g_AO;
+	Out.mra.a =  1.f;
+	Out.emission = half4(omer.b, omer.b, omer.b, 1) * g_color + g_empower;
 	
 	return Out;
 }
@@ -336,13 +270,11 @@ PS_OUT PS_MAIN_HAIR(PS_IN In)
 	Out.normal = half4(normal, 0.f);
 	Out.depth = half4(In.vUvDepth.z / In.vUvDepth.w, In.vUvDepth.w / 300.f, 0.f, 0.f);
 	
-	Out.M = half4(omer.g, omer.g, omer.g, 1);
-	Out.R = half4(omer.a, omer.a, omer.a, 1);
-	Out.A = half4(omer.r, omer.r, omer.r, 1);
-	Out.E = half4(omer.b, omer.b, omer.b, 1);
-	
-	if(Out.diffuse.a == 0)
-		discard;
+	Out.mra.r = omer.g + g_Metalic;
+	Out.mra.g = omer.a + g_Roughness;
+	Out.mra.b = omer.r + g_AO;
+	Out.mra.a = 1.f;
+	Out.emission = half4(omer.b, omer.b, omer.b, 1) * g_color + g_empower;
 	
 	return Out;
 }

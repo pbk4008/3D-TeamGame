@@ -23,7 +23,6 @@ HRESULT CWeapon::NativeConstruct_Prototype()
 	if (FAILED(__super::NativeConstruct_Prototype()))
 		return E_FAIL;
 
-
 	return S_OK;
 }
 
@@ -34,6 +33,7 @@ HRESULT CWeapon::NativeConstruct(const _uint _iSceneID, void* _pArg)
 
 	m_pLocalTransform = g_pGameInstance->Clone_Component<CTransform>(0, L"Proto_Component_Transform");
 
+	m_lightdesc = g_pGameInstance->Get_LightDesc(0);
 	//list<CGameObject*>* listobj = g_pGameInstance->getObjectList(_iSceneID, L"Layer_SordTrail");
 	//m_pTrail = static_cast<CSwordTrail*>(listobj->front());
 
@@ -62,6 +62,46 @@ HRESULT CWeapon::Render()
 {
 	if (FAILED(__super::Render()))
 		return E_FAIL;
+
+	return S_OK;
+}
+
+HRESULT CWeapon::BindConstantBuffer(const wstring& camTag,SCB* consbuffer)
+{
+	if(m_pTransform == nullptr)
+		MSGBOX("Failed To Apply Weapon Transform nullptr");
+
+	_matrix smatWorld, smatView, smatProj;
+	smatWorld = XMMatrixTranspose(m_pTransform->Get_WorldMatrix());
+	smatView = XMMatrixTranspose(g_pGameInstance->Get_Transform(camTag, TRANSFORMSTATEMATRIX::D3DTS_VIEW));
+	smatProj = XMMatrixTranspose(g_pGameInstance->Get_Transform(camTag, TRANSFORMSTATEMATRIX::D3DTS_PROJECTION));
+
+	if(FAILED(m_pModel->SetUp_ValueOnShader("g_WorldMatrix", &smatWorld, sizeof(_matrix)))) MSGBOX("Failed To Apply Weapon ConstantBuffer");
+	if(FAILED(m_pModel->SetUp_ValueOnShader("g_ViewMatrix", &smatView, sizeof(_matrix)))) MSGBOX("Failed To Apply Weapon ConstantBuffer");
+	if(FAILED(m_pModel->SetUp_ValueOnShader("g_ProjMatrix", &smatProj, sizeof(_matrix)))) MSGBOX("Failed To Apply Weapon ConstantBuffer");
+
+	if (consbuffer)
+	{
+		if (FAILED(m_pModel->SetUp_ValueOnShader("g_Metalic", &consbuffer->metalic, sizeof(_float)))) MSGBOX("Failed To Apply Weapon ConstantBuffer");
+		if (FAILED(m_pModel->SetUp_ValueOnShader("g_Roughness", &consbuffer->roughness, sizeof(_float)))) MSGBOX("Failed To Apply Weapon ConstantBuffer");
+		if (FAILED(m_pModel->SetUp_ValueOnShader("g_AO", &consbuffer->ao, sizeof(_float)))) MSGBOX("Failed To Apply Weapon ConstantBuffer");
+		if (FAILED(m_pModel->SetUp_ValueOnShader("g_color", &consbuffer->color, sizeof(_float4)))) MSGBOX("Failed To Apply Weapon ConstantBuffer");
+		if (FAILED(m_pModel->SetUp_ValueOnShader("g_empower", &consbuffer->empower, sizeof(_float)))) MSGBOX("Failed To Apply Weapon ConstantBuffer");
+	}
+
+	return S_OK;
+}
+
+HRESULT CWeapon::BindLightBuffer()
+{
+	_matrix view, porj;
+	_float3 lightpos = m_lightdesc->vPosition;
+	view = XMMatrixTranspose(m_lightdesc->mLightView);
+	porj = XMMatrixTranspose(m_lightdesc->mLightProj);
+
+	if(FAILED(m_pModel->SetUp_ValueOnShader("g_LightView", &view, sizeof(_matrix)))) MSGBOX("Failed To Apply Weapon LightConstantBuffer");
+	if(FAILED(m_pModel->SetUp_ValueOnShader("g_LightProj", &porj, sizeof(_matrix)))) MSGBOX("Failed To Apply Weapon LightConstantBuffer");
+	if(FAILED(m_pModel->SetUp_ValueOnShader("g_LightPos", &lightpos, sizeof(_float3)))) MSGBOX("Failed To Apply Weapon LightConstantBuffer");
 
 	return S_OK;
 }

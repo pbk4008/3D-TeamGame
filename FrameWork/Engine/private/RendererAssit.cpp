@@ -46,14 +46,16 @@ HRESULT CRendererAssit::Setup_RenderTarget()
 		return E_FAIL;
 	if (FAILED(m_pTargetMgr->Add_RenderTarget(m_pDevice, m_pDeviceContext, TEXT("Target_Depth"), widht, height, DXGI_FORMAT_R32G32B32A32_FLOAT, _float4(1.f, 1.f, 1.f, 0.f), CRenderTarget::RTT::DEFFURED)))
 		return E_FAIL;
-	if (FAILED(m_pTargetMgr->Add_RenderTarget(m_pDevice, m_pDeviceContext, TEXT("Target_Metallic"), widht, height, DXGI_FORMAT_R16G16B16A16_FLOAT, _float4(0.f, 0.f, 0.f, 0.f), CRenderTarget::RTT::DEFFURED)))
-		return E_FAIL;
-	if (FAILED(m_pTargetMgr->Add_RenderTarget(m_pDevice, m_pDeviceContext, TEXT("Target_Roughness"), widht, height, DXGI_FORMAT_R16G16B16A16_FLOAT, _float4(0.f, 0.f, 0.f, 0.f), CRenderTarget::RTT::DEFFURED)))
-		return E_FAIL;
-	if (FAILED(m_pTargetMgr->Add_RenderTarget(m_pDevice, m_pDeviceContext, TEXT("Target_AO"), widht, height, DXGI_FORMAT_R16G16B16A16_FLOAT, _float4(0.f, 0.f, 0.f, 0.f), CRenderTarget::RTT::DEFFURED)))
+	if (FAILED(m_pTargetMgr->Add_RenderTarget(m_pDevice, m_pDeviceContext, TEXT("Target_MRA"), widht, height, DXGI_FORMAT_R16G16B16A16_FLOAT, _float4(0.f, 0.f, 0.f, 0.f), CRenderTarget::RTT::DEFFURED)))
 		return E_FAIL;
 	if (FAILED(m_pTargetMgr->Add_RenderTarget(m_pDevice, m_pDeviceContext, TEXT("Target_Emission"), widht, height, DXGI_FORMAT_R16G16B16A16_FLOAT, _float4(0.f, 0.f, 0.f, 0.f), CRenderTarget::RTT::DEFFURED)))
 		return E_FAIL;
+	//if (FAILED(m_pTargetMgr->Add_RenderTarget(m_pDevice, m_pDeviceContext, TEXT("Target_Metallic"), widht, height, DXGI_FORMAT_R16G16B16A16_FLOAT, _float4(0.f, 0.f, 0.f, 0.f), CRenderTarget::RTT::DEFFURED)))
+	//	return E_FAIL;
+	//if (FAILED(m_pTargetMgr->Add_RenderTarget(m_pDevice, m_pDeviceContext, TEXT("Target_Roughness"), widht, height, DXGI_FORMAT_R16G16B16A16_FLOAT, _float4(0.f, 0.f, 0.f, 0.f), CRenderTarget::RTT::DEFFURED)))
+	//	return E_FAIL;
+	//if (FAILED(m_pTargetMgr->Add_RenderTarget(m_pDevice, m_pDeviceContext, TEXT("Target_AO"), widht, height, DXGI_FORMAT_R16G16B16A16_FLOAT, _float4(0.f, 0.f, 0.f, 0.f), CRenderTarget::RTT::DEFFURED)))
+	//	return E_FAIL;
 
 
 	// Shadow Map RenderTarget
@@ -202,8 +204,9 @@ HRESULT CRendererAssit::Setup_RenderTarget()
 
 	if (FAILED(m_pTargetMgr->Add_MRT(TEXT("MRT_SkyBox"), TEXT("Target_SkyBox"))))
 		return E_FAIL;
-	if (FAILED(m_pTargetMgr->Add_MRT(TEXT("MRT_SkyBox"), TEXT("Target_Blend"))))
-		return E_FAIL;
+	//if (FAILED(m_pTargetMgr->Add_MRT(TEXT("MRT_SkyBox"), TEXT("Target_Blend"))))
+	/*if (FAILED(m_pTargetMgr->Add_MRT(TEXT("MRT_SkyBox"), TEXT("Target_Diffuse"))))
+		return E_FAIL;*/
 
 	// ¸ÖÆ¼ Å¸°Ù Deferred
 	if (FAILED(m_pTargetMgr->Add_MRT(TEXT("MRT_Deferred"), TEXT("Target_Diffuse"))))
@@ -212,14 +215,18 @@ HRESULT CRendererAssit::Setup_RenderTarget()
 		return E_FAIL;
 	if (FAILED(m_pTargetMgr->Add_MRT(TEXT("MRT_Deferred"), TEXT("Target_Depth"))))
 		return E_FAIL;
-	if (FAILED(m_pTargetMgr->Add_MRT(TEXT("MRT_Deferred"), TEXT("Target_Metallic"))))
-		return E_FAIL;
-	if (FAILED(m_pTargetMgr->Add_MRT(TEXT("MRT_Deferred"), TEXT("Target_Roughness"))))
-		return E_FAIL;
-	if (FAILED(m_pTargetMgr->Add_MRT(TEXT("MRT_Deferred"), TEXT("Target_AO"))))
+	if (FAILED(m_pTargetMgr->Add_MRT(TEXT("MRT_Deferred"), TEXT("Target_MRA"))))
 		return E_FAIL;
 	if (FAILED(m_pTargetMgr->Add_MRT(TEXT("MRT_Deferred"), TEXT("Target_Emission"))))
 		return E_FAIL;
+	//if (FAILED(m_pTargetMgr->Add_MRT(TEXT("MRT_Deferred"), TEXT("Target_Metallic"))))
+	//	return E_FAIL;
+	//if (FAILED(m_pTargetMgr->Add_MRT(TEXT("MRT_Deferred"), TEXT("Target_Roughness"))))
+	//	return E_FAIL;
+	//if (FAILED(m_pTargetMgr->Add_MRT(TEXT("MRT_Deferred"), TEXT("Target_AO"))))
+	//	return E_FAIL;
+	//if (FAILED(m_pTargetMgr->Add_MRT(TEXT("MRT_Deferred"), TEXT("Target_Emission"))))
+	//	return E_FAIL;
 
 	// ´ÜÀÏ Å¸°Ù ShadowMap
 	if (FAILED(m_pTargetMgr->Add_MRT(TEXT("MRT_Shadow"), TEXT("Target_Shadow"))))
@@ -331,10 +338,11 @@ HRESULT CRendererAssit::Setup_RenderTarget()
 	if (FAILED(m_pTargetMgr->Ready_Debug_Buffer(TEXT("Target_Normal"), (fwidth - fwidth) + 100.f, (fheight - fheight), 100.f, 100.f)))	return E_FAIL;
 	if (FAILED(m_pTargetMgr->Ready_Debug_Buffer(TEXT("Target_Depth"), (fwidth - fwidth) + 200.f, (fheight - fheight), 100.f, 100.f)))	return E_FAIL;
 
-	if (FAILED(m_pTargetMgr->Ready_Debug_Buffer(TEXT("Target_Metallic"), fwidth - 200.f, (fheight - fheight), 100.f, 100.f)))		return E_FAIL;
-	if (FAILED(m_pTargetMgr->Ready_Debug_Buffer(TEXT("Target_Roughness"), fwidth - 100.f, (fheight - fheight), 100.f, 100.f)))		return E_FAIL;
-	if (FAILED(m_pTargetMgr->Ready_Debug_Buffer(TEXT("Target_AO"), fwidth - 200.f, (fheight - fheight) + 100, 100.f, 100.f)))		return E_FAIL;
-	if (FAILED(m_pTargetMgr->Ready_Debug_Buffer(TEXT("Target_Emission"), fwidth - 100.f, (fheight - fheight) + 100, 100.f, 100.f)))	return E_FAIL;
+	if (FAILED(m_pTargetMgr->Ready_Debug_Buffer(TEXT("Target_MRA"), (fwidth - fwidth) +300.f, (fheight - fheight), 100.f, 100.f)))	return E_FAIL;
+  	if (FAILED(m_pTargetMgr->Ready_Debug_Buffer(TEXT("Target_Emission"), (fwidth - fwidth) + 400.f, (fheight - fheight) + 100, 100.f, 100.f)))	return E_FAIL;
+	//if (FAILED(m_pTargetMgr->Ready_Debug_Buffer(TEXT("Target_Metallic"), fwidth - 200.f, (fheight - fheight), 100.f, 100.f)))		return E_FAIL;
+	//if (FAILED(m_pTargetMgr->Ready_Debug_Buffer(TEXT("Target_Roughness"), fwidth - 100.f, (fheight - fheight), 100.f, 100.f)))		return E_FAIL;
+	//if (FAILED(m_pTargetMgr->Ready_Debug_Buffer(TEXT("Target_AO"), fwidth - 200.f, (fheight - fheight) + 100, 100.f, 100.f)))		return E_FAIL;
 
 	if (FAILED(m_pTargetMgr->Ready_Debug_Buffer(TEXT("Target_Shadow"), (fwidth - fwidth), (fheight - fheight) + 100.f, 100.f, 100.f)))				return E_FAIL;
 	if (FAILED(m_pTargetMgr->Ready_Debug_Buffer(TEXT("Target_ShadeShadow"), (fwidth - fwidth) + 100.f, (fheight - fheight) + 100.f, 100.f, 100.f)))	return E_FAIL;

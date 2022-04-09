@@ -68,25 +68,24 @@ _int CStargazer::LateTick(_double _dDeltaTime)
 
 HRESULT CStargazer::Render()
 {
-	if (FAILED(__super::Render()))
-		return E_FAIL;
+	SCB desc;
+	ZeroMemory(&desc, sizeof(desc));
+	desc.color = _float4(0.7529f, 0.7529f, 0.7529f, 1.f);
+	desc.empower = 0.7f;
 
-	_matrix XMWorldMatrix = XMMatrixTranspose(m_pTransform->Get_WorldMatrix());
-	_matrix XMViewMatrix = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_VIEW));
-	_matrix XMProjectMatrix = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_PROJECTION));
-
-	//모델에 월드Matrix 던져줌
-	m_pModel->SetUp_ValueOnShader("g_WorldMatrix", &XMWorldMatrix, sizeof(_float) * 16);
-	//모델에  뷰Matrix 던져줌
-	m_pModel->SetUp_ValueOnShader("g_ViewMatrix", &XMViewMatrix, sizeof(_float) * 16);
-	//모델에 프로젝션Matrix 던져줌
-	m_pModel->SetUp_ValueOnShader("g_ProjMatrix", &XMProjectMatrix, sizeof(XMMATRIX));
-
-	
-	//모든 메쉬컨테이너를 돌면서 랜더함
+	CWeapon::BindConstantBuffer(L"Camera_Silvermane", &desc);
 	for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
 		m_pModel->Render(i, 0);
 
+	return S_OK;
+}
+
+HRESULT CStargazer::Render_Shadow()
+{
+	CWeapon::BindConstantBuffer(L"Camera_Silvermane");
+	CWeapon::BindLightBuffer();
+	for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
+		m_pModel->Render(i, 1);
 
 	return S_OK;
 }
@@ -110,8 +109,8 @@ HRESULT CStargazer::SetUp_Component()
 	CCapsuleCollider::DESC tDesc;
 	ZeroMemory(&tDesc, sizeof(tDesc));
 
-	tDesc.fHeight = 1.f;
-	tDesc.fRadius = 0.2f;
+	tDesc.fHeight = 1.5f;
+	tDesc.fRadius = 0.25f;
 	tDesc.tColliderDesc.eRigidType = ERigidType::Dynamic;
 	tDesc.tColliderDesc.fDynamicFriction = 0.f;
 	tDesc.tColliderDesc.fStaticFriction = 0.f;
@@ -126,7 +125,7 @@ HRESULT CStargazer::SetUp_Component()
 	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_CapsuleCollider", L"Collider", (CComponent**)&m_pCollider,&tDesc)))
 		return E_FAIL;
 
-	_matrix matPivot = /*XMMatrixScaling(10.f, 10.f, 10.f) * */XMMatrixRotationAxis(XMVectorSet(0.f, 1.f, 0.f, 0.f), XMConvertToRadians(90.f)) * XMMatrixTranslation(0.f, 0.f, 1.f);
+	_matrix matPivot = /*XMMatrixScaling(10.f, 10.f, 10.f) * */XMMatrixRotationAxis(XMVectorSet(0.f, 1.f, 0.f, 0.f), XMConvertToRadians(90.f)) * XMMatrixTranslation(0.f, 0.f, 0.8f);
 	m_pCollider->setPivotMatrix(matPivot);
 
 	if (FAILED(SetUp_Material()))

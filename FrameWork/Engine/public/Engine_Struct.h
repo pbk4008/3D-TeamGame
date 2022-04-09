@@ -196,4 +196,14 @@ namespace Engine
 		_uint iLevel = 0;
 		_float fDamage = 0.f;
 	}ATTACKDESC;
+
+	// 쉐이더 재질 값, 이미션 컬러
+	typedef struct ShaderConstantBuffer
+	{
+		_float metalic = 0.f;
+		_float roughness = 0.f;
+		_float ao = 0.f;
+		_float4 color = _float4(0, 0, 0, 0);
+		_float empower = 0.f;
+	}SCB;
 }

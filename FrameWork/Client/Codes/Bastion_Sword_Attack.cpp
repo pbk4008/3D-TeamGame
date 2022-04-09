@@ -72,14 +72,12 @@ _int CBastion_Sword_Attack::Tick(const _double& _dDeltaTime)
 
 		if ((_uint)CMonster_Bastion_Sword::ANIM_TYPE::ATTACK_SINGLE == m_pAnimator->Get_CurrentAnimNode())
 		{
-			//cout << "Single : " << iCurKeyFrameIndex << endl;
-
 			if (120 < iCurKeyFrameIndex && 150 > iCurKeyFrameIndex)
 			{
 				pMonster->Set_IsAttack(true);
 
 				_float fDamage = 4.f;
-				_uint iLevel = 1;
+				_uint iLevel = 2;
 				pMonster->Set_AttackDesc_Damaga(fDamage);
 				pMonster->Set_AttackDesc_Level(iLevel);
 			}
@@ -89,17 +87,26 @@ _int CBastion_Sword_Attack::Tick(const _double& _dDeltaTime)
 
 		else if ((_uint)CMonster_Bastion_Sword::ANIM_TYPE::ATTACK_DOUBLE == m_pAnimator->Get_CurrentAnimNode())
 		{
-			//cout << "Double : " << iCurKeyFrameIndex << endl;
+			cout << "Double : " << iCurKeyFrameIndex << endl;
 
 			if (80 < iCurKeyFrameIndex && 200 > iCurKeyFrameIndex)
 			{
 				pMonster->Set_IsAttack(true);
 
-				_float fDamage = 5.f;
+				_float fDamage = 3.f;
 				_uint iLevel = 1;
 				pMonster->Set_AttackDesc_Damaga(fDamage);
 				pMonster->Set_AttackDesc_Level(iLevel);
 			}
+			/*else if (180 < iCurKeyFrameIndex && 200 > iCurKeyFrameIndex)
+			{
+				pMonster->Set_IsAttack(true);
+
+				_float fDamage = 5.f;
+				_uint iLevel = 2;
+				pMonster->Set_AttackDesc_Damaga(fDamage);
+				pMonster->Set_AttackDesc_Level(iLevel);
+			}*/
 			else
 			{
 				pMonster->Set_IsAttack(false);
@@ -108,14 +115,12 @@ _int CBastion_Sword_Attack::Tick(const _double& _dDeltaTime)
 
 		else if ((_uint)CMonster_Bastion_Sword::ANIM_TYPE::ATTACK_JUMPEND == m_pAnimator->Get_CurrentAnimNode())
 		{
-			//cout << "Jump : " << iCurKeyFrameIndex << endl;
-
 			if (50 < iCurKeyFrameIndex && 70 > iCurKeyFrameIndex)
 			{
 				pMonster->Set_IsAttack(true);
 
 				_float fDamage = 5.f;
-				_uint iLevel = 2;
+				_uint iLevel = 3;
 				pMonster->Set_AttackDesc_Damaga(fDamage);
 				pMonster->Set_AttackDesc_Level(iLevel);
 			}
@@ -144,7 +149,7 @@ HRESULT CBastion_Sword_Attack::EnterState(void* pArg)
 	switch (m_eAttackType)
 	{
 	case ATTACK_TYPE::ATTACK_SINGLE:
-		if (FAILED(m_pAnimator->Change_AnyEntryAnimation((_uint)CMonster_Bastion_Sword::ANIM_TYPE::ATTACK_SINGLE)))
+		if (FAILED(m_pAnimator->Change_AnyEntryAnimation((_uint)CMonster_Bastion_Sword::ANIM_TYPE::ATTACK_DOUBLE)))
 			return E_FAIL;
 		break;
 	case ATTACK_TYPE::ATTACK_DOUBLE:
@@ -152,7 +157,7 @@ HRESULT CBastion_Sword_Attack::EnterState(void* pArg)
 			return E_FAIL;
 		break;
 	case ATTACK_TYPE::ATTACK_JUMP:
-		if (FAILED(m_pAnimator->Change_AnyEntryAnimation((_uint)CMonster_Bastion_Sword::ANIM_TYPE::ATTACK_JUMPSTART)))
+		if (FAILED(m_pAnimator->Change_AnyEntryAnimation((_uint)CMonster_Bastion_Sword::ANIM_TYPE::ATTACK_DOUBLE)))
 			return E_FAIL;
 		break;
 	}

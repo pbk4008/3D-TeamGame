@@ -1,35 +1,20 @@
 #include "Shader_RenderState.hpp"
+#include "Shader_Share.hlsli"
+#include "Shader_ShareFuntion.hlsli"
 
 /* 모든 전역변수들을 -> 상수테이블. */
 /* 클라이언트로부터 값을 전달받아올 수 있다. */
 
-cbuffer CameraDesc
-{
-	vector		g_vCamPosition;
-    float3		g_color;
-	float		g_Weight;
-};
-
-cbuffer Matrices
-{
-	matrix		g_WorldMatrix = (matrix)0;
-	matrix		g_ViewMatrix;
-	matrix		g_ProjMatrix;
-};
 
 Texture2D	g_DiffuseTexture;
-uint g_iImageCountX; //가로줄수
-uint g_iImageCountY; //세로줄수
-uint g_iFrame; //전체장수
-float g_fLifeTime;
-float g_fCurTime;
 
-
-sampler DefaultSampler = sampler_state
+cbuffer Information
 {
-	filter = min_mag_mip_linear;
-	AddressU = wrap;
-	AddressV = wrap;
+	uint g_iImageCountX; //가로줄수
+	uint g_iImageCountY; //세로줄수
+	uint g_iFrame; //전체장수
+	float g_fLifeTime;
+	float g_fCurTime;
 };
 
 /* 1. m_pDeviceContext->DrawIndexed() */
@@ -194,35 +179,41 @@ PS_OUT PS_MAIN_MULTIIMAGE(PS_IN In)
 
 struct PS_OUT_TEST
 {
-	float4 diffuse : SV_TARGET0;
-	float4 normal : SV_TARGET1;
-	float4 depth : SV_TARGET2;
-	float4 M : SV_Target3;
-	float4 R : SV_Target4;
-	float4 A : SV_Target5;
-	float4 E : SV_Target6;
+	half4 diffuse : SV_TARGET0;
+	half4 normal : SV_TARGET1;
+	half4 depth : SV_TARGET2;
+	half4 mra : SV_Target3;
+	half4 emission : SV_Target4;
 };
 
 PS_OUT_TEST PS_MAIN_TEST(PS_IN In)
 {
 	PS_OUT_TEST Out = (PS_OUT_TEST)0;
+	
+	In.vTexUV.x = (In.vTexUV.x / g_iImageCountX) + (g_iFrame % g_iImageCountX) * (1.f / g_iImageCountX); //가로 이미지개수 , 프레임 , 1나누기 이미지개수 
+	In.vTexUV.y = (In.vTexUV.y / g_iImageCountY) + (g_iFrame / g_iImageCountY) * (1.f / g_iImageCountY); //세로 이미지개수 , 프레임 , 1나누기 이미지개수
 
-	float4 diffuse = g_DiffuseTexture.Sample(DefaultSampler, In.vTexUV.xy);	
-	Out.diffuse = diffuse;
+	half GreenAlpha = g_DiffuseTexture.Sample(DefaultSampler, In.vTexUV).a;
+	
+	Out.diffuse = g_DiffuseTexture.Sample(DefaultSampler, In.vTexUV);
+	
+	Out.diffuse.r = 1.f;
+	Out.diffuse.gb = 0.f;
+	
+	Out.diffuse = Out.diffuse * GreenAlpha;
 
-	Out.depth = float4(In.vPosition.z / In.vPosition.w, In.vPosition.w / 300.f, 0.f, 0.f);
-	Out.normal = float4(1, 1, 1, 0);
+	Out.depth = half4(In.vPosition.z / In.vPosition.w, In.vPosition.w / 300.f, 0.f, 0.f);
+	Out.normal = half4(1, 1, 1, 0);
 
-	Out.M = float4(0, 0, 0, 1);
-	Out.R = float4(1, 1, 1, 1);
-	Out.A = float4(1, 1, 1, 1);
-
-    float4 color = float4(g_color, 1.f);
-	float4 power = 1.0f;
-
-	Out.E = color * power * diffuse;
-
-	if (Out.diffuse.a < 0.1f)
+	Out.mra.r = 0.f;
+	Out.mra.g = 1.f;
+	Out.mra.b = 1.f;
+	Out.mra.a = 1.f;
+	
+	half4 power = 0.1f;
+	Out.emission = g_color * power * GreenAlpha;
+	
+	if (0.01f >= Out.diffuse.a)
 		discard;
 	
 	return Out;
@@ -262,7 +253,7 @@ technique11			DefaultTechnique
 		/* 렌더스테이츠에 대한 정의. */
         SetRasterizerState(CullMode_Default);
         SetDepthStencilState(ZDefault, 0);
-        //SetBlendState(AlphaBlending, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+		SetBlendState(AlphaBlending, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
 
 		/* 진입점함수를 지정한다. */
         VertexShader = compile vs_5_0 VS_MAIN();
@@ -286,9 +277,9 @@ technique11			DefaultTechnique
 	pass Test //4
 	{
 		/* 렌더스테이츠에 대한 정의. */
-		SetRasterizerState(CullMode_Default);
+		SetRasterizerState(CullMode_None);
 		SetDepthStencilState(ZDefault, 0);
-
+		SetBlendState(BlendDisable, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
 
 		/* 진입점함수를 지정한다. */
 		VertexShader = compile vs_5_0 VS_MAIN();
