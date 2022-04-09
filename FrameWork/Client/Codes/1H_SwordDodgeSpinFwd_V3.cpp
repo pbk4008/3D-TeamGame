@@ -22,7 +22,7 @@ _int C1H_SwordDodgeSpinFwd_V3::Tick(const _double& _dDeltaTime)
 	if (NO_EVENT != iProgress)
 		return iProgress;
 
-	Add_PlusAngle(EDir::Forward, _dDeltaTime);
+	Add_PlusAngle(m_eDir, _dDeltaTime);
 
 	return _int();
 }
@@ -54,8 +54,7 @@ HRESULT C1H_SwordDodgeSpinFwd_V3::EnterState()
 	m_pAnimationController->Set_RootMotion(true, true);
 
 	m_iCutIndex = 15;
-
-
+	m_eDir = EDir::Forward;
 
 	m_tShakeEvent.fDuration = 1.f;
 	m_tShakeEvent.fBlendInTime = 0.2f;

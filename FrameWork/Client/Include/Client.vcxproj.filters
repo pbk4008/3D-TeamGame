@@ -1632,6 +1632,9 @@
     <ClInclude Include="..\Headers\LootingChest.h">
       <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Looting</Filter>
     </ClInclude>
+    <ClInclude Include="..\Headers\DodgeSlide.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Idel</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -2549,6 +2552,9 @@
     </ClCompile>
     <ClCompile Include="..\Codes\LootingChest.cpp">
       <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Looting</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\DodgeSlide.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Idel</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

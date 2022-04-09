@@ -254,6 +254,105 @@ const _int CState_Silvermane::Add_PlusAngle(const EDir _eDir, const _double& _dD
 	return _int();
 }
 
+const _int CState_Silvermane::ToIdle()
+{
+	if (m_pSilvermane->IsEquipWeapon())
+	{
+		switch (m_pSilvermane->Get_WeaponType())
+		{
+		case CWeapon::EType::Sword_1H:
+			if (FAILED(m_pStateController->Change_State(L"1H_SwordIdle")))
+				return -1;
+			break;
+		case CWeapon::EType::Hammer_2H:
+			if (FAILED(m_pStateController->Change_State(L"2H_HammerIdle")))
+				return -1;
+			break;
+		}
+		return STATE_CHANGE;
+	}
+	else
+	{
+		if (FAILED(m_pStateController->Change_State(L"Idle")))
+			return -1;
+		return STATE_CHANGE;
+	}
+
+	return _int();
+}
+
+const _int CState_Silvermane::ToSprint()
+{
+	if (!m_pSilvermane->IsEquipWeapon())
+	{
+		if (FAILED(m_pStateController->Change_State(L"SprintFwdStart")))
+			return -1;
+	}
+	else
+	{
+		switch (m_pSilvermane->Get_WeaponType())
+		{
+		case CWeapon::EType::Sword_1H:
+			if (FAILED(m_pStateController->Change_State(L"1H_SwordEquipOff")))
+				return -1;
+			break;
+		case CWeapon::EType::Hammer_2H:
+			if (FAILED(m_pStateController->Change_State(L"2H_HammerEquipOff")))
+				return -1;
+			break;
+		}
+	}
+	return STATE_CHANGE;
+}
+
+const _int CState_Silvermane::ToJogAttack()
+{
+	switch (m_pSilvermane->Get_WeaponType())
+	{
+	case CWeapon::EType::Sword_1H:
+		if (FAILED(m_pStateController->Change_State(L"1H_SwordJogAttack")))
+			return -1;
+		break;
+	case CWeapon::EType::Hammer_2H:
+		if (FAILED(m_pStateController->Change_State(L"2H_HammerAttackJogR1")))
+			return -1;
+		break;
+	}
+	return STATE_CHANGE;
+}
+
+const _int CState_Silvermane::ToDashAttack()
+{
+	switch (m_pSilvermane->Get_WeaponType())
+	{
+	case CWeapon::EType::Sword_1H:
+		if (FAILED(m_pStateController->Change_State(L"1H_SwordJogAttack")))
+			return -1;
+		break;
+	case CWeapon::EType::Hammer_2H:
+		if (FAILED(m_pStateController->Change_State(L"2H_HammerAttackDodgeR1")))
+			return -1;
+		break;
+	}
+	return STATE_CHANGE;
+}
+
+const _int CState_Silvermane::ToChargeStart()
+{
+	switch (m_pSilvermane->Get_WeaponType())
+	{
+	case CWeapon::EType::Sword_1H:
+		if (FAILED(m_pStateController->Change_State(L"1H_SwordAttackNormalR2_Start")))
+			return -1;
+		break;
+	case CWeapon::EType::Hammer_2H:
+		if (FAILED(m_pStateController->Change_State(L"2H_HammerChargeStage1_Start")))
+			return -1;
+		break;
+	}
+	return STATE_CHANGE;
+}
+
 void CState_Silvermane::Set_Silvermane(CSilvermane* _pSilvermane)
 {
 	m_pSilvermane = _pSilvermane;

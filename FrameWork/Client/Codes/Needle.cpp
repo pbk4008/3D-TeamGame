@@ -101,7 +101,7 @@ _int CNeedle::Tick(_double _dDeltaTime)
 
 	if (m_bLight && 0.f <= m_fLightRange)
 	{
-		m_fLightRange -= _dDeltaTime * 10.f;
+		m_fLightRange -= (_float)_dDeltaTime * 10.f;
 		m_pLight->Set_Range(m_fLightRange);
 	}
 

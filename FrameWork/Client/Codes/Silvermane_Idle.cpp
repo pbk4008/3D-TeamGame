@@ -33,7 +33,7 @@ _int CSilvermane_Idle::Tick(const _double& _dDeltaTime)
 	if (!m_pSilvermane->IsEquipWeapon())
 	{
 		m_fHoldTime += (_float)_dDeltaTime;
-		if (2.f < m_fHoldTime)
+		if (3.f < m_fHoldTime)
 		{
 			switch (m_pSilvermane->Get_WeaponType())
 			{

@@ -84,7 +84,6 @@ HRESULT C1H_Dash::ExitState()
 	m_pSilvermane->Set_IsMove(false);
 	m_pSilvermane->Set_IsDash(false);
 
-	m_isShake = false;
 	return S_OK;
 }
 
@@ -93,6 +92,50 @@ _int C1H_Dash::Input(const _double& _dDeltaTime)
 	_int iProgress = __super::Input(_dDeltaTime);
 	if (NO_EVENT != iProgress)
 		return iProgress;
+
+	_uint iCurKeyFrameIndex = m_pAnimationController->Get_CurKeyFrameIndex();
+	if (6 < iCurKeyFrameIndex && iCurKeyFrameIndex < m_iCutIndex)
+	{
+		if (g_pGameInstance->getkeyDown(DIK_SPACE))
+		{
+			EDir eDir = EDir::Max;
+			if (g_pGameInstance->getkeyPress(DIK_A))
+			{
+				if (g_pGameInstance->getkeyPress(DIK_W))
+					eDir = EDir::LeftForward;
+				else if (g_pGameInstance->getkeyPress(DIK_S))
+					eDir = EDir::LeftBackward;
+				else
+					eDir = EDir::Left;
+
+			}
+			else if (g_pGameInstance->getkeyPress(DIK_D))
+			{
+				if (g_pGameInstance->getkeyPress(DIK_W))
+					eDir = EDir::RightForward;
+				else if (g_pGameInstance->getkeyPress(DIK_S))
+					eDir = EDir::RightBackward;
+				else
+					eDir = EDir::Right;
+			}
+			else if (g_pGameInstance->getkeyPress(DIK_S))
+			{
+				eDir = EDir::Backward;
+			}
+			else if (g_pGameInstance->getkeyPress(DIK_W))
+			{
+				eDir = EDir::Forward;
+			}
+			else
+			{
+				eDir = EDir::Backward;
+			}
+
+			if (FAILED(m_pStateController->Change_State(L"DodgeSlide", &eDir)))
+				return -1;
+			return STATE_CHANGE;
+		}
+	}
 
 	if (m_iCutIndex < m_pAnimationController->Get_CurKeyFrameIndex())
 	{
@@ -105,33 +148,11 @@ _int C1H_Dash::Input(const _double& _dDeltaTime)
 
 		if (g_pGameInstance->getMouseKeyDown(CInputDev::MOUSESTATE::MB_LBUTTON))
 		{
-			switch (m_pSilvermane->Get_WeaponType())
-			{
-			case CWeapon::EType::Sword_1H:
-				if (FAILED(m_pStateController->Change_State(L"1H_SwordJogAttack")))
-					return -1;
-				break;
-			case CWeapon::EType::Hammer_2H:
-				if (FAILED(m_pStateController->Change_State(L"2H_HammerAttackDodgeR1")))
-					return -1;
-				break;
-			}
-			return STATE_CHANGE;
+			return ToDashAttack();
 		}
 		else if (g_pGameInstance->getMouseKeyDown(CInputDev::MOUSESTATE::MB_RBUTTON))
 		{
-			switch (m_pSilvermane->Get_WeaponType())
-			{
-			case CWeapon::EType::Sword_1H:
-				if (FAILED(m_pStateController->Change_State(L"1H_SwordAttackNormalR2_Start")))
-					return -1;
-				break;
-			case CWeapon::EType::Hammer_2H:
-				if (FAILED(m_pStateController->Change_State(L"2H_HammerChargeStage1_Start")))
-					return -1;
-				break;
-			}
-			return STATE_CHANGE;
+			return ToChargeStart();
 		}
 
 		if (g_pGameInstance->getkeyPress(DIK_LSHIFT))
@@ -141,26 +162,7 @@ _int C1H_Dash::Input(const _double& _dDeltaTime)
 				g_pGameInstance->getkeyPress(DIK_A) ||
 				g_pGameInstance->getkeyPress(DIK_D))
 			{
-				if (!m_pSilvermane->IsEquipWeapon())
-				{
-					if (FAILED(m_pStateController->Change_State(L"SprintFwdStart")))
-						return -1;
-				}
-				else
-				{
-					switch (m_pSilvermane->Get_WeaponType())
-					{
-					case CWeapon::EType::Sword_1H:
-						if (FAILED(m_pStateController->Change_State(L"1H_SwordEquipOff")))
-							return -1;
-						break;
-					case CWeapon::EType::Hammer_2H:
-						if (FAILED(m_pStateController->Change_State(L"2H_HammerEquipOff")))
-							return -1;
-						break;
-					}
-				}
-				return STATE_CHANGE;
+				return ToSprint();
 			}
 		}
 	}

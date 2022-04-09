@@ -50,10 +50,9 @@ HRESULT CSilvermane_Death::EnterState(void* _pArg)
 	if (FAILED(__super::EnterState()))
 		return E_FAIL;
 
-	EDir eDir = EDir::Max;
 	if(_pArg)
-		memcpy_s(&eDir, sizeof(EDir), _pArg, sizeof(EDir));
-	switch (eDir)
+		memcpy_s(&m_eDir, sizeof(EDir), _pArg, sizeof(EDir));
+	switch (m_eDir)
 	{
 	case EDir::Forward:
 		if (FAILED(m_pAnimationController->SetUp_NextAnimation("SK_Silvermane.ao|A_Death_Bwd_Player", false)))
