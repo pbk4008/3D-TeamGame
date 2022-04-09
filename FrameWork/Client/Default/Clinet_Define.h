@@ -9,9 +9,6 @@ const float MAXGROOGUGAGUE  = 10.0f;
 extern HWND g_hWnd;
 extern HINSTANCE  g_hInst;
 
-extern _float g_fDeltaTime;
-extern _double g_dDeltaTime;
-
 extern CMainApp* g_pMainApp;
 extern CClient_Observer* g_pObserver;
 extern CDebugSystem* g_pDebugSystem;

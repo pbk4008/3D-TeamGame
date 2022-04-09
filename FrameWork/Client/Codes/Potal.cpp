@@ -137,9 +137,9 @@ _uint CPotal::Scaling(_double dDeltaTime)
 	if (!m_bCreate)
 	{
 		if(fSize<3.f)
-			fSize += dDeltaTime*10.f;
+			fSize += (_float)dDeltaTime*10.f;
 		else
-			fSize += dDeltaTime*4.5f;
+			fSize += (_float)dDeltaTime*4.5f;
 	}
 	else
 		fSize -= (_float)dDeltaTime *5.f;
@@ -168,7 +168,7 @@ _uint CPotal::Create_Meteor(_double dDeltaTime)
 	}
 	else
 	{
-		m_fAccRetain += dDeltaTime;
+		m_fAccRetain += (_float)dDeltaTime;
 		if (m_fAccRetain > 1.f)
 		{
 			m_fAccRetain = 0.f;

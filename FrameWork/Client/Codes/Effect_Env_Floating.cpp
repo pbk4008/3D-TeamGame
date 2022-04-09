@@ -77,9 +77,9 @@ _int CEffect_Env_Floating::Tick(_double TimeDelta)
 		m_Desc.fCurTime = 0.f;
 	}*/
 
-	m_pBuffer->Update(g_dDeltaTime, m_Desc.iAxis);
+	m_pBuffer->Update(g_dImmutableTime, m_Desc.iAxis);
 
-	//m_fNonActiveTimeAcc += (_float)g_dDeltaTime;
+	//m_fNonActiveTimeAcc += (_float)g_dImmutableTime;
 	//if (4000.f <= m_fNonActiveTimeAcc)
 	//{
 	//	setActive(false);

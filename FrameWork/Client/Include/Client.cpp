@@ -11,8 +11,6 @@
 HINSTANCE  g_hInst;                                // 현재 인스턴스입니다.
 HWND g_hWnd;
 CMainApp* g_pMainApp;
-_float g_fDeltaTime;
-_double g_dDeltaTime;
 WCHAR szTitle[MAX_LOADSTRING];                  // 제목 표시줄 텍스트입니다.
 WCHAR szWindowClass[MAX_LOADSTRING];            // 기본 창 클래스 이름입니다.
 _bool g_isLockMouse = false;
@@ -88,9 +86,9 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
 			g_pGameInstance->Update_TimeDelta(L"Timer_60");
 
-            _double dDeltaTimme = g_pGameInstance->Get_TimeDelta(L"Timer_60");
-            g_dDeltaTime = dDeltaTimme;
-            g_fDeltaTime = (_float)dDeltaTimme;
+			_double dDeltaTimme = g_pGameInstance->Get_TimeDelta(L"Timer_60");
+			g_fImmutableTime = (_float)dDeltaTimme;
+			g_dImmutableTime = dDeltaTimme;
 			if (0 > pMainGame->Tick(dDeltaTimme))
 				break;
 
