@@ -128,18 +128,6 @@ CVIBuffer_Rect * CVIBuffer_Rect::Create(ID3D11Device * pDevice, ID3D11DeviceCont
 	return pInstance;
 }
 
-CVIBuffer_Rect* CVIBuffer_Rect::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
-{
-	CVIBuffer_Rect* pInstance = new CVIBuffer_Rect(pDevice, pDeviceContext);
-
-	if (FAILED(pInstance->NativeConstruct_Prototype()))
-	{
-		MSGBOX("Failed to Creating CVIBuffer_Rect");
-		Safe_Release(pInstance);
-	}
-	return pInstance;
-}
-
 CComponent * CVIBuffer_Rect::Clone(void * pArg)
 {
 	CVIBuffer_Rect*		pInstance = new CVIBuffer_Rect(*this);
