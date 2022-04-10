@@ -133,8 +133,8 @@ PS_OUT PS_MAIN(PS_IN In)
 	Out.depth = half4(In.vUvDepth.z / In.vUvDepth.w, In.vUvDepth.w / 300.f, 0.f, 0.f);
 	Out.normal = half4(normal, 0);
 	
-	Out.mra.r = 0.8f;
-	Out.mra.g = 0.2f;
+	Out.mra.r = 0.4f;
+	Out.mra.g = 0.65f;
 	Out.mra.b = 1.f;
 	Out.mra.a = 1.f;
 	Out.emission = half4(0, 0, 0, 1);

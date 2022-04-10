@@ -22,7 +22,8 @@ public: enum RENDERBUTTON
 
 public: enum RENDER {	RENDER_PRIORITY, RENDER_SKYBOX
 						, RENDER_SHADOW, RENDER_NONALPHA, RENDER_ALPHA
-						, RENDER_EFFECT
+						, RENDER_STANDARD
+						, RENDER_DYDISTORTION, RENDER_STDISTORTION
 						, RENDER_UI, RENDER_UI_ACTIVE
 						, RENDER_MAX };
 
@@ -77,7 +78,6 @@ private: HRESULT Render_Alpha();
 private: HRESULT Render_UI();
 private: HRESULT Render_UI_Active();
 
-private: HRESULT SSAOPass();
 private: HRESULT DistortionPass();
 private: HRESULT Render_Shadow();
 private: HRESULT ShadowPass();

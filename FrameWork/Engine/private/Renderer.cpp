@@ -146,18 +146,17 @@ HRESULT CRenderer::Draw_RenderGroup()
 	if (FAILED(Render_Priority()))
 		return E_FAIL;
 
+	if (FAILED(Render_SkyBox())) MSGBOX("Failed To Rendering SkyPass");
+
+	if (m_bShadow == true)
+	{
+		if (FAILED(Render_Shadow())) MSGBOX("Failed To Rendering ShadowMapPass");
+	}
+
+	if (FAILED(Render_NonAlpha())) MSGBOX("Failed To Rendering NonAlphaPaas");
 
 	if (m_bPixel) // Pixel HDR
 	{
-		if (FAILED(Render_SkyBox())) MSGBOX("Failed To Rendering SkyPass");
-
-		if (m_bShadow == true)
-		{
-			if (FAILED(Render_Shadow())) MSGBOX("Failed To Rendering ShadowMapPass");
-		}
-
-		if (FAILED(Render_NonAlpha())) MSGBOX("Failed To Rendering NonAlphaPaas");
-
 		if (m_bShadow == true)
 		{
 			if (FAILED(ShadowPass())) MSGBOX("Failed To Rendering ShadowPass");
@@ -235,6 +234,7 @@ HRESULT CRenderer::Draw_RenderGroup()
 		if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("Target_AlphaBlend")))) return E_FAIL;
 		if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("Target_BlurShadow")))) return E_FAIL;
 		if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("Target_Distortion")))) return E_FAIL;
+		if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("Target_STDistortion")))) return E_FAIL;
 	}
 #endif // _DEBUG
 
@@ -343,14 +343,29 @@ HRESULT CRenderer::DistortionPass()
 	if (FAILED(m_pTargetMgr->Begin_MRT(m_pDeviceContext, TEXT("Target_Distortion"))))
 		return E_FAIL;
 
-	for (auto& pGameObject : m_RenderGroup[RENDER_EFFECT])
+	for (auto& pGameObject : m_RenderGroup[RENDER_DYDISTORTION])
 	{
 		if (nullptr != pGameObject)
 			pGameObject->Render();
 
 		Safe_Release(pGameObject);
 	}
-	m_RenderGroup[RENDER_EFFECT].clear();
+	m_RenderGroup[RENDER_DYDISTORTION].clear();
+
+	if (FAILED(m_pTargetMgr->End_MRTNotClear(m_pDeviceContext))) return E_FAIL;
+
+
+	if (FAILED(m_pTargetMgr->Begin_MRT(m_pDeviceContext, TEXT("Target_STDistortion"))))
+		return E_FAIL;
+
+	for (auto& pGameObject : m_RenderGroup[RENDER_STDISTORTION])
+	{
+		if (nullptr != pGameObject)
+			pGameObject->Render();
+
+		Safe_Release(pGameObject);
+	}
+	m_RenderGroup[RENDER_STDISTORTION].clear();
 
 	if (FAILED(m_pTargetMgr->End_MRT(m_pDeviceContext))) return E_FAIL;
 
@@ -452,14 +467,31 @@ HRESULT CRenderer::Render_Final(_bool outline, _bool Radial)
 {
 	if (!m_pTargetMgr)	return E_FAIL;
 
+	_float delta = (_float)g_pGameInstance->Get_TimeDelta(L"Timer_60");
+	_float thick = 0.2f;
 	if (FAILED(m_pVIBuffer->SetUp_TextureOnShader("g_DiffuseTexture", m_pTargetMgr->Get_SRV(TEXT("Target_Blend"))))) MSGBOX("Render Final DiffuseTeuxtre Not Apply");
+	if (FAILED(m_pVIBuffer->SetUp_TextureOnShader("g_DepthTexture", m_pTargetMgr->Get_SRV(TEXT("Target_Depth"))))) MSGBOX("Render Final DepthTexture Not Apply");
+	if (FAILED(m_pVIBuffer->SetUp_TextureOnShader("g_BlurTexture", m_pTargetMgr->Get_SRV(TEXT("Target_Bloom"))))) MSGBOX("Render Final BlurTexture Not Apply");
+
+	_matrix		ViewMatrix = g_pGameInstance->Get_Transform(m_CameraTag, TRANSFORMSTATEMATRIX::D3DTS_VIEW);
+	_matrix		ProjMatrix = g_pGameInstance->Get_Transform(m_CameraTag, TRANSFORMSTATEMATRIX::D3DTS_PROJECTION);
+	_vector		campos = g_pGameInstance->Get_CamPosition(m_CameraTag);
+
+	ViewMatrix = XMMatrixInverse(nullptr, ViewMatrix);
+	ProjMatrix = XMMatrixInverse(nullptr, ProjMatrix);
+	if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_ViewMatrixInv", &XMMatrixTranspose(ViewMatrix), sizeof(_float4x4)))) MSGBOX("Failed To Apply Finalpass ViewInvers");
+	if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_ProjMatrixInv", &XMMatrixTranspose(ProjMatrix), sizeof(_float4x4)))) MSGBOX("Failed To Apply Finalpass ProjInvers");
+
+	if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_vCamPosition", &campos, sizeof(_vector)))) MSGBOX("Failed To Apply Finalpass ProjInvers");
+	if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_delta", &delta, sizeof(_float)))) MSGBOX("Render Final Value delta Not Apply");
+	if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_thick", &thick, sizeof(_float)))) MSGBOX("Render Final Value thick Not Apply");
+
 	if (m_bdistortion == true)
 	{
-		_float delta = (_float)g_pGameInstance->Get_TimeDelta(L"Timer_60");
 		if (FAILED(m_pVIBuffer->SetUp_TextureOnShader("g_DistortionTex", m_pTargetMgr->Get_SRV(TEXT("Target_Distortion"))))) MSGBOX("Render Final g_DistortionTex Not Apply");
-		if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_delta", &delta, sizeof(_float)))) MSGBOX("Render Final Value delta Not Apply");
 	}
 
+	if (FAILED(m_pVIBuffer->SetUp_TextureOnShader("g_STDistortionTex", m_pTargetMgr->Get_SRV(TEXT("Target_STDistortion"))))) MSGBOX("Render Final g_STDistortionTex Not Apply");
 	if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_outline", &m_boutline, sizeof(_bool)))) MSGBOX("Render Final Value outline Not Apply");
 	if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_radial", &m_bradial, sizeof(_bool)))) MSGBOX("Render Final Value raidal Not Apply");
 	if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_distort", &m_bdistortion, sizeof(_bool)))) MSGBOX("Render Final Value distort Not Apply");

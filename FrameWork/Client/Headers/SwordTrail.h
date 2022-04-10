@@ -26,7 +26,7 @@ public:  HRESULT Render();
 public: void			AddVertex(const _fvector pToppos, const _vector pBottompos);
 public: void			Clear_Vertex();
 
-private: _float				m_Frametime = 0.f;
+//private: _float				m_Frametime = 0.f;
 private: CTrail_VIBuffer*	m_pViBufferCom = nullptr;
 private: CTexture*			m_pTexture = nullptr;
 private: CTexture*			m_pTexture1 = nullptr;

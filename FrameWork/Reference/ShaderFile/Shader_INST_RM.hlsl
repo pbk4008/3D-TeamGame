@@ -5,6 +5,7 @@
 Texture2D g_ShadowTexture;
 Texture2D g_DiffuseTexture;
 Texture2D g_BiNormalTexture;
+Texture2D g_RMTexture;
 
 struct VS_IN
 {
@@ -14,10 +15,10 @@ struct VS_IN
 	float3		vTangent	: TANGENT; 
 	float3		vBiNormal	: BINORMAL;
 	
-	float4 vRight		: TEXCOORD1;
-	float4 vUp			: TEXCOORD2;
-	float4 vLook		: TEXCOORD3;
-	float4 vTranslation : TEXCOORD4;
+	float4 vRight			: TEXCOORD1;
+	float4 vUp				: TEXCOORD2;
+	float4 vLook			: TEXCOORD3;
+	float4 vTranslation		: TEXCOORD4;
 };
 
 struct VS_OUT
@@ -27,7 +28,7 @@ struct VS_OUT
 	float4 vTangent		: TANGENT;
 	float4 vBiNormal	: BINORMAL;
 	float4 vUvDepth		: TEXCOORD0;
-	float clip			: SV_ClipDistance0;
+	float4 clip			: SV_ClipDistance0;
 };
 
 bool g_bUsingTool = false;
@@ -65,17 +66,17 @@ VS_OUT VS_MESH(VS_IN In)
 	Out.vUvDepth.zw = Out.vPosition.zw;
 	
 	Out.clip = dot(mul(vPosition, g_WorldMatrix), ClipPlane);
-	
 	return Out;
 }
 // VS_SHADOW_MAP
 //*---------------------------------------------------------------------------------------------*
+
 struct VS_OUT_SHADOW
 {
-	float4 vPosition	: SV_Position;
-	float2 vTexUV		: TEXCOORD0;
-	float4 vClipPos		: TEXCOORD1;
-	float3 worldpos		: TEXCOORD2;
+	float4 vPosition : SV_Position;
+	float2 vTexUV : TEXCOORD0;
+	float4 vClipPos : TEXCOORD1;
+	float3 worldpos : TEXCOORD2;
 };
 
 VS_OUT_SHADOW VS_MAIN_SHADOW(VS_IN In)
@@ -95,8 +96,36 @@ VS_OUT_SHADOW VS_MAIN_SHADOW(VS_IN In)
 	Out.vTexUV = In.vTexUV;
 	Out.vClipPos = Out.vPosition;
 	
-	half4 worldpos = mul(vPosition, g_WorldMatrix);
+	float4 worldpos = mul(vPosition, g_WorldMatrix);
 	Out.worldpos = worldpos.xyz;
+	
+	return Out;
+}
+//*---------------------------------------------------------------------------------------------*
+
+// SHADOW_MAP
+//*---------------------------------------------------------------------------------------------*
+struct PS_IN_SHADOW
+{
+	float4 vPosition : SV_Position;
+	float2 vTexUV : TEXCOORD0;
+	float4 vClipPos : TEXCOORD1;
+	float3 worldpos : TEXCOORD2;
+};
+
+struct PS_OUT_SHADOW
+{
+	vector vShadowDepthMap : SV_TARGET0;
+};
+
+PS_OUT_SHADOW PS_MAIN_SHADOW(PS_IN_SHADOW In)
+{
+	PS_OUT_SHADOW Out = (PS_OUT_SHADOW) 0.f;
+	
+	const float OneDividzFar = 1 / 300.f;
+	float4 color = 1;
+	color.xyz = length(In.worldpos - g_LightPos) * OneDividzFar;
+	Out.vShadowDepthMap = color;
 	
 	return Out;
 }
@@ -104,14 +133,13 @@ VS_OUT_SHADOW VS_MAIN_SHADOW(VS_IN In)
 
 struct PS_IN
 {
-	half4 vPosition		: SV_POSITION;
-	half4 vNormal		: NORMAL;
-	half4 vTangent		: TANGENT;
-	half4 vBiNormal		: BINORMAL;
-	half4 vUvDepth		: TEXCOORD0;
-	half clip			: SV_ClipDistance0;
+	float4 vPosition : SV_POSITION;
+	float4 vNormal : NORMAL;
+	float4 vTangent : TANGENT;
+	float4 vBiNormal : BINORMAL;
+	float4 vUvDepth : TEXCOORD0;
+	float clip : SV_ClipDistance0;
 };
-
 struct PS_OUT
 {
 	half4 diffuse	: SV_TARGET0;
@@ -126,6 +154,7 @@ PS_OUT PS_MAIN(PS_IN In)
 	
 	half4 diffuse = g_DiffuseTexture.Sample(DefaultSampler, In.vUvDepth.xy);
 	half3 normal = g_BiNormalTexture.Sample(DefaultSampler, In.vUvDepth.xy).xyz;
+	half3 rm = g_RMTexture.Sample(DefaultSampler, In.vUvDepth.xy).xyz;
 	half3x3 tbn = { In.vTangent.xyz, In.vBiNormal.xyz, In.vNormal.xyz };
 	
 	normal = Normalmapping(normal, tbn);
@@ -135,46 +164,19 @@ PS_OUT PS_MAIN(PS_IN In)
 	Out.depth = half4(In.vUvDepth.z / In.vUvDepth.w, In.vUvDepth.w / 300.f, 0.f, 0.f);
 	Out.normal = half4(normal, 0);
 	
-	half Metalic = 0.f;
-	half Roughness = 0.9;
+	half Metalic = rm.g;
+	half Roughness = rm.r;
 	half Ao = 1.f;
-
+	
 	Out.mra.r = Metalic;
 	Out.mra.g = Roughness;
 	Out.mra.b = Ao;
 	Out.mra.a = 1.f;
+	
 	Out.emission = half4(0, 0, 0, 1);
-
-	return Out;
-}
-
-// SHADOW_MAP
-//*---------------------------------------------------------------------------------------------*
-struct PS_IN_SHADOW
-{
-	float4 vPosition	: SV_Position;
-	float2 vTexUV		: TEXCOORD0;
-	float4 vClipPos		: TEXCOORD1;
-	float3 worldpos		: TEXCOORD2;
-};
-
-struct PS_OUT_SHADOW
-{
-	vector vShadowDepthMap : SV_TARGET0;
-};
-
-PS_OUT_SHADOW PS_MAIN_SHADOW(PS_IN_SHADOW In)
-{
-	PS_OUT_SHADOW Out = (PS_OUT_SHADOW) 0.f;
-
-	const half OneDividzFar = 1 / 300.f;
-	half4 color = 1;
-	color.xyz = length(In.worldpos - g_LightPos) * OneDividzFar;
-	Out.vShadowDepthMap = color;
 	
 	return Out;
 }
-//*---------------------------------------------------------------------------------------------*
 
 technique11			DefaultTechnique
 {
