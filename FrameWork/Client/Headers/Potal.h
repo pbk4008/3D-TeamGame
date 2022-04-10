@@ -42,6 +42,10 @@ private:/*For Create Meteor*/
 	_bool m_bCreate;
 	_bool m_bRetain;
 	_float m_fAccRetain;
+private:
+	_bool m_bSpawn;
+	_float m_fRandSpawnTime;
+	_float m_fAccSpawnTime;
 };
 END
 #endif
