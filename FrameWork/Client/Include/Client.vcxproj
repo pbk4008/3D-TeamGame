@@ -375,6 +375,8 @@ call Update_Client.bat</Command>
     <ClInclude Include="..\Headers\Plane_Test.h" />
     <ClInclude Include="..\Headers\Polearm.h" />
     <ClInclude Include="..\Headers\Potal.h" />
+    <ClInclude Include="..\Headers\Scenematic.h" />
+    <ClInclude Include="..\Headers\ScenematicManager.h" />
     <ClInclude Include="..\Headers\ScriptableData.h" />
     <ClInclude Include="..\Headers\ShakeManager.h" />
     <ClInclude Include="..\Headers\Shield.h" />
@@ -686,6 +688,8 @@ call Update_Client.bat</Command>
     <ClCompile Include="..\Codes\Plane_Test.cpp" />
     <ClCompile Include="..\Codes\Polearm.cpp" />
     <ClCompile Include="..\Codes\Potal.cpp" />
+    <ClCompile Include="..\Codes\Scenematic.cpp" />
+    <ClCompile Include="..\Codes\ScenematicManager.cpp" />
     <ClCompile Include="..\Codes\ScriptableData.cpp" />
     <ClCompile Include="..\Codes\ShakeManager.cpp" />
     <ClCompile Include="..\Codes\Shield.cpp" />

@@ -2,6 +2,10 @@
 #include"ScenematicManager.h"
 #include "Scenematic.h"
 
+CScenematicManager::CScenematicManager()
+{
+}
+
 HRESULT CScenematicManager::Add_Scenema(CScenematic* pScenema)
 {
 	pScenema->Set_Active(false);

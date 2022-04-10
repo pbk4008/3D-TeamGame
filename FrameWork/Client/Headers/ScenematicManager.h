@@ -5,13 +5,13 @@
 #include "SingleTon.h"
 BEGIN(Client)
 class CScenematic;
-class CSceneMaticManager final : public CSingleTon<CSceneMaticManager>
+class CScenematicManager final : public CSingleTon<CScenematicManager>
 {
 	friend CSingleTon;
 private:
-	NO_COPY(CSceneMaticManager);
-	explicit CSceneMaticManager();
-	virtual ~CSceneMaticManager() = default;
+	NO_COPY(CScenematicManager);
+	explicit CScenematicManager();
+	virtual ~CScenematicManager() = default;
 public:
 	HRESULT Add_Scenema(CScenematic* pScenema);
 	HRESULT Active_Scenema(_uint iScenemaIndex);

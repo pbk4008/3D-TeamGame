@@ -742,6 +742,12 @@
     <Filter Include="01.Scene\00.Logo">
       <UniqueIdentifier>{cac3034c-dd8b-47e8-afc7-da6cb3e9501e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="03.System\07.Scenematic">
+      <UniqueIdentifier>{21489520-048e-4295-9f73-a3c5349519f9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.System\07.Scenematic\00.Manager">
+      <UniqueIdentifier>{e6727d87-3999-40d8-b43e-c853a4edea65}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -1674,6 +1680,12 @@
     <ClInclude Include="..\Headers\2H_HammerRicochetReaction.h">
       <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\2H_Hammer</Filter>
     </ClInclude>
+    <ClInclude Include="..\Headers\ScenematicManager.h">
+      <Filter>03.System\07.Scenematic\00.Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Scenematic.h">
+      <Filter>03.System\07.Scenematic</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -2581,6 +2593,12 @@
     </ClCompile>
     <ClCompile Include="..\Codes\2H_HammerRicochetReaction.cpp">
       <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\2H_Hammer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\ScenematicManager.cpp">
+      <Filter>03.System\07.Scenematic\00.Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Scenematic.cpp">
+      <Filter>03.System\07.Scenematic</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

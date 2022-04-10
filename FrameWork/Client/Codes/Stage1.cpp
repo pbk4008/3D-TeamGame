@@ -57,7 +57,7 @@ CStage1::CStage1(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
 	, m_bDebug(false)
 	, m_iCountMonster(0)
 	, m_bFirst(false)
-	, m_pScenemaManager(nullptr);
+	, m_pScenemaManager(nullptr)
 {
 }
 
