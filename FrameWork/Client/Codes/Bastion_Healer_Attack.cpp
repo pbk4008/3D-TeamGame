@@ -131,10 +131,10 @@ void CBastion_Healer_Attack::Check_Attack()
 
 void CBastion_Healer_Attack::Look_Player(void)
 {
-	CAnimation* pAnim = m_pAnimator->Get_CurrentAnimation();
+	/*CAnimation* pAnim = m_pAnimator->Get_CurrentAnimation();
 
 	if (pAnim->Is_Finished())
-		m_pStateController->Change_State(L"Idle");
+		m_pStateController->Change_State(L"Idle");*/
 }
 
 void CBastion_Healer_Attack::Look_Monster(void)
