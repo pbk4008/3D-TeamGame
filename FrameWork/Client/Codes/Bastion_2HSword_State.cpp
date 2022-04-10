@@ -206,8 +206,8 @@ void CBastion_2HSword_State::Look_Monster(void)
 
 void CBastion_2HSword_State::OnTriggerEnter(CCollision& collision)
 {
-	if(nullptr != m_pOwner)
-		m_pOwner->Hit(collision);
+	//if(nullptr != m_pOwner)
+	//	m_pOwner->Hit(collision);
 }
 
 HRESULT CBastion_2HSword_State::Render_Debug()

@@ -37,6 +37,7 @@ public:
 public:
 	virtual void Set_Remove(_bool bCheck) override;
 	virtual void Hit(const ATTACKDESC& _tAttackDesc) override;
+	virtual void Parry(const PARRYDESC& _tParrykDesc) override;
 
 public:
 	void Set_Shot(_bool bShot) { m_bShot = bShot; }

@@ -230,6 +230,25 @@ HRESULT CMonster_BronzeAnimus::Render_Shadow()
 	return S_OK;
 }
 
+void CMonster_BronzeAnimus::Hit(const ATTACKDESC& _tAttackDesc)
+{
+	if (m_bDead || 0.f >= m_fCurrentHp)
+		return;
+
+	m_pPanel->Set_Show(true);
+	m_fCurrentHp -= _tAttackDesc.fDamage;
+	CCollision collision;
+	collision.pGameObject = _tAttackDesc.pHitObject;
+
+	Hit(collision);
+}
+
+void CMonster_BronzeAnimus::Parry(const PARRYDESC& _tParryDesc)
+{
+	m_fGroggyGauge += (m_fMaxGroggyGauge - m_fGroggyGauge);
+	GroggyStart();
+}
+
 HRESULT CMonster_BronzeAnimus::Ready_Components()
 {
 	CTransform::TRANSFORMDESC transformDesc;
@@ -243,7 +262,7 @@ HRESULT CMonster_BronzeAnimus::Ready_Components()
 
 
 	// 모델
-	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STAGE1, L"Model_BronzeAnimus", L"Model", (CComponent**)&m_pModel)))
+	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Model_BronzeAnimus", L"Model", (CComponent**)&m_pModel)))
 		return E_FAIL;
 	_matrix matPivot = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(180.f));
 	m_pModel->Set_PivotMatrix(matPivot);
@@ -556,22 +575,22 @@ void CMonster_BronzeAnimus::Hit(CCollision& collision)
 {
 	if (!m_bDead)
 	{
-		if (true == g_pObserver->IsAttack()) //플레이어공격일때
-		{
+		//if (true == g_pObserver->IsAttack()) //플레이어공격일때
+		//{
 			if (!m_bFirstHit)
 			{
 				m_bFirstHit = true; //딱 한번 true로 변경해줌
 				m_pPanel->Set_BackUIGapY(1.f);
 			}
 
-			if ((_uint)GAMEOBJECT::WEAPON == collision.pGameObject->getTag())
-			{
-				m_pPanel->Set_Show(true);
+			//if ((_uint)GAMEOBJECT::WEAPON == collision.pGameObject->getTag())
+			//{
+				//m_pPanel->Set_Show(true);
 				_vector MonsterPos = m_pTransform->Get_State(CTransform::STATE_POSITION);
 				_vector Pos = { XMVectorGetX(MonsterPos), XMVectorGetY(MonsterPos) + 4.f, XMVectorGetZ(MonsterPos), 1.f };
 				Active_Effect((_uint)EFFECT::HIT, Pos);
 				Active_Effect((_uint)EFFECT::FLOATING, Pos);
-				Set_Current_HP(-5);
+				//Set_Current_HP(-5);
 				Set_GroggyGauge(2); //TODO::수치정해서바꿔줘야됨
 
 				m_pPanel->Set_HpBar(Get_HpRatio());
@@ -582,8 +601,8 @@ void CMonster_BronzeAnimus::Hit(CCollision& collision)
 					m_pPanel->Set_GroggyBar(Get_GroggyGaugeRatio());
 					m_pStateController->Change_State(L"Hit");
 				}
-			}
-		}
+			//}
+		//}
 	}
 }
 

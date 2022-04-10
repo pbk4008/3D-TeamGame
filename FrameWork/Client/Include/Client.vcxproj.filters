@@ -678,13 +678,13 @@
     </Filter>
     <Filter Include="02.GameObject\96.Weapon\99.Shield">
       <UniqueIdentifier>{a9a4ad69-9913-4775-b0c0-8025825621ca}</UniqueIdentifier>
-	</Filter>
+    </Filter>
     <Filter Include="01.Scene\01.Loading\00.Logo">
       <UniqueIdentifier>{cac3034c-dd8b-47e8-afc7-da6cb3e9501e}</UniqueIdentifier>
     </Filter>
     <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_Spear\00.Idle">
       <UniqueIdentifier>{2398d3e4-0aad-4c0a-b779-2676cae6f42f}</UniqueIdentifier>
-	</Filter>
+    </Filter>
     <Filter Include="02.GameObject\05.UI\03.SingleImage">
       <UniqueIdentifier>{3fff2a7c-2e05-4760-99a8-e04b4a301ae2}</UniqueIdentifier>
     </Filter>
@@ -729,7 +729,7 @@
     </Filter>
     <Filter Include="02.GameObject\05.UI\04.Inventory\03.Armory">
       <UniqueIdentifier>{d0ac4e6a-b203-4940-b2f1-08c40c0e062e}</UniqueIdentifier>
-	</Filter>
+    </Filter>
     <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_Healer\Meteor">
       <UniqueIdentifier>{62e29ab4-9fdb-4a34-b3fd-46a933f3453a}</UniqueIdentifier>
     </Filter>
@@ -1652,28 +1652,7 @@
     </ClInclude>
     <ClInclude Include="..\Headers\BronzeAnimus_State.h">
       <Filter>02.GameObject\03.Character\01.Monster\BronzeAnimus\State</Filter>
-	</ClInclude>
-    <ClInclude Include="..\Headers\SingleImage.h">
-      <Filter>02.GameObject\05.UI\03.SingleImage</Filter>
     </ClInclude>
-    <ClInclude Include="..\Headers\UI_ModalWindow.h">
-      <Filter>02.GameObject\05.UI\04.Inventory</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Headers\UI_Indexes.h">
-      <Filter>02.GameObject\05.UI\04.Inventory\00.Indexes</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Headers\Inven_UIManager.h">
-      <Filter>03.System\06.Inven_UIManager</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Headers\UI_Background.h">
-      <Filter>02.GameObject\05.UI\04.Inventory\01.Background</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Headers\UI_Equipment.h">
-      <Filter>02.GameObject\05.UI\04.Inventory\02.Equipment</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Headers\UI_Armory.h">
-      <Filter>02.GameObject\05.UI\04.Inventory\03.Armory</Filter>
-	</ClInclude>
     <ClInclude Include="..\Codes\Meteor.h">
       <Filter>02.GameObject\03.Character\01.Monster\Bastion_Healer\Meteor</Filter>
     </ClInclude>
@@ -1688,6 +1667,12 @@
     </ClInclude>
     <ClInclude Include="..\Headers\DodgeSlide.h">
       <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Idel</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\1H_SwordRicochetReaction.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\1H_Sword</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\2H_HammerRicochetReaction.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\2H_Hammer</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1720,9 +1705,6 @@
     </ClCompile>
     <ClCompile Include="..\Codes\TestScene_JS.cpp">
       <Filter>01.Scene\99.TestScene_JS</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Codes\State_Silvermane.cpp">
-      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\Camera_Silvermane.cpp">
       <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\Camera</Filter>
@@ -2576,27 +2558,6 @@
     <ClCompile Include="..\Codes\Effect_Falling_Leaf.cpp">
       <Filter>02.GameObject\04.Effect\00.Particle\01.Effect_MapLeaf</Filter>
     </ClCompile>
-    <ClCompile Include="..\Codes\SingleImage.cpp">
-      <Filter>02.GameObject\05.UI\03.SingleImage</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Codes\UI_ModalWindow.cpp">
-      <Filter>02.GameObject\05.UI\04.Inventory</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Codes\UI_Indexes.cpp">
-      <Filter>02.GameObject\05.UI\04.Inventory\00.Indexes</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Codes\Inven_UIManager.cpp">
-      <Filter>03.System\06.Inven_UIManager</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Codes\UI_Background.cpp">
-      <Filter>02.GameObject\05.UI\04.Inventory\01.Background</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Codes\UI_Equipment.cpp">
-      <Filter>02.GameObject\05.UI\04.Inventory\02.Equipment</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Codes\UI_Armory.cpp">
-      <Filter>02.GameObject\05.UI\04.Inventory\03.Armory</Filter>
-	</ClCompile>
     <ClCompile Include="..\Codes\Meteor.cpp">
       <Filter>02.GameObject\03.Character\01.Monster\Bastion_Healer\Meteor</Filter>
     </ClCompile>
@@ -2611,6 +2572,15 @@
     </ClCompile>
     <ClCompile Include="..\Codes\DodgeSlide.cpp">
       <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Idel</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\State_Silvermane.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\1H_SwordRicochetReaction.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\1H_Sword</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\2H_HammerRicochetReaction.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\2H_Hammer</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

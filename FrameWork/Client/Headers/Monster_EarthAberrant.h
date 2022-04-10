@@ -42,6 +42,7 @@ public:
 	virtual void OnTriggerExit(CCollision& collision) override;
 
 	virtual void Hit(const ATTACKDESC& _tAttackDesc) override;
+	virtual void Parry(const PARRYDESC& _tParryDesc) override;
 
 public:
 	void Set_IsAttack(const _bool _isAttack);

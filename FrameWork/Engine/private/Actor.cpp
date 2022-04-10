@@ -205,6 +205,10 @@ void CActor::Hit(const ATTACKDESC& _tAttackDesc)
 {
 }
 
+void CActor::Parry(const PARRYDESC& _tParryDesc)
+{
+}
+
 void CActor::Free()
 {
 	Safe_Release(m_pModel);

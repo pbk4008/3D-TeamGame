@@ -22,7 +22,7 @@ public:
 
 	virtual void OnTriggerEnter(CCollision& collision);
 
-public:
+private:
 	virtual _int Input(const _double & _dDeltaTime) override;
 
 private:

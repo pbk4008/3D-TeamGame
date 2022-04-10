@@ -93,7 +93,7 @@ HRESULT CDebugSystem::Level_Move()
 	m_bLevelMove = true;
 	m_iSelectLevel = iSelect+1;
 	//m_pRenderer->Remove_RenderGroup();
-	//if(FAILED(g_pGameInstance->Open_Level((_uint)SCENEID::SCENE_LOADING, CLoading::Create(m_pDevice, m_pDeviceContext, (SCENEID)(iSelect+1)))))
+	//if (FAILED(g_pGameInstance->Open_Level((_uint)SCENEID::SCENE_LOADING, CLoading::Create(m_pDevice, m_pDeviceContext, (SCENEID)(iSelect + 1)))))
 	//	return E_FAIL;
 
 	return S_OK;

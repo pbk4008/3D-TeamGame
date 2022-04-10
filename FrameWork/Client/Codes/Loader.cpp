@@ -695,7 +695,7 @@ HRESULT CLoader::Load_Stage2_Object()
 {
 	//BronzeAnimus
 	_matrix matPivot = XMMatrixIdentity();
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE2, L"Model_BronzeAnimus", CModel::Create(m_pDevice, m_pDeviceContext,
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_BronzeAnimus", CModel::Create(m_pDevice, m_pDeviceContext,
 		L"../bin/FBX/Monster/BronzeAnimus_Bin.fbx", CModel::TYPE_ANIM, true))))
 		return E_FAIL;
 	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Monster_BronzeAnimus", CMonster_BronzeAnimus::Create(m_pDevice, m_pDeviceContext))))
@@ -703,7 +703,7 @@ HRESULT CLoader::Load_Stage2_Object()
 	
 
 	//weapon
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE2, L"Model_BronzeAnimus_Sword", CModel::Create(m_pDevice, m_pDeviceContext,
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_BronzeAnimus_Sword", CModel::Create(m_pDevice, m_pDeviceContext,
 		"../bin/Resources/Mesh/BronzeAnimus_Sword/", "BronzeAnimus_Sword.fbx",
 		L"../../Reference/ShaderFile/Shader_Weapon.hlsl", matPivot, CModel::TYPE_STATIC, true))))
 	{
@@ -713,14 +713,14 @@ HRESULT CLoader::Load_Stage2_Object()
 		return E_FAIL;
 
 	//Bastion Spear
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE2, L"Model_Bastion_Spear", CModel::Create(m_pDevice, m_pDeviceContext,
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Bastion_Spear", CModel::Create(m_pDevice, m_pDeviceContext,
 		L"../bin/FBX/Monster/Bastion_HonerGuard_Bin.fbx", CModel::TYPE_ANIM, true))))
 		return E_FAIL;
 	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Monster_Bastion_Spear", CMonster_Bastion_Spear::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 
 	////weapon
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE2, L"Model_Polearm", CModel::Create(m_pDevice, m_pDeviceContext,
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Polearm", CModel::Create(m_pDevice, m_pDeviceContext,
 		"../bin/Resources/Mesh/Polearm/", "Bastion_Polearm.fbx",
 		L"../../Reference/ShaderFile/Shader_Weapon.hlsl", matPivot, CModel::TYPE_STATIC, true))))
 		return E_FAIL;
@@ -1162,6 +1162,36 @@ HRESULT CLoader::Ready_Test_JS()
 	//	return E_FAIL;
 	//if (FAILED(Load_Stage1MonsterLoad()))
 	//	return E_FAIL;
+
+	//////BronzeAnimus
+	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_BronzeAnimus", CModel::Create(m_pDevice, m_pDeviceContext,
+	//	L"../bin/FBX/Monster/BronzeAnimus_Bin.fbx", CModel::TYPE_ANIM, true))))
+	//	return E_FAIL;
+	//if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Monster_BronzeAnimus", CMonster_BronzeAnimus::Create(m_pDevice, m_pDeviceContext))))
+	//	return E_FAIL;
+	//////weapon
+	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_BronzeAnimus_Sword", CModel::Create(m_pDevice, m_pDeviceContext,
+	//	"../bin/Resources/Mesh/BronzeAnimus_Sword/", "BronzeAnimus_Sword.fbx",
+	//	L"../../Reference/ShaderFile/Shader_Weapon.hlsl", matPivot, CModel::TYPE_STATIC, true))))
+	//{
+	//	return E_FAIL;
+	//}
+	//if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Weapon_BronzeAnimus_Sword", CBronzeAnimus_Sword::Create(m_pDevice, m_pDeviceContext))))
+	//	return E_FAIL;
+
+	////Bastion Spear
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Bastion_Spear", CModel::Create(m_pDevice, m_pDeviceContext,
+		L"../bin/FBX/Monster/Bastion_HonerGuard_Bin.fbx", CModel::TYPE_ANIM, true))))
+		return E_FAIL;
+	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Monster_Bastion_Spear", CMonster_Bastion_Spear::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	////weapon
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Polearm", CModel::Create(m_pDevice, m_pDeviceContext,
+		"../bin/Resources/Mesh/Polearm/", "Bastion_Polearm.fbx",
+		L"../../Reference/ShaderFile/Shader_Weapon.hlsl", matPivot, CModel::TYPE_STATIC, true))))
+		return E_FAIL;
+	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Weapon_Polearm", CPolearm::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
 #pragma endregion
 
 
@@ -1227,9 +1257,9 @@ HRESULT CLoader::Ready_Test_JS()
 	if (FAILED(Load_Stage1UILoad()))
 		return E_FAIL;
 
-	//// Effect
-	//if (FAILED(Load_Stage1EffectLoad()))
-	//	return E_FAIL;
+	// Effect
+	if (FAILED(Load_Stage1EffectLoad()))
+		return E_FAIL;
 
 	cout << "TestScene_JS 로딩 완료..." << endl;
 	return S_OK;

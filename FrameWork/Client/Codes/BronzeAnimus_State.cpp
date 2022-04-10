@@ -351,8 +351,8 @@ void CBronzeAnimus_State::Look_Monster(void)
 
 void CBronzeAnimus_State::OnTriggerEnter(CCollision& collision)
 {
-	if(m_pOwner)
-		m_pOwner->Hit(collision);
+	//if(m_pOwner)
+	//	m_pOwner->Hit(collision);
 }
 
 CBronzeAnimus_State* CBronzeAnimus_State::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext, void* _pArg)

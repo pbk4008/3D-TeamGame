@@ -203,6 +203,11 @@ void CMonster_Bastion_Sword::Hit(const ATTACKDESC& _tAttackDesc)
 	Hit();
 }
 
+void CMonster_Bastion_Sword::Parry(const PARRYDESC& _tParryDesc)
+{
+	m_fGroggyGauge += (m_fMaxGroggyGauge - m_fGroggyGauge);
+}
+
 void CMonster_Bastion_Sword::Set_Remove(_bool bCheck)
 {
 	m_bRemove = bCheck;
@@ -236,6 +241,7 @@ void CMonster_Bastion_Sword::OnTriggerEnter(CCollision& collision)
 
 void CMonster_Bastion_Sword::OnTriggerExit(CCollision& collision)
 {
+
 }
 
 HRESULT CMonster_Bastion_Sword::SetUp_Components()
