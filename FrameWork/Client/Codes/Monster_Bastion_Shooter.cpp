@@ -197,6 +197,11 @@ void CMonster_Bastion_Shooter::Hit(const ATTACKDESC& _tAttackDesc)
 	Hit();
 }
 
+void CMonster_Bastion_Shooter::Parry(const PARRYDESC& _tParrykDesc)
+{
+	m_fGroggyGauge += (m_fMaxGroggyGauge - m_fGroggyGauge);
+}
+
 void CMonster_Bastion_Shooter::OnTriggerEnter(CCollision& collision)
 {
 	if (!m_bDead)

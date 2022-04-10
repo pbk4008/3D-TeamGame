@@ -1668,6 +1668,12 @@
     <ClInclude Include="..\Headers\DodgeSlide.h">
       <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Idel</Filter>
     </ClInclude>
+    <ClInclude Include="..\Headers\1H_SwordRicochetReaction.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\1H_Sword</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\2H_HammerRicochetReaction.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\2H_Hammer</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -1699,9 +1705,6 @@
     </ClCompile>
     <ClCompile Include="..\Codes\TestScene_JS.cpp">
       <Filter>01.Scene\99.TestScene_JS</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Codes\State_Silvermane.cpp">
-      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\Camera_Silvermane.cpp">
       <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\Camera</Filter>
@@ -2569,6 +2572,15 @@
     </ClCompile>
     <ClCompile Include="..\Codes\DodgeSlide.cpp">
       <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Idel</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\State_Silvermane.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\1H_SwordRicochetReaction.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\1H_Sword</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\2H_HammerRicochetReaction.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\2H_Hammer</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

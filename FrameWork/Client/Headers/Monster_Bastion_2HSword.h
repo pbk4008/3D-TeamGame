@@ -54,6 +54,7 @@ public:
 	void Groggy_Start();
 	void Hit(CCollision& pCol);
 	virtual void Hit(const ATTACKDESC& _tAttackDesc) override;
+	virtual void Parry(const PARRYDESC& _tParrykDesc) override;
 	void Remove_Collider();
 private:
 	virtual void OnTriggerEnter(CCollision& collision) override;

@@ -146,7 +146,7 @@ HRESULT CStage2::Ready_MapObject()
 	tJumpNodeDesc.vPosition = { -2.f, 15.f, 235.f };
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE2, L"Layer_JumpNode", L"Proto_GameObject_JumpNode", &tJumpNodeDesc)))
 		return E_FAIL;
-	tJumpNodeDesc.vPosition = { 39.f, 17.f, 268.f };
+	tJumpNodeDesc.vPosition = { 39.f, 18.f, 268.f };
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE2, L"Layer_JumpNode", L"Proto_GameObject_JumpNode", &tJumpNodeDesc)))
 		return E_FAIL;
 	tJumpNodeDesc.vPosition = { 33.f, 15.f, 278.f };

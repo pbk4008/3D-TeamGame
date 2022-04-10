@@ -658,6 +658,11 @@ void CMonster_EarthAberrant::Hit(const ATTACKDESC& _tAttackDesc)
 	Active_Effect((_uint)EFFECT::FLOATING);
 }
 
+void CMonster_EarthAberrant::Parry(const PARRYDESC& _tParryDesc)
+{
+	m_fGroggyGauge += (m_fMaxGroggyGauge - m_fGroggyGauge);
+}
+
 void CMonster_EarthAberrant::Set_IsAttack(const _bool _isAttack)
 {
 	m_IsAttack = _isAttack;

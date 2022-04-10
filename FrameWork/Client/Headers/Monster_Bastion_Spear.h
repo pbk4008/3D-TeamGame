@@ -60,6 +60,7 @@ public:
 	void Groggy_Start();
 public:
 	virtual void Hit(const ATTACKDESC& _tAttackDesc) override;
+	virtual void Parry(const PARRYDESC& _tParryDesc) override;
 	void Hit(CCollision& collision);
 	void Attack(_bool bCheck);
 public:
@@ -86,7 +87,6 @@ private:
 	_int m_iGuardCount = 7;
 
 private:
-	CModel* m_pModel = nullptr;
 	CAnimation* m_pAnimation = nullptr;
 	CAnimator* m_pAnimator = nullptr;
 	CStateController* m_pStateController = nullptr;

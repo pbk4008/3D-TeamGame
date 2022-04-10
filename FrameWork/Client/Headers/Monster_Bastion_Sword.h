@@ -37,6 +37,7 @@ public:
 	virtual HRESULT	Render_Shadow()  override;
 
 	virtual void Hit(const ATTACKDESC& _tAttackDesc);
+	virtual void Parry(const PARRYDESC& _tParryDesc);
 
 public:
 	virtual void Set_Remove(_bool bCheck) override;

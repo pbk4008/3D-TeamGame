@@ -321,6 +321,22 @@ const _int CState_Silvermane::ToJogAttack()
 	return STATE_CHANGE;
 }
 
+const _int CState_Silvermane::ToAttack()
+{
+	switch (m_pSilvermane->Get_WeaponType())
+	{
+	case CWeapon::EType::Sword_1H:
+		if (FAILED(m_pStateController->Change_State(L"1H_SwordAttackNormalR1_01")))
+			return -1;
+		break;
+	case CWeapon::EType::Hammer_2H:
+		if (FAILED(m_pStateController->Change_State(L"2H_HammerAttackR1_01")))
+			return -1;
+		break;
+	}
+	return STATE_CHANGE;
+}
+
 const _int CState_Silvermane::ToDashAttack()
 {
 	switch (m_pSilvermane->Get_WeaponType())
@@ -492,18 +508,26 @@ void CState_Silvermane::Block(const ATTACKDESC& _tAttackDesc)
 		{
 		case 1:
 		case 2:
+		{
 			if ((_uint)GAMEOBJECT::WEAPON_BULLET == _tAttackDesc.pHitObject->getTag())
 			{
 				Reflect_Bullet(_tAttackDesc);
 			}
+			PARRYDESC tParryDesc;
+			tParryDesc.iLevel = _tAttackDesc.iLevel;
+			tParryDesc.pOwner = m_pSilvermane;
+			static_cast<CActor*>(_tAttackDesc.pOwner)->Parry(tParryDesc);
 			m_pStateController->Change_State(L"Shield_Parry");
 			return;
+		}
 			break;
 		case 3:
+			m_pSilvermane->Add_HP(_tAttackDesc.fDamage * 0.2f);
 			m_pStateController->Change_State(L"Shield_ParryStunback");
 			return;
 			break;
 		case 4:
+			m_pSilvermane->Add_HP(_tAttackDesc.fDamage * 0.4f);
 			m_pStateController->Change_State(L"Shield_ParryStunbackStrong");
 			return;
 			break;
@@ -522,10 +546,12 @@ void CState_Silvermane::Block(const ATTACKDESC& _tAttackDesc)
 			return;
 			break;
 		case 3:
+			m_pSilvermane->Add_HP(_tAttackDesc.fDamage * 0.2f);
 			m_pStateController->Change_State(L"Shield_Ricochet");
 			return;
 			break;
 		case 4:
+			m_pSilvermane->Add_HP(_tAttackDesc.fDamage * 0.4f);
 			m_pStateController->Change_State(L"Shield_BlockBreakStart");
 			return;
 			break;
