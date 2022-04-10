@@ -373,6 +373,8 @@ HRESULT CRenderer::Render_UI()
 			});
 	}*/
 
+
+
 	for (auto& pGameObject : m_RenderGroup[RENDER_UI])
 	{
 		if (nullptr != pGameObject)

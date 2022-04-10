@@ -96,7 +96,14 @@ void CBastion_Healer_Attack::Check_Attack()
 		vLook *= -30.f;
 		vPos += vLook;
 
-		g_pGameInstance->Add_GameObjectToLayer(iSceneID,L"Layer_Potal",L"Proto_GameObject_Portal",&vPos);
+		for (_uint i = 0; i < 4; i++)
+		{
+			_float fSizeX = MathUtils::ReliableRandom(-10.f, 10.f);
+			_float fSizeY = MathUtils::ReliableRandom(-10.f, 10.f);
+			_vector vRand = XMVectorSet(fSizeX, fSizeY, 0.f, 0.f);
+			vPos += vRand;
+			g_pGameInstance->Add_GameObjectToLayer(iSceneID, L"Layer_Potal", L"Proto_GameObject_Portal", &vPos);
+		}
 	}
 }
 
