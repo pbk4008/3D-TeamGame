@@ -264,6 +264,12 @@ void CMonster_Crawler::Hit(const ATTACKDESC& _tAttackDesc)
 	Active_Effect((_uint)EFFECT::FLOATING);
 }
 
+void CMonster_Crawler::Parry(const PARRYDESC& _tParryDesc)
+{
+	// 그로기 처리를 해야한다.
+	m_fGroggyGauge += (m_fMaxGroggyGauge - m_fGroggyGauge);
+}
+
 void CMonster_Crawler::Set_IsAttack(const _bool _isAttack)
 {
 	m_IsAttack = _isAttack;

@@ -37,6 +37,7 @@ protected:
 	const _int ToIdle();
 	const _int ToSprint();
 	const _int ToJogAttack();
+	const _int ToAttack();
 	const _int ToDashAttack();
 	const _int ToChargeStart();
 

@@ -36,6 +36,7 @@
 
 #include "InteractManager.h"
 #include "DropManager.h"
+#include "ScenematicManager.h"
 
 
 CDropManager* g_pDropManager = nullptr;
@@ -46,6 +47,7 @@ CStage1::CStage1()
 	, m_bDebug(false)
 	, m_iCountMonster(0)
 	, m_bFirst(false)
+	, m_pScenemaManager(nullptr)
 {
 }
 
@@ -55,6 +57,7 @@ CStage1::CStage1(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
 	, m_bDebug(false)
 	, m_iCountMonster(0)
 	, m_bFirst(false)
+	, m_pScenemaManager(nullptr)
 {
 }
 
@@ -124,6 +127,8 @@ HRESULT CStage1::NativeConstruct()
 		return E_FAIL;
 
 	g_pGameInstance->PlayBGM(L"Stage1_BGM");
+	m_pScenemaManager = GET_INSTANCE(CScenematicManager);
+
 	return S_OK;
 }
 
@@ -166,7 +171,7 @@ _int CStage1::Tick(_double TimeDelta)
 		//}
 	}
 
-	//_float3 fPos = { 0.f,5.f,20.f };
+	_float3 fPos = { 0.f,5.f,20.f };
 
 	//if (g_pGameInstance->getkeyDown(DIK_NUMPAD0))
 	//{
@@ -192,12 +197,12 @@ _int CStage1::Tick(_double TimeDelta)
 	//	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Test", L"Proto_GameObject_Monster_Bastion_Shooter", &fPos, (CGameObject**)&pMonster)))
 	//		return -1;
 	//}
-	//if (g_pGameInstance->getkeyDown(DIK_NUMPAD4))
-	//{
-	//	CMonster_Bastion_Healer* pMonster = nullptr;
-	//	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Test", L"Proto_GameObject_Monster_Bastion_Healer", &fPos, (CGameObject**)&pMonster)))
-	//		return -1;
-	//}
+	if (g_pGameInstance->getkeyDown(DIK_NUMPAD4))
+	{
+		CMonster_Bastion_Healer* pMonster = nullptr;
+		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Test", L"Proto_GameObject_Monster_Bastion_Healer", &fPos, (CGameObject**)&pMonster)))
+			return -1;
+	}
 	//if (g_pGameInstance->getkeyDown(DIK_NUMPAD5))
 	//{
 	//	CMonster_Bastion_2HSword* pMonster = nullptr;
@@ -1527,8 +1532,12 @@ void CStage1::Free()
 {
 	CLevel::Free();
 
+	Safe_Release(m_pScenemaManager);
+	CScenematicManager::DestroyInstance();
+	
 	CDropManager::DestroyInstance();
 	CInteractManager::DestroyInstance();
+
 	Safe_Release(m_pTriggerSystem);
 
 }

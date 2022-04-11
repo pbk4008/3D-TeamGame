@@ -17,7 +17,6 @@
 
 #pragma region 스테이트들
 #include "Silvermane_Idle.h"
-
 //////////////////// Jog
 #include "Silvermane_JogBwd.h"
 #include "Silvermane_JogBwdStart.h"
@@ -35,19 +34,16 @@
 #include "Silvermane_JogRight.h"
 #include "Silvermane_JogRightPivot180.h"
 #include "Silvermane_JogRightStart.h"
-
 ///////////////////////////////////// Sprint
 #include "Silvermane_SprintFwd.h"
 #include "Silvermane_SprintFwdStart.h"
 #include "Silvermane_SprintFwdStop.h"
-
 ///////////////////////////////////// Dash
 #include "1H_SwordDodgeSpinFwd_V3.h"
 #include "1H_SwordNormalSidestepBwd_V3.h"
 #include "1H_SwordNormalSidestepLeft_V3.h"
 #include "1H_SwordNormalSidestepRight_V3.h"
 #include "DodgeSlide.h"
-
 //////////////////////////////////// 1H_Sword
 #include "1H_SwordEquipOff.h"
 #include "1H_SwordEquipOn.h"
@@ -65,7 +61,6 @@
 #include "1H_SwordJogRight.h"
 #include "1H_SwordJogRightPivot180.h"
 #include "1H_SwordJogRightStart.h"
-
 // Attack
 #include "1H_SwordAttackNormalR1_01.h"
 #include "1H_SwordAttackNormalR1_02.h"
@@ -83,12 +78,12 @@
 #include "1H_SwordAttackNormalR2_03.h"
 #include "1H_SwordAttackNormalR2_04.h"
 #include "1H_SwordAttackNormalR2_ReleaseDoubleSwing.h"
-
+// 패링 당함
+#include "1H_SwordRicochetReaction.h"
 //////////////////////// 2H_Hammer
 #include "2H_HammerEquipOff.h"
 #include "2H_HammerEquipOn.h"
 #include "2H_HammerIdle.h"
-
 // Jog
 #include "2H_HammerJogBwd.h"
 #include "2H_HammerJogBwdPivot180.h"
@@ -102,7 +97,6 @@
 #include "2H_HammerJogRight.h"
 #include "2H_HammerJogRightPivot180.h"
 #include "2H_HammerJogRightStart.h"
-
 //Attack
 #include "2H_HammerAttackR1_01.h"
 #include "2H_HammerAttackR1_02.h"
@@ -120,7 +114,8 @@
 
 #include "2H_HammerAttackDodgeR1.h"
 #include "2H_HammerAttackSprintR1.h"
-
+// 패링 당함
+#include "2H_HammerRicochetReaction.h"
 ///////////////////////////////////////////// Shield
 // 막기
 #include "Shield_BlockStart.h"
@@ -137,7 +132,6 @@
 #include "Shield_Parry.h"
 #include "Shield_ParryStunback.h"
 #include "Shield_ParryStunbackStrong.h"
-
 // Walk
 #include "Shield_WalkBwd.h"
 #include "Shield_WalkBwdStart.h"
@@ -151,14 +145,11 @@
 #include "Shield_WalkRight.h"
 #include "Shield_WalkRightStart.h"
 #include "Shield_WalkRightStop.h"
-
 // Attack
 #include "Shield_SupermanPunchStraight.h"
-
 //////////////////////////////////////////// Jump
 #include "Traverse_Jump400Jog.h"
 #include "Traverse_JumpNodeJog.h"
-
 //////////////////////////////////////////// Hit
 #include "1H_FlinchLeft.h"
 #include "1H_Stagger.h"
@@ -220,7 +211,7 @@ HRESULT CSilvermane::NativeConstruct(const _uint _iSceneID, void* _pArg)
 		return E_FAIL;
 
 	m_isFall = true;
-	m_fMaxHp = 1.f;
+	m_fMaxHp = 50.f;
 	m_fCurrentHp = m_fMaxHp;
 
 	m_pRenderer->SetRenderButton(CRenderer::PIXEL, true);
@@ -648,6 +639,9 @@ HRESULT CSilvermane::Ready_States()
 		return E_FAIL;
 	if (FAILED(m_pStateController->Add_State(L"1H_SwordAttackNormalR2_ReleaseDoubleSwing", C1H_SwordAttackNormalR2_ReleaseDoubleSwing::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
+	// 패랭 당함
+	if (FAILED(m_pStateController->Add_State(L"1H_SwordRicochetReaction", C1H_SwordRicochetReaction::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
 #pragma endregion
 #pragma region 2H_Hammer
 	if (FAILED(m_pStateController->Add_State(L"2H_HammerEquipOn", C2H_HammerEquipOn::Create(m_pDevice, m_pDeviceContext))))
@@ -709,6 +703,9 @@ HRESULT CSilvermane::Ready_States()
 	if (FAILED(m_pStateController->Add_State(L"2H_HammerAttackDodgeR1", C2H_HammerAttackDodgeR1::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 	if (FAILED(m_pStateController->Add_State(L"2H_HammerAttackSprintR1", C2H_HammerAttackSprintR1::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	// 패랭 당함
+	if (FAILED(m_pStateController->Add_State(L"2H_HammerRicochetReaction", C2H_HammerRicochetReaction::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 #pragma endregion
 #pragma region Shield
@@ -927,6 +924,19 @@ void CSilvermane::Hit(const ATTACKDESC& _tAttackDesc)
 		static_cast<CState_Silvermane*>(m_pStateController->Get_CurState())->Block(_tAttackDesc);
 	else
 		static_cast<CState_Silvermane*>(m_pStateController->Get_CurState())->Hit(_tAttackDesc);
+}
+
+void CSilvermane::Parry(const PARRYDESC& _tParryDesc)
+{
+	switch (Get_WeaponType())
+	{
+	case CWeapon::EType::Sword_1H:
+		m_pStateController->Change_State(L"1H_SwordRicochetReaction");
+		break;
+	case CWeapon::EType::Hammer_2H:
+		m_pStateController->Change_State(L"2H_HammerRicochetReaction");
+		break;
+	}
 }
 
 const _bool CSilvermane::IsHit() const

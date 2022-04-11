@@ -59,6 +59,7 @@ public:
 
 public:
 	virtual void Hit(const ATTACKDESC& _tAttackDesc);
+	virtual void Parry(const PARRYDESC& _tParryDesc);
 
 protected:
 	virtual void Free() override;
@@ -68,6 +69,7 @@ protected:
 	_bool m_IsAttack;//공격했는지 공격 안했는지
 	_bool m_bGroggy; //스턴상태인지 아닌지
 	_bool m_bUIShow = false; //몬스터머리위에 ui보이는상태인지아닌지
+	_bool m_isParry = false; // 패링상태 체크
 
 	_float m_fSpeed;//이동 속도
 	_float m_fMaxHp;//최대 체력

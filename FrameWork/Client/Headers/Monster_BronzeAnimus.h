@@ -40,6 +40,9 @@ public:
 	virtual HRESULT Render() override;
 	virtual HRESULT	Render_Shadow() override;
 
+	virtual void Hit(const ATTACKDESC& _tAttackDesc) override;
+	virtual void Parry(const PARRYDESC& _tParryDesc) override;
+
 private:
 	HRESULT Ready_Components();
 	HRESULT Ready_Weapon(void);

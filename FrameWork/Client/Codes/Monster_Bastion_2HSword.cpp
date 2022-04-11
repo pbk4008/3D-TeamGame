@@ -597,17 +597,17 @@ void CMonster_Bastion_2HSword::Hit(CCollision& pCol)
 {
 	if (!m_bDead)
 	{
-		if (true == g_pObserver->IsAttack()) //플레이어공격일때
-		{
+		//if (true == g_pObserver->IsAttack()) //플레이어공격일때
+		//{
 			m_bFirstHit = true; //딱 한번 true로 변경해줌
 			if (true == m_bFirstHit)
 				m_pPanel->Set_BackUIGapY(1.f);
 
-			if ((_uint)GAMEOBJECT::WEAPON == pCol.pGameObject->getTag())
-			{
-				m_pPanel->Set_Show(true);
-				Active_Effect((_uint)EFFECT::HIT);
-				Active_Effect((_uint)EFFECT::FLOATING);
+			//if ((_uint)GAMEOBJECT::WEAPON == pCol.pGameObject->getTag())
+			//{
+				//m_pPanel->Set_Show(true);
+				//Active_Effect((_uint)EFFECT::HIT);
+				//Active_Effect((_uint)EFFECT::FLOATING);
 
 				//m_fCurrentHp -= 5.f;
 				//m_bGroggy = 2; //TODO::수치정해서바꿔줘야됨
@@ -626,10 +626,10 @@ void CMonster_Bastion_2HSword::Hit(CCollision& pCol)
 
 					m_pStateController->Change_State(L"Hit", &svDir);
 				}
-			}
-			else
-				m_pStateController->Change_State(L"Idle");
-		}
+			//}
+			//else
+			//	m_pStateController->Change_State(L"Idle");
+		//}
 	}
 }
 
@@ -647,6 +647,12 @@ void CMonster_Bastion_2HSword::Hit(const ATTACKDESC& _tAttackDesc)
 	Hit(collision);
 }
 
+void CMonster_Bastion_2HSword::Parry(const PARRYDESC& _tParrykDesc)
+{
+	m_fGroggyGauge += (m_fMaxGroggyGauge - m_fGroggyGauge);
+	Groggy_Start();
+}
+
 void CMonster_Bastion_2HSword::Remove_Collider()
 {
 	m_pCharacterController->Remove_CCT();
@@ -655,7 +661,6 @@ void CMonster_Bastion_2HSword::Remove_Collider()
 
 void CMonster_Bastion_2HSword::OnTriggerEnter(CCollision& collision)
 {
-	
 	m_pStateController->OnTriggerEnter(collision);
 }
 

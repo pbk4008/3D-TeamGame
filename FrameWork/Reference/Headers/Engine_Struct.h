@@ -196,6 +196,11 @@ namespace Engine
 		_uint iLevel = 0;
 		_float fDamage = 0.f;
 	}ATTACKDESC;
+	typedef struct tagParryDesc
+	{
+		_uint iLevel = 0;
+		class CGameObject* pOwner = nullptr;
+	}PARRYDESC;
 
 	// 쉐이더 재질 값, 이미션 컬러
 	typedef struct ShaderConstantBuffer

@@ -287,6 +287,11 @@ void CMonster_Bastion_Healer::Hit(const ATTACKDESC& _tAttackDesc)
 	Hit(collision);
 }
 
+void CMonster_Bastion_Healer::Parry(const PARRYDESC& _tParryDesc)
+{
+	m_fGroggyGauge += (m_fMaxGroggyGauge - m_fGroggyGauge);
+}
+
 void CMonster_Bastion_Healer::Remove_Collider()
 {
 	m_pCharacterController->Remove_CCT();

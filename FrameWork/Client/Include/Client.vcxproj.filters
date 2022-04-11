@@ -744,6 +744,12 @@
     </Filter>
     <Filter Include="02.GameObject\02.Map\04.Wall">
       <UniqueIdentifier>{3dae373e-68c5-415f-8383-cd466ef9596f}</UniqueIdentifier>
+	</Filter>
+    <Filter Include="03.System\07.Scenematic">
+      <UniqueIdentifier>{21489520-048e-4295-9f73-a3c5349519f9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.System\07.Scenematic\00.Manager">
+      <UniqueIdentifier>{e6727d87-3999-40d8-b43e-c853a4edea65}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -1673,6 +1679,18 @@
     </ClInclude>
     <ClInclude Include="..\Headers\Wall.h">
       <Filter>02.GameObject\02.Map\04.Wall</Filter>
+	</ClInclude>
+    <ClInclude Include="..\Headers\1H_SwordRicochetReaction.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\1H_Sword</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\2H_HammerRicochetReaction.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\2H_Hammer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\ScenematicManager.h">
+      <Filter>03.System\07.Scenematic\00.Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Scenematic.h">
+      <Filter>03.System\07.Scenematic</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1705,9 +1723,6 @@
     </ClCompile>
     <ClCompile Include="..\Codes\TestScene_JS.cpp">
       <Filter>01.Scene\99.TestScene_JS</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Codes\State_Silvermane.cpp">
-      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\Camera_Silvermane.cpp">
       <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\Camera</Filter>
@@ -2578,6 +2593,21 @@
     </ClCompile>
     <ClCompile Include="..\Codes\Wall.cpp">
       <Filter>02.GameObject\02.Map\04.Wall</Filter>
+	</ClCompile>
+    <ClCompile Include="..\Codes\State_Silvermane.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\1H_SwordRicochetReaction.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\1H_Sword</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\2H_HammerRicochetReaction.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\2H_Hammer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\ScenematicManager.cpp">
+      <Filter>03.System\07.Scenematic\00.Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Scenematic.cpp">
+      <Filter>03.System\07.Scenematic</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

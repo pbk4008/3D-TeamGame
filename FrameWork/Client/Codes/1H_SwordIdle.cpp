@@ -195,13 +195,11 @@ _int C1H_SwordIdle::Input(const _double& _dDeltaTime)
 C1H_SwordIdle* C1H_SwordIdle::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext, void* _pArg)
 {
 	C1H_SwordIdle* pInstance = new C1H_SwordIdle(_pDevice, _pDeviceContext);
-
 	if (FAILED(pInstance->NativeConstruct(_pArg)))
 	{
 		MSGBOX("C1H_SwordIdle Create Fail");
 		Safe_Release(pInstance);
 	}
-
 	return pInstance;
 }
 

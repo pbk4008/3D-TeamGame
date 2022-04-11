@@ -8,6 +8,9 @@ CPotal::CPotal()
 	, m_pMaskTexture(nullptr)
 	, m_bCreate(false)
 	, m_fAccRetain(0.f)
+	, m_bSpawn(false)
+	, m_fRandSpawnTime(0.f)
+	, m_fAccSpawnTime(0.f)
 {
 }
 
@@ -18,6 +21,9 @@ CPotal::CPotal(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
 	, m_pMaskTexture(nullptr)
 	, m_bCreate(false)
 	, m_fAccRetain(0.f)
+	, m_bSpawn(false)
+	, m_fRandSpawnTime(0.f)
+	, m_fAccSpawnTime(0.f)
 {
 }
 
@@ -28,6 +34,9 @@ CPotal::CPotal(const CPotal& rhs)
 	, m_pMaskTexture(rhs.m_pMaskTexture)
 	, m_bCreate(rhs.m_bCreate)
 	, m_fAccRetain(0.f)
+	, m_bSpawn(false)
+	, m_fRandSpawnTime(0.f)
+	, m_fAccSpawnTime(0.f)
 {
 	Safe_AddRef(m_pRect);
 	Safe_AddRef(m_pDiffuseTexture);
@@ -64,11 +73,23 @@ HRESULT CPotal::NativeConstruct(const _uint _iSceneID, void* _pArg)
 	_vector vPos = (*(_vector*)_pArg);
 	m_pTransform->Set_State(CTransform::STATE_POSITION, vPos);
 
+	m_fRandSpawnTime = MathUtils::ReliableRandom(0.5f, 1.3f);
+	cout << m_fRandSpawnTime << endl;
 	return S_OK;
 }
 
 _int CPotal::Tick(_double _dDeltaTime)
 {
+	if (!m_bSpawn)
+	{
+		m_fAccSpawnTime += _dDeltaTime;
+		if (m_fAccSpawnTime >= m_fRandSpawnTime)
+		{
+			m_fAccSpawnTime = 0.f;
+			m_bSpawn = true;
+		}
+		return 0;
+	}
 	Scaling(_dDeltaTime);
 	Create_Meteor(_dDeltaTime);
 	Remove_Portal(_dDeltaTime);
@@ -78,6 +99,9 @@ _int CPotal::Tick(_double _dDeltaTime)
 
 _int CPotal::LateTick(_double _dDeltaTime)
 {
+	if (!m_bSpawn)
+		return 0;
+
 	m_pRenderer->Add_RenderGroup(CRenderer::RENDER_UI, this);
 
 
@@ -87,6 +111,21 @@ _int CPotal::LateTick(_double _dDeltaTime)
 HRESULT CPotal::Render()
 {
 	_matrix smatWorld, smatView, smatProj;
+
+	_matrix ViewMatrix;
+	ViewMatrix = g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_VIEW);
+	ViewMatrix = XMMatrixInverse(nullptr, ViewMatrix);
+	
+	_float vScaleX = m_pTransform->Get_Scale(CTransform::STATE_RIGHT);
+	_float vScaleZ = m_pTransform->Get_Scale(CTransform::STATE_LOOK);
+	_vector vRight = XMVector3Normalize(ViewMatrix.r[0]);
+	_vector vLook = XMVector3Normalize(ViewMatrix.r[2]);
+	vRight *= vScaleX;
+	vLook *= vScaleZ;
+	
+	m_pTransform->Set_State(CTransform::STATE::STATE_RIGHT, vRight);
+	m_pTransform->Set_State(CTransform::STATE::STATE_LOOK, vLook);
+
 	smatWorld = XMMatrixTranspose(m_pTransform->Get_WorldMatrix());
 	smatView = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_VIEW));
 	smatProj = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_PROJECTION));
@@ -119,6 +158,7 @@ HRESULT CPotal::Ready_Component()
 		return E_FAIL;
 	m_pDiffuseTexture->Change_Texture(wstrTextureTag);
 
+	wstrTextureTag = L"Potal_Mask";
 	g_pGameInstance->Add_Texture(m_pDevice, wstrTextureTag, L"../bin/Resources/Texture/Portal/T_Portal_SpaceMask_M.dds");
 	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_Texture", L"MaskTexture", (CComponent**)&m_pMaskTexture)))
 		return E_FAIL;

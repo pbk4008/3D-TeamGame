@@ -26,6 +26,7 @@ private:
 	void OnTriggerEnter(CCollision& collision);
 private:
 	_int Move();
+	_bool Find_HitPlayer(vector<CGameObject*>* pVecActor);
 public:
 	static CMeteor* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);
 	virtual CGameObject* Clone(const _uint iSceneID, void* pArg = nullptr) override;
