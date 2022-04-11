@@ -79,10 +79,8 @@ PS_OUT PS_MAIN(PS_IN In)
     vector vDiffuse = g_DiffuseTexture.Sample(DefaultSampler, In.vTexUV);
     vector vMask = g_MaskTexture.Sample(DefaultSampler, In.vTexUV);
 
-    //if (vDiffuse.a < 0.01)
-    //    discard;
-    
-    //Out.vColor.rgb = vDiffuse.rgb * vMask.rgb;
+    vDiffuse.a = vMask.r;
+
     Out.vColor = vDiffuse;
     
     return Out;

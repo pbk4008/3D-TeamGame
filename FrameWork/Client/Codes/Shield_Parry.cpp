@@ -22,28 +22,6 @@ _int CShield_Parry::Tick(const _double& _dDeltaTime)
 
 	if (m_pAnimationController->Is_Finished())
 	{
-		//if (m_pSilvermane->IsEquipWeapon())
-		//{
-		//	switch (m_pSilvermane->Get_WeaponType())
-		//	{
-		//	case CWeapon::EType::Sword_1H:
-		//		if (FAILED(m_pStateController->Change_State(L"1H_SwordIdle")))
-		//			return -1;
-		//		return STATE_CHANGE;
-		//		break;
-		//	case CWeapon::EType::Hammer_2H:
-		//		if (FAILED(m_pStateController->Change_State(L"2H_HammerIdle")))
-		//			return -1;
-		//		return STATE_CHANGE;
-		//		break;
-		//	}
-		//}
-		//else
-		//{
-		//	if (FAILED(m_pStateController->Change_State(L"Idle")))
-		//		return -1;
-		//	return STATE_CHANGE;
-		//}
 		if (FAILED(m_pStateController->Change_State(L"Shield_BlockLoop")))
 			return -1;
 		return STATE_CHANGE;
@@ -74,12 +52,14 @@ HRESULT CShield_Parry::EnterState()
 	if (FAILED(__super::EnterState()))
 		return E_FAIL;
 
-	m_pAnimationController->SetUp_NextAnimation("SK_Silvermane.ao|A_Spectral_Shield_Parry_V2", false);
+	if (FAILED(m_pAnimationController->SetUp_NextAnimation("SK_Silvermane.ao|A_Spectral_Shield_Parry_V2", false)))
+		return E_FAIL;
 	m_pAnimationController->Set_RootMotion(true, true, ERootOption::XYZ);
 
 	m_pSilvermane->Set_EquipShield(true);
 	m_pSilvermane->Set_IsHit(true);
 
+	m_iCutIndex = 25;
 	return S_OK;
 }
 
@@ -88,7 +68,6 @@ HRESULT CShield_Parry::ExitState()
 	if (FAILED(__super::ExitState()))
 		return E_FAIL;
 
-	//m_pSilvermane->Set_EquipShield(false);
 	m_pSilvermane->Set_IsHit(false);
 	return S_OK;
 }
@@ -99,6 +78,25 @@ _int CShield_Parry::Input(const _double& _dDeltaTime)
 	if (NO_EVENT != iProgress)
 		return iProgress;
 
+	_uint iCurkeyFrameIndex = m_pAnimationController->Get_CurKeyFrameIndex();
+	if (m_iCutIndex < iCurkeyFrameIndex)
+	{
+		if (g_pGameInstance->getMouseKeyDown(CInputDev::MOUSESTATE::MB_LBUTTON))
+		{
+			m_pSilvermane->Set_EquipShield(false);
+			m_pSilvermane->Set_EquipShieldAnim(false);
+			m_pSilvermane->Set_BlockTime(0.f);
+			return ToAttack();
+		}
+		else if (g_pGameInstance->getMouseKeyDown(CInputDev::MOUSESTATE::MB_RBUTTON))
+		{
+			m_pSilvermane->Set_EquipShield(false);
+			m_pSilvermane->Set_EquipShieldAnim(false);
+			m_pSilvermane->Set_BlockTime(0.f);
+			return ToChargeStart();
+		}
+	}
+			
 	return _int();
 }
 

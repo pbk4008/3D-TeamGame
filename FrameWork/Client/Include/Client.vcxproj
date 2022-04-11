@@ -188,6 +188,7 @@ call Update_Client.bat</Command>
     <ClInclude Include="..\Headers\1H_Dash.h" />
     <ClInclude Include="..\Headers\1H_FlinchLeft.h" />
     <ClInclude Include="..\Headers\1H_KnockBack.h" />
+    <ClInclude Include="..\Headers\1H_SwordRicochetReaction.h" />
     <ClInclude Include="..\Headers\1H_Stagger.h" />
     <ClInclude Include="..\Headers\1H_SwordAttack.h" />
     <ClInclude Include="..\Headers\1H_SwordAttackNormalR1_01.h" />
@@ -255,6 +256,7 @@ call Update_Client.bat</Command>
     <ClInclude Include="..\Headers\2H_HammerJogRight.h" />
     <ClInclude Include="..\Headers\2H_HammerJogRightPivot180.h" />
     <ClInclude Include="..\Headers\2H_HammerJogRightStart.h" />
+    <ClInclude Include="..\Headers\2H_HammerRicochetReaction.h" />
     <ClInclude Include="..\Headers\Aberrant_Attack.h" />
     <ClInclude Include="..\Headers\Aberrant_Dash_Bwd.h" />
     <ClInclude Include="..\Headers\Aberrant_Death.h" />
@@ -321,6 +323,7 @@ call Update_Client.bat</Command>
     <ClInclude Include="..\Headers\Crawler_Walk.h" />
     <ClInclude Include="..\Headers\DataManager.h" />
     <ClInclude Include="..\Headers\DebugSystem.h" />
+    <ClInclude Include="..\Headers\DodgeSlide.h" />
     <ClInclude Include="..\Headers\DropBox.h" />
     <ClInclude Include="..\Headers\DropBox_Idle.h" />
     <ClInclude Include="..\Headers\DropBox_Open.h" />
@@ -338,6 +341,7 @@ call Update_Client.bat</Command>
     <ClInclude Include="..\Headers\Effect_HitParticle.h" />
     <ClInclude Include="..\Headers\Environment.h" />
     <ClInclude Include="..\Headers\EquipmentData.h" />
+    <ClInclude Include="..\Headers\FlyingShield.h" />
     <ClInclude Include="..\Headers\Fury.h" />
     <ClInclude Include="..\Headers\GameObjectPool.h" />
     <ClInclude Include="..\Headers\InteractableObject.h" />
@@ -378,6 +382,8 @@ call Update_Client.bat</Command>
     <ClInclude Include="..\Headers\PlayerData.h" />
     <ClInclude Include="..\Headers\Polearm.h" />
     <ClInclude Include="..\Headers\Potal.h" />
+    <ClInclude Include="..\Headers\Scenematic.h" />
+    <ClInclude Include="..\Headers\ScenematicManager.h" />
     <ClInclude Include="..\Headers\ScriptableData.h" />
     <ClInclude Include="..\Headers\ShakeManager.h" />
     <ClInclude Include="..\Headers\Shield.h" />
@@ -396,6 +402,7 @@ call Update_Client.bat</Command>
     <ClInclude Include="..\Headers\Shield_ParryStunbackStrong.h" />
     <ClInclude Include="..\Headers\Shield_Ricochet.h" />
     <ClInclude Include="..\Headers\Shield_SupermanPunchStraight.h" />
+    <ClInclude Include="..\Headers\Shield_Throw.h" />
     <ClInclude Include="..\Headers\Shield_Walk.h" />
     <ClInclude Include="..\Headers\Shield_WalkBwd.h" />
     <ClInclude Include="..\Headers\Shield_WalkBwdStart.h" />
@@ -500,6 +507,7 @@ call Update_Client.bat</Command>
     <ClInclude Include="..\Headers\UI_SlotItemIcon.h" />
     <ClInclude Include="..\Headers\UI_Tuto_Base.h" />
     <ClInclude Include="..\Headers\UI_Tuto_Font.h" />
+    <ClInclude Include="..\Headers\Wall.h" />
     <ClInclude Include="..\Headers\Weapon.h" />
     <ClInclude Include="..\Headers\WeaponData.h" />
     <ClInclude Include="Client.h" />
@@ -512,6 +520,7 @@ call Update_Client.bat</Command>
     <ClCompile Include="..\Codes\1H_Dash.cpp" />
     <ClCompile Include="..\Codes\1H_FlinchLeft.cpp" />
     <ClCompile Include="..\Codes\1H_KnockBack.cpp" />
+    <ClCompile Include="..\Codes\1H_SwordRicochetReaction.cpp" />
     <ClCompile Include="..\Codes\1H_Stagger.cpp" />
     <ClCompile Include="..\Codes\1H_SwordAttack.cpp" />
     <ClCompile Include="..\Codes\1H_SwordAttackNormalR1_01.cpp" />
@@ -578,6 +587,7 @@ call Update_Client.bat</Command>
     <ClCompile Include="..\Codes\2H_HammerJogRightStart.cpp" />
     <ClCompile Include="..\Codes\2H_HammerEquipOff.cpp" />
     <ClCompile Include="..\Codes\2H_HammerEquipOn.cpp" />
+    <ClCompile Include="..\Codes\2H_HammerRicochetReaction.cpp" />
     <ClCompile Include="..\Codes\Aberrant_Attack.cpp" />
     <ClCompile Include="..\Codes\Aberrant_Dash_Bwd.cpp" />
     <ClCompile Include="..\Codes\Aberrant_Death.cpp" />
@@ -642,6 +652,7 @@ call Update_Client.bat</Command>
     <ClCompile Include="..\Codes\Crawler_Ricochet.cpp" />
     <ClCompile Include="..\Codes\Crawler_Walk.cpp" />
     <ClCompile Include="..\Codes\DataManager.cpp" />
+    <ClCompile Include="..\Codes\DodgeSlide.cpp" />
     <ClCompile Include="..\Codes\DropBox.cpp" />
     <ClCompile Include="..\Codes\DropBox_Idle.cpp" />
     <ClCompile Include="..\Codes\DropBox_Open.cpp" />
@@ -657,6 +668,7 @@ call Update_Client.bat</Command>
     <ClCompile Include="..\Codes\Effect_HitFloating.cpp" />
     <ClCompile Include="..\Codes\Effect_HitParticle.cpp" />
     <ClCompile Include="..\Codes\EquipmentData.cpp" />
+    <ClCompile Include="..\Codes\FlyingShield.cpp" />
     <ClCompile Include="..\Codes\Fury.cpp" />
     <ClCompile Include="..\Codes\GameObjectPool.cpp" />
     <ClCompile Include="..\Codes\InteractableObject.cpp" />
@@ -705,6 +717,8 @@ call Update_Client.bat</Command>
     <ClCompile Include="..\Codes\PlayerData.cpp" />
     <ClCompile Include="..\Codes\Polearm.cpp" />
     <ClCompile Include="..\Codes\Potal.cpp" />
+    <ClCompile Include="..\Codes\Scenematic.cpp" />
+    <ClCompile Include="..\Codes\ScenematicManager.cpp" />
     <ClCompile Include="..\Codes\ScriptableData.cpp" />
     <ClCompile Include="..\Codes\ShakeManager.cpp" />
     <ClCompile Include="..\Codes\Shield.cpp" />
@@ -723,6 +737,7 @@ call Update_Client.bat</Command>
     <ClCompile Include="..\Codes\Shield_ParryStunbackStrong.cpp" />
     <ClCompile Include="..\Codes\Shield_Ricochet.cpp" />
     <ClCompile Include="..\Codes\Shield_SupermanPunchStraight.cpp" />
+    <ClCompile Include="..\Codes\Shield_Throw.cpp" />
     <ClCompile Include="..\Codes\Shield_Walk.cpp" />
     <ClCompile Include="..\Codes\Shield_WalkBwd.cpp" />
     <ClCompile Include="..\Codes\Shield_WalkBwdStart.cpp" />
@@ -826,6 +841,7 @@ call Update_Client.bat</Command>
     <ClCompile Include="..\Codes\UI_SlotItemIcon.cpp" />
     <ClCompile Include="..\Codes\UI_Tuto_Base.cpp" />
     <ClCompile Include="..\Codes\UI_Tuto_Font.cpp" />
+    <ClCompile Include="..\Codes\Wall.cpp" />
     <ClCompile Include="..\Codes\Weapon.cpp" />
     <ClCompile Include="..\Codes\WeaponData.cpp" />
     <ClCompile Include="..\Default\Client_Function.cpp" />
@@ -851,12 +867,14 @@ call Update_Client.bat</Command>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="..\bin\ShaderFile\Shader_AnimMesh.hlsl" />
+    <FxCompile Include="..\bin\ShaderFile\Shader_Distortion.hlsl" />
     <FxCompile Include="..\bin\ShaderFile\Shader_Effect_Fire.hlsl" />
     <FxCompile Include="..\bin\ShaderFile\Shader_Geo_UI.hlsl" />
     <FxCompile Include="..\bin\ShaderFile\Shader_InstanceFire.hlsl" />
     <FxCompile Include="..\bin\ShaderFile\Shader_InstanceMesh.hlsl" />
     <FxCompile Include="..\bin\ShaderFile\Shader_INST_Coin.hlsl" />
     <FxCompile Include="..\bin\ShaderFile\Shader_INST_MASK.hlsl" />
+    <FxCompile Include="..\bin\ShaderFile\Shader_INST_M_O_R.hlsl" />
     <FxCompile Include="..\bin\ShaderFile\Shader_INST_OMER.hlsl" />
     <FxCompile Include="..\bin\ShaderFile\Shader_INST_OMR.hlsl" />
     <FxCompile Include="..\bin\ShaderFile\Shader_INST_ORM.hlsl" />
@@ -865,6 +883,7 @@ call Update_Client.bat</Command>
     <FxCompile Include="..\bin\ShaderFile\Shader_INST_ORM_M.hlsl" />
     <FxCompile Include="..\bin\ShaderFile\Shader_INST_ORM_N2.hlsl" />
     <FxCompile Include="..\bin\ShaderFile\Shader_INST_ORS.hlsl" />
+    <FxCompile Include="..\bin\ShaderFile\Shader_INST_RM.hlsl" />
     <FxCompile Include="..\bin\ShaderFile\Shader_INST_Rock.hlsl" />
     <FxCompile Include="..\bin\ShaderFile\Shader_INST_Tree.hlsl" />
     <FxCompile Include="..\bin\ShaderFile\Shader_Mesh.hlsl" />
@@ -878,12 +897,15 @@ call Update_Client.bat</Command>
     <FxCompile Include="..\bin\ShaderFile\Shader_Shield.hlsl" />
     <FxCompile Include="..\bin\ShaderFile\Shader_SilverMane.hlsl" />
     <FxCompile Include="..\bin\ShaderFile\Shader_StaticMesh.hlsl" />
-    <FxCompile Include="..\bin\ShaderFile\Shader_Trail.hlsl" />
     <FxCompile Include="..\bin\ShaderFile\Shader_Treasure_Chest.hlsl" />
     <FxCompile Include="..\bin\ShaderFile\Shader_UI.hlsl" />
     <FxCompile Include="..\bin\ShaderFile\Shader_UI_Bar.hlsl" />
     <FxCompile Include="..\bin\ShaderFile\Shader_UI_Enemy_Bar.hlsl" />
     <FxCompile Include="..\bin\ShaderFile\Shader_Weapon.hlsl" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\bin\ShaderFile\Shader_Share.hlsli" />
+    <None Include="..\bin\ShaderFile\Shader_ShareFuntion.hlsli" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -53,7 +53,7 @@ _int CTrailEffect::LateTick(_double _dDeltaTime)
 		return iProgress;
 
 	if(m_isRender)
-		m_pRenderer->Add_RenderGroup(CRenderer::RENDER_ALPHA, this);
+		m_pRenderer->Add_RenderGroup(CRenderer::RENDER_DYDISTORTION, this);
 
 	return _int();
 }
@@ -121,37 +121,36 @@ HRESULT CTrailEffect::Render()
 	view = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_VIEW));
 	proj = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_PROJECTION));
 
-	if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_WorldMatrix", &world, sizeof(_float4x4))))	MSGBOX("NoiseFire ConstBuffer Worldmatrix Not Apply");
-	if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_ViewMatrix", &view, sizeof(_float4x4)))) MSGBOX("NoiseFire ConstBuffer Viewmatrix Not Apply");
-	if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_ProjMatrix", &proj, sizeof(_float4x4)))) MSGBOX("NoiseFire ConstBuffer Projmatrix Not Apply");
+	if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_WorldMatrix", &world, sizeof(_float4x4))))	MSGBOX("Trail ConstBuffer Worldmatrix Not Apply");
+	if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_ViewMatrix", &view, sizeof(_float4x4)))) MSGBOX("Trail ConstBuffer Viewmatrix Not Apply");
+	if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_ProjMatrix", &proj, sizeof(_float4x4)))) MSGBOX("Trail ConstBuffer Projmatrix Not Apply");
 
-	_float3 scrollspeeds = _float3(1.5f, 2.6f, 2.8f); //_float3(1.3f, 2.1f, 2.3f);
-	_float3 scales = _float3(1.0f, 2.0f, 3.0f);//_float3(1.0f, 2.0f, 3.0f);
-	if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_frametime", &m_Frametime, sizeof(_float)))) MSGBOX("NoiseFire ConstBuffer NosieBuffer Not Apply");
-	if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_scrollspeeds", &scrollspeeds, sizeof(_float3)))) MSGBOX("NoiseFire ConstBuffer NosieBuffer Not Apply");
-	if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_scales", &scales, sizeof(_float3)))) MSGBOX("NoiseFire ConstBuffer NosieBuffer Not Apply");
+	//_float3 scrollspeeds = _float3(1.5f, 2.6f, 2.8f);
+	//_float3 scales = _float3(1.0f, 2.0f, 3.0f);
+	//if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_frametime", &m_Frametime, sizeof(_float)))) MSGBOX("NoiseFire ConstBuffer NosieBuffer Not Apply");
+	//if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_scrollspeeds", &scrollspeeds, sizeof(_float3)))) MSGBOX("NoiseFire ConstBuffer NosieBuffer Not Apply");
+	//if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_scales", &scales, sizeof(_float3)))) MSGBOX("NoiseFire ConstBuffer NosieBuffer Not Apply");
 
-	_float2 distoriton1 = _float2(0.1f, 0.5f);
-	_float2 distoriton2 = _float2(0.1f, 0.6f);
-	_float2 distoriton3 = _float2(0.1f, 0.4f);
-	_float distoritonScale = 0.8f;
-	_float distoritonBiase = 0.2f;
+	//_float2 distoriton1 = _float2(0.1f, 0.5f);
+	//_float2 distoriton2 = _float2(0.1f, 0.6f);
+	//_float2 distoriton3 = _float2(0.1f, 0.4f);
+	//_float distoritonScale = 0.8f;
+	//_float distoritonBiase = 0.2f;
 
-	if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_distortion1", &distoriton1, sizeof(_float2)))) MSGBOX("NoiseFire ConstBuffer Distorition buffer Not Apply");
-	if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_distortion2", &distoriton2, sizeof(_float2)))) MSGBOX("NoiseFire ConstBuffer Distorition buffer Not Apply");
-	if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_distortion3", &distoriton3, sizeof(_float2)))) MSGBOX("NoiseFire ConstBuffer Distorition buffer Not Apply");
-	if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_distortionscale", &distoritonScale, sizeof(_float)))) MSGBOX("NoiseFire ConstBuffer Distorition buffer Not Apply");
-	if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_distortionbias", &distoritonBiase, sizeof(_float)))) MSGBOX("NoiseFire ConstBuffer Distorition buffer Not Apply");
+	//if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_distortion1", &distoriton1, sizeof(_float2)))) MSGBOX("NoiseFire ConstBuffer Distorition buffer Not Apply");
+	//if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_distortion2", &distoriton2, sizeof(_float2)))) MSGBOX("NoiseFire ConstBuffer Distorition buffer Not Apply");
+	//if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_distortion3", &distoriton3, sizeof(_float2)))) MSGBOX("NoiseFire ConstBuffer Distorition buffer Not Apply");
+	//if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_distortionscale", &distoritonScale, sizeof(_float)))) MSGBOX("NoiseFire ConstBuffer Distorition buffer Not Apply");
+	//if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_distortionbias", &distoritonBiase, sizeof(_float)))) MSGBOX("NoiseFire ConstBuffer Distorition buffer Not Apply");
 
 	// Texture
-	if (FAILED(m_pVIBuffer->SetUp_TextureOnShader("g_DiffuseTexture", m_pTexture)))		MSGBOX("NoiseFire ConstBuffer FireTexture Not Apply");
-	if (FAILED(m_pVIBuffer->SetUp_TextureOnShader("g_DistortionTex", m_pTexture1)))	MSGBOX("NoiseFire ConstBuffer NoiseTexture Not Apply");
-	if (FAILED(m_pVIBuffer->SetUp_TextureOnShader("g_DistorionMaskTex", m_pTexture2)))	MSGBOX("NoiseFire ConstBuffer AlphaTexture Not Apply");
+	//if (FAILED(m_pVIBuffer->SetUp_TextureOnShader("g_DiffuseTexture", m_pTexture)))		MSGBOX("NoiseFire ConstBuffer FireTexture Not Apply");
+	//if (FAILED(m_pVIBuffer->SetUp_TextureOnShader("g_DistortionTex", m_pTexture1)))	MSGBOX("NoiseFire ConstBuffer NoiseTexture Not Apply");
+	if (FAILED(m_pVIBuffer->SetUp_TextureOnShader("g_DistorionMaskTex", m_pTexture2)))	MSGBOX("Trail ConstBuffer AlphaTexture Not Apply");
 	
-	_float weight = 0.9f;
-	if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_Weight", &weight, sizeof(_float)))) MSGBOX("NoiseFire ConstBuffer Weight Not Apply");
+	if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_deltatime", &g_fDeltaTime, sizeof(_float)))) MSGBOX("Trail ConstBuffer Weight Not Apply");
 
-	m_pVIBuffer->Render_Curve(1);
+	m_pVIBuffer->Render_Curve(0);
 
 	m_listCurved.clear();
 

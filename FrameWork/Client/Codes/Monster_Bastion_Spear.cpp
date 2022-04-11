@@ -22,7 +22,6 @@
 CMonster_Bastion_Spear::CMonster_Bastion_Spear(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
 	: CActor(_pDevice, _pDeviceContext)
 	, m_pCharacterController(nullptr)
-	, m_pModel(nullptr)
 	, m_pStateController(nullptr)
 	, m_pAnimator(nullptr)
 	, m_bHalf(false)
@@ -32,7 +31,6 @@ CMonster_Bastion_Spear::CMonster_Bastion_Spear(ID3D11Device* _pDevice, ID3D11Dev
 CMonster_Bastion_Spear::CMonster_Bastion_Spear(const CMonster_Bastion_Spear& _rhs)
 	: CActor(_rhs)
 	, m_pCharacterController(_rhs.m_pCharacterController)
-	, m_pModel(_rhs.m_pModel)
 	, m_pStateController(_rhs.m_pStateController)
 	, m_pAnimator(_rhs.m_pAnimator)
 	, m_bHalf(_rhs.m_bHalf)
@@ -210,30 +208,26 @@ _int CMonster_Bastion_Spear::LateTick(_double _dDeltaTime)
 
 HRESULT CMonster_Bastion_Spear::Render()
 {
-	if (FAILED(__super::Render()))
-		return E_FAIL;
+	SCB desc;
+	ZeroMemory(&desc, sizeof(SCB));
 
-	_matrix smatWorld, smatView, smatProj;
-	smatWorld = XMMatrixTranspose(m_pTransform->Get_WorldMatrix());
-	smatView = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_VIEW));
-	smatProj = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_PROJECTION));
-
-	if (FAILED(m_pModel->SetUp_ValueOnShader("g_WorldMatrix", &smatWorld, sizeof(_matrix))))
-		return E_FAIL;
-	if (FAILED(m_pModel->SetUp_ValueOnShader("g_ViewMatrix", &smatView, sizeof(_matrix))))
-		return E_FAIL;
-	if (FAILED(m_pModel->SetUp_ValueOnShader("g_ProjMatrix", &smatProj, sizeof(_matrix))))
-		return E_FAIL;
-
+	CActor::BindConstantBuffer(L"Camera_Silvermane", &desc);
 	for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
-	{
-		if (FAILED(m_pModel->Render(i, 0)))
-			return E_FAIL;
-	}
+		m_pModel->Render(i, 0);
 
 #ifdef _DEBUG
 	//Render_Debug();
 #endif
+	return S_OK;
+}
+
+HRESULT CMonster_Bastion_Spear::Render_Shadow()
+{
+	CActor::BindConstantBuffer(L"Camera_Silvermane");
+	CActor::BindLightBuffer();
+	for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
+		m_pModel->Render(i, 3);
+
 	return S_OK;
 }
 
@@ -249,7 +243,7 @@ HRESULT CMonster_Bastion_Spear::Ready_Components(_uint iSceneID)
 	//m_pTransform->Set_State(CTransform::STATE_POSITION, XMLoadFloat4(&vPosition));
 
 	// 모델
-	if (FAILED(SetUp_Components(iSceneID, L"Model_Bastion_Spear", L"Model", (CComponent**)&m_pModel)))
+	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Model_Bastion_Spear", L"Model", (CComponent**)&m_pModel)))
 		return E_FAIL;
 	_matrix matPivot = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(180.f));
 	m_pModel->Set_PivotMatrix(matPivot);
@@ -606,12 +600,18 @@ void CMonster_Bastion_Spear::Hit(const ATTACKDESC& _tAttackDesc)
 	Hit(collision);
 }
 
+void CMonster_Bastion_Spear::Parry(const PARRYDESC& _tParryDesc)
+{
+	m_fGroggyGauge += (m_fMaxGroggyGauge - m_fGroggyGauge);
+	Groggy_Start();
+}
+
 void CMonster_Bastion_Spear::Hit(CCollision& collision)
 {
 	if (!m_bDead)
 	{
-		if (true == g_pObserver->IsAttack()) //플레이어공격일때
-		{
+		//if (true == g_pObserver->IsAttack()) //플레이어공격일때
+		//{
 			m_bFirstHit = true; //딱 한번 true로 변경해줌
 
 			if (true == m_bFirstHit)
@@ -619,8 +619,8 @@ void CMonster_Bastion_Spear::Hit(CCollision& collision)
 				m_pPanel->Set_BackUIGapY(1.f);
 			}
 
-			if ((_uint)GAMEOBJECT::WEAPON == collision.pGameObject->getTag())
-			{
+			//if ((_uint)GAMEOBJECT::WEAPON == collision.pGameObject->getTag())
+			//{
 				if (L"Guard" != m_pStateController->Get_CurStateTag()
 					|| m_iGuardCount<=0)
 				{
@@ -629,7 +629,7 @@ void CMonster_Bastion_Spear::Hit(CCollision& collision)
 						if (!m_bChargeOn)
 							m_bChargeOn = true;
 					}
-					m_pPanel->Set_Show(true);
+					//m_pPanel->Set_Show(true);
 					m_bGuard = false;
 					m_pStateController->Change_State(L"Hit");
 					Active_Effect((_uint)EFFECT::HIT);
@@ -641,8 +641,8 @@ void CMonster_Bastion_Spear::Hit(CCollision& collision)
 					}
 				}
 				m_pPanel->Set_HpBar(Get_HpRatio());
-			}
-		}
+			//}
+		//}
 	}
 }
 
@@ -677,13 +677,11 @@ CGameObject* CMonster_Bastion_Spear::Clone(const _uint _iSceneID, void* _pArg)
 
 void CMonster_Bastion_Spear::Free()
 {
-	__super::Free();
-
-	Safe_Release(m_pModel);
 	Safe_Release(m_pAnimator);
 	Safe_Release(m_pWeapon);
 	Safe_Release(m_pStateController);
 	Safe_Release(m_pCharacterController);
 	Safe_Release(m_pPanel);
 
+	__super::Free();
 }

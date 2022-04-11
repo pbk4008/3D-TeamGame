@@ -19,10 +19,8 @@ public:
 	virtual HRESULT EnterState(void* _pArg = nullptr) override;
 	virtual HRESULT ExitState() override;
 
-	virtual _int Input(const _double& _dDeltaTime) override;
-
 private:
-	_int ToIdle();
+	virtual _int Input(const _double& _dDeltaTime) override;
 
 private:
 	_float m_fLookTime = 0.f;

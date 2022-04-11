@@ -3,6 +3,10 @@
 
 ENGINE_DLL CGameInstance* g_pGameInstance = nullptr;
 ENGINE_DLL mt19937 g_random;		// mt19937 난수 엔진
+_float g_fDeltaTime;
+_double g_dDeltaTime;
+_float g_fImmutableTime;
+_double g_dImmutableTime;
 
 CGameInstance::CGameInstance()
 	: m_pGraphic_Device(CGraphic_Device::GetInstance())
@@ -97,6 +101,9 @@ _int CGameInstance::Tick_Engine(_double TimeDelta)
 		nullptr == m_pInput_Device || 
 		nullptr == m_pFrustum)
 		return -1;
+
+	g_fDeltaTime = (_float)TimeDelta;
+	g_dDeltaTime = TimeDelta;
 
 	_int	iProgress = 0;
 

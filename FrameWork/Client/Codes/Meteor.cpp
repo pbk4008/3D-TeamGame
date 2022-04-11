@@ -48,7 +48,7 @@ HRESULT CMeteor::NativeConstruct(const _uint _iSceneID, void* _pArg)
 	{
 		_vector vPos = (*(_vector*)_pArg);
 		m_pTransform->Set_State(CTransform::STATE_POSITION, vPos);
-		m_pTransform->Scaling(XMVectorSet(0.1f, 0.1f, 0.1f,0.f));
+		m_pTransform->Scaling(XMVectorSet(0.05f, 0.05f, 0.05f,0.f));
 	}
 
 	if (FAILED(Ready_Component()))
@@ -67,6 +67,12 @@ _int CMeteor::Tick(_double _dDeltaTime)
 {
 	m_pCollider->Tick(_dDeltaTime);
 
+	_vector vPos = m_pTransform->Get_State(CTransform::STATE_POSITION);
+	_float fY = XMVectorGetY(vPos);
+
+	if (fY < -20.f)
+		m_bRemove = true;
+	
 	return _int();
 }
 
@@ -133,7 +139,43 @@ HRESULT CMeteor::Ready_Component()
 
 void CMeteor::OnTriggerEnter(CCollision& collision)
 {
-	m_bRemove = true;
+	OVERLAPDESC tOverlapDesc;
+	tOverlapDesc.geometry = PxSphereGeometry(5.f);
+	XMStoreFloat3(&tOverlapDesc.vOrigin, m_pTransform->Get_State(CTransform::STATE_POSITION));
+	CGameObject* pHitObject = nullptr;
+	tOverlapDesc.ppOutHitObject = &pHitObject;
+	tOverlapDesc.filterData.flags = PxQueryFlag::eDYNAMIC;
+	if (g_pGameInstance->Overlap(tOverlapDesc))
+	{
+		if (tOverlapDesc.vecHitObjects.empty()
+			|| !Find_HitPlayer(&tOverlapDesc.vecHitObjects))
+		{
+			m_bRemove = true;
+			return;
+		}
+		_uint iSize = (_uint)tOverlapDesc.vecHitObjects.size();
+		for (_uint i = 0; i < iSize; ++i)
+		{
+			CActor* pActor = static_cast<CActor*>(tOverlapDesc.vecHitObjects[i]);
+			_uint iTag = tOverlapDesc.vecHitObjects[i]->getTag();
+			if (iTag == (_uint)GAMEOBJECT::PLAYER)
+			{
+				ATTACKDESC tAttackDesc;
+
+				tAttackDesc.pOwner = this;
+				tAttackDesc.pHitObject = pActor;
+
+				tAttackDesc.iLevel = 3;
+				tAttackDesc.fDamage = 15.f;
+
+				pActor->Hit(tAttackDesc);
+				m_bRemove = true;
+				return;
+			}
+			else 
+				continue;
+		}
+	}
 }
 
 _int CMeteor::Move()
@@ -145,12 +187,22 @@ _int CMeteor::Move()
 	_float fLen = XMVectorGetX(XMVector3Length(vDir));
 
 	vDir = XMVector3Normalize(vDir);
-	fLen /=8;
+	fLen /=6;
 	vDir *= fLen*m_fSpeed;
 	vDir=XMVectorSetY(vDir, 30.f);
 	m_pCollider->Add_Force(vDir);
 
 	return _int();
+}
+
+_bool CMeteor::Find_HitPlayer(vector<CGameObject*>* pVecActor)
+{
+	for (auto& pActor : *pVecActor)
+	{
+		if (pActor->getTag() == (_uint)GAMEOBJECT::PLAYER)
+			return true;
+	}
+	return false;
 }
 
 

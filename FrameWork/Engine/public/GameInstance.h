@@ -266,4 +266,7 @@ END
 
 ENGINE_DLL extern CGameInstance* g_pGameInstance;
 ENGINE_DLL extern mt19937 g_random;
-
+ENGINE_DLL extern _float g_fDeltaTime;
+ENGINE_DLL extern _double g_dDeltaTime;
+ENGINE_DLL extern _float g_fImmutableTime;
+ENGINE_DLL extern _double g_dImmutableTime;

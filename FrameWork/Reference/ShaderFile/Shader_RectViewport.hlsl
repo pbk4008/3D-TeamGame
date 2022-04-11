@@ -51,8 +51,9 @@ cbuffer ShaderCheck
 	bool g_shadow;
 	bool g_outline;
 	bool g_radial;
-	
+	bool g_distort;
 	int	 g_RadialCnt;
+	float g_delta;
 };
 
 cbuffer LightDesc
@@ -89,31 +90,23 @@ cbuffer MatrixInverse
 };
 
 Texture2D g_SkyBoxTexture;
-//TextureCube g_SkyBoxTexture;
-//TextureCube g_SkyBoxTexutre;
 
 // Lighting
 
 Texture2D g_DiffuseTexture;
 Texture2D g_NormalTexture;
 Texture2D g_DepthTexture;
-
-Texture2D g_Metallic;
-Texture2D g_Roughness;
-Texture2D g_AO;
-
-texture2D g_SSS;
+Texture2D g_MRATexture;
 
 // belnding
-Texture2D g_ShadeTexture;
-Texture2D g_SpecularTexture;
-
 Texture2D g_ShadowMapTex;
 Texture2D g_ShadowTexture;
 
 Texture2D g_AlphaTexture;
+Texture2D g_DistortionTex;
+Texture2D g_STDistortionTex;
+Texture2D g_BlurTexture;
 
-Texture2D<half> depthTex;
 
 struct VS_IN
 {
@@ -212,9 +205,7 @@ PS_OUT_DIRLIGHTACC PS_MAIN_LIGHTACC_DIRECTIONAL(PS_IN In)
 	half4 vDiffuseDesc = g_DiffuseTexture.Sample(DefaultSampler, uvRT);
 	half4 vNormalDesc = g_NormalTexture.Sample(DefaultSampler, uvRT);
 	half4 vDepthDesc = g_DepthTexture.Sample(DefaultSampler, uvRT);
-	half Metallic = g_Metallic.Sample(DefaultSampler, uvRT).r;
-	half Roughness = g_Roughness.Sample(DefaultSampler, uvRT).r;
-	half AO = g_AO.Sample(DefaultSampler, uvRT).r;
+	half3 MRA = g_MRATexture.Sample(DefaultSampler, uvRT).xyz;
 	half fViewZ = vDepthDesc.y * 300.f;
 	
 	half3 normaltest = vNormalDesc.xyz;
@@ -240,7 +231,7 @@ PS_OUT_DIRLIGHTACC PS_MAIN_LIGHTACC_DIRECTIONAL(PS_IN In)
 		half3 L = g_vLightDir.xyz * -1;
 		half F0 = 0.93;
 		
-		half specular = LightingGGX_Ref(N, V, L, F0, Roughness);
+		half specular = LightingGGX_Ref(N, V, L, F0, MRA.g);
 	
 		////-------------------------------------------------------------------------//
 		half3 color = half3(0.97f, 0.95f, 0.8f);
@@ -255,22 +246,22 @@ PS_OUT_DIRLIGHTACC PS_MAIN_LIGHTACC_DIRECTIONAL(PS_IN In)
 		
 		half4 cubeRef1 = g_SkyBoxTexture.Sample(SkyBoxSampler, worldReflectDirection.xy);
 		
-		half smoothness = 1 - Roughness;
-		half InvMetalic = (1 - Metallic);
+		half smoothness = 1 - MRA.g;
+		half InvMetalic = (1 - MRA.r);
 		InvMetalic = max(InvMetalic, 0.5f);
-		half4 lightpower = InvMetalic * light * AO;
+		half4 lightpower = InvMetalic * light * MRA.b;
 		
 		if (g_shadow == true)
 		{
 			half4 shadow = g_ShadowTexture.Sample(DefaultSampler, In.vTexUV);
 			shadow = saturate(shadow + 0.5f);
 			
-			Out.vSpecular = saturate((light * specular + cubeRef1) * Metallic * smoothness * shadow);
-			Out.vShade = saturate(lightpower * shadow);
+			Out.vSpecular = saturate((light * specular + cubeRef1) * MRA.r * smoothness * shadow);
+			Out.vShade = lightpower * shadow;
 		}
 		else
 		{
-			Out.vSpecular = saturate((light * specular + cubeRef1) * Metallic * smoothness);
+			Out.vSpecular = saturate((light * specular + cubeRef1) * MRA.r * smoothness);
 			Out.vShade = saturate(lightpower);
 		}
 	}
@@ -309,7 +300,6 @@ PS_OUT_POINTLIGHTACC PS_MAIN_LIGHTACC_POINT(PS_IN In)
 
 	vWorldPos = vWorldPos * fViewZ;
 	vWorldPos = mul(vWorldPos, g_ProjMatrixInv);
-
 	vWorldPos = mul(vWorldPos, g_ViewMatrixInv);
 
 	vector vLightDir = vWorldPos - g_vLightPos;
@@ -396,19 +386,21 @@ PS_OUT_BLEND PS_MAIN_BLEND(PS_IN In)
 	half4 color = g_DiffuseTexture.Sample(DefaultSampler, In.vTexUV);
 	
 	Out.vColor = color;
+
+	//Out.vColor = DOF(g_DiffuseTexture, g_DepthTexture, g_BlurTexture, DefaultSampler, In.vTexUV, g_ProjMatrixInv, g_ViewMatrixInv, g_vCamPosition);
+	
+	if (g_distort == true)
+	{
+		Out.vColor = Distortion(g_STDistortionTex, g_DiffuseTexture, DefaultSampler, In.vTexUV, g_delta);
+		Out.vColor = Distortion(g_DistortionTex, g_DiffuseTexture, DefaultSampler, In.vTexUV, g_delta);
+	}
 	
 	if (g_radial == true)
 	{		
-		
 		Out.vColor.rgb = Radialblur(g_DiffuseTexture,DefaultSampler,In.vTexUV,g_RadialCnt);
 	}
 	
-	if (g_outline == true)
-	{ 
-		// ¿Ü°û¼± È¿°ú
-		Out.vColor = Outline(g_DiffuseTexture, DefaultSampler, In.vTexUV, Out.vColor);
-	}
-	
+
 	if (Out.vColor.a == 0)
 		discard;
 	

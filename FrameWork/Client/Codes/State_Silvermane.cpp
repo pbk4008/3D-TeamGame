@@ -254,6 +254,121 @@ const _int CState_Silvermane::Add_PlusAngle(const EDir _eDir, const _double& _dD
 	return _int();
 }
 
+const _int CState_Silvermane::ToIdle()
+{
+	if (m_pSilvermane->IsEquipWeapon())
+	{
+		switch (m_pSilvermane->Get_WeaponType())
+		{
+		case CWeapon::EType::Sword_1H:
+			if (FAILED(m_pStateController->Change_State(L"1H_SwordIdle")))
+				return -1;
+			break;
+		case CWeapon::EType::Hammer_2H:
+			if (FAILED(m_pStateController->Change_State(L"2H_HammerIdle")))
+				return -1;
+			break;
+		}
+		return STATE_CHANGE;
+	}
+	else
+	{
+		if (FAILED(m_pStateController->Change_State(L"Idle")))
+			return -1;
+		return STATE_CHANGE;
+	}
+
+	return _int();
+}
+
+const _int CState_Silvermane::ToSprint()
+{
+	if (!m_pSilvermane->IsEquipWeapon())
+	{
+		if (FAILED(m_pStateController->Change_State(L"SprintFwdStart")))
+			return -1;
+	}
+	else
+	{
+		switch (m_pSilvermane->Get_WeaponType())
+		{
+		case CWeapon::EType::Sword_1H:
+			if (FAILED(m_pStateController->Change_State(L"1H_SwordEquipOff")))
+				return -1;
+			break;
+		case CWeapon::EType::Hammer_2H:
+			if (FAILED(m_pStateController->Change_State(L"2H_HammerEquipOff")))
+				return -1;
+			break;
+		}
+	}
+	return STATE_CHANGE;
+}
+
+const _int CState_Silvermane::ToJogAttack()
+{
+	switch (m_pSilvermane->Get_WeaponType())
+	{
+	case CWeapon::EType::Sword_1H:
+		if (FAILED(m_pStateController->Change_State(L"1H_SwordJogAttack")))
+			return -1;
+		break;
+	case CWeapon::EType::Hammer_2H:
+		if (FAILED(m_pStateController->Change_State(L"2H_HammerAttackJogR1")))
+			return -1;
+		break;
+	}
+	return STATE_CHANGE;
+}
+
+const _int CState_Silvermane::ToAttack()
+{
+	switch (m_pSilvermane->Get_WeaponType())
+	{
+	case CWeapon::EType::Sword_1H:
+		if (FAILED(m_pStateController->Change_State(L"1H_SwordAttackNormalR1_01")))
+			return -1;
+		break;
+	case CWeapon::EType::Hammer_2H:
+		if (FAILED(m_pStateController->Change_State(L"2H_HammerAttackR1_01")))
+			return -1;
+		break;
+	}
+	return STATE_CHANGE;
+}
+
+const _int CState_Silvermane::ToDashAttack()
+{
+	switch (m_pSilvermane->Get_WeaponType())
+	{
+	case CWeapon::EType::Sword_1H:
+		if (FAILED(m_pStateController->Change_State(L"1H_SwordJogAttack")))
+			return -1;
+		break;
+	case CWeapon::EType::Hammer_2H:
+		if (FAILED(m_pStateController->Change_State(L"2H_HammerAttackDodgeR1")))
+			return -1;
+		break;
+	}
+	return STATE_CHANGE;
+}
+
+const _int CState_Silvermane::ToChargeStart()
+{
+	switch (m_pSilvermane->Get_WeaponType())
+	{
+	case CWeapon::EType::Sword_1H:
+		if (FAILED(m_pStateController->Change_State(L"1H_SwordAttackNormalR2_Start")))
+			return -1;
+		break;
+	case CWeapon::EType::Hammer_2H:
+		if (FAILED(m_pStateController->Change_State(L"2H_HammerChargeStage1_Start")))
+			return -1;
+		break;
+	}
+	return STATE_CHANGE;
+}
+
 void CState_Silvermane::Set_Silvermane(CSilvermane* _pSilvermane)
 {
 	m_pSilvermane = _pSilvermane;
@@ -393,18 +508,26 @@ void CState_Silvermane::Block(const ATTACKDESC& _tAttackDesc)
 		{
 		case 1:
 		case 2:
+		{
 			if ((_uint)GAMEOBJECT::WEAPON_BULLET == _tAttackDesc.pHitObject->getTag())
 			{
 				Reflect_Bullet(_tAttackDesc);
 			}
+			PARRYDESC tParryDesc;
+			tParryDesc.iLevel = _tAttackDesc.iLevel;
+			tParryDesc.pOwner = m_pSilvermane;
+			static_cast<CActor*>(_tAttackDesc.pOwner)->Parry(tParryDesc);
 			m_pStateController->Change_State(L"Shield_Parry");
 			return;
+		}
 			break;
 		case 3:
+			m_pSilvermane->Add_HP(_tAttackDesc.fDamage * 0.2f);
 			m_pStateController->Change_State(L"Shield_ParryStunback");
 			return;
 			break;
 		case 4:
+			m_pSilvermane->Add_HP(_tAttackDesc.fDamage * 0.4f);
 			m_pStateController->Change_State(L"Shield_ParryStunbackStrong");
 			return;
 			break;
@@ -423,10 +546,12 @@ void CState_Silvermane::Block(const ATTACKDESC& _tAttackDesc)
 			return;
 			break;
 		case 3:
+			m_pSilvermane->Add_HP(_tAttackDesc.fDamage * 0.2f);
 			m_pStateController->Change_State(L"Shield_Ricochet");
 			return;
 			break;
 		case 4:
+			m_pSilvermane->Add_HP(_tAttackDesc.fDamage * 0.4f);
 			m_pStateController->Change_State(L"Shield_BlockBreakStart");
 			return;
 			break;

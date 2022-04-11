@@ -346,8 +346,8 @@ HRESULT CSpear_State::Render_Debug()
 
 void CSpear_State::OnTriggerEnter(CCollision& collision)
 {
-	if(m_pOwner)
-		m_pOwner->Hit(collision);
+	//if(m_pOwner)
+	//	m_pOwner->Hit(collision);
 	//if(!m_pOwner->Get_Dead())
 	//{
 	//	if (true == g_pObserver->IsAttack()) //플레이어공격일때

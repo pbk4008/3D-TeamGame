@@ -68,9 +68,9 @@ HRESULT CEffect_Guard::NativeConstruct(const _uint _iSceneID, void* pArg)
 
 _int CEffect_Guard::Tick(_double TimeDelta)
 {
-	m_pBuffer->Update(g_dDeltaTime, m_Desc.iAxis);
+	m_pBuffer->Update(g_dImmutableTime, m_Desc.iAxis);
 
-	m_fNonActiveTimeAcc += (_float)g_dDeltaTime;
+	m_fNonActiveTimeAcc += (_float)g_dImmutableTime;
 	if (4.f <= m_fNonActiveTimeAcc)
 	{
 		setActive(false);
@@ -88,7 +88,7 @@ _int CEffect_Guard::Tick(_double TimeDelta)
 
 _int CEffect_Guard::LateTick(_double TimeDelta)
 {
-	_bool bCulling = g_pGameInstance->isIn_WorldFrustum(m_pBox->Get_Points(), 20.f);
+	_bool bCulling = g_pGameInstance->isIn_WorldFrustum(m_pBox->Get_Points(), 1.f);
 	if (true == bCulling)
 	{
 		if (nullptr != m_pRenderer)

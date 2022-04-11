@@ -121,11 +121,6 @@ HRESULT CGameObject::Render_Shadow()
 	return S_OK;
 }
 
-HRESULT CGameObject::Render_ShadeShadow(ID3D11ShaderResourceView* ShaodwMap)
-{
-	return S_OK;
-}
-
 void CGameObject::OnCollisionEnter(CCollision& collision)
 {
 }

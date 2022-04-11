@@ -362,18 +362,6 @@ technique11 DefaultTechnique
 		GeometryShader = NULL;
 		PixelShader = compile ps_5_0 PS_MAIN_SHADOW();
 	}
-
-	pass ShadeShadowStaticMesh //------------------------------------------------------------------------------------4 Static Shade_Shadow
-	{
-		SetRasterizerState(CullMode_Default);
-		SetDepthStencilState(ZDefault, 0);
-		SetBlendState(BlendDisable, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
-
-		/* 진입점함수를 지정한다. */
-		VertexShader = compile vs_5_0 VS_MAIN_SHADESHADOW_STATIC();
-		GeometryShader = NULL;
-		PixelShader = compile ps_5_0 PS_MAIN_SHADESHADOW();
-	}
 }
 
 

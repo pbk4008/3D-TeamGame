@@ -17,7 +17,6 @@
 
 #pragma region 스테이트들
 #include "Silvermane_Idle.h"
-
 //////////////////// Jog
 #include "Silvermane_JogBwd.h"
 #include "Silvermane_JogBwdStart.h"
@@ -35,12 +34,16 @@
 #include "Silvermane_JogRight.h"
 #include "Silvermane_JogRightPivot180.h"
 #include "Silvermane_JogRightStart.h"
-
 ///////////////////////////////////// Sprint
 #include "Silvermane_SprintFwd.h"
 #include "Silvermane_SprintFwdStart.h"
 #include "Silvermane_SprintFwdStop.h"
-
+///////////////////////////////////// Dash
+#include "1H_SwordDodgeSpinFwd_V3.h"
+#include "1H_SwordNormalSidestepBwd_V3.h"
+#include "1H_SwordNormalSidestepLeft_V3.h"
+#include "1H_SwordNormalSidestepRight_V3.h"
+#include "DodgeSlide.h"
 //////////////////////////////////// 1H_Sword
 #include "1H_SwordEquipOff.h"
 #include "1H_SwordEquipOn.h"
@@ -58,7 +61,6 @@
 #include "1H_SwordJogRight.h"
 #include "1H_SwordJogRightPivot180.h"
 #include "1H_SwordJogRightStart.h"
-
 // Attack
 #include "1H_SwordAttackNormalR1_01.h"
 #include "1H_SwordAttackNormalR1_02.h"
@@ -69,11 +71,6 @@
 #include "1H_SwordJogAttack.h"
 #include "1H_SwordSupermanStab.h"
 
-#include "1H_SwordDodgeSpinFwd_V3.h"
-#include "1H_SwordNormalSidestepBwd_V3.h"
-#include "1H_SwordNormalSidestepLeft_V3.h"
-#include "1H_SwordNormalSidestepRight_V3.h"
-
 #include "1H_SwordAttackNormalR2_Start.h"
 #include "1H_SwordAttackNormalR2_Loop.h"
 #include "1H_SwordAttackNormalR2_ReleaseStab.h" // 이게 첫번쨰 공격같은데 왜 ReleaseStab?
@@ -81,12 +78,12 @@
 #include "1H_SwordAttackNormalR2_03.h"
 #include "1H_SwordAttackNormalR2_04.h"
 #include "1H_SwordAttackNormalR2_ReleaseDoubleSwing.h"
-
+// 패링 당함
+#include "1H_SwordRicochetReaction.h"
 //////////////////////// 2H_Hammer
 #include "2H_HammerEquipOff.h"
 #include "2H_HammerEquipOn.h"
 #include "2H_HammerIdle.h"
-
 // Jog
 #include "2H_HammerJogBwd.h"
 #include "2H_HammerJogBwdPivot180.h"
@@ -100,7 +97,6 @@
 #include "2H_HammerJogRight.h"
 #include "2H_HammerJogRightPivot180.h"
 #include "2H_HammerJogRightStart.h"
-
 //Attack
 #include "2H_HammerAttackR1_01.h"
 #include "2H_HammerAttackR1_02.h"
@@ -118,7 +114,8 @@
 
 #include "2H_HammerAttackDodgeR1.h"
 #include "2H_HammerAttackSprintR1.h"
-
+// 패링 당함
+#include "2H_HammerRicochetReaction.h"
 ///////////////////////////////////////////// Shield
 // 막기
 #include "Shield_BlockStart.h"
@@ -135,7 +132,6 @@
 #include "Shield_Parry.h"
 #include "Shield_ParryStunback.h"
 #include "Shield_ParryStunbackStrong.h"
-
 // Walk
 #include "Shield_WalkBwd.h"
 #include "Shield_WalkBwdStart.h"
@@ -149,14 +145,12 @@
 #include "Shield_WalkRight.h"
 #include "Shield_WalkRightStart.h"
 #include "Shield_WalkRightStop.h"
-
 // Attack
 #include "Shield_SupermanPunchStraight.h"
-
+#include "Shield_Throw.h"
 //////////////////////////////////////////// Jump
 #include "Traverse_Jump400Jog.h"
 #include "Traverse_JumpNodeJog.h"
-
 //////////////////////////////////////////// Hit
 #include "1H_FlinchLeft.h"
 #include "1H_Stagger.h"
@@ -218,7 +212,7 @@ HRESULT CSilvermane::NativeConstruct(const _uint _iSceneID, void* _pArg)
 		return E_FAIL;
 
 	m_isFall = true;
-	m_fMaxHp = 1.f;
+	m_fMaxHp = 50.f;
 	m_fCurrentHp = m_fMaxHp;
 
 	m_pRenderer->SetRenderButton(CRenderer::PIXEL, true);
@@ -268,7 +262,6 @@ _int CSilvermane::Tick(_double _dDeltaTime)
 	{
 		m_pCharacterController->Move(_dDeltaTime, m_pTransform->Get_Velocity());
 	}
-
 
 	Raycast_JumpNode(_dDeltaTime);
 	Raycast_DropBox(_dDeltaTime);
@@ -336,21 +329,6 @@ _int CSilvermane::LateTick(_double _dDeltaTime)
 
 HRESULT CSilvermane::Render()
 {
-	if (FAILED(__super::Render()))
-		return E_FAIL;
-
-	_matrix smatWorld, smatView, smatProj;
-	smatWorld = XMMatrixTranspose(m_pTransform->Get_WorldMatrix());
-	smatView = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_VIEW));
-	smatProj = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_PROJECTION));
-
-	if (FAILED(m_pModel->SetUp_ValueOnShader("g_WorldMatrix", &smatWorld, sizeof(_matrix))))
-		return E_FAIL;
-	if (FAILED(m_pModel->SetUp_ValueOnShader("g_ViewMatrix", &smatView, sizeof(_matrix))))
-		return E_FAIL;
-	if (FAILED(m_pModel->SetUp_ValueOnShader("g_ProjMatrix", &smatProj, sizeof(_matrix))))
-		return E_FAIL;
-
 	if (g_pObserver->IsAttack())
 	{
 		m_color = _float4(0.784f, 0.137f, 0.137f, 0.f);
@@ -371,15 +349,23 @@ HRESULT CSilvermane::Render()
 			m_color.z = 0.8196f;
 		else
 			m_color.z += 0.005f;
-
 	}
 
 	for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
 	{
-		if(i == 0)
-			if (FAILED(m_pModel->SetUp_ValueOnShader("g_color", &m_color, sizeof(_float4)))) return E_FAIL;
+		SCB desc;
+		ZeroMemory(&desc, sizeof(SCB));
 
-		if (FAILED(m_pModel->Render(i, i)))	return E_FAIL;
+		if (i == 0)
+		{
+			desc.color = m_color;
+			desc.empower = 0.8f;
+			CActor::BindConstantBuffer(L"Camera_Silvermane", &desc);
+		}
+		else
+			CActor::BindConstantBuffer(L"Camera_Silvermane", &desc);
+
+		if (FAILED(m_pModel->Render(i, i))) MSGBOX("Fialed To Rendering Silvermane");
 	}
 
 #ifdef _DEBUG
@@ -391,45 +377,10 @@ HRESULT CSilvermane::Render()
 
 HRESULT CSilvermane::Render_Shadow()
 {
-	_matrix world, lightview, lightproj;
-	_float3 lightpos = m_Lightdesc->vPosition;
-	world = XMMatrixTranspose(m_pTransform->Get_WorldMatrix());
-	lightview = XMMatrixTranspose(m_Lightdesc->mLightView);
-	lightproj = XMMatrixTranspose(m_Lightdesc->mLightProj);
-
-	m_pModel->SetUp_ValueOnShader("g_WorldMatrix", &world, sizeof(_matrix));
-	m_pModel->SetUp_ValueOnShader("g_LightView", &lightview, sizeof(_matrix));
-	m_pModel->SetUp_ValueOnShader("g_LightProj", &lightproj, sizeof(_matrix));
-	m_pModel->SetUp_ValueOnShader("g_LightPos", &lightpos, sizeof(_float3));
-
-
+	CActor::BindConstantBuffer(L"Camera_Silvermane");
+	CActor::BindLightBuffer();
 	for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
 		m_pModel->Render(i, 4);
-
-	return S_OK;
-}
-
-HRESULT CSilvermane::Render_ShadeShadow(ID3D11ShaderResourceView* pshadow)
-{
-	_matrix world, view, proj, lightview, lightproj;
-	world = XMMatrixTranspose(m_pTransform->Get_WorldMatrix());
-	view = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_VIEW));
-	proj = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_PROJECTION));
-	lightview = XMMatrixTranspose(m_Lightdesc->mLightView);
-	lightproj = XMMatrixTranspose(m_Lightdesc->mLightProj);
-
-	m_pModel->SetUp_ValueOnShader("g_WorldMatrix", &world, sizeof(_matrix));
-	m_pModel->SetUp_ValueOnShader("g_ViewMatrix", &view, sizeof(_matrix));
-	m_pModel->SetUp_ValueOnShader("g_ProjMatrix", &proj, sizeof(_matrix));
-	m_pModel->SetUp_ValueOnShader("g_LightView", &lightview, sizeof(_matrix));
-	m_pModel->SetUp_ValueOnShader("g_LightProj", &lightproj, sizeof(_matrix));
-
-
-	for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
-	{
-		m_pModel->SetUp_TextureOnShader("g_ShadowTexture", pshadow);
-		m_pModel->Render(i, 5);
-	}
 
 	return S_OK;
 }
@@ -574,9 +525,7 @@ HRESULT CSilvermane::Ready_Components()
 	m_pTexture = g_pGameInstance->Clone_Component<CTexture>(0, L"Proto_Component_Texture");
 	m_pTexture->Change_Texture(L"Texture_SilvermeanNewHair");
 
-	m_pModel->Get_Materials()[3]->Set_Texture("g_NewHairTexture", TEXTURETYPE::TEX_TINT, m_pTexture);
-
-	m_Lightdesc = g_pGameInstance->Get_LightDesc(0);
+	m_pModel->Get_Materials()[3]->Set_Texture("g_OtherTexture", TEXTURETYPE::TEX_OTHER, m_pTexture);
 
 	return S_OK;
 }
@@ -617,6 +566,17 @@ HRESULT CSilvermane::Ready_States()
 	if (FAILED(m_pStateController->Add_State(L"SprintFwdStart", CSilvermane_SprintFwdStart::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 	if (FAILED(m_pStateController->Add_State(L"SprintFwdStop", CSilvermane_SprintFwdStop::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	// Dash
+	if (FAILED(m_pStateController->Add_State(L"1H_DodgeSpin", C1H_SwordDodgeSpinFwd_V3::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	if (FAILED(m_pStateController->Add_State(L"1H_SidestepBwd", C1H_SwordNormalSidestepBwd_V3::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	if (FAILED(m_pStateController->Add_State(L"1H_SidestepLeft", C1H_SwordNormalSidestepLeft_V3::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	if (FAILED(m_pStateController->Add_State(L"1H_SidestepRight", C1H_SwordNormalSidestepRight_V3::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	if (FAILED(m_pStateController->Add_State(L"DodgeSlide", CDodgeSlide::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 #pragma endregion
 #pragma region 1H_Sword
@@ -680,13 +640,8 @@ HRESULT CSilvermane::Ready_States()
 		return E_FAIL;
 	if (FAILED(m_pStateController->Add_State(L"1H_SwordAttackNormalR2_ReleaseDoubleSwing", C1H_SwordAttackNormalR2_ReleaseDoubleSwing::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
-	if (FAILED(m_pStateController->Add_State(L"1H_DodgeSpin", C1H_SwordDodgeSpinFwd_V3::Create(m_pDevice, m_pDeviceContext))))
-		return E_FAIL;
-	if (FAILED(m_pStateController->Add_State(L"1H_SidestepBwd", C1H_SwordNormalSidestepBwd_V3::Create(m_pDevice, m_pDeviceContext))))
-		return E_FAIL;
-	if (FAILED(m_pStateController->Add_State(L"1H_SidestepLeft", C1H_SwordNormalSidestepLeft_V3::Create(m_pDevice, m_pDeviceContext))))
-		return E_FAIL;
-	if (FAILED(m_pStateController->Add_State(L"1H_SidestepRight", C1H_SwordNormalSidestepRight_V3::Create(m_pDevice, m_pDeviceContext))))
+	// 패랭 당함
+	if (FAILED(m_pStateController->Add_State(L"1H_SwordRicochetReaction", C1H_SwordRicochetReaction::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 #pragma endregion
 #pragma region 2H_Hammer
@@ -750,6 +705,9 @@ HRESULT CSilvermane::Ready_States()
 		return E_FAIL;
 	if (FAILED(m_pStateController->Add_State(L"2H_HammerAttackSprintR1", C2H_HammerAttackSprintR1::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
+	// 패랭 당함
+	if (FAILED(m_pStateController->Add_State(L"2H_HammerRicochetReaction", C2H_HammerRicochetReaction::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
 #pragma endregion
 #pragma region Shield
 	// 막기
@@ -807,6 +765,8 @@ HRESULT CSilvermane::Ready_States()
 		return E_FAIL;
 	// Attack
 	if (FAILED(m_pStateController->Add_State(L"Shield_SupermanPunchStraight", CShield_SupermanPunchStraight::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	if (FAILED(m_pStateController->Add_State(L"Shield_Throw", CShield_Throw::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 #pragma endregion
 	// 짬푸
@@ -963,10 +923,23 @@ void CSilvermane::OnControllerColliderHit(CCollision& collision)
 
 void CSilvermane::Hit(const ATTACKDESC& _tAttackDesc)
 {
-	if (m_isBlock)
+	if (m_isBlock && !m_IsAttack)
 		static_cast<CState_Silvermane*>(m_pStateController->Get_CurState())->Block(_tAttackDesc);
 	else
 		static_cast<CState_Silvermane*>(m_pStateController->Get_CurState())->Hit(_tAttackDesc);
+}
+
+void CSilvermane::Parry(const PARRYDESC& _tParryDesc)
+{
+	switch (Get_WeaponType())
+	{
+	case CWeapon::EType::Sword_1H:
+		m_pStateController->Change_State(L"1H_SwordRicochetReaction");
+		break;
+	case CWeapon::EType::Hammer_2H:
+		m_pStateController->Change_State(L"2H_HammerRicochetReaction");
+		break;
+	}
 }
 
 const _bool CSilvermane::IsHit() const
@@ -1519,7 +1492,6 @@ void CSilvermane::Free()
 	Safe_Release(m_pCharacterController);
 	Safe_Release(m_pStateController);
 	Safe_Release(m_pAnimationController);
-	Safe_Release(m_pModel);
 
 	__super::Free();
 }

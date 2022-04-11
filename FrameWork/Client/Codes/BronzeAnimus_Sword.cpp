@@ -88,20 +88,24 @@ _int CBronzeAnimus_Sword::LateTick(_double _dDeltaTime)
 
 HRESULT CBronzeAnimus_Sword::Render()
 {
-	if (FAILED(__super::Render()))
-		return E_FAIL;
+	SCB desc;
+	ZeroMemory(&desc, sizeof(desc));
+	desc.color = _float4(1.f, 0.f, 0.f, 1.f);
+	desc.empower = 0.6f;
 
-	_matrix smatWorld, smatView, smatProj;
-	smatWorld = XMMatrixTranspose(m_pTransform->Get_WorldMatrix());
-	smatView = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_VIEW));
-	smatProj = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_PROJECTION));
-
-	m_pModel->SetUp_ValueOnShader("g_WorldMatrix", &smatWorld, sizeof(_matrix));
-	m_pModel->SetUp_ValueOnShader("g_ViewMatrix", &smatView, sizeof(_matrix));
-	m_pModel->SetUp_ValueOnShader("g_ProjMatrix", &smatProj, sizeof(_matrix));
-
+	CWeapon::BindConstantBuffer(L"Camera_Silvermane",&desc);
 	for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
 		m_pModel->Render(i, 0);
+
+	return S_OK;
+}
+
+HRESULT CBronzeAnimus_Sword::Render_Shadow()
+{
+	CWeapon::BindConstantBuffer(L"Camera_Silvermane");
+	CWeapon::BindLightBuffer();
+	for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
+		m_pModel->Render(i, 1);
 
 	return S_OK;
 }
@@ -116,6 +120,7 @@ void CBronzeAnimus_Sword::OnTriggerEnter(CCollision& collision)
 
 		ATTACKDESC tAttackDesc = m_pOwner->Get_AttackDesc();
 		tAttackDesc.fDamage += m_fDamage;
+		tAttackDesc.iLevel = 2;
 		static_cast<CActor*>(collision.pGameObject)->Hit(tAttackDesc);
 	}
 }
@@ -128,7 +133,7 @@ HRESULT CBronzeAnimus_Sword::Ready_Components()
 	m_pTransform->Set_TransformDesc(transformDesc);
 	m_pLocalTransform->Set_TransformDesc(transformDesc);
 
-	if (FAILED(SetUp_Components(m_iSceneID, L"Model_BronzeAnimus_Sword", L"Model", (CComponent**)&m_pModel)))
+	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Model_BronzeAnimus_Sword", L"Model", (CComponent**)&m_pModel)))
 		return E_FAIL;
 
 	m_pModel->Add_Material(g_pGameInstance->Get_Material(L"Mtrl_BronzeAnimus_Sword"), 0);
@@ -140,13 +145,13 @@ HRESULT CBronzeAnimus_Sword::Ready_Components()
 
 	CCapsuleCollider::DESC tCapsuleColliderDesc;
 	tCapsuleColliderDesc.tColliderDesc = tColliderDesc;
-	tCapsuleColliderDesc.fHeight = 1.5f;
-	tCapsuleColliderDesc.fRadius = 0.15f;
+	tCapsuleColliderDesc.fHeight = 2.f;
+	tCapsuleColliderDesc.fRadius = 0.2f;
 
 	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_CapsuleCollider", L"Collider", (CComponent**)&m_pCollider, &tCapsuleColliderDesc)))
 		return E_FAIL;
 
-	_matrix smatPviot = XMMatrixRotationY(XMConvertToRadians(90.f)) * XMMatrixTranslation(0.f, 0.f, 1.f);
+	_matrix smatPviot = XMMatrixRotationY(XMConvertToRadians(90.f)) * XMMatrixTranslation(0.f, 0.f, 0.8f);
 	m_pCollider->setPivotMatrix(smatPviot);
 	return S_OK;
 }

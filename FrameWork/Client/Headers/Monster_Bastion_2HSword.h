@@ -42,6 +42,7 @@ public:
 	virtual _int Tick(_double _dDeltaTime) override;
 	virtual _int LateTick(_double _dDeltaTime) override;
 	virtual HRESULT Render() override;
+	virtual HRESULT	Render_Shadow() override;
 
 private:
 	HRESULT Ready_Components(void);
@@ -53,6 +54,7 @@ public:
 	void Groggy_Start();
 	void Hit(CCollision& pCol);
 	virtual void Hit(const ATTACKDESC& _tAttackDesc) override;
+	virtual void Parry(const PARRYDESC& _tParrykDesc) override;
 	void Remove_Collider();
 private:
 	virtual void OnTriggerEnter(CCollision& collision) override;
@@ -85,7 +87,6 @@ private:
 	_bool m_bFirstAttack = false;
 	_int m_iRandAtt = -1;
 private:
-	CModel*				  m_pModel = nullptr;
 	CAnimation*			  m_pAnimation = nullptr;
 	CAnimator*			  m_pAnimator = nullptr;
 	CStateController*	  m_pStateController = nullptr;
@@ -104,7 +105,6 @@ private:
 private:
 	_bool	m_isFall = false;
 	_bool	m_bFirstHit = false; //맨처음들어와서 맞았을때 판넬크기바꿔줘야돼서
-	_uint m_iCurScene = 0;
 
 public:
 	static CMonster_Bastion_2HSword* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext);

@@ -34,6 +34,12 @@ public:
 
 protected:
 	const _int Add_PlusAngle(const EDir _eDir, const _double& _dDeltaTime);
+	const _int ToIdle();
+	const _int ToSprint();
+	const _int ToJogAttack();
+	const _int ToAttack();
+	const _int ToDashAttack();
+	const _int ToChargeStart();
 
 protected:
 	virtual _int Input(const _double& _dDeltaTime);

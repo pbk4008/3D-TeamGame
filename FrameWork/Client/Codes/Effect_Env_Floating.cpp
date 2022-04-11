@@ -40,8 +40,6 @@ HRESULT CEffect_Env_Floating::NativeConstruct(const _uint _iSceneID, void* pArg)
 		memcpy(&m_Desc, pArg, sizeof(EFFECTDESC));
 	}
 
-	m_Desc.fParticleSize = _float2(0.5f, 0.5f);
-
 	//여기서 필요한 모든 컴포넌트들 Clone해옴
 	if (FAILED(SetUp_Components())) 
 	{
@@ -79,9 +77,9 @@ _int CEffect_Env_Floating::Tick(_double TimeDelta)
 		m_Desc.fCurTime = 0.f;
 	}*/
 
-	m_pBuffer->Update(g_dDeltaTime, m_Desc.iAxis);
+	m_pBuffer->Update(g_dImmutableTime, m_Desc.iAxis);
 
-	//m_fNonActiveTimeAcc += (_float)g_dDeltaTime;
+	//m_fNonActiveTimeAcc += (_float)g_dImmutableTime;
 	//if (4000.f <= m_fNonActiveTimeAcc)
 	//{
 	//	setActive(false);
@@ -130,9 +128,8 @@ HRESULT CEffect_Env_Floating::Render()
 	m_pBuffer->SetUp_ValueOnShader("g_fLifeTime", &m_Desc.fMaxLifeTime, sizeof(_float));
 	m_pBuffer->SetUp_ValueOnShader("g_fCurTime", &m_Desc.fCurTime, sizeof(_float));
 
-	//_float3 color = { 0.6f, 1.f, 0.3f };
-	_float3 color = { 0.6f, 1.f, 0.3f };
-	m_pBuffer->SetUp_ValueOnShader("g_color", &color, sizeof(_float3));
+	_float4 color = { 1.f, 0.6f, 0.3f ,1.f};
+	m_pBuffer->SetUp_ValueOnShader("g_color", &color, sizeof(_float4));
 
 	m_pBuffer->SetUp_ValueOnShader("g_vCamPosition", (void*)&CamPos, sizeof(_vector));
 

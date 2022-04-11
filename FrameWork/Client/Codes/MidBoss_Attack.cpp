@@ -41,31 +41,169 @@ _int CMidBoss_Attack::Tick(const _double& TimeDelta)
 	CBoss_Bastion_Judicator* pBoss = (CBoss_Bastion_Judicator*)m_pStateController->Get_GameObject();
 	if (nullptr != pBoss)
 	{
+		_uint iCurKeyFrameIndex = m_pAnimator->Get_AnimController()->Get_CurKeyFrameIndex();
+
 		if (CBoss_Bastion_Judicator::M_BossAnimState::ATTACK_JOG_H == m_pAnimator->Get_CurrentAnimNode())
 		{
-			pBoss->Set_IsAttack(true);
+			cout << "JOG : " << iCurKeyFrameIndex << endl;
+			
+			if (20 < iCurKeyFrameIndex && 35 > iCurKeyFrameIndex)
+			{
+				pBoss->Set_IsAttack(true);
 
+				_float fDamage = 6.f;
+				_uint iLevel = 3;
+				pBoss->Set_AttackDesc_Damaga(fDamage);
+				pBoss->Set_AttackDesc_Level(iLevel);
+			}
+			else
+				pBoss->Set_IsAttack(false);
 		}
 		else if (CBoss_Bastion_Judicator::M_BossAnimState::ATTACK_LEGACY_H == m_pAnimator->Get_CurrentAnimNode())
 		{
+			cout << "LEGACY : " << iCurKeyFrameIndex << endl;
+
+			if (0 < iCurKeyFrameIndex && 20 > iCurKeyFrameIndex)
+			{
+				pBoss->Set_IsAttack(true);
+
+				_float fDamage = 6.f;
+				_uint iLevel = 3;
+				pBoss->Set_AttackDesc_Damaga(fDamage);
+				pBoss->Set_AttackDesc_Level(iLevel);
+			}
+			if (25 < iCurKeyFrameIndex && 40 > iCurKeyFrameIndex)
+			{
+				pBoss->Set_IsAttack(true);
+
+				_float fDamage = 8.f;
+				_uint iLevel = 4;
+				pBoss->Set_AttackDesc_Damaga(fDamage);
+				pBoss->Set_AttackDesc_Level(iLevel);
+			}
+			else
+				pBoss->Set_IsAttack(false);
+
+		}
+		else if (CBoss_Bastion_Judicator::M_BossAnimState::SPRINT_ATTACK_H == m_pAnimator->Get_CurrentAnimNode())
+		{
+			cout << "SPRINT : " << iCurKeyFrameIndex << endl;
+
+			if ( 15 < iCurKeyFrameIndex && 27 > iCurKeyFrameIndex)
+			{
+				pBoss->Set_IsAttack(true);
+
+				_float fDamage = 6.f;
+				_uint iLevel = 3;
+				pBoss->Set_AttackDesc_Damaga(fDamage);
+				pBoss->Set_AttackDesc_Level(iLevel);
+			}
+			else
+				pBoss->Set_IsAttack(false);
 
 		}
 		else if (CBoss_Bastion_Judicator::M_BossAnimState::ATTACK_R1_H == m_pAnimator->Get_CurrentAnimNode())
 		{
+			cout << "R1_H : " << iCurKeyFrameIndex << endl;
 
+			if (26 < iCurKeyFrameIndex && 40 > iCurKeyFrameIndex)
+			{
+				pBoss->Set_IsAttack(true);
+
+				_float fDamage = 6.f;
+				_uint iLevel = 3;
+				pBoss->Set_AttackDesc_Damaga(fDamage);
+				pBoss->Set_AttackDesc_Level(iLevel);
+			}
+			else
+				pBoss->Set_IsAttack(false);
 		}
 		else if (CBoss_Bastion_Judicator::M_BossAnimState::ATTACK_R1 == m_pAnimator->Get_CurrentAnimNode())
 		{
+			cout << "R1 : " << iCurKeyFrameIndex << endl;
+
+			if (40 <= iCurKeyFrameIndex && 125 >= iCurKeyFrameIndex)
+			{
+				pBoss->Set_IsAttack(true);
+
+				_float fDamage = 6.f;
+				_uint iLevel = 3;
+				pBoss->Set_AttackDesc_Damaga(fDamage);
+				pBoss->Set_AttackDesc_Level(iLevel);
+			}
+			/*if (105 < iCurKeyFrameIndex && 125 > iCurKeyFrameIndex)
+			{
+				pBoss->Set_IsAttack(true);
+
+				_float fDamage = 6.f;
+				_uint iLevel = 4;
+				pBoss->Set_AttackDesc_Damaga(fDamage);
+				pBoss->Set_AttackDesc_Level(iLevel);
+			}*/
+			else
+				pBoss->Set_IsAttack(false);
 
 		}
 		else if (CBoss_Bastion_Judicator::M_BossAnimState::ATTACK_S1 == m_pAnimator->Get_CurrentAnimNode())
 		{
+			cout << "S1 : " << iCurKeyFrameIndex << endl;
 
+			m_pTransform->Face_Target(g_pObserver->Get_PlayerPos());
+
+			if (60 < iCurKeyFrameIndex && 90 > iCurKeyFrameIndex)
+			{
+				pBoss->Set_IsAttack(true);
+
+				_float fDamage = 6.f;
+				_uint iLevel = 3;
+				pBoss->Set_AttackDesc_Damaga(fDamage);
+				pBoss->Set_AttackDesc_Level(iLevel);
+			}
+			if (110 < iCurKeyFrameIndex && 140 > iCurKeyFrameIndex)
+			{
+				pBoss->Set_IsAttack(true);
+
+				_float fDamage = 7.f;
+				_uint iLevel = 4;
+				pBoss->Set_AttackDesc_Damaga(fDamage);
+				pBoss->Set_AttackDesc_Level(iLevel);
+			}
+			else
+				pBoss->Set_IsAttack(false);
 		}
 		else if (CBoss_Bastion_Judicator::M_BossAnimState::ATTACK_S2 == m_pAnimator->Get_CurrentAnimNode())
 		{
-			//TODO : 일정 범위내에 콜라이더 생겨서 그걸로 충돌처리해야됨
+			cout << "S2 : " << iCurKeyFrameIndex << endl;
+			if (35 < iCurKeyFrameIndex && 55 > iCurKeyFrameIndex)
+			{
+				OVERLAPDESC tOverlapDesc;
+				tOverlapDesc.geometry = PxSphereGeometry(5.f);
+				XMStoreFloat3(&tOverlapDesc.vOrigin, m_pTransform->Get_State(CTransform::STATE_POSITION));
+				CGameObject* pHitObject = nullptr;
+				tOverlapDesc.ppOutHitObject = &pHitObject;
+				tOverlapDesc.filterData.flags = PxQueryFlag::eDYNAMIC;
+				if (g_pGameInstance->Overlap(tOverlapDesc))
+				{
+					_uint iSize = (_uint)tOverlapDesc.vecHitObjects.size();
+					for (_uint i = 0; i < iSize; ++i)
+					{
+						CActor* pActor = static_cast<CActor*>(tOverlapDesc.vecHitObjects[i]);
+						_uint iTag = tOverlapDesc.vecHitObjects[i]->getTag();
+						switch (iTag)
+						{
+						case (_uint)GAMEOBJECT::PLAYER:
+							ATTACKDESC tAttackDesc = pBoss->Get_AttackDesc();
+							tAttackDesc.fDamage = 7.f;
+							tAttackDesc.iLevel = 4;
 
+							pActor->Hit(tAttackDesc);
+							break;
+						}
+					}
+				}
+			}
+			else
+				pBoss->Set_IsAttack(false);
 		}
 
 	}
@@ -162,6 +300,7 @@ HRESULT CMidBoss_Attack::EnterState()
 			m_iPreState_2 = iRandom;
 		}
 	}
+
 	return S_OK;
 }
 

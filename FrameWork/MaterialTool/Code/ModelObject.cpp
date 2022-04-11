@@ -78,7 +78,7 @@ _int CModelObject::LateTick(_double dDeltaTime)
 	if (!m_pRenderer)
 		return -1;
 
-	m_pRenderer->Add_RenderGroup(CRenderer::RENDER_ALPHA, this);
+	m_pRenderer->Add_RenderGroup(CRenderer::RENDER_UI, this);
 	return _int();
 }
 
@@ -122,7 +122,7 @@ HRESULT CModelObject::Check_Texture(list<wstring>& pTextrue)
 
 	string strTexturePath;
 	strTexturePath.assign(m_tModelFolder.begin(), m_tModelFolder.end());
-	strTexturePath += "*.dds";
+	strTexturePath += "*.tga";
 
 	intptr_t handle = _findfirst(strTexturePath.c_str(), &fd);
 

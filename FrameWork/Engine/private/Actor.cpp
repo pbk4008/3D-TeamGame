@@ -60,6 +60,8 @@ HRESULT CActor::NativeConstruct(const _uint _iSceneID, void* pArg)
 
 	m_tAttackDesc.pOwner = this;
 	m_tAttackDesc.pHitObject = this;
+
+	m_lightdesc = g_pGameInstance->Get_LightDesc(0);
 	return S_OK;
 }
 
@@ -123,6 +125,46 @@ HRESULT CActor::Set_SpawnPosition(const _float3 vPoint)
 	return S_OK;
 }
 
+HRESULT CActor::BindConstantBuffer(const wstring& camTag, SCB* bindbuffer)
+{
+	if (m_pTransform == nullptr)
+		MSGBOX("Failed To Apply Actor Transform nullptr");
+
+	_matrix smatWorld, smatView, smatProj;
+	smatWorld = XMMatrixTranspose(m_pTransform->Get_WorldMatrix());
+	smatView = XMMatrixTranspose(g_pGameInstance->Get_Transform(camTag, TRANSFORMSTATEMATRIX::D3DTS_VIEW));
+	smatProj = XMMatrixTranspose(g_pGameInstance->Get_Transform(camTag, TRANSFORMSTATEMATRIX::D3DTS_PROJECTION));
+
+	if(FAILED(m_pModel->SetUp_ValueOnShader("g_WorldMatrix", &smatWorld, sizeof(_matrix)))) MSGBOX("Failed To Apply Actor ConstantBuffer");
+	if(FAILED(m_pModel->SetUp_ValueOnShader("g_ViewMatrix", &smatView, sizeof(_matrix)))) MSGBOX("Failed To Apply Actor ConstantBuffer");
+	if(FAILED(m_pModel->SetUp_ValueOnShader("g_ProjMatrix", &smatProj, sizeof(_matrix)))) MSGBOX("Failed To Apply Actor ConstantBuffer");
+
+	if (bindbuffer)
+	{
+		if(FAILED(m_pModel->SetUp_ValueOnShader("g_Metalic", &bindbuffer->metalic, sizeof(_float)))) MSGBOX("Failed To Apply Actor ConstantBuffer");
+		if(FAILED(m_pModel->SetUp_ValueOnShader("g_Roughness", &bindbuffer->roughness, sizeof(_float)))) MSGBOX("Failed To Apply Actor ConstantBuffer");
+		if(FAILED(m_pModel->SetUp_ValueOnShader("g_AO", &bindbuffer->ao, sizeof(_float)))) MSGBOX("Failed To Apply Actor ConstantBuffer");
+		if(FAILED(m_pModel->SetUp_ValueOnShader("g_color", &bindbuffer->color, sizeof(_float4)))) MSGBOX("Failed To Apply Actor ConstantBuffer");
+		if(FAILED(m_pModel->SetUp_ValueOnShader("g_empower", &bindbuffer->empower, sizeof(_float)))) MSGBOX("Failed To Apply Actor ConstantBuffer");
+	}
+
+	return S_OK;
+}
+
+HRESULT CActor::BindLightBuffer()
+{
+	_matrix view, porj;
+	_float3 lightpos = m_lightdesc->vPosition;
+	view = XMMatrixTranspose(m_lightdesc->mLightView);
+	porj = XMMatrixTranspose(m_lightdesc->mLightProj);
+
+	if(FAILED(m_pModel->SetUp_ValueOnShader("g_LightView", &view, sizeof(_matrix)))) MSGBOX("Failed To Apply Actor LightConstantBuffer");
+	if(FAILED(m_pModel->SetUp_ValueOnShader("g_LightProj", &porj, sizeof(_matrix)))) MSGBOX("Failed To Apply Actor LightConstantBuffer");
+	if(FAILED(m_pModel->SetUp_ValueOnShader("g_LightPos", &lightpos, sizeof(_float3)))) MSGBOX("Failed To Apply Actor LightConstantBuffer");
+
+	return S_OK;
+}
+
 void CActor::Active_Effect(_uint iEffectIndex)
 {
 	CEffect* pEffect = g_pGameInstance->Get_Effect(iEffectIndex);
@@ -163,7 +205,12 @@ void CActor::Hit(const ATTACKDESC& _tAttackDesc)
 {
 }
 
+void CActor::Parry(const PARRYDESC& _tParryDesc)
+{
+}
+
 void CActor::Free()
 {
+	Safe_Release(m_pModel);
 	CGameObject::Free();
 }

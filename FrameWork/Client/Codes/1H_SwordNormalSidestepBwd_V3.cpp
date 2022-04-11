@@ -69,7 +69,6 @@ HRESULT C1H_SwordNormalSidestepBwd_V3::EnterState()
 	m_iCutIndex = 15;
 
 
-
 	m_tShakeEvent.fDuration = 1.f;
 	m_tShakeEvent.fBlendInTime = 0.2f;
 	m_tShakeEvent.fBlendOutTime = 0.8f;
@@ -81,8 +80,6 @@ HRESULT C1H_SwordNormalSidestepBwd_V3::EnterState()
 	m_tShakeEvent.tWaveZ.fAdditionalOffset = -4.f;
 
 	g_pShakeManager->Shake(m_tShakeEvent, m_pTransform->Get_State(CTransform::STATE_POSITION));
-
-
 	return S_OK;
 }
 

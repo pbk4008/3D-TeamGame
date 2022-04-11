@@ -24,7 +24,6 @@
 CMonster_Bastion_2HSword::CMonster_Bastion_2HSword(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
 	: CActor(_pDevice, _pDeviceContext)
 	, m_pCharacterController(nullptr)
-	, m_pModel(nullptr)
 	, m_pStateController(nullptr)
 	, m_pAnimator(nullptr)
 {
@@ -33,7 +32,6 @@ CMonster_Bastion_2HSword::CMonster_Bastion_2HSword(ID3D11Device* _pDevice, ID3D1
 CMonster_Bastion_2HSword::CMonster_Bastion_2HSword(const CMonster_Bastion_2HSword& _rhs)
 	: CActor(_rhs)
 	, m_pCharacterController(_rhs.m_pCharacterController)
-	, m_pModel(_rhs.m_pModel)
 	, m_pStateController(_rhs.m_pStateController)
 	, m_pAnimator(_rhs.m_pAnimator)
 {
@@ -58,8 +56,6 @@ HRESULT CMonster_Bastion_2HSword::NativeConstruct(const _uint _iSceneID, void* _
 	if (FAILED(__super::NativeConstruct(_iSceneID, _pArg)))
 		return E_FAIL;
 
-	m_iCurScene = _iSceneID;
-
 	if (_pArg)
 	{
 		_float3 vPoint = (*(_float3*)_pArg);
@@ -81,9 +77,18 @@ HRESULT CMonster_Bastion_2HSword::NativeConstruct(const _uint _iSceneID, void* _
 	if (FAILED(Ready_StateFSM()))
 		return E_FAIL;
 
+	m_fMaxHp = 5.f;
+	m_fCurrentHp = m_fMaxHp;
+
+	m_fMaxGroggyGauge = 10.f;
+	m_fGroggyGauge = 0.f;
+
+	m_pPanel->Set_HpBar(Get_HpRatio());
+	m_pPanel->Set_GroggyBar(Get_GroggyGaugeRatio());
+
 	m_isFall = true;
 
-	//setActive(false);
+	setActive(false);
 
 	m_tAttackDesc.iLevel = 1;
 
@@ -121,10 +126,8 @@ _int CMonster_Bastion_2HSword::Tick(_double _dDeltaTime)
 				m_pPanel->Set_UIRemove(true);
 			}
 
-			if (1 == m_pAnimator->Get_AnimController()->Get_CurKeyFrameIndex())
-			{
+			if (1 <= m_pAnimator->Get_AnimController()->Get_CurKeyFrameIndex() && 2 > m_pAnimator->Get_AnimController()->Get_CurKeyFrameIndex())
 				Active_Effect((_uint)EFFECT::DEATH);
-			}
 		}
 		else
 		{
@@ -166,7 +169,6 @@ _int CMonster_Bastion_2HSword::Tick(_double _dDeltaTime)
 		}
 	}
 
-	//죽을때
 	
 	m_pPanel->Set_TargetWorldMatrix(m_pTransform->Get_WorldMatrix());
 
@@ -196,29 +198,35 @@ _int CMonster_Bastion_2HSword::LateTick(_double _dDeltaTime)
 
 HRESULT CMonster_Bastion_2HSword::Render()
 {
-	if (FAILED(__super::Render()))
-		return E_FAIL;
+	SCB desc;
+	ZeroMemory(&desc, sizeof(SCB));
 
-	_matrix smatWorld, smatView, smatProj;
-	smatWorld = XMMatrixTranspose(m_pTransform->Get_WorldMatrix());
-	smatView = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_VIEW));
-	smatProj = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_PROJECTION));
-
-	if (FAILED(m_pModel->SetUp_ValueOnShader("g_WorldMatrix", &smatWorld, sizeof(_matrix))))
-		return E_FAIL;
-	if (FAILED(m_pModel->SetUp_ValueOnShader("g_ViewMatrix", &smatView, sizeof(_matrix))))
-		return E_FAIL;
-	if (FAILED(m_pModel->SetUp_ValueOnShader("g_ProjMatrix", &smatProj, sizeof(_matrix))))
-		return E_FAIL;
-
+	CActor::BindConstantBuffer(L"Camera_Silvermane", &desc);
 	for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
 	{
-		if (FAILED(m_pModel->Render(i, 0))) return E_FAIL;
+		switch (i)
+		{
+		case 2:
+			if (FAILED(m_pModel->Render(i, 1))) MSGBOX("Failed To Rendering Shooter");
+			break;
+		default:
+			if (FAILED(m_pModel->Render(i, 0))) MSGBOX("Failed To Rendering Shooter");
+			break;
+		}
 	}
-	
 #ifdef _DEBUG
 	//Render_Debug();
 #endif
+	return S_OK;
+}
+
+HRESULT CMonster_Bastion_2HSword::Render_Shadow()
+{
+	CActor::BindConstantBuffer(L"Camera_Silvermane");
+	CActor::BindLightBuffer();
+	for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
+		m_pModel->Render(i, 3);
+
 	return S_OK;
 }
 
@@ -272,22 +280,13 @@ HRESULT CMonster_Bastion_2HSword::Ready_Components()
 	Desc.pTargetTransform = m_pTransform;
 	Desc.iEnemyTag = CUI_Monster_Panel::Enemy::SWORD2H;
 
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer(m_iCurScene, L"Layer_UI", L"Proto_GameObject_UI_Monster_Panel", &Desc,
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer(m_iSceneID, L"Layer_UI", L"Proto_GameObject_UI_Monster_Panel", &Desc,
 		(CGameObject**)&m_pPanel)))
 		return E_FAIL;
 
 	Safe_AddRef(m_pPanel);
 
 	m_pPanel->Set_TargetWorldMatrix(m_pTransform->Get_WorldMatrix());
-
-	m_fMaxHp = 5.f;
-	m_fCurrentHp = m_fMaxHp;
-
-	m_fMaxGroggyGauge = 10.f;
-	m_fGroggyGauge = 0.f;
-
-	m_pPanel->Set_HpBar(Get_HpRatio());
-	m_pPanel->Set_GroggyBar(Get_GroggyGaugeRatio());
 
 	return S_OK;
 }
@@ -584,41 +583,6 @@ HRESULT CMonster_Bastion_2HSword::Render_Debug(void)
 	if (FAILED(m_pStateController->Render()))
 		return E_FAIL;
 	
-	////Hp
-	//if (FAILED(g_pGameInstance->Render_Font(TEXT("Font_Arial"), XMVectorSet(0.f, 1.0f, 0.f, 1.f), L"HP : " + to_wstring(m_fCurrentHp), _float2(950.f, 20.f), _float2(0.6f, 0.6f))))
-	//	return E_FAIL;
-
-	//// FSM
-	//wstring wstrCurStateTag = m_pStateController->Get_CurStateTag();
-	//wstring wstrState = L"Cur State : ";
-
-	//if (FAILED(g_pGameInstance->Render_Font(TEXT("Font_Arial"), XMVectorSet(0.f, 1.0f, 0.f, 1.f), (wstrState + wstrCurStateTag).c_str(), _float2(950.f, 40.f), _float2(0.6f, 0.6f))))
-	//	return E_FAIL;
-	//
-	//m_pAnimation = m_pAnimator->Get_CurrentAnimation();
-
-	//// 애니메이션 이름
-	//string CurAnimName = m_pAnimation->Get_Name();
-	//wstring wstrCurAnimTag;
-	//wstring wstrAnimname = L"Cur Anim Tag : ";
-	//wstrCurAnimTag.assign(CurAnimName.begin(), CurAnimName.end());
-	//if (FAILED(g_pGameInstance->Render_Font(TEXT("Font_Arial"), XMVectorSet(0.f, 1.0f, 0.f, 1.f), (wstrAnimname + wstrCurAnimTag).c_str(), _float2(950.f, 60.f), _float2(0.6f, 0.6f))))
-	//	return E_FAIL;
-
-	//// 애니메이션 상태
-	//wstring wstrCurKeyFrameIndex = to_wstring(m_pAnimation->Get_CurrentKeyFrameIndex());
-	//wstring wstrKeyFrame = L"Key Frame : ";
-	//if (FAILED(g_pGameInstance->Render_Font(TEXT("Font_Arial"), XMVectorSet(0.f, 1.0f, 0.f, 1.f), (wstrKeyFrame + wstrCurKeyFrameIndex).c_str(), _float2(950.f, 80.f), _float2(0.6f, 0.6f))))
-	//	return E_FAIL;
-
-	//wstring wstrAnimFinished = L"";
-	//if (m_pAnimation->Is_Finished())
-	//	wstrAnimFinished = L"AnimFinished : TRUE";
-	//else
-	//	wstrAnimFinished = L"AnimFinished : FALSE";
-	//if (FAILED(g_pGameInstance->Render_Font(TEXT("Font_Arial"), XMVectorSet(0.f, 1.0f, 0.f, 1.f), wstrAnimFinished.c_str(), _float2(950.f, 100.f), _float2(0.6f, 0.6f))))
-	//	return E_FAIL;
-
 	return S_OK;
 }
 
@@ -633,17 +597,17 @@ void CMonster_Bastion_2HSword::Hit(CCollision& pCol)
 {
 	if (!m_bDead)
 	{
-		if (true == g_pObserver->IsAttack()) //플레이어공격일때
-		{
+		//if (true == g_pObserver->IsAttack()) //플레이어공격일때
+		//{
 			m_bFirstHit = true; //딱 한번 true로 변경해줌
 			if (true == m_bFirstHit)
 				m_pPanel->Set_BackUIGapY(1.f);
 
-			if ((_uint)GAMEOBJECT::WEAPON == pCol.pGameObject->getTag())
-			{
-				m_pPanel->Set_Show(true);
-				Active_Effect((_uint)EFFECT::HIT);
-				Active_Effect((_uint)EFFECT::FLOATING);
+			//if ((_uint)GAMEOBJECT::WEAPON == pCol.pGameObject->getTag())
+			//{
+				//m_pPanel->Set_Show(true);
+				//Active_Effect((_uint)EFFECT::HIT);
+				//Active_Effect((_uint)EFFECT::FLOATING);
 
 				//m_fCurrentHp -= 5.f;
 				//m_bGroggy = 2; //TODO::수치정해서바꿔줘야됨
@@ -662,10 +626,10 @@ void CMonster_Bastion_2HSword::Hit(CCollision& pCol)
 
 					m_pStateController->Change_State(L"Hit", &svDir);
 				}
-			}
-			else
-				m_pStateController->Change_State(L"Idle");
-		}
+			//}
+			//else
+			//	m_pStateController->Change_State(L"Idle");
+		//}
 	}
 }
 
@@ -683,6 +647,12 @@ void CMonster_Bastion_2HSword::Hit(const ATTACKDESC& _tAttackDesc)
 	Hit(collision);
 }
 
+void CMonster_Bastion_2HSword::Parry(const PARRYDESC& _tParrykDesc)
+{
+	m_fGroggyGauge += (m_fMaxGroggyGauge - m_fGroggyGauge);
+	Groggy_Start();
+}
+
 void CMonster_Bastion_2HSword::Remove_Collider()
 {
 	m_pCharacterController->Remove_CCT();
@@ -691,7 +661,6 @@ void CMonster_Bastion_2HSword::Remove_Collider()
 
 void CMonster_Bastion_2HSword::OnTriggerEnter(CCollision& collision)
 {
-	
 	m_pStateController->OnTriggerEnter(collision);
 }
 
@@ -746,7 +715,6 @@ void CMonster_Bastion_2HSword::Free()
 {
 	__super::Free();
 
-	Safe_Release(m_pModel);
 	Safe_Release(m_pAnimator);
 	Safe_Release(m_pWeapon);
 	Safe_Release(m_pStateController);

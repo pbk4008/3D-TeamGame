@@ -26,7 +26,7 @@ HRESULT CBronzeAnimus_Attack::NativeConstruct(void* _pArg)
 _int CBronzeAnimus_Attack::Tick(const _double& _dDeltaTime)
 {
 	_int iProgress = __super::Tick(_dDeltaTime);
-	cout << "Attack" << endl;
+
 	if (NO_EVENT != iProgress)
 		return iProgress;
 
@@ -38,6 +38,74 @@ _int CBronzeAnimus_Attack::Tick(const _double& _dDeltaTime)
 		m_pOwner->Set_AttackOn(false);
 		m_pStateController->Change_State(L"A_Idle_Battle");
 	}
+
+	//keyframe에따라 데미지 다르게 들어가게 
+	CMonster_BronzeAnimus* pMonster = (CMonster_BronzeAnimus*)m_pStateController->Get_GameObject();
+	if (nullptr != pMonster)
+	{
+		_uint iCurKeyFrameIndex = m_pAnimator->Get_AnimController()->Get_CurKeyFrameIndex();
+
+		if ((_uint)CMonster_BronzeAnimus::ANIM_TYPE::A_ATTACK_R1 == m_pAnimator->Get_CurrentAnimNode())
+		{
+			if (120 < iCurKeyFrameIndex && 150 > iCurKeyFrameIndex)
+			{
+				pMonster->Set_IsAttack(true);
+
+				_float fDamage = 4.f;
+				_uint iLevel = 1;
+				pMonster->Set_AttackDesc_Damaga(fDamage);
+				pMonster->Set_AttackDesc_Level(iLevel);
+			}
+
+			else if (270 < iCurKeyFrameIndex && 300 > iCurKeyFrameIndex)
+			{
+				pMonster->Set_IsAttack(true);
+
+				_float fDamage = 5.f;
+				_uint iLevel = 3;
+				pMonster->Set_AttackDesc_Damaga(fDamage);
+				pMonster->Set_AttackDesc_Level(iLevel);
+			}
+
+			else
+			{
+				pMonster->Set_IsAttack(false);
+			}
+		}
+
+		else if ((_uint)CMonster_BronzeAnimus::ANIM_TYPE::A_ATTACK_R2 == m_pAnimator->Get_CurrentAnimNode())
+		{
+			if (126 < iCurKeyFrameIndex && 150 > iCurKeyFrameIndex)
+			{
+				pMonster->Set_IsAttack(true);
+
+				_float fDamage = 5.f;
+				_uint iLevel = 3;
+				pMonster->Set_AttackDesc_Damaga(fDamage);
+				pMonster->Set_AttackDesc_Level(iLevel);
+			}
+			else
+			{
+				pMonster->Set_IsAttack(false);
+			}
+		}
+
+		else if ((_uint)CMonster_BronzeAnimus::ANIM_TYPE::A_ATTACK_S1 == m_pAnimator->Get_CurrentAnimNode())
+		{
+			if (150 < iCurKeyFrameIndex && 180 > iCurKeyFrameIndex)
+			{
+				pMonster->Set_IsAttack(true);
+
+				_float fDamage = 5.f;
+				_uint iLevel = 3;
+				pMonster->Set_AttackDesc_Damaga(fDamage);
+				pMonster->Set_AttackDesc_Level(iLevel);
+			}
+			else
+				pMonster->Set_IsAttack(false);
+		}
+	}
+
 	return _int();
 }
 

@@ -12,7 +12,6 @@ sampler DefaultSampler = sampler_state
 	AddressV = clamp;
 };
 
-Texture2D g_SkyBoxTexutre;
 Texture2D g_DiffuseTexture;
 Texture2D g_OriginTexture;
 Texture2D g_SpecularTexture;
@@ -26,7 +25,7 @@ Texture2D g_Blur16Texture;
 
 Texture2D g_ShadowTexture;
 
-Texture2D g_AlphaTexture;
+Texture2D g_SkyBoxTexutre;
 
 cbuffer check
 {
@@ -70,30 +69,27 @@ PS_OUT PS_MAIN_BLEND(PS_IN In)
 {
 	PS_OUT Out = (PS_OUT) 0;
 	
-	float originA = g_OriginTexture.Sample(DefaultSampler, In.vTexUV).a;
+	half4 origindifusse = g_OriginTexture.Sample(DefaultSampler, In.vTexUV);
 	
-	float4 diffuse = g_DiffuseTexture.Sample(DefaultSampler, In.vTexUV);
-	float4 emission = g_EmissionTexture.Sample(DefaultSampler, In.vTexUV);
-	float4 specular = g_SpecularTexture.Sample(DefaultSampler, In.vTexUV);
+	half4 diffuse = g_DiffuseTexture.Sample(DefaultSampler, In.vTexUV);
+	half4 emission = g_EmissionTexture.Sample(DefaultSampler, In.vTexUV);
+	half4 specular = g_SpecularTexture.Sample(DefaultSampler, In.vTexUV);
 		 
-	float4 blur2 = g_Blur2Texture.Sample(DefaultSampler, In.vTexUV);
-	float4 blur4 = g_Blur4Texture.Sample(DefaultSampler, In.vTexUV);
-	float4 blur8 = g_Blur8Texture.Sample(DefaultSampler, In.vTexUV);
-	float4 blur16 = g_Blur16Texture.Sample(DefaultSampler, In.vTexUV);
+	half4 blur2 = g_Blur2Texture.Sample(DefaultSampler, In.vTexUV);
+	half4 blur4 = g_Blur4Texture.Sample(DefaultSampler, In.vTexUV);
+	half4 blur8 = g_Blur8Texture.Sample(DefaultSampler, In.vTexUV);
+	half4 blur16 = g_Blur16Texture.Sample(DefaultSampler, In.vTexUV);
+	half4 sky = g_SkyBoxTexutre.Sample(DefaultSampler, In.vTexUV);
 	
-	float4 emissive = ((emission) * 1.f + (blur2) * 1.3f + (blur4) * 1.5f + (blur8) * 2.5f + (blur16) * 3.5f);
-	float4 final = float4(0, 0, 0, 0);
-	if (g_check == true)
+	half4 emissive = ((emission) * 1.f + (blur2) * 1.3f + (blur4) * 1.5f + (blur8) * 2.5f + (blur16) * 3.5f);
+	half4 final = float4(0, 0, 0, 0);
+	
+	if (diffuse.a <= 0)
 	{
-		final.rgb = diffuse.rgb + specular.rgb + emissive.rgb;
-		//final = diffuse + emissive + specular;
-	}
-	else
-	{
-		final = diffuse + emissive + specular;
+		diffuse = sky;
 	}
 	
-	final.a = originA + emissive.a;
+	final = diffuse + specular + emissive;
 	
 	Out.vOutColor = final;
 	

@@ -20,7 +20,6 @@
 CMonster_Bastion_Shooter::CMonster_Bastion_Shooter(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
 	: CActor(_pDevice, _pDeviceContext)
 	, m_pCharacterController(nullptr)
-	, m_pModelCom(nullptr)
 	, m_pStateController(nullptr)
 	, m_pAnimator(nullptr)
 	, m_bShot(false)
@@ -31,14 +30,12 @@ CMonster_Bastion_Shooter::CMonster_Bastion_Shooter(ID3D11Device* _pDevice, ID3D1
 CMonster_Bastion_Shooter::CMonster_Bastion_Shooter(const CMonster_Bastion_Shooter& _rhs)
 	: CActor(_rhs)
 	, m_pCharacterController(_rhs.m_pCharacterController)
-	, m_pModelCom(_rhs.m_pModelCom)
 	, m_pStateController(_rhs.m_pStateController)
 	, m_pAnimator(_rhs.m_pAnimator)
 	, m_pPanel(_rhs.m_pPanel)
 	, m_bShot(_rhs.m_bShot)
 {
 	Safe_AddRef(m_pCharacterController);
-	Safe_AddRef(m_pModelCom);
 	Safe_AddRef(m_pStateController);
 	Safe_AddRef(m_pAnimator);
 	Safe_AddRef(m_pPanel);
@@ -152,32 +149,32 @@ _int CMonster_Bastion_Shooter::LateTick(_double _dDeltaTime)
 
 HRESULT CMonster_Bastion_Shooter::Render()
 {
-	if (FAILED(__super::Render()))
-		return E_FAIL;
+	SCB desc;
+	ZeroMemory(&desc, sizeof(SCB));
 
-	_matrix smatWorld, smatView, smatProj;
-	smatWorld = XMMatrixTranspose(m_pTransform->Get_WorldMatrix());
-	smatView = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_VIEW));
-	smatProj = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_PROJECTION));
-
-	if (FAILED(m_pModelCom->SetUp_ValueOnShader("g_WorldMatrix", &smatWorld, sizeof(_matrix)))) 
-		return E_FAIL;
-	if (FAILED(m_pModelCom->SetUp_ValueOnShader("g_ViewMatrix", &smatView, sizeof(_matrix)))) 
-		return E_FAIL;
-	if (FAILED(m_pModelCom->SetUp_ValueOnShader("g_ProjMatrix", &smatProj, sizeof(_matrix)))) 
-		return E_FAIL;
-
-	for (_uint i = 0; i < m_pModelCom->Get_NumMeshContainer(); ++i)
+	CActor::BindConstantBuffer(L"Camera_Silvermane", &desc);
+	for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
 	{
-		if (i == 2)
+		switch (i)
 		{
-			if (FAILED(m_pModelCom->Render(i, 1))) 	return E_FAIL;
-		}
-		else
-		{
-			if (FAILED(m_pModelCom->Render(i, 0))) 	return E_FAIL;
+		case 2:
+			if (FAILED(m_pModel->Render(i, 1))) MSGBOX("Failed To Rendering Shooter");
+			break;
+		default:
+			if (FAILED(m_pModel->Render(i, 0))) MSGBOX("Failed To Rendering Shooter");
+			break;
 		}
 	}
+
+	return S_OK;
+}
+
+HRESULT CMonster_Bastion_Shooter::Render_Shadow()
+{
+	CActor::BindConstantBuffer(L"Camera_Silvermane");
+	CActor::BindLightBuffer();
+	for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
+		m_pModel->Render(i, 3);
 
 	return S_OK;
 }
@@ -198,6 +195,11 @@ void CMonster_Bastion_Shooter::Hit(const ATTACKDESC& _tAttackDesc)
 	m_fCurrentHp -= _tAttackDesc.fDamage;
 
 	Hit();
+}
+
+void CMonster_Bastion_Shooter::Parry(const PARRYDESC& _tParrykDesc)
+{
+	m_fGroggyGauge += (m_fMaxGroggyGauge - m_fGroggyGauge);
 }
 
 void CMonster_Bastion_Shooter::OnTriggerEnter(CCollision& collision)
@@ -276,16 +278,16 @@ HRESULT CMonster_Bastion_Shooter::Ready_Components()
 	Desc.fRotationPerSec = XMConvertToRadians(60.f);
 	m_pTransform->Set_TransformDesc(Desc);
 
-	if (FAILED(__super::SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Model_Monster_Bastion_Shooter", L"Model", (CComponent**)&m_pModelCom)))
+	if (FAILED(__super::SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Model_Monster_Bastion_Shooter", L"Model", (CComponent**)&m_pModel)))
 		return E_FAIL;
 
 	_matrix matPivot = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(180.f));
-	m_pModelCom->Set_PivotMatrix(matPivot);
+	m_pModel->Set_PivotMatrix(matPivot);
 
 	CAnimator::ANIMATORDESC tDesc;
 	ZeroMemory(&tDesc, sizeof(tDesc));
 
-	tDesc.pModel = m_pModelCom;
+	tDesc.pModel = m_pModel;
 	tDesc.pTransform = m_pTransform;
 	tDesc.eType = CAnimationController::EType::CharacterController;
 
@@ -318,88 +320,88 @@ HRESULT CMonster_Bastion_Shooter::Ready_Components()
 
 HRESULT CMonster_Bastion_Shooter::Ready_AnimationFSM()
 {
-	CAnimation* pAnim = m_pModelCom->Get_Animation("Idle");
+	CAnimation* pAnim = m_pModel->Get_Animation("Idle");
 
 	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::IDLE, (_uint)ANIM_TYPE::HEAD, pAnim, true, false, true, ERootOption::XYZ)))
 		return E_FAIL;
 
-	pAnim = m_pModelCom->Get_Animation("RunStart");
+	pAnim = m_pModel->Get_Animation("RunStart");
 	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::RUN_START, (_uint)ANIM_TYPE::HEAD, pAnim, true, true, false, ERootOption::XYZ)))
 		return E_FAIL;
-	pAnim = m_pModelCom->Get_Animation("RunLoop");
+	pAnim = m_pModel->Get_Animation("RunLoop");
 	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::RUN_LOOP, (_uint)ANIM_TYPE::RUN_START, pAnim, true, false, true, ERootOption::XYZ)))
 		return E_FAIL;
-	pAnim = m_pModelCom->Get_Animation("RunEnd");
+	pAnim = m_pModel->Get_Animation("RunEnd");
 	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::RUN_END, (_uint)ANIM_TYPE::RUN_LOOP, pAnim, true, true, false, ERootOption::XYZ)))
 		return E_FAIL;
 
-	pAnim = m_pModelCom->Get_Animation("Attack");
+	pAnim = m_pModel->Get_Animation("Attack");
 	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::ATTACK, (_uint)ANIM_TYPE::HEAD, pAnim, true, false, false, ERootOption::XYZ)))
 		return E_FAIL;
 
-	pAnim = m_pModelCom->Get_Animation("Hit1");
+	pAnim = m_pModel->Get_Animation("Hit1");
 	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::HIT1, (_uint)ANIM_TYPE::HEAD, pAnim, true, false, false, ERootOption::XYZ)))
 		return E_FAIL;
-	pAnim = m_pModelCom->Get_Animation("Hit2");
+	pAnim = m_pModel->Get_Animation("Hit2");
 	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::HIT2, (_uint)ANIM_TYPE::HEAD, pAnim, true, false, false, ERootOption::XYZ)))
 		return E_FAIL;
-	pAnim = m_pModelCom->Get_Animation("Hit3");
+	pAnim = m_pModel->Get_Animation("Hit3");
 	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::HIT3, (_uint)ANIM_TYPE::HEAD, pAnim, true, false, false, ERootOption::XYZ)))
 		return E_FAIL;
-	pAnim = m_pModelCom->Get_Animation("Hit4");
+	pAnim = m_pModel->Get_Animation("Hit4");
 	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::HIT4, (_uint)ANIM_TYPE::HEAD, pAnim, true, false, false, ERootOption::XYZ)))
 		return E_FAIL;
-	pAnim = m_pModelCom->Get_Animation("Death");
+	pAnim = m_pModel->Get_Animation("Death");
 	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::DEATH, (_uint)ANIM_TYPE::HIT1, pAnim, true, false, false, ERootOption::XYZ)))
 		return E_FAIL;
 
-	pAnim = m_pModelCom->Get_Animation("StunStart");
+	pAnim = m_pModel->Get_Animation("StunStart");
 	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::GROGGY_START, (_uint)ANIM_TYPE::HEAD, pAnim, true, false, false, ERootOption::XYZ)))
 		return E_FAIL;
-	pAnim = m_pModelCom->Get_Animation("StunLoop");
+	pAnim = m_pModel->Get_Animation("StunLoop");
 	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::GROGGY_LOOP, (_uint)ANIM_TYPE::GROGGY_START, pAnim, true, false, true, ERootOption::XYZ)))
 		return E_FAIL;
-	pAnim = m_pModelCom->Get_Animation("StunEnd");
+	pAnim = m_pModel->Get_Animation("StunEnd");
 	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::GROGGY_END, (_uint)ANIM_TYPE::GROGGY_LOOP, pAnim, true, false, false, ERootOption::XYZ)))
 		return E_FAIL;
 
-	pAnim = m_pModelCom->Get_Animation("BwdWalkStart");
+	pAnim = m_pModel->Get_Animation("BwdWalkStart");
 	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::BACKWARD_START, (_uint)ANIM_TYPE::HEAD, pAnim, true, true, false, ERootOption::XYZ)))
 		return E_FAIL;
-	pAnim = m_pModelCom->Get_Animation("BwdWalkLoop");
+	pAnim = m_pModel->Get_Animation("BwdWalkLoop");
 	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::BACKWARD_LOOP, (_uint)ANIM_TYPE::BACKWARD_START, pAnim, true, true, true, ERootOption::XYZ)))
 		return E_FAIL;
-	pAnim = m_pModelCom->Get_Animation("BwdWalkEnd");
+	pAnim = m_pModel->Get_Animation("BwdWalkEnd");
 	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::BACKWARD_END, (_uint)ANIM_TYPE::BACKWARD_LOOP, pAnim, true, true, false, ERootOption::XYZ)))
 		return E_FAIL;
 
-	pAnim = m_pModelCom->Get_Animation("FwdWalkStart");
+	pAnim = m_pModel->Get_Animation("FwdWalkStart");
 	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::FORWARD_START, (_uint)ANIM_TYPE::HEAD, pAnim, true, true, false, ERootOption::XYZ)))
 		return E_FAIL;
-	pAnim = m_pModelCom->Get_Animation("FwdWalkLoop");
+	pAnim = m_pModel->Get_Animation("FwdWalkLoop");
 	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::FORWARD_LOOP, (_uint)ANIM_TYPE::FORWARD_START, pAnim, true, true, true, ERootOption::XYZ)))
 		return E_FAIL;
-	pAnim = m_pModelCom->Get_Animation("FwdWalkStop");
+	pAnim = m_pModel->Get_Animation("FwdWalkStop");
 	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::FORWARD_END, (_uint)ANIM_TYPE::FORWARD_LOOP, pAnim, true, true, false, ERootOption::XYZ)))
 		return E_FAIL;
 
-	pAnim = m_pModelCom->Get_Animation("LeftWalkStart");
+	pAnim = m_pModel->Get_Animation("LeftWalkStart");
 	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::LEFTWALK_START, (_uint)ANIM_TYPE::HEAD, pAnim, true, true, false, ERootOption::XYZ)))
 		return E_FAIL;
-	pAnim = m_pModelCom->Get_Animation("LeftWalkLoop");
+	pAnim = m_pModel->Get_Animation("LeftWalkLoop");
 	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::LEFTWALK_LOOP, (_uint)ANIM_TYPE::LEFTWALK_START, pAnim, true, true, true, ERootOption::XYZ)))
 		return E_FAIL;
-	pAnim = m_pModelCom->Get_Animation("LeftWalkEnd");
+	pAnim = m_pModel->Get_Animation("LeftWalkEnd");
 	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::LEFTWALK_END, (_uint)ANIM_TYPE::LEFTWALK_LOOP, pAnim, true, true, false, ERootOption::XYZ)))
 		return E_FAIL;
 
-	pAnim = m_pModelCom->Get_Animation("RightWalkStart");
+	pAnim = m_pModel->Get_Animation("RightWalkStart");
 	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::RIGHTWALK_START, (_uint)ANIM_TYPE::HEAD, pAnim, true, true, false, ERootOption::XYZ)))
 		return E_FAIL;
-	pAnim = m_pModelCom->Get_Animation("RightWalkLoop");
+	pAnim = m_pModel->Get_Animation("RightWalkLoop");
 	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::RIGHTWALK_LOOP, (_uint)ANIM_TYPE::RIGHTWALK_START, pAnim, true, true, true, ERootOption::XYZ)))
 		return E_FAIL;
-	pAnim = m_pModelCom->Get_Animation("RightWalkEnd");
+	pAnim = m_pModel->Get_Animation("RightWalkEnd");
 	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::RIGHTWALK_END, (_uint)ANIM_TYPE::RIGHTWALK_LOOP, pAnim, true, true, false, ERootOption::XYZ)))
 		return E_FAIL;
 
@@ -645,11 +647,10 @@ CGameObject* CMonster_Bastion_Shooter::Clone(const _uint _iSceneID, void* _pArg)
 
 void CMonster_Bastion_Shooter::Free()
 {
-	__super::Free();
-
 	Safe_Release(m_pStateController);
 	Safe_Release(m_pAnimator);
-	Safe_Release(m_pModelCom);
 	Safe_Release(m_pCharacterController);
 	Safe_Release(m_pPanel);
+
+	__super::Free();
 }

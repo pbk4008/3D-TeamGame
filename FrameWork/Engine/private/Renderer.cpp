@@ -47,6 +47,9 @@ void CRenderer::SetRenderButton(RENDERBUTTON ebutton, _bool check)
 		m_bradial = check;
 		m_RadialCnt = 6;
 		break;
+	case CRenderer::DISTORTION:
+		m_bdistortion = check;
+		break;
 	}
 }
 
@@ -68,6 +71,7 @@ HRESULT CRenderer::NativeConstruct_Prototype()
 
 	m_pVIBuffer = CVIBuffer_RectViewPort::Create(m_pDevice, m_pDeviceContext, 0.f, 0.f, ViewportDesc.Width, ViewportDesc.Height, TEXT("../../Reference/ShaderFile/Shader_RectViewPort.hlsl"));
 	if (nullptr == m_pVIBuffer)
+		return E_FAIL;
 
 	lstrcpy(m_CameraTag, L"MainCamera");
 
@@ -125,7 +129,7 @@ HRESULT CRenderer::CreateShadowDepthStencilview(_uint iWidth, _uint iHeight,ID3D
 
 HRESULT CRenderer::Add_RenderGroup(RENDER eRenderID, CGameObject* pGameObject)
 {
-	if (nullptr == pGameObject || eRenderID >= RENDER_END)
+	if (nullptr == pGameObject || eRenderID >= RENDER_MAX)
 		return E_FAIL;
 
 	m_RenderGroup[eRenderID].push_back(pGameObject);
@@ -142,37 +146,36 @@ HRESULT CRenderer::Draw_RenderGroup()
 	if (FAILED(Render_Priority()))
 		return E_FAIL;
 
-	if (FAILED(Render_SkyBox())) return E_FAIL;
+	if (FAILED(Render_SkyBox())) MSGBOX("Failed To Rendering SkyPass");
 
-	if (FAILED(Render_NonAlpha())) // 디퍼드 단계
-		return E_FAIL;
+	if (m_bShadow == true)
+	{
+		if (FAILED(Render_Shadow())) MSGBOX("Failed To Rendering ShadowMapPass");
+	}
+
+	if (FAILED(Render_NonAlpha())) MSGBOX("Failed To Rendering NonAlphaPaas");
 
 	if (m_bPixel) // Pixel HDR
 	{
 		if (m_bShadow == true)
 		{
-			if (FAILED(Render_Shadow())) return E_FAIL;
 			if (FAILED(ShadowPass())) MSGBOX("Failed To Rendering ShadowPass");
 		}
 
-		if (FAILED(m_pRenderAssit->Render_LightAcc(m_pTargetMgr, m_CameraTag, m_bPBR, m_bShadow))) return E_FAIL;
+		if (FAILED(m_pRenderAssit->Render_LightAcc(m_pTargetMgr, m_CameraTag, m_bPBR, m_bShadow))) MSGBOX("Failed To Rendering LightPass");
 
-		//if (m_bShadow == true)
-		//{
-		//	if (FAILED(m_pRenderAssit->Render_VolumetricLightAcc(m_pTargetMgr, m_CameraTag))) MSGBOX("Failed To Rendering VolumetricLightAcc");
-		//}
+		if (FAILED(Render_Alpha()))	MSGBOX("Failed To Rendering AlphaPass");
 
-		if (FAILED(m_pHDR->Render_HDRBase(m_pTargetMgr, m_bShadow))) return E_FAIL;
+		if (FAILED(DistortionPass())) MSGBOX("Failed To Rendering Distortion");
 
-		if (FAILED(m_pLuminance->DownSampling(m_pTargetMgr))) return E_FAIL;
+		if (FAILED(m_pHDR->Render_HDRBase(m_pTargetMgr, m_bShadow))) MSGBOX("Failed To Rendering HDRBasePass");
 
-		if (FAILED(m_pPostProcess->PossProcessing(m_pTonemapping, m_pTargetMgr,m_bHDR,m_bradial))) return E_FAIL;
+		if (FAILED(m_pLuminance->DownSampling(m_pTargetMgr)))MSGBOX("Failed To Rendering DownSamplingPass");
 
-		if (FAILED(Render_Final(m_boutline, m_bradial))) return E_FAIL;
+		if (FAILED(m_pPostProcess->PossProcessing(m_pTonemapping, m_pTargetMgr, m_bHDR, m_bradial))) MSGBOX("Failed To Rendering PostProcessPass");
+
+		if (FAILED(Render_Final(m_boutline, m_bradial))) MSGBOX("Failed To Rendering FinalPass");
 	}
-
-	if (FAILED(Render_Alpha()))
-		return E_FAIL;
 
 	if (FAILED(Render_UI()))
 		return E_FAIL;
@@ -230,7 +233,8 @@ HRESULT CRenderer::Draw_RenderGroup()
 		if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("Target_Alpha")))) return E_FAIL;
 		if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("Target_AlphaBlend")))) return E_FAIL;
 		if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("Target_BlurShadow")))) return E_FAIL;
-		if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("Target_GodRay")))) return E_FAIL;
+		if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("Target_Distortion")))) return E_FAIL;
+		if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("Target_STDistortion")))) return E_FAIL;
 	}
 #endif // _DEBUG
 
@@ -239,7 +243,7 @@ HRESULT CRenderer::Draw_RenderGroup()
 
 HRESULT CRenderer::Remove_RenderGroup()
 {
-	for (_uint i = 0; i < RENDER_END; i++)
+	for (_uint i = 0; i < RENDER_MAX; i++)
 	{
 		for (auto pObj : m_RenderGroup[i])
 			Safe_Release(pObj);
@@ -278,7 +282,6 @@ HRESULT CRenderer::Render_SkyBox()
 	}
 	m_RenderGroup[RENDER_SKYBOX].clear();
 
-	/*if (FAILED(m_pTargetMgr->End_MRT(m_pDeviceContext)))return E_FAIL;*/
 	if (FAILED(m_pTargetMgr->End_MRTNotClear(m_pDeviceContext))) return E_FAIL;
 
 	return S_OK;
@@ -297,7 +300,6 @@ HRESULT CRenderer::Render_NonAlpha()
 	}
 	m_RenderGroup[RENDER_NONALPHA].clear();
 
-	//if (FAILED(m_pTargetMgr->End_MRT(m_pDeviceContext))) return E_FAIL;
 	if (FAILED(m_pTargetMgr->End_MRTNotClear(m_pDeviceContext))) return E_FAIL;
 	
 	return S_OK;
@@ -331,17 +333,41 @@ HRESULT CRenderer::Render_Alpha()
 	}
 	m_RenderGroup[RENDER_ALPHA].clear();
 
-	//if (FAILED(m_pTargetMgr->End_MRTNotClear(m_pDeviceContext))) return E_FAIL;
-	if (FAILED(m_pTargetMgr->End_MRT(m_pDeviceContext))) return E_FAIL;
+	if (FAILED(m_pTargetMgr->End_MRTNotClear(m_pDeviceContext))) return E_FAIL;
 
-	if (m_bParticle == true)
+	return S_OK;
+}
+
+HRESULT CRenderer::DistortionPass()
+{
+	if (FAILED(m_pTargetMgr->Begin_MRT(m_pDeviceContext, TEXT("Target_Distortion"))))
+		return E_FAIL;
+
+	for (auto& pGameObject : m_RenderGroup[RENDER_DYDISTORTION])
 	{
-		if (FAILED(m_pPostProcess->AlphaBlur(m_pTargetMgr,m_bParticle))) MSGBOX("Alpha Blur Failed");
+		if (nullptr != pGameObject)
+			pGameObject->Render();
 
-		if (FAILED(m_pVIBuffer->SetUp_TextureOnShader("g_AlphaTexture", m_pTargetMgr->Get_SRV(L"Target_Alpha")))) MSGBOX("Alpha Render Failed");
-
-		if (FAILED(m_pVIBuffer->Render(4))) MSGBOX("Alpha Rendering Failed");
+		Safe_Release(pGameObject);
 	}
+	m_RenderGroup[RENDER_DYDISTORTION].clear();
+
+	if (FAILED(m_pTargetMgr->End_MRTNotClear(m_pDeviceContext))) return E_FAIL;
+
+
+	if (FAILED(m_pTargetMgr->Begin_MRT(m_pDeviceContext, TEXT("Target_STDistortion"))))
+		return E_FAIL;
+
+	for (auto& pGameObject : m_RenderGroup[RENDER_STDISTORTION])
+	{
+		if (nullptr != pGameObject)
+			pGameObject->Render();
+
+		Safe_Release(pGameObject);
+	}
+	m_RenderGroup[RENDER_STDISTORTION].clear();
+
+	if (FAILED(m_pTargetMgr->End_MRT(m_pDeviceContext))) return E_FAIL;
 
 	return S_OK;
 }
@@ -362,6 +388,18 @@ HRESULT CRenderer::Render_UI()
 			});
 	}*/
 
+	_matrix view = g_pGameInstance->Get_Transform(m_CameraTag, TRANSFORMSTATEMATRIX::D3DTS_VIEW);
+	view = XMMatrixInverse(nullptr, view);
+
+	for (auto& iter : m_RenderGroup[RENDER_UI])
+		iter->ComputeViewZ(&view);
+
+	m_RenderGroup[RENDER_UI].sort(
+		[](auto& psrc, auto& pdst)->bool
+		{
+			return psrc->Get_ViewZ() > pdst->Get_ViewZ();
+		});
+
 	for (auto& pGameObject : m_RenderGroup[RENDER_UI])
 	{
 		if (nullptr != pGameObject)
@@ -370,6 +408,16 @@ HRESULT CRenderer::Render_UI()
 		Safe_Release(pGameObject);
 	}
 	m_RenderGroup[RENDER_UI].clear();
+
+
+	/*for (auto& pGameObject : m_RenderGroup[RENDER_UI])
+	{
+		if (nullptr != pGameObject)
+			pGameObject->Render();
+
+		Safe_Release(pGameObject);
+	}
+	m_RenderGroup[RENDER_UI].clear();*/
 	
 	return S_OK;
 }
@@ -441,14 +489,45 @@ HRESULT CRenderer::Render_Final(_bool outline, _bool Radial)
 {
 	if (!m_pTargetMgr)	return E_FAIL;
 
+	_float delta = (_float)g_pGameInstance->Get_TimeDelta(L"Timer_60");
+	_float thick = 0.2f;
 	if (FAILED(m_pVIBuffer->SetUp_TextureOnShader("g_DiffuseTexture", m_pTargetMgr->Get_SRV(TEXT("Target_Blend"))))) MSGBOX("Render Final DiffuseTeuxtre Not Apply");
+	if (FAILED(m_pVIBuffer->SetUp_TextureOnShader("g_DepthTexture", m_pTargetMgr->Get_SRV(TEXT("Target_Depth"))))) MSGBOX("Render Final DepthTexture Not Apply");
+	if (FAILED(m_pVIBuffer->SetUp_TextureOnShader("g_BlurTexture", m_pTargetMgr->Get_SRV(TEXT("Target_Bloom"))))) MSGBOX("Render Final BlurTexture Not Apply");
+
+	_matrix		ViewMatrix = g_pGameInstance->Get_Transform(m_CameraTag, TRANSFORMSTATEMATRIX::D3DTS_VIEW);
+	_matrix		ProjMatrix = g_pGameInstance->Get_Transform(m_CameraTag, TRANSFORMSTATEMATRIX::D3DTS_PROJECTION);
+	_vector		campos = g_pGameInstance->Get_CamPosition(m_CameraTag);
+
+	ViewMatrix = XMMatrixInverse(nullptr, ViewMatrix);
+	ProjMatrix = XMMatrixInverse(nullptr, ProjMatrix);
+	if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_ViewMatrixInv", &XMMatrixTranspose(ViewMatrix), sizeof(_float4x4)))) MSGBOX("Failed To Apply Finalpass ViewInvers");
+	if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_ProjMatrixInv", &XMMatrixTranspose(ProjMatrix), sizeof(_float4x4)))) MSGBOX("Failed To Apply Finalpass ProjInvers");
+
+	if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_vCamPosition", &campos, sizeof(_vector)))) MSGBOX("Failed To Apply Finalpass ProjInvers");
+	if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_delta", &delta, sizeof(_float)))) MSGBOX("Render Final Value delta Not Apply");
+	if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_thick", &thick, sizeof(_float)))) MSGBOX("Render Final Value thick Not Apply");
+
+	if (m_bdistortion == true)
+	{
+		if (FAILED(m_pVIBuffer->SetUp_TextureOnShader("g_DistortionTex", m_pTargetMgr->Get_SRV(TEXT("Target_Distortion"))))) MSGBOX("Render Final g_DistortionTex Not Apply");
+	}
+
+	if (FAILED(m_pVIBuffer->SetUp_TextureOnShader("g_STDistortionTex", m_pTargetMgr->Get_SRV(TEXT("Target_STDistortion"))))) MSGBOX("Render Final g_STDistortionTex Not Apply");
 	if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_outline", &m_boutline, sizeof(_bool)))) MSGBOX("Render Final Value outline Not Apply");
 	if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_radial", &m_bradial, sizeof(_bool)))) MSGBOX("Render Final Value raidal Not Apply");
+	if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_distort", &m_bdistortion, sizeof(_bool)))) MSGBOX("Render Final Value distort Not Apply");
 	if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_RadialCnt", &m_RadialCnt, sizeof(_int)))) MSGBOX("Render Final Value RaidalCnt Not Apply");
 	
-
 	if (FAILED(m_pVIBuffer->Render(3))) MSGBOX("Final Rendering Failed");
 
+	if (m_bParticle == true)
+	{
+		if (FAILED(m_pPostProcess->AlphaBlur(m_pTargetMgr, m_bParticle))) MSGBOX("Alpha Blur Failed");
+		if (FAILED(m_pVIBuffer->SetUp_TextureOnShader("g_AlphaTexture", m_pTargetMgr->Get_SRV(L"Target_AlphaBlend")))) MSGBOX("Alpha Render Failed");
+
+		if (FAILED(m_pVIBuffer->Render(4))) MSGBOX("Alpha Rendering Failed");
+	}
 	return S_OK;
 }
 
@@ -537,7 +616,7 @@ void CRenderer::Free()
 	Safe_Release(m_pInputLayout);
 #pragma endregion
 
-	for (_uint i = 0; i < RENDER_END; ++i)
+	for (_uint i = 0; i < RENDER_MAX; ++i)
 	{
 		for (auto& pGameObject : m_RenderGroup[i])
 			Safe_Release(pGameObject);

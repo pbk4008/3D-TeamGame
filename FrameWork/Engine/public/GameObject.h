@@ -39,7 +39,6 @@ public:
 	virtual _int LateTick(_double TimeDelta);
 	virtual HRESULT Render();
 	virtual HRESULT	Render_Shadow();
-	virtual HRESULT	Render_ShadeShadow(ID3D11ShaderResourceView* ShaodwMap);
 	virtual void	ComputeViewZ(_fmatrix* pView);
 public:
 	virtual void OnCollisionEnter(CCollision& collision);

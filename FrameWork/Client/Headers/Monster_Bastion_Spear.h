@@ -39,6 +39,7 @@ public:
 	virtual _int Tick(_double _dDeltaTime) override;
 	virtual _int LateTick(_double _dDeltaTime) override;
 	virtual HRESULT Render() override;
+	virtual HRESULT	Render_Shadow() override;
 
 private:
 	HRESULT Ready_Components(_uint iSceneID);
@@ -59,6 +60,7 @@ public:
 	void Groggy_Start();
 public:
 	virtual void Hit(const ATTACKDESC& _tAttackDesc) override;
+	virtual void Parry(const PARRYDESC& _tParryDesc) override;
 	void Hit(CCollision& collision);
 	void Attack(_bool bCheck);
 public:
@@ -85,7 +87,6 @@ private:
 	_int m_iGuardCount = 7;
 
 private:
-	CModel* m_pModel = nullptr;
 	CAnimation* m_pAnimation = nullptr;
 	CAnimator* m_pAnimator = nullptr;
 	CStateController* m_pStateController = nullptr;

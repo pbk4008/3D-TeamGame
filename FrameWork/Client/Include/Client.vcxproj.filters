@@ -105,6 +105,9 @@
     </Filter>
     <Filter Include="02.GameObject\96.Weapon\99.Shield">
       <UniqueIdentifier>{a9a4ad69-9913-4775-b0c0-8025825621ca}</UniqueIdentifier>
+	</Filter>
+    <Filter Include="01.Scene\98.TestScene_YM">
+      <UniqueIdentifier>{8e37d1fe-95e3-4c35-bcbf-fba13eeabb78}</UniqueIdentifier>
     </Filter>
     <Filter Include="02.GameObject\96.Weapon\02.RetributionBlade">
       <UniqueIdentifier>{493beca5-7248-489a-b7af-b6706549a6e7}</UniqueIdentifier>
@@ -355,9 +358,6 @@
     <Filter Include="02.GameObject\03.Character\02.Boss\00.MiddleBoss">
       <UniqueIdentifier>{a7db1ec6-722d-46ed-bdad-a86d3c709df2}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObject\03.Character\02.Boss\00.MiddleBoss\00.Weapon">
-      <UniqueIdentifier>{eee5d743-fda4-4f7b-ba26-d4c790268f21}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObject\03.Character\02.Boss\00.MiddleBoss\State">
       <UniqueIdentifier>{8a29aee6-6d31-4f13-bfdb-45f715488804}</UniqueIdentifier>
     </Filter>
@@ -378,12 +378,6 @@
     </Filter>
     <Filter Include="02.GameObject\03.Character\02.Boss\00.MiddleBoss\State\05.Stun">
       <UniqueIdentifier>{2a308277-84e1-4f4f-afc1-cfdeb29f6ae2}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObject\03.Character\01.Monster\EarthAberrant\00.Weapon">
-      <UniqueIdentifier>{0bf5894c-ed8e-4af5-8351-a1c946f08e63}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObject\03.Character\01.Monster\EarthAberrant\00.Weapon\00.Aberrant_Pick">
-      <UniqueIdentifier>{5fb68284-c871-4e91-8aaa-81ee9c81ea14}</UniqueIdentifier>
     </Filter>
     <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_Healer\State_Healer\Hit">
       <UniqueIdentifier>{d4ca5c36-6c33-400f-a4c0-e81fd9a67485}</UniqueIdentifier>
@@ -532,9 +526,6 @@
     <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_Sword\00.State">
       <UniqueIdentifier>{9607ce11-6263-4e1e-8495-2de83143c495}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_Sword\00.State\00.Idle">
-      <UniqueIdentifier>{2398d3e4-0aad-4c0a-b779-2676cae6f42f}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_Sword\00.State\01.Chase">
       <UniqueIdentifier>{198aa2cf-1f67-4f22-b567-e3dc4942f330}</UniqueIdentifier>
     </Filter>
@@ -676,8 +667,23 @@
     <Filter Include="02.GameObject\04.Effect\00.Particle\06.Effect_Guard">
       <UniqueIdentifier>{a0e663ef-dcdc-4443-8e69-2f05e2663463}</UniqueIdentifier>
     </Filter>
+    <Filter Include="100.ShaderFiles\98.Share">
+      <UniqueIdentifier>{451023dd-fff5-4931-95a3-2c781dff7537}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\96.Weapon\08.ShieldBreaker">
+      <UniqueIdentifier>{eee5d743-fda4-4f7b-ba26-d4c790268f21}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\96.Weapon\07.Aberrant_Pick">
+      <UniqueIdentifier>{5fb68284-c871-4e91-8aaa-81ee9c81ea14}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\96.Weapon\99.Shield">
+      <UniqueIdentifier>{a9a4ad69-9913-4775-b0c0-8025825621ca}</UniqueIdentifier>
+    </Filter>
     <Filter Include="01.Scene\01.Loading\00.Logo">
       <UniqueIdentifier>{cac3034c-dd8b-47e8-afc7-da6cb3e9501e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_Spear\00.Idle">
+      <UniqueIdentifier>{2398d3e4-0aad-4c0a-b779-2676cae6f42f}</UniqueIdentifier>
     </Filter>
     <Filter Include="02.GameObject\05.UI\03.SingleImage">
       <UniqueIdentifier>{3fff2a7c-2e05-4760-99a8-e04b4a301ae2}</UniqueIdentifier>
@@ -774,6 +780,21 @@
     </Filter>
     <Filter Include="96.ScriptableData\PlayerData">
       <UniqueIdentifier>{9c78ba36-bbb3-432e-97e9-2ec38031f8fa}</UniqueIdentifier>
+	</Filter>
+    <Filter Include="01.Scene\00.Logo">
+      <UniqueIdentifier>{cac3034c-dd8b-47e8-afc7-da6cb3e9501e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\02.Map\04.Wall">
+      <UniqueIdentifier>{3dae373e-68c5-415f-8383-cd466ef9596f}</UniqueIdentifier>
+	</Filter>
+    <Filter Include="03.System\07.Scenematic">
+      <UniqueIdentifier>{21489520-048e-4295-9f73-a3c5349519f9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.System\07.Scenematic\00.Manager">
+      <UniqueIdentifier>{e6727d87-3999-40d8-b43e-c853a4edea65}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\00.Player\00.Silvermane\State\Shield\Throw">
+      <UniqueIdentifier>{69f64efb-d5bc-433d-bf69-0a94dad5f809}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -808,7 +829,7 @@
       <Filter>00.MainGame</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\Level_Logo.h">
-      <Filter>01.Scene\01.Loading\00.Logo</Filter>
+      <Filter>01.Scene\00.Logo</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\Loading.h">
       <Filter>01.Scene\01.Loading</Filter>
@@ -1207,7 +1228,7 @@
       <Filter>02.GameObject\03.Character\02.Boss\00.MiddleBoss</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\ShieldBreaker.h">
-      <Filter>02.GameObject\03.Character\02.Boss\00.MiddleBoss\00.Weapon</Filter>
+      <Filter>02.GameObject\96.Weapon\08.ShieldBreaker</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\Stargazer.h">
       <Filter>02.GameObject\96.Weapon\03.Stargazer</Filter>
@@ -1249,7 +1270,7 @@
       <Filter>02.GameObject\03.Character\01.Monster\Bastion_2HSword\State_2HSword\Attack</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\Bastion_Sword_Idle.h">
-      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Sword\00.State\00.Idle</Filter>
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Spear\00.Idle</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\Bastion_Sword_Chase.h">
       <Filter>02.GameObject\03.Character\01.Monster\Bastion_Sword\00.State\01.Chase</Filter>
@@ -1372,7 +1393,7 @@
       <Filter>02.GameObject\03.Character\01.Monster\EarthAberrant\State\05.Stun</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\EarthAberrant_Pick.h">
-      <Filter>02.GameObject\03.Character\01.Monster\EarthAberrant\00.Weapon\00.Aberrant_Pick</Filter>
+      <Filter>02.GameObject\96.Weapon\07.Aberrant_Pick</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\UI_Tuto_Base.h">
       <Filter>02.GameObject\05.UI\01.UI_Ingame\01.Meter\05.Tutorial\01.SideTutorial\00.Base</Filter>
@@ -1469,9 +1490,6 @@
     </ClInclude>
     <ClInclude Include="..\Headers\BronzeAnimus_Sword.h">
       <Filter>02.GameObject\96.Weapon\05.BronzeAnimus_Sword</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Headers\BronzeAnimus_State.h">
-      <Filter>02.GameObject\03.Character\01.Monster\BronzeAnimus\State</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\BronzeAnimus_Idle.h">
       <Filter>02.GameObject\03.Character\01.Monster\BronzeAnimus\Statue_Idle</Filter>
@@ -1712,6 +1730,19 @@
     </ClInclude>
     <ClInclude Include="..\Headers\UI_ItemSlot.h">
       <Filter>02.GameObject\05.UI\04.Inventory\04.ItemSlot</Filter>
+	</ClInclude>
+    <ClInclude Include="..\Headers\BronzeAnimus_State.h">
+      <Filter>02.GameObject\03.Character\01.Monster\BronzeAnimus\State</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Codes\Meteor.h">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Healer\Meteor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Potal.h">
+      <Filter>02.GameObject\02.Map\03.Potal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Silvermane_Death.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\HIt</Filter>
+>>>>>>> main
     </ClInclude>
     <ClInclude Include="..\Headers\UI_SlotBackground.h">
       <Filter>02.GameObject\05.UI\04.Inventory\04.ItemSlot\00.Background</Filter>
@@ -1755,6 +1786,30 @@
     <ClInclude Include="..\Headers\PlayerData.h">
       <Filter>96.ScriptableData\PlayerData</Filter>
     </ClInclude>
+    <ClInclude Include="..\Headers\DodgeSlide.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Idel</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Wall.h">
+      <Filter>02.GameObject\02.Map\04.Wall</Filter>
+	</ClInclude>
+    <ClInclude Include="..\Headers\1H_SwordRicochetReaction.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\1H_Sword</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\2H_HammerRicochetReaction.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\2H_Hammer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\ScenematicManager.h">
+      <Filter>03.System\07.Scenematic\00.Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Scenematic.h">
+      <Filter>03.System\07.Scenematic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Shield_Throw.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Shield\Throw</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\FlyingShield.h">
+      <Filter>02.GameObject\96.Weapon\99.Shield</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -1764,7 +1819,7 @@
       <Filter>00.MainGame</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\Level_Logo.cpp">
-      <Filter>01.Scene\01.Loading\00.Logo</Filter>
+      <Filter>01.Scene\00.Logo</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\Loading.cpp">
       <Filter>01.Scene\01.Loading</Filter>
@@ -1786,9 +1841,6 @@
     </ClCompile>
     <ClCompile Include="..\Codes\TestScene_JS.cpp">
       <Filter>01.Scene\99.TestScene_JS</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Codes\State_Silvermane.cpp">
-      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\Camera_Silvermane.cpp">
       <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\Camera</Filter>
@@ -2166,7 +2218,7 @@
       <Filter>02.GameObject\03.Character\02.Boss\00.MiddleBoss</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\ShieldBreaker.cpp">
-      <Filter>02.GameObject\03.Character\02.Boss\00.MiddleBoss\00.Weapon</Filter>
+      <Filter>02.GameObject\96.Weapon\08.ShieldBreaker</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\Stargazer.cpp">
       <Filter>02.GameObject\96.Weapon\03.Stargazer</Filter>
@@ -2208,7 +2260,7 @@
       <Filter>02.GameObject\03.Character\01.Monster\Bastion_2HSword\State_2HSword\Attack</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\Bastion_Sword_Idle.cpp">
-      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Sword\00.State\00.Idle</Filter>
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Spear\00.Idle</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\Bastion_Sword_Chase.cpp">
       <Filter>02.GameObject\03.Character\01.Monster\Bastion_Sword\00.State\01.Chase</Filter>
@@ -2331,7 +2383,7 @@
       <Filter>02.GameObject\03.Character\01.Monster\EarthAberrant\State\05.Stun</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\EarthAberrant_Pick.cpp">
-      <Filter>02.GameObject\03.Character\01.Monster\EarthAberrant\00.Weapon\00.Aberrant_Pick</Filter>
+      <Filter>02.GameObject\96.Weapon\07.Aberrant_Pick</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\UI_Tuto_Base.cpp">
       <Filter>02.GameObject\05.UI\01.UI_Ingame\01.Meter\05.Tutorial\01.SideTutorial\00.Base</Filter>
@@ -2711,6 +2763,33 @@
     <ClCompile Include="..\Codes\PlayerData.cpp">
       <Filter>96.ScriptableData\PlayerData</Filter>
     </ClCompile>
+    <ClCompile Include="..\Codes\DodgeSlide.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Idel</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Wall.cpp">
+      <Filter>02.GameObject\02.Map\04.Wall</Filter>
+	</ClCompile>
+    <ClCompile Include="..\Codes\State_Silvermane.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\1H_SwordRicochetReaction.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\1H_Sword</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\2H_HammerRicochetReaction.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\2H_Hammer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\ScenematicManager.cpp">
+      <Filter>03.System\07.Scenematic\00.Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Scenematic.cpp">
+      <Filter>03.System\07.Scenematic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Shield_Throw.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Shield\Throw</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\FlyingShield.cpp">
+      <Filter>02.GameObject\96.Weapon\99.Shield</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -2807,9 +2886,6 @@
     <FxCompile Include="..\bin\ShaderFile\Shader_RectFire.hlsl">
       <Filter>100.ShaderFiles\03.Effect</Filter>
     </FxCompile>
-    <FxCompile Include="..\bin\ShaderFile\Shader_Trail.hlsl">
-      <Filter>100.ShaderFiles\03.Effect</Filter>
-    </FxCompile>
     <FxCompile Include="..\bin\ShaderFile\Shader_UI.hlsl">
       <Filter>100.ShaderFiles\04.UI</Filter>
     </FxCompile>
@@ -2828,5 +2904,22 @@
     <FxCompile Include="..\bin\ShaderFile\Shader_Potal.hlsl">
       <Filter>100.ShaderFiles\99.Other</Filter>
     </FxCompile>
+    <FxCompile Include="..\bin\ShaderFile\Shader_Distortion.hlsl">
+      <Filter>100.ShaderFiles\03.Effect</Filter>
+    </FxCompile>
+    <FxCompile Include="..\bin\ShaderFile\Shader_INST_M_O_R.hlsl">
+      <Filter>100.ShaderFiles\01.Environment</Filter>
+    </FxCompile>
+    <FxCompile Include="..\bin\ShaderFile\Shader_INST_RM.hlsl">
+      <Filter>100.ShaderFiles\01.Environment</Filter>
+    </FxCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\bin\ShaderFile\Shader_Share.hlsli">
+      <Filter>100.ShaderFiles\98.Share</Filter>
+    </None>
+    <None Include="..\bin\ShaderFile\Shader_ShareFuntion.hlsli">
+      <Filter>100.ShaderFiles\98.Share</Filter>
+    </None>
   </ItemGroup>
 </Project>

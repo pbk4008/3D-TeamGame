@@ -1,9 +1,11 @@
 #pragma once
+
 #ifndef __ACTOR_H__
 #define __ACTOR_H__
 
 #include "GameObject.h"
 BEGIN(Engine)
+
 class ENGINE_DLL CActor abstract : public CGameObject
 {
 protected:
@@ -26,7 +28,9 @@ protected:
 	virtual HRESULT Set_SpawnPosition(const _float3 vPoint);
 
 public:
-	//Effect 불러오는 함수
+	virtual HRESULT BindConstantBuffer(const wstring & camTag,SCB* bindbuffer = nullptr);
+	virtual HRESULT	BindLightBuffer();
+
 public:
 	void Active_Effect(_uint iEffectIndex);
 	//Effect 좌표받아와서 불러오는 함수
@@ -55,14 +59,17 @@ public:
 
 public:
 	virtual void Hit(const ATTACKDESC& _tAttackDesc);
+	virtual void Parry(const PARRYDESC& _tParryDesc);
 
 protected:
 	virtual void Free() override;
 protected:
+	class CModel* m_pModel = nullptr;
 	_bool m_bDead;//죽었는지 안죽었는지 판단
 	_bool m_IsAttack;//공격했는지 공격 안했는지
-	_bool m_bGroggy;//스턴상태인지 아닌지
+	_bool m_bGroggy; //스턴상태인지 아닌지
 	_bool m_bUIShow = false; //몬스터머리위에 ui보이는상태인지아닌지
+	_bool m_isParry = false; // 패링상태 체크
 
 	_float m_fSpeed;//이동 속도
 	_float m_fMaxHp;//최대 체력
@@ -71,6 +78,7 @@ protected:
 	_float m_fMaxGroggyGauge; //스턴게이지
 
 	ATTACKDESC m_tAttackDesc;
+	const LIGHTDESC* m_lightdesc;
 };
 END
 #endif

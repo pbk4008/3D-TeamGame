@@ -3,8 +3,8 @@
 #define __STAGE1_H__
 #include "Level.h"
 #include "TriggerSystem.h"
-
 BEGIN(Client)
+class CScenematicManager;
 class CStage1 final : public CLevel
 {
 private:
@@ -58,6 +58,7 @@ private:
 	virtual void Free() override;
 private:
 	CTriggerSystem<CStage1>* m_pTriggerSystem;
+	CScenematicManager* m_pScenemaManager;
 	_bool m_bDebug;
 	_uint m_iCountMonster;
 	_bool m_bFirst;

@@ -62,6 +62,7 @@ HRESULT CShield::NativeConstruct(const _uint _iSceneID, void* _pArg)
 	m_bActive = false;
 	m_pCollider->Remove_ActorFromScene();
 
+	m_fDamage = 3.f;
 	return S_OK;
 }
 
@@ -95,26 +96,52 @@ _int CShield::LateTick(_double _dDeltaTime)
 
 HRESULT CShield::Render()
 {
-	if (FAILED(__super::Render()))
-		return E_FAIL;
+	SCB desc;
+	ZeroMemory(&desc, sizeof(desc));
+	desc.color = _float4(0.f, 0.2862f, 0.5490f, 1.f);
+	desc.empower = 0.8f;
 
-	_matrix smatWorld, smatView, smatProj;
-	smatWorld = XMMatrixTranspose(m_pTransform->Get_WorldMatrix());
-	smatView = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_VIEW));
-	smatProj = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_PROJECTION));
-
-	m_pModel->SetUp_ValueOnShader("g_WorldMatrix", &smatWorld, sizeof(_matrix));
-	m_pModel->SetUp_ValueOnShader("g_ViewMatrix", &smatView, sizeof(_matrix));
-	m_pModel->SetUp_ValueOnShader("g_ProjMatrix", &smatProj, sizeof(_matrix));
-
+	CWeapon::BindConstantBuffer(L"Camera_Silvermane",&desc);
 	for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
-	{
-		m_pModel->SetUp_TextureOnShader("g_DiffuseTexture", i, aiTextureType_DIFFUSE);
-
 		m_pModel->Render(i, 0);
-	}
 
 	return S_OK;
+}
+
+HRESULT CShield::Render_Shadow()
+{
+	CWeapon::BindConstantBuffer(L"Camera_Silvermane");
+	CWeapon::BindLightBuffer();
+	for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
+		m_pModel->Render(i, 1);
+
+	return S_OK;
+}
+
+void CShield::OnTriggerEnter(CCollision& collision)
+{
+	_uint iTag = collision.pGameObject->getTag();
+	switch (iTag)
+	{
+	case (_uint)GAMEOBJECT::MONSTER_CRYSTAL:
+	case (_uint)GAMEOBJECT::MONSTER_ABERRANT:
+	case (_uint)GAMEOBJECT::MONSTER_1H:
+	case (_uint)GAMEOBJECT::MONSTER_2H:
+	case (_uint)GAMEOBJECT::MONSTER_HEALER:
+	case (_uint)GAMEOBJECT::MONSTER_SHOOTER:
+	case (_uint)GAMEOBJECT::MONSTER_SPEAR:
+	case (_uint)GAMEOBJECT::MONSTER_ANIMUS:
+	case (_uint)GAMEOBJECT::MIDDLE_BOSS:
+	case (_uint)GAMEOBJECT::BOSS:
+		if (!m_isAttack)
+			return;
+
+		ATTACKDESC tAttackDesc = m_pOwner->Get_AttackDesc();
+		tAttackDesc.fDamage += m_fDamage;
+		tAttackDesc.pHitObject = this;
+		static_cast<CActor*>(collision.pGameObject)->Hit(tAttackDesc);
+		break;
+	}
 }
 
 HRESULT CShield::Ready_Components()

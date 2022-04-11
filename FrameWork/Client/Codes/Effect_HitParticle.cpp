@@ -71,9 +71,9 @@ HRESULT CEffect_HitParticle::NativeConstruct(const _uint _iSceneID, void* pArg)
 
 _int CEffect_HitParticle::Tick(_double TimeDelta)
 {
-	m_pBuffer->Update(g_dDeltaTime, m_Desc.iAxis);
+	m_pBuffer->Update(g_dImmutableTime, m_Desc.iAxis);
 
-	m_fNonActiveTimeAcc += (_float)g_dDeltaTime;
+	m_fNonActiveTimeAcc += (_float)g_dImmutableTime;
 	if (4.f <= m_fNonActiveTimeAcc)
 	{
 		setActive(false);
@@ -90,7 +90,7 @@ _int CEffect_HitParticle::Tick(_double TimeDelta)
 
 _int CEffect_HitParticle::LateTick(_double TimeDelta)
 {
-	_bool bCulling = g_pGameInstance->isIn_WorldFrustum(m_pBox->Get_Points(), 20.f);
+	_bool bCulling = g_pGameInstance->isIn_WorldFrustum(m_pBox->Get_Points(), 1.f);
 	if (true == bCulling)
 	{
 		if (nullptr != m_pRenderer)
@@ -104,7 +104,7 @@ _int CEffect_HitParticle::LateTick(_double TimeDelta)
 
 HRESULT CEffect_HitParticle::Render()
 {
-	m_pBox->Render(L"Camera_Silvermane");
+	//m_pBox->Render(L"Camera_Silvermane");
 
 	_matrix XMWorldMatrix = XMMatrixTranspose(m_pTransform->Get_WorldMatrix());
 	_matrix XMViewMatrix = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_VIEW));
@@ -126,12 +126,12 @@ HRESULT CEffect_HitParticle::Render()
 	m_pBuffer->SetUp_ValueOnShader("g_fLifeTime", &m_Desc.fMaxLifeTime, sizeof(_float));
 	m_pBuffer->SetUp_ValueOnShader("g_fCurTime", &m_Desc.fCurTime, sizeof(_float));
 
-	_float3 color = { 1.f, 0.6f, 0.3f };
-	m_pBuffer->SetUp_ValueOnShader("g_color", &color, sizeof(_float3));
+	_float4 color = { 1.f, 0.6f, 0.3f ,1.f };
+	m_pBuffer->SetUp_ValueOnShader("g_color", &color, sizeof(_float4));
 
 	m_pBuffer->SetUp_ValueOnShader("g_vCamPosition", (void*)&CamPos, sizeof(_vector));
 
-	m_pBuffer->Render(m_Desc.iRenderPassNum); //4번이어야함,,게속,,
+	m_pBuffer->Render(/*m_Desc.iRenderPassNum*/4); //4번이어야함,,게속,,
 
 	return S_OK;
 }

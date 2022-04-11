@@ -38,11 +38,13 @@ public:
 	virtual _int Tick(_double _dDeltaTime) override;
 	virtual _int LateTick(_double _dDeltaTime) override;
 	virtual HRESULT Render() override;
+	virtual HRESULT	Render_Shadow() override;
 
 public:
 	void Groggy_Start();
 	void Hit(CCollision& pCol);
 	virtual void Hit(const ATTACKDESC& _tAttackDesc) override;
+	virtual void Parry(const PARRYDESC& _tParryDesc) override;
 	void Remove_Collider();
 private:
 	HRESULT Ready_Components();
@@ -72,7 +74,6 @@ private:
 	_bool		m_bTargetOn = false;
 	_bool		m_bAttackOn = false;
 private:
-	CModel* m_pModel = nullptr;
 	CAnimation* m_pAnimation = nullptr;
 	CAnimator* m_pAnimator = nullptr;
 	CStateController* m_pStateController = nullptr;

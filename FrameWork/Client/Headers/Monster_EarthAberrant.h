@@ -3,7 +3,6 @@
 #include "Actor.h"
 
 BEGIN(Engine)
-class CModel;
 class CAnimator;
 class CCharacterController;
 END
@@ -29,6 +28,7 @@ public:
 	virtual _int Tick(_double _dDeltaTime) override;
 	virtual _int LateTick(_double _dDeltaTime) override;
 	virtual HRESULT Render() override;
+	virtual HRESULT	Render_Shadow() override;
 
 private:
 	virtual HRESULT SetUp_Components();
@@ -42,13 +42,13 @@ public:
 	virtual void OnTriggerExit(CCollision& collision) override;
 
 	virtual void Hit(const ATTACKDESC& _tAttackDesc) override;
+	virtual void Parry(const PARRYDESC& _tParryDesc) override;
 
 public:
 	void Set_IsAttack(const _bool _isAttack);
 	virtual void Set_Remove(_bool bCheck) override;
 
 private:
-	CModel* m_pModelCom = nullptr;
 	CAnimator* m_pAnimatorCom = nullptr;
 	CStateController* m_pStateController = nullptr;
 	CCharacterController* m_pCharacterController = nullptr;

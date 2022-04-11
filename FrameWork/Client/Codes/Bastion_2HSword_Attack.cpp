@@ -29,8 +29,6 @@ _int CBastion_2HSword_Attack::Tick(const _double& _dDeltaTime)
 	if (NO_EVENT != iProgress)
 		return iProgress;
 
-
-	//cout << "Attack" << endl;
 	m_pTransform->Face_Target(g_pObserver->Get_PlayerPos());
 	m_pAnimator->Tick(_dDeltaTime);
 
@@ -45,14 +43,11 @@ _int CBastion_2HSword_Attack::Tick(const _double& _dDeltaTime)
 	CMonster_Bastion_2HSword* pMonster = (CMonster_Bastion_2HSword*)m_pStateController->Get_GameObject();
 	if (nullptr != pMonster)
 	{
-		//cout << pMonster->IsAttack() << endl;
-
 		_uint iCurKeyFrameIndex = m_pAnimator->Get_AnimController()->Get_CurKeyFrameIndex();
 		
 		if ((_uint)CMonster_Bastion_2HSword::ANIM_TYPE::A_ATTACK_R1 == m_pAnimator->Get_CurrentAnimNode())
 		{
-			cout << "R1 : " << iCurKeyFrameIndex << endl;
-			if (130 < iCurKeyFrameIndex && 154 > iCurKeyFrameIndex)
+			if (130 < iCurKeyFrameIndex && 160 > iCurKeyFrameIndex)
 			{
 				pMonster->Set_IsAttack(true);
 
@@ -62,7 +57,7 @@ _int CBastion_2HSword_Attack::Tick(const _double& _dDeltaTime)
 				pMonster->Set_AttackDesc_Level(iLevel);
 			}
 			
-			else if (270 < iCurKeyFrameIndex && 290 > iCurKeyFrameIndex)
+			else if (265 < iCurKeyFrameIndex && 295 > iCurKeyFrameIndex)
 			{
 				pMonster->Set_IsAttack(true);
 
@@ -80,7 +75,6 @@ _int CBastion_2HSword_Attack::Tick(const _double& _dDeltaTime)
 
 		else if ((_uint)CMonster_Bastion_2HSword::ANIM_TYPE::A_ATTACK_R2 == m_pAnimator->Get_CurrentAnimNode())
 		{
-			cout << "R2 : " << iCurKeyFrameIndex << endl;
 			if (180 < iCurKeyFrameIndex && 210 > iCurKeyFrameIndex)
 			{
 				pMonster->Set_IsAttack(true);
@@ -98,7 +92,6 @@ _int CBastion_2HSword_Attack::Tick(const _double& _dDeltaTime)
 
 		else if ((_uint)CMonster_Bastion_2HSword::ANIM_TYPE::A_ATTACK_S1 == m_pAnimator->Get_CurrentAnimNode())
 		{
-			cout << "S1 : " << iCurKeyFrameIndex << endl;
 			if (133 < iCurKeyFrameIndex && 160 > iCurKeyFrameIndex)
 			{
 				pMonster->Set_IsAttack(true);
@@ -114,7 +107,6 @@ _int CBastion_2HSword_Attack::Tick(const _double& _dDeltaTime)
 
 		else if ((_uint)CMonster_Bastion_2HSword::ANIM_TYPE::A_ATTACK_S3== m_pAnimator->Get_CurrentAnimNode())
 		{
-			cout << "S3 : " << iCurKeyFrameIndex << endl;
 			if (90 < iCurKeyFrameIndex && 120 > iCurKeyFrameIndex)
 			{
 				pMonster->Set_IsAttack(true);
