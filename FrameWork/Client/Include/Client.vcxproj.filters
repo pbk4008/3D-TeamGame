@@ -748,6 +748,9 @@
     <Filter Include="03.System\07.Scenematic\00.Manager">
       <UniqueIdentifier>{e6727d87-3999-40d8-b43e-c853a4edea65}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\03.Character\00.Player\00.Silvermane\State\Shield\Throw">
+      <UniqueIdentifier>{69f64efb-d5bc-433d-bf69-0a94dad5f809}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -1686,6 +1689,12 @@
     <ClInclude Include="..\Headers\Scenematic.h">
       <Filter>03.System\07.Scenematic</Filter>
     </ClInclude>
+    <ClInclude Include="..\Headers\Shield_Throw.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Shield\Throw</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\FlyingShield.h">
+      <Filter>02.GameObject\96.Weapon\99.Shield</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -2599,6 +2608,12 @@
     </ClCompile>
     <ClCompile Include="..\Codes\Scenematic.cpp">
       <Filter>03.System\07.Scenematic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Shield_Throw.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Shield\Throw</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\FlyingShield.cpp">
+      <Filter>02.GameObject\96.Weapon\99.Shield</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

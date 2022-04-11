@@ -136,6 +136,8 @@ HRESULT CTestScene_JS::Ready_Gameobject()
 		return E_FAIL;
  	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_JS, L"Layer_Camera", L"Proto_GameObject_Camera_Silvermane")))
 		return E_FAIL;
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_JS, L"Layer_Weapon", L"Proto_GameObject_FlyingShield")))
+		return E_FAIL;
 
 
 	// 점프 노드들

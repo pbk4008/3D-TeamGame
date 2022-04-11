@@ -164,8 +164,6 @@ HRESULT CStage2::Ready_Player(const _tchar* LayerTag)
 	//스폰 하고자 하는 위치 지정
 	tDesc.vPos = _float3(70.f, 3.f, 5.f);
 
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE2, L"Layer_SordTrail", L"Prototype_GameObject_SwordTral")))
-		return E_FAIL;
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE2, LayerTag, L"Proto_GameObject_Silvermane", &tDesc)))
 		return E_FAIL;
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE2, L"Layer_Camera", L"Proto_GameObject_Camera_Silvermane")))

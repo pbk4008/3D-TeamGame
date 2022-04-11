@@ -147,6 +147,7 @@
 #include "Shield_WalkRightStop.h"
 // Attack
 #include "Shield_SupermanPunchStraight.h"
+#include "Shield_Throw.h"
 //////////////////////////////////////////// Jump
 #include "Traverse_Jump400Jog.h"
 #include "Traverse_JumpNodeJog.h"
@@ -765,6 +766,8 @@ HRESULT CSilvermane::Ready_States()
 	// Attack
 	if (FAILED(m_pStateController->Add_State(L"Shield_SupermanPunchStraight", CShield_SupermanPunchStraight::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
+	if (FAILED(m_pStateController->Add_State(L"Shield_Throw", CShield_Throw::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
 #pragma endregion
 	// «Ǫ
 	if (FAILED(m_pStateController->Add_State(L"Traverse_Jump400Jog", CTraverse_Jump400Jog::Create(m_pDevice, m_pDeviceContext))))
@@ -920,7 +923,7 @@ void CSilvermane::OnControllerColliderHit(CCollision& collision)
 
 void CSilvermane::Hit(const ATTACKDESC& _tAttackDesc)
 {
-	if (m_isBlock)
+	if (m_isBlock && !m_IsAttack)
 		static_cast<CState_Silvermane*>(m_pStateController->Get_CurState())->Block(_tAttackDesc);
 	else
 		static_cast<CState_Silvermane*>(m_pStateController->Get_CurState())->Hit(_tAttackDesc);
