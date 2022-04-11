@@ -1742,7 +1742,6 @@
     </ClInclude>
     <ClInclude Include="..\Headers\Silvermane_Death.h">
       <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\HIt</Filter>
->>>>>>> main
     </ClInclude>
     <ClInclude Include="..\Headers\UI_SlotBackground.h">
       <Filter>02.GameObject\05.UI\04.Inventory\04.ItemSlot\00.Background</Filter>
