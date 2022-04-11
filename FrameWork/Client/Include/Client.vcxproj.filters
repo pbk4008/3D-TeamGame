@@ -103,6 +103,9 @@
     <Filter Include="02.GameObject\05.UI\01.UI_Ingame\01.Meter\02.Monster\03.HpUI">
       <UniqueIdentifier>{8d05bd08-0e08-4584-9925-592ea048aeab}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\96.Weapon\99.Shield">
+      <UniqueIdentifier>{a9a4ad69-9913-4775-b0c0-8025825621ca}</UniqueIdentifier>
+	</Filter>
     <Filter Include="01.Scene\98.TestScene_YM">
       <UniqueIdentifier>{8e37d1fe-95e3-4c35-bcbf-fba13eeabb78}</UniqueIdentifier>
     </Filter>
@@ -120,9 +123,6 @@
     </Filter>
     <Filter Include="02.GameObject\96.Weapon\03.Stargazer">
       <UniqueIdentifier>{c7467934-81e9-48c7-9c6f-403039f32fbb}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="01.Scene\100.TestScene_SB">
-      <UniqueIdentifier>{976dac7e-cb0b-4d33-ad07-182416607cee}</UniqueIdentifier>
     </Filter>
     <Filter Include="02.GameObject\03.Character">
       <UniqueIdentifier>{81c1fb5a-5f64-45b1-b48c-f368e2157c7c}</UniqueIdentifier>
@@ -739,6 +739,48 @@
     <Filter Include="02.GameObject\03.Character\00.Player\00.Silvermane\State\Looting">
       <UniqueIdentifier>{63d17537-8141-4500-98a5-9b4ef284d80f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\05.UI\04.Inventory\04.ItemSlot">
+      <UniqueIdentifier>{6087a9c1-16ce-485b-8b56-bde28a7edbf8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.UI\04.Inventory\04.ItemSlot\00.Background">
+      <UniqueIdentifier>{4e7c56aa-b02e-46a0-a605-797dce1d100f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.UI\04.Inventory\04.ItemSlot\01.Grade">
+      <UniqueIdentifier>{f8c6ca39-7368-4519-a58f-96c3456aeb0f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.UI\04.Inventory\04.ItemSlot\02.ItemIcon">
+      <UniqueIdentifier>{15298026-689c-47c7-a84e-0312ecf70293}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.UI\04.Inventory\04.ItemSlot\03.ItemEffect">
+      <UniqueIdentifier>{02ffd2ac-4864-4ba7-8755-1a4624eba3b7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.UI\04.Inventory\04.ItemSlot\04.EquipedText">
+      <UniqueIdentifier>{22a23bd4-eaf6-40e3-896c-6cf7455c7a77}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="96.ScriptableData\EquipmentData">
+      <UniqueIdentifier>{7bea859b-1617-46b5-961f-33a170cd8d53}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.UI\99.UIHelper">
+      <UniqueIdentifier>{7f503847-a598-492a-be31-19a6604b7e28}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.UI\04.Inventory\05.ItemStatusWindow">
+      <UniqueIdentifier>{850eb111-7ae4-490c-80d5-1943bd9ab30e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.UI\04.Inventory\05.ItemStatusWindow\00.Background">
+      <UniqueIdentifier>{8bafe783-d0e5-46a7-9d4f-d9c347e0900d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.UI\04.Inventory\00.Indexes\00.Button_Equipment">
+      <UniqueIdentifier>{1fbb0f0c-0d1b-4251-8639-85edb4781910}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.UI\04.Inventory\00.Indexes\01.Button_Armory">
+      <UniqueIdentifier>{b3b1db8d-8efa-47ee-9502-be082548d46f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.UI\04.Inventory\00.Indexes\02.Button_Skill">
+      <UniqueIdentifier>{8033d721-34aa-4cf8-8b42-515932cc7d6a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="96.ScriptableData\PlayerData">
+      <UniqueIdentifier>{9c78ba36-bbb3-432e-97e9-2ec38031f8fa}</UniqueIdentifier>
+	</Filter>
     <Filter Include="01.Scene\00.Logo">
       <UniqueIdentifier>{cac3034c-dd8b-47e8-afc7-da6cb3e9501e}</UniqueIdentifier>
     </Filter>
@@ -750,6 +792,15 @@
     </Filter>
     <Filter Include="03.System\07.Scenematic\00.Manager">
       <UniqueIdentifier>{e6727d87-3999-40d8-b43e-c853a4edea65}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\01. MainCamera\CinemaCam">
+      <UniqueIdentifier>{80dff71d-f3e2-4611-85c4-d598d100a259}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.System\07.Scenematic\01.Stage1">
+      <UniqueIdentifier>{7923ba1c-8533-4b27-8cbc-6a47b092efad}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.System\07.Scenematic\01.Stage1\Cinema1_1">
+      <UniqueIdentifier>{aa6a42c7-1e50-490c-80c7-c2e3fcb11325}</UniqueIdentifier>
     </Filter>
     <Filter Include="02.GameObject\03.Character\00.Player\00.Silvermane\State\Shield\Throw">
       <UniqueIdentifier>{69f64efb-d5bc-433d-bf69-0a94dad5f809}</UniqueIdentifier>
@@ -1170,9 +1221,6 @@
     <ClInclude Include="..\Headers\Shield_SupermanPunchStraight.h">
       <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Shield\Attack</Filter>
     </ClInclude>
-    <ClInclude Include="..\Headers\TestScene_YM.h">
-      <Filter>01.Scene\98.TestScene_YM</Filter>
-    </ClInclude>
     <ClInclude Include="..\Headers\RetributionBlade.h">
       <Filter>02.GameObject\96.Weapon\02.RetributionBlade</Filter>
     </ClInclude>
@@ -1202,9 +1250,6 @@
     </ClInclude>
     <ClInclude Include="..\Headers\Bastion_2HSword_Chaser.h">
       <Filter>02.GameObject\03.Character\01.Monster\Bastion_2HSword\State_2HSword\Chaser</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Headers\TestScene_Sb.h">
-      <Filter>01.Scene\100.TestScene_SB</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\Shooter_Idle.h">
       <Filter>02.GameObject\03.Character\01.Monster\Bastion_Shooter\State\Idle</Filter>
@@ -1662,6 +1707,39 @@
     <ClInclude Include="..\Headers\Effect_Falling_Leaf.h">
       <Filter>02.GameObject\04.Effect\00.Particle\01.Effect_MapLeaf</Filter>
     </ClInclude>
+    <ClInclude Include="..\Codes\Meteor.h">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Healer\Meteor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Potal.h">
+      <Filter>02.GameObject\02.Map\03.Potal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Silvermane_Death.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\HIt</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\LootingChest.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Looting</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\UI_Equipment.h">
+      <Filter>02.GameObject\05.UI\04.Inventory\02.Equipment</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\UI_Indexes.h">
+      <Filter>02.GameObject\05.UI\04.Inventory\00.Indexes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\UI_Armory.h">
+      <Filter>02.GameObject\05.UI\04.Inventory\03.Armory</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\UI_Background.h">
+      <Filter>02.GameObject\05.UI\04.Inventory\01.Background</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Inven_UIManager.h">
+      <Filter>03.System\06.Inven_UIManager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\SingleImage.h">
+      <Filter>02.GameObject\05.UI\03.SingleImage</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\UI_ItemSlot.h">
+      <Filter>02.GameObject\05.UI\04.Inventory\04.ItemSlot</Filter>
+	</ClInclude>
     <ClInclude Include="..\Headers\BronzeAnimus_State.h">
       <Filter>02.GameObject\03.Character\01.Monster\BronzeAnimus\State</Filter>
     </ClInclude>
@@ -1674,8 +1752,47 @@
     <ClInclude Include="..\Headers\Silvermane_Death.h">
       <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\HIt</Filter>
     </ClInclude>
-    <ClInclude Include="..\Headers\LootingChest.h">
-      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Looting</Filter>
+    <ClInclude Include="..\Headers\UI_SlotBackground.h">
+      <Filter>02.GameObject\05.UI\04.Inventory\04.ItemSlot\00.Background</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\UI_SlotGrade.h">
+      <Filter>02.GameObject\05.UI\04.Inventory\04.ItemSlot\01.Grade</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\UI_SlotItemIcon.h">
+      <Filter>02.GameObject\05.UI\04.Inventory\04.ItemSlot\02.ItemIcon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\UI_SlotItemEffect.h">
+      <Filter>02.GameObject\05.UI\04.Inventory\04.ItemSlot\03.ItemEffect</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\UI_EquipedText.h">
+      <Filter>02.GameObject\05.UI\04.Inventory\04.ItemSlot\04.EquipedText</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\UIHelper.h">
+      <Filter>02.GameObject\05.UI\99.UIHelper</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\EquipmentData.h">
+      <Filter>96.ScriptableData\EquipmentData</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\UI_ModalWindow.h">
+      <Filter>02.GameObject\05.UI\04.Inventory</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\UI_ItemStatusWindow.h">
+      <Filter>02.GameObject\05.UI\04.Inventory\05.ItemStatusWindow</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\UI_ItemStatusBackground.h">
+      <Filter>02.GameObject\05.UI\04.Inventory\05.ItemStatusWindow\00.Background</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Button_Equipment.h">
+      <Filter>02.GameObject\05.UI\04.Inventory\00.Indexes\00.Button_Equipment</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Button_Armory.h">
+      <Filter>02.GameObject\05.UI\04.Inventory\00.Indexes\01.Button_Armory</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Button_Skill.h">
+      <Filter>02.GameObject\05.UI\04.Inventory\00.Indexes\02.Button_Skill</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\PlayerData.h">
+      <Filter>96.ScriptableData\PlayerData</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\DodgeSlide.h">
       <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Idel</Filter>
@@ -1694,6 +1811,12 @@
     </ClInclude>
     <ClInclude Include="..\Headers\Scenematic.h">
       <Filter>03.System\07.Scenematic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\CinemaCam.h">
+      <Filter>02.GameObject\01. MainCamera\CinemaCam</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Cinema1_1.h">
+      <Filter>03.System\07.Scenematic\01.Stage1\Cinema1_1</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\Shield_Throw.h">
       <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Shield\Throw</Filter>
@@ -2093,9 +2216,6 @@
     <ClCompile Include="..\Codes\Shield_SupermanPunchStraight.cpp">
       <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Shield\Attack</Filter>
     </ClCompile>
-    <ClCompile Include="..\Codes\TestScene_YM.cpp">
-      <Filter>01.Scene\98.TestScene_YM</Filter>
-    </ClCompile>
     <ClCompile Include="..\Codes\RetributionBlade.cpp">
       <Filter>02.GameObject\96.Weapon\02.RetributionBlade</Filter>
     </ClCompile>
@@ -2125,9 +2245,6 @@
     </ClCompile>
     <ClCompile Include="..\Codes\Bastion_2HSword_Chaser.cpp">
       <Filter>02.GameObject\03.Character\01.Monster\Bastion_2HSword\State_2HSword\Chaser</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Codes\TestScene_Sb.cpp">
-      <Filter>01.Scene\100.TestScene_SB</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\Shooter_Idle.cpp">
       <Filter>02.GameObject\03.Character\01.Monster\Bastion_Shooter\State\Idle</Filter>
@@ -2597,6 +2714,69 @@
     <ClCompile Include="..\Codes\LootingChest.cpp">
       <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Looting</Filter>
     </ClCompile>
+    <ClCompile Include="..\Codes\UI_Indexes.cpp">
+      <Filter>02.GameObject\05.UI\04.Inventory\00.Indexes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\UI_Armory.cpp">
+      <Filter>02.GameObject\05.UI\04.Inventory\03.Armory</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\UI_Background.cpp">
+      <Filter>02.GameObject\05.UI\04.Inventory\01.Background</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\UI_Equipment.cpp">
+      <Filter>02.GameObject\05.UI\04.Inventory\02.Equipment</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Inven_UIManager.cpp">
+      <Filter>03.System\06.Inven_UIManager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\SingleImage.cpp">
+      <Filter>02.GameObject\05.UI\03.SingleImage</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\UI_ItemSlot.cpp">
+      <Filter>02.GameObject\05.UI\04.Inventory\04.ItemSlot</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\UI_SlotBackground.cpp">
+      <Filter>02.GameObject\05.UI\04.Inventory\04.ItemSlot\00.Background</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\UI_SlotGrade.cpp">
+      <Filter>02.GameObject\05.UI\04.Inventory\04.ItemSlot\01.Grade</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\UI_SlotItemIcon.cpp">
+      <Filter>02.GameObject\05.UI\04.Inventory\04.ItemSlot\02.ItemIcon</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\UI_SlotItemEffect.cpp">
+      <Filter>02.GameObject\05.UI\04.Inventory\04.ItemSlot\03.ItemEffect</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\UI_EquipedText.cpp">
+      <Filter>02.GameObject\05.UI\04.Inventory\04.ItemSlot\04.EquipedText</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\UIHelper.cpp">
+      <Filter>02.GameObject\05.UI\99.UIHelper</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\EquipmentData.cpp">
+      <Filter>96.ScriptableData\EquipmentData</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\UI_ModalWindow.cpp">
+      <Filter>02.GameObject\05.UI\04.Inventory</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\UI_ItemStatusWindow.cpp">
+      <Filter>02.GameObject\05.UI\04.Inventory\05.ItemStatusWindow</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\UI_ItemStatusBackground.cpp">
+      <Filter>02.GameObject\05.UI\04.Inventory\05.ItemStatusWindow\00.Background</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Button_Equipment.cpp">
+      <Filter>02.GameObject\05.UI\04.Inventory\00.Indexes\00.Button_Equipment</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Button_Armory.cpp">
+      <Filter>02.GameObject\05.UI\04.Inventory\00.Indexes\01.Button_Armory</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Button_Skill.cpp">
+      <Filter>02.GameObject\05.UI\04.Inventory\00.Indexes\02.Button_Skill</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\PlayerData.cpp">
+      <Filter>96.ScriptableData\PlayerData</Filter>
+    </ClCompile>
     <ClCompile Include="..\Codes\DodgeSlide.cpp">
       <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Idel</Filter>
     </ClCompile>
@@ -2617,6 +2797,12 @@
     </ClCompile>
     <ClCompile Include="..\Codes\Scenematic.cpp">
       <Filter>03.System\07.Scenematic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\CinemaCam.cpp">
+      <Filter>02.GameObject\01. MainCamera\CinemaCam</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Cinema1_1.cpp">
+      <Filter>03.System\07.Scenematic\01.Stage1\Cinema1_1</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\Shield_Throw.cpp">
       <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Shield\Throw</Filter>

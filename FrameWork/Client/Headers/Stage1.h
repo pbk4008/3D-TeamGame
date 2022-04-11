@@ -5,6 +5,7 @@
 #include "TriggerSystem.h"
 BEGIN(Client)
 class CScenematicManager;
+class CScenematic;
 class CStage1 final : public CLevel
 {
 private:
@@ -23,12 +24,14 @@ private:
 	HRESULT Ready_Monster(const _tchar* LayerTag);
 	HRESULT Ready_UI(const _tchar* LayerTag);
 	HRESULT Ready_Light();
-
+	HRESULT Ready_GameManager(void);
 	HRESULT Ready_Data_Effect();
 	HRESULT Ready_Data_UI(const _tchar* pDataFilePath);
 
 	HRESULT Ready_TriggerSystem(const _tchar* pTriggerFile);
 	HRESULT Ready_TriggerFunctionSetting();
+
+	HRESULT Ready_Cinema();
 public:
 	void Minus_MonsterCount() { m_iCountMonster--; }
 public:
@@ -63,6 +66,8 @@ private:
 	_uint m_iCountMonster;
 	_bool m_bFirst;
 	_bool test = false;
+private:
+	CScenematic* m_pCinema = nullptr;
 };
 #endif
 

@@ -12,7 +12,8 @@ HRESULT CPipeLine::Add_Camera(const wstring& pCameraTag)
 	CAMERA* tCamera = new CAMERA;
 	ZeroMemory(tCamera, sizeof(CAMERA));
 
-	m_mapPipeLine.emplace(pCameraTag, tCamera);
+
+	m_mapPipeLine.emplace_back(make_pair(pCameraTag, tCamera));
 
 	return S_OK;
 }
@@ -90,10 +91,10 @@ HRESULT CPipeLine::Change_BaseCamera(const wstring& pCameraTag)
 	//첫번째 카메라 가져오기
 	auto iter_begin = m_mapPipeLine.begin();
 	//찾고자 하는 카메라 가져오기
-
 	auto iter_Find = find_if(m_mapPipeLine.begin(), m_mapPipeLine.end(), CTag_Finder(pCameraTag));
 	if (iter_Find == m_mapPipeLine.end())
 		return E_FAIL;
+	_int iFindIndex = Find_Index(pCameraTag);
 
 	//임시로 저장할 카메라
 	auto pTmpCamera = iter_begin;
@@ -101,6 +102,9 @@ HRESULT CPipeLine::Change_BaseCamera(const wstring& pCameraTag)
 	iter_begin = iter_Find;
 	//찾고자 하는 카메라에 저장했던 첫번째 카메라로 변경
 	iter_Find = pTmpCamera;
+
+	m_mapPipeLine[0] = *iter_begin;
+	m_mapPipeLine[iFindIndex] = *iter_Find;
 
 	return S_OK;
 }
@@ -122,6 +126,17 @@ CAMERA* CPipeLine::Find_Camera(const wstring& pCameraTag)
 		return nullptr;
 
 	return pCamera->second;
+}
+
+_int CPipeLine::Find_Index(const wstring& pCameraTag)
+{
+	_uint iSize = m_mapPipeLine.size();
+	for (_uint i = 0; i < iSize; i++)
+	{
+		if (m_mapPipeLine[i].first == pCameraTag)
+			return i;
+	}
+	return -1;
 }
 
 void CPipeLine::Free()

@@ -14,7 +14,7 @@ private:
 	virtual ~CScenematicManager() = default;
 public:
 	HRESULT Add_Scenema(CScenematic* pScenema);
-	HRESULT Active_Scenema(_uint iScenemaIndex);
+	HRESULT Active_Scenema(_uint iScenemaIndex, CScenematic** pOutCineam);
 private:
 	virtual void Free() override;
 private:

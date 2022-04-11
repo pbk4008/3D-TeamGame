@@ -153,7 +153,7 @@ namespace Engine
 	}
 
 
-	/*_bool IsDigitString(int* _digit, wstring _string)
+	static _bool IsDigitString(int* _digit, wstring _string)
 	{
 		int num = _wtoi(_string.c_str());
 
@@ -174,7 +174,7 @@ namespace Engine
 		}
 
 		return false;
-	}*/
+	}
 
 }
 

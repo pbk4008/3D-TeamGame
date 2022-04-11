@@ -89,10 +89,11 @@ HRESULT CFury::Render()
 {
 	SCB desc;
 	ZeroMemory(&desc, sizeof(desc));
+	wstring wstrCamTag = g_pGameInstance->Get_BaseCameraTag();
 	desc.color = _float4(0.f, 0.552f, 0.384f, 1.f);
 	desc.empower = 0.6f;
 
-	CWeapon::BindConstantBuffer(L"Camera_Silvermane",&desc);
+	CWeapon::BindConstantBuffer(wstrCamTag,&desc);
 	for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
 		m_pModel->Render(i, 0);
 
@@ -101,7 +102,8 @@ HRESULT CFury::Render()
 
 HRESULT CFury::Render_Shadow()
 {
-	CWeapon::BindConstantBuffer(L"Camera_Silvermane");
+	wstring wstrCamTag = g_pGameInstance->Get_BaseCameraTag();
+	CWeapon::BindConstantBuffer(wstrCamTag);
 	CWeapon::BindLightBuffer();
 	for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
 		m_pModel->Render(i, 1);

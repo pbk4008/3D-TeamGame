@@ -40,6 +40,7 @@ private:
 	HRESULT Load_Stage1JumpTrigger();		// 점프 트리거들 로더
 	HRESULT Load_Stage1TriggerLod();
 	HRESULT	Load_Stage1_TreasureChest_Load();
+	HRESULT Load_Stage1_Cinema_Object();
 private:
 	//Stage2
 	HRESULT Set_Stage2_Prototype();

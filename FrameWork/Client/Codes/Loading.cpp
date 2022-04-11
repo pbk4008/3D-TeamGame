@@ -7,10 +7,7 @@
 #include "Stage3.h"
 
 #include "TestObj.h"
-
 #include "TestScene_JS.h"
-#include "TestScene_YM.h"
-#include "TestScene_Sb.h"
 
 CLoading::CLoading()
 	: m_eSceneID(SCENEID::SCENE_END)
@@ -90,12 +87,6 @@ HRESULT CLoading::Move_Scene()
 		break;
 	case SCENEID::SCENE_TEST_JS:
 		pLevel = CTestScene_JS::Create(m_pDevice, m_pDeviceContext);
-		break;
-	case SCENEID::SCENE_TEST_YM:
-		pLevel = CTestScene_YM::Create(m_pDevice, m_pDeviceContext);
-		break;
-	case SCENEID::SCENE_TEST_SB:
-		pLevel = CTestScene_Sb::Create(m_pDevice, m_pDeviceContext);
 		break;
 	}
 	if (FAILED(g_pGameInstance->Open_Level((_uint)m_eSceneID, pLevel)))

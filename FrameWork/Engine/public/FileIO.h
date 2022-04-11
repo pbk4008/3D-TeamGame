@@ -2,7 +2,7 @@
 #define FileIO_h__
 
 #include "Engine_Defines.h"
-#include <atlconv.h>
+//#include <atlconv.h>
 
 BEGIN(Engine)
 

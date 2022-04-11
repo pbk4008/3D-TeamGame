@@ -218,7 +218,7 @@ HRESULT CSilvermane::NativeConstruct(const _uint _iSceneID, void* _pArg)
 
 	m_pRenderer->SetRenderButton(CRenderer::PIXEL, true);
 	m_pRenderer->SetRenderButton(CRenderer::PBRHDR, true);
-	m_pRenderer->SetCameraTag(L"Camera_Silvermane");
+	m_pRenderer->SetCameraTag(g_pGameInstance->Get_BaseCameraTag());
 
 	/* 인벤 데이터 디버그용 */
 	m_pInventoryData = g_pDataManager->GET_DATA(CInventoryData, L"InventoryData");
@@ -330,6 +330,7 @@ _int CSilvermane::LateTick(_double _dDeltaTime)
 
 HRESULT CSilvermane::Render()
 {
+	wstring wstrCamTag = g_pGameInstance->Get_BaseCameraTag();
 	if (g_pObserver->IsAttack())
 	{
 		m_color = _float4(0.784f, 0.137f, 0.137f, 0.f);
@@ -361,10 +362,10 @@ HRESULT CSilvermane::Render()
 		{
 			desc.color = m_color;
 			desc.empower = 0.8f;
-			CActor::BindConstantBuffer(L"Camera_Silvermane", &desc);
+			CActor::BindConstantBuffer(wstrCamTag, &desc);
 		}
 		else
-			CActor::BindConstantBuffer(L"Camera_Silvermane", &desc);
+			CActor::BindConstantBuffer(wstrCamTag, &desc);
 
 		if (FAILED(m_pModel->Render(i, i))) MSGBOX("Fialed To Rendering Silvermane");
 	}
@@ -378,7 +379,8 @@ HRESULT CSilvermane::Render()
 
 HRESULT CSilvermane::Render_Shadow()
 {
-	CActor::BindConstantBuffer(L"Camera_Silvermane");
+	wstring wstrCamTag = g_pGameInstance->Get_BaseCameraTag();
+	CActor::BindConstantBuffer(wstrCamTag);
 	CActor::BindLightBuffer();
 	for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
 		m_pModel->Render(i, 4);
