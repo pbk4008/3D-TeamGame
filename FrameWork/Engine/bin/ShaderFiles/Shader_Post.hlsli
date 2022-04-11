@@ -93,60 +93,11 @@ half4 DOF(Texture2D screenTex, Texture2D blurTex, Texture2D depthTex, SamplerSta
 	//half4 test = lerp(color, outofFocusColor, blur);
 	//return color + test;
 	
-	 // Normalized pixel coordinates (from 0 to 1)
-	const float PI = 3.141592f;
+	half4 screen = screenTex.Sample(samplest, UV);
+	half4 depth = depthTex.Sample(samplest, UV);
+	half4 blur = blurTex.Sample(samplest, UV);
 	
-	half2 uv = UV;
-    
-    // Sample original texture data at uv
-	half4 texData = screenTex.Sample(samplest, uv);
-	half4 depths = depthTex.Sample(samplest, uv);
-    // Get its depth
-	half depth = depths.x;
-    
-    // Focal plane at 3.9 (the camera is looking at the center from ~4.0)
-	half focalPlane = 3.9;
-    
-    // Calculate CoC, see above
-	half coc = getCoC(depth, focalPlane);
-    
-    // Sample count
-	const int taps = 32;
-    
-	half golden = 3.141592 * (3.0 - sqrt(5.0));
-    
-    // Color & total weight
-	half3 color = half3(0,0,0);
-	float tot = 0.0;
-    
-	for (int i = 0; i < taps; i++)
-	{
-        // Radius slowly increases as i increases, all the way up to coc
-		half radius = coc * sqrt(half(i) / half(taps));
-        
-        // Golden ratio sample offset
-		half theta = half(i) * golden;
-		half2 tapUV = uv + sin(theta + half2(0.0, PI / 2.0)) * radius;
-        
-        // Sample the bit over there
-		half4 tapped = screenTex.Sample(samplest, tapUV);
-		half tappedDepth = depthTex.Sample(samplest, tapUV).x;
-
-		if (tappedDepth > 0.0)
-		{
-            // Use CoC over there as weight
-			half tappedCoC = getCoC(tappedDepth, focalPlane);
-			half weight = max(0.001, tappedCoC);
-            
-            // Contribute to final color
-			color += tapped.rgb * weight;
-            // And final weight sum
-			tot += weight;
-		}
-	}
-    // And normalize the final color by final weight sum
-	color /= tot;
-	return half4(color, 1.0);
+	return lerp(screen, blur, saturate(0.5f * abs(0.5f - depth.x)));
 	
 	
 }
