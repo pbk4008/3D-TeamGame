@@ -22,6 +22,8 @@ public:
 	virtual HRESULT Render() override;
 	virtual HRESULT BindConstantBuffer(const wstring& camTag,SCB* consbuffer = nullptr);
 	virtual HRESULT	BindLightBuffer();
+	virtual HRESULT	WeaponToAppear();
+	virtual HRESULT	WeaponToDisAppear();
 
 public:
 	const wstring& Get_Name() const;
@@ -37,6 +39,9 @@ public:
 	void Set_IsAttack(const _bool _isAttack);
 	void Set_IsTrail(const _bool _isTrail);
 	void Set_SwordTrail(_bool check) { m_bTrailOnOff = check; }
+
+	void Set_WeaponAppear(_bool check) { m_bdissolveappear = check; }
+	void Set_WeaponDisAppear(_bool check) { m_bdissolvedisappear = check; }
 
 	const _bool IsAttack() const;
 	const _bool IsTrail() const;
@@ -69,9 +74,11 @@ protected:
 	_float m_fDamage = 0.f;
 	const LIGHTDESC* m_lightdesc;
 
-	_bool			m_bdissolve = false;
+	_bool			m_bdissolveappear = false;
+	_bool			m_bdissolvedisappear = false;
 	_float			m_lifetime = 0.f;
 	CTexture*		m_dissolveTex = nullptr;
+	_uint			m_dissolvepass = 1;
 
 public:
 	virtual CGameObject* Clone(const _uint _iSceneID, void* _pArg = nullptr) PURE;

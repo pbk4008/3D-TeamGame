@@ -174,10 +174,10 @@ PS_OUT PS_MAIN_DISSOLVE(PS_IN In)
 	float3 normal = g_BiNormalTexture.Sample(DefaultSampler, In.vUvDepth.xy).xyz;
 	float4 dissolve = g_DissolveTex.Sample(DefaultSampler, In.vUvDepth.xy);
 	
-	float3x3 tbn = { In.vTangent.xyz, In.vBiNormal.xyz, In.vNormal.xyz };
-	
 	if (dissolve.r - g_dissolvetime <= 0)
 		discard;
+	
+	float3x3 tbn = { In.vTangent.xyz, In.vBiNormal.xyz, In.vNormal.xyz };
 	
 	normal = Normalmapping(normal, tbn);
 	

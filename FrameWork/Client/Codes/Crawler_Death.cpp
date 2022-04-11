@@ -67,6 +67,7 @@ HRESULT CCrawler_Death::EnterState()
 	m_pAnimator->Get_AnimController()->Set_MoveSpeed(15.f);
 	//m_pTransform->Face_Target(g_pObserver->Get_PlayerPos());
 	g_pShakeManager->Shake(CShakeManager::ETemplate::MonsterDeath, m_pTransform->Get_State(CTransform::STATE_POSITION));
+	m_pMonster->Set_Dissolve(true);
 
 	g_pMainApp->FreezeTime();
 	return S_OK;
@@ -78,7 +79,6 @@ HRESULT CCrawler_Death::ExitState()
 		return E_FAIL;
 
 	g_pGameInstance->StopSound(CSoundMgr::CHANNELID::Monster_Death);
-
 
 	return S_OK;
 }

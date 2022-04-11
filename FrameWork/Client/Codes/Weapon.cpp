@@ -39,6 +39,9 @@ HRESULT CWeapon::NativeConstruct(const _uint _iSceneID, void* _pArg)
 
 	//if (m_pTrail == nullptr) return E_FAIL;
 
+	m_dissolveTex = g_pGameInstance->Clone_Component<CTexture>(0, L"Proto_Component_Texture");
+	if (FAILED(m_dissolveTex->Change_Texture(L"DissovleBase"))) MSGBOX("Failed to Change Texture DissovleTex");
+
 	return S_OK;
 }
 
@@ -102,6 +105,38 @@ HRESULT CWeapon::BindLightBuffer()
 	if(FAILED(m_pModel->SetUp_ValueOnShader("g_LightView", &view, sizeof(_matrix)))) MSGBOX("Failed To Apply Weapon LightConstantBuffer");
 	if(FAILED(m_pModel->SetUp_ValueOnShader("g_LightProj", &porj, sizeof(_matrix)))) MSGBOX("Failed To Apply Weapon LightConstantBuffer");
 	if(FAILED(m_pModel->SetUp_ValueOnShader("g_LightPos", &lightpos, sizeof(_float3)))) MSGBOX("Failed To Apply Weapon LightConstantBuffer");
+
+	return S_OK;
+}
+
+HRESULT CWeapon::WeaponToAppear()
+{
+	m_lifetime -= (g_fDeltaTime);
+	if (m_lifetime <= 0.f)
+	{
+		m_lifetime = 0.f;
+		m_dissolvepass = 1;
+		m_bdissolveappear = false;
+	}
+	if (FAILED(m_pModel->SetUp_ValueOnShader("g_dissolvetime", &m_lifetime, sizeof(_float)))) MSGBOX("Failed to Apply dissolvetime");
+	if (FAILED(m_pModel->SetUp_TextureOnShader("g_DissolveTex", m_dissolveTex, 0))) MSGBOX("Failed to Apply dissolveTex");
+
+	return S_OK;
+}
+
+HRESULT CWeapon::WeaponToDisAppear()
+{
+	m_dissolvepass = 1;
+
+	m_lifetime += (g_fDeltaTime);
+	if (m_lifetime >= 1.f)
+	{
+		m_lifetime = 1.f;
+		m_bdissolvedisappear = false;
+	}
+	if (FAILED(m_pModel->SetUp_ValueOnShader("g_dissolvetime", &m_lifetime, sizeof(_float)))) MSGBOX("Failed to Apply dissolvetime");
+	if (FAILED(m_pModel->SetUp_TextureOnShader("g_DissolveTex", m_dissolveTex, 0))) MSGBOX("Failed to Apply dissolveTex");
+
 
 	return S_OK;
 }

@@ -56,6 +56,8 @@ public:
 	void Set_AttackDesc_HitObject(CGameObject* pObj) { m_tAttackDesc.pHitObject = pObj; };
 	void Set_AttackDesc_Damaga(_float fDamage) { m_tAttackDesc.fDamage = fDamage; };
 	void Set_AttackDesc_Level(_uint iLevel) { m_tAttackDesc.iLevel = iLevel; };
+	void Set_Dissolve(_bool on) { m_bdissolve = on; }
+	HRESULT DissolveOn();
 
 public:
 	virtual void Hit(const ATTACKDESC& _tAttackDesc);
@@ -79,6 +81,10 @@ protected:
 
 	ATTACKDESC m_tAttackDesc;
 	const LIGHTDESC* m_lightdesc;
+
+	_bool			m_bdissolve = false;
+	_float			m_lifetime = 0.f;
+	CTexture*		m_dissolveTex = nullptr;
 };
 END
 #endif

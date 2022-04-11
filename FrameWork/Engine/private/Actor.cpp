@@ -62,6 +62,10 @@ HRESULT CActor::NativeConstruct(const _uint _iSceneID, void* pArg)
 	m_tAttackDesc.pHitObject = this;
 
 	m_lightdesc = g_pGameInstance->Get_LightDesc(0);
+
+	m_dissolveTex = g_pGameInstance->Clone_Component<CTexture>(0, L"Proto_Component_Texture");
+	if (FAILED(m_dissolveTex->Change_Texture(L"DissovleBase"))) MSGBOX("Failed to Change Texture DissovleTex");
+
 	return S_OK;
 }
 
@@ -199,6 +203,23 @@ void CActor::Active_Effect(_uint iEffectIndex, _fvector vPivot)
 void CActor::Set_AttackDesc(const ATTACKDESC& _tAttackDesc)
 {
 	m_tAttackDesc = _tAttackDesc;
+}
+
+HRESULT CActor::DissolveOn()
+{
+	if (m_bdissolve == true)
+	{
+		m_lifetime += (g_fDeltaTime * 0.5f);
+		if (m_lifetime >= 1.f)
+		{
+			m_lifetime = 1.f;
+			/*m_bdissolve = false;*/
+		}
+		if (FAILED(m_pModel->SetUp_ValueOnShader("g_dissolvetime", &m_lifetime, sizeof(_float)))) MSGBOX("Failed to Apply dissolvetime");
+		if (FAILED(m_pModel->SetUp_TextureOnShader("g_DissolveTex", m_dissolveTex, 0))) MSGBOX("Failed to Apply dissolveTex");
+	}
+
+	return S_OK;
 }
 
 void CActor::Hit(const ATTACKDESC& _tAttackDesc)

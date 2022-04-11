@@ -107,3 +107,11 @@ half4 Noisfunction(Texture2D MainTex, SamplerState sample, half2 UV, half delta,
 	
 	return color;
 }
+
+void Dissolve(Texture2D dissolvetex,SamplerState sample,half2 UV,half time)
+{
+	half dissolve = dissolvetex.Sample(sample, UV).r;
+		
+	if (dissolve - time <= 0)
+		discard;
+}

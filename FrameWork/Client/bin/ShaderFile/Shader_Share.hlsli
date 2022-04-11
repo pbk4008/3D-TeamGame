@@ -63,5 +63,6 @@ cbuffer Camerabuffer
 
 cbuffer Dissolvebuffer
 {
-	float g_dissolvetime;
+	float	g_dissolvetime;
+	bool	g_bdissolve;
 };
