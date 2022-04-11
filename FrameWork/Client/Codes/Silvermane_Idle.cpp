@@ -235,17 +235,7 @@ _int CSilvermane_Idle::Input(const _double& _dDeltaTime)
 			g_pGameInstance->getkeyPress(DIK_A) ||
 			g_pGameInstance->getkeyPress(DIK_D))
 		{
-			if (!m_pSilvermane->IsEquipWeapon())
-			{
-				if (FAILED(m_pStateController->Change_State(L"SprintFwdStart")))
-					return -1;
-			}
-			else
-			{
-				if (FAILED(m_pStateController->Change_State(L"1H_SwordEquipOff")))
-					return -1;
-			}
-			return STATE_CHANGE;
+			return ToSprint();
 		}
 	}
 	else

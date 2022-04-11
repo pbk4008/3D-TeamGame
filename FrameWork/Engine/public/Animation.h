@@ -31,6 +31,7 @@ public:
 public:
 	void Reset_Animation();
 	void Add_TrackAcc(const _double& _dTrackAcc);
+	void Set_TrackAcc(const _double& _dTrackAcc);
 private:
 	char				m_szName[MAX_PATH] = "";
 	_double				m_Duration = 0.0; /*하나의 애니메이션을 재생하는데 걸리는 시간(트랙의 위치와 동일) */

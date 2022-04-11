@@ -5,6 +5,8 @@
 #include "Silvermane.h"
 #include "Material.h"
 
+#include "FlyingShield.h"
+
 CShield::CShield(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
 	: CWeapon(_pDevice, _pDeviceContext)
 {
@@ -26,7 +28,6 @@ HRESULT CShield::NativeConstruct_Prototype()
 
 	XMStoreFloat4x4(&m_matPivot, XMMatrixRotationRollPitchYaw(XMConvertToRadians(0.f), XMConvertToRadians(0.f), XMConvertToRadians(0.f)) * XMMatrixTranslation(0.f, 0.f, 0.f));
 
-
 	CMaterial* pMtrl = nullptr;
 	CTexture* pTexture = nullptr;
 	pMtrl = CMaterial::Create(m_pDevice, m_pDeviceContext, L"Mtrl_Shield", L"../../Reference/ShaderFile/Shader_Shield.hlsl", CMaterial::EType::Anim);
@@ -43,7 +44,6 @@ HRESULT CShield::NativeConstruct_Prototype()
 	pTexture->NativeConstruct_Prototype(L"../Bin/Resources/Mesh/Shield/T_ShieldBase_CEO.dds", 1);
 	pMtrl->Set_Texture("g_CEOTexture", TEXTURETYPE::TEX_CEO, pTexture, 0);
 	g_pGameInstance->Add_Material(L"Mtrl_Shield", pMtrl);
-
 
 	return S_OK;
 }
@@ -239,6 +239,30 @@ void CShield::Set_EquipAnim(const _bool _isEquip)
 		m_pCollider->Remove_ActorFromScene();
 		break;
 	}
+}
+
+void CShield::Add_TrackAcc(const _double& _dTrackAcc)
+{
+	m_pAnimationController->Add_TrackAcc(_dTrackAcc);
+}
+
+void CShield::Set_TrackAcc(const _double& _dTrackAcc)
+{
+	m_pAnimationController->Set_TrackAcc(_dTrackAcc);
+}
+
+CWeapon* CShield::Throw(const _fvector _svTargetPos)
+{
+	CFlyingShield::DESC tDesc;
+	XMStoreFloat3(&tDesc.vTargetPos, _svTargetPos);
+	tDesc.pOriginTransform = m_pTransform;
+	CFlyingShield* pFlyingShield = nullptr;
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer(m_iSceneID, L"Layer_Weapon", L"Proto_GameObject_FlyingShield", &tDesc, (CGameObject**)&pFlyingShield)))
+		return nullptr;
+	if (pFlyingShield)
+		pFlyingShield->Set_Owner(m_pOwner);
+
+	return pFlyingShield;
 }
 
 CShield* CShield::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)

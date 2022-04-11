@@ -40,6 +40,10 @@ protected:
 	const _int ToAttack();
 	const _int ToDashAttack();
 	const _int ToChargeStart();
+	const _int ToJogFwd();
+	const _int ToJogBwd();
+	const _int ToJogLeft();
+	const _int ToJogRight();
 
 protected:
 	virtual _int Input(const _double& _dDeltaTime);

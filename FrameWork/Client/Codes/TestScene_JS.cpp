@@ -74,15 +74,17 @@ _int CTestScene_JS::Tick(_double TimeDelta)
 		//	return E_FAIL;
 		//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_JS, L"Layer_Monster", L"Proto_GameObject_Monster_BronzeAnimus", nullptr, &pMonster)))
 		//	return E_FAIL;
-		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_JS, L"Layer_Monster", L"Proto_GameObject_Monster_Bastion_Spear", nullptr, &pMonster)))
-			return E_FAIL;
-		pMonster->setActive(true);
+		//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_JS, L"Layer_Monster", L"Proto_GameObject_Monster_Bastion_Spear", nullptr, &pMonster)))
+		//	return E_FAIL;
+		if(pMonster)
+			pMonster->setActive(true);
 	}
 	if (g_pGameInstance->getkeyDown(DIK_SEMICOLON))
 	{
-	//	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_JS, L"Layer_Monster", L"Proto_GameObject_Monster_Crawler", nullptr, &pMonster)))
-	//		return -1;
-	//	pMonster->setActive(true);
+		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_JS, L"Layer_Monster", L"Proto_GameObject_Monster_Crawler", nullptr, &pMonster)))
+			return -1;
+		if(pMonster)
+			pMonster->setActive(true);
 	}
 	return _int();
 }
@@ -136,8 +138,8 @@ HRESULT CTestScene_JS::Ready_Gameobject()
 		return E_FAIL;
  	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_JS, L"Layer_Camera", L"Proto_GameObject_Camera_Silvermane")))
 		return E_FAIL;
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_JS, L"Layer_Weapon", L"Proto_GameObject_FlyingShield")))
-		return E_FAIL;
+	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_JS, L"Layer_Weapon", L"Proto_GameObject_FlyingShield")))
+	//	return E_FAIL;
 
 
 	// 점프 노드들

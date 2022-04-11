@@ -5,6 +5,7 @@
 #include "Needle.h"
 #include "Fury.h"
 #include "Shield.h"
+#include "FlyingShield.h"
 #include "JumpNode.h"
 #include "JumpTrigger.h"
 #include "JumpBox.h"
@@ -1064,6 +1065,16 @@ const _bool CSilvermane::IsEquipShield() const
 	return m_isEquipShield;
 }
 
+const _bool CSilvermane::IsShieldThrow() const
+{
+	return m_isShieldThrow;
+}
+
+const _bool CSilvermane::IsShieldReturn() const
+{
+	return m_isShieldReturn;
+}
+
 const CWeapon::EType CSilvermane::Get_WeaponType() const
 {
 	return m_pCurWeapon->Get_Type();
@@ -1197,9 +1208,50 @@ void CSilvermane::Set_IsShieldAttack(const _bool _isAttack)
 		m_pShield->Set_IsAttack(_isAttack);
 }
 
+void CSilvermane::Set_IsShieldThrow(const _bool _isShieldThrow)
+{
+	m_isShieldThrow = _isShieldThrow;
+}
+
+void CSilvermane::Set_IsShieldReturn(const _bool _isShieldReturn)
+{
+	m_isShieldReturn = _isShieldReturn;
+}
+
 void CSilvermane::Add_BlockTime(const _float _fValue)
 {
 	m_fBlockTime += _fValue;
+}
+
+HRESULT CSilvermane::ThrowShield(const _fvector& _svTargetPos)
+{
+	m_pFlyingShield = static_cast<CFlyingShield*>(m_pShield->Throw(_svTargetPos));
+	if (!m_pFlyingShield)
+		return E_FAIL;
+
+	return S_OK;
+}
+
+void CSilvermane::Return_Shield()
+{
+	m_isShieldReturn = true;
+	m_pAnimationController->Set_PlaySpeed(1.f);
+}
+
+void CSilvermane::End_ThrowShield()
+{
+	if (g_pObserver->Get_PlayerAttackAnimStart() || m_isBlock || m_isHit)
+		return;
+
+	m_pStateController->Change_State(L"Shield_Throw");
+	Set_EquipShield(true);
+	Set_EquipShieldAnim(true);
+	m_pShield->Set_TrackAcc(6.0); // 방패가 펼쳐진상태로 켜지도록 함
+
+	m_pAnimationController->Set_TrackAcc(73.0);
+	m_pAnimationController->Set_PlaySpeed(1.4f);
+	m_pFlyingShield = nullptr;
+	m_isShieldThrow = false;
 }
 
 const _int CSilvermane::Trace_CameraLook(const _double& _dDeltaTime)

@@ -29,6 +29,10 @@ private:
 public:
 	virtual void Set_Equip(const _bool _isEquip, void* _pArg = nullptr);
 	virtual void Set_EquipAnim(const _bool _isEquip);
+	void Add_TrackAcc(const _double& _dTrackAcc);
+	void Set_TrackAcc(const _double& _dTrackAcc);
+
+	CWeapon* Throw(const _fvector _svTargetPos);
 
 private:
 	_float4x4 m_matPivot;

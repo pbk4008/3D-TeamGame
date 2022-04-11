@@ -39,13 +39,30 @@ HRESULT CFlyingShield::NativeConstruct_Prototype()
 
 HRESULT CFlyingShield::NativeConstruct(const _uint _iSceneID, void* _pArg)
 {
+	if (_pArg)
+	{
+		memcpy_s(&m_tDesc, sizeof(DESC), _pArg, sizeof(DESC));
+	}
+
 	if (FAILED(__super::NativeConstruct(_iSceneID, _pArg)))
 		return E_FAIL;
 
 	if (FAILED(Ready_Components()))
 		return E_FAIL;
 
+	_vector svDir = XMVectorSetW(XMLoadFloat3(&m_tDesc.vTargetPos), 1.f) - m_pTransform->Get_State(CTransform::STATE_POSITION);
+	m_fDis = XMVectorGetX(XMVector3Length(svDir));
+	svDir = XMVector3Normalize(svDir);
+	XMStoreFloat3(&m_vDir, svDir);
+	m_fLiveTime = 1.6f;
+
+	//m_fSpeed = m_fDis / (m_fLiveTime * 0.5f);
+	m_fSpeed = 50.f;
+
 	m_fDamage = 3.f;
+	m_isAttack = true;
+
+	g_pObserver->Set_IsThrownObject(true);
 	return S_OK;
 }
 
@@ -55,8 +72,28 @@ _int CFlyingShield::Tick(_double _dDeltaTime)
 	if (NO_EVENT != iProgress)
 		return iProgress;
 
-	m_pCollider->Tick(_dDeltaTime);
+	if (!m_isReturn)
+	{
+		_vector svPos = m_pTransform->Get_State(CTransform::STATE_POSITION);
+		_vector svVelocity = XMLoadFloat3(&m_vDir) * m_fSpeed * (_float)_dDeltaTime;
+		svPos += svVelocity;
+		m_fAccDis += XMVectorGetX(XMVector3Length(svVelocity));
+		m_pTransform->Set_State(CTransform::STATE_POSITION, svPos);
 
+		if (m_fDis < m_fAccDis)
+		{
+			m_isReturn = true;
+			static_cast<CSilvermane*>(m_pOwner)->Return_Shield();
+		}
+	}
+	else
+	{
+		_vector svPos = m_pTransform->Get_State(CTransform::STATE_POSITION);
+		svPos -= XMLoadFloat3(&m_vDir) * m_fSpeed * (_float)_dDeltaTime;
+		m_pTransform->Set_State(CTransform::STATE_POSITION, svPos);
+	}
+
+	m_pCollider->Tick(_dDeltaTime);
 	return _int();
 }
 
@@ -101,6 +138,17 @@ HRESULT CFlyingShield::Render_Shadow()
 
 void CFlyingShield::OnTriggerEnter(CCollision& collision)
 {
+	if (m_isReturn)
+	{
+		if (collision.pGameObject == m_pOwner)
+		{
+			setActive(false);
+			m_bRemove = true;
+			static_cast<CSilvermane*>(m_pOwner)->End_ThrowShield();
+		}
+		return;
+	}
+
 	_uint iTag = collision.pGameObject->getTag();
 	switch (iTag)
 	{
@@ -121,12 +169,19 @@ void CFlyingShield::OnTriggerEnter(CCollision& collision)
 		tAttackDesc.fDamage += m_fDamage;
 		tAttackDesc.pHitObject = this;
 		static_cast<CActor*>(collision.pGameObject)->Hit(tAttackDesc);
+
+		g_pObserver->Set_IsThrownObject(false);
+		m_isAttack = false;
+		m_isReturn = true;
+		static_cast<CSilvermane*>(m_pOwner)->Return_Shield();
 		break;
 	}
 }
 
 HRESULT CFlyingShield::Ready_Components()
 {
+	m_pTransform->Set_WorldMatrix(m_tDesc.pOriginTransform->Get_WorldMatrix());
+
 	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Model_FlyingShield", L"Model", (CComponent**)&m_pModel)))
 		return E_FAIL;
 	_matrix matPivot = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationRollPitchYaw(XMConvertToRadians(-90.f), XMConvertToRadians(0.f), XMConvertToRadians(0.f));
