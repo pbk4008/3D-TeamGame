@@ -84,7 +84,7 @@ PS_OUT_DISTORTION PS_MAIN_WALL(PS_IN_DISTORTION In)
 {
 	PS_OUT_DISTORTION Out = (PS_OUT_DISTORTION) 0;
 
-	Out.diffuse = Noisfunction(g_DiffuseTexture, DefaultSampler, In.vUvDepth.xy, g_deltatime);
+	Out.diffuse = Noisfunction(g_DiffuseTexture, DefaultSampler, In.vUvDepth.xy, g_deltatime, g_color);
 	
 	return Out;
 }

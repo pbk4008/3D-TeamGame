@@ -50,8 +50,8 @@ protected:
 
 protected:
 	CTransform* m_pLocalTransform = nullptr;
-	CModel* m_pModel = nullptr;
-	_float4x4 m_smatOwnerPivot;;
+	CModel*		m_pModel = nullptr;
+	_float4x4	m_smatOwnerPivot;;
 
 	CActor* m_pOwner = nullptr;
 	CHierarchyNode* m_pFixedBone = nullptr;
@@ -68,6 +68,10 @@ protected:
 
 	_float m_fDamage = 0.f;
 	const LIGHTDESC* m_lightdesc;
+
+	_bool			m_bdissolve = false;
+	_float			m_lifetime = 0.f;
+	CTexture*		m_dissolveTex = nullptr;
 
 public:
 	virtual CGameObject* Clone(const _uint _iSceneID, void* _pArg = nullptr) PURE;

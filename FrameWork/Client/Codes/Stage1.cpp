@@ -37,6 +37,7 @@
 #include "InteractManager.h"
 #include "DropManager.h"
 #include "ScenematicManager.h"
+#include "Wall.h"
 
 
 CDropManager* g_pDropManager = nullptr;
@@ -85,18 +86,18 @@ HRESULT CStage1::NativeConstruct()
 	if (FAILED(Ready_MapObject()))
 		return E_FAIL;
 
-	if (FAILED(Ready_TriggerSystem(L"../bin/SaveData/Trigger/MonsterSpawnTrigger.dat")))
-		return E_FAIL;
+	//if (FAILED(Ready_TriggerSystem(L"../bin/SaveData/Trigger/MonsterSpawnTrigger.dat")))
+	//	return E_FAIL;
 
-	if (FAILED(Ready_Boss(L"Layer_Boss")))
-	{
-		return E_FAIL;
-	}
+	//if (FAILED(Ready_Boss(L"Layer_Boss")))
+	//{
+	//	return E_FAIL;
+	//}
 
-	if (FAILED(Ready_Monster(L"Layer_Monster")))
-	{
-		return E_FAIL;
-	}
+	//if (FAILED(Ready_Monster(L"Layer_Monster")))
+	//{
+	//	return E_FAIL;
+	//}
 
 	if (FAILED(Ready_Data_UI(L"../bin/SaveData/UI/UI.dat")))
 	{
@@ -113,21 +114,21 @@ HRESULT CStage1::NativeConstruct()
 		return E_FAIL;
 	}
 
-	if (FAILED(Ready_Treasure_Chest()))
-		return E_FAIL;
+	//if (FAILED(Ready_Treasure_Chest()))
+	//	return E_FAIL;
 
 	g_pGameInstance->Change_BaseCamera(L"Camera_Silvermane");
 
-	g_pInteractManager = CInteractManager::GetInstance();
+	/*g_pInteractManager = CInteractManager::GetInstance();
 	if (FAILED(g_pInteractManager->NativeConstruct()))
 		return E_FAIL;
 
 	g_pDropManager = CDropManager::GetInstance();
 	if (FAILED(g_pDropManager->NativeConstruct((SCENEID::SCENE_STAGE1))))
-		return E_FAIL;
+		return E_FAIL;*/
 
 	g_pGameInstance->PlayBGM(L"Stage1_BGM");
-	m_pScenemaManager = GET_INSTANCE(CScenematicManager);
+	//m_pScenemaManager = GET_INSTANCE(CScenematicManager);
 
 	return S_OK;
 }
@@ -228,8 +229,8 @@ _int CStage1::Tick(_double TimeDelta)
 	//		return -1;
 	//}
 
-	g_pInteractManager->Tick(TimeDelta);
-	g_pDropManager->Tick();
+	//g_pInteractManager->Tick(TimeDelta);
+	//g_pDropManager->Tick();
 
 	return _int();
 }
@@ -282,6 +283,7 @@ HRESULT CStage1::Ready_MapObject()
 				Desc.fFrame = 64.f;
 				Desc.fEffectPlaySpeed = 1.f;
 				Desc.ParticleMat = XMLoadFloat4x4(&iter);
+				Desc.bUsingGravity = true;
 
 				if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_NoisFire", L"Proto_GameObject_Effect_Env_Fire",&Desc)))
 					MSGBOX("Failed To Clone NoisFire");
@@ -351,8 +353,21 @@ HRESULT CStage1::Ready_Player(const _tchar* LayerTag)
 		return E_FAIL;
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Camera", L"Proto_GameObject_Camera_Silvermane")))
 		return E_FAIL;
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Wall", L"Proto_GameObject_Wall")))
-		return E_FAIL;
+
+	WALLDESC desc;
+	ZeroMemory(&desc, sizeof(WALLDESC));
+	desc.pos = _float4(-61.f, 18.f, 194.f, 1.f);
+	desc.scale = _float2(6.f, 10.f);
+	desc.radian = 0.f;
+	desc.color = _float4(1.f, 0.f, 0.f, 1.f);
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Wall", L"Proto_GameObject_Wall",&desc))) return E_FAIL;
+
+	ZeroMemory(&desc, sizeof(WALLDESC));
+	desc.pos = _float4(-91.f, 25.f, 218.f, 1.f);
+	desc.scale = _float2(10.f, 24.f);
+	desc.radian = 90.f;
+	desc.color = _float4(0.f, 1.f, 1.f, 1.f);
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Wall", L"Proto_GameObject_Wall", &desc))) return E_FAIL;
 	
 	return S_OK;
 }
@@ -1532,11 +1547,11 @@ void CStage1::Free()
 {
 	CLevel::Free();
 
-	Safe_Release(m_pScenemaManager);
-	CScenematicManager::DestroyInstance();
-	
-	CDropManager::DestroyInstance();
-	CInteractManager::DestroyInstance();
+	//Safe_Release(m_pScenemaManager);
+	//CScenematicManager::DestroyInstance();
+	//
+	//CDropManager::DestroyInstance();
+	//CInteractManager::DestroyInstance();
 
 	Safe_Release(m_pTriggerSystem);
 

@@ -129,6 +129,7 @@ public: /* For.Light_Manager */
 	HRESULT Add_Light(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext, const LIGHTDESC& LightDesc);
 	HRESULT Add_Light(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext, const LIGHTDESC& LightDesc, CLight** ppOutLight);
 	void UpdateLightCam(_uint LightIndx, _fvector playerpos);
+	void RemoveLight();
 
 public: /* Target Mgr*/
 	ID3D11ShaderResourceView* Get_SRV(const wstring& target);

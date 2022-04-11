@@ -55,8 +55,13 @@ cbuffer ClipPlaneBuffer
 	float4 ClipPlane;
 };
 
-cbuffer CameraDesc
+cbuffer Camerabuffer
 {
 	vector g_vCamPosition;
 	float g_Weight;
+};
+
+cbuffer Dissolvebuffer
+{
+	float g_dissolvetime;
 };

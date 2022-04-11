@@ -36,7 +36,7 @@ half4 Outline(Texture2D mainTex, SamplerState sample, half2 UV,half4 OutColor)
 	return OutColor;
 }
 
-half4 Distortion(Texture2D DistortionTex,Texture2D DiffuseTex,SamplerState Sample, half2 UV, half delta)
+half4 Distortion(Texture2D DistortionTex,Texture2D DiffuseTex,SamplerState Sample, half2 UV)
 {
 	half2 noiseuv = UV + 0.001f;
 	half4 noise = DistortionTex.Sample(Sample, noiseuv);
@@ -62,42 +62,13 @@ float getCoC(float depth, float focalPlane)
         (depth * (focalPlane - focalLength)));
 }
 
-half4 DOF(Texture2D screenTex, Texture2D blurTex, Texture2D depthTex, SamplerState samplest, half2 UV, half4x4 projinv, half4x4 viewinv, half4 campos)
+half4 FOG(half4 Color, Texture2D blurTex, Texture2D depthTex, SamplerState samplest, half2 UV, half4x4 projinv, half4x4 viewinv, half4 campos)
 {	
-	//half minDist = 8.0f;
-	//half maxDist = 12.0f;
-	
-	//float far = 300.f;
-	//half2 texsize = half2(1280.f, 720.f);
-	//half4 color = screenTex.Sample(samplest, UV);
-	//half4 depth = depthTex.Sample(samplest, UV);
-	//half fViewZ = depth.y * 300.f;
 
-	//half4 pos = half4(0, 0, 0, 0);
-	//pos.x = (UV.x * 2.f - 1.f) * fViewZ;
-	//pos.y = (UV.y * -2.f + 1.f) * fViewZ;
-	//pos.z = depth.x * fViewZ;
-	//pos.w = fViewZ;
-	//pos = mul(pos, projinv);
-	////pos = mul(pos, viewinv);
-	//half2 camposition = campos.xy / texsize;
 	
-	//if(pos.a <= 0.0)
-	//{		
-	//	return half4(1.0, 1.0, 1.0, 1.0);
-	//}
+	//half4 screen = screenTex.Sample(samplest, UV);
+	//half4 depth = depthTex.Sample(samplest, UV);
+	//half4 blur = blurTex.Sample(samplest, UV);
 	
-	//half4 outofFocusColor = blurTex.Sample(samplest, UV);
-	//half4 focuspoint = depthTex.Sample(samplest, camposition);
-	//half blur = smoothstep(minDist, maxDist, length(pos - focuspoint));
-	//half4 test = lerp(color, outofFocusColor, blur);
-	//return color + test;
-	
-	half4 screen = screenTex.Sample(samplest, UV);
-	half4 depth = depthTex.Sample(samplest, UV);
-	half4 blur = blurTex.Sample(samplest, UV);
-	
-	return lerp(screen, blur, saturate(0.5f * abs(0.5f - depth.x)));
-	
-	
+	//return lerp(screen, blur, saturate(0.5f * abs(0.5f - depth.x)));
 }

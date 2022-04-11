@@ -92,6 +92,9 @@ _int CNeedle::Tick(_double _dDeltaTime)
 	if (0 > __super::Tick(_dDeltaTime))
 		return -1;
 
+	if (g_pGameInstance->getkeyDown(DIK_NUMPAD5))
+		m_bdissolve = true;
+
 	Attach_FixedBone(_dDeltaTime);
 	Attach_Owner(_dDeltaTime);
 
@@ -165,14 +168,39 @@ _int CNeedle::LateTick(_double _dDeltaTime)
 
 HRESULT CNeedle::Render()
 {
+	_uint pass = 0;
+	if (m_bdissolve == true)
+	{
+		m_lifetime += g_fDeltaTime;
+		if (m_lifetime >= 1.f)
+		{
+			m_lifetime = 0.f;
+			m_bdissolve = false;
+			pass = 0;
+		}
+	}
+	else
+	{
+		m_lifetime = 1.f;
+		pass = 1;
+	}
+
 	SCB desc;
 	ZeroMemory(&desc, sizeof(desc));
 	desc.color = _float4(0.7529f, 0.7529f, 0.7529f, 1.f);
 	desc.empower = 0.7f;
 
+	if (FAILED(m_pModel->SetUp_ValueOnShader("g_dissolvetime", &m_lifetime, sizeof(_float)))) MSGBOX("Failed to Apply dissolvetime");
+	if (FAILED(m_pModel->SetUp_TextureOnShader("g_DissolveTex", m_dissolveTex, 0))) MSGBOX("Failed to Apply dissolveTex");
+
 	CWeapon::BindConstantBuffer(L"Camera_Silvermane", &desc);
 	for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
-		m_pModel->Render(i, 0);
+	{
+		if (m_bdissolve == true)
+			m_pModel->Render(i, 1);
+		else
+			m_pModel->Render(i, 0);
+	}
 
 	return S_OK;
 }
@@ -292,6 +320,9 @@ HRESULT CNeedle::Ready_Components()
 
 	_matrix smatPviot = XMMatrixRotationY(XMConvertToRadians(90.f)) * XMMatrixTranslation(0.f, 0.f, 0.8f);
 	m_pCollider->setPivotMatrix(smatPviot);
+
+	m_dissolveTex = g_pGameInstance->Clone_Component<CTexture>(0, L"Proto_Component_Texture");
+	if (FAILED(m_dissolveTex->Change_Texture(L"DissovleBase"))) MSGBOX("Failed to Change Texture DissovleTex");
 
 	return S_OK;
 }

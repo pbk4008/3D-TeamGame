@@ -489,36 +489,34 @@ HRESULT CRenderer::Render_Final(_bool outline, _bool Radial)
 {
 	if (!m_pTargetMgr)	return E_FAIL;
 
-	_float delta = (_float)g_pGameInstance->Get_TimeDelta(L"Timer_60");
 	_float thick = 0.2f;
+	_bool fog = false;
 	if (FAILED(m_pVIBuffer->SetUp_TextureOnShader("g_DiffuseTexture", m_pTargetMgr->Get_SRV(TEXT("Target_Blend"))))) MSGBOX("Render Final DiffuseTeuxtre Not Apply");
-	if (FAILED(m_pVIBuffer->SetUp_TextureOnShader("g_DepthTexture", m_pTargetMgr->Get_SRV(TEXT("Target_Depth"))))) MSGBOX("Render Final DepthTexture Not Apply");
-	if (FAILED(m_pVIBuffer->SetUp_TextureOnShader("g_BlurTexture", m_pTargetMgr->Get_SRV(TEXT("Target_Bloom"))))) MSGBOX("Render Final BlurTexture Not Apply");
-
-	_matrix		ViewMatrix = g_pGameInstance->Get_Transform(m_CameraTag, TRANSFORMSTATEMATRIX::D3DTS_VIEW);
-	_matrix		ProjMatrix = g_pGameInstance->Get_Transform(m_CameraTag, TRANSFORMSTATEMATRIX::D3DTS_PROJECTION);
-	_vector		campos = g_pGameInstance->Get_CamPosition(m_CameraTag);
-
-	ViewMatrix = XMMatrixInverse(nullptr, ViewMatrix);
-	ProjMatrix = XMMatrixInverse(nullptr, ProjMatrix);
-	if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_ViewMatrixInv", &XMMatrixTranspose(ViewMatrix), sizeof(_float4x4)))) MSGBOX("Failed To Apply Finalpass ViewInvers");
-	if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_ProjMatrixInv", &XMMatrixTranspose(ProjMatrix), sizeof(_float4x4)))) MSGBOX("Failed To Apply Finalpass ProjInvers");
-
-	if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_vCamPosition", &campos, sizeof(_vector)))) MSGBOX("Failed To Apply Finalpass ProjInvers");
-	if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_delta", &delta, sizeof(_float)))) MSGBOX("Render Final Value delta Not Apply");
 	if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_thick", &thick, sizeof(_float)))) MSGBOX("Render Final Value thick Not Apply");
 
 	if (m_bdistortion == true)
 	{
 		if (FAILED(m_pVIBuffer->SetUp_TextureOnShader("g_DistortionTex", m_pTargetMgr->Get_SRV(TEXT("Target_Distortion"))))) MSGBOX("Render Final g_DistortionTex Not Apply");
 	}
+	if (g_pGameInstance->getCurrentLevel() == 4)
+	{
+		fog = true;
+		_float4 fogcolor = _float4(0.8f, 0.8f, 0.8f, 1.f);
+		_float fogdist = 10.f;
+		_float fogdensity = 0.09f;
+		if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_fogcolor", &fogcolor, sizeof(_float4)))) MSGBOX("Render Final Value fogcolor Not Apply");
+		if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_fogDist", &fogdist, sizeof(_float)))) MSGBOX("Render Final Value fogdist Not Apply");
+		if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_fogDenstiy", &fogdensity, sizeof(_float)))) MSGBOX("Render Final fogdensity thick Not Apply");
+		if (FAILED(m_pVIBuffer->SetUp_TextureOnShader("g_DepthTexture", m_pTargetMgr->Get_SRV(TEXT("Target_Depth"))))) MSGBOX("Render Final DepthTexture Not Apply");
+	}
 
 	if (FAILED(m_pVIBuffer->SetUp_TextureOnShader("g_STDistortionTex", m_pTargetMgr->Get_SRV(TEXT("Target_STDistortion"))))) MSGBOX("Render Final g_STDistortionTex Not Apply");
 	if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_outline", &m_boutline, sizeof(_bool)))) MSGBOX("Render Final Value outline Not Apply");
 	if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_radial", &m_bradial, sizeof(_bool)))) MSGBOX("Render Final Value raidal Not Apply");
 	if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_distort", &m_bdistortion, sizeof(_bool)))) MSGBOX("Render Final Value distort Not Apply");
+	if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_fog", &fog, sizeof(_bool)))) MSGBOX("Render Final Value distort Not Apply");
 	if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_RadialCnt", &m_RadialCnt, sizeof(_int)))) MSGBOX("Render Final Value RaidalCnt Not Apply");
-	
+
 	if (FAILED(m_pVIBuffer->Render(3))) MSGBOX("Final Rendering Failed");
 
 	if (m_bParticle == true)

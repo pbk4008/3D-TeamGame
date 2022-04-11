@@ -16,7 +16,7 @@ HRESULT CScenematicManager::Add_Scenema(CScenematic* pScenema)
 
 HRESULT CScenematicManager::Active_Scenema(_uint iScenemaIndex)
 {
-	_uint iSize = m_vecScenema.size();
+	_uint iSize = (_uint)m_vecScenema.size();
 	if (iScenemaIndex < 0 || iScenemaIndex >= iSize)
 		return E_FAIL;
 

@@ -92,7 +92,7 @@ float myfbm2(half3 p)
 	return f;
 }
 
-half4 Noisfunction(Texture2D MainTex, SamplerState sample, half2 UV, half delta)
+half4 Noisfunction(Texture2D MainTex, SamplerState sample, half2 UV, half delta, half4 color3)
 {
 	half2 resolution = half2(1280.f, 720.f);
 	half2 uv = UV / resolution.y;
@@ -102,6 +102,7 @@ half4 Noisfunction(Texture2D MainTex, SamplerState sample, half2 UV, half delta)
 	v = (0.5 + 0.5 * sin(x * half3(FreqX, FreqY, 1.0) * Scale1)) / Scale1;
 	v *= Amp;
 	half3 Ti = MainTex.Sample(sample, 0.02 * v.xy + UV.xy / resolution.xy).rgb;
+	Ti = Ti * color3.rgb;
 	half4 color = half4(Ti, 1.0);
 	
 	return color;
