@@ -387,7 +387,7 @@ PS_OUT_BLEND PS_MAIN_BLEND(PS_IN In)
 	
 	Out.vColor = color;
 
-	Out.vColor = DOF(g_DiffuseTexture, g_DepthTexture, g_BlurTexture, DefaultSampler, In.vTexUV, g_ProjMatrixInv, g_ViewMatrixInv, g_vCamPosition);
+	//Out.vColor = DOF(g_DiffuseTexture, g_DepthTexture, g_BlurTexture, DefaultSampler, In.vTexUV, g_ProjMatrixInv, g_ViewMatrixInv, g_vCamPosition);
 	
 	if (g_distort == true)
 	{
