@@ -165,7 +165,7 @@ _int CBoss_Bastion_Judicator::Tick(_double TimeDelta)
 			if (m_pAnimator->Get_CurrentAnimation()->Is_Finished())
 			{
 				m_bDead = true;
-				Set_Remove(true);
+				//Set_Remove(true);
 				m_pPanel->Set_Show(false);
 				m_pPanel->Set_UIRemove(true);
 				return 0;
@@ -220,6 +220,7 @@ _int CBoss_Bastion_Judicator::LateTick(_double TimeDelta)
 
 HRESULT CBoss_Bastion_Judicator::Render()
 {
+	wstring wstrCamTag = g_pGameInstance->Get_BaseCameraTag();
 	for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
 	{
 		SCB desc;
@@ -230,15 +231,15 @@ HRESULT CBoss_Bastion_Judicator::Render()
 			desc.metalic = 0.2f;
 			desc.color = _float4(0.811f, 1.f, 0.898f, 1.f);
 			desc.empower = 0.7f;
-			CActor::BindConstantBuffer(L"Camera_Silvermane",&desc);
+			CActor::BindConstantBuffer(wstrCamTag,&desc);
 			m_pModel->Render(i, 0);
 			break;
 		case 1 : // fur
-			CActor::BindConstantBuffer(L"Camera_Silvermane",&desc);
+			CActor::BindConstantBuffer(wstrCamTag,&desc);
 			m_pModel->Render(i, 2);
 			break;
 		case 2 :  // cloak
-			CActor::BindConstantBuffer(L"Camera_Silvermane",&desc);
+			CActor::BindConstantBuffer(wstrCamTag,&desc);
 			m_pModel->Render(i, 1);
 			break;
 		}
@@ -249,7 +250,8 @@ HRESULT CBoss_Bastion_Judicator::Render()
 
 HRESULT CBoss_Bastion_Judicator::Render_Shadow()
 {
-	CActor::BindConstantBuffer(L"Camera_Silvermane");
+	wstring wstrCamTag = g_pGameInstance->Get_BaseCameraTag();
+	CActor::BindConstantBuffer(wstrCamTag);
 	CActor::BindLightBuffer();
 	for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
 		m_pModel->Render(i, 3);

@@ -71,8 +71,9 @@ HRESULT CNoiseFire::BindConstBuffer()
 	_matrix world, view, proj;
 
 	world = XMMatrixTranspose(m_pTransform->Get_WorldMatrix());
-	view = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_VIEW));
-	proj = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_PROJECTION));
+	wstring wstrCamTag = g_pGameInstance->Get_BaseCameraTag();
+	view = XMMatrixTranspose(g_pGameInstance->Get_Transform(wstrCamTag, TRANSFORMSTATEMATRIX::D3DTS_VIEW));
+	proj = XMMatrixTranspose(g_pGameInstance->Get_Transform(wstrCamTag, TRANSFORMSTATEMATRIX::D3DTS_PROJECTION));
 
 	if (FAILED(m_pbuffer->SetUp_ValueOnShader("g_WorldMatrix", &world, sizeof(_float4x4))))	MSGBOX("NoiseFire ConstBuffer Worldmatrix Not Apply");
 	if (FAILED(m_pbuffer->SetUp_ValueOnShader("g_ViewMatrix", &view, sizeof(_float4x4)))) MSGBOX("NoiseFire ConstBuffer Viewmatrix Not Apply");

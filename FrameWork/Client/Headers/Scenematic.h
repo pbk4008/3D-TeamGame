@@ -18,7 +18,10 @@ public:
 	virtual _int Tick(_double dDeltaTime);
 	virtual _int LateTick(_double dDeltaTime);
 public:
-	void Set_Active(_bool bCheck);
+	virtual void Set_Active(_bool bCheck);
+	virtual void End_Cinema();
+public:
+	_bool Get_Active() { return m_bActive; }
 protected:
 	HRESULT Set_UpComponents(CComponent* pComponent);
 protected:
@@ -28,6 +31,7 @@ protected:
 	ID3D11DeviceContext* m_pDeviceContext;
 	_bool m_bActive;
 	vector<CComponent*> m_vecScenemaComponents;
+	_bool m_bCinemaEnd;
 };
 END
 #endif

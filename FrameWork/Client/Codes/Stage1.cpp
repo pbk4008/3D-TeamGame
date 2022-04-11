@@ -38,6 +38,9 @@
 #include "DropManager.h"
 #include "ScenematicManager.h"
 
+//Cinema
+#include "Cinema1_1.h"
+
 
 CDropManager* g_pDropManager = nullptr;
 CInteractManager* g_pInteractManager = nullptr;
@@ -76,8 +79,8 @@ HRESULT CStage1::NativeConstruct()
 	if (FAILED(Ready_Light()))
 		return E_FAIL;
 
-	if (FAILED(Ready_Trigger_Jump()))
-		return E_FAIL;
+	/*if (FAILED(Ready_Trigger_Jump()))
+		return E_FAIL;*/
 
 	if (FAILED(Ready_Player(L"Layer_Silvermane")))
 		return E_FAIL;
@@ -85,8 +88,8 @@ HRESULT CStage1::NativeConstruct()
 	if (FAILED(Ready_MapObject()))
 		return E_FAIL;
 
-	if (FAILED(Ready_TriggerSystem(L"../bin/SaveData/Trigger/MonsterSpawnTrigger.dat")))
-		return E_FAIL;
+	//if (FAILED(Ready_TriggerSystem(L"../bin/SaveData/Trigger/MonsterSpawnTrigger.dat")))
+	//	return E_FAIL;
 
 	/*if (FAILED(Ready_Boss(L"Layer_Boss")))
 	{
@@ -128,6 +131,9 @@ HRESULT CStage1::NativeConstruct()
 
 	g_pGameInstance->PlayBGM(L"Stage1_BGM");
 	m_pScenemaManager = GET_INSTANCE(CScenematicManager);
+
+	if (FAILED(Ready_Cinema()))
+		return E_FAIL;
 
 	return S_OK;
 }
@@ -230,6 +236,15 @@ _int CStage1::Tick(_double TimeDelta)
 
 	//g_pInteractManager->Tick(TimeDelta);
 	//g_pDropManager->Tick();
+
+	if (g_pGameInstance->getkeyDown(DIK_END))
+		m_pScenemaManager->Active_Scenema((_uint)CINEMA_INDEX::CINEMA1_1, &m_pCinema);
+	if (m_pCinema && m_pCinema->Get_Active())
+	{
+		m_pCinema->Tick(TimeDelta);
+		if (!m_pCinema->Get_Active())
+			m_pCinema = nullptr;
+	}
 
 	return _int();
 }
@@ -743,6 +758,17 @@ HRESULT CStage1::Ready_TriggerFunctionSetting()
 
 	fp = &CStage1::Trgger_FunctionBoss;;
 	m_pTriggerSystem->Add_TriggerFuntion(fp);
+
+	return S_OK;
+}
+
+HRESULT CStage1::Ready_Cinema()
+{
+	if (!m_pScenemaManager)
+		return E_FAIL;
+
+	if (FAILED(m_pScenemaManager->Add_Scenema(CCinema1_1::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
 
 	return S_OK;
 }

@@ -748,6 +748,15 @@
     <Filter Include="03.System\07.Scenematic\00.Manager">
       <UniqueIdentifier>{e6727d87-3999-40d8-b43e-c853a4edea65}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\01. MainCamera\CinemaCam">
+      <UniqueIdentifier>{80dff71d-f3e2-4611-85c4-d598d100a259}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.System\07.Scenematic\01.Stage1">
+      <UniqueIdentifier>{7923ba1c-8533-4b27-8cbc-6a47b092efad}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.System\07.Scenematic\01.Stage1\Cinema1_1">
+      <UniqueIdentifier>{aa6a42c7-1e50-490c-80c7-c2e3fcb11325}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -1686,6 +1695,12 @@
     <ClInclude Include="..\Headers\Scenematic.h">
       <Filter>03.System\07.Scenematic</Filter>
     </ClInclude>
+    <ClInclude Include="..\Headers\CinemaCam.h">
+      <Filter>02.GameObject\01. MainCamera\CinemaCam</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Cinema1_1.h">
+      <Filter>03.System\07.Scenematic\01.Stage1\Cinema1_1</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -2599,6 +2614,12 @@
     </ClCompile>
     <ClCompile Include="..\Codes\Scenematic.cpp">
       <Filter>03.System\07.Scenematic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\CinemaCam.cpp">
+      <Filter>02.GameObject\01. MainCamera\CinemaCam</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Cinema1_1.cpp">
+      <Filter>03.System\07.Scenematic\01.Stage1\Cinema1_1</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -235,6 +235,7 @@ _int CMonster_EarthAberrant::LateTick(_double _dDeltaTime)
 
 HRESULT CMonster_EarthAberrant::Render()
 {
+	wstring wstrCamTag = g_pGameInstance->Get_BaseCameraTag();
 	for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
 	{
 		SCB desc;
@@ -244,11 +245,11 @@ HRESULT CMonster_EarthAberrant::Render()
 		case 0: // crystal
 			desc.color = _float4(0.831f, 0.43f, 0.643f, 1.f);
 			desc.empower = 0.7f;
-			CActor::BindConstantBuffer(L"Camera_Silvermane", &desc);
+			CActor::BindConstantBuffer(wstrCamTag, &desc);
 			m_pModel->Render(i, 5);
 			break;
 		case 1: // body
-			CActor::BindConstantBuffer(L"Camera_Silvermane", &desc);
+			CActor::BindConstantBuffer(wstrCamTag, &desc);
 			m_pModel->Render(i, 4);
 			break;
 		}
