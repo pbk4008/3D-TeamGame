@@ -62,6 +62,7 @@ HRESULT CShield::NativeConstruct(const _uint _iSceneID, void* _pArg)
 	m_bActive = false;
 	m_pCollider->Remove_ActorFromScene();
 
+	m_fDamage = 3.f;
 	return S_OK;
 }
 
@@ -117,6 +118,32 @@ HRESULT CShield::Render_Shadow()
 		m_pModel->Render(i, 1);
 
 	return S_OK;
+}
+
+void CShield::OnTriggerEnter(CCollision& collision)
+{
+	_uint iTag = collision.pGameObject->getTag();
+	switch (iTag)
+	{
+	case (_uint)GAMEOBJECT::MONSTER_CRYSTAL:
+	case (_uint)GAMEOBJECT::MONSTER_ABERRANT:
+	case (_uint)GAMEOBJECT::MONSTER_1H:
+	case (_uint)GAMEOBJECT::MONSTER_2H:
+	case (_uint)GAMEOBJECT::MONSTER_HEALER:
+	case (_uint)GAMEOBJECT::MONSTER_SHOOTER:
+	case (_uint)GAMEOBJECT::MONSTER_SPEAR:
+	case (_uint)GAMEOBJECT::MONSTER_ANIMUS:
+	case (_uint)GAMEOBJECT::MIDDLE_BOSS:
+	case (_uint)GAMEOBJECT::BOSS:
+		if (!m_isAttack)
+			return;
+
+		ATTACKDESC tAttackDesc = m_pOwner->Get_AttackDesc();
+		tAttackDesc.fDamage += m_fDamage;
+		tAttackDesc.pHitObject = this;
+		static_cast<CActor*>(collision.pGameObject)->Hit(tAttackDesc);
+		break;
+	}
 }
 
 HRESULT CShield::Ready_Components()

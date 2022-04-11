@@ -71,6 +71,7 @@
 #include "Needle.h"
 #include "Fury.h"
 #include "Shield.h"
+#include "FlyingShield.h"
 
 
 #include "JumpNode.h"
@@ -81,6 +82,7 @@
 #include "SwordTrail.h"
 #include "NoiseFire.h"
 #include "TrailEffect.h"
+#include "Wall.h"
 
 #pragma endregion
 
@@ -138,12 +140,6 @@ HRESULT CLoader::LoadForScene()
 	case SCENEID::SCENE_TEST_JS:
 		hr = Ready_Test_JS();
 		break;
-	case SCENEID::SCENE_TEST_YM:
-		hr = Ready_Test_YM();
-		break;
-	case SCENEID::SCENE_TEST_SB:
-		hr = Ready_Test_SB();
-		break;
 	default:
 		return E_FAIL;
 	}
@@ -168,9 +164,9 @@ HRESULT CLoader::SetUp_Stage1_Object()
 	//if (FAILED(Load_Stage1MonsterLoad()))
 	//	return E_FAIL;
 
-	//if (FAILED(Load_Stage1BossLoad()))
-	//	return E_FAIL;
-	//	
+	if (FAILED(Load_Stage1BossLoad()))
+		return E_FAIL;
+
 	if (FAILED(Load_Stage1StaticUILoad()))
 		return E_FAIL;
 
@@ -180,14 +176,14 @@ HRESULT CLoader::SetUp_Stage1_Object()
 	if (FAILED(Load_Stage1EffectLoad()))
 		return E_FAIL;
 
-	//if (FAILED(Load_Stage1JumpTrigger()))
-	//	return E_FAIL;
+	if (FAILED(Load_Stage1JumpTrigger()))
+		return E_FAIL;
 
-	//if (FAILED(Load_Stage1TriggerLod()))
-	//	return E_FAIL;
-	//
-	//if (FAILED(Load_Stage1_TreasureChest_Load()))
-	//	return E_FAIL;
+	if (FAILED(Load_Stage1TriggerLod()))
+		return E_FAIL;
+
+	if (FAILED(Load_Stage1_TreasureChest_Load()))
+		return E_FAIL;
 
 	if(FAILED(Load_Stage1_Cinema_Object()))
 		return E_FAIL;
@@ -860,31 +856,36 @@ HRESULT CLoader::Load_Stage1PlayerLoad()
 	{
 		return E_FAIL;
 	}
-
-	// 트레일
-	/*if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Prototype_Component_VIBuffer_Trail"
-		, CTrail_VIBuffer::Create(m_pDevice, m_pDeviceContext, L"../../Reference/ShaderFile/Shader_Trail.hlsl", 400))))
+	// 던지기용 방패
+	matPivot = XMMatrixIdentity();
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_FlyingShield", CModel::Create(m_pDevice, m_pDeviceContext,
+		"../bin/Resources/Mesh/Shield/", "Shield.fbx",
+		L"../../Reference/ShaderFile/Shader_StaticMesh.hlsl", matPivot, CModel::TYPE_STATIC, true))))
 	{
 		return E_FAIL;
-	}*/
+	}
 
+	// Trail
 	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"TrailBase", L"../bin/Resources/Texture/Trail/T_Smoke_Trail_Soft.dds"))) MSGBOX("Failed To Add SwordTrail Tex");
 	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"DistortionBase", L"../bin/Resources/Texture/Trail/t_distort_channels.dds"))) MSGBOX("Failed To Add SwordTrail Tex");
 	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"DistortionMask", L"../bin/Resources/Texture/Trail/T_DistortionNoise.dds"))) MSGBOX("Failed To Add SwordTrail Tex");
-	// 2
+
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_VIBuffer_Trail",
-		CVIBuffer_Trail::Create(m_pDevice, m_pDeviceContext, L"../../Reference/ShaderFile/Shader_Trail.hlsl", 100))))
+		CVIBuffer_Trail::Create(m_pDevice, m_pDeviceContext, L"../../Reference/ShaderFile/Shader_Distortion.hlsl", 100))))
 		MSGBOX(L"트레일 버퍼 프로토타입 생성 실패");
-	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_TrailEffect", CTrailEffect::Create(m_pDevice, m_pDeviceContext))))
-		MSGBOX(L"트레일이펙트 프로토타입 생성 실패");
+
+	//Wall
+	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"WallBase", L"../bin/Resources/Texture/T_Portal_Space_D.dds"))) MSGBOX("Failed To Add WallBase Tex");
+
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_VIBuffer_Wall", CVIBuffer_Rect::Create(m_pDevice, m_pDeviceContext, L"../../Reference/ShaderFile/Shader_Distortion.hlsl"))))
+		MSGBOX("Failed to Create Wall Buffer");
 
 #pragma region 오브젝트
-	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Silvermane", CSilvermane::Create(m_pDevice, m_pDeviceContext))))
-		return E_FAIL;
-	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Camera_Silvermane", CCamera_Silvermane::Create(m_pDevice, m_pDeviceContext))))
-		return E_FAIL;
-	//if (FAILED(g_pGameInstance->Add_Prototype(L"Prototype_GameObject_SwordTral", CSwordTrail::Create(m_pDevice, m_pDeviceContext))))
-	//	return E_FAIL;
+	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Silvermane", CSilvermane::Create(m_pDevice, m_pDeviceContext))))	return E_FAIL;
+	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Camera_Silvermane", CCamera_Silvermane::Create(m_pDevice, m_pDeviceContext))))		return E_FAIL;
+	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_TrailEffect", CTrailEffect::Create(m_pDevice, m_pDeviceContext))))	MSGBOX(L"트레일이펙트 프로토타입 생성 실패");
+	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Wall", CWall::Create(m_pDevice, m_pDeviceContext)))) MSGBOX(L"Wall 원본 생성 실패");
+	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_FlyingShield", CFlyingShield::Create(m_pDevice, m_pDeviceContext)))) MSGBOX(L"날으는 쉴드 원본 생성 실패");
 #pragma endregion
 
 	return S_OK;
@@ -1127,6 +1128,13 @@ HRESULT CLoader::Ready_Test_JS()
 		return E_FAIL;
 	}
 	matPivot = XMMatrixIdentity();
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_FlyingShield", CModel::Create(m_pDevice, m_pDeviceContext,
+		"../bin/Resources/Mesh/Shield/", "Shield.fbx",
+		L"../../Reference/ShaderFile/Shader_StaticMesh.hlsl", matPivot, CModel::TYPE_STATIC, true))))
+	{
+		return E_FAIL;
+	}
+	matPivot = XMMatrixIdentity();
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_JumpNode_Bin", CModel::Create(m_pDevice, m_pDeviceContext,
 		L"../bin/Resources/Mesh/JumpNode/JumpNode_Bin.fbx", CModel::TYPE_ANIM, true))))
 	{
@@ -1241,6 +1249,8 @@ HRESULT CLoader::Ready_Test_JS()
 		return E_FAIL;
 	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_JumpBox", CJumpBox::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
+	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_FlyingShield", CFlyingShield::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
 #pragma endregion
 
 	// 소드 트레일
@@ -1278,209 +1288,6 @@ HRESULT CLoader::Ready_Test_JS()
 	return S_OK;
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-HRESULT CLoader::Ready_Test_YM()
-{
-	cout << "TestScene_YM 로딩 시작..." << endl;
-	cout << "TestScene_YM 리소스 생성중..." << endl;
-
-	if (FAILED(Load_Stage1StaticUILoad()))
-		return E_FAIL;
-
-	if (FAILED(Load_Stage1UILoad()))
-		return E_FAIL;
-
-	if (FAILED(Load_Stage1EffectLoad()))
-		return E_FAIL;
-
-	if (FAILED(Load_Stage1JumpTrigger()))
-		return E_FAIL;
-
-	CTexture* pTexture = nullptr;
-#pragma region 플레이어
-	_matrix matPlayerPivot = XMMatrixIdentity();
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Silvermane_Bin", CModel::Create(m_pDevice, m_pDeviceContext,
-		L"../bin/FBX/Silvermane/Silvermane_Bin.fbx", CModel::TYPE_ANIM, true))))
-	{
-		return E_FAIL;
-	}
-
-	matPlayerPivot = XMMatrixIdentity();
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Needle", CModel::Create(m_pDevice, m_pDeviceContext,
-		"../bin/Resources/Mesh/Needle/", "Needle.fbx",
-		L"../../Reference/ShaderFile/Shader_StaticMesh.hlsl", matPlayerPivot, CModel::TYPE_STATIC, true))))
-	{
-		return E_FAIL;
-	}
-	matPlayerPivot = XMMatrixIdentity();
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Fury", CModel::Create(m_pDevice, m_pDeviceContext,
-		"../bin/Resources/Mesh/Fury/", "Fury.fbx",
-		L"../../Reference/ShaderFile/Shader_StaticMesh.hlsl", matPlayerPivot, CModel::TYPE_STATIC, true))))
-	{
-		return E_FAIL;
-	}
-	matPlayerPivot = XMMatrixIdentity();
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Shield", CModel::Create(m_pDevice, m_pDeviceContext,
-		"../bin/Resources/Mesh/Shield/", "Shield.fbx",
-		L"../../Reference/ShaderFile/Shader_Mesh.hlsl", matPlayerPivot, CModel::TYPE::TYPE_ANIM, true))))
-	{
-		return E_FAIL;
-	}
-#pragma endregion
-	
-#pragma region 리소스
-	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"Plane_Texture", L"../Bin/Resources/Texture/Terrain/Plane_Default.dds")))
-		return E_FAIL;
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"VIBuffer_Plane", CVIBuffer_Plane::Create(m_pDevice, m_pDeviceContext, L"../../Reference/ShaderFile/Shader_Plane.hlsl", 100, 100))))
-		return E_FAIL;
-
-#pragma region 모델
-	cout << "TestScene_YM 모델 프로토타입 생성중..." << endl;
-	_matrix matPivot = XMMatrixIdentity();
-
-	//Bastion_2HSword
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_TEST_YM, L"Model_Bastion_2HSword", CModel::Create(m_pDevice, m_pDeviceContext,
-		L"../bin/FBX/Monster/Bastion_2HSword_Bin.fbx", CModel::TYPE_ANIM, true))))
-		return E_FAIL;
-	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Monster_Bastion_2HSword", CMonster_Bastion_2HSword::Create(m_pDevice, m_pDeviceContext))))
-		return E_FAIL;
-
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_TEST_YM, L"Model_RetributionBlade", CModel::Create(m_pDevice, m_pDeviceContext,
-		"../bin/Resources/Mesh/RetributionBlade/", "RetributionBlade(2H).fbx",
-		L"../../Reference/ShaderFile/Shader_Weapon.hlsl", matPivot, CModel::TYPE_STATIC, true))))
-	{
-		return E_FAIL;
-	}
-	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Weapon_RetributionBlade", CRetributionBlade::Create(m_pDevice, m_pDeviceContext))))
-		return E_FAIL;
-
-	////Bastion_Healer
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_TEST_YM, L"Model_Bastion_Healer", CModel::Create(m_pDevice, m_pDeviceContext,
-		L"../bin/FBX/Monster/Bastion_Healer_Bin.fbx", CModel::TYPE_ANIM, true))))
-		return E_FAIL;
-	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Monster_Bastion_Healer", CMonster_Bastion_Healer::Create(m_pDevice, m_pDeviceContext))))
-		return E_FAIL;
-
-	//weapon
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_TEST_YM, L"Model_Staff", CModel::Create(m_pDevice, m_pDeviceContext,
-		"../bin/Resources/Mesh/Staff/", "Staff.fbx",
-		L"../../Reference/ShaderFile/Shader_Weapon.hlsl", matPivot, CModel::TYPE_STATIC, true))))
-	{
-		return E_FAIL;
-	}
-	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Weapon_Staff", CStaff::Create(m_pDevice, m_pDeviceContext))))
-		return E_FAIL;
-
-#pragma endregion
-#pragma region 컴포넌트
-	cout << "TestScene_YM 컴포넌트 프로토타입 생성중..." << endl;
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_AnimationController", CAnimationController::Create(m_pDevice, m_pDeviceContext))))
-		return E_FAIL;
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_StateController", CStateController::Create(m_pDevice, m_pDeviceContext))))
-		return E_FAIL;
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_CharacterController", CCharacterController::Create(m_pDevice, m_pDeviceContext))))
-		return E_FAIL;
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_Animator", CAnimator::Create(m_pDevice, m_pDeviceContext))))
-		return E_FAIL;
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_BoxCollider", CBoxCollider::Create(m_pDevice, m_pDeviceContext))))
-		return E_FAIL;
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_NavMeshCollider", CNavMeshCollider::Create(m_pDevice, m_pDeviceContext))))
-		return E_FAIL;
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_CapsuleCollider", CCapsuleCollider::Create(m_pDevice, m_pDeviceContext))))
-		return E_FAIL;
-#pragma endregion
-#pragma region 오브젝트
-	cout << "TestScene_YM 오브젝트 프로토타입 생성중..." << endl;
-	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Plane_Test", CPlane_Test::Create(m_pDevice, m_pDeviceContext))))
-		return E_FAIL;
-	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_TestObj", CTestObj::Create(m_pDevice, m_pDeviceContext))))
-		return E_FAIL;
-	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Silvermane", CSilvermane::Create(m_pDevice, m_pDeviceContext))))
-		return E_FAIL;
-	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Camera_Silvermane", CCamera_Silvermane::Create(m_pDevice, m_pDeviceContext))))
-		return E_FAIL;
-	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Camera_Debug", CCamera_Debug::Create(m_pDevice, m_pDeviceContext))))
-		return E_FAIL;
-	if (FAILED(g_pGameInstance->Add_Prototype(L"Weapon_RetributionBlade", CRetributionBlade::Create(m_pDevice, m_pDeviceContext))))
-		return E_FAIL;
-	if (FAILED(g_pGameInstance->Add_Prototype(L"Weapon_Staff", CStaff::Create(m_pDevice, m_pDeviceContext))))
-		return E_FAIL;
-	if (FAILED(g_pGameInstance->Add_Prototype(L"Monster_Bastion_2HSword", CMonster_Bastion_2HSword::Create(m_pDevice, m_pDeviceContext))))
-		return E_FAIL;
-	if (FAILED(g_pGameInstance->Add_Prototype(L"Monster_Bastion_Healer", CMonster_Bastion_Healer::Create(m_pDevice, m_pDeviceContext))))
-		return E_FAIL;
-#pragma endregion
-	cout << "TestScene_YM 로딩 완료..." << endl;
-	return S_OK;
-}
-
-HRESULT CLoader::Ready_Test_SB()
-{
-	cout << "TestScene_SB 로딩 시작..." << endl;
-	cout << "TestScene_SB 리소스 생성중..." << endl;
-#pragma region 리소스
-	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"Plane_Texture", L"../Bin/Resources/Texture/Terrain/Plane_Default.tga")))
-		return E_FAIL;
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"VIBuffer_Plane", CVIBuffer_Plane::Create(m_pDevice, m_pDeviceContext, L"../../Reference/ShaderFile/Shader_Plane.hlsl", 100, 100))))
-		return E_FAIL;
-
-	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"Sky_Texture", L"../Bin/Resources/Texture/SkyBox/SkyBox_Stage1.dds")))
-		return E_FAIL;
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"VIBuffer_Cube", CVIBuffer_Cube::Create(m_pDevice, m_pDeviceContext, L"../../Reference/ShaderFile/Shader_Cube.hlsl"))))
-		return E_FAIL;
-
-	cout << "TestScene_SB 마테리얼 생성중..." << endl;
-	CTexture* pTexture = nullptr;
-#pragma region 플레이어
-
-#pragma endregion
-#pragma region 무기
-	cout << "TestScene_SB 모델 프로토타입 생성중..." << endl;
-	_matrix matPivot = XMMatrixIdentity();
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Silvermane_Bin", CModel::Create(m_pDevice, m_pDeviceContext,
-		L"../bin/FBX/Silvermane/Silvermane_Bin.fbx", CModel::TYPE_ANIM, true))))
-		return E_FAIL;
-
-	matPivot = XMMatrixIdentity();
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Needle", CModel::Create(m_pDevice, m_pDeviceContext,
-		"../bin/Resources/Mesh/Needle/", "Needle.fbx",
-		L"../../Reference/ShaderFile/Shader_StaticMesh.hlsl", matPivot, CModel::TYPE_STATIC, true))))
-	{
-		return E_FAIL;
-	}
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Monster_Bastion_Marksman", CModel::Create(m_pDevice, m_pDeviceContext,
-		L"../bin/FBX/Monster/Bastion_Maskman.fbx", CModel::TYPE_ANIM, true))))
-		return E_FAIL;
-
-	cout << "TestScene_SB 컴포넌트 프로토타입 생성중..." << endl;
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_AnimationController", CAnimationController::Create(m_pDevice, m_pDeviceContext))))
-		return E_FAIL;
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_StateController", CStateController::Create(m_pDevice, m_pDeviceContext))))
-		return E_FAIL;
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_CharacterController", CCharacterController::Create(m_pDevice, m_pDeviceContext))))
-		return E_FAIL;
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_MeshCollider", CMeshCollider::Create(m_pDevice, m_pDeviceContext))))
-		return E_FAIL;
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_Animator", CAnimator::Create(m_pDevice, m_pDeviceContext))))
-		return E_FAIL;
-
-	if (FAILED(g_pGameInstance->Add_Prototype(L"Monster_Bastion_Marksman", CMonster_Bastion_Shooter::Create(m_pDevice, m_pDeviceContext))))
-		return E_FAIL;
-	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Plane_Test", CPlane_Test::Create(m_pDevice, m_pDeviceContext))))
-		return E_FAIL;
-	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_SkyBox", CSkyBox::Create(m_pDevice, m_pDeviceContext))))
-		return E_FAIL;
-	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Silvermane", CSilvermane::Create(m_pDevice, m_pDeviceContext))))
-		return E_FAIL;
-	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Camera_Silvermane", CCamera_Silvermane::Create(m_pDevice, m_pDeviceContext))))
-		return E_FAIL;
-	if (FAILED(g_pGameInstance->Add_Prototype(L"Weapon_Needle", CNeedle::Create(m_pDevice, m_pDeviceContext))))
-		return E_FAIL;
-
-
-	return S_OK;
-}
 
 void CLoader::Free()
 {

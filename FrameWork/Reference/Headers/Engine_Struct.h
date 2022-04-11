@@ -196,6 +196,14 @@ namespace Engine
 		_uint iLevel = 0;
 		_float fDamage = 0.f;
 	}ATTACKDESC;
+
+	/* UI 府家胶 包府 */
+	typedef struct ResoucePath
+	{
+		std::wstring clientResourcePath = L"../Resource";
+		std::wstring engineResourcePath = L"../../Engine/Resource";
+	}RESOUCEPATH;
+
 	typedef struct tagParryDesc
 	{
 		_uint iLevel = 0;

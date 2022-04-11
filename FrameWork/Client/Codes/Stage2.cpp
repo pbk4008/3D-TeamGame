@@ -10,6 +10,7 @@
 #include "UI_Player_HpBar_Red.h"
 #include "UI_Blank_CKey.h"
 #include "UI_Fill_CKey.h"
+#include "Effect_Env_Fire.h"
 
 CStage2::CStage2(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
 	: CLevel(pDevice, pDeviceContext)
@@ -129,6 +130,24 @@ HRESULT CStage2::Ready_MapObject()
 	_uint iTmpIndx = 0;
 	for (auto& pDesc : tEnvironmentDesc)
 	{
+		if (pDesc.wstrInstaneTag == L"Brazier_03_Lod0.fbx")
+		{
+			for (auto& iter : pDesc.tInstanceDesc.vecMatrix)
+			{
+				CEffect_Env_Fire::EFFECTDESC Desc;
+				_tcscpy_s(Desc.TextureTag, L"Env_Fire");
+				Desc.iRenderPassNum = 1;
+				Desc.iImageCountX = 8;
+				Desc.iImageCountY = 8;
+				Desc.fFrame = 64.f;
+				Desc.fEffectPlaySpeed = 1.f;
+				Desc.ParticleMat = XMLoadFloat4x4(&iter);
+
+				if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE2, L"Layer_NoisFire", L"Proto_GameObject_Effect_Env_Fire", &Desc)))
+					MSGBOX("Failed To Clone NoisFire");
+			}
+		}
+
 		if (pDesc.wstrInstaneTag == L"")
 			break;
 		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE2, L"Layer_Environment", L"Proto_GameObject_Environment", &pDesc)))
@@ -163,9 +182,6 @@ HRESULT CStage2::Ready_Player(const _tchar* LayerTag)
 	
 	//스폰 하고자 하는 위치 지정
 	tDesc.vPos = _float3(70.f, 3.f, 5.f);
-
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE2, L"Layer_SordTrail", L"Prototype_GameObject_SwordTral")))
-		return E_FAIL;
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE2, LayerTag, L"Proto_GameObject_Silvermane", &tDesc)))
 		return E_FAIL;
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE2, L"Layer_Camera", L"Proto_GameObject_Camera_Silvermane")))
@@ -1069,6 +1085,7 @@ CStage2* CStage2::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceCont
 	{
 		MSGBOX("CStage2 Crate Fail");
 		Safe_Release(pInstance);
+
 	}
 	return pInstance;
 }

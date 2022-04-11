@@ -18,7 +18,7 @@ cbuffer	BoneMatricesBuffer
 };
 
 
-texture2D	g_DiffuseTexture;
+Texture2D	g_DiffuseTexture;
 
 sampler DefaultSampler = sampler_state
 {		
@@ -99,7 +99,7 @@ PS_OUT PS_MAIN(PS_IN In)
 {
 	PS_OUT		Out = (PS_OUT)0;
 
-	Out.vDiffuse = g_DiffuseTexture.Sample(DefaultSampler, In.vTexUV);
+	Out.vDiffuse = g_DiffuseTexture.Sample(DefaultSampler, In.vTexUV.xy);
 	Out.vDiffuse.a = 1.f;
 
 	/* -1 ~ 1 */ 

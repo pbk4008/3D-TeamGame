@@ -9,10 +9,34 @@
 #include "ShakeManager.h"
 #include "DataManager.h"
 
+//Inventory UI Object
+#include "Inven_UIManager.h"
+#include "UI_ModalWindow.h"
+#include "UI_Indexes.h"
+#include "UI_Background.h"
+#include "UI_Equipment.h"
+#include "UI_Armory.h"
+#include "UI_ItemSlot.h"
+#include "UI_SlotBackground.h"
+#include "UI_SlotGrade.h"
+#include "UI_SlotItemEffect.h"
+#include "UI_EquipedText.h"
+#include "UI_SlotItemIcon.h"
+#include "UI_ItemStatusWindow.h"
+#include "UI_ItemStatusBackground.h"
+#include "Button_Equipment.h"
+#include "Button_Armory.h"
+#include "Button_Skill.h"
+
+//Inventory UI Component
+#include "SingleImage.h"
+#include "UIHelper.h"
+
 CClient_Observer* g_pObserver = nullptr;
 CDebugSystem* g_pDebugSystem = nullptr;
 CShakeManager* g_pShakeManager = nullptr;
 CDataManager* g_pDataManager = nullptr;
+CInven_UIManager* g_pInvenUIManager = nullptr;
 
 CMainApp::CMainApp()
 {
@@ -30,8 +54,10 @@ HRESULT CMainApp::NativeConstruct()
 
 	if (FAILED(Load_Texture()))
 		return E_FAIL;
+
 	if (FAILED(Ready_Component_Prototype()))
 		return E_FAIL;
+
 	if (FAILED(Ready_GameObject_Prototype()))
 		return E_FAIL;
 
@@ -47,17 +73,9 @@ HRESULT CMainApp::NativeConstruct()
 	if (FAILED(SetUp_StartLevel(SCENEID::SCENE_LOGO)))
 		return E_FAIL;
 
-	g_pObserver = CClient_Observer::GetInstance();
-	g_pShakeManager = CShakeManager::GetInstance();
-	if (FAILED(g_pShakeManager->NativeConstruct()))
+	if (FAILED(Ready_GameManager()))
 		return E_FAIL;
-	/*CMeshLoader* pMeshLoader = CMeshLoader::GetInstance();
-	if (FAILED(pMeshLoader->Reserve_MeshLoader(m_pDevice, m_pDeviceContext)))
-		return E_FAIL;*/
 
-	g_pDataManager = CDataManager::GetInstance();
-	if (FAILED(g_pDataManager->NativeConstruct()))
-		return E_FAIL;
 
 	return S_OK;
 }
@@ -185,6 +203,29 @@ HRESULT CMainApp::SetUp_StartLevel(SCENEID eLevel)
 	return S_OK;
 }
 
+HRESULT CMainApp::Ready_GameManager(void)
+{
+	/*CMeshLoader* pMeshLoader = CMeshLoader::GetInstance();
+if (FAILED(pMeshLoader->Reserve_MeshLoader(m_pDevice, m_pDeviceContext)))
+	return E_FAIL;*/
+
+	g_pObserver = CClient_Observer::GetInstance();
+	g_pShakeManager = CShakeManager::GetInstance();
+
+	if (FAILED(g_pShakeManager->NativeConstruct()))
+		return E_FAIL;
+
+	g_pDataManager = CDataManager::GetInstance();
+	if (FAILED(g_pDataManager->NativeConstruct()))
+		return E_FAIL;
+
+	g_pInvenUIManager = CInven_UIManager::GetInstance();
+	if (FAILED(g_pInvenUIManager->NativeConstruct()))
+		return E_FAIL;
+
+	return S_OK;
+}
+
 HRESULT CMainApp::Ready_Component_Prototype()
 {
 	if(FAILED(g_pGameInstance->SetUpBaseComponent(m_pDevice, m_pDeviceContext)))
@@ -193,7 +234,13 @@ HRESULT CMainApp::Ready_Component_Prototype()
 
 	if (!m_pRenderer)
 		return E_FAIL;
-
+	//////////////////////////////////////////
+	/* for. inventory ui component*/
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_SingleImage", CSingleImage::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_UIHelper", CUIHelper::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	//////////////////////////////////////////
 	return S_OK;
 }
 
@@ -208,6 +255,57 @@ HRESULT CMainApp::Ready_GameObject_Prototype()
 
 	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_MainOrthoCamera"), CMainCamera_Ortho::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
+
+	//for. Inventory ////////////////
+	//Modal Window
+	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_UI_ModalWindow"), CUI_ModalWindow::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	//Indexes
+	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_UI_Indexes"), CUI_Indexes::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	//BG
+	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_UI_Background"), CUI_Background::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	//Equip
+	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_UI_Equipment"), CUI_Equipment::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	//Armory
+	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_UI_Armory"), CUI_Armory::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	//Item Slot 
+	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_UI_ItemSlot"), CUI_ItemSlot::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	//Item Slot BG
+	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_UI_ItemSlot_BG"), CUI_SlotBackground::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	//Item Icon
+	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_UI_ItemIcon"), CUI_SlotItemIcon::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	//Item Grade
+	//if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_UI_ItemGrade"), CUI_SlotGrade::Create(m_pDevice, m_pDeviceContext))))
+	//	return E_FAIL;
+	//Item Effect
+	//if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_UI_ItemEffect"), CUI_SlotItemEffect::Create(m_pDevice, m_pDeviceContext))))
+	//	return E_FAIL;
+	//Item Equip Text
+	//if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_UI_ItemEquipedText"), CUI_EquipedText::Create(m_pDevice, m_pDeviceContext))))
+	//	return E_FAIL;
+	//ItemStatusWindow
+	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_UI_ItemStatusWindow"), CUI_ItemStatusWindow::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	//ItemStatus BG
+	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_UI_ItemStatus_BG"), UI_ItemStatusBackground::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	//Button Equip
+	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_UI_Button_Equipment"), CButton_Equipment::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	//Button Armory
+	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_UI_Button_Armory"), CButton_Armory::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	//Button Skill
+	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_UI_Button_Skill"), CButton_Skill::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	////////////////////////////////
 
 	return S_OK;
 }
@@ -306,6 +404,7 @@ void CMainApp::Free()
 	CShakeManager::DestroyInstance();
 	CMeshLoader::DestroyInstance();
 	CDataManager::DestroyInstance();
+	CInven_UIManager::DestroyInstance();
 
 	Safe_Release(g_pObserver);
 

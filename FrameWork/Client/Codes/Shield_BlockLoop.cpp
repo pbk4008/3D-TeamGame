@@ -63,16 +63,6 @@ HRESULT CShield_BlockLoop::ExitState()
 
 void CShield_BlockLoop::OnTriggerEnter(CCollision& collision)
 {
-	_uint iTag = collision.pGameObject->getTag();
-	if ((_uint)GAMEOBJECT::MONSTER_CRYSTAL == iTag)
-	{
-		if (static_cast<CActor*>(collision.pGameObject)->IsAttack())
-		{
-			if (FAILED(m_pStateController->Change_State(L"Shield_BlockSkid")))
-				return;
-			return;
-		}
-	}
 }
 
 _int CShield_BlockLoop::Input(const _double& _dDeltaTime)
@@ -80,6 +70,13 @@ _int CShield_BlockLoop::Input(const _double& _dDeltaTime)
 	_int iProgress = __super::Input(_dDeltaTime);
 	if (NO_EVENT != iProgress)
 		return iProgress;
+
+	if (g_pGameInstance->getMouseKeyDown(CInputDev::MOUSESTATE::MB_RBUTTON))
+	{
+		if (FAILED(m_pStateController->Change_State(L"Shield_Throw")))
+			return -1;
+		return STATE_CHANGE;
+	}
 
 	return _int();
 }
@@ -99,6 +96,5 @@ CShield_BlockLoop* CShield_BlockLoop::Create(ID3D11Device* _pDevice, ID3D11Devic
 
 void CShield_BlockLoop::Free()
 {
-
 	__super::Free();
 }

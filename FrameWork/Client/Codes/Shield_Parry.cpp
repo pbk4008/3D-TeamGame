@@ -52,7 +52,8 @@ HRESULT CShield_Parry::EnterState()
 	if (FAILED(__super::EnterState()))
 		return E_FAIL;
 
-	m_pAnimationController->SetUp_NextAnimation("SK_Silvermane.ao|A_Spectral_Shield_Parry_V2", false);
+	if (FAILED(m_pAnimationController->SetUp_NextAnimation("SK_Silvermane.ao|A_Spectral_Shield_Parry_V2", false)))
+		return E_FAIL;
 	m_pAnimationController->Set_RootMotion(true, true, ERootOption::XYZ);
 
 	m_pSilvermane->Set_EquipShield(true);

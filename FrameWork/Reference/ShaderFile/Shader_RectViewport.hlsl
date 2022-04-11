@@ -96,20 +96,17 @@ Texture2D g_SkyBoxTexture;
 Texture2D g_DiffuseTexture;
 Texture2D g_NormalTexture;
 Texture2D g_DepthTexture;
-
 Texture2D g_MRATexture;
 
-texture2D g_SSS;
-
 // belnding
-Texture2D g_ShadeTexture;
-Texture2D g_SpecularTexture;
-
 Texture2D g_ShadowMapTex;
 Texture2D g_ShadowTexture;
 
 Texture2D g_AlphaTexture;
 Texture2D g_DistortionTex;
+Texture2D g_STDistortionTex;
+Texture2D g_BlurTexture;
+
 
 struct VS_IN
 {
@@ -303,7 +300,6 @@ PS_OUT_POINTLIGHTACC PS_MAIN_LIGHTACC_POINT(PS_IN In)
 
 	vWorldPos = vWorldPos * fViewZ;
 	vWorldPos = mul(vWorldPos, g_ProjMatrixInv);
-
 	vWorldPos = mul(vWorldPos, g_ViewMatrixInv);
 
 	vector vLightDir = vWorldPos - g_vLightPos;
@@ -390,30 +386,21 @@ PS_OUT_BLEND PS_MAIN_BLEND(PS_IN In)
 	half4 color = g_DiffuseTexture.Sample(DefaultSampler, In.vTexUV);
 	
 	Out.vColor = color;
+
+	//Out.vColor = DOF(g_DiffuseTexture, g_DepthTexture, g_BlurTexture, DefaultSampler, In.vTexUV, g_ProjMatrixInv, g_ViewMatrixInv, g_vCamPosition);
+	
+	if (g_distort == true)
+	{
+		Out.vColor = Distortion(g_STDistortionTex, g_DiffuseTexture, DefaultSampler, In.vTexUV, g_delta);
+		Out.vColor = Distortion(g_DistortionTex, g_DiffuseTexture, DefaultSampler, In.vTexUV, g_delta);
+	}
 	
 	if (g_radial == true)
 	{		
 		Out.vColor.rgb = Radialblur(g_DiffuseTexture,DefaultSampler,In.vTexUV,g_RadialCnt);
 	}
 	
-	if (g_outline == true)
-	{ 
-		// ¿Ü°û¼± È¿°ú
-		Out.vColor = Outline(g_DiffuseTexture, DefaultSampler, In.vTexUV, Out.vColor);
-	}
-	
-	if(g_distort == true)
-	{
-		//half2 noiseuv = In.vTexUV + 0.001f;
-		//half4 noise = g_DistortionTex.Sample(DefaultSampler, noiseuv);
-		//half2 uv = In.vTexUV.xy + noise.xy * 0.05f;
-	
-		//Out.vColor = g_DiffuseTexture.Sample(DefaultSampler, uv);	
-		Out.vColor = Distortion(g_DistortionTex, g_DiffuseTexture, DefaultSampler, In.vTexUV, g_delta);
 
-	}
-	
-	
 	if (Out.vColor.a == 0)
 		discard;
 	

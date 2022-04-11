@@ -20,7 +20,10 @@ _int CDodgeSlide::Tick(const _double& _dDeltaTime)
 	if (NO_EVENT != iProgress)
 		return iProgress;
 
- 	//Add_PlusAngle(m_eDir, _dDeltaTime);
+	_uint iCurKeyFrameIndex = m_pAnimationController->Get_CurKeyFrameIndex();
+	if (iCurKeyFrameIndex >= 10)
+		m_pSilvermane->Set_Radial(false);
+
 	switch (m_eDir)
 	{
 	case EDir::Forward:
@@ -82,7 +85,6 @@ HRESULT CDodgeSlide::EnterState(void* _pArg)
 	tShakeEvent.tWaveZ.fFrequency = 1.f;
 	tShakeEvent.tWaveZ.fAdditionalOffset = -1.f;
 
-
 	switch (m_eDir)
 	{
 	case EDir::Forward:
@@ -139,6 +141,8 @@ HRESULT CDodgeSlide::EnterState(void* _pArg)
 	m_pSilvermane->Set_IsMove(true);
 	m_pSilvermane->Set_IsDash(true);
 	g_pShakeManager->Shake(tShakeEvent, m_pTransform->Get_State(CTransform::STATE_POSITION));
+	m_pSilvermane->Set_Radial(true);
+	m_pSilvermane->Set_RadialCnt(5);
 	return S_OK;
 }
 

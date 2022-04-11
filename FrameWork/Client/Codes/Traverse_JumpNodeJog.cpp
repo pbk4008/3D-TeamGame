@@ -42,8 +42,8 @@ _int CTraverse_JumpNodeJog::Tick(const _double& _dDeltaTime)
 
 			m_pSilvermane->Set_Radial(true);
 			
-			if(iCurKeyFrameIndex <= 20)
-				m_pSilvermane->Set_RadialCnt(iCurKeyFrameIndex);
+			if(iCurKeyFrameIndex <= 32)
+				m_pSilvermane->Set_RadialCnt(6);
 		}
 	}
 	else

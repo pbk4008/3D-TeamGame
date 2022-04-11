@@ -74,8 +74,16 @@ _int CEffect_Env_Fire::Tick(_double TimeDelta)
 	//m_pTransform->Set_State(CTransform::STATE_POSITION, Pos);
 
 	_vector pos = m_Desc.ParticleMat.r[3];
-	_vector pos2 = { XMVectorGetX(pos),XMVectorGetY(pos) + (XMVectorGetY(m_scale) * 5.f) ,XMVectorGetZ(pos) ,1.f };
-
+	_vector pos2 = XMVectorZero();
+	switch (m_iSceneID)
+	{
+	case 3:
+		pos2 = { XMVectorGetX(pos),XMVectorGetY(pos) + (XMVectorGetY(m_scale) * 5.f) ,XMVectorGetZ(pos) ,1.f };
+		break;
+	case 4:
+		pos2 = { XMVectorGetX(pos),XMVectorGetY(pos) + (XMVectorGetY(m_scale)) ,XMVectorGetZ(pos) ,1.f };
+		break;
+	}
 	m_pTransform->Set_State(CTransform::STATE_POSITION, pos2);
 
 	//ºôº¸µå
@@ -86,9 +94,15 @@ _int CEffect_Env_Fire::Tick(_double TimeDelta)
 	m_pTransform->Set_State(CTransform::STATE::STATE_RIGHT, ViewMatrix.r[0]);
 	m_pTransform->Set_State(CTransform::STATE::STATE_LOOK, ViewMatrix.r[2]);
 
-	//_vector  scale = { 3.f, 3.f, 1.f, 0.f };
-	m_pTransform->Scaling(m_scale * 7.f);
-
+	switch (m_iSceneID)
+	{
+	case 3:
+		m_pTransform->Scaling(m_scale * 7.f);
+		break;
+	case 4:
+		m_pTransform->Scaling(m_scale * 1.f);
+		break;
+	}
     return 0;
 }
 

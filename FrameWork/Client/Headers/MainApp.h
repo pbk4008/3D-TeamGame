@@ -41,6 +41,7 @@ private:
 	_double				m_dFreezeTimeAcc = 0.0;
 private:
 	HRESULT SetUp_StartLevel(SCENEID eLevel);
+	HRESULT Ready_GameManager(void);
 
 	/* For. Level_static*/
 	HRESULT Ready_Component_Prototype();

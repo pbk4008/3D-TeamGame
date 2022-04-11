@@ -25,6 +25,7 @@ public:
 	_bool getMousePress(MOUSESTATE eMouse);
 	_bool getMouseKeyDown(MOUSESTATE eMouse);
 	_bool getMouseKeyUp(MOUSESTATE eMouse);
+	_fvector getMousePostion(void);
 
 	_long getMouseMoveState(MOUSEMOVESTATE eMouse);
 	_bool getKeyboardNoKey();

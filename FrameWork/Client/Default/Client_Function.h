@@ -17,5 +17,14 @@ public:
 
 };
 
+//static _fvector getMousePostion()
+//{
+//	POINT point = {};
+//	GetCursorPos(&point);
+//	ScreenToClient(g_hWnd, &point);
+//
+//	return _fvector{ (_float)point.x,(_float)point.y, 1.f, 1.f };
+//};
+
 END
 #endif

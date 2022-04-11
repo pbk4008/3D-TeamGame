@@ -154,8 +154,8 @@ HRESULT CLight::Ready_PBRLighting(CTarget_Manager* pTarget_Manager, const wstrin
 	ProjMatrix = XMMatrixInverse(nullptr, ProjMatrix);
 
 	if(FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_vCamPosition", &vCamPosition, sizeof(_float4)))) MSGBOX("Failed To Apply LightRender CamPosition");
-	if(FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_ViewMatrixInv", &XMMatrixTranspose(ViewMatrix), sizeof(_float4x4)))) MSGBOX("Failed To Apply LightRender ViewInvers");
-	if(FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_ProjMatrixInv", &XMMatrixTranspose(ProjMatrix), sizeof(_float4x4)))) MSGBOX("Failed To Apply LightRender ProjInvers");
+	if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_ViewMatrixInv", &XMMatrixTranspose(ViewMatrix), sizeof(_float4x4)))) MSGBOX("Failed To Apply LightRender ViewInvers");
+	if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_ProjMatrixInv", &XMMatrixTranspose(ProjMatrix), sizeof(_float4x4)))) MSGBOX("Failed To Apply LightRender ProjInvers");
 
 	return S_OK;
 }
