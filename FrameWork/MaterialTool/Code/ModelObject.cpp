@@ -78,7 +78,7 @@ _int CModelObject::LateTick(_double dDeltaTime)
 	if (!m_pRenderer)
 		return -1;
 
-	m_pRenderer->Add_RenderGroup(CRenderer::RENDER_ALPHA, this);
+	m_pRenderer->Add_RenderGroup(CRenderer::RENDER_UI, this);
 	return _int();
 }
 

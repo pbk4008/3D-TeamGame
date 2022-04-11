@@ -742,6 +742,9 @@
     <Filter Include="01.Scene\00.Logo">
       <UniqueIdentifier>{cac3034c-dd8b-47e8-afc7-da6cb3e9501e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\02.Map\04.Wall">
+      <UniqueIdentifier>{3dae373e-68c5-415f-8383-cd466ef9596f}</UniqueIdentifier>
+	</Filter>
     <Filter Include="03.System\07.Scenematic">
       <UniqueIdentifier>{21489520-048e-4295-9f73-a3c5349519f9}</UniqueIdentifier>
     </Filter>
@@ -1677,6 +1680,9 @@
     <ClInclude Include="..\Headers\DodgeSlide.h">
       <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Idel</Filter>
     </ClInclude>
+    <ClInclude Include="..\Headers\Wall.h">
+      <Filter>02.GameObject\02.Map\04.Wall</Filter>
+	</ClInclude>
     <ClInclude Include="..\Headers\1H_SwordRicochetReaction.h">
       <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\1H_Sword</Filter>
     </ClInclude>
@@ -2594,6 +2600,9 @@
     <ClCompile Include="..\Codes\DodgeSlide.cpp">
       <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Idel</Filter>
     </ClCompile>
+    <ClCompile Include="..\Codes\Wall.cpp">
+      <Filter>02.GameObject\02.Map\04.Wall</Filter>
+	</ClCompile>
     <ClCompile Include="..\Codes\State_Silvermane.cpp">
       <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State</Filter>
     </ClCompile>
@@ -2711,9 +2720,6 @@
     <FxCompile Include="..\bin\ShaderFile\Shader_RectFire.hlsl">
       <Filter>100.ShaderFiles\03.Effect</Filter>
     </FxCompile>
-    <FxCompile Include="..\bin\ShaderFile\Shader_Trail.hlsl">
-      <Filter>100.ShaderFiles\03.Effect</Filter>
-    </FxCompile>
     <FxCompile Include="..\bin\ShaderFile\Shader_UI.hlsl">
       <Filter>100.ShaderFiles\04.UI</Filter>
     </FxCompile>
@@ -2731,6 +2737,15 @@
     </FxCompile>
     <FxCompile Include="..\bin\ShaderFile\Shader_Potal.hlsl">
       <Filter>100.ShaderFiles\99.Other</Filter>
+    </FxCompile>
+    <FxCompile Include="..\bin\ShaderFile\Shader_Distortion.hlsl">
+      <Filter>100.ShaderFiles\03.Effect</Filter>
+    </FxCompile>
+    <FxCompile Include="..\bin\ShaderFile\Shader_INST_M_O_R.hlsl">
+      <Filter>100.ShaderFiles\01.Environment</Filter>
+    </FxCompile>
+    <FxCompile Include="..\bin\ShaderFile\Shader_INST_RM.hlsl">
+      <Filter>100.ShaderFiles\01.Environment</Filter>
     </FxCompile>
   </ItemGroup>
   <ItemGroup>

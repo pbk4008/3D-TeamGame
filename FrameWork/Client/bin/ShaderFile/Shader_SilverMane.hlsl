@@ -7,7 +7,7 @@ Texture2D	g_BiNormalTexture;
 Texture2D	g_MRATexture;
 Texture2D	g_OMERTexture;
 Texture2D	g_CEOTexture;
-Texture2D	g_NewHairTexture;
+Texture2D	g_OtherTexture;
 
 struct VS_IN
 {
@@ -165,7 +165,7 @@ PS_OUT PS_MAIN_TOP(PS_IN In)
 	
 	normal = Normalmapping(normal, tbn);
 	
-	Out.depth = float4(In.vUvDepth.z / In.vUvDepth.w, In.vUvDepth.w / 300.f, 0.f, 0.f);
+	Out.depth = float4(In.vUvDepth.z / In.vUvDepth.w, In.vUvDepth.w / 300.f, 0.5f, 0.f);
 	
 	half accvalue = diffuse.r + diffuse.g - diffuse.b;
 	if(accvalue > 0.6f)
@@ -255,7 +255,7 @@ PS_OUT PS_MAIN_CLOAK(PS_IN In)
 PS_OUT PS_MAIN_HAIR(PS_IN In)
 {
 	PS_OUT Out = (PS_OUT) 0;
-	half4 diffuse = g_NewHairTexture.Sample(DefaultSampler, In.vUvDepth.xy);
+	half4 diffuse = g_OtherTexture.Sample(DefaultSampler, In.vUvDepth.xy);
 	half4 diffuse2 = g_DiffuseTexture.Sample(DefaultSampler, In.vUvDepth.xy);
 	diffuse.rgb = diffuse.rgb;
 	half4 omer = g_OMERTexture.Sample(DefaultSampler, In.vUvDepth.xy);

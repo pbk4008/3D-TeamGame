@@ -176,20 +176,13 @@ HRESULT CRendererAssit::Setup_RenderTarget()
 	if (FAILED(m_pTargetMgr->Add_RenderTarget(m_pDevice, m_pDeviceContext, TEXT("Target_ParticleH4"), 320, 180, DXGI_FORMAT_R16G16B16A16_FLOAT, _float4(0.f, 0.f, 0.f, 0.f), CRenderTarget::RTT::Luminance)))
 		return E_FAIL;
 
-	//if (FAILED(m_pTargetMgr->Add_RenderTarget(m_pDevice, m_pDeviceContext, TEXT("Target_ParticleV8"), 160, 90, DXGI_FORMAT_R16G16B16A16_FLOAT, _float4(0.f, 0.f, 0.f, 0.f), CRenderTarget::RTT::Luminance)))
-	//	return E_FAIL;
-	//if (FAILED(m_pTargetMgr->Add_RenderTarget(m_pDevice, m_pDeviceContext, TEXT("Target_ParticleH8"), 160, 90, DXGI_FORMAT_R16G16B16A16_FLOAT, _float4(0.f, 0.f, 0.f, 0.f), CRenderTarget::RTT::Luminance)))
-	//	return E_FAIL;
-
-	//if (FAILED(m_pTargetMgr->Add_RenderTarget(m_pDevice, m_pDeviceContext, TEXT("Target_ParticleV16"), 64, 64, DXGI_FORMAT_R16G16B16A16_FLOAT, _float4(0.f, 0.f, 0.f, 0.f), CRenderTarget::RTT::Luminance)))
-	//	return E_FAIL;
-	//if (FAILED(m_pTargetMgr->Add_RenderTarget(m_pDevice, m_pDeviceContext, TEXT("Target_ParticleH16"), 64, 64, DXGI_FORMAT_R16G16B16A16_FLOAT, _float4(0.f, 0.f, 0.f, 0.f), CRenderTarget::RTT::Luminance)))
-	//	return E_FAIL;
-
 	if (FAILED(m_pTargetMgr->Add_RenderTarget(m_pDevice, m_pDeviceContext, TEXT("Target_Alpha"), widht, height, DXGI_FORMAT_R16G16B16A16_FLOAT, _float4(0.f, 0.f, 0.f, 0.f), CRenderTarget::RTT::Luminance)))
 		return E_FAIL;
 
 	if (FAILED(m_pTargetMgr->Add_RenderTarget(m_pDevice, m_pDeviceContext, TEXT("Target_Distortion"), widht, height, DXGI_FORMAT_R16G16B16A16_FLOAT, _float4(0.f, 0.f, 0.f, 0.f), CRenderTarget::RTT::Luminance)))
+		return E_FAIL;
+
+	if (FAILED(m_pTargetMgr->Add_RenderTarget(m_pDevice, m_pDeviceContext, TEXT("Target_STDistortion"), widht, height, DXGI_FORMAT_R16G16B16A16_FLOAT, _float4(0.f, 0.f, 0.f, 0.f), CRenderTarget::RTT::Luminance)))
 		return E_FAIL;
 
 	//----------------------------------//
@@ -197,9 +190,6 @@ HRESULT CRendererAssit::Setup_RenderTarget()
 
 	if (FAILED(m_pTargetMgr->Add_MRT(TEXT("MRT_SkyBox"), TEXT("Target_SkyBox"))))
 		return E_FAIL;
-	//if (FAILED(m_pTargetMgr->Add_MRT(TEXT("MRT_SkyBox"), TEXT("Target_Blend"))))
-	/*if (FAILED(m_pTargetMgr->Add_MRT(TEXT("MRT_SkyBox"), TEXT("Target_Diffuse"))))
-		return E_FAIL;*/
 
 	// ¸ÖÆ¼ Å¸°Ù Deferred
 	if (FAILED(m_pTargetMgr->Add_MRT(TEXT("MRT_Deferred"), TEXT("Target_Diffuse"))))
@@ -212,14 +202,6 @@ HRESULT CRendererAssit::Setup_RenderTarget()
 		return E_FAIL;
 	if (FAILED(m_pTargetMgr->Add_MRT(TEXT("MRT_Deferred"), TEXT("Target_Emission"))))
 		return E_FAIL;
-	//if (FAILED(m_pTargetMgr->Add_MRT(TEXT("MRT_Deferred"), TEXT("Target_Metallic"))))
-	//	return E_FAIL;
-	//if (FAILED(m_pTargetMgr->Add_MRT(TEXT("MRT_Deferred"), TEXT("Target_Roughness"))))
-	//	return E_FAIL;
-	//if (FAILED(m_pTargetMgr->Add_MRT(TEXT("MRT_Deferred"), TEXT("Target_AO"))))
-	//	return E_FAIL;
-	//if (FAILED(m_pTargetMgr->Add_MRT(TEXT("MRT_Deferred"), TEXT("Target_Emission"))))
-	//	return E_FAIL;
 
 	// ´ÜÀÏ Å¸°Ù ShadowMap
 	if (FAILED(m_pTargetMgr->Add_MRT(TEXT("MRT_Shadow"), TEXT("Target_Shadow"))))
@@ -266,7 +248,6 @@ HRESULT CRendererAssit::Setup_RenderTarget()
 	if (FAILED(m_pTargetMgr->Add_MRT(TEXT("MRT_ToneMapping"), TEXT("Target_ToneMapSpecular"))))
 		return E_FAIL;
 
-
 	if (FAILED(m_pTargetMgr->Add_MRT(TEXT("Target_VT2"), TEXT("Target_VT2"))))	return E_FAIL;
 	if (FAILED(m_pTargetMgr->Add_MRT(TEXT("Target_HZ2"), TEXT("Target_HZ2"))))	return E_FAIL;
 
@@ -309,11 +290,6 @@ HRESULT CRendererAssit::Setup_RenderTarget()
 	if (FAILED(m_pTargetMgr->Add_MRT(TEXT("Target_ParticleV4"), TEXT("Target_ParticleV4"))))	return E_FAIL;
 	if (FAILED(m_pTargetMgr->Add_MRT(TEXT("Target_ParticleH4"), TEXT("Target_ParticleH4"))))	return E_FAIL;
 
-	//if (FAILED(m_pTargetMgr->Add_MRT(TEXT("Target_ParticleV8"), TEXT("Target_ParticleV8"))))	return E_FAIL;
-	//if (FAILED(m_pTargetMgr->Add_MRT(TEXT("Target_ParticleH8"), TEXT("Target_ParticleH8"))))	return E_FAIL;
-
-	//if (FAILED(m_pTargetMgr->Add_MRT(TEXT("Target_ParticleV16"), TEXT("Target_ParticleV16"))))	return E_FAIL;
-	//if (FAILED(m_pTargetMgr->Add_MRT(TEXT("Target_ParticleH16"), TEXT("Target_ParticleH16"))))	return E_FAIL;
 	//------------------------------------//
 	
 	if (FAILED(m_pTargetMgr->Add_MRT(TEXT("Target_BlurShadow"), TEXT("Target_BlurShadow"))))	return E_FAIL;
@@ -323,6 +299,7 @@ HRESULT CRendererAssit::Setup_RenderTarget()
 	if (FAILED(m_pTargetMgr->Add_MRT(TEXT("Target_ShadowH4"), TEXT("Target_ShadowH4"))))	return E_FAIL;
 	
 	if (FAILED(m_pTargetMgr->Add_MRT(TEXT("Target_Distortion"), TEXT("Target_Distortion"))))			return E_FAIL;
+	if (FAILED(m_pTargetMgr->Add_MRT(TEXT("Target_STDistortion"), TEXT("Target_STDistortion"))))			return E_FAIL;
 
 #ifdef _DEBUG
 	if (FAILED(m_pTargetMgr->Ready_Debug_Buffer(TEXT("Target_SkyBox"), (fwidth - fwidth), (fheight - fheight) + 200.f, 100.f, 100.f)))	return E_FAIL;
@@ -333,9 +310,6 @@ HRESULT CRendererAssit::Setup_RenderTarget()
 
 	if (FAILED(m_pTargetMgr->Ready_Debug_Buffer(TEXT("Target_MRA"), (fwidth - fwidth) +300.f, (fheight - fheight), 100.f, 100.f)))	return E_FAIL;
   	if (FAILED(m_pTargetMgr->Ready_Debug_Buffer(TEXT("Target_Emission"), (fwidth - fwidth) + 400.f, (fheight - fheight) + 100, 100.f, 100.f)))	return E_FAIL;
-	//if (FAILED(m_pTargetMgr->Ready_Debug_Buffer(TEXT("Target_Metallic"), fwidth - 200.f, (fheight - fheight), 100.f, 100.f)))		return E_FAIL;
-	//if (FAILED(m_pTargetMgr->Ready_Debug_Buffer(TEXT("Target_Roughness"), fwidth - 100.f, (fheight - fheight), 100.f, 100.f)))		return E_FAIL;
-	//if (FAILED(m_pTargetMgr->Ready_Debug_Buffer(TEXT("Target_AO"), fwidth - 200.f, (fheight - fheight) + 100, 100.f, 100.f)))		return E_FAIL;
 
 	if (FAILED(m_pTargetMgr->Ready_Debug_Buffer(TEXT("Target_Shadow"), (fwidth - fwidth), (fheight - fheight) + 100.f, 100.f, 100.f)))				return E_FAIL;
 	if (FAILED(m_pTargetMgr->Ready_Debug_Buffer(TEXT("Target_ShadeShadow"), (fwidth - fwidth) + 100.f, (fheight - fheight) + 100.f, 100.f, 100.f)))	return E_FAIL;
@@ -395,7 +369,7 @@ HRESULT CRendererAssit::Setup_RenderTarget()
 	
 	if (FAILED(m_pTargetMgr->Ready_Debug_Buffer(TEXT("Target_BlurShadow"), 200.f, 100.f, 100.f, 100.f)))		return E_FAIL;
 	if (FAILED(m_pTargetMgr->Ready_Debug_Buffer(TEXT("Target_Distortion"), 400.f, 100.f, 100.f, 100.f)))		return E_FAIL;
-
+	if (FAILED(m_pTargetMgr->Ready_Debug_Buffer(TEXT("Target_STDistortion"), 500.f, 100.f, 100.f, 100.f)))		return E_FAIL;
 
 #endif // _DEBUG
 

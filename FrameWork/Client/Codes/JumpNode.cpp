@@ -131,7 +131,11 @@ HRESULT CJumpNode::Render()
 		if (i == 1)
 		{
 			_float4 color = _float4(0.3725f, 0.2941f, 0.5450f, 1.f);
-			_float EmissionPower = 0.6f;
+			_float EmissionPower = 0.f;
+			if(m_isPick)
+				EmissionPower = 1.5f;
+			else
+				EmissionPower = 0.3f;
 			if (FAILED(m_pModel->SetUp_ValueOnShader("g_color", &color, sizeof(_float4))))		return E_FAIL;
 			if (FAILED(m_pModel->SetUp_ValueOnShader("g_empower", &EmissionPower, sizeof(_float))))		return E_FAIL;
 		}

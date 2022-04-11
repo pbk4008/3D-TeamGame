@@ -525,7 +525,7 @@ HRESULT CSilvermane::Ready_Components()
 	m_pTexture = g_pGameInstance->Clone_Component<CTexture>(0, L"Proto_Component_Texture");
 	m_pTexture->Change_Texture(L"Texture_SilvermeanNewHair");
 
-	m_pModel->Get_Materials()[3]->Set_Texture("g_NewHairTexture", TEXTURETYPE::TEX_TINT, m_pTexture);
+	m_pModel->Get_Materials()[3]->Set_Texture("g_OtherTexture", TEXTURETYPE::TEX_OTHER, m_pTexture);
 
 	return S_OK;
 }
