@@ -76,7 +76,7 @@ _int C1H_SwordRicochetReaction::Input(const _double& _dDeltaTime)
 	if (NO_EVENT != iProgress)
 		return iProgress;
 
-	_int iCurKeyFrameIndex = m_pAnimationController->Get_CurKeyFrameIndex();
+	_uint iCurKeyFrameIndex = m_pAnimationController->Get_CurKeyFrameIndex();
 	if (m_iCutIndex < iCurKeyFrameIndex)
 	{
 		if (g_pGameInstance->getkeyDown(DIK_Q))

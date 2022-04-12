@@ -99,7 +99,7 @@ HRESULT CMonster_Bastion_Spear::NativeConstruct(const _uint _iSceneID, void* _pA
 	m_pPanel->Set_GroggyBar(Get_GroggyGaugeRatio());
 
 	m_isFall = true;
-	//setActive(false);
+	setActive(false);
 
 	m_tAttackDesc.iLevel = 1;
 
@@ -210,8 +210,8 @@ HRESULT CMonster_Bastion_Spear::Render()
 {
 	SCB desc;
 	ZeroMemory(&desc, sizeof(SCB));
-
-	CActor::BindConstantBuffer(L"Camera_Silvermane", &desc);
+	wstring wstrCamTag = g_pGameInstance->Get_BaseCameraTag();
+	CActor::BindConstantBuffer(wstrCamTag, &desc);
 	for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
 		m_pModel->Render(i, 0);
 
@@ -223,7 +223,8 @@ HRESULT CMonster_Bastion_Spear::Render()
 
 HRESULT CMonster_Bastion_Spear::Render_Shadow()
 {
-	CActor::BindConstantBuffer(L"Camera_Silvermane");
+	wstring wstrCamTag = g_pGameInstance->Get_BaseCameraTag();
+	CActor::BindConstantBuffer(wstrCamTag);
 	CActor::BindLightBuffer();
 	for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
 		m_pModel->Render(i, 3);
@@ -515,40 +516,6 @@ HRESULT CMonster_Bastion_Spear::Render_Debug(void)
 	if (FAILED(m_pStateController->Render()))
 		return E_FAIL;
 
-	//Hp
-	if (FAILED(g_pGameInstance->Render_Font(TEXT("Font_Arial"), XMVectorSet(0.f, 1.0f, 0.f, 1.f), L"HP : " + to_wstring(m_fCurrentHp), _float2(950.f, 20.f), _float2(0.6f, 0.6f))))
-		return E_FAIL;
-
-	// FSM
-	wstring wstrCurStateTag = m_pStateController->Get_CurStateTag();
-	wstring wstrState = L"Cur State : ";
-
-	if (FAILED(g_pGameInstance->Render_Font(TEXT("Font_Arial"), XMVectorSet(0.f, 1.0f, 0.f, 1.f), (wstrState + wstrCurStateTag).c_str(), _float2(950.f, 40.f), _float2(0.6f, 0.6f))))
-		return E_FAIL;
-
-	m_pAnimation = m_pAnimator->Get_CurrentAnimation();
-
-	// 애니메이션 이름
-	string CurAnimName = m_pAnimation->Get_Name();
-	wstring wstrCurAnimTag;
-	wstring wstrAnimname = L"Cur Anim Tag : ";
-	wstrCurAnimTag.assign(CurAnimName.begin(), CurAnimName.end());
-	if (FAILED(g_pGameInstance->Render_Font(TEXT("Font_Arial"), XMVectorSet(0.f, 1.0f, 0.f, 1.f), (wstrAnimname + wstrCurAnimTag).c_str(), _float2(950.f, 60.f), _float2(0.6f, 0.6f))))
-		return E_FAIL;
-
-	// 애니메이션 상태
-	wstring wstrCurKeyFrameIndex = to_wstring(m_pAnimation->Get_CurrentKeyFrameIndex());
-	wstring wstrKeyFrame = L"Key Frame : ";
-	if (FAILED(g_pGameInstance->Render_Font(TEXT("Font_Arial"), XMVectorSet(0.f, 1.0f, 0.f, 1.f), (wstrKeyFrame + wstrCurKeyFrameIndex).c_str(), _float2(950.f, 80.f), _float2(0.6f, 0.6f))))
-		return E_FAIL;
-
-	wstring wstrAnimFinished = L"";
-	if (m_pAnimation->Is_Finished())
-		wstrAnimFinished = L"AnimFinished : TRUE";
-	else
-		wstrAnimFinished = L"AnimFinished : FALSE";
-	if (FAILED(g_pGameInstance->Render_Font(TEXT("Font_Arial"), XMVectorSet(0.f, 1.0f, 0.f, 1.f), wstrAnimFinished.c_str(), _float2(950.f, 100.f), _float2(0.6f, 0.6f))))
-		return E_FAIL;
 
 	return S_OK;
 }
@@ -573,8 +540,9 @@ void CMonster_Bastion_Spear::Remove_Collider()
 
 void CMonster_Bastion_Spear::Groggy_Start()
 {
-	Set_Groggy(true);
-	Set_GroggyGauge(0);
+	m_bGroggy = true;
+	m_fGroggyGauge = 0.f;
+	m_pStateController->Change_State(L"Groggy");
 	m_pPanel->Set_GroggyBar(Get_GroggyGaugeRatio());
 }
 
@@ -589,6 +557,7 @@ void CMonster_Bastion_Spear::Hit(const ATTACKDESC& _tAttackDesc)
 		|| m_iGuardCount > 0)
 	{
 		m_iGuardCount--;
+		Active_Effect((_uint)EFFECT::FLOATING);
 		return;
 	}
 
@@ -610,39 +579,38 @@ void CMonster_Bastion_Spear::Hit(CCollision& collision)
 {
 	if (!m_bDead)
 	{
-		//if (true == g_pObserver->IsAttack()) //플레이어공격일때
-		//{
+		if (false == m_bFirstHit)
+		{
 			m_bFirstHit = true; //딱 한번 true로 변경해줌
+			m_pPanel->Set_BackUIGapY(1.f);
+		}
 
-			if (true == m_bFirstHit)
+
+		if (L"Guard" != m_pStateController->Get_CurStateTag()
+			|| m_iGuardCount <= 0)
+		{
+			if (m_bHalf)
 			{
-				m_pPanel->Set_BackUIGapY(1.f);
+				if (!m_bChargeOn)
+					m_bChargeOn = true;
 			}
 
-			//if ((_uint)GAMEOBJECT::WEAPON == collision.pGameObject->getTag())
-			//{
-				if (L"Guard" != m_pStateController->Get_CurStateTag()
-					|| m_iGuardCount<=0)
-				{
-					if (m_bHalf)
-					{
-						if (!m_bChargeOn)
-							m_bChargeOn = true;
-					}
-					//m_pPanel->Set_Show(true);
-					m_bGuard = false;
-					m_pStateController->Change_State(L"Hit");
-					Active_Effect((_uint)EFFECT::HIT);
-					Active_Effect((_uint)EFFECT::FLOATING);
-					if (false == m_bGroggy)
-					{
-						//그로기 아닐때만 증가할수있게
-						m_pPanel->Set_GroggyBar(Get_GroggyGaugeRatio());
-					}
-				}
-				m_pPanel->Set_HpBar(Get_HpRatio());
-			//}
-		//}
+			m_bGuard = false;
+
+			
+			m_pPanel->Set_HpBar(Get_HpRatio());
+
+			if (false == m_bGroggy)
+			{
+				//그로기 아닐때만 증가할수있게'
+				m_pPanel->Set_GroggyBar(Get_GroggyGaugeRatio());
+				m_pStateController->Change_State(L"Hit");
+				m_fGroggyGauge += 2.f;
+
+				Active_Effect((_uint)EFFECT::HIT);
+				Active_Effect((_uint)EFFECT::FLOATING);
+			}
+		}
 	}
 }
 

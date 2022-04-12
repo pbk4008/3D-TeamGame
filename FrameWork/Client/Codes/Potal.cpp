@@ -113,7 +113,8 @@ HRESULT CPotal::Render()
 	_matrix smatWorld, smatView, smatProj;
 
 	_matrix ViewMatrix;
-	ViewMatrix = g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_VIEW);
+	wstring wstrCamTag = g_pGameInstance->Get_BaseCameraTag();
+	ViewMatrix = g_pGameInstance->Get_Transform(wstrCamTag, TRANSFORMSTATEMATRIX::D3DTS_VIEW);
 	ViewMatrix = XMMatrixInverse(nullptr, ViewMatrix);
 	
 	_float vScaleX = m_pTransform->Get_Scale(CTransform::STATE_RIGHT);
@@ -127,8 +128,8 @@ HRESULT CPotal::Render()
 	m_pTransform->Set_State(CTransform::STATE::STATE_LOOK, vLook);
 
 	smatWorld = XMMatrixTranspose(m_pTransform->Get_WorldMatrix());
-	smatView = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_VIEW));
-	smatProj = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_PROJECTION));
+	smatView = XMMatrixTranspose(g_pGameInstance->Get_Transform(wstrCamTag, TRANSFORMSTATEMATRIX::D3DTS_VIEW));
+	smatProj = XMMatrixTranspose(g_pGameInstance->Get_Transform(wstrCamTag, TRANSFORMSTATEMATRIX::D3DTS_PROJECTION));
 
 	if (FAILED(m_pRect->SetUp_ValueOnShader("g_WorldMatrix", &smatWorld, sizeof(_matrix))))
 		return E_FAIL;

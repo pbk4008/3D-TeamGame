@@ -61,6 +61,7 @@ public:
 	const _bool Is_Finished() const;
 
 	void Add_TrackAcc(const _double& _dTrackAcc);
+	void Set_TrackAcc(const _double& _dTrackAcc);
 
 	void Mul_MoveSpeed(const _float _fValue);
 	void Div_MoveSpeed(const _float _fValue);

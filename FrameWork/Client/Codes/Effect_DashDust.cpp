@@ -80,7 +80,8 @@ _int CEffect_DashDust::Tick(_double TimeDelta)
 	}
 
 	//zÁ¤·Ä
-	_vector vDir = g_pGameInstance->Get_CamPosition(L"Camera_Silvermane") - m_pTransform->Get_State(CTransform::STATE_POSITION);
+	wstring wstrCamTag = g_pGameInstance->Get_BaseCameraTag();
+	_vector vDir = g_pGameInstance->Get_CamPosition(wstrCamTag) - m_pTransform->Get_State(CTransform::STATE_POSITION);
 	vDir = XMVector3Normalize(vDir);
 	m_pBuffer->Set_Dir(vDir);
 
@@ -117,10 +118,11 @@ _int CEffect_DashDust::LateTick(_double TimeDelta)
 HRESULT CEffect_DashDust::Render()
 {
 	//_matrix XMWorldMatrix = XMMatrixTranspose(XMLoadFloat4x4(&m_WorldMatrix));
+	wstring wstrCamTag = g_pGameInstance->Get_BaseCameraTag();
 	_matrix XMWorldMatrix = XMMatrixTranspose(m_pTransform->Get_WorldMatrix());
-	_matrix XMViewMatrix = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_VIEW));
-	_matrix XMProjectMatrix = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_PROJECTION));
-	_vector CamPos = g_pGameInstance->Get_CamPosition(L"Camera_Silvermane");
+	_matrix XMViewMatrix = XMMatrixTranspose(g_pGameInstance->Get_Transform(wstrCamTag, TRANSFORMSTATEMATRIX::D3DTS_VIEW));
+	_matrix XMProjectMatrix = XMMatrixTranspose(g_pGameInstance->Get_Transform(wstrCamTag, TRANSFORMSTATEMATRIX::D3DTS_PROJECTION));
+	_vector CamPos = g_pGameInstance->Get_CamPosition(wstrCamTag);
 
 	m_pBuffer->SetUp_ValueOnShader("g_WorldMatrix", &XMWorldMatrix, sizeof(_float) * 16);
 	m_pBuffer->SetUp_ValueOnShader("g_ViewMatrix", &XMViewMatrix, sizeof(_float) * 16);

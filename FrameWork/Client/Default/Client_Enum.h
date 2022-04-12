@@ -3,8 +3,8 @@
 #define __CLIENT_ENUM_H__
 
 BEGIN(Client)
-enum class SCENEID {SCENE_STATIC, SCENE_LOADING, SCENE_LOGO, SCENE_STAGE1, SCENE_STAGE2, SCENE_STAGE3,SCENE_TEST_JS, SCENE_TEST_YM, SCENE_TEST_SB, SCENE_END};
-enum class SCENEMA_INDEX {SCENEMA_START, SCENEMA_END};
+enum class SCENEID {SCENE_STATIC, SCENE_LOADING, SCENE_LOGO, SCENE_STAGE1, SCENE_STAGE2, SCENE_STAGE3,SCENE_TEST_JS, SCENE_END};
+enum class CINEMA_INDEX{CINEMA1_1, CINEMA_END};
 enum class GAMEOBJECT
 {
 	ENVIRONMENT,
@@ -50,7 +50,10 @@ enum class EFFECT
 	FLOATING,
 	DEATH,
 	PLAYERHIT,
-	GUARD
+	GUARD,
+	ATTACK_LEFT,
+	ATTACK_RIGHT,
+	HITGROUND
 };
 
 enum class ELayer
@@ -81,6 +84,7 @@ enum class EItemType
 
 enum class EEquipmentGrade
 {
+	Common,
 	Uncommon,
 	Rare,
 	Epic,
@@ -123,6 +127,77 @@ typedef enum eEquipmentMainStatType
 	MainStatType_End
 }EQUIPMENT_MAINSTAT_TYPE;
 
+typedef enum eModalIndex
+{
+	TAB_EQUIPMENT,
+	TAB_ARMORY,
+	TAB_RESOURCE,
+	TAB_END
+}INVEN_INDEX;
+
+enum class EEquipSlot
+{
+	Weapon1,
+	Weapon2,
+	LifeStone,
+	Banner,
+	Ring1,
+	Ring2,
+	Amulet,
+	Charm,
+	Max,
+
+	/* 무기1 무기2 */
+	/* 목걸이 방패 */
+	/* 반지1 반지2 */
+	/* 생명석 배너 */
+};
+
+enum class EEquipmentGradeUI
+{
+	Common,
+	Uncommon,
+	Rare,
+	Epic,
+	Legendary,
+	GRADE_END
+};
+
+const wstring g_arrGradeName[(int)EEquipmentGradeUI::GRADE_END]
+{
+	L"일반",
+	L"고급",
+	L"희귀",
+	L"영웅",
+	L"전설"
+};
+
+const wstring g_arrGradeSlotBgName[(int)EEquipmentGradeUI::GRADE_END]
+{ 
+	L"T_Item_Bg_Grey",
+	L"T_Item_Bg_Blue",
+	L"T_Item_Bg_Green",
+	L"T_Item_Bg_Purple",
+	L"T_Item_Bg_Orange"
+};
+
+const wstring g_arrGradeStatusBgName[(int)EEquipmentGradeUI::GRADE_END]
+{ 
+	L"T_ItemStatus_Bg_Common",
+	L"T_ItemStatus_Bg_Rare",
+	L"T_ItemStatus_Bg_Uncommon",
+	L"T_ItemStatus_Bg_Epic",
+	L"T_ItemStatus_Bg_Legendary"
+};
+
+const wstring g_arrGradeEffectName[(int)EEquipmentGradeUI::GRADE_END]
+{
+	L"T_Item_Glow_Grey",
+	L"T_Item_Glow_Blue",
+	L"T_Item_Glow_Green",
+	L"T_Item_Glow_Purple",
+	L"T_Item_Glow_Orange"
+};
 
 END
 

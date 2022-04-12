@@ -147,6 +147,16 @@ _bool CInputDev::getMouseKeyUp(MOUSESTATE eMouse)
 	return false;
 }
 
+_fvector CInputDev::getMousePostion(void)
+{
+	//POINT point = {};
+	//GetCursorPos(&point);
+	//ScreenToClient(g_hWnd, &point);
+
+	//return _fvector{ (_float)point.x,(_float)point.y, 1.f, 1.f};
+	return _fvector();
+}
+
 _long CInputDev::getMouseMoveState(MOUSEMOVESTATE eMouse)
 {
 	if (WA_INACTIVE == GetActiveWindow())

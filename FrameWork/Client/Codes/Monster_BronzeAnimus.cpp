@@ -96,7 +96,7 @@ HRESULT CMonster_BronzeAnimus::NativeConstruct(const _uint _iSceneID, void* _pAr
 	m_pPanel->Set_GroggyBar(Get_GroggyGaugeRatio());
 
 	m_isFall = true;
-	//setActive(false);
+	setActive(false);
 
 	m_tAttackDesc.iLevel = 1;
 
@@ -159,6 +159,7 @@ _int CMonster_BronzeAnimus::Tick(_double _dDeltaTime)
 		//스턴상태일때 스턴state에서 현재 그로기 계속 0으로 고정시켜줌
 		m_bGroggy = true;
 		m_fGroggyGauge = 0.f;
+		m_pStateController->Change_State(L"Groggy");
 		m_pPanel->Set_GroggyBar(Get_GroggyGaugeRatio());
 	}
 
@@ -209,7 +210,8 @@ HRESULT CMonster_BronzeAnimus::Render()
 	SCB desc;
 	ZeroMemory(&desc, sizeof(SCB));
 
-	CActor::BindConstantBuffer(L"Camera_Silvermane", &desc);
+	wstring wstrCamTag = g_pGameInstance->Get_BaseCameraTag();
+	CActor::BindConstantBuffer(wstrCamTag, &desc);
 
 	for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
 		m_pModel->Render(i, 6);
@@ -222,7 +224,8 @@ HRESULT CMonster_BronzeAnimus::Render()
 
 HRESULT CMonster_BronzeAnimus::Render_Shadow()
 {
-	CActor::BindConstantBuffer(L"Camera_Silvermane");
+	wstring wstrCamTag = g_pGameInstance->Get_BaseCameraTag();
+	CActor::BindConstantBuffer(wstrCamTag);
 	CActor::BindLightBuffer();
 	for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
 		m_pModel->Render(i, 3);
@@ -566,43 +569,37 @@ void CMonster_BronzeAnimus::Remove_Collider()
 void CMonster_BronzeAnimus::GroggyStart()
 {
 	m_bGroggy = true;
-	Set_GroggyGauge(0);
-	m_pPanel->Set_GroggyBar(Get_GroggyGaugeRatio());
+	m_fGroggyGauge = 0.f;
 	m_pStateController->Change_State(L"Groggy");
+	m_pPanel->Set_GroggyBar(Get_GroggyGaugeRatio());
 }
 
 void CMonster_BronzeAnimus::Hit(CCollision& collision)
 {
 	if (!m_bDead)
 	{
-		//if (true == g_pObserver->IsAttack()) //플레이어공격일때
-		//{
-			if (!m_bFirstHit)
-			{
-				m_bFirstHit = true; //딱 한번 true로 변경해줌
-				m_pPanel->Set_BackUIGapY(1.f);
-			}
+		if (!m_bFirstHit)
+		{
+			m_bFirstHit = true; //딱 한번 true로 변경해줌
+			m_pPanel->Set_BackUIGapY(1.f);
+		}
 
-			//if ((_uint)GAMEOBJECT::WEAPON == collision.pGameObject->getTag())
-			//{
-				//m_pPanel->Set_Show(true);
-				_vector MonsterPos = m_pTransform->Get_State(CTransform::STATE_POSITION);
-				_vector Pos = { XMVectorGetX(MonsterPos), XMVectorGetY(MonsterPos) + 4.f, XMVectorGetZ(MonsterPos), 1.f };
-				Active_Effect((_uint)EFFECT::HIT, Pos);
-				Active_Effect((_uint)EFFECT::FLOATING, Pos);
-				//Set_Current_HP(-5);
-				Set_GroggyGauge(2); //TODO::수치정해서바꿔줘야됨
+		_vector MonsterPos = m_pTransform->Get_State(CTransform::STATE_POSITION);
+		_vector Pos = { XMVectorGetX(MonsterPos), XMVectorGetY(MonsterPos) + 3.f, XMVectorGetZ(MonsterPos), 1.f };
+		Active_Effect((_uint)EFFECT::HIT, Pos);
+		Active_Effect((_uint)EFFECT::FLOATING, Pos);
 
-				m_pPanel->Set_HpBar(Get_HpRatio());
+		//TODO::수치정해서바꿔줘야됨
+		m_fGroggyGauge += 2.f;
 
-				if (false == m_bGroggy)
-				{
-					//그로기 아닐때만 증가할수있게
-					m_pPanel->Set_GroggyBar(Get_GroggyGaugeRatio());
-					m_pStateController->Change_State(L"Hit");
-				}
-			//}
-		//}
+		m_pPanel->Set_HpBar(Get_HpRatio());
+
+		if (false == m_bGroggy)
+		{
+			//그로기 아닐때만 증가할수있게
+			m_pPanel->Set_GroggyBar(Get_GroggyGaugeRatio());
+			m_pStateController->Change_State(L"Hit");
+		}
 	}
 }
 

@@ -190,20 +190,20 @@ HRESULT CMonster_Crawler::Render()
 	SCB desc;
 	ZeroMemory(&desc, sizeof(SCB));
 
-	CActor::BindConstantBuffer(L"Camera_Silvermane",&desc);
+	wstring wstrCamTag = g_pGameInstance->Get_BaseCameraTag();
+	CActor::BindConstantBuffer(wstrCamTag,&desc);
 	if (FAILED(m_pModel->SetUp_ValueOnShader("g_bdissolve", &m_bdissolve, sizeof(_bool)))) MSGBOX("Failed to Apply dissolvetime");
 
 	for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
-	{	
 		m_pModel->Render(i, 0);
-	}
 
 	return S_OK;
 }
 
 HRESULT CMonster_Crawler::Render_Shadow()
 {
-	CActor::BindConstantBuffer(L"Camera_Silvermane");
+	wstring wstrCamTag = g_pGameInstance->Get_BaseCameraTag();
+	CActor::BindConstantBuffer(wstrCamTag);
 	CActor::BindLightBuffer();
 	for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
 		m_pModel->Render(i, 3);
@@ -249,10 +249,10 @@ void CMonster_Crawler::Hit(const ATTACKDESC& _tAttackDesc)
 
 	m_pPanel->Set_Show(true);
 
-	m_bFirstHit = true; //µü ÇÑ¹ø true·Î º¯°æÇØÁÜ
 
-	if (true == m_bFirstHit)
+	if (false == m_bFirstHit)
 	{
+		m_bFirstHit = true; //µü ÇÑ¹ø true·Î º¯°æÇØÁÜ
 		m_pPanel->Set_BackUIGapY(1.f);
 	}
 

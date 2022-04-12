@@ -5,6 +5,7 @@
 #include "Needle.h"
 #include "Fury.h"
 #include "Shield.h"
+#include "FlyingShield.h"
 #include "JumpNode.h"
 #include "JumpTrigger.h"
 #include "JumpBox.h"
@@ -147,6 +148,7 @@
 #include "Shield_WalkRightStop.h"
 // Attack
 #include "Shield_SupermanPunchStraight.h"
+#include "Shield_Throw.h"
 //////////////////////////////////////////// Jump
 #include "Traverse_Jump400Jog.h"
 #include "Traverse_JumpNodeJog.h"
@@ -216,10 +218,7 @@ HRESULT CSilvermane::NativeConstruct(const _uint _iSceneID, void* _pArg)
 
 	m_pRenderer->SetRenderButton(CRenderer::PIXEL, true);
 	m_pRenderer->SetRenderButton(CRenderer::PBRHDR, true);
-	m_pRenderer->SetCameraTag(L"Camera_Silvermane");
-
-	/* 인벤 데이터 디버그용 */
-	m_pInventoryData = g_pDataManager->GET_DATA(CInventoryData, L"InventoryData");
+	m_pRenderer->SetCameraTag(g_pGameInstance->Get_BaseCameraTag());
 
 	return S_OK;
 }
@@ -280,6 +279,12 @@ _int CSilvermane::Tick(_double _dDeltaTime)
 			return iProgress;
 	}
 
+	if (g_pGameInstance->getkeyDown(DIK_NUMPAD8))
+	{
+		_vector pos = { 0.f, 0.f, 5.f };
+		Active_Effect((_uint)EFFECT::HITGROUND, pos);
+	}
+
 	return _int();
 }
 
@@ -328,9 +333,11 @@ _int CSilvermane::LateTick(_double _dDeltaTime)
 
 HRESULT CSilvermane::Render()
 {
+
 	RIM rimdesc;
 	ZeroMemory(&rimdesc, sizeof(RIM));
 
+	wstring wstrCamTag = g_pGameInstance->Get_BaseCameraTag();
 	if (g_pObserver->IsAttack())
 	{
 		m_color = _float4(0.784f, 0.137f, 0.137f, 0.f);
@@ -371,10 +378,10 @@ HRESULT CSilvermane::Render()
 		{
 			desc.color = m_color;
 			desc.empower = 0.8f;
-			CActor::BindConstantBuffer(L"Camera_Silvermane", &desc, &rimdesc);
+			CActor::BindConstantBuffer(wstrCamTag, &desc, &rimdesc);
 		}
 		else
-			CActor::BindConstantBuffer(L"Camera_Silvermane", &desc, &rimdesc);
+			CActor::BindConstantBuffer(wstrCamTag, &desc, &rimdesc);
 
 		if (FAILED(m_pModel->Render(i, i))) MSGBOX("Fialed To Rendering Silvermane");
 	}
@@ -388,7 +395,8 @@ HRESULT CSilvermane::Render()
 
 HRESULT CSilvermane::Render_Shadow()
 {
-	CActor::BindConstantBuffer(L"Camera_Silvermane");
+	wstring wstrCamTag = g_pGameInstance->Get_BaseCameraTag();
+	CActor::BindConstantBuffer(wstrCamTag);
 	CActor::BindLightBuffer();
 	for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
 		m_pModel->Render(i, 4);
@@ -449,29 +457,6 @@ HRESULT CSilvermane::Render_Debug()
 	wstring wstrIsAttack = L"IsAttack : ";
 	m_IsAttack == true ? wstrIsAttack += L"true" : wstrIsAttack += L"false";
 	if (FAILED(g_pGameInstance->Render_Font(TEXT("Font_Arial"), XMVectorSet(1.f, 0.0f, 0.f, 1.f), wstrIsAttack.c_str(), _float2(0.f, 200.f), _float2(0.6f, 0.6f))))
-		return E_FAIL;
-
-
-	
-	// 인벤 상태
-	wstring wstrIsInvenState = L"Inven Count : ";
-	wstring wstrInvenCnt = to_wstring(m_pInventoryData->GetCount());
-	if (FAILED(g_pGameInstance->Render_Font(TEXT("Font_Arial"), XMVectorSet(0.f, 1.0f, 1.f, 1.f), (wstrIsInvenState + wstrInvenCnt).c_str(), _float2(800.f, 40.f), _float2(0.6f, 0.6f))))
-		return E_FAIL;
-
-	wstring wstrCurItem = L"Inven Cur Add Item : ";
-	wstring wstrItemName = m_pInventoryData->GetItem().szItemName;
-	if (FAILED(g_pGameInstance->Render_Font(TEXT("Font_Arial"), XMVectorSet(0.f, 1.0f, 1.f, 1.f), (wstrCurItem + wstrItemName).c_str(), _float2(800.f, 60.f), _float2(0.6f, 0.6f))))
-		return E_FAIL;
-
-	wstring wstrItemLevel = L"Item Level : ";
-	wstring ItemLevel = to_wstring(m_pInventoryData->GetItem().iLevel);
-	if (FAILED(g_pGameInstance->Render_Font(TEXT("Font_Arial"), XMVectorSet(0.f, 1.0f, 1.f, 1.f), (wstrItemLevel + ItemLevel).c_str(), _float2(800.f, 80.f), _float2(0.6f, 0.6f))))
-		return E_FAIL;
-
-	wstring wstrItemDmg = L"Item Dmg : ";
-	wstring ItemDmg = to_wstring(m_pInventoryData->GetItem().iDmg);
-	if (FAILED(g_pGameInstance->Render_Font(TEXT("Font_Arial"), XMVectorSet(0.f, 1.0f, 1.f, 1.f), (wstrItemDmg + ItemDmg).c_str(), _float2(800.f, 100.f), _float2(0.6f, 0.6f))))
 		return E_FAIL;
 
 	return S_OK;
@@ -777,6 +762,8 @@ HRESULT CSilvermane::Ready_States()
 	// Attack
 	if (FAILED(m_pStateController->Add_State(L"Shield_SupermanPunchStraight", CShield_SupermanPunchStraight::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
+	if (FAILED(m_pStateController->Add_State(L"Shield_Throw", CShield_Throw::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
 #pragma endregion
 	// 짬푸
 	if (FAILED(m_pStateController->Add_State(L"Traverse_Jump400Jog", CTraverse_Jump400Jog::Create(m_pDevice, m_pDeviceContext))))
@@ -932,7 +919,7 @@ void CSilvermane::OnControllerColliderHit(CCollision& collision)
 
 void CSilvermane::Hit(const ATTACKDESC& _tAttackDesc)
 {
-	if (m_isBlock)
+	if (m_isBlock && !m_IsAttack)
 		static_cast<CState_Silvermane*>(m_pStateController->Get_CurState())->Block(_tAttackDesc);
 	else
 		static_cast<CState_Silvermane*>(m_pStateController->Get_CurState())->Hit(_tAttackDesc);
@@ -1073,6 +1060,16 @@ const _bool CSilvermane::IsEquipShield() const
 	return m_isEquipShield;
 }
 
+const _bool CSilvermane::IsShieldThrow() const
+{
+	return m_isShieldThrow;
+}
+
+const _bool CSilvermane::IsShieldReturn() const
+{
+	return m_isShieldReturn;
+}
+
 const CWeapon::EType CSilvermane::Get_WeaponType() const
 {
 	return m_pCurWeapon->Get_Type();
@@ -1206,9 +1203,50 @@ void CSilvermane::Set_IsShieldAttack(const _bool _isAttack)
 		m_pShield->Set_IsAttack(_isAttack);
 }
 
+void CSilvermane::Set_IsShieldThrow(const _bool _isShieldThrow)
+{
+	m_isShieldThrow = _isShieldThrow;
+}
+
+void CSilvermane::Set_IsShieldReturn(const _bool _isShieldReturn)
+{
+	m_isShieldReturn = _isShieldReturn;
+}
+
 void CSilvermane::Add_BlockTime(const _float _fValue)
 {
 	m_fBlockTime += _fValue;
+}
+
+HRESULT CSilvermane::ThrowShield(const _fvector& _svTargetPos)
+{
+	m_pFlyingShield = static_cast<CFlyingShield*>(m_pShield->Throw(_svTargetPos));
+	if (!m_pFlyingShield)
+		return E_FAIL;
+
+	return S_OK;
+}
+
+void CSilvermane::Return_Shield()
+{
+	m_isShieldReturn = true;
+	m_pAnimationController->Set_PlaySpeed(1.f);
+}
+
+void CSilvermane::End_ThrowShield()
+{
+	if (g_pObserver->Get_PlayerAttackAnimStart() || m_isBlock || m_isHit)
+		return;
+
+	m_pStateController->Change_State(L"Shield_Throw");
+	Set_EquipShield(true);
+	Set_EquipShieldAnim(true);
+	m_pShield->Set_TrackAcc(6.0); // 방패가 펼쳐진상태로 켜지도록 함
+
+	m_pAnimationController->Set_TrackAcc(73.0);
+	m_pAnimationController->Set_PlaySpeed(1.4f);
+	m_pFlyingShield = nullptr;
+	m_isShieldThrow = false;
 }
 
 const _int CSilvermane::Trace_CameraLook(const _double& _dDeltaTime)

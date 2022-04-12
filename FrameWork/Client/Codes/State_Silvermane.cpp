@@ -369,6 +369,102 @@ const _int CState_Silvermane::ToChargeStart()
 	return STATE_CHANGE;
 }
 
+const _int CState_Silvermane::ToJogFwd()
+{
+	if (!m_pSilvermane->IsEquipWeapon())
+	{
+		if (FAILED(m_pStateController->Change_State(L"JogFwdStart")))
+			return -1;
+	}
+	else
+	{
+		switch (m_pSilvermane->Get_WeaponType())
+		{
+		case CWeapon::EType::Sword_1H:
+			if (FAILED(m_pStateController->Change_State(L"1H_SwordJogFwdStart")))
+				return -1;
+			break;
+		case CWeapon::EType::Hammer_2H:
+			if (FAILED(m_pStateController->Change_State(L"2H_HammerJogFwdStart")))
+				return -1;
+			break;
+		}
+	}
+	return STATE_CHANGE;
+}
+
+const _int CState_Silvermane::ToJogBwd()
+{
+	if (!m_pSilvermane->IsEquipWeapon())
+	{
+		if (FAILED(m_pStateController->Change_State(L"JogBwdStart")))
+			return -1;
+	}
+	else
+	{
+		switch (m_pSilvermane->Get_WeaponType())
+		{
+		case CWeapon::EType::Sword_1H:
+			if (FAILED(m_pStateController->Change_State(L"1H_SwordJogBwdStart")))
+				return -1;
+			break;
+		case CWeapon::EType::Hammer_2H:
+			if (FAILED(m_pStateController->Change_State(L"2H_HammerJogBwdStart")))
+				return -1;
+			break;
+		}
+	}
+	return STATE_CHANGE;
+}
+
+const _int CState_Silvermane::ToJogLeft()
+{
+	if (!m_pSilvermane->IsEquipWeapon())
+	{
+		if (FAILED(m_pStateController->Change_State(L"JogLeftStart")))
+			return -1;
+	}
+	else
+	{
+		switch (m_pSilvermane->Get_WeaponType())
+		{
+		case CWeapon::EType::Sword_1H:
+			if (FAILED(m_pStateController->Change_State(L"1H_SwordJogLeftStart")))
+				return -1;
+			break;
+		case CWeapon::EType::Hammer_2H:
+			if (FAILED(m_pStateController->Change_State(L"2H_HammerJogLeftStart")))
+				return -1;
+			break;
+		}
+	}
+	return STATE_CHANGE;
+}
+
+const _int CState_Silvermane::ToJogRight()
+{
+	if (!m_pSilvermane->IsEquipWeapon())
+	{
+		if (FAILED(m_pStateController->Change_State(L"JogRightStart")))
+			return -1;
+	}
+	else
+	{
+		switch (m_pSilvermane->Get_WeaponType())
+		{
+		case CWeapon::EType::Sword_1H:
+			if (FAILED(m_pStateController->Change_State(L"1H_SwordJogRightStart")))
+				return -1;
+			break;
+		case CWeapon::EType::Hammer_2H:
+			if (FAILED(m_pStateController->Change_State(L"2H_HammerJogRightStart")))
+				return -1;
+			break;
+		}
+	}
+	return STATE_CHANGE;
+}
+
 void CState_Silvermane::Set_Silvermane(CSilvermane* _pSilvermane)
 {
 	m_pSilvermane = _pSilvermane;

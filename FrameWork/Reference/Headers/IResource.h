@@ -9,12 +9,12 @@ class ENGINE_DLL IResource
 {
 	friend class CResourceManager;
 
-protected:
+public:
 	explicit IResource(void);
 	virtual ~IResource(void) = default;
 
 protected:
-	virtual void NativeConstruct(std::wstring _fg = L"") PURE;
+	virtual void NativeConstruct(std::wstring _fg) PURE;
 	
 public:
 	const std::wstring& GetName(void) { return m_name; }

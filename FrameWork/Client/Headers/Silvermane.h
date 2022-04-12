@@ -10,6 +10,8 @@ END
 BEGIN(Client)
 #pragma region 전방선언
 class CWeapon;
+class CShield;
+class CFlyingShield;
 class CCamera_Silvermane;
 class CJumpNode;
 class CJumpTrigger;
@@ -102,12 +104,20 @@ public: /* For.Weapon */
 
 public: /* For.Shield */
 	const _bool IsEquipShield() const;
+	const _bool IsShieldThrow() const;
+	const _bool IsShieldReturn() const;
 	const _float Get_BlockTime() const;
 	void Set_EquipShield(const _bool _isEquipShield);
 	void Set_EquipShieldAnim(const _bool _isEquipShield);
 	void Set_BlockTime(const _float _fValue);
 	void Set_IsShieldAttack(const _bool _isAttack);
+	void Set_IsShieldThrow(const _bool _isShieldThrow);
+	void Set_IsShieldReturn(const _bool _isShieldReturn);
 	void Add_BlockTime(const _float _fValue);
+	HRESULT ThrowShield(const _fvector& _svTargetPos);
+	void Return_Shield();
+	void End_ThrowShield();
+
 
 public: /* For.JumpNode */
 	CJumpNode* Get_TargetJumpNode() const;
@@ -146,11 +156,16 @@ public:
 
 private: /* For.Weapon */
 	CWeapon* m_pCurWeapon = nullptr;
-	CWeapon* m_pShield = nullptr;
 	_bool m_isEquipWeapon = false;
-	_bool m_isEquipShield = false;
-	_float m_fBlockTime = 0.f;
 	unordered_map<wstring, CWeapon*> m_umapWeapons;
+
+private: /* For.Shield */
+	CShield* m_pShield = nullptr;
+	CFlyingShield* m_pFlyingShield = nullptr;
+	_bool m_isEquipShield = false;
+	_bool m_isShieldThrow = false;
+	_bool m_isShieldReturn = false;
+	_float m_fBlockTime = 0.f;
 
 private: /* For.JumpNode */
 	CJumpNode* m_pTargetJumpNode = nullptr;

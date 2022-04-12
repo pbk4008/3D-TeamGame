@@ -189,6 +189,17 @@ void CAnimationController::Add_TrackAcc(const _double& _dTrackAcc)
 	m_pCurAnim->Add_TrackAcc(_dTrackAcc);
 }
 
+void CAnimationController::Set_TrackAcc(const _double& _dTrackAcc)
+{
+	if (-1 != m_tBlendDesc.iNextAnimIndex)
+	{
+		vector<CAnimation*>& vecAnimations = m_pModel->Get_Animations();
+		vecAnimations[m_tBlendDesc.iNextAnimIndex]->Set_TrackAcc(_dTrackAcc);
+		return;
+	}
+	m_pCurAnim->Set_TrackAcc(_dTrackAcc);
+}
+
 void CAnimationController::Mul_MoveSpeed(const _float _fValue)
 {
 	m_fMoveSpeed *= _fValue;

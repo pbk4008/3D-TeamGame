@@ -1,0 +1,2945 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="99.Default">
+      <UniqueIdentifier>{4c615150-21ae-4a5c-b481-71b70d76748b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="98.Headers">
+      <UniqueIdentifier>{96eda15f-74ed-47dc-ba01-308cf57bfc5c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00.MainGame">
+      <UniqueIdentifier>{77744ede-73e8-4a86-9387-22f105cb42bb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Scene">
+      <UniqueIdentifier>{9e263673-2d49-4631-b81e-17e3fed66b69}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Scene\01.Loading">
+      <UniqueIdentifier>{7422941d-4d51-474c-be5e-f6a0e862edd3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Scene\01.Loading\00.Loader">
+      <UniqueIdentifier>{5fc128d8-a6b0-4069-a1d5-9b84151e16b3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="97.DebugSystem">
+      <UniqueIdentifier>{b4bd8d9b-cb93-4756-811e-26837882420d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Scene\02.Stage">
+      <UniqueIdentifier>{7b03efd1-8edb-483a-9e4d-de2be570d5c2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Scene\99.TestScene_JS">
+      <UniqueIdentifier>{b6e86d0a-b561-409f-9266-5b3cc0b5111e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject">
+      <UniqueIdentifier>{f2cdd416-1246-46fe-9651-260378957611}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\00. BackGround">
+      <UniqueIdentifier>{3e9f8b1d-79d3-4ea6-8887-0f1a331282cb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\01. MainCamera">
+      <UniqueIdentifier>{8b18fdcc-5500-4069-924b-f1bd56f8854d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\01. MainCamera\ProjectionCam">
+      <UniqueIdentifier>{b39d66ed-89a6-46d9-8ed8-5f311d203299}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\01. MainCamera\OrthoCam">
+      <UniqueIdentifier>{65662b41-31ce-4b36-8d8e-957a55ecdb6d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\99.TestObj">
+      <UniqueIdentifier>{0437e1aa-690d-4d50-9a9f-8e81ae5f8eb9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\04.Effect">
+      <UniqueIdentifier>{8a92a3f2-2ab5-4eeb-a712-96f614c298ff}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.UI">
+      <UniqueIdentifier>{ea588900-5830-4a87-bbb5-2525229f11a6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.UI\01.UI_Ingame">
+      <UniqueIdentifier>{2697be6f-d512-4375-9c64-b12c0e1ffaec}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\96.Weapon">
+      <UniqueIdentifier>{4de56d05-7178-4ee0-a266-5f7bb2773397}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\96.Weapon\00.Needle">
+      <UniqueIdentifier>{3eee425a-e769-4d53-87d7-fe962081c44a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\96.Weapon\01.Fury">
+      <UniqueIdentifier>{41f5effc-3bc6-4200-b217-cd324fcb7c7a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.UI\01.UI_Ingame\01.Meter">
+      <UniqueIdentifier>{25729745-f9c6-4a84-b355-89c40ec68f2c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.UI\01.UI_Ingame\01.Meter\00.Player">
+      <UniqueIdentifier>{4de05ff2-3d03-4f3b-ad4d-09b3e5ba1d89}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.UI\01.UI_Ingame\01.Meter\02.Monster">
+      <UniqueIdentifier>{502a6b26-1f52-4b01-ba20-de46249aa8be}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.UI\01.UI_Ingame\00.UI_Ingame_Static">
+      <UniqueIdentifier>{25165615-4570-4a4e-bba1-7184efc01ed4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.UI\01.UI_Ingame\01.Meter\03.Experience">
+      <UniqueIdentifier>{e9863d16-3274-42ad-b939-668432992c6a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.UI\01.UI_Ingame\01.Meter\04.Quest">
+      <UniqueIdentifier>{27923a70-84a2-468f-a230-34f40a40682f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.UI\01.UI_Ingame\01.Meter\05.Tutorial">
+      <UniqueIdentifier>{15bb2a83-2c91-4dd2-8f5a-44ac8b9947eb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.UI\01.UI_Ingame\01.Meter\05.Tutorial\01.SideTutorial">
+      <UniqueIdentifier>{084cbf4c-c0f2-467b-b1a2-0cbd5dfed096}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.UI\01.UI_Ingame\01.Meter\05.Tutorial\00.WindowTutorial">
+      <UniqueIdentifier>{35f9989b-6fcb-4f33-8ef7-b58dd6d6549f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.UI\01.UI_Ingame\01.Meter\02.Monster\02.LevelUI">
+      <UniqueIdentifier>{b525fe55-b1b3-46b1-b25d-5a2f5862ee98}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.UI\01.UI_Ingame\01.Meter\02.Monster\01.BackUI">
+      <UniqueIdentifier>{a09772d0-1451-4530-a375-7fe1820525c4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.UI\01.UI_Ingame\01.Meter\02.Monster\00.Panel">
+      <UniqueIdentifier>{03b93ce8-7782-46d2-877d-9aad77e75074}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.UI\01.UI_Ingame\01.Meter\02.Monster\03.HpUI">
+      <UniqueIdentifier>{8d05bd08-0e08-4584-9925-592ea048aeab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\96.Weapon\99.Shield">
+      <UniqueIdentifier>{a9a4ad69-9913-4775-b0c0-8025825621ca}</UniqueIdentifier>
+	</Filter>
+    <Filter Include="01.Scene\98.TestScene_YM">
+      <UniqueIdentifier>{8e37d1fe-95e3-4c35-bcbf-fba13eeabb78}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\96.Weapon\02.RetributionBlade">
+      <UniqueIdentifier>{493beca5-7248-489a-b7af-b6706549a6e7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\94.Observer">
+      <UniqueIdentifier>{940d0a05-11c0-4eb4-a1d5-243f18cbc146}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.UI\01.UI_Ingame\01.Meter\00.Player\00.HpBar_Green">
+      <UniqueIdentifier>{5669ad8b-59eb-4030-b7fe-a090faac3e0f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.UI\01.UI_Ingame\01.Meter\00.Player\01.HpBar_Red">
+      <UniqueIdentifier>{3bc79af9-7de6-4fdb-bd68-25821baf2a4b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\96.Weapon\03.Stargazer">
+      <UniqueIdentifier>{c7467934-81e9-48c7-9c6f-403039f32fbb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character">
+      <UniqueIdentifier>{81c1fb5a-5f64-45b1-b48c-f368e2157c7c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\00.Player">
+      <UniqueIdentifier>{ea0db492-8f6d-4cf1-9f49-a1483fa2eb10}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\00.Player\00.Silvermane">
+      <UniqueIdentifier>{c9df52b7-2319-4d77-a2e8-0a052e39157d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\00.Player\00.Silvermane\State">
+      <UniqueIdentifier>{ef05c7f7-5a10-49d2-a495-156cd2854a96}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\00.Player\00.Silvermane\State\1H_Sword">
+      <UniqueIdentifier>{0e4cba26-3aae-4f52-85e9-e564bdabc551}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\00.Player\00.Silvermane\State\1H_Sword\R1">
+      <UniqueIdentifier>{b633d97d-462e-48c6-867d-562024140055}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\00.Player\00.Silvermane\State\1H_Sword\R2">
+      <UniqueIdentifier>{c0d08387-07b4-4d7c-a318-5ece1884a341}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\00.Player\00.Silvermane\State\1H_Sword\Dash">
+      <UniqueIdentifier>{222e2ebe-0f75-418e-8c0b-3c3fa18868d4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\00.Player\00.Silvermane\State\1H_Sword\Default">
+      <UniqueIdentifier>{46707690-282f-43ef-b597-bc4ac8b961ef}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\00.Player\00.Silvermane\State\1H_Sword\Jog">
+      <UniqueIdentifier>{4c43f7b0-8a55-4a1e-90c3-d1d2fa61b380}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\00.Player\00.Silvermane\State\2H_Hammer">
+      <UniqueIdentifier>{09b012e7-83f6-4d29-8792-13efdc82098c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\00.Player\00.Silvermane\State\2H_Hammer\Default">
+      <UniqueIdentifier>{76d183de-db73-4482-b897-41f812405f31}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\00.Player\00.Silvermane\State\2H_Hammer\Jog">
+      <UniqueIdentifier>{a587da2b-ac44-42ed-8ed7-3acc2294bbce}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\00.Player\00.Silvermane\State\2H_Hammer\R1">
+      <UniqueIdentifier>{8442c6e8-1b71-42cb-9465-65001b52b72f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\00.Player\00.Silvermane\State\2H_Hammer\R2">
+      <UniqueIdentifier>{e33ba3ef-21b0-430f-8b2b-2ca2d50e74c5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\00.Player\00.Silvermane\State\Shield">
+      <UniqueIdentifier>{4590a2ac-338a-47ba-8c6b-df9838b1d71e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\00.Player\00.Silvermane\State\Shield\Block">
+      <UniqueIdentifier>{e8029245-54e6-452e-b4e4-f1f6a5409528}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\00.Player\00.Silvermane\State\Shield\Walk">
+      <UniqueIdentifier>{d66c57df-414a-42b9-8a22-8de350e11a0f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\00.Player\00.Silvermane\State\Shield\Attack">
+      <UniqueIdentifier>{d31e6c56-beaa-4aaa-a144-eba3c2cdafff}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\00.Player\00.Silvermane\State\Jump">
+      <UniqueIdentifier>{c46bf2a8-6d72-4573-8057-fad1bf3781e0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\00.Player\00.Silvermane\Camera">
+      <UniqueIdentifier>{fff034f3-6d84-4669-b0c2-9e3d6be892c0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster">
+      <UniqueIdentifier>{4eb6e82c-5d39-4760-aeda-4732c2357b3b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_2HSword">
+      <UniqueIdentifier>{6a8d6a38-662f-4d40-b3d6-331656a470eb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_2HSword\State_2HSword">
+      <UniqueIdentifier>{af1e5dd1-ee66-47a7-aec3-1945a6e5ae03}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_2HSword\State_2HSword\Dash">
+      <UniqueIdentifier>{c23a677a-c591-4bd2-8e17-78ac1f993745}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_2HSword\State_2HSword\Chaser">
+      <UniqueIdentifier>{a2d12d7f-0e2d-42e3-9df6-ec3b41216d6c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_2HSword\State_2HSword\Idle">
+      <UniqueIdentifier>{18041324-6424-4135-85dd-5f36abcfcc46}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_2HSword\State_2HSword\Attack">
+      <UniqueIdentifier>{3eaa0c37-22a5-4c1c-9f2b-98016a66f7b6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_2HSword\State_2HSword\Death">
+      <UniqueIdentifier>{47fa8725-e6cb-49c0-87f1-92cb4ca29640}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_2HSword\State_2HSword\Rage">
+      <UniqueIdentifier>{bd8eebf8-c00f-4303-9ddc-b43dfb509314}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_2HSword\State_2HSword\Hit">
+      <UniqueIdentifier>{7622b84d-629f-47c9-91a2-0c5b83b391dc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_Healer">
+      <UniqueIdentifier>{335bed18-d7d5-4883-82c3-5137d2e1cbc5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_Shooter">
+      <UniqueIdentifier>{9ff8a515-17bc-40fa-a1a9-f012b45f5d19}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_Spear">
+      <UniqueIdentifier>{985a4737-6984-45e3-b7aa-e1c5e0c5c488}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\BronzeAnimus">
+      <UniqueIdentifier>{d4ff09ad-5442-4050-8ed4-1c05e5b91f71}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\Crawler">
+      <UniqueIdentifier>{5b72d0c0-077b-4741-ae56-127caf52670c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\EarthAberrant">
+      <UniqueIdentifier>{3ff89c49-f181-4547-aeea-d6ccbc1b943e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\02.Map">
+      <UniqueIdentifier>{6c137bf1-fc2b-4525-be87-87d5a6156eb0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\02.Map\00.Plane">
+      <UniqueIdentifier>{90180e28-49c4-4c5c-89b6-1ad22812fb29}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\02.Map\01.Environment">
+      <UniqueIdentifier>{2671a8b6-a2a8-4ec2-ad0d-b3e116f33512}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\02.Boss">
+      <UniqueIdentifier>{5e4ce90c-d575-4e08-9ce0-006401437c35}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.UI\01.UI_Ingame\01.Meter\02.Monster\04.Name">
+      <UniqueIdentifier>{f93eb3ac-c59a-4020-8040-bc1b1ca22d26}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\Crawler\State">
+      <UniqueIdentifier>{d76242e7-e6bc-430a-b9db-6e820a61d11f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\Crawler\State\03.Flinch">
+      <UniqueIdentifier>{7ae21a8b-87f2-42a9-b8ec-557e3b386415}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\Crawler\State\01.Walk">
+      <UniqueIdentifier>{c9f6cc46-ba83-4d0f-b3ed-dee4c84a7974}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\Crawler\State\02.Attack">
+      <UniqueIdentifier>{9121331f-10e4-4281-a84d-af03d2a228d0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\Crawler\State\00.Idle">
+      <UniqueIdentifier>{80718da2-b434-4f3a-83f6-f405a8b45485}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\Crawler\State\04.Knockback">
+      <UniqueIdentifier>{e39aa1b3-074d-44d7-bfb9-3305bcc059cf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\Crawler\State\05.Death">
+      <UniqueIdentifier>{68e33a80-cc88-4dfe-a15d-622a68dcbb14}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\Crawler\State\06.Ricochet">
+      <UniqueIdentifier>{5d0d2558-f65e-4b32-8804-080a0c1b99d6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\EarthAberrant\State">
+      <UniqueIdentifier>{c378b0cc-f07a-4ba2-8dae-09b85aedec4b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\EarthAberrant\State\00.Idle">
+      <UniqueIdentifier>{89a86753-77d9-4309-aceb-d226891146ab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\EarthAberrant\State\01.Walk">
+      <UniqueIdentifier>{8ee6be25-4296-447d-a71c-1df2c16a91ef}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\EarthAberrant\State\02.Run">
+      <UniqueIdentifier>{7464defb-76ef-40ae-9e49-60563ce32ef8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\EarthAberrant\State\03.Attack">
+      <UniqueIdentifier>{8891ce53-fa8d-4839-acaf-b37030d1d847}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\EarthAberrant\State\04.Flinch">
+      <UniqueIdentifier>{598793a3-920b-4585-a942-1ffe7b1a718a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\EarthAberrant\State\05.Stun">
+      <UniqueIdentifier>{a5feef31-56a7-454e-b845-a90b88d0d9cf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\EarthAberrant\State\06.Knockback">
+      <UniqueIdentifier>{fcb36259-0e76-4d95-8ef9-ad44c10ef567}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_Healer\State_Healer">
+      <UniqueIdentifier>{ac333559-d103-4db9-a16f-3083aeb79507}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_Healer\State_Healer\Idle">
+      <UniqueIdentifier>{ae86d84e-b34f-4aae-957e-4acd49333021}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\96.Weapon\04.Staff">
+      <UniqueIdentifier>{19b1f1d3-c266-4b09-9b08-5abbbca7ed80}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Scene\02.Stage\00.Stage1">
+      <UniqueIdentifier>{ed994de5-4c7c-496e-8ec2-e5c3993d6b2d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Scene\02.Stage\01.Stage2">
+      <UniqueIdentifier>{a040ae63-0bf3-4932-8dd6-cc54af1b87c5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Scene\02.Stage\02.Stage3">
+      <UniqueIdentifier>{1c229266-2fe0-42c7-b3c0-4ff0917f6000}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_Healer\State_Healer\Attack">
+      <UniqueIdentifier>{17b7c742-628e-4868-8d1e-7c0d413d9f1d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_Healer\State_Healer\Protect">
+      <UniqueIdentifier>{a934e01a-0d69-4988-820b-0a3452caae48}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_Healer\State_Healer\Death">
+      <UniqueIdentifier>{cb8123f1-7865-4c84-bd46-7c2c4c7fb4fc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Scene\01.Loading\00.Loader\00.MeshLoader">
+      <UniqueIdentifier>{c2049929-7ae9-4414-bb90-0d30c5d6089c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\00. BackGround\Skybox">
+      <UniqueIdentifier>{34e9d6fc-40fa-469c-b052-c7a694bdeaaa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\49.Treasure_Chest">
+      <UniqueIdentifier>{cbf09ecb-b293-43d9-8ea2-ea120f524ad7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\EarthAberrant\State\07.Death">
+      <UniqueIdentifier>{955cc475-5007-4ece-807c-dd6fbd6d41a5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\EarthAberrant\State\08.Dash">
+      <UniqueIdentifier>{44af2aae-a22a-45f0-b19b-a68fbdd4099f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.UI\01.UI_Ingame\01.Meter\05.Tutorial\01.SideTutorial\00.Base">
+      <UniqueIdentifier>{e8825a4a-7e01-4b4a-bf32-adb9045e05f3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.UI\01.UI_Ingame\01.Meter\05.Tutorial\01.SideTutorial\01.Font">
+      <UniqueIdentifier>{bc016171-dd24-4100-ae51-f14583cc3157}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.System">
+      <UniqueIdentifier>{62988325-939c-4ebd-9df0-bc7e105ce642}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.System\00.Trigger">
+      <UniqueIdentifier>{64538ba6-dcae-4651-a187-37e1fdf0fbf0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.UI\01.UI_Ingame\01.Meter\02.Monster\05.Groggy">
+      <UniqueIdentifier>{de4559b8-3cc3-4e19-a28c-9e4004bf6722}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\02.Boss\00.MiddleBoss">
+      <UniqueIdentifier>{a7db1ec6-722d-46ed-bdad-a86d3c709df2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\02.Boss\00.MiddleBoss\State">
+      <UniqueIdentifier>{8a29aee6-6d31-4f13-bfdb-45f715488804}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\02.Boss\00.MiddleBoss\State\00.Rage">
+      <UniqueIdentifier>{78558ab8-2fff-4b33-ab1b-2e33a7ffd7ca}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\02.Boss\00.MiddleBoss\State\01.BattleCry">
+      <UniqueIdentifier>{0548b5d4-b2f0-44cd-be0d-411854b88969}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\02.Boss\00.MiddleBoss\State\02.Attack">
+      <UniqueIdentifier>{1b94931b-764f-4fd3-9076-83d5953ebc0b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\02.Boss\00.MiddleBoss\State\03.Turn">
+      <UniqueIdentifier>{f2df4087-aee9-4ef4-bcdf-ddd10c0ac559}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\02.Boss\00.MiddleBoss\State\04.Death">
+      <UniqueIdentifier>{9ca0b922-5493-4c13-b374-4312bd2f3120}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\02.Boss\00.MiddleBoss\State\05.Stun">
+      <UniqueIdentifier>{2a308277-84e1-4f4f-afc1-cfdeb29f6ae2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_Healer\State_Healer\Hit">
+      <UniqueIdentifier>{d4ca5c36-6c33-400f-a4c0-e81fd9a67485}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\02.Boss\00.MiddleBoss\State\00.Idle">
+      <UniqueIdentifier>{bc617a5c-688e-4158-810d-363ff4b32592}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\02.Boss\00.MiddleBoss\State\00.Run">
+      <UniqueIdentifier>{e800aeda-0ac9-4c06-ba77-a606ba04cd5b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_Shooter\State">
+      <UniqueIdentifier>{14771fa7-7054-4bf1-99fc-72b13a0f9722}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_Shooter\State\Attack">
+      <UniqueIdentifier>{0e465f15-42b9-4038-9066-ca93866e3c94}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_Shooter\State\Idle">
+      <UniqueIdentifier>{98de4f7a-c550-41c1-9300-e3be3582d049}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_Shooter\State\Death">
+      <UniqueIdentifier>{b2969b5b-1ae9-43a2-b4ac-88190867c1d0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_Shooter\State\Hit">
+      <UniqueIdentifier>{f8b78009-493d-4f56-bd0a-df9463180192}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_Shooter\State\Groggy">
+      <UniqueIdentifier>{28ef5e3b-891e-4dfb-a639-46f6f9844ec7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_Shooter\State\Walk">
+      <UniqueIdentifier>{45ae3d67-529b-4945-a05d-b6f887e8ddca}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_Shooter\State\Chase">
+      <UniqueIdentifier>{bc8ce3b8-ea1a-440f-bb8e-4fb703e5a16c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_Shooter\Bullet">
+      <UniqueIdentifier>{bc9506cc-b8bd-46dc-8693-749f8a69ac2b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_2HSword\State_2HSword\Groggy">
+      <UniqueIdentifier>{903a9638-b5eb-482e-924a-0a015449b4a1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\00.Player\00.Silvermane\State\HIt">
+      <UniqueIdentifier>{c0836172-4e03-4723-b9f5-2ce38812b858}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\01. MainCamera\CullingCam">
+      <UniqueIdentifier>{448dfa35-cb38-4df2-bd37-7952d6ae674d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_Healer\State_Healer\Groggy">
+      <UniqueIdentifier>{be23ca3f-dcd4-4d54-94af-faa9de66f577}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\02.Map\02.JumpNode">
+      <UniqueIdentifier>{15743125-3fab-4955-a1a7-2c3ab22ace2e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_2HSword\State_2HSword\Groggy\End">
+      <UniqueIdentifier>{1158fce2-5cfa-4605-9029-4ac375f14bcd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_Healer\State_Healer\Groggy\End">
+      <UniqueIdentifier>{892718b1-9962-4028-8d41-2430bd159096}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\BronzeAnimus\State">
+      <UniqueIdentifier>{a3990c0b-9ec5-4534-916f-dc6b9454ab6b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\96.Weapon\05.BronzeAnimus_Sword">
+      <UniqueIdentifier>{b1f35ebf-a1f3-4bfd-b47c-ae5a2fd62910}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\BronzeAnimus\Statue_Idle">
+      <UniqueIdentifier>{ab912abd-75d7-4635-b14f-ca5549302ffe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\96.Weapon\06.Polearm">
+      <UniqueIdentifier>{6541d66d-92a3-424d-ad00-8ab2e88ba65c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\BronzeAnimus\State\Roar">
+      <UniqueIdentifier>{e623c139-2b93-4b9d-b51c-289274bd5b74}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\BronzeAnimus\State\Attack">
+      <UniqueIdentifier>{5f6e1b9b-53fa-4651-bb12-f089e6344449}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\BronzeAnimus\State\Battle_Idle">
+      <UniqueIdentifier>{0d243957-00aa-4b43-8fde-f1348d9aab3d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\BronzeAnimus\State\Chaser">
+      <UniqueIdentifier>{a4182a70-0ec5-48a9-9c78-0b4ef0774ffe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\BronzeAnimus\State\Death">
+      <UniqueIdentifier>{064f9573-fa9e-4f1d-9e76-3a2619ac25ac}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\BronzeAnimus\State\Groggy">
+      <UniqueIdentifier>{cb31667d-6a67-4aff-b990-7ff2d35b50ff}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\BronzeAnimus\State\Hit">
+      <UniqueIdentifier>{f3401bf2-27f9-4f41-8ffd-c09412a1b03a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_Spear\State">
+      <UniqueIdentifier>{039fdf97-f9f1-4fbc-bea3-13aada469634}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_Spear\State\Idle">
+      <UniqueIdentifier>{dcbb37db-5b85-4a81-be9f-2863822d36d6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_Spear\State\Death">
+      <UniqueIdentifier>{baf915d2-4f93-4072-b81d-fab0de0f3234}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_Spear\State\Attack">
+      <UniqueIdentifier>{f9710c6f-1f1a-4367-b8ff-96774951aae4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_Spear\State\Hit">
+      <UniqueIdentifier>{7477709e-4f41-4890-8122-ef475bec7d85}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_Spear\State\Groggy">
+      <UniqueIdentifier>{ac66a710-bcf5-414e-8c08-e5d2e6fc5282}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_Spear\State\Chaser">
+      <UniqueIdentifier>{8bca8ade-8c30-4cda-95ec-9c503ce7740e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_Spear\State\Dash">
+      <UniqueIdentifier>{80b8b8b3-629f-4bc0-a2d6-a1cf19a42817}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_Spear\State\Groggy\End">
+      <UniqueIdentifier>{e5543a53-3cc7-4cb6-87bb-4c41032fce03}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_Spear\State\Guard">
+      <UniqueIdentifier>{85a09936-f9ae-4c4f-a521-9cdca484e2fb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_Spear\State\Attack\Charge_Attack">
+      <UniqueIdentifier>{52f9fe23-d530-45bf-8dce-6f09b54d794d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.System\01.ShakeManager">
+      <UniqueIdentifier>{88c490a5-4de2-42f5-8177-be9cf2784d4b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.System\00.Trigger\Client_Trigger">
+      <UniqueIdentifier>{b9091f0b-2046-48f5-9b0a-b245f8fa1e4e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\00.Player\00.Silvermane\State\Idel">
+      <UniqueIdentifier>{c9495a7f-fa32-4be2-9ed1-f71f827bba41}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\00.Player\00.Silvermane\State\Idel\Jog">
+      <UniqueIdentifier>{01f7ac04-32d9-487c-9957-9dcf393a6d81}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\00.Player\00.Silvermane\State\Idel\Sprint">
+      <UniqueIdentifier>{f86ae29b-ccc6-4e20-aafd-431e17d61329}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\96.Weapon\98.Trail">
+      <UniqueIdentifier>{0a662d2a-bf0c-4955-b176-58fbdf8c84f3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_Sword">
+      <UniqueIdentifier>{f21fcb8a-8935-4037-bb0e-677bf69fee18}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_Sword\00.State">
+      <UniqueIdentifier>{9607ce11-6263-4e1e-8495-2de83143c495}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_Sword\00.State\01.Chase">
+      <UniqueIdentifier>{198aa2cf-1f67-4f22-b567-e3dc4942f330}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_Sword\00.State\02.Attack">
+      <UniqueIdentifier>{37cf987f-07dd-4d07-9d9b-25d6172a3b02}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_Sword\00.State\03.Hit">
+      <UniqueIdentifier>{c566e27b-d8f9-4f71-a9a3-1f26dea458e5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_Sword\00.State\04.Death">
+      <UniqueIdentifier>{ef3cb63a-530b-45b7-92f9-fdd0cdbeffc0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_Sword\00.State\05.Groggy">
+      <UniqueIdentifier>{3d15588b-416d-40ca-b9f2-015a9e9d2a0b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_Sword\00.State\06.Paring">
+      <UniqueIdentifier>{0914aca3-ccbf-42a5-83c1-a594627f4e52}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_Sword\00.State\08.Walk">
+      <UniqueIdentifier>{fe36a500-8b7c-4714-bff8-ed49386ac515}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_Sword\00.State\08.Walk\07.Turn">
+      <UniqueIdentifier>{f15707ff-b13d-4f61-ae5b-8aaf6d1afdc7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\02.Map\01.Environment\00.Tree">
+      <UniqueIdentifier>{afa39133-5db9-4588-b538-151dc4a78680}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\02.Map\01.Environment\01.NoiseFire">
+      <UniqueIdentifier>{9d43fd19-4db2-406e-a72d-f78aadaf8bd3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\02.Map\01.Environment\02.MapObject">
+      <UniqueIdentifier>{6c74a239-aae4-4275-b01a-ea48c53eae4c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\04.Effect\00.Particle">
+      <UniqueIdentifier>{26ffc168-b02c-40a4-b7fb-3fa6ef6e68d1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\04.Effect\00.Particle\00.Effect_DashDust_Player">
+      <UniqueIdentifier>{b305731d-7dad-4c04-a1b5-dfb2e52d2441}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\04.Effect\00.Particle\01.Effect_MapLeaf">
+      <UniqueIdentifier>{387da879-a8da-43c1-a901-c84527a9b9f2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\04.Effect\00.Particle\03.Effect_Floating">
+      <UniqueIdentifier>{be60742a-b954-4dc6-8968-d6849db69d5c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\04.Effect\00.Effect_Image">
+      <UniqueIdentifier>{b8f9805f-3e27-4c3b-ac49-1503c798311d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\04.Effect\00.Effect_Image\00.Env_Fire">
+      <UniqueIdentifier>{f3533393-750c-4e4b-8424-ce5de30c8016}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\04.Effect\00.Particle\04.Effect_Death">
+      <UniqueIdentifier>{b1e1a118-af89-4ff4-8367-ab5967b67e62}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\04.Effect\00.Particle\02.Effect_HitParticle">
+      <UniqueIdentifier>{b370ed74-461a-48d9-91e0-c06ca932a31c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\04.Effect\00.Particle\05.Effect_Env_Floating">
+      <UniqueIdentifier>{8d7b5bdf-ccca-4b02-a6e5-003a503ad353}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.UI\01.UI_Ingame\02.UI_JumpNode">
+      <UniqueIdentifier>{03278934-600d-43f1-abf8-b223c947e83e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.UI\01.UI_Ingame\02.UI_JumpNode\00.Blank">
+      <UniqueIdentifier>{bc51da15-514c-49b6-9f36-484c1a4a1510}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.UI\01.UI_Ingame\02.UI_JumpNode\01.Fill">
+      <UniqueIdentifier>{a56a74b1-3d13-4387-b77b-96aeb0113934}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="100.ShaderFiles">
+      <UniqueIdentifier>{e173c6ad-aaf0-433d-b1a6-467acfce5285}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="100.ShaderFiles\01.Environment">
+      <UniqueIdentifier>{b73a4e26-0c07-4d4d-b1c4-8860928a6b4a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="100.ShaderFiles\02.Actor">
+      <UniqueIdentifier>{01f09cd2-dcfc-4f2c-a5da-56671ab0b823}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="100.ShaderFiles\03.Effect">
+      <UniqueIdentifier>{f35001cd-5f3e-4300-aa56-576f4dca80d9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="100.ShaderFiles\04.UI">
+      <UniqueIdentifier>{4af64381-c8be-4ccc-ab92-05fd23a14472}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="100.ShaderFiles\99.Other">
+      <UniqueIdentifier>{905d5be1-9601-40ef-81f2-c8c3537101a9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\04.Effect\01.TrailEffect">
+      <UniqueIdentifier>{4da4394f-ff21-4396-a0e8-24986eaeec60}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.UI\01.UI_Ingame\01.Meter\02.Monster\03.HpUI\00.BackHp">
+      <UniqueIdentifier>{56f68291-1790-462f-af84-0e71c7f994af}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="96.ScriptableData">
+      <UniqueIdentifier>{7c23face-6ea6-4e04-a605-1ddce2d9a0d7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="96.ScriptableData\ItemData">
+      <UniqueIdentifier>{3f7dd977-f734-4af9-a8b5-0e67491a7ed6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="96.ScriptableData\WeaponData">
+      <UniqueIdentifier>{fcee0832-7747-4d88-8347-466b12020e7b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.UI\02.UIDGen">
+      <UniqueIdentifier>{f266934c-1a57-446b-95cc-e419c91d86f5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.System\02.InteractManager">
+      <UniqueIdentifier>{463fe524-896b-4339-89fc-7dd31e8d3856}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\06.Interactable Object">
+      <UniqueIdentifier>{4a5859c8-26b8-4d46-99f2-0e7d33ad266d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.System\03.DropManager">
+      <UniqueIdentifier>{1616c50f-191e-47c8-9ae6-63f27fdd364c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\06.Interactable Object\DropObject">
+      <UniqueIdentifier>{083ba14e-1894-4e11-b635-6aa79097214f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.System\04.GameObjectPool">
+      <UniqueIdentifier>{1624795f-0856-4f9e-b3dd-76c8629f1312}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\06.Interactable Object\DropBox">
+      <UniqueIdentifier>{b65eefca-bd57-42a1-8609-b4176f8e4154}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\06.Interactable Object\DropBox\Open_State">
+      <UniqueIdentifier>{51e0a802-bea5-479b-a341-22f1110f66f9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="96.ScriptableData\InventoryData">
+      <UniqueIdentifier>{981fc99d-54c6-44d5-97b1-06663b0d6739}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.System\05.DataManager">
+      <UniqueIdentifier>{570e7cdd-e1ad-4238-8e22-de6213ebd30e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\00.Player\00.Silvermane\State\Shield\Parry">
+      <UniqueIdentifier>{476d3f32-8157-40d0-b1ca-3cfc24316276}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_Healer\State_Healer\Run">
+      <UniqueIdentifier>{6c4f4213-7978-4785-9bab-d674b1588fbf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\04.Effect\00.Particle\06.Effect_Guard">
+      <UniqueIdentifier>{a0e663ef-dcdc-4443-8e69-2f05e2663463}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="100.ShaderFiles\98.Share">
+      <UniqueIdentifier>{451023dd-fff5-4931-95a3-2c781dff7537}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\96.Weapon\08.ShieldBreaker">
+      <UniqueIdentifier>{eee5d743-fda4-4f7b-ba26-d4c790268f21}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\96.Weapon\07.Aberrant_Pick">
+      <UniqueIdentifier>{5fb68284-c871-4e91-8aaa-81ee9c81ea14}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\96.Weapon\99.Shield">
+      <UniqueIdentifier>{a9a4ad69-9913-4775-b0c0-8025825621ca}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Scene\01.Loading\00.Logo">
+      <UniqueIdentifier>{cac3034c-dd8b-47e8-afc7-da6cb3e9501e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_Spear\00.Idle">
+      <UniqueIdentifier>{2398d3e4-0aad-4c0a-b779-2676cae6f42f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.UI\03.SingleImage">
+      <UniqueIdentifier>{3fff2a7c-2e05-4760-99a8-e04b4a301ae2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.UI\04.Inventory">
+      <UniqueIdentifier>{782f4f26-a57a-4218-81bc-72b76cac97a6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.UI\04.Inventory\00.Indexes">
+      <UniqueIdentifier>{9fbfeccf-c9da-4ea7-a744-e8696373439b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.System">
+      <UniqueIdentifier>{62988325-939c-4ebd-9df0-bc7e105ce642}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.System\00.Trigger">
+      <UniqueIdentifier>{64538ba6-dcae-4651-a187-37e1fdf0fbf0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.System\00.Trigger\Client_Trigger">
+      <UniqueIdentifier>{b9091f0b-2046-48f5-9b0a-b245f8fa1e4e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.System\01.ShakeManager">
+      <UniqueIdentifier>{88c490a5-4de2-42f5-8177-be9cf2784d4b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.System\02.InteractManager">
+      <UniqueIdentifier>{463fe524-896b-4339-89fc-7dd31e8d3856}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.System\03.DropManager">
+      <UniqueIdentifier>{1616c50f-191e-47c8-9ae6-63f27fdd364c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.System\04.GameObjectPool">
+      <UniqueIdentifier>{1624795f-0856-4f9e-b3dd-76c8629f1312}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.System\05.DataManager">
+      <UniqueIdentifier>{570e7cdd-e1ad-4238-8e22-de6213ebd30e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.System\06.Inven_UIManager">
+      <UniqueIdentifier>{625ef898-8306-4fcf-948a-cb5065ac2aea}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.UI\04.Inventory\01.Background">
+      <UniqueIdentifier>{095a960c-4854-49d0-b937-3c2eebd13ce3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.UI\04.Inventory\02.Equipment">
+      <UniqueIdentifier>{f3c63aa5-6608-4b19-b2ca-9cd9e1c01051}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.UI\04.Inventory\03.Armory">
+      <UniqueIdentifier>{d0ac4e6a-b203-4940-b2f1-08c40c0e062e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_Healer\Meteor">
+      <UniqueIdentifier>{62e29ab4-9fdb-4a34-b3fd-46a933f3453a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\02.Map\03.Potal">
+      <UniqueIdentifier>{ad5b56da-5141-4199-8cab-4b99f8de595c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\00.Player\00.Silvermane\State\Looting">
+      <UniqueIdentifier>{63d17537-8141-4500-98a5-9b4ef284d80f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.UI\04.Inventory\04.ItemSlot">
+      <UniqueIdentifier>{6087a9c1-16ce-485b-8b56-bde28a7edbf8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.UI\04.Inventory\04.ItemSlot\00.Background">
+      <UniqueIdentifier>{4e7c56aa-b02e-46a0-a605-797dce1d100f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.UI\04.Inventory\04.ItemSlot\01.Grade">
+      <UniqueIdentifier>{f8c6ca39-7368-4519-a58f-96c3456aeb0f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.UI\04.Inventory\04.ItemSlot\02.ItemIcon">
+      <UniqueIdentifier>{15298026-689c-47c7-a84e-0312ecf70293}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.UI\04.Inventory\04.ItemSlot\03.ItemEffect">
+      <UniqueIdentifier>{02ffd2ac-4864-4ba7-8755-1a4624eba3b7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.UI\04.Inventory\04.ItemSlot\04.EquipedText">
+      <UniqueIdentifier>{22a23bd4-eaf6-40e3-896c-6cf7455c7a77}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="96.ScriptableData\EquipmentData">
+      <UniqueIdentifier>{7bea859b-1617-46b5-961f-33a170cd8d53}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.UI\99.UIHelper">
+      <UniqueIdentifier>{7f503847-a598-492a-be31-19a6604b7e28}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.UI\04.Inventory\05.ItemStatusWindow">
+      <UniqueIdentifier>{850eb111-7ae4-490c-80d5-1943bd9ab30e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.UI\04.Inventory\05.ItemStatusWindow\00.Background">
+      <UniqueIdentifier>{8bafe783-d0e5-46a7-9d4f-d9c347e0900d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.UI\04.Inventory\00.Indexes\00.Button_Equipment">
+      <UniqueIdentifier>{1fbb0f0c-0d1b-4251-8639-85edb4781910}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.UI\04.Inventory\00.Indexes\01.Button_Armory">
+      <UniqueIdentifier>{b3b1db8d-8efa-47ee-9502-be082548d46f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.UI\04.Inventory\00.Indexes\02.Button_Skill">
+      <UniqueIdentifier>{8033d721-34aa-4cf8-8b42-515932cc7d6a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="96.ScriptableData\PlayerData">
+      <UniqueIdentifier>{9c78ba36-bbb3-432e-97e9-2ec38031f8fa}</UniqueIdentifier>
+	</Filter>
+    <Filter Include="01.Scene\00.Logo">
+      <UniqueIdentifier>{cac3034c-dd8b-47e8-afc7-da6cb3e9501e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\02.Map\04.Wall">
+      <UniqueIdentifier>{3dae373e-68c5-415f-8383-cd466ef9596f}</UniqueIdentifier>
+	</Filter>
+    <Filter Include="03.System\07.Scenematic">
+      <UniqueIdentifier>{21489520-048e-4295-9f73-a3c5349519f9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.System\07.Scenematic\00.Manager">
+      <UniqueIdentifier>{e6727d87-3999-40d8-b43e-c853a4edea65}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\01. MainCamera\CinemaCam">
+      <UniqueIdentifier>{80dff71d-f3e2-4611-85c4-d598d100a259}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.System\07.Scenematic\01.Stage1">
+      <UniqueIdentifier>{7923ba1c-8533-4b27-8cbc-6a47b092efad}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.System\07.Scenematic\01.Stage1\Cinema1_1">
+      <UniqueIdentifier>{aa6a42c7-1e50-490c-80c7-c2e3fcb11325}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\00.Player\00.Silvermane\State\Shield\Throw">
+      <UniqueIdentifier>{69f64efb-d5bc-433d-bf69-0a94dad5f809}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Client.h">
+      <Filter>99.Default</Filter>
+    </ClInclude>
+    <ClInclude Include="framework.h">
+      <Filter>99.Default</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>99.Default</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>99.Default</Filter>
+    </ClInclude>
+    <ClInclude Include="pch.h">
+      <Filter>98.Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Default\Client_Include.h">
+      <Filter>98.Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Default\Clinet_Define.h">
+      <Filter>98.Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Default\Client_Enum.h">
+      <Filter>98.Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Default\Client_Function.h">
+      <Filter>98.Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\MainApp.h">
+      <Filter>00.MainGame</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Level_Logo.h">
+      <Filter>01.Scene\00.Logo</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Loading.h">
+      <Filter>01.Scene\01.Loading</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Loader.h">
+      <Filter>01.Scene\01.Loading\00.Loader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\BackGround.h">
+      <Filter>02.GameObject\00. BackGround</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\TestObj.h">
+      <Filter>02.GameObject\99.TestObj</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Silvermane.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\TestScene_JS.h">
+      <Filter>01.Scene\99.TestScene_JS</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\State_Silvermane.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Camera_Silvermane.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Silvermane_JogBwd.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Idel\Jog</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Silvermane_JogBwdPivot180.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Idel\Jog</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Silvermane_JogBwdStart.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Idel\Jog</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Silvermane_JogFwd.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Idel\Jog</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Silvermane_JogFwdPivot180.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Idel\Jog</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Silvermane_JogFwdStart.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Idel\Jog</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Silvermane_JogFwdStop.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Idel\Jog</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Silvermane_JogLeft.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Idel\Jog</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Silvermane_JogLeftPivot180.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Idel\Jog</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Silvermane_JogLeftStart.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Idel\Jog</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Silvermane_JogRight.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Idel\Jog</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Silvermane_JogRightPivot180.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Idel\Jog</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Silvermane_JogRightStart.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Idel\Jog</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Silvermane_SprintFwd.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Idel\Sprint</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Silvermane_SprintFwdStart.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Idel\Sprint</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Silvermane_SprintFwdStop.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Idel\Sprint</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Plane_Test.h">
+      <Filter>02.GameObject\02.Map\00.Plane</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Weapon.h">
+      <Filter>02.GameObject\96.Weapon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Needle.h">
+      <Filter>02.GameObject\96.Weapon\00.Needle</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\MainCamera.h">
+      <Filter>02.GameObject\01. MainCamera\ProjectionCam</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\MainCamera_Ortho.h">
+      <Filter>02.GameObject\01. MainCamera\OrthoCam</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Camera_Debug.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Monster_Bastion_2HSword.h">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_2HSword</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Monster_Bastion_Healer.h">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Healer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Monster_Crawler.h">
+      <Filter>02.GameObject\03.Character\01.Monster\Crawler</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Monster_EarthAberrant.h">
+      <Filter>02.GameObject\03.Character\01.Monster\EarthAberrant</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Silvermane_Jog.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Idel\Jog</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\1H_SwordAttack.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\1H_Sword</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\1H_Dash.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\1H_Sword\Dash</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\1H_SwordDodgeSpinFwd_V3.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\1H_Sword\Dash</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\1H_SwordNormalSidestepBwd_V3.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\1H_Sword\Dash</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\1H_SwordNormalSidestepLeft_V3.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\1H_Sword\Dash</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\1H_SwordNormalSidestepRight_V3.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\1H_Sword\Dash</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\1H_SwordAttackNormalR1_01.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\1H_Sword\R1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\1H_SwordAttackNormalR1_02.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\1H_Sword\R1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\1H_SwordAttackNormalR1_03.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\1H_Sword\R1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\1H_SwordAttackNormalR1_04.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\1H_Sword\R1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\1H_SwordSupermanStab.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\1H_Sword\R1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\1H_SwordJogAttack.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\1H_Sword\R1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\1H_SwordAttackNormalR2_ReleaseStab.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\1H_Sword\R2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\1H_SwordAttackNormalR2_02.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\1H_Sword\R2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\1H_SwordAttackNormalR2_03.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\1H_Sword\R2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\1H_SwordAttackNormalR2_04.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\1H_Sword\R2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\1H_SwordAttackNormalR2_Start.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\1H_Sword\R2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\1H_SwordAttackNormalR2_ReleaseDoubleSwing.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\1H_Sword\R2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\1H_SwordAttackNormalR2_Loop.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\1H_Sword\R2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Fury.h">
+      <Filter>02.GameObject\96.Weapon\01.Fury</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\2H_HammerIdle.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\2H_Hammer\Default</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\2H_HammerEquipOff.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\2H_Hammer\Default</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\2H_HammerEquipOn.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\2H_Hammer\Default</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\2H_HammerJog.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\2H_Hammer\Jog</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\2H_HammerJogBwd.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\2H_Hammer\Jog</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\2H_HammerJogBwdPivot180.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\2H_Hammer\Jog</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\2H_HammerJogBwdStart.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\2H_Hammer\Jog</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\2H_HammerJogFwd.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\2H_Hammer\Jog</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\2H_HammerJogFwdPivot180.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\2H_Hammer\Jog</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\2H_HammerJogFwdStart.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\2H_Hammer\Jog</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\2H_HammerJogLeft.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\2H_Hammer\Jog</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\2H_HammerJogLeftPivot180.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\2H_Hammer\Jog</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\2H_HammerJogLeftStart.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\2H_Hammer\Jog</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\2H_HammerJogRight.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\2H_Hammer\Jog</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\2H_HammerJogRightPivot180.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\2H_Hammer\Jog</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\2H_HammerJogRightStart.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\2H_Hammer\Jog</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Silvermane_Sprint.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Idel\Sprint</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\1H_SwordEquipOff.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\1H_Sword\Default</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\1H_SwordEquipOn.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\1H_Sword\Default</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\1H_SwordJog.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\1H_Sword\Jog</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\1H_SwordJogBwd.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\1H_Sword\Jog</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\1H_SwordJogBwdPivot180.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\1H_Sword\Jog</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\1H_SwordJogBwdStart.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\1H_Sword\Jog</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\1H_SwordJogFwd.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\1H_Sword\Jog</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\1H_SwordJogFwdPivot180.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\1H_Sword\Jog</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\1H_SwordJogFwdStart.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\1H_Sword\Jog</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\1H_SwordJogLeft.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\1H_Sword\Jog</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\1H_SwordJogLeftPivot180.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\1H_Sword\Jog</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\1H_SwordJogLeftStart.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\1H_Sword\Jog</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\1H_SwordJogRight.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\1H_Sword\Jog</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\1H_SwordJogRightPivot180.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\1H_Sword\Jog</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\1H_SwordJogRightStart.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\1H_Sword\Jog</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\1H_SwordIdle.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\1H_Sword\Default</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\UI_Ingame.h">
+      <Filter>02.GameObject\05.UI\01.UI_Ingame\00.UI_Ingame_Static</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\UI_Monster_Level.h">
+      <Filter>02.GameObject\05.UI\01.UI_Ingame\01.Meter\02.Monster\02.LevelUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\UI_Monster_Back.h">
+      <Filter>02.GameObject\05.UI\01.UI_Ingame\01.Meter\02.Monster\01.BackUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\UI_Monster_Panel.h">
+      <Filter>02.GameObject\05.UI\01.UI_Ingame\01.Meter\02.Monster\00.Panel</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\UI_Monster_HpBar.h">
+      <Filter>02.GameObject\05.UI\01.UI_Ingame\01.Meter\02.Monster\03.HpUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\2H_HammerAttack.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\2H_Hammer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\2H_HammerAttackR1_01.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\2H_Hammer\R1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\2H_HammerAttackR1_02.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\2H_Hammer\R1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\2H_HammerAttackR1_03.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\2H_Hammer\R1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\2H_HammerAttackR1_04.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\2H_Hammer\R1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\2H_HammerAttackJogR1.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\2H_Hammer\R1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\2H_HammerAttackR2_01.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\2H_Hammer\R2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\2H_HammerAttackR2_02.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\2H_Hammer\R2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\2H_HammerAttackR2_03.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\2H_Hammer\R2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\2H_HammerChargeStage1_Start.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\2H_Hammer\R2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\2H_HammerChargeStage1_Loop.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\2H_Hammer\R2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\2H_HammerAttackSprintR1.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\2H_Hammer\R1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\2H_HammerAttackR1_04Swap.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\2H_Hammer\R2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\2H_HammerAttackDodgeR1.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\2H_Hammer\R1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\2H_HammerAttackR2_Charge.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\2H_Hammer\R2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Shield.h">
+      <Filter>02.GameObject\96.Weapon\99.Shield</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Shield_BlockStart.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Shield\Block</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Shield_Block.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Shield\Block</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Shield_BlockLoop.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Shield\Block</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Shield_BlockEnd.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Shield\Block</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Shield_WalkBwd.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Shield\Walk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Shield_WalkBwdStart.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Shield\Walk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Shield_WalkBwdStop.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Shield\Walk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Shield_WalkFwd.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Shield\Walk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Shield_WalkFwdStart.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Shield\Walk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Shield_WalkFwdStop.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Shield\Walk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Shield_WalkLeft.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Shield\Walk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Shield_WalkLeftStart.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Shield\Walk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Shield_WalkLeftStop.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Shield\Walk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Shield_WalkRight.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Shield\Walk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Shield_WalkRightStart.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Shield\Walk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Shield_WalkRightStop.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Shield\Walk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Shield_Walk.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Shield\Walk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Shield_SupermanPunchStraight.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Shield\Attack</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\RetributionBlade.h">
+      <Filter>02.GameObject\96.Weapon\02.RetributionBlade</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Client_Observer.h">
+      <Filter>02.GameObject\94.Observer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\UI_Player_HpBar.h">
+      <Filter>02.GameObject\05.UI\01.UI_Ingame\01.Meter\00.Player\00.HpBar_Green</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\UI_Player_HpBar_Red.h">
+      <Filter>02.GameObject\05.UI\01.UI_Ingame\01.Meter\00.Player\01.HpBar_Red</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Boss_Bastion_Judicator.h">
+      <Filter>02.GameObject\03.Character\02.Boss\00.MiddleBoss</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\ShieldBreaker.h">
+      <Filter>02.GameObject\96.Weapon\08.ShieldBreaker</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Stargazer.h">
+      <Filter>02.GameObject\96.Weapon\03.Stargazer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Bastion_2HSword_Dash.h">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_2HSword\State_2HSword\Dash</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Bastion_2HSword_Idle.h">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_2HSword\State_2HSword\Idle</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Bastion_2HSword_Chaser.h">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_2HSword\State_2HSword\Chaser</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Shooter_Idle.h">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Shooter\State\Idle</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Traverse_Jump400Jog.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Jump</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\MidBoss_Rage.h">
+      <Filter>02.GameObject\03.Character\02.Boss\00.MiddleBoss\State\00.Rage</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\MidBoss_Attack.h">
+      <Filter>02.GameObject\03.Character\02.Boss\00.MiddleBoss\State\02.Attack</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\MidBoss_BattleCry.h">
+      <Filter>02.GameObject\03.Character\02.Boss\00.MiddleBoss\State\01.BattleCry</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\MidBoss_Turn.h">
+      <Filter>02.GameObject\03.Character\02.Boss\00.MiddleBoss\State\03.Turn</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Bastion_2HSword_Death.h">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_2HSword\State_2HSword\Death</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Bastion_2HSword_Rage.h">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_2HSword\State_2HSword\Rage</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Bastion_2HSword_Attack.h">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_2HSword\State_2HSword\Attack</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Bastion_Sword_Idle.h">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Spear\00.Idle</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Bastion_Sword_Chase.h">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Sword\00.State\01.Chase</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Bastion_Sword_Attack.h">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Sword\00.State\02.Attack</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Bastion_Sword_Hit.h">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Sword\00.State\03.Hit</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Bastion_Sword_Death.h">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Sword\00.State\04.Death</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Bastion_Sword_Groggy.h">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Sword\00.State\05.Groggy</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Bastion_Sword_Paring.h">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Sword\00.State\06.Paring</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Bastion_Sword_Turn.h">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Sword\00.State\08.Walk\07.Turn</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Bastion_Sword_Walk.h">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Sword\00.State\08.Walk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Bastion_2HSword_State.h">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_2HSword\State_2HSword</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Bastion_2HSword_Hit.h">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_2HSword\State_2HSword\Hit</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Traverse_JumpNodeJog.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Jump</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Monster_Bastion_Sword.h">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Sword</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\1H_SwordAttackNormalR1_04Swap.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\1H_Sword\R2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Bastion_Healer_State.h">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Healer\State_Healer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Bastion_Healer_Idle.h">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Healer\State_Healer\Idle</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Staff.h">
+      <Filter>02.GameObject\96.Weapon\04.Staff</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Stage1.h">
+      <Filter>01.Scene\02.Stage\00.Stage1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Stage2.h">
+      <Filter>01.Scene\02.Stage\01.Stage2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\UI_Monster_Name.h">
+      <Filter>02.GameObject\05.UI\01.UI_Ingame\01.Meter\02.Monster\04.Name</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Crawler_Idle.h">
+      <Filter>02.GameObject\03.Character\01.Monster\Crawler\State\00.Idle</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Crawler_Walk.h">
+      <Filter>02.GameObject\03.Character\01.Monster\Crawler\State\01.Walk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Crawler_Attack.h">
+      <Filter>02.GameObject\03.Character\01.Monster\Crawler\State\02.Attack</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Crawler_Ricochet.h">
+      <Filter>02.GameObject\03.Character\01.Monster\Crawler\State\06.Ricochet</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Crawler_Death.h">
+      <Filter>02.GameObject\03.Character\01.Monster\Crawler\State\05.Death</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Crawler_Flinch_Left.h">
+      <Filter>02.GameObject\03.Character\01.Monster\Crawler\State\03.Flinch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Aberrant_Idle.h">
+      <Filter>02.GameObject\03.Character\01.Monster\EarthAberrant\State\00.Idle</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Aberrant_Walk.h">
+      <Filter>02.GameObject\03.Character\01.Monster\EarthAberrant\State\01.Walk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Aberrant_Attack.h">
+      <Filter>02.GameObject\03.Character\01.Monster\EarthAberrant\State\03.Attack</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Default\Client_Struct.h">
+      <Filter>98.Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Stage3.h">
+      <Filter>01.Scene\02.Stage\02.Stage3</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\DebugSystem.h">
+      <Filter>97.DebugSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Bastion_Healer_Run.h">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Healer\State_Healer\Run</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Bastion_Healer_Attack.h">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Healer\State_Healer\Attack</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\SkyBox.h">
+      <Filter>02.GameObject\00. BackGround\Skybox</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Treasure_Chest.h">
+      <Filter>02.GameObject\49.Treasure_Chest</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Aberrant_Flinch_Left.h">
+      <Filter>02.GameObject\03.Character\01.Monster\EarthAberrant\State\04.Flinch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Aberrant_Run.h">
+      <Filter>02.GameObject\03.Character\01.Monster\EarthAberrant\State\02.Run</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Aberrant_Dash_Bwd.h">
+      <Filter>02.GameObject\03.Character\01.Monster\EarthAberrant\State\08.Dash</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Aberrant_Death.h">
+      <Filter>02.GameObject\03.Character\01.Monster\EarthAberrant\State\07.Death</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Aberrant_Stun.h">
+      <Filter>02.GameObject\03.Character\01.Monster\EarthAberrant\State\05.Stun</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\EarthAberrant_Pick.h">
+      <Filter>02.GameObject\96.Weapon\07.Aberrant_Pick</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\UI_Tuto_Base.h">
+      <Filter>02.GameObject\05.UI\01.UI_Ingame\01.Meter\05.Tutorial\01.SideTutorial\00.Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\UI_Tuto_Font.h">
+      <Filter>02.GameObject\05.UI\01.UI_Ingame\01.Meter\05.Tutorial\01.SideTutorial\01.Font</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\MidBoss_Death.h">
+      <Filter>02.GameObject\03.Character\02.Boss\00.MiddleBoss\State\04.Death</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\MidBoss_Stun.h">
+      <Filter>02.GameObject\03.Character\02.Boss\00.MiddleBoss\State\05.Stun</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\UI_Monster_GroggyBar.h">
+      <Filter>02.GameObject\05.UI\01.UI_Ingame\01.Meter\02.Monster\05.Groggy</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\JumpNode.h">
+      <Filter>02.GameObject\02.Map\02.JumpNode</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\JumpTrigger.h">
+      <Filter>02.GameObject\02.Map\02.JumpNode</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Bastion_Healer_Hit.h">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Healer\State_Healer\Hit</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Bastion_Healer_Death.h">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Healer\State_Healer\Death</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\MidBoss_Idle.h">
+      <Filter>02.GameObject\03.Character\02.Boss\00.MiddleBoss\State\00.Idle</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\MidBoss_Run.h">
+      <Filter>02.GameObject\03.Character\02.Boss\00.MiddleBoss\State\00.Run</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Shooter_Death.h">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Shooter\State\Death</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Shooter_Hit.h">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Shooter\State\Hit</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\MeshLoader.h">
+      <Filter>01.Scene\01.Loading\00.Loader\00.MeshLoader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Shooter_Groggy.h">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Shooter\State\Groggy</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Shooter_Walk.h">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Shooter\State\Walk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Shooter_Chase.h">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Shooter\State\Chase</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Bullet.h">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Shooter\Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Monster_Bastion_Shooter.h">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Shooter</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Shooter_Attack.h">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Shooter\State\Attack</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Effect_DashDust.h">
+      <Filter>02.GameObject\04.Effect\00.Particle\00.Effect_DashDust_Player</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Effect_HitParticle.h">
+      <Filter>02.GameObject\04.Effect\00.Particle\02.Effect_HitParticle</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Bastion_2HSword_Groggy.h">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_2HSword\State_2HSword\Groggy</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Camera_Culling.h">
+      <Filter>02.GameObject\01. MainCamera\CullingCam</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Bastion_Healer_Groggy.h">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Healer\State_Healer\Groggy</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\SubEnvironment.h">
+      <Filter>02.GameObject\02.Map\01.Environment\00.Tree</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Effect_HitFloating.h">
+      <Filter>02.GameObject\04.Effect\00.Particle\03.Effect_Floating</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\CameraShake.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Bastion_Healer_Groggy_End.h">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Healer\State_Healer\Groggy\End</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Bastion_Healer_CastProtect.h">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Healer\State_Healer\Protect</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Monster_BronzeAnimus.h">
+      <Filter>02.GameObject\03.Character\01.Monster\BronzeAnimus</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\BronzeAnimus_Sword.h">
+      <Filter>02.GameObject\96.Weapon\05.BronzeAnimus_Sword</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\BronzeAnimus_Idle.h">
+      <Filter>02.GameObject\03.Character\01.Monster\BronzeAnimus\Statue_Idle</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\BronzeAnimus_Chaser.h">
+      <Filter>02.GameObject\03.Character\01.Monster\BronzeAnimus\State\Chaser</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\BronzeAnimus_Death.h">
+      <Filter>02.GameObject\03.Character\01.Monster\BronzeAnimus\State\Death</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Bastion_2HSword_Groggy_End.h">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_2HSword\State_2HSword\Groggy\End</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\BronzeAnimus_Groggy.h">
+      <Filter>02.GameObject\03.Character\01.Monster\BronzeAnimus\State\Groggy</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\BronzeAnimus_Hit.h">
+      <Filter>02.GameObject\03.Character\01.Monster\BronzeAnimus\State\Hit</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\BronzeAnimus_Roar.h">
+      <Filter>02.GameObject\03.Character\01.Monster\BronzeAnimus\State\Roar</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\BronzeAnimus_Attack.h">
+      <Filter>02.GameObject\03.Character\01.Monster\BronzeAnimus\State\Attack</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\BronzeAnimus_Battle_Idle.h">
+      <Filter>02.GameObject\03.Character\01.Monster\BronzeAnimus\State\Battle_Idle</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Monster_Bastion_Spear.h">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Spear</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Polearm.h">
+      <Filter>02.GameObject\96.Weapon\06.Polearm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Spear_State.h">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Spear\State</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Spear_Idle.h">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Spear\State\Idle</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Spear_Death.h">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Spear\State\Death</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Spear_Groggy.h">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Spear\State\Groggy</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Spear_Groggy_End.h">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Spear\State\Groggy\End</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Spear_Hit.h">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Spear\State\Hit</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Spear_Chaser.h">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Spear\State\Chaser</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Spear_Attack.h">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Spear\State\Attack</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Spear_Guard.h">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Spear\State\Guard</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Spear_Bwd_Dash.h">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Spear\State\Dash</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Spear_Charge_Attack.h">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Spear\State\Attack\Charge_Attack</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\TriggerSystem.h">
+      <Filter>03.System\00.Trigger</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Client_Trigger.h">
+      <Filter>03.System\00.Trigger\Client_Trigger</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\ShakeManager.h">
+      <Filter>03.System\01.ShakeManager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Silvermane_Idle.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Idel</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\1H_FlinchLeft.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\HIt</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Silvermane_Hit.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\HIt</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\JumpBox.h">
+      <Filter>02.GameObject\02.Map\02.JumpNode</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Effect_Env_Fire.h">
+      <Filter>02.GameObject\04.Effect\00.Effect_Image\00.Env_Fire</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\SwordTrail.h">
+      <Filter>02.GameObject\96.Weapon\98.Trail</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\NoiseFire.h">
+      <Filter>02.GameObject\02.Map\01.Environment\01.NoiseFire</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Environment.h">
+      <Filter>02.GameObject\02.Map\01.Environment\02.MapObject</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\TrailEffect.h">
+      <Filter>02.GameObject\04.Effect\01.TrailEffect</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Effect_DeathParticle.h">
+      <Filter>02.GameObject\04.Effect\00.Particle\04.Effect_Death</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Effect_Env_Floating.h">
+      <Filter>02.GameObject\04.Effect\00.Particle\05.Effect_Env_Floating</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\UI_Blank_CKey.h">
+      <Filter>02.GameObject\05.UI\01.UI_Ingame\02.UI_JumpNode\00.Blank</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\UI_Fill_CKey.h">
+      <Filter>02.GameObject\05.UI\01.UI_Ingame\02.UI_JumpNode\01.Fill</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\UI_Monster_BackHpBar.h">
+      <Filter>02.GameObject\05.UI\01.UI_Ingame\01.Meter\02.Monster\03.HpUI\00.BackHp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\ScriptableData.h">
+      <Filter>96.ScriptableData</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\ItemData.h">
+      <Filter>96.ScriptableData\ItemData</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\WeaponData.h">
+      <Filter>96.ScriptableData\WeaponData</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\UIDGen.h">
+      <Filter>02.GameObject\05.UI\02.UIDGen</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\InteractManager.h">
+      <Filter>03.System\02.InteractManager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\InteractableObject.h">
+      <Filter>02.GameObject\06.Interactable Object</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\DropObject.h">
+      <Filter>02.GameObject\06.Interactable Object\DropObject</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\DropManager.h">
+      <Filter>03.System\03.DropManager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\GameObjectPool.h">
+      <Filter>03.System\04.GameObjectPool</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\DropBox.h">
+      <Filter>02.GameObject\06.Interactable Object\DropBox</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\DropBox_Open.h">
+      <Filter>02.GameObject\06.Interactable Object\DropBox\Open_State</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\DropBox_Idle.h">
+      <Filter>02.GameObject\06.Interactable Object\DropBox\Open_State</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\DropBox_State.h">
+      <Filter>02.GameObject\06.Interactable Object\DropBox\Open_State</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\InventoryData.h">
+      <Filter>96.ScriptableData\InventoryData</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\DataManager.h">
+      <Filter>03.System\05.DataManager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Shield_Parry.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Shield\Parry</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Shield_BlockSkid.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Shield\Block</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\1H_KnockBack.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\HIt</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Silvermane_KnockBack.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\HIt</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Effect_Guard.h">
+      <Filter>02.GameObject\04.Effect\00.Particle\06.Effect_Guard</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\1H_Stagger.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\HIt</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Shield_BlockSkidStrong.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Shield\Block</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Shield_BlockHard.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Shield\Block</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Shield_BlockSoft.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Shield\Block</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Shield_Ricochet.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Shield\Block</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Shield_BlockBreakStart.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Shield\Block</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Shield_BlockBreakEnd.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Shield\Block</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Shield_ParryStunback.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Shield\Parry</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Shield_ParryStunbackStrong.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Shield\Parry</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Effect_Falling_Leaf.h">
+      <Filter>02.GameObject\04.Effect\00.Particle\01.Effect_MapLeaf</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Codes\Meteor.h">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Healer\Meteor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Potal.h">
+      <Filter>02.GameObject\02.Map\03.Potal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Silvermane_Death.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\HIt</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\LootingChest.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Looting</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\UI_Equipment.h">
+      <Filter>02.GameObject\05.UI\04.Inventory\02.Equipment</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\UI_Indexes.h">
+      <Filter>02.GameObject\05.UI\04.Inventory\00.Indexes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\UI_Armory.h">
+      <Filter>02.GameObject\05.UI\04.Inventory\03.Armory</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\UI_Background.h">
+      <Filter>02.GameObject\05.UI\04.Inventory\01.Background</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Inven_UIManager.h">
+      <Filter>03.System\06.Inven_UIManager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\SingleImage.h">
+      <Filter>02.GameObject\05.UI\03.SingleImage</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\UI_ItemSlot.h">
+      <Filter>02.GameObject\05.UI\04.Inventory\04.ItemSlot</Filter>
+	</ClInclude>
+    <ClInclude Include="..\Headers\BronzeAnimus_State.h">
+      <Filter>02.GameObject\03.Character\01.Monster\BronzeAnimus\State</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Codes\Meteor.h">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Healer\Meteor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Potal.h">
+      <Filter>02.GameObject\02.Map\03.Potal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Silvermane_Death.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\HIt</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\UI_SlotBackground.h">
+      <Filter>02.GameObject\05.UI\04.Inventory\04.ItemSlot\00.Background</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\UI_SlotGrade.h">
+      <Filter>02.GameObject\05.UI\04.Inventory\04.ItemSlot\01.Grade</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\UI_SlotItemIcon.h">
+      <Filter>02.GameObject\05.UI\04.Inventory\04.ItemSlot\02.ItemIcon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\UI_SlotItemEffect.h">
+      <Filter>02.GameObject\05.UI\04.Inventory\04.ItemSlot\03.ItemEffect</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\UI_EquipedText.h">
+      <Filter>02.GameObject\05.UI\04.Inventory\04.ItemSlot\04.EquipedText</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\UIHelper.h">
+      <Filter>02.GameObject\05.UI\99.UIHelper</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\EquipmentData.h">
+      <Filter>96.ScriptableData\EquipmentData</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\UI_ModalWindow.h">
+      <Filter>02.GameObject\05.UI\04.Inventory</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\UI_ItemStatusWindow.h">
+      <Filter>02.GameObject\05.UI\04.Inventory\05.ItemStatusWindow</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\UI_ItemStatusBackground.h">
+      <Filter>02.GameObject\05.UI\04.Inventory\05.ItemStatusWindow\00.Background</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Button_Equipment.h">
+      <Filter>02.GameObject\05.UI\04.Inventory\00.Indexes\00.Button_Equipment</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Button_Armory.h">
+      <Filter>02.GameObject\05.UI\04.Inventory\00.Indexes\01.Button_Armory</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Button_Skill.h">
+      <Filter>02.GameObject\05.UI\04.Inventory\00.Indexes\02.Button_Skill</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\PlayerData.h">
+      <Filter>96.ScriptableData\PlayerData</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\DodgeSlide.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Idel</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Wall.h">
+      <Filter>02.GameObject\02.Map\04.Wall</Filter>
+	</ClInclude>
+    <ClInclude Include="..\Headers\1H_SwordRicochetReaction.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\1H_Sword</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\2H_HammerRicochetReaction.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\2H_Hammer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\ScenematicManager.h">
+      <Filter>03.System\07.Scenematic\00.Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Scenematic.h">
+      <Filter>03.System\07.Scenematic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\CinemaCam.h">
+      <Filter>02.GameObject\01. MainCamera\CinemaCam</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Cinema1_1.h">
+      <Filter>03.System\07.Scenematic\01.Stage1\Cinema1_1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Shield_Throw.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Shield\Throw</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\FlyingShield.h">
+      <Filter>02.GameObject\96.Weapon\99.Shield</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="pch.cpp">
+      <Filter>99.Default</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\MainApp.cpp">
+      <Filter>00.MainGame</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Level_Logo.cpp">
+      <Filter>01.Scene\00.Logo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Loading.cpp">
+      <Filter>01.Scene\01.Loading</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Loader.cpp">
+      <Filter>01.Scene\01.Loading\00.Loader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\BackGround.cpp">
+      <Filter>02.GameObject\00. BackGround</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\DebugSystem.cpp">
+      <Filter>97.DebugSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\TestObj.cpp">
+      <Filter>02.GameObject\99.TestObj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Silvermane.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\TestScene_JS.cpp">
+      <Filter>01.Scene\99.TestScene_JS</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Camera_Silvermane.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Silvermane_JogBwd.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Idel\Jog</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Silvermane_JogBwdPivot180.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Idel\Jog</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Silvermane_JogBwdStart.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Idel\Jog</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Silvermane_JogFwd.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Idel\Jog</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Silvermane_JogFwdPivot180.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Idel\Jog</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Silvermane_JogFwdStart.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Idel\Jog</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Silvermane_JogFwdStop.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Idel\Jog</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Silvermane_JogLeft.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Idel\Jog</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Silvermane_JogLeftPivot180.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Idel\Jog</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Silvermane_JogLeftStart.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Idel\Jog</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Silvermane_JogRight.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Idel\Jog</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Silvermane_JogRightPivot180.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Idel\Jog</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Silvermane_JogRightStart.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Idel\Jog</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Silvermane_SprintFwd.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Idel\Sprint</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Silvermane_SprintFwdStart.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Idel\Sprint</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Silvermane_SprintFwdStop.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Idel\Sprint</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Plane_Test.cpp">
+      <Filter>02.GameObject\02.Map\00.Plane</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Weapon.cpp">
+      <Filter>02.GameObject\96.Weapon</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Needle.cpp">
+      <Filter>02.GameObject\96.Weapon\00.Needle</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\MainCamera.cpp">
+      <Filter>02.GameObject\01. MainCamera\ProjectionCam</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\MainCamera_Ortho.cpp">
+      <Filter>02.GameObject\01. MainCamera\OrthoCam</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Camera_Debug.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Monster_Bastion_2HSword.cpp">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_2HSword</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Monster_Bastion_Healer.cpp">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Healer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Monster_Crawler.cpp">
+      <Filter>02.GameObject\03.Character\01.Monster\Crawler</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Monster_EarthAberrant.cpp">
+      <Filter>02.GameObject\03.Character\01.Monster\EarthAberrant</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Silvermane_Jog.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Idel\Jog</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\1H_SwordAttack.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\1H_Sword</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\1H_Dash.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\1H_Sword\Dash</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\1H_SwordDodgeSpinFwd_V3.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\1H_Sword\Dash</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\1H_SwordNormalSidestepBwd_V3.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\1H_Sword\Dash</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\1H_SwordNormalSidestepLeft_V3.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\1H_Sword\Dash</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\1H_SwordNormalSidestepRight_V3.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\1H_Sword\Dash</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\1H_SwordAttackNormalR1_01.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\1H_Sword\R1</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\1H_SwordAttackNormalR1_02.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\1H_Sword\R1</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\1H_SwordAttackNormalR1_03.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\1H_Sword\R1</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\1H_SwordAttackNormalR1_04.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\1H_Sword\R1</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\1H_SwordSupermanStab.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\1H_Sword\R1</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\1H_SwordJogAttack.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\1H_Sword\R1</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\1H_SwordAttackNormalR2_ReleaseStab.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\1H_Sword\R2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\1H_SwordAttackNormalR2_02.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\1H_Sword\R2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\1H_SwordAttackNormalR2_03.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\1H_Sword\R2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\1H_SwordAttackNormalR2_04.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\1H_Sword\R2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\1H_SwordAttackNormalR2_Start.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\1H_Sword\R2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\1H_SwordAttackNormalR2_ReleaseDoubleSwing.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\1H_Sword\R2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\1H_SwordAttackNormalR2_Loop.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\1H_Sword\R2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Fury.cpp">
+      <Filter>02.GameObject\96.Weapon\01.Fury</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\2H_HammerIdle.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\2H_Hammer\Default</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\2H_HammerEquipOff.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\2H_Hammer\Default</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\2H_HammerEquipOn.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\2H_Hammer\Default</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\2H_HammerJog.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\2H_Hammer\Jog</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\2H_HammerJogBwd.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\2H_Hammer\Jog</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\2H_HammerJogBwdPivot180.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\2H_Hammer\Jog</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\2H_HammerJogBwdStart.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\2H_Hammer\Jog</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\2H_HammerJogFwd.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\2H_Hammer\Jog</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\2H_HammerJogFwdPivot180.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\2H_Hammer\Jog</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\2H_HammerJogFwdStart.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\2H_Hammer\Jog</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\2H_HammerJogLeft.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\2H_Hammer\Jog</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\2H_HammerJogLeftPivot180.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\2H_Hammer\Jog</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\2H_HammerJogLeftStart.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\2H_Hammer\Jog</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\2H_HammerJogRight.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\2H_Hammer\Jog</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\2H_HammerJogRightPivot180.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\2H_Hammer\Jog</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\2H_HammerJogRightStart.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\2H_Hammer\Jog</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Silvermane_Sprint.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Idel\Sprint</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\1H_SwordEquipOff.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\1H_Sword\Default</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\1H_SwordEquipOn.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\1H_Sword\Default</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\1H_SwordJog.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\1H_Sword\Jog</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\1H_SwordJogBwd.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\1H_Sword\Jog</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\1H_SwordJogBwdPivot180.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\1H_Sword\Jog</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\1H_SwordJogBwdStart.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\1H_Sword\Jog</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\1H_SwordJogFwd.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\1H_Sword\Jog</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\1H_SwordJogFwdPivot180.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\1H_Sword\Jog</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\1H_SwordJogFwdStart.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\1H_Sword\Jog</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\1H_SwordJogLeft.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\1H_Sword\Jog</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\1H_SwordJogLeftPivot180.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\1H_Sword\Jog</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\1H_SwordJogLeftStart.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\1H_Sword\Jog</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\1H_SwordJogRight.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\1H_Sword\Jog</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\1H_SwordJogRightPivot180.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\1H_Sword\Jog</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\1H_SwordJogRightStart.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\1H_Sword\Jog</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\1H_SwordIdle.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\1H_Sword\Default</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\UI_Ingame.cpp">
+      <Filter>02.GameObject\05.UI\01.UI_Ingame\00.UI_Ingame_Static</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\UI_Monster_Level.cpp">
+      <Filter>02.GameObject\05.UI\01.UI_Ingame\01.Meter\02.Monster\02.LevelUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\UI_Monster_Back.cpp">
+      <Filter>02.GameObject\05.UI\01.UI_Ingame\01.Meter\02.Monster\01.BackUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\UI_Monster_Panel.cpp">
+      <Filter>02.GameObject\05.UI\01.UI_Ingame\01.Meter\02.Monster\00.Panel</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\UI_Monster_HpBar.cpp">
+      <Filter>02.GameObject\05.UI\01.UI_Ingame\01.Meter\02.Monster\03.HpUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\2H_HammerAttack.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\2H_Hammer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\2H_HammerAttackR1_01.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\2H_Hammer\R1</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\2H_HammerAttackR1_02.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\2H_Hammer\R1</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\2H_HammerAttackR1_03.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\2H_Hammer\R1</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\2H_HammerAttackR1_04.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\2H_Hammer\R1</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\2H_HammerAttackJogR1.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\2H_Hammer\R1</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\2H_HammerAttackR2_01.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\2H_Hammer\R2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\2H_HammerAttackR2_02.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\2H_Hammer\R2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\2H_HammerAttackR2_03.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\2H_Hammer\R2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\2H_HammerChargeStage1_Start.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\2H_Hammer\R2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\2H_HammerChargeStage1_Loop.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\2H_Hammer\R2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\2H_HammerAttackSprintR1.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\2H_Hammer\R1</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\2H_HammerAttackR1_04Swap.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\2H_Hammer\R2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\2H_HammerAttackDodgeR1.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\2H_Hammer\R1</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\2H_HammerAttackR2_Charge.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\2H_Hammer\R2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Shield.cpp">
+      <Filter>02.GameObject\96.Weapon\99.Shield</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Shield_Block.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Shield\Block</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Shield_BlockStart.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Shield\Block</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Shield_BlockLoop.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Shield\Block</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Shield_BlockEnd.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Shield\Block</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Shield_WalkBwd.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Shield\Walk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Shield_WalkBwdStart.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Shield\Walk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Shield_WalkBwdStop.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Shield\Walk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Shield_WalkFwd.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Shield\Walk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Shield_WalkFwdStart.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Shield\Walk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Shield_WalkFwdStop.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Shield\Walk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Shield_WalkLeft.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Shield\Walk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Shield_WalkLeftStart.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Shield\Walk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Shield_WalkLeftStop.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Shield\Walk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Shield_WalkRight.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Shield\Walk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Shield_WalkRightStart.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Shield\Walk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Shield_WalkRightStop.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Shield\Walk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Shield_Walk.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Shield\Walk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Shield_SupermanPunchStraight.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Shield\Attack</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\RetributionBlade.cpp">
+      <Filter>02.GameObject\96.Weapon\02.RetributionBlade</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Client_Observer.cpp">
+      <Filter>02.GameObject\94.Observer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\UI_Player_HpBar.cpp">
+      <Filter>02.GameObject\05.UI\01.UI_Ingame\01.Meter\00.Player\00.HpBar_Green</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\UI_Player_HpBar_Red.cpp">
+      <Filter>02.GameObject\05.UI\01.UI_Ingame\01.Meter\00.Player\01.HpBar_Red</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Boss_Bastion_Judicator.cpp">
+      <Filter>02.GameObject\03.Character\02.Boss\00.MiddleBoss</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\ShieldBreaker.cpp">
+      <Filter>02.GameObject\96.Weapon\08.ShieldBreaker</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Stargazer.cpp">
+      <Filter>02.GameObject\96.Weapon\03.Stargazer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Bastion_2HSword_Dash.cpp">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_2HSword\State_2HSword\Dash</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Bastion_2HSword_Idle.cpp">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_2HSword\State_2HSword\Idle</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Bastion_2HSword_Chaser.cpp">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_2HSword\State_2HSword\Chaser</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Shooter_Idle.cpp">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Shooter\State\Idle</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Traverse_Jump400Jog.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Jump</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\MidBoss_Rage.cpp">
+      <Filter>02.GameObject\03.Character\02.Boss\00.MiddleBoss\State\00.Rage</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\MidBoss_Attack.cpp">
+      <Filter>02.GameObject\03.Character\02.Boss\00.MiddleBoss\State\02.Attack</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\MidBoss_BattleCry.cpp">
+      <Filter>02.GameObject\03.Character\02.Boss\00.MiddleBoss\State\01.BattleCry</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\MidBoss_Turn.cpp">
+      <Filter>02.GameObject\03.Character\02.Boss\00.MiddleBoss\State\03.Turn</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Bastion_2HSword_Death.cpp">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_2HSword\State_2HSword\Death</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Bastion_2HSword_Rage.cpp">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_2HSword\State_2HSword\Rage</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Bastion_2HSword_Attack.cpp">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_2HSword\State_2HSword\Attack</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Bastion_Sword_Idle.cpp">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Spear\00.Idle</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Bastion_Sword_Chase.cpp">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Sword\00.State\01.Chase</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Bastion_Sword_Attack.cpp">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Sword\00.State\02.Attack</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Bastion_Sword_Death.cpp">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Sword\00.State\04.Death</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Bastion_Sword_Groggy.cpp">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Sword\00.State\05.Groggy</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Bastion_Sword_Paring.cpp">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Sword\00.State\06.Paring</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Bastion_Sword_Walk.cpp">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Sword\00.State\08.Walk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Bastion_2HSword_State.cpp">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_2HSword\State_2HSword</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Bastion_2HSword_Hit.cpp">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_2HSword\State_2HSword\Hit</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Traverse_JumpNodeJog.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Jump</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Monster_Bastion_Sword.cpp">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Sword</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\1H_SwordAttackNormalR1_04Swap.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\1H_Sword\R2</Filter>
+    </ClCompile>
+    <ClCompile Include="Client.cpp">
+      <Filter>99.Default</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Bastion_Healer_State.cpp">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Healer\State_Healer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Bastion_Healer_Idle.cpp">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Healer\State_Healer\Idle</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Staff.cpp">
+      <Filter>02.GameObject\96.Weapon\04.Staff</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Stage1.cpp">
+      <Filter>01.Scene\02.Stage\00.Stage1</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Stage2.cpp">
+      <Filter>01.Scene\02.Stage\01.Stage2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\UI_Monster_Name.cpp">
+      <Filter>02.GameObject\05.UI\01.UI_Ingame\01.Meter\02.Monster\04.Name</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Crawler_Idle.cpp">
+      <Filter>02.GameObject\03.Character\01.Monster\Crawler\State\00.Idle</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Crawler_Walk.cpp">
+      <Filter>02.GameObject\03.Character\01.Monster\Crawler\State\01.Walk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Crawler_Attack.cpp">
+      <Filter>02.GameObject\03.Character\01.Monster\Crawler\State\02.Attack</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Crawler_Ricochet.cpp">
+      <Filter>02.GameObject\03.Character\01.Monster\Crawler\State\06.Ricochet</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Crawler_Death.cpp">
+      <Filter>02.GameObject\03.Character\01.Monster\Crawler\State\05.Death</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Crawler_Flinch_Left.cpp">
+      <Filter>02.GameObject\03.Character\01.Monster\Crawler\State\03.Flinch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Aberrant_Idle.cpp">
+      <Filter>02.GameObject\03.Character\01.Monster\EarthAberrant\State\00.Idle</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Aberrant_Walk.cpp">
+      <Filter>02.GameObject\03.Character\01.Monster\EarthAberrant\State\01.Walk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Aberrant_Attack.cpp">
+      <Filter>02.GameObject\03.Character\01.Monster\EarthAberrant\State\03.Attack</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Bastion_Sword_Hit.cpp">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Sword\00.State\03.Hit</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Bastion_Sword_Turn.cpp">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Sword\00.State\08.Walk\07.Turn</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Stage3.cpp">
+      <Filter>01.Scene\02.Stage\02.Stage3</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Bastion_Healer_Run.cpp">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Healer\State_Healer\Run</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Bastion_Healer_Attack.cpp">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Healer\State_Healer\Attack</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\MeshLoader.cpp">
+      <Filter>01.Scene\01.Loading\00.Loader\00.MeshLoader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\SkyBox.cpp">
+      <Filter>02.GameObject\00. BackGround\Skybox</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Treasure_Chest.cpp">
+      <Filter>02.GameObject\49.Treasure_Chest</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Aberrant_Flinch_Left.cpp">
+      <Filter>02.GameObject\03.Character\01.Monster\EarthAberrant\State\04.Flinch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Aberrant_Run.cpp">
+      <Filter>02.GameObject\03.Character\01.Monster\EarthAberrant\State\02.Run</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Aberrant_Dash_Bwd.cpp">
+      <Filter>02.GameObject\03.Character\01.Monster\EarthAberrant\State\08.Dash</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Aberrant_Death.cpp">
+      <Filter>02.GameObject\03.Character\01.Monster\EarthAberrant\State\07.Death</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Aberrant_Stun.cpp">
+      <Filter>02.GameObject\03.Character\01.Monster\EarthAberrant\State\05.Stun</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\EarthAberrant_Pick.cpp">
+      <Filter>02.GameObject\96.Weapon\07.Aberrant_Pick</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\UI_Tuto_Base.cpp">
+      <Filter>02.GameObject\05.UI\01.UI_Ingame\01.Meter\05.Tutorial\01.SideTutorial\00.Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\UI_Tuto_Font.cpp">
+      <Filter>02.GameObject\05.UI\01.UI_Ingame\01.Meter\05.Tutorial\01.SideTutorial\01.Font</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\MidBoss_Death.cpp">
+      <Filter>02.GameObject\03.Character\02.Boss\00.MiddleBoss\State\04.Death</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\MidBoss_Stun.cpp">
+      <Filter>02.GameObject\03.Character\02.Boss\00.MiddleBoss\State\05.Stun</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\UI_Monster_GroggyBar.cpp">
+      <Filter>02.GameObject\05.UI\01.UI_Ingame\01.Meter\02.Monster\05.Groggy</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\JumpNode.cpp">
+      <Filter>02.GameObject\02.Map\02.JumpNode</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\JumpTrigger.cpp">
+      <Filter>02.GameObject\02.Map\02.JumpNode</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Bastion_Healer_Hit.cpp">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Healer\State_Healer\Hit</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Bastion_Healer_Death.cpp">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Healer\State_Healer\Death</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\MidBoss_Idle.cpp">
+      <Filter>02.GameObject\03.Character\02.Boss\00.MiddleBoss\State\00.Idle</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\MidBoss_Run.cpp">
+      <Filter>02.GameObject\03.Character\02.Boss\00.MiddleBoss\State\00.Run</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Shooter_Death.cpp">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Shooter\State\Death</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Shooter_Hit.cpp">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Shooter\State\Hit</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Shooter_Groggy.cpp">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Shooter\State\Groggy</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Shooter_Walk.cpp">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Shooter\State\Walk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Shooter_Chase.cpp">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Shooter\State\Chase</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Bullet.cpp">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Shooter\Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Monster_Bastion_Shooter.cpp">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Shooter</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Shooter_Attack.cpp">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Shooter\State\Attack</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Effect_DashDust.cpp">
+      <Filter>02.GameObject\04.Effect\00.Particle\00.Effect_DashDust_Player</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Effect_HitParticle.cpp">
+      <Filter>02.GameObject\04.Effect\00.Particle\02.Effect_HitParticle</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Bastion_2HSword_Groggy.cpp">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_2HSword\State_2HSword\Groggy</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Camera_Culling.cpp">
+      <Filter>02.GameObject\01. MainCamera\CullingCam</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Bastion_Healer_Groggy.cpp">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Healer\State_Healer\Groggy</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\SubEnvironment.cpp">
+      <Filter>02.GameObject\02.Map\01.Environment\00.Tree</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Effect_HitFloating.cpp">
+      <Filter>02.GameObject\04.Effect\00.Particle\03.Effect_Floating</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\CameraShake.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Bastion_Healer_Groggy_End.cpp">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Healer\State_Healer\Groggy\End</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Bastion_Healer_CastProtect.cpp">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Healer\State_Healer\Protect</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Monster_BronzeAnimus.cpp">
+      <Filter>02.GameObject\03.Character\01.Monster\BronzeAnimus</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\BronzeAnimus_Sword.cpp">
+      <Filter>02.GameObject\96.Weapon\05.BronzeAnimus_Sword</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\BronzeAnimus_State.cpp">
+      <Filter>02.GameObject\03.Character\01.Monster\BronzeAnimus\State</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\BronzeAnimus_Idle.cpp">
+      <Filter>02.GameObject\03.Character\01.Monster\BronzeAnimus\Statue_Idle</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\BronzeAnimus_Chaser.cpp">
+      <Filter>02.GameObject\03.Character\01.Monster\BronzeAnimus\State\Chaser</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\BronzeAnimus_Death.cpp">
+      <Filter>02.GameObject\03.Character\01.Monster\BronzeAnimus\State\Death</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Bastion_2HSword_Groggy_End.cpp">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_2HSword\State_2HSword\Groggy\End</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\BronzeAnimus_Groggy.cpp">
+      <Filter>02.GameObject\03.Character\01.Monster\BronzeAnimus\State\Groggy</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\BronzeAnimus_Hit.cpp">
+      <Filter>02.GameObject\03.Character\01.Monster\BronzeAnimus\State\Hit</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\BronzeAnimus_Roar.cpp">
+      <Filter>02.GameObject\03.Character\01.Monster\BronzeAnimus\State\Roar</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\BronzeAnimus_Attack.cpp">
+      <Filter>02.GameObject\03.Character\01.Monster\BronzeAnimus\State\Attack</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\BronzeAnimus_Battle_Idle.cpp">
+      <Filter>02.GameObject\03.Character\01.Monster\BronzeAnimus\State\Battle_Idle</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Monster_Bastion_Spear.cpp">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Spear</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Polearm.cpp">
+      <Filter>02.GameObject\96.Weapon\06.Polearm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Spear_State.cpp">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Spear\State</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Spear_Idle.cpp">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Spear\State\Idle</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Spear_Death.cpp">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Spear\State\Death</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Spear_Groggy.cpp">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Spear\State\Groggy</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Spear_Groggy_End.cpp">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Spear\State\Groggy\End</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Spear_Hit.cpp">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Spear\State\Hit</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Spear_Chaser.cpp">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Spear\State\Chaser</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Spear_Attack.cpp">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Spear\State\Attack</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Spear_Guard.cpp">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Spear\State\Guard</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Spear_Bwd_Dash.cpp">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Spear\State\Dash</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Spear_Charge_Attack.cpp">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Spear\State\Attack\Charge_Attack</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Client_Trigger.cpp">
+      <Filter>03.System\00.Trigger\Client_Trigger</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\ShakeManager.cpp">
+      <Filter>03.System\01.ShakeManager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Silvermane_Idle.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Idel</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\1H_FlinchLeft.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\HIt</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Siilvermane_Hit.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\HIt</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\JumpBox.cpp">
+      <Filter>02.GameObject\02.Map\02.JumpNode</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Effect_Env_Fire.cpp">
+      <Filter>02.GameObject\04.Effect\00.Effect_Image\00.Env_Fire</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\SwordTrail.cpp">
+      <Filter>02.GameObject\96.Weapon\98.Trail</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\NoiseFire.cpp">
+      <Filter>02.GameObject\02.Map\01.Environment\01.NoiseFire</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Environment.cpp">
+      <Filter>02.GameObject\02.Map\01.Environment\02.MapObject</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\TrailEffect.cpp">
+      <Filter>02.GameObject\04.Effect\01.TrailEffect</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Effect_DeathParticle.cpp">
+      <Filter>02.GameObject\04.Effect\00.Particle\04.Effect_Death</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Effect_Env_Floating.cpp">
+      <Filter>02.GameObject\04.Effect\00.Particle\05.Effect_Env_Floating</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\UI_Blank_CKey.cpp">
+      <Filter>02.GameObject\05.UI\01.UI_Ingame\02.UI_JumpNode\00.Blank</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\UI_Fill_CKey.cpp">
+      <Filter>02.GameObject\05.UI\01.UI_Ingame\02.UI_JumpNode\01.Fill</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\UI_Monster_BackHpBar.cpp">
+      <Filter>02.GameObject\05.UI\01.UI_Ingame\01.Meter\02.Monster\03.HpUI\00.BackHp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\ScriptableData.cpp">
+      <Filter>96.ScriptableData</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\ItemData.cpp">
+      <Filter>96.ScriptableData\ItemData</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\WeaponData.cpp">
+      <Filter>96.ScriptableData\WeaponData</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\UIDGen.cpp">
+      <Filter>02.GameObject\05.UI\02.UIDGen</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\InteractManager.cpp">
+      <Filter>03.System\02.InteractManager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\InteractableObject.cpp">
+      <Filter>02.GameObject\06.Interactable Object</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\DropObject.cpp">
+      <Filter>02.GameObject\06.Interactable Object\DropObject</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Default\Client_Function.cpp">
+      <Filter>98.Headers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\DropManager.cpp">
+      <Filter>03.System\03.DropManager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\GameObjectPool.cpp">
+      <Filter>03.System\04.GameObjectPool</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\DropBox.cpp">
+      <Filter>02.GameObject\06.Interactable Object\DropBox</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\DropBox_Open.cpp">
+      <Filter>02.GameObject\06.Interactable Object\DropBox\Open_State</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\DropBox_Idle.cpp">
+      <Filter>02.GameObject\06.Interactable Object\DropBox\Open_State</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\DropBox_State.cpp">
+      <Filter>02.GameObject\06.Interactable Object\DropBox\Open_State</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\InventoryData.cpp">
+      <Filter>96.ScriptableData\InventoryData</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\DataManager.cpp">
+      <Filter>03.System\05.DataManager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Shield_Parry.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Shield\Parry</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Shield_BlockSkid.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Shield\Block</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\1H_KnockBack.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\HIt</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Silvermane_KnockBack.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\HIt</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Effect_Guard.cpp">
+      <Filter>02.GameObject\04.Effect\00.Particle\06.Effect_Guard</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\1H_Stagger.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\HIt</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Shield_BlockSkidStrong.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Shield\Block</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Shield_BlockHard.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Shield\Block</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Shield_BlockSoft.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Shield\Block</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Shield_Ricochet.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Shield\Block</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Shield_BlockBreakStart.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Shield\Block</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Shield_BlockBreakEnd.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Shield\Block</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Shield_ParryStunback.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Shield\Parry</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Shield_ParryStunbackStrong.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Shield\Parry</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Effect_Falling_Leaf.cpp">
+      <Filter>02.GameObject\04.Effect\00.Particle\01.Effect_MapLeaf</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Meteor.cpp">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Healer\Meteor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Potal.cpp">
+      <Filter>02.GameObject\02.Map\03.Potal</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Silvermane_Death.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\HIt</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\LootingChest.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Looting</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\UI_Indexes.cpp">
+      <Filter>02.GameObject\05.UI\04.Inventory\00.Indexes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\UI_Armory.cpp">
+      <Filter>02.GameObject\05.UI\04.Inventory\03.Armory</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\UI_Background.cpp">
+      <Filter>02.GameObject\05.UI\04.Inventory\01.Background</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\UI_Equipment.cpp">
+      <Filter>02.GameObject\05.UI\04.Inventory\02.Equipment</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Inven_UIManager.cpp">
+      <Filter>03.System\06.Inven_UIManager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\SingleImage.cpp">
+      <Filter>02.GameObject\05.UI\03.SingleImage</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\UI_ItemSlot.cpp">
+      <Filter>02.GameObject\05.UI\04.Inventory\04.ItemSlot</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\UI_SlotBackground.cpp">
+      <Filter>02.GameObject\05.UI\04.Inventory\04.ItemSlot\00.Background</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\UI_SlotGrade.cpp">
+      <Filter>02.GameObject\05.UI\04.Inventory\04.ItemSlot\01.Grade</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\UI_SlotItemIcon.cpp">
+      <Filter>02.GameObject\05.UI\04.Inventory\04.ItemSlot\02.ItemIcon</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\UI_SlotItemEffect.cpp">
+      <Filter>02.GameObject\05.UI\04.Inventory\04.ItemSlot\03.ItemEffect</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\UI_EquipedText.cpp">
+      <Filter>02.GameObject\05.UI\04.Inventory\04.ItemSlot\04.EquipedText</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\UIHelper.cpp">
+      <Filter>02.GameObject\05.UI\99.UIHelper</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\EquipmentData.cpp">
+      <Filter>96.ScriptableData\EquipmentData</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\UI_ModalWindow.cpp">
+      <Filter>02.GameObject\05.UI\04.Inventory</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\UI_ItemStatusWindow.cpp">
+      <Filter>02.GameObject\05.UI\04.Inventory\05.ItemStatusWindow</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\UI_ItemStatusBackground.cpp">
+      <Filter>02.GameObject\05.UI\04.Inventory\05.ItemStatusWindow\00.Background</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Button_Equipment.cpp">
+      <Filter>02.GameObject\05.UI\04.Inventory\00.Indexes\00.Button_Equipment</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Button_Armory.cpp">
+      <Filter>02.GameObject\05.UI\04.Inventory\00.Indexes\01.Button_Armory</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Button_Skill.cpp">
+      <Filter>02.GameObject\05.UI\04.Inventory\00.Indexes\02.Button_Skill</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\PlayerData.cpp">
+      <Filter>96.ScriptableData\PlayerData</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\DodgeSlide.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Idel</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Wall.cpp">
+      <Filter>02.GameObject\02.Map\04.Wall</Filter>
+	</ClCompile>
+    <ClCompile Include="..\Codes\State_Silvermane.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\1H_SwordRicochetReaction.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\1H_Sword</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\2H_HammerRicochetReaction.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\2H_Hammer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\ScenematicManager.cpp">
+      <Filter>03.System\07.Scenematic\00.Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Scenematic.cpp">
+      <Filter>03.System\07.Scenematic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\CinemaCam.cpp">
+      <Filter>02.GameObject\01. MainCamera\CinemaCam</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Cinema1_1.cpp">
+      <Filter>03.System\07.Scenematic\01.Stage1\Cinema1_1</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Shield_Throw.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Shield\Throw</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\FlyingShield.cpp">
+      <Filter>02.GameObject\96.Weapon\99.Shield</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Client.ico">
+      <Filter>99.Default</Filter>
+    </Image>
+    <Image Include="small.ico">
+      <Filter>99.Default</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Client.rc">
+      <Filter>99.Default</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="..\bin\ShaderFile\Shader_AnimMesh.hlsl">
+      <Filter>100.ShaderFiles\99.Other</Filter>
+    </FxCompile>
+    <FxCompile Include="..\bin\ShaderFile\Shader_Effect_Fire.hlsl">
+      <Filter>100.ShaderFiles\03.Effect</Filter>
+    </FxCompile>
+    <FxCompile Include="..\bin\ShaderFile\Shader_Geo_UI.hlsl">
+      <Filter>100.ShaderFiles\04.UI</Filter>
+    </FxCompile>
+    <FxCompile Include="..\bin\ShaderFile\Shader_INST_Coin.hlsl">
+      <Filter>100.ShaderFiles\01.Environment</Filter>
+    </FxCompile>
+    <FxCompile Include="..\bin\ShaderFile\Shader_INST_MASK.hlsl">
+      <Filter>100.ShaderFiles\01.Environment</Filter>
+    </FxCompile>
+    <FxCompile Include="..\bin\ShaderFile\Shader_INST_OMER.hlsl">
+      <Filter>100.ShaderFiles\01.Environment</Filter>
+    </FxCompile>
+    <FxCompile Include="..\bin\ShaderFile\Shader_INST_OMR.hlsl">
+      <Filter>100.ShaderFiles\01.Environment</Filter>
+    </FxCompile>
+    <FxCompile Include="..\bin\ShaderFile\Shader_INST_ORM.hlsl">
+      <Filter>100.ShaderFiles\01.Environment</Filter>
+    </FxCompile>
+    <FxCompile Include="..\bin\ShaderFile\Shader_INST_ORM_Gold.hlsl">
+      <Filter>100.ShaderFiles\01.Environment</Filter>
+    </FxCompile>
+    <FxCompile Include="..\bin\ShaderFile\Shader_INST_ORM_M.hlsl">
+      <Filter>100.ShaderFiles\01.Environment</Filter>
+    </FxCompile>
+    <FxCompile Include="..\bin\ShaderFile\Shader_INST_ORM_N2.hlsl">
+      <Filter>100.ShaderFiles\01.Environment</Filter>
+    </FxCompile>
+    <FxCompile Include="..\bin\ShaderFile\Shader_INST_ORME.hlsl">
+      <Filter>100.ShaderFiles\01.Environment</Filter>
+    </FxCompile>
+    <FxCompile Include="..\bin\ShaderFile\Shader_INST_ORS.hlsl">
+      <Filter>100.ShaderFiles\01.Environment</Filter>
+    </FxCompile>
+    <FxCompile Include="..\bin\ShaderFile\Shader_INST_Rock.hlsl">
+      <Filter>100.ShaderFiles\01.Environment</Filter>
+    </FxCompile>
+    <FxCompile Include="..\bin\ShaderFile\Shader_INST_Tree.hlsl">
+      <Filter>100.ShaderFiles\01.Environment</Filter>
+    </FxCompile>
+    <FxCompile Include="..\bin\ShaderFile\Shader_InstanceFire.hlsl">
+      <Filter>100.ShaderFiles\03.Effect</Filter>
+    </FxCompile>
+    <FxCompile Include="..\bin\ShaderFile\Shader_InstanceMesh.hlsl">
+      <Filter>100.ShaderFiles\01.Environment</Filter>
+    </FxCompile>
+    <FxCompile Include="..\bin\ShaderFile\Shader_Mesh.hlsl">
+      <Filter>100.ShaderFiles\99.Other</Filter>
+    </FxCompile>
+    <FxCompile Include="..\bin\ShaderFile\Shader_MeshAnim.hlsl">
+      <Filter>100.ShaderFiles\99.Other</Filter>
+    </FxCompile>
+    <FxCompile Include="..\bin\ShaderFile\Shader_Monster.hlsl">
+      <Filter>100.ShaderFiles\02.Actor</Filter>
+    </FxCompile>
+    <FxCompile Include="..\bin\ShaderFile\Shader_Panel_UI.hlsl">
+      <Filter>100.ShaderFiles\04.UI</Filter>
+    </FxCompile>
+    <FxCompile Include="..\bin\ShaderFile\Shader_Shield.hlsl">
+      <Filter>100.ShaderFiles\02.Actor</Filter>
+    </FxCompile>
+    <FxCompile Include="..\bin\ShaderFile\Shader_StaticMesh.hlsl">
+      <Filter>100.ShaderFiles\99.Other</Filter>
+    </FxCompile>
+    <FxCompile Include="..\bin\ShaderFile\Shader_Weapon.hlsl">
+      <Filter>100.ShaderFiles\02.Actor</Filter>
+    </FxCompile>
+    <FxCompile Include="..\bin\ShaderFile\Shader_SilverMane.hlsl">
+      <Filter>100.ShaderFiles\02.Actor</Filter>
+    </FxCompile>
+    <FxCompile Include="..\bin\ShaderFile\Shader_Particle.hlsl">
+      <Filter>100.ShaderFiles\03.Effect</Filter>
+    </FxCompile>
+    <FxCompile Include="..\bin\ShaderFile\Shader_RectFire.hlsl">
+      <Filter>100.ShaderFiles\03.Effect</Filter>
+    </FxCompile>
+    <FxCompile Include="..\bin\ShaderFile\Shader_UI.hlsl">
+      <Filter>100.ShaderFiles\04.UI</Filter>
+    </FxCompile>
+    <FxCompile Include="..\bin\ShaderFile\Shader_UI_Bar.hlsl">
+      <Filter>100.ShaderFiles\04.UI</Filter>
+    </FxCompile>
+    <FxCompile Include="..\bin\ShaderFile\Shader_Treasure_Chest.hlsl">
+      <Filter>100.ShaderFiles\99.Other</Filter>
+    </FxCompile>
+    <FxCompile Include="..\bin\ShaderFile\Shader_UI_Enemy_Bar.hlsl">
+      <Filter>100.ShaderFiles\04.UI</Filter>
+    </FxCompile>
+    <FxCompile Include="..\bin\ShaderFile\Shader_Particle_Size.hlsl">
+      <Filter>100.ShaderFiles\03.Effect</Filter>
+    </FxCompile>
+    <FxCompile Include="..\bin\ShaderFile\Shader_Potal.hlsl">
+      <Filter>100.ShaderFiles\99.Other</Filter>
+    </FxCompile>
+    <FxCompile Include="..\bin\ShaderFile\Shader_Distortion.hlsl">
+      <Filter>100.ShaderFiles\03.Effect</Filter>
+    </FxCompile>
+    <FxCompile Include="..\bin\ShaderFile\Shader_INST_M_O_R.hlsl">
+      <Filter>100.ShaderFiles\01.Environment</Filter>
+    </FxCompile>
+    <FxCompile Include="..\bin\ShaderFile\Shader_INST_RM.hlsl">
+      <Filter>100.ShaderFiles\01.Environment</Filter>
+    </FxCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\bin\ShaderFile\Shader_Share.hlsli">
+      <Filter>100.ShaderFiles\98.Share</Filter>
+    </None>
+    <None Include="..\bin\ShaderFile\Shader_ShareFuntion.hlsli">
+      <Filter>100.ShaderFiles\98.Share</Filter>
+    </None>
+  </ItemGroup>
+</Project>

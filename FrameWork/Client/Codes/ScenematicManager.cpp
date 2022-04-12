@@ -14,14 +14,18 @@ HRESULT CScenematicManager::Add_Scenema(CScenematic* pScenema)
 	return S_OK;
 }
 
-HRESULT CScenematicManager::Active_Scenema(_uint iScenemaIndex)
+HRESULT CScenematicManager::Active_Scenema(_uint iScenemaIndex, CScenematic** pOutCineam)
 {
 	_uint iSize = (_uint)m_vecScenema.size();
 	if (iScenemaIndex < 0 || iScenemaIndex >= iSize)
+	{
+		*pOutCineam = nullptr;
 		return E_FAIL;
+	}
 
 	m_vecScenema[iScenemaIndex]->Set_Active(true);
-
+	*pOutCineam = m_vecScenema[iScenemaIndex];
+	
 	return S_OK;
 }
 

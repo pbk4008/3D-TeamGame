@@ -93,13 +93,12 @@ HRESULT C1H_SwordAttack::ExitState()
 
 	m_pSilvermane->Set_IsTrasceCamera(true);
 	m_pAnimationController->Set_PlaySpeed(1.f);
+	g_pObserver->Set_PlayerAttackAnimStart(false);
 	return S_OK;
 }
 
 void C1H_SwordAttack::OnTriggerEnter(CCollision& collision)
 {
-	//if (!m_pSilvermane->IsAttack())
-	//	OnTriggerEnterHit(collision);
 }
 
 void C1H_SwordAttack::Hit(const ATTACKDESC& _tAttackDesc)

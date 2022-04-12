@@ -110,7 +110,8 @@ _int CEarthAberrant_Pick::LateTick(_double TimeDelta)
 
 HRESULT CEarthAberrant_Pick::Render()
 {
-	CWeapon::BindConstantBuffer(L"Camera_Silvermane");
+	wstring wstrCamTag = g_pGameInstance->Get_BaseCameraTag();
+	CWeapon::BindConstantBuffer(wstrCamTag);
 	for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
 		m_pModel->Render(i, 0);
 
@@ -119,7 +120,8 @@ HRESULT CEarthAberrant_Pick::Render()
 
 HRESULT CEarthAberrant_Pick::Render_Shadow()
 {
-	CWeapon::BindConstantBuffer(L"Camera_Silvermane");
+	wstring wstrCamTag = g_pGameInstance->Get_BaseCameraTag();
+	CWeapon::BindConstantBuffer(wstrCamTag);
 	CWeapon::BindLightBuffer();
 	for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
 		m_pModel->Render(i, 1);
@@ -178,7 +180,7 @@ _int CEarthAberrant_Pick::Attach_FixedBone(const _double& TimeDelta)
 	{
 		_matrix smatWorld = m_pFixedBone->Get_CombinedMatrix();
 
-		smatWorld *= XMLoadFloat4x4(&m_smatOwnerPivot);
+		smatWorld *= XMLoadFloat4x4(&m_matOwnerPivot);
 
 		m_pLocalTransform->Set_WorldMatrix(smatWorld);
 	}

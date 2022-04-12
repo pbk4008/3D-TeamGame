@@ -98,8 +98,8 @@ HRESULT CPolearm::Render()
 {
 	SCB desc;
 	ZeroMemory(&desc, sizeof(desc));
-
-	CWeapon::BindConstantBuffer(L"Camera_Silvermane",&desc);
+	wstring wstrCamTag = g_pGameInstance->Get_BaseCameraTag();
+	CWeapon::BindConstantBuffer(wstrCamTag,&desc);
 	for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
 		m_pModel->Render(i, 0);
 
@@ -108,7 +108,8 @@ HRESULT CPolearm::Render()
 
 HRESULT CPolearm::Render_Shadow()
 {
-	CWeapon::BindConstantBuffer(L"Camera_Silvermane");
+	wstring wstrCamTag = g_pGameInstance->Get_BaseCameraTag();
+	CWeapon::BindConstantBuffer(wstrCamTag);
 	CWeapon::BindLightBuffer();
 	for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
 		m_pModel->Render(i, 1);
@@ -168,7 +169,7 @@ _int CPolearm::Attach_FixedBone(const _double& _dDeltaTime)
 	{
 		_matrix smatWorld = m_pFixedBone->Get_CombinedMatrix();
 
-		smatWorld *= XMLoadFloat4x4(&m_smatOwnerPivot);
+		smatWorld *= XMLoadFloat4x4(&m_matOwnerPivot);
 
 		if (!m_isEquip)
 		{

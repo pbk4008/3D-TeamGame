@@ -231,14 +231,10 @@ call Update_Library_Release.bat</Command>
     <ClInclude Include="..\public\CSTarget.h" />
     <ClInclude Include="..\public\CullingBox.h" />
     <ClInclude Include="..\public\EffectManager.h" />
-    <ClInclude Include="..\public\FileIO.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-    </ClInclude>
+    <ClInclude Include="..\public\FileIO.h" />
     <ClInclude Include="..\public\HDR.h" />
     <ClInclude Include="..\public\Instancing_Mesh.h" />
-    <ClInclude Include="..\public\IResource.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-    </ClInclude>
+    <ClInclude Include="..\public\IResource.h" />
     <ClInclude Include="..\public\Luminance.h" />
     <ClInclude Include="..\public\Material_Manager.h" />
     <ClInclude Include="..\public\Effect.h" />
@@ -291,9 +287,7 @@ call Update_Library_Release.bat</Command>
     <ClInclude Include="..\public\Renderer.h" />
     <ClInclude Include="..\public\RendererAssit.h" />
     <ClInclude Include="..\public\RenderTarget.h" />
-    <ClInclude Include="..\public\ResourceManager.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-    </ClInclude>
+    <ClInclude Include="..\public\ResourceManager.h" />
     <ClInclude Include="..\public\SaveManager.h" />
     <ClInclude Include="..\public\SimulationEventCallback.h" />
     <ClInclude Include="..\public\SimulationFilterCallback.h" />
@@ -314,9 +308,7 @@ call Update_Library_Release.bat</Command>
     <ClInclude Include="..\public\Trail_VIBuffer.h" />
     <ClInclude Include="..\public\Transform.h" />
     <ClInclude Include="..\public\UI.h" />
-    <ClInclude Include="..\public\UI_Texture.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-    </ClInclude>
+    <ClInclude Include="..\public\UI_Texture.h" />
     <ClInclude Include="..\public\VIBuffer.h" />
     <ClInclude Include="..\public\VIBuffer_Cube.h" />
     <ClInclude Include="..\public\VIBuffer_Plane.h" />
@@ -360,14 +352,10 @@ call Update_Library_Release.bat</Command>
     <ClCompile Include="..\private\CSTarget.cpp" />
     <ClCompile Include="..\private\CullingBox.cpp" />
     <ClCompile Include="..\private\EffectManager.cpp" />
-    <ClCompile Include="..\private\FileIO.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-    </ClCompile>
+    <ClCompile Include="..\private\FileIO.cpp" />
     <ClCompile Include="..\private\HDR.cpp" />
     <ClCompile Include="..\private\Instancing_Mesh.cpp" />
-    <ClCompile Include="..\private\IResource.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-    </ClCompile>
+    <ClCompile Include="..\private\IResource.cpp" />
     <ClCompile Include="..\private\Luminance.cpp" />
     <ClCompile Include="..\private\Material_Manager.cpp" />
     <ClCompile Include="..\private\Collider.cpp" />
@@ -393,9 +381,7 @@ call Update_Library_Release.bat</Command>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\private\RendererAssit.cpp" />
-    <ClCompile Include="..\private\ResourceManager.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-    </ClCompile>
+    <ClCompile Include="..\private\ResourceManager.cpp" />
     <ClCompile Include="..\private\SimulationEventCallback.cpp" />
     <ClCompile Include="..\private\SimulationFilterCallback.cpp" />
     <ClCompile Include="..\private\SphereCollider.cpp">
@@ -435,9 +421,7 @@ call Update_Library_Release.bat</Command>
     <ClCompile Include="..\private\Timer.cpp" />
     <ClCompile Include="..\private\Timer_Manager.cpp" />
     <ClCompile Include="..\private\Transform.cpp" />
-    <ClCompile Include="..\private\UI_Texture.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-    </ClCompile>
+    <ClCompile Include="..\private\UI_Texture.cpp" />
     <ClCompile Include="..\private\VIBuffer.cpp" />
     <ClCompile Include="..\private\VIBuffer_Cube.cpp" />
     <ClCompile Include="..\private\VIBuffer_Plane.cpp" />

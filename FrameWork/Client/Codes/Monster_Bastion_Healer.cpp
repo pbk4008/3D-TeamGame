@@ -197,6 +197,7 @@ _int CMonster_Bastion_Healer::LateTick(_double _dDeltaTime)
 
 HRESULT CMonster_Bastion_Healer::Render()
 {
+	wstring wstrCamTag = g_pGameInstance->Get_BaseCameraTag();
 	for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
 	{
 		SCB desc;
@@ -205,11 +206,11 @@ HRESULT CMonster_Bastion_Healer::Render()
 		switch (i)
 		{
 		case 2:
-			CActor::BindConstantBuffer(L"Camera_Silvermane", &desc);
+			CActor::BindConstantBuffer(wstrCamTag, &desc);
 			if (FAILED(m_pModel->Render(i, 1))) MSGBOX("Failed To Rendering Shooter");
 			break;
 		default:
-			CActor::BindConstantBuffer(L"Camera_Silvermane", &desc);
+			CActor::BindConstantBuffer(wstrCamTag, &desc);
 			if (FAILED(m_pModel->Render(i, 0))) MSGBOX("Failed To Rendering Shooter");
 			break;
 		}
@@ -224,7 +225,8 @@ HRESULT CMonster_Bastion_Healer::Render()
 
 HRESULT CMonster_Bastion_Healer::Render_Shadow()
 {
-	CActor::BindConstantBuffer(L"Camera_Silvermane");
+	wstring wstrCamTag = g_pGameInstance->Get_BaseCameraTag();
+	CActor::BindConstantBuffer(wstrCamTag);
 	CActor::BindLightBuffer();
 	for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
 		m_pModel->Render(i, 3);
@@ -245,9 +247,11 @@ void CMonster_Bastion_Healer::Hit(CCollision& pCol)
 	{
 		if (true == g_pObserver->IsAttack()) //플레이어공격일때
 		{
-			m_bFirstHit = true; //딱 한번 true로 변경해줌
-			if (true == m_bFirstHit)
+			if (false == m_bFirstHit)
+			{
+				m_bFirstHit = true; //딱 한번 true로 변경해줌
 				m_pPanel->Set_BackUIGapY(1.f);
+			}
 
 			if ((_uint)GAMEOBJECT::WEAPON == pCol.pGameObject->getTag())
 			{

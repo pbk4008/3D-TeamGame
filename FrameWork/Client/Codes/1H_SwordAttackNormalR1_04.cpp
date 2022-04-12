@@ -96,6 +96,7 @@ HRESULT C1H_SwordAttackNormalR1_04::EnterState()
 
 	//g_pGameInstance->Play_Shot(L"Needle_Attack_L_4_1", CSoundMgr::CHANNELID::Power_Resonance_01);
 
+	m_pSilvermane->Set_AttackDesc_Dir(EAttackDir::Right);
 	return S_OK;
 }
 

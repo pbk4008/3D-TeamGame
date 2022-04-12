@@ -212,7 +212,7 @@ PS_OUT_TEST PS_MAIN_TEST(PS_IN In)
 	
 	Out.emission = g_color * g_empower/* * GreenAlpha*/;
 	
-	if (0.01f >= Out.diffuse.a)
+	if (0.1f >= Out.diffuse.a)
 		discard;
 	
 	return Out;

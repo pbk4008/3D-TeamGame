@@ -99,7 +99,8 @@ _int CUI_Player_HpBar_Red::LateTick(_double TimeDelta)
 
 	if (nullptr != m_pRenderer)
 	{
-		m_pRenderer->Add_RenderGroup(CRenderer::RENDER::RENDER_UI, this);
+		if (g_pInvenUIManager->Get_OpenCheck() == false)
+			m_pRenderer->Add_RenderGroup(CRenderer::RENDER::RENDER_UI, this);
 	}
 	return _int();
 }

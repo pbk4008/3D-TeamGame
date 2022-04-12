@@ -31,6 +31,7 @@ public:
 	const EType Get_Type() const;
 	CActor* Get_Owner() const;
 	const _float Get_Damage() const;
+	const _float3& Get_EndPos() const;
 
 	void Set_Owner(CActor* _pOwner);
 	virtual void Set_OwnerPivotMatrix(const _fmatrix& _smatPivot);
@@ -89,6 +90,7 @@ protected:
 	//rimlight
 	_bool			m_rimcheck = false;
 	_float			m_rimintensity = 8.f;
+	_float3			m_vEndPos{};
 
 public:
 	virtual CGameObject* Clone(const _uint _iSceneID, void* _pArg = nullptr) PURE;

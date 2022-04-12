@@ -111,8 +111,8 @@ PS_OUT PS_MAIN(PS_IN In)
 
 	Out.vColor = g_DiffuseTexture.Sample(DefaultSampler, In.vTexUV);
 
-	if (Out.vColor.a < 0.01)
-		discard;
+	//if (Out.vColor.a <= 0.1)
+	//	discard;
 	
 	return Out;	
 }
@@ -167,12 +167,9 @@ technique11			DefaultTechnique
 	/* 조명연산(어둡게, 스펙큘러) + 그림자 + 노멀맵핑 */
 	pass Normal
 	{
-		/* 렌더스테이츠에 대한 정의. */
-		SetRasterizerState(CullMode_Default);
+		SetRasterizerState(CullMode_None);
 		SetDepthStencilState(ZDefault, 0);
-
-
-		/* 진입점함수를 지정한다. */
+		SetBlendState(BlendDisable, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
 		VertexShader = compile vs_5_0 VS_MAIN();
 		GeometryShader = NULL;
 		PixelShader = compile ps_5_0  PS_MAIN();
@@ -180,7 +177,10 @@ technique11			DefaultTechnique
 
 	pass Viewport
 	{
-		VertexShader = compile vs_5_0 VS_MAIN_VIEWPORT();
+		SetRasterizerState(CullMode_None);
+		SetDepthStencilState(ZDefault, 0);
+		SetBlendState(AlphaBlending, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+		VertexShader = compile vs_5_0 VS_MAIN();
 		GeometryShader = NULL;
 		PixelShader = compile ps_5_0  PS_MAIN();
 	}

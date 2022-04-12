@@ -15,6 +15,7 @@ using namespace Client;
 #include "DebugSystem.h"
 #include "ShakeManager.h"
 #include "DataManager.h"
+#include "Inven_UIManager.h"
 #include "MainApp.h"
 #include "Clinet_Define.h"
 

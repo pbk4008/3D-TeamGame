@@ -25,8 +25,10 @@ public:
 	const wstring& getBaseCamera();
 private:
 	CAMERA* Find_Camera(const wstring& pCameraTag);
+	_int Find_Index(const wstring& pCameraTag);
 private:
-	map<wstring, CAMERA*> m_mapPipeLine;
+	//map<wstring, CAMERA*> m_mapPipeLine;
+	vector<pair<wstring, CAMERA*>> m_mapPipeLine;
 public:
 	virtual void Free() override;
 };
