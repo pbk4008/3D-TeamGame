@@ -50,7 +50,10 @@ enum class EFFECT
 	FLOATING,
 	DEATH,
 	PLAYERHIT,
-	GUARD
+	GUARD,
+	ATTACK_LEFT,
+	ATTACK_RIGHT,
+	HITGROUND
 };
 
 enum class ELayer
@@ -81,6 +84,7 @@ enum class EItemType
 
 enum class EEquipmentGrade
 {
+	Common,
 	Uncommon,
 	Rare,
 	Epic,

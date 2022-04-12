@@ -8,7 +8,6 @@
 #include "UI_EquipedText.h"
 
 
-
 CUI_ItemSlot::CUI_ItemSlot(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
 	:CUI(pDevice, pDeviceContext)
 {
@@ -64,6 +63,12 @@ _int CUI_ItemSlot::LateTick(_double TimeDelta)
 	if (m_pItemIcon->getActive())
 		m_pItemIcon->LateTick(TimeDelta);
 
+	if (m_pGrade->getActive())
+		m_pGrade->LateTick(TimeDelta);
+
+	if (m_pItemEffect->getActive())
+		m_pItemEffect->LateTick(TimeDelta);
+
 	return _int();
 }
 
@@ -78,6 +83,12 @@ HRESULT CUI_ItemSlot::Render()
 	if (m_pItemIcon->getActive())
 		m_pItemIcon->Render();
 
+	if (m_pGrade->getActive())
+		m_pGrade->Render();
+
+	if (m_pItemEffect->getActive())
+		m_pItemEffect->Render();
+
 	return S_OK;
 }
 
@@ -90,9 +101,11 @@ HRESULT CUI_ItemSlot::Ready_UIObject(void)
 {
 	m_pBG		   = static_cast<CUI_SlotBackground*>(g_pGameInstance->Clone_GameObject((_uint)SCENEID::SCENE_STATIC, L"Proto_GameObject_UI_ItemSlot_BG", &desc));
 	m_pItemIcon	   = static_cast<CUI_SlotItemIcon*>(g_pGameInstance->Clone_GameObject((_uint)SCENEID::SCENE_STATIC, L"Proto_GameObject_UI_ItemIcon", &desc));
-	//m_pGrade	   = static_cast<CUI_SlotGrade*>(g_pGameInstance->Clone_GameObject((_uint)SCENEID::SCENE_STATIC, L"Proto_GameObject_UI_ItemGrade"));
-	//m_pItemEffect  = static_cast<CUI_SlotItemEffect*>(g_pGameInstance->Clone_GameObject((_uint)SCENEID::SCENE_STATIC, L"Proto_GameObject_UI_ItemEffect"));
+	m_pGrade	   = static_cast<CUI_SlotGrade*>(g_pGameInstance->Clone_GameObject((_uint)SCENEID::SCENE_STATIC, L"Proto_GameObject_UI_ItemGrade", &desc));
+	m_pItemEffect  = static_cast<CUI_SlotItemEffect*>(g_pGameInstance->Clone_GameObject((_uint)SCENEID::SCENE_STATIC, L"Proto_GameObject_UI_ItemEffect", &desc));
 	//m_pEquipedText = static_cast<CUI_EquipedText*>(g_pGameInstance->Clone_GameObject((_uint)SCENEID::SCENE_STATIC, L"Proto_GameObject_UI_ItemEquipedText"));
+
+	assert("Failed to Create UI Object" && (m_pBG || m_pItemIcon || m_pGrade));
 
 	return S_OK;
 }
@@ -103,13 +116,17 @@ void CUI_ItemSlot::SetActiveAll(_bool _OnOff)
 
 	m_pBG->setActive(_OnOff);
 	m_pItemIcon->setActive(_OnOff);
-	//m_pGrade->setActive(_OnOff);
-	//m_pItemEffect->setActive(_OnOff);
+	m_pGrade->setActive(_OnOff);
+	m_pItemEffect->setActive(_OnOff);
 	//m_pEquipedText->setActive(_OnOff);
 }
 
 void CUI_ItemSlot::SetActiveExceptBg(_bool _OnOff)
 {
+	m_pGrade->setActive(_OnOff);
+	m_pItemIcon->setActive(_OnOff);
+	m_pItemEffect->setActive(_OnOff);
+
 }
 
 void CUI_ItemSlot::SetActiveOnlyBg(_bool _OnOff)
@@ -124,6 +141,7 @@ void CUI_ItemSlot::SetActiveOnlnyIcon(_bool _OnOff)
 
 void CUI_ItemSlot::SetActiveEquiped(_bool _IsEquiped)
 {
+	//m_pEquipedText->SetActive(_IsEquiped);
 }
 
 _bool CUI_ItemSlot::BgMouseOn(void)
@@ -163,6 +181,54 @@ void CUI_ItemSlot::SetIcon(const std::wstring& _szFileName)
 	m_pItemIcon->SetIcon(_szFileName);
 }
 
+void CUI_ItemSlot::SetGrade(EEquipmentGrade _eGrade)
+{
+
+	EEquipmentGrade tempEnum = _eGrade;
+
+	switch (tempEnum)
+	{
+	case EEquipmentGrade::Common:
+	{//grey
+		m_pGrade->SetGrade(L"T_Weapon_Sash_Common");
+		m_pItemEffect->SetIcon(L"T_Item_Glow_Grey");
+	}
+	break;
+	case EEquipmentGrade::Uncommon:
+	{//blue
+		m_pGrade->SetGrade(L"T_Weapon_Sash_Rare");
+		m_pItemEffect->SetIcon(L"T_Item_Glow_Blue");
+	}
+	break;
+	case EEquipmentGrade::Rare:
+	{//green
+		m_pGrade->SetGrade(L"T_Weapon_Sash_Common");
+		m_pItemEffect->SetIcon(L"T_Item_Glow_Green");
+	}
+	break;
+	case EEquipmentGrade::Epic:
+	{//purple
+		m_pGrade->SetGrade(L"T_Weapon_Sash_Legendary");
+		m_pItemEffect->SetIcon(L"T_Item_Glow_Purple");
+	}
+	break;
+	case EEquipmentGrade::Legendary:
+	{//orange
+		m_pGrade->SetGrade(L"T_Weapon_Sash_Mythic");
+		m_pItemEffect->SetIcon(L"T_Item_Glow_Orange");
+	}
+	break;
+	case EEquipmentGrade::EQUIPGRADE_END:
+	{
+		m_pGrade->SetGrade(L"T_Weapon_Sash_Common");
+		m_pItemEffect->SetIcon(L"T_Item_Glow_Grey");
+	}
+	break;
+	default:
+		break;
+	}
+}
+
 CUI_ItemSlot* CUI_ItemSlot::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
 {
 	CUI_ItemSlot* pInstance = new CUI_ItemSlot(pDevice, pDeviceContext);
@@ -188,9 +254,10 @@ CGameObject* CUI_ItemSlot::Clone(const _uint iSceneID, void* pArg)
 
 void CUI_ItemSlot::Free()
 {
-	Safe_Release(m_pSigleImageCom);
 	Safe_Release(m_pBG);
 	Safe_Release(m_pItemIcon);
+	Safe_Release(m_pGrade);
+	Safe_Release(m_pItemEffect);
 
 	__super::Free();
 }

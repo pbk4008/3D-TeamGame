@@ -282,11 +282,11 @@ HRESULT CMainApp::Ready_GameObject_Prototype()
 	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_UI_ItemIcon"), CUI_SlotItemIcon::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 	//Item Grade
-	//if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_UI_ItemGrade"), CUI_SlotGrade::Create(m_pDevice, m_pDeviceContext))))
-	//	return E_FAIL;
+	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_UI_ItemGrade"), CUI_SlotGrade::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
 	//Item Effect
-	//if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_UI_ItemEffect"), CUI_SlotItemEffect::Create(m_pDevice, m_pDeviceContext))))
-	//	return E_FAIL;
+	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_UI_ItemEffect"), CUI_SlotItemEffect::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
 	//Item Equip Text
 	//if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_UI_ItemEquipedText"), CUI_EquipedText::Create(m_pDevice, m_pDeviceContext))))
 	//	return E_FAIL;

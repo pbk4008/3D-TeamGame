@@ -28,10 +28,10 @@ HRESULT UI_ItemStatusBackground::NativeConstruct(const _uint iSceneID, void* pAr
 	if (FAILED(Ready_Component()))
 		return E_FAIL;
 
-	m_pTransform->Set_State(CTransform::STATE_POSITION, _vector{ 420.f, 0.f, 0.4f, 1.f });
+	m_pTransform->Set_State(CTransform::STATE_POSITION, _vector{ 420.f, 0.f, 0.3f, 1.f });
 	m_pTransform->Scaling(_vector{ 360.f, 580.f, 1.f, 1.f });
 
-	setActive(false);
+	setActive(true);
 
 	return S_OK;
 }
@@ -50,9 +50,6 @@ _int UI_ItemStatusBackground::LateTick(_double TimeDelta)
 	if (FAILED(CUI::LateTick(TimeDelta)))
 		return -1;
 
-	if (this->getActive())
-		m_pSigleImageCom->LateTick(TimeDelta);
-
 	return _int();
 }
 
@@ -63,7 +60,7 @@ HRESULT UI_ItemStatusBackground::Render()
 
 	if (this->getActive())
 		m_pSigleImageCom->Render(m_pTransform);
-			
+
 	return S_OK;
 }
 

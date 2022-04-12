@@ -33,6 +33,8 @@ HRESULT CUI_ItemStatusWindow::NativeConstruct(const _uint iSceneID, void* pArg)
 	if (FAILED(Ready_UIObject()))
 		return E_FAIL;
 
+	setActive(false);
+
 	return S_OK;
 }
 
@@ -49,6 +51,12 @@ _int CUI_ItemStatusWindow::LateTick(_double TimeDelta)
 	if (FAILED(CUI::LateTick(TimeDelta)))
 		return -1;
 
+	if (nullptr != m_pRenderer)
+		m_pRenderer->Add_RenderGroup(CRenderer::RENDER::RENDER_UI_ACTIVE, this);
+
+	if (this->getActive())
+		m_pBg->LateTick(TimeDelta);
+
 	for (auto iter : m_mapDefaultUIs)
 	{
 		if (iter.second->getActive())
@@ -62,6 +70,9 @@ _int CUI_ItemStatusWindow::LateTick(_double TimeDelta)
 
 HRESULT CUI_ItemStatusWindow::Render()
 {
+
+	if (this->getActive())
+		m_pBg->Render();
 
 	for (auto iter : m_mapDefaultUIs)
 	{
@@ -83,9 +94,6 @@ HRESULT CUI_ItemStatusWindow::Ready_UIObject(void)
 {
 	m_pBg = static_cast<UI_ItemStatusBackground*>(g_pGameInstance->Clone_GameObject((_uint)SCENEID::SCENE_STATIC, L"Proto_GameObject_UI_ItemStatus_BG"));
 	m_pBgSprite = m_pBg->GetSingleImage();
-	Safe_AddRef(m_pBgSprite);
-
-
 	InsertDefaultUIs(L"Bg", m_pBg);
 
 	return S_OK;
@@ -93,6 +101,8 @@ HRESULT CUI_ItemStatusWindow::Ready_UIObject(void)
 
 void CUI_ItemStatusWindow::Show(CItemData* _pItem)
 {
+	setActive(true);
+
 	if (!m_bIsOpen)
 	{
 		for (auto& obj : m_mapDefaultUIs)
@@ -107,6 +117,8 @@ void CUI_ItemStatusWindow::Show(CItemData* _pItem)
 
 void CUI_ItemStatusWindow::Hide()
 {
+	setActive(false);
+
 	if (m_bIsOpen)
 	{
 		for (auto& obj : m_mapDefaultUIs)
@@ -179,8 +191,6 @@ CGameObject* CUI_ItemStatusWindow::Clone(const _uint iSceneID, void* pArg)
 
 void CUI_ItemStatusWindow::Free()
 {
-	Safe_Delete(m_pSelectItem);
-	Safe_Release(m_pBgSprite);
 	Safe_Release(m_pBg);
 
 	__super::Free();

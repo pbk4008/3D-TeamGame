@@ -105,7 +105,7 @@
     </Filter>
     <Filter Include="02.GameObject\96.Weapon\99.Shield">
       <UniqueIdentifier>{a9a4ad69-9913-4775-b0c0-8025825621ca}</UniqueIdentifier>
-    </Filter>
+	</Filter>
     <Filter Include="01.Scene\98.TestScene_YM">
       <UniqueIdentifier>{8e37d1fe-95e3-4c35-bcbf-fba13eeabb78}</UniqueIdentifier>
     </Filter>
@@ -780,13 +780,13 @@
     </Filter>
     <Filter Include="96.ScriptableData\PlayerData">
       <UniqueIdentifier>{9c78ba36-bbb3-432e-97e9-2ec38031f8fa}</UniqueIdentifier>
-    </Filter>
+	</Filter>
     <Filter Include="01.Scene\00.Logo">
       <UniqueIdentifier>{cac3034c-dd8b-47e8-afc7-da6cb3e9501e}</UniqueIdentifier>
     </Filter>
     <Filter Include="02.GameObject\02.Map\04.Wall">
       <UniqueIdentifier>{3dae373e-68c5-415f-8383-cd466ef9596f}</UniqueIdentifier>
-    </Filter>
+	</Filter>
     <Filter Include="03.System\07.Scenematic">
       <UniqueIdentifier>{21489520-048e-4295-9f73-a3c5349519f9}</UniqueIdentifier>
     </Filter>
@@ -804,12 +804,6 @@
     </Filter>
     <Filter Include="02.GameObject\03.Character\00.Player\00.Silvermane\State\Shield\Throw">
       <UniqueIdentifier>{69f64efb-d5bc-433d-bf69-0a94dad5f809}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObject\04.Effect\00.Effect_Image\01.Hammer_Dust">
-      <UniqueIdentifier>{4de6e516-ad86-47ae-a1e1-49d04baa93c3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObject\04.Effect\00.Effect_Image\02.DeadSpray">
-      <UniqueIdentifier>{93da6596-e33e-43cb-b193-e94382481f3a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -1745,7 +1739,7 @@
     </ClInclude>
     <ClInclude Include="..\Headers\UI_ItemSlot.h">
       <Filter>02.GameObject\05.UI\04.Inventory\04.ItemSlot</Filter>
-    </ClInclude>
+	</ClInclude>
     <ClInclude Include="..\Headers\BronzeAnimus_State.h">
       <Filter>02.GameObject\03.Character\01.Monster\BronzeAnimus\State</Filter>
     </ClInclude>
@@ -1757,6 +1751,9 @@
     </ClInclude>
     <ClInclude Include="..\Headers\Silvermane_Death.h">
       <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\HIt</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\UI_SlotBackground.h">
+      <Filter>02.GameObject\05.UI\04.Inventory\04.ItemSlot\00.Background</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\UI_SlotGrade.h">
       <Filter>02.GameObject\05.UI\04.Inventory\04.ItemSlot\01.Grade</Filter>
@@ -1802,7 +1799,7 @@
     </ClInclude>
     <ClInclude Include="..\Headers\Wall.h">
       <Filter>02.GameObject\02.Map\04.Wall</Filter>
-    </ClInclude>
+	</ClInclude>
     <ClInclude Include="..\Headers\1H_SwordRicochetReaction.h">
       <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\1H_Sword</Filter>
     </ClInclude>
@@ -1826,15 +1823,6 @@
     </ClInclude>
     <ClInclude Include="..\Headers\FlyingShield.h">
       <Filter>02.GameObject\96.Weapon\99.Shield</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Headers\Effect_Hammer_Dust.h">
-      <Filter>02.GameObject\04.Effect\00.Effect_Image\01.Hammer_Dust</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Headers\Effect_Dead_Spray.h">
-      <Filter>02.GameObject\04.Effect\00.Effect_Image\02.DeadSpray</Filter>
-	</ClInclude>
-    <ClInclude Include="..\Headers\UI_SlotBackground.h">
-      <Filter>02.GameObject\05.UI\04.Inventory\04.ItemSlot\00.Background</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -2794,7 +2782,7 @@
     </ClCompile>
     <ClCompile Include="..\Codes\Wall.cpp">
       <Filter>02.GameObject\02.Map\04.Wall</Filter>
-    </ClCompile>
+	</ClCompile>
     <ClCompile Include="..\Codes\State_Silvermane.cpp">
       <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State</Filter>
     </ClCompile>
@@ -2821,12 +2809,6 @@
     </ClCompile>
     <ClCompile Include="..\Codes\FlyingShield.cpp">
       <Filter>02.GameObject\96.Weapon\99.Shield</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Codes\Effect_Hammer_Dust.cpp">
-      <Filter>02.GameObject\04.Effect\00.Effect_Image\01.Hammer_Dust</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Codes\Effect_Dead_Spray.cpp">
-      <Filter>02.GameObject\04.Effect\00.Effect_Image\02.DeadSpray</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

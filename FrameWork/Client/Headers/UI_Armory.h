@@ -4,7 +4,9 @@
 #include "UI.h"
 
 BEGIN(Client)
-class CSingleImage;
+class CInventoryData;
+class CEquipmentData;
+class CUI_ItemSlot;
 class CUI_Armory : public CUI
 {
 public:
@@ -22,9 +24,31 @@ public:
 
 public:
 	HRESULT Ready_Component(void);
+	HRESULT Ready_UIObject(void);
+
+public:
+	void Show(void);
+	void Hide(void);
+	void UpdateSlots(void);
+	void UpdateSlot(_int _iIndex);
+	void UpdateResourceCount(void);
+	void ClickSlot(void);
+	void MouseOnSlot(void);
+
+public: /* Get */
+	_bool GetArmoryActive(void);
+
+public: /* Set */
+	void InsertSlotVector(CUI_ItemSlot* _pObj);
+	void SetResourceCount();
 
 private:
-	CSingleImage* m_pSigleImageCom = nullptr;
+	CInventoryData* m_pInventoryData = nullptr;
+	CEquipmentData* m_pEquipData = nullptr;
+
+private:
+	vector<CUI_ItemSlot*> m_vecSlots;
+	_bool m_bArmoryActive = false;
 
 public:
 	static CUI_Armory* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);

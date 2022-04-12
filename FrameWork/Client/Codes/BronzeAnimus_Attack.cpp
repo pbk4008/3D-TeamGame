@@ -106,6 +106,7 @@ _int CBronzeAnimus_Attack::Tick(const _double& _dDeltaTime)
 		}
 	}
 
+	cout << "╬Нец" << endl;
 	return _int();
 }
 

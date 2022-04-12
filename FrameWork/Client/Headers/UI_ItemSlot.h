@@ -4,7 +4,6 @@
 #include "UI.h"
 
 BEGIN(Client)
-class CSingleImage;
 class CUI_SlotBackground;
 class CUI_SlotItemIcon;
 class CUI_SlotGrade;
@@ -48,13 +47,13 @@ public:
 	_bool	IconClicked(void);
 
 	void	SetIcon(const std::wstring& _szFileName);
+	void    SetGrade(EEquipmentGrade _eGrade);
 
 private:
-	CSingleImage*			m_pSigleImageCom = nullptr;
 	CUI_SlotBackground*		m_pBG = nullptr;
 	CUI_SlotItemIcon*		m_pItemIcon = nullptr;
-	//CUI_SlotGrade*		m_pGrade = nullptr;
-	//CUI_SlotItemEffect*	m_pItemEffect = nullptr;
+	CUI_SlotGrade*			m_pGrade = nullptr;
+	CUI_SlotItemEffect*		m_pItemEffect = nullptr;
 	//CUI_EquipedText*		m_pEquipedText = nullptr;
 	ItemSlotDesc desc;
 public:
