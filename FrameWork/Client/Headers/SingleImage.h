@@ -14,8 +14,12 @@ BEGIN(Client)
 class CSingleImage :  public CComponent
 {
 public:
+	enum RenderType { Alpha, Nonalpha, Type_End };
+
+public:
 	struct Desc
 	{
+		RenderType renderType = Type_End;
 		_float2 fOffsetPos = { 0.f, 0.f };
 		_float2 fOffsetScale = { 1.f, 1.f };
 		_float4 fColor = { 1.f, 1.f, 1.f, 1.f }; /* RGBA */

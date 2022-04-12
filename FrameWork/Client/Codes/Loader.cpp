@@ -197,7 +197,7 @@ HRESULT CLoader::Load_Stage1FBXLoad()
 	ZeroMemory(&fd, sizeof(_finddata_t));
 
 	intptr_t handle = _findfirst("../bin/FBX/*.fbx", &fd);
-
+	
 	if (handle == 0)
 		return E_FAIL;
 

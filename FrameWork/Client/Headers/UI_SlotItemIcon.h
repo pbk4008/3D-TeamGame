@@ -34,13 +34,14 @@ public:
 public:
 	_bool	IconMouseOn(void);
 	_bool	IconClicked(void);
+	_bool   ItemClicked(void);
 	void	SetIcon(const std::wstring& _szFileName);
 
 private:
 	CSingleImage* m_pSigleImageCom = nullptr;
 	CUIHelper*	  m_pUIHelperCom = nullptr;
 	ItemSlotDesc  desc;
-
+	_bool		  m_bHasItem = false;
 public:
 	static CUI_SlotItemIcon* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);
 	virtual CGameObject* Clone(const _uint iSceneID, void* pArg);

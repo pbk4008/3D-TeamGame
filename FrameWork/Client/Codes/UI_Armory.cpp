@@ -50,6 +50,9 @@ _int CUI_Armory::Tick(_double dDeltaTime)
 	if (FAILED(CUI::Tick(dDeltaTime)))
 		return -1;
 
+	MouseOnSlot();
+	ClickSlot();
+
 	return _int();
 }
 
@@ -148,7 +151,7 @@ void CUI_Armory::UpdateSlots(void)
 			if (false == m_pInventoryData->GetItem(i).bEquiped)
 			{
 				//창착중인 아이템이 아닌 경우
-				//m_vecSlots[i]->SetActiveEquiped(false);
+				m_vecSlots[i]->SetActiveEquiped(false);
 			}
 		}
 		else
@@ -175,10 +178,158 @@ void CUI_Armory::UpdateResourceCount(void)
 
 void CUI_Armory::ClickSlot(void)
 {
+	if (0 >= m_vecSlots.size())
+		return;
+
+	for (_int i = 0; i < m_pInventoryData->GetCount(); ++i)
+	{
+		if (m_vecSlots[i]->ItemClicked())
+		{
+			if (m_pEquipData->ExistItem(m_pInventoryData->GetItem(i)))
+			{ /* 이미 장착중인 아이템인 경우 */
+				return;
+			}
+			else
+			{
+				CItemData SelectedItem = m_pInventoryData->GetItem(i);
+				EEquipmentType type = SelectedItem.equipmentType;
+
+				switch (type)
+				{
+				case Client::EEquipmentType::Weapon:
+				{
+					if (m_pEquipData->IsExistEquip(EEquipSlot::Weapon1))
+					{
+						if (m_pEquipData->IsExistEquip(EEquipSlot::Weapon2))
+							return; /* 무기 1,2 슬롯 모두 사용중 */
+						else
+						{
+							m_pInventoryData->SetEquiped(i, TRUE);
+							m_pEquipData->ChangeEquipment(EEquipSlot::Weapon2, SelectedItem);
+							UpdateSlot(i);
+						}
+					}
+					else
+					{
+						m_pInventoryData->SetEquiped(i, TRUE);
+						m_pEquipData->ChangeEquipment(EEquipSlot::Weapon1, SelectedItem);
+						UpdateSlot(i);
+					}
+				}
+				break;
+				case Client::EEquipmentType::Ring:
+				{
+					if (m_pEquipData->IsExistEquip(EEquipSlot::Ring1))
+					{
+						if (m_pEquipData->IsExistEquip(EEquipSlot::Ring2))
+							return; /* 반지 1,2 슬롯 모두 사용중 */
+						else
+						{
+							m_pInventoryData->SetEquiped(i, TRUE);
+							m_pEquipData->ChangeEquipment(EEquipSlot::Ring2, SelectedItem);
+							UpdateSlot(i);
+						}
+					}
+					else
+					{
+						m_pInventoryData->SetEquiped(i, TRUE);
+						m_pEquipData->ChangeEquipment(EEquipSlot::Ring1, SelectedItem);
+						UpdateSlot(i);
+					}
+				}
+				break;
+				case Client::EEquipmentType::Amulet:
+				{
+					if (m_pEquipData->IsExistEquip(EEquipSlot::Amulet))
+						return;
+					else
+					{
+						m_pInventoryData->SetEquiped(i, TRUE);
+						m_pEquipData->ChangeEquipment(EEquipSlot::Amulet, SelectedItem);
+						UpdateSlot(i);
+					}
+				}
+				break;
+				case Client::EEquipmentType::Charm:
+				{
+					if (m_pEquipData->IsExistEquip(EEquipSlot::Charm))
+						return;
+					else
+					{
+						m_pInventoryData->SetEquiped(i, TRUE);
+						m_pEquipData->ChangeEquipment(EEquipSlot::Charm, SelectedItem);
+						UpdateSlot(i);
+					}
+				}
+				break;
+				case Client::EEquipmentType::LifeStone:
+				{
+					if (m_pEquipData->IsExistEquip(EEquipSlot::LifeStone))
+						return;
+					else
+					{
+						m_pInventoryData->SetEquiped(i, TRUE);
+						m_pEquipData->ChangeEquipment(EEquipSlot::LifeStone, SelectedItem);
+						UpdateSlot(i);
+					}
+				}
+				break;
+				case Client::EEquipmentType::Banner:
+				{
+					if (m_pEquipData->IsExistEquip(EEquipSlot::Banner))
+						return;
+					else
+					{
+						m_pInventoryData->SetEquiped(i, TRUE);
+						m_pEquipData->ChangeEquipment(EEquipSlot::Banner, SelectedItem);
+						UpdateSlot(i);
+					}
+				}
+				break;
+				case Client::EEquipmentType::Augment:
+				{
+					if (m_pEquipData->IsExistEquip(EEquipSlot::Amulet))
+						return;
+					else
+					{
+						m_pInventoryData->SetEquiped(i, TRUE);
+						m_pEquipData->ChangeEquipment(EEquipSlot::Amulet, SelectedItem);
+						UpdateSlot(i);
+					}
+
+				}
+				break;
+				default:
+				{
+					assert("Not Found Item Type!");
+				}
+					break;
+				}
+			}
+			break;
+		}
+	}
 }
 
 void CUI_Armory::MouseOnSlot(void)
 {
+	if (0 >= m_vecSlots.size() ||
+		false == m_bArmoryActive )
+	{
+		return;
+	}
+
+	for (_int i = 0; i < m_pInventoryData->GetCount(); ++i)
+	{
+		if (m_vecSlots[i]->IconMouseOn())
+		{
+			CItemData temp = m_pInventoryData->GetItem(i);
+			g_pInvenUIManager->ShowItemStatus(&temp);
+			return;
+		}
+	}
+
+	g_pInvenUIManager->HideItemStatus();
 }
 
 _bool CUI_Armory::GetArmoryActive(void)

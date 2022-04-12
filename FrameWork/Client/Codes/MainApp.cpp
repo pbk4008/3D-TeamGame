@@ -86,6 +86,9 @@ _int CMainApp::Tick(_double TimeDelta)
 
 	g_pGameInstance->Update_InputDev();
 
+	if (g_pInvenUIManager->IsOpenModal())
+		TimeDelta = 0.f;
+
 	if (m_isFreeze)
 	{
 		m_dFreezeTimeAcc += TimeDelta;
@@ -288,8 +291,8 @@ HRESULT CMainApp::Ready_GameObject_Prototype()
 	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_UI_ItemEffect"), CUI_SlotItemEffect::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 	//Item Equip Text
-	//if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_UI_ItemEquipedText"), CUI_EquipedText::Create(m_pDevice, m_pDeviceContext))))
-	//	return E_FAIL;
+	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_UI_ItemEquipedText"), CUI_EquipedText::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
 	//ItemStatusWindow
 	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_UI_ItemStatusWindow"), CUI_ItemStatusWindow::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
