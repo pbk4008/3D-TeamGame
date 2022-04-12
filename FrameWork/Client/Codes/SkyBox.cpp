@@ -66,6 +66,8 @@ HRESULT CSkyBox::Render()
 		m_pVIBufferCom->SetUp_TextureOnShader("g_DiffuseTexture", m_pTexture);
 	else if(g_pGameInstance->getCurrentLevel() == 4)
 		m_pVIBufferCom->SetUp_TextureOnShader("g_DiffuseTexture", m_pTexture2);
+	else if (g_pGameInstance->getCurrentLevel() == 6)
+		m_pVIBufferCom->SetUp_TextureOnShader("g_DiffuseTexture", m_pTexture);
 
 	m_pVIBufferCom->Render(0);
 

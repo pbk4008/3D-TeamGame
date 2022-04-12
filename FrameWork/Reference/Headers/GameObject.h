@@ -70,6 +70,7 @@ protected:
 	_uint m_iObectTag;
 	_uint m_iSceneID;
 	_float m_fViewZ = 0.f;
+	_matrix m_PreveWVMatrix = XMMatrixIdentity();
 protected:
 	unordered_map<wstring, class CComponent*>		m_Components;
 protected:
