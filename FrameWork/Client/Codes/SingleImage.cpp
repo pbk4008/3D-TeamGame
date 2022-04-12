@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "SingleImage.h"
 #include "UI_Texture.h"
+#include "VIBuffer_Rect.h"
 
 CSingleImage::CSingleImage(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
 	: CComponent(pDevice, pDeviceContext)
@@ -45,7 +46,8 @@ HRESULT CSingleImage::NativeConstruct(void* pArg)
 	m_fOffsetPosition = texDesc.fOffsetPos;
 	m_fOffsetScale = texDesc.fOffsetScale;
 
-	m_pBuffer = g_pGameInstance->Clone_Component<CVIBuffer_Rect>(0, L"Proto_Component_Rect_UI");
+	m_pBuffer = g_pGameInstance->Clone_Component<CVIBuffer_Rect>(0, L"Proto_Component_RectBuffer");
+	//Safe_AddRef(m_pBuffer);
 
 	if (!m_pBuffer)
 		return E_FAIL;
@@ -60,10 +62,8 @@ _int CSingleImage::Tick(_double TimeDelta)
 
 _int CSingleImage::LateTick(_double TimeDelta)
 {
-	if (nullptr != m_pRenderer)
-	{
-		m_pRenderer->Add_RenderGroup(CRenderer::RENDER::RENDER_UI, m_pCreator);
-	}
+	//if (nullptr != m_pRenderer)
+	//	m_pRenderer->Add_RenderGroup(CRenderer::RENDER::RENDER_UI_ACTIVE, m_pCreator);
 
 	return _int();
 }
@@ -85,7 +85,6 @@ HRESULT CSingleImage::Render(CTransform* _sender)
 
 		m_pBuffer->Render(1);
 	}
-
 	return S_OK;
 }
 
@@ -119,7 +118,10 @@ CComponent* CSingleImage::Clone(void* pArg)
 
 void CSingleImage::Free()
 {
-	Safe_Release(m_pBuffer);
+	if (m_isCloned == true)
+	{
+		Safe_Release(m_pBuffer);
+	}
 
 	__super::Free();
 }

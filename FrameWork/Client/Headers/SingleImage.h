@@ -6,6 +6,7 @@
 BEGIN(Engine)
 class UI_Texture;
 class CVIBuffer_Rect;
+class CVI_UIBuffer;
 class CRenderer;
 END
 
@@ -53,7 +54,7 @@ private:
 	_float2 m_fOffsetScale = { 1.f, 1.f };
 
 private:
-	CVIBuffer_Rect* m_pBuffer = nullptr;
+	CVIBuffer_Rect* m_pBuffer;
 	CRenderer*		m_pRenderer = nullptr;
 	CTransform*		m_pTransform = nullptr;
 	CGameObject*	m_pCreator = nullptr;

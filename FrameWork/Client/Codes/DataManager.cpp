@@ -24,7 +24,7 @@ HRESULT CDataManager::NativeConstruct(void)
 
 	/* Default Weapon ItemData */
 	CItemData weaponItemData;
-	weaponItemData.equipmentGrade = EEquipmentGrade::Rare;
+	weaponItemData.equipmentGrade = EEquipmentGrade::Legendary;
 	weaponItemData.equipmentType = EEquipmentType::Weapon;
 	weaponItemData.ItemType = EItemType::Equipment;
 	weaponItemData.iconTexName = L"T_Weapon_Sword_1H_Player_Needle";
@@ -33,7 +33,7 @@ HRESULT CDataManager::NativeConstruct(void)
 	pInventoryData->PushItem(weaponItemData);
 
 	pEquipmentData->SetEquipment(EEquipSlot::Weapon1, weaponItemData);
-
+	
 	return S_OK;
 }
 

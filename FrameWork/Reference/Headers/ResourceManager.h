@@ -48,7 +48,7 @@ public:
 			if (L"" != targetFile)
 			{
 				std::wstring filePath = targetFile;
-				std::wstring fileName = filePath.substr(filePath.find_last_of(L"/") + 1);
+				wstring fileName = filePath.substr(filePath.find_last_of(L"/") + 1);
 				size_t targetNum = fileName.find_last_of(L".");
 				fileName = fileName.substr(0, targetNum);
 
@@ -98,7 +98,7 @@ public:
 			for (auto& file : filePaths)
 			{
 				std::wstring filePath = file;
-				std::wstring fileName = filePath.substr(filePath.find_last_of(L"/" + 1));
+				wstring fileName = filePath.substr(filePath.find_last_of(L"/") + 1);
 				size_t targetNum = fileName.find_last_of(L".");
 				fileName = fileName.substr(0, targetNum);
 
@@ -168,7 +168,7 @@ public:
 		for (auto& file : filePaths)
 		{
 			std::wstring filePath = file;
-			std::wstring fileName = filePath.substr(filePath.find_last_of(L"/") + 1);
+			wstring fileName = filePath.substr(filePath.find_last_of(L"/") + 1);
 			size_t targetNum = fileName.find_last_of(L".");
 			fileName = fileName.substr(0, targetNum);
 
@@ -198,7 +198,7 @@ public:
 	void LoadResource(const std::wstring& _filePath, _bool _bStatic = false)
 	{
 		std::wstring filePath = _filePath;
-		std::wstring fileName = filePath.substr(filePath.find_last_of(L"/" + 1));
+		wstring fileName = filePath.substr(filePath.find_last_of(L"/") + 1);
 		size_t targetNum = fileName.substr(L".");
 		fileName = fileName.substr(0, targetNum);
 

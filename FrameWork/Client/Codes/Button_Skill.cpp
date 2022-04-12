@@ -52,11 +52,6 @@ _int CButton_Skill::LateTick(_double TimeDelta)
 	if (FAILED(CUI::LateTick(TimeDelta)))
 		return -1;
 
-	if (nullptr != m_pRenderer)
-	{
-		m_pRenderer->Add_RenderGroup(CRenderer::RENDER::RENDER_UI, this);
-	}
-
 	return _int();
 }
 

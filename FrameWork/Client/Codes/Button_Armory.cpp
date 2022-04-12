@@ -26,13 +26,13 @@ HRESULT CButton_Armory::NativeConstruct(const _uint iSceneID, void* pArg)
 	if (FAILED(__super::NativeConstruct(iSceneID, pArg)))
 		return E_FAIL;
 
-	if (FAILED(Ready_Component()))
-		return E_FAIL;
-
 	desc = (*(Desc*)pArg);
 
 	m_pTransform->Set_State(CTransform::STATE_POSITION, _vector{ desc.fPos.x, desc.fPos.y, 0.4f, 1.f });
 	m_pTransform->Scaling(_vector{ desc.fScale.x, desc.fScale.y, 1.f, 1.f });
+
+	if (FAILED(Ready_Component()))
+		return E_FAIL;
 
 	setActive(false);
 
@@ -52,18 +52,13 @@ _int CButton_Armory::LateTick(_double TimeDelta)
 	if (FAILED(CUI::LateTick(TimeDelta)))
 		return -1;
 
-	if (nullptr != m_pRenderer)
-	{
-		m_pRenderer->Add_RenderGroup(CRenderer::RENDER::RENDER_UI, this);
-	}
-
 	return _int();
 }
 
 HRESULT CButton_Armory::Render()
 {
-	/*if (this->getActive())
-		m_pSigleImageCom->Render(m_pTransform);*/
+	if (this->getActive())
+		m_pSigleImageCom->Render(m_pTransform);
 
 	return S_OK;
 }
@@ -72,7 +67,7 @@ HRESULT CButton_Armory::Ready_Component(void)
 {
 	/* for. Single Image Com */
 	CSingleImage::Desc ModalSprite;
-	ModalSprite.textureName = L"T_Item_Bg_None";
+	ModalSprite.textureName = L"T_Button_Armory";
 	ModalSprite.pCreator = this;
 	ModalSprite.pRenderer = this->m_pRenderer;
 	ModalSprite.pTransform = this->m_pTransform;
@@ -91,7 +86,7 @@ HRESULT CButton_Armory::Ready_Component(void)
 
 _bool CButton_Armory::ButtonClicked(void)
 {
-	return m_pUIHelperCom->MouseClickDown();
+	return m_pUIHelperCom->MouseClickArmoryBtn();
 }
 
 CButton_Armory* CButton_Armory::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)

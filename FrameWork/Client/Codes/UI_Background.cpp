@@ -25,11 +25,13 @@ HRESULT CUI_Background::NativeConstruct(const _uint iSceneID, void* pArg)
 	if (FAILED(__super::NativeConstruct(iSceneID, pArg)))
 		return E_FAIL;
 
+	m_pTransform->Set_State(CTransform::STATE_POSITION, _vector{ 0.f, -30.f, 0.9f, 1.f});
+	m_pTransform->Scaling(_vector{ 1400.f, 780.f, 1.f, 1.f });
+
 	if (FAILED(Ready_Component()))
 		return E_FAIL;
 
-	m_pTransform->Set_State(CTransform::STATE_POSITION, _vector{ 0.f, 0.f, 0.1f, 1.f});
-	m_pTransform->Scaling(_vector{ 1280.f, 720.f, 1.f, 1.f });
+
 	setActive(false);
 
 	return S_OK;
@@ -48,11 +50,8 @@ _int CUI_Background::LateTick(_double TimeDelta)
 	if (FAILED(CUI::LateTick(TimeDelta)))
 		return -1;
 
-	m_pTransform->Set_State(CTransform::STATE_POSITION, _vector{ 0.f, 0.f, 0.9f, 1.f });
-	m_pTransform->Scaling(_vector{ 1280.f, 720.f, 1.f, 1.f });
-
-	if(this->getActive())
-		m_pSigleImageCom->LateTick(TimeDelta);
+	if (nullptr != m_pRenderer)
+		m_pRenderer->Add_RenderGroup(CRenderer::RENDER::RENDER_UI_ACTIVE, this);
 
 	return _int();
 }

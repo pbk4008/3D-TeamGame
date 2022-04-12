@@ -43,11 +43,8 @@ _int CUI_ModalWindow::Tick(_double dDeltaTime)
 	if (FAILED(CUI::Tick(dDeltaTime)))
 		return -1;
 
-	if (m_pEquipment->getActive())
-		m_pEquipment->Tick(dDeltaTime);
-
-	if( m_pIndex->Click_Equipment())
-	{ 
+	if (m_pIndex->Click_Equipment())
+	{
 		if (false == m_pEquipment->GetEquipmentActive())
 		{
 			ShutTheUI();
@@ -55,15 +52,21 @@ _int CUI_ModalWindow::Tick(_double dDeltaTime)
 		}
 	}
 
-	//if (m_pIndex->Click_Armory())
-	//{
-	//	if (false == m_pArmory->GetEquipmentActive())
-	//	{
-	//		ShutTheUI();
-	//		m_pArmory->Show();
-	//	}
-	//}
-	
+	if (m_pIndex->Click_Armory())
+	{
+		if (false == m_pArmory->GetArmoryActive())
+		{
+			ShutTheUI();
+			m_pArmory->Show();
+		}
+	}
+
+	if (m_pEquipment->getActive())
+		m_pEquipment->Tick(dDeltaTime);
+
+	if (m_pArmory->getActive())
+		m_pArmory->Tick(dDeltaTime);
+
 	return _int();
 }
 
@@ -72,7 +75,7 @@ _int CUI_ModalWindow::LateTick(_double TimeDelta)
 	if (FAILED(CUI::LateTick(TimeDelta)))
 		return -1;
 
-	m_pRenderer->Add_RenderGroup(CRenderer::RENDER::RENDER_UI, this);
+	m_pRenderer->Add_RenderGroup(CRenderer::RENDER::RENDER_UI_ACTIVE, this);
 
 	if (m_pIndex->getActive())
 		m_pIndex->LateTick(TimeDelta);
@@ -82,6 +85,9 @@ _int CUI_ModalWindow::LateTick(_double TimeDelta)
 
 	if (m_pEquipment->getActive())
 		m_pEquipment->LateTick(TimeDelta);
+
+	if (m_pArmory->getActive())
+		m_pArmory->LateTick(TimeDelta);
 
 	return _int();
 }
@@ -98,6 +104,9 @@ HRESULT CUI_ModalWindow::Render()
 
 		if (m_pEquipment->getActive())
 			m_pEquipment->Render();
+
+		if (m_pArmory->getActive())
+			m_pArmory->Render();
 	}
 	return S_OK;
 }
@@ -112,7 +121,8 @@ HRESULT CUI_ModalWindow::Ready_UIObject(void)
 	m_pBG		 = static_cast<CUI_Background*>(g_pGameInstance->Clone_GameObject((_uint)SCENEID::SCENE_STATIC, L"Proto_GameObject_UI_Background"));
 	m_pIndex	 = static_cast<CUI_Indexes*>(g_pGameInstance->Clone_GameObject((_uint)SCENEID::SCENE_STATIC, L"Proto_GameObject_UI_Indexes"));
 	m_pEquipment = static_cast<CUI_Equipment*>(g_pGameInstance->Clone_GameObject((_uint)SCENEID::SCENE_STATIC, L"Proto_GameObject_UI_Equipment"));
-	//m_pArmory	 = static_cast<CUI_Armory*>(g_pGameInstance->Clone_GameObject((_uint)SCENEID::SCENE_STATIC, L"Proto_GameObject_UI_Armory"));
+	m_pArmory	 = static_cast<CUI_Armory*>(g_pGameInstance->Clone_GameObject((_uint)SCENEID::SCENE_STATIC, L"Proto_GameObject_UI_Armory"));
+
 	assert("Failed to Create UI Object in Modal Window" && (m_pBG || m_pIndex || m_pEquipment || m_pArmory));
 
 	return S_OK;
@@ -126,8 +136,6 @@ void CUI_ModalWindow::Show(void)
 	m_pBG->setActive(true);		 /* 인벤 배경 */
 
 	m_pEquipment->Show();		 /* 장비 창  */
-	//m_pArmory->Show();		 /* 무기고 창 */
-
 }
 
 void CUI_ModalWindow::Hide(void)
@@ -138,13 +146,13 @@ void CUI_ModalWindow::Hide(void)
 	m_pBG->setActive(false);	
 
 	m_pEquipment->Hide();		
-	//m_pArmory->Hide();		
+	m_pArmory->Hide();		
 }	
 
 void CUI_ModalWindow::ShutTheUI(void)
 {
 	m_pEquipment->Hide();
-	//m_pArmory->Hide();
+	m_pArmory->Hide();
 	//m_pSkills->Hide();
 }
 
@@ -209,11 +217,10 @@ CGameObject* CUI_ModalWindow::Clone(const _uint iSceneID, void* pArg)
 
 void CUI_ModalWindow::Free()
 {
+	Safe_Release(m_pEquipment);
+	Safe_Release(m_pArmory);
 	Safe_Release(m_pBG);
 	Safe_Release(m_pIndex);
-	Safe_Release(m_pEquipment);
-
-	//Safe_Release(m_pArmory);
 
 	__super::Free();
 }

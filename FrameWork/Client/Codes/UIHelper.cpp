@@ -84,7 +84,31 @@ POINT CUIHelper::getMousePostion(void)
 
 _bool CUIHelper::MouseClickDown()
 {
+	if (g_pGameInstance->getMouseKeyDown(CInputDev::MOUSESTATE::MB_RBUTTON))
+	{
+		if (IsCursorRect())
+		{
+			return true;
+		}
+	}
+	return false;
+}
+
+_bool CUIHelper::MouseClickEquipBtn(void)
+{
 	if (g_pGameInstance->getMouseKeyDown(CInputDev::MOUSESTATE::MB_LBUTTON))
+	{
+		if (IsCursorRect())
+		{
+			return true;
+		}
+	}
+	return false;
+}
+
+_bool CUIHelper::MouseClickArmoryBtn(void)
+{
+	if (g_pGameInstance->getMouseKeyDown(CInputDev::MOUSESTATE::MB_WHILL))
 	{
 		if (IsCursorRect())
 		{

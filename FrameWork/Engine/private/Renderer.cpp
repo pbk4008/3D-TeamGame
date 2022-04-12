@@ -177,6 +177,9 @@ HRESULT CRenderer::Draw_RenderGroup()
 		if (FAILED(Render_Final(m_boutline, m_bradial))) MSGBOX("Failed To Rendering FinalPass");
 	}
 
+	if (FAILED(Render_UI_Active()))
+		return E_FAIL;
+
 	if (FAILED(Render_UI()))
 		return E_FAIL;
 
@@ -388,19 +391,16 @@ HRESULT CRenderer::Render_UI()
 			});
 	}*/
 
-	_matrix view = g_pGameInstance->Get_Transform(m_CameraTag, TRANSFORMSTATEMATRIX::D3DTS_VIEW);
-	view = XMMatrixInverse(nullptr, view);
+	//for (auto& iter : m_RenderGroup[RENDER_UI])
+	//	iter->ComputeViewZ(&view);
 
-	for (auto& iter : m_RenderGroup[RENDER_UI])
-		iter->ComputeViewZ(&view);
+	//m_RenderGroup[RENDER_UI].sort(
+	//	[](auto& psrc, auto& pdst)->bool
+	//	{
+	//		return psrc->Get_ViewZ() > pdst->Get_ViewZ();
+	//	});
 
-	m_RenderGroup[RENDER_UI].sort(
-		[](auto& psrc, auto& pdst)->bool
-		{
-			return psrc->Get_ViewZ() > pdst->Get_ViewZ();
-		});
-
-	for (auto& pGameObject : m_RenderGroup[RENDER_UI])
+	for (auto& pGameObject : m_RenderGroup[RENDER_UI] )
 	{
 		if (nullptr != pGameObject)
 			pGameObject->Render();
@@ -410,20 +410,23 @@ HRESULT CRenderer::Render_UI()
 	m_RenderGroup[RENDER_UI].clear();
 
 
-	/*for (auto& pGameObject : m_RenderGroup[RENDER_UI])
-	{
-		if (nullptr != pGameObject)
-			pGameObject->Render();
-
-		Safe_Release(pGameObject);
-	}
-	m_RenderGroup[RENDER_UI].clear();*/
-	
 	return S_OK;
 }
 
 HRESULT CRenderer::Render_UI_Active()
 {
+	_matrix view = g_pGameInstance->Get_Transform(L"MainOrthoCamera", TRANSFORMSTATEMATRIX::D3DTS_VIEW);
+	view = XMMatrixInverse(nullptr, view);
+
+	for (auto& iter : m_RenderGroup[RENDER_UI_ACTIVE])
+		iter->ComputeViewZ(&view);
+
+	m_RenderGroup[RENDER_UI_ACTIVE].sort(
+		[](auto& psrc, auto& pdst)->bool
+		{
+			return psrc->Get_ViewZ() > pdst->Get_ViewZ();
+		});
+
 	for (auto& pGameObject : m_RenderGroup[RENDER_UI_ACTIVE])
 	{
 		if (nullptr != pGameObject)
@@ -432,7 +435,6 @@ HRESULT CRenderer::Render_UI_Active()
 		Safe_Release(pGameObject);
 	}
 	m_RenderGroup[RENDER_UI_ACTIVE].clear();
-
 	return S_OK;
 }
 

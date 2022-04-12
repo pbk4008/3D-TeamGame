@@ -82,6 +82,7 @@ enum class EItemType
 
 enum class EEquipmentGrade
 {
+	Common,
 	Uncommon,
 	Rare,
 	Epic,

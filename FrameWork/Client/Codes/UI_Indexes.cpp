@@ -52,10 +52,10 @@ _int CUI_Indexes::LateTick(_double TimeDelta)
 	if (m_pEquipmentBtn->getActive())
 		m_pEquipmentBtn->LateTick(TimeDelta);
 
-	/*if (m_pArmoryBtn->getActive())
+	if (m_pArmoryBtn->getActive())
 		m_pArmoryBtn->LateTick(TimeDelta);
 
-	if (m_pSkillBtn->getActive())
+	/*if (m_pSkillBtn->getActive())
 		m_pSkillBtn->LateTick(TimeDelta);*/
 
 	return _int();
@@ -66,10 +66,10 @@ HRESULT CUI_Indexes::Render(void)
 	if (m_pEquipmentBtn->getActive())
 		m_pEquipmentBtn->Render();
 
-	/*if (m_pArmoryBtn->getActive())
+	if (m_pArmoryBtn->getActive())
 		m_pArmoryBtn->Render();
 
-	if (m_pSkillBtn->getActive())
+	/*if (m_pSkillBtn->getActive())
 		m_pSkillBtn->Render();*/
 
 	return S_OK;
@@ -79,26 +79,26 @@ HRESULT CUI_Indexes::Ready_UIObject(void)
 {
 	CButton_Equipment::Desc Equipment_Btn;
 	{
-		Equipment_Btn.fPos = { 100.f, 50.f };
-		Equipment_Btn.fScale = { 100.f, 50.f };
+		Equipment_Btn.fPos = { -550.f, 335.f };
+		Equipment_Btn.fScale = { 60.f, 30.f };
 
 		m_pEquipmentBtn = static_cast<CButton_Equipment*>(g_pGameInstance->Clone_GameObject((_uint)SCENEID::SCENE_STATIC, L"Proto_GameObject_UI_Button_Equipment", &Equipment_Btn));
+		assert("Failed to Create Proto_GameObject_UI_Button_Equipment" && m_pEquipmentBtn);
 	}
-	/*CButton_Armory::Desc Armory_Btn;
+	CButton_Armory::Desc Armory_Btn;
 	{
-		Armory_Btn.fPos = { 0.f, 0.f};
-		Armory_Btn.fScale = { 100.f, 50.f };
+		Armory_Btn.fPos = { -450.f, 335.f };
+		Armory_Btn.fScale = { 60.f, 30.f };
 
 		m_pArmoryBtn = static_cast<CButton_Armory*>(g_pGameInstance->Clone_GameObject((_uint)SCENEID::SCENE_STATIC, L"Proto_GameObject_UI_Button_Armory", &Armory_Btn));
+		assert("Failed to Create Proto_GameObject_UI_Button_Armory" && m_pArmoryBtn);
 	}
-	CButton_Skill::Desc Skill_Btn;
-	{
-		Skill_Btn.fPos = { 0.f, 0.f };
-		Skill_Btn.fScale = { 100.f, 50.f };
-		m_pSkillBtn = static_cast<CButton_Skill*>(g_pGameInstance->Clone_GameObject((_uint)SCENEID::SCENE_STATIC, L"Proto_GameObject_UI_Button_Skill", &Skill_Btn));
-	}
-
-	assert(L"Failed to Create CUI_Indexes" && (m_pEquipmentBtn || m_pArmoryBtn || m_pSkillBtn));*/
+	//CButton_Skill::Desc Skill_Btn;
+	//{
+	//	Skill_Btn.fPos = { 0.f, 0.f };
+	//	Skill_Btn.fScale = { 100.f, 50.f };
+	//	m_pSkillBtn = static_cast<CButton_Skill*>(g_pGameInstance->Clone_GameObject((_uint)SCENEID::SCENE_STATIC, L"Proto_GameObject_UI_Button_Skill", &Skill_Btn));
+	//}
 	return S_OK;
 }
 
@@ -106,15 +106,15 @@ void CUI_Indexes::Show(void)
 {
 	/* Show Menu Button*/
 	m_pEquipmentBtn->setActive(true);
-	/*m_pArmoryBtn->setActive(true);
-	m_pSkillBtn->setActive(true);*/
+	m_pArmoryBtn->setActive(true);
+	//m_pSkillBtn->setActive(true);
 }
 
 void CUI_Indexes::Hide(void)
 {
 	/* Hide Menu Button*/
 	m_pEquipmentBtn->setActive(false);
-	//m_pArmoryBtn->setActive(false);
+	m_pArmoryBtn->setActive(false);
 	//m_pSkillBtn->setActive(false);
 }
 
@@ -129,7 +129,7 @@ _bool CUI_Indexes::Click_Equipment(void)
 
 _bool CUI_Indexes::Click_Armory(void)
 {
-	return true;
+	return m_pArmoryBtn->ButtonClicked();
 }
 
 _bool CUI_Indexes::Click_Skill(void)
@@ -169,7 +169,7 @@ CGameObject* CUI_Indexes::Clone(const _uint iSceneID, void* pArg)
 void CUI_Indexes::Free()
 {
 	Safe_Release(m_pEquipmentBtn);
-	//Safe_Release(m_pArmoryBtn);
+	Safe_Release(m_pArmoryBtn);
 	//Safe_Release(m_pSkillBtn);
 
 	__super::Free();
