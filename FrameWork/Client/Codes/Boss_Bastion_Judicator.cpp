@@ -596,6 +596,11 @@ void CBoss_Bastion_Judicator::Set_IsAttack(const _bool _isAttack)
 	}
 }
 
+void CBoss_Bastion_Judicator::OnWeaponEffect()
+{
+	m_pWeapon->Set_HitGround(true);
+}
+
 
 CBoss_Bastion_Judicator* CBoss_Bastion_Judicator::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
 {
