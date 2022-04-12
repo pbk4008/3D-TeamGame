@@ -27,7 +27,7 @@ HRESULT CUI_SlotItemEffect::NativeConstruct(const _uint iSceneID, void* pArg)
 
 	desc = (*(ItemSlotDesc*)pArg);
 
-	m_pTransform->Set_State(CTransform::STATE_POSITION, _vector{ desc.fPos.x, desc.fPos.y, 0.3f, 1.f });
+	m_pTransform->Set_State(CTransform::STATE_POSITION, _vector{ desc.fPos.x + 10.f , desc.fPos.y - 10.f , 0.3f, 1.f });
 	m_pTransform->Scaling(_vector{ desc.fScale.x + 5.f, desc.fScale.y + 5.f, 1.f, 1.f });
 
 	if (FAILED(Ready_Component()))

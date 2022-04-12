@@ -56,6 +56,7 @@ private:
 	_float4 m_fColor;
 	_float2 m_fOffsetPosition = { 0.f, 0.f };
 	_float2 m_fOffsetScale = { 1.f, 1.f };
+	_bool   m_bRenderPass = 1;
 
 private:
 	CVIBuffer_Rect* m_pBuffer;

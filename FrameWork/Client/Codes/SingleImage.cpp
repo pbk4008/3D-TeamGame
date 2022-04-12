@@ -46,18 +46,20 @@ HRESULT CSingleImage::NativeConstruct(void* pArg)
 	m_fOffsetPosition = texDesc.fOffsetPos;
 	m_fOffsetScale = texDesc.fOffsetScale;
 
-
 	switch (texDesc.renderType)
 	{
 	case CSingleImage::Alpha:
-		m_pBuffer = g_pGameInstance->Clone_Component<CVIBuffer_Rect>(0, L"Proto_Component_RectBuffer");
+		m_bRenderPass = 1;
 		break;
 	case CSingleImage::Nonalpha:
-		m_pBuffer = g_pGameInstance->Clone_Component<CVIBuffer_Rect>(0, L"Proto_Component_RectBuffer");
+		m_bRenderPass = 0;
+		break;
 	default:
-		m_pBuffer = g_pGameInstance->Clone_Component<CVIBuffer_Rect>(0, L"Proto_Component_RectBuffer");
+		m_bRenderPass = 1;
 		break;
 	}
+
+	m_pBuffer = g_pGameInstance->Clone_Component<CVIBuffer_Rect>(0, L"Proto_Component_RectBuffer");
 	assert("Failed to Get Buffer" && m_pBuffer);
 		
 	return S_OK;
@@ -88,7 +90,7 @@ HRESULT CSingleImage::Render(CTransform* _sender)
 
 		m_pBuffer->SetUp_TextureOnShader("g_DiffuseTexture", m_pImage);
 
-		m_pBuffer->Render(1);
+		m_pBuffer->Render(m_bRenderPass);
 	}
 	return S_OK;
 }
