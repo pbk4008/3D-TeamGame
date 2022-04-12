@@ -24,6 +24,7 @@ private:
 	void RaycastForThrow();
 
 private:
+	_bool m_isThrow = false;
 	_bool m_isTrigger = false;
 	_bool m_isRecive = false;
 

@@ -102,6 +102,7 @@ HRESULT CSilvermane_Death::ExitState()
 		return E_FAIL;
 
 	m_pSilvermane->Set_IsTrasceCamera(true);
+	m_pSilvermane->Set_Radial(false);
 	return S_OK;
 }
 

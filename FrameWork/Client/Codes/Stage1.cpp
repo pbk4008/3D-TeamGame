@@ -39,6 +39,7 @@
 #include "InteractManager.h"
 #include "DropManager.h"
 #include "ScenematicManager.h"
+#include "Wall.h"
 
 //Cinema
 #include "Cinema1_1.h"
@@ -81,23 +82,17 @@ HRESULT CStage1::NativeConstruct()
 	if (FAILED(Ready_Light()))
 		return E_FAIL;
 
-	//if (FAILED(Ready_Trigger_Jump()))
-	//	return E_FAIL;
+	if (FAILED(Ready_Trigger_Jump()))
+		return E_FAIL;
 
 	if (FAILED(Ready_Player(L"Layer_Silvermane")))
 		return E_FAIL;
 
-	//if (FAILED(Ready_MapObject()))
-	//	return E_FAIL;
+	if (FAILED(Ready_MapObject()))
+		return E_FAIL;
 
-	//if (FAILED(Ready_TriggerSystem(L"../bin/SaveData/Trigger/MonsterSpawnTrigger.dat")))
-	//	return E_FAIL;
-
-	//if(FAILED(Ready_Boss(L"Layer_Boss")))
-	//	return E_FAIL;
-
-	//if (FAILED(Ready_Monster(L"Layer_Monster")))
-	//	return E_FAIL;
+	if (FAILED(Ready_TriggerSystem(L"../bin/SaveData/Trigger/MonsterSpawnTrigger.dat")))
+		return E_FAIL;
 
 	if (FAILED(Ready_Data_UI(L"../bin/SaveData/UI/UI.dat")))
 		return E_FAIL;
@@ -115,11 +110,26 @@ HRESULT CStage1::NativeConstruct()
 		return E_FAIL;
 
 	g_pGameInstance->Change_BaseCamera(L"Camera_Silvermane");
-	//g_pGameInstance->PlayBGM(L"Stage1_BGM");
+	g_pGameInstance->PlayBGM(L"Stage1_BGM");
 
-	if (FAILED(Ready_Cinema()))
+	g_pInteractManager = CInteractManager::GetInstance();
+	if (FAILED(g_pInteractManager->NativeConstruct()))
 		return E_FAIL;
 
+	g_pDropManager = CDropManager::GetInstance();
+	if (FAILED(g_pDropManager->NativeConstruct((SCENEID::SCENE_STAGE1))))
+		return E_FAIL;
+
+	m_pScenemaManager = GET_INSTANCE(CScenematicManager);
+
+	//if (FAILED(Ready_Cinema()))
+	//	return E_FAIL;
+
+	//if (FAILED(Ready_Boss(L"Layer_Boss")))
+	//	return E_FAIL;
+
+	//if (FAILED(Ready_Monster(L"Layer_Monster")))
+	//	return E_FAIL;
 	return S_OK;
 }
 
@@ -299,6 +309,7 @@ HRESULT CStage1::Ready_MapObject()
 				Desc.fFrame = 64.f;
 				Desc.fEffectPlaySpeed = 1.f;
 				Desc.ParticleMat = XMLoadFloat4x4(&iter);
+				Desc.bUsingGravity = true;
 
 				if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_NoisFire", L"Proto_GameObject_Effect_Env_Fire",&Desc)))
 					MSGBOX("Failed To Clone NoisFire");
@@ -368,8 +379,21 @@ HRESULT CStage1::Ready_Player(const _tchar* LayerTag)
 		return E_FAIL;
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Camera", L"Proto_GameObject_Camera_Silvermane")))
 		return E_FAIL;
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Wall", L"Proto_GameObject_Wall")))
-		return E_FAIL;
+
+	WALLDESC desc;
+	ZeroMemory(&desc, sizeof(WALLDESC));
+	desc.pos = _float4(-61.f, 18.f, 194.f, 1.f);
+	desc.scale = _float2(6.f, 10.f);
+	desc.radian = 0.f;
+	desc.color = _float4(1.f, 0.f, 0.f, 1.f);
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Wall", L"Proto_GameObject_Wall",&desc))) return E_FAIL;
+
+	ZeroMemory(&desc, sizeof(WALLDESC));
+	desc.pos = _float4(-91.f, 25.f, 218.f, 1.f);
+	desc.scale = _float2(10.f, 24.f);
+	desc.radian = 90.f;
+	desc.color = _float4(0.f, 1.f, 1.f, 1.f);
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Wall", L"Proto_GameObject_Wall", &desc))) return E_FAIL;
 	
 	return S_OK;
 }
@@ -725,23 +749,6 @@ HRESULT CStage1::Ready_Data_Effect()
 	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Effect_Hammer_Dust", L"Proto_GameObject_Effect_Hammer_Dust", &Desc)))
 	//{
 	//	MSGBOX("Failed to Creating Effect_Hammer_Dust in CStage1::Ready_Effect()");
-	//	return E_FAIL;
-
-	//}
-
-	////Monster Dead
-	//ZeroMemory(&Desc, sizeof(Desc));
-
-	//_tcscpy_s(Desc.TextureTag, L"GroundSmoke1");
-	//Desc.iRenderPassNum = 1;
-	//Desc.iImageCountX = 8;
-	//Desc.iImageCountY = 8;
-	//Desc.fFrame = 64.f;
-	//Desc.fEffectPlaySpeed = 1.f;
-
-	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Effect_Monster_Dead_Spray", L"Proto_GameObject_Effect_Monster_Dead_Spray", &Desc)))
-	//{
-	//	MSGBOX("Failed to Creating Effect_Monster_Dead_Spray in CStage1::Ready_Effect()");
 	//	return E_FAIL;
 
 	//}
@@ -1666,7 +1673,6 @@ void CStage1::Free()
 
 	CDropManager::DestroyInstance();
 	CInteractManager::DestroyInstance();
-
 	Safe_Release(m_pTriggerSystem);
 
 }

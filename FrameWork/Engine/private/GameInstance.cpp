@@ -523,6 +523,14 @@ void CGameInstance::UpdateLightCam(_uint LightIndx, _fvector playerpos)
 	m_pLight_Manager->UpdateLightCam(LightIndx, playerpos);
 }
 
+void CGameInstance::RemoveLight()
+{
+	if (m_pLight_Manager == nullptr)
+		return;
+
+	m_pLight_Manager->Free();
+}
+
 ID3D11ShaderResourceView* CGameInstance::Get_SRV(const wstring& target)
 {
 	if(m_pTarget_Manager == nullptr)

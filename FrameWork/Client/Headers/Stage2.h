@@ -17,6 +17,7 @@ public:
 	virtual _int Tick(_double TimeDelta);
 	virtual HRESULT Render();
 private:
+	HRESULT	Ready_Light();
 	HRESULT Ready_NaviMesh();
 	HRESULT Ready_MapObject();
 	//HRESULT Ready_Camera(const _tchar* LayerTag);

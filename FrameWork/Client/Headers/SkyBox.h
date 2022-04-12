@@ -23,6 +23,7 @@ public:
 	virtual HRESULT Render() override;
 private:
 	CTexture*		m_pTexture = nullptr;
+	CTexture*		m_pTexture2 = nullptr;
 	CVIBuffer_Cube* m_pVIBufferCom = nullptr;
 private:
 	virtual HRESULT SetUp_Components();

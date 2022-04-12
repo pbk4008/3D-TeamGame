@@ -64,6 +64,8 @@ HRESULT CUI_EquipedText::Render()
 
 	if (this->getActive())
 		m_pSigleImageCom->Render(m_pTransform);
+
+	return S_OK;
 }
 
 HRESULT CUI_EquipedText::Ready_Component(void)

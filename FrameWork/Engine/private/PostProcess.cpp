@@ -80,18 +80,6 @@ HRESULT CPostProcess::PossProcessing(CTonemapping* tone,CTarget_Manager* pTarget
 	return S_OK;
 }
 
-HRESULT CPostProcess::RadialPass(CTarget_Manager* pTargetMgr)
-{
-	if (FAILED(pTargetMgr->Begin_MRT(m_pDeviceContext, TEXT("Target_Final"))))	return E_FAIL;
-
-	if (FAILED(m_pVIBuffer->SetUp_TextureOnShader("g_Basetexture", pTargetMgr->Get_SRV(TEXT("Target_Blend"))))) MSGBOX("Render Final Basetexture Not Apply");
-
-	if(FAILED(m_pVIBuffer->Render(5))) MSGBOX("Failed To Rendering RadialPass");
-
-	if (FAILED(pTargetMgr->End_MRTNotClear(m_pDeviceContext))) return E_FAIL;
-	return S_OK;
-}
-
 HRESULT CPostProcess::ComputeBrightPass(CTarget_Manager* pTargetMgr, const wstring& in, _float sizex, _float sizey)
 {
 	if (FAILED(pTargetMgr->Begin_MRT(m_pDeviceContext, TEXT("MRT_BrightPass"))))

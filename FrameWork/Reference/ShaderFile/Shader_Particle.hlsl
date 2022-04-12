@@ -210,8 +210,7 @@ PS_OUT_TEST PS_MAIN_TEST(PS_IN In)
 	Out.mra.b = 1.f;
 	Out.mra.a = 1.f;
 	
-	half4 power = 0.1f;
-	Out.emission = g_color * power * GreenAlpha;
+	Out.emission = g_color * g_empower/* * GreenAlpha*/;
 	
 	if (0.1f >= Out.diffuse.a)
 		discard;
