@@ -91,12 +91,6 @@ HRESULT CStage1::NativeConstruct()
 	if (FAILED(Ready_MapObject()))
 		return E_FAIL;
 
-	if (FAILED(Ready_Boss(L"Layer_Boss")))
-		return E_FAIL;
-
-	if (FAILED(Ready_Monster(L"Layer_Monster")))
-		return E_FAIL;
-
 	if (FAILED(Ready_TriggerSystem(L"../bin/SaveData/Trigger/MonsterSpawnTrigger.dat")))
 		return E_FAIL;
 
@@ -131,6 +125,11 @@ HRESULT CStage1::NativeConstruct()
 	if (FAILED(Ready_Cinema()))
 		return E_FAIL;
 
+	//if (FAILED(Ready_Boss(L"Layer_Boss")))
+	//	return E_FAIL;
+
+	//if (FAILED(Ready_Monster(L"Layer_Monster")))
+	//	return E_FAIL;
 	return S_OK;
 }
 
@@ -753,23 +752,6 @@ HRESULT CStage1::Ready_Data_Effect()
 	//	return E_FAIL;
 
 	//}
-
-	//Monster Dead
-	ZeroMemory(&Desc, sizeof(Desc));
-
-	_tcscpy_s(Desc.TextureTag, L"T_lavaSpary");
-	Desc.iRenderPassNum = 1;
-	Desc.iImageCountX = 8;
-	Desc.iImageCountY = 8;
-	Desc.fFrame = 64.f;
-	Desc.fEffectPlaySpeed = 1.f;
-
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Effect_Monster_Dead_Spray", L"Proto_GameObject_Effect_Monster_Dead_Spray", &Desc)))
-	{
-		MSGBOX("Failed to Creating Effect_Monster_Dead_Spray in CStage1::Ready_Effect()");
-		return E_FAIL;
-
-	}
 	
 	//Env floating
 	vector<CEffect_Env_Floating::EFFECTDESC> vecEnvFloating;

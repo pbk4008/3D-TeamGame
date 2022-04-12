@@ -63,7 +63,7 @@ protected:
 protected:
 	CTransform* m_pLocalTransform = nullptr;
 	CModel*		m_pModel = nullptr;
-	_float4x4	m_smatOwnerPivot;;
+	_float4x4	m_matOwnerPivot;
 
 	CActor* m_pOwner = nullptr;
 	CHierarchyNode* m_pFixedBone = nullptr;
