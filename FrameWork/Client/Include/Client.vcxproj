@@ -313,6 +313,8 @@ call Update_Client.bat</Command>
     <ClInclude Include="..\Headers\Camera_Culling.h" />
     <ClInclude Include="..\Headers\Camera_Silvermane.h" />
     <ClInclude Include="..\Headers\Camera_Debug.h" />
+    <ClInclude Include="..\Headers\Cinema1_1.h" />
+    <ClInclude Include="..\Headers\CinemaCam.h" />
     <ClInclude Include="..\Headers\Client_Observer.h" />
     <ClInclude Include="..\Headers\Client_Trigger.h" />
     <ClInclude Include="..\Headers\Crawler_Attack.h" />
@@ -642,6 +644,8 @@ call Update_Client.bat</Command>
     <ClCompile Include="..\Codes\Button_Skill.cpp" />
     <ClCompile Include="..\Codes\CameraShake.cpp" />
     <ClCompile Include="..\Codes\Camera_Culling.cpp" />
+    <ClCompile Include="..\Codes\Cinema1_1.cpp" />
+    <ClCompile Include="..\Codes\CinemaCam.cpp" />
     <ClCompile Include="..\Codes\Client_Observer.cpp" />
     <ClCompile Include="..\Codes\Client_Trigger.cpp" />
     <ClCompile Include="..\Codes\Boss_Bastion_Judicator.cpp" />

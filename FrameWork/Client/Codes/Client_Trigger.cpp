@@ -75,22 +75,23 @@ HRESULT CClient_Trigger::Render()
 {
 	Set_WVPMatrix();
 
+	wstring wstrCamTag = g_pGameInstance->Get_BaseCameraTag();
 	switch ((TRIGGERTYPE)m_TriggerDesc.eTrigger_Type)
 	{
 	case TRIGGERTYPE::TRIGGER_LOD:
-		m_pGizmo->DrawCapsule(m_pTransform->Get_WorldMatrix(), L"Camera_Silvermane", _fvector{0.129f, 0.65f, 0.929f, 1.0f});
+		m_pGizmo->DrawCapsule(m_pTransform->Get_WorldMatrix(), wstrCamTag, _fvector{0.129f, 0.65f, 0.929f, 1.0f});
 		break;
 	case TRIGGERTYPE::TRIGGER_LIGHT:
-		m_pGizmo->DrawSphere(m_pTransform->Get_WorldMatrix(), L"Camera_Silvermane", _fvector{ 0.96f, 0.98f, 0.074f, 1.0f });
+		m_pGizmo->DrawSphere(m_pTransform->Get_WorldMatrix(), wstrCamTag, _fvector{ 0.96f, 0.98f, 0.074f, 1.0f });
 		break;
 	case TRIGGERTYPE::TRIGGER_SCENE:
-		m_pGizmo->DrawCube(m_pTransform->Get_WorldMatrix(), L"Camera_Silvermane", _fvector{ 1.0, 0.0f, 0.0f, 1.0f });
+		m_pGizmo->DrawCube(m_pTransform->Get_WorldMatrix(), wstrCamTag, _fvector{ 1.0, 0.0f, 0.0f, 1.0f });
 		break;
 	case TRIGGERTYPE::TRIGGER_MONSTER:
-		m_pGizmo->DrawCube(m_pTransform->Get_WorldMatrix(), L"Camera_Silvermane", _fvector{ 0.309f, 0.933f, 0.125f, 1.0f });
+		m_pGizmo->DrawCube(m_pTransform->Get_WorldMatrix(), wstrCamTag, _fvector{ 0.309f, 0.933f, 0.125f, 1.0f });
 		break;
 	case TRIGGERTYPE::TRIGGER_QUEST:
-		m_pGizmo->DrawCube(m_pTransform->Get_WorldMatrix(), L"Camera_Silvermane", _fvector{ 0.501f, 0.082f, 0.0f, 1.0f });
+		m_pGizmo->DrawCube(m_pTransform->Get_WorldMatrix(), wstrCamTag, _fvector{ 0.501f, 0.082f, 0.0f, 1.0f });
 		break;
 	}
 	return S_OK;
