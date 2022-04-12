@@ -162,11 +162,11 @@ HRESULT CLoader::SetUp_Stage1_Object()
 	if (FAILED(Load_Stage1PlayerLoad()))
 		return E_FAIL;
 
-	if (FAILED(Load_Stage1MonsterLoad()))
+	/*if (FAILED(Load_Stage1MonsterLoad()))
 		return E_FAIL;
 
 	if (FAILED(Load_Stage1BossLoad()))
-		return E_FAIL;
+		return E_FAIL;*/
 
 	if (FAILED(Load_Stage1StaticUILoad()))
 		return E_FAIL;
@@ -180,8 +180,8 @@ HRESULT CLoader::SetUp_Stage1_Object()
 	if (FAILED(Load_Stage1JumpTrigger()))
 		return E_FAIL;
 	
-	if (FAILED(Load_Stage1TriggerLod()))
-		return E_FAIL;
+	//if (FAILED(Load_Stage1TriggerLod()))
+	//	return E_FAIL;
 
 	if (FAILED(Load_Stage1_TreasureChest_Load()))
 		return E_FAIL;

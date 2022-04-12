@@ -10,7 +10,7 @@ cbuffer Matrices
 	matrix		g_ProjMatrix;
 };
 
-texture2D	g_DiffuseTexture;
+Texture2D		g_DiffuseTexture;
 
 sampler DefaultSampler = sampler_state
 {		

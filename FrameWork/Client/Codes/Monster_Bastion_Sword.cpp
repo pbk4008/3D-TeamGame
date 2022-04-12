@@ -162,18 +162,22 @@ _int CMonster_Bastion_Sword::LateTick(_double _dDeltaTime)
 
 HRESULT CMonster_Bastion_Sword::Render()
 {
-	SCB desc;
-	ZeroMemory(&desc, sizeof(SCB));
 	wstring wstrCamTag = g_pGameInstance->Get_BaseCameraTag();
-	CActor::BindConstantBuffer(wstrCamTag, &desc);
+	SCB desc;
 	for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
 	{
 		switch (i)
 		{
 		case 2:
+			ZeroMemory(&desc, sizeof(SCB));
+			CActor::BindConstantBuffer(wstrCamTag, &desc);
 			if (FAILED(m_pModel->Render(i, 1))) MSGBOX("Failed To Rendering Shooter");
 			break;
 		default:
+			ZeroMemory(&desc, sizeof(SCB));
+			desc.color = _float4(1.f, 1.f, 0.f, 1.f);
+			desc.empower = 1.f;
+			CActor::BindConstantBuffer(wstrCamTag, &desc);
 			if (FAILED(m_pModel->Render(i, 0))) MSGBOX("Failed To Rendering Shooter");
 			break;
 		}

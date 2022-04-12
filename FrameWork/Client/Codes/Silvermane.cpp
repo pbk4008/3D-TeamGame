@@ -218,6 +218,7 @@ HRESULT CSilvermane::NativeConstruct(const _uint _iSceneID, void* _pArg)
 
 	m_pRenderer->SetRenderButton(CRenderer::PIXEL, true);
 	m_pRenderer->SetRenderButton(CRenderer::PBRHDR, true);
+	m_pRenderer->SetRenderButton(CRenderer::HDR, true);
 	m_pRenderer->SetCameraTag(g_pGameInstance->Get_BaseCameraTag());
 
 	return S_OK;

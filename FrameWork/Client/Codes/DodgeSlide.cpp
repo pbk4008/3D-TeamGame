@@ -22,7 +22,23 @@ _int CDodgeSlide::Tick(const _double& _dDeltaTime)
 
 	_uint iCurKeyFrameIndex = m_pAnimationController->Get_CurKeyFrameIndex();
 	if (iCurKeyFrameIndex >= 10)
-		m_pSilvermane->Set_Radial(false);
+	{
+		if (m_radialcnt > 1)
+		{
+			m_radialcnt--;
+			m_pSilvermane->Set_RadialCnt(m_radialcnt);
+		}
+		else
+			m_pSilvermane->Set_Radial(false);
+	}
+	else
+	{
+		if (m_radialcnt < 8)
+		{
+			m_radialcnt++;
+			m_pSilvermane->Set_RadialCnt(m_radialcnt);
+		}
+	}
 
 	switch (m_eDir)
 	{
@@ -142,7 +158,6 @@ HRESULT CDodgeSlide::EnterState(void* _pArg)
 	m_pSilvermane->Set_IsDash(true);
 	g_pShakeManager->Shake(tShakeEvent, m_pTransform->Get_State(CTransform::STATE_POSITION));
 	m_pSilvermane->Set_Radial(true);
-	m_pSilvermane->Set_RadialCnt(5);
 	m_pSilvermane->Set_IsTrasceCamera(false);
 	m_pAnimationController->Set_PlaySpeed(1.2f);
 	return S_OK;

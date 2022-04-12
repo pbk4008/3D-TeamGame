@@ -247,17 +247,13 @@ void CActor::SetRimIntensity(_float time)
 
 HRESULT CActor::DissolveOn(_float dissolveSpeed)
 {
-	if (m_bdissolve == true)
+	m_lifetime += (g_fDeltaTime * dissolveSpeed);
+	if (m_lifetime >= 1.f)
 	{
-		m_lifetime += (g_fDeltaTime * dissolveSpeed);
-		if (m_lifetime >= 1.f)
-		{
-			m_lifetime = 1.f;
-			/*m_bdissolve = false;*/
-		}
-		if (FAILED(m_pModel->SetUp_ValueOnShader("g_dissolvetime", &m_lifetime, sizeof(_float)))) MSGBOX("Failed to Apply dissolvetime");
-		if (FAILED(m_pModel->SetUp_TextureOnShader("g_DissolveTex", m_dissolveTex, 0))) MSGBOX("Failed to Apply dissolveTex");
+		m_lifetime = 1.f;
 	}
+	if (FAILED(m_pModel->SetUp_ValueOnShader("g_dissolvetime", &m_lifetime, sizeof(_float)))) MSGBOX("Failed to Apply dissolvetime");
+	if (FAILED(m_pModel->SetUp_TextureOnShader("g_DissolveTex", m_dissolveTex, 0))) MSGBOX("Failed to Apply dissolveTex");
 
 	return S_OK;
 }
