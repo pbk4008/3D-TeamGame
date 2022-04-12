@@ -244,5 +244,4 @@ void CFlyingShield::Free()
 	__super::Free();
 
 	Safe_Release(m_pCollider);
-	Safe_Release(m_pModel);
 }
