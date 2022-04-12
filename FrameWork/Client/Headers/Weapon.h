@@ -20,8 +20,9 @@ public:
 	virtual _int Tick(_double _dDeltaTime) override;
 	virtual _int LateTick(_double _dDeltaTime) override;
 	virtual HRESULT Render() override;
-	virtual HRESULT BindConstantBuffer(const wstring& camTag,SCB* consbuffer = nullptr);
+	virtual HRESULT BindConstantBuffer(const wstring& camTag, SCB* consbuffer = nullptr, RIM* rimlightbuffer = nullptr);
 	virtual HRESULT	BindLightBuffer();
+	// dissolve
 	virtual HRESULT	WeaponToAppear();
 	virtual HRESULT	WeaponToDisAppear();
 
@@ -45,6 +46,11 @@ public:
 
 	const _bool IsAttack() const;
 	const _bool IsTrail() const;
+
+	// rimlight
+	_bool GetRimCheck() { return m_rimcheck; }
+	void RimlightCheck(_bool check);
+	void SetRimIntensity(_float time);
 
 public:
 	virtual void RangeAttack();
@@ -79,6 +85,10 @@ protected:
 	_float			m_lifetime = 0.f;
 	CTexture*		m_dissolveTex = nullptr;
 	_uint			m_dissolvepass = 1;
+
+	//rimlight
+	_bool			m_rimcheck = false;
+	_float			m_rimintensity = 8.f;
 
 public:
 	virtual CGameObject* Clone(const _uint _iSceneID, void* _pArg = nullptr) PURE;

@@ -115,3 +115,12 @@ void Dissolve(Texture2D dissolvetex,SamplerState sample,half2 UV,half time)
 	if (dissolve - time <= 0)
 		discard;
 }
+
+half4 RimLighting(float4 normal, float4 camdir, float rimintensity, float4 rimcolor)
+{
+	float rim = 0.f;
+	rim = 1 - saturate(dot(normal, -camdir));
+	rim = pow(rim, rimintensity);
+	rimcolor = rim * rimcolor;
+	return float4(rimcolor.rgb, 1.f);
+}

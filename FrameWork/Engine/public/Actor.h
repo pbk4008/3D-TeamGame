@@ -28,7 +28,7 @@ protected:
 	virtual HRESULT Set_SpawnPosition(const _float3 vPoint);
 
 public:
-	virtual HRESULT BindConstantBuffer(const wstring & camTag,SCB* bindbuffer = nullptr);
+	virtual HRESULT BindConstantBuffer(const wstring & camTag,SCB* bindbuffer = nullptr, RIM* rimbuffer = nullptr);
 	virtual HRESULT	BindLightBuffer();
 
 public:
@@ -56,8 +56,13 @@ public:
 	void Set_AttackDesc_HitObject(CGameObject* pObj) { m_tAttackDesc.pHitObject = pObj; };
 	void Set_AttackDesc_Damaga(_float fDamage) { m_tAttackDesc.fDamage = fDamage; };
 	void Set_AttackDesc_Level(_uint iLevel) { m_tAttackDesc.iLevel = iLevel; };
+
+	void RimlightCheck(_bool check);
+	_bool GetRimCheck() { return m_rimcheck; }
+	void SetRimIntensity(_float time);
+	
 	void Set_Dissolve(_bool on) { m_bdissolve = on; }
-	HRESULT DissolveOn();
+	HRESULT DissolveOn(_float dissolveSpeed = 0.5f);
 
 public:
 	virtual void Hit(const ATTACKDESC& _tAttackDesc);
@@ -81,10 +86,15 @@ protected:
 
 	ATTACKDESC m_tAttackDesc;
 	const LIGHTDESC* m_lightdesc;
-
+	
+	//dissovle
 	_bool			m_bdissolve = false;
 	_float			m_lifetime = 0.f;
 	CTexture*		m_dissolveTex = nullptr;
+
+	//rimlight
+	_bool			m_rimcheck = false;
+	_float			m_rimintensity = 30.f;
 };
 END
 #endif

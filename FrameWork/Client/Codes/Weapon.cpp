@@ -69,7 +69,7 @@ HRESULT CWeapon::Render()
 	return S_OK;
 }
 
-HRESULT CWeapon::BindConstantBuffer(const wstring& camTag,SCB* consbuffer)
+HRESULT CWeapon::BindConstantBuffer(const wstring& camTag,SCB* consbuffer, RIM* rimlightbuffer)
 {
 	if(m_pTransform == nullptr)
 		MSGBOX("Failed To Apply Weapon Transform nullptr");
@@ -90,6 +90,14 @@ HRESULT CWeapon::BindConstantBuffer(const wstring& camTag,SCB* consbuffer)
 		if (FAILED(m_pModel->SetUp_ValueOnShader("g_AO", &consbuffer->ao, sizeof(_float)))) MSGBOX("Failed To Apply Weapon ConstantBuffer");
 		if (FAILED(m_pModel->SetUp_ValueOnShader("g_color", &consbuffer->color, sizeof(_float4)))) MSGBOX("Failed To Apply Weapon ConstantBuffer");
 		if (FAILED(m_pModel->SetUp_ValueOnShader("g_empower", &consbuffer->empower, sizeof(_float)))) MSGBOX("Failed To Apply Weapon ConstantBuffer");
+	}
+
+	if (rimlightbuffer)
+	{
+		if (FAILED(m_pModel->SetUp_ValueOnShader("g_rimlightcheck", &rimlightbuffer->rimcheck, sizeof(_bool)))) MSGBOX("Failed To Apply Actor ConstantBuffer");
+		if (FAILED(m_pModel->SetUp_ValueOnShader("g_rimintensity", &rimlightbuffer->rimintensity, sizeof(_float)))) MSGBOX("Failed To Apply Actor ConstantBuffer");
+		if (FAILED(m_pModel->SetUp_ValueOnShader("g_rimcolor", &rimlightbuffer->rimcol, sizeof(_float4)))) MSGBOX("Failed To Apply Actor ConstantBuffer");
+		if (FAILED(m_pModel->SetUp_ValueOnShader("g_camdir", &rimlightbuffer->camdir, sizeof(_float4)))) MSGBOX("Failed To Apply Actor ConstantBuffer");
 	}
 
 	return S_OK;
@@ -206,13 +214,28 @@ const _bool CWeapon::IsTrail() const
 	return m_isTrail;
 }
 
+void CWeapon::RimlightCheck(_bool check)
+{
+	m_rimcheck = check;
+	if (check == false)
+		m_rimintensity = 8.f;
+}
+
+void CWeapon::SetRimIntensity(_float time)
+{
+	m_rimintensity += time;
+	
+	if (m_rimintensity <= 2.0f)
+		m_rimintensity = 2.0f;
+}
+
 void CWeapon::RangeAttack()
 {
 }
 
 _fmatrix CWeapon::Remove_Scale(_fmatrix matTransform)
 {
-	//Right벡터 Nomalize해서 구하기
+	//Right vector to Normalize
 	_vector vRight = XMVector3Normalize(matTransform.r[0]);
 	//Up벡터 Nomalize해서 구하기
 	_vector vUP = XMVector3Normalize(matTransform.r[1]);

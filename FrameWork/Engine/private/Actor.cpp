@@ -129,7 +129,7 @@ HRESULT CActor::Set_SpawnPosition(const _float3 vPoint)
 	return S_OK;
 }
 
-HRESULT CActor::BindConstantBuffer(const wstring& camTag, SCB* bindbuffer)
+HRESULT CActor::BindConstantBuffer(const wstring& camTag, SCB* bindbuffer, RIM* rimbuffer)
 {
 	if (m_pTransform == nullptr)
 		MSGBOX("Failed To Apply Actor Transform nullptr");
@@ -150,6 +150,14 @@ HRESULT CActor::BindConstantBuffer(const wstring& camTag, SCB* bindbuffer)
 		if(FAILED(m_pModel->SetUp_ValueOnShader("g_AO", &bindbuffer->ao, sizeof(_float)))) MSGBOX("Failed To Apply Actor ConstantBuffer");
 		if(FAILED(m_pModel->SetUp_ValueOnShader("g_color", &bindbuffer->color, sizeof(_float4)))) MSGBOX("Failed To Apply Actor ConstantBuffer");
 		if(FAILED(m_pModel->SetUp_ValueOnShader("g_empower", &bindbuffer->empower, sizeof(_float)))) MSGBOX("Failed To Apply Actor ConstantBuffer");
+	}
+
+	if (rimbuffer)
+	{
+		if (FAILED(m_pModel->SetUp_ValueOnShader("g_rimlightcheck", &rimbuffer->rimcheck, sizeof(_bool)))) MSGBOX("Failed To Apply Actor ConstantBuffer");
+		if (FAILED(m_pModel->SetUp_ValueOnShader("g_rimintensity", &rimbuffer->rimintensity, sizeof(_float)))) MSGBOX("Failed To Apply Actor ConstantBuffer");
+		if (FAILED(m_pModel->SetUp_ValueOnShader("g_rimcolor", &rimbuffer->rimcol, sizeof(_float4)))) MSGBOX("Failed To Apply Actor ConstantBuffer");
+		if (FAILED(m_pModel->SetUp_ValueOnShader("g_camdir", &rimbuffer->camdir, sizeof(_float4)))) MSGBOX("Failed To Apply Actor ConstantBuffer");
 	}
 
 	return S_OK;
@@ -205,11 +213,26 @@ void CActor::Set_AttackDesc(const ATTACKDESC& _tAttackDesc)
 	m_tAttackDesc = _tAttackDesc;
 }
 
-HRESULT CActor::DissolveOn()
+void CActor::RimlightCheck(_bool check)
+{
+	m_rimcheck = check;
+	if (check == false)
+		m_rimintensity = 30.f;
+}
+
+void CActor::SetRimIntensity(_float time)
+{
+	m_rimintensity += time;
+
+	if (m_rimintensity <= 5.f)
+		m_rimintensity = 5.f;
+}
+
+HRESULT CActor::DissolveOn(_float dissolveSpeed)
 {
 	if (m_bdissolve == true)
 	{
-		m_lifetime += (g_fDeltaTime * 0.5f);
+		m_lifetime += (g_fDeltaTime * dissolveSpeed);
 		if (m_lifetime >= 1.f)
 		{
 			m_lifetime = 1.f;

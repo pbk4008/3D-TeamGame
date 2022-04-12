@@ -41,7 +41,6 @@ _int CSkyBox::LateTick(_double TimeDelta)
 	if (nullptr != m_pRenderer)
 	{
 		m_pRenderer->Add_RenderGroup(CRenderer::RENDER_PRIORITY, this);
-		//m_pRenderer->Add_RenderGroup(CRenderer::RENDER_NONALPHA, this);
 		m_pRenderer->Add_RenderGroup(CRenderer::RENDER_SKYBOX, this);
 	}
 
@@ -65,7 +64,7 @@ HRESULT CSkyBox::Render()
 
 	if(g_pGameInstance->getCurrentLevel() == 3)
 		m_pVIBufferCom->SetUp_TextureOnShader("g_DiffuseTexture", m_pTexture);
-	else
+	else if(g_pGameInstance->getCurrentLevel() == 4)
 		m_pVIBufferCom->SetUp_TextureOnShader("g_DiffuseTexture", m_pTexture2);
 
 	m_pVIBufferCom->Render(0);

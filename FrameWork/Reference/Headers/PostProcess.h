@@ -17,7 +17,6 @@ public: HRESULT				InitPostProcess();
 public: HRESULT				AlphaBlur(CTarget_Manager* pTargetMgr, _bool alpha);
 public: HRESULT				Shadowblur(CTarget_Manager* pTargetMgr, _bool shadow, _float weight);
 public: HRESULT				PossProcessing(CTonemapping* tone,CTarget_Manager* pTargetMgr,_bool hdr, _bool radial);
-public: HRESULT				RadialPass(CTarget_Manager* pTargetMgr);
 
 public: HRESULT				ComputeBrightPass(CTarget_Manager* pTargetMgr, const wstring& in, _float sizex, _float sizey);
 public: HRESULT				BloomPass(CTarget_Manager* pTargetMgr, const wstring& target, const wstring& base1, const wstring& base2, const wstring& base3, const wstring& base4, _float weight);

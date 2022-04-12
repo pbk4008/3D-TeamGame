@@ -211,4 +211,13 @@ namespace Engine
 		_float4 color = _float4(0, 0, 0, 0);
 		_float empower = 0.f;
 	}SCB;
+
+	typedef struct tagRimLight
+	{
+		_bool	rimcheck = false;
+		_float	rimintensity = 0.f;
+		_float4 rimcol = _float4(0, 0, 0, 0);
+		_float4 camdir = _float4(0, 0, 0, 0);
+
+	}RIM;
 }

@@ -88,6 +88,7 @@ HRESULT C1H_SwordAttackNormalR1_01::ExitState()
 
 	m_pAnimationController->Set_PlaySpeed(1.f);
 	g_pGameInstance->StopSound(CSoundMgr::CHANNELID::Player_Sword_Attack);
+
 	return S_OK;
 }
 
