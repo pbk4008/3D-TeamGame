@@ -195,6 +195,7 @@ namespace Engine
 		// 1 : 약공격, 2 : 강공격, 3 : 넉백될 정도의 강려크한 공격
 		_uint iLevel = 0;
 		_float fDamage = 0.f;
+		EAttackDir eDir = EAttackDir::Max;
 	}ATTACKDESC;
 
 	/* UI 리소스 관리 */
