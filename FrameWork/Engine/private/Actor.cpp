@@ -195,6 +195,23 @@ void CActor::Active_Effect(_uint iEffectIndex, _fvector vPivot)
 	pEffect->Set_Reset(true);
 }
 
+void CActor::Active_Effect_Target(_uint iEffectIndex, _fvector TargetPos)
+{
+	CEffect* pEffect = g_pGameInstance->Get_Effect(iEffectIndex);
+	if (!pEffect)
+	{
+		MSGBOX("Effect Null!!");
+		return;
+	}
+
+	_vector Mypos = m_pTransform->Get_State(CTransform::STATE_POSITION);
+	Mypos = XMVectorSetY(Mypos, XMVectorGetY(Mypos) + 1.f);
+	pEffect->Get_Transform()->Set_State(CTransform::STATE_POSITION, Mypos);
+	pEffect->Get_Transform()->Face_Target(TargetPos);
+	pEffect->setActive(true);
+	pEffect->Set_Reset(true);
+}
+
 
 void CActor::Set_AttackDesc(const ATTACKDESC& _tAttackDesc)
 {

@@ -279,6 +279,12 @@ _int CSilvermane::Tick(_double _dDeltaTime)
 			return iProgress;
 	}
 
+	if (g_pGameInstance->getkeyDown(DIK_NUMPAD8))
+	{
+		_vector pos = { 0.f, 0.f, 5.f };
+		Active_Effect((_uint)EFFECT::HITGROUND, pos);
+	}
+
 	return _int();
 }
 

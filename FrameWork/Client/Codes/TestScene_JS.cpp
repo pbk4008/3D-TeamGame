@@ -55,6 +55,7 @@ HRESULT CTestScene_JS::NativeConstruct()
 		return E_FAIL;
 	}
 
+	g_pGameInstance->Change_BaseCamera(L"Camera_Silvermane");
 	return S_OK;
 }
 

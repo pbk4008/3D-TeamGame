@@ -28,6 +28,7 @@ public:
 	const EType Get_Type() const;
 	CActor* Get_Owner() const;
 	const _float Get_Damage() const;
+	const _float3& Get_EndPos() const;
 
 	void Set_Owner(CActor* _pOwner);
 	virtual void Set_OwnerPivotMatrix(const _fmatrix& _smatPivot);
@@ -51,7 +52,7 @@ protected:
 protected:
 	CTransform* m_pLocalTransform = nullptr;
 	CModel* m_pModel = nullptr;
-	_float4x4 m_smatOwnerPivot;;
+	_float4x4 m_matOwnerPivot;
 
 	CActor* m_pOwner = nullptr;
 	CHierarchyNode* m_pFixedBone = nullptr;
@@ -68,6 +69,8 @@ protected:
 
 	_float m_fDamage = 0.f;
 	const LIGHTDESC* m_lightdesc;
+
+	_float3 m_vEndPos{};
 
 public:
 	virtual CGameObject* Clone(const _uint _iSceneID, void* _pArg = nullptr) PURE;

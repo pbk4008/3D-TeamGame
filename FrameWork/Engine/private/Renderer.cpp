@@ -377,28 +377,16 @@ HRESULT CRenderer::DistortionPass()
 
 HRESULT CRenderer::Render_UI()
 {
-	/*if (!m_RenderGroup[RENDER_UI].empty())
-	{
-		sort(m_RenderGroup[RENDER_UI].begin(), m_RenderGroup[RENDER_UI].end(), [](CGameObject* pSour, CGameObject* pDest)
-			{
-				CTransform* pSourTrans = (CTransform*)pSour->Get_Component(L"Transform");
-				CTransform* pDestTrans = (CTransform*)pDest->Get_Component(L"Transform");
+	_matrix view = g_pGameInstance->Get_Transform(L"MainOrthoCamera", TRANSFORMSTATEMATRIX::D3DTS_VIEW);
+	view = XMMatrixInverse(nullptr, view);
 
-				float sour = XMVectorGetZ(pSourTrans->Get_State(CTransform::STATE_POSITION));
-				float dest = XMVectorGetZ(pDestTrans->Get_State(CTransform::STATE_POSITION));
-
-				return  sour > dest;
-			});
-	}*/
-
-	//for (auto& iter : m_RenderGroup[RENDER_UI])
-	//	iter->ComputeViewZ(&view);
-
-	//m_RenderGroup[RENDER_UI].sort(
-	//	[](auto& psrc, auto& pdst)->bool
-	//	{
-	//		return psrc->Get_ViewZ() > pdst->Get_ViewZ();
-	//	});
+	for (auto& iter : m_RenderGroup[RENDER_UI])
+		iter->ComputeViewZ(&view);
+	m_RenderGroup[RENDER_UI].sort(
+		[](auto& psrc, auto& pdst)->bool
+		{
+			return psrc->Get_ViewZ() > pdst->Get_ViewZ();
+		});
 
 	for (auto& pGameObject : m_RenderGroup[RENDER_UI] )
 	{

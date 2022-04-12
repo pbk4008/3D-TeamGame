@@ -2,6 +2,8 @@
 #include "FlyingShield.h"
 #include "Material.h"
 
+#include "HierarchyNode.h"
+
 CFlyingShield::CFlyingShield(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
 	: CWeapon(_pDevice, _pDeviceContext)
 {
@@ -88,8 +90,12 @@ _int CFlyingShield::Tick(_double _dDeltaTime)
 	}
 	else
 	{
+		_matrix smatOwner = m_pFixedBone->Get_CombinedMatrix() * XMLoadFloat4x4(&m_matOwnerPivot) * m_pOwner->Get_Transform()->Get_WorldMatrix();
+		_vector svOwnerPos = smatOwner.r[3];
 		_vector svPos = m_pTransform->Get_State(CTransform::STATE_POSITION);
-		svPos -= XMLoadFloat3(&m_vDir) * m_fSpeed * (_float)_dDeltaTime;
+		_vector svDir = XMVector3Normalize(svOwnerPos - svPos);
+
+		svPos += svDir * m_fSpeed * (_float)_dDeltaTime;
 		m_pTransform->Set_State(CTransform::STATE_POSITION, svPos);
 	}
 

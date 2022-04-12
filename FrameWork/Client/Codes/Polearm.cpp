@@ -169,7 +169,7 @@ _int CPolearm::Attach_FixedBone(const _double& _dDeltaTime)
 	{
 		_matrix smatWorld = m_pFixedBone->Get_CombinedMatrix();
 
-		smatWorld *= XMLoadFloat4x4(&m_smatOwnerPivot);
+		smatWorld *= XMLoadFloat4x4(&m_matOwnerPivot);
 
 		if (!m_isEquip)
 		{

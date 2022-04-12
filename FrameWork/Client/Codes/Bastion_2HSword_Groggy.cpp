@@ -72,6 +72,7 @@ HRESULT CBastion_2HSword_Groggy::EnterState()
 HRESULT CBastion_2HSword_Groggy::ExitState()
 {
 	m_fGroggyTime = 5.0f;
+	
 	m_pMonster->Set_Groggy(false);
 
 	return S_OK;

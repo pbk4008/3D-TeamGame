@@ -94,6 +94,9 @@ _int CNeedle::Tick(_double _dDeltaTime)
 
 	Attach_FixedBone(_dDeltaTime);
 	Attach_Owner(_dDeltaTime);
+	_vector svPos = m_pTransform->Get_State(CTransform::STATE_POSITION);
+	_vector svLook = XMVector3Normalize(m_pTransform->Get_State(CTransform::STATE_LOOK));
+	XMStoreFloat3(&m_vEndPos, svPos + svLook);
 
 	if (m_pCollider)
 		m_pCollider->Tick(_dDeltaTime);
@@ -306,7 +309,7 @@ _int CNeedle::Attach_FixedBone(const _double& _dDeltaTime)
 		if (XMMatrixIsNaN(smatWorld))
 			smatWorld = XMMatrixIdentity();
 
-		smatWorld *= XMLoadFloat4x4(&m_smatOwnerPivot);;
+		smatWorld *= XMLoadFloat4x4(&m_matOwnerPivot);;
 
 		if (!m_isEquip)
 			smatWorld = XMLoadFloat4x4(&m_matPivot) * smatWorld;
