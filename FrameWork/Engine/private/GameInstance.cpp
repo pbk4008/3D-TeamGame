@@ -392,6 +392,13 @@ HRESULT CGameInstance::Change_BaseCamera(const wstring& pCameraTag)
 	return m_pPipeLine->Change_BaseCamera(pCameraTag);
 }
 
+const wstring& CGameInstance::Get_BaseCameraTag()
+{
+	if (!m_pPipeLine)
+		return L"";
+	return m_pPipeLine->getBaseCamera();
+}
+
 void CGameInstance::Update_InputDev()
 {
 	if (!m_pInput_Device)

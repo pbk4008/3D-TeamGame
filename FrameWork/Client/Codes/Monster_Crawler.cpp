@@ -182,8 +182,8 @@ HRESULT CMonster_Crawler::Render()
 {
 	SCB desc;
 	ZeroMemory(&desc, sizeof(SCB));
-
-	CActor::BindConstantBuffer(L"Camera_Silvermane",&desc);
+	wstring wstrCamTag = g_pGameInstance->Get_BaseCameraTag();
+	CActor::BindConstantBuffer(wstrCamTag,&desc);
 
 	for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
 		m_pModel->Render(i, 0);
@@ -193,7 +193,8 @@ HRESULT CMonster_Crawler::Render()
 
 HRESULT CMonster_Crawler::Render_Shadow()
 {
-	CActor::BindConstantBuffer(L"Camera_Silvermane");
+	wstring wstrCamTag = g_pGameInstance->Get_BaseCameraTag();
+	CActor::BindConstantBuffer(wstrCamTag);
 	CActor::BindLightBuffer();
 	for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
 		m_pModel->Render(i, 3);

@@ -40,6 +40,9 @@
 #include "DropManager.h"
 #include "ScenematicManager.h"
 
+//Cinema
+#include "Cinema1_1.h"
+
 
 CDropManager* g_pDropManager = nullptr;
 CInteractManager* g_pInteractManager = nullptr;
@@ -114,6 +117,9 @@ HRESULT CStage1::NativeConstruct()
 	g_pGameInstance->Change_BaseCamera(L"Camera_Silvermane");
 	//g_pGameInstance->PlayBGM(L"Stage1_BGM");
 
+	if (FAILED(Ready_Cinema()))
+		return E_FAIL;
+
 	return S_OK;
 }
 
@@ -155,16 +161,16 @@ _int CStage1::Tick(_double TimeDelta)
 		if (m_iCountMonster == 0 && m_bFirst)
 			m_pTriggerSystem->Check_Clear();
 
-		//CBoss_Bastion_Judicator* pBoss = (CBoss_Bastion_Judicator*)g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Layer_Boss")->front();
-		//if (nullptr != pBoss)
-		//{
-		//	if (true == pBoss->Get_Dead())
-		//	{
-		//		if (FAILED(g_pGameInstance->Open_Level((_uint)SCENEID::SCENE_LOADING, CLoading::Create(m_pDevice, m_pDeviceContext, SCENEID::SCENE_STAGE2))))
-		//			return -1;
-		//		return 0;
-		//	}
-		//}
+		CBoss_Bastion_Judicator* pBoss = (CBoss_Bastion_Judicator*)g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Layer_Boss")->front();
+		if (nullptr != pBoss)
+		{
+			if (true == pBoss->Get_Dead())
+			{
+				if (FAILED(g_pGameInstance->Open_Level((_uint)SCENEID::SCENE_LOADING, CLoading::Create(m_pDevice, m_pDeviceContext, SCENEID::SCENE_STAGE2))))
+					return -1;
+				return 0;
+			}
+		}
 	}
 
 	_float3 fPos = { 0.f,5.f,20.f };
@@ -232,6 +238,15 @@ _int CStage1::Tick(_double TimeDelta)
 
 	//g_pInteractManager->Tick(TimeDelta);
 	//g_pDropManager->Tick();
+
+	if (g_pGameInstance->getkeyDown(DIK_END))
+		m_pScenemaManager->Active_Scenema((_uint)CINEMA_INDEX::CINEMA1_1, &m_pCinema);
+	if (m_pCinema && m_pCinema->Get_Active())
+	{
+		m_pCinema->Tick(TimeDelta);
+		if (!m_pCinema->Get_Active())
+			m_pCinema = nullptr;
+	}
 
 	return _int();
 }
@@ -846,6 +861,17 @@ HRESULT CStage1::Ready_TriggerFunctionSetting()
 
 	fp = &CStage1::Trgger_FunctionBoss;;
 	m_pTriggerSystem->Add_TriggerFuntion(fp);
+
+	return S_OK;
+}
+
+HRESULT CStage1::Ready_Cinema()
+{
+	if (!m_pScenemaManager)
+		return E_FAIL;
+
+	if (FAILED(m_pScenemaManager->Add_Scenema(CCinema1_1::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
 
 	return S_OK;
 }

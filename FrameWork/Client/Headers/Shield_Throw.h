@@ -24,8 +24,8 @@ private:
 	void RaycastForThrow();
 
 private:
-	_bool m_isThrow = false;
-	_bool m_iReverse = false;
+	_bool m_isTrigger = false;
+	_bool m_isRecive = false;
 
 public:
 	static CShield_Throw* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext, void* _pArg = nullptr);

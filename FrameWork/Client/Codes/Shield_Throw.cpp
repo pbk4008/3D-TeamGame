@@ -22,20 +22,50 @@ _int CShield_Throw::Tick(const _double& _dDeltaTime)
 
 	_uint iCurKeyFrameIndex = m_pAnimationController->Get_CurKeyFrameIndex();
 
-	//if (m_iReverse)
-	//{
-	//	if (15 > iCurKeyFrameIndex)
-	//	{
-	//		m_pAnimationController->Set_PlaySpeed(1.f);
-	//		m_iReverse = false;
-	//	}
-	//}
+	if (22 < iCurKeyFrameIndex && 33 > iCurKeyFrameIndex)
+	{
+		m_pSilvermane->Set_IsTrasceCamera(true);
+	}
+
+	if (33 < iCurKeyFrameIndex && 40 > iCurKeyFrameIndex)
+	{
+		if (!m_pSilvermane->IsShieldThrow())
+		{
+			RaycastForThrow();
+			m_pSilvermane->Set_IsShieldThrow(true);
+			m_pSilvermane->Set_EquipShield(false);
+			m_pSilvermane->Set_IsTrasceCamera(false);
+		}
+	}
+
+	if (m_pSilvermane->IsShieldThrow())
+	{
+		//if (m_pSilvermane->IsShieldReturn())
+		//{
+			if (65 < iCurKeyFrameIndex && 73 > iCurKeyFrameIndex)
+			{
+				m_pAnimationController->Set_PlaySpeed(0.2f);
+			}
+			if (73 < iCurKeyFrameIndex)
+			{
+				m_pSilvermane->Set_EquipShield(true);
+			}
+		//}
+	}
 
 	if (m_pAnimationController->Is_Finished())
 	{
+		if (g_pGameInstance->getkeyPress(DIK_Q))
+		{
+			if (m_pStateController->Change_State(L"Shield_BlockLoop"))
+				return -1;
+			return STATE_CHANGE;
+		}
+
+		m_pSilvermane->Set_EquipShield(false);
+		m_pSilvermane->Set_EquipShieldAnim(false);
 		return ToIdle();
 	}
-
 	return _int();
 }
 
@@ -63,9 +93,12 @@ HRESULT CShield_Throw::EnterState()
 
 	if (FAILED(m_pAnimationController->SetUp_NextAnimation("SK_Silvermane.ao|A_Spectral_Shield_Block_Throw_NoCharge", false)))
 		return E_FAIL;
-	m_pAnimationController->Set_RootMotion(true, true, ERootOption::XYZ);
+	m_pAnimationController->Set_RootMotion(true, false, ERootOption::XYZ);
 
 	m_pSilvermane->Set_IsTrasceCamera(false);
+	m_pAnimationController->Set_PlaySpeed(1.4f);
+
+	m_iCutIndex = 40;
 	return S_OK;
 }
 
@@ -73,12 +106,13 @@ HRESULT CShield_Throw::ExitState()
 {
 	if (FAILED(__super::ExitState()))
 		return E_FAIL;
-
+	
+	m_isTrigger = false;
 	m_pSilvermane->Set_IsTrasceCamera(true);
-	m_pSilvermane->Set_EquipShield(false);
-	m_pSilvermane->Set_EquipShieldAnim(false);
+	m_pAnimationController->Set_PlaySpeed(1.f);
 
-	m_isThrow = false;
+	m_pSilvermane->Set_IsShieldThrow(false);
+	m_pSilvermane->Set_IsShieldReturn(false);
 	return S_OK;
 }
 
@@ -89,21 +123,81 @@ _int CShield_Throw::Input(const _double& _dDeltaTime)
 		return iProgress;
 
 	_uint iCurKeyFrameIndex = m_pAnimationController->Get_CurKeyFrameIndex();
-	if (20 < iCurKeyFrameIndex)
+	if (!m_isTrigger)
 	{
-		if (!g_pGameInstance->getMousePress(CInputDev::MOUSESTATE::MB_RBUTTON))
+		if (20 < iCurKeyFrameIndex)
 		{
-			m_pAnimationController->Set_PlaySpeed(1.f);
-			if (!m_isThrow)
+			if (!g_pGameInstance->getMousePress(CInputDev::MOUSESTATE::MB_RBUTTON))
 			{
-				RaycastForThrow();
-				m_isThrow = true;
+				m_pAnimationController->Set_PlaySpeed(1.f);
+				m_isTrigger = true;
+			}
+			else
+			{
+				m_pAnimationController->Set_PlaySpeed(0.f);
 			}
 		}
-		else
+	}
+
+	if (m_iCutIndex < iCurKeyFrameIndex)
+	{
+		if (g_pGameInstance->getMouseKeyDown(CInputDev::MOUSESTATE::MB_LBUTTON))
 		{
-			m_pAnimationController->Add_TrackAcc(-5.f);
-			m_iReverse = true;
+			m_pSilvermane->Set_EquipShield(false);
+			m_pSilvermane->Set_EquipShieldAnim(false);
+			return ToAttack();
+		}
+		else if (g_pGameInstance->getMouseKeyDown(CInputDev::MOUSESTATE::MB_RBUTTON))
+		{
+			m_pSilvermane->Set_EquipShield(false);
+			m_pSilvermane->Set_EquipShieldAnim(false);
+			return ToChargeStart();
+		}
+
+		if (m_pSilvermane->IsShieldThrow())
+		{
+			if (g_pGameInstance->getkeyDown(DIK_Q))
+			{
+				m_pSilvermane->Set_EquipShieldAnim(false);
+				if (FAILED(m_pStateController->Change_State(L"Shield_BlockStart")))
+					return E_FAIL;
+				return STATE_CHANGE;
+			}
+
+			if (g_pGameInstance->getkeyPress(DIK_LSHIFT))
+			{
+				if (g_pGameInstance->getkeyPress(DIK_W) ||
+					g_pGameInstance->getkeyPress(DIK_S) ||
+					g_pGameInstance->getkeyPress(DIK_A) ||
+					g_pGameInstance->getkeyPress(DIK_D))
+				{
+					m_pSilvermane->Set_EquipShieldAnim(false);
+					return ToSprint();
+				}
+			}
+			else
+			{
+				if (g_pGameInstance->getkeyPress(DIK_W))
+				{
+					m_pSilvermane->Set_EquipShieldAnim(false);
+					return ToJogFwd();
+				}
+				if (g_pGameInstance->getkeyPress(DIK_S))
+				{
+					m_pSilvermane->Set_EquipShieldAnim(false);
+					return ToJogBwd();
+				}
+				if (g_pGameInstance->getkeyPress(DIK_D))
+				{
+					m_pSilvermane->Set_EquipShieldAnim(false);
+					return ToJogRight();
+				}
+				if (g_pGameInstance->getkeyPress(DIK_A))
+				{
+					m_pSilvermane->Set_EquipShieldAnim(false);
+					return ToJogLeft();
+				}
+			}
 		}
 	}
 
@@ -129,8 +223,8 @@ void CShield_Throw::RaycastForThrow()
 	RAYCASTDESC tRaycastDesc;
 	XMStoreFloat3(&tRaycastDesc.vOrigin, svRayPos);
 	XMStoreFloat3(&tRaycastDesc.vDir, svRayDir);
-	tRaycastDesc.fMaxDistance = 30.f;
-	tRaycastDesc.filterData.flags = PxQueryFlag::eANY_HIT;
+	tRaycastDesc.fMaxDistance = 50.f;
+	tRaycastDesc.filterData.flags |= PxQueryFlag::eANY_HIT;
 	CGameObject* pHitObject = nullptr;
 	tRaycastDesc.ppOutHitObject = &pHitObject;
 	if (g_pGameInstance->Raycast(tRaycastDesc))
@@ -138,7 +232,8 @@ void CShield_Throw::RaycastForThrow()
 		if (pHitObject)
 		{
 			// 타겟이 있으면 그 위치를 받아오고 점 두개를 더 구해서 베지어 곡선을 구한다음에 해당 곡선을 따라 방패 던지기
-			svTargetPos = pHitObject->Get_Transform()->Get_State(CTransform::STATE_POSITION);
+			//svTargetPos = pHitObject->Get_Transform()->Get_State(CTransform::STATE_POSITION);
+			svTargetPos = XMLoadFloat3(&tRaycastDesc.vHitPos);
 		}
 	}
 	else
@@ -146,7 +241,7 @@ void CShield_Throw::RaycastForThrow()
 		svTargetPos = svRayPos += svRayDir * tRaycastDesc.fMaxDistance;
 	}
 
-
+	m_pSilvermane->ThrowShield(svTargetPos);
 }
 
 CShield_Throw* CShield_Throw::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext, void* _pArg)

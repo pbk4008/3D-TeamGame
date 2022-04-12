@@ -29,6 +29,8 @@ public: /* Open Modal */
 	void  CloseModal(void);
 	_bool IsOpenModal(void);
 
+public: _bool Get_OpenCheck() { return m_bOpenModal; }
+
 public: /* Item */
 	void ShowItemStatus(CItemData* _pItemData);
 	void HideItemStatus(void);

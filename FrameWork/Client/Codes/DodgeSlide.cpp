@@ -143,6 +143,8 @@ HRESULT CDodgeSlide::EnterState(void* _pArg)
 	g_pShakeManager->Shake(tShakeEvent, m_pTransform->Get_State(CTransform::STATE_POSITION));
 	m_pSilvermane->Set_Radial(true);
 	m_pSilvermane->Set_RadialCnt(5);
+	m_pSilvermane->Set_IsTrasceCamera(false);
+	m_pAnimationController->Set_PlaySpeed(1.2f);
 	return S_OK;
 }
 
@@ -153,6 +155,8 @@ HRESULT CDodgeSlide::ExitState()
 
 	m_pSilvermane->Set_IsMove(false);
 	m_pSilvermane->Set_IsDash(false);
+	m_pSilvermane->Set_IsTrasceCamera(true);
+	m_pAnimationController->Set_PlaySpeed(1.f);
 	return S_OK;
 }
 

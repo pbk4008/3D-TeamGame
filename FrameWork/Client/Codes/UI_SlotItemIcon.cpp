@@ -28,7 +28,7 @@ HRESULT CUI_SlotItemIcon::NativeConstruct(const _uint iSceneID, void* pArg)
 
 	desc = (*(ItemSlotDesc*)pArg);
 
-	m_pTransform->Set_State(CTransform::STATE_POSITION, _vector{ desc.fPos.x, desc.fPos.y, 0.3f, 1.f });
+	m_pTransform->Set_State(CTransform::STATE_POSITION, _vector{ desc.fPos.x, desc.fPos.y, 0.4f, 1.f });
 	m_pTransform->Scaling(_vector{ desc.fScale.x, desc.fScale.y, 1.f, 1.f });
 
 	if (FAILED(Ready_Component()))
@@ -52,8 +52,8 @@ _int CUI_SlotItemIcon::LateTick(_double TimeDelta)
 	if (FAILED(CUI::LateTick(TimeDelta)))
 		return -1;
 
-	if (this->getActive())
-		m_pSigleImageCom->LateTick(TimeDelta);
+	if (nullptr != m_pRenderer)
+		m_pRenderer->Add_RenderGroup(CRenderer::RENDER::RENDER_UI_ACTIVE, this);
 
 	return _int();
 }

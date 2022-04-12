@@ -111,8 +111,8 @@ PS_OUT PS_MAIN(PS_IN In)
 
 	Out.vColor = g_DiffuseTexture.Sample(DefaultSampler, In.vTexUV);
 
-	if (Out.vColor.a < 0.01)
-		discard;
+	//if (Out.vColor.a <= 0.1)
+	//	discard;
 	
 	return Out;	
 }
@@ -180,7 +180,10 @@ technique11			DefaultTechnique
 
 	pass Viewport
 	{
-		VertexShader = compile vs_5_0 VS_MAIN_VIEWPORT();
+		SetRasterizerState(CullMode_None);
+		SetDepthStencilState(ZDefault, 0);
+		SetBlendState(AlphaBlending, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+		VertexShader = compile vs_5_0 VS_MAIN();
 		GeometryShader = NULL;
 		PixelShader = compile ps_5_0  PS_MAIN();
 	}

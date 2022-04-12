@@ -25,15 +25,15 @@ HRESULT CUI_SlotBackground::NativeConstruct(const _uint iSceneID, void* pArg)
 	if (FAILED(__super::NativeConstruct(iSceneID, pArg)))
 		return E_FAIL;
 
-	if (FAILED(Ready_Component()))
-		return E_FAIL;
-
 	desc = (*(ItemSlotDesc*)pArg);
 
-	m_pTransform->Set_State(CTransform::STATE_POSITION, _vector{ desc.fPos.x, desc.fPos.y, 0.4f, 1.f });
+	m_pTransform->Set_State(CTransform::STATE_POSITION, _vector{ desc.fPos.x, desc.fPos.y, 0.6f, 1.f });
 	m_pTransform->Scaling(_vector{ desc.fScale.x, desc.fScale.y, 1.f, 1.f });
 
 	setActive(false);
+
+	if (FAILED(Ready_Component()))
+		return E_FAIL;
 
 	return S_OK;
 }
@@ -43,7 +43,6 @@ _int CUI_SlotBackground::Tick(_double dDeltaTime)
 	if (FAILED(CUI::Tick(dDeltaTime)))
 		return -1;
 
-
 	return _int();
 }
 
@@ -52,10 +51,8 @@ _int CUI_SlotBackground::LateTick(_double TimeDelta)
 	if (FAILED(CUI::LateTick(TimeDelta)))
 		return -1;
 
-	m_pTransform->Set_State(CTransform::STATE_POSITION, _vector{ desc.fPos.x, desc.fPos.y, 0.4f, 1.f });
-
-	if (this->getActive())
-		m_pSigleImageCom->LateTick(TimeDelta);
+	if (nullptr != m_pRenderer)
+		m_pRenderer->Add_RenderGroup(CRenderer::RENDER::RENDER_UI_ACTIVE, this);
 
 	return _int();
 }
@@ -63,7 +60,7 @@ _int CUI_SlotBackground::LateTick(_double TimeDelta)
 HRESULT CUI_SlotBackground::Render()
 {
 	if (FAILED(CUI::Render()))
-		return -1;
+		return E_FAIL;
 
 	if (this->getActive())
 		m_pSigleImageCom->Render(m_pTransform);

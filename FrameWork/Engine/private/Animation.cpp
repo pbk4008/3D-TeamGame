@@ -84,6 +84,15 @@ HRESULT CAnimation::Update_TransformationMatrix(_double TimeDelta,const _bool _i
 				if (iCurChannelKeyFrameIndex > m_iCurKeyFrameIndex)
 					m_iCurKeyFrameIndex = iCurChannelKeyFrameIndex;
 			}
+			if (0 < iCurChannelKeyFrameIndex)
+			{
+				while (m_TrackPositionAcc <= KeyFrames[iCurChannelKeyFrameIndex - 1]->Time)
+				{
+					m_Channels[i]->Set_CurrentKeyFrameIndex(--iCurChannelKeyFrameIndex);
+					if (iCurChannelKeyFrameIndex < m_iCurKeyFrameIndex)
+						m_iCurKeyFrameIndex = iCurChannelKeyFrameIndex;
+				}
+			}
 
 			_float		fRatio = (_float)(m_TrackPositionAcc - KeyFrames[iCurChannelKeyFrameIndex]->Time) / 
 				(_float)(KeyFrames[iCurChannelKeyFrameIndex + 1]->Time - KeyFrames[iCurChannelKeyFrameIndex]->Time);
@@ -207,6 +216,11 @@ void CAnimation::Reset_Animation()
 void CAnimation::Add_TrackAcc(const _double& _dTrackAcc)
 {
 	m_TrackPositionAcc += _dTrackAcc;
+}
+
+void CAnimation::Set_TrackAcc(const _double& _dTrackAcc)
+{
+	m_TrackPositionAcc = _dTrackAcc;
 }
 
 CAnimation * CAnimation::Create(char * pName, _double Duration, _double PlaySpeed, const _int _iIndex)

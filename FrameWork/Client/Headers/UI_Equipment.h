@@ -4,7 +4,6 @@
 #include "UI.h"
 
 BEGIN(Client)
-class CSingleImage;
 class CInventoryData;
 class CEquipmentData;
 class CUI_ItemSlot;
@@ -44,7 +43,6 @@ public: /* Set */
 	void SetResourceCount();
 
 private:
-	CSingleImage*	m_pSigleImageCom = nullptr;
 	CInventoryData*	m_pInventoryData = nullptr;
 	CEquipmentData* m_pEquipData	 = nullptr;
 

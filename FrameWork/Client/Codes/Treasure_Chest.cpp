@@ -59,9 +59,10 @@ HRESULT CTreasure_Chest::Render()
 		return E_FAIL;
 
 	_matrix smatWorld, smatView, smatProj;
+	wstring wstrCamTag = g_pGameInstance->Get_BaseCameraTag();
 	smatWorld = XMMatrixTranspose(m_pTransform->Get_CombinedMatrix());
-	smatView = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_VIEW));
-	smatProj = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_PROJECTION));
+	smatView = XMMatrixTranspose(g_pGameInstance->Get_Transform(wstrCamTag, TRANSFORMSTATEMATRIX::D3DTS_VIEW));
+	smatProj = XMMatrixTranspose(g_pGameInstance->Get_Transform(wstrCamTag, TRANSFORMSTATEMATRIX::D3DTS_PROJECTION));
 	_float4 color = _float4(0.25f, 0.92f, 0.94f, 1.f);
 	_float power = 1.5f;
 

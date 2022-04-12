@@ -87,8 +87,8 @@ HRESULT CUI_Equipment::Ready_Component(void)
 
 HRESULT CUI_Equipment::Ready_UIObject(void)
 {
-	_float2 fInitPos   = { 40.f, -160.f };
-	_float2 fResultPos = { 40.f, -160.f };
+	_float2 fInitPos   = { 50.f, 140.f };
+	_float2 fResultPos = { 50.f, 140.f };
 
 	for (_int i = 0; i < 8 ; ++i)
 	{
@@ -103,7 +103,7 @@ HRESULT CUI_Equipment::Ready_UIObject(void)
 			else
 			{
 				fResultPos.x = fInitPos.x;
-				fResultPos.y += 100.f;
+				fResultPos.y -= 100.f;
 			}
 		}
 		slotDesc.fPos = fResultPos;
@@ -154,6 +154,7 @@ void CUI_Equipment::UpdateSlots(void)
 		else
 		{
 			m_vecSlots[i]->SetIcon(data.iconTexName);
+			m_vecSlots[i]->SetGrade(data.equipmentGrade);
 			m_vecSlots[i]->SetActiveAll(true);
 		}
 	}
@@ -267,8 +268,6 @@ void CUI_Equipment::Free()
 	for (auto iter : m_vecSlots)
 		Safe_Release(iter);
 	m_vecSlots.clear();
-
-	Safe_Release(m_pSigleImageCom);
 
 	__super::Free();
 }

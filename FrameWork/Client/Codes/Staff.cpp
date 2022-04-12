@@ -81,10 +81,11 @@ HRESULT CStaff::Render()
 {
 	SCB desc;
 	ZeroMemory(&desc, sizeof(desc));
+	wstring wstrCamTag = g_pGameInstance->Get_BaseCameraTag();
 	desc.color = _float4(0.588f, 0.294f, 0.f, 1.f);
 	desc.empower = 0.3f;
 
-	CWeapon::BindConstantBuffer(L"Camera_Silvermane",&desc);
+	CWeapon::BindConstantBuffer(wstrCamTag,&desc);
 	for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
 		m_pModel->Render(i, 0);
 
@@ -93,7 +94,8 @@ HRESULT CStaff::Render()
 
 HRESULT CStaff::Render_Shadow()
 {
-	CWeapon::BindConstantBuffer(L"Camera_Silvermane");
+	wstring wstrCamTag = g_pGameInstance->Get_BaseCameraTag();
+	CWeapon::BindConstantBuffer(wstrCamTag);
 	CWeapon::BindLightBuffer();
 	for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
 		m_pModel->Render(i, 1);

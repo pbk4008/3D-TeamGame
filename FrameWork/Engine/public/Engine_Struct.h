@@ -200,7 +200,7 @@ namespace Engine
 	/* UI 府家胶 包府 */
 	typedef struct ResoucePath
 	{
-		std::wstring clientResourcePath = L"../Resource";
+		std::wstring clientResourcePath = L"../bin/Resources/Texture/InventoryResources/Texture";
 		std::wstring engineResourcePath = L"../../Engine/Resource";
 	}RESOUCEPATH;
 

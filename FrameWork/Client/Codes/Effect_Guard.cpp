@@ -76,8 +76,8 @@ _int CEffect_Guard::Tick(_double TimeDelta)
 		setActive(false);
 		m_fNonActiveTimeAcc = 0.f;
 	}
-
-	m_pTransform->Face_Target(g_pGameInstance->Get_CamPosition(L"Camera_Silvermane"));
+	wstring wstrCamTag = g_pGameInstance->Get_BaseCameraTag();
+	m_pTransform->Face_Target(g_pGameInstance->Get_CamPosition(wstrCamTag));
 
 	_matrix matCullingBoxPivot = XMMatrixIdentity();
 	matCullingBoxPivot.r[3] = { m_Desc.CullingBoxPos.x, m_Desc.CullingBoxPos.y,m_Desc.CullingBoxPos.z, 1.f };
@@ -102,12 +102,12 @@ _int CEffect_Guard::LateTick(_double TimeDelta)
 
 HRESULT CEffect_Guard::Render()
 {
-	m_pBox->Render(L"Camera_Silvermane");
-
+	wstring wstrCamTag = g_pGameInstance->Get_BaseCameraTag();
+	m_pBox->Render(wstrCamTag);
 	_matrix XMWorldMatrix = XMMatrixTranspose(m_pTransform->Get_WorldMatrix());
-	_matrix XMViewMatrix = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_VIEW));
-	_matrix XMProjectMatrix = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_PROJECTION));
-	_vector CamPos = g_pGameInstance->Get_CamPosition(L"Camera_Silvermane");
+	_matrix XMViewMatrix = XMMatrixTranspose(g_pGameInstance->Get_Transform(wstrCamTag, TRANSFORMSTATEMATRIX::D3DTS_VIEW));
+	_matrix XMProjectMatrix = XMMatrixTranspose(g_pGameInstance->Get_Transform(wstrCamTag, TRANSFORMSTATEMATRIX::D3DTS_PROJECTION));
+	_vector CamPos = g_pGameInstance->Get_CamPosition(wstrCamTag);
 
 	m_pBuffer->SetUp_ValueOnShader("g_WorldMatrix", &XMWorldMatrix, sizeof(_float) * 16);
 	m_pBuffer->SetUp_ValueOnShader("g_ViewMatrix", &XMViewMatrix, sizeof(_float) * 16);
