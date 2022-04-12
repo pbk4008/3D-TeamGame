@@ -100,11 +100,11 @@ void CBastion_Healer_Attack::Check_Attack()
 		vector<_vector> vecRand;
 		while (true)
 		{
-			_uint iVecSize = vecRand.size();
+			_uint iVecSize = (_uint)vecRand.size();
 			if (iVecSize > 5)
 				break;
-			_float fSizeX = MathUtils::ReliableRandom(-30.f, 30.f);
-			_float fSizeY = MathUtils::ReliableRandom(0.f, 5.f);
+			_float fSizeX = (_float)MathUtils::ReliableRandom(-30.f, 30.f);
+			_float fSizeY = (_float)MathUtils::ReliableRandom(0.f, 5.f);
 			_vector vRand = XMVectorSet(fSizeX, fSizeY, 0.f, 0.f);
 			vPos += vRand;
 			_bool bCheck = false;

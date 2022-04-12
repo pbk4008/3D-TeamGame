@@ -45,6 +45,7 @@ public:
 	_bool	BgClicked(_int _KeyState);
 	_bool	IconMouseOn(void);
 	_bool	IconClicked(void);
+	_bool	ItemClicked(void);
 
 	void	SetIcon(const std::wstring& _szFileName);
 	void    SetGrade(EEquipmentGrade _eGrade);
@@ -54,7 +55,7 @@ private:
 	CUI_SlotItemIcon*		m_pItemIcon = nullptr;
 	CUI_SlotGrade*			m_pGrade = nullptr;
 	CUI_SlotItemEffect*		m_pItemEffect = nullptr;
-	//CUI_EquipedText*		m_pEquipedText = nullptr;
+	CUI_EquipedText*		m_pEquipedText = nullptr;
 	ItemSlotDesc desc;
 public:
 	static CUI_ItemSlot* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);

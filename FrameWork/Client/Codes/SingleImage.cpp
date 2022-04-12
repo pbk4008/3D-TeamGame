@@ -46,12 +46,22 @@ HRESULT CSingleImage::NativeConstruct(void* pArg)
 	m_fOffsetPosition = texDesc.fOffsetPos;
 	m_fOffsetScale = texDesc.fOffsetScale;
 
+	switch (texDesc.renderType)
+	{
+	case CSingleImage::Alpha:
+		m_bRenderPass = 1;
+		break;
+	case CSingleImage::Nonalpha:
+		m_bRenderPass = 0;
+		break;
+	default:
+		m_bRenderPass = 1;
+		break;
+	}
+
 	m_pBuffer = g_pGameInstance->Clone_Component<CVIBuffer_Rect>(0, L"Proto_Component_RectBuffer");
-	//Safe_AddRef(m_pBuffer);
-
-	if (!m_pBuffer)
-		return E_FAIL;
-
+	assert("Failed to Get Buffer" && m_pBuffer);
+		
 	return S_OK;
 }
 
@@ -62,9 +72,6 @@ _int CSingleImage::Tick(_double TimeDelta)
 
 _int CSingleImage::LateTick(_double TimeDelta)
 {
-	//if (nullptr != m_pRenderer)
-	//	m_pRenderer->Add_RenderGroup(CRenderer::RENDER::RENDER_UI_ACTIVE, m_pCreator);
-
 	return _int();
 }
 
@@ -83,7 +90,7 @@ HRESULT CSingleImage::Render(CTransform* _sender)
 
 		m_pBuffer->SetUp_TextureOnShader("g_DiffuseTexture", m_pImage);
 
-		m_pBuffer->Render(1);
+		m_pBuffer->Render(m_bRenderPass);
 	}
 	return S_OK;
 }

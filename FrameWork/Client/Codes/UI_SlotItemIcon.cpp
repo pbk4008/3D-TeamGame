@@ -100,9 +100,15 @@ _bool CUI_SlotItemIcon::IconClicked()
 	return m_pUIHelperCom->MouseClickDown();
 }
 
+_bool CUI_SlotItemIcon::ItemClicked(void)
+{
+	return m_pUIHelperCom->MouseClickItem();
+}
+
 void CUI_SlotItemIcon::SetIcon(const std::wstring& _szFileName)
 {
 	m_pSigleImageCom->SetTexture(_szFileName);
+	m_bHasItem = true;
 }
 
 

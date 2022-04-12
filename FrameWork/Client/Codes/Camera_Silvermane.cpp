@@ -158,7 +158,7 @@ HRESULT CCamera_Silvermane::Ready_Components()
 	CCamera::CAMERADESC cameraDesc;
 	cameraDesc.pCameraTag = L"Camera_Silvermane";
 	cameraDesc.eType = CCamera::CAMERATYPE::CAMERA_PROJECTION;
-	cameraDesc.vEye = _float4(0.f, 0.f, 0.f, 1.f);
+	cameraDesc.vEye = _float4(0.f, 0.f, 0.f, 1.f); 
 	cameraDesc.vAt = _float4(0.f, 0.f, 1.f, 1.f);
 	cameraDesc.vAxisY = _float4(0.f, 1.f, 0.f, 0.f);
 	cameraDesc.fFovy = XMConvertToRadians(60.f);

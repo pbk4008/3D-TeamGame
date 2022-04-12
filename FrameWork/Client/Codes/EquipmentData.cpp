@@ -7,13 +7,23 @@ CEquipmentData::CEquipmentData(void)
 }
 
 _bool CEquipmentData::IsExistEquip(EEquipSlot slot)
-{
-	return _bool();
+{ /* 장착하려는 슬롯이 비어있는가 */
+	EItemType itemType = m_vecEquipmentItems[(_int)slot].ItemType;
+
+	if (EItemType::NONE == itemType)
+		return false;
+	else
+		return true;
 }
 
 _bool CEquipmentData::ExistItem(CItemData item)
 {
-	return _bool();
+	for (auto EquipmentItem : m_vecEquipmentItems)
+	{
+		if (EquipmentItem.uid == item.uid)
+			return true;
+	}
+	return false;
 }
 
 _bool CEquipmentData::CompareEquipment(EEquipSlot slot, CItemData item)
@@ -23,6 +33,13 @@ _bool CEquipmentData::CompareEquipment(EEquipSlot slot, CItemData item)
 
 void CEquipmentData::ChangeEquipment(EEquipSlot slot, CItemData item)
 {
+	if (IsExistEquip(slot))
+		return;
+	else
+	{
+		m_vecEquipmentItems[(_int)slot] = item;
+		m_vecEquipmentItems[(_int)slot].bEquiped = TRUE;
+	}
 }
 
 void CEquipmentData::RemoveEquipment(EEquipSlot slot)

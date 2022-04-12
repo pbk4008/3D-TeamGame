@@ -75,6 +75,7 @@ HRESULT CUI_SlotGrade::Ready_Component(void)
 {
 	/* for. Single Image Com */
 	CSingleImage::Desc ModalSprite;
+	ModalSprite.renderType = CSingleImage::RenderType::Nonalpha;
 	ModalSprite.textureName = L"T_Weapon_Sash_Common";
 	ModalSprite.pCreator = this;
 	ModalSprite.pRenderer = this->m_pRenderer;

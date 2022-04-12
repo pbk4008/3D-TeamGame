@@ -84,7 +84,21 @@ POINT CUIHelper::getMousePostion(void)
 
 _bool CUIHelper::MouseClickDown()
 {
-	if (g_pGameInstance->getMouseKeyDown(CInputDev::MOUSESTATE::MB_RBUTTON))
+	if (GetAsyncKeyState(VK_RBUTTON) & 0x8000)
+	//if (g_pGameInstance->getMouseKeyDown(CInputDev::MOUSESTATE::MB_RBUTTON))
+	{
+		if (IsCursorRect())
+		{
+			return true;
+		}
+	}
+	return false;
+}
+
+_bool CUIHelper::MouseClickItem(void)
+{
+	if (GetAsyncKeyState(VK_LBUTTON) & 0x8000)
+	//if (g_pGameInstance->getMouseKeyDown(CInputDev::MOUSESTATE::MB_LBUTTON))
 	{
 		if (IsCursorRect())
 		{
@@ -96,24 +110,24 @@ _bool CUIHelper::MouseClickDown()
 
 _bool CUIHelper::MouseClickEquipBtn(void)
 {
-	if (g_pGameInstance->getMouseKeyDown(CInputDev::MOUSESTATE::MB_LBUTTON))
+	if (g_pGameInstance->getkeyDown(DIK_F6))
 	{
-		if (IsCursorRect())
-		{
+		/*	if (IsCursorRect())
+			{
+			}*/
 			return true;
-		}
 	}
 	return false;
 }
 
 _bool CUIHelper::MouseClickArmoryBtn(void)
 {
-	if (g_pGameInstance->getMouseKeyDown(CInputDev::MOUSESTATE::MB_WHILL))
+	if (g_pGameInstance->getkeyDown(DIK_F5))
 	{
-		if (IsCursorRect())
+		/*if (IsCursorRect())
 		{
+		}*/
 			return true;
-		}
 	}
 	return false;
 }

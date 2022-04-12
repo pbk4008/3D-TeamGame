@@ -73,6 +73,8 @@ HRESULT C1H_SwordAttackNormalR2_Loop::ExitState()
 	m_fHoldTime = 0.f;
 
 	m_isShake = false;
+	m_pSilvermane->RimlightCheck(false);
+	m_pSilvermane->Get_CurerntWeapon()->RimlightCheck(false);
 	return S_OK;
 }
 

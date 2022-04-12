@@ -84,6 +84,7 @@ HRESULT CNeedle::NativeConstruct(const _uint _iSceneID, void* _pArg)
 
 	m_bActive = false;
 	m_pCollider->Remove_ActorFromScene();
+
 	return S_OK;
 }
 
@@ -174,7 +175,20 @@ HRESULT CNeedle::Render()
 	desc.color = _float4(0.7529f, 0.7529f, 0.7529f, 1.f);
 	desc.empower = 0.7f;
 
-	CWeapon::BindConstantBuffer(wstrCamTag, &desc);
+	RIM rimdesc;
+	ZeroMemory(&rimdesc, sizeof(rimdesc));
+	
+	if (m_rimcheck == true)
+	{
+		rimdesc.rimcheck = m_rimcheck;
+		rimdesc.rimintensity = m_rimintensity;
+		rimdesc.rimcol = _float4(1.0f, 0, 0, 1.0f);
+		XMStoreFloat4(&rimdesc.camdir, XMVector3Normalize(m_pTransform->Get_State(CTransform::STATE_POSITION) - g_pGameInstance->Get_CamPosition(L"Camera_Silvermane")));
+		CWeapon::SetRimIntensity(g_fDeltaTime * -4.f);
+	}
+
+	CWeapon::BindConstantBuffer(wstrCamTag, &desc, &rimdesc);
+
 	for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
 		m_pModel->Render(i, 0);
 

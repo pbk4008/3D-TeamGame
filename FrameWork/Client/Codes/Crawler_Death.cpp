@@ -79,7 +79,6 @@ HRESULT CCrawler_Death::ExitState()
 
 	g_pGameInstance->StopSound(CSoundMgr::CHANNELID::Monster_Death);
 
-
 	return S_OK;
 }
 

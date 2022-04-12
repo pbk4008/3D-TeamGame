@@ -5,7 +5,6 @@
 
 BEGIN(Client)
 class CSingleImage;
-class CUIHelper;
 class CUI_SlotItemEffect :public CUI
 {
 public:
@@ -32,13 +31,10 @@ public:
 	HRESULT Ready_Component(void);
 
 public:
-	_bool	IconMouseOn(void);
-	_bool	IconClicked(void);
 	void	SetIcon(const std::wstring & _szFileName);
 
 private:
 	CSingleImage* m_pSigleImageCom = nullptr;
-	CUIHelper* m_pUIHelperCom = nullptr;
 	ItemSlotDesc  desc;
 
 public:
