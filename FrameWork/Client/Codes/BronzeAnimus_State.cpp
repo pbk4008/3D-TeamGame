@@ -218,8 +218,7 @@ _int CBronzeAnimus_State::Check_State()
 {
 	if (!m_pOwner->Get_Dead())
 	{
-		if (m_pOwner->Get_BattleOn()	&&!m_pOwner->Get_Groggy() 
-			&& m_pStateController->Get_CurStateTag()!=L"Hit")
+		if (m_pOwner->Get_BattleOn()	&&false == m_pOwner->Get_Groggy() && m_pStateController->Get_CurStateTag()!=L"Hit")
 		{
 			if (!m_pOwner->Get_Find())
 			{

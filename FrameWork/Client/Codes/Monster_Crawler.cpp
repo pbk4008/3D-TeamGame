@@ -239,10 +239,10 @@ void CMonster_Crawler::Hit(const ATTACKDESC& _tAttackDesc)
 
 	m_pPanel->Set_Show(true);
 
-	m_bFirstHit = true; //µü ÇÑ¹ø true·Î º¯°æÇØÁÜ
 
-	if (true == m_bFirstHit)
+	if (false == m_bFirstHit)
 	{
+		m_bFirstHit = true; //µü ÇÑ¹ø true·Î º¯°æÇØÁÜ
 		m_pPanel->Set_BackUIGapY(1.f);
 	}
 

@@ -165,7 +165,7 @@ _int CBoss_Bastion_Judicator::Tick(_double TimeDelta)
 			if (m_pAnimator->Get_CurrentAnimation()->Is_Finished())
 			{
 				m_bDead = true;
-				Set_Remove(true);
+				//Set_Remove(true);
 				m_pPanel->Set_Show(false);
 				m_pPanel->Set_UIRemove(true);
 				return 0;
@@ -176,7 +176,7 @@ _int CBoss_Bastion_Judicator::Tick(_double TimeDelta)
 		}
 		else
 		{
-			Set_Remove(true);
+			//Set_Remove(true);
 			m_pPanel->Set_UIRemove(true);
 			Active_Effect((_uint)EFFECT::DEATH);
 		}

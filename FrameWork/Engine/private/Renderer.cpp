@@ -388,7 +388,7 @@ HRESULT CRenderer::Render_UI()
 			});
 	}*/
 
-	_matrix view = g_pGameInstance->Get_Transform(m_CameraTag, TRANSFORMSTATEMATRIX::D3DTS_VIEW);
+	_matrix view = g_pGameInstance->Get_Transform(L"MainOrthoCamera", TRANSFORMSTATEMATRIX::D3DTS_VIEW);
 	view = XMMatrixInverse(nullptr, view);
 
 	for (auto& iter : m_RenderGroup[RENDER_UI])

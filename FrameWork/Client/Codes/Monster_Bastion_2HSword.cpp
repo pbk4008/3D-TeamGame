@@ -152,6 +152,7 @@ _int CMonster_Bastion_2HSword::Tick(_double _dDeltaTime)
 		//스턴상태일때 스턴state에서 현재 그로기 계속 0으로 고정시켜줌
 		m_bGroggy = true;
 		m_fGroggyGauge = 0.f;
+		m_pStateController->Change_State(L"Groggy");
 		m_pPanel->Set_GroggyBar(Get_GroggyGaugeRatio());
 	}
 
@@ -588,8 +589,9 @@ HRESULT CMonster_Bastion_2HSword::Render_Debug(void)
 
 void CMonster_Bastion_2HSword::Groggy_Start()
 {
-	Set_Groggy(true);
-	Set_GroggyGauge(0);
+	m_bGroggy = true;
+	m_fGroggyGauge = 0.f;
+	m_pStateController->Change_State(L"Groggy");
 	m_pPanel->Set_GroggyBar(Get_GroggyGaugeRatio());
 }
 
@@ -597,39 +599,32 @@ void CMonster_Bastion_2HSword::Hit(CCollision& pCol)
 {
 	if (!m_bDead)
 	{
-		//if (true == g_pObserver->IsAttack()) //플레이어공격일때
-		//{
+		if (false == m_bFirstHit)
+		{
 			m_bFirstHit = true; //딱 한번 true로 변경해줌
-			if (true == m_bFirstHit)
-				m_pPanel->Set_BackUIGapY(1.f);
+			m_pPanel->Set_BackUIGapY(1.f);
+		}
 
-			//if ((_uint)GAMEOBJECT::WEAPON == pCol.pGameObject->getTag())
-			//{
-				//m_pPanel->Set_Show(true);
-				//Active_Effect((_uint)EFFECT::HIT);
-				//Active_Effect((_uint)EFFECT::FLOATING);
+		Active_Effect((_uint)EFFECT::HIT);
+		Active_Effect((_uint)EFFECT::FLOATING);
 
-				//m_fCurrentHp -= 5.f;
-				//m_bGroggy = 2; //TODO::수치정해서바꿔줘야됨
+		//TODO::수치정해서바꿔줘야됨
+		m_fGroggyGauge += 2;
 
-				m_pPanel->Set_HpBar(Get_HpRatio());
+		m_pPanel->Set_HpBar(Get_HpRatio());
 
-				if (false == m_bGroggy)
-				{
-					//그로기 아닐때만 증가할수있게
-					m_pPanel->Set_GroggyBar(Get_GroggyGaugeRatio());
+		if (false == m_bGroggy)
+		{
+			//그로기 아닐때만 증가할수있게
+			m_pPanel->Set_GroggyBar(Get_GroggyGaugeRatio());
 
-					_vector svTargetPos = pCol.pGameObject->Get_Transform()->Get_State(CTransform::STATE_POSITION);
-					_vector svPos = m_pTransform->Get_State(CTransform::STATE_POSITION);
+			_vector svTargetPos = pCol.pGameObject->Get_Transform()->Get_State(CTransform::STATE_POSITION);
+			_vector svPos = m_pTransform->Get_State(CTransform::STATE_POSITION);
 
-					_vector svDir = XMVector3Normalize(XMVectorSetY(svPos - svTargetPos, 0.f));
+			_vector svDir = XMVector3Normalize(XMVectorSetY(svPos - svTargetPos, 0.f));
 
-					m_pStateController->Change_State(L"Hit", &svDir);
-				}
-			//}
-			//else
-			//	m_pStateController->Change_State(L"Idle");
-		//}
+			m_pStateController->Change_State(L"Hit", &svDir);
+		}
 	}
 }
 
