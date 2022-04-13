@@ -55,6 +55,7 @@ cbuffer ShaderCheck
 	bool g_fog;
 	int	 g_RadialCnt;
 	float g_delta;
+	int	 g_sampletest;
 };
 
 cbuffer Fogbuffer
@@ -400,23 +401,21 @@ PS_OUT_BLEND PS_MAIN_BLEND(PS_IN In)
 	Out.vColor = color;
 	
 	half4 velocity = g_VelocityTex.Sample(DefaultSampler, In.vTexUV);
-	int numsample = 5;
-	velocity.xy /= (half) numsample;
+	velocity.xy /= (half) g_sampletest;
 	
 	int cnt = 1;
 	half4 bcolor;
 	
-	for (int i = cnt; i < numsample; ++i)
+	for (int i = cnt; i < g_sampletest; ++i)
 	{
 		bcolor = g_DiffuseTexture.Sample(DefaultSampler, In.vTexUV + velocity.xy * (half) i);
 		if (velocity.w < depth.x + 0.04f)
 		{
 			cnt++;
-			color += bcolor;
+			Out.vColor += bcolor;
 		}
 	}
-	color /= (half) cnt;
-	Out.vColor = color;
+	Out.vColor /= (half) cnt;
 	
 	if (g_distort == true)
 	{

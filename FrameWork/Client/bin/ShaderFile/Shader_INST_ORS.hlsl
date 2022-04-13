@@ -28,7 +28,6 @@ struct VS_OUT
 	float4 vTangent		: TANGENT;
 	float4 vBiNormal	: BINORMAL;
 	float4 vUvDepth		: TEXCOORD0;
-	float4 vVelocity	: TEXCOORD1;
 	float clip			: SV_ClipDistance0;
 };
 
@@ -67,29 +66,6 @@ VS_OUT VS_MESH(VS_IN In)
 	Out.vUvDepth.zw = Out.vPosition.zw;
 	
 	Out.clip = dot(mul(vPosition, g_WorldMatrix), ClipPlane);
-	
-	half4 curpos = Out.vPosition;
-	matrix prematWV = mul(g_prvWmat, g_prvVmat);
-	matrix prematWVP = mul(prematWV, g_prvPmat);
-	half4 oldpos = mul(vPosition, prematWVP);
-	matrix ronly = prematWVP;
-	ronly._11 = 1.0f;
-	ronly._22 = 1.0f;
-	ronly._33 = 1.0f;
-	ronly._41 = 0.0f;
-	ronly._42 = 0.0f;
-	ronly._43 = 0.0f;
-	
-	half3 vdir = curpos.xyz - oldpos.xyz;
-	
-	//half a = dot(normalize(vdir), normalize(mul(vNormal, prematWVP)).xyz);
-	//if (a < 0.f)
-	//	Out.vPosition = oldpos;
-	
-	half2 velocity = (curpos.xy / curpos.w) - (oldpos.xy / oldpos.w);
-	Out.vVelocity.xy = velocity * 0.5f;
-	Out.vVelocity.y *= -1.f;
-	Out.vVelocity.zw = Out.vPosition.zw;
 	
 	return Out;
 }
@@ -134,7 +110,6 @@ struct PS_IN
 	float4 vTangent		: TANGENT;
 	float4 vBiNormal	: BINORMAL;
 	float4 vUvDepth		: TEXCOORD0;
-	float4 vVelocity	: TEXCOORD1;
 	float clip			: SV_ClipDistance0;
 };
 
@@ -145,7 +120,6 @@ struct PS_OUT
 	half4 depth		: SV_TARGET2;
 	half4 mra		: SV_Target3;
 	half4 emission	: SV_Target4;
-	half4 velocity	: SV_Target5;
 };
 PS_OUT PS_MAIN(PS_IN In)
 {
@@ -173,10 +147,6 @@ PS_OUT PS_MAIN(PS_IN In)
 	Out.mra.b = Ao;
 	Out.mra.a = 1.f;
 	Out.emission = half4(diffuse.xyz * ors.b * EmissionPower, 1.f);
-
-	Out.velocity.xy = In.vVelocity.xy;
-	Out.velocity.z = 1.f;
-	Out.velocity.w = In.vVelocity.z / In.vVelocity.w;
 	
 	return Out;
 }

@@ -406,11 +406,11 @@ HRESULT CModel::Render(_uint iMeshContainerIndex, _uint iPassIndex)
 			{
 				m_vecMaterials[iMtrlIndex]->Set_InputLayout(iPassIndex);
 
+				_matrix		BoneMatrices[256];
+				ZeroMemory(BoneMatrices, sizeof(_matrix) * 256);
+
 				if (m_eMeshType == TYPE_ANIM)
 				{
-					_matrix		BoneMatrices[256];
-					ZeroMemory(BoneMatrices, sizeof(_matrix) * 256);
-
 					pMeshContainer->SetUp_BoneMatrices(BoneMatrices, XMLoadFloat4x4(&m_PivotMatrix));
 
 					if (FAILED(m_vecMaterials[iMtrlIndex]->SetUp_ValueOnShader("g_BoneMatrices", BoneMatrices, sizeof(_matrix) * 256)))
@@ -418,25 +418,27 @@ HRESULT CModel::Render(_uint iMeshContainerIndex, _uint iPassIndex)
 
 					if (FAILED(m_vecMaterials[iMtrlIndex]->SetUp_ValueOnShader("g_OldBoneMatrices", m_oldbonemat, sizeof(_matrix) * 256)))
 						return E_FAIL;
-
-					ZeroMemory(m_oldbonemat, sizeof(_float4x4) * 256);
-					memcpy(m_oldbonemat, BoneMatrices, sizeof(_float4x4) * 256);
 				}
 				if(m_bUsingTool)
 					m_vecMaterials[iMtrlIndex]->Using_Tool();
+
 				m_vecMaterials[iMtrlIndex]->Render(iPassIndex);
 				pMeshContainer->Render();
+
+				ZeroMemory(m_oldbonemat, sizeof(_float4x4) * 256);
+				memcpy(m_oldbonemat, BoneMatrices, sizeof(_float4x4) * 256);
 			}
 		}
 		else
 		{
 			if (iPassIndex >= (_uint)m_PassDesc.size())
 				return E_FAIL;
+
+			_matrix		BoneMatrices[256];
+			ZeroMemory(BoneMatrices, sizeof(_matrix) * 256);
+
 			if (m_eMeshType == TYPE_ANIM)
 			{
-				_matrix		BoneMatrices[256];
-				ZeroMemory(BoneMatrices, sizeof(_matrix) * 256);
-
 				pMeshContainer->SetUp_BoneMatrices(BoneMatrices, XMLoadFloat4x4(&m_PivotMatrix));
 
 				if (FAILED(SetUp_ValueOnShader("g_BoneMatrices", BoneMatrices, sizeof(_matrix) * 256)))
@@ -446,6 +448,9 @@ HRESULT CModel::Render(_uint iMeshContainerIndex, _uint iPassIndex)
 			m_PassDesc[iPassIndex]->pPass->Apply(0, m_pDeviceContext);
 
 			pMeshContainer->Render();
+
+			ZeroMemory(m_oldbonemat, sizeof(_float4x4) * 256);
+			memcpy(m_oldbonemat, BoneMatrices, sizeof(_float4x4) * 256);
 		}
 	}
 

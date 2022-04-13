@@ -466,12 +466,14 @@ HRESULT CRenderer::Render_Final(_bool outline, _bool Radial)
 	_float thick = 0.2f;
 	_bool fog = false;
 	if (FAILED(m_pVIBuffer->SetUp_TextureOnShader("g_DiffuseTexture", m_pTargetMgr->Get_SRV(TEXT("Target_Blend"))))) MSGBOX("Render Final DiffuseTeuxtre Not Apply");
-	if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_thick", &thick, sizeof(_float)))) MSGBOX("Render Final Value thick Not Apply");
+	if (FAILED(m_pVIBuffer->SetUp_TextureOnShader("g_DepthTexture", m_pTargetMgr->Get_SRV(TEXT("Target_Depth"))))) MSGBOX("Render Final DepthTexture Not Apply");
+	if (FAILED(m_pVIBuffer->SetUp_TextureOnShader("g_VelocityTex", m_pTargetMgr->Get_SRV(TEXT("Target_Velocity"))))) MSGBOX("Render Final DiffuseTeuxtre Not Apply");
 
 	if (m_bdistortion == true)
 	{
 		if (FAILED(m_pVIBuffer->SetUp_TextureOnShader("g_DistortionTex", m_pTargetMgr->Get_SRV(TEXT("Target_Distortion"))))) MSGBOX("Render Final g_DistortionTex Not Apply");
 	}
+
 	if (g_pGameInstance->getCurrentLevel() == 4)
 	{
 		fog = true;
@@ -481,14 +483,16 @@ HRESULT CRenderer::Render_Final(_bool outline, _bool Radial)
 		if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_fogcolor", &fogcolor, sizeof(_float4)))) MSGBOX("Render Final Value fogcolor Not Apply");
 		if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_fogDist", &fogdist, sizeof(_float)))) MSGBOX("Render Final Value fogdist Not Apply");
 		if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_fogDenstiy", &fogdensity, sizeof(_float)))) MSGBOX("Render Final fogdensity thick Not Apply");
-		if (FAILED(m_pVIBuffer->SetUp_TextureOnShader("g_DepthTexture", m_pTargetMgr->Get_SRV(TEXT("Target_Depth"))))) MSGBOX("Render Final DepthTexture Not Apply");
 	}
 
+	_int cnt = 12;
 	if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_outline", &m_boutline, sizeof(_bool)))) MSGBOX("Render Final Value outline Not Apply");
 	if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_radial", &m_bradial, sizeof(_bool)))) MSGBOX("Render Final Value raidal Not Apply");
 	if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_distort", &m_bdistortion, sizeof(_bool)))) MSGBOX("Render Final Value distort Not Apply");
 	if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_fog", &fog, sizeof(_bool)))) MSGBOX("Render Final Value distort Not Apply");
 	if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_RadialCnt", &m_RadialCnt, sizeof(_int)))) MSGBOX("Render Final Value RaidalCnt Not Apply");
+	if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_sampletest", &cnt, sizeof(_int)))) MSGBOX("Render Final Value RaidalCnt Not Apply");
+	if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_thick", &thick, sizeof(_float)))) MSGBOX("Render Final Value thick Not Apply");
 
 	if (FAILED(m_pVIBuffer->Render(3))) MSGBOX("Final Rendering Failed");
 

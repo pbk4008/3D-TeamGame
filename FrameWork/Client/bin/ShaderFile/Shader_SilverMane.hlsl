@@ -67,11 +67,10 @@ VS_OUT VS_MAIN_ANIM(VS_IN In)
 	Out.vUvDepth.xy = In.vTexUV.xy;
 	Out.vUvDepth.zw = Out.vPosition.zw;
 	
-	half4 curpos = Out.vPosition;
+	half4 curpos = Out.vPosition;	
 	half4 oldpos = mul(vector(In.vPosition, 1.f), OldBoneMatrix);
 	matrix prematWV = mul(g_prvWmat, g_prvVmat);
 	matrix prematWVP = mul(prematWV, g_prvPmat);
-
 	oldpos = mul(oldpos, prematWVP);
 	
 	half3 vdir = curpos.xyz - oldpos.xyz;
@@ -79,7 +78,9 @@ VS_OUT VS_MAIN_ANIM(VS_IN In)
 	half a = dot(normalize(vdir), normalize(mul(vNormal, prematWV)).xyz);
 	if (a < 0.f)
 		Out.vPosition = oldpos;
-	
+	else
+		Out.vPosition = curpos;
+		
 	half2 velocity = (curpos.xy / curpos.w) - (oldpos.xy / oldpos.w);
 	Out.vVelocity.xy = velocity * 0.5f;
 	Out.vVelocity.y *= -1.f;
@@ -228,9 +229,10 @@ PS_OUT PS_MAIN_TOP(PS_IN In)
 		Out.emission += rim;
 	}
 	
-	Out.vVelocity.xy = In.vVelocity.xy;
-	Out.vVelocity.z = 1.f;
-	Out.vVelocity.w = In.vVelocity.z / In.vVelocity.w;
+	//Out.vVelocity.xy = In.vVelocity.xy;
+	//Out.vVelocity.z = 1.f;
+	//Out.vVelocity.w = In.vVelocity.z / In.vVelocity.w;
+	Out.vVelocity = In.vVelocity;
 	
 	return Out;	
 }
@@ -262,9 +264,7 @@ PS_OUT PS_MAIN_DOWN(PS_IN In)
 	Out.mra.a = 1.f;
 	Out.emission = E;
 	
-	Out.vVelocity.xy = In.vVelocity.xy;
-	Out.vVelocity.z = 1.f;
-	Out.vVelocity.w = In.vVelocity.z / In.vVelocity.w;
+	Out.vVelocity = In.vVelocity;
 	return Out;
 }
 
@@ -287,9 +287,7 @@ PS_OUT PS_MAIN_CLOAK(PS_IN In)
 	Out.mra.a =  1.f;
 	Out.emission = half4(omer.b, omer.b, omer.b, 1) * g_color + g_empower;
 	
-	Out.vVelocity.xy = In.vVelocity.xy;
-	Out.vVelocity.z = 1.f;
-	Out.vVelocity.w = In.vVelocity.z / In.vVelocity.w;
+	Out.vVelocity = In.vVelocity;
 	return Out;
 }
 
@@ -317,9 +315,7 @@ PS_OUT PS_MAIN_HAIR(PS_IN In)
 	Out.mra.a = 1.f;
 	Out.emission = half4(omer.b, omer.b, omer.b, 1) * g_color + g_empower;
 	
-	Out.vVelocity.xy = In.vVelocity.xy;
-	Out.vVelocity.z = 1.f;
-	Out.vVelocity.w = In.vVelocity.z / In.vVelocity.w;
+	Out.vVelocity = In.vVelocity;
 	return Out;
 }
 
