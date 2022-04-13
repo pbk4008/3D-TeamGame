@@ -124,3 +124,5 @@ half4 RimLighting(float4 normal, float4 camdir, float rimintensity, float4 rimco
 	rimcolor = rim * rimcolor;
 	return float4(rimcolor.rgb, 1.f);
 }
+
+	

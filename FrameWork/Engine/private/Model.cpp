@@ -415,6 +415,12 @@ HRESULT CModel::Render(_uint iMeshContainerIndex, _uint iPassIndex)
 
 					if (FAILED(m_vecMaterials[iMtrlIndex]->SetUp_ValueOnShader("g_BoneMatrices", BoneMatrices, sizeof(_matrix) * 256)))
 						return E_FAIL;
+
+					if (FAILED(m_vecMaterials[iMtrlIndex]->SetUp_ValueOnShader("g_OldBoneMatrices", m_oldbonemat, sizeof(_matrix) * 256)))
+						return E_FAIL;
+
+					ZeroMemory(m_oldbonemat, sizeof(_float4x4) * 256);
+					memcpy(m_oldbonemat, BoneMatrices, sizeof(_float4x4) * 256);
 				}
 				if(m_bUsingTool)
 					m_vecMaterials[iMtrlIndex]->Using_Tool();

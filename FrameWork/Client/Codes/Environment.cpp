@@ -77,9 +77,8 @@ HRESULT CEnvironment::Render()
 {
 	if (!m_pInstanceMesh)
 		return E_FAIL;
-
-	//m_pInstanceMesh->Render(L"Camera_Silvermane");
 	wstring wstrCamTag = g_pGameInstance->Get_BaseCameraTag();
+
 	_float4 ClipPlane = _float4(0.f, 0.f, 0.f, 0.f);
 	_matrix matWorld = XMMatrixTranspose(m_pTransform->Get_WorldMatrix());
 	_matrix matView = XMMatrixTranspose(g_pGameInstance->Get_Transform(wstrCamTag, TRANSFORMSTATEMATRIX::D3DTS_VIEW));
@@ -92,13 +91,22 @@ HRESULT CEnvironment::Render()
 	m_pInstanceMesh->SetUp_ValueOnShader("g_CamPos", &campos, sizeof(_vector));
 	m_pInstanceMesh->SetUp_ValueOnShader("ClipPlane", &ClipPlane, sizeof(_float4));
 
-	/*_uint iNumMeshCnt = m_pInstanceMesh->Get_NumMeshContainer();*/
+	_matrix preworld, preview, preproj;
+	preworld = XMMatrixTranspose(m_pTransform->Get_WorldMatrix());
+	preview = XMMatrixTranspose(m_PreViewMat);
+	preproj = XMMatrixTranspose(g_pGameInstance->Get_Transform(wstrCamTag, TRANSFORMSTATEMATRIX::D3DTS_PROJECTION));
+
+	if (FAILED(m_pInstanceMesh->SetUp_ValueOnShader("g_prvWmat", &preworld, sizeof(_matrix)))) MSGBOX("Failed To Apply Actor ConstantBuffer");
+	if (FAILED(m_pInstanceMesh->SetUp_ValueOnShader("g_prvVmat", &preview, sizeof(_matrix)))) MSGBOX("Failed To Apply Actor ConstantBuffer");
+	if (FAILED(m_pInstanceMesh->SetUp_ValueOnShader("g_prvPmat", &preproj, sizeof(_matrix)))) MSGBOX("Failed To Apply Actor ConstantBuffer");
+
 	for (_uint i = 0; i < m_Nummeshcontainer; i++)
 		m_pInstanceMesh->Render(i, 0);
-//
-//#ifdef _DEBUG
-//	m_pNaviMesh->Render(L"MainCamera");
-//#endif
+	
+	m_PreWroldMat = m_pTransform->Get_WorldMatrix();
+	m_PreViewMat = g_pGameInstance->Get_Transform(wstrCamTag, TRANSFORMSTATEMATRIX::D3DTS_VIEW);
+	m_PreProjdMat = g_pGameInstance->Get_Transform(wstrCamTag, TRANSFORMSTATEMATRIX::D3DTS_PROJECTION);
+
 	return S_OK;
 }
 

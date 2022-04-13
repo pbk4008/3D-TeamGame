@@ -219,7 +219,6 @@ HRESULT CSilvermane::NativeConstruct(const _uint _iSceneID, void* _pArg)
 	m_pRenderer->SetRenderButton(CRenderer::PIXEL, true);
 	m_pRenderer->SetRenderButton(CRenderer::PBRHDR, true);
 	m_pRenderer->SetRenderButton(CRenderer::HDR, true);
-	m_pRenderer->SetCameraTag(g_pGameInstance->Get_BaseCameraTag());
 
 	return S_OK;
 }
@@ -334,41 +333,17 @@ _int CSilvermane::LateTick(_double _dDeltaTime)
 
 HRESULT CSilvermane::Render()
 {
+	wstring wstrCamTag = g_pGameInstance->Get_BaseCameraTag();
 
 	RIM rimdesc;
 	ZeroMemory(&rimdesc, sizeof(RIM));
+	rimdesc = ColorChange_RimCheck(rimdesc);
 
-	wstring wstrCamTag = g_pGameInstance->Get_BaseCameraTag();
-	if (g_pObserver->IsAttack())
-	{
-		m_color = _float4(0.784f, 0.137f, 0.137f, 0.f);
-	}
-	else
-	{
-		if (m_color.x <= 0.498f)
-			m_color.x = 0.498f;
-		else
-			m_color.x -= 0.005f;
-
-		if (m_color.y >= 0.9411f)
-			m_color.y = 0.9411f;
-		else
-			m_color.y += 0.005f;
-
-		if (m_color.z >= 0.8196f)
-			m_color.z = 0.8196f;
-		else
-			m_color.z += 0.005f;
-	}
-
-	if (m_rimcheck == true)
-	{
-		rimdesc.rimcheck = m_rimcheck;
-		rimdesc.rimcol = _float4(1.f, 0, 0, 1);
-		rimdesc.rimintensity = m_rimintensity; // intensity ³·À» ¼ö·Ï °úÇÏ°Ô ºû³²
-		XMStoreFloat4(&rimdesc.camdir, XMVector3Normalize(m_pTransform->Get_State(CTransform::STATE_POSITION) - g_pGameInstance->Get_CamPosition(L"Camera_Silvermane")));
-		CActor::SetRimIntensity(g_fDeltaTime * -10.f);
-	}
+	MOTIONBLUR motion;
+	ZeroMemory(&motion, sizeof(MOTIONBLUR));
+	XMStoreFloat4x4(&motion.preWorldMat, m_PreWroldMat);
+	XMStoreFloat4x4(&motion.preViewMat, m_PreViewMat);
+	XMStoreFloat4x4(&motion.preProjMat, m_PreProjdMat);
 
 	for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
 	{
@@ -379,13 +354,17 @@ HRESULT CSilvermane::Render()
 		{
 			desc.color = m_color;
 			desc.empower = 0.8f;
-			CActor::BindConstantBuffer(wstrCamTag, &desc, &rimdesc);
+			CActor::BindConstantBuffer(wstrCamTag, &desc, &rimdesc,&motion);
 		}
 		else
-			CActor::BindConstantBuffer(wstrCamTag, &desc, &rimdesc);
+			CActor::BindConstantBuffer(wstrCamTag, &desc, &rimdesc,&motion);
 
 		if (FAILED(m_pModel->Render(i, i))) MSGBOX("Fialed To Rendering Silvermane");
 	}
+
+	m_PreWroldMat =  m_pTransform->Get_WorldMatrix();
+	m_PreViewMat = g_pGameInstance->Get_Transform(wstrCamTag, TRANSFORMSTATEMATRIX::D3DTS_VIEW);
+	m_PreProjdMat = g_pGameInstance->Get_Transform(wstrCamTag, TRANSFORMSTATEMATRIX::D3DTS_PROJECTION);
 
 #ifdef _DEBUG
 	Render_Debug();
@@ -1323,6 +1302,42 @@ const _int CSilvermane::Input(const _double& _dDeltaTime)
 	}
 
 	return _int();
+}
+
+RIM CSilvermane::ColorChange_RimCheck(RIM& rimdesc)
+{
+	if (g_pObserver->IsAttack())
+	{
+		m_color = _float4(0.784f, 0.137f, 0.137f, 0.f);
+	}
+	else
+	{
+		if (m_color.x <= 0.498f)
+			m_color.x = 0.498f;
+		else
+			m_color.x -= 0.005f;
+
+		if (m_color.y >= 0.9411f)
+			m_color.y = 0.9411f;
+		else
+			m_color.y += 0.005f;
+
+		if (m_color.z >= 0.8196f)
+			m_color.z = 0.8196f;
+		else
+			m_color.z += 0.005f;
+	}
+
+	if (m_rimcheck == true)
+	{
+		rimdesc.rimcheck = m_rimcheck;
+		rimdesc.rimcol = _float4(1.f, 0, 0, 1);
+		rimdesc.rimintensity = m_rimintensity; // intensity ³·À» ¼ö·Ï °úÇÏ°Ô ºû³²
+		XMStoreFloat4(&rimdesc.camdir, XMVector3Normalize(m_pTransform->Get_State(CTransform::STATE_POSITION) - g_pGameInstance->Get_CamPosition(L"Camera_Silvermane")));
+		CActor::SetRimIntensity(g_fDeltaTime * -10.f);
+	}
+
+	return rimdesc;
 }
 
 CJumpNode* CSilvermane::Get_TargetJumpNode() const

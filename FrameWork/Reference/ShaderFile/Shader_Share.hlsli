@@ -20,6 +20,7 @@ struct BoneMatrixArray
 cbuffer BoneMatricesBuffer
 {
 	BoneMatrixArray g_BoneMatrices;
+	BoneMatrixArray g_OldBoneMatrices;
 };
 
 cbuffer Matrices
@@ -73,4 +74,11 @@ cbuffer Limlight
 	float	g_rimintensity = (float)0;
 	float4	g_rimcolor = (float4)0;
 	float4	g_camdir = (float4)0;
+};
+
+cbuffer Motionblur
+{
+	matrix	g_prvWmat = (matrix) 0;
+	matrix	g_prvVmat = (matrix) 0;
+	matrix	g_prvPmat = (matrix) 0;
 };

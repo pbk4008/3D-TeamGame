@@ -114,7 +114,7 @@ Texture2D g_ShadowTexture;
 
 Texture2D g_AlphaTexture;
 Texture2D g_DistortionTex;
-Texture2D g_STDistortionTex;
+Texture2D g_VelocityTex;
 Texture2D g_BlurTexture;
 
 
@@ -395,14 +395,31 @@ PS_OUT_BLEND PS_MAIN_BLEND(PS_IN In)
 	
 	half4 depth = g_DepthTexture.Sample(DefaultSampler, In.vTexUV);
 	half4 color = g_DiffuseTexture.Sample(DefaultSampler, In.vTexUV);
-	vector vDepthDesc = g_DepthTexture.Sample(DefaultSampler, In.vTexUV);
-	float fViewZ = depth.y * 300.f;
+	half fViewZ = depth.y * 300.f;
 	
+	Out.vColor = color;
+	
+	half4 velocity = g_VelocityTex.Sample(DefaultSampler, In.vTexUV);
+	int numsample = 5;
+	velocity.xy /= (half) numsample;
+	
+	int cnt = 1;
+	half4 bcolor;
+	
+	for (int i = cnt; i < numsample; ++i)
+	{
+		bcolor = g_DiffuseTexture.Sample(DefaultSampler, In.vTexUV + velocity.xy * (half) i);
+		if (velocity.w < depth.x + 0.04f)
+		{
+			cnt++;
+			color += bcolor;
+		}
+	}
+	color /= (half) cnt;
 	Out.vColor = color;
 	
 	if (g_distort == true)
 	{
-		//Out.vColor = Distortion(g_STDistortionTex, g_DiffuseTexture, DefaultSampler, In.vTexUV, g_delta);
 		Out.vColor = Distortion(g_DistortionTex, g_DiffuseTexture, DefaultSampler, In.vTexUV);
 	}
 	

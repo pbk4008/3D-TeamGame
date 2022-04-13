@@ -91,10 +91,10 @@ _int CActor::LateTick(_double TimeDelta)
 
 HRESULT CActor::Render()
 {
-	if (FAILED(__super::Render()))
-	{
-		return E_FAIL;
-	}
+	//if (FAILED(__super::Render()))
+	//{
+	//	return E_FAIL;
+	//}
 
 	return S_OK;
 }
@@ -129,7 +129,7 @@ HRESULT CActor::Set_SpawnPosition(const _float3 vPoint)
 	return S_OK;
 }
 
-HRESULT CActor::BindConstantBuffer(const wstring& camTag, SCB* bindbuffer, RIM* rimbuffer)
+HRESULT CActor::BindConstantBuffer(const wstring& camTag, SCB* bindbuffer, RIM* rimbuffer, MOTIONBLUR* motionbuffer)
 {
 	if (m_pTransform == nullptr)
 		MSGBOX("Failed To Apply Actor Transform nullptr");
@@ -158,6 +158,13 @@ HRESULT CActor::BindConstantBuffer(const wstring& camTag, SCB* bindbuffer, RIM* 
 		if (FAILED(m_pModel->SetUp_ValueOnShader("g_rimintensity", &rimbuffer->rimintensity, sizeof(_float)))) MSGBOX("Failed To Apply Actor ConstantBuffer");
 		if (FAILED(m_pModel->SetUp_ValueOnShader("g_rimcolor", &rimbuffer->rimcol, sizeof(_float4)))) MSGBOX("Failed To Apply Actor ConstantBuffer");
 		if (FAILED(m_pModel->SetUp_ValueOnShader("g_camdir", &rimbuffer->camdir, sizeof(_float4)))) MSGBOX("Failed To Apply Actor ConstantBuffer");
+	}
+
+	if (motionbuffer)
+	{
+		if (FAILED(m_pModel->SetUp_ValueOnShader("g_prvWmat", &XMMatrixTranspose(XMLoadFloat4x4(&motionbuffer->preWorldMat)), sizeof(_matrix)))) MSGBOX("Failed To Apply Actor ConstantBuffer");
+		if (FAILED(m_pModel->SetUp_ValueOnShader("g_prvVmat", &XMMatrixTranspose(XMLoadFloat4x4(&motionbuffer->preViewMat)), sizeof(_matrix)))) MSGBOX("Failed To Apply Actor ConstantBuffer");
+		if (FAILED(m_pModel->SetUp_ValueOnShader("g_prvPmat", &XMMatrixTranspose(XMLoadFloat4x4(&motionbuffer->preProjMat)), sizeof(_matrix)))) MSGBOX("Failed To Apply Actor ConstantBuffer");
 	}
 
 	return S_OK;

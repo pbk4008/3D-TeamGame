@@ -109,8 +109,8 @@ HRESULT CStage1::NativeConstruct()
 	if (FAILED(Ready_GameManager()))
 		return E_FAIL;
 
-	g_pGameInstance->Change_BaseCamera(L"Camera_Silvermane");
 	g_pGameInstance->PlayBGM(L"Stage1_BGM");
+	g_pGameInstance->Change_BaseCamera(L"Camera_Silvermane");
 
 	g_pInteractManager = CInteractManager::GetInstance();
 	if (FAILED(g_pInteractManager->NativeConstruct()))

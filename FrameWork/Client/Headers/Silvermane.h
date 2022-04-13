@@ -131,8 +131,9 @@ public: /* For.DropBox */
 	const void Raycast_DropBox(const _double& _dDeltaTime);
 
 private:
-	const _int Trace_CameraLook(const _double& _dDeltaTime);
-	const _int Input(const _double& _dDeltaTime);
+	const _int	Trace_CameraLook(const _double& _dDeltaTime);
+	const _int	Input(const _double& _dDeltaTime);
+	RIM			ColorChange_RimCheck(RIM& rimdesc);
 
 private: /* Components */
 	CStateController* m_pStateController = nullptr;

@@ -28,7 +28,7 @@ protected:
 	virtual HRESULT Set_SpawnPosition(const _float3 vPoint);
 
 public:
-	virtual HRESULT BindConstantBuffer(const wstring & camTag,SCB* bindbuffer = nullptr, RIM* rimbuffer = nullptr);
+	virtual HRESULT BindConstantBuffer(const wstring & camTag,SCB* bindbuffer = nullptr, RIM* rimbuffer = nullptr, MOTIONBLUR* motionbuffer = nullptr);
 	virtual HRESULT	BindLightBuffer();
 
 public:
@@ -89,14 +89,17 @@ protected:
 	ATTACKDESC m_tAttackDesc;
 	const LIGHTDESC* m_lightdesc;
 	
-	//dissovle
+	// dissovle
 	_bool			m_bdissolve = false;
 	_float			m_lifetime = 0.f;
 	CTexture*		m_dissolveTex = nullptr;
 
-	//rimlight
+	// rim light
 	_bool			m_rimcheck = false;
 	_float			m_rimintensity = 30.f;
+
+	// motion blur
+	_bool			m_motionblurcheck = false;
 };
 END
 #endif

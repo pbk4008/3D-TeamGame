@@ -237,7 +237,6 @@ HRESULT CRenderer::Draw_RenderGroup()
 		if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("Target_AlphaBlend")))) return E_FAIL;
 		if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("Target_BlurShadow")))) return E_FAIL;
 		if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("Target_Distortion")))) return E_FAIL;
-		if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("Target_STDistortion")))) return E_FAIL;
 	}
 #endif // _DEBUG
 
@@ -356,21 +355,6 @@ HRESULT CRenderer::DistortionPass()
 	m_RenderGroup[RENDER_DYDISTORTION].clear();
 
 	if (FAILED(m_pTargetMgr->End_MRTNotClear(m_pDeviceContext))) return E_FAIL;
-
-
-	if (FAILED(m_pTargetMgr->Begin_MRT(m_pDeviceContext, TEXT("Target_STDistortion"))))
-		return E_FAIL;
-
-	for (auto& pGameObject : m_RenderGroup[RENDER_STDISTORTION])
-	{
-		if (nullptr != pGameObject)
-			pGameObject->Render();
-
-		Safe_Release(pGameObject);
-	}
-	m_RenderGroup[RENDER_STDISTORTION].clear();
-
-	if (FAILED(m_pTargetMgr->End_MRT(m_pDeviceContext))) return E_FAIL;
 
 	return S_OK;
 }
@@ -500,7 +484,6 @@ HRESULT CRenderer::Render_Final(_bool outline, _bool Radial)
 		if (FAILED(m_pVIBuffer->SetUp_TextureOnShader("g_DepthTexture", m_pTargetMgr->Get_SRV(TEXT("Target_Depth"))))) MSGBOX("Render Final DepthTexture Not Apply");
 	}
 
-	if (FAILED(m_pVIBuffer->SetUp_TextureOnShader("g_STDistortionTex", m_pTargetMgr->Get_SRV(TEXT("Target_STDistortion"))))) MSGBOX("Render Final g_STDistortionTex Not Apply");
 	if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_outline", &m_boutline, sizeof(_bool)))) MSGBOX("Render Final Value outline Not Apply");
 	if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_radial", &m_bradial, sizeof(_bool)))) MSGBOX("Render Final Value raidal Not Apply");
 	if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_distort", &m_bdistortion, sizeof(_bool)))) MSGBOX("Render Final Value distort Not Apply");
