@@ -1769,6 +1769,8 @@ const void CSilvermane::Raycast_DropBox(const _double& _dDeltaTime)
 	XMStoreFloat3(&tRaycastDesc.vDir, svRayDir);
 	tRaycastDesc.fMaxDistance = 1.f;
 	tRaycastDesc.filterData.flags = PxQueryFlag::eANY_HIT | PxQueryFlag::eDYNAMIC;
+	tRaycastDesc.layerMask = (1 << (_uint)ELayer::ItemBox);
+
 	CGameObject* pHitObject = nullptr;
 	tRaycastDesc.ppOutHitObject = &pHitObject;
 	if (g_pGameInstance->Raycast(tRaycastDesc))

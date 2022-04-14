@@ -164,11 +164,12 @@ HRESULT CDropBox::Ready_Components()
 
 	CBoxCollider::DESC tBoxColliderDesc;
 	tBoxColliderDesc.tColliderDesc = tColliderDesc;
-	tBoxColliderDesc.vScale = { 1.f, 1.f, 1.f };
+	tBoxColliderDesc.vScale = { 2.0f, 1.f, 1.f };
 	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_BoxCollider", L"Collider", (CComponent**)&m_pCollider, &tBoxColliderDesc)))
 		return E_FAIL;
 	_matrix smatPivot = XMMatrixTranslation(0.f, tBoxColliderDesc.vScale.y * 0.5f, 0.f);
 	m_pCollider->setPivotMatrix(smatPivot);
+	m_pCollider->setShapeLayer((_uint)ELayer::ItemBox);
 
 	/* for. Animator Com */
 	matPivot = XMMatrixIdentity();

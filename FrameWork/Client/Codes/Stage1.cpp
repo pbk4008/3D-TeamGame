@@ -186,6 +186,7 @@ _int CStage1::Tick(_double TimeDelta)
 				return 0;
 			}
 		}*/
+	}
 	_float3 fPos = { 0.f,5.f,20.f };
 	//if (g_pGameInstance->getkeyDown(DIK_NUMPAD0))
 	//{
