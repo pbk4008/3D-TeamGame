@@ -36,6 +36,7 @@ HRESULT CIndicator_Manager::Add_Indicator(_uint iSceneID, const wstring& pLayerT
 		if (FAILED(g_pGameInstance->Add_GameObjectToLayer(iSceneID, L"Layer_UI_Indicator", L"Proto_GameObject_UI_Indicator", &Desc, (CGameObject**)&pIndicator)))
 			return E_FAIL;
 
+		Safe_AddRef(pIndicator);
 		m_vecIndicator.push_back(pIndicator);
 	}
 	
