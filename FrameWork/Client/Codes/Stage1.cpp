@@ -178,7 +178,6 @@ _int CStage1::Tick(_double TimeDelta)
 		if (m_iCountMonster == 0 && m_bFirst)
 			m_pTriggerSystem->Check_Clear();
 
-
 		CBoss_Bastion_Judicator* pBoss = (CBoss_Bastion_Judicator*)g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Layer_Boss")->front();
 		if (nullptr != pBoss)
 		{
@@ -270,7 +269,7 @@ _int CStage1::Tick(_double TimeDelta)
 	//		m_pCinema = nullptr;
 	//}
 
-	Shoot_Meteor(TimeDelta);
+	//Shoot_Meteor(TimeDelta);
 
 
 	return _int();
@@ -600,11 +599,11 @@ HRESULT CStage1::Ready_Data_Effect()
 	CEffect* pEffect = nullptr;
 	vector<CEffect_HitParticle::EFFECTDESC> vecHitParticle;
 	g_pGameInstance->LoadFile<CEffect_HitParticle::EFFECTDESC>(vecHitParticle, L"../bin/SaveData/Effect/Effect_Player_Attack1.dat");
-	
+
 	wstring FullName = L"Proto_GameObject_Effect_Explosion";
 
 	//마지막에 받을 Effect변수 넣기
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Player_Attack1", FullName, &vecHitParticle[0],(CGameObject**)&pEffect)))
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Player_Attack1", FullName, &vecHitParticle[0], (CGameObject**)&pEffect)))
 	{
 		MSGBOX("Failed to Creating Effect_Player_Attack1 in CStage1::Ready_Effect()");
 		return E_FAIL;
@@ -621,7 +620,7 @@ HRESULT CStage1::Ready_Data_Effect()
 	g_pGameInstance->LoadFile<CEffect_HitFloating::EFFECTDESC>(vecHitFloating, L"../bin/SaveData/Effect/Effect_Player_Attack2_Floating.dat");
 
 	FullName = L"Proto_GameObject_Effect_Floating";
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Player_Attack2_Floating", FullName, &vecHitFloating[0],(CGameObject**)&pEffect)))
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Player_Attack2_Floating", FullName, &vecHitFloating[0], (CGameObject**)&pEffect)))
 	{
 		MSGBOX("Failed to Creating Effect_Player_Attack2_Floating in CStage1::Ready_Effect()");
 		return E_FAIL;
@@ -684,7 +683,7 @@ HRESULT CStage1::Ready_Data_Effect()
 	vector<CEffect_HitParticle::EFFECTDESC> vecHitLeft;
 	g_pGameInstance->LoadFile<CEffect_HitParticle::EFFECTDESC>(vecHitLeft, L"../bin/SaveData/Effect/Effect_Player_Attack_Left.dat");
 
-	FullName = L"Proto_GameObject_Effect_Floating_Speed";
+	FullName = L"Proto_GameObject_Effect_Explosion";
 	//FullName = L"Proto_GameObject_Effect_Attack_Left";
 
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Player_Attack_Left", FullName, &vecHitLeft[0], (CGameObject**)&pEffect)))
@@ -692,7 +691,7 @@ HRESULT CStage1::Ready_Data_Effect()
 		MSGBOX("Failed to Creating Effect_Player_Attack_Left in CStage1::Ready_Effect()");
 		return E_FAIL;
 	}
-	if (FAILED(g_pGameInstance->Add_Effect((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Player_Attack_Left", pEffect, 10)))
+	if (FAILED(g_pGameInstance->Add_Effect((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Player_Attack_Left", pEffect, 5)))
 	{
 		MSGBOX("Falild to Add_Effect_Player_Attack_Left in CStage1::Ready_Effect()");
 		return E_FAIL;
@@ -728,7 +727,7 @@ HRESULT CStage1::Ready_Data_Effect()
 		MSGBOX("Failed to Creating Effect_Hit_Ground in CStage1::Ready_Effect()");
 		return E_FAIL;
 	}
-	if (FAILED(g_pGameInstance->Add_Effect((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Hit_Ground", pEffect, 10)))
+	if (FAILED(g_pGameInstance->Add_Effect((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Hit_Ground", pEffect, 6)))
 	{
 		MSGBOX("Falild to Add_Effect_Hit_Ground in CStage1::Ready_Effect()");
 		return E_FAIL;
@@ -736,20 +735,61 @@ HRESULT CStage1::Ready_Data_Effect()
 
 
 	//OpenBox
-	vector<CEffect_Floating_Speed::EFFECTDESC> vecOpenBox;
-	g_pGameInstance->LoadFile<CEffect_Floating_Speed::EFFECTDESC>(vecOpenBox, L"../bin/SaveData/Effect/Effect_Open_Box.dat");
+	vector<CEffect_Floating_Speed::FLOATINGSPEEDDESC> vecOpenBox;
+	g_pGameInstance->LoadFile<CEffect_Floating_Speed::FLOATINGSPEEDDESC>(vecOpenBox, L"../bin/SaveData/Effect/Effect_Open_Box.dat");
 
 	FullName = L"Proto_GameObject_Effect_Floating_Speed";
 	//FullName = L"Proto_GameObject_Effect_Attack_Left";
+	vecOpenBox[0].ParticleColor = { 0.3f,0.5f,1.f, 1.f };
+	vecOpenBox[0].Power = 2.5f;
 
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Open_Box", FullName, &vecOpenBox[0], (CGameObject**)&pEffect)))
 	{
 		MSGBOX("Failed to Creating Effect_Open_Box in CStage1::Ready_Effect()");
 		return E_FAIL;
 	}
-	if (FAILED(g_pGameInstance->Add_Effect((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Open_Box", pEffect, 10)))
+	if (FAILED(g_pGameInstance->Add_Effect((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Open_Box", pEffect, 3)))
 	{
 		MSGBOX("Falild to Add_Effect_Open_Box in CStage1::Ready_Effect()");
+		return E_FAIL;
+	}
+
+	//PlayerAttackGround
+	vector<CEffect_Floating_Speed::FLOATINGSPEEDDESC> vecAttackGround;
+	g_pGameInstance->LoadFile<CEffect_Floating_Speed::FLOATINGSPEEDDESC>(vecAttackGround, L"../bin/SaveData/Effect/Effect_Player_Attack_Ground.dat");
+
+	FullName = L"Proto_GameObject_Effect_Floating_Speed";
+	//FullName = L"Proto_GameObject_Effect_Attack_Left";
+	vecAttackGround[0].ParticleColor = { 1.f,0.3f,0.3f, 1.f };
+	vecAttackGround[0].Power = 1.5f;
+
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Player_Attack_Ground", FullName, &vecAttackGround[0], (CGameObject**)&pEffect)))
+	{
+		MSGBOX("Failed to Creating Effect_Player_Attack_Ground in CStage1::Ready_Effect()");
+		return E_FAIL;
+	}
+	if (FAILED(g_pGameInstance->Add_Effect((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Player_Attack_Ground", pEffect, 5)))
+	{
+		MSGBOX("Falild to Add_Effect_Player_Attack_Ground in CStage1::Ready_Effect()");
+		return E_FAIL;
+	}
+
+	//PlayerAttackGround_2
+	g_pGameInstance->LoadFile<CEffect_Floating_Speed::FLOATINGSPEEDDESC>(vecAttackGround, L"../bin/SaveData/Effect/Effect_Player_Attack_Ground_2.dat");
+
+	FullName = L"Proto_GameObject_Effect_Floating_Speed";
+	//FullName = L"Proto_GameObject_Effect_Attack_Left";
+	vecAttackGround[0].ParticleColor = { 1.f,0.3f,0.3f, 1.f };
+	vecAttackGround[0].Power = 1.5f;
+
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Player_Attack_Ground2", FullName, &vecAttackGround[0], (CGameObject**)&pEffect)))
+	{
+		MSGBOX("Failed to Creating Effect_Player_Attack_Ground2 in CStage1::Ready_Effect()");
+		return E_FAIL;
+	}
+	if (FAILED(g_pGameInstance->Add_Effect((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Player_Attack_Ground2", pEffect, 5)))
+	{
+		MSGBOX("Falild to Add_Effect_Player_Attack_Ground2 in CStage1::Ready_Effect()");
 		return E_FAIL;
 	}
 #pragma endregion

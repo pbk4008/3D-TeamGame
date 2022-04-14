@@ -15,7 +15,7 @@ public:
 	typedef struct tagEffFloatingSpeedDesc : CEffect::EFFECTDESC
 	{
 		_float4 ParticleColor;
-		
+		_float	Power;
 	}FLOATINGSPEEDDESC;
 	
 protected:
