@@ -29,6 +29,7 @@
 #include "JumpNode.h"
 #include "JumpBox.h"
 
+#include "Meteor.h"
 #include <Monster_Crawler.h>
 #include <Monster_EarthAberrant.h>
 #include <Monster_Bastion_Healer.h>
@@ -41,6 +42,7 @@
 #include "InteractManager.h"
 #include "DropManager.h"
 #include "ScenematicManager.h"
+
 #include "Indicator_Manager.h"
 #include "WeaponGenerator.h"
 
@@ -50,16 +52,14 @@
 #include "Cinema1_1.h"
 
 
-CDropManager* g_pDropManager = nullptr;
-CInteractManager* g_pInteractManager = nullptr;
-CWeaponGenerator* g_pWeaponGenerator = nullptr;
-
 CStage1::CStage1()
 	: m_pTriggerSystem(nullptr)
 	, m_bDebug(false)
 	, m_iCountMonster(0)
 	, m_bFirst(false)
 	, m_pScenemaManager(nullptr)
+	, m_fAccMeteorSpawn(0.f)
+	, m_fRandomMeteorSpawnTime(0.f)
 {
 }
 
@@ -70,6 +70,8 @@ CStage1::CStage1(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
 	, m_iCountMonster(0)
 	, m_bFirst(false)
 	, m_pScenemaManager(nullptr)
+	, m_fAccMeteorSpawn(0.f)
+	, m_fRandomMeteorSpawnTime(0.f)
 {
 }
 
@@ -88,10 +90,9 @@ HRESULT CStage1::NativeConstruct()
 	if (FAILED(Ready_Light()))
 		return E_FAIL;
 
-	//if (FAILED(Ready_Trigger_Jump()))
-	//	return E_FAIL;
+	if (FAILED(Ready_Trigger_Jump()))
+		return E_FAIL;
 
-	/* 생성 타이밍으로 인해 여기에 둠 YM */
 	g_pWeaponGenerator = CWeaponGenerator::GetInstance();
 
 	if (FAILED(Ready_Player(L"Layer_Silvermane")))
@@ -100,8 +101,8 @@ HRESULT CStage1::NativeConstruct()
 	if (FAILED(Ready_MapObject()))
 		return E_FAIL;
 
-	//if (FAILED(Ready_TriggerSystem(L"../bin/SaveData/Trigger/MonsterSpawnTrigger.dat")))
-	//	return E_FAIL;
+	if (FAILED(Ready_TriggerSystem(L"../bin/SaveData/Trigger/MonsterSpawnTrigger.dat")))
+		return E_FAIL;
 
 	if (FAILED(Ready_Data_UI(L"../bin/SaveData/UI/UI.dat")))
 		return E_FAIL;
@@ -119,11 +120,13 @@ HRESULT CStage1::NativeConstruct()
 		return E_FAIL;
 
 	g_pGameInstance->Change_BaseCamera(L"Camera_Silvermane");
-
 	g_pGameInstance->PlayBGM(L"Stage1_BGM");
 
-	//if (FAILED(Ready_Cinema()))
-	//	return E_FAIL;
+	if (FAILED(Ready_Meteor()))
+		return E_FAIL;
+
+	if (FAILED(Ready_Cinema()))
+		return E_FAIL;
 
 	//if (FAILED(Ready_Boss(L"Layer_Boss")))
 	//	return E_FAIL;
@@ -175,30 +178,27 @@ _int CStage1::Tick(_double TimeDelta)
 		if (m_iCountMonster == 0 && m_bFirst)
 			m_pTriggerSystem->Check_Clear();
 
-		//CBoss_Bastion_Judicator* pBoss = (CBoss_Bastion_Judicator*)g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Layer_Boss")->front();
-		//if (nullptr != pBoss)
-		//{
-		//	if (true == pBoss->Get_Dead())
-		//	{
-		//		if (FAILED(g_pGameInstance->Open_Level((_uint)SCENEID::SCENE_LOADING, CLoading::Create(m_pDevice, m_pDeviceContext, SCENEID::SCENE_STAGE2))))
-		//			return -1;
-		//		return 0;
-		//	}
-		//}
-
-		
+		CBoss_Bastion_Judicator* pBoss = (CBoss_Bastion_Judicator*)g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Layer_Boss")->front();
+		if (nullptr != pBoss)
+		{
+			if (true == pBoss->Get_Dead())
+			{
+				if (FAILED(g_pGameInstance->Open_Level((_uint)SCENEID::SCENE_LOADING, CLoading::Create(m_pDevice, m_pDeviceContext, SCENEID::SCENE_STAGE2))))
+					return -1;
+				return 0;
+			}
+		}
 	}
 
 #pragma region Using Debug
 	_float3 fPos = { 0.f,5.f,20.f };
+	//if (g_pGameInstance->getkeyDown(DIK_NUMPAD0))
+	//{
+	//	CMonster_EarthAberrant* pMonster = nullptr;
+	//	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Test", L"Proto_GameObject_Boss_Bastion", &fPos, (CGameObject**)&pMonster)))
+	//		return -1;
+	//}
 	
-	if (g_pGameInstance->getkeyDown(DIK_NUMPAD0))
-	{
-		CBoss_Bastion_Judicator* pMonster = nullptr;
-		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Test", L"Proto_GameObject_Boss_Bastion", &fPos, (CGameObject**)&pMonster)))
-			return -1;
-	}
-	 
 	//if (g_pGameInstance->getkeyDown(DIK_NUMPAD0))
 	//{
 	//	CMonster_Crawler* pMonster = nullptr;
@@ -224,12 +224,12 @@ _int CStage1::Tick(_double TimeDelta)
 	//	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Test", L"Proto_GameObject_Monster_Bastion_Shooter", &fPos, (CGameObject**)&pMonster)))
 	//		return -1;
 	//}
-	//if (g_pGameInstance->getkeyDown(DIK_NUMPAD4))
-	//{
-	//	CMonster_Bastion_Healer* pMonster = nullptr;
-	//	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Test", L"Proto_GameObject_Monster_Bastion_Healer", &fPos, (CGameObject**)&pMonster)))
-	//		return -1;
-	//}
+	if (g_pGameInstance->getkeyDown(DIK_NUMPAD4))
+	{
+		CMonster_Bastion_Healer* pMonster = nullptr;
+		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Test", L"Proto_GameObject_Monster_Bastion_Healer", &fPos, (CGameObject**)&pMonster)))
+			return -1;
+	}
 	//if (g_pGameInstance->getkeyDown(DIK_NUMPAD5))
 	//{
 	//	CMonster_Bastion_2HSword* pMonster = nullptr;
@@ -255,7 +255,6 @@ _int CStage1::Tick(_double TimeDelta)
 	//		return -1;
 	//}
 #pragma endregion
-
 	g_pInteractManager->Tick(TimeDelta);
 	g_pDropManager->Tick();
 	m_pIndicatorManager->Active_Indicator();
@@ -270,11 +269,16 @@ _int CStage1::Tick(_double TimeDelta)
 	//		m_pCinema = nullptr;
 	//}
 
+	Shoot_Meteor(TimeDelta);
+
+
 	return _int();
 }
 
 HRESULT CStage1::Render()
 {
+
+
 #ifdef _DEBUG
 	if (nullptr != m_pTriggerSystem)
 	{
@@ -452,7 +456,7 @@ HRESULT CStage1::Ready_UI(const _tchar* LayerTag)
 	Desc.fSize = { 200.f , 30.f };
 	Desc.IDTag = (_uint)GAMEOBJECT::UI_DYNAMIC;
 
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_UI_Green", L"Proto_GameObject_UI_Player_HpBar", &Desc)))
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_UI_Green", L"Proto_GameObject_UI_Player_HpBar", &Desc)))
 		return E_FAIL;
 
 	//Player HpBar Red
@@ -464,7 +468,7 @@ HRESULT CStage1::Ready_UI(const _tchar* LayerTag)
 	Desc.fSize = { 200.f , 30.f };
 	Desc.IDTag = (_uint)GAMEOBJECT::UI_DYNAMIC;
 
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, LayerTag, L"Proto_GameObject_UI_Player_HpBar_Red", &Desc)))
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Proto_GameObject_UI_Player_HpBar_Red", &Desc)))
 		return E_FAIL;
 
 
@@ -478,7 +482,7 @@ HRESULT CStage1::Ready_UI(const _tchar* LayerTag)
 	Desc1.UIDesc.fSize = { 333.f , 105.f };
 	Desc1.UIDesc.IDTag = (_uint)GAMEOBJECT::UI_STATIC;
 
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, LayerTag, L"Proto_GameObject_UI_Tuto_Base", &Desc1)))
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Proto_GameObject_UI_Tuto_Base", &Desc1)))
 		return E_FAIL;
 	
 	//Tuto Font
@@ -492,7 +496,7 @@ HRESULT CStage1::Ready_UI(const _tchar* LayerTag)
 	Desc2.UIDesc.IDTag = (_uint)GAMEOBJECT::UI_STATIC;
 	Desc2.iTextureNum = 0;
 	
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, LayerTag, L"Proto_GameObject_UI_Tuto_Font", &Desc2)))
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Proto_GameObject_UI_Tuto_Font", &Desc2)))
 		return E_FAIL;
 
 	//Blank_Ckey
@@ -550,7 +554,7 @@ HRESULT CStage1::Ready_Light()
 
 	if (FAILED(g_pGameInstance->Add_Light(m_pDevice, m_pDeviceContext, LightDesc))) MSGBOX("Failed To Adding PointLight");
 
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_SkyBox", L"Proto_GameObject_SkyBox")))
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_SkyBox", L"Proto_GameObject_SkyBox")))
 		return E_FAIL;
 
 	return S_OK;
@@ -558,10 +562,6 @@ HRESULT CStage1::Ready_Light()
 
 HRESULT CStage1::Ready_GameManager(void)
 {
-	g_pInteractManager = CInteractManager::GetInstance();
-	if (FAILED(g_pInteractManager->NativeConstruct()))
-		return E_FAIL;
-
 	g_pDropManager = CDropManager::GetInstance();
 	if (FAILED(g_pDropManager->NativeConstruct((SCENEID::SCENE_STAGE1))))
 		return E_FAIL;
@@ -851,7 +851,7 @@ HRESULT CStage1::Ready_Data_Effect()
 	FullName = L"Proto_GameObject_Effect_Env_Floating";
 
 	vecEnvFloating[0].fMyPos = { -5.f, 1.f, 20.f };
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Env_Floating_1", FullName, &vecEnvFloating[0])))
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Effect_Env_Floating_1", FullName, &vecEnvFloating[0])))
 	{
 		MSGBOX("Failed to Creating Effect_Env_Floating_1 in CStage1::Ready_Effect()");
 		return E_FAIL;
@@ -862,7 +862,7 @@ HRESULT CStage1::Ready_Data_Effect()
 	g_pGameInstance->LoadFile<CEffect_Falling_Leaf::EFFECTDESC>(vecEnvFallingLeaf, L"../bin/SaveData/Effect/Effect_Falling_Leaf.dat");
 
 	FullName = L"Proto_GameObject_Effect_Falling_Leaf";
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Env_Falling_Leaf", FullName, &vecEnvFallingLeaf[0])))
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Effect_Env_Falling_Leaf", FullName, &vecEnvFallingLeaf[0])))
 	{
 		MSGBOX("Failed to Creating Effect_Env_FallingLeaf in CStage1::Ready_Effect()");
 		return E_FAIL;
@@ -1753,6 +1753,96 @@ HRESULT CStage1::Ready_Treasure_Chest()
 	return S_OK;
 }
 
+HRESULT CStage1::Ready_Meteor()
+{
+	//if (g_pGameInstance->getkeyPress(DIK_NUMPAD0))
+	//{
+	//	_float4 vPos = _float4(-100.f, -20.f, 90.f, 1.f);
+	//	g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Test", L"Proto_GameObject_Weapon_Meteor", &vPos);
+	//}
+	for (_uint i = 0; i < 6; i++)
+	{
+		CMeteor* pObj = nullptr;
+		g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Meteor", L"Proto_GameObject_Weapon_Meteor", nullptr,(CGameObject**)&pObj);
+		pObj->setActive(false);
+		Safe_AddRef(pObj);
+		m_vecMeteor.emplace_back(pObj);
+	}
+	m_vecMeteorPos.resize(5);
+	m_vecMeteorPos[0] = _float4(-90.f, -20.f, 96.f, 1.f);
+	m_vecMeteorPos[1] = _float4(10.f, -20.f, 145.f, 1.f);
+	m_vecMeteorPos[2] = _float4(-100.f, -20.f, 190.f, 1.f);
+	m_vecMeteorPos[3] = _float4(-200.f, -20.f, 320.f, 1.f);
+	m_vecMeteorPos[4] = _float4(-150.f, -20.f, 380.f, 1.f);
+
+	m_fRandomMeteorSpawnTime = MathUtils::ReliableRandom((_double)10.f,(_double)25.f);
+
+	return S_OK;
+}
+
+void CStage1::Shoot_Meteor(_double dDeltaTime)
+{
+	_bool bCheck = false;
+	if (m_vecMeteor.empty())
+		return;
+	for (auto& pMeteor : m_vecMeteor)
+	{
+		if (pMeteor->getActive())
+		{
+			bCheck = true;
+			return;
+		}
+	}
+	m_fAccMeteorSpawn += (_float)dDeltaTime;
+	if (m_fAccMeteorSpawn >= m_fRandomMeteorSpawnTime)
+	{
+		m_fAccMeteorSpawn = 0.f;
+		m_fRandomMeteorSpawnTime = MathUtils::ReliableRandom(10.f, 25.f);
+		
+		_vector vSelectPos = XMVectorZero();
+		for (auto& pPos : m_vecMeteorPos)
+		{
+			_vector vPos = XMLoadFloat4(&pPos);
+			_float fDist=g_pObserver->Get_Dist(vPos);
+			if (fDist > 80 && fDist < 150)
+			{
+				vSelectPos = vPos;
+				break;
+			}
+		}
+		if (XMVector3Equal(vSelectPos, XMVectorZero()))
+			return;
+
+		_uint iRandomShot = MathUtils::ReliableRandom(1, 5);
+		for (_uint i = 0; i < iRandomShot; i++)
+		{
+			_vector vPivot;
+			_vector vMin = XMVectorSet(-20.f, 0.f, -20.f, 1.f);
+			_vector vMax = XMVectorSet(20.f, 0.f, 20.f, 1.f);
+			MathUtils::GetRandomVector(&vPivot, &vMin, &vMax);
+
+			vSelectPos += vPivot;
+			CMeteor* pMeteor = Find_Meteor();
+			if (!pMeteor)
+				MSGBOX("Meteor Null!!");
+			pMeteor->setActive(true);
+			pMeteor->Move(vSelectPos);
+		}
+	}
+
+}
+
+CMeteor* CStage1::Find_Meteor()
+{
+	for (auto& pObj : m_vecMeteor)
+	{
+		if (!pObj->getActive())
+			return pObj;
+	}
+
+	return nullptr;
+}
+
 
 
 CStage1* CStage1::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
@@ -1770,13 +1860,21 @@ void CStage1::Free()
 {
 	CLevel::Free();
 
+	//Safe_Release(m_pScenemaManager);
+	//CScenematicManager::DestroyInstance();
+	g_pInteractManager->Remove_Interactable();
+	CWeaponGenerator::DestroyInstance();
+
 	Safe_Release(m_pScenemaManager);
 	Safe_Release(m_pIndicatorManager);
 	CScenematicManager::DestroyInstance();
 	CIndicator_Manager::DestroyInstance();
 
 	CDropManager::DestroyInstance();
-	CInteractManager::DestroyInstance();
 	Safe_Release(m_pTriggerSystem);
+
+	for (auto& pObj : m_vecMeteor)
+		Safe_Release(pObj);
+	m_vecMeteor.clear();
 
 }

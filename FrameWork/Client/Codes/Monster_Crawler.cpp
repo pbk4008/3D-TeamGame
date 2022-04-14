@@ -91,6 +91,7 @@ HRESULT CMonster_Crawler::NativeConstruct(const _uint _iSceneID, void* _pArg)
 			MSGBOX("Failed To Adding PointLight");
 	}
 
+	Safe_AddRef(m_pLight);
 	m_pLight->Set_Show(false);
 	m_fLightRange = LightDesc.fRange;
 

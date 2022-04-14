@@ -17,6 +17,8 @@ using namespace Client;
 #include "DataManager.h"
 #include "Inven_UIManager.h"
 #include "WeaponGenerator.h"
+#include "DropManager.h"
+#include "InteractManager.h"
 #include "MainApp.h"
 #include "Clinet_Define.h"
 #include "WeaponData.h"

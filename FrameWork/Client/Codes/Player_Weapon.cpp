@@ -219,6 +219,7 @@ HRESULT CPlayer_Weapon::Ready_Components()
 			return E_FAIL;
 		_matrix smatPivot = XMMatrixTranslation(0.f, 0.f, 0.4f);
 		m_pBoxCollider->setPivotMatrix(smatPivot);
+		m_pBoxCollider->setShapeLayer((_uint)ELayer::Weapon);
 	}
 	else
 	{
@@ -231,6 +232,7 @@ HRESULT CPlayer_Weapon::Ready_Components()
 
 		_matrix smatPviot = XMMatrixRotationY(XMConvertToRadians(90.f)) * XMMatrixTranslation(0.f, 0.f, 0.8f);
 		m_pCapsuleCollider->setPivotMatrix(smatPviot);
+		m_pCapsuleCollider->setShapeLayer((_uint)ELayer::Weapon);
 	}
 
 

@@ -11,6 +11,8 @@ CPotal::CPotal()
 	, m_bSpawn(false)
 	, m_fRandSpawnTime(0.f)
 	, m_fAccSpawnTime(0.f)
+	, m_bOpenCheck(false)
+	, m_fAccTime(0.f)
 {
 }
 
@@ -24,6 +26,8 @@ CPotal::CPotal(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
 	, m_bSpawn(false)
 	, m_fRandSpawnTime(0.f)
 	, m_fAccSpawnTime(0.f)
+	, m_bOpenCheck(false)
+	, m_fAccTime(0.f)
 {
 }
 
@@ -37,6 +41,8 @@ CPotal::CPotal(const CPotal& rhs)
 	, m_bSpawn(false)
 	, m_fRandSpawnTime(0.f)
 	, m_fAccSpawnTime(0.f)
+	, m_bOpenCheck(false)
+	, m_fAccTime(0.f)
 {
 	Safe_AddRef(m_pRect);
 	Safe_AddRef(m_pDiffuseTexture);
@@ -65,9 +71,9 @@ HRESULT CPotal::NativeConstruct(const _uint _iSceneID, void* _pArg)
 		return E_FAIL;
 	}
 
-	m_pTransform->Set_State(CTransform::STATE_RIGHT, XMVectorZero());
-	m_pTransform->Set_State(CTransform::STATE_UP, XMVectorZero());
-	m_pTransform->Set_State(CTransform::STATE_LOOK, XMVectorZero());
+	//m_pTransform->Set_State(CTransform::STATE_RIGHT, XMVectorZero());
+	//m_pTransform->Set_State(CTransform::STATE_UP, XMVectorZero());
+	//m_pTransform->Set_State(CTransform::STATE_LOOK, XMVectorZero());
 
 	//m_pTransform->Scaling(XMVectorSet(100.f, 100.f, 100.f, 0.f));
 	_vector vPos = (*(_vector*)_pArg);
@@ -137,6 +143,11 @@ HRESULT CPotal::Render()
 		return E_FAIL;
 	if (FAILED(m_pRect->SetUp_ValueOnShader("g_ProjMatrix", &smatProj, sizeof(_matrix))))
 		return E_FAIL;
+
+	if (FAILED(m_pRect->SetUp_ValueOnShader("g_bOpenCheck", &m_bOpenCheck, sizeof(_bool))))
+		return E_FAIL;
+	if (FAILED(m_pRect->SetUp_ValueOnShader("g_fAccTime", &m_fAccTime, sizeof(_float))))
+		return E_FAIL;
 	
 	if (FAILED(m_pRect->SetUp_TextureOnShader("g_DiffuseTexture", m_pDiffuseTexture->Get_ShaderResourceView())))
 		return E_FAIL;
@@ -173,6 +184,10 @@ _uint CPotal::Scaling(_double dDeltaTime)
 	if (!m_pTransform)
 		return -1;
 
+	/*if (!m_bCreate && !m_bOpenCheck)
+		m_fAccTime += dDeltaTime;*/
+
+
 	_float fSize = m_pTransform->Get_Scale(CTransform::STATE_RIGHT);
 
 	if (!m_bCreate)
@@ -198,20 +213,29 @@ _uint CPotal::Create_Meteor(_double dDeltaTime)
 {
 	if (!m_bCreate)
 	{
-		_float fSize = m_pTransform->Get_Scale(CTransform::STATE_RIGHT);
-		if (fSize >= 6.f)
+		//_float fSize = m_pTransform->Get_Scale(CTransform::STATE_RIGHT);
+		//if (fSize >= 6.f)
+		//{
+		//	_vector vPos = m_pTransform->Get_State(CTransform::STATE_POSITION);
+		//	if (FAILED(g_pGameInstance->Add_GameObjectToLayer(m_iSceneID, L"Layer_Meteor", L"Proto_GameObject_Weapon_Meteor", &vPos)))
+		//		MSGBOX("Create_Meteor Fail");
+		//	m_bCreate = true;
+		//}
+		/*if (m_fAccTime > 1.f)
 		{
 			_vector vPos = m_pTransform->Get_State(CTransform::STATE_POSITION);
-			if (FAILED(g_pGameInstance->Add_GameObjectToLayer(m_iSceneID, L"Layer_Meteor", L"Proto_GameObject_Weapon_Meteor",&vPos)))
+			if (FAILED(g_pGameInstance->Add_GameObjectToLayer(m_iSceneID, L"Layer_Meteor", L"Proto_GameObject_Weapon_Meteor", &vPos)))
 				MSGBOX("Create_Meteor Fail");
 			m_bCreate = true;
-		}
+		}*/
+			
 	}
 	else
 	{
 		m_fAccRetain += (_float)dDeltaTime;
 		if (m_fAccRetain > 1.f)
 		{
+			m_fAccTime = 0.f;
 			m_fAccRetain = 0.f;
 			m_bRetain = true;
 		}
@@ -232,6 +256,10 @@ _uint CPotal::Remove_Portal(_double dDeltaTime)
 			m_pTransform->Set_State(CTransform::STATE_LOOK, XMVectorZero());
 			m_bRemove = true;
 		}
+		/*	m_bOpenCheck = true;
+			m_fAccTime += dDeltaTime;
+			if (m_fAccTime > 1.f)
+				m_bRemove = true;*/
 	}
 	return _uint();
 }
