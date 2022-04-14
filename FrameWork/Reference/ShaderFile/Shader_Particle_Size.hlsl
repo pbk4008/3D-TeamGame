@@ -42,7 +42,6 @@ VS_OUT VS_MAIN(VS_IN In)
 	Out.vPosition = mul(vPosition, g_WorldMatrix);
     Out.vPSize.x = In.vPSize.x * In.TransformMatrix._11;
     Out.vPSize.y = In.vPSize.y * In.TransformMatrix._22;
-    //Out.vPSize = In.vPSize;
     Out.vTime.x = In.vTime.x;
 	return Out;
 }

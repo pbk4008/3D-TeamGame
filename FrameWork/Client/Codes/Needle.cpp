@@ -68,7 +68,7 @@ HRESULT CNeedle::NativeConstruct(const _uint _iSceneID, void* _pArg)
 	LightDesc.fRange = 7.f;
 	LightDesc.vDiffuse = _float4(1.f, 0.7f, 0.5f, 1.f);
 	LightDesc.vSpecular = _float4(0.8f, 0.8f, 0.8f, 1.f);
-	LightDesc.vAmbient = _float4(0.6f, 0.6f, 0.6f, 1.f);
+	LightDesc.vAmbient = _float4(1.f, 1.f, 1.f, 1.f);
 	XMStoreFloat3(&LightDesc.vPosition,m_pTransform->Get_State(CTransform::STATE_POSITION));
 
 	if (nullptr == m_pLight)
@@ -105,7 +105,7 @@ _int CNeedle::Tick(_double _dDeltaTime)
 
 	if (m_bLight && 0.f <= m_fLightRange)
 	{
-		m_fLightRange -= (_float)_dDeltaTime * 10.f;
+		m_fLightRange -= (_float)_dDeltaTime * 20.f;
 		m_pLight->Set_Range(m_fLightRange);
 	}
 
@@ -234,6 +234,7 @@ void CNeedle::OnTriggerEnter(CCollision& collision)
 			m_pLight->Set_Pos(static_cast<CActor*>(collision.pGameObject)->Get_Transform()->Get_State(CTransform::STATE_POSITION));
 			m_pLight->Set_Show(true);
 			_vector vColor = { 1.f, 0.7f, 0.5f, 1.f };
+
 			m_pLight->Set_Color(vColor);
 			m_fLightRange = 4.f;
 			m_pLight->Set_Range(m_fLightRange);
@@ -389,5 +390,6 @@ void CNeedle::Free()
 {
 	CWeapon::Free();
 
+	Safe_Release(m_pLight);
 	Safe_Release(m_pCollider);
 }

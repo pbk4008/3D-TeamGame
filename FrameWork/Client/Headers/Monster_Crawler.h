@@ -5,6 +5,7 @@
 BEGIN(Engine)
 class CCapsuleCollider;
 class CAnimator;
+class CLight;
 END
 
 BEGIN(Client)
@@ -67,6 +68,11 @@ public:
 private:
 	_bool	m_bIsFall = false;
 	_bool m_bFirstHit = false; //맨처음들어와서 맞았을때 판넬크기바꿔줘야돼서
+
+	//죽을때 빛 비춰주려고
+	CLight* m_pLight = nullptr;
+	_bool m_bLight = false;
+	_float m_fLightRange = 0.f;
 
 public:
 	static CMonster_Crawler* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext);

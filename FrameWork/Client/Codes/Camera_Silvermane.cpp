@@ -47,6 +47,9 @@ HRESULT CCamera_Silvermane::NativeConstruct(const _uint _iSceneID, void* _pArg)
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer(m_iSceneID, L"Layer_Camera", L"Proto_GameObject_Camera_Culling", this)))
 		return E_FAIL;
 
+	g_pGameInstance->Change_BaseCamera(L"Camera_Silvermane");
+	m_pRenderer->SetCameraTag(g_pGameInstance->Get_BaseCameraTag());
+
 	return S_OK;
 }
 
@@ -309,6 +312,7 @@ void CCamera_Silvermane::OnOffMonsterUI()
 		case (_uint)GAMEOBJECT::MONSTER_HEALER:
 		case (_uint)GAMEOBJECT::MONSTER_SHOOTER:
 		case (_uint)GAMEOBJECT::MONSTER_SPEAR:
+		case (_uint)GAMEOBJECT::MONSTER_ANIMUS:
 			if (nullptr != pHitObject)
 			{
 				m_pTargetMonster = pHitObject;

@@ -38,6 +38,7 @@
 #include "Effect_DashDust.h"
 #include "Effect_HitParticle.h"
 #include "Effect_HitFloating.h"
+#include "Effect_Floating_Speed.h"
 #include "Effect_DeathParticle.h"
 #include "Effect_Env_Floating.h"
 #include "Effect_Env_Fire.h"
@@ -59,6 +60,8 @@
 #include "UI_Tuto_Font.h"
 #include "UI_Blank_CKey.h"
 #include "UI_Fill_CKey.h"
+#include "UI_Indicator.h"
+
 //Cinema
 #include "CinemaCam.h"
 
@@ -186,8 +189,8 @@ HRESULT CLoader::SetUp_Stage1_Object()
 	if (FAILED(Load_Stage1_TreasureChest_Load()))
 		return E_FAIL;
 
-	if(FAILED(Load_Stage1_Cinema_Object()))
-		return E_FAIL;
+	//if(FAILED(Load_Stage1_Cinema_Object()))
+	//	return E_FAIL;
 
 	return S_OK;
 }
@@ -503,12 +506,21 @@ HRESULT CLoader::Load_Stage1UILoad()
 		return E_FAIL;
 	}
 
+	//Indicator
+	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_UI_Indicator"), CUI_Indicator::Create(m_pDevice, m_pDeviceContext))))
+	{
+		return E_FAIL;
+	}
+	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"Texture_Indicator", L"../bin/Resources/Texture/UI/Static/Active/T_HUD_CompassMarker_OuterPointer.dds")))
+	{
+		return E_FAIL;
+	}
 	return S_OK;
 }
 
 HRESULT CLoader::Load_Stage1EffectLoad()
 {
-	//Effect
+	//Effect buffer
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_Rect_Effect", CVIBuffer_Rect::Create(m_pDevice, m_pDeviceContext, L"../../Reference/ShaderFile/Shader_Effect_Fire.hlsl"))))
 		return E_FAIL;
 
@@ -520,6 +532,10 @@ HRESULT CLoader::Load_Stage1EffectLoad()
 		CVIBuffer_PointInstance_Floating::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_VIBuffer_PointInstance_Floating_Speed",
+		CVIBuffer_PointInstance_Floating_Speed::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_VIBuffer_PointInstance_Env_Floating",
 		CVIBuffer_PointInstance_Env_Floating::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
@@ -528,6 +544,8 @@ HRESULT CLoader::Load_Stage1EffectLoad()
 		CVIBuffer_PointInstance_Respawn::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 
+
+	//object
 	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_Effect_DashDust"), CEffect_DashDust::Create(m_pDevice, m_pDeviceContext))))
 	{
 		return E_FAIL;
@@ -538,22 +556,27 @@ HRESULT CLoader::Load_Stage1EffectLoad()
 		return E_FAIL;
 	}
 
-	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_Effect_Attack_Left"), CEffect_HitParticle::Create(m_pDevice, m_pDeviceContext))))
-	{
-		return E_FAIL;
-	}
+	//if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_Effect_Attack_Left"), CEffect_HitParticle::Create(m_pDevice, m_pDeviceContext))))
+	//{
+	//	return E_FAIL;
+	//}
 
-	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_Effect_Attack_Right"), CEffect_HitParticle::Create(m_pDevice, m_pDeviceContext))))
-	{
-		return E_FAIL;
-	}
+	//if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_Effect_Attack_Right"), CEffect_HitParticle::Create(m_pDevice, m_pDeviceContext))))
+	//{
+	//	return E_FAIL;
+	//}
 
-	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_Effect_Hit_Ground"), CEffect_HitParticle::Create(m_pDevice, m_pDeviceContext))))
-	{
-		return E_FAIL;
-	}
+	//if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_Effect_Hit_Ground"), CEffect_HitParticle::Create(m_pDevice, m_pDeviceContext))))
+	//{
+	//	return E_FAIL;
+	//}
 
 	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_Effect_Floating"), CEffect_HitFloating::Create(m_pDevice, m_pDeviceContext))))
+	{
+		return E_FAIL;
+	}
+
+	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_Effect_Floating_Speed"), CEffect_Floating_Speed::Create(m_pDevice, m_pDeviceContext))))
 	{
 		return E_FAIL;
 	}
@@ -584,15 +607,15 @@ HRESULT CLoader::Load_Stage1EffectLoad()
 		return E_FAIL;
 	}
 	
-	/*if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_Effect_Hammer_Dust"), CEffect_Hammer_Dust::Create(m_pDevice, m_pDeviceContext))))
-	{
-		return E_FAIL;
-	}*/
+	//if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_Effect_Hammer_Dust"), CEffect_Hammer_Dust::Create(m_pDevice, m_pDeviceContext))))
+	//{
+	//	return E_FAIL;
+	//}
 
-	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_Effect_Monster_Dead_Spray"), CEffect_Dead_Spray::Create(m_pDevice, m_pDeviceContext))))
-	{
-		return E_FAIL;
-	}
+	//if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_Effect_Monster_Dead_Spray"), CEffect_Dead_Spray::Create(m_pDevice, m_pDeviceContext))))
+	//{
+	//	return E_FAIL;
+	//}
 
 	//Effect Folder Image Load
 	_finddata_t fd;
@@ -978,58 +1001,58 @@ HRESULT CLoader::Load_Stage1MonsterLoad()
 	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Weapon_Stargazer", CStargazer::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 
-	//Monster Bastion_Shooter
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Monster_Bastion_Shooter", CModel::Create(m_pDevice, m_pDeviceContext,
-		L"../bin/FBX/Monster/Bastion_Shooter.fbx", CModel::TYPE_ANIM, true))))
-		return E_FAIL;
+	////Monster Bastion_Shooter
+	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Monster_Bastion_Shooter", CModel::Create(m_pDevice, m_pDeviceContext,
+	//	L"../bin/FBX/Monster/Bastion_Shooter.fbx", CModel::TYPE_ANIM, true))))
+	//	return E_FAIL;
 
-	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Monster_Bastion_Shooter", CMonster_Bastion_Shooter::Create(m_pDevice, m_pDeviceContext))))
-		return E_FAIL;
+	//if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Monster_Bastion_Shooter", CMonster_Bastion_Shooter::Create(m_pDevice, m_pDeviceContext))))
+	//	return E_FAIL;
 
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Shooter_Bullet", CModel::Create(m_pDevice, m_pDeviceContext,
-		"../bin/Resources/Mesh/Bullet/", "Sphere.fbx",
-			L"../../Reference/ShaderFile/Shader_Weapon.hlsl", matPivot, CModel::TYPE_STATIC, true))))
-		return E_FAIL;
+	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Shooter_Bullet", CModel::Create(m_pDevice, m_pDeviceContext,
+	//	"../bin/Resources/Mesh/Bullet/", "Sphere.fbx",
+	//		L"../../Reference/ShaderFile/Shader_Weapon.hlsl", matPivot, CModel::TYPE_STATIC, true))))
+	//	return E_FAIL;
 
-	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Shooter_Bullet", CBullet::Create(m_pDevice, m_pDeviceContext))))
-		return E_FAIL;
+	//if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Shooter_Bullet", CBullet::Create(m_pDevice, m_pDeviceContext))))
+	//	return E_FAIL;
 
-	//Bastion_2HSword
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Bastion_2HSword", CModel::Create(m_pDevice, m_pDeviceContext,
-		L"../bin/FBX/Monster/Bastion_2HSword_Bin.fbx", CModel::TYPE_ANIM, true))))
-		return E_FAIL;
-	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Monster_Bastion_2HSword", CMonster_Bastion_2HSword::Create(m_pDevice, m_pDeviceContext))))
-		return E_FAIL;
-	//Weapon
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_RetributionBlade", CModel::Create(m_pDevice, m_pDeviceContext,
-		"../bin/Resources/Mesh/RetributionBlade/", "RetributionBlade(2H).fbx",
-		L"../../Reference/ShaderFile/Shader_Weapon.hlsl", matPivot, CModel::TYPE_STATIC, true))))
-	{
-		return E_FAIL;
-	}
-	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Weapon_RetributionBlade", CRetributionBlade::Create(m_pDevice, m_pDeviceContext))))
-		return E_FAIL;
-	 
-	//Bastion_Healer
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Bastion_Healer", CModel::Create(m_pDevice, m_pDeviceContext,
-		L"../bin/FBX/Monster/Bastion_Healer_Bin.fbx", CModel::TYPE_ANIM, true))))
-		return E_FAIL;
-	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Monster_Bastion_Healer", CMonster_Bastion_Healer::Create(m_pDevice, m_pDeviceContext))))
-		return E_FAIL;
+	////Bastion_2HSword
+	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Bastion_2HSword", CModel::Create(m_pDevice, m_pDeviceContext,
+	//	L"../bin/FBX/Monster/Bastion_2HSword_Bin.fbx", CModel::TYPE_ANIM, true))))
+	//	return E_FAIL;
+	//if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Monster_Bastion_2HSword", CMonster_Bastion_2HSword::Create(m_pDevice, m_pDeviceContext))))
+	//	return E_FAIL;
+	////Weapon
+	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_RetributionBlade", CModel::Create(m_pDevice, m_pDeviceContext,
+	//	"../bin/Resources/Mesh/RetributionBlade/", "RetributionBlade(2H).fbx",
+	//	L"../../Reference/ShaderFile/Shader_Weapon.hlsl", matPivot, CModel::TYPE_STATIC, true))))
+	//{
+	//	return E_FAIL;
+	//}
+	//if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Weapon_RetributionBlade", CRetributionBlade::Create(m_pDevice, m_pDeviceContext))))
+	//	return E_FAIL;
+	// 
+	////Bastion_Healer
+	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Bastion_Healer", CModel::Create(m_pDevice, m_pDeviceContext,
+	//	L"../bin/FBX/Monster/Bastion_Healer_Bin.fbx", CModel::TYPE_ANIM, true))))
+	//	return E_FAIL;
+	//if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Monster_Bastion_Healer", CMonster_Bastion_Healer::Create(m_pDevice, m_pDeviceContext))))
+	//	return E_FAIL;
 
-	//weapon
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Staff", CModel::Create(m_pDevice, m_pDeviceContext,
-		"../bin/Resources/Mesh/Staff/", "Staff.fbx",
-		L"../../Reference/ShaderFile/Shader_Weapon.hlsl", matPivot, CModel::TYPE_STATIC, true))))
-	{
-		return E_FAIL;
-	}
-	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Weapon_Staff", CStaff::Create(m_pDevice, m_pDeviceContext))))
-		return E_FAIL;
+	////weapon
+	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Staff", CModel::Create(m_pDevice, m_pDeviceContext,
+	//	"../bin/Resources/Mesh/Staff/", "Staff.fbx",
+	//	L"../../Reference/ShaderFile/Shader_Weapon.hlsl", matPivot, CModel::TYPE_STATIC, true))))
+	//{
+	//	return E_FAIL;
+	//}
+	//if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Weapon_Staff", CStaff::Create(m_pDevice, m_pDeviceContext))))
+	//	return E_FAIL;
 
-	//Meteor
-	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Weapon_Meteor", CMeteor::Create(m_pDevice, m_pDeviceContext))))
-		return E_FAIL;
+	////Meteor
+	//if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Weapon_Meteor", CMeteor::Create(m_pDevice, m_pDeviceContext))))
+	//	return E_FAIL;
 
 	return S_OK;
 }

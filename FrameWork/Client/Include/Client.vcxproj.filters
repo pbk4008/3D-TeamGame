@@ -811,6 +811,18 @@
     <Filter Include="02.GameObject\04.Effect\00.Effect_Image\02.DeadSpray">
       <UniqueIdentifier>{93da6596-e33e-43cb-b193-e94382481f3a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\05.UI\05.Indicator">
+      <UniqueIdentifier>{fdbf11f0-da6e-4f08-b745-30097dc95913}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.System\08.IndicatorManager">
+      <UniqueIdentifier>{12dfd46f-3cc1-42a4-a02a-049a617f82ed}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\04.Effect\00.Particle\03.Effect_Floating\00.Normal">
+      <UniqueIdentifier>{f7900c7e-1c0f-44c1-9a37-a0ee1618a5b0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\04.Effect\00.Particle\03.Effect_Floating\01.DifferentSpeed">
+      <UniqueIdentifier>{82e39491-981b-4b60-ad3a-d68489dac6be}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -1488,9 +1500,6 @@
     <ClInclude Include="..\Headers\SubEnvironment.h">
       <Filter>02.GameObject\02.Map\01.Environment\00.Tree</Filter>
     </ClInclude>
-    <ClInclude Include="..\Headers\Effect_HitFloating.h">
-      <Filter>02.GameObject\04.Effect\00.Particle\03.Effect_Floating</Filter>
-    </ClInclude>
     <ClInclude Include="..\Headers\CameraShake.h">
       <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\Camera</Filter>
     </ClInclude>
@@ -1832,9 +1841,21 @@
     </ClInclude>
     <ClInclude Include="..\Headers\Effect_Dead_Spray.h">
       <Filter>02.GameObject\04.Effect\00.Effect_Image\02.DeadSpray</Filter>
-	</ClInclude>
+    </ClInclude>
     <ClInclude Include="..\Headers\UI_SlotBackground.h">
       <Filter>02.GameObject\05.UI\04.Inventory\04.ItemSlot\00.Background</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\UI_Indicator.h">
+      <Filter>02.GameObject\05.UI\05.Indicator</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Indicator_Manager.h">
+      <Filter>03.System\08.IndicatorManager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Effect_HitFloating.h">
+      <Filter>02.GameObject\04.Effect\00.Particle\03.Effect_Floating\00.Normal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Effect_Floating_Speed.h">
+      <Filter>02.GameObject\04.Effect\00.Particle\03.Effect_Floating\01.DifferentSpeed</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -2486,9 +2507,6 @@
     <ClCompile Include="..\Codes\SubEnvironment.cpp">
       <Filter>02.GameObject\02.Map\01.Environment\00.Tree</Filter>
     </ClCompile>
-    <ClCompile Include="..\Codes\Effect_HitFloating.cpp">
-      <Filter>02.GameObject\04.Effect\00.Particle\03.Effect_Floating</Filter>
-    </ClCompile>
     <ClCompile Include="..\Codes\CameraShake.cpp">
       <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\Camera</Filter>
     </ClCompile>
@@ -2827,6 +2845,18 @@
     </ClCompile>
     <ClCompile Include="..\Codes\Effect_Dead_Spray.cpp">
       <Filter>02.GameObject\04.Effect\00.Effect_Image\02.DeadSpray</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\UI_Indicator.cpp">
+      <Filter>02.GameObject\05.UI\05.Indicator</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Indicator_Manager.cpp">
+      <Filter>03.System\08.IndicatorManager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Effect_HitFloating.cpp">
+      <Filter>02.GameObject\04.Effect\00.Particle\03.Effect_Floating\00.Normal</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Effect_Floating_Speed.cpp">
+      <Filter>02.GameObject\04.Effect\00.Particle\03.Effect_Floating\01.DifferentSpeed</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

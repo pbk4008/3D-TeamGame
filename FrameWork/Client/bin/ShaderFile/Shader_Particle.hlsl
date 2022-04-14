@@ -71,9 +71,9 @@ void GS_MAIN(point GS_IN In[1], inout TriangleStream<GS_OUT> OutStream)
 {
 	GS_OUT		Out[6];
 	
-    //float Ratio = In[0].vTime.x / g_fLifeTime;
-    //In[0].vPSize.x = ((-In[0].vPSize.x) * Ratio + In[0].vPSize.x) / 2.f;
-    //In[0].vPSize.y = ((-In[0].vPSize.y) * Ratio + In[0].vPSize.y) / 2.f;
+    float Ratio = In[0].vTime.x / g_fLifeTime;
+    In[0].vPSize.x = ((-In[0].vPSize.x) * Ratio + In[0].vPSize.x) / 2.f;
+    In[0].vPSize.y = ((-In[0].vPSize.y) * Ratio + In[0].vPSize.y) / 2.f;
 
 	vector		vAxisY = vector(0.f, 1.f, 0.f, 0.f);
 

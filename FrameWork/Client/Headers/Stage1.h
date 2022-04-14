@@ -6,6 +6,7 @@
 BEGIN(Client)
 class CScenematicManager;
 class CScenematic;
+class CIndicator_Manager;
 class CStage1 final : public CLevel
 {
 private:
@@ -27,6 +28,7 @@ private:
 	HRESULT Ready_GameManager(void);
 	HRESULT Ready_Data_Effect();
 	HRESULT Ready_Data_UI(const _tchar* pDataFilePath);
+	HRESULT Ready_Indicator();
 
 	HRESULT Ready_TriggerSystem(const _tchar* pTriggerFile);
 	HRESULT Ready_TriggerFunctionSetting();
@@ -62,6 +64,7 @@ private:
 private:
 	CTriggerSystem<CStage1>* m_pTriggerSystem;
 	CScenematicManager* m_pScenemaManager;
+	CIndicator_Manager* m_pIndicatorManager = nullptr;
 	_bool m_bDebug;
 	_uint m_iCountMonster;
 	_bool m_bFirst;

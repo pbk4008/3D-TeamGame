@@ -339,6 +339,7 @@ call Update_Client.bat</Command>
     <ClInclude Include="..\Headers\Effect_Env_Fire.h" />
     <ClInclude Include="..\Headers\Effect_Env_Floating.h" />
     <ClInclude Include="..\Headers\Effect_Falling_Leaf.h" />
+    <ClInclude Include="..\Headers\Effect_Floating_Speed.h" />
     <ClInclude Include="..\Headers\Effect_Guard.h" />
     <ClInclude Include="..\Headers\Effect_Hammer_Dust.h" />
     <ClInclude Include="..\Headers\Effect_HitFloating.h" />
@@ -348,6 +349,7 @@ call Update_Client.bat</Command>
     <ClInclude Include="..\Headers\FlyingShield.h" />
     <ClInclude Include="..\Headers\Fury.h" />
     <ClInclude Include="..\Headers\GameObjectPool.h" />
+    <ClInclude Include="..\Headers\Indicator_Manager.h" />
     <ClInclude Include="..\Headers\InteractableObject.h" />
     <ClInclude Include="..\Headers\InteractManager.h" />
     <ClInclude Include="..\Headers\InventoryData.h" />
@@ -491,6 +493,7 @@ call Update_Client.bat</Command>
     <ClInclude Include="..\Headers\UI_Equipment.h" />
     <ClInclude Include="..\Headers\UI_Fill_CKey.h" />
     <ClInclude Include="..\Headers\UI_Indexes.h" />
+    <ClInclude Include="..\Headers\UI_Indicator.h" />
     <ClInclude Include="..\Headers\UI_Ingame.h" />
     <ClInclude Include="..\Headers\UI_ItemSlot.h" />
     <ClInclude Include="..\Headers\UI_ItemStatusBackground.h" />
@@ -671,6 +674,7 @@ call Update_Client.bat</Command>
     <ClCompile Include="..\Codes\Effect_Env_Fire.cpp" />
     <ClCompile Include="..\Codes\Effect_Env_Floating.cpp" />
     <ClCompile Include="..\Codes\Effect_Falling_Leaf.cpp" />
+    <ClCompile Include="..\Codes\Effect_Floating_Speed.cpp" />
     <ClCompile Include="..\Codes\Effect_Guard.cpp" />
     <ClCompile Include="..\Codes\Effect_Hammer_Dust.cpp" />
     <ClCompile Include="..\Codes\Effect_HitFloating.cpp" />
@@ -679,6 +683,7 @@ call Update_Client.bat</Command>
     <ClCompile Include="..\Codes\FlyingShield.cpp" />
     <ClCompile Include="..\Codes\Fury.cpp" />
     <ClCompile Include="..\Codes\GameObjectPool.cpp" />
+    <ClCompile Include="..\Codes\Indicator_Manager.cpp" />
     <ClCompile Include="..\Codes\InteractableObject.cpp" />
     <ClCompile Include="..\Codes\InteractManager.cpp" />
     <ClCompile Include="..\Codes\InventoryData.cpp" />
@@ -829,6 +834,7 @@ call Update_Client.bat</Command>
     <ClCompile Include="..\Codes\UI_Equipment.cpp" />
     <ClCompile Include="..\Codes\UI_Fill_CKey.cpp" />
     <ClCompile Include="..\Codes\UI_Indexes.cpp" />
+    <ClCompile Include="..\Codes\UI_Indicator.cpp" />
     <ClCompile Include="..\Codes\UI_Ingame.cpp" />
     <ClCompile Include="..\Codes\UI_ItemSlot.cpp" />
     <ClCompile Include="..\Codes\UI_ItemStatusBackground.cpp" />
