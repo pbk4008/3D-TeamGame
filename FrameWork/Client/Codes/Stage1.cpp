@@ -98,8 +98,8 @@ HRESULT CStage1::NativeConstruct()
 	if (FAILED(Ready_Player(L"Layer_Silvermane")))
 		return E_FAIL;
 
-	if (FAILED(Ready_MapObject()))
-		return E_FAIL;
+	//if (FAILED(Ready_MapObject()))
+	//	return E_FAIL;
 
 	//if (FAILED(Ready_TriggerSystem(L"../bin/SaveData/Trigger/MonsterSpawnTrigger.dat")))
 	//	return E_FAIL;
@@ -1832,12 +1832,9 @@ void CStage1::Free()
 
 	CDropManager::DestroyInstance();
 	Safe_Release(m_pTriggerSystem);
-<<<<<<< HEAD
 
 	for (auto& pObj : m_vecMeteor)
 		Safe_Release(pObj);
 	m_vecMeteor.clear();
 
-=======
->>>>>>> main
 }
