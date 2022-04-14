@@ -14,6 +14,7 @@ HRESULT CCustomFont::Ready_CustomFont(const wstring& pFontPath)
 	if (nullptr == m_pSpriteBatch)
 		return E_FAIL;
 
+
 	m_pSpriteFont = new DirectX::SpriteFont(m_pDevice, pFontPath.c_str());
 	if (nullptr == m_pSpriteFont)
 		return E_FAIL;

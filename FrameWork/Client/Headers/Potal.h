@@ -46,6 +46,9 @@ private:
 	_bool m_bSpawn;
 	_float m_fRandSpawnTime;
 	_float m_fAccSpawnTime;
+private:
+	_bool m_bOpenCheck;
+	_float m_fAccTime;
 };
 END
 #endif

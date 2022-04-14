@@ -85,47 +85,47 @@ void CBastion_Healer_Attack::Check_Attack()
 	//cout << iCurAnimFrame << endl;
 	if (iCurAnimFrame >= 160 && !m_bSpawn)
 	{
-		m_bSpawn = true;
-		_uint iSceneID = g_pGameInstance->getCurrentLevel();
+		//m_bSpawn = true;
+		//_uint iSceneID = g_pGameInstance->getCurrentLevel();
 
-		_vector vPos = m_pTransform->Get_State(CTransform::STATE_POSITION);
-		vPos=XMVectorSetY(vPos, 10.f);
-		
-		_vector vLook = m_pTransform->Get_State(CTransform::STATE_LOOK);
-		vLook=XMVector3Normalize(vLook);
-		vLook *= -30.f;
-		vPos += vLook;
+		//_vector vPos = m_pTransform->Get_State(CTransform::STATE_POSITION);
+		//vPos=XMVectorSetY(vPos, 10.f);
+		//
+		//_vector vLook = m_pTransform->Get_State(CTransform::STATE_LOOK);
+		//vLook=XMVector3Normalize(vLook);
+		//vLook *= -30.f;
+		//vPos += vLook;
 
 
-		vector<_vector> vecRand;
-		while (true)
-		{
-			_uint iVecSize = (_uint)vecRand.size();
-			if (iVecSize > 5)
-				break;
-			_float fSizeX = (_float)MathUtils::ReliableRandom(-30.f, 30.f);
-			_float fSizeY = (_float)MathUtils::ReliableRandom(0.f, 5.f);
-			_vector vRand = XMVectorSet(fSizeX, fSizeY, 0.f, 0.f);
-			vPos += vRand;
-			_bool bCheck = false;
-			for (auto& vRandPos : vecRand)
-			{
-				_float fLen = XMVectorGetX(XMVector3Length(vPos - vRandPos));
-				if (fLen < 6)
-				{
-					bCheck = true;
-					break;
-				}
-			}
-			if (bCheck)
-				continue;
-			vecRand.emplace_back(vPos);
-		}
-		
-		for (_uint i = 0; i < 5; i++)
-		{
-			g_pGameInstance->Add_GameObjectToLayer(iSceneID, L"Layer_Potal", L"Proto_GameObject_Portal", &vecRand[i]);
-		}
+		//vector<_vector> vecRand;
+		//while (true)
+		//{
+		//	_uint iVecSize = vecRand.size();
+		//	if (iVecSize > 5)
+		//		break;
+		//	//_float fSizeX = MathUtils::ReliableRandom(-30.f, 30.f);
+		//	_float fSizeY = MathUtils::ReliableRandom(0.f, 5.f);
+		//	_vector vRand = XMVectorSet(0.f, fSizeY, 0.f, 0.f);
+		//	vPos += vRand;
+		//	_bool bCheck = false;
+		//	for (auto& vRandPos : vecRand)
+		//	{
+		//		_float fLen = XMVectorGetX(XMVector3Length(vPos - vRandPos));
+		//		if (fLen < 6)
+		//		{
+		//			bCheck = true;
+		//			break;
+		//		}
+		//	}
+		//	if (bCheck)
+		//		continue;
+		//	vecRand.emplace_back(vPos);
+		//}
+		//g_pGameInstance->Add_GameObjectToLayer(iSceneID, L"Layer_Potal", L"Proto_GameObject_Portal", &vecRand[0]);
+		//for (_uint i = 0; i < 5; i++)
+		//{
+		//	g_pGameInstance->Add_GameObjectToLayer(iSceneID, L"Layer_Potal", L"Proto_GameObject_Portal", &vecRand[i]);
+		//}
 	}
 }
 
