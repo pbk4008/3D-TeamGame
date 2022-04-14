@@ -67,7 +67,6 @@
 
 
 #pragma region TestScene_JS
-
 #include "Camera_Debug.h"
 #include "Plane_Test.h"
 #include "TestObj.h"
@@ -88,6 +87,7 @@
 #include "TrailEffect_Distortion.h"
 #include "Wall.h"
 
+#include "MeshEffect.h"
 #pragma endregion
 
 CLoader::CLoader() 
@@ -1065,58 +1065,58 @@ HRESULT CLoader::Load_Stage1MonsterLoad()
 	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Weapon_Stargazer", CStargazer::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 
-	////Monster Bastion_Shooter
-	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Monster_Bastion_Shooter", CModel::Create(m_pDevice, m_pDeviceContext,
-	//	L"../bin/FBX/Monster/Bastion_Shooter.fbx", CModel::TYPE_ANIM, true))))
-	//	return E_FAIL;
+	//Monster Bastion_Shooter
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Monster_Bastion_Shooter", CModel::Create(m_pDevice, m_pDeviceContext,
+		L"../bin/FBX/Monster/Bastion_Shooter.fbx", CModel::TYPE_ANIM, true))))
+		return E_FAIL;
 
-	//if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Monster_Bastion_Shooter", CMonster_Bastion_Shooter::Create(m_pDevice, m_pDeviceContext))))
-	//	return E_FAIL;
+	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Monster_Bastion_Shooter", CMonster_Bastion_Shooter::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
 
-	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Shooter_Bullet", CModel::Create(m_pDevice, m_pDeviceContext,
-	//	"../bin/Resources/Mesh/Bullet/", "Sphere.fbx",
-	//		L"../../Reference/ShaderFile/Shader_Weapon.hlsl", matPivot, CModel::TYPE_STATIC, true))))
-	//	return E_FAIL;
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Shooter_Bullet", CModel::Create(m_pDevice, m_pDeviceContext,
+		"../bin/Resources/Mesh/Bullet/", "Sphere.fbx",
+			L"../../Reference/ShaderFile/Shader_Weapon.hlsl", matPivot, CModel::TYPE_STATIC, true))))
+		return E_FAIL;
 
-	//if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Shooter_Bullet", CBullet::Create(m_pDevice, m_pDeviceContext))))
-	//	return E_FAIL;
+	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Shooter_Bullet", CBullet::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
 
-	////Bastion_2HSword
-	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Bastion_2HSword", CModel::Create(m_pDevice, m_pDeviceContext,
-	//	L"../bin/FBX/Monster/Bastion_2HSword_Bin.fbx", CModel::TYPE_ANIM, true))))
-	//	return E_FAIL;
-	//if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Monster_Bastion_2HSword", CMonster_Bastion_2HSword::Create(m_pDevice, m_pDeviceContext))))
-	//	return E_FAIL;
-	////Weapon
-	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_RetributionBlade", CModel::Create(m_pDevice, m_pDeviceContext,
-	//	"../bin/Resources/Mesh/RetributionBlade/", "RetributionBlade(2H).fbx",
-	//	L"../../Reference/ShaderFile/Shader_Weapon.hlsl", matPivot, CModel::TYPE_STATIC, true))))
-	//{
-	//	return E_FAIL;
-	//}
-	//if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Weapon_RetributionBlade", CRetributionBlade::Create(m_pDevice, m_pDeviceContext))))
-	//	return E_FAIL;
-	// 
-	////Bastion_Healer
-	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Bastion_Healer", CModel::Create(m_pDevice, m_pDeviceContext,
-	//	L"../bin/FBX/Monster/Bastion_Healer_Bin.fbx", CModel::TYPE_ANIM, true))))
-	//	return E_FAIL;
-	//if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Monster_Bastion_Healer", CMonster_Bastion_Healer::Create(m_pDevice, m_pDeviceContext))))
-	//	return E_FAIL;
+	//Bastion_2HSword
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Bastion_2HSword", CModel::Create(m_pDevice, m_pDeviceContext,
+		L"../bin/FBX/Monster/Bastion_2HSword_Bin.fbx", CModel::TYPE_ANIM, true))))
+		return E_FAIL;
+	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Monster_Bastion_2HSword", CMonster_Bastion_2HSword::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	//Weapon
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_RetributionBlade", CModel::Create(m_pDevice, m_pDeviceContext,
+		"../bin/Resources/Mesh/RetributionBlade/", "RetributionBlade(2H).fbx",
+		L"../../Reference/ShaderFile/Shader_Weapon.hlsl", matPivot, CModel::TYPE_STATIC, true))))
+	{
+		return E_FAIL;
+	}
+	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Weapon_RetributionBlade", CRetributionBlade::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	 
+	//Bastion_Healer
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Bastion_Healer", CModel::Create(m_pDevice, m_pDeviceContext,
+		L"../bin/FBX/Monster/Bastion_Healer_Bin.fbx", CModel::TYPE_ANIM, true))))
+		return E_FAIL;
+	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Monster_Bastion_Healer", CMonster_Bastion_Healer::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
 
-	////weapon
-	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Staff", CModel::Create(m_pDevice, m_pDeviceContext,
-	//	"../bin/Resources/Mesh/Staff/", "Staff.fbx",
-	//	L"../../Reference/ShaderFile/Shader_Weapon.hlsl", matPivot, CModel::TYPE_STATIC, true))))
-	//{
-	//	return E_FAIL;
-	//}
-	//if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Weapon_Staff", CStaff::Create(m_pDevice, m_pDeviceContext))))
-	//	return E_FAIL;
+	//weapon
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Staff", CModel::Create(m_pDevice, m_pDeviceContext,
+		"../bin/Resources/Mesh/Staff/", "Staff.fbx",
+		L"../../Reference/ShaderFile/Shader_Weapon.hlsl", matPivot, CModel::TYPE_STATIC, true))))
+	{
+		return E_FAIL;
+	}
+	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Weapon_Staff", CStaff::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
 
-	////Meteor
-	//if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Weapon_Meteor", CMeteor::Create(m_pDevice, m_pDeviceContext))))
-	//	return E_FAIL;
+	//Meteor
+	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Weapon_Meteor", CMeteor::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
 
 	return S_OK;
 }
@@ -1202,6 +1202,7 @@ HRESULT CLoader::Ready_Test_JS()
 		return E_FAIL;
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"VIBuffer_Plane", CVIBuffer_Plane::Create(m_pDevice, m_pDeviceContext, L"../../Reference/ShaderFile/Shader_Plane.hlsl", 100, 100))))
 		return E_FAIL;
+#pragma endregion
 
 #pragma region 모델
 	cout << "TestScene_JS 모델 프로토타입 생성중..." << endl;
@@ -1320,7 +1321,6 @@ HRESULT CLoader::Ready_Test_JS()
 	//	return E_FAIL;
 #pragma endregion
 
-
 #pragma region 컴포넌트
 	cout << "TestScene_JS 컴포넌트 프로토타입 생성중..." << endl;
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_AnimationController", CAnimationController::Create(m_pDevice, m_pDeviceContext))))
@@ -1358,6 +1358,7 @@ HRESULT CLoader::Ready_Test_JS()
 		return E_FAIL;
 #pragma endregion
 
+#pragma region 소드트레일
 	/////////////////////////////////////// 소드 트레일
 	// 기본 텍스처
 	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"TrailBase", L"../bin/Resources/Texture/Trail/T_Smoke_Trail_Soft.dds"))) MSGBOX("Failed To Add SwordTrail Tex");
@@ -1382,6 +1383,7 @@ HRESULT CLoader::Ready_Test_JS()
 	// 디스토션
 	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_TrailEffect_Distortion", CTrailEffect_Distortion::Create(m_pDevice, m_pDeviceContext))))
 		MSGBOX(L"트레일이펙트_디스토션 프로토타입 생성 실패");
+#pragma endregion
 
 	// dissolve 
 	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"DissovleBase", L"../bin/Resources/Texture/dissolve.dds"))) MSGBOX("Failed To Add dissolve Tex");
@@ -1395,6 +1397,18 @@ HRESULT CLoader::Ready_Test_JS()
 
 	// Effect
 	if (FAILED(Load_Stage1EffectLoad()))
+		return E_FAIL;
+
+
+	// MeshEffect
+	matPivot = XMMatrixIdentity();
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_MeshEffect", CModel::Create(m_pDevice, m_pDeviceContext,
+		"../bin/Resources/Mesh/Effect/", "Effect01.fbx",
+		L"../../Reference/ShaderFile/Shader_StaticMesh.hlsl", matPivot, CModel::TYPE_STATIC, true))))
+	{
+		return E_FAIL;
+	}
+	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_MeshEffect", CMeshEffect::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 
 	cout << "TestScene_JS 로딩 완료..." << endl;

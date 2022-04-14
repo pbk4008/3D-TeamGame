@@ -367,6 +367,7 @@ call Update_Client.bat</Command>
     <ClInclude Include="..\Headers\MainApp.h" />
     <ClInclude Include="..\Headers\MainCamera.h" />
     <ClInclude Include="..\Headers\MainCamera_Ortho.h" />
+    <ClInclude Include="..\Headers\MeshEffect.h" />
     <ClInclude Include="..\Headers\MeshLoader.h" />
     <ClInclude Include="..\Headers\MidBoss_Attack.h" />
     <ClInclude Include="..\Headers\MidBoss_BattleCry.h" />
@@ -699,6 +700,7 @@ call Update_Client.bat</Command>
     <ClCompile Include="..\Codes\LootingChest.cpp" />
     <ClCompile Include="..\Codes\Hud.cpp" />
     <ClCompile Include="..\Codes\Loot_Equipment.cpp" />
+    <ClCompile Include="..\Codes\MeshEffect.cpp" />
     <ClCompile Include="..\Codes\MeshLoader.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
     </ClCompile>

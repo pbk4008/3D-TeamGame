@@ -135,7 +135,7 @@ _int CNeedle::LateTick(_double _dDeltaTime)
 	if (0 > __super::LateTick(_dDeltaTime))
 		return -1;
 
-	m_pTrailEffect_Normal->Set_Texture(L"Fire_02");
+	//m_pTrailEffect_Normal->Set_Texture(L"Fire_02");
 
 	if (m_isTrail)
 	{

@@ -830,17 +830,17 @@ HRESULT CSilvermane::Ready_Weapons(const _uint _iSceneID)
 	//pWeapon->Set_OwnerPivotMatrix(m_pModel->Get_PivotMatrix());
 	//pWeapon->Set_Equip(false);
 	//m_umapWeapons.emplace(L"Fury", pWeapon);
-	//// 방패
-	//pWeaponBone = m_pModel->Get_BoneMatrix("weapon_l");
-	//m_pShield = CShield::Create(m_pDevice, m_pDeviceContext);
-	//if (FAILED(m_pShield->NativeConstruct(m_iSceneID, pWeaponBone)))
-	//{
-	//	Safe_Release(m_pShield);
-	//	return E_FAIL;
-	//}
-	//m_pShield->Set_Owner(this);
-	//m_pShield->Set_OwnerPivotMatrix(m_pModel->Get_PivotMatrix());
-	//Set_EquipShield(false);
+	// 방패
+	CHierarchyNode* pWeaponBone = m_pModel->Get_BoneMatrix("weapon_l");
+	m_pShield = CShield::Create(m_pDevice, m_pDeviceContext);
+	if (FAILED(m_pShield->NativeConstruct(m_iSceneID, pWeaponBone)))
+	{
+		Safe_Release(m_pShield);
+		return E_FAIL;
+	}
+	m_pShield->Set_Owner(this);
+	m_pShield->Set_OwnerPivotMatrix(m_pModel->Get_PivotMatrix());
+	Set_EquipShield(false);
 
 #pragma endregion
 

@@ -129,6 +129,7 @@ HRESULT CClient_Trigger::SetUp_Components()
 	if (FAILED(CGameObject::SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_BoxCollider", L"BoxTrigger", (CComponent**)&m_pBoxCollider,&tDesc)))
 		return E_FAIL;
 	m_pBoxCollider->Update_PxTransform();
+	m_pBoxCollider->setShapeLayer((_uint)ELayer::Trigger);
 
 	return S_OK;
 }

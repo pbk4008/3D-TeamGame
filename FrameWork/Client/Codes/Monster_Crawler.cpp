@@ -109,7 +109,7 @@ HRESULT CMonster_Crawler::NativeConstruct(const _uint _iSceneID, void* _pArg)
 	m_pPanel->Set_GroggyBar(Get_GroggyGaugeRatio());
 
 	m_iObectTag = (_uint)GAMEOBJECT::MONSTER_CRYSTAL;
-	setActive(true);
+	setActive(false);
 
 	return S_OK;
 }
@@ -279,15 +279,6 @@ void CMonster_Crawler::OnTriggerEnter(CCollision& collision)
 
 void CMonster_Crawler::OnTriggerExit(CCollision& collision)
 {
-	if (true == g_pObserver->IsAttack()) //플레이어공격일때
-	{
-		if ((_uint)GAMEOBJECT::WEAPON == collision.pGameObject->getTag())
-		{
-			if (m_bDead)
-				g_pMainApp->FreezeTime();
-		}
-	}
-	g_pGameInstance->StopSound(CSoundMgr::CHANNELID::Monster_Hit);
 }
 
 void CMonster_Crawler::Hit(const ATTACKDESC& _tAttackDesc)

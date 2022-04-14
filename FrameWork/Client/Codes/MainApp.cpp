@@ -58,6 +58,7 @@ HRESULT CMainApp::NativeConstruct()
 	g_pGameInstance->Set_CollisionLayer((_uint)ELayer::Player, (_uint)ELayer::MonsterWeapon);
 	g_pGameInstance->Set_CollisionLayer((_uint)ELayer::Player, (_uint)ELayer::JumpTrigger);
 	g_pGameInstance->Set_CollisionLayer((_uint)ELayer::Player, (_uint)ELayer::Monster);
+	g_pGameInstance->Set_CollisionLayer((_uint)ELayer::Player, (_uint)ELayer::Trigger);
 	// ¸ó½ºÅÍ
 	g_pGameInstance->Set_CollisionLayer((_uint)ELayer::Monster, (_uint)ELayer::Enviroment);
 	g_pGameInstance->Set_CollisionLayer((_uint)ELayer::Monster, (_uint)ELayer::Weapon);

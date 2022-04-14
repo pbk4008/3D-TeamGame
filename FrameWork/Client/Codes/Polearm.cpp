@@ -159,6 +159,7 @@ HRESULT CPolearm::Ready_Components()
 
 	_matrix smatPviot = XMMatrixRotationY(XMConvertToRadians(90.f)) * XMMatrixTranslation(0.f, 0.f, 1.f);
 	m_pCollider->setPivotMatrix(smatPviot);
+	m_pCollider->setShapeLayer((_uint)ELayer::MonsterWeapon);
 
 	return S_OK;
 }

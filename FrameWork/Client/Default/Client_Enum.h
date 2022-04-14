@@ -65,6 +65,7 @@ enum class ELayer
 	MonsterWeapon,
 	JumpTrigger,
 	ItemBox,
+	Trigger,
 	Max
 };
 

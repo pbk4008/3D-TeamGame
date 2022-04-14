@@ -170,6 +170,7 @@ HRESULT CEarthAberrant_Pick::Ready_Components()
 
 	_matrix matPivot = XMMatrixRotationY(XMConvertToRadians(90.f)) * XMMatrixTranslation(0.f, 0.f, -0.6f);
 	m_pCollider->setPivotMatrix(matPivot);
+	m_pCollider->setShapeLayer((_uint)ELayer::MonsterWeapon);
 
 	return S_OK;
 }

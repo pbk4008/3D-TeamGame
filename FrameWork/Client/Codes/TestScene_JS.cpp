@@ -400,14 +400,15 @@ HRESULT CTestScene_JS::Ready_Data_Effect()
 	vector<CEffect_HitParticle::EFFECTDESC> vecHitLeft;
 	g_pGameInstance->LoadFile<CEffect_HitParticle::EFFECTDESC>(vecHitLeft, L"../bin/SaveData/Effect/Effect_Player_Attack_Left.dat");
 
-	FullName = L"Proto_GameObject_Effect_Attack_Left";
+	FullName = L"Proto_GameObject_Effect_Floating_Speed";
+	//FullName = L"Proto_GameObject_Effect_Attack_Left";
 
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Player_Attack_Left", FullName, &vecHitLeft[0], (CGameObject**)&pEffect)))
 	{
 		MSGBOX("Failed to Creating Effect_Player_Attack_Left in CStage1::Ready_Effect()");
 		return E_FAIL;
 	}
-	if (FAILED(g_pGameInstance->Add_Effect((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Player_Attack_Left", pEffect, 20)))
+	if (FAILED(g_pGameInstance->Add_Effect((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Player_Attack_Left", pEffect, 10)))
 	{
 		MSGBOX("Falild to Add_Effect_Player_Attack_Left in CStage1::Ready_Effect()");
 		return E_FAIL;
@@ -417,7 +418,8 @@ HRESULT CTestScene_JS::Ready_Data_Effect()
 	vector<CEffect_HitParticle::EFFECTDESC> vecHitRight;
 	g_pGameInstance->LoadFile<CEffect_HitParticle::EFFECTDESC>(vecHitRight, L"../bin/SaveData/Effect/Effect_Player_Attack_Right.dat");
 
-	FullName = L"Proto_GameObject_Effect_Attack_Right";
+	FullName = L"Proto_GameObject_Effect_Explosion";
+	//FullName = L"Proto_GameObject_Effect_Attack_Right";
 
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Player_Attack_Right", FullName, &vecHitRight[0], (CGameObject**)&pEffect)))
 	{
@@ -434,14 +436,15 @@ HRESULT CTestScene_JS::Ready_Data_Effect()
 	vector<CEffect_HitParticle::EFFECTDESC> vecHitGround;
 	g_pGameInstance->LoadFile<CEffect_HitParticle::EFFECTDESC>(vecHitGround, L"../bin/SaveData/Effect/Effect_Hit_Ground.dat");
 
-	FullName = L"Proto_GameObject_Effect_Hit_Ground";
+	FullName = L"Proto_GameObject_Effect_Explosion";
+	//FullName = L"Proto_GameObject_Effect_Hit_Ground";
 
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Hit_Ground", FullName, &vecHitGround[0], (CGameObject**)&pEffect)))
 	{
 		MSGBOX("Failed to Creating Effect_Hit_Ground in CStage1::Ready_Effect()");
 		return E_FAIL;
 	}
-	if (FAILED(g_pGameInstance->Add_Effect((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Hit_Ground", pEffect, 20)))
+	if (FAILED(g_pGameInstance->Add_Effect((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Hit_Ground", pEffect, 10)))
 	{
 		MSGBOX("Falild to Add_Effect_Hit_Ground in CStage1::Ready_Effect()");
 		return E_FAIL;
@@ -482,26 +485,23 @@ HRESULT CTestScene_JS::Ready_Data_Effect()
 	//{
 	//	MSGBOX("Failed to Creating Effect_Hammer_Dust in CStage1::Ready_Effect()");
 	//	return E_FAIL;
+	//}
+	//Monster Dead
+	//ZeroMemory(&Desc, sizeof(Desc));
+
+	//_tcscpy_s(Desc.TextureTag, L"T_lavaSpary");
+	//Desc.iRenderPassNum = 1;
+	//Desc.iImageCountX = 8;
+	//Desc.iImageCountY = 8;
+	//Desc.fFrame = 64.f;
+	//Desc.fEffectPlaySpeed = 1.f;
+
+	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Effect_Monster_Dead_Spray", L"Proto_GameObject_Effect_Monster_Dead_Spray", &Desc)))
+	//{
+	//	MSGBOX("Failed to Creating Effect_Monster_Dead_Spray in CStage1::Ready_Effect()");
+	//	return E_FAIL;
 
 	//}
-
-	//Monster Dead
-	ZeroMemory(&Desc, sizeof(Desc));
-
-	_tcscpy_s(Desc.TextureTag, L"T_lavaSpary");
-	Desc.iRenderPassNum = 1;
-	Desc.iImageCountX = 8;
-	Desc.iImageCountY = 8;
-	Desc.fFrame = 64.f;
-	Desc.fEffectPlaySpeed = 1.f;
-
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Effect_Monster_Dead_Spray", L"Proto_GameObject_Effect_Monster_Dead_Spray", &Desc)))
-	{
-		MSGBOX("Failed to Creating Effect_Monster_Dead_Spray in CStage1::Ready_Effect()");
-		return E_FAIL;
-
-	}
-
 	//Env floating
 	vector<CEffect_Env_Floating::EFFECTDESC> vecEnvFloating;
 	g_pGameInstance->LoadFile<CEffect_Env_Floating::EFFECTDESC>(vecEnvFloating, L"../bin/SaveData/Effect/Effect_Env_Floating_1.dat");
@@ -529,6 +529,8 @@ HRESULT CTestScene_JS::Ready_Data_Effect()
 #pragma endregion
 	return S_OK;
 }
+///////////////////////////////////////////////////////// 이펙트 레디 끝
+
 
 CTestScene_JS* CTestScene_JS::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
 {
