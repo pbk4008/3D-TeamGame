@@ -208,7 +208,10 @@ _int CCamera_Silvermane::Chase_Target(const _double& _dDeltaTime)
 
 	_vector svTargetPosition = m_pSilvermane->Get_Transform()->Get_State(CTransform::STATE_POSITION);
 	_vector svPosition = m_pWorldTransform->Get_State(CTransform::STATE_POSITION);
-	_vector svLerp = XMVectorLerp(svPosition, svTargetPosition, (_float)_dDeltaTime * 12.f);
+	_float fRatio = (_float)_dDeltaTime * 12.f;
+	if (1.f < fRatio)
+		fRatio = 1.f;
+	_vector svLerp = XMVectorLerp(svPosition, svTargetPosition, fRatio);
 	m_pWorldTransform->Set_State(CTransform::STATE_POSITION, svLerp);
 
 	return _int();

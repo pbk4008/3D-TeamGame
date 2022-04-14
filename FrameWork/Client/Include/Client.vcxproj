@@ -892,6 +892,8 @@ call Update_Client.bat</Command>
     <FxCompile Include="..\bin\ShaderFile\Shader_INST_Tree.hlsl" />
     <FxCompile Include="..\bin\ShaderFile\Shader_Mesh.hlsl" />
     <FxCompile Include="..\bin\ShaderFile\Shader_MeshAnim.hlsl" />
+    <FxCompile Include="..\bin\ShaderFile\Shader_Metor.hlsl" />
+    <FxCompile Include="..\bin\ShaderFile\Shader_MetorAnim.hlsl" />
     <FxCompile Include="..\bin\ShaderFile\Shader_Monster.hlsl" />
     <FxCompile Include="..\bin\ShaderFile\Shader_Panel_UI.hlsl" />
     <FxCompile Include="..\bin\ShaderFile\Shader_Particle.hlsl" />

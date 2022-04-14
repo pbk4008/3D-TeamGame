@@ -601,9 +601,6 @@
     <Filter Include="100.ShaderFiles\01.Environment">
       <UniqueIdentifier>{b73a4e26-0c07-4d4d-b1c4-8860928a6b4a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="100.ShaderFiles\02.Actor">
-      <UniqueIdentifier>{01f09cd2-dcfc-4f2c-a5da-56671ab0b823}</UniqueIdentifier>
-    </Filter>
     <Filter Include="100.ShaderFiles\03.Effect">
       <UniqueIdentifier>{f35001cd-5f3e-4300-aa56-576f4dca80d9}</UniqueIdentifier>
     </Filter>
@@ -804,6 +801,12 @@
     </Filter>
     <Filter Include="02.GameObject\03.Character\00.Player\00.Silvermane\State\Shield\Throw">
       <UniqueIdentifier>{69f64efb-d5bc-433d-bf69-0a94dad5f809}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\03.CinemaActor">
+      <UniqueIdentifier>{2303d924-8d8e-4580-829a-b12a5244fd00}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="100.ShaderFiles\01.Environment\02.Actor">
+      <UniqueIdentifier>{01f09cd2-dcfc-4f2c-a5da-56671ab0b823}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -2883,22 +2886,22 @@
       <Filter>100.ShaderFiles\99.Other</Filter>
     </FxCompile>
     <FxCompile Include="..\bin\ShaderFile\Shader_Monster.hlsl">
-      <Filter>100.ShaderFiles\02.Actor</Filter>
+      <Filter>100.ShaderFiles\01.Environment\02.Actor</Filter>
     </FxCompile>
     <FxCompile Include="..\bin\ShaderFile\Shader_Panel_UI.hlsl">
       <Filter>100.ShaderFiles\04.UI</Filter>
     </FxCompile>
     <FxCompile Include="..\bin\ShaderFile\Shader_Shield.hlsl">
-      <Filter>100.ShaderFiles\02.Actor</Filter>
+      <Filter>100.ShaderFiles\01.Environment\02.Actor</Filter>
     </FxCompile>
     <FxCompile Include="..\bin\ShaderFile\Shader_StaticMesh.hlsl">
       <Filter>100.ShaderFiles\99.Other</Filter>
     </FxCompile>
     <FxCompile Include="..\bin\ShaderFile\Shader_Weapon.hlsl">
-      <Filter>100.ShaderFiles\02.Actor</Filter>
+      <Filter>100.ShaderFiles\01.Environment\02.Actor</Filter>
     </FxCompile>
     <FxCompile Include="..\bin\ShaderFile\Shader_SilverMane.hlsl">
-      <Filter>100.ShaderFiles\02.Actor</Filter>
+      <Filter>100.ShaderFiles\01.Environment\02.Actor</Filter>
     </FxCompile>
     <FxCompile Include="..\bin\ShaderFile\Shader_Particle.hlsl">
       <Filter>100.ShaderFiles\03.Effect</Filter>
@@ -2932,6 +2935,12 @@
     </FxCompile>
     <FxCompile Include="..\bin\ShaderFile\Shader_INST_RM.hlsl">
       <Filter>100.ShaderFiles\01.Environment</Filter>
+    </FxCompile>
+    <FxCompile Include="..\bin\ShaderFile\Shader_Metor.hlsl">
+      <Filter>100.ShaderFiles\99.Other</Filter>
+    </FxCompile>
+    <FxCompile Include="..\bin\ShaderFile\Shader_MetorAnim.hlsl">
+      <Filter>100.ShaderFiles\99.Other</Filter>
     </FxCompile>
   </ItemGroup>
   <ItemGroup>

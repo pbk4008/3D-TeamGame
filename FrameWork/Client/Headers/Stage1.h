@@ -6,6 +6,7 @@
 BEGIN(Client)
 class CScenematicManager;
 class CScenematic;
+class CMeteor;
 class CStage1 final : public CLevel
 {
 private:
@@ -55,6 +56,10 @@ public:
 	HRESULT Ready_Trigger_Jump();
 private:
 	HRESULT	Ready_Treasure_Chest();
+private:
+	HRESULT Ready_Meteor();
+	void Shoot_Meteor(_double dDeltaTime);
+	CMeteor* Find_Meteor();
 public:
 	static CStage1* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);
 private:
@@ -68,6 +73,11 @@ private:
 	_bool test = false;
 private:
 	CScenematic* m_pCinema = nullptr;
+private:/*for Meteor*/
+	vector<CMeteor*> m_vecMeteor;
+	vector<_float4> m_vecMeteorPos;
+	_float m_fAccMeteorSpawn;
+	_float m_fRandomMeteorSpawnTime;
 };
 #endif
 

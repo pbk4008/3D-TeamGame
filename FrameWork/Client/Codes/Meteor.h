@@ -20,24 +20,32 @@ public:
 	virtual _int Tick(_double _dDeltaTime) override;
 	virtual _int LateTick(_double _dDeltaTime) override;
 	virtual HRESULT Render() override;
+public:
+	_int Move(_fvector vPos);
 private:
 	HRESULT Ready_Component();
 private:
 	void OnTriggerEnter(CCollision& collision);
 private:
-	_int Move();
 	_bool Find_HitPlayer(vector<CGameObject*>* pVecActor);
+	
 public:
 	static CMeteor* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);
 	virtual CGameObject* Clone(const _uint iSceneID, void* pArg = nullptr) override;
 private:
 	virtual void Free() override;
 private:
-	CModel* m_pModel;
+	CModel* m_pStaticModel;
+	CModel* m_pAnimModel;
 	CSphereCollider* m_pCollider;
 private:
 	_float m_fSpeed;
 	_float4 m_vDestination;
+	_bool m_bRemoveCheck;
+private:
+	_float m_fAccTime;
+	_float m_fRandSpawnTime;
+	_bool m_bStart;
 };
 END
 #endif
