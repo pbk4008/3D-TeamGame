@@ -45,8 +45,7 @@ _int CTrailEffect_Normal::LateTick(_double _dDeltaTime)
 	if (NO_EVENT != iProgress)
 		return iProgress;
 
-	if (m_isRender)
-		m_pRenderer->Add_RenderGroup(CRenderer::RENDER_ALPHA, this);
+	m_pRenderer->Add_RenderGroup(CRenderer::RENDER_ALPHA, this);
 
 	return _int();
 }

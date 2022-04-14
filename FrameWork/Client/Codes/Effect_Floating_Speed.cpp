@@ -1,24 +1,23 @@
 #include "pch.h"
-#include "Effect_HitFloating.h"
+#include "Effect_Floating_Speed.h"
 #include "GameInstance.h"
-#include "VIBuffer_PointInstance_Explosion.h"
+#include "VIBuffer_PointInstance_Floating_Speed.h"
 
-
-CEffect_HitFloating::CEffect_HitFloating()
+CEffect_Floating_Speed::CEffect_Floating_Speed()
 {
 }
 
-CEffect_HitFloating::CEffect_HitFloating(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
+CEffect_Floating_Speed::CEffect_Floating_Speed(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
     :CEffect(pDevice,pDeviceContext)
 {
 }
 
-CEffect_HitFloating::CEffect_HitFloating(const CEffect_HitFloating& rhs)
+CEffect_Floating_Speed::CEffect_Floating_Speed(const CEffect_Floating_Speed& rhs)
     :CEffect(rhs)
 {
 }
 
-HRESULT CEffect_HitFloating::NativeConstruct_Prototype()
+HRESULT CEffect_Floating_Speed::NativeConstruct_Prototype()
 {
 	if (FAILED(__super::NativeConstruct_Prototype()))
 	{
@@ -28,7 +27,7 @@ HRESULT CEffect_HitFloating::NativeConstruct_Prototype()
     return S_OK;
 }
 
-HRESULT CEffect_HitFloating::NativeConstruct(const _uint _iSceneID, void* pArg)
+HRESULT CEffect_Floating_Speed::NativeConstruct(const _uint _iSceneID, void* pArg)
 {
 	if (FAILED(__super::NativeConstruct(_iSceneID, pArg)))
 	{
@@ -45,8 +44,8 @@ HRESULT CEffect_HitFloating::NativeConstruct(const _uint _iSceneID, void* pArg)
 	{
 		return E_FAIL;
 	}
-
-	CVIBuffer_PointInstance_Floating::PIDESC Desc;
+	
+	CVIBuffer_PointInstance_Floating_Speed::PIDESC Desc;
 	_tcscpy_s(Desc.ShaderFilePath, m_Desc.ShaderFullFilePath);
 	Desc.matParticle = m_Desc.ParticleMat;
 	Desc.fParticleStartRandomPos = m_Desc.fParticleRandomPos;
@@ -63,7 +62,7 @@ HRESULT CEffect_HitFloating::NativeConstruct(const _uint _iSceneID, void* pArg)
 	return S_OK;
 }
 
-_int CEffect_HitFloating::Tick(_double TimeDelta)
+_int CEffect_Floating_Speed::Tick(_double TimeDelta)
 {
 	m_pBuffer->Update(g_dImmutableTime, m_Desc.iAxis);
 
@@ -74,6 +73,9 @@ _int CEffect_HitFloating::Tick(_double TimeDelta)
 		m_fNonActiveTimeAcc = 0.f;
 	}
 
+	//_vector dis = XMVector3Normalize((m_pTransform->Get_State(CTransform::STATE_POSITION) - g_pObserver->Get_PlayerPos()));
+	//m_pTransform->LookAt_RotYAxis(dis);
+
 	_matrix matCullingBoxPivot = XMMatrixIdentity();
 	matCullingBoxPivot.r[3] = { m_Desc.CullingBoxPos.x, m_Desc.CullingBoxPos.y,m_Desc.CullingBoxPos.z, 1.f };
 	m_pBox->Update_Matrix(matCullingBoxPivot * m_pTransform->Get_WorldMatrix());
@@ -81,7 +83,7 @@ _int CEffect_HitFloating::Tick(_double TimeDelta)
     return 0;
 }
 
-_int CEffect_HitFloating::LateTick(_double TimeDelta)
+_int CEffect_Floating_Speed::LateTick(_double TimeDelta)
 {
 	_bool bCulling = g_pGameInstance->isIn_WorldFrustum(m_pBox->Get_Points(), 1.f);
 	if (true == bCulling)
@@ -95,9 +97,9 @@ _int CEffect_HitFloating::LateTick(_double TimeDelta)
 	return 0;
 }
 
-HRESULT CEffect_HitFloating::Render()
+HRESULT CEffect_Floating_Speed::Render()
 {
-	//m_pBox->Render(L"Camera_Silvermane");
+	m_pBox->Render(L"Camera_Silvermane");
 	wstring wstrCamTag = g_pGameInstance->Get_BaseCameraTag();
 	_matrix XMWorldMatrix = XMMatrixTranspose(m_pTransform->Get_WorldMatrix());
 	_matrix XMViewMatrix = XMMatrixTranspose(g_pGameInstance->Get_Transform(wstrCamTag, TRANSFORMSTATEMATRIX::D3DTS_VIEW));
@@ -120,20 +122,20 @@ HRESULT CEffect_HitFloating::Render()
 	m_pBuffer->SetUp_ValueOnShader("g_fCurTime", &m_Desc.fCurTime, sizeof(_float));
 
 	_float4 color = { 1.f , 0.6f, 0.3f ,1.f };
-	_float power = 2.5f;
+	_float power = 1.f;
 	m_pBuffer->SetUp_ValueOnShader("g_color", &color, sizeof(_float4));
 	m_pBuffer->SetUp_ValueOnShader("g_empower", &power, sizeof(_float));
 
 	m_pBuffer->SetUp_ValueOnShader("g_vCamPosition", (void*)&CamPos, sizeof(_vector));
-
-	m_pBuffer->Render(m_Desc.iRenderPassNum);
+	//m_pBuffer->Render(m_Desc.iRenderPassNum);
+	m_pBuffer->Render(4);
 
 	return S_OK;
 }
 
-CEffect* CEffect_HitFloating::Copy()
+CEffect* CEffect_Floating_Speed::Copy()
 {
-	CEffect_HitFloating* pEffect = new CEffect_HitFloating(m_pDevice, m_pDeviceContext);
+	CEffect_Floating_Speed* pEffect = new CEffect_Floating_Speed(m_pDevice, m_pDeviceContext);
 	if (FAILED(pEffect->NativeConstruct_Prototype()))
 	{
 		MSGBOX("HitParticle Copy Fail");
@@ -148,7 +150,7 @@ CEffect* CEffect_HitFloating::Copy()
 	return pEffect;
 }
 
-void CEffect_HitFloating::Set_Reset(_bool bReset)
+void CEffect_Floating_Speed::Set_Reset(_bool bReset)
 {
 	CEffect::Set_Reset(bReset);
 	m_Desc.fCurTime = 0.f;
@@ -156,7 +158,7 @@ void CEffect_HitFloating::Set_Reset(_bool bReset)
 	m_pBuffer->Particle_Reset();
 }
 
-HRESULT CEffect_HitFloating::SetUp_Components()
+HRESULT CEffect_Floating_Speed::SetUp_Components()
 {
 	if (!m_pTexture || !m_pRenderer || !m_pTransform)
 		return E_FAIL;
@@ -187,39 +189,39 @@ HRESULT CEffect_HitFloating::SetUp_Components()
 	m_backupDesc.iNumInstance = m_Desc.iNumInstance;
 	m_backupDesc.fLifeTime = m_Desc.fMaxLifeTime;
 	m_backupDesc.fCurTime = m_Desc.fCurTime;
-	if (FAILED(__super::SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_VIBuffer_PointInstance_Floating", L"Com_VIBuffer", (CComponent**)&m_pBuffer, &m_backupDesc)))
+	if (FAILED(__super::SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_VIBuffer_PointInstance_Floating_Speed", L"Com_VIBuffer", (CComponent**)&m_pBuffer, &m_backupDesc)))
 		return E_FAIL;
 	return S_OK;
 }
 
-CEffect_HitFloating* CEffect_HitFloating::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
+CEffect_Floating_Speed* CEffect_Floating_Speed::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
 {
 	/* 원형객체 생성할때 초기화 */
-	CEffect_HitFloating* pInstance = new CEffect_HitFloating(pDevice, pDeviceContext);
+	CEffect_Floating_Speed* pInstance = new CEffect_Floating_Speed(pDevice, pDeviceContext);
 
 	if (FAILED(pInstance->NativeConstruct_Prototype()))
 	{
-		MSGBOX("Failed to Creating CEffect_HitFloating");
+		MSGBOX("Failed to Creating CEffect_Floating_Speed");
 		Safe_Release(pInstance);
 	}
 
 	return pInstance;
 }
 
-CGameObject* CEffect_HitFloating::Clone(const _uint _iSceneID, void* pArg)
+CGameObject* CEffect_Floating_Speed::Clone(const _uint _iSceneID, void* pArg)
 {
 	/* 복제본 생성할때는 아래함수 호출해서 추가 초기화를 진행 */
-	CEffect_HitFloating* pInstance = new CEffect_HitFloating(*this);
+	CEffect_Floating_Speed* pInstance = new CEffect_Floating_Speed(*this);
 	if (FAILED(pInstance->NativeConstruct(_iSceneID, pArg)))
 	{
-		MSGBOX("Failed to Creating Clone CEffect_HitFloating");
+		MSGBOX("Failed to Creating Clone CEffect_Floating_Speed");
 		Safe_Release(pInstance);
 	}
 
 	return pInstance;
 }
 
-void CEffect_HitFloating::Free()
+void CEffect_Floating_Speed::Free()
 {
 	Safe_Release(m_pBox);
 	Safe_Release(m_pBuffer);

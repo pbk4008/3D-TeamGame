@@ -129,6 +129,7 @@ HRESULT CStargazer::SetUp_Component()
 
 	_matrix matPivot = /*XMMatrixScaling(10.f, 10.f, 10.f) * */XMMatrixRotationAxis(XMVectorSet(0.f, 1.f, 0.f, 0.f), XMConvertToRadians(90.f)) * XMMatrixTranslation(0.f, 0.f, 0.8f);
 	m_pCollider->setPivotMatrix(matPivot);
+	m_pCollider->setShapeLayer((_uint)ELayer::MonsterWeapon);
 
 	if (FAILED(SetUp_Material()))
 		return E_FAIL;

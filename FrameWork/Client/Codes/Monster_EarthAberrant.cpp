@@ -92,13 +92,12 @@ HRESULT CMonster_EarthAberrant::NativeConstruct(const _uint _iSceneID, void* _pA
 	m_fMaxHp = 5.f;
 	m_fCurrentHp = m_fMaxHp;
 
-	m_fMaxGroggyGauge = 10.f;
+	m_fMaxGroggyGauge = 100.f;
 	m_fGroggyGauge = 0.f;
 
 	m_pPanel->Set_HpBar(Get_HpRatio());
 	m_pPanel->Set_GroggyBar(Get_GroggyGaugeRatio());
 
-	
 	m_tAttackDesc.iLevel = 1;
 	m_tAttackDesc.fDamage = 3.f;
 
@@ -200,17 +199,6 @@ _int CMonster_EarthAberrant::Tick(_double _dDeltaTime)
 		{
 			m_bGroggy = false;
 		}
-	}
-
-
-
-	if (g_pGameInstance->getkeyDown(DIK_NUMPAD5))
-	{
-		Active_Effect_Target((_uint)EFFECT::ATTACK_LEFT, g_pObserver->Get_PlayerPos());
-	}
-	if (g_pGameInstance->getkeyDown(DIK_NUMPAD6))
-	{
-		Active_Effect_Target((_uint)EFFECT::ATTACK_RIGHT, g_pObserver->Get_PlayerPos());
 	}
 
 	return 0;
@@ -667,8 +655,7 @@ void CMonster_EarthAberrant::Hit(const ATTACKDESC& _tAttackDesc)
 		m_pStateController->Change_State(L"Flinch_Left");
 	}
 
-	Active_Effect((_uint)EFFECT::HIT);
-	Active_Effect((_uint)EFFECT::FLOATING);
+	
 }
 
 void CMonster_EarthAberrant::Parry(const PARRYDESC& _tParryDesc)

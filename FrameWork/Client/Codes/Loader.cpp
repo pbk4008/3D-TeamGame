@@ -38,6 +38,7 @@
 #include "Effect_DashDust.h"
 #include "Effect_HitParticle.h"
 #include "Effect_HitFloating.h"
+#include "Effect_Floating_Speed.h"
 #include "Effect_DeathParticle.h"
 #include "Effect_Env_Floating.h"
 #include "Effect_Env_Fire.h"
@@ -59,12 +60,13 @@
 #include "UI_Tuto_Font.h"
 #include "UI_Blank_CKey.h"
 #include "UI_Fill_CKey.h"
+#include "UI_Indicator.h"
+
 //Cinema
 #include "CinemaCam.h"
 
 
 #pragma region TestScene_JS
-
 #include "Camera_Debug.h"
 #include "Plane_Test.h"
 #include "TestObj.h"
@@ -85,6 +87,7 @@
 #include "TrailEffect_Distortion.h"
 #include "Wall.h"
 
+#include "MeshEffect.h"
 #pragma endregion
 
 CLoader::CLoader() 
@@ -502,12 +505,21 @@ HRESULT CLoader::Load_Stage1UILoad()
 		return E_FAIL;
 	}
 
+	//Indicator
+	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_UI_Indicator"), CUI_Indicator::Create(m_pDevice, m_pDeviceContext))))
+	{
+		return E_FAIL;
+	}
+	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"Texture_Indicator", L"../bin/Resources/Texture/UI/Static/Active/T_HUD_CompassMarker_OuterPointer.dds")))
+	{
+		return E_FAIL;
+	}
 	return S_OK;
 }
 
 HRESULT CLoader::Load_Stage1EffectLoad()
 {
-	//Effect
+	//Effect buffer
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_Rect_Effect", CVIBuffer_Rect::Create(m_pDevice, m_pDeviceContext, L"../../Reference/ShaderFile/Shader_Effect_Fire.hlsl"))))
 		return E_FAIL;
 
@@ -519,6 +531,10 @@ HRESULT CLoader::Load_Stage1EffectLoad()
 		CVIBuffer_PointInstance_Floating::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_VIBuffer_PointInstance_Floating_Speed",
+		CVIBuffer_PointInstance_Floating_Speed::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_VIBuffer_PointInstance_Env_Floating",
 		CVIBuffer_PointInstance_Env_Floating::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
@@ -527,6 +543,8 @@ HRESULT CLoader::Load_Stage1EffectLoad()
 		CVIBuffer_PointInstance_Respawn::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 
+
+	//object
 	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_Effect_DashDust"), CEffect_DashDust::Create(m_pDevice, m_pDeviceContext))))
 	{
 		return E_FAIL;
@@ -537,22 +555,27 @@ HRESULT CLoader::Load_Stage1EffectLoad()
 		return E_FAIL;
 	}
 
-	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_Effect_Attack_Left"), CEffect_HitParticle::Create(m_pDevice, m_pDeviceContext))))
-	{
-		return E_FAIL;
-	}
+	//if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_Effect_Attack_Left"), CEffect_HitParticle::Create(m_pDevice, m_pDeviceContext))))
+	//{
+	//	return E_FAIL;
+	//}
 
-	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_Effect_Attack_Right"), CEffect_HitParticle::Create(m_pDevice, m_pDeviceContext))))
-	{
-		return E_FAIL;
-	}
+	//if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_Effect_Attack_Right"), CEffect_HitParticle::Create(m_pDevice, m_pDeviceContext))))
+	//{
+	//	return E_FAIL;
+	//}
 
-	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_Effect_Hit_Ground"), CEffect_HitParticle::Create(m_pDevice, m_pDeviceContext))))
-	{
-		return E_FAIL;
-	}
+	//if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_Effect_Hit_Ground"), CEffect_HitParticle::Create(m_pDevice, m_pDeviceContext))))
+	//{
+	//	return E_FAIL;
+	//}
 
 	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_Effect_Floating"), CEffect_HitFloating::Create(m_pDevice, m_pDeviceContext))))
+	{
+		return E_FAIL;
+	}
+
+	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_Effect_Floating_Speed"), CEffect_Floating_Speed::Create(m_pDevice, m_pDeviceContext))))
 	{
 		return E_FAIL;
 	}
@@ -583,15 +606,15 @@ HRESULT CLoader::Load_Stage1EffectLoad()
 		return E_FAIL;
 	}
 	
-	/*if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_Effect_Hammer_Dust"), CEffect_Hammer_Dust::Create(m_pDevice, m_pDeviceContext))))
-	{
-		return E_FAIL;
-	}*/
+	//if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_Effect_Hammer_Dust"), CEffect_Hammer_Dust::Create(m_pDevice, m_pDeviceContext))))
+	//{
+	//	return E_FAIL;
+	//}
 
-	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_Effect_Monster_Dead_Spray"), CEffect_Dead_Spray::Create(m_pDevice, m_pDeviceContext))))
-	{
-		return E_FAIL;
-	}
+	//if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_Effect_Monster_Dead_Spray"), CEffect_Dead_Spray::Create(m_pDevice, m_pDeviceContext))))
+	//{
+	//	return E_FAIL;
+	//}
 
 	//Effect Folder Image Load
 	_finddata_t fd;
@@ -1183,6 +1206,7 @@ HRESULT CLoader::Ready_Test_JS()
 		return E_FAIL;
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"VIBuffer_Plane", CVIBuffer_Plane::Create(m_pDevice, m_pDeviceContext, L"../../Reference/ShaderFile/Shader_Plane.hlsl", 100, 100))))
 		return E_FAIL;
+#pragma endregion
 
 #pragma region 모델
 	cout << "TestScene_JS 모델 프로토타입 생성중..." << endl;
@@ -1301,7 +1325,6 @@ HRESULT CLoader::Ready_Test_JS()
 	//	return E_FAIL;
 #pragma endregion
 
-
 #pragma region 컴포넌트
 	cout << "TestScene_JS 컴포넌트 프로토타입 생성중..." << endl;
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_AnimationController", CAnimationController::Create(m_pDevice, m_pDeviceContext))))
@@ -1339,6 +1362,7 @@ HRESULT CLoader::Ready_Test_JS()
 		return E_FAIL;
 #pragma endregion
 
+#pragma region 소드트레일
 	/////////////////////////////////////// 소드 트레일
 	// 기본 텍스처
 	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"TrailBase", L"../bin/Resources/Texture/Trail/T_Smoke_Trail_Soft.dds"))) MSGBOX("Failed To Add SwordTrail Tex");
@@ -1363,6 +1387,7 @@ HRESULT CLoader::Ready_Test_JS()
 	// 디스토션
 	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_TrailEffect_Distortion", CTrailEffect_Distortion::Create(m_pDevice, m_pDeviceContext))))
 		MSGBOX(L"트레일이펙트_디스토션 프로토타입 생성 실패");
+#pragma endregion
 
 	// dissolve 
 	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"DissovleBase", L"../bin/Resources/Texture/dissolve.dds"))) MSGBOX("Failed To Add dissolve Tex");
@@ -1376,6 +1401,18 @@ HRESULT CLoader::Ready_Test_JS()
 
 	// Effect
 	if (FAILED(Load_Stage1EffectLoad()))
+		return E_FAIL;
+
+
+	// MeshEffect
+	matPivot = XMMatrixIdentity();
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_MeshEffect", CModel::Create(m_pDevice, m_pDeviceContext,
+		"../bin/Resources/Mesh/Effect/", "Effect01.fbx",
+		L"../../Reference/ShaderFile/Shader_StaticMesh.hlsl", matPivot, CModel::TYPE_STATIC, true))))
+	{
+		return E_FAIL;
+	}
+	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_MeshEffect", CMeshEffect::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 
 	cout << "TestScene_JS 로딩 완료..." << endl;

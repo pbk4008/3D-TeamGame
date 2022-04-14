@@ -216,12 +216,12 @@ HRESULT CSilvermane::NativeConstruct(const _uint _iSceneID, void* _pArg)
 		return E_FAIL;
 
 	m_isFall = true;
-	m_fMaxHp = 50.f;
+	m_fMaxHp = 1150.f;
 	m_fCurrentHp = m_fMaxHp;
 
 	m_pRenderer->SetRenderButton(CRenderer::PIXEL, true);
 	m_pRenderer->SetRenderButton(CRenderer::PBRHDR, true);
-	m_pRenderer->SetCameraTag(g_pGameInstance->Get_BaseCameraTag());
+
 
 	return S_OK;
 }
@@ -279,12 +279,6 @@ _int CSilvermane::Tick(_double _dDeltaTime)
 		iProgress = m_pShield->Tick(_dDeltaTime);
 		if (NO_EVENT != iProgress)
 			return iProgress;
-	}
-
-	if (g_pGameInstance->getkeyDown(DIK_NUMPAD8))
-	{
-		_vector pos = { 0.f, 0.f, 5.f };
-		Active_Effect((_uint)EFFECT::HITGROUND, pos);
 	}
 
 	return _int();
@@ -501,7 +495,7 @@ HRESULT CSilvermane::Ready_Components()
 	m_pAnimationController->Set_Transform(m_pTransform);
 	m_pAnimationController->Set_MoveSpeed(36.f);
 	m_fMoveSpeed = 3.6f;
-	m_fCurrentHp = 100.f;
+	m_fCurrentHp = 1000.f;
 
 	// 스테이트 컨트롤러
 	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_StateController", L"StateController", (CComponent**)&m_pStateController)))
@@ -836,17 +830,17 @@ HRESULT CSilvermane::Ready_Weapons(const _uint _iSceneID)
 	//pWeapon->Set_OwnerPivotMatrix(m_pModel->Get_PivotMatrix());
 	//pWeapon->Set_Equip(false);
 	//m_umapWeapons.emplace(L"Fury", pWeapon);
-	//// 방패
-	//pWeaponBone = m_pModel->Get_BoneMatrix("weapon_l");
-	//m_pShield = CShield::Create(m_pDevice, m_pDeviceContext);
-	//if (FAILED(m_pShield->NativeConstruct(m_iSceneID, pWeaponBone)))
-	//{
-	//	Safe_Release(m_pShield);
-	//	return E_FAIL;
-	//}
-	//m_pShield->Set_Owner(this);
-	//m_pShield->Set_OwnerPivotMatrix(m_pModel->Get_PivotMatrix());
-	//Set_EquipShield(false);
+	// 방패
+	CHierarchyNode* pWeaponBone = m_pModel->Get_BoneMatrix("weapon_l");
+	m_pShield = CShield::Create(m_pDevice, m_pDeviceContext);
+	if (FAILED(m_pShield->NativeConstruct(m_iSceneID, pWeaponBone)))
+	{
+		Safe_Release(m_pShield);
+		return E_FAIL;
+	}
+	m_pShield->Set_Owner(this);
+	m_pShield->Set_OwnerPivotMatrix(m_pModel->Get_PivotMatrix());
+	Set_EquipShield(false);
 
 #pragma endregion
 
