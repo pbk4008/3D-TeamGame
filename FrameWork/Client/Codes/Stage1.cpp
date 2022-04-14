@@ -117,18 +117,8 @@ HRESULT CStage1::NativeConstruct()
 	g_pGameInstance->Change_BaseCamera(L"Camera_Silvermane");
 	g_pGameInstance->PlayBGM(L"Stage1_BGM");
 
-	g_pInteractManager = CInteractManager::GetInstance();
-	if (FAILED(g_pInteractManager->NativeConstruct()))
-		return E_FAIL;
-
-	g_pDropManager = CDropManager::GetInstance();
-	if (FAILED(g_pDropManager->NativeConstruct((SCENEID::SCENE_STAGE1))))
-		return E_FAIL;
-
-	m_pScenemaManager = GET_INSTANCE(CScenematicManager);
-
-	if (FAILED(Ready_Cinema()))
-		return E_FAIL;
+	/*if (FAILED(Ready_Cinema()))
+		return E_FAIL;*/
 
 	//if (FAILED(Ready_Boss(L"Layer_Boss")))
 	//	return E_FAIL;
@@ -255,15 +245,15 @@ _int CStage1::Tick(_double TimeDelta)
 	g_pInteractManager->Tick(TimeDelta);
 	g_pDropManager->Tick();
 
-	if (g_pGameInstance->getkeyDown(DIK_END))
-		m_pScenemaManager->Active_Scenema((_uint)CINEMA_INDEX::CINEMA1_1, &m_pCinema);
+	//if (g_pGameInstance->getkeyDown(DIK_END))
+	//	m_pScenemaManager->Active_Scenema((_uint)CINEMA_INDEX::CINEMA1_1, &m_pCinema);
 
-	if (m_pCinema && m_pCinema->Get_Active())
-	{
-		m_pCinema->Tick(TimeDelta);
-		if (!m_pCinema->Get_Active())
-			m_pCinema = nullptr;
-	}
+	//if (m_pCinema && m_pCinema->Get_Active())
+	//{
+	//	m_pCinema->Tick(TimeDelta);
+	//	if (!m_pCinema->Get_Active())
+	//		m_pCinema = nullptr;
+	//}
 
 	return _int();
 }
@@ -1690,8 +1680,8 @@ void CStage1::Free()
 {
 	CLevel::Free();
 
-	Safe_Release(m_pScenemaManager);
-	CScenematicManager::DestroyInstance();
+	//Safe_Release(m_pScenemaManager);
+	//CScenematicManager::DestroyInstance();
 
 	CDropManager::DestroyInstance();
 	CInteractManager::DestroyInstance();
