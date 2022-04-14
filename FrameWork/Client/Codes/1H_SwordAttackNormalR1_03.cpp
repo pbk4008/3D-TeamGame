@@ -74,6 +74,7 @@ HRESULT C1H_SwordAttackNormalR1_03::EnterState()
 	m_iTrailStartIndex = 10;
 	m_iTrailEndIndex = 25;
 
+	m_pSilvermane->Set_AttackDesc_Dir(EAttackDir::Right);
 	return S_OK;
 }
 

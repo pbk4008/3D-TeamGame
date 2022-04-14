@@ -79,7 +79,7 @@ HRESULT CPotal::NativeConstruct(const _uint _iSceneID, void* _pArg)
 	_vector vPos = (*(_vector*)_pArg);
 	m_pTransform->Set_State(CTransform::STATE_POSITION, vPos);
 
-	m_fRandSpawnTime = MathUtils::ReliableRandom(0.5f, 1.3f);
+	m_fRandSpawnTime = (_float)MathUtils::ReliableRandom(0.5f, 1.3f);
 	cout << m_fRandSpawnTime << endl;
 	return S_OK;
 }
@@ -88,7 +88,7 @@ _int CPotal::Tick(_double _dDeltaTime)
 {
 	if (!m_bSpawn)
 	{
-		m_fAccSpawnTime += _dDeltaTime;
+		m_fAccSpawnTime += (_float)_dDeltaTime;
 		if (m_fAccSpawnTime >= m_fRandSpawnTime)
 		{
 			m_fAccSpawnTime = 0.f;

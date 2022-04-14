@@ -52,8 +52,18 @@ cbuffer ShaderCheck
 	bool g_outline;
 	bool g_radial;
 	bool g_distort;
+	bool g_fog;
 	int	 g_RadialCnt;
 	float g_delta;
+};
+
+cbuffer Fogbuffer
+{
+	float4 g_fogcolor = (float4) 0;
+	float g_fogDenstiy = (float) 0;
+	float g_fogDist = (float) 0;
+	float g_fogstart = (float) 0;
+	float g_fogend = (float) 0;
 };
 
 cbuffer LightDesc
@@ -383,26 +393,32 @@ PS_OUT_BLEND PS_MAIN_BLEND(PS_IN In)
 {
 	PS_OUT_BLEND Out = (PS_OUT_BLEND) 0;
 	
+	half4 depth = g_DepthTexture.Sample(DefaultSampler, In.vTexUV);
 	half4 color = g_DiffuseTexture.Sample(DefaultSampler, In.vTexUV);
+	vector vDepthDesc = g_DepthTexture.Sample(DefaultSampler, In.vTexUV);
+	float fViewZ = depth.y * 300.f;
 	
 	Out.vColor = color;
-
-	//Out.vColor = DOF(g_DiffuseTexture, g_DepthTexture, g_BlurTexture, DefaultSampler, In.vTexUV, g_ProjMatrixInv, g_ViewMatrixInv, g_vCamPosition);
 	
 	if (g_distort == true)
 	{
-		Out.vColor = Distortion(g_STDistortionTex, g_DiffuseTexture, DefaultSampler, In.vTexUV, g_delta);
-		Out.vColor = Distortion(g_DistortionTex, g_DiffuseTexture, DefaultSampler, In.vTexUV, g_delta);
+		//Out.vColor = Distortion(g_STDistortionTex, g_DiffuseTexture, DefaultSampler, In.vTexUV, g_delta);
+		Out.vColor = Distortion(g_DistortionTex, g_DiffuseTexture, DefaultSampler, In.vTexUV);
 	}
 	
 	if (g_radial == true)
-	{		
+	{	
 		Out.vColor.rgb = Radialblur(g_DiffuseTexture,DefaultSampler,In.vTexUV,g_RadialCnt);
 	}
 	
-
 	if (Out.vColor.a == 0)
 		discard;
+	
+	if (g_fog == true)
+	{
+		half fogfactor = 1.0 / pow(2.71828, saturate((fViewZ - g_fogDist) * g_fogDenstiy));
+		Out.vColor = fogfactor * Out.vColor + (1.0 - fogfactor) * g_fogcolor;
+	}
 	
 	return Out;
 }

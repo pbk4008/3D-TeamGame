@@ -176,7 +176,7 @@ _int CBoss_Bastion_Judicator::Tick(_double TimeDelta)
 		}
 		else
 		{
-			Set_Remove(true);
+			//Set_Remove(true);
 			m_pPanel->Set_UIRemove(true);
 			Active_Effect((_uint)EFFECT::DEATH);
 		}
@@ -594,6 +594,11 @@ void CBoss_Bastion_Judicator::Set_IsAttack(const _bool _isAttack)
 	{
 		m_pWeapon->Set_IsAttack(_isAttack);
 	}
+}
+
+void CBoss_Bastion_Judicator::OnWeaponEffect()
+{
+	m_pWeapon->Set_HitGround(true);
 }
 
 

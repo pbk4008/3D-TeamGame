@@ -94,7 +94,7 @@ HRESULT CStargazer::Render_Shadow()
 
 void CStargazer::Set_OwnerPivotMatrix(const _fmatrix& _smatPivot)
 {
-	XMStoreFloat4x4(&m_smatOwnerPivot, _smatPivot);
+	XMStoreFloat4x4(&m_matOwnerPivot, _smatPivot);
 }
 
 HRESULT CStargazer::SetUp_Component()
@@ -144,7 +144,7 @@ _int CStargazer::Attach_FixedBone(const _double& _dDeltaTime)
 		//뼈노드가 가지고 있는 Combine행렬 가져옴
 		_matrix smatWorld = m_pFixedBone->Get_CombinedMatrix();
 		//무기 가지고 있는 객체의 피벗 곱해줌
-		smatWorld *= XMLoadFloat4x4(&m_smatOwnerPivot);
+		smatWorld *= XMLoadFloat4x4(&m_matOwnerPivot);
 		//무기 로컬 트랜스 폼 갱신
 		m_pLocalTransform->Set_WorldMatrix(smatWorld);
 	}

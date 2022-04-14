@@ -24,6 +24,9 @@ _int CSpear_Groggy::Tick(const _double& _dDeltaTime)
 
 	m_fGroggyTime -= (_float)_dDeltaTime;
 
+	if (0 >= m_fGroggyTime)
+		m_pStateController->Change_State(L"Groggy_End");
+
 	return _int();
 }
 
@@ -47,8 +50,7 @@ void CSpear_Groggy::Look_Player(void)
 
 void CSpear_Groggy::Look_Monster(void)
 {
-	if (0 >= m_fGroggyTime)
-		m_pStateController->Change_State(L"Groggy_End");
+
 }
 
 void CSpear_Groggy::OnTriggerEnter(CCollision& collision)
@@ -65,6 +67,7 @@ HRESULT CSpear_Groggy::EnterState()
 HRESULT CSpear_Groggy::ExitState()
 {
 	m_fGroggyTime = 5.0f;
+	m_pOwner->Set_Groggy(false);
 	return S_OK;
 }
 

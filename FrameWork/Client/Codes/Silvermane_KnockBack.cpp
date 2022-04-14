@@ -154,7 +154,7 @@ HRESULT CSilvermane_KnockBack::ExitState()
 	m_pAnimationController->Div_MoveSpeed(0.5f);
 
 	m_pSilvermane->Set_IsTrasceCamera(true);
-
+	m_pSilvermane->Set_Radial(false);
 	return S_OK;
 }
 

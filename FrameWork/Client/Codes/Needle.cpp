@@ -84,6 +84,7 @@ HRESULT CNeedle::NativeConstruct(const _uint _iSceneID, void* _pArg)
 
 	m_bActive = false;
 	m_pCollider->Remove_ActorFromScene();
+
 	return S_OK;
 }
 
@@ -94,6 +95,9 @@ _int CNeedle::Tick(_double _dDeltaTime)
 
 	Attach_FixedBone(_dDeltaTime);
 	Attach_Owner(_dDeltaTime);
+	_vector svPos = m_pTransform->Get_State(CTransform::STATE_POSITION);
+	_vector svLook = XMVector3Normalize(m_pTransform->Get_State(CTransform::STATE_LOOK));
+	XMStoreFloat3(&m_vEndPos, svPos + svLook);
 
 	if (m_pCollider)
 		m_pCollider->Tick(_dDeltaTime);
@@ -171,7 +175,20 @@ HRESULT CNeedle::Render()
 	desc.color = _float4(0.7529f, 0.7529f, 0.7529f, 1.f);
 	desc.empower = 0.7f;
 
-	CWeapon::BindConstantBuffer(wstrCamTag, &desc);
+	RIM rimdesc;
+	ZeroMemory(&rimdesc, sizeof(rimdesc));
+	
+	if (m_rimcheck == true)
+	{
+		rimdesc.rimcheck = m_rimcheck;
+		rimdesc.rimintensity = m_rimintensity;
+		rimdesc.rimcol = _float4(1.0f, 0, 0, 1.0f);
+		XMStoreFloat4(&rimdesc.camdir, XMVector3Normalize(m_pTransform->Get_State(CTransform::STATE_POSITION) - g_pGameInstance->Get_CamPosition(L"Camera_Silvermane")));
+		CWeapon::SetRimIntensity(g_fDeltaTime * -4.f);
+	}
+
+	CWeapon::BindConstantBuffer(wstrCamTag, &desc, &rimdesc);
+
 	for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
 		m_pModel->Render(i, 0);
 
@@ -306,7 +323,7 @@ _int CNeedle::Attach_FixedBone(const _double& _dDeltaTime)
 		if (XMMatrixIsNaN(smatWorld))
 			smatWorld = XMMatrixIdentity();
 
-		smatWorld *= XMLoadFloat4x4(&m_smatOwnerPivot);;
+		smatWorld *= XMLoadFloat4x4(&m_matOwnerPivot);;
 
 		if (!m_isEquip)
 			smatWorld = XMLoadFloat4x4(&m_matPivot) * smatWorld;

@@ -2,6 +2,8 @@
 #include "FlyingShield.h"
 #include "Material.h"
 
+#include "HierarchyNode.h"
+
 CFlyingShield::CFlyingShield(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
 	: CWeapon(_pDevice, _pDeviceContext)
 {
@@ -50,19 +52,29 @@ HRESULT CFlyingShield::NativeConstruct(const _uint _iSceneID, void* _pArg)
 	if (FAILED(Ready_Components()))
 		return E_FAIL;
 
+	// 날아가야할 방향벡터 구하는 곳
 	_vector svDir = XMVectorSetW(XMLoadFloat3(&m_tDesc.vTargetPos), 1.f) - m_pTransform->Get_State(CTransform::STATE_POSITION);
 	m_fDis = XMVectorGetX(XMVector3Length(svDir));
 	svDir = XMVector3Normalize(svDir);
 	XMStoreFloat3(&m_vDir, svDir);
-	m_fLiveTime = 1.6f;
+
+	// 방향벡터를 기준으로 라업룩 회전시켜주는곳
+	_vector svLook = XMVector3Normalize(svDir) * m_pTransform->Get_Scale(CTransform::STATE_LOOK);
+	_vector svRight = XMVector3Cross(XMVectorSet(0.f, 1.f, 0.f, 0.f), svDir) * m_pTransform->Get_Scale(CTransform::STATE_RIGHT);
+	_vector svUp = XMVector3Cross(svDir, XMVector3Normalize(svRight)) * m_pTransform->Get_Scale(CTransform::STATE_UP);
+	m_pTransform->Set_State(CTransform::STATE_RIGHT, svRight);
+	m_pTransform->Set_State(CTransform::STATE_UP, svUp);
+	m_pTransform->Set_State(CTransform::STATE_LOOK, svLook);
 
 	//m_fSpeed = m_fDis / (m_fLiveTime * 0.5f);
 	m_fSpeed = 50.f;
 
 	m_fDamage = 3.f;
 	m_isAttack = true;
+	m_fLiveTime = 1.6f;
 
 	g_pObserver->Set_IsThrownObject(true);
+
 	return S_OK;
 }
 
@@ -75,7 +87,9 @@ _int CFlyingShield::Tick(_double _dDeltaTime)
 	if (!m_isReturn)
 	{
 		_vector svPos = m_pTransform->Get_State(CTransform::STATE_POSITION);
-		_vector svVelocity = XMLoadFloat3(&m_vDir) * m_fSpeed * (_float)_dDeltaTime;
+		_vector svLook = XMVector3Normalize(m_pTransform->Get_State(CTransform::STATE_LOOK));
+		//_vector svVelocity = XMLoadFloat3(&m_vDir) * m_fSpeed * (_float)_dDeltaTime;
+		_vector svVelocity = svLook * m_fSpeed * (_float)_dDeltaTime;
 		svPos += svVelocity;
 		m_fAccDis += XMVectorGetX(XMVector3Length(svVelocity));
 		m_pTransform->Set_State(CTransform::STATE_POSITION, svPos);
@@ -88,8 +102,12 @@ _int CFlyingShield::Tick(_double _dDeltaTime)
 	}
 	else
 	{
+		_matrix smatOwner = m_pFixedBone->Get_CombinedMatrix() * XMLoadFloat4x4(&m_matOwnerPivot) * m_pOwner->Get_Transform()->Get_WorldMatrix();
+		_vector svOwnerPos = smatOwner.r[3];
 		_vector svPos = m_pTransform->Get_State(CTransform::STATE_POSITION);
-		svPos -= XMLoadFloat3(&m_vDir) * m_fSpeed * (_float)_dDeltaTime;
+		_vector svDir = XMVector3Normalize(svOwnerPos - svPos);
+
+		svPos += svDir * m_fSpeed * (_float)_dDeltaTime;
 		m_pTransform->Set_State(CTransform::STATE_POSITION, svPos);
 	}
 
@@ -184,8 +202,6 @@ HRESULT CFlyingShield::Ready_Components()
 
 	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Model_FlyingShield", L"Model", (CComponent**)&m_pModel)))
 		return E_FAIL;
-	_matrix matPivot = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationRollPitchYaw(XMConvertToRadians(-90.f), XMConvertToRadians(0.f), XMConvertToRadians(0.f));
-	m_pModel->Set_PivotMatrix(matPivot);
 	m_pModel->Add_Material(g_pGameInstance->Get_Material(L"Mtrl_FlyingShield"), 0);
 
 
@@ -228,5 +244,4 @@ void CFlyingShield::Free()
 	__super::Free();
 
 	Safe_Release(m_pCollider);
-	Safe_Release(m_pModel);
 }

@@ -21,10 +21,16 @@ _int CBronzeAnimus_Groggy::Tick(const _double& _dDeltaTime)
 	if (NO_EVENT != iProgress)
 		return iProgress;
 
-	if(!m_bGroggy)
-		m_pAnimator->Tick(_dDeltaTime);
+	m_pAnimator->Tick(_dDeltaTime);
 
 	m_fGroggyTime -= (_float)_dDeltaTime;
+	cout << "±×·Î±â" << endl;
+
+	if ((_uint)CMonster_BronzeAnimus::ANIM_TYPE::A_STUN == m_pAnimator->Get_CurrentAnimNode()
+		&& m_fGroggyTime <= 0.f)
+	{
+		m_pAnimator->Change_LoopAnim();
+	}
 
 	return _int();
 }
@@ -45,15 +51,16 @@ HRESULT CBronzeAnimus_Groggy::Render()
 
 void CBronzeAnimus_Groggy::Look_Player(void)
 {
+	
 }
 
 void CBronzeAnimus_Groggy::Look_Monster(void)
 {
-	if (0 >= m_fGroggyTime)
+	/*if (0 >= m_fGroggyTime)
 	{
 		m_bGroggy = true;
 		m_pStateController->Change_State(L"Groggy_End");
-	}
+	}*/
 }
 
 void CBronzeAnimus_Groggy::OnTriggerEnter(CCollision& collision)
@@ -70,7 +77,7 @@ HRESULT CBronzeAnimus_Groggy::EnterState()
 HRESULT CBronzeAnimus_Groggy::ExitState()
 {
 	m_fGroggyTime = 5.0f;
-	m_bGroggy = false;
+	m_pMonster->Set_Groggy(false);
 	return S_OK;
 }
 

@@ -52,11 +52,25 @@ cbuffer Colorbuffer
 
 cbuffer ClipPlaneBuffer
 {
-	float4 ClipPlane;
+	float4 ClipPlane = (float4)0;
 };
 
-cbuffer CameraDesc
+cbuffer Camerabuffer
 {
-	vector g_vCamPosition;
-	float g_Weight;
+	vector g_vCamPosition = (vector)0;
+	float g_Weight = (float)0;
+};
+
+cbuffer Dissolvebuffer
+{
+	float	g_dissolvetime = (float)0;
+	bool	g_bdissolve = (bool) 0;
+};
+
+cbuffer Limlight
+{
+	bool	g_rimlightcheck = (bool)0;
+	float	g_rimintensity = (float)0;
+	float4	g_rimcolor = (float4)0;
+	float4	g_camdir = (float4)0;
 };

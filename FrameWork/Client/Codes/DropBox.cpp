@@ -254,7 +254,7 @@ std::vector<CItemData> CDropBox::GetDropList(void)
 	item2.iconTexName = L"T_Weapon_DualBlades_1H_Player_Mercy";
 	item2.equipmentGrade = EEquipmentGrade::Epic;
 	item2.ItemType = EItemType::Equipment;
-	item2.equipmentType = EEquipmentType::Weapon;
+	item2.equipmentType = EEquipmentType::Augment;
 	item2.szItemName = L"SuBin's Sword";
 	item2.iMainStat = 20;
 	item2.iLevel = 16;
@@ -264,7 +264,7 @@ std::vector<CItemData> CDropBox::GetDropList(void)
 	item3.iconTexName = L"T_Weapon_Sword_1H_Player_Needle";
 	item3.equipmentGrade = EEquipmentGrade::Rare;
 	item3.ItemType = EItemType::Equipment;
-	item3.equipmentType = EEquipmentType::Weapon;
+	item3.equipmentType = EEquipmentType::Banner;
 	item3.szItemName = L"YoungMo's Sword";
 	item3.iMainStat = 20;
 	item3.iLevel = 16;
@@ -273,7 +273,7 @@ std::vector<CItemData> CDropBox::GetDropList(void)
 	item4.iconTexName = L"T_Weapon_Hammer_2H_Player_Fury";
 	item4.equipmentGrade = EEquipmentGrade::Uncommon;
 	item4.ItemType = EItemType::Equipment;
-	item4.equipmentType = EEquipmentType::Weapon;
+	item4.equipmentType = EEquipmentType::LifeStone;
 	item4.szItemName = L"BeangGyu's Sword";
 	item4.iMainStat = 20;
 	item4.iLevel = 16;
@@ -282,7 +282,7 @@ std::vector<CItemData> CDropBox::GetDropList(void)
 	item5.iconTexName = L"T_Weapon_Hammer_2H_Player_Legend7";
 	item5.equipmentGrade = EEquipmentGrade::Common;
 	item5.ItemType = EItemType::Equipment;
-	item5.equipmentType = EEquipmentType::Weapon;
+	item5.equipmentType = EEquipmentType::Ring;
 	item5.szItemName = L"HeeDong's Sword";
 	item5.iMainStat = 20;
 	item5.iLevel = 16;
@@ -292,8 +292,8 @@ std::vector<CItemData> CDropBox::GetDropList(void)
 	item6.iconTexName = L"T_Amulet_11";
 	item6.equipmentGrade = EEquipmentGrade::Rare;
 	item6.ItemType = EItemType::Equipment;
-	item6.equipmentType = EEquipmentType::Weapon;
-	item6.szItemName = L"HeeDong's Sword";
+	item6.equipmentType = EEquipmentType::Ring;
+	item6.szItemName = L"HeeDong's Sword_2";
 	item6.iMainStat = 20;
 	item6.iLevel = 16;
 
@@ -301,8 +301,8 @@ std::vector<CItemData> CDropBox::GetDropList(void)
 	item7.iconTexName = L"T_Amulet_12";
 	item7.equipmentGrade = EEquipmentGrade::Epic;
 	item7.ItemType = EItemType::Equipment;
-	item7.equipmentType = EEquipmentType::Weapon;
-	item7.szItemName = L"HeeDong's Sword";
+	item7.equipmentType = EEquipmentType::Augment;
+	item7.szItemName = L"HeeDong's Sword_3";
 	item7.iMainStat = 20;
 	item7.iLevel = 16;
 
@@ -311,7 +311,7 @@ std::vector<CItemData> CDropBox::GetDropList(void)
 	item8.equipmentGrade = EEquipmentGrade::Legendary;
 	item8.ItemType = EItemType::Equipment;
 	item8.equipmentType = EEquipmentType::Weapon;
-	item8.szItemName = L"HeeDong's Sword";
+	item8.szItemName = L"HeeDong's Sword_4";
 	item8.iMainStat = 20;
 	item8.iLevel = 16;
 
@@ -320,7 +320,7 @@ std::vector<CItemData> CDropBox::GetDropList(void)
 	item9.equipmentGrade = EEquipmentGrade::Common;
 	item9.ItemType = EItemType::Equipment;
 	item9.equipmentType = EEquipmentType::Weapon;
-	item9.szItemName = L"HeeDong's Sword";
+	item9.szItemName = L"HeeDong's Sword_5";
 	item9.iMainStat = 20;
 	item9.iLevel = 16;
 
@@ -329,7 +329,7 @@ std::vector<CItemData> CDropBox::GetDropList(void)
 	item10.equipmentGrade = EEquipmentGrade::Common;
 	item10.ItemType = EItemType::Equipment;
 	item10.equipmentType = EEquipmentType::Weapon;
-	item10.szItemName = L"HeeDong's Sword";
+	item10.szItemName = L"HeeDong's Sword_6";
 	item10.iMainStat = 20;
 	item10.iLevel = 16;
 

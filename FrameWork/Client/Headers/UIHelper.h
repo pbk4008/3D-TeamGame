@@ -24,6 +24,7 @@ public:
 	_bool IsCursorRect(void);
 	POINT getMousePostion(void);
 	_bool MouseClickDown(void);
+	_bool MouseClickItem(void);
 	_bool MouseClickEquipBtn(void);
 	_bool MouseClickArmoryBtn(void);
 

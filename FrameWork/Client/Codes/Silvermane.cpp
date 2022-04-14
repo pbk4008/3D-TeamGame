@@ -280,6 +280,12 @@ _int CSilvermane::Tick(_double _dDeltaTime)
 			return iProgress;
 	}
 
+	if (g_pGameInstance->getkeyDown(DIK_NUMPAD8))
+	{
+		_vector pos = { 0.f, 0.f, 5.f };
+		Active_Effect((_uint)EFFECT::HITGROUND, pos);
+	}
+
 	return _int();
 }
 
@@ -328,6 +334,10 @@ _int CSilvermane::LateTick(_double _dDeltaTime)
 
 HRESULT CSilvermane::Render()
 {
+
+	RIM rimdesc;
+	ZeroMemory(&rimdesc, sizeof(RIM));
+
 	wstring wstrCamTag = g_pGameInstance->Get_BaseCameraTag();
 	if (g_pObserver->IsAttack())
 	{
@@ -351,6 +361,15 @@ HRESULT CSilvermane::Render()
 			m_color.z += 0.005f;
 	}
 
+	if (m_rimcheck == true)
+	{
+		rimdesc.rimcheck = m_rimcheck;
+		rimdesc.rimcol = _float4(1.f, 0, 0, 1);
+		rimdesc.rimintensity = m_rimintensity; // intensity ³·À» ¼ö·Ï °úÇÏ°Ô ºû³²
+		XMStoreFloat4(&rimdesc.camdir, XMVector3Normalize(m_pTransform->Get_State(CTransform::STATE_POSITION) - g_pGameInstance->Get_CamPosition(L"Camera_Silvermane")));
+		CActor::SetRimIntensity(g_fDeltaTime * -10.f);
+	}
+
 	for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
 	{
 		SCB desc;
@@ -360,10 +379,10 @@ HRESULT CSilvermane::Render()
 		{
 			desc.color = m_color;
 			desc.empower = 0.8f;
-			CActor::BindConstantBuffer(wstrCamTag, &desc);
+			CActor::BindConstantBuffer(wstrCamTag, &desc, &rimdesc);
 		}
 		else
-			CActor::BindConstantBuffer(wstrCamTag, &desc);
+			CActor::BindConstantBuffer(wstrCamTag, &desc, &rimdesc);
 
 		if (FAILED(m_pModel->Render(i, i))) MSGBOX("Fialed To Rendering Silvermane");
 	}

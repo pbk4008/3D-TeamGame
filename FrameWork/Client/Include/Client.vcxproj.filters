@@ -807,6 +807,12 @@
     </Filter>
     <Filter Include="100.ShaderFiles\01.Environment\02.Actor">
       <UniqueIdentifier>{01f09cd2-dcfc-4f2c-a5da-56671ab0b823}</UniqueIdentifier>
+     </Filter>
+    <Filter Include="02.GameObject\04.Effect\00.Effect_Image\01.Hammer_Dust">
+      <UniqueIdentifier>{4de6e516-ad86-47ae-a1e1-49d04baa93c3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\04.Effect\00.Effect_Image\02.DeadSpray">
+      <UniqueIdentifier>{93da6596-e33e-43cb-b193-e94382481f3a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -1824,6 +1830,12 @@
     <ClInclude Include="..\Headers\FlyingShield.h">
       <Filter>02.GameObject\96.Weapon\99.Shield</Filter>
     </ClInclude>
+    <ClInclude Include="..\Headers\Effect_Hammer_Dust.h">
+      <Filter>02.GameObject\04.Effect\00.Effect_Image\01.Hammer_Dust</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Effect_Dead_Spray.h">
+      <Filter>02.GameObject\04.Effect\00.Effect_Image\02.DeadSpray</Filter>
+	</ClInclude>
     <ClInclude Include="..\Headers\UI_SlotBackground.h">
       <Filter>02.GameObject\05.UI\04.Inventory\04.ItemSlot\00.Background</Filter>
     </ClInclude>
@@ -2812,6 +2824,12 @@
     </ClCompile>
     <ClCompile Include="..\Codes\FlyingShield.cpp">
       <Filter>02.GameObject\96.Weapon\99.Shield</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Effect_Hammer_Dust.cpp">
+      <Filter>02.GameObject\04.Effect\00.Effect_Image\01.Hammer_Dust</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Effect_Dead_Spray.cpp">
+      <Filter>02.GameObject\04.Effect\00.Effect_Image\02.DeadSpray</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

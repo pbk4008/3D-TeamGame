@@ -146,6 +146,8 @@ HRESULT C1H_Stagger::ExitState()
 	if (FAILED(__super::ExitState()))
 		return E_FAIL;
 
+	m_pSilvermane->Set_Radial(false);
+
 	return S_OK;
 }
 

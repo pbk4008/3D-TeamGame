@@ -62,6 +62,10 @@ HRESULT CActor::NativeConstruct(const _uint _iSceneID, void* pArg)
 	m_tAttackDesc.pHitObject = this;
 
 	m_lightdesc = g_pGameInstance->Get_LightDesc(0);
+
+	m_dissolveTex = g_pGameInstance->Clone_Component<CTexture>(0, L"Proto_Component_Texture");
+	if (FAILED(m_dissolveTex->Change_Texture(L"DissovleBase"))) MSGBOX("Failed to Change Texture DissovleTex");
+
 	return S_OK;
 }
 
@@ -125,7 +129,7 @@ HRESULT CActor::Set_SpawnPosition(const _float3 vPoint)
 	return S_OK;
 }
 
-HRESULT CActor::BindConstantBuffer(const wstring& camTag, SCB* bindbuffer)
+HRESULT CActor::BindConstantBuffer(const wstring& camTag, SCB* bindbuffer, RIM* rimbuffer)
 {
 	if (m_pTransform == nullptr)
 		MSGBOX("Failed To Apply Actor Transform nullptr");
@@ -146,6 +150,14 @@ HRESULT CActor::BindConstantBuffer(const wstring& camTag, SCB* bindbuffer)
 		if(FAILED(m_pModel->SetUp_ValueOnShader("g_AO", &bindbuffer->ao, sizeof(_float)))) MSGBOX("Failed To Apply Actor ConstantBuffer");
 		if(FAILED(m_pModel->SetUp_ValueOnShader("g_color", &bindbuffer->color, sizeof(_float4)))) MSGBOX("Failed To Apply Actor ConstantBuffer");
 		if(FAILED(m_pModel->SetUp_ValueOnShader("g_empower", &bindbuffer->empower, sizeof(_float)))) MSGBOX("Failed To Apply Actor ConstantBuffer");
+	}
+
+	if (rimbuffer)
+	{
+		if (FAILED(m_pModel->SetUp_ValueOnShader("g_rimlightcheck", &rimbuffer->rimcheck, sizeof(_bool)))) MSGBOX("Failed To Apply Actor ConstantBuffer");
+		if (FAILED(m_pModel->SetUp_ValueOnShader("g_rimintensity", &rimbuffer->rimintensity, sizeof(_float)))) MSGBOX("Failed To Apply Actor ConstantBuffer");
+		if (FAILED(m_pModel->SetUp_ValueOnShader("g_rimcolor", &rimbuffer->rimcol, sizeof(_float4)))) MSGBOX("Failed To Apply Actor ConstantBuffer");
+		if (FAILED(m_pModel->SetUp_ValueOnShader("g_camdir", &rimbuffer->camdir, sizeof(_float4)))) MSGBOX("Failed To Apply Actor ConstantBuffer");
 	}
 
 	return S_OK;
@@ -195,10 +207,59 @@ void CActor::Active_Effect(_uint iEffectIndex, _fvector vPivot)
 	pEffect->Set_Reset(true);
 }
 
+void CActor::Active_Effect_Target(_uint iEffectIndex, _fvector TargetPos)
+{
+	CEffect* pEffect = g_pGameInstance->Get_Effect(iEffectIndex);
+	if (!pEffect)
+	{
+		MSGBOX("Effect Null!!");
+		return;
+	}
+
+	_vector Mypos = m_pTransform->Get_State(CTransform::STATE_POSITION);
+	Mypos = XMVectorSetY(Mypos, XMVectorGetY(Mypos) + 1.f);
+	pEffect->Get_Transform()->Set_State(CTransform::STATE_POSITION, Mypos);
+	pEffect->Get_Transform()->Face_Target(TargetPos);
+	pEffect->setActive(true);
+	pEffect->Set_Reset(true);
+}
+
 
 void CActor::Set_AttackDesc(const ATTACKDESC& _tAttackDesc)
 {
 	m_tAttackDesc = _tAttackDesc;
+}
+
+void CActor::RimlightCheck(_bool check)
+{
+	m_rimcheck = check;
+	if (check == false)
+		m_rimintensity = 30.f;
+}
+
+void CActor::SetRimIntensity(_float time)
+{
+	m_rimintensity += time;
+
+	if (m_rimintensity <= 5.f)
+		m_rimintensity = 5.f;
+}
+
+HRESULT CActor::DissolveOn(_float dissolveSpeed)
+{
+	if (m_bdissolve == true)
+	{
+		m_lifetime += (g_fDeltaTime * dissolveSpeed);
+		if (m_lifetime >= 1.f)
+		{
+			m_lifetime = 1.f;
+			/*m_bdissolve = false;*/
+		}
+		if (FAILED(m_pModel->SetUp_ValueOnShader("g_dissolvetime", &m_lifetime, sizeof(_float)))) MSGBOX("Failed to Apply dissolvetime");
+		if (FAILED(m_pModel->SetUp_TextureOnShader("g_DissolveTex", m_dissolveTex, 0))) MSGBOX("Failed to Apply dissolveTex");
+	}
+
+	return S_OK;
 }
 
 void CActor::Hit(const ATTACKDESC& _tAttackDesc)

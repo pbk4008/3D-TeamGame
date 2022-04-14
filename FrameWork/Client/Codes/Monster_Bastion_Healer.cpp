@@ -247,9 +247,11 @@ void CMonster_Bastion_Healer::Hit(CCollision& pCol)
 	{
 		if (true == g_pObserver->IsAttack()) //ÇÃ·¹ÀÌ¾î°ø°İÀÏ¶§
 		{
-			m_bFirstHit = true; //µü ÇÑ¹ø true·Î º¯°æÇØÁÜ
-			if (true == m_bFirstHit)
+			if (false == m_bFirstHit)
+			{
+				m_bFirstHit = true; //µü ÇÑ¹ø true·Î º¯°æÇØÁÜ
 				m_pPanel->Set_BackUIGapY(1.f);
+			}
 
 			if ((_uint)GAMEOBJECT::WEAPON == pCol.pGameObject->getTag())
 			{

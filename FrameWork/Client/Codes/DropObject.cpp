@@ -235,7 +235,7 @@ void CDropObject::Drop(CItemData itemData, _fvector dropPos, EScatterType scatte
 
 	// 회전관련 아직 보류
 	//m_pTransform->LookAt_RotYAxis(dir);
-//	m_pTransform->Rotation_Axis(dir, g_pGameInstance->Get_TimeDelta(L"Timer_Default"));
+	//	m_pTransform->Rotation_Axis(dir, g_pGameInstance->Get_TimeDelta(L"Timer_Default"));
 	/* for. Spline Curve */
 	_vector p0;
 	_vector p1 = XMLoadFloat3(&m_dropPos);	    /* start */

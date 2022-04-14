@@ -25,6 +25,7 @@ private: HRESULT Ready_Component();
 private: CVIBuffer_Rect*	m_pbuffer = nullptr;
 private: CTexture*			m_pdiffusetex = nullptr;
 private: _float				m_delta = 0.f;
+private: WALLDESC			m_desc;
 
 public: static CWall* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContex);
 public: virtual CGameObject* Clone(_uint iSeneid, void* pArg) override;

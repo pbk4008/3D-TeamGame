@@ -195,6 +195,7 @@ namespace Engine
 		// 1 : 약공격, 2 : 강공격, 3 : 넉백될 정도의 강려크한 공격
 		_uint iLevel = 0;
 		_float fDamage = 0.f;
+		EAttackDir eDir = EAttackDir::Max;
 	}ATTACKDESC;
 
 	/* UI 리소스 관리 */
@@ -219,4 +220,13 @@ namespace Engine
 		_float4 color = _float4(0, 0, 0, 0);
 		_float empower = 0.f;
 	}SCB;
+
+	typedef struct tagRimLight
+	{
+		_bool	rimcheck = false;
+		_float	rimintensity = 0.f;
+		_float4 rimcol = _float4(0, 0, 0, 0);
+		_float4 camdir = _float4(0, 0, 0, 0);
+
+	}RIM;
 }

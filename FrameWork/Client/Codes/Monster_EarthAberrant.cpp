@@ -202,6 +202,17 @@ _int CMonster_EarthAberrant::Tick(_double _dDeltaTime)
 		}
 	}
 
+
+
+	if (g_pGameInstance->getkeyDown(DIK_NUMPAD5))
+	{
+		Active_Effect_Target((_uint)EFFECT::ATTACK_LEFT, g_pObserver->Get_PlayerPos());
+	}
+	if (g_pGameInstance->getkeyDown(DIK_NUMPAD6))
+	{
+		Active_Effect_Target((_uint)EFFECT::ATTACK_RIGHT, g_pObserver->Get_PlayerPos());
+	}
+
 	return 0;
 }
 
@@ -634,10 +645,10 @@ void CMonster_EarthAberrant::Hit(const ATTACKDESC& _tAttackDesc)
 
 	m_pPanel->Set_Show(true);
 
-	m_bFirstHit = true; //µü ÇÑ¹ø true·Î º¯°æÇØÁÜ
 
-	if (true == m_bFirstHit)
+	if (false == m_bFirstHit)
 	{
+		m_bFirstHit = true; //µü ÇÑ¹ø true·Î º¯°æÇØÁÜ
 		m_pPanel->Set_BackUIGapY(1.f);
 	}
 

@@ -37,6 +37,10 @@ public:
 	_int m_iPreState_2;
 
 private:
+	_bool m_bEffectCheck = false;
+
+
+private:
 	_uint m_iAttackR1_H = 25;
 	_uint m_iAttackR1_1 = 54;
 	_uint m_iAttackR1_2 = 105;
@@ -58,6 +62,7 @@ private:
 	_bool m_bAttackFar = false;
 	_bool m_bAttackLegacy_1 = false;
 	_bool m_bAttackLegacy_2 = false;
+
 
 public:
 	static CMidBoss_Attack* Create(ID3D11Device * pDevice, ID3D11DeviceContext * pDeviceContext, void* pArg = nullptr);

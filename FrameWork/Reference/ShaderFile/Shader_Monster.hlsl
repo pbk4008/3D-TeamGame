@@ -13,6 +13,8 @@ Texture2D	g_TINTTexture;
 Texture2D	g_FurTexture;
 Texture2D	g_OMERTexture;
 
+Texture2D	g_DissolveTex;
+
 struct VS_IN
 {
 	float3	vPosition : POSITION;
@@ -165,7 +167,11 @@ PS_OUT PS_MAIN_Body(PS_IN In)
 	half4 mra = g_MRATexture.Sample(DefaultSampler, In.vUvDepth.xy);
 	half4 ceo = g_CEOTexture.Sample(DefaultSampler, In.vUvDepth.xy);
 	half4 tint = g_TINTTexture.Sample(DefaultSampler, In.vUvDepth.xy);
-	
+
+	if (g_bdissolve == true)
+	{
+		Dissolve(g_DissolveTex, DefaultSampler, In.vUvDepth.xy, g_dissolvetime);
+	}
 	half3 normal = g_BiNormalTexture.Sample(DefaultSampler, In.vUvDepth.xy).xyz;
 	half3x3 tbn = { In.vTangent.xyz, In.vBiNormal.xyz, In.vNormal.xyz };
 	
@@ -197,6 +203,11 @@ PS_OUT PS_MAIN_CLOAK(PS_IN In)
 	half4 ceo = g_CEOTexture.Sample(DefaultSampler, In.vUvDepth.xy);
 	half4 tint = g_TINTTexture.Sample(DefaultSampler, In.vUvDepth.xy);
 	
+	if (g_bdissolve == true)
+	{
+		Dissolve(g_DissolveTex, DefaultSampler, In.vUvDepth.xy, g_dissolvetime);
+	}
+	
 	half3 normal = g_BiNormalTexture.Sample(DefaultSampler, In.vUvDepth.xy).xyz;
 	half3x3 tbn = { In.vTangent.xyz, In.vBiNormal.xyz, In.vNormal.xyz };
 	
@@ -225,6 +236,11 @@ PS_OUT PS_MAIN_FUR(PS_IN In)
 	PS_OUT Out = (PS_OUT) 0;
 	float4 diffuse = g_DiffuseTexture.Sample(DefaultSampler, In.vUvDepth.xy);
 	
+	if (g_bdissolve == true)
+	{
+		Dissolve(g_DissolveTex, DefaultSampler, In.vUvDepth.xy, g_dissolvetime);
+	}
+	
 	Out.diffuse.xyz = diffuse.xyz * 0.5f + 0.5f;
 	Out.diffuse.w = diffuse.w;
 	
@@ -251,6 +267,11 @@ PS_OUT PS_MAIN_EARTH_Body(PS_IN In)
 	half4 diffuse = g_DiffuseTexture.Sample(DefaultSampler, In.vUvDepth.xy);
 	half4 mra = g_MRATexture.Sample(DefaultSampler, In.vUvDepth.xy);
 	half3 mask = g_MaskTexture.Sample(DefaultSampler, In.vUvDepth.xy).xyz;
+	
+	if (g_bdissolve == true)
+	{
+		Dissolve(g_DissolveTex, DefaultSampler, In.vUvDepth.xy, g_dissolvetime);
+	}
 	
 	half3 normal = g_BiNormalTexture.Sample(DefaultSampler, In.vUvDepth.xy).xyz;
 	half3x3 tbn = { In.vTangent.xyz, In.vBiNormal.xyz, In.vNormal.xyz };
@@ -283,6 +304,11 @@ PS_OUT PS_MAIN_EARTH_CRYSTAL(PS_IN In)
 	half4 diffuse = g_DiffuseTexture.Sample(DefaultSampler, In.vUvDepth.xy);
 	half4 mra = g_MRATexture.Sample(DefaultSampler, In.vUvDepth.xy);
 	half3 mask = g_MaskTexture.Sample(DefaultSampler, In.vUvDepth.xy).xyz;
+	
+	if (g_bdissolve == true)
+	{
+		Dissolve(g_DissolveTex, DefaultSampler, In.vUvDepth.xy, g_dissolvetime);
+	}
 	
 	half3 normal = g_BiNormalTexture.Sample(DefaultSampler, In.vUvDepth.xy).xyz;
 	half3x3 tbn = { In.vTangent.xyz, In.vBiNormal.xyz, In.vNormal.xyz };
@@ -318,6 +344,11 @@ PS_OUT PS_MAIN_Bronze(PS_IN In)
 	half4 omer = g_OMERTexture.Sample(DefaultSampler, In.vUvDepth.xy);
 	half3 normal = g_BiNormalTexture.Sample(DefaultSampler, In.vUvDepth.xy).xyz;
 	half3x3 tbn = { In.vTangent.xyz, In.vBiNormal.xyz, In.vNormal.xyz };
+	
+	if (g_bdissolve == true)
+	{
+		Dissolve(g_DissolveTex, DefaultSampler, In.vUvDepth.xy, g_dissolvetime);
+	}
 	
 	normal = Normalmapping(normal, tbn);
 	

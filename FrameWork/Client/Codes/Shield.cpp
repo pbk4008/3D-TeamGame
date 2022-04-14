@@ -187,7 +187,7 @@ _int CShield::Attach_FixedBone(const _double& _dDeltaTime)
 	if (m_pFixedBone)
 	{
 		_matrix smatWorld = m_pFixedBone->Get_CombinedMatrix();
-		smatWorld *= XMLoadFloat4x4(&m_smatOwnerPivot);;
+		smatWorld *= XMLoadFloat4x4(&m_matOwnerPivot);
 
 		if (!m_isEquip)
 			smatWorld = XMLoadFloat4x4(&m_matPivot) * smatWorld;
@@ -262,7 +262,11 @@ CWeapon* CShield::Throw(const _fvector _svTargetPos)
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer(m_iSceneID, L"Layer_Weapon", L"Proto_GameObject_FlyingShield", &tDesc, (CGameObject**)&pFlyingShield)))
 		return nullptr;
 	if (pFlyingShield)
+	{
 		pFlyingShield->Set_Owner(m_pOwner);
+		pFlyingShield->Set_FixedBone(m_pFixedBone);
+		pFlyingShield->Set_OwnerPivotMatrix(XMLoadFloat4x4(&m_matOwnerPivot));
+	}
 
 	return pFlyingShield;
 }

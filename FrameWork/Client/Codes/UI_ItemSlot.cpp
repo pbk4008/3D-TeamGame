@@ -69,6 +69,9 @@ _int CUI_ItemSlot::LateTick(_double TimeDelta)
 	if (m_pItemEffect->getActive())
 		m_pItemEffect->LateTick(TimeDelta);
 
+	if (m_pEquipedText->getActive())
+		m_pEquipedText->LateTick(TimeDelta);
+
 	return _int();
 }
 
@@ -89,6 +92,9 @@ HRESULT CUI_ItemSlot::Render()
 	if (m_pItemEffect->getActive())
 		m_pItemEffect->Render();
 
+	if (m_pEquipedText->getActive())
+		m_pEquipedText->Render();
+
 	return S_OK;
 }
 
@@ -103,9 +109,9 @@ HRESULT CUI_ItemSlot::Ready_UIObject(void)
 	m_pItemIcon	   = static_cast<CUI_SlotItemIcon*>(g_pGameInstance->Clone_GameObject((_uint)SCENEID::SCENE_STATIC, L"Proto_GameObject_UI_ItemIcon", &desc));
 	m_pGrade	   = static_cast<CUI_SlotGrade*>(g_pGameInstance->Clone_GameObject((_uint)SCENEID::SCENE_STATIC, L"Proto_GameObject_UI_ItemGrade", &desc));
 	m_pItemEffect  = static_cast<CUI_SlotItemEffect*>(g_pGameInstance->Clone_GameObject((_uint)SCENEID::SCENE_STATIC, L"Proto_GameObject_UI_ItemEffect", &desc));
-	//m_pEquipedText = static_cast<CUI_EquipedText*>(g_pGameInstance->Clone_GameObject((_uint)SCENEID::SCENE_STATIC, L"Proto_GameObject_UI_ItemEquipedText"));
+	m_pEquipedText = static_cast<CUI_EquipedText*>(g_pGameInstance->Clone_GameObject((_uint)SCENEID::SCENE_STATIC, L"Proto_GameObject_UI_ItemEquipedText", &desc));
 
-	assert("Failed to Create UI Object" && (m_pBG || m_pItemIcon || m_pGrade));
+	assert("Failed to Create UI Object" && (m_pBG || m_pItemIcon || m_pGrade || m_pEquipedText));
 
 	return S_OK;
 }
@@ -118,7 +124,7 @@ void CUI_ItemSlot::SetActiveAll(_bool _OnOff)
 	m_pItemIcon->setActive(_OnOff);
 	m_pGrade->setActive(_OnOff);
 	m_pItemEffect->setActive(_OnOff);
-	//m_pEquipedText->setActive(_OnOff);
+	m_pEquipedText->setActive(_OnOff);
 }
 
 void CUI_ItemSlot::SetActiveExceptBg(_bool _OnOff)
@@ -126,7 +132,6 @@ void CUI_ItemSlot::SetActiveExceptBg(_bool _OnOff)
 	m_pGrade->setActive(_OnOff);
 	m_pItemIcon->setActive(_OnOff);
 	m_pItemEffect->setActive(_OnOff);
-
 }
 
 void CUI_ItemSlot::SetActiveOnlyBg(_bool _OnOff)
@@ -141,7 +146,7 @@ void CUI_ItemSlot::SetActiveOnlnyIcon(_bool _OnOff)
 
 void CUI_ItemSlot::SetActiveEquiped(_bool _IsEquiped)
 {
-	//m_pEquipedText->SetActive(_IsEquiped);
+	m_pEquipedText->setActive(_IsEquiped);
 }
 
 _bool CUI_ItemSlot::BgMouseOn(void)
@@ -171,6 +176,16 @@ _bool CUI_ItemSlot::IconClicked()
 	if (m_pItemIcon->getActive())
 	{
 		if (m_pItemIcon->IconClicked())
+			return true;
+	}
+	return false;
+}
+
+_bool CUI_ItemSlot::ItemClicked(void)
+{
+	if (m_pItemIcon->getActive())
+	{
+		if (m_pItemIcon->ItemClicked())
 			return true;
 	}
 	return false;
@@ -258,6 +273,7 @@ void CUI_ItemSlot::Free()
 	Safe_Release(m_pItemIcon);
 	Safe_Release(m_pGrade);
 	Safe_Release(m_pItemEffect);
+	Safe_Release(m_pEquipedText);
 
 	__super::Free();
 }

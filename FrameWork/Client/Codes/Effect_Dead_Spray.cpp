@@ -1,23 +1,23 @@
 #include "pch.h"
-#include "Effect_Env_Fire.h"
+#include "Effect_Dead_Spray.h"
 #include "GameInstance.h"
 
 
-CEffect_Env_Fire::CEffect_Env_Fire()
+CEffect_Dead_Spray::CEffect_Dead_Spray()
 {
 }
 
-CEffect_Env_Fire::CEffect_Env_Fire(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
+CEffect_Dead_Spray::CEffect_Dead_Spray(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
     :CEffect(pDevice,pDeviceContext)
 {
 }
 
-CEffect_Env_Fire::CEffect_Env_Fire(const CEffect& rhs)
+CEffect_Dead_Spray::CEffect_Dead_Spray(const CEffect& rhs)
     :CEffect(rhs)
 {
 }
 
-HRESULT CEffect_Env_Fire::NativeConstruct_Prototype()
+HRESULT CEffect_Dead_Spray::NativeConstruct_Prototype()
 {
 	if (FAILED(__super::NativeConstruct_Prototype()))
 	{
@@ -27,7 +27,7 @@ HRESULT CEffect_Env_Fire::NativeConstruct_Prototype()
     return S_OK;
 }
 
-HRESULT CEffect_Env_Fire::NativeConstruct(const _uint _iSceneID, void* pArg)
+HRESULT CEffect_Dead_Spray::NativeConstruct(const _uint _iSceneID, void* pArg)
 {
 	if (FAILED(__super::NativeConstruct(_iSceneID, pArg)))
 	{
@@ -44,61 +44,56 @@ HRESULT CEffect_Env_Fire::NativeConstruct(const _uint _iSceneID, void* pArg)
 		return E_FAIL;
 	}
 
-	_float4x4 desc;
-	XMStoreFloat4x4(&desc,m_Desc.ParticleMat);
-	_vector pos = m_Desc.ParticleMat.r[3];
-	pos += XMVectorSet(0, 2.5f, 0, 0);
-
-	m_pTransform->Set_State(CTransform::STATE_POSITION, pos);
-
-
-	m_scale = XMVectorSet(XMVectorGetX(XMVector3Length(m_Desc.ParticleMat.r[0]))
-			, XMVectorGetX(XMVector3Length(m_Desc.ParticleMat.r[1]))
-			, XMVectorGetX(XMVector3Length(m_Desc.ParticleMat.r[2]))
-			, 1);
 
 	return S_OK;
 }
 
-_int CEffect_Env_Fire::Tick(_double TimeDelta)
+_int CEffect_Dead_Spray::Tick(_double TimeDelta)
 {
 	
 	_uint iAllFrameCount = (m_Desc.iImageCountX * m_Desc.iImageCountY);
-	m_Desc.fFrame += (_float)(iAllFrameCount * TimeDelta * /*m_Desc.fEffectPlaySpeed*/ 1); //플레이속도 
+	m_Desc.fFrame += (_float)(iAllFrameCount * TimeDelta * /*m_Desc.fEffectPlaySpeed*/1.f); //플레이속도 
+
 	if (m_Desc.fFrame >= iAllFrameCount)
 	{
 		m_Desc.fFrame = 0;
 	}
 
-	////_vector Pos = { 9.5f,4.f,6.5f, 1.f };
-	//m_pTransform->Set_State(CTransform::STATE_POSITION, Pos);
 
-	_vector pos = m_Desc.ParticleMat.r[3];
-	_vector pos2 = XMVectorZero();
-	if (m_Desc.bUsingGravity == true)
-		pos2 = { XMVectorGetX(pos),XMVectorGetY(pos) + (XMVectorGetY(m_scale) * 5.f) ,XMVectorGetZ(pos) ,1.f };
-	else
-		pos2 = { XMVectorGetX(pos),XMVectorGetY(pos) + (XMVectorGetY(m_scale)) ,XMVectorGetZ(pos) ,1.f };
+	_vector Pos = { 0.f,0.f,0.f, 1.f };
+	m_pTransform->Set_State(CTransform::STATE_POSITION, Pos);
 
-	m_pTransform->Set_State(CTransform::STATE_POSITION, pos2);
+	//m_pTransform->SetUp_Rotation(XMVectorSet(0.f, 0.f, 1.f, 0.f), XMConvertToRadians(90.f));
 
 	//빌보드
 	_matrix ViewMatrix;
-	wstring wstrCamTag = g_pGameInstance->Get_BaseCameraTag();
-	ViewMatrix = g_pGameInstance->Get_Transform(wstrCamTag, TRANSFORMSTATEMATRIX::D3DTS_VIEW);
+	ViewMatrix = g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_VIEW);
 	ViewMatrix = XMMatrixInverse(nullptr, ViewMatrix);
+
+	/*_matrix		RotationMatrix = XMMatrixRotationAxis(XMVectorSet(0.f, 0.f, 1.f, 0.f), XMConvertToRadians(90.f));
+
+	_vector		vRight = XMVectorSet(1.f, 0.f, 0.f, 0.f) * XMVectorGetX(XMVector3Length(ViewMatrix.r[0]));
+	_vector		vUp = XMVectorSet(0.f, 1.f, 0.f, 0.f) * XMVectorGetX(XMVector3Length(ViewMatrix.r[1]));
+	_vector		vLook = XMVectorSet(0.f, 0.f, 1.f, 0.f) * XMVectorGetX(XMVector3Length(ViewMatrix.r[2]));
+
+	vRight = XMVector4Transform(vRight, RotationMatrix);
+	vUp = XMVector4Transform(vUp, RotationMatrix);
+	vLook = XMVector4Transform(vLook, RotationMatrix);
+
+	ViewMatrix.r[0] = vRight;
+	ViewMatrix.r[1] = vUp;
+	ViewMatrix.r[2] = vLook;*/
+
 	m_pTransform->Set_State(CTransform::STATE::STATE_RIGHT, ViewMatrix.r[0]);
 	m_pTransform->Set_State(CTransform::STATE::STATE_LOOK, ViewMatrix.r[2]);
 
-	if (m_Desc.bUsingGravity == true)
-		m_pTransform->Scaling(m_scale * 7.f);
-	else
-		m_pTransform->Scaling(m_scale * 1.f);
+	_vector vec = { 6.f,6.f,6.f,0.f };
+	m_pTransform->Scaling(vec);
 	
     return 0;
 }
 
-_int CEffect_Env_Fire::LateTick(_double TimeDelta)
+_int CEffect_Dead_Spray::LateTick(_double TimeDelta)
 {
 	if (nullptr != m_pRenderer)
 	{
@@ -108,14 +103,13 @@ _int CEffect_Env_Fire::LateTick(_double TimeDelta)
 	return 0;
 }
 
-HRESULT CEffect_Env_Fire::Render()
+HRESULT CEffect_Dead_Spray::Render()
 {
 	//_matrix XMWorldMatrix = XMMatrixTranspose(XMLoadFloat4x4(&m_WorldMatrix));
 	_matrix XMWorldMatrix = XMMatrixTranspose(m_pTransform->Get_WorldMatrix());
-	wstring wstrCamTag = g_pGameInstance->Get_BaseCameraTag();
-	_matrix XMViewMatrix = XMMatrixTranspose(g_pGameInstance->Get_Transform(wstrCamTag, TRANSFORMSTATEMATRIX::D3DTS_VIEW));
-	_matrix XMProjectMatrix = XMMatrixTranspose(g_pGameInstance->Get_Transform(wstrCamTag, TRANSFORMSTATEMATRIX::D3DTS_PROJECTION));
-	_vector CamPos = g_pGameInstance->Get_CamPosition(wstrCamTag);
+	_matrix XMViewMatrix = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_VIEW));
+	_matrix XMProjectMatrix = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_PROJECTION));
+	_vector CamPos = g_pGameInstance->Get_CamPosition(L"Camera_Silvermane");
 
 	m_pBuffer->SetUp_ValueOnShader("g_WorldMatrix", &XMWorldMatrix, sizeof(_float) * 16);
 	m_pBuffer->SetUp_ValueOnShader("g_ViewMatrix", &XMViewMatrix, sizeof(_float) * 16);
@@ -127,9 +121,10 @@ HRESULT CEffect_Env_Fire::Render()
 	m_pBuffer->SetUp_ValueOnShader("g_iImageCountY", &m_Desc.iImageCountY, sizeof(_uint));
 
 	_uint iFrame = (_uint)m_Desc.fFrame;
+
 	m_pBuffer->SetUp_ValueOnShader("g_iFrame", &iFrame, sizeof(_uint));
 	
-	_float weight = 0.8f;
+	_float weight = 1.f;
 	m_pBuffer->SetUp_ValueOnShader("g_Weight", &weight, sizeof(_float));
 
 	m_pBuffer->Render(1);
@@ -137,12 +132,11 @@ HRESULT CEffect_Env_Fire::Render()
 	return S_OK;
 }
 
-HRESULT CEffect_Env_Fire::SetUp_Components()
+HRESULT CEffect_Dead_Spray::SetUp_Components()
 {
 	if (!m_pTexture || !m_pRenderer || !m_pTransform)
 		return E_FAIL;
 
-	//이미지 리스트박스로부터 가져옴
 	wstring tag = m_Desc.TextureTag;
 	wstring NewTag = L"Texture_" + tag;
 	if (FAILED(m_pTexture->Change_Texture(NewTag)))
@@ -157,34 +151,34 @@ HRESULT CEffect_Env_Fire::SetUp_Components()
 	return S_OK;
 }
 
-CEffect_Env_Fire* CEffect_Env_Fire::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
+CEffect_Dead_Spray* CEffect_Dead_Spray::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
 {
 	/* 원형객체 생성할때 초기화 */
-	CEffect_Env_Fire* pInstance = new CEffect_Env_Fire(pDevice, pDeviceContext);
+	CEffect_Dead_Spray* pInstance = new CEffect_Dead_Spray(pDevice, pDeviceContext);
 
 	if (FAILED(pInstance->NativeConstruct_Prototype()))
 	{
-		MSGBOX("Failed to Creating CEffect_Env_Fire");
+		MSGBOX("Failed to Creating CEffect_Dead_Spray");
 		Safe_Release(pInstance);
 	}
 
 	return pInstance;
 }
 
-CGameObject* CEffect_Env_Fire::Clone(const _uint _iSceneID, void* pArg)
+CGameObject* CEffect_Dead_Spray::Clone(const _uint _iSceneID, void* pArg)
 {
 	/* 복제본 생성할때는 아래함수 호출해서 추가 초기화를 진행 */
-	CEffect_Env_Fire* pInstance = new CEffect_Env_Fire(*this);
+	CEffect_Dead_Spray* pInstance = new CEffect_Dead_Spray(*this);
 	if (FAILED(pInstance->NativeConstruct(_iSceneID, pArg)))
 	{
-		MSGBOX("Failed to Creating Clone CEffect_Env_Fire");
+		MSGBOX("Failed to Creating Clone CEffect_Dead_Spray");
 		Safe_Release(pInstance);
 	}
 
 	return pInstance;
 }
 
-void CEffect_Env_Fire::Free()
+void CEffect_Dead_Spray::Free()
 {
 	Safe_Release(m_pBuffer);
 	__super::Free();

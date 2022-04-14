@@ -156,6 +156,7 @@ void CUI_Equipment::UpdateSlots(void)
 			m_vecSlots[i]->SetIcon(data.iconTexName);
 			m_vecSlots[i]->SetGrade(data.equipmentGrade);
 			m_vecSlots[i]->SetActiveAll(true);
+			m_vecSlots[i]->SetActiveEquiped(false);
 		}
 	}
 }
@@ -167,7 +168,7 @@ void CUI_Equipment::UpdateSlot(_int _iIndex)
 	if (itemdata.ItemType == EItemType::NONE)
 	{
 		m_vecSlots[_iIndex]->SetIcon(L"T_Item_Bg_None");
-		//m_vecSlots[_iIndex]->SetGrade(EEquipmentGrade::GRADE_END);
+		m_vecSlots[_iIndex]->SetGrade(EEquipmentGrade::EQUIPGRADE_END);
 
 		m_vecSlots[_iIndex]->SetActiveAll(false);
 		m_vecSlots[_iIndex]->SetActiveOnlyBg(true);
@@ -176,7 +177,7 @@ void CUI_Equipment::UpdateSlot(_int _iIndex)
 	{
 		m_vecSlots[_iIndex]->SetIcon(itemdata.iconTexName);
 		m_vecSlots[_iIndex]->SetActiveOnlnyIcon(true);
-		//m_vecSlots[_iIndex]->SetGrade(data.equipmentGrade)
+		m_vecSlots[_iIndex]->SetGrade(itemdata.equipmentGrade);
 	}
 }
 

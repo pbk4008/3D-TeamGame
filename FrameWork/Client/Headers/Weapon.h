@@ -20,14 +20,18 @@ public:
 	virtual _int Tick(_double _dDeltaTime) override;
 	virtual _int LateTick(_double _dDeltaTime) override;
 	virtual HRESULT Render() override;
-	virtual HRESULT BindConstantBuffer(const wstring& camTag,SCB* consbuffer = nullptr);
+	virtual HRESULT BindConstantBuffer(const wstring& camTag, SCB* consbuffer = nullptr, RIM* rimlightbuffer = nullptr);
 	virtual HRESULT	BindLightBuffer();
+	// dissolve
+	virtual HRESULT	WeaponToAppear();
+	virtual HRESULT	WeaponToDisAppear();
 
 public:
 	const wstring& Get_Name() const;
 	const EType Get_Type() const;
 	CActor* Get_Owner() const;
 	const _float Get_Damage() const;
+	const _float3& Get_EndPos() const;
 
 	void Set_Owner(CActor* _pOwner);
 	virtual void Set_OwnerPivotMatrix(const _fmatrix& _smatPivot);
@@ -38,8 +42,16 @@ public:
 	void Set_IsTrail(const _bool _isTrail);
 	void Set_SwordTrail(_bool check) { m_bTrailOnOff = check; }
 
+	void Set_WeaponAppear(_bool check) { m_bdissolveappear = check; }
+	void Set_WeaponDisAppear(_bool check) { m_bdissolvedisappear = check; }
+
 	const _bool IsAttack() const;
 	const _bool IsTrail() const;
+
+	// rimlight
+	_bool GetRimCheck() { return m_rimcheck; }
+	void RimlightCheck(_bool check);
+	void SetRimIntensity(_float time);
 
 public:
 	virtual void RangeAttack();
@@ -50,8 +62,8 @@ protected:
 
 protected:
 	CTransform* m_pLocalTransform = nullptr;
-	CModel* m_pModel = nullptr;
-	_float4x4 m_smatOwnerPivot;;
+	CModel*		m_pModel = nullptr;
+	_float4x4	m_matOwnerPivot;
 
 	CActor* m_pOwner = nullptr;
 	CHierarchyNode* m_pFixedBone = nullptr;
@@ -68,6 +80,17 @@ protected:
 
 	_float m_fDamage = 0.f;
 	const LIGHTDESC* m_lightdesc;
+
+	_bool			m_bdissolveappear = false;
+	_bool			m_bdissolvedisappear = false;
+	_float			m_lifetime = 0.f;
+	CTexture*		m_dissolveTex = nullptr;
+	_uint			m_dissolvepass = 1;
+
+	//rimlight
+	_bool			m_rimcheck = false;
+	_float			m_rimintensity = 8.f;
+	_float3			m_vEndPos{};
 
 public:
 	virtual CGameObject* Clone(const _uint _iSceneID, void* _pArg = nullptr) PURE;
