@@ -44,7 +44,7 @@ HRESULT CEffect_Floating_Speed::NativeConstruct(const _uint _iSceneID, void* pAr
 	{
 		return E_FAIL;
 	}
-
+	
 	CVIBuffer_PointInstance_Floating_Speed::PIDESC Desc;
 	_tcscpy_s(Desc.ShaderFilePath, m_Desc.ShaderFullFilePath);
 	Desc.matParticle = m_Desc.ParticleMat;

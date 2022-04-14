@@ -53,7 +53,8 @@ enum class EFFECT
 	GUARD,
 	ATTACK_LEFT,
 	ATTACK_RIGHT,
-	HITGROUND
+	HITGROUND,
+	OPENBOX
 };
 
 enum class ELayer

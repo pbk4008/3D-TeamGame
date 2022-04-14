@@ -300,7 +300,7 @@ void CCamera_Silvermane::OnOffMonsterUI()
 	XMStoreFloat3(&tSweepDesc.vDir, svRayDir);
 	tSweepDesc.fMaxDistance = 15.f;
 	tSweepDesc.filterData.flags = PxQueryFlag::eANY_HIT | PxQueryFlag::eDYNAMIC;
-	tSweepDesc.layerMask = (1 << (_uint)ELayer::Monster);
+	tSweepDesc.layerMask = (1 << (_uint)ELayer::Monster)/*+ (1 << (_uint)ELayer::Player)*/;
 	CGameObject* pHitObject = nullptr;
 	tSweepDesc.ppOutHitObject = &pHitObject;
 

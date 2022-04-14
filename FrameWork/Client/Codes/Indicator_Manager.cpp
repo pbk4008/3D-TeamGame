@@ -50,6 +50,7 @@ void CIndicator_Manager::Active_Indicator()
 	CGameObject* pHitObject = nullptr;
 	tOverlapDesc.ppOutHitObject = &pHitObject;
 	tOverlapDesc.filterData.flags = PxQueryFlag::eDYNAMIC;
+	tOverlapDesc.layerMask = 1 << (_uint)ELayer::Monster;
 	if (g_pGameInstance->Overlap(tOverlapDesc))
 	{
 		_uint iSize = (_uint)tOverlapDesc.vecHitObjects.size();
@@ -62,45 +63,39 @@ void CIndicator_Manager::Active_Indicator()
 				(_uint)GAMEOBJECT::MONSTER_2H == iTag || (_uint)GAMEOBJECT::MONSTER_HEALER == iTag || (_uint)GAMEOBJECT::MONSTER_SHOOTER == iTag ||
 				(_uint)GAMEOBJECT::MONSTER_SPEAR == iTag || (_uint)GAMEOBJECT::MONSTER_ANIMUS == iTag)
 			{
-				//플레이어때문에 갯수가 하나더들어옴
-				if (tOverlapDesc.iHitNum - 1 >= m_iHitNum)
+				if (tOverlapDesc.iHitNum >= m_iHitNum)
 				{
 					for (_uint i = 0; i < tOverlapDesc.iHitNum; ++i)
 					{
-						if ((_uint)GAMEOBJECT::PLAYER != tOverlapDesc.vecHitObjects[i]->getTag())
+						if (nullptr != tOverlapDesc.vecHitObjects[i]->Get_Transform())
 						{
 							m_vecIndicator[i]->setActive(true);
 							_vector TargetPos = tOverlapDesc.vecHitObjects[i]->Get_Transform()->Get_State(CTransform::STATE_POSITION);
 							m_vecIndicator[i]->Set_TargetPos(TargetPos);
-						}
 
-						m_iHitNum = tOverlapDesc.iHitNum - 1;
+							m_iHitNum = tOverlapDesc.iHitNum;
+						}
 					}
 
 				}
-				else if (tOverlapDesc.iHitNum - 1 < m_iHitNum)
+				else if (tOverlapDesc.iHitNum < m_iHitNum)
 				{
-					for (_uint i = tOverlapDesc.iHitNum - 1; i < m_iHitNum; ++i)
+					for (_uint i = tOverlapDesc.iHitNum; i < m_iHitNum; ++i)
 					{
-						if ((_uint)GAMEOBJECT::PLAYER != tOverlapDesc.vecHitObjects[i]->getTag())
-						{
-							m_vecIndicator[i]->setActive(false);
-							_vector TargetPos = tOverlapDesc.vecHitObjects[i]->Get_Transform()->Get_State(CTransform::STATE_POSITION);
-							m_vecIndicator[i]->Set_TargetPos(TargetPos);
-						}
-
-						m_iHitNum = tOverlapDesc.iHitNum - 1;
+						m_vecIndicator[i]->setActive(false);
+						m_iHitNum = tOverlapDesc.iHitNum;
 					}
 				}
 			}
-			else if(1 == tOverlapDesc.iHitNum)
-			{
-				//범위안에 충돌된게 플레이어뿐일때 
-				for (_uint i = 0; i < m_vecIndicator.size(); ++i)
-				{
-					m_vecIndicator[i]->setActive(false);
-				}
-			}
+		}
+	}
+	
+	else 
+	{
+		//충돌된거없을때 
+		for (_uint i = 0; i < m_vecIndicator.size(); ++i)
+		{
+			m_vecIndicator[i]->setActive(false);
 		}
 	}
 }
