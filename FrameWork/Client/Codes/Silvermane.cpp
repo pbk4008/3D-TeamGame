@@ -223,6 +223,27 @@ HRESULT CSilvermane::NativeConstruct(const _uint _iSceneID, void* _pArg)
 	m_pRenderer->SetRenderButton(CRenderer::PBRHDR, true);
 
 
+
+	//Light
+	LIGHTDESC			LightDesc;
+	ZeroMemory(&LightDesc, sizeof(LIGHTDESC));
+	LightDesc.eType = LIGHTDESC::TYPE_POINT;
+	LightDesc.fRange = 7.f;
+	LightDesc.vDiffuse = _float4(1.f, 0.2f, 0.2f, 1.f);
+	LightDesc.vSpecular = _float4(0.8f, 0.8f, 0.8f, 1.f);
+	LightDesc.vAmbient = _float4(1.f, 1.f, 1.f, 1.f);
+	XMStoreFloat3(&LightDesc.vPosition, m_pTransform->Get_State(CTransform::STATE_POSITION));
+
+	if (nullptr == m_pLight)
+	{
+		if (FAILED(g_pGameInstance->Add_Light(m_pDevice, m_pDeviceContext, LightDesc, &m_pLight)))
+			MSGBOX("Failed To Adding PointLight");
+	}
+
+	m_pLight->Set_Show(false);
+	m_fLightRange = LightDesc.fRange;
+
+
 	return S_OK;
 }
 
@@ -279,6 +300,21 @@ _int CSilvermane::Tick(_double _dDeltaTime)
 		iProgress = m_pShield->Tick(_dDeltaTime);
 		if (NO_EVENT != iProgress)
 			return iProgress;
+	}
+
+
+	//light ฐüทร 
+	if (m_bLight && 0.f <= m_fLightRange)
+	{
+		m_fLightRange -= (_float)_dDeltaTime * 15.f;
+		m_pLight->Set_Range(m_fLightRange);
+	}
+
+	if (0.f >= m_fLightRange)
+	{
+		m_fLightRange = 0.f;
+		m_pLight->Set_Show(false);
+		m_bLight = false;
 	}
 
 	return _int();
@@ -1529,6 +1565,21 @@ void CSilvermane::End_ThrowShield()
 	m_pAnimationController->Set_PlaySpeed(1.4f);
 	m_pFlyingShield = nullptr;
 	m_isShieldThrow = false;
+}
+
+void CSilvermane::OnLight()
+{
+	if (nullptr != m_pLight)
+	{
+		m_pLight->Set_Pos(m_pTransform->Get_State(CTransform::STATE_POSITION));
+		m_pLight->Set_Show(true);
+
+		m_pLight->Set_Color(XMVectorSet(1.f, 0.2f, 0.2f, 1.f));
+
+		m_fLightRange = 10.f;
+		m_pLight->Set_Range(m_fLightRange);
+		m_bLight = true;
+	}
 }
 
 const _int CSilvermane::Trace_CameraLook(const _double& _dDeltaTime)

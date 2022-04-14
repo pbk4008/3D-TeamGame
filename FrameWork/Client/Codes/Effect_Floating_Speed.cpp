@@ -36,7 +36,7 @@ HRESULT CEffect_Floating_Speed::NativeConstruct(const _uint _iSceneID, void* pAr
 
 	if (nullptr != pArg)
 	{
-		memcpy(&m_Desc, pArg, sizeof(EFFECTDESC));
+		memcpy(&m_Desc, pArg, sizeof(FLOATINGSPEEDDESC));
 	}
 
 	//여기서 필요한 모든 컴포넌트들 Clone해옴
@@ -51,11 +51,12 @@ HRESULT CEffect_Floating_Speed::NativeConstruct(const _uint _iSceneID, void* pAr
 	Desc.fParticleStartRandomPos = m_Desc.fParticleRandomPos;
 	Desc.fParticleMinusRandomDir = m_Desc.fParticleMinusRandomDir;
 	Desc.fParticleRandomDir = m_Desc.fParticleRandomDir;
-	Desc.fParticleSpeed = m_Desc.fParticleVelocity;
 	Desc.fParticleSize = m_Desc.fParticleSize;
+	Desc.fParticleSpeed = m_Desc.fParticleVelocity;
 	Desc.iNumInstance = m_Desc.iNumInstance;
 	Desc.fLifeTime = m_Desc.fMaxLifeTime;
 	Desc.fCurTime = m_Desc.fCurTime;
+	Desc.bGravity = m_Desc.bUsingGravity;
 
 	m_backupDesc = Desc;
 
@@ -121,14 +122,12 @@ HRESULT CEffect_Floating_Speed::Render()
 	m_pBuffer->SetUp_ValueOnShader("g_fLifeTime", &m_Desc.fMaxLifeTime, sizeof(_float));
 	m_pBuffer->SetUp_ValueOnShader("g_fCurTime", &m_Desc.fCurTime, sizeof(_float));
 
-	_float4 color = { 1.f , 0.6f, 0.3f ,1.f };
-	_float power = 1.f;
-	m_pBuffer->SetUp_ValueOnShader("g_color", &color, sizeof(_float4));
-	m_pBuffer->SetUp_ValueOnShader("g_empower", &power, sizeof(_float));
+	m_pBuffer->SetUp_ValueOnShader("g_color", &m_Desc.ParticleColor, sizeof(_float4));
+	m_pBuffer->SetUp_ValueOnShader("g_empower", &m_Desc.Power, sizeof(_float));
 
 	m_pBuffer->SetUp_ValueOnShader("g_vCamPosition", (void*)&CamPos, sizeof(_vector));
-	//m_pBuffer->Render(m_Desc.iRenderPassNum);
-	m_pBuffer->Render(4);
+	m_pBuffer->Render(m_Desc.iRenderPassNum);
+	//m_pBuffer->Render(4);
 
 	return S_OK;
 }
@@ -189,6 +188,7 @@ HRESULT CEffect_Floating_Speed::SetUp_Components()
 	m_backupDesc.iNumInstance = m_Desc.iNumInstance;
 	m_backupDesc.fLifeTime = m_Desc.fMaxLifeTime;
 	m_backupDesc.fCurTime = m_Desc.fCurTime;
+	m_backupDesc.bGravity = m_Desc.bUsingGravity;
 	if (FAILED(__super::SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_VIBuffer_PointInstance_Floating_Speed", L"Com_VIBuffer", (CComponent**)&m_pBuffer, &m_backupDesc)))
 		return E_FAIL;
 	return S_OK;

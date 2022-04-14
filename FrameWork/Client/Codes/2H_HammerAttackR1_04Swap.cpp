@@ -37,8 +37,12 @@ _int C2H_HammerAttackR1_04Swap::Tick(const _double& _dDeltaTime)
 	}
 
 
-	if (41 < iCurKeyFrameIndex && !m_isRangeAttack)
+	if (50 < iCurKeyFrameIndex && !m_isRangeAttack)
 	{
+		_vector Pos = { 0.f, 0.f, 0.f ,0.f};
+		m_pSilvermane->Active_Effect((_uint)EFFECT::ATTACK_GROUND, Pos);
+		m_pSilvermane->Active_Effect((_uint)EFFECT::ATTACK_GROUND_2, Pos);
+
 		m_pSilvermane->RangeAttack();
 		m_isRangeAttack = true;
 	}

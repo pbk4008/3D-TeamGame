@@ -123,6 +123,10 @@ public: /* For.Shield */
 	void Return_Shield();
 	void End_ThrowShield();
 
+public:
+	//light test ÇÔ¼ö
+	void OnLight();
+
 
 public: /* For.JumpNode */
 	CJumpNode* Get_TargetJumpNode() const;
@@ -193,6 +197,11 @@ private:/* for. Player& Inventory& Equipment Data */
 	CPlayerData*	m_pPlayerData = nullptr;
 	CInventoryData* m_pInventoryData = nullptr;
 	CEquipmentData* m_pEquipmentData = nullptr;
+
+private:
+	CLight* m_pLight = nullptr;
+	_bool m_bLight = false;
+	_float m_fLightRange = 0.f;
 
 private:
 	CTexture*	m_pTexture = nullptr;
