@@ -34,7 +34,6 @@ VS_OUT VS_MAIN_ANIM(VS_IN In)
 {
 	VS_OUT			Out = (VS_OUT)0;	
 
-
 	matrix			matWV, matWVP;	
 
 	float		fWeightw = 1.f - (In.vBlendWeight.x + In.vBlendWeight.y + In.vBlendWeight.z);
@@ -66,30 +65,93 @@ VS_OUT VS_MAIN_ANIM(VS_IN In)
 	Out.vTangent = normalize(mul(vTantent, g_WorldMatrix));
 	Out.vUvDepth.xy = In.vTexUV.xy;
 	Out.vUvDepth.zw = Out.vPosition.zw;
+
+	return Out;
+}
+
+//*---------------------------------------------------------------------------------------------*
+// VS_Velocity
+struct VS_OUT_VELOCITY
+{
+	float4 vPosition : SV_POSITION;
+	float4 vVelocity : TEXCOORD0;
+};
+
+VS_OUT_VELOCITY VS_MAIN_VELOCITY(VS_IN In)
+{
+	VS_OUT_VELOCITY Out = (VS_OUT_VELOCITY) 0;
 	
-	half4 curpos = Out.vPosition;	
-	half4 oldpos = mul(vector(In.vPosition, 1.f), OldBoneMatrix);
-	matrix prematWV = mul(g_prvWmat, g_prvVmat);
-	matrix prematWVP = mul(prematWV, g_prvPmat);
-	oldpos = mul(oldpos, prematWVP);
+	matrix matWV, matWVP;
+
+	float fWeightw = 1.f - (In.vBlendWeight.x + In.vBlendWeight.y + In.vBlendWeight.z);
+
+	matrix BoneMatrix = mul(g_BoneMatrices.Bone[In.vBlendIndex.x], In.vBlendWeight.x) +
+						mul(g_BoneMatrices.Bone[In.vBlendIndex.y], In.vBlendWeight.y) +
+						mul(g_BoneMatrices.Bone[In.vBlendIndex.z], In.vBlendWeight.z) +
+						mul(g_BoneMatrices.Bone[In.vBlendIndex.w], In.vBlendWeight.w);
 	
-	half3 vdir = curpos.xyz - oldpos.xyz;
+	matrix OldBoneMatrix =  mul(g_OldBoneMatrices.Bone[In.vBlendIndex.x], In.vBlendWeight.x) +
+							mul(g_OldBoneMatrices.Bone[In.vBlendIndex.y], In.vBlendWeight.y) +
+							mul(g_OldBoneMatrices.Bone[In.vBlendIndex.z], In.vBlendWeight.z) +
+							mul(g_OldBoneMatrices.Bone[In.vBlendIndex.w], In.vBlendWeight.w);
 	
-	half a = dot(normalize(vdir), normalize(mul(vNormal, prematWV)).xyz);
-	if (a < 0.f)
-		Out.vPosition = oldpos;
+	matWV = mul(g_WorldMatrix, g_ViewMatrix);
+	matWVP = mul(matWV, g_ProjMatrix);
+	
+	half4 vCurPosition = mul(vector(In.vPosition, 1.f), BoneMatrix);
+	half4 vPrePrositon = mul(vector(In.vPosition, 1.f), OldBoneMatrix);
+	
+	vCurPosition = mul(vCurPosition, matWVP);
+	Out.vPosition = vCurPosition;
+	half4 normal = mul(vector(In.vNormal, 0.f), BoneMatrix);
+	normal = mul(normal, matWVP);
+
+	half4 curpos = Out.vPosition;
+	half4 prepos = mul(vPrePrositon, g_PreWorldViewProj);
+	half3 dir = curpos.xyz - prepos.xyz;
+	
+	half a = dot(normalize(dir), normalize(normal.xyz));
+	if(a < 0.f)
+		Out.vPosition = prepos;
 	else
 		Out.vPosition = curpos;
-		
-	half2 velocity = (curpos.xy / curpos.w) - (oldpos.xy / oldpos.w);
+	
+	half2 velocity = (curpos.xy / curpos.w) - (prepos.xy / prepos.w);
 	Out.vVelocity.xy = velocity * 0.5f;
 	Out.vVelocity.y *= -1.f;
-	Out.vVelocity.zw = Out.vPosition.zw;
+	Out.vVelocity.z = Out.vPosition.z;
+	Out.vVelocity.w = Out.vPosition.w;
 	
 	return Out;
 }
-// VS_SHADOWMAP
+
+// PS Velocity Map
+struct PS_IN_VELOCITY
+{
+	float4 vPosition : SV_POSITION;
+	float4 vVelocity : TEXCOORD0;
+};
+
+struct PS_OUT_VELOCITY
+{
+	vector VelocityMap : SV_TARGET0;
+};
+
+PS_OUT_VELOCITY PS_MAIN_VELOCITY(PS_IN_VELOCITY In)
+{
+	PS_OUT_VELOCITY Out = (PS_OUT_VELOCITY) 0.f;
+	
+	Out.VelocityMap.xy = In.vVelocity.xy;
+	Out.VelocityMap.z = In.vVelocity.z / In.vVelocity.w;
+	Out.VelocityMap.w = In.vVelocity.w / 300.f;
+	
+	return Out;
+}
 //*---------------------------------------------------------------------------------------------*
+
+
+//*---------------------------------------------------------------------------------------------*
+// VS_SHADOWMAP
 
 struct VS_OUT_SHADOW
 {
@@ -128,8 +190,7 @@ VS_OUT_SHADOW VS_MAIN_SHADOW(VS_IN In)
 	return Out;
 }
 
-// SHADOWMAP
-//*---------------------------------------------------------------------------------------------*
+// PS SHADOWMAP
 struct PS_IN_SHADOW
 {
 	half4 vPosition : SV_Position;
@@ -163,7 +224,6 @@ struct PS_IN
 	float4 vTangent		: TANGENT;
 	float4 vBiNormal	: BINORMAL;
 	float4 vUvDepth		: TEXCOORD0;
-	float4 vVelocity	: TEXCOORD1;
 };
 
 struct PS_OUT
@@ -229,11 +289,6 @@ PS_OUT PS_MAIN_TOP(PS_IN In)
 		Out.emission += rim;
 	}
 	
-	//Out.vVelocity.xy = In.vVelocity.xy;
-	//Out.vVelocity.z = 1.f;
-	//Out.vVelocity.w = In.vVelocity.z / In.vVelocity.w;
-	Out.vVelocity = In.vVelocity;
-	
 	return Out;	
 }
 
@@ -264,7 +319,6 @@ PS_OUT PS_MAIN_DOWN(PS_IN In)
 	Out.mra.a = 1.f;
 	Out.emission = E;
 	
-	Out.vVelocity = In.vVelocity;
 	return Out;
 }
 
@@ -287,7 +341,6 @@ PS_OUT PS_MAIN_CLOAK(PS_IN In)
 	Out.mra.a =  1.f;
 	Out.emission = half4(omer.b, omer.b, omer.b, 1) * g_color + g_empower;
 	
-	Out.vVelocity = In.vVelocity;
 	return Out;
 }
 
@@ -315,7 +368,6 @@ PS_OUT PS_MAIN_HAIR(PS_IN In)
 	Out.mra.a = 1.f;
 	Out.emission = half4(omer.b, omer.b, omer.b, 1) * g_color + g_empower;
 	
-	Out.vVelocity = In.vVelocity;
 	return Out;
 }
 
@@ -369,7 +421,6 @@ technique11			DefaultTechnique
 		PixelShader = compile ps_5_0 PS_MAIN_HAIR();
 	}
 
-
 	pass ShadowANIM //-----------------------------------------------------------------------------------------4 Anim ShadowMap
 	{
 		SetRasterizerState(CullMode_Default);
@@ -380,6 +431,18 @@ technique11			DefaultTechnique
 		VertexShader = compile vs_5_0 VS_MAIN_SHADOW();
 		GeometryShader = NULL;
 		PixelShader = compile ps_5_0 PS_MAIN_SHADOW();
+	}
+
+	pass Velocity //-----------------------------------------------------------------------------------------4 Anim ShadowMap
+	{
+		SetRasterizerState(CullMode_Default);
+		SetDepthStencilState(ZDefault, 0);
+		SetBlendState(BlendDisable, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+
+		/* 진입점함수를 지정한다. */
+		VertexShader = compile vs_5_0 VS_MAIN_VELOCITY();
+		GeometryShader = NULL;
+		PixelShader = compile ps_5_0 PS_MAIN_VELOCITY();
 	}
 }
 

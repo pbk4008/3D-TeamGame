@@ -395,8 +395,25 @@ HRESULT CGameInstance::Change_BaseCamera(const wstring& pCameraTag)
 const wstring& CGameInstance::Get_BaseCameraTag()
 {
 	if (!m_pPipeLine)
-		return L"";
+		MSGBOX("GameInstance PiepeLine null");
+
 	return m_pPipeLine->getBaseCamera();
+}
+
+HRESULT CGameInstance::SetPreViewProtj(const wstring& cametag)
+{
+	if (!m_pPipeLine)
+		MSGBOX("pipeline is null");
+
+	return m_pPipeLine->SetPreViewProtj(cametag);
+}
+
+_fmatrix CGameInstance::GetPreViewProtj(_fmatrix world)
+{
+	if (!m_pPipeLine)
+		MSGBOX("pipeline is null");
+
+	return m_pPipeLine->GetPreViewProtj(world);
 }
 
 void CGameInstance::Update_InputDev()

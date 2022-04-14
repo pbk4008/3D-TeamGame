@@ -232,8 +232,7 @@ namespace Engine
 
 	typedef struct tagMotionblur
 	{
-		_float4x4 preWorldMat;
-		_float4x4 preViewMat;
-		_float4x4 preProjMat;
+		_float4x4 RotationMat;
+		_float4x4 preWorldViewPorjMat;
 	}MOTIONBLUR;
 }

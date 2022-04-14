@@ -101,26 +101,7 @@ _int CMainApp::Tick(_double TimeDelta)
 			TimeDelta *= 0.1;
 	}
 
-	if (g_pGameInstance->getkeyDown(DIK_F1))
-	{
-		m_bHDR = !m_bHDR;
-		m_pRenderer->SetRenderButton(CRenderer::HDR, m_bHDR);
-	}
-	if (g_pGameInstance->getkeyDown(DIK_F2))
-	{
-		m_bDBG = !m_bDBG;
-		m_pRenderer->SetRenderButton(CRenderer::DBG, m_bDBG);
-	}
-	if (g_pGameInstance->getkeyDown(DIK_F3))
-	{
-		m_bShadow = !m_bShadow;
-		m_pRenderer->SetRenderButton(CRenderer::SHADOW, m_bShadow);
-	}
-	if (g_pGameInstance->getkeyDown(DIK_F4))
-	{
-		m_bOutline = !m_bOutline;
-		m_pRenderer->SetRenderButton(CRenderer::RADIAL, m_bOutline);
-	}
+	RenderingBnt();
 
 	if (g_pGameInstance->getkeyDown(DIK_P))
 		m_isPause = !m_isPause;
@@ -155,6 +136,9 @@ HRESULT CMainApp::Render()
 
 	if (FAILED(m_pRenderer->Draw_RenderGroup()))
 		return E_FAIL;
+
+	if (FAILED(g_pGameInstance->SetPreViewProtj(g_pGameInstance->Get_BaseCameraTag())))
+		MSGBOX("Failed to Recording PreViewProj");
 
 	if (FAILED(g_pGameInstance->Render_Engine()))
 		return E_FAIL;
@@ -370,6 +354,35 @@ HRESULT CMainApp::Ready_Fonts()
 		return E_FAIL;
 
 	return S_OK;
+}
+
+void CMainApp::RenderingBnt()
+{
+	if (g_pGameInstance->getkeyDown(DIK_F1))
+	{
+		m_bHDR = !m_bHDR;
+		m_pRenderer->SetRenderButton(CRenderer::HDR, m_bHDR);
+	}
+	if (g_pGameInstance->getkeyDown(DIK_F2))
+	{
+		m_bDBG = !m_bDBG;
+		m_pRenderer->SetRenderButton(CRenderer::DBG, m_bDBG);
+	}
+	if (g_pGameInstance->getkeyDown(DIK_F3))
+	{
+		m_bShadow = !m_bShadow;
+		m_pRenderer->SetRenderButton(CRenderer::SHADOW, m_bShadow);
+	}
+	if (g_pGameInstance->getkeyDown(DIK_F4))
+	{
+		m_bOutline = !m_bOutline;
+		m_pRenderer->SetRenderButton(CRenderer::OUTLINE, m_bOutline);
+	}
+	if (g_pGameInstance->getkeyDown(DIK_F5))
+	{
+		m_bMotionblur = !m_bMotionblur;
+		m_pRenderer->SetRenderButton(CRenderer::VELOCITYBLUR, m_bMotionblur);
+	}
 }
 
 const _bool CMainApp::IsFreeze() const

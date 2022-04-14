@@ -69,7 +69,50 @@ HRESULT CWeapon::Render()
 	return S_OK;
 }
 
-HRESULT CWeapon::BindConstantBuffer(const wstring& camTag,SCB* consbuffer, RIM* rimlightbuffer)
+HRESULT CWeapon::Render_Shadow()
+{
+	wstring wstrCamTag = g_pGameInstance->Get_BaseCameraTag();
+	CWeapon::BindConstantBuffer(wstrCamTag);
+	CWeapon::BindLightBuffer();
+	for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
+		m_pModel->Render(i, 2);
+
+	return S_OK;
+}
+
+HRESULT CWeapon::Render_Velocity()
+{
+	wstring wstrCamTag = g_pGameInstance->Get_BaseCameraTag();
+	SCB desc;
+	ZeroMemory(&desc, sizeof(SCB));
+
+	RIM rimdesc;
+	ZeroMemory(&rimdesc, sizeof(RIM));
+
+	MOTIONBLUR motion;
+	ZeroMemory(&motion, sizeof(MOTIONBLUR));
+	// velocity desc
+	_float4x4 rot;
+	XMStoreFloat4x4(&rot, m_pTransform->Get_WorldMatrix()
+		* g_pGameInstance->Get_Transform(wstrCamTag, TRANSFORMSTATEMATRIX::D3DTS_VIEW)
+		* g_pGameInstance->Get_Transform(wstrCamTag, TRANSFORMSTATEMATRIX::D3DTS_PROJECTION));
+	rot._11 = 1.0f; rot._22 = 1.0f; rot._33 = 1.0f;
+	rot._41 = 0.0f; rot._42 = 0.0f; rot._43 = 0.0f;
+	motion.RotationMat = rot;
+	_matrix prewvp = g_pGameInstance->GetPreViewProtj(m_PreWroldMat);
+	XMStoreFloat4x4(&motion.preWorldViewPorjMat, prewvp);
+	//----------------------------------------------------
+
+	CWeapon::BindConstantBuffer(wstrCamTag, &desc, &rimdesc, &motion);
+	for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
+		if (FAILED(m_pModel->Render(i, 3))) MSGBOX("Fialed To Rendering Silvermane");
+
+	m_PreWroldMat = m_pTransform->Get_WorldMatrix();
+
+	return S_OK;
+}
+
+HRESULT CWeapon::BindConstantBuffer(const wstring& camTag,SCB* consbuffer, RIM* rimlightbuffer, MOTIONBLUR* motionbuffer)
 {
 	if(m_pTransform == nullptr)
 		MSGBOX("Failed To Apply Weapon Transform nullptr");
@@ -98,6 +141,16 @@ HRESULT CWeapon::BindConstantBuffer(const wstring& camTag,SCB* consbuffer, RIM* 
 		if (FAILED(m_pModel->SetUp_ValueOnShader("g_rimintensity", &rimlightbuffer->rimintensity, sizeof(_float)))) MSGBOX("Failed To Apply Actor ConstantBuffer");
 		if (FAILED(m_pModel->SetUp_ValueOnShader("g_rimcolor", &rimlightbuffer->rimcol, sizeof(_float4)))) MSGBOX("Failed To Apply Actor ConstantBuffer");
 		if (FAILED(m_pModel->SetUp_ValueOnShader("g_camdir", &rimlightbuffer->camdir, sizeof(_float4)))) MSGBOX("Failed To Apply Actor ConstantBuffer");
+	}
+
+	if (motionbuffer)
+	{
+		_matrix rot, wvp;
+		rot = XMMatrixTranspose(XMLoadFloat4x4(&motionbuffer->RotationMat));
+		wvp = XMMatrixTranspose(XMLoadFloat4x4(&motionbuffer->preWorldViewPorjMat));
+
+		if (FAILED(m_pModel->SetUp_ValueOnShader("g_RotationMat", &rot, sizeof(_matrix)))) MSGBOX("Failed To Apply Actor ConstantBuffer");
+		if (FAILED(m_pModel->SetUp_ValueOnShader("g_PreWorldViewProj", &wvp, sizeof(_matrix)))) MSGBOX("Failed To Apply Actor ConstantBuffer");
 	}
 
 	return S_OK;

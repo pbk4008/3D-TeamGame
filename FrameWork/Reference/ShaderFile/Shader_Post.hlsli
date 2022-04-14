@@ -31,7 +31,7 @@ half4 Outline(Texture2D mainTex, SamplerState sample, half2 UV,half4 OutColor)
 			-1.f, -1.f, -1.f
 	};
 	for (int i = 0; i < 9; ++i)
-		OutColor += fLaplacianMask[i] * mainTex.Sample(sample, (UV + half2(fCoord[i / 3] / 1280.f, fCoord[i / 3] / 720.f)));
+		OutColor += fLaplacianMask[i] * mainTex.Sample(sample, (UV + half2(fCoord[i / 3] / 1280.f, fCoord[i / 3] / 720.f)));	
 	
 	return OutColor;
 }

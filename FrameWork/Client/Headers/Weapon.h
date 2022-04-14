@@ -20,7 +20,9 @@ public:
 	virtual _int Tick(_double _dDeltaTime) override;
 	virtual _int LateTick(_double _dDeltaTime) override;
 	virtual HRESULT Render() override;
-	virtual HRESULT BindConstantBuffer(const wstring& camTag, SCB* consbuffer = nullptr, RIM* rimlightbuffer = nullptr);
+	virtual HRESULT	Render_Shadow() override;
+	virtual HRESULT	Render_Velocity() override;
+	virtual HRESULT BindConstantBuffer(const wstring& camTag, SCB* consbuffer = nullptr, RIM* rimlightbuffer = nullptr, MOTIONBLUR* motionbuffer = nullptr);
 	virtual HRESULT	BindLightBuffer();
 	// dissolve
 	virtual HRESULT	WeaponToAppear();

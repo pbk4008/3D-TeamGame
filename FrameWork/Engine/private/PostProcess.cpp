@@ -52,7 +52,7 @@ HRESULT CPostProcess::Shadowblur(CTarget_Manager* pTargetMgr, _bool shadow, _flo
 	return S_OK;
 }
 
-HRESULT CPostProcess::PossProcessing(CTonemapping* tone,CTarget_Manager* pTargetMgr, _bool hdr, _bool radial)
+HRESULT CPostProcess::PossProcessing(CTonemapping* tone,CTarget_Manager* pTargetMgr, _bool hdr)
 {
 	if (FAILED(ComputeBrightPass(pTargetMgr, L"Target_HDRDiffuse", 640.f, 360.f))) return E_FAIL;
 
@@ -71,11 +71,6 @@ HRESULT CPostProcess::PossProcessing(CTonemapping* tone,CTarget_Manager* pTarget
 	if (FAILED(BlurPass(pTargetMgr, L"Target_Horizontal8", L"Target_Vertical16", L"Target_Horizontal16", 64, 64))) return E_FAIL;
 
 	if (FAILED(tone->Blend_FinalPass(pTargetMgr, hdr))) return E_FAIL;
-
-	//if (radial == true)
-	//{
-	//	if (FAILED(RadialPass(pTargetMgr))) MSGBOX("Failed To Rednering Radial Pass");
-	//}
 
 	return S_OK;
 }

@@ -41,14 +41,10 @@ _int CTraverse_JumpNodeJog::Tick(const _double& _dDeltaTime)
 				m_pAnimationController->Set_PlaySpeed(6.f);
 			
 			m_pSilvermane->Set_Radial(true);
-			
-			if (17 < iCurKeyFrameIndex)
+			if (m_radialcnt <= 12)
 			{
-				if (m_radialcnt <= 10)
-				{
-					m_radialcnt++;
-					m_pSilvermane->Set_RadialCnt(m_radialcnt);
-				}
+				m_pSilvermane->Set_RadialCnt(m_radialcnt);
+				m_radialcnt++;
 			}
 		}
 	}
@@ -56,10 +52,10 @@ _int CTraverse_JumpNodeJog::Tick(const _double& _dDeltaTime)
 	{
 		if (m_radialcnt > 1)
 		{
-			m_radialcnt--;
 			m_pSilvermane->Set_RadialCnt(m_radialcnt);
+			m_radialcnt--;
 		}
-		else
+		else if (m_radialcnt == 1)
 		{
 			m_pSilvermane->Set_Radial(false);
 			m_pSilvermane->Set_IsFall(true);

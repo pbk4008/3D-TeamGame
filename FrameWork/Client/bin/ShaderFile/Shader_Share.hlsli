@@ -78,7 +78,6 @@ cbuffer Limlight
 
 cbuffer Motionblur
 {
-	matrix	g_prvWmat = (matrix) 0;
-	matrix	g_prvVmat = (matrix) 0;
-	matrix	g_prvPmat = (matrix) 0;
+	matrix g_RotationMat = (matrix) 0;
+	matrix g_PreWorldViewProj = (matrix) 0;
 };

@@ -39,6 +39,7 @@ public:
 	virtual _int LateTick(_double TimeDelta);
 	virtual HRESULT Render();
 	virtual HRESULT	Render_Shadow();
+	virtual HRESULT	Render_Velocity();
 	virtual void	ComputeViewZ(_fmatrix* pView);
 public:
 	virtual void OnCollisionEnter(CCollision& collision);
@@ -71,8 +72,6 @@ protected:
 	_uint m_iSceneID;
 	_float m_fViewZ = 0.f;
 	_matrix m_PreWroldMat = XMMatrixIdentity();
-	_matrix m_PreViewMat = XMMatrixIdentity();
-	_matrix m_PreProjdMat = XMMatrixIdentity();
 
 protected:
 	unordered_map<wstring, class CComponent*>		m_Components;

@@ -53,9 +53,14 @@ cbuffer ShaderCheck
 	bool g_radial;
 	bool g_distort;
 	bool g_fog;
-	int	 g_RadialCnt;
+	bool g_motion;
+};
+
+cbuffer CountBuffer
+{
+	int g_RadialCnt;
 	float g_delta;
-	int	 g_sampletest;
+	int g_MotionblurCnt;
 };
 
 cbuffer Fogbuffer
@@ -400,22 +405,23 @@ PS_OUT_BLEND PS_MAIN_BLEND(PS_IN In)
 	
 	Out.vColor = color;
 	
-	half4 velocity = g_VelocityTex.Sample(DefaultSampler, In.vTexUV);
-	velocity.xy /= (half) g_sampletest;
-	
-	int cnt = 1;
-	half4 bcolor;
-	
-	for (int i = cnt; i < g_sampletest; ++i)
+	if (g_motion == true)
 	{
-		bcolor = g_DiffuseTexture.Sample(DefaultSampler, In.vTexUV + velocity.xy * (half) i);
-		if (velocity.w < depth.x + 0.04f)
+		half4 velocity = g_VelocityTex.Sample(DefaultSampler, In.vTexUV);
+		velocity.xy /= (half) g_MotionblurCnt;
+		int cnt = 1;
+		half4 bcolor;
+		for (int i = cnt; i < g_MotionblurCnt; ++i)
 		{
-			cnt++;
-			Out.vColor += bcolor;
+			bcolor = g_DiffuseTexture.Sample(DefaultSampler, In.vTexUV + velocity.xy * (half) i);
+			if (velocity.z < depth.x + 0.04f)
+			{
+				cnt++;
+				Out.vColor += bcolor;
+			}
 		}
+		Out.vColor /= (half) cnt;
 	}
-	Out.vColor /= (half) cnt;
 	
 	if (g_distort == true)
 	{
@@ -425,6 +431,11 @@ PS_OUT_BLEND PS_MAIN_BLEND(PS_IN In)
 	if (g_radial == true)
 	{	
 		Out.vColor.rgb = Radialblur(g_DiffuseTexture,DefaultSampler,In.vTexUV,g_RadialCnt);
+	}
+	
+	if(g_outline == true)
+	{
+		Out.vColor = Outline(g_DiffuseTexture, DefaultSampler, In.vTexUV, Out.vColor);
 	}
 	
 	if (Out.vColor.a == 0)

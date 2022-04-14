@@ -162,9 +162,8 @@ HRESULT CActor::BindConstantBuffer(const wstring& camTag, SCB* bindbuffer, RIM* 
 
 	if (motionbuffer)
 	{
-		if (FAILED(m_pModel->SetUp_ValueOnShader("g_prvWmat", &XMMatrixTranspose(XMLoadFloat4x4(&motionbuffer->preWorldMat)), sizeof(_matrix)))) MSGBOX("Failed To Apply Actor ConstantBuffer");
-		if (FAILED(m_pModel->SetUp_ValueOnShader("g_prvVmat", &XMMatrixTranspose(XMLoadFloat4x4(&motionbuffer->preViewMat)), sizeof(_matrix)))) MSGBOX("Failed To Apply Actor ConstantBuffer");
-		if (FAILED(m_pModel->SetUp_ValueOnShader("g_prvPmat", &XMMatrixTranspose(XMLoadFloat4x4(&motionbuffer->preProjMat)), sizeof(_matrix)))) MSGBOX("Failed To Apply Actor ConstantBuffer");
+		if (FAILED(m_pModel->SetUp_ValueOnShader("g_RotationMat", &XMMatrixTranspose(XMLoadFloat4x4(&motionbuffer->RotationMat)), sizeof(_matrix)))) MSGBOX("Failed To Apply Actor ConstantBuffer");
+		if (FAILED(m_pModel->SetUp_ValueOnShader("g_PreWorldViewProj", &XMMatrixTranspose(XMLoadFloat4x4(&motionbuffer->preWorldViewPorjMat)), sizeof(_matrix)))) MSGBOX("Failed To Apply Actor ConstantBuffer");
 	}
 
 	return S_OK;

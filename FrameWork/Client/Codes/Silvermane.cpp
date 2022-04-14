@@ -217,7 +217,7 @@ HRESULT CSilvermane::NativeConstruct(const _uint _iSceneID, void* _pArg)
 	m_fCurrentHp = m_fMaxHp;
 
 	m_pRenderer->SetRenderButton(CRenderer::PIXEL, true);
-	m_pRenderer->SetRenderButton(CRenderer::PBRHDR, true);
+	m_pRenderer->SetRenderButton(CRenderer::PBR, true);
 	m_pRenderer->SetRenderButton(CRenderer::HDR, true);
 
 	return S_OK;
@@ -300,13 +300,19 @@ _int CSilvermane::LateTick(_double _dDeltaTime)
 	if (NO_EVENT != iProgress)
 		return iProgress;
 
-	if (m_pRenderer->Get_Shadow() == true)
+	if (m_pRenderer->Get_RenderButton(CRenderer::SHADOW) == true)
 	{
 		if (FAILED(m_pRenderer->Add_RenderGroup(CRenderer::RENDER_SHADOW, this))) return -1;
 	}
 
 	if (FAILED(m_pRenderer->Add_RenderGroup(CRenderer::RENDER_NONALPHA, this)))
 		return -1;
+
+	if (m_pRenderer->Get_RenderButton(CRenderer::VELOCITYBLUR) == true)
+	{
+		if (FAILED(m_pRenderer->Add_RenderGroup(CRenderer::RENDER_VELOCITY, this)))
+			return -1;
+	}
 
 	// ¹«±â ·¹ÀÕ¾÷µ«
 	if (m_pCurWeapon)
@@ -338,13 +344,7 @@ HRESULT CSilvermane::Render()
 	RIM rimdesc;
 	ZeroMemory(&rimdesc, sizeof(RIM));
 	rimdesc = ColorChange_RimCheck(rimdesc);
-
-	MOTIONBLUR motion;
-	ZeroMemory(&motion, sizeof(MOTIONBLUR));
-	XMStoreFloat4x4(&motion.preWorldMat, m_PreWroldMat);
-	XMStoreFloat4x4(&motion.preViewMat, m_PreViewMat);
-	XMStoreFloat4x4(&motion.preProjMat, m_PreProjdMat);
-
+	
 	for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
 	{
 		SCB desc;
@@ -354,17 +354,16 @@ HRESULT CSilvermane::Render()
 		{
 			desc.color = m_color;
 			desc.empower = 0.8f;
-			CActor::BindConstantBuffer(wstrCamTag, &desc, &rimdesc,&motion);
+			CActor::BindConstantBuffer(wstrCamTag, &desc, &rimdesc);
 		}
 		else
-			CActor::BindConstantBuffer(wstrCamTag, &desc, &rimdesc,&motion);
+			CActor::BindConstantBuffer(wstrCamTag, &desc, &rimdesc);
 
-		if (FAILED(m_pModel->Render(i, i))) MSGBOX("Fialed To Rendering Silvermane");
+		if (i != 2)
+		{
+			if (FAILED(m_pModel->Render(i, i))) MSGBOX("Fialed To Rendering Silvermane");
+		}
 	}
-
-	m_PreWroldMat =  m_pTransform->Get_WorldMatrix();
-	m_PreViewMat = g_pGameInstance->Get_Transform(wstrCamTag, TRANSFORMSTATEMATRIX::D3DTS_VIEW);
-	m_PreProjdMat = g_pGameInstance->Get_Transform(wstrCamTag, TRANSFORMSTATEMATRIX::D3DTS_PROJECTION);
 
 #ifdef _DEBUG
 	Render_Debug();
@@ -380,6 +379,39 @@ HRESULT CSilvermane::Render_Shadow()
 	CActor::BindLightBuffer();
 	for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
 		m_pModel->Render(i, 4);
+
+	return S_OK;
+}
+
+HRESULT CSilvermane::Render_Velocity()
+{
+	wstring wstrCamTag = g_pGameInstance->Get_BaseCameraTag();
+	SCB desc;
+	ZeroMemory(&desc, sizeof(SCB));
+
+	RIM rimdesc;
+	ZeroMemory(&rimdesc, sizeof(RIM));
+
+	MOTIONBLUR motion;
+	ZeroMemory(&motion, sizeof(MOTIONBLUR));
+	// velocity desc
+	_float4x4 rot;
+	XMStoreFloat4x4(&rot, m_pTransform->Get_WorldMatrix()
+					* g_pGameInstance->Get_Transform(wstrCamTag, TRANSFORMSTATEMATRIX::D3DTS_VIEW)
+					* g_pGameInstance->Get_Transform(wstrCamTag, TRANSFORMSTATEMATRIX::D3DTS_PROJECTION));
+	rot._11 = 1.0f; rot._22 = 1.0f; rot._33 = 1.0f;
+	rot._41 = 0.0f; rot._42 = 0.0f; rot._43 = 0.0f;
+	motion.RotationMat = rot;
+	_matrix prewvp = g_pGameInstance->GetPreViewProtj(m_PreWroldMat);
+	XMStoreFloat4x4(&motion.preWorldViewPorjMat, prewvp);
+	//----------------------------------------------------
+
+	CActor::BindConstantBuffer(wstrCamTag, &desc, &rimdesc, &motion);
+	for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
+		if (FAILED(m_pModel->Render(i, 5))) MSGBOX("Fialed To Rendering Silvermane");
+
+	m_PreWroldMat = m_pTransform->Get_WorldMatrix();
+
 
 	return S_OK;
 }

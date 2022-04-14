@@ -28,7 +28,7 @@ private:
 	_float m_fMoveSpeed = 0.f;
 	_float3 m_vTargetPos = { 0.f, 0.f, 0.f };
 	_float3 m_vDir = { 0.f, 0.f, 0.f };
-	_int	m_radialcnt = 0;
+	_int	m_radialcnt = 1;
 
 public:
 	static CTraverse_JumpNodeJog* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext, void* _pArg = nullptr);

@@ -425,8 +425,8 @@ HRESULT CModel::Render(_uint iMeshContainerIndex, _uint iPassIndex)
 				m_vecMaterials[iMtrlIndex]->Render(iPassIndex);
 				pMeshContainer->Render();
 
-				ZeroMemory(m_oldbonemat, sizeof(_float4x4) * 256);
-				memcpy(m_oldbonemat, BoneMatrices, sizeof(_float4x4) * 256);
+				ZeroMemory(m_oldbonemat, sizeof(_matrix) * 256);
+				memcpy(m_oldbonemat, BoneMatrices, sizeof(_matrix) * 256);
 			}
 		}
 		else
@@ -442,6 +442,9 @@ HRESULT CModel::Render(_uint iMeshContainerIndex, _uint iPassIndex)
 				pMeshContainer->SetUp_BoneMatrices(BoneMatrices, XMLoadFloat4x4(&m_PivotMatrix));
 
 				if (FAILED(SetUp_ValueOnShader("g_BoneMatrices", BoneMatrices, sizeof(_matrix) * 256)))
+					return E_FAIL;
+
+				if (FAILED(SetUp_ValueOnShader("g_OldBoneMatrices", m_oldbonemat, sizeof(_matrix) * 256)))
 					return E_FAIL;
 			}
 			m_pDeviceContext->IASetInputLayout(m_PassDesc[iPassIndex]->pInputLayout);

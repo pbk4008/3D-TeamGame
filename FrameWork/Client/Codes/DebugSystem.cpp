@@ -94,6 +94,7 @@ HRESULT CDebugSystem::Level_Move()
 	m_iSelectLevel = iSelect+1;
 
 	g_pGameInstance->RemoveLight();
+
 	//m_pRenderer->Remove_RenderGroup();
 	//if (FAILED(g_pGameInstance->Open_Level((_uint)SCENEID::SCENE_LOADING, CLoading::Create(m_pDevice, m_pDeviceContext, (SCENEID)(iSelect + 1)))))
 	//	return E_FAIL;
