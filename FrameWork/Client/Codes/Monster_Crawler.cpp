@@ -382,6 +382,7 @@ HRESULT CMonster_Crawler::SetUp_Components()
 	if (FAILED(__super::SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_CharacterController", L"CharacterController", (CComponent**)&m_pCharacterController, &tCCTDesc)))
 		return E_FAIL;
 	m_pCharacterController->setOwnerTransform(m_pTransform);
+	m_pCharacterController->setShapeLayer((_uint)ELayer::Monster);
 
 	//state controller
 	if (FAILED(__super::SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_StateController", L"Com_StateController", (CComponent**)&m_pStateController)))
@@ -407,6 +408,7 @@ HRESULT CMonster_Crawler::Ready_Weapone()
 
 	_matrix smatPviot = XMMatrixRotationY(XMConvertToRadians(90.f)) * XMMatrixTranslation(0.f, 0.5f, 0.5f);
 	m_pCollider->setPivotMatrix(smatPviot);
+	m_pCollider->setShapeLayer((_uint)ELayer::MonsterWeapon);
 
 	return S_OK;
 }

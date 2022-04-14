@@ -154,6 +154,11 @@ CActor* CBullet::Get_Owner() const
 void CBullet::Set_Owner(CActor* _pOwner)
 {
 	m_pOwner = _pOwner;
+
+	if ((_uint)GAMEOBJECT::PLAYER == _pOwner->getTag())
+		m_pCollider->setShapeLayer((_uint)ELayer::Weapon);
+	else
+		m_pCollider->setShapeLayer((_uint)ELayer::MonsterWeapon);
 }
 
 void CBullet::OnTriggerEnter(CCollision& collision)

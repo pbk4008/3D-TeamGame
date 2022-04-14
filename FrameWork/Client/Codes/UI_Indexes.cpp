@@ -49,6 +49,16 @@ _int CUI_Indexes::LateTick(_double TimeDelta)
 	if (FAILED(CUI::LateTick(TimeDelta)))
 		return -1;
 
+	if (m_fInitPos > m_fEndPos)
+	{
+		m_fInitPos -= TimeDelta * 100.f;
+		if (m_fInitPos < m_fEndPos)
+		{
+			m_fInitPos = m_fEndPos;
+		}
+		m_pTransform->Set_State(CTransform::STATE_POSITION, _vector{ m_fInitPos, 0.f, 0.f, 1.f });
+	}
+
 	if (m_pEquipmentBtn->getActive())
 		m_pEquipmentBtn->LateTick(TimeDelta);
 
@@ -75,12 +85,21 @@ HRESULT CUI_Indexes::Render(void)
 	return S_OK;
 }
 
+void CUI_Indexes::setActive(_bool bActive)
+{
+	this->m_bActive = bActive;
+
+	if (false == bActive)
+		m_fInitPos = 10.f;
+}
+
 HRESULT CUI_Indexes::Ready_UIObject(void)
 {
 	CButton_Equipment::Desc Equipment_Btn;
 	{
 		Equipment_Btn.fPos = { -550.f, 335.f };
 		Equipment_Btn.fScale = { 60.f, 30.f };
+		Equipment_Btn.pOwner = this;
 
 		m_pEquipmentBtn = static_cast<CButton_Equipment*>(g_pGameInstance->Clone_GameObject((_uint)SCENEID::SCENE_STATIC, L"Proto_GameObject_UI_Button_Equipment", &Equipment_Btn));
 		assert("Failed to Create Proto_GameObject_UI_Button_Equipment" && m_pEquipmentBtn);
@@ -89,6 +108,7 @@ HRESULT CUI_Indexes::Ready_UIObject(void)
 	{
 		Armory_Btn.fPos = { -450.f, 335.f };
 		Armory_Btn.fScale = { 60.f, 30.f };
+		Armory_Btn.pOwner = this;
 
 		m_pArmoryBtn = static_cast<CButton_Armory*>(g_pGameInstance->Clone_GameObject((_uint)SCENEID::SCENE_STATIC, L"Proto_GameObject_UI_Button_Armory", &Armory_Btn));
 		assert("Failed to Create Proto_GameObject_UI_Button_Armory" && m_pArmoryBtn);
@@ -104,6 +124,7 @@ HRESULT CUI_Indexes::Ready_UIObject(void)
 
 void CUI_Indexes::Show(void)
 {
+	setActive(true);
 	/* Show Menu Button*/
 	m_pEquipmentBtn->setActive(true);
 	m_pArmoryBtn->setActive(true);
@@ -112,6 +133,7 @@ void CUI_Indexes::Show(void)
 
 void CUI_Indexes::Hide(void)
 {
+	setActive(false);
 	/* Hide Menu Button*/
 	m_pEquipmentBtn->setActive(false);
 	m_pArmoryBtn->setActive(false);

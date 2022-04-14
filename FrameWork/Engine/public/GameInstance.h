@@ -181,6 +181,8 @@ public:/* For.PhysX */
 	const _bool Raycast(RAYCASTDESC& _desc);
 	const _bool Sweep(SWEEPDESC& _desc);
 	const _bool Overlap(OVERLAPDESC& _desc);
+	void Set_NumLayers(const _uint _iNumLayers);
+	void Set_CollisionLayer(const _uint _iLayer1, const _uint _iLayer2);
 
 public: /* For.SoundMgr */
 	HRESULT Init_SoundManager();

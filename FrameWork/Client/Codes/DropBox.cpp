@@ -84,7 +84,6 @@ _int CDropBox::Tick(_double _dDeltaTime)
 		m_dropElapsed += (_float)_dDeltaTime; /* drop time */
 		if (m_dropElapsed >= m_dropDelay) 
 		{
-			//g_pGameInstance->BlendSound(L"Drop_Item", L"Drop_Item_2", CSoundMgr::CHANNELID::Item_Drop, CSoundMgr::CHANNELID::Item_Drop_2);
 			g_pGameInstance->StopSound(CSoundMgr::CHANNELID::Item_Drop);
 			g_pGameInstance->Play_Shot(L"Drop_Item_2", CSoundMgr::CHANNELID::Item_Drop);
 			g_pGameInstance->VolumeChange(CSoundMgr::CHANNELID::Item_Drop, 5.5f);
@@ -165,11 +164,12 @@ HRESULT CDropBox::Ready_Components()
 
 	CBoxCollider::DESC tBoxColliderDesc;
 	tBoxColliderDesc.tColliderDesc = tColliderDesc;
-	tBoxColliderDesc.vScale = { 1.f, 1.f, 1.f };
+	tBoxColliderDesc.vScale = { 2.0f, 1.f, 1.f };
 	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_BoxCollider", L"Collider", (CComponent**)&m_pCollider, &tBoxColliderDesc)))
 		return E_FAIL;
 	_matrix smatPivot = XMMatrixTranslation(0.f, tBoxColliderDesc.vScale.y * 0.5f, 0.f);
 	m_pCollider->setPivotMatrix(smatPivot);
+	m_pCollider->setShapeLayer((_uint)ELayer::ItemBox);
 
 	/* for. Animator Com */
 	matPivot = XMMatrixIdentity();
@@ -240,98 +240,176 @@ void CDropBox::Open(void)
 std::vector<CItemData> CDropBox::GetDropList(void)
 {
 	CItemData item1;
-	item1.iconTexName = L"T_Weapon_DualBlades_1H_Player_Brimtide";
+	item1.iconTexName = L"T_Weapon_Hammer_2H_Player_Hinterclaw";
 	item1.equipmentGrade = EEquipmentGrade::Legendary;
 	item1.ItemType = EItemType::Equipment;
 	item1.equipmentType = EEquipmentType::Weapon;
-
 	item1.szItemName = L"JinSung's Sword";
 	item1.iMainStat = 52;
 	item1.iLevel = 10;
+	item1.weaponData.weaponName = L"Hinterclaw";
+
 
 
 	CItemData item2;
-	item2.iconTexName = L"T_Weapon_DualBlades_1H_Player_Mercy";
+	item2.iconTexName = L"T_Weapon_Hammer_2H_Player_Harbinger";
 	item2.equipmentGrade = EEquipmentGrade::Epic;
 	item2.ItemType = EItemType::Equipment;
-	item2.equipmentType = EEquipmentType::Augment;
+	item2.equipmentType = EEquipmentType::Weapon;
 	item2.szItemName = L"SuBin's Sword";
 	item2.iMainStat = 20;
 	item2.iLevel = 16;
-
+	item2.szWeaponName = L"2";
+	item2.weaponData.weaponName = L"Harbinger";
 
 	CItemData item3;
-	item3.iconTexName = L"T_Weapon_Sword_1H_Player_Needle";
+	item3.iconTexName = L"T_Weapon_Sword_1H_Player_Crossblade";
 	item3.equipmentGrade = EEquipmentGrade::Rare;
 	item3.ItemType = EItemType::Equipment;
-	item3.equipmentType = EEquipmentType::Banner;
+	item3.equipmentType = EEquipmentType::Weapon;
 	item3.szItemName = L"YoungMo's Sword";
 	item3.iMainStat = 20;
 	item3.iLevel = 16;
+	item3.szWeaponName = L"3";
+	item3.weaponData.weaponName = L"Crossblade";
 
 	CItemData item4;
-	item4.iconTexName = L"T_Weapon_Hammer_2H_Player_Fury";
+	item4.iconTexName = L"T_Weapon_Sword_1H_Player_Dragon";
 	item4.equipmentGrade = EEquipmentGrade::Uncommon;
 	item4.ItemType = EItemType::Equipment;
-	item4.equipmentType = EEquipmentType::LifeStone;
+	item4.equipmentType = EEquipmentType::Weapon;
 	item4.szItemName = L"BeangGyu's Sword";
 	item4.iMainStat = 20;
 	item4.iLevel = 16;
+	item4.szWeaponName = L"4";
+	item4.weaponData.weaponName = L"Dragon";
+
 
 	CItemData item5;
-	item5.iconTexName = L"T_Weapon_Hammer_2H_Player_Legend7";
+	item5.iconTexName = L"T_Weapon_Hammer_2H_Player_Godhammer";
 	item5.equipmentGrade = EEquipmentGrade::Common;
 	item5.ItemType = EItemType::Equipment;
-	item5.equipmentType = EEquipmentType::Ring;
+	item5.equipmentType = EEquipmentType::Weapon;
 	item5.szItemName = L"HeeDong's Sword";
 	item5.iMainStat = 20;
 	item5.iLevel = 16;
-
+	item5.szWeaponName = L"5";
+	item5.weaponData.weaponName = L"GodHammer";
 
 	CItemData item6;
-	item6.iconTexName = L"T_Amulet_11";
+	item6.iconTexName = L"T_Weapon_Hammer_2H_Player_INE";
 	item6.equipmentGrade = EEquipmentGrade::Rare;
 	item6.ItemType = EItemType::Equipment;
-	item6.equipmentType = EEquipmentType::Ring;
+	item6.equipmentType = EEquipmentType::Weapon;
 	item6.szItemName = L"HeeDong's Sword_2";
 	item6.iMainStat = 20;
 	item6.iLevel = 16;
+	item6.szWeaponName = L"6";
+	item6.weaponData.weaponName = L"Legend5";
+
 
 	CItemData item7;
-	item7.iconTexName = L"T_Amulet_12";
+	item7.iconTexName = L"T_Weapon_Sword_1H_Player_Eclipse_Gold";
 	item7.equipmentGrade = EEquipmentGrade::Epic;
 	item7.ItemType = EItemType::Equipment;
-	item7.equipmentType = EEquipmentType::Augment;
+	item7.equipmentType = EEquipmentType::Weapon;
 	item7.szItemName = L"HeeDong's Sword_3";
 	item7.iMainStat = 20;
 	item7.iLevel = 16;
+	item7.szWeaponName = L"7";
+	item7.weaponData.weaponName = L"Eclipse";
+
 
 	CItemData item8;
-	item8.iconTexName = L"T_Amulet_13";
+	item8.iconTexName = L"T_Weapon_Hammer_2H_Player_Skymourne";
 	item8.equipmentGrade = EEquipmentGrade::Legendary;
 	item8.ItemType = EItemType::Equipment;
 	item8.equipmentType = EEquipmentType::Weapon;
 	item8.szItemName = L"HeeDong's Sword_4";
 	item8.iMainStat = 20;
 	item8.iLevel = 16;
+	item8.weaponData.weaponName = L"Skymourne";
+
 
 	CItemData item9;
-	item9.iconTexName = L"T_Amulet_BlisteringPulse";
-	item9.equipmentGrade = EEquipmentGrade::Common;
+	item9.iconTexName = L"T_Weapon_Hammer_2H_Player_Soothsayer";
+	item9.equipmentGrade = EEquipmentGrade::Legendary;
 	item9.ItemType = EItemType::Equipment;
 	item9.equipmentType = EEquipmentType::Weapon;
 	item9.szItemName = L"HeeDong's Sword_5";
 	item9.iMainStat = 20;
 	item9.iLevel = 16;
+	item9.weaponData.weaponName = L"Soothsayer";
 
 	CItemData item10;
-	item10.iconTexName = L"T_Amulet_SunBloom";
-	item10.equipmentGrade = EEquipmentGrade::Common;
+	item10.iconTexName = L"T_Weapon_Sword_1H_Player_ArgentBlade";
+	item10.equipmentGrade = EEquipmentGrade::Legendary;
 	item10.ItemType = EItemType::Equipment;
 	item10.equipmentType = EEquipmentType::Weapon;
 	item10.szItemName = L"HeeDong's Sword_6";
 	item10.iMainStat = 20;
 	item10.iLevel = 16;
+	item10.weaponData.weaponName = L"ArgentBlade";
+
+	CItemData item11;
+	item11.iconTexName = L"T_Weapon_Hammer_2H_Player_Ironstone";
+	item11.equipmentGrade = EEquipmentGrade::Legendary;
+	item11.ItemType = EItemType::Equipment;
+	item11.equipmentType = EEquipmentType::Weapon;
+	item11.szItemName = L"HeeDong's Sword_6";
+	item11.iMainStat = 20;
+	item11.iLevel = 16;
+	item11.weaponData.weaponName = L"Ironstone";
+
+	CItemData item12;
+	item12.iconTexName = L"T_Weapon_Sword_1H_Player_Justice";
+	item12.equipmentGrade = EEquipmentGrade::Legendary;
+	item12.ItemType = EItemType::Equipment;
+	item12.equipmentType = EEquipmentType::Weapon;
+	item12.szItemName = L"HeeDong's Sword_6";
+	item12.iMainStat = 20;
+	item12.iLevel = 16;
+	item12.weaponData.weaponName = L"Justice";
+
+	CItemData item13;
+	item13.iconTexName = L"T_Weapon_Hammer_2H_Player_Legend1";
+	item13.equipmentGrade = EEquipmentGrade::Common;
+	item13.ItemType = EItemType::Equipment;
+	item13.equipmentType = EEquipmentType::Weapon;
+	item13.szItemName = L"HeeDong's Sword_6";
+	item13.iMainStat = 20;
+	item13.iLevel = 16;
+	item13.weaponData.weaponName = L"Legend1";
+
+	CItemData item14;
+	item14.iconTexName = L"T_Weapon_Hammer_2H_Player_Legend2";
+	item14.equipmentGrade = EEquipmentGrade::Uncommon;
+	item14.ItemType = EItemType::Equipment;
+	item14.equipmentType = EEquipmentType::Weapon;
+	item14.szItemName = L"HeeDong's Sword_6";
+	item14.iMainStat = 20;
+	item14.iLevel = 16;
+	item14.weaponData.weaponName = L"Legend2";
+
+	CItemData item15;
+	item15.iconTexName = L"T_Weapon_Hammer_2H_Player_Mesa";
+	item15.equipmentGrade = EEquipmentGrade::Rare;
+	item15.ItemType = EItemType::Equipment;
+	item15.equipmentType = EEquipmentType::Weapon;
+	item15.szItemName = L"HeeDong's Sword_6";
+	item15.iMainStat = 20;
+	item15.iLevel = 16;
+	item15.weaponData.weaponName = L"Mesa";
+
+	CItemData item16;
+	item16.iconTexName = L"T_Weapon_Hammer_2H_Player_Mesa";
+	item16.equipmentGrade = EEquipmentGrade::Rare;
+	item16.ItemType = EItemType::Equipment;
+	item16.equipmentType = EEquipmentType::Weapon;
+	item16.szItemName = L"HeeDong's Sword_6";
+	item16.iMainStat = 20;
+	item16.iLevel = 16;
+	item16.weaponData.weaponName = L"Mesa";
 
 	std::vector<CItemData> dropList;
 
@@ -345,6 +423,12 @@ std::vector<CItemData> CDropBox::GetDropList(void)
 	dropList.push_back(item8);
 	dropList.push_back(item9);
 	dropList.push_back(item10);
+	dropList.push_back(item11);
+	dropList.push_back(item12);
+	dropList.push_back(item13);
+	dropList.push_back(item14);
+	dropList.push_back(item15);
+	dropList.push_back(item16);
 	return dropList;
 }
 
@@ -387,14 +471,9 @@ void CDropBox::UpdateInteraction(_double _dTimeDelta)
 {
 	__super::UpdateInteraction(_dTimeDelta);
 
-	//m_openElapsed += (_float)_dTimeDelta;
-
-	//if (m_openDelay <= m_openElapsed)
-	//{
-		m_pStateController->Change_State(L"DropBox_Open");
-		m_bBoxOpened = true;
-		Open();
-	//}
+	m_pStateController->Change_State(L"DropBox_Open");
+	m_bBoxOpened = true;
+	Open();
 }
 
 void CDropBox::EndInteraction(void)

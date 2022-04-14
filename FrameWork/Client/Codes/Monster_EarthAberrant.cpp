@@ -315,6 +315,7 @@ HRESULT CMonster_EarthAberrant::SetUp_Components()
 	if (FAILED(__super::SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_CharacterController", L"CharacterController", (CComponent**)&m_pCharacterController, &tCharacterControllerDesc)))
 		return E_FAIL;
 	m_pCharacterController->setOwnerTransform(m_pTransform);
+	m_pCharacterController->setShapeLayer((_uint)ELayer::Monster);
 
 	return S_OK;
 }

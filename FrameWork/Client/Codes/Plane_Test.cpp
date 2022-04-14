@@ -111,6 +111,7 @@ HRESULT CPlane_Test::Ready_NavMesh()
 
 	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_NavMeshCollider", L"NavMeshCollider", (CComponent**)&m_pNaviCollider, &NavMeshDesc)))
 		return E_FAIL;
+	m_pNaviCollider->setShapeLayer((_uint)ELayer::Enviroment);
 
 	return S_OK;
 }

@@ -123,24 +123,6 @@ HRESULT CDropObject::Ready_Components()
 
 	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Model_DropObject", L"Model", (CComponent**)&m_pModel)))
 		return E_FAIL;
-	
-	///* for. Collider Com */
-	//CCollider::DESC tColliderDesc;
-	//tColliderDesc.eRigidType = ERigidType::Dynamic;
-	//tColliderDesc.isSceneQuery = true;
-	//tColliderDesc.isTrigger = true;
-	//tColliderDesc.pGameObject = this;
-	////tColliderDesc.isGravity = true;
-	//tColliderDesc.fRestitution = 0.05f;
-
-
-	//CBoxCollider::DESC tBoxColliderDesc;
-	//tBoxColliderDesc.tColliderDesc = tColliderDesc;
-	//tBoxColliderDesc.vScale = { 0.3f, 0.3f, 0.3f };
-	//if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_BoxCollider", L"Collider", (CComponent**)&m_pCollider, &tBoxColliderDesc)))
-	//	return E_FAIL;
-	//_matrix smatPivot = XMMatrixTranslation(0.f, tBoxColliderDesc.vScale.y * 0.5f, 0.f);
-	//m_pCollider->setPivotMatrix(smatPivot);
 
 	return S_OK;
 }

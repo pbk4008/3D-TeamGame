@@ -103,12 +103,14 @@ HRESULT CVIBuffer_Trail::Set_VertexTrail(const _float3 _vStartPoints[], const _f
 	for (_uint i = 0; i < _iCount; ++i)
 	{
 		((VTXTEX*)pVertices.pData)[i * 2 + 0].vPosition = _vStartPoints[i];
-		((VTXTEX*)pVertices.pData)[i * 2 + 0].vTexUV = _float2(1.f, (i * 2 + 0) / _float(_iCount - 2.f));
+		//((VTXTEX*)pVertices.pData)[i * 2 + 0].vTexUV = _float2(1.f, (i * 2 + 0) / _float(_iCount - 2.f));
 		//((VTXTEX*)pVertices.pData)[i * 2 + 0].vTexUV = _float2(1.f, (i * 2 + 0) / _float((_iCount - 1) * 2));
+		((VTXTEX*)pVertices.pData)[i * 2 + 0].vTexUV = _float2((i * 2 + 0) / _float((_iCount - 1) * 2), 0.f);
 
 		((VTXTEX*)pVertices.pData)[i * 2 + 1].vPosition = _vEndPoints[i];
-		((VTXTEX*)pVertices.pData)[i * 2 + 1].vTexUV = _float2(0.f, (i * 2 + 1) / _float(_iCount - 1.f));
+		//((VTXTEX*)pVertices.pData)[i * 2 + 1].vTexUV = _float2(0.f, (i * 2 + 1) / _float(_iCount - 1.f));
 		//((VTXTEX*)pVertices.pData)[i * 2 + 1].vTexUV = _float2(1.f, (i * 2 + 1) / _float(_iCount * 2 - 1));
+		((VTXTEX*)pVertices.pData)[i * 2 + 1].vTexUV = _float2((i * 2 + 0) / _float((_iCount - 1) * 2), 1.f);
 	}
 	m_iNumPrimitive = (_iCount - 1) * 2;
 

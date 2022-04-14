@@ -13,6 +13,7 @@ public:
 	{
 		_float2 fPos;
 		_float2 fScale;
+		CUI* pOwner = nullptr;
 	};
 
 public:
@@ -30,6 +31,7 @@ public:
 
 public:
 	HRESULT Ready_Component(void);
+	_int	Attach_Owner(void);
 
 public:
 	_bool	IconMouseOn(void);
@@ -42,6 +44,9 @@ private:
 	CUIHelper*	  m_pUIHelperCom = nullptr;
 	ItemSlotDesc  desc;
 	_bool		  m_bHasItem = false;
+	CTransform*	  m_pLocalTransform = nullptr;
+	CUI*		  m_pOwner = nullptr;
+
 public:
 	static CUI_SlotItemIcon* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);
 	virtual CGameObject* Clone(const _uint iSceneID, void* pArg);

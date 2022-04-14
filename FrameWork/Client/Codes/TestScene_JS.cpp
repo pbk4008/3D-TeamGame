@@ -98,6 +98,7 @@ HRESULT CTestScene_JS::Render()
 HRESULT CTestScene_JS::Ready_Light()
 {
 	LIGHTDESC			LightDesc;
+
 	ZeroMemory(&LightDesc, sizeof(LIGHTDESC));
 
 	LightDesc.eType = LIGHTDESC::TYPE_DIRECTIONAL;
@@ -105,22 +106,19 @@ HRESULT CTestScene_JS::Ready_Light()
 	LightDesc.vDiffuse = _float4(1.f, 1.f, 1.f, 1.f);
 	LightDesc.vSpecular = _float4(0.8f, 0.8f, 0.8f, 1.f);
 	LightDesc.vAmbient = _float4(0.6f, 0.6f, 0.6f, 1.f);
-	LightDesc.mOrthinfo[0] = 50.f;
+	LightDesc.mOrthinfo[0] = 30.f;
 
-	if (FAILED(g_pGameInstance->CreateLightCam(m_pDevice, m_pDeviceContext, LightDesc))) return E_FAIL;
+	if (FAILED(g_pGameInstance->CreateLightCam(m_pDevice, m_pDeviceContext, LightDesc))) MSGBOX("Failed To Creating DirectionLight Cam");
 
-	//ZeroMemory(&LightDesc, sizeof(LIGHTDESC));
+	ZeroMemory(&LightDesc, sizeof(LIGHTDESC));
+	LightDesc.eType = LIGHTDESC::TYPE_POINT;
+	LightDesc.fRange = 10.f;
+	LightDesc.vDiffuse = _float4(1.f, 0.f, 0.f, 1.f);
+	LightDesc.vSpecular = _float4(0.8f, 0.8f, 0.8f, 1.f);
+	LightDesc.vAmbient = _float4(0.6f, 0.6f, 0.6f, 1.f);
+	LightDesc.vPosition = _float3(2.f, 15.f, 110.f);
 
-	//LightDesc.eType = LIGHTDESC::TYPE_DIRECTIONAL;
-	//LightDesc.vDirection = _float3(-1.f, -1.f, 1.f);
-	//LightDesc.vDiffuse = _float4(1.f, 1.f, 1.f, 1.f);
-	//LightDesc.vSpecular = _float4(0.8f, 0.8f, 0.8f, 1.f);
-	//LightDesc.vAmbient = _float4(0.6f, 0.6f, 0.6f, 1.f);
-	//LightDesc.mOrthinfo[0] = 50.f;
-
-	//if (FAILED(g_pGameInstance->CreateLightCam(m_pDevice, m_pDeviceContext, LightDesc))) return E_FAIL;
-
-	//if (FAILED(g_pGameInstance->CreateLightCam(m_pDevice, m_pDeviceContext, LightDesc))) return E_FAIL;
+	if (FAILED(g_pGameInstance->Add_Light(m_pDevice, m_pDeviceContext, LightDesc))) MSGBOX("Failed To Adding PointLight");
 
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_SkyBox", L"Proto_GameObject_SkyBox")))
 		return E_FAIL;

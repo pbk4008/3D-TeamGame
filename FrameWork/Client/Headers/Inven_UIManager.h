@@ -6,6 +6,7 @@ BEGIN(Client)
 class CUI_Indexes;
 class CUI_ModalWindow;
 class CUI_ItemStatusWindow;
+class CHud;
 class CItemData;
 class CInven_UIManager final : public CSingleTon<CInven_UIManager>
 {
@@ -18,7 +19,7 @@ private:
 
 public:
 	HRESULT NativeConstruct(void);
-	_int    Tick(void);
+	_int    Tick(_double _dTimeDelta);
 
 public:
 	void OnModalOpen(void*);
@@ -38,6 +39,9 @@ public: /* Item */
 private: /* Inventory */
 	CUI_ModalWindow*			m_pModal = nullptr;
 	CUI_ItemStatusWindow*		m_pItemStatus = nullptr;
+
+private: /* Notify UI */
+	CHud*	m_pHud = nullptr;
 
 private:
 	_bool m_bOpenModal = false;

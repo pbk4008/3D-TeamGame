@@ -281,6 +281,7 @@ call Update_Library_Release.bat</Command>
     <ClInclude Include="..\public\PipeLine.h" />
     <ClInclude Include="..\public\PostProcess.h" />
     <ClInclude Include="..\public\QuadTree.h" />
+    <ClInclude Include="..\public\QueryFilterCallback.h" />
     <ClInclude Include="..\public\Ray_Collider.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClInclude>
@@ -378,6 +379,7 @@ call Update_Library_Release.bat</Command>
     <ClCompile Include="..\private\NavMeshCollider.cpp" />
     <ClCompile Include="..\private\PhysicsXSystem.cpp" />
     <ClCompile Include="..\private\PostProcess.cpp" />
+    <ClCompile Include="..\private\QueryFilterCallback.cpp" />
     <ClCompile Include="..\private\Ray_Collider.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>

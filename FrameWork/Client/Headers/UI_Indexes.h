@@ -22,6 +22,7 @@ public:
 	virtual _int Tick(_double dDeltaTime)override;
 	virtual _int LateTick(_double TimeDelta)override;
 	virtual HRESULT Render(void) override;
+	virtual void setActive(_bool bActive) override;
 
 public:
 	HRESULT Ready_UIObject(void);
@@ -45,6 +46,10 @@ private:
 
 private:
 	_bool m_arrCurWindow[INVEN_INDEX::TAB_END] = { false };
+
+private:
+	_float m_fInitPos = 10.f;
+	_float m_fEndPos  = 0.f;
 
 public:
 	static CUI_Indexes* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);

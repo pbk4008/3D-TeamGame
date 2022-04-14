@@ -13,7 +13,8 @@
 #include "UI_Blank_CKey.h"
 #include "UI_Fill_CKey.h"
 #include "InventoryData.h"
-
+#include "EquipmentData.h"
+#include "PlayerData.h"
 #include "MainApp.h"
 
 #pragma region 스테이트들
@@ -189,6 +190,8 @@ HRESULT CSilvermane::NativeConstruct(const _uint _iSceneID, void* _pArg)
 	if (FAILED(__super::NativeConstruct(_iSceneID, _pArg)))
 		return E_FAIL;
 
+	m_pPlayerData = g_pDataManager->GET_DATA(CPlayerData, L"PlayerData");
+
 	if (_pArg)
 	{
 		SCENEMOVEDATA tDesc = (*(SCENEMOVEDATA*)_pArg);
@@ -204,7 +207,7 @@ HRESULT CSilvermane::NativeConstruct(const _uint _iSceneID, void* _pArg)
 		return E_FAIL;
 	if (FAILED(Ready_States()))
 		return E_FAIL;
-	if (FAILED(Ready_Weapons()))
+	if (FAILED(Ready_Weapons(_iSceneID)))
 		return E_FAIL;
 
 	/*g_pObserver->Set_PlayerTransCom(m_pTransform);*/
@@ -264,7 +267,6 @@ _int CSilvermane::Tick(_double _dDeltaTime)
 	Raycast_JumpNode(_dDeltaTime);
 	Raycast_DropBox(_dDeltaTime);
 
-
 	// 무기 업뎃
 	if (m_pCurWeapon)
 	{
@@ -289,6 +291,10 @@ _int CSilvermane::LateTick(_double _dDeltaTime)
 		return iProgress;
 
 	m_pCharacterController->Update_OwnerTransform();
+
+	/* 장비창 실시간 변경 */
+	if (g_pInvenUIManager->IsOpenModal())
+		Change_WeaponOnInventory();
 
 	iProgress = m_pStateController->LateTick(_dDeltaTime);
 	if (NO_EVENT != iProgress)
@@ -511,6 +517,7 @@ HRESULT CSilvermane::Ready_Components()
 	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_CharacterController", L"CharacterController", (CComponent**)&m_pCharacterController, &tCharacterControllerDesc)))
 		return E_FAIL;
 	m_pCharacterController->setOwnerTransform(m_pTransform);
+	m_pCharacterController->setShapeLayer((_uint)ELayer::Player);
 
 	m_pTexture = g_pGameInstance->Clone_Component<CTexture>(0, L"Proto_Component_Texture");
 	m_pTexture->Change_Texture(L"Texture_SilvermeanNewHair");
@@ -791,45 +798,69 @@ HRESULT CSilvermane::Ready_States()
 	return S_OK;
 }
 
-HRESULT CSilvermane::Ready_Weapons()
+HRESULT CSilvermane::Ready_Weapons(const _uint _iSceneID)
 {
-	CHierarchyNode* pWeaponBone = m_pModel->Get_BoneMatrix("spine_03");
 	CWeapon* pWeapon = nullptr;
-	// 한손검
-	pWeapon = CNeedle::Create(m_pDevice, m_pDeviceContext);
-	if (FAILED(pWeapon->NativeConstruct(m_iSceneID, pWeaponBone)))
-	{
-		Safe_Release(pWeapon);
-		return E_FAIL;
-	}
-	pWeapon->Set_Owner(this);
-	pWeapon->Set_OwnerPivotMatrix(m_pModel->Get_PivotMatrix());
-	m_umapWeapons.emplace(L"Needle", pWeapon);
-	m_pCurWeapon = pWeapon;
-	m_pCurWeapon->setActive(true);
-	// 해머
-	pWeapon = CFury::Create(m_pDevice, m_pDeviceContext);
-	if (FAILED(pWeapon->NativeConstruct(m_iSceneID, pWeaponBone)))
-	{
-		Safe_Release(pWeapon);
-		return E_FAIL;
-	}
-	pWeapon->Set_Owner(this);
-	pWeapon->Set_OwnerPivotMatrix(m_pModel->Get_PivotMatrix());
-	pWeapon->Set_Equip(false);
-	m_umapWeapons.emplace(L"Fury", pWeapon);
-	// 방패
-	pWeaponBone = m_pModel->Get_BoneMatrix("weapon_l");
-	m_pShield = CShield::Create(m_pDevice, m_pDeviceContext);
-	if (FAILED(m_pShield->NativeConstruct(m_iSceneID, pWeaponBone)))
-	{
-		Safe_Release(m_pShield);
-		return E_FAIL;
-	}
-	m_pShield->Set_Owner(this);
-	m_pShield->Set_OwnerPivotMatrix(m_pModel->Get_PivotMatrix());
-	Set_EquipShield(false);
 
+	if (FAILED(g_pWeaponGenerator->NativeConstruct(m_pDevice, m_pDeviceContext, _iSceneID, m_pModel)))
+		return E_FAIL;
+
+#pragma region Old Ready Weapon
+	//// 한손검
+	//pWeapon = CNeedle::Create(m_pDevice, m_pDeviceContext);
+	//if (FAILED(pWeapon->NativeConstruct(m_iSceneID, pWeaponBone)))
+	//{
+	//	Safe_Release(pWeapon);
+	//	return E_FAIL;
+	//}
+	//pWeapon->Set_Owner(this); /* 무기에게 네가 나의 마스타인가? */
+	//pWeapon->Set_OwnerPivotMatrix(m_pModel->Get_PivotMatrix()); /* 마스타의 뼈를 취하겠다 */
+	//m_umapWeapons.emplace(L"Needle", pWeapon); /* 따로 저장 */
+	//m_pCurWeapon = pWeapon; /* FSM 나뉨 */
+	//m_pCurWeapon->setActive(true); 
+
+	//// 해머
+	//pWeapon = CFury::Create(m_pDevice, m_pDeviceContext);
+	//if (FAILED(pWeapon->NativeConstruct(m_iSceneID, pWeaponBone)))
+	//{
+	//	Safe_Release(pWeapon);
+	//	return E_FAIL;
+	//}
+	//pWeapon->Set_Owner(this);
+	//pWeapon->Set_OwnerPivotMatrix(m_pModel->Get_PivotMatrix());
+	//pWeapon->Set_Equip(false);
+	//m_umapWeapons.emplace(L"Fury", pWeapon);
+	//// 방패
+	//pWeaponBone = m_pModel->Get_BoneMatrix("weapon_l");
+	//m_pShield = CShield::Create(m_pDevice, m_pDeviceContext);
+	//if (FAILED(m_pShield->NativeConstruct(m_iSceneID, pWeaponBone)))
+	//{
+	//	Safe_Release(m_pShield);
+	//	return E_FAIL;
+	//}
+	//m_pShield->Set_Owner(this);
+	//m_pShield->Set_OwnerPivotMatrix(m_pModel->Get_PivotMatrix());
+	//Set_EquipShield(false);
+
+#pragma endregion
+
+	/// <summary>
+	/// Equipment&Inventory Data와 연동하여 장비 Ready함
+	/// </summary>
+	/// 
+	m_pEquipmentData = g_pDataManager->GET_DATA(CEquipmentData, L"EquipmentData");
+	
+	if (1 == m_pPlayerData->EquipedSlot)
+	{
+		assert(m_pEquipmentData->GetEquipment(EEquipSlot::Weapon1).weaponData.IsValid());
+		pWeapon = m_pEquipmentData->GetEquipment(EEquipSlot::Weapon1).weaponData.Get_Weapon();
+
+		pWeapon->Set_Owner(this);
+		pWeapon->Set_OwnerPivotMatrix(m_pModel->Get_PivotMatrix());
+		pWeapon->setActive(true);
+
+		m_pCurWeapon = pWeapon;
+	}
 	return S_OK;
 }
 
@@ -1137,19 +1168,276 @@ void CSilvermane::Set_Position(const _float3 _vPosition)
 
 const _bool CSilvermane::Change_Weapon(const wstring& _name)
 {
-	CWeapon* pWeapon = m_umapWeapons[_name];
-	if (!pWeapon)
-		return false;
-	if (m_pCurWeapon == pWeapon)
-		return false;
+#pragma region Old Change Weapon
+	/*
+CWeapon* pWeapon = m_umapWeapons[_name];
+if (!pWeapon)
+	return false;
+if (m_pCurWeapon == pWeapon)
+	return false;
 
-	if (m_pCurWeapon)
-	{
-		Set_EquipWeapon(false);
-		Set_WeaponFixedBone("spine_03");
-	}
-	m_pCurWeapon = pWeapon;
+if (m_pCurWeapon)
+{
+	Set_EquipWeapon(false);
+	Set_WeaponFixedBone("spine_03");
+}
+m_pCurWeapon = pWeapon;
+*/
+#pragma endregion
+
 	return true;
+
+}
+
+const _bool CSilvermane::Change_Weapon()
+{
+	if (1 == m_pPlayerData->EquipedSlot) /* 현재 1번 슬롯상태 */
+	{
+		if (m_pEquipmentData->IsExistEquip(EEquipSlot::Weapon1)) /* 장비창 첫번째 슬롯의 무기를 장착중인 경우 */
+		{
+			if (m_pEquipmentData->IsExistEquip(EEquipSlot::Weapon2)) /* 두번째 슬롯에 장착 중인 무기가 있는 경우*/
+			{
+				if (nullptr != m_pCurWeapon && /* 현재 장착중인 무기가 두번째 슬롯의 무기와 이름이 같은 경우  */
+					0 == m_pCurWeapon->Get_Name().compare(m_pEquipmentData->GetEquipment(EEquipSlot::Weapon2).weaponData.weaponName))
+				{
+					m_pPlayerData->EquipedSlot = 1;
+					return false; /* 같은 무기, 변화 없음 */
+				}
+				else 
+				{
+					if (nullptr != m_pCurWeapon)
+					{
+						Set_EquipWeapon(false); /* 현재 착용중인 무기를 해제 */
+						Set_WeaponFixedBone("spine_03");
+					}
+					m_pCurWeapon = m_pEquipmentData->GetEquipment(EEquipSlot::Weapon2).weaponData.Get_Weapon(); /* 2번슬롯의 무기로 바꿔서 든다  */
+					m_pCurWeapon->Set_Owner(this);
+					m_pPlayerData->EquipedSlot = 2;
+					return true;
+				}
+			}
+			else /* 두번째 슬롯에 장착중인 무기가 없는 경우 */
+			{
+				return false; /* 무기 변경 없음 */
+			}
+		}
+	}
+
+	else if (2 == m_pPlayerData->EquipedSlot) /* 현재 2번 슬롯상태 */
+	{
+		if (m_pEquipmentData->IsExistEquip(EEquipSlot::Weapon2)) /* 장비창 두번째 슬롯의 무기를 장착중인 경우 */
+		{
+			if (m_pEquipmentData->IsExistEquip(EEquipSlot::Weapon1)) /* 첫번째 슬롯에 장착 중인 무기가 있는 경우*/
+			{
+				if (nullptr != m_pCurWeapon && /* 현재 장착중인 무기가 첫번째 슬롯의 무기와 이름이 같은 경우  */
+					0 == m_pCurWeapon->Get_Name().compare(m_pEquipmentData->GetEquipment(EEquipSlot::Weapon1).weaponData.weaponName))
+				{
+					m_pPlayerData->EquipedSlot = 2;
+					return false; /* 같은 무기, 변화 없음 */
+				}
+				else
+				{
+					if (nullptr != m_pCurWeapon)
+					{
+						Set_EquipWeapon(false); /* 현재 착용중인 무기를 해제 */
+						Set_WeaponFixedBone("spine_03");
+					}
+					m_pCurWeapon = m_pEquipmentData->GetEquipment(EEquipSlot::Weapon1).weaponData.Get_Weapon(); /* 1번슬롯의 무기로 바꿔서 든다  */
+					m_pCurWeapon->Set_Owner(this);
+					m_pPlayerData->EquipedSlot = 1;
+					return true;
+				}
+			}
+			else /* 두번째 슬롯에 장착중인 무기가 없는 경우 */
+			{
+				return false; /* 무기 변경 없음 */
+			}
+		}
+	}
+	else
+		return false;
+		//	if (nullptr != m_pCurWeapon && /* 1번 슬롯 무기의 이름과 현재 장착중인 1번 무기의 이름이 같은 경우  */
+		//		0 == m_pCurWeapon->Get_Name().compare(m_pEquipmentData->GetEquipment(EEquipSlot::Weapon1).weaponData.weaponName))
+		//	{
+		//		return false; /* 같은 무기를 이미 장착 중임 */
+		//	}
+		//	else /* 무기 변경 */
+		//	{
+		//		if (nullptr != m_pCurWeapon)
+		//		{
+		//			Set_EquipWeapon(false); /* 현재 착용중인 무기를 해제 */
+		//			Set_WeaponFixedBone("spine_03");
+		//		}
+		//		m_pCurWeapon = m_pEquipmentData->GetEquipment(EEquipSlot::Weapon1).weaponData.Get_Weapon(); /* 1번슬롯의 무기로 바꿔서 든다  */
+		//		m_pCurWeapon->Set_Owner(this);
+		//		return true;
+		//	}
+		//}
+		//else /* 장비창 첫번째 슬롯이 없는 경우 */
+		//{
+		//	// 첫번째 슬롯엔 없지만 두번째 슬롯에 있는 경우, 들고있는 무기를 그대로 들고있는다.
+		//	if (m_pEquipmentData->IsExistEquip(EEquipSlot::Weapon2))
+		//	{
+		//		m_pPlayerData->EquipedSlot = 2;
+		//		if (nullptr != m_pCurWeapon)
+		//		{
+		//			Set_EquipWeapon(false);
+		//			Set_WeaponFixedBone("spine_03");
+		//		}
+		//		m_pCurWeapon = m_pEquipmentData->GetEquipment(EEquipSlot::Weapon2).weaponData.Get_Weapon();
+		//		m_pCurWeapon->Set_Owner(this);
+		//		return false;
+		//	}
+		//	else /* 두번째 슬롯에도 무기가 없는 경우, 장비창에서 착용중인 무기가 없다는 것이다~ */
+		//	{
+		//		m_pPlayerData->EquipedSlot = 1;
+		//		if (nullptr != m_pCurWeapon)
+		//		{
+		//			Set_EquipWeapon(false);
+		//			Set_WeaponFixedBone("spine_03");
+		//		}
+		//		return false;
+		//	}
+	
+	//else if(2 == m_pPlayerData->EquipedSlot) /* 1번 무기에서 2번 무기로 변경하는 경우 */
+	//{
+	//	if (m_pEquipmentData->IsExistEquip(EEquipSlot::Weapon2)) /* 2번 슬롯에 장착중인 무기가 있는 경우  */
+	//	{
+	//		if(nullptr != m_pCurWeapon && /* 현재 장착중인 무기가 2번슬롯의 무기와 같은 경우 */
+	//			0 == m_pCurWeapon->Get_Name().compare(m_pEquipmentData->GetEquipment(EEquipSlot::Weapon2).weaponData.weaponName))
+	//		{ 
+	//			return false; /* 같은 무기를 착용 중이라는 것이다~ */
+	//		}
+	//		else /* 무기 변경 */
+	//		{
+	//			if (nullptr != m_pCurWeapon)
+	//			{
+	//				Set_EquipWeapon(false);
+	//				Set_WeaponFixedBone("spine_03");
+	//			}
+	//			m_pCurWeapon = m_pEquipmentData->GetEquipment(EEquipSlot::Weapon2).weaponData.Get_Weapon();
+	//			m_pCurWeapon->Set_Owner(this);
+	//			return true;
+	//		}
+	//	}
+	//	else /* 2번째 슬롯에 착용중인 무기가 없는 경우 */
+	//	{
+	//		if (m_pEquipmentData->IsExistEquip(EEquipSlot::Weapon1)) /* 하지만, 1번 슬롯에는 착용중이라면  */
+	//		{
+	//			m_pPlayerData->EquipedSlot = 1;
+	//			if (nullptr != m_pCurWeapon)
+	//			{
+	//				Set_EquipWeapon(false);
+	//				Set_WeaponFixedBone("spine_03");
+	//			}
+	//			m_pCurWeapon = m_pEquipmentData->GetEquipment(EEquipSlot::Weapon1).weaponData.Get_Weapon();
+	//			m_pCurWeapon->Set_Owner(this);
+	//			return false;
+	//		}
+	//	}
+	//}
+	//else
+	//{
+	//	return false;
+	//}
+}
+
+void CSilvermane::Change_WeaponOnInventory(void)
+{
+	if (1 == m_pPlayerData->EquipedSlot)
+	{
+		if (m_pEquipmentData->IsExistEquip(EEquipSlot::Weapon1)) /* 첫번째 슬롯에 무기가 장착되어있는 경우 */
+		{
+			if (nullptr != m_pCurWeapon && /* 현재 장착중인 무기가 첫번째 슬롯의 무기와 이름이 같은 경우  */
+				0 == m_pCurWeapon->Get_Name().compare(m_pEquipmentData->GetEquipment(EEquipSlot::Weapon1).weaponData.weaponName))
+			{
+				return; /* 장착 해제 X */
+			}
+			else /* 인벤에서 1번 슬롯 무기를 변경했다. */
+			{
+				if (nullptr != m_pCurWeapon)
+				{
+					Set_EquipWeapon(false);
+					Set_WeaponFixedBone("spine_03");
+					m_pCurWeapon = m_pEquipmentData->GetEquipment(EEquipSlot::Weapon1).weaponData.Get_Weapon();
+					m_pCurWeapon->Set_Owner(this);
+					m_pPlayerData->EquipedSlot = 1;
+					/* 무기 교체 후 애님 상태 변경 */
+					if (CWeapon::EType::Sword_1H == Get_WeaponType())
+						m_pStateController->Change_State(L"1H_SwordEquipOn");
+					else if (CWeapon::EType::Hammer_2H == Get_WeaponType())
+						m_pStateController->Change_State(L"2H_HammerEquipOn");
+				}
+			}
+		}
+		else if (m_pEquipmentData->IsExistEquip(EEquipSlot::Weapon2)) /* 두번째 슬롯에 무기가 장착되어있는 경우 */
+		{
+			/* 인벤에서 1번 슬롯 무기를 장착 해제 했다. 2번 슬롯의 무기로 변경 */
+			if (nullptr != m_pCurWeapon)
+			{
+				Set_EquipWeapon(false);
+				Set_WeaponFixedBone("spine_03");
+				m_pCurWeapon = m_pEquipmentData->GetEquipment(EEquipSlot::Weapon2).weaponData.Get_Weapon();
+				m_pCurWeapon->Set_Owner(this);
+				m_pPlayerData->EquipedSlot = 2;
+				/* 무기 교체 후 애님 상태 변경 */
+				if (CWeapon::EType::Sword_1H == Get_WeaponType())
+					m_pStateController->Change_State(L"1H_SwordEquipOn");
+				else if (CWeapon::EType::Hammer_2H == Get_WeaponType())
+					m_pStateController->Change_State(L"2H_HammerEquipOn");
+			}
+		}
+		else /* 1번과 2번 슬롯 모두 무기가 없다. */
+			return;
+	}
+	else if(2 == m_pPlayerData->EquipedSlot)
+		{
+			if (m_pEquipmentData->IsExistEquip(EEquipSlot::Weapon2)) /* 두번째 슬롯에 무기가 장착되어있는 경우 */
+			{
+				if (nullptr != m_pCurWeapon && /* 현재 장착중인 무기가 두번째 슬롯의 무기와 이름이 같은 경우  */
+					0 == m_pCurWeapon->Get_Name().compare(m_pEquipmentData->GetEquipment(EEquipSlot::Weapon2).weaponData.weaponName))
+				{
+					return; /* 장착 해제 X */
+				}
+				else /* 인벤에서 2번 슬롯 무기를 변경했다. */
+				{
+					if (nullptr != m_pCurWeapon)
+					{
+						Set_EquipWeapon(false);
+						Set_WeaponFixedBone("spine_03");
+						m_pCurWeapon = m_pEquipmentData->GetEquipment(EEquipSlot::Weapon2).weaponData.Get_Weapon();
+						m_pCurWeapon->Set_Owner(this);
+						m_pPlayerData->EquipedSlot = 2;
+						/* 무기 교체 후 애님 상태 변경 */
+						if (CWeapon::EType::Sword_1H == Get_WeaponType())
+							m_pStateController->Change_State(L"1H_SwordEquipOn");
+						else if (CWeapon::EType::Hammer_2H == Get_WeaponType())
+							m_pStateController->Change_State(L"2H_HammerEquipOn");
+					}
+				}
+			}
+			else if (m_pEquipmentData->IsExistEquip(EEquipSlot::Weapon1)) /* 첫번째 슬롯에 무기가 장착되어있는 경우 */
+			{
+				/* 인벤에서 2번 슬롯 무기를 장착 해제 했다. 1번 슬롯의 무기로 변경 */
+				if (nullptr != m_pCurWeapon)
+				{
+					Set_EquipWeapon(false);
+					Set_WeaponFixedBone("spine_03");
+					m_pCurWeapon = m_pEquipmentData->GetEquipment(EEquipSlot::Weapon1).weaponData.Get_Weapon();
+					m_pCurWeapon->Set_Owner(this);
+					m_pPlayerData->EquipedSlot = 1;
+					/* 무기 교체 후 애님 상태 변경 */
+					if (CWeapon::EType::Sword_1H == Get_WeaponType())
+						m_pStateController->Change_State(L"1H_SwordEquipOn");
+					else if (CWeapon::EType::Hammer_2H == Get_WeaponType())
+						m_pStateController->Change_State(L"2H_HammerEquipOn");
+				}
+			}
+			else /* 1번과 2번 슬롯 모두 무기가 없다. */
+				return;
+		}
+
+
 }
 
 HRESULT CSilvermane::Change_State(const wstring& _wstrStateTag)
@@ -1355,6 +1643,7 @@ const _bool CSilvermane::Raycast_JumpNode(const _double& _dDeltaTime)
 	XMStoreFloat3(&tRaycastDesc.vDir, svRayDir);
 	tRaycastDesc.fMaxDistance = 50.f;
 	tRaycastDesc.filterData.flags = PxQueryFlag::eANY_HIT | PxQueryFlag::eDYNAMIC;
+	tRaycastDesc.layerMask = (1 << (_uint)ELayer::JumpTrigger);
 	CGameObject* pHitObject = nullptr;
 	tRaycastDesc.ppOutHitObject = &pHitObject;
 	if (g_pGameInstance->Raycast(tRaycastDesc))
@@ -1474,6 +1763,8 @@ const void CSilvermane::Raycast_DropBox(const _double& _dDeltaTime)
 	XMStoreFloat3(&tRaycastDesc.vDir, svRayDir);
 	tRaycastDesc.fMaxDistance = 1.f;
 	tRaycastDesc.filterData.flags = PxQueryFlag::eANY_HIT | PxQueryFlag::eDYNAMIC;
+	tRaycastDesc.layerMask = (1 << (_uint)ELayer::ItemBox);
+
 	CGameObject* pHitObject = nullptr;
 	tRaycastDesc.ppOutHitObject = &pHitObject;
 	if (g_pGameInstance->Raycast(tRaycastDesc))
@@ -1526,10 +1817,6 @@ CGameObject* CSilvermane::Clone(const _uint _iSceneID, void* _pArg)
 void CSilvermane::Free()
 {
 	Safe_Release(m_pShield);
-	for (auto& pair : m_umapWeapons)
-		Safe_Release(pair.second);
-	m_umapWeapons.clear();
-
 	Safe_Release(m_pCharacterController);
 	Safe_Release(m_pStateController);
 	Safe_Release(m_pAnimationController);

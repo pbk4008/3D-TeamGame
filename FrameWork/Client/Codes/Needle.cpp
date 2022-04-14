@@ -6,8 +6,9 @@
 #include "StateController.h"
 
 #include "Material.h"
-#include "SwordTrail.h"
-#include "TrailEffect.h"
+
+#include "TrailEffect_Normal.h"
+#include "TrailEffect_Distortion.h"
 
 
 CNeedle::CNeedle(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
@@ -58,8 +59,19 @@ HRESULT CNeedle::NativeConstruct(const _uint _iSceneID, void* _pArg)
 
 	XMStoreFloat4x4(&m_matPivot, XMMatrixRotationRollPitchYaw(XMConvertToRadians(-20.f), XMConvertToRadians(-67.f), XMConvertToRadians(0.f)) * XMMatrixTranslation(0.5f, 0.05f, -0.2f));
 
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer(m_iSceneID, L"Layer_Effect", L"Proto_GameObject_TrailEffect", m_pTransform, (CGameObject**)&m_pTrailEffect)))
-		MSGBOX(L"트레일 이펙트 생성 실패. from Needle");
+	// 트레일 이펙트 달기
+	CTrailEffect::DESC tTrailDesc;
+	tTrailDesc.pOwnerTransform = m_pTransform;
+	tTrailDesc.fLength = 1.f;
+	XMStoreFloat4x4(&tTrailDesc.matPivot, XMMatrixTranslation(0.f, 0.f, 2.f));
+	tTrailDesc.wstrTextureTag = L"WispTrail_Thin";
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer(m_iSceneID, L"Layer_Effect", L"Proto_GameObject_TrailEffect_Normal", &tTrailDesc, (CGameObject**)&m_pTrailEffect_Normal)))
+		MSGBOX(L"노말 트레일 생성 실패. from Needle");
+	tTrailDesc.fLength = 1.f;
+	XMStoreFloat4x4(&tTrailDesc.matPivot, XMMatrixTranslation(0.f, 0.f, 2.f));
+	tTrailDesc.wstrTextureTag = L"TrailBase";
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer(m_iSceneID, L"Layer_Effect", L"Proto_GameObject_TrailEffect_Distortion", &tTrailDesc, (CGameObject**)&m_pTrailEffect_Distortion)))
+		MSGBOX(L"디스토션 트레일 생성 실패. from Needle");
 
 	//Light
 	LIGHTDESC			LightDesc;
@@ -102,7 +114,6 @@ _int CNeedle::Tick(_double _dDeltaTime)
 	if (m_pCollider)
 		m_pCollider->Tick(_dDeltaTime);
 
-
 	if (m_bLight && 0.f <= m_fLightRange)
 	{
 		m_fLightRange -= (_float)_dDeltaTime * 20.f;
@@ -124,45 +135,27 @@ _int CNeedle::LateTick(_double _dDeltaTime)
 	if (0 > __super::LateTick(_dDeltaTime))
 		return -1;
 
+	m_pTrailEffect_Normal->Set_Texture(L"Fire_02");
+
 	if (m_isTrail)
 	{
-		m_pTrailEffect->Record_Points(_dDeltaTime);
-		m_pTrailEffect->Set_IsRender(true);
+		m_pTrailEffect_Normal->Record_Points(_dDeltaTime);
+		m_pTrailEffect_Normal->Set_IsRender(true);
+		m_pTrailEffect_Distortion->Record_Points(_dDeltaTime);
+		m_pTrailEffect_Distortion->Set_IsRender(true);
 		m_pRenderer->SetRenderButton(CRenderer::DISTORTION, true);
 	}
 	else
 	{
-		m_pTrailEffect->Clear_Points();
-		m_pTrailEffect->Set_IsRender(false);
+		m_pTrailEffect_Normal->Clear_Points();
+		m_pTrailEffect_Normal->Set_IsRender(false);
+		m_pTrailEffect_Distortion->Clear_Points();
+		m_pTrailEffect_Distortion->Set_IsRender(false);
 		m_pRenderer->SetRenderButton(CRenderer::DISTORTION, false);
 	}
 
 	if(m_pRenderer)
 		m_pRenderer->Add_RenderGroup(CRenderer::RENDER_NONALPHA, this);
-
-
-	//if (g_pObserver->IsAttack())
-	//	m_bTrailOnOff = true;
-	//else
-	//	m_bTrailOnOff = false;
-
-	//if (m_bTrailOnOff == true)
-	//{
-	//	_vector top, bottom, look;
-	//	_matrix world = m_pTransform->Get_WorldMatrix();
-	//	
-	//	look = world.r[2];
-	//	top = world.r[3];
-	//	bottom = world.r[3];
-	//	/*look = XMVector3Normalize(look);*/
-	//	top += look * 2.5f;
-	//	bottom += look * 0.5f;
-
-	//	m_pTrail->AddVertex(top, bottom);
-	//	m_pTrail->Tick(_dDeltaTime);
-	//}
-	//else
-	//	m_pTrail->Clear_Vertex();
 
 	return _int();
 }
@@ -236,7 +229,7 @@ void CNeedle::OnTriggerEnter(CCollision& collision)
 			_vector vColor = { 1.f, 0.7f, 0.5f, 1.f };
 
 			m_pLight->Set_Color(vColor);
-			m_fLightRange = 4.f;
+			m_fLightRange = 10.f;
 			m_pLight->Set_Range(m_fLightRange);
 			m_bLight = true;
 		}
@@ -261,6 +254,7 @@ void CNeedle::RangeAttack()
 	CGameObject* pHitObject = nullptr;
 	tOverlapDesc.ppOutHitObject = &pHitObject;
 	tOverlapDesc.filterData.flags = PxQueryFlag::eDYNAMIC;
+	tOverlapDesc.layerMask = (1 << (_uint)ELayer::Monster);
 	if (g_pGameInstance->Overlap(tOverlapDesc))
 	{
 		_uint iSize = (_uint)tOverlapDesc.vecHitObjects.size();
@@ -309,6 +303,7 @@ HRESULT CNeedle::Ready_Components()
 	tCapsuleColliderDesc.fRadius = 0.2f;
 	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_CapsuleCollider", L"Collider", (CComponent**)&m_pCollider, &tCapsuleColliderDesc)))
 		return E_FAIL;
+	m_pCollider->setShapeLayer((_uint)ELayer::Weapon);
 
 	_matrix smatPviot = XMMatrixRotationY(XMConvertToRadians(90.f)) * XMMatrixTranslation(0.f, 0.f, 0.8f);
 	m_pCollider->setPivotMatrix(smatPviot);
@@ -392,4 +387,6 @@ void CNeedle::Free()
 
 	Safe_Release(m_pLight);
 	Safe_Release(m_pCollider);
+	m_pTrailEffect_Normal->Set_Remove(true);
+	m_pTrailEffect_Distortion->Set_Remove(true);
 }

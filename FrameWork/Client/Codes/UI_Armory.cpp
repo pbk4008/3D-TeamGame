@@ -145,6 +145,7 @@ void CUI_Armory::UpdateSlots(void)
 		if (i < m_pInventoryData->GetCount())
 		{
 			m_vecSlots[i]->SetActiveAll(true);
+
 			m_vecSlots[i]->SetIcon(m_pInventoryData->GetItem(i).iconTexName);
 			m_vecSlots[i]->SetGrade(m_pInventoryData->GetItem(i).equipmentGrade);
 
