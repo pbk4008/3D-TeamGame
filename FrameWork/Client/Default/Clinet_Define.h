@@ -20,5 +20,5 @@ extern CDebugSystem* g_pDebugSystem;
 extern CShakeManager* g_pShakeManager;
 extern CDataManager*  g_pDataManager;
 extern CInven_UIManager* g_pInvenUIManager;
-
+extern CWeaponGenerator* g_pWeaponGenerator;
 #endif

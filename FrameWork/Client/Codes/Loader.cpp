@@ -153,8 +153,8 @@ HRESULT CLoader::LoadForScene()
 
 HRESULT CLoader::SetUp_Stage1_Object()
 {
-	//if (FAILED(Load_Stage1FBXLoad()))
-	//	return E_FAIL;
+	if (FAILED(Load_Stage1FBXLoad()))
+		return E_FAIL;
 
 	if (FAILED(Load_Stage1Navi_SkyLoad()))
 		return E_FAIL;
@@ -162,11 +162,11 @@ HRESULT CLoader::SetUp_Stage1_Object()
 	if (FAILED(Load_Stage1PlayerLoad()))
 		return E_FAIL;
 
-	//if (FAILED(Load_Stage1MonsterLoad()))
-	//	return E_FAIL;
+	if (FAILED(Load_Stage1MonsterLoad()))
+		return E_FAIL;
 
-	//if (FAILED(Load_Stage1BossLoad()))
-	//	return E_FAIL;
+	if (FAILED(Load_Stage1BossLoad()))
+		return E_FAIL;
 
 	if (FAILED(Load_Stage1StaticUILoad()))
 		return E_FAIL;
@@ -177,32 +177,16 @@ HRESULT CLoader::SetUp_Stage1_Object()
 	if (FAILED(Load_Stage1EffectLoad()))
 		return E_FAIL;
 
-	//if (FAILED(Load_Stage1JumpTrigger()))
-	//	return E_FAIL;
-	//
-	//if (FAILED(Load_Stage1TriggerLod()))
-	//	return E_FAIL;
-
-	//if (FAILED(Load_Stage1_TreasureChest_Load()))
-	//	return E_FAIL;
-
-	_matrix matPivot = XMMatrixIdentity();
-	//////Monster EarthAberrant
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Monster_EarthAberrant", CModel::Create(m_pDevice, m_pDeviceContext,
-		L"../bin/FBX/Monster/EarthAberrant.fbx", CModel::TYPE_ANIM, true))))
-		return E_FAIL;
-	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Monster_EarthAberrant", CMonster_EarthAberrant::Create(m_pDevice, m_pDeviceContext))))
+	if (FAILED(Load_Stage1JumpTrigger()))
 		return E_FAIL;
 
-	////Monster EarthAberrant Weapon
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Weapon_EarthAberrant_Pick", CModel::Create(m_pDevice, m_pDeviceContext,
-		"../bin/Resources/Mesh/Earth_Aberrant_Pick/", "EarthAberrant_Pick.fbx",
-		L"../../Reference/ShaderFile/Shader_StaticMesh.hlsl", matPivot, CModel::TYPE_STATIC, true))))
-		return E_FAIL;
-	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Weapon_EarthAberrant_Pick", CEarthAberrant_Pick::Create(m_pDevice, m_pDeviceContext))))
+	if (FAILED(Load_Stage1TriggerLod()))
 		return E_FAIL;
 
-	if(FAILED(Load_Stage1_Cinema_Object()))
+	if (FAILED(Load_Stage1_TreasureChest_Load()))
+		return E_FAIL;
+
+	if (FAILED(Load_Stage1_Cinema_Object()))
 		return E_FAIL;
 
 	return S_OK;
@@ -892,6 +876,55 @@ HRESULT CLoader::Load_Stage1PlayerLoad()
 	{
 		return E_FAIL;
 	}
+#pragma region 	YM 추가한 무기들
+	matPivot = XMMatrixIdentity();
+	std::wstring shaderPath = L"../../Reference/ShaderFile/Shader_StaticMesh.hlsl";
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_ArgentBlade", CModel::Create(m_pDevice, m_pDeviceContext,
+		"../bin/Resources/Mesh/ArgentBlade/", "1H_Sword_ArgentBlade.fbx",
+		shaderPath, matPivot, CModel::TYPE::TYPE_STATIC, true)))) return E_FAIL;
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Crossblade", CModel::Create(m_pDevice, m_pDeviceContext,
+		"../bin/Resources/Mesh/Crossblade/", "1H_sword_Crossblade.fbx",
+		shaderPath, matPivot, CModel::TYPE::TYPE_STATIC, true)))) return E_FAIL;
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Dragon", CModel::Create(m_pDevice, m_pDeviceContext,
+		"../bin/Resources/Mesh/Dragon/", "1H_sword_dragon.fbx",
+		shaderPath, matPivot, CModel::TYPE::TYPE_STATIC, true)))) return E_FAIL;
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Eclipse", CModel::Create(m_pDevice, m_pDeviceContext,
+		"../bin/Resources/Mesh/Eclipse/", "1H_Sword_Eclipse.fbx",
+		shaderPath, matPivot, CModel::TYPE::TYPE_STATIC, true)))) return E_FAIL;
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Justice", CModel::Create(m_pDevice, m_pDeviceContext,
+		"../bin/Resources/Mesh/Justice/", "1H_sword_Justice.fbx",
+		shaderPath, matPivot, CModel::TYPE::TYPE_STATIC, true)))) return E_FAIL;
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_GodHammer", CModel::Create(m_pDevice, m_pDeviceContext,
+		"../bin/Resources/Mesh/GodHammer/", "2H_Hammer_GodHammer.fbx",
+		shaderPath, matPivot, CModel::TYPE::TYPE_STATIC, true)))) return E_FAIL;
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Harbinger", CModel::Create(m_pDevice, m_pDeviceContext,
+		"../bin/Resources/Mesh/Harbinger/", "2H_Hammer_Harbinger.fbx",
+		shaderPath, matPivot, CModel::TYPE::TYPE_STATIC, true)))) return E_FAIL;
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Hinterclaw", CModel::Create(m_pDevice, m_pDeviceContext,
+		"../bin/Resources/Mesh/Hinterclaw/", "2H_hammer_Hinterclaw.fbx",
+		shaderPath, matPivot, CModel::TYPE::TYPE_STATIC, true)))) return E_FAIL;
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Ironstone", CModel::Create(m_pDevice, m_pDeviceContext,
+		"../bin/Resources/Mesh/Ironstone/", "2H_hammer_Ironstone.fbx",
+		shaderPath, matPivot, CModel::TYPE::TYPE_STATIC, true)))) return E_FAIL;
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Legend1", CModel::Create(m_pDevice, m_pDeviceContext,
+		"../bin/Resources/Mesh/Legend1/", "2H_hammer_Legend1.fbx",
+		shaderPath, matPivot, CModel::TYPE::TYPE_STATIC, true)))) return E_FAIL;
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Legend2", CModel::Create(m_pDevice, m_pDeviceContext,
+		"../bin/Resources/Mesh/Legend2/", "2H_hammer_Legend2.fbx",
+		shaderPath, matPivot, CModel::TYPE::TYPE_STATIC, true)))) return E_FAIL;
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Legend5", CModel::Create(m_pDevice, m_pDeviceContext,
+		"../bin/Resources/Mesh/Legend5/", "2H_hammer_Legend5.fbx",
+		shaderPath, matPivot, CModel::TYPE::TYPE_STATIC, true)))) return E_FAIL;
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Mesa", CModel::Create(m_pDevice, m_pDeviceContext,
+		"../bin/Resources/Mesh/Mesa/", "2H_hammer_Mesa.fbx",
+		shaderPath, matPivot, CModel::TYPE::TYPE_STATIC, true)))) return E_FAIL;
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Skymourne", CModel::Create(m_pDevice, m_pDeviceContext,
+		"../bin/Resources/Mesh/Skymourne/", "2H_hammer_Skymourne.fbx",
+		shaderPath, matPivot, CModel::TYPE::TYPE_STATIC, true)))) return E_FAIL;
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Soothsayer", CModel::Create(m_pDevice, m_pDeviceContext,
+		"../bin/Resources/Mesh/Soothsayer/", "2H_Hammer_Soothsayer.fbx",
+		shaderPath, matPivot, CModel::TYPE::TYPE_STATIC, true)))) return E_FAIL;
+#pragma endregion
 	// 던지기용 방패
 	matPivot = XMMatrixIdentity();
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_FlyingShield", CModel::Create(m_pDevice, m_pDeviceContext,

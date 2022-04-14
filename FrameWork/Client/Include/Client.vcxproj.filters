@@ -811,6 +811,36 @@
     <Filter Include="02.GameObject\04.Effect\00.Effect_Image\02.DeadSpray">
       <UniqueIdentifier>{93da6596-e33e-43cb-b193-e94382481f3a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="03.System\08.WeaponGenerator">
+      <UniqueIdentifier>{8b3e76a1-7243-423d-8f7c-2d96b855bff3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\96.Weapon\09.Player_Weapon">
+      <UniqueIdentifier>{724f123e-80fd-4656-b0c2-ef2c47d8f99e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.UI\05.Hud">
+      <UniqueIdentifier>{4d603c3a-a859-46c6-8c40-1106a8067330}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.UI\05.Hud\00.Loot_Equipment">
+      <UniqueIdentifier>{b4cb1e3a-bd52-4cc4-9726-8bc18787075d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.UI\05.Hud\00.Loot_Equipment\00.Background">
+      <UniqueIdentifier>{64f468e9-c508-46c7-b1cc-6f82a1421d72}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.UI\05.Hud\00.Loot_Equipment\01.Grade">
+      <UniqueIdentifier>{1f0312d8-d933-425d-833f-007340c33ca6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.UI\05.Hud\00.Loot_Equipment\02.ItemIcon">
+      <UniqueIdentifier>{734951bf-7155-4361-abd7-ac5b95729157}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.UI\05.Hud\00.Loot_Equipment\03.ItemEffect">
+      <UniqueIdentifier>{1aa8f0fa-3e53-4e34-b399-5236c4d40363}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.UI\05.Hud\00.Loot_Equipment\04.ItemNameText">
+      <UniqueIdentifier>{be661eb4-722d-4761-9b65-d41ba77cb755}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.UI\05.Hud\00.Loot_Equipment\05.ItemTypeText">
+      <UniqueIdentifier>{7aabadda-a29d-4b40-afad-af2a4daaa382}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -1007,9 +1037,6 @@
     </ClInclude>
     <ClInclude Include="..\Headers\1H_SwordAttackNormalR2_Loop.h">
       <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\1H_Sword\R2</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Headers\Fury.h">
-      <Filter>02.GameObject\96.Weapon\01.Fury</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\2H_HammerIdle.h">
       <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\2H_Hammer\Default</Filter>
@@ -1832,9 +1859,24 @@
     </ClInclude>
     <ClInclude Include="..\Headers\Effect_Dead_Spray.h">
       <Filter>02.GameObject\04.Effect\00.Effect_Image\02.DeadSpray</Filter>
-	</ClInclude>
+    </ClInclude>
     <ClInclude Include="..\Headers\UI_SlotBackground.h">
       <Filter>02.GameObject\05.UI\04.Inventory\04.ItemSlot\00.Background</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\WeaponGenerator.h">
+      <Filter>03.System\08.WeaponGenerator</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Player_Weapon.h">
+      <Filter>02.GameObject\96.Weapon\09.Player_Weapon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Fury.h">
+      <Filter>02.GameObject\96.Weapon\01.Fury</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Hud.h">
+      <Filter>02.GameObject\05.UI\05.Hud</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Loot_Equipment.h">
+      <Filter>02.GameObject\05.UI\05.Hud\00.Loot_Equipment</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -2827,6 +2869,18 @@
     </ClCompile>
     <ClCompile Include="..\Codes\Effect_Dead_Spray.cpp">
       <Filter>02.GameObject\04.Effect\00.Effect_Image\02.DeadSpray</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\WeaponGenerator.cpp">
+      <Filter>03.System\08.WeaponGenerator</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Player_Weapon.cpp">
+      <Filter>02.GameObject\96.Weapon\09.Player_Weapon</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Hud.cpp">
+      <Filter>02.GameObject\05.UI\05.Hud</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Loot_Equipment.cpp">
+      <Filter>02.GameObject\05.UI\05.Hud\00.Loot_Equipment</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

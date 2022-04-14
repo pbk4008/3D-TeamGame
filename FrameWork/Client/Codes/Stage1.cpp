@@ -39,6 +39,7 @@
 #include "InteractManager.h"
 #include "DropManager.h"
 #include "ScenematicManager.h"
+#include "WeaponGenerator.h"
 
 //Cinema
 #include "Cinema1_1.h"
@@ -46,6 +47,7 @@
 
 CDropManager* g_pDropManager = nullptr;
 CInteractManager* g_pInteractManager = nullptr;
+CWeaponGenerator* g_pWeaponGenerator = nullptr;
 
 CStage1::CStage1()
 	: m_pTriggerSystem(nullptr)
@@ -81,23 +83,20 @@ HRESULT CStage1::NativeConstruct()
 	if (FAILED(Ready_Light()))
 		return E_FAIL;
 
-	//if (FAILED(Ready_Trigger_Jump()))
-	//	return E_FAIL;
+	if (FAILED(Ready_Trigger_Jump()))
+		return E_FAIL;
+
+	/* 생성 타이밍으로 인해 여기에 둠 YM */
+	g_pWeaponGenerator = CWeaponGenerator::GetInstance();
 
 	if (FAILED(Ready_Player(L"Layer_Silvermane")))
 		return E_FAIL;
 
-	//if (FAILED(Ready_MapObject()))
-	//	return E_FAIL;
+	if (FAILED(Ready_MapObject()))
+		return E_FAIL;
 
-	//if (FAILED(Ready_TriggerSystem(L"../bin/SaveData/Trigger/MonsterSpawnTrigger.dat")))
-	//	return E_FAIL;
-
-	//if(FAILED(Ready_Boss(L"Layer_Boss")))
-	//	return E_FAIL;
-	//
-	//if (FAILED(Ready_Monster(L"Layer_Monster")))
-	//	return E_FAIL;
+	if (FAILED(Ready_TriggerSystem(L"../bin/SaveData/Trigger/MonsterSpawnTrigger.dat")))
+		return E_FAIL;
 
 	if (FAILED(Ready_Data_UI(L"../bin/SaveData/UI/UI.dat")))
 		return E_FAIL;
@@ -108,14 +107,14 @@ HRESULT CStage1::NativeConstruct()
 	if (FAILED(Ready_UI(L"Layer_UI")))
 		return E_FAIL;
 
-	//if (FAILED(Ready_Treasure_Chest()))
-	//	return E_FAIL;
+	if (FAILED(Ready_Treasure_Chest()))
+		return E_FAIL;
 
-	//if (FAILED(Ready_GameManager()))
-	//	return E_FAIL;
+	if (FAILED(Ready_GameManager()))
+		return E_FAIL;
 
 	g_pGameInstance->Change_BaseCamera(L"Camera_Silvermane");
-	//g_pGameInstance->PlayBGM(L"Stage1_BGM");
+	g_pGameInstance->PlayBGM(L"Stage1_BGM");
 
 	if (FAILED(Ready_Cinema()))
 		return E_FAIL;
@@ -161,7 +160,7 @@ _int CStage1::Tick(_double TimeDelta)
 		if (m_iCountMonster == 0 && m_bFirst)
 			m_pTriggerSystem->Check_Clear();
 
-		CBoss_Bastion_Judicator* pBoss = (CBoss_Bastion_Judicator*)g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Layer_Boss")->front();
+		/*CBoss_Bastion_Judicator* pBoss = (CBoss_Bastion_Judicator*)g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Layer_Boss")->front();
 		if (nullptr != pBoss)
 		{
 			if (true == pBoss->Get_Dead())
@@ -170,7 +169,7 @@ _int CStage1::Tick(_double TimeDelta)
 					return -1;
 				return 0;
 			}
-		}
+		}*/
 	}
 
 	_float3 fPos = { 0.f,5.f,20.f };
@@ -181,6 +180,7 @@ _int CStage1::Tick(_double TimeDelta)
 			return -1;
 	}
 
+#pragma region Using Debug
 	//if (g_pGameInstance->getkeyDown(DIK_NUMPAD0))
 	//{
 	//	CMonster_Crawler* pMonster = nullptr;
@@ -235,12 +235,14 @@ _int CStage1::Tick(_double TimeDelta)
 	//	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Test", L"Proto_GameObject_Monster_BronzeAnimus", &fPos, (CGameObject**)&pMonster)))
 	//		return -1;
 	//}
+#pragma endregion
 
-	//g_pInteractManager->Tick(TimeDelta);
-	//g_pDropManager->Tick();
+	g_pInteractManager->Tick(TimeDelta);
+	g_pDropManager->Tick();
 
 	if (g_pGameInstance->getkeyDown(DIK_END))
 		m_pScenemaManager->Active_Scenema((_uint)CINEMA_INDEX::CINEMA1_1, &m_pCinema);
+
 	if (m_pCinema && m_pCinema->Get_Active())
 	{
 		m_pCinema->Tick(TimeDelta);
@@ -529,7 +531,7 @@ HRESULT CStage1::Ready_GameManager(void)
 	if (FAILED(g_pDropManager->NativeConstruct((SCENEID::SCENE_STAGE1))))
 		return E_FAIL;
 
-	m_pScenemaManager = GET_INSTANCE(CScenematicManager);
+	//m_pScenemaManager = GET_INSTANCE(CScenematicManager);
 
 	return S_OK;
 }
@@ -730,21 +732,21 @@ HRESULT CStage1::Ready_Data_Effect()
 	//}
 
 	//Monster Dead
-	ZeroMemory(&Desc, sizeof(Desc));
+	//ZeroMemory(&Desc, sizeof(Desc));
 
-	_tcscpy_s(Desc.TextureTag, L"T_lavaSpary");
-	Desc.iRenderPassNum = 1;
-	Desc.iImageCountX = 8;
-	Desc.iImageCountY = 8;
-	Desc.fFrame = 64.f;
-	Desc.fEffectPlaySpeed = 1.f;
+	//_tcscpy_s(Desc.TextureTag, L"T_lavaSpary");
+	//Desc.iRenderPassNum = 1;
+	//Desc.iImageCountX = 8;
+	//Desc.iImageCountY = 8;
+	//Desc.fFrame = 64.f;
+	//Desc.fEffectPlaySpeed = 1.f;
 
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Effect_Monster_Dead_Spray", L"Proto_GameObject_Effect_Monster_Dead_Spray", &Desc)))
-	{
-		MSGBOX("Failed to Creating Effect_Monster_Dead_Spray in CStage1::Ready_Effect()");
-		return E_FAIL;
+	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Effect_Monster_Dead_Spray", L"Proto_GameObject_Effect_Monster_Dead_Spray", &Desc)))
+	//{
+	//	MSGBOX("Failed to Creating Effect_Monster_Dead_Spray in CStage1::Ready_Effect()");
+	//	return E_FAIL;
 
-	}
+	//}
 	
 	//Env floating
 	vector<CEffect_Env_Floating::EFFECTDESC> vecEnvFloating;

@@ -18,13 +18,17 @@ public:
 	virtual _int Tick(_double dDeltaTime) override;
 	virtual _int LateTick(_double TimeDelta) override;
 	virtual HRESULT Render() override;
-
+	virtual void setActive(_bool bActive) override;
 public:
 	HRESULT Ready_Component(void);
 	CSingleImage* GetSingleImage(void);
 
 private:
 	CSingleImage* m_pSigleImageCom = nullptr;
+
+private:
+	_float m_fInitPos = 430.f;
+	_float m_fEndPos  = 420.f;
 
 public:
 	static UI_ItemStatusBackground* Create(ID3D11Device * pDevice, ID3D11DeviceContext * pDeviceContext);

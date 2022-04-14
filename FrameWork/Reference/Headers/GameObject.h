@@ -49,7 +49,7 @@ public:
 	virtual void OnTriggerExit(CCollision& collision);
 	virtual void OnControllerColliderHit(CCollision& collision);
 public:
-	void setActive(_bool bActive);
+	virtual void setActive(_bool bActive);
 	_bool getActive() { return m_bActive; }
 	_int getTag() { return m_iObectTag; }
 	_bool getRemove() { return m_bRemove; }

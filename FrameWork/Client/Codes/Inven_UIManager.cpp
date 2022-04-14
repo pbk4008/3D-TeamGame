@@ -2,6 +2,7 @@
 #include "Inven_UIManager.h"
 #include "UI_ModalWindow.h"
 #include "UI_ItemStatusWindow.h"
+#include "Hud.h"
 
 CInven_UIManager::CInven_UIManager(void)
 {
@@ -33,11 +34,24 @@ HRESULT CInven_UIManager::NativeConstruct(void)
 
 	m_pItemStatus->Hide();
 
+	/* for. Proto_GameObject_UI_Hud */
+	/*if (FAILED(g_pGameInstance->Add_GameObjectToLayer(
+		(_uint)SCENEID::SCENE_STATIC,
+		L"Layer_UI_Hud",
+		L"Proto_GameObject_UI_Hud",
+		nullptr,
+		(CGameObject**)&m_pHud))
+		)
+		return S_OK;*/
+
 	return S_OK;
 }
 
-_int CInven_UIManager::Tick(void)
+_int CInven_UIManager::Tick(_double _dTimeDelta)
 {
+	if (m_pHud)
+		m_pHud->Tick(_dTimeDelta);
+
 	return _int();
 }
 

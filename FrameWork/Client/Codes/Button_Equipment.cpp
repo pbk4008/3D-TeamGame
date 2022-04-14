@@ -2,6 +2,7 @@
 #include "Button_Equipment.h"
 #include "SingleImage.h"
 #include "UIHelper.h"
+#include "UI_Indexes.h"
 
 CButton_Equipment::CButton_Equipment(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
 	:CUI(pDevice, pDeviceContext)
@@ -28,8 +29,11 @@ HRESULT CButton_Equipment::NativeConstruct(const _uint iSceneID, void* pArg)
 
 	desc = (*(Desc*)pArg);
 
-	m_pTransform->Set_State(CTransform::STATE_POSITION, _vector{ desc.fPos.x, desc.fPos.y, 0.4f, 1.f });
-	m_pTransform->Scaling(_vector{ desc.fScale.x, desc.fScale.y, 1.f, 1.f });
+	m_pLocalTransform = g_pGameInstance->Clone_Component<CTransform>(0, L"Proto_Component_Transform");
+	m_pLocalTransform->Set_State(CTransform::STATE_POSITION, _vector{ desc.fPos.x, desc.fPos.y, 0.4f, 1.f });
+	m_pLocalTransform->Scaling(_vector{ desc.fScale.x, desc.fScale.y, 1.f, 1.f });
+	m_pOwner = desc.pOwner;
+	assert("Owner is nullptr!" && m_pOwner);
 
 	if (FAILED(Ready_Component()))
 		return E_FAIL;
@@ -51,6 +55,8 @@ _int CButton_Equipment::LateTick(_double TimeDelta)
 {
 	if (FAILED(CUI::LateTick(TimeDelta)))
 		return -1;
+
+	Attach_Owner();
 
 	return _int();
 }
@@ -81,7 +87,7 @@ HRESULT CButton_Equipment::Ready_Component(void)
 	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_UIHelper", L"UIHelper", (CComponent**)&m_pUIHelperCom)))
 		return E_FAIL;
 
-	m_pUIHelperCom->UpdateBoundary(m_pTransform);
+	m_pUIHelperCom->UpdateBoundary(m_pLocalTransform);
 
 	return S_OK;
 }
@@ -89,6 +95,19 @@ HRESULT CButton_Equipment::Ready_Component(void)
 _bool CButton_Equipment::ButtonClicked(void)
 {
 	return m_pUIHelperCom->MouseClickEquipBtn();
+}
+
+_int CButton_Equipment::Attach_Owner(void)
+{
+	if (nullptr != m_pOwner)
+	{
+		_matrix smatWorld = m_pLocalTransform->Get_WorldMatrix();
+		_matrix smatOwerWorld = static_cast<CUI_Indexes*>(m_pOwner)->Get_Transform()->Get_WorldMatrix();
+
+		m_pTransform->Set_WorldMatrix(smatWorld * smatOwerWorld);
+	}
+
+	return _int();
 }
 
 CButton_Equipment* CButton_Equipment::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
@@ -118,6 +137,7 @@ void CButton_Equipment::Free()
 {
 	Safe_Release(m_pSigleImageCom);
 	Safe_Release(m_pUIHelperCom);
+	Safe_Release(m_pLocalTransform);
 
 	__super::Free();
 }

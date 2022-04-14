@@ -16,6 +16,7 @@ public:
 	{
 		_float2 fPos;
 		_float2 fScale;
+		CUI*	pOwner = nullptr;
 	};
 
 	explicit CUI_ItemSlot(void) = default;
@@ -29,6 +30,7 @@ public:
 	virtual _int Tick(_double dDeltaTime) override;
 	virtual _int LateTick(_double TimeDelta) override;
 	virtual HRESULT Render() override;
+	virtual void setActive(_bool bActive) override;
 
 public:
 	HRESULT Ready_Component(void);
@@ -57,6 +59,11 @@ private:
 	CUI_SlotItemEffect*		m_pItemEffect = nullptr;
 	CUI_EquipedText*		m_pEquipedText = nullptr;
 	ItemSlotDesc desc;
+
+private:
+	_float m_fInitPos = 10.f;
+	_float m_fEndPos = 0.f;
+
 public:
 	static CUI_ItemSlot* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);
 	virtual CGameObject* Clone(const _uint iSceneID, void* pArg);

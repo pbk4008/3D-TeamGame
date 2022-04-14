@@ -27,6 +27,9 @@
 #include "Button_Equipment.h"
 #include "Button_Armory.h"
 #include "Button_Skill.h"
+//HUD
+#include "Hud.h"
+#include "Loot_Equipment.h"
 
 //Inventory UI Component
 #include "SingleImage.h"
@@ -86,8 +89,8 @@ _int CMainApp::Tick(_double TimeDelta)
 
 	g_pGameInstance->Update_InputDev();
 
-	if (g_pInvenUIManager->IsOpenModal())
-		TimeDelta = 0.f;
+	//if (g_pInvenUIManager->IsOpenModal())
+	//	TimeDelta = 0.f;
 
 	if (m_isFreeze)
 	{
@@ -309,7 +312,13 @@ HRESULT CMainApp::Ready_GameObject_Prototype()
 	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_UI_Button_Skill"), CButton_Skill::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 	////////////////////////////////
-
+	/* for. Hud */
+	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_UI_Button_Hud"), CHud::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	//Loot Equipment
+	//if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_UI_LootEquipment"), CLoot_Equipment::Create(m_pDevice, m_pDeviceContext))))
+	//	return E_FAIL;
+	////////////////////////////////
 	return S_OK;
 }
 
@@ -408,11 +417,10 @@ void CMainApp::Free()
 	CMeshLoader::DestroyInstance();
 	CDataManager::DestroyInstance();
 	CInven_UIManager::DestroyInstance();
+	CWeaponGenerator::DestroyInstance();
 
 	Safe_Release(g_pObserver);
-
 	Safe_Release(m_pRenderer);
-
 	Safe_Release(m_pDeviceContext);
 	Safe_Release(m_pDevice);
 	

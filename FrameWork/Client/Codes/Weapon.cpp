@@ -146,6 +146,8 @@ void CWeapon::Set_OwnerPivotMatrix(const _fmatrix& _smatPivot)
 void CWeapon::Set_Equip(const _bool _isEquip, void* _pArg)
 {
 	m_isEquip = _isEquip;
+	if(nullptr != _pArg)
+		Set_Owner((CActor*)_pArg);
 	//if (_pArg)
 	//	m_pFixedBone = static_cast<CHierarchyNode*>(_pArg);
 }

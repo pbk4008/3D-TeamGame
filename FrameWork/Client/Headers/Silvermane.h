@@ -19,6 +19,8 @@ class CJumpBox;
 class CUI_Blank_CKey;
 class CUI_Fill_Ckey;
 class CInventoryData;
+class CEquipmentData;
+class CPlayerData;
 class CDropBox;
 #pragma endregion
 class CSilvermane final : public CActor
@@ -46,7 +48,7 @@ public:
 private:
 	HRESULT Ready_Components();
 	HRESULT Ready_States();
-	HRESULT Ready_Weapons();
+	HRESULT Ready_Weapons(const _uint _iSceneID);
 
 public:
 	virtual void OnCollisionEnter(CCollision& collision) override;
@@ -98,6 +100,9 @@ public: /* For.Weapon */
 	void Set_WeaponFixedBone(const string& _wstrFixedBoneTag);
 	void Set_WeaponFixedBone(CHierarchyNode* _pFixedBone);
 	const _bool Change_Weapon(const wstring& _name);
+	const _bool Change_Weapon(void);
+	void Change_WeaponOnInventory(void);
+
 	HRESULT Change_State(const wstring& _wstrStateTag);
 	void RangeAttack();
 
@@ -156,7 +161,6 @@ public:
 private: /* For.Weapon */
 	CWeapon* m_pCurWeapon = nullptr;
 	_bool m_isEquipWeapon = false;
-	unordered_map<wstring, CWeapon*> m_umapWeapons;
 
 private: /* For.Shield */
 	CShield* m_pShield = nullptr;
@@ -183,8 +187,11 @@ private: /* For.Cheat */
 	_bool m_isHighSpeedMode = false;
 
 private: _float4  m_color = _float4(0.498f, 0.9411f, 0.8196f, 0.f); // color
-private:/* for. Inventroy */
+
+private:/* for. Player& Inventory& Equipment Data */
+	CPlayerData*	m_pPlayerData = nullptr;
 	CInventoryData* m_pInventoryData = nullptr;
+	CEquipmentData* m_pEquipmentData = nullptr;
 
 private:
 	CTexture*	m_pTexture = nullptr;
