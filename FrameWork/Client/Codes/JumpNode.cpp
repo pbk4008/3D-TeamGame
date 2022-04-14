@@ -186,6 +186,7 @@ HRESULT CJumpNode::Ready_Components()
 		return E_FAIL;
 	_matrix smatPivot = XMMatrixTranslation(0.f, tBoxColliderDesc.vScale.y * 0.5f, 0.f);
 	m_pCollider->setPivotMatrix(smatPivot);
+	m_pCollider->setShapeLayer((_uint)ELayer::JumpTrigger);
 
 	return S_OK;
 }

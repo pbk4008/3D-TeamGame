@@ -132,6 +132,7 @@ public: /* For.Light_Manager */
 	HRESULT Add_Light(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext, const LIGHTDESC& LightDesc);
 	HRESULT Add_Light(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext, const LIGHTDESC& LightDesc, CLight** ppOutLight);
 	void UpdateLightCam(_uint LightIndx, _fvector playerpos);
+	void RemoveLight();
 
 public: /* Target Mgr*/
 	ID3D11ShaderResourceView* Get_SRV(const wstring& target);
@@ -180,6 +181,8 @@ public:/* For.PhysX */
 	const _bool Raycast(RAYCASTDESC& _desc);
 	const _bool Sweep(SWEEPDESC& _desc);
 	const _bool Overlap(OVERLAPDESC& _desc);
+	void Set_NumLayers(const _uint _iNumLayers);
+	void Set_CollisionLayer(const _uint _iLayer1, const _uint _iLayer2);
 
 public: /* For.SoundMgr */
 	HRESULT Init_SoundManager();

@@ -59,17 +59,35 @@ _int CEffect_Dead_Spray::Tick(_double TimeDelta)
 		m_Desc.fFrame = 0;
 	}
 
+
 	_vector Pos = { 0.f,0.f,0.f, 1.f };
 	m_pTransform->Set_State(CTransform::STATE_POSITION, Pos);
+
+	//m_pTransform->SetUp_Rotation(XMVectorSet(0.f, 0.f, 1.f, 0.f), XMConvertToRadians(90.f));
 
 	//ºôº¸µå
 	_matrix ViewMatrix;
 	ViewMatrix = g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_VIEW);
 	ViewMatrix = XMMatrixInverse(nullptr, ViewMatrix);
+
+	/*_matrix		RotationMatrix = XMMatrixRotationAxis(XMVectorSet(0.f, 0.f, 1.f, 0.f), XMConvertToRadians(90.f));
+
+	_vector		vRight = XMVectorSet(1.f, 0.f, 0.f, 0.f) * XMVectorGetX(XMVector3Length(ViewMatrix.r[0]));
+	_vector		vUp = XMVectorSet(0.f, 1.f, 0.f, 0.f) * XMVectorGetX(XMVector3Length(ViewMatrix.r[1]));
+	_vector		vLook = XMVectorSet(0.f, 0.f, 1.f, 0.f) * XMVectorGetX(XMVector3Length(ViewMatrix.r[2]));
+
+	vRight = XMVector4Transform(vRight, RotationMatrix);
+	vUp = XMVector4Transform(vUp, RotationMatrix);
+	vLook = XMVector4Transform(vLook, RotationMatrix);
+
+	ViewMatrix.r[0] = vRight;
+	ViewMatrix.r[1] = vUp;
+	ViewMatrix.r[2] = vLook;*/
+
 	m_pTransform->Set_State(CTransform::STATE::STATE_RIGHT, ViewMatrix.r[0]);
 	m_pTransform->Set_State(CTransform::STATE::STATE_LOOK, ViewMatrix.r[2]);
 
-	_vector vec = { 1.f,1.f,1.f,0.f };
+	_vector vec = { 6.f,6.f,6.f,0.f };
 	m_pTransform->Scaling(vec);
 	
     return 0;

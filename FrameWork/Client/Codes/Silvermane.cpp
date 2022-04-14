@@ -339,6 +339,10 @@ _int CSilvermane::LateTick(_double _dDeltaTime)
 
 HRESULT CSilvermane::Render()
 {
+
+	RIM rimdesc;
+	ZeroMemory(&rimdesc, sizeof(RIM));
+
 	wstring wstrCamTag = g_pGameInstance->Get_BaseCameraTag();
 	if (g_pObserver->IsAttack())
 	{
@@ -362,6 +366,15 @@ HRESULT CSilvermane::Render()
 			m_color.z += 0.005f;
 	}
 
+	if (m_rimcheck == true)
+	{
+		rimdesc.rimcheck = m_rimcheck;
+		rimdesc.rimcol = _float4(1.f, 0, 0, 1);
+		rimdesc.rimintensity = m_rimintensity; // intensity ³·À» ¼ö·Ï °úÇÏ°Ô ºû³²
+		XMStoreFloat4(&rimdesc.camdir, XMVector3Normalize(m_pTransform->Get_State(CTransform::STATE_POSITION) - g_pGameInstance->Get_CamPosition(L"Camera_Silvermane")));
+		CActor::SetRimIntensity(g_fDeltaTime * -10.f);
+	}
+
 	for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
 	{
 		SCB desc;
@@ -371,10 +384,10 @@ HRESULT CSilvermane::Render()
 		{
 			desc.color = m_color;
 			desc.empower = 0.8f;
-			CActor::BindConstantBuffer(wstrCamTag, &desc);
+			CActor::BindConstantBuffer(wstrCamTag, &desc, &rimdesc);
 		}
 		else
-			CActor::BindConstantBuffer(wstrCamTag, &desc);
+			CActor::BindConstantBuffer(wstrCamTag, &desc, &rimdesc);
 
 		if (FAILED(m_pModel->Render(i, i))) MSGBOX("Fialed To Rendering Silvermane");
 	}
@@ -510,6 +523,7 @@ HRESULT CSilvermane::Ready_Components()
 	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_CharacterController", L"CharacterController", (CComponent**)&m_pCharacterController, &tCharacterControllerDesc)))
 		return E_FAIL;
 	m_pCharacterController->setOwnerTransform(m_pTransform);
+	m_pCharacterController->setShapeLayer((_uint)ELayer::Player);
 
 	m_pTexture = g_pGameInstance->Clone_Component<CTexture>(0, L"Proto_Component_Texture");
 	m_pTexture->Change_Texture(L"Texture_SilvermeanNewHair");
@@ -1635,6 +1649,7 @@ const _bool CSilvermane::Raycast_JumpNode(const _double& _dDeltaTime)
 	XMStoreFloat3(&tRaycastDesc.vDir, svRayDir);
 	tRaycastDesc.fMaxDistance = 50.f;
 	tRaycastDesc.filterData.flags = PxQueryFlag::eANY_HIT | PxQueryFlag::eDYNAMIC;
+	tRaycastDesc.layerMask = (1 << (_uint)ELayer::JumpTrigger);
 	CGameObject* pHitObject = nullptr;
 	tRaycastDesc.ppOutHitObject = &pHitObject;
 	if (g_pGameInstance->Raycast(tRaycastDesc))

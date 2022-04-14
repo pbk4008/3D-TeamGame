@@ -303,6 +303,33 @@ HRESULT CModel::SetUp_ValueOnShader(const char* pConstantName, void* pData, _uin
 	return S_OK;
 }
 
+HRESULT CModel::SetUp_TextureOnShader(const char* pConstantName, CTexture* pTextureCom, _uint iTextureIndex)
+{
+	if (m_bUsingMaterial)
+	{
+		for (auto& pMtrl : m_vecMaterials)
+		{
+			if (pMtrl)
+				pMtrl->SetUp_TextureOnShader(pConstantName, pTextureCom, iTextureIndex);
+		}
+	}
+	else
+	{
+		if (nullptr == pTextureCom)
+			return E_FAIL;
+		ID3D11ShaderResourceView* pShaderResourceView = pTextureCom->Get_ShaderResourceView(iTextureIndex);
+		if (nullptr == pShaderResourceView)
+			return E_FAIL;
+		ID3DX11EffectShaderResourceVariable* pVariable = m_pEffect->GetVariableByName(pConstantName)->AsShaderResource();
+		if (nullptr == pVariable)
+			return E_FAIL;
+
+		return pVariable->SetResource(pShaderResourceView);
+	}
+
+	return S_OK;
+}
+
 HRESULT CModel::SetUp_TextureOnShader(const char* pConstantName, _uint iMeshContainerIndex, aiTextureType eType)
 {
 	if (!m_pEffect)

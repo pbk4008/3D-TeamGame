@@ -54,6 +54,7 @@ HRESULT CSilvermane_Hit::EnterState()
 	m_pSilvermane->Set_IsHit(true);
 
 	m_pSilvermane->Active_Effect((_uint)EFFECT::PLAYERHIT);
+	m_pSilvermane->Set_Radial(false);
 
 	return S_OK;
 }

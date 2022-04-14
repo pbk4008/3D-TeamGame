@@ -41,7 +41,6 @@ _int CSkyBox::LateTick(_double TimeDelta)
 	if (nullptr != m_pRenderer)
 	{
 		m_pRenderer->Add_RenderGroup(CRenderer::RENDER_PRIORITY, this);
-		//m_pRenderer->Add_RenderGroup(CRenderer::RENDER_NONALPHA, this);
 		m_pRenderer->Add_RenderGroup(CRenderer::RENDER_SKYBOX, this);
 	}
 
@@ -63,7 +62,12 @@ HRESULT CSkyBox::Render()
 	m_pVIBufferCom->SetUp_ValueOnShader("g_ProjMatrix", &proj, sizeof(_matrix));
 	m_pVIBufferCom->SetUp_ValueOnShader("g_campos", &campos, sizeof(_vector));
 
-	m_pVIBufferCom->SetUp_TextureOnShader("g_DiffuseTexture", m_pTexture);
+	if(g_pGameInstance->getCurrentLevel() == (_uint)SCENEID::SCENE_STAGE1)
+		m_pVIBufferCom->SetUp_TextureOnShader("g_DiffuseTexture", m_pTexture);
+	else if(g_pGameInstance->getCurrentLevel() == (_uint)SCENEID::SCENE_STAGE2)
+		m_pVIBufferCom->SetUp_TextureOnShader("g_DiffuseTexture", m_pTexture2);
+	else if (g_pGameInstance->getCurrentLevel() == (_uint)SCENEID::SCENE_TEST_JS)
+		m_pVIBufferCom->SetUp_TextureOnShader("g_DiffuseTexture", m_pTexture);
 
 	m_pVIBufferCom->Render(0);
 
@@ -82,9 +86,13 @@ HRESULT CSkyBox::SetUp_Components()
 	if (FAILED(__super::SetUp_Components((_uint)SCENEID::SCENE_STATIC, TEXT("VIBuffer_Cube"), TEXT("Com_VIBuffer"), (CComponent**)&m_pVIBufferCom))) return E_FAIL;
 
 	m_pTexture = g_pGameInstance->Clone_Component<CTexture>(0, L"Proto_Component_Texture");
-	m_pTexture->Change_Texture(L"Sky_Texture");
+	m_pTexture->Change_Texture(L"Sky_Texture1");
 
-	if (m_pTexture == nullptr) return E_FAIL;
+	m_pTexture2 = g_pGameInstance->Clone_Component<CTexture>(0, L"Proto_Component_Texture");
+	m_pTexture2->Change_Texture(L"Sky_Texture2");
+
+	if (m_pTexture == nullptr || m_pTexture2 == nullptr)
+		MSGBOX("Failed To Creating SkyTexture");
 
 	return S_OK;
 }
@@ -120,5 +128,6 @@ void CSkyBox::Free()
 	__super::Free();
 
 	Safe_Release(m_pTexture);
+	Safe_Release(m_pTexture2);
 	Safe_Release(m_pVIBufferCom);
 }

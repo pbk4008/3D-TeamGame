@@ -27,6 +27,8 @@ HRESULT CStage2::NativeConstruct()
 #ifndef _DEBUG
 	m_bDebug = false;
 #endif
+	if (FAILED(Ready_Light())) MSGBOX("Failed To Creating Light");
+
 	if (FAILED(CLevel::NativeConstruct()))
 		return E_FAIL;
 
@@ -47,8 +49,8 @@ HRESULT CStage2::NativeConstruct()
 		return E_FAIL;
 	}
 
-	//if (FAILED(Ready_TriggerSystem(L"../bin/SaveData/Trigger/MonsterSpawnTrigger2.dat")))
-	//	return E_FAIL;
+	if (FAILED(Ready_TriggerSystem(L"../bin/SaveData/Trigger/MonsterSpawnTrigger2.dat")))
+		return E_FAIL;
 
 	return S_OK;
 }
@@ -93,6 +95,37 @@ HRESULT CStage2::Render()
 		m_pTriggerSystem->Render();
 	}
 #endif
+	return S_OK;
+}
+
+HRESULT CStage2::Ready_Light()
+{
+	LIGHTDESC			LightDesc;
+
+	ZeroMemory(&LightDesc, sizeof(LIGHTDESC));
+
+	LightDesc.eType = LIGHTDESC::TYPE_DIRECTIONAL;
+	LightDesc.vDirection = _float3(0.f, -1.f, 1.f);
+	LightDesc.vDiffuse = _float4(1.f, 1.f, 1.f, 1.f);
+	LightDesc.vSpecular = _float4(0.8f, 0.8f, 0.8f, 1.f);
+	LightDesc.vAmbient = _float4(0.6f, 0.6f, 0.6f, 1.f);
+	LightDesc.mOrthinfo[0] = 30.f;
+
+	if (FAILED(g_pGameInstance->CreateLightCam(m_pDevice, m_pDeviceContext, LightDesc))) MSGBOX("Failed To Creating DirectionLight Cam");
+
+	ZeroMemory(&LightDesc, sizeof(LIGHTDESC));
+	LightDesc.eType = LIGHTDESC::TYPE_POINT;
+	LightDesc.fRange = 10.f;
+	LightDesc.vDiffuse = _float4(1.f, 0.f, 0.f, 1.f);
+	LightDesc.vSpecular = _float4(0.3f, 0.3f, 0.3f, 1.f);
+	LightDesc.vAmbient = _float4(0.2f, 0.2f, 0.2f, 1.f);
+	LightDesc.vPosition = _float3(71.f, 35.f, 81.f);
+	if (FAILED(g_pGameInstance->Add_Light(m_pDevice, m_pDeviceContext, LightDesc))) MSGBOX("Failed To Adding PointLight");
+
+	LightDesc.fRange = 30.f;
+	LightDesc.vDiffuse = _float4(1.0f, 0.34509f, 0.1333f, 1.f);
+	LightDesc.vPosition = _float3(54.f, 19.f, 237.f);
+	if (FAILED(g_pGameInstance->Add_Light(m_pDevice, m_pDeviceContext, LightDesc))) MSGBOX("Failed To Adding PointLight");
 	return S_OK;
 }
 
@@ -142,8 +175,27 @@ HRESULT CStage2::Ready_MapObject()
 				Desc.fFrame = 64.f;
 				Desc.fEffectPlaySpeed = 1.f;
 				Desc.ParticleMat = XMLoadFloat4x4(&iter);
+				Desc.bUsingGravity = false;
 
 				if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE2, L"Layer_NoisFire", L"Proto_GameObject_Effect_Env_Fire", &Desc)))
+					MSGBOX("Failed To Clone NoisFire");
+			}
+		}
+		else if (pDesc.wstrInstaneTag == L"Brazier_Large_01.fbx")
+		{
+			for (auto& iter : pDesc.tInstanceDesc.vecMatrix)
+			{
+				CEffect_Env_Fire::EFFECTDESC Desc;
+				_tcscpy_s(Desc.TextureTag, L"Env_Fire");
+				Desc.iRenderPassNum = 1;
+				Desc.iImageCountX = 8;
+				Desc.iImageCountY = 8;
+				Desc.fFrame = 64.f;
+				Desc.fEffectPlaySpeed = 1.f;
+				Desc.ParticleMat = XMLoadFloat4x4(&iter);
+				Desc.bUsingGravity = true;
+
+				if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_NoisFire", L"Proto_GameObject_Effect_Env_Fire", &Desc)))
 					MSGBOX("Failed To Clone NoisFire");
 			}
 		}

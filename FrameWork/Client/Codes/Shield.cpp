@@ -176,6 +176,7 @@ HRESULT CShield::Ready_Components()
 	tBoxColliderDesc.vScale = { 1.f, 0.2f, 1.f};
 	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_BoxCollider", L"Collider", (CComponent**)&m_pCollider, &tBoxColliderDesc)))
 		return E_FAIL;
+	m_pCollider->setShapeLayer((_uint)ELayer::Weapon);
 	//_matrix smatPivot = XMMatrixTranslation(0.f, 0.f, 0.0f);
 	//m_pCollider->setPivotMatrix(smatPivot);
 

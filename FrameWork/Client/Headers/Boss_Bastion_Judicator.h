@@ -39,6 +39,7 @@ private:
 	HRESULT Set_Weapon();
 	HRESULT Set_PanelBar();
 
+
 public:
 	virtual void OnTriggerEnter(CCollision& collision) override;
 
@@ -46,6 +47,7 @@ public:
 
 public:
 	void Set_IsAttack(const _bool _isAttack);
+	void OnWeaponEffect();
 
 private:
 	CAnimator* m_pAnimator = nullptr;

@@ -517,9 +517,6 @@
     <Filter Include="02.GameObject\03.Character\00.Player\00.Silvermane\State\Idel\Sprint">
       <UniqueIdentifier>{f86ae29b-ccc6-4e20-aafd-431e17d61329}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObject\96.Weapon\98.Trail">
-      <UniqueIdentifier>{0a662d2a-bf0c-4955-b176-58fbdf8c84f3}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_Sword">
       <UniqueIdentifier>{f21fcb8a-8935-4037-bb0e-677bf69fee18}</UniqueIdentifier>
     </Filter>
@@ -1623,9 +1620,6 @@
     <ClInclude Include="..\Headers\Effect_Env_Fire.h">
       <Filter>02.GameObject\04.Effect\00.Effect_Image\00.Env_Fire</Filter>
     </ClInclude>
-    <ClInclude Include="..\Headers\SwordTrail.h">
-      <Filter>02.GameObject\96.Weapon\98.Trail</Filter>
-    </ClInclude>
     <ClInclude Include="..\Headers\NoiseFire.h">
       <Filter>02.GameObject\02.Map\01.Environment\01.NoiseFire</Filter>
     </ClInclude>
@@ -1877,6 +1871,12 @@
     </ClInclude>
     <ClInclude Include="..\Headers\Loot_Equipment.h">
       <Filter>02.GameObject\05.UI\05.Hud\00.Loot_Equipment</Filter>
+	</ClInclude>
+    <ClInclude Include="..\Headers\TrailEffect_Distortion.h">
+      <Filter>02.GameObject\04.Effect\01.TrailEffect</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\TrailEffect_Normal.h">
+      <Filter>02.GameObject\04.Effect\01.TrailEffect</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -2636,9 +2636,6 @@
     <ClCompile Include="..\Codes\Effect_Env_Fire.cpp">
       <Filter>02.GameObject\04.Effect\00.Effect_Image\00.Env_Fire</Filter>
     </ClCompile>
-    <ClCompile Include="..\Codes\SwordTrail.cpp">
-      <Filter>02.GameObject\96.Weapon\98.Trail</Filter>
-    </ClCompile>
     <ClCompile Include="..\Codes\NoiseFire.cpp">
       <Filter>02.GameObject\02.Map\01.Environment\01.NoiseFire</Filter>
     </ClCompile>
@@ -2881,6 +2878,12 @@
     </ClCompile>
     <ClCompile Include="..\Codes\Loot_Equipment.cpp">
       <Filter>02.GameObject\05.UI\05.Hud\00.Loot_Equipment</Filter>
+	</ClCompile>
+    <ClCompile Include="..\Codes\TrailEffect_Distortion.cpp">
+      <Filter>02.GameObject\04.Effect\01.TrailEffect</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\TrailEffect_Normal.cpp">
+      <Filter>02.GameObject\04.Effect\01.TrailEffect</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -3004,6 +3007,9 @@
     </FxCompile>
     <FxCompile Include="..\bin\ShaderFile\Shader_INST_RM.hlsl">
       <Filter>100.ShaderFiles\01.Environment</Filter>
+    </FxCompile>
+    <FxCompile Include="..\bin\ShaderFile\Shader_Trail.hlsl">
+      <Filter>100.ShaderFiles\03.Effect</Filter>
     </FxCompile>
   </ItemGroup>
   <ItemGroup>

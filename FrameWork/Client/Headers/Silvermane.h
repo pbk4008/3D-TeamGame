@@ -105,6 +105,7 @@ public: /* For.Weapon */
 
 	HRESULT Change_State(const wstring& _wstrStateTag);
 	void RangeAttack();
+	CWeapon* Get_CurerntWeapon() { return m_pCurWeapon; }
 
 public: /* For.Shield */
 	const _bool IsEquipShield() const;

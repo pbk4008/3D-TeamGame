@@ -81,8 +81,8 @@
 #include "JumpBox.h"
 #include "DropBox.h"
 #include "DropObject.h"
-#include "SwordTrail.h"
-#include "TrailEffect.h"
+#include "TrailEffect_Normal.h"
+#include "TrailEffect_Distortion.h"
 #include "Wall.h"
 
 #pragma endregion
@@ -276,11 +276,8 @@ HRESULT CLoader::Load_Stage1Navi_SkyLoad()
 	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Plane_Test", CPlane_Test::Create(m_pDevice, m_pDeviceContext)))) MSGBOX("Failed To Creating PlaneTest Prototype");
 
 	// Texture
-	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"Sky_Texture", L"../Bin/Resources/Texture/SkyBox/SkyBox_Stage1.dds"))) MSGBOX("Failed Add To SkyBoxTex");
-	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"FireTexture", L"../Bin/Resources/Texture/Fire/fire.dds"))) MSGBOX("Failed Add To FireTex");
-	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"FireAlphaTexture", L"../Bin/Resources/Texture/Fire/firealpha.dds"))) MSGBOX("Failed Add To FireAlphaTex");
-	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"FireNoiseTexture", L"../Bin/Resources/Texture/Fire/firenoise.dds"))) MSGBOX("Failed Add To FireNoiseTex");
-
+	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"Sky_Texture1", L"../Bin/Resources/Texture/SkyBox/SkyBox_Stage1.dds"))) MSGBOX("Failed Add To SkyBoxTex");
+	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"Sky_Texture2", L"../Bin/Resources/Texture/SkyBox/SkyBox_Stage2_1.dds"))) MSGBOX("Failed Add To SkyBoxTex");
 
 	return S_OK;
 }
@@ -715,7 +712,6 @@ HRESULT CLoader::Load_Stage1_Cinema_Object()
 
 HRESULT CLoader::Set_Stage2_Prototype()
 {
-
 	return S_OK;
 }
 
@@ -926,7 +922,7 @@ HRESULT CLoader::Load_Stage1PlayerLoad()
 		shaderPath, matPivot, CModel::TYPE::TYPE_STATIC, true)))) return E_FAIL;
 #pragma endregion
 	// 던지기용 방패
-	matPivot = XMMatrixIdentity();
+	matPivot = XMMatrixRotationRollPitchYaw(XMConvertToRadians(180.f), XMConvertToRadians(0.f), XMConvertToRadians(0.f));
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_FlyingShield", CModel::Create(m_pDevice, m_pDeviceContext,
 		"../bin/Resources/Mesh/Shield/", "Shield.fbx",
 		L"../../Reference/ShaderFile/Shader_StaticMesh.hlsl", matPivot, CModel::TYPE_STATIC, true))))
@@ -934,14 +930,30 @@ HRESULT CLoader::Load_Stage1PlayerLoad()
 		return E_FAIL;
 	}
 
-	// Trail
+	/////////////////////////////////////// 소드 트레일
+	// 기본 텍스처
 	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"TrailBase", L"../bin/Resources/Texture/Trail/T_Smoke_Trail_Soft.dds"))) MSGBOX("Failed To Add SwordTrail Tex");
 	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"DistortionBase", L"../bin/Resources/Texture/Trail/t_distort_channels.dds"))) MSGBOX("Failed To Add SwordTrail Tex");
 	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"DistortionMask", L"../bin/Resources/Texture/Trail/T_DistortionNoise.dds"))) MSGBOX("Failed To Add SwordTrail Tex");
-
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_VIBuffer_Trail",
-		CVIBuffer_Trail::Create(m_pDevice, m_pDeviceContext, L"../../Reference/ShaderFile/Shader_Distortion.hlsl", 100))))
+	// 추가 텍스처
+	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"WispTrail", L"../bin/Resources/Texture/Trail/T_WispTrail.dds"))) MSGBOX("Failed To Add WispTrail Tex");
+	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"WispTrail_02", L"../bin/Resources/Texture/Trail/T_WispTrail_02.dds"))) MSGBOX("Failed To Add WispTrail_02 Tex");
+	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"WispTrail_Thin", L"../bin/Resources/Texture/Trail/T_WispTrail_thin.dds"))) MSGBOX("Failed To Add WispTrail_Thin Tex");
+	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"Fire_02", L"../bin/Resources/Texture/Trail/T_Fire_02.dds"))) MSGBOX("Failed To Add Fire_02 Tex");
+	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"Wisp_01", L"../bin/Resources/Texture/Trail/T_Wisp_01.dds"))) MSGBOX("Failed To Add Wisp_01 Tex");
+	// 버퍼
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_VIBuffer_Trail_Distortion",
+		CVIBuffer_Trail::Create(m_pDevice, m_pDeviceContext, L"../../Reference/ShaderFile/Shader_Distortion.hlsl", 256))))
 		MSGBOX(L"트레일 버퍼 프로토타입 생성 실패");
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_VIBuffer_Trail_Normal",
+		CVIBuffer_Trail::Create(m_pDevice, m_pDeviceContext, L"../bin/ShaderFile/Shader_Trail.hlsl", 256))))
+		MSGBOX(L"트레일 버퍼 프로토타입 생성 실패");
+	// 노말
+	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_TrailEffect_Normal", CTrailEffect_Normal::Create(m_pDevice, m_pDeviceContext))))
+		MSGBOX(L"트레일이펙트_노말 프로토타입 생성 실패");
+	// 디스토션
+	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_TrailEffect_Distortion", CTrailEffect_Distortion::Create(m_pDevice, m_pDeviceContext))))
+		MSGBOX(L"트레일이펙트_디스토션 프로토타입 생성 실패");
 
 	//Wall
 	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"WallBase", L"../bin/Resources/Texture/T_Portal_Space_D.dds"))) MSGBOX("Failed To Add WallBase Tex");
@@ -949,10 +961,12 @@ HRESULT CLoader::Load_Stage1PlayerLoad()
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_VIBuffer_Wall", CVIBuffer_Rect::Create(m_pDevice, m_pDeviceContext, L"../../Reference/ShaderFile/Shader_Distortion.hlsl"))))
 		MSGBOX("Failed to Create Wall Buffer");
 
+	// dissolve 
+	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"DissovleBase", L"../bin/Resources/Texture/dissolve.dds"))) MSGBOX("Failed To Add dissolve Tex");
+
 #pragma region 오브젝트
 	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Silvermane", CSilvermane::Create(m_pDevice, m_pDeviceContext))))	return E_FAIL;
 	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Camera_Silvermane", CCamera_Silvermane::Create(m_pDevice, m_pDeviceContext))))		return E_FAIL;
-	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_TrailEffect", CTrailEffect::Create(m_pDevice, m_pDeviceContext))))	MSGBOX(L"트레일이펙트 프로토타입 생성 실패");
 	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Wall", CWall::Create(m_pDevice, m_pDeviceContext)))) MSGBOX(L"Wall 원본 생성 실패");
 	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_FlyingShield", CFlyingShield::Create(m_pDevice, m_pDeviceContext)))) MSGBOX(L"날으는 쉴드 원본 생성 실패");
 #pragma endregion
@@ -998,14 +1012,14 @@ HRESULT CLoader::Load_Stage1MonsterLoad()
 	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Monster_Crawler", CMonster_Crawler::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 
-	//////Monster EarthAberrant
+	//Monster EarthAberrant
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Monster_EarthAberrant", CModel::Create(m_pDevice, m_pDeviceContext,
 		L"../bin/FBX/Monster/EarthAberrant.fbx", CModel::TYPE_ANIM, true))))
 		return E_FAIL;
 	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Monster_EarthAberrant", CMonster_EarthAberrant::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 
-	////Monster EarthAberrant Weapon
+	//Monster EarthAberrant Weapon
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Weapon_EarthAberrant_Pick", CModel::Create(m_pDevice, m_pDeviceContext,
 		"../bin/Resources/Mesh/Earth_Aberrant_Pick/", "EarthAberrant_Pick.fbx",
 		L"../../Reference/ShaderFile/Shader_StaticMesh.hlsl", matPivot, CModel::TYPE_STATIC, true))))
@@ -1013,14 +1027,14 @@ HRESULT CLoader::Load_Stage1MonsterLoad()
 	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Weapon_EarthAberrant_Pick", CEarthAberrant_Pick::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 
-	////Monster Bastion_Sword
+	//Monster Bastion_Sword
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Monster_Bastion_Sword", CModel::Create(m_pDevice, m_pDeviceContext,
 		L"../bin/FBX/Monster/Bastion_Sword.fbx", CModel::TYPE_ANIM, true))))
 		return E_FAIL;
 	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Monster_Bastion_Sword", CMonster_Bastion_Sword::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 
-	////Weapon
+	//Weapon
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Weapon_Stargazer", CModel::Create(m_pDevice, m_pDeviceContext,
 		"../bin/Resources/Mesh/Stargazer/", "Stargazer(1H Sword).fbx",
 		L"../../Reference/ShaderFile/Shader_Weapon.hlsl", matPivot, CModel::TYPE_STATIC, true))))
@@ -1028,7 +1042,7 @@ HRESULT CLoader::Load_Stage1MonsterLoad()
 	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Weapon_Stargazer", CStargazer::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 
-	////Monster Bastion_Shooter
+	//Monster Bastion_Shooter
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Monster_Bastion_Shooter", CModel::Create(m_pDevice, m_pDeviceContext,
 		L"../bin/FBX/Monster/Bastion_Shooter.fbx", CModel::TYPE_ANIM, true))))
 		return E_FAIL;
@@ -1036,15 +1050,15 @@ HRESULT CLoader::Load_Stage1MonsterLoad()
 	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Monster_Bastion_Shooter", CMonster_Bastion_Shooter::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 
-	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Shooter_Bullet", CModel::Create(m_pDevice, m_pDeviceContext,
-	//	"../bin/Resources/Mesh/Bullet/", "Sphere.fbx",
-	//		L"../../Reference/ShaderFile/Shader_Weapon.hlsl", matPivot, CModel::TYPE_STATIC, true))))
-	//	return E_FAIL;
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Shooter_Bullet", CModel::Create(m_pDevice, m_pDeviceContext,
+		"../bin/Resources/Mesh/Bullet/", "Sphere.fbx",
+			L"../../Reference/ShaderFile/Shader_Weapon.hlsl", matPivot, CModel::TYPE_STATIC, true))))
+		return E_FAIL;
 
 	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Shooter_Bullet", CBullet::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 
-	////Bastion_2HSword
+	//Bastion_2HSword
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Bastion_2HSword", CModel::Create(m_pDevice, m_pDeviceContext,
 		L"../bin/FBX/Monster/Bastion_2HSword_Bin.fbx", CModel::TYPE_ANIM, true))))
 		return E_FAIL;
@@ -1060,26 +1074,26 @@ HRESULT CLoader::Load_Stage1MonsterLoad()
 	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Weapon_RetributionBlade", CRetributionBlade::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 	 
-	////////Bastion_Healer
-	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Bastion_Healer", CModel::Create(m_pDevice, m_pDeviceContext,
-	//	L"../bin/FBX/Monster/Bastion_Healer_Bin.fbx", CModel::TYPE_ANIM, true))))
-	//	return E_FAIL;
-	//if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Monster_Bastion_Healer", CMonster_Bastion_Healer::Create(m_pDevice, m_pDeviceContext))))
-	//	return E_FAIL;
+	//Bastion_Healer
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Bastion_Healer", CModel::Create(m_pDevice, m_pDeviceContext,
+		L"../bin/FBX/Monster/Bastion_Healer_Bin.fbx", CModel::TYPE_ANIM, true))))
+		return E_FAIL;
+	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Monster_Bastion_Healer", CMonster_Bastion_Healer::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
 
-	//////weapon
-	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Staff", CModel::Create(m_pDevice, m_pDeviceContext,
-	//	"../bin/Resources/Mesh/Staff/", "Staff.fbx",
-	//	L"../../Reference/ShaderFile/Shader_Weapon.hlsl", matPivot, CModel::TYPE_STATIC, true))))
-	//{
-	//	return E_FAIL;
-	//}
-	//if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Weapon_Staff", CStaff::Create(m_pDevice, m_pDeviceContext))))
-	//	return E_FAIL;
+	//weapon
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Staff", CModel::Create(m_pDevice, m_pDeviceContext,
+		"../bin/Resources/Mesh/Staff/", "Staff.fbx",
+		L"../../Reference/ShaderFile/Shader_Weapon.hlsl", matPivot, CModel::TYPE_STATIC, true))))
+	{
+		return E_FAIL;
+	}
+	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Weapon_Staff", CStaff::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
 
-	////Meteor
-	//if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Weapon_Meteor", CMeteor::Create(m_pDevice, m_pDeviceContext))))
-	//	return E_FAIL;
+	//Meteor
+	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Weapon_Meteor", CMeteor::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
 
 	return S_OK;
 }
@@ -1130,9 +1144,6 @@ HRESULT CLoader::Ready_Stage1()
 		return E_FAIL;
 	}
 
-	//if (FAILED(Load_Stage2_Object()))
-	//	return E_FAIL;
-
 	return S_OK;
 }
 
@@ -1154,8 +1165,10 @@ HRESULT CLoader::Ready_Test_JS()
 	cout << "TestScene_JS 로딩 시작..." << endl;
 	cout << "TestScene_JS 리소스 생성중..." << endl;
 	// 스카이박스
-	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"Sky_Texture", L"../Bin/Resources/Texture/SkyBox/SkyBox_Stage1.dds")))
-		return E_FAIL;
+	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"Sky_Texture1", L"../Bin/Resources/Texture/SkyBox/SkyBox_Stage1.dds"))) 
+		MSGBOX("Failed Add To SkyBoxTex");
+	//if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"Sky_Texture2", L"../Bin/Resources/Texture/SkyBox/SkyBox_Stage2_1.dds")))
+	//	MSGBOX("Failed Add To SkyBoxTex");
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"VIBuffer_Cube", CVIBuffer_Cube::Create(m_pDevice, m_pDeviceContext, L"../../Reference/ShaderFile/Shader_Cube.hlsl"))))
 		return E_FAIL;
 	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_SkyBox", CSkyBox::Create(m_pDevice, m_pDeviceContext))))
@@ -1196,7 +1209,7 @@ HRESULT CLoader::Ready_Test_JS()
 	{
 		return E_FAIL;
 	}
-	matPivot = XMMatrixIdentity();
+	matPivot = XMMatrixRotationRollPitchYaw(XMConvertToRadians(180.f), XMConvertToRadians(0.f), XMConvertToRadians(0.f));
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_FlyingShield", CModel::Create(m_pDevice, m_pDeviceContext,
 		"../bin/Resources/Mesh/Shield/", "Shield.fbx",
 		L"../../Reference/ShaderFile/Shader_StaticMesh.hlsl", matPivot, CModel::TYPE_STATIC, true))))
@@ -1322,25 +1335,33 @@ HRESULT CLoader::Ready_Test_JS()
 		return E_FAIL;
 #pragma endregion
 
-	// 소드 트레일
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Prototype_Component_VIBuffer_Trail"
-		, CTrail_VIBuffer::Create(m_pDevice, m_pDeviceContext, L"../../Reference/ShaderFile/Shader_Trail.hlsl", 400))))
-	{
-		return E_FAIL;
-	}
+	/////////////////////////////////////// 소드 트레일
+	// 기본 텍스처
 	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"TrailBase", L"../bin/Resources/Texture/Trail/T_Smoke_Trail_Soft.dds"))) MSGBOX("Failed To Add SwordTrail Tex");
 	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"DistortionBase", L"../bin/Resources/Texture/Trail/t_distort_channels.dds"))) MSGBOX("Failed To Add SwordTrail Tex");
 	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"DistortionMask", L"../bin/Resources/Texture/Trail/T_DistortionNoise.dds"))) MSGBOX("Failed To Add SwordTrail Tex");
-
-	if (FAILED(g_pGameInstance->Add_Prototype(L"Prototype_GameObject_SwordTral", CSwordTrail::Create(m_pDevice, m_pDeviceContext))))
-		return E_FAIL;
-	// 2
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_VIBuffer_Trail",
-		CVIBuffer_Trail::Create(m_pDevice, m_pDeviceContext, L"../../Reference/ShaderFile/Shader_Trail.hlsl", 100))))
+	// 추가 텍스처
+	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"WispTrail", L"../bin/Resources/Texture/Trail/T_WispTrail.dds"))) MSGBOX("Failed To Add WispTrail Tex");
+	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"WispTrail_02", L"../bin/Resources/Texture/Trail/T_WispTrail_02.dds"))) MSGBOX("Failed To Add WispTrail_02 Tex");
+	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"WispTrail_Thin", L"../bin/Resources/Texture/Trail/T_WispTrail_thin.dds"))) MSGBOX("Failed To Add WispTrail_Thin Tex");
+	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"Fire_02", L"../bin/Resources/Texture/Trail/T_Fire_02.dds"))) MSGBOX("Failed To Add Fire_02 Tex");
+	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"Wisp_01", L"../bin/Resources/Texture/Trail/T_Wisp_01.dds"))) MSGBOX("Failed To Add Wisp_01 Tex");
+	// 버퍼
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_VIBuffer_Trail_Distortion",
+		CVIBuffer_Trail::Create(m_pDevice, m_pDeviceContext, L"../../Reference/ShaderFile/Shader_Distortion.hlsl", 256))))
 		MSGBOX(L"트레일 버퍼 프로토타입 생성 실패");
-	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_TrailEffect", CTrailEffect::Create(m_pDevice, m_pDeviceContext))))
-		MSGBOX(L"트레일이펙트 프로토타입 생성 실패");
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_VIBuffer_Trail_Normal",
+		CVIBuffer_Trail::Create(m_pDevice, m_pDeviceContext, L"../bin/ShaderFile/Shader_Trail.hlsl", 256))))
+		MSGBOX(L"트레일 버퍼 프로토타입 생성 실패");
+	// 노말
+	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_TrailEffect_Normal", CTrailEffect_Normal::Create(m_pDevice, m_pDeviceContext))))
+		MSGBOX(L"트레일이펙트_노말 프로토타입 생성 실패");
+	// 디스토션
+	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_TrailEffect_Distortion", CTrailEffect_Distortion::Create(m_pDevice, m_pDeviceContext))))
+		MSGBOX(L"트레일이펙트_디스토션 프로토타입 생성 실패");
 
+	// dissolve 
+	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"DissovleBase", L"../bin/Resources/Texture/dissolve.dds"))) MSGBOX("Failed To Add dissolve Tex");
 
 	// UI
 	if(FAILED(Load_Stage1StaticUILoad()))

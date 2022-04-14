@@ -45,10 +45,17 @@ _int CMidBoss_Attack::Tick(const _double& TimeDelta)
 
 		if (CBoss_Bastion_Judicator::M_BossAnimState::ATTACK_JOG_H == m_pAnimator->Get_CurrentAnimNode())
 		{
-			cout << "JOG : " << iCurKeyFrameIndex << endl;
+			//cout << "JOG : " << iCurKeyFrameIndex << endl;
 			
 			if (20 < iCurKeyFrameIndex && 35 > iCurKeyFrameIndex)
 			{
+				if (27 <= iCurKeyFrameIndex && 28 >= iCurKeyFrameIndex && false == m_bEffectCheck)
+				{
+					//무기앞에생기는이펙트
+					m_bEffectCheck = true;
+					pBoss->OnWeaponEffect();
+				}
+
 				pBoss->Set_IsAttack(true);
 
 				_float fDamage = 6.f;
@@ -57,7 +64,9 @@ _int CMidBoss_Attack::Tick(const _double& TimeDelta)
 				pBoss->Set_AttackDesc_Level(iLevel);
 			}
 			else
+			{
 				pBoss->Set_IsAttack(false);
+			}
 		}
 		else if (CBoss_Bastion_Judicator::M_BossAnimState::ATTACK_LEGACY_H == m_pAnimator->Get_CurrentAnimNode())
 		{
@@ -74,6 +83,13 @@ _int CMidBoss_Attack::Tick(const _double& TimeDelta)
 			}
 			if (25 < iCurKeyFrameIndex && 40 > iCurKeyFrameIndex)
 			{
+				if (37 <= iCurKeyFrameIndex && 38 >= iCurKeyFrameIndex && false == m_bEffectCheck)
+				{
+					//무기앞에생기는이펙트
+					m_bEffectCheck = true;
+					pBoss->OnWeaponEffect();
+				}
+
 				pBoss->Set_IsAttack(true);
 
 				_float fDamage = 8.f;
@@ -83,14 +99,21 @@ _int CMidBoss_Attack::Tick(const _double& TimeDelta)
 			}
 			else
 				pBoss->Set_IsAttack(false);
-
 		}
+
 		else if (CBoss_Bastion_Judicator::M_BossAnimState::SPRINT_ATTACK_H == m_pAnimator->Get_CurrentAnimNode())
 		{
 			cout << "SPRINT : " << iCurKeyFrameIndex << endl;
 
 			if ( 15 < iCurKeyFrameIndex && 27 > iCurKeyFrameIndex)
 			{
+				if (19 <= iCurKeyFrameIndex && 20 >= iCurKeyFrameIndex && false == m_bEffectCheck)
+				{
+					//무기앞에생기는이펙트
+					m_bEffectCheck = true;
+					pBoss->OnWeaponEffect();
+				}
+
 				pBoss->Set_IsAttack(true);
 
 				_float fDamage = 6.f;
@@ -108,6 +131,13 @@ _int CMidBoss_Attack::Tick(const _double& TimeDelta)
 
 			if (26 < iCurKeyFrameIndex && 40 > iCurKeyFrameIndex)
 			{
+				if (35 <= iCurKeyFrameIndex && 36 >= iCurKeyFrameIndex && false == m_bEffectCheck)
+				{
+					//무기앞에생기는이펙트
+					m_bEffectCheck = true;
+					pBoss->OnWeaponEffect();
+				}
+
 				pBoss->Set_IsAttack(true);
 
 				_float fDamage = 6.f;
@@ -131,15 +161,7 @@ _int CMidBoss_Attack::Tick(const _double& TimeDelta)
 				pBoss->Set_AttackDesc_Damaga(fDamage);
 				pBoss->Set_AttackDesc_Level(iLevel);
 			}
-			/*if (105 < iCurKeyFrameIndex && 125 > iCurKeyFrameIndex)
-			{
-				pBoss->Set_IsAttack(true);
-
-				_float fDamage = 6.f;
-				_uint iLevel = 4;
-				pBoss->Set_AttackDesc_Damaga(fDamage);
-				pBoss->Set_AttackDesc_Level(iLevel);
-			}*/
+			
 			else
 				pBoss->Set_IsAttack(false);
 
@@ -152,6 +174,14 @@ _int CMidBoss_Attack::Tick(const _double& TimeDelta)
 
 			if (60 < iCurKeyFrameIndex && 90 > iCurKeyFrameIndex)
 			{
+				if (74 < iCurKeyFrameIndex && 76 > iCurKeyFrameIndex && false == m_bEffectCheck)
+				{
+					//무기앞에생기는이펙트
+					m_bEffectCheck = true;
+					pBoss->OnWeaponEffect();
+					cout << "여러번들어욤" << endl;
+				}
+
 				pBoss->Set_IsAttack(true);
 
 				_float fDamage = 6.f;
@@ -161,6 +191,13 @@ _int CMidBoss_Attack::Tick(const _double& TimeDelta)
 			}
 			if (110 < iCurKeyFrameIndex && 140 > iCurKeyFrameIndex)
 			{
+				if (123 <= iCurKeyFrameIndex && 124 >= iCurKeyFrameIndex && false == m_bEffectCheck)
+				{
+					//무기앞에생기는이펙트
+					m_bEffectCheck = true;
+					pBoss->OnWeaponEffect();
+				}
+
 				pBoss->Set_IsAttack(true);
 
 				_float fDamage = 7.f;
@@ -169,7 +206,10 @@ _int CMidBoss_Attack::Tick(const _double& TimeDelta)
 				pBoss->Set_AttackDesc_Level(iLevel);
 			}
 			else
+			{
+				m_bEffectCheck = false;
 				pBoss->Set_IsAttack(false);
+			}
 		}
 		else if (CBoss_Bastion_Judicator::M_BossAnimState::ATTACK_S2 == m_pAnimator->Get_CurrentAnimNode())
 		{
@@ -309,6 +349,8 @@ HRESULT CMidBoss_Attack::ExitState()
 	if (FAILED(__super::ExitState()))
 		return E_FAIL;
 
+	m_bEffectCheck = false; //이펙트다시켜야됨 
+
 	m_bAttackTypeFar = false;
 	m_bAttackR1_H = false;
 	m_bAttackR1_1 = false;
@@ -317,8 +359,6 @@ HRESULT CMidBoss_Attack::ExitState()
 	m_bAttackFar = false;
 	m_bAttackLegacy_1 = false;
 	m_bAttackLegacy_2 = false;
-
-
 
 	return S_OK;
 }

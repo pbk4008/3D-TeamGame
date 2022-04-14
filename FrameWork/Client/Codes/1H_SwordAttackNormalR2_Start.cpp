@@ -72,6 +72,9 @@ HRESULT C1H_SwordAttackNormalR2_Start::EnterState()
 
 	m_pSilvermane->Set_IsTrasceCamera(false);
 	m_pSilvermane->Set_IsAttack(false);
+
+	m_pSilvermane->RimlightCheck(true);
+	m_pSilvermane->Get_CurerntWeapon()->RimlightCheck(true);
 	return S_OK;
 }
 

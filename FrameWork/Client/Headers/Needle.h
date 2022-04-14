@@ -5,7 +5,8 @@
 
 BEGIN(Client)
 
-class CTrailEffect;
+class CTrailEffect_Normal;
+class CTrailEffect_Distortion;
 
 class CNeedle final : public CWeapon
 {
@@ -36,7 +37,8 @@ private:
 private:
 	_float4x4 m_matPivot{};
 	CCapsuleCollider* m_pCollider = nullptr;
-	CTrailEffect* m_pTrailEffect = nullptr;
+	CTrailEffect_Normal* m_pTrailEffect_Normal = nullptr;
+	CTrailEffect_Distortion* m_pTrailEffect_Distortion = nullptr;
 	CLight* m_pLight = nullptr;
 
 	_bool m_bLight = false;

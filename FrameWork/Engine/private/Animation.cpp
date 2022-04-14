@@ -74,6 +74,7 @@ HRESULT CAnimation::Update_TransformationMatrix(_double TimeDelta,const _bool _i
 			vRotation = XMLoadFloat4(&KeyFrames[iNumKeyFrame - 1]->vRotation);
 			vPosition = XMLoadFloat3(&KeyFrames[iNumKeyFrame - 1]->vPosition);
 			vPosition = XMVectorSetW(vPosition, 1.f);
+
 			if (iNumKeyFrame - 1 > m_iCurKeyFrameIndex)
 				m_iCurKeyFrameIndex = iNumKeyFrame - 1;
 		}

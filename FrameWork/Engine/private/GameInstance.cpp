@@ -523,6 +523,14 @@ void CGameInstance::UpdateLightCam(_uint LightIndx, _fvector playerpos)
 	m_pLight_Manager->UpdateLightCam(LightIndx, playerpos);
 }
 
+void CGameInstance::RemoveLight()
+{
+	if (m_pLight_Manager == nullptr)
+		return;
+
+	m_pLight_Manager->Free();
+}
+
 ID3D11ShaderResourceView* CGameInstance::Get_SRV(const wstring& target)
 {
 	if(m_pTarget_Manager == nullptr)
@@ -643,6 +651,20 @@ const _bool CGameInstance::Overlap(OVERLAPDESC& _desc)
 	if (!m_pPhysicSystem)
 		return false;
 	return m_pPhysicSystem->Overlap(_desc);
+}
+
+void CGameInstance::Set_NumLayers(const _uint _iNumLayers)
+{
+	if (!m_pPhysicSystem)
+		return;
+	m_pPhysicSystem->Set_NumLayers(_iNumLayers);
+}
+
+void CGameInstance::Set_CollisionLayer(const _uint _iLayer1, const _uint _iLayer2)
+{
+	if (!m_pPhysicSystem)
+		return;
+	m_pPhysicSystem->Set_CollisionLayer(_iLayer1, _iLayer2);
 }
 
 HRESULT CGameInstance::Init_SoundManager()

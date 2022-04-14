@@ -197,9 +197,8 @@ PS_OUT PS_MAIN(PS_IN In)
 	Out.M = float4(mra.r, mra.r, mra.r, 1);
 	Out.R = float4(mra.g, mra.g, mra.g, 1);
 	Out.A = float4(ceo.b + mra.b, ceo.b + mra.b, ceo.b + mra.b, 1);
-	float4 color = (1.f, 0, 0, 1);
+	float4 color = float4(1, 0, 0, 1);
 	Out.E = color * 0.3f * ceo.g;
-
 
 	return Out;
 }

@@ -1,6 +1,5 @@
 #include "pch.h"
 #include "Weapon.h"
-#include "SwordTrail.h"
 
 CWeapon::CWeapon(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
 	: CGameObject(_pDevice, _pDeviceContext)
@@ -39,6 +38,9 @@ HRESULT CWeapon::NativeConstruct(const _uint _iSceneID, void* _pArg)
 
 	//if (m_pTrail == nullptr) return E_FAIL;
 
+	m_dissolveTex = g_pGameInstance->Clone_Component<CTexture>(0, L"Proto_Component_Texture");
+	if (FAILED(m_dissolveTex->Change_Texture(L"DissovleBase"))) MSGBOX("Failed to Change Texture DissovleTex");
+
 	return S_OK;
 }
 
@@ -66,7 +68,7 @@ HRESULT CWeapon::Render()
 	return S_OK;
 }
 
-HRESULT CWeapon::BindConstantBuffer(const wstring& camTag,SCB* consbuffer)
+HRESULT CWeapon::BindConstantBuffer(const wstring& camTag,SCB* consbuffer, RIM* rimlightbuffer)
 {
 	if(m_pTransform == nullptr)
 		MSGBOX("Failed To Apply Weapon Transform nullptr");
@@ -89,6 +91,14 @@ HRESULT CWeapon::BindConstantBuffer(const wstring& camTag,SCB* consbuffer)
 		if (FAILED(m_pModel->SetUp_ValueOnShader("g_empower", &consbuffer->empower, sizeof(_float)))) MSGBOX("Failed To Apply Weapon ConstantBuffer");
 	}
 
+	if (rimlightbuffer)
+	{
+		if (FAILED(m_pModel->SetUp_ValueOnShader("g_rimlightcheck", &rimlightbuffer->rimcheck, sizeof(_bool)))) MSGBOX("Failed To Apply Actor ConstantBuffer");
+		if (FAILED(m_pModel->SetUp_ValueOnShader("g_rimintensity", &rimlightbuffer->rimintensity, sizeof(_float)))) MSGBOX("Failed To Apply Actor ConstantBuffer");
+		if (FAILED(m_pModel->SetUp_ValueOnShader("g_rimcolor", &rimlightbuffer->rimcol, sizeof(_float4)))) MSGBOX("Failed To Apply Actor ConstantBuffer");
+		if (FAILED(m_pModel->SetUp_ValueOnShader("g_camdir", &rimlightbuffer->camdir, sizeof(_float4)))) MSGBOX("Failed To Apply Actor ConstantBuffer");
+	}
+
 	return S_OK;
 }
 
@@ -102,6 +112,38 @@ HRESULT CWeapon::BindLightBuffer()
 	if(FAILED(m_pModel->SetUp_ValueOnShader("g_LightView", &view, sizeof(_matrix)))) MSGBOX("Failed To Apply Weapon LightConstantBuffer");
 	if(FAILED(m_pModel->SetUp_ValueOnShader("g_LightProj", &porj, sizeof(_matrix)))) MSGBOX("Failed To Apply Weapon LightConstantBuffer");
 	if(FAILED(m_pModel->SetUp_ValueOnShader("g_LightPos", &lightpos, sizeof(_float3)))) MSGBOX("Failed To Apply Weapon LightConstantBuffer");
+
+	return S_OK;
+}
+
+HRESULT CWeapon::WeaponToAppear()
+{
+	m_lifetime -= (g_fDeltaTime);
+	if (m_lifetime <= 0.f)
+	{
+		m_lifetime = 0.f;
+		m_dissolvepass = 1;
+		m_bdissolveappear = false;
+	}
+	if (FAILED(m_pModel->SetUp_ValueOnShader("g_dissolvetime", &m_lifetime, sizeof(_float)))) MSGBOX("Failed to Apply dissolvetime");
+	if (FAILED(m_pModel->SetUp_TextureOnShader("g_DissolveTex", m_dissolveTex, 0))) MSGBOX("Failed to Apply dissolveTex");
+
+	return S_OK;
+}
+
+HRESULT CWeapon::WeaponToDisAppear()
+{
+	m_dissolvepass = 1;
+
+	m_lifetime += (g_fDeltaTime);
+	if (m_lifetime >= 1.f)
+	{
+		m_lifetime = 1.f;
+		m_bdissolvedisappear = false;
+	}
+	if (FAILED(m_pModel->SetUp_ValueOnShader("g_dissolvetime", &m_lifetime, sizeof(_float)))) MSGBOX("Failed to Apply dissolvetime");
+	if (FAILED(m_pModel->SetUp_TextureOnShader("g_DissolveTex", m_dissolveTex, 0))) MSGBOX("Failed to Apply dissolveTex");
+
 
 	return S_OK;
 }
@@ -178,13 +220,28 @@ const _bool CWeapon::IsTrail() const
 	return m_isTrail;
 }
 
+void CWeapon::RimlightCheck(_bool check)
+{
+	m_rimcheck = check;
+	if (check == false)
+		m_rimintensity = 8.f;
+}
+
+void CWeapon::SetRimIntensity(_float time)
+{
+	m_rimintensity += time;
+	
+	if (m_rimintensity <= 2.0f)
+		m_rimintensity = 2.0f;
+}
+
 void CWeapon::RangeAttack()
 {
 }
 
 _fmatrix CWeapon::Remove_Scale(_fmatrix matTransform)
 {
-	//Right벡터 Nomalize해서 구하기
+	//Right vector to Normalize
 	_vector vRight = XMVector3Normalize(matTransform.r[0]);
 	//Up벡터 Nomalize해서 구하기
 	_vector vUP = XMVector3Normalize(matTransform.r[1]);
@@ -208,6 +265,7 @@ _fmatrix CWeapon::Remove_Scale(_fmatrix matTransform)
 
 void CWeapon::Free()
 {
+	Safe_Release(m_dissolveTex);
 	Safe_Release(m_pModel);
 	Safe_Release(m_pLocalTransform);
 
