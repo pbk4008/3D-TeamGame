@@ -111,6 +111,9 @@ HRESULT C2H_HammerAttackR2_Charge::EnterState()
 
 	m_iAttackStartIndex = 50;
 	m_iAttackEndIndex = 90;
+	m_iTrailStartIndex = 50;
+	m_iTrailEndIndex = 90;
+
 	m_iShakeIndex = 54;
 	m_iShakeIndex2 = 73;
 

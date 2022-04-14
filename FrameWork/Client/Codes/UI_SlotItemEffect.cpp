@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "UI_SlotItemEffect.h"
 #include "SingleImage.h"
+#include "UI_ItemSlot.h"
 
 CUI_SlotItemEffect::CUI_SlotItemEffect(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
 	:CUI(pDevice, pDeviceContext)
@@ -27,13 +28,17 @@ HRESULT CUI_SlotItemEffect::NativeConstruct(const _uint iSceneID, void* pArg)
 
 	desc = (*(ItemSlotDesc*)pArg);
 
-	m_pTransform->Set_State(CTransform::STATE_POSITION, _vector{ desc.fPos.x + 10.f , desc.fPos.y - 10.f , 0.3f, 1.f });
-	m_pTransform->Scaling(_vector{ desc.fScale.x + 5.f, desc.fScale.y + 5.f, 1.f, 1.f });
+	m_pLocalTransform = g_pGameInstance->Clone_Component<CTransform>(0, L"Proto_Component_Transform");
+	m_pLocalTransform->Set_State(CTransform::STATE_POSITION, _vector{ desc.fPos.x + 10.f , desc.fPos.y - 10.f , 0.3f, 1.f });
+	m_pLocalTransform->Scaling(_vector{ desc.fScale.x + 5.f, desc.fScale.y + 5.f, 1.f, 1.f });
+	m_pOwner = desc.pOwner;
+	assert("Owner is nullptr!" && m_pOwner);
+
+	setActive(false);
 
 	if (FAILED(Ready_Component()))
 		return E_FAIL;
 
-	setActive(false);
 
 	return S_OK;
 }
@@ -51,6 +56,7 @@ _int CUI_SlotItemEffect::LateTick(_double TimeDelta)
 	if (FAILED(CUI::LateTick(TimeDelta)))
 		return -1;
 
+	Attach_Owner();
 	/*if (nullptr != m_pRenderer)
 		m_pRenderer->Add_RenderGroup(CRenderer::RENDER::RENDER_UI_ACTIVE, this);*/
 
@@ -81,6 +87,19 @@ HRESULT CUI_SlotItemEffect::Ready_Component(void)
 		return E_FAIL;
 
 	return S_OK;
+}
+
+_int CUI_SlotItemEffect::Attach_Owner(void)
+{
+	if (nullptr != m_pOwner)
+	{
+		_matrix smatWorld = m_pLocalTransform->Get_WorldMatrix();
+		_matrix smatOwerWorld = static_cast<CUI_ItemSlot*>(m_pOwner)->Get_Transform()->Get_WorldMatrix();
+
+		m_pTransform->Set_WorldMatrix(smatWorld * smatOwerWorld);
+	}
+
+	return _int();
 }
 
 void CUI_SlotItemEffect::SetIcon(const std::wstring& _szFileName)
@@ -114,5 +133,7 @@ CGameObject* CUI_SlotItemEffect::Clone(const _uint iSceneID, void* pArg)
 void CUI_SlotItemEffect::Free()
 {
 	Safe_Release(m_pSigleImageCom);
+	Safe_Release(m_pLocalTransform);
+
 	__super::Free();
 }

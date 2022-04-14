@@ -127,13 +127,13 @@ HRESULT CEffect_HitParticle::Render()
 	m_pBuffer->SetUp_ValueOnShader("g_fCurTime", &m_Desc.fCurTime, sizeof(_float));
 
 	_float4 color = { 1.f , 0.6f, 0.3f ,1.f };
-	_float power = 1.5f;
+	_float power = 2.5f;
 	m_pBuffer->SetUp_ValueOnShader("g_color", &color, sizeof(_float4));
 	m_pBuffer->SetUp_ValueOnShader("g_empower", &power, sizeof(_float));
 
 	m_pBuffer->SetUp_ValueOnShader("g_vCamPosition", (void*)&CamPos, sizeof(_vector));
 
-	m_pBuffer->Render(/*m_Desc.iRenderPassNum*/4); //4번이어야함,,게속,,
+	m_pBuffer->Render(m_Desc.iRenderPassNum); //4번이어야함,,게속,,
 
 	return S_OK;
 }

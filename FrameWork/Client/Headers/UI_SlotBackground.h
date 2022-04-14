@@ -12,6 +12,7 @@ public:
 	{
 		_float2 fPos;
 		_float2 fScale;
+		CUI*	pOwner = nullptr;
 	};
 
 	explicit CUI_SlotBackground(void) = default;
@@ -28,10 +29,13 @@ public:
 
 public:
 	HRESULT Ready_Component(void);
+	_int Attach_Owner(void);
 
 private:
 	CSingleImage* m_pSigleImageCom = nullptr;
 	ItemSlotDesc  desc;
+	CUI*		  m_pOwner = nullptr;
+	CTransform*	  m_pLocalTransform = nullptr;
 
 public:
 	static CUI_SlotBackground* Create(ID3D11Device * pDevice, ID3D11DeviceContext * pDeviceContext);

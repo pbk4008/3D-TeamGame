@@ -100,6 +100,17 @@ void CCharacterController::setOwnerTransform(CTransform* _pTransform)
 	m_pOwnerTransform = _pTransform;
 }
 
+void CCharacterController::setShapeLayer(const _uint _iLayer)
+{
+	if (!m_pPhysX)
+		return;
+
+	for (auto pShape : m_vecShapes)
+	{
+		m_pPhysX->Set_ShapeLayer(pShape, _iLayer);
+	}
+}
+
 const _bool CCharacterController::IsDown()
 {
 	return m_curFlag & PxControllerCollisionFlag::eCOLLISION_DOWN;

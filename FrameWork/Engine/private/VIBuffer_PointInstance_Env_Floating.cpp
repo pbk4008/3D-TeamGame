@@ -220,12 +220,12 @@ void CVIBuffer_PointInstance_Env_Floating::Update(_double TimeDelta, _uint eAxis
 		{
 			if (m_Desc.fLifeTime > ((VTXPARTICLE*)SubResource.pData)[i].vTime.x)
 			{
-				((VTXPARTICLE*)SubResource.pData)[i].vTime.x += (_float)TimeDelta;
+				//((VTXPARTICLE*)SubResource.pData)[i].vTime.x += (_float)TimeDelta;
 			}
 
 			if (m_Desc.fLifeTime < ((VTXPARTICLE*)SubResource.pData)[i].vTime.x)
 			{
-				((VTXPARTICLE*)SubResource.pData)[i].vTime.x = m_Desc.fLifeTime;
+				//((VTXPARTICLE*)SubResource.pData)[i].vTime.x = m_Desc.fLifeTime;
 			}
 
 			if ((_uint)AXIS::AXIS_X == eAxis)
@@ -297,7 +297,7 @@ void CVIBuffer_PointInstance_Env_Floating::Particle_Reset()
 
 	for (_uint i = 0; i < m_Desc.iNumInstance; ++i)
 	{
-		((VTXPARTICLE*)SubResource.pData)[i].vTime.x = (rand() % 9) * 0.1f + m_Desc.fCurTime;
+		//((VTXPARTICLE*)SubResource.pData)[i].vTime.x = (rand() % 9) * 0.1f + m_Desc.fCurTime;
 
 		m_Desc.matParticle.r[0] = XMVectorSetX(m_Desc.matParticle.r[0], m_Desc.fParticleSize.x);
 		m_Desc.matParticle.r[1] = XMVectorSetY(m_Desc.matParticle.r[1], m_Desc.fParticleSize.y);

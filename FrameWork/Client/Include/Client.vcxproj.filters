@@ -517,9 +517,6 @@
     <Filter Include="02.GameObject\03.Character\00.Player\00.Silvermane\State\Idel\Sprint">
       <UniqueIdentifier>{f86ae29b-ccc6-4e20-aafd-431e17d61329}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObject\96.Weapon\98.Trail">
-      <UniqueIdentifier>{0a662d2a-bf0c-4955-b176-58fbdf8c84f3}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_Sword">
       <UniqueIdentifier>{f21fcb8a-8935-4037-bb0e-677bf69fee18}</UniqueIdentifier>
     </Filter>
@@ -676,9 +673,6 @@
     <Filter Include="02.GameObject\96.Weapon\99.Shield">
       <UniqueIdentifier>{a9a4ad69-9913-4775-b0c0-8025825621ca}</UniqueIdentifier>
     </Filter>
-    <Filter Include="01.Scene\01.Loading\00.Logo">
-      <UniqueIdentifier>{cac3034c-dd8b-47e8-afc7-da6cb3e9501e}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_Spear\00.Idle">
       <UniqueIdentifier>{2398d3e4-0aad-4c0a-b779-2676cae6f42f}</UniqueIdentifier>
     </Filter>
@@ -813,6 +807,48 @@
     </Filter>
     <Filter Include="02.GameObject\04.Effect\00.Effect_Image\02.DeadSpray">
       <UniqueIdentifier>{93da6596-e33e-43cb-b193-e94382481f3a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.UI\05.Indicator">
+      <UniqueIdentifier>{fdbf11f0-da6e-4f08-b745-30097dc95913}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.System\08.IndicatorManager">
+      <UniqueIdentifier>{12dfd46f-3cc1-42a4-a02a-049a617f82ed}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\04.Effect\00.Particle\03.Effect_Floating\00.Normal">
+      <UniqueIdentifier>{f7900c7e-1c0f-44c1-9a37-a0ee1618a5b0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\04.Effect\00.Particle\03.Effect_Floating\01.DifferentSpeed">
+      <UniqueIdentifier>{82e39491-981b-4b60-ad3a-d68489dac6be}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.System\08.WeaponGenerator">
+      <UniqueIdentifier>{8b3e76a1-7243-423d-8f7c-2d96b855bff3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\96.Weapon\09.Player_Weapon">
+      <UniqueIdentifier>{724f123e-80fd-4656-b0c2-ef2c47d8f99e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.UI\05.Hud">
+      <UniqueIdentifier>{4d603c3a-a859-46c6-8c40-1106a8067330}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.UI\05.Hud\00.Loot_Equipment">
+      <UniqueIdentifier>{b4cb1e3a-bd52-4cc4-9726-8bc18787075d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.UI\05.Hud\00.Loot_Equipment\00.Background">
+      <UniqueIdentifier>{64f468e9-c508-46c7-b1cc-6f82a1421d72}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.UI\05.Hud\00.Loot_Equipment\01.Grade">
+      <UniqueIdentifier>{1f0312d8-d933-425d-833f-007340c33ca6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.UI\05.Hud\00.Loot_Equipment\02.ItemIcon">
+      <UniqueIdentifier>{734951bf-7155-4361-abd7-ac5b95729157}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.UI\05.Hud\00.Loot_Equipment\03.ItemEffect">
+      <UniqueIdentifier>{1aa8f0fa-3e53-4e34-b399-5236c4d40363}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.UI\05.Hud\00.Loot_Equipment\04.ItemNameText">
+      <UniqueIdentifier>{be661eb4-722d-4761-9b65-d41ba77cb755}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.UI\05.Hud\00.Loot_Equipment\05.ItemTypeText">
+      <UniqueIdentifier>{7aabadda-a29d-4b40-afad-af2a4daaa382}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -1010,9 +1046,6 @@
     </ClInclude>
     <ClInclude Include="..\Headers\1H_SwordAttackNormalR2_Loop.h">
       <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\1H_Sword\R2</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Headers\Fury.h">
-      <Filter>02.GameObject\96.Weapon\01.Fury</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\2H_HammerIdle.h">
       <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\2H_Hammer\Default</Filter>
@@ -1491,9 +1524,6 @@
     <ClInclude Include="..\Headers\SubEnvironment.h">
       <Filter>02.GameObject\02.Map\01.Environment\00.Tree</Filter>
     </ClInclude>
-    <ClInclude Include="..\Headers\Effect_HitFloating.h">
-      <Filter>02.GameObject\04.Effect\00.Particle\03.Effect_Floating</Filter>
-    </ClInclude>
     <ClInclude Include="..\Headers\CameraShake.h">
       <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\Camera</Filter>
     </ClInclude>
@@ -1598,9 +1628,6 @@
     </ClInclude>
     <ClInclude Include="..\Headers\Effect_Env_Fire.h">
       <Filter>02.GameObject\04.Effect\00.Effect_Image\00.Env_Fire</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Headers\SwordTrail.h">
-      <Filter>02.GameObject\96.Weapon\98.Trail</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\NoiseFire.h">
       <Filter>02.GameObject\02.Map\01.Environment\01.NoiseFire</Filter>
@@ -1835,9 +1862,45 @@
     </ClInclude>
     <ClInclude Include="..\Headers\Effect_Dead_Spray.h">
       <Filter>02.GameObject\04.Effect\00.Effect_Image\02.DeadSpray</Filter>
-	</ClInclude>
+    </ClInclude>
     <ClInclude Include="..\Headers\UI_SlotBackground.h">
       <Filter>02.GameObject\05.UI\04.Inventory\04.ItemSlot\00.Background</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\UI_Indicator.h">
+      <Filter>02.GameObject\05.UI\05.Indicator</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Indicator_Manager.h">
+      <Filter>03.System\08.IndicatorManager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Effect_HitFloating.h">
+      <Filter>02.GameObject\04.Effect\00.Particle\03.Effect_Floating\00.Normal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Effect_Floating_Speed.h">
+      <Filter>02.GameObject\04.Effect\00.Particle\03.Effect_Floating\01.DifferentSpeed</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\WeaponGenerator.h">
+      <Filter>03.System\08.WeaponGenerator</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Player_Weapon.h">
+      <Filter>02.GameObject\96.Weapon\09.Player_Weapon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Fury.h">
+      <Filter>02.GameObject\96.Weapon\01.Fury</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Hud.h">
+      <Filter>02.GameObject\05.UI\05.Hud</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Loot_Equipment.h">
+      <Filter>02.GameObject\05.UI\05.Hud\00.Loot_Equipment</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\TrailEffect_Distortion.h">
+      <Filter>02.GameObject\04.Effect\01.TrailEffect</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\TrailEffect_Normal.h">
+      <Filter>02.GameObject\04.Effect\01.TrailEffect</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\MeshEffect.h">
+      <Filter>02.GameObject\04.Effect</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -2489,9 +2552,6 @@
     <ClCompile Include="..\Codes\SubEnvironment.cpp">
       <Filter>02.GameObject\02.Map\01.Environment\00.Tree</Filter>
     </ClCompile>
-    <ClCompile Include="..\Codes\Effect_HitFloating.cpp">
-      <Filter>02.GameObject\04.Effect\00.Particle\03.Effect_Floating</Filter>
-    </ClCompile>
     <ClCompile Include="..\Codes\CameraShake.cpp">
       <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\Camera</Filter>
     </ClCompile>
@@ -2596,9 +2656,6 @@
     </ClCompile>
     <ClCompile Include="..\Codes\Effect_Env_Fire.cpp">
       <Filter>02.GameObject\04.Effect\00.Effect_Image\00.Env_Fire</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Codes\SwordTrail.cpp">
-      <Filter>02.GameObject\96.Weapon\98.Trail</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\NoiseFire.cpp">
       <Filter>02.GameObject\02.Map\01.Environment\01.NoiseFire</Filter>
@@ -2831,6 +2888,39 @@
     <ClCompile Include="..\Codes\Effect_Dead_Spray.cpp">
       <Filter>02.GameObject\04.Effect\00.Effect_Image\02.DeadSpray</Filter>
     </ClCompile>
+    <ClCompile Include="..\Codes\UI_Indicator.cpp">
+      <Filter>02.GameObject\05.UI\05.Indicator</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Indicator_Manager.cpp">
+      <Filter>03.System\08.IndicatorManager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Effect_HitFloating.cpp">
+      <Filter>02.GameObject\04.Effect\00.Particle\03.Effect_Floating\00.Normal</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Effect_Floating_Speed.cpp">
+      <Filter>02.GameObject\04.Effect\00.Particle\03.Effect_Floating\01.DifferentSpeed</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\WeaponGenerator.cpp">
+      <Filter>03.System\08.WeaponGenerator</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Player_Weapon.cpp">
+      <Filter>02.GameObject\96.Weapon\09.Player_Weapon</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Hud.cpp">
+      <Filter>02.GameObject\05.UI\05.Hud</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Loot_Equipment.cpp">
+      <Filter>02.GameObject\05.UI\05.Hud\00.Loot_Equipment</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\TrailEffect_Distortion.cpp">
+      <Filter>02.GameObject\04.Effect\01.TrailEffect</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\TrailEffect_Normal.cpp">
+      <Filter>02.GameObject\04.Effect\01.TrailEffect</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\MeshEffect.cpp">
+      <Filter>02.GameObject\04.Effect</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -2959,6 +3049,9 @@
     </FxCompile>
     <FxCompile Include="..\bin\ShaderFile\Shader_MetorAnim.hlsl">
       <Filter>100.ShaderFiles\99.Other</Filter>
+          </FxCompile>
+    <FxCompile Include="..\bin\ShaderFile\Shader_Trail.hlsl">
+      <Filter>100.ShaderFiles\03.Effect</Filter>
     </FxCompile>
   </ItemGroup>
   <ItemGroup>

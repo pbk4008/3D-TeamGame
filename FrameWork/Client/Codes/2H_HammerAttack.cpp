@@ -29,6 +29,11 @@ _int C2H_HammerAttack::Tick(const _double& _dDeltaTime)
 	else
 		m_pSilvermane->Set_IsAttack(false);
 
+	if (m_iTrailStartIndex < iCurKeyFrameIndex && m_iTrailEndIndex > iCurKeyFrameIndex)
+		m_pSilvermane->Set_IsTrail(true);
+	else
+		m_pSilvermane->Set_IsTrail(false);
+
 	if (iCurKeyFrameIndex == m_iShakeIndex)
 	{
 		if (!m_isShake)
@@ -96,6 +101,8 @@ HRESULT C2H_HammerAttack::ExitState()
 		return E_FAIL;
 
 	m_pSilvermane->Set_IsTrasceCamera(true);
+	if (m_pSilvermane->IsAttack())
+		m_pSilvermane->Set_IsAttack(false);
 
 	m_isShake2 = false;
 	m_isRangeAttack = false;

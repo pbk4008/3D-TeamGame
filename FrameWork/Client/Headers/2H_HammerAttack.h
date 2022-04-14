@@ -27,6 +27,8 @@ protected:
 protected:
 	_uint m_iAttackStartIndex = 0;
 	_uint m_iAttackEndIndex = 0;
+	_uint m_iTrailStartIndex = 0;
+	_uint m_iTrailEndIndex = 0;
 	_int m_iShakeIndex = -1;
 	
 	_bool m_isShake2 = false;

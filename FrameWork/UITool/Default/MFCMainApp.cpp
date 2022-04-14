@@ -10,6 +10,7 @@
 #include "MFCCamera_Proj.h"
 #include "MFCEffect.h"
 #include "MFCEffect_floating.h"
+#include "MFCEffect_floating_Speed.h"
 #include "MFCEffect_Env_floating.h"
 #include "MFCEffect_Respawn.h"
 #include "MFCTerrain.h"
@@ -195,6 +196,12 @@ HRESULT CMFCMainApp::Ready_Component_Prototype()
 		return E_FAIL;
 	}
 
+	if (FAILED(g_pGameInstance->Add_Prototype(TOOL_LEVEL::TOOL_LEVEL_LOGO, L"Prototype_Component_VIBuffer_PointInstance_Floating_Speed", CVIBuffer_PointInstance_Floating_Speed::Create(m_pDevice, m_pDeviceContext/*, L"../../Reference/ShaderFile/Shader_Particle.hlsl", 100*/))))
+	{
+		return E_FAIL;
+	}
+
+
 	if (FAILED(g_pGameInstance->Add_Prototype(TOOL_LEVEL::TOOL_LEVEL_LOGO, L"Prototype_Component_VIBuffer_PointInstance_Env_Floating", CVIBuffer_PointInstance_Env_Floating::Create(m_pDevice, m_pDeviceContext/*, L"../../Reference/ShaderFile/Shader_Particle.hlsl", 100*/))))
 	{
 		return E_FAIL;
@@ -344,6 +351,11 @@ HRESULT CMFCMainApp::Ready_GameObject_Prototype()
 	}
 
 	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Effect_Floating"), CMFCEffect_Floating::Create(m_pDevice, m_pDeviceContext))))
+	{
+		return E_FAIL;
+	}
+
+	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Effect_Floating_Speed"), CMFCEffect_Floating_Speed::Create(m_pDevice, m_pDeviceContext))))
 	{
 		return E_FAIL;
 	}

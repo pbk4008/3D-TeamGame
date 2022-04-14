@@ -32,6 +32,7 @@ HRESULT CUI_ItemSlot::NativeConstruct(const _uint iSceneID, void* pArg)
 		return E_FAIL;
 
 	desc = (*(ItemSlotDesc*)pArg);
+	desc.pOwner = this;
 
 	if (FAILED(Ready_Component()))
 		return E_FAIL;
@@ -57,6 +58,16 @@ _int CUI_ItemSlot::LateTick(_double TimeDelta)
 	if (FAILED(CUI::LateTick(TimeDelta)))
 		return -1;
 
+	if (m_fInitPos > m_fEndPos)
+	{
+		m_fInitPos -= TimeDelta * 100.f;
+		if (m_fInitPos < m_fEndPos)
+		{
+			m_fInitPos = m_fEndPos;
+		}
+		m_pTransform->Set_State(CTransform::STATE_POSITION, _vector{ m_fInitPos, 0.f, 0.f, 1.f });
+	}
+
 	if(m_pBG->getActive())
 		m_pBG->LateTick(TimeDelta);
 
@@ -71,6 +82,7 @@ _int CUI_ItemSlot::LateTick(_double TimeDelta)
 
 	if (m_pEquipedText->getActive())
 		m_pEquipedText->LateTick(TimeDelta);
+
 
 	return _int();
 }
@@ -96,6 +108,14 @@ HRESULT CUI_ItemSlot::Render()
 		m_pEquipedText->Render();
 
 	return S_OK;
+}
+
+void CUI_ItemSlot::setActive(_bool bActive)
+{
+	this->m_bActive = bActive;
+
+	if (false == bActive)
+		m_fInitPos = 10.f;
 }
 
 HRESULT CUI_ItemSlot::Ready_Component(void)

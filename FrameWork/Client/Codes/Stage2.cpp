@@ -10,7 +10,13 @@
 #include "UI_Player_HpBar_Red.h"
 #include "UI_Blank_CKey.h"
 #include "UI_Fill_CKey.h"
+#include "UI_Tuto_Base.h"
+#include "UI_Tuto_Font.h"
+
 #include "Effect_Env_Fire.h"
+
+#include "DropManager.h"
+
 
 CStage2::CStage2(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
 	: CLevel(pDevice, pDeviceContext)
@@ -27,16 +33,18 @@ HRESULT CStage2::NativeConstruct()
 #ifndef _DEBUG
 	m_bDebug = false;
 #endif
-	if (FAILED(Ready_Light())) MSGBOX("Failed To Creating Light");
-
 	if (FAILED(CLevel::NativeConstruct()))
 		return E_FAIL;
+
+	if (FAILED(Ready_Light())) MSGBOX("Failed To Creating Light");
 
 	if (FAILED(Ready_NaviMesh()))
 		return E_FAIL;
 
 	if (FAILED(Ready_MapObject()))
 		return E_FAIL;
+
+	g_pWeaponGenerator = CWeaponGenerator::GetInstance();
 
 	if (FAILED(Ready_Player(L"Layer_Silvermane")))
 		return E_FAIL;
@@ -50,6 +58,10 @@ HRESULT CStage2::NativeConstruct()
 	}
 
 	if (FAILED(Ready_TriggerSystem(L"../bin/SaveData/Trigger/MonsterSpawnTrigger2.dat")))
+		return E_FAIL;
+
+	g_pDropManager = CDropManager::GetInstance();
+	if (FAILED(g_pDropManager->NativeConstruct((SCENEID::SCENE_STAGE2))))
 		return E_FAIL;
 
 	return S_OK;
@@ -81,8 +93,8 @@ _int CStage2::Tick(_double TimeDelta)
 		if (m_iCountMonster == 0 && m_bFirst)
 			m_pTriggerSystem->Check_Clear();
 	}
-
-	
+	g_pInteractManager->Tick(TimeDelta);
+	g_pDropManager->Tick();
 
 	return _int();
 }
@@ -100,6 +112,8 @@ HRESULT CStage2::Render()
 
 HRESULT CStage2::Ready_Light()
 {
+	g_pGameInstance->RemoveLight();
+
 	LIGHTDESC			LightDesc;
 
 	ZeroMemory(&LightDesc, sizeof(LIGHTDESC));
@@ -126,6 +140,11 @@ HRESULT CStage2::Ready_Light()
 	LightDesc.vDiffuse = _float4(1.0f, 0.34509f, 0.1333f, 1.f);
 	LightDesc.vPosition = _float3(54.f, 19.f, 237.f);
 	if (FAILED(g_pGameInstance->Add_Light(m_pDevice, m_pDeviceContext, LightDesc))) MSGBOX("Failed To Adding PointLight");
+	
+	
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE2, L"Layer_SkyBox", L"Proto_GameObject_SkyBox")))
+		return E_FAIL;
+	
 	return S_OK;
 }
 
@@ -266,6 +285,32 @@ HRESULT CStage2::Ready_UI(const _tchar* LayerTag)
 	Desc.IDTag = (_uint)GAMEOBJECT::UI_DYNAMIC;
 
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE2, L"Layer_UI", L"Proto_GameObject_UI_Player_HpBar_Red", &Desc)))
+		return E_FAIL;
+
+	CUI_Tuto_Base::UIACTIVEDESC Desc1;
+	ZeroMemory(&Desc1, sizeof(CUI_Tuto_Base::UIACTIVEDESC));
+	_tcscpy_s(Desc1.UIDesc.TextureTag, L"Texture_Tuto_Base");
+	Desc1.UIDesc.bMinus = false;
+	Desc1.UIDesc.fAngle = 0.f;
+	Desc1.UIDesc.fPos = { 1150.f, 360.f, 0.2f };
+	Desc1.UIDesc.fSize = { 333.f , 105.f };
+	Desc1.UIDesc.IDTag = (_uint)GAMEOBJECT::UI_STATIC;
+
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE2, LayerTag, L"Proto_GameObject_UI_Tuto_Base", &Desc1)))
+		return E_FAIL;
+
+	//Tuto Font
+	CUI_Tuto_Font::UIACTIVEDESC Desc2;
+	ZeroMemory(&Desc2, sizeof(CUI_Tuto_Font::UIACTIVEDESC));
+	_tcscpy_s(Desc2.UIDesc.TextureTag, L"Texture_Tuto_Font");
+	Desc2.UIDesc.bMinus = false;
+	Desc2.UIDesc.fAngle = 0.f;
+	Desc2.UIDesc.fPos = { 1130.f, 360.f, 0.1f };
+	Desc2.UIDesc.fSize = { 73.f , 73.f };
+	Desc2.UIDesc.IDTag = (_uint)GAMEOBJECT::UI_STATIC;
+	Desc2.iTextureNum = 0;
+
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE2, LayerTag, L"Proto_GameObject_UI_Tuto_Font", &Desc2)))
 		return E_FAIL;
 
 	//Blank_Ckey
@@ -742,7 +787,6 @@ void CStage2::Trgger_Function6()
 		pLayer = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE2, L"Layer_Bastion_Shooter");
 
 		if (!pLayer)
-			return;
 
 		iter = pLayer->begin();
 		advance(iter, 5);
@@ -1146,4 +1190,8 @@ void CStage2::Free()
 {
 	CLevel::Free();
 	Safe_Release(m_pTriggerSystem);
+	g_pInteractManager->Remove_Interactable();
+	CWeaponGenerator::DestroyInstance();
+	CDropManager::DestroyInstance();
+
 }

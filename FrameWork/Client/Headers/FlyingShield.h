@@ -2,6 +2,10 @@
 
 #include "Weapon.h"
 
+BEGIN(Engine)
+class CSplineCurve;
+END
+
 BEGIN(Client)
 
 class CFlyingShield : public CWeapon
@@ -30,8 +34,15 @@ public:
 private:
 	HRESULT Ready_Components();
 
+	void Return();
+
+	void Spline_Throw();
+	void Spline_Return();
+
 private:
 	CBoxCollider* m_pCollider = nullptr;
+	CSplineCurve* m_pSpline = nullptr;
+
 	DESC m_tDesc{};
 	_bool m_isReturn = false;
 

@@ -81,10 +81,18 @@ _int C2H_HammerIdle::Input(const _double& _dDeltaTime)
 
 	if (g_pGameInstance->getkeyDown(DIK_1))
 	{
-		if (m_pSilvermane->Change_Weapon(L"Needle"))
+		if (m_pSilvermane->Change_Weapon())
 		{
-			if (FAILED(m_pStateController->Change_State(L"1H_SwordEquipOn")))
-				return E_FAIL;
+			if (CWeapon::EType::Sword_1H == m_pSilvermane->Get_WeaponType())
+			{
+				if (FAILED(m_pStateController->Change_State(L"1H_SwordEquipOn")))
+					return E_FAIL;
+			}
+			else if (CWeapon::EType::Hammer_2H == m_pSilvermane->Get_WeaponType())
+			{
+				if (FAILED(m_pStateController->Change_State(L"2H_HammerEquipOn")))
+					return E_FAIL;
+			}
 			return STATE_CHANGE;
 		}
 	}

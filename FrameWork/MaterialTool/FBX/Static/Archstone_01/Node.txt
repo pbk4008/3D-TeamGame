@@ -1,6 +1,0 @@
-머리부분 -> Archstone_03
-
-머리 옆 무늬 부분 -> Archstone 02
-
-뼈대 부분 -> T_Metal_Bare_Scratched
-

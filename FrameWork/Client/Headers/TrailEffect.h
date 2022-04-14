@@ -4,9 +4,17 @@
 
 BEGIN(Client)
 
-class CTrailEffect : public CGameObject
+class CTrailEffect abstract : public CGameObject
 {
-private:
+public:
+	typedef struct tagTrailDesc
+	{
+		CTransform* pOwnerTransform = nullptr;
+		_float fLength = 0.f;
+		_float4x4 matPivot{};
+		wstring wstrTextureTag = L"TrailBase";
+	}DESC;
+protected:
 	explicit CTrailEffect(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext);
 	explicit CTrailEffect(const CTrailEffect& _rhs);
 	virtual ~CTrailEffect() = default;
@@ -18,36 +26,31 @@ public:
 	virtual _int LateTick(_double _dDeltaTime) override;
 	virtual HRESULT Render() override;
 
-private:
-	HRESULT Ready_Components();
+protected:
+	void CatmullRom();
 
 public:
 	void Set_IsRender(const _bool _isRender);
+	void Set_Length(const _float _fLength);
+	void Set_Texture(const wstring& _wstrTextureTag);
+	void Set_PivotMatrix(const _fmatrix& _smatPivot);
 	void Record_Points(const _double& _dDeltaTIme);
 	void Clear_Points();
-	void CatmullRom();
 
-private:
-	_float			m_Frametime = 0.f;
+protected:
 	CVIBuffer_Trail* m_pVIBuffer = nullptr;
 	CTexture* m_pTexture = nullptr;
-	CTexture* m_pTexture1 = nullptr;
-	CTexture* m_pTexture2 = nullptr;
+
+	_bool m_isRender = false;
+	_float m_fAccTime = 0.f;
 
 	list<pair<_float3, _float3>> m_listPoints; // first : start, second : end
 	list<pair<_float3, _float3>> m_listCurved;
 
-	_float m_fAccTime = 0.f;
-	_float m_fLength = 0.f;
-
-	CTransform* m_pTargetTransform = nullptr;
-
-	_bool m_isRender = false;
-	_float4x4 m_matPivot{};
+	DESC m_tDesc;
 
 public:
-	static CTrailEffect* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext);
-	virtual CGameObject* Clone(_uint _iSceneID, void* _pArg = nullptr) override;
+	virtual CGameObject* Clone(_uint _iSceneID, void* _pArg = nullptr) PURE;
 	virtual void Free() override;
 };
 

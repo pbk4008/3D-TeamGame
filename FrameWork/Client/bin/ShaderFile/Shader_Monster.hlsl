@@ -386,7 +386,7 @@ technique11			DefaultTechnique
 
 	pass BastionCloak //------------------------------------------------------------------------------------1 Top
 	{
-		SetRasterizerState(CullMode_Default);
+		SetRasterizerState(CullMode_Default);	
 		SetDepthStencilState(ZDefault, 0);
 		SetBlendState(BlendDisable, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
 
