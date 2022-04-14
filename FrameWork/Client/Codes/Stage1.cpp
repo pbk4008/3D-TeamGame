@@ -39,16 +39,12 @@
 #include "InteractManager.h"
 #include "DropManager.h"
 #include "ScenematicManager.h"
-#include "WeaponGenerator.h"
+
 #include "Wall.h"
 
 //Cinema
 #include "Cinema1_1.h"
 
-
-CDropManager* g_pDropManager = nullptr;
-CInteractManager* g_pInteractManager = nullptr;
-CWeaponGenerator* g_pWeaponGenerator = nullptr;
 
 CStage1::CStage1()
 	: m_pTriggerSystem(nullptr)
@@ -87,7 +83,6 @@ HRESULT CStage1::NativeConstruct()
 	if (FAILED(Ready_Trigger_Jump()))
 		return E_FAIL;
 
-	/* 생성 타이밍으로 인해 여기에 둠 YM */
 	g_pWeaponGenerator = CWeaponGenerator::GetInstance();
 
 	if (FAILED(Ready_Player(L"Layer_Silvermane")))
@@ -166,7 +161,7 @@ _int CStage1::Tick(_double TimeDelta)
 		if (m_iCountMonster == 0 && m_bFirst)
 			m_pTriggerSystem->Check_Clear();
 
-		/*CBoss_Bastion_Judicator* pBoss = (CBoss_Bastion_Judicator*)g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Layer_Boss")->front();
+		CBoss_Bastion_Judicator* pBoss = (CBoss_Bastion_Judicator*)g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Layer_Boss")->front();
 		if (nullptr != pBoss)
 		{
 			if (true == pBoss->Get_Dead())
@@ -175,7 +170,7 @@ _int CStage1::Tick(_double TimeDelta)
 					return -1;
 				return 0;
 			}
-		}*/
+		}
 	}
 	_float3 fPos = { 0.f,5.f,20.f };
 	//if (g_pGameInstance->getkeyDown(DIK_NUMPAD0))
@@ -241,7 +236,6 @@ _int CStage1::Tick(_double TimeDelta)
 	//		return -1;
 	//}
 #pragma endregion
-
 	g_pInteractManager->Tick(TimeDelta);
 	g_pDropManager->Tick();
 
@@ -437,7 +431,7 @@ HRESULT CStage1::Ready_UI(const _tchar* LayerTag)
 	Desc.fSize = { 200.f , 30.f };
 	Desc.IDTag = (_uint)GAMEOBJECT::UI_DYNAMIC;
 
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_UI_Green", L"Proto_GameObject_UI_Player_HpBar", &Desc)))
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_UI_Green", L"Proto_GameObject_UI_Player_HpBar", &Desc)))
 		return E_FAIL;
 
 	//Player HpBar Red
@@ -449,7 +443,7 @@ HRESULT CStage1::Ready_UI(const _tchar* LayerTag)
 	Desc.fSize = { 200.f , 30.f };
 	Desc.IDTag = (_uint)GAMEOBJECT::UI_DYNAMIC;
 
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, LayerTag, L"Proto_GameObject_UI_Player_HpBar_Red", &Desc)))
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Proto_GameObject_UI_Player_HpBar_Red", &Desc)))
 		return E_FAIL;
 
 
@@ -463,7 +457,7 @@ HRESULT CStage1::Ready_UI(const _tchar* LayerTag)
 	Desc1.UIDesc.fSize = { 333.f , 105.f };
 	Desc1.UIDesc.IDTag = (_uint)GAMEOBJECT::UI_STATIC;
 
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, LayerTag, L"Proto_GameObject_UI_Tuto_Base", &Desc1)))
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Proto_GameObject_UI_Tuto_Base", &Desc1)))
 		return E_FAIL;
 	
 	//Tuto Font
@@ -477,7 +471,7 @@ HRESULT CStage1::Ready_UI(const _tchar* LayerTag)
 	Desc2.UIDesc.IDTag = (_uint)GAMEOBJECT::UI_STATIC;
 	Desc2.iTextureNum = 0;
 	
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, LayerTag, L"Proto_GameObject_UI_Tuto_Font", &Desc2)))
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Proto_GameObject_UI_Tuto_Font", &Desc2)))
 		return E_FAIL;
 
 	//Blank_Ckey
@@ -534,7 +528,7 @@ HRESULT CStage1::Ready_Light()
 
 	if (FAILED(g_pGameInstance->Add_Light(m_pDevice, m_pDeviceContext, LightDesc))) MSGBOX("Failed To Adding PointLight");
 
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_SkyBox", L"Proto_GameObject_SkyBox")))
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_SkyBox", L"Proto_GameObject_SkyBox")))
 		return E_FAIL;
 
 	return S_OK;
@@ -542,10 +536,6 @@ HRESULT CStage1::Ready_Light()
 
 HRESULT CStage1::Ready_GameManager(void)
 {
-	g_pInteractManager = CInteractManager::GetInstance();
-	if (FAILED(g_pInteractManager->NativeConstruct()))
-		return E_FAIL;
-
 	g_pDropManager = CDropManager::GetInstance();
 	if (FAILED(g_pDropManager->NativeConstruct((SCENEID::SCENE_STAGE1))))
 		return E_FAIL;
@@ -772,7 +762,7 @@ HRESULT CStage1::Ready_Data_Effect()
 	FullName = L"Proto_GameObject_Effect_Env_Floating";
 
 	vecEnvFloating[0].fMyPos = { -5.f, 1.f, 20.f };
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Env_Floating_1", FullName, &vecEnvFloating[0])))
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Effect_Env_Floating_1", FullName, &vecEnvFloating[0])))
 	{
 		MSGBOX("Failed to Creating Effect_Env_Floating_1 in CStage1::Ready_Effect()");
 		return E_FAIL;
@@ -783,7 +773,7 @@ HRESULT CStage1::Ready_Data_Effect()
 	g_pGameInstance->LoadFile<CEffect_Falling_Leaf::EFFECTDESC>(vecEnvFallingLeaf, L"../bin/SaveData/Effect/Effect_Falling_Leaf.dat");
 
 	FullName = L"Proto_GameObject_Effect_Falling_Leaf";
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Env_Falling_Leaf", FullName, &vecEnvFallingLeaf[0])))
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Effect_Env_Falling_Leaf", FullName, &vecEnvFallingLeaf[0])))
 	{
 		MSGBOX("Failed to Creating Effect_Env_FallingLeaf in CStage1::Ready_Effect()");
 		return E_FAIL;
@@ -1682,9 +1672,8 @@ void CStage1::Free()
 
 	//Safe_Release(m_pScenemaManager);
 	//CScenematicManager::DestroyInstance();
-
+	g_pInteractManager->Remove_Interactable();
+	CWeaponGenerator::DestroyInstance();
 	CDropManager::DestroyInstance();
-	CInteractManager::DestroyInstance();
 	Safe_Release(m_pTriggerSystem);
-
 }

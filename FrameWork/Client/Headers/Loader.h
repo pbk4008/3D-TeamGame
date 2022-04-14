@@ -23,8 +23,6 @@ private:
 	HRESULT Ready_Stage2();
 	HRESULT Ready_Stage3();
 	HRESULT Ready_Test_JS();
-	HRESULT Ready_Test_YM();
-	HRESULT Ready_Test_SB();
 private:
 	//stage1
 	HRESULT SetUp_Stage1_Prototype();

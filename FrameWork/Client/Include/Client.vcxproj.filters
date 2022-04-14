@@ -676,9 +676,6 @@
     <Filter Include="02.GameObject\96.Weapon\99.Shield">
       <UniqueIdentifier>{a9a4ad69-9913-4775-b0c0-8025825621ca}</UniqueIdentifier>
     </Filter>
-    <Filter Include="01.Scene\01.Loading\00.Logo">
-      <UniqueIdentifier>{cac3034c-dd8b-47e8-afc7-da6cb3e9501e}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_Spear\00.Idle">
       <UniqueIdentifier>{2398d3e4-0aad-4c0a-b779-2676cae6f42f}</UniqueIdentifier>
     </Filter>
@@ -1871,7 +1868,7 @@
     </ClInclude>
     <ClInclude Include="..\Headers\Loot_Equipment.h">
       <Filter>02.GameObject\05.UI\05.Hud\00.Loot_Equipment</Filter>
-	</ClInclude>
+    </ClInclude>
     <ClInclude Include="..\Headers\TrailEffect_Distortion.h">
       <Filter>02.GameObject\04.Effect\01.TrailEffect</Filter>
     </ClInclude>
@@ -2878,7 +2875,7 @@
     </ClCompile>
     <ClCompile Include="..\Codes\Loot_Equipment.cpp">
       <Filter>02.GameObject\05.UI\05.Hud\00.Loot_Equipment</Filter>
-	</ClCompile>
+    </ClCompile>
     <ClCompile Include="..\Codes\TrailEffect_Distortion.cpp">
       <Filter>02.GameObject\04.Effect\01.TrailEffect</Filter>
     </ClCompile>

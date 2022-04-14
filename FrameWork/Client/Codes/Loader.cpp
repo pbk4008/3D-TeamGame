@@ -277,7 +277,6 @@ HRESULT CLoader::Load_Stage1Navi_SkyLoad()
 
 	// Texture
 	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"Sky_Texture1", L"../Bin/Resources/Texture/SkyBox/SkyBox_Stage1.dds"))) MSGBOX("Failed Add To SkyBoxTex");
-	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"Sky_Texture2", L"../Bin/Resources/Texture/SkyBox/SkyBox_Stage2_1.dds"))) MSGBOX("Failed Add To SkyBoxTex");
 
 	return S_OK;
 }
@@ -712,6 +711,9 @@ HRESULT CLoader::Load_Stage1_Cinema_Object()
 
 HRESULT CLoader::Set_Stage2_Prototype()
 {
+	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"Sky_Texture2", L"../Bin/Resources/Texture/SkyBox/SkyBox_Stage2_1.dds"))) MSGBOX("Failed Add To SkyBoxTex");
+
+
 	return S_OK;
 }
 
@@ -1149,6 +1151,8 @@ HRESULT CLoader::Ready_Stage1()
 
 HRESULT CLoader::Ready_Stage2()
 {
+	if (FAILED(Set_Stage2_Prototype()))
+		return E_FAIL;
 	if (FAILED(Load_Stage2_Object()))
 		return E_FAIL;
 

@@ -68,10 +68,12 @@ HRESULT CNeedle::NativeConstruct(const _uint _iSceneID, void* _pArg)
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer(m_iSceneID, L"Layer_Effect", L"Proto_GameObject_TrailEffect_Normal", &tTrailDesc, (CGameObject**)&m_pTrailEffect_Normal)))
 		MSGBOX(L"노말 트레일 생성 실패. from Needle");
 	tTrailDesc.fLength = 1.f;
+	Safe_AddRef(m_pTrailEffect_Normal);
 	XMStoreFloat4x4(&tTrailDesc.matPivot, XMMatrixTranslation(0.f, 0.f, 2.f));
 	tTrailDesc.wstrTextureTag = L"TrailBase";
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer(m_iSceneID, L"Layer_Effect", L"Proto_GameObject_TrailEffect_Distortion", &tTrailDesc, (CGameObject**)&m_pTrailEffect_Distortion)))
 		MSGBOX(L"디스토션 트레일 생성 실패. from Needle");
+	Safe_AddRef(m_pTrailEffect_Distortion);
 
 	//Light
 	LIGHTDESC			LightDesc;
@@ -135,7 +137,7 @@ _int CNeedle::LateTick(_double _dDeltaTime)
 	if (0 > __super::LateTick(_dDeltaTime))
 		return -1;
 
-	m_pTrailEffect_Normal->Set_Texture(L"Fire_02");
+	/*m_pTrailEffect_Normal->Set_Texture(L"Fire_02");*/
 
 	if (m_isTrail)
 	{
@@ -385,6 +387,6 @@ void CNeedle::Free()
 	CWeapon::Free();
 
 	Safe_Release(m_pCollider);
-	m_pTrailEffect_Normal->Set_Remove(true);
-	m_pTrailEffect_Distortion->Set_Remove(true);
+	Safe_Release(m_pTrailEffect_Normal);
+	Safe_Release(m_pTrailEffect_Distortion);
 }

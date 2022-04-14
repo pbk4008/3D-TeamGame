@@ -62,6 +62,7 @@ HRESULT CFury::NativeConstruct(const _uint _iSceneID, void* _pArg)
 	tTrailDesc.wstrTextureTag = L"Wisp_01";
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer(m_iSceneID, L"Layer_Effect", L"Proto_GameObject_TrailEffect_Normal", &tTrailDesc, (CGameObject**)&m_pTrailEffect_Normal)))
 		MSGBOX(L"노말 트레일 생성 실패. from Needle");
+	Safe_AddRef(m_pTrailEffect_Normal);
 
 	XMStoreFloat4x4(&m_matPivot, XMMatrixRotationRollPitchYaw(XMConvertToRadians(-21.5f), XMConvertToRadians(-118.f), XMConvertToRadians(20.f)) * XMMatrixTranslation(0.28f, 0.11f, 0.05f));
 
@@ -306,5 +307,5 @@ void CFury::Free()
 	CWeapon::Free();
 
 	Safe_Release(m_pCollider);
-	m_pTrailEffect_Normal->Set_Remove(true);
+	Safe_Release(m_pTrailEffect_Normal);
 }

@@ -3,11 +3,15 @@
 #include "BackGround.h"
 #include "MainCamera.h"
 #include "MainCamera_Ortho.h"
-#include "DebugSystem.h"
 #include "Loading.h"
 #include "MeshLoader.h"
+
+#include "DebugSystem.h"
 #include "ShakeManager.h"
 #include "DataManager.h"
+#include "InteractManager.h"
+#include "WeaponGenerator.h"
+#include "DropManager.h"
 
 //Inventory UI Object
 #include "Inven_UIManager.h"
@@ -35,11 +39,15 @@
 #include "SingleImage.h"
 #include "UIHelper.h"
 
+
 CClient_Observer* g_pObserver = nullptr;
 CDebugSystem* g_pDebugSystem = nullptr;
 CShakeManager* g_pShakeManager = nullptr;
 CDataManager* g_pDataManager = nullptr;
 CInven_UIManager* g_pInvenUIManager = nullptr;
+CInteractManager* g_pInteractManager = nullptr;
+CWeaponGenerator* g_pWeaponGenerator = nullptr;
+CDropManager* g_pDropManager = nullptr;
 
 CMainApp::CMainApp()
 {
@@ -239,6 +247,10 @@ if (FAILED(pMeshLoader->Reserve_MeshLoader(m_pDevice, m_pDeviceContext)))
 	if (FAILED(g_pInvenUIManager->NativeConstruct()))
 		return E_FAIL;
 
+	g_pInteractManager = CInteractManager::GetInstance();
+	if (FAILED(g_pInteractManager->NativeConstruct()))
+		return E_FAIL;
+
 	return S_OK;
 }
 
@@ -428,6 +440,7 @@ void CMainApp::Free()
 	CDataManager::DestroyInstance();
 	CInven_UIManager::DestroyInstance();
 	CWeaponGenerator::DestroyInstance();
+	CInteractManager::DestroyInstance();
 
 	Safe_Release(g_pObserver);
 	Safe_Release(m_pRenderer);

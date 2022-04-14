@@ -35,7 +35,7 @@ public:
 public:
 	void DropItem(CItemData itemData, _fvector vecOriginPos);
 	void DropItemUpdate(void);
-
+	void Remove_Interactable();
 public:
 	void AddInteractObject(CInteractableObject* pInteractableObject);
 
