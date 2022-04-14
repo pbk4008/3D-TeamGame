@@ -11,6 +11,13 @@ END
 BEGIN(Client)
 class CEffect_Floating_Speed final : public CEffect
 {
+public:
+	typedef struct tagEffFloatingSpeedDesc : CEffect::EFFECTDESC
+	{
+		_float4 ParticleColor;
+		
+	}FLOATINGSPEEDDESC;
+	
 protected:
 	explicit CEffect_Floating_Speed();
 	explicit CEffect_Floating_Speed(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);
@@ -33,13 +40,12 @@ private:
 
 public:
 	CEffect::EFFECTDESC Get_EffectDesc() {return m_Desc; }
-
 private:
 	CVIBuffer_PointInstance_Floating_Speed* m_pBuffer = nullptr;
 	class CCullingBox* m_pBox = nullptr;
 
 private:
-	CEffect::EFFECTDESC m_Desc;
+	FLOATINGSPEEDDESC m_Desc;
 	CVIBuffer_PointInstance_Floating_Speed::PIDESC m_backupDesc;
 
 public:

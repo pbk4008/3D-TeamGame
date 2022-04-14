@@ -156,6 +156,10 @@ void CGameObject::setActive(_bool bActive)
 
 CTransform* CGameObject::Get_Transform() const
 {
+	if (nullptr == m_pTransform)
+	{
+		return nullptr;
+	}
 	return m_pTransform;
 }
 

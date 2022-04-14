@@ -9,6 +9,7 @@
 #include "Effect_DashDust.h"
 #include "Effect_HitParticle.h"
 #include "Effect_HitFloating.h"
+#include "Effect_Floating_Speed.h"
 #include "Effect_DeathParticle.h"
 #include "Effect_Env_Floating.h"
 #include "Effect_Env_Fire.h"
@@ -87,8 +88,8 @@ HRESULT CStage1::NativeConstruct()
 	if (FAILED(Ready_Light()))
 		return E_FAIL;
 
-	if (FAILED(Ready_Trigger_Jump()))
-		return E_FAIL;
+	//if (FAILED(Ready_Trigger_Jump()))
+	//	return E_FAIL;
 
 	/* 생성 타이밍으로 인해 여기에 둠 YM */
 	g_pWeaponGenerator = CWeaponGenerator::GetInstance();
@@ -96,11 +97,11 @@ HRESULT CStage1::NativeConstruct()
 	if (FAILED(Ready_Player(L"Layer_Silvermane")))
 		return E_FAIL;
 
-	if (FAILED(Ready_MapObject()))
-		return E_FAIL;
+	//if (FAILED(Ready_MapObject()))
+	//	return E_FAIL;
 
-	if (FAILED(Ready_TriggerSystem(L"../bin/SaveData/Trigger/MonsterSpawnTrigger.dat")))
-		return E_FAIL;
+	//if (FAILED(Ready_TriggerSystem(L"../bin/SaveData/Trigger/MonsterSpawnTrigger.dat")))
+	//	return E_FAIL;
 
 	if (FAILED(Ready_Data_UI(L"../bin/SaveData/UI/UI.dat")))
 		return E_FAIL;
@@ -121,8 +122,8 @@ HRESULT CStage1::NativeConstruct()
 
 	g_pGameInstance->PlayBGM(L"Stage1_BGM");
 
-	if (FAILED(Ready_Cinema()))
-		return E_FAIL;
+	//if (FAILED(Ready_Cinema()))
+	//	return E_FAIL;
 
 	//if (FAILED(Ready_Boss(L"Layer_Boss")))
 	//	return E_FAIL;
@@ -174,22 +175,28 @@ _int CStage1::Tick(_double TimeDelta)
 		if (m_iCountMonster == 0 && m_bFirst)
 			m_pTriggerSystem->Check_Clear();
 
-		CBoss_Bastion_Judicator* pBoss = (CBoss_Bastion_Judicator*)g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Layer_Boss")->front();
-		if (nullptr != pBoss)
-		{
-			if (true == pBoss->Get_Dead())
-			{
-				if (FAILED(g_pGameInstance->Open_Level((_uint)SCENEID::SCENE_LOADING, CLoading::Create(m_pDevice, m_pDeviceContext, SCENEID::SCENE_STAGE2))))
-					return -1;
-				return 0;
-			}
-		}
-
+		//CBoss_Bastion_Judicator* pBoss = (CBoss_Bastion_Judicator*)g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Layer_Boss")->front();
+		//if (nullptr != pBoss)
+		//{
+		//	if (true == pBoss->Get_Dead())
+		//	{
+		//		if (FAILED(g_pGameInstance->Open_Level((_uint)SCENEID::SCENE_LOADING, CLoading::Create(m_pDevice, m_pDeviceContext, SCENEID::SCENE_STAGE2))))
+		//			return -1;
+		//		return 0;
+		//	}
+		//}
 	}
 
 #pragma region Using Debug
 	_float3 fPos = { 0.f,5.f,20.f };
-
+	
+	if (g_pGameInstance->getkeyDown(DIK_NUMPAD0))
+	{
+		CBoss_Bastion_Judicator* pMonster = nullptr;
+		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Test", L"Proto_GameObject_Boss_Bastion", &fPos, (CGameObject**)&pMonster)))
+			return -1;
+	}
+	 
 	//if (g_pGameInstance->getkeyDown(DIK_NUMPAD0))
 	//{
 	//	CMonster_Crawler* pMonster = nullptr;
@@ -236,7 +243,7 @@ _int CStage1::Tick(_double TimeDelta)
 	//if (g_pGameInstance->getkeyDown(DIK_NUMPAD7))
 	//{
 	//	CBoss_Bastion_Judicator* pMonster = nullptr;
-	//	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Test", L"Proto_GameObject_Boss_Bastion_Judicator", &fPos, (CGameObject**)&pMonster)))
+	//	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Test", L"Proto_GameObject_Boss_Bastion", &fPos, (CGameObject**)&pMonster)))
 	//		return -1;
 	//}
 	//if (g_pGameInstance->getkeyDown(DIK_NUMPAD8))
@@ -724,6 +731,24 @@ HRESULT CStage1::Ready_Data_Effect()
 		return E_FAIL;
 	}
 
+
+	//OpenBox
+	vector<CEffect_Floating_Speed::EFFECTDESC> vecOpenBox;
+	g_pGameInstance->LoadFile<CEffect_Floating_Speed::EFFECTDESC>(vecOpenBox, L"../bin/SaveData/Effect/Effect_Open_Box.dat");
+
+	FullName = L"Proto_GameObject_Effect_Floating_Speed";
+	//FullName = L"Proto_GameObject_Effect_Attack_Left";
+
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Open_Box", FullName, &vecOpenBox[0], (CGameObject**)&pEffect)))
+	{
+		MSGBOX("Failed to Creating Effect_Open_Box in CStage1::Ready_Effect()");
+		return E_FAIL;
+	}
+	if (FAILED(g_pGameInstance->Add_Effect((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Open_Box", pEffect, 10)))
+	{
+		MSGBOX("Falild to Add_Effect_Open_Box in CStage1::Ready_Effect()");
+		return E_FAIL;
+	}
 #pragma endregion
 
 #pragma region 이펙트매니저에 안들어가는것들
