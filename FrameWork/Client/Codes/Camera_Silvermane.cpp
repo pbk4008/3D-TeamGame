@@ -258,7 +258,8 @@ void CCamera_Silvermane::SpringArm()
 	XMStoreFloat3(&tRaycastDesc.vOrigin, svTargetPos);
 	XMStoreFloat3(&tRaycastDesc.vDir, XMVector3Normalize(svPosition - svTargetPos));
 	tRaycastDesc.fMaxDistance = 4.f;
-	tRaycastDesc.filterData.flags = PxQueryFlag::eSTATIC;
+	tRaycastDesc.filterData.flags = PxQueryFlag::eANY_HIT | PxQueryFlag::eSTATIC;
+	tRaycastDesc.layerMask = (1 << (_uint)ELayer::Enviroment);
 	if (g_pGameInstance->Raycast(tRaycastDesc))
 	{
 		for (_uint i = 0; i < tRaycastDesc.iHitNum; ++i)

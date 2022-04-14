@@ -10,6 +10,7 @@ class CQueryFilterCallback : public PxQueryFilterCallback
 public:
 	explicit CQueryFilterCallback();
 	explicit CQueryFilterCallback(const PxU32 layerMask);
+	explicit CQueryFilterCallback(const PxU32 layerMask, const _bool _isOnce);
 	virtual ~CQueryFilterCallback() = default;
 	
 	// PxQueryFilterCallback을(를) 통해 상속됨
@@ -18,6 +19,7 @@ public:
 
 private:
 	PxU32 m_layerMask = 0;
+	_bool m_isOnce = false;
 };
 
 END
