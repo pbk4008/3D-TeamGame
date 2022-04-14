@@ -122,11 +122,11 @@ HRESULT CStage1::NativeConstruct()
 	g_pGameInstance->Change_BaseCamera(L"Camera_Silvermane");
 	g_pGameInstance->PlayBGM(L"Stage1_BGM");
 
-	if (FAILED(Ready_Meteor()))
-		return E_FAIL;
+	//if (FAILED(Ready_Meteor()))
+	//	return E_FAIL;
 
-	if (FAILED(Ready_Cinema()))
-		return E_FAIL;
+	//if (FAILED(Ready_Cinema()))
+	//	return E_FAIL;
 
 	//if (FAILED(Ready_Boss(L"Layer_Boss")))
 	//	return E_FAIL;
