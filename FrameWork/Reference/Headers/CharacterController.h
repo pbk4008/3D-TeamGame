@@ -55,6 +55,8 @@ public:
 	void setPosition(const _float3& _vPosition);
 	void setOwnerTransform(CTransform* _pTransform);
 
+	void setShapeLayer(const _uint _iLayer);
+
 	const _bool IsDown();
 	const _bool IsUp();
 	const _bool IsSides();

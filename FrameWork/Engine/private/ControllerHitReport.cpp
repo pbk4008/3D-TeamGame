@@ -32,10 +32,8 @@ void CControllerHitReport::onShapeHit(const PxControllerShapeHit& hit)
 
 void CControllerHitReport::onControllerHit(const PxControllersHit& hit)
 {
-	int a = 0;
 }
 
 void CControllerHitReport::onObstacleHit(const PxControllerObstacleHit& hit)
 {
-	int a = 0;
 }

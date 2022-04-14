@@ -1,6 +1,5 @@
 #include "pch.h"
 #include "Weapon.h"
-#include "SwordTrail.h"
 
 CWeapon::CWeapon(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
 	: CGameObject(_pDevice, _pDeviceContext)

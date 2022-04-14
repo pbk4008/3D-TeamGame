@@ -62,10 +62,12 @@ HRESULT CSkyBox::Render()
 	m_pVIBufferCom->SetUp_ValueOnShader("g_ProjMatrix", &proj, sizeof(_matrix));
 	m_pVIBufferCom->SetUp_ValueOnShader("g_campos", &campos, sizeof(_vector));
 
-	if(g_pGameInstance->getCurrentLevel() == 3)
+	if(g_pGameInstance->getCurrentLevel() == (_uint)SCENEID::SCENE_STAGE1)
 		m_pVIBufferCom->SetUp_TextureOnShader("g_DiffuseTexture", m_pTexture);
-	else if(g_pGameInstance->getCurrentLevel() == 4)
+	else if(g_pGameInstance->getCurrentLevel() == (_uint)SCENEID::SCENE_STAGE2)
 		m_pVIBufferCom->SetUp_TextureOnShader("g_DiffuseTexture", m_pTexture2);
+	else if (g_pGameInstance->getCurrentLevel() == (_uint)SCENEID::SCENE_TEST_JS)
+		m_pVIBufferCom->SetUp_TextureOnShader("g_DiffuseTexture", m_pTexture);
 
 	m_pVIBufferCom->Render(0);
 

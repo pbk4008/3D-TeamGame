@@ -68,6 +68,14 @@ _int CShield_Walk::Input(const _double& _dDeltaTime)
 	if (NO_EVENT != iProgress)
 		return iProgress;
 
+
+	if (g_pGameInstance->getMouseKeyDown(CInputDev::MOUSESTATE::MB_RBUTTON))
+	{
+		if (FAILED(m_pStateController->Change_State(L"Shield_Throw")))
+			return -1;
+		return STATE_CHANGE;
+	}
+
 	if (g_pGameInstance->getkeyUp(DIK_Q))
 	{
 		if (FAILED(m_pStateController->Change_State(L"Shield_BlockEnd")))

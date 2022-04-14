@@ -517,6 +517,7 @@ HRESULT CSilvermane::Ready_Components()
 	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_CharacterController", L"CharacterController", (CComponent**)&m_pCharacterController, &tCharacterControllerDesc)))
 		return E_FAIL;
 	m_pCharacterController->setOwnerTransform(m_pTransform);
+	m_pCharacterController->setShapeLayer((_uint)ELayer::Player);
 
 	m_pTexture = g_pGameInstance->Clone_Component<CTexture>(0, L"Proto_Component_Texture");
 	m_pTexture->Change_Texture(L"Texture_SilvermeanNewHair");
@@ -1361,6 +1362,7 @@ const _bool CSilvermane::Raycast_JumpNode(const _double& _dDeltaTime)
 	XMStoreFloat3(&tRaycastDesc.vDir, svRayDir);
 	tRaycastDesc.fMaxDistance = 50.f;
 	tRaycastDesc.filterData.flags = PxQueryFlag::eANY_HIT | PxQueryFlag::eDYNAMIC;
+	tRaycastDesc.layerMask = (1 << (_uint)ELayer::JumpTrigger);
 	CGameObject* pHitObject = nullptr;
 	tRaycastDesc.ppOutHitObject = &pHitObject;
 	if (g_pGameInstance->Raycast(tRaycastDesc))

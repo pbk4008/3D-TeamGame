@@ -97,7 +97,7 @@ HRESULT CMonster_Bastion_Healer::NativeConstruct(const _uint _iSceneID, void* _p
 
 	m_isFall = true;
 
-	//setActive(false);
+	setActive(false);
 	return S_OK;
 }
 
@@ -333,6 +333,7 @@ HRESULT CMonster_Bastion_Healer::Ready_Components()
 	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_CharacterController", L"CharacterController", (CComponent**)&m_pCharacterController, &tCharacterControllerDesc)))
 		return E_FAIL;
 	m_pCharacterController->setOwnerTransform(m_pTransform);
+	m_pCharacterController->setShapeLayer((_uint)ELayer::Monster);
 
 	// 스테이트 컨트롤러
 	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_StateController", L"StateController", (CComponent**)&m_pStateController)))

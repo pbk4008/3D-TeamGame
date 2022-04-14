@@ -59,6 +59,8 @@ public:
 	void setKinematic(const _bool _isKinematic);
 	void setTrigger(const _bool _isTrigger);
 	void setSceneQuery(const _bool _isSceneQuery);
+	
+	void setShapeLayer(const _uint _iLayer);
 
 	_int Update_Transform();
 	_int Update_PxTransform();

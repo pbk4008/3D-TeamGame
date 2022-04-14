@@ -162,6 +162,12 @@ void CCollider::setSceneQuery(const _bool _isSceneQuery)
 	m_tDesc.isSceneQuery = _isSceneQuery;
 }
 
+void CCollider::setShapeLayer(const _uint _iLayer)
+{
+	if (m_pPhsyX)
+		m_pPhsyX->Set_ShapeLayer(m_pShape, _iLayer);
+}
+
 _int CCollider::Update_Transform()
 {
 	PxTransform pxTransform = m_pRigidActor->getGlobalPose();

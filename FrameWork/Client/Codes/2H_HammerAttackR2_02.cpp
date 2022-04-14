@@ -65,6 +65,9 @@ HRESULT C2H_HammerAttackR2_02::EnterState()
 
 	m_iAttackStartIndex = 15;
 	m_iAttackEndIndex = 35;
+	m_iTrailStartIndex = 15;
+	m_iTrailEndIndex = 35;
+
 	m_iShakeIndex = 24;
 	return S_OK;
 }

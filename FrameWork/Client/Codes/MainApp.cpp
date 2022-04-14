@@ -49,6 +49,16 @@ HRESULT CMainApp::NativeConstruct()
 		return E_FAIL;
 	RELEASE_INSTANCE(CGameInstance);
 
+	g_pGameInstance->Set_NumLayers((_uint)ELayer::Max);
+	// 플레이어
+	g_pGameInstance->Set_CollisionLayer((_uint)ELayer::Player, (_uint)ELayer::Enviroment);
+	g_pGameInstance->Set_CollisionLayer((_uint)ELayer::Player, (_uint)ELayer::MonsterWeapon);
+	g_pGameInstance->Set_CollisionLayer((_uint)ELayer::Player, (_uint)ELayer::JumpTrigger);
+	g_pGameInstance->Set_CollisionLayer((_uint)ELayer::Player, (_uint)ELayer::Monster);
+	// 몬스터
+	g_pGameInstance->Set_CollisionLayer((_uint)ELayer::Monster, (_uint)ELayer::Enviroment);
+	g_pGameInstance->Set_CollisionLayer((_uint)ELayer::Monster, (_uint)ELayer::Weapon);
+
 	if (FAILED(Ready_Fonts()))
 		return E_FAIL;
 

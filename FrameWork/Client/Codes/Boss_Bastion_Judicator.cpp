@@ -79,7 +79,7 @@ HRESULT CBoss_Bastion_Judicator::NativeConstruct(const _uint _iSceneID, void* pA
 	m_pPanel->Set_HpBar(Get_HpRatio());
 	m_pPanel->Set_GroggyBar(Get_GroggyGaugeRatio());
 
-	//setActive(false);
+	setActive(false);
 
 	m_tAttackDesc.iLevel = 2;
 
@@ -305,6 +305,7 @@ HRESULT CBoss_Bastion_Judicator::SetUp_Components()
 	if (FAILED(__super::SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_CharacterController", L"CharacterController", (CComponent**)&m_pCharacterController, &tCharacterControllerDesc)))
 		return E_FAIL;
 	m_pCharacterController->setOwnerTransform(m_pTransform);
+	m_pCharacterController->setShapeLayer((_uint)ELayer::Monster);
 
 	return S_OK;
 }

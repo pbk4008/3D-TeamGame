@@ -102,7 +102,7 @@ HRESULT CMonster_EarthAberrant::NativeConstruct(const _uint _iSceneID, void* _pA
 	m_tAttackDesc.iLevel = 1;
 	m_tAttackDesc.fDamage = 3.f;
 
-	//setActive(false);
+	setActive(false);
 
 	return S_OK;
 }
@@ -327,6 +327,7 @@ HRESULT CMonster_EarthAberrant::SetUp_Components()
 	if (FAILED(__super::SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_CharacterController", L"CharacterController", (CComponent**)&m_pCharacterController, &tCharacterControllerDesc)))
 		return E_FAIL;
 	m_pCharacterController->setOwnerTransform(m_pTransform);
+	m_pCharacterController->setShapeLayer((_uint)ELayer::Monster);
 
 	return S_OK;
 }

@@ -62,7 +62,9 @@ enum class ELayer
 	Player,
 	Monster,
 	Weapon,
+	MonsterWeapon,
 	JumpTrigger,
+	ItemBox,
 	Max
 };
 
