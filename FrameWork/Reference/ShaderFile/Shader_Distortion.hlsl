@@ -89,7 +89,7 @@ PS_OUT_DISTORTION PS_MAIN_WALL(PS_IN_DISTORTION In)
 
 	if (g_bdissolve == true)
 	{
-		Dissolve(g_DissolveTex, DefaultSampler, In.vUvDepth.xy, g_dissolvetime);
+		Out.diffuse = Dissolve(g_DiffuseTexture, g_DissolveTex, DefaultSampler, In.vUvDepth.xy, g_dissolvetime);
 	}
 	
 	return Out;

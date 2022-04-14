@@ -71,11 +71,11 @@ _int CEnvironment::LateTick(_double TimeDelta)
 
 	if(FAILED(m_pRenderer->Add_RenderGroup(CRenderer::RENDER_NONALPHA, this))) return -1;
 
-	if (m_pRenderer->Get_RenderButton(CRenderer::VELOCITYBLUR) == true)
-	{
-		if (FAILED(m_pRenderer->Add_RenderGroup(CRenderer::RENDER_VELOCITY, this)))
-			return -1;
-	}
+	//if (m_pRenderer->Get_RenderButton(CRenderer::VELOCITYBLUR) == true)
+	//{
+	//	if (FAILED(m_pRenderer->Add_RenderGroup(CRenderer::RENDER_VELOCITY, this)))
+	//		return -1;
+	//}
 
 	return _int();
 }
@@ -166,6 +166,8 @@ HRESULT CEnvironment::Render_Velocity()
 
 	for (_uint i = 0; i < m_Nummeshcontainer; i++)
 		m_pInstanceMesh->Render(i, 3);
+
+	m_PreWroldMat = m_pTransform->Get_WorldMatrix();
 
 	return S_OK;
 }
