@@ -58,6 +58,7 @@ HRESULT CEffect_Env_Floating::NativeConstruct(const _uint _iSceneID, void* pArg)
 	Desc.iNumInstance = m_Desc.iNumInstance;
 	Desc.fLifeTime = m_Desc.fMaxLifeTime;
 	Desc.fCurTime = m_Desc.fCurTime;
+	Desc.bGravity = m_Desc.bUsingGravity;
 
 	//m_pBuffer->Set_Desc(Desc);
 	//m_pBuffer->Particle_Reset();
@@ -200,6 +201,8 @@ HRESULT CEffect_Env_Floating::SetUp_Components()
 	m_backupDesc.iNumInstance = m_Desc.iNumInstance;
 	m_backupDesc.fLifeTime = m_Desc.fMaxLifeTime;
 	m_backupDesc.fCurTime = m_Desc.fCurTime;
+	m_backupDesc.bGravity = m_Desc.bUsingGravity;
+
 	if (FAILED(__super::SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_VIBuffer_PointInstance_Env_Floating", L"Com_VIBuffer", (CComponent**)&m_pBuffer, &m_backupDesc)))
 		return E_FAIL;
 	return S_OK;

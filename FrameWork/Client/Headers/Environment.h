@@ -27,6 +27,7 @@ public:
 	virtual _int LateTick(_double TimeDelta);
 	virtual HRESULT Render()override;
 	virtual HRESULT	Render_Shadow() override;
+	virtual HRESULT	Render_Velocity() override;
 private:
 	HRESULT Ready_Component();
 	HRESULT Culling();

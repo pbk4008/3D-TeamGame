@@ -229,4 +229,10 @@ namespace Engine
 		_float4 camdir = _float4(0, 0, 0, 0);
 
 	}RIM;
+
+	typedef struct tagMotionblur
+	{
+		_float4x4 RotationMat;
+		_float4x4 preWorldViewPorjMat;
+	}MOTIONBLUR;
 }

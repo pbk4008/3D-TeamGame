@@ -187,6 +187,8 @@ HRESULT CEffect_HitFloating::SetUp_Components()
 	m_backupDesc.iNumInstance = m_Desc.iNumInstance;
 	m_backupDesc.fLifeTime = m_Desc.fMaxLifeTime;
 	m_backupDesc.fCurTime = m_Desc.fCurTime;
+	m_backupDesc.bGravity = m_Desc.bUsingGravity;
+
 	if (FAILED(__super::SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_VIBuffer_PointInstance_Floating", L"Com_VIBuffer", (CComponent**)&m_pBuffer, &m_backupDesc)))
 		return E_FAIL;
 	return S_OK;

@@ -135,6 +135,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>../../Reference/Library/Debug/;../../Reference/Headers/</AdditionalLibraryDirectories>
       <Profile>false</Profile>
+      <LargeAddressAware>true</LargeAddressAware>
     </Link>
     <PostBuildEvent>
       <Command>cd $(SolutionDir)

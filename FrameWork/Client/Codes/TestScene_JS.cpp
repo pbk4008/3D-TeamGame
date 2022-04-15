@@ -33,6 +33,7 @@ CTestScene_JS::CTestScene_JS(ID3D11Device* pDevice, ID3D11DeviceContext* pDevice
 HRESULT CTestScene_JS::NativeConstruct()
 {
 	if (FAILED(__super::NativeConstruct())) return E_FAIL;
+	g_pWeaponGenerator = CWeaponGenerator::GetInstance();
 
 	if (FAILED(Ready_Light()))
 		return E_FAIL;
@@ -139,7 +140,8 @@ HRESULT CTestScene_JS::Ready_Gameobject()
 		return E_FAIL;
 	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_JS, L"Layer_Weapon", L"Proto_GameObject_FlyingShield")))
 	//	return E_FAIL;
-
+	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_JS, L"Layer_Effect", L"Proto_GameObject_MeshEffect")))
+	//	return E_FAIL;
 
 	// 점프 노드들
 	CJumpNode::DESC tJumpNodeDesc;

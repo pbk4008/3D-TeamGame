@@ -121,6 +121,11 @@ HRESULT CGameObject::Render_Shadow()
 	return S_OK;
 }
 
+HRESULT CGameObject::Render_Velocity()
+{
+	return S_OK;
+}
+
 void CGameObject::OnCollisionEnter(CCollision& collision)
 {
 }

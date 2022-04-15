@@ -28,7 +28,9 @@ _int CCrawler_Death::Tick(const _double& TimeDelta)
 	if (NO_EVENT != iProgress)
 		return iProgress;
 
-	m_pTransform->Face_Target(g_pObserver->Get_PlayerPos());
+	if(m_pMonster->Get_Dead() == false)
+		m_pTransform->Face_Target(g_pObserver->Get_PlayerPos());
+
 	m_pAnimator->Tick(TimeDelta);
 
 	//if (m_pAnimator->Get_AnimController()->Is_Finished())

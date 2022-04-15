@@ -62,14 +62,14 @@ HRESULT CNeedle::NativeConstruct(const _uint _iSceneID, void* _pArg)
 	// 트레일 이펙트 달기
 	CTrailEffect::DESC tTrailDesc;
 	tTrailDesc.pOwnerTransform = m_pTransform;
-	tTrailDesc.fLength = 1.f;
+	tTrailDesc.fLength = 0.5f;
 	XMStoreFloat4x4(&tTrailDesc.matPivot, XMMatrixTranslation(0.f, 0.f, 2.f));
-	tTrailDesc.wstrTextureTag = L"WispTrail_Thin";
+	tTrailDesc.wstrTextureTag = L"Fire_02";
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer(m_iSceneID, L"Layer_Effect", L"Proto_GameObject_TrailEffect_Normal", &tTrailDesc, (CGameObject**)&m_pTrailEffect_Normal)))
 		MSGBOX(L"노말 트레일 생성 실패. from Needle");
-	tTrailDesc.fLength = 1.f;
 	Safe_AddRef(m_pTrailEffect_Normal);
-	XMStoreFloat4x4(&tTrailDesc.matPivot, XMMatrixTranslation(0.f, 0.f, 2.f));
+	tTrailDesc.fLength = 1.f;
+	XMStoreFloat4x4(&tTrailDesc.matPivot, XMMatrixTranslation(0.f, 0.f, 1.5f));
 	tTrailDesc.wstrTextureTag = L"TrailBase";
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer(m_iSceneID, L"Layer_Effect", L"Proto_GameObject_TrailEffect_Distortion", &tTrailDesc, (CGameObject**)&m_pTrailEffect_Distortion)))
 		MSGBOX(L"디스토션 트레일 생성 실패. from Needle");
@@ -137,8 +137,6 @@ _int CNeedle::LateTick(_double _dDeltaTime)
 	if (0 > __super::LateTick(_dDeltaTime))
 		return -1;
 
-	//m_pTrailEffect_Normal->Set_Texture(L"Fire_02");
-
 	if (m_isTrail)
 	{
 		m_pTrailEffect_Normal->Record_Points(_dDeltaTime);
@@ -158,6 +156,10 @@ _int CNeedle::LateTick(_double _dDeltaTime)
 
 	if(m_pRenderer)
 		m_pRenderer->Add_RenderGroup(CRenderer::RENDER_NONALPHA, this);
+
+	if (m_pRenderer && m_pRenderer->Get_RenderButton(CRenderer::VELOCITYBLUR) == true)
+		m_pRenderer->Add_RenderGroup(CRenderer::RENDER_VELOCITY, this);
+	
 
 	return _int();
 }
@@ -187,16 +189,21 @@ HRESULT CNeedle::Render()
 	for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
 		m_pModel->Render(i, 0);
 
+	if (m_pRenderer->Get_RenderButton(CRenderer::VELOCITYBLUR) == false)
+		m_PreWroldMat = m_pTransform->Get_WorldMatrix();
 	return S_OK;
 }
 
 HRESULT CNeedle::Render_Shadow()
 {
-	wstring wstrCamTag = g_pGameInstance->Get_BaseCameraTag();
-	CWeapon::BindConstantBuffer(wstrCamTag);
-	CWeapon::BindLightBuffer();
-	for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
-		m_pModel->Render(i, 1);
+	CWeapon::Render_Shadow();
+
+	return S_OK;
+}
+
+HRESULT CNeedle::Render_Velocity()
+{
+	CWeapon::Render_Velocity();
 
 	return S_OK;
 }

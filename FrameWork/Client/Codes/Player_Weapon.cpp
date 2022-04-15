@@ -46,7 +46,7 @@ HRESULT CPlayer_Weapon::NativeConstruct(const _uint _iSceneID, Desc _desc)
 
 		pMtrl = CMaterial::Create(m_pDevice, m_pDeviceContext, m_szMIname, m_szMIFilePath, CMaterial::EType::Static);
 
-		for (_int i = 0; i < desc.NumMat; ++i)
+		for (_uint i = 0; i < desc.NumMat; ++i)
 		{
 			std::wstring szMiTexPath = L"../bin/Resources/Mesh/";
 			szMiTexPath = m_szMiTexPath + m_wstrName + L"/";
@@ -219,6 +219,7 @@ HRESULT CPlayer_Weapon::Ready_Components()
 			return E_FAIL;
 		_matrix smatPivot = XMMatrixTranslation(0.f, 0.f, 0.4f);
 		m_pBoxCollider->setPivotMatrix(smatPivot);
+		m_pBoxCollider->setShapeLayer((_uint)ELayer::Weapon);
 	}
 	else
 	{
@@ -231,6 +232,7 @@ HRESULT CPlayer_Weapon::Ready_Components()
 
 		_matrix smatPviot = XMMatrixRotationY(XMConvertToRadians(90.f)) * XMMatrixTranslation(0.f, 0.f, 0.8f);
 		m_pCapsuleCollider->setPivotMatrix(smatPviot);
+		m_pCapsuleCollider->setShapeLayer((_uint)ELayer::Weapon);
 	}
 
 

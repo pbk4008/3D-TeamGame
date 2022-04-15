@@ -52,8 +52,75 @@ VS_OUT VS_MAIN_ANIM(VS_IN In)
 	return Out;
 
 }
-// VS_SHADOWMAP
+
 //*---------------------------------------------------------------------------------------------*
+// VS_Velocity
+struct VS_OUT_VELOCITY
+{
+	float4 vPosition : SV_POSITION;
+	float4 vVelocity : TEXCOORD0;
+};
+
+VS_OUT_VELOCITY VS_MAIN_VELOCITY(VS_IN In)
+{
+	VS_OUT_VELOCITY Out = (VS_OUT_VELOCITY) 0;
+	
+	matrix matWV, matWVP;
+
+	matWV = mul(g_WorldMatrix, g_ViewMatrix);
+	matWVP = mul(matWV, g_ProjMatrix);
+	
+	
+	half4 vCurPosition = mul(vector(In.vPosition, 1.f), matWVP);
+	Out.vPosition = vCurPosition;
+	half4 normal = mul(vector(In.vNormal, 0.f),matWVP);
+	normal = mul(normal, matWVP);
+
+	half4 curpos = Out.vPosition;
+	half4 prepos = mul(vector(In.vPosition, 1.f), g_PreWorldViewProj);
+	half3 dir = curpos.xyz - prepos.xyz;
+	
+	half a = dot(normalize(dir), normalize(normal.xyz));
+	if (a < 0.f)
+		Out.vPosition = prepos;
+	else
+		Out.vPosition = curpos;
+	
+	half2 velocity = (curpos.xy / curpos.w) - (prepos.xy / prepos.w);
+	Out.vVelocity.xy = velocity * 0.5f;
+	Out.vVelocity.y *= -1.f;
+	Out.vVelocity.z = Out.vPosition.z;
+	Out.vVelocity.w = Out.vPosition.w;
+	
+	return Out;
+}
+
+// PS Velocity Map
+struct PS_IN_VELOCITY
+{
+	float4 vPosition : SV_POSITION;
+	float4 vVelocity : TEXCOORD0;
+};
+
+struct PS_OUT_VELOCITY
+{
+	vector VelocityMap : SV_TARGET0;
+};
+
+PS_OUT_VELOCITY PS_MAIN_VELOCITY(PS_IN_VELOCITY In)
+{
+	PS_OUT_VELOCITY Out = (PS_OUT_VELOCITY) 0.f;
+	
+	Out.VelocityMap.xy = In.vVelocity.xy;
+	Out.VelocityMap.z = In.vVelocity.z / In.vVelocity.w;
+	Out.VelocityMap.w = In.vVelocity.w / 300.f;
+	
+	return Out;
+}
+//*---------------------------------------------------------------------------------------------*
+
+//*---------------------------------------------------------------------------------------------*
+// VS_SHADOWMAP
 
 struct VS_OUT_SHADOW
 {
@@ -82,10 +149,8 @@ VS_OUT_SHADOW VS_MAIN_SHADOW(VS_IN In)
 	Out.worldpos = worldpos.xyz;
 	return Out;
 }
-//*---------------------------------------------------------------------------------------------*
 
-// SHADOWMAP
-//*---------------------------------------------------------------------------------------------*
+// PS SHADOWMAP
 struct PS_IN_SHADOW
 {
 	float4 vPosition : SV_Position;
@@ -237,7 +302,7 @@ technique11			DefaultTechnique
 		PixelShader = compile ps_5_0 PS_MAIN_DISSOLVE();
 	}
 
-	pass ShadowANIM //-----------------------------------------------------------------------------------------3 shadow
+	pass ShadowMap //-----------------------------------------------------------------------------------------2 ShadowMap
 	{
 		SetRasterizerState(CullMode_Default);
 		SetDepthStencilState(ZDefault, 0);
@@ -247,6 +312,18 @@ technique11			DefaultTechnique
 		VertexShader = compile vs_5_0 VS_MAIN_SHADOW();
 		GeometryShader = NULL;
 		PixelShader = compile ps_5_0 PS_MAIN_SHADOW();
+	}
+
+	pass VelocityMap //-----------------------------------------------------------------------------------------3 VeloCityMap
+	{
+		SetRasterizerState(CullMode_Default);
+		SetDepthStencilState(ZDefault, 0);
+		SetBlendState(BlendDisable, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+
+		/* 진입점함수를 지정한다. */
+		VertexShader = compile vs_5_0 VS_MAIN_VELOCITY();
+		GeometryShader = NULL;
+		PixelShader = compile ps_5_0 PS_MAIN_VELOCITY();
 	}
 }
 

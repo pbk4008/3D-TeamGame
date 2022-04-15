@@ -174,6 +174,7 @@ void CFury::RangeAttack()
 	CGameObject* pHitObject = nullptr;
 	tOverlapDesc.ppOutHitObject = &pHitObject;
 	tOverlapDesc.filterData.flags = PxQueryFlag::eDYNAMIC;
+	tOverlapDesc.layerMask = (1 << (_uint)ELayer::Monster);
 	if (g_pGameInstance->Overlap(tOverlapDesc))
 	{
 		_uint iSize = (_uint)tOverlapDesc.vecHitObjects.size();

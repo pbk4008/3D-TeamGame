@@ -220,10 +220,30 @@ HRESULT CSilvermane::NativeConstruct(const _uint _iSceneID, void* _pArg)
 	m_fCurrentHp = m_fMaxHp;
 
 	m_pRenderer->SetRenderButton(CRenderer::PIXEL, true);
-	m_pRenderer->SetRenderButton(CRenderer::PBRHDR, true);
+	m_pRenderer->SetRenderButton(CRenderer::PBR, true);
+	m_pRenderer->SetRenderButton(CRenderer::HDR, true);
 
+	//Light ¼öÁ¤ ÇØ¾ßµÊ
+	LIGHTDESC			LightDesc;
+	ZeroMemory(&LightDesc, sizeof(LIGHTDESC));
+	LightDesc.eType = LIGHTDESC::TYPE_POINT;
+	LightDesc.fRange = 7.f;
+	LightDesc.vDiffuse = _float4(1.f, 0.2f, 0.2f, 1.f);
+	LightDesc.vSpecular = _float4(0.8f, 0.8f, 0.8f, 1.f);
+	LightDesc.vAmbient = _float4(1.f, 1.f, 1.f, 1.f);
+	XMStoreFloat3(&LightDesc.vPosition, m_pTransform->Get_State(CTransform::STATE_POSITION));
+
+	if (nullptr == m_pLight)
+	{
+		if (FAILED(g_pGameInstance->Add_Light(m_pDevice, m_pDeviceContext, LightDesc, &m_pLight)))
+			MSGBOX("Failed To Adding PointLight");
+	}
+
+	m_pLight->Set_Show(false);
+	m_fLightRange = LightDesc.fRange;
 
 	m_pTransform->Set_State(CTransform::STATE_POSITION, XMVectorSet(0.f,5.f, 10.f, 1.f));
+
 	return S_OK;
 }
 
@@ -282,6 +302,21 @@ _int CSilvermane::Tick(_double _dDeltaTime)
 			return iProgress;
 	}
 
+
+	//light °ü·Ã 
+	if (m_bLight && 0.f <= m_fLightRange)
+	{
+		m_fLightRange -= (_float)_dDeltaTime * 15.f;
+		m_pLight->Set_Range(m_fLightRange);
+	}
+
+	if (0.f >= m_fLightRange)
+	{
+		m_fLightRange = 0.f;
+		m_pLight->Set_Show(false);
+		m_bLight = false;
+	}
+
 	return _int();
 }
 
@@ -301,13 +336,19 @@ _int CSilvermane::LateTick(_double _dDeltaTime)
 	if (NO_EVENT != iProgress)
 		return iProgress;
 
-	if (m_pRenderer->Get_Shadow() == true)
+	if (m_pRenderer->Get_RenderButton(CRenderer::SHADOW) == true)
 	{
 		if (FAILED(m_pRenderer->Add_RenderGroup(CRenderer::RENDER_SHADOW, this))) return -1;
 	}
 
 	if (FAILED(m_pRenderer->Add_RenderGroup(CRenderer::RENDER_NONALPHA, this)))
 		return -1;
+
+	if (m_pRenderer->Get_RenderButton(CRenderer::VELOCITYBLUR) == true)
+	{
+		if (FAILED(m_pRenderer->Add_RenderGroup(CRenderer::RENDER_VELOCITY, this)))
+			return -1;
+	}
 
 	// ¹«±â ·¹ÀÕ¾÷µ«
 	if (m_pCurWeapon)
@@ -334,42 +375,12 @@ _int CSilvermane::LateTick(_double _dDeltaTime)
 
 HRESULT CSilvermane::Render()
 {
+	wstring wstrCamTag = g_pGameInstance->Get_BaseCameraTag();
 
 	RIM rimdesc;
 	ZeroMemory(&rimdesc, sizeof(RIM));
-
-	wstring wstrCamTag = g_pGameInstance->Get_BaseCameraTag();
-	if (g_pObserver->IsAttack())
-	{
-		m_color = _float4(0.784f, 0.137f, 0.137f, 0.f);
-	}
-	else
-	{
-		if (m_color.x <= 0.498f)
-			m_color.x = 0.498f;
-		else
-			m_color.x -= 0.005f;
-
-		if (m_color.y >= 0.9411f)
-			m_color.y = 0.9411f;
-		else
-			m_color.y += 0.005f;
-
-		if (m_color.z >= 0.8196f)
-			m_color.z = 0.8196f;
-		else
-			m_color.z += 0.005f;
-	}
-
-	if (m_rimcheck == true)
-	{
-		rimdesc.rimcheck = m_rimcheck;
-		rimdesc.rimcol = _float4(1.f, 0, 0, 1);
-		rimdesc.rimintensity = m_rimintensity; // intensity ³·À» ¼ö·Ï °úÇÏ°Ô ºû³²
-		XMStoreFloat4(&rimdesc.camdir, XMVector3Normalize(m_pTransform->Get_State(CTransform::STATE_POSITION) - g_pGameInstance->Get_CamPosition(L"Camera_Silvermane")));
-		CActor::SetRimIntensity(g_fDeltaTime * -10.f);
-	}
-
+	rimdesc = ColorChange_RimCheck(rimdesc);
+	
 	for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
 	{
 		SCB desc;
@@ -384,9 +395,14 @@ HRESULT CSilvermane::Render()
 		else
 			CActor::BindConstantBuffer(wstrCamTag, &desc, &rimdesc);
 
-		if (FAILED(m_pModel->Render(i, i))) MSGBOX("Fialed To Rendering Silvermane");
+		if (i != 2)
+		{
+			if (FAILED(m_pModel->Render(i, i))) MSGBOX("Fialed To Rendering Silvermane");
+		}
 	}
 
+	if (m_pRenderer->Get_RenderButton(CRenderer::VELOCITYBLUR) == false)
+		m_PreWroldMat = m_pTransform->Get_WorldMatrix();
 #ifdef _DEBUG
 	Render_Debug();
 #endif
@@ -401,6 +417,51 @@ HRESULT CSilvermane::Render_Shadow()
 	CActor::BindLightBuffer();
 	for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
 		m_pModel->Render(i, 4);
+
+	return S_OK;
+}
+
+HRESULT CSilvermane::Render_Velocity()
+{
+	wstring wstrCamTag = g_pGameInstance->Get_BaseCameraTag();
+	SCB desc;
+	ZeroMemory(&desc, sizeof(SCB));
+
+	RIM rimdesc;
+	ZeroMemory(&rimdesc, sizeof(RIM));
+
+	MOTIONBLUR motion;
+	ZeroMemory(&motion, sizeof(MOTIONBLUR));
+	// velocity desc
+	_float4x4 rot;
+	XMStoreFloat4x4(&rot, m_pTransform->Get_WorldMatrix()
+					* g_pGameInstance->Get_Transform(wstrCamTag, TRANSFORMSTATEMATRIX::D3DTS_VIEW)
+					* g_pGameInstance->Get_Transform(wstrCamTag, TRANSFORMSTATEMATRIX::D3DTS_PROJECTION));
+	rot._11 = 1.0f; rot._22 = 1.0f; rot._33 = 1.0f;
+	rot._41 = 0.0f; rot._42 = 0.0f; rot._43 = 0.0f;
+	motion.RotationMat = rot;
+	_matrix prewvp = g_pGameInstance->GetPreViewProtj(m_PreWroldMat);
+	XMStoreFloat4x4(&motion.preWorldViewPorjMat, prewvp);
+	//----------------------------------------------------
+
+	CActor::BindConstantBuffer(wstrCamTag, &desc, &rimdesc, &motion);
+	for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
+	{
+		if (i != 2)
+		{
+			if (FAILED(m_pModel->Render(i, 5))) MSGBOX("Fialed To Rendering Silvermane");
+		}
+	}
+
+
+	m_PreWroldMat = m_pTransform->Get_WorldMatrix();
+	/*m_timer += g_fDeltaTime;
+	if (m_timer >= 0.1f) 
+	{
+		m_PreWroldMat = m_pTransform->Get_WorldMatrix();
+		m_timer = 0.f;
+	}*/
+
 
 	return S_OK;
 }
@@ -1341,6 +1402,8 @@ const _bool CSilvermane::Change_Weapon()
 	//{
 	//	return false;
 	//}
+
+	return S_OK;
 }
 
 void CSilvermane::Change_WeaponOnInventory(void)
@@ -1532,6 +1595,21 @@ void CSilvermane::End_ThrowShield()
 	m_isShieldThrow = false;
 }
 
+void CSilvermane::OnLight()
+{
+	if (nullptr != m_pLight)
+	{
+		m_pLight->Set_Pos(m_pTransform->Get_State(CTransform::STATE_POSITION));
+		m_pLight->Set_Show(true);
+
+		m_pLight->Set_Color(XMVectorSet(1.f, 0.2f, 0.2f, 1.f));
+
+		m_fLightRange = 10.f;
+		m_pLight->Set_Range(m_fLightRange);
+		m_bLight = true;
+	}
+}
+
 const _int CSilvermane::Trace_CameraLook(const _double& _dDeltaTime)
 {
 	_vector svCameraLook = m_pCamera->Get_Look();
@@ -1605,6 +1683,42 @@ const _int CSilvermane::Input(const _double& _dDeltaTime)
 	}
 
 	return _int();
+}
+
+RIM CSilvermane::ColorChange_RimCheck(RIM& rimdesc)
+{
+	if (g_pObserver->IsAttack())
+	{
+		m_color = _float4(0.784f, 0.137f, 0.137f, 0.f);
+	}
+	else
+	{
+		if (m_color.x <= 0.498f)
+			m_color.x = 0.498f;
+		else
+			m_color.x -= 0.005f;
+
+		if (m_color.y >= 0.9411f)
+			m_color.y = 0.9411f;
+		else
+			m_color.y += 0.005f;
+
+		if (m_color.z >= 0.8196f)
+			m_color.z = 0.8196f;
+		else
+			m_color.z += 0.005f;
+	}
+
+	if (m_rimcheck == true)
+	{
+		rimdesc.rimcheck = m_rimcheck;
+		rimdesc.rimcol = _float4(1.f, 0, 0, 1);
+		rimdesc.rimintensity = m_rimintensity; // intensity ³·À» ¼ö·Ï °úÇÏ°Ô ºû³²
+		XMStoreFloat4(&rimdesc.camdir, XMVector3Normalize(m_pTransform->Get_State(CTransform::STATE_POSITION) - g_pGameInstance->Get_CamPosition(L"Camera_Silvermane")));
+		CActor::SetRimIntensity(g_fDeltaTime * -10.f);
+	}
+
+	return rimdesc;
 }
 
 CJumpNode* CSilvermane::Get_TargetJumpNode() const

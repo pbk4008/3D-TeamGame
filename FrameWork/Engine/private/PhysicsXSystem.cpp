@@ -479,22 +479,23 @@ const _bool CPhysicsXSystem::Raycast(RAYCASTDESC & _desc)
 	PxVec3 origin = ToPxVec3(_desc.vOrigin);
 	PxVec3 unitDir = ToPxVec3(_desc.vDir);
 
-	CQueryFilterCallback filterCallback(_desc.layerMask);
 	_desc.filterData.flags |= PxQueryFlag::ePREFILTER;
 
 	if (PxQueryFlag::eANY_HIT & _desc.filterData.flags)
 	{
 		PxRaycastBuffer hit;
+		CQueryFilterCallback filterCallback(_desc.layerMask, true);
 		if (m_pScene->raycast(origin, unitDir, _desc.fMaxDistance, hit, _desc.hitFlags, _desc.filterData, &filterCallback))
 		{
 			if (hit.hasBlock)
 			{
 				PxRaycastHit hitInfo = hit.block;
+				_desc.iHitNum = 1;
+				_desc.vecHitObjects.emplace_back(static_cast<CGameObject*>(hitInfo.actor->userData));
+				_desc.vecHitPositions.emplace_back(FromPxVec3(hitInfo.position));
 				if (_desc.ppOutHitObject)
-				{
 					*_desc.ppOutHitObject = static_cast<CGameObject*>(hitInfo.actor->userData);
-					_desc.vHitPos = FromPxVec3(hitInfo.position);
-				}
+				_desc.vHitPos = FromPxVec3(hitInfo.position);
 				return true;
 			}
 		}
@@ -505,6 +506,7 @@ const _bool CPhysicsXSystem::Raycast(RAYCASTDESC & _desc)
 		const PxU32 bufferSize = 128;
 		PxRaycastHit hitBuffer[bufferSize];
 		PxRaycastBuffer buf(hitBuffer, bufferSize);
+		CQueryFilterCallback filterCallback(_desc.layerMask, false);
 		if (m_pScene->raycast(origin, unitDir, _desc.fMaxDistance, buf, _desc.hitFlags, _desc.filterData, &filterCallback))
 		{
 			_desc.iHitNum = buf.nbTouches;
@@ -533,22 +535,23 @@ const _bool CPhysicsXSystem::Sweep(SWEEPDESC& _desc)
 	origin.q = ToPxQuat(_desc.vQuat);
 	PxVec3 unitDir = ToPxVec3(_desc.vDir);
 
-	CQueryFilterCallback filterCallback(_desc.layerMask);
 	_desc.filterData.flags |= PxQueryFlag::ePREFILTER;
 
 	if (PxQueryFlag::eANY_HIT & _desc.filterData.flags)
 	{
 		PxSweepBuffer hit;
+		CQueryFilterCallback filterCallback(_desc.layerMask, true);
 		if (m_pScene->sweep(_desc.geometry.any(), origin, unitDir, _desc.fMaxDistance, hit, _desc.hitFlags, _desc.filterData, &filterCallback))
 		{
 			if (hit.hasBlock)
 			{
 				PxSweepHit hitInfo = hit.block;
+				_desc.iHitNum = 1;
+				_desc.vecHitObjects.emplace_back(static_cast<CGameObject*>(hitInfo.actor->userData));
+				_desc.vecHitPositions.emplace_back(FromPxVec3(hitInfo.position));
 				if (_desc.ppOutHitObject)
-				{
 					*_desc.ppOutHitObject = static_cast<CGameObject*>(hitInfo.actor->userData);
-					_desc.vHitPos = FromPxVec3(hitInfo.position);
-				}
+				_desc.vHitPos = FromPxVec3(hitInfo.position);
 				return true;
 			}
 		}
@@ -558,6 +561,7 @@ const _bool CPhysicsXSystem::Sweep(SWEEPDESC& _desc)
 		const PxU32 bufferSize = 128;
 		PxSweepHit hitBuffer[bufferSize];
 		PxSweepBuffer buf(hitBuffer, bufferSize);
+		CQueryFilterCallback filterCallback(_desc.layerMask, false);
 		if (m_pScene->sweep(_desc.geometry.any(), origin, unitDir, _desc.fMaxDistance, buf, _desc.hitFlags, _desc.filterData, &filterCallback))
 		{
 			_desc.iHitNum = buf.nbTouches;
@@ -583,18 +587,19 @@ const _bool CPhysicsXSystem::Overlap(OVERLAPDESC& _desc)
 	PxTransform origin;
 	origin.p = ToPxVec3(_desc.vOrigin);
 	origin.q = ToPxQuat(_desc.vQuat);
-
-	CQueryFilterCallback filterCallback(_desc.layerMask);
 	_desc.filterData.flags |= PxQueryFlag::ePREFILTER;
 
 	if (PxQueryFlag::eANY_HIT & _desc.filterData.flags)
 	{
 		PxOverlapBuffer hit;
+		CQueryFilterCallback filterCallback(_desc.layerMask, true);
 		if (m_pScene->overlap(_desc.geometry.any(), origin, hit, _desc.filterData, &filterCallback))
 		{
 			if (hit.hasBlock)
 			{
 				PxOverlapHit hitInfo = hit.block;
+				_desc.iHitNum = 1;
+				_desc.vecHitObjects.emplace_back(static_cast<CGameObject*>(hitInfo.actor->userData));
 				if (_desc.ppOutHitObject)
 					*_desc.ppOutHitObject = static_cast<CGameObject*>(hitInfo.actor->userData);
 				return true;
@@ -606,6 +611,7 @@ const _bool CPhysicsXSystem::Overlap(OVERLAPDESC& _desc)
 		const PxU32 bufferSize = 128;
 		PxOverlapHit hitBuffer[bufferSize];
 		PxOverlapBuffer buf(hitBuffer, bufferSize);
+		CQueryFilterCallback filterCallback(_desc.layerMask, false);
 		if (m_pScene->overlap(_desc.geometry.any(), origin, buf, _desc.filterData, &filterCallback))
 		{
 			_desc.iHitNum = buf.nbTouches;
