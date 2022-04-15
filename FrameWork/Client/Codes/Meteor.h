@@ -46,6 +46,11 @@ private:
 	_float m_fAccTime;
 	_float m_fRandSpawnTime;
 	_bool m_bStart;
+private:
+	_float m_fAccRotateTime;
+	_float m_fAccGravityTime;
+	_float4 m_vRandNorm;
+	_float m_fPreY;
 };
 END
 #endif

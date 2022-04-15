@@ -189,6 +189,9 @@ HRESULT CLoader::SetUp_Stage1_Object()
 	if (FAILED(Load_Stage1_TreasureChest_Load()))
 		return E_FAIL;
 
+	if (FAILED(Load_Stage1Meteor()))
+		return E_FAIL;
+
 	//if (FAILED(Load_Stage1_Cinema_Object()))
 	//	return E_FAIL;
 
@@ -1116,18 +1119,22 @@ HRESULT CLoader::Load_Stage1MonsterLoad()
 	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Weapon_Staff", CStaff::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Healer_Meteor_Static", CModel::Create(m_pDevice, m_pDeviceContext,
+	return S_OK;
+}
+
+HRESULT CLoader::Load_Stage1Meteor()
+{
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Meteor_Static", CModel::Create(m_pDevice, m_pDeviceContext,
 		L"../bin/FBX/Monster/Meteor_Static.fbx", CModel::TYPE_STATIC, true))))
 		return E_FAIL;
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Healer_Meteor_Anim", CModel::Create(m_pDevice, m_pDeviceContext,
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Meteor_Anim", CModel::Create(m_pDevice, m_pDeviceContext,
 		L"../bin/FBX/Monster/Meteor_Anim.fbx", CModel::TYPE_ANIM, true))))
 		return E_FAIL;
-
-	//Meteor
+	//Meteorm
 	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Weapon_Meteor", CMeteor::Create(m_pDevice, m_pDeviceContext))))
-		return E_FAIL;
+		return S_OK;
 
-	return S_OK;
+	return E_NOTIMPL;
 }
 
 _uint CLoader::Thread_Main(void* pArg)

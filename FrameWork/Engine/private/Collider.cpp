@@ -49,7 +49,31 @@ void CCollider::Add_Force(_fvector vPow)
 	PxVec3 vPower = ToPxVec3(vPos);
 	if (m_tDesc.eRigidType == ERigidType::Dynamic)
 	{
-		static_cast<PxRigidDynamic*>(m_pRigidActor)->addForce(vPower, PxForceMode::eACCELERATION);
+		static_cast<PxRigidDynamic*>(m_pRigidActor)->addForce(vPower, PxForceMode::eVELOCITY_CHANGE);
+	}
+}
+
+void CCollider::Add_Torque(_fvector vAxis, _float fAngle)
+{
+	if (m_tDesc.eRigidType == ERigidType::Dynamic)
+	{
+		PxRigidDynamic* tmpRigidActor = static_cast<PxRigidDynamic*>(m_pRigidActor);
+		tmpRigidActor->setMaxAngularVelocity(360.f);
+		_float3 fAxis;
+		XMStoreFloat3(&fAxis, vAxis);
+		PxVec3 pxAxis=ToPxVec3(fAxis);
+		tmpRigidActor->addTorque(pxAxis);
+	}
+}
+
+void CCollider::Reset_Power()
+{
+	if (m_tDesc.eRigidType == ERigidType::Dynamic)
+	{
+		PxRigidDynamic* tmpRigidActor = static_cast<PxRigidDynamic*>(m_pRigidActor);
+		PxVec3 vecZero = PxVec3(PxZero);
+		tmpRigidActor->setAngularVelocity(vecZero);
+		tmpRigidActor->setLinearVelocity(vecZero);
 	}
 }
 
@@ -173,10 +197,10 @@ _int CCollider::Update_Transform()
 	PxTransform pxTransform = m_pRigidActor->getGlobalPose();
 	CTransform* pTransform = m_pGameObject->Get_Transform();
 	_float3 vPosition = FromPxVec3(pxTransform.p);
-	//_float4 vQuat = FromPxQuat(pxTransform.q);
-	//_float3 vRotation = QuaternionToEuler(vQuat);
+	_float4 vQuat = FromPxQuat(pxTransform.q);
 
 	pTransform->Set_State(CTransform::STATE_POSITION, XMVectorSetW(XMLoadFloat3(&vPosition), 1.f));
+	pTransform->SetUp_Rotation(XMLoadFloat4(&vQuat));
 
 	return _int();
 }

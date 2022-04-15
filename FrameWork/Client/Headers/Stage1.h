@@ -81,6 +81,7 @@ private:/*for Meteor*/
 	vector<_float4> m_vecMeteorPos;
 	_float m_fAccMeteorSpawn;
 	_float m_fRandomMeteorSpawnTime;
+	_float m_fAccMeteorStartTime;
 };
 #endif
 

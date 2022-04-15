@@ -39,7 +39,8 @@ public:
 	void Sleep();
 	void WakeUp();
 	void Add_Force(_fvector vPow);
-
+	void Add_Torque(_fvector vAxis, _float fAngle);
+	void Reset_Power();
 public:
 	virtual HRESULT NativeConstruct_Prototype() override;
 	virtual HRESULT NativeConstruct(void* _pArg = nullptr) override;

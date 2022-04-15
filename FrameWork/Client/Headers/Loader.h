@@ -32,6 +32,7 @@ private:
 	HRESULT Load_Stage1PlayerLoad();
 	HRESULT Load_Stage1BossLoad();
 	HRESULT Load_Stage1MonsterLoad();
+	HRESULT Load_Stage1Meteor();
 	HRESULT Load_Stage1StaticUILoad(); //툴에서 값 지정해주는 UI들은 여기서 미리 생성
 	HRESULT Load_Stage1UILoad(); //직접 생성
 	HRESULT Load_Stage1EffectLoad();

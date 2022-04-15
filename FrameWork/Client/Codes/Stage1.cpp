@@ -60,6 +60,7 @@ CStage1::CStage1()
 	, m_pScenemaManager(nullptr)
 	, m_fAccMeteorSpawn(0.f)
 	, m_fRandomMeteorSpawnTime(0.f)
+	, m_fAccMeteorStartTime(0.f)
 {
 }
 
@@ -72,6 +73,7 @@ CStage1::CStage1(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
 	, m_pScenemaManager(nullptr)
 	, m_fAccMeteorSpawn(0.f)
 	, m_fRandomMeteorSpawnTime(0.f)
+	, m_fAccMeteorStartTime(0.f)
 {
 }
 
@@ -125,8 +127,8 @@ HRESULT CStage1::NativeConstruct()
 	if (FAILED(Ready_Meteor()))
 		return E_FAIL;
 
-	if (FAILED(Ready_Cinema()))
-		return E_FAIL;
+	//if (FAILED(Ready_Cinema()))
+	//	return E_FAIL;
 
 	//if (FAILED(Ready_Boss(L"Layer_Boss")))
 	//	return E_FAIL;
@@ -270,8 +272,10 @@ _int CStage1::Tick(_double TimeDelta)
 	//		m_pCinema = nullptr;
 	//}
 
-	Shoot_Meteor(TimeDelta);
-
+	/*for Meteor*/
+	m_fAccMeteorStartTime += (_float)TimeDelta;
+	if (m_fAccMeteorStartTime > 60.f)
+		Shoot_Meteor(TimeDelta);
 
 	return _int();
 }
@@ -1720,7 +1724,7 @@ HRESULT CStage1::Ready_Meteor()
 	//	_float4 vPos = _float4(-100.f, -20.f, 90.f, 1.f);
 	//	g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Test", L"Proto_GameObject_Weapon_Meteor", &vPos);
 	//}
-	for (_uint i = 0; i < 6; i++)
+	for (_uint i = 0; i < 10; i++)
 	{
 		CMeteor* pObj = nullptr;
 		g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Meteor", L"Proto_GameObject_Weapon_Meteor", nullptr,(CGameObject**)&pObj);
@@ -1735,34 +1739,39 @@ HRESULT CStage1::Ready_Meteor()
 	m_vecMeteorPos[3] = _float4(-200.f, -20.f, 320.f, 1.f);
 	m_vecMeteorPos[4] = _float4(-150.f, -20.f, 380.f, 1.f);
 
-	m_fRandomMeteorSpawnTime = MathUtils::ReliableRandom((_double)10.f,(_double)25.f);
+	m_fRandomMeteorSpawnTime = (_float)MathUtils::ReliableRandom((_double)10.f,(_double)25.f);
 
 	return S_OK;
 }
 
 void CStage1::Shoot_Meteor(_double dDeltaTime)
 {
-	_bool bCheck = false;
 	if (m_vecMeteor.empty())
 		return;
+	_uint iCount = 0;
 	for (auto& pMeteor : m_vecMeteor)
 	{
-		if (pMeteor->getActive())
-		{
-			bCheck = true;
-			return;
-		}
+		if (!pMeteor->getActive())
+			iCount++;
 	}
+	if (iCount == 0)
+		return;
+	if (iCount > 5)
+		iCount = 5;
+
 	m_fAccMeteorSpawn += (_float)dDeltaTime;
 	if (m_fAccMeteorSpawn >= m_fRandomMeteorSpawnTime)
 	{
 		m_fAccMeteorSpawn = 0.f;
-		m_fRandomMeteorSpawnTime = MathUtils::ReliableRandom(10.f, 25.f);
+		m_fRandomMeteorSpawnTime = MathUtils::ReliableRandom(5.f,15.f);
 		
 		_vector vSelectPos = XMVectorZero();
 		for (auto& pPos : m_vecMeteorPos)
 		{
 			_vector vPos = XMLoadFloat4(&pPos);
+			_vector vDir = g_pObserver->Get_Dir(vPos);
+			if(XMVectorGetZ(vDir)<0.f)
+				continue;
 			_float fDist=g_pObserver->Get_Dist(vPos);
 			if (fDist > 80 && fDist < 150)
 			{
@@ -1773,14 +1782,14 @@ void CStage1::Shoot_Meteor(_double dDeltaTime)
 		if (XMVector3Equal(vSelectPos, XMVectorZero()))
 			return;
 
-		_uint iRandomShot = MathUtils::ReliableRandom(1, 5);
+		_uint iRandomShot = (_uint)MathUtils::ReliableRandom(1.0, (_double)iCount+1);
 		for (_uint i = 0; i < iRandomShot; i++)
 		{
 			_vector vPivot;
-			_vector vMin = XMVectorSet(-20.f, 0.f, -20.f, 1.f);
-			_vector vMax = XMVectorSet(20.f, 0.f, 20.f, 1.f);
-			MathUtils::GetRandomVector(&vPivot, &vMin, &vMax);
+			_float fX = (_float)MathUtils::ReliableRandom(-20.0, 20.0);
+			_float fZ = (_float)MathUtils::ReliableRandom(-20.0, 20.0);
 
+			vPivot = XMVectorSet(fX, 0.f, fZ, 1.f);
 			vSelectPos += vPivot;
 			CMeteor* pMeteor = Find_Meteor();
 			if (!pMeteor)

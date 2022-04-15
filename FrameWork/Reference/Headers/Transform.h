@@ -62,11 +62,13 @@ public:
 	void LookAt_RotYAxis(const _fvector& _dir);
 	void SetUp_Rotation(_fvector vAxis, _float fRadian); /* 디폴트상태기준으로 특정축으로 몇도만큼 회전시켜놓겠다. */
 	void SetUp_Rotation(const _float3& _vEuler);
+	void SetUp_Rotation(const _fvector vQuaternion);
 	void Scaling(_fvector vScale);
 	void Scale_Up(_fvector vScale);
 	void ScaleX_Up(_fvector vScale);
 	void ScaleY_Up(_fvector vScale);
 	void ScaleZ_Up(_fvector vScale);
+	void Scale_One();
 public:
 	void Fall(_double dDeltaTime);
 
