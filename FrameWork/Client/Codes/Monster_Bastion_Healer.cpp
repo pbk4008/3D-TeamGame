@@ -97,7 +97,7 @@ HRESULT CMonster_Bastion_Healer::NativeConstruct(const _uint _iSceneID, void* _p
 
 	m_isFall = true;
 
-	//setActive(false);
+	setActive(false);
 	return S_OK;
 }
 
@@ -207,6 +207,7 @@ HRESULT CMonster_Bastion_Healer::Render()
 	if (FAILED(m_pModel->SetUp_ValueOnShader("g_bdissolve", &m_bdissolve, sizeof(_bool)))) MSGBOX("Failed to Apply dissolvetime");
 
 	wstring wstrCamTag = g_pGameInstance->Get_BaseCameraTag();
+	if (FAILED(m_pModel->SetUp_ValueOnShader("g_bdissolve", &m_bdissolve, sizeof(_bool)))) MSGBOX("Failed to Apply dissolvetime");
 	for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
 	{
 		SCB desc;
@@ -216,11 +217,11 @@ HRESULT CMonster_Bastion_Healer::Render()
 		{
 		case 2:
 			CActor::BindConstantBuffer(wstrCamTag, &desc);
-			if (FAILED(m_pModel->Render(i, 1))) MSGBOX("Failed To Rendering Shooter");
+			if (FAILED(m_pModel->Render(i, 2))) MSGBOX("Failed To Rendering Healer");
 			break;
 		default:
 			CActor::BindConstantBuffer(wstrCamTag, &desc);
-			if (FAILED(m_pModel->Render(i, 0))) MSGBOX("Failed To Rendering Shooter");
+			if (FAILED(m_pModel->Render(i, 0))) MSGBOX("Failed To Rendering Healer");
 			break;
 		}
 	}
@@ -342,6 +343,7 @@ HRESULT CMonster_Bastion_Healer::Ready_Components()
 	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_CharacterController", L"CharacterController", (CComponent**)&m_pCharacterController, &tCharacterControllerDesc)))
 		return E_FAIL;
 	m_pCharacterController->setOwnerTransform(m_pTransform);
+	m_pCharacterController->setShapeLayer((_uint)ELayer::Monster);
 
 	// 스테이트 컨트롤러
 	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_StateController", L"StateController", (CComponent**)&m_pStateController)))

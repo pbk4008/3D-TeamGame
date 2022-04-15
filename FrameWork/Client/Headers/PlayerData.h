@@ -10,6 +10,22 @@ class CPlayerData final : public CScriptableData
 public:
 	CPlayerData(void);
 
+
+public:
+	void Reset(void);
+
+public:
+	_int Level = 1;
+	_int Exp   = 0;
+
+	_float CurHp = 200.f;
+	_float Life = 200.f;
+
+	_float Power = 100.f;
+
+
+	_bool m_bEquipShield = false;
+	_int  EquipedSlot = 1;
 };
 
 END

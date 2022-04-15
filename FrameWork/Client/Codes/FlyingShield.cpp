@@ -3,6 +3,7 @@
 #include "Material.h"
 
 #include "HierarchyNode.h"
+#include "SplineCurve.h"
 
 CFlyingShield::CFlyingShield(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
 	: CWeapon(_pDevice, _pDeviceContext)
@@ -52,19 +53,36 @@ HRESULT CFlyingShield::NativeConstruct(const _uint _iSceneID, void* _pArg)
 	if (FAILED(Ready_Components()))
 		return E_FAIL;
 
+	// 날아가야할 방향벡터 구하는 곳
 	_vector svDir = XMVectorSetW(XMLoadFloat3(&m_tDesc.vTargetPos), 1.f) - m_pTransform->Get_State(CTransform::STATE_POSITION);
 	m_fDis = XMVectorGetX(XMVector3Length(svDir));
 	svDir = XMVector3Normalize(svDir);
 	XMStoreFloat3(&m_vDir, svDir);
-	m_fLiveTime = 1.6f;
 
-	//m_fSpeed = m_fDis / (m_fLiveTime * 0.5f);
-	m_fSpeed = 50.f;
+	// 방향벡터를 기준으로 라업룩 회전시켜주는곳
+	_vector svLook = XMVector3Normalize(svDir) * m_pTransform->Get_Scale(CTransform::STATE_LOOK);
+	_vector svRight = XMVector3Cross(XMVectorSet(0.f, 1.f, 0.f, 0.f), svDir) * m_pTransform->Get_Scale(CTransform::STATE_RIGHT);
+	_vector svUp = XMVector3Cross(svDir, XMVector3Normalize(svRight)) * m_pTransform->Get_Scale(CTransform::STATE_UP);
+	m_pTransform->Set_State(CTransform::STATE_RIGHT, svRight);
+	m_pTransform->Set_State(CTransform::STATE_UP, svUp);
+	m_pTransform->Set_State(CTransform::STATE_LOOK, svLook);
+
+	m_pTransform->Rotation_Axis(CTransform::STATE_LOOK, XMConvertToRadians(45.f));
+
+
+	Spline_Throw();
+
+
+	//m_fLiveTime = 1.6f;
+	//m_fSpeed = m_fDis / m_fLiveTime;
+	m_fSpeed = 30.f;
+	m_fLiveTime = m_fDis / m_fSpeed;
 
 	m_fDamage = 3.f;
 	m_isAttack = true;
 
 	g_pObserver->Set_IsThrownObject(true);
+
 	return S_OK;
 }
 
@@ -74,30 +92,68 @@ _int CFlyingShield::Tick(_double _dDeltaTime)
 	if (NO_EVENT != iProgress)
 		return iProgress;
 
+	m_fAccTime += (_float)_dDeltaTime;
 	if (!m_isReturn)
 	{
-		_vector svPos = m_pTransform->Get_State(CTransform::STATE_POSITION);
-		_vector svVelocity = XMLoadFloat3(&m_vDir) * m_fSpeed * (_float)_dDeltaTime;
-		svPos += svVelocity;
-		m_fAccDis += XMVectorGetX(XMVector3Length(svVelocity));
-		m_pTransform->Set_State(CTransform::STATE_POSITION, svPos);
-
-		if (m_fDis < m_fAccDis)
+		if (m_fAccTime >= m_fLiveTime)
 		{
-			m_isReturn = true;
-			static_cast<CSilvermane*>(m_pOwner)->Return_Shield();
+			Return();
+		}
+		else
+		{
+			_vector svPoint = m_pSpline->GetPoint(m_fAccTime / m_fLiveTime);
+			svPoint = XMVectorSetW(svPoint, 1.f);
+			m_pTransform->Set_State(CTransform::STATE_POSITION, svPoint);
 		}
 	}
 	else
 	{
-		_matrix smatOwner = m_pFixedBone->Get_CombinedMatrix() * XMLoadFloat4x4(&m_matOwnerPivot) * m_pOwner->Get_Transform()->Get_WorldMatrix();
-		_vector svOwnerPos = smatOwner.r[3];
-		_vector svPos = m_pTransform->Get_State(CTransform::STATE_POSITION);
-		_vector svDir = XMVector3Normalize(svOwnerPos - svPos);
+		if (m_fAccTime >= m_fLiveTime * 0.8f)
+		{
+			//_matrix smatOwner = m_pFixedBone->Get_CombinedMatrix() * XMLoadFloat4x4(&m_matOwnerPivot) * m_pOwner->Get_Transform()->Get_WorldMatrix();
+			//_vector svOwnerPos = smatOwner.r[3];
+			_vector svOwnerPos = m_pOwner->Get_Transform()->Get_State(CTransform::STATE_POSITION) + XMVectorSet(0.f, 1.f, 0.f, 0.f);
+			_vector svPos = m_pTransform->Get_State(CTransform::STATE_POSITION);
+			_vector svDir = XMVector3Normalize(svOwnerPos - svPos);
 
-		svPos += svDir * m_fSpeed * (_float)_dDeltaTime;
-		m_pTransform->Set_State(CTransform::STATE_POSITION, svPos);
+			svPos += svDir * m_fSpeed * (_float)_dDeltaTime;
+			m_pTransform->Set_State(CTransform::STATE_POSITION, svPos);
+		}
+		else
+		{
+			_vector svPoint = m_pSpline->GetPoint(m_fAccTime / m_fLiveTime);
+			svPoint = XMVectorSetW(svPoint, 1.f);
+			m_pTransform->Set_State(CTransform::STATE_POSITION, svPoint);
+		}
 	}
+
+	//if (!m_isReturn)
+	//{
+	//	_vector svPos = m_pTransform->Get_State(CTransform::STATE_POSITION);
+	//	_vector svLook = XMVector3Normalize(m_pTransform->Get_State(CTransform::STATE_LOOK));
+	//	//_vector svVelocity = XMLoadFloat3(&m_vDir) * m_fSpeed * (_float)_dDeltaTime;
+	//	_vector svVelocity = svLook * m_fSpeed * (_float)_dDeltaTime;
+	//	svPos += svVelocity;
+	//	m_fAccDis += XMVectorGetX(XMVector3Length(svVelocity));
+	//	m_pTransform->Set_State(CTransform::STATE_POSITION, svPos);
+
+	//	if (m_fDis < m_fAccDis)
+	//	{
+	//		m_isReturn = true;
+	//		static_cast<CSilvermane*>(m_pOwner)->Return_Shield();
+	//		m_pTransform->Rotation_Axis(CTransform::STATE_LOOK, XMConvertToRadians(-45.f));
+	//	}
+	//}
+	//else
+	//{
+	//	_matrix smatOwner = m_pFixedBone->Get_CombinedMatrix() * XMLoadFloat4x4(&m_matOwnerPivot) * m_pOwner->Get_Transform()->Get_WorldMatrix();
+	//	_vector svOwnerPos = smatOwner.r[3];
+	//	_vector svPos = m_pTransform->Get_State(CTransform::STATE_POSITION);
+	//	_vector svDir = XMVector3Normalize(svOwnerPos - svPos);
+
+	//	svPos += svDir * m_fSpeed * (_float)_dDeltaTime;
+	//	m_pTransform->Set_State(CTransform::STATE_POSITION, svPos);
+	//}
 
 	m_pCollider->Tick(_dDeltaTime);
 	return _int();
@@ -178,8 +234,8 @@ void CFlyingShield::OnTriggerEnter(CCollision& collision)
 
 		g_pObserver->Set_IsThrownObject(false);
 		m_isAttack = false;
-		m_isReturn = true;
-		static_cast<CSilvermane*>(m_pOwner)->Return_Shield();
+
+		Return();
 		break;
 	}
 }
@@ -190,8 +246,6 @@ HRESULT CFlyingShield::Ready_Components()
 
 	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Model_FlyingShield", L"Model", (CComponent**)&m_pModel)))
 		return E_FAIL;
-	_matrix matPivot = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationRollPitchYaw(XMConvertToRadians(-90.f), XMConvertToRadians(0.f), XMConvertToRadians(0.f));
-	m_pModel->Set_PivotMatrix(matPivot);
 	m_pModel->Add_Material(g_pGameInstance->Get_Material(L"Mtrl_FlyingShield"), 0);
 
 
@@ -203,8 +257,89 @@ HRESULT CFlyingShield::Ready_Components()
 	tBoxColliderDesc.vScale = { 1.f, 0.2f, 1.f };
 	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_BoxCollider", L"Collider", (CComponent**)&m_pCollider, &tBoxColliderDesc)))
 		return E_FAIL;
+	m_pCollider->setShapeLayer((_uint)ELayer::Weapon);
 
 	return S_OK;
+}
+
+void CFlyingShield::Return()
+{
+	m_isReturn = true;
+	static_cast<CSilvermane*>(m_pOwner)->Return_Shield();
+	m_pTransform->Rotation_Axis(CTransform::STATE_LOOK, XMConvertToRadians(-45.f));
+
+	Spline_Return();
+	m_fAccTime = 0.f;
+
+	m_pCollider->setShapeLayer((_uint)ELayer::MonsterWeapon);
+}
+
+void CFlyingShield::Spline_Throw()
+{
+	m_pSpline = new CSplineCurve();
+
+	_vector p0{};
+	_vector p1 = XMVectorSetW(m_pTransform->Get_State(CTransform::STATE_POSITION), 0.f); /* start */
+	_vector p2{}; /* curve */
+	_vector p3 = XMLoadFloat3(&m_tDesc.vTargetPos); /* end */
+	_vector p4{};
+
+	_float dist = MathUtils::Length(p3, p1);
+	_float curveFactor = dist * 0.05f;
+	_vector temp = p3 - p1;
+	temp /= 2;
+	temp += (XMVector3Normalize(m_pTransform->Get_State(CTransform::STATE_RIGHT)) * 0.f +
+		XMVector3Normalize(m_pTransform->Get_State(CTransform::STATE_UP)) * curveFactor +
+		XMVector3Normalize(m_pTransform->Get_State(CTransform::STATE_LOOK)) * 0.f);
+	p2 = p1 + temp;
+	p0 = p1 + (MathUtils::Direction(p2, p1));
+	p4 = p3 + (MathUtils::Direction(p2, p3));
+
+	p0 = XMVectorSetW(p0, 1.f);
+	p1 = XMVectorSetW(p1, 1.f);
+	p2 = XMVectorSetW(p2, 1.f);
+	p3 = XMVectorSetW(p3, 1.f);
+	p4 = XMVectorSetW(p4, 1.f);
+
+	m_pSpline->DeletePoints();
+	m_pSpline->AddPoint(p0);
+	m_pSpline->AddPoint(p1);
+	m_pSpline->AddPoint(p2);
+	m_pSpline->AddPoint(p3);
+	m_pSpline->AddPoint(p4);
+}
+
+void CFlyingShield::Spline_Return()
+{
+	_vector p0{};
+	_vector p1 = XMLoadFloat3(&m_tDesc.vTargetPos); /* start */
+	_vector p2{}; /* curve */
+	_vector p3 = m_pOwner->Get_Transform()->Get_State(CTransform::STATE_POSITION) + XMVectorSet(0.f, 1.f, 0.f, -1.f); /* end */
+	_vector p4{};
+
+	_float dist = MathUtils::Length(p3, p1);
+	_float curveFactor = dist * 0.1f;
+	_vector temp = p3 - p1;
+	temp /= 2;
+	temp += (XMVector3Normalize(m_pTransform->Get_State(CTransform::STATE_RIGHT)) * 0.f +
+		XMVector3Normalize(m_pTransform->Get_State(CTransform::STATE_UP)) * curveFactor +
+		XMVector3Normalize(m_pTransform->Get_State(CTransform::STATE_LOOK)) * 0.f);
+	p2 = p1 + temp;
+	p0 = p1 + (MathUtils::Direction(p2, p1));
+	p4 = p3 + (MathUtils::Direction(p2, p3));
+
+	p0 = XMVectorSetW(p0, 1.f);
+	p1 = XMVectorSetW(p1, 1.f);
+	p2 = XMVectorSetW(p2, 1.f);
+	p3 = XMVectorSetW(p3, 1.f);
+	p4 = XMVectorSetW(p4, 1.f);
+
+	m_pSpline->DeletePoints();
+	m_pSpline->AddPoint(p0);
+	m_pSpline->AddPoint(p1);
+	m_pSpline->AddPoint(p2);
+	m_pSpline->AddPoint(p3);
+	m_pSpline->AddPoint(p4);
 }
 
 CFlyingShield* CFlyingShield::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
@@ -234,5 +369,5 @@ void CFlyingShield::Free()
 	__super::Free();
 
 	Safe_Release(m_pCollider);
-	/*Safe_Release(m_pModel);*/
+	Safe_Delete(m_pSpline);
 }

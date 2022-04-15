@@ -4,11 +4,10 @@
 #include "ScriptableData.h"
 
 BEGIN(Client)
-
 class CWeaponData : public CScriptableData
 {
 public:
-	struct WeaponDesc
+	struct Desc
 	{
 		std::wstring weaponName;
 		_float damage;
@@ -19,8 +18,23 @@ public:
 
 public:
 	CWeaponData(void);
-	CWeaponData(WeaponDesc desc);
+	CWeaponData(Desc desc);
 	~CWeaponData(void);
+
+public:
+	CWeapon* Get_Weapon(void);
+	_bool	 IsValid(void);
+
+public:
+	std::wstring weaponName;
+	_float damage;
+
+public:
+	EWeaponType weaponType = EWeaponType::Weapon_End;
+
+private:
+	_bool isValid = false;
+
 };
 
 END

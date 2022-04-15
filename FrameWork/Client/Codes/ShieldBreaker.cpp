@@ -84,6 +84,12 @@ _int CShieldBreaker::Tick(_double TimeDelta)
 	Attach_FixedBone(TimeDelta);
 	Attach_Owner(TimeDelta);
 	
+	if (true == m_bHitGround)
+	{
+		OnHitGroundEffect();
+		m_bHitGround = false;
+	}
+	
 	if (nullptr != m_pCollider)
 	{
 		m_pCollider->Tick(TimeDelta);
@@ -199,6 +205,15 @@ _int CShieldBreaker::Attach_Owner(const _double& TimeDelta)
 	}
 
 	return _int();
+}
+
+void CShieldBreaker::OnHitGroundEffect()
+{
+	_vector svPos = m_pTransform->Get_State(CTransform::STATE_POSITION);
+	_vector svLook = XMVector3Normalize(m_pTransform->Get_State(CTransform::STATE_LOOK));
+	XMStoreFloat3(&m_vEndPos, svPos + svLook);
+
+	m_pOwner->Active_Effect((_uint)EFFECT::HITGROUND, svLook * 2.6f);
 }
 
 CShieldBreaker* CShieldBreaker::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)

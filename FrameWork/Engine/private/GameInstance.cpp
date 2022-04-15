@@ -670,6 +670,20 @@ const _bool CGameInstance::Overlap(OVERLAPDESC& _desc)
 	return m_pPhysicSystem->Overlap(_desc);
 }
 
+void CGameInstance::Set_NumLayers(const _uint _iNumLayers)
+{
+	if (!m_pPhysicSystem)
+		return;
+	m_pPhysicSystem->Set_NumLayers(_iNumLayers);
+}
+
+void CGameInstance::Set_CollisionLayer(const _uint _iLayer1, const _uint _iLayer2)
+{
+	if (!m_pPhysicSystem)
+		return;
+	m_pPhysicSystem->Set_CollisionLayer(_iLayer1, _iLayer2);
+}
+
 HRESULT CGameInstance::Init_SoundManager()
 {
 	if (!m_pSoundManager)

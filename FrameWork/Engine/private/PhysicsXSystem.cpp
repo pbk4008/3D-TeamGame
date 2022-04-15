@@ -20,6 +20,8 @@
 #include "NavMeshCollider.h"
 #include "CharacterController.h"
 
+#include "QueryFilterCallback.h"
+
 CPhysicsXSystem::CPhysicsXSystem()
 {
 }
@@ -110,6 +112,11 @@ const _int CPhysicsXSystem::Tick(const _double& _dDeltaTime)
 	return _int();
 }
 
+void CPhysicsXSystem::Set_NumLayers(const _uint _iNumLayers)
+{
+	m_iNumLayers = _iNumLayers;
+}
+
 PxMaterial* CPhysicsXSystem::Create_Material(const PxReal _staticFriction, const PxReal _dynamicFriction, const PxReal _restitution)
 {
 	PxMaterial* pMaterial = m_pPhysics->createMaterial(_staticFriction, _dynamicFriction, _restitution);
@@ -190,6 +197,7 @@ HRESULT CPhysicsXSystem::Create_Box(CBoxCollider* _pCollider)
 	pShape->setFlag(PxShapeFlag::eSCENE_QUERY_SHAPE, tColliderDesc.isSceneQuery);
 	pShape->setFlag(PxShapeFlag::eSIMULATION_SHAPE, !tColliderDesc.isTrigger);
 	pShape->setFlag(PxShapeFlag::eTRIGGER_SHAPE, tColliderDesc.isTrigger);
+	pShape->userData = tColliderDesc.pGameObject;
 
 	//PxFilterData filterData;
 	//filterData.word0 = 1;
@@ -227,6 +235,7 @@ HRESULT CPhysicsXSystem::Create_Sphere(CSphereCollider* _pCollider)
 	pShape->setFlag(PxShapeFlag::eSCENE_QUERY_SHAPE, tColliderDesc.isSceneQuery);
 	pShape->setFlag(PxShapeFlag::eSIMULATION_SHAPE, !tColliderDesc.isTrigger);
 	pShape->setFlag(PxShapeFlag::eTRIGGER_SHAPE, tColliderDesc.isTrigger);
+	pShape->userData = tColliderDesc.pGameObject;
 
 	//PxFilterData filterData;
 	//filterData.word0 = 1;
@@ -264,6 +273,7 @@ HRESULT CPhysicsXSystem::Create_Capsule(CCapsuleCollider* _pCollider)
 	pShape->setFlag(PxShapeFlag::eSCENE_QUERY_SHAPE, tColliderDesc.isSceneQuery);
 	pShape->setFlag(PxShapeFlag::eSIMULATION_SHAPE, !tColliderDesc.isTrigger);
 	pShape->setFlag(PxShapeFlag::eTRIGGER_SHAPE, tColliderDesc.isTrigger);
+	pShape->userData = tColliderDesc.pGameObject;
 
 	//PxFilterData filterData;
 	//filterData.word0 = 1;
@@ -339,6 +349,7 @@ HRESULT CPhysicsXSystem::Create_NavMesh(CNavMeshCollider* _pCollider)
 	pShape->setFlag(PxShapeFlag::eSCENE_QUERY_SHAPE, tColliderDesc.isSceneQuery);
 	pShape->setFlag(PxShapeFlag::eSIMULATION_SHAPE, !tColliderDesc.isTrigger);
 	pShape->setFlag(PxShapeFlag::eTRIGGER_SHAPE, tColliderDesc.isTrigger);
+	pShape->userData = tColliderDesc.pGameObject;
 
 	pRigidActor->attachShape(*pShape);
 	m_pScene->addActor(*pRigidActor);
@@ -426,24 +437,65 @@ void CPhysicsXSystem::Add_Actor(PxActor* _pActor)
 		m_pScene->addActor(*_pActor);
 }
 
+void CPhysicsXSystem::Set_ShapeLayer(PxShape* _pShape, const _uint _iLayer)
+{
+	PxU32 shapeLayer = 1 << _iLayer;
+
+	PxU32 layerMasks = 0;
+
+	for (_uint i = 0; i < m_iNumLayers; ++i)
+	{
+		PxU32 layerMask = 1 << i;
+		for (auto& layer : m_listLayers)
+		{
+			if (layer == (_ulonglong)shapeLayer + layerMask)
+			{
+				layerMasks |= layerMask;
+			}
+		}
+	}
+
+	PxFilterData filterData;
+	filterData.word0 = shapeLayer;
+	filterData.word1 = layerMasks;
+
+	_pShape->setSimulationFilterData(filterData);
+	_pShape->setQueryFilterData(filterData);
+}
+
+void CPhysicsXSystem::Set_CollisionLayer(const _uint _iLayer1, const _uint _iLayer2)
+{
+	PxU32 layerMask = (1 << _iLayer1) + (1 << _iLayer2);
+	for (auto layer : m_listLayers)
+	{
+		if (layer == layerMask)
+			return;
+	}
+	m_listLayers.emplace_back(layerMask);
+}
+
 const _bool CPhysicsXSystem::Raycast(RAYCASTDESC & _desc)
 {
 	PxVec3 origin = ToPxVec3(_desc.vOrigin);
 	PxVec3 unitDir = ToPxVec3(_desc.vDir);
 
+	_desc.filterData.flags |= PxQueryFlag::ePREFILTER;
+
 	if (PxQueryFlag::eANY_HIT & _desc.filterData.flags)
 	{
 		PxRaycastBuffer hit;
-		if (m_pScene->raycast(origin, unitDir, _desc.fMaxDistance, hit, _desc.hitFlags, _desc.filterData))
+		CQueryFilterCallback filterCallback(_desc.layerMask, true);
+		if (m_pScene->raycast(origin, unitDir, _desc.fMaxDistance, hit, _desc.hitFlags, _desc.filterData, &filterCallback))
 		{
 			if (hit.hasBlock)
 			{
 				PxRaycastHit hitInfo = hit.block;
+				_desc.iHitNum = 1;
+				_desc.vecHitObjects.emplace_back(static_cast<CGameObject*>(hitInfo.actor->userData));
+				_desc.vecHitPositions.emplace_back(FromPxVec3(hitInfo.position));
 				if (_desc.ppOutHitObject)
-				{
 					*_desc.ppOutHitObject = static_cast<CGameObject*>(hitInfo.actor->userData);
-					_desc.vHitPos = FromPxVec3(hitInfo.position);
-				}
+				_desc.vHitPos = FromPxVec3(hitInfo.position);
 				return true;
 			}
 		}
@@ -454,7 +506,8 @@ const _bool CPhysicsXSystem::Raycast(RAYCASTDESC & _desc)
 		const PxU32 bufferSize = 128;
 		PxRaycastHit hitBuffer[bufferSize];
 		PxRaycastBuffer buf(hitBuffer, bufferSize);
-		if (m_pScene->raycast(origin, unitDir, _desc.fMaxDistance, buf, _desc.hitFlags, _desc.filterData))
+		CQueryFilterCallback filterCallback(_desc.layerMask, false);
+		if (m_pScene->raycast(origin, unitDir, _desc.fMaxDistance, buf, _desc.hitFlags, _desc.filterData, &filterCallback))
 		{
 			_desc.iHitNum = buf.nbTouches;
 			_desc.vecHitObjects.reserve(_desc.iHitNum);
@@ -482,19 +535,23 @@ const _bool CPhysicsXSystem::Sweep(SWEEPDESC& _desc)
 	origin.q = ToPxQuat(_desc.vQuat);
 	PxVec3 unitDir = ToPxVec3(_desc.vDir);
 
+	_desc.filterData.flags |= PxQueryFlag::ePREFILTER;
+
 	if (PxQueryFlag::eANY_HIT & _desc.filterData.flags)
 	{
 		PxSweepBuffer hit;
-		if (m_pScene->sweep(_desc.geometry.any(), origin, unitDir, _desc.fMaxDistance, hit, _desc.hitFlags, _desc.filterData))
+		CQueryFilterCallback filterCallback(_desc.layerMask, true);
+		if (m_pScene->sweep(_desc.geometry.any(), origin, unitDir, _desc.fMaxDistance, hit, _desc.hitFlags, _desc.filterData, &filterCallback))
 		{
 			if (hit.hasBlock)
 			{
 				PxSweepHit hitInfo = hit.block;
+				_desc.iHitNum = 1;
+				_desc.vecHitObjects.emplace_back(static_cast<CGameObject*>(hitInfo.actor->userData));
+				_desc.vecHitPositions.emplace_back(FromPxVec3(hitInfo.position));
 				if (_desc.ppOutHitObject)
-				{
 					*_desc.ppOutHitObject = static_cast<CGameObject*>(hitInfo.actor->userData);
-					_desc.vHitPos = FromPxVec3(hitInfo.position);
-				}
+				_desc.vHitPos = FromPxVec3(hitInfo.position);
 				return true;
 			}
 		}
@@ -504,7 +561,8 @@ const _bool CPhysicsXSystem::Sweep(SWEEPDESC& _desc)
 		const PxU32 bufferSize = 128;
 		PxSweepHit hitBuffer[bufferSize];
 		PxSweepBuffer buf(hitBuffer, bufferSize);
-		if (m_pScene->sweep(_desc.geometry.any(), origin, unitDir, _desc.fMaxDistance, buf, _desc.hitFlags, _desc.filterData))
+		CQueryFilterCallback filterCallback(_desc.layerMask, false);
+		if (m_pScene->sweep(_desc.geometry.any(), origin, unitDir, _desc.fMaxDistance, buf, _desc.hitFlags, _desc.filterData, &filterCallback))
 		{
 			_desc.iHitNum = buf.nbTouches;
 			_desc.vecHitObjects.reserve(_desc.iHitNum);
@@ -529,15 +587,19 @@ const _bool CPhysicsXSystem::Overlap(OVERLAPDESC& _desc)
 	PxTransform origin;
 	origin.p = ToPxVec3(_desc.vOrigin);
 	origin.q = ToPxQuat(_desc.vQuat);
+	_desc.filterData.flags |= PxQueryFlag::ePREFILTER;
 
 	if (PxQueryFlag::eANY_HIT & _desc.filterData.flags)
 	{
 		PxOverlapBuffer hit;
-		if (m_pScene->overlap(_desc.geometry.any(), origin, hit, _desc.filterData))
+		CQueryFilterCallback filterCallback(_desc.layerMask, true);
+		if (m_pScene->overlap(_desc.geometry.any(), origin, hit, _desc.filterData, &filterCallback))
 		{
 			if (hit.hasBlock)
 			{
 				PxOverlapHit hitInfo = hit.block;
+				_desc.iHitNum = 1;
+				_desc.vecHitObjects.emplace_back(static_cast<CGameObject*>(hitInfo.actor->userData));
 				if (_desc.ppOutHitObject)
 					*_desc.ppOutHitObject = static_cast<CGameObject*>(hitInfo.actor->userData);
 				return true;
@@ -549,7 +611,8 @@ const _bool CPhysicsXSystem::Overlap(OVERLAPDESC& _desc)
 		const PxU32 bufferSize = 128;
 		PxOverlapHit hitBuffer[bufferSize];
 		PxOverlapBuffer buf(hitBuffer, bufferSize);
-		if (m_pScene->overlap(_desc.geometry.any(), origin, buf, _desc.filterData))
+		CQueryFilterCallback filterCallback(_desc.layerMask, false);
+		if (m_pScene->overlap(_desc.geometry.any(), origin, buf, _desc.filterData, &filterCallback))
 		{
 			_desc.iHitNum = buf.nbTouches;
 			_desc.vecHitObjects.reserve(_desc.iHitNum);

@@ -29,12 +29,13 @@ _int CShield_Throw::Tick(const _double& _dDeltaTime)
 
 	if (33 < iCurKeyFrameIndex && 40 > iCurKeyFrameIndex)
 	{
-		if (!m_pSilvermane->IsShieldThrow())
+		if (!m_isThrow)
 		{
 			RaycastForThrow();
 			m_pSilvermane->Set_IsShieldThrow(true);
 			m_pSilvermane->Set_EquipShield(false);
 			m_pSilvermane->Set_IsTrasceCamera(false);
+			m_isThrow = true;
 		}
 	}
 
@@ -44,7 +45,7 @@ _int CShield_Throw::Tick(const _double& _dDeltaTime)
 		//{
 			if (65 < iCurKeyFrameIndex && 73 > iCurKeyFrameIndex)
 			{
-				m_pAnimationController->Set_PlaySpeed(0.2f);
+				m_pAnimationController->Set_PlaySpeed(0.1f);
 			}
 			if (73 < iCurKeyFrameIndex)
 			{
@@ -108,6 +109,7 @@ HRESULT CShield_Throw::ExitState()
 		return E_FAIL;
 	
 	m_isTrigger = false;
+	m_isThrow = false;
 	m_pSilvermane->Set_IsTrasceCamera(true);
 	m_pAnimationController->Set_PlaySpeed(1.f);
 
@@ -223,8 +225,9 @@ void CShield_Throw::RaycastForThrow()
 	RAYCASTDESC tRaycastDesc;
 	XMStoreFloat3(&tRaycastDesc.vOrigin, svRayPos);
 	XMStoreFloat3(&tRaycastDesc.vDir, svRayDir);
-	tRaycastDesc.fMaxDistance = 50.f;
+	tRaycastDesc.fMaxDistance = 20.f;
 	tRaycastDesc.filterData.flags |= PxQueryFlag::eANY_HIT;
+	tRaycastDesc.layerMask = (1 << (_uint)ELayer::Enviroment) + (1 << (_uint)ELayer::Monster);
 	CGameObject* pHitObject = nullptr;
 	tRaycastDesc.ppOutHitObject = &pHitObject;
 	if (g_pGameInstance->Raycast(tRaycastDesc))

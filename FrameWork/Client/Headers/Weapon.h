@@ -3,7 +3,6 @@
 #include "GameObject.h"
 
 BEGIN(Client)
-class CSwordTrail;
 
 class CWeapon abstract : public CGameObject
 {
@@ -78,7 +77,6 @@ protected:
 	wstring m_wstrName = L"";
 
 	_bool			m_bTrailOnOff = false;
-	CSwordTrail*	m_pTrail = nullptr;
 
 	_float m_fDamage = 0.f;
 	const LIGHTDESC* m_lightdesc;

@@ -53,7 +53,10 @@ enum class EFFECT
 	GUARD,
 	ATTACK_LEFT,
 	ATTACK_RIGHT,
-	HITGROUND
+	HITGROUND,
+	OPENBOX,
+	ATTACK_GROUND,
+	ATTACK_GROUND_2
 };
 
 enum class ELayer
@@ -62,7 +65,10 @@ enum class ELayer
 	Player,
 	Monster,
 	Weapon,
+	MonsterWeapon,
 	JumpTrigger,
+	ItemBox,
+	Trigger,
 	Max
 };
 
@@ -172,6 +178,35 @@ const wstring g_arrGradeName[(int)EEquipmentGradeUI::GRADE_END]
 	L"Àü¼³"
 };
 
+
+enum class EWeaponMaterial
+{
+	D,
+	N,
+	MRA,
+	CEO,
+	Mask,
+	MATERIAL_END
+};
+
+static TEXTURETYPE g_arrMI_Texture[(int)EWeaponMaterial::MATERIAL_END]
+{
+	TEXTURETYPE::TEX_DIFFUSE,
+	TEXTURETYPE::TEX_NORMAL,
+	TEXTURETYPE::TEX_MRA,
+	TEXTURETYPE::TEX_CEO,
+	TEXTURETYPE::TEX_MASK
+};
+
+static const string g_arrMI_Tex[(int)EWeaponMaterial::MATERIAL_END]
+{
+	"g_DiffuseTexture",
+	"g_BiNormalTexture",
+	"g_MRATexture",
+	"g_CEOTexture"
+	"g_MASKTexture"
+};
+
 const wstring g_arrGradeSlotBgName[(int)EEquipmentGradeUI::GRADE_END]
 { 
 	L"T_Item_Bg_Grey",
@@ -197,6 +232,124 @@ const wstring g_arrGradeEffectName[(int)EEquipmentGradeUI::GRADE_END]
 	L"T_Item_Glow_Green",
 	L"T_Item_Glow_Purple",
 	L"T_Item_Glow_Orange"
+};
+
+const wstring g_arrMI_ArgentBlade[(int)EWeaponMaterial::MATERIAL_END]
+{
+	L"T_1H_Sword_ArgentBlade_D.dds",
+	L"T_1H_Sword_ArgentBlade_N.dds",
+	L"T_1H_sword_ArgentBlade_MRA.dds",
+};
+
+const wstring g_arrMI_Crossblade[(int)EWeaponMaterial::MATERIAL_END]
+{
+	L"T_1h_Sword_Crossblade_D.dds",
+	L"T_1h_Sword_Crossblade_N.dds",
+	L"T_1h_Sword_Crossblade_MRA.dds",
+};
+
+const wstring g_arrMI_Dragon[(int)EWeaponMaterial::MATERIAL_END]
+{
+	L"T_1h_Sword_Dragon_D.dds",
+	L"T_1h_Sword_Dragon_N.dds",
+	L"T_1h_Sword_Dragon_MRA.dds",
+	L"T_1h_Sword_Dragon_CEO.dds"
+};
+
+const wstring g_arrMI_Eclipse[(int)EWeaponMaterial::MATERIAL_END]
+{
+	L"T_1H_Sword_Eclipse_Gold_D.dds",
+	L"T_1H_Sword_Eclipse_Gold_N.dds",
+	L"T_1H_Sword_Eclipse_Gold_MRA.dds",
+	L"T_1H_Sword_Eclipse_Gold_CEO.dds"
+};
+
+const wstring g_arrMI_Justice[(int)EWeaponMaterial::MATERIAL_END]
+{
+	L"T_1H_sword_Justice_D.dds",
+	L"T_1H_sword_Justice_N.dds",
+	L"T_1H_sword_Justice_MRA.dds",
+	L"T_1H_sword_Justice_CEO.dds"
+};
+
+const wstring g_arrMI_GodHammer[(int)EWeaponMaterial::MATERIAL_END]
+{
+	L"T_2H_hammer_Godhammer_D.dds",
+	L"T_2H_hammer_Godhammer_N.dds",
+	L"T_2H_hammer_Godhammer_MRA.dds",
+};
+
+const wstring g_arrMI_Harbinger[(int)EWeaponMaterial::MATERIAL_END]
+{
+	L"T_2h_Hammer_Harbinger_D.dds",
+	L"T_2h_Hammer_Harbinger_N.dds",
+	L"T_2h_Hammer_Harbinger_MRA.dds",
+	L"T_2h_Hammer_Harbinger_CEO.dds"
+};
+
+const wstring g_arrMI_Hinterclaw[(int)EWeaponMaterial::MATERIAL_END]
+{
+	L"T_2H_hammer_Hinterclaw_D.dds",
+	L"T_2H_hammer_Hinterclaw_N.dds",
+	L"T_2H_hammer_Hinterclaw_MRA.dds",
+	L"T_2H_hammer_Hinterclaw_CEO.dds"
+};
+
+const wstring g_arrMI_Ironstone[(int)EWeaponMaterial::MATERIAL_END]
+{
+	L"T_2h_hammer_Ironstone_D.dds",
+	L"T_2h_hammer_Ironstone_N.dds",
+	L"T_2h_hammer_Ironstone_MRA.dds",
+	L"T_2h_hammer_Ironstone_CEO.dds"
+};
+
+const wstring g_arrMI_Legend1[(int)EWeaponMaterial::MATERIAL_END]
+{
+	L"T_2H_hammer_Legend1_D.dds",
+	L"T_2H_hammer_Legend1_N.dds",
+	L"T_2H_hammer_Legend1_MRA.dds",
+	L"T_2H_hammer_Legend1_CEO.dds",
+	L"T_2H_hammer_Legend1_MASK.dds"
+};
+
+const wstring g_arrMI_Legend2[(int)EWeaponMaterial::MATERIAL_END]
+{
+	L"T_2H_hammer_Legend2_D.dds",
+	L"T_2H_hammer_Legend2_N.dds",
+	L"T_2H_hammer_Legend2_MRA.dds",
+	L"T_2H_hammer_Legend2_CEO.dds",
+};
+
+const wstring g_arrMI_Legend5[(int)EWeaponMaterial::MATERIAL_END]
+{
+	L"T_2H_hammer_Legend5_D.dds",
+	L"T_2H_hammer_Legend5_N.dds",
+	L"T_2H_hammer_Legend5_MRA.dds",
+	L"T_2H_hammer_Legend5_CEO.dds",
+};
+
+const wstring g_arrMI_Mesa[(int)EWeaponMaterial::MATERIAL_END]
+{
+	L"T_2h_hammer_Mesa_D.dds",
+	L"T_2h_hammer_Mesa_N.dds",
+	L"T_2h_hammer_Mesa_MRA.dds",
+	L"T_2h_hammer_Mesa_CEO.dds",
+};
+
+const wstring g_arrMI_Skymourne[(int)EWeaponMaterial::MATERIAL_END]
+{
+	L"T_2h_hammer_Skymourne_D.dds",
+	L"T_2h_hammer_Skymourne_N.dds",
+	L"T_2h_hammer_Skymourne_MRA.dds",
+	L"T_2h_hammer_Skymourne_CEO.dds",
+};
+
+const wstring g_arrMI_Soothsayer[(int)EWeaponMaterial::MATERIAL_END]
+{
+	L"T_2H_Hammer_Soothsayer_D.dds",
+	L"T_2H_Hammer_Soothsayer_N.dds",
+	L"T_2H_Hammer_Soothsayer_MRA.dds",
+	L"T_2H_Hammer_Soothsayer_CEO.dds",
 };
 
 END

@@ -4,6 +4,8 @@
 
 BEGIN(Client)
 
+class CTrailEffect_Normal;
+
 class CFury final : public CWeapon
 {
 private:
@@ -29,8 +31,10 @@ private:
 	virtual void Set_Equip(const _bool _isEquip, void* _pArg = nullptr);
 
 private:
-	_float4x4 m_matPivot;
+	_float4x4 m_matPivot{};
 	CBoxCollider* m_pCollider = nullptr;
+
+	CTrailEffect_Normal* m_pTrailEffect_Normal = nullptr;
 
 public:
 	static CFury* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext);

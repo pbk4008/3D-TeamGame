@@ -96,9 +96,9 @@ HRESULT CVIBuffer_PointInstance_Respawn::NativeConstruct(void * pArg)
 		XMStoreFloat4(&pVertices[i].vUp, m_Desc.matParticle.r[1]);
 		XMStoreFloat4(&pVertices[i].vLook, m_Desc.matParticle.r[2]);
 		pVertices[i].vPosition =
-			_float4(XMVectorGetX(m_Desc.matParticle.r[3]) + rand() % (_int)(m_Desc.fParticleStartRandomPos.x),
-				XMVectorGetY(m_Desc.matParticle.r[3]) + rand() % (_int)(m_Desc.fParticleStartRandomPos.y),
-				XMVectorGetZ(m_Desc.matParticle.r[3]) + rand() % (_int)(m_Desc.fParticleStartRandomPos.z), 1.f);
+			_float4(XMVectorGetX(m_Desc.matParticle.r[3]) + rand() % (_int)(m_Desc.fParticleStartRandomPos.x) + (rand() % 10) * 0.1f,
+				XMVectorGetY(m_Desc.matParticle.r[3]) + rand() % (_int)(m_Desc.fParticleStartRandomPos.y) + (rand() % 10) * 0.1f,
+				XMVectorGetZ(m_Desc.matParticle.r[3]) + rand() % (_int)(m_Desc.fParticleStartRandomPos.z) + (rand() % 10) * 0.1f, 1.f);
 
 		//맨처음 들어오는 y값을 미리 저장해둠
 		m_pFirstPos[i].x = pVertices[i].vPosition.x;
@@ -344,9 +344,9 @@ void CVIBuffer_PointInstance_Respawn::Particle_Reset()
 		XMStoreFloat4(&((VTXPARTICLE*)SubResource.pData)[i].vRight, m_Desc.matParticle.r[0]);
 		XMStoreFloat4(&((VTXPARTICLE*)SubResource.pData)[i].vUp, m_Desc.matParticle.r[1]);
 		XMStoreFloat4(&((VTXPARTICLE*)SubResource.pData)[i].vLook, m_Desc.matParticle.r[2]);
-		((VTXPARTICLE*)SubResource.pData)[i].vPosition.x = XMVectorGetX(m_Desc.matParticle.r[3]) + rand() % (_int)(m_Desc.fParticleStartRandomPos.x);
-		((VTXPARTICLE*)SubResource.pData)[i].vPosition.y = XMVectorGetY(m_Desc.matParticle.r[3]) + rand() % (_int)(m_Desc.fParticleStartRandomPos.y);
-		((VTXPARTICLE*)SubResource.pData)[i].vPosition.z = XMVectorGetZ(m_Desc.matParticle.r[3]) + rand() % (_int)(m_Desc.fParticleStartRandomPos.z);
+		((VTXPARTICLE*)SubResource.pData)[i].vPosition.x = XMVectorGetX(m_Desc.matParticle.r[3]) + rand() % (_int)(m_Desc.fParticleStartRandomPos.x) + (rand() % 10) * 0.1f;
+		((VTXPARTICLE*)SubResource.pData)[i].vPosition.y = XMVectorGetY(m_Desc.matParticle.r[3]) + rand() % (_int)(m_Desc.fParticleStartRandomPos.y) + (rand() % 10) * 0.1f;
+		((VTXPARTICLE*)SubResource.pData)[i].vPosition.z = XMVectorGetZ(m_Desc.matParticle.r[3]) + rand() % (_int)(m_Desc.fParticleStartRandomPos.z) + (rand() % 10) * 0.1f;
 
 		m_pFirstPos[i].x = ((VTXPARTICLE*)SubResource.pData)[i].vPosition.x;
 		m_pFirstPos[i].y = ((VTXPARTICLE*)SubResource.pData)[i].vPosition.y;

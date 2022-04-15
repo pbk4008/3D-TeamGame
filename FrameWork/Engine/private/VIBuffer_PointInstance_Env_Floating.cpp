@@ -220,12 +220,12 @@ void CVIBuffer_PointInstance_Env_Floating::Update(_double TimeDelta, _uint eAxis
 		{
 			if (m_Desc.fLifeTime > ((VTXPARTICLE*)SubResource.pData)[i].vTime.x)
 			{
-				((VTXPARTICLE*)SubResource.pData)[i].vTime.x += (_float)TimeDelta;
+				//((VTXPARTICLE*)SubResource.pData)[i].vTime.x += (_float)TimeDelta;
 			}
 
 			if (m_Desc.fLifeTime < ((VTXPARTICLE*)SubResource.pData)[i].vTime.x)
 			{
-				((VTXPARTICLE*)SubResource.pData)[i].vTime.x = m_Desc.fLifeTime;
+				//((VTXPARTICLE*)SubResource.pData)[i].vTime.x = m_Desc.fLifeTime;
 			}
 
 			if ((_uint)AXIS::AXIS_X == eAxis)
@@ -297,7 +297,7 @@ void CVIBuffer_PointInstance_Env_Floating::Particle_Reset()
 
 	for (_uint i = 0; i < m_Desc.iNumInstance; ++i)
 	{
-		((VTXPARTICLE*)SubResource.pData)[i].vTime.x = (rand() % 9) * 0.1f + m_Desc.fCurTime;
+		//((VTXPARTICLE*)SubResource.pData)[i].vTime.x = (rand() % 9) * 0.1f + m_Desc.fCurTime;
 
 		m_Desc.matParticle.r[0] = XMVectorSetX(m_Desc.matParticle.r[0], m_Desc.fParticleSize.x);
 		m_Desc.matParticle.r[1] = XMVectorSetY(m_Desc.matParticle.r[1], m_Desc.fParticleSize.y);
@@ -305,9 +305,9 @@ void CVIBuffer_PointInstance_Env_Floating::Particle_Reset()
 		XMStoreFloat4(&((VTXPARTICLE*)SubResource.pData)[i].vRight, m_Desc.matParticle.r[0]);
 		XMStoreFloat4(&((VTXPARTICLE*)SubResource.pData)[i].vUp, m_Desc.matParticle.r[1]);
 		XMStoreFloat4(&((VTXPARTICLE*)SubResource.pData)[i].vLook, m_Desc.matParticle.r[2]);
-		((VTXPARTICLE*)SubResource.pData)[i].vPosition.x = XMVectorGetX(m_Desc.matParticle.r[3]) + rand() % (_int)(m_Desc.fParticleStartRandomPos.x);
-		((VTXPARTICLE*)SubResource.pData)[i].vPosition.y = XMVectorGetY(m_Desc.matParticle.r[3]) + rand() % (_int)(m_Desc.fParticleStartRandomPos.y);
-		((VTXPARTICLE*)SubResource.pData)[i].vPosition.z = XMVectorGetZ(m_Desc.matParticle.r[3]) + rand() % (_int)(m_Desc.fParticleStartRandomPos.z);
+		((VTXPARTICLE*)SubResource.pData)[i].vPosition.x = XMVectorGetX(m_Desc.matParticle.r[3]) + rand() % (_int)(m_Desc.fParticleStartRandomPos.x) + (rand() % 10) * 0.1f;
+		((VTXPARTICLE*)SubResource.pData)[i].vPosition.y = XMVectorGetY(m_Desc.matParticle.r[3]) + rand() % (_int)(m_Desc.fParticleStartRandomPos.y) + (rand() % 10) * 0.1f;
+		((VTXPARTICLE*)SubResource.pData)[i].vPosition.z = XMVectorGetZ(m_Desc.matParticle.r[3]) + rand() % (_int)(m_Desc.fParticleStartRandomPos.z) + (rand() % 10) * 0.1f;
 	}
 
 	m_pDeviceContext->Unmap(m_pVBInstance, 0);

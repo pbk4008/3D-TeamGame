@@ -3,11 +3,15 @@
 #include "BackGround.h"
 #include "MainCamera.h"
 #include "MainCamera_Ortho.h"
-#include "DebugSystem.h"
 #include "Loading.h"
 #include "MeshLoader.h"
+
+#include "DebugSystem.h"
 #include "ShakeManager.h"
 #include "DataManager.h"
+#include "InteractManager.h"
+#include "WeaponGenerator.h"
+#include "DropManager.h"
 
 //Inventory UI Object
 #include "Inven_UIManager.h"
@@ -27,16 +31,23 @@
 #include "Button_Equipment.h"
 #include "Button_Armory.h"
 #include "Button_Skill.h"
+//HUD
+#include "Hud.h"
+#include "Loot_Equipment.h"
 
 //Inventory UI Component
 #include "SingleImage.h"
 #include "UIHelper.h"
+
 
 CClient_Observer* g_pObserver = nullptr;
 CDebugSystem* g_pDebugSystem = nullptr;
 CShakeManager* g_pShakeManager = nullptr;
 CDataManager* g_pDataManager = nullptr;
 CInven_UIManager* g_pInvenUIManager = nullptr;
+CInteractManager* g_pInteractManager = nullptr;
+CWeaponGenerator* g_pWeaponGenerator = nullptr;
+CDropManager* g_pDropManager = nullptr;
 
 CMainApp::CMainApp()
 {
@@ -48,6 +59,17 @@ HRESULT CMainApp::NativeConstruct()
 	if (FAILED(pInstance->Initialize_Engine(g_hInst, g_hWnd, (_uint)SCENEID::SCENE_END, CGraphic_Device::MODE_WIN, g_iWinCx, g_iWinCy, &m_pDevice, &m_pDeviceContext)))
 		return E_FAIL;
 	RELEASE_INSTANCE(CGameInstance);
+
+	g_pGameInstance->Set_NumLayers((_uint)ELayer::Max);
+	// 플레이어
+	g_pGameInstance->Set_CollisionLayer((_uint)ELayer::Player, (_uint)ELayer::Enviroment);
+	g_pGameInstance->Set_CollisionLayer((_uint)ELayer::Player, (_uint)ELayer::MonsterWeapon);
+	g_pGameInstance->Set_CollisionLayer((_uint)ELayer::Player, (_uint)ELayer::JumpTrigger);
+	g_pGameInstance->Set_CollisionLayer((_uint)ELayer::Player, (_uint)ELayer::Monster);
+	g_pGameInstance->Set_CollisionLayer((_uint)ELayer::Player, (_uint)ELayer::Trigger);
+	// 몬스터
+	g_pGameInstance->Set_CollisionLayer((_uint)ELayer::Monster, (_uint)ELayer::Enviroment);
+	g_pGameInstance->Set_CollisionLayer((_uint)ELayer::Monster, (_uint)ELayer::Weapon);
 
 	if (FAILED(Ready_Fonts()))
 		return E_FAIL;
@@ -86,8 +108,8 @@ _int CMainApp::Tick(_double TimeDelta)
 
 	g_pGameInstance->Update_InputDev();
 
-	if (g_pInvenUIManager->IsOpenModal())
-		TimeDelta = 0.f;
+	//if (g_pInvenUIManager->IsOpenModal())
+	//	TimeDelta = 0.f;
 
 	if (m_isFreeze)
 	{
@@ -210,6 +232,10 @@ if (FAILED(pMeshLoader->Reserve_MeshLoader(m_pDevice, m_pDeviceContext)))
 	if (FAILED(g_pInvenUIManager->NativeConstruct()))
 		return E_FAIL;
 
+	g_pInteractManager = CInteractManager::GetInstance();
+	if (FAILED(g_pInteractManager->NativeConstruct()))
+		return E_FAIL;
+
 	return S_OK;
 }
 
@@ -293,7 +319,13 @@ HRESULT CMainApp::Ready_GameObject_Prototype()
 	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_UI_Button_Skill"), CButton_Skill::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 	////////////////////////////////
-
+	/* for. Hud */
+	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_UI_Button_Hud"), CHud::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	//Loot Equipment
+	//if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_UI_LootEquipment"), CLoot_Equipment::Create(m_pDevice, m_pDeviceContext))))
+	//	return E_FAIL;
+	////////////////////////////////
 	return S_OK;
 }
 
@@ -421,11 +453,11 @@ void CMainApp::Free()
 	CMeshLoader::DestroyInstance();
 	CDataManager::DestroyInstance();
 	CInven_UIManager::DestroyInstance();
+	CWeaponGenerator::DestroyInstance();
+	CInteractManager::DestroyInstance();
 
 	Safe_Release(g_pObserver);
-
 	Safe_Release(m_pRenderer);
-
 	Safe_Release(m_pDeviceContext);
 	Safe_Release(m_pDevice);
 	

@@ -267,8 +267,9 @@ void CEffectTool_Dlg::OnBnClickedButtonApply()
 	_tcscpy_s(m_EffectDesc.ShaderFullFilePath, ShaderFullPath.c_str());
 	
 	wstring Name = m_strPickFileName;
-	wstring FullName = L"Prototype_GameObject_Effect"/* + Name*/;
-	//wstring FullName = L"Prototype_GameObject_Effect_Floating"/* + Name*/;
+	//wstring FullName = L"Prototype_GameObject_Effect"/* + Name*/;
+	wstring FullName = L"Prototype_GameObject_Effect_Floating"/* + Name*/;
+	//wstring FullName = L"Prototype_GameObject_Effect_Floating_Speed"/* + Name*/; //파티클늦게나오는거일수록 속도빠르게주고싶을때 
 	//wstring FullName = L"Prototype_GameObject_Effect_Env_Floating"/* + Name*/;
 	//wstring FullName = L"Prototype_GameObject_Effect_Respawn"/* + Name*/;
 
@@ -531,8 +532,9 @@ void CEffectTool_Dlg::OnBnClickedButtonLoad()
 	}
 
 	wstring Tag = m_vecEffect[0].TextureTag;
-	wstring FullName = L"Prototype_GameObject_Effect"/* + Tag*/;
-	//wstring FullName = L"Prototype_GameObject_Effect_Floating"/* + Tag*/;
+	//wstring FullName = L"Prototype_GameObject_Effect"/* + Tag*/;
+	wstring FullName = L"Prototype_GameObject_Effect_Floating"/* + Tag*/;
+	//wstring FullName = L"Prototype_GameObject_Effect_Floating_Speed"/* + Name*/; //파티클늦게나오는거일수록 속도빠르게주고싶을때 
 	//wstring FullName = L"Prototype_GameObject_Effect_Env_Floating"/* + Name*/;
 	//wstring FullName = L"Prototype_GameObject_Effect_Respawn"/* + Name*/;
 	

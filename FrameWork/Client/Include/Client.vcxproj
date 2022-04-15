@@ -340,6 +340,7 @@ call Update_Client.bat</Command>
     <ClInclude Include="..\Headers\Effect_Env_Fire.h" />
     <ClInclude Include="..\Headers\Effect_Env_Floating.h" />
     <ClInclude Include="..\Headers\Effect_Falling_Leaf.h" />
+    <ClInclude Include="..\Headers\Effect_Floating_Speed.h" />
     <ClInclude Include="..\Headers\Effect_Guard.h" />
     <ClInclude Include="..\Headers\Effect_Hammer_Dust.h" />
     <ClInclude Include="..\Headers\Effect_HitFloating.h" />
@@ -349,6 +350,7 @@ call Update_Client.bat</Command>
     <ClInclude Include="..\Headers\FlyingShield.h" />
     <ClInclude Include="..\Headers\Fury.h" />
     <ClInclude Include="..\Headers\GameObjectPool.h" />
+    <ClInclude Include="..\Headers\Indicator_Manager.h" />
     <ClInclude Include="..\Headers\InteractableObject.h" />
     <ClInclude Include="..\Headers\InteractManager.h" />
     <ClInclude Include="..\Headers\InventoryData.h" />
@@ -361,9 +363,12 @@ call Update_Client.bat</Command>
     <ClInclude Include="..\Headers\Loader.h" />
     <ClInclude Include="..\Headers\Loading.h" />
     <ClInclude Include="..\Headers\LootingChest.h" />
+    <ClInclude Include="..\Headers\Hud.h" />
+    <ClInclude Include="..\Headers\Loot_Equipment.h" />
     <ClInclude Include="..\Headers\MainApp.h" />
     <ClInclude Include="..\Headers\MainCamera.h" />
     <ClInclude Include="..\Headers\MainCamera_Ortho.h" />
+    <ClInclude Include="..\Headers\MeshEffect.h" />
     <ClInclude Include="..\Headers\MeshLoader.h" />
     <ClInclude Include="..\Headers\MidBoss_Attack.h" />
     <ClInclude Include="..\Headers\MidBoss_BattleCry.h" />
@@ -385,6 +390,7 @@ call Update_Client.bat</Command>
     <ClInclude Include="..\Headers\NoiseFire.h" />
     <ClInclude Include="..\Headers\Plane_Test.h" />
     <ClInclude Include="..\Headers\PlayerData.h" />
+    <ClInclude Include="..\Headers\Player_Weapon.h" />
     <ClInclude Include="..\Headers\Polearm.h" />
     <ClInclude Include="..\Headers\Potal.h" />
     <ClInclude Include="..\Headers\Scenematic.h" />
@@ -475,10 +481,11 @@ call Update_Client.bat</Command>
     <ClInclude Include="..\Headers\Stargazer.h" />
     <ClInclude Include="..\Headers\State_Silvermane.h" />
     <ClInclude Include="..\Headers\SubEnvironment.h" />
-    <ClInclude Include="..\Headers\SwordTrail.h" />
+    <ClInclude Include="..\Headers\TrailEffect_Distortion.h" />
     <ClInclude Include="..\Headers\TestObj.h" />
     <ClInclude Include="..\Headers\TestScene_JS.h" />
     <ClInclude Include="..\Headers\TrailEffect.h" />
+    <ClInclude Include="..\Headers\TrailEffect_Normal.h" />
     <ClInclude Include="..\Headers\Traverse_Jump400Jog.h" />
     <ClInclude Include="..\Headers\Traverse_JumpNodeJog.h" />
     <ClInclude Include="..\Headers\Treasure_Chest.h" />
@@ -492,6 +499,7 @@ call Update_Client.bat</Command>
     <ClInclude Include="..\Headers\UI_Equipment.h" />
     <ClInclude Include="..\Headers\UI_Fill_CKey.h" />
     <ClInclude Include="..\Headers\UI_Indexes.h" />
+    <ClInclude Include="..\Headers\UI_Indicator.h" />
     <ClInclude Include="..\Headers\UI_Ingame.h" />
     <ClInclude Include="..\Headers\UI_ItemSlot.h" />
     <ClInclude Include="..\Headers\UI_ItemStatusBackground.h" />
@@ -515,6 +523,7 @@ call Update_Client.bat</Command>
     <ClInclude Include="..\Headers\Wall.h" />
     <ClInclude Include="..\Headers\Weapon.h" />
     <ClInclude Include="..\Headers\WeaponData.h" />
+    <ClInclude Include="..\Headers\WeaponGenerator.h" />
     <ClInclude Include="Client.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="pch.h" />
@@ -672,6 +681,7 @@ call Update_Client.bat</Command>
     <ClCompile Include="..\Codes\Effect_Env_Fire.cpp" />
     <ClCompile Include="..\Codes\Effect_Env_Floating.cpp" />
     <ClCompile Include="..\Codes\Effect_Falling_Leaf.cpp" />
+    <ClCompile Include="..\Codes\Effect_Floating_Speed.cpp" />
     <ClCompile Include="..\Codes\Effect_Guard.cpp" />
     <ClCompile Include="..\Codes\Effect_Hammer_Dust.cpp" />
     <ClCompile Include="..\Codes\Effect_HitFloating.cpp" />
@@ -680,6 +690,7 @@ call Update_Client.bat</Command>
     <ClCompile Include="..\Codes\FlyingShield.cpp" />
     <ClCompile Include="..\Codes\Fury.cpp" />
     <ClCompile Include="..\Codes\GameObjectPool.cpp" />
+    <ClCompile Include="..\Codes\Indicator_Manager.cpp" />
     <ClCompile Include="..\Codes\InteractableObject.cpp" />
     <ClCompile Include="..\Codes\InteractManager.cpp" />
     <ClCompile Include="..\Codes\InventoryData.cpp" />
@@ -688,6 +699,9 @@ call Update_Client.bat</Command>
     <ClCompile Include="..\Codes\JumpBox.cpp" />
     <ClCompile Include="..\Codes\JumpTrigger.cpp" />
     <ClCompile Include="..\Codes\LootingChest.cpp" />
+    <ClCompile Include="..\Codes\Hud.cpp" />
+    <ClCompile Include="..\Codes\Loot_Equipment.cpp" />
+    <ClCompile Include="..\Codes\MeshEffect.cpp" />
     <ClCompile Include="..\Codes\MeshLoader.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
     </ClCompile>
@@ -724,6 +738,7 @@ call Update_Client.bat</Command>
     <ClCompile Include="..\Codes\NoiseFire.cpp" />
     <ClCompile Include="..\Codes\Plane_Test.cpp" />
     <ClCompile Include="..\Codes\PlayerData.cpp" />
+    <ClCompile Include="..\Codes\Player_Weapon.cpp" />
     <ClCompile Include="..\Codes\Polearm.cpp" />
     <ClCompile Include="..\Codes\Potal.cpp" />
     <ClCompile Include="..\Codes\Scenematic.cpp" />
@@ -814,10 +829,11 @@ call Update_Client.bat</Command>
     <ClCompile Include="..\Codes\Stargazer.cpp" />
     <ClCompile Include="..\Codes\State_Silvermane.cpp" />
     <ClCompile Include="..\Codes\SubEnvironment.cpp" />
-    <ClCompile Include="..\Codes\SwordTrail.cpp" />
+    <ClCompile Include="..\Codes\TrailEffect_Distortion.cpp" />
     <ClCompile Include="..\Codes\TestObj.cpp" />
     <ClCompile Include="..\Codes\TestScene_JS.cpp" />
     <ClCompile Include="..\Codes\TrailEffect.cpp" />
+    <ClCompile Include="..\Codes\TrailEffect_Normal.cpp" />
     <ClCompile Include="..\Codes\Traverse_Jump400Jog.cpp" />
     <ClCompile Include="..\Codes\Traverse_JumpNodeJog.cpp" />
     <ClCompile Include="..\Codes\Treasure_Chest.cpp" />
@@ -830,6 +846,7 @@ call Update_Client.bat</Command>
     <ClCompile Include="..\Codes\UI_Equipment.cpp" />
     <ClCompile Include="..\Codes\UI_Fill_CKey.cpp" />
     <ClCompile Include="..\Codes\UI_Indexes.cpp" />
+    <ClCompile Include="..\Codes\UI_Indicator.cpp" />
     <ClCompile Include="..\Codes\UI_Ingame.cpp" />
     <ClCompile Include="..\Codes\UI_ItemSlot.cpp" />
     <ClCompile Include="..\Codes\UI_ItemStatusBackground.cpp" />
@@ -853,6 +870,7 @@ call Update_Client.bat</Command>
     <ClCompile Include="..\Codes\Wall.cpp" />
     <ClCompile Include="..\Codes\Weapon.cpp" />
     <ClCompile Include="..\Codes\WeaponData.cpp" />
+    <ClCompile Include="..\Codes\WeaponGenerator.cpp" />
     <ClCompile Include="..\Default\Client_Function.cpp" />
     <ClCompile Include="Client.cpp" />
     <ClCompile Include="pch.cpp">
@@ -897,6 +915,8 @@ call Update_Client.bat</Command>
     <FxCompile Include="..\bin\ShaderFile\Shader_INST_Tree.hlsl" />
     <FxCompile Include="..\bin\ShaderFile\Shader_Mesh.hlsl" />
     <FxCompile Include="..\bin\ShaderFile\Shader_MeshAnim.hlsl" />
+    <FxCompile Include="..\bin\ShaderFile\Shader_Metor.hlsl" />
+    <FxCompile Include="..\bin\ShaderFile\Shader_MetorAnim.hlsl" />
     <FxCompile Include="..\bin\ShaderFile\Shader_Monster.hlsl" />
     <FxCompile Include="..\bin\ShaderFile\Shader_Panel_UI.hlsl" />
     <FxCompile Include="..\bin\ShaderFile\Shader_Particle.hlsl" />
@@ -906,6 +926,7 @@ call Update_Client.bat</Command>
     <FxCompile Include="..\bin\ShaderFile\Shader_Shield.hlsl" />
     <FxCompile Include="..\bin\ShaderFile\Shader_SilverMane.hlsl" />
     <FxCompile Include="..\bin\ShaderFile\Shader_StaticMesh.hlsl" />
+    <FxCompile Include="..\bin\ShaderFile\Shader_Trail.hlsl" />
     <FxCompile Include="..\bin\ShaderFile\Shader_Treasure_Chest.hlsl" />
     <FxCompile Include="..\bin\ShaderFile\Shader_UI.hlsl" />
     <FxCompile Include="..\bin\ShaderFile\Shader_UI_Bar.hlsl" />

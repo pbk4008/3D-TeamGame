@@ -317,8 +317,8 @@ HRESULT CMonster_Bastion_Shooter::Ready_Components()
 	if (FAILED(__super::SetUp_Components((_uint)SCENEID::SCENE_STATIC,
 		L"Proto_Component_CharacterController", L"Com_CharacterController", (CComponent**)&m_pCharacterController, &tController)))
 		return E_FAIL;
-
 	m_pCharacterController->setOwnerTransform(m_pTransform);
+	m_pCharacterController->setShapeLayer((_uint)ELayer::Monster);
 
 	return S_OK;
 }

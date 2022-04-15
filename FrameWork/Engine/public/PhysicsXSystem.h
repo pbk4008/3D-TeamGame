@@ -23,6 +23,7 @@ class CSimulationEventCallback;
 class CSimulationFilterCallback;
 class CControllerBehaviorCallback;
 class CControllerHitReport;
+class CQueryFilterCallback;
 
 class CCollider;
 class CBoxCollider;
@@ -42,6 +43,7 @@ typedef struct tagRaycastDesc
 	_float fMaxDistance = 0.f;
 	PxHitFlags hitFlags = PxHitFlag::eDEFAULT;
 	PxQueryFilterData filterData;
+	PxU32 layerMask = 0;
 	// out
 	_float3 vHitPos = { 0.f, 0.f, 0.f };
 	CGameObject** ppOutHitObject = nullptr;
@@ -59,6 +61,7 @@ typedef struct tagSweepDesc
 	_float fMaxDistance = 0.f;
 	PxHitFlags hitFlags = PxHitFlag::eDEFAULT;
 	PxQueryFilterData filterData;
+	PxU32 layerMask = 0;
 	// out
 	_float3 vHitPos = { 0.f, 0.f, 0.f };
 	CGameObject** ppOutHitObject = nullptr;
@@ -73,6 +76,7 @@ typedef struct tagOverlapDesc
 	_float3 vOrigin = { 0.f, 0.f, 0.f };
 	_float4 vQuat = { 0.f, 0.f, 0.f, 1.f };
 	PxQueryFilterData filterData;
+	PxU32 layerMask = 0;
 	// out
 	CGameObject** ppOutHitObject = nullptr;
 	_uint iHitNum = 0;
@@ -90,6 +94,7 @@ private:
 public:
 	HRESULT Init_PhysX();
 	const _int Tick(const _double& _dDeltaTime);
+	void Set_NumLayers(const _uint _iNumLayers);
 
 private:
 	PxMaterial* Create_Material(const PxReal _staticFriction, const PxReal _dynamicFriction, const PxReal _restitution);
@@ -108,6 +113,8 @@ public:
 
 	void Remove_Actor(PxActor* _pActor);
 	void Add_Actor(PxActor* _pActor);
+	void Set_ShapeLayer(PxShape* _pShape, const _uint _iLayer);
+	void Set_CollisionLayer(const _uint _iLayer1, const _uint _iLayer2);
 
 public:
 	const _bool Raycast(RAYCASTDESC& _desc);
@@ -125,6 +132,9 @@ private:
 	PxCooking* m_pCooking = nullptr;
 
 	PxMaterial* m_pDefaultMaterial = nullptr;
+
+	_uint m_iNumLayers = 0;
+	list<_ulonglong> m_listLayers;
 
 private: /* For.Pvd */
 	PxPvdTransport* m_pPvdTransport = nullptr;

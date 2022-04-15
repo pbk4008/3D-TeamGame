@@ -25,10 +25,16 @@ private:
 	HRESULT Ready_Components();
 	_int Attach_FixedBone(const _double& Timedelta);
 	_int Attach_Owner(const _double& Timedelta);
+	void OnHitGroundEffect();
+
+public:
+	void Set_HitGround(_bool bCheck) { m_bHitGround = bCheck; }
+
 
 private:
 	_float4x4 m_matPivot;
 	CCapsuleCollider* m_pCollider = nullptr;
+	_bool m_bHitGround = false;
 
 public:
 	static CShieldBreaker* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);

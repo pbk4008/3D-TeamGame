@@ -25,12 +25,11 @@ HRESULT CUI_Background::NativeConstruct(const _uint iSceneID, void* pArg)
 	if (FAILED(__super::NativeConstruct(iSceneID, pArg)))
 		return E_FAIL;
 
-	m_pTransform->Set_State(CTransform::STATE_POSITION, _vector{ 0.f, -30.f, 0.9f, 1.f});
+	m_pTransform->Set_State(CTransform::STATE_POSITION, _vector{ 0.f, m_fInitPos, 0.9f, 1.f});
 	m_pTransform->Scaling(_vector{ 1400.f, 780.f, 1.f, 1.f });
 
 	if (FAILED(Ready_Component()))
 		return E_FAIL;
-
 
 	setActive(false);
 
@@ -50,6 +49,16 @@ _int CUI_Background::LateTick(_double TimeDelta)
 	if (FAILED(CUI::LateTick(TimeDelta)))
 		return -1;
 
+	if (m_fInitPos > m_fEndPos)
+	{
+		m_fInitPos -= TimeDelta * 100.f;
+		if (m_fInitPos < m_fEndPos)
+		{
+			m_fInitPos = m_fEndPos;
+		}
+		m_pTransform->Set_State(CTransform::STATE_POSITION, _vector{ 0.f, m_fInitPos, 0.9f, 1.f });
+	}
+
 	if (nullptr != m_pRenderer)
 		m_pRenderer->Add_RenderGroup(CRenderer::RENDER::RENDER_UI_ACTIVE, this);
 
@@ -62,6 +71,14 @@ HRESULT CUI_Background::Render()
 		m_pSigleImageCom->Render(m_pTransform);
 	
 	return S_OK;
+}
+
+void CUI_Background::setActive(_bool bActive)
+{
+	this->m_bActive = bActive;
+
+	if (false == bActive)
+		m_fInitPos = -20.f;
 }
 
 HRESULT CUI_Background::Ready_Component(void)

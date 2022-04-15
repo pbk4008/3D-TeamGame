@@ -13,6 +13,7 @@ public:
 	{
 		_float2 fPos;
 		_float2 fScale;
+		CUI*	pOwner = nullptr;
 	};
 	explicit CButton_Armory(void) = default;
 	explicit CButton_Armory(ID3D11Device * pDevice, ID3D11DeviceContext * pDeviceContext);
@@ -29,6 +30,7 @@ public:
 public:
 	HRESULT Ready_Component(void);
 	_bool   ButtonClicked(void);
+	_int	Attach_Owner(void);
 
 public:
 	static CButton_Armory* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);
@@ -38,6 +40,8 @@ private:
 	CSingleImage* m_pSigleImageCom = nullptr;
 	CUIHelper*    m_pUIHelperCom = nullptr;
 	Desc desc;
+	CTransform*	  m_pLocalTransform = nullptr;
+	CUI*		  m_pOwner = nullptr;
 
 private:
 	virtual void Free() override;
