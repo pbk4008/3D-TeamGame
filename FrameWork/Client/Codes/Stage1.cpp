@@ -100,8 +100,8 @@ HRESULT CStage1::NativeConstruct()
 	if (FAILED(Ready_Player(L"Layer_Silvermane")))
 		return E_FAIL;
 
-	if (FAILED(Ready_MapObject()))
-		return E_FAIL;
+	//if (FAILED(Ready_MapObject()))
+	//	return E_FAIL;
 
 	//if (FAILED(Ready_TriggerSystem(L"../bin/SaveData/Trigger/MonsterSpawnTrigger.dat")))
 	//	return E_FAIL;
@@ -122,7 +122,7 @@ HRESULT CStage1::NativeConstruct()
 		return E_FAIL;
 
 	g_pGameInstance->PlayBGM(L"Stage1_BGM");
-	//g_pGameInstance->Change_BaseCamera(L"Camera_Silvermane");
+	g_pGameInstance->Change_BaseCamera(L"Camera_Silvermane");
 
 	if (FAILED(Ready_Meteor()))
 		return E_FAIL;
@@ -1803,11 +1803,7 @@ void CStage1::Shoot_Meteor(_double dDeltaTime)
 	if (m_fAccMeteorSpawn >= m_fRandomMeteorSpawnTime)
 	{
 		m_fAccMeteorSpawn = 0.f;
-<<<<<<< HEAD
 		m_fRandomMeteorSpawnTime = MathUtils::ReliableRandom(5.f,15.f);
-=======
-		m_fRandomMeteorSpawnTime = (_float)MathUtils::ReliableRandom(10.f, 25.f);
->>>>>>> main
 		
 		_vector vSelectPos = XMVectorZero();
 		for (auto& pPos : m_vecMeteorPos)
@@ -1826,11 +1822,7 @@ void CStage1::Shoot_Meteor(_double dDeltaTime)
 		if (XMVector3Equal(vSelectPos, XMVectorZero()))
 			return;
 
-<<<<<<< HEAD
 		_uint iRandomShot = (_uint)MathUtils::ReliableRandom(1.0, (_double)iCount+1);
-=======
-		_uint iRandomShot = (_float)MathUtils::ReliableRandom(1, 5);
->>>>>>> main
 		for (_uint i = 0; i < iRandomShot; i++)
 		{
 			_vector vPivot;
