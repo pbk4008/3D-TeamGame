@@ -84,6 +84,8 @@ HRESULT CStage1::NativeConstruct()
 	m_bDebug = false;
 #endif // DEBUG
 
+	g_pWeaponGenerator = CWeaponGenerator::GetInstance();
+
 	if (FAILED(CLevel::NativeConstruct()))
 		return E_FAIL;
 
@@ -92,8 +94,6 @@ HRESULT CStage1::NativeConstruct()
 
 	if (FAILED(Ready_Trigger_Jump()))
 		return E_FAIL;
-
-	g_pWeaponGenerator = CWeaponGenerator::GetInstance();
 
 	if (FAILED(Ready_Player(L"Layer_Silvermane")))
 		return E_FAIL;
@@ -128,8 +128,8 @@ HRESULT CStage1::NativeConstruct()
 	//if (FAILED(Ready_Cinema()))
 	//	return E_FAIL;
 
-	if (FAILED(Ready_Boss(L"Layer_Boss")))
-		return E_FAIL;
+	//if (FAILED(Ready_Boss(L"Layer_Boss")))
+	//	return E_FAIL;
 
 	//if (FAILED(Ready_Monster(L"Layer_Monster")))
 	//	return E_FAIL;
