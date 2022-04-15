@@ -16,16 +16,6 @@ BlendState OneBlending
 	BlendOp = Add;
 };
 
-BlendState OneBlending2
-{
-	BlendEnable[0] = true;
-	/*BlendEnable[1] = true;*/
-
-	SrcBlend = One;
-	//DestBlend = Inv_Src_Alpha;
-	BlendOp = Add;
-};
-
 BlendState AlphaBlending
 {
 	BlendEnable[0] = true;

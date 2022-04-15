@@ -106,7 +106,12 @@ HRESULT CWeapon::Render_Velocity()
 	for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
 		if (FAILED(m_pModel->Render(i, 3))) MSGBOX("Fialed To Rendering Silvermane");
 
-	m_PreWroldMat = m_pTransform->Get_WorldMatrix();
+	m_timer += g_fDeltaTime;
+	if (m_timer >= 0.05f)
+	{
+		m_PreWroldMat = m_pTransform->Get_WorldMatrix();
+		m_timer = 0.f;
+	}
 
 	return S_OK;
 }
@@ -277,12 +282,12 @@ void CWeapon::RimlightCheck(_bool check)
 {
 	m_rimcheck = check;
 	if (check == false)
-		m_rimintensity = 8.f;
+		m_rimintensity = 5.f;
 }
 
 void CWeapon::SetRimIntensity(_float time)
 {
-	m_rimintensity += time;
+	m_rimintensity += time * 1.3f;
 	
 	if (m_rimintensity <= 2.0f)
 		m_rimintensity = 2.0f;

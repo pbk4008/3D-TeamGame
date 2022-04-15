@@ -101,6 +101,7 @@ protected:
 
 	// motion blur
 	_bool			m_motionblurcheck = false;
+	_float			m_timer = 0.f;
 };
 END
 #endif

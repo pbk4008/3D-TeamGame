@@ -262,7 +262,7 @@ _int CMeteor::Move(_fvector vPos)
 	vDir *= m_fSpeed;
 	m_pCollider->Add_Force(vDir);
 
-	m_fRandSpawnTime = MathUtils::ReliableRandom(1.f, 3.f);
+	m_fRandSpawnTime = (_float)MathUtils::ReliableRandom(1.f, 3.f);
 
 	return _int();
 }

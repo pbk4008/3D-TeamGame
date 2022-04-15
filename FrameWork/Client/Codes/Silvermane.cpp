@@ -401,6 +401,8 @@ HRESULT CSilvermane::Render()
 		}
 	}
 
+	if (m_pRenderer->Get_RenderButton(CRenderer::VELOCITYBLUR) == false)
+		m_PreWroldMat = m_pTransform->Get_WorldMatrix();
 #ifdef _DEBUG
 	Render_Debug();
 #endif
@@ -444,9 +446,21 @@ HRESULT CSilvermane::Render_Velocity()
 
 	CActor::BindConstantBuffer(wstrCamTag, &desc, &rimdesc, &motion);
 	for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
-		if (FAILED(m_pModel->Render(i, 5))) MSGBOX("Fialed To Rendering Silvermane");
+	{
+		if (i != 2)
+		{
+			if (FAILED(m_pModel->Render(i, 5))) MSGBOX("Fialed To Rendering Silvermane");
+		}
+	}
+
 
 	m_PreWroldMat = m_pTransform->Get_WorldMatrix();
+	/*m_timer += g_fDeltaTime;
+	if (m_timer >= 0.1f) 
+	{
+		m_PreWroldMat = m_pTransform->Get_WorldMatrix();
+		m_timer = 0.f;
+	}*/
 
 
 	return S_OK;
@@ -1388,6 +1402,8 @@ const _bool CSilvermane::Change_Weapon()
 	//{
 	//	return false;
 	//}
+
+	return S_OK;
 }
 
 void CSilvermane::Change_WeaponOnInventory(void)

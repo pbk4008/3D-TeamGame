@@ -32,7 +32,7 @@ _int CCinema1_1::Tick(_double dDeltaTime)
 
 	m_pCam->Tick(dDeltaTime);
 
-	m_fAccTest += dDeltaTime;
+	m_fAccTest += (_float)dDeltaTime;
 	if (m_fAccTest > 5.f)
 		m_bCinemaEnd = true;
 

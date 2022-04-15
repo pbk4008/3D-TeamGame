@@ -285,7 +285,7 @@ HRESULT CRendererAssit::Setup_RenderTarget()
 
 	//-----------------------------------//
 	if (FAILED(m_pTargetMgr->Add_MRT(TEXT("Target_AlphaBlend"), TEXT("Target_AlphaBlend"))))	return E_FAIL;
-	if (FAILED(m_pTargetMgr->Add_MRT(TEXT("Target_AlphaBlend"), TEXT("Target_AlphaWeight"))))	return E_FAIL;
+	if (FAILED(m_pTargetMgr->Add_MRT(TEXT("Target_AlphaBlend"), TEXT("Target_Emission"))))	return E_FAIL;
 	
 	if (FAILED(m_pTargetMgr->Add_MRT(TEXT("Target_Alpha"), TEXT("Target_Alpha"))))			return E_FAIL;
 

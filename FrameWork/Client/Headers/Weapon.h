@@ -87,9 +87,13 @@ protected:
 	CTexture*		m_dissolveTex = nullptr;
 	_uint			m_dissolvepass = 1;
 
+	// motion blur
+	_float			m_timer = 0.f;
+
 	//rimlight
 	_bool			m_rimcheck = false;
 	_float			m_rimintensity = 8.f;
+
 	_float3			m_vEndPos{};
 
 public:

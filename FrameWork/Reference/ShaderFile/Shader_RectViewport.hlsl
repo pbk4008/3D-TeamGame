@@ -516,7 +516,7 @@ technique11 DefaultTechnique
 	{
 		SetRasterizerState(CullMode_Default);
 		SetDepthStencilState(ZTestDiable, 0);
-		SetBlendState(OneBlending2, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+		SetBlendState(OneBlending, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
 
 		VertexShader = compile vs_5_0 VS_MAIN_VIEWPORT();
 		GeometryShader = NULL;

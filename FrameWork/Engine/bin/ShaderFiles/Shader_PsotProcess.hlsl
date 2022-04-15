@@ -101,7 +101,7 @@ PS_OUT PS_MAIN_HorizontalBlur(PS_IN In)
 													* blurWeights[i];
 	}
 	
-	Out.vOutColor.xyz = color.xyz;
+	Out.vOutColor = color;
 	
 	return Out;
 }
@@ -169,10 +169,11 @@ PS_OUT PS_MAIN_AlphaWeight(PS_IN In)
 	float4 base2 = g_BaseBlur2Texture.Sample(DefaultSampler, In.vTexUV);
 	float4 base4 = g_BaseBlur4Texture.Sample(DefaultSampler, In.vTexUV);
 	
-	float weight = g_WeightTexture.Sample(DefaultSampler, In.vTexUV);
+	float weight = g_WeightTexture.Sample(DefaultSampler, In.vTexUV).r;
+	
 	weight *= g_Weight;
 	
-	float4 baseBloom = (base * weight) + (base2 * weight) + (base4 * weight);
+	float4 baseBloom = (base * (g_Weight - 0.5f)) + (base2 * (g_Weight - 0.3f)) + (base4 * (g_Weight - 0.1f));
 	
 	Out.vOutColor = baseBloom;
 	

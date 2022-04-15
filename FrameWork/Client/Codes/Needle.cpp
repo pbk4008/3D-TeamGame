@@ -157,8 +157,9 @@ _int CNeedle::LateTick(_double _dDeltaTime)
 	if(m_pRenderer)
 		m_pRenderer->Add_RenderGroup(CRenderer::RENDER_NONALPHA, this);
 
-	if (m_pRenderer)
+	if (m_pRenderer && m_pRenderer->Get_RenderButton(CRenderer::VELOCITYBLUR) == true)
 		m_pRenderer->Add_RenderGroup(CRenderer::RENDER_VELOCITY, this);
+	
 
 	return _int();
 }
@@ -188,6 +189,8 @@ HRESULT CNeedle::Render()
 	for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
 		m_pModel->Render(i, 0);
 
+	if (m_pRenderer->Get_RenderButton(CRenderer::VELOCITYBLUR) == false)
+		m_PreWroldMat = m_pTransform->Get_WorldMatrix();
 	return S_OK;
 }
 
