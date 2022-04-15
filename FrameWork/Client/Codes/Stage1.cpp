@@ -125,8 +125,8 @@ HRESULT CStage1::NativeConstruct()
 	if (FAILED(Ready_Cinema()))
 		return E_FAIL;
 
-	//if (FAILED(Ready_Boss(L"Layer_Boss")))
-	//	return E_FAIL;
+	if (FAILED(Ready_Boss(L"Layer_Boss")))
+		return E_FAIL;
 
 	//if (FAILED(Ready_Monster(L"Layer_Monster")))
 	//	return E_FAIL;

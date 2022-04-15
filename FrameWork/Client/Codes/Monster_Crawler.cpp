@@ -140,7 +140,6 @@ _int CMonster_Crawler::Tick(_double _dDeltaTime)
 
 			if (m_lifetime >= 1.f)
 				Set_Remove(true);
-			
 		}
 		else
 		{
@@ -160,7 +159,6 @@ _int CMonster_Crawler::Tick(_double _dDeltaTime)
 
 	if (false == m_bUIShow)
 		m_pPanel->Set_Show(false);
-
 
 	return 0;
 }
@@ -185,17 +183,20 @@ _int CMonster_Crawler::LateTick(_double _dDeltaTime)
 HRESULT CMonster_Crawler::Render()
 {
 	if (m_bdissolve == true)
-		CActor::DissolveOn(0.25f);
+		CActor::DissolveOn(0.5f);
+
+	if (FAILED(m_pModel->SetUp_ValueOnShader("g_bdissolve", &m_bdissolve, sizeof(_bool)))) MSGBOX("Failed to Apply dissolvetime");
 
 	SCB desc;
 	ZeroMemory(&desc, sizeof(SCB));
 
 	wstring wstrCamTag = g_pGameInstance->Get_BaseCameraTag();
 	CActor::BindConstantBuffer(wstrCamTag,&desc);
-	if (FAILED(m_pModel->SetUp_ValueOnShader("g_bdissolve", &m_bdissolve, sizeof(_bool)))) MSGBOX("Failed to Apply dissolvetime");
 
 	for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
+	{
 		m_pModel->Render(i, 0);
+	}
 
 	return S_OK;
 }

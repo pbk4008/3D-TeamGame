@@ -64,7 +64,7 @@ public:
 	void SetRimIntensity(_float time);
 	
 	void Set_Dissolve(_bool on) { m_bdissolve = on; }
-	HRESULT DissolveOn(_float dissolveSpeed = 0.5f);
+	HRESULT DissolveOn(_float dissolveSpeed = 1.f);
 
 public:
 	virtual void Hit(const ATTACKDESC& _tAttackDesc);
@@ -93,6 +93,7 @@ protected:
 	_bool			m_bdissolve = false;
 	_float			m_lifetime = 0.f;
 	CTexture*		m_dissolveTex = nullptr;
+	CTexture*		m_dissolveGradientTex = nullptr;
 
 	// rim light
 	_bool			m_rimcheck = false;

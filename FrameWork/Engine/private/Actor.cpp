@@ -65,6 +65,8 @@ HRESULT CActor::NativeConstruct(const _uint _iSceneID, void* pArg)
 
 	m_dissolveTex = g_pGameInstance->Clone_Component<CTexture>(0, L"Proto_Component_Texture");
 	if (FAILED(m_dissolveTex->Change_Texture(L"DissovleBase"))) MSGBOX("Failed to Change Texture DissovleTex");
+	m_dissolveGradientTex = g_pGameInstance->Clone_Component<CTexture>(0, L"Proto_Component_Texture");
+	if (FAILED(m_dissolveGradientTex->Change_Texture(L"DissovleGradient"))) MSGBOX("Failed to Change Texture DissovleTex");
 
 	return S_OK;
 }
@@ -260,6 +262,7 @@ HRESULT CActor::DissolveOn(_float dissolveSpeed)
 	}
 	if (FAILED(m_pModel->SetUp_ValueOnShader("g_dissolvetime", &m_lifetime, sizeof(_float)))) MSGBOX("Failed to Apply dissolvetime");
 	if (FAILED(m_pModel->SetUp_TextureOnShader("g_DissolveTex", m_dissolveTex, 0))) MSGBOX("Failed to Apply dissolveTex");
+	if (FAILED(m_pModel->SetUp_TextureOnShader("g_DissolveGrTex", m_dissolveGradientTex, 0))) MSGBOX("Failed to Apply dissolveTex");
 
 	return S_OK;
 }

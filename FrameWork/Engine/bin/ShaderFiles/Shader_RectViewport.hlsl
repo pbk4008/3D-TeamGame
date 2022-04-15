@@ -119,9 +119,11 @@ Texture2D g_ShadowMapTex;
 Texture2D g_ShadowTexture;
 
 Texture2D g_AlphaTexture;
+Texture2D g_BlurTexture;
+
 Texture2D g_DistortionTex;
 Texture2D g_VelocityTex;
-Texture2D g_BlurTexture;
+Texture2D g_DissolveTex;
 
 
 struct VS_IN

@@ -108,38 +108,33 @@ half4 Noisfunction(Texture2D MainTex, SamplerState sample, half2 UV, half delta,
 	return color;
 }
 
-half4 Dissolve(Texture2D Diffuse, Texture2D dissolvetex,SamplerState sample,half2 UV,half time)
+half4 Dissolve(Texture2D Diffuse, Texture2D dissolvetex, SamplerState sample, half2 UV, half time)
 {
-	half dissolve = dissolvetex.Sample(sample, UV).r;
 	half4 diffuse = Diffuse.Sample(sample, UV);
-	//half Amount = dissolve - time;
+	half dissolve = dissolvetex.Sample(sample, UV).r;
+	half clipAmount = dissolve - time;
+
+	clip(diffuse.a - clipAmount);
 	
-	clip(diffuse.a - time);
+	if (clipAmount <= 0)
+		discard;
 	
 	if (dissolve <= time)
 	{
-		if (time - dissolve <= 0.03f)
+		if (clipAmount >= 0.03f)
 		{
 			diffuse = half4(1, 0, 0, 1);
-			return diffuse;
 		}
-		else if (time - dissolve <= 0.06f)
+		else if (clipAmount >= 0.06f)
 		{
 			diffuse = half4(1, 1, 0, 1);
-			return diffuse;
 		}
-		else if (time - dissolve > 0 && time - dissolve <= 0.1f)
+		else if (clipAmount > 0 && clipAmount <= 0.1f)
 		{
 			diffuse = half4(1, 1, 1, 1);
-			return diffuse;
-		}
-		else
-		{
-			diffuse = half4(0, 0, 0, 1);
-			discard;
 		}
 	}
-	
+
 	return diffuse;
 }
 

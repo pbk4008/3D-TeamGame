@@ -123,11 +123,15 @@ _int CMonster_Bastion_Healer::Tick(_double _dDeltaTime)
 	{
 		if (L"Death" == m_pStateController->Get_CurStateTag())
 		{
-			if (m_pAnimator->Get_CurrentAnimation()->Is_Finished())
+			if (m_pAnimator->Get_CurrentAnimation()->Is_Finished() && m_lifetime <= 0.f)
 			{
-				Set_Remove(true);
+				//Set_Remove(true);
+				m_bdissolve = true;
 				m_pPanel->Set_UIRemove(true);
 			}
+
+			if (m_lifetime >= 1.f)
+				Set_Remove(true);
 
 			if (1 == m_pAnimator->Get_AnimController()->Get_CurKeyFrameIndex())
 			{
@@ -197,6 +201,11 @@ _int CMonster_Bastion_Healer::LateTick(_double _dDeltaTime)
 
 HRESULT CMonster_Bastion_Healer::Render()
 {
+	if (m_bdissolve == true)
+		CActor::DissolveOn(0.5f);
+
+	if (FAILED(m_pModel->SetUp_ValueOnShader("g_bdissolve", &m_bdissolve, sizeof(_bool)))) MSGBOX("Failed to Apply dissolvetime");
+
 	wstring wstrCamTag = g_pGameInstance->Get_BaseCameraTag();
 	for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
 	{

@@ -168,6 +168,7 @@ _int CBoss_Bastion_Judicator::Tick(_double TimeDelta)
 				//Set_Remove(true);
 				m_pPanel->Set_Show(false);
 				m_pPanel->Set_UIRemove(true);
+				m_bdissolve = true;
 				return 0;
 			}
 
@@ -220,6 +221,11 @@ _int CBoss_Bastion_Judicator::LateTick(_double TimeDelta)
 
 HRESULT CBoss_Bastion_Judicator::Render()
 {
+	if (m_bdissolve == true)
+		CActor::DissolveOn(0.5f);
+
+	if (FAILED(m_pModel->SetUp_ValueOnShader("g_bdissolve", &m_bdissolve, sizeof(_bool)))) MSGBOX("Failed to Apply dissolvetime");
+
 	wstring wstrCamTag = g_pGameInstance->Get_BaseCameraTag();
 	for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
 	{
@@ -228,19 +234,22 @@ HRESULT CBoss_Bastion_Judicator::Render()
 		switch (i)
 		{
 		case 0 : case 3:  // body
-			desc.metalic = 0.2f;
+			desc.metalic = 0.3f;
+			desc.roughness = -0.1f;
 			desc.color = _float4(0.811f, 1.f, 0.898f, 1.f);
 			desc.empower = 0.7f;
 			CActor::BindConstantBuffer(wstrCamTag,&desc);
 			m_pModel->Render(i, 0);
 			break;
 		case 1 : // fur
+			desc.color = _float4(1.f, 0.466f, 0.901f, 1.f);
+			desc.empower = 0.01f;
 			CActor::BindConstantBuffer(wstrCamTag,&desc);
-			m_pModel->Render(i, 2);
+			m_pModel->Render(i, 1);
 			break;
 		case 2 :  // cloak
 			CActor::BindConstantBuffer(wstrCamTag,&desc);
-			m_pModel->Render(i, 1);
+			m_pModel->Render(i, 2);
 			break;
 		}
 	}

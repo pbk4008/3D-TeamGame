@@ -497,7 +497,11 @@ HRESULT CRenderer::Render_Final()
 	_float thick = 0.2f;
 	if (FAILED(m_pVIBuffer->SetUp_TextureOnShader("g_DiffuseTexture", m_pTargetMgr->Get_SRV(TEXT("Target_Blend"))))) MSGBOX("Render Final DiffuseTeuxtre Not Apply");
 	if (FAILED(m_pVIBuffer->SetUp_TextureOnShader("g_DepthTexture", m_pTargetMgr->Get_SRV(TEXT("Target_Depth"))))) MSGBOX("Render Final DepthTexture Not Apply");
-	if (FAILED(m_pVIBuffer->SetUp_TextureOnShader("g_VelocityTex", m_pTargetMgr->Get_SRV(TEXT("Target_Velocity"))))) MSGBOX("Render Final DiffuseTeuxtre Not Apply");
+
+	if (m_bRenderbtn[VELOCITYBLUR] == true)
+	{
+		if (FAILED(m_pVIBuffer->SetUp_TextureOnShader("g_VelocityTex", m_pTargetMgr->Get_SRV(TEXT("Target_Velocity"))))) MSGBOX("Render Final DiffuseTeuxtre Not Apply");
+	}
 
 	if (m_bRenderbtn[DISTORTION] == true)
 	{
@@ -519,7 +523,7 @@ HRESULT CRenderer::Render_Final()
 	if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_outline", &m_bRenderbtn[OUTLINE], sizeof(_bool)))) MSGBOX("Render Final Value outline Not Apply");
 	if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_radial", &m_bRenderbtn[RADIAL], sizeof(_bool)))) MSGBOX("Render Final Value raidal Not Apply");
 	if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_distort", &m_bRenderbtn[DISTORTION], sizeof(_bool)))) MSGBOX("Render Final Value distort Not Apply");
-	if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_fog", &m_bRenderbtn[FOG], sizeof(_bool)))) MSGBOX("Render Final Value distort Not Apply");
+	if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_fog", &m_bRenderbtn[FOG], sizeof(_bool)))) MSGBOX("Render Final Value g_fog Not Apply");
 	if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_motion", &m_bRenderbtn[VELOCITYBLUR], sizeof(_bool)))) MSGBOX("Render Final Value distort Not Apply");
 	if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_RadialCnt", &m_RadialCnt, sizeof(_int)))) MSGBOX("Render Final Value RaidalCnt Not Apply");
 	if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_MotionblurCnt", &cnt, sizeof(_int)))) MSGBOX("Render Final Value RaidalCnt Not Apply");

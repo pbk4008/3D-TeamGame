@@ -179,11 +179,18 @@ HRESULT CRendererAssit::Setup_RenderTarget()
 	if (FAILED(m_pTargetMgr->Add_RenderTarget(m_pDevice, m_pDeviceContext, TEXT("Target_Alpha"), widht, height, DXGI_FORMAT_R16G16B16A16_FLOAT, _float4(0.f, 0.f, 0.f, 0.f), CRenderTarget::RTT::Luminance)))
 		return E_FAIL;
 
+	// distortion grab target
 	if (FAILED(m_pTargetMgr->Add_RenderTarget(m_pDevice, m_pDeviceContext, TEXT("Target_Distortion"), widht, height, DXGI_FORMAT_R16G16B16A16_FLOAT, _float4(0.f, 0.f, 0.f, 0.f), CRenderTarget::RTT::Luminance)))
 		return E_FAIL;
 
+	// velocity map
 	if (FAILED(m_pTargetMgr->Add_RenderTarget(m_pDevice, m_pDeviceContext, TEXT("Target_Velocity"), widht, height, DXGI_FORMAT_R16G16B16A16_FLOAT, _float4(0.f, 0.f, 0.f, 0.f), CRenderTarget::RTT::DEFFURED)))
 		return E_FAIL;
+
+	// dissolve target
+	if (FAILED(m_pTargetMgr->Add_RenderTarget(m_pDevice, m_pDeviceContext, TEXT("Target_Dissolve"), widht, height, DXGI_FORMAT_R16G16B16A16_FLOAT, _float4(0.f, 0.f, 0.f, 0.f), CRenderTarget::RTT::DEFFURED)))
+		return E_FAIL;
+
 	//----------------------------------//
 
 
@@ -369,6 +376,7 @@ HRESULT CRendererAssit::Setup_RenderTarget()
 	if (FAILED(m_pTargetMgr->Ready_Debug_Buffer(TEXT("Target_BlurShadow"), 200.f, 100.f, 100.f, 100.f)))		return E_FAIL;
 	if (FAILED(m_pTargetMgr->Ready_Debug_Buffer(TEXT("Target_Distortion"), 400.f, 100.f, 100.f, 100.f)))		return E_FAIL;
 	if (FAILED(m_pTargetMgr->Ready_Debug_Buffer(TEXT("Target_Velocity"), 500.f, 0.f, 100.f, 100.f)))			return E_FAIL;
+
 	
 #endif // _DEBUG
 
