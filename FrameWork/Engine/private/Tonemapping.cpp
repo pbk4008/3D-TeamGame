@@ -49,6 +49,7 @@ HRESULT CTonemapping::Blend_FinalPass(CTarget_Manager* pTargetMgr, _bool check)
 	if (FAILED(m_pFinalBlend->SetUp_TextureOnShader("g_Blur4Texture", pTargetMgr->Get_SRV(L"Target_Horizontal4"))))	return E_FAIL;
 	if (FAILED(m_pFinalBlend->SetUp_TextureOnShader("g_Blur8Texture", pTargetMgr->Get_SRV(L"Target_Horizontal8"))))	return E_FAIL;
 	if (FAILED(m_pFinalBlend->SetUp_TextureOnShader("g_Blur16Texture", pTargetMgr->Get_SRV(L"Target_Horizontal16")))) return E_FAIL;
+	if (FAILED(m_pFinalBlend->SetUp_TextureOnShader("g_RimLightTexture", pTargetMgr->Get_SRV(L"Target_RimLight")))) return E_FAIL;
 
 
 	if (FAILED(m_pFinalBlend->SetUp_ValueOnShader("g_check", &check, sizeof(_bool)))) return E_FAIL;

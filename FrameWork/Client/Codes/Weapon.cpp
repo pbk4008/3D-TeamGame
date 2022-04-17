@@ -143,7 +143,7 @@ HRESULT CWeapon::BindConstantBuffer(const wstring& camTag,SCB* consbuffer, RIM* 
 	{
 		if (FAILED(m_pModel->SetUp_ValueOnShader("g_rimlightcheck", &rimlightbuffer->rimcheck, sizeof(_bool)))) MSGBOX("Failed To Apply Actor ConstantBuffer");
 		if (FAILED(m_pModel->SetUp_ValueOnShader("g_rimintensity", &rimlightbuffer->rimintensity, sizeof(_float)))) MSGBOX("Failed To Apply Actor ConstantBuffer");
-		if (FAILED(m_pModel->SetUp_ValueOnShader("g_rimcolor", &rimlightbuffer->rimcol, sizeof(_float4)))) MSGBOX("Failed To Apply Actor ConstantBuffer");
+		if (FAILED(m_pModel->SetUp_ValueOnShader("g_rimcolor", &rimlightbuffer->rimcol, sizeof(_float3)))) MSGBOX("Failed To Apply Actor ConstantBuffer");
 		if (FAILED(m_pModel->SetUp_ValueOnShader("g_camdir", &rimlightbuffer->camdir, sizeof(_float4)))) MSGBOX("Failed To Apply Actor ConstantBuffer");
 	}
 

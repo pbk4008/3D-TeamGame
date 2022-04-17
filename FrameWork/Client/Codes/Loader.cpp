@@ -9,6 +9,7 @@
 #include "Client_Trigger.h"
 #include "SkyBox.h"
 #include "Environment.h"
+#include "SubEnvironment.h"
 #include "Treasure_Chest.h"
 #include "Potal.h"
 
@@ -834,7 +835,7 @@ HRESULT CLoader::SetUp_Stage1_Prototype()
 	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Environment", CEnvironment::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 
-	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_SubEnvironment", CEnvironment::Create(m_pDevice, m_pDeviceContext))))
+	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_SubEnvironment", CSubEnvironment::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 
 	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Treasure_Chest", CDropBox::Create(m_pDevice, m_pDeviceContext))))

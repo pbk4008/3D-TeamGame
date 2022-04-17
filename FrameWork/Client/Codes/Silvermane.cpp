@@ -1708,14 +1708,14 @@ RIM CSilvermane::ColorChange_RimCheck(RIM& rimdesc)
 		else
 			m_color.z += 0.005f;
 	}
-
+	
 	if (m_rimcheck == true)
 	{
 		rimdesc.rimcheck = m_rimcheck;
-		rimdesc.rimcol = _float4(1.f, 0, 0, 1);
+		rimdesc.rimcol = _float3(1.f, 0, 0);
 		rimdesc.rimintensity = m_rimintensity; // intensity ³·À» ¼ö·Ï °úÇÏ°Ô ºû³²
 		XMStoreFloat4(&rimdesc.camdir, XMVector3Normalize(m_pTransform->Get_State(CTransform::STATE_POSITION) - g_pGameInstance->Get_CamPosition(L"Camera_Silvermane")));
-		CActor::SetRimIntensity(g_fDeltaTime * -10.f);
+		CActor::SetRimIntensity(g_fDeltaTime * -1.f);
 	}
 
 	return rimdesc;

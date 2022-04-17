@@ -1813,7 +1813,7 @@ void CStage1::Shoot_Meteor(_double dDeltaTime)
 		if (XMVector3Equal(vSelectPos, XMVectorZero()))
 			return;
 
-		_uint iRandomShot = (_float)MathUtils::ReliableRandom(1, 5);
+		_uint iRandomShot = (_uint)MathUtils::ReliableRandom(1, 5);
 		for (_uint i = 0; i < iRandomShot; i++)
 		{
 			_vector vPivot;

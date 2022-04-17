@@ -233,7 +233,7 @@ struct PS_OUT
 	half4 depth		: SV_TARGET2;
 	half4 mra		: SV_Target3;
 	half4 emission	: SV_Target4;
-	half4 vVelocity : SV_Target5;
+	half4 rimlight  : SV_Target5;
 };
 
 PS_OUT PS_MAIN_TOP(PS_IN In)
@@ -284,7 +284,7 @@ PS_OUT PS_MAIN_TOP(PS_IN In)
 	
 	if(g_rimlightcheck == true)
 	{
-		half4 normal = half4(Out.normal.rgb * 2.f - 1.f, 0.f);
+		half4 normal = half4(In.vNormal.xyz, 0.f);
 		float4 rim = RimLighting(normal, g_camdir, g_rimintensity, g_rimcolor);
 		Out.emission += rim;
 	}
@@ -318,6 +318,13 @@ PS_OUT PS_MAIN_DOWN(PS_IN In)
 	Out.mra.b = ao + g_AO;
 	Out.mra.a = 1.f;
 	Out.emission = E;
+	
+	if (g_rimlightcheck == true)
+	{
+		half4 normal = half4(In.vNormal.xyz, 0.f);
+		float4 rim = RimLighting(normal, g_camdir, g_rimintensity, g_rimcolor);
+		Out.rimlight = rim;
+	}
 	
 	return Out;
 }

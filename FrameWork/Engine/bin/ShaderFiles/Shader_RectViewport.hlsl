@@ -124,7 +124,7 @@ Texture2D g_BlurTexture;
 Texture2D g_DistortionTex;
 Texture2D g_VelocityTex;
 Texture2D g_DissolveTex;
-
+Texture2D g_RimLightTexture;
 
 struct VS_IN
 {
@@ -437,7 +437,7 @@ PS_OUT_BLEND PS_MAIN_BLEND(PS_IN In)
 	
 	if(g_outline == true)
 	{
-		Out.vColor = Outline(g_DiffuseTexture, DefaultSampler, In.vTexUV, Out.vColor);
+		Out.vColor = Outline(g_RimLightTexture, DefaultSampler, In.vTexUV, Out.vColor);
 	}
 	
 	if (Out.vColor.a == 0)
