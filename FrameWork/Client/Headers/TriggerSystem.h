@@ -96,12 +96,22 @@ public:
 		{
 			//CurrentTriggerMonsterAllDelete();
 			m_vecCurMonster.clear();
-			m_vecClear[m_iClearIndex] = true;
-			if (m_iClearIndex != iSize - 1)
+			m_vecClear[m_iClearIndex] =true;
+			Next_TriggerOn();
+			/*if (m_iClearIndex != iSize - 1)
 			{
 				m_vecTrigger[m_iClearIndex + 1]->setActive(true);
 				m_vecTrigger[m_iClearIndex + 1]->TurnOnTrigger(true);
-			}
+			}*/
+		}
+	}
+	void Next_TriggerOn()
+	{
+		_int iSize = (_int)m_vecClear.size();
+		if (m_iClearIndex != iSize - 1)
+		{
+			m_vecTrigger[m_iClearIndex + 1]->setActive(true);
+			m_vecTrigger[m_iClearIndex + 1]->TurnOnTrigger(true);
 		}
 	}
 	HRESULT Add_CurrentTriggerMonster(CGameObject* pMonster)
@@ -205,7 +215,7 @@ public:
 		return S_OK;
 	}
 	const vector<_float3> Get_MonsterSpawnPoint(MONSTER eType) { return m_pVecMonsterSpawnPoint[(_uint)eType]; }
-
+	const _int Get_CurrentTriggerNumber() { return m_iClearIndex; }
 private:
 	virtual void Free() override
 	{

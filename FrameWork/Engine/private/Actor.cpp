@@ -131,6 +131,16 @@ HRESULT CActor::Set_SpawnPosition(const _float3 vPoint)
 	return S_OK;
 }
 
+HRESULT CActor::Set_SpawnPosition(_fvector vPos)
+{
+	if (!m_pTransform)
+		return E_FAIL;
+
+	m_pTransform->Set_State(CTransform::STATE_POSITION, vPos);
+
+	return S_OK;
+}
+
 HRESULT CActor::BindConstantBuffer(const wstring& camTag, SCB* bindbuffer, RIM* rimbuffer, MOTIONBLUR* motionbuffer)
 {
 	if (m_pTransform == nullptr)

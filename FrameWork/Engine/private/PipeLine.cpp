@@ -120,8 +120,19 @@ HRESULT CPipeLine::Change_BaseCamera(const wstring& pCameraTag)
 	//찾고자 하는 카메라에 저장했던 첫번째 카메라로 변경
 	iter_Find = pTmpCamera;
 
-	m_mapPipeLine[0] = *iter_begin;
-	m_mapPipeLine[iFindIndex] = *iter_Find;
+	CAMERA* tmp = new CAMERA;
+	memcpy(tmp, (*iter_begin).second, sizeof(CAMERA));
+	auto pairBegin=make_pair((*iter_begin).first, tmp);
+
+	tmp = new CAMERA;
+	memcpy(tmp, (*iter_Find).second, sizeof(CAMERA));
+	auto pairFind = make_pair((*iter_Find).first, tmp);
+
+	Safe_Delete(m_mapPipeLine[0].second);
+	Safe_Delete(m_mapPipeLine[iFindIndex].second);
+
+	m_mapPipeLine[0] = pairBegin;
+	m_mapPipeLine[iFindIndex] = pairFind;
 
 	return S_OK;
 }
