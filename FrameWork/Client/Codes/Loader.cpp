@@ -655,6 +655,12 @@ HRESULT CLoader::Load_Stage1EffectLoad()
 	}
 	_findclose(handle);
 
+	/////////////////////////////////////// 소드 트레일
+	if (FAILED(Load_TrailEffects()))
+		return E_FAIL;
+	/////////////////////////////////////// 메쉬 이펙트
+	if (FAILED(Load_MeshEffects()))
+		return E_FAIL;
 
 	return S_OK;
 }
@@ -957,11 +963,6 @@ HRESULT CLoader::Load_Stage1PlayerLoad()
 	{
 		return E_FAIL;
 	}
-
-	/////////////////////////////////////// 소드 트레일
-	// 기본 텍스처
-	if (FAILED(Load_TrailEffects()))
-		return E_FAIL;
 
 	//Wall
 	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"WallBase", L"../bin/Resources/Texture/T_Portal_Space_D.dds"))) MSGBOX("Failed To Add WallBase Tex");
