@@ -131,6 +131,16 @@ HRESULT CActor::Set_SpawnPosition(const _float3 vPoint)
 	return S_OK;
 }
 
+HRESULT CActor::Set_SpawnPosition(_fvector vPos)
+{
+	if (!m_pTransform)
+		return E_FAIL;
+
+	m_pTransform->Set_State(CTransform::STATE_POSITION, vPos);
+
+	return S_OK;
+}
+
 HRESULT CActor::BindConstantBuffer(const wstring& camTag, SCB* bindbuffer, RIM* rimbuffer, MOTIONBLUR* motionbuffer)
 {
 	if (m_pTransform == nullptr)
@@ -238,6 +248,10 @@ void CActor::Set_AttackDesc(const ATTACKDESC& _tAttackDesc)
 	m_tAttackDesc = _tAttackDesc;
 }
 
+void CActor::Set_FootPosition(const _float3& _vPos)
+{
+}
+
 void CActor::RimlightCheck(_bool check)
 {
 	m_rimcheck = check;
@@ -275,8 +289,18 @@ void CActor::Parry(const PARRYDESC& _tParryDesc)
 {
 }
 
+void CActor::Execution()
+{
+}
+
+void CActor::Execution(CActor* _pOther, CHierarchyNode* _pFixedBone)
+{
+}
+
 void CActor::Free()
 {
-	Safe_Release(m_pModel);
 	CGameObject::Free();
+	Safe_Release(m_pModel);
+	Safe_Release(m_dissolveTex);
+	Safe_Release(m_dissolveGradientTex);
 }

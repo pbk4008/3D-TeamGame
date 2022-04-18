@@ -51,6 +51,7 @@
 
 //Cinema
 #include "Cinema1_1.h"
+#include <Potal.h>
 
 
 CStage1::CStage1()
@@ -62,6 +63,7 @@ CStage1::CStage1()
 	, m_fAccMeteorSpawn(0.f)
 	, m_fRandomMeteorSpawnTime(0.f)
 	, m_fAccMeteorStartTime(0.f)
+	, m_iPortalCount(0)
 {
 }
 
@@ -75,6 +77,7 @@ CStage1::CStage1(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
 	, m_fAccMeteorSpawn(0.f)
 	, m_fRandomMeteorSpawnTime(0.f)
 	, m_fAccMeteorStartTime(0.f)
+	, m_iPortalCount(0)
 {
 }
 
@@ -101,11 +104,11 @@ HRESULT CStage1::NativeConstruct()
 	if (FAILED(Ready_Player(L"Layer_Silvermane")))
 		return E_FAIL;
 
-	//if (FAILED(Ready_MapObject()))
-	//	return E_FAIL;
+	if (FAILED(Ready_MapObject()))
+		return E_FAIL;
 
-	//if (FAILED(Ready_TriggerSystem(L"../bin/SaveData/Trigger/MonsterSpawnTrigger.dat")))
-	//	return E_FAIL;
+	if (FAILED(Ready_TriggerSystem(L"../bin/SaveData/Trigger/MonsterSpawnTrigger.dat")))
+		return E_FAIL;
 
 	if (FAILED(Ready_Data_UI(L"../bin/SaveData/UI/UI.dat")))
 		return E_FAIL;
@@ -122,7 +125,6 @@ HRESULT CStage1::NativeConstruct()
 	if (FAILED(Ready_GameManager()))
 		return E_FAIL;
 
-	//g_pGameInstance->PlayBGM(L"Stage1_BGM");
 	g_pGameInstance->Change_BaseCamera(L"Camera_Silvermane");
 
 	//if (FAILED(Ready_Meteor()))
@@ -139,12 +141,25 @@ HRESULT CStage1::NativeConstruct()
 
 	if (FAILED(Ready_Indicator()))
 		return E_FAIL;
-	
+
+	if (FAILED(Ready_Portal()))
+		return E_FAIL;
+
+	g_pGameInstance->PlayBGM(L"Stage1_BGM");
+
 	return S_OK;
 }
 
 _int CStage1::Tick(_double TimeDelta)
 {
+	//_vector vTmp = g_pObserver->Get_PlayerPos();
+
+	//cout << XMVectorGetX(vTmp) << " " << XMVectorGetY(vTmp) << " " << XMVectorGetZ(vTmp) << endl;
+
+	//if(g_pGameInstance->getkeyDown(DIK_NUMPAD0))
+	//	Open_Potal(XMVectorSet(-58.f, 18.f, 213.f, 1.f), (_uint)GAMEOBJECT::MONSTER_1H);
+
+
 #ifdef  _DEBUG
 	_int iLevel = 0;
 	if (g_pDebugSystem->Get_LevelMoveCheck(iLevel))
@@ -178,8 +193,57 @@ _int CStage1::Tick(_double TimeDelta)
 
 		m_pTriggerSystem->Tick(TimeDelta);
 
-		if (m_iCountMonster == 0 && m_bFirst)
-			m_pTriggerSystem->Check_Clear();
+		if (m_iCountMonster == 0 && m_bFirst)//트리거 몬스터 다 잡힘
+		{
+			//포탈 위치 체크 
+			if (m_pTriggerSystem->Get_CurrentTriggerNumber() == 4)
+			{
+				if (m_iPortalCount == 0)
+				{
+					m_iPortalCount= 3;
+					Open_Potal(XMVectorSet(-58.f, 18.f, 213.f, 1.f), (_uint)GAMEOBJECT::MONSTER_1H);
+					Open_Potal(XMVectorSet(-64.f, 18.f, 230.f, 1.f), (_uint)GAMEOBJECT::MONSTER_1H);
+					Open_Potal(XMVectorSet(-77.f, 18.f, 220.f, 1.f), (_uint)GAMEOBJECT::MONSTER_1H);
+					m_iCountMonster += 3;
+				}
+				else
+					m_pTriggerSystem->Next_TriggerOn();
+			}
+			else if (m_pTriggerSystem->Get_CurrentTriggerNumber() == 5)
+			{
+				if (m_iPortalCount == 3)
+				{
+					Open_Potal(XMVectorSet(-130.f, 19.f, 216.f, 1.f), (_uint)GAMEOBJECT::MONSTER_SHOOTER);
+					m_iPortalCount++;
+					m_iCountMonster++;
+				}
+				else if (m_iPortalCount == 4)
+				{
+					Open_Potal(XMVectorSet(-126.f, 19.f, 220.f, 1.f), (_uint)GAMEOBJECT::MONSTER_1H);
+					Open_Potal(XMVectorSet(-127.f, 19.f, 214.f, 1.f), (_uint)GAMEOBJECT::MONSTER_SHOOTER);
+					m_iCountMonster += 2;
+					m_iPortalCount += 2;
+				}
+				else
+					m_pTriggerSystem->Next_TriggerOn();
+			}
+			else if (m_pTriggerSystem->Get_CurrentTriggerNumber() == 7)
+			{
+				if (m_iPortalCount == 6)
+				{
+					Open_Potal(XMVectorSet(-177.f, 29.f, 300.f, 1.f), (_uint)GAMEOBJECT::MONSTER_1H);
+					Open_Potal(XMVectorSet(-172.f, 29.f, 316.f, 1.f), (_uint)GAMEOBJECT::MONSTER_1H);
+					Open_Potal(XMVectorSet(-168.f, 29.f, 306.f, 1.f), (_uint)GAMEOBJECT::MONSTER_1H);
+					Open_Potal(XMVectorSet(-173.f, 29.f, 300.f, 1.f), (_uint)GAMEOBJECT::MONSTER_SHOOTER);
+					m_iCountMonster += 4;
+					m_iPortalCount += 4;
+				}
+				else
+					m_pTriggerSystem->Next_TriggerOn();
+			}
+			else
+				m_pTriggerSystem->Check_Clear();
+		}
 
 		//CBoss_Bastion_Judicator* pBoss = (CBoss_Bastion_Judicator*)g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Layer_Boss")->front();
 		//if (nullptr != pBoss)
@@ -192,6 +256,8 @@ _int CStage1::Tick(_double TimeDelta)
 		//	}
 		//}
 	}
+
+
 
 #pragma region Using Debug
 	_float3 fPos = { 0.f,5.f,20.f };
@@ -279,7 +345,8 @@ _int CStage1::Tick(_double TimeDelta)
 	//		m_pCinema = nullptr;
 	//}
 
-	///*for Meteor*/
+
+	/*for Meteor*/
 	//m_fAccMeteorStartTime += (_float)TimeDelta;
 	//if (m_fAccMeteorStartTime > 60.f)
 	//	Shoot_Meteor(TimeDelta);
@@ -1121,6 +1188,43 @@ HRESULT CStage1::Ready_Cinema()
 	return S_OK;
 }
 
+HRESULT CStage1::Ready_Portal()
+{
+	for (_uint i = 0; i < 10; i++)
+	{
+		if (i < 7)
+		{
+			if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_PortalMonster", L"Proto_GameObject_Monster_Bastion_Sword")))
+				return E_FAIL;
+		}
+		else
+		{
+			if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_PortalMonster", L"Proto_GameObject_Monster_Bastion_Shooter")))
+				return E_FAIL;
+		}
+	
+		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Portal", L"Proto_GameObject_Portal")))
+			return E_FAIL;
+	}
+
+	return S_OK;
+}
+void CStage1::Open_Potal(_fvector vPos, _uint iMonTag)
+{
+	list<CGameObject*>* pLayer = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Layer_Portal");
+	for (auto& pObj : *pLayer)
+	{
+		CPotal* pPotal = nullptr;
+		if (!pObj->getActive())
+		{
+			pPotal = static_cast<CPotal*>(pObj);
+			pPotal->Open_Potal(iMonTag, vPos);
+			pPotal->setActive(true);
+			break;
+		}
+	}
+}
+//땅강아지 3마리
 void CStage1::Trgger_Function1()
 {
 	//TriggerSystem에서 저장된 몬스터 위치를 가져온다(MonsterType)
@@ -1167,7 +1271,7 @@ void CStage1::Trgger_Function1()
 	}
 	m_iCountMonster = 3;
 }
-
+//대지 1마리
 void CStage1::Trgger_Function2()
 {
 	list<CGameObject*>* pLayer = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Layer_EarthAberrant");
@@ -1198,7 +1302,7 @@ void CStage1::Trgger_Function2()
 	}
 	m_iCountMonster = 1;
 }
-
+//땅강아지 2마리 소드 2마리
 void CStage1::Trgger_Function3()
 {
 	list<CGameObject*>* pLayer = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Layer_Crawler");
@@ -1267,7 +1371,7 @@ void CStage1::Trgger_Function3()
 	}
 	m_iCountMonster = 4;
 }
-
+//땅강아지 3마리
 void CStage1::Trgger_Function4()
 {
 	list<CGameObject*>* pLayer = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Layer_Crawler");
@@ -1311,7 +1415,7 @@ void CStage1::Trgger_Function4()
 	}
 	m_iCountMonster = 3;
 }
-
+//중간에 많은데(포탈3개)
 void CStage1::Trgger_Function5()
 {
 	list<CGameObject*>* pLayer = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Layer_EarthAberrant");
@@ -1429,7 +1533,7 @@ void CStage1::Trgger_Function5()
 	}
 	m_iCountMonster = 9;
 }
-
+//힐러1마리 소드 2마리(포탈 3개)
 void CStage1::Trgger_Function7()
 {
 	list<CGameObject*>* pLayer = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Layer_Bastion_Sword");
@@ -1489,7 +1593,7 @@ void CStage1::Trgger_Function7()
 	}
 	m_iCountMonster = 3;
 }
-
+// 소드3 총1
 void CStage1::Trgger_Function8()
 {
 	list<CGameObject*>* pLayer = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Layer_Bastion_Sword");
@@ -1556,7 +1660,7 @@ void CStage1::Trgger_Function8()
 	}
 	m_iCountMonster = 4;
 }
-
+//힐러1 총2 소드1(포탈 4개)
 void CStage1::Trgger_Function9()
 {
 	list<CGameObject*>* pLayer = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Layer_Bastion_Sword");
@@ -1643,7 +1747,7 @@ void CStage1::Trgger_Function9()
 	}
 	m_iCountMonster = 5;
 }
-
+//대지 5마리
 void CStage1::Trgger_Function10()
 {
 	list<CGameObject*>* pLayer = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Layer_EarthAberrant");
@@ -1700,7 +1804,7 @@ void CStage1::Trgger_Function10()
 	}
 	m_iCountMonster = 5;
 }
-
+//투핸드 1마리
 void CStage1::Trgger_Function11()
 {
 	list<CGameObject*>* pLayer = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Layer_Bastion_2HSword");
@@ -1729,8 +1833,7 @@ void CStage1::Trgger_Function11()
 	}
 	m_iCountMonster = 1;
 }
-
-//-175 51 422
+//보스
 void CStage1::Trgger_FunctionBoss()
 {
 	list<CGameObject*>* pLayer = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Layer_Boss");
@@ -1891,11 +1994,6 @@ HRESULT CStage1::Ready_Treasure_Chest()
 
 HRESULT CStage1::Ready_Meteor()
 {
-	//if (g_pGameInstance->getkeyPress(DIK_NUMPAD0))
-	//{
-	//	_float4 vPos = _float4(-100.f, -20.f, 90.f, 1.f);
-	//	g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Test", L"Proto_GameObject_Weapon_Meteor", &vPos);
-	//}
 	for (_uint i = 0; i < 10; i++)
 	{
 		CMeteor* pObj = nullptr;
@@ -2003,7 +2101,8 @@ void CStage1::Free()
 
 	//Safe_Release(m_pScenemaManager);
 	//CScenematicManager::DestroyInstance();
-	g_pInteractManager->Remove_Interactable();
+	if(g_pInteractManager)
+		g_pInteractManager->Remove_Interactable();
 
 	Safe_Release(m_pScenemaManager);
 	Safe_Release(m_pIndicatorManager);
@@ -2013,8 +2112,8 @@ void CStage1::Free()
 	CDropManager::DestroyInstance();
 	Safe_Release(m_pTriggerSystem);
 
-	for (auto& pObj : m_vecMeteor)
-		Safe_Release(pObj);
-	m_vecMeteor.clear();
+	//for (auto& pObj : m_vecMeteor)
+	//	Safe_Release(pObj);
+	//m_vecMeteor.clear();
 
 }

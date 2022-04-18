@@ -55,14 +55,14 @@ HRESULT CFury::NativeConstruct(const _uint _iSceneID, void* _pArg)
 		return E_FAIL;
 
 	// 트레일 이펙트 달기
-	CTrailEffect::DESC tTrailDesc;
-	tTrailDesc.fLength = 0.2f;
-	XMStoreFloat4x4(&tTrailDesc.matPivot, XMMatrixTranslation(0.f, 0.f, 1.5f));
-	tTrailDesc.pOwnerTransform = m_pTransform;
-	tTrailDesc.wstrTextureTag = L"Wisp_01";
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer(m_iSceneID, L"Layer_Effect", L"Proto_GameObject_TrailEffect_Normal", &tTrailDesc, (CGameObject**)&m_pTrailEffect_Normal)))
-		MSGBOX(L"노말 트레일 생성 실패. from Needle");
-	Safe_AddRef(m_pTrailEffect_Normal);
+	//CTrailEffect::DESC tTrailDesc;
+	//tTrailDesc.fLength = 0.2f;
+	//XMStoreFloat4x4(&tTrailDesc.matPivot, XMMatrixTranslation(0.f, 0.f, 1.5f));
+	//tTrailDesc.pOwnerTransform = m_pTransform;
+	//tTrailDesc.wstrTextureTag = L"Wisp_01";
+	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer(m_iSceneID, L"Layer_Effect", L"Proto_GameObject_TrailEffect_Normal", &tTrailDesc, (CGameObject**)&m_pTrailEffect_Normal)))
+	//	MSGBOX(L"노말 트레일 생성 실패. from Needle");
+	//Safe_AddRef(m_pTrailEffect_Normal);
 
 	XMStoreFloat4x4(&m_matPivot, XMMatrixRotationRollPitchYaw(XMConvertToRadians(-21.5f), XMConvertToRadians(-118.f), XMConvertToRadians(20.f)) * XMMatrixTranslation(0.28f, 0.11f, 0.05f));
 
@@ -91,22 +91,22 @@ _int CFury::LateTick(_double _dDeltaTime)
 	if (0 > __super::LateTick(_dDeltaTime))
 		return -1;
 
-	if (m_isTrail)
-	{
-		m_pTrailEffect_Normal->Record_Points(_dDeltaTime);
-		m_pTrailEffect_Normal->Set_IsRender(true);
-		//m_pTrailEffect_Distortion->Record_Points(_dDeltaTime);
-		//m_pTrailEffect_Distortion->Set_IsRender(true);
-		//m_pRenderer->SetRenderButton(CRenderer::DISTORTION, true);
-	}
-	else
-	{
-		m_pTrailEffect_Normal->Clear_Points();
-		m_pTrailEffect_Normal->Set_IsRender(false);
-		//m_pTrailEffect_Distortion->Clear_Points();
-		//m_pTrailEffect_Distortion->Set_IsRender(false);
-		//m_pRenderer->SetRenderButton(CRenderer::DISTORTION, false);
-	}
+	//if (m_isTrail)
+	//{
+	//	m_pTrailEffect_Normal->Record_Points(_dDeltaTime);
+	//	m_pTrailEffect_Normal->Set_IsRender(true);
+	//	//m_pTrailEffect_Distortion->Record_Points(_dDeltaTime);
+	//	//m_pTrailEffect_Distortion->Set_IsRender(true);
+	//	//m_pRenderer->SetRenderButton(CRenderer::DISTORTION, true);
+	//}
+	//else
+	//{
+	//	m_pTrailEffect_Normal->Clear_Points();
+	//	m_pTrailEffect_Normal->Set_IsRender(false);
+	//	//m_pTrailEffect_Distortion->Clear_Points();
+	//	//m_pTrailEffect_Distortion->Set_IsRender(false);
+	//	//m_pRenderer->SetRenderButton(CRenderer::DISTORTION, false);
+	//}
 
 	if(m_pRenderer)
 		m_pRenderer->Add_RenderGroup(CRenderer::RENDER_NONALPHA, this);

@@ -115,14 +115,11 @@ HRESULT CPipeLine::Change_BaseCamera(const wstring& pCameraTag)
 	_int iFindIndex = Find_Index(pCameraTag);
 
 	//임시로 저장할 카메라
-	auto pTmpCamera = iter_begin;
+	auto pTmpCamera = *iter_begin;
 	//임시로 저장할 카메라에 첫번째 카메라 저장
-	iter_begin = iter_Find;
+	*iter_begin = *iter_Find;
 	//찾고자 하는 카메라에 저장했던 첫번째 카메라로 변경
-	iter_Find = pTmpCamera;
-
-	m_mapPipeLine[0] = *iter_begin;
-	m_mapPipeLine[iFindIndex] = *iter_Find;
+	*iter_Find = pTmpCamera;
 
 	return S_OK;
 }

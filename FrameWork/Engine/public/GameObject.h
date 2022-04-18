@@ -54,6 +54,7 @@ public:
 	_bool getActive() { return m_bActive; }
 	_int getTag() { return m_iObectTag; }
 	_bool getRemove() { return m_bRemove; }
+	const _uint getSceneID() const { return m_iSceneID; }
 	CTransform* Get_Transform() const;
 	_float		Get_ViewZ() { return m_fViewZ; }
 public:

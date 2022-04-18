@@ -352,7 +352,7 @@
     <Filter Include="00.Utility\04.Manager\11.PhsyicX\QueryFilterCallback">
       <UniqueIdentifier>{82bf3245-07f8-43d7-a6c8-3da62c918076}</UniqueIdentifier>
     </Filter>
-    <Filter Include="00.Utility\04.Manager\06.LevelManager\05.GameObectManager">
+    <Filter Include="00.Utility\04.Manager\05.GameObectManager">
       <UniqueIdentifier>{cbc26e05-8936-4bc7-a647-4df54c45879e}</UniqueIdentifier>
     </Filter>
     <Filter Include="00.Utility\03.Component\05.VIBuffer\09.Instance\00.Particle\01.Respawn\00.Down">
@@ -487,7 +487,7 @@
       <Filter>00.Utility\04.Manager\04.ComponentManager</Filter>
     </ClInclude>
     <ClInclude Include="..\public\Object_Manager.h">
-      <Filter>00.Utility\04.Manager\06.LevelManager\05.GameObectManager</Filter>
+      <Filter>00.Utility\04.Manager\05.GameObectManager</Filter>
     </ClInclude>
     <ClInclude Include="..\public\Level_Manager.h">
       <Filter>00.Utility\04.Manager\06.LevelManager</Filter>
@@ -804,7 +804,7 @@
       <Filter>00.Utility\04.Manager\04.ComponentManager</Filter>
     </ClCompile>
     <ClCompile Include="..\private\Object_Manager.cpp">
-      <Filter>00.Utility\04.Manager\06.LevelManager\05.GameObectManager</Filter>
+      <Filter>00.Utility\04.Manager\05.GameObectManager</Filter>
     </ClCompile>
     <ClCompile Include="..\private\Level_Manager.cpp">
       <Filter>00.Utility\04.Manager\06.LevelManager</Filter>

@@ -852,6 +852,12 @@
     </Filter>
     <Filter Include="02.GameObject\04.Effect\00.Particle\06.Effect_Guard_다른이펙트로바꾸면될듯">
       <UniqueIdentifier>{a0e663ef-dcdc-4443-8e69-2f05e2663463}</UniqueIdentifier>
+	</Filter>
+    <Filter Include="02.GameObject\04.Effect\02.MeshEffect">
+      <UniqueIdentifier>{d0ea5fcc-900a-4262-9b01-208f5ce4b2be}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\00.Player\00.Silvermane\State\Execution">
+      <UniqueIdentifier>{afe0def3-27c1-4308-948a-afc5940899dd}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -1903,7 +1909,19 @@
       <Filter>02.GameObject\04.Effect\01.TrailEffect</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\MeshEffect.h">
-      <Filter>02.GameObject\04.Effect</Filter>
+      <Filter>02.GameObject\04.Effect\02.MeshEffect</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\MeshEffect_Test.h">
+      <Filter>02.GameObject\04.Effect\02.MeshEffect</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Silvermane_Heal.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Idel</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Silvermane_Execution.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Execution</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Execution_Mook.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Execution</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\Effect_FloatingUp.h">
       <Filter>02.GameObject\04.Effect\00.Particle\07.Effect_FloatingUp</Filter>
@@ -2925,7 +2943,19 @@
       <Filter>02.GameObject\04.Effect\01.TrailEffect</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\MeshEffect.cpp">
-      <Filter>02.GameObject\04.Effect</Filter>
+      <Filter>02.GameObject\04.Effect\02.MeshEffect</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\MeshEffect_Test.cpp">
+      <Filter>02.GameObject\04.Effect\02.MeshEffect</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Silvermane_Heal.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Idel</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Silvermane_Execution.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Execution</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Execution_Mook.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Execution</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\Effect_FloatingUp.cpp">
       <Filter>02.GameObject\04.Effect\00.Particle\07.Effect_FloatingUp</Filter>
@@ -3063,6 +3093,9 @@
       <Filter>100.ShaderFiles\03.Effect</Filter>
     </FxCompile>
     <FxCompile Include="..\bin\ShaderFile\Shader_Particle_Alpha.hlsl">
+		<Filter>100.ShaderFiles\03.Effect</Filter>
+	</FxCompile>
+    <FxCompile Include="..\bin\ShaderFile\Shader_MeshEffect.hlsl">
       <Filter>100.ShaderFiles\03.Effect</Filter>
     </FxCompile>
   </ItemGroup>

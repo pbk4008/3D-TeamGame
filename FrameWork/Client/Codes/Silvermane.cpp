@@ -161,6 +161,10 @@
 #include "Silvermane_Death.h"
 ///////////////////////////////////////////// Looting
 #include "LootingChest.h"
+///////////////////////////////////////////// Heal
+#include "Silvermane_Heal.h"
+///////////////////////////////////////////// Execution
+#include "Execution_Mook.h"
 #pragma endregion
 
 #include "Material.h"
@@ -243,6 +247,8 @@ HRESULT CSilvermane::NativeConstruct(const _uint _iSceneID, void* _pArg)
 	m_fLightRange = LightDesc.fRange;
 
 	m_pTransform->Set_State(CTransform::STATE_POSITION, XMVectorSet(0.f,5.f, 10.f, 1.f));
+
+	m_pExecutionTargetBone = m_pModel->Get_BoneMatrix("utility_01");
 
 	return S_OK;
 }
@@ -847,6 +853,12 @@ HRESULT CSilvermane::Ready_States()
 	// 루팅
 	if (FAILED(m_pStateController->Add_State(L"LootingChest", CLootingChest::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
+	// 힐
+	if (FAILED(m_pStateController->Add_State(L"Silvermane_Heal", CSilvermane_Heal::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	// Execution
+	if (FAILED(m_pStateController->Add_State(L"Execution_Mook", CExecution_Mook::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
 
 	for (auto& pair : m_pStateController->Get_States())
 	{
@@ -863,23 +875,25 @@ HRESULT CSilvermane::Ready_States()
 HRESULT CSilvermane::Ready_Weapons(const _uint _iSceneID)
 {
 	CWeapon* pWeapon = nullptr;
+	CHierarchyNode* pWeaponBone = m_pModel->Get_BoneMatrix("spine_03");
 
-	if (FAILED(g_pWeaponGenerator->NativeConstruct(m_pDevice, m_pDeviceContext, _iSceneID, m_pModel)))
-		return E_FAIL;
+	//if (FAILED(g_pWeaponGenerator->NativeConstruct(m_pDevice, m_pDeviceContext, _iSceneID, m_pModel)))
+	//	return E_FAIL;
 
 #pragma region Old Ready Weapon
-	//// 한손검
-	//pWeapon = CNeedle::Create(m_pDevice, m_pDeviceContext);
-	//if (FAILED(pWeapon->NativeConstruct(m_iSceneID, pWeaponBone)))
-	//{
-	//	Safe_Release(pWeapon);
-	//	return E_FAIL;
-	//}
-	//pWeapon->Set_Owner(this); /* 무기에게 네가 나의 마스타인가? */
-	//pWeapon->Set_OwnerPivotMatrix(m_pModel->Get_PivotMatrix()); /* 마스타의 뼈를 취하겠다 */
+	// 한손검
+	pWeapon = CNeedle::Create(m_pDevice, m_pDeviceContext);
+	if (FAILED(pWeapon->NativeConstruct(m_iSceneID, pWeaponBone)))
+	{
+		Safe_Release(pWeapon);
+		return E_FAIL;
+	}
+	pWeapon->Set_Owner(this); /* 무기에게 네가 나의 마스타인가? */
+	pWeapon->Set_OwnerPivotMatrix(m_pModel->Get_PivotMatrix()); /* 마스타의 뼈를 취하겠다 */
 	//m_umapWeapons.emplace(L"Needle", pWeapon); /* 따로 저장 */
-	//m_pCurWeapon = pWeapon; /* FSM 나뉨 */
-	//m_pCurWeapon->setActive(true); 
+	m_pCurWeapon = pWeapon; /* FSM 나뉨 */
+	m_pCurWeapon->setActive(true); 
+	m_pNeedle = pWeapon;
 
 	//// 해머
 	//pWeapon = CFury::Create(m_pDevice, m_pDeviceContext);
@@ -893,7 +907,7 @@ HRESULT CSilvermane::Ready_Weapons(const _uint _iSceneID)
 	//pWeapon->Set_Equip(false);
 	//m_umapWeapons.emplace(L"Fury", pWeapon);
 	// 방패
-	CHierarchyNode* pWeaponBone = m_pModel->Get_BoneMatrix("weapon_l");
+	pWeaponBone = m_pModel->Get_BoneMatrix("weapon_l");
 	m_pShield = CShield::Create(m_pDevice, m_pDeviceContext);
 	if (FAILED(m_pShield->NativeConstruct(m_iSceneID, pWeaponBone)))
 	{
@@ -910,19 +924,26 @@ HRESULT CSilvermane::Ready_Weapons(const _uint _iSceneID)
 	/// Equipment&Inventory Data와 연동하여 장비 Ready함
 	/// </summary>
 	/// 
-	m_pEquipmentData = g_pDataManager->GET_DATA(CEquipmentData, L"EquipmentData");
-	
-	if (1 == m_pPlayerData->EquipedSlot)
-	{
-		assert(m_pEquipmentData->GetEquipment(EEquipSlot::Weapon1).weaponData.IsValid());
-		pWeapon = m_pEquipmentData->GetEquipment(EEquipSlot::Weapon1).weaponData.Get_Weapon();
 
-		pWeapon->Set_Owner(this);
-		pWeapon->Set_OwnerPivotMatrix(m_pModel->Get_PivotMatrix());
-		pWeapon->setActive(true);
+	//if (g_pDataManager)
+	//{
+	//	m_pEquipmentData = g_pDataManager->GET_DATA(CEquipmentData, L"EquipmentData");
 
-		m_pCurWeapon = pWeapon;
-	}
+	//	if (1 == m_pPlayerData->EquipedSlot)
+	//	{
+	//		assert(m_pEquipmentData->GetEquipment(EEquipSlot::Weapon1).weaponData.IsValid());
+	//		pWeapon = m_pEquipmentData->GetEquipment(EEquipSlot::Weapon1).weaponData.Get_Weapon();
+
+	//		if (!pWeapon)
+	//		{
+	//			pWeapon->Set_Owner(this);
+	//			pWeapon->Set_OwnerPivotMatrix(m_pModel->Get_PivotMatrix());
+	//			pWeapon->setActive(true);
+
+	//			m_pCurWeapon = pWeapon;
+	//		}
+	//	}
+	//}
 	return S_OK;
 }
 
@@ -956,7 +977,11 @@ void CSilvermane::OnControllerColliderHit(CCollision& collision)
 	_uint iTag = pHitObject->getTag();
 
 	//점프ui관련
-	m_pFillCKey = (CUI_Fill_Ckey*)g_pGameInstance->getObjectList(m_iSceneID, L"Layer_UI_FillC")->front();
+	list<CGameObject*>* listFillKeys = g_pGameInstance->getObjectList(m_iSceneID, L"Layer_UI_FillC");
+	if (listFillKeys)
+	{
+		m_pFillCKey = (CUI_Fill_Ckey*)listFillKeys->front();
+	}
 
 	if (m_pTargetJumpBox)
 	{
@@ -966,8 +991,11 @@ void CSilvermane::OnControllerColliderHit(CCollision& collision)
 
 		if (5.f < fBoxToPlayer)
 		{
-			m_pFillCKey->Set_GapX(0.f);
-			m_pFillCKey->setActive(false);
+			if (m_pFillCKey)
+			{
+				m_pFillCKey->Set_GapX(0.f);
+				m_pFillCKey->setActive(false);
+			}
 			//m_pTargetJumpBox = nullptr;
 		}
 	}
@@ -983,10 +1011,10 @@ void CSilvermane::OnControllerColliderHit(CCollision& collision)
 			m_pTargetJumpBox = nullptr;
 		}
 
-		if (nullptr != m_pFillCKey)
+		if (m_pFillCKey)
 			m_pFillCKey->Set_JumpNode(false);
 
-		if (nullptr != m_pTargetJumpBox)
+		if (m_pTargetJumpBox)
 		{
 			_fvector vBoxPos = m_pTargetJumpBox->Get_Transform()->Get_State(CTransform::STATE_POSITION);
 			_fvector vDist = vBoxPos - m_pTransform->Get_State(CTransform::STATE_POSITION);
@@ -996,8 +1024,11 @@ void CSilvermane::OnControllerColliderHit(CCollision& collision)
 			{
 				if (nullptr != m_pFillCKey)
 				{
-					m_pFillCKey->Set_GapX(1.f);
-					m_pFillCKey->setActive(true);
+					if (m_pFillCKey)
+					{
+						m_pFillCKey->Set_GapX(1.f);
+						m_pFillCKey->setActive(true);
+					}
 				}
 			}
 		}
@@ -1253,6 +1284,9 @@ m_pCurWeapon = pWeapon;
 
 const _bool CSilvermane::Change_Weapon()
 {
+	if (!m_pEquipmentData)
+		return false;
+
 	if (1 == m_pPlayerData->EquipedSlot) /* 현재 1번 슬롯상태 */
 	{
 		if (m_pEquipmentData->IsExistEquip(EEquipSlot::Weapon1)) /* 장비창 첫번째 슬롯의 무기를 장착중인 경우 */
@@ -1403,11 +1437,14 @@ const _bool CSilvermane::Change_Weapon()
 	//	return false;
 	//}
 
-	return S_OK;
+	return false;
 }
 
 void CSilvermane::Change_WeaponOnInventory(void)
 {
+	if (!m_pEquipmentData)
+		return;
+
 	if (1 == m_pPlayerData->EquipedSlot)
 	{
 		if (m_pEquipmentData->IsExistEquip(EEquipSlot::Weapon1)) /* 첫번째 슬롯에 무기가 장착되어있는 경우 */
@@ -1770,8 +1807,17 @@ const _bool CSilvermane::Raycast_JumpNode(const _double& _dDeltaTime)
 	}
 
 	//점프ui관련
-	m_pBlankCKey = (CUI_Blank_CKey*)g_pGameInstance->getObjectList(m_iSceneID, L"Layer_UI_BlankC")->front();
-	m_pFillCKey = (CUI_Fill_Ckey*)g_pGameInstance->getObjectList(m_iSceneID, L"Layer_UI_FillC")->front();
+
+	list<CGameObject*>* listBlankCkeys = g_pGameInstance->getObjectList(m_iSceneID, L"Layer_UI_BlankC");
+	if (listBlankCkeys)
+	{
+		m_pBlankCKey = (CUI_Blank_CKey*)listBlankCkeys->front();
+	}
+	list<CGameObject*>* listFillKeys = g_pGameInstance->getObjectList(m_iSceneID, L"Layer_UI_FillC");
+	if (listFillKeys)
+	{
+		m_pFillCKey = (CUI_Fill_Ckey*)listFillKeys->front();
+	}
 
 	if ((_uint)GAMEOBJECT::JUMP_TRIGGER == iObjectTag)
 	{
@@ -1795,7 +1841,7 @@ const _bool CSilvermane::Raycast_JumpNode(const _double& _dDeltaTime)
 		if (g_pGameInstance->getkeyPress(DIK_C))
 			m_fJumpNodeLookTime += (_float)_dDeltaTime;
 
-		if (nullptr != m_pFillCKey)
+		if (m_pFillCKey)
 			m_pFillCKey->Set_JumpNode(true);
 
 		if (1.f < m_fJumpNodeLookTime)
@@ -1806,7 +1852,7 @@ const _bool CSilvermane::Raycast_JumpNode(const _double& _dDeltaTime)
 		}
 		else if (1.f >= m_fJumpNodeLookTime)
 		{
-			if (nullptr != m_pBlankCKey && false == m_pBlankCKey->getActive())
+			if (m_pBlankCKey && !m_pBlankCKey->getActive())
 			{
 				m_pBlankCKey->setActive(true);
 				m_pFillCKey->setActive(true);
@@ -1829,12 +1875,12 @@ const _bool CSilvermane::Raycast_JumpNode(const _double& _dDeltaTime)
 		m_fJumpNodeLookTime = 0.f;
 		m_fJumpTriggerLookTime = 0.f;
 
-		if (nullptr != m_pBlankCKey)
+		if (m_pBlankCKey)
 		{
 			m_pBlankCKey->setActive(false);
 		}
 
-		if (nullptr != m_pFillCKey && nullptr == m_pTargetJumpBox)
+		if (m_pFillCKey && !m_pTargetJumpBox)
 		{
 			m_pFillCKey->Set_GapX(0.f);
 			m_pFillCKey->setActive(false);
@@ -1878,7 +1924,7 @@ const void CSilvermane::Raycast_DropBox(const _double& _dDeltaTime)
 	XMStoreFloat3(&tRaycastDesc.vDir, svRayDir);
 	tRaycastDesc.fMaxDistance = 1.f;
 	tRaycastDesc.filterData.flags = PxQueryFlag::eANY_HIT | PxQueryFlag::eDYNAMIC;
-	tRaycastDesc.layerMask = (1 << (_uint)ELayer::ItemBox);
+	tRaycastDesc.layerMask = (1 << (_uint)ELayer::ItemBox) + (1 << (_uint)ELayer::Monster);
 
 	CGameObject* pHitObject = nullptr;
 	tRaycastDesc.ppOutHitObject = &pHitObject;
@@ -1905,6 +1951,49 @@ const void CSilvermane::Raycast_DropBox(const _double& _dDeltaTime)
 		m_pTargetDropBox = nullptr;
 	//else
 	//	static_cast<CDropBox*>(pHitObject)->FocusExit();
+
+	if (!m_isExecution && g_pGameInstance->getkeyDown(DIK_F))
+	{
+		switch (iObjectTag)
+		{
+		case (_uint)GAMEOBJECT::MONSTER_ABERRANT:
+			m_pTargetExecution = static_cast<CActor*>(pHitObject);
+			m_pTargetExecution->Execution();
+			Set_Execution(true);
+			break;
+		}
+	}
+}
+
+void CSilvermane::Set_Execution(const _bool _isExecution, CActor* _pTarget)
+{
+	if (m_pCamera)
+	{
+		CHierarchyNode* pEyeBone = nullptr;
+		CHierarchyNode* pAtBone = nullptr;
+		switch (_isExecution)
+		{
+		case true:
+			pEyeBone = m_pModel->Get_BoneMatrix("camera_location_1");
+			pAtBone = m_pModel->Get_BoneMatrix("camera_look_at_1");
+			m_pStateController->Change_State(L"Execution_Mook");
+			break;
+		case false:
+			m_pTargetExecution = nullptr;
+		}
+		m_isExecution = _isExecution;
+		m_pCamera->Set_Execution(_isExecution, pEyeBone, pAtBone);
+	}
+}
+
+CActor* CSilvermane::Get_TargetExecution() const
+{
+	return m_pTargetExecution;
+}
+
+CHierarchyNode* CSilvermane::Get_ExecutionTargetBone() const
+{
+	return m_pExecutionTargetBone;
 }
 
 CSilvermane* CSilvermane::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
@@ -1931,10 +2020,11 @@ CGameObject* CSilvermane::Clone(const _uint _iSceneID, void* _pArg)
 
 void CSilvermane::Free()
 {
+	__super::Free();
+
+	Safe_Release(m_pNeedle);
 	Safe_Release(m_pShield);
 	Safe_Release(m_pCharacterController);
 	Safe_Release(m_pStateController);
 	Safe_Release(m_pAnimationController);
-
-	__super::Free();
 }

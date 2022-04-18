@@ -79,6 +79,8 @@ HRESULT C1H_SwordAttack::EnterState()
 
 	m_pAnimationController->Set_PlaySpeed(1.2f);
 	g_pObserver->Set_PlayerAttackAnimStart(true);
+
+	m_pAnimationController->Mul_MoveSpeed(0.5f);
 	return S_OK;
 }
 
@@ -94,6 +96,8 @@ HRESULT C1H_SwordAttack::ExitState()
 	m_pSilvermane->Set_IsTrasceCamera(true);
 	m_pAnimationController->Set_PlaySpeed(1.f);
 	g_pObserver->Set_PlayerAttackAnimStart(false);
+
+	m_pAnimationController->Div_MoveSpeed(0.5f);
 	return S_OK;
 }
 
