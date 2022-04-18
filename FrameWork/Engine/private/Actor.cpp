@@ -302,4 +302,5 @@ void CActor::Free()
 	CGameObject::Free();
 	Safe_Release(m_pModel);
 	Safe_Release(m_dissolveTex);
+	Safe_Release(m_dissolveGradientTex);
 }

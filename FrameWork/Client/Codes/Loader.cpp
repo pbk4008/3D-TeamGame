@@ -960,28 +960,8 @@ HRESULT CLoader::Load_Stage1PlayerLoad()
 
 	/////////////////////////////////////// 소드 트레일
 	// 기본 텍스처
-	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"TrailBase", L"../bin/Resources/Texture/Trail/T_Smoke_Trail_Soft.dds"))) MSGBOX("Failed To Add SwordTrail Tex");
-	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"DistortionBase", L"../bin/Resources/Texture/Trail/t_distort_channels.dds"))) MSGBOX("Failed To Add SwordTrail Tex");
-	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"DistortionMask", L"../bin/Resources/Texture/Trail/T_DistortionNoise.dds"))) MSGBOX("Failed To Add SwordTrail Tex");
-	// 추가 텍스처
-	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"WispTrail", L"../bin/Resources/Texture/Trail/T_WispTrail.dds"))) MSGBOX("Failed To Add WispTrail Tex");
-	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"WispTrail_02", L"../bin/Resources/Texture/Trail/T_WispTrail_02.dds"))) MSGBOX("Failed To Add WispTrail_02 Tex");
-	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"WispTrail_Thin", L"../bin/Resources/Texture/Trail/T_WispTrail_thin.dds"))) MSGBOX("Failed To Add WispTrail_Thin Tex");
-	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"Fire_02", L"../bin/Resources/Texture/Trail/T_Fire_02.dds"))) MSGBOX("Failed To Add Fire_02 Tex");
-	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"Wisp_01", L"../bin/Resources/Texture/Trail/T_Wisp_01.dds"))) MSGBOX("Failed To Add Wisp_01 Tex");
-	// 버퍼
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_VIBuffer_Trail_Distortion",
-		CVIBuffer_Trail::Create(m_pDevice, m_pDeviceContext, L"../../Reference/ShaderFile/Shader_Distortion.hlsl", 256))))
-		MSGBOX(L"트레일 버퍼 프로토타입 생성 실패");
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_VIBuffer_Trail_Normal",
-		CVIBuffer_Trail::Create(m_pDevice, m_pDeviceContext, L"../bin/ShaderFile/Shader_Trail.hlsl", 256))))
-		MSGBOX(L"트레일 버퍼 프로토타입 생성 실패");
-	// 노말
-	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_TrailEffect_Normal", CTrailEffect_Normal::Create(m_pDevice, m_pDeviceContext))))
-		MSGBOX(L"트레일이펙트_노말 프로토타입 생성 실패");
-	// 디스토션
-	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_TrailEffect_Distortion", CTrailEffect_Distortion::Create(m_pDevice, m_pDeviceContext))))
-		MSGBOX(L"트레일이펙트_디스토션 프로토타입 생성 실패");
+	if (FAILED(Load_TrailEffects()))
+		return E_FAIL;
 
 	//Wall
 	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"WallBase", L"../bin/Resources/Texture/T_Portal_Space_D.dds"))) MSGBOX("Failed To Add WallBase Tex");
@@ -1397,6 +1377,7 @@ HRESULT CLoader::Ready_Test_JS()
 
 	// dissolve 
 	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"DissovleBase", L"../bin/Resources/Texture/dissolve.dds"))) MSGBOX("Failed To Add dissolve Tex");
+	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"DissovleGradient", L"../bin/Resources/Texture/T_FlameGradient_01.dds"))) MSGBOX("Failed To Add dissolveGradient Tex");
 
 	// UI
 	if(FAILED(Load_Stage1StaticUILoad()))
