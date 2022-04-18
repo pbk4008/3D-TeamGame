@@ -12,6 +12,12 @@ END
 BEGIN(Client)
 class CEffect_Falling_Leaf final : public CEffect
 {
+public:
+	typedef struct tagEffFloatingLeafDesc : CEffect::EFFECTDESC
+	{
+		_float	fRespawnPosY; //다시 리스폰될y값
+		_bool	bSmall; //사이즈작아지게하고싶을때 
+	}FLOATINGLEAFDESC;
 protected:
 	explicit CEffect_Falling_Leaf();
 	explicit CEffect_Falling_Leaf(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);
@@ -40,7 +46,7 @@ private:
 	class CCullingBox* m_pBox = nullptr;
 
 private:
-	CEffect::EFFECTDESC m_Desc;
+	FLOATINGLEAFDESC m_Desc;
 	CVIBuffer_PointInstance_Respawn::PIDESC m_backupDesc;
 
 public:

@@ -229,6 +229,8 @@ HRESULT CMeteor::Ready_Component()
 		return E_FAIL;
 
 	m_pCollider->setShapeLayer((_uint)ELayer::Meteor);
+	m_pCollider->Remove_ActorFromScene();
+
 
 	return S_OK;
 }
@@ -267,6 +269,7 @@ void CMeteor::OnTriggerEnter(CCollision& collision)
 _int CMeteor::Move(_fvector vPos)
 {	
 	m_pCollider->Reset_Power();
+	m_pCollider->Add_ActorToScene();
 	m_pTransform->Set_State(CTransform::STATE_POSITION, vPos);
 	XMStoreFloat4(&m_vDestination, g_pObserver->Get_PlayerPos());
 

@@ -135,10 +135,7 @@ PS_OUT PS_MAIN(PS_IN In)
 	PS_OUT		Out = (PS_OUT)0;
 
 	Out.vColor = g_DiffuseTexture.Sample(DefaultSampler, In.vTexUV);
-    Out.vColor.r = 1.f;
-    Out.vColor.g = 0.6f;
-    Out.vColor.b = 0.3f;
-
+   
 	if (Out.vColor.a < 0.01)
 		discard;
 
@@ -150,7 +147,7 @@ PS_OUT PS_MAIN_MULTIIMAGE(PS_IN In)
     PS_OUT Out = (PS_OUT) 0;
 
     In.vTexUV.x = (In.vTexUV.x / g_iImageCountX) + (g_iFrame % g_iImageCountX) * (1.f / g_iImageCountX); //가로 이미지개수 , 프레임 , 1나누기 이미지개수 
-    In.vTexUV.y = (In.vTexUV.y / g_iImageCountY) + (g_iFrame / g_iImageCountY) * (1.f / g_iImageCountY); //세로 이미지개수 , 프레임 , 1나누기 이미지개수
+    In.vTexUV.y = (In.vTexUV.y / g_iImageCountY) + (g_iFrame / g_iImageCountX) * (1.f / g_iImageCountY); //세로 이미지개수 , 프레임 , 1나누기 이미지개수
 
     Out.vColor = g_DiffuseTexture.Sample(DefaultSampler, In.vTexUV);
 

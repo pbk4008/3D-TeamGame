@@ -59,6 +59,8 @@ _int CDropObject::Tick(_double _dDeltaTime)
 		if (m_elapsed >= m_dropDurtaion)
 		{
 			SetTakableState(true);
+			_vector Pos = { -0.04f, -0.1f, 0.f, 0.f };
+			Active_Effect((_uint)EFFECT::ITEM, Pos);
 		}
 		_vector point = m_pSplineCurve->GetPoint(m_elapsed / m_dropDurtaion);
 		point = XMVectorSetW(point, 1.f);
@@ -264,6 +266,9 @@ void CDropObject::Take(void)
 	{
 		/* Inventory push Item */
  		m_pInventoryData->PushItem(m_droppedItem);
+
+		_vector pivot = { 0.f, -0.05f, 0.f, 0.f };
+		Active_Effect((_uint)EFFECT::EAT_ITEM, pivot);
 	}
 
 	m_bDead = true;

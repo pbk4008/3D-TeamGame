@@ -4,7 +4,7 @@
 
 BEGIN(Engine)
 
-class ENGINE_DLL CVIBuffer_PointInstance_Respawn final : public CVIBuffer
+class ENGINE_DLL CVIBuffer_PointInstance_Respawn_Up final : public CVIBuffer
 {
 	enum class AXIS { AXIS_X,AXIS_Y,AXIS_Z, AXIS_ALL, AXIS_END };
 public:
@@ -25,9 +25,9 @@ public:
 		_bool		bSmall;
 	}PIDESC;
 protected:
-	explicit CVIBuffer_PointInstance_Respawn(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);
-	explicit CVIBuffer_PointInstance_Respawn(const CVIBuffer_PointInstance_Respawn& rhs);
-	virtual ~CVIBuffer_PointInstance_Respawn() = default;
+	explicit CVIBuffer_PointInstance_Respawn_Up(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);
+	explicit CVIBuffer_PointInstance_Respawn_Up(const CVIBuffer_PointInstance_Respawn_Up& rhs);
+	virtual ~CVIBuffer_PointInstance_Respawn_Up() = default;
 public:
 	virtual HRESULT NativeConstruct_Prototype() override;
 	virtual HRESULT NativeConstruct(void* pArg) override;
@@ -71,7 +71,7 @@ private:
 
 	_float m_fGravityTime = 0.f;
 public:
-	static CVIBuffer_PointInstance_Respawn* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext/*, const _tchar* pShaderFilePath, _uint iNumInstance*/);
+	static CVIBuffer_PointInstance_Respawn_Up* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext/*, const _tchar* pShaderFilePath, _uint iNumInstance*/);
 	virtual CComponent* Clone(void* pArg) override;
 	virtual void Free() override;
 };

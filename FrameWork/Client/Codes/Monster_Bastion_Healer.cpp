@@ -267,7 +267,8 @@ void CMonster_Bastion_Healer::Hit(CCollision& pCol)
 			{
 				m_pPanel->Set_Show(true);
 				Active_Effect((_uint)EFFECT::HIT);
-				Active_Effect((_uint)EFFECT::FLOATING);
+				Active_Effect((_uint)EFFECT::HIT_FLOATING);
+				Active_Effect((_uint)EFFECT::HIT_FLOATING_2);
 
 				//m_fCurrentHp -= 5.f;
 				//m_bGroggy = 2; //TODO::¼öÄ¡Á¤ÇØ¼­¹Ù²ãÁà¾ßµÊ

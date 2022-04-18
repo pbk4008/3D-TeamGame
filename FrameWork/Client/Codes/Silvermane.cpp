@@ -216,7 +216,7 @@ HRESULT CSilvermane::NativeConstruct(const _uint _iSceneID, void* _pArg)
 		return E_FAIL;
 
 	m_isFall = true;
-	m_fMaxHp = 1150.f;
+	m_fMaxHp = 100.f;
 	m_fCurrentHp = m_fMaxHp;
 
 	m_pRenderer->SetRenderButton(CRenderer::PIXEL, true);
@@ -302,11 +302,11 @@ _int CSilvermane::Tick(_double _dDeltaTime)
 			return iProgress;
 	}
 
-
+	
 	//light ฐüทร 
 	if (m_bLight && 0.f <= m_fLightRange)
 	{
-		m_fLightRange -= (_float)_dDeltaTime * 15.f;
+		m_fLightRange -= (_float)_dDeltaTime * 12.f;
 		m_pLight->Set_Range(m_fLightRange);
 	}
 

@@ -15,6 +15,7 @@ cbuffer Information
 	uint g_iFrame; //전체장수
 	float g_fLifeTime;
 	float g_fCurTime;
+    float g_fAlpha = 1.f;
 };
 
 /* 1. m_pDeviceContext->DrawIndexed() */
@@ -140,12 +141,14 @@ PS_OUT PS_MAIN(PS_IN In)
 	PS_OUT		Out = (PS_OUT)0;
 
 	Out.vColor = g_DiffuseTexture.Sample(DefaultSampler, In.vTexUV);
-	Out.vColor.r = g_color.r;
-	Out.vColor.g = g_color.g;
-	Out.vColor.b = g_color.b;
+	//Out.vColor.r = g_color.r;
+	//Out.vColor.g = g_color.g;
+	//Out.vColor.b = g_color.b;
+	
+    Out.vColor.a = Out.vColor.a * g_fAlpha;
 
-	if (Out.vColor.a < 0.01)
-		discard;
+	//if (Out.vColor.a < 0.001)
+	//	discard;
 	
 	Out.weight = float4(g_Weight.xxx, 0.5f);
 

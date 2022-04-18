@@ -213,7 +213,7 @@ void CShieldBreaker::OnHitGroundEffect()
 	_vector svLook = XMVector3Normalize(m_pTransform->Get_State(CTransform::STATE_LOOK));
 	XMStoreFloat3(&m_vEndPos, svPos + svLook);
 
-	m_pOwner->Active_Effect((_uint)EFFECT::HITGROUND, svLook * 2.6f);
+	m_pOwner->Active_Effect((_uint)EFFECT::HIT_GROUND, svLook * 2.6f);
 }
 
 CShieldBreaker* CShieldBreaker::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)

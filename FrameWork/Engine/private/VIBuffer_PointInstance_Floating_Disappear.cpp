@@ -1,14 +1,15 @@
-#include "..\public\VIBuffer_PointInstance_Explosion.h"
-#include "GameInstance.h"
+#include "..\public\VIBuffer_PointInstance_Floating_Disappear.h"
 #include <time.h>
+#include "GameInstance.h"
 
-CVIBuffer_PointInstance_Explosion::CVIBuffer_PointInstance_Explosion(ID3D11Device * pDevice, ID3D11DeviceContext * pDeviceContext)
+//사이즈가 작아지지는 않고 알파값만 없어지는 버퍼
+CVIBuffer_PointInstance_Floating_Disappear::CVIBuffer_PointInstance_Floating_Disappear(ID3D11Device * pDevice, ID3D11DeviceContext * pDeviceContext)
 	: CVIBuffer(pDevice, pDeviceContext)
 {
 
 }
 
-CVIBuffer_PointInstance_Explosion::CVIBuffer_PointInstance_Explosion(const CVIBuffer_PointInstance_Explosion & rhs)
+CVIBuffer_PointInstance_Floating_Disappear::CVIBuffer_PointInstance_Floating_Disappear(const CVIBuffer_PointInstance_Floating_Disappear& rhs)
 	: CVIBuffer(rhs)
 	//, m_iNumInstance(rhs.m_iNumInstance)
 	, m_pVBInstance(rhs.m_pVBInstance)
@@ -23,96 +24,17 @@ CVIBuffer_PointInstance_Explosion::CVIBuffer_PointInstance_Explosion(const CVIBu
 	Safe_AddRef(m_pVBInstance);	
 }
 
-HRESULT CVIBuffer_PointInstance_Explosion::NativeConstruct_Prototype(/*const _tchar* pShaderFilePath, _uint iNumInstance*/)
+HRESULT CVIBuffer_PointInstance_Floating_Disappear::NativeConstruct_Prototype(/*const _tchar* pShaderFilePath, _uint iNumInstance*/)
 {
 	srand(unsigned(time(NULL)));
 
 	if (FAILED(__super::NativeConstruct_Prototype()))
 		return E_FAIL;
 
-	//ZeroMemory(&m_VBDesc, sizeof(D3D11_BUFFER_DESC));
-
-	///* D3D11_BUFFER_DESC */
-	//m_iStride = sizeof(VTXPOINT);
-	//m_iNumVertices = iNumInstance;
-	//m_iNumInstance = iNumInstance;
-	//m_ePrimitiveTopology = D3D_PRIMITIVE_TOPOLOGY_POINTLIST;
-
-	//m_VBDesc.ByteWidth = m_iStride * m_iNumVertices;
-	//m_VBDesc.Usage = D3D11_USAGE_IMMUTABLE;
-	//m_VBDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-	//m_VBDesc.CPUAccessFlags = 0;
-	//m_VBDesc.MiscFlags = 0;
-	//m_VBDesc.StructureByteStride = m_iStride;
-
-	//
-	///* D3D11_SUBRESOURCE_DATA */
-	//ZeroMemory(&m_VBSubresourceData, sizeof(D3D11_SUBRESOURCE_DATA));
-	//m_pVertices = new VTXPOINT[m_iNumVertices];
-	//ZeroMemory(m_pVertices, sizeof(VTXPOINT) * m_iNumVertices);
-
-	//for (_uint i = 0; i < m_iNumVertices; ++i)
-	//{
-	//	((VTXPOINT*)m_pVertices)[i].vPosition = _float3(0.0f, 0.0f, 0.f);
-	//	((VTXPOINT*)m_pVertices)[i].vPSize = _float2(1.0f, 1.f);
-	//}
-	//
-	//m_VBSubresourceData.pSysMem = m_pVertices;
-
-
-	//if (FAILED(__super::Create_VertexBuffer()))
-	//	return E_FAIL;
-
-	///* 인스턴싱용 정점버퍼를 생성하자.(인스턴스의 갯수만큼 정점(사각형 하나를 움직이기 위한 행렬)을 생성하여 보관하는 버퍼) */
-	//ZeroMemory(&m_VBInstDesc, sizeof(D3D11_BUFFER_DESC));
-
-	///* D3D11_BUFFER_DESC */
-	//m_iInstStride = sizeof(VTXPARTICLE);
-	//m_iInstNumVertices = m_iNumInstance;
-
-	//m_VBInstDesc.ByteWidth = m_iInstStride * m_iInstNumVertices;
-	//m_VBInstDesc.Usage = D3D11_USAGE_DYNAMIC;
-	//m_VBInstDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-	//m_VBInstDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-	//m_VBInstDesc.MiscFlags = 0;
-	//m_VBInstDesc.StructureByteStride = m_iInstStride;
-
-	//ZeroMemory(&m_VBInstSubresourceData, sizeof(D3D11_SUBRESOURCE_DATA));
-	//VTXPARTICLE*	pVertices = new VTXPARTICLE[m_iInstNumVertices];
-	//ZeroMemory(pVertices, sizeof(VTXPARTICLE) * m_iInstNumVertices);
-
-	//for (_uint i = 0; i < m_iInstNumVertices; ++i)
-	//{
-	//	pVertices[i].vRight = _float4(1.0f, 0.f, 0.f, 0.f);
-	//	pVertices[i].vUp = _float4(0.f, 1.0f, 0.f, 0.f);
-	//	pVertices[i].vLook = _float4(0.f, 0.f, 1.0f, 0.f);
-	//	pVertices[i].vPosition = _float4(rand() % 20, 15.0f, rand() % 20, 1.f);
-	//}
-	//m_VBInstSubresourceData.pSysMem = pVertices;
-
-	//if (FAILED(m_pDevice->CreateBuffer(&m_VBInstDesc, &m_VBInstSubresourceData, &m_pVBInstance)))
-	//	return E_FAIL;
-
-	//Safe_Delete_Array(pVertices);
-
-	//D3D11_INPUT_ELEMENT_DESC		ElementDescs[] = 
-	//{		
-	//	{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-	//	{ "PSIZE", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 }, 
-
-	//	{ "WORLD", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 1, 0, D3D11_INPUT_PER_INSTANCE_DATA, 1 },
-	//	{ "WORLD", 1, DXGI_FORMAT_R32G32B32A32_FLOAT, 1, 16, D3D11_INPUT_PER_INSTANCE_DATA, 1 },
-	//	{ "WORLD", 2, DXGI_FORMAT_R32G32B32A32_FLOAT, 1, 32, D3D11_INPUT_PER_INSTANCE_DATA, 1 },
-	//	{ "WORLD", 3, DXGI_FORMAT_R32G32B32A32_FLOAT, 1, 48, D3D11_INPUT_PER_INSTANCE_DATA, 1 },
-	//};
-
-	//if (FAILED(Compile_ShaderFiles(pShaderFilePath, ElementDescs, 6)))
-	//	return E_FAIL;
-
 	return S_OK;
 }
 
-HRESULT CVIBuffer_PointInstance_Explosion::NativeConstruct(void * pArg)
+HRESULT CVIBuffer_PointInstance_Floating_Disappear::NativeConstruct(void * pArg)
 {
 	if (FAILED(__super::NativeConstruct(pArg)))
 		return E_FAIL;
@@ -122,7 +44,7 @@ HRESULT CVIBuffer_PointInstance_Explosion::NativeConstruct(void * pArg)
 	ZeroMemory(&m_VBDesc, sizeof(D3D11_BUFFER_DESC));
 
 	/* D3D11_BUFFER_DESC */
-	m_iStride = sizeof(VTXPOINT);
+	m_iStride = sizeof(VTXPOINTSORT);
 	m_iNumVertices = m_Desc.iNumInstance;
 	//m_iNumInstance = iNumInstance;
 	m_ePrimitiveTopology = D3D_PRIMITIVE_TOPOLOGY_POINTLIST;
@@ -136,13 +58,14 @@ HRESULT CVIBuffer_PointInstance_Explosion::NativeConstruct(void * pArg)
 
 	/* D3D11_SUBRESOURCE_DATA */
 	ZeroMemory(&m_VBSubresourceData, sizeof(D3D11_SUBRESOURCE_DATA));
-	m_pVertices = new VTXPOINT[m_iNumVertices];
-	ZeroMemory(m_pVertices, sizeof(VTXPOINT) * m_iNumVertices);
+	m_pVertices = new VTXPOINTSORT[m_iNumVertices];
+	ZeroMemory(m_pVertices, sizeof(VTXPOINTSORT) * m_iNumVertices);
 
 	for (_uint i = 0; i < m_iNumVertices; ++i)
 	{
-		((VTXPOINT*)m_pVertices)[i].vPosition = _float3(0.f, 0.f, 0.f);
-		((VTXPOINT*)m_pVertices)[i].vPSize = _float2(m_Desc.fParticleSize.x, m_Desc.fParticleSize.y);
+		((VTXPOINTSORT*)m_pVertices)[i].vPosition = _float3(0.f, 0.f, 0.f);
+		((VTXPOINTSORT*)m_pVertices)[i].vPSize = _float2(m_Desc.fParticleSize.x, m_Desc.fParticleSize.y);
+		((VTXPOINTSORT*)m_pVertices)[i].ViewZ = 0;
 	}
 
 	m_VBSubresourceData.pSysMem = m_pVertices;
@@ -189,7 +112,7 @@ HRESULT CVIBuffer_PointInstance_Explosion::NativeConstruct(void * pArg)
 
 		uniform_real_distribution<_float> fRange(0.f, 1.f);
 		_float fRandom = fRange(g_random);
-		pVertices[i].vTime.x = fRandom + m_Desc.fCurTime;
+		pVertices[i].vTime.x = /*fRandom +*/ m_Desc.fCurTime;
 		pVertices[i].vTime.y = 0.f; //viewZ로쓸거임 
 	}
 	m_VBInstSubresourceData.pSysMem = pVertices;
@@ -222,10 +145,11 @@ HRESULT CVIBuffer_PointInstance_Explosion::NativeConstruct(void * pArg)
 
 	Particle_Setting_RandomPos();
 
+	m_bFloating = true;
 	return S_OK;
 }
 
-HRESULT CVIBuffer_PointInstance_Explosion::Render(_uint iPassIndex)
+HRESULT CVIBuffer_PointInstance_Floating_Disappear::Render(_uint iPassIndex)
 {
 	if (nullptr == m_pDeviceContext)
 		return E_FAIL;
@@ -259,21 +183,21 @@ HRESULT CVIBuffer_PointInstance_Explosion::Render(_uint iPassIndex)
 	return S_OK;
 }
 
-void CVIBuffer_PointInstance_Explosion::Update(_double TimeDelta, _uint eAxis)
+void CVIBuffer_PointInstance_Floating_Disappear::Update(_double TimeDelta, _uint eAxis)
 {
 	if ((_uint)AXIS::AXIS_END <= eAxis)
 	{
-		MSGBOX("Failed to Update In CVIBuffer_PointInstance_Explosion::Update");
+		MSGBOX("Failed to Update In CVIBuffer_PointInstance_Floating_Disappear::Update");
 		return;
 	}
+
+	//소팅하려고
+	_matrix matView = XMMatrixInverse(nullptr, g_pGameInstance->Get_ViewMatrix());
+	_vector Campos = matView.r[3];
 
 	D3D11_MAPPED_SUBRESOURCE		SubResource;
 
 	m_pDeviceContext->Map(m_pVBInstance, 0, /*D3D11_MAP_WRITE_DISCARD*/D3D11_MAP_WRITE_NO_OVERWRITE, 0, &SubResource);
-
-	//소팅하기위해서
-	_matrix matView = XMMatrixInverse(nullptr, g_pGameInstance->Get_ViewMatrix());
-	_vector Campos = matView.r[3];
 
 	if (!m_bSettingDir) 
 	{
@@ -306,6 +230,8 @@ void CVIBuffer_PointInstance_Explosion::Update(_double TimeDelta, _uint eAxis)
 		}
 
 		m_bSettingDir = true;
+
+		m_fFloatingGauge = m_Desc.fParticleSpeed;
 	}
 
 
@@ -313,15 +239,14 @@ void CVIBuffer_PointInstance_Explosion::Update(_double TimeDelta, _uint eAxis)
 	{
 		if (!m_bReset)
 		{
-			
 			if (m_Desc.fLifeTime > ((VTXPARTICLE*)SubResource.pData)[i].vTime.x)
 			{
-				((VTXPARTICLE*)SubResource.pData)[i].vTime.x += (_float)TimeDelta;
+				//((VTXPARTICLE*)SubResource.pData)[i].vTime.x += (_float)TimeDelta;
 			}
 
 			if (m_Desc.fLifeTime < ((VTXPARTICLE*)SubResource.pData)[i].vTime.x)
 			{
-				((VTXPARTICLE*)SubResource.pData)[i].vTime.x = m_Desc.fLifeTime;
+				//((VTXPARTICLE*)SubResource.pData)[i].vTime.x = m_Desc.fLifeTime;
 			}
 
 			if (m_Desc.bGravity) //중력값 줬을때만 ,,
@@ -331,12 +256,11 @@ void CVIBuffer_PointInstance_Explosion::Update(_double TimeDelta, _uint eAxis)
 
 				if (m_Desc.fLifeTime > m_fGravityTime && 0.f <= m_fGravityTime)
 				{
-					fY = ((VTXPARTICLE*)SubResource.pData)[i].vPosition.y + (-2.f * 9.8f * (_float)TimeDelta * ((m_Desc.fLifeTime - m_fGravityTime) * (m_Desc.fParticleSpeed * 0.1f)));
+					fY = ((VTXPARTICLE*)SubResource.pData)[i].vPosition.y + (-2.f * 9.8f * (_float)TimeDelta * ((m_Desc.fLifeTime - m_fGravityTime) * (/*m_Desc.fParticleSpeed*/m_fFloatingGauge * 0.01f)));
 					((VTXPARTICLE*)SubResource.pData)[i].vPosition.y = fY;
 				}
 			}
 
-			//리셋일때는 돌지않게
 			if ((_uint)AXIS::AXIS_X == eAxis)
 			{
 				((VTXPARTICLE*)SubResource.pData)[i].vPosition.x = 0;
@@ -365,25 +289,36 @@ void CVIBuffer_PointInstance_Explosion::Update(_double TimeDelta, _uint eAxis)
 
 			if ((_uint)AXIS::AXIS_ALL == eAxis)
 			{
-				((VTXPARTICLE*)SubResource.pData)[i].vPosition.x += m_pNormal[i].x * (_float)TimeDelta * m_Desc.fParticleSpeed;
-				((VTXPARTICLE*)SubResource.pData)[i].vPosition.y += m_pNormal[i].y * (_float)TimeDelta * m_Desc.fParticleSpeed;
-				((VTXPARTICLE*)SubResource.pData)[i].vPosition.z += m_pNormal[i].z * (_float)TimeDelta * m_Desc.fParticleSpeed;
-				((VTXPARTICLE*)SubResource.pData)[i].vPosition.w = 1.f;
+				if (false == m_bFloating)
+				{
+					((VTXPARTICLE*)SubResource.pData)[i].vPosition.x += m_pNormal[i].x * (_float)TimeDelta * m_Desc.fParticleSpeed;
+					((VTXPARTICLE*)SubResource.pData)[i].vPosition.y += m_pNormal[i].y * (_float)TimeDelta * m_Desc.fParticleSpeed;
+					((VTXPARTICLE*)SubResource.pData)[i].vPosition.z += m_pNormal[i].z * (_float)TimeDelta * m_Desc.fParticleSpeed;
+					((VTXPARTICLE*)SubResource.pData)[i].vPosition.w = 1.f;
+				}
+				else
+				{
+					m_Desc.fParticleSpeed -= (_float)TimeDelta * (m_fFloatingGauge * 0.1f);
+					if (0 >= m_Desc.fParticleSpeed)
+					{
+						m_Desc.fParticleSpeed = m_fFloatingGauge * 0.1f;
+					}
+					((VTXPARTICLE*)SubResource.pData)[i].vPosition.x += (m_pNormal[i].x * (_float)TimeDelta * m_Desc.fParticleSpeed);
+					((VTXPARTICLE*)SubResource.pData)[i].vPosition.y += (m_pNormal[i].y * (_float)TimeDelta * m_Desc.fParticleSpeed);
+					((VTXPARTICLE*)SubResource.pData)[i].vPosition.z += (m_pNormal[i].z * (_float)TimeDelta * m_Desc.fParticleSpeed);
+					((VTXPARTICLE*)SubResource.pData)[i].vPosition.w = 1.f;
+				}
 			}
+
+			/*_vector ViewLength = XMVector3Length(Campos - XMLoadFloat4(&((VTXPARTICLE*)SubResource.pData)[i].vPosition));
+			((VTXPARTICLE*)SubResource.pData)[i].vTime.y = XMVectorGetX(ViewLength);*/
 		}
 	}
 
-	/*for (_uint i = 0; i < m_Desc.iNumInstance; ++i)
-	{
-		_vector ViewLength = XMVector3Length(Campos - XMLoadFloat4(&((VTXPARTICLE*)SubResource.pData)[i].vPosition));
-		((VTXPARTICLE*)SubResource.pData)[i].vTime.y = XMVectorGetX(ViewLength);
-	}
-
-	sort((VTXPARTICLE*)SubResource.pData, (VTXPARTICLE*)SubResource.pData + m_Desc.iNumInstance, [](VTXPARTICLE& pSour, VTXPARTICLE& pDest)->bool
-		{
-			return pSour.vTime.y > pDest.vTime.y;
-		});*/
-
+	//sort(((VTXPARTICLE*)SubResource.pData), ((VTXPARTICLE*)SubResource.pData) + m_Desc.iNumInstance, [](VTXPARTICLE pSour, VTXPARTICLE pDest)
+	//	{
+	//		return pSour.vTime.y > pDest.vTime.y;
+	//	});
 
 	/*if (0 > m_fCamLookDir.z)
 	{
@@ -403,7 +338,7 @@ void CVIBuffer_PointInstance_Explosion::Update(_double TimeDelta, _uint eAxis)
 	m_pDeviceContext->Unmap(m_pVBInstance, 0);
 }
 
-void CVIBuffer_PointInstance_Explosion::Particle_Setting_RandomPos()
+void CVIBuffer_PointInstance_Floating_Disappear::Particle_Setting_RandomPos()
 {
 	for (_uint i = 0; i < m_Desc.iNumInstance; ++i)
 	{
@@ -428,13 +363,13 @@ void CVIBuffer_PointInstance_Explosion::Particle_Setting_RandomPos()
 	}
 }
 
-void CVIBuffer_PointInstance_Explosion::Particle_Reset()
+void CVIBuffer_PointInstance_Floating_Disappear::Particle_Reset()
 {
 	m_bSettingDir = false;
 	m_fGravityTime = 0.f;
+	m_fFloatingGauge = 0.f;
 	//리셋될때마다 새롭게 벡터세팅 
 	Particle_Setting_RandomPos();
-
 
 	//소팅하기위해서
 	_matrix matView = XMMatrixInverse(nullptr, g_pGameInstance->Get_ViewMatrix());
@@ -449,7 +384,7 @@ void CVIBuffer_PointInstance_Explosion::Particle_Reset()
 		uniform_real_distribution<_float> fRange(0.f, 1.f);
 		_float fRandom = fRange(g_random);
 
-		((VTXPARTICLE*)SubResource.pData)[i].vTime.x = fRandom + m_Desc.fCurTime;
+		((VTXPARTICLE*)SubResource.pData)[i].vTime.x = /*fRandom +*/ m_Desc.fCurTime;
 
 		m_Desc.matParticle.r[0] = XMVectorSetX(m_Desc.matParticle.r[0], m_Desc.fParticleSize.x);
 		m_Desc.matParticle.r[1] = XMVectorSetY(m_Desc.matParticle.r[1], m_Desc.fParticleSize.y);
@@ -470,66 +405,47 @@ void CVIBuffer_PointInstance_Explosion::Particle_Reset()
 		((VTXPARTICLE*)SubResource.pData)[i].vPosition.y = XMVectorGetY(m_Desc.matParticle.r[3]) + fYRandom;
 		((VTXPARTICLE*)SubResource.pData)[i].vPosition.z = XMVectorGetZ(m_Desc.matParticle.r[3]) + fZRandom;
 
-		
+	/*	_vector ViewLength = XMVector3Length(Campos - XMLoadFloat4(&((VTXPARTICLE*)SubResource.pData)[i].vPosition));
+		((VTXPARTICLE*)SubResource.pData)[i].vTime.y = XMVectorGetX(ViewLength);*/
 	}
-	
-	//for (_uint i = 0; i < m_Desc.iNumInstance; ++i)
-	//{ 
-	//	_vector ViewLength = XMVector3Length(Campos - XMLoadFloat4(&((VTXPARTICLE*)SubResource.pData)[i].vPosition));
-	//	((VTXPARTICLE*)SubResource.pData)[i].vTime.y = XMVectorGetX(ViewLength);
-	//}
 
-	//sort((VTXPARTICLE*)SubResource.pData, (VTXPARTICLE*)SubResource.pData + m_Desc.iNumInstance, [](VTXPARTICLE& pSour, VTXPARTICLE& pDest)->bool
+	//////소팅해야댐 여기서 , 멀리있는것부터 그릴수있게,, 저는 생각이없습니다.. 
+
+	//sort(((VTXPARTICLE*)SubResource.pData), ((VTXPARTICLE*)SubResource.pData) + m_Desc.iNumInstance, [](VTXPARTICLE pSour, VTXPARTICLE pDest)->bool
 	//	{
 	//		return pSour.vTime.y > pDest.vTime.y;
 	//	});
 
-	//////소팅해야댐 여기서 , 멀리있는것부터 그릴수있게,, 저는 생각이없습니다.. 
-	//if (0 > m_fCamLookDir.z)
-	//{
-	//	sort(((VTXPARTICLE*)SubResource.pData), ((VTXPARTICLE*)SubResource.pData) + m_Desc.iNumInstance, [](VTXPARTICLE pSour, VTXPARTICLE pDest)
-	//		{
-	//			return pSour.vPosition.z > pDest.vPosition.z;
-	//		});
-	//}
-	//if (0 <= m_fCamLookDir.z)
-	//{
-	//	sort(((VTXPARTICLE*)SubResource.pData), ((VTXPARTICLE*)SubResource.pData) + m_Desc.iNumInstance, [](VTXPARTICLE pSour, VTXPARTICLE pDest)
-	//		{
-	//			return pSour.vPosition.z < pDest.vPosition.z;
-	//		});
-	//}
-
 	m_pDeviceContext->Unmap(m_pVBInstance, 0);
 }
 
-CVIBuffer_PointInstance_Explosion * CVIBuffer_PointInstance_Explosion::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pDeviceContext/*, const _tchar* pShaderFilePath, _uint iNumInstance*/)
+CVIBuffer_PointInstance_Floating_Disappear * CVIBuffer_PointInstance_Floating_Disappear::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pDeviceContext/*, const _tchar* pShaderFilePath, _uint iNumInstance*/)
 {
-	CVIBuffer_PointInstance_Explosion*		pInstance = new CVIBuffer_PointInstance_Explosion(pDevice, pDeviceContext);
+	CVIBuffer_PointInstance_Floating_Disappear*		pInstance = new CVIBuffer_PointInstance_Floating_Disappear(pDevice, pDeviceContext);
 
 	if (FAILED(pInstance->NativeConstruct_Prototype(/*pShaderFilePath, iNumInstance*/)))
 	{
-		MSGBOX("Failed to Creating CVIBuffer_PointInstance_Explosion");
+		MSGBOX("Failed to Creating CVIBuffer_PointInstance_Floating_Disappear");
 		Safe_Release(pInstance);
 	}
 
 	return pInstance;
 }
 
-CComponent * CVIBuffer_PointInstance_Explosion::Clone(void * pArg)
+CComponent * CVIBuffer_PointInstance_Floating_Disappear::Clone(void * pArg)
 {
-	CVIBuffer_PointInstance_Explosion*		pInstance = new CVIBuffer_PointInstance_Explosion(*this);
+	CVIBuffer_PointInstance_Floating_Disappear*		pInstance = new CVIBuffer_PointInstance_Floating_Disappear(*this);
 
 	if (FAILED(pInstance->NativeConstruct(pArg)))
 	{
-		MSGBOX("Failed to Creating CVIBuffer_PointInstance_Explosion");
+		MSGBOX("Failed to Creating CVIBuffer_PointInstance_Floating_Disappear");
 		Safe_Release(pInstance);
 	}
 
 	return pInstance;
 }
 
-void CVIBuffer_PointInstance_Explosion::Free()
+void CVIBuffer_PointInstance_Floating_Disappear::Free()
 {
 	Safe_Delete_Array(m_pDir);
 	Safe_Delete_Array(m_pNormal);

@@ -340,6 +340,7 @@ call Update_Client.bat</Command>
     <ClInclude Include="..\Headers\Effect_Env_Fire.h" />
     <ClInclude Include="..\Headers\Effect_Env_Floating.h" />
     <ClInclude Include="..\Headers\Effect_Falling_Leaf.h" />
+    <ClInclude Include="..\Headers\Effect_FloatingUp.h" />
     <ClInclude Include="..\Headers\Effect_Floating_Speed.h" />
     <ClInclude Include="..\Headers\Effect_Guard.h" />
     <ClInclude Include="..\Headers\Effect_Hammer_Dust.h" />
@@ -681,6 +682,7 @@ call Update_Client.bat</Command>
     <ClCompile Include="..\Codes\Effect_Env_Fire.cpp" />
     <ClCompile Include="..\Codes\Effect_Env_Floating.cpp" />
     <ClCompile Include="..\Codes\Effect_Falling_Leaf.cpp" />
+    <ClCompile Include="..\Codes\Effect_FloatingUp.cpp" />
     <ClCompile Include="..\Codes\Effect_Floating_Speed.cpp" />
     <ClCompile Include="..\Codes\Effect_Guard.cpp" />
     <ClCompile Include="..\Codes\Effect_Hammer_Dust.cpp" />
@@ -920,6 +922,7 @@ call Update_Client.bat</Command>
     <FxCompile Include="..\bin\ShaderFile\Shader_Monster.hlsl" />
     <FxCompile Include="..\bin\ShaderFile\Shader_Panel_UI.hlsl" />
     <FxCompile Include="..\bin\ShaderFile\Shader_Particle.hlsl" />
+    <FxCompile Include="..\bin\ShaderFile\Shader_Particle_Alpha.hlsl" />
     <FxCompile Include="..\bin\ShaderFile\Shader_Particle_Size.hlsl" />
     <FxCompile Include="..\bin\ShaderFile\Shader_Potal.hlsl" />
     <FxCompile Include="..\bin\ShaderFile\Shader_RectFire.hlsl" />

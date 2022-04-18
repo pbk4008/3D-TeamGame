@@ -1,5 +1,6 @@
 #include "..\public\VIBuffer_PointInstance_Floating.h"
 #include <time.h>
+#include "GameInstance.h"
 
 CVIBuffer_PointInstance_Floating::CVIBuffer_PointInstance_Floating(ID3D11Device * pDevice, ID3D11DeviceContext * pDeviceContext)
 	: CVIBuffer(pDevice, pDeviceContext)
@@ -172,12 +173,23 @@ HRESULT CVIBuffer_PointInstance_Floating::NativeConstruct(void * pArg)
 		XMStoreFloat4(&pVertices[i].vRight, m_Desc.matParticle.r[0]);
 		XMStoreFloat4(&pVertices[i].vUp, m_Desc.matParticle.r[1]);
 		XMStoreFloat4(&pVertices[i].vLook, m_Desc.matParticle.r[2]);
-		pVertices[i].vPosition =
-			_float4(XMVectorGetX(m_Desc.matParticle.r[3]) + rand() % (_int)(m_Desc.fParticleStartRandomPos.x) + (rand() % 10) * 0.1f,
-				XMVectorGetY(m_Desc.matParticle.r[3]) + rand() % (_int)(m_Desc.fParticleStartRandomPos.y) + (rand() % 10) * 0.1f,
-				XMVectorGetZ(m_Desc.matParticle.r[3]) + rand() % (_int)(m_Desc.fParticleStartRandomPos.z) + (rand() % 10) * 0.1f, 1.f);
 
-		pVertices[i].vTime.x = (rand() % 9) * 0.1f + m_Desc.fCurTime;
+		uniform_real_distribution<_float> fXRange(0.f, m_Desc.fParticleStartRandomPos.x);
+		uniform_real_distribution<_float> fYRange(0.f, m_Desc.fParticleStartRandomPos.y);
+		uniform_real_distribution<_float> fZRange(0.f, m_Desc.fParticleStartRandomPos.z);
+
+		_float fXRandom = fXRange(g_random);
+		_float fYRandom = fYRange(g_random);
+		_float fZRandom = fZRange(g_random);
+
+		pVertices[i].vPosition =
+			_float4(XMVectorGetX(m_Desc.matParticle.r[3]) + fXRandom,
+				XMVectorGetY(m_Desc.matParticle.r[3]) + fYRandom,
+				XMVectorGetZ(m_Desc.matParticle.r[3]) + fZRandom, 1.f);
+
+		uniform_real_distribution<_float> fRange(0.f, 1.f);
+		_float fRandom = fRange(g_random);
+		pVertices[i].vTime.x = fRandom + m_Desc.fCurTime;
 	}
 	m_VBInstSubresourceData.pSysMem = pVertices;
 
@@ -265,12 +277,20 @@ void CVIBuffer_PointInstance_Floating::Update(_double TimeDelta, _uint eAxis)
 
 		for (_uint i = 0; i < m_Desc.iNumInstance; ++i)
 		{
+			uniform_real_distribution<_float> fXRange(-m_Desc.fParticleMinusRandomDir.x, 0.f);
+			uniform_real_distribution<_float> fYRange(-m_Desc.fParticleMinusRandomDir.y, 0.f);
+			uniform_real_distribution<_float> fZRange(-m_Desc.fParticleMinusRandomDir.z, 0.f);
+
+			_float fXRandom = fXRange(g_random);
+			_float fYRandom = fYRange(g_random);
+			_float fZRandom = fZRange(g_random);
+
 			while (0 == m_pRandomPos[i].x && 0 == m_pRandomPos[i].y && 0 == m_pRandomPos[i].z)
 			{
 				//만약에 세 축이 다 0이면 아닐때까지 계속돌리기
-				m_pRandomPos[i].x = -(rand() % (_int)(m_Desc.fParticleMinusRandomDir.x)) + m_Desc.fParticleRandomDir.x;
-				m_pRandomPos[i].y = -(rand() % (_int)(m_Desc.fParticleMinusRandomDir.y)) + m_Desc.fParticleRandomDir.y;
-				m_pRandomPos[i].z = -(rand() % (_int)(m_Desc.fParticleMinusRandomDir.z)) + m_Desc.fParticleRandomDir.z;
+				m_pRandomPos[i].x = fXRandom + m_Desc.fParticleRandomDir.x;
+				m_pRandomPos[i].y = fYRandom + m_Desc.fParticleRandomDir.y;
+				m_pRandomPos[i].z = fZRandom + m_Desc.fParticleRandomDir.z;
 			}
 
 			m_pDir[i] = { m_pRandomPos[i].x - ((VTXPARTICLE*)SubResource.pData)[i].vPosition.x,
@@ -386,15 +406,23 @@ void CVIBuffer_PointInstance_Floating::Particle_Setting_RandomPos()
 {
 	for (_uint i = 0; i < m_Desc.iNumInstance; ++i)
 	{
-		m_pRandomPos[i] = { -(rand() % (_int)(m_Desc.fParticleMinusRandomDir.x)) + m_Desc.fParticleRandomDir.x,
-			-(rand() % (_int)(m_Desc.fParticleMinusRandomDir.y)) + m_Desc.fParticleRandomDir.y,
-			-(rand() % (_int)(m_Desc.fParticleMinusRandomDir.z)) + m_Desc.fParticleRandomDir.z };
+		uniform_real_distribution<_float> fXRange(-m_Desc.fParticleMinusRandomDir.x, 0.f);
+		uniform_real_distribution<_float> fYRange(-m_Desc.fParticleMinusRandomDir.y, 0.f);
+		uniform_real_distribution<_float> fZRange(-m_Desc.fParticleMinusRandomDir.z, 0.f);
+
+		_float fXRandom = fXRange(g_random);
+		_float fYRandom = fYRange(g_random);
+		_float fZRandom = fZRange(g_random);
+
+		m_pRandomPos[i] = { fXRandom + m_Desc.fParticleRandomDir.x,
+			fYRandom + m_Desc.fParticleRandomDir.y,
+			fZRandom + m_Desc.fParticleRandomDir.z };
 
 		while (0 == m_pRandomPos[i].x && 0 == m_pRandomPos[i].y && 0 == m_pRandomPos[i].z)
 		{
-			m_pRandomPos[i].x = -(rand() % (_int)(m_Desc.fParticleMinusRandomDir.x)) + m_Desc.fParticleRandomDir.x;
-			m_pRandomPos[i].y = -(rand() % (_int)(m_Desc.fParticleMinusRandomDir.y)) + m_Desc.fParticleRandomDir.y;
-			m_pRandomPos[i].z = -(rand() % (_int)(m_Desc.fParticleMinusRandomDir.z)) + m_Desc.fParticleRandomDir.z;
+			m_pRandomPos[i].x = fXRandom + m_Desc.fParticleRandomDir.x;
+			m_pRandomPos[i].y = fYRandom + m_Desc.fParticleRandomDir.y;
+			m_pRandomPos[i].z = fZRandom + m_Desc.fParticleRandomDir.z;
 		}
 	}
 }
@@ -413,7 +441,10 @@ void CVIBuffer_PointInstance_Floating::Particle_Reset()
 
 	for (_uint i = 0; i < m_Desc.iNumInstance; ++i)
 	{
-		((VTXPARTICLE*)SubResource.pData)[i].vTime.x = (rand() % 9) * 0.1f + m_Desc.fCurTime;
+		uniform_real_distribution<_float> fRange(0.f, 1.f);
+		_float fRandom = fRange(g_random);
+
+		((VTXPARTICLE*)SubResource.pData)[i].vTime.x = fRandom + m_Desc.fCurTime;
 
 		m_Desc.matParticle.r[0] = XMVectorSetX(m_Desc.matParticle.r[0], m_Desc.fParticleSize.x);
 		m_Desc.matParticle.r[1] = XMVectorSetY(m_Desc.matParticle.r[1], m_Desc.fParticleSize.y);
@@ -422,9 +453,17 @@ void CVIBuffer_PointInstance_Floating::Particle_Reset()
 		XMStoreFloat4(&((VTXPARTICLE*)SubResource.pData)[i].vUp, m_Desc.matParticle.r[1]);
 		XMStoreFloat4(&((VTXPARTICLE*)SubResource.pData)[i].vLook, m_Desc.matParticle.r[2]);
 
-		((VTXPARTICLE*)SubResource.pData)[i].vPosition.x = XMVectorGetX(m_Desc.matParticle.r[3]) + rand() % (_int)(m_Desc.fParticleStartRandomPos.x) + (rand() % 10) * 0.1f;
-		((VTXPARTICLE*)SubResource.pData)[i].vPosition.y = XMVectorGetY(m_Desc.matParticle.r[3]) + rand() % (_int)(m_Desc.fParticleStartRandomPos.y) + (rand() % 10) * 0.1f;
-		((VTXPARTICLE*)SubResource.pData)[i].vPosition.z = XMVectorGetZ(m_Desc.matParticle.r[3]) + rand() % (_int)(m_Desc.fParticleStartRandomPos.z) + (rand() % 10) * 0.1f;
+		uniform_real_distribution<_float> fXRange(0.f, m_Desc.fParticleStartRandomPos.x);
+		uniform_real_distribution<_float> fYRange(0.f, m_Desc.fParticleStartRandomPos.y);
+		uniform_real_distribution<_float> fZRange(0.f, m_Desc.fParticleStartRandomPos.z);
+
+		_float fXRandom = fXRange(g_random);
+		_float fYRandom = fYRange(g_random);
+		_float fZRandom = fZRange(g_random);
+
+		((VTXPARTICLE*)SubResource.pData)[i].vPosition.x = XMVectorGetX(m_Desc.matParticle.r[3]) + fXRandom;
+		((VTXPARTICLE*)SubResource.pData)[i].vPosition.y = XMVectorGetY(m_Desc.matParticle.r[3]) + fYRandom;
+		((VTXPARTICLE*)SubResource.pData)[i].vPosition.z = XMVectorGetZ(m_Desc.matParticle.r[3]) + fZRandom;
 	}
 
 	////소팅해야댐 여기서 , 멀리있는것부터 그릴수있게,, 저는 생각이없습니다.. 

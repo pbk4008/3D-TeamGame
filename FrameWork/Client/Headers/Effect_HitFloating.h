@@ -11,6 +11,12 @@ END
 BEGIN(Client)
 class CEffect_HitFloating final : public CEffect
 {
+public:
+	typedef struct tagEffHitFloatingDesc : CEffect::EFFECTDESC
+	{
+		_float4 ParticleColor;
+		_float	Power;
+	}EF_PAR_HITFLOAT_DESC;
 protected:
 	explicit CEffect_HitFloating();
 	explicit CEffect_HitFloating(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);
@@ -32,14 +38,14 @@ private:
 	virtual void Set_Reset(_bool bReset);
 
 public:
-	CEffect::EFFECTDESC Get_EffectDesc() {return m_Desc; }
+	EF_PAR_HITFLOAT_DESC Get_EffectDesc() {return m_Desc; }
 
 private:
 	CVIBuffer_PointInstance_Floating* m_pBuffer = nullptr;
 	class CCullingBox* m_pBox = nullptr;
 
 private:
-	CEffect::EFFECTDESC m_Desc;
+	EF_PAR_HITFLOAT_DESC m_Desc;
 	CVIBuffer_PointInstance_Floating::PIDESC m_backupDesc;
 
 public:

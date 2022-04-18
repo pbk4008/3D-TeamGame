@@ -61,6 +61,7 @@ HRESULT CMFCEffect_Respawn::NativeConstruct(const _uint iSceneID, void* pArg)
 	Desc.fLifeTime = m_Desc.fMaxLifeTime;
 	Desc.fCurTime = m_Desc.fCurTime;
 	Desc.bGravity = m_Desc.bUsingGravity;
+	Desc.bSmall = false;
 
 	m_pBuffer->Set_Desc(Desc);
 	m_pBuffer->Particle_Reset();
@@ -115,6 +116,8 @@ _int CMFCEffect_Respawn::Tick(_double TimeDelta)
 		Desc.fLifeTime = m_Desc.fMaxLifeTime;
 		Desc.fCurTime = m_Desc.fCurTime;
 		Desc.bGravity = m_Desc.bUsingGravity;
+		Desc.bSmall = false;
+
 		m_pBox->Set_Length(m_Desc.CullingBoxSize.x, m_Desc.CullingBoxSize.y, m_Desc.CullingBoxSize.z);
 
 		m_pBuffer->Set_Desc(Desc);
@@ -217,6 +220,7 @@ HRESULT CMFCEffect_Respawn::SetUp_Components()
 	Desc.fLifeTime = m_Desc.fMaxLifeTime;
 	Desc.fCurTime = m_Desc.fCurTime;
 	Desc.bGravity = m_Desc.bUsingGravity;
+	Desc.bSmall = false;
 
 	if (FAILED(__super::SetUp_Components(TOOL_LEVEL::TOOL_LEVEL_LOGO, L"Prototype_Component_VIBuffer_PointInstance_Respawn", L"Com_VIBuffer", (CComponent**)&m_pBuffer, &Desc)))
 		return E_FAIL;

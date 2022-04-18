@@ -596,7 +596,8 @@ void CMonster_BronzeAnimus::Hit(CCollision& collision)
 		_vector MonsterPos = m_pTransform->Get_State(CTransform::STATE_POSITION);
 		_vector Pos = { XMVectorGetX(MonsterPos), XMVectorGetY(MonsterPos) + 3.f, XMVectorGetZ(MonsterPos), 1.f };
 		Active_Effect((_uint)EFFECT::HIT, Pos);
-		Active_Effect((_uint)EFFECT::FLOATING, Pos);
+		Active_Effect((_uint)EFFECT::HIT_FLOATING, Pos);
+		Active_Effect((_uint)EFFECT::HIT_FLOATING_2, Pos);
 
 		//TODO::¼öÄ¡Á¤ÇØ¼­¹Ù²ãÁà¾ßµÊ
 		m_fGroggyGauge += 2.f;

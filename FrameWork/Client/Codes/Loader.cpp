@@ -39,13 +39,16 @@
 #include "Effect_HitParticle.h"
 #include "Effect_HitFloating.h"
 #include "Effect_Floating_Speed.h"
-#include "Effect_DeathParticle.h"
 #include "Effect_Env_Floating.h"
 #include "Effect_Env_Fire.h"
+#include "Effect_Falling_Leaf.h"
+#include "Effect_FloatingUp.h"
 #include "Effect_Hammer_Dust.h"
 #include "Effect_Dead_Spray.h"
-#include "Effect_Guard.h"
-#include "Effect_Falling_Leaf.h"
+//#include "Effect_DeathParticle.h"
+//#include "Effect_Guard.h"
+
+
 #include "UI_Ingame.h"
 #include "UI_Player_HpBar.h"
 #include "UI_Player_HpBar_Red.h"
@@ -156,8 +159,8 @@ HRESULT CLoader::LoadForScene()
 
 HRESULT CLoader::SetUp_Stage1_Object()
 {
-	if (FAILED(Load_Stage1FBXLoad()))
-		return E_FAIL;
+	//if (FAILED(Load_Stage1FBXLoad()))
+	//	return E_FAIL;
 
 	if (FAILED(Load_Stage1Navi_SkyLoad()))
 		return E_FAIL;
@@ -165,8 +168,8 @@ HRESULT CLoader::SetUp_Stage1_Object()
 	if (FAILED(Load_Stage1PlayerLoad()))
 		return E_FAIL;
 
-	//if (FAILED(Load_Stage1MonsterLoad()))
-	//	return E_FAIL;
+	if (FAILED(Load_Stage1MonsterLoad()))
+		return E_FAIL;
 
 	//if (FAILED(Load_Stage1BossLoad()))
 	//	return E_FAIL;
@@ -180,17 +183,17 @@ HRESULT CLoader::SetUp_Stage1_Object()
 	if (FAILED(Load_Stage1EffectLoad()))
 		return E_FAIL;
 
-	if (FAILED(Load_Stage1JumpTrigger()))
-		return E_FAIL;
-
+	//if (FAILED(Load_Stage1JumpTrigger()))
+	//	return E_FAIL;
+	//
 	//if (FAILED(Load_Stage1TriggerLod()))
 	//	return E_FAIL;
 
 	if (FAILED(Load_Stage1_TreasureChest_Load()))
 		return E_FAIL;
 
-	if (FAILED(Load_Stage1Meteor()))
-		return E_FAIL;
+	//if (FAILED(Load_Stage1Meteor()))
+	//	return E_FAIL;
 
 	//if (FAILED(Load_Stage1_Cinema_Object()))
 	//	return E_FAIL;
@@ -546,6 +549,13 @@ HRESULT CLoader::Load_Stage1EffectLoad()
 		CVIBuffer_PointInstance_Respawn::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_VIBuffer_PointInstance_Respawn_Up",
+		CVIBuffer_PointInstance_Respawn_Up::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_VIBuffer_PointInstance_Disappear",
+		CVIBuffer_PointInstance_Floating_Disappear::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
 
 	//object
 	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_Effect_DashDust"), CEffect_DashDust::Create(m_pDevice, m_pDeviceContext))))
@@ -558,21 +568,6 @@ HRESULT CLoader::Load_Stage1EffectLoad()
 		return E_FAIL;
 	}
 
-	//if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_Effect_Attack_Left"), CEffect_HitParticle::Create(m_pDevice, m_pDeviceContext))))
-	//{
-	//	return E_FAIL;
-	//}
-
-	//if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_Effect_Attack_Right"), CEffect_HitParticle::Create(m_pDevice, m_pDeviceContext))))
-	//{
-	//	return E_FAIL;
-	//}
-
-	//if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_Effect_Hit_Ground"), CEffect_HitParticle::Create(m_pDevice, m_pDeviceContext))))
-	//{
-	//	return E_FAIL;
-	//}
-
 	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_Effect_Floating"), CEffect_HitFloating::Create(m_pDevice, m_pDeviceContext))))
 	{
 		return E_FAIL;
@@ -583,17 +578,7 @@ HRESULT CLoader::Load_Stage1EffectLoad()
 		return E_FAIL;
 	}
 
-	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_Effect_Death"), CEffect_DeathParticle::Create(m_pDevice, m_pDeviceContext))))
-	{
-		return E_FAIL;
-	}
-
 	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_Effect_Env_Floating"), CEffect_Env_Floating::Create(m_pDevice, m_pDeviceContext))))
-	{
-		return E_FAIL;
-	}
-
-	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_Effect_Guard"), CEffect_Guard::Create(m_pDevice, m_pDeviceContext))))
 	{
 		return E_FAIL;
 	}
@@ -602,6 +587,23 @@ HRESULT CLoader::Load_Stage1EffectLoad()
 	{
 		return E_FAIL;
 	}
+
+	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_Effect_FloatingUp"), CEffect_FloatingUp::Create(m_pDevice, m_pDeviceContext))))
+	{
+		return E_FAIL;
+	}
+
+	//if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_Effect_Guard"), CEffect_Guard::Create(m_pDevice, m_pDeviceContext))))
+	//{
+	//	return E_FAIL;
+	//}
+
+	//if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_Effect_Death"), CEffect_DeathParticle::Create(m_pDevice, m_pDeviceContext))))
+	//{
+	//	return E_FAIL;
+	//}
+
+	//아이템 파티클옵젝만들기 
 
 	//Effect Image
 	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_Effect_Env_Fire"), CEffect_Env_Fire::Create(m_pDevice, m_pDeviceContext))))

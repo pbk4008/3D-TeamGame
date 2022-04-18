@@ -416,6 +416,11 @@ _fmatrix CGameInstance::GetPreViewProtj(_fmatrix world)
 	return m_pPipeLine->GetPreViewProtj(world);
 }
 
+_matrix CGameInstance::Get_ViewMatrix()
+{
+	return m_pPipeLine->Get_ViewMatrix();
+}
+
 void CGameInstance::Update_InputDev()
 {
 	if (!m_pInput_Device)

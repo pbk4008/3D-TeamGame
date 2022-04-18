@@ -345,8 +345,8 @@
     </Filter>
     <Filter Include="00.Utility\03.Component\05.VIBuffer\09.Instance\00.Particle\02.Floating\01.DifferentSpeed">
       <UniqueIdentifier>{42c2c09e-e183-4415-b01d-28cc858b7554}</UniqueIdentifier>
-	</Filter>
-	<Filter Include="00.Utility\03.Component\97.CharacterController">
+    </Filter>
+    <Filter Include="00.Utility\03.Component\97.CharacterController">
       <UniqueIdentifier>{de46ff26-c4c3-465e-90af-a8225d355507}</UniqueIdentifier>
     </Filter>
     <Filter Include="00.Utility\04.Manager\11.PhsyicX\QueryFilterCallback">
@@ -354,6 +354,15 @@
     </Filter>
     <Filter Include="00.Utility\04.Manager\06.LevelManager\05.GameObectManager">
       <UniqueIdentifier>{cbc26e05-8936-4bc7-a647-4df54c45879e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00.Utility\03.Component\05.VIBuffer\09.Instance\00.Particle\01.Respawn\00.Down">
+      <UniqueIdentifier>{6ef2ca35-5270-4648-a064-51326b8bc7f4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00.Utility\03.Component\05.VIBuffer\09.Instance\00.Particle\01.Respawn\01.Up">
+      <UniqueIdentifier>{80f0b551-9e63-45b0-aca4-cd538bdb633e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00.Utility\03.Component\05.VIBuffer\09.Instance\00.Particle\02.Floating\02.ImageDisappear">
+      <UniqueIdentifier>{2431a4b8-54d9-4e5f-a1f3-1b2d367181bf}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -657,9 +666,6 @@
     <ClInclude Include="..\public\Texture.h">
       <Filter>00.Utility\03.Component\03.Texture</Filter>
     </ClInclude>
-    <ClInclude Include="..\public\VIBuffer_PointInstance_Respawn.h">
-      <Filter>00.Utility\03.Component\05.VIBuffer\09.Instance\00.Particle\01.Respawn</Filter>
-    </ClInclude>
     <ClInclude Include="..\public\UI_Texture.h">
       <Filter>00.Utility\04.Manager\13.ResourceManager\Texture</Filter>
     </ClInclude>
@@ -680,9 +686,18 @@
     </ClInclude>
     <ClInclude Include="..\public\VIBuffer_PointInstance_Floating_Speed.h">
       <Filter>00.Utility\03.Component\05.VIBuffer\09.Instance\00.Particle\02.Floating\01.DifferentSpeed</Filter>
-	</ClInclude>
-	<ClInclude Include="..\public\QueryFilterCallback.h">
+    </ClInclude>
+    <ClInclude Include="..\public\QueryFilterCallback.h">
       <Filter>00.Utility\04.Manager\11.PhsyicX\QueryFilterCallback</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\VIBuffer_PointInstance_Respawn.h">
+      <Filter>00.Utility\03.Component\05.VIBuffer\09.Instance\00.Particle\01.Respawn\00.Down</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\VIBuffer_PointInstance_Respawn_Up.h">
+      <Filter>00.Utility\03.Component\05.VIBuffer\09.Instance\00.Particle\01.Respawn\01.Up</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\VIBuffer_PointInstance_Floating_Disappear.h">
+      <Filter>00.Utility\03.Component\05.VIBuffer\09.Instance\00.Particle\02.Floating\02.ImageDisappear</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -950,9 +965,6 @@
     <ClCompile Include="..\private\VIBuffer_PointInstance_Env_Floating.cpp">
       <Filter>00.Utility\03.Component\05.VIBuffer\09.Instance\00.Particle\03.Env_Floating</Filter>
     </ClCompile>
-    <ClCompile Include="..\private\VIBuffer_PointInstance_Respawn.cpp">
-      <Filter>00.Utility\03.Component\05.VIBuffer\09.Instance\00.Particle\01.Respawn</Filter>
-    </ClCompile>
     <ClCompile Include="..\private\SplineCurve.cpp">
       <Filter>00.Utility\07.SplineCurve</Filter>
     </ClCompile>
@@ -979,9 +991,18 @@
     </ClCompile>
     <ClCompile Include="..\private\VIBuffer_PointInstance_Floating_Speed.cpp">
       <Filter>00.Utility\03.Component\05.VIBuffer\09.Instance\00.Particle\02.Floating\01.DifferentSpeed</Filter>
-	</ClCompile>
-	<ClCompile Include="..\private\QueryFilterCallback.cpp">
+    </ClCompile>
+    <ClCompile Include="..\private\QueryFilterCallback.cpp">
       <Filter>00.Utility\04.Manager\11.PhsyicX\QueryFilterCallback</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\VIBuffer_PointInstance_Respawn.cpp">
+      <Filter>00.Utility\03.Component\05.VIBuffer\09.Instance\00.Particle\01.Respawn\00.Down</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\VIBuffer_PointInstance_Respawn_Up.cpp">
+      <Filter>00.Utility\03.Component\05.VIBuffer\09.Instance\00.Particle\01.Respawn\01.Up</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\VIBuffer_PointInstance_Floating_Disappear.cpp">
+      <Filter>00.Utility\03.Component\05.VIBuffer\09.Instance\00.Particle\02.Floating\02.ImageDisappear</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
