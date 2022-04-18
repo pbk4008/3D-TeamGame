@@ -146,30 +146,30 @@ HRESULT CTestScene_JS::Ready_Gameobject()
 	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_JS, L"Layer_Effect", L"Proto_GameObject_MeshEffect_Test")))
 	//	return E_FAIL;
 
-	//// 점프 노드들
-	//CJumpNode::DESC tJumpNodeDesc;
-	//tJumpNodeDesc.vPosition = { 25.f, 5.f, 84.f };
-	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_JS, L"Layer_JumpNode", L"Proto_GameObject_JumpNode", &tJumpNodeDesc)))
-	//	return E_FAIL;
-	//tJumpNodeDesc.vPosition = { -25.f, 8.f, 98.f };
-	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_JS, L"Layer_JumpNode", L"Proto_GameObject_JumpNode", &tJumpNodeDesc)))
-	//	return E_FAIL;
-	//tJumpNodeDesc.vPosition = { -176.f, 50.f, 335.f };
-	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_JS, L"Layer_JumpNode", L"Proto_GameObject_JumpNode", &tJumpNodeDesc)))
-	//	return E_FAIL;
+	// 점프 노드들
+	CJumpNode::DESC tJumpNodeDesc;
+	tJumpNodeDesc.vPosition = { 25.f, 5.f, 84.f };
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_JS, L"Layer_JumpNode", L"Proto_GameObject_JumpNode", &tJumpNodeDesc)))
+		return E_FAIL;
+	tJumpNodeDesc.vPosition = { -25.f, 8.f, 98.f };
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_JS, L"Layer_JumpNode", L"Proto_GameObject_JumpNode", &tJumpNodeDesc)))
+		return E_FAIL;
+	tJumpNodeDesc.vPosition = { -176.f, 50.f, 335.f };
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_JS, L"Layer_JumpNode", L"Proto_GameObject_JumpNode", &tJumpNodeDesc)))
+		return E_FAIL;
 
-	//// 점프 박스들
-	//CJumpBox::DESC tJumpBoxrDesc;
-	//tJumpBoxrDesc.vPosition = { -42.5f, 4.5f, 82.f };
-	//tJumpBoxrDesc.vRotation = { 0.f, 0.f, 0.f };
-	//tJumpBoxrDesc.vScale = { 7.f, 2.f, 8.f };
-	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_JS, L"Layer_JumpBox", L"Proto_GameObject_JumpBox", &tJumpBoxrDesc)))
-	//	return E_FAIL;
-	//tJumpBoxrDesc.vPosition = { -136.5f, 19.f, 231.5f };
-	//tJumpBoxrDesc.vRotation = { 0.f, 0.f, 0.f };
-	//tJumpBoxrDesc.vScale = { 7.f, 2.f, 6.f };
-	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_JS, L"Layer_JumpBox", L"Proto_GameObject_JumpBox", &tJumpBoxrDesc)))
-	//	return E_FAIL;
+	// 점프 박스들
+	CJumpBox::DESC tJumpBoxrDesc;
+	tJumpBoxrDesc.vPosition = { -42.5f, 4.5f, 82.f };
+	tJumpBoxrDesc.vRotation = { 0.f, 0.f, 0.f };
+	tJumpBoxrDesc.vScale = { 7.f, 2.f, 8.f };
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_JS, L"Layer_JumpBox", L"Proto_GameObject_JumpBox", &tJumpBoxrDesc)))
+		return E_FAIL;
+	tJumpBoxrDesc.vPosition = { -136.5f, 19.f, 231.5f };
+	tJumpBoxrDesc.vRotation = { 0.f, 0.f, 0.f };
+	tJumpBoxrDesc.vScale = { 7.f, 2.f, 6.f };
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_JS, L"Layer_JumpBox", L"Proto_GameObject_JumpBox", &tJumpBoxrDesc)))
+		return E_FAIL;
 
 	///////////////////// 스테이지 2용
 	// 

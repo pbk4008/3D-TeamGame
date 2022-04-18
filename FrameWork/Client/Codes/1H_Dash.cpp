@@ -74,6 +74,8 @@ HRESULT C1H_Dash::EnterState()
 	m_pSilvermane->Set_IsDash(true);
 	m_pSilvermane->Set_IsTrasceCamera(false);
 	m_pAnimationController->Set_PlaySpeed(1.2f);
+
+	g_pGameInstance->BlendSound(L"Player_Dash", L"Player_Dash_1", CSoundMgr::CHANNELID::PLAYER1, CSoundMgr::CHANNELID::PLAYER2);
 	return S_OK;
 }
 
@@ -86,6 +88,7 @@ HRESULT C1H_Dash::ExitState()
 	m_pSilvermane->Set_IsDash(false);
 	m_pSilvermane->Set_IsTrasceCamera(true);
 	m_pAnimationController->Set_PlaySpeed(1.f);
+
 	return S_OK;
 }
 
