@@ -39,6 +39,13 @@ _int C1H_SwordSupermanStab::Tick(const _double& _dDeltaTime)
 		}
 	}
 
+	_int temp = iCurkeyFrameIndex % 3;
+
+	if (temp == 0)
+	{
+		m_pSilvermane->Create_MotionTrail(m_motiontrailidx);
+		m_motiontrailidx++;
+	}
 
 	if (m_pAnimationController->Is_Finished())
 	{
@@ -104,6 +111,7 @@ HRESULT C1H_SwordSupermanStab::EnterState()
 	m_tShakeEvent2.tWaveZ.fFrequency = 1.f;
 	m_tShakeEvent2.tWaveZ.fAdditionalOffset = 0.3f;
 
+	m_motiontrailidx = 0;
 
 	return S_OK;
 }

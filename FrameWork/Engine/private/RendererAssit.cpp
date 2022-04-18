@@ -186,7 +186,7 @@ HRESULT CRendererAssit::Setup_RenderTarget()
 		return E_FAIL;
 
 	// rim light
-	if (FAILED(m_pTargetMgr->Add_RenderTarget(m_pDevice, m_pDeviceContext, TEXT("Target_RimLight"), widht, height, DXGI_FORMAT_R16G16B16A16_FLOAT, _float4(0.f, 0.f, 0.f, 0.f), CRenderTarget::RTT::Luminance)))
+	if (FAILED(m_pTargetMgr->Add_RenderTarget(m_pDevice, m_pDeviceContext, TEXT("Target_RimLight"), widht, height, DXGI_FORMAT_R16G16B16A16_FLOAT, _float4(0.f, 0.f, 0.f, 0.f), CRenderTarget::RTT::DEFFURED)))
 		return E_FAIL;
 
 	//----------------------------------//
@@ -206,7 +206,8 @@ HRESULT CRendererAssit::Setup_RenderTarget()
 		return E_FAIL;
 	if (FAILED(m_pTargetMgr->Add_MRT(TEXT("MRT_Deferred"), TEXT("Target_Emission"))))
 		return E_FAIL;
-	if (FAILED(m_pTargetMgr->Add_MRT(TEXT("MRT_Deferred"), TEXT("Target_RimLight"))))
+
+	if (FAILED(m_pTargetMgr->Add_MRT(TEXT("Target_RimLight"), TEXT("Target_RimLight"))))
 		return E_FAIL;
 
 	// ´ÜÀÏ Å¸°Ù ShadowMap
@@ -315,7 +316,7 @@ HRESULT CRendererAssit::Setup_RenderTarget()
 	if (FAILED(m_pTargetMgr->Ready_Debug_Buffer(TEXT("Target_Depth"), (fwidth - fwidth) + 200.f, (fheight - fheight), 100.f, 100.f)))	return E_FAIL;
 	if (FAILED(m_pTargetMgr->Ready_Debug_Buffer(TEXT("Target_MRA"), (fwidth - fwidth) +300.f, (fheight - fheight), 100.f, 100.f)))	return E_FAIL;
   	if (FAILED(m_pTargetMgr->Ready_Debug_Buffer(TEXT("Target_Emission"), (fwidth - fwidth) + 400.f, (fheight - fheight), 100.f, 100.f)))	return E_FAIL;
-	if (FAILED(m_pTargetMgr->Ready_Debug_Buffer(TEXT("Target_RimLight"), (fwidth - fwidth) + 500.f, (fheight - fheight), 100.f, 100.f)))	return E_FAIL;
+	if (FAILED(m_pTargetMgr->Ready_Debug_Buffer(TEXT("Target_RimLight"), (fwidth - fwidth) + 500.f, (fheight - fheight) + 100.f, 100.f, 100.f)))	return E_FAIL;
 
 	if (FAILED(m_pTargetMgr->Ready_Debug_Buffer(TEXT("Target_Shadow"), (fwidth - fwidth), (fheight - fheight) + 100.f, 100.f, 100.f)))				return E_FAIL;
 	if (FAILED(m_pTargetMgr->Ready_Debug_Buffer(TEXT("Target_ShadeShadow"), (fwidth - fwidth) + 100.f, (fheight - fheight) + 100.f, 100.f, 100.f)))	return E_FAIL;
@@ -368,7 +369,6 @@ HRESULT CRendererAssit::Setup_RenderTarget()
 	if (FAILED(m_pTargetMgr->Ready_Debug_Buffer(TEXT("Target_Blend"), fwidth - 100.f, fheight - 200.f, 100.f, 100.f)))			return E_FAIL;
 	if (FAILED(m_pTargetMgr->Ready_Debug_Buffer(TEXT("Target_Final"), fwidth - 100.f, fheight - 400.f, 100.f, 100.f)))			return E_FAIL;
 	
-
 	if (FAILED(m_pTargetMgr->Ready_Debug_Buffer(TEXT("Target_Alpha"), fwidth - 100.f, fheight - 100.f, 100.f, 100.f)))			return E_FAIL;
 	if (FAILED(m_pTargetMgr->Ready_Debug_Buffer(TEXT("Target_AlphaBlend"), fwidth - fwidth, fheight - 220.f, 100.f, 100.f)))		return E_FAIL;
 	
@@ -376,9 +376,7 @@ HRESULT CRendererAssit::Setup_RenderTarget()
 	if (FAILED(m_pTargetMgr->Ready_Debug_Buffer(TEXT("Target_Distortion"), 400.f, 100.f, 100.f, 100.f)))		return E_FAIL;
 	if (FAILED(m_pTargetMgr->Ready_Debug_Buffer(TEXT("Target_Velocity"), 600.f, 0.f, 100.f, 100.f)))			return E_FAIL;
 
-	
 #endif // _DEBUG
-
 
 	return S_OK;
 }

@@ -801,7 +801,7 @@
     </Filter>
     <Filter Include="100.ShaderFiles\01.Environment\02.Actor">
       <UniqueIdentifier>{01f09cd2-dcfc-4f2c-a5da-56671ab0b823}</UniqueIdentifier>
-     </Filter>
+    </Filter>
     <Filter Include="02.GameObject\04.Effect\00.Effect_Image\01.Hammer_Dust">
       <UniqueIdentifier>{4de6e516-ad86-47ae-a1e1-49d04baa93c3}</UniqueIdentifier>
     </Filter>
@@ -849,6 +849,9 @@
     </Filter>
     <Filter Include="02.GameObject\05.UI\05.Hud\00.Loot_Equipment\05.ItemTypeText">
       <UniqueIdentifier>{7aabadda-a29d-4b40-afad-af2a4daaa382}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\04.Effect\02. MotionTrail">
+      <UniqueIdentifier>{71fab7b7-58fc-41cf-8695-c5967ce00dcc}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -1902,6 +1905,9 @@
     <ClInclude Include="..\Headers\MeshEffect.h">
       <Filter>02.GameObject\04.Effect</Filter>
     </ClInclude>
+    <ClInclude Include="..\Headers\MotionTrail.h">
+      <Filter>02.GameObject\04.Effect\02. MotionTrail</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -2921,6 +2927,9 @@
     <ClCompile Include="..\Codes\MeshEffect.cpp">
       <Filter>02.GameObject\04.Effect</Filter>
     </ClCompile>
+    <ClCompile Include="..\Codes\MotionTrail.cpp">
+      <Filter>02.GameObject\04.Effect\02. MotionTrail</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -3049,7 +3058,7 @@
     </FxCompile>
     <FxCompile Include="..\bin\ShaderFile\Shader_MetorAnim.hlsl">
       <Filter>100.ShaderFiles\99.Other</Filter>
-          </FxCompile>
+    </FxCompile>
     <FxCompile Include="..\bin\ShaderFile\Shader_Trail.hlsl">
       <Filter>100.ShaderFiles\03.Effect</Filter>
     </FxCompile>

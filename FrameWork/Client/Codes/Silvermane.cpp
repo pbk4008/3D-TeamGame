@@ -164,6 +164,7 @@
 #pragma endregion
 
 #include "Material.h"
+#include "MotionTrail.h"
 
 CSilvermane::CSilvermane(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
 	: CActor(_pDevice, _pDeviceContext)
@@ -336,13 +337,13 @@ _int CSilvermane::LateTick(_double _dDeltaTime)
 	if (NO_EVENT != iProgress)
 		return iProgress;
 
+	if (FAILED(m_pRenderer->Add_RenderGroup(CRenderer::RENDER_NONALPHA, this)))
+		return -1;
+
 	if (m_pRenderer->Get_RenderButton(CRenderer::SHADOW) == true)
 	{
 		if (FAILED(m_pRenderer->Add_RenderGroup(CRenderer::RENDER_SHADOW, this))) return -1;
 	}
-
-	if (FAILED(m_pRenderer->Add_RenderGroup(CRenderer::RENDER_NONALPHA, this)))
-		return -1;
 
 	if (m_pRenderer->Get_RenderButton(CRenderer::VELOCITYBLUR) == true)
 	{
@@ -370,6 +371,8 @@ _int CSilvermane::LateTick(_double _dDeltaTime)
 	//g_pObserver->Set_PlayerPos(m_pTransform->Get_State(CTransform::STATE_POSITION));
 	g_pGameInstance->UpdateLightCam(0, m_pTransform->Get_State(CTransform::STATE_POSITION));
 
+	size_t i = m_vecMotionTrail.size();
+
 	return _int();
 }
 
@@ -395,10 +398,11 @@ HRESULT CSilvermane::Render()
 		else
 			CActor::BindConstantBuffer(wstrCamTag, &desc, &rimdesc);
 
-		if (i != 2)
+		if (FAILED(m_pModel->Render(i, i))) MSGBOX("Fialed To Rendering Silvermane");
+		/*if (i != 2)
 		{
 			if (FAILED(m_pModel->Render(i, i))) MSGBOX("Fialed To Rendering Silvermane");
-		}
+		}*/
 	}
 
 	if (m_pRenderer->Get_RenderButton(CRenderer::VELOCITYBLUR) == false)
@@ -416,7 +420,7 @@ HRESULT CSilvermane::Render_Shadow()
 	CActor::BindConstantBuffer(wstrCamTag);
 	CActor::BindLightBuffer();
 	for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
-		m_pModel->Render(i, 4);
+		m_pModel->Render(i, 6);
 
 	return S_OK;
 }
@@ -455,12 +459,12 @@ HRESULT CSilvermane::Render_Velocity()
 
 
 	m_PreWroldMat = m_pTransform->Get_WorldMatrix();
-	/*m_timer += g_fDeltaTime;
-	if (m_timer >= 0.1f) 
-	{
-		m_PreWroldMat = m_pTransform->Get_WorldMatrix();
-		m_timer = 0.f;
-	}*/
+	//m_timer += g_fDeltaTime;
+	//if (m_timer >= 0.3f)
+	//{
+	//	m_PreWroldMat = m_pTransform->Get_WorldMatrix();
+	//	m_timer = 0.f;
+	//}
 
 
 	return S_OK;
@@ -548,7 +552,6 @@ HRESULT CSilvermane::Ready_Components()
 	_matrix matPivot = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(180.f));
 	m_pModel->Set_PivotMatrix(matPivot);
 
-
 	// 에니메이션 컨트롤러
 	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_AnimationController", L"AnimationController", (CComponent**)&m_pAnimationController)))
 		return E_FAIL;
@@ -585,6 +588,20 @@ HRESULT CSilvermane::Ready_Components()
 	m_pTexture->Change_Texture(L"Texture_SilvermeanNewHair");
 
 	m_pModel->Get_Materials()[3]->Set_Texture("g_OtherTexture", TEXTURETYPE::TEX_OTHER, m_pTexture);
+
+	for (_int i = 0; i < 20; ++i)
+	{
+		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)m_iSceneID, L"Layer_MotionTrail", L"Proto_GameObject_MotionTrail")))
+			return E_FAIL;
+
+		list<CGameObject*>* pobjlist = nullptr;
+		pobjlist = g_pGameInstance->getObjectList((_uint)m_iSceneID, L"Layer_MotionTrail");
+		CGameObject* pobj = pobjlist->back();
+		pobj->setActive(false);
+
+		m_vecMotionTrail.emplace_back(pobj);
+	}
+
 
 	return S_OK;
 }
@@ -1713,12 +1730,36 @@ RIM CSilvermane::ColorChange_RimCheck(RIM& rimdesc)
 	{
 		rimdesc.rimcheck = m_rimcheck;
 		rimdesc.rimcol = _float3(1.f, 0, 0);
+		CActor::SetRimIntensity(g_fDeltaTime * -1.f);
 		rimdesc.rimintensity = m_rimintensity; // intensity 낮을 수록 과하게 빛남
 		XMStoreFloat4(&rimdesc.camdir, XMVector3Normalize(m_pTransform->Get_State(CTransform::STATE_POSITION) - g_pGameInstance->Get_CamPosition(L"Camera_Silvermane")));
-		CActor::SetRimIntensity(g_fDeltaTime * -1.f);
 	}
 
 	return rimdesc;
+}
+
+HRESULT CSilvermane::Create_MotionTrail(_int idex)
+{
+	if (idex <= 19)
+	{
+		wstring wstrCamTag = g_pGameInstance->Get_BaseCameraTag();
+
+		_matrix smatWorld, smatView, smatProj;
+		smatWorld = m_pTransform->Get_WorldMatrix();
+		smatView = g_pGameInstance->Get_Transform(wstrCamTag, TRANSFORMSTATEMATRIX::D3DTS_VIEW);
+		smatProj = g_pGameInstance->Get_Transform(wstrCamTag, TRANSFORMSTATEMATRIX::D3DTS_PROJECTION);
+		_vector position, camposition;
+		position = m_pTransform->Get_State(CTransform::STATE_POSITION);
+		camposition = g_pGameInstance->Get_CamPosition(wstrCamTag);
+
+		static_cast<CMotionTrail*>(m_vecMotionTrail[idex])->setActive(true);
+		static_cast<CMotionTrail*>(m_vecMotionTrail[idex])->Set_BoneMat(m_pModel->Get_CurBoneMatrix());
+		static_cast<CMotionTrail*>(m_vecMotionTrail[idex])->Set_Info(smatWorld, smatView, smatProj, position, camposition);
+		/*_matrix prewvp = g_pGameInstance->GetPreViewProtj(m_PreWroldMat);*/
+		/*static_cast<CMotionTrail*>(m_vecMotionTrail[idex])->Set_Info(m_PreWroldMat, prewvp, position, camposition);*/
+	}
+
+	return S_OK;
 }
 
 CJumpNode* CSilvermane::Get_TargetJumpNode() const

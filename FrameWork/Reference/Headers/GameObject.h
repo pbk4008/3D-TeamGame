@@ -40,6 +40,7 @@ public:
 	virtual HRESULT Render();
 	virtual HRESULT	Render_Shadow();
 	virtual HRESULT	Render_Velocity();
+	virtual HRESULT	Render_MotionTrail();
 	virtual void	ComputeViewZ(_fmatrix* pView);
 public:
 	virtual void OnCollisionEnter(CCollision& collision);
@@ -56,6 +57,7 @@ public:
 	_bool getRemove() { return m_bRemove; }
 	CTransform* Get_Transform() const;
 	_float		Get_ViewZ() { return m_fViewZ; }
+	_bool		Get_TrailCehck() { return m_bMotionTrailRemove;	}
 public:
 	virtual void Set_Remove(_bool bCheck) { m_bRemove = bCheck; };
 	static  void Destroy(CGameObject* _obj);
@@ -72,6 +74,7 @@ protected:
 	_uint m_iSceneID;
 	_float m_fViewZ = 0.f;
 	_matrix m_PreWroldMat = XMMatrixIdentity();
+	_bool	m_bMotionTrailRemove = false;
 
 protected:
 	unordered_map<wstring, class CComponent*>		m_Components;

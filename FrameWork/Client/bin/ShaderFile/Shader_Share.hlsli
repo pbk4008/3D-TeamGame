@@ -21,6 +21,7 @@ cbuffer BoneMatricesBuffer
 {
 	BoneMatrixArray g_BoneMatrices;
 	BoneMatrixArray g_OldBoneMatrices;
+	BoneMatrixArray g_TrailBoneMatrices;
 };
 
 cbuffer Matrices

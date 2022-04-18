@@ -386,6 +386,7 @@ call Update_Client.bat</Command>
     <ClInclude Include="..\Headers\Monster_BronzeAnimus.h" />
     <ClInclude Include="..\Headers\Monster_Crawler.h" />
     <ClInclude Include="..\Headers\Monster_EarthAberrant.h" />
+    <ClInclude Include="..\Headers\MotionTrail.h" />
     <ClInclude Include="..\Headers\Needle.h" />
     <ClInclude Include="..\Headers\NoiseFire.h" />
     <ClInclude Include="..\Headers\Plane_Test.h" />
@@ -734,6 +735,7 @@ call Update_Client.bat</Command>
     <ClCompile Include="..\Codes\Monster_BronzeAnimus.cpp" />
     <ClCompile Include="..\Codes\Monster_Crawler.cpp" />
     <ClCompile Include="..\Codes\Monster_EarthAberrant.cpp" />
+    <ClCompile Include="..\Codes\MotionTrail.cpp" />
     <ClCompile Include="..\Codes\Needle.cpp" />
     <ClCompile Include="..\Codes\NoiseFire.cpp" />
     <ClCompile Include="..\Codes\Plane_Test.cpp" />

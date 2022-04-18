@@ -64,6 +64,7 @@ protected:
 	_uint m_iCutIndex = 0;
 	EDir m_eDir = EDir::Max;
 
+	_int	m_motiontrailidx = 0;
 	
 
 public:

@@ -55,6 +55,9 @@ void CRenderer::SetRenderButton(RENDERBUTTON ebutton, _bool check)
 	case CRenderer::VELOCITYBLUR:
 		m_bRenderbtn[VELOCITYBLUR] = check;
 		break;
+	case CRenderer::MOTIONTRAIL:
+		m_bRenderbtn[MOTIONTRAIL] = check;
+		break;
 	}
 }
 
@@ -96,7 +99,6 @@ HRESULT CRenderer::NativeConstruct_Prototype()
 
 	m_pBatch = new PrimitiveBatch<VertexPositionColor>(m_pDeviceContext);
 #pragma endregion
-
 
 	return S_OK;
 }
@@ -165,6 +167,8 @@ HRESULT CRenderer::Draw_RenderGroup()
 
 	if (m_bRenderbtn[PIXEL]) // Pixel HDR
 	{
+		if (FAILED(MotionTrailPass())) MSGBOX("Failed To Rendering Motiontrail");
+
 		if (m_bRenderbtn[SHADOW] == true)
 		{
 			if (FAILED(ShadowPass())) MSGBOX("Failed To Rendering ShadowPass");
@@ -248,6 +252,7 @@ HRESULT CRenderer::Draw_RenderGroup()
 		if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("Target_BlurShadow")))) return E_FAIL;
 		if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("Target_Distortion")))) return E_FAIL;
 		if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("Target_Velocity")))) return E_FAIL;
+		if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("Target_RimLight")))) return E_FAIL;
 		
 	}
 #endif // _DEBUG
@@ -390,6 +395,25 @@ HRESULT CRenderer::DistortionPass()
 	return S_OK;
 }
 
+HRESULT CRenderer::MotionTrailPass()
+{
+	if (FAILED(m_pTargetMgr->Begin_MRT(m_pDeviceContext, TEXT("Target_RimLight"))))
+		return E_FAIL;
+
+	for (auto& pGameObject : m_RenderGroup[RENDER_MOTIONTRAIL])
+	{
+		if (nullptr != pGameObject)
+			pGameObject->Render_MotionTrail();
+		
+		Safe_Release(pGameObject);
+	}
+	m_RenderGroup[RENDER_MOTIONTRAIL].clear();
+
+	if (FAILED(m_pTargetMgr->End_MRTNotClear(m_pDeviceContext))) return E_FAIL;
+
+	return S_OK;
+}
+
 HRESULT CRenderer::Render_UI()
 {
 	_matrix view = g_pGameInstance->Get_Transform(L"MainOrthoCamera", TRANSFORMSTATEMATRIX::D3DTS_VIEW);
@@ -497,7 +521,7 @@ HRESULT CRenderer::Render_Final()
 	_float thick = 0.2f;
 	if (FAILED(m_pVIBuffer->SetUp_TextureOnShader("g_DiffuseTexture", m_pTargetMgr->Get_SRV(TEXT("Target_Blend"))))) MSGBOX("Render Final DiffuseTeuxtre Not Apply");
 	if (FAILED(m_pVIBuffer->SetUp_TextureOnShader("g_DepthTexture", m_pTargetMgr->Get_SRV(TEXT("Target_Depth"))))) MSGBOX("Render Final DepthTexture Not Apply");
-	if (FAILED(m_pVIBuffer->SetUp_TextureOnShader("g_RimLightTexture", m_pTargetMgr->Get_SRV(TEXT("Target_Emission"))))) MSGBOX("Render Final DepthTexture Not Apply");
+	if (FAILED(m_pVIBuffer->SetUp_TextureOnShader("g_RimLightTexture", m_pTargetMgr->Get_SRV(TEXT("Target_RimLight"))))) MSGBOX("Render Final DepthTexture Not Apply");
 	if (m_bRenderbtn[VELOCITYBLUR] == true)
 	{
 		if (FAILED(m_pVIBuffer->SetUp_TextureOnShader("g_VelocityTex", m_pTargetMgr->Get_SRV(TEXT("Target_Velocity"))))) MSGBOX("Render Final DiffuseTeuxtre Not Apply");

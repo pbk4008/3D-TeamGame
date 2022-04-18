@@ -134,8 +134,8 @@ HRESULT CStage1::NativeConstruct()
 	//if (FAILED(Ready_Monster(L"Layer_Monster")))
 	//	return E_FAIL;
 
-	if (FAILED(Ready_Indicator()))
-		return E_FAIL;
+	//if (FAILED(Ready_Indicator()))
+	//	return E_FAIL;
 	
 	return S_OK;
 }
@@ -255,9 +255,9 @@ _int CStage1::Tick(_double TimeDelta)
 	//		return -1;
 	//}
 #pragma endregion
-	g_pInteractManager->Tick(TimeDelta);
-	g_pDropManager->Tick();
-	m_pIndicatorManager->Active_Indicator();
+	//g_pInteractManager->Tick(TimeDelta);
+	//g_pDropManager->Tick();
+	//m_pIndicatorManager->Active_Indicator();
 
 	//if (g_pGameInstance->getkeyDown(DIK_END))
 	//	m_pScenemaManager->Active_Scenema((_uint)CINEMA_INDEX::CINEMA1_1, &m_pCinema);

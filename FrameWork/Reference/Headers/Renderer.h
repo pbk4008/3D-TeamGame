@@ -23,6 +23,7 @@ public: enum RENDERBUTTON
 		,OUTLINE,RADIAL
 		,DISTORTION,FOG
 		,VELOCITYBLUR
+		,MOTIONTRAIL
 		,RENDERBUTTON_END
 };
 
@@ -30,6 +31,7 @@ public: enum RENDER {	RENDER_PRIORITY, RENDER_SKYBOX
 						, RENDER_SHADOW, RENDER_NONALPHA, RENDER_ALPHA
 						, RENDER_STANDARD
 						, RENDER_VELOCITY
+						, RENDER_MOTIONTRAIL
 						, RENDER_DYDISTORTION
 						, RENDER_UI, RENDER_UI_ACTIVE
 						, RENDER_MAX };
@@ -69,6 +71,8 @@ private: CHDR*								m_pHDR			= nullptr;
 private: CPostProcess*						m_pPostProcess	= nullptr;
 private: CTonemapping*						m_pTonemapping	= nullptr;
 
+private: _float								m_fTimer = 0.f;
+
 private: HRESULT Render_Priority();
 private: HRESULT Render_SkyBox();
 private: HRESULT Render_NonAlpha();
@@ -76,8 +80,10 @@ private: HRESULT Render_Alpha();
 private: HRESULT Render_UI();
 private: HRESULT Render_UI_Active();
 
+
 private: HRESULT VeloCityPass();
 private: HRESULT DistortionPass();
+private: HRESULT MotionTrailPass();
 private: HRESULT Render_Shadow();
 private: HRESULT ShadowPass();
 private: HRESULT Render_Final();
