@@ -154,11 +154,15 @@ _int CMonster_EarthAberrant::Tick(_double _dDeltaTime)
 		if (L"Death" == m_pStateController->Get_CurStateTag())
 		{
 			if (m_pAnimatorCom->Get_CurrentAnimation()->Is_Finished() && 
-				!m_pAnimatorCom->Get_IsLerp())
+				!m_pAnimatorCom->Get_IsLerp() && m_lifetime <= 0.f)
 			{
-				Set_Remove(true);
 				m_pPanel->Set_UIRemove(true);
+				m_bdissolve = true;
 			}
+
+			if (m_lifetime >= 1.f)
+				Set_Remove(true);
+
 			if (9 <= m_pAnimatorCom->Get_AnimController()->Get_CurKeyFrameIndex() 
 				&& 10 > m_pAnimatorCom->Get_AnimController()->Get_CurKeyFrameIndex())
 			{
@@ -201,6 +205,15 @@ _int CMonster_EarthAberrant::Tick(_double _dDeltaTime)
 		}
 	}
 
+	/*if (g_pGameInstance->getkeyDown(DIK_NUMPAD5))
+	{
+		Active_Effect_Target((_uint)EFFECT::ATTACK_LEFT, g_pObserver->Get_PlayerPos());
+	}
+	if (g_pGameInstance->getkeyDown(DIK_NUMPAD6))
+	{
+		Active_Effect_Target((_uint)EFFECT::ATTACK_RIGHT, g_pObserver->Get_PlayerPos());
+	}*/
+
 	return 0;
 }
 
@@ -234,6 +247,11 @@ _int CMonster_EarthAberrant::LateTick(_double _dDeltaTime)
 
 HRESULT CMonster_EarthAberrant::Render()
 {
+	if (m_bdissolve == true)
+		CActor::DissolveOn(0.5f);
+
+	if (FAILED(m_pModel->SetUp_ValueOnShader("g_bdissolve", &m_bdissolve, sizeof(_bool)))) MSGBOX("Failed to Apply dissolvetime");
+
 	wstring wstrCamTag = g_pGameInstance->Get_BaseCameraTag();
 	for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
 	{

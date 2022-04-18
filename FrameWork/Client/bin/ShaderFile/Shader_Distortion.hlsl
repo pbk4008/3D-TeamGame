@@ -22,6 +22,7 @@ cbuffer Distortionbuffer
 Texture2D g_DiffuseTexture;
 Texture2D g_DistortionTex;
 Texture2D g_DistorionMaskTex;
+Texture2D g_DissolveTex;
 
 struct VS_IN
 {
@@ -83,14 +84,16 @@ PS_OUT_DISTORTION PS_MAIN_TRAIL(PS_IN_DISTORTION In)
 PS_OUT_DISTORTION PS_MAIN_WALL(PS_IN_DISTORTION In)
 {
 	PS_OUT_DISTORTION Out = (PS_OUT_DISTORTION) 0;
-
+	
 	Out.diffuse = Noisfunction(g_DiffuseTexture, DefaultSampler, In.vUvDepth.xy, g_deltatime, g_color);
+
+	if (g_bdissolve == true)
+	{
+		Out.diffuse = Dissolve(g_DiffuseTexture, g_DissolveTex, DefaultSampler, In.vUvDepth.xy, g_dissolvetime);
+	}
 	
 	return Out;
 }
-
-
-
 
 technique11 DefaultTechnique
 {

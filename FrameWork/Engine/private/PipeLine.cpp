@@ -12,7 +12,6 @@ HRESULT CPipeLine::Add_Camera(const wstring& pCameraTag)
 	CAMERA* tCamera = new CAMERA;
 	ZeroMemory(tCamera, sizeof(CAMERA));
 
-
 	m_mapPipeLine.emplace_back(make_pair(pCameraTag, tCamera));
 
 	return S_OK;
@@ -79,6 +78,24 @@ void CPipeLine::Set_Transform(const wstring& pCameraTag, TRANSFORMSTATEMATRIX eT
 	}
 }
 
+HRESULT CPipeLine::SetPreViewProtj(const wstring& cametag)
+{
+	auto tCamera = Find_Camera(cametag);
+	
+	m_matPreView = tCamera->matView;
+	m_matPreProj = tCamera->matProj;
+
+	return S_OK;
+}
+
+_fmatrix CPipeLine::GetPreViewProtj(_fmatrix world)
+{
+	_matrix previewproj = XMMatrixIdentity();
+	previewproj = world * XMLoadFloat4x4(&m_matPreView) * XMLoadFloat4x4(&m_matPreProj);
+
+	return previewproj;
+}
+
 HRESULT CPipeLine::Change_BaseCamera(const wstring& pCameraTag)
 {
 	//파이프라인이 비어있으면 나가
@@ -103,16 +120,13 @@ HRESULT CPipeLine::Change_BaseCamera(const wstring& pCameraTag)
 	//찾고자 하는 카메라에 저장했던 첫번째 카메라로 변경
 	*iter_Find = pTmpCamera;
 
-	//m_mapPipeLine[0] = *iter_begin;
-	//m_mapPipeLine[iFindIndex] = *iter_Find;
-
 	return S_OK;
 }
 
 const wstring& CPipeLine::getBaseCamera()
 {
 	if (m_mapPipeLine.empty())
-		return L"";
+		MSGBOX("Empty PipeLine");
 
 	auto& iter = m_mapPipeLine.begin();
 
@@ -130,7 +144,7 @@ CAMERA* CPipeLine::Find_Camera(const wstring& pCameraTag)
 
 _int CPipeLine::Find_Index(const wstring& pCameraTag)
 {
-	_uint iSize = m_mapPipeLine.size();
+	_uint iSize = (_uint)m_mapPipeLine.size();
 	for (_uint i = 0; i < iSize; i++)
 	{
 		if (m_mapPipeLine[i].first == pCameraTag)

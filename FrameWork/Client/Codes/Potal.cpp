@@ -1,6 +1,7 @@
 #include "pch.h"
-#include "Meteor.h"
 #include "..\Headers\Potal.h"
+#include "Monster_Bastion_Sword.h"
+#include "Monster_Bastion_Shooter.H"
 
 CPotal::CPotal()
 	: m_pRect(nullptr)
@@ -8,11 +9,9 @@ CPotal::CPotal()
 	, m_pMaskTexture(nullptr)
 	, m_bCreate(false)
 	, m_fAccRetain(0.f)
-	, m_bSpawn(false)
-	, m_fRandSpawnTime(0.f)
-	, m_fAccSpawnTime(0.f)
 	, m_bOpenCheck(false)
-	, m_fAccTime(0.f)
+	, m_iMonTag(0)
+	, m_bRetain(false)
 {
 }
 
@@ -23,11 +22,9 @@ CPotal::CPotal(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
 	, m_pMaskTexture(nullptr)
 	, m_bCreate(false)
 	, m_fAccRetain(0.f)
-	, m_bSpawn(false)
-	, m_fRandSpawnTime(0.f)
-	, m_fAccSpawnTime(0.f)
 	, m_bOpenCheck(false)
-	, m_fAccTime(0.f)
+	, m_iMonTag(0)
+	, m_bRetain(false)
 {
 }
 
@@ -38,11 +35,9 @@ CPotal::CPotal(const CPotal& rhs)
 	, m_pMaskTexture(rhs.m_pMaskTexture)
 	, m_bCreate(rhs.m_bCreate)
 	, m_fAccRetain(0.f)
-	, m_bSpawn(false)
-	, m_fRandSpawnTime(0.f)
-	, m_fAccSpawnTime(0.f)
 	, m_bOpenCheck(false)
-	, m_fAccTime(0.f)
+	, m_iMonTag(0)
+	, m_bRetain(false)
 {
 	Safe_AddRef(m_pRect);
 	Safe_AddRef(m_pDiffuseTexture);
@@ -71,33 +66,17 @@ HRESULT CPotal::NativeConstruct(const _uint _iSceneID, void* _pArg)
 		return E_FAIL;
 	}
 
-	//m_pTransform->Set_State(CTransform::STATE_RIGHT, XMVectorZero());
-	//m_pTransform->Set_State(CTransform::STATE_UP, XMVectorZero());
-	//m_pTransform->Set_State(CTransform::STATE_LOOK, XMVectorZero());
-
-	//m_pTransform->Scaling(XMVectorSet(100.f, 100.f, 100.f, 0.f));
-	_vector vPos = (*(_vector*)_pArg);
-	m_pTransform->Set_State(CTransform::STATE_POSITION, vPos);
-
-	m_fRandSpawnTime = (_float)MathUtils::ReliableRandom(0.5f, 1.3f);
-	cout << m_fRandSpawnTime << endl;
+	setActive(false);
 	return S_OK;
 }
 
 _int CPotal::Tick(_double _dDeltaTime)
 {
-	if (!m_bSpawn)
-	{
-		m_fAccSpawnTime += (_float)_dDeltaTime;
-		if (m_fAccSpawnTime >= m_fRandSpawnTime)
-		{
-			m_fAccSpawnTime = 0.f;
-			m_bSpawn = true;
-		}
+	if (!m_bOpenCheck)
 		return 0;
-	}
+
 	Scaling(_dDeltaTime);
-	Create_Meteor(_dDeltaTime);
+	Spawn_Monster(_dDeltaTime);
 	Remove_Portal(_dDeltaTime);
 
 	return _int();
@@ -105,11 +84,7 @@ _int CPotal::Tick(_double _dDeltaTime)
 
 _int CPotal::LateTick(_double _dDeltaTime)
 {
-	if (!m_bSpawn)
-		return 0;
-
 	m_pRenderer->Add_RenderGroup(CRenderer::RENDER_UI, this);
-
 
 	return _int();
 }
@@ -144,10 +119,10 @@ HRESULT CPotal::Render()
 	if (FAILED(m_pRect->SetUp_ValueOnShader("g_ProjMatrix", &smatProj, sizeof(_matrix))))
 		return E_FAIL;
 
-	if (FAILED(m_pRect->SetUp_ValueOnShader("g_bOpenCheck", &m_bOpenCheck, sizeof(_bool))))
-		return E_FAIL;
-	if (FAILED(m_pRect->SetUp_ValueOnShader("g_fAccTime", &m_fAccTime, sizeof(_float))))
-		return E_FAIL;
+	//if (FAILED(m_pRect->SetUp_ValueOnShader("g_bOpenCheck", &m_bOpenCheck, sizeof(_bool))))
+	//	return E_FAIL;
+	//if (FAILED(m_pRect->SetUp_ValueOnShader("g_fAccTime", &m_fAccTime, sizeof(_float))))
+	//	return E_FAIL;
 	
 	if (FAILED(m_pRect->SetUp_TextureOnShader("g_DiffuseTexture", m_pDiffuseTexture->Get_ShaderResourceView())))
 		return E_FAIL;
@@ -157,6 +132,22 @@ HRESULT CPotal::Render()
 	m_pRect->Render(0);
 
 	return S_OK;
+}
+
+void CPotal::Open_Potal(_uint iMonTag, _fvector vPos)
+{
+	m_bOpenCheck = true;
+	m_iMonTag = iMonTag;
+
+	_vector vTmp = vPos;
+	m_pTransform->Set_State(CTransform::STATE_POSITION, vTmp);
+	
+	_vector vecZero = XMVectorZero();
+
+	m_pTransform->Set_State(CTransform::STATE_RIGHT, vecZero);
+	m_pTransform->Set_State(CTransform::STATE_UP, vecZero);
+	m_pTransform->Set_State(CTransform::STATE_LOOK, vecZero);
+
 }
 
 HRESULT CPotal::Ready_Component()
@@ -209,33 +200,45 @@ _uint CPotal::Scaling(_double dDeltaTime)
 	return _uint();
 }
 
-_uint CPotal::Create_Meteor(_double dDeltaTime)
+_uint CPotal::Spawn_Monster(_double dDeltaTime)
 {
 	if (!m_bCreate)
 	{
-		//_float fSize = m_pTransform->Get_Scale(CTransform::STATE_RIGHT);
-		//if (fSize >= 6.f)
-		//{
-		//	_vector vPos = m_pTransform->Get_State(CTransform::STATE_POSITION);
-		//	if (FAILED(g_pGameInstance->Add_GameObjectToLayer(m_iSceneID, L"Layer_Meteor", L"Proto_GameObject_Weapon_Meteor", &vPos)))
-		//		MSGBOX("Create_Meteor Fail");
-		//	m_bCreate = true;
-		//}
-		/*if (m_fAccTime > 1.f)
+		_float fSize = m_pTransform->Get_Scale(CTransform::STATE_RIGHT);
+		if (fSize >= 6.f)
 		{
-			_vector vPos = m_pTransform->Get_State(CTransform::STATE_POSITION);
-			if (FAILED(g_pGameInstance->Add_GameObjectToLayer(m_iSceneID, L"Layer_Meteor", L"Proto_GameObject_Weapon_Meteor", &vPos)))
-				MSGBOX("Create_Meteor Fail");
 			m_bCreate = true;
-		}*/
-			
+			_vector vPos = m_pTransform->Get_State(CTransform::STATE_POSITION);
+			list<CGameObject*>* pLayer = g_pGameInstance->getObjectList(m_iSceneID, L"Layer_PortalMonster");
+
+			if (!pLayer)
+				return -1;
+
+			for (auto& pMon : *pLayer)
+			{
+				if (!pMon->getActive() && pMon->getTag() == m_iMonTag)
+				{
+					if (m_iMonTag == (_uint)GAMEOBJECT::MONSTER_1H)
+					{
+						static_cast<CMonster_Bastion_Sword*>(pMon)->Set_SpawnPosition(vPos);
+						pMon->setActive(true);
+					}
+					else if (m_iMonTag == (_uint)GAMEOBJECT::MONSTER_SHOOTER)
+					{
+						static_cast<CMonster_Bastion_Shooter*>(pMon)->Set_SpawnPosition(vPos);
+						pMon->setActive(true);
+					}
+					m_bCreate = true;
+					break;
+				}
+			}
+		}	
 	}
 	else
 	{
 		m_fAccRetain += (_float)dDeltaTime;
 		if (m_fAccRetain > 1.f)
 		{
-			m_fAccTime = 0.f;
 			m_fAccRetain = 0.f;
 			m_bRetain = true;
 		}
@@ -249,12 +252,16 @@ _uint CPotal::Remove_Portal(_double dDeltaTime)
 	{
 		Scaling(dDeltaTime);
 		_float fSize = m_pTransform->Get_Scale(CTransform::STATE_RIGHT);
-		if (fSize < 0.f)
+		if (fSize < 0.1f)
 		{
 			m_pTransform->Set_State(CTransform::STATE_RIGHT, XMVectorZero());
 			m_pTransform->Set_State(CTransform::STATE_UP, XMVectorZero());
 			m_pTransform->Set_State(CTransform::STATE_LOOK, XMVectorZero());
-			m_bRemove = true;
+			m_bOpenCheck = false;
+			m_bCreate = false;
+			m_bRetain = false;
+			//m_bRemove = true;
+			setActive(false);
 		}
 		/*	m_bOpenCheck = true;
 			m_fAccTime += dDeltaTime;

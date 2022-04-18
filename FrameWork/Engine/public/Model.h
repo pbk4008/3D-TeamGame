@@ -64,6 +64,7 @@ private:
 	_bool				m_bSaved = false;
 	_bool				m_bUsingMaterial = false;
 	_bool				m_bUsingTool = false;
+	_matrix				m_oldbonemat[256];
 private:
 	CSaveManager::DYNAMICDATA m_tAnimData;
 private:
@@ -76,7 +77,7 @@ private:
 
 	vector<MESHMATERIAL*>			m_Materials;
 
-	vector<CMaterial*>					m_vecMaterials;
+	vector<CMaterial*>				m_vecMaterials;
 
 	vector<CHierarchyNode*>			m_HierarchyNodes;
 	typedef vector<CHierarchyNode*>	HIERARCHYNODES;

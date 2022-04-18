@@ -23,32 +23,37 @@ void CRenderer::SetRenderButton(RENDERBUTTON ebutton, _bool check)
 	switch (ebutton)
 	{
 	case CRenderer::SHADOW:
-		m_bShadow = check;
+		m_bRenderbtn[SHADOW] = check;
 		break;
-	case CRenderer::PBRHDR:
-		m_bPBR = check;
+	case CRenderer::PBR:
+		m_bRenderbtn[PBR] = check;
 		break;
 	case CRenderer::PIXEL:
-		m_bPixel = check;
+		m_bRenderbtn[PIXEL] = check;
 		break;
 	case CRenderer::HDR:
-		m_bHDR = check;
+		m_bRenderbtn[HDR] = check;
 		break;
 	case CRenderer::DBG:
-		m_bDBG = check;
+		m_bRenderbtn[DBG] = check;
 		break;
 	case CRenderer::PARTICLE:
-		m_bParticle = check;
+		m_bRenderbtn[PARTICLE] = check;
 		break;
 	case CRenderer::OUTLINE:
-		m_boutline = check;
+		m_bRenderbtn[OUTLINE] = check;
 		break;
 	case CRenderer::RADIAL:
-		m_bradial = check;
-		m_RadialCnt = 6;
+		m_bRenderbtn[RADIAL] = check;
 		break;
 	case CRenderer::DISTORTION:
-		m_bdistortion = check;
+		m_bRenderbtn[DISTORTION] = check;
+		break;
+	case CRenderer::FOG:
+		m_bRenderbtn[FOG] = check;
+		break;
+	case CRenderer::VELOCITYBLUR:
+		m_bRenderbtn[VELOCITYBLUR] = check;
 		break;
 	}
 }
@@ -72,6 +77,9 @@ HRESULT CRenderer::NativeConstruct_Prototype()
 	m_pVIBuffer = CVIBuffer_RectViewPort::Create(m_pDevice, m_pDeviceContext, 0.f, 0.f, ViewportDesc.Width, ViewportDesc.Height, TEXT("../../Reference/ShaderFile/Shader_RectViewPort.hlsl"));
 	if (nullptr == m_pVIBuffer)
 		return E_FAIL;
+
+	for (_int i = 0; i < RENDERBUTTON_END; ++i)
+		m_bRenderbtn[i] = false;
 
 	lstrcpy(m_CameraTag, L"MainCamera");
 
@@ -148,33 +156,35 @@ HRESULT CRenderer::Draw_RenderGroup()
 
 	if (FAILED(Render_SkyBox())) MSGBOX("Failed To Rendering SkyPass");
 
-	if (m_bShadow == true)
+	if (m_bRenderbtn[SHADOW] == true)
 	{
 		if (FAILED(Render_Shadow())) MSGBOX("Failed To Rendering ShadowMapPass");
 	}
 
 	if (FAILED(Render_NonAlpha())) MSGBOX("Failed To Rendering NonAlphaPaas");
 
-	if (m_bPixel) // Pixel HDR
+	if (m_bRenderbtn[PIXEL]) // Pixel HDR
 	{
-		if (m_bShadow == true)
+		if (m_bRenderbtn[SHADOW] == true)
 		{
 			if (FAILED(ShadowPass())) MSGBOX("Failed To Rendering ShadowPass");
 		}
 
-		if (FAILED(m_pRenderAssit->Render_LightAcc(m_pTargetMgr, m_CameraTag, m_bPBR, m_bShadow))) MSGBOX("Failed To Rendering LightPass");
-
-		if (FAILED(Render_Alpha()))	MSGBOX("Failed To Rendering AlphaPass");
+		if (FAILED(m_pRenderAssit->Render_LightAcc(m_pTargetMgr, m_CameraTag, m_bRenderbtn[PBR], m_bRenderbtn[SHADOW]))) MSGBOX("Failed To Rendering LightPass");
 
 		if (FAILED(DistortionPass())) MSGBOX("Failed To Rendering Distortion");
 
-		if (FAILED(m_pHDR->Render_HDRBase(m_pTargetMgr, m_bShadow))) MSGBOX("Failed To Rendering HDRBasePass");
+		if (FAILED(VeloCityPass())) MSGBOX("Failed To Rendering Velocity");
+
+		if (FAILED(Render_Alpha()))	MSGBOX("Failed To Rendering AlphaPass");
+
+		if (FAILED(m_pHDR->Render_HDRBase(m_pTargetMgr, m_bRenderbtn[SHADOW]))) MSGBOX("Failed To Rendering HDRBasePass");
 
 		if (FAILED(m_pLuminance->DownSampling(m_pTargetMgr)))MSGBOX("Failed To Rendering DownSamplingPass");
 
-		if (FAILED(m_pPostProcess->PossProcessing(m_pTonemapping, m_pTargetMgr, m_bHDR, m_bradial))) MSGBOX("Failed To Rendering PostProcessPass");
+		if (FAILED(m_pPostProcess->PossProcessing(m_pTonemapping, m_pTargetMgr, m_bRenderbtn[HDR]))) MSGBOX("Failed To Rendering PostProcessPass");
 
-		if (FAILED(Render_Final(m_boutline, m_bradial))) MSGBOX("Failed To Rendering FinalPass");
+		if (FAILED(Render_Final())) MSGBOX("Failed To Rendering FinalPass");
 	}
 
 	if (FAILED(Render_UI_Active()))
@@ -187,7 +197,7 @@ HRESULT CRenderer::Draw_RenderGroup()
 		return E_FAIL;
 	
 #ifdef _DEBUG
-	if (m_bDBG == false)
+	if (m_bRenderbtn[DBG] == false)
 	{
 		if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("MRT_SkyBox"))))		return E_FAIL;
 
@@ -237,7 +247,8 @@ HRESULT CRenderer::Draw_RenderGroup()
 		if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("Target_AlphaBlend")))) return E_FAIL;
 		if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("Target_BlurShadow")))) return E_FAIL;
 		if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("Target_Distortion")))) return E_FAIL;
-		if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("Target_STDistortion")))) return E_FAIL;
+		if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("Target_Velocity")))) return E_FAIL;
+		
 	}
 #endif // _DEBUG
 
@@ -328,13 +339,32 @@ HRESULT CRenderer::Render_Alpha()
 	{
 		if (nullptr != pGameObject)
 		{
-			m_bParticle = true;
+			m_bRenderbtn[PARTICLE] = true;
 			pGameObject->Render();
 		}
 
 		Safe_Release(pGameObject);
 	}
 	m_RenderGroup[RENDER_ALPHA].clear();
+
+	if (FAILED(m_pTargetMgr->End_MRTNotClear(m_pDeviceContext))) return E_FAIL;
+
+	return S_OK;
+}
+
+HRESULT CRenderer::VeloCityPass()
+{
+	if (FAILED(m_pTargetMgr->Begin_MRT(m_pDeviceContext, TEXT("Target_Velocity"))))
+		return E_FAIL;
+
+	for (auto& pGameObject : m_RenderGroup[RENDER_VELOCITY])
+	{
+		if (nullptr != pGameObject)
+			pGameObject->Render_Velocity();
+
+		Safe_Release(pGameObject);
+	}
+	m_RenderGroup[RENDER_VELOCITY].clear();
 
 	if (FAILED(m_pTargetMgr->End_MRTNotClear(m_pDeviceContext))) return E_FAIL;
 
@@ -356,21 +386,6 @@ HRESULT CRenderer::DistortionPass()
 	m_RenderGroup[RENDER_DYDISTORTION].clear();
 
 	if (FAILED(m_pTargetMgr->End_MRTNotClear(m_pDeviceContext))) return E_FAIL;
-
-
-	if (FAILED(m_pTargetMgr->Begin_MRT(m_pDeviceContext, TEXT("Target_STDistortion"))))
-		return E_FAIL;
-
-	for (auto& pGameObject : m_RenderGroup[RENDER_STDISTORTION])
-	{
-		if (nullptr != pGameObject)
-			pGameObject->Render();
-
-		Safe_Release(pGameObject);
-	}
-	m_RenderGroup[RENDER_STDISTORTION].clear();
-
-	if (FAILED(m_pTargetMgr->End_MRT(m_pDeviceContext))) return E_FAIL;
 
 	return S_OK;
 }
@@ -470,49 +485,56 @@ HRESULT CRenderer::ShadowPass()
 
 	if (FAILED(m_pTargetMgr->End_MRTNotClear(m_pDeviceContext))) return E_FAIL;
 
-	if (FAILED(m_pPostProcess->Shadowblur(m_pTargetMgr, m_bShadow, 1.f))) MSGBOX("Failed To Rendering ShadowBlurPass");
+	if (FAILED(m_pPostProcess->Shadowblur(m_pTargetMgr, m_bRenderbtn[SHADOW], 1.f))) MSGBOX("Failed To Rendering ShadowBlurPass");
 
 	return S_OK;
 }
 
-HRESULT CRenderer::Render_Final(_bool outline, _bool Radial)
+HRESULT CRenderer::Render_Final()
 {
 	if (!m_pTargetMgr)	return E_FAIL;
 
 	_float thick = 0.2f;
-	_bool fog = false;
 	if (FAILED(m_pVIBuffer->SetUp_TextureOnShader("g_DiffuseTexture", m_pTargetMgr->Get_SRV(TEXT("Target_Blend"))))) MSGBOX("Render Final DiffuseTeuxtre Not Apply");
-	if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_thick", &thick, sizeof(_float)))) MSGBOX("Render Final Value thick Not Apply");
+	if (FAILED(m_pVIBuffer->SetUp_TextureOnShader("g_DepthTexture", m_pTargetMgr->Get_SRV(TEXT("Target_Depth"))))) MSGBOX("Render Final DepthTexture Not Apply");
 
-	if (m_bdistortion == true)
+	if (m_bRenderbtn[VELOCITYBLUR] == true)
+	{
+		if (FAILED(m_pVIBuffer->SetUp_TextureOnShader("g_VelocityTex", m_pTargetMgr->Get_SRV(TEXT("Target_Velocity"))))) MSGBOX("Render Final DiffuseTeuxtre Not Apply");
+	}
+
+	if (m_bRenderbtn[DISTORTION] == true)
 	{
 		if (FAILED(m_pVIBuffer->SetUp_TextureOnShader("g_DistortionTex", m_pTargetMgr->Get_SRV(TEXT("Target_Distortion"))))) MSGBOX("Render Final g_DistortionTex Not Apply");
 	}
+
 	if (g_pGameInstance->getCurrentLevel() == 4)
 	{
-		fog = true;
+		m_bRenderbtn[FOG] = true;
 		_float4 fogcolor = _float4(0.8f, 0.8f, 0.8f, 1.f);
 		_float fogdist = 10.f;
 		_float fogdensity = 0.09f;
 		if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_fogcolor", &fogcolor, sizeof(_float4)))) MSGBOX("Render Final Value fogcolor Not Apply");
 		if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_fogDist", &fogdist, sizeof(_float)))) MSGBOX("Render Final Value fogdist Not Apply");
 		if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_fogDenstiy", &fogdensity, sizeof(_float)))) MSGBOX("Render Final fogdensity thick Not Apply");
-		if (FAILED(m_pVIBuffer->SetUp_TextureOnShader("g_DepthTexture", m_pTargetMgr->Get_SRV(TEXT("Target_Depth"))))) MSGBOX("Render Final DepthTexture Not Apply");
 	}
 
-	if (FAILED(m_pVIBuffer->SetUp_TextureOnShader("g_STDistortionTex", m_pTargetMgr->Get_SRV(TEXT("Target_STDistortion"))))) MSGBOX("Render Final g_STDistortionTex Not Apply");
-	if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_outline", &m_boutline, sizeof(_bool)))) MSGBOX("Render Final Value outline Not Apply");
-	if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_radial", &m_bradial, sizeof(_bool)))) MSGBOX("Render Final Value raidal Not Apply");
-	if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_distort", &m_bdistortion, sizeof(_bool)))) MSGBOX("Render Final Value distort Not Apply");
-	if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_fog", &fog, sizeof(_bool)))) MSGBOX("Render Final Value distort Not Apply");
+	_int cnt = 32;
+	if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_outline", &m_bRenderbtn[OUTLINE], sizeof(_bool)))) MSGBOX("Render Final Value outline Not Apply");
+	if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_radial", &m_bRenderbtn[RADIAL], sizeof(_bool)))) MSGBOX("Render Final Value raidal Not Apply");
+	if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_distort", &m_bRenderbtn[DISTORTION], sizeof(_bool)))) MSGBOX("Render Final Value distort Not Apply");
+	if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_fog", &m_bRenderbtn[FOG], sizeof(_bool)))) MSGBOX("Render Final Value g_fog Not Apply");
+	if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_motion", &m_bRenderbtn[VELOCITYBLUR], sizeof(_bool)))) MSGBOX("Render Final Value distort Not Apply");
 	if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_RadialCnt", &m_RadialCnt, sizeof(_int)))) MSGBOX("Render Final Value RaidalCnt Not Apply");
+	if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_MotionblurCnt", &cnt, sizeof(_int)))) MSGBOX("Render Final Value RaidalCnt Not Apply");
+	if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_thick", &thick, sizeof(_float)))) MSGBOX("Render Final Value thick Not Apply");
 
 	if (FAILED(m_pVIBuffer->Render(3))) MSGBOX("Final Rendering Failed");
 
-	if (m_bParticle == true)
+	if (m_bRenderbtn[PARTICLE] == true)
 	{
-		if (FAILED(m_pPostProcess->AlphaBlur(m_pTargetMgr, m_bParticle))) MSGBOX("Alpha Blur Failed");
-		if (FAILED(m_pVIBuffer->SetUp_TextureOnShader("g_AlphaTexture", m_pTargetMgr->Get_SRV(L"Target_AlphaBlend")))) MSGBOX("Alpha Render Failed");
+		if (FAILED(m_pPostProcess->AlphaBlur(m_pTargetMgr, m_bRenderbtn[PARTICLE]))) MSGBOX("Alpha Blur Failed");
+		if (FAILED(m_pVIBuffer->SetUp_TextureOnShader("g_AlphaTexture", m_pTargetMgr->Get_SRV(L"Target_Alpha")))) MSGBOX("Alpha Render Failed");
 
 		if (FAILED(m_pVIBuffer->Render(4))) MSGBOX("Alpha Rendering Failed");
 	}

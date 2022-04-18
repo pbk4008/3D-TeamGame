@@ -120,8 +120,10 @@ PS_OUT PS_MAIN1(PS_IN In)
     In.vTexUV.x = (In.vTexUV.x / g_iImageCountX) + (g_iFrame % g_iImageCountX) * (1.f / g_iImageCountX);
     In.vTexUV.y = (In.vTexUV.y / g_iImageCountY) + (g_iFrame / g_iImageCountY) * (1.f / g_iImageCountY);
 
-    Out.vColor = g_DiffuseTexture.Sample(DefaultSampler, In.vTexUV);
-	Out.weight = float4(g_Weight.xxx, 1.f);
+	half4 color = g_DiffuseTexture.Sample(DefaultSampler, In.vTexUV);
+	
+	Out.vColor = color;
+	//Out.weight = color.r * g_Weight * Out.vColor;
 	
     return Out;
 }

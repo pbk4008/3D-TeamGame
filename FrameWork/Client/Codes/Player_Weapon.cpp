@@ -46,7 +46,7 @@ HRESULT CPlayer_Weapon::NativeConstruct(const _uint _iSceneID, Desc _desc)
 
 		pMtrl = CMaterial::Create(m_pDevice, m_pDeviceContext, m_szMIname, m_szMIFilePath, CMaterial::EType::Static);
 
-		for (_int i = 0; i < desc.NumMat; ++i)
+		for (_uint i = 0; i < desc.NumMat; ++i)
 		{
 			std::wstring szMiTexPath = L"../bin/Resources/Mesh/";
 			szMiTexPath = m_szMiTexPath + m_wstrName + L"/";

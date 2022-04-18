@@ -100,6 +100,8 @@ HRESULT C1H_SwordAttackNormalR2_ReleaseStab::EnterState()
 	m_tShakeEvent2.tWaveZ.fFrequency = 1.f;
 	m_tShakeEvent2.tWaveZ.fAdditionalOffset = 0.3f;
 
+	m_pSilvermane->RimlightCheck(false);
+	m_pSilvermane->Get_CurerntWeapon()->RimlightCheck(false);
 
 	return S_OK;
 }

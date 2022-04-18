@@ -53,8 +53,14 @@ cbuffer ShaderCheck
 	bool g_radial;
 	bool g_distort;
 	bool g_fog;
-	int	 g_RadialCnt;
+	bool g_motion;
+};
+
+cbuffer CountBuffer
+{
+	int g_RadialCnt;
 	float g_delta;
+	int g_MotionblurCnt;
 };
 
 cbuffer Fogbuffer
@@ -113,9 +119,11 @@ Texture2D g_ShadowMapTex;
 Texture2D g_ShadowTexture;
 
 Texture2D g_AlphaTexture;
-Texture2D g_DistortionTex;
-Texture2D g_STDistortionTex;
 Texture2D g_BlurTexture;
+
+Texture2D g_DistortionTex;
+Texture2D g_VelocityTex;
+Texture2D g_DissolveTex;
 
 
 struct VS_IN
@@ -395,20 +403,41 @@ PS_OUT_BLEND PS_MAIN_BLEND(PS_IN In)
 	
 	half4 depth = g_DepthTexture.Sample(DefaultSampler, In.vTexUV);
 	half4 color = g_DiffuseTexture.Sample(DefaultSampler, In.vTexUV);
-	vector vDepthDesc = g_DepthTexture.Sample(DefaultSampler, In.vTexUV);
-	float fViewZ = depth.y * 300.f;
+	half fViewZ = depth.y * 300.f;
 	
 	Out.vColor = color;
 	
+	if (g_motion == true)
+	{
+		half4 velocity = g_VelocityTex.Sample(DefaultSampler, In.vTexUV);
+		velocity.xy /= (half) g_MotionblurCnt;
+		int cnt = 1;
+		half4 bcolor;
+		for (int i = cnt; i < g_MotionblurCnt; ++i)
+		{
+			bcolor = g_DiffuseTexture.Sample(DefaultSampler, In.vTexUV + velocity.xy * (half) i);
+			if (velocity.z < depth.x + 0.04f)
+			{
+				cnt++;
+				Out.vColor += bcolor;
+			}
+		}
+		Out.vColor /= (half) cnt;
+	}
+	
 	if (g_distort == true)
 	{
-		//Out.vColor = Distortion(g_STDistortionTex, g_DiffuseTexture, DefaultSampler, In.vTexUV, g_delta);
 		Out.vColor = Distortion(g_DistortionTex, g_DiffuseTexture, DefaultSampler, In.vTexUV);
 	}
 	
 	if (g_radial == true)
 	{	
 		Out.vColor.rgb = Radialblur(g_DiffuseTexture,DefaultSampler,In.vTexUV,g_RadialCnt);
+	}
+	
+	if(g_outline == true)
+	{
+		Out.vColor = Outline(g_DiffuseTexture, DefaultSampler, In.vTexUV, Out.vColor);
 	}
 	
 	if (Out.vColor.a == 0)

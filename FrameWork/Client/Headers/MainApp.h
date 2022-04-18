@@ -36,6 +36,7 @@ private:
 	_bool				m_bDBG = false;
 	_bool				m_bShadow = false;
 	_bool				m_bOutline = false;
+	_bool				m_bMotionblur = false;
 
 	_bool				m_isFreeze = false;
 	_double				m_dFreezeTimeAcc = 0.0;
@@ -49,6 +50,7 @@ private:
 	HRESULT Load_Texture();
 	HRESULT Init_Camera();
 	HRESULT Ready_Fonts();
+	void	RenderingBnt();
 
 public:
 	const _bool IsFreeze() const;

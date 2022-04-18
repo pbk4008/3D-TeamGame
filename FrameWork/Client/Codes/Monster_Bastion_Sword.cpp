@@ -60,12 +60,12 @@ HRESULT CMonster_Bastion_Sword::NativeConstruct(const _uint _iSceneID, void* _pA
 	if (_pArg)
 	{
 		_float3 tPos = (*(_float3*)_pArg);
-		if (FAILED(Set_SpawnPosition(tPos)))
+		if (FAILED(CActor::Set_SpawnPosition(tPos)))
 			return E_FAIL;
 	}
 	else
 	{
-		m_pTransform->Set_State(CTransform::STATE_POSITION, XMVectorSet(5.f, 0.f, 10.f, 1.f));
+		m_pTransform->Set_State(CTransform::STATE_POSITION, XMVectorSet(0.f, -10.f, 0.f, 1.f));
 	}
 
 	if (FAILED(SetUp_Components()))
@@ -92,7 +92,7 @@ HRESULT CMonster_Bastion_Sword::NativeConstruct(const _uint _iSceneID, void* _pA
 
 	m_tAttackDesc.iLevel = 2;
 	m_tAttackDesc.fDamage = 5.f;
-
+	
 	return S_OK;
 }
 
@@ -162,18 +162,27 @@ _int CMonster_Bastion_Sword::LateTick(_double _dDeltaTime)
 
 HRESULT CMonster_Bastion_Sword::Render()
 {
-	SCB desc;
-	ZeroMemory(&desc, sizeof(SCB));
+	if (m_bdissolve == true)
+		CActor::DissolveOn(0.5f);
+
+	if (FAILED(m_pModel->SetUp_ValueOnShader("g_bdissolve", &m_bdissolve, sizeof(_bool)))) MSGBOX("Failed to Apply dissolvetime");
+
 	wstring wstrCamTag = g_pGameInstance->Get_BaseCameraTag();
-	CActor::BindConstantBuffer(wstrCamTag, &desc);
+	SCB desc;
 	for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
 	{
 		switch (i)
 		{
 		case 2:
+			ZeroMemory(&desc, sizeof(SCB));
+			CActor::BindConstantBuffer(wstrCamTag, &desc);
 			if (FAILED(m_pModel->Render(i, 1))) MSGBOX("Failed To Rendering Shooter");
 			break;
 		default:
+			ZeroMemory(&desc, sizeof(SCB));
+			desc.color = _float4(1.f, 1.f, 0.f, 1.f);
+			desc.empower = 1.f;
+			CActor::BindConstantBuffer(wstrCamTag, &desc);
 			if (FAILED(m_pModel->Render(i, 0))) MSGBOX("Failed To Rendering Shooter");
 			break;
 		}
@@ -208,6 +217,18 @@ void CMonster_Bastion_Sword::Parry(const PARRYDESC& _tParryDesc)
 {
 	m_fGroggyGauge += (m_fMaxGroggyGauge - m_fGroggyGauge);
 }
+
+HRESULT CMonster_Bastion_Sword::Set_SpawnPosition(_fvector vPos)
+{
+	CActor::Set_SpawnPosition(vPos);
+	_float3 tmpPos;
+	XMStoreFloat3(&tmpPos, vPos);
+	m_pCharacterController->setFootPosition(tmpPos);
+
+	return S_OK;
+}
+
+
 
 void CMonster_Bastion_Sword::Set_Remove(_bool bCheck)
 {
@@ -617,10 +638,13 @@ _int CMonster_Bastion_Sword::Dead_Check()
 			if (m_pAnimator->Get_CurrentAnimNode() == (_uint)ANIM_TYPE::DEATH
 				&& m_pAnimator->Get_CurrentAnimation()->Is_Finished())
 			{
-				m_bRemove = true;
 				m_bUIShow = false;
 				m_pPanel->Set_Show(false);
-				m_pPanel->Set_UIRemove(false);
+				//m_pPanel->Set_UIRemove(false);
+				m_bdissolve = true;
+
+				if (m_lifetime >= 1.f)
+					Set_Remove(true);
 			}
 			else if (1 == m_pAnimator->Get_AnimController()->Get_CurKeyFrameIndex())
 			{

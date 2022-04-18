@@ -53,7 +53,6 @@ public:
 	
 private:
 	CGameObject*	 m_pPlayer = nullptr;
-	CModel*			 m_pModel = nullptr;
 
 private:
 	CItemData	 m_droppedItem;

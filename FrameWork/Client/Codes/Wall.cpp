@@ -29,7 +29,6 @@ HRESULT CWall::NativeConstruct(const _uint _iSceneID, void* _pArg)
 		memcpy(&m_desc, _pArg, sizeof(WALLDESC));
 	}
 
-
 	if(FAILED(Ready_Component())) MSGBOX("Failed to Wall ReadyComponent");
 
 	m_pTransform->Set_State(CTransform::STATE_POSITION, XMLoadFloat4(&m_desc.pos));
@@ -42,6 +41,15 @@ HRESULT CWall::NativeConstruct(const _uint _iSceneID, void* _pArg)
 
 _int CWall::Tick(_double _dDeltaTime)
 {
+	// 디졸브 테스트용 버튼 
+	if (g_pGameInstance->getkeyDown(DIK_NUMPAD5))
+		m_bdissolve = true;
+	if (g_pGameInstance->getkeyDown(DIK_NUMPAD6))
+	{
+		m_lifetime = 0.f;
+		m_bdissolve = true;
+	}
+
 	return _int();
 }
 
@@ -69,6 +77,8 @@ HRESULT CWall::Render()
 		m_delta = 0.0f;
 	}
 
+	if (FAILED(DissolveOn(0.35f))) MSGBOX("Failed to Dissovle Shader");
+
 	_matrix world, view, proj;
 
 	world = XMMatrixTranspose(m_pTransform->Get_WorldMatrix());
@@ -93,7 +103,27 @@ HRESULT CWall::Ready_Component()
 		MSGBOX("Failed to Create wall buffer");
 
 	m_pdiffusetex = g_pGameInstance->Clone_Component<CTexture>(0, L"Proto_Component_Texture");
-	m_pdiffusetex->Change_Texture(L"WallBase");
+	if (FAILED(m_pdiffusetex->Change_Texture(L"WallBase"))) MSGBOX("Failed to Change Texture DiffuseTex");
+
+	m_dissolveTex = g_pGameInstance->Clone_Component<CTexture>(0, L"Proto_Component_Texture");
+	if (FAILED(m_dissolveTex->Change_Texture(L"DissovleBase"))) MSGBOX("Failed to Change Texture DissovleTex");
+
+	return S_OK;
+}
+
+HRESULT CWall::DissolveOn(_float dissolveSpeed)
+{
+	if (m_bdissolve == true)
+	{
+		m_lifetime += (g_fDeltaTime * dissolveSpeed);
+		if (m_lifetime >= 1.f)
+		{
+			m_lifetime = 1.f;
+		}
+		if (FAILED(m_pbuffer->SetUp_ValueOnShader("g_bdissolve", &m_bdissolve, sizeof(_bool)))) MSGBOX("Failed to Apply dissolvetime");
+		if (FAILED(m_pbuffer->SetUp_ValueOnShader("g_dissolvetime", &m_lifetime, sizeof(_float)))) MSGBOX("Failed to Apply dissolvetime");
+		if (FAILED(m_pbuffer->SetUp_TextureOnShader("g_DissolveTex", m_dissolveTex, 0))) MSGBOX("Failed to Apply dissolveTex");
+	}
 
 	return S_OK;
 }

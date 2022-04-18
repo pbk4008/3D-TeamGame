@@ -185,7 +185,6 @@ _int CMonster_Crawler::Tick(_double _dDeltaTime)
 
 			if (m_lifetime >= 1.f)
 				Set_Remove(true);
-			
 		}
 		else
 		{
@@ -205,12 +204,6 @@ _int CMonster_Crawler::Tick(_double _dDeltaTime)
 
 	if (false == m_bUIShow)
 		m_pPanel->Set_Show(false);
-
-	//if (g_pGameInstance->getkeyDown(DIK_NUMPAD6))
-	//{
-	//	Active_Effect_Target((_uint)EFFECT::ATTACK_LEFT, g_pObserver->Get_PlayerPos());
-	//	cout << "¿ÞÂÊ" << endl;
-	//}
 
 	return 0;
 }
@@ -237,15 +230,18 @@ HRESULT CMonster_Crawler::Render()
 	if (m_bdissolve == true)
 		CActor::DissolveOn(0.25f);
 
+	if (FAILED(m_pModel->SetUp_ValueOnShader("g_bdissolve", &m_bdissolve, sizeof(_bool)))) MSGBOX("Failed to Apply dissolvetime");
+
 	SCB desc;
 	ZeroMemory(&desc, sizeof(SCB));
 
 	wstring wstrCamTag = g_pGameInstance->Get_BaseCameraTag();
 	CActor::BindConstantBuffer(wstrCamTag,&desc);
-	if (FAILED(m_pModel->SetUp_ValueOnShader("g_bdissolve", &m_bdissolve, sizeof(_bool)))) MSGBOX("Failed to Apply dissolvetime");
 
 	for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
+	{
 		m_pModel->Render(i, 0);
+	}
 
 	return S_OK;
 }

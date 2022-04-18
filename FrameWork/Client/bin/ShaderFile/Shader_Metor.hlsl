@@ -38,9 +38,9 @@ VS_OUT VS_MESH(VS_IN In)
 	half4 postion = half4(In.vPosition, 1.f);
 
 	Out.vPosition = mul(postion, matWVP);
-	Out.vNormal = normalize(mul(In.vNormal, g_WorldMatrix));
-	Out.vBiNormal = normalize(mul(In.vBiNormal, g_WorldMatrix));
-	Out.vTangent = normalize(mul(In.vTangent, g_WorldMatrix));
+	Out.vNormal = normalize(mul(vector(In.vNormal, 0.f), g_WorldMatrix));
+	Out.vBiNormal = normalize(mul(vector(In.vBiNormal, 0.f), g_WorldMatrix));
+	Out.vTangent = normalize(mul(vector(In.vTangent, 0.f), g_WorldMatrix));
 	Out.vUvDepth.xy = In.vTexUV.xy;
 	Out.vUvDepth.zw = Out.vPosition.zw;
 	

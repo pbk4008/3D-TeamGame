@@ -14,6 +14,7 @@ Texture2D	g_FurTexture;
 Texture2D	g_OMERTexture;
 
 Texture2D	g_DissolveTex;
+Texture2D	g_DissolveGrTex;
 
 struct VS_IN
 {
@@ -167,11 +168,13 @@ PS_OUT PS_MAIN_Body(PS_IN In)
 	half4 mra = g_MRATexture.Sample(DefaultSampler, In.vUvDepth.xy);
 	half4 ceo = g_CEOTexture.Sample(DefaultSampler, In.vUvDepth.xy);
 	half4 tint = g_TINTTexture.Sample(DefaultSampler, In.vUvDepth.xy);
-
-	if (g_bdissolve == true)
+	
+	if(g_bdissolve == true)
 	{
-		Dissolve(g_DissolveTex, DefaultSampler, In.vUvDepth.xy, g_dissolvetime);
+		half dissolve = g_DissolveTex.Sample(DefaultSampler, In.vUvDepth.xy).r;
+		clip(dissolve - g_dissolvetime);
 	}
+	
 	half3 normal = g_BiNormalTexture.Sample(DefaultSampler, In.vUvDepth.xy).xyz;
 	half3x3 tbn = { In.vTangent.xyz, In.vBiNormal.xyz, In.vNormal.xyz };
 	
@@ -192,6 +195,20 @@ PS_OUT PS_MAIN_Body(PS_IN In)
 	Out.mra.a = 1.f;
 	Out.emission = g_color * g_empower * ceo.g;
 	
+	if (g_bdissolve == true)
+	{
+		half dissolve = g_DissolveTex.Sample(DefaultSampler, In.vUvDepth.xy).r;
+		half amount = dissolve - g_dissolvetime;
+
+		if (g_dissolvetime > 0 && g_dissolvetime < 1)
+		{
+			if (amount < 0.06f)
+			{
+				Out.emission = g_DissolveGrTex.Sample(DefaultSampler, half2(1 - g_dissolvetime, 0)) * 0.5f;
+				Out.diffuse *= Out.emission;
+			}
+		}
+	}
 	return Out;	
 }
 
@@ -202,14 +219,14 @@ PS_OUT PS_MAIN_CLOAK(PS_IN In)
 	half4 mra = g_MRATexture.Sample(DefaultSampler, In.vUvDepth.xy);
 	half4 ceo = g_CEOTexture.Sample(DefaultSampler, In.vUvDepth.xy);
 	half4 tint = g_TINTTexture.Sample(DefaultSampler, In.vUvDepth.xy);
+	half3 normal = g_BiNormalTexture.Sample(DefaultSampler, In.vUvDepth.xy).xyz;
+	half3x3 tbn = { In.vTangent.xyz, In.vBiNormal.xyz, In.vNormal.xyz };
 	
 	if (g_bdissolve == true)
 	{
-		Dissolve(g_DissolveTex, DefaultSampler, In.vUvDepth.xy, g_dissolvetime);
+		half dissolve = g_DissolveTex.Sample(DefaultSampler, In.vUvDepth.xy).r;
+		clip(dissolve - g_dissolvetime);
 	}
-	
-	half3 normal = g_BiNormalTexture.Sample(DefaultSampler, In.vUvDepth.xy).xyz;
-	half3x3 tbn = { In.vTangent.xyz, In.vBiNormal.xyz, In.vNormal.xyz };
 	
 	normal = Normalmapping(normal, tbn);
 	
@@ -228,27 +245,41 @@ PS_OUT PS_MAIN_CLOAK(PS_IN In)
 	Out.mra.a = 1.f;
 	Out.emission = g_color * g_empower * ceo.g;
 	
+	if (g_bdissolve == true)
+	{
+		half dissolve = g_DissolveTex.Sample(DefaultSampler, In.vUvDepth.xy).r;
+		half amount = dissolve - g_dissolvetime;
+
+		if (g_dissolvetime > 0 && g_dissolvetime < 1)
+		{
+			if (amount < 0.06f)
+			{
+				Out.emission = g_DissolveGrTex.Sample(DefaultSampler, half2(1 - g_dissolvetime, 0)) * 0.5f;
+				Out.diffuse *= Out.emission;
+			}
+		}
+	}
+	
 	return Out;
 }
 
 PS_OUT PS_MAIN_FUR(PS_IN In)
 {
 	PS_OUT Out = (PS_OUT) 0;
-	float4 diffuse = g_DiffuseTexture.Sample(DefaultSampler, In.vUvDepth.xy);
+	float4 diffuse = g_FurTexture.Sample(DefaultSampler, In.vUvDepth.xy);
+	
+	if (diffuse.a <= 0)
+		discard;
 	
 	if (g_bdissolve == true)
 	{
-		Dissolve(g_DissolveTex, DefaultSampler, In.vUvDepth.xy, g_dissolvetime);
+		half dissolve = g_DissolveTex.Sample(DefaultSampler, In.vUvDepth.xy).r;
+		clip(dissolve - g_dissolvetime);
 	}
 	
-	Out.diffuse.xyz = diffuse.xyz * 0.5f + 0.5f;
-	Out.diffuse.w = diffuse.w;
+	Out.diffuse = diffuse;
 	
-	float3 normal = In.vNormal.xyz;
-	normal = normalize(normal);
-	normal = normal * 0.5f + 0.5f;
-	Out.normal = float4(normal, 0.f);
-	
+	Out.normal = half4(1, 1, 1, 0);
 	Out.depth = float4(In.vUvDepth.z / In.vUvDepth.w, In.vUvDepth.w / 300.f, 0.f, 0.f);
 	
 	Out.mra.r = 0 + g_Metalic;
@@ -256,7 +287,21 @@ PS_OUT PS_MAIN_FUR(PS_IN In)
 	Out.mra.b = 1 + g_AO;
 	Out.mra.a = 1.f;
 	Out.emission = g_color * g_empower;
-	
+
+	if (g_bdissolve == true)
+	{
+		half dissolve = g_DissolveTex.Sample(DefaultSampler, In.vUvDepth.xy).r;
+		half amount = dissolve - g_dissolvetime;
+
+		if (g_dissolvetime > 0 && g_dissolvetime < 1)
+		{
+			if (amount < 0.06f)
+			{
+				Out.emission = g_DissolveGrTex.Sample(DefaultSampler, half2(1 - g_dissolvetime, 0)) * 0.5f;
+				Out.diffuse *= Out.emission;
+			}
+		}
+	}
 	return Out;
 }
 
@@ -268,13 +313,14 @@ PS_OUT PS_MAIN_EARTH_Body(PS_IN In)
 	half4 mra = g_MRATexture.Sample(DefaultSampler, In.vUvDepth.xy);
 	half3 mask = g_MaskTexture.Sample(DefaultSampler, In.vUvDepth.xy).xyz;
 	
-	if (g_bdissolve == true)
-	{
-		Dissolve(g_DissolveTex, DefaultSampler, In.vUvDepth.xy, g_dissolvetime);
-	}
-	
 	half3 normal = g_BiNormalTexture.Sample(DefaultSampler, In.vUvDepth.xy).xyz;
 	half3x3 tbn = { In.vTangent.xyz, In.vBiNormal.xyz, In.vNormal.xyz };
+	
+	if (g_bdissolve == true)
+	{
+		half dissolve = g_DissolveTex.Sample(DefaultSampler, In.vUvDepth.xy).r;
+		clip(dissolve - g_dissolvetime);
+	}
 	
 	normal = Normalmapping(normal, tbn);
 	
@@ -294,6 +340,20 @@ PS_OUT PS_MAIN_EARTH_Body(PS_IN In)
 	Out.mra.a = 1.f;
 	Out.emission = g_color * g_empower * mask.r;
 	
+	if (g_bdissolve == true)
+	{
+		half dissolve = g_DissolveTex.Sample(DefaultSampler, In.vUvDepth.xy).r;
+		half amount = dissolve - g_dissolvetime;
+
+		if (g_dissolvetime > 0 && g_dissolvetime < 1)
+		{
+			if (amount < 0.06f)
+			{
+				Out.emission = g_DissolveGrTex.Sample(DefaultSampler, half2(1 - g_dissolvetime, 0)) * 0.5f;
+				Out.diffuse *= Out.emission;
+			}
+		}
+	}
 	return Out;
 }
 
@@ -305,13 +365,14 @@ PS_OUT PS_MAIN_EARTH_CRYSTAL(PS_IN In)
 	half4 mra = g_MRATexture.Sample(DefaultSampler, In.vUvDepth.xy);
 	half3 mask = g_MaskTexture.Sample(DefaultSampler, In.vUvDepth.xy).xyz;
 	
-	if (g_bdissolve == true)
-	{
-		Dissolve(g_DissolveTex, DefaultSampler, In.vUvDepth.xy, g_dissolvetime);
-	}
-	
 	half3 normal = g_BiNormalTexture.Sample(DefaultSampler, In.vUvDepth.xy).xyz;
 	half3x3 tbn = { In.vTangent.xyz, In.vBiNormal.xyz, In.vNormal.xyz };
+	
+	if (g_bdissolve == true)
+	{
+		half dissolve = g_DissolveTex.Sample(DefaultSampler, In.vUvDepth.xy).r;
+		clip(dissolve - g_dissolvetime);
+	}
 	
 	normal = Normalmapping(normal, tbn);
 	
@@ -331,8 +392,21 @@ PS_OUT PS_MAIN_EARTH_CRYSTAL(PS_IN In)
 	Out.mra.b = ao;
 	Out.mra.a = 1.f;
 	Out.emission = g_color * g_empower * mask.r;
-
 	
+	if (g_bdissolve == true)
+	{
+		half dissolve = g_DissolveTex.Sample(DefaultSampler, In.vUvDepth.xy).r;
+		half amount = dissolve - g_dissolvetime;
+
+		if (g_dissolvetime > 0 && g_dissolvetime < 1)
+		{
+			if (amount < 0.06f)
+			{
+				Out.emission = g_DissolveGrTex.Sample(DefaultSampler, half2(1 - g_dissolvetime, 0)) * 0.5f;
+				Out.diffuse *= Out.emission;
+			}
+		}
+	}
 	return Out;
 }
 
@@ -347,9 +421,10 @@ PS_OUT PS_MAIN_Bronze(PS_IN In)
 	
 	if (g_bdissolve == true)
 	{
-		Dissolve(g_DissolveTex, DefaultSampler, In.vUvDepth.xy, g_dissolvetime);
+		half dissolve = g_DissolveTex.Sample(DefaultSampler, In.vUvDepth.xy).r;
+		clip(dissolve - g_dissolvetime);
+
 	}
-	
 	normal = Normalmapping(normal, tbn);
 	
 	Out.diffuse = diffuse;
@@ -366,13 +441,28 @@ PS_OUT PS_MAIN_Bronze(PS_IN In)
 	Out.mra.b = ao;
 	Out.mra.a = 1.f;
 	Out.emission = g_color * g_empower * omer.b;
+
+	if (g_bdissolve == true)
+	{
+		half dissolve = g_DissolveTex.Sample(DefaultSampler, In.vUvDepth.xy).r;
+		half amount = dissolve - g_dissolvetime;
+
+		if (g_dissolvetime > 0 && g_dissolvetime < 1)
+		{
+			if (amount < 0.06f)
+			{
+				Out.emission = g_DissolveGrTex.Sample(DefaultSampler, half2(1 - g_dissolvetime, 0)) * 0.5f;
+				Out.diffuse *= Out.emission;
+			}
+		}
+	}
 	
 	return Out;
 }
 
 technique11			DefaultTechnique
 {	
-	pass BastionBody //------------------------------------------------------------------------------------0 Top
+	pass BastionBody //------------------------------------------------------------------------------------0 Top Down Body
 	{
 		SetRasterizerState(CullMode_Default);
 		SetDepthStencilState(ZDefault, 0);
@@ -384,7 +474,7 @@ technique11			DefaultTechnique
 		PixelShader = compile ps_5_0 PS_MAIN_Body();
 	}
 
-	pass BastionCloak //------------------------------------------------------------------------------------1 Top
+	pass BastionFur //------------------------------------------------------------------------------------1 Fur
 	{
 		SetRasterizerState(CullMode_Default);	
 		SetDepthStencilState(ZDefault, 0);
@@ -393,10 +483,10 @@ technique11			DefaultTechnique
 		/* 진입점함수를 지정한다. */
 		VertexShader = compile vs_5_0 VS_MAIN_ANIM();
 		GeometryShader = NULL;
-		PixelShader = compile ps_5_0 PS_MAIN_CLOAK();
+		PixelShader = compile ps_5_0 PS_MAIN_FUR();
 	}
 
-	pass BastionFur //------------------------------------------------------------------------------------2 Fur
+	pass BastionCloak //------------------------------------------------------------------------------------2 망토
 	{
 		SetRasterizerState(CullMode_Default);
 		SetDepthStencilState(ZDefault, 0);
@@ -405,7 +495,7 @@ technique11			DefaultTechnique
 		/* 진입점함수를 지정한다. */
 		VertexShader = compile vs_5_0 VS_MAIN_ANIM();
 		GeometryShader = NULL;
-		PixelShader = compile ps_5_0 PS_MAIN_FUR();
+		PixelShader = compile ps_5_0 PS_MAIN_CLOAK();
 	}
 
 	pass ShadowANIM //-----------------------------------------------------------------------------------------3 Anim ShadowMap

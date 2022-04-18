@@ -44,6 +44,7 @@ public:
 	virtual _int LateTick(_double _dDeltaTime) override;
 	virtual HRESULT Render() override;
 	virtual HRESULT	Render_Shadow()  override;
+	virtual HRESULT	Render_Velocity()  override;
 	HRESULT Render_Debug();
 private:
 	HRESULT Ready_Components();
@@ -145,8 +146,9 @@ public: /* For.Execute */
 	CHierarchyNode* Get_ExecutionTargetBone() const;
 
 private:
-	const _int Trace_CameraLook(const _double& _dDeltaTime);
-	const _int Input(const _double& _dDeltaTime);
+	const _int	Trace_CameraLook(const _double& _dDeltaTime);
+	const _int	Input(const _double& _dDeltaTime);
+	RIM			ColorChange_RimCheck(RIM& rimdesc);
 
 private: /* Components */
 	CStateController* m_pStateController = nullptr;

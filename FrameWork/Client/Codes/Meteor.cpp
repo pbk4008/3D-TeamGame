@@ -11,8 +11,12 @@ CMeteor::CMeteor()
 	, m_fRandSpawnTime(0.f)
 	, m_fAccTime(0.f)
 	, m_bStart(false)
+	, m_fAccRotateTime(0.f)
+	, m_fPreY(0.f)
+	, m_fAccGravityTime(0.f)
 {
 	ZeroMemory(&m_vDestination, sizeof(_float4));
+	ZeroMemory(&m_vRandNorm, sizeof(_float4));
 }
 
 CMeteor::CMeteor(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
@@ -25,8 +29,12 @@ CMeteor::CMeteor(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
 	, m_fRandSpawnTime(0.f)
 	, m_fAccTime(0.f)
 	, m_bStart(false)
+	, m_fAccRotateTime(0.f)
+	, m_fPreY(0.f)
+	, m_fAccGravityTime(0.f)
 {
 	ZeroMemory(&m_vDestination, sizeof(_float4));
+	ZeroMemory(&m_vRandNorm, sizeof(_float4));
 }
 
 CMeteor::CMeteor(const CMeteor& rhs)
@@ -40,6 +48,10 @@ CMeteor::CMeteor(const CMeteor& rhs)
 	, m_fRandSpawnTime(rhs.m_fRandSpawnTime)
 	, m_fAccTime(rhs.m_fAccTime)
 	, m_bStart(false)
+	, m_fAccRotateTime(0.f)
+	, m_vRandNorm(rhs.m_vRandNorm)
+	, m_fPreY(0.f)
+	, m_fAccGravityTime(0.f)
 {
 	Safe_AddRef(m_pStaticModel);
 	Safe_AddRef(m_pAnimModel);
@@ -65,8 +77,6 @@ HRESULT CMeteor::NativeConstruct(const _uint _iSceneID, void* _pArg)
 		return E_FAIL;
 
 	m_pAnimModel->SetUp_AnimationIndex(0);
-	m_fSpeed = 1000.f;
-
 
 	return S_OK;
 }
@@ -86,25 +96,47 @@ _int CMeteor::Tick(_double _dDeltaTime)
 			return 0;
 	}
 	m_pCollider->Tick(_dDeltaTime);
+	m_fAccRotateTime += (_float)_dDeltaTime;
+	m_pCollider->Add_Torque(XMLoadFloat4(&m_vRandNorm), _dDeltaTime);
 
 	_vector vPos = m_pTransform->Get_State(CTransform::STATE_POSITION);
 	_float fY = XMVectorGetY(vPos);
-
+	if (fY > 0)
+	{
+		if (m_fPreY < fY)
+			m_fPreY = fY;
+		else
+		{
+			_vector vPow = XMVectorSet(0.f,_dDeltaTime*-50 ,0.f,0.f);
+			m_pCollider->Add_Force(vPow);
+			m_fAccGravityTime += (_float)_dDeltaTime;
+			if (m_fAccGravityTime > 0.5f)
+				m_fAccGravityTime = 0.f;
+		}
+	}
 	if (fY < -30.f)
-		m_bRemove = true;
+	{
+		m_pCollider->Reset_Power();
+		setActive(false);
+		m_fAccGravityTime = 0.f;
+	}
 	
 	if (m_bRemoveCheck)
 	{
-		m_pTransform->Scaling(XMVectorSet(0.3f, 0.3f, 0.3f, 0.f));
+		m_pTransform->Scaling(XMVectorSet(0.15f, 0.15f, 0.15f, 0.f));
+		m_pTransform->SetUp_Rotation(_float3(0.f, 0.f, 0.f));
 		m_pAnimModel->Update_CombinedTransformationMatrix(_dDeltaTime*3.f);
 		vector<CAnimation*> pVecAnim = m_pAnimModel->Get_Animations();
 
 		if (pVecAnim[0]->Is_Finished())
 		{
+			m_pTransform->Scale_One();
 			pVecAnim[0]->Reset_Animation();
+			m_pCollider->Reset_Power();
+			m_fAccGravityTime = 0.f;
 			setActive(false);
 			m_bStart = false;
-			//m_bRemove = true;
+			m_bRemoveCheck = false;
 		}
 	}
 
@@ -171,12 +203,12 @@ HRESULT CMeteor::Ready_Component()
 
 	m_pTransform->Set_TransformDesc(tDesc);
 
-	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Model_Healer_Meteor_Static", L"Meteor_Static", (CComponent**)&m_pStaticModel)))
+	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Model_Meteor_Static", L"Meteor_Static", (CComponent**)&m_pStaticModel)))
 		return E_FAIL;
 	_matrix matIdnetity = XMMatrixIdentity();
 	m_pStaticModel->Set_PivotMatrix(matIdnetity);
 
-	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Model_Healer_Meteor_Anim", L"Meteor_Anim", (CComponent**)&m_pAnimModel)))
+	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Model_Meteor_Anim", L"Meteor_Anim", (CComponent**)&m_pAnimModel)))
 		return E_FAIL;
 	//_matrix matScale = XMMatrixScaling(0.5f, 0.5f, 0.5f);
 	//m_pAnimModel->Set_PivotMatrix(matScale);
@@ -184,11 +216,11 @@ HRESULT CMeteor::Ready_Component()
 
 	CSphereCollider::DESC tColliderDesc;
 
-	tColliderDesc.fRadius = 1.5f;
+	tColliderDesc.fRadius = 2.f;
 	tColliderDesc.tColliderDesc.eRigidType = ERigidType::Dynamic;
 	tColliderDesc.tColliderDesc.isTrigger = true;
 	tColliderDesc.tColliderDesc.isGravity = true;
-	tColliderDesc.tColliderDesc.fMass = 10.f;
+	tColliderDesc.tColliderDesc.fMass = 1.f;
 	tColliderDesc.tColliderDesc.isVisualization = true;
 	tColliderDesc.tColliderDesc.isSceneQuery = true;
 	tColliderDesc.tColliderDesc.pGameObject = this;
@@ -196,11 +228,15 @@ HRESULT CMeteor::Ready_Component()
 	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_SphereCollider", L"Collider", (CComponent**)&m_pCollider, &tColliderDesc)))
 		return E_FAIL;
 
+	m_pCollider->setShapeLayer((_uint)ELayer::Meteor);
+	m_pCollider->Remove_ActorFromScene();
+
 	return S_OK;
 }
 
 void CMeteor::OnTriggerEnter(CCollision& collision)
 {
+	cout << "collision" << endl;
 	if (!m_bRemoveCheck)
 	{
 		m_bRemoveCheck = true;
@@ -210,38 +246,29 @@ void CMeteor::OnTriggerEnter(CCollision& collision)
 		CGameObject* pHitObject = nullptr;
 		tOverlapDesc.ppOutHitObject = &pHitObject;
 		tOverlapDesc.filterData.flags = PxQueryFlag::eDYNAMIC;
+		tOverlapDesc.layerMask = 1<<(_uint)ELayer::Player;
 		if (g_pGameInstance->Overlap(tOverlapDesc))
 		{
-			if (tOverlapDesc.vecHitObjects.empty()
-				|| !Find_HitPlayer(&tOverlapDesc.vecHitObjects))
+			if (tOverlapDesc.vecHitObjects.empty())
 				return;
 
-			_uint iSize = (_uint)tOverlapDesc.vecHitObjects.size();
-			for (_uint i = 0; i < iSize; ++i)
-			{
-				CActor* pActor = static_cast<CActor*>(tOverlapDesc.vecHitObjects[i]);
-				_uint iTag = tOverlapDesc.vecHitObjects[i]->getTag();
-				if (iTag == (_uint)GAMEOBJECT::PLAYER)
-				{
-					ATTACKDESC tAttackDesc;
+			CActor* pActor = static_cast<CActor*>(tOverlapDesc.vecHitObjects[0]);
+			ATTACKDESC tAttackDesc;
 
-					tAttackDesc.pOwner = this;
-					tAttackDesc.pHitObject = pActor;
+			tAttackDesc.pOwner = this;
+			tAttackDesc.pHitObject = pActor;
 
-					tAttackDesc.iLevel = 3;
-					tAttackDesc.fDamage = 15.f;
+			tAttackDesc.iLevel = 3;
+			tAttackDesc.fDamage = 15.f;
 
-					pActor->Hit(tAttackDesc);
-					return;
-				}
-				else
-					continue;
-			}
+			pActor->Hit(tAttackDesc);
 		}
 	}
 }
 _int CMeteor::Move(_fvector vPos)
 {	
+	m_pCollider->Add_ActorToScene();
+	m_pCollider->Reset_Power();
 	m_pTransform->Set_State(CTransform::STATE_POSITION, vPos);
 	XMStoreFloat4(&m_vDestination, g_pObserver->Get_PlayerPos());
 
@@ -251,19 +278,31 @@ _int CMeteor::Move(_fvector vPos)
 	_vector vTmp = XMVectorSetY(vPosition, XMVectorGetY(vDest));
 	_vector vDir = vDest - vTmp;
 	vDir = XMVector3Normalize(vDir);
+
 	_vector vUp = XMVectorSet(0.f, 1.f, 0.f, 0.f);
 
 	_vector vTmpLook = XMVector3Cross(vDir, vUp);
-	_matrix matRot=XMMatrixRotationAxis(vTmpLook, XMConvertToRadians(60.f));
+	_matrix matRot=XMMatrixRotationAxis(vTmpLook, XMConvertToRadians(70.f));
 	
 	vDir=XMVector3TransformNormal(vDir, matRot);
 	//_float fLen = XMVectorGetX(XMVector3Length(vDir));
+	_float fDist=g_pObserver->Get_Dist(vPos);
 
-	vDir *= m_fSpeed;
+	m_fSpeed = 0.8f*fDist;
+
+	_float fRandSpeed = (_float)MathUtils::ReliableRandom(-1.0, 3.0);
+	fRandSpeed += m_fSpeed;
+	vDir *= fRandSpeed;
+
 	m_pCollider->Add_Force(vDir);
 
-	m_fRandSpawnTime = MathUtils::ReliableRandom(1.f, 3.f);
+	m_fRandSpawnTime = (_float)MathUtils::ReliableRandom(1.f, 3.f);
 
+	_float fNormX = MathUtils::ReliableRandom(-1.0, 1.0);
+	_float fNormY = MathUtils::ReliableRandom(-1.0, 1.0);
+	_float fNormZ = MathUtils::ReliableRandom(-1.0, 1.0);
+
+	m_vRandNorm = _float4(fNormX, fNormY, fNormZ,0.f);
 	return _int();
 }
 

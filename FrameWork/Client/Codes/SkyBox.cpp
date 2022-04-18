@@ -80,6 +80,7 @@ HRESULT CSkyBox::SetUp_Components()
 	if (FAILED(__super::SetUp_Components((_uint)SCENEID::SCENE_STATIC, TEXT("VIBuffer_Cube"), TEXT("Com_VIBuffer"), (CComponent**)&m_pVIBufferCom))) return E_FAIL;
 
 	m_pTexture = g_pGameInstance->Clone_Component<CTexture>(0, L"Proto_Component_Texture");
+
 	if(m_iSceneID == (_uint)SCENEID::SCENE_STAGE1)
 		m_pTexture->Change_Texture(L"Sky_Texture1");
 	else if(m_iSceneID == (_uint)SCENEID::SCENE_STAGE2)

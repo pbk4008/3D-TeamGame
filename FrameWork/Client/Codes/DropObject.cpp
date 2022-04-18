@@ -16,7 +16,6 @@ CDropObject::CDropObject(const CDropObject& _rhs)
 	:CInteractableObject(_rhs)
 	, m_pSplineCurve(_rhs.m_pSplineCurve)
 {
-	//Safe_AddRef(m_pModel);
 	m_pInventoryData = g_pDataManager->GET_DATA(CInventoryData, L"InventoryData");
 }
 
@@ -309,9 +308,9 @@ CGameObject* CDropObject::Clone(const _uint _iSceneID, void* _pArg)
 
 void CDropObject::Free()
 {
+	__super::Free();
+
 	Safe_Delete(m_pSplineCurve);
-	Safe_Release(m_pModel);
 	m_pInventoryData = nullptr;
 
-	__super::Free();
 }

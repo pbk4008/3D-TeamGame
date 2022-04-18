@@ -227,7 +227,6 @@ technique11			DefaultTechnique
 		SetRasterizerState(CullMode_Default);
 		SetDepthStencilState(ZDefault, 0);
 
-
 		/* 진입점함수를 지정한다. */
 		VertexShader = compile vs_5_0 VS_MAIN();
 		GeometryShader = compile gs_5_0 GS_MAIN();
