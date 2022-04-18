@@ -663,6 +663,12 @@ void CMonster_EarthAberrant::Parry(const PARRYDESC& _tParryDesc)
 	m_fGroggyGauge += (m_fMaxGroggyGauge - m_fGroggyGauge);
 }
 
+void CMonster_EarthAberrant::Execution()
+{
+	m_pAnimatorCom->Change_AnyEntryAnimation(ATTACK_EXECUTION);
+	m_pCharacterController->Remove_CCT();
+}
+
 void CMonster_EarthAberrant::Set_IsAttack(const _bool _isAttack)
 {
 	m_IsAttack = _isAttack;
@@ -674,6 +680,11 @@ void CMonster_EarthAberrant::Set_Remove(_bool bCheck)
 {
 	m_bRemove = bCheck;
 	m_pPanel->Set_UIRemove(bCheck);
+}
+
+void CMonster_EarthAberrant::Set_FootPosition(const _float3& _vPos)
+{
+	m_pCharacterController->setFootPosition(_vPos);
 }
 
 CMonster_EarthAberrant* CMonster_EarthAberrant::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
@@ -700,11 +711,11 @@ CGameObject* CMonster_EarthAberrant::Clone(const _uint _iSceneID, void* _pArg)
 
 void CMonster_EarthAberrant::Free()
 {
+	__super::Free();
+
 	Safe_Release(m_pPanel);
 	Safe_Release(m_pCharacterController);
 	Safe_Release(m_pWeapon);
 	Safe_Release(m_pStateController);
 	Safe_Release(m_pAnimatorCom);
-
-	__super::Free();
 }

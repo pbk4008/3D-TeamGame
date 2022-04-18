@@ -10,7 +10,11 @@ CMeshEffect::CMeshEffect(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceCo
 
 CMeshEffect::CMeshEffect(const CMeshEffect& _rhs)
 	: CGameObject(_rhs)
+	, m_pMaterial(_rhs.m_pMaterial)
+	, m_pTexture(_rhs.m_pTexture)
 {
+	Safe_AddRef(m_pMaterial);
+	Safe_AddRef(m_pTexture);
 }
 
 HRESULT CMeshEffect::NativeConstruct_Prototype()
@@ -18,26 +22,26 @@ HRESULT CMeshEffect::NativeConstruct_Prototype()
 	if (FAILED(__super::NativeConstruct_Prototype()))
 		return E_FAIL;
 
-
-	CMaterial* pMtrl = nullptr;
-	CTexture* pTexture = nullptr;
-	pMtrl = CMaterial::Create(m_pDevice, m_pDeviceContext, L"Mtrl_MeshEffect", L"../../Reference/ShaderFile/Shader_StaticMesh.hlsl", CMaterial::EType::Static);
-	pTexture = CTexture::Create(m_pDevice, m_pDeviceContext, L"../Bin/Resources/Mesh/Effect/T_Hexgrid.dds", 1);
-	pMtrl->Set_Texture("g_DiffuseTexture", TEXTURETYPE::TEX_DIFFUSE, pTexture, 0);
-	g_pGameInstance->Add_Material(L"Mtrl_MeshEffect", pMtrl);
+	m_pTexture = g_pGameInstance->Clone_Component<CTexture>(0, L"Proto_Component_Texture");
+	if (!m_pTexture)
+		return E_FAIL;
 
 	return S_OK;
 }
 
 HRESULT CMeshEffect::NativeConstruct(_uint _iSceneID, void* _pArg)
 {
+	DESC tDesc;
 	if (_pArg)
 	{
-		m_tDesc = *static_cast<DESC*>(_pArg);
+		tDesc = *static_cast<DESC*>(_pArg);
+		m_fLifeTime = tDesc.fLifeTime;
 	}
 
 	if (FAILED(__super::NativeConstruct(_iSceneID, _pArg)))
 		return E_FAIL;
+
+	m_pTransform->Set_State(CTransform::STATE_POSITION, XMVectorSetW(XMLoadFloat3(&tDesc.vPosition), 1.f));
 
 	return S_OK;
 }
@@ -57,8 +61,6 @@ _int CMeshEffect::LateTick(_double _dDeltaTime)
 	if (NO_EVENT != iProcess)
 		return iProcess;
 
-	m_pRenderer->Add_RenderGroup(CRenderer::RENDER_ALPHA, this);
-
 	return _int();
 }
 
@@ -67,44 +69,42 @@ HRESULT CMeshEffect::Render()
 	if (FAILED(__super::Render()))
 		return E_FAIL;
 
+	// 쉐이더에 행렬 넘기기
+	_matrix smatWorld, smatView, smatProj;
+	wstring wstrCamTag = g_pGameInstance->Get_BaseCameraTag();
+	smatWorld = XMMatrixTranspose(m_pTransform->Get_WorldMatrix());
+	smatView = XMMatrixTranspose(g_pGameInstance->Get_Transform(wstrCamTag, TRANSFORMSTATEMATRIX::D3DTS_VIEW));
+	smatProj = XMMatrixTranspose(g_pGameInstance->Get_Transform(wstrCamTag, TRANSFORMSTATEMATRIX::D3DTS_PROJECTION));
+	m_pModel->SetUp_ValueOnShader("g_WorldMatrix", &smatWorld, sizeof(_matrix));
+	m_pModel->SetUp_ValueOnShader("g_ViewMatrix", &smatView, sizeof(_matrix));
+	m_pModel->SetUp_ValueOnShader("g_ProjMatrix", &smatProj, sizeof(_matrix));
+	// 쉐이더에 이펙트에 필요한 값들 넘기기
+	// 시간
+	m_pModel->SetUp_ValueOnShader("g_fLifeTime", &m_fLifeTime, sizeof(_float));
+	m_pModel->SetUp_ValueOnShader("g_fAccTime", &m_fAccTime, sizeof(_float));
+	// Alpha
+	m_pModel->SetUp_ValueOnShader("g_fAlpha", &m_fAlpha, sizeof(_float));
+	// UV
+	m_pModel->SetUp_ValueOnShader("g_vPlusUV", &m_vPlusUV, sizeof(_float2));
+	// X
+	m_pModel->SetUp_ValueOnShader("g_isFlowX", &m_isFlowX, sizeof(_bool));
+	m_pModel->SetUp_ValueOnShader("g_fFlowSpeedX", &m_fFlowSpeedX, sizeof(_float));
+	// Y
+	m_pModel->SetUp_ValueOnShader("g_isFlowX", &m_isFlowY, sizeof(_bool));
+	m_pModel->SetUp_ValueOnShader("g_fFlowSpeedY", &m_fFlowSpeedY, sizeof(_float));
+	//Color
+	m_pModel->SetUp_ValueOnShader("g_isCustomColor", &m_isCustomColor, sizeof(_float));
+	m_pModel->SetUp_ValueOnShader("g_vColor", &m_vColor, sizeof(_float));
+
+
 	return S_OK;
-}
-
-HRESULT CMeshEffect::Ready_Components()
-{
-	m_pTransform->Set_State(CTransform::STATE_POSITION, XMVectorSetW(XMLoadFloat3(&m_tDesc.vPosition), 1.f));
-
-	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Model_MeshEffect", L"Model", (CComponent**)&m_pModel)))
-		return E_FAIL;
-
-
-
-	return S_OK;
-}
-
-CMeshEffect* CMeshEffect::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
-{
-	CMeshEffect* pInstance = new CMeshEffect(_pDevice, _pDeviceContext);
-	if (FAILED(pInstance->NativeConstruct_Prototype()))
-	{
-		MSGBOX("Failed to Creating CMeshEffect");
-		Safe_Release(pInstance);
-	}
-	return pInstance;
-}
-
-CGameObject* CMeshEffect::Clone(const _uint _iSceneID, void* _pArg)
-{
-	CMeshEffect* pInstance = new CMeshEffect(*this);
-	if (FAILED(pInstance->NativeConstruct(_iSceneID, _pArg)))
-	{
-		MSGBOX("Failed to Creating Clone CMonster_Crawler");
-		Safe_Release(pInstance);
-	}
-	return pInstance;
 }
 
 void CMeshEffect::Free()
 {
 	__super::Free();
+
+	Safe_Release(m_pModel);
+	Safe_Release(m_pMaterial);
+	Safe_Release(m_pTexture);
 }

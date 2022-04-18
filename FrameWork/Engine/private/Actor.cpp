@@ -230,6 +230,10 @@ void CActor::Set_AttackDesc(const ATTACKDESC& _tAttackDesc)
 	m_tAttackDesc = _tAttackDesc;
 }
 
+void CActor::Set_FootPosition(const _float3& _vPos)
+{
+}
+
 void CActor::RimlightCheck(_bool check)
 {
 	m_rimcheck = check;
@@ -270,8 +274,17 @@ void CActor::Parry(const PARRYDESC& _tParryDesc)
 {
 }
 
+void CActor::Execution()
+{
+}
+
+void CActor::Execution(CActor* _pOther, CHierarchyNode* _pFixedBone)
+{
+}
+
 void CActor::Free()
 {
-	Safe_Release(m_pModel);
 	CGameObject::Free();
+	Safe_Release(m_pModel);
+	Safe_Release(m_dissolveTex);
 }

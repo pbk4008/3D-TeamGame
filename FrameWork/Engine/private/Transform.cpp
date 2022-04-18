@@ -186,6 +186,9 @@ void CTransform::Face_Target(_fvector vTargetPos)
 
 void CTransform::Rotation_Axis(_fvector vAxis, _double TimeDelta)
 {
+	if (XMVector3Equal(vAxis, _vector{ 0.f, 0.f, 0.f, 0.f }))
+		return;
+
 	_matrix		RotationMatrix = XMMatrixRotationAxis(vAxis, m_TransformDesc.fRotationPerSec * (_float)TimeDelta );
 
 	_vector		vRight = Get_State(CTransform::STATE_RIGHT);

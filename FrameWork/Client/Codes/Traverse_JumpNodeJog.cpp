@@ -54,24 +54,7 @@ _int CTraverse_JumpNodeJog::Tick(const _double& _dDeltaTime)
 
 	if (m_iCutIndex < iCurKeyFrameIndex)
 	{
-		if (m_pSilvermane->IsEquipWeapon())
-		{
-			switch (m_pSilvermane->Get_WeaponType())
-			{
-			case CWeapon::EType::Sword_1H:
-				if (FAILED(m_pStateController->Change_State(L"1H_SwordIdle")))
-					return E_FAIL;
-				break;
-			case CWeapon::EType::Hammer_2H:
-				if (FAILED(m_pStateController->Change_State(L"2H_HammerIdle")))
-					return E_FAIL;
-				break;
-			}
-			return STATE_CHANGE;
-		}
-		if (FAILED(m_pStateController->Change_State(L"Idle")))
-			return E_FAIL;
-		return STATE_CHANGE;
+		return ToIdle();
 	}
 
 	return _int();

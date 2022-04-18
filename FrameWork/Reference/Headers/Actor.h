@@ -59,6 +59,8 @@ public:
 	void Set_AttackDesc_Level(_uint iLevel) { m_tAttackDesc.iLevel = iLevel; }
 	void Set_AttackDesc_Dir(const EAttackDir _eDir) { m_tAttackDesc.eDir = _eDir; }
 
+	virtual void Set_FootPosition(const _float3& _vPos);
+
 	void RimlightCheck(_bool check);
 	_bool GetRimCheck() { return m_rimcheck; }
 	void SetRimIntensity(_float time);
@@ -69,6 +71,8 @@ public:
 public:
 	virtual void Hit(const ATTACKDESC& _tAttackDesc);
 	virtual void Parry(const PARRYDESC& _tParryDesc);
+	virtual void Execution();
+	virtual void Execution(CActor* _pOther, CHierarchyNode* _pFixedBone);
 
 protected:
 	virtual void Free() override;
@@ -79,6 +83,7 @@ protected:
 	_bool m_bGroggy; //스턴상태인지 아닌지
 	_bool m_bUIShow = false; //몬스터머리위에 ui보이는상태인지아닌지
 	_bool m_isParry = false; // 패링상태 체크
+	_bool m_isExecution = false; // 처형당하는 중인지 체크
 
 	_float m_fSpeed;//이동 속도
 	_float m_fMaxHp;//최대 체력

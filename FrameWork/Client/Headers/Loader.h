@@ -44,6 +44,9 @@ private:
 	HRESULT Set_Stage2_Prototype();
 	HRESULT Load_Stage2_Object();
 private:
+	HRESULT Load_TrailEffects();
+	HRESULT Load_MeshEffects();
+private:
 	//쓰레드에 로딩할 파일 추가(컴포넌트 태그, 로딩할 파일 패스, 타입(0 = Static, 1 = Ainm, 2 = Instancing_Static)
 	void Add_LoadingThread(const wstring& pComponetTag, const wstring& pFilePath, _uint iType);
 public:

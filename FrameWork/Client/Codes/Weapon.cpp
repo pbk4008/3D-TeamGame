@@ -265,8 +265,8 @@ _fmatrix CWeapon::Remove_Scale(_fmatrix matTransform)
 
 void CWeapon::Free()
 {
-	Safe_Release(m_dissolveTex);
 	Safe_Release(m_pModel);
+	Safe_Release(m_dissolveTex);
 	Safe_Release(m_pLocalTransform);
 
 	__super::Free();

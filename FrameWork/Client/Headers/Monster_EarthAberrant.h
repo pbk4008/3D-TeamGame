@@ -43,10 +43,12 @@ public:
 
 	virtual void Hit(const ATTACKDESC& _tAttackDesc) override;
 	virtual void Parry(const PARRYDESC& _tParryDesc) override;
+	virtual void Execution() override;
 
 public:
 	void Set_IsAttack(const _bool _isAttack);
 	virtual void Set_Remove(_bool bCheck) override;
+	virtual void Set_FootPosition(const _float3& _vPos) override;
 
 private:
 	CAnimator* m_pAnimatorCom = nullptr;
