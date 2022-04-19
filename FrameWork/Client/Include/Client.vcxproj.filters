@@ -793,9 +793,6 @@
     <Filter Include="02.GameObject\03.Character\03.CinemaActor">
       <UniqueIdentifier>{2303d924-8d8e-4580-829a-b12a5244fd00}</UniqueIdentifier>
     </Filter>
-    <Filter Include="100.ShaderFiles\01.Environment\02.Actor">
-      <UniqueIdentifier>{01f09cd2-dcfc-4f2c-a5da-56671ab0b823}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObject\04.Effect\00.Effect_Image\01.Hammer_Dust">
       <UniqueIdentifier>{4de6e516-ad86-47ae-a1e1-49d04baa93c3}</UniqueIdentifier>
     </Filter>
@@ -846,7 +843,7 @@
     </Filter>
     <Filter Include="03.System\07.Scenematic\01.Stage1\Cinema1_2">
       <UniqueIdentifier>{efa2a259-325c-4afc-a8f7-30014b40af6a}</UniqueIdentifier>
-     </Filter>
+    </Filter>
     <Filter Include="02.GameObject\04.Effect\00.Particle\07.Effect_FloatingUp">
       <UniqueIdentifier>{71658c88-0735-4f35-a05b-0508b6453715}</UniqueIdentifier>
     </Filter>
@@ -855,12 +852,18 @@
     </Filter>
     <Filter Include="02.GameObject\04.Effect\00.Particle\06.Effect_Guard_다른이펙트로바꾸면될듯">
       <UniqueIdentifier>{a0e663ef-dcdc-4443-8e69-2f05e2663463}</UniqueIdentifier>
-	</Filter>
+    </Filter>
     <Filter Include="02.GameObject\04.Effect\02.MeshEffect">
       <UniqueIdentifier>{d0ea5fcc-900a-4262-9b01-208f5ce4b2be}</UniqueIdentifier>
     </Filter>
     <Filter Include="02.GameObject\03.Character\00.Player\00.Silvermane\State\Execution">
       <UniqueIdentifier>{afe0def3-27c1-4308-948a-afc5940899dd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\04.Effect\02.MeshEffect\00.ExplosionRock">
+      <UniqueIdentifier>{bea67d0a-4217-4e46-a065-e0f07a483482}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="100.ShaderFiles\02.Actor">
+      <UniqueIdentifier>{01f09cd2-dcfc-4f2c-a5da-56671ab0b823}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -1755,9 +1758,6 @@
     <ClInclude Include="..\Headers\Effect_Falling_Leaf.h">
       <Filter>02.GameObject\04.Effect\00.Particle\01.Effect_MapLeaf</Filter>
     </ClInclude>
-    <ClInclude Include="..\Codes\Meteor.h">
-      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Healer\Meteor</Filter>
-    </ClInclude>
     <ClInclude Include="..\Headers\Potal.h">
       <Filter>02.GameObject\02.Map\03.Potal</Filter>
     </ClInclude>
@@ -1934,6 +1934,12 @@
     </ClInclude>
     <ClInclude Include="..\Headers\Cinema1_2.h">
       <Filter>03.System\07.Scenematic\01.Stage1\Cinema1_2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Explosion_Rock.h">
+      <Filter>02.GameObject\04.Effect\02.MeshEffect\00.ExplosionRock</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Meteor.h">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Healer\Meteor</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -2975,6 +2981,9 @@
     <ClCompile Include="..\Codes\Cinema1_2.cpp">
       <Filter>03.System\07.Scenematic\01.Stage1\Cinema1_2</Filter>
     </ClCompile>
+    <ClCompile Include="..\Codes\Explosion_Rock.cpp">
+      <Filter>02.GameObject\04.Effect\02.MeshEffect\00.ExplosionRock</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -3048,22 +3057,22 @@
       <Filter>100.ShaderFiles\99.Other</Filter>
     </FxCompile>
     <FxCompile Include="..\bin\ShaderFile\Shader_Monster.hlsl">
-      <Filter>100.ShaderFiles\01.Environment\02.Actor</Filter>
+      <Filter>100.ShaderFiles\02.Actor</Filter>
     </FxCompile>
     <FxCompile Include="..\bin\ShaderFile\Shader_Panel_UI.hlsl">
       <Filter>100.ShaderFiles\04.UI</Filter>
     </FxCompile>
     <FxCompile Include="..\bin\ShaderFile\Shader_Shield.hlsl">
-      <Filter>100.ShaderFiles\01.Environment\02.Actor</Filter>
+      <Filter>100.ShaderFiles\02.Actor</Filter>
     </FxCompile>
     <FxCompile Include="..\bin\ShaderFile\Shader_StaticMesh.hlsl">
       <Filter>100.ShaderFiles\99.Other</Filter>
     </FxCompile>
     <FxCompile Include="..\bin\ShaderFile\Shader_Weapon.hlsl">
-      <Filter>100.ShaderFiles\01.Environment\02.Actor</Filter>
+      <Filter>100.ShaderFiles\02.Actor</Filter>
     </FxCompile>
     <FxCompile Include="..\bin\ShaderFile\Shader_SilverMane.hlsl">
-      <Filter>100.ShaderFiles\01.Environment\02.Actor</Filter>
+      <Filter>100.ShaderFiles\02.Actor</Filter>
     </FxCompile>
     <FxCompile Include="..\bin\ShaderFile\Shader_Particle.hlsl">
       <Filter>100.ShaderFiles\03.Effect</Filter>
@@ -3108,8 +3117,8 @@
       <Filter>100.ShaderFiles\03.Effect</Filter>
     </FxCompile>
     <FxCompile Include="..\bin\ShaderFile\Shader_Particle_Alpha.hlsl">
-		<Filter>100.ShaderFiles\03.Effect</Filter>
-	</FxCompile>
+      <Filter>100.ShaderFiles\03.Effect</Filter>
+    </FxCompile>
     <FxCompile Include="..\bin\ShaderFile\Shader_MeshEffect.hlsl">
       <Filter>100.ShaderFiles\03.Effect</Filter>
     </FxCompile>

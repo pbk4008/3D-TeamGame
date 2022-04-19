@@ -17,6 +17,7 @@
 #include "Effect_Falling_Leaf.h"
 #include "Effect_FloatingUp.h"
 #include "Effect_Hammer_Dust.h"
+#include "Explosion_Rock.h"
 
 
 #include "UI_Ingame.h"
@@ -106,8 +107,8 @@ HRESULT CStage1::NativeConstruct()
 	if (FAILED(Ready_Player(L"Layer_Silvermane")))
 		return E_FAIL;
 
-	if (FAILED(Ready_MapObject()))
-		return E_FAIL;
+	//if (FAILED(Ready_MapObject()))
+	//	return E_FAIL;
 
 	//if (FAILED(Ready_TriggerSystem(L"../bin/SaveData/Trigger/MonsterSpawnTrigger.dat")))
 	//	return E_FAIL;
@@ -115,14 +116,14 @@ HRESULT CStage1::NativeConstruct()
 	if (FAILED(Ready_Data_UI(L"../bin/SaveData/UI/UI.dat")))
 		return E_FAIL;
 
-	//if (FAILED(Ready_Data_Effect()))
-	//	return E_FAIL;
+	if (FAILED(Ready_Data_Effect()))
+		return E_FAIL;
 
 	if (FAILED(Ready_UI(L"Layer_UI")))
 		return E_FAIL;
 
-	//if (FAILED(Ready_Treasure_Chest()))
-	//	return E_FAIL;
+	if (FAILED(Ready_Treasure_Chest()))
+		return E_FAIL;
 
 	if (FAILED(Ready_GameManager()))
 		return E_FAIL;
@@ -132,8 +133,8 @@ HRESULT CStage1::NativeConstruct()
 	//if (FAILED(Ready_Meteor()))
 	//	return E_FAIL;
 
-	if (FAILED(Ready_Cinema()))
-		return E_FAIL;
+	//if (FAILED(Ready_Cinema()))
+	//	return E_FAIL;
 
 	//if (FAILED(Ready_Boss(L"Layer_Boss")))
 	//	return E_FAIL;
@@ -147,7 +148,8 @@ HRESULT CStage1::NativeConstruct()
 	//if (FAILED(Ready_Portal()))
 	//	return E_FAIL;
 
-	g_pGameInstance->PlayBGM(L"Stage1_BGM");
+
+	//g_pGameInstance->PlayBGM(L"Stage1_BGM");
 
 	return S_OK;
 }
@@ -239,33 +241,27 @@ _int CStage1::Tick(_double TimeDelta)
 				m_pTriggerSystem->Check_Clear();
 		}
 
-		//CBoss_Bastion_Judicator* pBoss = (CBoss_Bastion_Judicator*)g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Layer_Boss")->front();
-		//if (nullptr != pBoss)
-		//{
-		//	if (true == pBoss->Get_Dead())
-		//	{
-		//		if (FAILED(g_pGameInstance->Open_Level((_uint)SCENEID::SCENE_LOADING, CLoading::Create(m_pDevice, m_pDeviceContext, SCENEID::SCENE_STAGE2))))
-		//			return -1;
-		//		return 0;
-		//	}
-		//}
+		CBoss_Bastion_Judicator* pBoss = (CBoss_Bastion_Judicator*)g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Layer_Boss")->front();
+		if (nullptr != pBoss)
+		{
+			if (true == pBoss->Get_Dead())
+			{
+				if (FAILED(g_pGameInstance->Open_Level((_uint)SCENEID::SCENE_LOADING, CLoading::Create(m_pDevice, m_pDeviceContext, SCENEID::SCENE_STAGE2))))
+					return -1;
+				return 0;
+			}
+		}
 	}
 
 #pragma region Using Debug
 	_float3 fPos = { 0.f,5.f,20.f };
+
 	if (g_pGameInstance->getkeyDown(DIK_NUMPAD0))
 	{
-		CMonster_Crawler* pMonster = nullptr;
-		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Test", L"Proto_GameObject_Monster_Crawler", &fPos, (CGameObject**)&pMonster)))
+		CMonster_EarthAberrant* pMonster = nullptr;
+		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Test", L"Proto_GameObject_Boss_Bastion", &fPos, (CGameObject**)&pMonster)))
 			return -1;
 	}
-
-	//if (g_pGameInstance->getkeyDown(DIK_NUMPAD0))
-	//{
-	//	CMonster_EarthAberrant* pMonster = nullptr;
-	//	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Test", L"Proto_GameObject_Boss_Bastion", &fPos, (CGameObject**)&pMonster)))
-	//		return -1;
-	//}
 	
 	//if (g_pGameInstance->getkeyDown(DIK_NUMPAD0))
 	//{
@@ -327,12 +323,13 @@ _int CStage1::Tick(_double TimeDelta)
 	//g_pDropManager->Tick();
 	m_pIndicatorManager->Active_Indicator();
 
-	/*For Cinema*/
-	if (g_pGameInstance->getkeyDown(DIK_END))
-		m_pScenemaManager->Active_Scenema((_uint)CINEMA_INDEX::CINEMA1_2);
+	///*For Cinema*/
+	//if (g_pGameInstance->getkeyDown(DIK_END))
+	//	m_pScenemaManager->Active_Scenema((_uint)CINEMA_INDEX::CINEMA1_2);
 
 
-	m_pScenemaManager->Tick(TimeDelta);
+	//m_pScenemaManager->Tick(TimeDelta);
+
 	//if (m_pCinema && m_pCinema->Get_Active())
 	//{
 	//	m_pCinema->Tick(TimeDelta);
@@ -351,7 +348,7 @@ _int CStage1::Tick(_double TimeDelta)
 
 _int CStage1::LateTick(_double TimeDelta)
 {
-	m_pScenemaManager->LateTick(TimeDelta);
+	//m_pScenemaManager->LateTick(TimeDelta);
 	return _int();
 }
 
@@ -647,7 +644,7 @@ HRESULT CStage1::Ready_GameManager(void)
 	//	return E_FAIL;
 
 	m_pIndicatorManager = GET_INSTANCE(CIndicator_Manager);
-	m_pScenemaManager = GET_INSTANCE(CScenematicManager);
+	//m_pScenemaManager = GET_INSTANCE(CScenematicManager);
 
 
 	return S_OK;
@@ -858,6 +855,8 @@ HRESULT CStage1::Ready_Data_Effect()
 	g_pGameInstance->LoadFile<CEffect_HitParticle::EF_PAR_HIT_DESC>(vecHitParticle, L"../bin/SaveData/Effect/Effect_Hit_Ground.dat");
 
 	FullName = L"Proto_GameObject_Effect_Explosion";
+	vecHitParticle[0].ParticleColor = { 0.3f,0.5f,1.f, 1.f };
+	vecHitParticle[0].Power = 2.5f;
 
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Hit_Ground", FullName, &vecHitParticle[0], (CGameObject**)&pEffect)))
 	{
@@ -988,43 +987,65 @@ HRESULT CStage1::Ready_Data_Effect()
 		MSGBOX("Falild to Add_Effect_Eat_Item in CStage1::Ready_Effect()");
 		return E_FAIL;
 	}
-#pragma endregion
 
-#pragma region 이펙트매니저에 안들어가는것들
+	//Explosion Rock 
+	CExplosion_Rock* pObj = nullptr;
+	FullName = L"Proto_GameObject_Explosion_Rock";
 
-	//fire
-	CEffect_Env_Fire::EFFECTDESC Desc;
-	_tcscpy_s(Desc.TextureTag, L"Env_Fire");
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_Explosion_Rock_Up", FullName, nullptr, (CGameObject**)&pObj)))
+	{
+		MSGBOX("Failed to Creating Effect_Explosion Rock_Up in CStage1::Ready_Effect()");
+		return E_FAIL;
+	}
+	if (FAILED(g_pGameInstance->Add_Effect((_uint)SCENEID::SCENE_STATIC, L"Layer_Explosion_Rock_Up", pObj, 10)))
+	{
+		MSGBOX("Falild to Add_Effect_Explosion ROck in CStage1::Ready_Effect()");
+		return E_FAIL;
+	}
+
+	//Hammer_Dust
+	CEffect_Hammer_Dust* pHammer = nullptr;
+	CEffect_Hammer_Dust::EFFECTDESC Desc;
+	ZeroMemory(&Desc, sizeof(Desc));
+
+	_tcscpy_s(Desc.TextureTag, L"Hammer_Dust");
 	Desc.iRenderPassNum = 1;
 	Desc.iImageCountX = 8;
 	Desc.iImageCountY = 8;
 	Desc.fFrame = 64.f;
 	Desc.fEffectPlaySpeed = 1.f;
-	Desc.fMyPos = { 0.f, 0.f, 0.f };
 
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Effect_Env_Fire", L"Proto_GameObject_Effect_Env_Fire", &Desc)))
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Effect_Hammer_Dust", L"Proto_GameObject_Effect_Hammer_Dust", &Desc, (CGameObject**)&pHammer)))
+	{
+		MSGBOX("Failed to Creating Effect_Hammer_Dust in CStage1::Ready_Effect()");
+		return E_FAIL;
+	}
+	if (FAILED(g_pGameInstance->Add_Effect((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Hammer_Dust", pHammer, 7)))
+	{
+		MSGBOX("Falild to Add_Effect_Explosion ROck in CStage1::Ready_Effect()");
+		return E_FAIL;
+	}
+#pragma endregion
+
+#pragma region 이펙트매니저에 안들어가는것들
+
+	//fire
+	CEffect_Env_Fire::EFFECTDESC Desc1;
+	_tcscpy_s(Desc1.TextureTag, L"Env_Fire");
+	Desc1.iRenderPassNum = 1;
+	Desc1.iImageCountX = 8;
+	Desc1.iImageCountY = 8;
+	Desc1.fFrame = 64.f;
+	Desc1.fEffectPlaySpeed = 1.f;
+	Desc1.fMyPos = { 0.f, 0.f, 0.f };
+
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Effect_Env_Fire", L"Proto_GameObject_Effect_Env_Fire", &Desc1)))
 	{
 		MSGBOX("Failed to Creating Effect_Env_Fire in CStage1::Ready_Effect()");
 		return E_FAIL;
 	}
 
-	////Hammer_Dust
-	//ZeroMemory(&Desc, sizeof(Desc));
 
-	//_tcscpy_s(Desc.TextureTag, L"Hammer_Dust");
-	//Desc.iRenderPassNum = 1;
-	//Desc.iImageCountX = 8;
-	//Desc.iImageCountY = 8;
-	//Desc.fFrame = 64.f;
-	//Desc.fEffectPlaySpeed = 1.f;
-
-	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Effect_Hammer_Dust", L"Proto_GameObject_Effect_Hammer_Dust", &Desc)))
-	//{
-	//	MSGBOX("Failed to Creating Effect_Hammer_Dust in CStage1::Ready_Effect()");
-	//	return E_FAIL;
-	//}
-	 
-	
 	////Monster Dead
 	//ZeroMemory(&Desc, sizeof(Desc));
 

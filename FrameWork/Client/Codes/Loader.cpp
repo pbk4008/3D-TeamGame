@@ -47,6 +47,7 @@
 #include "Effect_Dead_Spray.h"
 //#include "Effect_DeathParticle.h"
 //#include "Effect_Guard.h"
+#include "Explosion_Rock.h"
 
 
 #include "UI_Ingame.h"
@@ -172,8 +173,8 @@ HRESULT CLoader::SetUp_Stage1_Object()
 	//if (FAILED(Load_Stage1MonsterLoad()))
 	//	return E_FAIL;
 
-	//if (FAILED(Load_Stage1BossLoad()))
-	//	return E_FAIL;
+	if (FAILED(Load_Stage1BossLoad()))
+		return E_FAIL;
 
 	if (FAILED(Load_Stage1StaticUILoad()))
 		return E_FAIL;
@@ -196,8 +197,8 @@ HRESULT CLoader::SetUp_Stage1_Object()
 	//if (FAILED(Load_Stage1Meteor()))
 	//	return E_FAIL;
 
-	if (FAILED(Load_Stage1_Cinema_Object()))
-		return E_FAIL;
+	//if (FAILED(Load_Stage1_Cinema_Object()))
+	//	return E_FAIL;
 
 	return S_OK;
 }
@@ -604,18 +605,16 @@ HRESULT CLoader::Load_Stage1EffectLoad()
 	//	return E_FAIL;
 	//}
 
-	//아이템 파티클옵젝만들기 
-
 	//Effect Image
 	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_Effect_Env_Fire"), CEffect_Env_Fire::Create(m_pDevice, m_pDeviceContext))))
 	{
 		return E_FAIL;
 	}
 	
-	//if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_Effect_Hammer_Dust"), CEffect_Hammer_Dust::Create(m_pDevice, m_pDeviceContext))))
-	//{
-	//	return E_FAIL;
-	//}
+	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_Effect_Hammer_Dust"), CEffect_Hammer_Dust::Create(m_pDevice, m_pDeviceContext))))
+	{
+		return E_FAIL;
+	}
 
 	//if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_Effect_Monster_Dead_Spray"), CEffect_Dead_Spray::Create(m_pDevice, m_pDeviceContext))))
 	//{
@@ -1482,7 +1481,7 @@ HRESULT CLoader::Load_MeshEffects()
 	{
 		return E_FAIL;
 	}
-	matPivot = XMMatrixIdentity();
+
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_MagicShield", CModel::Create(m_pDevice, m_pDeviceContext,
 		"../bin/Resources/Mesh/Effect/", "magic_shield_00_01_mesh.fbx",
 		L"../bin/ShaderFile/Shader_MeshEffect.hlsl", matPivot, CModel::TYPE_STATIC, true))))
@@ -1490,9 +1489,20 @@ HRESULT CLoader::Load_MeshEffects()
 		return E_FAIL;
 	}
 
+
+	///////////////Rock
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Explosion_Rock_Up_Anim", CModel::Create(m_pDevice, m_pDeviceContext,
+		L"../bin/FBX/Eff_fbx/Rock_Explosion_Up.fbx", CModel::TYPE_ANIM, true))))
+		return E_FAIL;
+
+
 	//////////////////// Objects
 	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_MeshEffect_Test", CMeshEffect_Test::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
+
+
+	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Explosion_Rock", CExplosion_Rock::Create(m_pDevice, m_pDeviceContext))))
+		return S_OK;
 
 	return S_OK;
 }

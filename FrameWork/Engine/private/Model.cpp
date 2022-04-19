@@ -114,6 +114,11 @@ CAnimation* CModel::Get_Animation(const string& pName)
 	return pFindAnim;
 }
 
+_bool CModel::Get_IsAnimFinished()
+{
+	return m_Animations[m_iCurrentAnimation]->Is_Finished();
+}
+
 void CModel::Set_PivotMatrix(const _fmatrix& _matPivot)
 {
 	XMStoreFloat4x4(&m_PivotMatrix, _matPivot);

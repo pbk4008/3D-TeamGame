@@ -31,7 +31,7 @@ _int CMidBoss_Rage::Tick(const _double& TimeDelta)
 	m_pAnimator->Tick(TimeDelta);
 
 	m_pTransform->Face_Target(g_pObserver->Get_PlayerPos());
-
+	cout << "rage" << endl;
 	if (m_pAnimator->Get_CurrentAnimation()->Is_Finished())
 	{
 		m_pStateController->Change_State(L"BattleCry");
@@ -65,7 +65,6 @@ HRESULT CMidBoss_Rage::EnterState()
 	g_pGameInstance->StopSound(CSoundMgr::CHANNELID::MidBoss);
 	g_pGameInstance->Play_Shot(L"MidBoss_Roar", CSoundMgr::CHANNELID::MidBoss);
 	m_pAnimator->Change_AnyEntryAnimation((_uint)CBoss_Bastion_Judicator::M_BossAnimState::RAGE);
-
 
 	return S_OK;
 }

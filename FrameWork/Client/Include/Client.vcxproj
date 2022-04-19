@@ -180,7 +180,6 @@ call Update_Client.bat</Command>
     </FxCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\Codes\Meteor.h" />
     <ClInclude Include="..\Default\Client_Enum.h" />
     <ClInclude Include="..\Default\Client_Function.h" />
     <ClInclude Include="..\Default\Client_Include.h" />
@@ -351,6 +350,7 @@ call Update_Client.bat</Command>
     <ClInclude Include="..\Headers\Environment.h" />
     <ClInclude Include="..\Headers\EquipmentData.h" />
     <ClInclude Include="..\Headers\Execution_Mook.h" />
+    <ClInclude Include="..\Headers\Explosion_Rock.h" />
     <ClInclude Include="..\Headers\FlyingShield.h" />
     <ClInclude Include="..\Headers\Fury.h" />
     <ClInclude Include="..\Headers\GameObjectPool.h" />
@@ -375,6 +375,7 @@ call Update_Client.bat</Command>
     <ClInclude Include="..\Headers\MeshEffect.h" />
     <ClInclude Include="..\Headers\MeshEffect_Test.h" />
     <ClInclude Include="..\Headers\MeshLoader.h" />
+    <ClInclude Include="..\Headers\Meteor.h" />
     <ClInclude Include="..\Headers\MidBoss_Attack.h" />
     <ClInclude Include="..\Headers\MidBoss_BattleCry.h" />
     <ClInclude Include="..\Headers\MidBoss_Death.h" />
@@ -698,6 +699,7 @@ call Update_Client.bat</Command>
     <ClCompile Include="..\Codes\Effect_HitParticle.cpp" />
     <ClCompile Include="..\Codes\EquipmentData.cpp" />
     <ClCompile Include="..\Codes\Execution_Mook.cpp" />
+    <ClCompile Include="..\Codes\Explosion_Rock.cpp" />
     <ClCompile Include="..\Codes\FlyingShield.cpp" />
     <ClCompile Include="..\Codes\Fury.cpp" />
     <ClCompile Include="..\Codes\GameObjectPool.cpp" />

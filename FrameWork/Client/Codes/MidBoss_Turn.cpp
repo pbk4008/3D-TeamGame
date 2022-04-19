@@ -27,7 +27,7 @@ _int CMidBoss_Turn::Tick(const _double& TimeDelta)
 	_int iProgress = __super::Tick(TimeDelta);
 	if (NO_EVENT != iProgress)
 		return iProgress;
-
+	cout << "Turn tick" << endl;
 	m_pAnimator->Tick(TimeDelta);
 
 	if (m_pAnimator->Get_AnimController()->Is_Finished())
@@ -48,28 +48,6 @@ _int CMidBoss_Turn::Tick(const _double& TimeDelta)
 
 		}
 	}
-
-	//m_TurnTime += TimeDelta;
-	//m_fRadAcc += TimeDelta * 0.1f;
-
-	//if (m_TurnTime < 1.f)
-	//{
-	//	if (10.f < XMConvertToDegrees(m_fRadian) && 170.f < XMConvertToDegrees(m_fRadian))
-	//	{
-	//		if (XMConvertToDegrees(m_fRadian) > m_fRadAcc)
-	//		{
-	//			if (m_bLeft) //몬스터왼쪽회전
-	//			{
-	//				m_pTransform->Rotation_Axis(CTransform::STATE_UP, TimeDelta * -1.f);
-	//			}
-
-	//			else if (!m_bLeft) //몬스터오른쪽회전
-	//			{
- // 					m_pTransform->Rotation_Axis(CTransform::STATE_UP, TimeDelta * 1.f);
-	//			}
-	//		}
-	//	}
-	//}
 
 	return _int();
 }
@@ -207,11 +185,6 @@ HRESULT CMidBoss_Turn::EnterState()
 
 			}
 		}
-		//else
-		//{
-		//	cout << "아무거에도 안속함, 어택으로넘어감 " << endl;
-		//	m_pStateController->Change_State(L"Attack");
-		//}
 
 	}
 
