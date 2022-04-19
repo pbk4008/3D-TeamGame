@@ -9,6 +9,8 @@ class CUI_SlotItemIcon;
 class CUI_SlotGrade;
 class CUI_SlotItemEffect;
 class CUI_EquipedText;
+class CUI_SelectEffect;
+
 class CUI_ItemSlot : public CUI
 {
 public:
@@ -58,6 +60,8 @@ private:
 	CUI_SlotGrade*			m_pGrade = nullptr;
 	CUI_SlotItemEffect*		m_pItemEffect = nullptr;
 	CUI_EquipedText*		m_pEquipedText = nullptr;
+	CUI_SelectEffect*		m_pSelectEffect = nullptr;
+
 	ItemSlotDesc desc;
 
 private:

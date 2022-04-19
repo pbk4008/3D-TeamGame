@@ -6,6 +6,7 @@ BEGIN(Client)
 class CUI_Indexes;
 class CUI_ModalWindow;
 class CUI_ItemStatusWindow;
+class CUI_PlayerStatusWindow;
 class CHud;
 class CItemData;
 class CInven_UIManager final : public CSingleTon<CInven_UIManager>
@@ -30,7 +31,9 @@ public: /* Open Modal */
 	void  CloseModal(void);
 	_bool IsOpenModal(void);
 
-public: _bool Get_OpenCheck() { return m_bOpenModal; }
+public: 
+	_bool Get_OpenCheck(void) { return m_bOpenModal; }
+	CHud* GetHud(void);
 
 public: /* Item */
 	void ShowItemStatus(CItemData* _pItemData);
@@ -39,6 +42,7 @@ public: /* Item */
 private: /* Inventory */
 	CUI_ModalWindow*			m_pModal = nullptr;
 	CUI_ItemStatusWindow*		m_pItemStatus = nullptr;
+	CUI_PlayerStatusWindow*		m_pPlayerStatus = nullptr;
 
 private: /* Notify UI */
 	CHud*	m_pHud = nullptr;

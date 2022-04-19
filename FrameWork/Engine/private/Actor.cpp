@@ -168,7 +168,7 @@ HRESULT CActor::BindConstantBuffer(const wstring& camTag, SCB* bindbuffer, RIM* 
 	{
 		if (FAILED(m_pModel->SetUp_ValueOnShader("g_rimlightcheck", &rimbuffer->rimcheck, sizeof(_bool)))) MSGBOX("Failed To Apply Actor ConstantBuffer");
 		if (FAILED(m_pModel->SetUp_ValueOnShader("g_rimintensity", &rimbuffer->rimintensity, sizeof(_float)))) MSGBOX("Failed To Apply Actor ConstantBuffer");
-		if (FAILED(m_pModel->SetUp_ValueOnShader("g_rimcolor", &rimbuffer->rimcol, sizeof(_float4)))) MSGBOX("Failed To Apply Actor ConstantBuffer");
+		if (FAILED(m_pModel->SetUp_ValueOnShader("g_rimcolor", &rimbuffer->rimcol, sizeof(_float3)))) MSGBOX("Failed To Apply Actor ConstantBuffer");
 		if (FAILED(m_pModel->SetUp_ValueOnShader("g_camdir", &rimbuffer->camdir, sizeof(_float4)))) MSGBOX("Failed To Apply Actor ConstantBuffer");
 	}
 
@@ -300,6 +300,7 @@ void CActor::Execution(CActor* _pOther, CHierarchyNode* _pFixedBone)
 void CActor::Free()
 {
 	CGameObject::Free();
+
 	Safe_Release(m_pModel);
 	Safe_Release(m_dissolveTex);
 	Safe_Release(m_dissolveGradientTex);

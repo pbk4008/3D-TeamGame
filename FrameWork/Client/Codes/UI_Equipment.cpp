@@ -113,6 +113,8 @@ HRESULT CUI_Equipment::Ready_UIObject(void)
 		SetResourceCount();
 	}
 
+
+
 	return S_OK;
 }
 
@@ -122,7 +124,7 @@ void CUI_Equipment::Show(void)
 	
 	UpdateSlots();
 	UpdateResourceCount();
-
+	
 	m_bEquipmentActive = true;
 }
 

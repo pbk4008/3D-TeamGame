@@ -90,7 +90,7 @@ struct PS_IN
 struct PS_OUT
 {
     vector vColor : SV_TARGET0;
-	float4 weight : SV_Target1;
+	//float4 weight : SV_Target1;
 };
 
 
@@ -108,7 +108,7 @@ PS_OUT PS_MAIN(PS_IN In)
         discard;
     }
 
-	Out.weight = float4(g_Weight.xxx, 1.f);
+	//Out.weight = float4(g_Weight.xxx, 1.f);
 	
     return Out;
 }

@@ -21,6 +21,7 @@ cbuffer BoneMatricesBuffer
 {
 	BoneMatrixArray g_BoneMatrices;
 	BoneMatrixArray g_OldBoneMatrices;
+	BoneMatrixArray g_TrailBoneMatrices;
 };
 
 cbuffer Matrices
@@ -72,7 +73,7 @@ cbuffer Limlight
 {
 	bool	g_rimlightcheck = (bool)0;
 	float	g_rimintensity = (float)0;
-	float4	g_rimcolor = (float4)0;
+	float3	g_rimcolor = (float3)0;
 	float4	g_camdir = (float4)0;
 };
 

@@ -110,7 +110,7 @@ _bool CUIHelper::MouseClickItem(void)
 
 _bool CUIHelper::MouseClickEquipBtn(void)
 {
-	if (g_pGameInstance->getkeyDown(DIK_F6))
+	if (g_pGameInstance->getkeyDown(DIK_J))
 	{
 		/*	if (IsCursorRect())
 			{
@@ -122,7 +122,7 @@ _bool CUIHelper::MouseClickEquipBtn(void)
 
 _bool CUIHelper::MouseClickArmoryBtn(void)
 {
-	if (g_pGameInstance->getkeyDown(DIK_F5))
+	if (g_pGameInstance->getkeyDown(DIK_K))
 	{
 		/*if (IsCursorRect())
 		{

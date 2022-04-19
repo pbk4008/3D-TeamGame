@@ -287,19 +287,6 @@ void CUI_Armory::ClickSlot(void)
 					}
 				}
 				break;
-				case Client::EEquipmentType::Augment:
-				{
-					if (m_pEquipData->IsExistEquip(EEquipSlot::Amulet))
-						return;
-					else
-					{
-						m_pInventoryData->SetEquiped(i, TRUE);
-						m_pEquipData->ChangeEquipment(EEquipSlot::Amulet, SelectedItem);
-						UpdateSlot(i);
-					}
-
-				}
-				break;
 				default:
 				{
 					assert("Not Found Item Type!");
