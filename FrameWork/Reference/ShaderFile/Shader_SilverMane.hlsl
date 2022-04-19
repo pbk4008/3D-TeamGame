@@ -387,12 +387,14 @@ VS_OUT_MOTIONTRAIL VS_MAIN_MOTIONTRAIL(VS_IN In)
 	float fWeightw = 1.f - (In.vBlendWeight.x + In.vBlendWeight.y + In.vBlendWeight.z);
 
 	matrix BoneMatrix = mul(g_TrailBoneMatrices.Bone[In.vBlendIndex.x], In.vBlendWeight.x) +
-						mul(g_TrailBoneMatrices.Bone[In.vBlendIndex.y], In.vBlendWeight.y) +
 						mul(g_TrailBoneMatrices.Bone[In.vBlendIndex.z], In.vBlendWeight.z) +
+						mul(g_TrailBoneMatrices.Bone[In.vBlendIndex.y], In.vBlendWeight.y) +
 						mul(g_TrailBoneMatrices.Bone[In.vBlendIndex.w], In.vBlendWeight.w);
 
 	matWV = mul(g_WorldMatrix, g_ViewMatrix);
 	matWVP = mul(matWV, g_ProjMatrix);
+	//matWVP = mul(g_WorldMatrix, g_ProjMatrix);
+
 		
 	vector vPosition = mul(vector(In.vPosition, 1.f), BoneMatrix);
 	vPosition = mul(vPosition, matWVP);
@@ -425,7 +427,7 @@ PS_OUT_MOTIONTRAIL PS_MAIN_MOTIONTRAIL(PS_IN_MOTIONTRAIL In)
 	half4 diffuse = g_DiffuseTexture.Sample(DefaultSampler, In.vUvDepth.xy);
 	
 	half4 normal = half4(In.vNormal.xyz, 0.f);
-	Out.Motiontrail += RimLighting(normal, g_camdir, g_rimintensity, g_rimcolor);
+	Out.Motiontrail = diffuse + RimLighting(normal, g_camdir, g_rimintensity, g_rimcolor);
 	
 	return Out;
 }

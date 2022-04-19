@@ -54,9 +54,9 @@ _int CMotionTrail::LateTick(_double _dDeltaTime)
 	return _int();
 }
 
-HRESULT CMotionTrail::Render_MotionTrail()
+HRESULT CMotionTrail::Render()
 {
-	_matrix smatWorld,smatView, smatProj;
+	_matrix smatWorld, smatView, smatProj;
 
 	smatWorld = XMMatrixTranspose(m_worldamt);
 	smatView = XMMatrixTranspose(m_viewmat);
@@ -89,35 +89,68 @@ HRESULT CMotionTrail::Render_MotionTrail()
 	return S_OK;
 }
 
+HRESULT CMotionTrail::Render_MotionTrail()
+{
+	_matrix smatWorld,smatView, smatProj;
+
+	smatWorld = XMMatrixTranspose(m_worldamt);
+
+	wstring camtag = g_pGameInstance->Get_BaseCameraTag();
+
+	smatView = XMMatrixTranspose(g_pGameInstance->Get_Transform(camtag,TRANSFORMSTATEMATRIX::D3DTS_VIEW));
+	smatProj = XMMatrixTranspose(g_pGameInstance->Get_Transform(camtag, TRANSFORMSTATEMATRIX::D3DTS_PROJECTION));
+
+	if (FAILED(m_pModel->SetUp_ValueOnShader("g_WorldMatrix", &smatWorld, sizeof(_matrix)))) MSGBOX("Failed To Apply Actor ConstantBuffer");
+	if (FAILED(m_pModel->SetUp_ValueOnShader("g_ViewMatrix", &smatView, sizeof(_matrix)))) MSGBOX("Failed To Apply Actor ConstantBuffer");
+	if (FAILED(m_pModel->SetUp_ValueOnShader("g_ProjMatrix", &smatProj, sizeof(_matrix)))) MSGBOX("Failed To Apply Actor ConstantBuffer");
+
+	if (FAILED(m_pModel->SetUp_ValueOnShader("g_TrailBoneMatrices", &m_bonematrix, sizeof(_matrix) * 256))) MSGBOX("Failed To Apply Actor ConstantBuffer");
+
+	RIM rimdesc;
+	ZeroMemory(&rimdesc, sizeof(RIM));
+	rimdesc.rimcheck = m_rimcheck;
+	rimdesc.rimcol = _float3(0.f, 1.0f, 0);
+	rimdesc.rimintensity = m_rimintensity; // intensity ³·À» ¼ö·Ï °úÇÏ°Ô ºû³²
+	XMStoreFloat4(&rimdesc.camdir, XMVector3Normalize(m_position - m_camposition));
+
+	if (FAILED(m_pModel->SetUp_ValueOnShader("g_rimlightcheck", &rimdesc.rimcheck, sizeof(_bool)))) MSGBOX("Failed To Apply Actor ConstantBuffer");
+	if (FAILED(m_pModel->SetUp_ValueOnShader("g_rimintensity", &rimdesc.rimintensity, sizeof(_float)))) MSGBOX("Failed To Apply Actor ConstantBuffer");
+	if (FAILED(m_pModel->SetUp_ValueOnShader("g_rimcolor", &rimdesc.rimcol, sizeof(_float3)))) MSGBOX("Failed To Apply Actor ConstantBuffer");
+	if (FAILED(m_pModel->SetUp_ValueOnShader("g_camdir", &rimdesc.camdir, sizeof(_float4)))) MSGBOX("Failed To Apply Actor ConstantBuffer");
+
+	for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
+	{
+		if (FAILED(m_pModel->Render(i, 4))) MSGBOX("Fialed To Rendering Silvermane");
+	}
+
+	return S_OK;
+}
+
 void CMotionTrail::Set_BoneMat(_fmatrix* bone)
 {
 	memcpy(m_bonematrix, bone, sizeof(_matrix) * 256);
 }
 
-void CMotionTrail::Set_Info(_fmatrix world,_fmatrix view, _fmatrix proj, _vector position, _vector campostion)
+void CMotionTrail::Set_Info(_fmatrix world, _vector position, _vector campostion)
 {
-	memcpy(&m_worldamt, &world, sizeof(_matrix));
-	memcpy(&m_viewmat, &view, sizeof(_matrix));
-	memcpy(&m_projmat, &proj, sizeof(_matrix));
+	m_worldamt = world;
 	m_position = position;
 	m_camposition = campostion;
 }
 
-void CMotionTrail::Set_Info(_fmatrix world,_fmatrix wvp, _vector position, _vector campostion)
+void CMotionTrail::Set_Model(CModel* pModel)
 {
-	memcpy(&m_worldamt, &world, sizeof(_matrix));
-	memcpy(&m_WVP, &wvp, sizeof(_matrix));
-	m_position = position;
-	m_camposition = campostion;
+	m_pModel = pModel;
+	Safe_AddRef(m_pModel);
 }
 
 HRESULT CMotionTrail::Ready_Component()
 {
-	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Model_Silvermane_Bin", L"Model", (CComponent**)&m_pModel)))
-		return E_FAIL;
+	//if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Model_Silvermane_Bin", L"Model", (CComponent**)&m_pModel)))
+	//	return E_FAIL;
 
-	_matrix matPivot = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(180.f));
-	m_pModel->Set_PivotMatrix(matPivot);
+	//_matrix matPivot = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(180.f));
+	//m_pModel->Set_PivotMatrix(matPivot);
 
 	return S_OK;
 }

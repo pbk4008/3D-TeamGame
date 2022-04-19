@@ -14,13 +14,14 @@ public: virtual HRESULT NativeConstruct_Prototype() override;
 public: virtual HRESULT NativeConstruct(const _uint _iSceneID, void* _pArg = nullptr) override;
 public: virtual _int	Tick(_double _dDeltaTime) override;
 public: virtual _int	LateTick(_double _dDeltaTime) override;
+public: virtual HRESULT	Render()			 override;
 public: virtual HRESULT	Render_MotionTrail() override;
 
 public: _float	Get_LifeTime() { return m_lifetime; }
 public: void	Set_Owner(CActor* _pOwner) { m_pOwner = _pOwner; }
 public: void	Set_BoneMat(_fmatrix* bone);
-public: void	Set_Info(_fmatrix world, _fmatrix view, _fmatrix proj, _vector position, _vector campostion);
-public: void	Set_Info(_fmatrix world,_fmatrix wvp,_vector position, _vector campostion);
+public: void	Set_Info(_fmatrix world, _vector position, _vector campostion);
+public: void	Set_Model(CModel* pModel);
 
 private: _matrix	m_bonematrix[256];
 private: _matrix	m_worldamt = XMMatrixIdentity();

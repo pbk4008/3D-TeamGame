@@ -437,6 +437,7 @@ PS_OUT_BLEND PS_MAIN_BLEND(PS_IN In)
 	
 	if(g_outline == true)
 	{
+		half4 rim = g_RimLightTexture.Sample(DefaultSampler, In.vTexUV);
 		Out.vColor = Outline(g_RimLightTexture, DefaultSampler, In.vTexUV, Out.vColor);
 	}
 	

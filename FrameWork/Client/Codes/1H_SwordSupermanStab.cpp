@@ -39,18 +39,18 @@ _int C1H_SwordSupermanStab::Tick(const _double& _dDeltaTime)
 		}
 	}
 
-	_int temp = iCurkeyFrameIndex % 3;
+	if (m_pAnimationController->Is_Finished())
+	{
+		m_pStateController->Change_State(L"1H_SwordIdle");
+		return STATE_CHANGE;
+	}
+
+	_int temp = iCurkeyFrameIndex % 5;
 
 	if (temp == 0)
 	{
 		m_pSilvermane->Create_MotionTrail(m_motiontrailidx);
 		m_motiontrailidx++;
-	}
-
-	if (m_pAnimationController->Is_Finished())
-	{
-		m_pStateController->Change_State(L"1H_SwordIdle");
-		return STATE_CHANGE;
 	}
 
 	return _int();
