@@ -42,8 +42,8 @@ _int C1H_SwordAttackNormalR1_04Swap::Tick(const _double& _dDeltaTime)
 	{
 		// ÀÌÆåÆ®
 		_vector Pos = { 0.f, 0.03f, 0.f ,0.f };
-		//m_pSilvermane->Active_Effect((_uint)EFFECT::ATTACK_GROUND, Pos);
-		//m_pSilvermane->Active_Effect((_uint)EFFECT::ATTACK_GROUND_2, Pos);
+		m_pSilvermane->Active_Effect((_uint)EFFECT::ATTACK_GROUND, Pos);
+		m_pSilvermane->Active_Effect((_uint)EFFECT::ATTACK_GROUND_2, Pos); 
 
 		Pos = { 0.f, 0.1f, 0.f ,0.f };
 		m_pSilvermane->Active_Effect((_uint)EFFECT::HIT_GROUND_SMOKE, Pos);

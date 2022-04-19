@@ -427,7 +427,7 @@ PS_OUT_MOTIONTRAIL PS_MAIN_MOTIONTRAIL(PS_IN_MOTIONTRAIL In)
 	half4 diffuse = g_DiffuseTexture.Sample(DefaultSampler, In.vUvDepth.xy);
 	
 	half4 normal = half4(In.vNormal.xyz, 0.f);
-	Out.Motiontrail = RimLighting(normal, g_camdir, g_rimintensity, g_rimcolor);
+	Out.Motiontrail = MotionTrailRim(normal, g_camdir, g_rimintensity, g_rimcolor);
 	
 	return Out;
 }

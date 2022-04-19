@@ -192,8 +192,11 @@ void CVIBuffer_PointInstance_Floating_Disappear::Update(_double TimeDelta, _uint
 	}
 
 	//소팅하려고
-	_matrix matView = XMMatrixInverse(nullptr, g_pGameInstance->Get_ViewMatrix());
-	_vector Campos = matView.r[3];
+	//wstring camtag = g_pGameInstance->Get_BaseCameraTag();
+	//_matrix view = g_pGameInstance->Get_Transform(camtag, TRANSFORMSTATEMATRIX::D3DTS_VIEW);
+	//view = XMMatrixInverse(nullptr, view);
+
+	//_vector Campos = view.r[3];
 
 	D3D11_MAPPED_SUBRESOURCE		SubResource;
 
@@ -203,7 +206,7 @@ void CVIBuffer_PointInstance_Floating_Disappear::Update(_double TimeDelta, _uint
 	{
 		//방향 처음에 지정해줬으면 리셋하기 전까지 그 방향으로 고정
 
-		for (_uint i = 0; i < m_Desc.iNumInstance; ++i)
+ 		for (_uint i = 0; i < m_Desc.iNumInstance; ++i)
 		{
 			uniform_real_distribution<_float> fXRange(-m_Desc.fParticleMinusRandomDir.x, 0.f);
 			uniform_real_distribution<_float> fYRange(-m_Desc.fParticleMinusRandomDir.y, 0.f);
@@ -233,7 +236,6 @@ void CVIBuffer_PointInstance_Floating_Disappear::Update(_double TimeDelta, _uint
 
 		m_fFloatingGauge = m_Desc.fParticleSpeed;
 	}
-
 
 	for (_uint i = 0; i < m_Desc.iNumInstance; ++i)
 	{
@@ -309,10 +311,9 @@ void CVIBuffer_PointInstance_Floating_Disappear::Update(_double TimeDelta, _uint
 					((VTXPARTICLE*)SubResource.pData)[i].vPosition.w = 1.f;
 				}
 			}
-
-			/*_vector ViewLength = XMVector3Length(Campos - XMLoadFloat4(&((VTXPARTICLE*)SubResource.pData)[i].vPosition));
-			((VTXPARTICLE*)SubResource.pData)[i].vTime.y = XMVectorGetX(ViewLength);*/
 		}
+		//_vector ViewLength = XMVector3Length(Campos - XMLoadFloat4(&((VTXPARTICLE*)SubResource.pData)[i].vPosition));
+		//((VTXPARTICLE*)SubResource.pData)[i].vTime.y = XMVectorGetX(ViewLength);
 	}
 
 	//sort(((VTXPARTICLE*)SubResource.pData), ((VTXPARTICLE*)SubResource.pData) + m_Desc.iNumInstance, [](VTXPARTICLE pSour, VTXPARTICLE pDest)

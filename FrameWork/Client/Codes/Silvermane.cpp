@@ -2065,6 +2065,6 @@ void CSilvermane::Free()
 	Safe_Release(m_pStateController);
 	Safe_Release(m_pAnimationController);
 
-	for (auto& iter : m_vecMotionTrail)
-		Safe_Release(iter);
+	//for (auto& iter : m_vecMotionTrail)
+	//	Safe_Release(iter);
 }

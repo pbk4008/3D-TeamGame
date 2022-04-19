@@ -105,7 +105,7 @@ _int CEffect_DashDust::Tick(_double TimeDelta)
 		m_Desc.fCurTime = m_Desc.fMaxLifeTime;
 	}
 
-	m_fAlpha -= (_float)TimeDelta;
+	m_fAlpha -= (_float)TimeDelta * 0.05f;
 
 	if (0 >= m_fAlpha)
 	{
@@ -153,8 +153,9 @@ HRESULT CEffect_DashDust::Render()
 	m_pBuffer->SetUp_ValueOnShader("g_fCurTime", &m_Desc.fCurTime, sizeof(_float));
 
 	m_pBuffer->SetUp_ValueOnShader("g_fAlpha", &m_fAlpha, sizeof(_float));
-	_float power = 1.f;
-	m_pBuffer->SetUp_ValueOnShader("g_empower", &power, sizeof(_float));
+
+	_float weight = 0.1f;
+	m_pBuffer->SetUp_ValueOnShader("g_Weight", &weight, sizeof(_float));
 
 	m_pBuffer->SetUp_ValueOnShader("g_vCamPosition", (void*)&CamPos, sizeof(_vector));
 
@@ -184,7 +185,7 @@ void CEffect_DashDust::Set_Reset(_bool bReset)
 {
 	CEffect::Set_Reset(bReset);
 	m_Desc.fCurTime = 0.f;
-	m_fAlpha = 0.5f;
+	m_fAlpha = 0.1f;
 	m_pBuffer->Set_Desc(m_backupDesc);
 	m_pBuffer->Particle_Reset();
 }

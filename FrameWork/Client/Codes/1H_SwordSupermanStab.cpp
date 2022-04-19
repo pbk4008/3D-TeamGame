@@ -45,7 +45,7 @@ _int C1H_SwordSupermanStab::Tick(const _double& _dDeltaTime)
 		return STATE_CHANGE;
 	}
 
-	_int temp = iCurkeyFrameIndex % 5;
+	_int temp = iCurkeyFrameIndex % 3;
 
 	if (temp == 0)
 	{
