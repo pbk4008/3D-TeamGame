@@ -4,11 +4,15 @@
 
 
 CEffect_Dead_Spray::CEffect_Dead_Spray()
+	: m_fSize(0.f)
+	, m_fAccRetain(0.f)
 {
 }
 
 CEffect_Dead_Spray::CEffect_Dead_Spray(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
     :CEffect(pDevice,pDeviceContext)
+	, m_fSize(0.f)
+	, m_fAccRetain(0.f)
 {
 }
 
@@ -44,24 +48,22 @@ HRESULT CEffect_Dead_Spray::NativeConstruct(const _uint _iSceneID, void* pArg)
 		return E_FAIL;
 	}
 
-
+	m_fSize = 6.f;
 	return S_OK;
 }
 
 _int CEffect_Dead_Spray::Tick(_double TimeDelta)
 {
-	
 	_uint iAllFrameCount = (m_Desc.iImageCountX * m_Desc.iImageCountY);
-	m_Desc.fFrame += (_float)(iAllFrameCount * TimeDelta * /*m_Desc.fEffectPlaySpeed*/1.f); //플레이속도 
+	m_Desc.fFrame += (_float)(iAllFrameCount * g_fImmutableTime * /*m_Desc.fEffectPlaySpeed*/20.f); //플레이속도 
 
 	if (m_Desc.fFrame >= iAllFrameCount)
 	{
 		m_Desc.fFrame = 0;
+		setActive(false);
 	}
-
-
-	_vector Pos = { 0.f,0.f,0.f, 1.f };
-	m_pTransform->Set_State(CTransform::STATE_POSITION, Pos);
+	//_vector Pos = { 0.f,0.f,0.f, 1.f };
+	//m_pTransform->Set_State(CTransform::STATE_POSITION, Pos);
 
 	//m_pTransform->SetUp_Rotation(XMVectorSet(0.f, 0.f, 1.f, 0.f), XMConvertToRadians(90.f));
 
@@ -70,26 +72,19 @@ _int CEffect_Dead_Spray::Tick(_double TimeDelta)
 	ViewMatrix = g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_VIEW);
 	ViewMatrix = XMMatrixInverse(nullptr, ViewMatrix);
 
-	/*_matrix		RotationMatrix = XMMatrixRotationAxis(XMVectorSet(0.f, 0.f, 1.f, 0.f), XMConvertToRadians(90.f));
-
-	_vector		vRight = XMVectorSet(1.f, 0.f, 0.f, 0.f) * XMVectorGetX(XMVector3Length(ViewMatrix.r[0]));
-	_vector		vUp = XMVectorSet(0.f, 1.f, 0.f, 0.f) * XMVectorGetX(XMVector3Length(ViewMatrix.r[1]));
-	_vector		vLook = XMVectorSet(0.f, 0.f, 1.f, 0.f) * XMVectorGetX(XMVector3Length(ViewMatrix.r[2]));
-
-	vRight = XMVector4Transform(vRight, RotationMatrix);
-	vUp = XMVector4Transform(vUp, RotationMatrix);
-	vLook = XMVector4Transform(vLook, RotationMatrix);
-
-	ViewMatrix.r[0] = vRight;
-	ViewMatrix.r[1] = vUp;
-	ViewMatrix.r[2] = vLook;*/
-
+	m_fSize = 3.f;
+	//ViewMatrix *= m_fSize;
 	m_pTransform->Set_State(CTransform::STATE::STATE_RIGHT, ViewMatrix.r[0]);
 	m_pTransform->Set_State(CTransform::STATE::STATE_LOOK, ViewMatrix.r[2]);
+	m_pTransform->Scaling(XMVectorSet(m_fSize, m_fSize, m_fSize, 0.f));
+	m_fAccRetain += TimeDelta;
+	cout << m_fAccRetain << endl;
+	//if (m_fAccRetain > 0.5f)
+	//{
+	//	m_fAccRetain = 0.f;
+	//	setActive(false);
+	//}
 
-	_vector vec = { 6.f,6.f,6.f,0.f };
-	m_pTransform->Scaling(vec);
-	
     return 0;
 }
 
@@ -130,6 +125,22 @@ HRESULT CEffect_Dead_Spray::Render()
 	m_pBuffer->Render(1);
 
 	return S_OK;
+}
+
+CEffect* CEffect_Dead_Spray::Copy()
+{
+	CEffect_Dead_Spray* pEffect = new CEffect_Dead_Spray(m_pDevice, m_pDeviceContext);
+	if (FAILED(pEffect->NativeConstruct_Prototype()))
+	{
+		MSGBOX("DashDust Copy Fail");
+		Safe_Release(pEffect);
+	}
+	if (FAILED(pEffect->NativeConstruct(m_iSceneID, &m_Desc)))
+	{
+		MSGBOX("HitParticle Copy Fail");
+		Safe_Release(pEffect);
+	}
+	return pEffect;
 }
 
 HRESULT CEffect_Dead_Spray::SetUp_Components()

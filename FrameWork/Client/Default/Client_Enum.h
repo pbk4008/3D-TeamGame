@@ -63,7 +63,8 @@ enum class EFFECT
 	ATTACK_GROUND_2,
 	ITEM,
 	BOX,
-	EAT_ITEM
+	EAT_ITEM,
+	HIT_IMAGE
 };
 
 enum class ELayer
