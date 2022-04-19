@@ -78,7 +78,7 @@ HRESULT CUI_EquipedText::Ready_Component(void)
 {
 	/* for. Single Image Com */
 	CSingleImage::Desc ModalSprite;
-	ModalSprite.textureName = L"T_HUD_LootNotification_BG";
+	ModalSprite.textureName = L"T_HUD_EquipNotification_BG";
 	ModalSprite.pCreator = this;
 	ModalSprite.pRenderer = this->m_pRenderer;
 	ModalSprite.pTransform = this->m_pTransform;

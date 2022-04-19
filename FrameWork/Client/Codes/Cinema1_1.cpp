@@ -21,8 +21,10 @@ CCinema1_1::CCinema1_1(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContex
 {
 }
 
-HRESULT CCinema1_1::NativeContruct()
+HRESULT CCinema1_1::NativeContruct(_uint iSceneID)
 {
+	if (FAILED(CScenematic::NativeContruct(iSceneID)))
+		return E_FAIL;
 	if (FAILED(Ready_Components()))
 		return E_FAIL;
 
@@ -121,10 +123,10 @@ HRESULT CCinema1_1::Ready_Components()
 	return S_OK;
 }
 
-CCinema1_1* CCinema1_1::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
+CCinema1_1* CCinema1_1::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext, _uint iSceneID)
 {
 	CCinema1_1* pInstance = new CCinema1_1(pDevice, pDeviceContext);
-	if (FAILED(pInstance->NativeContruct()))
+	if (FAILED(pInstance->NativeContruct(iSceneID)))
 	{
 		MSGBOX("Cinema1_1 Crate Faile");
 		Safe_Release(pInstance);

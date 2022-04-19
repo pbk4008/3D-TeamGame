@@ -22,8 +22,11 @@ CCinema1_2::CCinema1_2(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContex
 {
 }
 
-HRESULT CCinema1_2::NativeContruct()
+HRESULT CCinema1_2::NativeContruct(_uint iSceneID)
 {
+	if (FAILED(CScenematic::NativeContruct(iSceneID)))
+		return E_FAIL;
+
 	if (FAILED(Ready_Components()))
 		return E_FAIL;
 
@@ -40,7 +43,7 @@ HRESULT CCinema1_2::NativeContruct()
 	pGrayeHwakTr->Set_State(CTransform::STATE_POSITION, XMVectorSet(3.f, -1.f, 8.f, 1.f));
 
 	m_pSilvermane->Actor_AnimPlay(0);
-	CTransform* pSilvermaneTr = m_pGrayeHwak->Get_Transform();
+	CTransform* pSilvermaneTr = m_pSilvermane->Get_Transform();
 	pSilvermaneTr->Set_State(CTransform::STATE_POSITION, XMVectorSet(3.f, -1.f, 3.f, 1.f));
 
 	return S_OK;
@@ -136,10 +139,10 @@ HRESULT CCinema1_2::Ready_Components()
 	return S_OK;
 }
 
-CCinema1_2* CCinema1_2::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
+CCinema1_2* CCinema1_2::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext, _uint iSceneID)
 {
 	CCinema1_2* pInstance = new CCinema1_2(pDevice, pDeviceContext);
-	if (FAILED(pInstance->NativeContruct()))
+	if (FAILED(pInstance->NativeContruct(iSceneID)))
 	{
 		MSGBOX("Cinema1_2 Crate Faile");
 		Safe_Release(pInstance);

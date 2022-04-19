@@ -59,21 +59,21 @@ HRESULT CNeedle::NativeConstruct(const _uint _iSceneID, void* _pArg)
 
 	XMStoreFloat4x4(&m_matPivot, XMMatrixRotationRollPitchYaw(XMConvertToRadians(-20.f), XMConvertToRadians(-67.f), XMConvertToRadians(0.f)) * XMMatrixTranslation(0.5f, 0.05f, -0.2f));
 
-	// 트레일 이펙트 달기
-	CTrailEffect::DESC tTrailDesc;
-	tTrailDesc.pOwnerTransform = m_pTransform;
-	tTrailDesc.fLength = 0.5f;
-	XMStoreFloat4x4(&tTrailDesc.matPivot, XMMatrixTranslation(0.f, 0.f, 2.f));
-	tTrailDesc.wstrTextureTag = L"Fire_02";
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer(m_iSceneID, L"Layer_Effect", L"Proto_GameObject_TrailEffect_Normal", &tTrailDesc, (CGameObject**)&m_pTrailEffect_Normal)))
-		MSGBOX(L"노말 트레일 생성 실패. from Needle");
-	Safe_AddRef(m_pTrailEffect_Normal);
-	tTrailDesc.fLength = 1.f;
-	XMStoreFloat4x4(&tTrailDesc.matPivot, XMMatrixTranslation(0.f, 0.f, 1.5f));
-	tTrailDesc.wstrTextureTag = L"TrailBase";
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer(m_iSceneID, L"Layer_Effect", L"Proto_GameObject_TrailEffect_Distortion", &tTrailDesc, (CGameObject**)&m_pTrailEffect_Distortion)))
-		MSGBOX(L"디스토션 트레일 생성 실패. from Needle");
-	Safe_AddRef(m_pTrailEffect_Distortion);
+	//// 트레일 이펙트 달기
+	//CTrailEffect::DESC tTrailDesc;
+	//tTrailDesc.pOwnerTransform = m_pTransform;
+	//tTrailDesc.fLength = 0.5f;
+	//XMStoreFloat4x4(&tTrailDesc.matPivot, XMMatrixTranslation(0.f, 0.f, 2.f));
+	//tTrailDesc.wstrTextureTag = L"Fire_02";
+	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer(m_iSceneID, L"Layer_Effect", L"Proto_GameObject_TrailEffect_Normal", &tTrailDesc, (CGameObject**)&m_pTrailEffect_Normal)))
+	//	MSGBOX(L"노말 트레일 생성 실패. from Needle");
+	//Safe_AddRef(m_pTrailEffect_Normal);
+	//tTrailDesc.fLength = 1.f;
+	//XMStoreFloat4x4(&tTrailDesc.matPivot, XMMatrixTranslation(0.f, 0.f, 1.5f));
+	//tTrailDesc.wstrTextureTag = L"TrailBase";
+	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer(m_iSceneID, L"Layer_Effect", L"Proto_GameObject_TrailEffect_Distortion", &tTrailDesc, (CGameObject**)&m_pTrailEffect_Distortion)))
+	//	MSGBOX(L"디스토션 트레일 생성 실패. from Needle");
+	//Safe_AddRef(m_pTrailEffect_Distortion);
 
 	//Light
 	LIGHTDESC			LightDesc;
@@ -137,7 +137,7 @@ _int CNeedle::LateTick(_double _dDeltaTime)
 	if (0 > __super::LateTick(_dDeltaTime))
 		return -1;
 
-	if (m_isTrail)
+	/*if (m_isTrail)
 	{
 		m_pTrailEffect_Normal->Record_Points(_dDeltaTime);
 		m_pTrailEffect_Normal->Set_IsRender(true);
@@ -152,7 +152,7 @@ _int CNeedle::LateTick(_double _dDeltaTime)
 		m_pTrailEffect_Distortion->Clear_Points();
 		m_pTrailEffect_Distortion->Set_IsRender(false);
 		m_pRenderer->SetRenderButton(CRenderer::DISTORTION, false);
-	}
+	}*/
 
 	if(m_pRenderer)
 		m_pRenderer->Add_RenderGroup(CRenderer::RENDER_NONALPHA, this);

@@ -13,7 +13,7 @@ private:
 	explicit CCinema1_2(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);
 	virtual ~CCinema1_2() = default;
 public:
-	virtual HRESULT NativeContruct();
+	virtual HRESULT NativeContruct(_uint iSceneID);
 	virtual _int Tick(_double dDeltaTime);
 	virtual _int LateTick(_double dDeltaTime);
 public:
@@ -21,7 +21,7 @@ public:
 private:
 	HRESULT Ready_Components();
 public:
-	static CCinema1_2* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);
+	static CCinema1_2* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext, _uint iSceneID);
 private:
 	virtual void Free() override;
 private:

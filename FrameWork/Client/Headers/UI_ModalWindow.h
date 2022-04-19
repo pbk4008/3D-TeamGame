@@ -34,8 +34,8 @@ public:
 	void Show(void);
 	void Hide(void);
 	void ShutTheUI(void);
-	void OpenArmory(void);
-	void OpenEquipment(void);
+	_bool OpenArmory(void);
+	_bool OpenEquipment(void);
 
 public: /* Get */
 	CUI_Indexes*	GetIndex(void);

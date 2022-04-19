@@ -28,17 +28,43 @@
 #include "UI_SlotItemIcon.h"
 #include "UI_ItemStatusWindow.h"
 #include "UI_ItemStatusBackground.h"
+#include "UI_ItemStatusEffect.h"
 #include "Button_Equipment.h"
 #include "Button_Armory.h"
 #include "Button_Skill.h"
+#include "UI_SelectEffect.h"
+#include "IndexIndicator.h"
+#include "UI_PlayerStatusWindow.h"
+#include "UI_PlayerStatus_BG.h"
+#include "UI_PlayerStatus_Might.h"
+#include "UI_PlayerStatus_Spirit.h"
+#include "UI_PlayerStatus_Viality.h"
+#include "UI_PlayerStatus_DPS_1.h"
+#include "UI_PlayerStatus_DPS_2.h"
+#include "UI_PlayerStatus_MaxHealth.h"
+
 //HUD
 #include "Hud.h"
 #include "Loot_Equipment.h"
+#include "UI_LootBackground.h"
+#include "UI_LootGrade.h"
+#include "UI_LootFrame.h"
+#include "UI_LootItemIcon.h"
+#include "UI_LootItemEffect.h"
+#include "UI_LootItemNameText.h"
+#include "UI_LootItemNameType.h"
+#include "UI_Level_UP.h"
+#include "UI_LevelUP_Background.h"
+#include "UI_LevelUP_BG_Left.h"
+#include "UI_LevelUP_BG_Right.h"
+#include "UI_LevelUP_Fill_Lead_Left.h"
+#include "UI_LevelUP_Fill_Lead_Right.h"
+#include "UI_LevelUP_Fill_Left.h"
+#include "UI_LevelUP_Fill_Right.h"
 
 //Inventory UI Component
 #include "SingleImage.h"
 #include "UIHelper.h"
-
 
 CClient_Observer* g_pObserver = nullptr;
 CDebugSystem* g_pDebugSystem = nullptr;
@@ -313,6 +339,9 @@ HRESULT CMainApp::Ready_GameObject_Prototype()
 	//ItemStatus BG
 	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_UI_ItemStatus_BG"), UI_ItemStatusBackground::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
+	//ItemStatus Effect
+	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_UI_ItemStatus_Effect"), UI_ItemStatusEffect::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
 	//Button Equip
 	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_UI_Button_Equipment"), CButton_Equipment::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
@@ -322,13 +351,89 @@ HRESULT CMainApp::Ready_GameObject_Prototype()
 	//Button Skill
 	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_UI_Button_Skill"), CButton_Skill::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
+	//Select Effect
+	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_UI_SelectEffect"), CUI_SelectEffect::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	//Index Indicator
+	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_UI_IndexIndicator"), CIndexIndicator::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	//Player Status Window
+	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_UI_PlayerStatus_Window"), CUI_PlayerStatusWindow::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	//Player Status BG
+	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_UI_PlayerStatus_BG"), CUI_PlayerStatus_BG::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	//Player Status Might 
+	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_UI_PlayerStatus_Might"), CUI_PlayerStatus_Might::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	//Player Status Spirit
+	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_UI_PlayerStatus_Spirit"), CUI_PlayerStatus_Spirit::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	//Player Status Viality
+	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_UI_PlayerStatus_Viality"), CUI_PlayerStatus_Viality::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	//Player Status First DPS
+	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_UI_PlayerStatus_FirstDPS"), CUI_PlayerStatus_DPS_1::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	//Player Status Second DPS
+	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_UI_PlayerStatus_SecondDPS"), CUI_PlayerStatus_DPS_2::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	//Player Status Max Hp
+	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_UI_PlayerStatus_MaxHp"), CUI_PlayerStatus_MAXHP::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
 	////////////////////////////////
 	/* for. Hud */
-	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_UI_Button_Hud"), CHud::Create(m_pDevice, m_pDeviceContext))))
+	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_UI_Hud"), CHud::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 	//Loot Equipment
-	//if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_UI_LootEquipment"), CLoot_Equipment::Create(m_pDevice, m_pDeviceContext))))
-	//	return E_FAIL;
+	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_UI_LootEquipment"), CLoot_Equipment::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	//Loot Equipment Background
+	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_UI_LootBackground"), CUI_LootBackground::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	//Loot Equipment Grade
+	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_UI_LootGrade"), CUI_LootGrade::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	//Loot Equipment Frame
+	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_UI_LootFrame"), CUI_LootFrame::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	//Loot Equipment Item Icon
+	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_UI_LootItemIcon"), CUI_LootItemIcon::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	//Loot Equipment Item Effect
+	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_UI_LootItemEffect"), CUI_LootItemEffect::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	//Loot Equipment Item Name Text
+	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_UI_LootItemNameText"), CUI_LootItemNameText::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	//Loot Equipment Item Name Type
+	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_UI_LootItemNameType"), CUI_LootItemNameType::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	///////////////////////////////
+	//Level Up
+	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_UI_LevelUp"), CLevel_UP::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	//Level Up Background
+	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_UI_LevelUp_Background"), CUI_LevelUP_Background::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	//Level Up Background Left
+	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_UI_LevelUp_BG_Left"), CUI_LevelUP_BG_Left::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	//Level Up Background Right
+	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_UI_LevelUp_BG_Right"), CUI_LevelUP_BG_Right::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	//Level Up Fill Lead Left
+	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_UI_LevelUp_Fill_Lead_Left"), CUI_LevelUP_Fill_Lead_Left::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	//Level Up Fill Lead Right
+	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_UI_LevelUp_Fill_Lead_Right"), CUI_LevelUP_Fill_Lead_Right::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	//Level Up Fill Left
+	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_UI_LevelUp_Fill_Left"), UI_LevelUP_Fill_Left::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	//Level Up Fill Right
+	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_UI_LevelUp_Fill_Right"), UI_LevelUP_Fill_Right::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
 	////////////////////////////////
 	return S_OK;
 }

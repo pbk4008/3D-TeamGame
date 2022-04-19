@@ -25,7 +25,6 @@ HRESULT CDropManager::NativeConstruct(SCENEID _iSceneID)
 		return E_FAIL;
 
 	m_curSceneId = (_uint)_iSceneID;
-
 	m_pPlayer = *g_pGameInstance->getObjectList(m_curSceneId, L"Layer_Silvermane")->begin();
 
 	return S_OK;

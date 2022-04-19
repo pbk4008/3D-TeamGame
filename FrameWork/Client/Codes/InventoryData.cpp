@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "InventoryData.h"
+#include "Hud.h"
 
 CInventoryData::CInventoryData(void)
 {
@@ -13,6 +14,14 @@ _bool CInventoryData::PushItem(CItemData itemData)
 	else
 	{
 		InventoryItems.push_back(itemData);
+		
+		if (nullptr != g_pInvenUIManager)
+		{
+			CHud* pHud = g_pInvenUIManager->GetHud();
+			assert("pHud is nullptr!!" && pHud);
+			pHud->OnLootEquipment(&itemData);
+		}
+
 		return true;
 	}
 }
