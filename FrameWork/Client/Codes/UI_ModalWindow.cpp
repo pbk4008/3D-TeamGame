@@ -156,12 +156,14 @@ void CUI_ModalWindow::ShutTheUI(void)
 	//m_pSkills->Hide();
 }
 
-void CUI_ModalWindow::OpenArmory(void)
+_bool CUI_ModalWindow::OpenArmory(void)
 {
+	return m_pArmory->GetArmoryActive();
 }
 
-void CUI_ModalWindow::OpenEquipment(void)
+_bool CUI_ModalWindow::OpenEquipment(void)
 {
+	return m_pEquipment->GetEquipmentActive();
 }
 
 CUI_Indexes* CUI_ModalWindow::GetIndex(void)

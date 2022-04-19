@@ -12,6 +12,7 @@ BEGIN(Client)
 class CSingleImage;
 class CItemData;
 class UI_ItemStatusBackground;
+class UI_ItemStatusEffect;
 class CUI_ItemStatusWindow : public CUI
 {
 public:
@@ -41,6 +42,7 @@ public:
 public:
 	HRESULT Ready_Component(void);
 	HRESULT Ready_UIObject(void);
+	void    ResetInitPos(void) { m_fInitPos = 10.f; }
 
 public:
 	void Show(CItemData* _pItem);
@@ -62,6 +64,7 @@ private:
 
 private:
 	CSingleImage*	 m_pBgSprite = nullptr;
+	CSingleImage*	 m_pEffectSprite = nullptr;
 	UI_Texture*		 m_pRequiredLvText = nullptr;
 	UI_Texture*		 m_ptemNameText = nullptr;
 	UI_Texture*		 m_pGradeAndKindText = nullptr;
@@ -70,9 +73,14 @@ private:
 
 private:
 	UI_ItemStatusBackground*	m_pBg = nullptr;
+	UI_ItemStatusEffect*		m_pEffect = nullptr;
 
 private:
 	std::map<wstring, CGameObject*> m_mapDefaultUIs;
+
+private:
+	_float m_fInitPos = 10.f;
+	_float m_fEndPos = 0.f;
 
 public:
 	static CUI_ItemStatusWindow* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);

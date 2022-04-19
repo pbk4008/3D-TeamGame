@@ -287,6 +287,11 @@ _int CSilvermane::Tick(_double _dDeltaTime)
 		Active_Effect((_uint)EFFECT::HITGROUND, pos);
 	}
 
+	if (g_pGameInstance->getkeyDown(DIK_O))
+	{
+		m_pPlayerData->SetExp(10);
+	}
+
 	return _int();
 }
 

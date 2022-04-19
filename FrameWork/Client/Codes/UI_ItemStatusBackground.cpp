@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "UI_ItemStatusBackground.h"
 #include "SingleImage.h"
+#include "UI_ItemStatusWindow.h"
 
 UI_ItemStatusBackground::UI_ItemStatusBackground(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
 	:CUI(pDevice, pDeviceContext)
@@ -25,12 +26,14 @@ HRESULT UI_ItemStatusBackground::NativeConstruct(const _uint iSceneID, void* pAr
 	if (FAILED(__super::NativeConstruct(iSceneID, pArg)))
 		return E_FAIL;
 
+	desc = (*(Desc*)pArg);
+
+	m_pLocalTransform = g_pGameInstance->Clone_Component<CTransform>(0, L"Proto_Component_Transform");
+	m_pLocalTransform->Set_State(CTransform::STATE_POSITION, _vector{ 430.f, 0.f, 0.3f, 1.f });
+	m_pLocalTransform->Scaling(_vector{ 360.f, 580.f, 1.f, 1.f });
+
 	if (FAILED(Ready_Component()))
 		return E_FAIL;
-
-	m_pTransform->Set_State(CTransform::STATE_POSITION, _vector{ m_fInitPos, 0.f, 0.3f, 1.f });
-	//m_pTransform->Set_State(CTransform::STATE_POSITION, _vector{ 420.f, 0.f, 0.3f, 1.f });
-	m_pTransform->Scaling(_vector{ 360.f, 580.f, 1.f, 1.f });
 
 	setActive(true);
 
@@ -42,8 +45,6 @@ _int UI_ItemStatusBackground::Tick(_double dDeltaTime)
 	if (FAILED(CUI::Tick(dDeltaTime)))
 		return -1;
 
-
-
 	return _int();
 }
 
@@ -52,16 +53,11 @@ _int UI_ItemStatusBackground::LateTick(_double TimeDelta)
 	if (FAILED(CUI::LateTick(TimeDelta)))
 		return -1;
 
-	if (m_fInitPos > m_fEndPos)
-	{
-		m_fInitPos -= TimeDelta * 100.f;
-		if (m_fInitPos < m_fEndPos)
-		{
-			m_fInitPos = m_fEndPos;
-		}
-		m_pTransform->Set_State(CTransform::STATE_POSITION, _vector{ m_fInitPos, 0.f, 0.3f, 1.f });
-	}
-	
+	Attach_Owner();
+	m_pLocalTransform->Set_State(CTransform::STATE_POSITION, _vector{ 430.f, 0.f, 0.2f, 1.f });
+
+	m_pLocalTransform->Scaling(_vector{ 360.f, 600.f, 1.f, 1.f });
+
 	return _int();
 }
 
@@ -79,16 +75,13 @@ HRESULT UI_ItemStatusBackground::Render()
 void UI_ItemStatusBackground::setActive(_bool bActive)
 {
 	this->m_bActive = bActive;
-	
-	if (false == bActive)
-		m_fInitPos = 430.f;
 }
 
 HRESULT UI_ItemStatusBackground::Ready_Component(void)
 {
 	/* for. Single Image Com */
 	CSingleImage::Desc ModalSprite;
-	ModalSprite.textureName = L"T_ItemStatus_Bg_Common";
+	ModalSprite.textureName = L"T_ItemStatus_Weapon_Needle";
 	ModalSprite.pCreator = this;
 	ModalSprite.pRenderer = this->m_pRenderer;
 	ModalSprite.pTransform = this->m_pTransform;
@@ -102,6 +95,20 @@ HRESULT UI_ItemStatusBackground::Ready_Component(void)
 CSingleImage* UI_ItemStatusBackground::GetSingleImage(void)
 {
 	return m_pSigleImageCom;
+}
+
+_int UI_ItemStatusBackground::Attach_Owner(void)
+{
+	if (nullptr != desc.pOwner)
+	{
+		_matrix smatWorld = m_pLocalTransform->Get_WorldMatrix();
+		_matrix smatOwerWorld = static_cast<CUI_ItemStatusWindow*>(desc.pOwner)->Get_Transform()->Get_WorldMatrix();
+
+		m_pTransform->Set_WorldMatrix(smatWorld * smatOwerWorld);
+	}
+
+
+	return _int();
 }
 
 UI_ItemStatusBackground* UI_ItemStatusBackground::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
@@ -130,6 +137,7 @@ CGameObject* UI_ItemStatusBackground::Clone(const _uint iSceneID, void* pArg)
 void UI_ItemStatusBackground::Free()
 {
 	Safe_Release(m_pSigleImageCom);
+	Safe_Release(m_pLocalTransform);
 
 	__super::Free();
 }

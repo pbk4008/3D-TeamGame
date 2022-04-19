@@ -823,20 +823,83 @@
     <Filter Include="02.GameObject\05.UI\05.Hud\00.Loot_Equipment\00.Background">
       <UniqueIdentifier>{64f468e9-c508-46c7-b1cc-6f82a1421d72}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObject\05.UI\05.Hud\00.Loot_Equipment\01.Grade">
+    <Filter Include="02.GameObject\05.UI\05.Hud\00.Loot_Equipment\02.Grade">
       <UniqueIdentifier>{1f0312d8-d933-425d-833f-007340c33ca6}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObject\05.UI\05.Hud\00.Loot_Equipment\02.ItemIcon">
+    <Filter Include="02.GameObject\05.UI\05.Hud\00.Loot_Equipment\03.ItemIcon">
       <UniqueIdentifier>{734951bf-7155-4361-abd7-ac5b95729157}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObject\05.UI\05.Hud\00.Loot_Equipment\03.ItemEffect">
+    <Filter Include="02.GameObject\05.UI\05.Hud\00.Loot_Equipment\04.ItemEffect">
       <UniqueIdentifier>{1aa8f0fa-3e53-4e34-b399-5236c4d40363}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObject\05.UI\05.Hud\00.Loot_Equipment\04.ItemNameText">
+    <Filter Include="02.GameObject\05.UI\05.Hud\00.Loot_Equipment\05.ItemNameText">
       <UniqueIdentifier>{be661eb4-722d-4761-9b65-d41ba77cb755}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObject\05.UI\05.Hud\00.Loot_Equipment\05.ItemTypeText">
+    <Filter Include="02.GameObject\05.UI\05.Hud\00.Loot_Equipment\06.ItemTypeText">
       <UniqueIdentifier>{7aabadda-a29d-4b40-afad-af2a4daaa382}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.UI\05.Hud\00.Loot_Equipment\01.Frame">
+      <UniqueIdentifier>{50e6cb86-dfb6-4111-808f-69738befc736}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.UI\04.Inventory\05.ItemStatusWindow\01.StatusEffect">
+      <UniqueIdentifier>{86421fe7-fe1f-4dd3-b2c2-b4acc6df38c0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.UI\04.Inventory\04.ItemSlot\05.SelectEffect">
+      <UniqueIdentifier>{0f89ccb5-e37f-49b4-85dc-e0a6dd76f808}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.UI\04.Inventory\00.Indexes\03.Indicator">
+      <UniqueIdentifier>{5d28721a-1546-411f-8a3f-d39b53e92dfd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.UI\05.Hud\01.LevelUp">
+      <UniqueIdentifier>{b05a5374-3a99-4619-adfc-28ad479c74c9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.UI\05.Hud\01.LevelUp\00.Background">
+      <UniqueIdentifier>{453b61c1-5b1f-489d-b947-7d569d00d413}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.UI\05.Hud\01.LevelUp\01.Bg_Left">
+      <UniqueIdentifier>{e1fd938b-95e6-4016-8d68-676afee64c72}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.UI\05.Hud\01.LevelUp\02.Bg_Right">
+      <UniqueIdentifier>{b3d65390-a6eb-4ef5-8f2d-f4832989dc97}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.UI\05.Hud\01.LevelUp\02.Bg_Right\00.Fill_Right">
+      <UniqueIdentifier>{6eef7025-08a2-476d-adff-897ccfa1e942}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.UI\05.Hud\01.LevelUp\01.Bg_Left\00.Fill_Lead_Left">
+      <UniqueIdentifier>{4f0ed22a-321a-44f9-b015-f1fb8eb3aff0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.UI\05.Hud\01.LevelUp\01.Bg_Left\00.Fill_Lead_Left\00.Fill_Left">
+      <UniqueIdentifier>{ce8d4a4d-d63c-4555-92e4-3db2804a0515}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.UI\05.Hud\01.LevelUp\02.Bg_Right\00.Fill_Right\00.Fill_Lead_Right">
+      <UniqueIdentifier>{8bbea511-5e0f-407f-94de-d1bf899aba2e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.UI\05.Hud\01.LevelUp\02.Bg_Right\00.Fill_Right\00.Fill_Lead_Right\00.Fill_Rigth">
+      <UniqueIdentifier>{a23c0641-d31c-45aa-8ebe-9a454b635da1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.UI\04.Inventory\06.PlayerStatusWindow">
+      <UniqueIdentifier>{f3fd4ac5-03b6-4004-bde5-8de26456f78c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.UI\04.Inventory\06.PlayerStatusWindow\00.Background">
+      <UniqueIdentifier>{cc869def-1870-444a-b77b-d08a8160e87f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.UI\04.Inventory\06.PlayerStatusWindow\01.UI_Might">
+      <UniqueIdentifier>{cb912585-1865-4ed4-bab7-00de9883c017}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.UI\04.Inventory\06.PlayerStatusWindow\03.UI_Vitality">
+      <UniqueIdentifier>{5a5936d0-a520-440f-81e4-cc0012bc94c2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.UI\04.Inventory\06.PlayerStatusWindow\02.UI_Spirit">
+      <UniqueIdentifier>{8574e5ea-a8c6-4db5-a998-9450bd6f0ca7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.UI\04.Inventory\06.PlayerStatusWindow\04.First_DPS">
+      <UniqueIdentifier>{fa7b7eee-fc13-4587-b0f6-aba475c0d38e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.UI\04.Inventory\06.PlayerStatusWindow\05.Second_DPS">
+      <UniqueIdentifier>{55f9b407-905c-48e6-b740-87dc66be3eb9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.UI\04.Inventory\06.PlayerStatusWindow\06.MaxHealth">
+      <UniqueIdentifier>{38ae5783-b796-4654-a386-fe25666773d7}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -1871,12 +1934,90 @@
     </ClInclude>
     <ClInclude Include="..\Headers\Loot_Equipment.h">
       <Filter>02.GameObject\05.UI\05.Hud\00.Loot_Equipment</Filter>
-	</ClInclude>
+    </ClInclude>
     <ClInclude Include="..\Headers\TrailEffect_Distortion.h">
       <Filter>02.GameObject\04.Effect\01.TrailEffect</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\TrailEffect_Normal.h">
       <Filter>02.GameObject\04.Effect\01.TrailEffect</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\UI_LootBackground.h">
+      <Filter>02.GameObject\05.UI\05.Hud\00.Loot_Equipment\00.Background</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\UI_LootGrade.h">
+      <Filter>02.GameObject\05.UI\05.Hud\00.Loot_Equipment\02.Grade</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\UI_LootFrame.h">
+      <Filter>02.GameObject\05.UI\05.Hud\00.Loot_Equipment\01.Frame</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\UI_LootItemIcon.h">
+      <Filter>02.GameObject\05.UI\05.Hud\00.Loot_Equipment\03.ItemIcon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\UI_LootItemEffect.h">
+      <Filter>02.GameObject\05.UI\05.Hud\00.Loot_Equipment\04.ItemEffect</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\UI_LootItemNameText.h">
+      <Filter>02.GameObject\05.UI\05.Hud\00.Loot_Equipment\05.ItemNameText</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\UI_LootItemNameType.h">
+      <Filter>02.GameObject\05.UI\05.Hud\00.Loot_Equipment\06.ItemTypeText</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\UI_ItemStatusEffect.h">
+      <Filter>02.GameObject\05.UI\04.Inventory\05.ItemStatusWindow\01.StatusEffect</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\UI_SelectEffect.h">
+      <Filter>02.GameObject\05.UI\04.Inventory\04.ItemSlot\05.SelectEffect</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\IndexIndicator.h">
+      <Filter>02.GameObject\05.UI\04.Inventory\00.Indexes\03.Indicator</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\UI_Level_UP.h">
+      <Filter>02.GameObject\05.UI\05.Hud\01.LevelUp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\UI_LevelUP_Background.h">
+      <Filter>02.GameObject\05.UI\05.Hud\01.LevelUp\00.Background</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\UI_LevelUP_BG_Left.h">
+      <Filter>02.GameObject\05.UI\05.Hud\01.LevelUp\01.Bg_Left</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\UI_LevelUP_BG_Right.h">
+      <Filter>02.GameObject\05.UI\05.Hud\01.LevelUp\02.Bg_Right</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\UI_LevelUP_Fill_Lead_Left.h">
+      <Filter>02.GameObject\05.UI\05.Hud\01.LevelUp\01.Bg_Left\00.Fill_Lead_Left</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\UI_LevelUP_Fill_Lead_Right.h">
+      <Filter>02.GameObject\05.UI\05.Hud\01.LevelUp\02.Bg_Right\00.Fill_Right\00.Fill_Lead_Right</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\UI_LevelUP_Fill_Right.h">
+      <Filter>02.GameObject\05.UI\05.Hud\01.LevelUp\02.Bg_Right\00.Fill_Right\00.Fill_Lead_Right\00.Fill_Rigth</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\UI_LevelUP_Fill_Left.h">
+      <Filter>02.GameObject\05.UI\05.Hud\01.LevelUp\01.Bg_Left\00.Fill_Lead_Left\00.Fill_Left</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\UI_PlayerStatusWindow.h">
+      <Filter>02.GameObject\05.UI\04.Inventory\06.PlayerStatusWindow</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\UI_PlayerStatus_BG.h">
+      <Filter>02.GameObject\05.UI\04.Inventory\06.PlayerStatusWindow\00.Background</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\UI_PlayerStatus_Might.h">
+      <Filter>02.GameObject\05.UI\04.Inventory\06.PlayerStatusWindow\01.UI_Might</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\UI_PlayerStatus_Spirit.h">
+      <Filter>02.GameObject\05.UI\04.Inventory\06.PlayerStatusWindow\02.UI_Spirit</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\UI_PlayerStatus_Viality.h">
+      <Filter>02.GameObject\05.UI\04.Inventory\06.PlayerStatusWindow\03.UI_Vitality</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\UI_PlayerStatus_DPS_1.h">
+      <Filter>02.GameObject\05.UI\04.Inventory\06.PlayerStatusWindow\04.First_DPS</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\UI_PlayerStatus_DPS_2.h">
+      <Filter>02.GameObject\05.UI\04.Inventory\06.PlayerStatusWindow\05.Second_DPS</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\UI_PlayerStatus_MaxHealth.h">
+      <Filter>02.GameObject\05.UI\04.Inventory\06.PlayerStatusWindow\06.MaxHealth</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -2878,12 +3019,90 @@
     </ClCompile>
     <ClCompile Include="..\Codes\Loot_Equipment.cpp">
       <Filter>02.GameObject\05.UI\05.Hud\00.Loot_Equipment</Filter>
-	</ClCompile>
+    </ClCompile>
     <ClCompile Include="..\Codes\TrailEffect_Distortion.cpp">
       <Filter>02.GameObject\04.Effect\01.TrailEffect</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\TrailEffect_Normal.cpp">
       <Filter>02.GameObject\04.Effect\01.TrailEffect</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\UI_LootBackground.cpp">
+      <Filter>02.GameObject\05.UI\05.Hud\00.Loot_Equipment\00.Background</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\UI_LootGrade.cpp">
+      <Filter>02.GameObject\05.UI\05.Hud\00.Loot_Equipment\02.Grade</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\UI_LootFrame.cpp">
+      <Filter>02.GameObject\05.UI\05.Hud\00.Loot_Equipment\01.Frame</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\UI_LootItemIcon.cpp">
+      <Filter>02.GameObject\05.UI\05.Hud\00.Loot_Equipment\03.ItemIcon</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\UI_LootItemEffect.cpp">
+      <Filter>02.GameObject\05.UI\05.Hud\00.Loot_Equipment\04.ItemEffect</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\UI_LootItemNameText.cpp">
+      <Filter>02.GameObject\05.UI\05.Hud\00.Loot_Equipment\05.ItemNameText</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\UI_LootItemNameType.cpp">
+      <Filter>02.GameObject\05.UI\05.Hud\00.Loot_Equipment\06.ItemTypeText</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\UI_ItemStatusEffect.cpp">
+      <Filter>02.GameObject\05.UI\04.Inventory\05.ItemStatusWindow\01.StatusEffect</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\UI_SelectEffect.cpp">
+      <Filter>02.GameObject\05.UI\04.Inventory\04.ItemSlot\05.SelectEffect</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\IndexIndicator.cpp">
+      <Filter>02.GameObject\05.UI\04.Inventory\00.Indexes\03.Indicator</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\UI_Level_UP.cpp">
+      <Filter>02.GameObject\05.UI\05.Hud\01.LevelUp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\UI_LevelUP_Background.cpp">
+      <Filter>02.GameObject\05.UI\05.Hud\01.LevelUp\00.Background</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\UI_LevelUP_BG_Left.cpp">
+      <Filter>02.GameObject\05.UI\05.Hud\01.LevelUp\01.Bg_Left</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\UI_LevelUP_BG_Right.cpp">
+      <Filter>02.GameObject\05.UI\05.Hud\01.LevelUp\02.Bg_Right</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\UI_LevelUP_Fill_Lead_Left.cpp">
+      <Filter>02.GameObject\05.UI\05.Hud\01.LevelUp\01.Bg_Left\00.Fill_Lead_Left</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\UI_LevelUP_Fill_Lead_Right.cpp">
+      <Filter>02.GameObject\05.UI\05.Hud\01.LevelUp\02.Bg_Right\00.Fill_Right\00.Fill_Lead_Right</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\UI_LevelUP_Fill_Right.cpp">
+      <Filter>02.GameObject\05.UI\05.Hud\01.LevelUp\02.Bg_Right\00.Fill_Right\00.Fill_Lead_Right\00.Fill_Rigth</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\UI_LevelUP_Fill_Left.cpp">
+      <Filter>02.GameObject\05.UI\05.Hud\01.LevelUp\01.Bg_Left\00.Fill_Lead_Left\00.Fill_Left</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\UI_PlayerStatusWindow.cpp">
+      <Filter>02.GameObject\05.UI\04.Inventory\06.PlayerStatusWindow</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\UI_PlayerStatus_BG.cpp">
+      <Filter>02.GameObject\05.UI\04.Inventory\06.PlayerStatusWindow\00.Background</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\UI_PlayerStatus_Might.cpp">
+      <Filter>02.GameObject\05.UI\04.Inventory\06.PlayerStatusWindow\01.UI_Might</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\UI_PlayerStatus_Spirit.cpp">
+      <Filter>02.GameObject\05.UI\04.Inventory\06.PlayerStatusWindow\02.UI_Spirit</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\UI_PlayerStatus_Viality.cpp">
+      <Filter>02.GameObject\05.UI\04.Inventory\06.PlayerStatusWindow\03.UI_Vitality</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\UI_PlayerStatus_DPS_1.cpp">
+      <Filter>02.GameObject\05.UI\04.Inventory\06.PlayerStatusWindow\04.First_DPS</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\UI_PlayerStatus_DPS_2.cpp">
+      <Filter>02.GameObject\05.UI\04.Inventory\06.PlayerStatusWindow\05.Second_DPS</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\UI_PlayerStatus_MaxHealth.cpp">
+      <Filter>02.GameObject\05.UI\04.Inventory\06.PlayerStatusWindow\06.MaxHealth</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

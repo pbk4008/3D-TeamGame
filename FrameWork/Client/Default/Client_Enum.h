@@ -109,8 +109,60 @@ enum class EEquipmentType
 	Charm,
 	LifeStone,
 	Banner,
-	Augment,
 	Equipment_Type_End
+};
+
+
+enum class EEquipmentName
+{
+	/* weapon */
+	Needle,
+	ArgentBlade,
+	Crossblade,
+	Dragon,
+	Eclipse,
+	Fury,
+	GodHammer,
+	Harbinger,
+	Hinterclaw,
+	Ironstone,
+	Justice,
+	Legend1, 
+	Legend2,
+	Legend5,
+	Mesa,
+	Skymourne, 
+	Soothsayer,
+	/* Banner */
+	Banner_1,
+	Banner_2,
+	Banner_4,
+	Banner_6,
+	Banner_7,
+	/* Charm */
+	Charms_6,
+	Charms_7,
+	Charms_9,
+	Charms_14,
+	Charms_17,
+	/* LifeStone */
+	LifeStone_2,
+	LifeStone_3,
+	LifeStone_5,
+	LifeStone_9,
+	/* Ring */
+	Ring_5,
+	Ring_27,
+	Ring_33,
+	Ring_40,
+	Ring_AilmentChance,
+	/* Amulet */
+	Amulet_11,
+	Amulet_12,
+	Amulet_13,
+	Amulet_BlisteringPulse,
+	Amulet_SunBloom,
+	Equipment_Name_End
 };
 
 typedef enum eEquipmentMainStatType
@@ -125,7 +177,6 @@ typedef enum eEquipmentMainStatType
 	AllStat,
 	//LifeStone
 	HealthRecovery,
-
 	MainStatType_End
 }EQUIPMENT_MAINSTAT_TYPE;
 
@@ -150,7 +201,7 @@ enum class EEquipSlot
 	Max,
 
 	/* 무기1 무기2 */
-	/* 목걸이 방패 */
+	/* 목걸이 장신구 */
 	/* 반지1 반지2 */
 	/* 생명석 배너 */
 };
@@ -199,7 +250,7 @@ static const string g_arrMI_Tex[(int)EWeaponMaterial::MATERIAL_END]
 	"g_DiffuseTexture",
 	"g_BiNormalTexture",
 	"g_MRATexture",
-	"g_CEOTexture"
+	"g_CEOTexture",
 	"g_MASKTexture"
 };
 
@@ -208,17 +259,126 @@ const wstring g_arrGradeSlotBgName[(int)EEquipmentGradeUI::GRADE_END]
 	L"T_Item_Bg_Grey",
 	L"T_Item_Bg_Blue",
 	L"T_Item_Bg_Green",
+	L"T_Item_Bg_Orange",
 	L"T_Item_Bg_Purple",
-	L"T_Item_Bg_Orange"
 };
 
-const wstring g_arrGradeStatusBgName[(int)EEquipmentGradeUI::GRADE_END]
+/* 인벤토리 아이템 설명 */
+const wstring g_arrGradeStatusBgName[(int)EEquipmentName::Equipment_Name_End]
 { 
-	L"T_ItemStatus_Bg_Common",
-	L"T_ItemStatus_Bg_Rare",
-	L"T_ItemStatus_Bg_Uncommon",
-	L"T_ItemStatus_Bg_Epic",
-	L"T_ItemStatus_Bg_Legendary"
+	/* Weapon */
+	L"T_ItemStatus_Weapon_Needle",
+	L"T_ItemStatus_Weapon_ArgentBlade",
+	L"T_ItemStatus_Weapon_Crossblade",
+	L"T_ItemStatus_Weapon_Dragon",
+	L"T_ItemStatus_Weapon_Eclipse",
+	L"T_ItemStatus_Weapon_Fury",
+	L"T_ItemStatus_Weapon_GodHammer",
+	L"T_ItemStatus_Weapon_Harbinger",
+	L"T_ItemStatus_Weapon_Hinterclaw",
+	L"T_ItemStatus_Weapon_Ironstone",
+	L"T_ItemStatus_Weapon_Justice",
+	L"T_ItemStatus_Weapon_Legend1",
+	L"T_ItemStatus_Weapon_Legend2",
+	L"T_ItemStatus_Weapon_Legend5",
+	L"T_ItemStatus_Weapon_Mesa",
+	L"T_ItemStatus_Weapon_Skymourne",
+	L"T_ItemStatus_Weapon_Soothsayer",
+	/* Banner */
+	L"T_ItemStatus_Banner_1",
+	L"T_ItemStatus_Banner_2",
+	L"T_ItemStatus_Banner_4",
+	L"T_ItemStatus_Banner_6",
+	L"T_ItemStatus_Banner_7",
+	/* Charm */
+	L"T_ItemStatus_Charms_6",
+	L"T_ItemStatus_Charms_7",
+	L"T_ItemStatus_Charms_9",
+	L"T_ItemStatus_Charms_14",
+	L"T_ItemStatus_Charms_17",
+	/* LifeStone */
+	L"T_ItemStatus_LifeStone_2",
+	L"T_ItemStatus_LifeStone_3",
+	L"T_ItemStatus_LifeStone_5",
+	L"T_ItemStatus_LifeStone_9",
+	/* Ring */
+	L"T_ItemStatus_Ring_5",
+	L"T_ItemStatus_Ring_27",
+	L"T_ItemStatus_Ring_33",
+	L"T_ItemStatus_Ring_40",
+	L"T_ItemStatus_Ring_AilmentChance",
+	/* Amulet*/
+	L"T_ItemStatus_Amulet_11",
+	L"T_ItemStatus_Amulet_12",
+	L"T_ItemStatus_Amulet_13",
+	L"T_ItemStatus_Amulet_BlisteringPulse",
+	L"T_ItemStatus_SunBloom"
+};
+
+/* 획득시 아이템 이름 */
+const wstring g_arrHUDItemIcon[(int)EEquipmentName::Equipment_Name_End]
+{
+	L"T_HUD_WeaponName_Needle",
+	L"T_HUD_WeaponName_ArgentBlade",
+	L"T_HUD_WeaponName_Crossblade",
+	L"T_HUD_WeaponName_Dragon",
+	L"T_HUD_WeaponName_Eclipse",
+	L"T_HUD_WeaponName_Fury",
+	L"T_HUD_WeaponName_GodHammer",
+	L"T_HUD_WeaponName_Harbinger",
+	L"T_HUD_WeaponName_Hinterclaw",
+	L"T_HUD_WeaponName_Ironstone",
+	L"T_HUD_WeaponName_Justice",
+	L"T_HUD_WeaponName_Legend1",
+	L"T_HUD_WeaponName_Legend2",
+	L"T_HUD_WeaponName_Legend5",
+	L"T_HUD_WeaponName_Mesa",
+	L"T_HUD_WeaponName_Skymourne",
+	L"T_HUD_WeaponName_Soothsayer",
+	L"T_HUD_BannerName_1",
+	L"T_HUD_BannerName_2",
+	L"T_HUD_BannerName_4",
+	L"T_HUD_BannerName_6",
+	L"T_HUD_BannerName_7",
+	L"T_HUD_CharmsName_6",
+	L"T_HUD_CharmsName_7",
+	L"T_HUD_CharmsName_9",
+	L"T_HUD_CharmsName_14",
+	L"T_HUD_CharmsName_17",
+	L"T_HUD_LifeStoneName_2",
+	L"T_HUD_LifeStoneName_3",
+	L"T_HUD_LifeStoneName_5",
+	L"T_HUD_LifeStoneName_9",
+	L"T_HUD_RingName_5",
+	L"T_HUD_RingName_27",
+	L"T_HUD_RingName_33",
+	L"T_HUD_RingName_40",
+	L"T_HUD_RingName_AilmentChance",
+	L"T_HUD_AmuletName_11",
+	L"T_HUD_AmuletName_12",
+	L"T_HUD_AmuletName_13",
+	L"T_HUD_AmuletName_BlisteringPulse",
+	L"T_HUD_AmuletName_SunBloom"
+};
+
+
+const wstring g_arrHUDItemTypeIcon[(int)EEquipmentType::Equipment_Type_End]
+{
+	L"T_HUD_LootItemName_Weapon",
+	L"T_HUD_LootItemName_Ring",
+	L"T_HUD_LootItemName_Amulet", /* 목걸이 */
+	L"T_HUD_LootItemName_Charm",  /* 장신구 */
+	L"T_HUD_LootItemName_LifeStone",
+	L"T_HUD_LootItemName_Banner"
+};
+
+const wstring g_arrEffectStatus[(int)EEquipmentGradeUI::GRADE_END]
+{
+	L"T_GearPopover_Glow_Common",
+	L"T_GearPopover_Glow_UnCommon",
+	L"T_GearPopover_Glow_Rare",
+	L"T_GearPopover_Glow_Legendary",
+	L"T_GearPopover_Glow_Epic",
 };
 
 const wstring g_arrGradeEffectName[(int)EEquipmentGradeUI::GRADE_END]
@@ -226,8 +386,8 @@ const wstring g_arrGradeEffectName[(int)EEquipmentGradeUI::GRADE_END]
 	L"T_Item_Glow_Grey",
 	L"T_Item_Glow_Blue",
 	L"T_Item_Glow_Green",
+	L"T_Item_Glow_Orange",
 	L"T_Item_Glow_Purple",
-	L"T_Item_Glow_Orange"
 };
 
 const wstring g_arrMI_ArgentBlade[(int)EWeaponMaterial::MATERIAL_END]
@@ -249,7 +409,7 @@ const wstring g_arrMI_Dragon[(int)EWeaponMaterial::MATERIAL_END]
 	L"T_1h_Sword_Dragon_D.dds",
 	L"T_1h_Sword_Dragon_N.dds",
 	L"T_1h_Sword_Dragon_MRA.dds",
-	L"T_1h_Sword_Dragon_CEO.dds"
+	L"T_1h_Sword_Dragon_CEO.dds",
 };
 
 const wstring g_arrMI_Eclipse[(int)EWeaponMaterial::MATERIAL_END]
@@ -257,7 +417,7 @@ const wstring g_arrMI_Eclipse[(int)EWeaponMaterial::MATERIAL_END]
 	L"T_1H_Sword_Eclipse_Gold_D.dds",
 	L"T_1H_Sword_Eclipse_Gold_N.dds",
 	L"T_1H_Sword_Eclipse_Gold_MRA.dds",
-	L"T_1H_Sword_Eclipse_Gold_CEO.dds"
+	L"T_1H_Sword_Eclipse_Gold_CEO.dds",
 };
 
 const wstring g_arrMI_Justice[(int)EWeaponMaterial::MATERIAL_END]
@@ -265,7 +425,7 @@ const wstring g_arrMI_Justice[(int)EWeaponMaterial::MATERIAL_END]
 	L"T_1H_sword_Justice_D.dds",
 	L"T_1H_sword_Justice_N.dds",
 	L"T_1H_sword_Justice_MRA.dds",
-	L"T_1H_sword_Justice_CEO.dds"
+	L"T_1H_sword_Justice_CEO.dds",
 };
 
 const wstring g_arrMI_GodHammer[(int)EWeaponMaterial::MATERIAL_END]

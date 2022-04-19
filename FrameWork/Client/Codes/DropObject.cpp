@@ -183,7 +183,7 @@ void CDropObject::Drop(CItemData itemData, _fvector dropPos, EScatterType scatte
 	
 	XMStoreFloat3(&m_dropPos, dropPos);
 	m_droppedItem = itemData;
-
+	
 	m_pTransform->Set_State(CTransform::STATE_POSITION, dropPos);
 
 	if (EScatterType::Quad == scatterType)

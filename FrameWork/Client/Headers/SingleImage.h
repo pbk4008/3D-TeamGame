@@ -7,6 +7,7 @@ BEGIN(Engine)
 class UI_Texture;
 class CVIBuffer_Rect;
 class CVI_UIBuffer;
+class CVIBuffer_Trapezium;
 class CRenderer;
 END
 
@@ -14,7 +15,7 @@ BEGIN(Client)
 class CSingleImage :  public CComponent
 {
 public:
-	enum RenderType { Alpha, Nonalpha, Type_End };
+	enum RenderType { Alpha, Nonalpha, VerticalGauge, Type_End };
 
 public:
 	struct Desc
@@ -26,9 +27,20 @@ public:
 		std::wstring textureName = L"default";
 		std::wstring renderTargetName = L"";
 		ID3D11ShaderResourceView* pTexture = nullptr;
-		CRenderer* pRenderer = nullptr;
-		CTransform* pTransform = nullptr;
+		CRenderer*   pRenderer = nullptr;
+		CTransform*  pTransform = nullptr;
 		CGameObject* pCreator = nullptr;
+		CVIBuffer_Trapezium*  pBuffer = nullptr;
+		_float		 fCurExpGauge;
+		_float		 fGapX;
+		_float		 fGapY;
+	};
+
+	struct RenderVal
+	{
+		_float		 fCurExpGauge;
+		_float		 fGapX;
+		_float		 fGapY;
 	};
 
 private:
@@ -50,6 +62,7 @@ public:
 	const _fvector& GetColor(void)					{ return XMLoadFloat4(&m_fColor); }
 	void SetOffsetPos(const _float2& offsetPos)		{ m_fOffsetPosition = offsetPos; }
 	void SetOffsetScale(const _float2& offsetScale) { m_fOffsetScale = offsetScale; }
+	void SetRenderVal(void* val);
 
 private:
 	ID3D11ShaderResourceView* m_pImage = nullptr;
@@ -57,12 +70,17 @@ private:
 	_float2 m_fOffsetPosition = { 0.f, 0.f };
 	_float2 m_fOffsetScale = { 1.f, 1.f };
 	_bool   m_bRenderPass = 1;
+	RenderType m_ERenderType = Type_End;
+	_float  m_fGapX;
+	_float  m_fGapY;
+	_float  m_fCurExpGauge;
 
 private:
-	CVIBuffer_Rect* m_pBuffer;
-	CRenderer*		m_pRenderer = nullptr;
-	CTransform*		m_pTransform = nullptr;
-	CGameObject*	m_pCreator = nullptr;
+	CVIBuffer_Rect*		 m_pBuffer;
+	CVIBuffer_Trapezium* m_pTrapziumBuffer = nullptr;
+	CRenderer*			 m_pRenderer = nullptr;
+	CTransform*			 m_pTransform = nullptr;
+	CGameObject*		 m_pCreator = nullptr;
 
 public:
 	static CSingleImage* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);

@@ -3,6 +3,7 @@
 #include "SingleImage.h"
 #include "ItemData.h"
 #include "UI_ItemStatusBackground.h"
+#include "UI_ItemStatusEffect.h"
 
 CUI_ItemStatusWindow::CUI_ItemStatusWindow(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
 	: CUI(pDevice, pDeviceContext)
@@ -54,9 +55,21 @@ _int CUI_ItemStatusWindow::LateTick(_double TimeDelta)
 	if (nullptr != m_pRenderer)
 		m_pRenderer->Add_RenderGroup(CRenderer::RENDER::RENDER_UI_ACTIVE, this);
 
-	if (this->getActive())
-		m_pBg->LateTick(TimeDelta);
+	if (m_fInitPos > m_fEndPos)
+	{
+		m_fInitPos -= TimeDelta * 100.f;
+		if (m_fInitPos < m_fEndPos)
+		{
+			m_fInitPos = m_fEndPos;
+		}
+		m_pTransform->Set_State(CTransform::STATE_POSITION, _vector{ m_fInitPos, 0.f, 0.3f, 1.f });
+	}
 
+	if (this->getActive())
+	{
+		m_pBg->LateTick(TimeDelta);
+		m_pEffect->LateTick(TimeDelta);
+	}
 	for (auto iter : m_mapDefaultUIs)
 	{
 		if (iter.second->getActive())
@@ -72,7 +85,10 @@ HRESULT CUI_ItemStatusWindow::Render()
 {
 
 	if (this->getActive())
+	{
 		m_pBg->Render();
+		m_pEffect->Render();
+	}
 
 	for (auto iter : m_mapDefaultUIs)
 	{
@@ -92,10 +108,18 @@ HRESULT CUI_ItemStatusWindow::Ready_Component(void)
 
 HRESULT CUI_ItemStatusWindow::Ready_UIObject(void)
 {
-	m_pBg = static_cast<UI_ItemStatusBackground*>(g_pGameInstance->Clone_GameObject((_uint)SCENEID::SCENE_STATIC, L"Proto_GameObject_UI_ItemStatus_BG"));
-	m_pBgSprite = m_pBg->GetSingleImage();
-	InsertDefaultUIs(L"Bg", m_pBg);
-
+	{
+		UI_ItemStatusBackground::Desc desc;
+		desc.pOwner = this;
+		m_pBg = static_cast<UI_ItemStatusBackground*>(g_pGameInstance->Clone_GameObject((_uint)SCENEID::SCENE_STATIC, L"Proto_GameObject_UI_ItemStatus_BG", &desc));
+		m_pBgSprite = m_pBg->GetSingleImage();
+		InsertDefaultUIs(L"Bg", m_pBg);
+	}
+	{
+		UI_ItemStatusEffect::Desc desc;
+		desc.pOwner = this;
+		m_pEffect = static_cast<UI_ItemStatusEffect*>(g_pGameInstance->Clone_GameObject((_uint)SCENEID::SCENE_STATIC, L"Proto_GameObject_UI_ItemStatus_Effect", &desc));
+	}
 	return S_OK;
 }
 
@@ -118,6 +142,7 @@ void CUI_ItemStatusWindow::Show(CItemData* _pItem)
 void CUI_ItemStatusWindow::Hide()
 {
 	setActive(false);
+	m_fInitPos = 10.f;
 
 	if (m_bIsOpen)
 	{
@@ -125,7 +150,6 @@ void CUI_ItemStatusWindow::Hide()
 		{
 			obj.second->setActive(false);
 		}
-
 		m_pSelectItem = nullptr;
 		m_bIsOpen = false;
 	}
@@ -136,8 +160,9 @@ void CUI_ItemStatusWindow::SettingItemStatus()
 	assert(L"Item Status Data is null" && m_pSelectItem);
 	
 	/* for. Background */
-	m_pBgSprite->SetTexture(g_arrGradeStatusBgName[(_int)m_pSelectItem->equipmentGrade]);
-
+	m_pBgSprite->SetTexture(g_arrGradeStatusBgName[(_int)m_pSelectItem->equipmentName]);
+	/* for. Ring Effect */
+	m_pEffect->SetTexture(g_arrEffectStatus[(_int)m_pSelectItem->equipmentGrade]);
 	/* for. Level */
 	/* for. Name */
 	/* for. Grade& Kind */
@@ -192,6 +217,7 @@ CGameObject* CUI_ItemStatusWindow::Clone(const _uint iSceneID, void* pArg)
 void CUI_ItemStatusWindow::Free()
 {
 	Safe_Release(m_pBg);
+	Safe_Release(m_pEffect);
 
 	__super::Free();
 }

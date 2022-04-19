@@ -2,6 +2,7 @@
 #include "Inven_UIManager.h"
 #include "UI_ModalWindow.h"
 #include "UI_ItemStatusWindow.h"
+#include "UI_PlayerStatusWindow.h"
 #include "Hud.h"
 
 CInven_UIManager::CInven_UIManager(void)
@@ -18,7 +19,7 @@ HRESULT CInven_UIManager::NativeConstruct(void)
 		nullptr, 
 		(CGameObject**)&m_pModal))
 		)
-		return S_OK;
+		return E_FAIL;
 
 	m_pModal->Hide();
 
@@ -30,19 +31,32 @@ HRESULT CInven_UIManager::NativeConstruct(void)
 		nullptr,
 		(CGameObject**)&m_pItemStatus))
 		)
-		return S_OK;
+		return E_FAIL;
 
 	m_pItemStatus->Hide();
 
+	/* for. Proto_GameObject_UI_PlayerStatus_Window */
+
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer(
+		(_uint)SCENEID::SCENE_STATIC,
+		L"Layer_UI_Inventory",
+		L"Proto_GameObject_UI_PlayerStatus_Window",
+		nullptr,
+		(CGameObject**)&m_pPlayerStatus))
+		)
+		return E_FAIL;
+
+	m_pPlayerStatus->Hide();
+
 	/* for. Proto_GameObject_UI_Hud */
-	/*if (FAILED(g_pGameInstance->Add_GameObjectToLayer(
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer(
 		(_uint)SCENEID::SCENE_STATIC,
 		L"Layer_UI_Hud",
 		L"Proto_GameObject_UI_Hud",
 		nullptr,
 		(CGameObject**)&m_pHud))
 		)
-		return S_OK;*/
+		return E_FAIL;
 
 	return S_OK;
 }
@@ -82,16 +96,36 @@ _bool CInven_UIManager::IsOpenModal(void)
 	return m_bOpenModal;
 }
 
+CHud* CInven_UIManager::GetHud(void)
+{
+	if(nullptr == m_pHud)
+		return nullptr;
+
+	return m_pHud;
+}
+
 void CInven_UIManager::ShowItemStatus(CItemData* _pItemData)
 {
 	if (m_pItemStatus)
+	{
 		m_pItemStatus->Show(_pItemData);
+		if (m_pModal->OpenArmory())
+			m_pPlayerStatus->Hide();
+		else
+			m_pPlayerStatus->Show();
+	}
 }
 
 void CInven_UIManager::HideItemStatus(void)
 {
 	if (m_pItemStatus)
+	{
 		m_pItemStatus->Hide();
+		if(m_pModal->OpenEquipment())
+			m_pPlayerStatus->Show();
+		else
+			m_pPlayerStatus->Hide();
+	}
 }
 
 void CInven_UIManager::Free()

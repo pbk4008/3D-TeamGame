@@ -273,5 +273,7 @@ void CActor::Parry(const PARRYDESC& _tParryDesc)
 void CActor::Free()
 {
 	Safe_Release(m_pModel);
+	Safe_Release(m_dissolveTex);
+	
 	CGameObject::Free();
 }
