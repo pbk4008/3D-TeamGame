@@ -524,6 +524,11 @@ void CMainApp::RenderingBnt()
 		m_bMotionblur = !m_bMotionblur;
 		m_pRenderer->SetRenderButton(CRenderer::VELOCITYBLUR, m_bMotionblur);
 	}
+	if (g_pGameInstance->getkeyDown(DIK_F6))
+	{
+		m_bMotiontrail = !m_bMotiontrail;
+		m_pRenderer->SetRenderButton(CRenderer::MOTIONTRAIL, m_bMotiontrail);
+	}
 }
 
 const _bool CMainApp::IsFreeze() const

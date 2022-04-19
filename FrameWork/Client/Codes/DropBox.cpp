@@ -589,18 +589,18 @@ std::vector<CItemData> CDropBox::GetDropList(void)
 	dropList.push_back(item14);
 	dropList.push_back(item15);
 	dropList.push_back(item16);
-	dropList.push_back(item17);
-	dropList.push_back(item18);
-	dropList.push_back(item19);
-	dropList.push_back(item20);
-	dropList.push_back(item21);
-	dropList.push_back(item22);
-	dropList.push_back(item23);
-	dropList.push_back(item24);
-	dropList.push_back(item25);
-	dropList.push_back(item26);
-	dropList.push_back(item27);
-	dropList.push_back(item28);
+	//dropList.push_back(item17);
+	//dropList.push_back(item18);
+	//dropList.push_back(item19);
+	//dropList.push_back(item20);
+	//dropList.push_back(item21);
+	//dropList.push_back(item22);
+	//dropList.push_back(item23);
+	//dropList.push_back(item24);
+	//dropList.push_back(item25);
+	//dropList.push_back(item26);
+	//dropList.push_back(item27);
+	//dropList.push_back(item28);
 
 	return dropList;
 }

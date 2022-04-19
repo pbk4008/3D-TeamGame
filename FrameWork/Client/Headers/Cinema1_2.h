@@ -1,17 +1,17 @@
 #pragma once
-#ifndef __CINEMA1_1_H__
-#define __CINEMA1_1_H__
+#ifndef __CINEMA1_2_H__
+#define __CINEMA1_2_H__
 #include "Scenematic.h"
 
 BEGIN(Client)
 class CCinemaCam;
 class CCinemaActor;
-class CCinema1_1 final : public CScenematic
+class CCinema1_2 final : public CScenematic
 {
 private:
-	explicit CCinema1_1();
-	explicit CCinema1_1(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);
-	virtual ~CCinema1_1() = default;
+	explicit CCinema1_2();
+	explicit CCinema1_2(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);
+	virtual ~CCinema1_2() = default;
 public:
 	virtual HRESULT NativeContruct();
 	virtual _int Tick(_double dDeltaTime);
@@ -21,13 +21,14 @@ public:
 private:
 	HRESULT Ready_Components();
 public:
-	static CCinema1_1* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);
+	static CCinema1_2* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);
 private:
 	virtual void Free() override;
 private:
 	CCinemaCam* m_pCam;
 	CCinemaActor* m_pGrayeHwak;
 	CCinemaActor* m_pPhoenix;
+	CCinemaActor* m_pSilvermane;
 	_bool m_bActorAnimOn;
 };
 END

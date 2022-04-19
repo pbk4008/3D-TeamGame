@@ -315,6 +315,8 @@ call Update_Client.bat</Command>
     <ClInclude Include="..\Headers\Camera_Silvermane.h" />
     <ClInclude Include="..\Headers\Camera_Debug.h" />
     <ClInclude Include="..\Headers\Cinema1_1.h" />
+    <ClInclude Include="..\Headers\Cinema1_2.h" />
+    <ClInclude Include="..\Headers\CinemaActor.h" />
     <ClInclude Include="..\Headers\CinemaCam.h" />
     <ClInclude Include="..\Headers\Client_Observer.h" />
     <ClInclude Include="..\Headers\Client_Trigger.h" />
@@ -406,6 +408,7 @@ call Update_Client.bat</Command>
     <ClInclude Include="..\Headers\Monster_BronzeAnimus.h" />
     <ClInclude Include="..\Headers\Monster_Crawler.h" />
     <ClInclude Include="..\Headers\Monster_EarthAberrant.h" />
+    <ClInclude Include="..\Headers\MotionTrail.h" />
     <ClInclude Include="..\Headers\Needle.h" />
     <ClInclude Include="..\Headers\NoiseFire.h" />
     <ClInclude Include="..\Headers\Plane_Test.h" />
@@ -696,6 +699,8 @@ call Update_Client.bat</Command>
     <ClCompile Include="..\Codes\CameraShake.cpp" />
     <ClCompile Include="..\Codes\Camera_Culling.cpp" />
     <ClCompile Include="..\Codes\Cinema1_1.cpp" />
+    <ClCompile Include="..\Codes\Cinema1_2.cpp" />
+    <ClCompile Include="..\Codes\CinemaActor.cpp" />
     <ClCompile Include="..\Codes\CinemaCam.cpp" />
     <ClCompile Include="..\Codes\Client_Observer.cpp" />
     <ClCompile Include="..\Codes\Client_Trigger.cpp" />
@@ -793,6 +798,7 @@ call Update_Client.bat</Command>
     <ClCompile Include="..\Codes\Monster_BronzeAnimus.cpp" />
     <ClCompile Include="..\Codes\Monster_Crawler.cpp" />
     <ClCompile Include="..\Codes\Monster_EarthAberrant.cpp" />
+    <ClCompile Include="..\Codes\MotionTrail.cpp" />
     <ClCompile Include="..\Codes\Needle.cpp" />
     <ClCompile Include="..\Codes\NoiseFire.cpp" />
     <ClCompile Include="..\Codes\Plane_Test.cpp" />

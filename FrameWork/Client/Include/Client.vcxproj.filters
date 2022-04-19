@@ -907,6 +907,12 @@
     <Filter Include="02.GameObject\05.UI\04.Inventory\06.PlayerStatusWindow\06.MaxHealth">
       <UniqueIdentifier>{38ae5783-b796-4654-a386-fe25666773d7}</UniqueIdentifier>
 	</Filter>
+    <Filter Include="02.GameObject\04.Effect\02. MotionTrail">
+      <UniqueIdentifier>{71fab7b7-58fc-41cf-8695-c5967ce00dcc}</UniqueIdentifier>
+	</Filter>
+    <Filter Include="03.System\07.Scenematic\01.Stage1\Cinema1_2">
+      <UniqueIdentifier>{efa2a259-325c-4afc-a8f7-30014b40af6a}</UniqueIdentifier>
+     </Filter>
     <Filter Include="02.GameObject\04.Effect\00.Particle\07.Effect_FloatingUp">
       <UniqueIdentifier>{71658c88-0735-4f35-a05b-0508b6453715}</UniqueIdentifier>
     </Filter>
@@ -2067,6 +2073,15 @@
     <ClInclude Include="..\Headers\Effect_FloatingUp.h">
       <Filter>02.GameObject\04.Effect\00.Particle\07.Effect_FloatingUp</Filter>
     </ClInclude>
+    <ClInclude Include="..\Headers\CinemaActor.h">
+      <Filter>02.GameObject\03.Character\03.CinemaActor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Cinema1_2.h">
+      <Filter>03.System\07.Scenematic\01.Stage1\Cinema1_2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\MotionTrail.h">
+      <Filter>02.GameObject\04.Effect\02. MotionTrail</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -3178,6 +3193,15 @@
     </ClCompile>
     <ClCompile Include="..\Codes\Effect_FloatingUp.cpp">
       <Filter>02.GameObject\04.Effect\00.Particle\07.Effect_FloatingUp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\CinemaActor.cpp">
+      <Filter>02.GameObject\03.Character\03.CinemaActor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Cinema1_2.cpp">
+      <Filter>03.System\07.Scenematic\01.Stage1\Cinema1_2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\MotionTrail.cpp">
+      <Filter>02.GameObject\04.Effect\02. MotionTrail</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

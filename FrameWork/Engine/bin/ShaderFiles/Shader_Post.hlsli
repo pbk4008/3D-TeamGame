@@ -27,11 +27,11 @@ half4 Outline(Texture2D mainTex, SamplerState sample, half2 UV,half4 OutColor)
 	half fLaplacianMask[9] =
 	{
 		-1.f, -1.f, -1.f,
-			-1.f, 9.f, -1.f,
-			-1.f, -1.f, -1.f
+		-1.f, 9.f, -1.f,
+		-1.f, -1.f, -1.f
 	};
 	for (int i = 0; i < 9; ++i)
-		OutColor += fLaplacianMask[i] * mainTex.Sample(sample, (UV + half2(fCoord[i / 3] / 1280.f, fCoord[i / 3] / 720.f)));	
+		OutColor += fLaplacianMask[i] * mainTex.Sample(sample, (UV + half2(fCoord[i % 3] / 1280.f, fCoord[i / 3] / 720.f)));	
 	
 	return OutColor;
 }
@@ -60,15 +60,4 @@ float getCoC(float depth, float focalPlane)
 	float aperture = min(1.0, focalPlane * focalPlane);
 	return abs(aperture * (focalLength * (focalPlane - depth)) /
         (depth * (focalPlane - focalLength)));
-}
-
-half4 FOG(half4 Color, Texture2D blurTex, Texture2D depthTex, SamplerState samplest, half2 UV, half4x4 projinv, half4x4 viewinv, half4 campos)
-{	
-
-	
-	//half4 screen = screenTex.Sample(samplest, UV);
-	//half4 depth = depthTex.Sample(samplest, UV);
-	//half4 blur = blurTex.Sample(samplest, UV);
-	
-	//return lerp(screen, blur, saturate(0.5f * abs(0.5f - depth.x)));
 }

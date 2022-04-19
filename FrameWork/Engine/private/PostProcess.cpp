@@ -141,7 +141,7 @@ HRESULT CPostProcess::BloomPass(CTarget_Manager* pTargetMgr, const wstring& targ
 	else
 	{
 		if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_Weight", &weight, sizeof(_float)))) MSGBOX("Not Apply BloomPass ValueOnShader Weight");
-		if (FAILED(m_pVIBuffer->SetUp_TextureOnShader("g_WeightTexture", pTargetMgr->Get_SRV(L"Target_AlphaWeight"))))	return E_FAIL;
+		/*if (FAILED(m_pVIBuffer->SetUp_TextureOnShader("g_WeightTexture", pTargetMgr->Get_SRV(L"Target_AlphaWeight"))))	return E_FAIL;*/
 		m_pVIBuffer->Render(5);
 	}
 

@@ -37,6 +37,7 @@ private:
 	_bool				m_bShadow = false;
 	_bool				m_bOutline = false;
 	_bool				m_bMotionblur = false;
+	_bool				m_bMotiontrail = false;
 
 	_bool				m_isFreeze = false;
 	_double				m_dFreezeTimeAcc = 0.0;

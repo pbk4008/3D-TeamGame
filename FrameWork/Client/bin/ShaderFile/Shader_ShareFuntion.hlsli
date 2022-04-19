@@ -138,13 +138,12 @@ half4 Dissolve(Texture2D Diffuse, Texture2D dissolvetex, SamplerState sample, ha
 	return diffuse;
 }
 
-half4 RimLighting(float4 normal, float4 camdir, float rimintensity, float4 rimcolor)
+half4 RimLighting(float4 normal, float4 camdir, float rimintensity, float3 rimcolor)
 {
-	float rim = 0.f;
+	half rim = 0.f;
 	rim = 1 - saturate(dot(normal, -camdir));
 	rim = pow(rim, rimintensity);
 	rimcolor = rim * rimcolor;
-	return float4(rimcolor.rgb, 1.f);
-}
-
 	
+	return half4(rimcolor, 1.f);
+}

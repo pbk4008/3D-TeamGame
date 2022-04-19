@@ -43,18 +43,19 @@ _int CSkyBox::LateTick(_double TimeDelta)
 		m_pRenderer->Add_RenderGroup(CRenderer::RENDER_SKYBOX, this);
 	}
 
-	m_pTransform->Set_State(CTransform::STATE_POSITION, g_pGameInstance->Get_CamPosition(L"Camera_Silvermane"));
+	m_pTransform->Set_State(CTransform::STATE_POSITION, g_pGameInstance->Get_CamPosition(g_pGameInstance->Get_BaseCameraTag()));
 
 	return _int();
 }
 
 HRESULT CSkyBox::Render()
 {
-	_vector campos = g_pGameInstance->Get_CamPosition(L"Camera_Silvermane");
+	wstring wstrCamTag = g_pGameInstance->Get_BaseCameraTag();
+	_vector campos = g_pGameInstance->Get_CamPosition(wstrCamTag);
 	_matrix world, view, proj;
 	world = XMMatrixTranspose(m_pTransform->Get_WorldMatrix());
-	view = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_VIEW));
-	proj = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_PROJECTION));
+	view = XMMatrixTranspose(g_pGameInstance->Get_Transform(wstrCamTag, TRANSFORMSTATEMATRIX::D3DTS_VIEW));
+	proj = XMMatrixTranspose(g_pGameInstance->Get_Transform(wstrCamTag, TRANSFORMSTATEMATRIX::D3DTS_PROJECTION));
 
 	m_pVIBufferCom->SetUp_ValueOnShader("g_WorldMatrix", &world, sizeof(_matrix));
 	m_pVIBufferCom->SetUp_ValueOnShader("g_ViewMatrix", &view, sizeof(_matrix));

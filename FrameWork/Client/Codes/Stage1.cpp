@@ -48,10 +48,12 @@
 #include "WeaponGenerator.h"
 
 #include "Wall.h"
+#include "Potal.h"
 
 //Cinema
 #include "Cinema1_1.h"
-#include <Potal.h>
+#include "Cinema1_2.h"
+
 
 
 CStage1::CStage1()
@@ -107,8 +109,8 @@ HRESULT CStage1::NativeConstruct()
 	if (FAILED(Ready_MapObject()))
 		return E_FAIL;
 
-	if (FAILED(Ready_TriggerSystem(L"../bin/SaveData/Trigger/MonsterSpawnTrigger.dat")))
-		return E_FAIL;
+	//if (FAILED(Ready_TriggerSystem(L"../bin/SaveData/Trigger/MonsterSpawnTrigger.dat")))
+	//	return E_FAIL;
 
 	if (FAILED(Ready_Data_UI(L"../bin/SaveData/UI/UI.dat")))
 		return E_FAIL;
@@ -139,8 +141,8 @@ HRESULT CStage1::NativeConstruct()
 	//if (FAILED(Ready_Monster(L"Layer_Monster")))
 	//	return E_FAIL;
 
-	if (FAILED(Ready_Indicator()))
-		return E_FAIL;
+	//if (FAILED(Ready_Indicator()))
+	//	return E_FAIL;
 
 	//if (FAILED(Ready_Portal()))
 	//	return E_FAIL;
@@ -152,14 +154,6 @@ HRESULT CStage1::NativeConstruct()
 
 _int CStage1::Tick(_double TimeDelta)
 {
-	//_vector vTmp = g_pObserver->Get_PlayerPos();
-
-	//cout << XMVectorGetX(vTmp) << " " << XMVectorGetY(vTmp) << " " << XMVectorGetZ(vTmp) << endl;
-
-	//if(g_pGameInstance->getkeyDown(DIK_NUMPAD0))
-	//	Open_Potal(XMVectorSet(-58.f, 18.f, 213.f, 1.f), (_uint)GAMEOBJECT::MONSTER_1H);
-
-
 #ifdef  _DEBUG
 	_int iLevel = 0;
 	if (g_pDebugSystem->Get_LevelMoveCheck(iLevel))
@@ -257,8 +251,6 @@ _int CStage1::Tick(_double TimeDelta)
 		//}
 	}
 
-
-
 #pragma region Using Debug
 	_float3 fPos = { 0.f,5.f,20.f };
 	if (g_pGameInstance->getkeyDown(DIK_NUMPAD0))
@@ -333,17 +325,21 @@ _int CStage1::Tick(_double TimeDelta)
 #pragma endregion
 	g_pInteractManager->Tick(TimeDelta);
 	g_pDropManager->Tick();
-	m_pIndicatorManager->Active_Indicator();
+	//m_pIndicatorManager->Active_Indicator();
 
-	if (g_pGameInstance->getkeyDown(DIK_END))
-		m_pScenemaManager->Active_Scenema((_uint)CINEMA_INDEX::CINEMA1_1, &m_pCinema);
+	/*For Cinema*/
+	//if (g_pGameInstance->getkeyDown(DIK_END))
+	//	m_pScenemaManager->Active_Scenema((_uint)CINEMA_INDEX::CINEMA1_2);
 
-	if (m_pCinema && m_pCinema->Get_Active())
-	{
-		m_pCinema->Tick(TimeDelta);
-		if (!m_pCinema->Get_Active())
-			m_pCinema = nullptr;
-	}
+	//m_pScenemaManager->Tick(TimeDelta);
+
+	//if (m_pCinema && m_pCinema->Get_Active())
+	//{
+	//	m_pCinema->Tick(TimeDelta);
+	//	if (!m_pCinema->Get_Active())
+	//		m_pCinema = nullptr;
+	//}
+
 
 
 	/*for Meteor*/
@@ -351,6 +347,12 @@ _int CStage1::Tick(_double TimeDelta)
 	//if (m_fAccMeteorStartTime > 60.f)
 	//	Shoot_Meteor(TimeDelta);
 
+	return _int();
+}
+
+_int CStage1::LateTick(_double TimeDelta)
+{
+	m_pScenemaManager->LateTick(TimeDelta);
 	return _int();
 }
 
@@ -679,7 +681,8 @@ HRESULT CStage1::Ready_Data_Effect()
 		return E_FAIL;
 	}
 
-	//HitGroundSmoke
+
+	////HitGroundSmoke
 	vecDashEffect.clear();
 	g_pGameInstance->LoadFile<CEffect_DashDust::EFFECTDESC>(vecDashEffect, L"../bin/SaveData/Effect/Effect_HitGround_Smoke.dat");
 
@@ -942,12 +945,12 @@ HRESULT CStage1::Ready_Data_Effect()
 		MSGBOX("Failed to Creating Effect_Item in CStage1::Ready_Effect()");
 		return E_FAIL;
 	}
-	if (FAILED(g_pGameInstance->Add_Effect((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Item", pEffect, 20)))
+	if (FAILED(g_pGameInstance->Add_Effect((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Item", pEffect, 30)))
 	{
 		MSGBOX("Falild to Add_Effect_Item in CStage1::Ready_Effect()");
 		return E_FAIL;
 	}
-//
+
 	//Box 
 	vecFloatingUp.clear();
 	g_pGameInstance->LoadFile<CEffect_FloatingUp::EF_PAR_FLOATUP_DESC>(vecFloatingUp, L"../bin/SaveData/Effect/Effect_Box.dat");
@@ -1184,7 +1187,8 @@ HRESULT CStage1::Ready_Cinema()
 
 	if (FAILED(m_pScenemaManager->Add_Scenema(CCinema1_1::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
-
+	if (FAILED(m_pScenemaManager->Add_Scenema(CCinema1_2::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
 	return S_OK;
 }
 
@@ -2033,7 +2037,7 @@ void CStage1::Shoot_Meteor(_double dDeltaTime)
 	if (m_fAccMeteorSpawn >= m_fRandomMeteorSpawnTime)
 	{
 		m_fAccMeteorSpawn = 0.f;
-		m_fRandomMeteorSpawnTime = MathUtils::ReliableRandom(5.f,15.f);
+		m_fRandomMeteorSpawnTime = (_float)MathUtils::ReliableRandom(5.f,15.f);
 		
 		_vector vSelectPos = XMVectorZero();
 		for (auto& pPos : m_vecMeteorPos)

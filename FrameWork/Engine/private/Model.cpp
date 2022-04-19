@@ -406,14 +406,14 @@ HRESULT CModel::Render(_uint iMeshContainerIndex, _uint iPassIndex)
 			{
 				m_vecMaterials[iMtrlIndex]->Set_InputLayout(iPassIndex);
 
-				_matrix		BoneMatrices[256];
-				ZeroMemory(BoneMatrices, sizeof(_matrix) * 256);
+				/*_matrix		BoneMatrices[256];*/
+				ZeroMemory(m_curbonemat, sizeof(_matrix) * 256);
 
 				if (m_eMeshType == TYPE_ANIM)
 				{
-					pMeshContainer->SetUp_BoneMatrices(BoneMatrices, XMLoadFloat4x4(&m_PivotMatrix));
+					pMeshContainer->SetUp_BoneMatrices(m_curbonemat, XMLoadFloat4x4(&m_PivotMatrix));
 
-					if (FAILED(m_vecMaterials[iMtrlIndex]->SetUp_ValueOnShader("g_BoneMatrices", BoneMatrices, sizeof(_matrix) * 256)))
+					if (FAILED(m_vecMaterials[iMtrlIndex]->SetUp_ValueOnShader("g_BoneMatrices", m_curbonemat, sizeof(_matrix) * 256)))
 						return E_FAIL;
 
 					if (FAILED(m_vecMaterials[iMtrlIndex]->SetUp_ValueOnShader("g_OldBoneMatrices", m_oldbonemat, sizeof(_matrix) * 256)))
@@ -426,7 +426,7 @@ HRESULT CModel::Render(_uint iMeshContainerIndex, _uint iPassIndex)
 				pMeshContainer->Render();
 
 				ZeroMemory(m_oldbonemat, sizeof(_matrix) * 256);
-				memcpy(m_oldbonemat, BoneMatrices, sizeof(_matrix) * 256);
+				memcpy(m_oldbonemat, m_curbonemat, sizeof(_matrix) * 256);
 			}
 		}
 		else
@@ -434,14 +434,14 @@ HRESULT CModel::Render(_uint iMeshContainerIndex, _uint iPassIndex)
 			if (iPassIndex >= (_uint)m_PassDesc.size())
 				return E_FAIL;
 
-			_matrix		BoneMatrices[256];
-			ZeroMemory(BoneMatrices, sizeof(_matrix) * 256);
+			/*_matrix		BoneMatrices[256];*/
+			ZeroMemory(m_curbonemat, sizeof(_matrix) * 256);
 
 			if (m_eMeshType == TYPE_ANIM)
 			{
-				pMeshContainer->SetUp_BoneMatrices(BoneMatrices, XMLoadFloat4x4(&m_PivotMatrix));
+				pMeshContainer->SetUp_BoneMatrices(m_curbonemat, XMLoadFloat4x4(&m_PivotMatrix));
 
-				if (FAILED(SetUp_ValueOnShader("g_BoneMatrices", BoneMatrices, sizeof(_matrix) * 256)))
+				if (FAILED(SetUp_ValueOnShader("g_BoneMatrices", m_curbonemat, sizeof(_matrix) * 256)))
 					return E_FAIL;
 
 				if (FAILED(SetUp_ValueOnShader("g_OldBoneMatrices", m_oldbonemat, sizeof(_matrix) * 256)))
@@ -453,7 +453,7 @@ HRESULT CModel::Render(_uint iMeshContainerIndex, _uint iPassIndex)
 			pMeshContainer->Render();
 
 			ZeroMemory(m_oldbonemat, sizeof(_float4x4) * 256);
-			memcpy(m_oldbonemat, BoneMatrices, sizeof(_float4x4) * 256);
+			memcpy(m_oldbonemat, m_curbonemat, sizeof(_float4x4) * 256);
 		}
 	}
 
