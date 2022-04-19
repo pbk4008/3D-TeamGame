@@ -1,4 +1,4 @@
-\#pragma once
+#pragma once
 #ifndef __LOADER_H__
 #define __LOADER_H__
 #include "Base.h"
@@ -67,8 +67,6 @@ private:
 	ID3D11Device* m_pDevice;
 	ID3D11DeviceContext* m_pDeviceContext;
 	/*vector<CTexutre*> m_vectexture;*/
-
-	std::vector<std::vector<item>>
 };
 END
 #endif

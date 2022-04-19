@@ -190,30 +190,6 @@
     <Filter Include="00.Utility\03.Component\03.Texture">
       <UniqueIdentifier>{b90aa41e-6d2d-4ba7-a108-9b7aaef357ad}</UniqueIdentifier>
     </Filter>
-    <Filter Include="00.Utility\04.Manager\11.PhsyicX">
-      <UniqueIdentifier>{dcacacc8-e908-43f8-a712-29490a7b5ade}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="00.Utility\04.Manager\11.PhsyicX\ControllerFilterCallback">
-      <UniqueIdentifier>{29af0ba7-9f80-432a-a492-5fa7318fbf69}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="00.Utility\04.Manager\11.PhsyicX\ControllerBehaviorCallback">
-      <UniqueIdentifier>{b4fb3978-9779-4bb8-ada9-c0092107ec33}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="00.Utility\04.Manager\11.PhsyicX\ControllerHitReport">
-      <UniqueIdentifier>{00d7b819-af9e-46d6-8015-d187703f8817}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="00.Utility\04.Manager\11.PhsyicX\Collision">
-      <UniqueIdentifier>{05bf08cb-4970-4c8a-a482-eedfef3d32fc}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="00.Utility\04.Manager\11.PhsyicX\SimulationEventCallback">
-      <UniqueIdentifier>{bce66d1d-4542-46d3-97ec-86289d85fe97}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="00.Utility\04.Manager\11.PhsyicX\SimulationFilterCallback">
-      <UniqueIdentifier>{4e156a9e-01c5-4f7b-a7ab-73d84d0a4d61}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="00.Utility\04.Manager\11.PhsyicX\contactReportFilterShader">
-      <UniqueIdentifier>{c5026a07-417a-4125-8415-97d4c5bd56f3}</UniqueIdentifier>
-    </Filter>
     <Filter Include="00.Utility\04.Manager\03.RenderTargetManager">
       <UniqueIdentifier>{8104dec8-4d95-469c-9173-44bb25df1d68}</UniqueIdentifier>
     </Filter>
@@ -349,9 +325,6 @@
     <Filter Include="00.Utility\03.Component\97.CharacterController">
       <UniqueIdentifier>{de46ff26-c4c3-465e-90af-a8225d355507}</UniqueIdentifier>
     </Filter>
-    <Filter Include="00.Utility\04.Manager\11.PhsyicX\QueryFilterCallback">
-      <UniqueIdentifier>{82bf3245-07f8-43d7-a6c8-3da62c918076}</UniqueIdentifier>
-    </Filter>
     <Filter Include="00.Utility\04.Manager\05.GameObectManager">
       <UniqueIdentifier>{cbc26e05-8936-4bc7-a647-4df54c45879e}</UniqueIdentifier>
     </Filter>
@@ -363,6 +336,36 @@
     </Filter>
     <Filter Include="00.Utility\03.Component\05.VIBuffer\09.Instance\00.Particle\02.Floating\02.ImageDisappear">
       <UniqueIdentifier>{2431a4b8-54d9-4e5f-a1f3-1b2d367181bf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00.Utility\04.Manager\11.PhysX">
+      <UniqueIdentifier>{dcacacc8-e908-43f8-a712-29490a7b5ade}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00.Utility\04.Manager\11.PhysX\ControllerFilterCallback">
+      <UniqueIdentifier>{29af0ba7-9f80-432a-a492-5fa7318fbf69}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00.Utility\04.Manager\11.PhysX\ControllerBehaviorCallback">
+      <UniqueIdentifier>{b4fb3978-9779-4bb8-ada9-c0092107ec33}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00.Utility\04.Manager\11.PhysX\ControllerHitReport">
+      <UniqueIdentifier>{00d7b819-af9e-46d6-8015-d187703f8817}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00.Utility\04.Manager\11.PhysX\Collision">
+      <UniqueIdentifier>{05bf08cb-4970-4c8a-a482-eedfef3d32fc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00.Utility\04.Manager\11.PhysX\SimulationEventCallback">
+      <UniqueIdentifier>{bce66d1d-4542-46d3-97ec-86289d85fe97}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00.Utility\04.Manager\11.PhysX\SimulationFilterCallback">
+      <UniqueIdentifier>{4e156a9e-01c5-4f7b-a7ab-73d84d0a4d61}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00.Utility\04.Manager\11.PhysX\contactReportFilterShader">
+      <UniqueIdentifier>{c5026a07-417a-4125-8415-97d4c5bd56f3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00.Utility\04.Manager\11.PhysX\QueryFilterCallback">
+      <UniqueIdentifier>{82bf3245-07f8-43d7-a6c8-3da62c918076}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00.Utility\04.Manager\14.Flex">
+      <UniqueIdentifier>{1be47b8e-fd64-4bb9-b82a-584c71854a29}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -532,7 +535,7 @@
       <Filter>00.Utility\03.Component\05.VIBuffer\08.Plane</Filter>
     </ClInclude>
     <ClInclude Include="..\public\PhysicsXSystem.h">
-      <Filter>00.Utility\04.Manager\11.PhsyicX</Filter>
+      <Filter>00.Utility\04.Manager\11.PhysX</Filter>
     </ClInclude>
     <ClInclude Include="..\public\VIBuffer_PointInstance_Explosion.h">
       <Filter>00.Utility\03.Component\05.VIBuffer\09.Instance\00.Particle\00.Explosion</Filter>
@@ -556,13 +559,13 @@
       <Filter>00.Utility\03.Component\97.CharacterController</Filter>
     </ClInclude>
     <ClInclude Include="..\public\ControllerFilterCallback.h">
-      <Filter>00.Utility\04.Manager\11.PhsyicX\ControllerFilterCallback</Filter>
+      <Filter>00.Utility\04.Manager\11.PhysX\ControllerFilterCallback</Filter>
     </ClInclude>
     <ClInclude Include="..\public\ControllerBehaviorCallback.h">
-      <Filter>00.Utility\04.Manager\11.PhsyicX\ControllerBehaviorCallback</Filter>
+      <Filter>00.Utility\04.Manager\11.PhysX\ControllerBehaviorCallback</Filter>
     </ClInclude>
     <ClInclude Include="..\public\ControllerHitReport.h">
-      <Filter>00.Utility\04.Manager\11.PhsyicX\ControllerHitReport</Filter>
+      <Filter>00.Utility\04.Manager\11.PhysX\ControllerHitReport</Filter>
     </ClInclude>
     <ClInclude Include="..\public\Instancing_Mesh.h">
       <Filter>00.Utility\03.Component\05.VIBuffer\09.Instance\01. InstanceMesh</Filter>
@@ -610,7 +613,7 @@
       <Filter>00.Utility\03.Component\00.Collider\04.RayCollider</Filter>
     </ClInclude>
     <ClInclude Include="..\public\Collision.h">
-      <Filter>00.Utility\04.Manager\11.PhsyicX\Collision</Filter>
+      <Filter>00.Utility\04.Manager\11.PhysX\Collision</Filter>
     </ClInclude>
     <ClInclude Include="..\public\BoxCollider.h">
       <Filter>00.Utility\03.Component\00.Collider\00.BoxCollider</Filter>
@@ -625,16 +628,16 @@
       <Filter>00.Utility\03.Component\00.Collider\02.CapsuleCollider</Filter>
     </ClInclude>
     <ClInclude Include="..\public\contactReportFilterShader.h">
-      <Filter>00.Utility\04.Manager\11.PhsyicX\contactReportFilterShader</Filter>
+      <Filter>00.Utility\04.Manager\11.PhysX\contactReportFilterShader</Filter>
     </ClInclude>
     <ClInclude Include="..\public\NavMeshCollider.h">
       <Filter>00.Utility\03.Component\00.Collider\99.NavMesh</Filter>
     </ClInclude>
     <ClInclude Include="..\public\SimulationEventCallback.h">
-      <Filter>00.Utility\04.Manager\11.PhsyicX\SimulationEventCallback</Filter>
+      <Filter>00.Utility\04.Manager\11.PhysX\SimulationEventCallback</Filter>
     </ClInclude>
     <ClInclude Include="..\public\SimulationFilterCallback.h">
-      <Filter>00.Utility\04.Manager\11.PhsyicX\SimulationFilterCallback</Filter>
+      <Filter>00.Utility\04.Manager\11.PhysX\SimulationFilterCallback</Filter>
     </ClInclude>
     <ClInclude Include="..\public\EffectManager.h">
       <Filter>00.Utility\04.Manager\12.EffectManager</Filter>
@@ -688,7 +691,7 @@
       <Filter>00.Utility\03.Component\05.VIBuffer\09.Instance\00.Particle\02.Floating\01.DifferentSpeed</Filter>
     </ClInclude>
     <ClInclude Include="..\public\QueryFilterCallback.h">
-      <Filter>00.Utility\04.Manager\11.PhsyicX\QueryFilterCallback</Filter>
+      <Filter>00.Utility\04.Manager\11.PhysX\QueryFilterCallback</Filter>
     </ClInclude>
     <ClInclude Include="..\public\VIBuffer_PointInstance_Respawn.h">
       <Filter>00.Utility\03.Component\05.VIBuffer\09.Instance\00.Particle\01.Respawn\00.Down</Filter>
@@ -698,6 +701,9 @@
     </ClInclude>
     <ClInclude Include="..\public\VIBuffer_PointInstance_Floating_Disappear.h">
       <Filter>00.Utility\03.Component\05.VIBuffer\09.Instance\00.Particle\02.Floating\02.ImageDisappear</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\FlexSystem.h">
+      <Filter>00.Utility\04.Manager\14.Flex</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -846,7 +852,7 @@
       <Filter>00.Utility\03.Component\05.VIBuffer\08.Plane</Filter>
     </ClCompile>
     <ClCompile Include="..\private\PhysicsXSystem.cpp">
-      <Filter>00.Utility\04.Manager\11.PhsyicX</Filter>
+      <Filter>00.Utility\04.Manager\11.PhysX</Filter>
     </ClCompile>
     <ClCompile Include="..\private\VIBuffer_PointInstance_Explosion.cpp">
       <Filter>00.Utility\03.Component\05.VIBuffer\09.Instance\00.Particle\00.Explosion</Filter>
@@ -876,13 +882,13 @@
       <Filter>00.Utility\03.Component\97.CharacterController</Filter>
     </ClCompile>
     <ClCompile Include="..\private\ControllerFilterCallback.cpp">
-      <Filter>00.Utility\04.Manager\11.PhsyicX\ControllerFilterCallback</Filter>
+      <Filter>00.Utility\04.Manager\11.PhysX\ControllerFilterCallback</Filter>
     </ClCompile>
     <ClCompile Include="..\private\ControllerBehaviorCallback.cpp">
-      <Filter>00.Utility\04.Manager\11.PhsyicX\ControllerBehaviorCallback</Filter>
+      <Filter>00.Utility\04.Manager\11.PhysX\ControllerBehaviorCallback</Filter>
     </ClCompile>
     <ClCompile Include="..\private\ControllerHitReport.cpp">
-      <Filter>00.Utility\04.Manager\11.PhsyicX\ControllerHitReport</Filter>
+      <Filter>00.Utility\04.Manager\11.PhysX\ControllerHitReport</Filter>
     </ClCompile>
     <ClCompile Include="..\private\CSTarget.cpp">
       <Filter>00.Utility\04.Manager\03.RenderTargetManager\01.CSTarget</Filter>
@@ -924,7 +930,7 @@
       <Filter>00.Utility\03.Component\00.Collider\04.RayCollider</Filter>
     </ClCompile>
     <ClCompile Include="..\private\Collision.cpp">
-      <Filter>00.Utility\04.Manager\11.PhsyicX\Collision</Filter>
+      <Filter>00.Utility\04.Manager\11.PhysX\Collision</Filter>
     </ClCompile>
     <ClCompile Include="..\private\BoxCollider.cpp">
       <Filter>00.Utility\03.Component\00.Collider\00.BoxCollider</Filter>
@@ -942,10 +948,10 @@
       <Filter>00.Utility\03.Component\00.Collider\99.NavMesh</Filter>
     </ClCompile>
     <ClCompile Include="..\private\SimulationEventCallback.cpp">
-      <Filter>00.Utility\04.Manager\11.PhsyicX\SimulationEventCallback</Filter>
+      <Filter>00.Utility\04.Manager\11.PhysX\SimulationEventCallback</Filter>
     </ClCompile>
     <ClCompile Include="..\private\SimulationFilterCallback.cpp">
-      <Filter>00.Utility\04.Manager\11.PhsyicX\SimulationFilterCallback</Filter>
+      <Filter>00.Utility\04.Manager\11.PhysX\SimulationFilterCallback</Filter>
     </ClCompile>
     <ClCompile Include="..\private\EffectManager.cpp">
       <Filter>00.Utility\04.Manager\12.EffectManager</Filter>
@@ -993,7 +999,7 @@
       <Filter>00.Utility\03.Component\05.VIBuffer\09.Instance\00.Particle\02.Floating\01.DifferentSpeed</Filter>
     </ClCompile>
     <ClCompile Include="..\private\QueryFilterCallback.cpp">
-      <Filter>00.Utility\04.Manager\11.PhsyicX\QueryFilterCallback</Filter>
+      <Filter>00.Utility\04.Manager\11.PhysX\QueryFilterCallback</Filter>
     </ClCompile>
     <ClCompile Include="..\private\VIBuffer_PointInstance_Respawn.cpp">
       <Filter>00.Utility\03.Component\05.VIBuffer\09.Instance\00.Particle\01.Respawn\00.Down</Filter>
@@ -1003,6 +1009,9 @@
     </ClCompile>
     <ClCompile Include="..\private\VIBuffer_PointInstance_Floating_Disappear.cpp">
       <Filter>00.Utility\03.Component\05.VIBuffer\09.Instance\00.Particle\02.Floating\02.ImageDisappear</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\FlexSystem.cpp">
+      <Filter>00.Utility\04.Manager\14.Flex</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

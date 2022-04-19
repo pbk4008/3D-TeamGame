@@ -27,6 +27,7 @@ CGameInstance::CGameInstance()
 	, m_pPhysicSystem(CPhysicsXSystem::GetInstance())
 	, m_pEffectManager(CEffectManager::GetInstance())
 	, m_pResourceManager(CResourceManager::GetInstance())
+	, m_pFlexSystem(CFlexSystem::GetInstance())
 {
 	Safe_AddRef(m_pFont_Manager);
 	Safe_AddRef(m_pFrustum);
@@ -46,6 +47,7 @@ CGameInstance::CGameInstance()
 	Safe_AddRef(m_pPhysicSystem);
 	Safe_AddRef(m_pEffectManager);
 	Safe_AddRef(m_pResourceManager);
+	Safe_AddRef(m_pFlexSystem);
 }
 
 HRESULT CGameInstance::Initialize_Engine(HINSTANCE hInst, HWND hWnd, _uint iNumLevel, CGraphic_Device::WINMODE eWinMode, _uint iWinCX, _uint iWinCY, ID3D11Device** ppDeviceOut, ID3D11DeviceContext** ppDeviceContextOut)
@@ -62,6 +64,9 @@ HRESULT CGameInstance::Initialize_Engine(HINSTANCE hInst, HWND hWnd, _uint iNumL
 		return E_FAIL;
 
 	if (FAILED(m_pPhysicSystem->Init_PhysX()))
+		return E_FAIL;
+
+	if (FAILED(m_pFlexSystem->Init_Flex()))
 		return E_FAIL;
 
 	if (FAILED(m_pMaterial_Manager->NativeConstruct(*ppDeviceOut, *ppDeviceContextOut)))
@@ -794,6 +799,9 @@ void CGameInstance::Release_Engine()
 	if (0 != CPhysicsXSystem::GetInstance()->DestroyInstance())
 		MSGBOX("Failed to Release CPhysicsXSystem");
 
+	if (0 != CFlexSystem::GetInstance()->DestroyInstance())
+		MSGBOX("Failed to Release CFlexSystem");
+
 	if (0 != CSaveManager::GetInstance()->DestroyInstance())
 		MSGBOX("Failed to Release CSaveManager");
 
@@ -827,6 +835,7 @@ void CGameInstance::Free()
 	Safe_Release(m_pSaveManager);
 	Safe_Release(m_pSoundManager);
 	Safe_Release(m_pPhysicSystem);
+	Safe_Release(m_pFlexSystem);
 }
 
 
