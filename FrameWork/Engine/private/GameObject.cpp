@@ -90,10 +90,10 @@ HRESULT CGameObject::NativeConstruct(const _uint iSceneID, void* pArg)
 
 	m_pTransform = pInstance->Clone_Component<CTransform>(0, L"Proto_Component_Transform");
 
+	RELEASE_INSTANCE(CGameInstance);
+
 	if (!m_pTransform)
 		return E_FAIL;
-
-	RELEASE_INSTANCE(CGameInstance);
 
 	if (FAILED(SetUp_Components(L"Com_Transform", m_pTransform)))
 		return E_FAIL;

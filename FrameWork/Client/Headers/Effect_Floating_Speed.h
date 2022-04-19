@@ -16,7 +16,7 @@ public:
 	{
 		_float4 ParticleColor;
 		_float	Power;
-	}FLOATINGSPEEDDESC;
+	}EF_PAR_FLOATSPEED_DESC;
 	
 protected:
 	explicit CEffect_Floating_Speed();
@@ -39,13 +39,13 @@ private:
 	virtual void Set_Reset(_bool bReset);
 
 public:
-	CEffect::EFFECTDESC Get_EffectDesc() {return m_Desc; }
+	EF_PAR_FLOATSPEED_DESC Get_EffectDesc() {return m_Desc; }
 private:
 	CVIBuffer_PointInstance_Floating_Speed* m_pBuffer = nullptr;
 	class CCullingBox* m_pBox = nullptr;
 
 private:
-	FLOATINGSPEEDDESC m_Desc;
+	EF_PAR_FLOATSPEED_DESC m_Desc;
 	CVIBuffer_PointInstance_Floating_Speed::PIDESC m_backupDesc;
 
 public:

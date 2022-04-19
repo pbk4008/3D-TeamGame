@@ -152,13 +152,13 @@ PS_OUT PS_MAIN(PS_IN In)
 	return Out;
 }
 
-PS_OUT PS_MAIN_MULTIIMAGE(PS_IN In)
+PS_OUT PS_MAIN_MULTIIMAGE_LEAF(PS_IN In) //낙엽에서씀
 {
     PS_OUT Out = (PS_OUT) 0;
 
-    In.vTexUV.x = (In.vTexUV.x / g_iImageCountX) + (g_iFrame % g_iImageCountX) * (1.f / g_iImageCountX); //가로 이미지개수 , 프레임 , 1나누기 이미지개수 
-    In.vTexUV.y = (In.vTexUV.y / g_iImageCountY) + (g_iFrame / g_iImageCountY) * (1.f / g_iImageCountY); //세로 이미지개수 , 프레임 , 1나누기 이미지개수
-
+    In.vTexUV.x = (In.vTexUV.x / g_iImageCountX) + (g_iFrame % g_iImageCountX) * (1.f / g_iImageCountX);
+    In.vTexUV.y = (In.vTexUV.y / g_iImageCountY) + (g_iFrame / g_iImageCountX) * (1.f / g_iImageCountY);
+	
     float4 GreenAlpha = g_DiffuseTexture.Sample(DefaultSampler, In.vTexUV);
 	
     Out.vColor = g_DiffuseTexture.Sample(DefaultSampler, In.vTexUV);
@@ -191,16 +191,17 @@ PS_OUT_TEST PS_MAIN_TEST(PS_IN In)
 	PS_OUT_TEST Out = (PS_OUT_TEST)0;
 	
 	In.vTexUV.x = (In.vTexUV.x / g_iImageCountX) + (g_iFrame % g_iImageCountX) * (1.f / g_iImageCountX); //가로 이미지개수 , 프레임 , 1나누기 이미지개수 
-	In.vTexUV.y = (In.vTexUV.y / g_iImageCountY) + (g_iFrame / g_iImageCountY) * (1.f / g_iImageCountY); //세로 이미지개수 , 프레임 , 1나누기 이미지개수
+    In.vTexUV.y = (In.vTexUV.y / g_iImageCountY) + (g_iFrame / g_iImageCountX) * (1.f / g_iImageCountY); //세로 이미지개수 , 프레임 , 1나누기 이미지개수
 
-	half GreenAlpha = g_DiffuseTexture.Sample(DefaultSampler, In.vTexUV).a;
+	half Alpha = g_DiffuseTexture.Sample(DefaultSampler, In.vTexUV).a;
 	
 	Out.diffuse = g_DiffuseTexture.Sample(DefaultSampler, In.vTexUV);
 	
-	Out.diffuse.r = 1.f;
-	Out.diffuse.gb = 0.f;
+	//수빈 이거 왜 들어가는거임??
+	//Out.diffuse.r = 1.f;
+	//Out.diffuse.gb = 0.f;
 	
-	Out.diffuse = Out.diffuse * GreenAlpha;
+    Out.diffuse = Out.diffuse * Alpha;
 
 	Out.depth = half4(In.vPosition.z / In.vPosition.w, In.vPosition.w / 300.f, 0.f, 0.f);
 	Out.normal = half4(1, 1, 1, 0);
@@ -210,7 +211,7 @@ PS_OUT_TEST PS_MAIN_TEST(PS_IN In)
 	Out.mra.b = 1.f;
 	Out.mra.a = 1.f;
 	
-	Out.emission = g_color * g_empower/* * GreenAlpha*/;
+	Out.emission = g_color * g_empower;
 	
 	if (0.1f >= Out.diffuse.a)
 		discard;
@@ -218,7 +219,24 @@ PS_OUT_TEST PS_MAIN_TEST(PS_IN In)
 	return Out;
 }
 
+PS_OUT PS_MAIN_MULTIIMAGE(PS_IN In)
+{
+    PS_OUT Out = (PS_OUT) 0;
 
+    In.vTexUV.x = (In.vTexUV.x / g_iImageCountX) + (g_iFrame % g_iImageCountX) * (1.f / g_iImageCountX); //가로 이미지개수 , 프레임 , 1나누기 이미지개수 
+    In.vTexUV.y = (In.vTexUV.y / g_iImageCountY) + (g_iFrame / g_iImageCountX) * (1.f / g_iImageCountY); //세로 이미지개수 , 프레임 , 1나누기 이미지개수
+	
+	float4 Color = g_DiffuseTexture.Sample(DefaultSampler, In.vTexUV);
+    
+	Out.vColor = g_DiffuseTexture.Sample(DefaultSampler, In.vTexUV);
+    Out.weight = float4(g_Weight.xxx, 0.5f);
+	
+    Out.vColor = Out.vColor * Color.r;
+	
+    Out.weight = float4(g_Weight.xxx, 0.5f);
+	
+    return Out;
+}
 technique11			DefaultTechnique
 {
 	pass Normal //0
@@ -246,7 +264,7 @@ technique11			DefaultTechnique
 		PixelShader = compile ps_5_0  PS_MAIN();
 	}
 
-    pass AlphaBlendMultiImage //2
+    pass AlphaBlendMultiImageLeaf //2
     {
 		/* 렌더스테이츠에 대한 정의. */
         SetRasterizerState(CullMode_Default);
@@ -256,7 +274,7 @@ technique11			DefaultTechnique
 		/* 진입점함수를 지정한다. */
         VertexShader = compile vs_5_0 VS_MAIN();
         GeometryShader = compile gs_5_0 GS_MAIN();
-        PixelShader = compile ps_5_0 PS_MAIN_MULTIIMAGE();
+        PixelShader = compile ps_5_0 PS_MAIN_MULTIIMAGE_LEAF();
     }
 
     pass AlphaAdd //3
@@ -284,6 +302,19 @@ technique11			DefaultTechnique
 		GeometryShader = compile gs_5_0 GS_MAIN();
 		PixelShader = compile ps_5_0 PS_MAIN_TEST();
 	}
+
+    pass AlphaBlendMultiImage //5
+    {
+		/* 렌더스테이츠에 대한 정의. */
+        SetRasterizerState(CullMode_Default);
+        SetDepthStencilState(ZDefault, 0);
+        SetBlendState(AlphaBlending, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+
+		/* 진입점함수를 지정한다. */
+        VertexShader = compile vs_5_0 VS_MAIN();
+        GeometryShader = compile gs_5_0 GS_MAIN();
+        PixelShader = compile ps_5_0 PS_MAIN_MULTIIMAGE();
+    }
 }
 
 

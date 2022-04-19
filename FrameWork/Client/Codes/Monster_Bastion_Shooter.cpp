@@ -60,12 +60,12 @@ HRESULT CMonster_Bastion_Shooter::NativeConstruct(const _uint _iSceneID, void* _
 	if (_pArg)
 	{
 		_float3 vPoint = (*(_float3*)_pArg);
-		if (FAILED(Set_SpawnPosition(vPoint)))
+		if (FAILED(CActor::Set_SpawnPosition(vPoint)))
 			return E_FAIL;
 	}
 	else
 	{
-		m_pTransform->Set_State(CTransform::STATE_POSITION, XMVectorSet(5.f, 0.f, 10.f, 1.f));
+		m_pTransform->Set_State(CTransform::STATE_POSITION, XMVectorSet(0.f, -10.f, 0.f, 1.f));
 	}
 	if (FAILED(Ready_Components()))
 		return E_FAIL;
@@ -184,6 +184,15 @@ HRESULT CMonster_Bastion_Shooter::Render_Shadow()
 	return S_OK;
 }
 
+HRESULT CMonster_Bastion_Shooter::Set_SpawnPosition(_fvector vPos)
+{
+	CActor::Set_SpawnPosition(vPos);
+	_float3 tmpPos;
+	XMStoreFloat3(&tmpPos, vPos);
+	m_pCharacterController->setFootPosition(tmpPos);
+	return S_OK;
+}
+
 void CMonster_Bastion_Shooter::Set_Remove(_bool bCheck)
 {
 	m_bRemove = bCheck;
@@ -273,7 +282,8 @@ void CMonster_Bastion_Shooter::Hit()
 	}
 
 	Active_Effect((_uint)EFFECT::HIT);
-	Active_Effect((_uint)EFFECT::FLOATING);
+	Active_Effect((_uint)EFFECT::HIT_FLOATING);
+	Active_Effect((_uint)EFFECT::HIT_FLOATING_2);
 }
 
 HRESULT CMonster_Bastion_Shooter::Ready_Components()

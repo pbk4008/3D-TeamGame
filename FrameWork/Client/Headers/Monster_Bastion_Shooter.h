@@ -34,6 +34,9 @@ public:
 	virtual _int LateTick(_double _dDeltaTime) override;
 	virtual HRESULT Render() override;
 	virtual HRESULT	Render_Shadow() override;
+
+public:
+	virtual HRESULT Set_SpawnPosition(_fvector vPos);
 public:
 	virtual void Set_Remove(_bool bCheck) override;
 	virtual void Hit(const ATTACKDESC& _tAttackDesc) override;

@@ -60,12 +60,12 @@ HRESULT CMonster_Bastion_Sword::NativeConstruct(const _uint _iSceneID, void* _pA
 	if (_pArg)
 	{
 		_float3 tPos = (*(_float3*)_pArg);
-		if (FAILED(Set_SpawnPosition(tPos)))
+		if (FAILED(CActor::Set_SpawnPosition(tPos)))
 			return E_FAIL;
 	}
 	else
 	{
-		m_pTransform->Set_State(CTransform::STATE_POSITION, XMVectorSet(5.f, 0.f, 10.f, 1.f));
+		m_pTransform->Set_State(CTransform::STATE_POSITION, XMVectorSet(0.f, -10.f, 0.f, 1.f));
 	}
 
 	if (FAILED(SetUp_Components()))
@@ -92,7 +92,7 @@ HRESULT CMonster_Bastion_Sword::NativeConstruct(const _uint _iSceneID, void* _pA
 
 	m_tAttackDesc.iLevel = 2;
 	m_tAttackDesc.fDamage = 5.f;
-
+	
 	return S_OK;
 }
 
@@ -217,6 +217,18 @@ void CMonster_Bastion_Sword::Parry(const PARRYDESC& _tParryDesc)
 {
 	m_fGroggyGauge += (m_fMaxGroggyGauge - m_fGroggyGauge);
 }
+
+HRESULT CMonster_Bastion_Sword::Set_SpawnPosition(_fvector vPos)
+{
+	CActor::Set_SpawnPosition(vPos);
+	_float3 tmpPos;
+	XMStoreFloat3(&tmpPos, vPos);
+	m_pCharacterController->setFootPosition(tmpPos);
+
+	return S_OK;
+}
+
+
 
 void CMonster_Bastion_Sword::Set_Remove(_bool bCheck)
 {
@@ -686,7 +698,8 @@ void CMonster_Bastion_Sword::Hit()
 		tData.fCurHp = m_fCurrentHp;
 		tData.iHitType = (_uint)m_eHitType;
 		Active_Effect((_uint)EFFECT::HIT);
-		Active_Effect((_uint)EFFECT::FLOATING);
+		Active_Effect((_uint)EFFECT::HIT_FLOATING);
+		Active_Effect((_uint)EFFECT::HIT_FLOATING_2);
 		m_pStateController->Change_State(L"Hit", &tData);
 		m_fGroggyGauge += 2; //TODO::¼öÄ¡Á¤ÇØ¼­¹Ù²ãÁà¾ßµÊ
 		m_pPanel->Set_GroggyBar(Get_GroggyGaugeRatio());

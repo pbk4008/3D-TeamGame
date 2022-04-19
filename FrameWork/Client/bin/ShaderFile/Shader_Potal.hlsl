@@ -25,7 +25,7 @@ sampler MaskSampler = sampler_state
 {
     filter = min_mag_mip_linear;
     AddressU = clamp;
-    AddressV = clamp;
+  AddressV = wrap;
 };
 /* 1. m_pDeviceContext->DrawIndexed() */
 /* 2. 인덱스가 가지고 있던 인덱스 세개에 해당하는 정점 세개를 정점버퍼로부터 얻어온다. */
@@ -86,7 +86,8 @@ PS_OUT PS_MAIN(PS_IN In)
     PS_OUT Out = (PS_OUT) 0;
 
     vector vDiffuse = g_DiffuseTexture.Sample(DefaultSampler, In.vTexUV);
-    vector vMask = g_MaskTexture.Sample(MaskSampler, In.vMaskUV);
+    vector vMask = g_MaskTexture.Sample(DefaultSampler, In.vMaskUV);
+    //vector vMask = g_MaskTexture.Sample(MaskSampler, In.vMaskUV);
     //if(!g_bOpenCheck)
     //    vMask = g_MaskTexture.Sample(MaskSampler, In.vMaskUV * 2);
     //else

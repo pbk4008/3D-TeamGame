@@ -13,12 +13,17 @@ private:
 	explicit CScenematicManager();
 	virtual ~CScenematicManager() = default;
 public:
+	_uint Tick(_double TimeDelta);
+	_uint LateTick(_double TimeDelta);
+public:
 	HRESULT Add_Scenema(CScenematic* pScenema);
-	HRESULT Active_Scenema(_uint iScenemaIndex, CScenematic** pOutCineam);
+	HRESULT Active_Scenema(_uint iScenemaIndex);
+	HRESULT Change_Cinema(_uint iCinemaIndex);
 private:
 	virtual void Free() override;
 private:
 	vector<CScenematic*> m_vecScenema;
+	CScenematic* m_pCurCinema;
 };
 END
 #endif

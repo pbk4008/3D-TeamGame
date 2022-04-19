@@ -28,6 +28,7 @@ public:
 
 	HRESULT Set_Texture(const string& _strConstantName, TEXTURETYPE _eTextureType, CTexture* _pTexture, const _uint _iTextureIndex = 0);
 	HRESULT Set_Texture(TEXTURETYPE _eTextureType, const wstring& _pTextureTag, const wstring& _pTexturePath, _uint _iTextureIndex = 0);
+	HRESULT Change_Texture(const string& _strConstantName, TEXTURETYPE _eTextureType, const wstring& _wstrTextureTag);
 
 	void Set_InputLayout(_uint iPassIndex);
 	void Using_Tool();

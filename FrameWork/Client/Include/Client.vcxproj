@@ -315,6 +315,8 @@ call Update_Client.bat</Command>
     <ClInclude Include="..\Headers\Camera_Silvermane.h" />
     <ClInclude Include="..\Headers\Camera_Debug.h" />
     <ClInclude Include="..\Headers\Cinema1_1.h" />
+    <ClInclude Include="..\Headers\Cinema1_2.h" />
+    <ClInclude Include="..\Headers\CinemaActor.h" />
     <ClInclude Include="..\Headers\CinemaCam.h" />
     <ClInclude Include="..\Headers\Client_Observer.h" />
     <ClInclude Include="..\Headers\Client_Trigger.h" />
@@ -340,6 +342,7 @@ call Update_Client.bat</Command>
     <ClInclude Include="..\Headers\Effect_Env_Fire.h" />
     <ClInclude Include="..\Headers\Effect_Env_Floating.h" />
     <ClInclude Include="..\Headers\Effect_Falling_Leaf.h" />
+    <ClInclude Include="..\Headers\Effect_FloatingUp.h" />
     <ClInclude Include="..\Headers\Effect_Floating_Speed.h" />
     <ClInclude Include="..\Headers\Effect_Guard.h" />
     <ClInclude Include="..\Headers\Effect_Hammer_Dust.h" />
@@ -347,6 +350,7 @@ call Update_Client.bat</Command>
     <ClInclude Include="..\Headers\Effect_HitParticle.h" />
     <ClInclude Include="..\Headers\Environment.h" />
     <ClInclude Include="..\Headers\EquipmentData.h" />
+    <ClInclude Include="..\Headers\Execution_Mook.h" />
     <ClInclude Include="..\Headers\FlyingShield.h" />
     <ClInclude Include="..\Headers\Fury.h" />
     <ClInclude Include="..\Headers\GameObjectPool.h" />
@@ -369,6 +373,7 @@ call Update_Client.bat</Command>
     <ClInclude Include="..\Headers\MainCamera.h" />
     <ClInclude Include="..\Headers\MainCamera_Ortho.h" />
     <ClInclude Include="..\Headers\MeshEffect.h" />
+    <ClInclude Include="..\Headers\MeshEffect_Test.h" />
     <ClInclude Include="..\Headers\MeshLoader.h" />
     <ClInclude Include="..\Headers\MidBoss_Attack.h" />
     <ClInclude Include="..\Headers\MidBoss_BattleCry.h" />
@@ -441,6 +446,8 @@ call Update_Client.bat</Command>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClInclude>
     <ClInclude Include="..\Headers\Silvermane_Death.h" />
+    <ClInclude Include="..\Headers\Silvermane_Execution.h" />
+    <ClInclude Include="..\Headers\Silvermane_Heal.h" />
     <ClInclude Include="..\Headers\Silvermane_Hit.h" />
     <ClInclude Include="..\Headers\Silvermane_Idle.h" />
     <ClInclude Include="..\Headers\Silvermane_Jog.h" />
@@ -658,6 +665,8 @@ call Update_Client.bat</Command>
     <ClCompile Include="..\Codes\CameraShake.cpp" />
     <ClCompile Include="..\Codes\Camera_Culling.cpp" />
     <ClCompile Include="..\Codes\Cinema1_1.cpp" />
+    <ClCompile Include="..\Codes\Cinema1_2.cpp" />
+    <ClCompile Include="..\Codes\CinemaActor.cpp" />
     <ClCompile Include="..\Codes\CinemaCam.cpp" />
     <ClCompile Include="..\Codes\Client_Observer.cpp" />
     <ClCompile Include="..\Codes\Client_Trigger.cpp" />
@@ -682,12 +691,14 @@ call Update_Client.bat</Command>
     <ClCompile Include="..\Codes\Effect_Env_Fire.cpp" />
     <ClCompile Include="..\Codes\Effect_Env_Floating.cpp" />
     <ClCompile Include="..\Codes\Effect_Falling_Leaf.cpp" />
+    <ClCompile Include="..\Codes\Effect_FloatingUp.cpp" />
     <ClCompile Include="..\Codes\Effect_Floating_Speed.cpp" />
     <ClCompile Include="..\Codes\Effect_Guard.cpp" />
     <ClCompile Include="..\Codes\Effect_Hammer_Dust.cpp" />
     <ClCompile Include="..\Codes\Effect_HitFloating.cpp" />
     <ClCompile Include="..\Codes\Effect_HitParticle.cpp" />
     <ClCompile Include="..\Codes\EquipmentData.cpp" />
+    <ClCompile Include="..\Codes\Execution_Mook.cpp" />
     <ClCompile Include="..\Codes\FlyingShield.cpp" />
     <ClCompile Include="..\Codes\Fury.cpp" />
     <ClCompile Include="..\Codes\GameObjectPool.cpp" />
@@ -703,6 +714,7 @@ call Update_Client.bat</Command>
     <ClCompile Include="..\Codes\Hud.cpp" />
     <ClCompile Include="..\Codes\Loot_Equipment.cpp" />
     <ClCompile Include="..\Codes\MeshEffect.cpp" />
+    <ClCompile Include="..\Codes\MeshEffect_Test.cpp" />
     <ClCompile Include="..\Codes\MeshLoader.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
     </ClCompile>
@@ -791,6 +803,8 @@ call Update_Client.bat</Command>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\Codes\Silvermane_Death.cpp" />
+    <ClCompile Include="..\Codes\Silvermane_Execution.cpp" />
+    <ClCompile Include="..\Codes\Silvermane_Heal.cpp" />
     <ClCompile Include="..\Codes\Silvermane_Idle.cpp" />
     <ClCompile Include="..\Codes\Silvermane_Jog.cpp" />
     <ClCompile Include="..\Codes\Silvermane_JogBwd.cpp" />
@@ -917,11 +931,13 @@ call Update_Client.bat</Command>
     <FxCompile Include="..\bin\ShaderFile\Shader_INST_Tree.hlsl" />
     <FxCompile Include="..\bin\ShaderFile\Shader_Mesh.hlsl" />
     <FxCompile Include="..\bin\ShaderFile\Shader_MeshAnim.hlsl" />
+    <FxCompile Include="..\bin\ShaderFile\Shader_MeshEffect.hlsl" />
     <FxCompile Include="..\bin\ShaderFile\Shader_Metor.hlsl" />
     <FxCompile Include="..\bin\ShaderFile\Shader_MetorAnim.hlsl" />
     <FxCompile Include="..\bin\ShaderFile\Shader_Monster.hlsl" />
     <FxCompile Include="..\bin\ShaderFile\Shader_Panel_UI.hlsl" />
     <FxCompile Include="..\bin\ShaderFile\Shader_Particle.hlsl" />
+    <FxCompile Include="..\bin\ShaderFile\Shader_Particle_Alpha.hlsl" />
     <FxCompile Include="..\bin\ShaderFile\Shader_Particle_Size.hlsl" />
     <FxCompile Include="..\bin\ShaderFile\Shader_Potal.hlsl" />
     <FxCompile Include="..\bin\ShaderFile\Shader_RectFire.hlsl" />

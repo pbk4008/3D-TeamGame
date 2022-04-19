@@ -5,6 +5,7 @@
 
 BEGIN(Client)
 class CCinemaCam;
+class CCinemaActor;
 class CCinema1_1 final : public CScenematic
 {
 private:
@@ -25,7 +26,9 @@ private:
 	virtual void Free() override;
 private:
 	CCinemaCam* m_pCam;
-	_float m_fAccTest;
+	CCinemaActor* m_pGrayeHwak;
+	CCinemaActor* m_pPhoenix;
+	_bool m_bActorAnimOn;
 };
 END
 #endif

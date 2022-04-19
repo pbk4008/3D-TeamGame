@@ -116,6 +116,13 @@ namespace Engine
 		XMFLOAT2		vPSize;
 	} VTXPOINT;
 
+	typedef struct tagVertex_Point_Sort
+	{
+		XMFLOAT3		vPosition;
+		XMFLOAT2		vPSize;
+		FLOAT			ViewZ;
+	} VTXPOINTSORT;
+
 	typedef struct tagVertex_Color
 	{
 		XMFLOAT3		vPosition;

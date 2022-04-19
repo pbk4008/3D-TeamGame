@@ -39,7 +39,7 @@ HRESULT CEffect_HitParticle::NativeConstruct(const _uint _iSceneID, void* pArg)
 
 	if (nullptr != pArg)
 	{
-		memcpy(&m_Desc, pArg, sizeof(EFFECTDESC));
+		memcpy(&m_Desc, pArg, sizeof(EF_PAR_HIT_DESC));
 	}
 
 	//여기서 필요한 모든 컴포넌트들 Clone해옴
@@ -127,10 +127,8 @@ HRESULT CEffect_HitParticle::Render()
 	m_pBuffer->SetUp_ValueOnShader("g_fLifeTime", &m_Desc.fMaxLifeTime, sizeof(_float));
 	m_pBuffer->SetUp_ValueOnShader("g_fCurTime", &m_Desc.fCurTime, sizeof(_float));
 
-	_float4 color = { 1.f , 0.6f, 0.3f ,1.f };
-	_float power = 2.5f;
-	m_pBuffer->SetUp_ValueOnShader("g_color", &color, sizeof(_float4));
-	m_pBuffer->SetUp_ValueOnShader("g_empower", &power, sizeof(_float));
+	m_pBuffer->SetUp_ValueOnShader("g_color", &m_Desc.ParticleColor, sizeof(_float4));
+	m_pBuffer->SetUp_ValueOnShader("g_empower", &m_Desc.Power, sizeof(_float));
 
 	m_pBuffer->SetUp_ValueOnShader("g_vCamPosition", (void*)&CamPos, sizeof(_vector));
 

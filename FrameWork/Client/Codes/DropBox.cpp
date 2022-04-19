@@ -63,6 +63,8 @@ HRESULT CDropBox::NativeConstruct(const _uint _iSceneID, void* _pArg)
 
 	setActive(true);
 
+	Active_Effect((_uint)EFFECT::BOX);
+
 	return S_OK;
 }
 

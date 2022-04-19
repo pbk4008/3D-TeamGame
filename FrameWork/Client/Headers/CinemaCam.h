@@ -7,6 +7,12 @@
 BEGIN(Client)
 class CCinemaCam final : public CGameObject
 {
+public:
+	typedef struct tagCinema
+	{
+		CCamera::CAMERADESC tCameraDesc;
+		_uint iShotTag;
+	}CINEMADESC;
 private:
 	explicit CCinemaCam();
 	explicit CCinemaCam(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);
@@ -18,6 +24,17 @@ public:
 	virtual _int Tick(_double TimeDelta);
 	virtual _int LateTick(_double TimeDelta);
 public:
+	_bool Get_CamMoveEnd();
+	_bool Get_Event(_double dFrame);
+	_double Get_CamFrame();
+	void Set_CameraMatrix(_fmatrix matPivot);
+	void Reset_Camera();
+	void Add_Fov(_float fSpeed);
+	void Minus_Fov(_float fSpeed);
+private:
+	HRESULT Set_Camera(_uint iSceneTag);
+	class CHierarchyNode* Get_CamBone();
+public:
 	void Change_CurrentCam();
 public:
 	static CCinemaCam* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);
@@ -27,6 +44,8 @@ private:
 private:
 	CCamera* m_pCamera;
 	wstring m_pCamTag;
+	CModel* m_pModel;
+	_uint m_iShortTag;
 };
 END
 #endif

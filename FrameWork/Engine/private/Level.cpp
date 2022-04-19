@@ -25,6 +25,11 @@ _int CLevel::Tick(_double TimeDelta)
 	return _int();
 }
 
+_int CLevel::LateTick(_double TimeDelta)
+{
+	return _int();
+}
+
 HRESULT CLevel::Render()
 {
 	return S_OK;

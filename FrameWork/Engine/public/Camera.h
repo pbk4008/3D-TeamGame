@@ -34,6 +34,7 @@ public:
 	virtual HRESULT NativeConstruct(void* pArg);
 public:
 	void Update_Matrix(_fmatrix& matWorld);
+	void Change_Fov(_float fAngle);
 private:
 	HRESULT setViewMatrix();
 	HRESULT setProjMatrix();
@@ -45,6 +46,7 @@ public:
 	_fmatrix getProjection() { return XMLoadFloat4x4(&m_matProj); }
 	const wstring& getTag() { return m_tCameraDesc.pCameraTag; }
 	const CAMERADESC GetDesc() const { return m_tCameraDesc; }
+	void setDesc(const CAMERADESC& _tDesc);
 
 private:
 	virtual void Free() override;

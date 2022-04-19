@@ -13,6 +13,7 @@ protected:
 public:
 	virtual HRESULT NativeConstruct();
 	virtual _int Tick(_double TimeDelta);
+	virtual _int LateTick(_double TimeDelta);
 	virtual HRESULT Render();
 protected:
 	ID3D11Device*			m_pDevice;

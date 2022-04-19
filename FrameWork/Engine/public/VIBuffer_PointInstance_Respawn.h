@@ -19,8 +19,10 @@ public:
 		_float		fParticleSpeed;
 		_float		fLifeTime;
 		_float		fCurTime;
+		_float		fRespawnPosY;
 		_uint		iNumInstance;
 		_bool		bGravity;
+		_bool		bSmall;
 	}PIDESC;
 protected:
 	explicit CVIBuffer_PointInstance_Respawn(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);

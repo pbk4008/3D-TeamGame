@@ -46,11 +46,14 @@ _int CShooter_Attack::Tick(const _double& _dDeltaTime)
 	
 	Shot(_dDeltaTime);
 
-	if (m_pAnimator->Get_CurrentAnimation()->Is_Finished())
+	CAnimation* pAnim = m_pAnimator->Get_CurrentAnimation();
+	if (pAnim)
 	{
-		m_pStateController->Change_State(L"Idle");
+		if (pAnim->Is_Finished())
+		{
+			m_pStateController->Change_State(L"Idle");
+		}
 	}
-
 	return _int();
 }
 

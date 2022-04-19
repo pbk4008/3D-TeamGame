@@ -16,7 +16,6 @@ CDropObject::CDropObject(const CDropObject& _rhs)
 	:CInteractableObject(_rhs)
 	, m_pSplineCurve(_rhs.m_pSplineCurve)
 {
-	//Safe_AddRef(m_pModel);
 	m_pInventoryData = g_pDataManager->GET_DATA(CInventoryData, L"InventoryData");
 }
 
@@ -59,6 +58,8 @@ _int CDropObject::Tick(_double _dDeltaTime)
 		if (m_elapsed >= m_dropDurtaion)
 		{
 			SetTakableState(true);
+			_vector Pos = { -0.04f, -0.1f, 0.f, 0.f };
+			Active_Effect((_uint)EFFECT::ITEM, Pos);
 		}
 		_vector point = m_pSplineCurve->GetPoint(m_elapsed / m_dropDurtaion);
 		point = XMVectorSetW(point, 1.f);
@@ -264,6 +265,9 @@ void CDropObject::Take(void)
 	{
 		/* Inventory push Item */
  		m_pInventoryData->PushItem(m_droppedItem);
+
+		_vector pivot = { 0.f, -0.05f, 0.f, 0.f };
+		Active_Effect((_uint)EFFECT::EAT_ITEM, pivot);
 	}
 
 	m_bDead = true;
@@ -309,9 +313,9 @@ CGameObject* CDropObject::Clone(const _uint _iSceneID, void* _pArg)
 
 void CDropObject::Free()
 {
+	__super::Free();
+
 	Safe_Delete(m_pSplineCurve);
-	Safe_Release(m_pModel);
 	m_pInventoryData = nullptr;
 
-	__super::Free();
 }

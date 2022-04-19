@@ -3,6 +3,7 @@
 #include "Scenematic.h"
 
 CScenematicManager::CScenematicManager()
+	:m_pCurCinema(nullptr)
 {
 }
 
@@ -14,19 +15,51 @@ HRESULT CScenematicManager::Add_Scenema(CScenematic* pScenema)
 	return S_OK;
 }
 
-HRESULT CScenematicManager::Active_Scenema(_uint iScenemaIndex, CScenematic** pOutCineam)
+HRESULT CScenematicManager::Active_Scenema(_uint iScenemaIndex)
 {
 	_uint iSize = (_uint)m_vecScenema.size();
 	if (iScenemaIndex < 0 || iScenemaIndex >= iSize)
-	{
-		*pOutCineam = nullptr;
 		return E_FAIL;
-	}
 
 	m_vecScenema[iScenemaIndex]->Set_Active(true);
-	*pOutCineam = m_vecScenema[iScenemaIndex];
-	
+	m_pCurCinema = m_vecScenema[iScenemaIndex];
+
 	return S_OK;
+}
+
+HRESULT CScenematicManager::Change_Cinema(_uint iCinemaIndex)
+{
+	if (iCinemaIndex < 0 && (_uint)m_vecScenema.size() < iCinemaIndex)
+		return E_FAIL;
+
+	m_pCurCinema->Set_Active(false);
+	m_pCurCinema = m_vecScenema[iCinemaIndex];
+	m_pCurCinema->Set_Active(true);
+
+	return S_OK;
+}
+
+_uint CScenematicManager::Tick(_double TimeDelta)
+{
+	if (m_pCurCinema)
+	{
+		if (m_pCurCinema->Get_Active())
+			m_pCurCinema->Tick(TimeDelta);
+	}
+
+
+	return _uint();
+}
+
+_uint CScenematicManager::LateTick(_double TimeDelta)
+{
+	if (m_pCurCinema)
+	{
+		if (m_pCurCinema->Get_Active())
+			m_pCurCinema->LateTick(TimeDelta);
+	}
+
+	return _uint();
 }
 
 void CScenematicManager::Free()

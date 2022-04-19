@@ -17,6 +17,7 @@ private:
 public:
 	virtual HRESULT NativeConstruct();
 	virtual _int Tick(_double TimeDelta);
+	virtual _int LateTick(_double TimeDelta);
 	virtual HRESULT Render();
 private:
 	HRESULT Ready_MapObject();
@@ -35,6 +36,7 @@ private:
 	HRESULT Ready_TriggerFunctionSetting();
 
 	HRESULT Ready_Cinema();
+
 public:
 	void Minus_MonsterCount() { m_iCountMonster--; }
 public:
@@ -62,6 +64,9 @@ private:
 	HRESULT Ready_Meteor();
 	void Shoot_Meteor(_double dDeltaTime);
 	CMeteor* Find_Meteor();
+private:
+	HRESULT Ready_Portal();
+	void Open_Potal(_fvector vPos, _uint iMonTag);
 public:
 	static CStage1* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);
 private:
@@ -74,13 +79,14 @@ private:
 	_uint m_iCountMonster;
 	_bool m_bFirst;
 	_bool test = false;
-private:
-	CScenematic* m_pCinema = nullptr;
 private:/*for Meteor*/
 	vector<CMeteor*> m_vecMeteor;
 	vector<_float4> m_vecMeteorPos;
 	_float m_fAccMeteorSpawn;
 	_float m_fRandomMeteorSpawnTime;
+	_float m_fAccMeteorStartTime;
+private:
+	_int m_iPortalCount;
 };
 #endif
 

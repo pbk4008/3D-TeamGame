@@ -32,6 +32,7 @@ private:
 	HRESULT Load_Stage1PlayerLoad();
 	HRESULT Load_Stage1BossLoad();
 	HRESULT Load_Stage1MonsterLoad();
+	HRESULT Load_Stage1Meteor();
 	HRESULT Load_Stage1StaticUILoad(); //툴에서 값 지정해주는 UI들은 여기서 미리 생성
 	HRESULT Load_Stage1UILoad(); //직접 생성
 	HRESULT Load_Stage1EffectLoad();
@@ -43,6 +44,9 @@ private:
 	//Stage2
 	HRESULT Set_Stage2_Prototype();
 	HRESULT Load_Stage2_Object();
+private:
+	HRESULT Load_TrailEffects();
+	HRESULT Load_MeshEffects();
 private:
 	//쓰레드에 로딩할 파일 추가(컴포넌트 태그, 로딩할 파일 패스, 타입(0 = Static, 1 = Ainm, 2 = Instancing_Static)
 	void Add_LoadingThread(const wstring& pComponetTag, const wstring& pFilePath, _uint iType);

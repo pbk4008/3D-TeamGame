@@ -24,6 +24,7 @@ public:
 	_bool Get_Active() { return m_bActive; }
 protected:
 	HRESULT Set_UpComponents(CComponent* pComponent);
+	HRESULT Ready_Actor(class CCinemaActor** pOut, _uint iActorTag);
 protected:
 	virtual void Free() override;
 protected:

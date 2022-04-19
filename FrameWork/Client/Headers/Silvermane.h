@@ -140,6 +140,11 @@ public: /* For.DropBox */
 	void Set_IsBoxOpen(const _bool _isBoxOpen);
 	const void Raycast_DropBox(const _double& _dDeltaTime);
 
+public: /* For.Execute */
+	void Set_Execution(const _bool _isExecution, CActor* _pTarget = nullptr);
+	CActor* Get_TargetExecution() const;
+	CHierarchyNode* Get_ExecutionTargetBone() const;
+
 private:
 	const _int	Trace_CameraLook(const _double& _dDeltaTime);
 	const _int	Input(const _double& _dDeltaTime);
@@ -169,6 +174,7 @@ public:
 
 private: /* For.Weapon */
 	CWeapon* m_pCurWeapon = nullptr;
+	CWeapon* m_pNeedle = nullptr;
 	_bool m_isEquipWeapon = false;
 
 private: /* For.Shield */
@@ -191,6 +197,10 @@ private: /* For.JumpNode */
 private: /* For.DropBox  */
 	_bool m_isBoxOpen = false;
 	CDropBox* m_pTargetDropBox = nullptr;
+
+private: /* For.Execution */
+	CActor* m_pTargetExecution = nullptr;
+	CHierarchyNode* m_pExecutionTargetBone = nullptr;
 
 private: /* For.Cheat */
 	_bool m_isHighSpeedMode = false;
