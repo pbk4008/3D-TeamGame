@@ -140,4 +140,6 @@ void CUI_LevelUP_Fill_Lead_Left::Free()
 {
 	Safe_Release(m_pSigleImageCom);
 	Safe_Release(m_pLocalTransform);
+
+	__super::Free();
 }

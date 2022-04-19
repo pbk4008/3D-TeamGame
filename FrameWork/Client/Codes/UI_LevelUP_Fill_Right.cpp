@@ -136,4 +136,6 @@ void UI_LevelUP_Fill_Right::Free()
 {
 	Safe_Release(m_pSigleImageCom);
 	Safe_Release(m_pLocalTransform);
+
+	__super::Free();
 }

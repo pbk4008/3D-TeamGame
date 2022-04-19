@@ -50,6 +50,7 @@ public:
 private:
 	CLevel_UP* m_pLevelUp = nullptr;
 	CPlayerData* m_pPlayerData = nullptr;
+
 private:
 	std::vector< CLoot_Equipment*> m_vecLootEquipment;
 public:

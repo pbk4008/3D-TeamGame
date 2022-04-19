@@ -171,4 +171,6 @@ void UI_LevelUP_Fill_Left::Free()
 	Safe_Release(m_pSigleImageCom);
 	Safe_Release(m_pTrapziumBuffer);
 	Safe_Release(m_pLocalTransform);
+
+	__super::Free();
 }

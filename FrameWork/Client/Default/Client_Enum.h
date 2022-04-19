@@ -79,7 +79,6 @@ enum class ELayer
 	Max
 };
 
-
 /* for. Item Data */
 enum class EScatterType
 {
@@ -112,6 +111,7 @@ typedef enum EWeaponType
 	Weapon_End
 }WEAPON_TYPE;
 
+
 enum class EEquipmentType
 {
 	Weapon,
@@ -122,7 +122,6 @@ enum class EEquipmentType
 	Banner,
 	Equipment_Type_End
 };
-
 
 enum class EEquipmentName
 {
@@ -138,11 +137,11 @@ enum class EEquipmentName
 	Hinterclaw,
 	Ironstone,
 	Justice,
-	Legend1, 
+	Legend1,
 	Legend2,
 	Legend5,
 	Mesa,
-	Skymourne, 
+	Skymourne,
 	Soothsayer,
 	/* Banner */
 	Banner_1,
@@ -176,7 +175,7 @@ enum class EEquipmentName
 	Equipment_Name_End
 };
 
-typedef enum eEquipmentMainStatType
+typedef enum EEquipmentMainStatType
 {
 	//weapon
 	PHYSICAL_DPS,
@@ -210,11 +209,6 @@ enum class EEquipSlot
 	Amulet,
 	Charm,
 	Max,
-
-	/* 무기1 무기2 */
-	/* 목걸이 장신구 */
-	/* 반지1 반지2 */
-	/* 생명석 배너 */
 };
 
 enum class EEquipmentGradeUI
@@ -237,6 +231,14 @@ enum class EWeaponMaterial
 	MATERIAL_END
 };
 
+const wstring g_arrGradeName[(int)EEquipmentGradeUI::GRADE_END]
+{
+	L"일반",
+	L"고급",
+	L"희귀",
+	L"영웅",
+	L"전설"
+};
 static TEXTURETYPE g_arrMI_Texture[(int)EWeaponMaterial::MATERIAL_END]
 {
 	TEXTURETYPE::TEX_DIFFUSE,
@@ -245,6 +247,7 @@ static TEXTURETYPE g_arrMI_Texture[(int)EWeaponMaterial::MATERIAL_END]
 	TEXTURETYPE::TEX_CEO,
 	TEXTURETYPE::TEX_MASK
 };
+
 
 static const string g_arrMI_Tex[(int)EWeaponMaterial::MATERIAL_END]
 {
@@ -256,7 +259,7 @@ static const string g_arrMI_Tex[(int)EWeaponMaterial::MATERIAL_END]
 };
 
 const wstring g_arrGradeSlotBgName[(int)EEquipmentGradeUI::GRADE_END]
-{ 
+{
 	L"T_Item_Bg_Grey",
 	L"T_Item_Bg_Blue",
 	L"T_Item_Bg_Green",
@@ -266,7 +269,7 @@ const wstring g_arrGradeSlotBgName[(int)EEquipmentGradeUI::GRADE_END]
 
 /* 인벤토리 아이템 설명 */
 const wstring g_arrGradeStatusBgName[(int)EEquipmentName::Equipment_Name_End]
-{ 
+{
 	/* Weapon */
 	L"T_ItemStatus_Weapon_Needle",
 	L"T_ItemStatus_Weapon_ArgentBlade",
@@ -508,5 +511,5 @@ const wstring g_arrMI_Soothsayer[(int)EWeaponMaterial::MATERIAL_END]
 	L"T_2H_Hammer_Soothsayer_MRA.dds",
 	L"T_2H_Hammer_Soothsayer_CEO.dds",
 };
-
+END
 #endif

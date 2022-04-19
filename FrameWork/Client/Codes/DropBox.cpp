@@ -63,7 +63,7 @@ HRESULT CDropBox::NativeConstruct(const _uint _iSceneID, void* _pArg)
 
 	setActive(true);
 
-	Active_Effect((_uint)EFFECT::BOX);
+	//Active_Effect((_uint)EFFECT::BOX);
 
 	return S_OK;
 }
@@ -665,7 +665,7 @@ void CDropBox::FocusEnter()
 void CDropBox::Focus()
 {
 	__super::Focus();
-	Active_Effect((_uint)EFFECT::OPENBOX);
+	//Active_Effect((_uint)EFFECT::OPENBOX);
 
 	m_bFocus = true;
 }

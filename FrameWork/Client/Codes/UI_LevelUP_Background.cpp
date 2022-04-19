@@ -136,4 +136,6 @@ void CUI_LevelUP_Background::Free()
 {
 	Safe_Release(m_pSigleImageCom);
 	Safe_Release(m_pLocalTransform);
+
+	__super::Free();
 }

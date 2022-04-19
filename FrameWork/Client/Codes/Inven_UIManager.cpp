@@ -121,7 +121,7 @@ void CInven_UIManager::HideItemStatus(void)
 	if (m_pItemStatus)
 	{
 		m_pItemStatus->Hide();
-		if(m_pModal->OpenEquipment())
+		if (m_pModal->OpenEquipment())
 			m_pPlayerStatus->Show();
 		else
 			m_pPlayerStatus->Hide();

@@ -292,4 +292,6 @@ void CLoot_Equipment::Free()
 	Safe_Release(m_pItemEffect);
 	Safe_Release(m_pNameText);
 	Safe_Release(m_pNameType);
+
+	__super::Free();
 }

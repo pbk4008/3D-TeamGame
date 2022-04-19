@@ -48,6 +48,7 @@ private:
 	CUI_LootItemEffect*		m_pItemEffect = nullptr;
 	CUI_LootItemNameText*	m_pNameText = nullptr;
 	CUI_LootItemNameType*	m_pNameType = nullptr;
+
 private:
 	CHud::Desc			desc;
 	_float				m_fAliveTime = 0.f;

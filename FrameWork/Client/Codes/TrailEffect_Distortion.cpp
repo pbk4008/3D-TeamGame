@@ -134,11 +134,11 @@ HRESULT CTrailEffect_Distortion::Ready_Components()
 	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_VIBuffer_Trail_Distortion", L"VIBuffer", (CComponent**)&m_pVIBuffer)))
 		MSGBOX(L"트레일 버퍼 못만듬");
 
-	m_pTexture = g_pGameInstance->Clone_Component<CTexture>(0, L"Proto_Component_Texture");
+	/*m_pTexture = g_pGameInstance->Clone_Component<CTexture>(0, L"Proto_Component_Texture");
 	m_pTexture->Change_Texture(m_tDesc.wstrTextureTag);
 
 	m_pTexture1 = g_pGameInstance->Clone_Component<CTexture>(0, L"Proto_Component_Texture");;
-	m_pTexture1->Change_Texture(L"DistortionBase");
+	m_pTexture1->Change_Texture(L"DistortionBase");*/
 
 	m_pTexture2 = g_pGameInstance->Clone_Component<CTexture>(0, L"Proto_Component_Texture");;
 	m_pTexture2->Change_Texture(L"DistortionMask");
@@ -172,6 +172,6 @@ void CTrailEffect_Distortion::Free()
 {
 	__super::Free();
 
-	Safe_Release(m_pTexture1);
+	//Safe_Release(m_pTexture1);
 	Safe_Release(m_pTexture2);
 }

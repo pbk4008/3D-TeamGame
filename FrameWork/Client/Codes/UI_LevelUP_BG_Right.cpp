@@ -139,4 +139,6 @@ void CUI_LevelUP_BG_Right::Free()
 {
 	Safe_Release(m_pSigleImageCom);
 	Safe_Release(m_pLocalTransform);
+
+	__super::Free();
 }

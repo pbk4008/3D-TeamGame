@@ -55,16 +55,6 @@ _int UI_ItemStatusBackground::LateTick(_double TimeDelta)
 
 	Attach_Owner();
 
-	if (m_fInitPos > m_fEndPos)
-	{
-		m_fInitPos -= (_float)TimeDelta * 100.f;
-		if (m_fInitPos < m_fEndPos)
-		{
-			m_fInitPos = m_fEndPos;
-		}
-		m_pTransform->Set_State(CTransform::STATE_POSITION, _vector{ m_fInitPos, 0.f, 0.3f, 1.f });
-	}
-
 	return _int();
 }
 

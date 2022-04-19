@@ -159,8 +159,8 @@ HRESULT CLoader::LoadForScene()
 
 HRESULT CLoader::SetUp_Stage1_Object()
 {
-	//if (FAILED(Load_Stage1FBXLoad()))
-	//	return E_FAIL;
+	if (FAILED(Load_Stage1FBXLoad()))
+		return E_FAIL;
 
 	if (FAILED(Load_Stage1Navi_SkyLoad()))
 		return E_FAIL;
@@ -657,10 +657,10 @@ HRESULT CLoader::Load_Stage1EffectLoad()
 	}
 	_findclose(handle);
 
-	/////////////////////////////////////// 소드 트레일
+	/////////////////////////////////// 소드 트레일
 	if (FAILED(Load_TrailEffects()))
 		return E_FAIL;
-	/////////////////////////////////////// 메쉬 이펙트
+	///////////////////////////////////// 메쉬 이펙트
 	if (FAILED(Load_MeshEffects()))
 		return E_FAIL;
 

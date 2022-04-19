@@ -66,7 +66,6 @@
 #include "SingleImage.h"
 #include "UIHelper.h"
 
-
 CClient_Observer* g_pObserver = nullptr;
 CDebugSystem* g_pDebugSystem = nullptr;
 CShakeManager* g_pShakeManager = nullptr;

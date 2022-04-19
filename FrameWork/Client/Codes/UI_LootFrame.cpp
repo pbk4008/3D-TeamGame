@@ -134,4 +134,6 @@ void CUI_LootFrame::Free()
 {
 	Safe_Release(m_pSigleImageCom);
 	Safe_Release(m_pLocalTransform);
+
+	__super::Free();
 }

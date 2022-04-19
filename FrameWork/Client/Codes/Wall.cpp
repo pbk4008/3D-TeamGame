@@ -154,6 +154,7 @@ void CWall::Free()
 {
 	Safe_Release(m_pbuffer);
 	Safe_Release(m_pdiffusetex);
+	Safe_Release(m_dissolveTex);
 
 	__super::Free();
 }
