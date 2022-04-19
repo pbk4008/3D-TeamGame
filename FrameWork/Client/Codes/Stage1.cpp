@@ -326,7 +326,7 @@ _int CStage1::Tick(_double TimeDelta)
 #pragma endregion
 	g_pInteractManager->Tick(TimeDelta);
 	g_pDropManager->Tick();
-	//m_pIndicatorManager->Active_Indicator();
+	m_pIndicatorManager->Active_Indicator();
 
 	/*For Cinema*/
 	//if (g_pGameInstance->getkeyDown(DIK_END))
@@ -499,7 +499,7 @@ HRESULT CStage1::Ready_Monster(const _tchar* LayerTag)
 {
 	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Proto_GameObject_Monster_Crawler")))
 	//	return E_FAIL;
-	
+	//
 	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Proto_GameObject_Monster_EarthAberrant")))
 	//	return E_FAIL;
 	//

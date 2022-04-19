@@ -141,16 +141,9 @@ PS_OUT PS_MAIN(PS_IN In)
 	PS_OUT		Out = (PS_OUT)0;
 
 	Out.vColor = g_DiffuseTexture.Sample(DefaultSampler, In.vTexUV);
-	//Out.vColor.r = g_color.r;
-	//Out.vColor.g = g_color.g;
-	//Out.vColor.b = g_color.b;
 	
-    Out.vColor.a = Out.vColor.a * g_fAlpha;
-
-	//if (Out.vColor.a < 0.001)
-	//	discard;
-	
-	Out.weight = float4(g_Weight.xxx, 0.5f);
+	Out.vColor.a = Out.vColor.a * g_fAlpha;
+	Out.weight = float4(g_Weight.xxx, Out.vColor.a);
 
 	return Out;
 }
@@ -178,48 +171,6 @@ PS_OUT PS_MAIN_MULTIIMAGE_LEAF(PS_IN In) //낙엽에서씀
     }
 	
     return Out;
-}
-
-struct PS_OUT_TEST
-{
-	half4 diffuse : SV_TARGET0;
-	half4 normal : SV_TARGET1;
-	half4 depth : SV_TARGET2;
-	half4 mra : SV_Target3;
-	half4 emission : SV_Target4;
-};
-
-PS_OUT_TEST PS_MAIN_TEST(PS_IN In)
-{
-	PS_OUT_TEST Out = (PS_OUT_TEST)0;
-	
-	In.vTexUV.x = (In.vTexUV.x / g_iImageCountX) + (g_iFrame % g_iImageCountX) * (1.f / g_iImageCountX); //가로 이미지개수 , 프레임 , 1나누기 이미지개수 
-    In.vTexUV.y = (In.vTexUV.y / g_iImageCountY) + (g_iFrame / g_iImageCountX) * (1.f / g_iImageCountY); //세로 이미지개수 , 프레임 , 1나누기 이미지개수
-
-	half Alpha = g_DiffuseTexture.Sample(DefaultSampler, In.vTexUV).a;
-	
-	Out.diffuse = g_DiffuseTexture.Sample(DefaultSampler, In.vTexUV);
-	
-	//수빈 이거 왜 들어가는거임??
-	//Out.diffuse.r = 1.f;
-	//Out.diffuse.gb = 0.f;
-	
-    Out.diffuse = Out.diffuse * Alpha;
-
-	Out.depth = half4(In.vPosition.z / In.vPosition.w, In.vPosition.w / 300.f, 0.f, 0.f);
-	Out.normal = half4(1, 1, 1, 0);
-
-	Out.mra.r = 0.f;
-	Out.mra.g = 1.f;
-	Out.mra.b = 1.f;
-	Out.mra.a = 1.f;
-	
-	Out.emission = g_color * g_empower;
-	
-	if (0.1f >= Out.diffuse.a)
-		discard;
-	
-	return Out;
 }
 
 PS_OUT PS_MAIN_MULTIIMAGE(PS_IN In)
@@ -258,8 +209,8 @@ technique11			DefaultTechnique
 	{
 		/* 렌더스테이츠에 대한 정의. */
 		SetRasterizerState(CullMode_Default);
-		SetDepthStencilState(ZDefault, 0);
-		SetBlendState(AlphaBlending, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+		SetDepthStencilState(ZBufferDisable, 0);
+		SetBlendState(AlphaBlending2, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
 
 		/* 진입점함수를 지정한다. */
 		VertexShader = compile vs_5_0 VS_MAIN();
@@ -293,20 +244,7 @@ technique11			DefaultTechnique
         PixelShader = compile ps_5_0 PS_MAIN();
     }
 
-	pass Test //4
-	{
-		/* 렌더스테이츠에 대한 정의. */
-		SetRasterizerState(CullMode_None);
-		SetDepthStencilState(ZDefault, 0);
-		SetBlendState(BlendDisable, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
-
-		/* 진입점함수를 지정한다. */
-		VertexShader = compile vs_5_0 VS_MAIN();
-		GeometryShader = compile gs_5_0 GS_MAIN();
-		PixelShader = compile ps_5_0 PS_MAIN_TEST();
-	}
-
-    pass AlphaBlendMultiImage //5
+    pass AlphaBlendMultiImage //4
     {
 		/* 렌더스테이츠에 대한 정의. */
         SetRasterizerState(CullMode_Default);

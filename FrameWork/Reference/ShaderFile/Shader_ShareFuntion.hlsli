@@ -147,3 +147,10 @@ half4 RimLighting(float4 normal, float4 camdir, float rimintensity, float3 rimco
 	
 	return half4(rimcolor, 1.f);
 }
+
+half4 MotionTrailRim(float4 normal, float4 camdir, float rimintensity, float3 rimcolor)
+{
+	half4 rim = 1.f - saturate(dot(normalize(normal), normalize(camdir)));
+	rim.rgb = rim.rgb * rimcolor;
+	return rim;
+}

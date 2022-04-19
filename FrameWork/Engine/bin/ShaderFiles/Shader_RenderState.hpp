@@ -57,6 +57,13 @@ DepthStencilState ZWriteDisable
 	DepthFunc = less;
 };
 
+DepthStencilState ZBufferDisable
+{
+	DepthEnable = true;
+	DepthWriteMask = Zero;
+	DepthFunc = less;
+};
+
 DepthStencilState ZAlphaBlend
 {
 	DepthEnable = true;
@@ -76,11 +83,24 @@ DepthStencilState ZAlphaBlend
 //D3D11_BLEND_OP BlendOpAlpha;
 //UINT8 RenderTargetWriteMask;
 
+BlendState AlphaBlending2
+{
+	BlendEnable[0] = true;
+	BlendEnable[1] = true;
+	BlendOp = Add;
+
+	SrcBlend = Src_Alpha;
+	DestBlend = One;
+
+	SrcBlendAlpha = Zero;
+	DestBlendAlpha = Zero;
+	BlendOpAlpha = Add;
+};
 
 BlendState AlphaBlending
 {
 	BlendEnable[0] = true;
-	/*BlendEnable[1] = true;*/
+	BlendEnable[1] = true;
 	BlendOp = Add;
 
 	SrcBlend = Src_Alpha;
@@ -123,18 +143,6 @@ BlendState OneBlending
 BlendState BlendDisable
 {
 	BlendEnable[0] = false;
-};
-
-BlendState BlendAlphaFire
-{
-	BlendEnable[0] = true;
-	SrcBlend = Src_Alpha;
-	DestBlend = Inv_Src_Alpha;
-	BlendOp = Add;
-
-	SrcBlendAlpha = One;
-	DestBlendAlpha = Zero;
-	BlendOpAlpha = Add;
 };
 
 //----------------------------------Calculate Function-----------------------------//

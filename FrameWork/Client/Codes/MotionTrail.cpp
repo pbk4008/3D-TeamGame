@@ -35,7 +35,7 @@ HRESULT CMotionTrail::NativeConstruct(const _uint _iSceneID, void* _pArg)
 _int CMotionTrail::Tick(_double _dDeltaTime)
 {
 	m_lifetime += (_float)g_fDeltaTime;
-	if (m_lifetime >= 0.5f)
+	if (m_lifetime >= 0.3f)
 	{
 		m_lifetime = 0.f;
 		m_bActive = false;
@@ -74,9 +74,9 @@ HRESULT CMotionTrail::Render_MotionTrail()
 	RIM rimdesc;
 	ZeroMemory(&rimdesc, sizeof(RIM));
 	rimdesc.rimcheck = m_rimcheck;
-	rimdesc.rimcol = _float3(0.f, 1.0f, 0);
+	rimdesc.rimcol = _float3(0.7529f, 0.7529f, 0.7529f);
 	rimdesc.rimintensity = m_rimintensity; // intensity ³·À» ¼ö·Ï °úÇÏ°Ô ºû³²
-	XMStoreFloat4(&rimdesc.camdir, XMVector3Normalize(m_position - g_pGameInstance->Get_CamPosition(camtag)));
+	XMStoreFloat4(&rimdesc.camdir, XMVector3Normalize(g_pGameInstance->Get_CamPosition(camtag) - m_position));
 
 	if (FAILED(m_pModel->SetUp_ValueOnShader("g_rimlightcheck", &rimdesc.rimcheck, sizeof(_bool)))) MSGBOX("Failed To Apply Actor ConstantBuffer");
 	if (FAILED(m_pModel->SetUp_ValueOnShader("g_rimintensity", &rimdesc.rimintensity, sizeof(_float)))) MSGBOX("Failed To Apply Actor ConstantBuffer");
