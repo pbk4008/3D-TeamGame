@@ -898,23 +898,23 @@ HRESULT CSilvermane::Ready_Weapons(const _uint _iSceneID)
 	CWeapon* pWeapon = nullptr;
 	CHierarchyNode* pWeaponBone = m_pModel->Get_BoneMatrix("spine_03");
 
-	/*if (FAILED(g_pWeaponGenerator->NativeConstruct(m_pDevice, m_pDeviceContext, _iSceneID, m_pModel)))
-		return E_FAIL;*/
+	if (FAILED(g_pWeaponGenerator->NativeConstruct(m_pDevice, m_pDeviceContext, _iSceneID, m_pModel)))
+		return E_FAIL;
 
 #pragma region Old Ready Weapon
 	//한손검
-		pWeapon = CNeedle::Create(m_pDevice, m_pDeviceContext);
-	if (FAILED(pWeapon->NativeConstruct(m_iSceneID, pWeaponBone)))
-	{
-		Safe_Release(pWeapon);
-		return E_FAIL;
-	}
-	pWeapon->Set_Owner(this); /* 무기에게 네가 나의 마스타인가? */
-	pWeapon->Set_OwnerPivotMatrix(m_pModel->Get_PivotMatrix()); /* 마스타의 뼈를 취하겠다 */
-	//m_umapWeapons.emplace(L"Needle", pWeapon); /* 따로 저장 */
-	m_pCurWeapon = pWeapon; /* FSM 나뉨 */
-	m_pCurWeapon->setActive(true); 
-	m_pNeedle = pWeapon;
+	//pWeapon = CNeedle::Create(m_pDevice, m_pDeviceContext);
+	//if (FAILED(pWeapon->NativeConstruct(m_iSceneID, pWeaponBone)))
+	//{
+	//	Safe_Release(pWeapon);
+	//	return E_FAIL;
+	//}
+	//pWeapon->Set_Owner(this); /* 무기에게 네가 나의 마스타인가? */
+	//pWeapon->Set_OwnerPivotMatrix(m_pModel->Get_PivotMatrix()); /* 마스타의 뼈를 취하겠다 */
+	////m_umapWeapons.emplace(L"Needle", pWeapon); /* 따로 저장 */
+	//m_pCurWeapon = pWeapon; /* FSM 나뉨 */
+	//m_pCurWeapon->setActive(true); 
+	//m_pNeedle = pWeapon;
 
 	////// 해머
 	////pWeapon = CFury::Create(m_pDevice, m_pDeviceContext);
@@ -945,25 +945,25 @@ HRESULT CSilvermane::Ready_Weapons(const _uint _iSceneID)
 	/// Equipment&Inventory Data와 연동하여 장비 Ready함
 	/// </summary>
 	/// 
-	/*if (g_pDataManager)
-	{
-		m_pEquipmentData = g_pDataManager->GET_DATA(CEquipmentData, L"EquipmentData");
-
-		if (1 == m_pPlayerData->EquipedSlot)
+		if (g_pDataManager)
 		{
-			assert(m_pEquipmentData->GetEquipment(EEquipSlot::Weapon1).weaponData.IsValid());
-			pWeapon = m_pEquipmentData->GetEquipment(EEquipSlot::Weapon1).weaponData.Get_Weapon();
+			m_pEquipmentData = g_pDataManager->GET_DATA(CEquipmentData, L"EquipmentData");
 
-			if (pWeapon)
+			if (1 == m_pPlayerData->EquipedSlot)
 			{
-				pWeapon->Set_Owner(this);
-				pWeapon->Set_OwnerPivotMatrix(m_pModel->Get_PivotMatrix());
-				pWeapon->setActive(true);
+				assert(m_pEquipmentData->GetEquipment(EEquipSlot::Weapon1).weaponData.IsValid());
+				pWeapon = m_pEquipmentData->GetEquipment(EEquipSlot::Weapon1).weaponData.Get_Weapon();
 
-				m_pCurWeapon = pWeapon;
+				if (pWeapon)
+				{
+					pWeapon->Set_Owner(this);
+					pWeapon->Set_OwnerPivotMatrix(m_pModel->Get_PivotMatrix());
+					pWeapon->setActive(true);
+
+					m_pCurWeapon = pWeapon;
+				}
 			}
 		}
-	}*/
 	return S_OK;
 }
 
@@ -1985,7 +1985,4 @@ void CSilvermane::Free()
 	Safe_Release(m_pCharacterController);
 	Safe_Release(m_pStateController);
 	Safe_Release(m_pAnimationController);
-
-	for (auto& iter : m_vecMotionTrail)
-		Safe_Release(iter);
 }
