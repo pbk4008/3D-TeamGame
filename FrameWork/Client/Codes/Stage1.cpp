@@ -47,10 +47,12 @@
 #include "WeaponGenerator.h"
 
 #include "Wall.h"
+#include "Potal.h"
 
 //Cinema
 #include "Cinema1_1.h"
-#include <Potal.h>
+#include "Cinema1_2.h"
+
 
 
 CStage1::CStage1()
@@ -97,8 +99,8 @@ HRESULT CStage1::NativeConstruct()
 	if (FAILED(Ready_Light()))
 		return E_FAIL;
 
-	if (FAILED(Ready_Trigger_Jump()))
-		return E_FAIL;
+	//if (FAILED(Ready_Trigger_Jump()))
+	//	return E_FAIL;
 
 	if (FAILED(Ready_Player(L"Layer_Silvermane")))
 		return E_FAIL;
@@ -106,20 +108,20 @@ HRESULT CStage1::NativeConstruct()
 	if (FAILED(Ready_MapObject()))
 		return E_FAIL;
 
-	if (FAILED(Ready_TriggerSystem(L"../bin/SaveData/Trigger/MonsterSpawnTrigger.dat")))
-		return E_FAIL;
+	//if (FAILED(Ready_TriggerSystem(L"../bin/SaveData/Trigger/MonsterSpawnTrigger.dat")))
+	//	return E_FAIL;
 
 	if (FAILED(Ready_Data_UI(L"../bin/SaveData/UI/UI.dat")))
 		return E_FAIL;
 
-	if (FAILED(Ready_Data_Effect()))
-		return E_FAIL;
+	//if (FAILED(Ready_Data_Effect()))
+	//	return E_FAIL;
 
 	if (FAILED(Ready_UI(L"Layer_UI")))
 		return E_FAIL;
 
-	if (FAILED(Ready_Treasure_Chest()))
-		return E_FAIL;
+	//if (FAILED(Ready_Treasure_Chest()))
+	//	return E_FAIL;
 
 	if (FAILED(Ready_GameManager()))
 		return E_FAIL;
@@ -129,8 +131,8 @@ HRESULT CStage1::NativeConstruct()
 	//if (FAILED(Ready_Meteor()))
 	//	return E_FAIL;
 
-	//if (FAILED(Ready_Cinema()))
-	//	return E_FAIL;
+	if (FAILED(Ready_Cinema()))
+		return E_FAIL;
 
 	//if (FAILED(Ready_Boss(L"Layer_Boss")))
 	//	return E_FAIL;
@@ -141,8 +143,8 @@ HRESULT CStage1::NativeConstruct()
 	if (FAILED(Ready_Indicator()))
 		return E_FAIL;
 
-	if (FAILED(Ready_Portal()))
-		return E_FAIL;
+	//if (FAILED(Ready_Portal()))
+	//	return E_FAIL;
 
 	g_pGameInstance->PlayBGM(L"Stage1_BGM");
 
@@ -151,14 +153,6 @@ HRESULT CStage1::NativeConstruct()
 
 _int CStage1::Tick(_double TimeDelta)
 {
-	//_vector vTmp = g_pObserver->Get_PlayerPos();
-
-	//cout << XMVectorGetX(vTmp) << " " << XMVectorGetY(vTmp) << " " << XMVectorGetZ(vTmp) << endl;
-
-	//if(g_pGameInstance->getkeyDown(DIK_NUMPAD0))
-	//	Open_Potal(XMVectorSet(-58.f, 18.f, 213.f, 1.f), (_uint)GAMEOBJECT::MONSTER_1H);
-
-
 #ifdef  _DEBUG
 	_int iLevel = 0;
 	if (g_pDebugSystem->Get_LevelMoveCheck(iLevel))
@@ -256,8 +250,6 @@ _int CStage1::Tick(_double TimeDelta)
 		}
 	}
 
-
-
 #pragma region Using Debug
 	_float3 fPos = { 0.f,5.f,20.f };
 	//if (g_pGameInstance->getkeyDown(DIK_NUMPAD0))
@@ -323,13 +315,16 @@ _int CStage1::Tick(_double TimeDelta)
 	//		return -1;
 	//}
 #pragma endregion
-	g_pInteractManager->Tick(TimeDelta);
-	g_pDropManager->Tick();
+	//g_pInteractManager->Tick(TimeDelta);
+	//g_pDropManager->Tick();
 	m_pIndicatorManager->Active_Indicator();
 
-	//if (g_pGameInstance->getkeyDown(DIK_END))
-	//	m_pScenemaManager->Active_Scenema((_uint)CINEMA_INDEX::CINEMA1_1, &m_pCinema);
+	/*For Cinema*/
+	if (g_pGameInstance->getkeyDown(DIK_END))
+		m_pScenemaManager->Active_Scenema((_uint)CINEMA_INDEX::CINEMA1_2);
 
+
+	m_pScenemaManager->Tick(TimeDelta);
 	//if (m_pCinema && m_pCinema->Get_Active())
 	//{
 	//	m_pCinema->Tick(TimeDelta);
@@ -342,6 +337,12 @@ _int CStage1::Tick(_double TimeDelta)
 	//if (m_fAccMeteorStartTime > 60.f)
 	//	Shoot_Meteor(TimeDelta);
 
+	return _int();
+}
+
+_int CStage1::LateTick(_double TimeDelta)
+{
+	m_pScenemaManager->LateTick(TimeDelta);
 	return _int();
 }
 
@@ -632,9 +633,9 @@ HRESULT CStage1::Ready_Light()
 
 HRESULT CStage1::Ready_GameManager(void)
 {
-	g_pDropManager = CDropManager::GetInstance();
-	if (FAILED(g_pDropManager->NativeConstruct((SCENEID::SCENE_STAGE1))))
-		return E_FAIL;
+	//g_pDropManager = CDropManager::GetInstance();
+	//if (FAILED(g_pDropManager->NativeConstruct((SCENEID::SCENE_STAGE1))))
+	//	return E_FAIL;
 
 	m_pIndicatorManager = GET_INSTANCE(CIndicator_Manager);
 	m_pScenemaManager = GET_INSTANCE(CScenematicManager);
@@ -1051,7 +1052,8 @@ HRESULT CStage1::Ready_Cinema()
 
 	if (FAILED(m_pScenemaManager->Add_Scenema(CCinema1_1::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
-
+	if (FAILED(m_pScenemaManager->Add_Scenema(CCinema1_2::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
 	return S_OK;
 }
 
@@ -1968,15 +1970,15 @@ void CStage1::Free()
 
 	//Safe_Release(m_pScenemaManager);
 	//CScenematicManager::DestroyInstance();
-	if(g_pInteractManager)
-		g_pInteractManager->Remove_Interactable();
+	//if(g_pInteractManager)
+	//	g_pInteractManager->Remove_Interactable();
 
 	Safe_Release(m_pScenemaManager);
 	Safe_Release(m_pIndicatorManager);
 	CScenematicManager::DestroyInstance();
 	CIndicator_Manager::DestroyInstance();
 
-	CDropManager::DestroyInstance();
+	//CDropManager::DestroyInstance();
 	Safe_Release(m_pTriggerSystem);
 
 	//for (auto& pObj : m_vecMeteor)

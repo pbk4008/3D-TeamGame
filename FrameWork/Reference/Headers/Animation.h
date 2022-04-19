@@ -26,6 +26,7 @@ public:
 	const _float Get_PalySpeed() const;
 	void Set_MaxKeyFrameIndex(const _uint _iMaxKeyFrameIndex);
 	const _bool Is_Finished() const { return m_isFinished; }
+	const _double Get_TrackPoition() const { return m_TrackPositionAcc; }
 	CSaveManager::ANIMDATA& SetSaveAnimData();
 
 public:

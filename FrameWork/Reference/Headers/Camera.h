@@ -34,6 +34,7 @@ public:
 	virtual HRESULT NativeConstruct(void* pArg);
 public:
 	void Update_Matrix(_fmatrix& matWorld);
+	void Change_Fov(_float fAngle);
 private:
 	HRESULT setViewMatrix();
 	HRESULT setProjMatrix();

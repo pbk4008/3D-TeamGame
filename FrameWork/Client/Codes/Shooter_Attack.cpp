@@ -54,8 +54,6 @@ _int CShooter_Attack::Tick(const _double& _dDeltaTime)
 			m_pStateController->Change_State(L"Idle");
 		}
 	}
-	
-
 	return _int();
 }
 

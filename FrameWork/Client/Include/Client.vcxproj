@@ -315,6 +315,8 @@ call Update_Client.bat</Command>
     <ClInclude Include="..\Headers\Camera_Silvermane.h" />
     <ClInclude Include="..\Headers\Camera_Debug.h" />
     <ClInclude Include="..\Headers\Cinema1_1.h" />
+    <ClInclude Include="..\Headers\Cinema1_2.h" />
+    <ClInclude Include="..\Headers\CinemaActor.h" />
     <ClInclude Include="..\Headers\CinemaCam.h" />
     <ClInclude Include="..\Headers\Client_Observer.h" />
     <ClInclude Include="..\Headers\Client_Trigger.h" />
@@ -657,6 +659,8 @@ call Update_Client.bat</Command>
     <ClCompile Include="..\Codes\CameraShake.cpp" />
     <ClCompile Include="..\Codes\Camera_Culling.cpp" />
     <ClCompile Include="..\Codes\Cinema1_1.cpp" />
+    <ClCompile Include="..\Codes\Cinema1_2.cpp" />
+    <ClCompile Include="..\Codes\CinemaActor.cpp" />
     <ClCompile Include="..\Codes\CinemaCam.cpp" />
     <ClCompile Include="..\Codes\Client_Observer.cpp" />
     <ClCompile Include="..\Codes\Client_Trigger.cpp" />

@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "..\Headers\Scenematic.h"
+#include "CinemaActor.h"
 
 CScenematic::CScenematic()
 	: m_pDevice(nullptr)
@@ -32,6 +33,7 @@ _int CScenematic::Tick(_double dDeltaTime)
 	{
 		Set_Active(false);
 		End_Cinema();
+		m_bCinemaEnd = false;
 		return 1;
 	}
 
@@ -66,6 +68,17 @@ HRESULT CScenematic::Set_UpComponents(CComponent* pComponent)
 	m_vecScenemaComponents.emplace_back(pComponent);
 	Safe_AddRef(pComponent);
 
+	return S_OK;
+}
+
+HRESULT CScenematic::Ready_Actor(CCinemaActor** pOut, _uint iActorTag)
+{
+	*pOut = g_pGameInstance->Clone_GameObject<CCinemaActor>((_uint)SCENEID::SCENE_STAGE1, L"Proto_GameObject_CinemaActor", &iActorTag);
+	if (*pOut == nullptr)
+	{
+		MSGBOX("Ready Actor Fail");
+		return E_FAIL;
+	}
 	return S_OK;
 }
 
