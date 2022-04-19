@@ -70,6 +70,21 @@
     <Filter Include="04.Object\02.Effect\Respawn">
       <UniqueIdentifier>{a096ee32-1f65-4f8f-8939-3cf837f554a0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="04.Object\02.Effect\Floating\00.Normal">
+      <UniqueIdentifier>{6adc910a-cf05-45b8-bc01-5e501973b8ed}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04.Object\02.Effect\Floating\01.Speed">
+      <UniqueIdentifier>{7d870cff-da4e-4ae0-a53e-9c8fcf1121fd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04.Object\02.Effect\Respawn\00.Down">
+      <UniqueIdentifier>{ee771ac5-8abe-426c-a5ef-8f7541a99c0c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04.Object\02.Effect\Respawn\01.Up">
+      <UniqueIdentifier>{ca238a98-04c4-4f3a-a35e-8ecfac634fde}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04.Object\02.Effect\Floating\02.Disappear">
+      <UniqueIdentifier>{ae216ba8-d6fa-4181-a05b-33802e132997}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MainFrm.h">
@@ -132,14 +147,23 @@
     <ClInclude Include="MFCLevel_Play.h">
       <Filter>05.Level\Effect</Filter>
     </ClInclude>
-    <ClInclude Include="MFCEffect_floating.h">
-      <Filter>04.Object\02.Effect\Floating</Filter>
-    </ClInclude>
     <ClInclude Include="MFCEffect_Env_floating.h">
       <Filter>04.Object\02.Effect\Env_Floating</Filter>
     </ClInclude>
+    <ClInclude Include="MFCEffect_floating.h">
+      <Filter>04.Object\02.Effect\Floating\00.Normal</Filter>
+    </ClInclude>
+    <ClInclude Include="MFCEffect_floating_Speed.h">
+      <Filter>04.Object\02.Effect\Floating\01.Speed</Filter>
+    </ClInclude>
     <ClInclude Include="MFCEffect_Respawn.h">
-      <Filter>04.Object\02.Effect\Respawn</Filter>
+      <Filter>04.Object\02.Effect\Respawn\00.Down</Filter>
+    </ClInclude>
+    <ClInclude Include="MFCEffect_Respawn_Up.h">
+      <Filter>04.Object\02.Effect\Respawn\01.Up</Filter>
+    </ClInclude>
+    <ClInclude Include="MFCEffect_floating_Disappear.h">
+      <Filter>04.Object\02.Effect\Floating\02.Disappear</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -191,14 +215,23 @@
     <ClCompile Include="MFCLevel_Play.cpp">
       <Filter>05.Level\Effect</Filter>
     </ClCompile>
-    <ClCompile Include="MFCEffect_floating.cpp">
-      <Filter>04.Object\02.Effect\Floating</Filter>
-    </ClCompile>
     <ClCompile Include="MFCEffect_Env_floating.cpp">
       <Filter>04.Object\02.Effect\Env_Floating</Filter>
     </ClCompile>
+    <ClCompile Include="MFCEffect_floating.cpp">
+      <Filter>04.Object\02.Effect\Floating\00.Normal</Filter>
+    </ClCompile>
+    <ClCompile Include="MFCEffect_floating_Speed.cpp">
+      <Filter>04.Object\02.Effect\Floating\01.Speed</Filter>
+    </ClCompile>
     <ClCompile Include="MFCEffect_Respawn.cpp">
-      <Filter>04.Object\02.Effect\Respawn</Filter>
+      <Filter>04.Object\02.Effect\Respawn\00.Down</Filter>
+    </ClCompile>
+    <ClCompile Include="MFCEffect_Respawn_Up.cpp">
+      <Filter>04.Object\02.Effect\Respawn\01.Up</Filter>
+    </ClCompile>
+    <ClCompile Include="MFCEffect_floating_Disappear.cpp">
+      <Filter>04.Object\02.Effect\Floating\02.Disappear</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

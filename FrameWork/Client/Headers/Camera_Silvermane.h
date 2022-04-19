@@ -28,6 +28,7 @@ private:
 
 public:
 	void Set_ChaseTarget(const _bool _isChase);
+	void Set_Execution(const _bool _isExecution, CHierarchyNode* _pEyeBone = nullptr, CHierarchyNode* _pAtBone = nullptr);
 	void Respawn();
 
 private:
@@ -51,6 +52,13 @@ private:
 
 	_bool m_isChase = true;
 	_float m_fLerpTime = 0.f;
+
+	/* For.Execution */
+	_bool m_isExecution = false;
+	_float3 m_vExecutionAccPos{};
+	CHierarchyNode* m_pEyeBone = nullptr;
+	CHierarchyNode* m_pAtBone = nullptr;
+	_float m_fExecutionChangeTime = 0.f;
 
 private: /* For.Shake */
 	CCameraShake* m_pCameraShake = nullptr;

@@ -116,6 +116,13 @@ namespace Engine
 		XMFLOAT2		vPSize;
 	} VTXPOINT;
 
+	typedef struct tagVertex_Point_Sort
+	{
+		XMFLOAT3		vPosition;
+		XMFLOAT2		vPSize;
+		FLOAT			ViewZ;
+	} VTXPOINTSORT;
+
 	typedef struct tagVertex_Color
 	{
 		XMFLOAT3		vPosition;
@@ -229,4 +236,10 @@ namespace Engine
 		_float4 camdir = _float4(0, 0, 0, 0);
 
 	}RIM;
+
+	typedef struct tagMotionblur
+	{
+		_float4x4 RotationMat;
+		_float4x4 preWorldViewPorjMat;
+	}MOTIONBLUR;
 }

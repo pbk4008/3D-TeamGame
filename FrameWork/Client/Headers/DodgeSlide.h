@@ -24,6 +24,8 @@ private:
 	const _int Reset();
 	const _int ToDash();
 
+private: _int	m_radialcnt = 0;
+
 public:
 	static CDodgeSlide* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext, void* _pArg = nullptr);
 	virtual void Free() override;

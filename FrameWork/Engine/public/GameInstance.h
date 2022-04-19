@@ -113,6 +113,9 @@ public: /* For.PipeLine */
 	void Set_Transform(const wstring& pCameraTag, TRANSFORMSTATEMATRIX eType, _fmatrix TransformMatrix);
 	HRESULT Change_BaseCamera(const wstring& pCameraTag);
 	const wstring& Get_BaseCameraTag();
+	HRESULT	SetPreViewProtj(const wstring& cametag);
+	_fmatrix GetPreViewProtj(_fmatrix world);
+	_matrix Get_ViewMatrix();
 
 public: /* for.Input_Device */
 	void Update_InputDev();

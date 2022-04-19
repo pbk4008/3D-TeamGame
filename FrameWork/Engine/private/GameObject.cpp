@@ -90,10 +90,10 @@ HRESULT CGameObject::NativeConstruct(const _uint iSceneID, void* pArg)
 
 	m_pTransform = pInstance->Clone_Component<CTransform>(0, L"Proto_Component_Transform");
 
+	RELEASE_INSTANCE(CGameInstance);
+
 	if (!m_pTransform)
 		return E_FAIL;
-
-	RELEASE_INSTANCE(CGameInstance);
 
 	if (FAILED(SetUp_Components(L"Com_Transform", m_pTransform)))
 		return E_FAIL;
@@ -117,6 +117,11 @@ HRESULT CGameObject::Render()
 }
 
 HRESULT CGameObject::Render_Shadow()
+{
+	return S_OK;
+}
+
+HRESULT CGameObject::Render_Velocity()
 {
 	return S_OK;
 }
@@ -156,6 +161,10 @@ void CGameObject::setActive(_bool bActive)
 
 CTransform* CGameObject::Get_Transform() const
 {
+	if (nullptr == m_pTransform)
+	{
+		return nullptr;
+	}
 	return m_pTransform;
 }
 

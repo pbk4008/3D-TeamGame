@@ -46,14 +46,23 @@ enum class GAMEOBJECT
 enum class EFFECT
 {
 	//AddEffect할때에 넣어줬던 순서 그대로 넣어줘야함!!!
+	DASH,
+	HIT_GROUND_SMOKE,
 	HIT,
-	FLOATING,
+	HIT_FLOATING,
+	HIT_FLOATING_2,
 	DEATH,
-	PLAYERHIT,
+	PLAYER_HIT,
 	GUARD,
 	ATTACK_LEFT,
 	ATTACK_RIGHT,
-	HITGROUND
+	HIT_GROUND,
+	OPENBOX,
+	ATTACK_GROUND,
+	ATTACK_GROUND_2,
+	ITEM,
+	BOX,
+	EAT_ITEM
 };
 
 enum class ELayer
@@ -63,8 +72,10 @@ enum class ELayer
 	Monster,
 	Weapon,
 	MonsterWeapon,
+	Meteor,
 	JumpTrigger,
 	ItemBox,
+	Trigger,
 	Max
 };
 
@@ -215,16 +226,6 @@ enum class EEquipmentGradeUI
 	Legendary,
 	GRADE_END
 };
-
-const wstring g_arrGradeName[(int)EEquipmentGradeUI::GRADE_END]
-{
-	L"일반",
-	L"고급",
-	L"희귀",
-	L"영웅",
-	L"전설"
-};
-
 
 enum class EWeaponMaterial
 {
@@ -507,7 +508,5 @@ const wstring g_arrMI_Soothsayer[(int)EWeaponMaterial::MATERIAL_END]
 	L"T_2H_Hammer_Soothsayer_MRA.dds",
 	L"T_2H_Hammer_Soothsayer_CEO.dds",
 };
-
-END
 
 #endif

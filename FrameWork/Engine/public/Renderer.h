@@ -17,20 +17,27 @@ class ENGINE_DLL CRenderer final : public CComponent
 {
 public: enum RENDERBUTTON
 {
-	SHADOW,PBRHDR,PIXEL,HDR,DBG,PARTICLE,OUTLINE,RADIAL,DISTORTION, RENDERBUTTON_END
+		SHADOW,	PBR
+		,PIXEL,	HDR
+		,DBG,	PARTICLE
+		,OUTLINE,RADIAL
+		,DISTORTION,FOG
+		,VELOCITYBLUR
+		,RENDERBUTTON_END
 };
 
 public: enum RENDER {	RENDER_PRIORITY, RENDER_SKYBOX
 						, RENDER_SHADOW, RENDER_NONALPHA, RENDER_ALPHA
 						, RENDER_STANDARD
-						, RENDER_DYDISTORTION, RENDER_STDISTORTION
+						, RENDER_VELOCITY
+						, RENDER_DYDISTORTION
 						, RENDER_UI, RENDER_UI_ACTIVE
 						, RENDER_MAX };
 
 private: explicit CRenderer(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);
 private: virtual ~CRenderer() = default;
 
-public: _bool	Get_Shadow() { return m_bShadow; }
+public: _bool	Get_RenderButton(RENDERBUTTON button) { return m_bRenderbtn[button]; }
 
 public: void	SetRenderButton(RENDERBUTTON ebutton, _bool check);
 public: void	SetCameraTag(const wstring& CameraTag) { lstrcpy(m_CameraTag,CameraTag.c_str());  }
@@ -52,24 +59,15 @@ private: CTarget_Manager*					m_pTargetMgr = nullptr;
 
 private: ID3D11DepthStencilView*			m_pShadowMap = nullptr;
 
-private: _bool								m_bShadow = false;
-private: _bool								m_bPBR = false;
-private: _bool								m_bPixel = false;
-private: _bool								m_bHDR = false;
-private: _bool								m_bDBG = false;
-private: _bool								m_bParticle = false;
-private: _bool								m_boutline = false;
-private: _bool								m_bradial = false;
-private: _bool								m_bdistortion = false;
-private: RENDERBUTTON						m_eRenderButton;
+private: _bool								m_bRenderbtn[RENDERBUTTON_END];
 private: _tchar								m_CameraTag[128];
-private: _int								m_RadialCnt = 6;
+private: _int								m_RadialCnt = 0;
 
-private: CRendererAssit*					m_pRenderAssit = nullptr;
-private: CLuminance*						m_pLuminance = nullptr;
-private: CHDR*								m_pHDR = nullptr;
-private: CPostProcess*						m_pPostProcess = nullptr;
-private: CTonemapping*						m_pTonemapping = nullptr;
+private: CRendererAssit*					m_pRenderAssit	= nullptr;
+private: CLuminance*						m_pLuminance	= nullptr;
+private: CHDR*								m_pHDR			= nullptr;
+private: CPostProcess*						m_pPostProcess	= nullptr;
+private: CTonemapping*						m_pTonemapping	= nullptr;
 
 private: HRESULT Render_Priority();
 private: HRESULT Render_SkyBox();
@@ -78,10 +76,11 @@ private: HRESULT Render_Alpha();
 private: HRESULT Render_UI();
 private: HRESULT Render_UI_Active();
 
+private: HRESULT VeloCityPass();
 private: HRESULT DistortionPass();
 private: HRESULT Render_Shadow();
 private: HRESULT ShadowPass();
-private: HRESULT Render_Final(_bool outline,_bool radial);
+private: HRESULT Render_Final();
 
 private: /* For.PhysX */
 	_bool m_isPhysXRender = false;

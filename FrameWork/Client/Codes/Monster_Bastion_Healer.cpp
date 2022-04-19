@@ -123,11 +123,15 @@ _int CMonster_Bastion_Healer::Tick(_double _dDeltaTime)
 	{
 		if (L"Death" == m_pStateController->Get_CurStateTag())
 		{
-			if (m_pAnimator->Get_CurrentAnimation()->Is_Finished())
+			if (m_pAnimator->Get_CurrentAnimation()->Is_Finished() && m_lifetime <= 0.f)
 			{
-				Set_Remove(true);
+				//Set_Remove(true);
+				m_bdissolve = true;
 				m_pPanel->Set_UIRemove(true);
 			}
+
+			if (m_lifetime >= 1.f)
+				Set_Remove(true);
 
 			if (1 == m_pAnimator->Get_AnimController()->Get_CurKeyFrameIndex())
 			{
@@ -197,7 +201,13 @@ _int CMonster_Bastion_Healer::LateTick(_double _dDeltaTime)
 
 HRESULT CMonster_Bastion_Healer::Render()
 {
+	if (m_bdissolve == true)
+		CActor::DissolveOn(0.5f);
+
+	if (FAILED(m_pModel->SetUp_ValueOnShader("g_bdissolve", &m_bdissolve, sizeof(_bool)))) MSGBOX("Failed to Apply dissolvetime");
+
 	wstring wstrCamTag = g_pGameInstance->Get_BaseCameraTag();
+	if (FAILED(m_pModel->SetUp_ValueOnShader("g_bdissolve", &m_bdissolve, sizeof(_bool)))) MSGBOX("Failed to Apply dissolvetime");
 	for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
 	{
 		SCB desc;
@@ -207,11 +217,11 @@ HRESULT CMonster_Bastion_Healer::Render()
 		{
 		case 2:
 			CActor::BindConstantBuffer(wstrCamTag, &desc);
-			if (FAILED(m_pModel->Render(i, 1))) MSGBOX("Failed To Rendering Shooter");
+			if (FAILED(m_pModel->Render(i, 2))) MSGBOX("Failed To Rendering Healer");
 			break;
 		default:
 			CActor::BindConstantBuffer(wstrCamTag, &desc);
-			if (FAILED(m_pModel->Render(i, 0))) MSGBOX("Failed To Rendering Shooter");
+			if (FAILED(m_pModel->Render(i, 0))) MSGBOX("Failed To Rendering Healer");
 			break;
 		}
 	}
@@ -257,7 +267,8 @@ void CMonster_Bastion_Healer::Hit(CCollision& pCol)
 			{
 				m_pPanel->Set_Show(true);
 				Active_Effect((_uint)EFFECT::HIT);
-				Active_Effect((_uint)EFFECT::FLOATING);
+				Active_Effect((_uint)EFFECT::HIT_FLOATING);
+				Active_Effect((_uint)EFFECT::HIT_FLOATING_2);
 
 				//m_fCurrentHp -= 5.f;
 				//m_bGroggy = 2; //TODO::¼öÄ¡Á¤ÇØ¼­¹Ù²ãÁà¾ßµÊ

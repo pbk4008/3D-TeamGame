@@ -63,6 +63,8 @@ HRESULT CDropBox::NativeConstruct(const _uint _iSceneID, void* _pArg)
 
 	setActive(true);
 
+	Active_Effect((_uint)EFFECT::BOX);
+
 	return S_OK;
 }
 
@@ -82,6 +84,7 @@ _int CDropBox::Tick(_double _dDeltaTime)
 	if (true == m_bBoxOpened && 0 < m_dropList.size())
 	{
 		m_dropElapsed += (_float)_dDeltaTime; /* drop time */
+
 		if (m_dropElapsed >= m_dropDelay) 
 		{
 			g_pGameInstance->StopSound(CSoundMgr::CHANNELID::Item_Drop);
@@ -662,6 +665,7 @@ void CDropBox::FocusEnter()
 void CDropBox::Focus()
 {
 	__super::Focus();
+	Active_Effect((_uint)EFFECT::OPENBOX);
 
 	m_bFocus = true;
 }

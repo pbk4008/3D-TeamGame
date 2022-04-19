@@ -108,12 +108,34 @@ half4 Noisfunction(Texture2D MainTex, SamplerState sample, half2 UV, half delta,
 	return color;
 }
 
-void Dissolve(Texture2D dissolvetex,SamplerState sample,half2 UV,half time)
+half4 Dissolve(Texture2D Diffuse, Texture2D dissolvetex, SamplerState sample, half2 UV, half time)
 {
+	half4 diffuse = Diffuse.Sample(sample, UV);
 	half dissolve = dissolvetex.Sample(sample, UV).r;
-		
-	if (dissolve - time <= 0)
+	half clipAmount = dissolve - time;
+
+	clip(diffuse.a - clipAmount);
+	
+	if (clipAmount <= 0)
 		discard;
+	
+	if (dissolve <= time)
+	{
+		if (clipAmount >= 0.03f)
+		{
+			diffuse = half4(1, 0, 0, 1);
+		}
+		else if (clipAmount >= 0.06f)
+		{
+			diffuse = half4(1, 1, 0, 1);
+		}
+		else if (clipAmount > 0 && clipAmount <= 0.1f)
+		{
+			diffuse = half4(1, 1, 1, 1);
+		}
+	}
+
+	return diffuse;
 }
 
 half4 RimLighting(float4 normal, float4 camdir, float rimintensity, float4 rimcolor)
@@ -124,3 +146,5 @@ half4 RimLighting(float4 normal, float4 camdir, float rimintensity, float4 rimco
 	rimcolor = rim * rimcolor;
 	return float4(rimcolor.rgb, 1.f);
 }
+
+	

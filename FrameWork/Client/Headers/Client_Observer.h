@@ -38,6 +38,10 @@ public:
 	const _bool IsThrownObject();
 	//플레이어의 공격 애니메이션 시작하는지 
 	const _bool Get_PlayerAttackAnimStart();
+	//해당 좌표가 플레이어가 바라보는 기준으로 앞에 있는지 뒤에 있는지 판별
+	const _bool Get_PlayerFrontBackCheck(_fvector vPos);
+	//해당 좌표까지의 방향벡터
+	_fvector Get_Dir(_fvector vPos);
 public:
 	//플레이어 공격 셋팅
 	void Set_IsAttack(const _bool bAttack);

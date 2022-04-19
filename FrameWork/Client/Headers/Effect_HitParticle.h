@@ -12,6 +12,12 @@ END
 BEGIN(Client)
 class CEffect_HitParticle final : public CEffect
 {
+public:
+	typedef struct tagEffHitDesc : CEffect::EFFECTDESC
+	{
+		_float4 ParticleColor;
+		_float	Power;
+	}EF_PAR_HIT_DESC;
 protected:
 	explicit CEffect_HitParticle();
 	explicit CEffect_HitParticle(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);
@@ -33,14 +39,14 @@ private:
 	virtual HRESULT SetUp_Components();
 
 public:
-	CEffect::EFFECTDESC Get_EffectDesc() {return m_Desc; }
+	EF_PAR_HIT_DESC Get_EffectDesc() {return m_Desc; }
 
 private:
 	CVIBuffer_PointInstance_Explosion* m_pBuffer = nullptr;
 	class CCullingBox* m_pBox = nullptr;
 
 private:
-	CEffect::EFFECTDESC m_Desc;
+	EF_PAR_HIT_DESC m_Desc;
 	CVIBuffer_PointInstance_Explosion::PIDESC m_backupDesc;
 
 public:

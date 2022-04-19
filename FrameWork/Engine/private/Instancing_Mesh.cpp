@@ -156,17 +156,6 @@ HRESULT CInstancing_Mesh::Render(_uint iMeshContainerIndex, _int iPassindex)
 		if (m_vecMaterials[iMtrlIndex])
 		{
 			m_vecMaterials[iMtrlIndex]->Set_InputLayout(iPassindex);
-
-			/*	if (m_eType == CInstancing_Mesh::INSTANCE_TYPE::ANIM)
-				{
-					_matrix		BoneMatrices[256];
-					ZeroMemory(BoneMatrices, sizeof(_matrix) * 256);
-
-					pMeshContainer->SetUp_BoneMatrices(BoneMatrices, XMLoadFloat4x4(&m_PivotMatrix));
-
-					if (FAILED(m_vecMaterials[iMtrlIndex]->SetUp_ValueOnShader("g_BoneMatrices", BoneMatrices, sizeof(_matrix) * 256)))
-						return E_FAIL;
-				}*/
 			m_vecMaterials[iMtrlIndex]->Render(iPassindex);
 			pMeshContainer->Render(m_pVBInstance,m_iInstStride,m_iInstNumVertices);
 		}

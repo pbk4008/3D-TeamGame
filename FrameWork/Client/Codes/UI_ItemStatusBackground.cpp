@@ -29,8 +29,8 @@ HRESULT UI_ItemStatusBackground::NativeConstruct(const _uint iSceneID, void* pAr
 	desc = (*(Desc*)pArg);
 
 	m_pLocalTransform = g_pGameInstance->Clone_Component<CTransform>(0, L"Proto_Component_Transform");
-	m_pLocalTransform->Set_State(CTransform::STATE_POSITION, _vector{ 430.f, 0.f, 0.3f, 1.f });
-	m_pLocalTransform->Scaling(_vector{ 360.f, 580.f, 1.f, 1.f });
+	m_pLocalTransform->Set_State(CTransform::STATE_POSITION, _vector{ 430.f, 0.f, 0.2f, 1.f });
+	m_pLocalTransform->Scaling(_vector{ 360.f, 600.f, 1.f, 1.f });
 
 	if (FAILED(Ready_Component()))
 		return E_FAIL;
@@ -54,9 +54,16 @@ _int UI_ItemStatusBackground::LateTick(_double TimeDelta)
 		return -1;
 
 	Attach_Owner();
-	m_pLocalTransform->Set_State(CTransform::STATE_POSITION, _vector{ 430.f, 0.f, 0.2f, 1.f });
 
-	m_pLocalTransform->Scaling(_vector{ 360.f, 600.f, 1.f, 1.f });
+	if (m_fInitPos > m_fEndPos)
+	{
+		m_fInitPos -= (_float)TimeDelta * 100.f;
+		if (m_fInitPos < m_fEndPos)
+		{
+			m_fInitPos = m_fEndPos;
+		}
+		m_pTransform->Set_State(CTransform::STATE_POSITION, _vector{ m_fInitPos, 0.f, 0.3f, 1.f });
+	}
 
 	return _int();
 }

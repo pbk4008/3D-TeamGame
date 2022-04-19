@@ -86,12 +86,18 @@ void CCharacterController::setShapes(vector<PxShape*>& _vecShapes)
 
 void CCharacterController::setFootPosition(const _float3 & _vPosition)
 {
+	if (!m_pPxController)
+		return;
+
 	PxExtendedVec3 pxvFootPos = { _vPosition.x, _vPosition.y, _vPosition.z };
 	m_pPxController->setFootPosition(pxvFootPos);
 }
 
 void CCharacterController::setPosition(const _float3& _vPosition)
 {
+	if (!m_pPxController)
+		return;
+
 	m_pPxController->setPosition(ToPxExtendedVec3(_vPosition));
 }
 
@@ -142,6 +148,9 @@ HRESULT CCharacterController::Create_Controller()
 
 void CCharacterController::Move(const _double& _dDeltaTime, const _float3 _vVelocity)
 {
+	if (!m_pPxController)
+		return;
+
 	PxVec3 pxvVelocity = ToPxVec3(_vVelocity);
 	if (!pxvVelocity.isFinite())
 	{
@@ -156,6 +165,9 @@ void CCharacterController::Move(const _double& _dDeltaTime, const _float3 _vVelo
 
 void CCharacterController::Update_OwnerTransform()
 {
+	if (!m_pPxController)
+		return;
+
 	//PxExtendedVec3 pxPosition = m_pPxController->getPosition();
 
 	//_float3 vOffset = { (_float)pxPosition.x, (_float)pxPosition.y, (_float)pxPosition.z };
@@ -216,6 +228,8 @@ CComponent* CCharacterController::Clone(void* _pArg)
 
 void CCharacterController::Free()
 {
+	__super::Free();
+
 	//// 컨트롤러랑 둘중에 하나만 릴리즈 해줘야 한다
 	//for (auto& pShape : m_vecShapes)
 	//	Safe_PxRelease(pShape)
@@ -228,5 +242,4 @@ void CCharacterController::Free()
 		Safe_Delete(m_pFilterCallback);
 
 	Safe_Release(m_pPhysX);
-	__super::Free();
 }

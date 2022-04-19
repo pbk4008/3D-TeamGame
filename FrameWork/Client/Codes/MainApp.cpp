@@ -3,11 +3,15 @@
 #include "BackGround.h"
 #include "MainCamera.h"
 #include "MainCamera_Ortho.h"
-#include "DebugSystem.h"
 #include "Loading.h"
 #include "MeshLoader.h"
+
+#include "DebugSystem.h"
 #include "ShakeManager.h"
 #include "DataManager.h"
+#include "InteractManager.h"
+#include "WeaponGenerator.h"
+#include "DropManager.h"
 
 //Inventory UI Object
 #include "Inven_UIManager.h"
@@ -62,11 +66,15 @@
 #include "SingleImage.h"
 #include "UIHelper.h"
 
+
 CClient_Observer* g_pObserver = nullptr;
 CDebugSystem* g_pDebugSystem = nullptr;
 CShakeManager* g_pShakeManager = nullptr;
 CDataManager* g_pDataManager = nullptr;
 CInven_UIManager* g_pInvenUIManager = nullptr;
+CInteractManager* g_pInteractManager = nullptr;
+CWeaponGenerator* g_pWeaponGenerator = nullptr;
+CDropManager* g_pDropManager = nullptr;
 
 CMainApp::CMainApp()
 {
@@ -85,9 +93,14 @@ HRESULT CMainApp::NativeConstruct()
 	g_pGameInstance->Set_CollisionLayer((_uint)ELayer::Player, (_uint)ELayer::MonsterWeapon);
 	g_pGameInstance->Set_CollisionLayer((_uint)ELayer::Player, (_uint)ELayer::JumpTrigger);
 	g_pGameInstance->Set_CollisionLayer((_uint)ELayer::Player, (_uint)ELayer::Monster);
+	g_pGameInstance->Set_CollisionLayer((_uint)ELayer::Player, (_uint)ELayer::Trigger);
 	// 몬스터
 	g_pGameInstance->Set_CollisionLayer((_uint)ELayer::Monster, (_uint)ELayer::Enviroment);
 	g_pGameInstance->Set_CollisionLayer((_uint)ELayer::Monster, (_uint)ELayer::Weapon);
+	//메테오
+	g_pGameInstance->Set_CollisionLayer((_uint)ELayer::Meteor, (_uint)ELayer::Enviroment);
+	g_pGameInstance->Set_CollisionLayer((_uint)ELayer::Meteor, (_uint)ELayer::Player);
+
 
 	if (FAILED(Ready_Fonts()))
 		return E_FAIL;
@@ -141,26 +154,7 @@ _int CMainApp::Tick(_double TimeDelta)
 			TimeDelta *= 0.1;
 	}
 
-	if (g_pGameInstance->getkeyDown(DIK_F1))
-	{
-		m_bHDR = !m_bHDR;
-		m_pRenderer->SetRenderButton(CRenderer::HDR, m_bHDR);
-	}
-	if (g_pGameInstance->getkeyDown(DIK_F2))
-	{
-		m_bDBG = !m_bDBG;
-		m_pRenderer->SetRenderButton(CRenderer::DBG, m_bDBG);
-	}
-	if (g_pGameInstance->getkeyDown(DIK_F3))
-	{
-		m_bShadow = !m_bShadow;
-		m_pRenderer->SetRenderButton(CRenderer::SHADOW, m_bShadow);
-	}
-	if (g_pGameInstance->getkeyDown(DIK_F4))
-	{
-		m_bOutline = !m_bOutline;
-		m_pRenderer->SetRenderButton(CRenderer::RADIAL, m_bOutline);
-	}
+	RenderingBnt();
 
 	if (g_pGameInstance->getkeyDown(DIK_P))
 		m_isPause = !m_isPause;
@@ -195,6 +189,9 @@ HRESULT CMainApp::Render()
 
 	if (FAILED(m_pRenderer->Draw_RenderGroup()))
 		return E_FAIL;
+
+	if (FAILED(g_pGameInstance->SetPreViewProtj(g_pGameInstance->Get_BaseCameraTag())))
+		MSGBOX("Failed to Recording PreViewProj");
 
 	if (FAILED(g_pGameInstance->Render_Engine()))
 		return E_FAIL;
@@ -264,6 +261,10 @@ if (FAILED(pMeshLoader->Reserve_MeshLoader(m_pDevice, m_pDeviceContext)))
 
 	g_pInvenUIManager = CInven_UIManager::GetInstance();
 	if (FAILED(g_pInvenUIManager->NativeConstruct()))
+		return E_FAIL;
+
+	g_pInteractManager = CInteractManager::GetInstance();
+	if (FAILED(g_pInteractManager->NativeConstruct()))
 		return E_FAIL;
 
 	return S_OK;
@@ -497,6 +498,35 @@ HRESULT CMainApp::Ready_Fonts()
 	return S_OK;
 }
 
+void CMainApp::RenderingBnt()
+{
+	if (g_pGameInstance->getkeyDown(DIK_F1))
+	{
+		m_bHDR = !m_bHDR;
+		m_pRenderer->SetRenderButton(CRenderer::HDR, m_bHDR);
+	}
+	if (g_pGameInstance->getkeyDown(DIK_F2))
+	{
+		m_bDBG = !m_bDBG;
+		m_pRenderer->SetRenderButton(CRenderer::DBG, m_bDBG);
+	}
+	if (g_pGameInstance->getkeyDown(DIK_F3))
+	{
+		m_bShadow = !m_bShadow;
+		m_pRenderer->SetRenderButton(CRenderer::SHADOW, m_bShadow);
+	}
+	if (g_pGameInstance->getkeyDown(DIK_F4))
+	{
+		m_bOutline = !m_bOutline;
+		m_pRenderer->SetRenderButton(CRenderer::OUTLINE, m_bOutline);
+	}
+	if (g_pGameInstance->getkeyDown(DIK_F5))
+	{
+		m_bMotionblur = !m_bMotionblur;
+		m_pRenderer->SetRenderButton(CRenderer::VELOCITYBLUR, m_bMotionblur);
+	}
+}
+
 const _bool CMainApp::IsFreeze() const
 {
 	return m_isFreeze;
@@ -534,6 +564,7 @@ void CMainApp::Free()
 	CDataManager::DestroyInstance();
 	CInven_UIManager::DestroyInstance();
 	CWeaponGenerator::DestroyInstance();
+	CInteractManager::DestroyInstance();
 
 	Safe_Release(g_pObserver);
 	Safe_Release(m_pRenderer);

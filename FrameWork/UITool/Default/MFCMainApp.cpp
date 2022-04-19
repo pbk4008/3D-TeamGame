@@ -10,8 +10,12 @@
 #include "MFCCamera_Proj.h"
 #include "MFCEffect.h"
 #include "MFCEffect_floating.h"
+#include "MFCEffect_floating_Speed.h"
+#include "MFCEffect_floating_Disappear.h"
 #include "MFCEffect_Env_floating.h"
 #include "MFCEffect_Respawn.h"
+#include "MFCEffect_Respawn_Up.h"
+
 #include "MFCTerrain.h"
 
 
@@ -195,12 +199,28 @@ HRESULT CMFCMainApp::Ready_Component_Prototype()
 		return E_FAIL;
 	}
 
+	if (FAILED(g_pGameInstance->Add_Prototype(TOOL_LEVEL::TOOL_LEVEL_LOGO, L"Prototype_Component_VIBuffer_PointInstance_Floating_Disappear", CVIBuffer_PointInstance_Floating_Disappear::Create(m_pDevice, m_pDeviceContext/*, L"../../Reference/ShaderFile/Shader_Particle.hlsl", 100*/))))
+	{
+		return E_FAIL;
+	}
+
+	if (FAILED(g_pGameInstance->Add_Prototype(TOOL_LEVEL::TOOL_LEVEL_LOGO, L"Prototype_Component_VIBuffer_PointInstance_Floating_Speed", CVIBuffer_PointInstance_Floating_Speed::Create(m_pDevice, m_pDeviceContext/*, L"../../Reference/ShaderFile/Shader_Particle.hlsl", 100*/))))
+	{
+		return E_FAIL;
+	}
+
+
 	if (FAILED(g_pGameInstance->Add_Prototype(TOOL_LEVEL::TOOL_LEVEL_LOGO, L"Prototype_Component_VIBuffer_PointInstance_Env_Floating", CVIBuffer_PointInstance_Env_Floating::Create(m_pDevice, m_pDeviceContext/*, L"../../Reference/ShaderFile/Shader_Particle.hlsl", 100*/))))
 	{
 		return E_FAIL;
 	}
 
 	if (FAILED(g_pGameInstance->Add_Prototype(TOOL_LEVEL::TOOL_LEVEL_LOGO, L"Prototype_Component_VIBuffer_PointInstance_Respawn", CVIBuffer_PointInstance_Respawn::Create(m_pDevice, m_pDeviceContext/*, L"../../Reference/ShaderFile/Shader_Particle.hlsl", 100*/))))
+	{
+		return E_FAIL;
+	}
+
+	if (FAILED(g_pGameInstance->Add_Prototype(TOOL_LEVEL::TOOL_LEVEL_LOGO, L"Prototype_Component_VIBuffer_PointInstance_Respawn_Up", CVIBuffer_PointInstance_Respawn_Up::Create(m_pDevice, m_pDeviceContext/*, L"../../Reference/ShaderFile/Shader_Particle.hlsl", 100*/))))
 	{
 		return E_FAIL;
 	}
@@ -348,12 +368,27 @@ HRESULT CMFCMainApp::Ready_GameObject_Prototype()
 		return E_FAIL;
 	}
 
+	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Effect_Floating_Disappear"), CMFCEffect_Floating_Disappear::Create(m_pDevice, m_pDeviceContext))))
+	{
+		return E_FAIL;
+	}
+
+	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Effect_Floating_Speed"), CMFCEffect_Floating_Speed::Create(m_pDevice, m_pDeviceContext))))
+	{
+		return E_FAIL;
+	}
+
 	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Effect_Env_Floating"), CMFCEffect_Env_Floating::Create(m_pDevice, m_pDeviceContext))))
 	{
 		return E_FAIL;
 	}
 
 	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Effect_Respawn"), CMFCEffect_Respawn::Create(m_pDevice, m_pDeviceContext))))
+	{
+		return E_FAIL;
+	}
+
+	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Effect_Respawn_Up"), CMFCEffect_Respawn_Up::Create(m_pDevice, m_pDeviceContext))))
 	{
 		return E_FAIL;
 	}

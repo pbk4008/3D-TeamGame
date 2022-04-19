@@ -574,9 +574,6 @@
     <Filter Include="02.GameObject\04.Effect\00.Effect_Image\00.Env_Fire">
       <UniqueIdentifier>{f3533393-750c-4e4b-8424-ce5de30c8016}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObject\04.Effect\00.Particle\04.Effect_Death">
-      <UniqueIdentifier>{b1e1a118-af89-4ff4-8367-ab5967b67e62}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObject\04.Effect\00.Particle\02.Effect_HitParticle">
       <UniqueIdentifier>{b370ed74-461a-48d9-91e0-c06ca932a31c}</UniqueIdentifier>
     </Filter>
@@ -597,9 +594,6 @@
     </Filter>
     <Filter Include="100.ShaderFiles\01.Environment">
       <UniqueIdentifier>{b73a4e26-0c07-4d4d-b1c4-8860928a6b4a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="100.ShaderFiles\02.Actor">
-      <UniqueIdentifier>{01f09cd2-dcfc-4f2c-a5da-56671ab0b823}</UniqueIdentifier>
     </Filter>
     <Filter Include="100.ShaderFiles\03.Effect">
       <UniqueIdentifier>{f35001cd-5f3e-4300-aa56-576f4dca80d9}</UniqueIdentifier>
@@ -661,9 +655,6 @@
     <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_Healer\State_Healer\Run">
       <UniqueIdentifier>{6c4f4213-7978-4785-9bab-d674b1588fbf}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObject\04.Effect\00.Particle\06.Effect_Guard">
-      <UniqueIdentifier>{a0e663ef-dcdc-4443-8e69-2f05e2663463}</UniqueIdentifier>
-    </Filter>
     <Filter Include="100.ShaderFiles\98.Share">
       <UniqueIdentifier>{451023dd-fff5-4931-95a3-2c781dff7537}</UniqueIdentifier>
     </Filter>
@@ -675,9 +666,6 @@
     </Filter>
     <Filter Include="02.GameObject\96.Weapon\99.Shield">
       <UniqueIdentifier>{a9a4ad69-9913-4775-b0c0-8025825621ca}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="01.Scene\01.Loading\00.Logo">
-      <UniqueIdentifier>{cac3034c-dd8b-47e8-afc7-da6cb3e9501e}</UniqueIdentifier>
     </Filter>
     <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_Spear\00.Idle">
       <UniqueIdentifier>{2398d3e4-0aad-4c0a-b779-2676cae6f42f}</UniqueIdentifier>
@@ -802,11 +790,29 @@
     <Filter Include="02.GameObject\03.Character\00.Player\00.Silvermane\State\Shield\Throw">
       <UniqueIdentifier>{69f64efb-d5bc-433d-bf69-0a94dad5f809}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\03.Character\03.CinemaActor">
+      <UniqueIdentifier>{2303d924-8d8e-4580-829a-b12a5244fd00}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="100.ShaderFiles\01.Environment\02.Actor">
+      <UniqueIdentifier>{01f09cd2-dcfc-4f2c-a5da-56671ab0b823}</UniqueIdentifier>
+    </Filter>
     <Filter Include="02.GameObject\04.Effect\00.Effect_Image\01.Hammer_Dust">
       <UniqueIdentifier>{4de6e516-ad86-47ae-a1e1-49d04baa93c3}</UniqueIdentifier>
     </Filter>
     <Filter Include="02.GameObject\04.Effect\00.Effect_Image\02.DeadSpray">
       <UniqueIdentifier>{93da6596-e33e-43cb-b193-e94382481f3a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.UI\05.Indicator">
+      <UniqueIdentifier>{fdbf11f0-da6e-4f08-b745-30097dc95913}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.System\08.IndicatorManager">
+      <UniqueIdentifier>{12dfd46f-3cc1-42a4-a02a-049a617f82ed}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\04.Effect\00.Particle\03.Effect_Floating\00.Normal">
+      <UniqueIdentifier>{f7900c7e-1c0f-44c1-9a37-a0ee1618a5b0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\04.Effect\00.Particle\03.Effect_Floating\01.DifferentSpeed">
+      <UniqueIdentifier>{82e39491-981b-4b60-ad3a-d68489dac6be}</UniqueIdentifier>
     </Filter>
     <Filter Include="03.System\08.WeaponGenerator">
       <UniqueIdentifier>{8b3e76a1-7243-423d-8f7c-2d96b855bff3}</UniqueIdentifier>
@@ -900,6 +906,21 @@
     </Filter>
     <Filter Include="02.GameObject\05.UI\04.Inventory\06.PlayerStatusWindow\06.MaxHealth">
       <UniqueIdentifier>{38ae5783-b796-4654-a386-fe25666773d7}</UniqueIdentifier>
+	</Filter>
+    <Filter Include="02.GameObject\04.Effect\00.Particle\07.Effect_FloatingUp">
+      <UniqueIdentifier>{71658c88-0735-4f35-a05b-0508b6453715}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\04.Effect\00.Particle\04.Effect_Death_연기이펙트로바꾸면될듯">
+      <UniqueIdentifier>{b1e1a118-af89-4ff4-8367-ab5967b67e62}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\04.Effect\00.Particle\06.Effect_Guard_다른이펙트로바꾸면될듯">
+      <UniqueIdentifier>{a0e663ef-dcdc-4443-8e69-2f05e2663463}</UniqueIdentifier>
+	</Filter>
+    <Filter Include="02.GameObject\04.Effect\02.MeshEffect">
+      <UniqueIdentifier>{d0ea5fcc-900a-4262-9b01-208f5ce4b2be}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\00.Player\00.Silvermane\State\Execution">
+      <UniqueIdentifier>{afe0def3-27c1-4308-948a-afc5940899dd}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -1575,9 +1596,6 @@
     <ClInclude Include="..\Headers\SubEnvironment.h">
       <Filter>02.GameObject\02.Map\01.Environment\00.Tree</Filter>
     </ClInclude>
-    <ClInclude Include="..\Headers\Effect_HitFloating.h">
-      <Filter>02.GameObject\04.Effect\00.Particle\03.Effect_Floating</Filter>
-    </ClInclude>
     <ClInclude Include="..\Headers\CameraShake.h">
       <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\Camera</Filter>
     </ClInclude>
@@ -1693,7 +1711,7 @@
       <Filter>02.GameObject\04.Effect\01.TrailEffect</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\Effect_DeathParticle.h">
-      <Filter>02.GameObject\04.Effect\00.Particle\04.Effect_Death</Filter>
+      <Filter>02.GameObject\04.Effect\00.Particle\04.Effect_Death_연기이펙트로바꾸면될듯</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\Effect_Env_Floating.h">
       <Filter>02.GameObject\04.Effect\00.Particle\05.Effect_Env_Floating</Filter>
@@ -1765,7 +1783,7 @@
       <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\HIt</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\Effect_Guard.h">
-      <Filter>02.GameObject\04.Effect\00.Particle\06.Effect_Guard</Filter>
+      <Filter>02.GameObject\04.Effect\00.Particle\06.Effect_Guard_다른이펙트로바꾸면될듯</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\1H_Stagger.h">
       <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\HIt</Filter>
@@ -1920,6 +1938,18 @@
     <ClInclude Include="..\Headers\UI_SlotBackground.h">
       <Filter>02.GameObject\05.UI\04.Inventory\04.ItemSlot\00.Background</Filter>
     </ClInclude>
+    <ClInclude Include="..\Headers\UI_Indicator.h">
+      <Filter>02.GameObject\05.UI\05.Indicator</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Indicator_Manager.h">
+      <Filter>03.System\08.IndicatorManager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Effect_HitFloating.h">
+      <Filter>02.GameObject\04.Effect\00.Particle\03.Effect_Floating\00.Normal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Effect_Floating_Speed.h">
+      <Filter>02.GameObject\04.Effect\00.Particle\03.Effect_Floating\01.DifferentSpeed</Filter>
+    </ClInclude>
     <ClInclude Include="..\Headers\WeaponGenerator.h">
       <Filter>03.System\08.WeaponGenerator</Filter>
     </ClInclude>
@@ -2018,6 +2048,24 @@
     </ClInclude>
     <ClInclude Include="..\Headers\UI_PlayerStatus_MaxHealth.h">
       <Filter>02.GameObject\05.UI\04.Inventory\06.PlayerStatusWindow\06.MaxHealth</Filter>
+	</ClInclude>
+    <ClInclude Include="..\Headers\MeshEffect.h">
+      <Filter>02.GameObject\04.Effect\02.MeshEffect</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\MeshEffect_Test.h">
+      <Filter>02.GameObject\04.Effect\02.MeshEffect</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Silvermane_Heal.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Idel</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Silvermane_Execution.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Execution</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Execution_Mook.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Execution</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Effect_FloatingUp.h">
+      <Filter>02.GameObject\04.Effect\00.Particle\07.Effect_FloatingUp</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -2669,9 +2717,6 @@
     <ClCompile Include="..\Codes\SubEnvironment.cpp">
       <Filter>02.GameObject\02.Map\01.Environment\00.Tree</Filter>
     </ClCompile>
-    <ClCompile Include="..\Codes\Effect_HitFloating.cpp">
-      <Filter>02.GameObject\04.Effect\00.Particle\03.Effect_Floating</Filter>
-    </ClCompile>
     <ClCompile Include="..\Codes\CameraShake.cpp">
       <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\Camera</Filter>
     </ClCompile>
@@ -2787,7 +2832,7 @@
       <Filter>02.GameObject\04.Effect\01.TrailEffect</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\Effect_DeathParticle.cpp">
-      <Filter>02.GameObject\04.Effect\00.Particle\04.Effect_Death</Filter>
+      <Filter>02.GameObject\04.Effect\00.Particle\04.Effect_Death_연기이펙트로바꾸면될듯</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\Effect_Env_Floating.cpp">
       <Filter>02.GameObject\04.Effect\00.Particle\05.Effect_Env_Floating</Filter>
@@ -2862,7 +2907,7 @@
       <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\HIt</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\Effect_Guard.cpp">
-      <Filter>02.GameObject\04.Effect\00.Particle\06.Effect_Guard</Filter>
+      <Filter>02.GameObject\04.Effect\00.Particle\06.Effect_Guard_다른이펙트로바꾸면될듯</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\1H_Stagger.cpp">
       <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\HIt</Filter>
@@ -3008,6 +3053,18 @@
     <ClCompile Include="..\Codes\Effect_Dead_Spray.cpp">
       <Filter>02.GameObject\04.Effect\00.Effect_Image\02.DeadSpray</Filter>
     </ClCompile>
+    <ClCompile Include="..\Codes\UI_Indicator.cpp">
+      <Filter>02.GameObject\05.UI\05.Indicator</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Indicator_Manager.cpp">
+      <Filter>03.System\08.IndicatorManager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Effect_HitFloating.cpp">
+      <Filter>02.GameObject\04.Effect\00.Particle\03.Effect_Floating\00.Normal</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Effect_Floating_Speed.cpp">
+      <Filter>02.GameObject\04.Effect\00.Particle\03.Effect_Floating\01.DifferentSpeed</Filter>
+    </ClCompile>
     <ClCompile Include="..\Codes\WeaponGenerator.cpp">
       <Filter>03.System\08.WeaponGenerator</Filter>
     </ClCompile>
@@ -3103,6 +3160,24 @@
     </ClCompile>
     <ClCompile Include="..\Codes\UI_PlayerStatus_MaxHealth.cpp">
       <Filter>02.GameObject\05.UI\04.Inventory\06.PlayerStatusWindow\06.MaxHealth</Filter>
+	</ClCompile>
+    <ClCompile Include="..\Codes\MeshEffect.cpp">
+      <Filter>02.GameObject\04.Effect\02.MeshEffect</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\MeshEffect_Test.cpp">
+      <Filter>02.GameObject\04.Effect\02.MeshEffect</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Silvermane_Heal.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Idel</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Silvermane_Execution.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Execution</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Execution_Mook.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Execution</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Effect_FloatingUp.cpp">
+      <Filter>02.GameObject\04.Effect\00.Particle\07.Effect_FloatingUp</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -3177,22 +3252,22 @@
       <Filter>100.ShaderFiles\99.Other</Filter>
     </FxCompile>
     <FxCompile Include="..\bin\ShaderFile\Shader_Monster.hlsl">
-      <Filter>100.ShaderFiles\02.Actor</Filter>
+      <Filter>100.ShaderFiles\01.Environment\02.Actor</Filter>
     </FxCompile>
     <FxCompile Include="..\bin\ShaderFile\Shader_Panel_UI.hlsl">
       <Filter>100.ShaderFiles\04.UI</Filter>
     </FxCompile>
     <FxCompile Include="..\bin\ShaderFile\Shader_Shield.hlsl">
-      <Filter>100.ShaderFiles\02.Actor</Filter>
+      <Filter>100.ShaderFiles\01.Environment\02.Actor</Filter>
     </FxCompile>
     <FxCompile Include="..\bin\ShaderFile\Shader_StaticMesh.hlsl">
       <Filter>100.ShaderFiles\99.Other</Filter>
     </FxCompile>
     <FxCompile Include="..\bin\ShaderFile\Shader_Weapon.hlsl">
-      <Filter>100.ShaderFiles\02.Actor</Filter>
+      <Filter>100.ShaderFiles\01.Environment\02.Actor</Filter>
     </FxCompile>
     <FxCompile Include="..\bin\ShaderFile\Shader_SilverMane.hlsl">
-      <Filter>100.ShaderFiles\02.Actor</Filter>
+      <Filter>100.ShaderFiles\01.Environment\02.Actor</Filter>
     </FxCompile>
     <FxCompile Include="..\bin\ShaderFile\Shader_Particle.hlsl">
       <Filter>100.ShaderFiles\03.Effect</Filter>
@@ -3227,7 +3302,19 @@
     <FxCompile Include="..\bin\ShaderFile\Shader_INST_RM.hlsl">
       <Filter>100.ShaderFiles\01.Environment</Filter>
     </FxCompile>
+    <FxCompile Include="..\bin\ShaderFile\Shader_Metor.hlsl">
+      <Filter>100.ShaderFiles\99.Other</Filter>
+    </FxCompile>
+    <FxCompile Include="..\bin\ShaderFile\Shader_MetorAnim.hlsl">
+      <Filter>100.ShaderFiles\99.Other</Filter>
+    </FxCompile>
     <FxCompile Include="..\bin\ShaderFile\Shader_Trail.hlsl">
+      <Filter>100.ShaderFiles\03.Effect</Filter>
+    </FxCompile>
+    <FxCompile Include="..\bin\ShaderFile\Shader_Particle_Alpha.hlsl">
+		<Filter>100.ShaderFiles\03.Effect</Filter>
+	</FxCompile>
+    <FxCompile Include="..\bin\ShaderFile\Shader_MeshEffect.hlsl">
       <Filter>100.ShaderFiles\03.Effect</Filter>
     </FxCompile>
   </ItemGroup>

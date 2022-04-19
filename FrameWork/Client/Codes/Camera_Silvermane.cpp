@@ -4,6 +4,7 @@
 #include "Silvermane.h"
 #include "Camera_Culling.h"
 #include "CameraShake.h"
+#include "HierarchyNode.h"
 
 CCamera_Silvermane::CCamera_Silvermane(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
 	: CGameObject(_pDevice, _pDeviceContext)
@@ -47,6 +48,9 @@ HRESULT CCamera_Silvermane::NativeConstruct(const _uint _iSceneID, void* _pArg)
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer(m_iSceneID, L"Layer_Camera", L"Proto_GameObject_Camera_Culling", this)))
 		return E_FAIL;
 
+	g_pGameInstance->Change_BaseCamera(L"Camera_Silvermane");
+	m_pRenderer->SetCameraTag(g_pGameInstance->Get_BaseCameraTag());
+
 	return S_OK;
 }
 
@@ -60,12 +64,68 @@ _int CCamera_Silvermane::Tick(_double _dDeltaTime)
 	iProgress = Chase_Target(_dDeltaTime);
 	if (NO_EVENT != iProgress)
 		return iProgress;
-	iProgress = Input_Key(_dDeltaTime);
-	if (NO_EVENT != iProgress)
-		return iProgress;
-	m_pTransform->Set_WorldMatrix(m_pLocalTransform->Get_WorldMatrix() * m_pWorldTransform->Get_WorldMatrix());
 
-	SpringArm();
+	if (m_isExecution)
+	{
+		m_fExecutionChangeTime += (_float)_dDeltaTime;
+
+		// Eye
+		_matrix smatLocal = m_pEyeBone->Get_CombinedMatrix();
+		_matrix smatOwerPivot = m_pSilvermane->Get_Model()->Get_PivotMatrix();
+		_vector svEye = (smatLocal * smatOwerPivot).r[3];
+		// At
+		smatLocal = m_pAtBone->Get_CombinedMatrix();
+		_vector svAt = (smatLocal * smatOwerPivot).r[3];
+		// Right, Up, Look
+		_vector svLook, svRight, svUp;
+		svLook = XMVector3Normalize(svAt - svEye);
+		svRight = XMVector3Normalize(XMVector3Cross(_vector{ 0.f, 1.f, 0.f, 0.f }, svLook));
+		svUp = XMVector3Normalize(XMVector3Cross(svLook, svRight));
+
+		// SetLocalTransform
+		m_pLocalTransform->Set_State(CTransform::STATE_RIGHT, svRight);
+		m_pLocalTransform->Set_State(CTransform::STATE_UP, svUp);
+		m_pLocalTransform->Set_State(CTransform::STATE_LOOK, svLook);
+		m_pLocalTransform->Set_State(CTransform::STATE_POSITION, svEye);
+
+		// SetWorldTransform
+		_matrix smatOwner = m_pSilvermane->Get_Transform()->Get_WorldMatrix();
+		_matrix smatResult = m_pLocalTransform->Get_WorldMatrix()* smatOwner;
+
+		// LerpMatrix
+		_float fRatio = m_fExecutionChangeTime / 1.f;
+		if (1.f < fRatio)
+			fRatio = 1.f;
+		_matrix smatWorld = m_pTransform->Get_WorldMatrix();
+		smatWorld.r[0] = XMVectorLerp(smatWorld.r[0], smatResult.r[0], fRatio);
+		smatWorld.r[1] = XMVectorLerp(smatWorld.r[1], smatResult.r[1], fRatio);
+		smatWorld.r[2] = XMVectorLerp(smatWorld.r[2], smatResult.r[2], fRatio);
+		smatWorld.r[3] = XMVectorLerp(smatWorld.r[3], smatResult.r[3], fRatio);
+
+		m_pTransform->Set_WorldMatrix(smatWorld);
+	}
+	else
+	{
+		iProgress = Input_Key(_dDeltaTime);
+		if (NO_EVENT != iProgress)
+			return iProgress;
+
+
+		m_fExecutionChangeTime += (_float)_dDeltaTime * 0.2f;
+		_float fRatio = m_fExecutionChangeTime / 1.f;
+		if (1.f < fRatio)
+			fRatio = 1.f;
+		_matrix smatResult = m_pLocalTransform->Get_WorldMatrix() * m_pWorldTransform->Get_WorldMatrix();
+		_matrix smatWorld = m_pTransform->Get_WorldMatrix();
+		smatWorld.r[0] = XMVectorLerp(smatWorld.r[0], smatResult.r[0], fRatio);
+		smatWorld.r[1] = XMVectorLerp(smatWorld.r[1], smatResult.r[1], fRatio);
+		smatWorld.r[2] = XMVectorLerp(smatWorld.r[2], smatResult.r[2], fRatio);
+		smatWorld.r[3] = XMVectorLerp(smatWorld.r[3], smatResult.r[3], fRatio);
+
+		m_pTransform->Set_WorldMatrix(smatWorld);
+		SpringArm();
+	}
+
 	OnOffMonsterUI();
 
 	if (m_pCameraShake)
@@ -112,8 +172,6 @@ _int CCamera_Silvermane::Tick(_double _dDeltaTime)
 		}
 #pragma endregion
 
-
-
 		m_pCameraShake->Tick(this, _dDeltaTime);
 		if (m_pCameraShake->IsShaking())
 		{
@@ -128,7 +186,6 @@ _int CCamera_Silvermane::Tick(_double _dDeltaTime)
 			m_pLocalTransform->Set_State(CTransform::STATE_POSITION, svLocalTotalpos);
 		}
 	}
-
 
 	m_pCamera->Update_Matrix(m_pTransform->Get_WorldMatrix());
 	return _int();
@@ -175,7 +232,7 @@ HRESULT CCamera_Silvermane::Ready_Components()
 		return E_FAIL;
 	m_vLocalOriginPos = { 1.f, 3.f, -2.f };
 	m_pLocalTransform->Set_State(CTransform::STATE_POSITION, XMVectorSetW(XMLoadFloat3(&m_vLocalOriginPos), 1.f));
-	m_pLocalTransform->SetUp_Rotation(m_pLocalTransform->Get_State(CTransform::STATE_RIGHT), XMConvertToRadians(30.f));
+	m_pLocalTransform->SetUp_Rotation(_vector{ 1.f, 0.f, 0.f, 0.f }, XMConvertToRadians(30.f));
 
 	transformDesc.fRotationPerSec = XMConvertToRadians(120.f);
 	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_Transform", L"Com_WorldTransform", (CComponent**)&m_pWorldTransform, &transformDesc)))
@@ -191,6 +248,31 @@ HRESULT CCamera_Silvermane::Ready_Components()
 void CCamera_Silvermane::Set_ChaseTarget(const _bool _isChase)
 {
 	m_isChase = _isChase;
+}
+
+void CCamera_Silvermane::Set_Execution(const _bool _isExecution, CHierarchyNode* _pEyeBone, CHierarchyNode* _pAtBone)
+{
+	if (_isExecution != m_isExecution)
+	{
+		if (_pEyeBone)
+			m_pEyeBone = _pEyeBone;
+		if (_pAtBone)
+			m_pAtBone = _pAtBone;
+
+		switch (_isExecution)
+		{
+		case true:
+			m_fExecutionChangeTime = 0.f;
+			break;
+		case false:
+			m_pLocalTransform->Set_State(CTransform::STATE_POSITION, XMVectorSetW(XMLoadFloat3(&m_vLocalOriginPos), 1.f));
+			m_pLocalTransform->SetUp_Rotation(_vector{ 1.f, 0.f, 0.f, 0.f }, XMConvertToRadians(30.f));
+			m_fExecutionChangeTime = 0.f;
+			break;
+		}
+
+		m_isExecution = _isExecution;
+	}
 }
 
 void CCamera_Silvermane::Respawn()
@@ -255,7 +337,8 @@ void CCamera_Silvermane::SpringArm()
 	XMStoreFloat3(&tRaycastDesc.vOrigin, svTargetPos);
 	XMStoreFloat3(&tRaycastDesc.vDir, XMVector3Normalize(svPosition - svTargetPos));
 	tRaycastDesc.fMaxDistance = 4.f;
-	tRaycastDesc.filterData.flags = PxQueryFlag::eSTATIC;
+	tRaycastDesc.filterData.flags = PxQueryFlag::eANY_HIT | PxQueryFlag::eSTATIC;
+	tRaycastDesc.layerMask = (1 << (_uint)ELayer::Enviroment);
 	if (g_pGameInstance->Raycast(tRaycastDesc))
 	{
 		for (_uint i = 0; i < tRaycastDesc.iHitNum; ++i)
@@ -297,7 +380,7 @@ void CCamera_Silvermane::OnOffMonsterUI()
 	XMStoreFloat3(&tSweepDesc.vDir, svRayDir);
 	tSweepDesc.fMaxDistance = 15.f;
 	tSweepDesc.filterData.flags = PxQueryFlag::eANY_HIT | PxQueryFlag::eDYNAMIC;
-	tSweepDesc.layerMask = (1 << (_uint)ELayer::Monster);
+	tSweepDesc.layerMask = (1 << (_uint)ELayer::Monster)/*+ (1 << (_uint)ELayer::Player)*/;
 	CGameObject* pHitObject = nullptr;
 	tSweepDesc.ppOutHitObject = &pHitObject;
 
@@ -313,6 +396,7 @@ void CCamera_Silvermane::OnOffMonsterUI()
 		case (_uint)GAMEOBJECT::MONSTER_HEALER:
 		case (_uint)GAMEOBJECT::MONSTER_SHOOTER:
 		case (_uint)GAMEOBJECT::MONSTER_SPEAR:
+		case (_uint)GAMEOBJECT::MONSTER_ANIMUS:
 			if (nullptr != pHitObject)
 			{
 				m_pTargetMonster = pHitObject;

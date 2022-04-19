@@ -13,6 +13,7 @@
 #include "Effect_Env_Floating.h"
 #include "Effect_Guard.h"
 #include "Effect_Falling_Leaf.h"
+#include "Effect_Floating_Speed.h"
 
 #include "UI.h"
 #include "UI_Blank_CKey.h"
@@ -33,6 +34,7 @@ CTestScene_JS::CTestScene_JS(ID3D11Device* pDevice, ID3D11DeviceContext* pDevice
 HRESULT CTestScene_JS::NativeConstruct()
 {
 	if (FAILED(__super::NativeConstruct())) return E_FAIL;
+	g_pWeaponGenerator = CWeaponGenerator::GetInstance();
 
 	if (FAILED(Ready_Light()))
 		return E_FAIL;
@@ -45,10 +47,10 @@ HRESULT CTestScene_JS::NativeConstruct()
 		return E_FAIL;
 	}
 
-	if (FAILED(Ready_Data_Effect()))
-	{
-		return E_FAIL;
-	}
+	//if (FAILED(Ready_Data_Effect()))
+	//{
+	//	return E_FAIL;
+	//}
 
 	if (FAILED(Ready_UI(L"Layer_UI")))
 	{
@@ -65,24 +67,26 @@ _int CTestScene_JS::Tick(_double TimeDelta)
 		return -1;
 
 	CGameObject* pMonster = nullptr;
-	if (g_pGameInstance->getkeyDown(DIK_COLON))
-	{
-		//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_JS, L"Layer_Monster", L"Proto_GameObject_Monster_Bastion_2HSword", nullptr, &pMonster)))
-		//	return -1;
-		//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_JS, L"Layer_Monster", L"Proto_GameObject_Monster_Bastion_Shooter", nullptr, &pMonster)))
-		//	return E_FAIL;
-		//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_JS, L"Layer_Monster", L"Proto_GameObject_Monster_Bastion_Sword", nullptr, &pMonster)))
-		//	return E_FAIL;
-		//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_JS, L"Layer_Monster", L"Proto_GameObject_Monster_BronzeAnimus", nullptr, &pMonster)))
-		//	return E_FAIL;
-		//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_JS, L"Layer_Monster", L"Proto_GameObject_Monster_Bastion_Spear", nullptr, &pMonster)))
-		//	return E_FAIL;
-		if(pMonster)
-			pMonster->setActive(true);
-	}
+	//if (g_pGameInstance->getkeyDown(DIK_COLON))
+	//{
+	//	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_JS, L"Layer_Monster", L"Proto_GameObject_Monster_Bastion_2HSword", nullptr, &pMonster)))
+	//	//	return -1;
+	//	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_JS, L"Layer_Monster", L"Proto_GameObject_Monster_Bastion_Shooter", nullptr, &pMonster)))
+	//	//	return -1;
+	//	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_JS, L"Layer_Monster", L"Proto_GameObject_Monster_Bastion_Sword", nullptr, &pMonster)))
+	//	//	return -1;
+	//	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_JS, L"Layer_Monster", L"Proto_GameObject_Monster_BronzeAnimus", nullptr, &pMonster)))
+	//	//	return -1;
+	//	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_JS, L"Layer_Monster", L"Proto_GameObject_Monster_Bastion_Spear", nullptr, &pMonster)))
+	//	//	return -1;
+	//	if(pMonster)
+	//		pMonster->setActive(true);
+	//}
 	if (g_pGameInstance->getkeyDown(DIK_SEMICOLON))
 	{
-		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_JS, L"Layer_Monster", L"Proto_GameObject_Monster_Crawler", nullptr, &pMonster)))
+		//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_JS, L"Layer_Monster", L"Proto_GameObject_Monster_Crawler", nullptr, &pMonster)))
+		//	return -1;
+		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_JS, L"Layer_Monster", L"Proto_GameObject_Monster_EarthAberrant", nullptr, &pMonster)))
 			return -1;
 		if(pMonster)
 			pMonster->setActive(true);
@@ -120,7 +124,7 @@ HRESULT CTestScene_JS::Ready_Light()
 
 	if (FAILED(g_pGameInstance->Add_Light(m_pDevice, m_pDeviceContext, LightDesc))) MSGBOX("Failed To Adding PointLight");
 
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_SkyBox", L"Proto_GameObject_SkyBox")))
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_JS, L"Layer_SkyBox", L"Proto_GameObject_SkyBox")))
 		return E_FAIL;
 
 	return S_OK;
@@ -139,7 +143,8 @@ HRESULT CTestScene_JS::Ready_Gameobject()
 		return E_FAIL;
 	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_JS, L"Layer_Weapon", L"Proto_GameObject_FlyingShield")))
 	//	return E_FAIL;
-
+	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_JS, L"Layer_Effect", L"Proto_GameObject_MeshEffect_Test")))
+	//	return E_FAIL;
 
 	// 점프 노드들
 	CJumpNode::DESC tJumpNodeDesc;
@@ -165,8 +170,6 @@ HRESULT CTestScene_JS::Ready_Gameobject()
 	tJumpBoxrDesc.vScale = { 7.f, 2.f, 6.f };
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_JS, L"Layer_JumpBox", L"Proto_GameObject_JumpBox", &tJumpBoxrDesc)))
 		return E_FAIL;
-
-
 
 	///////////////////// 스테이지 2용
 	// 
@@ -209,7 +212,8 @@ HRESULT CTestScene_JS::Ready_Data_UI(const _tchar* pDataFilePath)
 }
 
 HRESULT CTestScene_JS::Ready_UI(const _tchar* LayerTag)
-{//Player HpBar Green
+{
+	//Player HpBar Green
 	CUI_Player_HpBar::UIDESC Desc;
 	_tcscpy_s(Desc.TextureTag, L"Texture_Player_HpBar");
 	Desc.bMinus = true;
@@ -218,7 +222,7 @@ HRESULT CTestScene_JS::Ready_UI(const _tchar* LayerTag)
 	Desc.fSize = { 200.f , 30.f };
 	Desc.IDTag = (_uint)GAMEOBJECT::UI_DYNAMIC;
 
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_UI_Green", L"Proto_GameObject_UI_Player_HpBar", &Desc)))
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_JS, L"Layer_UI_Green", L"Proto_GameObject_UI_Player_HpBar", &Desc)))
 		return E_FAIL;
 
 	//Player HpBar Red
@@ -230,7 +234,7 @@ HRESULT CTestScene_JS::Ready_UI(const _tchar* LayerTag)
 	Desc.fSize = { 200.f , 30.f };
 	Desc.IDTag = (_uint)GAMEOBJECT::UI_DYNAMIC;
 
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, LayerTag, L"Proto_GameObject_UI_Player_HpBar_Red", &Desc)))
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_JS, LayerTag, L"Proto_GameObject_UI_Player_HpBar_Red", &Desc)))
 		return E_FAIL;
 
 
@@ -244,7 +248,7 @@ HRESULT CTestScene_JS::Ready_UI(const _tchar* LayerTag)
 	Desc1.UIDesc.fSize = { 333.f , 105.f };
 	Desc1.UIDesc.IDTag = (_uint)GAMEOBJECT::UI_STATIC;
 
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, LayerTag, L"Proto_GameObject_UI_Tuto_Base", &Desc1)))
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_JS, LayerTag, L"Proto_GameObject_UI_Tuto_Base", &Desc1)))
 		return E_FAIL;
 
 	//Tuto Font
@@ -258,7 +262,7 @@ HRESULT CTestScene_JS::Ready_UI(const _tchar* LayerTag)
 	Desc2.UIDesc.IDTag = (_uint)GAMEOBJECT::UI_STATIC;
 	Desc2.iTextureNum = 0;
 
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, LayerTag, L"Proto_GameObject_UI_Tuto_Font", &Desc2)))
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_JS, LayerTag, L"Proto_GameObject_UI_Tuto_Font", &Desc2)))
 		return E_FAIL;
 
 	//Blank_Ckey
@@ -286,6 +290,7 @@ HRESULT CTestScene_JS::Ready_UI(const _tchar* LayerTag)
 
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_JS, L"Layer_UI_FillC", L"Proto_GameObject_UI_Fill_CKey", &Desc4)))
 		return E_FAIL;
+
 
 	return S_OK;
 }
@@ -400,14 +405,15 @@ HRESULT CTestScene_JS::Ready_Data_Effect()
 	vector<CEffect_HitParticle::EFFECTDESC> vecHitLeft;
 	g_pGameInstance->LoadFile<CEffect_HitParticle::EFFECTDESC>(vecHitLeft, L"../bin/SaveData/Effect/Effect_Player_Attack_Left.dat");
 
-	FullName = L"Proto_GameObject_Effect_Attack_Left";
+	FullName = L"Proto_GameObject_Effect_Explosion";
+	//FullName = L"Proto_GameObject_Effect_Attack_Left";
 
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Player_Attack_Left", FullName, &vecHitLeft[0], (CGameObject**)&pEffect)))
 	{
 		MSGBOX("Failed to Creating Effect_Player_Attack_Left in CStage1::Ready_Effect()");
 		return E_FAIL;
 	}
-	if (FAILED(g_pGameInstance->Add_Effect((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Player_Attack_Left", pEffect, 20)))
+	if (FAILED(g_pGameInstance->Add_Effect((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Player_Attack_Left", pEffect, 5)))
 	{
 		MSGBOX("Falild to Add_Effect_Player_Attack_Left in CStage1::Ready_Effect()");
 		return E_FAIL;
@@ -417,7 +423,8 @@ HRESULT CTestScene_JS::Ready_Data_Effect()
 	vector<CEffect_HitParticle::EFFECTDESC> vecHitRight;
 	g_pGameInstance->LoadFile<CEffect_HitParticle::EFFECTDESC>(vecHitRight, L"../bin/SaveData/Effect/Effect_Player_Attack_Right.dat");
 
-	FullName = L"Proto_GameObject_Effect_Attack_Right";
+	FullName = L"Proto_GameObject_Effect_Explosion";
+	//FullName = L"Proto_GameObject_Effect_Attack_Right";
 
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Player_Attack_Right", FullName, &vecHitRight[0], (CGameObject**)&pEffect)))
 	{
@@ -434,19 +441,79 @@ HRESULT CTestScene_JS::Ready_Data_Effect()
 	vector<CEffect_HitParticle::EFFECTDESC> vecHitGround;
 	g_pGameInstance->LoadFile<CEffect_HitParticle::EFFECTDESC>(vecHitGround, L"../bin/SaveData/Effect/Effect_Hit_Ground.dat");
 
-	FullName = L"Proto_GameObject_Effect_Hit_Ground";
+	FullName = L"Proto_GameObject_Effect_Explosion";
+	//FullName = L"Proto_GameObject_Effect_Hit_Ground";
 
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Hit_Ground", FullName, &vecHitGround[0], (CGameObject**)&pEffect)))
 	{
 		MSGBOX("Failed to Creating Effect_Hit_Ground in CStage1::Ready_Effect()");
 		return E_FAIL;
 	}
-	if (FAILED(g_pGameInstance->Add_Effect((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Hit_Ground", pEffect, 20)))
+	if (FAILED(g_pGameInstance->Add_Effect((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Hit_Ground", pEffect, 6)))
 	{
 		MSGBOX("Falild to Add_Effect_Hit_Ground in CStage1::Ready_Effect()");
 		return E_FAIL;
 	}
 
+
+	////OpenBox
+	//vector<CEffect_Floating_Speed::EF_PAR_FLOATSPEED_DESC> vecOpenBox;
+	//g_pGameInstance->LoadFile<CEffect_Floating_Speed::EF_PAR_FLOATSPEED_DESC>(vecOpenBox, L"../bin/SaveData/Effect/Effect_Open_Box.dat");
+
+	//FullName = L"Proto_GameObject_Effect_Floating_Speed";
+	////FullName = L"Proto_GameObject_Effect_Attack_Left";
+	//vecOpenBox[0].ParticleColor = { 0.3f,0.5f,1.f, 1.f };
+	//vecOpenBox[0].Power = 2.5f;
+
+	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Open_Box", FullName, &vecOpenBox[0], (CGameObject**)&pEffect)))
+	//{
+	//	MSGBOX("Failed to Creating Effect_Open_Box in CStage1::Ready_Effect()");
+	//	return E_FAIL;
+	//}
+	//if (FAILED(g_pGameInstance->Add_Effect((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Open_Box", pEffect, 3)))
+	//{
+	//	MSGBOX("Falild to Add_Effect_Open_Box in CStage1::Ready_Effect()");
+	//	return E_FAIL;
+	//}
+
+	////PlayerAttackGround
+	//vector<CEffect_Floating_Speed::EF_PAR_FLOATSPEED_DESC> vecAttackGround;
+	//g_pGameInstance->LoadFile<CEffect_Floating_Speed::EF_PAR_FLOATSPEED_DESC>(vecAttackGround, L"../bin/SaveData/Effect/Effect_Player_Attack_Ground.dat");
+
+	//FullName = L"Proto_GameObject_Effect_Floating_Speed";
+	////FullName = L"Proto_GameObject_Effect_Attack_Left";
+	//vecAttackGround[0].ParticleColor = { 1.f,0.3f,0.3f, 1.f };
+	//vecAttackGround[0].Power = 1.5f;
+
+	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Player_Attack_Ground", FullName, &vecAttackGround[0], (CGameObject**)&pEffect)))
+	//{
+	//	MSGBOX("Failed to Creating Effect_Player_Attack_Ground in CStage1::Ready_Effect()");
+	//	return E_FAIL;
+	//}
+	//if (FAILED(g_pGameInstance->Add_Effect((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Player_Attack_Ground", pEffect, 5)))
+	//{
+	//	MSGBOX("Falild to Add_Effect_Player_Attack_Ground in CStage1::Ready_Effect()");
+	//	return E_FAIL;
+	//}
+
+	////PlayerAttackGround_2
+	//g_pGameInstance->LoadFile<CEffect_Floating_Speed::EF_PAR_FLOATSPEED_DESC>(vecAttackGround, L"../bin/SaveData/Effect/Effect_Player_Attack_Ground_2.dat");
+
+	//FullName = L"Proto_GameObject_Effect_Floating_Speed";
+	////FullName = L"Proto_GameObject_Effect_Attack_Left";
+	//vecAttackGround[0].ParticleColor = { 1.f,0.3f,0.3f, 1.f };
+	//vecAttackGround[0].Power = 1.5f;
+
+	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Player_Attack_Ground2", FullName, &vecAttackGround[0], (CGameObject**)&pEffect)))
+	//{
+	//	MSGBOX("Failed to Creating Effect_Player_Attack_Ground2 in CStage1::Ready_Effect()");
+	//	return E_FAIL;
+	//}
+	//if (FAILED(g_pGameInstance->Add_Effect((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Player_Attack_Ground2", pEffect, 5)))
+	//{
+	//	MSGBOX("Falild to Add_Effect_Player_Attack_Ground2 in CStage1::Ready_Effect()");
+	//	return E_FAIL;
+	//}
 #pragma endregion
 
 #pragma region 이펙트매니저에 안들어가는것들
@@ -462,7 +529,7 @@ HRESULT CTestScene_JS::Ready_Data_Effect()
 	Desc.fEffectPlaySpeed = 1.f;
 	Desc.fMyPos = { 0.f, 0.f, 0.f };
 
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Effect_Env_Fire", L"Proto_GameObject_Effect_Env_Fire", &Desc)))
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_JS, L"Layer_Effect_Env_Fire", L"Proto_GameObject_Effect_Env_Fire", &Desc)))
 	{
 		MSGBOX("Failed to Creating Effect_Env_Fire in CStage1::Ready_Effect()");
 		return E_FAIL;
@@ -478,30 +545,27 @@ HRESULT CTestScene_JS::Ready_Data_Effect()
 	//Desc.fFrame = 64.f;
 	//Desc.fEffectPlaySpeed = 1.f;
 
-	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Effect_Hammer_Dust", L"Proto_GameObject_Effect_Hammer_Dust", &Desc)))
+	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_JS, L"Layer_Effect_Hammer_Dust", L"Proto_GameObject_Effect_Hammer_Dust", &Desc)))
 	//{
 	//	MSGBOX("Failed to Creating Effect_Hammer_Dust in CStage1::Ready_Effect()");
 	//	return E_FAIL;
+	//}
+	//Monster Dead
+	//ZeroMemory(&Desc, sizeof(Desc));
+
+	//_tcscpy_s(Desc.TextureTag, L"T_lavaSpary");
+	//Desc.iRenderPassNum = 1;
+	//Desc.iImageCountX = 8;
+	//Desc.iImageCountY = 8;
+	//Desc.fFrame = 64.f;
+	//Desc.fEffectPlaySpeed = 1.f;
+
+	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_JS, L"Layer_Effect_Monster_Dead_Spray", L"Proto_GameObject_Effect_Monster_Dead_Spray", &Desc)))
+	//{
+	//	MSGBOX("Failed to Creating Effect_Monster_Dead_Spray in CStage1::Ready_Effect()");
+	//	return E_FAIL;
 
 	//}
-
-	//Monster Dead
-	ZeroMemory(&Desc, sizeof(Desc));
-
-	_tcscpy_s(Desc.TextureTag, L"T_lavaSpary");
-	Desc.iRenderPassNum = 1;
-	Desc.iImageCountX = 8;
-	Desc.iImageCountY = 8;
-	Desc.fFrame = 64.f;
-	Desc.fEffectPlaySpeed = 1.f;
-
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Effect_Monster_Dead_Spray", L"Proto_GameObject_Effect_Monster_Dead_Spray", &Desc)))
-	{
-		MSGBOX("Failed to Creating Effect_Monster_Dead_Spray in CStage1::Ready_Effect()");
-		return E_FAIL;
-
-	}
-
 	//Env floating
 	vector<CEffect_Env_Floating::EFFECTDESC> vecEnvFloating;
 	g_pGameInstance->LoadFile<CEffect_Env_Floating::EFFECTDESC>(vecEnvFloating, L"../bin/SaveData/Effect/Effect_Env_Floating_1.dat");
@@ -509,7 +573,7 @@ HRESULT CTestScene_JS::Ready_Data_Effect()
 	FullName = L"Proto_GameObject_Effect_Env_Floating";
 
 	vecEnvFloating[0].fMyPos = { -5.f, 1.f, 20.f };
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Env_Floating_1", FullName, &vecEnvFloating[0])))
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_JS, L"Layer_Effect_Env_Floating_1", FullName, &vecEnvFloating[0])))
 	{
 		MSGBOX("Failed to Creating Effect_Env_Floating_1 in CStage1::Ready_Effect()");
 		return E_FAIL;
@@ -520,7 +584,7 @@ HRESULT CTestScene_JS::Ready_Data_Effect()
 	g_pGameInstance->LoadFile<CEffect_Falling_Leaf::EFFECTDESC>(vecEnvFallingLeaf, L"../bin/SaveData/Effect/Effect_Falling_Leaf.dat");
 
 	FullName = L"Proto_GameObject_Effect_Falling_Leaf";
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Env_Falling_Leaf", FullName, &vecEnvFallingLeaf[0])))
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_JS, L"Layer_Effect_Env_Falling_Leaf", FullName, &vecEnvFallingLeaf[0])))
 	{
 		MSGBOX("Failed to Creating Effect_Env_FallingLeaf in CStage1::Ready_Effect()");
 		return E_FAIL;
@@ -529,6 +593,8 @@ HRESULT CTestScene_JS::Ready_Data_Effect()
 #pragma endregion
 	return S_OK;
 }
+///////////////////////////////////////////////////////// 이펙트 레디 끝
+
 
 CTestScene_JS* CTestScene_JS::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
 {

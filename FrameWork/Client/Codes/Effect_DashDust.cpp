@@ -39,7 +39,6 @@ HRESULT CEffect_DashDust::NativeConstruct(const _uint _iSceneID, void* pArg)
 	if (nullptr != pArg)
 	{
 		memcpy(&m_Desc, pArg, sizeof(EFFECTDESC));
-		int a = 0;
 	}
 
 	//여기서 필요한 모든 컴포넌트들 Clone해옴
@@ -48,7 +47,7 @@ HRESULT CEffect_DashDust::NativeConstruct(const _uint _iSceneID, void* pArg)
 		return E_FAIL;
 	}
 
-	CVIBuffer_PointInstance_Explosion::PIDESC Desc;
+	CVIBuffer_PointInstance_Floating_Disappear::PIDESC Desc;
 	_tcscpy_s(Desc.ShaderFilePath, m_Desc.ShaderFullFilePath);
 	Desc.matParticle = m_Desc.ParticleMat;
 	Desc.fParticleStartRandomPos = m_Desc.fParticleRandomPos;
@@ -59,11 +58,16 @@ HRESULT CEffect_DashDust::NativeConstruct(const _uint _iSceneID, void* pArg)
 	Desc.iNumInstance = m_Desc.iNumInstance;
 	Desc.fLifeTime = m_Desc.fMaxLifeTime;
 	Desc.fCurTime = m_Desc.fCurTime;
+	Desc.bGravity = m_Desc.bUsingGravity;
 
 	//m_pBuffer->Set_Desc(Desc);
 	//m_pBuffer->Particle_Reset();
 
+	m_fAlpha = 0.2f;
+
 	m_backupDesc = Desc;
+
+	setActive(false);
 
 	return S_OK;
 }
@@ -72,19 +76,18 @@ _int CEffect_DashDust::Tick(_double TimeDelta)
 {
 	m_pBuffer->Update(TimeDelta, m_Desc.iAxis);
 
-	if (g_pGameInstance->getkeyDown(DIK_NUMPAD0))
+	m_fNonActiveTimeAcc += (_float)g_dImmutableTime;
+	if (4.f <= m_fNonActiveTimeAcc)
 	{
-		m_pBuffer->Set_Desc(m_backupDesc);
-		m_pBuffer->Particle_Reset();
-		m_Desc.fCurTime = 0.f;
+		setActive(false);
+		m_fNonActiveTimeAcc = 0.f;
 	}
 
-	//z정렬
-	wstring wstrCamTag = g_pGameInstance->Get_BaseCameraTag();
-	_vector vDir = g_pGameInstance->Get_CamPosition(wstrCamTag) - m_pTransform->Get_State(CTransform::STATE_POSITION);
-	vDir = XMVector3Normalize(vDir);
-	m_pBuffer->Set_Dir(vDir);
+	_matrix matCullingBoxPivot = XMMatrixIdentity();
+	matCullingBoxPivot.r[3] = { m_Desc.CullingBoxPos.x, m_Desc.CullingBoxPos.y,m_Desc.CullingBoxPos.z, 1.f };
+	m_pBox->Update_Matrix(matCullingBoxPivot * m_pTransform->Get_WorldMatrix());
 
+	//이미지 플레이
 	_uint iAllFrameCount = (m_Desc.iImageCountX * m_Desc.iImageCountY);
 	m_Desc.fFrame += (_float)(iAllFrameCount * TimeDelta * m_Desc.fEffectPlaySpeed); //플레이속도 
 	if (m_Desc.fFrame >= iAllFrameCount)
@@ -102,22 +105,32 @@ _int CEffect_DashDust::Tick(_double TimeDelta)
 		m_Desc.fCurTime = m_Desc.fMaxLifeTime;
 	}
 
+	m_fAlpha -= (_float)TimeDelta;
+
+	if (0 >= m_fAlpha)
+	{
+		setActive(false);
+	}
+
     return 0;
 }
 
 _int CEffect_DashDust::LateTick(_double TimeDelta)
 {
-	if (nullptr != m_pRenderer)
-	{
-		m_pRenderer->Add_RenderGroup(CRenderer::RENDER::RENDER_ALPHA, this);
+	_bool bCulling = g_pGameInstance->isIn_WorldFrustum(m_pBox->Get_Points(), 1.f);
+	if (true == bCulling)
+	{ 
+		if (nullptr != m_pRenderer)
+		{
+			m_pRenderer->Add_RenderGroup(CRenderer::RENDER::RENDER_ALPHA, this);
+		}
 	}
-
 	return 0;
 }
 
 HRESULT CEffect_DashDust::Render()
 {
-	//_matrix XMWorldMatrix = XMMatrixTranspose(XMLoadFloat4x4(&m_WorldMatrix));
+	//m_pBox->Render(L"Camera_Silvermane");
 	wstring wstrCamTag = g_pGameInstance->Get_BaseCameraTag();
 	_matrix XMWorldMatrix = XMMatrixTranspose(m_pTransform->Get_WorldMatrix());
 	_matrix XMViewMatrix = XMMatrixTranspose(g_pGameInstance->Get_Transform(wstrCamTag, TRANSFORMSTATEMATRIX::D3DTS_VIEW));
@@ -139,11 +152,41 @@ HRESULT CEffect_DashDust::Render()
 	m_pBuffer->SetUp_ValueOnShader("g_fLifeTime", &m_Desc.fMaxLifeTime, sizeof(_float));
 	m_pBuffer->SetUp_ValueOnShader("g_fCurTime", &m_Desc.fCurTime, sizeof(_float));
 
+	m_pBuffer->SetUp_ValueOnShader("g_fAlpha", &m_fAlpha, sizeof(_float));
+	_float power = 1.f;
+	m_pBuffer->SetUp_ValueOnShader("g_empower", &power, sizeof(_float));
+
 	m_pBuffer->SetUp_ValueOnShader("g_vCamPosition", (void*)&CamPos, sizeof(_vector));
 
 	m_pBuffer->Render(m_Desc.iRenderPassNum);
 
 	return S_OK;
+}
+
+CEffect* CEffect_DashDust::Copy()
+{
+	CEffect_DashDust* pEffect = new CEffect_DashDust(m_pDevice, m_pDeviceContext);
+	if (FAILED(pEffect->NativeConstruct_Prototype()))
+	{
+		MSGBOX("DashDust Copy Fail");
+		Safe_Release(pEffect);
+	}
+	if (FAILED(pEffect->NativeConstruct(m_iSceneID, &m_Desc)))
+	{
+		MSGBOX("HitParticle Copy Fail");
+		Safe_Release(pEffect);
+	}
+
+	return pEffect;
+}
+
+void CEffect_DashDust::Set_Reset(_bool bReset)
+{
+	CEffect::Set_Reset(bReset);
+	m_Desc.fCurTime = 0.f;
+	m_fAlpha = 0.5f;
+	m_pBuffer->Set_Desc(m_backupDesc);
+	m_pBuffer->Particle_Reset();
 }
 
 HRESULT CEffect_DashDust::SetUp_Components()
@@ -160,6 +203,12 @@ HRESULT CEffect_DashDust::SetUp_Components()
 	_vector vPos = { /*XMVectorGetX(m_Desc.fMyPos), XMVectorGetY(m_Desc.fMyPos), XMVectorGetZ(m_Desc.fMyPos)*/0,1.5f,0, 1.f };
 	m_pTransform->Set_State(CTransform::STATE_POSITION, vPos);
 
+	//culling 
+	m_pBox = g_pGameInstance->Clone_Component<CCullingBox>(0, L"Proto_Component_CullingBox");
+	if (!m_pBox)
+		return E_FAIL;
+	m_pBox->Set_Length(m_Desc.CullingBoxSize.x, m_Desc.CullingBoxSize.y, m_Desc.CullingBoxSize.z);
+
 	//버퍼 Clone
 	_tcscpy_s(m_backupDesc.ShaderFilePath, m_Desc.ShaderFullFilePath);
 	m_backupDesc.matParticle = m_Desc.ParticleMat;
@@ -171,7 +220,9 @@ HRESULT CEffect_DashDust::SetUp_Components()
 	m_backupDesc.iNumInstance = m_Desc.iNumInstance;
 	m_backupDesc.fLifeTime = m_Desc.fMaxLifeTime;
 	m_backupDesc.fCurTime = m_Desc.fCurTime;
-	if (FAILED(__super::SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_VIBuffer_PointInstance_Explosion", L"Com_VIBuffer", (CComponent**)&m_pBuffer, &m_backupDesc)))
+	m_backupDesc.bGravity = m_Desc.bUsingGravity;
+
+	if (FAILED(__super::SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_VIBuffer_PointInstance_Disappear", L"Com_VIBuffer", (CComponent**)&m_pBuffer, &m_backupDesc)))
 		return E_FAIL;
 
 	return S_OK;
@@ -206,6 +257,7 @@ CGameObject* CEffect_DashDust::Clone(const _uint _iSceneID, void* pArg)
 
 void CEffect_DashDust::Free()
 {
+	Safe_Release(m_pBox);
 	Safe_Release(m_pBuffer);
 
 	__super::Free();

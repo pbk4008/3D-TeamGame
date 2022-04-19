@@ -66,11 +66,88 @@ VS_OUT VS_MESH(VS_IN In)
 	Out.vUvDepth.zw = Out.vPosition.zw;
 	
 	Out.clip = dot(mul(vPosition, g_WorldMatrix), ClipPlane);
+
+	return Out;
+}
+//*---------------------------------------------------------------------------------------------*
+// VS_Velocity
+struct VS_OUT_VELOCITY
+{
+	float4 vPosition : SV_POSITION;
+	float4 vVelocity : TEXCOORD0;
+};
+
+VS_OUT_VELOCITY VS_MAIN_VELOCITY(VS_IN In)
+{
+	VS_OUT_VELOCITY Out = (VS_OUT_VELOCITY) 0;
+	
+	matrix matInstance = float4x4(In.vRight, In.vUp, In.vLook, In.vTranslation);
+	
+	if (g_bUsingTool)
+	{
+		matInstance = float4x4(1, 0, 0, 0,
+								0, 1, 0, 0,
+								0, 0, 1, 0,
+								0, 0, 0, 1);
+	}
+
+	half4 vPosition = mul(vector(In.vPosition, 1.f), matInstance);
+	half4 vNormal = mul(vector(In.vNormal, 0.f), matInstance);
+	
+	matrix matWV, matWVP;
+	
+	matWV = mul(g_WorldMatrix, g_ViewMatrix);
+	matWVP = mul(matWV, g_ProjMatrix);
+	
+	half4 vCurPosition = mul(vPosition, matWVP);
+
+	Out.vPosition = vCurPosition;
+	vNormal = mul(vNormal, matWVP);
+	half4 curpos = Out.vPosition;
+	half4 prepos = mul(vPosition, g_PreWorldViewProj);
+	half3 dir = curpos.xyz - prepos.xyz;
+	
+	half a = dot(normalize(dir), normalize(vNormal.xyz));
+	if (a < 0.f)
+		Out.vPosition = prepos;
+	else
+		Out.vPosition = curpos;
+	
+	half2 velocity = (curpos.xy / curpos.w) - (prepos.xy / prepos.w);
+	Out.vVelocity.xy = velocity * 0.5f;
+	Out.vVelocity.y *= -1.f;
+	Out.vVelocity.z = Out.vPosition.z;
+	Out.vVelocity.w = Out.vPosition.w;
 	
 	return Out;
 }
-// VS_SHADOW_MAP
+
+// PS Velocity Map
+struct PS_IN_VELOCITY
+{
+	float4 vPosition : SV_POSITION;
+	float4 vVelocity : TEXCOORD0;
+};
+
+struct PS_OUT_VELOCITY
+{
+	vector VelocityMap : SV_TARGET0;
+};
+
+PS_OUT_VELOCITY PS_MAIN_VELOCITY(PS_IN_VELOCITY In)
+{
+	PS_OUT_VELOCITY Out = (PS_OUT_VELOCITY) 0.f;
+	
+	Out.VelocityMap.xy = In.vVelocity.xy;
+	Out.VelocityMap.z = In.vVelocity.z / In.vVelocity.w;
+	Out.VelocityMap.w = In.vVelocity.w / 300.f;
+	
+	return Out;
+}
 //*---------------------------------------------------------------------------------------------*
+
+//*---------------------------------------------------------------------------------------------*
+// VS_SHADOW_MAP
 struct VS_OUT_SHADOW
 {
 	float4 vPosition : SV_Position;
@@ -101,10 +178,8 @@ VS_OUT_SHADOW VS_MAIN_SHADOW(VS_IN In)
 	
 	return Out;
 }
-//*---------------------------------------------------------------------------------------------*
 
-// SHADOW_MAP
-//*---------------------------------------------------------------------------------------------*
+// PS SHADOW_MAP
 struct PS_IN_SHADOW
 {
 	float4 vPosition : SV_Position;
@@ -167,7 +242,10 @@ PS_OUT PS_MAIN(PS_IN In)
 		Out.emission = half4(0.015f, 0.01f, 0.004f, 1);
 	}
 	else
+	{
 		Out.diffuse = diffuse;
+		Out.emission = half4(0.0f, 0.0f, 0.0f, 1);
+	}
 
 	Out.depth = half4(In.vUvDepth.z / In.vUvDepth.w, In.vUvDepth.w / 300.f, 0.f, 0.f);
 	Out.normal = half4(normal, 0);
@@ -215,5 +293,15 @@ technique11			DefaultTechnique
 		VertexShader = compile vs_5_0 VS_MAIN_SHADOW();
 		GeometryShader = NULL;
 		PixelShader = compile ps_5_0 PS_MAIN_SHADOW();
+	}
+	pass VelocityMap
+	{
+		SetRasterizerState(CullMode_None);
+		SetDepthStencilState(ZDefault, 0);
+		SetBlendState(BlendDisable, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+
+		VertexShader = compile vs_5_0 VS_MAIN_VELOCITY();
+		GeometryShader = NULL;
+		PixelShader = compile ps_5_0 PS_MAIN_VELOCITY();
 	}
 }

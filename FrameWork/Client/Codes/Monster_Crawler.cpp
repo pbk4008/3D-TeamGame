@@ -1,6 +1,8 @@
 #include "pch.h"
 #include "Monster_Crawler.h"
 
+#include "Light.h"
+
 #include "UI_Monster_Panel.h"
 
 #include "Effect_HitParticle.h"
@@ -73,11 +75,32 @@ HRESULT CMonster_Crawler::NativeConstruct(const _uint _iSceneID, void* _pArg)
 		return E_FAIL;
 	
 
+	//Light
+	LIGHTDESC			LightDesc;
+	ZeroMemory(&LightDesc, sizeof(LIGHTDESC));
+	LightDesc.eType = LIGHTDESC::TYPE_POINT;
+	LightDesc.fRange = 7.f;
+	LightDesc.vDiffuse = _float4(0.7f, 1.0f, 0.5f, 1.f);
+	LightDesc.vSpecular = _float4(0.8f, 0.8f, 0.8f, 1.f);
+	LightDesc.vAmbient = _float4(1.f, 1.f, 1.f, 1.f);
+	XMStoreFloat3(&LightDesc.vPosition, m_pTransform->Get_State(CTransform::STATE_POSITION));
+
+	if (nullptr == m_pLight)
+	{
+		if (FAILED(g_pGameInstance->Add_Light(m_pDevice, m_pDeviceContext, LightDesc, &m_pLight)))
+			MSGBOX("Failed To Adding PointLight");
+	}
+
+	Safe_AddRef(m_pLight);
+	m_pLight->Set_Show(false);
+	m_fLightRange = LightDesc.fRange;
+
+
 	m_bIsFall = true;
 
 	m_iObectTag = (_uint)GAMEOBJECT::MONSTER_CRYSTAL;
 
-	m_fMaxHp = 3.f;
+	m_fMaxHp = 30.f;
 	m_fCurrentHp = m_fMaxHp;
 
 	m_fMaxGroggyGauge = 3.f;
@@ -87,7 +110,8 @@ HRESULT CMonster_Crawler::NativeConstruct(const _uint _iSceneID, void* _pArg)
 	m_pPanel->Set_GroggyBar(Get_GroggyGaugeRatio());
 
 	m_iObectTag = (_uint)GAMEOBJECT::MONSTER_CRYSTAL;
-	setActive(false);
+
+	setActive(true);
 
 	return S_OK;
 }
@@ -99,7 +123,6 @@ _int CMonster_Crawler::Tick(_double _dDeltaTime)
 		return -1;
 	}
 
-
 	m_pTransform->Set_Velocity(XMVectorZero());
 	m_pPanel->Set_TargetWorldMatrix(m_pTransform->Get_WorldMatrix());
 
@@ -109,6 +132,19 @@ _int CMonster_Crawler::Tick(_double _dDeltaTime)
 	_int iProgress = m_pStateController->Tick(_dDeltaTime);
 	if (NO_EVENT != iProgress)
 		return iProgress;
+
+	if (m_bLight && 0.f <= m_fLightRange)
+	{
+		m_fLightRange -= (_float)_dDeltaTime * 2.f;
+		m_pLight->Set_Range(m_fLightRange);
+	}
+
+	if (0.f >= m_fLightRange)
+	{
+		m_fLightRange = 0.f;
+		m_pLight->Set_Show(false);
+		m_bLight = false;
+	}
 
 	if (!m_bDead)
 	{
@@ -133,6 +169,15 @@ _int CMonster_Crawler::Tick(_double _dDeltaTime)
 		{
 			if (m_pAnimatorCom->Get_CurrentAnimation()->Is_Finished() && m_lifetime <= 0.f)
 			{
+				if (nullptr != m_pLight)
+				{
+					m_pLight->Set_Pos(m_pTransform->Get_State(CTransform::STATE_POSITION));
+					m_pLight->Set_Show(true);
+					m_fLightRange = 3.f;
+					m_pLight->Set_Range(m_fLightRange);
+					m_bLight = true;
+				}
+
 				m_pPanel->Set_UIRemove(true);
 				Active_Effect((_uint)EFFECT::DEATH);
 				m_bdissolve = true;
@@ -140,7 +185,6 @@ _int CMonster_Crawler::Tick(_double _dDeltaTime)
 
 			if (m_lifetime >= 1.f)
 				Set_Remove(true);
-			
 		}
 		else
 		{
@@ -160,7 +204,6 @@ _int CMonster_Crawler::Tick(_double _dDeltaTime)
 
 	if (false == m_bUIShow)
 		m_pPanel->Set_Show(false);
-
 
 	return 0;
 }
@@ -187,15 +230,18 @@ HRESULT CMonster_Crawler::Render()
 	if (m_bdissolve == true)
 		CActor::DissolveOn(0.25f);
 
+	if (FAILED(m_pModel->SetUp_ValueOnShader("g_bdissolve", &m_bdissolve, sizeof(_bool)))) MSGBOX("Failed to Apply dissolvetime");
+
 	SCB desc;
 	ZeroMemory(&desc, sizeof(SCB));
 
 	wstring wstrCamTag = g_pGameInstance->Get_BaseCameraTag();
 	CActor::BindConstantBuffer(wstrCamTag,&desc);
-	if (FAILED(m_pModel->SetUp_ValueOnShader("g_bdissolve", &m_bdissolve, sizeof(_bool)))) MSGBOX("Failed to Apply dissolvetime");
 
 	for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
+	{
 		m_pModel->Render(i, 0);
+	}
 
 	return S_OK;
 }
@@ -231,15 +277,6 @@ void CMonster_Crawler::OnTriggerEnter(CCollision& collision)
 
 void CMonster_Crawler::OnTriggerExit(CCollision& collision)
 {
-	if (true == g_pObserver->IsAttack()) //플레이어공격일때
-	{
-		if ((_uint)GAMEOBJECT::WEAPON == collision.pGameObject->getTag())
-		{
-			if (m_bDead)
-				g_pMainApp->FreezeTime();
-		}
-	}
-	g_pGameInstance->StopSound(CSoundMgr::CHANNELID::Monster_Hit);
 }
 
 void CMonster_Crawler::Hit(const ATTACKDESC& _tAttackDesc)
@@ -271,7 +308,13 @@ void CMonster_Crawler::Hit(const ATTACKDESC& _tAttackDesc)
 	}
 
 	Active_Effect((_uint)EFFECT::HIT);
-	Active_Effect((_uint)EFFECT::FLOATING);
+	Active_Effect((_uint)EFFECT::HIT_FLOATING);
+	Active_Effect((_uint)EFFECT::HIT_FLOATING_2);
+
+	/*else if (EAttackDir::Right == _tAttackDesc.eDir)
+	{
+		Active_Effect_Target((_uint)EFFECT::ATTACK_RIGHT, g_pObserver->Get_PlayerPos());
+	}*/
 }
 
 void CMonster_Crawler::Parry(const PARRYDESC& _tParryDesc)
@@ -335,7 +378,6 @@ HRESULT CMonster_Crawler::SetUp_Components()
 	if (FAILED(__super::SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_StateController", L"Com_StateController", (CComponent**)&m_pStateController)))
 		return E_FAIL;
 	m_pStateController->Set_GameObject(this);
-
 
 	return S_OK;
 }
@@ -502,6 +544,8 @@ CGameObject* CMonster_Crawler::Clone(const _uint _iSceneID, void* _pArg)
 
 void CMonster_Crawler::Free()
 {
+	Safe_Release(m_pLight);
+
 	Safe_Release(m_pCollider);
 	Safe_Release(m_pCharacterController);
 	Safe_Release(m_pPanel);

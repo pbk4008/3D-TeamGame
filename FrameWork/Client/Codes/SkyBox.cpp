@@ -24,7 +24,6 @@ HRESULT CSkyBox::NativeConstruct(const _uint _iSceneID, void* pArg)
 	if (FAILED(__super::NativeConstruct(_iSceneID,pArg)))
 		return E_FAIL;
 
-
 	if (FAILED(SetUp_Components()))
 		return E_FAIL;
 
@@ -62,12 +61,7 @@ HRESULT CSkyBox::Render()
 	m_pVIBufferCom->SetUp_ValueOnShader("g_ProjMatrix", &proj, sizeof(_matrix));
 	m_pVIBufferCom->SetUp_ValueOnShader("g_campos", &campos, sizeof(_vector));
 
-	if(g_pGameInstance->getCurrentLevel() == (_uint)SCENEID::SCENE_STAGE1)
-		m_pVIBufferCom->SetUp_TextureOnShader("g_DiffuseTexture", m_pTexture);
-	else if(g_pGameInstance->getCurrentLevel() == (_uint)SCENEID::SCENE_STAGE2)
-		m_pVIBufferCom->SetUp_TextureOnShader("g_DiffuseTexture", m_pTexture2);
-	else if (g_pGameInstance->getCurrentLevel() == (_uint)SCENEID::SCENE_TEST_JS)
-		m_pVIBufferCom->SetUp_TextureOnShader("g_DiffuseTexture", m_pTexture);
+	m_pVIBufferCom->SetUp_TextureOnShader("g_DiffuseTexture", m_pTexture);
 
 	m_pVIBufferCom->Render(0);
 
@@ -86,12 +80,15 @@ HRESULT CSkyBox::SetUp_Components()
 	if (FAILED(__super::SetUp_Components((_uint)SCENEID::SCENE_STATIC, TEXT("VIBuffer_Cube"), TEXT("Com_VIBuffer"), (CComponent**)&m_pVIBufferCom))) return E_FAIL;
 
 	m_pTexture = g_pGameInstance->Clone_Component<CTexture>(0, L"Proto_Component_Texture");
-	m_pTexture->Change_Texture(L"Sky_Texture1");
 
-	m_pTexture2 = g_pGameInstance->Clone_Component<CTexture>(0, L"Proto_Component_Texture");
-	m_pTexture2->Change_Texture(L"Sky_Texture2");
+	if(m_iSceneID == (_uint)SCENEID::SCENE_STAGE1)
+		m_pTexture->Change_Texture(L"Sky_Texture1");
+	else if(m_iSceneID == (_uint)SCENEID::SCENE_STAGE2)
+		m_pTexture->Change_Texture(L"Sky_Texture2");
+	else if (m_iSceneID == (_uint)SCENEID::SCENE_TEST_JS)
+		m_pTexture->Change_Texture(L"Sky_Texture1");
 
-	if (m_pTexture == nullptr || m_pTexture2 == nullptr)
+	if (m_pTexture == nullptr)
 		MSGBOX("Failed To Creating SkyTexture");
 
 	return S_OK;
@@ -128,6 +125,5 @@ void CSkyBox::Free()
 	__super::Free();
 
 	Safe_Release(m_pTexture);
-	Safe_Release(m_pTexture2);
 	Safe_Release(m_pVIBufferCom);
 }

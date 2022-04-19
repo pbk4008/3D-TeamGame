@@ -39,7 +39,7 @@ HRESULT CEffect_HitParticle::NativeConstruct(const _uint _iSceneID, void* pArg)
 
 	if (nullptr != pArg)
 	{
-		memcpy(&m_Desc, pArg, sizeof(EFFECTDESC));
+		memcpy(&m_Desc, pArg, sizeof(EF_PAR_HIT_DESC));
 	}
 
 	//여기서 필요한 모든 컴포넌트들 Clone해옴
@@ -59,6 +59,7 @@ HRESULT CEffect_HitParticle::NativeConstruct(const _uint _iSceneID, void* pArg)
 	Desc.iNumInstance = m_Desc.iNumInstance;
 	Desc.fLifeTime = m_Desc.fMaxLifeTime;
 	Desc.fCurTime = m_Desc.fCurTime;
+	Desc.bGravity = m_Desc.bUsingGravity;
 
 	//m_pBuffer->Set_Desc(Desc);
 	//m_pBuffer->Particle_Reset();
@@ -126,14 +127,12 @@ HRESULT CEffect_HitParticle::Render()
 	m_pBuffer->SetUp_ValueOnShader("g_fLifeTime", &m_Desc.fMaxLifeTime, sizeof(_float));
 	m_pBuffer->SetUp_ValueOnShader("g_fCurTime", &m_Desc.fCurTime, sizeof(_float));
 
-	_float4 color = { 1.f , 0.6f, 0.3f ,1.f };
-	_float power = 1.5f;
-	m_pBuffer->SetUp_ValueOnShader("g_color", &color, sizeof(_float4));
-	m_pBuffer->SetUp_ValueOnShader("g_empower", &power, sizeof(_float));
+	m_pBuffer->SetUp_ValueOnShader("g_color", &m_Desc.ParticleColor, sizeof(_float4));
+	m_pBuffer->SetUp_ValueOnShader("g_empower", &m_Desc.Power, sizeof(_float));
 
 	m_pBuffer->SetUp_ValueOnShader("g_vCamPosition", (void*)&CamPos, sizeof(_vector));
 
-	m_pBuffer->Render(/*m_Desc.iRenderPassNum*/4); //4번이어야함,,게속,,
+	m_pBuffer->Render(m_Desc.iRenderPassNum); //4번이어야함,,게속,,
 
 	return S_OK;
 }
@@ -195,6 +194,8 @@ HRESULT CEffect_HitParticle::SetUp_Components()
 	m_backupDesc.iNumInstance = m_Desc.iNumInstance;
 	m_backupDesc.fLifeTime = m_Desc.fMaxLifeTime;
 	m_backupDesc.fCurTime = m_Desc.fCurTime;
+	m_backupDesc.bGravity = m_Desc.bUsingGravity;
+
 	if (FAILED(__super::SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_VIBuffer_PointInstance_Explosion", L"Com_VIBuffer", (CComponent**)&m_pBuffer, &m_backupDesc)))
 		return E_FAIL;
 

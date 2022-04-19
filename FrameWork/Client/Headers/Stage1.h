@@ -6,6 +6,8 @@
 BEGIN(Client)
 class CScenematicManager;
 class CScenematic;
+class CMeteor;
+class CIndicator_Manager;
 class CStage1 final : public CLevel
 {
 private:
@@ -27,11 +29,13 @@ private:
 	HRESULT Ready_GameManager(void);
 	HRESULT Ready_Data_Effect();
 	HRESULT Ready_Data_UI(const _tchar* pDataFilePath);
+	HRESULT Ready_Indicator();
 
 	HRESULT Ready_TriggerSystem(const _tchar* pTriggerFile);
 	HRESULT Ready_TriggerFunctionSetting();
 
 	HRESULT Ready_Cinema();
+
 public:
 	void Minus_MonsterCount() { m_iCountMonster--; }
 public:
@@ -55,6 +59,13 @@ public:
 	HRESULT Ready_Trigger_Jump();
 private:
 	HRESULT	Ready_Treasure_Chest();
+private:
+	HRESULT Ready_Meteor();
+	void Shoot_Meteor(_double dDeltaTime);
+	CMeteor* Find_Meteor();
+private:
+	HRESULT Ready_Portal();
+	void Open_Potal(_fvector vPos, _uint iMonTag);
 public:
 	static CStage1* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);
 private:
@@ -62,12 +73,21 @@ private:
 private:
 	CTriggerSystem<CStage1>* m_pTriggerSystem;
 	CScenematicManager* m_pScenemaManager;
+	CIndicator_Manager* m_pIndicatorManager = nullptr;
 	_bool m_bDebug;
 	_uint m_iCountMonster;
 	_bool m_bFirst;
 	_bool test = false;
 private:
 	CScenematic* m_pCinema = nullptr;
+private:/*for Meteor*/
+	vector<CMeteor*> m_vecMeteor;
+	vector<_float4> m_vecMeteorPos;
+	_float m_fAccMeteorSpawn;
+	_float m_fRandomMeteorSpawnTime;
+	_float m_fAccMeteorStartTime;
+private:
+	_int m_iPortalCount;
 };
 #endif
 

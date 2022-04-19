@@ -186,6 +186,9 @@ void CTransform::Face_Target(_fvector vTargetPos)
 
 void CTransform::Rotation_Axis(_fvector vAxis, _double TimeDelta)
 {
+	if (XMVector3Equal(vAxis, _vector{ 0.f, 0.f, 0.f, 0.f }))
+		return;
+
 	_matrix		RotationMatrix = XMMatrixRotationAxis(vAxis, m_TransformDesc.fRotationPerSec * (_float)TimeDelta );
 
 	_vector		vRight = Get_State(CTransform::STATE_RIGHT);
@@ -284,6 +287,19 @@ void CTransform::SetUp_Rotation(const _float3& _vEuler)
 	Set_State(STATE_LOOK, svLook);
 }
 
+void CTransform::SetUp_Rotation(const _fvector vQuaternion)
+{
+	_float fSizeX = Get_Scale(CTransform::STATE_RIGHT);
+	_float fSizeY = Get_Scale(CTransform::STATE_UP);
+	_float fSizeZ = Get_Scale(CTransform::STATE_LOOK);
+
+	_matrix matRotate = XMMatrixRotationQuaternion(vQuaternion);
+	
+	Set_State(CTransform::STATE_RIGHT, matRotate.r[0]*fSizeX);
+	Set_State(CTransform::STATE_UP, matRotate.r[1]*fSizeY);
+	Set_State(CTransform::STATE_LOOK, matRotate.r[2]*fSizeZ);
+}
+
 void CTransform::Scaling(_fvector vScale)
 {
 	_vector		vRight = XMVector3Normalize(Get_State(CTransform::STATE_RIGHT)) * XMVectorGetX(vScale);
@@ -322,6 +338,20 @@ void CTransform::ScaleZ_Up(_fvector vScale)
 {
 	_vector		vLook = Get_State(CTransform::STATE_LOOK) * XMVectorGetZ(vScale);
 	Set_State(CTransform::STATE_LOOK, vLook);
+}
+
+void CTransform::Scale_One()
+{
+	_matrix matWorld = XMLoadFloat4x4(&m_WorldMatrix);
+
+	_vector vRight = XMVector3Normalize(matWorld.r[0]);
+	_vector vUp = XMVector3Normalize(matWorld.r[1]);
+	_vector vLook = XMVector3Normalize(matWorld.r[2]);
+
+	Set_State(CTransform::STATE_RIGHT, vRight);
+	Set_State(CTransform::STATE_UP, vUp);
+	Set_State(CTransform::STATE_LOOK, vLook);
+
 }
 
 void CTransform::Fall(_double dDeltaTime)

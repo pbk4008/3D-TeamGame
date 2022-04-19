@@ -65,6 +65,8 @@ HRESULT CActor::NativeConstruct(const _uint _iSceneID, void* pArg)
 
 	m_dissolveTex = g_pGameInstance->Clone_Component<CTexture>(0, L"Proto_Component_Texture");
 	if (FAILED(m_dissolveTex->Change_Texture(L"DissovleBase"))) MSGBOX("Failed to Change Texture DissovleTex");
+	m_dissolveGradientTex = g_pGameInstance->Clone_Component<CTexture>(0, L"Proto_Component_Texture");
+	if (FAILED(m_dissolveGradientTex->Change_Texture(L"DissovleGradient"))) MSGBOX("Failed to Change Texture DissovleTex");
 
 	return S_OK;
 }
@@ -91,10 +93,10 @@ _int CActor::LateTick(_double TimeDelta)
 
 HRESULT CActor::Render()
 {
-	if (FAILED(__super::Render()))
-	{
-		return E_FAIL;
-	}
+	//if (FAILED(__super::Render()))
+	//{
+	//	return E_FAIL;
+	//}
 
 	return S_OK;
 }
@@ -129,7 +131,17 @@ HRESULT CActor::Set_SpawnPosition(const _float3 vPoint)
 	return S_OK;
 }
 
-HRESULT CActor::BindConstantBuffer(const wstring& camTag, SCB* bindbuffer, RIM* rimbuffer)
+HRESULT CActor::Set_SpawnPosition(_fvector vPos)
+{
+	if (!m_pTransform)
+		return E_FAIL;
+
+	m_pTransform->Set_State(CTransform::STATE_POSITION, vPos);
+
+	return S_OK;
+}
+
+HRESULT CActor::BindConstantBuffer(const wstring& camTag, SCB* bindbuffer, RIM* rimbuffer, MOTIONBLUR* motionbuffer)
 {
 	if (m_pTransform == nullptr)
 		MSGBOX("Failed To Apply Actor Transform nullptr");
@@ -158,6 +170,12 @@ HRESULT CActor::BindConstantBuffer(const wstring& camTag, SCB* bindbuffer, RIM* 
 		if (FAILED(m_pModel->SetUp_ValueOnShader("g_rimintensity", &rimbuffer->rimintensity, sizeof(_float)))) MSGBOX("Failed To Apply Actor ConstantBuffer");
 		if (FAILED(m_pModel->SetUp_ValueOnShader("g_rimcolor", &rimbuffer->rimcol, sizeof(_float4)))) MSGBOX("Failed To Apply Actor ConstantBuffer");
 		if (FAILED(m_pModel->SetUp_ValueOnShader("g_camdir", &rimbuffer->camdir, sizeof(_float4)))) MSGBOX("Failed To Apply Actor ConstantBuffer");
+	}
+
+	if (motionbuffer)
+	{
+		if (FAILED(m_pModel->SetUp_ValueOnShader("g_RotationMat", &XMMatrixTranspose(XMLoadFloat4x4(&motionbuffer->RotationMat)), sizeof(_matrix)))) MSGBOX("Failed To Apply Actor ConstantBuffer");
+		if (FAILED(m_pModel->SetUp_ValueOnShader("g_PreWorldViewProj", &XMMatrixTranspose(XMLoadFloat4x4(&motionbuffer->preWorldViewPorjMat)), sizeof(_matrix)))) MSGBOX("Failed To Apply Actor ConstantBuffer");
 	}
 
 	return S_OK;
@@ -230,6 +248,10 @@ void CActor::Set_AttackDesc(const ATTACKDESC& _tAttackDesc)
 	m_tAttackDesc = _tAttackDesc;
 }
 
+void CActor::Set_FootPosition(const _float3& _vPos)
+{
+}
+
 void CActor::RimlightCheck(_bool check)
 {
 	m_rimcheck = check;
@@ -247,17 +269,14 @@ void CActor::SetRimIntensity(_float time)
 
 HRESULT CActor::DissolveOn(_float dissolveSpeed)
 {
-	if (m_bdissolve == true)
+	m_lifetime += (g_fDeltaTime * dissolveSpeed);
+	if (m_lifetime >= 1.f)
 	{
-		m_lifetime += (g_fDeltaTime * dissolveSpeed);
-		if (m_lifetime >= 1.f)
-		{
-			m_lifetime = 1.f;
-			/*m_bdissolve = false;*/
-		}
-		if (FAILED(m_pModel->SetUp_ValueOnShader("g_dissolvetime", &m_lifetime, sizeof(_float)))) MSGBOX("Failed to Apply dissolvetime");
-		if (FAILED(m_pModel->SetUp_TextureOnShader("g_DissolveTex", m_dissolveTex, 0))) MSGBOX("Failed to Apply dissolveTex");
+		m_lifetime = 1.f;
 	}
+	if (FAILED(m_pModel->SetUp_ValueOnShader("g_dissolvetime", &m_lifetime, sizeof(_float)))) MSGBOX("Failed to Apply dissolvetime");
+	if (FAILED(m_pModel->SetUp_TextureOnShader("g_DissolveTex", m_dissolveTex, 0))) MSGBOX("Failed to Apply dissolveTex");
+	if (FAILED(m_pModel->SetUp_TextureOnShader("g_DissolveGrTex", m_dissolveGradientTex, 0))) MSGBOX("Failed to Apply dissolveTex");
 
 	return S_OK;
 }
@@ -270,10 +289,18 @@ void CActor::Parry(const PARRYDESC& _tParryDesc)
 {
 }
 
+void CActor::Execution()
+{
+}
+
+void CActor::Execution(CActor* _pOther, CHierarchyNode* _pFixedBone)
+{
+}
+
 void CActor::Free()
 {
+	CGameObject::Free();
 	Safe_Release(m_pModel);
 	Safe_Release(m_dissolveTex);
-	
-	CGameObject::Free();
+	Safe_Release(m_dissolveGradientTex);
 }

@@ -111,6 +111,32 @@ const _bool CClient_Observer::Get_PlayerAttackAnimStart()
 	return m_bAttackAnimStart;
 }
 
+const _bool CClient_Observer::Get_PlayerFrontBackCheck(_fvector vPos)
+{
+	_vector vPlayerPos = Get_PlayerPos();
+	_vector vDir = vPos - vPlayerPos;
+	vDir = XMVector3Normalize(vDir);
+
+	_matrix matMatrix = Get_PlayerWorldMatrix();
+	_vector vLook = XMVector3Normalize(matMatrix.r[2]);
+
+	_float fDot = XMVectorGetX(XMVector3Dot(vDir, vLook));
+
+	if (fDot < 0.f)
+		return false;
+
+	return true;
+}
+
+_fvector CClient_Observer::Get_Dir(_fvector vPos)
+{
+	_vector vPlayerPos = Get_PlayerPos();
+	_vector vDir = vPos - vPlayerPos;
+	vDir = XMVector3Normalize(vDir);
+
+	return vDir;
+}
+
 void CClient_Observer::Set_IsAttack(const _bool bAttack)
 {
 	if (!m_pPlayer)

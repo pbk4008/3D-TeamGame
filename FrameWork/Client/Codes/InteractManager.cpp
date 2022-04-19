@@ -67,6 +67,12 @@ void CInteractManager::DropItemUpdate(void)
 {
 }
 
+void CInteractManager::Remove_Interactable()
+{
+	if(!m_vecInteractableObjects.empty())
+		m_vecInteractableObjects.clear();
+}
+
 void CInteractManager::AddInteractObject(CInteractableObject* pInteractableObject)
 {
 	assert(pInteractableObject);
@@ -75,5 +81,5 @@ void CInteractManager::AddInteractObject(CInteractableObject* pInteractableObjec
 
 void CInteractManager::Free()
 {
-	m_vecInteractableObjects.clear();
+	Remove_Interactable();
 }

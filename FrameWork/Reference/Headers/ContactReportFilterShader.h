@@ -41,7 +41,12 @@ PxFilterFlags contactReportFilterShader(PxFilterObjectAttributes attributes0, Px
 			| PxPairFlag::eNOTIFY_TOUCH_LOST
 			| PxPairFlag::eNOTIFY_CONTACT_POINTS;
 		//}
+
+		return PxFilterFlag::eDEFAULT;
 	}
+
+	pairFlags = PxPairFlag::eSOLVE_CONTACT
+		| PxPairFlag::eDETECT_DISCRETE_CONTACT;
 
 	return PxFilterFlag::eDEFAULT;
 }

@@ -22,7 +22,23 @@ _int CDodgeSlide::Tick(const _double& _dDeltaTime)
 
 	_uint iCurKeyFrameIndex = m_pAnimationController->Get_CurKeyFrameIndex();
 	if (iCurKeyFrameIndex >= 10)
-		m_pSilvermane->Set_Radial(false);
+	{
+		if (m_radialcnt > 1)
+		{
+			m_radialcnt--;
+			m_pSilvermane->Set_RadialCnt(m_radialcnt);
+		}
+		else
+			m_pSilvermane->Set_Radial(false);
+	}
+	else
+	{
+		if (m_radialcnt < 8)
+		{
+			m_radialcnt++;
+			m_pSilvermane->Set_RadialCnt(m_radialcnt);
+		}
+	}
 
 	switch (m_eDir)
 	{
@@ -73,6 +89,8 @@ HRESULT CDodgeSlide::EnterState(void* _pArg)
 	if (_pArg)
 		memcpy_s(&m_eDir, sizeof(EDir), _pArg, sizeof(EDir));
 
+	_vector Pos = { 0.f, 0.5f, 0.f, 0.f };
+	m_pSilvermane->Active_Effect((_uint)EFFECT::DASH, Pos);
 
 	CCameraShake::SHAKEEVENT tShakeEvent;
 	tShakeEvent.fDuration = 1.f;
@@ -142,9 +160,10 @@ HRESULT CDodgeSlide::EnterState(void* _pArg)
 	m_pSilvermane->Set_IsDash(true);
 	g_pShakeManager->Shake(tShakeEvent, m_pTransform->Get_State(CTransform::STATE_POSITION));
 	m_pSilvermane->Set_Radial(true);
-	m_pSilvermane->Set_RadialCnt(5);
 	m_pSilvermane->Set_IsTrasceCamera(false);
 	m_pAnimationController->Set_PlaySpeed(1.2f);
+
+	g_pGameInstance->BlendSound(L"Player_Dash", L"Player_Dash_1", CSoundMgr::CHANNELID::PLAYER1, CSoundMgr::CHANNELID::PLAYER2);
 	return S_OK;
 }
 

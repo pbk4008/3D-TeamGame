@@ -19,7 +19,9 @@ public:
 	virtual _int Tick(_double _dDeltaTime) override;
 	virtual _int LateTick(_double _dDeltaTime) override;
 	virtual HRESULT Render() override;
-	virtual HRESULT BindConstantBuffer(const wstring& camTag, SCB* consbuffer = nullptr, RIM* rimlightbuffer = nullptr);
+	virtual HRESULT	Render_Shadow() override;
+	virtual HRESULT	Render_Velocity() override;
+	virtual HRESULT BindConstantBuffer(const wstring& camTag, SCB* consbuffer = nullptr, RIM* rimlightbuffer = nullptr, MOTIONBLUR* motionbuffer = nullptr);
 	virtual HRESULT	BindLightBuffer();
 	// dissolve
 	virtual HRESULT	WeaponToAppear();
@@ -85,9 +87,13 @@ protected:
 	CTexture*		m_dissolveTex = nullptr;
 	_uint			m_dissolvepass = 1;
 
+	// motion blur
+	_float			m_timer = 0.f;
+
 	//rimlight
 	_bool			m_rimcheck = false;
 	_float			m_rimintensity = 8.f;
+
 	_float3			m_vEndPos{};
 
 public:

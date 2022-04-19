@@ -12,6 +12,8 @@ cbuffer Matrices
 
 texture2D g_DiffuseTexture;
 texture2D g_MaskTexture;
+bool g_bOpenCheck;
+float g_fAccTime;
 
 sampler DefaultSampler = sampler_state
 {
@@ -19,7 +21,12 @@ sampler DefaultSampler = sampler_state
     AddressU = wrap;
     AddressV = wrap;
 };
-
+sampler MaskSampler = sampler_state
+{
+    filter = min_mag_mip_linear;
+    AddressU = clamp;
+  AddressV = wrap;
+};
 /* 1. m_pDeviceContext->DrawIndexed() */
 /* 2. 인덱스가 가지고 있던 인덱스 세개에 해당하는 정점 세개를 정점버퍼로부터 얻어온다. */
 /* 3. VS_MAIN함수를 호출하면서 가져온 정점 세개중 하나씩 전달해준다.  */
@@ -33,6 +40,7 @@ struct VS_OUT
 {
     float4 vPosition : SV_POSITION;
     float2 vTexUV : TEXCOORD0;
+    float2 vMaskUV : TEXCOORD1;
 };
 
 
@@ -50,7 +58,7 @@ VS_OUT VS_MAIN(VS_IN In)
 		
     Out.vPosition = mul(vector(In.vPosition, 1.f), matWVP);
     Out.vTexUV = In.vTexUV;
-	
+    Out.vMaskUV = In.vTexUV;
     return Out;
 }
 
@@ -62,6 +70,7 @@ struct PS_IN
 {
     float4 vPosition : SV_POSITION;
     float2 vTexUV : TEXCOORD0;
+    float2 vMaskUV : TEXCOORD1;
 };
 
 struct PS_OUT
@@ -77,8 +86,13 @@ PS_OUT PS_MAIN(PS_IN In)
     PS_OUT Out = (PS_OUT) 0;
 
     vector vDiffuse = g_DiffuseTexture.Sample(DefaultSampler, In.vTexUV);
-    vector vMask = g_MaskTexture.Sample(DefaultSampler, In.vTexUV);
-
+    vector vMask = g_MaskTexture.Sample(DefaultSampler, In.vMaskUV);
+    //vector vMask = g_MaskTexture.Sample(MaskSampler, In.vMaskUV);
+    //if(!g_bOpenCheck)
+    //    vMask = g_MaskTexture.Sample(MaskSampler, In.vMaskUV * 2);
+    //else
+    //    vMask = g_MaskTexture.Sample(MaskSampler, In.vMaskUV );
+    //    
     vDiffuse.a = vMask.r;
 
     Out.vColor = vDiffuse;

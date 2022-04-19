@@ -140,11 +140,14 @@ _int CMonster_BronzeAnimus::Tick(_double _dDeltaTime)
 			if (1 < m_pAnimator->Get_AnimController()->Get_CurKeyFrameIndex() && 2 >= m_pAnimator->Get_AnimController()->Get_CurKeyFrameIndex())
 				Active_Effect((_uint)EFFECT::DEATH);
 
-			if (m_pAnimator->Get_CurrentAnimation()->Is_Finished())
+			if (m_pAnimator->Get_CurrentAnimation()->Is_Finished() && m_lifetime <= 0.f)
 			{
-				Set_Remove(true);
+				m_bdissolve = true;
 				m_pPanel->Set_UIRemove(true);
 			}
+
+			if (m_lifetime >= 1.f)
+				Set_Remove(true);
 		}
 		else
 		{
@@ -207,6 +210,11 @@ _int CMonster_BronzeAnimus::LateTick(_double _dDeltaTime)
 
 HRESULT CMonster_BronzeAnimus::Render()
 {
+	if (m_bdissolve == true)
+		CActor::DissolveOn(0.5f);
+
+	if (FAILED(m_pModel->SetUp_ValueOnShader("g_bdissolve", &m_bdissolve, sizeof(_bool)))) MSGBOX("Failed to Apply dissolvetime");
+
 	SCB desc;
 	ZeroMemory(&desc, sizeof(SCB));
 
@@ -588,7 +596,8 @@ void CMonster_BronzeAnimus::Hit(CCollision& collision)
 		_vector MonsterPos = m_pTransform->Get_State(CTransform::STATE_POSITION);
 		_vector Pos = { XMVectorGetX(MonsterPos), XMVectorGetY(MonsterPos) + 3.f, XMVectorGetZ(MonsterPos), 1.f };
 		Active_Effect((_uint)EFFECT::HIT, Pos);
-		Active_Effect((_uint)EFFECT::FLOATING, Pos);
+		Active_Effect((_uint)EFFECT::HIT_FLOATING, Pos);
+		Active_Effect((_uint)EFFECT::HIT_FLOATING_2, Pos);
 
 		//TODO::¼öÄ¡Á¤ÇØ¼­¹Ù²ãÁà¾ßµÊ
 		m_fGroggyGauge += 2.f;

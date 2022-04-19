@@ -23,11 +23,13 @@ public:
 	virtual _int Tick(_double _dDeltaTime) override;
 	virtual _int LateTick(_double _dDeltaTime) override;
 	virtual HRESULT Render() override;
+public:
+	void Open_Potal(_uint iMonTag, _fvector vPos);
 private:
 	HRESULT Ready_Component();
 private:
 	_uint Scaling(_double dDeltaTime);
-	_uint Create_Meteor(_double dDeltaTime);
+	_uint Spawn_Monster(_double dDeltaTime);
 	_uint Remove_Portal(_double dDeltaTime);
 public:
 	static CPotal* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContex);
@@ -42,10 +44,9 @@ private:/*For Create Meteor*/
 	_bool m_bCreate;
 	_bool m_bRetain;
 	_float m_fAccRetain;
-private:
-	_bool m_bSpawn;
-	_float m_fRandSpawnTime;
-	_float m_fAccSpawnTime;
+private:/*For Open Potal*/
+	_bool m_bOpenCheck;
+	_uint m_iMonTag;
 };
 END
 #endif

@@ -39,39 +39,32 @@ _int CTraverse_JumpNodeJog::Tick(const _double& _dDeltaTime)
 				m_pAnimationController->Set_PlaySpeed(0.2f);
 			else
 				m_pAnimationController->Set_PlaySpeed(6.f);
-
-			m_pSilvermane->Set_Radial(true);
 			
-			if(iCurKeyFrameIndex <= 32)
-				m_pSilvermane->Set_RadialCnt(6);
+			m_pSilvermane->Set_Radial(true);
+			if (m_radialcnt <= 12)
+			{
+				m_pSilvermane->Set_RadialCnt(m_radialcnt);
+				m_radialcnt++;
+			}
 		}
 	}
 	else
 	{
-		m_pSilvermane->Set_Radial(false);
-		m_pSilvermane->Set_IsFall(true);
+		if (m_radialcnt > 1)
+		{
+			m_pSilvermane->Set_RadialCnt(m_radialcnt);
+			m_radialcnt--;
+		}
+		else if (m_radialcnt == 1)
+		{
+			m_pSilvermane->Set_Radial(false);
+			m_pSilvermane->Set_IsFall(true);
+		}
 	}
 
 	if (m_iCutIndex < iCurKeyFrameIndex)
 	{
-		if (m_pSilvermane->IsEquipWeapon())
-		{
-			switch (m_pSilvermane->Get_WeaponType())
-			{
-			case CWeapon::EType::Sword_1H:
-				if (FAILED(m_pStateController->Change_State(L"1H_SwordIdle")))
-					return E_FAIL;
-				break;
-			case CWeapon::EType::Hammer_2H:
-				if (FAILED(m_pStateController->Change_State(L"2H_HammerIdle")))
-					return E_FAIL;
-				break;
-			}
-			return STATE_CHANGE;
-		}
-		if (FAILED(m_pStateController->Change_State(L"Idle")))
-			return E_FAIL;
-		return STATE_CHANGE;
+		return ToIdle();
 	}
 
 	return _int();

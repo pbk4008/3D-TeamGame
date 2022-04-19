@@ -2,6 +2,7 @@
 #include "2H_HammerAttackSprintR1.h"
 
 #include "StateController.h"
+#include "MeshEffect_Test.h"
 
 C2H_HammerAttackSprintR1::C2H_HammerAttackSprintR1(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
 	: C2H_HammerAttack(_pDevice, _pDeviceContext)
@@ -39,6 +40,15 @@ _int C2H_HammerAttackSprintR1::Tick(const _double& _dDeltaTime)
 
 	if (35 < iCurKeyFrameIndex && !m_isRangeAttack)
 	{
+		// ¸Þ½¬ ÀÌÆåÆ®
+		_vector svPos = m_pTransform->Get_State(CTransform::STATE_POSITION);
+		_vector svLook = m_pTransform->Get_State(CTransform::STATE_LOOK);
+		_vector svUp = m_pTransform->Get_State(CTransform::STATE_UP);
+		CMeshEffect::DESC tMeshEffectDesc;
+		XMStoreFloat3(&tMeshEffectDesc.vPosition, svPos + (svLook * 2.f) + (svUp * 0.1f));
+		if (FAILED(g_pGameInstance->Add_GameObjectToLayer(m_pSilvermane->getSceneID(), L"Layer_Effect", L"Proto_GameObject_MeshEffect_Test", &tMeshEffectDesc)))
+			return E_FAIL;
+
 		m_pSilvermane->RangeAttack();
 		m_isRangeAttack = true;
 	}

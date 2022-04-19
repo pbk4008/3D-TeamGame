@@ -23,9 +23,9 @@ CEffectTool_Dlg::CEffectTool_Dlg(CWnd* pParent /*=nullptr*/)
 	, m_Age(0)
 	, m_ParticleSizeX(1.f)
 	, m_ParticleSizeY(1.f)
-	, m_fRandomPosX(1)
-	, m_fRandomPosY(1)
-	, m_fRandomPosZ(1)
+	, m_fRandomPosX(0)
+	, m_fRandomPosY(0)
+	, m_fRandomPosZ(0)
 	, m_fRandomDirX(360)
 	, m_fRandomDirY(360)
 	, m_fRandomDirZ(360)
@@ -34,7 +34,7 @@ CEffectTool_Dlg::CEffectTool_Dlg(CWnd* pParent /*=nullptr*/)
 	, m_fRandomMinusDirY(1)
 	, m_fRandomMinusDirZ(1)
 	, m_EffectName(_T("Layer_Effect"))
-	, m_RenderPassNum(1)
+	, m_RenderPassNum(4)
 	, m_frame(1)
 	, m_ImagecountX(1)
 	, m_ImagecountY(1)
@@ -80,9 +80,9 @@ void CEffectTool_Dlg::DoDataExchange(CDataExchange* pDX)
 	DDV_MinMaxFloat(pDX, m_Velocity, 0, 99999);
 	DDV_MinMaxFloat(pDX, m_ParticleSizeX, 0.1, 99999);
 	DDV_MinMaxFloat(pDX, m_ParticleSizeY, 0.1, 99999);
-	DDV_MinMaxFloat(pDX, m_fRandomPosX, 1, 99999);
-	DDV_MinMaxFloat(pDX, m_fRandomPosY, 1, 99999);
-	DDV_MinMaxFloat(pDX, m_fRandomPosZ, 1, 99999);
+	DDV_MinMaxFloat(pDX, m_fRandomPosX, 0, 99999);
+	DDV_MinMaxFloat(pDX, m_fRandomPosY, 0, 99999);
+	DDV_MinMaxFloat(pDX, m_fRandomPosZ, 0, 99999);
 	DDV_MinMaxFloat(pDX, m_fRandomDirX, 1, 99999);
 	DDV_MinMaxFloat(pDX, m_fRandomDirY, 1, 99999);
 	DDV_MinMaxFloat(pDX, m_fRandomDirZ, 1, 99999);
@@ -265,12 +265,16 @@ void CEffectTool_Dlg::OnBnClickedButtonApply()
 	_tcscpy_s(m_EffectDesc.ShaderFilePath, ShaderFolderPath.c_str());
 	_tcscpy_s(m_EffectDesc.ShaderFileName, ShaderFileName.c_str());
 	_tcscpy_s(m_EffectDesc.ShaderFullFilePath, ShaderFullPath.c_str());
-	
+
+
 	wstring Name = m_strPickFileName;
-	wstring FullName = L"Prototype_GameObject_Effect"/* + Name*/;
+	//wstring FullName = L"Prototype_GameObject_Effect"/* + Name*/;
 	//wstring FullName = L"Prototype_GameObject_Effect_Floating"/* + Name*/;
+	wstring FullName = L"Prototype_GameObject_Effect_Floating_Disappear"/* + Tag*/;
+	//wstring FullName = L"Prototype_GameObject_Effect_Floating_Speed"/* + Name*/; //파티클늦게나오는거일수록 속도빠르게주고싶을때 
 	//wstring FullName = L"Prototype_GameObject_Effect_Env_Floating"/* + Name*/;
 	//wstring FullName = L"Prototype_GameObject_Effect_Respawn"/* + Name*/;
+	//wstring FullName = L"Prototype_GameObject_Effect_Respawn_Up"/* + Name*/;
 
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer(TOOL_LEVEL::TOOL_LEVEL_GAMEPLAY, L"Layer_Effect", FullName, &m_EffectDesc)))
 	{
@@ -529,14 +533,17 @@ void CEffectTool_Dlg::OnBnClickedButtonLoad()
 		wstring strFilePath = Dlg.GetPathName();
 		g_pGameInstance->LoadFile<CMFCEffect::EFFECTDESC>(m_vecEffect, strFilePath);
 	}
-
+	
 	wstring Tag = m_vecEffect[0].TextureTag;
-	wstring FullName = L"Prototype_GameObject_Effect"/* + Tag*/;
+	//wstring FullName = L"Prototype_GameObject_Effect"/* + Tag*/;
 	//wstring FullName = L"Prototype_GameObject_Effect_Floating"/* + Tag*/;
+	wstring FullName = L"Prototype_GameObject_Effect_Floating_Disappear"/* + Tag*/;
+	//wstring FullName = L"Prototype_GameObject_Effect_Floating_Speed"/* + Name*/; //파티클늦게나오는거일수록 속도빠르게주고싶을때 
 	//wstring FullName = L"Prototype_GameObject_Effect_Env_Floating"/* + Name*/;
 	//wstring FullName = L"Prototype_GameObject_Effect_Respawn"/* + Name*/;
-	
+	//wstring FullName = L"Prototype_GameObject_Effect_Respawn_Up"/* + Name*/;
 
+	
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer(TOOL_LEVEL::TOOL_LEVEL_GAMEPLAY, L"Layer_Effect", FullName, &m_vecEffect[0])))
 	{
 		ERR_MSG(L"Failed to Creating in CEffectTool_Dlg::OnBnClickedButtonLoad()");

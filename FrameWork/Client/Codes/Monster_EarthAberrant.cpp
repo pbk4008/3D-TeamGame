@@ -92,13 +92,12 @@ HRESULT CMonster_EarthAberrant::NativeConstruct(const _uint _iSceneID, void* _pA
 	m_fMaxHp = 5.f;
 	m_fCurrentHp = m_fMaxHp;
 
-	m_fMaxGroggyGauge = 10.f;
+	m_fMaxGroggyGauge = 100.f;
 	m_fGroggyGauge = 0.f;
 
 	m_pPanel->Set_HpBar(Get_HpRatio());
 	m_pPanel->Set_GroggyBar(Get_GroggyGaugeRatio());
 
-	
 	m_tAttackDesc.iLevel = 1;
 	m_tAttackDesc.fDamage = 3.f;
 
@@ -155,11 +154,15 @@ _int CMonster_EarthAberrant::Tick(_double _dDeltaTime)
 		if (L"Death" == m_pStateController->Get_CurStateTag())
 		{
 			if (m_pAnimatorCom->Get_CurrentAnimation()->Is_Finished() && 
-				!m_pAnimatorCom->Get_IsLerp())
+				!m_pAnimatorCom->Get_IsLerp() && m_lifetime <= 0.f)
 			{
-				Set_Remove(true);
 				m_pPanel->Set_UIRemove(true);
+				m_bdissolve = true;
 			}
+
+			if (m_lifetime >= 1.f)
+				Set_Remove(true);
+
 			if (9 <= m_pAnimatorCom->Get_AnimController()->Get_CurKeyFrameIndex() 
 				&& 10 > m_pAnimatorCom->Get_AnimController()->Get_CurKeyFrameIndex())
 			{
@@ -202,16 +205,14 @@ _int CMonster_EarthAberrant::Tick(_double _dDeltaTime)
 		}
 	}
 
-
-
-	if (g_pGameInstance->getkeyDown(DIK_NUMPAD5))
+	/*if (g_pGameInstance->getkeyDown(DIK_NUMPAD5))
 	{
 		Active_Effect_Target((_uint)EFFECT::ATTACK_LEFT, g_pObserver->Get_PlayerPos());
 	}
 	if (g_pGameInstance->getkeyDown(DIK_NUMPAD6))
 	{
 		Active_Effect_Target((_uint)EFFECT::ATTACK_RIGHT, g_pObserver->Get_PlayerPos());
-	}
+	}*/
 
 	return 0;
 }
@@ -246,6 +247,11 @@ _int CMonster_EarthAberrant::LateTick(_double _dDeltaTime)
 
 HRESULT CMonster_EarthAberrant::Render()
 {
+	if (m_bdissolve == true)
+		CActor::DissolveOn(0.5f);
+
+	if (FAILED(m_pModel->SetUp_ValueOnShader("g_bdissolve", &m_bdissolve, sizeof(_bool)))) MSGBOX("Failed to Apply dissolvetime");
+
 	wstring wstrCamTag = g_pGameInstance->Get_BaseCameraTag();
 	for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
 	{
@@ -667,13 +673,18 @@ void CMonster_EarthAberrant::Hit(const ATTACKDESC& _tAttackDesc)
 		m_pStateController->Change_State(L"Flinch_Left");
 	}
 
-	Active_Effect((_uint)EFFECT::HIT);
-	Active_Effect((_uint)EFFECT::FLOATING);
+	
 }
 
 void CMonster_EarthAberrant::Parry(const PARRYDESC& _tParryDesc)
 {
 	m_fGroggyGauge += (m_fMaxGroggyGauge - m_fGroggyGauge);
+}
+
+void CMonster_EarthAberrant::Execution()
+{
+	m_pAnimatorCom->Change_AnyEntryAnimation(ATTACK_EXECUTION);
+	m_pCharacterController->Remove_CCT();
 }
 
 void CMonster_EarthAberrant::Set_IsAttack(const _bool _isAttack)
@@ -687,6 +698,11 @@ void CMonster_EarthAberrant::Set_Remove(_bool bCheck)
 {
 	m_bRemove = bCheck;
 	m_pPanel->Set_UIRemove(bCheck);
+}
+
+void CMonster_EarthAberrant::Set_FootPosition(const _float3& _vPos)
+{
+	m_pCharacterController->setFootPosition(_vPos);
 }
 
 CMonster_EarthAberrant* CMonster_EarthAberrant::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
@@ -713,11 +729,11 @@ CGameObject* CMonster_EarthAberrant::Clone(const _uint _iSceneID, void* _pArg)
 
 void CMonster_EarthAberrant::Free()
 {
+	__super::Free();
+
 	Safe_Release(m_pPanel);
 	Safe_Release(m_pCharacterController);
 	Safe_Release(m_pWeapon);
 	Safe_Release(m_pStateController);
 	Safe_Release(m_pAnimatorCom);
-
-	__super::Free();
 }

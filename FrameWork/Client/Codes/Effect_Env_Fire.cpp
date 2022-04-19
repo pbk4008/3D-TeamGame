@@ -129,7 +129,7 @@ HRESULT CEffect_Env_Fire::Render()
 	_uint iFrame = (_uint)m_Desc.fFrame;
 	m_pBuffer->SetUp_ValueOnShader("g_iFrame", &iFrame, sizeof(_uint));
 	
-	_float weight = 0.8f;
+	_float weight = 0.3f;
 	m_pBuffer->SetUp_ValueOnShader("g_Weight", &weight, sizeof(_float));
 
 	m_pBuffer->Render(1);

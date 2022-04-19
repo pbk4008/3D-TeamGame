@@ -45,8 +45,7 @@ _int CTrailEffect_Normal::LateTick(_double _dDeltaTime)
 	if (NO_EVENT != iProgress)
 		return iProgress;
 
-	if (m_isRender)
-		m_pRenderer->Add_RenderGroup(CRenderer::RENDER_ALPHA, this);
+	m_pRenderer->Add_RenderGroup(CRenderer::RENDER_NONALPHA, this);
 
 	return _int();
 }
@@ -107,12 +106,17 @@ HRESULT CTrailEffect_Normal::Render()
 	smatView = XMMatrixTranspose(g_pGameInstance->Get_Transform(wstrCamTag, TRANSFORMSTATEMATRIX::D3DTS_VIEW));
 	smatProj = XMMatrixTranspose(g_pGameInstance->Get_Transform(wstrCamTag, TRANSFORMSTATEMATRIX::D3DTS_PROJECTION));
 
+	_float4 color = _float4(1, 0, 0, 1);
+	_float empower = 0.7f;
 	m_pVIBuffer->SetUp_ValueOnShader("g_WorldMatrix", &smatWorld, sizeof(_matrix));
 	m_pVIBuffer->SetUp_ValueOnShader("g_ViewMatrix", &smatView, sizeof(_matrix));
 	m_pVIBuffer->SetUp_ValueOnShader("g_ProjMatrix", &smatProj, sizeof(_matrix));
+	m_pVIBuffer->SetUp_ValueOnShader("g_color", &color, sizeof(_float4));
+	m_pVIBuffer->SetUp_ValueOnShader("g_empower", &empower, sizeof(_float));
+	m_pVIBuffer->SetUp_ValueOnShader("g_weight", &empower, sizeof(_float));
 	m_pVIBuffer->SetUp_TextureOnShader("g_DiffuseTexture", m_pTexture);
 
-	m_pVIBuffer->Render_Curve(0);
+	m_pVIBuffer->Render_Curve(3);
 	m_listCurved.clear();
 
 	return S_OK;

@@ -62,16 +62,18 @@ HRESULT CNeedle::NativeConstruct(const _uint _iSceneID, void* _pArg)
 	// 트레일 이펙트 달기
 	CTrailEffect::DESC tTrailDesc;
 	tTrailDesc.pOwnerTransform = m_pTransform;
-	tTrailDesc.fLength = 1.f;
+	tTrailDesc.fLength = 0.5f;
 	XMStoreFloat4x4(&tTrailDesc.matPivot, XMMatrixTranslation(0.f, 0.f, 2.f));
-	tTrailDesc.wstrTextureTag = L"WispTrail_Thin";
+	tTrailDesc.wstrTextureTag = L"Fire_02";
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer(m_iSceneID, L"Layer_Effect", L"Proto_GameObject_TrailEffect_Normal", &tTrailDesc, (CGameObject**)&m_pTrailEffect_Normal)))
 		MSGBOX(L"노말 트레일 생성 실패. from Needle");
+	Safe_AddRef(m_pTrailEffect_Normal);
 	tTrailDesc.fLength = 1.f;
-	XMStoreFloat4x4(&tTrailDesc.matPivot, XMMatrixTranslation(0.f, 0.f, 2.f));
+	XMStoreFloat4x4(&tTrailDesc.matPivot, XMMatrixTranslation(0.f, 0.f, 1.5f));
 	tTrailDesc.wstrTextureTag = L"TrailBase";
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer(m_iSceneID, L"Layer_Effect", L"Proto_GameObject_TrailEffect_Distortion", &tTrailDesc, (CGameObject**)&m_pTrailEffect_Distortion)))
 		MSGBOX(L"디스토션 트레일 생성 실패. from Needle");
+	Safe_AddRef(m_pTrailEffect_Distortion);
 
 	//Light
 	LIGHTDESC			LightDesc;
@@ -80,7 +82,7 @@ HRESULT CNeedle::NativeConstruct(const _uint _iSceneID, void* _pArg)
 	LightDesc.fRange = 7.f;
 	LightDesc.vDiffuse = _float4(1.f, 0.7f, 0.5f, 1.f);
 	LightDesc.vSpecular = _float4(0.8f, 0.8f, 0.8f, 1.f);
-	LightDesc.vAmbient = _float4(0.6f, 0.6f, 0.6f, 1.f);
+	LightDesc.vAmbient = _float4(1.f, 1.f, 1.f, 1.f);
 	XMStoreFloat3(&LightDesc.vPosition,m_pTransform->Get_State(CTransform::STATE_POSITION));
 
 	if (nullptr == m_pLight)
@@ -88,7 +90,7 @@ HRESULT CNeedle::NativeConstruct(const _uint _iSceneID, void* _pArg)
 		if (FAILED(g_pGameInstance->Add_Light(m_pDevice, m_pDeviceContext, LightDesc, &m_pLight)))
 			MSGBOX("Failed To Adding PointLight");
 	}
-	
+	Safe_AddRef(m_pLight);
 	m_pLight->Set_Show(false);
 	m_fLightRange = LightDesc.fRange;
 
@@ -116,7 +118,7 @@ _int CNeedle::Tick(_double _dDeltaTime)
 
 	if (m_bLight && 0.f <= m_fLightRange)
 	{
-		m_fLightRange -= (_float)_dDeltaTime * 10.f;
+		m_fLightRange -= (_float)_dDeltaTime * 20.f;
 		m_pLight->Set_Range(m_fLightRange);
 	}
 
@@ -134,8 +136,6 @@ _int CNeedle::LateTick(_double _dDeltaTime)
 {
 	if (0 > __super::LateTick(_dDeltaTime))
 		return -1;
-
-	m_pTrailEffect_Normal->Set_Texture(L"Fire_02");
 
 	if (m_isTrail)
 	{
@@ -156,6 +156,10 @@ _int CNeedle::LateTick(_double _dDeltaTime)
 
 	if(m_pRenderer)
 		m_pRenderer->Add_RenderGroup(CRenderer::RENDER_NONALPHA, this);
+
+	if (m_pRenderer && m_pRenderer->Get_RenderButton(CRenderer::VELOCITYBLUR) == true)
+		m_pRenderer->Add_RenderGroup(CRenderer::RENDER_VELOCITY, this);
+	
 
 	return _int();
 }
@@ -185,16 +189,21 @@ HRESULT CNeedle::Render()
 	for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
 		m_pModel->Render(i, 0);
 
+	if (m_pRenderer->Get_RenderButton(CRenderer::VELOCITYBLUR) == false)
+		m_PreWroldMat = m_pTransform->Get_WorldMatrix();
 	return S_OK;
 }
 
 HRESULT CNeedle::Render_Shadow()
 {
-	wstring wstrCamTag = g_pGameInstance->Get_BaseCameraTag();
-	CWeapon::BindConstantBuffer(wstrCamTag);
-	CWeapon::BindLightBuffer();
-	for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
-		m_pModel->Render(i, 1);
+	CWeapon::Render_Shadow();
+
+	return S_OK;
+}
+
+HRESULT CNeedle::Render_Velocity()
+{
+	CWeapon::Render_Velocity();
 
 	return S_OK;
 }
@@ -227,6 +236,7 @@ void CNeedle::OnTriggerEnter(CCollision& collision)
 			m_pLight->Set_Pos(static_cast<CActor*>(collision.pGameObject)->Get_Transform()->Get_State(CTransform::STATE_POSITION));
 			m_pLight->Set_Show(true);
 			_vector vColor = { 1.f, 0.7f, 0.5f, 1.f };
+
 			m_pLight->Set_Color(vColor);
 			m_fLightRange = 10.f;
 			m_pLight->Set_Range(m_fLightRange);
@@ -384,7 +394,8 @@ void CNeedle::Free()
 {
 	CWeapon::Free();
 
+	Safe_Release(m_pLight);
 	Safe_Release(m_pCollider);
-	m_pTrailEffect_Normal->Set_Remove(true);
-	m_pTrailEffect_Distortion->Set_Remove(true);
+	Safe_Release(m_pTrailEffect_Normal);
+	Safe_Release(m_pTrailEffect_Distortion);
 }

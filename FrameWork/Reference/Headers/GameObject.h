@@ -39,6 +39,7 @@ public:
 	virtual _int LateTick(_double TimeDelta);
 	virtual HRESULT Render();
 	virtual HRESULT	Render_Shadow();
+	virtual HRESULT	Render_Velocity();
 	virtual void	ComputeViewZ(_fmatrix* pView);
 public:
 	virtual void OnCollisionEnter(CCollision& collision);
@@ -53,6 +54,7 @@ public:
 	_bool getActive() { return m_bActive; }
 	_int getTag() { return m_iObectTag; }
 	_bool getRemove() { return m_bRemove; }
+	const _uint getSceneID() const { return m_iSceneID; }
 	CTransform* Get_Transform() const;
 	_float		Get_ViewZ() { return m_fViewZ; }
 public:
@@ -70,6 +72,8 @@ protected:
 	_uint m_iObectTag;
 	_uint m_iSceneID;
 	_float m_fViewZ = 0.f;
+	_matrix m_PreWroldMat = XMMatrixIdentity();
+
 protected:
 	unordered_map<wstring, class CComponent*>		m_Components;
 protected:

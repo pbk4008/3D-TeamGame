@@ -130,11 +130,13 @@ _int CMonster_Bastion_Spear::Tick(_double _dDeltaTime)
 	{
 		if (L"Death" == m_pStateController->Get_CurStateTag())
 		{
-			if (m_pAnimator->Get_CurrentAnimation()->Is_Finished())
+			if (m_pAnimator->Get_CurrentAnimation()->Is_Finished() && m_lifetime <= 0.f)
 			{
-				Set_Remove(true);
 				m_pPanel->Set_UIRemove(true);
+				m_bdissolve = true;
 			}
+			if (m_lifetime >= 1.f)
+				Set_Remove(true);
 			if (1 < m_pAnimator->Get_AnimController()->Get_CurKeyFrameIndex() && 2 >= m_pAnimator->Get_AnimController()->Get_CurKeyFrameIndex())
 			{
 				Active_Effect((_uint)EFFECT::DEATH);
@@ -208,6 +210,11 @@ _int CMonster_Bastion_Spear::LateTick(_double _dDeltaTime)
 
 HRESULT CMonster_Bastion_Spear::Render()
 {
+	if (m_bdissolve == true)
+		CActor::DissolveOn(0.5f);
+
+	if (FAILED(m_pModel->SetUp_ValueOnShader("g_bdissolve", &m_bdissolve, sizeof(_bool)))) MSGBOX("Failed to Apply dissolvetime");
+
 	SCB desc;
 	ZeroMemory(&desc, sizeof(SCB));
 	wstring wstrCamTag = g_pGameInstance->Get_BaseCameraTag();
@@ -558,7 +565,10 @@ void CMonster_Bastion_Spear::Hit(const ATTACKDESC& _tAttackDesc)
 		|| m_iGuardCount > 0)
 	{
 		m_iGuardCount--;
-		Active_Effect((_uint)EFFECT::FLOATING);
+
+		Active_Effect((_uint)EFFECT::HIT);
+		Active_Effect((_uint)EFFECT::HIT_FLOATING);
+		Active_Effect((_uint)EFFECT::HIT_FLOATING_2);
 		return;
 	}
 
@@ -609,7 +619,8 @@ void CMonster_Bastion_Spear::Hit(CCollision& collision)
 				m_fGroggyGauge += 2.f;
 
 				Active_Effect((_uint)EFFECT::HIT);
-				Active_Effect((_uint)EFFECT::FLOATING);
+				Active_Effect((_uint)EFFECT::HIT_FLOATING);
+				Active_Effect((_uint)EFFECT::HIT_FLOATING_2);
 			}
 		}
 	}
