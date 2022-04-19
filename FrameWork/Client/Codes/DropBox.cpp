@@ -432,6 +432,7 @@ std::vector<CItemData> CDropBox::GetDropList(void)
 	dropList.push_back(item14);
 	dropList.push_back(item15);
 	dropList.push_back(item16);
+
 	return dropList;
 }
 

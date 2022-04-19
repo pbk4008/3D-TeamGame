@@ -35,7 +35,7 @@ HRESULT CMotionTrail::NativeConstruct(const _uint _iSceneID, void* _pArg)
 _int CMotionTrail::Tick(_double _dDeltaTime)
 {
 	m_lifetime += (_float)g_fDeltaTime;
-	if (m_lifetime >= 2.0)
+	if (m_lifetime >= 0.5f)
 	{
 		m_lifetime = 0.f;
 		m_bActive = false;
@@ -52,41 +52,6 @@ _int CMotionTrail::LateTick(_double _dDeltaTime)
 	}
 
 	return _int();
-}
-
-HRESULT CMotionTrail::Render()
-{
-	_matrix smatWorld, smatView, smatProj;
-
-	smatWorld = XMMatrixTranspose(m_worldamt);
-	smatView = XMMatrixTranspose(m_viewmat);
-	smatProj = XMMatrixTranspose(m_projmat);
-
-	if (FAILED(m_pModel->SetUp_ValueOnShader("g_WorldMatrix", &smatWorld, sizeof(_matrix)))) MSGBOX("Failed To Apply Actor ConstantBuffer");
-	if (FAILED(m_pModel->SetUp_ValueOnShader("g_ViewMatrix", &smatView, sizeof(_matrix)))) MSGBOX("Failed To Apply Actor ConstantBuffer");
-	if (FAILED(m_pModel->SetUp_ValueOnShader("g_ProjMatrix", &smatProj, sizeof(_matrix)))) MSGBOX("Failed To Apply Actor ConstantBuffer");
-
-	if (FAILED(m_pModel->SetUp_ValueOnShader("g_TrailBoneMatrices", &m_bonematrix, sizeof(_matrix) * 256))) MSGBOX("Failed To Apply Actor ConstantBuffer");
-
-	RIM rimdesc;
-	ZeroMemory(&rimdesc, sizeof(RIM));
-	rimdesc.rimcheck = m_rimcheck;
-	rimdesc.rimcol = _float3(0.f, 1.0f, 0);
-	/*CActor::SetRimIntensity(g_fDeltaTime * -1.f);*/
-	rimdesc.rimintensity = m_rimintensity; // intensity ³·À» ¼ö·Ï °úÇÏ°Ô ºû³²
-	XMStoreFloat4(&rimdesc.camdir, XMVector3Normalize(m_position - m_camposition));
-
-	if (FAILED(m_pModel->SetUp_ValueOnShader("g_rimlightcheck", &rimdesc.rimcheck, sizeof(_bool)))) MSGBOX("Failed To Apply Actor ConstantBuffer");
-	if (FAILED(m_pModel->SetUp_ValueOnShader("g_rimintensity", &rimdesc.rimintensity, sizeof(_float)))) MSGBOX("Failed To Apply Actor ConstantBuffer");
-	if (FAILED(m_pModel->SetUp_ValueOnShader("g_rimcolor", &rimdesc.rimcol, sizeof(_float3)))) MSGBOX("Failed To Apply Actor ConstantBuffer");
-	if (FAILED(m_pModel->SetUp_ValueOnShader("g_camdir", &rimdesc.camdir, sizeof(_float4)))) MSGBOX("Failed To Apply Actor ConstantBuffer");
-
-	for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
-	{
-		if (FAILED(m_pModel->Render(i, 4))) MSGBOX("Fialed To Rendering Silvermane");
-	}
-
-	return S_OK;
 }
 
 HRESULT CMotionTrail::Render_MotionTrail()
@@ -111,7 +76,7 @@ HRESULT CMotionTrail::Render_MotionTrail()
 	rimdesc.rimcheck = m_rimcheck;
 	rimdesc.rimcol = _float3(0.f, 1.0f, 0);
 	rimdesc.rimintensity = m_rimintensity; // intensity ³·À» ¼ö·Ï °úÇÏ°Ô ºû³²
-	XMStoreFloat4(&rimdesc.camdir, XMVector3Normalize(m_position - m_camposition));
+	XMStoreFloat4(&rimdesc.camdir, XMVector3Normalize(m_position - g_pGameInstance->Get_CamPosition(camtag)));
 
 	if (FAILED(m_pModel->SetUp_ValueOnShader("g_rimlightcheck", &rimdesc.rimcheck, sizeof(_bool)))) MSGBOX("Failed To Apply Actor ConstantBuffer");
 	if (FAILED(m_pModel->SetUp_ValueOnShader("g_rimintensity", &rimdesc.rimintensity, sizeof(_float)))) MSGBOX("Failed To Apply Actor ConstantBuffer");

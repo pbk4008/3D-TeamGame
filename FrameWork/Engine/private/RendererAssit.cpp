@@ -207,7 +207,7 @@ HRESULT CRendererAssit::Setup_RenderTarget()
 	if (FAILED(m_pTargetMgr->Add_MRT(TEXT("MRT_Deferred"), TEXT("Target_Emission"))))
 		return E_FAIL;
 
-	if (FAILED(m_pTargetMgr->Add_MRT(TEXT("Target_RimLight"), TEXT("Target_RimLight"))))
+	if (FAILED(m_pTargetMgr->Add_MRT(TEXT("Target_RimLight"), TEXT("Target_Emission"))))
 		return E_FAIL;
 
 	// ¥‹¿œ ≈∏∞Ÿ ShadowMap

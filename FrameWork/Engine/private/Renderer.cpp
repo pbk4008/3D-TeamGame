@@ -203,15 +203,14 @@ HRESULT CRenderer::Draw_RenderGroup()
 #ifdef _DEBUG
 	if (m_bRenderbtn[DBG] == false)
 	{
-		//if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("MRT_SkyBox"))))		return E_FAIL;
-		//
-		//if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("MRT_Shadow"))))		return E_FAIL;
-		//if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("MRT_ShaeShadow"))))	return E_FAIL;
-		//if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("MRT_Deferred"))))	return E_FAIL;
-		//
-		//if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("MRT_LightAcc"))))	return E_FAIL;
-		//if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("MRT_HDRBASE"))))		return E_FAIL;
-		//if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("MRT_ToneMapping"))))	return E_FAIL;
+		if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("MRT_SkyBox"))))		return E_FAIL;
+		if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("MRT_Shadow"))))		return E_FAIL;
+		if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("MRT_ShaeShadow"))))	return E_FAIL;
+		if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("MRT_Deferred"))))	return E_FAIL;
+		
+		if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("MRT_LightAcc"))))	return E_FAIL;
+		if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("MRT_HDRBASE"))))		return E_FAIL;
+		if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("MRT_ToneMapping"))))	return E_FAIL;
 
 		//if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("MRT_Lum1"))))	return E_FAIL;
 		//if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("MRT_Lum2"))))	return E_FAIL;
@@ -520,7 +519,7 @@ HRESULT CRenderer::Render_Final()
 	_float thick = 0.2f;
 	if (FAILED(m_pVIBuffer->SetUp_TextureOnShader("g_DiffuseTexture", m_pTargetMgr->Get_SRV(TEXT("Target_Blend"))))) MSGBOX("Render Final DiffuseTeuxtre Not Apply");
 	if (FAILED(m_pVIBuffer->SetUp_TextureOnShader("g_DepthTexture", m_pTargetMgr->Get_SRV(TEXT("Target_Depth"))))) MSGBOX("Render Final DepthTexture Not Apply");
-	if (FAILED(m_pVIBuffer->SetUp_TextureOnShader("g_RimLightTexture", m_pTargetMgr->Get_SRV(TEXT("Target_RimLight"))))) MSGBOX("Render Final DepthTexture Not Apply");
+	if (FAILED(m_pVIBuffer->SetUp_TextureOnShader("g_RimLightTexture", m_pTargetMgr->Get_SRV(TEXT("Target_Emission"))))) MSGBOX("Render Final DepthTexture Not Apply");
 	if (m_bRenderbtn[VELOCITYBLUR] == true)
 	{
 		if (FAILED(m_pVIBuffer->SetUp_TextureOnShader("g_VelocityTex", m_pTargetMgr->Get_SRV(TEXT("Target_Velocity"))))) MSGBOX("Render Final DiffuseTeuxtre Not Apply");
