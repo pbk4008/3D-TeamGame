@@ -138,10 +138,13 @@ HRESULT CCinemaCam::Set_Camera(_uint iSceneTag)
 	switch (iSceneTag)
 	{
 	case (_uint)CINEMA_INDEX::CINEMA1_1:
-		hr = CGameObject::SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Model_Cinema_Cam1_1", L"CamModel", (CComponent**)&m_pModel);
+		hr = CGameObject::SetUp_Components(m_iSceneID, L"Model_Cinema_Cam1_1", L"CamModel", (CComponent**)&m_pModel);
 		break;
 	case (_uint)CINEMA_INDEX::CINEMA1_2:
-		hr = CGameObject::SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Model_Cinema_Cam1_2", L"CamModel", (CComponent**)&m_pModel);
+		hr = CGameObject::SetUp_Components(m_iSceneID, L"Model_Cinema_Cam1_2", L"CamModel", (CComponent**)&m_pModel);
+		break;
+	case (_uint)CINEMA_INDEX::CINEMA2_1:
+		hr = CGameObject::SetUp_Components(m_iSceneID, L"Model_Cinema_Cam2_1", L"CamModel", (CComponent**)&m_pModel);
 		break;
 	}
 
@@ -163,6 +166,9 @@ CHierarchyNode* CCinemaCam::Get_CamBone()
 		break;
 	case (_uint)CINEMA_INDEX::CINEMA1_2:
 		pBorn=m_pModel->Get_BoneMatrix("Camera_02_born");
+		break;
+	case (_uint)CINEMA_INDEX::CINEMA2_1:
+		pBorn=m_pModel->Get_BoneMatrix("Shot_003_01_born");
 		break;
 	}
 	return pBorn;

@@ -7,6 +7,14 @@ BEGIN(Client)
 class CSingleImage;
 class UI_ItemStatusBackground : public CUI
 {
+public:
+	struct Desc
+	{
+		_float2 fPos;
+		_float2 fScale;
+		CUI* pOwner = nullptr;
+	};
+
 	explicit UI_ItemStatusBackground(void) = default;
 	explicit UI_ItemStatusBackground(ID3D11Device * pDevice, ID3D11DeviceContext * pDeviceContext);
 	explicit UI_ItemStatusBackground(const UI_ItemStatusBackground& rhs);
@@ -19,17 +27,18 @@ public:
 	virtual _int LateTick(_double TimeDelta) override;
 	virtual HRESULT Render() override;
 	virtual void setActive(_bool bActive) override;
-public:
-	HRESULT Ready_Component(void);
-	CSingleImage* GetSingleImage(void);
 
+public:
+	HRESULT		  Ready_Component(void);
+	CSingleImage* GetSingleImage(void);
+	_int		  Attach_Owner(void);
 private:
 	CSingleImage* m_pSigleImageCom = nullptr;
+	CTransform*	  m_pLocalTransform = nullptr;
 
 private:
-	_float m_fInitPos = 430.f;
-	_float m_fEndPos  = 420.f;
-
+	Desc   desc;
+	
 public:
 	static UI_ItemStatusBackground* Create(ID3D11Device * pDevice, ID3D11DeviceContext * pDeviceContext);
 	virtual CGameObject* Clone(const _uint iSceneID, void* pArg);

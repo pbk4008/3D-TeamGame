@@ -14,7 +14,7 @@ protected:
 	explicit CScenematic(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);
 	virtual ~CScenematic() = default;
 public:
-	virtual HRESULT NativeContruct();
+	virtual HRESULT NativeContruct(_uint iSceneID);
 	virtual _int Tick(_double dDeltaTime);
 	virtual _int LateTick(_double dDeltaTime);
 public:
@@ -25,6 +25,8 @@ public:
 protected:
 	HRESULT Set_UpComponents(CComponent* pComponent);
 	HRESULT Ready_Actor(class CCinemaActor** pOut, _uint iActorTag);
+private:
+	void OnOffPlayerWithUI(_bool bCheck);
 protected:
 	virtual void Free() override;
 protected:
@@ -33,6 +35,7 @@ protected:
 	_bool m_bActive;
 	vector<CComponent*> m_vecScenemaComponents;
 	_bool m_bCinemaEnd;
+	_uint m_iSceneID;
 };
 END
 #endif

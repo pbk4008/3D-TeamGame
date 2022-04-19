@@ -54,7 +54,7 @@
 //Cinema
 #include "Cinema1_1.h"
 #include "Cinema1_2.h"
-
+#include "Cinema2_1.h"
 
 
 CStage1::CStage1()
@@ -92,7 +92,6 @@ HRESULT CStage1::NativeConstruct()
 #ifndef _DEBUG 
 	m_bDebug = false;
 #endif // DEBUG
-
 	g_pWeaponGenerator = CWeaponGenerator::GetInstance();
 
 	if (FAILED(CLevel::NativeConstruct()))
@@ -142,8 +141,8 @@ HRESULT CStage1::NativeConstruct()
 	//if (FAILED(Ready_Monster(L"Layer_Monster")))
 	//	return E_FAIL;
 
-	if (FAILED(Ready_Indicator()))
-		return E_FAIL;
+	//if (FAILED(Ready_Indicator()))
+	//	return E_FAIL;
 
 	//if (FAILED(Ready_Portal()))
 	//	return E_FAIL;
@@ -270,18 +269,20 @@ _int CStage1::Tick(_double TimeDelta)
 	//		return -1;
 	//}
 
-	//if (g_pGameInstance->getkeyDown(DIK_NUMPAD1))
-	//{
-	//	CMonster_EarthAberrant* pMonster = nullptr;
-	//	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Test", L"Proto_GameObject_Monster_EarthAberrant", &fPos, (CGameObject**)&pMonster)))
-	//		return -1;
-	//}
-	//if (g_pGameInstance->getkeyDown(DIK_NUMPAD2))
-	//{
-	//	CMonster_Bastion_Sword* pMonster = nullptr;
-	//	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Test", L"Proto_GameObject_Monster_Bastion_Sword", &fPos, (CGameObject**)&pMonster)))
-	//		return -1;
-	//}
+	if (g_pGameInstance->getkeyDown(DIK_NUMPAD1))
+	{
+		CMonster_EarthAberrant* pMonster = nullptr;
+		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Test", L"Proto_GameObject_Monster_EarthAberrant", &fPos, (CGameObject**)&pMonster)))
+			return -1;
+		pMonster->setActive(true);
+	}
+	if (g_pGameInstance->getkeyDown(DIK_NUMPAD2))
+	{
+		CMonster_Bastion_Sword* pMonster = nullptr;
+		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Test", L"Proto_GameObject_Monster_Bastion_Sword", &fPos, (CGameObject**)&pMonster)))
+			return -1;
+		pMonster->setActive(true);
+	}
 	//if (g_pGameInstance->getkeyDown(DIK_NUMPAD3))
 	//{
 	//	CMonster_Bastion_Shooter* pMonster = nullptr;
@@ -319,14 +320,9 @@ _int CStage1::Tick(_double TimeDelta)
 	//		return -1;
 	//}
 #pragma endregion
-	//g_pInteractManager->Tick(TimeDelta);
-	//g_pDropManager->Tick();
+	g_pInteractManager->Tick(TimeDelta);
+	g_pDropManager->Tick();
 	m_pIndicatorManager->Active_Indicator();
-
-	///*For Cinema*/
-	//if (g_pGameInstance->getkeyDown(DIK_END))
-	//	m_pScenemaManager->Active_Scenema((_uint)CINEMA_INDEX::CINEMA1_2);
-
 
 	//m_pScenemaManager->Tick(TimeDelta);
 
@@ -337,6 +333,11 @@ _int CStage1::Tick(_double TimeDelta)
 	//		m_pCinema = nullptr;
 	//}
 
+	/*For Cinema*/
+	//if (g_pGameInstance->getkeyDown(DIK_END))
+	//	m_pScenemaManager->Active_Scenema((_uint)CINEMA_INDEX::CINEMA2_1);
+
+	//m_pScenemaManager->Tick(TimeDelta);
 
 	/*for Meteor*/
 	//m_fAccMeteorStartTime += (_float)TimeDelta;
@@ -503,7 +504,7 @@ HRESULT CStage1::Ready_Monster(const _tchar* LayerTag)
 {
 	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Proto_GameObject_Monster_Crawler")))
 	//	return E_FAIL;
-	
+	//
 	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Proto_GameObject_Monster_EarthAberrant")))
 	//	return E_FAIL;
 	//
@@ -639,9 +640,9 @@ HRESULT CStage1::Ready_Light()
 
 HRESULT CStage1::Ready_GameManager(void)
 {
-	//g_pDropManager = CDropManager::GetInstance();
-	//if (FAILED(g_pDropManager->NativeConstruct((SCENEID::SCENE_STAGE1))))
-	//	return E_FAIL;
+	g_pDropManager = CDropManager::GetInstance();
+	if (FAILED(g_pDropManager->NativeConstruct((SCENEID::SCENE_STAGE1))))
+		return E_FAIL;
 
 	m_pIndicatorManager = GET_INSTANCE(CIndicator_Manager);
 	//m_pScenemaManager = GET_INSTANCE(CScenematicManager);
@@ -657,14 +658,14 @@ HRESULT CStage1::Ready_Data_Effect()
 	//Manager에 넣을 Effect;
 #pragma region 이펙트매니저에 들어가는것들, 순서지켜서 enum에 맞춰줘야됨 
 
-	////Player Dash
+//	//Player Dash
 	CEffect* pEffect = nullptr;
 	vector<CEffect_DashDust::EFFECTDESC> vecDashEffect;
 	g_pGameInstance->LoadFile<CEffect_DashDust::EFFECTDESC>(vecDashEffect, L"../bin/SaveData/Effect/Effect_Player_Foot_Dash.dat");
 
 	wstring FullName = L"Proto_GameObject_Effect_DashDust";
 
-	//마지막에 받을 Effect변수 넣기
+	////마지막에 받을 Effect변수 넣기
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Player_Foot_Dash", FullName, &vecDashEffect[0], (CGameObject**)&pEffect)))
 	{
 		MSGBOX("Failed to Creating Effect_Player_Foot_Dash in CStage1::Ready_Effect()");
@@ -677,8 +678,9 @@ HRESULT CStage1::Ready_Data_Effect()
 		return E_FAIL;
 	}
 
+
 	////HitGroundSmoke
-	ZeroMemory(&vecDashEffect, sizeof(vecDashEffect));
+	vecDashEffect.clear();
 	g_pGameInstance->LoadFile<CEffect_DashDust::EFFECTDESC>(vecDashEffect, L"../bin/SaveData/Effect/Effect_HitGround_Smoke.dat");
 
 	FullName = L"Proto_GameObject_Effect_DashDust";
@@ -756,7 +758,7 @@ HRESULT CStage1::Ready_Data_Effect()
 	}
 
 	//MonsterDeath
-	ZeroMemory(&vecHitParticle, sizeof(vecHitParticle));
+	vecHitParticle.clear();
 	g_pGameInstance->LoadFile<CEffect_HitParticle::EF_PAR_HIT_DESC>(vecHitParticle, L"../bin/SaveData/Effect/Effect_Monster_Death.dat");
 
 	FullName = L"Proto_GameObject_Effect_Explosion";
@@ -768,14 +770,14 @@ HRESULT CStage1::Ready_Data_Effect()
 		MSGBOX("Failed to Creating Effect_Monster_Death in CStage1::Ready_Effect()");
 		return E_FAIL;
 	}
-	if (FAILED(g_pGameInstance->Add_Effect((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Monster_Death", pEffect, 8)))
+	if (FAILED(g_pGameInstance->Add_Effect((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Monster_Death", pEffect, 1)))
 	{
 		MSGBOX("Falild to Add_Effect_Monster_Death in CStage1::Ready_Effect()");
 		return E_FAIL;
 	}
 
 	//Player Hit
-	ZeroMemory(&vecHitParticle, sizeof(vecHitParticle));
+	vecHitParticle.clear();
 	g_pGameInstance->LoadFile<CEffect_HitParticle::EF_PAR_HIT_DESC>(vecHitParticle, L"../bin/SaveData/Effect/Effect_Player_Hit.dat");
 
 	FullName = L"Proto_GameObject_Effect_Explosion";
@@ -794,7 +796,7 @@ HRESULT CStage1::Ready_Data_Effect()
 	}
 
 	//Monster Guard
-	ZeroMemory(&vecHitParticle, sizeof(vecHitParticle));
+	vecHitParticle.clear();
 	g_pGameInstance->LoadFile<CEffect_HitParticle::EF_PAR_HIT_DESC>(vecHitParticle, L"../bin/SaveData/Effect/Effect_Monster_Guard.dat");
 
 	FullName = L"Proto_GameObject_Effect_Explosion";
@@ -813,7 +815,7 @@ HRESULT CStage1::Ready_Data_Effect()
 	}
 
 	//AttackLeft
-	ZeroMemory(&vecFloatingSpeed, sizeof(vecFloatingSpeed));
+	vecFloatingSpeed.clear();
 	g_pGameInstance->LoadFile<CEffect_Floating_Speed::EF_PAR_FLOATSPEED_DESC>(vecFloatingSpeed, L"../bin/SaveData/Effect/Effect_Player_Attack_Left.dat");
 
 	FullName = L"Proto_GameObject_Effect_Floating_Speed";
@@ -832,7 +834,7 @@ HRESULT CStage1::Ready_Data_Effect()
 	}
 
 	//AttackRight
-	ZeroMemory(&vecFloatingSpeed, sizeof(vecFloatingSpeed));
+	vecFloatingSpeed.clear();
 	g_pGameInstance->LoadFile<CEffect_Floating_Speed::EF_PAR_FLOATSPEED_DESC>(vecFloatingSpeed, L"../bin/SaveData/Effect/Effect_Player_Attack_Right.dat");
 
 	FullName = L"Proto_GameObject_Effect_Floating_Speed";
@@ -851,7 +853,7 @@ HRESULT CStage1::Ready_Data_Effect()
 	}
 
 	//HitGround
-	ZeroMemory(&vecHitParticle, sizeof(vecHitParticle));
+	vecHitParticle.clear();
 	g_pGameInstance->LoadFile<CEffect_HitParticle::EF_PAR_HIT_DESC>(vecHitParticle, L"../bin/SaveData/Effect/Effect_Hit_Ground.dat");
 
 	FullName = L"Proto_GameObject_Effect_Explosion";
@@ -871,7 +873,7 @@ HRESULT CStage1::Ready_Data_Effect()
 
 
 	//OpenBox
-	ZeroMemory(&vecFloatingSpeed, sizeof(vecFloatingSpeed));
+	vecFloatingSpeed.clear();
 	g_pGameInstance->LoadFile<CEffect_Floating_Speed::EF_PAR_FLOATSPEED_DESC>(vecFloatingSpeed, L"../bin/SaveData/Effect/Effect_Open_Box.dat");
 
 	FullName = L"Proto_GameObject_Effect_Floating_Speed";
@@ -890,7 +892,7 @@ HRESULT CStage1::Ready_Data_Effect()
 	}
 
 	//PlayerAttackGround
-	ZeroMemory(&vecFloatingSpeed, sizeof(vecFloatingSpeed));
+	vecFloatingSpeed.clear();
 	g_pGameInstance->LoadFile<CEffect_Floating_Speed::EF_PAR_FLOATSPEED_DESC>(vecFloatingSpeed, L"../bin/SaveData/Effect/Effect_Player_Attack_Ground.dat");
 
 	FullName = L"Proto_GameObject_Effect_Floating_Speed";
@@ -909,7 +911,7 @@ HRESULT CStage1::Ready_Data_Effect()
 	}
 
 	//PlayerAttackGround_2
-	ZeroMemory(&vecHitFloating, sizeof(vecHitFloating));
+	vecHitFloating.clear();
 	g_pGameInstance->LoadFile<CEffect_HitFloating::EF_PAR_HITFLOAT_DESC>(vecHitFloating, L"../bin/SaveData/Effect/Effect_Player_Attack_Ground_2.dat");
 
 	FullName = L"Proto_GameObject_Effect_Floating";
@@ -942,14 +944,14 @@ HRESULT CStage1::Ready_Data_Effect()
 		MSGBOX("Failed to Creating Effect_Item in CStage1::Ready_Effect()");
 		return E_FAIL;
 	}
-	if (FAILED(g_pGameInstance->Add_Effect((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Item", pEffect, 20)))
+	if (FAILED(g_pGameInstance->Add_Effect((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Item", pEffect, 30)))
 	{
 		MSGBOX("Falild to Add_Effect_Item in CStage1::Ready_Effect()");
 		return E_FAIL;
 	}
 
 	//Box 
-	ZeroMemory(&vecFloatingUp, sizeof(vecFloatingUp));
+	vecFloatingUp.clear();
 	g_pGameInstance->LoadFile<CEffect_FloatingUp::EF_PAR_FLOATUP_DESC>(vecFloatingUp, L"../bin/SaveData/Effect/Effect_Box.dat");
 
 	vecFloatingUp[0].ParticleColor = { 0.5f,1.0f,0.7f, 1.f };
@@ -970,7 +972,7 @@ HRESULT CStage1::Ready_Data_Effect()
 	}
 
 	//EatItem
-	ZeroMemory(&vecFloatingSpeed, sizeof(vecFloatingSpeed));
+	vecFloatingSpeed.clear();
 	g_pGameInstance->LoadFile<CEffect_Floating_Speed::EF_PAR_FLOATSPEED_DESC>(vecFloatingSpeed, L"../bin/SaveData/Effect/Effect_Eat_Item.dat");
 
 	FullName = L"Proto_GameObject_Effect_Floating_Speed";
@@ -987,6 +989,30 @@ HRESULT CStage1::Ready_Data_Effect()
 		MSGBOX("Falild to Add_Effect_Eat_Item in CStage1::Ready_Effect()");
 		return E_FAIL;
 	}
+
+	////Monster Hit
+	CEffect::EFFECTDESC tDesc;
+	ZeroMemory(&tDesc, sizeof(tDesc));
+
+	_tcscpy_s(tDesc.TextureTag, L"T_Hit");
+	tDesc.iRenderPassNum = 1;
+	tDesc.iImageCountX = 4;
+	tDesc.iImageCountY = 2;
+	tDesc.fFrame = 8;
+	tDesc.fEffectPlaySpeed = 1.f;
+
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Effect_HitImage", L"Proto_GameObject_Effect_HitImage", &tDesc, (CGameObject**)&pEffect)))
+	{
+		MSGBOX("Failed to Creating Proto_GameObject_Effect_HitImage in CStage1::Ready_Effect()");
+		return E_FAIL;
+	}
+	if (FAILED(g_pGameInstance->Add_Effect((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_HitImage", pEffect, 16)))
+	{
+		MSGBOX("Falild to Proto_GameObject_Effect_HitImage in CStage1::Ready_Effect()");
+		return E_FAIL;
+	}
+
+
 
 	//Explosion Rock 
 	CExplosion_Rock* pObj = nullptr;
@@ -1015,16 +1041,18 @@ HRESULT CStage1::Ready_Data_Effect()
 	Desc.fFrame = 64.f;
 	Desc.fEffectPlaySpeed = 1.f;
 
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Effect_Hammer_Dust", L"Proto_GameObject_Effect_Hammer_Dust", &Desc, (CGameObject**)&pHammer)))
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Effect_Hammer_Dust", L"Proto_GameObject_Effect_Hammer_Dust", &Desc)))
 	{
 		MSGBOX("Failed to Creating Effect_Hammer_Dust in CStage1::Ready_Effect()");
 		return E_FAIL;
 	}
+
 	if (FAILED(g_pGameInstance->Add_Effect((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Hammer_Dust", pHammer, 7)))
 	{
 		MSGBOX("Falild to Add_Effect_Explosion ROck in CStage1::Ready_Effect()");
 		return E_FAIL;
 	}
+
 #pragma endregion
 
 #pragma region 이펙트매니저에 안들어가는것들
@@ -1045,25 +1073,6 @@ HRESULT CStage1::Ready_Data_Effect()
 		return E_FAIL;
 	}
 
-
-	////Monster Dead
-	//ZeroMemory(&Desc, sizeof(Desc));
-
-	//_tcscpy_s(Desc.TextureTag, L"T_lavaSpary");
-	//Desc.iRenderPassNum = 1;
-	//Desc.iImageCountX = 8;
-	//Desc.iImageCountY = 8;
-	//Desc.fFrame = 64.f;
-	//Desc.fEffectPlaySpeed = 1.f;
-
-	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Effect_Monster_Dead_Spray", L"Proto_GameObject_Effect_Monster_Dead_Spray", &Desc)))
-	//{
-	//	MSGBOX("Failed to Creating Effect_Monster_Dead_Spray in CStage1::Ready_Effect()");
-	//	return E_FAIL;
-
-	//}
-
-	
 	////공중에떠있는환경파티클
 	//Env floating
 	vector<CEffect_Env_Floating::EFFECTDESC> vecEnvFloating;
@@ -1204,9 +1213,11 @@ HRESULT CStage1::Ready_Cinema()
 	if (!m_pScenemaManager)
 		return E_FAIL;
 
-	if (FAILED(m_pScenemaManager->Add_Scenema(CCinema1_1::Create(m_pDevice, m_pDeviceContext))))
+	if (FAILED(m_pScenemaManager->Add_Scenema(CCinema1_1::Create(m_pDevice, m_pDeviceContext, (_uint)SCENEID::SCENE_STAGE1))))
 		return E_FAIL;
-	if (FAILED(m_pScenemaManager->Add_Scenema(CCinema1_2::Create(m_pDevice, m_pDeviceContext))))
+	if (FAILED(m_pScenemaManager->Add_Scenema(CCinema1_2::Create(m_pDevice, m_pDeviceContext, (_uint)SCENEID::SCENE_STAGE1))))
+		return E_FAIL;
+	if (FAILED(m_pScenemaManager->Add_Scenema(CCinema2_1::Create(m_pDevice, m_pDeviceContext, (_uint)SCENEID::SCENE_STAGE1))))
 		return E_FAIL;
 	return S_OK;
 }
@@ -2056,7 +2067,7 @@ void CStage1::Shoot_Meteor(_double dDeltaTime)
 	if (m_fAccMeteorSpawn >= m_fRandomMeteorSpawnTime)
 	{
 		m_fAccMeteorSpawn = 0.f;
-		m_fRandomMeteorSpawnTime = MathUtils::ReliableRandom(5.f,15.f);
+		m_fRandomMeteorSpawnTime = (_float)MathUtils::ReliableRandom(5.f,15.f);
 		
 		_vector vSelectPos = XMVectorZero();
 		for (auto& pPos : m_vecMeteorPos)
@@ -2124,15 +2135,17 @@ void CStage1::Free()
 
 	//Safe_Release(m_pScenemaManager);
 	//CScenematicManager::DestroyInstance();
-	//if(g_pInteractManager)
-	//	g_pInteractManager->Remove_Interactable();
+
+	if(g_pInteractManager)
+		g_pInteractManager->Remove_Interactable();
 
 	Safe_Release(m_pScenemaManager);
 	Safe_Release(m_pIndicatorManager);
 	CScenematicManager::DestroyInstance();
 	CIndicator_Manager::DestroyInstance();
 
-	//CDropManager::DestroyInstance();
+
+	CDropManager::DestroyInstance();
 	Safe_Release(m_pTriggerSystem);
 
 	//for (auto& pObj : m_vecMeteor)

@@ -123,7 +123,7 @@ PS_OUT PS_MAIN1(PS_IN In)
 	half4 color = g_DiffuseTexture.Sample(DefaultSampler, In.vTexUV);
 	
 	Out.vColor = color;
-	//Out.weight = color.r * g_Weight * Out.vColor;
+	Out.weight = half4(g_Weight.xxx, Out.vColor.a);
 	
     return Out;
 }
@@ -187,7 +187,7 @@ technique11 DefaultTechnique
     {
         SetRasterizerState(CullMode_Default);
         SetDepthStencilState(ZDefault, 0);
-        SetBlendState(AlphaBlending, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+		SetBlendState(AlphaBlending2, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
 
         VertexShader = compile vs_5_0 VS_MAIN();
         GeometryShader = NULL;

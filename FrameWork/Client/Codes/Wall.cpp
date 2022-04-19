@@ -152,8 +152,9 @@ CGameObject* CWall::Clone(_uint iSeneid, void* pArg)
 
 void CWall::Free()
 {
+	__super::Free();
+
 	Safe_Release(m_pbuffer);
 	Safe_Release(m_pdiffusetex);
-
-	__super::Free();
+	Safe_Release(m_dissolveTex);
 }

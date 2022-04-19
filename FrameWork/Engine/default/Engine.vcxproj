@@ -188,6 +188,8 @@ call Update_Library_Debug.bat</Command>
       <AdditionalDependencies>d3d11.lib;dxguid.lib;dinput8.lib;effects11.lib;DirectXTex.lib;assimp-vc142-mt.lib;DirectXTK.lib;fmodL_vc.lib;fmod_vc.lib;PhysXExtensions_static_64d.lib;PhysX_64d.lib;PhysXCooking_64d.lib;PhysXCommon_64d.lib;PhysXVehicle_static_64d.lib;SimulationController_static_64d.lib;LowLevelDynamics_static_64d.lib;SceneQuery_static_64d.lib;PhysXCharacterKinematic_static_64d.lib;PhysXPvdSDK_static_64d.lib;LowLevel_static_64d.lib;LowLevelAABB_static_64d.lib;PhysXFoundation_64d.lib;PhysXTask_static_64d.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>../ThirdPartyLibrarys/</AdditionalLibraryDirectories>
       <LargeAddressAware>true</LargeAddressAware>
+      <StackReserveSize>50000</StackReserveSize>
+      <StackCommitSize>50000</StackCommitSize>
     </Link>
     <FxCompile>
       <ShaderType>Effect</ShaderType>

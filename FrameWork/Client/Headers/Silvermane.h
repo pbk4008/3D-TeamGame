@@ -150,6 +150,8 @@ private:
 	const _int	Input(const _double& _dDeltaTime);
 	RIM			ColorChange_RimCheck(RIM& rimdesc);
 
+public:  HRESULT	Create_MotionTrail(_int idex);
+
 private: /* Components */
 	CStateController* m_pStateController = nullptr;
 	CAnimationController* m_pAnimationController = nullptr;
@@ -217,6 +219,7 @@ private:
 
 private:
 	CTexture*	m_pTexture = nullptr;
+	vector<CGameObject*>	m_vecMotionTrail;
 
 public:
 	static CSilvermane* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext);

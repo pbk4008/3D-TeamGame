@@ -55,7 +55,7 @@ _int CSubEnvironment::LateTick(_double TimeDelta)
 	//	return -1;
 
 	if(m_pRenderer->Get_RenderButton(CRenderer::SHADOW) == false)
-		m_pRenderer->Add_RenderGroup(CRenderer::RENDER_ALPHA, this);
+		m_pRenderer->Add_RenderGroup(CRenderer::RENDER_NONALPHA, this);
 
 	return _int();
 }

@@ -137,6 +137,13 @@ _fvector CClient_Observer::Get_Dir(_fvector vPos)
 	return vDir;
 }
 
+void CClient_Observer::Player_Active(_bool bCheck)
+{
+	if (!m_pPlayer)
+		return;
+	m_pPlayer->setActive(bCheck);
+}
+
 void CClient_Observer::Set_IsAttack(const _bool bAttack)
 {
 	if (!m_pPlayer)
@@ -161,6 +168,14 @@ void CClient_Observer::MinusHp(const _float fDamage)
 	
 	fCurrentHp -= fDamage;
 	Set_Hp(fCurrentHp);
+}
+
+_bool CClient_Observer::Get_PlayerActive()
+{
+	if (!m_pPlayer)
+		return false;
+
+	return m_pPlayer->getActive();
 }
 
 void CClient_Observer::Free(void)

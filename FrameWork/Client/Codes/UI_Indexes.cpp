@@ -4,6 +4,7 @@
 #include "Button_Equipment.h"
 #include "Button_Armory.h"
 #include "Button_Skill.h"
+#include "IndexIndicator.h"
 
 CUI_Indexes::CUI_Indexes(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
 	: CUI(pDevice, pDeviceContext)
@@ -59,6 +60,11 @@ _int CUI_Indexes::LateTick(_double TimeDelta)
 		m_pTransform->Set_State(CTransform::STATE_POSITION, _vector{ m_fInitPos, 0.f, 0.f, 1.f });
 	}
 
+	if (m_bClickArmory)
+		m_pIndexIndicator->SetMove(true);
+	if (m_bClickEquipment)
+		m_pIndexIndicator->SetMove(false);
+
 	if (m_pEquipmentBtn->getActive())
 		m_pEquipmentBtn->LateTick(TimeDelta);
 
@@ -67,6 +73,10 @@ _int CUI_Indexes::LateTick(_double TimeDelta)
 
 	/*if (m_pSkillBtn->getActive())
 		m_pSkillBtn->LateTick(TimeDelta);*/
+
+	if (m_pIndexIndicator->getActive())
+		m_pIndexIndicator->LateTick(TimeDelta);
+
 
 	return _int();
 }
@@ -81,6 +91,9 @@ HRESULT CUI_Indexes::Render(void)
 
 	/*if (m_pSkillBtn->getActive())
 		m_pSkillBtn->Render();*/
+
+	if (m_pIndexIndicator->getActive())
+		m_pIndexIndicator->Render();
 
 	return S_OK;
 }
@@ -119,6 +132,16 @@ HRESULT CUI_Indexes::Ready_UIObject(void)
 	//	Skill_Btn.fScale = { 100.f, 50.f };
 	//	m_pSkillBtn = static_cast<CButton_Skill*>(g_pGameInstance->Clone_GameObject((_uint)SCENEID::SCENE_STATIC, L"Proto_GameObject_UI_Button_Skill", &Skill_Btn));
 	//}
+	CIndexIndicator::Desc desc;
+	{
+		desc.fPos = { -450.f, 300.f };
+		desc.fScale = { 124.f, 124.f };
+		desc.pOwner = this;
+
+		m_pIndexIndicator = static_cast<CIndexIndicator*>(g_pGameInstance->Clone_GameObject((_uint)SCENEID::SCENE_STATIC, L"Proto_GameObject_UI_IndexIndicator", &desc));
+		assert("Failed to Create Proto_GameObject_UI_IndexIndicator" && m_pIndexIndicator);
+	}
+
 	return S_OK;
 }
 
@@ -129,6 +152,7 @@ void CUI_Indexes::Show(void)
 	m_pEquipmentBtn->setActive(true);
 	m_pArmoryBtn->setActive(true);
 	//m_pSkillBtn->setActive(true);
+	m_pIndexIndicator->setActive(true);
 }
 
 void CUI_Indexes::Hide(void)
@@ -138,6 +162,12 @@ void CUI_Indexes::Hide(void)
 	m_pEquipmentBtn->setActive(false);
 	m_pArmoryBtn->setActive(false);
 	//m_pSkillBtn->setActive(false);
+
+	m_bClickArmory = false;
+	m_bClickEquipment = false;
+
+	m_pIndexIndicator->setActive(false);
+	m_pIndexIndicator->ResetXPos();
 }
 
 void CUI_Indexes::MenuAllOff(void)
@@ -146,12 +176,26 @@ void CUI_Indexes::MenuAllOff(void)
 
 _bool CUI_Indexes::Click_Equipment(void)
 {
-	return m_pEquipmentBtn->ButtonClicked();
+	if (m_pEquipmentBtn->ButtonClicked())
+	{
+		m_pIndexIndicator->SetInitEquipXPos(-550.f);
+		m_bClickEquipment = true;
+		m_bClickArmory = false;
+		return true;
+	}
+	return false;
 }
 
 _bool CUI_Indexes::Click_Armory(void)
 {
-	return m_pArmoryBtn->ButtonClicked();
+	if (m_pArmoryBtn->ButtonClicked())
+	{
+		m_pIndexIndicator->SetInitArmoryXPos(-450.f);
+		m_bClickEquipment = false;
+		m_bClickArmory = true;
+		return true;
+	}
+	return false;
 }
 
 _bool CUI_Indexes::Click_Skill(void)
@@ -193,6 +237,7 @@ void CUI_Indexes::Free()
 	Safe_Release(m_pEquipmentBtn);
 	Safe_Release(m_pArmoryBtn);
 	//Safe_Release(m_pSkillBtn);
+	Safe_Release(m_pIndexIndicator);
 
 	__super::Free();
 }

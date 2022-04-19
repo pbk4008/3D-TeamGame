@@ -8,6 +8,8 @@ BEGIN(Client)
 class CButton_Equipment;
 class CButton_Armory;
 class CButton_Skill;
+class CIndexIndicator;
+
 class CUI_Indexes final : public CUI
 {
 public:
@@ -43,6 +45,7 @@ private:
 	CButton_Equipment* m_pEquipmentBtn = nullptr;
 	CButton_Armory*	   m_pArmoryBtn = nullptr;
 	CButton_Skill*	   m_pSkillBtn = nullptr;
+	CIndexIndicator*   m_pIndexIndicator = nullptr;
 
 private:
 	_bool m_arrCurWindow[INVEN_INDEX::TAB_END] = { false };
@@ -50,6 +53,8 @@ private:
 private:
 	_float m_fInitPos = 10.f;
 	_float m_fEndPos  = 0.f;
+	_bool  m_bClickEquipment = false;
+	_bool  m_bClickArmory = false;
 
 public:
 	static CUI_Indexes* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);

@@ -188,11 +188,12 @@ struct PS_IN
 
 struct PS_OUT
 {
-	float4 diffuse	: SV_TARGET0;
-	float4 normal	: SV_TARGET1;
-	float4 depth	: SV_TARGET2;
-	float4 mra		: SV_Target3;
-	float4 emission : SV_Target4;
+	half4 diffuse	: SV_TARGET0;
+	half4 normal	: SV_TARGET1;
+	half4 depth		: SV_TARGET2;
+	half4 mra		: SV_Target3;
+	half4 emission	: SV_Target4;
+	half4 rimlight	: SV_Target5;
 };
 
 PS_OUT PS_MAIN_WEAPONE(PS_IN In)
