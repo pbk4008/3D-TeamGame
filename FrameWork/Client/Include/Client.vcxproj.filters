@@ -846,7 +846,7 @@
     </Filter>
     <Filter Include="03.System\07.Scenematic\01.Stage1\Cinema1_2">
       <UniqueIdentifier>{efa2a259-325c-4afc-a8f7-30014b40af6a}</UniqueIdentifier>
-     </Filter>
+    </Filter>
     <Filter Include="02.GameObject\04.Effect\00.Particle\07.Effect_FloatingUp">
       <UniqueIdentifier>{71658c88-0735-4f35-a05b-0508b6453715}</UniqueIdentifier>
     </Filter>
@@ -855,12 +855,15 @@
     </Filter>
     <Filter Include="02.GameObject\04.Effect\00.Particle\06.Effect_Guard_다른이펙트로바꾸면될듯">
       <UniqueIdentifier>{a0e663ef-dcdc-4443-8e69-2f05e2663463}</UniqueIdentifier>
-	</Filter>
+    </Filter>
     <Filter Include="02.GameObject\04.Effect\02.MeshEffect">
       <UniqueIdentifier>{d0ea5fcc-900a-4262-9b01-208f5ce4b2be}</UniqueIdentifier>
     </Filter>
     <Filter Include="02.GameObject\03.Character\00.Player\00.Silvermane\State\Execution">
       <UniqueIdentifier>{afe0def3-27c1-4308-948a-afc5940899dd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.System\07.Scenematic\01.Stage1\Cinema2_1">
+      <UniqueIdentifier>{a2813f18-35e9-48ca-9882-467634a4fb9c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -1935,6 +1938,9 @@
     <ClInclude Include="..\Headers\Cinema1_2.h">
       <Filter>03.System\07.Scenematic\01.Stage1\Cinema1_2</Filter>
     </ClInclude>
+    <ClInclude Include="..\Headers\Cinema2_1.h">
+      <Filter>03.System\07.Scenematic\01.Stage1\Cinema2_1</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -2975,6 +2981,9 @@
     <ClCompile Include="..\Codes\Cinema1_2.cpp">
       <Filter>03.System\07.Scenematic\01.Stage1\Cinema1_2</Filter>
     </ClCompile>
+    <ClCompile Include="..\Codes\Cinema2_1.cpp">
+      <Filter>03.System\07.Scenematic\01.Stage1\Cinema2_1</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -3108,8 +3117,8 @@
       <Filter>100.ShaderFiles\03.Effect</Filter>
     </FxCompile>
     <FxCompile Include="..\bin\ShaderFile\Shader_Particle_Alpha.hlsl">
-		<Filter>100.ShaderFiles\03.Effect</Filter>
-	</FxCompile>
+      <Filter>100.ShaderFiles\03.Effect</Filter>
+    </FxCompile>
     <FxCompile Include="..\bin\ShaderFile\Shader_MeshEffect.hlsl">
       <Filter>100.ShaderFiles\03.Effect</Filter>
     </FxCompile>

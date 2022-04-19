@@ -3,18 +3,21 @@
 
 CCinemaActor::CCinemaActor()
 	: m_pController(nullptr)
+	, m_iActorTag(0)
 {
 }
 
 CCinemaActor::CCinemaActor(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
 	:CActor(pDevice, pDeviceContext)
 	, m_pController(nullptr)
+	, m_iActorTag(0)
 {
 }
 
 CCinemaActor::CCinemaActor(const CCinemaActor& rhs)
 	: CActor(rhs)
 	, m_pController(rhs.m_pController)
+	, m_iActorTag(0)
 {
 	Safe_AddRef(m_pController);
 }
@@ -53,7 +56,6 @@ _int CCinemaActor::Tick(_double TimeDelta)
 {
 	//m_pTransform->Set_WorldMatrix(XMMatrixIdentity());
 	//m_pModel->Update_CombinedTransformationMatrix(TimeDelta);
-	m_pController->Set_PlaySpeed(2.f);
 	if(!m_pController->Is_Finished())
 		m_pController->Tick(TimeDelta);
 
@@ -68,25 +70,9 @@ _int CCinemaActor::LateTick(_double TimeDelta)
 
 HRESULT CCinemaActor::Render()
 {
-	_matrix matPivot = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(270.f)) * XMMatrixTranslation(0.f, 0.f, 10.f);
-	m_pModel->Set_PivotMatrix(matPivot);
-	SCB desc;
-	ZeroMemory(&desc, sizeof(SCB));
-	
-	wstring CameraTag=g_pGameInstance->Get_BaseCameraTag();
-	CActor::BindConstantBuffer(CameraTag, &desc);
-	for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
-	{
-		switch (i)
-		{
-		case 2:
-			if (FAILED(m_pModel->Render(i, 1))) MSGBOX("Failed To Rendering Actor");
-			break;
-		default:
-			if (FAILED(m_pModel->Render(i, 0))) MSGBOX("Failed To Rendering Actor");
-			break;
-		}
-	}
+	if(FAILED(Render_Acoter()))
+		return E_FAIL;
+
 	return S_OK;
 }
 
@@ -104,10 +90,50 @@ HRESULT CCinemaActor::Ready_Model(_uint iModel)
 	case (_uint)CINEMA_ACTOR::ACTOR_PHOENIX:
 		hr=CGameObject::SetUp_Components(m_iSceneID, L"Model_Cinema_Phoenix", L"Model", (CComponent**)&m_pModel);
 		break;
+	case (_uint)CINEMA_ACTOR::ACTOR_MIDBOSS:
+		hr=CGameObject::SetUp_Components(m_iSceneID, L"Model_Cinema_MidBoss", L"Model", (CComponent**)&m_pModel);
+		break;
 	}
 
 	if (FAILED(hr))
 		MSGBOX("Model SetUp Fail");
+
+	m_iActorTag = iModel;
+
+	return S_OK;
+}
+
+HRESULT CCinemaActor::Render_Acoter()
+{
+	wstring CameraTag = g_pGameInstance->Get_BaseCameraTag();
+	CActor::BindConstantBuffer(CameraTag);
+	if (m_iActorTag == (_uint)CINEMA_ACTOR::ACTOR_MIDBOSS)
+	{
+		for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
+		{
+			if (FAILED(m_pModel->Render(i, i)))
+				MSGBOX("Fialed To Rendering Silvermane");
+		}
+	}
+	else
+	{
+	
+		for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
+		{
+			if (i == 0 || i == 3)
+			{
+				if (FAILED(m_pModel->Render(i, 0)))
+					MSGBOX("Failed To Rendering MidBoss");
+			}
+			else
+			{
+				if (FAILED(m_pModel->Render(i, i)))
+					MSGBOX("Failed To Rendering MidBoss");
+			}
+		}
+	}
+
+
 
 	return S_OK;
 }

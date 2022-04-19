@@ -169,11 +169,11 @@ HRESULT CLoader::SetUp_Stage1_Object()
 	if (FAILED(Load_Stage1PlayerLoad()))
 		return E_FAIL;
 
-	//if (FAILED(Load_Stage1MonsterLoad()))
-	//	return E_FAIL;
+	if (FAILED(Load_Stage1MonsterLoad()))
+		return E_FAIL;
 
-	//if (FAILED(Load_Stage1BossLoad()))
-	//	return E_FAIL;
+	if (FAILED(Load_Stage1BossLoad()))
+		return E_FAIL;
 
 	if (FAILED(Load_Stage1StaticUILoad()))
 		return E_FAIL;
@@ -187,8 +187,8 @@ HRESULT CLoader::SetUp_Stage1_Object()
 	//if (FAILED(Load_Stage1JumpTrigger()))
 	//	return E_FAIL;
 
-	//if (FAILED(Load_Stage1TriggerLod()))
-	//	return E_FAIL;
+	if (FAILED(Load_Stage1TriggerLod()))
+		return E_FAIL;
 
 	if (FAILED(Load_Stage1_TreasureChest_Load()))
 		return E_FAIL;
@@ -196,8 +196,8 @@ HRESULT CLoader::SetUp_Stage1_Object()
 	//if (FAILED(Load_Stage1Meteor()))
 	//	return E_FAIL;
 
-	if (FAILED(Load_Stage1_Cinema_Object()))
-		return E_FAIL;
+	//if (FAILED(Load_Stage1_Cinema_Object()))
+	//	return E_FAIL;
 
 	return S_OK;
 }
@@ -746,18 +746,29 @@ HRESULT CLoader::Load_Stage1_Cinema_Object()
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Model_Cinema_Phoenix", CModel::Create(m_pDevice, m_pDeviceContext,
 		L"../bin/FBX/Cinema/Phoenix.fbx", CModel::TYPE_ANIM, true))))
 		return E_FAIL;
+	//MidBoss
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Model_Cinema_MidBoss", CModel::Create(m_pDevice, m_pDeviceContext,
+		L"../bin/FBX/Cinema/MidBoss_Cinema.fbx", CModel::TYPE_ANIM, true))))
+		return E_FAIL;
+
 	////Silvermane
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Cinema_Silvermane", CModel::Create(m_pDevice, m_pDeviceContext,
 		L"../bin/FBX/Cinema/Silvermane_Cinema.fbx", CModel::TYPE_ANIM, true))))
 		return E_FAIL;
+
+
 	
 	_matrix matPivot = XMMatrixIdentity();
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Cinema_Cam1_1", CModel::Create(m_pDevice, m_pDeviceContext,
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Model_Cinema_Cam1_1", CModel::Create(m_pDevice, m_pDeviceContext,
 		"../bin/FBX/Cinema/Camera/","Shot_01_cam_born.fbx",
 		L"../../Reference/ShaderFile/Shader_AnimMesh.hlsl", matPivot,CModel::TYPE_ANIM, true))))
 		return E_FAIL;
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Cinema_Cam1_2", CModel::Create(m_pDevice, m_pDeviceContext,
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Model_Cinema_Cam1_2", CModel::Create(m_pDevice, m_pDeviceContext,
 		"../bin/FBX/Cinema/Camera/", "Shot_02_cam_born.fbx",
+		L"../../Reference/ShaderFile/Shader_AnimMesh.hlsl", matPivot, CModel::TYPE_ANIM, true))))
+		return E_FAIL;
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Model_Cinema_Cam2_1", CModel::Create(m_pDevice, m_pDeviceContext,
+		"../bin/FBX/Cinema/Camera/", "Shot_03_cam_born.fbx",
 		L"../../Reference/ShaderFile/Shader_AnimMesh.hlsl", matPivot, CModel::TYPE_ANIM, true))))
 		return E_FAIL;
 

@@ -53,7 +53,7 @@
 //Cinema
 #include "Cinema1_1.h"
 #include "Cinema1_2.h"
-
+#include "Cinema2_1.h"
 
 
 CStage1::CStage1()
@@ -106,17 +106,17 @@ HRESULT CStage1::NativeConstruct()
 	if (FAILED(Ready_Player(L"Layer_Silvermane")))
 		return E_FAIL;
 
-	if (FAILED(Ready_MapObject()))
-		return E_FAIL;
-
-	//if (FAILED(Ready_TriggerSystem(L"../bin/SaveData/Trigger/MonsterSpawnTrigger.dat")))
+	//if (FAILED(Ready_MapObject()))
 	//	return E_FAIL;
+
+	if (FAILED(Ready_TriggerSystem(L"../bin/SaveData/Trigger/MonsterSpawnTrigger.dat")))
+		return E_FAIL;
 
 	if (FAILED(Ready_Data_UI(L"../bin/SaveData/UI/UI.dat")))
 		return E_FAIL;
 
-	//if (FAILED(Ready_Data_Effect()))
-	//	return E_FAIL;
+	if (FAILED(Ready_Data_Effect()))
+		return E_FAIL;
 
 	if (FAILED(Ready_UI(L"Layer_UI")))
 		return E_FAIL;
@@ -132,8 +132,8 @@ HRESULT CStage1::NativeConstruct()
 	//if (FAILED(Ready_Meteor()))
 	//	return E_FAIL;
 
-	if (FAILED(Ready_Cinema()))
-		return E_FAIL;
+	//if (FAILED(Ready_Cinema()))
+	//	return E_FAIL;
 
 	//if (FAILED(Ready_Boss(L"Layer_Boss")))
 	//	return E_FAIL;
@@ -144,8 +144,8 @@ HRESULT CStage1::NativeConstruct()
 	if (FAILED(Ready_Indicator()))
 		return E_FAIL;
 
-	//if (FAILED(Ready_Portal()))
-	//	return E_FAIL;
+	if (FAILED(Ready_Portal()))
+		return E_FAIL;
 
 	g_pGameInstance->PlayBGM(L"Stage1_BGM");
 
@@ -328,11 +328,11 @@ _int CStage1::Tick(_double TimeDelta)
 	m_pIndicatorManager->Active_Indicator();
 
 	/*For Cinema*/
-	if (g_pGameInstance->getkeyDown(DIK_END))
-		m_pScenemaManager->Active_Scenema((_uint)CINEMA_INDEX::CINEMA1_2);
+	//if (g_pGameInstance->getkeyDown(DIK_END))
+	//	m_pScenemaManager->Active_Scenema((_uint)CINEMA_INDEX::CINEMA2_1);
 
 
-	m_pScenemaManager->Tick(TimeDelta);
+	//m_pScenemaManager->Tick(TimeDelta);
 	//if (m_pCinema && m_pCinema->Get_Active())
 	//{
 	//	m_pCinema->Tick(TimeDelta);
@@ -1183,9 +1183,11 @@ HRESULT CStage1::Ready_Cinema()
 	if (!m_pScenemaManager)
 		return E_FAIL;
 
-	if (FAILED(m_pScenemaManager->Add_Scenema(CCinema1_1::Create(m_pDevice, m_pDeviceContext))))
+	if (FAILED(m_pScenemaManager->Add_Scenema(CCinema1_1::Create(m_pDevice, m_pDeviceContext, (_uint)SCENEID::SCENE_STAGE1))))
 		return E_FAIL;
-	if (FAILED(m_pScenemaManager->Add_Scenema(CCinema1_2::Create(m_pDevice, m_pDeviceContext))))
+	if (FAILED(m_pScenemaManager->Add_Scenema(CCinema1_2::Create(m_pDevice, m_pDeviceContext, (_uint)SCENEID::SCENE_STAGE1))))
+		return E_FAIL;
+	if (FAILED(m_pScenemaManager->Add_Scenema(CCinema2_1::Create(m_pDevice, m_pDeviceContext, (_uint)SCENEID::SCENE_STAGE1))))
 		return E_FAIL;
 	return S_OK;
 }
