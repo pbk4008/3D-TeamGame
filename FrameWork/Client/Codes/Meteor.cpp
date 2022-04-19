@@ -269,6 +269,7 @@ _int CMeteor::Move(_fvector vPos)
 {	
 	m_pCollider->Add_ActorToScene();
 	m_pCollider->Reset_Power();
+	m_pCollider->Add_ActorToScene();
 	m_pTransform->Set_State(CTransform::STATE_POSITION, vPos);
 	XMStoreFloat4(&m_vDestination, g_pObserver->Get_PlayerPos());
 

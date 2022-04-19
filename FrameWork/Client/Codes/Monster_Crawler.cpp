@@ -100,7 +100,7 @@ HRESULT CMonster_Crawler::NativeConstruct(const _uint _iSceneID, void* _pArg)
 
 	m_iObectTag = (_uint)GAMEOBJECT::MONSTER_CRYSTAL;
 
-	m_fMaxHp = 3.f;
+	m_fMaxHp = 30.f;
 	m_fCurrentHp = m_fMaxHp;
 
 	m_fMaxGroggyGauge = 3.f;
@@ -111,7 +111,7 @@ HRESULT CMonster_Crawler::NativeConstruct(const _uint _iSceneID, void* _pArg)
 
 	m_iObectTag = (_uint)GAMEOBJECT::MONSTER_CRYSTAL;
 
-	setActive(false);
+	setActive(true);
 
 	return S_OK;
 }
@@ -308,7 +308,8 @@ void CMonster_Crawler::Hit(const ATTACKDESC& _tAttackDesc)
 	}
 
 	Active_Effect((_uint)EFFECT::HIT);
-	Active_Effect((_uint)EFFECT::FLOATING);
+	Active_Effect((_uint)EFFECT::HIT_FLOATING);
+	Active_Effect((_uint)EFFECT::HIT_FLOATING_2);
 
 	/*else if (EAttackDir::Right == _tAttackDesc.eDir)
 	{

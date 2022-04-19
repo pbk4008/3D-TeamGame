@@ -698,7 +698,8 @@ void CMonster_Bastion_Sword::Hit()
 		tData.fCurHp = m_fCurrentHp;
 		tData.iHitType = (_uint)m_eHitType;
 		Active_Effect((_uint)EFFECT::HIT);
-		Active_Effect((_uint)EFFECT::FLOATING);
+		Active_Effect((_uint)EFFECT::HIT_FLOATING);
+		Active_Effect((_uint)EFFECT::HIT_FLOATING_2);
 		m_pStateController->Change_State(L"Hit", &tData);
 		m_fGroggyGauge += 2; //TODO::¼öÄ¡Á¤ÇØ¼­¹Ù²ãÁà¾ßµÊ
 		m_pPanel->Set_GroggyBar(Get_GroggyGaugeRatio());

@@ -176,6 +176,8 @@ HRESULT CMFCEffect_Env_Floating::Render()
 	_uint iFrame = (_uint)m_Desc.fFrame;
 	m_pBuffer->SetUp_ValueOnShader("g_iFrame", &iFrame, sizeof(_uint));
 
+
+
 	m_pBuffer->SetUp_ValueOnShader("g_fLifeTime", &m_Desc.fMaxLifeTime, sizeof(_float));
 	m_pBuffer->SetUp_ValueOnShader("g_fCurTime", &m_Desc.fCurTime, sizeof(_float));
 

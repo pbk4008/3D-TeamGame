@@ -102,8 +102,6 @@ _int C1H_SwordNormalSidestepRight_V3::Input(const _double& _dDeltaTime)
 	{
 		if (g_pGameInstance->getkeyDown(DIK_SPACE))
 		{
-			g_pGameInstance->BlendSound(L"Player_Dash", L"Player_Dash_1", CSoundMgr::CHANNELID::PLAYER1, CSoundMgr::CHANNELID::PLAYER2);
-
 			if (g_pGameInstance->getkeyPress(DIK_A))
 			{
 				if (FAILED(m_pStateController->Change_State(L"1H_SidestepLeft")))
@@ -120,11 +118,12 @@ _int C1H_SwordNormalSidestepRight_V3::Input(const _double& _dDeltaTime)
 			{
 				m_pAnimationController->Reset_Animation();
 
-				g_pShakeManager->Shake(m_tShakeEvent, m_pTransform->Get_State(CTransform::STATE_POSITION));
-				if (g_pGameInstance->getkeyPress(DIK_W))
-					m_eDir = EDir::LeftForward;
-				else
-					m_eDir = EDir::Forward;
+				//g_pShakeManager->Shake(m_tShakeEvent, m_pTransform->Get_State(CTransform::STATE_POSITION));
+				//if (g_pGameInstance->getkeyPress(DIK_W))
+				//	m_eDir = EDir::LeftForward;
+				//else
+				//	m_eDir = EDir::Forward;
+				EnterState();
 			}
 			else if (g_pGameInstance->getkeyPress(DIK_W))
 			{

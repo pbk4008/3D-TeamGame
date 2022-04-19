@@ -158,6 +158,14 @@ _uint CCamera::getType()
 	return (_uint)m_tCameraDesc.eType;
 }
 
+void CCamera::setDesc(const CAMERADESC& _tDesc)
+{
+	m_tCameraDesc = _tDesc;
+
+	setViewMatrix();
+	setProjMatrix();
+}
+
 void CCamera::Free()
 {
 	CComponent::Free();

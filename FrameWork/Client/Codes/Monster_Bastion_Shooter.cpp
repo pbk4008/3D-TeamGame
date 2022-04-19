@@ -282,7 +282,8 @@ void CMonster_Bastion_Shooter::Hit()
 	}
 
 	Active_Effect((_uint)EFFECT::HIT);
-	Active_Effect((_uint)EFFECT::FLOATING);
+	Active_Effect((_uint)EFFECT::HIT_FLOATING);
+	Active_Effect((_uint)EFFECT::HIT_FLOATING_2);
 }
 
 HRESULT CMonster_Bastion_Shooter::Ready_Components()

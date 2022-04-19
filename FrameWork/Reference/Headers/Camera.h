@@ -46,6 +46,7 @@ public:
 	_fmatrix getProjection() { return XMLoadFloat4x4(&m_matProj); }
 	const wstring& getTag() { return m_tCameraDesc.pCameraTag; }
 	const CAMERADESC GetDesc() const { return m_tCameraDesc; }
+	void setDesc(const CAMERADESC& _tDesc);
 
 private:
 	virtual void Free() override;

@@ -115,6 +115,7 @@ public: /* For.PipeLine */
 	const wstring& Get_BaseCameraTag();
 	HRESULT	SetPreViewProtj(const wstring& cametag);
 	_fmatrix GetPreViewProtj(_fmatrix world);
+	_matrix Get_ViewMatrix();
 
 public: /* for.Input_Device */
 	void Update_InputDev();

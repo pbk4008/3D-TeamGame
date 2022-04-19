@@ -89,6 +89,8 @@ HRESULT CDodgeSlide::EnterState(void* _pArg)
 	if (_pArg)
 		memcpy_s(&m_eDir, sizeof(EDir), _pArg, sizeof(EDir));
 
+	_vector Pos = { 0.f, 0.5f, 0.f, 0.f };
+	m_pSilvermane->Active_Effect((_uint)EFFECT::DASH, Pos);
 
 	CCameraShake::SHAKEEVENT tShakeEvent;
 	tShakeEvent.fDuration = 1.f;
@@ -160,6 +162,8 @@ HRESULT CDodgeSlide::EnterState(void* _pArg)
 	m_pSilvermane->Set_Radial(true);
 	m_pSilvermane->Set_IsTrasceCamera(false);
 	m_pAnimationController->Set_PlaySpeed(1.2f);
+
+	g_pGameInstance->BlendSound(L"Player_Dash", L"Player_Dash_1", CSoundMgr::CHANNELID::PLAYER1, CSoundMgr::CHANNELID::PLAYER2);
 	return S_OK;
 }
 

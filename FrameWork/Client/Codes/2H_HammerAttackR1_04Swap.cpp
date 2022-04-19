@@ -2,6 +2,7 @@
 #include "2H_HammerAttackR1_04Swap.h"
 
 #include "StateController.h"
+#include "MeshEffect.h"
 
 C2H_HammerAttackR1_04Swap::C2H_HammerAttackR1_04Swap(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
 	: C2H_HammerAttack(_pDevice, _pDeviceContext)
@@ -39,10 +40,21 @@ _int C2H_HammerAttackR1_04Swap::Tick(const _double& _dDeltaTime)
 
 	if (50 < iCurKeyFrameIndex && !m_isRangeAttack)
 	{
+		// 파티클
 		_vector Pos = { 0.f, 0.f, 0.f ,0.f};
 		m_pSilvermane->Active_Effect((_uint)EFFECT::ATTACK_GROUND, Pos);
 		m_pSilvermane->Active_Effect((_uint)EFFECT::ATTACK_GROUND_2, Pos);
 
+		// 메쉬 이펙트
+		_vector svPos = m_pTransform->Get_State(CTransform::STATE_POSITION);
+		_vector svLook = m_pTransform->Get_State(CTransform::STATE_LOOK);
+		_vector svUp = m_pTransform->Get_State(CTransform::STATE_UP);
+		CMeshEffect::DESC tMeshEffectDesc;
+		XMStoreFloat3(&tMeshEffectDesc.vPosition, svPos + (svLook * 2.f) + (svUp * 0.1f));
+		if (FAILED(g_pGameInstance->Add_GameObjectToLayer(m_pSilvermane->getSceneID(), L"Layer_Effect", L"Proto_GameObject_MeshEffect_Test", &tMeshEffectDesc)))
+			return E_FAIL;
+
+		// 범위 공격
 		m_pSilvermane->RangeAttack();
 		m_isRangeAttack = true;
 	}

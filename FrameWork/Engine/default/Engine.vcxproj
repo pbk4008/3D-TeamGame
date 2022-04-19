@@ -319,8 +319,10 @@ call Update_Library_Release.bat</Command>
     <ClInclude Include="..\public\VIBuffer_PointInstance_Env_Floating.h" />
     <ClInclude Include="..\public\VIBuffer_PointInstance_Explosion.h" />
     <ClInclude Include="..\public\VIBuffer_PointInstance_Floating.h" />
+    <ClInclude Include="..\public\VIBuffer_PointInstance_Floating_Disappear.h" />
     <ClInclude Include="..\public\VIBuffer_PointInstance_Floating_Speed.h" />
     <ClInclude Include="..\public\VIBuffer_PointInstance_Respawn.h" />
+    <ClInclude Include="..\public\VIBuffer_PointInstance_Respawn_Up.h" />
     <ClInclude Include="..\public\VIBuffer_Rect.h" />
     <ClInclude Include="..\public\VIBuffer_RectInstance.h" />
     <ClInclude Include="..\public\VIBuffer_RectViewPort.h" />
@@ -434,8 +436,10 @@ call Update_Library_Release.bat</Command>
     <ClCompile Include="..\private\VIBuffer_PointInstance_Env_Floating.cpp" />
     <ClCompile Include="..\private\VIBuffer_PointInstance_Explosion.cpp" />
     <ClCompile Include="..\private\VIBuffer_PointInstance_Floating.cpp" />
+    <ClCompile Include="..\private\VIBuffer_PointInstance_Floating_Disappear.cpp" />
     <ClCompile Include="..\private\VIBuffer_PointInstance_Floating_Speed.cpp" />
     <ClCompile Include="..\private\VIBuffer_PointInstance_Respawn.cpp" />
+    <ClCompile Include="..\private\VIBuffer_PointInstance_Respawn_Up.cpp" />
     <ClCompile Include="..\private\VIBuffer_Rect.cpp" />
     <ClCompile Include="..\private\VIBuffer_RectInstance.cpp" />
     <ClCompile Include="..\private\VIBuffer_RectViewPort.cpp" />

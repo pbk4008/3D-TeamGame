@@ -25,6 +25,7 @@ void CPipeLine::Update_PipeLine()
 		_matrix CamWorldMatrix = XMMatrixInverse(nullptr, XMLoadFloat4x4(&pair.second->matView));
 
 		XMStoreFloat4(&pair.second->vCamPos, CamWorldMatrix.r[3]);
+		m_matView = pair.second->matView; //이펙트 버퍼에서쓸려고 저장해두는거임
 	}
 }
 
@@ -114,25 +115,11 @@ HRESULT CPipeLine::Change_BaseCamera(const wstring& pCameraTag)
 	_int iFindIndex = Find_Index(pCameraTag);
 
 	//임시로 저장할 카메라
-	auto pTmpCamera = iter_begin;
+	auto pTmpCamera = *iter_begin;
 	//임시로 저장할 카메라에 첫번째 카메라 저장
-	iter_begin = iter_Find;
+	*iter_begin = *iter_Find;
 	//찾고자 하는 카메라에 저장했던 첫번째 카메라로 변경
-	iter_Find = pTmpCamera;
-
-	CAMERA* tmp = new CAMERA;
-	memcpy(tmp, (*iter_begin).second, sizeof(CAMERA));
-	auto pairBegin=make_pair((*iter_begin).first, tmp);
-
-	tmp = new CAMERA;
-	memcpy(tmp, (*iter_Find).second, sizeof(CAMERA));
-	auto pairFind = make_pair((*iter_Find).first, tmp);
-
-	Safe_Delete(m_mapPipeLine[0].second);
-	Safe_Delete(m_mapPipeLine[iFindIndex].second);
-
-	m_mapPipeLine[0] = pairBegin;
-	m_mapPipeLine[iFindIndex] = pairFind;
+	*iter_Find = pTmpCamera;
 
 	return S_OK;
 }

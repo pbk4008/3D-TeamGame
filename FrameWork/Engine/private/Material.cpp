@@ -259,6 +259,15 @@ HRESULT CMaterial::Set_Texture(TEXTURETYPE _eTextureType, const wstring& _pTextu
 	return S_OK;
 }
 
+HRESULT CMaterial::Change_Texture(const string& _strConstantName, TEXTURETYPE _eTextureType, const wstring& _wstrTextureTag)
+{
+	if (!m_vecTextures[(_uint)_eTextureType])
+		return E_FAIL;
+	if (FAILED(m_vecTextures[(_uint)_eTextureType]->Change_Texture(_wstrTextureTag)))
+		return E_FAIL;
+	return SetUp_TextureOnShader(_strConstantName, _eTextureType);
+}
+
 void CMaterial::Set_InputLayout(_uint iPassIndex)
 {
 	m_pDeviceContext->IASetInputLayout(m_vecEffectDescs[iPassIndex]->pInputLayout);

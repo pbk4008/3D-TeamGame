@@ -86,6 +86,8 @@ HRESULT CSkyBox::SetUp_Components()
 		m_pTexture->Change_Texture(L"Sky_Texture1");
 	else if(m_iSceneID == (_uint)SCENEID::SCENE_STAGE2)
 		m_pTexture->Change_Texture(L"Sky_Texture2");
+	else if (m_iSceneID == (_uint)SCENEID::SCENE_TEST_JS)
+		m_pTexture->Change_Texture(L"Sky_Texture1");
 
 	if (m_pTexture == nullptr)
 		MSGBOX("Failed To Creating SkyTexture");
