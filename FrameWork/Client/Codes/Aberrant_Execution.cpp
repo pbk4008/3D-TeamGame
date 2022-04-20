@@ -60,9 +60,6 @@ HRESULT CAberrant_Execution::EnterState()
 	//g_pShakeManager->Shake(CShakeManager::ETemplate::MonsterDeath, m_pTransform->Get_State(CTransform::STATE_POSITION));
 	m_pAnimator->Change_AnyEntryAnimation(CMonster_EarthAberrant::MON_STATE::ATTACK_EXECUTION);
 
-	m_pMonster->Execution();
-
-	//g_pMainApp->FreezeTime();
 	return S_OK;
 }
 

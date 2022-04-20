@@ -36,6 +36,7 @@ enum class GAMEOBJECT
 	WEAPON_POLEARM,
 	WEAPON_METEOR,
 	// Æ®¸®°Å
+	TRIGGER,
 	JUMP_TRIGGER,
 	JUMP_NODE,
 	JUMP_BOX,
@@ -516,5 +517,22 @@ const wstring g_arrMI_Soothsayer[(int)EWeaponMaterial::MATERIAL_END]
 	L"T_2H_Hammer_Soothsayer_MRA.dds",
 	L"T_2H_Hammer_Soothsayer_CEO.dds",
 };
+
+const wstring g_arrMI_Needle[(int)EWeaponMaterial::MATERIAL_END]
+{
+	L"T_1h_Sword_Needle_D.dds",
+	L"T_1h_Sword_Needle_N.dds",
+	L"T_1h_Sword_Needle_MRA.dds",
+	L"T_1h_Sword_Needle_CEO.dds",
+};
+
+const wstring g_arrMI_Fury[(int)EWeaponMaterial::MATERIAL_END]
+{
+	L"T_2h_Hammer_Fury_D.dds",
+	L"T_2h_Hammer_Fury_N.dds",
+	L"T_2h_Hammer_Fury_MRA.dds",
+	L"T_2h_Hammer_Fury_CEO.dds",
+};
+
 END
 #endif

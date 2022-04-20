@@ -54,7 +54,7 @@ HRESULT CTrailEffect_Distortion::Render()
 {
 	if (FAILED(__super::Render()))
 		return E_FAIL;
-	if (!m_pTexture)
+	if (!m_pTexture2)
 		return S_OK;
 
 	if (4 > m_listPoints.size())

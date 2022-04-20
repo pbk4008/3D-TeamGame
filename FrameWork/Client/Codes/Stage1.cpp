@@ -144,8 +144,8 @@ HRESULT CStage1::NativeConstruct()
 	if (FAILED(Ready_Indicator()))
 		return E_FAIL;
 
-	//if (FAILED(Ready_Portal()))
-	//	return E_FAIL;
+	if (FAILED(Ready_Portal()))
+		return E_FAIL;
 
 
 	g_pGameInstance->PlayBGM(L"Stage1_BGM");
@@ -257,9 +257,10 @@ _int CStage1::Tick(_double TimeDelta)
 
 	//if (g_pGameInstance->getkeyDown(DIK_NUMPAD0))
 	//{
-	//	CMonster_EarthAberrant* pMonster = nullptr;
+	//	CBoss_Bastion_Judicator* pMonster = nullptr;
 	//	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Test", L"Proto_GameObject_Boss_Bastion", &fPos, (CGameObject**)&pMonster)))
 	//		return -1;
+	//	pMonster->setActive(true);
 	//}
 	//
 	//if (g_pGameInstance->getkeyDown(DIK_NUMPAD0))
@@ -269,13 +270,13 @@ _int CStage1::Tick(_double TimeDelta)
 	//		return -1;
 	//}
 
-	//if (g_pGameInstance->getkeyDown(DIK_NUMPAD1))
-	//{
-	//	CMonster_EarthAberrant* pMonster = nullptr;
-	//	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Test", L"Proto_GameObject_Monster_EarthAberrant", &fPos, (CGameObject**)&pMonster)))
-	//		return -1;
-	//	pMonster->setActive(true);
-	//}
+	if (g_pGameInstance->getkeyDown(DIK_NUMPAD1))
+	{
+		CMonster_EarthAberrant* pMonster = nullptr;
+		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Test", L"Proto_GameObject_Monster_EarthAberrant", &fPos, (CGameObject**)&pMonster)))
+			return -1;
+		pMonster->setActive(true);
+	}
 	//if (g_pGameInstance->getkeyDown(DIK_NUMPAD2))
 	//{
 	//	CMonster_Bastion_Sword* pMonster = nullptr;
