@@ -13,6 +13,7 @@
 #include "Aberrant_Dash_Bwd.h"
 #include "Aberrant_Stun.h"
 #include "Aberrant_Death.h"
+#include "Aberrant_Execution.h"
 
 #include "Stage1.h"
 
@@ -585,6 +586,9 @@ HRESULT CMonster_EarthAberrant::Set_State_FSM()
 	if (FAILED(m_pStateController->Add_State(L"Death", CAberrant_Death::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 
+	if (FAILED(m_pStateController->Add_State(L"Execution", CAberrant_Execution::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+
 	for (auto& pair : m_pStateController->Get_States())
 	{
 		pair.second->Set_StateController(m_pStateController);
@@ -672,8 +676,6 @@ void CMonster_EarthAberrant::Hit(const ATTACKDESC& _tAttackDesc)
 		m_pPanel->Set_GroggyBar(Get_GroggyGaugeRatio());
 		m_pStateController->Change_State(L"Flinch_Left");
 	}
-
-	
 }
 
 void CMonster_EarthAberrant::Parry(const PARRYDESC& _tParryDesc)
@@ -683,7 +685,7 @@ void CMonster_EarthAberrant::Parry(const PARRYDESC& _tParryDesc)
 
 void CMonster_EarthAberrant::Execution()
 {
-	m_pAnimatorCom->Change_AnyEntryAnimation(ATTACK_EXECUTION);
+	m_pStateController->Change_State(L"Execution");
 	m_pCharacterController->Remove_CCT();
 }
 

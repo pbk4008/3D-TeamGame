@@ -33,6 +33,7 @@ private:
 
 private:
 	_uint m_iAttackFrame = 12;
+	_bool m_bEffectCheck = false;
 
 public:
 	static CMidBoss_BattleCry* Create(ID3D11Device * pDevice, ID3D11DeviceContext * pDeviceContext, void* pArg = nullptr);

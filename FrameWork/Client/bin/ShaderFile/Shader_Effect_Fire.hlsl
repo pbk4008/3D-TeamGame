@@ -19,6 +19,7 @@ Texture2D	g_DiffuseTexture;
 uint g_iImageCountX; //가로줄수
 uint g_iImageCountY; //세로줄수
 uint g_iFrame; //전체장수
+float g_fAlpha=1.f;//알파값 조절
 
 cbuffer weightbuffer
 {
@@ -123,6 +124,7 @@ PS_OUT PS_MAIN1(PS_IN In)
 	half4 color = g_DiffuseTexture.Sample(DefaultSampler, In.vTexUV);
 	
 	Out.vColor = color;
+	Out.vColor.a *= g_fAlpha;
 	Out.weight = half4(g_Weight.xxx, Out.vColor.a);
 	
     return Out;

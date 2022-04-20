@@ -79,7 +79,7 @@ HRESULT CBoss_Bastion_Judicator::NativeConstruct(const _uint _iSceneID, void* pA
 	m_pPanel->Set_HpBar(Get_HpRatio());
 	m_pPanel->Set_GroggyBar(Get_GroggyGaugeRatio());
 
-	setActive(false);
+	//setActive(false);
 
 	m_tAttackDesc.iLevel = 2;
 
@@ -91,6 +91,11 @@ _int CBoss_Bastion_Judicator::Tick(_double TimeDelta)
 	if (0 > __super::Tick(TimeDelta))
 	{
 		return -1;
+	}
+
+	if (m_rimcheck)
+	{
+		CActor::SetRimIntensity(TimeDelta * -10.f);
 	}
 
 	if (0 >= m_fCurrentHp)
@@ -224,6 +229,19 @@ HRESULT CBoss_Bastion_Judicator::Render()
 	if (m_bdissolve == true)
 		CActor::DissolveOn(0.5f);
 
+	RIM rimdesc;
+	ZeroMemory(&rimdesc, sizeof(RIM));
+
+	if (m_rimcheck == true)
+	{
+		rimdesc.rimcheck = m_rimcheck;
+		rimdesc.rimcol = _float3(1.f, 0.f, 0.f);
+		rimdesc.rimintensity = m_rimintensity; // intensity ³·À» ¼ö·Ï °úÇÏ°Ô ºû³²
+		XMStoreFloat4(&rimdesc.camdir, XMVector3Normalize(g_pGameInstance->Get_CamPosition(L"Camera_Silvermane") - m_pTransform->Get_State(CTransform::STATE_POSITION)));
+		CActor::SetRimIntensity(g_fDeltaTime * -10.f);
+	}
+
+
 	if (FAILED(m_pModel->SetUp_ValueOnShader("g_bdissolve", &m_bdissolve, sizeof(_bool)))) MSGBOX("Failed to Apply dissolvetime");
 
 	wstring wstrCamTag = g_pGameInstance->Get_BaseCameraTag();
@@ -238,7 +256,7 @@ HRESULT CBoss_Bastion_Judicator::Render()
 			desc.roughness = -0.1f;
 			desc.color = _float4(0.811f, 1.f, 0.898f, 1.f);
 			desc.empower = 0.7f;
-			CActor::BindConstantBuffer(wstrCamTag,&desc);
+			CActor::BindConstantBuffer(wstrCamTag,&desc, &rimdesc);
 			m_pModel->Render(i, 0);
 			break;
 		case 1 : // fur
@@ -450,8 +468,6 @@ HRESULT CBoss_Bastion_Judicator::Set_Animation_FSM()
 	m_pAnimator->Set_UpAutoChangeAnimation(STUN_START, STUN_LOOP);
 	m_pAnimator->Set_UpAutoChangeAnimation(STUN_LOOP, STUN_END);
 	m_pAnimator->Set_UpAutoChangeAnimation(STUN_END, RAGE);
-
-
 
 	m_pAnimator->Insert_AnyEntryAnimation(IDLE_START_H);
 	m_pAnimator->Insert_AnyEntryAnimation(RAGE);

@@ -174,7 +174,7 @@ CEffect* CEffect_DashDust::Copy()
 	}
 	if (FAILED(pEffect->NativeConstruct(m_iSceneID, &m_Desc)))
 	{
-		MSGBOX("HitParticle Copy Fail");
+		MSGBOX("DashDust Copy Fail");
 		Safe_Release(pEffect);
 	}
 

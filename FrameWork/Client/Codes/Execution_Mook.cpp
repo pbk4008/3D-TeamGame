@@ -49,7 +49,7 @@ _int CExecution_Mook::Tick(const _double& _dDeltaTime)
 			//pTargetTransform->Set_State(CTransform::STATE_RIGHT, svRight);
 			//pTargetTransform->Set_State(CTransform::STATE_UP, svUp);
 			//pTargetTransform->Set_State(CTransform::STATE_LOOK, svLook);
-			//pTargetTransform->Set_State(CTransform::STATE_POSITION, smatResult.r[3]);
+			pTargetTransform->Set_State(CTransform::STATE_POSITION, smatResult.r[3]);
 		}
 	}
 
