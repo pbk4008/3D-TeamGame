@@ -535,8 +535,8 @@ HRESULT CRenderer::Render_Final()
 	{
 		m_bRenderbtn[FOG] = true;
 		_float4 fogcolor = _float4(0.8f, 0.8f, 0.8f, 1.f);
-		_float fogstart = 10.f;
-		_float fogdensity = 0.05f;
+		_float fogstart = 20.f;
+		_float fogdensity = 0.01f;
 		_float4 campos;
 		XMStoreFloat4(&campos,g_pGameInstance->Get_CamPosition(m_CameraTag));
 		_matrix		ViewMatrix = g_pGameInstance->Get_Transform(m_CameraTag, TRANSFORMSTATEMATRIX::D3DTS_VIEW);
