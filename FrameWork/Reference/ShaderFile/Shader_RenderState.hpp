@@ -145,18 +145,6 @@ BlendState BlendDisable
 	BlendEnable[0] = false;
 };
 
-BlendState BlendAlphaFire
-{
-	BlendEnable[0] = true;
-	SrcBlend = Src_Alpha;
-	DestBlend = Inv_Src_Alpha;
-	BlendOp = Add;
-
-	SrcBlendAlpha = One;
-	DestBlendAlpha = Zero;
-	BlendOpAlpha = Add;
-};
-
 //----------------------------------Calculate Function-----------------------------//
 
 float3 FresnelSchlick(float cosTheta, float3 F0)

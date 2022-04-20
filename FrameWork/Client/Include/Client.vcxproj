@@ -260,6 +260,7 @@ call Update_Client.bat</Command>
     <ClInclude Include="..\Headers\Aberrant_Attack.h" />
     <ClInclude Include="..\Headers\Aberrant_Dash_Bwd.h" />
     <ClInclude Include="..\Headers\Aberrant_Death.h" />
+    <ClInclude Include="..\Headers\Aberrant_Execution.h" />
     <ClInclude Include="..\Headers\Aberrant_Flinch_Left.h" />
     <ClInclude Include="..\Headers\Aberrant_Idle.h" />
     <ClInclude Include="..\Headers\Aberrant_Run.h" />
@@ -649,6 +650,7 @@ call Update_Client.bat</Command>
     <ClCompile Include="..\Codes\Aberrant_Attack.cpp" />
     <ClCompile Include="..\Codes\Aberrant_Dash_Bwd.cpp" />
     <ClCompile Include="..\Codes\Aberrant_Death.cpp" />
+    <ClCompile Include="..\Codes\Aberrant_Execution.cpp" />
     <ClCompile Include="..\Codes\Aberrant_Flinch_Left.cpp" />
     <ClCompile Include="..\Codes\Aberrant_Idle.cpp" />
     <ClCompile Include="..\Codes\Aberrant_Run.cpp" />
