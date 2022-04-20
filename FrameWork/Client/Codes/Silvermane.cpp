@@ -607,7 +607,7 @@ HRESULT CSilvermane::Ready_Components()
 		pobjlist = g_pGameInstance->getObjectList((_uint)m_iSceneID, L"Layer_MotionTrail");
 		CGameObject* pobj = pobjlist->back();
 		pobj->setActive(false);
-		static_cast<CMotionTrail*>(pobj)->Set_Model(m_pModel);
+		static_cast<CMotionTrail*>(pobj)->Set_Model(m_pModel,m_pCurWeapon->Get_Model());
 
 		m_vecMotionTrail.emplace_back(pobj);
 	}

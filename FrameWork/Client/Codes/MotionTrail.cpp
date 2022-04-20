@@ -88,6 +88,8 @@ HRESULT CMotionTrail::Render_MotionTrail()
 		if (FAILED(m_pModel->Render(i, 4))) MSGBOX("Fialed To Rendering Silvermane");
 	}
 
+
+
 	return S_OK;
 }
 
@@ -103,10 +105,13 @@ void CMotionTrail::Set_Info(_fmatrix world, _vector position, _vector campostion
 	m_camposition = campostion;
 }
 
-void CMotionTrail::Set_Model(CModel* pModel)
+void CMotionTrail::Set_Model(CModel* pModel, CModel* pWeapon = nullptr)
 {
 	m_pModel = pModel;
 	Safe_AddRef(m_pModel);
+
+	m_pWeapon = pWeapon;
+	Safe_AddRef(m_pWeapon);
 }
 
 HRESULT CMotionTrail::Ready_Component()
@@ -145,4 +150,5 @@ CGameObject* CMotionTrail::Clone(const _uint _iSceneID, void* _pArg)
 void CMotionTrail::Free()
 {
 	CActor::Free();
+	Safe_Release(m_pWeapon);
 }

@@ -20,7 +20,6 @@
 #include "PhysicsXSystem.h"
 #include "EffectManager.h"
 #include "ResourceManager.h"
-#include "FlexSystem.h"
 
 BEGIN(Engine)
 
@@ -261,7 +260,6 @@ private:
 	CPhysicsXSystem*			m_pPhysicSystem = nullptr;
 	CEffectManager*				m_pEffectManager = nullptr;
 	CResourceManager*			m_pResourceManager = nullptr;
-	CFlexSystem*				m_pFlexSystem = nullptr;
 
 private:
 		RESOUCEPATH m_ResourcePath;

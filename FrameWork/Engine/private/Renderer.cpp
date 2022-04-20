@@ -535,11 +535,26 @@ HRESULT CRenderer::Render_Final()
 	{
 		m_bRenderbtn[FOG] = true;
 		_float4 fogcolor = _float4(0.8f, 0.8f, 0.8f, 1.f);
-		_float fogdist = 10.f;
-		_float fogdensity = 0.09f;
+		_float fogstart = 10.f;
+		_float fogdensity = 0.05f;
+		_float4 campos;
+		XMStoreFloat4(&campos,g_pGameInstance->Get_CamPosition(m_CameraTag));
+		_matrix		ViewMatrix = g_pGameInstance->Get_Transform(m_CameraTag, TRANSFORMSTATEMATRIX::D3DTS_VIEW);
+		_matrix		ProjMatrix = g_pGameInstance->Get_Transform(m_CameraTag, TRANSFORMSTATEMATRIX::D3DTS_PROJECTION);
+		ViewMatrix = XMMatrixInverse(nullptr, ViewMatrix);
+		ProjMatrix = XMMatrixInverse(nullptr, ProjMatrix);
 		if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_fogcolor", &fogcolor, sizeof(_float4)))) MSGBOX("Render Final Value fogcolor Not Apply");
-		if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_fogDist", &fogdist, sizeof(_float)))) MSGBOX("Render Final Value fogdist Not Apply");
+		if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_fogstart", &fogstart, sizeof(_float)))) MSGBOX("Render Final Value fogdist Not Apply");
 		if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_fogDenstiy", &fogdensity, sizeof(_float)))) MSGBOX("Render Final fogdensity thick Not Apply");
+		if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_vCamPosition", &campos, sizeof(_float4)))) MSGBOX("Render Final fogdensity thick Not Apply");
+		if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_fogType", &m_bfogtype, sizeof(_bool)))) MSGBOX("Render Final fogdensity thick Not Apply");
+		if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_ViewMatrixInv", &XMMatrixTranspose(ViewMatrix), sizeof(_float4x4)))) MSGBOX("Failed To Apply LightRender ViewInvers");
+		if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_ProjMatrixInv", &XMMatrixTranspose(ProjMatrix), sizeof(_float4x4)))) MSGBOX("Failed To Apply LightRender ProjInvers");
+		if (m_bfogtype == true)
+		{
+			_float fogfalloff = 0.1f;
+			if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_fogfalloff", &fogfalloff, sizeof(_float)))) MSGBOX("Render Final fogdensity thick Not Apply");
+		}
 	}
 
 	_int cnt = 32;

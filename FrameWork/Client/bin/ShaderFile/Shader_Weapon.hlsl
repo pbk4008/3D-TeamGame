@@ -276,7 +276,57 @@ PS_OUT PS_MAIN_DISSOLVE(PS_IN In)
 	
 	return Out;
 }
+//*---------------------------------------------------------------------------------------------*
+// VS Motion Trail
+struct VS_OUT_MOTIONTRAIL
+{
+	float4 vPosition : SV_POSITION;
+	float4 vNormal : NORMAL;
+	float4 vUvDepth : TEXCOORD0;
+};
 
+VS_OUT_MOTIONTRAIL VS_MAIN_MOTIONTRAIL(VS_IN In)
+{
+	VS_OUT_MOTIONTRAIL Out = (VS_OUT_MOTIONTRAIL) 0;
+	
+	matrix matWV, matWVP;
+	
+	matWV = mul(g_WorldMatrix, g_ViewMatrix);
+	matWVP = mul(matWV, g_ProjMatrix);
+
+	Out.vPosition = mul(vector(In.vPosition, 1.f), matWVP);
+	Out.vNormal = normalize(mul(vector(In.vNormal, 0.f), g_WorldMatrix));
+	
+	Out.vUvDepth.xy = In.vTexUV.xy;
+	Out.vUvDepth.zw = Out.vPosition.zw;
+
+	return Out;
+}
+// PS Motion Trail
+struct PS_IN_MOTIONTRAIL
+{
+	float4 vPosition : SV_POSITION;
+	float4 vNormal : NORMAL;
+	float4 vUvDepth : TEXCOORD0;
+};
+
+struct PS_OUT_MOTIONTRAIL
+{
+	half4 Motiontrail : SV_TARGET0;
+};
+
+PS_OUT_MOTIONTRAIL PS_MAIN_MOTIONTRAIL(PS_IN_MOTIONTRAIL In)
+{
+	PS_OUT_MOTIONTRAIL Out = (PS_OUT_MOTIONTRAIL) 0;
+
+	half4 diffuse = g_DiffuseTexture.Sample(DefaultSampler, In.vUvDepth.xy);
+	
+	half4 normal = half4(In.vNormal.xyz, 0.f);
+	Out.Motiontrail = MotionTrailRim(normal, g_camdir, g_rimintensity, g_rimcolor);
+	
+	return Out;
+}
+//*---------------------------------------------------------------------------------------------*
 technique11			DefaultTechnique
 {	
 	pass Weapone //------------------------------------------------------------------------------------0 normal

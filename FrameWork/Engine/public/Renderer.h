@@ -62,6 +62,7 @@ private: CTarget_Manager*					m_pTargetMgr = nullptr;
 private: ID3D11DepthStencilView*			m_pShadowMap = nullptr;
 
 private: _bool								m_bRenderbtn[RENDERBUTTON_END];
+private: _bool								m_bfogtype = false;
 private: _tchar								m_CameraTag[128];
 private: _int								m_RadialCnt = 0;
 
