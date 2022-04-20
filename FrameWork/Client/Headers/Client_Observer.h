@@ -42,12 +42,15 @@ public:
 	const _bool Get_PlayerFrontBackCheck(_fvector vPos);
 	//해당 좌표까지의 방향벡터
 	_fvector Get_Dir(_fvector vPos);
+	void Player_Active(_bool bCheck);
 public:
 	//플레이어 공격 셋팅
 	void Set_IsAttack(const _bool bAttack);
 	void Set_Hp(const _float fCurrentHp);
 	void MinusHp(const _float fDamage);
 	void Set_PlayerAttackAnimStart(const _bool bAnimStart) { m_bAttackAnimStart = bAnimStart; }
+public:
+	_bool Get_PlayerActive();
 private:
 	CSilvermane* m_pPlayer;
 private: /* 옵저버의 고유 멤버변수 */

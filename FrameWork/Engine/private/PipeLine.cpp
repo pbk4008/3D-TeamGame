@@ -25,6 +25,7 @@ void CPipeLine::Update_PipeLine()
 		_matrix CamWorldMatrix = XMMatrixInverse(nullptr, XMLoadFloat4x4(&pair.second->matView));
 
 		XMStoreFloat4(&pair.second->vCamPos, CamWorldMatrix.r[3]);
+		m_matView = pair.second->matView; //이펙트 버퍼에서쓸려고 저장해두는거임
 	}
 }
 

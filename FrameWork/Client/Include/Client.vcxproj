@@ -315,6 +315,9 @@ call Update_Client.bat</Command>
     <ClInclude Include="..\Headers\Camera_Silvermane.h" />
     <ClInclude Include="..\Headers\Camera_Debug.h" />
     <ClInclude Include="..\Headers\Cinema1_1.h" />
+    <ClInclude Include="..\Headers\Cinema1_2.h" />
+    <ClInclude Include="..\Headers\Cinema2_1.h" />
+    <ClInclude Include="..\Headers\CinemaActor.h" />
     <ClInclude Include="..\Headers\CinemaCam.h" />
     <ClInclude Include="..\Headers\Client_Observer.h" />
     <ClInclude Include="..\Headers\Client_Trigger.h" />
@@ -340,6 +343,7 @@ call Update_Client.bat</Command>
     <ClInclude Include="..\Headers\Effect_Env_Fire.h" />
     <ClInclude Include="..\Headers\Effect_Env_Floating.h" />
     <ClInclude Include="..\Headers\Effect_Falling_Leaf.h" />
+    <ClInclude Include="..\Headers\Effect_FloatingUp.h" />
     <ClInclude Include="..\Headers\Effect_Floating_Speed.h" />
     <ClInclude Include="..\Headers\Effect_Guard.h" />
     <ClInclude Include="..\Headers\Effect_Hammer_Dust.h" />
@@ -351,6 +355,7 @@ call Update_Client.bat</Command>
     <ClInclude Include="..\Headers\FlyingShield.h" />
     <ClInclude Include="..\Headers\Fury.h" />
     <ClInclude Include="..\Headers\GameObjectPool.h" />
+    <ClInclude Include="..\Headers\IndexIndicator.h" />
     <ClInclude Include="..\Headers\Indicator_Manager.h" />
     <ClInclude Include="..\Headers\InteractableObject.h" />
     <ClInclude Include="..\Headers\InteractManager.h" />
@@ -361,6 +366,22 @@ call Update_Client.bat</Command>
     <ClInclude Include="..\Headers\JumpNode.h" />
     <ClInclude Include="..\Headers\JumpTrigger.h" />
     <ClInclude Include="..\Headers\Level_Logo.h" />
+    <ClInclude Include="..\Headers\UI_LevelUP_Background.h" />
+    <ClInclude Include="..\Headers\UI_LevelUP_BG_Left.h" />
+    <ClInclude Include="..\Headers\UI_LevelUP_BG_Right.h" />
+    <ClInclude Include="..\Headers\UI_LevelUP_Fill_Lead_Left.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="..\Headers\UI_LevelUP_Fill_Lead_Right.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="..\Headers\UI_LevelUP_Fill_Left.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="..\Headers\UI_LevelUP_Fill_Right.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="..\Headers\UI_Level_UP.h" />
     <ClInclude Include="..\Headers\Loader.h" />
     <ClInclude Include="..\Headers\Loading.h" />
     <ClInclude Include="..\Headers\LootingChest.h" />
@@ -388,6 +409,7 @@ call Update_Client.bat</Command>
     <ClInclude Include="..\Headers\Monster_BronzeAnimus.h" />
     <ClInclude Include="..\Headers\Monster_Crawler.h" />
     <ClInclude Include="..\Headers\Monster_EarthAberrant.h" />
+    <ClInclude Include="..\Headers\MotionTrail.h" />
     <ClInclude Include="..\Headers\Needle.h" />
     <ClInclude Include="..\Headers\NoiseFire.h" />
     <ClInclude Include="..\Headers\Plane_Test.h" />
@@ -507,7 +529,15 @@ call Update_Client.bat</Command>
     <ClInclude Include="..\Headers\UI_Ingame.h" />
     <ClInclude Include="..\Headers\UI_ItemSlot.h" />
     <ClInclude Include="..\Headers\UI_ItemStatusBackground.h" />
+    <ClInclude Include="..\Headers\UI_ItemStatusEffect.h" />
     <ClInclude Include="..\Headers\UI_ItemStatusWindow.h" />
+    <ClInclude Include="..\Headers\UI_LootBackground.h" />
+    <ClInclude Include="..\Headers\UI_LootFrame.h" />
+    <ClInclude Include="..\Headers\UI_LootGrade.h" />
+    <ClInclude Include="..\Headers\UI_LootItemEffect.h" />
+    <ClInclude Include="..\Headers\UI_LootItemIcon.h" />
+    <ClInclude Include="..\Headers\UI_LootItemNameText.h" />
+    <ClInclude Include="..\Headers\UI_LootItemNameType.h" />
     <ClInclude Include="..\Headers\UI_ModalWindow.h" />
     <ClInclude Include="..\Headers\UI_Monster_Back.h" />
     <ClInclude Include="..\Headers\UI_Monster_BackHpBar.h" />
@@ -516,8 +546,17 @@ call Update_Client.bat</Command>
     <ClInclude Include="..\Headers\UI_Monster_Level.h" />
     <ClInclude Include="..\Headers\UI_Monster_Name.h" />
     <ClInclude Include="..\Headers\UI_Monster_Panel.h" />
+    <ClInclude Include="..\Headers\UI_PlayerStatusWindow.h" />
+    <ClInclude Include="..\Headers\UI_PlayerStatus_BG.h" />
+    <ClInclude Include="..\Headers\UI_PlayerStatus_DPS_1.h" />
+    <ClInclude Include="..\Headers\UI_PlayerStatus_DPS_2.h" />
+    <ClInclude Include="..\Headers\UI_PlayerStatus_MaxHealth.h" />
+    <ClInclude Include="..\Headers\UI_PlayerStatus_Might.h" />
+    <ClInclude Include="..\Headers\UI_PlayerStatus_Spirit.h" />
+    <ClInclude Include="..\Headers\UI_PlayerStatus_Viality.h" />
     <ClInclude Include="..\Headers\UI_Player_HpBar.h" />
     <ClInclude Include="..\Headers\UI_Player_HpBar_Red.h" />
+    <ClInclude Include="..\Headers\UI_SelectEffect.h" />
     <ClInclude Include="..\Headers\UI_SlotBackground.h" />
     <ClInclude Include="..\Headers\UI_SlotGrade.h" />
     <ClInclude Include="..\Headers\UI_SlotItemEffect.h" />
@@ -661,6 +700,9 @@ call Update_Client.bat</Command>
     <ClCompile Include="..\Codes\CameraShake.cpp" />
     <ClCompile Include="..\Codes\Camera_Culling.cpp" />
     <ClCompile Include="..\Codes\Cinema1_1.cpp" />
+    <ClCompile Include="..\Codes\Cinema1_2.cpp" />
+    <ClCompile Include="..\Codes\Cinema2_1.cpp" />
+    <ClCompile Include="..\Codes\CinemaActor.cpp" />
     <ClCompile Include="..\Codes\CinemaCam.cpp" />
     <ClCompile Include="..\Codes\Client_Observer.cpp" />
     <ClCompile Include="..\Codes\Client_Trigger.cpp" />
@@ -685,6 +727,7 @@ call Update_Client.bat</Command>
     <ClCompile Include="..\Codes\Effect_Env_Fire.cpp" />
     <ClCompile Include="..\Codes\Effect_Env_Floating.cpp" />
     <ClCompile Include="..\Codes\Effect_Falling_Leaf.cpp" />
+    <ClCompile Include="..\Codes\Effect_FloatingUp.cpp" />
     <ClCompile Include="..\Codes\Effect_Floating_Speed.cpp" />
     <ClCompile Include="..\Codes\Effect_Guard.cpp" />
     <ClCompile Include="..\Codes\Effect_Hammer_Dust.cpp" />
@@ -695,6 +738,7 @@ call Update_Client.bat</Command>
     <ClCompile Include="..\Codes\FlyingShield.cpp" />
     <ClCompile Include="..\Codes\Fury.cpp" />
     <ClCompile Include="..\Codes\GameObjectPool.cpp" />
+    <ClCompile Include="..\Codes\IndexIndicator.cpp" />
     <ClCompile Include="..\Codes\Indicator_Manager.cpp" />
     <ClCompile Include="..\Codes\InteractableObject.cpp" />
     <ClCompile Include="..\Codes\InteractManager.cpp" />
@@ -703,6 +747,22 @@ call Update_Client.bat</Command>
     <ClCompile Include="..\Codes\ItemData.cpp" />
     <ClCompile Include="..\Codes\JumpBox.cpp" />
     <ClCompile Include="..\Codes\JumpTrigger.cpp" />
+    <ClCompile Include="..\Codes\UI_LevelUP_Background.cpp" />
+    <ClCompile Include="..\Codes\UI_LevelUP_BG_Left.cpp" />
+    <ClCompile Include="..\Codes\UI_LevelUP_BG_Right.cpp" />
+    <ClCompile Include="..\Codes\UI_LevelUP_Fill_Lead_Left.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\Codes\UI_LevelUP_Fill_Lead_Right.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\Codes\UI_LevelUP_Fill_Left.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\Codes\UI_LevelUP_Fill_Right.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\Codes\UI_Level_UP.cpp" />
     <ClCompile Include="..\Codes\LootingChest.cpp" />
     <ClCompile Include="..\Codes\Hud.cpp" />
     <ClCompile Include="..\Codes\Loot_Equipment.cpp" />
@@ -740,6 +800,7 @@ call Update_Client.bat</Command>
     <ClCompile Include="..\Codes\Monster_BronzeAnimus.cpp" />
     <ClCompile Include="..\Codes\Monster_Crawler.cpp" />
     <ClCompile Include="..\Codes\Monster_EarthAberrant.cpp" />
+    <ClCompile Include="..\Codes\MotionTrail.cpp" />
     <ClCompile Include="..\Codes\Needle.cpp" />
     <ClCompile Include="..\Codes\NoiseFire.cpp" />
     <ClCompile Include="..\Codes\Plane_Test.cpp" />
@@ -858,7 +919,15 @@ call Update_Client.bat</Command>
     <ClCompile Include="..\Codes\UI_Ingame.cpp" />
     <ClCompile Include="..\Codes\UI_ItemSlot.cpp" />
     <ClCompile Include="..\Codes\UI_ItemStatusBackground.cpp" />
+    <ClCompile Include="..\Codes\UI_ItemStatusEffect.cpp" />
     <ClCompile Include="..\Codes\UI_ItemStatusWindow.cpp" />
+    <ClCompile Include="..\Codes\UI_LootBackground.cpp" />
+    <ClCompile Include="..\Codes\UI_LootFrame.cpp" />
+    <ClCompile Include="..\Codes\UI_LootGrade.cpp" />
+    <ClCompile Include="..\Codes\UI_LootItemEffect.cpp" />
+    <ClCompile Include="..\Codes\UI_LootItemIcon.cpp" />
+    <ClCompile Include="..\Codes\UI_LootItemNameText.cpp" />
+    <ClCompile Include="..\Codes\UI_LootItemNameType.cpp" />
     <ClCompile Include="..\Codes\UI_ModalWindow.cpp" />
     <ClCompile Include="..\Codes\UI_Monster_Back.cpp" />
     <ClCompile Include="..\Codes\UI_Monster_BackHpBar.cpp" />
@@ -867,8 +936,17 @@ call Update_Client.bat</Command>
     <ClCompile Include="..\Codes\UI_Monster_Level.cpp" />
     <ClCompile Include="..\Codes\UI_Monster_Name.cpp" />
     <ClCompile Include="..\Codes\UI_Monster_Panel.cpp" />
+    <ClCompile Include="..\Codes\UI_PlayerStatusWindow.cpp" />
+    <ClCompile Include="..\Codes\UI_PlayerStatus_BG.cpp" />
+    <ClCompile Include="..\Codes\UI_PlayerStatus_DPS_1.cpp" />
+    <ClCompile Include="..\Codes\UI_PlayerStatus_DPS_2.cpp" />
+    <ClCompile Include="..\Codes\UI_PlayerStatus_MaxHealth.cpp" />
+    <ClCompile Include="..\Codes\UI_PlayerStatus_Might.cpp" />
+    <ClCompile Include="..\Codes\UI_PlayerStatus_Spirit.cpp" />
+    <ClCompile Include="..\Codes\UI_PlayerStatus_Viality.cpp" />
     <ClCompile Include="..\Codes\UI_Player_HpBar.cpp" />
     <ClCompile Include="..\Codes\UI_Player_HpBar_Red.cpp" />
+    <ClCompile Include="..\Codes\UI_SelectEffect.cpp" />
     <ClCompile Include="..\Codes\UI_SlotBackground.cpp" />
     <ClCompile Include="..\Codes\UI_SlotGrade.cpp" />
     <ClCompile Include="..\Codes\UI_SlotItemEffect.cpp" />
@@ -929,6 +1007,7 @@ call Update_Client.bat</Command>
     <FxCompile Include="..\bin\ShaderFile\Shader_Monster.hlsl" />
     <FxCompile Include="..\bin\ShaderFile\Shader_Panel_UI.hlsl" />
     <FxCompile Include="..\bin\ShaderFile\Shader_Particle.hlsl" />
+    <FxCompile Include="..\bin\ShaderFile\Shader_Particle_Alpha.hlsl" />
     <FxCompile Include="..\bin\ShaderFile\Shader_Particle_Size.hlsl" />
     <FxCompile Include="..\bin\ShaderFile\Shader_Potal.hlsl" />
     <FxCompile Include="..\bin\ShaderFile\Shader_RectFire.hlsl" />

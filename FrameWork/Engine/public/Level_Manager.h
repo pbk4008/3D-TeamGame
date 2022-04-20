@@ -17,6 +17,7 @@ public:
 	/* 기존레벨을 날리고. 보여주고싶은 레베릉ㄹ 셋팅하낟.  */
 	HRESULT Open_Level(_uint iLevelIndex, class CLevel* pOpenLevel);
 	_int Tick(_double TimeDelta);
+	_int LateTick(_double TimeDelta);
 	HRESULT Render();
 	HRESULT Delete_GameObject();
 public:

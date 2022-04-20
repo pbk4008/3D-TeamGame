@@ -25,7 +25,8 @@ protected:
 	virtual _int Tick(_double TimeDelta);
 	virtual _int LateTick(_double TimeDelta);
 	virtual HRESULT Render();
-
+public:
+	virtual CEffect* Copy();
 private:
 	virtual HRESULT SetUp_Components();
 
@@ -37,7 +38,8 @@ private:
 
 private:
 	CEffect::EFFECTDESC m_Desc;
-
+	_float m_fSize = 6.f;
+	_float m_fAccRetain=0.f;
 public:
 	static CEffect_Dead_Spray* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);
 	virtual CGameObject* Clone(const _uint _iSceneID, void* pArg) override;

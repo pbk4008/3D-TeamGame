@@ -1,11 +1,13 @@
 #include "pch.h"
 #include "..\Headers\Scenematic.h"
+#include "CinemaActor.h"
 
 CScenematic::CScenematic()
 	: m_pDevice(nullptr)
 	, m_pDeviceContext(nullptr)
 	, m_bActive(true)
 	, m_bCinemaEnd(false)
+	, m_iSceneID(0)
 {
 }
 
@@ -14,13 +16,16 @@ CScenematic::CScenematic(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceCont
 	, m_pDeviceContext(pDeviceContext)
 	, m_bActive(true)
 	, m_bCinemaEnd(false)
+	, m_iSceneID(0)
 {
 	Safe_AddRef(pDevice);
 	Safe_AddRef(pDeviceContext);
 }
 
-HRESULT CScenematic::NativeContruct()
+HRESULT CScenematic::NativeContruct(_uint iSceneID)
 {
+	m_iSceneID = iSceneID;
+
 	return S_OK;
 }
 
@@ -32,6 +37,7 @@ _int CScenematic::Tick(_double dDeltaTime)
 	{
 		Set_Active(false);
 		End_Cinema();
+		m_bCinemaEnd = false;
 		return 1;
 	}
 
@@ -51,12 +57,17 @@ void CScenematic::Set_Active(_bool bCheck)
 	m_bActive = bCheck;
 	for (auto& pCom : m_vecScenemaComponents)
 		pCom->setActive(bCheck);
+
+	OnOffPlayerWithUI(bCheck);
 }
 
 void CScenematic::End_Cinema()
 {
 	if (m_bCinemaEnd)
+	{
+		OnOffPlayerWithUI(true);
 		g_pGameInstance->Change_BaseCamera(L"Camera_Silvermane");
+	}
 }
 
 HRESULT CScenematic::Set_UpComponents(CComponent* pComponent)
@@ -67,6 +78,28 @@ HRESULT CScenematic::Set_UpComponents(CComponent* pComponent)
 	Safe_AddRef(pComponent);
 
 	return S_OK;
+}
+
+HRESULT CScenematic::Ready_Actor(CCinemaActor** pOut, _uint iActorTag)
+{
+	*pOut = g_pGameInstance->Clone_GameObject<CCinemaActor>((_uint)SCENEID::SCENE_STAGE1, L"Proto_GameObject_CinemaActor", &iActorTag);
+	if (*pOut == nullptr)
+	{
+		MSGBOX("Ready Actor Fail");
+		return E_FAIL;
+	}
+	return S_OK;
+}
+
+void CScenematic::OnOffPlayerWithUI(_bool bCheck)
+{
+	g_pObserver->Player_Active(bCheck);
+	list<CGameObject*>* pUIList = g_pGameInstance->getObjectList(m_iSceneID, L"Layer_UI_Green");
+	for (auto& pUI : *pUIList)
+		pUI->setActive(bCheck);
+	pUIList = g_pGameInstance->getObjectList(m_iSceneID, L"Layer_UI");
+	for (auto& pUI : *pUIList)
+		pUI->setActive(bCheck);
 }
 
 void CScenematic::Free()

@@ -67,7 +67,7 @@ HRESULT CDropBox_Open::ExitState()
 		return E_FAIL;
 
 	return S_OK;
-}
+} 
 
 CDropBox_Open* CDropBox_Open::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext, void* pArg)
 {

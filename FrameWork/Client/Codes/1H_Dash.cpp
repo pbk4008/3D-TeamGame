@@ -75,7 +75,10 @@ HRESULT C1H_Dash::EnterState()
 	m_pSilvermane->Set_IsTrasceCamera(false);
 	m_pAnimationController->Set_PlaySpeed(1.2f);
 
+	_vector Pos = { 0.f, 0.5f, 0.f, 0.f };
+	m_pSilvermane->Active_Effect((_uint)EFFECT::DASH, Pos);
 	g_pGameInstance->BlendSound(L"Player_Dash", L"Player_Dash_1", CSoundMgr::CHANNELID::PLAYER1, CSoundMgr::CHANNELID::PLAYER2);
+
 	return S_OK;
 }
 
@@ -103,6 +106,7 @@ _int C1H_Dash::Input(const _double& _dDeltaTime)
 	{
 		if (g_pGameInstance->getkeyDown(DIK_SPACE))
 		{
+			
 			EDir eDir = EDir::Max;
 			if (g_pGameInstance->getkeyPress(DIK_A))
 			{

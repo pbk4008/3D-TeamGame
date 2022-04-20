@@ -627,6 +627,18 @@ const _int CAnimationController::Add_TransformVelocity(const _double& _dDeltaTim
 void CAnimationController::Reset_Animation()
 {
 	m_pCurAnim->Reset_Animation();
+	m_isFinished = false;
+}
+
+HRESULT CAnimationController::Set_Animation(_uint iIndex)
+{
+	vector<CAnimation*>& vecAnimations = m_pModel->Get_Animations();
+
+	if (vecAnimations.size() < iIndex)
+	{
+		return E_FAIL;
+	}
+	m_pCurAnim = vecAnimations[iIndex];
 }
 
 void CAnimationController::Render_Debug()

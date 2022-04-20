@@ -17,6 +17,7 @@ private:
 public:
 	virtual HRESULT NativeConstruct();
 	virtual _int Tick(_double TimeDelta);
+	virtual _int LateTick(_double TimeDelta);
 	virtual HRESULT Render();
 private:
 	HRESULT Ready_MapObject();
@@ -78,8 +79,6 @@ private:
 	_uint m_iCountMonster;
 	_bool m_bFirst;
 	_bool test = false;
-private:
-	CScenematic* m_pCinema = nullptr;
 private:/*for Meteor*/
 	vector<CMeteor*> m_vecMeteor;
 	vector<_float4> m_vecMeteorPos;

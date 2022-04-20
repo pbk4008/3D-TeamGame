@@ -126,6 +126,10 @@ _int CGameInstance::Tick_Engine(_double TimeDelta)
 	iProgress = m_pObject_Manager->LateTick(TimeDelta);
 	if (0 > iProgress)
 		return -1;
+	iProgress = m_pLevel_Manager->LateTick(TimeDelta);
+
+	if (0 > iProgress)
+		return -1;
 
 	return _int();
 }
@@ -414,6 +418,11 @@ _fmatrix CGameInstance::GetPreViewProtj(_fmatrix world)
 		MSGBOX("pipeline is null");
 
 	return m_pPipeLine->GetPreViewProtj(world);
+}
+
+_matrix CGameInstance::Get_ViewMatrix()
+{
+	return m_pPipeLine->Get_ViewMatrix();
 }
 
 void CGameInstance::Update_InputDev()

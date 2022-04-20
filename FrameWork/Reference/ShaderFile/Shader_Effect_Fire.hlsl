@@ -99,7 +99,7 @@ PS_OUT PS_MAIN(PS_IN In)
     PS_OUT Out = (PS_OUT) 0;
 
     In.vTexUV.x = (In.vTexUV.x / g_iImageCountX) + (g_iFrame % g_iImageCountX) * (1.f / g_iImageCountX);
-    In.vTexUV.y = (In.vTexUV.y / g_iImageCountY) + (g_iFrame / g_iImageCountY) * (1.f / g_iImageCountY);
+    In.vTexUV.y = (In.vTexUV.y / g_iImageCountY) + (g_iFrame / g_iImageCountX) * (1.f / g_iImageCountY);
 	  
     Out.vColor = g_DiffuseTexture.Sample(DefaultSampler, In.vTexUV);
 
@@ -118,12 +118,12 @@ PS_OUT PS_MAIN1(PS_IN In)
     PS_OUT Out = (PS_OUT) 0;
 
     In.vTexUV.x = (In.vTexUV.x / g_iImageCountX) + (g_iFrame % g_iImageCountX) * (1.f / g_iImageCountX);
-    In.vTexUV.y = (In.vTexUV.y / g_iImageCountY) + (g_iFrame / g_iImageCountY) * (1.f / g_iImageCountY);
+    In.vTexUV.y = (In.vTexUV.y / g_iImageCountY) + (g_iFrame / g_iImageCountX) * (1.f / g_iImageCountY);
 
 	half4 color = g_DiffuseTexture.Sample(DefaultSampler, In.vTexUV);
 	
 	Out.vColor = color;
-	//Out.weight = color.r * g_Weight * Out.vColor;
+	Out.weight = half4(g_Weight.xxx, Out.vColor.a);
 	
     return Out;
 }
@@ -148,7 +148,7 @@ PS_OUT_NONALPHA PS_MAIN_NONALPHA(PS_IN_NONALPHA In)
 	PS_OUT_NONALPHA Out = (PS_OUT_NONALPHA) 0;
 	
 	In.vUvDepth.x = (In.vUvDepth.x / g_iImageCountX) + (g_iFrame % g_iImageCountX) * (1.f / g_iImageCountX);
-	In.vUvDepth.y = (In.vUvDepth.y / g_iImageCountY) + (g_iFrame / g_iImageCountY) * (1.f / g_iImageCountY);
+    In.vUvDepth.y = (In.vUvDepth.y / g_iImageCountY) + (g_iFrame / g_iImageCountX) * (1.f / g_iImageCountY);
 
 	float4 diffuse = g_DiffuseTexture.Sample(DefaultSampler, In.vUvDepth.xy);
 	
@@ -187,7 +187,7 @@ technique11 DefaultTechnique
     {
         SetRasterizerState(CullMode_Default);
         SetDepthStencilState(ZDefault, 0);
-        SetBlendState(AlphaBlending, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+		SetBlendState(AlphaBlending2, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
 
         VertexShader = compile vs_5_0 VS_MAIN();
         GeometryShader = NULL;

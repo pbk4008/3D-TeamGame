@@ -23,9 +23,8 @@ Texture2D g_Blur4Texture;
 Texture2D g_Blur8Texture;
 Texture2D g_Blur16Texture;
 
-Texture2D g_ShadowTexture;
-
 Texture2D g_SkyBoxTexutre;
+Texture2D g_RimLightTexture;
 
 cbuffer check
 {
@@ -74,7 +73,8 @@ PS_OUT PS_MAIN_BLEND(PS_IN In)
 	half4 diffuse = g_DiffuseTexture.Sample(DefaultSampler, In.vTexUV);
 	half4 emission = g_EmissionTexture.Sample(DefaultSampler, In.vTexUV);
 	half4 specular = g_SpecularTexture.Sample(DefaultSampler, In.vTexUV);
-		 
+	//half4 rimlight = g_RimLightTexture.Sample(DefaultSampler, In.vTexUV);
+	
 	half4 blur2 = g_Blur2Texture.Sample(DefaultSampler, In.vTexUV);
 	half4 blur4 = g_Blur4Texture.Sample(DefaultSampler, In.vTexUV);
 	half4 blur8 = g_Blur8Texture.Sample(DefaultSampler, In.vTexUV);
@@ -89,7 +89,7 @@ PS_OUT PS_MAIN_BLEND(PS_IN In)
 		diffuse = sky;
 	}
 	
-	final = diffuse + specular + emissive;
+	final = diffuse + specular + emissive/* + rimlight*/;
 	
 	Out.vOutColor = final;
 	

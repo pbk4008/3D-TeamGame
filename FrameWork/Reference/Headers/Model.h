@@ -31,6 +31,8 @@ public:
 	_bool getUsingMaterial() { return m_bUsingMaterial; }
 	vector<vector<CMeshContainer*>> Get_MeshContainer() { return m_MeshContainers; }
 	vector<CMaterial*> Get_Materials() { return m_vecMaterials; }
+	_fmatrix*	Get_OldBoneMatrix() { return m_oldbonemat; }
+	_fmatrix*	Get_CurBoneMatrix() { return m_curbonemat; }
 public:
 	void setUsingTool(_bool Check) { m_bUsingTool = Check; }
 	void Set_PivotMatrix(const _fmatrix& _matPivot);
@@ -44,6 +46,7 @@ public:
 	HRESULT SetUp_TextureOnShader(const char* pConstantName, class CTexture* pTextureCom, _uint iTextureIndex = 0);
 	HRESULT SetUp_TextureOnShader(const char* pConstantName, _uint iMeshContainerIndex, aiTextureType eType);
 	HRESULT SetUp_TextureOnShader(const char* pConstantName, ID3D11ShaderResourceView* pSRV);
+
 
 	void SetUp_AnimationIndex(_uint iAnimationIndex) { m_iCurrentAnimation = iAnimationIndex; }
 	HRESULT Update_CombinedTransformationMatrix(_double TimeDelta);
@@ -65,6 +68,7 @@ private:
 	_bool				m_bUsingMaterial = false;
 	_bool				m_bUsingTool = false;
 	_matrix				m_oldbonemat[256];
+	_matrix				m_curbonemat[256];
 private:
 	CSaveManager::DYNAMICDATA m_tAnimData;
 private:

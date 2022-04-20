@@ -33,7 +33,7 @@ HRESULT CPostProcess::AlphaBlur(CTarget_Manager* pTargetMgr, _bool alpha)
 		if (FAILED(BlurPass(pTargetMgr, L"Target_AlphaBlend", L"Target_ParticleV2", L"Target_ParticleH2", 640, 360))) return E_FAIL;
 		if (FAILED(BlurPass(pTargetMgr, L"Target_ParticleH2", L"Target_ParticleV4", L"Target_ParticleH4", 320, 180))) return E_FAIL;
 
-		if (FAILED(BloomPass(pTargetMgr,L"Target_Alpha", L"Target_AlphaBlend", L"Target_ParticleH2", L"Target_ParticleH4", 1.5f, false))) return E_FAIL;
+		if (FAILED(BloomPass(pTargetMgr,L"Target_Alpha", L"Target_AlphaBlend", L"Target_ParticleH2", L"Target_ParticleH4", 1.0f, false))) return E_FAIL;
 	}
 
 	return S_OK;

@@ -116,6 +116,13 @@ namespace Engine
 		XMFLOAT2		vPSize;
 	} VTXPOINT;
 
+	typedef struct tagVertex_Point_Sort
+	{
+		XMFLOAT3		vPosition;
+		XMFLOAT2		vPSize;
+		FLOAT			ViewZ;
+	} VTXPOINTSORT;
+
 	typedef struct tagVertex_Color
 	{
 		XMFLOAT3		vPosition;
@@ -225,7 +232,7 @@ namespace Engine
 	{
 		_bool	rimcheck = false;
 		_float	rimintensity = 0.f;
-		_float4 rimcol = _float4(0, 0, 0, 0);
+		_float3 rimcol = _float3(0, 0, 0);
 		_float4 camdir = _float4(0, 0, 0, 0);
 
 	}RIM;

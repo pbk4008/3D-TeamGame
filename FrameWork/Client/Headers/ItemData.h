@@ -23,10 +23,12 @@ public:
 	std::wstring iconTexName = L"None_Icon";
 	std::wstring szWeaponName = L"";
 	std::wstring szItemName = L"";
+	std::wstring szStatusName = L"";
 
 	CWeaponData			   weaponData;
 	EEquipmentGrade		   equipmentGrade		 = EEquipmentGrade::EQUIPGRADE_END;
-	eEquipmentMainStatType equipmentMainStatType = eEquipmentMainStatType::MainStatType_End;
+	EEquipmentMainStatType equipmentMainStatType = EEquipmentMainStatType::MainStatType_End;
+	EEquipmentName		   equipmentName		 = EEquipmentName::Equipment_Name_End;
 
 	_bool bEquiped = false;
 	_int iDmg = 1;

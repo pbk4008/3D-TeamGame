@@ -89,6 +89,8 @@ HRESULT CDodgeSlide::EnterState(void* _pArg)
 	if (_pArg)
 		memcpy_s(&m_eDir, sizeof(EDir), _pArg, sizeof(EDir));
 
+	_vector Pos = { 0.f, 0.5f, 0.f, 0.f };
+	m_pSilvermane->Active_Effect((_uint)EFFECT::DASH, Pos);
 
 	CCameraShake::SHAKEEVENT tShakeEvent;
 	tShakeEvent.fDuration = 1.f;

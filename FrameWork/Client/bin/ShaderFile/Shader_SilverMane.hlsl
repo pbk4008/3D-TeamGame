@@ -27,7 +27,6 @@ struct VS_OUT
 	float4	vTangent	: TANGENT;
 	float4	vBiNormal	: BINORMAL;
 	float4	vUvDepth	: TEXCOORD0;
-	float4	vVelocity	: TEXCOORD1;
 };
 
 VS_OUT VS_MAIN_ANIM(VS_IN In)
@@ -42,11 +41,6 @@ VS_OUT VS_MAIN_ANIM(VS_IN In)
 						mul(g_BoneMatrices.Bone[In.vBlendIndex.y], In.vBlendWeight.y) +
 						mul(g_BoneMatrices.Bone[In.vBlendIndex.z], In.vBlendWeight.z) +
 						mul(g_BoneMatrices.Bone[In.vBlendIndex.w], In.vBlendWeight.w);
-	
-	matrix OldBoneMatrix =  mul(g_OldBoneMatrices.Bone[In.vBlendIndex.x], In.vBlendWeight.x) +
-							mul(g_OldBoneMatrices.Bone[In.vBlendIndex.y], In.vBlendWeight.y) +
-							mul(g_OldBoneMatrices.Bone[In.vBlendIndex.z], In.vBlendWeight.z) +
-							mul(g_OldBoneMatrices.Bone[In.vBlendIndex.w], In.vBlendWeight.w);
 
 	matWV = mul(g_WorldMatrix, g_ViewMatrix);
 	matWVP = mul(matWV, g_ProjMatrix);
@@ -68,7 +62,6 @@ VS_OUT VS_MAIN_ANIM(VS_IN In)
 
 	return Out;
 }
-
 //*---------------------------------------------------------------------------------------------*
 // VS_Velocity
 struct VS_OUT_VELOCITY
@@ -233,7 +226,6 @@ struct PS_OUT
 	half4 depth		: SV_TARGET2;
 	half4 mra		: SV_Target3;
 	half4 emission	: SV_Target4;
-	half4 vVelocity : SV_Target5;
 };
 
 PS_OUT PS_MAIN_TOP(PS_IN In)
@@ -284,7 +276,7 @@ PS_OUT PS_MAIN_TOP(PS_IN In)
 	
 	if(g_rimlightcheck == true)
 	{
-		half4 normal = half4(Out.normal.rgb * 2.f - 1.f, 0.f);
+		half4 normal = half4(In.vNormal.xyz, 0.f);
 		float4 rim = RimLighting(normal, g_camdir, g_rimintensity, g_rimcolor);
 		Out.emission += rim;
 	}
@@ -318,6 +310,13 @@ PS_OUT PS_MAIN_DOWN(PS_IN In)
 	Out.mra.b = ao + g_AO;
 	Out.mra.a = 1.f;
 	Out.emission = E;
+	
+	if (g_rimlightcheck == true)
+	{
+		half4 normal = half4(In.vNormal.xyz, 0.f);
+		float4 rim = RimLighting(normal, g_camdir, g_rimintensity, g_rimcolor);
+		Out.emission += rim;
+	}
 	
 	return Out;
 }
@@ -371,6 +370,69 @@ PS_OUT PS_MAIN_HAIR(PS_IN In)
 	return Out;
 }
 
+//*---------------------------------------------------------------------------------------------*
+struct VS_OUT_MOTIONTRAIL
+{
+	float4 vPosition	: SV_POSITION;
+	float4 vNormal		: NORMAL;
+	float4 vUvDepth		: TEXCOORD0;
+};
+
+VS_OUT_MOTIONTRAIL VS_MAIN_MOTIONTRAIL(VS_IN In)
+{
+	VS_OUT_MOTIONTRAIL Out = (VS_OUT_MOTIONTRAIL) 0;
+
+	matrix matWV, matWVP;
+
+	float fWeightw = 1.f - (In.vBlendWeight.x + In.vBlendWeight.y + In.vBlendWeight.z);
+
+	matrix BoneMatrix = mul(g_TrailBoneMatrices.Bone[In.vBlendIndex.x], In.vBlendWeight.x) +
+						mul(g_TrailBoneMatrices.Bone[In.vBlendIndex.z], In.vBlendWeight.z) +
+						mul(g_TrailBoneMatrices.Bone[In.vBlendIndex.y], In.vBlendWeight.y) +
+						mul(g_TrailBoneMatrices.Bone[In.vBlendIndex.w], In.vBlendWeight.w);
+
+	matWV = mul(g_WorldMatrix, g_ViewMatrix);
+	matWVP = mul(matWV, g_ProjMatrix);
+	//matWVP = mul(g_WorldMatrix, g_ProjMatrix);
+
+		
+	vector vPosition = mul(vector(In.vPosition, 1.f), BoneMatrix);
+	vPosition = mul(vPosition, matWVP);
+	Out.vPosition = vPosition;
+
+	vector vNormal = mul(vector(In.vNormal, 0.f), BoneMatrix);
+	
+	Out.vNormal = normalize(mul(vNormal, g_WorldMatrix));
+	Out.vUvDepth.xy = In.vTexUV.xy;
+	Out.vUvDepth.zw = Out.vPosition.zw;
+
+	return Out;
+}
+struct PS_IN_MOTIONTRAIL
+{
+	float4 vPosition	: SV_POSITION;
+	float4 vNormal		: NORMAL;
+	float4 vUvDepth		: TEXCOORD0;
+};
+
+struct PS_OUT_MOTIONTRAIL
+{
+	half4 Motiontrail : SV_TARGET0;
+};
+
+PS_OUT_MOTIONTRAIL PS_MAIN_MOTIONTRAIL(PS_IN_MOTIONTRAIL In)
+{
+	PS_OUT_MOTIONTRAIL Out = (PS_OUT_MOTIONTRAIL) 0;
+
+	half4 diffuse = g_DiffuseTexture.Sample(DefaultSampler, In.vUvDepth.xy);
+	
+	half4 normal = half4(In.vNormal.xyz, 0.f);
+	Out.Motiontrail = MotionTrailRim(normal, g_camdir, g_rimintensity, g_rimcolor);
+	
+	return Out;
+}
+//*---------------------------------------------------------------------------------------------*
+
 technique11			DefaultTechnique
 {	
 	pass SliverManeTop //------------------------------------------------------------------------------------0 Top
@@ -421,19 +483,19 @@ technique11			DefaultTechnique
 		PixelShader = compile ps_5_0 PS_MAIN_HAIR();
 	}
 
-	pass ShadowANIM //-----------------------------------------------------------------------------------------4 Anim ShadowMap
+	pass Motiontrail //-----------------------------------------------------------------------------------------4 Motion Trail
 	{
 		SetRasterizerState(CullMode_Default);
 		SetDepthStencilState(ZDefault, 0);
 		SetBlendState(BlendDisable, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
 
 		/* 진입점함수를 지정한다. */
-		VertexShader = compile vs_5_0 VS_MAIN_SHADOW();
+		VertexShader = compile vs_5_0 VS_MAIN_MOTIONTRAIL();
 		GeometryShader = NULL;
-		PixelShader = compile ps_5_0 PS_MAIN_SHADOW();
+		PixelShader = compile ps_5_0 PS_MAIN_MOTIONTRAIL();
 	}
 
-	pass Velocity //-----------------------------------------------------------------------------------------4 Anim ShadowMap
+	pass Velocity //-----------------------------------------------------------------------------------------5 Anim Velocity
 	{
 		SetRasterizerState(CullMode_Default);
 		SetDepthStencilState(ZDefault, 0);
@@ -443,6 +505,18 @@ technique11			DefaultTechnique
 		VertexShader = compile vs_5_0 VS_MAIN_VELOCITY();
 		GeometryShader = NULL;
 		PixelShader = compile ps_5_0 PS_MAIN_VELOCITY();
+	}
+
+	pass ShadowANIM //-----------------------------------------------------------------------------------------6 Anim ShadowMap
+	{
+		SetRasterizerState(CullMode_Default);
+		SetDepthStencilState(ZDefault, 0);
+		SetBlendState(BlendDisable, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+
+		/* 진입점함수를 지정한다. */
+		VertexShader = compile vs_5_0 VS_MAIN_SHADOW();
+		GeometryShader = NULL;
+		PixelShader = compile ps_5_0 PS_MAIN_SHADOW();
 	}
 }
 

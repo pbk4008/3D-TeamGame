@@ -18,6 +18,7 @@ public:
 	_fmatrix Get_Transform(const wstring& pCameraTag, TRANSFORMSTATEMATRIX eType);
 	_fvector Get_CamPosition(const wstring& pCameraTag);
 	void Set_Transform(const wstring& pCameraTag, TRANSFORMSTATEMATRIX eType, _fmatrix TransformMatrix);
+	_matrix Get_ViewMatrix() { return XMLoadFloat4x4(&m_matView); }
 	
 	HRESULT	SetPreViewProtj(const wstring& cametag);
 	_fmatrix GetPreViewProtj(_fmatrix world);
@@ -34,6 +35,8 @@ private:
 	vector<pair<wstring, CAMERA*>>	m_mapPipeLine;
 	_float4x4						m_matPreView;
 	_float4x4						m_matPreProj;
+
+	_float4x4	m_matView;
 public:
 	virtual void Free() override;
 };

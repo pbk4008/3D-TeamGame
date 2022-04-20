@@ -456,64 +456,64 @@ HRESULT CTestScene_JS::Ready_Data_Effect()
 	}
 
 
-	//OpenBox
-	vector<CEffect_Floating_Speed::FLOATINGSPEEDDESC> vecOpenBox;
-	g_pGameInstance->LoadFile<CEffect_Floating_Speed::FLOATINGSPEEDDESC>(vecOpenBox, L"../bin/SaveData/Effect/Effect_Open_Box.dat");
+	////OpenBox
+	//vector<CEffect_Floating_Speed::EF_PAR_FLOATSPEED_DESC> vecOpenBox;
+	//g_pGameInstance->LoadFile<CEffect_Floating_Speed::EF_PAR_FLOATSPEED_DESC>(vecOpenBox, L"../bin/SaveData/Effect/Effect_Open_Box.dat");
 
-	FullName = L"Proto_GameObject_Effect_Floating_Speed";
-	//FullName = L"Proto_GameObject_Effect_Attack_Left";
-	vecOpenBox[0].ParticleColor = { 0.3f,0.5f,1.f, 1.f };
-	vecOpenBox[0].Power = 2.5f;
+	//FullName = L"Proto_GameObject_Effect_Floating_Speed";
+	////FullName = L"Proto_GameObject_Effect_Attack_Left";
+	//vecOpenBox[0].ParticleColor = { 0.3f,0.5f,1.f, 1.f };
+	//vecOpenBox[0].Power = 2.5f;
 
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Open_Box", FullName, &vecOpenBox[0], (CGameObject**)&pEffect)))
-	{
-		MSGBOX("Failed to Creating Effect_Open_Box in CStage1::Ready_Effect()");
-		return E_FAIL;
-	}
-	if (FAILED(g_pGameInstance->Add_Effect((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Open_Box", pEffect, 3)))
-	{
-		MSGBOX("Falild to Add_Effect_Open_Box in CStage1::Ready_Effect()");
-		return E_FAIL;
-	}
+	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Open_Box", FullName, &vecOpenBox[0], (CGameObject**)&pEffect)))
+	//{
+	//	MSGBOX("Failed to Creating Effect_Open_Box in CStage1::Ready_Effect()");
+	//	return E_FAIL;
+	//}
+	//if (FAILED(g_pGameInstance->Add_Effect((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Open_Box", pEffect, 3)))
+	//{
+	//	MSGBOX("Falild to Add_Effect_Open_Box in CStage1::Ready_Effect()");
+	//	return E_FAIL;
+	//}
 
-	//PlayerAttackGround
-	vector<CEffect_Floating_Speed::FLOATINGSPEEDDESC> vecAttackGround;
-	g_pGameInstance->LoadFile<CEffect_Floating_Speed::FLOATINGSPEEDDESC>(vecAttackGround, L"../bin/SaveData/Effect/Effect_Player_Attack_Ground.dat");
+	////PlayerAttackGround
+	//vector<CEffect_Floating_Speed::EF_PAR_FLOATSPEED_DESC> vecAttackGround;
+	//g_pGameInstance->LoadFile<CEffect_Floating_Speed::EF_PAR_FLOATSPEED_DESC>(vecAttackGround, L"../bin/SaveData/Effect/Effect_Player_Attack_Ground.dat");
 
-	FullName = L"Proto_GameObject_Effect_Floating_Speed";
-	//FullName = L"Proto_GameObject_Effect_Attack_Left";
-	vecAttackGround[0].ParticleColor = { 1.f,0.3f,0.3f, 1.f };
-	vecAttackGround[0].Power = 1.5f;
+	//FullName = L"Proto_GameObject_Effect_Floating_Speed";
+	////FullName = L"Proto_GameObject_Effect_Attack_Left";
+	//vecAttackGround[0].ParticleColor = { 1.f,0.3f,0.3f, 1.f };
+	//vecAttackGround[0].Power = 1.5f;
 
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Player_Attack_Ground", FullName, &vecAttackGround[0], (CGameObject**)&pEffect)))
-	{
-		MSGBOX("Failed to Creating Effect_Player_Attack_Ground in CStage1::Ready_Effect()");
-		return E_FAIL;
-	}
-	if (FAILED(g_pGameInstance->Add_Effect((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Player_Attack_Ground", pEffect, 5)))
-	{
-		MSGBOX("Falild to Add_Effect_Player_Attack_Ground in CStage1::Ready_Effect()");
-		return E_FAIL;
-	}
+	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Player_Attack_Ground", FullName, &vecAttackGround[0], (CGameObject**)&pEffect)))
+	//{
+	//	MSGBOX("Failed to Creating Effect_Player_Attack_Ground in CStage1::Ready_Effect()");
+	//	return E_FAIL;
+	//}
+	//if (FAILED(g_pGameInstance->Add_Effect((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Player_Attack_Ground", pEffect, 5)))
+	//{
+	//	MSGBOX("Falild to Add_Effect_Player_Attack_Ground in CStage1::Ready_Effect()");
+	//	return E_FAIL;
+	//}
 
-	//PlayerAttackGround_2
-	g_pGameInstance->LoadFile<CEffect_Floating_Speed::FLOATINGSPEEDDESC>(vecAttackGround, L"../bin/SaveData/Effect/Effect_Player_Attack_Ground_2.dat");
+	////PlayerAttackGround_2
+	//g_pGameInstance->LoadFile<CEffect_Floating_Speed::EF_PAR_FLOATSPEED_DESC>(vecAttackGround, L"../bin/SaveData/Effect/Effect_Player_Attack_Ground_2.dat");
 
-	FullName = L"Proto_GameObject_Effect_Floating_Speed";
-	//FullName = L"Proto_GameObject_Effect_Attack_Left";
-	vecAttackGround[0].ParticleColor = { 1.f,0.3f,0.3f, 1.f };
-	vecAttackGround[0].Power = 1.5f;
+	//FullName = L"Proto_GameObject_Effect_Floating_Speed";
+	////FullName = L"Proto_GameObject_Effect_Attack_Left";
+	//vecAttackGround[0].ParticleColor = { 1.f,0.3f,0.3f, 1.f };
+	//vecAttackGround[0].Power = 1.5f;
 
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Player_Attack_Ground2", FullName, &vecAttackGround[0], (CGameObject**)&pEffect)))
-	{
-		MSGBOX("Failed to Creating Effect_Player_Attack_Ground2 in CStage1::Ready_Effect()");
-		return E_FAIL;
-	}
-	if (FAILED(g_pGameInstance->Add_Effect((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Player_Attack_Ground2", pEffect, 5)))
-	{
-		MSGBOX("Falild to Add_Effect_Player_Attack_Ground2 in CStage1::Ready_Effect()");
-		return E_FAIL;
-	}
+	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Player_Attack_Ground2", FullName, &vecAttackGround[0], (CGameObject**)&pEffect)))
+	//{
+	//	MSGBOX("Failed to Creating Effect_Player_Attack_Ground2 in CStage1::Ready_Effect()");
+	//	return E_FAIL;
+	//}
+	//if (FAILED(g_pGameInstance->Add_Effect((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Player_Attack_Ground2", pEffect, 5)))
+	//{
+	//	MSGBOX("Falild to Add_Effect_Player_Attack_Ground2 in CStage1::Ready_Effect()");
+	//	return E_FAIL;
+	//}
 #pragma endregion
 
 #pragma region 이펙트매니저에 안들어가는것들

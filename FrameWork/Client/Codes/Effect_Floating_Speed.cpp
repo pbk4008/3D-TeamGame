@@ -36,7 +36,7 @@ HRESULT CEffect_Floating_Speed::NativeConstruct(const _uint _iSceneID, void* pAr
 
 	if (nullptr != pArg)
 	{
-		memcpy(&m_Desc, pArg, sizeof(FLOATINGSPEEDDESC));
+		memcpy(&m_Desc, pArg, sizeof(EF_PAR_FLOATSPEED_DESC));
 	}
 
 	//여기서 필요한 모든 컴포넌트들 Clone해옴
@@ -59,6 +59,8 @@ HRESULT CEffect_Floating_Speed::NativeConstruct(const _uint _iSceneID, void* pAr
 	Desc.bGravity = m_Desc.bUsingGravity;
 
 	m_backupDesc = Desc;
+
+	setActive(false);
 
 	return S_OK;
 }
@@ -100,7 +102,7 @@ _int CEffect_Floating_Speed::LateTick(_double TimeDelta)
 
 HRESULT CEffect_Floating_Speed::Render()
 {
-	m_pBox->Render(L"Camera_Silvermane");
+	//m_pBox->Render(L"Camera_Silvermane");
 	wstring wstrCamTag = g_pGameInstance->Get_BaseCameraTag();
 	_matrix XMWorldMatrix = XMMatrixTranspose(m_pTransform->Get_WorldMatrix());
 	_matrix XMViewMatrix = XMMatrixTranspose(g_pGameInstance->Get_Transform(wstrCamTag, TRANSFORMSTATEMATRIX::D3DTS_VIEW));
@@ -127,7 +129,6 @@ HRESULT CEffect_Floating_Speed::Render()
 
 	m_pBuffer->SetUp_ValueOnShader("g_vCamPosition", (void*)&CamPos, sizeof(_vector));
 	m_pBuffer->Render(m_Desc.iRenderPassNum);
-	//m_pBuffer->Render(4);
 
 	return S_OK;
 }

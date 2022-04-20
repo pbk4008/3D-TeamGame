@@ -22,6 +22,14 @@ _int C1H_SwordAttackNormalR2_Loop::Tick(const _double& _dDeltaTime)
 
 	m_fHoldTime += (_float)_dDeltaTime;
 
+	_uint iCurkeyFrameIndex = m_pAnimationController->Get_CurKeyFrameIndex();
+	_int temp = iCurkeyFrameIndex % 1;
+
+	if (temp == 0)
+	{
+		m_pSilvermane->Create_MotionTrail(m_motiontrailidx);
+		m_motiontrailidx++;
+	}
 	return _int();
 }
 

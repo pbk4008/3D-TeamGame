@@ -565,7 +565,10 @@ void CMonster_Bastion_Spear::Hit(const ATTACKDESC& _tAttackDesc)
 		|| m_iGuardCount > 0)
 	{
 		m_iGuardCount--;
-		Active_Effect((_uint)EFFECT::FLOATING);
+
+		Active_Effect((_uint)EFFECT::HIT);
+		Active_Effect((_uint)EFFECT::HIT_FLOATING);
+		Active_Effect((_uint)EFFECT::HIT_FLOATING_2);
 		return;
 	}
 
@@ -616,7 +619,8 @@ void CMonster_Bastion_Spear::Hit(CCollision& collision)
 				m_fGroggyGauge += 2.f;
 
 				Active_Effect((_uint)EFFECT::HIT);
-				Active_Effect((_uint)EFFECT::FLOATING);
+				Active_Effect((_uint)EFFECT::HIT_FLOATING);
+				Active_Effect((_uint)EFFECT::HIT_FLOATING_2);
 			}
 		}
 	}
