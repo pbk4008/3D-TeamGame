@@ -18,6 +18,7 @@
 #include "Effect_FloatingUp.h"
 #include "Effect_Hammer_Dust.h"
 #include "Effect_Dead_Spray.h"
+#include "Explosion_Rock.h"
 
 
 #include "UI_Ingame.h"
@@ -100,17 +101,17 @@ HRESULT CStage1::NativeConstruct()
 	if (FAILED(Ready_Light()))
 		return E_FAIL;
 
-	//if (FAILED(Ready_Trigger_Jump()))
-	//	return E_FAIL;
+	if (FAILED(Ready_Trigger_Jump()))
+		return E_FAIL;
 
 	if (FAILED(Ready_Player(L"Layer_Silvermane")))
 		return E_FAIL;
 
-	//if (FAILED(Ready_MapObject()))
-	//	return E_FAIL;
+	if (FAILED(Ready_MapObject()))
+		return E_FAIL;
 
-	//if (FAILED(Ready_TriggerSystem(L"../bin/SaveData/Trigger/MonsterSpawnTrigger.dat")))
-	//	return E_FAIL;
+	if (FAILED(Ready_TriggerSystem(L"../bin/SaveData/Trigger/MonsterSpawnTrigger.dat")))
+		return E_FAIL;
 
 	if (FAILED(Ready_Data_UI(L"../bin/SaveData/UI/UI.dat")))
 		return E_FAIL;
@@ -146,6 +147,7 @@ HRESULT CStage1::NativeConstruct()
 
 	//if (FAILED(Ready_Portal()))
 	//	return E_FAIL;
+
 
 	g_pGameInstance->PlayBGM(L"Stage1_BGM");
 
@@ -253,12 +255,6 @@ _int CStage1::Tick(_double TimeDelta)
 
 #pragma region Using Debug
 	_float3 fPos = { 0.f,5.f,20.f };
-	if (g_pGameInstance->getkeyDown(DIK_NUMPAD0))
-	{
-		CMonster_Crawler* pMonster = nullptr;
-		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Test", L"Proto_GameObject_Monster_Crawler", &fPos, (CGameObject**)&pMonster)))
-			return -1;
-	}
 
 	//if (g_pGameInstance->getkeyDown(DIK_NUMPAD0))
 	//{
@@ -266,7 +262,7 @@ _int CStage1::Tick(_double TimeDelta)
 	//	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Test", L"Proto_GameObject_Boss_Bastion", &fPos, (CGameObject**)&pMonster)))
 	//		return -1;
 	//}
-	
+	//
 	//if (g_pGameInstance->getkeyDown(DIK_NUMPAD0))
 	//{
 	//	CMonster_Crawler* pMonster = nullptr;
@@ -274,20 +270,20 @@ _int CStage1::Tick(_double TimeDelta)
 	//		return -1;
 	//}
 
-	if (g_pGameInstance->getkeyDown(DIK_NUMPAD1))
-	{
-		CMonster_EarthAberrant* pMonster = nullptr;
-		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Test", L"Proto_GameObject_Monster_EarthAberrant", &fPos, (CGameObject**)&pMonster)))
-			return -1;
-		pMonster->setActive(true);
-	}
-	if (g_pGameInstance->getkeyDown(DIK_NUMPAD2))
-	{
-		CMonster_Bastion_Sword* pMonster = nullptr;
-		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Test", L"Proto_GameObject_Monster_Bastion_Sword", &fPos, (CGameObject**)&pMonster)))
-			return -1;
-		pMonster->setActive(true);
-	}
+	//if (g_pGameInstance->getkeyDown(DIK_NUMPAD1))
+	//{
+	//	CMonster_EarthAberrant* pMonster = nullptr;
+	//	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Test", L"Proto_GameObject_Monster_EarthAberrant", &fPos, (CGameObject**)&pMonster)))
+	//		return -1;
+	//	pMonster->setActive(true);
+	//}
+	//if (g_pGameInstance->getkeyDown(DIK_NUMPAD2))
+	//{
+	//	CMonster_Bastion_Sword* pMonster = nullptr;
+	//	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Test", L"Proto_GameObject_Monster_Bastion_Sword", &fPos, (CGameObject**)&pMonster)))
+	//		return -1;
+	//	pMonster->setActive(true);
+	//}
 	//if (g_pGameInstance->getkeyDown(DIK_NUMPAD3))
 	//{
 	//	CMonster_Bastion_Shooter* pMonster = nullptr;
@@ -328,6 +324,15 @@ _int CStage1::Tick(_double TimeDelta)
 	g_pInteractManager->Tick(TimeDelta);
 	g_pDropManager->Tick();
 	m_pIndicatorManager->Active_Indicator();
+
+	//m_pScenemaManager->Tick(TimeDelta);
+
+	//if (m_pCinema && m_pCinema->Get_Active())
+	//{
+	//	m_pCinema->Tick(TimeDelta);
+	//	if (!m_pCinema->Get_Active())
+	//		m_pCinema = nullptr;
+	//}
 
 	/*For Cinema*/
 	//if (g_pGameInstance->getkeyDown(DIK_END))
@@ -641,7 +646,7 @@ HRESULT CStage1::Ready_GameManager(void)
 		return E_FAIL;
 
 	m_pIndicatorManager = GET_INSTANCE(CIndicator_Manager);
-	m_pScenemaManager = GET_INSTANCE(CScenematicManager);
+	//m_pScenemaManager = GET_INSTANCE(CScenematicManager);
 
 
 	return S_OK;
@@ -853,6 +858,8 @@ HRESULT CStage1::Ready_Data_Effect()
 	g_pGameInstance->LoadFile<CEffect_HitParticle::EF_PAR_HIT_DESC>(vecHitParticle, L"../bin/SaveData/Effect/Effect_Hit_Ground.dat");
 
 	FullName = L"Proto_GameObject_Effect_Explosion";
+	vecHitParticle[0].ParticleColor = { 0.3f,0.5f,1.f, 1.f };
+	vecHitParticle[0].Power = 2.5f;
 
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Hit_Ground", FullName, &vecHitParticle[0], (CGameObject**)&pEffect)))
 	{
@@ -1032,43 +1039,65 @@ HRESULT CStage1::Ready_Data_Effect()
 		return E_FAIL;
 	}
 
+
+	//Explosion Rock 
+	CExplosion_Rock* pObj = nullptr;
+	FullName = L"Proto_GameObject_Explosion_Rock";
+
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_Explosion_Rock_Up", FullName, nullptr, (CGameObject**)&pObj)))
+	{
+		MSGBOX("Failed to Creating Effect_Explosion Rock_Up in CStage1::Ready_Effect()");
+		return E_FAIL;
+	}
+	if (FAILED(g_pGameInstance->Add_Effect((_uint)SCENEID::SCENE_STATIC, L"Layer_Explosion_Rock_Up", pObj, 10)))
+	{
+		MSGBOX("Falild to Add_Effect_Explosion ROck in CStage1::Ready_Effect()");
+		return E_FAIL;
+	}
+
+	//Hammer_Dust
+	CEffect_Hammer_Dust* pHammer = nullptr;
+	CEffect_Hammer_Dust::EFFECTDESC Desc;
+	ZeroMemory(&Desc, sizeof(Desc));
+
+	_tcscpy_s(Desc.TextureTag, L"Hammer_Dust");
+	Desc.iRenderPassNum = 1;
+	Desc.iImageCountX = 8;
+	Desc.iImageCountY = 8;
+	Desc.fFrame = 64.f;
+	Desc.fEffectPlaySpeed = 1.f;
+
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Effect_Hammer_Dust", L"Proto_GameObject_Effect_Hammer_Dust", &Desc, (CGameObject**)&pHammer)))
+	{
+		MSGBOX("Failed to Creating Effect_Hammer_Dust in CStage1::Ready_Effect()");
+		return E_FAIL;
+	}
+
+	if (FAILED(g_pGameInstance->Add_Effect((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Hammer_Dust", pHammer, 7)))
+	{
+		MSGBOX("Falild to Add_Effect_Explosion ROck in CStage1::Ready_Effect()");
+		return E_FAIL;
+	}
+
 #pragma endregion
 
 #pragma region 이펙트매니저에 안들어가는것들
 
 	//fire
-	_tcscpy_s(tDesc.TextureTag, L"Env_Fire");
-	tDesc.iRenderPassNum = 1;
-	tDesc.iImageCountX = 8;
-	tDesc.iImageCountY = 8;
-	tDesc.fFrame = 64.f;
-	tDesc.fEffectPlaySpeed = 1.f;
-	tDesc.fMyPos = { 0.f, 0.f, 0.f };
+	CEffect_Env_Fire::EFFECTDESC Desc1;
+	_tcscpy_s(Desc1.TextureTag, L"Env_Fire");
+	Desc1.iRenderPassNum = 1;
+	Desc1.iImageCountX = 8;
+	Desc1.iImageCountY = 8;
+	Desc1.fFrame = 64.f;
+	Desc1.fEffectPlaySpeed = 1.f;
+	Desc1.fMyPos = { 0.f, 0.f, 0.f };
 
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Effect_Env_Fire", L"Proto_GameObject_Effect_Env_Fire", &tDesc)))
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Effect_Env_Fire", L"Proto_GameObject_Effect_Env_Fire", &Desc1)))
 	{
 		MSGBOX("Failed to Creating Effect_Env_Fire in CStage1::Ready_Effect()");
 		return E_FAIL;
 	}
-
-	////Hammer_Dust
-	//ZeroMemory(&Desc, sizeof(Desc));
-
-	//_tcscpy_s(Desc.TextureTag, L"Hammer_Dust");
-	//Desc.iRenderPassNum = 1;
-	//Desc.iImageCountX = 8;
-	//Desc.iImageCountY = 8;
-	//Desc.fFrame = 64.f;
-	//Desc.fEffectPlaySpeed = 1.f;
-
-	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Effect_Hammer_Dust", L"Proto_GameObject_Effect_Hammer_Dust", &Desc)))
-	//{
-	//	MSGBOX("Failed to Creating Effect_Hammer_Dust in CStage1::Ready_Effect()");
-	//	return E_FAIL;
-	//}
-	// 
-	//
-
 
 	////공중에떠있는환경파티클
 	//Env floating

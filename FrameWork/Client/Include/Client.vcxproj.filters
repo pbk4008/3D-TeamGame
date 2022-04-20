@@ -295,9 +295,6 @@
     <Filter Include="02.GameObject\03.Character\01.Monster\EarthAberrant\State\05.Stun">
       <UniqueIdentifier>{a5feef31-56a7-454e-b845-a90b88d0d9cf}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObject\03.Character\01.Monster\EarthAberrant\State\06.Knockback">
-      <UniqueIdentifier>{fcb36259-0e76-4d95-8ef9-ad44c10ef567}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_Healer\State_Healer">
       <UniqueIdentifier>{ac333559-d103-4db9-a16f-3083aeb79507}</UniqueIdentifier>
     </Filter>
@@ -793,9 +790,6 @@
     <Filter Include="02.GameObject\03.Character\03.CinemaActor">
       <UniqueIdentifier>{2303d924-8d8e-4580-829a-b12a5244fd00}</UniqueIdentifier>
     </Filter>
-    <Filter Include="100.ShaderFiles\01.Environment\02.Actor">
-      <UniqueIdentifier>{01f09cd2-dcfc-4f2c-a5da-56671ab0b823}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObject\04.Effect\00.Effect_Image\01.Hammer_Dust">
       <UniqueIdentifier>{4de6e516-ad86-47ae-a1e1-49d04baa93c3}</UniqueIdentifier>
     </Filter>
@@ -906,10 +900,10 @@
     </Filter>
     <Filter Include="02.GameObject\05.UI\04.Inventory\06.PlayerStatusWindow\06.MaxHealth">
       <UniqueIdentifier>{38ae5783-b796-4654-a386-fe25666773d7}</UniqueIdentifier>
-	</Filter>
+    </Filter>
     <Filter Include="02.GameObject\04.Effect\02. MotionTrail">
       <UniqueIdentifier>{71fab7b7-58fc-41cf-8695-c5967ce00dcc}</UniqueIdentifier>
-	</Filter>
+    </Filter>
     <Filter Include="03.System\07.Scenematic\01.Stage1\Cinema1_2">
       <UniqueIdentifier>{efa2a259-325c-4afc-a8f7-30014b40af6a}</UniqueIdentifier>
     </Filter>
@@ -928,8 +922,17 @@
     <Filter Include="02.GameObject\03.Character\00.Player\00.Silvermane\State\Execution">
       <UniqueIdentifier>{afe0def3-27c1-4308-948a-afc5940899dd}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\04.Effect\02.MeshEffect\00.ExplosionRock">
+      <UniqueIdentifier>{bea67d0a-4217-4e46-a065-e0f07a483482}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="100.ShaderFiles\02.Actor">
+      <UniqueIdentifier>{01f09cd2-dcfc-4f2c-a5da-56671ab0b823}</UniqueIdentifier>
+    </Filter>
     <Filter Include="03.System\07.Scenematic\01.Stage1\Cinema2_1">
       <UniqueIdentifier>{a2813f18-35e9-48ca-9882-467634a4fb9c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\EarthAberrant\State\06.Execution">
+      <UniqueIdentifier>{fcb36259-0e76-4d95-8ef9-ad44c10ef567}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -1824,9 +1827,6 @@
     <ClInclude Include="..\Headers\Effect_Falling_Leaf.h">
       <Filter>02.GameObject\04.Effect\00.Particle\01.Effect_MapLeaf</Filter>
     </ClInclude>
-    <ClInclude Include="..\Codes\Meteor.h">
-      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Healer\Meteor</Filter>
-    </ClInclude>
     <ClInclude Include="..\Headers\Potal.h">
       <Filter>02.GameObject\02.Map\03.Potal</Filter>
     </ClInclude>
@@ -1859,9 +1859,6 @@
     </ClInclude>
     <ClInclude Include="..\Headers\BronzeAnimus_State.h">
       <Filter>02.GameObject\03.Character\01.Monster\BronzeAnimus\State</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Codes\Meteor.h">
-      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Healer\Meteor</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\Potal.h">
       <Filter>02.GameObject\02.Map\03.Potal</Filter>
@@ -2057,7 +2054,7 @@
     </ClInclude>
     <ClInclude Include="..\Headers\UI_PlayerStatus_MaxHealth.h">
       <Filter>02.GameObject\05.UI\04.Inventory\06.PlayerStatusWindow\06.MaxHealth</Filter>
-	</ClInclude>
+    </ClInclude>
     <ClInclude Include="..\Headers\MeshEffect.h">
       <Filter>02.GameObject\04.Effect\02.MeshEffect</Filter>
     </ClInclude>
@@ -2082,11 +2079,20 @@
     <ClInclude Include="..\Headers\Cinema1_2.h">
       <Filter>03.System\07.Scenematic\01.Stage1\Cinema1_2</Filter>
     </ClInclude>
+    <ClInclude Include="..\Headers\Explosion_Rock.h">
+      <Filter>02.GameObject\04.Effect\02.MeshEffect\00.ExplosionRock</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Meteor.h">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Healer\Meteor</Filter>
+    </ClInclude>
     <ClInclude Include="..\Headers\Cinema2_1.h">
       <Filter>03.System\07.Scenematic\01.Stage1\Cinema2_1</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\MotionTrail.h">
       <Filter>02.GameObject\04.Effect\02. MotionTrail</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Aberrant_Execution.h">
+      <Filter>02.GameObject\03.Character\01.Monster\EarthAberrant\State\06.Execution</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -3181,7 +3187,7 @@
     </ClCompile>
     <ClCompile Include="..\Codes\UI_PlayerStatus_MaxHealth.cpp">
       <Filter>02.GameObject\05.UI\04.Inventory\06.PlayerStatusWindow\06.MaxHealth</Filter>
-	</ClCompile>
+    </ClCompile>
     <ClCompile Include="..\Codes\MeshEffect.cpp">
       <Filter>02.GameObject\04.Effect\02.MeshEffect</Filter>
     </ClCompile>
@@ -3206,11 +3212,17 @@
     <ClCompile Include="..\Codes\Cinema1_2.cpp">
       <Filter>03.System\07.Scenematic\01.Stage1\Cinema1_2</Filter>
     </ClCompile>
+    <ClCompile Include="..\Codes\Explosion_Rock.cpp">
+      <Filter>02.GameObject\04.Effect\02.MeshEffect\00.ExplosionRock</Filter>
+    </ClCompile>
     <ClCompile Include="..\Codes\Cinema2_1.cpp">
       <Filter>03.System\07.Scenematic\01.Stage1\Cinema2_1</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\MotionTrail.cpp">
       <Filter>02.GameObject\04.Effect\02. MotionTrail</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Aberrant_Execution.cpp">
+      <Filter>02.GameObject\03.Character\01.Monster\EarthAberrant\State\06.Execution</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -3285,22 +3297,22 @@
       <Filter>100.ShaderFiles\99.Other</Filter>
     </FxCompile>
     <FxCompile Include="..\bin\ShaderFile\Shader_Monster.hlsl">
-      <Filter>100.ShaderFiles\01.Environment\02.Actor</Filter>
+      <Filter>100.ShaderFiles\02.Actor</Filter>
     </FxCompile>
     <FxCompile Include="..\bin\ShaderFile\Shader_Panel_UI.hlsl">
       <Filter>100.ShaderFiles\04.UI</Filter>
     </FxCompile>
     <FxCompile Include="..\bin\ShaderFile\Shader_Shield.hlsl">
-      <Filter>100.ShaderFiles\01.Environment\02.Actor</Filter>
+      <Filter>100.ShaderFiles\02.Actor</Filter>
     </FxCompile>
     <FxCompile Include="..\bin\ShaderFile\Shader_StaticMesh.hlsl">
       <Filter>100.ShaderFiles\99.Other</Filter>
     </FxCompile>
     <FxCompile Include="..\bin\ShaderFile\Shader_Weapon.hlsl">
-      <Filter>100.ShaderFiles\01.Environment\02.Actor</Filter>
+      <Filter>100.ShaderFiles\02.Actor</Filter>
     </FxCompile>
     <FxCompile Include="..\bin\ShaderFile\Shader_SilverMane.hlsl">
-      <Filter>100.ShaderFiles\01.Environment\02.Actor</Filter>
+      <Filter>100.ShaderFiles\02.Actor</Filter>
     </FxCompile>
     <FxCompile Include="..\bin\ShaderFile\Shader_Particle.hlsl">
       <Filter>100.ShaderFiles\03.Effect</Filter>

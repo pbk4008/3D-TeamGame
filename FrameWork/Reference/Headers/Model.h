@@ -31,8 +31,10 @@ public:
 	_bool getUsingMaterial() { return m_bUsingMaterial; }
 	vector<vector<CMeshContainer*>> Get_MeshContainer() { return m_MeshContainers; }
 	vector<CMaterial*> Get_Materials() { return m_vecMaterials; }
+	_bool Get_IsAnimFinished();
 	_fmatrix*	Get_OldBoneMatrix() { return m_oldbonemat; }
 	_fmatrix*	Get_CurBoneMatrix() { return m_curbonemat; }
+
 public:
 	void setUsingTool(_bool Check) { m_bUsingTool = Check; }
 	void Set_PivotMatrix(const _fmatrix& _matPivot);

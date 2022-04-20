@@ -42,25 +42,34 @@ private:
 
 private:
 	_uint m_iAttackR1_H = 25;
+
 	_uint m_iAttackR1_1 = 54;
 	_uint m_iAttackR1_2 = 105;
+
 	_uint m_iAttackS1_1 = 70;
 	_uint m_iAttackS1_2 = 120;
+
 	_uint m_iAttackS2_1 = 10;
 	_uint m_iAttackS2_2 = 40;
+
 	_uint m_iAttackJog  = 26;
+
 	_uint m_iAttackSprint = 14;
+
 	_uint m_iAttackLegacy_1 = 5;
 	_uint m_iAttackLegacy_2 = 14;
 	_uint m_iAttackLegacy_3 = 30;
 
 	_bool m_bAttackTypeFar = false;
+
+	//사운드 1번 재생하려고
 	_bool m_bAttackR1_H = false;
-	_bool m_bAttackR1_1 = false;
-	_bool m_bAttackS1_1 = false;
-	_bool m_bAttackS2_1 = false;
-	_bool m_bAttackFar = false;
-	_bool m_bAttackLegacy_1 = false;
+	_bool m_bAttackR1 = false;
+	_bool m_bAttackS1 = false;
+	_bool m_bAttackS2 = false;
+	_bool m_bAttackJog = false;
+	_bool m_bAttackSprint = false;
+	_bool m_bAttackLegacy = false;
 	_bool m_bAttackLegacy_2 = false;
 
 

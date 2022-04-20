@@ -44,6 +44,7 @@ HRESULT CEffect_Hammer_Dust::NativeConstruct(const _uint _iSceneID, void* pArg)
 		return E_FAIL;
 	}
 
+	setActive(false);
 
 	return S_OK;
 }
@@ -52,15 +53,13 @@ _int CEffect_Hammer_Dust::Tick(_double TimeDelta)
 {
 	
 	_uint iAllFrameCount = (m_Desc.iImageCountX * m_Desc.iImageCountY);
-	m_Desc.fFrame += (_float)(iAllFrameCount * TimeDelta * /*m_Desc.fEffectPlaySpeed*/0.6f); //플레이속도 
+	m_Desc.fFrame += (_float)(iAllFrameCount * TimeDelta * /*m_Desc.fEffectPlaySpeed*/1.f); //플레이속도 
 
 	if (m_Desc.fFrame >= iAllFrameCount)
 	{
 		m_Desc.fFrame = 0;
+		setActive(false);
 	}
-
-	_vector Pos = { 0.f,0.f,0.f, 1.f };
-	m_pTransform->Set_State(CTransform::STATE_POSITION, Pos);
 
 	//빌보드
 	_matrix ViewMatrix;
@@ -69,7 +68,7 @@ _int CEffect_Hammer_Dust::Tick(_double TimeDelta)
 	m_pTransform->Set_State(CTransform::STATE::STATE_RIGHT, ViewMatrix.r[0]);
 	m_pTransform->Set_State(CTransform::STATE::STATE_LOOK, ViewMatrix.r[2]);
 
-	_vector vec = { 1.f,1.f,1.f,0.f };
+	_vector vec = { 2.5f,2.5f,2.5f,0.f };
 	m_pTransform->Scaling(vec);
 	
     return 0;
@@ -112,6 +111,28 @@ HRESULT CEffect_Hammer_Dust::Render()
 	m_pBuffer->Render(1);
 
 	return S_OK;
+}
+
+CEffect* CEffect_Hammer_Dust::Copy()
+{
+	CEffect_Hammer_Dust* pEffect = new CEffect_Hammer_Dust(m_pDevice, m_pDeviceContext);
+	if (FAILED(pEffect->NativeConstruct_Prototype()))
+	{
+		MSGBOX("Hammer_Dust Copy Fail");
+		Safe_Release(pEffect);
+	}
+	if (FAILED(pEffect->NativeConstruct(m_iSceneID, &m_Desc)))
+	{
+		MSGBOX("Hammer_Dust Copy Fail");
+		Safe_Release(pEffect);
+	}
+
+	return pEffect;
+}
+
+void CEffect_Hammer_Dust::Set_Reset(_bool bReset)
+{
+	//setActive(false);
 }
 
 HRESULT CEffect_Hammer_Dust::SetUp_Components()

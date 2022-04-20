@@ -529,7 +529,7 @@ HRESULT CTestScene_JS::Ready_Data_Effect()
 	Desc.fEffectPlaySpeed = 1.f;
 	Desc.fMyPos = { 0.f, 0.f, 0.f };
 
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_JS, L"Layer_Effect_Env_Fire", L"Proto_GameObject_Effect_Env_Fire", &Desc)))
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Effect_Env_Fire", L"Proto_GameObject_Effect_Env_Fire", &Desc)))
 	{
 		MSGBOX("Failed to Creating Effect_Env_Fire in CStage1::Ready_Effect()");
 		return E_FAIL;
@@ -545,7 +545,7 @@ HRESULT CTestScene_JS::Ready_Data_Effect()
 	//Desc.fFrame = 64.f;
 	//Desc.fEffectPlaySpeed = 1.f;
 
-	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_JS, L"Layer_Effect_Hammer_Dust", L"Proto_GameObject_Effect_Hammer_Dust", &Desc)))
+	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Effect_Hammer_Dust", L"Proto_GameObject_Effect_Hammer_Dust", &Desc)))
 	//{
 	//	MSGBOX("Failed to Creating Effect_Hammer_Dust in CStage1::Ready_Effect()");
 	//	return E_FAIL;
@@ -560,7 +560,7 @@ HRESULT CTestScene_JS::Ready_Data_Effect()
 	//Desc.fFrame = 64.f;
 	//Desc.fEffectPlaySpeed = 1.f;
 
-	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_JS, L"Layer_Effect_Monster_Dead_Spray", L"Proto_GameObject_Effect_Monster_Dead_Spray", &Desc)))
+	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Effect_Monster_Dead_Spray", L"Proto_GameObject_Effect_Monster_Dead_Spray", &Desc)))
 	//{
 	//	MSGBOX("Failed to Creating Effect_Monster_Dead_Spray in CStage1::Ready_Effect()");
 	//	return E_FAIL;
@@ -573,7 +573,7 @@ HRESULT CTestScene_JS::Ready_Data_Effect()
 	FullName = L"Proto_GameObject_Effect_Env_Floating";
 
 	vecEnvFloating[0].fMyPos = { -5.f, 1.f, 20.f };
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_JS, L"Layer_Effect_Env_Floating_1", FullName, &vecEnvFloating[0])))
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Effect_Env_Floating_1", FullName, &vecEnvFloating[0])))
 	{
 		MSGBOX("Failed to Creating Effect_Env_Floating_1 in CStage1::Ready_Effect()");
 		return E_FAIL;
@@ -584,7 +584,7 @@ HRESULT CTestScene_JS::Ready_Data_Effect()
 	g_pGameInstance->LoadFile<CEffect_Falling_Leaf::EFFECTDESC>(vecEnvFallingLeaf, L"../bin/SaveData/Effect/Effect_Falling_Leaf.dat");
 
 	FullName = L"Proto_GameObject_Effect_Falling_Leaf";
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_JS, L"Layer_Effect_Env_Falling_Leaf", FullName, &vecEnvFallingLeaf[0])))
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Effect_Env_Falling_Leaf", FullName, &vecEnvFallingLeaf[0])))
 	{
 		MSGBOX("Failed to Creating Effect_Env_FallingLeaf in CStage1::Ready_Effect()");
 		return E_FAIL;
