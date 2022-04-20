@@ -110,14 +110,14 @@ HRESULT CStage1::NativeConstruct()
 	if (FAILED(Ready_MapObject()))
 		return E_FAIL;
 
-	if (FAILED(Ready_TriggerSystem(L"../bin/SaveData/Trigger/MonsterSpawnTrigger.dat")))
-		return E_FAIL;
+	//if (FAILED(Ready_TriggerSystem(L"../bin/SaveData/Trigger/MonsterSpawnTrigger.dat")))
+	//	return E_FAIL;
 
 	if (FAILED(Ready_Data_UI(L"../bin/SaveData/UI/UI.dat")))
 		return E_FAIL;
 
-	if (FAILED(Ready_Data_Effect()))
-		return E_FAIL;
+	//if (FAILED(Ready_Data_Effect()))
+	//	return E_FAIL;
 
 	if (FAILED(Ready_UI(L"Layer_UI")))
 		return E_FAIL;

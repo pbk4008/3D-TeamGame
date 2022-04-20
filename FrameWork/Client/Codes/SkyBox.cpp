@@ -82,11 +82,11 @@ HRESULT CSkyBox::SetUp_Components()
 
 	m_pTexture = g_pGameInstance->Clone_Component<CTexture>(0, L"Proto_Component_Texture");
 
-	if(m_iSceneID == (_uint)SCENEID::SCENE_STAGE1)
+	if(m_iSceneID == (_uint)SCENEID::SCENE_STAGE1 )
 		m_pTexture->Change_Texture(L"Sky_Texture1");
 	else if(m_iSceneID == (_uint)SCENEID::SCENE_STAGE2)
 		m_pTexture->Change_Texture(L"Sky_Texture2");
-	else if (m_iSceneID == (_uint)SCENEID::SCENE_TEST_JS)
+	else
 		m_pTexture->Change_Texture(L"Sky_Texture1");
 
 	if (m_pTexture == nullptr)
