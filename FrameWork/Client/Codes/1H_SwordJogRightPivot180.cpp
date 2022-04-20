@@ -93,7 +93,22 @@ _int C1H_SwordJogRightPivot180::Input(const _double& _dDeltaTime)
 			return STATE_CHANGE;
 		}
 
-		Add_PlusAngle(EDir::Forward, _dDeltaTime);
+		if (g_pGameInstance->getkeyPress(DIK_W))
+		{
+			if (FAILED(m_pStateController->Change_State(L"1H_SwordJogFwd")))
+				return -1;
+			return STATE_CHANGE;
+		}
+		if (g_pGameInstance->getkeyPress(DIK_S))
+		{
+			if (FAILED(m_pStateController->Change_State(L"1H_SwordJogBwd")))
+				return -1;
+			return STATE_CHANGE;
+		}
+		else
+		{
+			Add_PlusAngle(EDir::Forward, _dDeltaTime);
+		}
 	}
 	else if (g_pGameInstance->getkeyPress(DIK_D))
 	{

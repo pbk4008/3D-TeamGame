@@ -35,10 +35,10 @@ _int CTraverse_JumpNodeJog::Tick(const _double& _dDeltaTime)
 		{
 			m_pSilvermane->Set_IsTrasceCamera(false);
 			//배진성 바보 -> 범인 0mo
-			if (20 < iCurKeyFrameIndex)
+			if (10 < iCurKeyFrameIndex)
 				m_pAnimationController->Set_PlaySpeed(0.2f);
 			else
-				m_pAnimationController->Set_PlaySpeed(6.f);
+				m_pAnimationController->Set_PlaySpeed(4.f);
 			
 			m_pSilvermane->Set_Radial(true);
 			if (m_radialcnt <= 12)
