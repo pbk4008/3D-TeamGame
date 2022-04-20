@@ -17,6 +17,7 @@
 #include "Effect_Falling_Leaf.h"
 #include "Effect_FloatingUp.h"
 #include "Effect_Hammer_Dust.h"
+#include "Effect_Dead_Spray.h"
 #include "Explosion_Rock.h"
 
 
@@ -109,8 +110,8 @@ HRESULT CStage1::NativeConstruct()
 	if (FAILED(Ready_MapObject()))
 		return E_FAIL;
 
-	if (FAILED(Ready_TriggerSystem(L"../bin/SaveData/Trigger/MonsterSpawnTrigger.dat")))
-		return E_FAIL;
+	//if (FAILED(Ready_TriggerSystem(L"../bin/SaveData/Trigger/MonsterSpawnTrigger.dat")))
+	//	return E_FAIL;
 
 	if (FAILED(Ready_Data_UI(L"../bin/SaveData/UI/UI.dat")))
 		return E_FAIL;
@@ -146,7 +147,6 @@ HRESULT CStage1::NativeConstruct()
 
 	if (FAILED(Ready_Portal()))
 		return E_FAIL;
-
 
 	g_pGameInstance->PlayBGM(L"Stage1_BGM");
 
@@ -991,8 +991,8 @@ HRESULT CStage1::Ready_Data_Effect()
 		return E_FAIL;
 	}
 
-	////Monster Hit
-	CEffect::EFFECTDESC tDesc;
+	////Hit_Image
+	CEffect_Dead_Spray::IMAGEEFFECTDESC tDesc;
 	ZeroMemory(&tDesc, sizeof(tDesc));
 
 	_tcscpy_s(tDesc.TextureTag, L"T_Hit");
@@ -1000,7 +1000,10 @@ HRESULT CStage1::Ready_Data_Effect()
 	tDesc.iImageCountX = 4;
 	tDesc.iImageCountY = 2;
 	tDesc.fFrame = 8;
-	tDesc.fEffectPlaySpeed = 1.f;
+	tDesc.fEffectPlaySpeed = 20.f;
+	tDesc.fAlpha = 1.f;
+	tDesc.fWeight = 1.f;
+	tDesc.fSize = 3.f;
 
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Effect_HitImage", L"Proto_GameObject_Effect_HitImage", &tDesc, (CGameObject**)&pEffect)))
 	{
@@ -1013,6 +1016,28 @@ HRESULT CStage1::Ready_Data_Effect()
 		return E_FAIL;
 	}
 
+	ZeroMemory(&tDesc, sizeof(tDesc));
+	_tcscpy_s(tDesc.TextureTag, L"Smoke_4x4_1");
+	tDesc.iRenderPassNum = 1;
+	tDesc.iImageCountX = 4;
+	tDesc.iImageCountY = 4;
+	tDesc.fFrame = 16;
+	tDesc.fEffectPlaySpeed = 1.f;
+	tDesc.fAlpha = 0.8f;
+	tDesc.fWeight = 0.f;
+	tDesc.fSize = 6.f;
+
+
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Effect_DeadSmoke", L"Proto_GameObject_Effect_HitImage", &tDesc, (CGameObject**)&pEffect)))
+	{
+		MSGBOX("Failed to Creating Proto_GameObject_Effect_HitImage in CStage1::Ready_Effect()");
+		return E_FAIL;
+	}
+	if (FAILED(g_pGameInstance->Add_Effect((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_DeadSmoke", pEffect, 16)))
+	{
+		MSGBOX("Falild to Proto_GameObject_Effect_HitImage in CStage1::Ready_Effect()");
+		return E_FAIL;
+	}
 
 
 	//Explosion Rock 

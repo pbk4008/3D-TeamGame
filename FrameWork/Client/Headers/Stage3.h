@@ -20,7 +20,7 @@ private:
 	//HRESULT Ready_Boss(const _tchar* LayerTag);
 	//HRESULT Ready_Monster(const _tchar* LayerTag);
 	//HRESULT Ready_UI(const _tchar* LayerTag);
-	//HRESULT Ready_LightDesc();
+	HRESULT Ready_Light();
 
 
 	//HRESULT Ready_Data_Effect(const _tchar* pDataFilePath);

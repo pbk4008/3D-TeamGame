@@ -24,9 +24,9 @@ HRESULT CMotionTrail::NativeConstruct(const _uint _iSceneID, void* _pArg)
 	if (FAILED(__super::NativeConstruct(_iSceneID, _pArg)))
 		return E_FAIL;
 
-	if (FAILED(Ready_Component()))
-		return E_FAIL;
-
+	m_pGradientTex = g_pGameInstance->Clone_Component<CTexture>(0, L"Proto_Component_Texture");
+	if (FAILED(m_pGradientTex->Change_Texture(L"DissovleGradient"))) MSGBOX("Failed to Change Texture DissovleTex");
+	 
 	ZeroMemory(m_bonematrix, sizeof(_matrix) * 256);
 
 	return S_OK;
@@ -34,13 +34,6 @@ HRESULT CMotionTrail::NativeConstruct(const _uint _iSceneID, void* _pArg)
 
 _int CMotionTrail::Tick(_double _dDeltaTime)
 {
-	m_lifetime += (_float)g_fDeltaTime;
-	if (m_lifetime >= 0.3f)
-	{
-		m_lifetime = 0.f;
-		m_bActive = false;
-	}
-
 	return _int();
 }
 
@@ -51,41 +44,45 @@ _int CMotionTrail::LateTick(_double _dDeltaTime)
 		m_pRenderer->Add_RenderGroup(CRenderer::RENDER_MOTIONTRAIL, this);
 	}
 
+	m_lifetime -= (_float)_dDeltaTime;
+	if (m_lifetime <= 0.f)
+	{
+		m_lifetime = 1.f;
+		m_bActive = false;
+	}
+
 	return _int();
 }
 
 HRESULT CMotionTrail::Render_MotionTrail()
 {
-	_matrix smatWorld,smatView, smatProj;
-
-	smatWorld = XMMatrixTranspose(m_worldamt);
-
 	wstring camtag = g_pGameInstance->Get_BaseCameraTag();
-
-	smatView = XMMatrixTranspose(g_pGameInstance->Get_Transform(camtag,TRANSFORMSTATEMATRIX::D3DTS_VIEW));
-	smatProj = XMMatrixTranspose(g_pGameInstance->Get_Transform(camtag, TRANSFORMSTATEMATRIX::D3DTS_PROJECTION));
-
-	if (FAILED(m_pModel->SetUp_ValueOnShader("g_WorldMatrix", &smatWorld, sizeof(_matrix)))) MSGBOX("Failed To Apply Actor ConstantBuffer");
-	if (FAILED(m_pModel->SetUp_ValueOnShader("g_ViewMatrix", &smatView, sizeof(_matrix)))) MSGBOX("Failed To Apply Actor ConstantBuffer");
-	if (FAILED(m_pModel->SetUp_ValueOnShader("g_ProjMatrix", &smatProj, sizeof(_matrix)))) MSGBOX("Failed To Apply Actor ConstantBuffer");
-
-	if (FAILED(m_pModel->SetUp_ValueOnShader("g_TrailBoneMatrices", &m_bonematrix, sizeof(_matrix) * 256))) MSGBOX("Failed To Apply Actor ConstantBuffer");
-
 	RIM rimdesc;
 	ZeroMemory(&rimdesc, sizeof(RIM));
 	rimdesc.rimcheck = m_rimcheck;
 	rimdesc.rimcol = _float3(0.7529f, 0.7529f, 0.7529f);
 	rimdesc.rimintensity = m_rimintensity; // intensity ³·À» ¼ö·Ï °úÇÏ°Ô ºû³²
-	XMStoreFloat4(&rimdesc.camdir, XMVector3Normalize(g_pGameInstance->Get_CamPosition(camtag) - m_position));
+	XMStoreFloat4(&rimdesc.camdir, XMVector3Normalize(g_pGameInstance->Get_CamPosition(camtag) - m_worldamt.r[3]));
 
-	if (FAILED(m_pModel->SetUp_ValueOnShader("g_rimlightcheck", &rimdesc.rimcheck, sizeof(_bool)))) MSGBOX("Failed To Apply Actor ConstantBuffer");
-	if (FAILED(m_pModel->SetUp_ValueOnShader("g_rimintensity", &rimdesc.rimintensity, sizeof(_float)))) MSGBOX("Failed To Apply Actor ConstantBuffer");
-	if (FAILED(m_pModel->SetUp_ValueOnShader("g_rimcolor", &rimdesc.rimcol, sizeof(_float3)))) MSGBOX("Failed To Apply Actor ConstantBuffer");
-	if (FAILED(m_pModel->SetUp_ValueOnShader("g_camdir", &rimdesc.camdir, sizeof(_float4)))) MSGBOX("Failed To Apply Actor ConstantBuffer");
-
-	for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
 	{
-		if (FAILED(m_pModel->Render(i, 4))) MSGBOX("Fialed To Rendering Silvermane");
+		Set_ContantBuffer(m_pModel, m_worldamt, rimdesc);
+		if (FAILED(m_pModel->SetUp_ValueOnShader("g_TrailBoneMatrices", &m_bonematrix, sizeof(_matrix) * 256))) MSGBOX("Failed To Apply MotionTrail ConstantBuffer");
+		for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
+		{
+			if (FAILED(m_pModel->Render(i, 4))) MSGBOX("Fialed To Rendering Player MotionTrail");
+		}
+	}
+	
+	if (XMVector3Equal(m_weaponworldmat.r[3], XMMatrixIdentity().r[3]) != true)
+	{
+		_matrix weaponworld;
+		weaponworld = XMMatrixTranspose(m_weaponworldmat);
+		XMStoreFloat4(&rimdesc.camdir, XMVector3Normalize(g_pGameInstance->Get_CamPosition(camtag) - m_weaponworldmat.r[3]));
+		Set_ContantBuffer(m_pWeapon, m_weaponworldmat, rimdesc);
+		for (_uint i = 0; i < m_pWeapon->Get_NumMeshContainer(); ++i)
+		{
+			if (FAILED(m_pWeapon->Render(i, 4))) MSGBOX("Fialed To Rendering Weapon MotionTrail");
+		}
 	}
 
 	return S_OK;
@@ -96,26 +93,46 @@ void CMotionTrail::Set_BoneMat(_fmatrix* bone)
 	memcpy(m_bonematrix, bone, sizeof(_matrix) * 256);
 }
 
-void CMotionTrail::Set_Info(_fmatrix world, _vector position, _vector campostion)
+void CMotionTrail::Set_Info(_fmatrix world, _fmatrix weaponwrold,_float UVdvid)
 {
 	m_worldamt = world;
-	m_position = position;
-	m_camposition = campostion;
+	m_weaponworldmat = weaponwrold;
+	m_UVdvid = UVdvid;
 }
 
-void CMotionTrail::Set_Model(CModel* pModel)
+void CMotionTrail::Set_Model(CModel* pModel, CModel* pWeapon)
 {
 	m_pModel = pModel;
 	Safe_AddRef(m_pModel);
+
+	m_pWeapon = pWeapon;
+	Safe_AddRef(m_pWeapon);
 }
 
-HRESULT CMotionTrail::Ready_Component()
+HRESULT CMotionTrail::Set_ContantBuffer(CModel* pmodel, _fmatrix worldmat, RIM& rimdesc)
 {
-	//if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Model_Silvermane_Bin", L"Model", (CComponent**)&m_pModel)))
-	//	return E_FAIL;
+	_matrix smatWorld, smatView, smatProj;
 
-	//_matrix matPivot = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(180.f));
-	//m_pModel->Set_PivotMatrix(matPivot);
+	smatWorld = XMMatrixTranspose(worldmat);
+
+	wstring camtag = g_pGameInstance->Get_BaseCameraTag();
+
+	smatView = XMMatrixTranspose(g_pGameInstance->Get_Transform(camtag, TRANSFORMSTATEMATRIX::D3DTS_VIEW));
+	smatProj = XMMatrixTranspose(g_pGameInstance->Get_Transform(camtag, TRANSFORMSTATEMATRIX::D3DTS_PROJECTION));
+
+	if (FAILED(pmodel->SetUp_ValueOnShader("g_WorldMatrix", &smatWorld, sizeof(_matrix)))) MSGBOX("Failed To Apply MotionTrail ConstantBuffer");
+	if (FAILED(pmodel->SetUp_ValueOnShader("g_ViewMatrix", &smatView, sizeof(_matrix)))) MSGBOX("Failed To Apply MotionTrail ConstantBuffer");
+	if (FAILED(pmodel->SetUp_ValueOnShader("g_ProjMatrix", &smatProj, sizeof(_matrix)))) MSGBOX("Failed To Apply MotionTrail ConstantBuffer");
+
+	if (FAILED(pmodel->SetUp_ValueOnShader("g_rimlightcheck", &rimdesc.rimcheck, sizeof(_bool)))) MSGBOX("Failed To Apply MotionTrail ConstantBuffer");
+	if (FAILED(pmodel->SetUp_ValueOnShader("g_rimintensity", &rimdesc.rimintensity, sizeof(_float)))) MSGBOX("Failed To Apply MotionTrail ConstantBuffer");
+	if (FAILED(pmodel->SetUp_ValueOnShader("g_rimcolor", &rimdesc.rimcol, sizeof(_float3)))) MSGBOX("Failed To Apply MotionTrail ConstantBuffer");
+	if (FAILED(pmodel->SetUp_ValueOnShader("g_camdir", &rimdesc.camdir, sizeof(_float4)))) MSGBOX("Failed To Apply MotionTrail ConstantBuffer");
+	
+	if (FAILED(pmodel->SetUp_ValueOnShader("g_Fade", &m_lifetime, sizeof(_float)))) MSGBOX("Failed To Apply MotionTrail ConstantBuffer");
+	if (FAILED(pmodel->SetUp_ValueOnShader("g_UVdvid", &m_UVdvid, sizeof(_float)))) MSGBOX("Failed To Apply MotionTrail ConstantBuffer");
+
+	if (FAILED(pmodel->SetUp_TextureOnShader("g_GradientTex", m_pGradientTex))) MSGBOX("Failed To Apply MotionTrail ConstantBuffer");
 
 	return S_OK;
 }
@@ -145,4 +162,5 @@ CGameObject* CMotionTrail::Clone(const _uint _iSceneID, void* _pArg)
 void CMotionTrail::Free()
 {
 	CActor::Free();
+	Safe_Release(m_pWeapon);
 }

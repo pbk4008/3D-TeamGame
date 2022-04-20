@@ -47,6 +47,14 @@ _int C1H_SwordAttackNormalR2_ReleaseDoubleSwing::Tick(const _double& _dDeltaTime
 		return STATE_CHANGE;
 	}
 
+
+	_int temp = iCurkeyFrameIndex % 5;
+
+	if (temp == 0)
+	{
+		m_pSilvermane->Create_MotionTrail(m_motiontrailidx);
+		m_motiontrailidx++;
+	}
 	return _int();
 }
 
@@ -121,6 +129,7 @@ HRESULT C1H_SwordAttackNormalR2_ReleaseDoubleSwing::ExitState()
 	m_fRotTime = 0.f;
 
 	m_isShake2 = false;
+	m_motiontrailidx = 0;
 	return S_OK;
 }
 

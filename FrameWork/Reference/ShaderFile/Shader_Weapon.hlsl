@@ -11,6 +11,8 @@ Texture2D	g_MRATexture;
 Texture2D	g_CEOTexture;
 Texture2D	g_DissolveTex;
 
+Texture2D	g_GradientTex;
+
 struct VS_IN
 {
 	float3	vPosition : POSITION;
@@ -276,7 +278,57 @@ PS_OUT PS_MAIN_DISSOLVE(PS_IN In)
 	
 	return Out;
 }
+//*---------------------------------------------------------------------------------------------*
+// VS Motion Trail
+struct VS_OUT_MOTIONTRAIL
+{
+	float4 vPosition : SV_POSITION;
+	float4 vNormal : NORMAL;
+	float4 vUvDepth : TEXCOORD0;
+};
 
+VS_OUT_MOTIONTRAIL VS_MAIN_MOTIONTRAIL(VS_IN In)
+{
+	VS_OUT_MOTIONTRAIL Out = (VS_OUT_MOTIONTRAIL) 0;
+	
+	matrix matWV, matWVP;
+	
+	matWV = mul(g_WorldMatrix, g_ViewMatrix);
+	matWVP = mul(matWV, g_ProjMatrix);
+
+	Out.vPosition = mul(vector(In.vPosition, 1.f), matWVP);
+	Out.vNormal = normalize(mul(vector(In.vNormal, 0.f), g_WorldMatrix));
+	
+	Out.vUvDepth.xy = In.vTexUV.xy;
+	Out.vUvDepth.zw = Out.vPosition.zw;
+
+	return Out;
+}
+// PS Motion Trail
+struct PS_IN_MOTIONTRAIL
+{
+	float4 vPosition : SV_POSITION;
+	float4 vNormal : NORMAL;
+	float4 vUvDepth : TEXCOORD0;
+};
+
+struct PS_OUT_MOTIONTRAIL
+{
+	half4 Motiontrail : SV_TARGET0;
+};
+
+PS_OUT_MOTIONTRAIL PS_MAIN_MOTIONTRAIL(PS_IN_MOTIONTRAIL In)
+{
+	PS_OUT_MOTIONTRAIL Out = (PS_OUT_MOTIONTRAIL) 0;
+
+	half3 color = g_GradientTex.Sample(DefaultSampler, half2(g_UVdvid, 0)).rgb;
+	half4 normal = half4(In.vNormal.xyz, 0.f);
+	Out.Motiontrail = MotionTrailRim(normal, g_camdir, g_rimintensity, color);
+	Out.Motiontrail.a *= g_Fade;
+	
+	return Out;
+}
+//*---------------------------------------------------------------------------------------------*
 technique11			DefaultTechnique
 {	
 	pass Weapone //------------------------------------------------------------------------------------0 normal
@@ -315,7 +367,7 @@ technique11			DefaultTechnique
 		PixelShader = compile ps_5_0 PS_MAIN_SHADOW();
 	}
 
-	pass VelocityMap //-----------------------------------------------------------------------------------------3 VeloCityMap
+	pass VelocityMap //-----------------------------------------------------------------------------------------4 MotionTrail
 	{
 		SetRasterizerState(CullMode_Default);
 		SetDepthStencilState(ZDefault, 0);
@@ -325,6 +377,18 @@ technique11			DefaultTechnique
 		VertexShader = compile vs_5_0 VS_MAIN_VELOCITY();
 		GeometryShader = NULL;
 		PixelShader = compile ps_5_0 PS_MAIN_VELOCITY();
+	}
+
+	pass MotionTrail //-----------------------------------------------------------------------------------------3 VeloCityMap
+	{
+		SetRasterizerState(CullMode_Default);
+		SetDepthStencilState(ZDefault, 0);
+		SetBlendState(BlendDisable, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+
+		/* 진입점함수를 지정한다. */
+		VertexShader = compile vs_5_0 VS_MAIN_MOTIONTRAIL();
+		GeometryShader = NULL;
+		PixelShader = compile ps_5_0 PS_MAIN_MOTIONTRAIL();
 	}
 }
 
