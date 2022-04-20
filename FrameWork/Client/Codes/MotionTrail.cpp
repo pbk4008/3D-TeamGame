@@ -163,4 +163,5 @@ void CMotionTrail::Free()
 {
 	CActor::Free();
 	Safe_Release(m_pWeapon);
+	Safe_Release(m_pGradientTex);
 }

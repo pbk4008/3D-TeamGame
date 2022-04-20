@@ -206,8 +206,6 @@ HRESULT CMonster_Bastion_Healer::Render()
 	if (m_bdissolve == true)
 		CActor::DissolveOn(0.5f);
 
-	if (FAILED(m_pModel->SetUp_ValueOnShader("g_bdissolve", &m_bdissolve, sizeof(_bool)))) MSGBOX("Failed to Apply dissolvetime");
-
 	wstring wstrCamTag = g_pGameInstance->Get_BaseCameraTag();
 	if (FAILED(m_pModel->SetUp_ValueOnShader("g_bdissolve", &m_bdissolve, sizeof(_bool)))) MSGBOX("Failed to Apply dissolvetime");
 	for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
