@@ -11,6 +11,8 @@ Texture2D	g_MRATexture;
 Texture2D	g_CEOTexture;
 Texture2D	g_DissolveTex;
 
+Texture2D	g_GradientTex;
+
 struct VS_IN
 {
 	float3	vPosition : POSITION;
@@ -319,10 +321,10 @@ PS_OUT_MOTIONTRAIL PS_MAIN_MOTIONTRAIL(PS_IN_MOTIONTRAIL In)
 {
 	PS_OUT_MOTIONTRAIL Out = (PS_OUT_MOTIONTRAIL) 0;
 
-	half4 diffuse = g_DiffuseTexture.Sample(DefaultSampler, In.vUvDepth.xy);
-	
+	half3 color = g_GradientTex.Sample(DefaultSampler, half2(g_UVdvid, 0)).rgb;
 	half4 normal = half4(In.vNormal.xyz, 0.f);
-	Out.Motiontrail = MotionTrailRim(normal, g_camdir, g_rimintensity, g_rimcolor);
+	Out.Motiontrail = MotionTrailRim(normal, g_camdir, g_rimintensity, color);
+	Out.Motiontrail.a *= g_Fade;
 	
 	return Out;
 }
@@ -365,7 +367,7 @@ technique11			DefaultTechnique
 		PixelShader = compile ps_5_0 PS_MAIN_SHADOW();
 	}
 
-	pass VelocityMap //-----------------------------------------------------------------------------------------3 VeloCityMap
+	pass VelocityMap //-----------------------------------------------------------------------------------------4 MotionTrail
 	{
 		SetRasterizerState(CullMode_Default);
 		SetDepthStencilState(ZDefault, 0);
@@ -375,6 +377,18 @@ technique11			DefaultTechnique
 		VertexShader = compile vs_5_0 VS_MAIN_VELOCITY();
 		GeometryShader = NULL;
 		PixelShader = compile ps_5_0 PS_MAIN_VELOCITY();
+	}
+
+	pass MotionTrail //-----------------------------------------------------------------------------------------3 VeloCityMap
+	{
+		SetRasterizerState(CullMode_Default);
+		SetDepthStencilState(ZDefault, 0);
+		SetBlendState(BlendDisable, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+
+		/* 진입점함수를 지정한다. */
+		VertexShader = compile vs_5_0 VS_MAIN_MOTIONTRAIL();
+		GeometryShader = NULL;
+		PixelShader = compile ps_5_0 PS_MAIN_MOTIONTRAIL();
 	}
 }
 

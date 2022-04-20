@@ -598,21 +598,6 @@ HRESULT CSilvermane::Ready_Components()
 
 	m_pModel->Get_Materials()[3]->Set_Texture("g_OtherTexture", TEXTURETYPE::TEX_OTHER, m_pTexture);
 
-	for (_int i = 0; i < 10; ++i)
-	{
-		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)m_iSceneID, L"Layer_MotionTrail", L"Proto_GameObject_MotionTrail")))
-			return E_FAIL;
-
-		list<CGameObject*>* pobjlist = nullptr;
-		pobjlist = g_pGameInstance->getObjectList((_uint)m_iSceneID, L"Layer_MotionTrail");
-		CGameObject* pobj = pobjlist->back();
-		pobj->setActive(false);
-		static_cast<CMotionTrail*>(pobj)->Set_Model(m_pModel,m_pCurWeapon->Get_Model());
-
-		m_vecMotionTrail.emplace_back(pobj);
-	}
-
-
 	return S_OK;
 }
 
@@ -964,6 +949,21 @@ HRESULT CSilvermane::Ready_Weapons(const _uint _iSceneID)
 				}
 			}
 		}
+
+		for (_int i = 0; i < 10; ++i)
+		{
+			if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)m_iSceneID, L"Layer_MotionTrail", L"Proto_GameObject_MotionTrail")))
+				return E_FAIL;
+
+			list<CGameObject*>* pobjlist = nullptr;
+			pobjlist = g_pGameInstance->getObjectList((_uint)m_iSceneID, L"Layer_MotionTrail");
+			CGameObject* pobj = pobjlist->back();
+			pobj->setActive(false);
+			static_cast<CMotionTrail*>(pobj)->Set_Model(m_pModel, m_pCurWeapon->Get_Model());
+
+			m_vecMotionTrail.emplace_back(pobj);
+		}
+
 	return S_OK;
 }
 
@@ -1710,7 +1710,7 @@ HRESULT CSilvermane::Create_MotionTrail(_int idex)
 
 		static_cast<CMotionTrail*>(m_vecMotionTrail[idex])->setActive(true);
 		static_cast<CMotionTrail*>(m_vecMotionTrail[idex])->Set_BoneMat(m_pModel->Get_CurBoneMatrix());
-		static_cast<CMotionTrail*>(m_vecMotionTrail[idex])->Set_Info(smatWorld, position, camposition);
+		static_cast<CMotionTrail*>(m_vecMotionTrail[idex])->Set_Info(smatWorld,m_pCurWeapon->Get_Transform()->Get_WorldMatrix(),(idex / 10.f));
 	}
 
 	return S_OK;
