@@ -64,7 +64,8 @@ enum class EFFECT
 	ITEM,
 	BOX,
 	EAT_ITEM,
-	HIT_IMAGE
+	HIT_IMAGE,
+	DEAD_SMOKE
 };
 
 enum class ELayer

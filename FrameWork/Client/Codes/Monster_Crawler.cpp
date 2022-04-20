@@ -112,12 +112,13 @@ HRESULT CMonster_Crawler::NativeConstruct(const _uint _iSceneID, void* _pArg)
 	m_iObectTag = (_uint)GAMEOBJECT::MONSTER_CRYSTAL;
 
 	setActive(true);
-
+	m_fCurrentHp = 30.f;
 	return S_OK;
 }
 
 _int CMonster_Crawler::Tick(_double _dDeltaTime)
 {	
+
 	if (0 > __super::Tick(_dDeltaTime))
 	{
 		return -1;
@@ -179,7 +180,7 @@ _int CMonster_Crawler::Tick(_double _dDeltaTime)
 				}
 
 				m_pPanel->Set_UIRemove(true);
-				Active_Effect((_uint)EFFECT::DEATH);
+				//Active_Effect((_uint)EFFECT::DEATH);
 				m_bdissolve = true;
 			}
 
@@ -307,10 +308,11 @@ void CMonster_Crawler::Hit(const ATTACKDESC& _tAttackDesc)
 		m_pStateController->Change_State(L"Flinch_Left");
 	}
 
-	Active_Effect((_uint)EFFECT::HIT);
-	Active_Effect((_uint)EFFECT::HIT_FLOATING);
-	Active_Effect((_uint)EFFECT::HIT_FLOATING_2);
-	Active_Effect((_uint)EFFECT::HIT_IMAGE);
+	//Active_Effect((_uint)EFFECT::HIT);
+	//Active_Effect((_uint)EFFECT::HIT_FLOATING);
+	//Active_Effect((_uint)EFFECT::HIT_FLOATING_2);
+	//Active_Effect((_uint)EFFECT::HIT_IMAGE);
+	Active_Effect((_uint)EFFECT::DEAD_SMOKE);
 
 	/*else if (EAttackDir::Right == _tAttackDesc.eDir)
 	{

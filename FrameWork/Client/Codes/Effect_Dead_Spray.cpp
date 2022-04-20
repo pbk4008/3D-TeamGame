@@ -4,26 +4,25 @@
 
 
 CEffect_Dead_Spray::CEffect_Dead_Spray()
-	: m_fSize(0.f)
-	, m_fAccRetain(0.f)
 {
+	ZeroMemory(&m_tDesc, sizeof(m_tDesc));
 }
 
 CEffect_Dead_Spray::CEffect_Dead_Spray(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
     :CEffect(pDevice,pDeviceContext)
-	, m_fSize(0.f)
-	, m_fAccRetain(0.f)
 {
+	ZeroMemory(&m_tDesc, sizeof(m_tDesc));
 }
 
-CEffect_Dead_Spray::CEffect_Dead_Spray(const CEffect& rhs)
-    :CEffect(rhs)
+CEffect_Dead_Spray::CEffect_Dead_Spray(const CEffect_Dead_Spray& rhs)
+	:CEffect(rhs)
+	, m_tDesc(rhs.m_tDesc)
 {
 }
 
 HRESULT CEffect_Dead_Spray::NativeConstruct_Prototype()
 {
-	if (FAILED(__super::NativeConstruct_Prototype()))
+	if (FAILED(CGameObject::NativeConstruct_Prototype()))
 	{
 		return E_FAIL;
 	}
@@ -38,24 +37,27 @@ HRESULT CEffect_Dead_Spray::NativeConstruct(const _uint _iSceneID, void* pArg)
 		return E_FAIL;
 	}
 
-	if (nullptr != pArg)
-	{
-		memcpy(&m_Desc, pArg, sizeof(EFFECTDESC));
-	}
+	//if (nullptr != pArg)
+	//{
+	//	memcpy(&m_Desc, pArg, sizeof(EFFECTDESC));
+	//}
+	if (pArg)
+		m_tDesc = (*(IMAGEEFFECTDESC*)pArg);
+
 	//여기서 필요한 모든 컴포넌트들 Clone해옴
 	if (FAILED(SetUp_Components())) 
 	{
 		return E_FAIL;
 	}
 
-	m_fSize = 6.f;
 	return S_OK;
 }
 
 _int CEffect_Dead_Spray::Tick(_double TimeDelta)
 {
 	_uint iAllFrameCount = (m_Desc.iImageCountX * m_Desc.iImageCountY);
-	m_Desc.fFrame += (_float)(iAllFrameCount * g_fImmutableTime * /*m_Desc.fEffectPlaySpeed*/20.f); //플레이속도 
+	
+	m_Desc.fFrame += (_float)(iAllFrameCount * g_fImmutableTime *m_Desc.fEffectPlaySpeed); //플레이속도 
 
 	if (m_Desc.fFrame >= iAllFrameCount)
 	{
@@ -72,18 +74,11 @@ _int CEffect_Dead_Spray::Tick(_double TimeDelta)
 	ViewMatrix = g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_VIEW);
 	ViewMatrix = XMMatrixInverse(nullptr, ViewMatrix);
 
-	m_fSize = 3.f;
 	//ViewMatrix *= m_fSize;
+	_float fSize = m_tDesc.fSize;
 	m_pTransform->Set_State(CTransform::STATE::STATE_RIGHT, ViewMatrix.r[0]);
 	m_pTransform->Set_State(CTransform::STATE::STATE_LOOK, ViewMatrix.r[2]);
-	m_pTransform->Scaling(XMVectorSet(m_fSize, m_fSize, m_fSize, 0.f));
-	m_fAccRetain += TimeDelta;
-	cout << m_fAccRetain << endl;
-	//if (m_fAccRetain > 0.5f)
-	//{
-	//	m_fAccRetain = 0.f;
-	//	setActive(false);
-	//}
+	m_pTransform->Scaling(XMVectorSet(fSize, fSize, fSize, 0.f));
 
     return 0;
 }
@@ -112,15 +107,23 @@ HRESULT CEffect_Dead_Spray::Render()
 
 	m_pBuffer->SetUp_TextureOnShader("g_DiffuseTexture", m_pTexture);
 
+	//_uint DebugValue = 4;
+	//_uint DebugValue2 = 2;
 	m_pBuffer->SetUp_ValueOnShader("g_iImageCountX", &m_Desc.iImageCountX, sizeof(_uint));
 	m_pBuffer->SetUp_ValueOnShader("g_iImageCountY", &m_Desc.iImageCountY, sizeof(_uint));
+
+	//m_pBuffer->SetUp_ValueOnShader("g_iImageCountX", &DebugValue, sizeof(_uint));
+	//m_pBuffer->SetUp_ValueOnShader("g_iImageCountY", &DebugValue2, sizeof(_uint));
+
+
+	_float Alpha = 0.8f;
+	m_pBuffer->SetUp_ValueOnShader("g_fAlpha", &m_tDesc.fAlpha, sizeof(_float));
 
 	_uint iFrame = (_uint)m_Desc.fFrame;
 
 	m_pBuffer->SetUp_ValueOnShader("g_iFrame", &iFrame, sizeof(_uint));
 	
-	_float weight = 1.f;
-	m_pBuffer->SetUp_ValueOnShader("g_Weight", &weight, sizeof(_float));
+	m_pBuffer->SetUp_ValueOnShader("g_Weight", &m_tDesc.fWeight, sizeof(_float));
 
 	m_pBuffer->Render(1);
 
@@ -135,7 +138,7 @@ CEffect* CEffect_Dead_Spray::Copy()
 		MSGBOX("DashDust Copy Fail");
 		Safe_Release(pEffect);
 	}
-	if (FAILED(pEffect->NativeConstruct(m_iSceneID, &m_Desc)))
+	if (FAILED(pEffect->NativeConstruct(m_iSceneID, &m_tDesc)))
 	{
 		MSGBOX("HitParticle Copy Fail");
 		Safe_Release(pEffect);
@@ -145,11 +148,19 @@ CEffect* CEffect_Dead_Spray::Copy()
 
 HRESULT CEffect_Dead_Spray::SetUp_Components()
 {
-	if (!m_pTexture || !m_pRenderer || !m_pTransform)
+	if (!m_pRenderer || !m_pTransform)
 		return E_FAIL;
 
 	wstring tag = m_Desc.TextureTag;
 	wstring NewTag = L"Texture_" + tag;
+	
+	m_pTexture = g_pGameInstance->Clone_Component<CTexture>(0, L"Proto_Component_Texture");
+	if (!m_pTexture)
+		return E_FAIL;
+
+	if (FAILED(CGameObject::SetUp_Components(L"Com_Texture", m_pTexture)))
+		return E_FAIL;
+
 	if (FAILED(m_pTexture->Change_Texture(NewTag)))
 		return E_FAIL;
 
