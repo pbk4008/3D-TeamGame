@@ -73,6 +73,9 @@ HRESULT CLootingChest::EnterState(void* _pArg)
 	m_pSilvermane->Set_IsBoxOpen(true);
 
 	m_pSilvermane->Set_IsTrasceCamera(false);
+
+	m_pSilvermane->RimlightCheck(true, _float3(0, 0, 1));
+
 	return S_OK;
 }
 
@@ -84,6 +87,8 @@ HRESULT CLootingChest::ExitState()
 	m_pSilvermane->Set_IsBoxOpen(false);
 
 	m_pSilvermane->Set_IsTrasceCamera(true);
+
+	m_pSilvermane->RimlightCheck(false);
 	return S_OK;
 }
 

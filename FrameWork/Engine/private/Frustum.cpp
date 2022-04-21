@@ -1,6 +1,6 @@
 #include "..\public\Frustum.h"
 #include "PipeLine.h"
-
+#include <thread>
 
 CFrustum::CFrustum()
 {
@@ -109,7 +109,7 @@ void CFrustum::Frustum_Update(const wstring& pCameraTag)
 {
 	CPipeLine* pPipeLine = GET_INSTANCE(CPipeLine);
 
-	_matrix W, V, P;
+	_matrix V, P;
 	
 	V = pPipeLine->Get_Transform(pCameraTag, TRANSFORMSTATEMATRIX::D3DTS_VIEW);
 	P = pPipeLine->Get_Transform(pCameraTag, TRANSFORMSTATEMATRIX::D3DTS_PROJECTION);
