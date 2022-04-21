@@ -99,6 +99,11 @@ _int CEffect_FloatingUp::Tick(_double TimeDelta)
 	matCullingBoxPivot.r[3] = { m_Desc.CullingBoxPos.x, m_Desc.CullingBoxPos.y,m_Desc.CullingBoxPos.z, 1.f };
 	m_pBox->Update_Matrix(matCullingBoxPivot * m_pTransform->Get_WorldMatrix());
 
+	_float dist = MathUtils::Length(g_pObserver->Get_PlayerPos() , m_pTransform->Get_State(CTransform::STATE_POSITION) );
+
+	if (dist <= 1.0f)
+		setActive(false);
+
     return 0;
 }
 

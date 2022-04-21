@@ -906,13 +906,13 @@
     </Filter>
     <Filter Include="02.GameObject\05.UI\04.Inventory\06.PlayerStatusWindow\06.MaxHealth">
       <UniqueIdentifier>{38ae5783-b796-4654-a386-fe25666773d7}</UniqueIdentifier>
-	</Filter>
+    </Filter>
     <Filter Include="02.GameObject\04.Effect\02. MotionTrail">
       <UniqueIdentifier>{71fab7b7-58fc-41cf-8695-c5967ce00dcc}</UniqueIdentifier>
-	</Filter>
+    </Filter>
     <Filter Include="03.System\07.Scenematic\01.Stage1\Cinema1_2">
       <UniqueIdentifier>{efa2a259-325c-4afc-a8f7-30014b40af6a}</UniqueIdentifier>
-     </Filter>
+    </Filter>
     <Filter Include="02.GameObject\04.Effect\00.Particle\07.Effect_FloatingUp">
       <UniqueIdentifier>{71658c88-0735-4f35-a05b-0508b6453715}</UniqueIdentifier>
     </Filter>
@@ -921,12 +921,33 @@
     </Filter>
     <Filter Include="02.GameObject\04.Effect\00.Particle\06.Effect_Guard_다른이펙트로바꾸면될듯">
       <UniqueIdentifier>{a0e663ef-dcdc-4443-8e69-2f05e2663463}</UniqueIdentifier>
-	</Filter>
+    </Filter>
     <Filter Include="02.GameObject\04.Effect\02.MeshEffect">
       <UniqueIdentifier>{d0ea5fcc-900a-4262-9b01-208f5ce4b2be}</UniqueIdentifier>
     </Filter>
     <Filter Include="02.GameObject\03.Character\00.Player\00.Silvermane\State\Execution">
       <UniqueIdentifier>{afe0def3-27c1-4308-948a-afc5940899dd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="96.ScriptableData\DropBoxData">
+      <UniqueIdentifier>{54f9003f-bb2a-4717-9b95-a3601cf72c83}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.System\09.QuestManager">
+      <UniqueIdentifier>{54f54c76-0741-4989-8fa7-738892b59909}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.UI\05.Hud\02.Quest">
+      <UniqueIdentifier>{2d6282e1-486b-4672-8fce-5fc3bf26a1b0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.UI\05.Hud\02.Quest\00.Background">
+      <UniqueIdentifier>{b7460c6a-d886-45ab-85a3-262e7ece83f8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.UI\05.Hud\02.Quest\02.QuestText">
+      <UniqueIdentifier>{4e9e3262-eb50-4ce6-b047-7d9328f67562}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.UI\05.Hud\02.Quest\01.HeadText">
+      <UniqueIdentifier>{a8afbee4-c30d-4573-aa3b-818b03460e05}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.UI\05.Hud\02.Quest\03.QuestClear">
+      <UniqueIdentifier>{85a6a2f4-3986-4b5d-8a91-6b14ec89705e}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -2054,7 +2075,7 @@
     </ClInclude>
     <ClInclude Include="..\Headers\UI_PlayerStatus_MaxHealth.h">
       <Filter>02.GameObject\05.UI\04.Inventory\06.PlayerStatusWindow\06.MaxHealth</Filter>
-	</ClInclude>
+    </ClInclude>
     <ClInclude Include="..\Headers\MeshEffect.h">
       <Filter>02.GameObject\04.Effect\02.MeshEffect</Filter>
     </ClInclude>
@@ -2081,6 +2102,24 @@
     </ClInclude>
     <ClInclude Include="..\Headers\MotionTrail.h">
       <Filter>02.GameObject\04.Effect\02. MotionTrail</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\DropBoxData.h">
+      <Filter>96.ScriptableData\DropBoxData</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\QuestManager.h">
+      <Filter>03.System\09.QuestManager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Quest.h">
+      <Filter>02.GameObject\05.UI\05.Hud\02.Quest</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\UI_QuestText.h">
+      <Filter>02.GameObject\05.UI\05.Hud\02.Quest\02.QuestText</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\UI_QuestHeadText.h">
+      <Filter>02.GameObject\05.UI\05.Hud\02.Quest\01.HeadText</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\UI_QuestClear.h">
+      <Filter>02.GameObject\05.UI\05.Hud\02.Quest\03.QuestClear</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -3175,7 +3214,7 @@
     </ClCompile>
     <ClCompile Include="..\Codes\UI_PlayerStatus_MaxHealth.cpp">
       <Filter>02.GameObject\05.UI\04.Inventory\06.PlayerStatusWindow\06.MaxHealth</Filter>
-	</ClCompile>
+    </ClCompile>
     <ClCompile Include="..\Codes\MeshEffect.cpp">
       <Filter>02.GameObject\04.Effect\02.MeshEffect</Filter>
     </ClCompile>
@@ -3202,6 +3241,24 @@
     </ClCompile>
     <ClCompile Include="..\Codes\MotionTrail.cpp">
       <Filter>02.GameObject\04.Effect\02. MotionTrail</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\DropBoxData.cpp">
+      <Filter>96.ScriptableData\DropBoxData</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\QuestManager.cpp">
+      <Filter>03.System\09.QuestManager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Quest.cpp">
+      <Filter>02.GameObject\05.UI\05.Hud\02.Quest</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\UI_QuestText.cpp">
+      <Filter>02.GameObject\05.UI\05.Hud\02.Quest\02.QuestText</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\UI_QuestHeadText.cpp">
+      <Filter>02.GameObject\05.UI\05.Hud\02.Quest\01.HeadText</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\UI_QuestClear.cpp">
+      <Filter>02.GameObject\05.UI\05.Hud\02.Quest\03.QuestClear</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -3336,8 +3393,8 @@
       <Filter>100.ShaderFiles\03.Effect</Filter>
     </FxCompile>
     <FxCompile Include="..\bin\ShaderFile\Shader_Particle_Alpha.hlsl">
-		<Filter>100.ShaderFiles\03.Effect</Filter>
-	</FxCompile>
+      <Filter>100.ShaderFiles\03.Effect</Filter>
+    </FxCompile>
     <FxCompile Include="..\bin\ShaderFile\Shader_MeshEffect.hlsl">
       <Filter>100.ShaderFiles\03.Effect</Filter>
     </FxCompile>

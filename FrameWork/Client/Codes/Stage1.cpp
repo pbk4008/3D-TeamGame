@@ -49,6 +49,7 @@
 
 #include "Wall.h"
 #include "Potal.h"
+#include "DropBoxData.h"
 
 //Cinema
 #include "Cinema1_1.h"
@@ -128,8 +129,8 @@ HRESULT CStage1::NativeConstruct()
 
 	g_pGameInstance->Change_BaseCamera(L"Camera_Silvermane");
 
-	//if (FAILED(Ready_Meteor()))
-	//	return E_FAIL;
+	if (FAILED(Ready_Meteor()))
+		return E_FAIL;
 
 	//if (FAILED(Ready_Cinema()))
 	//	return E_FAIL;
@@ -140,11 +141,11 @@ HRESULT CStage1::NativeConstruct()
 	//if (FAILED(Ready_Monster(L"Layer_Monster")))
 	//	return E_FAIL;
 
-	//if (FAILED(Ready_Indicator()))
-	//	return E_FAIL;
+	if (FAILED(Ready_Indicator()))
+		return E_FAIL;
 
-	//if (FAILED(Ready_Portal()))
-	//	return E_FAIL;
+	if (FAILED(Ready_Portal()))
+		return E_FAIL;
 
 	g_pGameInstance->PlayBGM(L"Stage1_BGM");
 
@@ -164,6 +165,8 @@ _int CStage1::Tick(_double TimeDelta)
 		return 0;
 	}
 #endif //  _DEBUG
+
+	CheckTriggerForQuest();
 
 	if (g_pGameInstance->getkeyDown(DIK_I))
 	{
@@ -236,6 +239,8 @@ _int CStage1::Tick(_double TimeDelta)
 			}
 			else
 				m_pTriggerSystem->Check_Clear();
+
+			CLEAR_QUEST(L"T_HUD_KillAllMonster"); /* 포탈로 등장하는 몬스터가 아닌 경우에 몹이 다 잡힌 경우 */
 		}
 
 		//CBoss_Bastion_Judicator* pBoss = (CBoss_Bastion_Judicator*)g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Layer_Boss")->front();
@@ -324,7 +329,7 @@ _int CStage1::Tick(_double TimeDelta)
 #pragma endregion
 	g_pInteractManager->Tick(TimeDelta);
 	g_pDropManager->Tick();
-	//m_pIndicatorManager->Active_Indicator();
+	m_pIndicatorManager->Active_Indicator();
 
 	/*For Cinema*/
 	//if (g_pGameInstance->getkeyDown(DIK_END))
@@ -340,24 +345,26 @@ _int CStage1::Tick(_double TimeDelta)
 	//}
 
 
-
 	/*for Meteor*/
-	//m_fAccMeteorStartTime += (_float)TimeDelta;
-	//if (m_fAccMeteorStartTime > 60.f)
-	//	Shoot_Meteor(TimeDelta);
+	m_fAccMeteorStartTime += (_float)TimeDelta;
+	if (m_fAccMeteorStartTime > 60.f)
+		Shoot_Meteor(TimeDelta);
 
+	g_pQuestManager->Tick(TimeDelta);
+	
 	return _int();
 }
 
 _int CStage1::LateTick(_double TimeDelta)
 {
 	m_pScenemaManager->LateTick(TimeDelta);
+	g_pQuestManager->Late_Tick(TimeDelta);
+
 	return _int();
 }
 
 HRESULT CStage1::Render()
 {
-
 
 #ifdef _DEBUG
 	if (nullptr != m_pTriggerSystem)
@@ -365,6 +372,8 @@ HRESULT CStage1::Render()
 		m_pTriggerSystem->Render();
 	}
 #endif
+
+	g_pQuestManager->Render();
 
 	return S_OK;
 }
@@ -1227,6 +1236,11 @@ void CStage1::Open_Potal(_fvector vPos, _uint iMonTag)
 		}
 	}
 }
+void CStage1::CheckTriggerForQuest(void)
+{
+}
+
+
 //땅강아지 3마리
 void CStage1::Trgger_Function1()
 {
@@ -1273,7 +1287,13 @@ void CStage1::Trgger_Function1()
 		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 	}
 	m_iCountMonster = 3;
+
+	START_QUEST(EQuestHeaderType::FirestStep, L"T_HUD_Find_Sunforge");
+	START_QUEST(EQuestHeaderType::FirestStep, L"T_HUD_KillAllMonster");
+	START_QUEST(EQuestHeaderType::FirestStep, L"T_HUD_EquipNewWeapon"); 
+	START_QUEST(EQuestHeaderType::FirestStep, L"T_HUD_Find_DropBox"); 
 }
+
 //대지 1마리
 void CStage1::Trgger_Function2()
 {
@@ -1304,6 +1324,7 @@ void CStage1::Trgger_Function2()
 		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 	}
 	m_iCountMonster = 1;
+	START_QUEST(EQuestHeaderType::FirestStep, L"T_HUD_Find_DropBox");
 }
 //땅강아지 2마리 소드 2마리
 void CStage1::Trgger_Function3()
@@ -1980,18 +2001,30 @@ HRESULT CStage1::Ready_Treasure_Chest()
 		vecObject.emplace_back(pData.WorldMat);
 	}
 
+
 	for (int i = 0; i < vecObject.size(); ++i)
 	{
+		CDropBoxData*  pDropboxdata = new CDropBoxData;
 		MABOBJECT MapObjectDesc;
 
 		MapObjectDesc.WorldMat = vecObject[i];
+		auto temp  = pDropboxdata->GetItemData(i);
+		std::vector<void*> test;
+
+		for (auto& iter : temp)
+		{
+			test.emplace_back(&iter);
+		}
+		MapObjectDesc.itemData.push_back(test);
 
 		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_DropBox", L"Proto_GameObject_Treasure_Chest", &MapObjectDesc)))
 		{
 			MSGBOX("Treasure_Chest 파일을 불러오는 도중 오류가 발생했습니다. Stage1.cpp Line 306");
 			return E_FAIL;
 		}
+		m_pDumyDropData.push_back(pDropboxdata);
 	}
+
 	return S_OK;
 }
 
@@ -2105,6 +2138,9 @@ void CStage1::Free()
 	//Safe_Release(m_pScenemaManager);
 	//CScenematicManager::DestroyInstance();
 
+	for (auto& iter : m_pDumyDropData)
+		Safe_Delete(iter);
+
 	if(g_pInteractManager)
 		g_pInteractManager->Remove_Interactable();
 
@@ -2117,8 +2153,8 @@ void CStage1::Free()
 	CDropManager::DestroyInstance();
 	Safe_Release(m_pTriggerSystem);
 
-	//for (auto& pObj : m_vecMeteor)
-	//	Safe_Release(pObj);
-	//m_vecMeteor.clear();
+	for (auto& pObj : m_vecMeteor)
+		Safe_Release(pObj);
+	m_vecMeteor.clear();
 
 }

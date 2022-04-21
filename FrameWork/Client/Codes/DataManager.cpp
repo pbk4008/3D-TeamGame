@@ -26,7 +26,7 @@ HRESULT CDataManager::NativeConstruct(void)
 	/* Default Weapon */
 	CWeaponData::Desc weaponDesc;
 	weaponDesc.weaponName = L"Needle";
-	weaponDesc.damage = 20.f;
+	weaponDesc.damage = 30.f;
 	weaponDesc.weaponType = EWeaponType::LongSword;
 
 	CWeaponData weaponData(weaponDesc);

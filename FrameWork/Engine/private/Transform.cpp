@@ -363,6 +363,17 @@ void CTransform::Fall(_double dDeltaTime)
 		Add_Velocity(XMVectorSet(0.f, -9.8f * (_float)dDeltaTime, 0.f, 0.f));
 }
 
+void CTransform::SetPosY(_float fPosY)
+{
+	_matrix WorldMat = Get_WorldMatrix();
+	_float4x4 Temp;
+
+	XMStoreFloat4x4(&Temp, WorldMat);
+	Temp._42 = fPosY;
+
+	Set_WorldMatrix(XMLoadFloat4x4(&Temp));
+}
+
 void CTransform::Mesh_Straight(_double TimeDelta, CNavigation* pNavigation)
 {
 	_vector		vLook = Get_State(CTransform::STATE_LOOK);

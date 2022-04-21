@@ -100,7 +100,7 @@ HRESULT CMonster_Crawler::NativeConstruct(const _uint _iSceneID, void* _pArg)
 
 	m_iObectTag = (_uint)GAMEOBJECT::MONSTER_CRYSTAL;
 
-	m_fMaxHp = 30.f;
+	m_fMaxHp = 10.f;
 	m_fCurrentHp = m_fMaxHp;
 
 	m_fMaxGroggyGauge = 3.f;

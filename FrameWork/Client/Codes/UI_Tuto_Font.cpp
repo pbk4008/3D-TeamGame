@@ -80,17 +80,17 @@ _int CUI_Tuto_Font::LateTick(_double TimeDelta)
 
 HRESULT CUI_Tuto_Font::Render()
 {
-	_matrix XMWorldMatrix = XMMatrixTranspose(m_pTransform->Get_WorldMatrix());
-	_matrix XMViewMatrix = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"MainOrthoCamera", TRANSFORMSTATEMATRIX::D3DTS_VIEW));
-	_matrix XMProjectMatrix = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"MainOrthoCamera", TRANSFORMSTATEMATRIX::D3DTS_PROJECTION));
+	//_matrix XMWorldMatrix = XMMatrixTranspose(m_pTransform->Get_WorldMatrix());
+	//_matrix XMViewMatrix = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"MainOrthoCamera", TRANSFORMSTATEMATRIX::D3DTS_VIEW));
+	//_matrix XMProjectMatrix = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"MainOrthoCamera", TRANSFORMSTATEMATRIX::D3DTS_PROJECTION));
 
-	m_pBuffer->SetUp_ValueOnShader("g_WorldMatrix", &XMWorldMatrix, sizeof(_float) * 16);
-	m_pBuffer->SetUp_ValueOnShader("g_ViewMatrix", &XMViewMatrix, sizeof(_float) * 16);
-	m_pBuffer->SetUp_ValueOnShader("g_ProjMatrix", &XMProjectMatrix, sizeof(XMMATRIX));
+	//m_pBuffer->SetUp_ValueOnShader("g_WorldMatrix", &XMWorldMatrix, sizeof(_float) * 16);
+	//m_pBuffer->SetUp_ValueOnShader("g_ViewMatrix", &XMViewMatrix, sizeof(_float) * 16);
+	//m_pBuffer->SetUp_ValueOnShader("g_ProjMatrix", &XMProjectMatrix, sizeof(XMMATRIX));
 
-	m_pBuffer->SetUp_TextureOnShader("g_DiffuseTexture", m_pTexture, m_Desc.iTextureNum);
+	//m_pBuffer->SetUp_TextureOnShader("g_DiffuseTexture", m_pTexture, m_Desc.iTextureNum);
 
-	m_pBuffer->Render(1);
+	//m_pBuffer->Render(1);
 	
 	return S_OK;
 }

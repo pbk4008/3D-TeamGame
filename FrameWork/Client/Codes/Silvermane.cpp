@@ -417,7 +417,7 @@ HRESULT CSilvermane::Render()
 	if (m_pRenderer->Get_RenderButton(CRenderer::VELOCITYBLUR) == false)
 		m_PreWroldMat = m_pTransform->Get_WorldMatrix();
 #ifdef _DEBUG
-	Render_Debug();
+	//Render_Debug();
 #endif
 
 	return S_OK;
@@ -945,25 +945,25 @@ HRESULT CSilvermane::Ready_Weapons(const _uint _iSceneID)
 	/// Equipment&Inventory Data와 연동하여 장비 Ready함
 	/// </summary>
 	/// 
-		if (g_pDataManager)
+	if (g_pDataManager)
+	{
+		m_pEquipmentData = g_pDataManager->GET_DATA(CEquipmentData, L"EquipmentData");
+
+		if (1 == m_pPlayerData->EquipedSlot)
 		{
-			m_pEquipmentData = g_pDataManager->GET_DATA(CEquipmentData, L"EquipmentData");
+			assert(m_pEquipmentData->GetEquipment(EEquipSlot::Weapon1).weaponData.IsValid());
+			pWeapon = m_pEquipmentData->GetEquipment(EEquipSlot::Weapon1).weaponData.Get_Weapon();
 
-			if (1 == m_pPlayerData->EquipedSlot)
+			if (pWeapon)
 			{
-				assert(m_pEquipmentData->GetEquipment(EEquipSlot::Weapon1).weaponData.IsValid());
-				pWeapon = m_pEquipmentData->GetEquipment(EEquipSlot::Weapon1).weaponData.Get_Weapon();
+				pWeapon->Set_Owner(this);
+				pWeapon->Set_OwnerPivotMatrix(m_pModel->Get_PivotMatrix());
+				pWeapon->setActive(true);
 
-				if (pWeapon)
-				{
-					pWeapon->Set_Owner(this);
-					pWeapon->Set_OwnerPivotMatrix(m_pModel->Get_PivotMatrix());
-					pWeapon->setActive(true);
-
-					m_pCurWeapon = pWeapon;
-				}
+				m_pCurWeapon = pWeapon;
 			}
 		}
+	}
 	return S_OK;
 }
 

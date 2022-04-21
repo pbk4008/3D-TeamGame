@@ -61,19 +61,25 @@
 #include "UI_LevelUP_Fill_Lead_Right.h"
 #include "UI_LevelUP_Fill_Left.h"
 #include "UI_LevelUP_Fill_Right.h"
+//Quest
+#include "Quest.h"
+#include "UI_QuestText.h"
+#include "UI_QuestHeadText.h"
+#include "UI_QuestClear.h"
 
 //Inventory UI Component
 #include "SingleImage.h"
 #include "UIHelper.h"
 
-CClient_Observer* g_pObserver = nullptr;
-CDebugSystem* g_pDebugSystem = nullptr;
-CShakeManager* g_pShakeManager = nullptr;
-CDataManager* g_pDataManager = nullptr;
-CInven_UIManager* g_pInvenUIManager = nullptr;
-CInteractManager* g_pInteractManager = nullptr;
-CWeaponGenerator* g_pWeaponGenerator = nullptr;
-CDropManager* g_pDropManager = nullptr;
+CClient_Observer*	g_pObserver = nullptr;
+CDebugSystem*		g_pDebugSystem = nullptr;
+CShakeManager*		g_pShakeManager = nullptr;
+CDataManager*		g_pDataManager = nullptr;
+CInven_UIManager*	g_pInvenUIManager = nullptr;
+CInteractManager*	g_pInteractManager = nullptr;
+CWeaponGenerator*	g_pWeaponGenerator = nullptr;
+CDropManager*		g_pDropManager = nullptr;
+CQuestManager*		g_pQuestManager = nullptr;
 
 CMainApp::CMainApp()
 {
@@ -173,6 +179,8 @@ _int CMainApp::Tick(_double TimeDelta)
 	}
 
 	g_pDataManager->Tick();
+	g_pQuestManager->Tick(TimeDelta);
+
 	return _int();
 }
 
@@ -264,6 +272,10 @@ if (FAILED(pMeshLoader->Reserve_MeshLoader(m_pDevice, m_pDeviceContext)))
 
 	g_pInteractManager = CInteractManager::GetInstance();
 	if (FAILED(g_pInteractManager->NativeConstruct()))
+		return E_FAIL;
+
+	g_pQuestManager = CQuestManager::GetInstance();
+	if (FAILED(g_pQuestManager->NativeConstruct()))
 		return E_FAIL;
 
 	return S_OK;
@@ -408,6 +420,19 @@ HRESULT CMainApp::Ready_GameObject_Prototype()
 		return E_FAIL;
 	//Loot Equipment Item Name Type
 	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_UI_LootItemNameType"), CUI_LootItemNameType::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	///////////////////////////////
+	//Quest
+	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_UI_Quest"), CQuest::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	//Quest Text
+	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_UI_QuestText"), CUI_QuestText::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	//Quest Head Text
+	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_UI_QuestHeadText"), CUI_QuestHeadText::Create(m_pDevice, m_pDeviceContext))))
+	return E_FAIL;
+	//Quest Clear Marker
+	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_UI_QuestClear"), CUI_QuestClear::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 	///////////////////////////////
 	//Level Up
@@ -569,6 +594,7 @@ void CMainApp::Free()
 	CInven_UIManager::DestroyInstance();
 	CWeaponGenerator::DestroyInstance();
 	CInteractManager::DestroyInstance();
+	CQuestManager::DestroyInstance();
 
 	Safe_Release(g_pObserver);
 	Safe_Release(m_pRenderer);
