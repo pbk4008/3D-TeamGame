@@ -102,8 +102,9 @@ HRESULT CMonster_EarthAberrant::NativeConstruct(const _uint _iSceneID, void* _pA
 	m_tAttackDesc.iLevel = 1;
 	m_tAttackDesc.fDamage = 3.f;
 
+	m_pWeapon->setActive(false);
+	m_pPanel->setActive(false);
 	setActive(false);
-
 	return S_OK;
 }
 
@@ -152,7 +153,8 @@ _int CMonster_EarthAberrant::Tick(_double _dDeltaTime)
 	}
 	else
 	{
-		if (L"Death" == m_pStateController->Get_CurStateTag())
+		wstring stateTag = m_pStateController->Get_CurStateTag();
+		if (L"Death" == stateTag)
 		{
 			if (m_pAnimatorCom->Get_CurrentAnimation()->Is_Finished() && 
 				!m_pAnimatorCom->Get_IsLerp() && m_lifetime <= 0.f)
@@ -170,6 +172,18 @@ _int CMonster_EarthAberrant::Tick(_double _dDeltaTime)
 				Active_Effect((_uint)EFFECT::DEATH);
 			}
 		}
+		else if (L"Execution" == stateTag)
+		{
+			if (m_pAnimatorCom->Get_CurrentAnimation()->Is_Finished() &&
+				!m_pAnimatorCom->Get_IsLerp() && m_lifetime <= 0.f)
+			{
+				m_pPanel->Set_UIRemove(true);
+				m_bdissolve = true;
+			}
+
+			if (m_lifetime >= 1.f)
+				Set_Remove(true);
+ 		}
 		else
 		{
 			Set_Remove(true);
@@ -320,21 +334,21 @@ HRESULT CMonster_EarthAberrant::SetUp_Components()
 
 
 
-	/* for.Character Controller */
-	CCharacterController::DESC tCharacterControllerDesc;
-	tCharacterControllerDesc.fHeight = 1.f;
-	tCharacterControllerDesc.fRadius = 0.5f;
-	tCharacterControllerDesc.fContactOffset = tCharacterControllerDesc.fRadius * 0.1f;
-	tCharacterControllerDesc.fStaticFriction = 0.5f;
-	tCharacterControllerDesc.fDynamicFriction = 0.5f;
-	tCharacterControllerDesc.fRestitution = 0.f;
-	tCharacterControllerDesc.pGameObject = this;
-	tCharacterControllerDesc.vPosition = { 0.f, 0.f, 0.f };
+	///* for.Character Controller */
+	//CCharacterController::DESC tCharacterControllerDesc;
+	//tCharacterControllerDesc.fHeight = 1.f;
+	//tCharacterControllerDesc.fRadius = 0.5f;
+	//tCharacterControllerDesc.fContactOffset = tCharacterControllerDesc.fRadius * 0.1f;
+	//tCharacterControllerDesc.fStaticFriction = 0.5f;
+	//tCharacterControllerDesc.fDynamicFriction = 0.5f;
+	//tCharacterControllerDesc.fRestitution = 0.f;
+	//tCharacterControllerDesc.pGameObject = this;
+	//tCharacterControllerDesc.vPosition = { 0.f, 0.f, 0.f };
 
-	if (FAILED(__super::SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_CharacterController", L"CharacterController", (CComponent**)&m_pCharacterController, &tCharacterControllerDesc)))
-		return E_FAIL;
-	m_pCharacterController->setOwnerTransform(m_pTransform);
-	m_pCharacterController->setShapeLayer((_uint)ELayer::Monster);
+	//if (FAILED(__super::SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_CharacterController", L"CharacterController", (CComponent**)&m_pCharacterController, &tCharacterControllerDesc)))
+	//	return E_FAIL;
+	//m_pCharacterController->setOwnerTransform(m_pTransform);
+	//m_pCharacterController->setShapeLayer((_uint)ELayer::Monster);
 
 	return S_OK;
 }
@@ -685,6 +699,14 @@ void CMonster_EarthAberrant::Parry(const PARRYDESC& _tParryDesc)
 
 void CMonster_EarthAberrant::Execution()
 {
+	CLevel* pLevel = g_pGameInstance->getCurrentLevelScene();
+	if (g_pGameInstance->getCurrentLevel() == (_uint)SCENEID::SCENE_STAGE1)
+		static_cast<CStage1*>(pLevel)->Minus_MonsterCount();
+
+	m_bDead = true;
+	m_IsAttack = false;
+	m_pWeapon->Set_IsAttack(false);
+
 	m_pStateController->Change_State(L"Execution");
 	m_pCharacterController->Remove_CCT();
 }
@@ -705,6 +727,37 @@ void CMonster_EarthAberrant::Set_Remove(_bool bCheck)
 void CMonster_EarthAberrant::Set_FootPosition(const _float3& _vPos)
 {
 	m_pCharacterController->setFootPosition(_vPos);
+}
+
+void CMonster_EarthAberrant::setActive(_bool bActive)
+{
+	CGameObject::setActive(bActive);
+
+	if (bActive)
+	{
+		if (!m_pCharacterController)
+		{
+			/* for.Character Controller */
+			CCharacterController::DESC tCharacterControllerDesc;
+			tCharacterControllerDesc.fHeight = 1.f;
+			tCharacterControllerDesc.fRadius = 0.5f;
+			tCharacterControllerDesc.fContactOffset = tCharacterControllerDesc.fRadius * 0.1f;
+			tCharacterControllerDesc.fStaticFriction = 0.5f;
+			tCharacterControllerDesc.fDynamicFriction = 0.5f;
+			tCharacterControllerDesc.fRestitution = 0.f;
+			tCharacterControllerDesc.pGameObject = this;
+			tCharacterControllerDesc.vPosition = { 0.f, 0.f, 0.f };
+
+			if (FAILED(__super::SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_CharacterController", L"CharacterController", (CComponent**)&m_pCharacterController, &tCharacterControllerDesc)))
+				MSGBOX(L"돼지몬스터 cct 생성 실패");
+			m_pCharacterController->setOwnerTransform(m_pTransform);
+			m_pCharacterController->setShapeLayer((_uint)ELayer::Monster);
+		}
+		if (m_pWeapon)
+			m_pWeapon->setActive(true);
+		if (m_pPanel)
+			m_pPanel->setActive(true);
+	}
 }
 
 CMonster_EarthAberrant* CMonster_EarthAberrant::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)

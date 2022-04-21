@@ -4,6 +4,8 @@
 #include "HierarchyNode.h"
 #include "Silvermane.h"
 #include "Material.h"
+#include "TrailEffect_Normal.h"
+#include "TrailEffect_Distortion.h"
 
 CPlayer_Weapon::CPlayer_Weapon(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
 	: CWeapon(_pDevice, _pDeviceContext)
@@ -39,7 +41,6 @@ HRESULT CPlayer_Weapon::NativeConstruct(const _uint _iSceneID, Desc _desc)
 		m_szMIname += m_wstrName;
 		m_szModelName = desc.modelName;
 		m_fWeaponColor = desc.weaponColor;
-		m_EWeaponType = desc.EWeaponType;
 
 		CMaterial* pMtrl = nullptr;
 		CTexture* pTexture = nullptr;
@@ -60,6 +61,9 @@ HRESULT CPlayer_Weapon::NativeConstruct(const _uint _iSceneID, Desc _desc)
 	if (FAILED(Ready_Components()))
 		return E_FAIL;
 	
+	if(FAILED(Ready_TrailEffects(_desc)))
+		return E_FAIL;
+
 	if(EType::Hammer_2H == m_eType)
 		XMStoreFloat4x4(&m_matPivot, XMMatrixRotationRollPitchYaw(XMConvertToRadians(-21.5f), XMConvertToRadians(-118.f), XMConvertToRadians(20.f)) * XMMatrixTranslation(0.28f, 0.11f, 0.05f));
 	else
@@ -67,7 +71,7 @@ HRESULT CPlayer_Weapon::NativeConstruct(const _uint _iSceneID, Desc _desc)
 
 	m_bActive = false;
 
-	if(CWeapon::EType::Sword_1H	 == m_EWeaponType)
+	if(CWeapon::EType::Sword_1H	 == m_eType)
 		m_pCapsuleCollider->Remove_ActorFromScene();
 	else
 		m_pBoxCollider->Remove_ActorFromScene();
@@ -95,6 +99,35 @@ _int CPlayer_Weapon::LateTick(_double _dDeltaTime)
 {
 	if (0 > __super::LateTick(_dDeltaTime))
 		return -1;
+
+	if (m_isTrail)
+	{
+		if (m_pTrailEffect_Normal)
+		{
+			m_pTrailEffect_Normal->Record_Points(_dDeltaTime);
+			m_pTrailEffect_Normal->Set_IsRender(true);
+		}
+		if (m_pTrailEffect_Distortion)
+		{
+			m_pTrailEffect_Distortion->Record_Points(_dDeltaTime);
+			m_pTrailEffect_Distortion->Set_IsRender(true);
+			m_pRenderer->SetRenderButton(CRenderer::DISTORTION, true);
+		}
+	}
+	else
+	{
+		if (m_pTrailEffect_Normal)
+		{
+			m_pTrailEffect_Normal->Clear_Points();
+			m_pTrailEffect_Normal->Set_IsRender(false);
+		}
+		if (m_pTrailEffect_Distortion)
+		{
+			m_pTrailEffect_Distortion->Clear_Points();
+			m_pTrailEffect_Distortion->Set_IsRender(false);
+			m_pRenderer->SetRenderButton(CRenderer::DISTORTION, false);
+		}
+	}
 
 	if(m_pRenderer)
 		m_pRenderer->Add_RenderGroup(CRenderer::RENDER_NONALPHA, this);
@@ -157,11 +190,20 @@ void CPlayer_Weapon::OnTriggerEnter(CCollision& collision)
 void CPlayer_Weapon::RangeAttack()
 {
 	OVERLAPDESC tOverlapDesc;
-	tOverlapDesc.geometry = PxSphereGeometry(6.f);
+	switch (m_eType)
+	{
+	case CWeapon::EType::Sword_1H:
+		tOverlapDesc.geometry = PxSphereGeometry(4.f);
+		break;
+	case CWeapon::EType::Hammer_2H:
+		tOverlapDesc.geometry = PxSphereGeometry(6.f);
+		break;
+	}
 	XMStoreFloat3(&tOverlapDesc.vOrigin, m_pTransform->Get_State(CTransform::STATE_POSITION));
 	CGameObject* pHitObject = nullptr;
 	tOverlapDesc.ppOutHitObject = &pHitObject;
 	tOverlapDesc.filterData.flags = PxQueryFlag::eDYNAMIC;
+	tOverlapDesc.layerMask = (1 << (_uint)ELayer::Monster);
 	if (g_pGameInstance->Overlap(tOverlapDesc))
 	{
 		_uint iSize = (_uint)tOverlapDesc.vecHitObjects.size();
@@ -210,7 +252,7 @@ HRESULT CPlayer_Weapon::Ready_Components()
 	tColliderDesc.isTrigger = true;
 	tColliderDesc.pGameObject = this;
 
-	if (CWeapon::EType::Hammer_2H == m_EWeaponType)
+	if (CWeapon::EType::Hammer_2H == m_eType)
 	{
 		CBoxCollider::DESC tBoxColliderDesc;
 		tBoxColliderDesc.tColliderDesc = tColliderDesc;
@@ -235,6 +277,40 @@ HRESULT CPlayer_Weapon::Ready_Components()
 		m_pCapsuleCollider->setShapeLayer((_uint)ELayer::Weapon);
 	}
 
+
+	return S_OK;
+}
+
+HRESULT CPlayer_Weapon::Ready_TrailEffects(const Desc& _tDesc)
+{
+	if (L"Needle" == _tDesc.weaponName)
+	{
+		CTrailEffect::DESC tTrailDesc;
+		tTrailDesc.pOwnerTransform = m_pTransform;
+		tTrailDesc.fLength = 0.5f;
+		XMStoreFloat4x4(&tTrailDesc.matPivot, XMMatrixTranslation(0.f, 0.f, 2.f));
+		tTrailDesc.wstrTextureTag = L"Fire_02";
+		if (FAILED(g_pGameInstance->Add_GameObjectToLayer(m_iSceneID, L"Layer_Effect", L"Proto_GameObject_TrailEffect_Normal", &tTrailDesc, (CGameObject**)&m_pTrailEffect_Normal)))
+			MSGBOX(L"노말 트레일 생성 실패. from Needle");
+		Safe_AddRef(m_pTrailEffect_Normal);
+		tTrailDesc.fLength = 1.f;
+		XMStoreFloat4x4(&tTrailDesc.matPivot, XMMatrixTranslation(0.f, 0.f, 1.5f));
+		tTrailDesc.wstrTextureTag = L"TrailBase";
+		if (FAILED(g_pGameInstance->Add_GameObjectToLayer(m_iSceneID, L"Layer_Effect", L"Proto_GameObject_TrailEffect_Distortion", &tTrailDesc, (CGameObject**)&m_pTrailEffect_Distortion)))
+			MSGBOX(L"디스토션 트레일 생성 실패. from Needle");
+		Safe_AddRef(m_pTrailEffect_Distortion);
+	}
+	else if (L"Fury" == _tDesc.weaponName)
+	{
+		CTrailEffect::DESC tTrailDesc;
+		tTrailDesc.fLength = 0.2f;
+		XMStoreFloat4x4(&tTrailDesc.matPivot, XMMatrixTranslation(0.f, 0.f, 1.5f));
+		tTrailDesc.pOwnerTransform = m_pTransform;
+		tTrailDesc.wstrTextureTag = L"Wisp_01";
+		if (FAILED(g_pGameInstance->Add_GameObjectToLayer(m_iSceneID, L"Layer_Effect", L"Proto_GameObject_TrailEffect_Normal", &tTrailDesc, (CGameObject**)&m_pTrailEffect_Normal)))
+			MSGBOX(L"노말 트레일 생성 실패. from Needle");
+		Safe_AddRef(m_pTrailEffect_Normal);
+	}
 
 	return S_OK;
 }
@@ -317,6 +393,8 @@ void CPlayer_Weapon::Free()
 {
 	CWeapon::Free();
 
+	Safe_Release(m_pTrailEffect_Distortion);
+	Safe_Release(m_pTrailEffect_Normal);
 	Safe_Release(m_pBoxCollider);
 	Safe_Release(m_pCapsuleCollider);
 }

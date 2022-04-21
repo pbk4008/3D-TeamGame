@@ -95,7 +95,7 @@ HRESULT CExecution_Mook::ExitState()
 	if (FAILED(__super::ExitState()))
 		return E_FAIL;
 
-	m_pSilvermane->Get_TargetExecution()->Set_Remove(true);
+	//m_pSilvermane->Get_TargetExecution()->Set_Remove(true);
 	m_pSilvermane->Set_Execution(false);
 	return S_OK;
 }

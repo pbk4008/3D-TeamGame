@@ -25,6 +25,7 @@ public:
 private:
 	_bool m_isJumpEnd = false;
 
+	_float m_fFallTime = 0.f;
 	_float m_fMoveSpeed = 0.f;
 	_float3 m_vTargetPos = { 0.f, 0.f, 0.f };
 	_float3 m_vDir = { 0.f, 0.f, 0.f };

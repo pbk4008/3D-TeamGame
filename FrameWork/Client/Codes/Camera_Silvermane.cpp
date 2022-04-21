@@ -181,7 +181,10 @@ _int CCamera_Silvermane::Tick(_double _dDeltaTime)
 		else
 		{
 			_vector svShakeAccPos = XMVectorSetW(XMLoadFloat3(&m_vShakeAccPos), 1.f);
-			_vector svLerp = XMVectorLerp(svShakeAccPos, XMVectorSet(0.f, 0.f, 0.f, 1.f), (_float)_dDeltaTime);
+			_float fDeltaTime = (_float)_dDeltaTime;
+			if (1.f < fDeltaTime)
+				fDeltaTime = 1.f;
+			_vector svLerp = XMVectorLerp(svShakeAccPos, XMVectorSet(0.f, 0.f, 0.f, 1.f), fDeltaTime);
 			_vector svLocalTotalpos = XMVectorSetW(XMLoadFloat3(&m_vLocalOriginPos) + svLerp, 1.f);
 			m_pLocalTransform->Set_State(CTransform::STATE_POSITION, svLocalTotalpos);
 		}

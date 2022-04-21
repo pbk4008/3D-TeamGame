@@ -4,6 +4,10 @@
 #include "Weapon.h"
 
 BEGIN(Client)
+
+class CTrailEffect_Normal;
+class CTrailEffect_Distortion;
+
 class CPlayer_Weapon final : public CWeapon
 {
 public:
@@ -41,6 +45,7 @@ public:
 
 private:
 	HRESULT Ready_Components();
+	HRESULT Ready_TrailEffects(const Desc& _tDesc);
 	_int Attach_FixedBone(const _double& _dDeltaTime);
 	_int Attach_Owner(const _double& _dDeltaTime);
 	virtual void Set_Equip(const _bool _isEquip, void* _pArg = nullptr);
@@ -56,7 +61,9 @@ private:
 	std::wstring m_szMIFilePath = L"../../Reference/ShaderFile/Shader_Weapon.hlsl";
 	std::wstring m_szMiTexPath = L"../bin/Resources/Mesh/";
 
-	CWeapon::EType m_EWeaponType = CWeapon::EType::Max;
+private: /* TrailEffect */
+	CTrailEffect_Normal* m_pTrailEffect_Normal = nullptr;
+	CTrailEffect_Distortion* m_pTrailEffect_Distortion = nullptr;
 
 public:
 	static CPlayer_Weapon* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext);

@@ -243,15 +243,15 @@ void CDropBox::Open(void)
 std::vector<CItemData> CDropBox::GetDropList(void)
 {
 	CItemData item1;
-	item1.iconTexName = L"T_Weapon_Hammer_2H_Player_Hinterclaw";
+	item1.iconTexName = L"T_Weapon_Hammer_2H_Player_Fury";
 	item1.equipmentGrade = EEquipmentGrade::Epic;
 	item1.ItemType = EItemType::Equipment;
 	item1.equipmentType = EEquipmentType::Weapon;
 	item1.szItemName = L"JinSung's Sword";
 	item1.iMainStat = 52;
 	item1.iLevel = 10;
-	item1.weaponData.weaponName = L"Hinterclaw";
-	item1.equipmentName = EEquipmentName::Hinterclaw;
+	item1.weaponData.weaponName = L"Fury";
+	item1.equipmentName = EEquipmentName::Fury;
 	item1.szStatusName = L"T_2H_DPS_147";
 
 	CItemData item2;
@@ -574,21 +574,21 @@ std::vector<CItemData> CDropBox::GetDropList(void)
 	std::vector<CItemData> dropList;
 
 	dropList.push_back(item1);
-	dropList.push_back(item2);
-	dropList.push_back(item3);
-	dropList.push_back(item4);
-	dropList.push_back(item5);
-	dropList.push_back(item6);
-	dropList.push_back(item7);
-	dropList.push_back(item8);
-	dropList.push_back(item9);
-	dropList.push_back(item10);
-	dropList.push_back(item11);
-	dropList.push_back(item12);
-	dropList.push_back(item13);
-	dropList.push_back(item14);
-	dropList.push_back(item15);
-	dropList.push_back(item16);
+	//dropList.push_back(item2);
+	//dropList.push_back(item3);
+	//dropList.push_back(item4);
+	//dropList.push_back(item5);
+	//dropList.push_back(item6);
+	//dropList.push_back(item7);
+	//dropList.push_back(item8);
+	//dropList.push_back(item9);
+	//dropList.push_back(item10);
+	//dropList.push_back(item11);
+	//dropList.push_back(item12);
+	//dropList.push_back(item13);
+	//dropList.push_back(item14);
+	//dropList.push_back(item15);
+	//dropList.push_back(item16);
 	//dropList.push_back(item17);
 	//dropList.push_back(item18);
 	//dropList.push_back(item19);
