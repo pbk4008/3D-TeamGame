@@ -64,6 +64,7 @@ public:
 public:
 	const _bool IsHit() const;
 	const _bool IsDash() const;
+	const _bool IsGround() const;
 
 	CTransform* Get_Transform() const;
 	CModel* Get_Model() const;

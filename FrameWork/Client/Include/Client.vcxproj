@@ -331,6 +331,7 @@ call Update_Client.bat</Command>
     <ClInclude Include="..\Headers\DebugSystem.h" />
     <ClInclude Include="..\Headers\DodgeSlide.h" />
     <ClInclude Include="..\Headers\DropBox.h" />
+    <ClInclude Include="..\Headers\DropBoxData.h" />
     <ClInclude Include="..\Headers\DropBox_Idle.h" />
     <ClInclude Include="..\Headers\DropBox_Open.h" />
     <ClInclude Include="..\Headers\DropBox_State.h" />
@@ -368,6 +369,8 @@ call Update_Client.bat</Command>
     <ClInclude Include="..\Headers\JumpTrigger.h" />
     <ClInclude Include="..\Headers\Level_Logo.h" />
     <ClInclude Include="..\Headers\MidBoss_Execution.h" />
+    <ClInclude Include="..\Headers\Quest.h" />
+    <ClInclude Include="..\Headers\QuestManager.h" />
     <ClInclude Include="..\Headers\UI_LevelUP_Background.h" />
     <ClInclude Include="..\Headers\UI_LevelUP_BG_Left.h" />
     <ClInclude Include="..\Headers\UI_LevelUP_BG_Right.h" />
@@ -559,6 +562,9 @@ call Update_Client.bat</Command>
     <ClInclude Include="..\Headers\UI_PlayerStatus_Viality.h" />
     <ClInclude Include="..\Headers\UI_Player_HpBar.h" />
     <ClInclude Include="..\Headers\UI_Player_HpBar_Red.h" />
+    <ClInclude Include="..\Headers\UI_QuestClear.h" />
+    <ClInclude Include="..\Headers\UI_QuestHeadText.h" />
+    <ClInclude Include="..\Headers\UI_QuestText.h" />
     <ClInclude Include="..\Headers\UI_SelectEffect.h" />
     <ClInclude Include="..\Headers\UI_SlotBackground.h" />
     <ClInclude Include="..\Headers\UI_SlotGrade.h" />
@@ -720,6 +726,7 @@ call Update_Client.bat</Command>
     <ClCompile Include="..\Codes\DataManager.cpp" />
     <ClCompile Include="..\Codes\DodgeSlide.cpp" />
     <ClCompile Include="..\Codes\DropBox.cpp" />
+    <ClCompile Include="..\Codes\DropBoxData.cpp" />
     <ClCompile Include="..\Codes\DropBox_Idle.cpp" />
     <ClCompile Include="..\Codes\DropBox_Open.cpp" />
     <ClCompile Include="..\Codes\DropBox_State.cpp" />
@@ -753,6 +760,8 @@ call Update_Client.bat</Command>
     <ClCompile Include="..\Codes\JumpBox.cpp" />
     <ClCompile Include="..\Codes\JumpTrigger.cpp" />
     <ClCompile Include="..\Codes\MidBoss_Execution.cpp" />
+    <ClCompile Include="..\Codes\Quest.cpp" />
+    <ClCompile Include="..\Codes\QuestManager.cpp" />
     <ClCompile Include="..\Codes\UI_LevelUP_Background.cpp" />
     <ClCompile Include="..\Codes\UI_LevelUP_BG_Left.cpp" />
     <ClCompile Include="..\Codes\UI_LevelUP_BG_Right.cpp" />
@@ -952,6 +961,9 @@ call Update_Client.bat</Command>
     <ClCompile Include="..\Codes\UI_PlayerStatus_Viality.cpp" />
     <ClCompile Include="..\Codes\UI_Player_HpBar.cpp" />
     <ClCompile Include="..\Codes\UI_Player_HpBar_Red.cpp" />
+    <ClCompile Include="..\Codes\UI_QuestClear.cpp" />
+    <ClCompile Include="..\Codes\UI_QuestHeadText.cpp" />
+    <ClCompile Include="..\Codes\UI_QuestText.cpp" />
     <ClCompile Include="..\Codes\UI_SelectEffect.cpp" />
     <ClCompile Include="..\Codes\UI_SlotBackground.cpp" />
     <ClCompile Include="..\Codes\UI_SlotGrade.cpp" />

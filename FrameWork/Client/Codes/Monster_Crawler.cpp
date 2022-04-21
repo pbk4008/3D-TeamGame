@@ -69,7 +69,7 @@ HRESULT CMonster_Crawler::NativeConstruct(const _uint _iSceneID, void* _pArg)
 		return E_FAIL;
 	if (FAILED(Set_State_FSM())) 
 		return E_FAIL;
-	if (FAILED(Ready_Weapone())) 
+	if (FAILED(Ready_Weapone()))
 		return E_FAIL;
 	if (FAILED(Set_Panel()))
 		return E_FAIL;
@@ -100,7 +100,7 @@ HRESULT CMonster_Crawler::NativeConstruct(const _uint _iSceneID, void* _pArg)
 
 	m_iObectTag = (_uint)GAMEOBJECT::MONSTER_CRYSTAL;
 
-	m_fMaxHp = 30.f;
+	m_fMaxHp = 10.f;
 	m_fCurrentHp = m_fMaxHp;
 
 	m_fMaxGroggyGauge = 3.f;
@@ -111,13 +111,15 @@ HRESULT CMonster_Crawler::NativeConstruct(const _uint _iSceneID, void* _pArg)
 
 	m_iObectTag = (_uint)GAMEOBJECT::MONSTER_CRYSTAL;
 
-	setActive(true);
-
+	m_pCollider->Remove_ActorFromScene();
+	m_pPanel->setActive(false);
+	setActive(false);
 	return S_OK;
 }
 
 _int CMonster_Crawler::Tick(_double _dDeltaTime)
 {	
+
 	if (0 > __super::Tick(_dDeltaTime))
 	{
 		return -1;
@@ -179,7 +181,7 @@ _int CMonster_Crawler::Tick(_double _dDeltaTime)
 				}
 
 				m_pPanel->Set_UIRemove(true);
-				Active_Effect((_uint)EFFECT::DEATH);
+				//Active_Effect((_uint)EFFECT::DEATH);
 				m_bdissolve = true;
 			}
 
@@ -307,10 +309,11 @@ void CMonster_Crawler::Hit(const ATTACKDESC& _tAttackDesc)
 		m_pStateController->Change_State(L"Flinch_Left");
 	}
 
-	Active_Effect((_uint)EFFECT::HIT);
-	Active_Effect((_uint)EFFECT::HIT_FLOATING);
-	Active_Effect((_uint)EFFECT::HIT_FLOATING_2);
-	Active_Effect((_uint)EFFECT::HIT_IMAGE);
+	//Active_Effect((_uint)EFFECT::HIT);
+	//Active_Effect((_uint)EFFECT::HIT_FLOATING);
+	//Active_Effect((_uint)EFFECT::HIT_FLOATING_2);
+	//Active_Effect((_uint)EFFECT::HIT_IMAGE);
+	Active_Effect((_uint)EFFECT::DEAD_SMOKE);
 
 }
 
@@ -325,6 +328,37 @@ void CMonster_Crawler::Set_IsAttack(const _bool _isAttack)
 	m_IsAttack = _isAttack;
 	m_tAttackDesc.fDamage = 3;
 	m_tAttackDesc.iLevel = 1;
+}
+
+void CMonster_Crawler::setActive(_bool bActive)
+{
+	CGameObject::setActive(bActive);
+
+	if (bActive)
+	{
+		if (!m_pCharacterController)
+		{
+			//Ch_controller
+			CCharacterController::DESC tCCTDesc;
+			tCCTDesc.fHeight = 1.f;
+			tCCTDesc.fRadius = 0.5f;
+			tCCTDesc.fContactOffset = tCCTDesc.fRadius * 0.1f;
+			tCCTDesc.fStaticFriction = 0.5f;
+			tCCTDesc.fDynamicFriction = 0.5f;
+			tCCTDesc.fRestitution = 0.f;
+			tCCTDesc.pGameObject = this;
+			tCCTDesc.vPosition = { 0.f, 0.f, 0.f };
+
+			if (FAILED(__super::SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_CharacterController", L"CharacterController", (CComponent**)&m_pCharacterController, &tCCTDesc)))
+				MSGBOX(L"땅강아지 cct 생성 실패");
+			m_pCharacterController->setOwnerTransform(m_pTransform);
+			m_pCharacterController->setShapeLayer((_uint)ELayer::Monster);
+		}
+		if (m_pCollider)
+			m_pCollider->Add_ActorToScene();
+		if (m_pPanel)
+			m_pPanel->setActive(true);
+	}
 }
 
 HRESULT CMonster_Crawler::SetUp_Components()
@@ -355,21 +389,21 @@ HRESULT CMonster_Crawler::SetUp_Components()
 	if (FAILED(__super::SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_Animator", L"Com_Animator", (CComponent**)&m_pAnimatorCom, &tDesc)))
 		return E_FAIL;
 
-	//Ch_controller
-	CCharacterController::DESC tCCTDesc;
-	tCCTDesc.fHeight = 1.f;
-	tCCTDesc.fRadius = 0.5f;
-	tCCTDesc.fContactOffset = tCCTDesc.fRadius * 0.1f;
-	tCCTDesc.fStaticFriction = 0.5f;
-	tCCTDesc.fDynamicFriction = 0.5f;
-	tCCTDesc.fRestitution = 0.f;
-	tCCTDesc.pGameObject = this;
-	tCCTDesc.vPosition = { 0.f, 0.f, 0.f };
+	////Ch_controller
+	//CCharacterController::DESC tCCTDesc;
+	//tCCTDesc.fHeight = 1.f;
+	//tCCTDesc.fRadius = 0.5f;
+	//tCCTDesc.fContactOffset = tCCTDesc.fRadius * 0.1f;
+	//tCCTDesc.fStaticFriction = 0.5f;
+	//tCCTDesc.fDynamicFriction = 0.5f;
+	//tCCTDesc.fRestitution = 0.f;
+	//tCCTDesc.pGameObject = this;
+	//tCCTDesc.vPosition = { 0.f, 0.f, 0.f };
 
-	if (FAILED(__super::SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_CharacterController", L"CharacterController", (CComponent**)&m_pCharacterController, &tCCTDesc)))
-		return E_FAIL;
-	m_pCharacterController->setOwnerTransform(m_pTransform);
-	m_pCharacterController->setShapeLayer((_uint)ELayer::Monster);
+	//if (FAILED(__super::SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_CharacterController", L"CharacterController", (CComponent**)&m_pCharacterController, &tCCTDesc)))
+	//	return E_FAIL;
+	//m_pCharacterController->setOwnerTransform(m_pTransform);
+	//m_pCharacterController->setShapeLayer((_uint)ELayer::Monster);
 
 	//state controller
 	if (FAILED(__super::SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_StateController", L"Com_StateController", (CComponent**)&m_pStateController)))

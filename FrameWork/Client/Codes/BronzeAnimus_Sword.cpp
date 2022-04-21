@@ -127,6 +127,23 @@ void CBronzeAnimus_Sword::OnTriggerEnter(CCollision& collision)
 	}
 }
 
+void CBronzeAnimus_Sword::setActive(_bool bActive)
+{
+	CGameObject::setActive(bActive);
+
+	switch (bActive)
+	{
+	case true:
+		if (m_pCollider)
+			m_pCollider->Add_ActorToScene();
+		break;
+	case false:
+		if (m_pCollider)
+			m_pCollider->Remove_ActorFromScene();
+		break;
+	}
+}
+
 HRESULT CBronzeAnimus_Sword::Ready_Components()
 {
 	CTransform::TRANSFORMDESC transformDesc;

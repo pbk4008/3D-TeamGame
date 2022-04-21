@@ -107,7 +107,7 @@ HRESULT CWeapon::Render_Velocity()
 		if (FAILED(m_pModel->Render(i, 3))) MSGBOX("Fialed To Rendering Silvermane");
 
 	m_timer += g_fDeltaTime;
-	if (m_timer >= 0.05f)
+	if (m_timer >= 0.01f)
 	{
 		m_PreWroldMat = m_pTransform->Get_WorldMatrix();
 		m_timer = 0.f;

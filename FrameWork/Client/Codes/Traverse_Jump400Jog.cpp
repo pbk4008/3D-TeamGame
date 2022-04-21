@@ -96,7 +96,7 @@ HRESULT CTraverse_Jump400Jog::EnterState()
 	_vector svDir = svTargetPosition - m_pTransform->Get_State(CTransform::STATE_POSITION);
 	XMStoreFloat3(&m_vDir, XMVector3Normalize(XMVectorSetY(svDir, 0.f)));
 
-	m_pAnimationController->Set_MoveSpeed(32.f);
+	m_pAnimationController->Mul_MoveSpeed(0.8f);
 	m_pSilvermane->Set_IsFall(false);
 	m_iCutIndex = 45;
 	return S_OK;
@@ -107,7 +107,7 @@ HRESULT CTraverse_Jump400Jog::ExitState()
 	if (FAILED(__super::ExitState()))
 		return E_FAIL;
 
-	m_pAnimationController->Set_MoveSpeed(40.f);
+	m_pAnimationController->Div_MoveSpeed(0.8f);
 	m_pSilvermane->Set_IsTrasceCamera(true);
 	m_isJumpEnd = false;
 	m_pSilvermane->Set_IsFall(true);

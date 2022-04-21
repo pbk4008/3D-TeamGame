@@ -128,7 +128,7 @@ technique11			DefaultTechnique
 	pass Flow
 	{
 		SetRasterizerState(CullMode_None);
-		SetDepthStencilState(ZDefault, 0);
+		SetDepthStencilState(ZBufferDisable, 0);
 		SetBlendState(AlphaBlending, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
 
 		/* 진입점함수를 지정한다. */

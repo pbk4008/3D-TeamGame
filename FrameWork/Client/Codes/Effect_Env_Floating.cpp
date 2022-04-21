@@ -100,7 +100,7 @@ _int CEffect_Env_Floating::LateTick(_double TimeDelta)
 	_bool bCulling = g_pGameInstance->isIn_WorldFrustum(m_pBox->Get_Points(), 20.f);
 	if (true == bCulling)
 	{
-		m_pRenderer->Add_RenderGroup(CRenderer::RENDER::RENDER_NONALPHA, this);
+		m_pRenderer->Add_RenderGroup(CRenderer::RENDER::RENDER_ALPHA, this);
 	}
 
 	return 0;
@@ -132,11 +132,13 @@ HRESULT CEffect_Env_Floating::Render()
 
 	_float4 color = { 1.f , 0.6f, 0.3f ,1.f };
 	_float power = 4.f;
+	_float weight = 1.f;
 	m_pBuffer->SetUp_ValueOnShader("g_color", &color, sizeof(_float4));
 	m_pBuffer->SetUp_ValueOnShader("g_empower", &power, sizeof(_float));
+	m_pBuffer->SetUp_ValueOnShader("g_Weight", &weight, sizeof(_float));
 
 	m_pBuffer->SetUp_ValueOnShader("g_vCamPosition", (void*)&CamPos, sizeof(_vector));
-	m_pBuffer->Render(m_Desc.iRenderPassNum);
+	m_pBuffer->Render(/*m_Desc.iRenderPassNum*/1);
 
 	////1번으로 그릴때만 필요한 변수
 	//_float weight = 1.f;

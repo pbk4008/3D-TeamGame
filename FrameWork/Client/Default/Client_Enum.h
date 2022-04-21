@@ -36,6 +36,7 @@ enum class GAMEOBJECT
 	WEAPON_POLEARM,
 	WEAPON_METEOR,
 	// 트리거
+	TRIGGER,
 	JUMP_TRIGGER,
 	JUMP_NODE,
 	JUMP_BOX,
@@ -67,6 +68,7 @@ enum class EFFECT
 	BOX,
 	EAT_ITEM,
 	HIT_IMAGE,
+	DEAD_SMOKE,
 	EXPLOSION_ROCK_UP,
 	EXPLOSION_ROCK_LEFT,
 	EXPLOSION_ROCK_RIGHT,
@@ -240,6 +242,38 @@ enum class EWeaponMaterial
 	MATERIAL_END
 };
 
+enum class EQuestTextType
+{
+	FindSunForge,   /* 태양로 입구를 찾으십시오 */
+	AllKillMonster, /* 모든 몬스터 처치 */
+	FindDropBox,    /* 은닉품 조사 */
+	ChageNewWeapon, /* 새로운 무기로 교체 */
+	QuestText_END
+};
+
+const wstring g_arrQuestTextTex[(int)EQuestTextType::QuestText_END]
+{
+	L"T_HUD_Find_Sunforge",
+	L"T_HUD_KillAllMonster",
+	L"T_HUD_Find_DropBox",
+	L"T_HUD_EquipNewWeapon"
+};
+
+enum class EQuestHeaderType
+{
+	FirestStep,     /* 첫걸음 */
+	Sunforge,		/* 태양로 신전 */
+	Boss,			/* 수호자 */
+	QuestHeader_END
+};
+
+const wstring g_arrQuestHeaderTex[(int)EQuestHeaderType::QuestHeader_END]
+{
+	L"T_HUD_FirstStep",
+	L"T_HUD_GUARD",
+	L"T_HUD_GUARD"
+};
+
 const wstring g_arrGradeName[(int)EEquipmentGradeUI::GRADE_END]
 {
 	L"일반",
@@ -248,6 +282,7 @@ const wstring g_arrGradeName[(int)EEquipmentGradeUI::GRADE_END]
 	L"영웅",
 	L"전설"
 };
+
 static TEXTURETYPE g_arrMI_Texture[(int)EWeaponMaterial::MATERIAL_END]
 {
 	TEXTURETYPE::TEX_DIFFUSE,
@@ -520,5 +555,22 @@ const wstring g_arrMI_Soothsayer[(int)EWeaponMaterial::MATERIAL_END]
 	L"T_2H_Hammer_Soothsayer_MRA.dds",
 	L"T_2H_Hammer_Soothsayer_CEO.dds",
 };
+
+const wstring g_arrMI_Needle[(int)EWeaponMaterial::MATERIAL_END]
+{
+	L"T_1h_Sword_Needle_D.dds",
+	L"T_1h_Sword_Needle_N.dds",
+	L"T_1h_Sword_Needle_MRA.dds",
+	L"T_1h_Sword_Needle_CEO.dds",
+};
+
+const wstring g_arrMI_Fury[(int)EWeaponMaterial::MATERIAL_END]
+{
+	L"T_2h_Hammer_Fury_D.dds",
+	L"T_2h_Hammer_Fury_N.dds",
+	L"T_2h_Hammer_Fury_MRA.dds",
+	L"T_2h_Hammer_Fury_CEO.dds",
+};
+
 END
 #endif

@@ -70,7 +70,6 @@ HRESULT CCrawler_Death::EnterState()
 	//m_pTransform->Face_Target(g_pObserver->Get_PlayerPos());
 	g_pShakeManager->Shake(CShakeManager::ETemplate::MonsterDeath, m_pTransform->Get_State(CTransform::STATE_POSITION));
 
-	g_pMainApp->FreezeTime();
 	return S_OK;
 }
 

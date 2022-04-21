@@ -53,8 +53,9 @@ HRESULT CDropBox::NativeConstruct(const _uint _iSceneID, void* _pArg)
 		return E_FAIL;
 
 	m_tDesc = (*(MABOBJECT*)_pArg);
-	_vector pos = { m_tDesc.WorldMat._41, m_tDesc.WorldMat._42, m_tDesc.WorldMat._43,m_tDesc.WorldMat._44 };
-	m_pTransform->Set_State(CTransform::STATE_POSITION, pos);
+	//_vector pos = { m_tDesc.WorldMat._41, m_tDesc.WorldMat._42, m_tDesc.WorldMat._43,m_tDesc.WorldMat._44 };
+	//m_pTransform->Set_State(CTransform::STATE_POSITION, pos);
+	m_pTransform->Set_WorldMatrix(XMLoadFloat4x4(&m_tDesc.WorldMat));
 
 	m_pPlayer = m_pPlayer = *g_pGameInstance->getObjectList(_iSceneID, L"Layer_Silvermane")->begin();
 	assert(m_pPlayer);
@@ -94,7 +95,7 @@ _int CDropBox::Tick(_double _dDeltaTime)
 			m_dropElapsed = 0.f;
 			m_pCollider->Remove_ActorFromScene();
 			m_dropDelay = (_float)MathUtils::ReliableRandom(m_dropDelayMin, m_dropDelayMax);
-			CDropManager::GetInstance()->DropItem(m_dropList.back(), m_pTransform->Get_State(CTransform::STATE_POSITION), EScatterType::Cone, m_pTransform);
+			CDropManager::GetInstance()->DropItem(m_dropList.back(), m_pTransform->Get_State(CTransform::STATE_POSITION), EScatterType::Cone, Get_Transform());
 			m_dropList.pop_back();
 		}
 	}
@@ -244,15 +245,15 @@ void CDropBox::Open(void)
 std::vector<CItemData> CDropBox::GetDropList(void)
 {
 	CItemData item1;
-	item1.iconTexName = L"T_Weapon_Hammer_2H_Player_Hinterclaw";
+	item1.iconTexName = L"T_Weapon_Hammer_2H_Player_Fury";
 	item1.equipmentGrade = EEquipmentGrade::Epic;
 	item1.ItemType = EItemType::Equipment;
 	item1.equipmentType = EEquipmentType::Weapon;
 	item1.szItemName = L"JinSung's Sword";
 	item1.iMainStat = 52;
 	item1.iLevel = 10;
-	item1.weaponData.weaponName = L"Hinterclaw";
-	item1.equipmentName = EEquipmentName::Hinterclaw;
+	item1.weaponData.weaponName = L"Fury";
+	item1.equipmentName = EEquipmentName::Fury;
 	item1.szStatusName = L"T_2H_DPS_147";
 
 	CItemData item2;
@@ -333,7 +334,7 @@ std::vector<CItemData> CDropBox::GetDropList(void)
 	item7.weaponData.weaponName = L"Eclipse";
 	item7.equipmentName = EEquipmentName::Eclipse;
 	item7.szStatusName = L"T_1H_DPS_145";
-	
+
 	CItemData item8;
 	item8.iconTexName = L"T_Weapon_Hammer_2H_Player_Skymourne";
 	item8.equipmentGrade = EEquipmentGrade::Rare;
@@ -574,35 +575,14 @@ std::vector<CItemData> CDropBox::GetDropList(void)
 
 	std::vector<CItemData> dropList;
 
-	dropList.push_back(item1);
-	dropList.push_back(item2);
-	dropList.push_back(item3);
-	dropList.push_back(item4);
-	dropList.push_back(item5);
-	dropList.push_back(item6);
-	dropList.push_back(item7);
-	dropList.push_back(item8);
-	dropList.push_back(item9);
-	dropList.push_back(item10);
-	dropList.push_back(item11);
-	dropList.push_back(item12);
-	dropList.push_back(item13);
-	dropList.push_back(item14);
-	dropList.push_back(item15);
-	dropList.push_back(item16);
-	//dropList.push_back(item17);
-	//dropList.push_back(item18);
-	//dropList.push_back(item19);
-	//dropList.push_back(item20);
-	//dropList.push_back(item21);
-	//dropList.push_back(item22);
-	//dropList.push_back(item23);
-	//dropList.push_back(item24);
-	//dropList.push_back(item25);
-	//dropList.push_back(item26);
-	//dropList.push_back(item27);
-	//dropList.push_back(item28);
-
+	for (auto& iter : m_tDesc.itemData)
+	{
+		for (auto& temp : iter)
+		{
+			dropList.emplace_back(*((CItemData*)temp));
+		}
+	}
+	
 	return dropList;
 }
 
@@ -666,7 +646,7 @@ void CDropBox::FocusEnter()
 void CDropBox::Focus()
 {
 	__super::Focus();
-	//Active_Effect((_uint)EFFECT::OPENBOX);
+	Active_Effect((_uint)EFFECT::OPENBOX);
 
 	m_bFocus = true;
 }

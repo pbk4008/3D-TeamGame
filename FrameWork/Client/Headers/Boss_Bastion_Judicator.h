@@ -32,6 +32,8 @@ public:
 	virtual HRESULT Render() override;
 	virtual HRESULT	Render_Shadow() override;
 
+	virtual void setActive(_bool bActive) override;
+
 private:
 	virtual HRESULT SetUp_Components();
 	HRESULT Set_Animation_FSM();

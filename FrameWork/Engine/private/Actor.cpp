@@ -200,7 +200,7 @@ void CActor::Active_Effect(_uint iEffectIndex)
 	CEffect* pEffect = g_pGameInstance->Get_Effect(iEffectIndex);
 	if (!pEffect)
 	{
-		MSGBOX("Effect Null!!");
+		//MSGBOX("Effect Null!!");
 		return;
 	}
 	_vector Mypos = m_pTransform->Get_State(CTransform::STATE_POSITION);
@@ -215,7 +215,7 @@ void CActor::Active_Effect(_uint iEffectIndex, _fvector vPivot)
 	CEffect* pEffect = g_pGameInstance->Get_Effect(iEffectIndex);
 	if (!pEffect)
 	{
-		MSGBOX("Effect Null!!");
+		//MSGBOX("Effect Null!!");
 		return;
 	}
 	_vector Mypos = m_pTransform->Get_State(CTransform::STATE_POSITION);
@@ -230,7 +230,7 @@ void CActor::Active_Effect_Target(_uint iEffectIndex, _matrix TargetMat)
 	CEffect* pEffect = g_pGameInstance->Get_Effect(iEffectIndex);
 	if (!pEffect)
 	{
-		MSGBOX("Effect Null!!");
+		//MSGBOX("Effect Null!!");
 		return;
 	}
 

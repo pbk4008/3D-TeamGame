@@ -191,6 +191,7 @@ namespace Engine
 	typedef struct tagMabObject
 	{
 		_float4x4 WorldMat;
+		std::vector<vector<void*>> itemData;
 	}MABOBJECT;
 
 

@@ -70,6 +70,8 @@ cbuffer Fogbuffer
 	float g_fogDist = (float) 0;
 	float g_fogstart = (float) 0;
 	float g_fogend = (float) 0;
+	float g_fogfalloff = (float) 0;
+	bool g_fogType = (bool)0;
 };
 
 cbuffer LightDesc
@@ -125,6 +127,7 @@ Texture2D g_DistortionTex;
 Texture2D g_VelocityTex;
 Texture2D g_DissolveTex;
 Texture2D g_RimLightTexture;
+Texture2D g_AlphaNBTexture;
 
 struct VS_IN
 {
@@ -431,24 +434,40 @@ PS_OUT_BLEND PS_MAIN_BLEND(PS_IN In)
 	}
 	
 	if (g_radial == true)
-	{	
-		Out.vColor.rgb = Radialblur(g_DiffuseTexture,DefaultSampler,In.vTexUV,g_RadialCnt);
+	{
+		Out.vColor.rgb = Radialblur(g_DiffuseTexture, DefaultSampler, In.vTexUV, g_RadialCnt);
 	}
 	
 	if(g_outline == true)
 	{
 		half4 rim = g_RimLightTexture.Sample(DefaultSampler, In.vTexUV);
-		Out.vColor = Outline(g_RimLightTexture, DefaultSampler, In.vTexUV, Out.vColor);
+		Out.vColor += rim; /*Outline(g_RimLightTexture, DefaultSampler, In.vTexUV, Out.vColor);*/
 	}
-	
-	if (Out.vColor.a == 0)
-		discard;
 	
 	if (g_fog == true)
 	{
-		half fogfactor = 1.0 / pow(2.71828, saturate((fViewZ - g_fogDist) * g_fogDenstiy));
-		Out.vColor = fogfactor * Out.vColor + (1.0 - fogfactor) * g_fogcolor;
+		half4 worldpos;
+		worldpos.x = (In.vTexUV.x * 2.f - 1.f) * fViewZ;
+		worldpos.y = (In.vTexUV.y * -2.f + 1.f) * fViewZ;
+		worldpos.z = depth.x * fViewZ;
+		worldpos.w = fViewZ;
+		worldpos = mul(worldpos, g_ProjMatrixInv);
+		worldpos = mul(worldpos, g_ViewMatrixInv);
+		float fog = 0.0f;
+		if (g_fogType == EXPONENTIAL_FOG)
+		{
+			fog = ExponentialFog(worldpos,g_vCamPosition,g_fogstart,g_fogDenstiy);
+		}
+		else if (g_fogType == EXPONENTIAL_HEIGHT_FOG)
+		{
+			fog = ExponentialHeightFog(worldpos,g_vCamPosition,g_fogstart,g_fogDenstiy,g_fogfalloff);
+		}
+		Out.vColor = lerp(Out.vColor, g_fogcolor, fog);
 	}
+	
+	
+	if (Out.vColor.a == 0)
+		discard;
 	
 	return Out;
 }
@@ -458,7 +477,8 @@ PS_OUT_BLEND PS_MAIN_ALPHA(PS_IN In)
 	PS_OUT_BLEND Out = (PS_OUT_BLEND) 0;
 	
 	half4 color = g_AlphaTexture.Sample(DefaultSampler, In.vTexUV);
-	Out.vColor = color;
+	half4 color2 = g_AlphaNBTexture.Sample(DefaultSampler, In.vTexUV);
+	Out.vColor = color + color2;
 	
 	return Out;
 }

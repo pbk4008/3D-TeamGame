@@ -63,6 +63,8 @@ public:
 	void Set_GroggyGauge(_uint _Value) { m_fGroggyGauge += _Value; }
 	void Set_Dead(void) { m_bDead = true; }
 	virtual void Set_Remove(_bool bCheck) override;
+	virtual void setActive(_bool bActive) override;
+
 public:
 	void set_Target(_bool bCheck) { m_bTargetOn = bCheck; }
 	void set_Attack(_bool bCheck) { m_bAttackOn = bCheck; }

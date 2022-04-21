@@ -33,6 +33,7 @@ public:
 	CActor* Get_Owner() const;
 	const _float Get_Damage() const;
 	const _float3& Get_EndPos() const;
+	CModel* Get_Model() { return m_pModel; }
 
 	void Set_Owner(CActor* _pOwner);
 	virtual void Set_OwnerPivotMatrix(const _fmatrix& _smatPivot);
