@@ -971,8 +971,8 @@
       <UniqueIdentifier>{c05b8de5-518f-4321-9a1d-4fabd6806261}</UniqueIdentifier>
     </Filter>
     <Filter Include="02.GameObject\03.Character\01.Monster\BronzeAnimus\State\Excution">
-    </Filter>
       <UniqueIdentifier>{68087ee0-399c-4e15-a565-cb5d7e2cd6ce}</UniqueIdentifier>
+    </Filter>
     <Filter Include="02.GameObject\03.Character\02.Boss\00.MiddleBoss\State\06.Execution">
       <UniqueIdentifier>{b058ac71-c72c-4000-a763-0ed28eb645cc}</UniqueIdentifier>
     </Filter>
