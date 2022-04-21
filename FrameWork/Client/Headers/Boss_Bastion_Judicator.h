@@ -46,6 +46,7 @@ public:
 	virtual void OnTriggerEnter(CCollision& collision) override;
 
 	virtual void Hit(const ATTACKDESC& _tAttackDesc) override;
+	virtual void Execution() override;
 
 public:
 	void Set_IsAttack(const _bool _isAttack);

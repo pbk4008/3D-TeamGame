@@ -20,6 +20,10 @@ _int CSilvermane_Heal::Tick(const _double& _dDeltaTime)
 	if (NO_EVENT != iProgress)
 		return iProgress;
 
+	_uint iCurKeyFrameIndex = m_pAnimationController->Get_CurKeyFrameIndex();
+	if(20 < iCurKeyFrameIndex && 80 > iCurKeyFrameIndex)
+		m_pSilvermane->Add_HP(m_fValue * (_float)_dDeltaTime);
+
 	if (m_pAnimationController->Is_Finished())
 	{
 		return ToIdle();
@@ -52,6 +56,8 @@ HRESULT CSilvermane_Heal::EnterState()
 
 	m_pAnimationController->SetUp_NextAnimation("SK_Silvermane.ao|A_Heal01_Player", true);
 	m_pAnimationController->Set_RootMotion(true, true, ERootOption::XYZ);
+
+	m_fValue = m_pSilvermane->Get_MaxHp() * 0.1f;
 
 	return S_OK;
 }
