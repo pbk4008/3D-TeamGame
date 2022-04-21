@@ -881,40 +881,9 @@ HRESULT CSilvermane::Ready_States()
 HRESULT CSilvermane::Ready_Weapons(const _uint _iSceneID)
 {
 	CWeapon* pWeapon = nullptr;
-	CHierarchyNode* pWeaponBone = m_pModel->Get_BoneMatrix("spine_03");
 
 	if (FAILED(g_pWeaponGenerator->NativeConstruct(m_pDevice, m_pDeviceContext, _iSceneID, m_pModel)))
 		return E_FAIL;
-
-#pragma region Old Ready Weapon
-	////한손검
-	//pWeapon = CNeedle::Create(m_pDevice, m_pDeviceContext);
-	//if (FAILED(pWeapon->NativeConstruct(m_iSceneID, pWeaponBone)))
-	//{
-	//	Safe_Release(pWeapon);
-	//	return E_FAIL;
-	//}
-	//pWeapon->Set_Owner(this); /* 무기에게 네가 나의 마스타인가? */
-	//pWeapon->Set_OwnerPivotMatrix(m_pModel->Get_PivotMatrix()); /* 마스타의 뼈를 취하겠다 */
-	////m_umapWeapons.emplace(L"Needle", pWeapon); /* 따로 저장 */
-	//m_pCurWeapon = pWeapon; /* FSM 나뉨 */
-	//m_pCurWeapon->setActive(true); 
-	//m_pNeedle = pWeapon;
-
-	// 방패
-	pWeaponBone = m_pModel->Get_BoneMatrix("weapon_l");
-	m_pShield = CShield::Create(m_pDevice, m_pDeviceContext);
-	if (FAILED(m_pShield->NativeConstruct(m_iSceneID, pWeaponBone)))
-	{
-		Safe_Release(m_pShield);
-		return E_FAIL;
-	}
-	m_pShield->Set_Owner(this);
-	m_pShield->Set_OwnerPivotMatrix(m_pModel->Get_PivotMatrix());
-	Set_EquipShield(false);
-
-
-#pragma endregion
 
 	/// <summary>
 	/// Equipment&Inventory Data와 연동하여 장비 Ready함
@@ -941,7 +910,7 @@ HRESULT CSilvermane::Ready_Weapons(const _uint _iSceneID)
 	}
 
 	///////////////////////////////////////////////////////////////////// 방패
-	pWeaponBone = m_pModel->Get_BoneMatrix("weapon_l");
+	CHierarchyNode* pWeaponBone = m_pModel->Get_BoneMatrix("weapon_l");
 	m_pShield = CShield::Create(m_pDevice, m_pDeviceContext);
 	if (FAILED(m_pShield->NativeConstruct(m_iSceneID, pWeaponBone)))
 	{

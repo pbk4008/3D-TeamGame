@@ -178,8 +178,11 @@ _int CMainApp::Tick(_double TimeDelta)
 		}
 	}
 
-	g_pDataManager->Tick();
-	g_pQuestManager->Tick(TimeDelta);
+	if(g_pDataManager)
+		g_pDataManager->Tick();
+	// 스테이지에도 똑같은 코드가 있음
+	//if(g_pQuestManager)
+	//	g_pQuestManager->Tick(TimeDelta);
 
 	return _int();
 }
@@ -193,7 +196,7 @@ HRESULT CMainApp::Render()
 		return E_FAIL;
 	if (FAILED(g_pGameInstance->Clear_DepthStencil_View()))
 		return E_FAIL;	
-
+	
 	if (FAILED(m_pRenderer->Draw_RenderGroup()))
 		return E_FAIL;
 

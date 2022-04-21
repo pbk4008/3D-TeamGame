@@ -102,17 +102,17 @@ HRESULT CStage1::NativeConstruct()
 	if (FAILED(Ready_Light()))
 		return E_FAIL;
 
-	//if (FAILED(Ready_Trigger_Jump()))
-	//	return E_FAIL;
-	
+	if (FAILED(Ready_Trigger_Jump()))
+		return E_FAIL;
+
 	if (FAILED(Ready_Player(L"Layer_Silvermane")))
 		return E_FAIL;
 
-	//if (FAILED(Ready_MapObject()))
-	//	return E_FAIL;
+	if (FAILED(Ready_MapObject()))
+		return E_FAIL;
 
-	//if (FAILED(Ready_TriggerSystem(L"../bin/SaveData/Trigger/MonsterSpawnTrigger.dat")))
-	//	return E_FAIL;
+	if (FAILED(Ready_TriggerSystem(L"../bin/SaveData/Trigger/MonsterSpawnTrigger.dat")))
+		return E_FAIL;
 
 	if (FAILED(Ready_Data_UI(L"../bin/SaveData/UI/UI.dat")))
 		return E_FAIL;
@@ -131,8 +131,8 @@ HRESULT CStage1::NativeConstruct()
 
 	g_pGameInstance->Change_BaseCamera(L"Camera_Silvermane");
 
-	if (FAILED(Ready_Meteor()))
-		return E_FAIL;
+	//if (FAILED(Ready_Meteor()))
+	//	return E_FAIL;
 
 	//if (FAILED(Ready_Cinema()))
 	//	return E_FAIL;
@@ -149,7 +149,7 @@ HRESULT CStage1::NativeConstruct()
 	if (FAILED(Ready_Portal()))
 		return E_FAIL;
 
-	//g_pGameInstance->PlayBGM(L"Stage1_BGM");
+	g_pGameInstance->PlayBGM(L"Stage1_BGM");
 
 	return S_OK;
 }
@@ -260,12 +260,12 @@ _int CStage1::Tick(_double TimeDelta)
 #pragma region Using Debug
 	_float3 fPos = { 0.f,5.f,20.f };
 
-	if (g_pGameInstance->getkeyDown(DIK_NUMPAD0))
-	{
-		CMonster_EarthAberrant* pMonster = nullptr;
-		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Test", L"Proto_GameObject_Boss_Bastion", &fPos, (CGameObject**)&pMonster)))
-			return -1;
-	}
+	//if (g_pGameInstance->getkeyDown(DIK_NUMPAD0))
+	//{
+	//	CMonster_EarthAberrant* pMonster = nullptr;
+	//	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Test", L"Proto_GameObject_Boss_Bastion", &fPos, (CGameObject**)&pMonster)))
+	//		return -1;
+	//}
 
 	//if (g_pGameInstance->getkeyDown(DIK_NUMPAD0))
 	//{
@@ -326,9 +326,12 @@ _int CStage1::Tick(_double TimeDelta)
 	//		return -1;
 	//}
 #pragma endregion
-	g_pInteractManager->Tick(TimeDelta);
-	g_pDropManager->Tick();
-	m_pIndicatorManager->Active_Indicator();
+	if(g_pInteractManager)
+		g_pInteractManager->Tick(TimeDelta);
+	if(g_pDropManager)
+		g_pDropManager->Tick();
+	if(m_pIndicatorManager)
+		m_pIndicatorManager->Active_Indicator();
 
 
 	/*For Cinema*/
@@ -349,7 +352,8 @@ _int CStage1::Tick(_double TimeDelta)
 	if (m_fAccMeteorStartTime > 60.f)
 		Shoot_Meteor(TimeDelta);
 
-	g_pQuestManager->Tick(TimeDelta);
+	if(g_pQuestManager)
+		g_pQuestManager->Tick(TimeDelta);
 	
 	return _int();
 }
@@ -357,7 +361,8 @@ _int CStage1::Tick(_double TimeDelta)
 _int CStage1::LateTick(_double TimeDelta)
 {
 	//m_pScenemaManager->LateTick(TimeDelta);
-	g_pQuestManager->Late_Tick(TimeDelta);
+	if(g_pQuestManager)
+		g_pQuestManager->Late_Tick(TimeDelta);
 
 	return _int();
 }
@@ -372,7 +377,8 @@ HRESULT CStage1::Render()
 	}
 #endif
 
-	g_pQuestManager->Render();
+	if(g_pQuestManager)
+		g_pQuestManager->Render();
 
 	return S_OK;
 }
@@ -503,20 +509,20 @@ HRESULT CStage1::Ready_Player(const _tchar* LayerTag)
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Camera", L"Proto_GameObject_Camera_Silvermane")))
 		return E_FAIL;
 
-	WALLDESC desc;
-	ZeroMemory(&desc, sizeof(WALLDESC));
-	desc.pos = _float4(-61.f, 18.f, 194.f, 1.f);
-	desc.scale = _float2(6.f, 10.f);
-	desc.radian = 0.f;
-	desc.color = _float4(1.f, 0.f, 0.f, 1.f);
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Wall", L"Proto_GameObject_Wall",&desc))) return E_FAIL;
+	//WALLDESC desc;
+	//ZeroMemory(&desc, sizeof(WALLDESC));
+	//desc.pos = _float4(-61.f, 18.f, 194.f, 1.f);
+	//desc.scale = _float2(6.f, 10.f);
+	//desc.radian = 0.f;
+	//desc.color = _float4(1.f, 0.f, 0.f, 1.f);
+	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Wall", L"Proto_GameObject_Wall",&desc))) return E_FAIL;
 
-	ZeroMemory(&desc, sizeof(WALLDESC));
-	desc.pos = _float4(-91.f, 25.f, 218.f, 1.f);
-	desc.scale = _float2(10.f, 24.f);
-	desc.radian = 90.f;
-	desc.color = _float4(0.f, 1.f, 1.f, 1.f);
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Wall", L"Proto_GameObject_Wall", &desc))) return E_FAIL;
+	//ZeroMemory(&desc, sizeof(WALLDESC));
+	//desc.pos = _float4(-91.f, 25.f, 218.f, 1.f);
+	//desc.scale = _float2(10.f, 24.f);
+	//desc.radian = 90.f;
+	//desc.color = _float4(0.f, 1.f, 1.f, 1.f);
+	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Wall", L"Proto_GameObject_Wall", &desc))) return E_FAIL;
 	
 	return S_OK;
 }
@@ -691,8 +697,8 @@ HRESULT CStage1::Ready_Data_Effect()
 	CEffect* pEffect = nullptr;
 	vector<CEffect_DashDust::EF_PAR_DASH_DESC> vecDashEffect;
 
-	vecDashEffect[0].fAlpha = 0.05f;
 	g_pGameInstance->LoadFile<CEffect_DashDust::EF_PAR_DASH_DESC>(vecDashEffect, L"../bin/SaveData/Effect/Effect_Player_Foot_Dash.dat");
+	vecDashEffect[0].fAlpha = 0.05f;
 
 	wstring FullName = L"Proto_GameObject_Effect_DashDust";
 
