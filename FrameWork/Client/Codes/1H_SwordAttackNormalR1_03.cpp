@@ -25,6 +25,11 @@ _int C1H_SwordAttackNormalR1_03::Tick(const _double& _dDeltaTime)
 
 	_uint iCurkeyFrameIndex = m_pAnimationController->Get_CurKeyFrameIndex();
 
+	if (11 < iCurkeyFrameIndex && 16 > iCurkeyFrameIndex && false == m_bEffectCheck)
+	{
+		m_bEffectCheck = true;
+		m_pSilvermane->Active_Effect_Target((_uint)EFFECT::ATTACK_RIGHT, g_pObserver->Get_PlayerWorldMatrix());
+	}
 
 	if (m_pAnimationController->Is_Finished())
 	{
@@ -56,6 +61,8 @@ HRESULT C1H_SwordAttackNormalR1_03::EnterState()
 {
 	if (FAILED(__super::EnterState()))
 		return E_FAIL;
+
+	m_bEffectCheck = false;
 
 	g_pGameInstance->StopSound(CSoundMgr::CHANNELID::Player_Sword_Attack);
 	g_pGameInstance->Play_Shot(L"Needle_Attack_L_3", CSoundMgr::CHANNELID::Player_Sword_Attack);

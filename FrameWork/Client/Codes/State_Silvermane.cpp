@@ -631,6 +631,26 @@ void CState_Silvermane::Block(const ATTACKDESC& _tAttackDesc)
 	}
 	else
 	{
+		_matrix mat = g_pObserver->Get_PlayerWorldMatrix();
+
+		//공격방향에 따른 파티클위치 		
+		if (EAttackDir::Left == _tAttackDesc.eDir)
+		{
+			m_pSilvermane->Active_Effect_Target((_uint)EFFECT::EXPLOSION_ROCK_LEFT, mat);
+			cout << "왼쪽" << endl;
+		}
+		else if (EAttackDir::Right == _tAttackDesc.eDir)
+		{
+			m_pSilvermane->Active_Effect_Target((_uint)EFFECT::EXPLOSION_ROCK_RIGHT, mat);
+			cout << "오른쪽" << endl;
+
+		}
+		else if (EAttackDir::Forward == _tAttackDesc.eDir)
+		{
+			m_pSilvermane->Active_Effect_Target((_uint)EFFECT::EXPLOSION_ROCK, mat);
+			cout << "정면" << endl;
+		}
+
 		switch (_tAttackDesc.iLevel)
 		{
 		case 1:
@@ -653,8 +673,6 @@ void CState_Silvermane::Block(const ATTACKDESC& _tAttackDesc)
 			break;
 		}
 	}
-
-	//m_pSilvermane->Add_HP(-_tAttackDesc.fDamage);
 }
 
 void CState_Silvermane::Death(const ATTACKDESC& _tAttackDesc)

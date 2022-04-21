@@ -922,6 +922,27 @@
     <Filter Include="02.GameObject\03.Character\00.Player\00.Silvermane\State\Execution">
       <UniqueIdentifier>{afe0def3-27c1-4308-948a-afc5940899dd}</UniqueIdentifier>
     </Filter>
+    <Filter Include="96.ScriptableData\DropBoxData">
+      <UniqueIdentifier>{54f9003f-bb2a-4717-9b95-a3601cf72c83}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.System\09.QuestManager">
+      <UniqueIdentifier>{54f54c76-0741-4989-8fa7-738892b59909}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.UI\05.Hud\02.Quest">
+      <UniqueIdentifier>{2d6282e1-486b-4672-8fce-5fc3bf26a1b0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.UI\05.Hud\02.Quest\00.Background">
+      <UniqueIdentifier>{b7460c6a-d886-45ab-85a3-262e7ece83f8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.UI\05.Hud\02.Quest\02.QuestText">
+      <UniqueIdentifier>{4e9e3262-eb50-4ce6-b047-7d9328f67562}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.UI\05.Hud\02.Quest\01.HeadText">
+      <UniqueIdentifier>{a8afbee4-c30d-4573-aa3b-818b03460e05}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.UI\05.Hud\02.Quest\03.QuestClear">
+      <UniqueIdentifier>{85a6a2f4-3986-4b5d-8a91-6b14ec89705e}</UniqueIdentifier>
+	</Filter>
     <Filter Include="02.GameObject\04.Effect\02.MeshEffect\00.ExplosionRock">
       <UniqueIdentifier>{bea67d0a-4217-4e46-a065-e0f07a483482}</UniqueIdentifier>
     </Filter>
@@ -933,6 +954,9 @@
     </Filter>
     <Filter Include="02.GameObject\03.Character\01.Monster\EarthAberrant\State\06.Execution">
       <UniqueIdentifier>{fcb36259-0e76-4d95-8ef9-ad44c10ef567}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\02.Boss\00.MiddleBoss\State\06.Execution">
+      <UniqueIdentifier>{b058ac71-c72c-4000-a763-0ed28eb645cc}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -2088,8 +2112,29 @@
     <ClInclude Include="..\Headers\MotionTrail.h">
       <Filter>02.GameObject\04.Effect\02. MotionTrail</Filter>
     </ClInclude>
+    <ClInclude Include="..\Headers\DropBoxData.h">
+      <Filter>96.ScriptableData\DropBoxData</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\QuestManager.h">
+      <Filter>03.System\09.QuestManager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Quest.h">
+      <Filter>02.GameObject\05.UI\05.Hud\02.Quest</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\UI_QuestText.h">
+      <Filter>02.GameObject\05.UI\05.Hud\02.Quest\02.QuestText</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\UI_QuestHeadText.h">
+      <Filter>02.GameObject\05.UI\05.Hud\02.Quest\01.HeadText</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\UI_QuestClear.h">
+      <Filter>02.GameObject\05.UI\05.Hud\02.Quest\03.QuestClear</Filter>
+	</ClInclude>
     <ClInclude Include="..\Headers\Aberrant_Execution.h">
       <Filter>02.GameObject\03.Character\01.Monster\EarthAberrant\State\06.Execution</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\MidBoss_Execution.h">
+      <Filter>02.GameObject\03.Character\02.Boss\00.MiddleBoss\State\06.Execution</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -3215,8 +3260,29 @@
     <ClCompile Include="..\Codes\MotionTrail.cpp">
       <Filter>02.GameObject\04.Effect\02. MotionTrail</Filter>
     </ClCompile>
+    <ClCompile Include="..\Codes\DropBoxData.cpp">
+      <Filter>96.ScriptableData\DropBoxData</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\QuestManager.cpp">
+      <Filter>03.System\09.QuestManager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Quest.cpp">
+      <Filter>02.GameObject\05.UI\05.Hud\02.Quest</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\UI_QuestText.cpp">
+      <Filter>02.GameObject\05.UI\05.Hud\02.Quest\02.QuestText</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\UI_QuestHeadText.cpp">
+      <Filter>02.GameObject\05.UI\05.Hud\02.Quest\01.HeadText</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\UI_QuestClear.cpp">
+      <Filter>02.GameObject\05.UI\05.Hud\02.Quest\03.QuestClear</Filter>
+	</ClCompile>
     <ClCompile Include="..\Codes\Aberrant_Execution.cpp">
       <Filter>02.GameObject\03.Character\01.Monster\EarthAberrant\State\06.Execution</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\MidBoss_Execution.cpp">
+      <Filter>02.GameObject\03.Character\02.Boss\00.MiddleBoss\State\06.Execution</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

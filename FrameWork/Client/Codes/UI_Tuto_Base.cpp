@@ -80,7 +80,7 @@ _int CUI_Tuto_Base::LateTick(_double TimeDelta)
 
 HRESULT CUI_Tuto_Base::Render()
 {
-	_matrix XMWorldMatrix = XMMatrixTranspose(m_pTransform->Get_WorldMatrix());
+	/*_matrix XMWorldMatrix = XMMatrixTranspose(m_pTransform->Get_WorldMatrix());
 	_matrix XMViewMatrix = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"MainOrthoCamera", TRANSFORMSTATEMATRIX::D3DTS_VIEW));
 	_matrix XMProjectMatrix = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"MainOrthoCamera", TRANSFORMSTATEMATRIX::D3DTS_PROJECTION));
 
@@ -90,7 +90,7 @@ HRESULT CUI_Tuto_Base::Render()
 
 	m_pBuffer->SetUp_TextureOnShader("g_DiffuseTexture", m_pTexture);
 
-	m_pBuffer->Render(1);
+	m_pBuffer->Render(1);*/
 	
 	return S_OK;
 }

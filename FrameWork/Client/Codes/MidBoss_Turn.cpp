@@ -145,7 +145,7 @@ HRESULT CMidBoss_Turn::EnterState()
 			}
 
 		}
-		else if (0.f > XMVectorGetY(vCross)) //몬스터오른쪽회전
+		else if (0.f >= XMVectorGetY(vCross)) //몬스터오른쪽회전
 		{
 			fRadian = XMConvertToRadians(180.f - XMConvertToDegrees(m_fRadian));
 
@@ -230,7 +230,7 @@ HRESULT CMidBoss_Turn::EnterState()
 
 			}
 		}
-		else if (0.f > XMVectorGetY(vCross)) //몬스터오른쪽회전
+		else if (0.f >= XMVectorGetY(vCross)) //몬스터오른쪽회전
 		{
 			fRadian = XMConvertToRadians(180.f - XMConvertToDegrees(m_fRadian));
 

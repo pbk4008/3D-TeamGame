@@ -23,7 +23,7 @@ public:
 		_float4 weaponColor = _float4(0.f, 0.552f, 0.384f, 1.f);
 		_float damage = 10.f;
 		_uint  NumMat = 3;
-		CHierarchyNode* pHierarchyNode = nullptr;
+		CHierarchyNode* pHierarchyNode = nullptr; 
 		CWeapon::EType EWeaponType = EType::Max;
 	};
 
