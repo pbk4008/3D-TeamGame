@@ -118,8 +118,10 @@ _int CGameInstance::Tick_Engine(_double TimeDelta)
 		return -1;
 
 	m_pPipeLine->Update_PipeLine();
+
 	if (m_pPipeLine->getCameraCount())
-		m_pFrustum->Transform_ToWorldSpace(m_pPipeLine->getBaseCamera());
+		m_pFrustum->Transform_ToWorldSpace(m_pPipeLine->getBaseCamera());	
+	/*m_pFrustum->Frustum_Update(m_pPipeLine->getBaseCamera());*/
 	
 	m_pPhysicSystem->Tick(TimeDelta);
 
@@ -604,6 +606,14 @@ _bool CGameInstance::isIn_LocalFrustum(_fvector vPosition, _float fRange)
 		return false;
 
 	return m_pFrustum->isInLocal(vPosition, fRange);
+}
+
+_float4* CGameInstance::Get_FrustumPlane()
+{
+	if (nullptr == m_pFrustum)
+		return false;
+
+	return m_pFrustum->Get_FrustumPlane();
 }
 
 HRESULT CGameInstance::Add_Texture(ID3D11Device* pDevice, const wstring& pTextureTag, const wstring& pFilePath, _uint iTextureCnt)

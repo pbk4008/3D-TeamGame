@@ -163,7 +163,7 @@ _int CMidBoss_Attack::Tick(const _double& TimeDelta)
 		cout << "S1 : " << iCurKeyFrameIndex << endl;
 
 		//림라이트
-		m_pMonster->RimlightCheck(true);
+		m_pMonster->RimlightCheck(true, _float3(1, 0, 0));
 
 		m_pTransform->Face_Target(g_pObserver->Get_PlayerPos());
 

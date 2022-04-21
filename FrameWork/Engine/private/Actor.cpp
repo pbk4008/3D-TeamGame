@@ -252,11 +252,13 @@ void CActor::Set_FootPosition(const _float3& _vPos)
 {
 }
 
-void CActor::RimlightCheck(_bool check)
+void CActor::RimlightCheck(_bool check, _float3 color)
 {
 	m_rimcheck = check;
 	if (check == false)
 		m_rimintensity = 30.f;
+
+	m_rimcol = color;
 }
 
 void CActor::SetRimIntensity(_float time)

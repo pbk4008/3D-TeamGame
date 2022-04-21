@@ -105,16 +105,72 @@ _bool CFrustum::isInLocal(_fvector vPosition, _float fRange)
 	return true;
 }
 
+void CFrustum::Frustum_Update(const wstring& pCameraTag)
+{
+	CPipeLine* pPipeLine = GET_INSTANCE(CPipeLine);
+
+	_matrix W, V, P;
+	
+	V = pPipeLine->Get_Transform(pCameraTag, TRANSFORMSTATEMATRIX::D3DTS_VIEW);
+	P = pPipeLine->Get_Transform(pCameraTag, TRANSFORMSTATEMATRIX::D3DTS_PROJECTION);
+
+	_matrix M = V * P;
+	_float4x4 mat;
+	XMStoreFloat4x4(&mat, M);
+
+	// Left
+	m_Planes[0].x = mat._14 + mat._11;
+	m_Planes[0].y = mat._24 + mat._21;
+	m_Planes[0].z = mat._34 + mat._31;
+	m_Planes[0].w = mat._44 + mat._41;
+
+	// Right
+	m_Planes[1].x = mat._14 - mat._11;
+	m_Planes[1].y = mat._24 - mat._21;
+	m_Planes[1].z = mat._34 - mat._31;
+	m_Planes[1].w = mat._44 - mat._41;
+
+	// Top
+	m_Planes[2].x = mat._14 + mat._12;
+	m_Planes[2].y = mat._24 + mat._22;
+	m_Planes[2].z = mat._34 + mat._32;
+	m_Planes[2].w = mat._44 + mat._42;
+
+	// Bottom
+	m_Planes[3].x = mat._14 - mat._12;
+	m_Planes[3].y = mat._24 - mat._22;
+	m_Planes[3].z = mat._34 - mat._32;
+	m_Planes[3].w = mat._44 - mat._42;
+
+	// Near
+	m_Planes[4].x = mat._13;
+	m_Planes[4].y = mat._23;
+	m_Planes[4].z = mat._33;
+	m_Planes[4].w = mat._43;
+
+	// Far
+	m_Planes[5].x = mat._14 - mat._13;
+	m_Planes[5].y = mat._24 - mat._23;
+	m_Planes[5].z = mat._34 - mat._33;
+	m_Planes[5].w = mat._44 - mat._43;
+
+	for (_int i = 0; i < 6; ++i)
+		XMStoreFloat4(&m_Planes[i], XMPlaneNormalize(XMLoadFloat4(&m_Planes[i])));
+
+
+	RELEASE_INSTANCE(CPipeLine);
+}
+
 void CFrustum::Make_PlaneInWorld(_fvector* pPoints)
 {
-	XMStoreFloat4(&m_PlaneInWorld[0], XMPlaneFromPoints(pPoints[1], pPoints[5], pPoints[6]));
-	XMStoreFloat4(&m_PlaneInWorld[1], XMPlaneFromPoints(pPoints[4], pPoints[0], pPoints[3]));
+	XMStoreFloat4(&m_PlaneInWorld[0], XMPlaneFromPoints(pPoints[1], pPoints[5], pPoints[6])); // 오른쪽
+	XMStoreFloat4(&m_PlaneInWorld[1], XMPlaneFromPoints(pPoints[4], pPoints[0], pPoints[3])); // 왼쪽
 
-	XMStoreFloat4(&m_PlaneInWorld[2], XMPlaneFromPoints(pPoints[4], pPoints[5], pPoints[1]));
-	XMStoreFloat4(&m_PlaneInWorld[3], XMPlaneFromPoints(pPoints[3], pPoints[2], pPoints[6]));
+	XMStoreFloat4(&m_PlaneInWorld[2], XMPlaneFromPoints(pPoints[4], pPoints[5], pPoints[1])); // 위
+	XMStoreFloat4(&m_PlaneInWorld[3], XMPlaneFromPoints(pPoints[3], pPoints[2], pPoints[6])); // 아래
 
-	XMStoreFloat4(&m_PlaneInWorld[4], XMPlaneFromPoints(pPoints[5], pPoints[4], pPoints[7]));
-	XMStoreFloat4(&m_PlaneInWorld[5], XMPlaneFromPoints(pPoints[0], pPoints[1], pPoints[2]));
+	XMStoreFloat4(&m_PlaneInWorld[4], XMPlaneFromPoints(pPoints[5], pPoints[4], pPoints[7])); // far
+	XMStoreFloat4(&m_PlaneInWorld[5], XMPlaneFromPoints(pPoints[0], pPoints[1], pPoints[2])); // near
 }
 
 void CFrustum::Make_PlaneInLocal(_fvector* pPoints)

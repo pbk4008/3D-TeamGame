@@ -236,7 +236,7 @@ HRESULT CBoss_Bastion_Judicator::Render()
 	if (m_rimcheck == true)
 	{
 		rimdesc.rimcheck = m_rimcheck;
-		rimdesc.rimcol = _float3(1.f, 0.f, 0.f);
+		rimdesc.rimcol = m_rimcol;
 		rimdesc.rimintensity = m_rimintensity; // intensity ³·À» ¼ö·Ï °úÇÏ°Ô ºû³²
 		XMStoreFloat4(&rimdesc.camdir, XMVector3Normalize(g_pGameInstance->Get_CamPosition(L"Camera_Silvermane") - m_pTransform->Get_State(CTransform::STATE_POSITION)));
 		CActor::SetRimIntensity(g_fDeltaTime * -10.f);

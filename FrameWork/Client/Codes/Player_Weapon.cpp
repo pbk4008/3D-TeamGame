@@ -143,7 +143,19 @@ HRESULT CPlayer_Weapon::Render()
 	desc.color = m_fWeaponColor;
 	desc.empower = 0.6f;
 
-	CWeapon::BindConstantBuffer(wstrCamTag,&desc);
+	RIM rimdesc;
+	ZeroMemory(&rimdesc, sizeof(rimdesc));
+
+	if (m_rimcheck == true)
+	{
+		rimdesc.rimcheck = m_rimcheck;
+		rimdesc.rimintensity = m_rimintensity;
+		rimdesc.rimcol = _float3(1, 0, 0);
+		XMStoreFloat4(&rimdesc.camdir, XMVector3Normalize(m_pTransform->Get_State(CTransform::STATE_POSITION) - g_pGameInstance->Get_CamPosition(L"Camera_Silvermane")));
+		CWeapon::SetRimIntensity(g_fDeltaTime * -4.f);
+	}
+
+	CWeapon::BindConstantBuffer(wstrCamTag,&desc, &rimdesc);
 	for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
 		m_pModel->Render(i, 0);
 
@@ -152,11 +164,14 @@ HRESULT CPlayer_Weapon::Render()
 
 HRESULT CPlayer_Weapon::Render_Shadow()
 {
-	wstring wstrCamTag = g_pGameInstance->Get_BaseCameraTag();
-	CWeapon::BindConstantBuffer(wstrCamTag);
-	CWeapon::BindLightBuffer();
-	for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
-		m_pModel->Render(i, 1);
+	CWeapon::Render_Shadow();
+
+	return S_OK;
+}
+
+HRESULT CPlayer_Weapon::Render_Velocity()
+{
+	CWeapon::Render_Velocity();
 
 	return S_OK;
 }

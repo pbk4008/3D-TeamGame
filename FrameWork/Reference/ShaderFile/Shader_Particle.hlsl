@@ -195,12 +195,7 @@ PS_OUT_TEST PS_MAIN_TEST(PS_IN In)
 
 	half Alpha = g_DiffuseTexture.Sample(DefaultSampler, In.vTexUV).a;
 	
-	Out.diffuse = g_DiffuseTexture.Sample(DefaultSampler, In.vTexUV);
-	
-	//수빈 이거 왜 들어가는거임??
-	//Out.diffuse.r = 1.f;
-	//Out.diffuse.gb = 0.f;
-	
+	Out.diffuse = g_DiffuseTexture.Sample(DefaultSampler, In.vTexUV);	
     Out.diffuse = Out.diffuse * Alpha;
 
 	Out.depth = half4(In.vPosition.z / In.vPosition.w, In.vPosition.w / 300.f, 0.f, 0.f);

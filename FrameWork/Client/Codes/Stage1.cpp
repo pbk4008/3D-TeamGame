@@ -491,6 +491,10 @@ HRESULT CStage1::Ready_Player(const _tchar* LayerTag)
 	desc.color = _float4(0.f, 1.f, 1.f, 1.f);
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Wall", L"Proto_GameObject_Wall", &desc))) return E_FAIL;
 	
+	//Test
+	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Test", L"Proto_GameObject_TestObject")))
+	//	return E_FAIL;
+
 	return S_OK;
 }
 
