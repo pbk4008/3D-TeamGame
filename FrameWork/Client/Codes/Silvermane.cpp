@@ -951,8 +951,7 @@ HRESULT CSilvermane::Ready_Weapons(const _uint _iSceneID)
 	m_pShield->Set_OwnerPivotMatrix(m_pModel->Get_PivotMatrix());
 	Set_EquipShield(false);
 
-
-	for (_int i = 0; i < 10; ++i)
+	for (_int i = 0; i < 20; ++i)
 	{
 		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)m_iSceneID, L"Layer_MotionTrail", L"Proto_GameObject_MotionTrail")))
 			return E_FAIL;
@@ -1719,7 +1718,7 @@ RIM CSilvermane::ColorChange_RimCheck(RIM& rimdesc)
 
 HRESULT CSilvermane::Create_MotionTrail(_int idex)
 {
-	if (idex <= 9)
+	if (idex <= 19)
 	{
 		wstring wstrCamTag = g_pGameInstance->Get_BaseCameraTag();
 
@@ -1732,7 +1731,13 @@ HRESULT CSilvermane::Create_MotionTrail(_int idex)
 
 		static_cast<CMotionTrail*>(m_vecMotionTrail[idex])->setActive(true);
 		static_cast<CMotionTrail*>(m_vecMotionTrail[idex])->Set_BoneMat(m_pModel->Get_CurBoneMatrix());
-		static_cast<CMotionTrail*>(m_vecMotionTrail[idex])->Set_Info(smatWorld,m_pCurWeapon->Get_Transform()->Get_WorldMatrix(),(idex / 10.f));
+		_float uvdvid = 0.f;
+		if(idex <= 10)
+			uvdvid = idex / 10.f;
+		else
+			uvdvid = (idex - 10) / 10.f;
+
+		static_cast<CMotionTrail*>(m_vecMotionTrail[idex])->Set_Info(smatWorld,m_pCurWeapon->Get_Transform()->Get_WorldMatrix(), uvdvid);
 	}
 
 	return S_OK;

@@ -28,7 +28,6 @@ _int C1H_SwordSupermanStab::Tick(const _double& _dDeltaTime)
 
 	_uint iCurkeyFrameIndex = m_pAnimationController->Get_CurKeyFrameIndex();
 
-
 	if (m_iAttackStartIndex < iCurkeyFrameIndex && m_iAttackEndIndex > iCurkeyFrameIndex)
 	{
 		if (!m_isShake2)
@@ -45,12 +44,17 @@ _int C1H_SwordSupermanStab::Tick(const _double& _dDeltaTime)
 		return STATE_CHANGE;
 	}
 
-	_int temp = iCurkeyFrameIndex % 5;
 
-	if (temp == 0)
+	if (iCurkeyFrameIndex <= 20)
 	{
-		m_pSilvermane->Create_MotionTrail(m_motiontrailidx);
-		m_motiontrailidx++;
+		_int temp = 0;
+		temp = iCurkeyFrameIndex % 5;
+
+		if (temp == 0)
+		{
+			m_pSilvermane->Create_MotionTrail(m_motiontrailidx);
+			++m_motiontrailidx;
+		}
 	}
 
 	return _int();

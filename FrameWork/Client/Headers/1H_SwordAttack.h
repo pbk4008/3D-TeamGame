@@ -32,6 +32,8 @@ protected:
 	_uint m_iTrailStartIndex = 0;
 	_uint m_iTrailEndIndex = 0;
 
+	_bool	m_btest = true;
+
 	CCameraShake::SHAKEEVENT m_tShakeEvent;
 
 public:

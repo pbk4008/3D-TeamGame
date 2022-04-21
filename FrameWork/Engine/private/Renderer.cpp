@@ -182,6 +182,8 @@ HRESULT CRenderer::Draw_RenderGroup()
 
 		if (FAILED(Render_Alpha()))	MSGBOX("Failed To Rendering AlphaPass");
 
+		if (FAILED(Render_AlphaNoBloom()))	MSGBOX("Failed To Rendering AlphaNoBloomPass");
+
 		if (FAILED(m_pHDR->Render_HDRBase(m_pTargetMgr, m_bRenderbtn[SHADOW]))) MSGBOX("Failed To Rendering HDRBasePass");
 
 		if (FAILED(m_pLuminance->DownSampling(m_pTargetMgr)))MSGBOX("Failed To Rendering DownSamplingPass");
@@ -252,6 +254,7 @@ HRESULT CRenderer::Draw_RenderGroup()
 		if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("Target_Distortion")))) return E_FAIL;
 		if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("Target_Velocity")))) return E_FAIL;
 		if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("Target_RimLight")))) return E_FAIL;
+		if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("Target_AlphaNoBloom")))) return E_FAIL;
 	}
 #endif // _DEBUG
 
@@ -326,17 +329,7 @@ HRESULT CRenderer::Render_Alpha()
 {
 	if (FAILED(m_pTargetMgr->Begin_MRT(m_pDeviceContext, TEXT("Target_AlphaBlend")))) return E_FAIL;
 
-	_matrix view = g_pGameInstance->Get_Transform(m_CameraTag, TRANSFORMSTATEMATRIX::D3DTS_VIEW);
-	view = XMMatrixInverse(nullptr, view);
-
-	for (auto& iter : m_RenderGroup[RENDER_ALPHA])
-		iter->ComputeViewZ(&view);
-
-	m_RenderGroup[RENDER_ALPHA].sort(
-		[](auto& psrc, auto& pdst)->bool
-		{
-			return psrc->Get_ViewZ() > pdst->Get_ViewZ();
-		});
+	AlphaSorting(RENDER_ALPHA);
 
 	for (auto& pGameObject : m_RenderGroup[RENDER_ALPHA])
 	{
@@ -349,6 +342,26 @@ HRESULT CRenderer::Render_Alpha()
 		Safe_Release(pGameObject);
 	}
 	m_RenderGroup[RENDER_ALPHA].clear();
+
+	if (FAILED(m_pTargetMgr->End_MRTNotClear(m_pDeviceContext))) return E_FAIL;
+
+	return S_OK;
+}
+
+HRESULT CRenderer::Render_AlphaNoBloom()
+{
+	if (FAILED(m_pTargetMgr->Begin_MRT(m_pDeviceContext, TEXT("Target_AlphaNoBloom")))) return E_FAIL;
+
+	AlphaSorting(RENDER_ALPHANB);
+
+	for (auto& pGameObject : m_RenderGroup[RENDER_ALPHANB])
+	{
+		if (nullptr != pGameObject)
+			pGameObject->Render();
+
+		Safe_Release(pGameObject);
+	}
+	m_RenderGroup[RENDER_ALPHANB].clear();
 
 	if (FAILED(m_pTargetMgr->End_MRTNotClear(m_pDeviceContext))) return E_FAIL;
 
@@ -417,13 +430,7 @@ HRESULT CRenderer::Render_UI()
 	_matrix view = g_pGameInstance->Get_Transform(L"MainOrthoCamera", TRANSFORMSTATEMATRIX::D3DTS_VIEW);
 	view = XMMatrixInverse(nullptr, view);
 
-	for (auto& iter : m_RenderGroup[RENDER_UI])
-		iter->ComputeViewZ(&view);
-	m_RenderGroup[RENDER_UI].sort(
-		[](auto& psrc, auto& pdst)->bool
-		{
-			return psrc->Get_ViewZ() > pdst->Get_ViewZ();
-		});
+	AlphaSorting(RENDER_UI);
 
 	for (auto& pGameObject : m_RenderGroup[RENDER_UI] )
 	{
@@ -443,14 +450,7 @@ HRESULT CRenderer::Render_UI_Active()
 	_matrix view = g_pGameInstance->Get_Transform(L"MainOrthoCamera", TRANSFORMSTATEMATRIX::D3DTS_VIEW);
 	view = XMMatrixInverse(nullptr, view);
 
-	for (auto& iter : m_RenderGroup[RENDER_UI_ACTIVE])
-		iter->ComputeViewZ(&view);
-
-	m_RenderGroup[RENDER_UI_ACTIVE].sort(
-		[](auto& psrc, auto& pdst)->bool
-		{
-			return psrc->Get_ViewZ() > pdst->Get_ViewZ();
-		});
+	AlphaSorting(RENDER_UI_ACTIVE);
 
 	for (auto& pGameObject : m_RenderGroup[RENDER_UI_ACTIVE])
 	{
@@ -535,8 +535,8 @@ HRESULT CRenderer::Render_Final()
 	{
 		m_bRenderbtn[FOG] = true;
 		_float4 fogcolor = _float4(0.8f, 0.8f, 0.8f, 1.f);
-		_float fogstart = 10.f;
-		_float fogdensity = 0.05f;
+		_float fogstart = 20.f;
+		_float fogdensity = 0.01f;
 		_float4 campos;
 		XMStoreFloat4(&campos,g_pGameInstance->Get_CamPosition(m_CameraTag));
 		_matrix		ViewMatrix = g_pGameInstance->Get_Transform(m_CameraTag, TRANSFORMSTATEMATRIX::D3DTS_VIEW);
@@ -573,6 +573,7 @@ HRESULT CRenderer::Render_Final()
 	{
 		if (FAILED(m_pPostProcess->AlphaBlur(m_pTargetMgr, m_bRenderbtn[PARTICLE]))) MSGBOX("Alpha Blur Failed");
 		if (FAILED(m_pVIBuffer->SetUp_TextureOnShader("g_AlphaTexture", m_pTargetMgr->Get_SRV(L"Target_Alpha")))) MSGBOX("Alpha Render Failed");
+		if (FAILED(m_pVIBuffer->SetUp_TextureOnShader("g_AlphaNBTexture", m_pTargetMgr->Get_SRV(L"Target_AlphaNoBloom")))) MSGBOX("Alpha Render Failed");
 
 		if (FAILED(m_pVIBuffer->Render(4))) MSGBOX("Alpha Rendering Failed");
 	}
@@ -629,6 +630,23 @@ HRESULT CRenderer::Render_PhysX()
 	//}
 
 	m_pBatch->End();
+
+	return S_OK;
+}
+
+HRESULT CRenderer::AlphaSorting(RENDER etype)
+{
+	_matrix view = g_pGameInstance->Get_Transform(m_CameraTag, TRANSFORMSTATEMATRIX::D3DTS_VIEW);
+	view = XMMatrixInverse(nullptr, view);
+
+	for (auto& iter : m_RenderGroup[etype])
+		iter->ComputeViewZ(&view);
+
+	m_RenderGroup[etype].sort(
+		[](auto& psrc, auto& pdst)->bool
+		{
+			return psrc->Get_ViewZ() > pdst->Get_ViewZ();
+		});
 
 	return S_OK;
 }

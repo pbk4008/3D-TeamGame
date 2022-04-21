@@ -32,8 +32,7 @@ _int C1H_SwordAttackNormalR2_ReleaseDoubleSwing::Tick(const _double& _dDeltaTime
 		m_pSilvermane->Set_IsTrasceCamera(false);
 	}
 
-	if(50 < iCurkeyFrameIndex)
-	if (!m_isShake2)
+	if (!m_isShake2 && 50 < iCurkeyFrameIndex)
 	{
 		_float3 vPos; XMStoreFloat3(&vPos, m_pTransform->Get_State(CTransform::STATE_POSITION));
 		g_pShakeManager->Shake(m_tShakeEvent2, vPos);
@@ -47,14 +46,21 @@ _int C1H_SwordAttackNormalR2_ReleaseDoubleSwing::Tick(const _double& _dDeltaTime
 		return STATE_CHANGE;
 	}
 
+	std::cout << "current Idx : " << iCurkeyFrameIndex << std::endl;
 
-	_int temp = iCurkeyFrameIndex % 5;
 
-	if (temp == 0)
+	if (iCurkeyFrameIndex <= 45)
 	{
-		m_pSilvermane->Create_MotionTrail(m_motiontrailidx);
-		m_motiontrailidx++;
+		_int temp = 0;
+		temp = iCurkeyFrameIndex % 5;
+
+		if (temp == 0)
+		{
+			m_pSilvermane->Create_MotionTrail(m_motiontrailidx);
+			m_motiontrailidx++;
+		}
 	}
+
 	return _int();
 }
 

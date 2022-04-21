@@ -127,6 +127,7 @@ Texture2D g_DistortionTex;
 Texture2D g_VelocityTex;
 Texture2D g_DissolveTex;
 Texture2D g_RimLightTexture;
+Texture2D g_AlphaNBTexture;
 
 struct VS_IN
 {
@@ -433,18 +434,15 @@ PS_OUT_BLEND PS_MAIN_BLEND(PS_IN In)
 	}
 	
 	if (g_radial == true)
-	{	
-		Out.vColor.rgb = Radialblur(g_DiffuseTexture,DefaultSampler,In.vTexUV,g_RadialCnt);
+	{
+		Out.vColor.rgb = Radialblur(g_DiffuseTexture, DefaultSampler, In.vTexUV, g_RadialCnt);
 	}
 	
 	if(g_outline == true)
 	{
 		half4 rim = g_RimLightTexture.Sample(DefaultSampler, In.vTexUV);
-		Out.vColor = Outline(g_RimLightTexture, DefaultSampler, In.vTexUV, Out.vColor);
+		Out.vColor += rim; /*Outline(g_RimLightTexture, DefaultSampler, In.vTexUV, Out.vColor);*/
 	}
-	
-	if (Out.vColor.a == 0)
-		discard;
 	
 	if (g_fog == true)
 	{
@@ -465,9 +463,11 @@ PS_OUT_BLEND PS_MAIN_BLEND(PS_IN In)
 			fog = ExponentialHeightFog(worldpos,g_vCamPosition,g_fogstart,g_fogDenstiy,g_fogfalloff);
 		}
 		Out.vColor = lerp(Out.vColor, g_fogcolor, fog);
-		//half fogfactor = 1.0 / pow(2.71828, saturate((fViewZ - g_fogDist) * g_fogDenstiy));
-		//Out.vColor = fogfactor * Out.vColor + (1.0 - fogfactor) * g_fogcolor;
 	}
+	
+	
+	if (Out.vColor.a == 0)
+		discard;
 	
 	return Out;
 }
@@ -477,7 +477,8 @@ PS_OUT_BLEND PS_MAIN_ALPHA(PS_IN In)
 	PS_OUT_BLEND Out = (PS_OUT_BLEND) 0;
 	
 	half4 color = g_AlphaTexture.Sample(DefaultSampler, In.vTexUV);
-	Out.vColor = color;
+	half4 color2 = g_AlphaNBTexture.Sample(DefaultSampler, In.vTexUV);
+	Out.vColor = color + color2;
 	
 	return Out;
 }
