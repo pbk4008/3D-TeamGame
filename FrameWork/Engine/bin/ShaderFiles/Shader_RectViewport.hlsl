@@ -127,6 +127,7 @@ Texture2D g_DistortionTex;
 Texture2D g_VelocityTex;
 Texture2D g_DissolveTex;
 Texture2D g_RimLightTexture;
+Texture2D g_AlphaNBTexture;
 
 struct VS_IN
 {
@@ -476,7 +477,8 @@ PS_OUT_BLEND PS_MAIN_ALPHA(PS_IN In)
 	PS_OUT_BLEND Out = (PS_OUT_BLEND) 0;
 	
 	half4 color = g_AlphaTexture.Sample(DefaultSampler, In.vTexUV);
-	Out.vColor = color;
+	half4 color2 = g_AlphaNBTexture.Sample(DefaultSampler, In.vTexUV);
+	Out.vColor = color + color2;
 	
 	return Out;
 }
