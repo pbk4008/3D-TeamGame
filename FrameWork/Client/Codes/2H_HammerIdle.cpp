@@ -79,7 +79,7 @@ _int C2H_HammerIdle::Input(const _double& _dDeltaTime)
 	if (NO_EVENT != iProgress)
 		return iProgress;
 
-	if (g_pGameInstance->getkeyDown(DIK_1))
+	if (g_pGameInstance->getkeyDown(DIK_1) || g_pGameInstance->getkeyDown(DIK_2))
 	{
 		if (m_pSilvermane->Change_Weapon())
 		{
@@ -95,6 +95,13 @@ _int C2H_HammerIdle::Input(const _double& _dDeltaTime)
 			}
 			return STATE_CHANGE;
 		}
+	}
+
+	if (g_pGameInstance->getkeyDown(DIK_R))
+	{
+		if (FAILED(m_pStateController->Change_State(L"Silvermane_Heal")))
+			return E_FAIL;
+		return STATE_CHANGE;
 	}
 
 	if (g_pGameInstance->getkeyDown(DIK_Q))

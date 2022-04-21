@@ -95,6 +95,67 @@ _int CShield_Parry::Input(const _double& _dDeltaTime)
 			m_pSilvermane->Set_BlockTime(0.f);
 			return ToChargeStart();
 		}
+
+		if (g_pGameInstance->getkeyDown(DIK_SPACE))
+		{
+			if (g_pGameInstance->getkeyDown(DIK_W))
+			{
+				if (FAILED(m_pStateController->Change_State(L"1H_DodgeSpin")))
+					return -1;
+				return STATE_CHANGE;
+			}
+			else if (g_pGameInstance->getkeyDown(DIK_A))
+			{
+				if (FAILED(m_pStateController->Change_State(L"1H_SidestepLeft")))
+					return -1;
+				return STATE_CHANGE;
+			}
+			else if (g_pGameInstance->getkeyDown(DIK_D))
+			{
+				if (FAILED(m_pStateController->Change_State(L"1H_SidestepRight")))
+					return -1;
+				return STATE_CHANGE;
+			}
+			else
+			{
+				if (FAILED(m_pStateController->Change_State(L"1H_SidestepBwd")))
+					return -1;
+				return STATE_CHANGE;
+			}
+
+			m_pSilvermane->Set_EquipShield(false);
+			m_pSilvermane->Set_EquipShieldAnim(false);
+			m_pSilvermane->Set_BlockTime(0.f);
+		}
+
+		if (g_pGameInstance->getkeyPress(DIK_W))
+		{
+			m_pSilvermane->Set_EquipShield(false);
+			m_pSilvermane->Set_EquipShieldAnim(false);
+			m_pSilvermane->Set_BlockTime(0.f);
+			return ToJogFwd();
+		}
+		else if (g_pGameInstance->getkeyPress(DIK_A))
+		{
+			m_pSilvermane->Set_EquipShield(false);
+			m_pSilvermane->Set_EquipShieldAnim(false);
+			m_pSilvermane->Set_BlockTime(0.f);
+			return ToJogLeft();
+		}
+		else if (g_pGameInstance->getkeyPress(DIK_D))
+		{
+			m_pSilvermane->Set_EquipShield(false);
+			m_pSilvermane->Set_EquipShieldAnim(false);
+			m_pSilvermane->Set_BlockTime(0.f);
+			return ToJogRight();
+		}
+		else if (g_pGameInstance->getkeyPress(DIK_S))
+		{
+			m_pSilvermane->Set_EquipShield(false);
+			m_pSilvermane->Set_EquipShieldAnim(false);
+			m_pSilvermane->Set_BlockTime(0.f);
+			return ToJogBwd();
+		}
 	}
 			
 	return _int();

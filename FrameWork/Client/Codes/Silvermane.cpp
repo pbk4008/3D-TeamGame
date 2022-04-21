@@ -1937,6 +1937,8 @@ const void CSilvermane::Raycast_DropBox(const _double& _dDeltaTime)
 		switch (iObjectTag)
 		{
 		case (_uint)GAMEOBJECT::MONSTER_ABERRANT:
+			if (!static_cast<CActor*>(pHitObject)->Get_Groggy())
+				return;
 			m_pTargetExecution = static_cast<CActor*>(pHitObject);
 			m_pTargetExecution->Execution();
 			Set_Execution(true);

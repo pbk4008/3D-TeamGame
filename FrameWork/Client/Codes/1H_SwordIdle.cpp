@@ -87,7 +87,7 @@ _int C1H_SwordIdle::Input(const _double& _dDeltaTime)
 	if (NO_EVENT != iProgress)
 		return iProgress;
 
-	if (g_pGameInstance->getkeyDown(DIK_2))
+	if (g_pGameInstance->getkeyDown(DIK_1) || g_pGameInstance->getkeyDown(DIK_2))
 	{
 		if (m_pSilvermane->Change_Weapon())
 		{
@@ -111,13 +111,6 @@ _int C1H_SwordIdle::Input(const _double& _dDeltaTime)
 			return E_FAIL;
 		return STATE_CHANGE;
 	}
-
-	//if (g_pGameInstance->getkeyDown(DIK_F))
-	//{
-	//	if (FAILED(m_pStateController->Change_State(L"Execution_Mook")))
-	//		return E_FAIL;
-	//	return STATE_CHANGE;
-	//}
 
 	if (g_pGameInstance->getkeyDown(DIK_Q))
 	{
