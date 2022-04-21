@@ -20,6 +20,9 @@ public:
 	virtual HRESULT EnterState();
 	virtual HRESULT ExitState();
 
+private:
+	_bool m_bEffectCheck = false;
+
 public:
 	virtual _int Input(const _double& _dDeltaTime) override;
 

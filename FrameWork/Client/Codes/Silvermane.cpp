@@ -903,41 +903,41 @@ HRESULT CSilvermane::Ready_Weapons(const _uint _iSceneID)
 
 #pragma region Old Ready Weapon
 	//한손검
-	//pWeapon = CNeedle::Create(m_pDevice, m_pDeviceContext);
+	pWeapon = CNeedle::Create(m_pDevice, m_pDeviceContext);
+	if (FAILED(pWeapon->NativeConstruct(m_iSceneID, pWeaponBone)))
+	{
+		Safe_Release(pWeapon);
+		return E_FAIL;
+	}
+	pWeapon->Set_Owner(this); /* 무기에게 네가 나의 마스타인가? */
+	pWeapon->Set_OwnerPivotMatrix(m_pModel->Get_PivotMatrix()); /* 마스타의 뼈를 취하겠다 */
+	//m_umapWeapons.emplace(L"Needle", pWeapon); /* 따로 저장 */
+	m_pCurWeapon = pWeapon; /* FSM 나뉨 */
+	m_pCurWeapon->setActive(true); 
+	m_pNeedle = pWeapon;
+
+	//// 해머
+	//pWeapon = CFury::Create(m_pDevice, m_pDeviceContext);
 	//if (FAILED(pWeapon->NativeConstruct(m_iSceneID, pWeaponBone)))
 	//{
 	//	Safe_Release(pWeapon);
 	//	return E_FAIL;
 	//}
-	//pWeapon->Set_Owner(this); /* 무기에게 네가 나의 마스타인가? */
-	//pWeapon->Set_OwnerPivotMatrix(m_pModel->Get_PivotMatrix()); /* 마스타의 뼈를 취하겠다 */
-	////m_umapWeapons.emplace(L"Needle", pWeapon); /* 따로 저장 */
-	//m_pCurWeapon = pWeapon; /* FSM 나뉨 */
-	//m_pCurWeapon->setActive(true); 
-	//m_pNeedle = pWeapon;
-
-	////// 해머
-	////pWeapon = CFury::Create(m_pDevice, m_pDeviceContext);
-	////if (FAILED(pWeapon->NativeConstruct(m_iSceneID, pWeaponBone)))
-	////{
-	////	Safe_Release(pWeapon);
-	////	return E_FAIL;
-	////}
-	////pWeapon->Set_Owner(this);
-	////pWeapon->Set_OwnerPivotMatrix(m_pModel->Get_PivotMatrix());
-	////pWeapon->Set_Equip(false);
-	////m_umapWeapons.emplace(L"Fury", pWeapon);
-	//// 방패
-	//pWeaponBone = m_pModel->Get_BoneMatrix("weapon_l");
-	//m_pShield = CShield::Create(m_pDevice, m_pDeviceContext);
-	//if (FAILED(m_pShield->NativeConstruct(m_iSceneID, pWeaponBone)))
-	//{
-	//	Safe_Release(m_pShield);
-	//	return E_FAIL;
-	//}
-	//m_pShield->Set_Owner(this);
-	//m_pShield->Set_OwnerPivotMatrix(m_pModel->Get_PivotMatrix());
-	//Set_EquipShield(false);
+	//pWeapon->Set_Owner(this);
+	//pWeapon->Set_OwnerPivotMatrix(m_pModel->Get_PivotMatrix());
+	//pWeapon->Set_Equip(false);
+	//m_umapWeapons.emplace(L"Fury", pWeapon);
+	// 방패
+	pWeaponBone = m_pModel->Get_BoneMatrix("weapon_l");
+	m_pShield = CShield::Create(m_pDevice, m_pDeviceContext);
+	if (FAILED(m_pShield->NativeConstruct(m_iSceneID, pWeaponBone)))
+	{
+		Safe_Release(m_pShield);
+		return E_FAIL;
+	}
+	m_pShield->Set_Owner(this);
+	m_pShield->Set_OwnerPivotMatrix(m_pModel->Get_PivotMatrix());
+	Set_EquipShield(false);
 
 #pragma endregion
 

@@ -122,7 +122,6 @@ HRESULT CEffect_HitFloating::Render()
 	m_pBuffer->SetUp_ValueOnShader("g_fLifeTime", &m_Desc.fMaxLifeTime, sizeof(_float));
 	m_pBuffer->SetUp_ValueOnShader("g_fCurTime", &m_Desc.fCurTime, sizeof(_float));
 
-
 	m_pBuffer->SetUp_ValueOnShader("g_color", &m_Desc.ParticleColor, sizeof(_float4));
 	m_pBuffer->SetUp_ValueOnShader("g_empower", &m_Desc.Power, sizeof(_float));
 

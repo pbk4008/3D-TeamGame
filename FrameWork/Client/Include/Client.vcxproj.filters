@@ -934,6 +934,9 @@
     <Filter Include="02.GameObject\03.Character\01.Monster\EarthAberrant\State\06.Execution">
       <UniqueIdentifier>{fcb36259-0e76-4d95-8ef9-ad44c10ef567}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\03.Character\02.Boss\00.MiddleBoss\State\06.Execution">
+      <UniqueIdentifier>{b058ac71-c72c-4000-a763-0ed28eb645cc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -2094,6 +2097,9 @@
     <ClInclude Include="..\Headers\Aberrant_Execution.h">
       <Filter>02.GameObject\03.Character\01.Monster\EarthAberrant\State\06.Execution</Filter>
     </ClInclude>
+    <ClInclude Include="..\Headers\MidBoss_Execution.h">
+      <Filter>02.GameObject\03.Character\02.Boss\00.MiddleBoss\State\06.Execution</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -3223,6 +3229,9 @@
     </ClCompile>
     <ClCompile Include="..\Codes\Aberrant_Execution.cpp">
       <Filter>02.GameObject\03.Character\01.Monster\EarthAberrant\State\06.Execution</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\MidBoss_Execution.cpp">
+      <Filter>02.GameObject\03.Character\02.Boss\00.MiddleBoss\State\06.Execution</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -65,6 +65,10 @@ HRESULT C1H_SwordNormalSidestepBwd_V3::EnterState()
 	else
 		m_eDir = EDir::Forward;
 
+	_matrix newmat = g_pObserver->Get_PlayerWorldMatrix();
+	newmat.r[3] = XMVectorSetY(newmat.r[3], XMVectorGetY(newmat.r[3]) - 0.8f);
+	m_pSilvermane->Active_Effect_Target((_uint)EFFECT::DASH, XMMatrixRotationY(XMConvertToRadians(0.f)) * newmat);
+
 
 	m_iCutIndex = 15;
 
@@ -111,12 +115,13 @@ _int C1H_SwordNormalSidestepBwd_V3::Input(const _double& _dDeltaTime)
 			else if (g_pGameInstance->getkeyPress(DIK_S))
 			{
 				m_pAnimationController->Reset_Animation();
-				g_pShakeManager->Shake(m_tShakeEvent, m_pTransform->Get_State(CTransform::STATE_POSITION));
+				//g_pShakeManager->Shake(m_tShakeEvent, m_pTransform->Get_State(CTransform::STATE_POSITION));
 
-				if (g_pGameInstance->getkeyPress(DIK_D))
+				/*if (g_pGameInstance->getkeyPress(DIK_D))
 					m_eDir = EDir::LeftForward;
 				else
-					m_eDir = EDir::Forward;
+					m_eDir = EDir::Forward;*/
+				EnterState();
 			}
 			else if (g_pGameInstance->getkeyPress(DIK_D))
 			{

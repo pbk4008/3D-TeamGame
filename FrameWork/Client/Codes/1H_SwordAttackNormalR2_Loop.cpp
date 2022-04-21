@@ -55,6 +55,13 @@ HRESULT C1H_SwordAttackNormalR2_Loop::EnterState()
 	if (FAILED(__super::EnterState()))
 		return E_FAIL;
 
+	_vector Pos = { 0.f, 0.03f, 0.f ,0.f };
+	m_pSilvermane->Active_Effect((_uint)EFFECT::ATTACK_GROUND, Pos);
+	m_pSilvermane->Active_Effect((_uint)EFFECT::ATTACK_GROUND_2, Pos);
+
+	Pos = { 0.f, 0.1f, 0.f ,0.f };
+	m_pSilvermane->Active_Effect((_uint)EFFECT::HIT_GROUND_SMOKE, Pos);
+
 	if (FAILED(m_pAnimationController->SetUp_NextAnimation("SK_Silvermane.ao|A_1H_Sword_Attack_Normal_R2_Loop", true)))
 		return E_FAIL;
 	m_pAnimationController->Set_RootMotion(true, true);

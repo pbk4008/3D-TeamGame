@@ -367,6 +367,7 @@ call Update_Client.bat</Command>
     <ClInclude Include="..\Headers\JumpNode.h" />
     <ClInclude Include="..\Headers\JumpTrigger.h" />
     <ClInclude Include="..\Headers\Level_Logo.h" />
+    <ClInclude Include="..\Headers\MidBoss_Execution.h" />
     <ClInclude Include="..\Headers\UI_LevelUP_Background.h" />
     <ClInclude Include="..\Headers\UI_LevelUP_BG_Left.h" />
     <ClInclude Include="..\Headers\UI_LevelUP_BG_Right.h" />
@@ -751,6 +752,7 @@ call Update_Client.bat</Command>
     <ClCompile Include="..\Codes\ItemData.cpp" />
     <ClCompile Include="..\Codes\JumpBox.cpp" />
     <ClCompile Include="..\Codes\JumpTrigger.cpp" />
+    <ClCompile Include="..\Codes\MidBoss_Execution.cpp" />
     <ClCompile Include="..\Codes\UI_LevelUP_Background.cpp" />
     <ClCompile Include="..\Codes\UI_LevelUP_BG_Left.cpp" />
     <ClCompile Include="..\Codes\UI_LevelUP_BG_Right.cpp" />

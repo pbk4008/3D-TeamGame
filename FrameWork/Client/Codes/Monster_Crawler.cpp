@@ -312,10 +312,6 @@ void CMonster_Crawler::Hit(const ATTACKDESC& _tAttackDesc)
 	Active_Effect((_uint)EFFECT::HIT_FLOATING_2);
 	Active_Effect((_uint)EFFECT::HIT_IMAGE);
 
-	/*else if (EAttackDir::Right == _tAttackDesc.eDir)
-	{
-		Active_Effect_Target((_uint)EFFECT::ATTACK_RIGHT, g_pObserver->Get_PlayerPos());
-	}*/
 }
 
 void CMonster_Crawler::Parry(const PARRYDESC& _tParryDesc)
