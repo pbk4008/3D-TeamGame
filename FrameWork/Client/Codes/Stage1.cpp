@@ -242,6 +242,7 @@ _int CStage1::Tick(_double TimeDelta)
 			{
 				if (m_iPortalCount == 0)
 				{
+					m_pTriggerSystem->Trigger_Clear();
 					m_iPortalCount = 3;
 					Open_Potal(XMVectorSet(-58.f, 18.f, 213.f, 1.f), (_uint)GAMEOBJECT::MONSTER_1H);
 					Open_Potal(XMVectorSet(-64.f, 18.f, 230.f, 1.f), (_uint)GAMEOBJECT::MONSTER_1H);
@@ -259,6 +260,7 @@ _int CStage1::Tick(_double TimeDelta)
 			{
 				if (m_iPortalCount == 3)
 				{
+					m_pTriggerSystem->Trigger_Clear();
 					Open_Potal(XMVectorSet(-130.f, 19.f, 216.f, 1.f), (_uint)GAMEOBJECT::MONSTER_SHOOTER);
 					m_iPortalCount++;
 					m_iCountMonster++;
@@ -281,6 +283,7 @@ _int CStage1::Tick(_double TimeDelta)
 			{
 				if (m_iPortalCount == 6)
 				{
+					m_pTriggerSystem->Trigger_Clear();
 					Open_Potal(XMVectorSet(-177.f, 29.f, 300.f, 1.f), (_uint)GAMEOBJECT::MONSTER_1H);
 					Open_Potal(XMVectorSet(-172.f, 29.f, 316.f, 1.f), (_uint)GAMEOBJECT::MONSTER_1H);
 					Open_Potal(XMVectorSet(-168.f, 29.f, 306.f, 1.f), (_uint)GAMEOBJECT::MONSTER_1H);

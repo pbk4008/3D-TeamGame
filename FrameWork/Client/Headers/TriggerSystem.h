@@ -48,7 +48,7 @@ public:
 		_uint iSize = (_uint)m_vecTrigger.size();
 		for (_uint i = 0; i < iSize; i++)
 		{
-			if(m_vecTrigger[i]->getActive())
+			if (m_vecTrigger[i]->getActive())
 			{
 				m_vecTrigger[i]->Tick(dDeltaTime);
 				if (m_vecTrigger[i]->Get_OnTrigger() && !m_vecTrigger[i]->Get_Overlap())
@@ -60,6 +60,8 @@ public:
 				if (!m_vecClear[i])
 					bCheck = true;
 			}
+			else
+				bCheck = true;
 		}
 		if (!bCheck)
 		{
@@ -95,8 +97,7 @@ public:
 		if (m_iClearIndex < iSize)
 		{
 			//CurrentTriggerMonsterAllDelete();
-			m_vecCurMonster.clear();
-			m_vecClear[m_iClearIndex] =true;
+			Trigger_Clear();
 			Next_TriggerOn();
 			/*if (m_iClearIndex != iSize - 1)
 			{
@@ -104,6 +105,11 @@ public:
 				m_vecTrigger[m_iClearIndex + 1]->TurnOnTrigger(true);
 			}*/
 		}
+	}
+	void Trigger_Clear()
+	{
+		m_vecCurMonster.clear();
+		m_vecClear[m_iClearIndex] = true;
 	}
 	void Next_TriggerOn()
 	{
