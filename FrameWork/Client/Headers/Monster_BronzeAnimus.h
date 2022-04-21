@@ -43,9 +43,12 @@ public:
 	virtual void Hit(const ATTACKDESC& _tAttackDesc) override;
 	virtual void Parry(const PARRYDESC& _tParryDesc) override;
 
+	virtual void setActive(_bool bActive) override;
+
 private:
 	HRESULT Ready_Components();
 	HRESULT Ready_Weapon(void);
+	HRESULT Ready_UI();
 	HRESULT Ready_AnimFSM(void);
 	HRESULT Ready_StateFSM(void);
 	HRESULT Render_Debug(void);

@@ -4,8 +4,8 @@
 
 BEGIN(Client)
 enum class SCENEID {SCENE_STATIC, SCENE_LOADING, SCENE_LOGO, SCENE_STAGE1, SCENE_STAGE2, SCENE_STAGE3,SCENE_TEST_JS, SCENE_END};
-enum class CINEMA_INDEX{CINEMA1_1, CINEMA1_2, CINEMA_END};
-enum class CINEMA_ACTOR {	ACTOR_SILVERMANE, ACTOR_GRAYEHAWK, ACTOR_PHOENIX, ACTOR_END};
+enum class CINEMA_INDEX{CINEMA1_1, CINEMA1_2, CINEMA2_1, CINEMA_END};
+enum class CINEMA_ACTOR {	ACTOR_SILVERMANE, ACTOR_GRAYEHAWK, ACTOR_PHOENIX, ACTOR_MIDBOSS, ACTOR_END};
 enum class GAMEOBJECT
 {
 	ENVIRONMENT,
@@ -36,10 +36,12 @@ enum class GAMEOBJECT
 	WEAPON_POLEARM,
 	WEAPON_METEOR,
 	// Æ®¸®°Å
+	TRIGGER,
 	JUMP_TRIGGER,
 	JUMP_NODE,
 	JUMP_BOX,
 	DROP_BOX,
+	EXPLOSION_ROCK,
 	// END, MAX, SIZE
 	GAMEOBJECT_END,
 };
@@ -63,7 +65,11 @@ enum class EFFECT
 	ATTACK_GROUND_2,
 	ITEM,
 	BOX,
-	EAT_ITEM
+	EAT_ITEM,
+	HIT_IMAGE,
+	DEAD_SMOKE,
+	EXPLOSION_ROCK_UP,
+	HAMMER_DUST
 };
 
 enum class ELayer
@@ -545,5 +551,22 @@ const wstring g_arrMI_Soothsayer[(int)EWeaponMaterial::MATERIAL_END]
 	L"T_2H_Hammer_Soothsayer_MRA.dds",
 	L"T_2H_Hammer_Soothsayer_CEO.dds",
 };
+
+const wstring g_arrMI_Needle[(int)EWeaponMaterial::MATERIAL_END]
+{
+	L"T_1h_Sword_Needle_D.dds",
+	L"T_1h_Sword_Needle_N.dds",
+	L"T_1h_Sword_Needle_MRA.dds",
+	L"T_1h_Sword_Needle_CEO.dds",
+};
+
+const wstring g_arrMI_Fury[(int)EWeaponMaterial::MATERIAL_END]
+{
+	L"T_2h_Hammer_Fury_D.dds",
+	L"T_2h_Hammer_Fury_N.dds",
+	L"T_2h_Hammer_Fury_MRA.dds",
+	L"T_2h_Hammer_Fury_CEO.dds",
+};
+
 END
 #endif

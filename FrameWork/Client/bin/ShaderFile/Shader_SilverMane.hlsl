@@ -8,6 +8,7 @@ Texture2D	g_MRATexture;
 Texture2D	g_OMERTexture;
 Texture2D	g_CEOTexture;
 Texture2D	g_OtherTexture;
+Texture2D	g_GradientTex;
 
 struct VS_IN
 {
@@ -424,10 +425,10 @@ PS_OUT_MOTIONTRAIL PS_MAIN_MOTIONTRAIL(PS_IN_MOTIONTRAIL In)
 {
 	PS_OUT_MOTIONTRAIL Out = (PS_OUT_MOTIONTRAIL) 0;
 
-	half4 diffuse = g_DiffuseTexture.Sample(DefaultSampler, In.vUvDepth.xy);
-	
+	half3 color = g_GradientTex.Sample(DefaultSampler, half2(g_UVdvid,0)).rgb;	
 	half4 normal = half4(In.vNormal.xyz, 0.f);
-	Out.Motiontrail = RimLighting(normal, g_camdir, g_rimintensity, g_rimcolor);
+	Out.Motiontrail = MotionTrailRim(normal, g_camdir, g_rimintensity, color);
+	Out.Motiontrail.a *= g_Fade;
 	
 	return Out;
 }

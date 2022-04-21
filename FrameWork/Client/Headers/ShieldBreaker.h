@@ -20,6 +20,7 @@ public:
 	virtual HRESULT	Render_Shadow() override;
 
 	virtual void OnTriggerEnter(CCollision& collision) override;
+	virtual void setActive(_bool bActive) override;
 
 private:
 	HRESULT Ready_Components();

@@ -220,13 +220,13 @@ _uint CPotal::Spawn_Monster(_double dDeltaTime)
 				{
 					if (m_iMonTag == (_uint)GAMEOBJECT::MONSTER_1H)
 					{
-						static_cast<CMonster_Bastion_Sword*>(pMon)->Set_SpawnPosition(vPos);
 						pMon->setActive(true);
+						static_cast<CMonster_Bastion_Sword*>(pMon)->Set_SpawnPosition(vPos);
 					}
 					else if (m_iMonTag == (_uint)GAMEOBJECT::MONSTER_SHOOTER)
 					{
-						static_cast<CMonster_Bastion_Shooter*>(pMon)->Set_SpawnPosition(vPos);
 						pMon->setActive(true);
+						static_cast<CMonster_Bastion_Shooter*>(pMon)->Set_SpawnPosition(vPos);
 					}
 					m_bCreate = true;
 					break;

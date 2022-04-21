@@ -143,6 +143,23 @@ void CEarthAberrant_Pick::OnTriggerEnter(CCollision& collision)
 	}
 }
 
+void CEarthAberrant_Pick::setActive(_bool bActive)
+{
+	CGameObject::setActive(bActive);
+
+	switch (bActive)
+	{
+	case true:
+		if (m_pCollider)
+			m_pCollider->Add_ActorToScene();
+		break;
+	case false:
+		if (m_pCollider)
+			m_pCollider->Remove_ActorFromScene();
+		break;
+	}
+}
+
 HRESULT CEarthAberrant_Pick::Ready_Components()
 {
 	CTransform::TRANSFORMDESC transformDesc;

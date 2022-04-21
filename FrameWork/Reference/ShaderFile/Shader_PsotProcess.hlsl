@@ -171,9 +171,9 @@ PS_OUT PS_MAIN_AlphaWeight(PS_IN In)
 	
 	float weight = g_WeightTexture.Sample(DefaultSampler, In.vTexUV).r;
 	
-	weight *= g_Weight;
+	weight += g_Weight;
 	
-	float4 baseBloom = (base * (g_Weight - 0.5f)) + (base2 * (g_Weight - 0.3f)) + (base4 * (g_Weight - 0.1f));
+	float4 baseBloom = (base * (weight - 0.5f)) + (base2 * (weight - 0.3f)) + (base4 * (weight - 0.1f));
 	
 	Out.vOutColor = baseBloom;
 	

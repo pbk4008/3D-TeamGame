@@ -180,7 +180,6 @@ call Update_Client.bat</Command>
     </FxCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\Codes\Meteor.h" />
     <ClInclude Include="..\Default\Client_Enum.h" />
     <ClInclude Include="..\Default\Client_Function.h" />
     <ClInclude Include="..\Default\Client_Include.h" />
@@ -261,6 +260,7 @@ call Update_Client.bat</Command>
     <ClInclude Include="..\Headers\Aberrant_Attack.h" />
     <ClInclude Include="..\Headers\Aberrant_Dash_Bwd.h" />
     <ClInclude Include="..\Headers\Aberrant_Death.h" />
+    <ClInclude Include="..\Headers\Aberrant_Execution.h" />
     <ClInclude Include="..\Headers\Aberrant_Flinch_Left.h" />
     <ClInclude Include="..\Headers\Aberrant_Idle.h" />
     <ClInclude Include="..\Headers\Aberrant_Run.h" />
@@ -316,6 +316,7 @@ call Update_Client.bat</Command>
     <ClInclude Include="..\Headers\Camera_Debug.h" />
     <ClInclude Include="..\Headers\Cinema1_1.h" />
     <ClInclude Include="..\Headers\Cinema1_2.h" />
+    <ClInclude Include="..\Headers\Cinema2_1.h" />
     <ClInclude Include="..\Headers\CinemaActor.h" />
     <ClInclude Include="..\Headers\CinemaCam.h" />
     <ClInclude Include="..\Headers\Client_Observer.h" />
@@ -352,6 +353,7 @@ call Update_Client.bat</Command>
     <ClInclude Include="..\Headers\Environment.h" />
     <ClInclude Include="..\Headers\EquipmentData.h" />
     <ClInclude Include="..\Headers\Execution_Mook.h" />
+    <ClInclude Include="..\Headers\Explosion_Rock.h" />
     <ClInclude Include="..\Headers\FlyingShield.h" />
     <ClInclude Include="..\Headers\Fury.h" />
     <ClInclude Include="..\Headers\GameObjectPool.h" />
@@ -395,6 +397,7 @@ call Update_Client.bat</Command>
     <ClInclude Include="..\Headers\MeshEffect.h" />
     <ClInclude Include="..\Headers\MeshEffect_Test.h" />
     <ClInclude Include="..\Headers\MeshLoader.h" />
+    <ClInclude Include="..\Headers\Meteor.h" />
     <ClInclude Include="..\Headers\MidBoss_Attack.h" />
     <ClInclude Include="..\Headers\MidBoss_BattleCry.h" />
     <ClInclude Include="..\Headers\MidBoss_Death.h" />
@@ -653,6 +656,7 @@ call Update_Client.bat</Command>
     <ClCompile Include="..\Codes\Aberrant_Attack.cpp" />
     <ClCompile Include="..\Codes\Aberrant_Dash_Bwd.cpp" />
     <ClCompile Include="..\Codes\Aberrant_Death.cpp" />
+    <ClCompile Include="..\Codes\Aberrant_Execution.cpp" />
     <ClCompile Include="..\Codes\Aberrant_Flinch_Left.cpp" />
     <ClCompile Include="..\Codes\Aberrant_Idle.cpp" />
     <ClCompile Include="..\Codes\Aberrant_Run.cpp" />
@@ -706,6 +710,7 @@ call Update_Client.bat</Command>
     <ClCompile Include="..\Codes\Camera_Culling.cpp" />
     <ClCompile Include="..\Codes\Cinema1_1.cpp" />
     <ClCompile Include="..\Codes\Cinema1_2.cpp" />
+    <ClCompile Include="..\Codes\Cinema2_1.cpp" />
     <ClCompile Include="..\Codes\CinemaActor.cpp" />
     <ClCompile Include="..\Codes\CinemaCam.cpp" />
     <ClCompile Include="..\Codes\Client_Observer.cpp" />
@@ -740,6 +745,7 @@ call Update_Client.bat</Command>
     <ClCompile Include="..\Codes\Effect_HitParticle.cpp" />
     <ClCompile Include="..\Codes\EquipmentData.cpp" />
     <ClCompile Include="..\Codes\Execution_Mook.cpp" />
+    <ClCompile Include="..\Codes\Explosion_Rock.cpp" />
     <ClCompile Include="..\Codes\FlyingShield.cpp" />
     <ClCompile Include="..\Codes\Fury.cpp" />
     <ClCompile Include="..\Codes\GameObjectPool.cpp" />

@@ -37,6 +37,7 @@ public:
 
 public:
 	virtual HRESULT Set_SpawnPosition(_fvector vPos);
+	virtual void setActive(_bool bActive) override;
 public:
 	virtual void Set_Remove(_bool bCheck) override;
 	virtual void Hit(const ATTACKDESC& _tAttackDesc) override;

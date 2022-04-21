@@ -88,11 +88,13 @@ HRESULT CMonster_Bastion_Sword::NativeConstruct(const _uint _iSceneID, void* _pA
 	//MonsterBar Panel
 	m_pPanel->Set_Show(false);
 	m_bUIShow = false;
-	setActive(false);
 
 	m_tAttackDesc.iLevel = 2;
 	m_tAttackDesc.fDamage = 5.f;
 	
+	m_pWeapon->setActive(false);
+	m_pPanel->setActive(false);
+	setActive(false);
 	return S_OK;
 }
 
@@ -236,6 +238,38 @@ void CMonster_Bastion_Sword::Set_Remove(_bool bCheck)
 	m_pPanel->Set_UIRemove(bCheck);
 }
 
+void CMonster_Bastion_Sword::setActive(_bool bActive)
+{
+	CGameObject::setActive(bActive);
+
+	if (bActive)
+	{
+		if (!m_pCharacterController)
+		{
+			CCharacterController::DESC tController;
+			tController.fHeight = 1.f;
+			tController.fRadius = 1.f;
+			tController.fContactOffset = tController.fRadius * 0.1f;
+			tController.fStaticFriction = 0.5f;
+			tController.fDynamicFriction = 0.5f;
+			tController.fRestitution = 0.f;
+
+			tController.vPosition = _float3(0.f, 0.f, 0.f);
+			tController.pGameObject = this;
+
+			if (FAILED(__super::SetUp_Components((_uint)SCENEID::SCENE_STATIC,
+				L"Proto_Component_CharacterController", L"Com_CharacterController", (CComponent**)&m_pCharacterController, &tController)))
+				MSGBOX(L"한손검몬스터 cct 생성 실패");
+			m_pCharacterController->setOwnerTransform(m_pTransform);
+			m_pCharacterController->setShapeLayer((_uint)ELayer::Monster);
+		}
+		if (m_pWeapon)
+			m_pWeapon->setActive(true);
+		if (m_pPanel)
+			m_pPanel->setActive(true);
+	}
+}
+
 void CMonster_Bastion_Sword::Set_IsAttack(const _bool _isAttack)
 {
 	m_IsAttack = _isAttack;
@@ -292,23 +326,22 @@ HRESULT CMonster_Bastion_Sword::SetUp_Components()
 		return E_FAIL;
 	m_pStateController->Set_GameObject(this);
 
-	CCharacterController::DESC tController;
+	//CCharacterController::DESC tController;
+	//tController.fHeight = 1.f;
+	//tController.fRadius = 1.f;
+	//tController.fContactOffset = tController.fRadius*0.1f;
+	//tController.fStaticFriction = 0.5f;
+	//tController.fDynamicFriction = 0.5f;
+	//tController.fRestitution = 0.f;
+	//
+	//tController.vPosition = _float3(0.f, 0.f, 0.f);
+	//tController.pGameObject = this;
 
-	tController.fHeight = 1.f;
-	tController.fRadius = 1.f;
-	tController.fContactOffset = tController.fRadius*0.1f;
-	tController.fStaticFriction = 0.5f;
-	tController.fDynamicFriction = 0.5f;
-	tController.fRestitution = 0.f;
-	
-	tController.vPosition = _float3(0.f, 0.f, 0.f);
-	tController.pGameObject = this;
-
-	if(FAILED(__super::SetUp_Components((_uint)SCENEID::SCENE_STATIC, 
-		L"Proto_Component_CharacterController", L"Com_CharacterController", (CComponent**)&m_pCharacterController,&tController)))
-		return E_FAIL;
-	m_pCharacterController->setOwnerTransform(m_pTransform);
-	m_pCharacterController->setShapeLayer((_uint)ELayer::Monster);
+	//if(FAILED(__super::SetUp_Components((_uint)SCENEID::SCENE_STATIC, 
+	//	L"Proto_Component_CharacterController", L"Com_CharacterController", (CComponent**)&m_pCharacterController,&tController)))
+	//	return E_FAIL;
+	//m_pCharacterController->setOwnerTransform(m_pTransform);
+	//m_pCharacterController->setShapeLayer((_uint)ELayer::Monster);
 
 	return S_OK;
 }

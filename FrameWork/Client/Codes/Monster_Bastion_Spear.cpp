@@ -99,10 +99,11 @@ HRESULT CMonster_Bastion_Spear::NativeConstruct(const _uint _iSceneID, void* _pA
 	m_pPanel->Set_GroggyBar(Get_GroggyGaugeRatio());
 
 	m_isFall = true;
-	setActive(false);
-
 	m_tAttackDesc.iLevel = 1;
 
+	m_pWeapon->setActive(false);
+	m_pPanel->setActive(false);
+	setActive(false);
 	return S_OK;
 }
 
@@ -239,6 +240,37 @@ HRESULT CMonster_Bastion_Spear::Render_Shadow()
 	return S_OK;
 }
 
+void CMonster_Bastion_Spear::setActive(_bool bActive)
+{
+	CGameObject::setActive(bActive);
+
+	if (bActive)
+	{
+		if (!m_pCharacterController)
+		{
+			//* for.Character Controller */
+			CCharacterController::DESC tCharacterControllerDesc;
+			tCharacterControllerDesc.fHeight = 1.f;
+			tCharacterControllerDesc.fRadius = 0.5f;
+			tCharacterControllerDesc.fContactOffset = tCharacterControllerDesc.fRadius * 0.1f;
+			tCharacterControllerDesc.fStaticFriction = 0.5f;
+			tCharacterControllerDesc.fDynamicFriction = 0.5f;
+			tCharacterControllerDesc.fRestitution = 0.f;
+			tCharacterControllerDesc.pGameObject = this;
+			tCharacterControllerDesc.vPosition = { 0.f, 0.f, 0.f };
+
+			if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_CharacterController", L"CharacterController", (CComponent**)&m_pCharacterController, &tCharacterControllerDesc)))
+				MSGBOX(L"창 몬스터 cct 생성 실패");
+			m_pCharacterController->setOwnerTransform(m_pTransform);
+			m_pCharacterController->setShapeLayer((_uint)ELayer::Monster);
+		}
+		if (m_pWeapon)
+			m_pWeapon->setActive(true);
+		if (m_pPanel)
+			m_pPanel->setActive(true);
+	}
+}
+
 HRESULT CMonster_Bastion_Spear::Ready_Components(_uint iSceneID)
 {
 	CTransform::TRANSFORMDESC transformDesc;
@@ -256,21 +288,21 @@ HRESULT CMonster_Bastion_Spear::Ready_Components(_uint iSceneID)
 	_matrix matPivot = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(180.f));
 	m_pModel->Set_PivotMatrix(matPivot);
 
-	//* for.Character Controller */
-	CCharacterController::DESC tCharacterControllerDesc;
-	tCharacterControllerDesc.fHeight = 1.f;
-	tCharacterControllerDesc.fRadius = 0.5f;
-	tCharacterControllerDesc.fContactOffset = tCharacterControllerDesc.fRadius * 0.1f;
-	tCharacterControllerDesc.fStaticFriction = 0.5f;
-	tCharacterControllerDesc.fDynamicFriction = 0.5f;
-	tCharacterControllerDesc.fRestitution = 0.f;
-	tCharacterControllerDesc.pGameObject = this;
-	tCharacterControllerDesc.vPosition = { 0.f, 0.f, 0.f };
+	////* for.Character Controller */
+	//CCharacterController::DESC tCharacterControllerDesc;
+	//tCharacterControllerDesc.fHeight = 1.f;
+	//tCharacterControllerDesc.fRadius = 0.5f;
+	//tCharacterControllerDesc.fContactOffset = tCharacterControllerDesc.fRadius * 0.1f;
+	//tCharacterControllerDesc.fStaticFriction = 0.5f;
+	//tCharacterControllerDesc.fDynamicFriction = 0.5f;
+	//tCharacterControllerDesc.fRestitution = 0.f;
+	//tCharacterControllerDesc.pGameObject = this;
+	//tCharacterControllerDesc.vPosition = { 0.f, 0.f, 0.f };
 
-	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_CharacterController", L"CharacterController", (CComponent**)&m_pCharacterController, &tCharacterControllerDesc)))
-		return E_FAIL;
-	m_pCharacterController->setOwnerTransform(m_pTransform);
-	m_pCharacterController->setShapeLayer((_uint)ELayer::Monster);
+	//if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_CharacterController", L"CharacterController", (CComponent**)&m_pCharacterController, &tCharacterControllerDesc)))
+	//	return E_FAIL;
+	//m_pCharacterController->setOwnerTransform(m_pTransform);
+	//m_pCharacterController->setShapeLayer((_uint)ELayer::Monster);
 
 	// 스테이트 컨트롤러
 	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_StateController", L"StateController", (CComponent**)&m_pStateController)))

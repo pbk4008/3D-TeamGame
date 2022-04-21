@@ -21,8 +21,17 @@ HRESULT CWeaponGenerator::NativeConstruct(ID3D11Device* pDevice, ID3D11DeviceCon
 		weaponDataDesc.weaponType = EWeaponType::LongSword;
 		CWeaponData weaponData(weaponDataDesc);
 
-		CWeapon* pWeapon = CNeedle::Create(pDevice, pDeviceContext);
-		pWeapon->NativeConstruct(_iSceneID, pHierarchyNode);
+		desc.weaponName = L"Needle";
+		desc.modelName = L"Model_Needle";
+		desc.arrMaterial = g_arrMI_Needle;
+		desc.damage = 10.f;
+		desc.NumMat = 4;
+		desc.pHierarchyNode = pHierarchyNode;
+		desc.EWeaponType = CWeapon::EType::Sword_1H;
+
+		//CWeapon* pWeapon = CNeedle::Create(pDevice, pDeviceContext);
+		CPlayer_Weapon* pWeapon = CPlayer_Weapon::Create(pDevice, pDeviceContext);
+		pWeapon->NativeConstruct(_iSceneID, desc);
 		pWeapon->Set_OwnerPivotMatrix(_pModel->Get_PivotMatrix());
 		
 		m_vecWeapons.push_back(std::make_pair(weaponData, pWeapon));
@@ -34,8 +43,17 @@ HRESULT CWeaponGenerator::NativeConstruct(ID3D11Device* pDevice, ID3D11DeviceCon
 		weaponDataDesc.weaponType = EWeaponType::Hammer;
 		CWeaponData weaponData(weaponDataDesc);
 
-		CWeapon* pWeapon = CFury::Create(pDevice, pDeviceContext);
-		pWeapon->NativeConstruct(_iSceneID, pHierarchyNode);
+		desc.weaponName = L"Fury";
+		desc.modelName = L"Model_Fury";
+		desc.arrMaterial = g_arrMI_Fury;
+		desc.damage = 5.f;
+		desc.NumMat = 4;
+		desc.pHierarchyNode = pHierarchyNode;
+		desc.EWeaponType = CWeapon::EType::Hammer_2H;
+
+		//CWeapon* pWeapon = CFury::Create(pDevice, pDeviceContext);
+		CPlayer_Weapon* pWeapon = CPlayer_Weapon::Create(pDevice, pDeviceContext);
+		pWeapon->NativeConstruct(_iSceneID, desc);
 		pWeapon->Set_OwnerPivotMatrix(_pModel->Get_PivotMatrix());
 
 		m_vecWeapons.push_back(std::make_pair(weaponData, pWeapon));

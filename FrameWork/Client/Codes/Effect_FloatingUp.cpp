@@ -162,12 +162,12 @@ CEffect* CEffect_FloatingUp::Copy()
 	CEffect_FloatingUp* pEffect = new CEffect_FloatingUp(m_pDevice, m_pDeviceContext);
 	if (FAILED(pEffect->NativeConstruct_Prototype()))
 	{
-		MSGBOX("Falling_Leaf Copy Fail");
+		MSGBOX("CEffect_FloatingUp Copy Fail");
 		Safe_Release(pEffect);
 	}
 	if (FAILED(pEffect->NativeConstruct(m_iSceneID, &m_Desc)))
 	{
-		MSGBOX("Falling_Leaf Copy Fail");
+		MSGBOX("CEffect_FloatingUp Copy Fail");
 		Safe_Release(pEffect);
 	}
 	

@@ -37,7 +37,7 @@ _int CMidBoss_BattleCry::Tick(const _double& TimeDelta)
 	{
 		if (m_pAnimator->Get_AnimController()->Is_Finished())
 		{
-			m_pStateController->Change_State(L"Turn");
+			m_pStateController->Change_State(L"Attack");
 		}
 
 		CBoss_Bastion_Judicator* pBoss = (CBoss_Bastion_Judicator*)m_pStateController->Get_GameObject();
@@ -45,8 +45,16 @@ _int CMidBoss_BattleCry::Tick(const _double& TimeDelta)
 		{
 			_uint iCurKeyFrameIndex = m_pAnimator->Get_AnimController()->Get_CurKeyFrameIndex();
 
+			cout << iCurKeyFrameIndex << endl;
 			if (10 < iCurKeyFrameIndex && 25 > iCurKeyFrameIndex)
 			{
+				if (18 <= iCurKeyFrameIndex && 19 >= iCurKeyFrameIndex && false == m_bEffectCheck)
+				{
+					//무기앞에생기는이펙트
+					m_bEffectCheck = true;
+					pBoss->OnWeaponEffect();
+				}
+
 				pBoss->Set_IsAttack(true);
 
 				_float fDamage = 8.f;

@@ -83,7 +83,7 @@ HRESULT CLoading::Move_Scene()
 		pLevel = CStage2::Create(m_pDevice, m_pDeviceContext);
 		break;
 	case SCENEID::SCENE_STAGE3:
-		pLevel = CStage2::Create(m_pDevice, m_pDeviceContext);
+		pLevel = CStage3::Create(m_pDevice, m_pDeviceContext);
 		break;
 	case SCENEID::SCENE_TEST_JS:
 		pLevel = CTestScene_JS::Create(m_pDevice, m_pDeviceContext);

@@ -33,9 +33,8 @@ _int CExecution_Mook::Tick(const _double& _dDeltaTime)
 			_matrix smatResult = smatBone * smatPivot * m_pTransform->Get_WorldMatrix();
 
 			CTransform* pTargetTransform = pTarget->Get_Transform();
-			_vector svTargetPos = pTargetTransform->Get_State(CTransform::STATE_POSITION);
 
-			_vector svLook = XMVector3Normalize(m_pTransform->Get_State(CTransform::STATE_POSITION) - smatResult.r[3]);
+			_vector svLook = XMVector3Normalize(m_pTransform->Get_State(CTransform::STATE_LOOK) * -1.f);
 			_vector svRight = XMVector3Normalize(XMVector3Cross(_vector{ 0.f, 1.f, 0.f, 0.f }, svLook));
 			_vector svUp = XMVector3Normalize(XMVector3Cross(svLook, svRight));
 
@@ -43,13 +42,10 @@ _int CExecution_Mook::Tick(const _double& _dDeltaTime)
 			svRight *= pTargetTransform->Get_Scale(CTransform::STATE_RIGHT);
 			svUp *= pTargetTransform->Get_Scale(CTransform::STATE_UP);
 
-			//_float3 vTargetPos{};
-			//XMStoreFloat3(&vTargetPos, smatResult.r[3]);
-			//pTarget->Set_FootPosition(vTargetPos);
-			//pTargetTransform->Set_State(CTransform::STATE_RIGHT, svRight);
-			//pTargetTransform->Set_State(CTransform::STATE_UP, svUp);
-			//pTargetTransform->Set_State(CTransform::STATE_LOOK, svLook);
-			//pTargetTransform->Set_State(CTransform::STATE_POSITION, smatResult.r[3]);
+			pTargetTransform->Set_State(CTransform::STATE_RIGHT, svRight);
+			pTargetTransform->Set_State(CTransform::STATE_UP, svUp);
+			pTargetTransform->Set_State(CTransform::STATE_LOOK, svLook);
+			pTargetTransform->Set_State(CTransform::STATE_POSITION, smatResult.r[3]);
 		}
 	}
 
@@ -95,7 +91,7 @@ HRESULT CExecution_Mook::ExitState()
 	if (FAILED(__super::ExitState()))
 		return E_FAIL;
 
-	m_pSilvermane->Get_TargetExecution()->Set_Remove(true);
+	//m_pSilvermane->Get_TargetExecution()->Set_Remove(true);
 	m_pSilvermane->Set_Execution(false);
 	return S_OK;
 }

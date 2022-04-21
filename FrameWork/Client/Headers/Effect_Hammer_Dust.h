@@ -26,6 +26,10 @@ protected:
 	virtual _int LateTick(_double TimeDelta);
 	virtual HRESULT Render();
 
+public:
+	virtual CEffect* Copy() override;
+	virtual void Set_Reset(_bool bReset);
+
 private:
 	virtual HRESULT SetUp_Components();
 

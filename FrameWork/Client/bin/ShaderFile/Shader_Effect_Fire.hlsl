@@ -19,6 +19,7 @@ Texture2D	g_DiffuseTexture;
 uint g_iImageCountX; //가로줄수
 uint g_iImageCountY; //세로줄수
 uint g_iFrame; //전체장수
+float g_fAlpha=1.f;//알파값 조절
 
 cbuffer weightbuffer
 {
@@ -90,7 +91,7 @@ struct PS_IN
 struct PS_OUT
 {
     vector vColor : SV_TARGET0;
-	//float4 weight : SV_Target1;
+	float4 weight : SV_Target1;
 };
 
 
@@ -108,7 +109,7 @@ PS_OUT PS_MAIN(PS_IN In)
         discard;
     }
 
-	//Out.weight = float4(g_Weight.xxx, 1.f);
+	Out.weight = float4(g_Weight.xxx, 1.f);
 	
     return Out;
 }
@@ -123,7 +124,8 @@ PS_OUT PS_MAIN1(PS_IN In)
 	half4 color = g_DiffuseTexture.Sample(DefaultSampler, In.vTexUV);
 	
 	Out.vColor = color;
-	//Out.weight = color.r * g_Weight * Out.vColor;
+	Out.vColor.a *= g_fAlpha;
+	Out.weight = half4(g_Weight.xxx, Out.vColor.a);
 	
     return Out;
 }
@@ -187,7 +189,7 @@ technique11 DefaultTechnique
     {
         SetRasterizerState(CullMode_Default);
         SetDepthStencilState(ZDefault, 0);
-        SetBlendState(AlphaBlending, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+		SetBlendState(AlphaBlending2, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
 
         VertexShader = compile vs_5_0 VS_MAIN();
         GeometryShader = NULL;

@@ -1,3 +1,5 @@
+#define EXPONENTIAL_FOG 0
+#define EXPONENTIAL_HEIGHT_FOG 1
 
 cbuffer distortion
 {
@@ -60,4 +62,41 @@ float getCoC(float depth, float focalPlane)
 	float aperture = min(1.0, focalPlane * focalPlane);
 	return abs(aperture * (focalLength * (focalPlane - depth)) /
         (depth * (focalPlane - focalLength)));
+}
+
+float ExponentialFog(float4 pos_ws, float4 campos , float fogstart, float fogdensity)
+{
+	float3 obj_to_camera = (campos - pos_ws).xyz;
+
+	float distance = length(obj_to_camera);
+    
+	float fog_dist = max(distance - fogstart, 0.0);
+    
+	float fog = exp(-fog_dist * fogdensity);
+	return 1 - fog;
+}
+
+float ExponentialHeightFog(float4 pos_ws, float4 campos, float fogstart, float fogdensity, float fogfalloff)
+{
+	float3 camera_to_world = pos_ws.xyz;
+
+	float distance = length(camera_to_world);
+    
+	// 픽셀 거리에 대한 안개 응시 거리 찾기
+	float fogDist = max(distance - fogstart, 0.0);
+
+	// 거리 기반 안개 강도
+	float fogHeightDensityAtViewer = exp(-fogfalloff * campos.y);
+	float fogDistInt = fogDist * fogHeightDensityAtViewer;
+
+	// 높이 기반 안개 강도
+	float eyeToPixelY = camera_to_world.y * (fogDist / distance);
+	float t = fogfalloff * eyeToPixelY;
+	const float thresholdT = 0.01;
+	float fogHeightInt = abs(t) > thresholdT ? (1.0 - exp(-t)) / t : 1.0;
+
+	// 두 요소를 결합하여 최종 요소를 얻습니다.
+	float fog = exp(-fogdensity * fogDistInt * fogHeightInt);
+
+	return 1 - fog;
 }

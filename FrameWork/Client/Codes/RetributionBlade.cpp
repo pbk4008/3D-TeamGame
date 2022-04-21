@@ -77,9 +77,6 @@ _int CRetributionBlade::Tick(_double _dDeltaTime)
 	if (m_pCollider)
 		m_pCollider->Tick(_dDeltaTime);
 
-
-
-
 	return _int();
 }
 
@@ -131,6 +128,23 @@ void CRetributionBlade::OnTriggerEnter(CCollision& collision)
 		ATTACKDESC tAttackDesc = m_pOwner->Get_AttackDesc();
 		tAttackDesc.fDamage += m_fDamage;
 		static_cast<CActor*>(collision.pGameObject)->Hit(tAttackDesc);
+	}
+}
+
+void CRetributionBlade::setActive(_bool bActive)
+{
+	CGameObject::setActive(bActive);
+
+	switch (bActive)
+	{
+	case true:
+		if (m_pCollider)
+			m_pCollider->Add_ActorToScene();
+		break;
+	case false:
+		if (m_pCollider)
+			m_pCollider->Remove_ActorFromScene();
+		break;
 	}
 }
 

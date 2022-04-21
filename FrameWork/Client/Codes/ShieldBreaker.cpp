@@ -148,6 +148,23 @@ void CShieldBreaker::OnTriggerEnter(CCollision& collision)
 	}
 }
 
+void CShieldBreaker::setActive(_bool bActive)
+{
+	CGameObject::setActive(bActive);
+
+	switch (bActive)
+	{
+	case true:
+		if (m_pCollider)
+			m_pCollider->Add_ActorToScene();
+		break;
+	case false:
+		if (m_pCollider)
+			m_pCollider->Remove_ActorFromScene();
+		break;
+	}
+}
+
 HRESULT CShieldBreaker::Ready_Components()
 {
 	CTransform::TRANSFORMDESC transformDesc;
@@ -211,9 +228,13 @@ void CShieldBreaker::OnHitGroundEffect()
 {
 	_vector svPos = m_pTransform->Get_State(CTransform::STATE_POSITION);
 	_vector svLook = XMVector3Normalize(m_pTransform->Get_State(CTransform::STATE_LOOK));
+	_vector NewPos = svLook * 2.9f;
+	NewPos = XMVectorSetY(NewPos, XMVectorGetY(NewPos) + 1.5f);
 	XMStoreFloat3(&m_vEndPos, svPos + svLook);
 
 	m_pOwner->Active_Effect((_uint)EFFECT::HIT_GROUND, svLook * 2.6f);
+	m_pOwner->Active_Effect((_uint)EFFECT::EXPLOSION_ROCK_UP, svLook * 2.6f);
+	m_pOwner->Active_Effect((_uint)EFFECT::HAMMER_DUST, NewPos);
 }
 
 CShieldBreaker* CShieldBreaker::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)

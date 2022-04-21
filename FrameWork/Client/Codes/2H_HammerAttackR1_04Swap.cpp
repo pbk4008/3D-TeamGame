@@ -38,7 +38,7 @@ _int C2H_HammerAttackR1_04Swap::Tick(const _double& _dDeltaTime)
 	}
 
 
-	if (50 < iCurKeyFrameIndex && !m_isRangeAttack)
+	if (33 < iCurKeyFrameIndex && !m_isRangeAttack)
 	{
 		// ÆÄÆ¼Å¬
 		_vector Pos = { 0.f, 0.f, 0.f ,0.f};

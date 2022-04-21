@@ -18,6 +18,7 @@ public:
 	virtual HRESULT Render();
 private:
 	HRESULT Ready_Model(_uint iModel);
+	HRESULT Render_Acoter();
 public:
 	void Actor_AnimPlay(_int iIndex);
 	void AnimSpeed(_float fSpeed);
@@ -29,6 +30,7 @@ private:
 	virtual void Free()override;
 private:
 	CAnimationController* m_pController;
+	_uint m_iActorTag;
 };
 END
 #endif

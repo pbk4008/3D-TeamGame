@@ -49,6 +49,7 @@ public:
 	void Set_IsAttack(const _bool _isAttack);
 	virtual void Set_Remove(_bool bCheck) override;
 	virtual void Set_FootPosition(const _float3& _vPos) override;
+	virtual void setActive(_bool bActive) override;
 
 private:
 	CAnimator* m_pAnimatorCom = nullptr;

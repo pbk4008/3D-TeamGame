@@ -41,6 +41,8 @@ public:
 	virtual HRESULT Render() override;
 	virtual HRESULT	Render_Shadow() override;
 
+	virtual void setActive(_bool bActive) override;
+
 private:
 	HRESULT Ready_Components(_uint iSceneID);
 	HRESULT Ready_Weapon(void);

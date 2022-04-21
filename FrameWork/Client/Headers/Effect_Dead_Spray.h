@@ -12,10 +12,17 @@ END
 BEGIN(Client)
 class CEffect_Dead_Spray final : public CEffect
 {
+public:
+	typedef struct tagImageEffect : public EFFECTDESC
+	{
+		_float fAlpha;
+		_float fWeight;
+		_float fSize;
+	}IMAGEEFFECTDESC;
 protected:
 	explicit CEffect_Dead_Spray();
 	explicit CEffect_Dead_Spray(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);
-	explicit CEffect_Dead_Spray(const CEffect& rhs);
+	explicit CEffect_Dead_Spray(const CEffect_Dead_Spray& rhs);
 	virtual ~CEffect_Dead_Spray() = default;
 protected:
 	/* 원형객체가 생성될때 호출되는 함수. */
@@ -25,7 +32,8 @@ protected:
 	virtual _int Tick(_double TimeDelta);
 	virtual _int LateTick(_double TimeDelta);
 	virtual HRESULT Render();
-
+public:
+	virtual CEffect* Copy();
 private:
 	virtual HRESULT SetUp_Components();
 
@@ -36,8 +44,7 @@ private:
 	CVIBuffer_Rect* m_pBuffer = nullptr;
 
 private:
-	CEffect::EFFECTDESC m_Desc;
-
+	IMAGEEFFECTDESC m_tDesc;
 public:
 	static CEffect_Dead_Spray* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);
 	virtual CGameObject* Clone(const _uint _iSceneID, void* pArg) override;
