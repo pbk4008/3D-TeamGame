@@ -21,6 +21,19 @@ _int CSilvermane_SprintFwd::Tick(const _double& _dDeltaTime)
 		return iProgress;
 
 	//m_pSilvermane->Add_Velocity(CTransform::STATE_LOOK, _dDeltaTime * 2.f);
+	_uint iCurkeyFrameIndex = m_pAnimationController->Get_CurKeyFrameIndex();
+
+	_int temp = 0;
+	temp = iCurkeyFrameIndex % 5;
+
+	if (temp == 0)
+	{
+		m_pSilvermane->Create_MotionTrail(m_motiontrailidx, true);
+		++m_motiontrailidx;
+	}
+
+	if (m_motiontrailidx >= 20)
+		m_motiontrailidx = 0;
 
 	return _int();
 }
@@ -58,6 +71,8 @@ HRESULT CSilvermane_SprintFwd::ExitState()
 {
 	if (FAILED(__super::ExitState()))
 		return E_FAIL;
+
+	m_motiontrailidx = 0;
 
 	return S_OK;
 }

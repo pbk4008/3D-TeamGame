@@ -55,6 +55,7 @@ cbuffer Colorbuffer
 cbuffer ClipPlaneBuffer
 {
 	float4 ClipPlane = (float4)0;
+	float4 FrustumPlans[6];
 };
 
 cbuffer Camerabuffer

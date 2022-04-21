@@ -97,14 +97,14 @@ HRESULT CSingleImage::Render(CTransform* _sender)
 		if (m_fAlpha >= 1.f)
 			m_fAlpha = 1.f;
 		else
-			m_fAlpha += g_fDeltaTime * 0.5;
+			m_fAlpha += g_fDeltaTime * 0.5f;
 	}
 	else
 	{
 		if (m_fAlpha <= 0.f)
 			m_fAlpha = 0.f;
 		else
-			m_fAlpha -= g_fDeltaTime * 0.5;
+			m_fAlpha -= g_fDeltaTime * 0.5f;
 	}
 
 	if (RenderType::Alpha == m_ERenderType || RenderType::Nonalpha == m_ERenderType || RenderType::Type_End == m_ERenderType)

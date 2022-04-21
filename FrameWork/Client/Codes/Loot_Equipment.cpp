@@ -62,7 +62,7 @@ _int CLoot_Equipment::LateTick(_double TimeDelta)
 
 	SetGrade(desc.itemData);
 
-	m_fAliveTime += TimeDelta;
+	m_fAliveTime += (_float)TimeDelta;
 
 	if (desc.fDisapeatTime <= m_fAliveTime)
 		m_bAlive = false;
@@ -129,7 +129,7 @@ void CLoot_Equipment::FadeIn(_double TimeDela)
 {
 	if (desc.fInitScale.x > desc.fEndScale.x)
 	{
-		desc.fInitScale.y = desc.fInitScale.x -= TimeDela;
+		desc.fInitScale.y = desc.fInitScale.x -= (_float)TimeDela;
 
 		if (desc.fInitScale.x <= desc.fEndScale.x)
 		{
@@ -145,7 +145,7 @@ void CLoot_Equipment::Pulling(_double TimeDelta)
 
 	if (m_fInitPos.y < m_fEndPos.y)
 	{
-		m_fInitPos.y += TimeDelta * 150.f;
+		m_fInitPos.y += (_float)TimeDelta * 150.f;
 
 		if (m_fInitPos.y >= m_fEndPos.y)
 		{
@@ -159,7 +159,7 @@ void CLoot_Equipment::Pulling(_double TimeDelta)
 	{
 		if (m_fDisaperXInitPos < m_fDisaperXEndPos)
 		{
-			m_fDisaperXInitPos += TimeDelta * 150.f;
+			m_fDisaperXInitPos += (_float)TimeDelta * 150.f;
 
 			if (m_fDisaperXInitPos > m_fDisaperXEndPos)
 			{

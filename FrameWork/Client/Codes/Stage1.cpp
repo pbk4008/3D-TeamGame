@@ -102,67 +102,67 @@ HRESULT CStage1::NativeConstruct()
 
 	if (FAILED(CLevel::NativeConstruct()))
 	{
-		MSGBOX("Level");
+		MSGBOX("Stage1 Level");
 		return E_FAIL;
 	}
 
 	if (FAILED(Ready_Light()))
 	{
-		MSGBOX("Light");
+		MSGBOX("Stage1 Light");
 		return E_FAIL;
 	}
 
 	if (FAILED(Ready_Trigger_Jump()))
 	{
-		MSGBOX("Jump");
+		MSGBOX("Stage1 Jump");
 		return E_FAIL;
 	}
 
 	if (FAILED(Ready_Player(L"Layer_Silvermane")))
 	{
-		MSGBOX("Player");
+		MSGBOX("Stage1 Player");
 		return E_FAIL;
 	}
 
 	if (FAILED(Ready_MapObject()))
 	{
-		MSGBOX("MapObject");
+		MSGBOX("Stage1 MapObject");
 		return E_FAIL;
 	}
 
 	if (FAILED(Ready_TriggerSystem(L"../bin/SaveData/Trigger/MonsterSpawnTrigger.dat")))
 	{
-		MSGBOX("Trigger");
+		MSGBOX("Stage1 Trigger");
 		return E_FAIL;
 	}
 
 	if (FAILED(Ready_Data_UI(L"../bin/SaveData/UI/UI.dat")))
 	{
-		MSGBOX("UI Data");
+		MSGBOX("Stage1 UI Data");
 		return E_FAIL;
 	}
 
 	if (FAILED(Ready_Data_Effect()))
 	{
-		MSGBOX("Effect");
+		MSGBOX("Stage1 Effect");
 		return E_FAIL;
 	}
 
 	if (FAILED(Ready_UI(L"Layer_UI")))
 	{
-		MSGBOX("Ui");
+		MSGBOX("Stage1 Ui");
 		return E_FAIL;
 	}
 
 	if (FAILED(Ready_Treasure_Chest()))
 	{
-		MSGBOX("Box");
+		MSGBOX("Stage1 Box");
 		return E_FAIL;
 	}
 
 	if (FAILED(Ready_GameManager()))
 	{
-		MSGBOX("Manager");
+		MSGBOX("Stage1 Manager");
 		return E_FAIL;
 	}
 
@@ -182,13 +182,13 @@ HRESULT CStage1::NativeConstruct()
 
 	if (FAILED(Ready_Indicator()))
 	{
-		MSGBOX("Indicator");
+		MSGBOX("Stage1 Indicator");
 		return E_FAIL;
 	}
 
 	if (FAILED(Ready_Portal()))
 	{
-		MSGBOX("Portal");
+		MSGBOX("Stage1 Portal");
 		return E_FAIL;
 	}
 
@@ -242,6 +242,7 @@ _int CStage1::Tick(_double TimeDelta)
 			{
 				if (m_iPortalCount == 0)
 				{
+					m_pTriggerSystem->Trigger_Clear();
 					m_iPortalCount = 3;
 					Open_Potal(XMVectorSet(-58.f, 18.f, 213.f, 1.f), (_uint)GAMEOBJECT::MONSTER_1H);
 					Open_Potal(XMVectorSet(-64.f, 18.f, 230.f, 1.f), (_uint)GAMEOBJECT::MONSTER_1H);
@@ -259,6 +260,7 @@ _int CStage1::Tick(_double TimeDelta)
 			{
 				if (m_iPortalCount == 3)
 				{
+					m_pTriggerSystem->Trigger_Clear();
 					Open_Potal(XMVectorSet(-130.f, 19.f, 216.f, 1.f), (_uint)GAMEOBJECT::MONSTER_SHOOTER);
 					m_iPortalCount++;
 					m_iCountMonster++;
@@ -281,6 +283,7 @@ _int CStage1::Tick(_double TimeDelta)
 			{
 				if (m_iPortalCount == 6)
 				{
+					m_pTriggerSystem->Trigger_Clear();
 					Open_Potal(XMVectorSet(-177.f, 29.f, 300.f, 1.f), (_uint)GAMEOBJECT::MONSTER_1H);
 					Open_Potal(XMVectorSet(-172.f, 29.f, 316.f, 1.f), (_uint)GAMEOBJECT::MONSTER_1H);
 					Open_Potal(XMVectorSet(-168.f, 29.f, 306.f, 1.f), (_uint)GAMEOBJECT::MONSTER_1H);
@@ -580,6 +583,10 @@ HRESULT CStage1::Ready_Player(const _tchar* LayerTag)
 	//desc.color = _float4(0.f, 1.f, 1.f, 1.f);
 	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Wall", L"Proto_GameObject_Wall", &desc))) return E_FAIL;
 	
+	//Test
+	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Test", L"Proto_GameObject_TestObject")))
+	//	return E_FAIL;
+
 	return S_OK;
 }
 
@@ -776,7 +783,7 @@ HRESULT CStage1::Ready_Data_Effect()
 	vecDashEffect.clear();
 	g_pGameInstance->LoadFile<CEffect_DashDust::EF_PAR_DASH_DESC>(vecDashEffect, L"../bin/SaveData/Effect/Effect_HitGround_Smoke.dat");
 
-	vecDashEffect[0].fAlpha = 0.15;
+	vecDashEffect[0].fAlpha = 0.15f;
 
 	FullName = L"Proto_GameObject_Effect_DashDust";
 

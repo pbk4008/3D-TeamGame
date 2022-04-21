@@ -462,7 +462,7 @@ HRESULT CMainApp::Ready_GameObject_Prototype()
 	//Level Up Fill Right
 	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_UI_LevelUp_Fill_Right"), UI_LevelUP_Fill_Right::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
-	////////////////////////////////
+	//////////////////////////////
 	return S_OK;
 }
 

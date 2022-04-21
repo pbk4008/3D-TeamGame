@@ -94,7 +94,7 @@ protected:
 	//rimlight
 	_bool			m_rimcheck = false;
 	_float			m_rimintensity = 8.f;
-
+	_float3			m_rimcol = _float3(0, 0, 0);
 	_float3			m_vEndPos{};
 
 public:

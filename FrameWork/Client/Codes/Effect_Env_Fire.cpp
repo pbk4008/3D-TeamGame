@@ -111,7 +111,10 @@ _int CEffect_Env_Fire::LateTick(_double TimeDelta)
 {
 	if (nullptr != m_pRenderer)
 	{
-		m_pRenderer->Add_RenderGroup(CRenderer::RENDER::RENDER_ALPHA, this);
+		if (L"Texture_fx_smoke_a" == m_pTexture->getTextureTag())
+			m_pRenderer->Add_RenderGroup(CRenderer::RENDER::RENDER_ALPHANB, this);
+		else
+			m_pRenderer->Add_RenderGroup(CRenderer::RENDER::RENDER_ALPHA, this);
 	}
 
 	return 0;
@@ -145,7 +148,7 @@ HRESULT CEffect_Env_Fire::Render()
 	}
 	else
 	{
-		_float weight = 0.0f;
+		_float weight = 0.8f;
 		m_pBuffer->SetUp_ValueOnShader("g_Weight", &weight, sizeof(_float));
 	}
 	

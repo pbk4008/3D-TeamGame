@@ -97,7 +97,7 @@ _int CMeteor::Tick(_double _dDeltaTime)
 	}
 	m_pCollider->Tick(_dDeltaTime);
 	m_fAccRotateTime += (_float)_dDeltaTime;
-	m_pCollider->Add_Torque(XMLoadFloat4(&m_vRandNorm), _dDeltaTime);
+	m_pCollider->Add_Torque(XMLoadFloat4(&m_vRandNorm), (_float)_dDeltaTime);
 
 	_vector vPos = m_pTransform->Get_State(CTransform::STATE_POSITION);
 	_float fY = XMVectorGetY(vPos);
@@ -107,7 +107,7 @@ _int CMeteor::Tick(_double _dDeltaTime)
 			m_fPreY = fY;
 		else
 		{
-			_vector vPow = XMVectorSet(0.f,_dDeltaTime*-50 ,0.f,0.f);
+			_vector vPow = XMVectorSet(0.f, (_float)_dDeltaTime*-50 ,0.f,0.f);
 			m_pCollider->Add_Force(vPow);
 			m_fAccGravityTime += (_float)_dDeltaTime;
 			if (m_fAccGravityTime > 0.5f)
@@ -299,9 +299,9 @@ _int CMeteor::Move(_fvector vPos)
 
 	m_fRandSpawnTime = (_float)MathUtils::ReliableRandom(1.f, 3.f);
 
-	_float fNormX = MathUtils::ReliableRandom(-1.0, 1.0);
-	_float fNormY = MathUtils::ReliableRandom(-1.0, 1.0);
-	_float fNormZ = MathUtils::ReliableRandom(-1.0, 1.0);
+	_float fNormX = (_float)MathUtils::ReliableRandom(-1.0, 1.0);
+	_float fNormY = (_float)MathUtils::ReliableRandom(-1.0, 1.0);
+	_float fNormZ = (_float)MathUtils::ReliableRandom(-1.0, 1.0);
 
 	m_vRandNorm = _float4(fNormX, fNormY, fNormZ,0.f);
 	return _int();
