@@ -113,7 +113,7 @@ void CUI_QuestClear::Show(_double dTimeDelta)
 {
 	if(m_fInitScale.x > m_fEndScale.x)
 	{
-		m_fInitScale.y = m_fInitScale.x -= dTimeDelta * 550;
+		m_fInitScale.y = m_fInitScale.x -= (_float)dTimeDelta * 550;
 
 		if (m_fInitScale.x <= m_fEndScale.x)
 		{

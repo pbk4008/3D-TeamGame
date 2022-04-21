@@ -52,7 +52,7 @@ _int CQuest::Tick(_double dDeltaTime)
 	{
 		if (m_fUpYInitPos < m_fUpYEndPos)
 		{
-			m_fUpYInitPos += dDeltaTime * 20;
+			m_fUpYInitPos += (_float)dDeltaTime * 20;
 
 			if (m_fUpYInitPos >= m_fUpYEndPos)
 			{
@@ -77,7 +77,7 @@ _int CQuest::LateTick(_double TimeDelta)
 
 	if (m_bBye)
 	{
-		m_fDisapearTime += TimeDelta;
+		m_fDisapearTime += (_float)TimeDelta;
 
 		if(3.f <= m_fDisapearTime)
 			Pulling(TimeDelta);
@@ -139,7 +139,7 @@ void CQuest::Pulling(_double dDeltaTime)
 {
 	if(m_fDisaperXInitPos > m_fDisaperXEndPos)
 	{
-		m_fDisaperXInitPos -= dDeltaTime * 200;
+		m_fDisaperXInitPos -= (_float)dDeltaTime * 200;
 
 		if (m_fDisaperXInitPos <= m_fDisaperXEndPos)
 		{

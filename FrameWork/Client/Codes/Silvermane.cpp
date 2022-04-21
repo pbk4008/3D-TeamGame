@@ -1687,7 +1687,7 @@ RIM CSilvermane::ColorChange_RimCheck(RIM& rimdesc)
 	return rimdesc;
 }
 
-HRESULT CSilvermane::Create_MotionTrail(_int idex)
+HRESULT CSilvermane::Create_MotionTrail(_int idex, _bool runcheck)
 {
 	if (idex <= 19)
 	{
@@ -1709,6 +1709,7 @@ HRESULT CSilvermane::Create_MotionTrail(_int idex)
 			uvdvid = (idex - 10) / 10.f;
 
 		static_cast<CMotionTrail*>(m_vecMotionTrail[idex])->Set_Info(smatWorld,m_pCurWeapon->Get_Transform()->Get_WorldMatrix(), uvdvid);
+		static_cast<CMotionTrail*>(m_vecMotionTrail[idex])->Set_RunCheck(runcheck);
 	}
 
 	return S_OK;

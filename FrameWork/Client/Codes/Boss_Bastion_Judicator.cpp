@@ -101,7 +101,7 @@ _int CBoss_Bastion_Judicator::Tick(_double TimeDelta)
 
 	if (m_rimcheck)
 	{
-		CActor::SetRimIntensity(TimeDelta * -10.f);
+		CActor::SetRimIntensity((_float)TimeDelta * -10.f);
 	}
 
 	if (0 >= m_fCurrentHp)

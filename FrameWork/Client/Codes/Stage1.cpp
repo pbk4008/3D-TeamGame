@@ -102,67 +102,67 @@ HRESULT CStage1::NativeConstruct()
 
 	if (FAILED(CLevel::NativeConstruct()))
 	{
-		MSGBOX("Level");
+		MSGBOX("Stage1 Level");
 		return E_FAIL;
 	}
 
 	if (FAILED(Ready_Light()))
 	{
-		MSGBOX("Light");
+		MSGBOX("Stage1 Light");
 		return E_FAIL;
 	}
 
-	//if (FAILED(Ready_Trigger_Jump()))
-	// {
-	//	MSGBOX("Jump");
-	// return E_FAIL;
-	//}
+	if (FAILED(Ready_Trigger_Jump()))
+	{
+		MSGBOX("Stage1 Jump");
+		return E_FAIL;
+	}
 
 	if (FAILED(Ready_Player(L"Layer_Silvermane")))
 	{
-		MSGBOX("Player");
+		MSGBOX("Stage1 Player");
 		return E_FAIL;
 	}
 
 	if (FAILED(Ready_MapObject()))
 	{
-		MSGBOX("MapObject");
+		MSGBOX("Stage1 MapObject");
 		return E_FAIL;
 	}
 
-	if (FAILED(Ready_TriggerSystem(L"../bin/SaveData/Trigger/MonsterSpawnTrigger.dat")))
-	{
-		MSGBOX("Trigger");
-		return E_FAIL;
-	}
+	//if (FAILED(Ready_TriggerSystem(L"../bin/SaveData/Trigger/MonsterSpawnTrigger.dat")))
+	//{
+	//	MSGBOX("Stage1 Trigger");
+	//	return E_FAIL;
+	//}
 
 	if (FAILED(Ready_Data_UI(L"../bin/SaveData/UI/UI.dat")))
 	{
-		MSGBOX("UI Data");
+		MSGBOX("Stage1 UI Data");
 		return E_FAIL;
 	}
 
 	if (FAILED(Ready_Data_Effect()))
 	{
-		MSGBOX("Effect");
+		MSGBOX("Stage1 Effect");
 		return E_FAIL;
 	}
 
 	if (FAILED(Ready_UI(L"Layer_UI")))
 	{
-		MSGBOX("Ui");
+		MSGBOX("Stage1 Ui");
 		return E_FAIL;
 	}
 
 	if (FAILED(Ready_Treasure_Chest()))
 	{
-		MSGBOX("Box");
+		MSGBOX("Stage1 Box");
 		return E_FAIL;
 	}
 
 	if (FAILED(Ready_GameManager()))
 	{
-		MSGBOX("Manager");
+		MSGBOX("Stage1 Manager");
 		return E_FAIL;
 	}
 
@@ -180,17 +180,17 @@ HRESULT CStage1::NativeConstruct()
 	// 		return E_FAIL;
 	//}
 
-	if (FAILED(Ready_Indicator()))
-	{
-		MSGBOX("Indicator");
-		return E_FAIL;
-	}
+	//if (FAILED(Ready_Indicator()))
+	//{
+	//	MSGBOX("Stage1 Indicator");
+	//	return E_FAIL;
+	//}
 
-	if (FAILED(Ready_Portal()))
-	{
-		MSGBOX("Portal");
-		return E_FAIL;
-	}
+	//if (FAILED(Ready_Portal()))
+	//{
+	//	MSGBOX("Stage1 Portal");
+	//	return E_FAIL;
+	//}
 
 	g_pGameInstance->PlayBGM(L"Stage1_BGM");
 	
@@ -778,7 +778,7 @@ HRESULT CStage1::Ready_Data_Effect()
 	vecDashEffect.clear();
 	g_pGameInstance->LoadFile<CEffect_DashDust::EF_PAR_DASH_DESC>(vecDashEffect, L"../bin/SaveData/Effect/Effect_HitGround_Smoke.dat");
 
-	vecDashEffect[0].fAlpha = 0.15;
+	vecDashEffect[0].fAlpha = 0.15f;
 
 	FullName = L"Proto_GameObject_Effect_DashDust";
 
