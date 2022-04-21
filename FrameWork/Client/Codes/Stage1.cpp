@@ -56,7 +56,9 @@
 #include "Cinema1_1.h"
 #include "Cinema1_2.h"
 #include "Cinema2_1.h"
-
+#include "Cinema2_2.h"
+#include "Cinema2_3.h"
+#include "Cinema2_4.h"
 
 CStage1::CStage1()
 	: m_pTriggerSystem(nullptr)
@@ -68,6 +70,7 @@ CStage1::CStage1()
 	, m_fRandomMeteorSpawnTime(0.f)
 	, m_fAccMeteorStartTime(0.f)
 	, m_iPortalCount(0)
+	, m_bPortalClear(false)
 {
 }
 
@@ -82,6 +85,7 @@ CStage1::CStage1(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
 	, m_fRandomMeteorSpawnTime(0.f)
 	, m_fAccMeteorStartTime(0.f)
 	, m_iPortalCount(0)
+	, m_bPortalClear(false)
 {
 }
 
@@ -96,66 +100,60 @@ HRESULT CStage1::NativeConstruct()
 	g_pWeaponGenerator = CWeaponGenerator::GetInstance();
 
 	if (FAILED(CLevel::NativeConstruct()))
-		return E_FAIL;
+		MSGBOX("Level");
 
 	if (FAILED(Ready_Light()))
-		return E_FAIL;
+		MSGBOX("Light");
 
-	if (FAILED(Ready_Trigger_Jump()))
-		return E_FAIL;
+	//if (FAILED(Ready_Trigger_Jump()))
+	//	MSGBOX("Jump");
 
 	if (FAILED(Ready_Player(L"Layer_Silvermane")))
-		return E_FAIL;
+		MSGBOX("Player");
 
 	if (FAILED(Ready_MapObject()))
-		return E_FAIL;
+		MSGBOX("MapObject");
 
-	//if (FAILED(Ready_TriggerSystem(L"../bin/SaveData/Trigger/MonsterSpawnTrigger.dat")))
-	//	return E_FAIL;
+	if (FAILED(Ready_TriggerSystem(L"../bin/SaveData/Trigger/MonsterSpawnTrigger.dat")))
+		MSGBOX("Trigger");
 
 	if (FAILED(Ready_Data_UI(L"../bin/SaveData/UI/UI.dat")))
-		return E_FAIL;
+		MSGBOX("UI Data");
 
-	//if (FAILED(Ready_Data_Effect()))
-	//	return E_FAIL;
+	if (FAILED(Ready_Data_Effect()))
+		MSGBOX("Effect");
 
 	if (FAILED(Ready_UI(L"Layer_UI")))
-		return E_FAIL;
+		MSGBOX("Ui");
 
 	if (FAILED(Ready_Treasure_Chest()))
-		return E_FAIL;
+		MSGBOX("Box");
 
 	if (FAILED(Ready_GameManager()))
-		return E_FAIL;
+		MSGBOX("Manager");
 
 	g_pGameInstance->Change_BaseCamera(L"Camera_Silvermane");
 
 	//if (FAILED(Ready_Meteor()))
-	//	return E_FAIL;
+		//MSGBOX("Meteor");
 
 	//if (FAILED(Ready_Cinema()))
-	//	return E_FAIL;
-
-	//if (FAILED(Ready_Boss(L"Layer_Boss")))
-	//	return E_FAIL;
-
-	//if (FAILED(Ready_Monster(L"Layer_Monster")))
-	//	return E_FAIL;
+	//	MSGBOX("Cinema");
 
 	if (FAILED(Ready_Indicator()))
-		return E_FAIL;
+		MSGBOX("Indicator");
 
-	//if (FAILED(Ready_Portal()))
-	//	return E_FAIL;
-
+	if (FAILED(Ready_Portal()))
+		MSGBOX("Portal");
 
 	g_pGameInstance->PlayBGM(L"Stage1_BGM");
-
+	
 	return S_OK;
 }
 
 _int CStage1::Tick(_double TimeDelta)
 {
+	//m_pTestModel->Update_CombinedTransformationMatrix(TimeDelta);
 #ifdef  _DEBUG
 	_int iLevel = 0;
 	if (g_pDebugSystem->Get_LevelMoveCheck(iLevel))
@@ -196,14 +194,18 @@ _int CStage1::Tick(_double TimeDelta)
 			{
 				if (m_iPortalCount == 0)
 				{
-					m_iPortalCount= 3;
+					m_iPortalCount = 3;
 					Open_Potal(XMVectorSet(-58.f, 18.f, 213.f, 1.f), (_uint)GAMEOBJECT::MONSTER_1H);
 					Open_Potal(XMVectorSet(-64.f, 18.f, 230.f, 1.f), (_uint)GAMEOBJECT::MONSTER_1H);
 					Open_Potal(XMVectorSet(-77.f, 18.f, 220.f, 1.f), (_uint)GAMEOBJECT::MONSTER_1H);
 					m_iCountMonster += 3;
+					m_bPortalClear = true;
 				}
-				else
+				else if (m_bPortalClear)
+				{
 					m_pTriggerSystem->Next_TriggerOn();
+					m_bPortalClear = false;
+				}
 			}
 			else if (m_pTriggerSystem->Get_CurrentTriggerNumber() == 5)
 			{
@@ -219,9 +221,13 @@ _int CStage1::Tick(_double TimeDelta)
 					Open_Potal(XMVectorSet(-127.f, 19.f, 214.f, 1.f), (_uint)GAMEOBJECT::MONSTER_SHOOTER);
 					m_iCountMonster += 2;
 					m_iPortalCount += 2;
+					m_bPortalClear = true;
 				}
-				else
+				else if (m_bPortalClear)
+				{
+					m_bPortalClear = false;
 					m_pTriggerSystem->Next_TriggerOn();
+				}
 			}
 			else if (m_pTriggerSystem->Get_CurrentTriggerNumber() == 7)
 			{
@@ -233,9 +239,13 @@ _int CStage1::Tick(_double TimeDelta)
 					Open_Potal(XMVectorSet(-173.f, 29.f, 300.f, 1.f), (_uint)GAMEOBJECT::MONSTER_SHOOTER);
 					m_iCountMonster += 4;
 					m_iPortalCount += 4;
+					m_bPortalClear = true;
 				}
-				else
+				else if (m_bPortalClear)
+				{
 					m_pTriggerSystem->Next_TriggerOn();
+					m_bPortalClear = false;
+				}
 			}
 			else
 				m_pTriggerSystem->Check_Clear();
@@ -325,20 +335,14 @@ _int CStage1::Tick(_double TimeDelta)
 	g_pDropManager->Tick();
 	m_pIndicatorManager->Active_Indicator();
 
-	//m_pScenemaManager->Tick(TimeDelta);
-
-	//if (m_pCinema && m_pCinema->Get_Active())
-	//{
-	//	m_pCinema->Tick(TimeDelta);
-	//	if (!m_pCinema->Get_Active())
-	//		m_pCinema = nullptr;
-	//}
-
 	/*For Cinema*/
-	//if (g_pGameInstance->getkeyDown(DIK_END))
-	//	m_pScenemaManager->Active_Scenema((_uint)CINEMA_INDEX::CINEMA2_1);
+	if (m_pScenemaManager)
+	{
+		if (g_pGameInstance->getkeyDown(DIK_END))
+			m_pScenemaManager->Active_Scenema((_uint)CINEMA_INDEX::CINEMA2_3);
 
-	//m_pScenemaManager->Tick(TimeDelta);
+		m_pScenemaManager->Tick(TimeDelta);
+	}
 
 	/*for Meteor*/
 	//m_fAccMeteorStartTime += (_float)TimeDelta;
@@ -350,14 +354,13 @@ _int CStage1::Tick(_double TimeDelta)
 
 _int CStage1::LateTick(_double TimeDelta)
 {
-	//m_pScenemaManager->LateTick(TimeDelta);
+	if(m_pScenemaManager)
+		m_pScenemaManager->LateTick(TimeDelta);
 	return _int();
 }
 
 HRESULT CStage1::Render()
 {
-
-
 #ifdef _DEBUG
 	if (nullptr != m_pTriggerSystem)
 	{
@@ -646,7 +649,7 @@ HRESULT CStage1::Ready_GameManager(void)
 		return E_FAIL;
 
 	m_pIndicatorManager = GET_INSTANCE(CIndicator_Manager);
-	//m_pScenemaManager = GET_INSTANCE(CScenematicManager);
+	m_pScenemaManager = GET_INSTANCE(CScenematicManager);
 
 
 	return S_OK;
@@ -1245,6 +1248,13 @@ HRESULT CStage1::Ready_Cinema()
 		return E_FAIL;
 	if (FAILED(m_pScenemaManager->Add_Scenema(CCinema2_1::Create(m_pDevice, m_pDeviceContext, (_uint)SCENEID::SCENE_STAGE1))))
 		return E_FAIL;
+	if (FAILED(m_pScenemaManager->Add_Scenema(CCinema2_2::Create(m_pDevice, m_pDeviceContext, (_uint)SCENEID::SCENE_STAGE1))))
+		return E_FAIL;
+	if (FAILED(m_pScenemaManager->Add_Scenema(CCinema2_3::Create(m_pDevice, m_pDeviceContext, (_uint)SCENEID::SCENE_STAGE1))))
+		return E_FAIL;
+	if (FAILED(m_pScenemaManager->Add_Scenema(CCinema2_4::Create(m_pDevice, m_pDeviceContext, (_uint)SCENEID::SCENE_STAGE1))))
+		return E_FAIL;
+
 	return S_OK;
 }
 
@@ -1591,7 +1601,7 @@ void CStage1::Trgger_Function5()
 		(*iter)->setActive(true);
 		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 	}
-	m_iCountMonster = 9;
+	m_iCountMonster = 10;
 }
 //힐러1마리 소드 2마리(포탈 3개)
 void CStage1::Trgger_Function7()
@@ -2159,8 +2169,8 @@ void CStage1::Free()
 {
 	CLevel::Free();
 
-	//Safe_Release(m_pScenemaManager);
-	//CScenematicManager::DestroyInstance();
+	Safe_Release(m_pScenemaManager);
+	CScenematicManager::DestroyInstance();
 
 	if(g_pInteractManager)
 		g_pInteractManager->Remove_Interactable();

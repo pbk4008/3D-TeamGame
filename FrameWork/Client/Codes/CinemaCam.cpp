@@ -2,6 +2,7 @@
 #include "CinemaCam.h"
 #include "HierarchyNode.h"
 #include "Animation.h"
+#include "Camera.h"
 
 CCinemaCam::CCinemaCam()
 	:m_pCamera(nullptr)
@@ -65,13 +66,13 @@ _int CCinemaCam::Tick(_double TimeDelta)
 
 	/*_matrix matPivot = XMMatrixRotationY(XMConvertToRadians(270.f)) * XMMatrixTranslation(3.f, -5.f, 15.f);
 	m_pModel->Set_PivotMatrix(matPivot);*/
-	CHierarchyNode* pBorn = Get_CamBone();
+	CHierarchyNode* pBorn = m_pModel->Get_BoneMatrix("camera_bone");
 	_matrix matBone = pBorn->Get_CombinedMatrix()*m_pModel->Get_PivotMatrix();
 	//matBone *= (XMMatrixRotationY(XMConvertToRadians(270.f))*XMMatrixTranslation(3.f,-5.f,15.f));
 	matBone *= m_pTransform->Get_WorldMatrix();
 	m_pCamera->Update_Matrix(matBone);
 
-	Get_CamMoveEnd();
+	//Get_CamMoveEnd();
 
 	return _int();
 }
@@ -124,12 +125,36 @@ void CCinemaCam::Reset_Camera()
 
 void CCinemaCam::Add_Fov(_float fSpeed)
 {
-	m_pCamera->Change_Fov(fSpeed);
+	_float fAngle = m_pCamera->Get_FovAngle();
+	fAngle += fSpeed;
+	m_pCamera->Change_Fov(fAngle);
 }
 
 void CCinemaCam::Minus_Fov(_float fSpeed)
 {
-	m_pCamera->Change_Fov(-fSpeed);
+	_float fAngle = m_pCamera->Get_FovAngle();
+	fAngle -= fSpeed;
+	m_pCamera->Change_Fov(fAngle);
+}
+
+void CCinemaCam::Set_Fov(_float fSpeed, _float fGoalAngle)
+{
+	_float fAngle = m_pCamera->Get_FovAngle();
+	if (fSpeed < 0.f)
+	{
+		if (fGoalAngle < fAngle)
+			Add_Fov(fSpeed);
+	}
+	else
+	{
+		if (fGoalAngle > fAngle)
+			Add_Fov(fSpeed);
+	}
+}
+
+void CCinemaCam::Set_Fov(_float fAngle)
+{
+	m_pCamera->Change_Fov(fAngle);
 }
 
 HRESULT CCinemaCam::Set_Camera(_uint iSceneTag)
@@ -145,6 +170,15 @@ HRESULT CCinemaCam::Set_Camera(_uint iSceneTag)
 		break;
 	case (_uint)CINEMA_INDEX::CINEMA2_1:
 		hr = CGameObject::SetUp_Components(m_iSceneID, L"Model_Cinema_Cam2_1", L"CamModel", (CComponent**)&m_pModel);
+		break;
+	case (_uint)CINEMA_INDEX::CINEMA2_2:
+		hr = CGameObject::SetUp_Components(m_iSceneID, L"Model_Cinema_Cam2_2", L"CamModel", (CComponent**)&m_pModel);
+		break;
+	case (_uint)CINEMA_INDEX::CINEMA2_3:
+		hr = CGameObject::SetUp_Components(m_iSceneID, L"Model_Cinema_Cam2_3", L"CamModel", (CComponent**)&m_pModel);
+		break;
+	case (_uint)CINEMA_INDEX::CINEMA2_4:
+		hr = CGameObject::SetUp_Components(m_iSceneID, L"Model_Cinema_Cam2_4", L"CamModel", (CComponent**)&m_pModel);
 		break;
 	}
 
@@ -165,10 +199,10 @@ CHierarchyNode* CCinemaCam::Get_CamBone()
 		pBorn=m_pModel->Get_BoneMatrix("Camera_01_born");
 		break;
 	case (_uint)CINEMA_INDEX::CINEMA1_2:
-		pBorn=m_pModel->Get_BoneMatrix("Camera_02_born");
+		pBorn=m_pModel->Get_BoneMatrix("Shot_02_born");
 		break;
 	case (_uint)CINEMA_INDEX::CINEMA2_1:
-		pBorn=m_pModel->Get_BoneMatrix("Shot_003_01_born");
+		pBorn=m_pModel->Get_BoneMatrix("joint1");
 		break;
 	}
 	return pBorn;

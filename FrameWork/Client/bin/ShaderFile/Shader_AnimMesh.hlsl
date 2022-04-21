@@ -15,6 +15,7 @@ struct BoneMatrixArray
 cbuffer	BoneMatricesBuffer
 {
 	BoneMatrixArray		g_BoneMatrices;
+	BoneMatrixArray		g_OldBoneMatrices;
 };
 
 
@@ -95,6 +96,10 @@ struct PS_OUT
 	vector		vDepth : SV_TARGET2;
 };
 
+struct PS_TEST
+{
+	vector vColor : SV_TARGET0;
+};
 PS_OUT PS_MAIN(PS_IN In)
 {
 	PS_OUT		Out = (PS_OUT)0;
@@ -108,6 +113,16 @@ PS_OUT PS_MAIN(PS_IN In)
 	Out.vDepth = vector(In.vProjPos.z / In.vProjPos.w, In.vProjPos.w / 300.0f, 0.0f, 0.0f);
 
 	return Out;	
+}
+
+PS_TEST PS_Test(PS_IN In)
+{
+	PS_TEST Out = (PS_TEST)0;
+
+	Out.vColor = g_DiffuseTexture.Sample(DefaultSampler, In.vTexUV.xy);
+	Out.vColor.a = 1.f;
+
+	return Out;
 }
 
 technique11			DefaultTechnique
@@ -134,6 +149,17 @@ technique11			DefaultTechnique
 		VertexShader = compile vs_5_0 VS_MAIN_ANIM();
 		GeometryShader = NULL;
 		PixelShader = compile ps_5_0  PS_MAIN();
+	}
+
+	pass Test
+	{
+		SetRasterizerState(CullMode_Default);
+		SetDepthStencilState(ZDefault, 0);
+		SetBlendState(BlendDisable, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+
+		VertexShader = compile vs_5_0 VS_MAIN_ANIM();
+		GeometryShader = NULL;
+		PixelShader = compile ps_5_0  PS_Test();
 	}
 }
 

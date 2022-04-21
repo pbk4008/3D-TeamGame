@@ -17,6 +17,7 @@
 #include "Bastion_Sword_Paring.h"
 #include "Bastion_Sword_Turn.h"
 #include "Bastion_Sword_Walk.h"
+#include "Bastion_Sword_Excution.h"
 
 #include "Stage1.h"
 #include "Stage2.h"
@@ -384,6 +385,9 @@ HRESULT CMonster_Bastion_Sword::Set_Animation_FSM()
 	pAnim = m_pModel->Get_Animation("Paring");
 	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::PARING, (_uint)ANIM_TYPE::HEAD, pAnim, true, false, false, ERootOption::XYZ)))
 		return E_FAIL;
+	pAnim = m_pModel->Get_Animation("Excution");
+	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::EXCUTION, (_uint)ANIM_TYPE::HEAD, pAnim, true, true, false, ERootOption::XYZ)))
+		return E_FAIL;
 
 	////////////////Walk_BackWard
 	pAnim = m_pModel->Get_Animation("Walk_BackWard_Start");
@@ -503,6 +507,7 @@ HRESULT CMonster_Bastion_Sword::Set_Animation_FSM()
 	m_pAnimator->Insert_AnyEntryAnimation((_uint)ANIM_TYPE::RIGHTWALK_START);
 
 	m_pAnimator->Insert_AnyEntryAnimation((_uint)ANIM_TYPE::TURN);
+	m_pAnimator->Insert_AnyEntryAnimation((_uint)ANIM_TYPE::EXCUTION);
 
 
 	//애니메이션 체인지(바꿀 애)
@@ -571,6 +576,11 @@ HRESULT CMonster_Bastion_Sword::Set_State_FSM()
 	lstrcpy(tMoveDesc.pName, L"Walk");
 	if (FAILED(m_pStateController->Add_State(L"Walk", CBastion_Sword_Walk::Create(m_pDevice, m_pDeviceContext, &tMoveDesc))))
 		return E_FAIL;
+
+	lstrcpy(tActorDesc.pName, L"Excution");
+	if (FAILED(m_pStateController->Add_State(L"Excution", CBastion_Sword_Excution::Create(m_pDevice, m_pDeviceContext, &tActorDesc))))
+		return E_FAIL;
+
 
 	m_pStateController->Change_State(L"Idle");
 

@@ -14,6 +14,8 @@ public:
 	virtual HRESULT Render();
 private:
 	HRESULT Ready_GameObejct();
+private:
+	CModel* m_pModel;
 public:
 	static CLevel_Logo* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);
 	virtual void Free() override;

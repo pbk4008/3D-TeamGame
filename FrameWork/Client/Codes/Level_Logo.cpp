@@ -16,6 +16,9 @@ HRESULT CLevel_Logo::NativeConstruct()
 	if (FAILED(Ready_GameObejct()))
 		return E_FAIL;
 
+
+
+
 	return S_OK;
 }
 

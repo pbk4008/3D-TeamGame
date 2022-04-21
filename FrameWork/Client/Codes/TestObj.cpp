@@ -2,35 +2,29 @@
 #include "TestObj.h"
 
 CTestObj::CTestObj()
-	: m_pBoxCollider(nullptr)
-	, m_pSphereCollider(nullptr)
-	, m_pCapsuleCollider(nullptr)
 {
 }
 
 CTestObj::CTestObj(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
 	: CGameObject(pDevice, pDeviceContext)
-	, m_pBoxCollider(nullptr)
-	, m_pSphereCollider(nullptr)
-	, m_pCapsuleCollider(nullptr)
 {
 }
 
 CTestObj::CTestObj(const CTestObj& rhs)
 	: CGameObject(rhs)
-	, m_pBoxCollider(rhs.m_pBoxCollider)
-	, m_pSphereCollider(rhs.m_pSphereCollider)
-	, m_pCapsuleCollider(rhs.m_pCapsuleCollider)
 {
-	Safe_AddRef(m_pBoxCollider);
-	Safe_AddRef(m_pSphereCollider);
-	Safe_AddRef(m_pCapsuleCollider);
+	
 }
 
 HRESULT CTestObj::NativeConstruct_Prototype()
 {
 	if (FAILED(CGameObject::NativeConstruct_Prototype()))
 		return E_FAIL;
+
+	_matrix matPivot = XMMatrixIdentity();
+	m_pModel = CModel::Create(m_pDevice, m_pDeviceContext, "../bin/FBX/Cinema/Test_box/", "test_po.fbx"
+		, L"../../Reference/ShaderFile/Shader_StaticMesh.hlsl", matPivot, CModel::TYPE_STATIC,true);
+	m_pModel = static_cast<CModel*>(m_pModel->Clone(nullptr));
 
 	return S_OK;
 }
@@ -40,50 +34,35 @@ HRESULT CTestObj::NativeConstruct(const _uint _iSceneID, void* pArg)
 	if (FAILED(CGameObject::NativeConstruct(_iSceneID, pArg)))
 		return E_FAIL;
 
-	if (pArg)
-		memcpy_s(&m_tTestDesc, sizeof(TESTDESC), pArg, sizeof(TESTDESC));
-
-	m_pTransform->Set_TransformDesc(5.f, 10.f);
-	m_pTransform->Set_State(CTransform::STATE_POSITION, XMVectorSetW(XMLoadFloat3(&m_tTestDesc.vPosition), 1.f));
 	
-	CCollider::DESC tColliderDesc;
-	tColliderDesc.isTrigger = m_tTestDesc.isTrigger;
-	tColliderDesc.eRigidType = m_tTestDesc._eRigidType;
-	tColliderDesc.pGameObject = this;
-
-	CBoxCollider::DESC tBoxColliderDesc;
-	tBoxColliderDesc.tColliderDesc = tColliderDesc;
-	tBoxColliderDesc.vScale = { 1.f, 1.f, 1.f };
-	if (FAILED(SetUp_Components(m_iSceneID, L"Proto_Component_BoxCollider", L"BoxCollider", (CComponent**)&m_pBoxCollider, &tBoxColliderDesc)))
-		return E_FAIL;
-
-	m_isMove = m_tTestDesc.isMove;
-
 	return S_OK;
 }
 
 _int CTestObj::Tick(_double TimeDelta)
 {
-	move(TimeDelta);
-
-	if(m_pBoxCollider)
-		m_pBoxCollider->Tick(TimeDelta);
-	if(m_pSphereCollider)
-		m_pSphereCollider->Tick(TimeDelta);
-	if (m_pCapsuleCollider)
-		m_pCapsuleCollider->Tick(TimeDelta);
 
 	return _int();
 }
 
 _int CTestObj::LateTick(_double TimeDelta)
 {
-	m_pRenderer->Add_RenderGroup(CRenderer::RENDER_PRIORITY, this);
+	m_pRenderer->Add_RenderGroup(CRenderer::RENDER_NONALPHA, this);
 	return _int();
 }
 
 HRESULT CTestObj::Render()
 {
+	_matrix matIdentity = XMMatrixIdentity();
+	wstring CameraTag = g_pGameInstance->Get_BaseCameraTag();
+	_matrix ViewMatrix = XMMatrixTranspose(g_pGameInstance->Get_Transform(CameraTag, TRANSFORMSTATEMATRIX::D3DTS_VIEW));
+	_matrix ProjMatrix = XMMatrixTranspose(g_pGameInstance->Get_Transform(CameraTag, TRANSFORMSTATEMATRIX::D3DTS_PROJECTION));
+	m_pModel->SetUp_ValueOnShader("g_WorldMatrix", &matIdentity, sizeof(_matrix));
+	m_pModel->SetUp_ValueOnShader("g_ViewMatrix", &ViewMatrix, sizeof(_matrix));
+	m_pModel->SetUp_ValueOnShader("g_ProjMatrix", &ProjMatrix, sizeof(_matrix));
+
+	_uint iSize = m_pModel->Get_MaterialCount();
+	for (_uint i = 0; i < iSize; i++)
+		m_pModel->Render(i, 2);
 
 	return S_OK;
 }
@@ -156,8 +135,5 @@ CGameObject* CTestObj::Clone(const _uint _iSceneID, void* pArg)
 
 void CTestObj::Free()
 {
-	Safe_Release(m_pBoxCollider);
-	Safe_Release(m_pSphereCollider);
-	Safe_Release(m_pCapsuleCollider);
 	CGameObject::Free();
 }

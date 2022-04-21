@@ -289,6 +289,7 @@ call Update_Client.bat</Command>
     <ClInclude Include="..\Headers\Bastion_Sword_Attack.h" />
     <ClInclude Include="..\Headers\Bastion_Sword_Chase.h" />
     <ClInclude Include="..\Headers\Bastion_Sword_Death.h" />
+    <ClInclude Include="..\Headers\Bastion_Sword_Excution.h" />
     <ClInclude Include="..\Headers\Bastion_Sword_Groggy.h" />
     <ClInclude Include="..\Headers\Bastion_Sword_Hit.h" />
     <ClInclude Include="..\Headers\Bastion_Sword_Idle.h" />
@@ -300,6 +301,7 @@ call Update_Client.bat</Command>
     <ClInclude Include="..\Headers\BronzeAnimus_Battle_Idle.h" />
     <ClInclude Include="..\Headers\BronzeAnimus_Chaser.h" />
     <ClInclude Include="..\Headers\BronzeAnimus_Death.h" />
+    <ClInclude Include="..\Headers\BronzeAnimus_Excution.h" />
     <ClInclude Include="..\Headers\BronzeAnimus_Groggy.h" />
     <ClInclude Include="..\Headers\BronzeAnimus_Hit.h" />
     <ClInclude Include="..\Headers\BronzeAnimus_Idle.h" />
@@ -317,6 +319,9 @@ call Update_Client.bat</Command>
     <ClInclude Include="..\Headers\Cinema1_1.h" />
     <ClInclude Include="..\Headers\Cinema1_2.h" />
     <ClInclude Include="..\Headers\Cinema2_1.h" />
+    <ClInclude Include="..\Headers\Cinema2_2.h" />
+    <ClInclude Include="..\Headers\Cinema2_3.h" />
+    <ClInclude Include="..\Headers\Cinema2_4.h" />
     <ClInclude Include="..\Headers\CinemaActor.h" />
     <ClInclude Include="..\Headers\CinemaCam.h" />
     <ClInclude Include="..\Headers\Client_Observer.h" />
@@ -367,6 +372,7 @@ call Update_Client.bat</Command>
     <ClInclude Include="..\Headers\JumpNode.h" />
     <ClInclude Include="..\Headers\JumpTrigger.h" />
     <ClInclude Include="..\Headers\Level_Logo.h" />
+    <ClInclude Include="..\Headers\Shooter_Excution.h" />
     <ClInclude Include="..\Headers\UI_LevelUP_Background.h" />
     <ClInclude Include="..\Headers\UI_LevelUP_BG_Left.h" />
     <ClInclude Include="..\Headers\UI_LevelUP_BG_Right.h" />
@@ -680,6 +686,7 @@ call Update_Client.bat</Command>
     <ClCompile Include="..\Codes\Bastion_Sword_Attack.cpp" />
     <ClCompile Include="..\Codes\Bastion_Sword_Chase.cpp" />
     <ClCompile Include="..\Codes\Bastion_Sword_Death.cpp" />
+    <ClCompile Include="..\Codes\Bastion_Sword_Excution.cpp" />
     <ClCompile Include="..\Codes\Bastion_Sword_Groggy.cpp" />
     <ClCompile Include="..\Codes\Bastion_Sword_Hit.cpp" />
     <ClCompile Include="..\Codes\Bastion_Sword_Idle.cpp" />
@@ -690,6 +697,7 @@ call Update_Client.bat</Command>
     <ClCompile Include="..\Codes\BronzeAnimus_Battle_Idle.cpp" />
     <ClCompile Include="..\Codes\BronzeAnimus_Chaser.cpp" />
     <ClCompile Include="..\Codes\BronzeAnimus_Death.cpp" />
+    <ClCompile Include="..\Codes\BronzeAnimus_Excution.cpp" />
     <ClCompile Include="..\Codes\BronzeAnimus_Groggy.cpp" />
     <ClCompile Include="..\Codes\BronzeAnimus_Hit.cpp" />
     <ClCompile Include="..\Codes\BronzeAnimus_Idle.cpp" />
@@ -705,6 +713,9 @@ call Update_Client.bat</Command>
     <ClCompile Include="..\Codes\Cinema1_1.cpp" />
     <ClCompile Include="..\Codes\Cinema1_2.cpp" />
     <ClCompile Include="..\Codes\Cinema2_1.cpp" />
+    <ClCompile Include="..\Codes\Cinema2_2.cpp" />
+    <ClCompile Include="..\Codes\Cinema2_3.cpp" />
+    <ClCompile Include="..\Codes\Cinema2_4.cpp" />
     <ClCompile Include="..\Codes\CinemaActor.cpp" />
     <ClCompile Include="..\Codes\CinemaCam.cpp" />
     <ClCompile Include="..\Codes\Client_Observer.cpp" />
@@ -751,6 +762,7 @@ call Update_Client.bat</Command>
     <ClCompile Include="..\Codes\ItemData.cpp" />
     <ClCompile Include="..\Codes\JumpBox.cpp" />
     <ClCompile Include="..\Codes\JumpTrigger.cpp" />
+    <ClCompile Include="..\Codes\Shooter_Excution.cpp" />
     <ClCompile Include="..\Codes\UI_LevelUP_Background.cpp" />
     <ClCompile Include="..\Codes\UI_LevelUP_BG_Left.cpp" />
     <ClCompile Include="..\Codes\UI_LevelUP_BG_Right.cpp" />
