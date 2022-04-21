@@ -2067,9 +2067,6 @@
     <ClInclude Include="..\Headers\Silvermane_Execution.h">
       <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Execution</Filter>
     </ClInclude>
-    <ClInclude Include="..\Headers\Execution_Mook.h">
-      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Execution</Filter>
-    </ClInclude>
     <ClInclude Include="..\Headers\Effect_FloatingUp.h">
       <Filter>02.GameObject\04.Effect\00.Particle\07.Effect_FloatingUp</Filter>
     </ClInclude>
@@ -3198,9 +3195,6 @@
       <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Idel</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\Silvermane_Execution.cpp">
-      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Execution</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Codes\Execution_Mook.cpp">
       <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Execution</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\Effect_FloatingUp.cpp">

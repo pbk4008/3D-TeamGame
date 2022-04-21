@@ -351,7 +351,6 @@ call Update_Client.bat</Command>
     <ClInclude Include="..\Headers\Effect_HitParticle.h" />
     <ClInclude Include="..\Headers\Environment.h" />
     <ClInclude Include="..\Headers\EquipmentData.h" />
-    <ClInclude Include="..\Headers\Execution_Mook.h" />
     <ClInclude Include="..\Headers\Explosion_Rock.h" />
     <ClInclude Include="..\Headers\FlyingShield.h" />
     <ClInclude Include="..\Headers\Fury.h" />
@@ -737,7 +736,6 @@ call Update_Client.bat</Command>
     <ClCompile Include="..\Codes\Effect_HitFloating.cpp" />
     <ClCompile Include="..\Codes\Effect_HitParticle.cpp" />
     <ClCompile Include="..\Codes\EquipmentData.cpp" />
-    <ClCompile Include="..\Codes\Execution_Mook.cpp" />
     <ClCompile Include="..\Codes\Explosion_Rock.cpp" />
     <ClCompile Include="..\Codes\FlyingShield.cpp" />
     <ClCompile Include="..\Codes\Fury.cpp" />

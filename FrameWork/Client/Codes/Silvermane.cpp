@@ -164,7 +164,7 @@
 ///////////////////////////////////////////// Heal
 #include "Silvermane_Heal.h"
 ///////////////////////////////////////////// Execution
-#include "Execution_Mook.h"
+#include "Silvermane_Execution.h"
 #pragma endregion
 
 #include "Material.h"
@@ -863,7 +863,7 @@ HRESULT CSilvermane::Ready_States()
 	if (FAILED(m_pStateController->Add_State(L"Silvermane_Heal", CSilvermane_Heal::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 	// Execution
-	if (FAILED(m_pStateController->Add_State(L"Execution_Mook", CExecution_Mook::Create(m_pDevice, m_pDeviceContext))))
+	if (FAILED(m_pStateController->Add_State(L"Execution", CSilvermane_Execution::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 
 	for (auto& pair : m_pStateController->Get_States())
@@ -1937,18 +1937,20 @@ const void CSilvermane::Raycast_DropBox(const _double& _dDeltaTime)
 	//else
 	//	static_cast<CDropBox*>(pHitObject)->FocusExit();
 
-	if (!m_isExecution && g_pGameInstance->getkeyDown(DIK_F))
+	switch (iObjectTag)
 	{
-		switch (iObjectTag)
+	case (_uint)GAMEOBJECT::MONSTER_ABERRANT:
+	case (_uint)GAMEOBJECT::MIDDLE_BOSS:
+		if (static_cast<CActor*>(pHitObject)->Get_Groggy())
 		{
-		case (_uint)GAMEOBJECT::MONSTER_ABERRANT:
-			if (!static_cast<CActor*>(pHitObject)->Get_Groggy())
-				return;
-			m_pTargetExecution = static_cast<CActor*>(pHitObject);
-			m_pTargetExecution->Execution();
-			Set_Execution(true);
-			break;
+			if (!m_isExecution && g_pGameInstance->getkeyDown(DIK_F))
+			{
+				m_pTargetExecution = static_cast<CActor*>(pHitObject);
+				m_pTargetExecution->Execution();
+				Set_Execution(true);
+			}
 		}
+		break;
 	}
 }
 
@@ -1963,7 +1965,7 @@ void CSilvermane::Set_Execution(const _bool _isExecution, CActor* _pTarget)
 		case true:
 			pEyeBone = m_pModel->Get_BoneMatrix("camera_location_1");
 			pAtBone = m_pModel->Get_BoneMatrix("camera_look_at_1");
-			m_pStateController->Change_State(L"Execution_Mook");
+			m_pStateController->Change_State(L"Execution");
 			break;
 		case false:
 			m_pTargetExecution = nullptr;

@@ -4,7 +4,7 @@
 
 BEGIN(Client)
 
-class CSilvermane_Execution abstract : public CState_Silvermane
+class CSilvermane_Execution : public CState_Silvermane
 {
 protected:
 	explicit CSilvermane_Execution(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext);
@@ -25,6 +25,7 @@ protected:
 	virtual _int Input(const _double & _dDeltaTime);
 
 public:
+	static CSilvermane_Execution* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext, void* _pArg = nullptr);
 	virtual void Free() override;
 };
 
