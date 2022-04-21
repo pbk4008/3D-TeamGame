@@ -10,6 +10,11 @@ cbuffer Matrices
 	matrix		g_ProjMatrix;
 };
 
+cbuffer fadeinout
+{
+	bool g_Fade = false;
+	float g_Alpha = 0.f;
+};
 Texture2D		g_DiffuseTexture;
 
 sampler DefaultSampler = sampler_state
@@ -111,6 +116,10 @@ PS_OUT PS_MAIN(PS_IN In)
 
 	Out.vColor = g_DiffuseTexture.Sample(DefaultSampler, In.vTexUV);
 
+	if (g_Fade == true)
+	{
+		Out.vColor.a *= g_Alpha;
+	}
 	//if (Out.vColor.a <= 0.1)
 	//	discard;
 	

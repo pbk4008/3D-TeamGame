@@ -177,13 +177,6 @@ HRESULT CBronzeAnimus_Attack::ExitState(void* pArg)
 
 void CBronzeAnimus_Attack::Look_Player(void)
 {
-	CAnimation* pAnim = m_pAnimator->Get_CurrentAnimation();
-
-	if (pAnim->Is_Finished())
-	{
-		m_bAttackEnd = true;
-		m_pStateController->Change_State(L"A_Idle_Battle");
-	}
 }
 
 void CBronzeAnimus_Attack::Look_Monster(void)

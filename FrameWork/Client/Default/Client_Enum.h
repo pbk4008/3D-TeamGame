@@ -4,7 +4,7 @@
 
 BEGIN(Client)
 enum class SCENEID {SCENE_STATIC, SCENE_LOADING, SCENE_LOGO, SCENE_STAGE1, SCENE_STAGE2, SCENE_STAGE3,SCENE_TEST_JS, SCENE_END};
-enum class CINEMA_INDEX{CINEMA1_1, CINEMA1_2, CINEMA2_1, CINEMA_END};
+enum class CINEMA_INDEX{CINEMA1_1, CINEMA1_2, CINEMA2_1, CINEMA2_2, CINEMA2_3, CINEMA2_4, CINEMA_END};
 enum class CINEMA_ACTOR {	ACTOR_SILVERMANE, ACTOR_GRAYEHAWK, ACTOR_PHOENIX, ACTOR_MIDBOSS, ACTOR_END};
 enum class GAMEOBJECT
 {
@@ -59,6 +59,7 @@ enum class EFFECT
 	GUARD,
 	ATTACK_LEFT,
 	ATTACK_RIGHT,
+	ATTACK_RIGHT_LAST,
 	HIT_GROUND,
 	OPENBOX,
 	ATTACK_GROUND,
@@ -69,6 +70,9 @@ enum class EFFECT
 	HIT_IMAGE,
 	DEAD_SMOKE,
 	EXPLOSION_ROCK_UP,
+	EXPLOSION_ROCK_LEFT,
+	EXPLOSION_ROCK_RIGHT,
+	EXPLOSION_ROCK,
 	HAMMER_DUST
 };
 
@@ -238,6 +242,38 @@ enum class EWeaponMaterial
 	MATERIAL_END
 };
 
+enum class EQuestTextType
+{
+	FindSunForge,   /* 태양로 입구를 찾으십시오 */
+	AllKillMonster, /* 모든 몬스터 처치 */
+	FindDropBox,    /* 은닉품 조사 */
+	ChageNewWeapon, /* 새로운 무기로 교체 */
+	QuestText_END
+};
+
+const wstring g_arrQuestTextTex[(int)EQuestTextType::QuestText_END]
+{
+	L"T_HUD_Find_Sunforge",
+	L"T_HUD_KillAllMonster",
+	L"T_HUD_Find_DropBox",
+	L"T_HUD_EquipNewWeapon"
+};
+
+enum class EQuestHeaderType
+{
+	FirestStep,     /* 첫걸음 */
+	Sunforge,		/* 태양로 신전 */
+	Boss,			/* 수호자 */
+	QuestHeader_END
+};
+
+const wstring g_arrQuestHeaderTex[(int)EQuestHeaderType::QuestHeader_END]
+{
+	L"T_HUD_FirstStep",
+	L"T_HUD_GUARD",
+	L"T_HUD_GUARD"
+};
+
 const wstring g_arrGradeName[(int)EEquipmentGradeUI::GRADE_END]
 {
 	L"일반",
@@ -246,6 +282,7 @@ const wstring g_arrGradeName[(int)EEquipmentGradeUI::GRADE_END]
 	L"영웅",
 	L"전설"
 };
+
 static TEXTURETYPE g_arrMI_Texture[(int)EWeaponMaterial::MATERIAL_END]
 {
 	TEXTURETYPE::TEX_DIFFUSE,

@@ -56,8 +56,8 @@ private:
 
 private:
 	CItemData	 m_droppedItem;
-	_float3      m_dropPos;
-	_float3		 m_scatteredPos;
+	_float4      m_dropPos;
+	_float4		 m_scatteredPos;
 	_float		 m_interactDist = 1.0f;
 	_float		 m_elapsed = 0.0f;
 	_bool		 m_bDrop = false;

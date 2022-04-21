@@ -31,6 +31,8 @@ _int C1H_SwordAttackNormalR1_04::Tick(const _double& _dDeltaTime)
 	{
 		if (!m_isShake2)
 		{
+			m_pSilvermane->Active_Effect_Target((_uint)EFFECT::ATTACK_RIGHT_LAST, g_pObserver->Get_PlayerWorldMatrix());
+
 			_float3 vPos; XMStoreFloat3(&vPos, m_pTransform->Get_State(CTransform::STATE_POSITION));
 			g_pShakeManager->Shake(m_tShakeEvent2, vPos);
 			m_isShake2 = true;
@@ -67,6 +69,9 @@ HRESULT C1H_SwordAttackNormalR1_04::EnterState()
 {
 	if (FAILED(__super::EnterState()))
 		return E_FAIL;
+
+	m_bEffectCheck = false;
+
 	g_pGameInstance->BlendSound(L"Needle_Attack_L_4", L"Needle_Attack_L_4_1", CSoundMgr::CHANNELID::Player_Sword_Attack, CSoundMgr::CHANNELID::Power_Resonance_01);
 
 	if (FAILED(m_pAnimationController->SetUp_NextAnimation("SK_Silvermane.ao|A_1H_Sword_Attack_Normal_R1_04", false)))

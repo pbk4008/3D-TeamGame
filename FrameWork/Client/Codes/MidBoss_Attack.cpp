@@ -59,6 +59,8 @@ _int CMidBoss_Attack::Tick(const _double& TimeDelta)
 		{
 			m_pMonster->Set_IsAttack(false);
 		}
+
+		m_pMonster->Set_AttackDesc_Dir(EAttackDir::Forward);
 	}
 	else if (CBoss_Bastion_Judicator::M_BossAnimState::ATTACK_LEGACY_H == m_pAnimator->Get_CurrentAnimNode())
 	{
@@ -91,12 +93,13 @@ _int CMidBoss_Attack::Tick(const _double& TimeDelta)
 		}
 		else
 			m_pMonster->Set_IsAttack(false);
+
+		m_pMonster->Set_AttackDesc_Dir(EAttackDir::Forward);
 	}
 
 	else if (CBoss_Bastion_Judicator::M_BossAnimState::SPRINT_ATTACK_H == m_pAnimator->Get_CurrentAnimNode())
 	{
 		cout << "SPRINT : " << iCurKeyFrameIndex << endl;
-
 		if (15 < iCurKeyFrameIndex && 27 > iCurKeyFrameIndex)
 		{
 			if (19 <= iCurKeyFrameIndex && 20 >= iCurKeyFrameIndex && false == m_bEffectCheck)
@@ -116,6 +119,7 @@ _int CMidBoss_Attack::Tick(const _double& TimeDelta)
 		else
 			m_pMonster->Set_IsAttack(false);
 
+		m_pMonster->Set_AttackDesc_Dir(EAttackDir::Forward);
 	}
 	else if (CBoss_Bastion_Judicator::M_BossAnimState::ATTACK_R1_H == m_pAnimator->Get_CurrentAnimNode())
 	{
@@ -139,6 +143,8 @@ _int CMidBoss_Attack::Tick(const _double& TimeDelta)
 		}
 		else
 			m_pMonster->Set_IsAttack(false);
+
+		m_pMonster->Set_AttackDesc_Dir(EAttackDir::Forward);
 	}
 	else if (CBoss_Bastion_Judicator::M_BossAnimState::ATTACK_R1 == m_pAnimator->Get_CurrentAnimNode())
 	{
@@ -152,6 +158,15 @@ _int CMidBoss_Attack::Tick(const _double& TimeDelta)
 			_uint iLevel = 3;
 			m_pMonster->Set_AttackDesc_Damaga(fDamage);
 			m_pMonster->Set_AttackDesc_Level(iLevel);
+
+			if (40 <= iCurKeyFrameIndex && 60 >= iCurKeyFrameIndex)
+			{
+				m_pMonster->Set_AttackDesc_Dir(EAttackDir::Right);
+			}
+			if (80 <= iCurKeyFrameIndex && 120 >= iCurKeyFrameIndex)
+			{
+				m_pMonster->Set_AttackDesc_Dir(EAttackDir::Left);
+			}
 		}
 
 		else
@@ -204,6 +219,8 @@ _int CMidBoss_Attack::Tick(const _double& TimeDelta)
 			m_bEffectCheck = false;
 			m_pMonster->Set_IsAttack(false);
 		}
+
+		m_pMonster->Set_AttackDesc_Dir(EAttackDir::Forward);
 	}
 	else if (CBoss_Bastion_Judicator::M_BossAnimState::ATTACK_S2 == m_pAnimator->Get_CurrentAnimNode())
 	{
@@ -220,6 +237,7 @@ _int CMidBoss_Attack::Tick(const _double& TimeDelta)
 			CGameObject* pHitObject = nullptr;
 			tOverlapDesc.ppOutHitObject = &pHitObject;
 			tOverlapDesc.filterData.flags = PxQueryFlag::eDYNAMIC;
+			tOverlapDesc.layerMask = (1 << (_uint)ELayer::Player);
 			if (g_pGameInstance->Overlap(tOverlapDesc))
 			{
 				_uint iSize = (_uint)tOverlapDesc.vecHitObjects.size();
@@ -281,6 +299,19 @@ HRESULT CMidBoss_Attack::EnterState()
 
 	m_pTransform->Face_Target(g_pObserver->Get_PlayerPos());
 
+
+	CCameraShake::SHAKEEVENT tShakeEvent;
+	tShakeEvent.fDuration = 1.f;
+	tShakeEvent.fBlendInTime = 0.2f;
+	tShakeEvent.fBlendOutTime = 0.8f;
+	tShakeEvent.tWaveY.fAmplitude = 1.f;
+	tShakeEvent.tWaveY.fFrequency = 0.1f;
+	tShakeEvent.tWaveY.fAdditionalOffset = 0.2f;
+	tShakeEvent.tWaveZ.fAmplitude = 1.f;
+	tShakeEvent.tWaveZ.fFrequency = 1.f;
+	tShakeEvent.tWaveZ.fAdditionalOffset = -1.f;
+
+	g_pShakeManager->Shake(tShakeEvent, m_pTransform->Get_State(CTransform::STATE_POSITION));
 
 	if (5.f > fDistToPlayer )
 	{

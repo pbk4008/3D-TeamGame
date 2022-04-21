@@ -15,7 +15,6 @@ CTestObj::CTestObj(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
 CTestObj::CTestObj(const CTestObj& rhs)
 	: CGameObject(rhs)
 {
-
 }
 
 HRESULT CTestObj::NativeConstruct_Prototype()
@@ -29,6 +28,7 @@ HRESULT CTestObj::NativeConstruct_Prototype()
 	pTexture = CTexture::Create(m_pDevice, m_pDeviceContext, L"../bin/FBX/Cinema/Test_box/test_box.dds", 1);
 	pMtrl->Set_Texture("g_DiffuseTexture", TEXTURETYPE::TEX_DIFFUSE, pTexture, 0);
 	g_pGameInstance->Add_Material(L"Mtrl_Test", pMtrl);
+
 
 	return S_OK;
 }
@@ -70,6 +70,7 @@ _int CTestObj::LateTick(_double TimeDelta)
 
 HRESULT CTestObj::Render()
 {
+
 	wstring CameraTag = g_pGameInstance->Get_BaseCameraTag();
 	_matrix matworld = XMMatrixTranspose(m_pTransform->Get_WorldMatrix());
 	_matrix ViewMatrix = XMMatrixTranspose(g_pGameInstance->Get_Transform(CameraTag, TRANSFORMSTATEMATRIX::D3DTS_VIEW));
@@ -83,6 +84,7 @@ HRESULT CTestObj::Render()
 		m_pModel->SetUp_TextureOnShader("g_DiffuseTexture", i, aiTextureType_DIFFUSE);
 		m_pModel->Render(i, 2);
 	}
+
 
 	return S_OK;
 }
@@ -156,6 +158,5 @@ CGameObject* CTestObj::Clone(const _uint _iSceneID, void* pArg)
 void CTestObj::Free()
 {
 	CGameObject::Free();
-
 	Safe_Release(m_pModel);
 }

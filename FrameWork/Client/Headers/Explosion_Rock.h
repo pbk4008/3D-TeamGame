@@ -8,6 +8,12 @@ END
 BEGIN(Client)
 class CExplosion_Rock final : public CEffect
 {
+public:
+	typedef struct tagRockInfo
+	{
+		_tchar		ModelTag[MAX_PATH]; //파일이름
+		_float3		ModelSize;
+	}ROCKINFO;
 private:
 	explicit CExplosion_Rock();
 	explicit CExplosion_Rock(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);
@@ -19,6 +25,7 @@ public:
 	virtual _int Tick(_double _dDeltaTime) override;
 	virtual _int LateTick(_double _dDeltaTime) override;
 	virtual HRESULT Render() override;
+	virtual HRESULT	Render_Velocity()  override;
 
 private:
 	virtual CEffect* Copy() override;
@@ -27,6 +34,8 @@ private:
 private:
 	HRESULT Ready_Component();
 	
+private:
+	ROCKINFO m_Desc;
 public:
 	static CExplosion_Rock* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);
 	virtual CEffect* Clone(const _uint iSceneID, void* pArg = nullptr) override;

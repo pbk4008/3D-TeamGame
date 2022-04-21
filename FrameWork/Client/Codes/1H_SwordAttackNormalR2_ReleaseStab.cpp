@@ -83,9 +83,8 @@ HRESULT C1H_SwordAttackNormalR2_ReleaseStab::EnterState()
 	m_iCutIndex = 26;
 	m_iAttackStartIndex = 10;
 	m_iAttackEndIndex = 20;
-
-	m_iTrailStartIndex = 10;
-	m_iTrailEndIndex = 25;
+	//m_iTrailStartIndex = 10;
+	//m_iTrailEndIndex = 25;
 
 
 	// Ω¶¿Ã≈© ø…º«

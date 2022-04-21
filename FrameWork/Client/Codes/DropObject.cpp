@@ -59,7 +59,7 @@ _int CDropObject::Tick(_double _dDeltaTime)
 		{
 			SetTakableState(true);
 			_vector Pos = { -0.04f, -0.1f, 0.f, 0.f };
-			//Active_Effect((_uint)EFFECT::ITEM, Pos);
+			Active_Effect((_uint)EFFECT::ITEM, Pos);
 		}
 		_vector point = m_pSplineCurve->GetPoint(m_elapsed / m_dropDurtaion);
 		point = XMVectorSetW(point, 1.f);
@@ -181,10 +181,8 @@ void CDropObject::Drop(CItemData itemData, _fvector dropPos, EScatterType scatte
 	setActive(true);
 	m_bDrop = true;
 	m_bTakable = false;
-	
-	XMStoreFloat3(&m_dropPos, dropPos);
+	XMStoreFloat4(&m_dropPos, dropPos);
 	m_droppedItem = itemData;
-	
 	m_pTransform->Set_State(CTransform::STATE_POSITION, dropPos);
 
 	if (EScatterType::Quad == scatterType)
@@ -192,38 +190,40 @@ void CDropObject::Drop(CItemData itemData, _fvector dropPos, EScatterType scatte
 		_vector pMin = XMVectorSet((m_dropPos.x - m_scatteredRadius), m_dropPos.y , (m_dropPos.z - m_scatteredRadius), 1.0f);
 		_vector pMax = XMVectorSet((m_dropPos.x + m_scatteredRadius), m_dropPos.y, (m_dropPos.z + m_scatteredRadius), 1.0f);
 
-		_vector Temp = XMLoadFloat3(&m_scatteredPos);
+		_vector Temp = XMLoadFloat4(&m_scatteredPos);
 		MathUtils::GetRandomVector(&Temp, &pMin, &pMax);
 
-		XMStoreFloat3(&m_scatteredPos, Temp);
+		XMStoreFloat4(&m_scatteredPos, Temp);
 	}
 	else if (EScatterType::Cone == scatterType)
 	{
-		_vector direction = XMVectorSet(0.f, 0.f, 1.f, 0.f);
-		_vector Up = XMVectorSet(0.f, 1.f, 0.f, 0.f);
+		_vector direction = { 0.f, 0.f, 1.f, 0.f };
 
-		_float rotAngle = (_float)MathUtils::ReliableRandom(0.f, 15.f);
-		_matrix coneMat;
 
-		coneMat = XMMatrixRotationAxis(Up, rotAngle);
-		direction = XMVector3TransformNormal(XMVector3Normalize(pSender->Get_State(CTransform::STATE_LOOK)), coneMat);
+		_float rotAngle = (_float)MathUtils::ReliableRandom(-1.0, 1.0);
+		_matrix coneMat = XMMatrixIdentity();
 
+		coneMat = XMMatrixRotationAxis(_fvector{ 0.f, 1.f, 0.f, 0.f }, rotAngle);
+		direction = XMVector3TransformNormal(XMVector4Normalize(pSender->Get_State(CTransform::STATE_LOOK)), coneMat);
+
+		_float4 temp;
+		XMStoreFloat4(&temp, direction);
 		_float factor = (_float)MathUtils::ReliableRandom(2, m_scatteredRadius);
-		XMStoreFloat3(&m_scatteredPos, XMLoadFloat3(&m_dropPos) + (direction * factor));
+		XMStoreFloat4(&m_scatteredPos, XMLoadFloat4(&m_dropPos) + (direction * factor));
 	}
 
 	m_elapsed = 0.0f;
 
-	_vector dir = MathUtils::Direction(XMLoadFloat3(&m_dropPos), XMLoadFloat3(&m_scatteredPos));
+	_vector dir = MathUtils::Direction(XMLoadFloat4(&m_dropPos), XMLoadFloat4(&m_scatteredPos));
 
 	// 회전관련 아직 보류
-	//m_pTransform->LookAt_RotYAxis(dir);
-	//	m_pTransform->Rotation_Axis(dir, g_pGameInstance->Get_TimeDelta(L"Timer_Default"));
+	m_pTransform->LookAt_RotYAxis(dir);
+
 	/* for. Spline Curve */
 	_vector p0;
-	_vector p1 = XMLoadFloat3(&m_dropPos);	    /* start */
+	_vector p1 = XMLoadFloat4(&m_dropPos);	    /* start */
 	_vector p2;								    /* curve */
-	_vector p3 = XMLoadFloat3(&m_scatteredPos); /* end */
+	_vector p3 = XMLoadFloat4(&m_scatteredPos); /* end */
 	_vector p4;
 
 	_float dist = MathUtils::Length(p3, p1);
@@ -237,12 +237,6 @@ void CDropObject::Drop(CItemData itemData, _fvector dropPos, EScatterType scatte
 	p2 = m_pTransform->Get_State(CTransform::STATE_POSITION) + temp;
 	p0 = p1 + (MathUtils::Direction(p2, p1));
 	p4 = p3 + (MathUtils::Direction(p2, p3));
-	
-	p0 = XMVectorSetW(p0, 1.f);
-	p1 = XMVectorSetW(p1, 1.f);
-	p2 = XMVectorSetW(p2, 1.f);
-	p3 = XMVectorSetW(p3, 1.f);
-	p4 = XMVectorSetW(p4, 1.f);
 
 	m_pSplineCurve->DeletePoints();
 	m_pSplineCurve->AddPoint(p0);
@@ -267,7 +261,7 @@ void CDropObject::Take(void)
  		m_pInventoryData->PushItem(m_droppedItem);
 
 		_vector pivot = { 0.f, -0.05f, 0.f, 0.f };
-		//Active_Effect((_uint)EFFECT::EAT_ITEM, pivot);
+		Active_Effect((_uint)EFFECT::EAT_ITEM, pivot);
 	}
 
 	m_bDead = true;
