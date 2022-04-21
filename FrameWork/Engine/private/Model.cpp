@@ -229,8 +229,6 @@ HRESULT CModel::NativeConstruct(void * pArg)
 				pHierarchyNode->Add_Channel(i, pChannel);
 			}
 		}
-
-
 		return S_OK;
 	}
 
@@ -247,11 +245,9 @@ HRESULT CModel::NativeConstruct(void * pArg)
 		for (auto& pMeshContainer : MtrlMeshContainers)
 			pMeshContainer->Add_Bone(this);
 	}
-	for (auto& pHierarchyNode : m_HierarchyNodes)
-	{
-		pHierarchyNode->Update_CombinedTransformationMatrix();
-	}
 	_uint iNumAnimation = m_pScene->mNumAnimations;
+	if (iNumAnimation == 0)
+		return S_OK;
 	for (_uint i = 0; i < iNumAnimation; i++)
 	{
 		vector<class CChannel*>& pChannels = m_Animations[i]->Get_Channels();
@@ -263,6 +259,10 @@ HRESULT CModel::NativeConstruct(void * pArg)
 				return E_FAIL;
 			pHierarchyNode->Add_Channel(i, pChannel);
 		}
+	}
+	for (auto& pHierarchyNode : m_HierarchyNodes)
+	{
+		pHierarchyNode->Update_CombinedTransformationMatrix();
 	}
 	return S_OK;
 }
@@ -673,12 +673,14 @@ HRESULT CModel::Create_MeshContainer()
 		CMeshContainer* pMeshContainer = CMeshContainer::Create(m_pDevice, m_pDeviceContext, this, pMesh, (m_eMeshType == TYPE_STATIC) ? XMLoadFloat4x4(&m_PivotMatrix) : XMMatrixIdentity());
 		if (!pMeshContainer)
 			return E_FAIL;
-		pMeshContainer->setMeshIndex(i);
 
 		if(!m_bUsingMaterial)
 			m_MeshContainers[pMesh->mMaterialIndex].emplace_back(pMeshContainer);
 		else
+		{
+			pMeshContainer->setMeshIndex(i);
 			m_MeshContainers[i].emplace_back(pMeshContainer);
+		}
 	}
 	
 	return S_OK;

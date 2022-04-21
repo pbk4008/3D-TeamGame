@@ -15,6 +15,7 @@
 #include "BronzeAnimus_Hit.h"
 #include "BronzeAnimus_Roar.h"
 #include "BronzeAnimus_Attack.h"
+#include "BronzeAnimus_Excution.h"
 
 #include "Stage1.h"
 
@@ -447,6 +448,10 @@ HRESULT CMonster_BronzeAnimus::Ready_AnimFSM(void)
 	pAnimation = m_pModel->Get_Animation("A_Stun_End");
 	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::A_STUN_ED, (_uint)ANIM_TYPE::A_STUN, pAnimation, TRUE, TRUE, FALSE, ERootOption::XYZ, FALSE)))
 		return E_FAIL;
+
+	pAnimation = m_pModel->Get_Animation("A_Excution");
+	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::A_EXCUTION, (_uint)ANIM_TYPE::A_HEAD, pAnimation, TRUE, TRUE, FALSE, ERootOption::XYZ, FALSE)))
+		return E_FAIL;
 #pragma endregion
 #pragma region Turn
 	//pAnimation = m_pModel->Get_Animation("A_Trun_45_Right");
@@ -480,6 +485,7 @@ HRESULT CMonster_BronzeAnimus::Ready_AnimFSM(void)
 	m_pAnimator->Insert_AnyEntryAnimation((_uint)ANIM_TYPE::A_TURN_180_RIGHT);
 	m_pAnimator->Insert_AnyEntryAnimation((_uint)ANIM_TYPE::A_TURN_90_RIGHT);
 	m_pAnimator->Insert_AnyEntryAnimation((_uint)ANIM_TYPE::A_TURN_90_RIGHT);
+	m_pAnimator->Insert_AnyEntryAnimation((_uint)ANIM_TYPE::A_EXCUTION);
 #pragma endregion
 
 #pragma region  Auto Change Anim

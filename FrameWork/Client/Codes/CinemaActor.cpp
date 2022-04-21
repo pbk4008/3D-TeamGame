@@ -115,26 +115,51 @@ HRESULT CCinemaActor::Render_Acoter()
 				MSGBOX("Fialed To Rendering Silvermane");
 		}
 	}
-	else
+	else if(m_iActorTag == (_uint)CINEMA_ACTOR::ACTOR_GRAYEHAWK)
 	{
-	
 		for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
 		{
-			if (i == 0 || i == 3)
+			switch (i)
 			{
+			case 0:
+				if (FAILED(m_pModel->Render(i, 2)))
+					MSGBOX("Failed To Rendering Actor");
+				break;
+			case 1:
+				if (FAILED(m_pModel->Render(i, 1)))
+					MSGBOX("Failed To Rendering Actor");
+				break;
+			case 2:
 				if (FAILED(m_pModel->Render(i, 0)))
-					MSGBOX("Failed To Rendering MidBoss");
-			}
-			else
-			{
-				if (FAILED(m_pModel->Render(i, i)))
-					MSGBOX("Failed To Rendering MidBoss");
+					MSGBOX("Failed To Rendering Actor");
+				break;
 			}
 		}
 	}
-
-
-
+	else if (m_iActorTag == (_uint)CINEMA_ACTOR::ACTOR_PHOENIX)
+	{
+		for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
+		{
+			switch (i)
+			{
+			case 0:
+				if (FAILED(m_pModel->Render(i, 1)))
+					MSGBOX("Failed To Rendering Actor");
+				break;
+			case 1:
+				if (FAILED(m_pModel->Render(i, 0)))
+					MSGBOX("Failed To Rendering Actor");
+				break;
+			case 2:
+				if (FAILED(m_pModel->Render(i, 2)))
+					MSGBOX("Failed To Rendering Actor");
+				break;
+			case 3:
+				if (FAILED(m_pModel->Render(i, 3)))
+					MSGBOX("Failed To Rendering Actor");
+			}
+		}
+	}
 	return S_OK;
 }
 

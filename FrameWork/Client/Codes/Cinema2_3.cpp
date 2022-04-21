@@ -1,10 +1,10 @@
 #include "pch.h"
-#include "Cinema2_1.h"
+#include "Cinema2_3.h"
 #include "CinemaCam.h"
 #include "CinemaActor.h"
 #include "ScenematicManager.h"
 
-CCinema2_1::CCinema2_1()
+CCinema2_3::CCinema2_3()
 	: m_pCam(nullptr)
 	, m_pSilvermane(nullptr)
 	, m_pMidBoss(nullptr)
@@ -12,7 +12,7 @@ CCinema2_1::CCinema2_1()
 {
 }
 
-CCinema2_1::CCinema2_1(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
+CCinema2_3::CCinema2_3(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
 	: CScenematic(pDevice, pDeviceContext)
 	, m_pCam(nullptr)
 	, m_pSilvermane(nullptr)
@@ -21,7 +21,7 @@ CCinema2_1::CCinema2_1(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContex
 {
 }
 
-HRESULT CCinema2_1::NativeContruct(_uint iSceneID)
+HRESULT CCinema2_3::NativeContruct(_uint iSceneID)
 {
 	if (FAILED(CScenematic::NativeContruct(iSceneID)))
 		return E_FAIL;
@@ -29,21 +29,21 @@ HRESULT CCinema2_1::NativeContruct(_uint iSceneID)
 	if (FAILED(Ready_Components()))
 		return E_FAIL;
 
-	_matrix matPivot = XMMatrixRotationY(XMConvertToRadians(270.f)) * XMMatrixTranslation(-191.f, 41.7f, 408.f);
+	_matrix matPivot = XMMatrixTranslation(-175.f, 51.f, 415.f);
 	m_pCam->Set_CameraMatrix(matPivot);
 
-	m_pSilvermane->Actor_AnimPlay(6);
+	m_pSilvermane->Actor_AnimPlay(8);
 	CTransform* pSilvermaneTr = m_pSilvermane->Get_Transform();
 	pSilvermaneTr->Set_State(CTransform::STATE_POSITION, XMVectorSet(-168.f, 51.f, 404.f, 1.f));
 
-	m_pMidBoss->Actor_AnimPlay(5);
+	m_pMidBoss->Actor_AnimPlay(7);
 	CTransform* pMidBossTr = m_pMidBoss->Get_Transform();
 	pMidBossTr->Set_State(CTransform::STATE_POSITION, XMVectorSet(-172.f, 57.f, 441.5f, 1.f));
 
 	return S_OK;
 }
 
-_int CCinema2_1::Tick(_double dDeltaTime)
+_int CCinema2_3::Tick(_double dDeltaTime)
 {
 	_uint iProgress=CScenematic::Tick(dDeltaTime);
 	if (iProgress == 1)
@@ -53,28 +53,29 @@ _int CCinema2_1::Tick(_double dDeltaTime)
 	//pSilvermaneTr->Set_State(CTransform::STATE_POSITION, XMVectorSet(-168.f, 51.f, 404.f,1.f));
 	m_pSilvermane->Tick(dDeltaTime);
 
-	/*CTransform* pBossTr = m_pMidBoss->Get_Transform();
-	pBossTr->Set_State(CTransform::STATE_POSITION, XMVectorSet(-172.f, 57.f, 441.5f, 1.f));*/
+	//CTransform* pBossTr = m_pMidBoss->Get_Transform();
+	//pBossTr->Set_State(CTransform::STATE_POSITION, XMVectorSet(-172.f, 57.f, 441.5f, 1.f));
 	m_pMidBoss->Tick(dDeltaTime);
 
-	_matrix matPivot = XMMatrixRotationY(XMConvertToRadians(270.f)) * XMMatrixTranslation(-191.f, 41.7f, 408.f);
-	m_pCam->Set_CameraMatrix(matPivot);
+	//_matrix matPivot = XMMatrixRotationY(XMConvertToRadians(270.f)) * XMMatrixTranslation(-175.f, 51.f, 415.f);
+	//m_pCam->Set_CameraMatrix(matPivot);
 	m_pCam->Tick(dDeltaTime);
 
+	int a = 10;
 
 	if (m_pCam->Get_CamMoveEnd())
 	{
 		m_bCinemaEnd = true;
 		m_pCam->Reset_Camera();
 		//CScenematicManager* pInstance = GET_INSTANCE(CScenematicManager);
-		//pInstance->Change_Cinema((_uint)CINEMA_INDEX::CINEMA2_2);
+		//pInstance->Change_Cinema((_uint)CINEMA_INDEX::CINEMA2_4);
 		//RELEASE_INSTANCE(CScenematicManager);
 	}
 
 	return _int();
 }
 
-_int CCinema2_1::LateTick(_double dDeltaTime)
+_int CCinema2_3::LateTick(_double dDeltaTime)
 {
 	m_pSilvermane->LateTick(dDeltaTime);
 	m_pMidBoss->LateTick(dDeltaTime);
@@ -82,7 +83,7 @@ _int CCinema2_1::LateTick(_double dDeltaTime)
 	return _int();
 }
 
-void CCinema2_1::Set_Active(_bool bCheck)
+void CCinema2_3::Set_Active(_bool bCheck)
 {
 	CScenematic::Set_Active(bCheck);
 	m_bActorAnimOn = false;
@@ -92,11 +93,11 @@ void CCinema2_1::Set_Active(_bool bCheck)
 		m_pCam->Change_CurrentCam();
 }
 
-HRESULT CCinema2_1::Ready_Components()
+HRESULT CCinema2_3::Ready_Components()
 {
 	CCamera::CAMERADESC tDesc;
 	tDesc.eType = CCamera::CAMERATYPE::CAMERA_PROJECTION;
-	tDesc.pCameraTag = L"Cienema2_1";
+	tDesc.pCameraTag = L"Cienema2_3";
 	tDesc.vEye = _float4(0.f, 0.f, 0.f, 1.f);
 	tDesc.vAt = _float4(0.f, 0.f, 1.f, 1.f);
 	tDesc.vAxisY = _float4(0.f, 1.f, 0.f, 0.f);
@@ -109,7 +110,7 @@ HRESULT CCinema2_1::Ready_Components()
 	ZeroMemory(&tCinemaDesc, sizeof(tCinemaDesc));
 
 	tCinemaDesc.tCameraDesc = tDesc;
-	tCinemaDesc.iShotTag = (_uint)CINEMA_INDEX::CINEMA2_1;
+	tCinemaDesc.iShotTag = (_uint)CINEMA_INDEX::CINEMA2_3;
 
 	m_pCam=g_pGameInstance->Clone_GameObject<CCinemaCam>((_uint)SCENEID::SCENE_STAGE1, L"Proto_GameObject_CinemaCamera", &tCinemaDesc);
 	if (!m_pCam)
@@ -127,9 +128,9 @@ HRESULT CCinema2_1::Ready_Components()
 	return S_OK;
 }
 
-CCinema2_1* CCinema2_1::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext, _uint iSceneID)
+CCinema2_3* CCinema2_3::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext, _uint iSceneID)
 {
-	CCinema2_1* pInstance = new CCinema2_1(pDevice, pDeviceContext);
+	CCinema2_3* pInstance = new CCinema2_3(pDevice, pDeviceContext);
 	if (FAILED(pInstance->NativeContruct(iSceneID)))
 	{
 		MSGBOX("Cinema1_2 Crate Faile");
@@ -138,7 +139,7 @@ CCinema2_1* CCinema2_1::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDevi
 	return pInstance;
 }
 
-void CCinema2_1::Free()
+void CCinema2_3::Free()
 {
 	CScenematic::Free();
 	Safe_Release(m_pCam);
