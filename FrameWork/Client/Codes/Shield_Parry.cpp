@@ -68,7 +68,18 @@ HRESULT CShield_Parry::ExitState()
 	if (FAILED(__super::ExitState()))
 		return E_FAIL;
 
-	m_pSilvermane->Set_IsHit(false);
+
+	if (m_pAnimationController->Is_Finished())
+	{
+		m_pSilvermane->Set_IsHit(false);
+	}
+	else
+	{
+		m_pSilvermane->Set_EquipShield(false);
+		m_pSilvermane->Set_EquipShieldAnim(false);
+		m_pSilvermane->Set_BlockTime(0.f);
+	}
+
 	return S_OK;
 }
 
@@ -83,16 +94,10 @@ _int CShield_Parry::Input(const _double& _dDeltaTime)
 	{
 		if (g_pGameInstance->getMouseKeyDown(CInputDev::MOUSESTATE::MB_LBUTTON))
 		{
-			m_pSilvermane->Set_EquipShield(false);
-			m_pSilvermane->Set_EquipShieldAnim(false);
-			m_pSilvermane->Set_BlockTime(0.f);
 			return ToAttack();
 		}
 		else if (g_pGameInstance->getMouseKeyDown(CInputDev::MOUSESTATE::MB_RBUTTON))
 		{
-			m_pSilvermane->Set_EquipShield(false);
-			m_pSilvermane->Set_EquipShieldAnim(false);
-			m_pSilvermane->Set_BlockTime(0.f);
 			return ToChargeStart();
 		}
 
@@ -122,38 +127,22 @@ _int CShield_Parry::Input(const _double& _dDeltaTime)
 					return -1;
 				return STATE_CHANGE;
 			}
-
-			m_pSilvermane->Set_EquipShield(false);
-			m_pSilvermane->Set_EquipShieldAnim(false);
-			m_pSilvermane->Set_BlockTime(0.f);
 		}
 
 		if (g_pGameInstance->getkeyPress(DIK_W))
 		{
-			m_pSilvermane->Set_EquipShield(false);
-			m_pSilvermane->Set_EquipShieldAnim(false);
-			m_pSilvermane->Set_BlockTime(0.f);
 			return ToJogFwd();
 		}
 		else if (g_pGameInstance->getkeyPress(DIK_A))
 		{
-			m_pSilvermane->Set_EquipShield(false);
-			m_pSilvermane->Set_EquipShieldAnim(false);
-			m_pSilvermane->Set_BlockTime(0.f);
 			return ToJogLeft();
 		}
 		else if (g_pGameInstance->getkeyPress(DIK_D))
 		{
-			m_pSilvermane->Set_EquipShield(false);
-			m_pSilvermane->Set_EquipShieldAnim(false);
-			m_pSilvermane->Set_BlockTime(0.f);
 			return ToJogRight();
 		}
 		else if (g_pGameInstance->getkeyPress(DIK_S))
 		{
-			m_pSilvermane->Set_EquipShield(false);
-			m_pSilvermane->Set_EquipShieldAnim(false);
-			m_pSilvermane->Set_BlockTime(0.f);
 			return ToJogBwd();
 		}
 	}
