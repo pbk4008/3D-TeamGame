@@ -1232,6 +1232,8 @@ void CSilvermane::Add_Velocity(const CTransform::STATE _eState, const _double& _
 void CSilvermane::Add_HP(const _float _fValue)
 {
 	m_fCurrentHp += _fValue;
+	if (m_fCurrentHp > m_fMaxHp)
+		m_fCurrentHp = m_fMaxHp;
 }
 
 void CSilvermane::Respawn()
@@ -1910,15 +1912,15 @@ const void CSilvermane::Raycast_DropBox(const _double& _dDeltaTime)
 	{
 	case (_uint)GAMEOBJECT::MONSTER_ABERRANT:
 	case (_uint)GAMEOBJECT::MIDDLE_BOSS:
-		if (static_cast<CActor*>(pHitObject)->Get_Groggy())
-		{
+		//if (static_cast<CActor*>(pHitObject)->Get_Groggy())
+		//{
 			if (!m_isExecution && g_pGameInstance->getkeyDown(DIK_F))
 			{
 				m_pTargetExecution = static_cast<CActor*>(pHitObject);
 				m_pTargetExecution->Execution();
 				Set_Execution(true);
 			}
-		}
+		//}
 		break;
 	}
 }

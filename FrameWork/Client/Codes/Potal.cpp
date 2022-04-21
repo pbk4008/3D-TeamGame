@@ -84,7 +84,7 @@ _int CPotal::Tick(_double _dDeltaTime)
 
 _int CPotal::LateTick(_double _dDeltaTime)
 {
-	m_pRenderer->Add_RenderGroup(CRenderer::RENDER_UI, this);
+	m_pRenderer->Add_RenderGroup(CRenderer::RENDER_ALPHA, this);
 
 	return _int();
 }

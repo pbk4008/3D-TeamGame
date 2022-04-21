@@ -195,6 +195,19 @@ _int CBoss_Bastion_Judicator::Tick(_double TimeDelta)
 		}
 		
 	}
+	else if (EXECUTION == m_pAnimator->Get_CurrentAnimNode())
+	{
+		if (L"Execution" == m_pStateController->Get_CurStateTag())
+		{
+			if (m_pAnimator->Get_CurrentAnimation()->Is_Finished())
+			{
+				m_pPanel->Set_Show(false);
+				m_pPanel->Set_UIRemove(true);
+				m_bdissolve = true;
+				return 0;
+			}
+		}
+	}
 
 	m_pCharacterController->Move(TimeDelta, m_pTransform->Get_Velocity());
 
@@ -304,7 +317,7 @@ void CBoss_Bastion_Judicator::setActive(_bool bActive)
 			/* for.Character Controller */
 			CCharacterController::DESC tCharacterControllerDesc;
 			tCharacterControllerDesc.fHeight = 1.f;
-			tCharacterControllerDesc.fRadius = 0.5f;
+			tCharacterControllerDesc.fRadius = 1.f;
 			tCharacterControllerDesc.fContactOffset = tCharacterControllerDesc.fRadius * 0.1f;
 			tCharacterControllerDesc.fStaticFriction = 0.5f;
 			tCharacterControllerDesc.fDynamicFriction = 0.5f;
@@ -659,6 +672,16 @@ void CBoss_Bastion_Judicator::Hit(const ATTACKDESC& _tAttackDesc)
 		//그로기 아닐때만 증가할수있게
 		m_pPanel->Set_GroggyBar(Get_GroggyGaugeRatio());
 	}
+}
+
+void CBoss_Bastion_Judicator::Execution()
+{
+	m_bDead = true;
+	m_IsAttack = false;
+	m_pWeapon->Set_IsAttack(false);
+
+	m_pStateController->Change_State(L"Execution");
+	m_pCharacterController->Remove_CCT();
 }
 
 void CBoss_Bastion_Judicator::Set_IsAttack(const _bool _isAttack)

@@ -97,6 +97,7 @@ HRESULT CSilvermane_Execution::EnterState()
 	}
 	m_pAnimationController->Set_RootMotion(true, true, ERootOption::XYZ);
 
+	m_pAnimationController->Mul_MoveSpeed(0.5f);
 	return S_OK;
 }
 
@@ -106,6 +107,7 @@ HRESULT CSilvermane_Execution::ExitState()
 		return E_FAIL;
 
 	m_pSilvermane->Set_Execution(false);
+	m_pAnimationController->Div_MoveSpeed(0.5f);
 	return S_OK;
 }
 
