@@ -34,6 +34,7 @@ public:
 		_float		 fCurExpGauge;
 		_float		 fGapX;
 		_float		 fGapY;
+		_bool		 bFadeOption = false;
 	};
 
 	struct RenderVal
@@ -63,6 +64,7 @@ public:
 	void SetOffsetPos(const _float2& offsetPos)		{ m_fOffsetPosition = offsetPos; }
 	void SetOffsetScale(const _float2& offsetScale) { m_fOffsetScale = offsetScale; }
 	void SetRenderVal(void* val);
+	void SetFadeOut(void);
 
 private:
 	ID3D11ShaderResourceView* m_pImage = nullptr;
@@ -70,11 +72,14 @@ private:
 	_float2 m_fOffsetPosition = { 0.f, 0.f };
 	_float2 m_fOffsetScale = { 1.f, 1.f };
 	_bool   m_bRenderPass = 1;
+	_bool	m_bFadeOpt;
+	_bool	m_bFadeOut = false;
+
 	RenderType m_ERenderType = Type_End;
 	_float  m_fGapX;
 	_float  m_fGapY;
 	_float  m_fCurExpGauge;
-
+	_float  m_fAlpha = 0.f;
 private:
 	CVIBuffer_Rect*		 m_pBuffer;
 	CVIBuffer_Trapezium* m_pTrapziumBuffer = nullptr;

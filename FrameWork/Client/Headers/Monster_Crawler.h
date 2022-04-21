@@ -46,6 +46,8 @@ public:
 
 public:
 	void Set_IsAttack(const _bool _isAttack);
+	virtual void setActive(_bool bActive) override;
+
 private:
 	virtual HRESULT SetUp_Components();
 	HRESULT	Ready_Weapone();

@@ -28,7 +28,7 @@ public: enum RENDERBUTTON
 };
 
 public: enum RENDER {	RENDER_PRIORITY, RENDER_SKYBOX
-						, RENDER_SHADOW, RENDER_NONALPHA, RENDER_ALPHA
+						, RENDER_SHADOW, RENDER_NONALPHA, RENDER_ALPHA , RENDER_ALPHANB
 						, RENDER_STANDARD
 						, RENDER_VELOCITY
 						, RENDER_MOTIONTRAIL
@@ -62,6 +62,7 @@ private: CTarget_Manager*					m_pTargetMgr = nullptr;
 private: ID3D11DepthStencilView*			m_pShadowMap = nullptr;
 
 private: _bool								m_bRenderbtn[RENDERBUTTON_END];
+private: _bool								m_bfogtype = false;
 private: _tchar								m_CameraTag[128];
 private: _int								m_RadialCnt = 0;
 
@@ -77,6 +78,7 @@ private: HRESULT Render_Priority();
 private: HRESULT Render_SkyBox();
 private: HRESULT Render_NonAlpha();
 private: HRESULT Render_Alpha();
+private: HRESULT Render_AlphaNoBloom();
 private: HRESULT Render_UI();
 private: HRESULT Render_UI_Active();
 
@@ -94,6 +96,8 @@ private: /* For.PhysX */
 	PrimitiveBatch<VertexPositionColor>* m_pBatch = nullptr;
 	ID3D11InputLayout* m_pInputLayout = nullptr;
 	HRESULT Render_PhysX();
+
+private: HRESULT	AlphaSorting(RENDER etype);
 
 public: static CRenderer* Create(ID3D11Device * pDevice, ID3D11DeviceContext * pDeviceContext);
 public: virtual CComponent* Clone(void* pArg) override;

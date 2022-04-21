@@ -22,14 +22,6 @@ _int C1H_SwordAttackNormalR2_Loop::Tick(const _double& _dDeltaTime)
 
 	m_fHoldTime += (_float)_dDeltaTime;
 
-	_uint iCurkeyFrameIndex = m_pAnimationController->Get_CurKeyFrameIndex();
-	_int temp = iCurkeyFrameIndex % 1;
-
-	if (temp == 0)
-	{
-		m_pSilvermane->Create_MotionTrail(m_motiontrailidx);
-		m_motiontrailidx++;
-	}
 	return _int();
 }
 
@@ -54,6 +46,13 @@ HRESULT C1H_SwordAttackNormalR2_Loop::EnterState()
 {
 	if (FAILED(__super::EnterState()))
 		return E_FAIL;
+
+	_vector Pos = { 0.f, 0.03f, 0.f ,0.f };
+	m_pSilvermane->Active_Effect((_uint)EFFECT::ATTACK_GROUND, Pos);
+	m_pSilvermane->Active_Effect((_uint)EFFECT::ATTACK_GROUND_2, Pos);
+
+	Pos = { 0.f, 0.1f, 0.f ,0.f };
+	m_pSilvermane->Active_Effect((_uint)EFFECT::HIT_GROUND_SMOKE, Pos);
 
 	if (FAILED(m_pAnimationController->SetUp_NextAnimation("SK_Silvermane.ao|A_1H_Sword_Attack_Normal_R2_Loop", true)))
 		return E_FAIL;

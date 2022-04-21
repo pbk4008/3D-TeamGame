@@ -90,7 +90,6 @@ HRESULT CDodgeSlide::EnterState(void* _pArg)
 		memcpy_s(&m_eDir, sizeof(EDir), _pArg, sizeof(EDir));
 
 	_vector Pos = { 0.f, 0.5f, 0.f, 0.f };
-	m_pSilvermane->Active_Effect((_uint)EFFECT::DASH, Pos);
 
 	CCameraShake::SHAKEEVENT tShakeEvent;
 	tShakeEvent.fDuration = 1.f;
@@ -103,11 +102,17 @@ HRESULT CDodgeSlide::EnterState(void* _pArg)
 	tShakeEvent.tWaveZ.fFrequency = 1.f;
 	tShakeEvent.tWaveZ.fAdditionalOffset = -1.f;
 
+	_matrix newmat = g_pObserver->Get_PlayerWorldMatrix();
+	newmat.r[3] = XMVectorSetY(newmat.r[3], XMVectorGetY(newmat.r[3]) - 0.8f);
+
 	switch (m_eDir)
 	{
 	case EDir::Forward:
 		if (FAILED(m_pAnimationController->SetUp_NextAnimation("SK_Silvermane.ao|A_Dodge_Slide_Fwd_Player_NEW", false)))
 			return E_FAIL;
+
+		m_pSilvermane->Active_Effect_Target((_uint)EFFECT::DASH, XMMatrixRotationY(XMConvertToRadians(180.f)) * newmat);
+
 		break;
 	case EDir::Backward:
 		tShakeEvent.fDuration = 1.4f;
@@ -116,15 +121,24 @@ HRESULT CDodgeSlide::EnterState(void* _pArg)
 		tShakeEvent.tWaveZ.fAdditionalOffset = -4.f;
 		if (FAILED(m_pAnimationController->SetUp_NextAnimation("SK_Silvermane.ao|A_Dodge_Slide_Back_Player_NEW", false)))
 			return E_FAIL;
+
+		m_pSilvermane->Active_Effect_Target((_uint)EFFECT::DASH, XMMatrixRotationY(XMConvertToRadians(0.f)) * newmat);
+
 		break;
 	case EDir::Left:
 		tShakeEvent.tWaveZ.fAdditionalOffset = -2.f;
 		if (FAILED(m_pAnimationController->SetUp_NextAnimation("SK_Silvermane.ao|A_Dodge_Slide_Left_Player_NEW", false)))
 			return E_FAIL;
+
+		m_pSilvermane->Active_Effect_Target((_uint)EFFECT::DASH, XMMatrixRotationY(XMConvertToRadians(90.f)) * newmat);
+
 		break;
 	case EDir::LeftForward:
 		if (FAILED(m_pAnimationController->SetUp_NextAnimation("SK_Silvermane.ao|A_Dodge_Slide_Left_Player_NEW", false)))
 			return E_FAIL;
+
+		m_pSilvermane->Active_Effect_Target((_uint)EFFECT::DASH, XMMatrixRotationY(XMConvertToRadians(90.f)) * newmat);
+
 		break;
 	case EDir::LeftBackward:
 		tShakeEvent.fDuration = 1.4f;
@@ -133,15 +147,24 @@ HRESULT CDodgeSlide::EnterState(void* _pArg)
 		tShakeEvent.tWaveZ.fAdditionalOffset = -4.f;
 		if (FAILED(m_pAnimationController->SetUp_NextAnimation("SK_Silvermane.ao|A_Dodge_Slide_Left_Player_NEW", false)))
 			return E_FAIL;
+
+		m_pSilvermane->Active_Effect_Target((_uint)EFFECT::DASH, XMMatrixRotationY(XMConvertToRadians(90.f)) * newmat);
+
 		break;
 	case EDir::Right:
 		tShakeEvent.tWaveZ.fAdditionalOffset = -2.f;
 		if (FAILED(m_pAnimationController->SetUp_NextAnimation("SK_Silvermane.ao|A_Dodge_Slide_Right_Player_NEW", false)))
 			return E_FAIL;
+
+		m_pSilvermane->Active_Effect_Target((_uint)EFFECT::DASH, XMMatrixRotationY(XMConvertToRadians(270.f)) * newmat);
+
 		break;
 	case EDir::RightForward:
 		if (FAILED(m_pAnimationController->SetUp_NextAnimation("SK_Silvermane.ao|A_Dodge_Slide_Right_Player_NEW", false)))
 			return E_FAIL;
+
+		m_pSilvermane->Active_Effect_Target((_uint)EFFECT::DASH, XMMatrixRotationY(XMConvertToRadians(270.f)) * newmat);
+
 		break;
 	case EDir::RightBackward:
 		tShakeEvent.fDuration = 1.4f;
@@ -150,6 +173,9 @@ HRESULT CDodgeSlide::EnterState(void* _pArg)
 		tShakeEvent.tWaveZ.fAdditionalOffset = -4.f;
 		if (FAILED(m_pAnimationController->SetUp_NextAnimation("SK_Silvermane.ao|A_Dodge_Slide_Right_Player_NEW", false)))
 			return E_FAIL;
+
+		m_pSilvermane->Active_Effect_Target((_uint)EFFECT::DASH, XMMatrixRotationY(XMConvertToRadians(270.f)) * newmat);
+
 		break;
 	}
 	m_pAnimationController->Set_RootMotion(true, true);

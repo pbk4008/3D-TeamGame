@@ -575,8 +575,8 @@ void CMap_Tool::OnNMClickTreeItem(NMHDR* pNMHDR, LRESULT* pResult)
 void CMap_Tool::OnBnClickedSaveButton()
 {
 	// TODO: 맵 데이터를 저장합니다.
-	//list<CGameObject*> ListObj = g_pGameInstance->getAllObjectList();
-	list<CGameObject*> ListObj = *(g_pGameInstance->getObjectList(1, L"DropBox"));
+	list<CGameObject*> ListObj = g_pGameInstance->getAllObjectList();
+	//list<CGameObject*> ListObj = *(g_pGameInstance->getObjectList(1, L"DropBox"));
 	//list<CGameObject*> ListObj = *(g_pGameInstance->getObjectList(1, L"Env_Tree"));
 	m_vecMesh.clear();
 
@@ -584,6 +584,10 @@ void CMap_Tool::OnBnClickedSaveButton()
 	{
 		for (auto& pObj : ListObj)
 		{
+			_fvector temp = pObj->Get_Transform()->Get_State(CTransform::STATE_LOOK);
+			_float4 temp2;
+			XMStoreFloat4(&temp2, temp);
+
 			CStatic_Mesh* pMesh = (CStatic_Mesh*)pObj;
 			m_vecMesh.push_back(pMesh->m_MeshDesc);
 		}

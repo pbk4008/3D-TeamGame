@@ -2,6 +2,7 @@
 #include "SingleImage.h"
 #include "UI_Texture.h"
 #include "VIBuffer_Rect.h"
+#include "..\Headers\SingleImage.h"
 
 CSingleImage::CSingleImage(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
 	: CComponent(pDevice, pDeviceContext)
@@ -45,6 +46,7 @@ HRESULT CSingleImage::NativeConstruct(void* pArg)
 	m_fOffsetPosition = texDesc.fOffsetPos;
 	m_fOffsetScale = texDesc.fOffsetScale;
 	m_ERenderType = texDesc.renderType;
+	m_bFadeOpt = texDesc.bFadeOption;
 
 	/* for VerticalGauge */
 	m_fGapX = texDesc.fGapX;
@@ -90,6 +92,20 @@ _int CSingleImage::LateTick(_double TimeDelta)
 
 HRESULT CSingleImage::Render(CTransform* _sender)
 {
+	if (false == m_bFadeOut)
+	{
+		if (m_fAlpha >= 1.f)
+			m_fAlpha = 1.f;
+		else
+			m_fAlpha += g_fDeltaTime * 0.5;
+	}
+	else
+	{
+		if (m_fAlpha <= 0.f)
+			m_fAlpha = 0.f;
+		else
+			m_fAlpha -= g_fDeltaTime * 0.5;
+	}
 
 	if (RenderType::Alpha == m_ERenderType || RenderType::Nonalpha == m_ERenderType || RenderType::Type_End == m_ERenderType)
 	{
@@ -102,8 +118,9 @@ HRESULT CSingleImage::Render(CTransform* _sender)
 			m_pBuffer->SetUp_ValueOnShader("g_WorldMatrix", &XMWorldMatrix, sizeof(_float) * 16);
 			m_pBuffer->SetUp_ValueOnShader("g_ViewMatrix", &XMViewMatrix, sizeof(_float) * 16);
 			m_pBuffer->SetUp_ValueOnShader("g_ProjMatrix", &XMProjectMatrix, sizeof(XMMATRIX));
+			m_pBuffer->SetUp_ValueOnShader("g_Fade", &m_bFadeOpt, sizeof(_bool));
+			m_pBuffer->SetUp_ValueOnShader("g_Alpha", &m_fAlpha, sizeof(_float));
 			//m_pBuffer->SetUp_ValueOnShader("g_Color", &m_fColor, sizeof(_float4));
-
 			m_pBuffer->SetUp_TextureOnShader("g_DiffuseTexture", m_pImage);
 
 			m_pBuffer->Render(m_bRenderPass);
@@ -142,6 +159,11 @@ void CSingleImage::SetRenderVal(void* val)
 	m_fCurExpGauge = (*(RenderVal*)val).fCurExpGauge;
 	m_fGapX = (*(RenderVal*)val).fGapX;
 	m_fGapY = (*(RenderVal*)val).fGapY;
+}
+
+void CSingleImage::SetFadeOut(void)
+{
+	m_bFadeOut = true;
 }
 
 CSingleImage* CSingleImage::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)

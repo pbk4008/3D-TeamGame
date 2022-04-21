@@ -8,6 +8,7 @@ class CScenematicManager;
 class CScenematic;
 class CMeteor;
 class CIndicator_Manager;
+class CDropBoxData;
 class CStage1 final : public CLevel
 {
 private:
@@ -67,6 +68,8 @@ private:
 private:
 	HRESULT Ready_Portal();
 	void Open_Potal(_fvector vPos, _uint iMonTag);
+	void CheckTriggerForQuest(void);
+
 public:
 	static CStage1* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);
 private:
@@ -75,6 +78,8 @@ private:
 	CTriggerSystem<CStage1>* m_pTriggerSystem;
 	CScenematicManager* m_pScenemaManager;
 	CIndicator_Manager* m_pIndicatorManager = nullptr;
+
+	std::vector<CDropBoxData*> m_pDumyDropData;
 	_bool m_bDebug;
 	_uint m_iCountMonster;
 	_bool m_bFirst;

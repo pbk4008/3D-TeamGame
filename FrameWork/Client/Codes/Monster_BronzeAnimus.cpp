@@ -73,34 +73,19 @@ HRESULT CMonster_BronzeAnimus::NativeConstruct(const _uint _iSceneID, void* _pAr
 	if (FAILED(Ready_StateFSM()))
 		return E_FAIL;
 
-	// MonsterBar Panel
-	CUI_Monster_Panel::PANELDESC Desc;
-	Desc.pTargetTransform = m_pTransform;
-	Desc.iEnemyTag = CUI_Monster_Panel::Enemy::ANIMUS;
-
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer(_iSceneID, L"Layer_UI", L"Proto_GameObject_UI_Monster_Panel", &Desc,
-		(CGameObject**)&m_pPanel)))
-		return E_FAIL;
-
-	Safe_AddRef(m_pPanel);
-
-
-	m_pPanel->Set_TargetWorldMatrix(m_pTransform->Get_WorldMatrix());
-
-	m_fMaxHp = 30.f;
-	m_fCurrentHp = m_fMaxHp;
-
 	m_fMaxGroggyGauge = 10.f;
 	m_fGroggyGauge = 0.f;
-
-	m_pPanel->Set_HpBar(Get_HpRatio());
-	m_pPanel->Set_GroggyBar(Get_GroggyGaugeRatio());
-
+	m_fMaxHp = 30.f;
+	m_fCurrentHp = m_fMaxHp;
 	m_isFall = true;
-	setActive(false);
-
 	m_tAttackDesc.iLevel = 1;
 
+	if (FAILED(Ready_UI()))
+		return E_FAIL;
+
+	m_pWeapon->setActive(false);
+	m_pPanel->setActive(false);
+	setActive(false);
 	return S_OK;
 }
 
@@ -261,6 +246,37 @@ void CMonster_BronzeAnimus::Parry(const PARRYDESC& _tParryDesc)
 	GroggyStart();
 }
 
+void CMonster_BronzeAnimus::setActive(_bool bActive)
+{
+	CGameObject::setActive(bActive);
+
+	if (bActive)
+	{
+		if (!m_pCharacterController)
+		{
+			//* for.Character Controller */
+			CCharacterController::DESC tCharacterControllerDesc;
+			tCharacterControllerDesc.fHeight = 1.f;
+			tCharacterControllerDesc.fRadius = 0.5f;
+			tCharacterControllerDesc.fContactOffset = tCharacterControllerDesc.fRadius * 0.1f;
+			tCharacterControllerDesc.fStaticFriction = 0.5f;
+			tCharacterControllerDesc.fDynamicFriction = 0.5f;
+			tCharacterControllerDesc.fRestitution = 0.f;
+			tCharacterControllerDesc.pGameObject = this;
+			tCharacterControllerDesc.vPosition = { 0.f, 0.f, 0.f };
+
+			if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_CharacterController", L"CharacterController", (CComponent**)&m_pCharacterController, &tCharacterControllerDesc)))
+				MSGBOX(L"브론즈 cct 생성 실패");
+			m_pCharacterController->setOwnerTransform(m_pTransform);
+			m_pCharacterController->setShapeLayer((_uint)ELayer::Monster);
+		}
+		if (m_pWeapon)
+			m_pWeapon->setActive(true);
+		if (m_pPanel)
+			m_pPanel->setActive(true);
+	}
+}
+
 HRESULT CMonster_BronzeAnimus::Ready_Components()
 {
 	CTransform::TRANSFORMDESC transformDesc;
@@ -279,21 +295,21 @@ HRESULT CMonster_BronzeAnimus::Ready_Components()
 	_matrix matPivot = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(180.f));
 	m_pModel->Set_PivotMatrix(matPivot);
 
-	//* for.Character Controller */
-	CCharacterController::DESC tCharacterControllerDesc;
-	tCharacterControllerDesc.fHeight = 1.f;
-	tCharacterControllerDesc.fRadius = 0.5f;
-	tCharacterControllerDesc.fContactOffset = tCharacterControllerDesc.fRadius * 0.1f;
-	tCharacterControllerDesc.fStaticFriction = 0.5f;
-	tCharacterControllerDesc.fDynamicFriction = 0.5f;
-	tCharacterControllerDesc.fRestitution = 0.f;
-	tCharacterControllerDesc.pGameObject = this;
-	tCharacterControllerDesc.vPosition = { 0.f, 0.f, 0.f };
+	////* for.Character Controller */
+	//CCharacterController::DESC tCharacterControllerDesc;
+	//tCharacterControllerDesc.fHeight = 1.f;
+	//tCharacterControllerDesc.fRadius = 0.5f;
+	//tCharacterControllerDesc.fContactOffset = tCharacterControllerDesc.fRadius * 0.1f;
+	//tCharacterControllerDesc.fStaticFriction = 0.5f;
+	//tCharacterControllerDesc.fDynamicFriction = 0.5f;
+	//tCharacterControllerDesc.fRestitution = 0.f;
+	//tCharacterControllerDesc.pGameObject = this;
+	//tCharacterControllerDesc.vPosition = { 0.f, 0.f, 0.f };
 
-	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_CharacterController", L"CharacterController", (CComponent**)&m_pCharacterController, &tCharacterControllerDesc)))
-		return E_FAIL;
-	m_pCharacterController->setOwnerTransform(m_pTransform);
-	m_pCharacterController->setShapeLayer((_uint)ELayer::Monster);
+	//if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_CharacterController", L"CharacterController", (CComponent**)&m_pCharacterController, &tCharacterControllerDesc)))
+	//	return E_FAIL;
+	//m_pCharacterController->setOwnerTransform(m_pTransform);
+	//m_pCharacterController->setShapeLayer((_uint)ELayer::Monster);
 
 	// 스테이트 컨트롤러
 	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_StateController", L"StateController", (CComponent**)&m_pStateController)))
@@ -332,6 +348,23 @@ HRESULT CMonster_BronzeAnimus::Ready_Weapon(void)
 	}
 	m_pWeapon->Set_FixedBone(pWeaponBone);
 	m_pWeapon->Set_OwnerPivotMatrix(m_pModel->Get_PivotMatrix());
+	return S_OK;
+}
+
+HRESULT CMonster_BronzeAnimus::Ready_UI()
+{	
+	// MonsterBar Panel
+	CUI_Monster_Panel::PANELDESC Desc;
+	Desc.pTargetTransform = m_pTransform;
+	Desc.iEnemyTag = CUI_Monster_Panel::Enemy::ANIMUS;
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer(m_iSceneID, L"Layer_UI", L"Proto_GameObject_UI_Monster_Panel", &Desc,
+		(CGameObject**)&m_pPanel)))
+		return E_FAIL;
+	Safe_AddRef(m_pPanel);
+	m_pPanel->Set_HpBar(Get_HpRatio());
+	m_pPanel->Set_GroggyBar(Get_GroggyGaugeRatio());
+	m_pPanel->Set_TargetWorldMatrix(m_pTransform->Get_WorldMatrix());
+
 	return S_OK;
 }
 

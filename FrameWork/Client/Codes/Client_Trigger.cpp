@@ -34,6 +34,8 @@ HRESULT CClient_Trigger::NativeConstruct_Prototype()
 	if(FAILED(__super::NativeConstruct_Prototype()))
 		return E_FAIL;
 
+	m_iObectTag = (_uint)GAMEOBJECT::TRIGGER;
+
 	return S_OK;
 }
 

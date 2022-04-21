@@ -176,7 +176,7 @@ HRESULT CStateController::Change_State(const wstring& _wstrStateTag, void* _pArg
 			{
 			case EChange::Normal:
 			case EChange::NonEnter://현재 상태의 나가는 이벤트를 호출
-				m_pCurState->ExitState(_pArg);
+				m_pCurState->ExitState();
 				break;
 			}
 		}

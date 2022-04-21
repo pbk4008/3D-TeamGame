@@ -148,6 +148,23 @@ void CShieldBreaker::OnTriggerEnter(CCollision& collision)
 	}
 }
 
+void CShieldBreaker::setActive(_bool bActive)
+{
+	CGameObject::setActive(bActive);
+
+	switch (bActive)
+	{
+	case true:
+		if (m_pCollider)
+			m_pCollider->Add_ActorToScene();
+		break;
+	case false:
+		if (m_pCollider)
+			m_pCollider->Remove_ActorFromScene();
+		break;
+	}
+}
+
 HRESULT CShieldBreaker::Ready_Components()
 {
 	CTransform::TRANSFORMDESC transformDesc;
@@ -176,6 +193,7 @@ HRESULT CShieldBreaker::Ready_Components()
 
 	_matrix matPivot = XMMatrixRotationY(XMConvertToRadians(90.f)) * XMMatrixTranslation(0.f, 0.f, 0.8f);
 	m_pCollider->setPivotMatrix(matPivot);
+	m_pCollider->setShapeLayer((_uint)ELayer::MonsterWeapon);
 
 	return S_OK;
 }

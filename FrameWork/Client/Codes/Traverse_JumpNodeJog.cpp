@@ -58,8 +58,30 @@ _int CTraverse_JumpNodeJog::Tick(const _double& _dDeltaTime)
 		else if (m_radialcnt == 1)
 		{
 			m_pSilvermane->Set_Radial(false);
-			m_pSilvermane->Set_IsFall(true);
 		}
+
+		if (25 < iCurKeyFrameIndex)
+		{
+			m_fFallTime += (_float)_dDeltaTime;
+
+			if (m_pSilvermane->IsGround())
+			{
+				m_pAnimationController->Set_PlaySpeed(1.2f);
+			}
+			else
+			{
+				if (0.5 > m_fFallTime)
+				{
+					m_pAnimationController->Set_PlaySpeed(0.2f);
+				}
+				else
+				{
+					m_pAnimationController->Set_PlaySpeed(1.2f);
+				}
+			}
+		}
+
+		m_pSilvermane->Set_IsFall(true);
 	}
 
 	if (m_iCutIndex < iCurKeyFrameIndex)
@@ -117,6 +139,8 @@ HRESULT CTraverse_JumpNodeJog::ExitState()
 	m_pSilvermane->Set_IsTrasceCamera(true);
 	m_isJumpEnd = false;
 
+	m_pAnimationController->Set_PlaySpeed(1.f);
+	m_fFallTime = 0.f;
 	return S_OK;
 }
 
@@ -135,8 +159,8 @@ void CTraverse_JumpNodeJog::OnTriggerExit(CCollision& collision)
 
 	if ((_uint)GAMEOBJECT::JUMP_NODE == iTag)
 	{
-		m_fMoveSpeed = 0.f;
 		m_pAnimationController->Set_PlaySpeed(1.2f);
+		m_fMoveSpeed = 0.f;
 		m_isJumpEnd = true;
 	}
 }

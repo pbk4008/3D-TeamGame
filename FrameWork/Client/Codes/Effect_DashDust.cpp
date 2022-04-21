@@ -38,7 +38,7 @@ HRESULT CEffect_DashDust::NativeConstruct(const _uint _iSceneID, void* pArg)
 
 	if (nullptr != pArg)
 	{
-		memcpy(&m_Desc, pArg, sizeof(EFFECTDESC));
+		memcpy(&m_Desc, pArg, sizeof(EF_PAR_DASH_DESC));
 	}
 
 	//여기서 필요한 모든 컴포넌트들 Clone해옴
@@ -62,8 +62,6 @@ HRESULT CEffect_DashDust::NativeConstruct(const _uint _iSceneID, void* pArg)
 
 	//m_pBuffer->Set_Desc(Desc);
 	//m_pBuffer->Particle_Reset();
-
-	m_fAlpha = 0.2f;
 
 	m_backupDesc = Desc;
 
@@ -105,9 +103,9 @@ _int CEffect_DashDust::Tick(_double TimeDelta)
 		m_Desc.fCurTime = m_Desc.fMaxLifeTime;
 	}
 
-	m_fAlpha -= (_float)TimeDelta * 0.05f;
+	m_Desc.fAlpha -= (_float)TimeDelta * 0.05f;
 
-	if (0 >= m_fAlpha)
+	if (0 >= m_Desc.fAlpha)
 	{
 		setActive(false);
 	}
@@ -122,7 +120,7 @@ _int CEffect_DashDust::LateTick(_double TimeDelta)
 	{ 
 		if (nullptr != m_pRenderer)
 		{
-			m_pRenderer->Add_RenderGroup(CRenderer::RENDER::RENDER_ALPHA, this);
+			m_pRenderer->Add_RenderGroup(CRenderer::RENDER::RENDER_ALPHANB, this);
 		}
 	}
 	return 0;
@@ -152,7 +150,7 @@ HRESULT CEffect_DashDust::Render()
 	m_pBuffer->SetUp_ValueOnShader("g_fLifeTime", &m_Desc.fMaxLifeTime, sizeof(_float));
 	m_pBuffer->SetUp_ValueOnShader("g_fCurTime", &m_Desc.fCurTime, sizeof(_float));
 
-	m_pBuffer->SetUp_ValueOnShader("g_fAlpha", &m_fAlpha, sizeof(_float));
+	m_pBuffer->SetUp_ValueOnShader("g_fAlpha", &m_Desc.fAlpha, sizeof(_float));
 
 	_float weight = 0.1f;
 	m_pBuffer->SetUp_ValueOnShader("g_Weight", &weight, sizeof(_float));
@@ -185,7 +183,6 @@ void CEffect_DashDust::Set_Reset(_bool bReset)
 {
 	CEffect::Set_Reset(bReset);
 	m_Desc.fCurTime = 0.f;
-	m_fAlpha = 0.1f;
 	m_pBuffer->Set_Desc(m_backupDesc);
 	m_pBuffer->Particle_Reset();
 }

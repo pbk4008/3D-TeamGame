@@ -51,6 +51,7 @@
 
 #include "Wall.h"
 #include "Potal.h"
+#include "DropBoxData.h"
 
 //Cinema
 #include "Cinema1_1.h"
@@ -100,51 +101,96 @@ HRESULT CStage1::NativeConstruct()
 	g_pWeaponGenerator = CWeaponGenerator::GetInstance();
 
 	if (FAILED(CLevel::NativeConstruct()))
+	{
 		MSGBOX("Level");
+		return E_FAIL;
+	}
 
 	if (FAILED(Ready_Light()))
+	{
 		MSGBOX("Light");
+		return E_FAIL;
+	}
 
 	//if (FAILED(Ready_Trigger_Jump()))
+	// {
 	//	MSGBOX("Jump");
+	// return E_FAIL;
+	//}
 
 	if (FAILED(Ready_Player(L"Layer_Silvermane")))
+	{
 		MSGBOX("Player");
+		return E_FAIL;
+	}
 
 	if (FAILED(Ready_MapObject()))
+	{
 		MSGBOX("MapObject");
+		return E_FAIL;
+	}
 
 	if (FAILED(Ready_TriggerSystem(L"../bin/SaveData/Trigger/MonsterSpawnTrigger.dat")))
+	{
 		MSGBOX("Trigger");
+		return E_FAIL;
+	}
 
 	if (FAILED(Ready_Data_UI(L"../bin/SaveData/UI/UI.dat")))
+	{
 		MSGBOX("UI Data");
+		return E_FAIL;
+	}
 
 	if (FAILED(Ready_Data_Effect()))
+	{
 		MSGBOX("Effect");
+		return E_FAIL;
+	}
 
 	if (FAILED(Ready_UI(L"Layer_UI")))
+	{
 		MSGBOX("Ui");
+		return E_FAIL;
+	}
 
 	if (FAILED(Ready_Treasure_Chest()))
+	{
 		MSGBOX("Box");
+		return E_FAIL;
+	}
 
 	if (FAILED(Ready_GameManager()))
+	{
 		MSGBOX("Manager");
+		return E_FAIL;
+	}
 
 	g_pGameInstance->Change_BaseCamera(L"Camera_Silvermane");
 
 	//if (FAILED(Ready_Meteor()))
+	// {
 		//MSGBOX("Meteor");
+		// 		return E_FAIL;
+	//}
 
 	//if (FAILED(Ready_Cinema()))
+	// {
 	//	MSGBOX("Cinema");
+	// 		return E_FAIL;
+	//}
 
 	if (FAILED(Ready_Indicator()))
+	{
 		MSGBOX("Indicator");
+		return E_FAIL;
+	}
 
 	if (FAILED(Ready_Portal()))
+	{
 		MSGBOX("Portal");
+		return E_FAIL;
+	}
 
 	g_pGameInstance->PlayBGM(L"Stage1_BGM");
 	
@@ -165,6 +211,8 @@ _int CStage1::Tick(_double TimeDelta)
 		return 0;
 	}
 #endif //  _DEBUG
+
+	CheckTriggerForQuest();
 
 	if (g_pGameInstance->getkeyDown(DIK_I))
 	{
@@ -249,6 +297,8 @@ _int CStage1::Tick(_double TimeDelta)
 			}
 			else
 				m_pTriggerSystem->Check_Clear();
+
+			CLEAR_QUEST(L"T_HUD_KillAllMonster"); /* 포탈로 등장하는 몬스터가 아닌 경우에 몹이 다 잡힌 경우 */
 		}
 
 		CBoss_Bastion_Judicator* pBoss = (CBoss_Bastion_Judicator*)g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Layer_Boss")->front();
@@ -272,7 +322,7 @@ _int CStage1::Tick(_double TimeDelta)
 	//	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Test", L"Proto_GameObject_Boss_Bastion", &fPos, (CGameObject**)&pMonster)))
 	//		return -1;
 	//}
-	//
+
 	//if (g_pGameInstance->getkeyDown(DIK_NUMPAD0))
 	//{
 	//	CMonster_Crawler* pMonster = nullptr;
@@ -287,6 +337,7 @@ _int CStage1::Tick(_double TimeDelta)
 	//		return -1;
 	//	pMonster->setActive(true);
 	//}
+	
 	//if (g_pGameInstance->getkeyDown(DIK_NUMPAD2))
 	//{
 	//	CMonster_Bastion_Sword* pMonster = nullptr;
@@ -331,9 +382,12 @@ _int CStage1::Tick(_double TimeDelta)
 	//		return -1;
 	//}
 #pragma endregion
-	g_pInteractManager->Tick(TimeDelta);
-	g_pDropManager->Tick();
-	m_pIndicatorManager->Active_Indicator();
+	if(g_pInteractManager)
+		g_pInteractManager->Tick(TimeDelta);
+	if(g_pDropManager)
+		g_pDropManager->Tick();
+	if(m_pIndicatorManager)
+		m_pIndicatorManager->Active_Indicator();
 
 	/*For Cinema*/
 	if (m_pScenemaManager)
@@ -344,11 +398,15 @@ _int CStage1::Tick(_double TimeDelta)
 		m_pScenemaManager->Tick(TimeDelta);
 	}
 
-	/*for Meteor*/
-	//m_fAccMeteorStartTime += (_float)TimeDelta;
-	//if (m_fAccMeteorStartTime > 60.f)
-	//	Shoot_Meteor(TimeDelta);
 
+	/*for Meteor*/
+	m_fAccMeteorStartTime += (_float)TimeDelta;
+	if (m_fAccMeteorStartTime > 60.f)
+		Shoot_Meteor(TimeDelta);
+
+	if(g_pQuestManager)
+		g_pQuestManager->Tick(TimeDelta);
+	
 	return _int();
 }
 
@@ -356,6 +414,10 @@ _int CStage1::LateTick(_double TimeDelta)
 {
 	if(m_pScenemaManager)
 		m_pScenemaManager->LateTick(TimeDelta);
+
+	if(g_pQuestManager)
+		g_pQuestManager->Late_Tick(TimeDelta);
+
 	return _int();
 }
 
@@ -367,6 +429,9 @@ HRESULT CStage1::Render()
 		m_pTriggerSystem->Render();
 	}
 #endif
+
+	if(g_pQuestManager)
+		g_pQuestManager->Render();
 
 	return S_OK;
 }
@@ -409,8 +474,27 @@ HRESULT CStage1::Ready_MapObject()
 				Desc.ParticleMat = XMLoadFloat4x4(&iter);
 				Desc.bUsingGravity = true;
 
-				if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_NoisFire", L"Proto_GameObject_Effect_Env_Fire",&Desc)))
+				if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_NoisFire", L"Proto_GameObject_Effect_Env_Fire", &Desc)))
 					MSGBOX("Failed To Clone NoisFire");
+
+
+				//fire smoke
+				ZeroMemory(&Desc, sizeof(Desc));
+				_tcscpy_s(Desc.TextureTag, L"fx_smoke_a");
+				Desc.iRenderPassNum = 1;
+				Desc.iImageCountX = 5;
+				Desc.iImageCountY = 6;
+				Desc.fFrame = 30.f;
+				Desc.fEffectPlaySpeed = 1.f;
+				Desc.ParticleMat = XMLoadFloat4x4(&iter);
+				Desc.ParticleMat.r[3] = XMVectorSetY(Desc.ParticleMat.r[3], XMVectorGetY(Desc.ParticleMat.r[3]) + 0.5f);
+				Desc.bUsingGravity = true;
+
+				if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Effect_Env_Fire_Smoke", L"Proto_GameObject_Effect_Env_Fire", &Desc)))
+				{
+					MSGBOX("Failed to Creating Effect_Env_Fire_Smoke in CStage1::Ready_Effect()");
+					return E_FAIL;
+				}
 			}
 		}
 
@@ -478,20 +562,20 @@ HRESULT CStage1::Ready_Player(const _tchar* LayerTag)
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Camera", L"Proto_GameObject_Camera_Silvermane")))
 		return E_FAIL;
 
-	WALLDESC desc;
-	ZeroMemory(&desc, sizeof(WALLDESC));
-	desc.pos = _float4(-61.f, 18.f, 194.f, 1.f);
-	desc.scale = _float2(6.f, 10.f);
-	desc.radian = 0.f;
-	desc.color = _float4(1.f, 0.f, 0.f, 1.f);
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Wall", L"Proto_GameObject_Wall",&desc))) return E_FAIL;
+	//WALLDESC desc;
+	//ZeroMemory(&desc, sizeof(WALLDESC));
+	//desc.pos = _float4(-61.f, 18.f, 194.f, 1.f);
+	//desc.scale = _float2(6.f, 10.f);
+	//desc.radian = 0.f;
+	//desc.color = _float4(1.f, 0.f, 0.f, 1.f);
+	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Wall", L"Proto_GameObject_Wall",&desc))) return E_FAIL;
 
-	ZeroMemory(&desc, sizeof(WALLDESC));
-	desc.pos = _float4(-91.f, 25.f, 218.f, 1.f);
-	desc.scale = _float2(10.f, 24.f);
-	desc.radian = 90.f;
-	desc.color = _float4(0.f, 1.f, 1.f, 1.f);
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Wall", L"Proto_GameObject_Wall", &desc))) return E_FAIL;
+	//ZeroMemory(&desc, sizeof(WALLDESC));
+	//desc.pos = _float4(-91.f, 25.f, 218.f, 1.f);
+	//desc.scale = _float2(10.f, 24.f);
+	//desc.radian = 90.f;
+	//desc.color = _float4(0.f, 1.f, 1.f, 1.f);
+	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Wall", L"Proto_GameObject_Wall", &desc))) return E_FAIL;
 	
 	return S_OK;
 }
@@ -664,8 +748,10 @@ HRESULT CStage1::Ready_Data_Effect()
 
 //	//Player Dash
 	CEffect* pEffect = nullptr;
-	vector<CEffect_DashDust::EFFECTDESC> vecDashEffect;
-	g_pGameInstance->LoadFile<CEffect_DashDust::EFFECTDESC>(vecDashEffect, L"../bin/SaveData/Effect/Effect_Player_Foot_Dash.dat");
+	vector<CEffect_DashDust::EF_PAR_DASH_DESC> vecDashEffect;
+
+	g_pGameInstance->LoadFile<CEffect_DashDust::EF_PAR_DASH_DESC>(vecDashEffect, L"../bin/SaveData/Effect/Effect_Player_Foot_Dash.dat");
+	vecDashEffect[0].fAlpha = 0.05f;
 
 	wstring FullName = L"Proto_GameObject_Effect_DashDust";
 
@@ -685,7 +771,9 @@ HRESULT CStage1::Ready_Data_Effect()
 
 	////HitGroundSmoke
 	vecDashEffect.clear();
-	g_pGameInstance->LoadFile<CEffect_DashDust::EFFECTDESC>(vecDashEffect, L"../bin/SaveData/Effect/Effect_HitGround_Smoke.dat");
+	g_pGameInstance->LoadFile<CEffect_DashDust::EF_PAR_DASH_DESC>(vecDashEffect, L"../bin/SaveData/Effect/Effect_HitGround_Smoke.dat");
+
+	vecDashEffect[0].fAlpha = 0.15;
 
 	FullName = L"Proto_GameObject_Effect_DashDust";
 
@@ -728,7 +816,7 @@ HRESULT CStage1::Ready_Data_Effect()
 	g_pGameInstance->LoadFile<CEffect_HitFloating::EF_PAR_HITFLOAT_DESC>(vecHitFloating, L"../bin/SaveData/Effect/Effect_Player_Attack2_Floating.dat");
 
 	FullName = L"Proto_GameObject_Effect_Floating";
-	vecHitFloating[0].ParticleColor = { 1.f , 0.6f, 0.3f ,1.f };
+	vecHitFloating[0].ParticleColor = { 1.f , 0.8f, 0.5f ,1.f };
 	vecHitFloating[0].Power = 2.5f;
 
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Player_Attack2_Floating", FullName, &vecHitFloating[0], (CGameObject**)&pEffect)))
@@ -823,7 +911,8 @@ HRESULT CStage1::Ready_Data_Effect()
 	g_pGameInstance->LoadFile<CEffect_Floating_Speed::EF_PAR_FLOATSPEED_DESC>(vecFloatingSpeed, L"../bin/SaveData/Effect/Effect_Player_Attack_Left.dat");
 
 	FullName = L"Proto_GameObject_Effect_Floating_Speed";
-	vecFloatingSpeed[0].ParticleColor = { 1.f,0.5f,0.4f, 1.f };
+	
+	vecFloatingSpeed[0].ParticleColor = { 0.7f, 1.f, 0.5f, 1.f };
 	vecFloatingSpeed[0].Power = 2.0f;
 
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Player_Attack_Left", FullName, &vecFloatingSpeed[0], (CGameObject**)&pEffect)))
@@ -842,7 +931,7 @@ HRESULT CStage1::Ready_Data_Effect()
 	g_pGameInstance->LoadFile<CEffect_Floating_Speed::EF_PAR_FLOATSPEED_DESC>(vecFloatingSpeed, L"../bin/SaveData/Effect/Effect_Player_Attack_Right.dat");
 
 	FullName = L"Proto_GameObject_Effect_Floating_Speed";
-	vecFloatingSpeed[0].ParticleColor = { 1.f,0.5f,0.4f, 1.f };
+	vecFloatingSpeed[0].ParticleColor = { 0.7f, 1.f, 0.5f, 1.f };
 	vecFloatingSpeed[0].Power = 2.0f;
 
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Player_Attack_Right", FullName, &vecFloatingSpeed[0], (CGameObject**)&pEffect)))
@@ -850,9 +939,28 @@ HRESULT CStage1::Ready_Data_Effect()
 		MSGBOX("Failed to Creating Effect_Player_Attack_Right in CStage1::Ready_Effect()");
 		return E_FAIL;
 	}
-	if (FAILED(g_pGameInstance->Add_Effect((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Player_Attack_Right", pEffect, 20)))
+	if (FAILED(g_pGameInstance->Add_Effect((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Player_Attack_Right", pEffect, 10)))
 	{
 		MSGBOX("Falild to Add_Effect_Player_Attack_Right in CStage1::Ready_Effect()");
+		return E_FAIL;
+	}
+
+	//AttackRight_Last
+	vecFloatingSpeed.clear();
+	g_pGameInstance->LoadFile<CEffect_Floating_Speed::EF_PAR_FLOATSPEED_DESC>(vecFloatingSpeed, L"../bin/SaveData/Effect/Effect_Player_Attack_Right_Last.dat");
+
+	FullName = L"Proto_GameObject_Effect_Floating_Speed";
+	vecFloatingSpeed[0].ParticleColor = { 0.7f, 1.f, 0.5f, 1.f };
+	vecFloatingSpeed[0].Power = 2.0f;
+
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Player_Attack_Right_Last", FullName, &vecFloatingSpeed[0], (CGameObject**)&pEffect)))
+	{
+		MSGBOX("Failed to Creating Effect_Player_Attack_Right_Last in CStage1::Ready_Effect()");
+		return E_FAIL;
+	}
+	if (FAILED(g_pGameInstance->Add_Effect((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Player_Attack_Right_Last", pEffect, 5)))
+	{
+		MSGBOX("Falild to Add_Effect_Player_Attack_Right_Last in CStage1::Ready_Effect()");
 		return E_FAIL;
 	}
 
@@ -861,7 +969,7 @@ HRESULT CStage1::Ready_Data_Effect()
 	g_pGameInstance->LoadFile<CEffect_HitParticle::EF_PAR_HIT_DESC>(vecHitParticle, L"../bin/SaveData/Effect/Effect_Hit_Ground.dat");
 
 	FullName = L"Proto_GameObject_Effect_Explosion";
-	vecHitParticle[0].ParticleColor = { 0.3f,0.5f,1.f, 1.f };
+	vecHitParticle[0].ParticleColor = { 0.9f,0.5f,0.2f, 1.f };
 	vecHitParticle[0].Power = 2.5f;
 
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Hit_Ground", FullName, &vecHitParticle[0], (CGameObject**)&pEffect)))
@@ -1019,6 +1127,7 @@ HRESULT CStage1::Ready_Data_Effect()
 		return E_FAIL;
 	}
 
+	//Death smoke
 	ZeroMemory(&tDesc, sizeof(tDesc));
 	_tcscpy_s(tDesc.TextureTag, L"Smoke_4x4_1");
 	tDesc.iRenderPassNum = 1;
@@ -1045,16 +1154,60 @@ HRESULT CStage1::Ready_Data_Effect()
 
 	//Explosion Rock 
 	CExplosion_Rock* pObj = nullptr;
+	CExplosion_Rock::ROCKINFO DescRock;
 	FullName = L"Proto_GameObject_Explosion_Rock";
+	_tcscpy_s(DescRock.ModelTag, L"Model_Explosion_Rock_Up_Anim");
 
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_Explosion_Rock_Up", FullName, nullptr, (CGameObject**)&pObj)))
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_Explosion_Rock_Up", FullName, &DescRock, (CGameObject**)&pObj)))
 	{
 		MSGBOX("Failed to Creating Effect_Explosion Rock_Up in CStage1::Ready_Effect()");
 		return E_FAIL;
 	}
 	if (FAILED(g_pGameInstance->Add_Effect((_uint)SCENEID::SCENE_STATIC, L"Layer_Explosion_Rock_Up", pObj, 10)))
 	{
-		MSGBOX("Falild to Add_Effect_Explosion ROck in CStage1::Ready_Effect()");
+		MSGBOX("Falild to Add_Effect_Explosion Rock in CStage1::Ready_Effect()");
+		return E_FAIL;
+	}
+
+	//explosion rock left
+	_tcscpy_s(DescRock.ModelTag, L"Model_Explosion_Rock_Left_Anim");
+
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_Explosion_Rock_Left", FullName, &DescRock, (CGameObject**)&pObj)))
+	{
+		MSGBOX("Failed to Creating Effect_Explosion Rock_Left in CStage1::Ready_Effect()");
+		return E_FAIL;
+	}
+	if (FAILED(g_pGameInstance->Add_Effect((_uint)SCENEID::SCENE_STATIC, L"Layer_Explosion_Rock_Left", pObj, 5)))
+	{
+		MSGBOX("Falild to Add_Effect_Explosion Rock Left in CStage1::Ready_Effect()");
+		return E_FAIL;
+	}
+
+	//explosion rock right
+	_tcscpy_s(DescRock.ModelTag, L"Model_Explosion_Rock_Right_Anim");
+
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_Explosion_Rock_Right", FullName, &DescRock, (CGameObject**)&pObj)))
+	{
+		MSGBOX("Failed to Creating Effect_Explosion Rock_Right in CStage1::Ready_Effect()");
+		return E_FAIL;
+	}
+	if (FAILED(g_pGameInstance->Add_Effect((_uint)SCENEID::SCENE_STATIC, L"Layer_Explosion_Rock_Right", pObj, 5)))
+	{
+		MSGBOX("Falild to Add_Effect_Explosion ROck Right in CStage1::Ready_Effect()");
+		return E_FAIL;
+	}
+
+	//explosion rock
+	_tcscpy_s(DescRock.ModelTag, L"Model_Explosion_Rock_Anim");
+
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_Explosion_Rock", FullName, &DescRock, (CGameObject**)&pObj)))
+	{
+		MSGBOX("Failed to Creating Effect_Explosion Rock in CStage1::Ready_Effect()");
+		return E_FAIL;
+	}
+	if (FAILED(g_pGameInstance->Add_Effect((_uint)SCENEID::SCENE_STATIC, L"Layer_Explosion_Rock", pObj, 5)))
+	{
+		MSGBOX("Falild to Add_Effect_Explosion ROck CStage1::Ready_Effect()");
 		return E_FAIL;
 	}
 
@@ -1085,23 +1238,6 @@ HRESULT CStage1::Ready_Data_Effect()
 #pragma endregion
 
 #pragma region 이펙트매니저에 안들어가는것들
-
-	//fire
-	CEffect_Env_Fire::EFFECTDESC Desc1;
-	_tcscpy_s(Desc1.TextureTag, L"Env_Fire");
-	Desc1.iRenderPassNum = 1;
-	Desc1.iImageCountX = 8;
-	Desc1.iImageCountY = 8;
-	Desc1.fFrame = 64.f;
-	Desc1.fEffectPlaySpeed = 1.f;
-	Desc1.fMyPos = { 0.f, 0.f, 0.f };
-
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Effect_Env_Fire", L"Proto_GameObject_Effect_Env_Fire", &Desc1)))
-	{
-		MSGBOX("Failed to Creating Effect_Env_Fire in CStage1::Ready_Effect()");
-		return E_FAIL;
-	}
-
 	////공중에떠있는환경파티클
 	//Env floating
 	vector<CEffect_Env_Floating::EFFECTDESC> vecEnvFloating;
@@ -1294,6 +1430,11 @@ void CStage1::Open_Potal(_fvector vPos, _uint iMonTag)
 		}
 	}
 }
+void CStage1::CheckTriggerForQuest(void)
+{
+}
+
+
 //땅강아지 3마리
 void CStage1::Trgger_Function1()
 {
@@ -1340,7 +1481,13 @@ void CStage1::Trgger_Function1()
 		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 	}
 	m_iCountMonster = 3;
+
+	START_QUEST(EQuestHeaderType::FirestStep, L"T_HUD_Find_Sunforge");
+	START_QUEST(EQuestHeaderType::FirestStep, L"T_HUD_KillAllMonster");
+	START_QUEST(EQuestHeaderType::FirestStep, L"T_HUD_EquipNewWeapon"); 
+	START_QUEST(EQuestHeaderType::FirestStep, L"T_HUD_Find_DropBox"); 
 }
+
 //대지 1마리
 void CStage1::Trgger_Function2()
 {
@@ -1371,6 +1518,7 @@ void CStage1::Trgger_Function2()
 		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 	}
 	m_iCountMonster = 1;
+	START_QUEST(EQuestHeaderType::FirestStep, L"T_HUD_Find_DropBox");
 }
 //땅강아지 2마리 소드 2마리
 void CStage1::Trgger_Function3()
@@ -2047,18 +2195,30 @@ HRESULT CStage1::Ready_Treasure_Chest()
 		vecObject.emplace_back(pData.WorldMat);
 	}
 
+
 	for (int i = 0; i < vecObject.size(); ++i)
 	{
+		CDropBoxData*  pDropboxdata = new CDropBoxData;
 		MABOBJECT MapObjectDesc;
 
 		MapObjectDesc.WorldMat = vecObject[i];
+		auto temp  = pDropboxdata->GetItemData(i);
+		std::vector<void*> test;
+
+		for (auto& iter : temp)
+		{
+			test.emplace_back(&iter);
+		}
+		MapObjectDesc.itemData.push_back(test);
 
 		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_DropBox", L"Proto_GameObject_Treasure_Chest", &MapObjectDesc)))
 		{
 			MSGBOX("Treasure_Chest 파일을 불러오는 도중 오류가 발생했습니다. Stage1.cpp Line 306");
 			return E_FAIL;
 		}
+		m_pDumyDropData.push_back(pDropboxdata);
 	}
+
 	return S_OK;
 }
 
@@ -2172,6 +2332,9 @@ void CStage1::Free()
 	Safe_Release(m_pScenemaManager);
 	CScenematicManager::DestroyInstance();
 
+	for (auto& iter : m_pDumyDropData)
+		Safe_Delete(iter);
+
 	if(g_pInteractManager)
 		g_pInteractManager->Remove_Interactable();
 
@@ -2184,8 +2347,8 @@ void CStage1::Free()
 	CDropManager::DestroyInstance();
 	Safe_Release(m_pTriggerSystem);
 
-	//for (auto& pObj : m_vecMeteor)
-	//	Safe_Release(pObj);
-	//m_vecMeteor.clear();
+	for (auto& pObj : m_vecMeteor)
+		Safe_Release(pObj);
+	m_vecMeteor.clear();
 
 }

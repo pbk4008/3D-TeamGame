@@ -188,7 +188,7 @@ technique11 DefaultTechnique
     pass AlphaBlend
     {
         SetRasterizerState(CullMode_Default);
-        SetDepthStencilState(ZDefault, 0);
+        SetDepthStencilState(ZBufferDisable, 0);
 		SetBlendState(AlphaBlending2, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
 
         VertexShader = compile vs_5_0 VS_MAIN();

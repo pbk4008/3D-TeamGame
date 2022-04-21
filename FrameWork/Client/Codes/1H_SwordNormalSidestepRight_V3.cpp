@@ -81,6 +81,11 @@ HRESULT C1H_SwordNormalSidestepRight_V3::EnterState()
 
 
 	g_pShakeManager->Shake(m_tShakeEvent, m_pTransform->Get_State(CTransform::STATE_POSITION));
+
+	_matrix newmat = g_pObserver->Get_PlayerWorldMatrix();
+	newmat.r[3] = XMVectorSetY(newmat.r[3], XMVectorGetY(newmat.r[3]) - 0.8f);
+	m_pSilvermane->Active_Effect_Target((_uint)EFFECT::DASH, XMMatrixRotationY(XMConvertToRadians(270.f)) * newmat);
+
 	return S_OK;
 }
 

@@ -14,15 +14,15 @@ const float MAXGROOGUGAGUE  = 10.0f;
 extern HWND g_hWnd;
 extern HINSTANCE  g_hInst;
 
-extern CMainApp* g_pMainApp;
+extern CMainApp*		 g_pMainApp;
 extern CClient_Observer* g_pObserver;
-extern CDebugSystem* g_pDebugSystem;
-extern CShakeManager* g_pShakeManager;
-extern CDataManager*  g_pDataManager;
+extern CDebugSystem*	 g_pDebugSystem;
+extern CShakeManager*	 g_pShakeManager;
+extern CDataManager*	 g_pDataManager;
 extern CInven_UIManager* g_pInvenUIManager;
 extern CInteractManager* g_pInteractManager;
-extern CDropManager* g_pDropManager;
+extern CDropManager*	 g_pDropManager;
 extern CWeaponGenerator* g_pWeaponGenerator;
-
+extern CQuestManager*	 g_pQuestManager;
 
 #endif

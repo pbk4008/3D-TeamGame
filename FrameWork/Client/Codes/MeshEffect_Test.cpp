@@ -145,7 +145,7 @@ HRESULT CMeshEffect_Test::Render()
 
 HRESULT CMeshEffect_Test::Ready_Components()
 {
-	if (FAILED(m_pTexture->Change_Texture(L"WispTrail_02")))
+	if (FAILED(m_pTexture->Change_Texture(L"WispTrail_02_Red")))
 		return E_FAIL;
 	if (FAILED(m_pMaterial->Set_Texture("g_DiffuseTexture", TEXTURETYPE::TEX_DIFFUSE, m_pTexture, 0)))
 		return E_FAIL;

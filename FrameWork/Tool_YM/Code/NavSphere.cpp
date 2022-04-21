@@ -99,9 +99,9 @@ void CNavSphere::Input_Key(_double _dtimeDelta)
 	if (g_pGameInstance->getkeyPress(DIK_RIGHT))
 		m_pTransform->Go_Right(_dtimeDelta);
 	if (g_pGameInstance->getkeyPress(DIK_PGUP))
-		m_pTransform->Go_Up(_dtimeDelta);
+		m_pTransform->Mesh_Up(_dtimeDelta);
 	if (g_pGameInstance->getkeyPress(DIK_PGDN))
-		m_pTransform->Go_Down(_dtimeDelta);
+		m_pTransform->Mesh_Down(_dtimeDelta);
 
 	XMStoreFloat3(&m_fPostion, m_pTransform->Get_State(CTransform::STATE_POSITION));
 }

@@ -82,3 +82,9 @@ cbuffer Motionblur
 	matrix g_RotationMat = (matrix) 0;
 	matrix g_PreWorldViewProj = (matrix) 0;
 };
+
+cbuffer MotionTrail
+{
+	float g_Fade = (float)0;
+	float g_UVdvid = (float) 0;
+};

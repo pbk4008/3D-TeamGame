@@ -12,6 +12,7 @@
 #include "MidBoss_Attack.h"
 #include "MidBoss_Turn.h"
 #include "MidBoss_Death.h"
+#include "MidBoss_Execution.h"
 #include "MidBoss_Stun.h"
 
 CBoss_Bastion_Judicator::CBoss_Bastion_Judicator(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
@@ -79,10 +80,11 @@ HRESULT CBoss_Bastion_Judicator::NativeConstruct(const _uint _iSceneID, void* pA
 	m_pPanel->Set_HpBar(Get_HpRatio());
 	m_pPanel->Set_GroggyBar(Get_GroggyGaugeRatio());
 
-	//setActive(false);
-
 	m_tAttackDesc.iLevel = 2;
 
+	m_pWeapon->setActive(false);
+	m_pPanel->setActive(false);
+	setActive(false);
 	return S_OK;
 }
 
@@ -92,6 +94,10 @@ _int CBoss_Bastion_Judicator::Tick(_double TimeDelta)
 	{
 		return -1;
 	}
+
+	_matrix matPivot = XMMatrixIdentity();
+	matPivot = XMMatrixScaling(0.013f, 0.013f, 0.013f) * XMMatrixRotationY(XMConvertToRadians(180.f));
+	m_pModel->Set_PivotMatrix(matPivot);
 
 	if (m_rimcheck)
 	{
@@ -136,8 +142,9 @@ _int CBoss_Bastion_Judicator::Tick(_double TimeDelta)
 	{
 		m_pPanel->Set_Show(true);
 	}
-	if (false == m_bUIShow)
+	if (g_pGameInstance->getkeyDown(DIK_NUMPAD8))
 	{
+		m_pStateController->Change_State(L"Execution");
 	}
 
 	if (m_fGroggyGauge >= m_fMaxGroggyGauge)
@@ -286,6 +293,37 @@ HRESULT CBoss_Bastion_Judicator::Render_Shadow()
 	return S_OK;
 }
 
+void CBoss_Bastion_Judicator::setActive(_bool bActive)
+{
+	CGameObject::setActive(bActive);
+
+	if (bActive)
+	{
+		if (!m_pCharacterController)
+		{
+			/* for.Character Controller */
+			CCharacterController::DESC tCharacterControllerDesc;
+			tCharacterControllerDesc.fHeight = 1.f;
+			tCharacterControllerDesc.fRadius = 0.5f;
+			tCharacterControllerDesc.fContactOffset = tCharacterControllerDesc.fRadius * 0.1f;
+			tCharacterControllerDesc.fStaticFriction = 0.5f;
+			tCharacterControllerDesc.fDynamicFriction = 0.5f;
+			tCharacterControllerDesc.fRestitution = 0.f;
+			tCharacterControllerDesc.pGameObject = this;
+			tCharacterControllerDesc.vPosition = { 0.f, 0.f, 0.f };
+
+			if (FAILED(__super::SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_CharacterController", L"CharacterController", (CComponent**)&m_pCharacterController, &tCharacterControllerDesc)))
+				MSGBOX(L"중간보스 cct 생성 실패");
+			m_pCharacterController->setOwnerTransform(m_pTransform);
+			m_pCharacterController->setShapeLayer((_uint)ELayer::Monster);
+		}
+		if (m_pWeapon)
+			m_pWeapon->setActive(true);
+		if (m_pPanel)
+			m_pPanel->setActive(true);
+	}
+}
+
 HRESULT CBoss_Bastion_Judicator::SetUp_Components()
 {
 	CTransform::TRANSFORMDESC Desc;
@@ -318,21 +356,21 @@ HRESULT CBoss_Bastion_Judicator::SetUp_Components()
 	m_pStateController->Set_GameObject(this);
 
 
-	/* for.Character Controller */
-	CCharacterController::DESC tCharacterControllerDesc;
-	tCharacterControllerDesc.fHeight = 1.f;
-	tCharacterControllerDesc.fRadius = 0.5f;
-	tCharacterControllerDesc.fContactOffset = tCharacterControllerDesc.fRadius * 0.1f;
-	tCharacterControllerDesc.fStaticFriction = 0.5f;
-	tCharacterControllerDesc.fDynamicFriction = 0.5f;
-	tCharacterControllerDesc.fRestitution = 0.f;
-	tCharacterControllerDesc.pGameObject = this;
-	tCharacterControllerDesc.vPosition = { 0.f, 0.f, 0.f };
+	///* for.Character Controller */
+	//CCharacterController::DESC tCharacterControllerDesc;
+	//tCharacterControllerDesc.fHeight = 1.f;
+	//tCharacterControllerDesc.fRadius = 0.5f;
+	//tCharacterControllerDesc.fContactOffset = tCharacterControllerDesc.fRadius * 0.1f;
+	//tCharacterControllerDesc.fStaticFriction = 0.5f;
+	//tCharacterControllerDesc.fDynamicFriction = 0.5f;
+	//tCharacterControllerDesc.fRestitution = 0.f;
+	//tCharacterControllerDesc.pGameObject = this;
+	//tCharacterControllerDesc.vPosition = { 0.f, 0.f, 0.f };
 
-	if (FAILED(__super::SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_CharacterController", L"CharacterController", (CComponent**)&m_pCharacterController, &tCharacterControllerDesc)))
-		return E_FAIL;
-	m_pCharacterController->setOwnerTransform(m_pTransform);
-	m_pCharacterController->setShapeLayer((_uint)ELayer::Monster);
+	//if (FAILED(__super::SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_CharacterController", L"CharacterController", (CComponent**)&m_pCharacterController, &tCharacterControllerDesc)))
+	//	return E_FAIL;
+	//m_pCharacterController->setOwnerTransform(m_pTransform);
+	//m_pCharacterController->setShapeLayer((_uint)ELayer::Monster);
 
 	return S_OK;
 }
@@ -421,6 +459,10 @@ HRESULT CBoss_Bastion_Judicator::Set_Animation_FSM()
 		return E_FAIL;
 #pragma endregion
 
+	pAnim = m_pModel->Get_Animation("SK_Bastion_Tier4.ao|A_Attack_Finisher_Phalanxar");
+	if (FAILED(m_pAnimator->Insert_Animation(EXECUTION, HEAD, pAnim, true, true, false, ERootOption::XYZ)))
+		return E_FAIL;
+
 #pragma region 상시어택애님
 	pAnim = m_pModel->Get_Animation("SK_Bastion_Tier4.ao|A_2H_Hammer_Attack_JogR1");
 	if (FAILED(m_pAnimator->Insert_Animation(ATTACK_JOG_H, HEAD, pAnim, true, true, true, ERootOption::XYZ)))
@@ -477,6 +519,8 @@ HRESULT CBoss_Bastion_Judicator::Set_Animation_FSM()
 	
 	m_pAnimator->Insert_AnyEntryAnimation(STUN_START);
 
+	m_pAnimator->Insert_AnyEntryAnimation(EXECUTION);
+
 	//어택애님
 	m_pAnimator->Insert_AnyEntryAnimation(ATTACK_JOG_H);
 	m_pAnimator->Insert_AnyEntryAnimation(ATTACK_LEGACY_H);
@@ -526,6 +570,9 @@ HRESULT CBoss_Bastion_Judicator::Set_State_FSM()
 		return E_FAIL;
 
 	if (FAILED(m_pStateController->Add_State(L"Death", CMidBoss_Death::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+
+	if (FAILED(m_pStateController->Add_State(L"Execution", CMidBoss_Execution::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 
 	if (FAILED(m_pStateController->Add_State(L"Stun", CMidBoss_Stun::Create(m_pDevice, m_pDeviceContext))))
@@ -660,5 +707,4 @@ void CBoss_Bastion_Judicator::Free()
 	Safe_Release(m_pWeapon);
 	Safe_Release(m_pStateController);
 	Safe_Release(m_pAnimator);
-
 }

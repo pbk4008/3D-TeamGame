@@ -639,6 +639,8 @@ HRESULT CAnimationController::Set_Animation(_uint iIndex)
 		return E_FAIL;
 	}
 	m_pCurAnim = vecAnimations[iIndex];
+
+	return S_OK;
 }
 
 void CAnimationController::Render_Debug()
