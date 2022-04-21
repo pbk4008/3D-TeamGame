@@ -38,6 +38,7 @@ public:
 
 	virtual void Hit(const ATTACKDESC& _tAttackDesc);
 	virtual void Parry(const PARRYDESC& _tParryDesc);
+	virtual void Execution() override;
 public:
 	virtual HRESULT Set_SpawnPosition(_fvector vPos);
 public:

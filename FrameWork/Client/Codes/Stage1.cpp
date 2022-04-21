@@ -112,11 +112,11 @@ HRESULT CStage1::NativeConstruct()
 		return E_FAIL;
 	}
 
-	//if (FAILED(Ready_Trigger_Jump()))
-	// {
-	//	MSGBOX("Jump");
-	// return E_FAIL;
-	//}
+	if (FAILED(Ready_Trigger_Jump()))
+	{
+		MSGBOX("Jump");
+		return E_FAIL;
+	}
 
 	if (FAILED(Ready_Player(L"Layer_Silvermane")))
 	{
@@ -339,19 +339,20 @@ _int CStage1::Tick(_double TimeDelta)
 		pMonster->setActive(true);
 	}
 	
-	//if (g_pGameInstance->getkeyDown(DIK_NUMPAD2))
-	//{
-	//	CMonster_Bastion_Sword* pMonster = nullptr;
-	//	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Test", L"Proto_GameObject_Monster_Bastion_Sword", &fPos, (CGameObject**)&pMonster)))
-	//		return -1;
-	//	pMonster->setActive(true);
-	//}
-	//if (g_pGameInstance->getkeyDown(DIK_NUMPAD3))
-	//{
-	//	CMonster_Bastion_Shooter* pMonster = nullptr;
-	//	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Test", L"Proto_GameObject_Monster_Bastion_Shooter", &fPos, (CGameObject**)&pMonster)))
-	//		return -1;
-	//}
+	if (g_pGameInstance->getkeyDown(DIK_NUMPAD2))
+	{
+		CMonster_Bastion_Sword* pMonster = nullptr;
+		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Test", L"Proto_GameObject_Monster_Bastion_Sword", &fPos, (CGameObject**)&pMonster)))
+			return -1;
+		pMonster->setActive(true);
+	}
+	if (g_pGameInstance->getkeyDown(DIK_NUMPAD3))
+	{
+		CMonster_Bastion_Shooter* pMonster = nullptr;
+		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Test", L"Proto_GameObject_Monster_Bastion_Shooter", &fPos, (CGameObject**)&pMonster)))
+			return -1;
+		pMonster->setActive(true);
+	}
 	//if (g_pGameInstance->getkeyDown(DIK_NUMPAD4))
 	//{
 	//	CMonster_Bastion_Healer* pMonster = nullptr;
@@ -376,12 +377,13 @@ _int CStage1::Tick(_double TimeDelta)
 	//	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Test", L"Proto_GameObject_Boss_Bastion", &fPos, (CGameObject**)&pMonster)))
 	//		return -1;
 	//}
-	//if (g_pGameInstance->getkeyDown(DIK_NUMPAD8))
-	//{
-	//	CMonster_BronzeAnimus* pMonster = nullptr;
-	//	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Test", L"Proto_GameObject_Monster_BronzeAnimus", &fPos, (CGameObject**)&pMonster)))
-	//		return -1;
-	//}
+	if (g_pGameInstance->getkeyDown(DIK_NUMPAD8))
+	{
+		CMonster_BronzeAnimus* pMonster = nullptr;
+		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Test", L"Proto_GameObject_Monster_BronzeAnimus", &fPos, (CGameObject**)&pMonster)))
+			return -1;
+		pMonster->setActive(true);
+	}
 #pragma endregion
 	if(g_pInteractManager)
 		g_pInteractManager->Tick(TimeDelta);

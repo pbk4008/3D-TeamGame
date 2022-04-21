@@ -48,7 +48,6 @@ HRESULT CShooter_Excution::Render()
 HRESULT CShooter_Excution::EnterState()
 {
 	m_pAnimator->Change_AnyEntryAnimation((_uint)CMonster_Bastion_Shooter::ANIM_TYPE::EXCUTION);
-	g_pMainApp->FreezeTime();
 
 	return S_OK;
 }

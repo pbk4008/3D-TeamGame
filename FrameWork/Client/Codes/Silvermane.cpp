@@ -1911,6 +1911,9 @@ const void CSilvermane::Raycast_DropBox(const _double& _dDeltaTime)
 	switch (iObjectTag)
 	{
 	case (_uint)GAMEOBJECT::MONSTER_ABERRANT:
+	case (_uint)GAMEOBJECT::MONSTER_1H:
+	case (_uint)GAMEOBJECT::MONSTER_SHOOTER:
+	case (_uint)GAMEOBJECT::MONSTER_ANIMUS:
 	case (_uint)GAMEOBJECT::MIDDLE_BOSS:
 		//if (static_cast<CActor*>(pHitObject)->Get_Groggy())
 		//{

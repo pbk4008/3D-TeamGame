@@ -43,6 +43,7 @@ public:
 
 	virtual void Hit(const ATTACKDESC& _tAttackDesc) override;
 	virtual void Parry(const PARRYDESC& _tParryDesc) override;
+	virtual void Execution() override;
 
 	virtual void setActive(_bool bActive) override;
 

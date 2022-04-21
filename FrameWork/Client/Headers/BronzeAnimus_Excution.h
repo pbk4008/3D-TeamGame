@@ -3,12 +3,12 @@
 #define __BRONZEAINMUS_EXCUTION_H__
 #include "BronzeAnimus_State.h"
 BEGIN(Client)
-class CBraonzeAnimus_Excution : public CBronzeAnimus_State
+class CBronzeAnimus_Excution : public CBronzeAnimus_State
 {
 protected:
-	explicit CBraonzeAnimus_Excution(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext);
-	explicit CBraonzeAnimus_Excution(const CBraonzeAnimus_Excution& _rhs);
-	virtual ~CBraonzeAnimus_Excution() = default;
+	explicit CBronzeAnimus_Excution(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext);
+	explicit CBronzeAnimus_Excution(const CBronzeAnimus_Excution& _rhs);
+	virtual ~CBronzeAnimus_Excution() = default;
 
 public:
 	virtual HRESULT NativeConstruct(void* _pArg = nullptr);
@@ -29,7 +29,7 @@ private:
 	_bool	m_bAttackEnd = false;
 
 public:
-	static CBraonzeAnimus_Excution* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext, void* _pArg = nullptr);
+	static CBronzeAnimus_Excution* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext, void* _pArg = nullptr);
 	virtual void Free() override;
 };
 END
