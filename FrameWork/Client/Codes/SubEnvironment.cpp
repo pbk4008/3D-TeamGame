@@ -54,8 +54,14 @@ _int CSubEnvironment::LateTick(_double TimeDelta)
 	//if (FAILED(Culling()))
 	//	return -1;
 
-	if(m_pRenderer->Get_RenderButton(CRenderer::SHADOW) == false)
+	if (m_pRenderer)
+	{
+		if (m_pRenderer->Get_RenderButton(CRenderer::SHADOW) == true)
+			m_pRenderer->Add_RenderGroup(CRenderer::RENDER_SHADOW, this);
+
 		m_pRenderer->Add_RenderGroup(CRenderer::RENDER_NONALPHA, this);
+	}
+
 
 	return _int();
 }
@@ -86,6 +92,22 @@ HRESULT CSubEnvironment::Render()
 
 HRESULT CSubEnvironment::Render_Shadow()
 {
+	_matrix world, lightview, ligtproj;
+	world = XMMatrixTranspose(m_pTransform->Get_WorldMatrix());
+	lightview = XMMatrixTranspose(m_LightDesc->mLightView);
+	ligtproj = XMMatrixTranspose(m_LightDesc->mLightProj);
+	_float3 lightpos = m_LightDesc->vPosition;
+
+	m_pInstanceMesh->SetUp_ValueOnShader("g_WorldMatrix", &world, sizeof(_matrix));
+	m_pInstanceMesh->SetUp_ValueOnShader("g_LightView", &lightview, sizeof(_matrix));
+	m_pInstanceMesh->SetUp_ValueOnShader("g_LightProj", &ligtproj, sizeof(_matrix));
+	m_pInstanceMesh->SetUp_ValueOnShader("g_LightPos", &lightpos, sizeof(_float3));
+
+	for (_uint i = 0; i < m_Nummeshcontainer; i++)
+		m_pInstanceMesh->Render(i, 2);
+
+	return S_OK;
+
 	return S_OK;
 }
 
@@ -95,6 +117,8 @@ HRESULT CSubEnvironment::Ready_Component()
 		return E_FAIL;
 
 	m_Nummeshcontainer = m_pInstanceMesh->Get_NumMeshContainer();
+
+	m_LightDesc = g_pGameInstance->Get_LightDesc(0);
 
 	return S_OK;
 }
