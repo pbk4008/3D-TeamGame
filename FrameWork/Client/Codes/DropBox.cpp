@@ -62,8 +62,10 @@ HRESULT CDropBox::NativeConstruct(const _uint _iSceneID, void* _pArg)
 
 	setActive(true);
 
-	_vector EffPos = { 0.f, -0.5f, 0.f, 0.f };
-	Active_Effect((_uint)EFFECT::BOX , EffPos);
+	//박스위치에 파티클생성
+	_matrix matPos = m_pTransform->Get_WorldMatrix();
+	matPos.r[3] = XMVectorSetY(matPos.r[3], XMVectorGetY(matPos.r[3]) - 0.5f);
+	Active_Effect_Target((_uint)EFFECT::BOX , matPos);
 
 	return S_OK;
 }

@@ -791,13 +791,11 @@ HRESULT CStage1::Ready_Data_Effect()
 
 	FullName = L"Proto_GameObject_Effect_DashDust";
 
-	//마지막에 받을 Effect변수 넣기
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_HitGroundSmoke", FullName, &vecDashEffect[0], (CGameObject**)&pEffect)))
 	{
 		MSGBOX("Failed to Creating Effect_HitGroundSmoke in CStage1::Ready_Effect()");
 		return E_FAIL;
 	}
-	//매니저에 이펙트 넣기 (마지막 매개변수 : 같은 이펙트 추가로 넣을 갯수)
 	if (FAILED(g_pGameInstance->Add_Effect((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_HitGroundSmoke", pEffect, 6)))
 	{
 		MSGBOX("Falild to Add_Effect_HitGroundSmoke in CStage1::Ready_Effect()");
