@@ -112,11 +112,11 @@ HRESULT CStage1::NativeConstruct()
 		return E_FAIL;
 	}
 
-	if (FAILED(Ready_Trigger_Jump()))
-	{
-		MSGBOX("Stage1 Jump");
-		return E_FAIL;
-	}
+	//if (FAILED(Ready_Trigger_Jump()))
+	//{
+	//	MSGBOX("Stage1 Jump");
+	//	return E_FAIL;
+	//}
 
 	if (FAILED(Ready_Player(L"Layer_Silvermane")))
 	{
@@ -192,7 +192,7 @@ HRESULT CStage1::NativeConstruct()
 	//	return E_FAIL;
 	//}
 
-	g_pGameInstance->PlayBGM(L"Stage1_BGM");
+	//g_pGameInstance->PlayBGM(L"Stage1_BGM");
 	
 	return S_OK;
 }
@@ -787,17 +787,15 @@ HRESULT CStage1::Ready_Data_Effect()
 	vecDashEffect.clear();
 	g_pGameInstance->LoadFile<CEffect_DashDust::EF_PAR_DASH_DESC>(vecDashEffect, L"../bin/SaveData/Effect/Effect_HitGround_Smoke.dat");
 
-	vecDashEffect[0].fAlpha = 0.15f;
+	vecDashEffect[0].fAlpha = 0.1f;
 
 	FullName = L"Proto_GameObject_Effect_DashDust";
 
-	//마지막에 받을 Effect변수 넣기
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_HitGroundSmoke", FullName, &vecDashEffect[0], (CGameObject**)&pEffect)))
 	{
 		MSGBOX("Failed to Creating Effect_HitGroundSmoke in CStage1::Ready_Effect()");
 		return E_FAIL;
 	}
-	//매니저에 이펙트 넣기 (마지막 매개변수 : 같은 이펙트 추가로 넣을 갯수)
 	if (FAILED(g_pGameInstance->Add_Effect((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_HitGroundSmoke", pEffect, 6)))
 	{
 		MSGBOX("Falild to Add_Effect_HitGroundSmoke in CStage1::Ready_Effect()");
@@ -926,7 +924,7 @@ HRESULT CStage1::Ready_Data_Effect()
 
 	FullName = L"Proto_GameObject_Effect_Floating_Speed";
 	
-	vecFloatingSpeed[0].ParticleColor = { 0.7f, 1.f, 0.5f, 1.f };
+	vecFloatingSpeed[0].ParticleColor = { 1.f, 0.9f, 0.5f, 1.f };
 	vecFloatingSpeed[0].Power = 2.0f;
 
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Player_Attack_Left", FullName, &vecFloatingSpeed[0], (CGameObject**)&pEffect)))
@@ -945,7 +943,7 @@ HRESULT CStage1::Ready_Data_Effect()
 	g_pGameInstance->LoadFile<CEffect_Floating_Speed::EF_PAR_FLOATSPEED_DESC>(vecFloatingSpeed, L"../bin/SaveData/Effect/Effect_Player_Attack_Right.dat");
 
 	FullName = L"Proto_GameObject_Effect_Floating_Speed";
-	vecFloatingSpeed[0].ParticleColor = { 0.7f, 1.f, 0.5f, 1.f };
+	vecFloatingSpeed[0].ParticleColor = { 1.f, 0.9f, 0.5f, 1.f };
 	vecFloatingSpeed[0].Power = 2.0f;
 
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Player_Attack_Right", FullName, &vecFloatingSpeed[0], (CGameObject**)&pEffect)))
@@ -964,7 +962,7 @@ HRESULT CStage1::Ready_Data_Effect()
 	g_pGameInstance->LoadFile<CEffect_Floating_Speed::EF_PAR_FLOATSPEED_DESC>(vecFloatingSpeed, L"../bin/SaveData/Effect/Effect_Player_Attack_Right_Last.dat");
 
 	FullName = L"Proto_GameObject_Effect_Floating_Speed";
-	vecFloatingSpeed[0].ParticleColor = { 0.7f, 1.f, 0.5f, 1.f };
+	vecFloatingSpeed[0].ParticleColor = { 1.f, 0.9f, 0.5f, 1.f };
 	vecFloatingSpeed[0].Power = 2.0f;
 
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Player_Attack_Right_Last", FullName, &vecFloatingSpeed[0], (CGameObject**)&pEffect)))
@@ -1255,33 +1253,118 @@ HRESULT CStage1::Ready_Data_Effect()
 	////공중에떠있는환경파티클
 	//Env floating
 	vector<CEffect_Env_Floating::EFFECTDESC> vecEnvFloating;
-	g_pGameInstance->LoadFile<CEffect_Env_Floating::EFFECTDESC>(vecEnvFloating, L"../bin/SaveData/Effect/Effect_Env_Floating_1.dat");
-
+	g_pGameInstance->LoadFile<CEffect_Env_Floating::EFFECTDESC>(vecEnvFloating, L"../bin/SaveData/Effect/Effect_Env_Floating_2.dat");
 	FullName = L"Proto_GameObject_Effect_Env_Floating";
-
 	vecEnvFloating[0].fMyPos = { -5.f, 1.f, 20.f };
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Effect_Env_Floating_1", FullName, &vecEnvFloating[0])))
 	{
 		MSGBOX("Failed to Creating Effect_Env_Floating_1 in CStage1::Ready_Effect()");
 		return E_FAIL;
 	}
+	//envFloating
+	vecEnvFloating[0].fMyPos = { 17.f,4.f, 100.f, 1.f };
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Effect_Env_Falling_Leaf", FullName, &vecEnvFloating[0])))
+		return E_FAIL;
+	//envFloating
+	vecEnvFloating[0].fMyPos = { -68.f,3.f, 110.f, 1.f };
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Effect_Env_Falling_Leaf", FullName, &vecEnvFloating[0])))
+		return E_FAIL;
+	//envFloating
+	vecEnvFloating[0].fMyPos = { -68.f,5.f, 125.f, 1.f };
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Effect_Env_Falling_Leaf", FullName, &vecEnvFloating[0])))
+		return E_FAIL;
+	//envFloating
+	vecEnvFloating[0].fMyPos = { -68.f,8.f, 140.f, 1.f };
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Effect_Env_Falling_Leaf", FullName, &vecEnvFloating[0])))
+		return E_FAIL;
+	//envFloating
+	vecEnvFloating[0].fMyPos = { -110.f,15.f, 210.f, 1.f };
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Effect_Env_Falling_Leaf", FullName, &vecEnvFloating[0])))
+		return E_FAIL;
+	//envFloating
+	vecEnvFloating[0].fMyPos = { -140.f,19.f, 210.f, 1.f };
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Effect_Env_Falling_Leaf", FullName, &vecEnvFloating[0])))
+		return E_FAIL;
+	//envFloating
+	vecEnvFloating[0].fMyPos = { -135.f,22.f, 280.f, 1.f };
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Effect_Env_Falling_Leaf", FullName, &vecEnvFloating[0])))
+		return E_FAIL;
+	//envFloating
+	vecEnvFloating[0].fMyPos = { -145.f,23.f, 300.f, 1.f };
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Effect_Env_Falling_Leaf", FullName, &vecEnvFloating[0])))
+		return E_FAIL;
+	//envFloating
+	vecEnvFloating[0].fMyPos = { -185.f,40.f, 320.f, 1.f };
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Effect_Env_Falling_Leaf", FullName, &vecEnvFloating[0])))
+		return E_FAIL;
+	//envFloating
+	vecEnvFloating[0].fMyPos = { -182.f,55.f, 380.f, 1.f };
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Effect_Env_Falling_Leaf", FullName, &vecEnvFloating[0])))
+		return E_FAIL;
+
 
 	//Env Falling Leaf
 	vector<CEffect_Falling_Leaf::FLOATINGLEAFDESC> vecEnvFallingLeaf;
 	g_pGameInstance->LoadFile<CEffect_Falling_Leaf::FLOATINGLEAFDESC>(vecEnvFallingLeaf, L"../bin/SaveData/Effect/Effect_Falling_Leaf.dat");
-
-	vecEnvFallingLeaf[0].fMyPos = { -5.f, 1.f, 20.f };
+	vecEnvFallingLeaf[0].fMyPos = { -7.f, -10.0f, 3.f, 1.f };
 	vecEnvFallingLeaf[0].fRespawnPosY = -20.f;
 	vecEnvFallingLeaf[0].bSmall = false;
-
 	FullName = L"Proto_GameObject_Effect_Falling_Leaf";
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Effect_Env_Falling_Leaf", FullName, &vecEnvFallingLeaf[0])))
 	{
 		MSGBOX("Failed to Creating Effect_Env_FallingLeaf in CStage1::Ready_Effect()");
 		return E_FAIL;
 	}
-
+	//Leaf
+	vecEnvFallingLeaf[0].fMyPos = { -7.f, -10.0f, 30.f, 1.f };
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Effect_Env_Falling_Leaf", FullName, &vecEnvFallingLeaf[0])))
+		return E_FAIL;
+	//Leaf
+	vecEnvFallingLeaf[0].fMyPos = { 8.f, -10.0f, 50.f, 1.f };
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Effect_Env_Falling_Leaf", FullName, &vecEnvFallingLeaf[0])))
+		return E_FAIL;
+	//Leaf
+	vecEnvFallingLeaf[0].fMyPos = { 11.f, 0.0f, 100.f, 1.f };
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Effect_Env_Falling_Leaf", FullName, &vecEnvFallingLeaf[0])))
+		return E_FAIL;
+	//Leaf
+	vecEnvFallingLeaf[0].fMyPos = { -36.f, 0.0f, 76.f, 1.f };
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Effect_Env_Falling_Leaf", FullName, &vecEnvFallingLeaf[0])))
+		return E_FAIL;
+	//Leaf
+	vecEnvFallingLeaf[0].fMyPos = { -50.f, -16.0f, 73.f, 1.f };
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Effect_Env_Falling_Leaf", FullName, &vecEnvFallingLeaf[0])))
+		return E_FAIL;
+	//Leaf
+	vecEnvFallingLeaf[0].fMyPos = { -66.f, 0.0f, 78.f, 1.f };
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Effect_Env_Falling_Leaf", FullName, &vecEnvFallingLeaf[0])))
+		return E_FAIL;
+	//Leaf
+	vecEnvFallingLeaf[0].fMyPos = { -71.f, 10.0f, 180.f, 1.f };
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Effect_Env_Falling_Leaf", FullName, &vecEnvFallingLeaf[0])))
+		return E_FAIL;
+	//Leaf
+	vecEnvFallingLeaf[0].fMyPos = { -160.f, 18.0f, 204.f, 1.f };
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Effect_Env_Falling_Leaf", FullName, &vecEnvFallingLeaf[0])))
+		return E_FAIL;
+	//Leaf
+	vecEnvFallingLeaf[0].fMyPos = { -146.f, 16.0f, 254.f, 1.f };
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Effect_Env_Falling_Leaf", FullName, &vecEnvFallingLeaf[0])))
+		return E_FAIL;
+	//Leaf
+	vecEnvFallingLeaf[0].fMyPos = { -138.f, 17.0f, 278.f, 1.f };
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Effect_Env_Falling_Leaf", FullName, &vecEnvFallingLeaf[0])))
+		return E_FAIL;
+	//Leaf
+	vecEnvFallingLeaf[0].fMyPos = { -187.f, 45.0f, 390.f, 1.f };
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Effect_Env_Falling_Leaf", FullName, &vecEnvFallingLeaf[0])))
+		return E_FAIL;
+	//Leaf
+	vecEnvFallingLeaf[0].fMyPos = { -187.f, 45.0f, 414.f, 1.f };
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Effect_Env_Falling_Leaf", FullName, &vecEnvFallingLeaf[0])))
+		return E_FAIL;
 #pragma endregion
+
 	return S_OK;
 }
 

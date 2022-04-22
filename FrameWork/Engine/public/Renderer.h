@@ -33,7 +33,7 @@ public: enum RENDER {	RENDER_PRIORITY, RENDER_SKYBOX
 						, RENDER_VELOCITY
 						, RENDER_MOTIONTRAIL
 						, RENDER_DYDISTORTION
-						, RENDER_UI, RENDER_UI_ACTIVE
+						, RENDER_UI, RENDER_UI_ACTIVE, RENDER_UI_TOP
 						, RENDER_MAX };
 
 private: explicit CRenderer(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);
@@ -81,6 +81,7 @@ private: HRESULT Render_Alpha();
 private: HRESULT Render_AlphaNoBloom();
 private: HRESULT Render_UI();
 private: HRESULT Render_UI_Active();
+private: HRESULT Render_UI_Top();
 
 
 private: HRESULT VeloCityPass();

@@ -71,7 +71,7 @@ _int CUI_LevelUP_Fill_Lead_Left::LateTick(_double TimeDelta)
 
 
 	if (nullptr != m_pRenderer)
-		m_pRenderer->Add_RenderGroup(CRenderer::RENDER::RENDER_UI_ACTIVE, this);
+		m_pRenderer->Add_RenderGroup(CRenderer::RENDER::RENDER_UI_TOP, this);
 
 	return _int();
 }

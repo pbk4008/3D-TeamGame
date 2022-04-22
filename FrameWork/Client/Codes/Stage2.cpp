@@ -6,6 +6,7 @@
 
 #include "JumpNode.h"
 
+//UI
 #include "UI_Player_HpBar.h"
 #include "UI_Player_HpBar_Red.h"
 #include "UI_Blank_CKey.h"
@@ -13,10 +14,11 @@
 #include "UI_Tuto_Base.h"
 #include "UI_Tuto_Font.h"
 
+//Effect
 #include "Effect_Env_Fire.h"
+#include "Effect_Env_Floating.h"
 
 #include "DropManager.h"
-
 
 CStage2::CStage2(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
 	: CLevel(pDevice, pDeviceContext)
@@ -386,6 +388,27 @@ HRESULT CStage2::Ready_JumpTrigger()
 	tJumpNodeDesc.vPosition = { 39.f, 15.f, 268.f };
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_JS, L"Layer_JumpNode", L"Proto_GameObject_JumpNode", &tJumpNodeDesc)))
 		return E_FAIL;
+
+	return S_OK;
+}
+
+HRESULT CStage2::Ready_Data_Effect(const _tchar* pDataFilePath)
+{
+#pragma region 이펙트매니저에 안들어가는것들
+	////공중에떠있는환경파티클
+	//Env floating
+	vector<CEffect_Env_Floating::EFFECTDESC> vecEnvFloating;
+	g_pGameInstance->LoadFile<CEffect_Env_Floating::EFFECTDESC>(vecEnvFloating, L"../bin/SaveData/Effect/Effect_Env_Floating_1.dat");
+
+	wstring FullName = L"Proto_GameObject_Effect_Env_Floating";
+
+	vecEnvFloating[0].fMyPos = { -5.f, 1.f, 20.f };
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE2, L"Layer_Effect_Env_Floating_1", FullName, &vecEnvFloating[0])))
+	{
+		MSGBOX("Failed to Creating Effect_Env_Floating_1 in CStage1::Ready_Effect()");
+		return E_FAIL;
+	}
+#pragma endregion
 
 	return S_OK;
 }

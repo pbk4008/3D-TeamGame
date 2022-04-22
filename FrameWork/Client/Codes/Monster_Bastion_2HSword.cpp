@@ -618,6 +618,7 @@ void CMonster_Bastion_2HSword::Hit(CCollision& pCol)
 		Active_Effect((_uint)EFFECT::HIT);
 		Active_Effect((_uint)EFFECT::HIT_FLOATING);
 		Active_Effect((_uint)EFFECT::HIT_FLOATING_2);
+		Active_Effect((_uint)EFFECT::HIT_IMAGE);
 
 		//TODO::¼öÄ¡Á¤ÇØ¼­¹Ù²ãÁà¾ßµÊ
 		m_fGroggyGauge += 2;
