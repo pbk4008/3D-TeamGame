@@ -75,6 +75,20 @@ HRESULT CMotionTrail::Render_MotionTrail()
 	{
 		if (FAILED(m_pModel->Render(2, 4))) MSGBOX("Fialed To Rendering Player Cloak MotionTrail");
 	}
+	else if (m_throwchck == true)
+	{
+		if (XMVector3Equal(m_shieldworldmat.r[3], XMMatrixIdentity().r[3]) != true)
+		{
+			_matrix shield;
+			shield = XMMatrixTranspose(m_shieldworldmat);
+			XMStoreFloat4(&rimdesc.camdir, XMVector3Normalize(g_pGameInstance->Get_CamPosition(camtag) - m_shieldworldmat.r[3]));
+			Set_ContantBuffer(m_pShield, m_shieldworldmat, rimdesc);
+			for (_uint i = 0; i < m_pShield->Get_NumMeshContainer(); ++i)
+			{
+				if (FAILED(m_pShield->Render(i, 4))) MSGBOX("Fialed To Rendering Shield MotionTrail");
+			}
+		}
+	}
 	else
 	{
 		for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
@@ -103,20 +117,24 @@ void CMotionTrail::Set_BoneMat(_fmatrix* bone)
 	memcpy(m_bonematrix, bone, sizeof(_matrix) * 256);
 }
 
-void CMotionTrail::Set_Info(_fmatrix world, _fmatrix weaponwrold,_float UVdvid)
+void CMotionTrail::Set_Info(_fmatrix world, _fmatrix weapon, _fmatrix shield, _float UVdvid)
 {
 	m_worldamt = world;
-	m_weaponworldmat = weaponwrold;
+	m_weaponworldmat = weapon;
+	m_shieldworldmat = shield;
 	m_UVdvid = UVdvid;
 }
 
-void CMotionTrail::Set_Model(CModel* pModel, CModel* pWeapon)
+void CMotionTrail::Set_Model(CModel* pModel, CModel* pWeapon,CModel* pShield)
 {
 	m_pModel = pModel;
 	Safe_AddRef(m_pModel);
 
 	m_pWeapon = pWeapon;
 	Safe_AddRef(m_pWeapon);
+
+	m_pShield = pShield;
+	Safe_AddRef(m_pShield);
 }
 
 HRESULT CMotionTrail::Set_ContantBuffer(CModel* pmodel, _fmatrix worldmat, RIM& rimdesc)
@@ -173,5 +191,6 @@ void CMotionTrail::Free()
 {
 	CActor::Free();
 	Safe_Release(m_pWeapon);
+	Safe_Release(m_pShield);
 	Safe_Release(m_pGradientTex);
 }

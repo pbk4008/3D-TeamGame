@@ -56,6 +56,9 @@ private:
 	_float m_fLiveTime = 0.f;
 	_float3 m_vDir{};
 
+	_float	m_fMTTime = 0.f;
+	_int	m_motiontrailidx = 0;
+
 public:
 	static CFlyingShield* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext);
 	virtual CGameObject* Clone(_uint _iSceneID, void* _pArg = nullptr) override;

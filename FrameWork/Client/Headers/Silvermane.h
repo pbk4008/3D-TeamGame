@@ -150,7 +150,7 @@ private:
 	const _int	Input(const _double& _dDeltaTime);
 	RIM			ColorChange_RimCheck(RIM& rimdesc);
 
-public:  HRESULT	Create_MotionTrail(_int idex,_bool runcheck = false);
+public:  HRESULT	Create_MotionTrail(_int idex,_bool runcheck = false, _bool throwcheck = false);
 
 private: /* Components */
 	CStateController* m_pStateController = nullptr;

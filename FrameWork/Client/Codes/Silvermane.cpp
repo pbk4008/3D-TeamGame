@@ -945,9 +945,7 @@ HRESULT CSilvermane::Ready_Weapons(const _uint _iSceneID)
 		pobjlist = g_pGameInstance->getObjectList((_uint)m_iSceneID, L"Layer_MotionTrail");
 		CGameObject* pobj = pobjlist->back();
 		pobj->setActive(false);
-		//static_cast<CMotionTrail*>(pobj)->Set_Model(m_pModel, m_pCurWeapon->Get_Model());
-		static_cast<CMotionTrail*>(pobj)->Set_Model(m_pModel, m_pFlyingShield->Get_Model());
-
+		static_cast<CMotionTrail*>(pobj)->Set_Model(m_pModel, m_pCurWeapon->Get_Model(), m_pFlyingShield->Get_Model());
 
 		m_vecMotionTrail.emplace_back(pobj);
 	}
@@ -1709,7 +1707,7 @@ RIM CSilvermane::ColorChange_RimCheck(RIM& rimdesc)
 	return rimdesc;
 }
 
-HRESULT CSilvermane::Create_MotionTrail(_int idex, _bool runcheck)
+HRESULT CSilvermane::Create_MotionTrail(_int idex, _bool runcheck, _bool throwcheck)
 {
 	if (idex <= 19)
 	{
@@ -1725,14 +1723,25 @@ HRESULT CSilvermane::Create_MotionTrail(_int idex, _bool runcheck)
 		static_cast<CMotionTrail*>(m_vecMotionTrail[idex])->setActive(true);
 		static_cast<CMotionTrail*>(m_vecMotionTrail[idex])->Set_BoneMat(m_pModel->Get_CurBoneMatrix());
 		_float uvdvid = 0.f;
-		if(idex <= 10)
-			uvdvid = idex / 10.f;
+		if (throwcheck == true)
+			uvdvid = 0.7f;
+		else if(runcheck == true)
+			uvdvid = 0.9f;
 		else
-			uvdvid = (idex - 10) / 10.f;
+		{
+			if (idex <= 10)
+				uvdvid = idex * 0.1f;
+			else
+				uvdvid = (idex - 10) * 0.1f;
+		}
 
-		//static_cast<CMotionTrail*>(m_vecMotionTrail[idex])->Set_Info(smatWorld,m_pCurWeapon->Get_Transform()->Get_WorldMatrix(), uvdvid);
-		static_cast<CMotionTrail*>(m_vecMotionTrail[idex])->Set_Info(smatWorld,m_pFlyingShield->Get_Transform()->Get_WorldMatrix(), uvdvid);
+		static_cast<CMotionTrail*>(m_vecMotionTrail[idex])->Set_Info(smatWorld
+																	,m_pCurWeapon->Get_Transform()->Get_WorldMatrix()
+																	, m_pFlyingShield->Get_Transform()->Get_WorldMatrix()
+																	,uvdvid);
+
 		static_cast<CMotionTrail*>(m_vecMotionTrail[idex])->Set_RunCheck(runcheck);
+		static_cast<CMotionTrail*>(m_vecMotionTrail[idex])->Set_ThrowCheck(throwcheck);
 	}
 
 	return S_OK;

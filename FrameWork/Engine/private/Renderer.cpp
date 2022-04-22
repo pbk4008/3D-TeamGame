@@ -200,11 +200,11 @@ HRESULT CRenderer::Draw_RenderGroup()
 
 		if (FAILED(Render_UI_Active()))
 			return E_FAIL;
-
-		if (FAILED(Render_PhysX()))
-			return E_FAIL;
 	
 #ifdef _DEBUG
+		if (FAILED(Render_PhysX()))
+			return E_FAIL;
+
 		if (m_bRenderbtn[DBG] == false)
 		{
 			if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("MRT_SkyBox"))))		return E_FAIL;
