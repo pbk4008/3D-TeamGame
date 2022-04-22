@@ -705,13 +705,15 @@ HRESULT CStage1::Ready_Light()
 	LIGHTDESC			LightDesc;
 
 	ZeroMemory(&LightDesc, sizeof(LIGHTDESC));
-
 	LightDesc.eType = LIGHTDESC::TYPE_DIRECTIONAL;
-	LightDesc.vDirection = _float3(0.f, -1.f, 1.f);
+	LightDesc.vDirection = _float3(-1.f, -1.f, 1.f);
 	LightDesc.vDiffuse = _float4(1.f, 1.f, 1.f, 1.f);
 	LightDesc.vSpecular = _float4(0.8f, 0.8f, 0.8f, 1.f);
 	LightDesc.vAmbient = _float4(0.6f, 0.6f, 0.6f, 1.f);
-	LightDesc.mOrthinfo[0] = 30.f;
+	/*LightDesc.vPosition = _float3(-132.f, 87.f, 396.f);*/
+	LightDesc.bactive = true;
+
+	LightDesc.mOrthinfo[0] = 50.f;
 
 	if (FAILED(g_pGameInstance->CreateLightCam(m_pDevice, m_pDeviceContext, LightDesc))) MSGBOX("Failed To Creating DirectionLight Cam");
 
@@ -721,6 +723,7 @@ HRESULT CStage1::Ready_Light()
 	LightDesc.vDiffuse = _float4(1.f, 0.f, 0.f, 1.f);
 	LightDesc.vSpecular = _float4(0.8f, 0.8f, 0.8f, 1.f);
 	LightDesc.vAmbient = _float4(0.6f, 0.6f, 0.6f, 1.f);
+	LightDesc.bactive = true;
 	LightDesc.vPosition = _float3(2.f, 15.f, 110.f);
 
 	if (FAILED(g_pGameInstance->Add_Light(m_pDevice, m_pDeviceContext, LightDesc))) MSGBOX("Failed To Adding PointLight");

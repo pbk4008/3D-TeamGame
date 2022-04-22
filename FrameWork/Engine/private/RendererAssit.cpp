@@ -34,9 +34,6 @@ HRESULT CRendererAssit::Setup_RenderTarget()
 	_float fheight = ViewportDesc.Height;
 #endif // _DEBUG
 
-	m_pVIBuffer = CVIBuffer_RectViewPort::Create(m_pDevice, m_pDeviceContext, 0.f, 0.f, ViewportDesc.Width, ViewportDesc.Height, TEXT("../../Reference/ShaderFile/Shader_RectViewPort.hlsl"));
-	if (nullptr == m_pVIBuffer)
-		return E_FAIL;
 	if (FAILED(m_pTargetMgr->Add_RenderTarget(m_pDevice, m_pDeviceContext, TEXT("Target_SkyBox"), widht, height, DXGI_FORMAT_B8G8R8A8_UNORM, _float4(0.f, 0.f, 0.f, 0.f), CRenderTarget::RTT::RTT_END)))
 		return E_FAIL;
 
@@ -436,8 +433,6 @@ CRendererAssit* CRendererAssit::Create(ID3D11Device* pDevice, ID3D11DeviceContex
 
 void CRendererAssit::Free()
 {
-	Safe_Release(m_pVIBuffer);
-	
 	Safe_Release(m_pTargetMgr);
 	Safe_Release(m_pDeviceContext);
 	Safe_Release(m_pDevice);

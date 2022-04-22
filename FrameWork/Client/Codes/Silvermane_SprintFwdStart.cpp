@@ -23,7 +23,7 @@ _int CSilvermane_SprintFwdStart::Tick(const _double& _dDeltaTime)
 	_uint iCurkeyFrameIndex = m_pAnimationController->Get_CurKeyFrameIndex();
 
 	_int temp = 0;
-	temp = iCurkeyFrameIndex % 5;
+	temp = iCurkeyFrameIndex % 2;
 
 	if (temp == 0)
 	{

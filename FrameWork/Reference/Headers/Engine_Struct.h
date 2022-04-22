@@ -67,6 +67,8 @@ namespace Engine
 		XMMATRIX		mLightProj;
 
 		_float			mOrthinfo[5];
+
+		_bool			bactive;
 	}LIGHTDESC;
 
 	typedef struct tagMtrlDesc
