@@ -1,11 +1,11 @@
 #ifndef UI_LevelUP_Background_h__
 #define UI_LevelUP_Background_h__
 
-#include "Hud.h"
+#include "UI.h"
 
 BEGIN(Client)
 class CSingleImage;
-class CUI_LevelUP_Background : public CHud
+class CUI_LevelUP_Background : public CUI
 {
 public:
 	struct ItemSlotDesc
@@ -15,9 +15,20 @@ public:
 		CUI*	pOwner = nullptr;
 	};
 
+	struct Desc
+	{
+		CItemData itemData;
+		_float	  fDisapeatTime = 5.f;
+		_int	  iQueueIndex = 0;
+		CUI*	  pOwner = nullptr;
+		_float2   fInitPos = { 0.f, 0.f };
+		_float2   fInitScale = { 1.2f, 1.2f };
+		_float2   fEndScale = { 1.0f, 1.0f };
+	};
+
 	explicit CUI_LevelUP_Background(void) = default;
 	explicit CUI_LevelUP_Background(ID3D11Device * pDevice, ID3D11DeviceContext * pDeviceContext);
-	explicit CUI_LevelUP_Background(const CHud& rhs);
+	explicit CUI_LevelUP_Background(const CUI& rhs);
 	virtual ~CUI_LevelUP_Background() = default;
 
 public:
@@ -36,7 +47,7 @@ public:
 
 private:
 	CSingleImage* m_pSigleImageCom = nullptr;
-	CHud::Desc    desc;
+	Desc		  desc;
 	CUI*		  m_pOwner = nullptr;
 	CTransform*	  m_pLocalTransform = nullptr;
 	_bool		  m_bSetScale = true;

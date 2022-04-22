@@ -47,14 +47,16 @@ _int C1H_SwordSupermanStab::Tick(const _double& _dDeltaTime)
 
 	if (iCurkeyFrameIndex <= 20)
 	{
-		_int temp = 0;
-		temp = iCurkeyFrameIndex % 2;
-
-		if (temp == 0)
+		m_fMTAcc += g_fDeltaTime;
+		if (0.05f < m_fMTAcc)
 		{
 			m_pSilvermane->Create_MotionTrail(m_motiontrailidx);
 			++m_motiontrailidx;
+			m_fMTAcc = 0.f;
 		}
+
+		if (m_motiontrailidx >= 20)
+			m_motiontrailidx = 0;
 	}
 
 	return _int();

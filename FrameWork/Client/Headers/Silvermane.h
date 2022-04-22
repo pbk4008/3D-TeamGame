@@ -127,7 +127,7 @@ public: /* For.Shield */
 
 public:
 	//light test ÇÔ¼ö
-	void OnLight();
+	void OnLight(_vector vColor, _vector vAmbient, _float fRange, _float fOffTimeSpeed);
 
 public: /* For.JumpNode */
 	CJumpNode* Get_TargetJumpNode() const;
@@ -150,7 +150,7 @@ private:
 	const _int	Input(const _double& _dDeltaTime);
 	RIM			ColorChange_RimCheck(RIM& rimdesc);
 
-public:  HRESULT	Create_MotionTrail(_int idex,_bool runcheck = false);
+public:  HRESULT	Create_MotionTrail(_int idex,_bool runcheck = false, _bool throwcheck = false);
 
 private: /* Components */
 	CStateController* m_pStateController = nullptr;
@@ -213,9 +213,10 @@ private:/* for. Player& Inventory& Equipment Data */
 	CEquipmentData* m_pEquipmentData = nullptr;
 
 private:
+	LIGHTDESC m_LightDesc;
 	CLight* m_pLight = nullptr;
 	_bool m_bLight = false;
-	_float m_fLightRange = 0.f;
+	_float m_fOffTimeSpeed = 15.f;
 
 private:
 	CTexture*	m_pTexture = nullptr;

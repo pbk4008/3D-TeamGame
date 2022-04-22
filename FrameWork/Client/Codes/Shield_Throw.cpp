@@ -68,17 +68,6 @@ _int CShield_Throw::Tick(const _double& _dDeltaTime)
 		return ToIdle();
 	}
 
-	m_fMTAcc += g_fDeltaTime;
-	if (0.05f < m_fMTAcc)
-	{
-		m_pSilvermane->Create_MotionTrail(m_motiontrailidx);
-		++m_motiontrailidx;
-		m_fMTAcc = 0.f;
-	}
-
-	if (m_motiontrailidx >= 20)
-		m_motiontrailidx = 0;
-
 	return _int();
 }
 

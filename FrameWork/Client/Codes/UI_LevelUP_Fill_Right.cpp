@@ -5,12 +5,12 @@
 #include "PlayerData.h"
 
 UI_LevelUP_Fill_Right::UI_LevelUP_Fill_Right(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
-	:CHud(pDevice, pDeviceContext)
+	:CUI(pDevice, pDeviceContext)
 {
 }
 
-UI_LevelUP_Fill_Right::UI_LevelUP_Fill_Right(const CHud& rhs)
-	: CHud(rhs)
+UI_LevelUP_Fill_Right::UI_LevelUP_Fill_Right(const CUI& rhs)
+	: CUI(rhs)
 {
 }
 
@@ -171,6 +171,4 @@ void UI_LevelUP_Fill_Right::Free()
 
 	Safe_Release(m_pSigleImageCom);
 	Safe_Release(m_pLocalTransform);
-	Safe_Release(m_pBuffer);
-
 }

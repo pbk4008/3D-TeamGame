@@ -181,7 +181,7 @@ _int CMonster_Crawler::Tick(_double _dDeltaTime)
 				}
 
 				m_pPanel->Set_UIRemove(true);
-				//Active_Effect((_uint)EFFECT::DEATH);
+				Active_Effect((_uint)EFFECT::DEATH);
 				m_bdissolve = true;
 			}
 
@@ -309,11 +309,11 @@ void CMonster_Crawler::Hit(const ATTACKDESC& _tAttackDesc)
 		m_pStateController->Change_State(L"Flinch_Left");
 	}
 
-	//Active_Effect((_uint)EFFECT::HIT);
-	//Active_Effect((_uint)EFFECT::HIT_FLOATING);
-	//Active_Effect((_uint)EFFECT::HIT_FLOATING_2);
-	//Active_Effect((_uint)EFFECT::HIT_IMAGE);
-	Active_Effect((_uint)EFFECT::DEAD_SMOKE);
+	Active_Effect((_uint)EFFECT::HIT);
+	Active_Effect((_uint)EFFECT::HIT_FLOATING);
+	Active_Effect((_uint)EFFECT::HIT_FLOATING_2);
+	Active_Effect((_uint)EFFECT::HIT_IMAGE);
+	//Active_Effect((_uint)EFFECT::DEAD_SMOKE);
 
 }
 

@@ -102,6 +102,18 @@ _int CFlyingShield::Tick(_double _dDeltaTime)
 	}
 
 	m_pCollider->Tick(_dDeltaTime);
+
+	m_fMTTime += g_fDeltaTime;
+	if (0.05f < m_fMTTime)
+	{
+		static_cast<CSilvermane*>(m_pOwner)->Create_MotionTrail(m_motiontrailidx,false, true);
+		++m_motiontrailidx;
+		m_fMTTime = 0.f;
+	}
+
+	if (m_motiontrailidx >= 20)
+		m_motiontrailidx = 0;
+
 	return _int();
 }
 
@@ -238,7 +250,6 @@ HRESULT CFlyingShield::Ready_Components()
 	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Model_FlyingShield", L"Model", (CComponent**)&m_pModel)))
 		return E_FAIL;
 	m_pModel->Add_Material(g_pGameInstance->Get_Material(L"Mtrl_FlyingShield"), 0);
-
 
 	CCollider::DESC tColliderDesc;
 	tColliderDesc.isTrigger = true;

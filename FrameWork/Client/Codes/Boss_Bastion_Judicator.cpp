@@ -665,7 +665,7 @@ void CBoss_Bastion_Judicator::Hit(const ATTACKDESC& _tAttackDesc)
 	Active_Effect((_uint)EFFECT::HIT);
 	Active_Effect((_uint)EFFECT::HIT_FLOATING);
 	Active_Effect((_uint)EFFECT::HIT_FLOATING_2);
-
+	Active_Effect((_uint)EFFECT::HIT_IMAGE);
 
 	if (false == m_bGroggy)
 	{

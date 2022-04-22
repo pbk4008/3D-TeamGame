@@ -254,24 +254,6 @@ void CShield::Set_TrackAcc(const _double& _dTrackAcc)
 	m_pAnimationController->Set_TrackAcc(_dTrackAcc);
 }
 
-CWeapon* CShield::Throw(const _fvector _svTargetPos)
-{
-	CFlyingShield::DESC tDesc;
-	XMStoreFloat3(&tDesc.vTargetPos, _svTargetPos);
-	tDesc.pOriginTransform = m_pTransform;
-	CFlyingShield* pFlyingShield = nullptr;
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer(m_iSceneID, L"Layer_Weapon", L"Proto_GameObject_FlyingShield", &tDesc, (CGameObject**)&pFlyingShield)))
-		return nullptr;
-	if (pFlyingShield)
-	{
-		pFlyingShield->Set_Owner(m_pOwner);
-		pFlyingShield->Set_FixedBone(m_pFixedBone);
-		pFlyingShield->Set_OwnerPivotMatrix(XMLoadFloat4x4(&m_matOwnerPivot));
-	}
-
-	return pFlyingShield;
-}
-
 CShield* CShield::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
 {
 	CShield* pInstance = new CShield(_pDevice, _pDeviceContext);

@@ -5,12 +5,12 @@
 #include "UI_LevelUP_Fill_Right.h"
 
 CUI_LevelUP_Fill_Lead_Right::CUI_LevelUP_Fill_Lead_Right(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
-	:CHud(pDevice, pDeviceContext)
+	:CUI(pDevice, pDeviceContext)
 {
 }
 
-CUI_LevelUP_Fill_Lead_Right::CUI_LevelUP_Fill_Lead_Right(const CHud& rhs)
-	: CHud(rhs)
+CUI_LevelUP_Fill_Lead_Right::CUI_LevelUP_Fill_Lead_Right(const CUI& rhs)
+	: CUI(rhs)
 {
 }
 
@@ -69,7 +69,7 @@ _int CUI_LevelUP_Fill_Lead_Right::LateTick(_double TimeDelta)
 	m_pTransform->Set_State(CTransform::STATE_POSITION, _vector{ 40.0f + Gap , -274.f, 0.07f, 1.f });
 
 	if (nullptr != m_pRenderer)
-		m_pRenderer->Add_RenderGroup(CRenderer::RENDER::RENDER_UI_ACTIVE, this);
+		m_pRenderer->Add_RenderGroup(CRenderer::RENDER::RENDER_UI_TOP, this);
 
 	return _int();
 }
@@ -148,5 +148,4 @@ void CUI_LevelUP_Fill_Lead_Right::Free()
 
 	Safe_Release(m_pSigleImageCom);
 	Safe_Release(m_pLocalTransform);
-
 }

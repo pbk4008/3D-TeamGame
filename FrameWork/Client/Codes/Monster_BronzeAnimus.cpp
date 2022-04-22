@@ -663,6 +663,7 @@ void CMonster_BronzeAnimus::Hit(CCollision& collision)
 		Active_Effect((_uint)EFFECT::HIT, Pos);
 		Active_Effect((_uint)EFFECT::HIT_FLOATING, Pos);
 		Active_Effect((_uint)EFFECT::HIT_FLOATING_2, Pos);
+		Active_Effect((_uint)EFFECT::HIT_IMAGE, Pos);
 
 		//TODO::¼öÄ¡Á¤ÇØ¼­¹Ù²ãÁà¾ßµÊ
 		m_fGroggyGauge += 2.f;

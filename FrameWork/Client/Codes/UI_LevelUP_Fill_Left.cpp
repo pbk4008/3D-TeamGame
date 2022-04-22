@@ -5,12 +5,12 @@
 #include "PlayerData.h"
 
 UI_LevelUP_Fill_Left::UI_LevelUP_Fill_Left(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
-	:CHud(pDevice, pDeviceContext)
+	:CUI(pDevice, pDeviceContext)
 {
 }
 
-UI_LevelUP_Fill_Left::UI_LevelUP_Fill_Left(const CHud& rhs)
-	: CHud(rhs)
+UI_LevelUP_Fill_Left::UI_LevelUP_Fill_Left(const CUI& rhs)
+	: CUI(rhs)
 {
 }
 
@@ -188,7 +188,7 @@ CGameObject* UI_LevelUP_Fill_Left::Clone(const _uint iSceneID, void* pArg)
 void UI_LevelUP_Fill_Left::Free()
 {
 	__super::Free();
+
 	Safe_Release(m_pSigleImageCom);
 	Safe_Release(m_pLocalTransform);
-	Safe_Release(m_pBuffer);
 }

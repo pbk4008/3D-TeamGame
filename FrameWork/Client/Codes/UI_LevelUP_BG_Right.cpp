@@ -4,12 +4,12 @@
 #include "UI_Level_UP.h"
 
 CUI_LevelUP_BG_Right::CUI_LevelUP_BG_Right(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
-	:CHud(pDevice, pDeviceContext)
+	:CUI(pDevice, pDeviceContext)
 {
 }
 
-CUI_LevelUP_BG_Right::CUI_LevelUP_BG_Right(const CHud& rhs)
-	: CHud(rhs)
+CUI_LevelUP_BG_Right::CUI_LevelUP_BG_Right(const CUI& rhs)
+	: CUI(rhs)
 {
 }
 
@@ -26,7 +26,7 @@ HRESULT CUI_LevelUP_BG_Right::NativeConstruct(const _uint iSceneID, void* pArg)
 	if (FAILED(CUI::NativeConstruct(iSceneID, pArg)))
 		return E_FAIL;
 
-	desc = (*(CHud::Desc*)pArg);
+	desc = (*(Desc*)pArg);
 
 	m_pLocalTransform = g_pGameInstance->Clone_Component<CTransform>(0, L"Proto_Component_Transform");
 	m_pLocalTransform->Set_State(CTransform::STATE_POSITION, _vector{ 140.f , -270.f, 0.3f, 1.f });
