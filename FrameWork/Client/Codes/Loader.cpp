@@ -190,11 +190,9 @@ HRESULT CLoader::SetUp_Stage1_Object()
 #pragma region 이펙트들
 	if (FAILED(Load_Stage1EffectLoad()))
 		return E_FAIL;
-	/////////////////////////////// 소드 트레일
-	if (FAILED(Load_TrailEffects()))
+	if (FAILED(Load_TrailEffects())) //소드
 		return E_FAIL;
-	///////////////////////////////////// 메쉬 이펙트
-	if (FAILED(Load_MeshEffects()))
+	if (FAILED(Load_MeshEffects())) //매쉬
 		return E_FAIL;
 #pragma endregion
 

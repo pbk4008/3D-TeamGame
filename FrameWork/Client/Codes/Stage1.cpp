@@ -169,9 +169,9 @@ HRESULT CStage1::NativeConstruct()
 	g_pGameInstance->Change_BaseCamera(L"Camera_Silvermane");
 
 	//if (FAILED(Ready_Meteor()))
-	// {
-		//MSGBOX("Meteor");
-		// 		return E_FAIL;
+	//{
+	//	MSGBOX("Meteor");
+	//	return E_FAIL;
 	//}
 
 	//if (FAILED(Ready_Cinema()))
@@ -243,6 +243,7 @@ _int CStage1::Tick(_double TimeDelta)
 				if (m_iPortalCount == 0)
 				{
 					m_pTriggerSystem->Trigger_Clear();
+
 					m_iPortalCount = 3;
 					Open_Potal(XMVectorSet(-58.f, 18.f, 213.f, 1.f), (_uint)GAMEOBJECT::MONSTER_1H);
 					Open_Potal(XMVectorSet(-64.f, 18.f, 230.f, 1.f), (_uint)GAMEOBJECT::MONSTER_1H);
@@ -356,6 +357,7 @@ _int CStage1::Tick(_double TimeDelta)
 			return -1;
 		pMonster->setActive(true);
 	}
+
 	//if (g_pGameInstance->getkeyDown(DIK_NUMPAD4))
 	//{
 	//	CMonster_Bastion_Healer* pMonster = nullptr;
@@ -388,6 +390,7 @@ _int CStage1::Tick(_double TimeDelta)
 		pMonster->setActive(true);
 	}
 #pragma endregion
+
 	if(g_pInteractManager)
 		g_pInteractManager->Tick(TimeDelta);
 	if(g_pDropManager)
@@ -431,9 +434,7 @@ HRESULT CStage1::Render()
 {
 #ifdef _DEBUG
 	if (nullptr != m_pTriggerSystem)
-	{
 		m_pTriggerSystem->Render();
-	}
 #endif
 
 	if(g_pQuestManager)
@@ -745,7 +746,6 @@ HRESULT CStage1::Ready_GameManager(void)
 	m_pIndicatorManager = GET_INSTANCE(CIndicator_Manager);
 	m_pScenemaManager = GET_INSTANCE(CScenematicManager);
 
-
 	return S_OK;
 }
 
@@ -771,6 +771,7 @@ HRESULT CStage1::Ready_Data_Effect()
 		MSGBOX("Failed to Creating Effect_Player_Foot_Dash in CStage1::Ready_Effect()");
 		return E_FAIL;
 	}
+
 	//매니저에 이펙트 넣기 (마지막 매개변수 : 같은 이펙트 추가로 넣을 갯수)
 	if (FAILED(g_pGameInstance->Add_Effect((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Player_Foot_Dash", pEffect, 20)))
 	{

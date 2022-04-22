@@ -65,16 +65,16 @@ _int CLevel_UP::LateTick(_double TimeDelta)
 
 HRESULT CLevel_UP::Render()
 {
-	m_pBg->Render();
+	//m_pBg->Render();
 
-	m_pBgLeft->Render();
-	m_pBgRight->Render();
+	//m_pBgLeft->Render();
+	//m_pBgRight->Render();
 
-	m_pFill_Lead_Left->Render();
-	m_pFill_Lead_Right->Render();
+	//m_pFill_Lead_Left->Render();
+	//m_pFill_Lead_Right->Render();
 
-	m_pFIll_Left->Render();
-	m_pFIll_Right->Render();
+	//m_pFIll_Left->Render();
+	//m_pFIll_Right->Render();
 
 	return S_OK;
 }
@@ -150,12 +150,19 @@ void CLevel_UP::Show(CPlayerData* pPlayerData)
 	this->setActive(true);
 
 	m_pBg->setActive(true);
+
 	m_pBgLeft->setActive(true);
 	m_pBgRight->setActive(true);
+
 	m_pFill_Lead_Left->setActive(true);
 	m_pFill_Lead_Right->setActive(true);
 
 	m_pFIll_Left->SetUI(pPlayerData);
+	m_pFIll_Right->SetUI(pPlayerData);
+
+	m_pFill_Lead_Left->Set_Fill(m_pFIll_Right);
+	m_pFill_Lead_Right->Set_Fill(m_pFIll_Right);
+
 	m_pFIll_Left->setActive(true);
 	m_pFIll_Right->setActive(true);
 }

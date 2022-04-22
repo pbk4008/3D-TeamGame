@@ -15,7 +15,7 @@ BEGIN(Client)
 class CSingleImage :  public CComponent
 {
 public:
-	enum RenderType { Alpha, Nonalpha, VerticalGauge, Type_End };
+	enum RenderType { Alpha, Nonalpha, VerticalGaugeRight, VerticalGaugeLeft, Type_End };
 
 public:
 	struct Desc
@@ -30,20 +30,17 @@ public:
 		CRenderer*   pRenderer = nullptr;
 		CTransform*  pTransform = nullptr;
 		CGameObject* pCreator = nullptr;
-		CVIBuffer_Trapezium*  pBuffer = nullptr;
-		_float		 fCurExpGauge;
+		CVIBuffer_Rect*  pBuffer = nullptr;
+		_float		 fExpRatio;
 		_float		 fGapX;
-		_float		 fGapY;
 		_bool		 bFadeOption = false;
 	};
 
-	struct RenderVal
+	typedef struct RenderVal
 	{
-		_float		 fCurExpGauge;
-		_float		 fGapX;
-		_float		 fGapY;
-	};
-
+		_float		fExpRatio;//현재 경험치 비율
+		_float		fGapX;
+	}RENDERVAL;
 private:
 	explicit CSingleImage(void) = default;
 	explicit CSingleImage(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);
@@ -77,9 +74,9 @@ private:
 
 	RenderType m_ERenderType = Type_End;
 	_float  m_fGapX;
-	_float  m_fGapY;
-	_float  m_fCurExpGauge;
 	_float  m_fAlpha = 0.f;
+	_float	m_fExpRatio = 0.f;
+
 private:
 	CVIBuffer_Rect*		 m_pBuffer;
 	CVIBuffer_Trapezium* m_pTrapziumBuffer = nullptr;

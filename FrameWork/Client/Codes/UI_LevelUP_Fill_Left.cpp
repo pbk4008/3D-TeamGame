@@ -38,6 +38,9 @@ HRESULT UI_LevelUP_Fill_Left::NativeConstruct(const _uint iSceneID, void* pArg)
 
 	setActive(false);
 
+	Bufferdesc.fExpRatio = 0.f;
+	Bufferdesc.fGapX = 0.f;
+
 	if (FAILED(Ready_Component()))
 		return E_FAIL;
 
@@ -49,15 +52,38 @@ _int UI_LevelUP_Fill_Left::Tick(_double dDeltaTime)
 	if (FAILED(CUI::Tick(dDeltaTime)))
 		return -1;
 
-	Bufferdesc.fGapX = m_fGapX = m_fExpRatio;
-	Bufferdesc.fGapY = 0.5f;
 
-	if (m_fExExpRatio != m_fExpRatio)
+	//if (g_pGameInstance->getkeyPress(DIK_NUMPAD6))
+	//{
+	//	Bufferdesc.fExpRatio += 0.01f;
+
+	//	if (1.f <= Bufferdesc.fExpRatio)
+	//	{
+	//		Bufferdesc.fExpRatio = 1.f;
+	//	}
+	//}
+	//if (g_pGameInstance->getkeyPress(DIK_NUMPAD5))
+	//{
+	//	Bufferdesc.fExpRatio -= 0.01f;
+
+	//	if (0 >= Bufferdesc.fExpRatio)
+	//	{
+	//		Bufferdesc.fExpRatio = 0.f;
+	//	}
+	//}
+
+	if (0.f == Bufferdesc.fExpRatio)
 	{
-		//Save Pre Data;
-		Bufferdesc.fCurExpGauge = m_fCurExpGauge = (m_fExpRatio - m_fExExpRatio);
-		m_fExExpRatio = m_fExpRatio;
+		Bufferdesc.fGapX = 0.f;
 	}
+
+	if (Bufferdesc.fGapX < Bufferdesc.fExpRatio)
+	{
+		_float IncreaseGapSpeed = Bufferdesc.fExpRatio -  Bufferdesc.fGapX ;
+		Bufferdesc.fGapX += (_float)dDeltaTime * IncreaseGapSpeed * 2.f;
+	}
+
+	//Bufferdesc.fGapX = Bufferdesc.fExpRatio;
 
 	return _int();
 }
@@ -69,10 +95,11 @@ _int UI_LevelUP_Fill_Left::LateTick(_double TimeDelta)
 
 	m_pSigleImageCom->SetRenderVal(&Bufferdesc);
 
-	m_pLocalTransform->Set_State(CTransform::STATE_POSITION, _vector{ -140.f , -270.f, 0.2f, 1.f });
-	m_pLocalTransform->Scaling(_vector{ 230.f, 30.f, 1.f, 0.f });
-
 	Attach_Owner();
+
+	m_pTransform->Set_State(CTransform::STATE_POSITION, _vector{ -155.f , -270.f, 0.09f, 1.f });
+
+	m_pLocalTransform->Scaling(_vector{ 250.f, 30.f, 1.f, 0.f });
 
 	if (nullptr != m_pRenderer)
 		m_pRenderer->Add_RenderGroup(CRenderer::RENDER::RENDER_UI_ACTIVE, this);
@@ -93,16 +120,9 @@ HRESULT UI_LevelUP_Fill_Left::Render()
 
 HRESULT UI_LevelUP_Fill_Left::Ready_Component(void)
 {
-	{
-		CVIBuffer_Trapezium::TRAPDESC desc;
-		desc.fAngle = 0.f;
-		_tcscpy_s(desc.ShaderFilePath, L"../../Reference/ShaderFile/Shader_UI_Enemy_Bar.hlsl");
 
-		desc.bMinus = true;
-
-		if (FAILED(CGameObject::SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_Trapezium_UI", L"Com_Trapezium_UI", (CComponent**)&m_pTrapziumBuffer, &desc)))
-			return E_FAIL;
-	}
+	if (FAILED(CGameObject::SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_Rect_Level_Bar", L"Com_Rect_UI_Bar", (CComponent**)&m_pBuffer)))
+		return E_FAIL;
 
 	/* for. Single Image Com */
 	CSingleImage::Desc ModalSprite;
@@ -111,12 +131,11 @@ HRESULT UI_LevelUP_Fill_Left::Ready_Component(void)
 	ModalSprite.pRenderer = this->m_pRenderer;
 	ModalSprite.pTransform = this->m_pTransform;
 	ModalSprite.fColor = { 1.f, 1.f, 1.f, 0.f };
-	ModalSprite.renderType = CSingleImage::VerticalGauge;
+	ModalSprite.renderType = CSingleImage::VerticalGaugeLeft;
 
-	ModalSprite.pBuffer = m_pTrapziumBuffer;
-	ModalSprite.fGapX = m_fGapX;
-	ModalSprite.fGapY = m_fGapY;
-	ModalSprite.fCurExpGauge = m_fCurExpGauge;
+	ModalSprite.pBuffer = m_pBuffer;
+	ModalSprite.fGapX = Bufferdesc.fGapX;
+	ModalSprite.fExpRatio = Bufferdesc.fExpRatio;
 
 	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_SingleImage", L"SingleImage", (CComponent**)&m_pSigleImageCom, &ModalSprite)))
 		return E_FAIL;
@@ -139,7 +158,7 @@ _int UI_LevelUP_Fill_Left::Attach_Owner()
 
 void UI_LevelUP_Fill_Left::SetUI(CPlayerData* pPlayerData)
 {
-	m_fExExpRatio = pPlayerData->GetExp() / 100.f;
+	Bufferdesc.fExpRatio = pPlayerData->GetExp() / 100.f;
 }
  
 
@@ -168,9 +187,9 @@ CGameObject* UI_LevelUP_Fill_Left::Clone(const _uint iSceneID, void* pArg)
 
 void UI_LevelUP_Fill_Left::Free()
 {
-	Safe_Release(m_pSigleImageCom);
-	Safe_Release(m_pTrapziumBuffer);
-	Safe_Release(m_pLocalTransform);
-
 	__super::Free();
+	Safe_Release(m_pSigleImageCom);
+	Safe_Release(m_pLocalTransform);
+	Safe_Release(m_pBuffer);
+
 }

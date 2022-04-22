@@ -326,7 +326,7 @@ _int CSilvermane::Tick(_double _dDeltaTime)
 
 	if (g_pGameInstance->getkeyDown(DIK_O))
 	{
-		m_pPlayerData->SetExp(10);
+		m_pPlayerData->SetExp(5);
 	}
 
 	return _int();

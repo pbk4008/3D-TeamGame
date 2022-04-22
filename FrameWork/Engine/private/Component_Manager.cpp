@@ -64,6 +64,8 @@ HRESULT CComponent_Manager::SetUpBaseComponent(ID3D11Device* pDevice, ID3D11Devi
 		return E_FAIL;
 	if (Add_Prototype(0, L"Proto_Component_Trapezium_UI", CVIBuffer_Trapezium::Create(pDevice, pDeviceContext)))
 		return E_FAIL;	
+	if (Add_Prototype(0, L"Proto_Component_Rect_Level_Bar", CVIBuffer_Rect::Create(pDevice, pDeviceContext, L"../../Reference/ShaderFile/Shader_UI_Level_Bar.hlsl")))
+		return E_FAIL;
 	if (Add_Prototype(0, L"Proto_Component_CullingBox", CCullingBox::Create(pDevice, pDeviceContext)))
 		return E_FAIL;
 	//if (Add_Prototype(0, L"Proto_Component_RectInstance_UI", CVIBuffer_RectInstance::Create(pDevice, pDeviceContext, L"../../Reference/ShaderFile/Shader_Geo_UI.hlsl", 1)))

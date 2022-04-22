@@ -50,8 +50,6 @@ HRESULT CSingleImage::NativeConstruct(void* pArg)
 
 	/* for VerticalGauge */
 	m_fGapX = texDesc.fGapX;
-	m_fGapY = texDesc.fGapY;
-	m_fCurExpGauge = texDesc.fCurExpGauge;
 
 	switch (m_ERenderType)
 	{
@@ -65,12 +63,18 @@ HRESULT CSingleImage::NativeConstruct(void* pArg)
 		assert("Failed to Get Buffer" && m_pBuffer);
 		m_bRenderPass = 0;
 		break;
-	case CSingleImage::VerticalGauge:
+	case CSingleImage::VerticalGaugeRight:
 	{
-		m_pTrapziumBuffer = texDesc.pBuffer;
+		m_pBuffer = texDesc.pBuffer;
 		m_bRenderPass = 1;
 	}
 		break;
+	case CSingleImage::VerticalGaugeLeft:
+	{
+		m_pBuffer = texDesc.pBuffer;
+		m_bRenderPass = 1;
+	}
+	break;
 	default:
 		m_pBuffer = g_pGameInstance->Clone_Component<CVIBuffer_Rect>(0, L"Proto_Component_RectBuffer");
 		assert("Failed to Get Buffer" && m_pBuffer);
@@ -126,24 +130,39 @@ HRESULT CSingleImage::Render(CTransform* _sender)
 			m_pBuffer->Render(m_bRenderPass);
 		}
 	}
-	else if(RenderType::VerticalGauge == m_ERenderType)
+	else if(RenderType::VerticalGaugeRight == m_ERenderType)
 	{
 		wstring wstrCamTag = g_pGameInstance->Get_BaseCameraTag();
 		_matrix XMWorldMatrix = XMMatrixTranspose(m_pTransform->Get_WorldMatrix());
-		_matrix XMViewMatrix = XMMatrixTranspose(g_pGameInstance->Get_Transform(wstrCamTag, TRANSFORMSTATEMATRIX::D3DTS_VIEW));
-		_matrix XMProjectMatrix = XMMatrixTranspose(g_pGameInstance->Get_Transform(wstrCamTag, TRANSFORMSTATEMATRIX::D3DTS_PROJECTION));
+		_matrix XMViewMatrix = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"MainOrthoCamera", TRANSFORMSTATEMATRIX::D3DTS_VIEW));
+		_matrix XMProjectMatrix = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"MainOrthoCamera", TRANSFORMSTATEMATRIX::D3DTS_PROJECTION));
 
-		m_pTrapziumBuffer->SetUp_ValueOnShader("g_WorldMatrix", &XMWorldMatrix, sizeof(_float) * 16);
-		m_pTrapziumBuffer->SetUp_ValueOnShader("g_ViewMatrix", &XMViewMatrix, sizeof(_float) * 16);
-		m_pTrapziumBuffer->SetUp_ValueOnShader("g_ProjMatrix", &XMProjectMatrix, sizeof(XMMATRIX));
-		m_pTrapziumBuffer->SetUp_ValueOnShader("g_fX", &m_fGapX, sizeof(_float));
-		m_pTrapziumBuffer->SetUp_ValueOnShader("g_fY", &m_fGapY, sizeof(_float));
-		m_pTrapziumBuffer->SetUp_ValueOnShader("g_fAlpha", &m_fColor.z, sizeof(_float));
-		m_pTrapziumBuffer->SetUp_ValueOnShader("g_fCurAttack", &m_fCurExpGauge, sizeof(_float));
+		m_pBuffer->SetUp_ValueOnShader("g_WorldMatrix", &XMWorldMatrix, sizeof(_float) * 16);
+		m_pBuffer->SetUp_ValueOnShader("g_ViewMatrix", &XMViewMatrix, sizeof(_float) * 16);
+		m_pBuffer->SetUp_ValueOnShader("g_ProjMatrix", &XMProjectMatrix, sizeof(XMMATRIX));
+		m_pBuffer->SetUp_ValueOnShader("g_fX", &m_fGapX, sizeof(_float));
+		m_pBuffer->SetUp_ValueOnShader("g_fAlpha", &m_fColor.z, sizeof(_float));
 
-		m_pTrapziumBuffer->SetUp_TextureOnShader("g_DiffuseTexture", m_pImage);
+		m_pBuffer->SetUp_TextureOnShader("g_DiffuseTexture", m_pImage);
 
-		m_pTrapziumBuffer->Render(0);
+		m_pBuffer->Render(1);
+	}
+	else if (RenderType::VerticalGaugeLeft == m_ERenderType)
+	{
+		wstring wstrCamTag = g_pGameInstance->Get_BaseCameraTag();
+		_matrix XMWorldMatrix = XMMatrixTranspose(m_pTransform->Get_WorldMatrix());
+		_matrix XMViewMatrix = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"MainOrthoCamera", TRANSFORMSTATEMATRIX::D3DTS_VIEW));
+		_matrix XMProjectMatrix = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"MainOrthoCamera", TRANSFORMSTATEMATRIX::D3DTS_PROJECTION));
+
+		m_pBuffer->SetUp_ValueOnShader("g_WorldMatrix", &XMWorldMatrix, sizeof(_float) * 16);
+		m_pBuffer->SetUp_ValueOnShader("g_ViewMatrix", &XMViewMatrix, sizeof(_float) * 16);
+		m_pBuffer->SetUp_ValueOnShader("g_ProjMatrix", &XMProjectMatrix, sizeof(XMMATRIX));
+		m_pBuffer->SetUp_ValueOnShader("g_fX", &m_fGapX, sizeof(_float));
+		m_pBuffer->SetUp_ValueOnShader("g_fAlpha", &m_fColor.z, sizeof(_float));
+
+		m_pBuffer->SetUp_TextureOnShader("g_DiffuseTexture", m_pImage);
+
+		m_pBuffer->Render(2);
 	}
 
 	return S_OK;
@@ -156,9 +175,8 @@ void CSingleImage::SetTexture(std::wstring name)
 
 void CSingleImage::SetRenderVal(void* val)
 {
-	m_fCurExpGauge = (*(RenderVal*)val).fCurExpGauge;
+	m_fExpRatio = (*(RenderVal*)val).fExpRatio;
 	m_fGapX = (*(RenderVal*)val).fGapX;
-	m_fGapY = (*(RenderVal*)val).fGapY;
 }
 
 void CSingleImage::SetFadeOut(void)

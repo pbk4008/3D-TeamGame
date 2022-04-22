@@ -59,8 +59,12 @@ _int CUI_LevelUP_BG_Left::LateTick(_double TimeDelta)
 
 	Attach_Owner();
 
+	m_pTransform->Set_State(CTransform::STATE_POSITION, _vector{ -155.f , -270.f, 0.1f, 1.f });
+
+	m_pLocalTransform->Scaling(_vector{ 250.f, 30.f, 1.f, 0.f });
+
 	if (nullptr != m_pRenderer)
-		m_pRenderer->Add_RenderGroup(CRenderer::RENDER::RENDER_UI_ACTIVE, this);
+		m_pRenderer->Add_RenderGroup(CRenderer::RENDER::RENDER_UI, this);
 
 	return _int();
 }
