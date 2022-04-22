@@ -2,6 +2,7 @@
 #include "Cinema1_2.h"
 #include "CinemaCam.h"
 #include "CinemaActor.h"
+#include "ScenematicManager.h"
 
 CCinema1_2::CCinema1_2()
 	: m_pCam(nullptr)
@@ -35,12 +36,12 @@ HRESULT CCinema1_2::NativeContruct(_uint iSceneID)
 
 	m_pPhoenix->Actor_AnimPlay(1);
 	CTransform* pPhoenixTr = m_pPhoenix->Get_Transform();
-	pPhoenixTr->Set_State(CTransform::STATE_POSITION, XMVectorSet(3.f, -1.f, 8.f, 1.f));
-
+	pPhoenixTr->Set_State(CTransform::STATE_POSITION, XMVectorSet(2.f, -1.f, 13.f, 1.f));
+	pPhoenixTr->SetUp_Rotation(XMVectorSet(0.f, 1.f, 0.f, 0.f), XMConvertToRadians(180.f));
 
 	m_pGrayeHwak->Actor_AnimPlay(1);
 	CTransform* pGrayeHwakTr = m_pGrayeHwak->Get_Transform();
-	pGrayeHwakTr->Set_State(CTransform::STATE_POSITION, XMVectorSet(3.f, -1.f, 8.f, 1.f));
+	pGrayeHwakTr->Set_State(CTransform::STATE_POSITION, XMVectorSet(0.f, -1.5f, 13.f, 1.f));
 
 	m_pSilvermane->Actor_AnimPlay(9);
 	CTransform* pSilvermaneTr = m_pSilvermane->Get_Transform();
@@ -55,32 +56,35 @@ _int CCinema1_2::Tick(_double dDeltaTime)
 	if (iProgress == 1)
 		return 0;
 
-	//CTransform* pGrayHwakTr = m_pGrayeHwak->Get_Transform();
-	//pGrayHwakTr->Set_State(CTransform::STATE_POSITION, XMVectorSet(1.f, -1.f, 13.f, 1.f));
+	CTransform* pGrayeHwakTr = m_pGrayeHwak->Get_Transform();
+	pGrayeHwakTr->Set_State(CTransform::STATE_POSITION, XMVectorSet(4.5f, -1.f, 15.f, 1.f));
+	pGrayeHwakTr->SetUp_Rotation(XMVectorSet(0.f, 1.f, 0.f, 0.f), XMConvertToRadians(300.f));
 
-	//CTransform* pPhoenixTr = m_pPhoenix->Get_Transform();
-	//pPhoenixTr->Set_State(CTransform::STATE_POSITION, XMVectorSet(8.f, -1.f, 13.f, 1.f));
+	CTransform* pPhoenixTr = m_pPhoenix->Get_Transform();
+	pPhoenixTr->Set_State(CTransform::STATE_POSITION, XMVectorSet(3.5f, -1.f, 16.f, 1.f));
+	pPhoenixTr->SetUp_Rotation(XMVectorSet(0.f, 1.f, 0.f, 0.f), XMConvertToRadians(270.f));
 
+	CTransform* pSilvermaneTr = m_pSilvermane->Get_Transform();
+	pSilvermaneTr->Set_State(CTransform::STATE_POSITION, XMVectorSet(4.0f, -1.f, 15.f, 1.f));
+	pSilvermaneTr->SetUp_Rotation(XMVectorSet(0.f, 1.f, 0.f, 0.f), XMConvertToRadians(270.f));
 
-	//CTransform* pSilvermaneTr = m_pSilvermane->Get_Transform();
-	//pSilvermaneTr->Set_State(CTransform::STATE_POSITION, XMVectorSet(9.f, 0.f, 10.f, 1.f));
+	m_pGrayeHwak->AnimSpeed(1.2f);
+	m_pPhoenix->AnimSpeed(1.2f);
+	m_pSilvermane->AnimSpeed(1.2f);
 
 	m_pGrayeHwak->Tick(dDeltaTime);
 	m_pPhoenix->Tick(dDeltaTime);
 	m_pSilvermane->Tick(dDeltaTime);
 
-	_matrix matPivot = XMMatrixRotationY(XMConvertToRadians(270.f)) * XMMatrixTranslation(3.f, -1.f, 15.f);
+	_matrix matPivot = XMMatrixRotationY(XMConvertToRadians(270.f)) * XMMatrixTranslation(3.5f, -1.f, 16.f);
 	m_pCam->Set_CameraMatrix(matPivot);
+	m_pCam->Set_Fov(XMConvertToRadians(40.f));
 	m_pCam->Tick(dDeltaTime);
 
 
 	//m_bActorAnimOn = m_pCam->Get_Event(30.0);
 
-	if (m_pCam->Get_CamMoveEnd())
-	{
-		m_bCinemaEnd = true;
-		m_pCam->Reset_Camera();
-	}
+
 
 	return _int();
 }
@@ -91,6 +95,14 @@ _int CCinema1_2::LateTick(_double dDeltaTime)
 	m_pPhoenix->LateTick(dDeltaTime);
 	m_pSilvermane->LateTick(dDeltaTime);
 
+	if (m_pCam->Get_CamMoveEnd())
+	{
+		m_bCinemaEnd = true;
+		m_pCam->Reset_Camera();
+		CScenematicManager* pInstance = GET_INSTANCE(CScenematicManager);
+		pInstance->Change_Cinema((_uint)CINEMA_INDEX::CINEMA2_1);
+		RELEASE_INSTANCE(CScenematicManager);
+	}
 	return _int();
 }
 
@@ -99,6 +111,9 @@ void CCinema1_2::Set_Active(_bool bCheck)
 	CScenematic::Set_Active(bCheck);
 	m_bActorAnimOn = false;
 	m_pSilvermane->Actor_AnimPlay(9);
+	m_pGrayeHwak->Actor_AnimPlay(1);
+	m_pPhoenix->Actor_AnimPlay(1);
+
 	m_pGrayeHwak->Actor_AnimReset();
 	m_pPhoenix->Actor_AnimReset();
 	m_pSilvermane->Actor_AnimReset();

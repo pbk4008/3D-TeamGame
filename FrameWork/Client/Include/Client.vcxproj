@@ -322,6 +322,12 @@ call Update_Client.bat</Command>
     <ClInclude Include="..\Headers\Cinema2_2.h" />
     <ClInclude Include="..\Headers\Cinema2_3.h" />
     <ClInclude Include="..\Headers\Cinema2_4.h" />
+    <ClInclude Include="..\Headers\Cinema3_1.h" />
+    <ClInclude Include="..\Headers\Cinema3_2.h" />
+    <ClInclude Include="..\Headers\Cinema3_3.h" />
+    <ClInclude Include="..\Headers\Cinema3_4.h" />
+    <ClInclude Include="..\Headers\Cinema3_5.h" />
+    <ClInclude Include="..\Headers\Cinema3_6.h" />
     <ClInclude Include="..\Headers\CinemaActor.h" />
     <ClInclude Include="..\Headers\CinemaCam.h" />
     <ClInclude Include="..\Headers\Client_Observer.h" />
@@ -722,6 +728,12 @@ call Update_Client.bat</Command>
     <ClCompile Include="..\Codes\Cinema2_2.cpp" />
     <ClCompile Include="..\Codes\Cinema2_3.cpp" />
     <ClCompile Include="..\Codes\Cinema2_4.cpp" />
+    <ClCompile Include="..\Codes\Cinema3_1.cpp" />
+    <ClCompile Include="..\Codes\Cinema3_2.cpp" />
+    <ClCompile Include="..\Codes\Cinema3_3.cpp" />
+    <ClCompile Include="..\Codes\Cinema3_4.cpp" />
+    <ClCompile Include="..\Codes\Cinema3_5.cpp" />
+    <ClCompile Include="..\Codes\Cinema3_6.cpp" />
     <ClCompile Include="..\Codes\CinemaActor.cpp" />
     <ClCompile Include="..\Codes\CinemaCam.cpp" />
     <ClCompile Include="..\Codes\Client_Observer.cpp" />
