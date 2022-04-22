@@ -34,6 +34,7 @@ public:
 	void Set_Pos(_vector vPos) { XMStoreFloat3(&m_LightDesc.vPosition, vPos); }
 	void Set_Color(_vector vColor) { XMStoreFloat4(&m_LightDesc.vDiffuse, vColor); }
 	void Set_Range(_float fRange) { m_LightDesc.fRange = fRange; }
+	void Set_Desc(LIGHTDESC Desc) { m_LightDesc = Desc; }
 
 private:
 	ID3D11Device*				m_pDevice = nullptr;

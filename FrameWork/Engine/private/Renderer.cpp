@@ -201,6 +201,9 @@ HRESULT CRenderer::Draw_RenderGroup()
 		if (FAILED(Render_UI_Active()))
 			return E_FAIL;
 
+		if (FAILED(Render_UI_Top()))
+			return E_FAIL;
+
 		if (FAILED(Render_PhysX()))
 			return E_FAIL;
 	
@@ -462,6 +465,24 @@ HRESULT CRenderer::Render_UI_Active()
 		Safe_Release(pGameObject);
 	}
 	m_RenderGroup[RENDER_UI_ACTIVE].clear();
+	return S_OK;
+}
+
+HRESULT CRenderer::Render_UI_Top()
+{
+	_matrix view = g_pGameInstance->Get_Transform(L"MainOrthoCamera", TRANSFORMSTATEMATRIX::D3DTS_VIEW);
+	view = XMMatrixInverse(nullptr, view);
+
+	AlphaSorting(RENDER_UI_TOP);
+
+	for (auto& pGameObject : m_RenderGroup[RENDER_UI_TOP])
+	{
+		if (nullptr != pGameObject)
+			pGameObject->Render();
+
+		Safe_Release(pGameObject);
+	}
+	m_RenderGroup[RENDER_UI_TOP].clear();
 	return S_OK;
 }
 

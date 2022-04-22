@@ -66,6 +66,8 @@ HRESULT CEffect_Falling_Leaf::NativeConstruct(const _uint _iSceneID, void* pArg)
 	//m_pBuffer->Set_Desc(Desc);
 	//m_pBuffer->Particle_Reset();
 
+	m_pTransform->Set_State(CTransform::STATE_POSITION, m_Desc.fMyPos);
+
 	m_backupDesc = Desc;
 
 	return S_OK;
@@ -74,8 +76,21 @@ HRESULT CEffect_Falling_Leaf::NativeConstruct(const _uint _iSceneID, void* pArg)
 _int CEffect_Falling_Leaf::Tick(_double TimeDelta)
 {
 
-	_vector newpos = { -15.f, -3.f,10.f, 1.f };
-	m_pTransform->Set_State(CTransform::STATE_POSITION, newpos);
+	//_vector newpos = { -7.f, -10.0f, 3.f, 1.f };
+	//_vector newpos = { -7.f, -10.0f, 30.f, 1.f };
+	//_vector newpos = { 8.f, -10.0f, 50.f, 1.f };
+	//_vector newpos = { 11.f, 0.0f, 100.f, 1.f };
+	//_vector newpos = { -36.f, 0.0f, 76.f, 1.f };
+	//_vector newpos = { -50.f, -16.0f, 73.f, 1.f };
+	//_vector newpos = { -66.f, 0.0f, 78.f, 1.f };
+	//_vector newpos = { -71.f, 10.0f, 180.f, 1.f };
+	//_vector newpos = { -160.f, 18.0f, 204.f, 1.f };
+	//_vector newpos = { -146.f, 16.0f, 254.f, 1.f };
+	//_vector newpos = { -138.f, 17.0f, 278.f, 1.f };
+	//_vector newpos = { -187.f, 45.0f, 390.f, 1.f };
+	//_vector newpos = { -187.f, 45.0f, 414.f, 1.f };
+
+
 	m_pBuffer->Update(g_dImmutableTime, m_Desc.iAxis);
 
 	/*m_fNonActiveTimeAcc += (_float)g_dImmutableTime;
@@ -108,6 +123,7 @@ _int CEffect_Falling_Leaf::Tick(_double TimeDelta)
 _int CEffect_Falling_Leaf::LateTick(_double TimeDelta)
 {
 	_bool bCulling = g_pGameInstance->isIn_WorldFrustum(m_pBox->Get_Points(), 1.f);
+	//_bool bCulling = true;
 	if (true == bCulling)
 	{
 		if (nullptr != m_pRenderer)
@@ -145,7 +161,7 @@ HRESULT CEffect_Falling_Leaf::Render()
 	m_pBuffer->SetUp_ValueOnShader("g_fLifeTime", &m_Desc.fMaxLifeTime, sizeof(_float));
 	m_pBuffer->SetUp_ValueOnShader("g_fCurTime", &m_Desc.fCurTime, sizeof(_float));
 
-	_float4 color = { 1.f, 0.f, 0.f ,1.f };
+	_float4 color = { 1.f, 0.5f, 0.5f ,1.f };
 	m_pBuffer->SetUp_ValueOnShader("g_color", &color, sizeof(_float4));
 
 	m_pBuffer->SetUp_ValueOnShader("g_vCamPosition", (void*)&CamPos, sizeof(_vector));

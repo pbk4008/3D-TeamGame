@@ -69,7 +69,7 @@ _int CUI_LevelUP_Fill_Lead_Right::LateTick(_double TimeDelta)
 	m_pTransform->Set_State(CTransform::STATE_POSITION, _vector{ 40.0f + Gap , -274.f, 0.07f, 1.f });
 
 	if (nullptr != m_pRenderer)
-		m_pRenderer->Add_RenderGroup(CRenderer::RENDER::RENDER_UI_ACTIVE, this);
+		m_pRenderer->Add_RenderGroup(CRenderer::RENDER::RENDER_UI_TOP, this);
 
 	return _int();
 }
