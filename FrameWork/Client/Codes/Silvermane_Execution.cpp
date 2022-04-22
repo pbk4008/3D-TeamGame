@@ -98,10 +98,10 @@ HRESULT CSilvermane_Execution::EnterState()
 		m_pAnimationController->SetUp_NextAnimation("SK_Silvermane.ao|A_Attack_Execution_CrimsonMarksmen_Player", false);
 		break;
 	case (_uint)GAMEOBJECT::MONSTER_ANIMUS:
-		m_pAnimationController->SetUp_NextAnimation("SK_Silvermane.ao|A_Attack_Execution_Swordsworn_Player", false);
+		m_pAnimationController->SetUp_NextAnimation("SK_Silvermane.ao|A_Attack_Execution_BronzeAnimus_Player", false);
 		break;
 	case (_uint)GAMEOBJECT::MIDDLE_BOSS:
-		m_pAnimationController->SetUp_NextAnimation("SK_Silvermane.ao|A_Attack_Execution_BronzeAnimus_Player", false);
+		m_pAnimationController->SetUp_NextAnimation("SK_Silvermane.ao|A_Attack_Finisher_Phalanxar_Player", false);
 		break;
 	}
 	m_pAnimationController->Set_RootMotion(true, true, ERootOption::XYZ);
