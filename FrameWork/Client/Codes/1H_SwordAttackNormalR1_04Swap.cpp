@@ -42,7 +42,7 @@ _int C1H_SwordAttackNormalR1_04Swap::Tick(const _double& _dDeltaTime)
 	{
 
 		// 라이트
-		m_pSilvermane->OnLight();
+		m_pSilvermane->OnLight(XMVectorSet(1.f, 0.2f, 0.2f, 1.f), XMVectorSet(1.f, 1.f, 1.f, 1.f), 10.f, 12.f);
 
 		// 메쉬 이펙트
 		_vector svPos = m_pTransform->Get_State(CTransform::STATE_POSITION);

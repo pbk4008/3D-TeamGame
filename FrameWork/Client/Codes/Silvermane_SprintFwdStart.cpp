@@ -20,19 +20,18 @@ _int CSilvermane_SprintFwdStart::Tick(const _double& _dDeltaTime)
 	if (NO_EVENT != iProgress)
 		return iProgress;
 
-	_uint iCurkeyFrameIndex = m_pAnimationController->Get_CurKeyFrameIndex();
 
-	_int temp = 0;
-	temp = iCurkeyFrameIndex % 2;
-
-	if (temp == 0)
+	m_fMTAcc += g_fDeltaTime;
+	if (0.1f < m_fMTAcc)
 	{
 		m_pSilvermane->Create_MotionTrail(m_motiontrailidx, true);
 		++m_motiontrailidx;
+		m_fMTAcc = 0.f;
 	}
 
 	if (m_motiontrailidx >= 20)
 		m_motiontrailidx = 0;
+
 	return _int();
 }
 

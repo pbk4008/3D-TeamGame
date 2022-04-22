@@ -85,7 +85,7 @@ HRESULT CUI_LootItemEffect::Ready_Component(void)
 	ModalSprite.pCreator = this;
 	ModalSprite.pRenderer = this->m_pRenderer;
 	ModalSprite.pTransform = this->m_pTransform;
-
+	ModalSprite.bFadeOption = true;
 	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_SingleImage", L"SingleImage", (CComponent**)&m_pSigleImageCom, &ModalSprite)))
 		return E_FAIL;
 
@@ -103,6 +103,11 @@ _int CUI_LootItemEffect::Attach_Owner()
 	}
 
 	return _int();
+}
+
+void CUI_LootItemEffect::SetFadeOut(void)
+{
+	m_pSigleImageCom->SetFadeOut();
 }
 
 void CUI_LootItemEffect::SetIcon(const std::wstring& _szFileName)

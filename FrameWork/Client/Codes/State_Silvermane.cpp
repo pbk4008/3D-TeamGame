@@ -573,6 +573,8 @@ void CState_Silvermane::Block(const ATTACKDESC& _tAttackDesc)
 	if (m_pSilvermane->IsHit() || m_pSilvermane->Get_Dead())
 		return;
 
+	m_pSilvermane->OnLight(XMVectorSet(1.f, 1.f, 1.f, 1.f), XMVectorSet(5.f, 5.f, 5.f, 5.f), 15.0f, 60.f);
+
 	EDir eDirFB = EDir::Max;
 	_vector svDir = XMVector3Normalize(XMVectorSetY(_tAttackDesc.pOwner->Get_Transform()->Get_State(CTransform::STATE_POSITION) - m_pTransform->Get_State(CTransform::STATE_POSITION), 0.f));
 	_vector svLook = XMVector3Normalize(XMVectorSetY(m_pTransform->Get_State(CTransform::STATE_LOOK), 0.f));

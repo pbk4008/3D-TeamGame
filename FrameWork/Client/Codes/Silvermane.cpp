@@ -240,14 +240,16 @@ HRESULT CSilvermane::NativeConstruct(const _uint _iSceneID, void* _pArg)
 	LightDesc.vAmbient = _float4(1.f, 1.f, 1.f, 1.f);
 	XMStoreFloat3(&LightDesc.vPosition, m_pTransform->Get_State(CTransform::STATE_POSITION));
 
+	m_LightDesc = LightDesc;
+
 	if (nullptr == m_pLight)
 	{
-		if (FAILED(g_pGameInstance->Add_Light(m_pDevice, m_pDeviceContext, LightDesc, &m_pLight)))
+		if (FAILED(g_pGameInstance->Add_Light(m_pDevice, m_pDeviceContext, m_LightDesc, &m_pLight)))
 			MSGBOX("Failed To Adding PointLight");
 	}
 
 	m_pLight->Set_Show(false);
-	m_fLightRange = LightDesc.fRange;
+
 
 	m_pTransform->Set_State(CTransform::STATE_POSITION, XMVectorSet(0.f,5.f, 10.f, 1.f));
 
@@ -328,15 +330,15 @@ _int CSilvermane::Tick(_double _dDeltaTime)
 
 	
 	//light ฐüทร 
-	if (m_bLight && 0.f <= m_fLightRange)
+	if (m_bLight && 0.f <= m_LightDesc.fRange)
 	{
-		m_fLightRange -= (_float)_dDeltaTime * 12.f;
-		m_pLight->Set_Range(m_fLightRange);
+		m_LightDesc.fRange -= (_float)_dDeltaTime * m_fOffTimeSpeed;
+		m_pLight->Set_Range(m_LightDesc.fRange);
 	}
 
-	if (0.f >= m_fLightRange)
+	if (0.f >= m_LightDesc.fRange)
 	{
-		m_fLightRange = 0.f;
+		m_LightDesc.fRange = 0.f;
 		m_pLight->Set_Show(false);
 		m_bLight = false;
 	}
@@ -393,11 +395,10 @@ _int CSilvermane::LateTick(_double _dDeltaTime)
 			return iProgress;
 	}
 
-
 	//Raycast_Camera();
 
 	//g_pObserver->Set_PlayerPos(m_pTransform->Get_State(CTransform::STATE_POSITION));
-	//g_pGameInstance->UpdateLightCam(0, m_pTransform->Get_State(CTransform::STATE_POSITION));
+	g_pGameInstance->UpdateLightCam(0, m_pTransform->Get_State(CTransform::STATE_POSITION));
 
 
 	return _int();
@@ -431,11 +432,10 @@ HRESULT CSilvermane::Render()
 			if (FAILED(m_pModel->Render(i, i))) MSGBOX("Fialed To Rendering Silvermane");
 		}*/
 	}
-
 	if (m_pRenderer->Get_RenderButton(CRenderer::VELOCITYBLUR) == false)
 		m_PreWroldMat = m_pTransform->Get_WorldMatrix();
 #ifdef _DEBUG
-	Render_Debug();
+	//Render_Debug();
 #endif
 
 
@@ -961,9 +961,7 @@ HRESULT CSilvermane::Ready_Weapons(const _uint _iSceneID)
 		pobjlist = g_pGameInstance->getObjectList((_uint)m_iSceneID, L"Layer_MotionTrail");
 		CGameObject* pobj = pobjlist->back();
 		pobj->setActive(false);
-		//static_cast<CMotionTrail*>(pobj)->Set_Model(m_pModel, m_pCurWeapon->Get_Model());
-		static_cast<CMotionTrail*>(pobj)->Set_Model(m_pModel, m_pFlyingShield->Get_Model());
-
+		static_cast<CMotionTrail*>(pobj)->Set_Model(m_pModel, m_pCurWeapon->Get_Model(), m_pFlyingShield->Get_Model());
 
 		m_vecMotionTrail.emplace_back(pobj);
 	}
@@ -1590,17 +1588,19 @@ void CSilvermane::End_ThrowShield()
 	m_pAnimationController->Set_PlaySpeed(1.4f);
 }
 
-void CSilvermane::OnLight()
+void CSilvermane::OnLight(_vector vColor, _vector vAmbient, _float fRange, _float fOffTimeSpeed)
 {
 	if (nullptr != m_pLight)
 	{
-		m_pLight->Set_Pos(m_pTransform->Get_State(CTransform::STATE_POSITION));
+		_vector Pos = m_pTransform->Get_State(CTransform::STATE_POSITION);
+		m_LightDesc.vPosition = _float3(XMVectorGetX(Pos) , XMVectorGetY(Pos), XMVectorGetZ(Pos));
+		XMStoreFloat4(&m_LightDesc.vDiffuse, vColor);
+		XMStoreFloat4(&m_LightDesc.vAmbient, vAmbient);
+		m_LightDesc.fRange = fRange;
+		m_fOffTimeSpeed = fOffTimeSpeed;
+
+		m_pLight->Set_Desc(m_LightDesc);
 		m_pLight->Set_Show(true);
-
-		m_pLight->Set_Color(XMVectorSet(1.f, 0.2f, 0.2f, 1.f));
-
-		m_fLightRange = 10.f;
-		m_pLight->Set_Range(m_fLightRange);
 		m_bLight = true;
 	}
 }
@@ -1721,7 +1721,7 @@ RIM CSilvermane::ColorChange_RimCheck(RIM& rimdesc)
 	return rimdesc;
 }
 
-HRESULT CSilvermane::Create_MotionTrail(_int idex, _bool runcheck)
+HRESULT CSilvermane::Create_MotionTrail(_int idex, _bool runcheck, _bool throwcheck)
 {
 	if (idex <= 19)
 	{
@@ -1737,14 +1737,25 @@ HRESULT CSilvermane::Create_MotionTrail(_int idex, _bool runcheck)
 		static_cast<CMotionTrail*>(m_vecMotionTrail[idex])->setActive(true);
 		static_cast<CMotionTrail*>(m_vecMotionTrail[idex])->Set_BoneMat(m_pModel->Get_CurBoneMatrix());
 		_float uvdvid = 0.f;
-		if(idex <= 10)
-			uvdvid = idex / 10.f;
+		if (throwcheck == true)
+			uvdvid = 0.7f;
+		else if(runcheck == true)
+			uvdvid = 0.9f;
 		else
-			uvdvid = (idex - 10) / 10.f;
+		{
+			if (idex <= 10)
+				uvdvid = idex * 0.1f;
+			else
+				uvdvid = (idex - 10) * 0.1f;
+		}
 
-		//static_cast<CMotionTrail*>(m_vecMotionTrail[idex])->Set_Info(smatWorld,m_pCurWeapon->Get_Transform()->Get_WorldMatrix(), uvdvid);
-		static_cast<CMotionTrail*>(m_vecMotionTrail[idex])->Set_Info(smatWorld,m_pFlyingShield->Get_Transform()->Get_WorldMatrix(), uvdvid);
+		static_cast<CMotionTrail*>(m_vecMotionTrail[idex])->Set_Info(smatWorld
+																	,m_pCurWeapon->Get_Transform()->Get_WorldMatrix()
+																	, m_pFlyingShield->Get_Transform()->Get_WorldMatrix()
+																	,uvdvid);
+
 		static_cast<CMotionTrail*>(m_vecMotionTrail[idex])->Set_RunCheck(runcheck);
+		static_cast<CMotionTrail*>(m_vecMotionTrail[idex])->Set_ThrowCheck(throwcheck);
 	}
 
 	return S_OK;

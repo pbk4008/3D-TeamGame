@@ -102,6 +102,18 @@ _int CFlyingShield::Tick(_double _dDeltaTime)
 	}
 
 	m_pCollider->Tick(_dDeltaTime);
+
+	m_fMTTime += g_fDeltaTime;
+	if (0.05f < m_fMTTime)
+	{
+		static_cast<CSilvermane*>(m_pOwner)->Create_MotionTrail(m_motiontrailidx,false, true);
+		++m_motiontrailidx;
+		m_fMTTime = 0.f;
+	}
+
+	if (m_motiontrailidx >= 20)
+		m_motiontrailidx = 0;
+
 	return _int();
 }
 

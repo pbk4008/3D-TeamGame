@@ -46,16 +46,18 @@ _int C1H_SwordAttackNormalR2_ReleaseDoubleSwing::Tick(const _double& _dDeltaTime
 		return STATE_CHANGE;
 	}
 
-	if (iCurkeyFrameIndex <= 45)
+	if (iCurkeyFrameIndex <= 50)
 	{
-		_int temp = 0;
-		temp = iCurkeyFrameIndex % 5;
-
-		if (temp == 0)
+		m_fMTAcc += g_fDeltaTime;
+		if (0.05f < m_fMTAcc)
 		{
 			m_pSilvermane->Create_MotionTrail(m_motiontrailidx);
-			m_motiontrailidx++;
+			++m_motiontrailidx;
+			m_fMTAcc = 0.f;
 		}
+
+		if (m_motiontrailidx >= 20)
+			m_motiontrailidx = 0;
 	}
 
 	return _int();

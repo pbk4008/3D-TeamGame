@@ -68,11 +68,11 @@ _int CHud::LateTick(_double TimeDelta)
 		}
 	}
 
-	if (m_pLevelUp)
-	{
-		if (m_pLevelUp->getActive())
-			m_pLevelUp->LateTick(TimeDelta);
-	}
+	//if (m_pLevelUp)
+	//{
+	//	if (m_pLevelUp->getActive())
+	//		m_pLevelUp->LateTick(TimeDelta);
+	//}
 
 	return _int();
 }
@@ -91,11 +91,11 @@ HRESULT CHud::Render()
 		}
 	}
 
-	if (m_pLevelUp)
-	{
-		if (m_pLevelUp->getActive())
-			m_pLevelUp->Render();
-	}
+	//if (m_pLevelUp)
+	//{
+	//	if (m_pLevelUp->getActive())
+	//		m_pLevelUp->Render();
+	//}
 
 	return S_OK;
 }
@@ -108,9 +108,9 @@ HRESULT CHud::Ready_Component(void)
 
 HRESULT CHud::Ready_UIObject(void)
 {
-	//m_pLevelUp = (CLevel_UP*) static_cast<CHud*>(
-	//g_pGameInstance->Clone_GameObject((_uint)SCENEID::SCENE_STATIC, L"Proto_GameObject_UI_LevelUp"));
-	//assert(m_pLevelUp);
+	m_pLevelUp = (CLevel_UP*) static_cast<CHud*>(
+	g_pGameInstance->Clone_GameObject((_uint)SCENEID::SCENE_STATIC, L"Proto_GameObject_UI_LevelUp"));
+	assert(m_pLevelUp);
 
 	return S_OK;
 }
@@ -139,7 +139,7 @@ void CHud::ShowLevelUp_HUD(void)
 	{
 		if (m_pLevelUp)
 		{
-			m_pLevelUp->Show(m_pPlayerData);
+			//m_pLevelUp->Show(m_pPlayerData);
 		}
 	}
 }
@@ -187,10 +187,11 @@ CGameObject* CHud::Clone(const _uint _iSceneID, void* _pArg)
 
 void CHud::Free()
 {
+	__super::Free();
+
 	for (auto& iter : m_vecLootEquipment)
 		Safe_Release(iter);
 
 	Safe_Release(m_pLevelUp);
 
-	__super::Free();
 }

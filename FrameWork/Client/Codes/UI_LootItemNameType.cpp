@@ -19,7 +19,6 @@ HRESULT CUI_LootItemNameType::NativeConstruct_Prototype(void)
 	if (FAILED(CUI::NativeConstruct_Prototype()))
 		return E_FAIL;
 
-
 	return S_OK;
 }
 
@@ -87,7 +86,7 @@ HRESULT CUI_LootItemNameType::Ready_Component(void)
 	ModalSprite.pCreator = this;
 	ModalSprite.pRenderer = this->m_pRenderer;
 	ModalSprite.pTransform = this->m_pTransform;
-
+	ModalSprite.bFadeOption = true;
 	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_SingleImage", L"SingleImage", (CComponent**)&m_pSigleImageCom, &ModalSprite)))
 		return E_FAIL;
 
@@ -110,6 +109,11 @@ _int CUI_LootItemNameType::Attach_Owner()
 void CUI_LootItemNameType::SetIcon(std::wstring _szTextureName)
 {
 	m_pSigleImageCom->SetTexture(_szTextureName);
+}
+
+void CUI_LootItemNameType::SetFadeOut(void)
+{
+	m_pSigleImageCom->SetFadeOut();
 }
 
 CUI_LootItemNameType* CUI_LootItemNameType::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
