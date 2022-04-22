@@ -239,7 +239,6 @@ HRESULT CFlyingShield::Ready_Components()
 		return E_FAIL;
 	m_pModel->Add_Material(g_pGameInstance->Get_Material(L"Mtrl_FlyingShield"), 0);
 
-
 	CCollider::DESC tColliderDesc;
 	tColliderDesc.isTrigger = true;
 	tColliderDesc.pGameObject = this;

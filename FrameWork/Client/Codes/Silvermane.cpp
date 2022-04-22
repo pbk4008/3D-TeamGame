@@ -1542,9 +1542,6 @@ void CSilvermane::Add_BlockTime(const _float _fValue)
 
 HRESULT CSilvermane::ThrowShield(const _fvector& _svTargetPos)
 {
-	//m_pFlyingShield = static_cast<CFlyingShield*>(m_pShield->Throw(_svTargetPos));
-	//if (!m_pFlyingShield)
-	//	return E_FAIL;
 	if (!m_pFlyingShield)
 		return E_FAIL;
 
@@ -1572,7 +1569,6 @@ void CSilvermane::End_ThrowShield()
 
 	m_pAnimationController->Set_TrackAcc(73.0);
 	m_pAnimationController->Set_PlaySpeed(1.4f);
-	//m_pFlyingShield = nullptr;
 }
 
 void CSilvermane::OnLight()
@@ -1910,7 +1906,7 @@ const void CSilvermane::Raycast_DropBox(const _double& _dDeltaTime)
 		if (pHitObject)
 			iObjectTag = pHitObject->getTag();
 	}
-	
+
 	if ((_uint)GAMEOBJECT::DROP_BOX == iObjectTag)
 	{
 		m_pTargetDropBox = static_cast<CDropBox*>(pHitObject);
