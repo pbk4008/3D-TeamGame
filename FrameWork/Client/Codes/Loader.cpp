@@ -1244,6 +1244,7 @@ HRESULT CLoader::Ready_Stage2()
 {
 	if (FAILED(Set_Stage2_Prototype()))
 		return E_FAIL;
+
 	if (FAILED(Load_Stage2_Object()))
 		return E_FAIL;
 

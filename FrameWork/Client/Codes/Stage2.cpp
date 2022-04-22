@@ -61,9 +61,9 @@ HRESULT CStage2::NativeConstruct()
 	//if (FAILED(Ready_TriggerSystem(L"../bin/SaveData/Trigger/MonsterSpawnTrigger2.dat")))
 	//	return E_FAIL;
 
-	g_pDropManager = CDropManager::GetInstance();
-	if (FAILED(g_pDropManager->NativeConstruct((SCENEID::SCENE_STAGE2))))
-		return E_FAIL;
+	//g_pDropManager = CDropManager::GetInstance();
+	//if (FAILED(g_pDropManager->NativeConstruct((SCENEID::SCENE_STAGE2))))
+	//	return E_FAIL;
 
 	return S_OK;
 }
@@ -94,8 +94,10 @@ _int CStage2::Tick(_double TimeDelta)
 		if (m_iCountMonster == 0 && m_bFirst)
 			m_pTriggerSystem->Check_Clear();
 	}
-	g_pInteractManager->Tick(TimeDelta);
-	g_pDropManager->Tick();
+	if(g_pInteractManager)
+		g_pInteractManager->Tick(TimeDelta);
+	if(g_pDropManager)
+		g_pDropManager->Tick();
 
 	return _int();
 }
@@ -124,6 +126,7 @@ HRESULT CStage2::Ready_Light()
 	LightDesc.vDiffuse = _float4(1.f, 1.f, 1.f, 1.f);\
 	LightDesc.vSpecular = _float4(0.8f, 0.8f, 0.8f, 1.f);
 	LightDesc.vAmbient = _float4(0.6f, 0.6f, 0.6f, 1.f);
+	LightDesc.bactive = true;
 	LightDesc.mOrthinfo[0] = 30.f;
 
 	if (FAILED(g_pGameInstance->CreateLightCam(m_pDevice, m_pDeviceContext, LightDesc))) MSGBOX("Failed To Creating DirectionLight Cam");
@@ -135,11 +138,13 @@ HRESULT CStage2::Ready_Light()
 	LightDesc.vSpecular = _float4(0.5f, 0.5f, 0.5f, 1.f);
 	LightDesc.vAmbient = _float4(0.5f, 0.5f, 0.5f, 1.f);
 	LightDesc.vPosition = _float3(71.f, 35.f, 81.f);
+	LightDesc.bactive = true;
 	if (FAILED(g_pGameInstance->Add_Light(m_pDevice, m_pDeviceContext, LightDesc))) MSGBOX("Failed To Adding PointLight");
 
 	LightDesc.fRange = 30.f;
 	LightDesc.vDiffuse = _float4(1.0f, 0.34509f, 0.1333f, 1.f);
 	LightDesc.vPosition = _float3(54.f, 19.f, 237.f);
+	LightDesc.bactive = true;
 	if (FAILED(g_pGameInstance->Add_Light(m_pDevice, m_pDeviceContext, LightDesc))) MSGBOX("Failed To Adding PointLight");
 	
 	
