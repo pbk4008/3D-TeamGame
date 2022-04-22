@@ -1,18 +1,29 @@
 #ifndef UI_LevelUP_Fill_Right_h__
 #define UI_LevelUP_Fill_Right_h__
 
-#include "Hud.h"
+#include "UI.h"
 
 BEGIN(Client)
 class CSingleImage;
-class UI_LevelUP_Fill_Right : public CHud
+class UI_LevelUP_Fill_Right : public CUI
 {
 public:
-	struct Desc
+	struct ItemSlotDesc
 	{
 		_float2 fPos;
 		_float2 fScale;
-		CUI*	pOwner = nullptr;
+		CUI* pOwner = nullptr;
+	};
+
+	struct Desc
+	{
+		CItemData	itemData;
+		_float		fDisapeatTime = 5.f;
+		_int		iQueueIndex = 0;
+		CUI* pOwner = nullptr;
+		_float2		fInitPos = { 0.f, 0.f };
+		_float2		fInitScale = { 1.2f, 1.2f };
+		_float2		fEndScale = { 1.0f, 1.0f };
 	};
 
 	typedef struct RenderVal
@@ -23,7 +34,7 @@ public:
 
 	explicit UI_LevelUP_Fill_Right(void) = default;
 	explicit UI_LevelUP_Fill_Right(ID3D11Device * pDevice, ID3D11DeviceContext * pDeviceContext);
-	explicit UI_LevelUP_Fill_Right(const CHud& rhs);
+	explicit UI_LevelUP_Fill_Right(const CUI& rhs);
 	virtual ~UI_LevelUP_Fill_Right() = default;
 
 public:

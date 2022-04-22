@@ -9,18 +9,18 @@
 #include "UI_LevelUP_Fill_Right.h"
 
 CLevel_UP::CLevel_UP(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
-	:CHud(pDevice, pDeviceContext)
+	:CUI(pDevice, pDeviceContext)
 {
 }
 
-CLevel_UP::CLevel_UP(const CHud& rhs)
-	: CHud(rhs)
+CLevel_UP::CLevel_UP(const CUI& rhs)
+	: CUI(rhs)
 {
 }
 
 HRESULT CLevel_UP::NativeConstruct_Prototype(void)
 {
-	if (FAILED(CHud::NativeConstruct_Prototype()))
+	if (FAILED(CUI::NativeConstruct_Prototype()))
 		return E_FAIL;
 
 	return S_OK;
@@ -28,7 +28,7 @@ HRESULT CLevel_UP::NativeConstruct_Prototype(void)
 
 HRESULT CLevel_UP::NativeConstruct(const _uint iSceneID, void* pArg)
 {
-	if (FAILED(CHud::NativeConstruct(iSceneID, pArg)))
+	if (FAILED(CUI::NativeConstruct(iSceneID, pArg)))
 		return E_FAIL;
 
 	if (FAILED(Ready_UIObject()))
@@ -89,7 +89,7 @@ HRESULT CLevel_UP::Ready_UIObject(void)
 	{
 		CUI_LevelUP_Background::Desc desc;
 		desc.pOwner = this;
-		m_pBg = (CUI_LevelUP_Background*) static_cast<CHud*>(
+		m_pBg = (CUI_LevelUP_Background*) static_cast<CUI*>(
 			g_pGameInstance->Clone_GameObject((_uint)SCENEID::SCENE_STATIC, L"Proto_GameObject_UI_LevelUp_Background", &desc));
 		assert(m_pBg);
 	}
@@ -97,21 +97,21 @@ HRESULT CLevel_UP::Ready_UIObject(void)
 	{
 		CUI_LevelUP_BG_Left::Desc desc;
 		desc.pOwner = this;
-		m_pBgLeft = (CUI_LevelUP_BG_Left*) static_cast<CHud*>(
+		m_pBgLeft = (CUI_LevelUP_BG_Left*) static_cast<CUI*>(
 			g_pGameInstance->Clone_GameObject((_uint)SCENEID::SCENE_STATIC, L"Proto_GameObject_UI_LevelUp_BG_Left", &desc));
 		assert(m_pBg);
 	}
 	{
 		CUI_LevelUP_Fill_Lead_Left::Desc desc;
 		desc.pOwner = this;
-		m_pFill_Lead_Left = (CUI_LevelUP_Fill_Lead_Left*) static_cast<CHud*>(
+		m_pFill_Lead_Left = (CUI_LevelUP_Fill_Lead_Left*) static_cast<CUI*>(
 			g_pGameInstance->Clone_GameObject((_uint)SCENEID::SCENE_STATIC, L"Proto_GameObject_UI_LevelUp_Fill_Lead_Left", &desc));
 		assert(m_pFill_Lead_Left);
 	}
 	{
 		UI_LevelUP_Fill_Left::Desc desc;
 		desc.pOwner = this;
-		m_pFIll_Left = (UI_LevelUP_Fill_Left*) static_cast<CHud*>(
+		m_pFIll_Left = (UI_LevelUP_Fill_Left*) static_cast<CUI*>(
 			g_pGameInstance->Clone_GameObject((_uint)SCENEID::SCENE_STATIC, L"Proto_GameObject_UI_LevelUp_Fill_Left", &desc));
 		assert(m_pFIll_Left);
 
@@ -121,7 +121,7 @@ HRESULT CLevel_UP::Ready_UIObject(void)
 	{
 		CUI_LevelUP_BG_Right::Desc desc;
 		desc.pOwner = this;
-		m_pBgRight = (CUI_LevelUP_BG_Right*) static_cast<CHud*>(
+		m_pBgRight = (CUI_LevelUP_BG_Right*) static_cast<CUI*>(
 			g_pGameInstance->Clone_GameObject((_uint)SCENEID::SCENE_STATIC, L"Proto_GameObject_UI_LevelUp_BG_Right", &desc));
 		assert(m_pBg);
 	}
@@ -129,7 +129,7 @@ HRESULT CLevel_UP::Ready_UIObject(void)
 		CUI_LevelUP_Fill_Lead_Right::Desc desc;
 
 		desc.pOwner = this;
-		m_pFill_Lead_Right = (CUI_LevelUP_Fill_Lead_Right*) static_cast<CHud*>(
+		m_pFill_Lead_Right = (CUI_LevelUP_Fill_Lead_Right*) static_cast<CUI*>(
 			g_pGameInstance->Clone_GameObject((_uint)SCENEID::SCENE_STATIC, L"Proto_GameObject_UI_LevelUp_Fill_Lead_Right", &desc));
 		assert(m_pFill_Lead_Right);
 
@@ -137,7 +137,7 @@ HRESULT CLevel_UP::Ready_UIObject(void)
 	{
 		UI_LevelUP_Fill_Right::Desc desc;
 		desc.pOwner = this;
-		m_pFIll_Right = (UI_LevelUP_Fill_Right*) static_cast<CHud*>(
+		m_pFIll_Right = (UI_LevelUP_Fill_Right*) static_cast<CUI*>(
 			g_pGameInstance->Clone_GameObject((_uint)SCENEID::SCENE_STATIC, L"Proto_GameObject_UI_LevelUp_Fill_Right", &desc));
 		assert(m_pFIll_Right);
 
@@ -191,6 +191,8 @@ CGameObject* CLevel_UP::Clone(const _uint iSceneID, void* pArg)
 
 void CLevel_UP::Free()
 {
+	__super::Free();
+
 	Safe_Release(m_pBg);
 	Safe_Release(m_pBgLeft);
 	Safe_Release(m_pBgRight);
@@ -198,6 +200,4 @@ void CLevel_UP::Free()
 	Safe_Release(m_pFill_Lead_Right);
 	Safe_Release(m_pFIll_Left);
 	Safe_Release(m_pFIll_Right);
-
-	__super::Free();
 }

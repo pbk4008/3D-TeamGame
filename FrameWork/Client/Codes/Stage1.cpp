@@ -130,11 +130,11 @@ HRESULT CStage1::NativeConstruct()
 		return E_FAIL;
 	}
 
-	if (FAILED(Ready_TriggerSystem(L"../bin/SaveData/Trigger/MonsterSpawnTrigger.dat")))
-	{
-		MSGBOX("Stage1 Trigger");
-		return E_FAIL;
-	}
+	//if (FAILED(Ready_TriggerSystem(L"../bin/SaveData/Trigger/MonsterSpawnTrigger.dat")))
+	//{
+	//	MSGBOX("Stage1 Trigger");
+	//	return E_FAIL;
+	//}
 
 	if (FAILED(Ready_Data_UI(L"../bin/SaveData/UI/UI.dat")))
 	{
@@ -154,7 +154,7 @@ HRESULT CStage1::NativeConstruct()
 		return E_FAIL;
 	}
 
-	if (FAILED(Ready_Treasure_Chest()))
+	/*if (FAILED(Ready_Treasure_Chest()))
 	{
 		MSGBOX("Stage1 Box");
 		return E_FAIL;
@@ -164,7 +164,7 @@ HRESULT CStage1::NativeConstruct()
 	{
 		MSGBOX("Stage1 Manager");
 		return E_FAIL;
-	}
+	}*/
 
 	g_pGameInstance->Change_BaseCamera(L"Camera_Silvermane");
 
@@ -180,11 +180,11 @@ HRESULT CStage1::NativeConstruct()
 	// 		return E_FAIL;
 	//}
 
-	if (FAILED(Ready_Indicator()))
-	{
-		MSGBOX("Stage1 Indicator");
-		return E_FAIL;
-	}
+	//if (FAILED(Ready_Indicator()))
+	//{
+	//	MSGBOX("Stage1 Indicator");
+	//	return E_FAIL;
+	//}
 
 	//if (FAILED(Ready_Portal()))
 	//{

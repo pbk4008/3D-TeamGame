@@ -19,6 +19,7 @@ public:
 		_int	IDTag;
 		_bool	bMinus;
 	}UIDESC;
+
 protected:
 	explicit CUI();
 	explicit CUI(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);

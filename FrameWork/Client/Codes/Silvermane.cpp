@@ -377,11 +377,10 @@ _int CSilvermane::LateTick(_double _dDeltaTime)
 			return iProgress;
 	}
 
-
 	//Raycast_Camera();
 
 	//g_pObserver->Set_PlayerPos(m_pTransform->Get_State(CTransform::STATE_POSITION));
-	//g_pGameInstance->UpdateLightCam(0, m_pTransform->Get_State(CTransform::STATE_POSITION));
+	g_pGameInstance->UpdateLightCam(0, m_pTransform->Get_State(CTransform::STATE_POSITION));
 
 
 	return _int();

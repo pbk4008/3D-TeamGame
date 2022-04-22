@@ -48,7 +48,7 @@ _int CMotionTrail::LateTick(_double _dDeltaTime)
 	if(m_runcheck == true)
 		m_lifetime -= (_float)_dDeltaTime * 2.f;
 	else
-		m_lifetime -= (_float)_dDeltaTime;
+		m_lifetime -= (_float)_dDeltaTime * 2.5f;
 	if (m_lifetime <= 0.f)
 	{
 		m_lifetime = 1.f;
