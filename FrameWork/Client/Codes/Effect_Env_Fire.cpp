@@ -19,7 +19,7 @@ CEffect_Env_Fire::CEffect_Env_Fire(const CEffect& rhs)
 
 HRESULT CEffect_Env_Fire::NativeConstruct_Prototype()
 {
-	if (FAILED(__super::NativeConstruct_Prototype()))
+	if (FAILED(CGameObject::NativeConstruct_Prototype()))
 	{
 		return E_FAIL;
 	}
@@ -70,10 +70,19 @@ _int CEffect_Env_Fire::Tick(_double TimeDelta)
 		m_Desc.fFrame = 0;
 	}
 
-	////_vector Pos = { 9.5f,4.f,6.5f, 1.f };
-	//m_pTransform->Set_State(CTransform::STATE_POSITION, Pos);
-
 	_vector pos = m_Desc.ParticleMat.r[3];
+
+
+	if (L"Texture_fx_smoke_a" == m_pTexture->getTextureTag())
+	{
+		_vector svPos = m_Desc.ParticleMat.r[3];
+		_vector svLook = m_Desc.ParticleMat.r[2];
+
+		svPos = XMVectorSetY(svPos, XMVectorGetY(svPos) + 0.0f);
+		pos = svPos + svLook * 0.f;
+	}
+	
+
 	_vector pos2 = XMVectorZero();
 	if (m_Desc.bUsingGravity == true)
 		pos2 = { XMVectorGetX(pos),XMVectorGetY(pos) + (XMVectorGetY(m_scale) * 5.f) ,XMVectorGetZ(pos) ,1.f };
@@ -94,7 +103,7 @@ _int CEffect_Env_Fire::Tick(_double TimeDelta)
 		m_pTransform->Scaling(m_scale * 7.f);
 	else
 		m_pTransform->Scaling(m_scale * 1.f);
-	
+
     return 0;
 }
 
@@ -102,7 +111,10 @@ _int CEffect_Env_Fire::LateTick(_double TimeDelta)
 {
 	if (nullptr != m_pRenderer)
 	{
-		m_pRenderer->Add_RenderGroup(CRenderer::RENDER::RENDER_ALPHA, this);
+		if (L"Texture_fx_smoke_a" == m_pTexture->getTextureTag())
+			m_pRenderer->Add_RenderGroup(CRenderer::RENDER::RENDER_ALPHANB, this);
+		else
+			m_pRenderer->Add_RenderGroup(CRenderer::RENDER::RENDER_ALPHA, this);
 	}
 
 	return 0;
@@ -129,9 +141,17 @@ HRESULT CEffect_Env_Fire::Render()
 	_uint iFrame = (_uint)m_Desc.fFrame;
 	m_pBuffer->SetUp_ValueOnShader("g_iFrame", &iFrame, sizeof(_uint));
 	
-	_float weight = 1.f;
-	m_pBuffer->SetUp_ValueOnShader("g_Weight", &weight, sizeof(_float));
-
+	if (L"Texture_fx_smoke_a" == m_pTexture->getTextureTag())
+	{
+		_float weight = 0.f;
+		m_pBuffer->SetUp_ValueOnShader("g_Weight", &weight, sizeof(_float));
+	}
+	else
+	{
+		_float weight = 0.8f;
+		m_pBuffer->SetUp_ValueOnShader("g_Weight", &weight, sizeof(_float));
+	}
+	
 	m_pBuffer->Render(1);
 
 	return S_OK;
@@ -139,12 +159,16 @@ HRESULT CEffect_Env_Fire::Render()
 
 HRESULT CEffect_Env_Fire::SetUp_Components()
 {
-	if (!m_pTexture || !m_pRenderer || !m_pTransform)
+	if (!m_pRenderer || !m_pTransform)
 		return E_FAIL;
 
 	//이미지 리스트박스로부터 가져옴
 	wstring tag = m_Desc.TextureTag;
 	wstring NewTag = L"Texture_" + tag;
+
+	if (FAILED(CGameObject::SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_Texture", L"Com_Texture", (CComponent**)&m_pTexture)))
+		return E_FAIL;
+
 	if (FAILED(m_pTexture->Change_Texture(NewTag)))
 		return E_FAIL;
 

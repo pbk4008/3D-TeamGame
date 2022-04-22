@@ -17,6 +17,7 @@
 #include "Bastion_Sword_Paring.h"
 #include "Bastion_Sword_Turn.h"
 #include "Bastion_Sword_Walk.h"
+#include "Bastion_Sword_Excution.h"
 
 #include "Stage1.h"
 #include "Stage2.h"
@@ -121,6 +122,8 @@ _int CMonster_Bastion_Sword::Tick(_double _dDeltaTime)
 		if (m_fCurrentHp <= 0.f)
 		{
 			m_bDead = true;
+			m_IsAttack = false;
+			m_pWeapon->Set_IsAttack(false);
 			m_pStateController->Change_State(L"Death");
 			m_pCharacterController->Remove_CCT();
 
@@ -218,6 +221,22 @@ void CMonster_Bastion_Sword::Hit(const ATTACKDESC& _tAttackDesc)
 void CMonster_Bastion_Sword::Parry(const PARRYDESC& _tParryDesc)
 {
 	m_fGroggyGauge += (m_fMaxGroggyGauge - m_fGroggyGauge);
+}
+
+void CMonster_Bastion_Sword::Execution()
+{
+	CLevel* pLevel = g_pGameInstance->getCurrentLevelScene();
+	if (g_pGameInstance->getCurrentLevel() == (_uint)SCENEID::SCENE_STAGE1)
+		static_cast<CStage1*>(pLevel)->Minus_MonsterCount();
+	else if (g_pGameInstance->getCurrentLevel() == (_uint)SCENEID::SCENE_STAGE2)
+		static_cast<CStage2*>(pLevel)->Minus_MonsterCount();
+
+	m_bDead = true;
+	m_IsAttack = false;
+	m_pWeapon->Set_IsAttack(false);
+
+	m_pStateController->Change_State(L"Excution");
+	m_pCharacterController->Remove_CCT();
 }
 
 HRESULT CMonster_Bastion_Sword::Set_SpawnPosition(_fvector vPos)
@@ -417,6 +436,9 @@ HRESULT CMonster_Bastion_Sword::Set_Animation_FSM()
 	pAnim = m_pModel->Get_Animation("Paring");
 	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::PARING, (_uint)ANIM_TYPE::HEAD, pAnim, true, false, false, ERootOption::XYZ)))
 		return E_FAIL;
+	pAnim = m_pModel->Get_Animation("Excution");
+	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::EXCUTION, (_uint)ANIM_TYPE::HEAD, pAnim, true, true, false, ERootOption::XYZ)))
+		return E_FAIL;
 
 	////////////////Walk_BackWard
 	pAnim = m_pModel->Get_Animation("Walk_BackWard_Start");
@@ -536,6 +558,7 @@ HRESULT CMonster_Bastion_Sword::Set_Animation_FSM()
 	m_pAnimator->Insert_AnyEntryAnimation((_uint)ANIM_TYPE::RIGHTWALK_START);
 
 	m_pAnimator->Insert_AnyEntryAnimation((_uint)ANIM_TYPE::TURN);
+	m_pAnimator->Insert_AnyEntryAnimation((_uint)ANIM_TYPE::EXCUTION);
 
 
 	//애니메이션 체인지(바꿀 애)
@@ -604,6 +627,11 @@ HRESULT CMonster_Bastion_Sword::Set_State_FSM()
 	lstrcpy(tMoveDesc.pName, L"Walk");
 	if (FAILED(m_pStateController->Add_State(L"Walk", CBastion_Sword_Walk::Create(m_pDevice, m_pDeviceContext, &tMoveDesc))))
 		return E_FAIL;
+
+	lstrcpy(tActorDesc.pName, L"Excution");
+	if (FAILED(m_pStateController->Add_State(L"Excution", CBastion_Sword_Excution::Create(m_pDevice, m_pDeviceContext, &tActorDesc))))
+		return E_FAIL;
+
 
 	m_pStateController->Change_State(L"Idle");
 
@@ -687,6 +715,20 @@ _int CMonster_Bastion_Sword::Dead_Check()
 			{
 				m_fGroggyGauge = 0.f;
 				m_pPanel->Set_GroggyBar(Get_GroggyGaugeRatio());
+			}
+		}
+		else if (m_pStateController->Get_CurStateTag() == L"Excution")
+		{
+			if (m_pAnimator->Get_CurrentAnimNode() == (_uint)ANIM_TYPE::EXCUTION
+				&& m_pAnimator->Get_CurrentAnimation()->Is_Finished())
+			{
+				m_bUIShow = false;
+				m_pPanel->Set_Show(false);
+				//m_pPanel->Set_UIRemove(false);
+				m_bdissolve = true;
+
+				if (m_lifetime >= 1.f)
+					Set_Remove(true);
 			}
 		}
 		else

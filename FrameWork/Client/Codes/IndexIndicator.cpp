@@ -106,7 +106,7 @@ void CIndexIndicator::MoveLeft(_double TimeDelta)
 {
 	if (m_fInitPos > m_fEndPos)
 	{
-		m_fInitPos -= TimeDelta * 1500.f;
+		m_fInitPos -= (_float)TimeDelta * 1500.f;
 
 		if (m_fInitPos < m_fEndPos)
 		{
@@ -121,7 +121,7 @@ void CIndexIndicator::MoveRight(_double TimeDelta)
 {
 	if (m_fInitPos < m_fEndPos)
 	{
-		m_fInitPos += TimeDelta * 1500.f;
+		m_fInitPos += (_float)TimeDelta * 1500.f;
 		if (m_fInitPos > m_fEndPos)
 		{
 			m_fInitPos = m_fEndPos;

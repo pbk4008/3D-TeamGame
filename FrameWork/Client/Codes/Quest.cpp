@@ -75,7 +75,21 @@ _int CQuest::Tick(_double dDeltaTime)
 		m_bSetY = true;
 	}
 
-	
+
+	if (m_bPosUp)
+	{
+		if (m_fUpYInitPos < m_fUpYEndPos)
+		{
+			m_fUpYInitPos += (_float)dDeltaTime * 20;
+
+			if (m_fUpYInitPos >= m_fUpYEndPos)
+			{
+				m_bPosUp = false;
+			}
+			m_pTransform->Set_State(CTransform::STATE_POSITION, _vector{ 0.f, m_fUpYInitPos, 0.0f, 1.f });
+		}
+	}
+
 	m_pQuestText->Tick(dDeltaTime);
 
 	if (m_pQuestClear->getActive())
@@ -94,7 +108,7 @@ _int CQuest::LateTick(_double TimeDelta)
 
 	if (m_bBye)
 	{
-		m_fDisapearTime += TimeDelta;
+		m_fDisapearTime += (_float)TimeDelta;
 
 		if (3.f <= m_fDisapearTime)
 			Pulling(TimeDelta);
@@ -152,7 +166,7 @@ void CQuest::Pulling(_double dDeltaTime)
 {
 	if(m_fDisaperXInitPos > m_fDisaperXEndPos)
 	{
-		m_fDisaperXInitPos -= dDeltaTime * 200;
+		m_fDisaperXInitPos -= (_float)dDeltaTime * 200;
 
 		if (m_fDisaperXInitPos <= m_fDisaperXEndPos)
 		{

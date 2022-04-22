@@ -19,7 +19,6 @@ public: HRESULT			Setup_RenderTarget();
 public: HRESULT			Render_LightAcc(CTarget_Manager* pTarget_Manager, const wstring& cameraTag,_bool bPBR, _bool shadow);
 public: HRESULT			Render_VolumetricLightAcc(CTarget_Manager* pTarget_Manager, const wstring& cameraTag);
 
-private: CVIBuffer_RectViewPort*	m_pVIBuffer = nullptr;
 private: CTarget_Manager*			m_pTargetMgr = nullptr;
 private: ID3D11Device*				m_pDevice = nullptr;
 private: ID3D11DeviceContext*		m_pDeviceContext = nullptr;

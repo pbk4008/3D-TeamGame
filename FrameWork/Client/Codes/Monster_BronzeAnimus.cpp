@@ -15,6 +15,7 @@
 #include "BronzeAnimus_Hit.h"
 #include "BronzeAnimus_Roar.h"
 #include "BronzeAnimus_Attack.h"
+#include "BronzeAnimus_Excution.h"
 
 #include "Stage1.h"
 
@@ -134,6 +135,17 @@ _int CMonster_BronzeAnimus::Tick(_double _dDeltaTime)
 			if (m_lifetime >= 1.f)
 				Set_Remove(true);
 		}
+		else if (m_pStateController->Get_CurStateTag() == L"Excution")
+		{
+			if (m_pAnimator->Get_CurrentAnimation()->Is_Finished() && m_lifetime <= 0.f)
+			{
+				m_bdissolve = true;
+				m_pPanel->Set_UIRemove(true);
+			}
+
+			if (m_lifetime >= 1.f)
+				Set_Remove(true);
+		}
 		else
 		{
 			Set_Remove(true);
@@ -243,6 +255,18 @@ void CMonster_BronzeAnimus::Parry(const PARRYDESC& _tParryDesc)
 {
 	m_fGroggyGauge += (m_fMaxGroggyGauge - m_fGroggyGauge);
 	GroggyStart();
+}
+
+void CMonster_BronzeAnimus::Execution()
+{
+	/*CLevel* pLevel = g_pGameInstance->getCurrentLevelScene();
+	if (g_pGameInstance->getCurrentLevel() == (_uint)SCENEID::SCENE_STAGE2)
+		static_cast<CStage2*>(pLevel)->Minus_MonsterCount();*/
+
+	Set_Dead();
+	Remove_Collider();
+	Set_IsAttack(false);
+	m_pStateController->Change_State(L"Excution");
 }
 
 void CMonster_BronzeAnimus::setActive(_bool bActive)
@@ -447,6 +471,10 @@ HRESULT CMonster_BronzeAnimus::Ready_AnimFSM(void)
 	pAnimation = m_pModel->Get_Animation("A_Stun_End");
 	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::A_STUN_ED, (_uint)ANIM_TYPE::A_STUN, pAnimation, TRUE, TRUE, FALSE, ERootOption::XYZ, FALSE)))
 		return E_FAIL;
+
+	pAnimation = m_pModel->Get_Animation("A_Excution");
+	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::A_EXCUTION, (_uint)ANIM_TYPE::A_HEAD, pAnimation, TRUE, TRUE, FALSE, ERootOption::XYZ, FALSE)))
+		return E_FAIL;
 #pragma endregion
 #pragma region Turn
 	//pAnimation = m_pModel->Get_Animation("A_Trun_45_Right");
@@ -480,6 +508,7 @@ HRESULT CMonster_BronzeAnimus::Ready_AnimFSM(void)
 	m_pAnimator->Insert_AnyEntryAnimation((_uint)ANIM_TYPE::A_TURN_180_RIGHT);
 	m_pAnimator->Insert_AnyEntryAnimation((_uint)ANIM_TYPE::A_TURN_90_RIGHT);
 	m_pAnimator->Insert_AnyEntryAnimation((_uint)ANIM_TYPE::A_TURN_90_RIGHT);
+	m_pAnimator->Insert_AnyEntryAnimation((_uint)ANIM_TYPE::A_EXCUTION);
 #pragma endregion
 
 #pragma region  Auto Change Anim
@@ -522,6 +551,9 @@ HRESULT CMonster_BronzeAnimus::Ready_StateFSM(void)
 		return E_FAIL;
 	/* for. Groggy */
 	if (FAILED(m_pStateController->Add_State(L"Groggy", CBronzeAnimus_Groggy::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	/* for. Excution */
+	if(FAILED(m_pStateController->Add_State(L"Excution", CBronzeAnimus_Excution::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 
 

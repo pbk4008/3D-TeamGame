@@ -11,6 +11,7 @@
 #include "Shooter_Death.h"
 #include "Shooter_Walk.h"
 #include "Shooter_Groggy.h"
+#include "Shooter_Excution.h"
 
 #include"UI_Monster_Panel.h"
 
@@ -247,6 +248,20 @@ void CMonster_Bastion_Shooter::Parry(const PARRYDESC& _tParrykDesc)
 	m_fGroggyGauge += (m_fMaxGroggyGauge - m_fGroggyGauge);
 }
 
+void CMonster_Bastion_Shooter::Execution()
+{
+	CLevel* pLevel = g_pGameInstance->getCurrentLevelScene();
+	if (g_pGameInstance->getCurrentLevel() == (_uint)SCENEID::SCENE_STAGE1)
+		static_cast<CStage1*>(pLevel)->Minus_MonsterCount();
+
+	else if (g_pGameInstance->getCurrentLevel() == (_uint)SCENEID::SCENE_STAGE2)
+		static_cast<CStage2*>(pLevel)->Minus_MonsterCount();
+
+	m_bDead = true;
+	m_pStateController->Change_State(L"Excution");
+	m_pCharacterController->Remove_CCT();
+}
+
 void CMonster_Bastion_Shooter::OnTriggerEnter(CCollision& collision)
 {
 	if (!m_bDead)
@@ -450,6 +465,10 @@ HRESULT CMonster_Bastion_Shooter::Ready_AnimationFSM()
 	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::RIGHTWALK_END, (_uint)ANIM_TYPE::RIGHTWALK_LOOP, pAnim, true, true, false, ERootOption::XYZ)))
 		return E_FAIL;
 
+	pAnim = m_pModel->Get_Animation("Excution");
+	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::EXCUTION, (_uint)ANIM_TYPE::HEAD, pAnim, true, true, false, ERootOption::XYZ)))
+		return E_FAIL;
+
 	if (FAILED(m_pAnimator->Connect_Animation((_uint)ANIM_TYPE::IDLE, (_uint)ANIM_TYPE::RUN_END, false)))
 		return E_FAIL;
 	if (FAILED(m_pAnimator->Connect_Animation((_uint)ANIM_TYPE::IDLE, (_uint)ANIM_TYPE::ATTACK, false)))
@@ -530,6 +549,8 @@ HRESULT CMonster_Bastion_Shooter::Ready_AnimationFSM()
 	m_pAnimator->Insert_AnyEntryAnimation((_uint)ANIM_TYPE::FORWARD_START);
 	m_pAnimator->Insert_AnyEntryAnimation((_uint)ANIM_TYPE::LEFTWALK_START);
 	m_pAnimator->Insert_AnyEntryAnimation((_uint)ANIM_TYPE::RIGHTWALK_START);
+	
+	m_pAnimator->Insert_AnyEntryAnimation((_uint)ANIM_TYPE::EXCUTION);
 
 	m_pAnimator->Change_Animation((_uint)ANIM_TYPE::IDLE);
 	
@@ -582,6 +603,10 @@ HRESULT CMonster_Bastion_Shooter::Ready_StateFSM()
 
 	lstrcpy(tMoveDesc.pName, L"Walk");
 	if (FAILED(m_pStateController->Add_State(L"Walk", CShooter_Walk::Create(m_pDevice, m_pDeviceContext, &tMoveDesc))))
+		return E_FAIL;
+
+	lstrcpy(tActorDesc.pName, L"Excution");
+	if (FAILED(m_pStateController->Add_State(L"Excution", CShooter_Excution::Create(m_pDevice, m_pDeviceContext, &tActorDesc))))
 		return E_FAIL;
 
 	m_pStateController->Change_State(L"Idle");
@@ -651,6 +676,18 @@ _int CMonster_Bastion_Shooter::Change_State()
 				m_fGroggyGauge = 0.f;
 				m_pPanel->Set_GroggyBar(Get_GroggyGaugeRatio());
 			}
+		}
+		else if (tmpState == L"Excution")
+		{
+			if (m_pAnimator->Get_CurrentAnimNode() == (_uint)ANIM_TYPE::EXCUTION
+				&& m_pAnimator->Get_CurrentAnimation()->Is_Finished() && m_lifetime <= 0.f)
+			{
+				m_pPanel->Set_UIRemove(false);
+				m_bdissolve = true;
+			}
+
+			if (m_lifetime >= 1.f)
+				Set_Remove(true);
 		}
 		else
 		{

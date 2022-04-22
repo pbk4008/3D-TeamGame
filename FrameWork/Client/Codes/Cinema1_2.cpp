@@ -42,7 +42,7 @@ HRESULT CCinema1_2::NativeContruct(_uint iSceneID)
 	CTransform* pGrayeHwakTr = m_pGrayeHwak->Get_Transform();
 	pGrayeHwakTr->Set_State(CTransform::STATE_POSITION, XMVectorSet(3.f, -1.f, 8.f, 1.f));
 
-	m_pSilvermane->Actor_AnimPlay(0);
+	m_pSilvermane->Actor_AnimPlay(9);
 	CTransform* pSilvermaneTr = m_pSilvermane->Get_Transform();
 	pSilvermaneTr->Set_State(CTransform::STATE_POSITION, XMVectorSet(3.f, -1.f, 3.f, 1.f));
 
@@ -55,30 +55,32 @@ _int CCinema1_2::Tick(_double dDeltaTime)
 	if (iProgress == 1)
 		return 0;
 
-	_vector vTmp1 = XMVectorSet(3.f, -1.5f, 8.f,1.f);
-	_vector vTmp2 = XMVectorSet(3.f,  0.f, 1.f,1.f);
-	CTransform* pGrayHwakTr = m_pGrayeHwak->Get_Transform();
-	pGrayHwakTr->Set_State(CTransform::STATE_POSITION, vTmp1);
+	//CTransform* pGrayHwakTr = m_pGrayeHwak->Get_Transform();
+	//pGrayHwakTr->Set_State(CTransform::STATE_POSITION, XMVectorSet(1.f, -1.f, 13.f, 1.f));
 
-	CTransform* pPhoenixTr = m_pPhoenix->Get_Transform();
-	pPhoenixTr->Set_State(CTransform::STATE_POSITION, vTmp1);
+	//CTransform* pPhoenixTr = m_pPhoenix->Get_Transform();
+	//pPhoenixTr->Set_State(CTransform::STATE_POSITION, XMVectorSet(8.f, -1.f, 13.f, 1.f));
 
-	CTransform* pSilvermaneTr = m_pSilvermane->Get_Transform();
-	pSilvermaneTr->Set_State(CTransform::STATE_POSITION, vTmp2);
+
+	//CTransform* pSilvermaneTr = m_pSilvermane->Get_Transform();
+	//pSilvermaneTr->Set_State(CTransform::STATE_POSITION, XMVectorSet(9.f, 0.f, 10.f, 1.f));
 
 	m_pGrayeHwak->Tick(dDeltaTime);
 	m_pPhoenix->Tick(dDeltaTime);
 	m_pSilvermane->Tick(dDeltaTime);
 
-	/*_matrix matPivot = XMMatrixRotationX(XMConvertToRadians(270.f)) * XMMatrixRotationZ(XMConvertToRadians(270.f)) * XMMatrixRotationY(XMConvertToRadians(180.f)) * XMMatrixTranslation(3.f, -1.f, 11.f);
-	m_pCam->Set_CameraMatrix(matPivot);*/
+	_matrix matPivot = XMMatrixRotationY(XMConvertToRadians(270.f)) * XMMatrixTranslation(3.f, -1.f, 15.f);
+	m_pCam->Set_CameraMatrix(matPivot);
 	m_pCam->Tick(dDeltaTime);
 
 
 	//m_bActorAnimOn = m_pCam->Get_Event(30.0);
 
 	if (m_pCam->Get_CamMoveEnd())
+	{
 		m_bCinemaEnd = true;
+		m_pCam->Reset_Camera();
+	}
 
 	return _int();
 }
@@ -96,6 +98,7 @@ void CCinema1_2::Set_Active(_bool bCheck)
 {
 	CScenematic::Set_Active(bCheck);
 	m_bActorAnimOn = false;
+	m_pSilvermane->Actor_AnimPlay(9);
 	m_pGrayeHwak->Actor_AnimReset();
 	m_pPhoenix->Actor_AnimReset();
 	m_pSilvermane->Actor_AnimReset();

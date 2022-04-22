@@ -22,7 +22,7 @@ public:
 		,FORWARD_START, FORWARD_LOOP, FORWARD_END
 		,LEFTWALK_START, LEFTWALK_LOOP, LEFTWALK_END
 		,RIGHTWALK_START, RIGHTWALK_LOOP, RIGHTWALK_END
-		,PARING,TURN
+		,PARING,TURN,EXCUTION
 		,TYPE_END};
 private:
 	explicit CMonster_Bastion_Sword(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext);
@@ -38,6 +38,7 @@ public:
 
 	virtual void Hit(const ATTACKDESC& _tAttackDesc);
 	virtual void Parry(const PARRYDESC& _tParryDesc);
+	virtual void Execution() override;
 public:
 	virtual HRESULT Set_SpawnPosition(_fvector vPos);
 public:

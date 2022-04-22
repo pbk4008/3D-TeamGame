@@ -20,7 +20,7 @@ HRESULT CLight::NativeConstruct(const LIGHTDESC& LightDesc)
 	_uint		iNumViewports = 1;
 	m_pDeviceContext->RSGetViewports(&iNumViewports, &ViewportDesc);
 
-	m_pVIBuffer = CVIBuffer_RectViewPort::Create(m_pDevice, m_pDeviceContext, 0.f, 0.f, ViewportDesc.Width, ViewportDesc.Height, TEXT("../../Reference/ShaderFile/Shader_RectViewPort.hlsl"));
+	m_pVIBuffer = CVIBuffer_RectViewPort::Create(m_pDevice, m_pDeviceContext, 0.f, 0.f, ViewportDesc.Width, ViewportDesc.Height, TEXT("../../Reference/ShaderFile/Shader_Lighting.hlsl"));
 	if (nullptr == m_pVIBuffer)
 		return E_FAIL;
 
@@ -39,12 +39,12 @@ HRESULT CLight::Render(CTarget_Manager* pTarget_Manager,const wstring& pCameraTa
 
 		if (m_LightDesc.eType == tagLightDesc::TYPE_DIRECTIONAL)
 		{
-			iPassIndex = 1;
+			iPassIndex = 0;
 			if (FAILED(Render_Directional(pTarget_Manager, pCameraTag, PBRHDRcheck, Shadow, iPassIndex))) MSGBOX("Failed To Rendering Direction Light");
 		}
 		else if (m_LightDesc.eType == tagLightDesc::TYPE_POINT)
 		{
-			iPassIndex = 2;
+			iPassIndex = 1;
 			if(FAILED(Render_PointLight(pTarget_Manager, pCameraTag, PBRHDRcheck, iPassIndex))) MSGBOX("Failed To Rendering Point Light")
 		}
 	}
@@ -60,13 +60,13 @@ HRESULT CLight::RenderVolumetric(CTarget_Manager* pTarget_Manager, const wstring
 
 		if (m_LightDesc.eType == tagLightDesc::TYPE_DIRECTIONAL)
 		{
-			iPassIndex = 5;
+			iPassIndex = 0;
 		
 			m_pVIBuffer->SetUp_ValueOnShader("g_vLightDir", &_float4(m_LightDesc.vDirection.x, m_LightDesc.vDirection.y, m_LightDesc.vDirection.z, 0.f), sizeof(_float4));
 		}
 		else if (m_LightDesc.eType == tagLightDesc::TYPE_POINT)
 		{
-			iPassIndex = 6;
+			iPassIndex = 1;
 			m_pVIBuffer->SetUp_ValueOnShader("g_fRange", &m_LightDesc.fRange, sizeof(_float));
 		}
 
@@ -114,6 +114,7 @@ HRESULT CLight::Render_PointLight(CTarget_Manager* pTarget_Manager, const wstrin
 
 HRESULT CLight::Ready_PBRLighting(CTarget_Manager* pTarget_Manager, const wstring& pCameraTag, LIGHTDESC::TYPE Type)
 {
+	_matrix		lightviewproj = m_LightDesc.mLightView * m_LightDesc.mLightProj;
 	_vector		vCamPosition = g_pGameInstance->Get_CamPosition(pCameraTag);
 	_matrix		ViewMatrix = g_pGameInstance->Get_Transform(pCameraTag, TRANSFORMSTATEMATRIX::D3DTS_VIEW);
 	_matrix		ProjMatrix = g_pGameInstance->Get_Transform(pCameraTag, TRANSFORMSTATEMATRIX::D3DTS_PROJECTION);
@@ -165,12 +166,12 @@ void CLight::UpdateLightCam(_fvector playerpos)
 {
 	_vector up = { 0, 1.f, 0,0 };
 	_vector lookat = playerpos;
-
-	m_LightDesc.mOrthinfo[0] = 50.f;
+	
+	m_LightDesc.mOrthinfo[0] = 150.f;
 
 	_float3 dir = _float3(-1.f, -1.f, 1.f);
 	_vector vdir = XMVector3Normalize(XMLoadFloat3(&m_LightDesc.vDirection));
-	XMStoreFloat3(&m_LightDesc.vPosition, (vdir * m_LightDesc.mOrthinfo[0] * -1.f) + lookat);
+	XMStoreFloat3(&m_LightDesc.vPosition, (vdir * -1.f * m_LightDesc.mOrthinfo[0]) + lookat);
 	m_LightDesc.mLightView = XMMatrixLookAtLH(XMLoadFloat3(&m_LightDesc.vPosition), lookat, up);
 }
 

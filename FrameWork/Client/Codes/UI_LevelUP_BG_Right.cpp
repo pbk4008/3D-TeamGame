@@ -29,8 +29,8 @@ HRESULT CUI_LevelUP_BG_Right::NativeConstruct(const _uint iSceneID, void* pArg)
 	desc = (*(CHud::Desc*)pArg);
 
 	m_pLocalTransform = g_pGameInstance->Clone_Component<CTransform>(0, L"Proto_Component_Transform");
-	m_pLocalTransform->Set_State(CTransform::STATE_POSITION, _vector{ 0.f , -270.f, 0.1f, 1.f });
-	m_pLocalTransform->Scaling(_vector{ 50.f, 58.f, 1.f, 0.f });
+	m_pLocalTransform->Set_State(CTransform::STATE_POSITION, _vector{ 140.f , -270.f, 0.3f, 1.f });
+	m_pLocalTransform->Scaling(_vector{ 230.f, 30.f, 1.f, 0.f });
 
 	m_pOwner = desc.pOwner;
 	assert(m_pOwner);
@@ -58,11 +58,11 @@ _int CUI_LevelUP_BG_Right::LateTick(_double TimeDelta)
 
 	Attach_Owner();
 
-	m_pLocalTransform->Set_State(CTransform::STATE_POSITION, _vector{ 140.f , -270.f, 0.3f, 1.f });
-	m_pLocalTransform->Scaling(_vector{ 230.f, 30.f, 1.f, 0.f });
+	m_pTransform->Set_State(CTransform::STATE_POSITION, _vector{ 155.f , -270.f, 0.1f, 1.f });
 
+	m_pLocalTransform->Scaling(_vector{ 250.f, 30.f, 1.f, 0.f });
 	if (nullptr != m_pRenderer)
-		m_pRenderer->Add_RenderGroup(CRenderer::RENDER::RENDER_UI_ACTIVE, this);
+		m_pRenderer->Add_RenderGroup(CRenderer::RENDER::RENDER_UI, this);
 
 	return _int();
 }

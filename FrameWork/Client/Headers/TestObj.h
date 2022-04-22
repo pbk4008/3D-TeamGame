@@ -12,16 +12,6 @@ BEGIN(Client)
 class CTestObj final : public CGameObject
 {
 public:
-	typedef struct tagTestDesc
-	{
-		CBoxCollider::DESC tBoxDesc;
-		CSphereCollider::DESC tSphereDesc;
-		CCapsuleCollider::DESC tCapsuleDesc;
-		ERigidType _eRigidType = ERigidType::Dynamic;
-		_float3 vPosition = { 0.f, 0.f, 0.f };
-		_bool isMove = false;
-		_bool isTrigger = false;
-	}TESTDESC;
 private:
 	explicit CTestObj();
 	explicit CTestObj(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);
@@ -47,7 +37,6 @@ private:
 
 private:
 	_bool m_isMove = false;
-	TESTDESC m_tTestDesc;
 
 public:
 	static CTestObj* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);
@@ -55,9 +44,7 @@ public:
 private:
 	virtual void Free() override;
 private:
-	CBoxCollider* m_pBoxCollider;
-	CSphereCollider* m_pSphereCollider;
-	CCapsuleCollider* m_pCapsuleCollider;
+	CModel* m_pModel;
 };
 END
 #endif

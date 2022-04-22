@@ -164,7 +164,7 @@
 ///////////////////////////////////////////// Heal
 #include "Silvermane_Heal.h"
 ///////////////////////////////////////////// Execution
-#include "Execution_Mook.h"
+#include "Silvermane_Execution.h"
 #pragma endregion
 
 #include "Material.h"
@@ -227,6 +227,7 @@ HRESULT CSilvermane::NativeConstruct(const _uint _iSceneID, void* _pArg)
 	m_pRenderer->SetRenderButton(CRenderer::PIXEL, true);
 	m_pRenderer->SetRenderButton(CRenderer::PBR, true);
 	m_pRenderer->SetRenderButton(CRenderer::HDR, true);
+	m_pRenderer->SetRenderButton(CRenderer::SHADOW, true);
 
 	//Light 수정 해야됨
 	LIGHTDESC			LightDesc;
@@ -326,7 +327,7 @@ _int CSilvermane::Tick(_double _dDeltaTime)
 
 	if (g_pGameInstance->getkeyDown(DIK_O))
 	{
-		m_pPlayerData->SetExp(10);
+		m_pPlayerData->SetExp(5);
 	}
 
 	return _int();
@@ -380,7 +381,8 @@ _int CSilvermane::LateTick(_double _dDeltaTime)
 	//Raycast_Camera();
 
 	//g_pObserver->Set_PlayerPos(m_pTransform->Get_State(CTransform::STATE_POSITION));
-	g_pGameInstance->UpdateLightCam(0, m_pTransform->Get_State(CTransform::STATE_POSITION));
+	//g_pGameInstance->UpdateLightCam(0, m_pTransform->Get_State(CTransform::STATE_POSITION));
+
 
 	return _int();
 }
@@ -417,8 +419,9 @@ HRESULT CSilvermane::Render()
 	if (m_pRenderer->Get_RenderButton(CRenderer::VELOCITYBLUR) == false)
 		m_PreWroldMat = m_pTransform->Get_WorldMatrix();
 #ifdef _DEBUG
-	//Render_Debug();
+	Render_Debug();
 #endif
+
 
 	return S_OK;
 }
@@ -863,7 +866,7 @@ HRESULT CSilvermane::Ready_States()
 	if (FAILED(m_pStateController->Add_State(L"Silvermane_Heal", CSilvermane_Heal::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 	// Execution
-	if (FAILED(m_pStateController->Add_State(L"Execution_Mook", CExecution_Mook::Create(m_pDevice, m_pDeviceContext))))
+	if (FAILED(m_pStateController->Add_State(L"Execution", CSilvermane_Execution::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 
 	for (auto& pair : m_pStateController->Get_States())
@@ -881,39 +884,9 @@ HRESULT CSilvermane::Ready_States()
 HRESULT CSilvermane::Ready_Weapons(const _uint _iSceneID)
 {
 	CWeapon* pWeapon = nullptr;
-	CHierarchyNode* pWeaponBone = m_pModel->Get_BoneMatrix("spine_03");
 
 	if (FAILED(g_pWeaponGenerator->NativeConstruct(m_pDevice, m_pDeviceContext, _iSceneID, m_pModel)))
 		return E_FAIL;
-
-#pragma region Old Ready Weapon
-	//한손검
-	//pWeapon = CNeedle::Create(m_pDevice, m_pDeviceContext);
-	//if (FAILED(pWeapon->NativeConstruct(m_iSceneID, pWeaponBone)))
-	//{
-	//	Safe_Release(pWeapon);
-	//	return E_FAIL;
-	//}
-	//pWeapon->Set_Owner(this); /* 무기에게 네가 나의 마스타인가? */
-	//pWeapon->Set_OwnerPivotMatrix(m_pModel->Get_PivotMatrix()); /* 마스타의 뼈를 취하겠다 */
-	////m_umapWeapons.emplace(L"Needle", pWeapon); /* 따로 저장 */
-	//m_pCurWeapon = pWeapon; /* FSM 나뉨 */
-	//m_pCurWeapon->setActive(true); 
-	//m_pNeedle = pWeapon;
-
-	////// 해머
-	////pWeapon = CFury::Create(m_pDevice, m_pDeviceContext);
-	////if (FAILED(pWeapon->NativeConstruct(m_iSceneID, pWeaponBone)))
-	////{
-	////	Safe_Release(pWeapon);
-	////	return E_FAIL;
-	////}
-	////pWeapon->Set_Owner(this);
-	////pWeapon->Set_OwnerPivotMatrix(m_pModel->Get_PivotMatrix());
-	////pWeapon->Set_Equip(false);
-	////m_umapWeapons.emplace(L"Fury", pWeapon);
-
-#pragma endregion
 
 	/// <summary>
 	/// Equipment&Inventory Data와 연동하여 장비 Ready함
@@ -940,7 +913,7 @@ HRESULT CSilvermane::Ready_Weapons(const _uint _iSceneID)
 	}
 
 	///////////////////////////////////////////////////////////////////// 방패
-	pWeaponBone = m_pModel->Get_BoneMatrix("weapon_l");
+	CHierarchyNode* pWeaponBone = m_pModel->Get_BoneMatrix("weapon_l");
 	m_pShield = CShield::Create(m_pDevice, m_pDeviceContext);
 	if (FAILED(m_pShield->NativeConstruct(m_iSceneID, pWeaponBone)))
 	{
@@ -951,6 +924,18 @@ HRESULT CSilvermane::Ready_Weapons(const _uint _iSceneID)
 	m_pShield->Set_OwnerPivotMatrix(m_pModel->Get_PivotMatrix());
 	Set_EquipShield(false);
 
+	CFlyingShield::DESC tDesc;
+	tDesc.pOriginTransform = m_pShield->Get_Transform();
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer(m_iSceneID, L"Layer_Weapon", L"Proto_GameObject_FlyingShield", &tDesc, (CGameObject**)&m_pFlyingShield)))
+		return E_FAIL;
+	if (m_pFlyingShield)
+	{
+		m_pFlyingShield->Set_Owner(this);
+		m_pFlyingShield->Set_FixedBone(pWeaponBone);
+		m_pFlyingShield->Set_OwnerPivotMatrix(m_pModel->Get_PivotMatrix());
+	}
+
+	///////////////////////////////////////////////////////////////////// 모션 트레일
 	for (_int i = 0; i < 20; ++i)
 	{
 		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)m_iSceneID, L"Layer_MotionTrail", L"Proto_GameObject_MotionTrail")))
@@ -960,7 +945,9 @@ HRESULT CSilvermane::Ready_Weapons(const _uint _iSceneID)
 		pobjlist = g_pGameInstance->getObjectList((_uint)m_iSceneID, L"Layer_MotionTrail");
 		CGameObject* pobj = pobjlist->back();
 		pobj->setActive(false);
-		static_cast<CMotionTrail*>(pobj)->Set_Model(m_pModel, m_pCurWeapon->Get_Model());
+		//static_cast<CMotionTrail*>(pobj)->Set_Model(m_pModel, m_pCurWeapon->Get_Model());
+		static_cast<CMotionTrail*>(pobj)->Set_Model(m_pModel, m_pFlyingShield->Get_Model());
+
 
 		m_vecMotionTrail.emplace_back(pobj);
 	}
@@ -1172,6 +1159,7 @@ void CSilvermane::Set_IsTrasceCamera(const _bool _isTraceCamera)
 void CSilvermane::Set_IsDead(const _bool _isDead)
 {
 	m_bDead = _isDead;
+	m_pFlyingShield->Set_Remove(true);
 }
 
 void CSilvermane::Set_EquipWeapon(const _bool _isEquipWeapon)
@@ -1262,6 +1250,8 @@ void CSilvermane::Add_Velocity(const CTransform::STATE _eState, const _double& _
 void CSilvermane::Add_HP(const _float _fValue)
 {
 	m_fCurrentHp += _fValue;
+	if (m_fCurrentHp > m_fMaxHp)
+		m_fCurrentHp = m_fMaxHp;
 }
 
 void CSilvermane::Respawn()
@@ -1555,9 +1545,13 @@ void CSilvermane::Add_BlockTime(const _float _fValue)
 
 HRESULT CSilvermane::ThrowShield(const _fvector& _svTargetPos)
 {
-	m_pFlyingShield = static_cast<CFlyingShield*>(m_pShield->Throw(_svTargetPos));
+	//m_pFlyingShield = static_cast<CFlyingShield*>(m_pShield->Throw(_svTargetPos));
+	//if (!m_pFlyingShield)
+	//	return E_FAIL;
 	if (!m_pFlyingShield)
 		return E_FAIL;
+
+	m_pFlyingShield->Throw(_svTargetPos);
 
 	return S_OK;
 }
@@ -1570,6 +1564,7 @@ void CSilvermane::Return_Shield()
 
 void CSilvermane::End_ThrowShield()
 {
+	m_isShieldThrow = false;
 	if (g_pObserver->Get_PlayerAttackAnimStart() || m_isBlock || m_isHit)
 		return;
 
@@ -1580,8 +1575,7 @@ void CSilvermane::End_ThrowShield()
 
 	m_pAnimationController->Set_TrackAcc(73.0);
 	m_pAnimationController->Set_PlaySpeed(1.4f);
-	m_pFlyingShield = nullptr;
-	m_isShieldThrow = false;
+	//m_pFlyingShield = nullptr;
 }
 
 void CSilvermane::OnLight()
@@ -1706,7 +1700,7 @@ RIM CSilvermane::ColorChange_RimCheck(RIM& rimdesc)
 	if (m_rimcheck == true)
 	{
 		rimdesc.rimcheck = m_rimcheck;
-		rimdesc.rimcol = _float3(1.f, 0, 0);
+		rimdesc.rimcol = m_rimcol;
 		CActor::SetRimIntensity(g_fDeltaTime * -1.f);
 		rimdesc.rimintensity = m_rimintensity; // intensity 낮을 수록 과하게 빛남
 		XMStoreFloat4(&rimdesc.camdir, XMVector3Normalize(m_pTransform->Get_State(CTransform::STATE_POSITION) - g_pGameInstance->Get_CamPosition(L"Camera_Silvermane")));
@@ -1715,7 +1709,7 @@ RIM CSilvermane::ColorChange_RimCheck(RIM& rimdesc)
 	return rimdesc;
 }
 
-HRESULT CSilvermane::Create_MotionTrail(_int idex)
+HRESULT CSilvermane::Create_MotionTrail(_int idex, _bool runcheck)
 {
 	if (idex <= 19)
 	{
@@ -1736,7 +1730,9 @@ HRESULT CSilvermane::Create_MotionTrail(_int idex)
 		else
 			uvdvid = (idex - 10) / 10.f;
 
-		static_cast<CMotionTrail*>(m_vecMotionTrail[idex])->Set_Info(smatWorld,m_pCurWeapon->Get_Transform()->Get_WorldMatrix(), uvdvid);
+		//static_cast<CMotionTrail*>(m_vecMotionTrail[idex])->Set_Info(smatWorld,m_pCurWeapon->Get_Transform()->Get_WorldMatrix(), uvdvid);
+		static_cast<CMotionTrail*>(m_vecMotionTrail[idex])->Set_Info(smatWorld,m_pFlyingShield->Get_Transform()->Get_WorldMatrix(), uvdvid);
+		static_cast<CMotionTrail*>(m_vecMotionTrail[idex])->Set_RunCheck(runcheck);
 	}
 
 	return S_OK;
@@ -1936,18 +1932,23 @@ const void CSilvermane::Raycast_DropBox(const _double& _dDeltaTime)
 	//else
 	//	static_cast<CDropBox*>(pHitObject)->FocusExit();
 
-	if (!m_isExecution && g_pGameInstance->getkeyDown(DIK_F))
+	switch (iObjectTag)
 	{
-		switch (iObjectTag)
-		{
-		case (_uint)GAMEOBJECT::MONSTER_ABERRANT:
-			if (!static_cast<CActor*>(pHitObject)->Get_Groggy())
-				return;
-			m_pTargetExecution = static_cast<CActor*>(pHitObject);
-			m_pTargetExecution->Execution();
-			Set_Execution(true);
-			break;
-		}
+	case (_uint)GAMEOBJECT::MONSTER_ABERRANT:
+	case (_uint)GAMEOBJECT::MONSTER_1H:
+	case (_uint)GAMEOBJECT::MONSTER_SHOOTER:
+	case (_uint)GAMEOBJECT::MONSTER_ANIMUS:
+	case (_uint)GAMEOBJECT::MIDDLE_BOSS:
+		//if (static_cast<CActor*>(pHitObject)->Get_Groggy())
+		//{
+			if (!m_isExecution && g_pGameInstance->getkeyDown(DIK_F))
+			{
+				m_pTargetExecution = static_cast<CActor*>(pHitObject);
+				m_pTargetExecution->Execution();
+				Set_Execution(true);
+			}
+		//}
+		break;
 	}
 }
 
@@ -1962,7 +1963,7 @@ void CSilvermane::Set_Execution(const _bool _isExecution, CActor* _pTarget)
 		case true:
 			pEyeBone = m_pModel->Get_BoneMatrix("camera_location_1");
 			pAtBone = m_pModel->Get_BoneMatrix("camera_look_at_1");
-			m_pStateController->Change_State(L"Execution_Mook");
+			m_pStateController->Change_State(L"Execution");
 			break;
 		case false:
 			m_pTargetExecution = nullptr;

@@ -18,9 +18,8 @@ public:
 
 	typedef struct RenderVal
 	{
-		_float		 fCurExpGauge;
-		_float		 fGapX;
-		_float		 fGapY;
+		_float		fExpRatio;//현재 경험치 비율
+		_float		fGapX;
 	}RENDERVAL;
 
 
@@ -42,8 +41,10 @@ public:
 	void SetUI(CPlayerData* pPlayerData);
 
 public:
-	void Set_ExExpRatio(_float Ratio) { m_fExExpRatio = Ratio; }
-	void Set_ExpRatio(_float Ratio) { m_fExpRatio = Ratio; }
+	void Set_ExpRatio(_float Ratio) { Bufferdesc.fExpRatio = Ratio; }
+
+public:
+	const _float Get_Ratio() const { return Bufferdesc.fGapX; }
 
 private:
 	CSingleImage* m_pSigleImageCom = nullptr;
@@ -53,11 +54,6 @@ private:
 	_bool		  m_bSetScale = true;
 
 private:
-	_float m_fExExpRatio = 0.f;		//이전 경험치 비율
-	_float m_fExpRatio = 0.f;		//현재 경험치 비율
-	_float m_fCurExpGauge = 0.f;	//이전게이지 - 현재게이지
-	_float m_fGapX = 1.f;
-	_float m_fGapY = 0.5f;
 	RENDERVAL Bufferdesc;
 
 public:

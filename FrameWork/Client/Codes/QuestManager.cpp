@@ -109,7 +109,7 @@ void CQuestManager::Start_Quest(EQuestHeaderType eQuestHead, std::wstring szQues
 		if (0 == QuestText.first.compare(szQuestText))
 		{
 			pQuest = QuestText.second;
-			pQuest->SetIndex(m_vecQuest.size());
+			pQuest->SetIndex((_int)m_vecQuest.size());
 			break;
 		}
 	}

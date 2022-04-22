@@ -47,7 +47,7 @@ public:
 	const wstring& getTag() { return m_tCameraDesc.pCameraTag; }
 	const CAMERADESC GetDesc() const { return m_tCameraDesc; }
 	void setDesc(const CAMERADESC& _tDesc);
-
+	_float Get_FovAngle() { return m_tCameraDesc.fFovy; }
 private:
 	virtual void Free() override;
 private:

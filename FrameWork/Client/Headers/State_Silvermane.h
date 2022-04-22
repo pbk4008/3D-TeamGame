@@ -65,7 +65,7 @@ protected:
 	EDir m_eDir = EDir::Max;
 
 	_int	m_motiontrailidx = 0;
-	
+	_float  m_fMTAcc = 0.f;
 
 public:
 	virtual void Free() override;

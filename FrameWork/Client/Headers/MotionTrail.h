@@ -20,6 +20,7 @@ public: _float	Get_LifeTime() { return m_lifetime; }
 public: void	Set_BoneMat(_fmatrix* bone);
 public: void	Set_Info(_fmatrix world, _fmatrix weaponwrold = XMMatrixIdentity(), _float UVdvid = 0.f);
 public: void	Set_Model(CModel* pModel = nullptr, CModel* pWeapon = nullptr);
+public: void	Set_RunCheck(_bool check) { m_runcheck = check; }
 
 private: HRESULT	Set_ContantBuffer(CModel* pmodel, _fmatrix worldmat,RIM& rimdesc);
 
@@ -33,6 +34,8 @@ private: _float		m_UVdvid = 0.f;
 
 private: CModel*	m_pWeapon = nullptr;
 private: CTexture*	m_pGradientTex = nullptr;
+
+private: _bool		m_runcheck = false;
 
 public: static CMotionTrail* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext);
 public: virtual CGameObject* Clone(const _uint _iSceneID, void* _pArg = nullptr) override;

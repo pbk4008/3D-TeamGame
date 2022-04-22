@@ -93,22 +93,22 @@ void CInstancing_Mesh::Update_InstanceBuffer(const vector<_float4x4>& pMatrix)
 			matMatrix.emplace_back(pData);
 	}
 
-	m_iInstNumVertices = (_uint)matMatrix.size();
+	m_iInstNumVertices = (_uint)pMatrix.size();
 
 	D3D11_MAPPED_SUBRESOURCE		SubResource;
 
-	m_pDeviceContext->Map(m_pVBInstance, 0, D3D11_MAP_WRITE_NO_OVERWRITE, 0, &SubResource);
+	m_pDeviceContext->Map(m_pVBInstance, 0, D3D11_MAP_WRITE_DISCARD, 0, &SubResource);
 
 	for (_uint i = 0; i < m_iInstNumVertices; ++i)
-	{
+	{	
 		_float4 vRight;
-		memcpy(&vRight, &matMatrix[i].m[0], sizeof(_float4));
+		memcpy(&vRight, &pMatrix[i].m[0], sizeof(_float4));
 		_float4 vUp;
-		memcpy(&vUp, &matMatrix[i].m[1], sizeof(_float4));
+		memcpy(&vUp, &pMatrix[i].m[1], sizeof(_float4));
 		_float4 vLook;
-		memcpy(&vLook, &matMatrix[i].m[2], sizeof(_float4));
+		memcpy(&vLook, &pMatrix[i].m[2], sizeof(_float4));
 		_float4 vPos;
-		memcpy(&vPos, &matMatrix[i].m[3], sizeof(_float4));
+		memcpy(&vPos, &pMatrix[i].m[3], sizeof(_float4));
 
 		((VTXMATRIX*)SubResource.pData)[i].vRight = vRight;
 		((VTXMATRIX*)SubResource.pData)[i].vUp = vUp;
@@ -184,8 +184,8 @@ HRESULT CInstancing_Mesh::Init_StaticMesh(const wstring& pMeshFilePath)
 	}
 	if (FAILED(Create_VertextIndexBuffer()))
 		return E_FAIL;
-	if (FAILED(Create_CullingBox()))
-		return E_FAIL;
+	//if (FAILED(Create_CullingBox()))
+	//	return E_FAIL;
 
 	for (auto& pMtrl : pData.pMtrlData)
 	{
@@ -305,9 +305,9 @@ HRESULT CInstancing_Mesh::Create_InstancingBuffer(void* pArg)
 	m_iInstStride = sizeof(VTXMATRIX);
 	m_iInstNumVertices = pDesc.iNumInstance;
 
-	CCullingBox* pBox = m_vecCullingBox[0];
-	for (_uint i = 0; i < m_iInstNumVertices - 1; i++)
-		m_vecCullingBox.emplace_back(static_cast<CCullingBox*>(pBox->Clone(nullptr)));
+	//CCullingBox* pBox = m_vecCullingBox[0];
+	//for (_uint i = 0; i < m_iInstNumVertices - 1; i++)
+	//	m_vecCullingBox.emplace_back(static_cast<CCullingBox*>(pBox->Clone(nullptr)));
 
 	m_VBInstDesc.ByteWidth = m_iInstStride * m_iInstNumVertices;
 	m_VBInstDesc.Usage = D3D11_USAGE_DYNAMIC;
@@ -327,13 +327,13 @@ HRESULT CInstancing_Mesh::Create_InstancingBuffer(void* pArg)
 		pVertices[i].vLook = (_float4)(pDesc.vecMatrix)[i].m[2];
 		pVertices[i].vPosition = (_float4)(pDesc.vecMatrix)[i].m[3];
 
-		_matrix matTransform;
-		matTransform.r[0] = XMLoadFloat4(&pVertices[i].vRight);
-		matTransform.r[1] = XMLoadFloat4(&pVertices[i].vUp);
-		matTransform.r[2] = XMLoadFloat4(&pVertices[i].vLook);
-		matTransform.r[3] = XMLoadFloat4(&pVertices[i].vPosition);
+		//_matrix matTransform;
+		//matTransform.r[0] = XMLoadFloat4(&pVertices[i].vRight);
+		//matTransform.r[1] = XMLoadFloat4(&pVertices[i].vUp);
+		//matTransform.r[2] = XMLoadFloat4(&pVertices[i].vLook);
+		//matTransform.r[3] = XMLoadFloat4(&pVertices[i].vPosition);
 
-		m_vecCullingBox[i]->Update_Matrix(matTransform);
+		//m_vecCullingBox[i]->Update_Matrix(matTransform);
 	}
 
 	m_VBInstSubResourceData.pSysMem = pVertices;

@@ -30,6 +30,20 @@ _int C1H_SwordAttackNormalR1_01::Tick(const _double& _dDeltaTime)
 		return STATE_CHANGE;
 	}
 
+	if (17 < iCurkeyFrameIndex && 20 > iCurkeyFrameIndex && false == m_bEffectCheck)
+	{
+		m_bEffectCheck = true;
+
+		_matrix WWorld = m_pSilvermane->Get_CurerntWeapon()->Get_Transform()->Get_WorldMatrix();
+		_vector WPos = { 0.f, -1.0f, 0.2f, 1.f };
+		WPos = XMVector4Transform(WPos, WWorld);
+
+		_matrix mat = g_pObserver->Get_PlayerWorldMatrix();
+		mat.r[3] = WPos;
+
+		m_pSilvermane->Active_Effect_Target((_uint)EFFECT::ATTACK_LEFT, mat);
+	}
+
 	return _int();
 }
 
@@ -54,6 +68,10 @@ HRESULT C1H_SwordAttackNormalR1_01::EnterState()
 {
 	if (FAILED(__super::EnterState()))
 		return E_FAIL;
+
+	m_bEffectCheck = false;
+
+	//m_pSilvermane->Active_Effect((_uint)EFFECT::ATTACK_LEFT);
 
 	g_pGameInstance->StopSound(CSoundMgr::CHANNELID::Player_Sword_Attack);
 	g_pGameInstance->Play_Shot(L"Needle_Attack_L_1", CSoundMgr::CHANNELID::Player_Sword_Attack);

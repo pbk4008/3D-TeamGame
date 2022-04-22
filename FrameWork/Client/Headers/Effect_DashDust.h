@@ -12,6 +12,11 @@ END
 BEGIN(Client)
 class CEffect_DashDust final : public CEffect
 {
+public:
+	typedef struct tagEffDashDesc : CEffect::EFFECTDESC
+	{
+		_float fAlpha;
+	}EF_PAR_DASH_DESC;
 protected:
 	explicit CEffect_DashDust();
 	explicit CEffect_DashDust(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);
@@ -34,7 +39,7 @@ private:
 	virtual HRESULT SetUp_Components();
 
 public:
-	CEffect::EFFECTDESC Get_EffectDesc() {return m_Desc; }
+	EF_PAR_DASH_DESC Get_EffectDesc() {return m_Desc; }
 
 private:
 	CVIBuffer_PointInstance_Floating_Disappear* m_pBuffer = nullptr;
@@ -46,7 +51,7 @@ private:
 	_bool m_bShow = true;
 
 private:
-	CEffect::EFFECTDESC m_Desc;
+	EF_PAR_DASH_DESC m_Desc;
 	CVIBuffer_PointInstance_Floating_Disappear::PIDESC m_backupDesc;
 
 public:

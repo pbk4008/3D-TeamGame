@@ -225,7 +225,7 @@ void CActor::Active_Effect(_uint iEffectIndex, _fvector vPivot)
 	pEffect->Set_Reset(true);
 }
 
-void CActor::Active_Effect_Target(_uint iEffectIndex, _fvector TargetPos)
+void CActor::Active_Effect_Target(_uint iEffectIndex, _matrix TargetMat)
 {
 	CEffect* pEffect = g_pGameInstance->Get_Effect(iEffectIndex);
 	if (!pEffect)
@@ -234,10 +234,8 @@ void CActor::Active_Effect_Target(_uint iEffectIndex, _fvector TargetPos)
 		return;
 	}
 
-	_vector Mypos = m_pTransform->Get_State(CTransform::STATE_POSITION);
-	Mypos = XMVectorSetY(Mypos, XMVectorGetY(Mypos) + 1.f);
-	pEffect->Get_Transform()->Set_State(CTransform::STATE_POSITION, Mypos);
-	pEffect->Get_Transform()->Face_Target(TargetPos);
+	TargetMat.r[3] = XMVectorSetY(TargetMat.r[3], XMVectorGetY(TargetMat.r[3]) + 1.f);
+	pEffect->Get_Transform()->Set_WorldMatrix(TargetMat);
 	pEffect->setActive(true);
 	pEffect->Set_Reset(true);
 }
@@ -252,11 +250,13 @@ void CActor::Set_FootPosition(const _float3& _vPos)
 {
 }
 
-void CActor::RimlightCheck(_bool check)
+void CActor::RimlightCheck(_bool check, _float3 color)
 {
 	m_rimcheck = check;
 	if (check == false)
 		m_rimintensity = 30.f;
+
+	m_rimcol = color;
 }
 
 void CActor::SetRimIntensity(_float time)

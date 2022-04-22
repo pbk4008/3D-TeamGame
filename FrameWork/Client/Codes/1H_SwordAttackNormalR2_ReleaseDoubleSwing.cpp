@@ -46,9 +46,6 @@ _int C1H_SwordAttackNormalR2_ReleaseDoubleSwing::Tick(const _double& _dDeltaTime
 		return STATE_CHANGE;
 	}
 
-	std::cout << "current Idx : " << iCurkeyFrameIndex << std::endl;
-
-
 	if (iCurkeyFrameIndex <= 45)
 	{
 		_int temp = 0;

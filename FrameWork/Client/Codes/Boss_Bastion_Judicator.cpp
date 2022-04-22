@@ -12,6 +12,7 @@
 #include "MidBoss_Attack.h"
 #include "MidBoss_Turn.h"
 #include "MidBoss_Death.h"
+#include "MidBoss_Execution.h"
 #include "MidBoss_Stun.h"
 
 CBoss_Bastion_Judicator::CBoss_Bastion_Judicator(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
@@ -94,9 +95,13 @@ _int CBoss_Bastion_Judicator::Tick(_double TimeDelta)
 		return -1;
 	}
 
+	_matrix matPivot = XMMatrixIdentity();
+	matPivot = XMMatrixScaling(0.013f, 0.013f, 0.013f) * XMMatrixRotationY(XMConvertToRadians(180.f));
+	m_pModel->Set_PivotMatrix(matPivot);
+
 	if (m_rimcheck)
 	{
-		CActor::SetRimIntensity(TimeDelta * -10.f);
+		CActor::SetRimIntensity((_float)TimeDelta * -10.f);
 	}
 
 	if (0 >= m_fCurrentHp)
@@ -137,8 +142,9 @@ _int CBoss_Bastion_Judicator::Tick(_double TimeDelta)
 	{
 		m_pPanel->Set_Show(true);
 	}
-	if (false == m_bUIShow)
+	if (g_pGameInstance->getkeyDown(DIK_NUMPAD8))
 	{
+		m_pStateController->Change_State(L"Execution");
 	}
 
 	if (m_fGroggyGauge >= m_fMaxGroggyGauge)
@@ -189,6 +195,19 @@ _int CBoss_Bastion_Judicator::Tick(_double TimeDelta)
 		}
 		
 	}
+	else if (EXECUTION == m_pAnimator->Get_CurrentAnimNode())
+	{
+		if (L"Execution" == m_pStateController->Get_CurStateTag())
+		{
+			if (m_pAnimator->Get_CurrentAnimation()->Is_Finished())
+			{
+				m_pPanel->Set_Show(false);
+				m_pPanel->Set_UIRemove(true);
+				m_bdissolve = true;
+				return 0;
+			}
+		}
+	}
 
 	m_pCharacterController->Move(TimeDelta, m_pTransform->Get_Velocity());
 
@@ -236,7 +255,7 @@ HRESULT CBoss_Bastion_Judicator::Render()
 	if (m_rimcheck == true)
 	{
 		rimdesc.rimcheck = m_rimcheck;
-		rimdesc.rimcol = _float3(1.f, 0.f, 0.f);
+		rimdesc.rimcol = m_rimcol;
 		rimdesc.rimintensity = m_rimintensity; // intensity ³·À» ¼ö·Ï °úÇÏ°Ô ºû³²
 		XMStoreFloat4(&rimdesc.camdir, XMVector3Normalize(g_pGameInstance->Get_CamPosition(L"Camera_Silvermane") - m_pTransform->Get_State(CTransform::STATE_POSITION)));
 		CActor::SetRimIntensity(g_fDeltaTime * -10.f);
@@ -298,7 +317,7 @@ void CBoss_Bastion_Judicator::setActive(_bool bActive)
 			/* for.Character Controller */
 			CCharacterController::DESC tCharacterControllerDesc;
 			tCharacterControllerDesc.fHeight = 1.f;
-			tCharacterControllerDesc.fRadius = 0.5f;
+			tCharacterControllerDesc.fRadius = 1.f;
 			tCharacterControllerDesc.fContactOffset = tCharacterControllerDesc.fRadius * 0.1f;
 			tCharacterControllerDesc.fStaticFriction = 0.5f;
 			tCharacterControllerDesc.fDynamicFriction = 0.5f;
@@ -453,6 +472,10 @@ HRESULT CBoss_Bastion_Judicator::Set_Animation_FSM()
 		return E_FAIL;
 #pragma endregion
 
+	pAnim = m_pModel->Get_Animation("SK_Bastion_Tier4.ao|A_Attack_Finisher_Phalanxar");
+	if (FAILED(m_pAnimator->Insert_Animation(EXECUTION, HEAD, pAnim, true, true, false, ERootOption::XYZ)))
+		return E_FAIL;
+
 #pragma region »ó½Ã¾îÅÃ¾Ö´Ô
 	pAnim = m_pModel->Get_Animation("SK_Bastion_Tier4.ao|A_2H_Hammer_Attack_JogR1");
 	if (FAILED(m_pAnimator->Insert_Animation(ATTACK_JOG_H, HEAD, pAnim, true, true, true, ERootOption::XYZ)))
@@ -509,6 +532,8 @@ HRESULT CBoss_Bastion_Judicator::Set_Animation_FSM()
 	
 	m_pAnimator->Insert_AnyEntryAnimation(STUN_START);
 
+	m_pAnimator->Insert_AnyEntryAnimation(EXECUTION);
+
 	//¾îÅÃ¾Ö´Ô
 	m_pAnimator->Insert_AnyEntryAnimation(ATTACK_JOG_H);
 	m_pAnimator->Insert_AnyEntryAnimation(ATTACK_LEGACY_H);
@@ -558,6 +583,9 @@ HRESULT CBoss_Bastion_Judicator::Set_State_FSM()
 		return E_FAIL;
 
 	if (FAILED(m_pStateController->Add_State(L"Death", CMidBoss_Death::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+
+	if (FAILED(m_pStateController->Add_State(L"Execution", CMidBoss_Execution::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 
 	if (FAILED(m_pStateController->Add_State(L"Stun", CMidBoss_Stun::Create(m_pDevice, m_pDeviceContext))))
@@ -646,6 +674,16 @@ void CBoss_Bastion_Judicator::Hit(const ATTACKDESC& _tAttackDesc)
 	}
 }
 
+void CBoss_Bastion_Judicator::Execution()
+{
+	m_bDead = true;
+	m_IsAttack = false;
+	m_pWeapon->Set_IsAttack(false);
+
+	m_pStateController->Change_State(L"Execution");
+	m_pCharacterController->Remove_CCT();
+}
+
 void CBoss_Bastion_Judicator::Set_IsAttack(const _bool _isAttack)
 {
 	m_IsAttack = _isAttack;
@@ -692,5 +730,4 @@ void CBoss_Bastion_Judicator::Free()
 	Safe_Release(m_pWeapon);
 	Safe_Release(m_pStateController);
 	Safe_Release(m_pAnimator);
-
 }

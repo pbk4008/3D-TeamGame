@@ -2,7 +2,6 @@
 #ifndef __CINEMACAM_H__
 #define __CINEMACAM_H__
 #include "GameObject.h"
-#include "Camera.h"
 
 BEGIN(Client)
 class CCinemaCam final : public CGameObject
@@ -31,6 +30,8 @@ public:
 	void Reset_Camera();
 	void Add_Fov(_float fSpeed);
 	void Minus_Fov(_float fSpeed);
+	void Set_Fov(_float fSpeed, _float fGoalAngle);
+	void Set_Fov(_float fAngle);
 private:
 	HRESULT Set_Camera(_uint iSceneTag);
 	class CHierarchyNode* Get_CamBone();

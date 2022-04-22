@@ -193,6 +193,7 @@ HRESULT CShieldBreaker::Ready_Components()
 
 	_matrix matPivot = XMMatrixRotationY(XMConvertToRadians(90.f)) * XMMatrixTranslation(0.f, 0.f, 0.8f);
 	m_pCollider->setPivotMatrix(matPivot);
+	m_pCollider->setShapeLayer((_uint)ELayer::MonsterWeapon);
 
 	return S_OK;
 }

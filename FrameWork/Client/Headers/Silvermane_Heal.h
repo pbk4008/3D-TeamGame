@@ -22,6 +22,9 @@ public:
 public:
 	virtual _int Input(const _double& _dDeltaTime) override;
 
+private:
+	_float m_fValue = 0.f;
+
 public:
 	static CSilvermane_Heal* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext, void* _pArg = nullptr);
 	virtual void Free();

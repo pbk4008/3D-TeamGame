@@ -57,7 +57,7 @@ _int CUI_ItemStatusWindow::LateTick(_double TimeDelta)
 
 	if (m_fInitPos > m_fEndPos)
 	{
-		m_fInitPos -= TimeDelta * 100.f;
+		m_fInitPos -= (_float)TimeDelta * 100.f;
 		if (m_fInitPos < m_fEndPos)
 		{
 			m_fInitPos = m_fEndPos;

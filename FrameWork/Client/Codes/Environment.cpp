@@ -62,14 +62,14 @@ _int CEnvironment::LateTick(_double TimeDelta)
 {
 	//if (FAILED(Culling()))
 	//	return -1;
-	//cout << "Hello World" << endl;
+
 
 	if (m_pRenderer->Get_RenderButton(CRenderer::SHADOW) == true)
 	{
 		if (FAILED(m_pRenderer->Add_RenderGroup(CRenderer::RENDER_SHADOW, this))) return -1;
 	}
 
-	if(FAILED(m_pRenderer->Add_RenderGroup(CRenderer::RENDER_NONALPHA, this))) return -1;
+	if (FAILED(m_pRenderer->Add_RenderGroup(CRenderer::RENDER_NONALPHA, this))) return -1;
 
 	//if (m_pRenderer->Get_RenderButton(CRenderer::VELOCITYBLUR) == true)
 	//{
@@ -186,27 +186,36 @@ HRESULT CEnvironment::Ready_Component()
 
 HRESULT CEnvironment::Culling()
 {
-	vector<CCullingBox*> vecCullingBox = m_pInstanceMesh->Get_CullingBox();
-
-	for (_uint i = 0; i < m_iInstanceCnt; i++)
-	{
-		if (!g_pGameInstance->isIn_WorldFrustum(vecCullingBox[i]->Get_Points(), 50.f))
-			ZeroMemory(&m_vecUsingMatrix[i], sizeof(_float4x4));
-		else
-			m_vecUsingMatrix[i] = m_tEnvironmentDesc.tInstanceDesc.vecMatrix[i];
-	}
+	//vector<CCullingBox*> vecCullingBox = m_pInstanceMesh->Get_CullingBox();
 
 	//for (_uint i = 0; i < m_iInstanceCnt; i++)
 	//{
-	//	_matrix matTmp = XMLoadFloat4x4(&m_tEnvironmentDesc.tInstanceDesc.vecMatrix[i]);
-	//	_vector vPos = matTmp.r[3];
-
-	//	if (!g_pGameInstance->isIn_WorldFrustum(vPos, 50.f))
+	//	if (!g_pGameInstance->isIn_WorldFrustum(vecCullingBox[i]->Get_Points(), 50.f))
 	//		ZeroMemory(&m_vecUsingMatrix[i], sizeof(_float4x4));
 	//	else
 	//		m_vecUsingMatrix[i] = m_tEnvironmentDesc.tInstanceDesc.vecMatrix[i];
 	//}
 
+	_int instancecnt = 0;
+	for (_uint i = 0; i < m_iInstanceCnt; i++)
+	{
+		_matrix matTmp = XMLoadFloat4x4(&m_tEnvironmentDesc.tInstanceDesc.vecMatrix[i]);
+		_vector vPos = matTmp.r[3];
+		
+
+		if (g_pGameInstance->isIn_WorldFrustum(vPos, 20.f))
+		{
+			m_vecUsingMatrix[i] = m_tEnvironmentDesc.tInstanceDesc.vecMatrix[i];
+			instancecnt++;
+		}
+		else
+		{
+			ZeroMemory(&m_vecUsingMatrix[i], sizeof(_float4x4));
+		}
+	}
+
+
+	//m_pInstanceMesh->Set_InstanceCnt(instancecnt);
 	m_pInstanceMesh->Update_InstanceBuffer(m_vecUsingMatrix);
 
 	return S_OK;
