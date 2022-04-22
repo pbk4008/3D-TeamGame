@@ -3,6 +3,7 @@
 #include "SingleImage.h"
 #include "UI_ItemSlot.h"
 #include "UI_Level_UP.h"
+#include "UI_LevelUP_Fill_Right.h"
 
 CUI_LevelUP_Fill_Lead_Left::CUI_LevelUP_Fill_Lead_Left(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
 	:CHud(pDevice, pDeviceContext)
@@ -57,10 +58,17 @@ _int CUI_LevelUP_Fill_Lead_Left::LateTick(_double TimeDelta)
 	if (FAILED(CUI::LateTick(TimeDelta)))
 		return -1;
 
-	m_pLocalTransform->Set_State(CTransform::STATE_POSITION, _vector{ -80.f , -274.f, 0.1f, 1.f });
-	m_pLocalTransform->Scaling(_vector{ 32.f, 10.f, 1.f, 0.f });
-
 	Attach_Owner();
+
+	_float Gap = 0.f;
+	if (nullptr != m_pFill)
+	{
+		m_fRatio = m_pFill->Get_Ratio();
+		Gap = m_fRatio * (XMVectorGetX(m_pFill->Get_Transform()->Get_State(CTransform::STATE_RIGHT)) - 20.f);
+	}
+
+	m_pTransform->Set_State(CTransform::STATE_POSITION, _vector{ -40.f - Gap , -274.f, 0.07f, 1.f });
+
 
 	if (nullptr != m_pRenderer)
 		m_pRenderer->Add_RenderGroup(CRenderer::RENDER::RENDER_UI_ACTIVE, this);
@@ -87,7 +95,7 @@ HRESULT CUI_LevelUP_Fill_Lead_Left::Ready_Component(void)
 	ModalSprite.pCreator = this;
 	ModalSprite.pRenderer = this->m_pRenderer;
 	ModalSprite.pTransform = this->m_pTransform;
-	//ModalSprite.renderType = CSingleImage::Alpha;
+	ModalSprite.renderType = CSingleImage::Alpha;
 
 	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_SingleImage", L"SingleImage", (CComponent**)&m_pSigleImageCom, &ModalSprite)))
 		return E_FAIL;

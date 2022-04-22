@@ -5,6 +5,7 @@
 
 BEGIN(Client)
 class CSingleImage;
+class UI_LevelUP_Fill_Right;
 class CUI_LevelUP_Fill_Lead_Left : public CHud
 {
 public:
@@ -31,6 +32,7 @@ public:
 	HRESULT Ready_Component(void);
 	_int Attach_Owner(void);
 
+	void Set_Fill(UI_LevelUP_Fill_Right* pObj) { m_pFill = pObj; }
 public:
 	void SetBg(const std::wstring& _szFileName);
 
@@ -41,6 +43,8 @@ private:
 	CTransform*	  m_pLocalTransform = nullptr;
 	_bool		  m_bSetScale = true;
 
+	UI_LevelUP_Fill_Right* m_pFill = nullptr;
+	_float m_fRatio = 0.f;
 public:
 	static CUI_LevelUP_Fill_Lead_Left* Create(ID3D11Device * pDevice, ID3D11DeviceContext * pDeviceContext);
 	virtual CGameObject* Clone(const _uint iSceneID, void* pArg);

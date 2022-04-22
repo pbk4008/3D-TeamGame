@@ -53,36 +53,12 @@ HRESULT CFlyingShield::NativeConstruct(const _uint _iSceneID, void* _pArg)
 	if (FAILED(Ready_Components()))
 		return E_FAIL;
 
-	// 날아가야할 방향벡터 구하는 곳
-	_vector svDir = XMVectorSetW(XMLoadFloat3(&m_tDesc.vTargetPos), 1.f) - m_pTransform->Get_State(CTransform::STATE_POSITION);
-	m_fDis = XMVectorGetX(XMVector3Length(svDir));
-	svDir = XMVector3Normalize(svDir);
-	XMStoreFloat3(&m_vDir, svDir);
-
-	// 방향벡터를 기준으로 라업룩 회전시켜주는곳
-	_vector svLook = XMVector3Normalize(svDir) * m_pTransform->Get_Scale(CTransform::STATE_LOOK);
-	_vector svRight = XMVector3Cross(XMVectorSet(0.f, 1.f, 0.f, 0.f), svDir) * m_pTransform->Get_Scale(CTransform::STATE_RIGHT);
-	_vector svUp = XMVector3Cross(svDir, XMVector3Normalize(svRight)) * m_pTransform->Get_Scale(CTransform::STATE_UP);
-	m_pTransform->Set_State(CTransform::STATE_RIGHT, svRight);
-	m_pTransform->Set_State(CTransform::STATE_UP, svUp);
-	m_pTransform->Set_State(CTransform::STATE_LOOK, svLook);
-
-	m_pTransform->Rotation_Axis(CTransform::STATE_LOOK, XMConvertToRadians(45.f));
-
-
-	Spline_Throw();
-
-
-	//m_fLiveTime = 1.6f;
-	//m_fSpeed = m_fDis / m_fLiveTime;
-	m_fSpeed = 30.f;
-	m_fLiveTime = m_fDis / m_fSpeed;
-
 	m_fDamage = 3.f;
-	m_isAttack = true;
+	m_fSpeed = 30.f;
 
-	g_pObserver->Set_IsThrownObject(true);
+	m_pSpline = new CSplineCurve();
 
+	setActive(false);
 	return S_OK;
 }
 
@@ -110,8 +86,6 @@ _int CFlyingShield::Tick(_double _dDeltaTime)
 	{
 		if (m_fAccTime >= m_fLiveTime * 0.8f)
 		{
-			//_matrix smatOwner = m_pFixedBone->Get_CombinedMatrix() * XMLoadFloat4x4(&m_matOwnerPivot) * m_pOwner->Get_Transform()->Get_WorldMatrix();
-			//_vector svOwnerPos = smatOwner.r[3];
 			_vector svOwnerPos = m_pOwner->Get_Transform()->Get_State(CTransform::STATE_POSITION) + XMVectorSet(0.f, 1.f, 0.f, 0.f);
 			_vector svPos = m_pTransform->Get_State(CTransform::STATE_POSITION);
 			_vector svDir = XMVector3Normalize(svOwnerPos - svPos);
@@ -126,34 +100,6 @@ _int CFlyingShield::Tick(_double _dDeltaTime)
 			m_pTransform->Set_State(CTransform::STATE_POSITION, svPoint);
 		}
 	}
-
-	//if (!m_isReturn)
-	//{
-	//	_vector svPos = m_pTransform->Get_State(CTransform::STATE_POSITION);
-	//	_vector svLook = XMVector3Normalize(m_pTransform->Get_State(CTransform::STATE_LOOK));
-	//	//_vector svVelocity = XMLoadFloat3(&m_vDir) * m_fSpeed * (_float)_dDeltaTime;
-	//	_vector svVelocity = svLook * m_fSpeed * (_float)_dDeltaTime;
-	//	svPos += svVelocity;
-	//	m_fAccDis += XMVectorGetX(XMVector3Length(svVelocity));
-	//	m_pTransform->Set_State(CTransform::STATE_POSITION, svPos);
-
-	//	if (m_fDis < m_fAccDis)
-	//	{
-	//		m_isReturn = true;
-	//		static_cast<CSilvermane*>(m_pOwner)->Return_Shield();
-	//		m_pTransform->Rotation_Axis(CTransform::STATE_LOOK, XMConvertToRadians(-45.f));
-	//	}
-	//}
-	//else
-	//{
-	//	_matrix smatOwner = m_pFixedBone->Get_CombinedMatrix() * XMLoadFloat4x4(&m_matOwnerPivot) * m_pOwner->Get_Transform()->Get_WorldMatrix();
-	//	_vector svOwnerPos = smatOwner.r[3];
-	//	_vector svPos = m_pTransform->Get_State(CTransform::STATE_POSITION);
-	//	_vector svDir = XMVector3Normalize(svOwnerPos - svPos);
-
-	//	svPos += svDir * m_fSpeed * (_float)_dDeltaTime;
-	//	m_pTransform->Set_State(CTransform::STATE_POSITION, svPos);
-	//}
 
 	m_pCollider->Tick(_dDeltaTime);
 	return _int();
@@ -198,6 +144,23 @@ HRESULT CFlyingShield::Render_Shadow()
 	return S_OK;
 }
 
+void CFlyingShield::setActive(_bool bActive)
+{
+	CGameObject::setActive(bActive);
+
+	switch (bActive)
+	{
+	case true:
+		m_pCollider->Add_ActorToScene();
+		break;
+	case false:
+		m_isReturn = false;
+		m_fAccTime = 0.f;
+		m_pCollider->Remove_ActorFromScene();
+		break;
+	}
+}
+
 void CFlyingShield::OnTriggerEnter(CCollision& collision)
 {
 	if (m_isReturn)
@@ -205,7 +168,6 @@ void CFlyingShield::OnTriggerEnter(CCollision& collision)
 		if (collision.pGameObject == m_pOwner)
 		{
 			setActive(false);
-			m_bRemove = true;
 			static_cast<CSilvermane*>(m_pOwner)->End_ThrowShield();
 		}
 		return;
@@ -240,10 +202,39 @@ void CFlyingShield::OnTriggerEnter(CCollision& collision)
 	}
 }
 
-HRESULT CFlyingShield::Ready_Components()
+void CFlyingShield::Throw(const _fvector& _svTargetPos)
 {
+	setActive(true);
+	XMStoreFloat3(&m_tDesc.vTargetPos, _svTargetPos);
 	m_pTransform->Set_WorldMatrix(m_tDesc.pOriginTransform->Get_WorldMatrix());
 
+	// 날아가야할 방향벡터 구하는 곳
+	_vector svDir = XMVectorSetW(_svTargetPos, 1.f) - m_pTransform->Get_State(CTransform::STATE_POSITION);
+	m_fDis = XMVectorGetX(XMVector3Length(svDir));
+	svDir = XMVector3Normalize(svDir);
+	XMStoreFloat3(&m_vDir, svDir);
+
+	// 방향벡터를 기준으로 라업룩 회전시켜주는곳
+	_vector svLook = XMVector3Normalize(svDir) * m_pTransform->Get_Scale(CTransform::STATE_LOOK);
+	_vector svRight = XMVector3Cross(XMVectorSet(0.f, 1.f, 0.f, 0.f), svDir) * m_pTransform->Get_Scale(CTransform::STATE_RIGHT);
+	_vector svUp = XMVector3Cross(svDir, XMVector3Normalize(svRight)) * m_pTransform->Get_Scale(CTransform::STATE_UP);
+	m_pTransform->Set_State(CTransform::STATE_RIGHT, svRight);
+	m_pTransform->Set_State(CTransform::STATE_UP, svUp);
+	m_pTransform->Set_State(CTransform::STATE_LOOK, svLook);
+
+	m_pTransform->Rotation_Axis(CTransform::STATE_LOOK, XMConvertToRadians(45.f));
+
+
+	Spline_Throw();
+
+
+	m_fLiveTime = m_fDis / m_fSpeed;
+	m_isAttack = true;
+	g_pObserver->Set_IsThrownObject(true);
+}
+
+HRESULT CFlyingShield::Ready_Components()
+{
 	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Model_FlyingShield", L"Model", (CComponent**)&m_pModel)))
 		return E_FAIL;
 	m_pModel->Add_Material(g_pGameInstance->Get_Material(L"Mtrl_FlyingShield"), 0);
@@ -276,8 +267,6 @@ void CFlyingShield::Return()
 
 void CFlyingShield::Spline_Throw()
 {
-	m_pSpline = new CSplineCurve();
-
 	_vector p0{};
 	_vector p1 = XMVectorSetW(m_pTransform->Get_State(CTransform::STATE_POSITION), 0.f); /* start */
 	_vector p2{}; /* curve */
@@ -314,7 +303,7 @@ void CFlyingShield::Spline_Return()
 	_vector p0{};
 	_vector p1 = XMLoadFloat3(&m_tDesc.vTargetPos); /* start */
 	_vector p2{}; /* curve */
-	_vector p3 = m_pOwner->Get_Transform()->Get_State(CTransform::STATE_POSITION) + XMVectorSet(0.f, 1.f, 0.f, -1.f); /* end */
+	_vector p3 = m_pOwner->Get_Transform()->Get_State(CTransform::STATE_POSITION) + _vector{ 0.f, 1.f, 0.f, -1.f }; /* end */
 	_vector p4{};
 
 	_float dist = MathUtils::Length(p3, p1);

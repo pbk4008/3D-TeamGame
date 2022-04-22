@@ -327,7 +327,7 @@ _int CSilvermane::Tick(_double _dDeltaTime)
 
 	if (g_pGameInstance->getkeyDown(DIK_O))
 	{
-		m_pPlayerData->SetExp(10);
+		m_pPlayerData->SetExp(5);
 	}
 
 	return _int();
@@ -924,6 +924,18 @@ HRESULT CSilvermane::Ready_Weapons(const _uint _iSceneID)
 	m_pShield->Set_OwnerPivotMatrix(m_pModel->Get_PivotMatrix());
 	Set_EquipShield(false);
 
+	CFlyingShield::DESC tDesc;
+	tDesc.pOriginTransform = m_pShield->Get_Transform();
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer(m_iSceneID, L"Layer_Weapon", L"Proto_GameObject_FlyingShield", &tDesc, (CGameObject**)&m_pFlyingShield)))
+		return E_FAIL;
+	if (m_pFlyingShield)
+	{
+		m_pFlyingShield->Set_Owner(this);
+		m_pFlyingShield->Set_FixedBone(pWeaponBone);
+		m_pFlyingShield->Set_OwnerPivotMatrix(m_pModel->Get_PivotMatrix());
+	}
+
+	///////////////////////////////////////////////////////////////////// 모션 트레일
 	for (_int i = 0; i < 20; ++i)
 	{
 		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)m_iSceneID, L"Layer_MotionTrail", L"Proto_GameObject_MotionTrail")))
@@ -933,7 +945,9 @@ HRESULT CSilvermane::Ready_Weapons(const _uint _iSceneID)
 		pobjlist = g_pGameInstance->getObjectList((_uint)m_iSceneID, L"Layer_MotionTrail");
 		CGameObject* pobj = pobjlist->back();
 		pobj->setActive(false);
-		static_cast<CMotionTrail*>(pobj)->Set_Model(m_pModel, m_pCurWeapon->Get_Model());
+		//static_cast<CMotionTrail*>(pobj)->Set_Model(m_pModel, m_pCurWeapon->Get_Model());
+		static_cast<CMotionTrail*>(pobj)->Set_Model(m_pModel, m_pFlyingShield->Get_Model());
+
 
 		m_vecMotionTrail.emplace_back(pobj);
 	}
@@ -1145,6 +1159,7 @@ void CSilvermane::Set_IsTrasceCamera(const _bool _isTraceCamera)
 void CSilvermane::Set_IsDead(const _bool _isDead)
 {
 	m_bDead = _isDead;
+	m_pFlyingShield->Set_Remove(true);
 }
 
 void CSilvermane::Set_EquipWeapon(const _bool _isEquipWeapon)
@@ -1530,9 +1545,13 @@ void CSilvermane::Add_BlockTime(const _float _fValue)
 
 HRESULT CSilvermane::ThrowShield(const _fvector& _svTargetPos)
 {
-	m_pFlyingShield = static_cast<CFlyingShield*>(m_pShield->Throw(_svTargetPos));
+	//m_pFlyingShield = static_cast<CFlyingShield*>(m_pShield->Throw(_svTargetPos));
+	//if (!m_pFlyingShield)
+	//	return E_FAIL;
 	if (!m_pFlyingShield)
 		return E_FAIL;
+
+	m_pFlyingShield->Throw(_svTargetPos);
 
 	return S_OK;
 }
@@ -1545,6 +1564,7 @@ void CSilvermane::Return_Shield()
 
 void CSilvermane::End_ThrowShield()
 {
+	m_isShieldThrow = false;
 	if (g_pObserver->Get_PlayerAttackAnimStart() || m_isBlock || m_isHit)
 		return;
 
@@ -1555,8 +1575,7 @@ void CSilvermane::End_ThrowShield()
 
 	m_pAnimationController->Set_TrackAcc(73.0);
 	m_pAnimationController->Set_PlaySpeed(1.4f);
-	m_pFlyingShield = nullptr;
-	m_isShieldThrow = false;
+	//m_pFlyingShield = nullptr;
 }
 
 void CSilvermane::OnLight()
@@ -1711,7 +1730,8 @@ HRESULT CSilvermane::Create_MotionTrail(_int idex, _bool runcheck)
 		else
 			uvdvid = (idex - 10) / 10.f;
 
-		static_cast<CMotionTrail*>(m_vecMotionTrail[idex])->Set_Info(smatWorld,m_pCurWeapon->Get_Transform()->Get_WorldMatrix(), uvdvid);
+		//static_cast<CMotionTrail*>(m_vecMotionTrail[idex])->Set_Info(smatWorld,m_pCurWeapon->Get_Transform()->Get_WorldMatrix(), uvdvid);
+		static_cast<CMotionTrail*>(m_vecMotionTrail[idex])->Set_Info(smatWorld,m_pFlyingShield->Get_Transform()->Get_WorldMatrix(), uvdvid);
 		static_cast<CMotionTrail*>(m_vecMotionTrail[idex])->Set_RunCheck(runcheck);
 	}
 
@@ -1915,6 +1935,9 @@ const void CSilvermane::Raycast_DropBox(const _double& _dDeltaTime)
 	switch (iObjectTag)
 	{
 	case (_uint)GAMEOBJECT::MONSTER_ABERRANT:
+	case (_uint)GAMEOBJECT::MONSTER_1H:
+	case (_uint)GAMEOBJECT::MONSTER_SHOOTER:
+	case (_uint)GAMEOBJECT::MONSTER_ANIMUS:
 	case (_uint)GAMEOBJECT::MIDDLE_BOSS:
 		//if (static_cast<CActor*>(pHitObject)->Get_Groggy())
 		//{

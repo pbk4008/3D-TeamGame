@@ -29,7 +29,10 @@ public:
 	virtual HRESULT Render() override;
 	virtual HRESULT	Render_Shadow() override;
 
+	virtual void setActive(_bool bActive) override;
+
 	virtual void OnTriggerEnter(CCollision& collision) override;
+	void Throw(const _fvector& _svTargetPos);
 
 private:
 	HRESULT Ready_Components();

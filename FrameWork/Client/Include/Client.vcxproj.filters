@@ -942,7 +942,7 @@
     </Filter>
     <Filter Include="02.GameObject\05.UI\05.Hud\02.Quest\03.QuestClear">
       <UniqueIdentifier>{85a6a2f4-3986-4b5d-8a91-6b14ec89705e}</UniqueIdentifier>
-	</Filter>
+    </Filter>
     <Filter Include="02.GameObject\04.Effect\02.MeshEffect\00.ExplosionRock">
       <UniqueIdentifier>{bea67d0a-4217-4e46-a065-e0f07a483482}</UniqueIdentifier>
     </Filter>
@@ -2147,7 +2147,7 @@
     </ClInclude>
     <ClInclude Include="..\Headers\UI_QuestClear.h">
       <Filter>02.GameObject\05.UI\05.Hud\02.Quest\03.QuestClear</Filter>
-	</ClInclude>
+    </ClInclude>
     <ClInclude Include="..\Headers\Aberrant_Execution.h">
       <Filter>02.GameObject\03.Character\01.Monster\EarthAberrant\State\06.Execution</Filter>
     </ClInclude>
@@ -3313,7 +3313,7 @@
     </ClCompile>
     <ClCompile Include="..\Codes\UI_QuestClear.cpp">
       <Filter>02.GameObject\05.UI\05.Hud\02.Quest\03.QuestClear</Filter>
-	</ClCompile>
+    </ClCompile>
     <ClCompile Include="..\Codes\Aberrant_Execution.cpp">
       <Filter>02.GameObject\03.Character\01.Monster\EarthAberrant\State\06.Execution</Filter>
     </ClCompile>
@@ -3475,6 +3475,9 @@
     </FxCompile>
     <FxCompile Include="..\bin\ShaderFile\Shader_MeshEffect.hlsl">
       <Filter>100.ShaderFiles\03.Effect</Filter>
+    </FxCompile>
+    <FxCompile Include="..\bin\ShaderFile\Shader_UI_Level_Bar.hlsl">
+      <Filter>100.ShaderFiles\04.UI</Filter>
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
