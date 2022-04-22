@@ -123,16 +123,16 @@ HRESULT CStage1::NativeConstruct()
 	if (FAILED(Ready_UI(L"Layer_UI")))
 		return E_FAIL;
 
-	if (FAILED(Ready_Treasure_Chest()))
-		return E_FAIL;
+	//if (FAILED(Ready_Treasure_Chest()))
+	//	return E_FAIL;
 
 	if (FAILED(Ready_GameManager()))
 		return E_FAIL;
 
 	g_pGameInstance->Change_BaseCamera(L"Camera_Silvermane");
 
-	if (FAILED(Ready_Meteor()))
-		return E_FAIL;
+	//if (FAILED(Ready_Meteor()))
+	//	return E_FAIL;
 
 	//if (FAILED(Ready_Cinema()))
 	//	return E_FAIL;
@@ -143,11 +143,11 @@ HRESULT CStage1::NativeConstruct()
 	//if (FAILED(Ready_Monster(L"Layer_Monster")))
 	//	return E_FAIL;
 
-	if (FAILED(Ready_Indicator()))
-		return E_FAIL;
+	//if (FAILED(Ready_Indicator()))
+	//	return E_FAIL;
 
-	if (FAILED(Ready_Portal()))
-		return E_FAIL;
+	//if (FAILED(Ready_Portal()))
+	//	return E_FAIL;
 
 	//g_pGameInstance->PlayBGM(L"Stage1_BGM");
 
@@ -198,7 +198,7 @@ _int CStage1::Tick(_double TimeDelta)
 			{
 				if (m_iPortalCount == 0)
 				{
-					m_iPortalCount= 3;
+					m_iPortalCount = 3;
 					Open_Potal(XMVectorSet(-58.f, 18.f, 213.f, 1.f), (_uint)GAMEOBJECT::MONSTER_1H);
 					Open_Potal(XMVectorSet(-64.f, 18.f, 230.f, 1.f), (_uint)GAMEOBJECT::MONSTER_1H);
 					Open_Potal(XMVectorSet(-77.f, 18.f, 220.f, 1.f), (_uint)GAMEOBJECT::MONSTER_1H);
@@ -260,12 +260,12 @@ _int CStage1::Tick(_double TimeDelta)
 #pragma region Using Debug
 	_float3 fPos = { 0.f,5.f,20.f };
 
-	if (g_pGameInstance->getkeyDown(DIK_NUMPAD0))
-	{
-		CMonster_EarthAberrant* pMonster = nullptr;
-		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Test", L"Proto_GameObject_Boss_Bastion", &fPos, (CGameObject**)&pMonster)))
-			return -1;
-	}
+	//if (g_pGameInstance->getkeyDown(DIK_NUMPAD0))
+	//{
+	//	CMonster_EarthAberrant* pMonster = nullptr;
+	//	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Test", L"Proto_GameObject_Boss_Bastion", &fPos, (CGameObject**)&pMonster)))
+	//		return -1;
+	//}
 
 	//if (g_pGameInstance->getkeyDown(DIK_NUMPAD0))
 	//{
@@ -281,7 +281,7 @@ _int CStage1::Tick(_double TimeDelta)
 	//		return -1;
 	//	pMonster->setActive(true);
 	//}
-	
+
 	//if (g_pGameInstance->getkeyDown(DIK_NUMPAD2))
 	//{
 	//	CMonster_Bastion_Sword* pMonster = nullptr;
@@ -326,16 +326,20 @@ _int CStage1::Tick(_double TimeDelta)
 	//		return -1;
 	//}
 #pragma endregion
-	g_pInteractManager->Tick(TimeDelta);
-	g_pDropManager->Tick();
-	m_pIndicatorManager->Active_Indicator();
+	//if (nullptr != g_pInteractManager)
+	//	g_pInteractManager->Tick(TimeDelta);
+	//if (nullptr != g_pDropManager)
+	//	g_pDropManager->Tick();
+	//if (nullptr != m_pIndicatorManager)
+	//	m_pIndicatorManager->Active_Indicator();
 
 
-	/*For Cinema*/
-	//if (g_pGameInstance->getkeyDown(DIK_END))
+	///*For Cinema */
+	//if (g_pGameInstance->getkeyDown(DIK_END) && nullptr != m_pScenemaManager)
 	//	m_pScenemaManager->Active_Scenema((_uint)CINEMA_INDEX::CINEMA1_2);
-
-	//m_pScenemaManager->Tick(TimeDelta);
+	//
+	//if (nullptr != m_pScenemaManager)
+	//	m_pScenemaManager->Tick(TimeDelta);
 
 	//if (m_pCinema && m_pCinema->Get_Active())
 	//{
@@ -349,15 +353,20 @@ _int CStage1::Tick(_double TimeDelta)
 	if (m_fAccMeteorStartTime > 60.f)
 		Shoot_Meteor(TimeDelta);
 
-	g_pQuestManager->Tick(TimeDelta);
+	if (nullptr != g_pQuestManager)
+	{
+		g_pQuestManager->Tick(TimeDelta);
+	}
 	
 	return _int();
 }
 
 _int CStage1::LateTick(_double TimeDelta)
 {
-	//m_pScenemaManager->LateTick(TimeDelta);
-	g_pQuestManager->Late_Tick(TimeDelta);
+	if (nullptr != m_pScenemaManager)
+		m_pScenemaManager->LateTick(TimeDelta);
+	if (nullptr != g_pQuestManager)
+		g_pQuestManager->Late_Tick(TimeDelta);
 
 	return _int();
 }
@@ -367,12 +376,11 @@ HRESULT CStage1::Render()
 
 #ifdef _DEBUG
 	if (nullptr != m_pTriggerSystem)
-	{
 		m_pTriggerSystem->Render();
-	}
 #endif
 
-	g_pQuestManager->Render();
+	if (nullptr != g_pQuestManager)
+		g_pQuestManager->Render();
 
 	return S_OK;
 }
@@ -669,12 +677,15 @@ HRESULT CStage1::Ready_Light()
 
 HRESULT CStage1::Ready_GameManager(void)
 {
-	g_pDropManager = CDropManager::GetInstance();
-	if (FAILED(g_pDropManager->NativeConstruct((SCENEID::SCENE_STAGE1))))
-		return E_FAIL;
-
-	m_pIndicatorManager = GET_INSTANCE(CIndicator_Manager);
-	//m_pScenemaManager = GET_INSTANCE(CScenematicManager);
+	//g_pDropManager = CDropManager::GetInstance();
+	//if (nullptr != g_pDropManager)
+	//{
+	//	//if (FAILED(g_pDropManager->NativeConstruct((SCENEID::SCENE_STAGE1))))
+	//	//	return E_FAIL;
+	//}
+	//
+	//m_pIndicatorManager = GET_INSTANCE(CIndicator_Manager);
+	////m_pScenemaManager = GET_INSTANCE(CScenematicManager);
 
 
 	return S_OK;
@@ -691,8 +702,8 @@ HRESULT CStage1::Ready_Data_Effect()
 	CEffect* pEffect = nullptr;
 	vector<CEffect_DashDust::EF_PAR_DASH_DESC> vecDashEffect;
 
-	vecDashEffect[0].fAlpha = 0.05f;
 	g_pGameInstance->LoadFile<CEffect_DashDust::EF_PAR_DASH_DESC>(vecDashEffect, L"../bin/SaveData/Effect/Effect_Player_Foot_Dash.dat");
+	vecDashEffect[0].fAlpha = 0.05f;
 
 	wstring FullName = L"Proto_GameObject_Effect_DashDust";
 
@@ -702,6 +713,7 @@ HRESULT CStage1::Ready_Data_Effect()
 		MSGBOX("Failed to Creating Effect_Player_Foot_Dash in CStage1::Ready_Effect()");
 		return E_FAIL;
 	}
+
 	//매니저에 이펙트 넣기 (마지막 매개변수 : 같은 이펙트 추가로 넣을 갯수)
 	if (FAILED(g_pGameInstance->Add_Effect((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Player_Foot_Dash", pEffect, 20)))
 	{
