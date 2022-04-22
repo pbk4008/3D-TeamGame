@@ -416,11 +416,10 @@ HRESULT CSilvermane::Render()
 			if (FAILED(m_pModel->Render(i, i))) MSGBOX("Fialed To Rendering Silvermane");
 		}*/
 	}
-
 	if (m_pRenderer->Get_RenderButton(CRenderer::VELOCITYBLUR) == false)
 		m_PreWroldMat = m_pTransform->Get_WorldMatrix();
 #ifdef _DEBUG
-	Render_Debug();
+	//Render_Debug();
 #endif
 
 

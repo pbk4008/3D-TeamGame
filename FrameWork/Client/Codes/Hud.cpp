@@ -68,11 +68,11 @@ _int CHud::LateTick(_double TimeDelta)
 		}
 	}
 
-	if (m_pLevelUp)
-	{
-		if (m_pLevelUp->getActive())
-			m_pLevelUp->LateTick(TimeDelta);
-	}
+	//if (m_pLevelUp)
+	//{
+	//	if (m_pLevelUp->getActive())
+	//		m_pLevelUp->LateTick(TimeDelta);
+	//}
 
 	return _int();
 }
@@ -91,11 +91,11 @@ HRESULT CHud::Render()
 		}
 	}
 
-	if (m_pLevelUp)
-	{
-		if (m_pLevelUp->getActive())
-			m_pLevelUp->Render();
-	}
+	//if (m_pLevelUp)
+	//{
+	//	if (m_pLevelUp->getActive())
+	//		m_pLevelUp->Render();
+	//}
 
 	return S_OK;
 }
@@ -139,7 +139,7 @@ void CHud::ShowLevelUp_HUD(void)
 	{
 		if (m_pLevelUp)
 		{
-			m_pLevelUp->Show(m_pPlayerData);
+			//m_pLevelUp->Show(m_pPlayerData);
 		}
 	}
 }

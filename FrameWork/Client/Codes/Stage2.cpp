@@ -60,12 +60,13 @@ HRESULT CStage2::NativeConstruct()
 	}
 
 
-	//if (FAILED(Ready_TriggerSystem(L"../bin/SaveData/Trigger/MonsterSpawnTrigger2.dat")))
-	//	return E_FAIL;
+	if (FAILED(Ready_TriggerSystem(L"../bin/SaveData/Trigger/MonsterSpawnTrigger2.dat")))
+		return E_FAIL;
 
-	//g_pDropManager = CDropManager::GetInstance();
-	//if (FAILED(g_pDropManager->NativeConstruct((SCENEID::SCENE_STAGE2))))
-	//	return E_FAIL;
+	g_pDropManager = CDropManager::GetInstance();
+	if (FAILED(g_pDropManager->NativeConstruct((SCENEID::SCENE_STAGE2))))
+		return E_FAIL;
+
 
 	return S_OK;
 }
