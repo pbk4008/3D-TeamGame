@@ -33,6 +33,7 @@ public:
 
 public:
 	void SetGrade(std::wstring _szTextureName);
+	void SetFadeOut(void);
 
 private:
 	CSingleImage* m_pSigleImageCom = nullptr;

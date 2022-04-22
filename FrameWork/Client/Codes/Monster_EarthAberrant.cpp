@@ -681,6 +681,12 @@ void CMonster_EarthAberrant::Hit(const ATTACKDESC& _tAttackDesc)
 		m_pPanel->Set_GroggyBar(Get_GroggyGaugeRatio());
 		m_pStateController->Change_State(L"Flinch_Left");
 	}
+
+	Active_Effect((_uint)EFFECT::HIT);
+	Active_Effect((_uint)EFFECT::HIT_FLOATING);
+	Active_Effect((_uint)EFFECT::HIT_FLOATING_2);
+	Active_Effect((_uint)EFFECT::HIT_IMAGE);
+
 }
 
 void CMonster_EarthAberrant::Parry(const PARRYDESC& _tParryDesc)

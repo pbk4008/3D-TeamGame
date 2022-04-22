@@ -459,6 +459,7 @@ call Update_Library_Release.bat</Command>
     <FxCompile Include="..\bin\ShaderFiles\Shader_GodRay.hlsl" />
     <FxCompile Include="..\bin\ShaderFiles\Shader_HDRBase.hlsl" />
     <FxCompile Include="..\bin\ShaderFiles\Shader_Instance.hlsl" />
+    <FxCompile Include="..\bin\ShaderFiles\Shader_Lighting.hlsl" />
     <FxCompile Include="..\bin\ShaderFiles\Shader_Luminance.hlsl" />
     <FxCompile Include="..\bin\ShaderFiles\Shader_Plane.hlsl" />
     <FxCompile Include="..\bin\ShaderFiles\Shader_PointInstance.hlsl" />

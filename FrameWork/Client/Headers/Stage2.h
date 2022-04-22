@@ -30,7 +30,7 @@ private:
 	HRESULT Ready_JumpTrigger();
 
 
-	//HRESULT Ready_Data_Effect(const _tchar* pDataFilePath);
+	HRESULT Ready_Data_Effect(const _tchar* pDataFilePath);
 	//HRESULT Ready_Data_UI(const _tchar* pDataFilePath);
 
 private:

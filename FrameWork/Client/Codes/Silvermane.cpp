@@ -11,6 +11,7 @@
 #include "JumpBox.h"
 #include "DropBox.h"
 #include "UI_Blank_CKey.h"
+#include "UI_Blank_FKey.h"
 #include "UI_Fill_CKey.h"
 #include "InventoryData.h"
 #include "EquipmentData.h"
@@ -227,6 +228,7 @@ HRESULT CSilvermane::NativeConstruct(const _uint _iSceneID, void* _pArg)
 	m_pRenderer->SetRenderButton(CRenderer::PIXEL, true);
 	m_pRenderer->SetRenderButton(CRenderer::PBR, true);
 	m_pRenderer->SetRenderButton(CRenderer::HDR, true);
+	m_pRenderer->SetRenderButton(CRenderer::SHADOW, true);
 
 	//Light 수정 해야됨
 	LIGHTDESC			LightDesc;
@@ -238,18 +240,35 @@ HRESULT CSilvermane::NativeConstruct(const _uint _iSceneID, void* _pArg)
 	LightDesc.vAmbient = _float4(1.f, 1.f, 1.f, 1.f);
 	XMStoreFloat3(&LightDesc.vPosition, m_pTransform->Get_State(CTransform::STATE_POSITION));
 
+	m_LightDesc = LightDesc;
+
 	if (nullptr == m_pLight)
 	{
-		if (FAILED(g_pGameInstance->Add_Light(m_pDevice, m_pDeviceContext, LightDesc, &m_pLight)))
+		if (FAILED(g_pGameInstance->Add_Light(m_pDevice, m_pDeviceContext, m_LightDesc, &m_pLight)))
 			MSGBOX("Failed To Adding PointLight");
 	}
 
 	m_pLight->Set_Show(false);
-	m_fLightRange = LightDesc.fRange;
+
 
 	m_pTransform->Set_State(CTransform::STATE_POSITION, XMVectorSet(0.f,5.f, 10.f, 1.f));
 
 	m_pExecutionTargetBone = m_pModel->Get_BoneMatrix("utility_01");
+
+	////////////////////////////////////// UI
+	CUI_Blank_CKey::UIACTIVEDESC tUIDesc;
+	ZeroMemory(&tUIDesc, sizeof(CUI_Blank_CKey::UIACTIVEDESC));
+	_tcscpy_s(tUIDesc.UIDesc.TextureTag, L"Texture_Blank_Fkey");
+	tUIDesc.UIDesc.bMinus = false;
+	tUIDesc.UIDesc.fAngle = 0.f;
+	tUIDesc.UIDesc.fPos = { 0.f, 0.f, 0.f };
+	tUIDesc.UIDesc.fSize = { 10.f , 10.f};
+	tUIDesc.UIDesc.IDTag = (_uint)GAMEOBJECT::UI_STATIC;
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer(m_iSceneID, L"Layer_UI_BlankF", L"Proto_GameObject_UI_Blank_FKey", &tUIDesc, (CGameObject**)&m_pBlankFKey)))
+		return E_FAIL;
+	if (m_pBlankFKey)
+		m_pBlankFKey->setActive(false);
+	
 
 	return S_OK;
 }
@@ -311,22 +330,22 @@ _int CSilvermane::Tick(_double _dDeltaTime)
 
 	
 	//light 관련 
-	if (m_bLight && 0.f <= m_fLightRange)
+	if (m_bLight && 0.f <= m_LightDesc.fRange)
 	{
-		m_fLightRange -= (_float)_dDeltaTime * 12.f;
-		m_pLight->Set_Range(m_fLightRange);
+		m_LightDesc.fRange -= (_float)_dDeltaTime * m_fOffTimeSpeed;
+		m_pLight->Set_Range(m_LightDesc.fRange);
 	}
 
-	if (0.f >= m_fLightRange)
+	if (0.f >= m_LightDesc.fRange)
 	{
-		m_fLightRange = 0.f;
+		m_LightDesc.fRange = 0.f;
 		m_pLight->Set_Show(false);
 		m_bLight = false;
 	}
 
 	if (g_pGameInstance->getkeyDown(DIK_O))
 	{
-		m_pPlayerData->SetExp(10);
+		m_pPlayerData->SetExp(5);
 	}
 
 	return _int();
@@ -376,11 +395,11 @@ _int CSilvermane::LateTick(_double _dDeltaTime)
 			return iProgress;
 	}
 
-
 	//Raycast_Camera();
 
 	//g_pObserver->Set_PlayerPos(m_pTransform->Get_State(CTransform::STATE_POSITION));
 	g_pGameInstance->UpdateLightCam(0, m_pTransform->Get_State(CTransform::STATE_POSITION));
+
 
 	return _int();
 }
@@ -413,12 +432,12 @@ HRESULT CSilvermane::Render()
 			if (FAILED(m_pModel->Render(i, i))) MSGBOX("Fialed To Rendering Silvermane");
 		}*/
 	}
-
 	if (m_pRenderer->Get_RenderButton(CRenderer::VELOCITYBLUR) == false)
 		m_PreWroldMat = m_pTransform->Get_WorldMatrix();
 #ifdef _DEBUG
 	//Render_Debug();
 #endif
+
 
 	return S_OK;
 }
@@ -921,6 +940,18 @@ HRESULT CSilvermane::Ready_Weapons(const _uint _iSceneID)
 	m_pShield->Set_OwnerPivotMatrix(m_pModel->Get_PivotMatrix());
 	Set_EquipShield(false);
 
+	CFlyingShield::DESC tDesc;
+	tDesc.pOriginTransform = m_pShield->Get_Transform();
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer(m_iSceneID, L"Layer_Weapon", L"Proto_GameObject_FlyingShield", &tDesc, (CGameObject**)&m_pFlyingShield)))
+		return E_FAIL;
+	if (m_pFlyingShield)
+	{
+		m_pFlyingShield->Set_Owner(this);
+		m_pFlyingShield->Set_FixedBone(pWeaponBone);
+		m_pFlyingShield->Set_OwnerPivotMatrix(m_pModel->Get_PivotMatrix());
+	}
+
+	///////////////////////////////////////////////////////////////////// 모션 트레일
 	for (_int i = 0; i < 20; ++i)
 	{
 		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)m_iSceneID, L"Layer_MotionTrail", L"Proto_GameObject_MotionTrail")))
@@ -930,7 +961,7 @@ HRESULT CSilvermane::Ready_Weapons(const _uint _iSceneID)
 		pobjlist = g_pGameInstance->getObjectList((_uint)m_iSceneID, L"Layer_MotionTrail");
 		CGameObject* pobj = pobjlist->back();
 		pobj->setActive(false);
-		static_cast<CMotionTrail*>(pobj)->Set_Model(m_pModel, m_pCurWeapon->Get_Model());
+		static_cast<CMotionTrail*>(pobj)->Set_Model(m_pModel, m_pCurWeapon->Get_Model(), m_pFlyingShield->Get_Model());
 
 		m_vecMotionTrail.emplace_back(pobj);
 	}
@@ -1142,6 +1173,7 @@ void CSilvermane::Set_IsTrasceCamera(const _bool _isTraceCamera)
 void CSilvermane::Set_IsDead(const _bool _isDead)
 {
 	m_bDead = _isDead;
+	m_pFlyingShield->Set_Remove(true);
 }
 
 void CSilvermane::Set_EquipWeapon(const _bool _isEquipWeapon)
@@ -1527,9 +1559,10 @@ void CSilvermane::Add_BlockTime(const _float _fValue)
 
 HRESULT CSilvermane::ThrowShield(const _fvector& _svTargetPos)
 {
-	m_pFlyingShield = static_cast<CFlyingShield*>(m_pShield->Throw(_svTargetPos));
 	if (!m_pFlyingShield)
 		return E_FAIL;
+
+	m_pFlyingShield->Throw(_svTargetPos);
 
 	return S_OK;
 }
@@ -1542,6 +1575,7 @@ void CSilvermane::Return_Shield()
 
 void CSilvermane::End_ThrowShield()
 {
+	m_isShieldThrow = false;
 	if (g_pObserver->Get_PlayerAttackAnimStart() || m_isBlock || m_isHit)
 		return;
 
@@ -1552,21 +1586,21 @@ void CSilvermane::End_ThrowShield()
 
 	m_pAnimationController->Set_TrackAcc(73.0);
 	m_pAnimationController->Set_PlaySpeed(1.4f);
-	m_pFlyingShield = nullptr;
-	m_isShieldThrow = false;
 }
 
-void CSilvermane::OnLight()
+void CSilvermane::OnLight(_vector vColor, _vector vAmbient, _float fRange, _float fOffTimeSpeed)
 {
 	if (nullptr != m_pLight)
 	{
-		m_pLight->Set_Pos(m_pTransform->Get_State(CTransform::STATE_POSITION));
+		_vector Pos = m_pTransform->Get_State(CTransform::STATE_POSITION);
+		m_LightDesc.vPosition = _float3(XMVectorGetX(Pos) , XMVectorGetY(Pos), XMVectorGetZ(Pos));
+		XMStoreFloat4(&m_LightDesc.vDiffuse, vColor);
+		XMStoreFloat4(&m_LightDesc.vAmbient, vAmbient);
+		m_LightDesc.fRange = fRange;
+		m_fOffTimeSpeed = fOffTimeSpeed;
+
+		m_pLight->Set_Desc(m_LightDesc);
 		m_pLight->Set_Show(true);
-
-		m_pLight->Set_Color(XMVectorSet(1.f, 0.2f, 0.2f, 1.f));
-
-		m_fLightRange = 10.f;
-		m_pLight->Set_Range(m_fLightRange);
 		m_bLight = true;
 	}
 }
@@ -1678,7 +1712,7 @@ RIM CSilvermane::ColorChange_RimCheck(RIM& rimdesc)
 	if (m_rimcheck == true)
 	{
 		rimdesc.rimcheck = m_rimcheck;
-		rimdesc.rimcol = _float3(1.f, 0, 0);
+		rimdesc.rimcol = m_rimcol;
 		CActor::SetRimIntensity(g_fDeltaTime * -1.f);
 		rimdesc.rimintensity = m_rimintensity; // intensity 낮을 수록 과하게 빛남
 		XMStoreFloat4(&rimdesc.camdir, XMVector3Normalize(m_pTransform->Get_State(CTransform::STATE_POSITION) - g_pGameInstance->Get_CamPosition(L"Camera_Silvermane")));
@@ -1687,7 +1721,7 @@ RIM CSilvermane::ColorChange_RimCheck(RIM& rimdesc)
 	return rimdesc;
 }
 
-HRESULT CSilvermane::Create_MotionTrail(_int idex)
+HRESULT CSilvermane::Create_MotionTrail(_int idex, _bool runcheck, _bool throwcheck)
 {
 	if (idex <= 19)
 	{
@@ -1703,12 +1737,25 @@ HRESULT CSilvermane::Create_MotionTrail(_int idex)
 		static_cast<CMotionTrail*>(m_vecMotionTrail[idex])->setActive(true);
 		static_cast<CMotionTrail*>(m_vecMotionTrail[idex])->Set_BoneMat(m_pModel->Get_CurBoneMatrix());
 		_float uvdvid = 0.f;
-		if(idex <= 10)
-			uvdvid = idex / 10.f;
+		if (throwcheck == true)
+			uvdvid = 0.7f;
+		else if(runcheck == true)
+			uvdvid = 0.9f;
 		else
-			uvdvid = (idex - 10) / 10.f;
+		{
+			if (idex <= 10)
+				uvdvid = idex * 0.1f;
+			else
+				uvdvid = (idex - 10) * 0.1f;
+		}
 
-		static_cast<CMotionTrail*>(m_vecMotionTrail[idex])->Set_Info(smatWorld,m_pCurWeapon->Get_Transform()->Get_WorldMatrix(), uvdvid);
+		static_cast<CMotionTrail*>(m_vecMotionTrail[idex])->Set_Info(smatWorld
+																	,m_pCurWeapon->Get_Transform()->Get_WorldMatrix()
+																	, m_pFlyingShield->Get_Transform()->Get_WorldMatrix()
+																	,uvdvid);
+
+		static_cast<CMotionTrail*>(m_vecMotionTrail[idex])->Set_RunCheck(runcheck);
+		static_cast<CMotionTrail*>(m_vecMotionTrail[idex])->Set_ThrowCheck(throwcheck);
 	}
 
 	return S_OK;
@@ -1889,7 +1936,7 @@ const void CSilvermane::Raycast_DropBox(const _double& _dDeltaTime)
 		if (pHitObject)
 			iObjectTag = pHitObject->getTag();
 	}
-	
+
 	if ((_uint)GAMEOBJECT::DROP_BOX == iObjectTag)
 	{
 		m_pTargetDropBox = static_cast<CDropBox*>(pHitObject);
@@ -1911,16 +1958,36 @@ const void CSilvermane::Raycast_DropBox(const _double& _dDeltaTime)
 	switch (iObjectTag)
 	{
 	case (_uint)GAMEOBJECT::MONSTER_ABERRANT:
+	case (_uint)GAMEOBJECT::MONSTER_1H:
+	case (_uint)GAMEOBJECT::MONSTER_SHOOTER:
+	case (_uint)GAMEOBJECT::MONSTER_ANIMUS:
 	case (_uint)GAMEOBJECT::MIDDLE_BOSS:
 		//if (static_cast<CActor*>(pHitObject)->Get_Groggy())
 		//{
-			if (!m_isExecution && g_pGameInstance->getkeyDown(DIK_F))
+		if (!m_isExecution)
+		{
+			if (m_pBlankFKey)
+			{
+				m_pBlankFKey->setActive(true);
+				CTransform* pTargetTransform = pHitObject->Get_Transform();
+				_vector svTargetPos = pTargetTransform->Get_State(CTransform::STATE_POSITION);
+				svTargetPos += _vector{ 0.f, 1.2f, 0.f, 0.f };
+				m_pBlankFKey->Set_Position(svTargetPos);
+			}//나는 나는 배진성 먹는게 세상에서 제일 좋아 
+
+			if (g_pGameInstance->getkeyDown(DIK_F))
 			{
 				m_pTargetExecution = static_cast<CActor*>(pHitObject);
 				m_pTargetExecution->Execution();
 				Set_Execution(true);
+				m_pBlankFKey->setActive(false);
 			}
+		}
 		//}
+		break;
+	default:
+		if (m_pBlankFKey)
+			m_pBlankFKey->setActive(false);
 		break;
 	}
 }
@@ -1954,6 +2021,11 @@ CActor* CSilvermane::Get_TargetExecution() const
 CHierarchyNode* CSilvermane::Get_ExecutionTargetBone() const
 {
 	return m_pExecutionTargetBone;
+}
+
+CUI_Blank_FKey* CSilvermane::Get_Blank_FKey() const
+{
+	return m_pBlankFKey;
 }
 
 CSilvermane* CSilvermane::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)

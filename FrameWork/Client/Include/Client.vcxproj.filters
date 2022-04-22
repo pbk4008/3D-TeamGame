@@ -2220,6 +2220,9 @@
     <ClInclude Include="..\Headers\Cinema3_6.h">
       <Filter>03.System\07.Scenematic\01.Stage1\04. Shot 04\Cinema3_6</Filter>
     </ClInclude>
+    <ClInclude Include="..\Headers\UI_Blank_FKey.h">
+      <Filter>02.GameObject\05.UI\01.UI_Ingame\02.UI_JumpNode\00.Blank</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -3403,6 +3406,9 @@
     </ClCompile>
     <ClCompile Include="..\Codes\Cinema3_6.cpp">
       <Filter>03.System\07.Scenematic\01.Stage1\04. Shot 04\Cinema3_6</Filter>
+     </ClCompile>
+    <ClCompile Include="..\Codes\UI_Blank_FKey.cpp">
+      <Filter>02.GameObject\05.UI\01.UI_Ingame\02.UI_JumpNode\00.Blank</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -3541,6 +3547,9 @@
     </FxCompile>
     <FxCompile Include="..\bin\ShaderFile\Shader_MeshEffect.hlsl">
       <Filter>100.ShaderFiles\03.Effect</Filter>
+    </FxCompile>
+    <FxCompile Include="..\bin\ShaderFile\Shader_UI_Level_Bar.hlsl">
+      <Filter>100.ShaderFiles\04.UI</Filter>
     </FxCompile>
   </ItemGroup>
   <ItemGroup>

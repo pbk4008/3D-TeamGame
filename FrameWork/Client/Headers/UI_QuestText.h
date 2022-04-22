@@ -11,7 +11,8 @@ public:
 	struct Desc
 	{
 		EQuestTextType	 EQuestText;
-		CUI* pOwner = nullptr;
+		_float			 fInitPosY;
+		CUI*			 pOwner = nullptr;
 	};
 
 	explicit CUI_QuestText(void) = default;
@@ -38,7 +39,7 @@ private:
 	CUI*		  m_pOwner = nullptr;
 	CTransform*	  m_pLocalTransform = nullptr;
 	Desc		  desc;
-	_float		  m_fPosY = 180.f;
+	_float		  m_fPosY = 182.f;
 	_bool		  m_bOffsetY = false;
 public:
 	static CUI_QuestText* Create(ID3D11Device * pDevice, ID3D11DeviceContext * pDeviceContext);

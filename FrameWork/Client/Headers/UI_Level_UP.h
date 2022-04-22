@@ -12,12 +12,12 @@ class CUI_LevelUP_Fill_Lead_Right;
 class UI_LevelUP_Fill_Left;
 class UI_LevelUP_Fill_Right;
 
-class CLevel_UP : public CHud 
+class CLevel_UP : public CUI
 {
 public:
 	explicit CLevel_UP(void) = default;
 	explicit CLevel_UP(ID3D11Device * pDevice, ID3D11DeviceContext * pDeviceContext);
-	explicit CLevel_UP(const CHud & rhs);
+	explicit CLevel_UP(const CUI & rhs);
 	virtual ~CLevel_UP() = default;
 
 public:
@@ -28,8 +28,8 @@ public:
 	virtual HRESULT Render() override;
 
 public:
-	virtual HRESULT Ready_Component(void) override;
-	virtual HRESULT Ready_UIObject(void) override;
+	HRESULT Ready_Component(void);
+	HRESULT Ready_UIObject(void);
 
 public:
 	void Show(CPlayerData* pPlayerData);

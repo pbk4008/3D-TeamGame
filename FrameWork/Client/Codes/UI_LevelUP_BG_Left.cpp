@@ -4,12 +4,12 @@
 #include "UI_Level_UP.h"
 
 CUI_LevelUP_BG_Left::CUI_LevelUP_BG_Left(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
-	:CHud(pDevice, pDeviceContext)
+	:CUI(pDevice, pDeviceContext)
 {
 }
 
-CUI_LevelUP_BG_Left::CUI_LevelUP_BG_Left(const CHud& rhs)
-	: CHud(rhs)
+CUI_LevelUP_BG_Left::CUI_LevelUP_BG_Left(const CUI& rhs)
+	: CUI(rhs)
 {
 }
 
@@ -26,7 +26,7 @@ HRESULT CUI_LevelUP_BG_Left::NativeConstruct(const _uint iSceneID, void* pArg)
 	if (FAILED(CUI::NativeConstruct(iSceneID, pArg)))
 		return E_FAIL;
 
-	desc = (*(CHud::Desc*)pArg);
+	desc = (*(Desc*)pArg);
 
 	m_pLocalTransform = g_pGameInstance->Clone_Component<CTransform>(0, L"Proto_Component_Transform");
 	m_pLocalTransform->Set_State(CTransform::STATE_POSITION, _vector{ -140.f , -270.f, 0.3f, 1.f });
@@ -59,8 +59,12 @@ _int CUI_LevelUP_BG_Left::LateTick(_double TimeDelta)
 
 	Attach_Owner();
 
+	m_pTransform->Set_State(CTransform::STATE_POSITION, _vector{ -155.f , -270.f, 0.1f, 1.f });
+
+	m_pLocalTransform->Scaling(_vector{ 250.f, 30.f, 1.f, 0.f });
+
 	if (nullptr != m_pRenderer)
-		m_pRenderer->Add_RenderGroup(CRenderer::RENDER::RENDER_UI_ACTIVE, this);
+		m_pRenderer->Add_RenderGroup(CRenderer::RENDER::RENDER_UI, this);
 
 	return _int();
 }
@@ -135,8 +139,8 @@ CGameObject* CUI_LevelUP_BG_Left::Clone(const _uint iSceneID, void* pArg)
 
 void CUI_LevelUP_BG_Left::Free()
 {
+	__super::Free();
+
 	Safe_Release(m_pSigleImageCom);
 	Safe_Release(m_pLocalTransform);
-
-	__super::Free();
 }

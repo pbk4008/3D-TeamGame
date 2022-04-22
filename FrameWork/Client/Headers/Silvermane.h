@@ -17,6 +17,7 @@ class CJumpNode;
 class CJumpTrigger;
 class CJumpBox;
 class CUI_Blank_CKey;
+class CUI_Blank_FKey;
 class CUI_Fill_Ckey;
 class CInventoryData;
 class CEquipmentData;
@@ -127,8 +128,7 @@ public: /* For.Shield */
 
 public:
 	//light test ÇÔ¼ö
-	void OnLight();
-
+	void OnLight(_vector vColor, _vector vAmbient, _float fRange, _float fOffTimeSpeed);
 
 public: /* For.JumpNode */
 	CJumpNode* Get_TargetJumpNode() const;
@@ -145,13 +145,14 @@ public: /* For.Execute */
 	void Set_Execution(const _bool _isExecution, CActor* _pTarget = nullptr);
 	CActor* Get_TargetExecution() const;
 	CHierarchyNode* Get_ExecutionTargetBone() const;
+	CUI_Blank_FKey* Get_Blank_FKey() const;
 
 private:
 	const _int	Trace_CameraLook(const _double& _dDeltaTime);
 	const _int	Input(const _double& _dDeltaTime);
 	RIM			ColorChange_RimCheck(RIM& rimdesc);
 
-public:  HRESULT	Create_MotionTrail(_int idex);
+public:  HRESULT	Create_MotionTrail(_int idex,_bool runcheck = false, _bool throwcheck = false);
 
 private: /* Components */
 	CStateController* m_pStateController = nullptr;
@@ -202,6 +203,7 @@ private: /* For.DropBox  */
 private: /* For.Execution */
 	CActor* m_pTargetExecution = nullptr;
 	CHierarchyNode* m_pExecutionTargetBone = nullptr;
+	CUI_Blank_FKey* m_pBlankFKey = nullptr;
 
 private: /* For.Cheat */
 	_bool m_isHighSpeedMode = false;
@@ -214,9 +216,10 @@ private:/* for. Player& Inventory& Equipment Data */
 	CEquipmentData* m_pEquipmentData = nullptr;
 
 private:
+	LIGHTDESC m_LightDesc;
 	CLight* m_pLight = nullptr;
 	_bool m_bLight = false;
-	_float m_fLightRange = 0.f;
+	_float m_fOffTimeSpeed = 15.f;
 
 private:
 	CTexture*	m_pTexture = nullptr;

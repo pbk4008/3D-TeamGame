@@ -30,6 +30,7 @@ public:
 public:
 	HRESULT Ready_Component(void);
 	_int Attach_Owner(void);
+	void SetFadeOut(void);
 
 public:
 	void SetIcon(const std::wstring& _szFileName);

@@ -72,25 +72,23 @@ HRESULT CEffect_Env_Floating::NativeConstruct(const _uint _iSceneID, void* pArg)
 
 _int CEffect_Env_Floating::Tick(_double TimeDelta)
 {
-	/*if (g_pGameInstance->getkeyDown(DIK_NUMPAD1))
-	{
-		m_pBuffer->Set_Desc(m_backupDesc);
-		m_pBuffer->Particle_Reset();
-		m_Desc.fCurTime = 0.f;
-	}*/
-
 	m_pBuffer->Update(g_dImmutableTime, m_Desc.iAxis);
-
-	//m_fNonActiveTimeAcc += (_float)g_dImmutableTime;
-	//if (4000.f <= m_fNonActiveTimeAcc)
-	//{
-	//	setActive(false);
-	//	m_fNonActiveTimeAcc = 0.f;
-	//}
 
 	_matrix matCullingBoxPivot = XMMatrixIdentity();
 	matCullingBoxPivot.r[3] = { m_Desc.CullingBoxPos.x, m_Desc.CullingBoxPos.y,m_Desc.CullingBoxPos.z, 1.f };
 	m_pBox->Update_Matrix(matCullingBoxPivot * m_pTransform->Get_WorldMatrix());
+	
+	//_vector vPos = { -5.f,-1.f, 20.f, 1.f };
+	//_vector vPos = { 17.f,4.f, 100.f, 1.f };
+	//_vector vPos = { -68.f,3.f, 110.f, 1.f };
+	//_vector vPos = { -68.f,5.f, 125.f, 1.f };
+	//_vector vPos = { -68.f,8.f, 140.f, 1.f };
+	//_vector vPos = { -110.f,15.f, 210.f, 1.f };
+	//_vector vPos = { -140.f,19.f, 210.f, 1.f };
+	//_vector vPos = { -135.f,22.f, 280.f, 1.f };
+	//_vector vPos = { -145.f,23.f, 300.f, 1.f };
+	//_vector vPos = { -185.f,40.f, 320.f, 1.f };
+	//_vector vPos = { -182.f,55.f, 380.f, 1.f };
 
     return 0;
 }
@@ -100,7 +98,15 @@ _int CEffect_Env_Floating::LateTick(_double TimeDelta)
 	_bool bCulling = g_pGameInstance->isIn_WorldFrustum(m_pBox->Get_Points(), 20.f);
 	if (true == bCulling)
 	{
-		m_pRenderer->Add_RenderGroup(CRenderer::RENDER::RENDER_ALPHA, this);
+		if ((_uint)SCENEID::SCENE_STAGE1 == g_pGameInstance->getCurrentLevel() || (_uint)SCENEID::SCENE_STAGE3 == g_pGameInstance->getCurrentLevel())
+		{
+			m_pRenderer->Add_RenderGroup(CRenderer::RENDER::RENDER_NONALPHA, this); //논알파일때는 패스 4번 
+		}
+		
+		else if((_uint)SCENEID::SCENE_STAGE2 == g_pGameInstance->getCurrentLevel())
+		{
+			m_pRenderer->Add_RenderGroup(CRenderer::RENDER::RENDER_ALPHA, this); //알파일때는 패스 1번 
+		}
 	}
 
 	return 0;
@@ -130,21 +136,32 @@ HRESULT CEffect_Env_Floating::Render()
 	m_pBuffer->SetUp_ValueOnShader("g_fLifeTime", &m_Desc.fMaxLifeTime, sizeof(_float));
 	m_pBuffer->SetUp_ValueOnShader("g_fCurTime", &m_Desc.fCurTime, sizeof(_float));
 
-	_float4 color = { 1.f , 0.6f, 0.3f ,1.f };
-	_float power = 4.f;
-	_float weight = 1.f;
-	m_pBuffer->SetUp_ValueOnShader("g_color", &color, sizeof(_float4));
-	m_pBuffer->SetUp_ValueOnShader("g_empower", &power, sizeof(_float));
-	m_pBuffer->SetUp_ValueOnShader("g_Weight", &weight, sizeof(_float));
+	if ((_uint)SCENEID::SCENE_STAGE1 == g_pGameInstance->getCurrentLevel() || (_uint)SCENEID::SCENE_STAGE3 == g_pGameInstance->getCurrentLevel())
+	{
+		_float4 color = { 1.f , 0.6f, 0.3f ,1.f };
+		_float power = 4.f;
+		//_float weight = 1.5f;
+		m_pBuffer->SetUp_ValueOnShader("g_color", &color, sizeof(_float4));
+		m_pBuffer->SetUp_ValueOnShader("g_empower", &power, sizeof(_float));
+		//m_pBuffer->SetUp_ValueOnShader("g_Weight", &weight, sizeof(_float));
 
-	m_pBuffer->SetUp_ValueOnShader("g_vCamPosition", (void*)&CamPos, sizeof(_vector));
-	m_pBuffer->Render(/*m_Desc.iRenderPassNum*/1);
+		m_pBuffer->SetUp_ValueOnShader("g_vCamPosition", (void*)&CamPos, sizeof(_vector));
+		m_pBuffer->Render(4);
+	}
 
-	////1번으로 그릴때만 필요한 변수
-	//_float weight = 1.f;
-	//m_pBuffer->SetUp_ValueOnShader("g_Weight", &weight, sizeof(_float));
-	//m_pBuffer->Render(1);
+	else if ((_uint)SCENEID::SCENE_STAGE2 == g_pGameInstance->getCurrentLevel())
+	{
+		_float4 color = { 1.f , 0.6f, 0.3f ,1.f };
+		_float power = 1.f;
+		_float weight = 1.5f;
+		m_pBuffer->SetUp_ValueOnShader("g_color", &color, sizeof(_float4));
+		m_pBuffer->SetUp_ValueOnShader("g_empower", &power, sizeof(_float));
+		m_pBuffer->SetUp_ValueOnShader("g_Weight", &weight, sizeof(_float));
 
+		m_pBuffer->SetUp_ValueOnShader("g_vCamPosition", (void*)&CamPos, sizeof(_vector));
+		m_pBuffer->Render(1);
+	}
+	
 	return S_OK;
 }
 

@@ -135,6 +135,17 @@ _int CMonster_BronzeAnimus::Tick(_double _dDeltaTime)
 			if (m_lifetime >= 1.f)
 				Set_Remove(true);
 		}
+		else if (m_pStateController->Get_CurStateTag() == L"Excution")
+		{
+			if (m_pAnimator->Get_CurrentAnimation()->Is_Finished() && m_lifetime <= 0.f)
+			{
+				m_bdissolve = true;
+				m_pPanel->Set_UIRemove(true);
+			}
+
+			if (m_lifetime >= 1.f)
+				Set_Remove(true);
+		}
 		else
 		{
 			Set_Remove(true);
@@ -244,6 +255,18 @@ void CMonster_BronzeAnimus::Parry(const PARRYDESC& _tParryDesc)
 {
 	m_fGroggyGauge += (m_fMaxGroggyGauge - m_fGroggyGauge);
 	GroggyStart();
+}
+
+void CMonster_BronzeAnimus::Execution()
+{
+	/*CLevel* pLevel = g_pGameInstance->getCurrentLevelScene();
+	if (g_pGameInstance->getCurrentLevel() == (_uint)SCENEID::SCENE_STAGE2)
+		static_cast<CStage2*>(pLevel)->Minus_MonsterCount();*/
+
+	Set_Dead();
+	Remove_Collider();
+	Set_IsAttack(false);
+	m_pStateController->Change_State(L"Excution");
 }
 
 void CMonster_BronzeAnimus::setActive(_bool bActive)
@@ -529,6 +552,9 @@ HRESULT CMonster_BronzeAnimus::Ready_StateFSM(void)
 	/* for. Groggy */
 	if (FAILED(m_pStateController->Add_State(L"Groggy", CBronzeAnimus_Groggy::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
+	/* for. Excution */
+	if(FAILED(m_pStateController->Add_State(L"Excution", CBronzeAnimus_Excution::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
 
 
 	for (auto& pair : m_pStateController->Get_States())
@@ -637,6 +663,7 @@ void CMonster_BronzeAnimus::Hit(CCollision& collision)
 		Active_Effect((_uint)EFFECT::HIT, Pos);
 		Active_Effect((_uint)EFFECT::HIT_FLOATING, Pos);
 		Active_Effect((_uint)EFFECT::HIT_FLOATING_2, Pos);
+		Active_Effect((_uint)EFFECT::HIT_IMAGE, Pos);
 
 		//TODO::¼öÄ¡Á¤ÇØ¼­¹Ù²ãÁà¾ßµÊ
 		m_fGroggyGauge += 2.f;

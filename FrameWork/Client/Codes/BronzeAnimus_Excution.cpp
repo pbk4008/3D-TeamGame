@@ -5,17 +5,17 @@
 /* Monster List */
 #include "Monster_BronzeAnimus.h"
 
-CBraonzeAnimus_Excution::CBraonzeAnimus_Excution(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
+CBronzeAnimus_Excution::CBronzeAnimus_Excution(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
 	: CBronzeAnimus_State(_pDevice, _pDeviceContext)
 {
 }
 
-CBraonzeAnimus_Excution::CBraonzeAnimus_Excution(const CBraonzeAnimus_Excution& _rhs)
+CBronzeAnimus_Excution::CBronzeAnimus_Excution(const CBronzeAnimus_Excution& _rhs)
 	: CBronzeAnimus_State(_rhs)
 {
 }
 
-HRESULT CBraonzeAnimus_Excution::NativeConstruct(void* _pArg)
+HRESULT CBronzeAnimus_Excution::NativeConstruct(void* _pArg)
 {
 	if (FAILED(__super::NativeConstruct(_pArg)))
 		return E_FAIL;
@@ -23,7 +23,7 @@ HRESULT CBraonzeAnimus_Excution::NativeConstruct(void* _pArg)
 	return S_OK;
 }
 
-_int CBraonzeAnimus_Excution::Tick(const _double& _dDeltaTime)
+_int CBronzeAnimus_Excution::Tick(const _double& _dDeltaTime)
 {
 	_int iProgress = __super::Tick(_dDeltaTime);
 
@@ -35,7 +35,7 @@ _int CBraonzeAnimus_Excution::Tick(const _double& _dDeltaTime)
 	return _int();
 }
 
-_int CBraonzeAnimus_Excution::LateTick(const _double& _dDeltaTime)
+_int CBronzeAnimus_Excution::LateTick(const _double& _dDeltaTime)
 {
 	_int iProgress = __super::LateTick(_dDeltaTime);
 	if (NO_EVENT != iProgress)
@@ -44,7 +44,7 @@ _int CBraonzeAnimus_Excution::LateTick(const _double& _dDeltaTime)
 	return _int();
 }
 
-HRESULT CBraonzeAnimus_Excution::Render()
+HRESULT CBronzeAnimus_Excution::Render()
 {
 	if (FAILED(__super::Render()))
 		return E_FAIL;
@@ -52,7 +52,7 @@ HRESULT CBraonzeAnimus_Excution::Render()
 	return S_OK;
 }
 
-HRESULT CBraonzeAnimus_Excution::EnterState()
+HRESULT CBronzeAnimus_Excution::EnterState()
 {
 	if (FAILED(__super::EnterState()))
 		return E_FAIL;
@@ -62,7 +62,7 @@ HRESULT CBraonzeAnimus_Excution::EnterState()
 	return S_OK;
 }
 
-HRESULT CBraonzeAnimus_Excution::ExitState()
+HRESULT CBronzeAnimus_Excution::ExitState()
 {
 	if (FAILED(__super::ExitState()))
 		return E_FAIL;
@@ -71,41 +71,41 @@ HRESULT CBraonzeAnimus_Excution::ExitState()
 	return S_OK;
 }
 
-HRESULT CBraonzeAnimus_Excution::EnterState(void* pArg)
+HRESULT CBronzeAnimus_Excution::EnterState(void* pArg)
 {
 
 	return S_OK;
 }
 
-HRESULT CBraonzeAnimus_Excution::ExitState(void* pArg)
+HRESULT CBronzeAnimus_Excution::ExitState(void* pArg)
 {
 	return S_OK;
 }
 
-void CBraonzeAnimus_Excution::Look_Player(void)
+void CBronzeAnimus_Excution::Look_Player(void)
 {
 
 }
 
-void CBraonzeAnimus_Excution::Look_Monster(void)
+void CBronzeAnimus_Excution::Look_Monster(void)
 {
 
 }
 
-CBraonzeAnimus_Excution* CBraonzeAnimus_Excution::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext, void* _pArg)
+CBronzeAnimus_Excution* CBronzeAnimus_Excution::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext, void* _pArg)
 {
-	CBraonzeAnimus_Excution* pInstance = new CBraonzeAnimus_Excution(_pDevice, _pDeviceContext);
+	CBronzeAnimus_Excution* pInstance = new CBronzeAnimus_Excution(_pDevice, _pDeviceContext);
 
 	if (FAILED(pInstance->NativeConstruct(_pArg)))
 	{
-		MSGBOX("CBraonzeAnimus_Excution Create Fail");
+		MSGBOX("CBronzeAnimus_Excution Create Fail");
 		Safe_Release(pInstance);
 	}
 
 	return pInstance;
 }
 
-void CBraonzeAnimus_Excution::Free()
+void CBronzeAnimus_Excution::Free()
 {
 	__super::Free();
 }

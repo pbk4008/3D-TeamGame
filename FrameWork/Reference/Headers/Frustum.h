@@ -20,12 +20,20 @@ public:
 	_bool isInWorld(_float4* vPoints, _float fRange = 0.f);
 	_bool isInLocal(_fvector vPosition, _float fRange = 0.f);
 
+public: void	 Frustum_Update(const wstring& pCameraTag);
+
+public: _float4* Get_FrustumPlane() { return m_PlaneInWorld; }
+
 private:
 	_float3			m_vPoint[8];	
 	_float3			m_vPointInWorld[8];
 
 	_float4			m_PlaneInWorld[6];	
 	_float4			m_PlaneInLocal[6];
+
+	_float4			m_Planes[6];
+	//_vector		m_vPlanes[6];
+	
 
 private:
 	void Make_PlaneInWorld(_fvector* pPoints);

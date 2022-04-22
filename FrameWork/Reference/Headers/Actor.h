@@ -61,7 +61,7 @@ public:
 
 	virtual void Set_FootPosition(const _float3& _vPos);
 
-	void RimlightCheck(_bool check);
+	void RimlightCheck(_bool check, _float3 color = _float3(0,0,0));
 	_bool GetRimCheck() { return m_rimcheck; }
 	void SetRimIntensity(_float time);
 	
@@ -103,6 +103,7 @@ protected:
 	// rim light
 	_bool			m_rimcheck = false;
 	_float			m_rimintensity = 30.f;
+	_float3			m_rimcol = _float3(0, 0, 0);
 
 	// motion blur
 	_bool			m_motionblurcheck = false;

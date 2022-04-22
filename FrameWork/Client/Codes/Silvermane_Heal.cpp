@@ -57,6 +57,7 @@ HRESULT CSilvermane_Heal::EnterState()
 	m_pAnimationController->SetUp_NextAnimation("SK_Silvermane.ao|A_Heal01_Player", true);
 	m_pAnimationController->Set_RootMotion(true, true, ERootOption::XYZ);
 
+	m_pSilvermane->RimlightCheck(true, _float3(0, 1, 0));
 	m_fValue = m_pSilvermane->Get_MaxHp() * 0.1f;
 
 	return S_OK;
@@ -67,6 +68,7 @@ HRESULT CSilvermane_Heal::ExitState()
 	if (FAILED(__super::ExitState()))
 		return E_FAIL;
 
+	m_pSilvermane->RimlightCheck(false);
 	return S_OK;
 }
 

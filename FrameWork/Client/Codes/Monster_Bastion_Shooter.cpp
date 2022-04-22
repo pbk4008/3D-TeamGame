@@ -248,6 +248,20 @@ void CMonster_Bastion_Shooter::Parry(const PARRYDESC& _tParrykDesc)
 	m_fGroggyGauge += (m_fMaxGroggyGauge - m_fGroggyGauge);
 }
 
+void CMonster_Bastion_Shooter::Execution()
+{
+	CLevel* pLevel = g_pGameInstance->getCurrentLevelScene();
+	if (g_pGameInstance->getCurrentLevel() == (_uint)SCENEID::SCENE_STAGE1)
+		static_cast<CStage1*>(pLevel)->Minus_MonsterCount();
+
+	else if (g_pGameInstance->getCurrentLevel() == (_uint)SCENEID::SCENE_STAGE2)
+		static_cast<CStage2*>(pLevel)->Minus_MonsterCount();
+
+	m_bDead = true;
+	m_pStateController->Change_State(L"Excution");
+	m_pCharacterController->Remove_CCT();
+}
+
 void CMonster_Bastion_Shooter::OnTriggerEnter(CCollision& collision)
 {
 	if (!m_bDead)
@@ -316,6 +330,7 @@ void CMonster_Bastion_Shooter::Hit()
 	Active_Effect((_uint)EFFECT::HIT);
 	Active_Effect((_uint)EFFECT::HIT_FLOATING);
 	Active_Effect((_uint)EFFECT::HIT_FLOATING_2);
+	Active_Effect((_uint)EFFECT::HIT_IMAGE);
 }
 
 HRESULT CMonster_Bastion_Shooter::Ready_Components()
@@ -662,6 +677,18 @@ _int CMonster_Bastion_Shooter::Change_State()
 				m_fGroggyGauge = 0.f;
 				m_pPanel->Set_GroggyBar(Get_GroggyGaugeRatio());
 			}
+		}
+		else if (tmpState == L"Excution")
+		{
+			if (m_pAnimator->Get_CurrentAnimNode() == (_uint)ANIM_TYPE::EXCUTION
+				&& m_pAnimator->Get_CurrentAnimation()->Is_Finished() && m_lifetime <= 0.f)
+			{
+				m_pPanel->Set_UIRemove(false);
+				m_bdissolve = true;
+			}
+
+			if (m_lifetime >= 1.f)
+				Set_Remove(true);
 		}
 		else
 		{

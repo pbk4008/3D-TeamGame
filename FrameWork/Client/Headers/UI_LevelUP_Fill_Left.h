@@ -1,32 +1,42 @@
 #ifndef UI_LevelUP_Fill_Left_h__
 #define UI_LevelUP_Fill_Left_h__
 
-#include "Hud.h"
+#include "UI.h"
 
 BEGIN(Client)
 class CSingleImage;
 class CPlayerData;
-class UI_LevelUP_Fill_Left : public CHud
+class UI_LevelUP_Fill_Left : public CUI
 {
 public:
-	struct Desc
+	struct ItemSlotDesc
 	{
 		_float2 fPos;
 		_float2 fScale;
-		CUI*	pOwner = nullptr;
+		CUI* pOwner = nullptr;
+	};
+
+	struct Desc
+	{
+		CItemData	itemData;
+		_float		fDisapeatTime = 5.f;
+		_int		iQueueIndex = 0;
+		CUI* pOwner = nullptr;
+		_float2		fInitPos = { 0.f, 0.f };
+		_float2		fInitScale = { 1.2f, 1.2f };
+		_float2		fEndScale = { 1.0f, 1.0f };
 	};
 
 	typedef struct RenderVal
 	{
-		_float		 fCurExpGauge;
-		_float		 fGapX;
-		_float		 fGapY;
+		_float		fExpRatio;//현재 경험치 비율
+		_float		fGapX;
 	}RENDERVAL;
 
 
 	explicit UI_LevelUP_Fill_Left(void) = default;
 	explicit UI_LevelUP_Fill_Left(ID3D11Device * pDevice, ID3D11DeviceContext * pDeviceContext);
-	explicit UI_LevelUP_Fill_Left(const CHud& rhs);
+	explicit UI_LevelUP_Fill_Left(const CUI& rhs);
 	virtual ~UI_LevelUP_Fill_Left() = default;
 
 public:
@@ -42,8 +52,10 @@ public:
 	void SetUI(CPlayerData* pPlayerData);
 
 public:
-	void Set_ExExpRatio(_float Ratio) { m_fExExpRatio = Ratio; }
-	void Set_ExpRatio(_float Ratio) { m_fExpRatio = Ratio; }
+	void Set_ExpRatio(_float Ratio) { Bufferdesc.fExpRatio = Ratio; }
+
+public:
+	const _float Get_Ratio() const { return Bufferdesc.fGapX; }
 
 private:
 	CSingleImage* m_pSigleImageCom = nullptr;
@@ -53,11 +65,6 @@ private:
 	_bool		  m_bSetScale = true;
 
 private:
-	_float m_fExExpRatio = 0.f;		//이전 경험치 비율
-	_float m_fExpRatio = 0.f;		//현재 경험치 비율
-	_float m_fCurExpGauge = 0.f;	//이전게이지 - 현재게이지
-	_float m_fGapX = 1.f;
-	_float m_fGapY = 0.5f;
 	RENDERVAL Bufferdesc;
 
 public:

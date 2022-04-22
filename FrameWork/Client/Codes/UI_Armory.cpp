@@ -182,6 +182,8 @@ void CUI_Armory::ClickSlot(void)
 	if (0 >= m_vecSlots.size())
 		return;
 
+	CLEAR_QUEST(L"T_HUD_EquipNewWeapon");
+
 	for (_int i = 0; i < m_pInventoryData->GetCount(); ++i)
 	{
 		if (m_vecSlots[i]->ItemClicked())

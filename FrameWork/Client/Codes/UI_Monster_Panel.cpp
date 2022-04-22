@@ -1076,6 +1076,7 @@ void CUI_Monster_Panel::Update_Setting_Crawler(_double TimeDelta)
 	ViewMatrix = g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_VIEW);
 	ViewMatrix = XMMatrixInverse(nullptr, ViewMatrix);
 	m_pTransform->Set_State(CTransform::STATE::STATE_RIGHT, ViewMatrix.r[0]);
+	m_pTransform->Set_State(CTransform::STATE::STATE_UP, ViewMatrix.r[1]);
 	m_pTransform->Set_State(CTransform::STATE::STATE_LOOK, ViewMatrix.r[2]);
 
 	_fvector MyPos = m_pTransform->Get_State(CTransform::STATE::STATE_POSITION);

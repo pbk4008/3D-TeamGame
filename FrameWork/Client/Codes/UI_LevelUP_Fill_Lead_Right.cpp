@@ -2,14 +2,15 @@
 #include "UI_LevelUP_Fill_Lead_Right.h"
 #include "SingleImage.h"
 #include "UI_Level_UP.h"
+#include "UI_LevelUP_Fill_Right.h"
 
 CUI_LevelUP_Fill_Lead_Right::CUI_LevelUP_Fill_Lead_Right(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
-	:CHud(pDevice, pDeviceContext)
+	:CUI(pDevice, pDeviceContext)
 {
 }
 
-CUI_LevelUP_Fill_Lead_Right::CUI_LevelUP_Fill_Lead_Right(const CHud& rhs)
-	: CHud(rhs)
+CUI_LevelUP_Fill_Lead_Right::CUI_LevelUP_Fill_Lead_Right(const CUI& rhs)
+	: CUI(rhs)
 {
 }
 
@@ -58,11 +59,17 @@ _int CUI_LevelUP_Fill_Lead_Right::LateTick(_double TimeDelta)
 
 	Attach_Owner();
 
-	m_pLocalTransform->Set_State(CTransform::STATE_POSITION, _vector{ 80.f , -273.f, 0.1f, 1.f });
-	m_pLocalTransform->Scaling(_vector{ 30.f, 8.f, 1.f, 0.f });
+	_float Gap = 0.f;
+	if (nullptr != m_pFill)
+	{
+		m_fRatio = m_pFill->Get_Ratio();
+		Gap = m_fRatio * (XMVectorGetX(m_pFill->Get_Transform()->Get_State(CTransform::STATE_RIGHT)) - 20.f);
+	}
+	
+	m_pTransform->Set_State(CTransform::STATE_POSITION, _vector{ 40.0f + Gap , -274.f, 0.07f, 1.f });
 
 	if (nullptr != m_pRenderer)
-		m_pRenderer->Add_RenderGroup(CRenderer::RENDER::RENDER_UI_ACTIVE, this);
+		m_pRenderer->Add_RenderGroup(CRenderer::RENDER::RENDER_UI_TOP, this);
 
 	return _int();
 }
@@ -137,8 +144,8 @@ CGameObject* CUI_LevelUP_Fill_Lead_Right::Clone(const _uint iSceneID, void* pArg
 
 void CUI_LevelUP_Fill_Lead_Right::Free()
 {
+	__super::Free();
+
 	Safe_Release(m_pSigleImageCom);
 	Safe_Release(m_pLocalTransform);
-
-	__super::Free();
 }

@@ -17,8 +17,6 @@ HRESULT CUI_QuestClear::NativeConstruct_Prototype(void)
 {
 	if (FAILED(CUI::NativeConstruct_Prototype()))
 		return E_FAIL;
-
-
 	return S_OK;
 }
 
@@ -30,11 +28,11 @@ HRESULT CUI_QuestClear::NativeConstruct(const _uint iSceneID, void* pArg)
 	desc = (*(Desc*)pArg);
 	
 	m_pLocalTransform = g_pGameInstance->Clone_Component<CTransform>(0, L"Proto_Component_Transform");
-	m_pLocalTransform->Set_State(CTransform::STATE_POSITION, _vector{ -580.5f, 150.f, 0.02f, 1.f });
-	m_pLocalTransform->Scaling(_vector{ 30.5f , 30.5f, 1.f, 0.f });
+	
+	XMStoreFloat4(&m_fOwnerPos, desc.pQuestTextTrans->Get_State(CTransform::STATE_POSITION));
 
-	m_pTransform->Set_State(CTransform::STATE_POSITION, _vector{ -580.5f, 150.f, 0.02f, 1.f });
-	m_pTransform->Scaling(_vector{ 30.5f , 30.5f, 1.f, 0.f });
+	m_pLocalTransform->Set_State(CTransform::STATE_POSITION, _vector{ -580.5f, desc.fInitPosY, 0.02f, 1.f });
+	m_pLocalTransform->Scaling(_vector{ 30.5f , 30.5f, 1.f, 0.f });
 
 	m_pOwner = desc.pOwner;
 	assert(m_pOwner);
@@ -52,7 +50,6 @@ _int CUI_QuestClear::Tick(_double dDeltaTime)
 	if (FAILED(CUI::Tick(dDeltaTime)))
 		return -1;
 
-
 	return _int();
 }
 
@@ -64,9 +61,13 @@ _int CUI_QuestClear::LateTick(_double TimeDelta)
 	if (!m_bShowEnd)
 		Show(TimeDelta);
 
-	if(m_bShowEnd)
+	//m_pLocalTransform->Set_State(CTransform::STATE_POSITION, _vector{ m_fOwnerPos.x, m_fOwnerPos.y, 0.02f, 1.f });
+	//m_pLocalTransform->Scaling(_vector{ 30.5f , 30.5f, 1.f, 0.f });
+
+//	if(m_bShowEnd)
 		Attach_Owner();
-	
+
+
 	return _int();
 }
 
@@ -80,22 +81,23 @@ HRESULT CUI_QuestClear::Render()
 	return S_OK;
 }
 
-HRESULT CUI_QuestClear::Ready_Component(void)
+
+void CUI_QuestClear::Show(_double dTimeDelta)
 {
-	/* for. Single Image Com */
-	CSingleImage::Desc ModalSprite;
-	ModalSprite.textureName = L"T_HUD_QuestClearMark";
-	ModalSprite.pCreator = this;
-	ModalSprite.pRenderer = this->m_pRenderer;
-	ModalSprite.pTransform = this->m_pTransform;
-	//ModalSprite.bFadeOption = true;
+	if (m_fInitScale.x > m_fEndScale.x)
+	{
+		m_fInitScale.y = m_fInitScale.x -= dTimeDelta * 500;
 
-	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_SingleImage", L"SingleImage", (CComponent**)&m_pSigleImageCom, &ModalSprite)))
-		return E_FAIL;
+		if (m_fInitScale.x <= m_fEndScale.x)
+		{
+			m_fInitScale.x = m_fEndScale.x;
+			m_fInitScale.y = m_fEndScale.y;
+			m_bShowEnd = true;
+		}
+		m_pLocalTransform->Scaling(_vector{ m_fInitScale.x , m_fInitScale.y, 1.f, 0.f });
+	}
 
-	return S_OK;
 }
-
 _int CUI_QuestClear::Attach_Owner()
 {
 	if (nullptr != m_pOwner)
@@ -109,19 +111,22 @@ _int CUI_QuestClear::Attach_Owner()
 	return _int();
 }
 
-void CUI_QuestClear::Show(_double dTimeDelta)
-{
-	if(m_fInitScale.x > m_fEndScale.x)
-	{
-		m_fInitScale.y = m_fInitScale.x -= dTimeDelta * 550;
 
-		if (m_fInitScale.x <= m_fEndScale.x)
-		{
-			m_fInitScale.x = m_fEndScale.x;
-			m_bShowEnd = true;
-		}
-		m_pTransform->Scaling(_vector{ m_fInitScale.x , m_fInitScale.y, 1.f, 0.f });
-	}
+HRESULT CUI_QuestClear::Ready_Component(void)
+{
+	/* for. Single Image Com */
+	CSingleImage::Desc ModalSprite;
+	ModalSprite.textureName = L"T_HUD_QuestClearMark";
+	ModalSprite.pCreator = this;
+	ModalSprite.pRenderer = this->m_pRenderer;
+	ModalSprite.pTransform = this->m_pTransform;
+	//ModalSprite.bFadeOption = true;
+
+	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_SingleImage", L"SingleImage", (CComponent**)&m_pSigleImageCom, &ModalSprite)))
+		return E_FAIL;
+	m_pSigleImageCom->SetRenderPass(4);
+	
+	return S_OK;
 }
 
 void CUI_QuestClear::SetIcon(std::wstring _szTextureName)
@@ -132,11 +137,19 @@ void CUI_QuestClear::SetIcon(std::wstring _szTextureName)
 void CUI_QuestClear::SetPosy(_float fPosy)
 {
 	m_fPosY -= fPosy;
+
+	m_pLocalTransform->Set_State(CTransform::STATE_POSITION, _vector{ -580.5f, m_fPosY + 2.f, 0.02f, 1.f });
+	m_pLocalTransform->Scaling(_vector{ 30.5f , 30.5f, 1.f, 0.f });
 }
 
 void CUI_QuestClear::SetFadeOut(void)
 {
 	m_pSigleImageCom->SetFadeOut();
+}
+
+void CUI_QuestClear::PlusYPos(void)
+{
+
 }
 
 CUI_QuestClear* CUI_QuestClear::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
