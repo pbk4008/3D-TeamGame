@@ -193,10 +193,10 @@ HRESULT CRenderer::Draw_RenderGroup()
 		if (FAILED(Render_Final())) MSGBOX("Failed To Rendering FinalPass");
 	}
 
-	if (FAILED(Render_UI_Active()))
+	if (FAILED(Render_UI()))
 		return E_FAIL;
 
-	if (FAILED(Render_UI()))
+	if (FAILED(Render_UI_Active()))
 		return E_FAIL;
 
 	if (FAILED(Render_PhysX()))
@@ -636,7 +636,12 @@ HRESULT CRenderer::Render_PhysX()
 
 HRESULT CRenderer::AlphaSorting(RENDER etype)
 {
-	_matrix view = g_pGameInstance->Get_Transform(m_CameraTag, TRANSFORMSTATEMATRIX::D3DTS_VIEW);
+	_matrix view = XMMatrixIdentity();
+	if(etype == RENDER::RENDER_UI || etype == RENDER::RENDER_UI_ACTIVE)
+		view = g_pGameInstance->Get_Transform(L"MainOrthoCamera", TRANSFORMSTATEMATRIX::D3DTS_VIEW);
+	else
+		view = g_pGameInstance->Get_Transform(m_CameraTag, TRANSFORMSTATEMATRIX::D3DTS_VIEW);
+
 	view = XMMatrixInverse(nullptr, view);
 
 	for (auto& iter : m_RenderGroup[etype])

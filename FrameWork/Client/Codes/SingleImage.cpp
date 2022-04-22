@@ -56,25 +56,25 @@ HRESULT CSingleImage::NativeConstruct(void* pArg)
 	switch (m_ERenderType)
 	{
 	case CSingleImage::Alpha:
-		m_bRenderPass = 1;
+		m_iRenderPass = 1;
 		m_pBuffer = g_pGameInstance->Clone_Component<CVIBuffer_Rect>(0, L"Proto_Component_RectBuffer");
 		assert("Failed to Get Buffer" && m_pBuffer);
 		break;
 	case CSingleImage::Nonalpha:
+		m_iRenderPass = 0;
 		m_pBuffer = g_pGameInstance->Clone_Component<CVIBuffer_Rect>(0, L"Proto_Component_RectBuffer");
 		assert("Failed to Get Buffer" && m_pBuffer);
-		m_bRenderPass = 0;
 		break;
 	case CSingleImage::VerticalGauge:
 	{
 		m_pTrapziumBuffer = texDesc.pBuffer;
-		m_bRenderPass = 1;
+		m_iRenderPass = 1;
 	}
 		break;
 	default:
 		m_pBuffer = g_pGameInstance->Clone_Component<CVIBuffer_Rect>(0, L"Proto_Component_RectBuffer");
 		assert("Failed to Get Buffer" && m_pBuffer);
-		m_bRenderPass = 1;
+		m_iRenderPass = 1;
 		break;
 	}
 	return S_OK;
@@ -123,7 +123,7 @@ HRESULT CSingleImage::Render(CTransform* _sender)
 			//m_pBuffer->SetUp_ValueOnShader("g_Color", &m_fColor, sizeof(_float4));
 			m_pBuffer->SetUp_TextureOnShader("g_DiffuseTexture", m_pImage);
 
-			m_pBuffer->Render(m_bRenderPass);
+			m_pBuffer->Render(m_iRenderPass);
 		}
 	}
 	else if(RenderType::VerticalGauge == m_ERenderType)

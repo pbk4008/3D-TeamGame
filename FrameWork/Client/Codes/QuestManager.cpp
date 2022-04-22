@@ -35,25 +35,27 @@ _int CQuestManager::Tick(_double dTimeDelta)
 
 _int CQuestManager::Late_Tick(_double dTimeDelta)
 {
-	m_pQuesthead->LateTick(dTimeDelta);
 	
 	for (_int i = 0; i < m_vecQuest.size(); ++i)
 	{
 		m_vecQuest[i]->LateTick(dTimeDelta);
 	}
+	m_pQuesthead->LateTick(dTimeDelta);
 
 	return _int();
 }
 
 HRESULT CQuestManager::Render(void)
 {
-	m_pQuesthead->Render();
-
-	for (_int i = 0; i < m_vecQuest.size(); ++i)
+	if (!g_pInvenUIManager->IsOpenModal())
 	{
-		m_vecQuest[i]->Render();
-	}
 
+		for (_int i = 0; i < m_vecQuest.size(); ++i)
+		{
+			m_vecQuest[i]->Render();
+		}
+		m_pQuesthead->Render();
+	}
 	return S_OK;
 }
 
@@ -86,12 +88,11 @@ void CQuestManager::PullingQuest(void)
 			if ((*iter)->IsAlive() == false)
 			{
 				/* 현재 iter 뒤의 모든 Quest 객체들의 위치값을 올리는 옵션 On */
-				_int i = 1;
-				for (auto quest = *(iter + i); i < m_vecQuest.size(); ++i)
-				{
-					quest->SetPosUp();
-				}
 				iter = m_vecQuest.erase(iter);
+				for (; iter != m_vecQuest.end(); ++iter)
+				{
+					(*iter)->SetPosUp();
+				}
 			}
 			else
 				iter++;
@@ -129,7 +130,6 @@ void CQuestManager::End_Quest(std::wstring szQuestText)
 		if (0 == (QuestText)->GetQuestName().compare(szQuestText))
 		{
 			(QuestText)->ActiveQuestClear(true);
-			
 		}
 	}
 }

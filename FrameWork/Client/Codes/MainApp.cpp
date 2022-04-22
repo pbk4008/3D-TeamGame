@@ -179,7 +179,7 @@ _int CMainApp::Tick(_double TimeDelta)
 	}
 
 	g_pDataManager->Tick();
-	g_pQuestManager->Tick(TimeDelta);
+	//g_pQuestManager->Tick(TimeDelta);
 
 	return _int();
 }
