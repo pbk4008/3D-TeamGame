@@ -58,6 +58,9 @@ _int CUI_ItemSlot::LateTick(_double TimeDelta)
 	if (FAILED(CUI::LateTick(TimeDelta)))
 		return -1;
 
+	if (nullptr != m_pRenderer)
+		m_pRenderer->Add_RenderGroup(CRenderer::RENDER::RENDER_UI_ACTIVE, this);
+
 	if (m_fInitPos > m_fEndPos)
 	{
 		m_fInitPos -= (_float)TimeDelta * 100.f;

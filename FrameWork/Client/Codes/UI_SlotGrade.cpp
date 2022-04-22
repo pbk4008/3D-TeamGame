@@ -58,10 +58,10 @@ _int CUI_SlotGrade::LateTick(_double TimeDelta)
 	if (FAILED(CUI::LateTick(TimeDelta)))
 		return -1;
 
-	Attach_Owner();
-
 	if (nullptr != m_pRenderer)
 		m_pRenderer->Add_RenderGroup(CRenderer::RENDER::RENDER_UI_ACTIVE, this);
+
+	Attach_Owner();
 
 	return _int();
 }

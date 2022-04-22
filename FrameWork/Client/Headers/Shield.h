@@ -32,8 +32,6 @@ public:
 	void Add_TrackAcc(const _double& _dTrackAcc);
 	void Set_TrackAcc(const _double& _dTrackAcc);
 
-	CWeapon* Throw(const _fvector _svTargetPos);
-
 private:
 	_float4x4 m_matPivot;
 	CAnimationController* m_pAnimationController = nullptr;
