@@ -85,7 +85,7 @@ HRESULT CUI_LootGrade::Ready_Component(void)
 	ModalSprite.pCreator = this;
 	ModalSprite.pRenderer = this->m_pRenderer;
 	ModalSprite.pTransform = this->m_pTransform;
-
+	ModalSprite.bFadeOption = true;
 	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_SingleImage", L"SingleImage", (CComponent**)&m_pSigleImageCom, &ModalSprite)))
 		return E_FAIL;
 
@@ -108,6 +108,11 @@ _int CUI_LootGrade::Attach_Owner()
 void CUI_LootGrade::SetGrade(std::wstring _szTextureName)
 {
 	m_pSigleImageCom->SetTexture(_szTextureName);
+}
+
+void CUI_LootGrade::SetFadeOut(void)
+{
+	m_pSigleImageCom->SetFadeOut();
 }
 
 CUI_LootGrade* CUI_LootGrade::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)

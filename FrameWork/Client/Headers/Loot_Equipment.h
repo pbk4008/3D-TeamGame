@@ -39,6 +39,7 @@ public:
 public:
 	_bool	GetAlive(void) { return m_bAlive; }
 	void	SetGrade(CItemData itemData);
+	void	SetFadeOutAll(void);
 
 private:
 	CUI_LootBackground*		m_pBG = nullptr;

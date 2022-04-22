@@ -88,7 +88,7 @@ HRESULT CUI_LootBackground::Ready_Component(void)
 	ModalSprite.pRenderer = this->m_pRenderer;
 	ModalSprite.pTransform = this->m_pTransform;
 	ModalSprite.renderType = CSingleImage::Alpha;
-
+	ModalSprite.bFadeOption = true;
 	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_SingleImage", L"SingleImage", (CComponent**)&m_pSigleImageCom, &ModalSprite)))
 		return E_FAIL;
 
@@ -111,6 +111,11 @@ _int CUI_LootBackground::Attach_Owner()
 void CUI_LootBackground::SetBg(const std::wstring& _szFileName)
 {
 	m_pSigleImageCom->SetTexture(_szFileName);
+}
+
+void CUI_LootBackground::SetFadeOut(void)
+{
+	m_pSigleImageCom->SetFadeOut();
 }
 
 CUI_LootBackground* CUI_LootBackground::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)

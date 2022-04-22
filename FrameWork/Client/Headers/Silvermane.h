@@ -17,6 +17,7 @@ class CJumpNode;
 class CJumpTrigger;
 class CJumpBox;
 class CUI_Blank_CKey;
+class CUI_Blank_FKey;
 class CUI_Fill_Ckey;
 class CInventoryData;
 class CEquipmentData;
@@ -144,6 +145,7 @@ public: /* For.Execute */
 	void Set_Execution(const _bool _isExecution, CActor* _pTarget = nullptr);
 	CActor* Get_TargetExecution() const;
 	CHierarchyNode* Get_ExecutionTargetBone() const;
+	CUI_Blank_FKey* Get_Blank_FKey() const;
 
 private:
 	const _int	Trace_CameraLook(const _double& _dDeltaTime);
@@ -201,6 +203,7 @@ private: /* For.DropBox  */
 private: /* For.Execution */
 	CActor* m_pTargetExecution = nullptr;
 	CHierarchyNode* m_pExecutionTargetBone = nullptr;
+	CUI_Blank_FKey* m_pBlankFKey = nullptr;
 
 private: /* For.Cheat */
 	_bool m_isHighSpeedMode = false;

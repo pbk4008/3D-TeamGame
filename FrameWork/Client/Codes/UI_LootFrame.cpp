@@ -87,7 +87,7 @@ HRESULT CUI_LootFrame::Ready_Component(void)
 	ModalSprite.pRenderer = this->m_pRenderer;
 	ModalSprite.pTransform = this->m_pTransform;
 	//ModalSprite.renderType = CSingleImage::Nonalpha;
-
+	ModalSprite.bFadeOption = true;
 	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_SingleImage", L"SingleImage", (CComponent**)&m_pSigleImageCom, &ModalSprite)))
 		return E_FAIL;
 
@@ -105,6 +105,11 @@ _int CUI_LootFrame::Attach_Owner()
 	}
 
 	return _int();
+}
+
+void CUI_LootFrame::SetFadeOut(void)
+{
+	m_pSigleImageCom->SetFadeOut();
 }
 
 CUI_LootFrame* CUI_LootFrame::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)

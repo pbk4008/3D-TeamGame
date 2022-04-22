@@ -85,7 +85,7 @@ HRESULT CUI_LootItemNameText::Ready_Component(void)
 	ModalSprite.pCreator = this;
 	ModalSprite.pRenderer = this->m_pRenderer;
 	ModalSprite.pTransform = this->m_pTransform;
-
+	ModalSprite.bFadeOption = true;
 	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_SingleImage", L"SingleImage", (CComponent**)&m_pSigleImageCom, &ModalSprite)))
 		return E_FAIL;
 
@@ -108,6 +108,11 @@ _int CUI_LootItemNameText::Attach_Owner()
 void CUI_LootItemNameText::SetIcon(std::wstring _szTextureName)
 {
 	m_pSigleImageCom->SetTexture(_szTextureName);
+}
+
+void CUI_LootItemNameText::SetFadeOut(void)
+{
+	m_pSigleImageCom->SetFadeOut();
 }
 
 CUI_LootItemNameText* CUI_LootItemNameText::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)

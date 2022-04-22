@@ -11,6 +11,7 @@
 #include "JumpBox.h"
 #include "DropBox.h"
 #include "UI_Blank_CKey.h"
+#include "UI_Blank_FKey.h"
 #include "UI_Fill_CKey.h"
 #include "InventoryData.h"
 #include "EquipmentData.h"
@@ -254,6 +255,21 @@ HRESULT CSilvermane::NativeConstruct(const _uint _iSceneID, void* _pArg)
 
 	m_pExecutionTargetBone = m_pModel->Get_BoneMatrix("utility_01");
 
+	////////////////////////////////////// UI
+	CUI_Blank_CKey::UIACTIVEDESC tUIDesc;
+	ZeroMemory(&tUIDesc, sizeof(CUI_Blank_CKey::UIACTIVEDESC));
+	_tcscpy_s(tUIDesc.UIDesc.TextureTag, L"Texture_Blank_Fkey");
+	tUIDesc.UIDesc.bMinus = false;
+	tUIDesc.UIDesc.fAngle = 0.f;
+	tUIDesc.UIDesc.fPos = { 0.f, 0.f, 0.f };
+	tUIDesc.UIDesc.fSize = { 10.f , 10.f};
+	tUIDesc.UIDesc.IDTag = (_uint)GAMEOBJECT::UI_STATIC;
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer(m_iSceneID, L"Layer_UI_BlankF", L"Proto_GameObject_UI_Blank_FKey", &tUIDesc, (CGameObject**)&m_pBlankFKey)))
+		return E_FAIL;
+	if (m_pBlankFKey)
+		m_pBlankFKey->setActive(false);
+	
+
 	return S_OK;
 }
 
@@ -416,11 +432,10 @@ HRESULT CSilvermane::Render()
 			if (FAILED(m_pModel->Render(i, i))) MSGBOX("Fialed To Rendering Silvermane");
 		}*/
 	}
-
 	if (m_pRenderer->Get_RenderButton(CRenderer::VELOCITYBLUR) == false)
 		m_PreWroldMat = m_pTransform->Get_WorldMatrix();
 #ifdef _DEBUG
-	Render_Debug();
+	//Render_Debug();
 #endif
 
 
@@ -1949,13 +1964,30 @@ const void CSilvermane::Raycast_DropBox(const _double& _dDeltaTime)
 	case (_uint)GAMEOBJECT::MIDDLE_BOSS:
 		//if (static_cast<CActor*>(pHitObject)->Get_Groggy())
 		//{
-			if (!m_isExecution && g_pGameInstance->getkeyDown(DIK_F))
+		if (!m_isExecution)
+		{
+			if (m_pBlankFKey)
+			{
+				m_pBlankFKey->setActive(true);
+				CTransform* pTargetTransform = pHitObject->Get_Transform();
+				_vector svTargetPos = pTargetTransform->Get_State(CTransform::STATE_POSITION);
+				svTargetPos += _vector{ 0.f, 1.2f, 0.f, 0.f };
+				m_pBlankFKey->Set_Position(svTargetPos);
+			}//나는 나는 배진성 먹는게 세상에서 제일 좋아 
+
+			if (g_pGameInstance->getkeyDown(DIK_F))
 			{
 				m_pTargetExecution = static_cast<CActor*>(pHitObject);
 				m_pTargetExecution->Execution();
 				Set_Execution(true);
+				m_pBlankFKey->setActive(false);
 			}
+		}
 		//}
+		break;
+	default:
+		if (m_pBlankFKey)
+			m_pBlankFKey->setActive(false);
 		break;
 	}
 }
@@ -1989,6 +2021,11 @@ CActor* CSilvermane::Get_TargetExecution() const
 CHierarchyNode* CSilvermane::Get_ExecutionTargetBone() const
 {
 	return m_pExecutionTargetBone;
+}
+
+CUI_Blank_FKey* CSilvermane::Get_Blank_FKey() const
+{
+	return m_pBlankFKey;
 }
 
 CSilvermane* CSilvermane::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
