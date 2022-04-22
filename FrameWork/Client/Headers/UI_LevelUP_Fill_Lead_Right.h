@@ -32,7 +32,7 @@ public:
 	HRESULT Ready_Component(void);
 	_int Attach_Owner(void);
 
-	void Set_Fill(UI_LevelUP_Fill_Right* pObj) { m_pFill = pObj; }
+	void Set_Fill(UI_LevelUP_Fill_Right* pObj) { m_pFill = pObj;}
 
 public:
 	void SetBg(const std::wstring& _szFileName);

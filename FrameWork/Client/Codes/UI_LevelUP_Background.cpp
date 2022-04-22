@@ -134,8 +134,8 @@ CGameObject* CUI_LevelUP_Background::Clone(const _uint iSceneID, void* pArg)
 
 void CUI_LevelUP_Background::Free()
 {
+	__super::Free();
 	Safe_Release(m_pSigleImageCom);
 	Safe_Release(m_pLocalTransform);
 
-	__super::Free();
 }

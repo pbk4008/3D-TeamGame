@@ -286,13 +286,13 @@ std::vector<CItemData> CDropBox::GetDropList(void)
 	dropList.push_back(item2);
 	dropList.push_back(item3);
 
-	/*for (auto& iter : m_tDesc.itemData)
-	{
-		for (auto& temp : iter)
-		{
-			dropList.emplace_back(*((CItemData*)temp));
-		}
-	}*/
+	//for (auto& iter : m_tDesc.itemData)
+	//{
+	//	for (auto& temp : iter)
+	//	{
+	//		dropList.emplace_back(*((CItemData*)temp));
+	//	}
+	//}
 	return dropList;
 }
 

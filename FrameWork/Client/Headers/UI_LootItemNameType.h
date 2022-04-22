@@ -31,6 +31,7 @@ public:
 	HRESULT Ready_Component(void);
 	_int Attach_Owner(void);
 	void SetIcon(std::wstring _szTextureName);
+	void SetFadeOut(void);
 
 private:
 	CSingleImage* m_pSigleImageCom = nullptr;

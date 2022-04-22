@@ -168,6 +168,7 @@ CGameObject* UI_LevelUP_Fill_Right::Clone(const _uint iSceneID, void* pArg)
 void UI_LevelUP_Fill_Right::Free()
 {
 	__super::Free();
+
 	Safe_Release(m_pSigleImageCom);
 	Safe_Release(m_pLocalTransform);
 	Safe_Release(m_pBuffer);

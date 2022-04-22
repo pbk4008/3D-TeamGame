@@ -194,10 +194,10 @@ void CLevel_UP::Free()
 	Safe_Release(m_pBg);
 	Safe_Release(m_pBgLeft);
 	Safe_Release(m_pBgRight);
-	Safe_Release(m_pFill_Lead_Left);
-	Safe_Release(m_pFill_Lead_Right);
 	Safe_Release(m_pFIll_Left);
 	Safe_Release(m_pFIll_Right);
+	Safe_Release(m_pFill_Lead_Left);
+	Safe_Release(m_pFill_Lead_Right);
 
 	__super::Free();
 }

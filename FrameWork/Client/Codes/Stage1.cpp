@@ -186,11 +186,11 @@ HRESULT CStage1::NativeConstruct()
 		return E_FAIL;
 	}
 
-	//if (FAILED(Ready_Portal()))
-	//{
-	//	MSGBOX("Stage1 Portal");
-	//	return E_FAIL;
-	//}
+	if (FAILED(Ready_Portal()))
+	{
+		MSGBOX("Stage1 Portal");
+		return E_FAIL;
+	}
 
 	g_pGameInstance->PlayBGM(L"Stage1_BGM");
 	
@@ -253,6 +253,7 @@ _int CStage1::Tick(_double TimeDelta)
 				}
 				else if (m_bPortalClear)
 				{
+					CLEAR_QUEST(L"T_HUD_KillAllMonster");
 					m_pTriggerSystem->Next_TriggerOn();
 					m_bPortalClear = false;
 				}
@@ -276,6 +277,7 @@ _int CStage1::Tick(_double TimeDelta)
 				}
 				else if (m_bPortalClear)
 				{
+					CLEAR_QUEST(L"T_HUD_KillAllMonster");
 					m_bPortalClear = false;
 					m_pTriggerSystem->Next_TriggerOn();
 				}
@@ -295,6 +297,7 @@ _int CStage1::Tick(_double TimeDelta)
 				}
 				else if (m_bPortalClear)
 				{
+					CLEAR_QUEST(L"T_HUD_KillAllMonster");
 					m_pTriggerSystem->Next_TriggerOn();
 					m_bPortalClear = false;
 				}
@@ -1497,9 +1500,6 @@ void CStage1::Trgger_Function1()
 	m_iCountMonster = 3;
 
 	START_QUEST(EQuestHeaderType::FirestStep, L"T_HUD_Find_Sunforge");
-	START_QUEST(EQuestHeaderType::FirestStep, L"T_HUD_KillAllMonster");
-	START_QUEST(EQuestHeaderType::FirestStep, L"T_HUD_EquipNewWeapon"); 
-	START_QUEST(EQuestHeaderType::FirestStep, L"T_HUD_Find_DropBox"); 
 }
 
 //대지 1마리
@@ -1532,7 +1532,6 @@ void CStage1::Trgger_Function2()
 		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 	}
 	m_iCountMonster = 1;
-	START_QUEST(EQuestHeaderType::FirestStep, L"T_HUD_Find_DropBox");
 }
 //땅강아지 2마리 소드 2마리
 void CStage1::Trgger_Function3()
@@ -1602,6 +1601,9 @@ void CStage1::Trgger_Function3()
 		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 	}
 	m_iCountMonster = 4;
+
+	START_QUEST(EQuestHeaderType::FirestStep, L"T_HUD_Find_DropBox");
+	START_QUEST(EQuestHeaderType::FirestStep, L"T_HUD_EquipNewWeapon");
 }
 //땅강아지 3마리
 void CStage1::Trgger_Function4()
@@ -1764,6 +1766,7 @@ void CStage1::Trgger_Function5()
 		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 	}
 	m_iCountMonster = 10;
+	START_QUEST(EQuestHeaderType::FirestStep, L"T_HUD_KillAllMonster");
 }
 //힐러1마리 소드 2마리(포탈 3개)
 void CStage1::Trgger_Function7()
@@ -1824,6 +1827,8 @@ void CStage1::Trgger_Function7()
 		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 	}
 	m_iCountMonster = 3;
+	START_QUEST(EQuestHeaderType::FirestStep, L"T_HUD_KillAllMonster");
+
 }
 // 소드3 총1
 void CStage1::Trgger_Function8()

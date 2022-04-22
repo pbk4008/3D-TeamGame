@@ -166,6 +166,7 @@ void CLoot_Equipment::Pulling(_double TimeDelta)
 				setActive(false);
 			}
 			m_pTransform->Set_State(CTransform::STATE_POSITION, _vector{ m_fDisaperXInitPos, m_fInitPos.y, 0.0f, 1.f });
+			SetFadeOutAll();
 		}
 	}
 }
@@ -258,6 +259,17 @@ void CLoot_Equipment::SetGrade(CItemData itemData)
 		break;
 
 	}
+}
+
+void CLoot_Equipment::SetFadeOutAll(void)
+{
+	m_pBG->SetFadeOut();
+	m_pGrade->SetFadeOut();
+	m_pItemIcon->SetFadeOut();
+	m_pNameText->SetFadeOut();
+	m_pNameType->SetFadeOut();
+	m_pFrame->SetFadeOut();
+	m_pItemEffect->SetFadeOut();
 }
 
 CLoot_Equipment* CLoot_Equipment::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)

@@ -191,5 +191,4 @@ void UI_LevelUP_Fill_Left::Free()
 	Safe_Release(m_pSigleImageCom);
 	Safe_Release(m_pLocalTransform);
 	Safe_Release(m_pBuffer);
-
 }

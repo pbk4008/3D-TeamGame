@@ -110,11 +110,10 @@ _int CQuest::LateTick(_double TimeDelta)
 	{
 		m_fDisapearTime += (_float)TimeDelta;
 
-		if (3.f <= m_fDisapearTime)
+		if (3.5f <= m_fDisapearTime)
 			Pulling(TimeDelta);
 
 	}
-
 
 	if (m_bPosUp)
 	{
