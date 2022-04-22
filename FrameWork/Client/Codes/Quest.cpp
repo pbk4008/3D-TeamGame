@@ -112,6 +112,7 @@ _int CQuest::LateTick(_double TimeDelta)
 
 		if (3.f <= m_fDisapearTime)
 			Pulling(TimeDelta);
+
 	}
 
 

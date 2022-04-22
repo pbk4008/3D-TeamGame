@@ -65,14 +65,14 @@ HRESULT CSingleImage::NativeConstruct(void* pArg)
 		break;
 	case CSingleImage::VerticalGaugeRight:
 	{
-		m_pTrapziumBuffer = texDesc.pBuffer;
+		m_pBuffer = texDesc.pBuffer;
 		m_iRenderPass = 1;
 	}
 		break;
 	case CSingleImage::VerticalGaugeLeft:
 	{
 		m_pBuffer = texDesc.pBuffer;
-		m_bRenderPass = 1;
+		m_iRenderPass = 1;
 	}
 	break;
 	default:
