@@ -112,11 +112,11 @@ HRESULT CStage1::NativeConstruct()
 		return E_FAIL;
 	}
 
-	//if (FAILED(Ready_Trigger_Jump()))
-	//{
-	//	MSGBOX("Stage1 Jump");
-	//	return E_FAIL;
-	//}
+	if (FAILED(Ready_Trigger_Jump()))
+	{
+		MSGBOX("Stage1 Jump");
+		return E_FAIL;
+	}
 
 	if (FAILED(Ready_Player(L"Layer_Silvermane")))
 	{
