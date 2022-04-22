@@ -169,12 +169,12 @@ HRESULT CRenderer::Draw_RenderGroup()
 
 		if (m_bRenderbtn[PIXEL]) // Pixel HDR
 		{
-			if (FAILED(MotionTrailPass())) MSGBOX("Failed To Rendering Motiontrail");
-
 			if (m_bRenderbtn[SHADOW] == true)
 			{
 				if (FAILED(ShadowPass())) MSGBOX("Failed To Rendering ShadowPass");
 			}
+
+			if (FAILED(MotionTrailPass())) MSGBOX("Failed To Rendering Motiontrail");
 
 			if (FAILED(m_pRenderAssit->Render_LightAcc(m_pTargetMgr, m_CameraTag, m_bRenderbtn[PBR], m_bRenderbtn[SHADOW]))) MSGBOX("Failed To Rendering LightPass");
 
@@ -504,8 +504,12 @@ HRESULT CRenderer::ShadowPass()
 	if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_ViewMatrixInv", &XMMatrixTranspose(ViewMatrix), sizeof(_float4x4)))) MSGBOX("Failed To Apply ShadowPass CamViewInv");
 	if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_ProjMatrixInv", &XMMatrixTranspose(ProjMatrix), sizeof(_float4x4)))) MSGBOX("Failed To Apply ShadowPass CamProjInv");
 	if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_vLightPos", &_float4(lightdesc->vPosition.x, lightdesc->vPosition.y, lightdesc->vPosition.z, 1.f), sizeof(_float4)))) MSGBOX("Failed To Apply ShadowPass LightPos");
+	
+	_float test = 0.2f;
+	if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_test", &test, sizeof(_float)))) MSGBOX("Failed To Apply ShadowPass LightPos");
 
-	if (FAILED(m_pVIBuffer->Render(5))) MSGBOX("Failed To Rendering ShadowPass");
+
+	if (FAILED(m_pVIBuffer->Render(3))) MSGBOX("Failed To Rendering ShadowPass");
 
 	if (FAILED(m_pTargetMgr->End_MRTNotClear(m_pDeviceContext))) return E_FAIL;
 
@@ -518,7 +522,7 @@ HRESULT CRenderer::Render_Final()
 {
 	if (!m_pTargetMgr)	return E_FAIL;
 
-	_float thick = 0.2f;
+	_float thick = 0.35f;
 	if (FAILED(m_pVIBuffer->SetUp_TextureOnShader("g_DiffuseTexture", m_pTargetMgr->Get_SRV(TEXT("Target_Blend"))))) MSGBOX("Render Final DiffuseTeuxtre Not Apply");
 	if (FAILED(m_pVIBuffer->SetUp_TextureOnShader("g_DepthTexture", m_pTargetMgr->Get_SRV(TEXT("Target_Depth"))))) MSGBOX("Render Final DepthTexture Not Apply");
 	if (FAILED(m_pVIBuffer->SetUp_TextureOnShader("g_RimLightTexture", m_pTargetMgr->Get_SRV(TEXT("Target_RimLight"))))) MSGBOX("Render Final DepthTexture Not Apply");
@@ -569,7 +573,7 @@ HRESULT CRenderer::Render_Final()
 	if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_MotionblurCnt", &cnt, sizeof(_int)))) MSGBOX("Render Final Value RaidalCnt Not Apply");
 	if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_thick", &thick, sizeof(_float)))) MSGBOX("Render Final Value thick Not Apply");
 	
-	if (FAILED(m_pVIBuffer->Render(3))) MSGBOX("Final Rendering Failed");
+	if (FAILED(m_pVIBuffer->Render(1))) MSGBOX("Final Rendering Failed");
 
 	if (m_bRenderbtn[PARTICLE] == true)
 	{
@@ -577,7 +581,7 @@ HRESULT CRenderer::Render_Final()
 		if (FAILED(m_pVIBuffer->SetUp_TextureOnShader("g_AlphaTexture", m_pTargetMgr->Get_SRV(L"Target_Alpha")))) MSGBOX("Alpha Render Failed");
 		if (FAILED(m_pVIBuffer->SetUp_TextureOnShader("g_AlphaNBTexture", m_pTargetMgr->Get_SRV(L"Target_AlphaNoBloom")))) MSGBOX("Alpha Render Failed");
 
-		if (FAILED(m_pVIBuffer->Render(4))) MSGBOX("Alpha Rendering Failed");
+		if (FAILED(m_pVIBuffer->Render(2))) MSGBOX("Alpha Rendering Failed");
 	}
 	return S_OK;
 }

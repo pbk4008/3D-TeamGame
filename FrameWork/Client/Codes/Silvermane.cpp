@@ -227,6 +227,7 @@ HRESULT CSilvermane::NativeConstruct(const _uint _iSceneID, void* _pArg)
 	m_pRenderer->SetRenderButton(CRenderer::PIXEL, true);
 	m_pRenderer->SetRenderButton(CRenderer::PBR, true);
 	m_pRenderer->SetRenderButton(CRenderer::HDR, true);
+	m_pRenderer->SetRenderButton(CRenderer::SHADOW, true);
 
 	//Light ¼öÁ¤ ÇØ¾ßµÊ
 	LIGHTDESC			LightDesc;
@@ -380,7 +381,8 @@ _int CSilvermane::LateTick(_double _dDeltaTime)
 	//Raycast_Camera();
 
 	//g_pObserver->Set_PlayerPos(m_pTransform->Get_State(CTransform::STATE_POSITION));
-	g_pGameInstance->UpdateLightCam(0, m_pTransform->Get_State(CTransform::STATE_POSITION));
+	//g_pGameInstance->UpdateLightCam(0, m_pTransform->Get_State(CTransform::STATE_POSITION));
+
 
 	return _int();
 }
@@ -417,8 +419,9 @@ HRESULT CSilvermane::Render()
 	if (m_pRenderer->Get_RenderButton(CRenderer::VELOCITYBLUR) == false)
 		m_PreWroldMat = m_pTransform->Get_WorldMatrix();
 #ifdef _DEBUG
-	//Render_Debug();
+	Render_Debug();
 #endif
+
 
 	return S_OK;
 }
