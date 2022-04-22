@@ -180,9 +180,6 @@ _int CMainApp::Tick(_double TimeDelta)
 
 	if(g_pDataManager)
 		g_pDataManager->Tick();
-	// 스테이지에도 똑같은 코드가 있음
-	//if(g_pQuestManager)
-	//	g_pQuestManager->Tick(TimeDelta);
 
 	return _int();
 }

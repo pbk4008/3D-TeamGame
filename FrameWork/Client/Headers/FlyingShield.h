@@ -29,7 +29,10 @@ public:
 	virtual HRESULT Render() override;
 	virtual HRESULT	Render_Shadow() override;
 
+	virtual void setActive(_bool bActive) override;
+
 	virtual void OnTriggerEnter(CCollision& collision) override;
+	void Throw(const _fvector& _svTargetPos);
 
 private:
 	HRESULT Ready_Components();
@@ -52,6 +55,9 @@ private:
 	_float m_fSpeed = 0.f;
 	_float m_fLiveTime = 0.f;
 	_float3 m_vDir{};
+
+	_float	m_fMTTime = 0.f;
+	_int	m_motiontrailidx = 0;
 
 public:
 	static CFlyingShield* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext);

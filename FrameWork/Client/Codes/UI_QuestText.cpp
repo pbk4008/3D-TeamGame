@@ -30,9 +30,6 @@ HRESULT CUI_QuestText::NativeConstruct(const _uint iSceneID, void* pArg)
 	desc = (*(Desc*)pArg);
 	
 	m_pLocalTransform = g_pGameInstance->Clone_Component<CTransform>(0, L"Proto_Component_Transform");
-	m_pLocalTransform->Set_State(CTransform::STATE_POSITION, _vector{ -445.f, 182.f, 0.03f, 1.f });
-	m_pLocalTransform->Scaling(_vector{ 295.f , 38.f, 1.f, 0.f });
-
 	m_pOwner = desc.pOwner;
 	assert(m_pOwner);
 
@@ -96,9 +93,6 @@ _int CUI_QuestText::Attach_Owner()
 		_matrix smatOwerWorld = static_cast<CQuest*>(m_pOwner)->Get_Transform()->Get_WorldMatrix();
 
 		m_pTransform->Set_WorldMatrix(smatWorld * smatOwerWorld);
-		_float4x4 temp;
-		XMStoreFloat4x4(&temp, smatOwerWorld);
-		m_pTransform->SetPosY(m_fPosY + temp._42);
 	}
 
 	return _int();
@@ -112,6 +106,9 @@ void CUI_QuestText::SetIcon(std::wstring _szTextureName)
 void CUI_QuestText::SetPosy(_float fPosy)
 {
 	m_fPosY -= fPosy;
+
+	m_pLocalTransform->Set_State(CTransform::STATE_POSITION, _vector{ -445.f, m_fPosY, 0.03f, 1.f });
+	m_pLocalTransform->Scaling(_vector{ 295.f , 38.f, 1.f, 0.f });
 }
 
 void CUI_QuestText::SetFadeOut(void)

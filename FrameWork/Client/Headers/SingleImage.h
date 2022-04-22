@@ -62,13 +62,13 @@ public:
 	void SetOffsetScale(const _float2& offsetScale) { m_fOffsetScale = offsetScale; }
 	void SetRenderVal(void* val);
 	void SetFadeOut(void);
-
+	void SetRenderPass(_int iPassIdx) { m_iRenderPass = iPassIdx;  }
 private:
 	ID3D11ShaderResourceView* m_pImage = nullptr;
 	_float4 m_fColor;
 	_float2 m_fOffsetPosition = { 0.f, 0.f };
 	_float2 m_fOffsetScale = { 1.f, 1.f };
-	_bool   m_bRenderPass = 1;
+	_int    m_iRenderPass = 1;
 	_bool	m_bFadeOpt;
 	_bool	m_bFadeOut = false;
 

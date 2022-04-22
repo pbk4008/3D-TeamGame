@@ -67,6 +67,7 @@ _int CShield_Throw::Tick(const _double& _dDeltaTime)
 		m_pSilvermane->Set_EquipShieldAnim(false);
 		return ToIdle();
 	}
+
 	return _int();
 }
 

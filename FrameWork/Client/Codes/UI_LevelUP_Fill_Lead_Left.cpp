@@ -6,12 +6,12 @@
 #include "UI_LevelUP_Fill_Right.h"
 
 CUI_LevelUP_Fill_Lead_Left::CUI_LevelUP_Fill_Lead_Left(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
-	:CHud(pDevice, pDeviceContext)
+	:CUI(pDevice, pDeviceContext)
 {
 }
 
-CUI_LevelUP_Fill_Lead_Left::CUI_LevelUP_Fill_Lead_Left(const CHud& rhs)
-	: CHud(rhs)
+CUI_LevelUP_Fill_Lead_Left::CUI_LevelUP_Fill_Lead_Left(const CUI& rhs)
+	: CUI(rhs)
 {
 }
 
@@ -146,8 +146,8 @@ CGameObject* CUI_LevelUP_Fill_Lead_Left::Clone(const _uint iSceneID, void* pArg)
 
 void CUI_LevelUP_Fill_Lead_Left::Free()
 {
+	__super::Free();
+
 	Safe_Release(m_pSigleImageCom);
 	Safe_Release(m_pLocalTransform);
-
-	__super::Free();
 }

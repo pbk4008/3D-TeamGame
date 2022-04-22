@@ -11,6 +11,8 @@ public:
 	struct Desc
 	{
 		CUI*			 pOwner = nullptr;
+		_float			 fInitPosY;
+		CTransform*		 pQuestTextTrans;
 	};
 
 	explicit CUI_QuestClear(void) = default;
@@ -32,15 +34,18 @@ public:
 	void SetIcon(std::wstring _szTextureName);
 	void SetPosy(_float fPosy);
 	void SetFadeOut(void);
+	void PlusYPos(void);
+
 private:
 	CSingleImage* m_pSigleImageCom = nullptr;
 	CUI*		  m_pOwner = nullptr;
 	CTransform*	  m_pLocalTransform = nullptr;
 	Desc		  desc;
-	_float		  m_fPosY = 180.f;
-	_float2		  m_fInitScale = { 120.f, 120.f };
-	_float2		  m_fEndScale = { 30.5f , 30.5f };
-	_bool		  m_bShowEnd = false;
+	_float		  m_fPosY      = 180.f;
+	_float2		  m_fInitScale = { 150.f, 150.f };
+	_float2		  m_fEndScale  = { 30.5f , 30.5f };
+	_bool		  m_bShowEnd   = false;
+	_float4		  m_fOwnerPos;
 
 public:
 	static CUI_QuestClear* Create(ID3D11Device * pDevice, ID3D11DeviceContext * pDeviceContext);

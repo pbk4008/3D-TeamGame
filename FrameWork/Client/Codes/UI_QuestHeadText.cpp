@@ -29,7 +29,7 @@ HRESULT CUI_QuestHeadText::NativeConstruct(const _uint iSceneID, void* pArg)
 
 	desc = (*(Desc*)pArg);
 
-	m_pTransform->Set_State(CTransform::STATE_POSITION, _vector{ -570.f, 208.f, 0.03f, 1.f });
+	m_pTransform->Set_State(CTransform::STATE_POSITION, _vector{ -570.f, 208.f, 0.02f, 1.f });
 	m_pTransform->Scaling(_vector{ 80.f , 39.f, 1.f, 0.f });
 
 	setActive(false);
@@ -63,9 +63,10 @@ HRESULT CUI_QuestHeadText::Render()
 {
 	if (FAILED(CUI::Render()))
 		return E_FAIL;
-
-	m_pSigleImageCom->Render(m_pTransform);
-
+	if (!g_pInvenUIManager->IsOpenModal())
+	{
+		m_pSigleImageCom->Render(m_pTransform);
+	}
 	return S_OK;
 }
 

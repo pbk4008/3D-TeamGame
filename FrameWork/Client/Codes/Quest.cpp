@@ -36,6 +36,33 @@ HRESULT CQuest::NativeConstruct(const _uint iSceneID, void* pArg)
 	return S_OK;
 }
 
+
+HRESULT CQuest::Ready_UIObject(void* pArg)
+{
+	/* Quest ÀÎµ¦½ºx20.f */
+	{
+		CUI_QuestText::Desc desc;
+		desc.EQuestText = (*(Desc*)pArg).EQuestText;
+		desc.pOwner = this;
+		this->m_pTransform->Get_State(CTransform::STATE_POSITION);
+
+		m_pQuestText = (CUI_QuestText*) static_cast<CUI*>(
+			g_pGameInstance->Clone_GameObject((_uint)SCENEID::SCENE_STATIC, L"Proto_GameObject_UI_QuestText", &desc));
+		assert(m_pQuestText);
+	}
+	{
+		CUI_QuestClear::Desc desc;
+		desc.pOwner = this;
+		desc.pQuestTextTrans = this->Get_Transform();
+		desc.fInitPosY = XMVectorGetY(m_pQuestText->Get_Transform()->Get_State(CTransform::STATE_POSITION));
+
+		m_pQuestClear = (CUI_QuestClear*) static_cast<CUI*>(
+			g_pGameInstance->Clone_GameObject((_uint)SCENEID::SCENE_STATIC, L"Proto_GameObject_UI_QuestClear", &desc));
+		assert(m_pQuestClear);
+	}
+	return S_OK;
+}
+
 _int CQuest::Tick(_double dDeltaTime)
 {
 	if (FAILED(__super::Tick(dDeltaTime)))
@@ -43,10 +70,11 @@ _int CQuest::Tick(_double dDeltaTime)
 
 	if (!m_bSetY)
 	{
-		m_pQuestText->SetPosy(30.f * m_iIndex);
+  		m_pQuestText->SetPosy(30.f * m_iIndex);
 		m_pQuestClear->SetPosy(30.f * m_iIndex);
 		m_bSetY = true;
 	}
+
 
 	if (m_bPosUp)
 	{
@@ -64,6 +92,9 @@ _int CQuest::Tick(_double dDeltaTime)
 
 	m_pQuestText->Tick(dDeltaTime);
 
+	if (m_pQuestClear->getActive())
+		m_pQuestClear->Tick(dDeltaTime);
+
 	return _int();
 }
 
@@ -73,14 +104,31 @@ _int CQuest::LateTick(_double TimeDelta)
 		return E_FAIL;
 
 	if (nullptr != m_pRenderer)
-		m_pRenderer->Add_RenderGroup(CRenderer::RENDER::RENDER_UI, this);
+		m_pRenderer->Add_RenderGroup(CRenderer::RENDER::RENDER_UI_ACTIVE, this);
 
 	if (m_bBye)
 	{
 		m_fDisapearTime += (_float)TimeDelta;
 
-		if(3.f <= m_fDisapearTime)
+		if (3.f <= m_fDisapearTime)
 			Pulling(TimeDelta);
+
+	}
+
+
+	if (m_bPosUp)
+	{
+		if (m_fUpYInitPos < m_fUpYEndPos)
+		{
+			m_fUpYInitPos += TimeDelta * 25;
+
+			if (m_fUpYInitPos >= m_fUpYEndPos)
+			{
+				m_fUpYInitPos = m_fUpYEndPos;
+				m_bPosUp = false;
+			}
+			m_pTransform->Set_State(CTransform::STATE_POSITION, _vector{ 0.f, m_fUpYInitPos, 0.0f, 1.f });
+		}
 	}
 
 	m_pQuestText->LateTick(TimeDelta);
@@ -93,11 +141,13 @@ _int CQuest::LateTick(_double TimeDelta)
 
 HRESULT CQuest::Render()
 {
-	m_pQuestText->Render();
+	if (!g_pInvenUIManager->IsOpenModal())
+	{
+		m_pQuestText->Render();
 
-	if (m_pQuestClear->getActive())
-		m_pQuestClear->Render();
-
+		if (m_pQuestClear->getActive())
+			m_pQuestClear->Render();
+	}
 	return S_OK;
 }
 
@@ -106,28 +156,6 @@ HRESULT CQuest::Ready_Component(void)
 	return S_OK;
 }
 
-HRESULT CQuest::Ready_UIObject(void* pArg)
-{
-	{
-		CUI_QuestText::Desc desc;
-		desc.EQuestText = (*(Desc*)pArg).EQuestText;
-		desc.pOwner = this;
-		this->m_pTransform->Get_State(CTransform::STATE_POSITION);
-
-		m_pQuestText = (CUI_QuestText*) static_cast<CUI*>(
-			g_pGameInstance->Clone_GameObject((_uint)SCENEID::SCENE_STATIC, L"Proto_GameObject_UI_QuestText", &desc));
-		assert(m_pQuestText);
-	}
-	{
-		CUI_QuestClear::Desc desc;
-		desc.pOwner = this;
-
-		m_pQuestClear = (CUI_QuestClear*) static_cast<CUI*>(
-				g_pGameInstance->Clone_GameObject((_uint)SCENEID::SCENE_STATIC, L"Proto_GameObject_UI_QuestClear", &desc));
-		assert(m_pQuestClear);
-	}
-	return S_OK;
-}
 
 void CQuest::ActiveQuestClear(_bool active)
 {
@@ -143,10 +171,10 @@ void CQuest::Pulling(_double dDeltaTime)
 
 		if (m_fDisaperXInitPos <= m_fDisaperXEndPos)
 		{
-			//setActive(false);
+			m_fDisaperXInitPos = m_fDisaperXEndPos;
 			m_bAlive = false;
 		}
-		m_pTransform->Set_State(CTransform::STATE_POSITION, _vector{ m_fDisaperXInitPos, 1.f, 0.0f, 1.f });
+		m_pTransform->Set_State(CTransform::STATE_POSITION, _vector{ m_fDisaperXInitPos, m_fUpYInitPos, 0.0f, 1.f });
 		SetFadeOutAll();
 	}
 }
@@ -160,7 +188,7 @@ void CQuest::SetFadeOutAll(void)
 void CQuest::SetPosUp(void)
 {
 	m_bPosUp = true;
-	//m_iIndex -= 1;
+	m_iIndex -= 1;
 }
 
 CQuest* CQuest::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)

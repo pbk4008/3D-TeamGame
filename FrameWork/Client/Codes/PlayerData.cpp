@@ -19,4 +19,6 @@ void CPlayerData::SetExp(_float iExp)
 {
 	if (CurExp < MaxExp)
 		CurExp += iExp;
+	else
+		CurExp = 0;
 }
