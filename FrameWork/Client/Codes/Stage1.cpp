@@ -112,11 +112,11 @@ HRESULT CStage1::NativeConstruct()
 		return E_FAIL;
 	}
 
-	if (FAILED(Ready_Trigger_Jump()))
-	{
-		MSGBOX("Stage1 Jump");
-		return E_FAIL;
-	}
+	//if (FAILED(Ready_Trigger_Jump()))
+	//{
+	//	MSGBOX("Stage1 Jump");
+	//	return E_FAIL;
+	//}
 
 	if (FAILED(Ready_Player(L"Layer_Silvermane")))
 	{
@@ -124,17 +124,17 @@ HRESULT CStage1::NativeConstruct()
 		return E_FAIL;
 	}
 
-	if (FAILED(Ready_MapObject()))
-	{
-		MSGBOX("Stage1 MapObject");
-		return E_FAIL;
-	}
+	//if (FAILED(Ready_MapObject()))
+	//{
+	//	MSGBOX("Stage1 MapObject");
+	//	return E_FAIL;
+	//}
 
-	if (FAILED(Ready_TriggerSystem(L"../bin/SaveData/Trigger/MonsterSpawnTrigger.dat")))
-	{
-		MSGBOX("Stage1 Trigger");
-		return E_FAIL;
-	}
+	//if (FAILED(Ready_TriggerSystem(L"../bin/SaveData/Trigger/MonsterSpawnTrigger.dat")))
+	//{
+	//	MSGBOX("Stage1 Trigger");
+	//	return E_FAIL;
+	//}
 
 	if (FAILED(Ready_Data_UI(L"../bin/SaveData/UI/UI.dat")))
 	{
@@ -154,17 +154,17 @@ HRESULT CStage1::NativeConstruct()
 		return E_FAIL;
 	}
 
-	if (FAILED(Ready_Treasure_Chest()))
-	{
-		MSGBOX("Stage1 Box");
-		return E_FAIL;
-	}
+	//if (FAILED(Ready_Treasure_Chest()))
+	//{
+	//	MSGBOX("Stage1 Box");
+	//	return E_FAIL;
+	//}
 
-	if (FAILED(Ready_GameManager()))
-	{
-		MSGBOX("Stage1 Manager");
-		return E_FAIL;
-	}
+	//if (FAILED(Ready_GameManager()))
+	//{
+	//	MSGBOX("Stage1 Manager");
+	//	return E_FAIL;
+	//}
 
 	g_pGameInstance->Change_BaseCamera(L"Camera_Silvermane");
 
@@ -180,17 +180,17 @@ HRESULT CStage1::NativeConstruct()
 	// 		return E_FAIL;
 	//}
 
-	if (FAILED(Ready_Indicator()))
-	{
-		MSGBOX("Stage1 Indicator");
-		return E_FAIL;
-	}
+	//if (FAILED(Ready_Indicator()))
+	//{
+	//	MSGBOX("Stage1 Indicator");
+	//	return E_FAIL;
+	//}
 
-	if (FAILED(Ready_Portal()))
-	{
-		MSGBOX("Stage1 Portal");
-		return E_FAIL;
-	}
+	//if (FAILED(Ready_Portal()))
+	//{
+	//	MSGBOX("Stage1 Portal");
+	//	return E_FAIL;
+	//}
 
 	g_pGameInstance->PlayBGM(L"Stage1_BGM");
 	
