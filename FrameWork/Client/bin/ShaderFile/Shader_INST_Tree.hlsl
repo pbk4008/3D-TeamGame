@@ -197,10 +197,15 @@ PS_OUT_SHADOW PS_MAIN_SHADOW(PS_IN_SHADOW In)
 {
 	PS_OUT_SHADOW Out = (PS_OUT_SHADOW) 0.f;
 	
+	half4 diffuse = g_DiffuseTexture.Sample(DefaultSampler, In.vTexUV);
+	
 	const half OneDividzFar = 1 / 300.f;
 	half4 color = 1;
 	color.xyz = length(In.worldpos - g_LightPos) * OneDividzFar;
 	Out.vShadowDepthMap = color;
+	
+	if (diffuse.a < 0.3f)
+		discard;
 	
 	return Out;
 }

@@ -30,6 +30,7 @@ public:
 public:
 	HRESULT SetUp_ValueOnShader(const char* pConstantName, void* pData, _uint iSize);
 	HRESULT	SetUp_TextureOnShader(const char* pConstantName, ID3D11ShaderResourceView* pSRV, _ulong Numindex);
+	void	Set_InstanceCnt(_int InstanceCnt) { m_iInstNumVertices = InstanceCnt; }
 	HRESULT Render(_uint iMeshContainerIndex, _int iPassindex);
 private:
 	HRESULT Init_StaticMesh(const wstring& pMeshFilePath);

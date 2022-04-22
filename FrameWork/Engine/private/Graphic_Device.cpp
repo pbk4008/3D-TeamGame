@@ -109,7 +109,7 @@ HRESULT CGraphic_Device::Ready_SwapChain(HWND hWnd, WINMODE eWinMode, _uint iWin
 	SwapChain.SampleDesc.Count = 1;
 	SwapChain.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
 	SwapChain.BufferCount = 1;
-	SwapChain.OutputWindow = hWnd;	
+	SwapChain.OutputWindow = hWnd;
 	SwapChain.Windowed = eWinMode;
 	SwapChain.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
 

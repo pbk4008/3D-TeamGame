@@ -148,6 +148,7 @@ public: /* For.Frustum */
 	_bool isIn_WorldFrustum(_fvector vPosition, _float fRange = 0.f);
 	_bool isIn_WorldFrustum(_float4* vPoints, _float fRange = 0.f);
 	_bool isIn_LocalFrustum(_fvector vPosition, _float fRange = 0.f);
+	_float4* Get_FrustumPlane();
 
 public:/* For.TextureManager*/
 	HRESULT Add_Texture(ID3D11Device* pDevice, const wstring& pTextureTag, const wstring& pFilePath, _uint iTextureCnt = 1);

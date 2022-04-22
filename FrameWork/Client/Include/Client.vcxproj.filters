@@ -955,6 +955,24 @@
     <Filter Include="02.GameObject\03.Character\01.Monster\EarthAberrant\State\06.Execution">
       <UniqueIdentifier>{fcb36259-0e76-4d95-8ef9-ad44c10ef567}</UniqueIdentifier>
     </Filter>
+    <Filter Include="03.System\07.Scenematic\01.Stage1\Cinema2_2">
+      <UniqueIdentifier>{1f65d2b9-fa3c-40c3-888b-1a974190cd33}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.System\07.Scenematic\01.Stage1\Cinema2_3">
+      <UniqueIdentifier>{f6ceea30-6b25-4401-a4ef-4eb5f6a74ec0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.System\07.Scenematic\01.Stage1\Cinema2_4">
+      <UniqueIdentifier>{082f2fa4-c0e5-4204-9567-d804fa3da07b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_Shooter\State\Excution">
+      <UniqueIdentifier>{1181e0b5-5ff0-4d09-8767-dd43718756ae}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_Sword\00.State\09.Excution">
+      <UniqueIdentifier>{c05b8de5-518f-4321-9a1d-4fabd6806261}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\BronzeAnimus\State\Excution">
+      <UniqueIdentifier>{68087ee0-399c-4e15-a565-cb5d7e2cd6ce}</UniqueIdentifier>
+    </Filter>
     <Filter Include="02.GameObject\03.Character\02.Boss\00.MiddleBoss\State\06.Execution">
       <UniqueIdentifier>{b058ac71-c72c-4000-a763-0ed28eb645cc}</UniqueIdentifier>
     </Filter>
@@ -2091,9 +2109,6 @@
     <ClInclude Include="..\Headers\Silvermane_Execution.h">
       <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Execution</Filter>
     </ClInclude>
-    <ClInclude Include="..\Headers\Execution_Mook.h">
-      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Execution</Filter>
-    </ClInclude>
     <ClInclude Include="..\Headers\Effect_FloatingUp.h">
       <Filter>02.GameObject\04.Effect\00.Particle\07.Effect_FloatingUp</Filter>
     </ClInclude>
@@ -2135,6 +2150,24 @@
     </ClInclude>
     <ClInclude Include="..\Headers\Aberrant_Execution.h">
       <Filter>02.GameObject\03.Character\01.Monster\EarthAberrant\State\06.Execution</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Cinema2_4.h">
+      <Filter>03.System\07.Scenematic\01.Stage1\Cinema2_4</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Cinema2_2.h">
+      <Filter>03.System\07.Scenematic\01.Stage1\Cinema2_2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Cinema2_3.h">
+      <Filter>03.System\07.Scenematic\01.Stage1\Cinema2_3</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Shooter_Excution.h">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Shooter\State\Excution</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Bastion_Sword_Excution.h">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Sword\00.State\09.Excution</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\BronzeAnimus_Excution.h">
+      <Filter>02.GameObject\03.Character\01.Monster\BronzeAnimus\State\Excution</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\MidBoss_Execution.h">
       <Filter>02.GameObject\03.Character\02.Boss\00.MiddleBoss\State\06.Execution</Filter>
@@ -3245,9 +3278,6 @@
     <ClCompile Include="..\Codes\Silvermane_Execution.cpp">
       <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Execution</Filter>
     </ClCompile>
-    <ClCompile Include="..\Codes\Execution_Mook.cpp">
-      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Execution</Filter>
-    </ClCompile>
     <ClCompile Include="..\Codes\Effect_FloatingUp.cpp">
       <Filter>02.GameObject\04.Effect\00.Particle\07.Effect_FloatingUp</Filter>
     </ClCompile>
@@ -3286,6 +3316,24 @@
     </ClCompile>
     <ClCompile Include="..\Codes\Aberrant_Execution.cpp">
       <Filter>02.GameObject\03.Character\01.Monster\EarthAberrant\State\06.Execution</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Cinema2_4.cpp">
+      <Filter>03.System\07.Scenematic\01.Stage1\Cinema2_4</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Cinema2_2.cpp">
+      <Filter>03.System\07.Scenematic\01.Stage1\Cinema2_2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Cinema2_3.cpp">
+      <Filter>03.System\07.Scenematic\01.Stage1\Cinema2_3</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Shooter_Excution.cpp">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Shooter\State\Excution</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Bastion_Sword_Excution.cpp">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Sword\00.State\09.Excution</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\BronzeAnimus_Excution.cpp">
+      <Filter>02.GameObject\03.Character\01.Monster\BronzeAnimus\State\Excution</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\MidBoss_Execution.cpp">
       <Filter>02.GameObject\03.Character\02.Boss\00.MiddleBoss\State\06.Execution</Filter>

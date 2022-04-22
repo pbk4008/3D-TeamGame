@@ -179,7 +179,7 @@ HRESULT CNeedle::Render()
 	{
 		rimdesc.rimcheck = m_rimcheck;
 		rimdesc.rimintensity = m_rimintensity;
-		rimdesc.rimcol = _float3(1.0f, 0, 0);
+		rimdesc.rimcol = _float3(1,0,0);
 		XMStoreFloat4(&rimdesc.camdir, XMVector3Normalize(m_pTransform->Get_State(CTransform::STATE_POSITION) - g_pGameInstance->Get_CamPosition(L"Camera_Silvermane")));
 		CWeapon::SetRimIntensity(g_fDeltaTime * -4.f);
 	}
@@ -191,6 +191,7 @@ HRESULT CNeedle::Render()
 
 	if (m_pRenderer->Get_RenderButton(CRenderer::VELOCITYBLUR) == false)
 		m_PreWroldMat = m_pTransform->Get_WorldMatrix();
+
 	return S_OK;
 }
 

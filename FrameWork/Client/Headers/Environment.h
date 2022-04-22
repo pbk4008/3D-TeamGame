@@ -42,7 +42,8 @@ private:
 	const LIGHTDESC*	m_LightDesc = nullptr;
 	_ulong				m_Nummeshcontainer = 0;
 	_uint					m_iInstanceCnt;
-	vector<_float4x4> m_vecUsingMatrix;
+	vector<_float4x4>	m_vecUsingMatrix;
+	_bool				m_bRenderCol = false;
 };
 END
 #endif

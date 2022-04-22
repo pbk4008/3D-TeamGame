@@ -203,6 +203,6 @@ CEffect* CExplosion_Rock::Clone(const _uint iSceneID, void* pArg)
 
 void CExplosion_Rock::Free()
 {
-	CGameObject::Free();
+	CEffect::Free();
 	Safe_Release(m_pAnimModel);
 }

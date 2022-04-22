@@ -79,6 +79,10 @@ _int CUI_Player_HpBar::Tick(_double TimeDelta)
 	{
 		m_fGapX -= (_float)TimeDelta * 1.f;
 	}
+	if (m_fGapX < m_fRatio)
+	{
+		m_fGapX = m_fRatio;
+	}
 
 	return 0;
 }

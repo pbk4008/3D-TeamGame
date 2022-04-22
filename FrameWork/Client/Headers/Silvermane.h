@@ -129,7 +129,6 @@ public:
 	//light test ÇÔ¼ö
 	void OnLight();
 
-
 public: /* For.JumpNode */
 	CJumpNode* Get_TargetJumpNode() const;
 	CJumpTrigger* Get_TargetJumpTrigger() const;
@@ -151,7 +150,7 @@ private:
 	const _int	Input(const _double& _dDeltaTime);
 	RIM			ColorChange_RimCheck(RIM& rimdesc);
 
-public:  HRESULT	Create_MotionTrail(_int idex);
+public:  HRESULT	Create_MotionTrail(_int idex,_bool runcheck = false);
 
 private: /* Components */
 	CStateController* m_pStateController = nullptr;

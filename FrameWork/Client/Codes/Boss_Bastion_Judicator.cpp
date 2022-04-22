@@ -101,7 +101,7 @@ _int CBoss_Bastion_Judicator::Tick(_double TimeDelta)
 
 	if (m_rimcheck)
 	{
-		CActor::SetRimIntensity(TimeDelta * -10.f);
+		CActor::SetRimIntensity((_float)TimeDelta * -10.f);
 	}
 
 	if (0 >= m_fCurrentHp)
@@ -195,6 +195,19 @@ _int CBoss_Bastion_Judicator::Tick(_double TimeDelta)
 		}
 		
 	}
+	else if (EXECUTION == m_pAnimator->Get_CurrentAnimNode())
+	{
+		if (L"Execution" == m_pStateController->Get_CurStateTag())
+		{
+			if (m_pAnimator->Get_CurrentAnimation()->Is_Finished())
+			{
+				m_pPanel->Set_Show(false);
+				m_pPanel->Set_UIRemove(true);
+				m_bdissolve = true;
+				return 0;
+			}
+		}
+	}
 
 	m_pCharacterController->Move(TimeDelta, m_pTransform->Get_Velocity());
 
@@ -242,7 +255,7 @@ HRESULT CBoss_Bastion_Judicator::Render()
 	if (m_rimcheck == true)
 	{
 		rimdesc.rimcheck = m_rimcheck;
-		rimdesc.rimcol = _float3(1.f, 0.f, 0.f);
+		rimdesc.rimcol = m_rimcol;
 		rimdesc.rimintensity = m_rimintensity; // intensity 낮을 수록 과하게 빛남
 		XMStoreFloat4(&rimdesc.camdir, XMVector3Normalize(g_pGameInstance->Get_CamPosition(L"Camera_Silvermane") - m_pTransform->Get_State(CTransform::STATE_POSITION)));
 		CActor::SetRimIntensity(g_fDeltaTime * -10.f);
@@ -304,7 +317,7 @@ void CBoss_Bastion_Judicator::setActive(_bool bActive)
 			/* for.Character Controller */
 			CCharacterController::DESC tCharacterControllerDesc;
 			tCharacterControllerDesc.fHeight = 1.f;
-			tCharacterControllerDesc.fRadius = 0.5f;
+			tCharacterControllerDesc.fRadius = 1.f;
 			tCharacterControllerDesc.fContactOffset = tCharacterControllerDesc.fRadius * 0.1f;
 			tCharacterControllerDesc.fStaticFriction = 0.5f;
 			tCharacterControllerDesc.fDynamicFriction = 0.5f;
@@ -659,6 +672,16 @@ void CBoss_Bastion_Judicator::Hit(const ATTACKDESC& _tAttackDesc)
 		//그로기 아닐때만 증가할수있게
 		m_pPanel->Set_GroggyBar(Get_GroggyGaugeRatio());
 	}
+}
+
+void CBoss_Bastion_Judicator::Execution()
+{
+	m_bDead = true;
+	m_IsAttack = false;
+	m_pWeapon->Set_IsAttack(false);
+
+	m_pStateController->Change_State(L"Execution");
+	m_pCharacterController->Remove_CCT();
 }
 
 void CBoss_Bastion_Judicator::Set_IsAttack(const _bool _isAttack)
