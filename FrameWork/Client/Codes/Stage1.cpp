@@ -167,19 +167,13 @@ HRESULT CStage1::NativeConstruct()
 		return E_FAIL;
 	}
 
-	if (FAILED(Ready_GameManager()))
-	{
-		MSGBOX("Stage1 Manager");
-		return E_FAIL;
-	}
-
 	g_pGameInstance->Change_BaseCamera(L"Camera_Silvermane");
 
-	if (FAILED(Ready_Meteor()))
-	{
-		MSGBOX("Meteor");
-		return E_FAIL;
-	}
+	//if (FAILED(Ready_Meteor()))
+	//{
+	//	MSGBOX("Meteor");
+	//	return E_FAIL;
+	//}
 
 	//if (FAILED(Ready_Cinema()))
 	// {
@@ -330,13 +324,13 @@ _int CStage1::Tick(_double TimeDelta)
 #pragma region Using Debug
 	_float3 fPos = { 0.f,5.f,20.f };
 
-	if (g_pGameInstance->getkeyDown(DIK_NUMPAD0))
-	{
-		CBoss_Bastion_Judicator* pMidBoss = nullptr;
-		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Test", L"Proto_GameObject_Boss_Bastion", &fPos, (CGameObject**)&pMidBoss)))
-			return -1;
-		pMidBoss->setActive(true);
-	}
+	//if (g_pGameInstance->getkeyDown(DIK_NUMPAD0))
+	//{
+	//	CBoss_Bastion_Judicator* pMidBoss = nullptr;
+	//	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Test", L"Proto_GameObject_Boss_Bastion", &fPos, (CGameObject**)&pMidBoss)))
+	//		return -1;
+	//	pMidBoss->setActive(true);
+	//}
 
 	//if (g_pGameInstance->getkeyDown(DIK_NUMPAD0))
 	//{
@@ -345,40 +339,43 @@ _int CStage1::Tick(_double TimeDelta)
 	//		return -1;
 	//}
 
-	if (g_pGameInstance->getkeyDown(DIK_NUMPAD1))
-	{
-		CMonster_EarthAberrant* pMonster = nullptr;
-		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Test", L"Proto_GameObject_Monster_EarthAberrant", &fPos, (CGameObject**)&pMonster)))
-			return -1;
-		pMonster->setActive(true);
-	}
-	
-	if (g_pGameInstance->getkeyDown(DIK_NUMPAD2))
-	{
-		CMonster_Bastion_Sword* pMonster = nullptr;
-		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Test", L"Proto_GameObject_Monster_Bastion_Sword", &fPos, (CGameObject**)&pMonster)))
-			return -1;
-		pMonster->setActive(true);
-	}
-	if (g_pGameInstance->getkeyDown(DIK_NUMPAD3))
-	{
-		CMonster_Bastion_Shooter* pMonster = nullptr;
-		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Test", L"Proto_GameObject_Monster_Bastion_Shooter", &fPos, (CGameObject**)&pMonster)))
-			return -1;
-		pMonster->setActive(true);
-	}
+	//if (g_pGameInstance->getkeyDown(DIK_NUMPAD1))
+	//{
+	//	CMonster_EarthAberrant* pMonster = nullptr;
+	//	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Test", L"Proto_GameObject_Monster_EarthAberrant", &fPos, (CGameObject**)&pMonster)))
+	//		return -1;
+	//	pMonster->setActive(true);
+	//}
+	//
+	//if (g_pGameInstance->getkeyDown(DIK_NUMPAD2))
+	//{
+	//	CMonster_Bastion_Sword* pMonster = nullptr;
+	//	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Test", L"Proto_GameObject_Monster_Bastion_Sword", &fPos, (CGameObject**)&pMonster)))
+	//		return -1;
+	//	pMonster->setActive(true);
+	//}
+	//if (g_pGameInstance->getkeyDown(DIK_NUMPAD3))
+	//{
+	//	CMonster_Bastion_Shooter* pMonster = nullptr;
+	//	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Test", L"Proto_GameObject_Monster_Bastion_Shooter", &fPos, (CGameObject**)&pMonster)))
+	//		return -1;
+	//	pMonster->setActive(true);
+	//}
 
 	//if (g_pGameInstance->getkeyDown(DIK_NUMPAD4))
 	//{
 	//	CMonster_Bastion_Healer* pMonster = nullptr;
 	//	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Test", L"Proto_GameObject_Monster_Bastion_Healer", &fPos, (CGameObject**)&pMonster)))
 	//		return -1;
+
+	//	pMonster->setActive(true);
 	//}
 	//if (g_pGameInstance->getkeyDown(DIK_NUMPAD5))
 	//{
 	//	CMonster_Bastion_2HSword* pMonster = nullptr;
 	//	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Test", L"Proto_GameObject_Monster_Bastion_2HSword", &fPos, (CGameObject**)&pMonster)))
 	//		return -1;
+	//	pMonster->setActive(true);
 	//}
 	//if (g_pGameInstance->getkeyDown(DIK_NUMPAD6))
 	//{
@@ -437,6 +434,9 @@ _int CStage1::LateTick(_double TimeDelta)
 	if(g_pQuestManager)
 		g_pQuestManager->Late_Tick(TimeDelta);
 
+	if (g_pGuideManager)
+		g_pGuideManager->Late_Tick(TimeDelta);
+
 	return _int();
 }
 
@@ -449,6 +449,9 @@ HRESULT CStage1::Render()
 
 	if(g_pQuestManager)
 		g_pQuestManager->Render();
+
+	if (g_pGuideManager)
+		g_pGuideManager->Render();
 
 	return S_OK;
 }

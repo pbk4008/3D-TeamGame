@@ -926,6 +926,19 @@ HRESULT CSilvermane::Ready_Weapons(const _uint _iSceneID)
 				m_pCurWeapon = pWeapon;
 			}
 		}
+		else if (2 == m_pPlayerData->EquipedSlot)
+		{
+			pWeapon = m_pEquipmentData->GetEquipment(EEquipSlot::Weapon2).weaponData.Get_Weapon();
+
+			if (pWeapon)
+			{
+				pWeapon->Set_Owner(this);
+				pWeapon->Set_OwnerPivotMatrix(m_pModel->Get_PivotMatrix());
+				pWeapon->setActive(true);
+
+				m_pCurWeapon = pWeapon;
+			}
+		}
 	}
 
 	///////////////////////////////////////////////////////////////////// πÊ∆–
@@ -1839,6 +1852,8 @@ const _bool CSilvermane::Raycast_JumpNode(const _double& _dDeltaTime)
 	}
 	else if ((_uint)GAMEOBJECT::JUMP_NODE == iObjectTag)
 	{
+		SHOW_GUIDE();
+
 		m_pTargetJumpNode = static_cast<CJumpNode*>(pHitObject);
 		m_pTargetJumpNode->setIsPick(true);
 		if (g_pGameInstance->getkeyPress(DIK_C))

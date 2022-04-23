@@ -219,9 +219,13 @@ HRESULT CMonster_Bastion_Healer::Render()
 		{
 		case 2:
 			CActor::BindConstantBuffer(wstrCamTag, &desc);
-			if (FAILED(m_pModel->Render(i, 2))) MSGBOX("Failed To Rendering Healer");
+			if (FAILED(m_pModel->Render(i, 1))) MSGBOX("Failed To Rendering Healer");
 			break;
 		default:
+			desc.metalic = 0.3f;
+			desc.roughness = -0.1f;
+			desc.color = _float4(0.254f, 1.f, 0.f, 1.f);
+			desc.empower = 1.f;
 			CActor::BindConstantBuffer(wstrCamTag, &desc);
 			if (FAILED(m_pModel->Render(i, 0))) MSGBOX("Failed To Rendering Healer");
 			break;
@@ -451,6 +455,13 @@ HRESULT CMonster_Bastion_Healer::Ready_AnimFSM(void)
 	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::A_STUN_ED, (_uint)ANIM_TYPE::A_STUN, pAnimation, TRUE, TRUE, FALSE, ERootOption::XYZ, FALSE)))
 		return E_FAIL;
 #pragma endregion
+
+#pragma region Ã³Çü
+	pAnimation = m_pModel->Get_Animation("A_Execution");
+	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::A_Execution, (_uint)ANIM_TYPE::A_HEAD, pAnimation, TRUE, TRUE, FALSE, ERootOption::XYZ, FALSE)))
+		return E_FAIL;
+#pragma endregion
+
 #pragma region Turn
 	//pAnimation = m_pModel->Get_Animation("A_Trun_45_Right");
 	//pAnimation = m_pModel->Get_Animation("A_Turn_45_Left");
@@ -480,6 +491,8 @@ HRESULT CMonster_Bastion_Healer::Ready_AnimFSM(void)
 	m_pAnimator->Insert_AnyEntryAnimation((_uint)ANIM_TYPE::A_TURN_180_RIGHT);
 	m_pAnimator->Insert_AnyEntryAnimation((_uint)ANIM_TYPE::A_TURN_90_RIGHT);
 	m_pAnimator->Insert_AnyEntryAnimation((_uint)ANIM_TYPE::A_TURN_90_RIGHT);
+	m_pAnimator->Insert_AnyEntryAnimation((_uint)ANIM_TYPE::A_Execution);
+
 #pragma endregion
 
 #pragma region  Auto Change Anim

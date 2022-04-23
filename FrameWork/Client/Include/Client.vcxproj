@@ -361,6 +361,7 @@ call Update_Client.bat</Command>
     <ClInclude Include="..\Headers\FlyingShield.h" />
     <ClInclude Include="..\Headers\Fury.h" />
     <ClInclude Include="..\Headers\GameObjectPool.h" />
+    <ClInclude Include="..\Headers\GuideUIManager.h" />
     <ClInclude Include="..\Headers\IndexIndicator.h" />
     <ClInclude Include="..\Headers\Indicator_Manager.h" />
     <ClInclude Include="..\Headers\InteractableObject.h" />
@@ -377,6 +378,8 @@ call Update_Client.bat</Command>
     <ClInclude Include="..\Headers\Quest.h" />
     <ClInclude Include="..\Headers\QuestManager.h" />
     <ClInclude Include="..\Headers\UI_Blank_FKey.h" />
+    <ClInclude Include="..\Headers\UI_Guide_Background.h" />
+    <ClInclude Include="..\Headers\UI_Guide_Texture.h" />
     <ClInclude Include="..\Headers\UI_LevelUP_Background.h" />
     <ClInclude Include="..\Headers\UI_LevelUP_BG_Left.h" />
     <ClInclude Include="..\Headers\UI_LevelUP_BG_Right.h" />
@@ -760,6 +763,7 @@ call Update_Client.bat</Command>
     <ClCompile Include="..\Codes\FlyingShield.cpp" />
     <ClCompile Include="..\Codes\Fury.cpp" />
     <ClCompile Include="..\Codes\GameObjectPool.cpp" />
+    <ClCompile Include="..\Codes\GuideUIManager.cpp" />
     <ClCompile Include="..\Codes\IndexIndicator.cpp" />
     <ClCompile Include="..\Codes\Indicator_Manager.cpp" />
     <ClCompile Include="..\Codes\InteractableObject.cpp" />
@@ -774,6 +778,8 @@ call Update_Client.bat</Command>
     <ClCompile Include="..\Codes\Quest.cpp" />
     <ClCompile Include="..\Codes\QuestManager.cpp" />
     <ClCompile Include="..\Codes\UI_Blank_FKey.cpp" />
+    <ClCompile Include="..\Codes\UI_Guide_Background.cpp" />
+    <ClCompile Include="..\Codes\UI_Guide_Texture.cpp" />
     <ClCompile Include="..\Codes\UI_LevelUP_Background.cpp" />
     <ClCompile Include="..\Codes\UI_LevelUP_BG_Left.cpp" />
     <ClCompile Include="..\Codes\UI_LevelUP_BG_Right.cpp" />
