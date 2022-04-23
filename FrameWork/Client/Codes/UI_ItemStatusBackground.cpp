@@ -42,6 +42,7 @@ HRESULT UI_ItemStatusBackground::NativeConstruct(const _uint iSceneID, void* pAr
 
 _int UI_ItemStatusBackground::Tick(_double dDeltaTime)
 {
+	dDeltaTime = g_dImmutableTime;
 	if (FAILED(CUI::Tick(dDeltaTime)))
 		return -1;
 
@@ -50,6 +51,7 @@ _int UI_ItemStatusBackground::Tick(_double dDeltaTime)
 
 _int UI_ItemStatusBackground::LateTick(_double TimeDelta)
 {
+	TimeDelta = g_dImmutableTime;
 	if (FAILED(CUI::LateTick(TimeDelta)))
 		return -1;
 

@@ -110,19 +110,22 @@ _int CCamera_Silvermane::Tick(_double _dDeltaTime)
 		if (NO_EVENT != iProgress)
 			return iProgress;
 
-
 		m_fExecutionChangeTime += (_float)_dDeltaTime * 0.2f;
 		_float fRatio = m_fExecutionChangeTime / 1.f;
-		if (1.f < fRatio)
-			fRatio = 1.f;
-		_matrix smatResult = m_pLocalTransform->Get_WorldMatrix() * m_pWorldTransform->Get_WorldMatrix();
-		_matrix smatWorld = m_pTransform->Get_WorldMatrix();
-		smatWorld.r[0] = XMVectorLerp(smatWorld.r[0], smatResult.r[0], fRatio);
-		smatWorld.r[1] = XMVectorLerp(smatWorld.r[1], smatResult.r[1], fRatio);
-		smatWorld.r[2] = XMVectorLerp(smatWorld.r[2], smatResult.r[2], fRatio);
-		smatWorld.r[3] = XMVectorLerp(smatWorld.r[3], smatResult.r[3], fRatio);
+		if (1.f >= fRatio)
+		{
+			_matrix smatResult = m_pLocalTransform->Get_WorldMatrix() * m_pWorldTransform->Get_WorldMatrix();
+			_matrix smatWorld = m_pTransform->Get_WorldMatrix();
+			smatWorld.r[0] = XMVectorLerp(smatWorld.r[0], smatResult.r[0], fRatio);
+			smatWorld.r[1] = XMVectorLerp(smatWorld.r[1], smatResult.r[1], fRatio);
+			smatWorld.r[2] = XMVectorLerp(smatWorld.r[2], smatResult.r[2], fRatio);
+			smatWorld.r[3] = XMVectorLerp(smatWorld.r[3], smatResult.r[3], fRatio);
 
-		m_pTransform->Set_WorldMatrix(smatWorld);
+			m_pTransform->Set_WorldMatrix(smatWorld);
+		}
+		else
+			m_pTransform->Set_WorldMatrix(m_pLocalTransform->Get_WorldMatrix() * m_pWorldTransform->Get_WorldMatrix());
+
 		SpringArm();
 	}
 

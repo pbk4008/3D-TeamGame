@@ -87,6 +87,7 @@ public:
 	void Set_Camera(CCamera_Silvermane* _pCamera);
 	void Set_PlusAngle(const _float _fAngle);
 	void Set_Position(const _float3 _vPosition);
+	virtual void Set_FootPosition(const _float3& _vPos) override;
 
 	void Add_PlusAngle(const _float _fDeltaAngle);
 	void Add_Velocity(const CTransform::STATE _eState, const _double& _dDeltaTime);

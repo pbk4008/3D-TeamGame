@@ -144,6 +144,9 @@ _int CMainApp::Tick(_double TimeDelta)
 
 	g_pGameInstance->Update_InputDev();
 
+	if (m_isDeltaTimeZero)
+		TimeDelta = 0.f;
+
 	//if (g_pInvenUIManager->IsOpenModal())
 	//	TimeDelta = 0.f;
 
@@ -561,12 +564,22 @@ const _bool CMainApp::IsFreeze() const
 	return m_isFreeze;
 }
 
+const _bool CMainApp::IsDeltaTimeZero() const
+{
+	return m_isDeltaTimeZero;
+}
+
 void CMainApp::FreezeTime()
 {
 	if (!m_isFreeze)
 	{
 		m_isFreeze = true;
 	}
+}
+
+void CMainApp::Set_DeltaTimeZero(const _bool _isDetaTimeZero)
+{
+	m_isDeltaTimeZero = _isDetaTimeZero;
 }
 
 CMainApp * CMainApp::Create()

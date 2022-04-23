@@ -54,6 +54,12 @@ _int C2H_HammerAttackR1_04Swap::Tick(const _double& _dDeltaTime)
 		if (FAILED(g_pGameInstance->Add_GameObjectToLayer(m_pSilvermane->getSceneID(), L"Layer_Effect", L"Proto_GameObject_MeshEffect_Test", &tMeshEffectDesc)))
 			return E_FAIL;
 
+		// 이펙트
+		m_pSilvermane->Active_Effect((_uint)EFFECT::ATTACK_GROUND, (svLook * 2.f) + (svUp * 0.1f));
+		m_pSilvermane->Active_Effect((_uint)EFFECT::ATTACK_GROUND_2, (svLook * 2.f) + (svUp * 0.1f));
+
+		m_pSilvermane->Active_Effect((_uint)EFFECT::HIT_GROUND_SMOKE, (svLook * 2.f) + (svUp * 0.1f));
+
 		// 범위 공격
 		m_pSilvermane->RangeAttack();
 		m_isRangeAttack = true;

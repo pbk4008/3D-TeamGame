@@ -41,6 +41,7 @@ HRESULT CLevel_UP::NativeConstruct(const _uint iSceneID, void* pArg)
 
 _int CLevel_UP::Tick(_double dDeltaTime)
 {
+	dDeltaTime = g_dImmutableTime;
 	m_pFIll_Left->Tick(dDeltaTime);
 	m_pFIll_Right->Tick(dDeltaTime);
 
@@ -49,6 +50,7 @@ _int CLevel_UP::Tick(_double dDeltaTime)
 
 _int CLevel_UP::LateTick(_double TimeDelta)
 {
+	TimeDelta = g_dImmutableTime;
 	m_pBg->LateTick(TimeDelta);
 
 	m_pBgLeft->LateTick(TimeDelta);
