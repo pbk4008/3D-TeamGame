@@ -44,21 +44,19 @@ _int CCinema2_2::Tick(_double dDeltaTime)
 		return 0;
 
 	CTransform* pBossTr = m_pMidBoss->Get_Transform();
-	pBossTr->Set_State(CTransform::STATE_POSITION, XMVectorSet(-173.f, 57.5f, 443.3f, 1.f));
+	pBossTr->Set_State(CTransform::STATE_POSITION, XMVectorSet(-176.5f, 46.7f, 411.8f, 1.f));;
+	pBossTr->SetUp_Rotation(XMVectorSet(0.f, 1.f, 0.f, 0.f), XMConvertToRadians(240.f));
+	pBossTr->Scaling(XMVectorSet(0.8f, 0.8f, 0.8f, 0.f));
+	//pBossTr->Scale_One();
 	m_pMidBoss->Tick(dDeltaTime);
 
-	_matrix matPivot = /*XMMatrixRotationY(XMConvertToRadians(270.f)) **/ XMMatrixTranslation(-186.f, 44.8f, 412.5f);
+	_matrix matPivot = XMMatrixTranslation(-171.f, 45.8f, 411.f);
+	//_matrix matPivot = XMMatrixTranslation(-170.f, 46.f, 380.f);
 	m_pCam->Set_CameraMatrix(matPivot);
+	m_pCam->Set_Fov(XMConvertToRadians(60.f));
 	m_pCam->Tick(dDeltaTime);
 
-	if (m_pCam->Get_CamMoveEnd())
-	{
-		m_bCinemaEnd = true;
-		m_pCam->Reset_Camera();
-	/*	CScenematicManager* pInstance = GET_INSTANCE(CScenematicManager);
-		pInstance->Change_Cinema((_uint)CINEMA_INDEX::CINEMA2_3);
-		RELEASE_INSTANCE(CScenematicManager);*/
-	}
+	
 
 	return _int();
 }
@@ -67,6 +65,14 @@ _int CCinema2_2::LateTick(_double dDeltaTime)
 {
 	m_pMidBoss->LateTick(dDeltaTime);
 
+	if (m_pCam->Get_CamMoveEnd())
+	{
+		m_bCinemaEnd = true;
+		m_pCam->Reset_Camera();
+		CScenematicManager* pInstance = GET_INSTANCE(CScenematicManager);
+		pInstance->Change_Cinema((_uint)CINEMA_INDEX::CINEMA2_3);
+		RELEASE_INSTANCE(CScenematicManager);
+	}
 	return _int();
 }
 

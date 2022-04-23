@@ -61,6 +61,12 @@
 #include "Cinema2_2.h"
 #include "Cinema2_3.h"
 #include "Cinema2_4.h"
+#include "Cinema3_1.h"
+#include "Cinema3_2.h"
+#include "Cinema3_3.h"
+#include "Cinema3_4.h"
+#include "Cinema3_5.h"
+#include "Cinema3_6.h"
 
 CStage1::CStage1()
 	: m_pTriggerSystem(nullptr)
@@ -180,18 +186,18 @@ HRESULT CStage1::NativeConstruct()
 	//	MSGBOX("Cinema");
 	// 		return E_FAIL;
 	//}
-
+	
 	if (FAILED(Ready_Indicator()))
 	{
-		MSGBOX("Stage1 Indicator");
+		MSGBOX("Indicator");
 		return E_FAIL;
 	}
 
-	if (FAILED(Ready_Portal()))
-	{
-		MSGBOX("Stage1 Portal");
-		return E_FAIL;
-	}
+	//if (FAILED(Ready_Portal()))
+	//{
+	//	MSGBOX("Portal");
+	//	return E_FAIL;
+	//}
 
 	g_pGameInstance->PlayBGM(L"Stage1_BGM");
 	
@@ -220,10 +226,12 @@ _int CStage1::Tick(_double TimeDelta)
 		if (g_pInvenUIManager->IsOpenModal())
 		{
 			g_pInvenUIManager->CloseModal();
+			g_pMainApp->Set_DeltaTimeZero(false);
 		}
 		else
 		{
 			g_pInvenUIManager->OpenModal();
+			g_pMainApp->Set_DeltaTimeZero(true);
 		}
 	}
 	if (nullptr != m_pTriggerSystem)
@@ -377,6 +385,7 @@ _int CStage1::Tick(_double TimeDelta)
 	//		return -1;
 	//	pMonster->setActive(true);
 	//}
+
 	//if (g_pGameInstance->getkeyDown(DIK_NUMPAD6))
 	//{
 	//	CMonster_Bastion_Spear* pMonster = nullptr;
@@ -409,7 +418,7 @@ _int CStage1::Tick(_double TimeDelta)
 	if (m_pScenemaManager)
 	{
 		if (g_pGameInstance->getkeyDown(DIK_END))
-			m_pScenemaManager->Active_Scenema((_uint)CINEMA_INDEX::CINEMA2_3);
+			m_pScenemaManager->Active_Scenema((_uint)CINEMA_INDEX::CINEMA1_1);;
 
 		m_pScenemaManager->Tick(TimeDelta);
 	}
@@ -421,7 +430,7 @@ _int CStage1::Tick(_double TimeDelta)
 		Shoot_Meteor(TimeDelta);
 
 	if(g_pQuestManager)
-		g_pQuestManager->Tick(TimeDelta);
+		g_pQuestManager->Tick(g_dImmutableTime);
 	
 	return _int();
 }
@@ -1499,6 +1508,18 @@ HRESULT CStage1::Ready_Cinema()
 	if (FAILED(m_pScenemaManager->Add_Scenema(CCinema2_3::Create(m_pDevice, m_pDeviceContext, (_uint)SCENEID::SCENE_STAGE1))))
 		return E_FAIL;
 	if (FAILED(m_pScenemaManager->Add_Scenema(CCinema2_4::Create(m_pDevice, m_pDeviceContext, (_uint)SCENEID::SCENE_STAGE1))))
+		return E_FAIL;
+	if (FAILED(m_pScenemaManager->Add_Scenema(CCinema3_1::Create(m_pDevice, m_pDeviceContext, (_uint)SCENEID::SCENE_STAGE1))))
+		return E_FAIL;
+	if (FAILED(m_pScenemaManager->Add_Scenema(CCinema3_2::Create(m_pDevice, m_pDeviceContext, (_uint)SCENEID::SCENE_STAGE1))))
+		return E_FAIL;
+	if (FAILED(m_pScenemaManager->Add_Scenema(CCinema3_3::Create(m_pDevice, m_pDeviceContext, (_uint)SCENEID::SCENE_STAGE1))))
+		return E_FAIL;
+	if (FAILED(m_pScenemaManager->Add_Scenema(CCinema3_4::Create(m_pDevice, m_pDeviceContext, (_uint)SCENEID::SCENE_STAGE1))))
+		return E_FAIL;
+	if (FAILED(m_pScenemaManager->Add_Scenema(CCinema3_5::Create(m_pDevice, m_pDeviceContext, (_uint)SCENEID::SCENE_STAGE1))))
+		return E_FAIL;
+	if (FAILED(m_pScenemaManager->Add_Scenema(CCinema3_6::Create(m_pDevice, m_pDeviceContext, (_uint)SCENEID::SCENE_STAGE1))))
 		return E_FAIL;
 
 	return S_OK;

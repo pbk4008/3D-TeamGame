@@ -41,6 +41,7 @@ HRESULT CButton_Skill::NativeConstruct(const _uint iSceneID, void* pArg)
 
 _int CButton_Skill::Tick(_double dDeltaTime)
 {
+	dDeltaTime = g_dImmutableTime;
 	if (FAILED(CUI::Tick(dDeltaTime)))
 		return -1;
 
@@ -49,6 +50,7 @@ _int CButton_Skill::Tick(_double dDeltaTime)
 
 _int CButton_Skill::LateTick(_double TimeDelta)
 {
+	TimeDelta = g_dImmutableTime;
 	if (FAILED(CUI::LateTick(TimeDelta)))
 		return -1;
 

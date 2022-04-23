@@ -278,30 +278,30 @@ void CAnimationController::Lerp_Anim(vector<CAnimation*>& _vecvecAnimations)
 	_vector vRotation{};
 	_vector vPosition{};
 
-	for (size_t i = 0; i < vecNextAnim.size(); ++i)
+	_uint iCurSize = vecCurrentAnim.size();
+	_uint iNextSize = vecNextAnim.size();
+	for (size_t i = 0; i < iNextSize; ++i)
 	{
 		_vector		vSourScale, vSourRotation, vSourPosition;
 		_vector		vDestScale, vDestRotation, vDestPosition;
 
-		{
-			/* 현재 키프레임의 상태 값 */
-			vSourScale = XMLoadFloat4(&vecCurrentAnim[i]->getAnimInterPolation().vScale);
-			vSourRotation = XMLoadFloat4(&vecCurrentAnim[i]->getAnimInterPolation().vRotation);
-			vSourPosition = XMLoadFloat4(&vecCurrentAnim[i]->getAnimInterPolation().vPosition);
+		/* 현재 키프레임의 상태 값 */
+		vSourScale = XMLoadFloat4(&vecCurrentAnim[i]->getAnimInterPolation().vScale);
+		vSourRotation = XMLoadFloat4(&vecCurrentAnim[i]->getAnimInterPolation().vRotation);
+		vSourPosition = XMLoadFloat4(&vecCurrentAnim[i]->getAnimInterPolation().vPosition);
 
-			/* 다음 키프레임의 상태 값 */
-			vDestScale = XMLoadFloat4(&vecNextAnim[i]->getAnimInterPolation().vScale);
-			vDestRotation = XMLoadFloat4(&vecNextAnim[i]->getAnimInterPolation().vRotation);
-			vDestPosition = XMLoadFloat4(&vecNextAnim[i]->getAnimInterPolation().vPosition);
+		/* 다음 키프레임의 상태 값 */
+		vDestScale = XMLoadFloat4(&vecNextAnim[i]->getAnimInterPolation().vScale);
+		vDestRotation = XMLoadFloat4(&vecNextAnim[i]->getAnimInterPolation().vRotation);
+		vDestPosition = XMLoadFloat4(&vecNextAnim[i]->getAnimInterPolation().vPosition);
 
-			/* 계산된 비율 만큼 현재 키프레임과 다음 키프레임의 상태값을 보간 */
-			vScale = XMVectorLerp(vSourScale, vDestScale, m_tBlendDesc.fTweenTime);
-			vRotation = XMQuaternionSlerp(vSourRotation, vDestRotation, m_tBlendDesc.fTweenTime);
-			vPosition = XMVectorLerp(vSourPosition, vDestPosition, m_tBlendDesc.fTweenTime);
+		/* 계산된 비율 만큼 현재 키프레임과 다음 키프레임의 상태값을 보간 */
+		vScale = XMVectorLerp(vSourScale, vDestScale, m_tBlendDesc.fTweenTime);
+		vRotation = XMQuaternionSlerp(vSourRotation, vDestRotation, m_tBlendDesc.fTweenTime);
+		vPosition = XMVectorLerp(vSourPosition, vDestPosition, m_tBlendDesc.fTweenTime);
 
-			_matrix smatTransform = XMMatrixAffineTransformation(vScale, XMVectorSet(0.f, 0.f, 0.f, 1.f), vRotation, vPosition);
-			vecNextAnim[i]->Set_TransformationMatrix(smatTransform);
-		}
+		_matrix smatTransform = XMMatrixAffineTransformation(vScale, XMVectorSet(0.f, 0.f, 0.f, 1.f), vRotation, vPosition);
+		vecNextAnim[i]->Set_TransformationMatrix(smatTransform);
 	}
 }
 
@@ -630,7 +630,7 @@ void CAnimationController::Reset_Animation()
 	m_isFinished = false;
 }
 
-HRESULT CAnimationController::Set_Animation(_uint iIndex)
+HRESULT CAnimationController::Set_Animation(_uint iIndex, _bool bLoop)
 {
 	vector<CAnimation*>& vecAnimations = m_pModel->Get_Animations();
 
@@ -639,6 +639,11 @@ HRESULT CAnimationController::Set_Animation(_uint iIndex)
 		return E_FAIL;
 	}
 	m_pCurAnim = vecAnimations[iIndex];
+	
+	m_tBlendDesc.iCurAnimIndex = iIndex;
+	m_strCurAnimTag = vecAnimations[iIndex]->Get_Name();
+
+	m_iCurKeyFrameIndex = vecAnimations[iIndex]->Get_CurrentKeyFrameIndex();
 
 	return S_OK;
 }

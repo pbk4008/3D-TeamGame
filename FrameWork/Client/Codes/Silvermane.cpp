@@ -275,6 +275,9 @@ HRESULT CSilvermane::NativeConstruct(const _uint _iSceneID, void* _pArg)
 
 _int CSilvermane::Tick(_double _dDeltaTime)
 {
+	if (g_pMainApp->IsDeltaTimeZero())
+		return NO_EVENT;
+
 	_int iProgress = __super::Tick(_dDeltaTime);
 	if (NO_EVENT != iProgress)
 		return iProgress;
@@ -353,6 +356,9 @@ _int CSilvermane::Tick(_double _dDeltaTime)
 
 _int CSilvermane::LateTick(_double _dDeltaTime)
 {
+	if (g_pMainApp->IsDeltaTimeZero())
+		return NO_EVENT;
+
 	_int iProgress = __super::LateTick(_dDeltaTime);
 	if (NO_EVENT != iProgress)
 		return iProgress;
@@ -1310,6 +1316,11 @@ void CSilvermane::Set_Position(const _float3 _vPosition)
 	m_pCharacterController->setPosition(_vPosition);
 }
 
+void CSilvermane::Set_FootPosition(const _float3& _vPos)
+{
+	m_pCharacterController->setFootPosition(_vPos);
+}
+
 
 const _bool CSilvermane::Change_Weapon(const wstring& _name)
 {
@@ -1937,16 +1948,17 @@ const void CSilvermane::Raycast_DropBox(const _double& _dDeltaTime)
 	_uint iObjectTag = -1;
 
 	svRayPos += svRayDir * 4.f;
-	RAYCASTDESC tRaycastDesc;
-	XMStoreFloat3(&tRaycastDesc.vOrigin, svRayPos);
-	XMStoreFloat3(&tRaycastDesc.vDir, svRayDir);
-	tRaycastDesc.fMaxDistance = 1.f;
-	tRaycastDesc.filterData.flags = PxQueryFlag::eANY_HIT | PxQueryFlag::eDYNAMIC;
-	tRaycastDesc.layerMask = (1 << (_uint)ELayer::ItemBox) + (1 << (_uint)ELayer::Monster);
+	SWEEPDESC tSweepDesc;
+	tSweepDesc.geometry = PxSphereGeometry(1.f);
+	XMStoreFloat3(&tSweepDesc.vOrigin, svRayPos);
+	XMStoreFloat3(&tSweepDesc.vDir, svRayDir);
+	tSweepDesc.fMaxDistance = 2.f;
+	tSweepDesc.filterData.flags = PxQueryFlag::eANY_HIT | PxQueryFlag::eDYNAMIC;
+	tSweepDesc.layerMask = (1 << (_uint)ELayer::ItemBox) + (1 << (_uint)ELayer::Monster);
 
 	CGameObject* pHitObject = nullptr;
-	tRaycastDesc.ppOutHitObject = &pHitObject;
-	if (g_pGameInstance->Raycast(tRaycastDesc))
+	tSweepDesc.ppOutHitObject = &pHitObject;
+	if (g_pGameInstance->Sweep(tSweepDesc))
 	{
 		if (pHitObject)
 			iObjectTag = pHitObject->getTag();
@@ -1988,7 +2000,7 @@ const void CSilvermane::Raycast_DropBox(const _double& _dDeltaTime)
 				_vector svTargetPos = pTargetTransform->Get_State(CTransform::STATE_POSITION);
 				svTargetPos += _vector{ 0.f, 1.2f, 0.f, 0.f };
 				m_pBlankFKey->Set_Position(svTargetPos);
-			}//나는 나는 배진성 먹는게 세상에서 제일 좋아 
+			}
 
 			if (g_pGameInstance->getkeyDown(DIK_F))
 			{

@@ -50,11 +50,13 @@ HRESULT CLoot_Equipment::NativeConstruct(const _uint iSceneID, void* pArg)
 
 _int CLoot_Equipment::Tick(_double dDeltaTime)
 {
+	dDeltaTime = g_dImmutableTime;
 	return _int();
 }
 
 _int CLoot_Equipment::LateTick(_double TimeDelta)
 {
+	TimeDelta = g_dImmutableTime;
 	FadeIn(TimeDelta);
 
 	if (false == m_bAlive)

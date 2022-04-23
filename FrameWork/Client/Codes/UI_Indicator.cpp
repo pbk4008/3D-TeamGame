@@ -55,6 +55,7 @@ HRESULT CUI_Indicator::NativeConstruct(const _uint _iSceneID, void* pArg)
 
 _int CUI_Indicator::Tick(_double TimeDelta)
 {
+	TimeDelta = g_dImmutableTime;
 	if (FAILED(CUI::Tick(TimeDelta)))
 		return -1;
 
@@ -110,6 +111,7 @@ _int CUI_Indicator::Tick(_double TimeDelta)
 
 _int CUI_Indicator::LateTick(_double TimeDelta)
 {
+	TimeDelta = g_dImmutableTime;
 	if (FAILED(CUI::LateTick(TimeDelta)))
 		return -1;
 

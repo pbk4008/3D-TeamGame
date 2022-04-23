@@ -111,8 +111,8 @@ HRESULT CCinemaActor::Render_Acoter()
 	{
 		for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
 		{
-			if (FAILED(m_pModel->Render(i, i)))
-				MSGBOX("Fialed To Rendering Silvermane");
+			if (FAILED(m_pModel->Render(i, 0)))
+				MSGBOX("Fialed To Rendering MidBoss");
 		}
 	}
 	else if(m_iActorTag == (_uint)CINEMA_ACTOR::ACTOR_GRAYEHAWK)
@@ -158,6 +158,14 @@ HRESULT CCinemaActor::Render_Acoter()
 				if (FAILED(m_pModel->Render(i, 3)))
 					MSGBOX("Failed To Rendering Actor");
 			}
+		}
+	}
+	else
+	{
+		for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); i++)
+		{
+			if (FAILED(m_pModel->Render(i, i)))
+				MSGBOX("Fialed To Rendering Silvermane");
 		}
 	}
 	return S_OK;

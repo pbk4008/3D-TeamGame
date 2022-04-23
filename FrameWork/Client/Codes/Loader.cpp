@@ -176,6 +176,12 @@ HRESULT CLoader::SetUp_Stage1_Object()
 	if (FAILED(Load_Stage1PlayerLoad()))
 		return E_FAIL;
 
+	if (FAILED(Load_Stage1MonsterLoad()))
+		return E_FAIL;
+
+	if (FAILED(Load_Stage1BossLoad()))
+		return E_FAIL;
+
 	if (FAILED(Load_Stage1StaticUILoad()))
 		return E_FAIL;
 
@@ -206,10 +212,7 @@ HRESULT CLoader::SetUp_Stage1_Object()
 	//if (FAILED(Load_Stage1_Cinema_Object()))
 	//	return E_FAIL;
 
-	if (FAILED(Load_Stage1MonsterLoad()))
-		return E_FAIL;
-
-	if (FAILED(Load_Stage1BossLoad()))
+	if (FAILED(Load_Stage1_Cinema_Object()))
 		return E_FAIL;
 
 	return S_OK;
@@ -510,7 +513,7 @@ HRESULT CLoader::Load_Stage1UILoad()
 	{
 		return E_FAIL;
 	}
-	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"Texture_Blank_Ckey", L"../bin/Resources/Texture/UI/Static/Active/T_Keyboard_Dark_Key_Shift.dds")))
+	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"Texture_Blank_Ckey", L"../bin/Resources/Texture/UI/Static/Active/Blank_CKey.dds")))
 	{
 		return E_FAIL;
 	}
@@ -783,25 +786,59 @@ HRESULT CLoader::Load_Stage1_Cinema_Object()
 
 	//Camera2-1
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Model_Cinema_Cam2_1", CModel::Create(m_pDevice, m_pDeviceContext,
-		"../bin/FBX/Cinema/Camera/", "camera_bone_03_01.fbx",
+		"../bin/FBX/Cinema/Camera/", "camera_03_01_bone.fbx",
 		L"../../Reference/ShaderFile/Shader_AnimMesh.hlsl", matPivot, CModel::TYPE_ANIM, true))))
 		return E_FAIL;
 	//Camera2-2
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Model_Cinema_Cam2_2", CModel::Create(m_pDevice, m_pDeviceContext,
-		"../bin/FBX/Cinema/Camera/", "camera_bone_03_02.fbx",
+		"../bin/FBX/Cinema/Camera/", "camera_03_02_bone.fbx",
 		L"../../Reference/ShaderFile/Shader_AnimMesh.hlsl", matPivot, CModel::TYPE_ANIM, true))))
 		return E_FAIL;
 	//Camera2-3
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Model_Cinema_Cam2_3", CModel::Create(m_pDevice, m_pDeviceContext,
-		"../bin/FBX/Cinema/Camera/", "camera_bone_03_03.fbx",
+		"../bin/FBX/Cinema/Camera/", "camera_03_03_bone.fbx",
 		L"../../Reference/ShaderFile/Shader_AnimMesh.hlsl", matPivot, CModel::TYPE_ANIM, true))))
 		return E_FAIL;
 	//Camera2-4
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Model_Cinema_Cam2_4", CModel::Create(m_pDevice, m_pDeviceContext,
-		"../bin/FBX/Cinema/Camera/", "camera_bone_03_04.fbx",
+		"../bin/FBX/Cinema/Camera/", "camera_03_04_bone.fbx",
+		L"../../Reference/ShaderFile/Shader_AnimMesh.hlsl", matPivot, CModel::TYPE_ANIM, true))))
+		return E_FAIL;
+	//Camera3-1
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Model_Cinema_Cam3_1", CModel::Create(m_pDevice, m_pDeviceContext,
+		"../bin/FBX/Cinema/Camera/", "camera_04_01_bone.fbx",
 		L"../../Reference/ShaderFile/Shader_AnimMesh.hlsl", matPivot, CModel::TYPE_ANIM, true))))
 		return E_FAIL;
 
+	//Camera3-2
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Model_Cinema_Cam3_2", CModel::Create(m_pDevice, m_pDeviceContext,
+		"../bin/FBX/Cinema/Camera/", "camera_04_02_bone.fbx",
+		L"../../Reference/ShaderFile/Shader_AnimMesh.hlsl", matPivot, CModel::TYPE_ANIM, true))))
+		return E_FAIL;
+
+	//Camera3-3
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Model_Cinema_Cam3_3", CModel::Create(m_pDevice, m_pDeviceContext,
+		"../bin/FBX/Cinema/Camera/", "camera_04_03_bone.fbx",
+		L"../../Reference/ShaderFile/Shader_AnimMesh.hlsl", matPivot, CModel::TYPE_ANIM, true))))
+		return E_FAIL;
+
+	//Camera3-4
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Model_Cinema_Cam3_4", CModel::Create(m_pDevice, m_pDeviceContext,
+		"../bin/FBX/Cinema/Camera/", "camera_04_04_bone.fbx",
+		L"../../Reference/ShaderFile/Shader_AnimMesh.hlsl", matPivot, CModel::TYPE_ANIM, true))))
+		return E_FAIL;
+
+	//Camera3-5
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Model_Cinema_Cam3_5", CModel::Create(m_pDevice, m_pDeviceContext,
+		"../bin/FBX/Cinema/Camera/", "camera_04_05_bone.fbx",
+		L"../../Reference/ShaderFile/Shader_AnimMesh.hlsl", matPivot, CModel::TYPE_ANIM, true))))
+		return E_FAIL;
+
+	//Camera3-6
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Model_Cinema_Cam3_6", CModel::Create(m_pDevice, m_pDeviceContext,
+		"../bin/FBX/Cinema/Camera/", "camera_04_06_bone.fbx",
+		L"../../Reference/ShaderFile/Shader_AnimMesh.hlsl", matPivot, CModel::TYPE_ANIM, true))))
+		return E_FAIL;
 
 	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_CinemaCamera", CCinemaCam::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;

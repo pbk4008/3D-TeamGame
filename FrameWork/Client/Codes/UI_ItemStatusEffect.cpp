@@ -43,6 +43,7 @@ HRESULT UI_ItemStatusEffect::NativeConstruct(const _uint iSceneID, void* pArg)
 
 _int UI_ItemStatusEffect::Tick(_double dDeltaTime)
 {
+	dDeltaTime = g_dImmutableTime;
 	if (FAILED(CUI::Tick(dDeltaTime)))
 		return -1;
 
@@ -51,6 +52,7 @@ _int UI_ItemStatusEffect::Tick(_double dDeltaTime)
 
 _int UI_ItemStatusEffect::LateTick(_double TimeDelta)
 {
+	TimeDelta = g_dImmutableTime;
 	if (FAILED(CUI::LateTick(TimeDelta)))
 		return -1;
 

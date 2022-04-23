@@ -40,6 +40,7 @@ HRESULT CHud::NativeConstruct(const _uint iSceneID, void* pArg)
 
 _int CHud::Tick(_double dDeltaTime)
 {
+	dDeltaTime = g_dImmutableTime;
 	PullingEquipmentUI();
 	ShowLevelUp_HUD();
 
@@ -54,6 +55,7 @@ _int CHud::Tick(_double dDeltaTime)
 
 _int CHud::LateTick(_double TimeDelta)
 {
+	TimeDelta = g_dImmutableTime;
 	if (nullptr != m_pRenderer)
 		m_pRenderer->Add_RenderGroup(CRenderer::RENDER::RENDER_UI_ACTIVE, this);
 
