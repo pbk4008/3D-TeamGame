@@ -45,6 +45,7 @@ HRESULT CButton_Armory::NativeConstruct(const _uint iSceneID, void* pArg)
 
 _int CButton_Armory::Tick(_double dDeltaTime)
 {
+	dDeltaTime = g_dImmutableTime;
 	if (FAILED(CUI::Tick(dDeltaTime)))
 		return -1;
 
@@ -53,6 +54,7 @@ _int CButton_Armory::Tick(_double dDeltaTime)
 
 _int CButton_Armory::LateTick(_double TimeDelta)
 {
+	TimeDelta = g_dImmutableTime;
 	if (FAILED(CUI::LateTick(TimeDelta)))
 		return -1;
 

@@ -176,11 +176,11 @@ HRESULT CLoader::SetUp_Stage1_Object()
 	if (FAILED(Load_Stage1PlayerLoad()))
 		return E_FAIL;
 
-	//if (FAILED(Load_Stage1MonsterLoad()))
-	//	return E_FAIL;
+	if (FAILED(Load_Stage1MonsterLoad()))
+		return E_FAIL;
 
-	//if (FAILED(Load_Stage1BossLoad()))
-	//	return E_FAIL;
+	if (FAILED(Load_Stage1BossLoad()))
+		return E_FAIL;
 
 	if (FAILED(Load_Stage1StaticUILoad()))
 		return E_FAIL;
@@ -209,8 +209,8 @@ HRESULT CLoader::SetUp_Stage1_Object()
 	//if (FAILED(Load_Stage1Meteor()))
 	//	return E_FAIL;
 
-	/*if (FAILED(Load_Stage1_Cinema_Object()))
-		return E_FAIL;*/
+	//if (FAILED(Load_Stage1_Cinema_Object()))
+	//	return E_FAIL;
 
 	return S_OK;
 }
@@ -510,7 +510,7 @@ HRESULT CLoader::Load_Stage1UILoad()
 	{
 		return E_FAIL;
 	}
-	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"Texture_Blank_Ckey", L"../bin/Resources/Texture/UI/Static/Active/T_Keyboard_Dark_Key_Shift.dds")))
+	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"Texture_Blank_Ckey", L"../bin/Resources/Texture/UI/Static/Active/Blank_CKey.dds")))
 	{
 		return E_FAIL;
 	}

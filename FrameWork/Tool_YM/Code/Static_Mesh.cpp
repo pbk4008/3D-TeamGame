@@ -114,8 +114,9 @@ HRESULT CStatic_Mesh::Render()
 			if(false == m_bPick)
 				m_pModelCom->Render(i, 0);
 			else 
-				m_pModelCom->Render(i, 0);
+				m_pModelCom->Render(i, 1);
 		}
+
 
 
 		if (true == m_bPick)

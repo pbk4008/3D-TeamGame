@@ -958,6 +958,18 @@
     <Filter Include="02.GameObject\03.Character\02.Boss\00.MiddleBoss\State\06.Execution">
       <UniqueIdentifier>{b058ac71-c72c-4000-a763-0ed28eb645cc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="03.System\10.GuideUIManager">
+      <UniqueIdentifier>{8c873b28-f498-4e9e-8d48-c7a54e04cfd4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.UI\05.Hud\03.Guide">
+      <UniqueIdentifier>{cfe4225c-7620-4d97-a459-8ae7a59199e9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.UI\05.Hud\03.Guide\00.BackGround">
+      <UniqueIdentifier>{30942ddf-5072-49e8-928d-389188d02fc9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.UI\05.Hud\03.Guide\01.GuideTex">
+      <UniqueIdentifier>{3803125f-9097-473b-8e77-dd2e9d614c15}</UniqueIdentifier>
+	</Filter>
     <Filter Include="03.System\07.Scenematic\01.Stage1\00. Shot 01">
       <UniqueIdentifier>{add1b9db-bbdb-4c2b-9855-4668fe034659}</UniqueIdentifier>
     </Filter>
@@ -2223,6 +2235,15 @@
     <ClInclude Include="..\Headers\UI_Blank_FKey.h">
       <Filter>02.GameObject\05.UI\01.UI_Ingame\02.UI_JumpNode\00.Blank</Filter>
     </ClInclude>
+    <ClInclude Include="..\Headers\GuideUIManager.h">
+      <Filter>03.System\10.GuideUIManager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\UI_Guide_Background.h">
+      <Filter>02.GameObject\05.UI\05.Hud\03.Guide\00.BackGround</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\UI_Guide_Texture.h">
+      <Filter>02.GameObject\05.UI\05.Hud\03.Guide\01.GuideTex</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -3409,6 +3430,15 @@
      </ClCompile>
     <ClCompile Include="..\Codes\UI_Blank_FKey.cpp">
       <Filter>02.GameObject\05.UI\01.UI_Ingame\02.UI_JumpNode\00.Blank</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\GuideUIManager.cpp">
+      <Filter>03.System\10.GuideUIManager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\UI_Guide_Background.cpp">
+      <Filter>02.GameObject\05.UI\05.Hud\03.Guide\00.BackGround</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\UI_Guide_Texture.cpp">
+      <Filter>02.GameObject\05.UI\05.Hud\03.Guide\01.GuideTex</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

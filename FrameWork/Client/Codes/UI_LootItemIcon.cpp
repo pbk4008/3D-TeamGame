@@ -47,6 +47,7 @@ HRESULT CUI_LootItemIcon::NativeConstruct(const _uint iSceneID, void* pArg)
 
 _int CUI_LootItemIcon::Tick(_double dDeltaTime)
 {
+	dDeltaTime = g_dImmutableTime;
 	if (FAILED(CUI::Tick(dDeltaTime)))
 		return -1;
 
@@ -55,6 +56,7 @@ _int CUI_LootItemIcon::Tick(_double dDeltaTime)
 
 _int CUI_LootItemIcon::LateTick(_double TimeDelta)
 {
+	TimeDelta = g_dImmutableTime;
 	if (FAILED(CUI::LateTick(TimeDelta)))
 		return -1;
 	Attach_Owner();
