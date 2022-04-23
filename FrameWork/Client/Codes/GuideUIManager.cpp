@@ -21,22 +21,22 @@ _int CGuideUIManager::Tick(_double dTimeDelta)
 
 _int CGuideUIManager::Late_Tick(_double dTimeDelta)
 {
-	//if (m_pBg->getActive())
-	//{
-	//	m_pBg->LateTick(dTimeDelta);
-	//	m_pTex->LateTick(dTimeDelta);
-	//}
+	/*if (m_pBg->getActive())
+	{
+		m_pBg->LateTick(dTimeDelta);
+		m_pTex->LateTick(dTimeDelta);
+	}*/
 
 	return _int();
 }
 
 HRESULT CGuideUIManager::Render(void)
 {
-	//if (m_pBg->getActive())
-	//{
-	//	m_pBg->Render();
-	//	m_pTex->Render();
-	//}
+	/*if (m_pBg->getActive())
+	{
+		m_pBg->Render();
+		m_pTex->Render();
+	}*/
 
 	return S_OK;
 }
