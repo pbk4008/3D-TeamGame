@@ -28,9 +28,8 @@ public:
 	_double Get_CamFrame();
 	void Set_CameraMatrix(_fmatrix matPivot);
 	void Reset_Camera();
-	void Add_Fov(_float fSpeed);
-	void Minus_Fov(_float fSpeed);
-	void Set_Fov(_float fSpeed, _float fGoalAngle);
+	void Add_Fov(_float fSpeed, _float fGoalAngle);
+	void Minus_Fov(_float fSpeed,_float fGoalAngle);
 	void Set_Fov(_float fAngle);
 private:
 	HRESULT Set_Camera(_uint iSceneTag);
@@ -47,6 +46,7 @@ private:
 	wstring m_pCamTag;
 	CModel* m_pModel;
 	_uint m_iShortTag;
+	_float m_fFovAngle;
 };
 END
 #endif

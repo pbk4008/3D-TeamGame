@@ -781,9 +781,6 @@
     <Filter Include="03.System\07.Scenematic\01.Stage1">
       <UniqueIdentifier>{7923ba1c-8533-4b27-8cbc-6a47b092efad}</UniqueIdentifier>
     </Filter>
-    <Filter Include="03.System\07.Scenematic\01.Stage1\Cinema1_1">
-      <UniqueIdentifier>{aa6a42c7-1e50-490c-80c7-c2e3fcb11325}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObject\03.Character\00.Player\00.Silvermane\State\Shield\Throw">
       <UniqueIdentifier>{69f64efb-d5bc-433d-bf69-0a94dad5f809}</UniqueIdentifier>
     </Filter>
@@ -904,9 +901,6 @@
     <Filter Include="02.GameObject\04.Effect\02. MotionTrail">
       <UniqueIdentifier>{71fab7b7-58fc-41cf-8695-c5967ce00dcc}</UniqueIdentifier>
     </Filter>
-    <Filter Include="03.System\07.Scenematic\01.Stage1\Cinema1_2">
-      <UniqueIdentifier>{efa2a259-325c-4afc-a8f7-30014b40af6a}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObject\04.Effect\00.Particle\07.Effect_FloatingUp">
       <UniqueIdentifier>{71658c88-0735-4f35-a05b-0508b6453715}</UniqueIdentifier>
     </Filter>
@@ -949,20 +943,8 @@
     <Filter Include="100.ShaderFiles\02.Actor">
       <UniqueIdentifier>{01f09cd2-dcfc-4f2c-a5da-56671ab0b823}</UniqueIdentifier>
     </Filter>
-    <Filter Include="03.System\07.Scenematic\01.Stage1\Cinema2_1">
-      <UniqueIdentifier>{a2813f18-35e9-48ca-9882-467634a4fb9c}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObject\03.Character\01.Monster\EarthAberrant\State\06.Execution">
       <UniqueIdentifier>{fcb36259-0e76-4d95-8ef9-ad44c10ef567}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="03.System\07.Scenematic\01.Stage1\Cinema2_2">
-      <UniqueIdentifier>{1f65d2b9-fa3c-40c3-888b-1a974190cd33}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="03.System\07.Scenematic\01.Stage1\Cinema2_3">
-      <UniqueIdentifier>{f6ceea30-6b25-4401-a4ef-4eb5f6a74ec0}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="03.System\07.Scenematic\01.Stage1\Cinema2_4">
-      <UniqueIdentifier>{082f2fa4-c0e5-4204-9567-d804fa3da07b}</UniqueIdentifier>
     </Filter>
     <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_Shooter\State\Excution">
       <UniqueIdentifier>{1181e0b5-5ff0-4d09-8767-dd43718756ae}</UniqueIdentifier>
@@ -975,6 +957,54 @@
     </Filter>
     <Filter Include="02.GameObject\03.Character\02.Boss\00.MiddleBoss\State\06.Execution">
       <UniqueIdentifier>{b058ac71-c72c-4000-a763-0ed28eb645cc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.System\07.Scenematic\01.Stage1\00. Shot 01">
+      <UniqueIdentifier>{add1b9db-bbdb-4c2b-9855-4668fe034659}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.System\07.Scenematic\01.Stage1\00. Shot 01\Cinema1_1">
+      <UniqueIdentifier>{aa6a42c7-1e50-490c-80c7-c2e3fcb11325}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.System\07.Scenematic\01.Stage1\01. Shot 02">
+      <UniqueIdentifier>{83f832cf-0faa-433d-9500-b57da4d70b6f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.System\07.Scenematic\01.Stage1\01. Shot 02\Cinema1_2">
+      <UniqueIdentifier>{efa2a259-325c-4afc-a8f7-30014b40af6a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.System\07.Scenematic\01.Stage1\03. Shot 03">
+      <UniqueIdentifier>{00bb73de-2574-4020-a6e3-bdb55f75c96d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.System\07.Scenematic\01.Stage1\03. Shot 03\Cinema2_1">
+      <UniqueIdentifier>{a2813f18-35e9-48ca-9882-467634a4fb9c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.System\07.Scenematic\01.Stage1\03. Shot 03\Cinema2_2">
+      <UniqueIdentifier>{1f65d2b9-fa3c-40c3-888b-1a974190cd33}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.System\07.Scenematic\01.Stage1\03. Shot 03\Cinema2_3">
+      <UniqueIdentifier>{f6ceea30-6b25-4401-a4ef-4eb5f6a74ec0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.System\07.Scenematic\01.Stage1\03. Shot 03\Cinema2_4">
+      <UniqueIdentifier>{082f2fa4-c0e5-4204-9567-d804fa3da07b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.System\07.Scenematic\01.Stage1\04. Shot 04">
+      <UniqueIdentifier>{86cc9808-185c-430a-a2ad-12560b26b607}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.System\07.Scenematic\01.Stage1\04. Shot 04\Cinema3_1">
+      <UniqueIdentifier>{aa7aa9b4-a5db-474c-be06-12fdfe7e5ff4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.System\07.Scenematic\01.Stage1\04. Shot 04\Cinema3_2">
+      <UniqueIdentifier>{85ff88da-dc43-4e10-9428-2b96e9f125dd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.System\07.Scenematic\01.Stage1\04. Shot 04\Cinema3_3">
+      <UniqueIdentifier>{b7240427-f575-4794-a56b-7db08d5d8973}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.System\07.Scenematic\01.Stage1\04. Shot 04\Cinema3_4">
+      <UniqueIdentifier>{edb5832f-69f7-4c06-acfa-59a589ce7b81}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.System\07.Scenematic\01.Stage1\04. Shot 04\Cinema3_5">
+      <UniqueIdentifier>{1960ad1b-84bd-4124-8821-6dd762fdac17}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.System\07.Scenematic\01.Stage1\04. Shot 04\Cinema3_6">
+      <UniqueIdentifier>{391dcb6c-27df-4ddc-9818-c679d8e7091d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -1969,7 +1999,7 @@
       <Filter>02.GameObject\01. MainCamera\CinemaCam</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\Cinema1_1.h">
-      <Filter>03.System\07.Scenematic\01.Stage1\Cinema1_1</Filter>
+      <Filter>03.System\07.Scenematic\01.Stage1\00. Shot 01\Cinema1_1</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\Shield_Throw.h">
       <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Shield\Throw</Filter>
@@ -2116,7 +2146,7 @@
       <Filter>02.GameObject\03.Character\03.CinemaActor</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\Cinema1_2.h">
-      <Filter>03.System\07.Scenematic\01.Stage1\Cinema1_2</Filter>
+      <Filter>03.System\07.Scenematic\01.Stage1\01. Shot 02\Cinema1_2</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\Explosion_Rock.h">
       <Filter>02.GameObject\04.Effect\02.MeshEffect\00.ExplosionRock</Filter>
@@ -2125,7 +2155,7 @@
       <Filter>02.GameObject\03.Character\01.Monster\Bastion_Healer\Meteor</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\Cinema2_1.h">
-      <Filter>03.System\07.Scenematic\01.Stage1\Cinema2_1</Filter>
+      <Filter>03.System\07.Scenematic\01.Stage1\03. Shot 03\Cinema2_1</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\MotionTrail.h">
       <Filter>02.GameObject\04.Effect\02. MotionTrail</Filter>
@@ -2152,13 +2182,13 @@
       <Filter>02.GameObject\03.Character\01.Monster\EarthAberrant\State\06.Execution</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\Cinema2_4.h">
-      <Filter>03.System\07.Scenematic\01.Stage1\Cinema2_4</Filter>
+      <Filter>03.System\07.Scenematic\01.Stage1\03. Shot 03\Cinema2_4</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\Cinema2_2.h">
-      <Filter>03.System\07.Scenematic\01.Stage1\Cinema2_2</Filter>
+      <Filter>03.System\07.Scenematic\01.Stage1\03. Shot 03\Cinema2_2</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\Cinema2_3.h">
-      <Filter>03.System\07.Scenematic\01.Stage1\Cinema2_3</Filter>
+      <Filter>03.System\07.Scenematic\01.Stage1\03. Shot 03\Cinema2_3</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\Shooter_Excution.h">
       <Filter>02.GameObject\03.Character\01.Monster\Bastion_Shooter\State\Excution</Filter>
@@ -2171,6 +2201,24 @@
     </ClInclude>
     <ClInclude Include="..\Headers\MidBoss_Execution.h">
       <Filter>02.GameObject\03.Character\02.Boss\00.MiddleBoss\State\06.Execution</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Cinema3_1.h">
+      <Filter>03.System\07.Scenematic\01.Stage1\04. Shot 04\Cinema3_1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Cinema3_2.h">
+      <Filter>03.System\07.Scenematic\01.Stage1\04. Shot 04\Cinema3_2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Cinema3_3.h">
+      <Filter>03.System\07.Scenematic\01.Stage1\04. Shot 04\Cinema3_3</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Cinema3_4.h">
+      <Filter>03.System\07.Scenematic\01.Stage1\04. Shot 04\Cinema3_4</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Cinema3_5.h">
+      <Filter>03.System\07.Scenematic\01.Stage1\04. Shot 04\Cinema3_5</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Cinema3_6.h">
+      <Filter>03.System\07.Scenematic\01.Stage1\04. Shot 04\Cinema3_6</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\UI_Blank_FKey.h">
       <Filter>02.GameObject\05.UI\01.UI_Ingame\02.UI_JumpNode\00.Blank</Filter>
@@ -3147,7 +3195,7 @@
       <Filter>02.GameObject\01. MainCamera\CinemaCam</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\Cinema1_1.cpp">
-      <Filter>03.System\07.Scenematic\01.Stage1\Cinema1_1</Filter>
+      <Filter>03.System\07.Scenematic\01.Stage1\00. Shot 01\Cinema1_1</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\Shield_Throw.cpp">
       <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Shield\Throw</Filter>
@@ -3288,13 +3336,13 @@
       <Filter>02.GameObject\03.Character\03.CinemaActor</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\Cinema1_2.cpp">
-      <Filter>03.System\07.Scenematic\01.Stage1\Cinema1_2</Filter>
+      <Filter>03.System\07.Scenematic\01.Stage1\01. Shot 02\Cinema1_2</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\Explosion_Rock.cpp">
       <Filter>02.GameObject\04.Effect\02.MeshEffect\00.ExplosionRock</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\Cinema2_1.cpp">
-      <Filter>03.System\07.Scenematic\01.Stage1\Cinema2_1</Filter>
+      <Filter>03.System\07.Scenematic\01.Stage1\03. Shot 03\Cinema2_1</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\MotionTrail.cpp">
       <Filter>02.GameObject\04.Effect\02. MotionTrail</Filter>
@@ -3321,13 +3369,13 @@
       <Filter>02.GameObject\03.Character\01.Monster\EarthAberrant\State\06.Execution</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\Cinema2_4.cpp">
-      <Filter>03.System\07.Scenematic\01.Stage1\Cinema2_4</Filter>
+      <Filter>03.System\07.Scenematic\01.Stage1\03. Shot 03\Cinema2_4</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\Cinema2_2.cpp">
-      <Filter>03.System\07.Scenematic\01.Stage1\Cinema2_2</Filter>
+      <Filter>03.System\07.Scenematic\01.Stage1\03. Shot 03\Cinema2_2</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\Cinema2_3.cpp">
-      <Filter>03.System\07.Scenematic\01.Stage1\Cinema2_3</Filter>
+      <Filter>03.System\07.Scenematic\01.Stage1\03. Shot 03\Cinema2_3</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\Shooter_Excution.cpp">
       <Filter>02.GameObject\03.Character\01.Monster\Bastion_Shooter\State\Excution</Filter>
@@ -3341,6 +3389,24 @@
     <ClCompile Include="..\Codes\MidBoss_Execution.cpp">
       <Filter>02.GameObject\03.Character\02.Boss\00.MiddleBoss\State\06.Execution</Filter>
     </ClCompile>
+    <ClCompile Include="..\Codes\Cinema3_1.cpp">
+      <Filter>03.System\07.Scenematic\01.Stage1\04. Shot 04\Cinema3_1</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Cinema3_2.cpp">
+      <Filter>03.System\07.Scenematic\01.Stage1\04. Shot 04\Cinema3_2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Cinema3_3.cpp">
+      <Filter>03.System\07.Scenematic\01.Stage1\04. Shot 04\Cinema3_3</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Cinema3_4.cpp">
+      <Filter>03.System\07.Scenematic\01.Stage1\04. Shot 04\Cinema3_4</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Cinema3_5.cpp">
+      <Filter>03.System\07.Scenematic\01.Stage1\04. Shot 04\Cinema3_5</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Cinema3_6.cpp">
+      <Filter>03.System\07.Scenematic\01.Stage1\04. Shot 04\Cinema3_6</Filter>
+     </ClCompile>
     <ClCompile Include="..\Codes\UI_Blank_FKey.cpp">
       <Filter>02.GameObject\05.UI\01.UI_Ingame\02.UI_JumpNode\00.Blank</Filter>
     </ClCompile>

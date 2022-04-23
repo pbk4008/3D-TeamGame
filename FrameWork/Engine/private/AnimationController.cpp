@@ -630,7 +630,7 @@ void CAnimationController::Reset_Animation()
 	m_isFinished = false;
 }
 
-HRESULT CAnimationController::Set_Animation(_uint iIndex)
+HRESULT CAnimationController::Set_Animation(_uint iIndex, _bool bLoop)
 {
 	vector<CAnimation*>& vecAnimations = m_pModel->Get_Animations();
 
@@ -639,6 +639,11 @@ HRESULT CAnimationController::Set_Animation(_uint iIndex)
 		return E_FAIL;
 	}
 	m_pCurAnim = vecAnimations[iIndex];
+	
+	m_tBlendDesc.iCurAnimIndex = iIndex;
+	m_strCurAnimTag = vecAnimations[iIndex]->Get_Name();
+
+	m_iCurKeyFrameIndex = vecAnimations[iIndex]->Get_CurrentKeyFrameIndex();
 
 	return S_OK;
 }
