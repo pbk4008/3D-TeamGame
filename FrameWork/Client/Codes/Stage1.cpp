@@ -131,17 +131,17 @@ HRESULT CStage1::NativeConstruct()
 		return E_FAIL;
 	}
 
-	if (FAILED(Ready_MapObject()))
+	/*if (FAILED(Ready_MapObject()))
 	{
 		MSGBOX("Stage1 MapObject");
 		return E_FAIL;
-	}
+	}*/
 
-	if (FAILED(Ready_TriggerSystem(L"../bin/SaveData/Trigger/MonsterSpawnTrigger.dat")))
-	{
-		MSGBOX("Stage1 Trigger");
-		return E_FAIL;
-	}
+	//if (FAILED(Ready_TriggerSystem(L"../bin/SaveData/Trigger/MonsterSpawnTrigger.dat")))
+	//{
+	//	MSGBOX("Stage1 Trigger");
+	//	return E_FAIL;
+	//}
 
 	if (FAILED(Ready_Data_UI(L"../bin/SaveData/UI/UI.dat")))
 	{
@@ -173,25 +173,19 @@ HRESULT CStage1::NativeConstruct()
 		return E_FAIL;
 	}
 
-	if (FAILED(Ready_GameManager()))
-	{
-		MSGBOX("Stage1 Manager");
-		return E_FAIL;
-	}
-
 	g_pGameInstance->Change_BaseCamera(L"Camera_Silvermane");
 
-	if (FAILED(Ready_Meteor()))
-	{
-		MSGBOX("Meteor");
-		return E_FAIL;
-	}
+	//if (FAILED(Ready_Meteor()))
+	//{
+	//	MSGBOX("Meteor");
+	//	return E_FAIL;
+	//}
 
-	if (FAILED(Ready_Cinema()))
-	{
-		MSGBOX("Cinema");
-		return E_FAIL;
-	}
+	//if (FAILED(Ready_Cinema()))
+	//{
+	//	MSGBOX("Cinema");
+	//	return E_FAIL;
+	//}
 
 	if (FAILED(Ready_Indicator()))
 	{
@@ -205,6 +199,11 @@ HRESULT CStage1::NativeConstruct()
 	//	return E_FAIL;
 	//}
 
+	if (FAILED(Ready_Wall()))
+	{
+		MSGBOX("Wall");
+		return E_FAIL;
+	}
 	g_pGameInstance->PlayBGM(L"Stage1_BGM");
 	
 	return S_OK;
@@ -212,7 +211,8 @@ HRESULT CStage1::NativeConstruct()
 
 _int CStage1::Tick(_double TimeDelta)
 {
-	//m_pTestModel->Update_CombinedTransformationMatrix(TimeDelta);
+	_vector vTmp=g_pObserver->Get_PlayerPos();
+	cout << XMVectorGetX(vTmp) << ", " << XMVectorGetY(vTmp) << ", " << XMVectorGetZ(vTmp) << endl;
 #ifdef  _DEBUG
 	_int iLevel = 0;
 	if (g_pDebugSystem->Get_LevelMoveCheck(iLevel))
@@ -415,13 +415,13 @@ _int CStage1::Tick(_double TimeDelta)
 		m_pIndicatorManager->Active_Indicator();
 
 	/*For Cinema*/
-	if (m_pScenemaManager)
-	{
-		if (g_pGameInstance->getkeyDown(DIK_END))
-			m_pScenemaManager->Active_Scenema((_uint)CINEMA_INDEX::CINEMA1_1);;
+	//if (m_pScenemaManager)
+	//{
+	//	if (g_pGameInstance->getkeyDown(DIK_END))
+	//		m_pScenemaManager->Active_Scenema((_uint)CINEMA_INDEX::CINEMA1_1);;
 
-		m_pScenemaManager->Tick(TimeDelta);
-	}
+	//	m_pScenemaManager->Tick(TimeDelta);
+	//}
 
 
 	/*for Meteor*/
@@ -432,6 +432,18 @@ _int CStage1::Tick(_double TimeDelta)
 	if(g_pQuestManager)
 		g_pQuestManager->Tick(TimeDelta);
 	
+
+
+	if (g_pGameInstance->getkeyDown(DIK_END))
+	{
+		list<CGameObject*>* pLayer = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Layer_Wall");
+
+		auto iter = pLayer->begin();
+		advance(iter, 4);
+		static_cast<CWall*>((*iter))->Destroy();
+	}
+	//Open_Wall();
+
 	return _int();
 }
 
@@ -585,21 +597,6 @@ HRESULT CStage1::Ready_Player(const _tchar* LayerTag)
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Camera", L"Proto_GameObject_Camera_Silvermane")))
 		return E_FAIL;
 
-	//WALLDESC desc;
-	//ZeroMemory(&desc, sizeof(WALLDESC));
-	//desc.pos = _float4(-61.f, 18.f, 194.f, 1.f);
-	//desc.scale = _float2(6.f, 10.f);
-	//desc.radian = 0.f;
-	//desc.color = _float4(1.f, 0.f, 0.f, 1.f);
-	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Wall", L"Proto_GameObject_Wall",&desc))) return E_FAIL;
-
-	//ZeroMemory(&desc, sizeof(WALLDESC));
-	//desc.pos = _float4(-91.f, 25.f, 218.f, 1.f);
-	//desc.scale = _float2(10.f, 24.f);
-	//desc.radian = 90.f;
-	//desc.color = _float4(0.f, 1.f, 1.f, 1.f);
-	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Wall", L"Proto_GameObject_Wall", &desc))) return E_FAIL;
-	
 	//Test
 	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Test", L"Proto_GameObject_TestObject")))
 	//	return E_FAIL;
@@ -1513,9 +1510,47 @@ HRESULT CStage1::Ready_Cinema()
 		return E_FAIL;
 	if (FAILED(m_pScenemaManager->Add_Scenema(CCinema3_5::Create(m_pDevice, m_pDeviceContext, (_uint)SCENEID::SCENE_STAGE1))))
 		return E_FAIL;
-	if (FAILED(m_pScenemaManager->Add_Scenema(CCinema3_6::Create(m_pDevice, m_pDeviceContext, (_uint)SCENEID::SCENE_STAGE1))))
-		return E_FAIL;
 
+	return S_OK;
+}
+
+HRESULT CStage1::Ready_Wall()
+{
+	CWall::WALLDESC desc;
+	ZeroMemory(&desc, sizeof(desc));
+	desc.pos = _float4(-61.f, 18.f, 194.f, 1.f);
+	desc.scale = _float2(6.f, 10.f);
+	desc.radian = 0.f;
+	desc.color = _float4(0.f, 0.f, 1.f, 1.f);
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Wall", L"Proto_GameObject_Wall",&desc))) return E_FAIL;
+
+	ZeroMemory(&desc, sizeof(desc));
+	desc.pos = _float4(-91.f, 25.f, 218.f, 1.f);
+	desc.scale = _float2(10.f, 24.f);
+	desc.radian = 90.f;
+	desc.color = _float4(0.f, 0.f, 1.f, 1.f);
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Wall", L"Proto_GameObject_Wall", &desc))) return E_FAIL;
+	
+	ZeroMemory(&desc, sizeof(desc));
+	desc.pos = _float4(-137.f, 19.f, 224.f, 1.f);
+	desc.scale = _float2(10.f, 24.f);
+	desc.radian = 0.f;
+	desc.color = _float4(0.f, 0.f, 1.f, 1.f);
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Wall", L"Proto_GameObject_Wall", &desc))) return E_FAIL;
+
+	ZeroMemory(&desc, sizeof(desc));
+	desc.pos = _float4(-175.f, 47.f, 373.f, 1.f);
+	desc.scale = _float2(12.f, 24.f);
+	desc.radian = 0.f;
+	desc.color = _float4(0.f, 0.f, 1.f, 1.f);
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Wall", L"Proto_GameObject_Wall", &desc))) return E_FAIL;
+
+	ZeroMemory(&desc, sizeof(desc));
+	desc.pos = _float4(-176.f, 51.f, 400.f, 1.f);
+	desc.scale = _float2(10.f, 24.f);
+	desc.radian = 0.f;
+	desc.color = _float4(0.f, 0.f, 1.f, 1.f);
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Wall", L"Proto_GameObject_Wall", &desc))) return E_FAIL;
 	return S_OK;
 }
 
@@ -1557,6 +1592,61 @@ void CStage1::Open_Potal(_fvector vPos, _uint iMonTag)
 }
 void CStage1::CheckTriggerForQuest(void)
 {
+}
+
+void CStage1::Open_Wall()
+{
+	list<CGameObject*>* pLayer = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Layer_Wall");
+
+	if (!pLayer)
+		return;
+
+	auto iter = pLayer->begin();
+	if (m_pTriggerSystem->Get_CurrentTriggerNumber() == 4)
+	{
+		if (m_iCountMonster == 8)
+		{
+			advance(iter, 0);
+			if((*iter)->getActive())
+				static_cast<CWall*>(*iter)->Destroy();
+		}
+		if (m_iCountMonster == 0 && m_iPortalCount ==3)
+		{
+			advance(iter, 1);
+			if ((*iter)->getActive())
+				static_cast<CWall*>(*iter)->Destroy();
+		}
+	}
+	else if (m_pTriggerSystem->Get_CurrentTriggerNumber() == 5)
+	{
+		if (m_iCountMonster == 0 && m_iPortalCount == 6)
+		{
+			advance(iter, 2);
+			if ((*iter)->getActive())
+				static_cast<CWall*>(*iter)->Destroy();
+		}
+	}
+	else if (m_pTriggerSystem->Get_CurrentTriggerNumber() == 8)
+	{
+		if (m_iCountMonster == 0)
+		{
+			advance(iter, 3);
+			if ((*iter)->getActive())
+				static_cast<CWall*>(*iter)->Destroy();
+		}
+	}
+	else if (m_pTriggerSystem->Get_CurrentTriggerNumber() == 9)
+	{
+		if (m_iCountMonster == 0)
+		{
+			advance(iter, 4);
+			if ((*iter)->getActive())
+			{
+				static_cast<CWall*>(*iter)->Destroy();
+				m_pTriggerSystem->setAllTriggerClear(true);
+			}
+		}
+	}
 }
 
 

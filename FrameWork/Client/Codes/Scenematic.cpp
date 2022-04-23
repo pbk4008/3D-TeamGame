@@ -58,7 +58,7 @@ void CScenematic::Set_Active(_bool bCheck)
 	for (auto& pCom : m_vecScenemaComponents)
 		pCom->setActive(bCheck);
 
-	OnOffPlayerWithUI(bCheck);
+	OnOffPlayerWithUI(!bCheck);
 }
 
 void CScenematic::End_Cinema()
