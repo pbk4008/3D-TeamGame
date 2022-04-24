@@ -129,6 +129,9 @@ Texture2D g_DissolveTex;
 Texture2D g_RimLightTexture;
 Texture2D g_AlphaNBTexture;
 
+Texture2D g_FinalDiffuseTex;
+Texture2D g_FinalAlphaTex;
+
 struct VS_IN
 {
 	half3 vPosition : POSITION;
@@ -297,6 +300,11 @@ PS_OUT_BLEND PS_MAIN_BLEND(PS_IN In)
 		Out.vColor += rim; /*Outline(g_RimLightTexture, DefaultSampler, In.vTexUV, Out.vColor);*/
 	}
 	
+	Out.vColor += DOF(Out.vColor, g_BlurTexture, DefaultSampler, In.vTexUV, depth.x);
+	
+	if (Out.vColor.a == 0)
+		discard;
+	
 	if (g_fog == true)
 	{
 		half4 worldpos;
@@ -315,12 +323,8 @@ PS_OUT_BLEND PS_MAIN_BLEND(PS_IN In)
 		{
 			fog = ExponentialHeightFog(worldpos,g_vCamPosition,g_fogstart,g_fogDenstiy,g_fogfalloff);
 		}
-		Out.vColor = lerp(Out.vColor, g_fogcolor, fog);
+		Out.vColor += lerp(Out.vColor, g_fogcolor, fog);
 	}
-	
-	
-	if (Out.vColor.a == 0)
-		discard;
 	
 	return Out;
 }
@@ -331,6 +335,17 @@ PS_OUT_BLEND PS_MAIN_ALPHA(PS_IN In)
 	
 	half4 color = g_AlphaTexture.Sample(DefaultSampler, In.vTexUV);
 	half4 color2 = g_AlphaNBTexture.Sample(DefaultSampler, In.vTexUV);
+	Out.vColor = color + color2;
+	
+	return Out;
+}
+
+PS_OUT_BLEND PS_MAIN_Final(PS_IN In)
+{
+	PS_OUT_BLEND Out = (PS_OUT_BLEND) 0;
+	
+	half4 color = g_FinalDiffuseTex.Sample(DefaultSampler, In.vTexUV);
+	half4 color2 = g_FinalAlphaTex.Sample(DefaultSampler, In.vTexUV);
 	Out.vColor = color + color2;
 	
 	return Out;
@@ -384,4 +399,14 @@ technique11 DefaultTechnique
 		PixelShader = compile ps_5_0 PS_MAIN_SHADOW();
 	}
 
+	pass Final // 4
+	{
+		SetRasterizerState(CullMode_None);
+		SetDepthStencilState(ZTestDiable, 0);
+		SetBlendState(BlendDisable, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+		
+		VertexShader = compile vs_5_0 VS_MAIN_VIEWPORT();
+		GeometryShader = NULL;
+		PixelShader = compile ps_5_0 PS_MAIN_Final();
+	}
 }

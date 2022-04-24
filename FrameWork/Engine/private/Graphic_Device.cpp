@@ -120,6 +120,7 @@ HRESULT CGraphic_Device::Ready_SwapChain(HWND hWnd, WINMODE eWinMode, _uint iWin
 	Safe_Release(pAdapter);
 	Safe_Release(pDevice);
 
+
 	return S_OK;
 }
 
@@ -173,7 +174,7 @@ HRESULT CGraphic_Device::Ready_DepthStencilRenderTargetView(_uint iWinCX, _uint 
 		return E_FAIL;	
 
 	Safe_Release(pDepthStencilTexture);
-
+	
 	return S_OK;
 }
 

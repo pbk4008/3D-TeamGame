@@ -21,6 +21,7 @@ public: HRESULT				PossProcessing(CTonemapping* tone,CTarget_Manager* pTargetMgr
 public: HRESULT				ComputeBrightPass(CTarget_Manager* pTargetMgr, const wstring& in, _float sizex, _float sizey);
 public: HRESULT				BloomPass(CTarget_Manager* pTargetMgr, const wstring& target, const wstring& base1, const wstring& base2, const wstring& base3, const wstring& base4, _float weight);
 public: HRESULT				BloomPass(CTarget_Manager* pTargetMgr, const wstring& target, const wstring& base, const wstring& base1, const wstring& base2 , _float weight, _bool check);
+public: HRESULT				BloomPass(CTarget_Manager* pTargetMgr, const wstring& target, const wstring& base, const wstring& base1);
 
 public: HRESULT				BlurPass(CTarget_Manager* pTargetMgr, const wstring& in, const wstring& middle, const wstring& out, _float sizex, _float sizey);
 public: HRESULT				GaussianBlurVertical(CTarget_Manager* pTargetMgr, const wstring& in, const wstring& bind, _float sizex, _float sizey);
@@ -33,7 +34,7 @@ private: CVIBuffer_RectViewPort*	m_pGRBuffer = nullptr;
 private: ID3D11Device*				m_pDevice = nullptr;
 private: ID3D11DeviceContext*		m_pDeviceContext = nullptr;
 
-private: _float						m_BrightThreshold = 0.8f; // 밝기 한계점 조절
+private: _float						m_BrightThreshold = 0.7f; // 밝기 한계점 조절
 private: _float						m_GaussMultipliter = 1.5f;
 private: _float						m_GaussMean = 0.0f;
 private: _float						m_GaussStdDev = 0.8f;

@@ -9,6 +9,7 @@ class CScenematic;
 class CMeteor;
 class CIndicator_Manager;
 class CDropBoxData;
+class CWall;
 class CStage1 final : public CLevel
 {
 private:
@@ -94,6 +95,8 @@ private:/*for Meteor*/
 private:
 	_int m_iPortalCount;
 	_bool m_bPortalClear = false;
+
+	std::vector<CWall*>	m_vecwall;
 };
 #endif
 

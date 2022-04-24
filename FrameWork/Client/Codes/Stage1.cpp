@@ -339,40 +339,41 @@ _int CStage1::Tick(_double TimeDelta)
 	//		return -1;
 	//}
 
-	if (g_pGameInstance->getkeyDown(DIK_NUMPAD1))
-	{
-		CMonster_EarthAberrant* pMonster = nullptr;
-		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Test", L"Proto_GameObject_Monster_EarthAberrant", &fPos, (CGameObject**)&pMonster)))
-			return -1;
-		pMonster->setActive(true);
-	}
-	
-	if (g_pGameInstance->getkeyDown(DIK_NUMPAD2))
-	{
-		CMonster_Bastion_Sword* pMonster = nullptr;
-		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Test", L"Proto_GameObject_Monster_Bastion_Sword", &fPos, (CGameObject**)&pMonster)))
-			return -1;
-		pMonster->setActive(true);
-	}
-	if (g_pGameInstance->getkeyDown(DIK_NUMPAD3))
-	{
-		CMonster_Bastion_Shooter* pMonster = nullptr;
-		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Test", L"Proto_GameObject_Monster_Bastion_Shooter", &fPos, (CGameObject**)&pMonster)))
-			return -1;
-		pMonster->setActive(true);
-	}
-
+	//if (g_pGameInstance->getkeyDown(DIK_NUMPAD1))
+	//{
+	//	CMonster_EarthAberrant* pMonster = nullptr;
+	//	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Test", L"Proto_GameObject_Monster_EarthAberrant", &fPos, (CGameObject**)&pMonster)))
+	//		return -1;
+	//	pMonster->setActive(true);
+	//}
+	//
+	//if (g_pGameInstance->getkeyDown(DIK_NUMPAD2))
+	//{
+	//	CMonster_Bastion_Sword* pMonster = nullptr;
+	//	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Test", L"Proto_GameObject_Monster_Bastion_Sword", &fPos, (CGameObject**)&pMonster)))
+	//		return -1;
+	//	pMonster->setActive(true);
+	//}
+	//if (g_pGameInstance->getkeyDown(DIK_NUMPAD3))
+	//{
+	//	CMonster_Bastion_Shooter* pMonster = nullptr;
+	//	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Test", L"Proto_GameObject_Monster_Bastion_Shooter", &fPos, (CGameObject**)&pMonster)))
+	//		return -1;
+	//	pMonster->setActive(true);
+	//}
 	//if (g_pGameInstance->getkeyDown(DIK_NUMPAD4))
 	//{
 	//	CMonster_Bastion_Healer* pMonster = nullptr;
 	//	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Test", L"Proto_GameObject_Monster_Bastion_Healer", &fPos, (CGameObject**)&pMonster)))
 	//		return -1;
+	//	pMonster->setActive(true);
 	//}
 	//if (g_pGameInstance->getkeyDown(DIK_NUMPAD5))
 	//{
 	//	CMonster_Bastion_2HSword* pMonster = nullptr;
 	//	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Test", L"Proto_GameObject_Monster_Bastion_2HSword", &fPos, (CGameObject**)&pMonster)))
 	//		return -1;
+	//	pMonster->setActive(true);
 	//}
 	//if (g_pGameInstance->getkeyDown(DIK_NUMPAD6))
 	//{
@@ -573,21 +574,25 @@ HRESULT CStage1::Ready_Player(const _tchar* LayerTag)
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Camera", L"Proto_GameObject_Camera_Silvermane")))
 		return E_FAIL;
 
-	//WALLDESC desc;
-	//ZeroMemory(&desc, sizeof(WALLDESC));
-	//desc.pos = _float4(-61.f, 18.f, 194.f, 1.f);
-	//desc.scale = _float2(6.f, 10.f);
-	//desc.radian = 0.f;
-	//desc.color = _float4(1.f, 0.f, 0.f, 1.f);
-	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Wall", L"Proto_GameObject_Wall",&desc))) return E_FAIL;
+	WALLDESC desc;
+	ZeroMemory(&desc, sizeof(WALLDESC));
+	desc.pos = _float4(-61.f, 18.f, 194.f, 1.f);
+	desc.scale = _float2(6.f, 10.f);
+	desc.radian = 0.f;
+	desc.color = _float4(1.f, 0.f, 0.f, 1.f);
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Wall1", L"Proto_GameObject_Wall",&desc))) return E_FAIL;
+	CGameObject* pobj = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Layer_Wall1")->back();
+	m_vecwall.emplace_back(static_cast<CWall*>(pobj));
 
-	//ZeroMemory(&desc, sizeof(WALLDESC));
-	//desc.pos = _float4(-91.f, 25.f, 218.f, 1.f);
-	//desc.scale = _float2(10.f, 24.f);
-	//desc.radian = 90.f;
-	//desc.color = _float4(0.f, 1.f, 1.f, 1.f);
-	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Wall", L"Proto_GameObject_Wall", &desc))) return E_FAIL;
-	
+	ZeroMemory(&desc, sizeof(WALLDESC));
+	desc.pos = _float4(-91.f, 25.f, 218.f, 1.f);
+	desc.scale = _float2(10.f, 24.f);
+	desc.radian = 90.f;
+	desc.color = _float4(0.f, 1.f, 1.f, 1.f);
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Wall2", L"Proto_GameObject_Wall", &desc))) return E_FAIL;
+	pobj = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Layer_Wall2")->back();
+	m_vecwall.emplace_back(static_cast<CWall*>(pobj));
+
 	//Test
 	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Test", L"Proto_GameObject_TestObject")))
 	//	return E_FAIL;

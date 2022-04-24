@@ -41,14 +41,6 @@ HRESULT CWall::NativeConstruct(const _uint _iSceneID, void* _pArg)
 
 _int CWall::Tick(_double _dDeltaTime)
 {
-	// 디졸브 테스트용 버튼 
-	if (g_pGameInstance->getkeyDown(DIK_NUMPAD5))
-		m_bdissolve = true;
-	if (g_pGameInstance->getkeyDown(DIK_NUMPAD6))
-	{
-		m_lifetime = 0.f;
-		m_bdissolve = true;
-	}
 
 	return _int();
 }
@@ -85,6 +77,7 @@ HRESULT CWall::Render()
 	view = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_VIEW));
 	proj = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_PROJECTION));
 	
+	if (FAILED(m_pbuffer->SetUp_ValueOnShader("g_bdissolve", &m_bdissolve, sizeof(_bool)))) MSGBOX("Failed to Apply dissolvetime");
 	if (FAILED(m_pbuffer->SetUp_ValueOnShader("g_WorldMatrix", &world, sizeof(_float4x4))))	MSGBOX("Wall ConstBuffer Worldmatrix Not Apply");
 	if (FAILED(m_pbuffer->SetUp_ValueOnShader("g_ViewMatrix", &view, sizeof(_float4x4))))	MSGBOX("Wall ConstBuffer Viewmatrix Not Apply");
 	if (FAILED(m_pbuffer->SetUp_ValueOnShader("g_ProjMatrix", &proj, sizeof(_float4x4))))	MSGBOX("Wall ConstBuffer Projmatrix Not Apply");
@@ -95,6 +88,12 @@ HRESULT CWall::Render()
 	if (FAILED(m_pbuffer->Render(1))) MSGBOX("Failed To Wall Rendering");
 
 	return S_OK;
+}
+
+void CWall::set_DissolveRest()
+{
+	m_bdissolve = false;
+	m_lifetime = 0.f;
 }
 
 HRESULT CWall::Ready_Component()
@@ -120,7 +119,6 @@ HRESULT CWall::DissolveOn(_float dissolveSpeed)
 		{
 			m_lifetime = 1.f;
 		}
-		if (FAILED(m_pbuffer->SetUp_ValueOnShader("g_bdissolve", &m_bdissolve, sizeof(_bool)))) MSGBOX("Failed to Apply dissolvetime");
 		if (FAILED(m_pbuffer->SetUp_ValueOnShader("g_dissolvetime", &m_lifetime, sizeof(_float)))) MSGBOX("Failed to Apply dissolvetime");
 		if (FAILED(m_pbuffer->SetUp_TextureOnShader("g_DissolveTex", m_dissolveTex, 0))) MSGBOX("Failed to Apply dissolveTex");
 	}

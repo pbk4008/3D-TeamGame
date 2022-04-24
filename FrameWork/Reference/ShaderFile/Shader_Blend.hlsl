@@ -73,7 +73,6 @@ PS_OUT PS_MAIN_BLEND(PS_IN In)
 	half4 diffuse = g_DiffuseTexture.Sample(DefaultSampler, In.vTexUV);
 	half4 emission = g_EmissionTexture.Sample(DefaultSampler, In.vTexUV);
 	half4 specular = g_SpecularTexture.Sample(DefaultSampler, In.vTexUV);
-	//half4 rimlight = g_RimLightTexture.Sample(DefaultSampler, In.vTexUV);
 	
 	half4 blur2 = g_Blur2Texture.Sample(DefaultSampler, In.vTexUV);
 	half4 blur4 = g_Blur4Texture.Sample(DefaultSampler, In.vTexUV);

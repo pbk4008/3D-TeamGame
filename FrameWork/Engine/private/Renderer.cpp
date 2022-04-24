@@ -188,7 +188,7 @@ HRESULT CRenderer::Draw_RenderGroup()
 
 			if (FAILED(m_pHDR->Render_HDRBase(m_pTargetMgr, m_bRenderbtn[SHADOW]))) MSGBOX("Failed To Rendering HDRBasePass");
 
-			if (FAILED(m_pLuminance->DownSampling(m_pTargetMgr)))MSGBOX("Failed To Rendering DownSamplingPass");
+			//if (FAILED(m_pLuminance->DownSampling(m_pTargetMgr)))MSGBOX("Failed To Rendering DownSamplingPass");
 
 			if (FAILED(m_pPostProcess->PossProcessing(m_pTonemapping, m_pTargetMgr, m_bRenderbtn[HDR]))) MSGBOX("Failed To Rendering PostProcessPass");
 
@@ -252,7 +252,8 @@ HRESULT CRenderer::Draw_RenderGroup()
 			//if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("Target_Horizontal16")))) return E_FAIL;
 
 			if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("Target_Blend")))) return E_FAIL;
-			if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("Target_Final")))) return E_FAIL;
+			//if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("Target_Final")))) return E_FAIL;
+			if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("Target_Bloom")))) return E_FAIL;
 			if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("Target_Alpha")))) return E_FAIL;
 			if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("Target_AlphaBlend")))) return E_FAIL;
 			if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("Target_BlurShadow")))) return E_FAIL;
@@ -547,6 +548,7 @@ HRESULT CRenderer::Render_Final()
 	if (FAILED(m_pVIBuffer->SetUp_TextureOnShader("g_DiffuseTexture", m_pTargetMgr->Get_SRV(TEXT("Target_Blend"))))) MSGBOX("Render Final DiffuseTeuxtre Not Apply");
 	if (FAILED(m_pVIBuffer->SetUp_TextureOnShader("g_DepthTexture", m_pTargetMgr->Get_SRV(TEXT("Target_Depth"))))) MSGBOX("Render Final DepthTexture Not Apply");
 	if (FAILED(m_pVIBuffer->SetUp_TextureOnShader("g_RimLightTexture", m_pTargetMgr->Get_SRV(TEXT("Target_RimLight"))))) MSGBOX("Render Final DepthTexture Not Apply");
+	if (FAILED(m_pVIBuffer->SetUp_TextureOnShader("g_BlurTexture", m_pTargetMgr->Get_SRV(TEXT("Target_HZ4"))))) MSGBOX("Render Final DepthTexture Not Apply");
 
 	if (m_bRenderbtn[VELOCITYBLUR] == true)
 	{
@@ -593,7 +595,9 @@ HRESULT CRenderer::Render_Final()
 	if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_RadialCnt", &m_RadialCnt, sizeof(_int)))) MSGBOX("Render Final Value RaidalCnt Not Apply");
 	if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_MotionblurCnt", &cnt, sizeof(_int)))) MSGBOX("Render Final Value RaidalCnt Not Apply");
 	if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_thick", &thick, sizeof(_float)))) MSGBOX("Render Final Value thick Not Apply");
-	
+
+	_float4 dofparma = _float4(0.1f, 0.1f, 20.f, 30.f);
+	if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_dofparam", &dofparma, sizeof(_float4)))) MSGBOX("Render Final Value dofparma Not Apply");
 	if (FAILED(m_pVIBuffer->Render(1))) MSGBOX("Final Rendering Failed");
 
 	if (m_bRenderbtn[PARTICLE] == true)

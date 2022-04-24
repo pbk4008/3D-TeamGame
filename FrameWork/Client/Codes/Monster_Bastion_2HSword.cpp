@@ -206,19 +206,25 @@ HRESULT CMonster_Bastion_2HSword::Render()
 
 	if (FAILED(m_pModel->SetUp_ValueOnShader("g_bdissolve", &m_bdissolve, sizeof(_bool)))) MSGBOX("Failed to Apply dissolvetime");
 
-	SCB desc;
-	ZeroMemory(&desc, sizeof(SCB));
 
 	wstring wstrCamTag = g_pGameInstance->Get_BaseCameraTag();
-	CActor::BindConstantBuffer(wstrCamTag, &desc);
 	for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
 	{
+		SCB desc;
+		ZeroMemory(&desc, sizeof(SCB));
+
 		switch (i)
 		{
 		case 2:
+			CActor::BindConstantBuffer(wstrCamTag, &desc);
 			if (FAILED(m_pModel->Render(i, 1))) MSGBOX("Failed To Rendering Shooter");
 			break;
 		default:
+			desc.metalic = 0.4f;
+			desc.roughness = -0.1f;
+			desc.color = _float4(0.28f, 0.45f, 0.76f, 1.f);
+			desc.empower = 0.7f;
+			CActor::BindConstantBuffer(wstrCamTag, &desc);
 			if (FAILED(m_pModel->Render(i, 0))) MSGBOX("Failed To Rendering Shooter");
 			break;
 		}

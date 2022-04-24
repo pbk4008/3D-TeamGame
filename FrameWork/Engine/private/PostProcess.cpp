@@ -54,14 +54,14 @@ HRESULT CPostProcess::Shadowblur(CTarget_Manager* pTargetMgr, _bool shadow, _flo
 
 HRESULT CPostProcess::PossProcessing(CTonemapping* tone,CTarget_Manager* pTargetMgr, _bool hdr)
 {
-	if (FAILED(ComputeBrightPass(pTargetMgr, L"Target_HDRDiffuse", 640.f, 360.f))) return E_FAIL;
+	//if (FAILED(ComputeBrightPass(pTargetMgr, L"Target_HDRDiffuse", 640.f, 360.f))) return E_FAIL;
 
-	if (FAILED(BlurPass(pTargetMgr, L"Target_BrightPass", L"Target_VT2", L"Target_HZ2", 640, 360))) return E_FAIL;
-	if (FAILED(BlurPass(pTargetMgr, L"Target_HZ2", L"Target_VT4", L"Target_HZ4", 320, 180))) return E_FAIL;
-	if (FAILED(BlurPass(pTargetMgr, L"Target_HZ4", L"Target_VT8", L"Target_HZ8", 160, 90))) return E_FAIL;
-	if (FAILED(BlurPass(pTargetMgr, L"Target_HZ8", L"Target_VT16", L"Target_HZ16", 64, 64))) return E_FAIL;
+	//if (FAILED(BlurPass(pTargetMgr, L"Target_BrightPass", L"Target_VT2", L"Target_HZ2", 640, 360))) return E_FAIL;
+	//if (FAILED(BlurPass(pTargetMgr, L"Target_HZ2", L"Target_VT4", L"Target_HZ4", 320, 180))) return E_FAIL;
+	//if (FAILED(BlurPass(pTargetMgr, L"Target_HZ4", L"Target_VT8", L"Target_HZ8", 160, 90))) return E_FAIL;
+	//if (FAILED(BlurPass(pTargetMgr, L"Target_HZ8", L"Target_VT16", L"Target_HZ16", 64, 64))) return E_FAIL;
 
-	if (FAILED(BloomPass(pTargetMgr,L"Target_Bloom", L"Target_HZ2", L"Target_HZ4", L"Target_HZ8", L"Target_HZ16",0.5f))) return E_FAIL;
+	//if (FAILED(BloomPass(pTargetMgr,L"Target_Bloom", L"Target_HZ2", L"Target_HZ4", L"Target_HZ8", L"Target_HZ16",0.5f))) return E_FAIL;
 
 	if (FAILED(tone->ToneMapping(pTargetMgr))) return E_FAIL;
 
@@ -71,6 +71,11 @@ HRESULT CPostProcess::PossProcessing(CTonemapping* tone,CTarget_Manager* pTarget
 	if (FAILED(BlurPass(pTargetMgr, L"Target_Horizontal8", L"Target_Vertical16", L"Target_Horizontal16", 64, 64))) return E_FAIL;
 
 	if (FAILED(tone->Blend_FinalPass(pTargetMgr, hdr))) return E_FAIL;
+
+	if (FAILED(BlurPass(pTargetMgr, L"Target_Blend", L"Target_VT2", L"Target_HZ2", 640, 360))) return E_FAIL;
+	if (FAILED(BlurPass(pTargetMgr, L"Target_HZ2", L"Target_VT4", L"Target_HZ4", 320, 180))) return E_FAIL;
+
+	if (FAILED(BloomPass(pTargetMgr, L"Target_Bloom", L"Target_HZ2", L"Target_HZ4"))) return E_FAIL;
 
 	return S_OK;
 }
@@ -144,6 +149,20 @@ HRESULT CPostProcess::BloomPass(CTarget_Manager* pTargetMgr, const wstring& targ
 		if (FAILED(m_pVIBuffer->SetUp_TextureOnShader("g_WeightTexture", pTargetMgr->Get_SRV(L"Target_AlphaWeight"))))	return E_FAIL;
 		m_pVIBuffer->Render(5);
 	}
+
+	if (FAILED(pTargetMgr->End_MRTNotClear(m_pDeviceContext))) return E_FAIL;
+
+	return S_OK;
+}
+
+HRESULT CPostProcess::BloomPass(CTarget_Manager* pTargetMgr, const wstring& target, const wstring& base, const wstring& base1)
+{
+	if (FAILED(pTargetMgr->Begin_MRT(m_pDeviceContext, target.c_str())))	return E_FAIL;
+
+	if (FAILED(m_pVIBuffer->SetUp_TextureOnShader("g_BaseBlur2Texture", pTargetMgr->Get_SRV(base.c_str()))))	return E_FAIL;
+	if (FAILED(m_pVIBuffer->SetUp_TextureOnShader("g_BaseBlur4Texture", pTargetMgr->Get_SRV(base1.c_str()))))	return E_FAIL;
+
+	m_pVIBuffer->Render(6);
 
 	if (FAILED(pTargetMgr->End_MRTNotClear(m_pDeviceContext))) return E_FAIL;
 

@@ -219,15 +219,18 @@ HRESULT CMonster_Bastion_Healer::Render()
 		{
 		case 2:
 			CActor::BindConstantBuffer(wstrCamTag, &desc);
-			if (FAILED(m_pModel->Render(i, 2))) MSGBOX("Failed To Rendering Healer");
+			if (FAILED(m_pModel->Render(i, 1))) MSGBOX("Failed To Rendering Healer");
 			break;
 		default:
+			desc.metalic = 0.4f;
+			desc.roughness = -0.1f;
+			desc.color = _float4(0.28f, 1.f, 0.1f, 1.f);
+			desc.empower = 0.7f;
 			CActor::BindConstantBuffer(wstrCamTag, &desc);
 			if (FAILED(m_pModel->Render(i, 0))) MSGBOX("Failed To Rendering Healer");
 			break;
 		}
 	}
-
 
 #ifdef _DEBUG
 	//Render_Debug();

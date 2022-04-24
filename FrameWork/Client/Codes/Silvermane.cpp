@@ -420,7 +420,7 @@ HRESULT CSilvermane::Render()
 		if (i == 0)
 		{
 			desc.color = m_color;
-			desc.empower = 0.8f;
+			desc.empower = 0.5f;
 			CActor::BindConstantBuffer(wstrCamTag, &desc, &rimdesc);
 		}
 		else
@@ -1739,14 +1739,13 @@ HRESULT CSilvermane::Create_MotionTrail(_int idex, _bool runcheck, _bool throwch
 		_float uvdvid = 0.f;
 		if (throwcheck == true)
 			uvdvid = 0.7f;
-		else if(runcheck == true)
-			uvdvid = 0.9f;
 		else
 		{
-			if (idex <= 10)
-				uvdvid = idex * 0.1f;
-			else
-				uvdvid = (idex - 10) * 0.1f;
+			uvdvid = 0.9f;
+			//if (idex <= 10)
+			//	uvdvid = idex * 0.1f;
+			//else
+			//	uvdvid = (idex - 10) * 0.1f;
 		}
 
 		static_cast<CMotionTrail*>(m_vecMotionTrail[idex])->Set_Info(smatWorld

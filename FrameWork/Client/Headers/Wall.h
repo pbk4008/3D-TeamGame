@@ -20,6 +20,9 @@ public: virtual _int		Tick(_double _dDeltaTime) override;
 public: virtual _int		LateTick(_double _dDeltaTime) override;
 public: virtual HRESULT		Render() override;
 
+public: void set_dissovle(_bool check) { m_bdissolve = check; }
+public: void set_DissolveRest();
+
 private: HRESULT Ready_Component();
 private: HRESULT DissolveOn(_float dissolveSpeed = 0.5f);
 
