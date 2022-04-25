@@ -93,6 +93,7 @@
 #include "JumpTrigger.h"
 #include "JumpBox.h"
 #include "BoxBridge.h"
+#include "CapsuleObstacle.h"
 #include "DropBox.h"
 #include "DropObject.h"
 #include "TrailEffect_Normal.h"
@@ -1315,6 +1316,11 @@ HRESULT CLoader::Ready_Stage2()
 
 HRESULT CLoader::Ready_Stage3()
 {
+	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_CapsuleObstacle", CCapsuleObstacle::Create(m_pDevice, m_pDeviceContext))))
+	{
+		MSGBOX(L"캡슐 장애물 프로토타입 생성 실패")
+			return E_FAIL;
+	}
 
 	return S_OK;
 }
