@@ -74,28 +74,27 @@ HRESULT CRendererAssit::Setup_RenderTarget()
 		return E_FAIL;
 	if (FAILED(m_pTargetMgr->Add_RenderTarget(m_pDevice, m_pDeviceContext, TEXT("Target_Specular"), widht, height, DXGI_FORMAT_R16G16B16A16_FLOAT, _float4(0.0f, 0.0f, 0.0f, 1.f), CRenderTarget::RTT::LIGHTING)))
 		return E_FAIL;
-	if (FAILED(m_pTargetMgr->Add_RenderTarget(m_pDevice, m_pDeviceContext, TEXT("Target_PointShadow"), widht, height, DXGI_FORMAT_R16G16B16A16_FLOAT, _float4(0.0f, 0.0f, 0.0f, 0.f), CRenderTarget::RTT::LIGHTING)))
-		return E_FAIL;
+
+	//if (FAILED(m_pTargetMgr->Add_RenderTarget(m_pDevice, m_pDeviceContext, TEXT("Target_PointShadow"), widht, height, DXGI_FORMAT_R16G16B16A16_FLOAT, _float4(0.0f, 0.0f, 0.0f, 0.f), CRenderTarget::RTT::LIGHTING)))
+	//	return E_FAIL;
 
 	//--------//
-	if (FAILED(m_pTargetMgr->Add_RenderTarget(m_pDevice, m_pDeviceContext, TEXT("Target_LumGray"), 243, 243, DXGI_FORMAT_R16G16B16A16_FLOAT, _float4(0.f, 0.f, 0.f, 0.f), CRenderTarget::RTT::Luminance)))
-		return E_FAIL;
-	if (FAILED(m_pTargetMgr->Add_RenderTarget(m_pDevice, m_pDeviceContext, TEXT("Target_Lum1"), 81, 81, DXGI_FORMAT_R16G16B16A16_FLOAT, _float4(0.f, 0.f, 0.f, 0.f), CRenderTarget::RTT::Luminance)))
-		return E_FAIL;
-	if (FAILED(m_pTargetMgr->Add_RenderTarget(m_pDevice, m_pDeviceContext, TEXT("Target_Lum2"), 27, 27, DXGI_FORMAT_R16G16B16A16_FLOAT, _float4(0.f, 0.f, 0.f, 0.f), CRenderTarget::RTT::Luminance)))
-		return E_FAIL;
-	if (FAILED(m_pTargetMgr->Add_RenderTarget(m_pDevice, m_pDeviceContext, TEXT("Target_Lum3"), 9, 9, DXGI_FORMAT_R16G16B16A16_FLOAT, _float4(0.f, 0.f, 0.f, 0.f), CRenderTarget::RTT::Luminance)))
-		return E_FAIL;
-	if (FAILED(m_pTargetMgr->Add_RenderTarget(m_pDevice, m_pDeviceContext, TEXT("Target_Lum4"), 3, 3, DXGI_FORMAT_R16G16B16A16_FLOAT, _float4(0.f, 0.f, 0.f, 0.f), CRenderTarget::RTT::Luminance)))
-		return E_FAIL;
-	if (FAILED(m_pTargetMgr->Add_RenderTarget(m_pDevice, m_pDeviceContext, TEXT("Target_Lum5"), 1, 1, DXGI_FORMAT_R16G16B16A16_FLOAT, _float4(0.f, 0.f, 0.f, 0.f), CRenderTarget::RTT::Luminance)))
-		return E_FAIL;
+	//if (FAILED(m_pTargetMgr->Add_RenderTarget(m_pDevice, m_pDeviceContext, TEXT("Target_LumGray"), 243, 243, DXGI_FORMAT_R16G16B16A16_FLOAT, _float4(0.f, 0.f, 0.f, 0.f), CRenderTarget::RTT::Luminance)))
+	//	return E_FAIL;
+	//if (FAILED(m_pTargetMgr->Add_RenderTarget(m_pDevice, m_pDeviceContext, TEXT("Target_Lum1"), 81, 81, DXGI_FORMAT_R16G16B16A16_FLOAT, _float4(0.f, 0.f, 0.f, 0.f), CRenderTarget::RTT::Luminance)))
+	//	return E_FAIL;
+	//if (FAILED(m_pTargetMgr->Add_RenderTarget(m_pDevice, m_pDeviceContext, TEXT("Target_Lum2"), 27, 27, DXGI_FORMAT_R16G16B16A16_FLOAT, _float4(0.f, 0.f, 0.f, 0.f), CRenderTarget::RTT::Luminance)))
+	//	return E_FAIL;
+	//if (FAILED(m_pTargetMgr->Add_RenderTarget(m_pDevice, m_pDeviceContext, TEXT("Target_Lum3"), 9, 9, DXGI_FORMAT_R16G16B16A16_FLOAT, _float4(0.f, 0.f, 0.f, 0.f), CRenderTarget::RTT::Luminance)))
+	//	return E_FAIL;
+	//if (FAILED(m_pTargetMgr->Add_RenderTarget(m_pDevice, m_pDeviceContext, TEXT("Target_Lum4"), 3, 3, DXGI_FORMAT_R16G16B16A16_FLOAT, _float4(0.f, 0.f, 0.f, 0.f), CRenderTarget::RTT::Luminance)))
+	//	return E_FAIL;
+	//if (FAILED(m_pTargetMgr->Add_RenderTarget(m_pDevice, m_pDeviceContext, TEXT("Target_Lum5"), 1, 1, DXGI_FORMAT_R16G16B16A16_FLOAT, _float4(0.f, 0.f, 0.f, 0.f), CRenderTarget::RTT::Luminance)))
+	//	return E_FAIL;
 
-	if (FAILED(m_pTargetMgr->Add_RenderTarget(m_pDevice, m_pDeviceContext, TEXT("Target_BrightPass"), 640, 360, DXGI_FORMAT_R16G16B16A16_FLOAT, _float4(0.f, 0.f, 0.f, 0.f), CRenderTarget::RTT::Luminance)))
-		return E_FAIL;
+	//if (FAILED(m_pTargetMgr->Add_RenderTarget(m_pDevice, m_pDeviceContext, TEXT("Target_BrightPass"), 640, 360, DXGI_FORMAT_R16G16B16A16_FLOAT, _float4(0.f, 0.f, 0.f, 0.f), CRenderTarget::RTT::Luminance)))
+	//	return E_FAIL;
 
-	if (FAILED(m_pTargetMgr->Add_RenderTarget(m_pDevice, m_pDeviceContext, TEXT("Target_Bloom"), widht, height, DXGI_FORMAT_R16G16B16A16_FLOAT, _float4(0.f, 0.f, 0.f, 0.f), CRenderTarget::RTT::Luminance)))
-		return E_FAIL;
 
 	if (FAILED(m_pTargetMgr->Add_RenderTarget(m_pDevice, m_pDeviceContext, TEXT("Target_VT2"), 640, 360, DXGI_FORMAT_R16G16B16A16_FLOAT, _float4(0.f, 0.f, 0.f, 0.f), CRenderTarget::RTT::Luminance)))
 		return E_FAIL;
@@ -107,15 +106,18 @@ HRESULT CRendererAssit::Setup_RenderTarget()
 	if (FAILED(m_pTargetMgr->Add_RenderTarget(m_pDevice, m_pDeviceContext, TEXT("Target_HZ4"), 320, 180, DXGI_FORMAT_R16G16B16A16_FLOAT, _float4(0.f, 0.f, 0.f, 0.f), CRenderTarget::RTT::Luminance)))
 		return E_FAIL;
 
-	if (FAILED(m_pTargetMgr->Add_RenderTarget(m_pDevice, m_pDeviceContext, TEXT("Target_VT8"), 160, 90, DXGI_FORMAT_R16G16B16A16_FLOAT, _float4(0.f, 0.f, 0.f, 0.f), CRenderTarget::RTT::Luminance)))
-		return E_FAIL;
-	if (FAILED(m_pTargetMgr->Add_RenderTarget(m_pDevice, m_pDeviceContext, TEXT("Target_HZ8"), 160, 90, DXGI_FORMAT_R16G16B16A16_FLOAT, _float4(0.f, 0.f, 0.f, 0.f), CRenderTarget::RTT::Luminance)))
+	if (FAILED(m_pTargetMgr->Add_RenderTarget(m_pDevice, m_pDeviceContext, TEXT("Target_Bloom"), widht, height, DXGI_FORMAT_R16G16B16A16_FLOAT, _float4(0.f, 0.f, 0.f, 0.f), CRenderTarget::RTT::Luminance)))
 		return E_FAIL;
 
-	if (FAILED(m_pTargetMgr->Add_RenderTarget(m_pDevice, m_pDeviceContext, TEXT("Target_VT16"), 64, 64, DXGI_FORMAT_R16G16B16A16_FLOAT, _float4(0.f, 0.f, 0.f, 0.f), CRenderTarget::RTT::Luminance)))
-		return E_FAIL;
-	if (FAILED(m_pTargetMgr->Add_RenderTarget(m_pDevice, m_pDeviceContext, TEXT("Target_HZ16"), 64, 64, DXGI_FORMAT_R16G16B16A16_FLOAT, _float4(0.f, 0.f, 0.f, 0.f), CRenderTarget::RTT::Luminance)))
-		return E_FAIL;
+	//if (FAILED(m_pTargetMgr->Add_RenderTarget(m_pDevice, m_pDeviceContext, TEXT("Target_VT8"), 160, 90, DXGI_FORMAT_R16G16B16A16_FLOAT, _float4(0.f, 0.f, 0.f, 0.f), CRenderTarget::RTT::Luminance)))
+	//	return E_FAIL;
+	//if (FAILED(m_pTargetMgr->Add_RenderTarget(m_pDevice, m_pDeviceContext, TEXT("Target_HZ8"), 160, 90, DXGI_FORMAT_R16G16B16A16_FLOAT, _float4(0.f, 0.f, 0.f, 0.f), CRenderTarget::RTT::Luminance)))
+	//	return E_FAIL;
+
+	//if (FAILED(m_pTargetMgr->Add_RenderTarget(m_pDevice, m_pDeviceContext, TEXT("Target_VT16"), 64, 64, DXGI_FORMAT_R16G16B16A16_FLOAT, _float4(0.f, 0.f, 0.f, 0.f), CRenderTarget::RTT::Luminance)))
+	//	return E_FAIL;
+	//if (FAILED(m_pTargetMgr->Add_RenderTarget(m_pDevice, m_pDeviceContext, TEXT("Target_HZ16"), 64, 64, DXGI_FORMAT_R16G16B16A16_FLOAT, _float4(0.f, 0.f, 0.f, 0.f), CRenderTarget::RTT::Luminance)))
+	//	return E_FAIL;
 
 	//--------//
 
@@ -148,8 +150,11 @@ HRESULT CRendererAssit::Setup_RenderTarget()
 	//--------------------------//
 	if (FAILED(m_pTargetMgr->Add_RenderTarget(m_pDevice, m_pDeviceContext, TEXT("Target_Blend"), (_uint)ViewportDesc.Width, (_uint)ViewportDesc.Height, DXGI_FORMAT_R16G16B16A16_FLOAT, _float4(0.0f, 0.0f, 0.0f, 0.f), CRenderTarget::RTT::LIGHTING)))
 		return E_FAIL;
-	if (FAILED(m_pTargetMgr->Add_RenderTarget(m_pDevice, m_pDeviceContext, TEXT("Target_Final"), (_uint)ViewportDesc.Width, (_uint)ViewportDesc.Height, DXGI_FORMAT_R16G16B16A16_FLOAT, _float4(0.0f, 0.0f, 0.0f, 0.f), CRenderTarget::RTT::LIGHTING)))
-		return E_FAIL;
+
+	//if (FAILED(m_pTargetMgr->Add_RenderTarget(m_pDevice, m_pDeviceContext, TEXT("Target_Blend2"), (_uint)ViewportDesc.Width, (_uint)ViewportDesc.Height, DXGI_FORMAT_R16G16B16A16_FLOAT, _float4(0.0f, 0.0f, 0.0f, 0.f), CRenderTarget::RTT::LIGHTING)))
+	//	return E_FAIL;
+	//if (FAILED(m_pTargetMgr->Add_RenderTarget(m_pDevice, m_pDeviceContext, TEXT("Target_Final"), (_uint)ViewportDesc.Width, (_uint)ViewportDesc.Height, DXGI_FORMAT_R16G16B16A16_FLOAT, _float4(0.0f, 0.0f, 0.0f, 0.f), CRenderTarget::RTT::LIGHTING)))
+	//	return E_FAIL;
 
 	if (FAILED(m_pTargetMgr->Add_RenderTarget(m_pDevice, m_pDeviceContext, TEXT("Target_ToneMapDiffuse"), widht, height, DXGI_FORMAT_R16G16B16A16_FLOAT, _float4(0.f, 0.f, 0.f, 0.f), CRenderTarget::RTT::Luminance)))
 		return E_FAIL;
@@ -222,8 +227,8 @@ HRESULT CRendererAssit::Setup_RenderTarget()
 		return E_FAIL;
 	if (FAILED(m_pTargetMgr->Add_MRT(TEXT("MRT_LightAcc"), TEXT("Target_Specular"))))
 		return E_FAIL;
-	if (FAILED(m_pTargetMgr->Add_MRT(TEXT("MRT_LightAcc"), TEXT("Target_PointShadow"))))
-		return E_FAIL;
+	/*if (FAILED(m_pTargetMgr->Add_MRT(TEXT("MRT_LightAcc"), TEXT("Target_PointShadow"))))
+		return E_FAIL;*/
 
 	// ¸ÖÆ¼ Å¸°Ù HDRBASE
 	if (FAILED(m_pTargetMgr->Add_MRT(TEXT("MRT_HDRBASE"), TEXT("Target_HDRDiffuse"))))
@@ -231,24 +236,24 @@ HRESULT CRendererAssit::Setup_RenderTarget()
 	if (FAILED(m_pTargetMgr->Add_MRT(TEXT("MRT_HDRBASE"), TEXT("Target_HDRSpecular"))))
 		return E_FAIL;
 
-	if (FAILED(m_pTargetMgr->Add_MRT(TEXT("MRT_LumGray"), TEXT("Target_LumGray"))))
-		return E_FAIL;
-	if (FAILED(m_pTargetMgr->Add_MRT(TEXT("MRT_Lum1"), TEXT("Target_Lum1"))))
-		return E_FAIL;
-	if (FAILED(m_pTargetMgr->Add_MRT(TEXT("MRT_Lum2"), TEXT("Target_Lum2"))))
-		return E_FAIL;
-	if (FAILED(m_pTargetMgr->Add_MRT(TEXT("MRT_Lum3"), TEXT("Target_Lum3"))))
-		return E_FAIL;
-	if (FAILED(m_pTargetMgr->Add_MRT(TEXT("MRT_Lum4"), TEXT("Target_Lum4"))))
-		return E_FAIL;
-	if (FAILED(m_pTargetMgr->Add_MRT(TEXT("MRT_Lum5"), TEXT("Target_Lum5"))))
-		return E_FAIL;
+	//if (FAILED(m_pTargetMgr->Add_MRT(TEXT("MRT_LumGray"), TEXT("Target_LumGray"))))
+	//	return E_FAIL;
+	//if (FAILED(m_pTargetMgr->Add_MRT(TEXT("MRT_Lum1"), TEXT("Target_Lum1"))))
+	//	return E_FAIL;
+	//if (FAILED(m_pTargetMgr->Add_MRT(TEXT("MRT_Lum2"), TEXT("Target_Lum2"))))
+	//	return E_FAIL;
+	//if (FAILED(m_pTargetMgr->Add_MRT(TEXT("MRT_Lum3"), TEXT("Target_Lum3"))))
+	//	return E_FAIL;
+	//if (FAILED(m_pTargetMgr->Add_MRT(TEXT("MRT_Lum4"), TEXT("Target_Lum4"))))
+	//	return E_FAIL;
+	//if (FAILED(m_pTargetMgr->Add_MRT(TEXT("MRT_Lum5"), TEXT("Target_Lum5"))))
+	//	return E_FAIL;
 
-	if (FAILED(m_pTargetMgr->Add_MRT(TEXT("MRT_BrightPass"), TEXT("Target_BrightPass"))))
-		return E_FAIL;
+	//if (FAILED(m_pTargetMgr->Add_MRT(TEXT("MRT_BrightPass"), TEXT("Target_BrightPass"))))
+	//	return E_FAIL;
 
-	if (FAILED(m_pTargetMgr->Add_MRT(TEXT("Target_Bloom"), TEXT("Target_Bloom"))))
-		return E_FAIL;
+	//if (FAILED(m_pTargetMgr->Add_MRT(TEXT("Target_Bloom"), TEXT("Target_Bloom"))))
+	//	return E_FAIL;
 
 	if (FAILED(m_pTargetMgr->Add_MRT(TEXT("MRT_ToneMapping"), TEXT("Target_ToneMapDiffuse"))))
 		return E_FAIL;
@@ -261,11 +266,14 @@ HRESULT CRendererAssit::Setup_RenderTarget()
 	if (FAILED(m_pTargetMgr->Add_MRT(TEXT("Target_VT4"), TEXT("Target_VT4"))))	return E_FAIL;
 	if (FAILED(m_pTargetMgr->Add_MRT(TEXT("Target_HZ4"), TEXT("Target_HZ4"))))	return E_FAIL;
 
-	if (FAILED(m_pTargetMgr->Add_MRT(TEXT("Target_VT8"), TEXT("Target_VT8"))))	return E_FAIL;
-	if (FAILED(m_pTargetMgr->Add_MRT(TEXT("Target_HZ8"), TEXT("Target_HZ8"))))	return E_FAIL;
+	if (FAILED(m_pTargetMgr->Add_MRT(TEXT("Target_Bloom"), TEXT("Target_Bloom"))))
+		return E_FAIL;
 
-	if (FAILED(m_pTargetMgr->Add_MRT(TEXT("Target_VT16"), TEXT("Target_VT16"))))	return E_FAIL;
-	if (FAILED(m_pTargetMgr->Add_MRT(TEXT("Target_HZ16"), TEXT("Target_HZ16"))))	return E_FAIL;
+	//if (FAILED(m_pTargetMgr->Add_MRT(TEXT("Target_VT8"), TEXT("Target_VT8"))))	return E_FAIL;
+	//if (FAILED(m_pTargetMgr->Add_MRT(TEXT("Target_HZ8"), TEXT("Target_HZ8"))))	return E_FAIL;
+
+	//if (FAILED(m_pTargetMgr->Add_MRT(TEXT("Target_VT16"), TEXT("Target_VT16"))))	return E_FAIL;
+	//if (FAILED(m_pTargetMgr->Add_MRT(TEXT("Target_HZ16"), TEXT("Target_HZ16"))))	return E_FAIL;
 
 
 	if (FAILED(m_pTargetMgr->Add_MRT(TEXT("Target_Vertical2"), TEXT("Target_Vertical2"))))	return E_FAIL;
@@ -281,8 +289,8 @@ HRESULT CRendererAssit::Setup_RenderTarget()
 	if (FAILED(m_pTargetMgr->Add_MRT(TEXT("Target_Horizontal16"), TEXT("Target_Horizontal16"))))	return E_FAIL;
 
 	if (FAILED(m_pTargetMgr->Add_MRT(TEXT("Target_Blend"), TEXT("Target_Blend"))))	return E_FAIL;
-	if (FAILED(m_pTargetMgr->Add_MRT(TEXT("Target_Final"), TEXT("Target_Final"))))	return E_FAIL;
-	
+	//if (FAILED(m_pTargetMgr->Add_MRT(TEXT("Target_Blend2"), TEXT("Target_Blend2"))))	return E_FAIL;
+	//if (FAILED(m_pTargetMgr->Add_MRT(TEXT("Target_Final"), TEXT("Target_Final"))))	return E_FAIL;
 
 	//-----------------------------------//
 	if (FAILED(m_pTargetMgr->Add_MRT(TEXT("Target_AlphaBlend"), TEXT("Target_AlphaBlend"))))		return E_FAIL;
@@ -321,7 +329,7 @@ HRESULT CRendererAssit::Setup_RenderTarget()
 
 	if (FAILED(m_pTargetMgr->Ready_Debug_Buffer(TEXT("Target_Shadow"), (fwidth - fwidth), (fheight - fheight) + 100.f, 100.f, 100.f)))				return E_FAIL;
 	if (FAILED(m_pTargetMgr->Ready_Debug_Buffer(TEXT("Target_ShadeShadow"), (fwidth - fwidth) + 100.f, (fheight - fheight) + 100.f, 100.f, 100.f)))	return E_FAIL;
-	if (FAILED(m_pTargetMgr->Ready_Debug_Buffer(TEXT("Target_PointShadow"), (fwidth - fwidth) + 300.f, (fheight - fheight) + 100.f, 100.f, 100.f)))	return E_FAIL;
+	//if (FAILED(m_pTargetMgr->Ready_Debug_Buffer(TEXT("Target_PointShadow"), (fwidth - fwidth) + 300.f, (fheight - fheight) + 100.f, 100.f, 100.f)))	return E_FAIL;
 
 	if (FAILED(m_pTargetMgr->Ready_Debug_Buffer(TEXT("Target_Shade"), (fwidth - fwidth) + 300.f, (fheight - fheight), 100.f, 100.f)))		return E_FAIL;
 	if (FAILED(m_pTargetMgr->Ready_Debug_Buffer(TEXT("Target_Specular"), (fwidth - fwidth) + 400.f, (fheight - fheight), 100.f, 100.f)))	return E_FAIL;
@@ -368,8 +376,10 @@ HRESULT CRendererAssit::Setup_RenderTarget()
 	//if (FAILED(m_pTargetMgr->Ready_Debug_Buffer(TEXT("Target_Horizontal16"), fwidth - 200.f, fheight - 100.f, 100.f, 100.f)))	return E_FAIL;
 
 	if (FAILED(m_pTargetMgr->Ready_Debug_Buffer(TEXT("Target_Blend"), fwidth - 100.f, fheight - 200.f, 100.f, 100.f)))					return E_FAIL;
-	if (FAILED(m_pTargetMgr->Ready_Debug_Buffer(TEXT("Target_Final"), fwidth - 100.f, fheight - 400.f, 100.f, 100.f)))					return E_FAIL;
-	
+	//if (FAILED(m_pTargetMgr->Ready_Debug_Buffer(TEXT("Target_Blend2"), fwidth - 300.f, fheight - 200.f, 100.f, 100.f)))				return E_FAIL;
+	//if (FAILED(m_pTargetMgr->Ready_Debug_Buffer(TEXT("Target_Final"), fwidth - 200.f, fheight - 200.f, 100.f, 100.f)))				return E_FAIL;
+	if (FAILED(m_pTargetMgr->Ready_Debug_Buffer(TEXT("Target_Bloom"), fwidth - 200.f, fheight - 200.f, 100.f, 100.f)))					return E_FAIL;
+
 	if (FAILED(m_pTargetMgr->Ready_Debug_Buffer(TEXT("Target_Alpha"), fwidth - 100.f, fheight - 100.f, 100.f, 100.f)))					return E_FAIL;
 	if (FAILED(m_pTargetMgr->Ready_Debug_Buffer(TEXT("Target_AlphaNoBloom"), fwidth - 200.f, fheight - 100.f, 100.f, 100.f)))			return E_FAIL;
 	if (FAILED(m_pTargetMgr->Ready_Debug_Buffer(TEXT("Target_AlphaBlend"), fwidth - fwidth, fheight - 220.f, 100.f, 100.f)))			return E_FAIL;

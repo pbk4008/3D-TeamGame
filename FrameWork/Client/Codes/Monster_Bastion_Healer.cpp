@@ -238,12 +238,12 @@ HRESULT CMonster_Bastion_Healer::Render()
 			desc.roughness = -0.1f;
 			desc.color = _float4(0.254f, 1.f, 0.f, 1.f);
 			desc.empower = 1.f;
+
 			CActor::BindConstantBuffer(wstrCamTag, &desc);
 			if (FAILED(m_pModel->Render(i, 0))) MSGBOX("Failed To Rendering Healer");
 			break;
 		}
 	}
-
 
 #ifdef _DEBUG
 	//Render_Debug();

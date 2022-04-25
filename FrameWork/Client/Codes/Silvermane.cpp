@@ -230,7 +230,7 @@ HRESULT CSilvermane::NativeConstruct(const _uint _iSceneID, void* _pArg)
 	m_pRenderer->SetRenderButton(CRenderer::PIXEL, true);
 	m_pRenderer->SetRenderButton(CRenderer::PBR, true);
 	m_pRenderer->SetRenderButton(CRenderer::HDR, true);
-	m_pRenderer->SetRenderButton(CRenderer::SHADOW, true);
+	//m_pRenderer->SetRenderButton(CRenderer::SHADOW, true);
 
 	//Light ¼öÁ¤ ÇØ¾ßµÊ
 	LIGHTDESC			LightDesc;
@@ -367,6 +367,9 @@ _int CSilvermane::Tick(_double _dDeltaTime)
 		m_pPlayerData->SetExp(5);
 	}
 
+	if (g_pGameInstance->getCurrentLevel() != 3)
+		m_isLootShield = true;
+
 	return _int();
 }
 
@@ -442,7 +445,7 @@ HRESULT CSilvermane::Render()
 		if (i == 0)
 		{
 			desc.color = m_color;
-			desc.empower = 0.8f;
+			desc.empower = 0.5f;
 			CActor::BindConstantBuffer(wstrCamTag, &desc, &rimdesc);
 		}
 		else
@@ -936,7 +939,6 @@ HRESULT CSilvermane::Ready_Weapons(const _uint _iSceneID)
 
 		if (1 == m_pPlayerData->EquipedSlot)
 		{
-			assert(m_pEquipmentData->GetEquipment(EEquipSlot::Weapon1).weaponData.IsValid());
 			pWeapon = m_pEquipmentData->GetEquipment(EEquipSlot::Weapon1).weaponData.Get_Weapon();
 
 			if (pWeapon)
@@ -1781,14 +1783,13 @@ HRESULT CSilvermane::Create_MotionTrail(_int idex, _bool runcheck, _bool throwch
 		_float uvdvid = 0.f;
 		if (throwcheck == true)
 			uvdvid = 0.7f;
-		else if(runcheck == true)
-			uvdvid = 0.9f;
 		else
 		{
-			if (idex <= 10)
-				uvdvid = idex * 0.1f;
-			else
-				uvdvid = (idex - 10) * 0.1f;
+			uvdvid = 0.9f;
+			//if (idex <= 10)
+			//	uvdvid = idex * 0.1f;
+			//else
+			//	uvdvid = (idex - 10) * 0.1f;
 		}
 
 		static_cast<CMotionTrail*>(m_vecMotionTrail[idex])->Set_Info(smatWorld

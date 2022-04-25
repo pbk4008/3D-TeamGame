@@ -154,8 +154,8 @@ _int CMainApp::Tick(_double TimeDelta)
 	if (m_isDeltaTimeZero)
 		TimeDelta = 0.f;
 
-	//if (g_pInvenUIManager->IsOpenModal())
-	//	TimeDelta = 0.f;
+	if (g_pInvenUIManager->IsOpenModal())
+		TimeDelta = 0.f;
 
 	if (m_isFreeze)
 	{
