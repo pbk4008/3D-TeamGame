@@ -64,8 +64,6 @@ _int CJumpBox::LateTick(_double _dDeltaTime)
 	if (NO_EVENT != iProgress)
 		return iProgress;
 
-	if (FAILED(m_pRenderer->Add_RenderGroup(CRenderer::RENDER_NONALPHA, this)))
-		return -1;
 	return _int();
 }
 
@@ -94,8 +92,6 @@ HRESULT CJumpBox::Ready_Components()
 	CCollider::DESC tColliderDesc;
 	tColliderDesc.eRigidType = ERigidType::Static;
 	tColliderDesc.isSceneQuery = true;
-	//tColliderDesc.isKinematic = true;
-	tColliderDesc.isTrigger = false;
 	tColliderDesc.pGameObject = this;
 	CBoxCollider::DESC tBoxColliderDesc;
 	tBoxColliderDesc.tColliderDesc = tColliderDesc;
@@ -139,7 +135,6 @@ CGameObject* CJumpBox::Clone(const _uint _iSceneID, void* _pArg)
 
 void CJumpBox::Free()
 {
-	Safe_Release(m_pCollider);
-
 	__super::Free();
+	Safe_Release(m_pCollider);
 }

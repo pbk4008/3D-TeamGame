@@ -37,14 +37,6 @@ HRESULT CWall::NativeConstruct(const _uint _iSceneID, void* _pArg)
 
 _int CWall::Tick(_double _dDeltaTime)
 {
-	// 디졸브 테스트용 버튼 
-	//if (g_pGameInstance->getkeyDown(DIK_NUMPAD5))
-	//	m_bdissolve = true;
-	//if (g_pGameInstance->getkeyDown(DIK_NUMPAD6))
-	//{
-	//	m_lifetime = 0.f;
-	//	m_bdissolve = true;
-	//}
 
 	m_pCollider->Tick(_dDeltaTime);
 
@@ -95,6 +87,12 @@ HRESULT CWall::Render()
 	if (FAILED(m_pbuffer->Render(1))) MSGBOX("Failed To Wall Rendering");
 
 	return S_OK;
+}
+
+void CWall::set_DissolveRest()
+{
+	m_bdissolve = false;
+	m_lifetime = 0.f;
 }
 
 void CWall::Destroy()
@@ -184,4 +182,5 @@ void CWall::Free()
 	Safe_Release(m_pbuffer);
 	Safe_Release(m_pdiffusetex);
 	Safe_Release(m_dissolveTex);
+	Safe_Release(m_pCollider);
 }

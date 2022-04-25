@@ -72,9 +72,12 @@ _int CSilvermane_Sprint::Input(const _double& _dDeltaTime)
 
 	if (g_pGameInstance->getkeyDown(DIK_Q))
 	{
-		if (FAILED(m_pStateController->Change_State(L"Shield_BlockStart")))
-			return E_FAIL;
-		return STATE_CHANGE;
+		//if (m_pSilvermane->IsLootShield())
+		{
+			if (FAILED(m_pStateController->Change_State(L"Shield_BlockStart")))
+				return E_FAIL;
+			return STATE_CHANGE;
+		}
 	}
 
 	if (g_pGameInstance->getkeyDown(DIK_SPACE))
@@ -127,12 +130,16 @@ _int CSilvermane_Sprint::Input(const _double& _dDeltaTime)
 			return STATE_CHANGE;
 			break;
 		}
+		
 	}
 	if (g_pGameInstance->getMouseKeyDown(CInputDev::MOUSESTATE::MB_RBUTTON))
 	{
-		if (FAILED(m_pStateController->Change_State(L"Shield_SupermanPunchStraight")))
-			return -1;
-		return STATE_CHANGE;
+		if (m_pSilvermane->IsLootShield())
+		{
+			if (FAILED(m_pStateController->Change_State(L"Shield_SupermanPunchStraight")))
+				return -1;
+			return STATE_CHANGE;
+		}
 	}
 
 	return _int();

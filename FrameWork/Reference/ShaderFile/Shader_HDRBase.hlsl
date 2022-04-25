@@ -39,6 +39,8 @@ Texture2D g_SpecularTexture;
 Texture2D g_ShadeTexture;
 Texture2D g_SSS;
 
+Texture2D g_SkyBoxTexutre;
+
 struct VS_IN
 {
 	float3 vPosition : POSITION;
@@ -76,13 +78,15 @@ PS_OUT PS_MAIN_HDDRBASE(PS_IN In)
 {
 	PS_OUT Out = (PS_OUT) 0;
 	
+	float Gamma = 2.2f;
+	
 	//float3 diffuse = g_DiffuseTexture.Sample(DiffuseSampler, In.vTexUV).xyz;
 	half4 diffuse = g_DiffuseTexture.Sample(DiffuseSampler, In.vTexUV);
 	
 	float3 normal = g_NormalTexture.Sample(DefaultSampler, In.vTexUV).xyz;
 	float4 specualr = g_SpecularTexture.Sample(DefaultSampler, In.vTexUV);
 	half4 final;
-	//float3 final;
+	
 	if (any(normal))
 	{
 		//float3 light = g_ShadeTexture.Sample(DefaultSampler, In.vTexUV).xyz;
@@ -93,9 +97,9 @@ PS_OUT PS_MAIN_HDDRBASE(PS_IN In)
 	{
 		final = diffuse;
 	}
-
-	Out.vHDRDiffuse = final;
-	Out.vHDRSpecular = specualr;
+	
+	Out.vHDRDiffuse = pow(abs(final), Gamma);
+	Out.vHDRSpecular = pow(abs(specualr), Gamma);
 	
 	//Out.vHDRDiffuse = float4(final, alpha);
 	

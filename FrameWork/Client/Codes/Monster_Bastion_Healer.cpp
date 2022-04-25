@@ -15,6 +15,7 @@
 #include "Bastion_Healer_Groggy.h"
 #include "Bastion_Healer_Groggy_End.h"
 #include "Bastion_Healer_CastProtect.h"
+#include "Healer_Execution.h"
 
 #include "Stage1.h"
 #include "Stage2.h"
@@ -140,6 +141,17 @@ _int CMonster_Bastion_Healer::Tick(_double _dDeltaTime)
 				Active_Effect((_uint)EFFECT::DEATH);
 			}
 		}
+		else if (L"Execution" == m_pStateController->Get_CurStateTag())
+		{
+			if (m_pAnimator->Get_CurrentAnimation()->Is_Finished() && m_lifetime <= 0.f)
+			{
+				m_bdissolve = true;
+				m_pPanel->Set_UIRemove(true);
+			}
+
+			if (m_lifetime >= 1.f)
+				Set_Remove(true);
+		}
 		else
 		{
 			Set_Remove(true);
@@ -226,12 +238,12 @@ HRESULT CMonster_Bastion_Healer::Render()
 			desc.roughness = -0.1f;
 			desc.color = _float4(0.254f, 1.f, 0.f, 1.f);
 			desc.empower = 1.f;
+
 			CActor::BindConstantBuffer(wstrCamTag, &desc);
 			if (FAILED(m_pModel->Render(i, 0))) MSGBOX("Failed To Rendering Healer");
 			break;
 		}
 	}
-
 
 #ifdef _DEBUG
 	//Render_Debug();
@@ -312,6 +324,20 @@ void CMonster_Bastion_Healer::Hit(const ATTACKDESC& _tAttackDesc)
 void CMonster_Bastion_Healer::Parry(const PARRYDESC& _tParryDesc)
 {
 	m_fGroggyGauge += (m_fMaxGroggyGauge - m_fGroggyGauge);
+}
+
+void CMonster_Bastion_Healer::Execution()
+{
+	Set_Dead();
+	Remove_Collider();
+
+	CLevel* pLevel = g_pGameInstance->getCurrentLevelScene();
+	if (g_pGameInstance->getCurrentLevel() == (_uint)SCENEID::SCENE_STAGE1)
+		static_cast<CStage1*>(pLevel)->Minus_MonsterCount();
+	else if (g_pGameInstance->getCurrentLevel() == (_uint)SCENEID::SCENE_STAGE2)
+		static_cast<CStage2*>(pLevel)->Minus_MonsterCount();
+
+	m_pStateController->Change_State(L"Execution");
 }
 
 void CMonster_Bastion_Healer::Remove_Collider()
@@ -548,6 +574,9 @@ HRESULT CMonster_Bastion_Healer::Ready_StateFSM(void)
 		return E_FAIL;
 	/* for. Cast Protect */
 	if (FAILED(m_pStateController->Add_State(L"Cast_Protect", CBastion_Healer_CastProtect::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	/* for. Execution */
+	if (FAILED(m_pStateController->Add_State(L"Execution", CHealer_Execution::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 
 	for (auto& pair : m_pStateController->Get_States())

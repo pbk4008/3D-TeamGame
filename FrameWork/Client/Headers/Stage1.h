@@ -9,6 +9,7 @@ class CScenematic;
 class CMeteor;
 class CIndicator_Manager;
 class CDropBoxData;
+class CWall;
 class CStage1 final : public CLevel
 {
 private:
@@ -92,10 +93,11 @@ private:/*for Meteor*/
 	_float m_fAccMeteorSpawn;
 	_float m_fRandomMeteorSpawnTime;
 	_float m_fAccMeteorStartTime;
-	CModel* m_pTestModel;
 private:
 	_int m_iPortalCount;
 	_bool m_bPortalClear = false;
+
+	std::vector<CWall*>	m_vecwall;
 };
 #endif
 

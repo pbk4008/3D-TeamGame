@@ -118,10 +118,10 @@ PS_OUT PS_MAIN_BrightPass(PS_IN In)
 	}
 	Average *= 0.25f;
 	
-	//float Luminance = max(Average.r, max(Average.g, Average.b));
-	float Luminance = 0.5f * (max(Average.r, max(Average.g, Average.b)) + min(Average.r, min(Average.g, Average.b)));
+	float Luminance = max(Average.r, max(Average.g, Average.b));
+	//float Luminance = 0.5f * (max(Average.r, max(Average.g, Average.b)) + min(Average.r, min(Average.g, Average.b)));
 	
-	if (Luminance > g_BrightPassThreshold)
+	if (Luminance < g_BrightPassThreshold)
 		Average = float4(0.f, 0.f, 0.f, 1.f);
 		
 	Out.vOutColor = Average;
@@ -155,6 +155,20 @@ PS_OUT PS_MAIN_Bloom2(PS_IN In)
 	float4 base4 = g_BaseBlur4Texture.Sample(DefaultSampler, In.vTexUV);
 	
 	float4 baseBloom = (base * g_Weight) + (base2 * g_Weight) + (base4 * g_Weight);
+	
+	Out.vOutColor = baseBloom;
+	
+	return Out;
+}
+
+PS_OUT PS_MAIN_Bloom3(PS_IN In)
+{
+	PS_OUT Out = (PS_OUT) 0;
+	
+	float4 base = g_Basetexture.Sample(DefaultSampler, In.vTexUV);
+	float4 base2 = g_BaseBlur2Texture.Sample(DefaultSampler, In.vTexUV);
+	
+	float4 baseBloom = base  + base2;
 	
 	Out.vOutColor = baseBloom;
 	
@@ -247,5 +261,16 @@ technique11 PostProcess
 		VertexShader = compile vs_5_0 VS_MAIN_VIEWPORT();
 		GeometryShader = NULL;
 		PixelShader = compile ps_5_0 PS_MAIN_AlphaWeight();
+	}
+
+	pass Bloom3 // 6
+	{
+		SetRasterizerState(CullMode_Default);
+		SetDepthStencilState(ZTestDiable, 0);
+		SetBlendState(BlendDisable, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+
+		VertexShader = compile vs_5_0 VS_MAIN_VIEWPORT();
+		GeometryShader = NULL;
+		PixelShader = compile ps_5_0 PS_MAIN_Bloom3();
 	}
 }

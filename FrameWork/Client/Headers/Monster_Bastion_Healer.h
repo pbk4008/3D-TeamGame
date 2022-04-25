@@ -46,6 +46,7 @@ public:
 	void Hit(CCollision& pCol);
 	virtual void Hit(const ATTACKDESC& _tAttackDesc) override;
 	virtual void Parry(const PARRYDESC& _tParryDesc) override;
+	virtual void Execution() override;
 	void Remove_Collider();
 private:
 	HRESULT Ready_Components();

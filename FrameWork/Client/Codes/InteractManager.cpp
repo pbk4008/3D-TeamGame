@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "InteractManager.h"
 #include "InteractableObject.h"
+#include "Loot_Shield.h"
 
 CInteractManager::CInteractManager(void)
 {

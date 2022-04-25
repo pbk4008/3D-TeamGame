@@ -65,7 +65,8 @@ HRESULT CUI_QuestHeadText::Render()
 {
 	if (FAILED(CUI::Render()))
 		return E_FAIL;
-	if (!g_pInvenUIManager->IsOpenModal())
+	if (!g_pInvenUIManager->IsOpenModal() &&
+		!g_pGuideManager->IsOpenDeathUI())
 	{
 		m_pSigleImageCom->Render(m_pTransform);
 	}
