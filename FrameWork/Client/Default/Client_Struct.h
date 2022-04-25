@@ -15,5 +15,11 @@ typedef struct tagEnvironMentLoadData
 	_uint	  iType;
 }ENVIRONMENTLOADDATA;
 
+typedef struct tagDropBox
+{
+	_float4x4 WorldMat;
+	std::vector<class CItemData> itemData;
+}DROPBOXDESC;
+
 END
 #endif

@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "Bastion_2HSword_Death.h"
 #include "Animation.h"
+#include "DropBoxData.h"
 
 /* Monster List */
 #include "Monster_Bastion_2HSword.h"
@@ -61,6 +62,14 @@ HRESULT CBastion_2HSword_Death::EnterState()
 	m_pAnimator->Change_AnyEntryAnimation((_uint)CMonster_Bastion_2HSword::ANIM_TYPE::A_DEATH);
 	g_pMainApp->FreezeTime();
 
+	CDropBoxData* pDropboxdata = new CDropBoxData;
+	std::vector<CItemData> dropList = pDropboxdata->Get2HDropList(m_iDropIdx);
+
+	for (_int i = 0; i < dropList.size(); ++i)
+		DROP_ITEM(dropList[i], m_pTransform->Get_State(CTransform::STATE_POSITION), this->m_pTransform);
+
+	Safe_Delete(pDropboxdata);
+
 	return S_OK;
 }
 
@@ -68,6 +77,8 @@ HRESULT CBastion_2HSword_Death::ExitState()
 {
 	if (FAILED(__super::ExitState()))
 		return E_FAIL;
+
+	m_iDropIdx++;
 
 	return S_OK;
 }

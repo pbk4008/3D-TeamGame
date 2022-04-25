@@ -35,9 +35,9 @@ _int CBoss_Attack_R2::Tick(const _double& TimeDelta)
 	//어택 체크
 	_uint iCurKeyFrameIndex = m_pAnimator->Get_AnimController()->Get_CurKeyFrameIndex();
 	 
-	cout << iCurKeyFrameIndex << endl;
+	//cout << iCurKeyFrameIndex << endl;
 
-	//m_pMonster->RimlightCheck(true, _float3(1, 0, 0));
+	m_pMonster->RimlightCheck(true, _float3(1, 0, 0));
 
 	if (39 <= iCurKeyFrameIndex && 42 >= iCurKeyFrameIndex && false == m_bShakeCheck)
 	{
@@ -111,6 +111,8 @@ _int CBoss_Attack_R2::Tick(const _double& TimeDelta)
 
 	if (m_pAnimator->Get_AnimController()->Is_Finished())
 	{
+		cout << "r2 -> turn" << endl;
+
 		m_pStateController->Change_State(L"Turn");
 	}
 
@@ -138,6 +140,9 @@ HRESULT CBoss_Attack_R2::EnterState()
 {
 	if (FAILED(__super::EnterState()))
 		return E_FAIL;
+
+	cout << "Attack_R2" << endl;
+
 
 	m_bShakeCheck = false;
 	m_bEffectCheck = false;

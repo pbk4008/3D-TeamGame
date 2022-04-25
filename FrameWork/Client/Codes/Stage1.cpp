@@ -140,11 +140,11 @@ HRESULT CStage1::NativeConstruct()
 		return E_FAIL;
 	}
 
-	//if (FAILED(Ready_TriggerSystem(L"../bin/SaveData/Trigger/MonsterSpawnTrigger.dat")))
-	//{
-	//	MSGBOX("Stage1 Trigger");
-	//	return E_FAIL;
-	//}
+	if (FAILED(Ready_TriggerSystem(L"../bin/SaveData/Trigger/MonsterSpawnTrigger.dat")))
+	{
+		MSGBOX("Stage1 Trigger");
+		return E_FAIL;
+	}
 
 	if (FAILED(Ready_Data_UI(L"../bin/SaveData/UI/UI.dat")))
 	{
@@ -166,6 +166,7 @@ HRESULT CStage1::NativeConstruct()
 
 	if (FAILED(Ready_Treasure_Chest()))
 	{
+		MSGBOX("Stage1 Box");
 		MSGBOX("Stage1 Box");
 		return E_FAIL;
 	}
@@ -190,23 +191,23 @@ HRESULT CStage1::NativeConstruct()
 	// 		return E_FAIL;
 	//}
 	
-	//if (FAILED(Ready_Indicator()))
-	//{
-	//	MSGBOX("Indicator");
-	//	return E_FAIL;
-	//}
+	if (FAILED(Ready_Indicator()))
+	{
+		MSGBOX("Indicator");
+		return E_FAIL;
+	}
 
-	//if (FAILED(Ready_Portal()))
-	//{
-	//	MSGBOX("Portal");
-	//	return E_FAIL;
-	//}
+	if (FAILED(Ready_Portal()))
+	{
+		MSGBOX("Portal");
+		return E_FAIL;
+	}
 
-	//if (FAILED(Ready_Wall()))
-	//{
-	//	MSGBOX("Wall");
-	//	return E_FAIL;
-	//}
+	if (FAILED(Ready_Wall()))
+	{
+		MSGBOX("Wall");
+		return E_FAIL;
+	}
 
 	g_pGameInstance->PlayBGM(L"Stage1_BGM");
 	
@@ -215,8 +216,8 @@ HRESULT CStage1::NativeConstruct()
 
 _int CStage1::Tick(_double TimeDelta)
 {
-	//_vector vTmp = g_pObserver->Get_PlayerPos();
-	//cout << XMVectorGetX(vTmp) << ", " << XMVectorGetY(vTmp) << ", " << XMVectorGetZ(vTmp) << endl;
+	/*_vector vTmp = g_pObserver->Get_PlayerPos();
+	cout << XMVectorGetX(vTmp) << ", " << XMVectorGetY(vTmp) << ", " << XMVectorGetZ(vTmp) << endl;*/
 
 #ifdef  _DEBUG
 	_int iLevel = 0;
@@ -376,6 +377,7 @@ _int CStage1::Tick(_double TimeDelta)
 	//		return -1;
 	//	pMonster->setActive(true);
 	//}
+
 	//if (g_pGameInstance->getkeyDown(DIK_NUMPAD3))
 	//{
 	//	CMonster_Bastion_Shooter* pMonster = nullptr;
@@ -383,6 +385,7 @@ _int CStage1::Tick(_double TimeDelta)
 	//		return -1;
 	//	pMonster->setActive(true);
 	//}
+	// 
 	//if (g_pGameInstance->getkeyDown(DIK_NUMPAD4))
 	//{
 	//	CMonster_Bastion_Healer* pMonster = nullptr;
@@ -427,13 +430,13 @@ _int CStage1::Tick(_double TimeDelta)
 		m_pIndicatorManager->Active_Indicator();
 
 	/*For Cinema*/
-	//if (m_pScenemaManager)
-	//{
-	//	if (g_pGameInstance->getkeyDown(DIK_END))
-	//		m_pScenemaManager->Active_Scenema((_uint)CINEMA_INDEX::CINEMA1_1);;
+	if (m_pScenemaManager)
+	{
+		if (g_pGameInstance->getkeyDown(DIK_END))
+			m_pScenemaManager->Active_Scenema((_uint)CINEMA_INDEX::CINEMA3_1);;
 
-	//	m_pScenemaManager->Tick(TimeDelta);
-	//}
+		m_pScenemaManager->Tick(TimeDelta);
+	}
 
 
 	/*for Meteor*/
@@ -614,12 +617,12 @@ HRESULT CStage1::Ready_Player(const _tchar* LayerTag)
 		return E_FAIL;
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Camera", L"Proto_GameObject_Camera_Silvermane")))
 		return E_FAIL;
-	
+
 	////Test
 	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Test", L"Proto_GameObject_TestObject")))
 	//	return E_FAIL;
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Test", L"Proto_GameObject_MeshEffect_Test2")))
-		MSGBOX(L"메쉬 이펙트 테스트2 생성 실패");
+	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Test", L"Proto_GameObject_MeshEffect_Test2")))
+	//	MSGBOX(L"메쉬 이펙트 테스트2 생성 실패");
 
 	return S_OK;
 }
@@ -780,7 +783,7 @@ HRESULT CStage1::Ready_GameManager(void)
 		return E_FAIL;
 
 	m_pIndicatorManager = GET_INSTANCE(CIndicator_Manager);
-	m_pScenemaManager = GET_INSTANCE(CScenematicManager);
+	//m_pScenemaManager = GET_INSTANCE(CScenematicManager);
 
 	return S_OK;
 }
@@ -2432,23 +2435,17 @@ HRESULT CStage1::Ready_Treasure_Chest()
 		vecObject.emplace_back(pData.WorldMat);
 	}
 
-
-	for (int i = 0; i < vecObject.size(); ++i)
+	for (_int j = 0; j < vecObject.size(); ++j)
 	{
-		CDropBoxData*  pDropboxdata = new CDropBoxData;
-		MABOBJECT MapObjectDesc;
+		DROPBOXDESC Desc;
 
-		MapObjectDesc.WorldMat = vecObject[i];
-		auto temp  = pDropboxdata->GetItemData(i);
-		std::vector<void*> test;
+		Desc.WorldMat = vecObject[j];
 
-		for (auto& iter : temp)
-		{
-			test.emplace_back(&iter);
-		}
-		MapObjectDesc.itemData.push_back(test);
+		CDropBoxData* pDropboxdata = new CDropBoxData;
 
-		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_DropBox", L"Proto_GameObject_Treasure_Chest", &MapObjectDesc)))
+		Desc.itemData = pDropboxdata->GetItemData(j);
+
+		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_DropBox", L"Proto_GameObject_Treasure_Chest", &Desc)))
 		{
 			MSGBOX("Treasure_Chest 파일을 불러오는 도중 오류가 발생했습니다. Stage1.cpp Line 306");
 			return E_FAIL;
@@ -2463,6 +2460,16 @@ HRESULT CStage1::Ready_Treasure_Chest()
 
 	return S_OK;
 }
+
+
+//auto temp  = pDropboxdata->GetItemData(i);
+		//std::vector<CItemData*> test;
+
+		//for (auto& iter : temp)
+		//{
+		//	test.emplace_back(&iter);
+		//}
+		//MapObjectDesc.itemData.push_back(test);
 
 HRESULT CStage1::Ready_Meteor()
 {
@@ -2567,6 +2574,7 @@ void CStage1::Free()
 
 	for (auto& iter : m_pDumyDropData)
 		Safe_Delete(iter);
+	m_pDumyDropData.clear();
 
 	if (m_pIndicatorManager)
 	{

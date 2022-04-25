@@ -118,6 +118,8 @@ _int CBoss_Attack_S6::Tick(const _double& TimeDelta)
 
 	if (m_pAnimator->Get_AnimController()->Is_Finished())
 	{
+		cout << "s6 -> turn" << endl;
+
 		m_pStateController->Change_State(L"Turn");
 	}
 
@@ -145,6 +147,8 @@ HRESULT CBoss_Attack_S6::EnterState()
 {
 	if (FAILED(__super::EnterState()))
 		return E_FAIL;
+
+	cout << "Attack_S6" << endl;
 
 	static_cast<CBoss_Solaris*>(m_pMonster)->Set_HitMotion(false);
 

@@ -289,6 +289,8 @@ void CCamera_Silvermane::Respawn()
 {
 	m_vRot = { 0.f, 0.f, 0.f };
 	m_pWorldTransform->SetUp_Rotation(m_vRot);
+    m_pWorldTransform->Set_State(CTransform::STATE_POSITION, m_pSilvermane->Get_Transform()->Get_State(CTransform::STATE_POSITION));
+	m_pTransform->Set_WorldMatrix(m_pLocalTransform->Get_WorldMatrix() * m_pWorldTransform->Get_WorldMatrix());
 }
 
 _int CCamera_Silvermane::Chase_Target(const _double& _dDeltaTime)

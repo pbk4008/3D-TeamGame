@@ -48,7 +48,7 @@ HRESULT CTestObj::NativeConstruct(const _uint _iSceneID, void* pArg)
 	transformDesc.fRotationPerSec = 0.f;
 	m_pTransform->Set_TransformDesc(transformDesc);
 
-	_vector pos = { 0,2,0,1 };
+	_vector pos = { 0,0,0,1 };
 	m_pTransform->Set_State(CTransform::STATE_POSITION, pos);
 
 	return S_OK;
@@ -56,7 +56,10 @@ HRESULT CTestObj::NativeConstruct(const _uint _iSceneID, void* pArg)
 
 _int CTestObj::Tick(_double TimeDelta)
 {
-	_vector pos = { -175.f, 54.f, 422.f,1 };
+	_vector pos = { 47.f, 1.f, 29.f,1 };
+	//_vector pos = { 46.f, 2.f, 81.f,1 };
+	//_vector pos = { 46.f, -4.5f, 143.f,1 };
+	//_vector pos = g_pObserver->Get_PlayerPos();
 	m_pTransform->Set_State(CTransform::STATE_POSITION, pos);
 
 	return _int();

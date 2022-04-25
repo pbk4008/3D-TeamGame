@@ -111,6 +111,7 @@ _int CBoss_Attack_S3::Tick(const _double& TimeDelta)
 
 	if (m_pAnimator->Get_AnimController()->Is_Finished())
 	{
+		cout << "s3 -> turn" << endl;
 		m_pStateController->Change_State(L"Turn");
 	}
 
@@ -138,6 +139,9 @@ HRESULT CBoss_Attack_S3::EnterState()
 {
 	if (FAILED(__super::EnterState()))
 		return E_FAIL;
+
+	cout << "Attack_S3" << endl;
+
 
 	m_bShakeCheck = false;
 	m_bEffectCheck = false;

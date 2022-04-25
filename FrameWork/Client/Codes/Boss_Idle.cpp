@@ -34,14 +34,9 @@ _int CBoss_Idle::Tick(const _double& TimeDelta)
 
 	m_pAnimator->Tick(TimeDelta);
 	
-	/*if ( 15.f > fDistToPlayer)
+	if (fDistToPlayer >= 15.f)
 	{
-		m_pStateController->Change_State(L"Rage");
-	}*/
-	
-	if (15.f >= fDistToPlayer)
-	{
-		int a = 0;
+		m_pStateController->Change_State(L"Attack_S5_Protocol");
 	}
 
 	return _int();
@@ -69,9 +64,10 @@ HRESULT CBoss_Idle::EnterState()
 	if (FAILED(__super::EnterState()))
 		return E_FAIL;
 
+
+	cout << "Boss Idle" << endl;
+
 	static_cast<CBoss_Solaris*>(m_pMonster)->Set_HitMotion(true);
-
-
 	m_pAnimator->Change_AnyEntryAnimation(CBoss_Solaris::M_BossAnimState::IDLE);
 	
 	return S_OK;

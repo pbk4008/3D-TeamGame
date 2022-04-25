@@ -135,7 +135,7 @@ HRESULT CBoss_Weapon::Ready_Components()
 
 	CCapsuleCollider::DESC tCapsuleColliderDesc;
 	tCapsuleColliderDesc.tColliderDesc = tColliderDesc;
-	tCapsuleColliderDesc.fHeight = 2.6f;
+	tCapsuleColliderDesc.fHeight = 3.f;
 	tCapsuleColliderDesc.fRadius = 0.8f;
 	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_CapsuleCollider", L"Collider", (CComponent**)&m_pCollider, &tCapsuleColliderDesc)))
 		return E_FAIL;

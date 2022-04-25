@@ -111,7 +111,7 @@ HRESULT CHud::Ready_Component(void)
 HRESULT CHud::Ready_UIObject(void)
 {
 	m_pLevelUp = (CLevel_UP*) static_cast<CHud*>(
-	g_pGameInstance->Clone_GameObject((_uint)SCENEID::SCENE_STATIC, L"Proto_GameObject_UI_LevelUp"));
+		g_pGameInstance->Clone_GameObject((_uint)SCENEID::SCENE_STATIC, L"Proto_GameObject_UI_LevelUp"));
 	assert(m_pLevelUp);
 
 	return S_OK;

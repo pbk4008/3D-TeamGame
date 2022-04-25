@@ -3,6 +3,7 @@
 #include "Loading.h"
 #include "Silvermane.h"
 #include "Environment.h"
+#include "TestObj.h"
 
 CStage3::CStage3(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
 	:CLevel(pDevice, pDeviceContext)
@@ -11,8 +12,6 @@ CStage3::CStage3(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
 
 HRESULT CStage3::NativeConstruct()
 {
-	//g_pWeaponGenerator = CWeaponGenerator::GetInstance();
-
 	if (FAILED(CLevel::NativeConstruct()))
 		return E_FAIL;
 
@@ -22,10 +21,16 @@ HRESULT CStage3::NativeConstruct()
 	if (FAILED(Ready_MapObject()))
 		return E_FAIL;
 
+	//if (FAILED(Ready_Boss(L"Layer_Boss")))
+	//	return E_FAIL;
+
 	if (FAILED(Ready_Player(L"Layer_Silvermane")))
 		return E_FAIL;
 
 	g_pGameInstance->Change_BaseCamera(L"Camera_Silvermane");
+
+	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE3, L"Layer_Test", L"Proto_GameObject_TestObject")))
+	//	return E_FAIL;
 
 	return S_OK;
 }
@@ -149,6 +154,13 @@ HRESULT CStage3::Ready_Player(const _tchar* LayerTag)
 	return S_OK;
 }
 
+HRESULT CStage3::Ready_Boss(const _tchar* LayerTag)
+{
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE3, L"Layer_Boss", L"Proto_GameObject_Solaris")))
+		return E_FAIL;
+	return S_OK;
+}
+
 HRESULT CStage3::Ready_Light()
 {
 	g_pGameInstance->RemoveLight();
@@ -199,5 +211,5 @@ CStage3* CStage3::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceCont
 void CStage3::Free()
 {
 	CLevel::Free();
-	//CWeaponGenerator::DestroyInstance();
+	CWeaponGenerator::DestroyInstance();
 }

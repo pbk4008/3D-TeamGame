@@ -58,8 +58,8 @@ HRESULT CSilvermane_Heal::EnterState()
 	m_pAnimationController->Set_RootMotion(true, true, ERootOption::XYZ);
 
 	m_pSilvermane->RimlightCheck(true, _float3(0, 1, 0));
-	m_fValue = m_pSilvermane->Get_MaxHp() * 0.1f;
 	m_pSilvermane->Set_HealActive(true);
+	m_fValue = m_pSilvermane->Get_MaxHp() * 0.2f;
 
 	return S_OK;
 }

@@ -187,13 +187,13 @@ HRESULT CMeteor::Render()
 
 	rimDesc.rimcheck = true;
 	rimDesc.rimcol = _float3(1.f, 0.49f, 0.f);
-	rimDesc.rimintensity = 1.f;
+	rimDesc.rimintensity = 30.f;
 	XMStoreFloat4(&rimDesc.camdir, XMVector3Normalize(g_pGameInstance->Get_CamPosition(L"Camera_Silvermane") - m_pTransform->Get_State(CTransform::STATE_POSITION)));
 
-	//_float4 fColor = _float4(1.f, 1.f, 1.f, 1.f);
-	//_float fEmpower = 0.3f;
-	//if (FAILED(m_pStaticModel->SetUp_ValueOnShader("g_color", &fColor, sizeof(_float4)))) MSGBOX("Failed To Apply Actor ConstantBuffer");
-	//if (FAILED(m_pStaticModel->SetUp_ValueOnShader("g_empower", &fEmpower, sizeof(_float)))) MSGBOX("Failed To Apply Actor ConstantBuffer");
+	_float4 fColor = _float4(0.f, 0.f, 0.f, 1.f);
+	_float fEmpower = 1.f;
+	if (FAILED(m_pStaticModel->SetUp_ValueOnShader("g_color", &fColor, sizeof(_float4)))) MSGBOX("Failed To Apply Actor ConstantBuffer");
+	if (FAILED(m_pStaticModel->SetUp_ValueOnShader("g_empower", &fEmpower, sizeof(_float)))) MSGBOX("Failed To Apply Actor ConstantBuffer");
 
 	if (FAILED(m_pStaticModel->SetUp_ValueOnShader("g_rimlightcheck", &rimDesc.rimcheck, sizeof(_bool)))) MSGBOX("Failed To Apply Actor ConstantBuffer");
 	if (FAILED(m_pStaticModel->SetUp_ValueOnShader("g_rimintensity", &rimDesc.rimintensity, sizeof(_float)))) MSGBOX("Failed To Apply Actor ConstantBuffer");
@@ -223,7 +223,10 @@ HRESULT CMeteor::Render_Velocity()
 
 	matTransform.r[0]=XMVector3Normalize(matTransform.r[0]);
 	matTransform.r[1]=XMVector3Normalize(matTransform.r[1]);
-	matTransform.r[2]=XMVector3Normalize(matTransform.r[2]);
+	matTransform.r[2] = XMVector3Normalize(matTransform.r[2]);
+
+	for (_uint i = 0; i < 3; i++)
+		matTransform.r[i] *= 0.5f;
 	matTransform.r[3] = XMVectorZero();
 
 	_matrix matPreWVP = g_pGameInstance->GetPreViewProtj(m_PreWroldMat);
