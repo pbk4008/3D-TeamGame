@@ -26,7 +26,7 @@ public:
 
 private:
 	CCameraShake::SHAKEEVENT m_tShakeEvent;
-
+	_int		m_iDropIdx = 0;
 public:
 	static CBastion_2HSword_Death* Create(ID3D11Device * _pDevice, ID3D11DeviceContext * _pDeviceContext, void* _pArg = nullptr);
 	virtual void Free() override;

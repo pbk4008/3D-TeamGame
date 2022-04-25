@@ -52,5 +52,7 @@ private:
 	virtual void Free() override;
 };
 
+#define DROP_ITEM(itemData, centerPos, senderTransform) g_pDropManager->DropItem(itemData, centerPos, EScatterType::Cone, senderTransform);
+
 END
 #endif // DropManager_h__

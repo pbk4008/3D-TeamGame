@@ -202,11 +202,11 @@ HRESULT CStage1::NativeConstruct()
 		return E_FAIL;
 	}
 
-	//if (FAILED(Ready_Wall()))
-	//{
-	//	MSGBOX("Wall");
-	//	return E_FAIL;
-	//}
+	if (FAILED(Ready_Wall()))
+	{
+		MSGBOX("Wall");
+		return E_FAIL;
+	}
 
 	g_pGameInstance->PlayBGM(L"Stage1_BGM");
 	
@@ -453,7 +453,7 @@ _int CStage1::Tick(_double TimeDelta)
 		_vector vPos = XMLoadFloat4(&m_vecMeteorPos[0]);;
 		pMeteor->Move(vPos, 0);
 	}
-	//Open_Wall();
+	Open_Wall();
 
 	return _int();
 }
@@ -777,7 +777,7 @@ HRESULT CStage1::Ready_GameManager(void)
 		return E_FAIL;
 
 	m_pIndicatorManager = GET_INSTANCE(CIndicator_Manager);
-	m_pScenemaManager = GET_INSTANCE(CScenematicManager);
+	//m_pScenemaManager = GET_INSTANCE(CScenematicManager);
 
 	return S_OK;
 }
@@ -2429,23 +2429,17 @@ HRESULT CStage1::Ready_Treasure_Chest()
 		vecObject.emplace_back(pData.WorldMat);
 	}
 
-
-	for (int i = 0; i < vecObject.size(); ++i)
+	for (_int j = 0; j < vecObject.size(); ++j)
 	{
-		CDropBoxData*  pDropboxdata = new CDropBoxData;
-		MABOBJECT MapObjectDesc;
+		DROPBOXDESC Desc;
 
-		MapObjectDesc.WorldMat = vecObject[i];
-		auto temp  = pDropboxdata->GetItemData(i);
-		std::vector<void*> test;
+		Desc.WorldMat = vecObject[j];
 
-		for (auto& iter : temp)
-		{
-			test.emplace_back(&iter);
-		}
-		MapObjectDesc.itemData.push_back(test);
+		CDropBoxData* pDropboxdata = new CDropBoxData;
 
-		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_DropBox", L"Proto_GameObject_Treasure_Chest", &MapObjectDesc)))
+		Desc.itemData = pDropboxdata->GetItemData(j);
+
+		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_DropBox", L"Proto_GameObject_Treasure_Chest", &Desc)))
 		{
 			MSGBOX("Treasure_Chest 파일을 불러오는 도중 오류가 발생했습니다. Stage1.cpp Line 306");
 			return E_FAIL;
@@ -2458,6 +2452,16 @@ HRESULT CStage1::Ready_Treasure_Chest()
 
 	return S_OK;
 }
+
+
+//auto temp  = pDropboxdata->GetItemData(i);
+		//std::vector<CItemData*> test;
+
+		//for (auto& iter : temp)
+		//{
+		//	test.emplace_back(&iter);
+		//}
+		//MapObjectDesc.itemData.push_back(test);
 
 HRESULT CStage1::Ready_Meteor()
 {
@@ -2559,6 +2563,7 @@ void CStage1::Free()
 
 	for (auto& iter : m_pDumyDropData)
 		Safe_Delete(iter);
+	m_pDumyDropData.clear();
 
 	if(g_pInteractManager)
 		g_pInteractManager->Remove_Interactable();

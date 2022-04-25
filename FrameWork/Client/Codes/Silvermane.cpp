@@ -1288,8 +1288,11 @@ void CSilvermane::Respawn()
 {
 	m_pCharacterController->setPosition(m_vRespawnPos);
 	m_pTransform->SetUp_Rotation(_float3(0.f, 0.f, 0.f));
+	m_pTransform->Set_State(CTransform::STATE_POSITION,XMVectorSetW(XMLoadFloat3(&m_vRespawnPos), 1.f));
+
 	if (m_pCamera)
 		m_pCamera->Respawn();
+
 	m_fCurrentHp = m_fMaxHp;
 
 	if (!m_isEquipWeapon)

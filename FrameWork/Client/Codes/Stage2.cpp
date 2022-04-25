@@ -5,6 +5,7 @@
 #include "Environment.h"
 
 #include "JumpNode.h"
+#include "DropBoxData.h"
 
 //UI
 #include "UI_Player_HpBar.h"
@@ -59,8 +60,10 @@ HRESULT CStage2::NativeConstruct()
 		return E_FAIL;
 	}
 
-
 	if (FAILED(Ready_TriggerSystem(L"../bin/SaveData/Trigger/MonsterSpawnTrigger2.dat")))
+		return E_FAIL;
+
+	if (FAILED(Ready_Treasure_Chest()))
 		return E_FAIL;
 
 	g_pDropManager = CDropManager::GetInstance();
@@ -1203,6 +1206,46 @@ void CStage2::Trgger_FunctionBoss()
 	m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 }
 
+
+
+HRESULT CStage2::Ready_Treasure_Chest()
+{
+	vector<ENVIRONMENTLOADDATA> vecMapObjectData;
+	if (FAILED(g_pGameInstance->LoadFile<ENVIRONMENTLOADDATA>(vecMapObjectData, L"../bin/SaveData/Treasure_Chest/DropBox2.dat")))
+		return E_FAIL;
+
+	vector<_float4x4> vecObject;
+
+	vector<CEnvironment::ENVIRONMENTDESC> tChestDesc;
+	tChestDesc.resize(10);
+	_uint iIndex = 0;
+
+	for (auto& pData : vecMapObjectData)
+	{
+		vecObject.emplace_back(pData.WorldMat);
+	}
+
+	for (_int j = 0; j < vecObject.size(); ++j)
+	{
+		DROPBOXDESC Desc;
+
+		Desc.WorldMat = vecObject[j];
+
+		CDropBoxData* pDropboxdata = new CDropBoxData;
+
+		Desc.itemData = pDropboxdata->GetStage2ItemData(j);
+
+		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE2, L"Layer_DropBox", L"Proto_GameObject_Treasure_Chest", &Desc)))
+		{
+			MSGBOX("Stage2 Treasure_Chest 파일을 불러오는 도중 오류가 발생했습니다.");
+			return E_FAIL;
+		}
+		m_pDumyDropData.push_back(pDropboxdata);
+	}
+
+	return S_OK;
+}
+
 CStage2* CStage2::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
 {
 	CStage2* pInstance = new CStage2(pDevice, pDeviceContext);
@@ -1223,5 +1266,9 @@ void CStage2::Free()
 	g_pInteractManager->Remove_Interactable();
 	CWeaponGenerator::DestroyInstance();
 	CDropManager::DestroyInstance();
+
+	for (auto& iter : m_pDumyDropData)
+		Safe_Delete(iter);
+	m_pDumyDropData.clear();
 
 }
