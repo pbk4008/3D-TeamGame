@@ -216,7 +216,7 @@ void CGuideUIManager::ShowNext(void)
 
 	m_vecGuideTex[m_iCurrentTrigerrIdx]->SetTexture(m_szTextureName);
 
-	if (true == m_bGuideUIShow/* && false == m_bInvenRender*/)
+	if (true == m_bGuideUIShow && false == m_bInvenRender)
 	{
 		if (g_pGameInstance->getkeyDown(DIK_SPACE))
 		{
