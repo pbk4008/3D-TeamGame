@@ -49,8 +49,8 @@ HRESULT CTestScene_JS::NativeConstruct()
 	if (FAILED(Ready_Data_UI(L"../bin/SaveData/UI/UI.dat")))
 		return E_FAIL;
 
-	if (FAILED(Ready_Data_Effect()))
-		return E_FAIL;
+	//if (FAILED(Ready_Data_Effect()))
+	//	return E_FAIL;
 
 	if (FAILED(Ready_UI(L"Layer_UI")))
 		return E_FAIL;

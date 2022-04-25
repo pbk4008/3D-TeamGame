@@ -224,7 +224,7 @@ HRESULT CSilvermane::NativeConstruct(const _uint _iSceneID, void* _pArg)
 
 
 	m_isFall = true;
-	m_fMaxHp = 10.f;
+	m_fMaxHp = 10000.f;
 	m_fCurrentHp = m_fMaxHp;
 
 	m_pRenderer->SetRenderButton(CRenderer::PIXEL, true);
