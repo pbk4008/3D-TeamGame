@@ -29,6 +29,8 @@
 #include "UI_Blank_FKey.h"
 #include "UI_Fill_CKey.h"
 #include "UI_Indicator.h"
+#include "UI_Fill_Space.h"
+#include "UI_Blank_Space.h"
 
 #include "JumpNode.h"
 #include "JumpBox.h"
@@ -49,6 +51,7 @@
 
 #include "Indicator_Manager.h"
 #include "WeaponGenerator.h"
+#include "Loot_Shield.h"
 
 #include "Wall.h"
 #include "Potal.h"
@@ -193,11 +196,11 @@ HRESULT CStage1::NativeConstruct()
 		return E_FAIL;
 	}
 
-	//if (FAILED(Ready_Portal()))
-	//{
-	//	MSGBOX("Portal");
-	//	return E_FAIL;
-	//}
+	if (FAILED(Ready_Portal()))
+	{
+		MSGBOX("Portal");
+		return E_FAIL;
+	}
 
 	g_pGameInstance->PlayBGM(L"Stage1_BGM");
 	
@@ -230,6 +233,7 @@ _int CStage1::Tick(_double TimeDelta)
 		}
 		else
 		{
+			SHOW_GUIDE();
 			g_pInvenUIManager->OpenModal();
 			g_pMainApp->Set_DeltaTimeZero(true);
 		}
@@ -407,10 +411,10 @@ _int CStage1::Tick(_double TimeDelta)
 	}
 #pragma endregion
 
-	if(g_pInteractManager)
-		g_pInteractManager->Tick(TimeDelta);
 	if(g_pDropManager)
 		g_pDropManager->Tick();
+	if (g_pInteractManager)
+		g_pInteractManager->Tick(TimeDelta);
 	if(m_pIndicatorManager)
 		m_pIndicatorManager->Active_Indicator();
 
@@ -432,6 +436,9 @@ _int CStage1::Tick(_double TimeDelta)
 	if(g_pQuestManager)
 		g_pQuestManager->Tick(g_dImmutableTime);
 	
+	if (g_pGuideManager)
+		g_pGuideManager->Tick(g_dImmutableTime);
+
 	return _int();
 }
 
@@ -444,7 +451,7 @@ _int CStage1::LateTick(_double TimeDelta)
 		g_pQuestManager->Late_Tick(TimeDelta);
 
 	if (g_pGuideManager)
-		g_pGuideManager->Late_Tick(TimeDelta);
+		g_pGuideManager->Late_Tick(g_dImmutableTime);
 
 	return _int();
 }
@@ -683,7 +690,7 @@ HRESULT CStage1::Ready_UI(const _tchar* LayerTag)
 
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Proto_GameObject_UI_Tuto_Base", &Desc1)))
 		return E_FAIL;
-	
+
 	//Tuto Font
 	CUI_Tuto_Font::UIACTIVEDESC Desc2;
 	ZeroMemory(&Desc2, sizeof(CUI_Tuto_Font::UIACTIVEDESC));
@@ -694,7 +701,7 @@ HRESULT CStage1::Ready_UI(const _tchar* LayerTag)
 	Desc2.UIDesc.fSize = { 73.f , 73.f };
 	Desc2.UIDesc.IDTag = (_uint)GAMEOBJECT::UI_STATIC;
 	Desc2.iTextureNum = 0;
-	
+
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Proto_GameObject_UI_Tuto_Font", &Desc2)))
 		return E_FAIL;
 
@@ -724,7 +731,7 @@ HRESULT CStage1::Ready_UI(const _tchar* LayerTag)
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_UI_FillC", L"Proto_GameObject_UI_Fill_CKey", &Desc4)))
 		return E_FAIL;
 
-
+	
 	return S_OK;
 }
 
@@ -2351,6 +2358,9 @@ HRESULT CStage1::Ready_Treasure_Chest()
 		}
 		m_pDumyDropData.push_back(pDropboxdata);
 	}
+
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_LootShield", L"Proto_GameObject_LootShield")))
+		return E_FAIL;
 
 	return S_OK;
 }

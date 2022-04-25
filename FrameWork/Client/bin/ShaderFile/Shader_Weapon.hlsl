@@ -228,7 +228,7 @@ PS_OUT PS_MAIN_WEAPONE(PS_IN In)
 	Out.mra.b = AO;
 	Out.mra.a = 1.f;
 	
-	Out.emission = g_color * power * ceo.g;
+	Out.emission = g_color * g_empower * ceo.g;
 	
 	if (g_rimlightcheck == true)
 	{

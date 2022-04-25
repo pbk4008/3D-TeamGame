@@ -264,7 +264,7 @@ void CDropObject::Take(void)
 		Active_Effect((_uint)EFFECT::EAT_ITEM, pivot);
 	}
 
-	m_bDead = true;
+	m_bInteractDead = true;
 	m_bTakable = false;
 }
 

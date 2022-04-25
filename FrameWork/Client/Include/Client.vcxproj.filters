@@ -969,7 +969,7 @@
     </Filter>
     <Filter Include="02.GameObject\05.UI\05.Hud\03.Guide\01.GuideTex">
       <UniqueIdentifier>{3803125f-9097-473b-8e77-dd2e9d614c15}</UniqueIdentifier>
-	</Filter>
+    </Filter>
     <Filter Include="03.System\07.Scenematic\01.Stage1\00. Shot 01">
       <UniqueIdentifier>{add1b9db-bbdb-4c2b-9855-4668fe034659}</UniqueIdentifier>
     </Filter>
@@ -1017,6 +1017,18 @@
     </Filter>
     <Filter Include="03.System\07.Scenematic\01.Stage1\04. Shot 04\Cinema3_6">
       <UniqueIdentifier>{391dcb6c-27df-4ddc-9818-c679d8e7091d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.UI\06.Death">
+      <UniqueIdentifier>{57b1e098-fece-4051-bc58-2f63d9365e5d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.UI\06.Death\00.Blank">
+      <UniqueIdentifier>{35fdaff3-41b8-46ba-8313-f5a0cd01b372}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.UI\06.Death\01.Fill">
+      <UniqueIdentifier>{9d266c14-4314-470c-9110-d8dda1683d43}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\06.Interactable Object\Shield">
+      <UniqueIdentifier>{6dfa7505-8405-4814-b738-f504a7ea30ca}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -2244,6 +2256,18 @@
     <ClInclude Include="..\Headers\UI_Guide_Texture.h">
       <Filter>02.GameObject\05.UI\05.Hud\03.Guide\01.GuideTex</Filter>
     </ClInclude>
+    <ClInclude Include="..\Headers\UI_Death.h">
+      <Filter>02.GameObject\05.UI\06.Death</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\UI_Fill_Space.h">
+      <Filter>02.GameObject\05.UI\06.Death\01.Fill</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\UI_Blank_Space.h">
+      <Filter>02.GameObject\05.UI\06.Death\00.Blank</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Loot_Shield.h">
+      <Filter>02.GameObject\06.Interactable Object\Shield</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -3427,7 +3451,7 @@
     </ClCompile>
     <ClCompile Include="..\Codes\Cinema3_6.cpp">
       <Filter>03.System\07.Scenematic\01.Stage1\04. Shot 04\Cinema3_6</Filter>
-     </ClCompile>
+    </ClCompile>
     <ClCompile Include="..\Codes\UI_Blank_FKey.cpp">
       <Filter>02.GameObject\05.UI\01.UI_Ingame\02.UI_JumpNode\00.Blank</Filter>
     </ClCompile>
@@ -3439,6 +3463,18 @@
     </ClCompile>
     <ClCompile Include="..\Codes\UI_Guide_Texture.cpp">
       <Filter>02.GameObject\05.UI\05.Hud\03.Guide\01.GuideTex</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\UI_Death.cpp">
+      <Filter>02.GameObject\05.UI\06.Death</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\UI_Blank_Space.cpp">
+      <Filter>02.GameObject\05.UI\06.Death\00.Blank</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\UI_Fill_Space.cpp">
+      <Filter>02.GameObject\05.UI\06.Death\01.Fill</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Loot_Shield.cpp">
+      <Filter>02.GameObject\06.Interactable Object\Shield</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -106,9 +106,12 @@ _int CCamera_Silvermane::Tick(_double _dDeltaTime)
 	}
 	else
 	{
-		iProgress = Input_Key(_dDeltaTime);
-		if (NO_EVENT != iProgress)
-			return iProgress;
+		if (false == g_pMainApp->IsDeltaTimeZero())
+		{
+			iProgress = Input_Key(_dDeltaTime);
+			if (NO_EVENT != iProgress)
+				return iProgress;
+		}
 
 		m_fExecutionChangeTime += (_float)_dDeltaTime * 0.2f;
 		_float fRatio = m_fExecutionChangeTime / 1.f;

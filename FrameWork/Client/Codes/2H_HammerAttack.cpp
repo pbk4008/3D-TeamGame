@@ -159,9 +159,12 @@ _int C2H_HammerAttack::Input(const _double& _dDeltaTime)
 
 		if (g_pGameInstance->getkeyPress(DIK_Q))
 		{
-			if (FAILED(m_pStateController->Change_State(L"Shield_BlockStart")))
-				return E_FAIL;
-			return STATE_CHANGE;
+			if (m_pSilvermane->IsLootShield())
+			{
+				if (FAILED(m_pStateController->Change_State(L"Shield_BlockStart")))
+					return E_FAIL;
+				return STATE_CHANGE;
+			}
 		}
 
 		if (g_pGameInstance->getkeyPress(DIK_LSHIFT))

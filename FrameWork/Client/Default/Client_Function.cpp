@@ -33,3 +33,8 @@ float MathUtils::Length(CGameObject* a, CGameObject* b)
 {
 	return Length(a->Get_Transform()->Get_State(CTransform::STATE_POSITION), b->Get_Transform()->Get_State(CTransform::STATE_POSITION));
 }
+
+float MathUtils::Length(CGameObject* a, CTransform* b)
+{
+	return Length(a->Get_Transform()->Get_State(CTransform::STATE_POSITION), b->Get_State(CTransform::STATE_POSITION));
+}

@@ -6,6 +6,7 @@
 
 BEGIN(Client)
 class CInteractableObject;
+class CLoot_Shield;
 class CInteractManager final : public CSingleTon<CInteractManager>
 {
 	friend CSingleTon;

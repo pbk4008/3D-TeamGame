@@ -14,7 +14,7 @@ public:
 	static _fvector Direction(_fvector from, _fvector to);
 	static float Length(_fvector a, _fvector b);
 	static float Length(CGameObject* a, CGameObject* b);
-
+	static float Length(CGameObject* a, CTransform* b);
 };
 
 //static _fvector getMousePostion()

@@ -126,6 +126,8 @@ public: /* For.Shield */
 	HRESULT ThrowShield(const _fvector& _svTargetPos);
 	void Return_Shield();
 	void End_ThrowShield();
+	void Loot_Shield();
+	_bool IsLootShield() { return m_isLootShield; }
 
 public:
 	//light test ÇÔ¼ö
@@ -186,6 +188,7 @@ private: /* For.Shield */
 	_bool m_isEquipShield = false;
 	_bool m_isShieldThrow = false;
 	_bool m_isShieldReturn = false;
+	_bool m_isLootShield = false;
 	_float m_fBlockTime = 0.f;
 
 private: /* For.JumpNode */
