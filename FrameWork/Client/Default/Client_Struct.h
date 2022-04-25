@@ -15,14 +15,5 @@ typedef struct tagEnvironMentLoadData
 	_uint	  iType;
 }ENVIRONMENTLOADDATA;
 
-typedef struct tagWallDesc
-{
-	_float4 pos;
-	_float2 scale;
-	_float radian;
-	_float4 color;
-
-}WALLDESC;
-
 END
 #endif

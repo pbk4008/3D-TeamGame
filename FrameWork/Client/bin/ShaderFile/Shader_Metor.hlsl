@@ -23,6 +23,11 @@ struct VS_OUT
 	float4 vBiNormal	: BINORMAL;
 	float4 vUvDepth		: TEXCOORD0;
 };
+struct VS_OUT_VELOCITY
+{
+	float4 vPosition : SV_POSITION;
+	float4 vVelocity : TEXCOORD0;
+};
 
 bool g_bUsingTool = false;
 
@@ -46,6 +51,40 @@ VS_OUT VS_MESH(VS_IN In)
 	
 	return Out;
 }
+VS_OUT_VELOCITY VS_MAIN_VELOCITY(VS_IN In)
+{
+	VS_OUT_VELOCITY Out = (VS_OUT_VELOCITY)0;
+
+	matrix matWV, matWVP;
+
+	matWV = mul(g_WorldMatrix, g_ViewMatrix);
+	matWVP = mul(matWV, g_ProjMatrix);
+
+
+	half4 vCurPosition = mul(vector(In.vPosition, 1.f), matWVP);
+	Out.vPosition = vCurPosition;
+	half4 normal = mul(vector(In.vNormal, 0.f), matWVP);
+	normal = mul(normal, matWVP);
+
+	half4 curpos = Out.vPosition;
+	half4 prepos = mul(vector(In.vPosition, 1.f), g_PreWorldViewProj);
+	half3 dir = curpos.xyz - prepos.xyz;
+
+	half a = dot(normalize(dir), normalize(normal.xyz));
+	if (a < 0.f)
+		Out.vPosition = prepos;
+	else
+		Out.vPosition = curpos;
+
+	half2 velocity = (curpos.xy / curpos.w) - (prepos.xy / prepos.w);
+	Out.vVelocity.xy = velocity * 0.5f;
+	Out.vVelocity.y *= -1.f;
+	Out.vVelocity.z = Out.vPosition.z;
+	Out.vVelocity.w = Out.vPosition.w;
+
+	return Out;
+}
+
 // VS_SHADOW_MAP
 //*---------------------------------------------------------------------------------------------*
 
@@ -59,7 +98,11 @@ struct PS_IN
 	half4 vBiNormal		: BINORMAL;
 	half4 vUvDepth		: TEXCOORD0;
 };
-
+struct PS_IN_VELOCITY
+{
+	float4 vPosition : SV_POSITION;
+	float4 vVelocity : TEXCOORD0;
+};
 struct PS_OUT
 {
 	half4 diffuse	: SV_TARGET0;
@@ -68,6 +111,11 @@ struct PS_OUT
 	half4 mra		: SV_Target3;
 	half4 emission	: SV_Target4;
 };
+struct PS_OUT_VELOCITY
+{
+	vector VelocityMap : SV_TARGET0;
+};
+
 PS_OUT PS_MAIN(PS_IN In)
 {
 	PS_OUT Out = (PS_OUT) 0;
@@ -91,11 +139,24 @@ PS_OUT PS_MAIN(PS_IN In)
 	Out.mra.g = Roughness;
 	Out.mra.b = Ao;
 	Out.mra.a = 1.f;
-	Out.emission = half4(0, 0, 0, 1);
+	
+	half4 tmp = half4(Out.normal.rgb * 2.f - 1.f, 0.f);
+	float4 rim = RimLighting(tmp, g_camdir, g_rimintensity, g_rimcolor);
+	Out.emission = g_color * g_empower;
+	Out.emission += rim;
 
 	return Out;
 }
+PS_OUT_VELOCITY PS_MAIN_VELOCITY(PS_IN_VELOCITY In)
+{
+	PS_OUT_VELOCITY Out = (PS_OUT_VELOCITY)0.f;
 
+	Out.VelocityMap.xy = In.vVelocity.xy;
+	Out.VelocityMap.z = In.vVelocity.z / In.vVelocity.w;
+	Out.VelocityMap.w = In.vVelocity.w / 300.f;
+
+	return Out;
+}
 
 
 technique11			DefaultTechnique
@@ -120,5 +181,14 @@ technique11			DefaultTechnique
 		GeometryShader = NULL;
 		PixelShader = compile ps_5_0  PS_MAIN();
 	}
+	pass VelocityMap
+	{
+		SetRasterizerState(CullMode_Default);
+		SetDepthStencilState(ZDefault, 0);
+		SetBlendState(BlendDisable, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
 
+		VertexShader = compile vs_5_0 VS_MAIN_VELOCITY();
+		GeometryShader = NULL;
+		PixelShader = compile ps_5_0 PS_MAIN_VELOCITY();
+	}
 }

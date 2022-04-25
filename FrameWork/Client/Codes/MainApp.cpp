@@ -62,6 +62,8 @@
 #include "UI_LevelUP_Fill_Lead_Right.h"
 #include "UI_LevelUP_Fill_Left.h"
 #include "UI_LevelUP_Fill_Right.h"
+#include "UI_Death.h"
+
 //Quest
 #include "Quest.h"
 #include "UI_QuestText.h"
@@ -295,6 +297,10 @@ if (FAILED(pMeshLoader->Reserve_MeshLoader(m_pDevice, m_pDeviceContext)))
 
 HRESULT CMainApp::Ready_Component_Prototype()
 {
+	//Buffer
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_Rect_Bar", CVIBuffer_Rect::Create(m_pDevice, m_pDeviceContext, L"../../Reference/ShaderFile/Shader_UI_Bar.hlsl"))))
+		return E_FAIL;
+
 	if(FAILED(g_pGameInstance->SetUpBaseComponent(m_pDevice, m_pDeviceContext)))
 		return E_FAIL;
 	m_pRenderer = g_pGameInstance->Clone_Component<CRenderer>((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_Renderer");
@@ -445,6 +451,9 @@ HRESULT CMainApp::Ready_GameObject_Prototype()
 	return E_FAIL;
 	//Quest Clear Marker
 	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_UI_QuestClear"), CUI_QuestClear::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	//Death
+	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_UI_Death"), CUI_Death::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 	///////////////////////////////
 	//Level Up

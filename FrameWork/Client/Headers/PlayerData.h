@@ -26,7 +26,6 @@ public:
 
 	_float Power = 100.f;
 
-
 	_bool m_bEquipShield = false;
 	_int  EquipedSlot = 1;
 };

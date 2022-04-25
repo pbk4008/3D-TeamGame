@@ -121,9 +121,12 @@ _int CCamera_Silvermane::Tick(_double _dDeltaTime)
 		}
 		else
 		{
-			iProgress = Input_Key(_dDeltaTime);
-			if (NO_EVENT != iProgress)
-				return iProgress;
+			if (false == g_pMainApp->IsDeltaTimeZero())
+			{
+				iProgress = Input_Key(_dDeltaTime);
+				if (NO_EVENT != iProgress)
+					return iProgress;
+			}
 			m_pTransform->Set_WorldMatrix(m_pLocalTransform->Get_WorldMatrix() * m_pWorldTransform->Get_WorldMatrix());
 		}
 

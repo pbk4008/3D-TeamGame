@@ -3,6 +3,7 @@
 #include "InteractableObject.h"
 #include "DropObject.h"
 #include "GameObjectPool.h"
+#include "Loot_Shield.h"
 
 CDropManager::CDropManager(void)
 {

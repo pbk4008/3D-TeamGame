@@ -8,10 +8,12 @@ BEGIN(Engine)
 class CTransform;
 END
 
-BEGIN(Client)
 
+BEGIN(Client)
 class CGameObjectPool;
 class CDropObject;
+class CLoot_Shield;
+class CInteractableObject;
 class CDropManager final : public CSingleTon<CDropManager>
 {
 	friend CSingleTon;
@@ -42,6 +44,9 @@ private:
 	std::vector<CDropObject*>	  m_dropObjects;
 	CGameObject*				  m_pPlayer = nullptr;
 	_uint						  m_curSceneId = 0;
+
+private:
+	CLoot_Shield*		          m_pShield = nullptr;
 
 private:
 	virtual void Free() override;

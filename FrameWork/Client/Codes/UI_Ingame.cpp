@@ -97,7 +97,8 @@ _int CUI_Ingame::LateTick(_double TimeDelta)
 
 	if (nullptr != m_pRenderer)
 	{
-		if(g_pInvenUIManager->Get_OpenCheck() == false)
+		if(!g_pInvenUIManager->Get_OpenCheck() &&
+			!g_pGuideManager->IsOpenDeathUI())
 			m_pRenderer->Add_RenderGroup(CRenderer::RENDER::RENDER_UI, this);
 	}
 	return _int();

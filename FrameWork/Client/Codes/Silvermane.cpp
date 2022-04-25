@@ -222,8 +222,9 @@ HRESULT CSilvermane::NativeConstruct(const _uint _iSceneID, void* _pArg)
 	if (FAILED(g_pObserver->Set_Player(this)))
 		return E_FAIL;
 
+
 	m_isFall = true;
-	m_fMaxHp = 100.f;
+	m_fMaxHp = 10.f;
 	m_fCurrentHp = m_fMaxHp;
 
 	m_pRenderer->SetRenderButton(CRenderer::PIXEL, true);
@@ -456,7 +457,7 @@ HRESULT CSilvermane::Render()
 	if (m_pRenderer->Get_RenderButton(CRenderer::VELOCITYBLUR) == false)
 		m_PreWroldMat = m_pTransform->Get_WorldMatrix();
 #ifdef _DEBUG
-	//Render_Debug();
+	Render_Debug();
 #endif
 
 
@@ -1050,9 +1051,7 @@ void CSilvermane::OnControllerColliderHit(CCollision& collision)
 
 	if (m_pTargetJumpBox)
 	{
-		_fvector vBoxPos = m_pTargetJumpBox->Get_Transform()->Get_State(CTransform::STATE_POSITION);
-		_fvector vDist = vBoxPos - m_pTransform->Get_State(CTransform::STATE_POSITION);
-		_float fBoxToPlayer = XMVectorGetX(XMVector3Length(vDist));
+		_float fBoxToPlayer = MathUtils::Length(m_pTargetJumpBox, this);
 
 		if (5.f < fBoxToPlayer)
 		{
@@ -1081,9 +1080,7 @@ void CSilvermane::OnControllerColliderHit(CCollision& collision)
 
 		if (m_pTargetJumpBox)
 		{
-			_fvector vBoxPos = m_pTargetJumpBox->Get_Transform()->Get_State(CTransform::STATE_POSITION);
-			_fvector vDist = vBoxPos - m_pTransform->Get_State(CTransform::STATE_POSITION);
-			_float fBoxToPlayer = XMVectorGetX(XMVector3Length(vDist));
+			_float fBoxToPlayer = MathUtils::Length(m_pTargetJumpBox, this);
 
 			if (5.f >= fBoxToPlayer)
 			{
@@ -1322,7 +1319,10 @@ void CSilvermane::Respawn()
 
 	if (FAILED(m_pStateController->Change_State(L"Idle")))
 		return;
+
 	m_bDead = false;
+
+	g_pMainApp->Set_DeltaTimeZero(true);
 }
 
 void CSilvermane::Set_Position(const _float3 _vPosition)
@@ -1623,6 +1623,13 @@ void CSilvermane::End_ThrowShield()
 	m_pAnimationController->Set_PlaySpeed(1.4f);
 }
 
+void CSilvermane::Loot_Shield()
+{
+	m_isLootShield = true;
+
+	m_pModel->Get_MeshContainer().size();
+}
+
 void CSilvermane::OnLight(_vector vColor, _vector vAmbient, _float fRange, _float fOffTimeSpeed)
 {
 	if (nullptr != m_pLight)
@@ -1859,8 +1866,6 @@ const _bool CSilvermane::Raycast_JumpNode(const _double& _dDeltaTime)
 
 	if ((_uint)GAMEOBJECT::JUMP_NODE == iObjectTag)
 	{
-		SHOW_GUIDE();
-
 		m_pTargetJumpNode = static_cast<CJumpNode*>(pHitObject);
 		m_pTargetJumpNode->setIsPick(true);
 		if (g_pGameInstance->getkeyPress(DIK_C))

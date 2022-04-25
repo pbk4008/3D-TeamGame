@@ -20,15 +20,14 @@ public:
 	virtual _int Tick(_double _dDeltaTime) override;
 	virtual _int LateTick(_double _dDeltaTime) override;
 	virtual HRESULT Render() override;
+	HRESULT Render_Velocity();
 public:
-	_int Move(_fvector vPos);
+	_int Move(_fvector vPos, _uint iNum);
+	_int Shot();
 private:
 	HRESULT Ready_Component();
 private:
-	void OnTriggerEnter(CCollision& collision);
-private:
 	_bool Find_HitPlayer(vector<CGameObject*>* pVecActor);
-	
 public:
 	static CMeteor* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);
 	virtual CGameObject* Clone(const _uint iSceneID, void* pArg = nullptr) override;
@@ -51,6 +50,8 @@ private:
 	_float m_fAccGravityTime;
 	_float4 m_vRandNorm;
 	_float m_fPreY;
+private:
+	_float m_fAccMotionTim;
 };
 END
 #endif

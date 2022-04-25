@@ -28,6 +28,17 @@ HRESULT CUI_Guide_Texture::NativeConstruct(const _uint iSceneID, void* pArg)
 	if (FAILED(Ready_Component()))
 		return E_FAIL;
 
+	if(nullptr != pArg)
+		desc = (*(Desc*)pArg);
+
+	/* for. check player Pos */
+	m_pTriggerTrans = g_pGameInstance->Clone_Component<CTransform>(0, L"Proto_Component_Transform");
+	m_pTriggerTrans->Set_State(CTransform::STATE_POSITION, XMLoadFloat3(&desc.fPos));
+
+	/* for. Texture Render*/
+	m_pTransform->Set_State(CTransform::STATE_POSITION, _fvector{ 20.f, 0.f, 0.1f, 1.f });
+	m_pTransform->Scaling(_fvector{ 600.f, 350.f, 1.f, 0.f });
+
 	setActive(false);
 
 	return S_OK;
@@ -35,26 +46,36 @@ HRESULT CUI_Guide_Texture::NativeConstruct(const _uint iSceneID, void* pArg)
 
 _int CUI_Guide_Texture::Tick(_double dDeltaTime)
 {
+	dDeltaTime = g_dImmutableTime;
+
 	if (FAILED(CUI::Tick(dDeltaTime)))
 		return -1;
+
+	m_pPlayer = *g_pGameInstance->getObjectList(g_pGameInstance->getCurrentLevel(), L"Layer_Silvermane")->begin();
+	_float dist = MathUtils::Length(m_pPlayer, m_pTriggerTrans);
+
+	if (dist <= m_interactDist)
+		this->setActive(true);
+	else
+		this->setActive(false);
 
 	return _int();
 }
 
 _int CUI_Guide_Texture::LateTick(_double TimeDelta)
 {
+	TimeDelta = g_dImmutableTime;
+
 	if (FAILED(CUI::LateTick(TimeDelta)))
 		return -1;
 
 	if (nullptr != m_pRenderer)
-		m_pRenderer->Add_RenderGroup(CRenderer::RENDER::RENDER_UI, this);
+		m_pRenderer->Add_RenderGroup(desc.ERenderGroup, this);
 
-	m_pTransform->Set_State(CTransform::STATE_POSITION, _fvector{ 20.f, 0.f, 0.1f, 1.f });
-	m_pTransform->Scaling(_fvector{ 600.f, 350.f, 1.f, 0.f });
+	m_pSigleImageCom->LateTick(TimeDelta);
 
 	return _int();
 }
-
 
 HRESULT CUI_Guide_Texture::Render()
 {
@@ -79,6 +100,12 @@ HRESULT CUI_Guide_Texture::Ready_Component(void)
 		return E_FAIL;
 
 	return S_OK;
+}
+
+void CUI_Guide_Texture::SetTexture(std::wstring szTexture)
+{
+	m_pSigleImageCom->SetTexture(szTexture);
+	//m_pSigleImageCom->SetFadeOut();
 }
 
 CUI_Guide_Texture* CUI_Guide_Texture::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
@@ -106,7 +133,8 @@ CGameObject* CUI_Guide_Texture::Clone(const _uint iSceneID, void* pArg)
 
 void CUI_Guide_Texture::Free()
 {
-	Safe_Release(m_pSigleImageCom);
-
 	__super::Free();
+
+	Safe_Release(m_pSigleImageCom);
+	Safe_Release(m_pTriggerTrans);
 }

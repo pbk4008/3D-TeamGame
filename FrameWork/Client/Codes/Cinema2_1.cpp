@@ -29,16 +29,19 @@ HRESULT CCinema2_1::NativeContruct(_uint iSceneID)
 	if (FAILED(Ready_Components()))
 		return E_FAIL;
 
-	_matrix matPivot = XMMatrixRotationY(XMConvertToRadians(270.f)) * XMMatrixTranslation(-191.f, 41.7f, 408.f);
-	m_pCam->Set_CameraMatrix(matPivot);
-
 	m_pSilvermane->Actor_AnimPlay(6);
-	CTransform* pSilvermaneTr = m_pSilvermane->Get_Transform();
-	pSilvermaneTr->Set_State(CTransform::STATE_POSITION, XMVectorSet(-168.f, 51.f, 404.f, 1.f));
-
 	m_pMidBoss->Actor_AnimPlay(5);
-	CTransform* pMidBossTr = m_pMidBoss->Get_Transform();
-	pMidBossTr->Set_State(CTransform::STATE_POSITION, XMVectorSet(-172.f, 59.f, 440.5f, 1.f));
+
+	CTransform* pSilvermaneTr = m_pSilvermane->Get_Transform();
+	pSilvermaneTr->Set_State(CTransform::STATE_POSITION, XMVectorSet(-177.f, 53.f, 425.f, 1.f));
+	pSilvermaneTr->SetUp_Rotation(XMVectorSet(0.f, 1.f, 0.f, 0.f), XMConvertToRadians(230.f));
+
+	CTransform* pBossTr = m_pMidBoss->Get_Transform();
+	pBossTr->Set_State(CTransform::STATE_POSITION, XMVectorSet(-152, 43.f, 417.f, 1.f));
+	pBossTr->SetUp_Rotation(XMVectorSet(0.f, 1.f, 0.f, 0.f), XMConvertToRadians(180.f));
+
+	_matrix matPivot = XMMatrixTranslation(-172.f, 42.5f, 404.3f);
+	m_pCam->Set_CameraMatrix(matPivot);
 
 	return S_OK;
 }
@@ -49,31 +52,15 @@ _int CCinema2_1::Tick(_double dDeltaTime)
 	if (iProgress == 1)
 		return 0;
 
-	CTransform* pSilvermaneTr = m_pSilvermane->Get_Transform();
-	pSilvermaneTr->Set_State(CTransform::STATE_POSITION, XMVectorSet(-177.f, 53.f, 425.f, 1.f));
-	pSilvermaneTr->SetUp_Rotation(XMVectorSet(0.f, 1.f, 0.f, 0.f), XMConvertToRadians(230.f));
 	m_pSilvermane->Tick(dDeltaTime);
-
-	CTransform* pBossTr = m_pMidBoss->Get_Transform();
-	pBossTr->Set_State(CTransform::STATE_POSITION, XMVectorSet(-152, 43.f, 417.f, 1.f));
-	pBossTr->SetUp_Rotation(XMVectorSet(0.f, 1.f, 0.f, 0.f), XMConvertToRadians(180.f));
 	m_pMidBoss->Tick(dDeltaTime);
-
-	_matrix matPivot = XMMatrixTranslation(-172.f, 42.5f, 404.3f);
-	m_pCam->Set_CameraMatrix(matPivot);
 	m_pCam->Tick(dDeltaTime);
-
-
-	
 
 	return _int();
 }
 
 _int CCinema2_1::LateTick(_double dDeltaTime)
 {
-	m_pSilvermane->LateTick(dDeltaTime);
-	m_pMidBoss->LateTick(dDeltaTime);
-
 	if (m_pCam->Get_CamMoveEnd())
 	{
 		m_bCinemaEnd = true;
@@ -81,7 +68,12 @@ _int CCinema2_1::LateTick(_double dDeltaTime)
 		CScenematicManager* pInstance = GET_INSTANCE(CScenematicManager);
 		pInstance->Change_Cinema((_uint)CINEMA_INDEX::CINEMA2_2);
 		RELEASE_INSTANCE(CScenematicManager);
+		return 0;
 	}
+	m_pSilvermane->LateTick(dDeltaTime);
+	m_pMidBoss->LateTick(dDeltaTime);
+
+	
 
 	return _int();
 }
@@ -92,6 +84,7 @@ void CCinema2_1::Set_Active(_bool bCheck)
 	m_bActorAnimOn = false;
 	m_pSilvermane->Actor_AnimReset();
 	m_pMidBoss->Actor_AnimReset();
+	m_pCam->Reset_Camera();
 	if (m_bActive)
 		m_pCam->Change_CurrentCam();
 }
