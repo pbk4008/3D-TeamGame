@@ -25,7 +25,18 @@ _int CShield_SupermanPunchStraight::Tick(const _double& _dDeltaTime)
 		return iProgress;
 
 	Add_PlusAngle(EDir::Forward, _dDeltaTime);
-	if (34 < m_pAnimationController->Get_CurKeyFrameIndex())
+
+	_uint iCurKeyFrameIndex = m_pAnimationController->Get_CurKeyFrameIndex();
+	if (16 < iCurKeyFrameIndex)
+	{
+		if (!m_isShake)
+		{
+			_float3 vPos; XMStoreFloat3(&vPos, m_pTransform->Get_State(CTransform::STATE_POSITION));
+			g_pShakeManager->Shake(m_tShakeEvent, vPos);
+			m_isShake = true;
+		}
+	}
+	if (34 < iCurKeyFrameIndex)
 	{
 		m_pSilvermane->Set_EquipShieldAnim(false);
 	}
@@ -69,6 +80,20 @@ HRESULT CShield_SupermanPunchStraight::EnterState()
 	m_pSilvermane->Set_EquipShieldAnim(true);
 
 	m_pSilvermane->Set_IsShieldAttack(true);
+
+	m_tShakeEvent.fDuration = 1.2f;
+	m_tShakeEvent.fBlendInTime = 0.2f;
+	m_tShakeEvent.fBlendOutTime = 0.4f;
+	m_tShakeEvent.tWaveX.fAmplitude = 0.04f;
+	m_tShakeEvent.tWaveX.fFrequency = 1.f;
+	m_tShakeEvent.tWaveX.fAdditionalOffset = -0.1f;
+	m_tShakeEvent.tWaveY.fAmplitude = 0.04f;
+	m_tShakeEvent.tWaveY.fFrequency = 1.f;
+	m_tShakeEvent.tWaveY.fAdditionalOffset = -0.5f;
+	m_tShakeEvent.tWaveZ.fAmplitude = 0.04f;
+	m_tShakeEvent.tWaveZ.fFrequency = 1.f;
+	m_tShakeEvent.tWaveZ.fAdditionalOffset = 0.4f;
+
 	return S_OK;
 }
 

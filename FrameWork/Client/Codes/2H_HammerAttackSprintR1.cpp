@@ -112,8 +112,10 @@ HRESULT C2H_HammerAttackSprintR1::EnterState()
 		m_pSilvermane->Set_WeaponFixedBone("weapon_r");
 	}
 
-	m_tShakeEvent2.tWaveY.fAdditionalOffset = -0.6f;
-
+	m_tShakeEvent2.tWaveY.fAdditionalOffset = -0.8f;
+	m_tShakeEvent2.tWaveZ.fAdditionalOffset = 0.6f;
+	m_tShakeEvent2.tWaveZ.fFrequency = 1.f;
+	m_tShakeEvent2.tWaveZ.fAmplitude = 0.04f;
 
 	m_iCutIndex = 40;
 	m_iAttackStartIndex = 30;

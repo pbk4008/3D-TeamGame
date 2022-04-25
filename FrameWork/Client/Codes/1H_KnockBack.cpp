@@ -20,7 +20,8 @@ _int C1H_KnockBack::Tick(const _double& _dDeltaTime)
 	if (NO_EVENT != iProgress)
 		return iProgress;
 
-	if (m_iCutIndex < m_pAnimationController->Get_CurKeyFrameIndex())
+	_uint iCurKeyFrameIndex = m_pAnimationController->Get_CurKeyFrameIndex();
+	if (m_iCutIndex < iCurKeyFrameIndex)
 	{
 		if (m_pSilvermane->IsEquipWeapon())
 		{
@@ -44,6 +45,22 @@ _int C1H_KnockBack::Tick(const _double& _dDeltaTime)
 				return -1;
 			return STATE_CHANGE;
 		}
+	}
+
+	if (!m_isShake && 15 < iCurKeyFrameIndex)
+	{
+		CCameraShake::SHAKEEVENT tShakeEvent;
+		tShakeEvent.fDuration = 0.4f;
+		tShakeEvent.fBlendInTime = 0.1f;
+		tShakeEvent.fBlendOutTime = 0.2f;
+		tShakeEvent.tWaveX.fAmplitude = 0.04f;
+		tShakeEvent.tWaveX.fFrequency = 8.f;
+		tShakeEvent.tWaveY.fAmplitude = 0.4f;
+		tShakeEvent.tWaveY.fFrequency = 1.f;
+
+		_float3 vPos; XMStoreFloat3(&vPos, m_pTransform->Get_State(CTransform::STATE_POSITION));
+		g_pShakeManager->Shake(tShakeEvent, vPos);
+		m_isShake = true;
 	}
 
 	return _int();
@@ -71,39 +88,23 @@ HRESULT C1H_KnockBack::EnterState()
 	if (FAILED(__super::EnterState()))
 		return E_FAIL;
 
-	uniform_int_distribution<_uint> iRange(0, 1);
+	//uniform_int_distribution<_uint> iRange(0, 1);
+	//switch (iRange(g_random))
+	//{
+	//case 0:
+	//	if (FAILED(m_pAnimationController->SetUp_NextAnimation("SK_Silvermane.ao|A_1H_KnockBack_Clash_Player", false)))
+	//		return E_FAIL;
+	//	break;
+	//case 1:
+	//	if (FAILED(m_pAnimationController->SetUp_NextAnimation("SK_Silvermane.ao|A_1H_KnockBack_Land_Player", false)))
+	//		return E_FAIL;
+	//	break;
+	//}
 
-	switch (iRange(g_random))
-	{
-	case 0:
-		if (FAILED(m_pAnimationController->SetUp_NextAnimation("SK_Silvermane.ao|A_1H_KnockBack_Clash_Player", false)))
-			return E_FAIL;
-		break;
-	case 1:
-		if (FAILED(m_pAnimationController->SetUp_NextAnimation("SK_Silvermane.ao|A_1H_KnockBack_Land_Player", false)))
-			return E_FAIL;
-		break;
-	}
+	if (FAILED(m_pAnimationController->SetUp_NextAnimation("SK_Silvermane.ao|A_1H_KnockBack_Land_Player", false)))
+		return E_FAIL;
 	m_pAnimationController->Set_RootMotion(true, true);
 	m_pAnimationController->Mul_MoveSpeed(0.5f);
-
-	if (!m_isShake)
-	{
-		CCameraShake::SHAKEEVENT tShakeEvent;
-		tShakeEvent.fDuration = 0.4f;
-		tShakeEvent.fBlendInTime = 0.1f;
-		tShakeEvent.fBlendOutTime = 0.1f;
-		tShakeEvent.tWaveX.fAmplitude = 0.04f;
-		tShakeEvent.tWaveX.fFrequency = 12.f;
-		tShakeEvent.tWaveY.fAmplitude = 0.04f;
-		tShakeEvent.tWaveY.fFrequency = 14.f;
-		tShakeEvent.tWaveZ.fAmplitude = 0.04f;
-		tShakeEvent.tWaveZ.fFrequency = 10.f;
-
-		_float3 vPos; XMStoreFloat3(&vPos, m_pTransform->Get_State(CTransform::STATE_POSITION));
-		g_pShakeManager->Shake(tShakeEvent, vPos);
-		m_isShake = true;
-	}
 
 	m_iCutIndex = 70;
 
