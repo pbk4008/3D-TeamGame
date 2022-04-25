@@ -20,6 +20,8 @@ _int CShield_Parry::Tick(const _double& _dDeltaTime)
 	if (NO_EVENT != iProgress)
 		return iProgress;
 
+	m_pSilvermane->Add_BlockTime((_float)_dDeltaTime);
+
 	if (m_pAnimationController->Is_Finished())
 	{
 		if (FAILED(m_pStateController->Change_State(L"Shield_BlockLoop")))
@@ -75,6 +77,7 @@ HRESULT CShield_Parry::ExitState()
 	}
 	else
 	{
+		m_pSilvermane->Set_IsHit(false);
 		m_pSilvermane->Set_EquipShield(false);
 		m_pSilvermane->Set_EquipShieldAnim(false);
 		m_pSilvermane->Set_BlockTime(0.f);

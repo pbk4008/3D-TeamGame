@@ -199,4 +199,5 @@ CStage3* CStage3::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceCont
 void CStage3::Free()
 {
 	CLevel::Free();
+	CWeaponGenerator::DestroyInstance();
 }
