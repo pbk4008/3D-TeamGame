@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "Effect_Env_Fire.h"
 #include "GameInstance.h"
-
+#include "Light.h"
 
 CEffect_Env_Fire::CEffect_Env_Fire()
 {
@@ -57,6 +57,23 @@ HRESULT CEffect_Env_Fire::NativeConstruct(const _uint _iSceneID, void* pArg)
 			, XMVectorGetX(XMVector3Length(m_Desc.ParticleMat.r[2]))
 			, 1);
 
+	if (m_Desc.IDTag != (_uint)SCENEID::SCENE_STAGE1)
+	{
+		LIGHTDESC LightDesc;
+		ZeroMemory(&LightDesc, sizeof(LIGHTDESC));
+		LightDesc.eType = LIGHTDESC::TYPE_POINT;
+		LightDesc.fRange = 3.f;
+		LightDesc.vDiffuse = _float4(1.0f, 0.34509f, 0.1333f, 1.f);
+		LightDesc.vSpecular = _float4(0.7f, 0.7f, 0.7f, 1.f);
+		LightDesc.vAmbient = _float4(0.8f, 0.8f, 0.8f, 1.f);
+		LightDesc.bactive = true;
+		LightDesc.vPosition = _float3(desc._41, desc._42 + 2.5f, desc._43);
+
+		m_range = LightDesc.fRange;
+
+		if (FAILED(g_pGameInstance->Add_Light(m_pDevice, m_pDeviceContext, LightDesc, &m_plight))) MSGBOX("Failed To Adding PointLight");
+	}
+
 	return S_OK;
 }
 
@@ -104,12 +121,32 @@ _int CEffect_Env_Fire::Tick(_double TimeDelta)
 	else
 		m_pTransform->Scaling(m_scale * 1.f);
 
+
+	if (m_plight)
+	{
+		m_plight->Set_Pos(m_pTransform->Get_State(CTransform::STATE_POSITION) - XMVectorSet(0.f,1.f,0.f,0.f));
+		m_range += g_fDeltaTime * 2.f * m_param;
+
+		if (m_range < 3.f)
+		{
+			m_param *= -1.f;
+			m_range = 3.f;
+		}
+		else if (m_range > 4.f)
+		{
+			m_param *= -1.f;
+			m_range = 4.f;
+		}
+
+		m_plight->Set_Range(m_range);
+	}
+
     return 0;
 }
 
 _int CEffect_Env_Fire::LateTick(_double TimeDelta)
 {
-	if (nullptr != m_pRenderer)
+	if (nullptr != m_pRenderer && g_pGameInstance->isIn_WorldFrustum(m_pTransform->Get_State(CTransform::STATE_POSITION), 5.f) == true)
 	{
 		if (L"Texture_fx_smoke_a" == m_pTexture->getTextureTag())
 			m_pRenderer->Add_RenderGroup(CRenderer::RENDER::RENDER_ALPHANB, this);
