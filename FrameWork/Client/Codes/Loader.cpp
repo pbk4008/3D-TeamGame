@@ -166,9 +166,9 @@ HRESULT CLoader::LoadForScene()
 }
 
 HRESULT CLoader::SetUp_Stage1_Object()
-{/*
-	if (FAILED(Load_Stage1FBXLoad()))
-		return E_FAIL;*/
+{
+	//if (FAILED(Load_Stage1FBXLoad()))
+	//	return E_FAIL;
 
 	if (FAILED(Load_Stage1Navi_SkyLoad()))
 		return E_FAIL;
@@ -176,11 +176,11 @@ HRESULT CLoader::SetUp_Stage1_Object()
 	if (FAILED(Load_Stage1PlayerLoad()))
 		return E_FAIL;
 
-	if (FAILED(Load_Stage1MonsterLoad()))
-		return E_FAIL;
+	//if (FAILED(Load_Stage1MonsterLoad()))
+	//	return E_FAIL;
 
-	if (FAILED(Load_Stage1BossLoad()))
-		return E_FAIL;
+	//if (FAILED(Load_Stage1BossLoad()))
+	//	return E_FAIL;
 
 	if (FAILED(Load_Stage1StaticUILoad()))
 		return E_FAIL;
@@ -206,8 +206,8 @@ HRESULT CLoader::SetUp_Stage1_Object()
 	if (FAILED(Load_Stage1_TreasureChest_Load()))
 		return E_FAIL;
 
-	//if (FAILED(Load_Stage1Meteor()))
-	//	return E_FAIL;
+	if (FAILED(Load_Stage1Meteor()))
+		return E_FAIL;
 
 	//if (FAILED(Load_Stage1_Cinema_Object()))
 	//	return E_FAIL;
@@ -772,7 +772,7 @@ HRESULT CLoader::Load_Stage1_Cinema_Object()
 	//Camera1-1
 	_matrix matPivot = XMMatrixIdentity();
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Model_Cinema_Cam1_1", CModel::Create(m_pDevice, m_pDeviceContext,
-		"../bin/FBX/Cinema/Camera/","camera_bone_01.fbx",
+		"../bin/FBX/Cinema/Camera/","camera_01_bone.fbx",
 		L"../../Reference/ShaderFile/Shader_AnimMesh.hlsl", matPivot,CModel::TYPE_ANIM, true))))
 		return E_FAIL;
 	//Camera1-2

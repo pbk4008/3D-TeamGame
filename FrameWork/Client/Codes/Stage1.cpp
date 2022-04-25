@@ -119,11 +119,11 @@ HRESULT CStage1::NativeConstruct()
 		return E_FAIL;
 	}
 
-	if (FAILED(Ready_Trigger_Jump()))
-	{
-		MSGBOX("Stage1 Jump");
-		return E_FAIL;
-	}
+	//if (FAILED(Ready_Trigger_Jump()))
+	//{
+	//	MSGBOX("Stage1 Jump");
+	//	return E_FAIL;
+	//}
 
 	if (FAILED(Ready_Player(L"Layer_Silvermane")))
 	{
@@ -175,11 +175,11 @@ HRESULT CStage1::NativeConstruct()
 
 	g_pGameInstance->Change_BaseCamera(L"Camera_Silvermane");
 
-	//if (FAILED(Ready_Meteor()))
-	//{
-	//	MSGBOX("Meteor");
-	//	return E_FAIL;
-	//}
+	if (FAILED(Ready_Meteor()))
+	{
+		MSGBOX("Meteor");
+		return E_FAIL;
+	}
 
 	//if (FAILED(Ready_Cinema()))
 	// {
@@ -211,7 +211,7 @@ HRESULT CStage1::NativeConstruct()
 
 _int CStage1::Tick(_double TimeDelta)
 {
-	_vector vTmp=g_pObserver->Get_PlayerPos();
+	_vector vTmp = g_pObserver->Get_PlayerPos();
 	cout << XMVectorGetX(vTmp) << ", " << XMVectorGetY(vTmp) << ", " << XMVectorGetZ(vTmp) << endl;
 #ifdef  _DEBUG
 	_int iLevel = 0;
@@ -431,22 +431,19 @@ _int CStage1::Tick(_double TimeDelta)
 
 
 	/*for Meteor*/
-	m_fAccMeteorStartTime += (_float)TimeDelta;
-	if (m_fAccMeteorStartTime > 60.f)
-		Shoot_Meteor(TimeDelta);
+	//m_fAccMeteorStartTime += (_float)TimeDelta;
+	//if (m_fAccMeteorStartTime > 15.f)
+	//	Shoot_Meteor(TimeDelta);
 
 	if(g_pQuestManager)
 		g_pQuestManager->Tick(g_dImmutableTime);
 	
-
-
 	if (g_pGameInstance->getkeyDown(DIK_END))
 	{
-		list<CGameObject*>* pLayer = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Layer_Wall");
-
-		auto iter = pLayer->begin();
-		advance(iter, 4);
-		static_cast<CWall*>((*iter))->Destroy();
+		CMeteor* pMeteor = Find_Meteor();
+		pMeteor->setActive(true);
+		_vector vPos = XMLoadFloat4(&m_vecMeteorPos[0]);;
+		pMeteor->Move(vPos, 0);
 	}
 	//Open_Wall();
 
@@ -2461,12 +2458,13 @@ HRESULT CStage1::Ready_Meteor()
 		Safe_AddRef(pObj);
 		m_vecMeteor.emplace_back(pObj);
 	}
-	m_vecMeteorPos.resize(5);
+	m_vecMeteorPos.resize(6);
 	m_vecMeteorPos[0] = _float4(-90.f, -20.f, 96.f, 1.f);
 	m_vecMeteorPos[1] = _float4(10.f, -20.f, 145.f, 1.f);
-	m_vecMeteorPos[2] = _float4(-100.f, -20.f, 190.f, 1.f);
+	m_vecMeteorPos[2] = _float4(-110.f, -5.f, 142.f, 1.f);
 	m_vecMeteorPos[3] = _float4(-200.f, -20.f, 320.f, 1.f);
-	m_vecMeteorPos[4] = _float4(-150.f, -20.f, 380.f, 1.f);
+	m_vecMeteorPos[4] = _float4(-80.f, -20.f, 380.f, 1.f);
+	m_vecMeteorPos[5] = _float4(-80, -20.f, 266.f, 1.f);
 
 	m_fRandomMeteorSpawnTime = (_float)MathUtils::ReliableRandom((_double)10.f,(_double)25.f);
 
@@ -2494,37 +2492,24 @@ void CStage1::Shoot_Meteor(_double dDeltaTime)
 		m_fAccMeteorSpawn = 0.f;
 		m_fRandomMeteorSpawnTime = (_float)MathUtils::ReliableRandom(5.f,15.f);
 		
-		_vector vSelectPos = XMVectorZero();
-		for (auto& pPos : m_vecMeteorPos)
-		{
-			_vector vPos = XMLoadFloat4(&pPos);
-			_vector vDir = g_pObserver->Get_Dir(vPos);
-			if(XMVectorGetZ(vDir)<0.f)
-				continue;
-			_float fDist=g_pObserver->Get_Dist(vPos);
-			if (fDist > 80 && fDist < 150)
-			{
-				vSelectPos = vPos;
-				break;
-			}
-		}
-		if (XMVector3Equal(vSelectPos, XMVectorZero()))
-			return;
-
 		_uint iRandomShot = (_uint)MathUtils::ReliableRandom(1.0, (_double)iCount+1);
 		for (_uint i = 0; i < iRandomShot; i++)
 		{
+			_vector vPos = XMVectorZero();
+			_uint randomPos = MathUtils::ReliableRandom(0, 6);
+			vPos = XMLoadFloat4(&m_vecMeteorPos[randomPos]);
+
 			_vector vPivot;
-			_float fX = (_float)MathUtils::ReliableRandom(-20.0, 20.0);
-			_float fZ = (_float)MathUtils::ReliableRandom(-20.0, 20.0);
+			_float fX = (_float)MathUtils::ReliableRandom(-10.0, 10.0);
+			_float fZ = (_float)MathUtils::ReliableRandom(-10.0, 10.0);
 
 			vPivot = XMVectorSet(fX, 0.f, fZ, 1.f);
-			vSelectPos += vPivot;
+			vPos += vPivot;
 			CMeteor* pMeteor = Find_Meteor();
 			if (!pMeteor)
 				MSGBOX("Meteor Null!!");
 			pMeteor->setActive(true);
-			pMeteor->Move(vSelectPos);
+			pMeteor->Move(vPos, randomPos);
 		}
 	}
 
