@@ -288,9 +288,9 @@ if (FAILED(pMeshLoader->Reserve_MeshLoader(m_pDevice, m_pDeviceContext)))
 	if (FAILED(g_pQuestManager->NativeConstruct()))
 		return E_FAIL;
 
-	//g_pGuideManager = CGuideUIManager::GetInstance();
-	//if (FAILED(g_pGuideManager->NativeConstruct()))
-	//	return E_FAIL;
+	g_pGuideManager = CGuideUIManager::GetInstance();
+	if (FAILED(g_pGuideManager->NativeConstruct()))
+		return E_FAIL;
 
 	return S_OK;
 }

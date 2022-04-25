@@ -73,7 +73,7 @@ _int CSilvermane_Jog::Input(const _double& _dDeltaTime)
 
 	if (g_pGameInstance->getkeyDown(DIK_Q))
 	{
-		if (m_pSilvermane->IsLootShield())
+		//if (m_pSilvermane->IsLootShield())
 		{
 			if (FAILED(m_pStateController->Change_State(L"Shield_BlockStart")))
 				return E_FAIL;

@@ -2556,9 +2556,6 @@ void CStage1::Free()
 {
 	CLevel::Free();
 
-	Safe_Release(m_pScenemaManager);
-	CScenematicManager::DestroyInstance();
-
 	for (auto& iter : m_pDumyDropData)
 		Safe_Delete(iter);
 
@@ -2569,7 +2566,6 @@ void CStage1::Free()
 	Safe_Release(m_pIndicatorManager);
 	CScenematicManager::DestroyInstance();
 	CIndicator_Manager::DestroyInstance();
-
 
 	CDropManager::DestroyInstance();
 	Safe_Release(m_pTriggerSystem);
