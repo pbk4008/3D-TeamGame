@@ -13,6 +13,8 @@ CStage3::CStage3(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
 
 HRESULT CStage3::NativeConstruct()
 {
+	g_pWeaponGenerator = CWeaponGenerator::GetInstance();
+
 	if (FAILED(CLevel::NativeConstruct()))
 		return E_FAIL;
 
@@ -22,7 +24,8 @@ HRESULT CStage3::NativeConstruct()
 	if (FAILED(Ready_MapObject()))
 		return E_FAIL;
 
-	g_pWeaponGenerator = CWeaponGenerator::GetInstance();
+	//if (FAILED(Ready_Boss(L"Layer_Boss")))
+	//	return E_FAIL;
 
 	if (FAILED(Ready_Player(L"Layer_Silvermane")))
 		return E_FAIL;
@@ -31,7 +34,6 @@ HRESULT CStage3::NativeConstruct()
 
 	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE3, L"Layer_Test", L"Proto_GameObject_TestObject")))
 	//	return E_FAIL;
-
 
 	return S_OK;
 }
@@ -176,6 +178,13 @@ HRESULT CStage3::Ready_Player(const _tchar* LayerTag)
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE3, L"Layer_Camera", L"Proto_GameObject_Camera_Silvermane")))
 		return E_FAIL;
 
+	return S_OK;
+}
+
+HRESULT CStage3::Ready_Boss(const _tchar* LayerTag)
+{
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE3, L"Layer_Boss", L"Proto_GameObject_Solaris")))
+		return E_FAIL;
 	return S_OK;
 }
 

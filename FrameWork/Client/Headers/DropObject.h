@@ -11,6 +11,8 @@ END
 
 BEGIN(Client)
 class CInventoryData;
+class CMotionTrail;
+
 class CDropObject final : public CInteractableObject
 {
 public:
@@ -50,7 +52,9 @@ public:
 	void  SetTakableState(_bool bState);
 	_bool IsDrop(void);
 	_bool IsTakable(void);
-	
+
+public:  HRESULT	Create_MotionTrail(_int idex, _bool runcheck = false, _bool throwcheck = false);
+
 private:
 	CGameObject*	 m_pPlayer = nullptr;
 
@@ -66,10 +70,13 @@ private:
 	const _float m_scatteredRadius = 3.5f;
 	const _float m_dropDurtaion = 1.0f;
 
+	_float							m_MotiontrailTime = 0.f;
+	_int							m_MotionTrailIdx = 0;
+	std::vector<CGameObject*>		m_vecMotionTrail;
 private:
 	CSplineCurve*   m_pSplineCurve = nullptr;
 	CInventoryData* m_pInventoryData = nullptr;
-	
+
 public:
 	static CDropObject* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext);
 	virtual CGameObject* Clone(const _uint _iSceneID, void* _pArg = nullptr) override;

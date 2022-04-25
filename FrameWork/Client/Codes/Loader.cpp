@@ -183,11 +183,11 @@ HRESULT CLoader::SetUp_Stage1_Object()
 	if (FAILED(Load_Stage1PlayerLoad()))
 		return E_FAIL;
 
-	if (FAILED(Load_Stage1MonsterLoad()))
-		return E_FAIL;
+	//if (FAILED(Load_Stage1MonsterLoad()))
+	//	return E_FAIL;
 
-	if (FAILED(Load_Stage1BossLoad()))
-		return E_FAIL;
+	//if (FAILED(Load_Stage1BossLoad()))
+	//	return E_FAIL;
 
 	if (FAILED(Load_Stage1StaticUILoad()))
 		return E_FAIL;
@@ -1095,8 +1095,13 @@ HRESULT CLoader::Load_Stage1PlayerLoad()
 	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_MotionTrail", CMotionTrail::Create(m_pDevice, m_pDeviceContext)))) MSGBOX(L"모션 더미 생성");
 #pragma endregion
 
+	matPivot = XMMatrixScaling(0.005f, 0.005f, 0.005f);
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Player_HealEffect", CModel::Create(m_pDevice, m_pDeviceContext,
+		"../bin/Resources/Mesh/Bullet/", "Sphere.fbx",
+		L"../../Reference/ShaderFile/Shader_StaticMesh.hlsl", matPivot, CModel::TYPE_STATIC, true))))
+		return E_FAIL;
 
-	// Test Object
+	//// Test Object
 	//matPivot = XMMatrixIdentity();
 	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Test", CModel::Create(m_pDevice, m_pDeviceContext, "../bin/FBX/Cinema/Test_box/", "Test_box.fbx"
 	//	, L"../../Reference/ShaderFile/Shader_StaticMesh.hlsl", matPivot, CModel::TYPE_STATIC, true))))
@@ -1131,15 +1136,6 @@ HRESULT CLoader::Load_Stage1BossLoad()
 	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Weapon_ShieldBreaker", CShieldBreaker::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 
-
-	//Boss Solaris
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Model_Boss_Solaris", CModel::Create(m_pDevice, m_pDeviceContext,
-		L"../bin/FBX/Monster/Solaris.fbx", CModel::TYPE_ANIM, true))))
-		return E_FAIL;
-
-	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Solaris", CBoss_Solaris::Create(m_pDevice, m_pDeviceContext))))
-		return E_FAIL;
-	
 	return S_OK;
 }
 
@@ -1321,6 +1317,16 @@ HRESULT CLoader::Ready_Stage3()
 		MSGBOX(L"캡슐 장애물 프로토타입 생성 실패")
 			return E_FAIL;
 	}
+
+	//Boss Solaris
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE3, L"Model_Boss_Solaris", CModel::Create(m_pDevice, m_pDeviceContext,
+		L"../bin/FBX/Monster/Solaris.fbx", CModel::TYPE_ANIM, true))))
+		return E_FAIL;
+
+	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Solaris", CBoss_Solaris::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Weapon_Boss", CBoss_Weapon::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
 
 	return S_OK;
 }
@@ -1542,9 +1548,9 @@ HRESULT CLoader::Ready_Test_JS()
 	if (FAILED(Load_Stage1UILoad()))
 		return E_FAIL;
 
-	//// Effect
-	if (FAILED(Load_Stage1EffectLoad()))
-		return E_FAIL;
+	////// Effect
+	//if (FAILED(Load_Stage1EffectLoad()))
+	//	return E_FAIL;
 
 	///////////////////////////////////////// 소드 트레일
 	if (FAILED(Load_TrailEffects()))

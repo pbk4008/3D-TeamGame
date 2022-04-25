@@ -38,6 +38,8 @@ HRESULT CStage2::NativeConstruct()
 #ifndef _DEBUG
 	m_bDebug = false;
 #endif
+	g_pWeaponGenerator = CWeaponGenerator::GetInstance();
+
 	if (FAILED(CLevel::NativeConstruct()))
 		return E_FAIL;
 
@@ -48,8 +50,6 @@ HRESULT CStage2::NativeConstruct()
 
 	if (FAILED(Ready_MapObject()))
 		return E_FAIL;
-
-	g_pWeaponGenerator = CWeaponGenerator::GetInstance();
 
 	if (FAILED(Ready_Player(L"Layer_Silvermane")))
 		return E_FAIL;
@@ -1288,14 +1288,18 @@ void CStage2::Free()
 {
 	CLevel::Free();
 
-	Safe_Release(m_pTriggerSystem);
+	if(m_pTriggerSystem)
+		Safe_Release(m_pTriggerSystem);
 
-	g_pInteractManager->Remove_Interactable();
-	CWeaponGenerator::DestroyInstance();
-	CDropManager::DestroyInstance();
+	if(g_pInteractManager)
+		g_pInteractManager->Remove_Interactable();
+
+	if (g_pDropManager)
+		CDropManager::DestroyInstance();
 
 	for (auto& iter : m_pDumyDropData)
 		Safe_Delete(iter);
 	m_pDumyDropData.clear();
 
+	CWeaponGenerator::DestroyInstance();
 }

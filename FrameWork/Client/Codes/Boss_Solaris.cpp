@@ -86,6 +86,8 @@ HRESULT CBoss_Solaris::NativeConstruct(const _uint _iSceneID, void* pArg)
 
 	m_pWeapon->setActive(true);
 	setActive(true);
+
+	//원래는 active false였다가 시네마틱끝나고 true로 바꿔줘야함 
 	return S_OK;
 }
 
@@ -302,12 +304,13 @@ HRESULT CBoss_Solaris::SetUp_Components()
 	Desc.fRotationPerSec = XMConvertToRadians(60.f);
 	m_pTransform->Set_TransformDesc(Desc);
 
-	if (FAILED(__super::SetUp_Components((_uint)SCENEID::SCENE_TEST_JS, L"Model_Boss_Solaris", L"Model", (CComponent**)&m_pModel)))
+	if (FAILED(__super::SetUp_Components(m_iSceneID, L"Model_Boss_Solaris", L"Model", (CComponent**)&m_pModel)))
 	{
 		return E_FAIL;
 	}
 
 	_matrix matPivot = XMMatrixIdentity();
+
 	matPivot = XMMatrixScaling(0.012f, 0.012f, 0.012f) * XMMatrixRotationY(XMConvertToRadians(180.f));
 	m_pModel->Set_PivotMatrix(matPivot);
 

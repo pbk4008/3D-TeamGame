@@ -96,6 +96,8 @@ HRESULT CBullet::Render()
 	if (FAILED(m_pModelCom->SetUp_ValueOnShader("g_ProjMatrix", &smatProj, sizeof(_matrix))))
 		return E_FAIL;
 
+
+
 	for (_uint i = 0; i < m_pModelCom->Get_NumMeshContainer(); ++i)
 		if (FAILED(m_pModelCom->Render(i, 0))) 	return E_FAIL;
 
