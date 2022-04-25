@@ -2573,8 +2573,8 @@ void CStage1::Free()
 	CScenematicManager::DestroyInstance();
 	CIndicator_Manager::DestroyInstance();
 	CWeaponGenerator::DestroyInstance();
-
 	CDropManager::DestroyInstance();
+
 	Safe_Release(m_pTriggerSystem);
 
 	for (auto& pObj : m_vecMeteor)

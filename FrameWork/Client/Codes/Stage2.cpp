@@ -119,8 +119,9 @@ _int CStage2::Tick(_double TimeDelta)
 	if(g_pInteractManager)
 		g_pInteractManager->Tick(TimeDelta);
 
-	//if(g_pDropManager)
-	//	g_pDropManager->Tick();
+	if(g_pDropManager)
+		g_pDropManager->Tick();
+
 
 	return _int();
 }
