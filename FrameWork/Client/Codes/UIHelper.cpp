@@ -30,11 +30,13 @@ HRESULT CUIHelper::NativeConstruct(void* pArg)
 
 _int CUIHelper::Tick(_double TimeDelta)
 {
+	TimeDelta = g_dImmutableTime;
 	return _int();
 }
 
 _int CUIHelper::LateTick(_double TimeDelta)
 {
+	TimeDelta = g_dImmutableTime;
 	return _int();
 }
 

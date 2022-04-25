@@ -47,6 +47,7 @@ HRESULT CUI_QuestClear::NativeConstruct(const _uint iSceneID, void* pArg)
 
 _int CUI_QuestClear::Tick(_double dDeltaTime)
 {
+	dDeltaTime = g_dImmutableTime;
 	if (FAILED(CUI::Tick(dDeltaTime)))
 		return -1;
 
@@ -55,6 +56,7 @@ _int CUI_QuestClear::Tick(_double dDeltaTime)
 
 _int CUI_QuestClear::LateTick(_double TimeDelta)
 {
+	TimeDelta = g_dImmutableTime;
 	if (FAILED(CUI::LateTick(TimeDelta)))
 		return -1;
 
@@ -86,7 +88,7 @@ void CUI_QuestClear::Show(_double dTimeDelta)
 {
 	if (m_fInitScale.x > m_fEndScale.x)
 	{
-		m_fInitScale.y = m_fInitScale.x -= dTimeDelta * 500;
+		m_fInitScale.y = m_fInitScale.x -= (_float)dTimeDelta * 500.f;
 
 		if (m_fInitScale.x <= m_fEndScale.x)
 		{

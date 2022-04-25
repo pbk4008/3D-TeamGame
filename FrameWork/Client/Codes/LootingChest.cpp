@@ -98,7 +98,7 @@ _int CLootingChest::Input(const _double& _dDeltaTime)
 	if (NO_EVENT != iProgress)
 		return iProgress;
 
-	if (g_pGameInstance->getkeyUp(DIK_C))
+	if (!g_pGameInstance->getkeyPress(DIK_C))
 	{
 		return ToIdle();
 	}

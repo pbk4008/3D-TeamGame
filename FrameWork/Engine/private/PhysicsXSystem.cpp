@@ -105,7 +105,8 @@ const _int CPhysicsXSystem::Tick(const _double& _dDeltaTime)
 	if (!m_pScene)
 		return -1;
 
-	m_pScene->simulate((PxReal)_dDeltaTime);
+	//m_pScene->simulate((PxReal)_dDeltaTime);
+	m_pScene->simulate(1.f / 60.f);
 	m_pScene->fetchResults(true);
 	m_pSimulationEventCallback->FetchResult();
 

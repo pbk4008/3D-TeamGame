@@ -86,13 +86,11 @@ void CBastion_Healer_Death::Look_Monster(void)
 CBastion_Healer_Death* CBastion_Healer_Death::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext, void* _pArg)
 {
 	CBastion_Healer_Death* pInstance = new CBastion_Healer_Death(_pDevice, _pDeviceContext);
-
 	if (FAILED(pInstance->NativeConstruct(_pArg)))
 	{
 		MSGBOX("CBastion_Healer_Death Create Fail");
 		Safe_Release(pInstance);
 	}
-
 	return pInstance;
 }
 

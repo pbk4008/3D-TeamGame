@@ -44,7 +44,6 @@ public:
 	{
 		if (m_vecTrigger.empty())
 			return -1;
-		_bool bCheck = false;
 		_uint iSize = (_uint)m_vecTrigger.size();
 		for (_uint i = 0; i < iSize; i++)
 		{
@@ -57,20 +56,12 @@ public:
 					(m_pStage->*m_vecTriggerFunction[i])();
 					m_iClearIndex = i;
 				}
-				if (!m_vecClear[i])
-					bCheck = true;
 			}
-			else
-				bCheck = true;
 		}
-		if (!bCheck)
+		if (m_bAllTriggerOn && !m_bOverlap)
 		{
-			m_bAllTriggerOn = true;
-			if (m_bAllTriggerOn && !m_bOverlap)
-			{
-				(m_pStage->*m_vecTriggerFunction.back())();
-				m_bOverlap = true;
-			}
+			(m_pStage->*m_vecTriggerFunction.back())();
+			m_bOverlap = true;
 		}
 
 		return _uint();
@@ -96,14 +87,8 @@ public:
 
 		if (m_iClearIndex < iSize)
 		{
-			//CurrentTriggerMonsterAllDelete();
 			Trigger_Clear();
 			Next_TriggerOn();
-			/*if (m_iClearIndex != iSize - 1)
-			{
-				m_vecTrigger[m_iClearIndex + 1]->setActive(true);
-				m_vecTrigger[m_iClearIndex + 1]->TurnOnTrigger(true);
-			}*/
 		}
 	}
 	void Trigger_Clear()
@@ -222,6 +207,7 @@ public:
 	}
 	const vector<_float3> Get_MonsterSpawnPoint(MONSTER eType) { return m_pVecMonsterSpawnPoint[(_uint)eType]; }
 	const _int Get_CurrentTriggerNumber() { return m_iClearIndex; }
+	void setAllTriggerClear(_bool bCheck) { m_bAllTriggerOn = bCheck; }
 private:
 	virtual void Free() override
 	{

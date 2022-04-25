@@ -54,11 +54,9 @@ _int C1H_SwordAttackNormalR1_04Swap::Tick(const _double& _dDeltaTime)
 			return E_FAIL;
 
 		// 이펙트
-		_vector Pos = { 0.f, 0.03f, 0.f ,0.f };
 		m_pSilvermane->Active_Effect((_uint)EFFECT::ATTACK_GROUND, (svLook * 2.f) + (svUp * 0.1f));
 		m_pSilvermane->Active_Effect((_uint)EFFECT::ATTACK_GROUND_2, (svLook * 2.f) + (svUp * 0.1f));
 
-		Pos = { 0.f, 0.1f, 0.f ,0.f };
 		m_pSilvermane->Active_Effect((_uint)EFFECT::HIT_GROUND_SMOKE, (svLook * 2.f) + (svUp * 0.1f));
 
 		// 범위 공격 

@@ -47,9 +47,9 @@ _int CQuestManager::Late_Tick(_double dTimeDelta)
 
 HRESULT CQuestManager::Render(void)
 {
-	if (!g_pInvenUIManager->IsOpenModal())
+	if (!g_pInvenUIManager->IsOpenModal() &&
+		!g_pGuideManager->IsOpenDeathUI())
 	{
-
 		for (_int i = 0; i < m_vecQuest.size(); ++i)
 		{
 			m_vecQuest[i]->Render();

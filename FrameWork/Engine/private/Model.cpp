@@ -412,10 +412,9 @@ HRESULT CModel::Render(_uint iMeshContainerIndex, _uint iPassIndex)
 				m_vecMaterials[iMtrlIndex]->Set_InputLayout(iPassIndex);
 
 				/*_matrix		BoneMatrices[256];*/
-				ZeroMemory(m_curbonemat, sizeof(_matrix) * 256);
-
 				if (m_eMeshType == TYPE_ANIM)
 				{
+					ZeroMemory(m_curbonemat, sizeof(_matrix) * 256);
 					pMeshContainer->SetUp_BoneMatrices(m_curbonemat, XMLoadFloat4x4(&m_PivotMatrix));
 
 					if (FAILED(m_vecMaterials[iMtrlIndex]->SetUp_ValueOnShader("g_BoneMatrices", m_curbonemat, sizeof(_matrix) * 256)))

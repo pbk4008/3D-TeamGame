@@ -146,13 +146,15 @@ _int C1H_Dash::Input(const _double& _dDeltaTime)
 
 	if (m_iCutIndex < m_pAnimationController->Get_CurKeyFrameIndex())
 	{
-		if (g_pGameInstance->getkeyPress(DIK_Q))
+		if (m_pSilvermane->IsLootShield())
 		{
-			if (FAILED(m_pStateController->Change_State(L"Shield_BlockStart")))
-				return E_FAIL;
-			return STATE_CHANGE;
+			if (g_pGameInstance->getkeyPress(DIK_Q))
+			{
+				if (FAILED(m_pStateController->Change_State(L"Shield_BlockStart")))
+					return E_FAIL;
+				return STATE_CHANGE;
+			}
 		}
-
 		if (g_pGameInstance->getMouseKeyDown(CInputDev::MOUSESTATE::MB_LBUTTON))
 		{
 			return ToDashAttack();

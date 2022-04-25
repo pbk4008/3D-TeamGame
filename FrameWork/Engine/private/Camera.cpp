@@ -79,7 +79,7 @@ void CCamera::Update_Matrix(const _fmatrix& matWorld)
 void CCamera::Change_Fov(_float fAngle)
 {
 	m_tCameraDesc.fFovy = fAngle;
-	XMStoreFloat4x4(&m_matProj, XMMatrixPerspectiveFovLH(m_tCameraDesc.fFovy, m_tCameraDesc.fAspect, m_tCameraDesc.fNear, m_tCameraDesc.fFar));
+	setProjMatrix();
 }
 
 HRESULT CCamera::setViewMatrix()

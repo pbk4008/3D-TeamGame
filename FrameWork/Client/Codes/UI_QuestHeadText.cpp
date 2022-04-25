@@ -42,6 +42,7 @@ HRESULT CUI_QuestHeadText::NativeConstruct(const _uint iSceneID, void* pArg)
 
 _int CUI_QuestHeadText::Tick(_double dDeltaTime)
 {
+	dDeltaTime = g_dImmutableTime;
 	if (FAILED(CUI::Tick(dDeltaTime)))
 		return -1;
 
@@ -50,6 +51,7 @@ _int CUI_QuestHeadText::Tick(_double dDeltaTime)
 
 _int CUI_QuestHeadText::LateTick(_double TimeDelta)
 {
+	TimeDelta = g_dImmutableTime;
 	if (FAILED(CUI::LateTick(TimeDelta)))
 		return -1;
 
@@ -63,7 +65,8 @@ HRESULT CUI_QuestHeadText::Render()
 {
 	if (FAILED(CUI::Render()))
 		return E_FAIL;
-	if (!g_pInvenUIManager->IsOpenModal())
+	if (!g_pInvenUIManager->IsOpenModal() &&
+		!g_pGuideManager->IsOpenDeathUI())
 	{
 		m_pSigleImageCom->Render(m_pTransform);
 	}

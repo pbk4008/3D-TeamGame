@@ -84,7 +84,7 @@ HRESULT C1H_SwordAttackNormalR1_04::EnterState()
 	m_iAttackStartIndex = 18;
 	m_iAttackEndIndex = 30;
 
-	m_iTrailStartIndex = 18;
+	m_iTrailStartIndex = 17;
 	m_iTrailEndIndex = 35;
 
 	// Ω¶¿Ã≈© ø…º«

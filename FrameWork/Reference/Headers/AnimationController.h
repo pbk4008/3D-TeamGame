@@ -76,7 +76,7 @@ public:
 	const _int Move_Transform(const _double& _dDeltaTime);
 	const _int Add_TransformVelocity(const _double& _dDeltaTime);
 	void Reset_Animation();
-	HRESULT Set_Animation(_uint iIndex);
+	HRESULT Set_Animation(_uint iIndex, _bool bLoop = false);
 	
 public: /* For.Debug */
 	void Render_Debug();

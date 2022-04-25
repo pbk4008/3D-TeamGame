@@ -24,6 +24,7 @@ public:
 		A_TURN_90_LEFT, A_TURN_90_RIGHT,
 		A_TURN_135_LEFT, A_TURN_135_RIGHT,
 		A_TURN_180_LEFT, A_TURN_180_RIGHT,
+		A_Execution,
 		A_END
 	};
 
@@ -45,6 +46,7 @@ public:
 	void Hit(CCollision& pCol);
 	virtual void Hit(const ATTACKDESC& _tAttackDesc) override;
 	virtual void Parry(const PARRYDESC& _tParryDesc) override;
+	virtual void Execution() override;
 	void Remove_Collider();
 private:
 	HRESULT Ready_Components();

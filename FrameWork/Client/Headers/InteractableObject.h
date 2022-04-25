@@ -39,7 +39,7 @@ public:
 	virtual void EndInteraction(void);
 
 public:
-	_bool IsAlive() const { return !m_bDead; }
+	_bool IsAlive() const { return !m_bInteractDead; }
 	_bool IsInteratcing(void);
 	_bool IsShowGuideUI(void);
 	void  ShowGuideUI(void);
@@ -53,10 +53,10 @@ public:
 
 	/* for. Check Interacting */
 public:
-	_bool m_bInteracting = false;
-	_bool m_bShowGuideUI = false;
-	_bool m_isFocused	 = false;
-	_bool m_bDead		 = false;
+	_bool m_bInteracting    = false;
+	_bool m_bShowGuideUI    = false;
+	_bool m_isFocused	    = false;
+	_bool m_bInteractDead	= false;
 
 public:
 	virtual CGameObject * Clone(const _uint _iSceneID, void* _pArg = nullptr) PURE;

@@ -85,16 +85,18 @@ HRESULT CMeshEffect::Render()
 	// Alpha
 	m_pModel->SetUp_ValueOnShader("g_fAlpha", &m_fAlpha, sizeof(_float));
 	// UV
+	m_pModel->SetUp_ValueOnShader("g_isReverse", &m_isReverse, sizeof(_bool));
 	m_pModel->SetUp_ValueOnShader("g_vPlusUV", &m_vPlusUV, sizeof(_float2));
+	m_pModel->SetUp_ValueOnShader("g_vTiling", &m_vTiling, sizeof(_float2));
 	// X
 	m_pModel->SetUp_ValueOnShader("g_isFlowX", &m_isFlowX, sizeof(_bool));
 	m_pModel->SetUp_ValueOnShader("g_fFlowSpeedX", &m_fFlowSpeedX, sizeof(_float));
 	// Y
-	m_pModel->SetUp_ValueOnShader("g_isFlowX", &m_isFlowY, sizeof(_bool));
+	m_pModel->SetUp_ValueOnShader("g_isFlowY", &m_isFlowY, sizeof(_bool));
 	m_pModel->SetUp_ValueOnShader("g_fFlowSpeedY", &m_fFlowSpeedY, sizeof(_float));
 	//Color
 	m_pModel->SetUp_ValueOnShader("g_isCustomColor", &m_isCustomColor, sizeof(_float));
-	m_pModel->SetUp_ValueOnShader("g_vColor", &m_vColor, sizeof(_float));
+	m_pModel->SetUp_ValueOnShader("g_vColor", &m_vColor, sizeof(_float3));
 
 
 	return S_OK;

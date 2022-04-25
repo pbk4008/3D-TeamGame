@@ -15,6 +15,7 @@
 #include "Bastion_Healer_Groggy.h"
 #include "Bastion_Healer_Groggy_End.h"
 #include "Bastion_Healer_CastProtect.h"
+#include "Healer_Execution.h"
 
 #include "Stage1.h"
 #include "Stage2.h"
@@ -140,6 +141,17 @@ _int CMonster_Bastion_Healer::Tick(_double _dDeltaTime)
 				Active_Effect((_uint)EFFECT::DEATH);
 			}
 		}
+		else if (L"Execution" == m_pStateController->Get_CurStateTag())
+		{
+			if (m_pAnimator->Get_CurrentAnimation()->Is_Finished() && m_lifetime <= 0.f)
+			{
+				m_bdissolve = true;
+				m_pPanel->Set_UIRemove(true);
+			}
+
+			if (m_lifetime >= 1.f)
+				Set_Remove(true);
+		}
 		else
 		{
 			Set_Remove(true);
@@ -222,10 +234,11 @@ HRESULT CMonster_Bastion_Healer::Render()
 			if (FAILED(m_pModel->Render(i, 1))) MSGBOX("Failed To Rendering Healer");
 			break;
 		default:
-			desc.metalic = 0.4f;
+			desc.metalic = 0.3f;
 			desc.roughness = -0.1f;
-			desc.color = _float4(0.28f, 1.f, 0.1f, 1.f);
-			desc.empower = 0.7f;
+			desc.color = _float4(0.254f, 1.f, 0.f, 1.f);
+			desc.empower = 1.f;
+
 			CActor::BindConstantBuffer(wstrCamTag, &desc);
 			if (FAILED(m_pModel->Render(i, 0))) MSGBOX("Failed To Rendering Healer");
 			break;
@@ -311,6 +324,20 @@ void CMonster_Bastion_Healer::Hit(const ATTACKDESC& _tAttackDesc)
 void CMonster_Bastion_Healer::Parry(const PARRYDESC& _tParryDesc)
 {
 	m_fGroggyGauge += (m_fMaxGroggyGauge - m_fGroggyGauge);
+}
+
+void CMonster_Bastion_Healer::Execution()
+{
+	Set_Dead();
+	Remove_Collider();
+
+	CLevel* pLevel = g_pGameInstance->getCurrentLevelScene();
+	if (g_pGameInstance->getCurrentLevel() == (_uint)SCENEID::SCENE_STAGE1)
+		static_cast<CStage1*>(pLevel)->Minus_MonsterCount();
+	else if (g_pGameInstance->getCurrentLevel() == (_uint)SCENEID::SCENE_STAGE2)
+		static_cast<CStage2*>(pLevel)->Minus_MonsterCount();
+
+	m_pStateController->Change_State(L"Execution");
 }
 
 void CMonster_Bastion_Healer::Remove_Collider()
@@ -454,6 +481,13 @@ HRESULT CMonster_Bastion_Healer::Ready_AnimFSM(void)
 	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::A_STUN_ED, (_uint)ANIM_TYPE::A_STUN, pAnimation, TRUE, TRUE, FALSE, ERootOption::XYZ, FALSE)))
 		return E_FAIL;
 #pragma endregion
+
+#pragma region Ã³Çü
+	pAnimation = m_pModel->Get_Animation("A_Execution");
+	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::A_Execution, (_uint)ANIM_TYPE::A_HEAD, pAnimation, TRUE, TRUE, FALSE, ERootOption::XYZ, FALSE)))
+		return E_FAIL;
+#pragma endregion
+
 #pragma region Turn
 	//pAnimation = m_pModel->Get_Animation("A_Trun_45_Right");
 	//pAnimation = m_pModel->Get_Animation("A_Turn_45_Left");
@@ -483,6 +517,8 @@ HRESULT CMonster_Bastion_Healer::Ready_AnimFSM(void)
 	m_pAnimator->Insert_AnyEntryAnimation((_uint)ANIM_TYPE::A_TURN_180_RIGHT);
 	m_pAnimator->Insert_AnyEntryAnimation((_uint)ANIM_TYPE::A_TURN_90_RIGHT);
 	m_pAnimator->Insert_AnyEntryAnimation((_uint)ANIM_TYPE::A_TURN_90_RIGHT);
+	m_pAnimator->Insert_AnyEntryAnimation((_uint)ANIM_TYPE::A_Execution);
+
 #pragma endregion
 
 #pragma region  Auto Change Anim
@@ -538,6 +574,9 @@ HRESULT CMonster_Bastion_Healer::Ready_StateFSM(void)
 		return E_FAIL;
 	/* for. Cast Protect */
 	if (FAILED(m_pStateController->Add_State(L"Cast_Protect", CBastion_Healer_CastProtect::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	/* for. Execution */
+	if (FAILED(m_pStateController->Add_State(L"Execution", CHealer_Execution::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 
 	for (auto& pair : m_pStateController->Get_States())

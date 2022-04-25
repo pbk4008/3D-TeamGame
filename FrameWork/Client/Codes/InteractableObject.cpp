@@ -11,6 +11,7 @@ CInteractableObject::CInteractableObject(const CInteractableObject& _rhs)
 	: CActor(_rhs)
 	, m_bInteracting(_rhs.m_bInteracting)
 	, m_bShowGuideUI(_rhs.m_bShowGuideUI)
+	, m_bInteractDead(_rhs.m_bInteractDead)
 {
 	CInteractManager::GetInstance()->AddInteractObject(this);
 }

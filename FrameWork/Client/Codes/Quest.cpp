@@ -65,6 +65,7 @@ HRESULT CQuest::Ready_UIObject(void* pArg)
 
 _int CQuest::Tick(_double dDeltaTime)
 {
+	dDeltaTime = g_dImmutableTime;
 	if (FAILED(__super::Tick(dDeltaTime)))
 		return E_FAIL;
 
@@ -100,6 +101,7 @@ _int CQuest::Tick(_double dDeltaTime)
 
 _int CQuest::LateTick(_double TimeDelta)
 {
+	TimeDelta = g_dImmutableTime;
 	if (FAILED(__super::LateTick(TimeDelta)))
 		return E_FAIL;
 
@@ -140,7 +142,8 @@ _int CQuest::LateTick(_double TimeDelta)
 
 HRESULT CQuest::Render()
 {
-	if (!g_pInvenUIManager->IsOpenModal())
+	if (!g_pInvenUIManager->IsOpenModal() &&
+		!g_pGuideManager->IsOpenDeathUI())
 	{
 		m_pQuestText->Render();
 
