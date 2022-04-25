@@ -203,8 +203,8 @@ HRESULT CLoader::SetUp_Stage1_Object()
 		return E_FAIL;
 #pragma endregion
 
-	if (FAILED(Load_Stage1JumpTrigger()))
-		return E_FAIL;
+	//if (FAILED(Load_Stage1JumpTrigger()))
+	//	return E_FAIL;
 
 	if (FAILED(Load_Stage1_TreasureChest_Load()))
 		return E_FAIL;
@@ -1096,12 +1096,12 @@ HRESULT CLoader::Load_Stage1PlayerLoad()
 
 
 	// Test Object
-	//matPivot = XMMatrixIdentity();
-	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Test", CModel::Create(m_pDevice, m_pDeviceContext, "../bin/FBX/Cinema/Test_box/", "Test_box.fbx"
-	//	, L"../../Reference/ShaderFile/Shader_StaticMesh.hlsl", matPivot, CModel::TYPE_STATIC, true))))
-	//	return E_FAIL;
+	matPivot = XMMatrixIdentity();
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Test", CModel::Create(m_pDevice, m_pDeviceContext, "../bin/FBX/Cinema/Test_box/", "Test_box.fbx"
+		, L"../../Reference/ShaderFile/Shader_StaticMesh.hlsl", matPivot, CModel::TYPE_STATIC, true))))
+		return E_FAIL;
 
-	//if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_TestObject", CTestObj::Create(m_pDevice, m_pDeviceContext)))) MSGBOX(L"테스트 오브젝트 생성");
+	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_TestObject", CTestObj::Create(m_pDevice, m_pDeviceContext)))) MSGBOX(L"테스트 오브젝트 생성");
 
 	return S_OK;
 }

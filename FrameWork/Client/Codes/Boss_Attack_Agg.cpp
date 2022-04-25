@@ -34,10 +34,9 @@ _int CBoss_Attack_Agg::Tick(const _double& TimeDelta)
 
 	//어택 체크
 	_uint iCurKeyFrameIndex = m_pAnimator->Get_AnimController()->Get_CurKeyFrameIndex();
-	 
-	cout << iCurKeyFrameIndex << endl;
+	//cout << iCurKeyFrameIndex << endl;
 
-	//m_pMonster->RimlightCheck(true, _float3(1, 0, 0));
+	m_pMonster->RimlightCheck(true, _float3(1, 0, 0));
 
 	_vector svPos = m_pTransform->Get_State(CTransform::STATE_POSITION);
 	_vector svLook = XMVector3Normalize(m_pTransform->Get_State(CTransform::STATE_LOOK));
@@ -87,10 +86,14 @@ _int CBoss_Attack_Agg::Tick(const _double& TimeDelta)
 	{
 		if (20.f <= fDistToPlayer)
 		{
+			cout << "agg -> Walk" << endl;
+
 			m_pStateController->Change_State(L"Walk_Front");
 		}
 		else if (20.f > fDistToPlayer)
 		{
+			cout << "agg -> turn" << endl;
+
 			m_pStateController->Change_State(L"Turn");
 		}
 	}
@@ -122,6 +125,8 @@ HRESULT CBoss_Attack_Agg::EnterState()
 
 	static_cast<CBoss_Solaris*>(m_pMonster)->Set_HitMotion(false);
 
+	cout << "Attack_Agg" << endl;
+
 	m_bShakeCheck = false;
 	m_bEffectCheck = false;
 
@@ -129,7 +134,6 @@ HRESULT CBoss_Attack_Agg::EnterState()
 	m_pMonster->RimlightCheck(true);
 
 	m_pAnimator->Get_AnimController()->Set_PlaySpeed(1.f);
-
  	m_pAnimator->Change_AnyEntryAnimation((_uint)CBoss_Solaris::M_BossAnimState::ATTACK_AGG_SPIN_360);
 
 	return S_OK;

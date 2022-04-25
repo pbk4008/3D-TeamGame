@@ -30,92 +30,9 @@ _int CBoss_Stagger_Left::Tick(const _double& TimeDelta)
 
 	m_pAnimator->Tick(TimeDelta);
 
-	cout << "Stagger_Left" << endl;
-	
 	if (m_pAnimator->Get_CurrentAnimation()->Is_Finished())
 	{
-		_vector vMonsterPos = m_pTransform->Get_State(CTransform::STATE::STATE_POSITION);
-		_vector vDist = vMonsterPos - g_pObserver->Get_PlayerPos();
-		_float fDistToPlayer = XMVectorGetX(XMVector3Length(vDist));
-
-		if (0.6f < m_pMonster->Get_HpRatio())
-		{
-			//레이저없음
-
-			if (30.f > fDistToPlayer)
-			{
-				_int iRandom = rand() % 5;
-
-				switch (iRandom)
-				{
-				case 0:
-					m_pStateController->Change_State(L"Attack_Agg");
-					break;
-				case 1:
-					m_pStateController->Change_State(L"Attack_R2");
-					break;
-				case 2:
-					m_pStateController->Change_State(L"Attack_S3");
-					break;
-				case 3:
-					m_pStateController->Change_State(L"Attack_R1");
-					break;
-				case 4:
-					m_pStateController->Change_State(L"Attack_S5_Protocol");
-					break;
-				}
-			}
-			else if (30.f <= fDistToPlayer)
-			{
-				m_pStateController->Change_State(L"Attack_S5_Protocol");
-			}
-		}
-		else if (0.6f >= m_pMonster->Get_HpRatio())
-		{
-			if (30.f > fDistToPlayer)
-			{
-				_int iRandom = rand() %7;
-
-				switch (iRandom)
-				{
-				case 0:
-					m_pStateController->Change_State(L"Attack_Agg");
-					break;
-				case 1:
-					m_pStateController->Change_State(L"Attack_R2");
-					break;
-				case 2:
-					m_pStateController->Change_State(L"Attack_S3");
-					break;
-				case 3:
-					m_pStateController->Change_State(L"Attack_R1");
-					break;
-				case 4:
-					m_pStateController->Change_State(L"Attack_S5_Protocol");
-					break;
-				case 5:
-					m_pStateController->Change_State(L"Attack_S6");
-					break;
-				case 6:
-					m_pStateController->Change_State(L"Attack_S2_Variant");
-					break;
-				}
-			}
-			else if (30.f <= fDistToPlayer)
-			{
-				_int iRandom = rand() %2;
-
-				switch (iRandom)
-				{
-				case 0:
-					m_pStateController->Change_State(L"Attack_S6");
-					break;
-				case 1:
-					m_pStateController->Change_State(L"Attack_S5_Protocol");
-					break;
-				}
-			}
-		}
+		static_cast<CBoss_Solaris*>(m_pMonster)->Set_Random_AttackAnim();
 	}
 
 	return _int();
@@ -142,6 +59,8 @@ HRESULT CBoss_Stagger_Left::EnterState()
 {
 	if (FAILED(__super::EnterState()))
 		return E_FAIL;
+
+	cout << "Stagger_Left" << endl;
 
 	m_pAnimator->Get_AnimController()->Set_MoveSpeed(40.0f);
 

@@ -3,6 +3,7 @@
 #include "Loading.h"
 #include "Silvermane.h"
 #include "Environment.h"
+#include "TestObj.h"
 
 CStage3::CStage3(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
 	:CLevel(pDevice, pDeviceContext)
@@ -26,6 +27,9 @@ HRESULT CStage3::NativeConstruct()
 		return E_FAIL;
 
 	g_pGameInstance->Change_BaseCamera(L"Camera_Silvermane");
+
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE3, L"Layer_Test", L"Proto_GameObject_TestObject")))
+		return E_FAIL;
 
 	return S_OK;
 }
