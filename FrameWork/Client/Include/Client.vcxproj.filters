@@ -1056,7 +1056,7 @@
     </Filter>
     <Filter Include="02.GameObject\03.Character\02.Boss\01.Boss\State\03.Dash\01.Flip">
       <UniqueIdentifier>{ea86cf91-ea2a-402e-85f5-0e259717833a}</UniqueIdentifier>
-	</Filter>
+    </Filter>
     <Filter Include="03.System\10.GuideUIManager">
       <UniqueIdentifier>{8c873b28-f498-4e9e-8d48-c7a54e04cfd4}</UniqueIdentifier>
     </Filter>
@@ -1068,7 +1068,7 @@
     </Filter>
     <Filter Include="02.GameObject\05.UI\05.Hud\03.Guide\01.GuideTex">
       <UniqueIdentifier>{3803125f-9097-473b-8e77-dd2e9d614c15}</UniqueIdentifier>
-	</Filter>
+    </Filter>
     <Filter Include="03.System\07.Scenematic\01.Stage1\00. Shot 01">
       <UniqueIdentifier>{add1b9db-bbdb-4c2b-9855-4668fe034659}</UniqueIdentifier>
     </Filter>
@@ -2393,7 +2393,7 @@
     </ClInclude>
     <ClInclude Include="..\Headers\Boss_BackFlip.h">
       <Filter>02.GameObject\03.Character\02.Boss\01.Boss\State\03.Dash\01.Flip</Filter>
-	</ClInclude>
+    </ClInclude>
     <ClInclude Include="..\Headers\GuideUIManager.h">
       <Filter>03.System\10.GuideUIManager</Filter>
     </ClInclude>
@@ -3149,7 +3149,7 @@
     <ClCompile Include="..\Codes\1H_FlinchLeft.cpp">
       <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\HIt</Filter>
     </ClCompile>
-    <ClCompile Include="..\Codes\Siilvermane_Hit.cpp">
+    <ClCompile Include="..\Codes\Silvermane_Hit.cpp">
       <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\HIt</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\JumpBox.cpp">
@@ -3586,7 +3586,7 @@
     </ClCompile>
     <ClCompile Include="..\Codes\Cinema3_6.cpp">
       <Filter>03.System\07.Scenematic\01.Stage1\04. Shot 04\Cinema3_6</Filter>
-     </ClCompile>
+    </ClCompile>
     <ClCompile Include="..\Codes\UI_Blank_FKey.cpp">
       <Filter>02.GameObject\05.UI\01.UI_Ingame\02.UI_JumpNode\00.Blank</Filter>
     </ClCompile>
@@ -3649,7 +3649,7 @@
     </ClCompile>
     <ClCompile Include="..\Codes\Boss_BackFlip.cpp">
       <Filter>02.GameObject\03.Character\02.Boss\01.Boss\State\03.Dash\01.Flip</Filter>
-	</ClCompile>
+    </ClCompile>
     <ClCompile Include="..\Codes\GuideUIManager.cpp">
       <Filter>03.System\10.GuideUIManager</Filter>
     </ClCompile>

@@ -41,6 +41,7 @@ public:
 	_float Get_CurrentHp() { return m_fCurrentHp; }
 	_float Get_MaxHp() { return m_fMaxHp; }
 	_float Get_GroggyGauge() { return m_fGroggyGauge; }
+	_float Get_MaxGroggyGauge() { return m_fMaxGroggyGauge; }
 	const _bool IsAttack() { return m_IsAttack; }
 	_bool Get_Groggy() { return m_bGroggy; }
 	const ATTACKDESC& Get_AttackDesc() const;

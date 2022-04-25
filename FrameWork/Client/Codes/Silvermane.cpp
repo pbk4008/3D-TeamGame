@@ -1192,7 +1192,6 @@ void CSilvermane::Set_IsTrasceCamera(const _bool _isTraceCamera)
 void CSilvermane::Set_IsDead(const _bool _isDead)
 {
 	m_bDead = _isDead;
-	m_pFlyingShield->Set_Remove(true);
 }
 
 void CSilvermane::Set_EquipWeapon(const _bool _isEquipWeapon)

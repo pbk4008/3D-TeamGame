@@ -936,7 +936,7 @@ call Update_Client.bat</Command>
     <ClCompile Include="..\Codes\Shooter_Hit.cpp" />
     <ClCompile Include="..\Codes\Shooter_Idle.cpp" />
     <ClCompile Include="..\Codes\Shooter_Walk.cpp" />
-    <ClCompile Include="..\Codes\Siilvermane_Hit.cpp" />
+    <ClCompile Include="..\Codes\Silvermane_Hit.cpp" />
     <ClCompile Include="..\Codes\Silvermane.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
