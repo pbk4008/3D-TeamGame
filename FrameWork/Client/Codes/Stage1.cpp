@@ -131,11 +131,11 @@ HRESULT CStage1::NativeConstruct()
 		return E_FAIL;
 	}
 
-	/*if (FAILED(Ready_MapObject()))
+	if (FAILED(Ready_MapObject()))
 	{
 		MSGBOX("Stage1 MapObject");
 		return E_FAIL;
-	}*/
+	}
 
 	//if (FAILED(Ready_TriggerSystem(L"../bin/SaveData/Trigger/MonsterSpawnTrigger.dat")))
 	//{
@@ -175,11 +175,11 @@ HRESULT CStage1::NativeConstruct()
 
 	g_pGameInstance->Change_BaseCamera(L"Camera_Silvermane");
 
-	if (FAILED(Ready_Meteor()))
-	{
-		MSGBOX("Meteor");
-		return E_FAIL;
-	}
+	//if (FAILED(Ready_Meteor()))
+	//{
+	//	MSGBOX("Meteor");
+	//	return E_FAIL;
+	//}
 
 	//if (FAILED(Ready_Cinema()))
 	// {
@@ -199,11 +199,11 @@ HRESULT CStage1::NativeConstruct()
 	//	return E_FAIL;
 	//}
 
-	if (FAILED(Ready_Wall()))
-	{
-		MSGBOX("Wall");
-		return E_FAIL;
-	}
+	//if (FAILED(Ready_Wall()))
+	//{
+	//	MSGBOX("Wall");
+	//	return E_FAIL;
+	//}
 	g_pGameInstance->PlayBGM(L"Stage1_BGM");
 	
 	return S_OK;
@@ -211,8 +211,8 @@ HRESULT CStage1::NativeConstruct()
 
 _int CStage1::Tick(_double TimeDelta)
 {
-	_vector vTmp = g_pObserver->Get_PlayerPos();
-	cout << XMVectorGetX(vTmp) << ", " << XMVectorGetY(vTmp) << ", " << XMVectorGetZ(vTmp) << endl;
+	/*_vector vTmp = g_pObserver->Get_PlayerPos();
+	cout << XMVectorGetX(vTmp) << ", " << XMVectorGetY(vTmp) << ", " << XMVectorGetZ(vTmp) << endl;*/
 #ifdef  _DEBUG
 	_int iLevel = 0;
 	if (g_pDebugSystem->Get_LevelMoveCheck(iLevel))
@@ -368,13 +368,13 @@ _int CStage1::Tick(_double TimeDelta)
 	//		return -1;
 	//	pMonster->setActive(true);
 	//}
-	//if (g_pGameInstance->getkeyDown(DIK_NUMPAD3))
-	//{
-	//	CMonster_Bastion_Shooter* pMonster = nullptr;
-	//	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Test", L"Proto_GameObject_Monster_Bastion_Shooter", &fPos, (CGameObject**)&pMonster)))
-	//		return -1;
-	//	pMonster->setActive(true);
-	//}
+	if (g_pGameInstance->getkeyDown(DIK_NUMPAD3))
+	{
+		CMonster_Bastion_Shooter* pMonster = nullptr;
+		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Test", L"Proto_GameObject_Monster_Bastion_Shooter", &fPos, (CGameObject**)&pMonster)))
+			return -1;
+		pMonster->setActive(true);
+	}
 
 	//if (g_pGameInstance->getkeyDown(DIK_NUMPAD4))
 	//{
@@ -421,13 +421,13 @@ _int CStage1::Tick(_double TimeDelta)
 		m_pIndicatorManager->Active_Indicator();
 
 	/*For Cinema*/
-	//if (m_pScenemaManager)
-	//{
-	//	if (g_pGameInstance->getkeyDown(DIK_END))
-	//		m_pScenemaManager->Active_Scenema((_uint)CINEMA_INDEX::CINEMA1_1);;
+	if (m_pScenemaManager)
+	{
+		if (g_pGameInstance->getkeyDown(DIK_END))
+			m_pScenemaManager->Active_Scenema((_uint)CINEMA_INDEX::CINEMA3_1);;
 
-	//	m_pScenemaManager->Tick(TimeDelta);
-	//}
+		m_pScenemaManager->Tick(TimeDelta);
+	}
 
 
 	/*for Meteor*/
@@ -606,9 +606,7 @@ HRESULT CStage1::Ready_Player(const _tchar* LayerTag)
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Camera", L"Proto_GameObject_Camera_Silvermane")))
 		return E_FAIL;
 
-	//Test
-	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Test", L"Proto_GameObject_TestObject")))
-	//	return E_FAIL;
+
 
 	return S_OK;
 }

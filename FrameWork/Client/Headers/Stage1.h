@@ -92,7 +92,6 @@ private:/*for Meteor*/
 	_float m_fAccMeteorSpawn;
 	_float m_fRandomMeteorSpawnTime;
 	_float m_fAccMeteorStartTime;
-	CModel* m_pTestModel;
 private:
 	_int m_iPortalCount;
 	_bool m_bPortalClear = false;
