@@ -47,6 +47,16 @@ HRESULT C2H_HammerChargeStage1_Loop::EnterState()
 	if (FAILED(__super::EnterState()))
 		return E_FAIL;
 
+	// ¶óÀÌÆ®
+	m_pSilvermane->OnLight(XMVectorSet(1.f, 0.2f, 0.2f, 1.f), XMVectorSet(1.f, 1.f, 1.f, 1.f), 10.f, 12.f);
+
+	_vector Pos = { 0.f, 0.03f, 0.f ,0.f };
+	m_pSilvermane->Active_Effect((_uint)EFFECT::ATTACK_GROUND, Pos);
+	m_pSilvermane->Active_Effect((_uint)EFFECT::ATTACK_GROUND_2, Pos);
+
+	Pos = { 0.f, 0.1f, 0.f ,0.f };
+	m_pSilvermane->Active_Effect((_uint)EFFECT::HIT_GROUND_SMOKE, Pos);
+
 	if (FAILED(m_pAnimationController->SetUp_NextAnimation("SK_Silvermane.ao|A_2H_Hammer_Charge_Stage_1_Loop", true)))
 		return E_FAIL;
 	m_pAnimationController->Set_RootMotion(true, true);

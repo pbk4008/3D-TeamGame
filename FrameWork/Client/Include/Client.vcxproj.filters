@@ -969,7 +969,7 @@
     </Filter>
     <Filter Include="02.GameObject\05.UI\05.Hud\03.Guide\01.GuideTex">
       <UniqueIdentifier>{3803125f-9097-473b-8e77-dd2e9d614c15}</UniqueIdentifier>
-	</Filter>
+    </Filter>
     <Filter Include="03.System\07.Scenematic\01.Stage1\00. Shot 01">
       <UniqueIdentifier>{add1b9db-bbdb-4c2b-9855-4668fe034659}</UniqueIdentifier>
     </Filter>
@@ -1017,6 +1017,12 @@
     </Filter>
     <Filter Include="03.System\07.Scenematic\01.Stage1\04. Shot 04\Cinema3_6">
       <UniqueIdentifier>{391dcb6c-27df-4ddc-9818-c679d8e7091d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_Healer\State_Healer\Execution">
+      <UniqueIdentifier>{fb49967b-287f-4d2f-8d18-791f8f1804ee}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\02.Map\05.Bridge">
+      <UniqueIdentifier>{39c78171-d0dc-4108-aad2-bed06c971f23}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -2244,6 +2250,18 @@
     <ClInclude Include="..\Headers\UI_Guide_Texture.h">
       <Filter>02.GameObject\05.UI\05.Hud\03.Guide\01.GuideTex</Filter>
     </ClInclude>
+    <ClInclude Include="..\Headers\Healer_Execution.h">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Healer\State_Healer\Execution</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\UI_Fill_CKey2.h">
+      <Filter>02.GameObject\05.UI\01.UI_Ingame\02.UI_JumpNode\01.Fill</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\MeshEffect_Test2.h">
+      <Filter>02.GameObject\04.Effect\02.MeshEffect</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\BoxBridge.h">
+      <Filter>02.GameObject\02.Map\05.Bridge</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -3427,7 +3445,7 @@
     </ClCompile>
     <ClCompile Include="..\Codes\Cinema3_6.cpp">
       <Filter>03.System\07.Scenematic\01.Stage1\04. Shot 04\Cinema3_6</Filter>
-     </ClCompile>
+    </ClCompile>
     <ClCompile Include="..\Codes\UI_Blank_FKey.cpp">
       <Filter>02.GameObject\05.UI\01.UI_Ingame\02.UI_JumpNode\00.Blank</Filter>
     </ClCompile>
@@ -3439,6 +3457,18 @@
     </ClCompile>
     <ClCompile Include="..\Codes\UI_Guide_Texture.cpp">
       <Filter>02.GameObject\05.UI\05.Hud\03.Guide\01.GuideTex</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Healer_Execution.cpp">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Healer\State_Healer\Execution</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\UI_Fill_CKey2.cpp">
+      <Filter>02.GameObject\05.UI\01.UI_Ingame\02.UI_JumpNode\01.Fill</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\MeshEffect_Test2.cpp">
+      <Filter>02.GameObject\04.Effect\02.MeshEffect</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\BoxBridge.cpp">
+      <Filter>02.GameObject\02.Map\05.Bridge</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

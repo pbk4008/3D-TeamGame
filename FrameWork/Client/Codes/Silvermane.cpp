@@ -13,6 +13,7 @@
 #include "UI_Blank_CKey.h"
 #include "UI_Blank_FKey.h"
 #include "UI_Fill_CKey.h"
+#include "UI_Fill_CKey2.h"
 #include "InventoryData.h"
 #include "EquipmentData.h"
 #include "PlayerData.h"
@@ -268,7 +269,21 @@ HRESULT CSilvermane::NativeConstruct(const _uint _iSceneID, void* _pArg)
 		return E_FAIL;
 	if (m_pBlankFKey)
 		m_pBlankFKey->setActive(false);
-	
+	//Fill_Ckey2
+	CUI_Fill_Ckey2::UIACTIVEDESC tUIDesc2;
+	ZeroMemory(&tUIDesc2, sizeof(CUI_Fill_Ckey2::UIACTIVEDESC));
+	_tcscpy_s(tUIDesc2.UIDesc.TextureTag, L"Texture_Fill_Ckey");
+	_tcscpy_s(tUIDesc2.TextureTag2, L"Texture_Blank_Ckey");
+	tUIDesc2.UIDesc.bMinus = false;
+	tUIDesc2.UIDesc.fAngle = 0.f;
+	tUIDesc.UIDesc.fPos = { 0.f, 0.f, 0.f };
+	tUIDesc2.UIDesc.fSize = { 10.f , 10.f };
+	tUIDesc2.UIDesc.IDTag = (_uint)GAMEOBJECT::UI_STATIC;
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer(m_iSceneID, L"Layer_UI_FillC2", L"Proto_GameObject_UI_Fill_CKey2", &tUIDesc2, (CGameObject**)&m_pFillCKey2)))
+		return E_FAIL;
+	if (m_pFillCKey2)
+		m_pFillCKey2->setActive(false);
+
 
 	return S_OK;
 }
@@ -1192,7 +1207,6 @@ void CSilvermane::Set_IsTrasceCamera(const _bool _isTraceCamera)
 void CSilvermane::Set_IsDead(const _bool _isDead)
 {
 	m_bDead = _isDead;
-	m_pFlyingShield->Set_Remove(true);
 }
 
 void CSilvermane::Set_EquipWeapon(const _bool _isEquipWeapon)
@@ -1342,7 +1356,6 @@ m_pCurWeapon = pWeapon;
 #pragma endregion
 
 	return true;
-
 }
 
 const _bool CSilvermane::Change_Weapon()
@@ -1472,41 +1485,23 @@ void CSilvermane::Change_WeaponOnInventory(void)
 			return;
 	}
 	else if(2 == m_pPlayerData->EquipedSlot)
+	{
+		if (m_pEquipmentData->IsExistEquip(EEquipSlot::Weapon2)) /* 두번째 슬롯에 무기가 장착되어있는 경우 */
 		{
-			if (m_pEquipmentData->IsExistEquip(EEquipSlot::Weapon2)) /* 두번째 슬롯에 무기가 장착되어있는 경우 */
+			if (nullptr != m_pCurWeapon && /* 현재 장착중인 무기가 두번째 슬롯의 무기와 이름이 같은 경우  */
+				0 == m_pCurWeapon->Get_Name().compare(m_pEquipmentData->GetEquipment(EEquipSlot::Weapon2).weaponData.weaponName))
 			{
-				if (nullptr != m_pCurWeapon && /* 현재 장착중인 무기가 두번째 슬롯의 무기와 이름이 같은 경우  */
-					0 == m_pCurWeapon->Get_Name().compare(m_pEquipmentData->GetEquipment(EEquipSlot::Weapon2).weaponData.weaponName))
-				{
-					return; /* 장착 해제 X */
-				}
-				else /* 인벤에서 2번 슬롯 무기를 변경했다. */
-				{
-					if (nullptr != m_pCurWeapon)
-					{
-						Set_EquipWeapon(false);
-						Set_WeaponFixedBone("spine_03");
-						m_pCurWeapon = m_pEquipmentData->GetEquipment(EEquipSlot::Weapon2).weaponData.Get_Weapon();
-						m_pCurWeapon->Set_Owner(this);
-						m_pPlayerData->EquipedSlot = 2;
-						/* 무기 교체 후 애님 상태 변경 */
-						if (CWeapon::EType::Sword_1H == Get_WeaponType())
-							m_pStateController->Change_State(L"1H_SwordEquipOn");
-						else if (CWeapon::EType::Hammer_2H == Get_WeaponType())
-							m_pStateController->Change_State(L"2H_HammerEquipOn");
-					}
-				}
+				return; /* 장착 해제 X */
 			}
-			else if (m_pEquipmentData->IsExistEquip(EEquipSlot::Weapon1)) /* 첫번째 슬롯에 무기가 장착되어있는 경우 */
+			else /* 인벤에서 2번 슬롯 무기를 변경했다. */
 			{
-				/* 인벤에서 2번 슬롯 무기를 장착 해제 했다. 1번 슬롯의 무기로 변경 */
 				if (nullptr != m_pCurWeapon)
 				{
 					Set_EquipWeapon(false);
 					Set_WeaponFixedBone("spine_03");
-					m_pCurWeapon = m_pEquipmentData->GetEquipment(EEquipSlot::Weapon1).weaponData.Get_Weapon();
+					m_pCurWeapon = m_pEquipmentData->GetEquipment(EEquipSlot::Weapon2).weaponData.Get_Weapon();
 					m_pCurWeapon->Set_Owner(this);
-					m_pPlayerData->EquipedSlot = 1;
+					m_pPlayerData->EquipedSlot = 2;
 					/* 무기 교체 후 애님 상태 변경 */
 					if (CWeapon::EType::Sword_1H == Get_WeaponType())
 						m_pStateController->Change_State(L"1H_SwordEquipOn");
@@ -1514,11 +1509,27 @@ void CSilvermane::Change_WeaponOnInventory(void)
 						m_pStateController->Change_State(L"2H_HammerEquipOn");
 				}
 			}
-			else /* 1번과 2번 슬롯 모두 무기가 없다. */
-				return;
 		}
-
-
+		else if (m_pEquipmentData->IsExistEquip(EEquipSlot::Weapon1)) /* 첫번째 슬롯에 무기가 장착되어있는 경우 */
+		{
+			/* 인벤에서 2번 슬롯 무기를 장착 해제 했다. 1번 슬롯의 무기로 변경 */
+			if (nullptr != m_pCurWeapon)
+			{
+				Set_EquipWeapon(false);
+				Set_WeaponFixedBone("spine_03");
+				m_pCurWeapon = m_pEquipmentData->GetEquipment(EEquipSlot::Weapon1).weaponData.Get_Weapon();
+				m_pCurWeapon->Set_Owner(this);
+				m_pPlayerData->EquipedSlot = 1;
+				/* 무기 교체 후 애님 상태 변경 */
+				if (CWeapon::EType::Sword_1H == Get_WeaponType())
+					m_pStateController->Change_State(L"1H_SwordEquipOn");
+				else if (CWeapon::EType::Hammer_2H == Get_WeaponType())
+					m_pStateController->Change_State(L"2H_HammerEquipOn");
+			}
+		}
+		else /* 1번과 2번 슬롯 모두 무기가 없다. */
+			return;
+	}
 }
 
 HRESULT CSilvermane::Change_State(const wstring& _wstrStateTag)
@@ -1846,22 +1857,7 @@ const _bool CSilvermane::Raycast_JumpNode(const _double& _dDeltaTime)
 		m_pFillCKey = (CUI_Fill_Ckey*)listFillKeys->front();
 	}
 
-	if ((_uint)GAMEOBJECT::JUMP_TRIGGER == iObjectTag)
-	{
-		m_pTargetJumpTrigger = static_cast<CJumpTrigger*>(pHitObject);
-		if (g_pGameInstance->getkeyPress(DIK_C))
-			m_fJumpTriggerLookTime += (_float)_dDeltaTime;
-
-		if (1.f < m_fJumpTriggerLookTime)
-		{
-			if (FAILED(m_pStateController->Change_State(L"Traverse_Jump400Jog")))
-				return false;
-			m_fJumpTriggerLookTime = 0.f;
-		}
-
-		return true;
-	}
-	else if ((_uint)GAMEOBJECT::JUMP_NODE == iObjectTag)
+	if ((_uint)GAMEOBJECT::JUMP_NODE == iObjectTag)
 	{
 		SHOW_GUIDE();
 
@@ -1869,6 +1865,8 @@ const _bool CSilvermane::Raycast_JumpNode(const _double& _dDeltaTime)
 		m_pTargetJumpNode->setIsPick(true);
 		if (g_pGameInstance->getkeyPress(DIK_C))
 			m_fJumpNodeLookTime += (_float)_dDeltaTime;
+		else
+			m_fJumpNodeLookTime = 0.f;
 
 		if (m_pFillCKey)
 			m_pFillCKey->Set_JumpNode(true);
@@ -1969,8 +1967,19 @@ const void CSilvermane::Raycast_DropBox(const _double& _dDeltaTime)
 		m_pTargetDropBox = static_cast<CDropBox*>(pHitObject);
 		if (!m_isBoxOpen && !m_pTargetDropBox->IsOpen())
 		{
+			if (m_pFillCKey2)
+			{
+				m_pFillCKey2->setActive(true);
+				CTransform* pTargetTransform = pHitObject->Get_Transform();
+				_vector svTargetPos = pTargetTransform->Get_State(CTransform::STATE_POSITION);
+				_vector svTargetLook = XMVector3Normalize(pTargetTransform->Get_State(CTransform::STATE_LOOK));
+				svTargetPos += _vector{ 0.f, 0.8f, 0.f, 0.f } + svTargetLook * 0.6f;
+				m_pFillCKey2->Set_Position(svTargetPos);
+			}
+
 			if (g_pGameInstance->getkeyDown(DIK_C))
 			{
+				m_pFillCKey2->Set_Press(true);
 				if (FAILED(m_pStateController->Change_State(L"LootingChest", nullptr)))
 					return;
 				return;
@@ -1978,7 +1987,15 @@ const void CSilvermane::Raycast_DropBox(const _double& _dDeltaTime)
 		}
 	}
 	else
+	{
 		m_pTargetDropBox = nullptr;
+		if (m_pFillCKey2)
+		{
+			m_pFillCKey2->setActive(false);
+			m_pFillCKey2->Set_Press(false);
+			m_pFillCKey2->Set_GapX(0.f);
+		}
+	}
 	//else
 	//	static_cast<CDropBox*>(pHitObject)->FocusExit();
 
@@ -1988,6 +2005,7 @@ const void CSilvermane::Raycast_DropBox(const _double& _dDeltaTime)
 	case (_uint)GAMEOBJECT::MONSTER_1H:
 	case (_uint)GAMEOBJECT::MONSTER_SHOOTER:
 	case (_uint)GAMEOBJECT::MONSTER_ANIMUS:
+	case (_uint)GAMEOBJECT::MONSTER_HEALER:
 	case (_uint)GAMEOBJECT::MIDDLE_BOSS:
 		//if (static_cast<CActor*>(pHitObject)->Get_Groggy())
 		//{

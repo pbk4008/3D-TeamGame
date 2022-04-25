@@ -10,7 +10,7 @@ CCharacterController::CCharacterController(ID3D11Device* _pDevice, ID3D11DeviceC
 	: CComponent(_pDevice, _pDeviceContext)
 	, m_pPhysX(CPhysicsXSystem::GetInstance())
 {
-	Safe_AddRef(m_pPhysX);
+	//Safe_AddRef(m_pPhysX);
 }
 
 CCharacterController::CCharacterController(const CCharacterController& _rhs)
@@ -18,7 +18,7 @@ CCharacterController::CCharacterController(const CCharacterController& _rhs)
 	, m_pPhysX(_rhs.m_pPhysX)
 	, m_pFilterCallback(_rhs.m_pFilterCallback)
 {
-	Safe_AddRef(m_pPhysX);
+	//Safe_AddRef(m_pPhysX);
 }
 
 HRESULT CCharacterController::NativeConstruct_Prototype()
@@ -241,5 +241,5 @@ void CCharacterController::Free()
 	if (!m_isCloned)
 		Safe_Delete(m_pFilterCallback);
 
-	Safe_Release(m_pPhysX);
+	//Safe_Release(m_pPhysX);
 }

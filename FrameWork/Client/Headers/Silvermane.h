@@ -19,6 +19,7 @@ class CJumpBox;
 class CUI_Blank_CKey;
 class CUI_Blank_FKey;
 class CUI_Fill_Ckey;
+class CUI_Fill_Ckey2;
 class CInventoryData;
 class CEquipmentData;
 class CPlayerData;
@@ -200,6 +201,7 @@ private: /* For.JumpNode */
 private: /* For.DropBox  */
 	_bool m_isBoxOpen = false;
 	CDropBox* m_pTargetDropBox = nullptr;
+	CUI_Fill_Ckey2* m_pFillCKey2 = nullptr;
 
 private: /* For.Execution */
 	CActor* m_pTargetExecution = nullptr;

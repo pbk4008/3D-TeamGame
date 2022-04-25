@@ -49,11 +49,13 @@ protected:
 	_float3 m_vScale{};
 
 	// UV
+	_bool m_isReverse = false;
 	_bool m_isFlowX = false;
 	_bool m_isFlowY = false;
 	_float m_fFlowSpeedX = 0.f;
 	_float m_fFlowSpeedY = 0.f;
 	_float2 m_vPlusUV{};
+	_float2 m_vTiling = { 1.f, 1.f };
 
 	// Color
 	_bool m_isCustomColor = false;

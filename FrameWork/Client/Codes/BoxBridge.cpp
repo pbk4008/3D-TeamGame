@@ -1,27 +1,27 @@
 #include "pch.h"
-#include "JumpBox.h"
+#include "BoxBridge.h"
 
-CJumpBox::CJumpBox(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
+CBoxBridge::CBoxBridge(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
 	: CGameObject(_pDevice, _pDeviceContext)
 {
 }
 
-CJumpBox::CJumpBox(const CJumpBox& _rhs)
+CBoxBridge::CBoxBridge(const CBoxBridge& _rhs)
 	: CGameObject(_rhs)
 {
 }
 
-HRESULT CJumpBox::NativeConstruct_Prototype()
+HRESULT CBoxBridge::NativeConstruct_Prototype()
 {
 	if (FAILED(__super::NativeConstruct_Prototype()))
 		return E_FAIL;
 
-	m_iObectTag = (_uint)GAMEOBJECT::JUMP_BOX;
+	m_iObectTag = (_uint)GAMEOBJECT::ENVIRONMENT;
 
 	return S_OK;
 }
 
-HRESULT CJumpBox::NativeConstruct(const _uint _iSceneID, void* _pArg)
+HRESULT CBoxBridge::NativeConstruct(const _uint _iSceneID, void* _pArg)
 {
 	if (_pArg)
 		memcpy_s(&m_tDesc, sizeof(DESC), _pArg, sizeof(DESC));
@@ -35,30 +35,18 @@ HRESULT CJumpBox::NativeConstruct(const _uint _iSceneID, void* _pArg)
 	return S_OK;
 }
 
-_int CJumpBox::Tick(_double _dDeltaTime)
+_int CBoxBridge::Tick(_double _dDeltaTime)
 {
 	_int iProgress = __super::Tick(_dDeltaTime);
 	if (NO_EVENT != iProgress)
 		return iProgress;
 
-	if (m_isDisable)
-	{
-		m_fDisableTime += (_float)_dDeltaTime;
-
-		if (1.5f < m_fDisableTime)
-		{
-			m_pCollider->setSceneQuery(true);
-			m_isDisable = false;
-			m_fDisableTime = 0.f;
-		}
-	}
-
-	m_pCollider->Tick(_dDeltaTime);
+	//m_pCollider->Tick(_dDeltaTime);
 
 	return _int();
 }
 
-_int CJumpBox::LateTick(_double _dDeltaTime)
+_int CBoxBridge::LateTick(_double _dDeltaTime)
 {
 	_int iProgress = __super::LateTick(_dDeltaTime);
 	if (NO_EVENT != iProgress)
@@ -67,7 +55,7 @@ _int CJumpBox::LateTick(_double _dDeltaTime)
 	return _int();
 }
 
-HRESULT CJumpBox::Render()
+HRESULT CBoxBridge::Render()
 {
 	if (FAILED(__super::Render()))
 		return E_FAIL;
@@ -79,15 +67,14 @@ HRESULT CJumpBox::Render()
 	return S_OK;
 }
 
-HRESULT CJumpBox::Ready_Components()
+HRESULT CBoxBridge::Ready_Components()
 {
 	CTransform::TRANSFORMDESC tTransformDesc;
 	tTransformDesc.fSpeedPerSec = 0.f;
 	tTransformDesc.fRotationPerSec = 0.f;
 	m_pTransform->Set_TransformDesc(tTransformDesc);
 	m_pTransform->Set_State(CTransform::STATE_POSITION, XMVectorSetW(XMLoadFloat3(&m_tDesc.vPosition), 1.f));
-	m_pTransform->SetUp_Rotation(XMVectorSet(0.f, 1.f, 0.f, 0.f), XMConvertToRadians(m_tDesc.vRotation.y));
-
+	m_pTransform->SetUp_Rotation(m_tDesc.vRotation);
 
 	CCollider::DESC tColliderDesc;
 	tColliderDesc.eRigidType = ERigidType::Static;
@@ -98,42 +85,36 @@ HRESULT CJumpBox::Ready_Components()
 	tBoxColliderDesc.vScale = { m_tDesc.vScale.x, m_tDesc.vScale.y, m_tDesc.vScale.z };
 	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_BoxCollider", L"Collider", (CComponent**)&m_pCollider, &tBoxColliderDesc)))
 		return E_FAIL;
-	_matrix smatPivot = XMMatrixTranslation(0.f, tBoxColliderDesc.vScale.y * 0.5f, 0.f);
+	_matrix smatPivot = XMMatrixTranslation(0.f, -tBoxColliderDesc.vScale.y * 0.5f, 0.f);
 	m_pCollider->setPivotMatrix(smatPivot);
+	m_pCollider->Update_PxTransform();
 
 	return S_OK;
 }
 
-void CJumpBox::DisableCollision()
+CBoxBridge* CBoxBridge::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
 {
-	m_pCollider->setSceneQuery(false);
-	m_isDisable = true;
-}
-
-
-CJumpBox* CJumpBox::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
-{
-	CJumpBox* pInstance = new CJumpBox(_pDevice, _pDeviceContext);
+	CBoxBridge* pInstance = new CBoxBridge(_pDevice, _pDeviceContext);
 	if (FAILED(pInstance->NativeConstruct_Prototype()))
 	{
-		MSGBOX("CJumpBox Create Fail");
+		MSGBOX("CBoxBridge Create Fail");
 		Safe_Release(pInstance);
 	}
 	return pInstance;
 }
 
-CGameObject* CJumpBox::Clone(const _uint _iSceneID, void* _pArg)
+CGameObject* CBoxBridge::Clone(const _uint _iSceneID, void* _pArg)
 {
-	CJumpBox* pInstance = new CJumpBox(*this);
+	CBoxBridge* pInstance = new CBoxBridge(*this);
 	if (FAILED(pInstance->NativeConstruct(_iSceneID, _pArg)))
 	{
-		MSGBOX("CJumpBox Clone Fail");
+		MSGBOX("CBoxBridge Clone Fail");
 		Safe_Release(pInstance);
 	}
 	return pInstance;
 }
 
-void CJumpBox::Free()
+void CBoxBridge::Free()
 {
 	__super::Free();
 	Safe_Release(m_pCollider);
