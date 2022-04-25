@@ -2,6 +2,7 @@
 #include "Cinema2_4.h"
 #include "CinemaCam.h"
 #include "CinemaActor.h"
+#include "ScenematicManager.h"
 
 CCinema2_4::CCinema2_4()
 	: m_pCam(nullptr)
@@ -26,12 +27,15 @@ HRESULT CCinema2_4::NativeContruct(_uint iSceneID)
 	if (FAILED(Ready_Components()))
 		return E_FAIL;
 
-	_matrix matPivot = XMMatrixRotationY(XMConvertToRadians(270.f)) * XMMatrixTranslation(-191.f, 52.f, 410.f);
-	m_pCam->Set_CameraMatrix(matPivot);
-
 	m_pMidBoss->Actor_AnimPlay(8);
-	CTransform* pMidBossTr = m_pMidBoss->Get_Transform();
-	pMidBossTr->Set_State(CTransform::STATE_POSITION, XMVectorSet(-172.f, 57.f, 441.5f, 1.f));
+
+	CTransform* pBossTr = m_pMidBoss->Get_Transform();
+	pBossTr->Set_State(CTransform::STATE_POSITION, XMVectorSet(-177.f, 52.2f, 410.8f, 1.f));
+	pBossTr->SetUp_Rotation(XMVectorSet(0.f, 1.f, 0.f, 0.f), XMConvertToRadians(240.f));;
+
+	_matrix matPivot = XMMatrixTranslation(-173.f, 52.f, 410.f);
+	m_pCam->Set_CameraMatrix(matPivot);
+	m_pCam->Set_Fov(XMConvertToRadians(30.f));
 
 	return S_OK;
 }
@@ -42,24 +46,25 @@ _int CCinema2_4::Tick(_double dDeltaTime)
 	if (iProgress == 1)
 		return 0;
 
-	/*CTransform* pBossTr = m_pMidBoss->Get_Transform();
-	pBossTr->Set_State(CTransform::STATE_POSITION, XMVectorSet(-172.f, 57.f, 441.5f, 1.f));*/
 	m_pMidBoss->Tick(dDeltaTime);
-
-	_matrix matPivot = XMMatrixRotationY(XMConvertToRadians(270.f)) * XMMatrixTranslation(-191.f, 52.f, 410.f);
-	m_pCam->Set_CameraMatrix(matPivot);
 	m_pCam->Tick(dDeltaTime);
-
-
-	if (m_pCam->Get_CamMoveEnd())
-		m_bCinemaEnd = true;
 
 	return _int();
 }
 
 _int CCinema2_4::LateTick(_double dDeltaTime)
 {
+	if (m_pCam->Get_CamMoveEnd())
+	{
+		m_bCinemaEnd = true;
+		CScenematicManager* pInstance = GET_INSTANCE(CScenematicManager);
+		pInstance->Change_Cinema((_uint)CINEMA_INDEX::CINEMA3_1);
+		RELEASE_INSTANCE(CScenematicManager);
+		return 0;
+	}
 	m_pMidBoss->LateTick(dDeltaTime);
+
+	
 
 	return _int();
 }
@@ -69,6 +74,7 @@ void CCinema2_4::Set_Active(_bool bCheck)
 	CScenematic::Set_Active(bCheck);
 	m_bActorAnimOn = false;
 	m_pMidBoss->Actor_AnimReset();
+	m_pCam->Reset_Camera();
 	if (m_bActive)
 		m_pCam->Change_CurrentCam();
 }

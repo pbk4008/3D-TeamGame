@@ -8,6 +8,7 @@ CCinemaCam::CCinemaCam()
 	:m_pCamera(nullptr)
 	, m_pModel(nullptr)
 	, m_iShortTag(0)
+	, m_fFovAngle(0.f)
 {
 }
 
@@ -16,6 +17,7 @@ CCinemaCam::CCinemaCam(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContex
 	, m_pCamera(nullptr)
 	, m_pModel(nullptr)
 	, m_iShortTag(0)
+	, m_fFovAngle(0.f)
 {
 }
 
@@ -24,6 +26,7 @@ CCinemaCam::CCinemaCam(const CCinemaCam& rhs)
 	, m_pCamera(rhs.m_pCamera)
 	, m_pModel(rhs.m_pModel)
 	, m_iShortTag(0)
+	, m_fFovAngle(0.f)
 {
 	Safe_AddRef(m_pCamera);
 	Safe_AddRef(m_pModel);
@@ -64,15 +67,10 @@ _int CCinemaCam::Tick(_double TimeDelta)
 	//BornÀÌ¸§ : Camera_01_born
 	m_pModel->Update_CombinedTransformationMatrix(TimeDelta);
 
-	/*_matrix matPivot = XMMatrixRotationY(XMConvertToRadians(270.f)) * XMMatrixTranslation(3.f, -5.f, 15.f);
-	m_pModel->Set_PivotMatrix(matPivot);*/
 	CHierarchyNode* pBorn = m_pModel->Get_BoneMatrix("camera_bone");
 	_matrix matBone = pBorn->Get_CombinedMatrix()*m_pModel->Get_PivotMatrix();
-	//matBone *= (XMMatrixRotationY(XMConvertToRadians(270.f))*XMMatrixTranslation(3.f,-5.f,15.f));
 	matBone *= m_pTransform->Get_WorldMatrix();
 	m_pCamera->Update_Matrix(matBone);
-
-	//Get_CamMoveEnd();
 
 	return _int();
 }
@@ -123,32 +121,25 @@ void CCinemaCam::Reset_Camera()
 	vecAnim[0]->Reset_Animation();
 }
 
-void CCinemaCam::Add_Fov(_float fSpeed)
+void CCinemaCam::Add_Fov(_float fSpeed, _float fGoalAngle)
 {
 	_float fAngle = m_pCamera->Get_FovAngle();
-	fAngle += fSpeed;
-	m_pCamera->Change_Fov(fAngle);
-}
-
-void CCinemaCam::Minus_Fov(_float fSpeed)
-{
-	_float fAngle = m_pCamera->Get_FovAngle();
-	fAngle -= fSpeed;
-	m_pCamera->Change_Fov(fAngle);
-}
-
-void CCinemaCam::Set_Fov(_float fSpeed, _float fGoalAngle)
-{
-	_float fAngle = m_pCamera->Get_FovAngle();
-	if (fSpeed < 0.f)
+	if (fAngle < fGoalAngle)
 	{
-		if (fGoalAngle < fAngle)
-			Add_Fov(fSpeed);
+		fAngle += fSpeed;
+		m_pCamera->Change_Fov(fAngle);
 	}
-	else
+}
+
+void CCinemaCam::Minus_Fov(_float fSpeed, _float fGoalAngle)
+{
+	_float fAngle = m_pCamera->Get_FovAngle();
+		m_fFovAngle = fAngle;
+	if (fAngle > fGoalAngle)
 	{
-		if (fGoalAngle > fAngle)
-			Add_Fov(fSpeed);
+		fAngle -= fSpeed;
+		cout << fAngle << endl;
+		m_pCamera->Change_Fov(XMConvertToRadians(fAngle));
 	}
 }
 
@@ -180,6 +171,24 @@ HRESULT CCinemaCam::Set_Camera(_uint iSceneTag)
 	case (_uint)CINEMA_INDEX::CINEMA2_4:
 		hr = CGameObject::SetUp_Components(m_iSceneID, L"Model_Cinema_Cam2_4", L"CamModel", (CComponent**)&m_pModel);
 		break;
+	case (_uint)CINEMA_INDEX::CINEMA3_1:
+		hr = CGameObject::SetUp_Components(m_iSceneID, L"Model_Cinema_Cam3_1", L"CamModel", (CComponent**)&m_pModel);
+		break;
+	case (_uint)CINEMA_INDEX::CINEMA3_2:
+		hr = CGameObject::SetUp_Components(m_iSceneID, L"Model_Cinema_Cam3_2", L"CamModel", (CComponent**)&m_pModel);
+		break;
+	case (_uint)CINEMA_INDEX::CINEMA3_3:
+		hr = CGameObject::SetUp_Components(m_iSceneID, L"Model_Cinema_Cam3_3", L"CamModel", (CComponent**)&m_pModel);
+		break;
+	case (_uint)CINEMA_INDEX::CINEMA3_4:
+		hr = CGameObject::SetUp_Components(m_iSceneID, L"Model_Cinema_Cam3_4", L"CamModel", (CComponent**)&m_pModel);
+		break;
+	case (_uint)CINEMA_INDEX::CINEMA3_5:
+		hr = CGameObject::SetUp_Components(m_iSceneID, L"Model_Cinema_Cam3_5", L"CamModel", (CComponent**)&m_pModel);
+		break;
+	case (_uint)CINEMA_INDEX::CINEMA3_6:
+		hr = CGameObject::SetUp_Components(m_iSceneID, L"Model_Cinema_Cam3_6", L"CamModel", (CComponent**)&m_pModel);
+		break;
 	}
 
 	if (FAILED(hr))
@@ -210,6 +219,9 @@ CHierarchyNode* CCinemaCam::Get_CamBone()
 
 void CCinemaCam::Change_CurrentCam()
 {
+	vector<CAnimation*> vecAnim = m_pModel->Get_Animations();
+	vecAnim[0]->Reset_Animation();
+
 	g_pGameInstance->Change_BaseCamera(m_pCamTag);
 }
 

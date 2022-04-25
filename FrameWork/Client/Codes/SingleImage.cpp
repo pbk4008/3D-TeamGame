@@ -86,11 +86,13 @@ HRESULT CSingleImage::NativeConstruct(void* pArg)
 
 _int CSingleImage::Tick(_double TimeDelta)
 {
+	TimeDelta = g_dImmutableTime;
 	return _int();
 }
 
 _int CSingleImage::LateTick(_double TimeDelta)
 {
+	TimeDelta = g_dImmutableTime;
 	return _int();
 }
 

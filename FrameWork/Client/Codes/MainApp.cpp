@@ -12,6 +12,7 @@
 #include "InteractManager.h"
 #include "WeaponGenerator.h"
 #include "DropManager.h"
+#include "GuideUIManager.h"
 
 //Inventory UI Object
 #include "Inven_UIManager.h"
@@ -66,6 +67,9 @@
 #include "UI_QuestText.h"
 #include "UI_QuestHeadText.h"
 #include "UI_QuestClear.h"
+//Guide
+#include "UI_Guide_Background.h"
+#include "UI_Guide_Texture.h"
 
 //Inventory UI Component
 #include "SingleImage.h"
@@ -80,6 +84,7 @@ CInteractManager*	g_pInteractManager = nullptr;
 CWeaponGenerator*	g_pWeaponGenerator = nullptr;
 CDropManager*		g_pDropManager = nullptr;
 CQuestManager*		g_pQuestManager = nullptr;
+CGuideUIManager*	g_pGuideManager = nullptr;
 
 CMainApp::CMainApp()
 {
@@ -143,6 +148,9 @@ _int CMainApp::Tick(_double TimeDelta)
 	m_TimeAcc += TimeDelta;
 
 	g_pGameInstance->Update_InputDev();
+
+	if (m_isDeltaTimeZero)
+		TimeDelta = 0.f;
 
 	//if (g_pInvenUIManager->IsOpenModal())
 	//	TimeDelta = 0.f;
@@ -276,6 +284,10 @@ if (FAILED(pMeshLoader->Reserve_MeshLoader(m_pDevice, m_pDeviceContext)))
 
 	g_pQuestManager = CQuestManager::GetInstance();
 	if (FAILED(g_pQuestManager->NativeConstruct()))
+		return E_FAIL;
+
+	g_pGuideManager = CGuideUIManager::GetInstance();
+	if (FAILED(g_pGuideManager->NativeConstruct()))
 		return E_FAIL;
 
 	return S_OK;
@@ -460,6 +472,14 @@ HRESULT CMainApp::Ready_GameObject_Prototype()
 	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_UI_LevelUp_Fill_Right"), UI_LevelUP_Fill_Right::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 	//////////////////////////////
+	//Guide UI
+	//Background
+	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_UI_Guide_Background"), CUI_Guide_Background::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	//Tex
+	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_UI_Guide_Texture"), CUI_Guide_Texture::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+
 	return S_OK;
 }
 
@@ -561,12 +581,22 @@ const _bool CMainApp::IsFreeze() const
 	return m_isFreeze;
 }
 
+const _bool CMainApp::IsDeltaTimeZero() const
+{
+	return m_isDeltaTimeZero;
+}
+
 void CMainApp::FreezeTime()
 {
 	if (!m_isFreeze)
 	{
 		m_isFreeze = true;
 	}
+}
+
+void CMainApp::Set_DeltaTimeZero(const _bool _isDetaTimeZero)
+{
+	m_isDeltaTimeZero = _isDetaTimeZero;
 }
 
 CMainApp * CMainApp::Create()
@@ -595,6 +625,7 @@ void CMainApp::Free()
 	CWeaponGenerator::DestroyInstance();
 	CInteractManager::DestroyInstance();
 	CQuestManager::DestroyInstance();
+	CGuideUIManager::DestroyInstance();
 
 	Safe_Release(g_pObserver);
 	Safe_Release(m_pRenderer);

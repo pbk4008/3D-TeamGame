@@ -64,7 +64,7 @@ HRESULT CInven_UIManager::NativeConstruct(void)
 _int CInven_UIManager::Tick(_double _dTimeDelta)
 {
 	if (m_pHud)
-		m_pHud->Tick(_dTimeDelta);
+		m_pHud->Tick(g_dImmutableTime);
 
 	return _int();
 }

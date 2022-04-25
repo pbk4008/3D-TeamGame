@@ -40,6 +40,7 @@ private:
 	_bool				m_bMotiontrail = false;
 
 	_bool				m_isFreeze = false;
+	_bool				m_isDeltaTimeZero = false;
 	_double				m_dFreezeTimeAcc = 0.0;
 private:
 	HRESULT SetUp_StartLevel(SCENEID eLevel);
@@ -55,7 +56,9 @@ private:
 
 public:
 	const _bool IsFreeze() const;
+	const _bool IsDeltaTimeZero() const;
 	void FreezeTime();
+	void Set_DeltaTimeZero(const _bool _isDetaTimeZero);
 	
 public:
 	static CMainApp* Create();

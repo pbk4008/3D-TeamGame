@@ -5,11 +5,13 @@
 CWall::CWall(ID3D11Device* pdevice, ID3D11DeviceContext* pdevicecontext)
 	: CGameObject(pdevice,pdevicecontext)
 {
+	ZeroMemory(&m_desc, sizeof(WALLDESC));
 }
 
 CWall::CWall(const CWall& rhs)
 	: CGameObject(rhs)
 {
+	ZeroMemory(&m_desc, sizeof(WALLDESC));
 }
 
 HRESULT CWall::NativeConstruct_Prototype()
@@ -24,31 +26,27 @@ HRESULT CWall::NativeConstruct(const _uint _iSceneID, void* _pArg)
 	if (FAILED(__super::NativeConstruct(_iSceneID,_pArg)))	MSGBOX("Failed to Wall Clone Native");
 
 	if (_pArg != nullptr)
-	{
-		ZeroMemory(&m_desc, sizeof(WALLDESC));
 		memcpy(&m_desc, _pArg, sizeof(WALLDESC));
-	}
 
 	if(FAILED(Ready_Component())) MSGBOX("Failed to Wall ReadyComponent");
 
-	m_pTransform->Set_State(CTransform::STATE_POSITION, XMLoadFloat4(&m_desc.pos));
-	_matrix world = m_pTransform->Get_WorldMatrix();
-	world = XMMatrixRotationY(XMConvertToRadians(m_desc.radian)) * world;
-	m_pTransform->Set_WorldMatrix(world);
-	m_pTransform->Scale_Up(XMVectorSet(m_desc.scale.x, m_desc.scale.y, 1.f, 0.f));
+	
+
 	return S_OK;
 }
 
 _int CWall::Tick(_double _dDeltaTime)
 {
 	// 디졸브 테스트용 버튼 
-	if (g_pGameInstance->getkeyDown(DIK_NUMPAD5))
-		m_bdissolve = true;
-	if (g_pGameInstance->getkeyDown(DIK_NUMPAD6))
-	{
-		m_lifetime = 0.f;
-		m_bdissolve = true;
-	}
+	//if (g_pGameInstance->getkeyDown(DIK_NUMPAD5))
+	//	m_bdissolve = true;
+	//if (g_pGameInstance->getkeyDown(DIK_NUMPAD6))
+	//{
+	//	m_lifetime = 0.f;
+	//	m_bdissolve = true;
+	//}
+
+	m_pCollider->Tick(_dDeltaTime);
 
 	return _int();
 }
@@ -81,10 +79,12 @@ HRESULT CWall::Render()
 
 	_matrix world, view, proj;
 
+	wstring wstrCam = g_pGameInstance->Get_BaseCameraTag();
 	world = XMMatrixTranspose(m_pTransform->Get_WorldMatrix());
-	view = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_VIEW));
-	proj = XMMatrixTranspose(g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_PROJECTION));
+	view = XMMatrixTranspose(g_pGameInstance->Get_Transform(wstrCam, TRANSFORMSTATEMATRIX::D3DTS_VIEW));
+	proj = XMMatrixTranspose(g_pGameInstance->Get_Transform(wstrCam, TRANSFORMSTATEMATRIX::D3DTS_PROJECTION));
 	
+	if (FAILED(m_pbuffer->SetUp_ValueOnShader("g_bdissolve", &m_bdissolve, sizeof(_bool)))) MSGBOX("Failed to Apply dissolvetime");
 	if (FAILED(m_pbuffer->SetUp_ValueOnShader("g_WorldMatrix", &world, sizeof(_float4x4))))	MSGBOX("Wall ConstBuffer Worldmatrix Not Apply");
 	if (FAILED(m_pbuffer->SetUp_ValueOnShader("g_ViewMatrix", &view, sizeof(_float4x4))))	MSGBOX("Wall ConstBuffer Viewmatrix Not Apply");
 	if (FAILED(m_pbuffer->SetUp_ValueOnShader("g_ProjMatrix", &proj, sizeof(_float4x4))))	MSGBOX("Wall ConstBuffer Projmatrix Not Apply");
@@ -97,16 +97,44 @@ HRESULT CWall::Render()
 	return S_OK;
 }
 
+void CWall::Destroy()
+{
+	m_bdissolve = true;
+	m_pCollider->Remove_ActorFromScene();
+}
+
 HRESULT CWall::Ready_Component()
 {
+	m_pTransform->Set_State(CTransform::STATE_POSITION, XMLoadFloat4(&m_desc.pos));
+	m_pTransform->SetUp_Rotation(XMVectorSet(0.f, 1.f, 0.f, 0.f), XMConvertToRadians(m_desc.radian));
+	m_pTransform->Scaling(XMVectorSet(m_desc.scale.x, m_desc.scale.y, 1.f, 0.f));
+
 	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_VIBuffer_Wall", L"wall_buffer", (CComponent**)&m_pbuffer)))
 		MSGBOX("Failed to Create wall buffer");
+
+
+	CCollider::DESC tColliderDesc;
+	tColliderDesc.eRigidType = ERigidType::Static;
+	tColliderDesc.isSceneQuery = true;
+	tColliderDesc.isTrigger = false;
+	tColliderDesc.pGameObject = this;
+	tColliderDesc.isVisualization= true;
+	CBoxCollider::DESC tBoxColliderDesc;
+	tBoxColliderDesc.tColliderDesc = tColliderDesc;
+	tBoxColliderDesc.vScale = { m_desc.scale.x, m_desc.scale.y, 1.f };
+
+	if(FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC,L"Proto_Component_BoxCollider",L"Collider", (CComponent**)&m_pCollider,&tBoxColliderDesc)))
+		return E_FAIL;
+	//_matrix matPivot = XMMatrixTranslation(0.f, m_desc.scale.y, 0.f);
+	//m_pCollider->setPivotMatrix(matPivot);
 
 	m_pdiffusetex = g_pGameInstance->Clone_Component<CTexture>(0, L"Proto_Component_Texture");
 	if (FAILED(m_pdiffusetex->Change_Texture(L"WallBase"))) MSGBOX("Failed to Change Texture DiffuseTex");
 
 	m_dissolveTex = g_pGameInstance->Clone_Component<CTexture>(0, L"Proto_Component_Texture");
 	if (FAILED(m_dissolveTex->Change_Texture(L"DissovleBase"))) MSGBOX("Failed to Change Texture DissovleTex");
+
+
 
 	return S_OK;
 }
@@ -120,7 +148,6 @@ HRESULT CWall::DissolveOn(_float dissolveSpeed)
 		{
 			m_lifetime = 1.f;
 		}
-		if (FAILED(m_pbuffer->SetUp_ValueOnShader("g_bdissolve", &m_bdissolve, sizeof(_bool)))) MSGBOX("Failed to Apply dissolvetime");
 		if (FAILED(m_pbuffer->SetUp_ValueOnShader("g_dissolvetime", &m_lifetime, sizeof(_float)))) MSGBOX("Failed to Apply dissolvetime");
 		if (FAILED(m_pbuffer->SetUp_TextureOnShader("g_DissolveTex", m_dissolveTex, 0))) MSGBOX("Failed to Apply dissolveTex");
 	}

@@ -12,6 +12,7 @@
 
 using namespace Client;
 #include "Client_Observer.h"
+#include "GuideUIManager.h"
 #include "QuestManager.h"
 #include "DebugSystem.h"
 #include "ShakeManager.h"

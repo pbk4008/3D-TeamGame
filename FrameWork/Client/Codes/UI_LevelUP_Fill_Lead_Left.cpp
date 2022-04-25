@@ -47,6 +47,7 @@ HRESULT CUI_LevelUP_Fill_Lead_Left::NativeConstruct(const _uint iSceneID, void* 
 
 _int CUI_LevelUP_Fill_Lead_Left::Tick(_double dDeltaTime)
 {
+	dDeltaTime = g_dImmutableTime;
 	if (FAILED(CUI::Tick(dDeltaTime)))
 		return -1;
 
@@ -55,6 +56,7 @@ _int CUI_LevelUP_Fill_Lead_Left::Tick(_double dDeltaTime)
 
 _int CUI_LevelUP_Fill_Lead_Left::LateTick(_double TimeDelta)
 {
+	TimeDelta = g_dImmutableTime;
 	if (FAILED(CUI::LateTick(TimeDelta)))
 		return -1;
 
