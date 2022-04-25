@@ -85,23 +85,23 @@ _int CEffect_DashDust::Tick(_double TimeDelta)
 	matCullingBoxPivot.r[3] = { m_Desc.CullingBoxPos.x, m_Desc.CullingBoxPos.y,m_Desc.CullingBoxPos.z, 1.f };
 	m_pBox->Update_Matrix(matCullingBoxPivot * m_pTransform->Get_WorldMatrix());
 
-	//이미지 플레이
-	_uint iAllFrameCount = (m_Desc.iImageCountX * m_Desc.iImageCountY);
- 	m_Desc.fFrame += (_float)(iAllFrameCount * TimeDelta * m_Desc.fEffectPlaySpeed); //플레이속도 
-	if (m_Desc.fFrame >= iAllFrameCount)
-	{
-		m_Desc.fFrame = 0;
-	}
+	////이미지 플레이
+	//_uint iAllFrameCount = (m_Desc.iImageCountX * m_Desc.iImageCountY);
+	//	m_Desc.fFrame += (_float)(iAllFrameCount * TimeDelta * m_Desc.fEffectPlaySpeed); //플레이속도 
+	//if (m_Desc.fFrame >= iAllFrameCount)
+	//{
+	//	m_Desc.fFrame = 0;
+	//}
 
-	if (m_Desc.fMaxLifeTime > m_Desc.fCurTime)
-	{
-		m_Desc.fCurTime += (_float)TimeDelta;
-	}
+	//if (m_Desc.fMaxLifeTime > m_Desc.fCurTime)
+	//{
+	//	m_Desc.fCurTime += (_float)TimeDelta;
+	//}
 
-	if (m_Desc.fMaxLifeTime < m_Desc.fCurTime)
-	{
-		m_Desc.fCurTime = m_Desc.fMaxLifeTime;
-	}
+	//if (m_Desc.fMaxLifeTime < m_Desc.fCurTime)
+	//{
+	//	m_Desc.fCurTime = m_Desc.fMaxLifeTime;
+	//}
 
 	m_fAlpha -= (_float)TimeDelta * 0.05f;
 
@@ -152,7 +152,7 @@ HRESULT CEffect_DashDust::Render()
 
 	m_pBuffer->SetUp_ValueOnShader("g_fAlpha", &m_fAlpha, sizeof(_float));
 
-	_float weight = 0.3f;
+	_float weight = 1.f;
 	m_pBuffer->SetUp_ValueOnShader("g_Weight", &weight, sizeof(_float));
 
 	m_pBuffer->SetUp_ValueOnShader("g_vCamPosition", (void*)&CamPos, sizeof(_vector));

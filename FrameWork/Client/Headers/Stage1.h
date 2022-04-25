@@ -37,6 +37,7 @@ private:
 	HRESULT Ready_TriggerFunctionSetting();
 
 	HRESULT Ready_Cinema();
+	HRESULT Ready_Wall();
 
 public:
 	void Minus_MonsterCount() { m_iCountMonster--; }
@@ -69,7 +70,8 @@ private:
 	HRESULT Ready_Portal();
 	void Open_Potal(_fvector vPos, _uint iMonTag);
 	void CheckTriggerForQuest(void);
-
+private:
+	void Open_Wall();
 public:
 	static CStage1* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);
 private:

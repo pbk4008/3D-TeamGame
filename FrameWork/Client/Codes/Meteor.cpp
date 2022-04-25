@@ -5,7 +5,6 @@
 CMeteor::CMeteor()
 	: m_pStaticModel(nullptr)
 	, m_pAnimModel(nullptr)
-	, m_pCollider(nullptr)
 	, m_fSpeed(0.f)
 	, m_bRemoveCheck(false)
 	, m_fRandSpawnTime(0.f)
@@ -14,6 +13,7 @@ CMeteor::CMeteor()
 	, m_fAccRotateTime(0.f)
 	, m_fPreY(0.f)
 	, m_fAccGravityTime(0.f)
+	, m_fAccMotionTim(0.f)
 {
 	ZeroMemory(&m_vDestination, sizeof(_float4));
 	ZeroMemory(&m_vRandNorm, sizeof(_float4));
@@ -32,6 +32,7 @@ CMeteor::CMeteor(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
 	, m_fAccRotateTime(0.f)
 	, m_fPreY(0.f)
 	, m_fAccGravityTime(0.f)
+	, m_fAccMotionTim(0.f)
 {
 	ZeroMemory(&m_vDestination, sizeof(_float4));
 	ZeroMemory(&m_vRandNorm, sizeof(_float4));
@@ -52,6 +53,7 @@ CMeteor::CMeteor(const CMeteor& rhs)
 	, m_vRandNorm(rhs.m_vRandNorm)
 	, m_fPreY(0.f)
 	, m_fAccGravityTime(0.f)
+	, m_fAccMotionTim(0.f)
 {
 	Safe_AddRef(m_pStaticModel);
 	Safe_AddRef(m_pAnimModel);
@@ -83,7 +85,7 @@ HRESULT CMeteor::NativeConstruct(const _uint _iSceneID, void* _pArg)
 
 _int CMeteor::Tick(_double _dDeltaTime)
 {
-	if (!m_bStart)
+	/*if (!m_bStart)
 	{
 		m_fAccTime += (_float)_dDeltaTime;
 		if (m_fAccTime >= m_fRandSpawnTime)
@@ -94,13 +96,21 @@ _int CMeteor::Tick(_double _dDeltaTime)
 		}
 		else
 			return 0;
-	}
+	}*/
 	m_pCollider->Tick(_dDeltaTime);
+	_vector vPos = m_pTransform->Get_State(CTransform::STATE_POSITION);
+	_float fY = XMVectorGetY(vPos);
+	if (fY < -30.f)
+	{
+		m_pCollider->Reset_Power();
+		setActive(false);
+		m_fAccGravityTime = 0.f;
+	}
+
 	m_fAccRotateTime += (_float)_dDeltaTime;
 	m_pCollider->Add_Torque(XMLoadFloat4(&m_vRandNorm), (_float)_dDeltaTime);
 
-	_vector vPos = m_pTransform->Get_State(CTransform::STATE_POSITION);
-	_float fY = XMVectorGetY(vPos);
+
 	if (fY > 0)
 	{
 		if (m_fPreY < fY)
@@ -145,17 +155,22 @@ _int CMeteor::Tick(_double _dDeltaTime)
 
 _int CMeteor::LateTick(_double _dDeltaTime)
 {
-	if (!m_bStart)
-		return 0; 
+	/*if (!m_bStart)
+		return 0; */
+	m_pCollider->Update_Transform();
+	//if (!m_bRemoveCheck)
 
-	if (!m_bRemoveCheck)
-		m_pCollider->Update_Transform();
 
-	if (!m_pRenderer)
-		return E_FAIL;
+	//if (!m_pRenderer)
+	//	return E_FAIL;
 
 	m_pRenderer->Add_RenderGroup(CRenderer::RENDER_NONALPHA, this);
 
+	if (m_pRenderer->Get_RenderButton(CRenderer::VELOCITYBLUR) == true)
+	{
+		if (FAILED(m_pRenderer->Add_RenderGroup(CRenderer::RENDER_VELOCITY, this)))
+			return -1;
+	}
 	return _int();
 }
 
@@ -166,6 +181,24 @@ HRESULT CMeteor::Render()
 	smatWorld = XMMatrixTranspose(m_pTransform->Get_WorldMatrix());
 	smatView = XMMatrixTranspose(g_pGameInstance->Get_Transform(wstrCamTag, TRANSFORMSTATEMATRIX::D3DTS_VIEW));
 	smatProj = XMMatrixTranspose(g_pGameInstance->Get_Transform(wstrCamTag, TRANSFORMSTATEMATRIX::D3DTS_PROJECTION));
+
+	RIM rimDesc;
+	ZeroMemory(&rimDesc, sizeof(RIM));
+
+	rimDesc.rimcheck = true;
+	rimDesc.rimcol = _float3(1.f, 0.49f, 0.f);
+	rimDesc.rimintensity = 1.f;
+	XMStoreFloat4(&rimDesc.camdir, XMVector3Normalize(g_pGameInstance->Get_CamPosition(L"Camera_Silvermane") - m_pTransform->Get_State(CTransform::STATE_POSITION)));
+
+	//_float4 fColor = _float4(1.f, 1.f, 1.f, 1.f);
+	//_float fEmpower = 0.3f;
+	//if (FAILED(m_pStaticModel->SetUp_ValueOnShader("g_color", &fColor, sizeof(_float4)))) MSGBOX("Failed To Apply Actor ConstantBuffer");
+	//if (FAILED(m_pStaticModel->SetUp_ValueOnShader("g_empower", &fEmpower, sizeof(_float)))) MSGBOX("Failed To Apply Actor ConstantBuffer");
+
+	if (FAILED(m_pStaticModel->SetUp_ValueOnShader("g_rimlightcheck", &rimDesc.rimcheck, sizeof(_bool)))) MSGBOX("Failed To Apply Actor ConstantBuffer");
+	if (FAILED(m_pStaticModel->SetUp_ValueOnShader("g_rimintensity", &rimDesc.rimintensity, sizeof(_float)))) MSGBOX("Failed To Apply Actor ConstantBuffer");
+	if (FAILED(m_pStaticModel->SetUp_ValueOnShader("g_rimcolor", &rimDesc.rimcol, sizeof(_float3)))) MSGBOX("Failed To Apply Actor ConstantBuffer");
+	if (FAILED(m_pStaticModel->SetUp_ValueOnShader("g_camdir", &rimDesc.camdir, sizeof(_float4)))) MSGBOX("Failed To Apply Actor ConstantBuffer");
 
 	if (!m_bRemoveCheck)
 	{
@@ -178,18 +211,42 @@ HRESULT CMeteor::Render()
 		for (_uint i = 0; i < m_pStaticModel->Get_NumMeshContainer(); ++i)
 			if (FAILED(m_pStaticModel->Render(i, 0))) 	return E_FAIL;
 	}
-	else
+	return S_OK;
+}
+
+HRESULT CMeteor::Render_Velocity()
+{
+	wstring wstrCam = g_pGameInstance->Get_BaseCameraTag();
+
+	_matrix matTransform = m_pTransform->Get_WorldMatrix();
+	matTransform *= g_pGameInstance->Get_Transform(wstrCam, TRANSFORMSTATEMATRIX::D3DTS_VIEW) * g_pGameInstance->Get_Transform(wstrCam, TRANSFORMSTATEMATRIX::D3DTS_PROJECTION);
+
+	matTransform.r[0]=XMVector3Normalize(matTransform.r[0]);
+	matTransform.r[1]=XMVector3Normalize(matTransform.r[1]);
+	matTransform.r[2]=XMVector3Normalize(matTransform.r[2]);
+	matTransform.r[3] = XMVectorZero();
+
+	_matrix matPreWVP = g_pGameInstance->GetPreViewProtj(m_PreWroldMat);
+
+
+	matTransform = XMMatrixTranspose(matTransform);
+	matPreWVP = XMMatrixTranspose(matPreWVP);
+
+	if (FAILED(m_pStaticModel->SetUp_ValueOnShader("g_RotationMat", &matTransform, sizeof(_matrix)))) MSGBOX("Failed To Apply Actor ConstantBuffer");
+	if (FAILED(m_pStaticModel->SetUp_ValueOnShader("g_PreWorldViewProj", &matPreWVP, sizeof(_matrix)))) MSGBOX("Failed To Apply Actor ConstantBuffer");
+
+	for (_uint i = 0; i < m_pStaticModel->Get_NumMeshContainer(); i++)
 	{
-		if (FAILED(m_pAnimModel->SetUp_ValueOnShader("g_WorldMatrix", &smatWorld, sizeof(_matrix))))
-			return E_FAIL;
-		if (FAILED(m_pAnimModel->SetUp_ValueOnShader("g_ViewMatrix", &smatView, sizeof(_matrix))))
-			return E_FAIL;
-		if (FAILED(m_pAnimModel->SetUp_ValueOnShader("g_ProjMatrix", &smatProj, sizeof(_matrix))))
-			return E_FAIL;
-		for (_uint i = 0; i < m_pAnimModel->Get_NumMeshContainer(); ++i)
-			m_pAnimModel->Render(i, 0);
+		if (FAILED(m_pStaticModel->Render(i, 2)))
+			MSGBOX("Fialed To Rendering Silvermane");
 	}
-	
+
+	m_fAccMotionTim += g_fDeltaTime;
+	if (m_fAccMotionTim > 0.1f)
+	{
+		m_PreWroldMat = m_pTransform->Get_WorldMatrix();
+		m_fAccMotionTim = 0.f;
+	}
 
 	return S_OK;
 }
@@ -234,66 +291,55 @@ HRESULT CMeteor::Ready_Component()
 	return S_OK;
 }
 
-void CMeteor::OnTriggerEnter(CCollision& collision)
-{
-	cout << "collision" << endl;
-	if (!m_bRemoveCheck)
-	{
-		m_bRemoveCheck = true;
-		OVERLAPDESC tOverlapDesc;
-		tOverlapDesc.geometry = PxSphereGeometry(5.f);
-		XMStoreFloat3(&tOverlapDesc.vOrigin, m_pTransform->Get_State(CTransform::STATE_POSITION));
-		CGameObject* pHitObject = nullptr;
-		tOverlapDesc.ppOutHitObject = &pHitObject;
-		tOverlapDesc.filterData.flags = PxQueryFlag::eDYNAMIC;
-		tOverlapDesc.layerMask = 1<<(_uint)ELayer::Player;
-		if (g_pGameInstance->Overlap(tOverlapDesc))
-		{
-			if (tOverlapDesc.vecHitObjects.empty())
-				return;
 
-			CActor* pActor = static_cast<CActor*>(tOverlapDesc.vecHitObjects[0]);
-			ATTACKDESC tAttackDesc;
-
-			tAttackDesc.pOwner = this;
-			tAttackDesc.pHitObject = pActor;
-
-			tAttackDesc.iLevel = 3;
-			tAttackDesc.fDamage = 15.f;
-
-			pActor->Hit(tAttackDesc);
-		}
-	}
-}
-_int CMeteor::Move(_fvector vPos)
+_int CMeteor::Move(_fvector vPos, _uint iNum)
 {	
 	m_pCollider->Add_ActorToScene();
 	m_pCollider->Reset_Power();
-	m_pCollider->Add_ActorToScene();
 	m_pTransform->Set_State(CTransform::STATE_POSITION, vPos);
-	XMStoreFloat4(&m_vDestination, g_pObserver->Get_PlayerPos());
 
 	_vector vPosition = m_pTransform->Get_State(CTransform::STATE_POSITION);
-	_vector vDest = XMLoadFloat4(&m_vDestination);
+	_vector vDir = XMVectorZero();
+	_float fAngle = 0.f;
+	_float fPow = 180.f;
+	switch (iNum)
+	{
+	case 0:
+		vDir = XMVectorSet(0.3f, 0.f, 1.f, 0.f);
+		fAngle = 50.f;
+		break;
+	case 1:
+		vDir = XMVectorSet(-0.5f, 0.f, 0.8f, 0.f);
+		fAngle = 50.f;
+		break;
+	case 2:
+		vDir = XMVectorSet(0.5f, 0.f, 0.8f, 0.f);
+		fAngle = 45.f;
+		break;
+	case 3:
+		vDir = XMVectorSet(0.4f, 0.f, -0.5f, 0.f);
+		fAngle = 50.f;
+		break;
+	case 4:
+		vDir = XMVectorSet(-1.f, 0.f, 0.f, 0.f);
+		fAngle = 60.f;
+		fPow = 180.f;
+		break;
+	case 5:
+		vDir = XMVectorSet(-1.f, 0.f, 0.5f, 0.f);;
+		fAngle = 50.f;
+		break;
+	}
 
-	_vector vTmp = XMVectorSetY(vPosition, XMVectorGetY(vDest));
-	_vector vDir = vDest - vTmp;
 	vDir = XMVector3Normalize(vDir);
 
 	_vector vUp = XMVectorSet(0.f, 1.f, 0.f, 0.f);
-
 	_vector vTmpLook = XMVector3Cross(vDir, vUp);
-	_matrix matRot=XMMatrixRotationAxis(vTmpLook, XMConvertToRadians(70.f));
+	_matrix matRot=XMMatrixRotationAxis(vTmpLook, XMConvertToRadians(fAngle));
 	
 	vDir=XMVector3TransformNormal(vDir, matRot);
-	//_float fLen = XMVectorGetX(XMVector3Length(vDir));
-	_float fDist=g_pObserver->Get_Dist(vPos);
 
-	m_fSpeed = 0.8f*fDist;
-
-	_float fRandSpeed = (_float)MathUtils::ReliableRandom(-1.0, 3.0);
-	fRandSpeed += m_fSpeed;
-	vDir *= fRandSpeed;
+	vDir *= fPow;
 
 	m_pCollider->Add_Force(vDir);
 
@@ -304,6 +350,36 @@ _int CMeteor::Move(_fvector vPos)
 	_float fNormZ = (_float)MathUtils::ReliableRandom(-1.0, 1.0);
 
 	m_vRandNorm = _float4(fNormX, fNormY, fNormZ,0.f);
+	return _int();
+}
+
+_int CMeteor::Shot()
+{
+	m_pCollider->Add_ActorToScene();
+
+	_matrix matPlayer = g_pObserver->Get_PlayerWorldMatrix();
+	_vector vPos = g_pObserver->Get_PlayerPos();
+	_vector vPlayerRight = matPlayer.r[0];
+	vPlayerRight = XMVector3Normalize(vPlayerRight);
+
+	cout << XMVectorGetX(vPlayerRight) << ", " << XMVectorGetY(vPlayerRight) << ", " << XMVectorGetZ(vPlayerRight)<<endl;
+	_vector vCreatePos = vPos + (vPlayerRight*10.f);
+	m_pTransform->Set_State(CTransform::STATE_POSITION, vCreatePos);
+
+	_vector vAxis = XMVectorSet(-1.f, 0.f, -1.f, 0.f);
+	vAxis = XMVector3Normalize(vAxis);
+
+	_matrix matRot = XMMatrixRotationAxis(vAxis, XMConvertToRadians(60.f));
+	_vector vDir = XMVectorSet(-1.f, 0.f, 1.f, 0.f);
+	vDir=XMVector3Normalize(vDir);
+	vDir=XMVector3TransformNormal(vDir, matRot);
+
+	/*_vector vDir = XMVectorSet(0.f, 0.f, 1.f, 0.f);
+	vDir=XMVectorSetY(vDir, 1.f);
+	vDir=XMVector3Normalize(vDir);*/
+	vDir *= 100.f;
+	m_pCollider->Add_Force(vDir);
+	
 	return _int();
 }
 

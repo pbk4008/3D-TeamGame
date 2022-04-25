@@ -219,6 +219,9 @@ CHierarchyNode* CCinemaCam::Get_CamBone()
 
 void CCinemaCam::Change_CurrentCam()
 {
+	vector<CAnimation*> vecAnim = m_pModel->Get_Animations();
+	vecAnim[0]->Reset_Animation();
+
 	g_pGameInstance->Change_BaseCamera(m_pCamTag);
 }
 

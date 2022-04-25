@@ -178,11 +178,11 @@ HRESULT CStage1::NativeConstruct()
 
 	g_pGameInstance->Change_BaseCamera(L"Camera_Silvermane");
 
-	//if (FAILED(Ready_Meteor()))
-	//{
-	//	MSGBOX("Meteor");
-	//	return E_FAIL;
-	//}
+	if (FAILED(Ready_Meteor()))
+	{
+		MSGBOX("Meteor");
+		return E_FAIL;
+	}
 
 	//if (FAILED(Ready_Cinema()))
 	// {
@@ -202,6 +202,11 @@ HRESULT CStage1::NativeConstruct()
 		return E_FAIL;
 	}
 
+	if (FAILED(Ready_Wall()))
+	{
+		MSGBOX("Wall");
+		return E_FAIL;
+	}
 	g_pGameInstance->PlayBGM(L"Stage1_BGM");
 	
 	return S_OK;
@@ -209,7 +214,8 @@ HRESULT CStage1::NativeConstruct()
 
 _int CStage1::Tick(_double TimeDelta)
 {
-	//m_pTestModel->Update_CombinedTransformationMatrix(TimeDelta);
+	_vector vTmp = g_pObserver->Get_PlayerPos();
+	cout << XMVectorGetX(vTmp) << ", " << XMVectorGetY(vTmp) << ", " << XMVectorGetZ(vTmp) << endl;
 #ifdef  _DEBUG
 	_int iLevel = 0;
 	if (g_pDebugSystem->Get_LevelMoveCheck(iLevel))
@@ -419,25 +425,34 @@ _int CStage1::Tick(_double TimeDelta)
 		m_pIndicatorManager->Active_Indicator();
 
 	/*For Cinema*/
-	if (m_pScenemaManager)
-	{
-		if (g_pGameInstance->getkeyDown(DIK_END))
-			m_pScenemaManager->Active_Scenema((_uint)CINEMA_INDEX::CINEMA1_1);;
+	//if (m_pScenemaManager)
+	//{
+	//	if (g_pGameInstance->getkeyDown(DIK_END))
+	//		m_pScenemaManager->Active_Scenema((_uint)CINEMA_INDEX::CINEMA1_1);;
 
-		m_pScenemaManager->Tick(TimeDelta);
-	}
+	//	m_pScenemaManager->Tick(TimeDelta);
+	//}
 
 
 	/*for Meteor*/
-	m_fAccMeteorStartTime += (_float)TimeDelta;
-	if (m_fAccMeteorStartTime > 60.f)
-		Shoot_Meteor(TimeDelta);
+	//m_fAccMeteorStartTime += (_float)TimeDelta;
+	//if (m_fAccMeteorStartTime > 15.f)
+	//	Shoot_Meteor(TimeDelta);
 
 	if(g_pQuestManager)
 		g_pQuestManager->Tick(g_dImmutableTime);
 	
 	if (g_pGuideManager)
 		g_pGuideManager->Tick(g_dImmutableTime);
+
+	if (g_pGameInstance->getkeyDown(DIK_END))
+	{
+		CMeteor* pMeteor = Find_Meteor();
+		pMeteor->setActive(true);
+		_vector vPos = XMLoadFloat4(&m_vecMeteorPos[0]);;
+		pMeteor->Move(vPos, 0);
+	}
+	//Open_Wall();
 
 	return _int();
 }
@@ -598,21 +613,6 @@ HRESULT CStage1::Ready_Player(const _tchar* LayerTag)
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Camera", L"Proto_GameObject_Camera_Silvermane")))
 		return E_FAIL;
 
-	//WALLDESC desc;
-	//ZeroMemory(&desc, sizeof(WALLDESC));
-	//desc.pos = _float4(-61.f, 18.f, 194.f, 1.f);
-	//desc.scale = _float2(6.f, 10.f);
-	//desc.radian = 0.f;
-	//desc.color = _float4(1.f, 0.f, 0.f, 1.f);
-	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Wall", L"Proto_GameObject_Wall",&desc))) return E_FAIL;
-
-	//ZeroMemory(&desc, sizeof(WALLDESC));
-	//desc.pos = _float4(-91.f, 25.f, 218.f, 1.f);
-	//desc.scale = _float2(10.f, 24.f);
-	//desc.radian = 90.f;
-	//desc.color = _float4(0.f, 1.f, 1.f, 1.f);
-	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Wall", L"Proto_GameObject_Wall", &desc))) return E_FAIL;
-	
 	//Test
 	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Test", L"Proto_GameObject_TestObject")))
 	//	return E_FAIL;
@@ -1526,9 +1526,47 @@ HRESULT CStage1::Ready_Cinema()
 		return E_FAIL;
 	if (FAILED(m_pScenemaManager->Add_Scenema(CCinema3_5::Create(m_pDevice, m_pDeviceContext, (_uint)SCENEID::SCENE_STAGE1))))
 		return E_FAIL;
-	if (FAILED(m_pScenemaManager->Add_Scenema(CCinema3_6::Create(m_pDevice, m_pDeviceContext, (_uint)SCENEID::SCENE_STAGE1))))
-		return E_FAIL;
 
+	return S_OK;
+}
+
+HRESULT CStage1::Ready_Wall()
+{
+	CWall::WALLDESC desc;
+	ZeroMemory(&desc, sizeof(desc));
+	desc.pos = _float4(-61.f, 18.f, 194.f, 1.f);
+	desc.scale = _float2(6.f, 10.f);
+	desc.radian = 0.f;
+	desc.color = _float4(0.f, 0.f, 1.f, 1.f);
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Wall", L"Proto_GameObject_Wall",&desc))) return E_FAIL;
+
+	ZeroMemory(&desc, sizeof(desc));
+	desc.pos = _float4(-91.f, 25.f, 218.f, 1.f);
+	desc.scale = _float2(10.f, 24.f);
+	desc.radian = 90.f;
+	desc.color = _float4(0.f, 0.f, 1.f, 1.f);
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Wall", L"Proto_GameObject_Wall", &desc))) return E_FAIL;
+	
+	ZeroMemory(&desc, sizeof(desc));
+	desc.pos = _float4(-137.f, 19.f, 224.f, 1.f);
+	desc.scale = _float2(10.f, 24.f);
+	desc.radian = 0.f;
+	desc.color = _float4(0.f, 0.f, 1.f, 1.f);
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Wall", L"Proto_GameObject_Wall", &desc))) return E_FAIL;
+
+	ZeroMemory(&desc, sizeof(desc));
+	desc.pos = _float4(-175.f, 47.f, 373.f, 1.f);
+	desc.scale = _float2(12.f, 24.f);
+	desc.radian = 0.f;
+	desc.color = _float4(0.f, 0.f, 1.f, 1.f);
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Wall", L"Proto_GameObject_Wall", &desc))) return E_FAIL;
+
+	ZeroMemory(&desc, sizeof(desc));
+	desc.pos = _float4(-176.f, 51.f, 400.f, 1.f);
+	desc.scale = _float2(10.f, 24.f);
+	desc.radian = 0.f;
+	desc.color = _float4(0.f, 0.f, 1.f, 1.f);
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Wall", L"Proto_GameObject_Wall", &desc))) return E_FAIL;
 	return S_OK;
 }
 
@@ -1570,6 +1608,61 @@ void CStage1::Open_Potal(_fvector vPos, _uint iMonTag)
 }
 void CStage1::CheckTriggerForQuest(void)
 {
+}
+
+void CStage1::Open_Wall()
+{
+	list<CGameObject*>* pLayer = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Layer_Wall");
+
+	if (!pLayer)
+		return;
+
+	auto iter = pLayer->begin();
+	if (m_pTriggerSystem->Get_CurrentTriggerNumber() == 4)
+	{
+		if (m_iCountMonster == 8)
+		{
+			advance(iter, 0);
+			if((*iter)->getActive())
+				static_cast<CWall*>(*iter)->Destroy();
+		}
+		if (m_iCountMonster == 0 && m_iPortalCount ==3)
+		{
+			advance(iter, 1);
+			if ((*iter)->getActive())
+				static_cast<CWall*>(*iter)->Destroy();
+		}
+	}
+	else if (m_pTriggerSystem->Get_CurrentTriggerNumber() == 5)
+	{
+		if (m_iCountMonster == 0 && m_iPortalCount == 6)
+		{
+			advance(iter, 2);
+			if ((*iter)->getActive())
+				static_cast<CWall*>(*iter)->Destroy();
+		}
+	}
+	else if (m_pTriggerSystem->Get_CurrentTriggerNumber() == 8)
+	{
+		if (m_iCountMonster == 0)
+		{
+			advance(iter, 3);
+			if ((*iter)->getActive())
+				static_cast<CWall*>(*iter)->Destroy();
+		}
+	}
+	else if (m_pTriggerSystem->Get_CurrentTriggerNumber() == 9)
+	{
+		if (m_iCountMonster == 0)
+		{
+			advance(iter, 4);
+			if ((*iter)->getActive())
+			{
+				static_cast<CWall*>(*iter)->Destroy();
+				m_pTriggerSystem->setAllTriggerClear(true);
+			}
+		}
+	}
 }
 
 
@@ -2375,12 +2468,13 @@ HRESULT CStage1::Ready_Meteor()
 		Safe_AddRef(pObj);
 		m_vecMeteor.emplace_back(pObj);
 	}
-	m_vecMeteorPos.resize(5);
+	m_vecMeteorPos.resize(6);
 	m_vecMeteorPos[0] = _float4(-90.f, -20.f, 96.f, 1.f);
 	m_vecMeteorPos[1] = _float4(10.f, -20.f, 145.f, 1.f);
-	m_vecMeteorPos[2] = _float4(-100.f, -20.f, 190.f, 1.f);
+	m_vecMeteorPos[2] = _float4(-110.f, -5.f, 142.f, 1.f);
 	m_vecMeteorPos[3] = _float4(-200.f, -20.f, 320.f, 1.f);
-	m_vecMeteorPos[4] = _float4(-150.f, -20.f, 380.f, 1.f);
+	m_vecMeteorPos[4] = _float4(-80.f, -20.f, 380.f, 1.f);
+	m_vecMeteorPos[5] = _float4(-80, -20.f, 266.f, 1.f);
 
 	m_fRandomMeteorSpawnTime = (_float)MathUtils::ReliableRandom((_double)10.f,(_double)25.f);
 
@@ -2408,37 +2502,24 @@ void CStage1::Shoot_Meteor(_double dDeltaTime)
 		m_fAccMeteorSpawn = 0.f;
 		m_fRandomMeteorSpawnTime = (_float)MathUtils::ReliableRandom(5.f,15.f);
 		
-		_vector vSelectPos = XMVectorZero();
-		for (auto& pPos : m_vecMeteorPos)
-		{
-			_vector vPos = XMLoadFloat4(&pPos);
-			_vector vDir = g_pObserver->Get_Dir(vPos);
-			if(XMVectorGetZ(vDir)<0.f)
-				continue;
-			_float fDist=g_pObserver->Get_Dist(vPos);
-			if (fDist > 80 && fDist < 150)
-			{
-				vSelectPos = vPos;
-				break;
-			}
-		}
-		if (XMVector3Equal(vSelectPos, XMVectorZero()))
-			return;
-
 		_uint iRandomShot = (_uint)MathUtils::ReliableRandom(1.0, (_double)iCount+1);
 		for (_uint i = 0; i < iRandomShot; i++)
 		{
+			_vector vPos = XMVectorZero();
+			_uint randomPos = MathUtils::ReliableRandom(0, 6);
+			vPos = XMLoadFloat4(&m_vecMeteorPos[randomPos]);
+
 			_vector vPivot;
-			_float fX = (_float)MathUtils::ReliableRandom(-20.0, 20.0);
-			_float fZ = (_float)MathUtils::ReliableRandom(-20.0, 20.0);
+			_float fX = (_float)MathUtils::ReliableRandom(-10.0, 10.0);
+			_float fZ = (_float)MathUtils::ReliableRandom(-10.0, 10.0);
 
 			vPivot = XMVectorSet(fX, 0.f, fZ, 1.f);
-			vSelectPos += vPivot;
+			vPos += vPivot;
 			CMeteor* pMeteor = Find_Meteor();
 			if (!pMeteor)
 				MSGBOX("Meteor Null!!");
 			pMeteor->setActive(true);
-			pMeteor->Move(vSelectPos);
+			pMeteor->Move(vPos, randomPos);
 		}
 	}
 
