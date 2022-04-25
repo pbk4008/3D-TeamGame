@@ -37,6 +37,19 @@ _int C2H_HammerAttackSprintR1::Tick(const _double& _dDeltaTime)
 		}
 	}
 
+	if (iCurKeyFrameIndex <= 35)
+	{
+		m_fMTAcc += g_fDeltaTime;
+		if (0.05f < m_fMTAcc)
+		{
+			m_pSilvermane->Create_MotionTrail(m_motiontrailidx);
+			++m_motiontrailidx;
+			m_fMTAcc = 0.f;
+		}
+
+		if (m_motiontrailidx >= 20)
+			m_motiontrailidx = 0;
+	}
 
 	if (35 < iCurKeyFrameIndex && !m_isRangeAttack)
 	{

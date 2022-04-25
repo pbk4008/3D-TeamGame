@@ -38,6 +38,8 @@ HRESULT CStage2::NativeConstruct()
 #ifndef _DEBUG
 	m_bDebug = false;
 #endif
+	g_pWeaponGenerator = CWeaponGenerator::GetInstance();
+
 	if (FAILED(CLevel::NativeConstruct()))
 		return E_FAIL;
 
@@ -1298,4 +1300,6 @@ void CStage2::Free()
 	for (auto& iter : m_pDumyDropData)
 		Safe_Delete(iter);
 	m_pDumyDropData.clear();
+
+	CWeaponGenerator::DestroyInstance();
 }
