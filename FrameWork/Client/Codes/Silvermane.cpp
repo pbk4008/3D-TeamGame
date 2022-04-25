@@ -224,7 +224,7 @@ HRESULT CSilvermane::NativeConstruct(const _uint _iSceneID, void* _pArg)
 
 
 	m_isFall = true;
-	m_fMaxHp = 10000.f;
+	m_fMaxHp = 100.f;
 	m_fCurrentHp = m_fMaxHp;
 
 	m_pRenderer->SetRenderButton(CRenderer::PIXEL, true);
@@ -285,7 +285,7 @@ HRESULT CSilvermane::NativeConstruct(const _uint _iSceneID, void* _pArg)
 	if (m_pFillCKey2)
 		m_pFillCKey2->setActive(false);
 
-
+	m_isLootShield = true;
 	return S_OK;
 }
 
@@ -1304,8 +1304,11 @@ void CSilvermane::Respawn()
 {
 	m_pCharacterController->setPosition(m_vRespawnPos);
 	m_pTransform->SetUp_Rotation(_float3(0.f, 0.f, 0.f));
+	m_pTransform->Set_State(CTransform::STATE_POSITION,XMVectorSetW(XMLoadFloat3(&m_vRespawnPos), 1.f));
+
 	if (m_pCamera)
 		m_pCamera->Respawn();
+
 	m_fCurrentHp = m_fMaxHp;
 
 	if (!m_isEquipWeapon)
@@ -1617,7 +1620,7 @@ void CSilvermane::End_ThrowShield()
 		return;
 
 	m_pStateController->Change_State(L"Shield_Throw");
-	Set_EquipShield(true);
+	//Set_EquipShield(true);
 	Set_EquipShieldAnim(true);
 	m_pShield->Set_TrackAcc(6.0); // 방패가 펼쳐진상태로 켜지도록 함
 

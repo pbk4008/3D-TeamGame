@@ -104,12 +104,14 @@ _int CShield_BlockEnd::Input(const _double& _dDeltaTime)
 	//_int iProgress = __super::KeyCheck(_dDeltaTime);
 	//if (NO_EVENT != iProgress)
 	//	return iProgress;
-
 	if (g_pGameInstance->getkeyDown(DIK_Q))
 	{
-		if (FAILED(m_pStateController->Change_State(L"Shield_BlockStart")))
-			return E_FAIL;
-		return STATE_CHANGE;
+		if (m_pSilvermane->IsLootShield())
+		{
+			if (FAILED(m_pStateController->Change_State(L"Shield_BlockStart")))
+				return E_FAIL;
+			return STATE_CHANGE;
+		}
 	}
 
 	if (m_iCutIndex < m_pAnimationController->Get_CurKeyFrameIndex())

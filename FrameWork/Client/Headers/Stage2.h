@@ -6,6 +6,7 @@
 #include "TriggerSystem.h"
 
 BEGIN(Client)
+class CDropBoxData;
 class CStage2 final : public CLevel
 {
 private:
@@ -52,12 +53,20 @@ private:
 	HRESULT Ready_Trigger_Light(const _tchar* pDataFilePath);
 	HRESULT Ready_Trigger_Scene(const _tchar* pDataFilePath);
 	HRESULT Ready_Trigger_Monster(const _tchar* pDataFilePath);*/
+
+private:
+	HRESULT Ready_Treasure_Chest(void);
+
 public:
 	void Minus_MonsterCount() { m_iCountMonster--; }
 public:
 	static CStage2* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);
 private:
 	virtual void Free() override;
+
+private:
+	std::vector<CDropBoxData*> m_pDumyDropData;
+
 private:
 	CTriggerSystem<CStage2>* m_pTriggerSystem;
 	_bool m_bDebug;
