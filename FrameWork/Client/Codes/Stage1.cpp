@@ -167,12 +167,6 @@ HRESULT CStage1::NativeConstruct()
 		return E_FAIL;
 	}
 
-	if (FAILED(Ready_GameManager()))
-	{
-		MSGBOX("Stage1 Manager");
-		return E_FAIL;
-	}
-
 	g_pGameInstance->Change_BaseCamera(L"Camera_Silvermane");
 
 	if (FAILED(Ready_Meteor()))

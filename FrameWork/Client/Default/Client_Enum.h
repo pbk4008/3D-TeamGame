@@ -27,6 +27,7 @@ enum class GAMEOBJECT
 	//이 이후로 추가되는거 달아주세요, 위에 추가하면 꼬임
 	// 무기
 	WEAPON_MIDBOSS,
+	WEAPON_BOSS,
 	WEAPON_EARTH,
 	WEAPON_2HSword,
 	WEAPON_1HSWORD,
