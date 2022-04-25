@@ -11,6 +11,8 @@ CStage3::CStage3(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
 
 HRESULT CStage3::NativeConstruct()
 {
+	//g_pWeaponGenerator = CWeaponGenerator::GetInstance();
+
 	if (FAILED(CLevel::NativeConstruct()))
 		return E_FAIL;
 
@@ -19,8 +21,6 @@ HRESULT CStage3::NativeConstruct()
 
 	if (FAILED(Ready_MapObject()))
 		return E_FAIL;
-
-	g_pWeaponGenerator = CWeaponGenerator::GetInstance();
 
 	if (FAILED(Ready_Player(L"Layer_Silvermane")))
 		return E_FAIL;
@@ -199,4 +199,5 @@ CStage3* CStage3::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceCont
 void CStage3::Free()
 {
 	CLevel::Free();
+	//CWeaponGenerator::DestroyInstance();
 }

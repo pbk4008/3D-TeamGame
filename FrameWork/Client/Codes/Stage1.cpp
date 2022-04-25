@@ -215,8 +215,9 @@ HRESULT CStage1::NativeConstruct()
 
 _int CStage1::Tick(_double TimeDelta)
 {
-	_vector vTmp = g_pObserver->Get_PlayerPos();
-	cout << XMVectorGetX(vTmp) << ", " << XMVectorGetY(vTmp) << ", " << XMVectorGetZ(vTmp) << endl;
+	//_vector vTmp = g_pObserver->Get_PlayerPos();
+	//cout << XMVectorGetX(vTmp) << ", " << XMVectorGetY(vTmp) << ", " << XMVectorGetZ(vTmp) << endl;
+
 #ifdef  _DEBUG
 	_int iLevel = 0;
 	if (g_pDebugSystem->Get_LevelMoveCheck(iLevel))
@@ -225,6 +226,8 @@ _int CStage1::Tick(_double TimeDelta)
 		if (FAILED(g_pGameInstance->Open_Level((_uint)SCENEID::SCENE_LOADING, pLoading)))
 			return -1;
 		g_pDebugSystem->Set_LevelcMoveCheck(false);
+		m_pTriggerSystem = nullptr;
+		g_pDropManager = nullptr;
 		return 0;
 	}
 #endif //  _DEBUG
@@ -2450,8 +2453,10 @@ HRESULT CStage1::Ready_Treasure_Chest()
 			MSGBOX("Treasure_Chest 파일을 불러오는 도중 오류가 발생했습니다. Stage1.cpp Line 306");
 			return E_FAIL;
 		}
+
 		m_pDumyDropData.push_back(pDropboxdata);
 	}
+
 
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_LootShield", L"Proto_GameObject_LootShield")))
 		return E_FAIL;
@@ -2507,7 +2512,7 @@ void CStage1::Shoot_Meteor(_double dDeltaTime)
 		for (_uint i = 0; i < iRandomShot; i++)
 		{
 			_vector vPos = XMVectorZero();
-			_uint randomPos = MathUtils::ReliableRandom(0, 6);
+			_uint randomPos = (_uint)MathUtils::ReliableRandom(0, 6);
 			vPos = XMLoadFloat4(&m_vecMeteorPos[randomPos]);
 
 			_vector vPivot;
@@ -2554,23 +2559,29 @@ void CStage1::Free()
 {
 	CLevel::Free();
 
-	Safe_Release(m_pScenemaManager);
-	CScenematicManager::DestroyInstance();
+	if (m_pScenemaManager)
+	{
+		Safe_Release(m_pScenemaManager);
+		CScenematicManager::DestroyInstance();
+	}
 
 	for (auto& iter : m_pDumyDropData)
 		Safe_Delete(iter);
 
-	if(g_pInteractManager)
+	if (m_pIndicatorManager)
+	{
+		Safe_Release(m_pIndicatorManager);
+		CIndicator_Manager::DestroyInstance();
+	}
+
+	if (g_pInteractManager)
 		g_pInteractManager->Remove_Interactable();
 
-	Safe_Release(m_pScenemaManager);
-	Safe_Release(m_pIndicatorManager);
-	CScenematicManager::DestroyInstance();
-	CIndicator_Manager::DestroyInstance();
+	if (g_pDropManager)
+		CDropManager::DestroyInstance();
 
-
-	CDropManager::DestroyInstance();
-	Safe_Release(m_pTriggerSystem);
+	if(m_pTriggerSystem)
+		Safe_Release(m_pTriggerSystem);
 
 	for (auto& pObj : m_vecMeteor)
 		Safe_Release(pObj);

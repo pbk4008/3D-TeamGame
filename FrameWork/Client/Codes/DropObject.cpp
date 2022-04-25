@@ -1,10 +1,10 @@
-
 #include "pch.h"
 #include "DropObject.h"
 #include "ItemData.h"
 #include "Client_Function.h"
 #include "SplineCurve.h"
 #include "InventoryData.h"
+#include "MotionTrail.h"
 
 CDropObject::CDropObject(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
 	:CInteractableObject(_pDevice, _pDeviceContext)
@@ -43,6 +43,20 @@ HRESULT CDropObject::NativeConstruct(const _uint _iSceneID, void* _pArg)
 
 	m_pTransform->Scaling(_vector{ 2.f, 2.f, 2.f });
 
+	for (_int i = 0; i < 20; ++i)
+	{
+		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)m_iSceneID, L"Layer_DropMotionTrail", L"Proto_GameObject_MotionTrail")))
+			return E_FAIL;
+
+		list<CGameObject*>* pobjlist = nullptr;
+		pobjlist = g_pGameInstance->getObjectList((_uint)m_iSceneID, L"Layer_DropMotionTrail");
+		CGameObject* pobj = pobjlist->back();
+		pobj->setActive(false);
+		static_cast<CMotionTrail*>(pobj)->Set_Model(nullptr,nullptr, m_pModel);
+
+		m_vecMotionTrail.emplace_back(pobj);
+	}
+
 	return S_OK;
 }
 
@@ -71,7 +85,21 @@ _int CDropObject::Tick(_double _dDeltaTime)
 	}
 
 	m_pTransform->Rotation_Axis(CTransform::STATE_UP, (_float)_dDeltaTime * 3.f);
-	m_pTransform->Scaling(_vector{ 2.f, 2.f, 2.f });
+
+
+	if (m_bTakable == false)
+	{
+		m_MotiontrailTime += g_fDeltaTime;
+		if (m_MotiontrailTime >= 0.1f)
+		{
+			m_MotiontrailTime = 0.f;
+			m_MotionTrailIdx++;
+			Create_MotionTrail(m_MotionTrailIdx, true, false);
+		}
+
+		if (m_MotionTrailIdx >= 19)
+			m_MotionTrailIdx = 0;
+	}
 
 	return _int();
 }
@@ -99,18 +127,22 @@ HRESULT CDropObject::Render()
 	smatView = XMMatrixTranspose(g_pGameInstance->Get_Transform(wstrCamTag, TRANSFORMSTATEMATRIX::D3DTS_VIEW));
 	smatProj = XMMatrixTranspose(g_pGameInstance->Get_Transform(wstrCamTag, TRANSFORMSTATEMATRIX::D3DTS_PROJECTION));
 
-	if (FAILED(m_pModel->SetUp_ValueOnShader("g_WorldMatrix", &smatWorld, sizeof(_matrix))))
-		return E_FAIL;
-	if (FAILED(m_pModel->SetUp_ValueOnShader("g_ViewMatrix", &smatView, sizeof(_matrix))))
-		return E_FAIL;
-	if (FAILED(m_pModel->SetUp_ValueOnShader("g_ProjMatrix", &smatProj, sizeof(_matrix))))
-		return E_FAIL;
+	if (FAILED(m_pModel->SetUp_ValueOnShader("g_WorldMatrix", &smatWorld, sizeof(_matrix))))	MSGBOX("Failed to Apply DropObject Value");
+	if (FAILED(m_pModel->SetUp_ValueOnShader("g_ViewMatrix", &smatView, sizeof(_matrix))))		MSGBOX("Failed to Apply DropObject Value");
+	if (FAILED(m_pModel->SetUp_ValueOnShader("g_ProjMatrix", &smatProj, sizeof(_matrix))))		MSGBOX("Failed to Apply DropObject Value");
+
+	_float4 color = _float4(0.f, 0.5529f,0.3843f,1.f);
+	_float empowr = 0.1f;
+
+	if (FAILED(m_pModel->SetUp_ValueOnShader("g_color", &color, sizeof(_float4))))		MSGBOX("Failed to Apply DropObject Value");
+	if (FAILED(m_pModel->SetUp_ValueOnShader("g_empower", &empowr, sizeof(_float))))	MSGBOX("Failed to Apply DropObject Value");
 
 	for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
 	{
-		if (FAILED(m_pModel->Render(i, 0)))
-			return E_FAIL;
+		if (FAILED(m_pModel->Render(i, 2)))		MSGBOX("Failed to Rendering DropObject Model");
 	}
+
+
 	return S_OK;
 }
 
@@ -281,6 +313,39 @@ _bool CDropObject::IsDrop(void)
 _bool CDropObject::IsTakable(void)
 {
 	return m_bTakable;
+}
+
+HRESULT CDropObject::Create_MotionTrail(_int idex, _bool runcheck, _bool throwcheck)
+{
+	if (idex <= 19)
+	{
+		wstring wstrCamTag = g_pGameInstance->Get_BaseCameraTag();
+
+		_matrix smatWorld;
+
+		smatWorld = m_pTransform->Get_WorldMatrix();
+		_vector position, camposition;
+		position = m_pTransform->Get_State(CTransform::STATE_POSITION);
+		camposition = g_pGameInstance->Get_CamPosition(wstrCamTag);
+
+		static_cast<CMotionTrail*>(m_vecMotionTrail[idex])->setActive(true);
+		static_cast<CMotionTrail*>(m_vecMotionTrail[idex])->Set_BoneMat(m_pModel->Get_CurBoneMatrix());
+		_float uvdvid = 0.f;
+		if (runcheck == true)
+			uvdvid = 0.3f;
+		else
+			uvdvid = 0.9f;
+
+		static_cast<CMotionTrail*>(m_vecMotionTrail[idex])->Set_Info(XMMatrixIdentity()
+			, XMMatrixIdentity()
+			, m_pTransform->Get_WorldMatrix()
+			, uvdvid);
+
+		static_cast<CMotionTrail*>(m_vecMotionTrail[idex])->Set_RunCheck(runcheck);
+		static_cast<CMotionTrail*>(m_vecMotionTrail[idex])->Set_ThrowCheck(throwcheck);
+	}
+
+	return S_OK;
 }
 
 CDropObject* CDropObject::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)

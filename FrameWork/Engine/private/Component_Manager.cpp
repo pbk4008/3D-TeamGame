@@ -20,10 +20,13 @@ HRESULT CComponent_Manager::Reserve_Manager(_uint iNumLevels)
 
 HRESULT CComponent_Manager::Add_Prototype(_uint iLevelIndex, const wstring& pPrototypeTag, CComponent * pPrototype)
 {
-	if (nullptr == pPrototype 
-		||nullptr!=Find_Prototype_Component(iLevelIndex, pPrototypeTag)
-		||iLevelIndex >= m_iNumLevels)
+	if (nullptr == pPrototype
+		|| nullptr != Find_Prototype_Component(iLevelIndex, pPrototypeTag)
+		|| iLevelIndex >= m_iNumLevels)
+	{
+		Safe_Release(pPrototype);
 		return E_FAIL;
+	}
 
 	m_pComponents[iLevelIndex].insert(COMPONENTS::value_type(pPrototypeTag, pPrototype));
 	
