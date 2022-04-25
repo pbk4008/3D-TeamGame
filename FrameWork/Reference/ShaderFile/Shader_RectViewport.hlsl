@@ -266,16 +266,6 @@ PS_OUT_BLEND PS_MAIN_BLEND(PS_IN In)
 	
 	Out.vColor = color;
 	
-	if (g_distort == true)
-	{
-		Out.vColor = Distortion(g_DistortionTex, g_DiffuseTexture, DefaultSampler, In.vTexUV);
-	}
-	
-		if (g_radial == true)
-	{
-		Out.vColor.rgb = Radialblur(g_DiffuseTexture, DefaultSampler, In.vTexUV, g_RadialCnt);
-	}
-	
 	if (g_motion == true)
 	{
 		half4 velocity = g_VelocityTex.Sample(DefaultSampler, In.vTexUV);
@@ -294,13 +284,21 @@ PS_OUT_BLEND PS_MAIN_BLEND(PS_IN In)
 		Out.vColor /= (half) cnt;
 	}
 	
+	if (g_distort == true)
+	{
+		Out.vColor = Distortion(g_DistortionTex, g_DiffuseTexture, DefaultSampler, In.vTexUV);
+	}
+	
+	if (g_radial == true)
+	{
+		Out.vColor.rgb = Radialblur(g_DiffuseTexture, DefaultSampler, In.vTexUV, g_RadialCnt);
+	}
+	
 	if(g_outline == true)
 	{
 		half4 rim = g_RimLightTexture.Sample(DefaultSampler, In.vTexUV);
 		Out.vColor += rim; /*Outline(g_RimLightTexture, DefaultSampler, In.vTexUV, Out.vColor);*/
 	}
-	
-	Out.vColor += DOF(Out.vColor, g_BlurTexture, DefaultSampler, In.vTexUV, depth.x);
 	
 	if (Out.vColor.a == 0)
 		discard;
@@ -325,9 +323,12 @@ PS_OUT_BLEND PS_MAIN_BLEND(PS_IN In)
 		}
 		Out.vColor += lerp(Out.vColor, g_fogcolor, fog);
 	}
+	else
+	{
+		Out.vColor += DOF(Out.vColor, g_BlurTexture, DefaultSampler, In.vTexUV, depth.x);
+	}
 	
-	
-	return Out;
+		return Out;
 }
 
 PS_OUT_BLEND PS_MAIN_ALPHA(PS_IN In)

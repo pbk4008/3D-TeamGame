@@ -32,6 +32,7 @@ _int C1H_SwordAttackNormalR2_Start::Tick(const _double& _dDeltaTime)
 	}
 
 	m_iCutIndex = 20;
+
 	return _int();
 }
 
@@ -71,7 +72,7 @@ HRESULT C1H_SwordAttackNormalR2_Start::EnterState()
 	}
 
 	m_pSilvermane->Set_IsTrasceCamera(false);
-	m_pSilvermane->Set_IsAttack(false);
+	m_pSilvermane->Set_IsAttack(true);
 
 	m_pSilvermane->RimlightCheck(true,_float3(1,0,0));
 	m_pSilvermane->Get_CurerntWeapon()->RimlightCheck(true);
@@ -87,7 +88,7 @@ HRESULT C1H_SwordAttackNormalR2_Start::ExitState()
 	g_pGameInstance->StopSound(CSoundMgr::CHANNELID::Player_Sword_Attack);
 
 	m_pSilvermane->Set_IsTrasceCamera(true);
-
+	
 	return S_OK;
 }
 

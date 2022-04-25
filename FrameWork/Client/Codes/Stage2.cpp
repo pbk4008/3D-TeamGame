@@ -55,10 +55,7 @@ HRESULT CStage2::NativeConstruct()
 		return E_FAIL;
 
 	if (FAILED(Ready_Data_UI(L"../bin/SaveData/UI/UI.dat")))
-	{
 		return E_FAIL;
-	}
-
 
 	//if (FAILED(Ready_TriggerSystem(L"../bin/SaveData/Trigger/MonsterSpawnTrigger2.dat")))
 	//	return E_FAIL;
@@ -97,6 +94,7 @@ _int CStage2::Tick(_double TimeDelta)
 		if (m_iCountMonster == 0 && m_bFirst)
 			m_pTriggerSystem->Check_Clear();
 	}
+
 	if(g_pInteractManager)
 		g_pInteractManager->Tick(TimeDelta);
 	if(g_pDropManager)
