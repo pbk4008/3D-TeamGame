@@ -12,6 +12,7 @@
 #include "SubEnvironment.h"
 #include "Treasure_Chest.h"
 #include "Potal.h"
+#include "Loot_Shield.h"
 
 //Monster
 #include "Monster_Crawler.h"
@@ -23,6 +24,8 @@
 #include "Monster_Bastion_2HSword.h"
 #include "Monster_Bastion_Healer.h"
 #include "Boss_Bastion_Judicator.h"
+#include "Boss_Solaris.h"
+
 //Weapon
 #include "BronzeAnimus_Sword.h"
 #include "ShieldBreaker.h"
@@ -33,7 +36,7 @@
 #include "Staff.h"
 #include "Polearm.h"
 #include "Meteor.h"
-
+#include "Boss_Weapon.h"
 
 //Effect & UI
 #include "Effect_DashDust.h"
@@ -66,6 +69,7 @@
 #include "UI_Blank_CKey.h"
 #include "UI_Blank_FKey.h"
 #include "UI_Fill_CKey.h"
+#include "UI_Fill_CKey2.h"
 #include "UI_Indicator.h"
 
 //Cinema
@@ -88,6 +92,7 @@
 #include "JumpNode.h"
 #include "JumpTrigger.h"
 #include "JumpBox.h"
+#include "BoxBridge.h"
 #include "DropBox.h"
 #include "DropObject.h"
 #include "TrailEffect_Normal.h"
@@ -96,6 +101,7 @@
 #include "MotionTrail.h"
 
 #include "MeshEffect_Test.h"
+#include "MeshEffect_Test2.h"
 #pragma endregion
 
 //Test
@@ -200,11 +206,11 @@ HRESULT CLoader::SetUp_Stage1_Object()
 	//if (FAILED(Load_Stage1JumpTrigger()))
 	//	return E_FAIL;
 
-	//if (FAILED(Load_Stage1TriggerLod()))
-	//	return E_FAIL;
-
 	if (FAILED(Load_Stage1_TreasureChest_Load()))
 		return E_FAIL;
+
+	//if (FAILED(Load_Stage1TriggerLod()))
+	//	return E_FAIL;
 
 	//if (FAILED(Load_Stage1Meteor()))
 	//	return E_FAIL;
@@ -395,9 +401,9 @@ HRESULT CLoader::Load_Stage1StaticUILoad()
 
 HRESULT CLoader::Load_Stage1UILoad()
 {
-	//Buffer
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_Rect_Bar", CVIBuffer_Rect::Create(m_pDevice, m_pDeviceContext, L"../../Reference/ShaderFile/Shader_UI_Bar.hlsl"))))
-		return E_FAIL;
+	////Buffer
+	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_Rect_Bar", CVIBuffer_Rect::Create(m_pDevice, m_pDeviceContext, L"../../Reference/ShaderFile/Shader_UI_Bar.hlsl"))))
+	//	return E_FAIL;
 
 	//Panel
 	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_UI_Monster_Panel"), CUI_Monster_Panel::Create(m_pDevice, m_pDeviceContext))))
@@ -529,7 +535,11 @@ HRESULT CLoader::Load_Stage1UILoad()
 	{
 		return E_FAIL;
 	}
-	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"Texture_Fill_Ckey", L"../bin/Resources/Texture/UI/Static/Active/T_Keyboard_Light_Key_Shift.dds")))
+	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_UI_Fill_CKey2"), CUI_Fill_Ckey2::Create(m_pDevice, m_pDeviceContext))))
+	{
+		return E_FAIL;
+	}
+	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"Texture_Fill_Ckey", L"../bin/Resources/Texture/UI/Static/Active/T_Keyboard_Light_Key_C2.dds")))
 	{
 		return E_FAIL;
 	}
@@ -694,6 +704,8 @@ HRESULT CLoader::Load_Stage1JumpTrigger()
 		return E_FAIL;
 	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_JumpBox", CJumpBox::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
+	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_BoxBridge", CBoxBridge::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
 
 	return S_OK;
 }
@@ -849,39 +861,39 @@ HRESULT CLoader::Set_Stage2_Prototype()
 
 HRESULT CLoader::Load_Stage2_Object()
 {
-	//BronzeAnimus
-	_matrix matPivot = XMMatrixIdentity();
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_BronzeAnimus", CModel::Create(m_pDevice, m_pDeviceContext,
-		L"../bin/FBX/Monster/BronzeAnimus_Bin.fbx", CModel::TYPE_ANIM, true))))
-		return E_FAIL;
-	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Monster_BronzeAnimus", CMonster_BronzeAnimus::Create(m_pDevice, m_pDeviceContext))))
-		return E_FAIL;
-	
-
-	//weapon
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_BronzeAnimus_Sword", CModel::Create(m_pDevice, m_pDeviceContext,
-		"../bin/Resources/Mesh/BronzeAnimus_Sword/", "BronzeAnimus_Sword.fbx",
-		L"../../Reference/ShaderFile/Shader_Weapon.hlsl", matPivot, CModel::TYPE_STATIC, true))))
-	{
-		return E_FAIL;
-	}
-	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Weapon_BronzeAnimus_Sword", CBronzeAnimus_Sword::Create(m_pDevice, m_pDeviceContext))))
-		return E_FAIL;
-
-	//Bastion Spear
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Bastion_Spear", CModel::Create(m_pDevice, m_pDeviceContext,
-		L"../bin/FBX/Monster/Bastion_HonerGuard_Bin.fbx", CModel::TYPE_ANIM, true))))
-		return E_FAIL;
-	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Monster_Bastion_Spear", CMonster_Bastion_Spear::Create(m_pDevice, m_pDeviceContext))))
-		return E_FAIL;
+	////BronzeAnimus
+	//_matrix matPivot = XMMatrixIdentity();
+	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_BronzeAnimus", CModel::Create(m_pDevice, m_pDeviceContext,
+	//	L"../bin/FBX/Monster/BronzeAnimus_Bin.fbx", CModel::TYPE_ANIM, true))))
+	//	return E_FAIL;
+	//if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Monster_BronzeAnimus", CMonster_BronzeAnimus::Create(m_pDevice, m_pDeviceContext))))
+	//	return E_FAIL;
+	//
 
 	////weapon
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Polearm", CModel::Create(m_pDevice, m_pDeviceContext,
-		"../bin/Resources/Mesh/Polearm/", "Bastion_Polearm.fbx",
-		L"../../Reference/ShaderFile/Shader_Weapon.hlsl", matPivot, CModel::TYPE_STATIC, true))))
-		return E_FAIL;
-	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Weapon_Polearm", CPolearm::Create(m_pDevice, m_pDeviceContext))))
-		return E_FAIL;
+	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_BronzeAnimus_Sword", CModel::Create(m_pDevice, m_pDeviceContext,
+	//	"../bin/Resources/Mesh/BronzeAnimus_Sword/", "BronzeAnimus_Sword.fbx",
+	//	L"../../Reference/ShaderFile/Shader_Weapon.hlsl", matPivot, CModel::TYPE_STATIC, true))))
+	//{
+	//	return E_FAIL;
+	//}
+	//if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Weapon_BronzeAnimus_Sword", CBronzeAnimus_Sword::Create(m_pDevice, m_pDeviceContext))))
+	//	return E_FAIL;
+
+	////Bastion Spear
+	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Bastion_Spear", CModel::Create(m_pDevice, m_pDeviceContext,
+	//	L"../bin/FBX/Monster/Bastion_HonerGuard_Bin.fbx", CModel::TYPE_ANIM, true))))
+	//	return E_FAIL;
+	//if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Monster_Bastion_Spear", CMonster_Bastion_Spear::Create(m_pDevice, m_pDeviceContext))))
+	//	return E_FAIL;
+
+	//////weapon
+	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Polearm", CModel::Create(m_pDevice, m_pDeviceContext,
+	//	"../bin/Resources/Mesh/Polearm/", "Bastion_Polearm.fbx",
+	//	L"../../Reference/ShaderFile/Shader_Weapon.hlsl", matPivot, CModel::TYPE_STATIC, true))))
+	//	return E_FAIL;
+	//if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Weapon_Polearm", CPolearm::Create(m_pDevice, m_pDeviceContext))))
+	//	return E_FAIL;
 
 
 	return S_OK;
@@ -949,6 +961,9 @@ HRESULT CLoader::SetUp_Stage1_Prototype()
 		return E_FAIL;
 
 	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Portal", CPotal::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+
+	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_LootShield", CLoot_Shield::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 
 	return S_OK;
@@ -1114,6 +1129,15 @@ HRESULT CLoader::Load_Stage1BossLoad()
 
 	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Weapon_ShieldBreaker", CShieldBreaker::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
+
+
+	//Boss Solaris
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Model_Boss_Solaris", CModel::Create(m_pDevice, m_pDeviceContext,
+		L"../bin/FBX/Monster/Solaris.fbx", CModel::TYPE_ANIM, true))))
+		return E_FAIL;
+
+	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Solaris", CBoss_Solaris::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
 	
 	return S_OK;
 }
@@ -1123,42 +1147,42 @@ HRESULT CLoader::Load_Stage1MonsterLoad()
 	_matrix matPivot = XMMatrixIdentity();
 
 	////Monster Crystal_Crawler
-	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Monster_Crawler", CModel::Create(m_pDevice, m_pDeviceContext,
-	//	L"../bin/FBX/Monster/Crystal_Crawler.fbx", CModel::TYPE_ANIM, true))))
-	//	return E_FAIL;
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Monster_Crawler", CModel::Create(m_pDevice, m_pDeviceContext,
+		L"../bin/FBX/Monster/Crystal_Crawler.fbx", CModel::TYPE_ANIM, true))))
+		return E_FAIL;
 
-	//if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Monster_Crawler", CMonster_Crawler::Create(m_pDevice, m_pDeviceContext))))
-	//	return E_FAIL;
+	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Monster_Crawler", CMonster_Crawler::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
 
-	//////Monster EarthAberrant
-	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Monster_EarthAberrant", CModel::Create(m_pDevice, m_pDeviceContext,
-	//	L"../bin/FBX/Monster/EarthAberrant.fbx", CModel::TYPE_ANIM, true))))
-	//	return E_FAIL;
-	//if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Monster_EarthAberrant", CMonster_EarthAberrant::Create(m_pDevice, m_pDeviceContext))))
-	//	return E_FAIL;
+	////Monster EarthAberrant
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Monster_EarthAberrant", CModel::Create(m_pDevice, m_pDeviceContext,
+		L"../bin/FBX/Monster/EarthAberrant.fbx", CModel::TYPE_ANIM, true))))
+		return E_FAIL;
+	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Monster_EarthAberrant", CMonster_EarthAberrant::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
 
-	//////Monster EarthAberrant Weapon
-	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Weapon_EarthAberrant_Pick", CModel::Create(m_pDevice, m_pDeviceContext,
-	//	"../bin/Resources/Mesh/Earth_Aberrant_Pick/", "EarthAberrant_Pick.fbx",
-	//	L"../../Reference/ShaderFile/Shader_StaticMesh.hlsl", matPivot, CModel::TYPE_STATIC, true))))
-	//	return E_FAIL;
-	//if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Weapon_EarthAberrant_Pick", CEarthAberrant_Pick::Create(m_pDevice, m_pDeviceContext))))
-	//	return E_FAIL;
+	////Monster EarthAberrant Weapon
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Weapon_EarthAberrant_Pick", CModel::Create(m_pDevice, m_pDeviceContext,
+		"../bin/Resources/Mesh/Earth_Aberrant_Pick/", "EarthAberrant_Pick.fbx",
+		L"../../Reference/ShaderFile/Shader_StaticMesh.hlsl", matPivot, CModel::TYPE_STATIC, true))))
+		return E_FAIL;
+	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Weapon_EarthAberrant_Pick", CEarthAberrant_Pick::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
 
-	//////Monster Bastion_Sword
-	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Monster_Bastion_Sword", CModel::Create(m_pDevice, m_pDeviceContext,
-	//	L"../bin/FBX/Monster/Bastion_Sword.fbx", CModel::TYPE_ANIM, true))))
-	//	return E_FAIL;
-	//if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Monster_Bastion_Sword", CMonster_Bastion_Sword::Create(m_pDevice, m_pDeviceContext))))
-	//	return E_FAIL;
+	////Monster Bastion_Sword
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Monster_Bastion_Sword", CModel::Create(m_pDevice, m_pDeviceContext,
+		L"../bin/FBX/Monster/Bastion_Sword.fbx", CModel::TYPE_ANIM, true))))
+		return E_FAIL;
+	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Monster_Bastion_Sword", CMonster_Bastion_Sword::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
 
-	//////Weapon
-	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Weapon_Stargazer", CModel::Create(m_pDevice, m_pDeviceContext,
-	//	"../bin/Resources/Mesh/Stargazer/", "Stargazer(1H Sword).fbx",
-	//	L"../../Reference/ShaderFile/Shader_Weapon.hlsl", matPivot, CModel::TYPE_STATIC, true))))
-	//	return E_FAIL;
-	//if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Weapon_Stargazer", CStargazer::Create(m_pDevice, m_pDeviceContext))))
-	//	return E_FAIL;
+	////Weapon
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Weapon_Stargazer", CModel::Create(m_pDevice, m_pDeviceContext,
+		"../bin/Resources/Mesh/Stargazer/", "Stargazer(1H Sword).fbx",
+		L"../../Reference/ShaderFile/Shader_Weapon.hlsl", matPivot, CModel::TYPE_STATIC, true))))
+		return E_FAIL;
+	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Weapon_Stargazer", CStargazer::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
 
 	////Monster Bastion_Shooter
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Monster_Bastion_Shooter", CModel::Create(m_pDevice, m_pDeviceContext,
@@ -1176,39 +1200,39 @@ HRESULT CLoader::Load_Stage1MonsterLoad()
 	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Shooter_Bullet", CBullet::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 
-	////Bastion_2HSword
-	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Bastion_2HSword", CModel::Create(m_pDevice, m_pDeviceContext,
-	//	L"../bin/FBX/Monster/Bastion_2HSword_Bin.fbx", CModel::TYPE_ANIM, true))))
-	//	return E_FAIL;
-	//if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Monster_Bastion_2HSword", CMonster_Bastion_2HSword::Create(m_pDevice, m_pDeviceContext))))
-	//	return E_FAIL;
+	//Bastion_2HSword
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Bastion_2HSword", CModel::Create(m_pDevice, m_pDeviceContext,
+		L"../bin/FBX/Monster/Bastion_2HSword_Bin.fbx", CModel::TYPE_ANIM, true))))
+		return E_FAIL;
+	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Monster_Bastion_2HSword", CMonster_Bastion_2HSword::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
 
-	//////Weapon
-	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_RetributionBlade", CModel::Create(m_pDevice, m_pDeviceContext,
-	//	"../bin/Resources/Mesh/RetributionBlade/", "RetributionBlade(2H).fbx",
-	//	L"../../Reference/ShaderFile/Shader_Weapon.hlsl", matPivot, CModel::TYPE_STATIC, true))))
-	//{
-	//	return E_FAIL;
-	//}
-	//if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Weapon_RetributionBlade", CRetributionBlade::Create(m_pDevice, m_pDeviceContext))))
-	//	return E_FAIL;
-	// 
-	//////Bastion_Healer
-	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Bastion_Healer", CModel::Create(m_pDevice, m_pDeviceContext,
-	//	L"../bin/FBX/Monster/Bastion_Healer_Bin.fbx", CModel::TYPE_ANIM, true))))
-	//	return E_FAIL;
-	//if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Monster_Bastion_Healer", CMonster_Bastion_Healer::Create(m_pDevice, m_pDeviceContext))))
-	//	return E_FAIL;
+	////Weapon
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_RetributionBlade", CModel::Create(m_pDevice, m_pDeviceContext,
+		"../bin/Resources/Mesh/RetributionBlade/", "RetributionBlade(2H).fbx",
+		L"../../Reference/ShaderFile/Shader_Weapon.hlsl", matPivot, CModel::TYPE_STATIC, true))))
+	{
+		return E_FAIL;
+	}
+	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Weapon_RetributionBlade", CRetributionBlade::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	 
+	////Bastion_Healer
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Bastion_Healer", CModel::Create(m_pDevice, m_pDeviceContext,
+		L"../bin/FBX/Monster/Bastion_Healer_Bin.fbx", CModel::TYPE_ANIM, true))))
+		return E_FAIL;
+	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Monster_Bastion_Healer", CMonster_Bastion_Healer::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
 
-	//////weapon
-	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Staff", CModel::Create(m_pDevice, m_pDeviceContext,
-	//	"../bin/Resources/Mesh/Staff/", "Staff.fbx",
-	//	L"../../Reference/ShaderFile/Shader_Weapon.hlsl", matPivot, CModel::TYPE_STATIC, true))))
-	//{
-	//	return E_FAIL;
-	//}
-	//if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Weapon_Staff", CStaff::Create(m_pDevice, m_pDeviceContext))))
-	//	return E_FAIL;
+	////weapon
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Staff", CModel::Create(m_pDevice, m_pDeviceContext,
+		"../bin/Resources/Mesh/Staff/", "Staff.fbx",
+		L"../../Reference/ShaderFile/Shader_Weapon.hlsl", matPivot, CModel::TYPE_STATIC, true))))
+	{
+		return E_FAIL;
+	}
+	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Weapon_Staff", CStaff::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
 
 	return S_OK;
 }
@@ -1310,7 +1334,7 @@ HRESULT CLoader::Ready_Test_JS()
 		return E_FAIL;
 
 #pragma region 리소스
-	if(FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"Plane_Texture", L"../Bin/Resources/Texture/Terrain/Plane_Default.dds")))
+	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"Plane_Texture", L"../Bin/Resources/Texture/Terrain/Plane_Default.dds")))
 		return E_FAIL;
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"VIBuffer_Plane", CVIBuffer_Plane::Create(m_pDevice, m_pDeviceContext, L"../../Reference/ShaderFile/Shader_Plane.hlsl", 100, 100))))
 		return E_FAIL;
@@ -1352,12 +1376,12 @@ HRESULT CLoader::Ready_Test_JS()
 	{
 		return E_FAIL;
 	}
-	matPivot = XMMatrixIdentity();
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_JumpNode_Bin", CModel::Create(m_pDevice, m_pDeviceContext,
-		L"../bin/Resources/Mesh/JumpNode/JumpNode_Bin.fbx", CModel::TYPE_ANIM, true))))
-	{
-		return E_FAIL;
-	}	
+	//matPivot = XMMatrixIdentity();
+	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_JumpNode_Bin", CModel::Create(m_pDevice, m_pDeviceContext,
+	//	L"../bin/Resources/Mesh/JumpNode/JumpNode_Bin.fbx", CModel::TYPE_ANIM, true))))
+	//{
+	//	return E_FAIL;
+	//}	
 #pragma endregion
 
 #pragma region 컴포넌트
@@ -1387,11 +1411,24 @@ HRESULT CLoader::Ready_Test_JS()
 		return E_FAIL;
 	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Camera_Silvermane", CCamera_Silvermane::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
-	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_JumpNode", CJumpNode::Create(m_pDevice, m_pDeviceContext))))
-		return E_FAIL;
-	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_JumpBox", CJumpBox::Create(m_pDevice, m_pDeviceContext))))
-		return E_FAIL;
+	//if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_JumpNode", CJumpNode::Create(m_pDevice, m_pDeviceContext))))
+	//	return E_FAIL;
+	//if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_JumpBox", CJumpBox::Create(m_pDevice, m_pDeviceContext))))
+	//	return E_FAIL;
 	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_FlyingShield", CFlyingShield::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+
+	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_MotionTrail", CMotionTrail::Create(m_pDevice, m_pDeviceContext)))) MSGBOX(L"모션 더미 생성");
+
+
+	//Boss Solaris
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_TEST_JS, L"Model_Boss_Solaris", CModel::Create(m_pDevice, m_pDeviceContext,
+		L"../bin/FBX/Monster/Solaris.fbx", CModel::TYPE_ANIM, true))))
+		return E_FAIL;
+
+	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Solaris", CBoss_Solaris::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Weapon_Boss", CBoss_Weapon::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 #pragma endregion
 
@@ -1407,21 +1444,21 @@ HRESULT CLoader::Ready_Test_JS()
 	//if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Monster_Crawler", CMonster_Crawler::Create(m_pDevice, m_pDeviceContext))))
 	//	return E_FAIL;
 
-	//Monster EarthAberrant
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Monster_EarthAberrant", CModel::Create(m_pDevice, m_pDeviceContext,
-		L"../bin/FBX/Monster/EarthAberrant.fbx", CModel::TYPE_ANIM, true))))
-		return E_FAIL;
-	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Monster_EarthAberrant", CMonster_EarthAberrant::Create(m_pDevice, m_pDeviceContext))))
-		return E_FAIL;
-
-	//Monster EarthAberrant Weapon
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Weapon_EarthAberrant_Pick", CModel::Create(m_pDevice, m_pDeviceContext,
-		"../bin/Resources/Mesh/Earth_Aberrant_Pick/", "EarthAberrant_Pick.fbx",
-		L"../../Reference/ShaderFile/Shader_StaticMesh.hlsl", matPivot, CModel::TYPE_STATIC, true))))
-		return E_FAIL;
-	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Weapon_EarthAberrant_Pick", CEarthAberrant_Pick::Create(m_pDevice, m_pDeviceContext))))
-		return E_FAIL;
-
+	////Monster EarthAberrant
+	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Monster_EarthAberrant", CModel::Create(m_pDevice, m_pDeviceContext,
+	//	L"../bin/FBX/Monster/EarthAberrant.fbx", CModel::TYPE_ANIM, true))))
+	//	return E_FAIL;
+	//if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Monster_EarthAberrant", CMonster_EarthAberrant::Create(m_pDevice, m_pDeviceContext))))
+	//	return E_FAIL;
+	//
+	////Monster EarthAberrant Weapon
+	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Weapon_EarthAberrant_Pick", CModel::Create(m_pDevice, m_pDeviceContext,
+	//	"../bin/Resources/Mesh/Earth_Aberrant_Pick/", "EarthAberrant_Pick.fbx",
+	//	L"../../Reference/ShaderFile/Shader_StaticMesh.hlsl", matPivot, CModel::TYPE_STATIC, true))))
+	//	return E_FAIL;
+	//if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Weapon_EarthAberrant_Pick", CEarthAberrant_Pick::Create(m_pDevice, m_pDeviceContext))))
+	//	return E_FAIL;
+	//
 	////Bastion_2HSword
 	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Bastion_2HSword", CModel::Create(m_pDevice, m_pDeviceContext,
 	//	L"../bin/FBX/Monster/Bastion_2HSword_Bin.fbx", CModel::TYPE_ANIM, true))))
@@ -1500,8 +1537,8 @@ HRESULT CLoader::Ready_Test_JS()
 		return E_FAIL;
 
 	//// Effect
-	//if (FAILED(Load_Stage1EffectLoad()))
-	//	return E_FAIL;
+	if (FAILED(Load_Stage1EffectLoad()))
+		return E_FAIL;
 
 	///////////////////////////////////////// 소드 트레일
 	if (FAILED(Load_TrailEffects()))
@@ -1521,15 +1558,41 @@ HRESULT CLoader::Load_TrailEffects()
 {
 	///////////////////////////////////////// 소드 트레일
 	// 기본 텍스처
-	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"TrailBase", L"../bin/Resources/Texture/Trail/T_Smoke_Trail_Soft.dds"))) MSGBOX("Failed To Add SwordTrail Tex");
-	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"DistortionBase", L"../bin/Resources/Texture/Trail/t_distort_channels.dds"))) MSGBOX("Failed To Add SwordTrail Tex");
-	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"DistortionMask", L"../bin/Resources/Texture/Trail/T_DistortionNoise.dds"))) MSGBOX("Failed To Add SwordTrail Tex");
+	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"TrailBase", L"../bin/Resources/Texture/Trail/T_Smoke_Trail_Soft.dds"))) 
+		MSGBOX("Failed To Add SwordTrail Tex");
+	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"DistortionBase", L"../bin/Resources/Texture/Trail/t_distort_channels.dds"))) 
+		MSGBOX("Failed To Add SwordTrail Tex");
+	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"DistortionMask", L"../bin/Resources/Texture/Trail/T_DistortionNoise.dds")))
+		MSGBOX("Failed To Add SwordTrail Tex");
 	// 추가 텍스처
-	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"WispTrail", L"../bin/Resources/Texture/Trail/T_WispTrail.dds"))) MSGBOX("Failed To Add WispTrail Tex");
-	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"WispTrail_02", L"../bin/Resources/Texture/Trail/T_WispTrail_02.dds"))) MSGBOX("Failed To Add WispTrail_02 Tex");
-	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"WispTrail_Thin", L"../bin/Resources/Texture/Trail/T_WispTrail_thin.dds"))) MSGBOX("Failed To Add WispTrail_Thin Tex");
-	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"Fire_02", L"../bin/Resources/Texture/Trail/T_Fire_02.dds"))) MSGBOX("Failed To Add Fire_02 Tex");
-	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"Wisp_01", L"../bin/Resources/Texture/Trail/T_Wisp_01.dds"))) MSGBOX("Failed To Add Wisp_01 Tex");
+	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"WispTrail", L"../bin/Resources/Texture/Trail/T_WispTrail.dds"))) 
+		MSGBOX("Failed To Add WispTrail Tex");
+	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"WispTrail_02", L"../bin/Resources/Texture/Trail/T_WispTrail_02.dds")))
+		MSGBOX("Failed To Add WispTrail_02 Tex");
+	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"WispTrail_Thin", L"../bin/Resources/Texture/Trail/T_WispTrail_thin.dds"))) 
+		MSGBOX("Failed To Add WispTrail_Thin Tex");
+	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"Fire_02", L"../bin/Resources/Texture/Trail/T_Fire_02.dds"))) 
+		MSGBOX("Failed To Add Fire_02 Tex");
+	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"Wisp_01", L"../bin/Resources/Texture/Trail/T_Wisp_01.dds"))) 
+		MSGBOX("Failed To Add Wisp_01 Tex");
+	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"EnergyPlasma_Tile_H_01", L"../bin/Resources/Texture/Trail/T_EnergyPlasma_Tile_H_01.dds"))) 
+		MSGBOX("Failed To Add EnergyPlasma_Tile_H_01 Tex");
+	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"FluidTile01_DA", L"../bin/Resources/Texture/Trail/T_FluidTile01_DA.dds")))
+		MSGBOX("Failed To Add FluidTile01_DA Tex");
+	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"Lightning_Beam_Tile", L"../bin/Resources/Texture/Trail/T_Lightning_Beam_Tile.dds")))
+		MSGBOX("Failed To Add Lightning_Beam_Tile Tex");
+	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"Melee_Arc_02", L"../bin/Resources/Texture/Trail/T_Melee_Arc_02.dds")))
+		MSGBOX("Failed To Add Melee_Arc_02 Tex");
+	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"PerlinElectric_Packed", L"../bin/Resources/Texture/Trail/T_PerlinElectric_Packed.dds"))) 
+		MSGBOX("Failed To Add PerlinElectric_Packed Tex");
+	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"Plasma_Seamless", L"../bin/Resources/Texture/Trail/T_Plasma_Seamless.dds")))
+		MSGBOX("Failed To Add Plasma_Seamless Tex");
+	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"SpeedTrails_Packed", L"../bin/Resources/Texture/Trail/T_SpeedTrails_Packed.dds")))
+		MSGBOX("Failed To Add SpeedTrails_Packed Tex");
+	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"Streak_Soft_Trail", L"../bin/Resources/Texture/Trail/T_Streak_Soft_Trail.dds")))
+		MSGBOX("Failed To Add Streak_Soft_Trail Tex");
+	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"Venus_Trail", L"../bin/Resources/Texture/Trail/T_Venus_Trail.dds")))
+		MSGBOX("Failed To Add Venus_Trail Tex");
 	// 버퍼
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_VIBuffer_Trail_Distortion",
 		CVIBuffer_Trail::Create(m_pDevice, m_pDeviceContext, L"../../Reference/ShaderFile/Shader_Distortion.hlsl", 256))))
@@ -1549,31 +1612,224 @@ HRESULT CLoader::Load_TrailEffects()
 
 HRESULT CLoader::Load_MeshEffects()
 {
-	//////////////////////// Textures
-	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"WispTrail_02_Red", L"../bin/Resources/Mesh/Effect/T_WispTrail_02_Red.dds"))) MSGBOX("Failed To Add T_WispTrail_02_Red Tex");
+	/////////////////////////////////////// Textures
+#pragma region Base
+	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"WispTrail_02_Red", L"../bin/Resources/Mesh/Effect/T_WispTrail_02_Red.dds")))
+		MSGBOX("Failed To Add 메쉬이펙트용 텍스처 Tex");
+	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"Hexgrid", L"../bin/Resources/Mesh/Effect/T_Hexgrid.dds")))
+		MSGBOX("Failed To Add 메쉬이펙트용 텍스처 Tex");
+	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"spk_17", L"../bin/Resources/Mesh/Effect/eye_lwy_t_spk_17_single.dds")))
+		MSGBOX("Failed To Add 메쉬이펙트용 텍스처 Tex");
+	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"magic_aura01", L"../bin/Resources/Mesh/Effect/mesh_03_magic_aura01_00_00_alba.dds")))
+		MSGBOX("Failed To Add 메쉬이펙트용 텍스처 Tex");
+	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"magic_electric00", L"../bin/Resources/Mesh/Effect/mesh_03_magic_electric00_00_00_ALBA.dds")))
+		MSGBOX("Failed To Add 메쉬이펙트용 텍스처 Tex");
+	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"magic_electric01", L"../bin/Resources/Mesh/Effect/mesh_03_magic_electric01_00_00_ALBA.dds")))
+		MSGBOX("Failed To Add 메쉬이펙트용 텍스처 Tex");
+	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"magic_electric02", L"../bin/Resources/Mesh/Effect/mesh_03_magic_electric02_00_00_ALBA.dds")))
+		MSGBOX("Failed To Add 메쉬이펙트용 텍스처 Tex");
+	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"wp01_007", L"../bin/Resources/Mesh/Effect/mesh_03_wp01_007_0000_01_00_MSK4.dds")))
+		MSGBOX("Failed To Add 메쉬이펙트용 텍스처 Tex");
+	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"myfire", L"../bin/Resources/Mesh/Effect/myfire.dds")))
+		MSGBOX("Failed To Add 메쉬이펙트용 텍스처 Tex");
+	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"waterfall02", L"../bin/Resources/Mesh/Effect/waterfall02_water_atos.dds")))
+		MSGBOX("Failed To Add 메쉬이펙트용 텍스처 Tex");
+#pragma endregion
+#pragma region FX12
+	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"dist_noise", L"../bin/Resources/Mesh/Effect/FX12/T_ky_dist_noise.dds")))
+		MSGBOX("Failed To Add FX12 Tex");
+	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"dust_longStar", L"../bin/Resources/Mesh/Effect/FX12/T_ky_dust_longStar.dds")))
+		MSGBOX("Failed To Add FX12 Tex");
+	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"flowmap", L"../bin/Resources/Mesh/Effect/FX12/T_ky_flowmap.dds")))
+		MSGBOX("Failed To Add FX12 Tex");
+	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"maskRGB3", L"../bin/Resources/Mesh/Effect/FX12/T_ky_maskRGB3.dds")))
+		MSGBOX("Failed To Add FX12 Tex");
+	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"maskRGB5", L"../bin/Resources/Mesh/Effect/FX12/T_ky_maskRGB5.dds")))
+		MSGBOX("Failed To Add FX12 Tex");
+	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"noise4", L"../bin/Resources/Mesh/Effect/FX12/T_ky_noise4.dds")))
+		MSGBOX("Failed To Add FX12 Tex");
+	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"noise5", L"../bin/Resources/Mesh/Effect/FX12/T_ky_noise5.dds")))
+		MSGBOX("Failed To Add FX12 Tex");
+	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"noise6", L"../bin/Resources/Mesh/Effect/FX12/T_ky_noise6.dds")))
+		MSGBOX("Failed To Add FX12 Tex");
+	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"noise16", L"../bin/Resources/Mesh/Effect/FX12/T_ky_noise16.dds")))
+		MSGBOX("Failed To Add FX12 Tex");
+#pragma endregion
+#pragma region FX13
+	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"dust01", L"../bin/Resources/Mesh/Effect/FX13/T_ky_dust01.dds")))
+		MSGBOX("Failed To Add FX13 Tex");
+	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"dust02", L"../bin/Resources/Mesh/Effect/FX13/T_ky_dust02.dds")))
+		MSGBOX("Failed To Add FX13 Tex");
+	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"fire01", L"../bin/Resources/Mesh/Effect/FX13/T_ky_fire01.dds")))
+		MSGBOX("Failed To Add FX13 Tex");
+	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"flare_a", L"../bin/Resources/Mesh/Effect/FX13/T_ky_flare_a.dds")))
+		MSGBOX("Failed To Add FX13 Tex");
+	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"flare01", L"../bin/Resources/Mesh/Effect/FX13/T_ky_flare01.dds")))
+		MSGBOX("Failed To Add FX13 Tex");
+	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"flareVertical02", L"../bin/Resources/Mesh/Effect/FX13/T_ky_flareVertical02.dds")))
+		MSGBOX("Failed To Add FX13 Tex");
+	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"ice02", L"../bin/Resources/Mesh/Effect/FX13/T_ky_ice02.dds")))
+		MSGBOX("Failed To Add FX13 Tex");
+	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"lensFlare01", L"../bin/Resources/Mesh/Effect/FX13/T_ky_lensFlare01.dds")))
+		MSGBOX("Failed To Add FX13 Tex");
+	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"maskRGB06", L"../bin/Resources/Mesh/Effect/FX13/T_ky_maskRGB06.dds")))
+		MSGBOX("Failed To Add FX13 Tex");
+	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"smoke1", L"../bin/Resources/Mesh/Effect/FX13/T_ky_smoke1.dds")))
+		MSGBOX("Failed To Add FX13 Tex");
+	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"smoke03", L"../bin/Resources/Mesh/Effect/FX13/T_ky_smoke03.dds")))
+		MSGBOX("Failed To Add FX13 Tex");
+#pragma endregion
+#pragma region FXVerietyPack
+	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"decoLines", L"../bin/Resources/Mesh/Effect/FXVarietyPack/T_ky_decoLines.dds")))
+		MSGBOX("Failed To Add FXVerietyPack Tex");
+	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"magicCircle020", L"../bin/Resources/Mesh/Effect/FXVarietyPack/T_ky_magicCircle020.dds")))
+		MSGBOX("Failed To Add FXVerietyPack Tex");
+	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"noise17", L"../bin/Resources/Mesh/Effect/FXVarietyPack/T_ky_noise17.dds")))
+		MSGBOX("Failed To Add FXVerietyPack Tex");
+#pragma endregion
 
-	//////////////////////// Meshs
+
+
+	/////////////////////////////////////// Meshs
 	_matrix matPivot = XMMatrixIdentity();
+#pragma region Base
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_MeshEffect", CModel::Create(m_pDevice, m_pDeviceContext,
 		"../bin/Resources/Mesh/Effect/", "Effect01.fbx",
-		L"../bin/ShaderFile/Shader_MeshEffect.hlsl", matPivot, CModel::TYPE_STATIC, true))))
-	{
-		return E_FAIL;
-	}
-	matPivot = XMMatrixIdentity();
+		L"../bin/ShaderFile/Shader_MeshEffect.hlsl", matPivot, CModel::TYPE_STATIC, true)))) MSGBOX(L"메쉬 이펙트용 메쉬 로드 실패");
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Branch", CModel::Create(m_pDevice, m_pDeviceContext,
+		"../bin/Resources/Mesh/Effect/", "branch.fbx",
+		L"../bin/ShaderFile/Shader_MeshEffect.hlsl", matPivot, CModel::TYPE_STATIC, true)))) MSGBOX(L"메쉬 이펙트용 메쉬 로드 실패");
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Magic_Electric00", CModel::Create(m_pDevice, m_pDeviceContext,
+		"../bin/Resources/Mesh/Effect/", "magic_eletric00.fbx",
+		L"../bin/ShaderFile/Shader_MeshEffect.hlsl", matPivot, CModel::TYPE_STATIC, true)))) MSGBOX(L"메쉬 이펙트용 메쉬 로드 실패");
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Magic_Electric01", CModel::Create(m_pDevice, m_pDeviceContext,
+		"../bin/Resources/Mesh/Effect/", "magic_eletric01.fbx",
+		L"../bin/ShaderFile/Shader_MeshEffect.hlsl", matPivot, CModel::TYPE_STATIC, true)))) MSGBOX(L"메쉬 이펙트용 메쉬 로드 실패");
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Magic_Electric02", CModel::Create(m_pDevice, m_pDeviceContext,
+		"../bin/Resources/Mesh/Effect/", "magic_eletric02.fbx",
+		L"../bin/ShaderFile/Shader_MeshEffect.hlsl", matPivot, CModel::TYPE_STATIC, true)))) MSGBOX(L"메쉬 이펙트용 메쉬 로드 실패");
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Outer", CModel::Create(m_pDevice, m_pDeviceContext,
 		"../bin/Resources/Mesh/Effect/", "outer.fbx",
-		L"../bin/ShaderFile/Shader_MeshEffect.hlsl", matPivot, CModel::TYPE_STATIC, true))))
-	{
-		return E_FAIL;
-	}
-
+		L"../bin/ShaderFile/Shader_MeshEffect.hlsl", matPivot, CModel::TYPE_STATIC, true)))) MSGBOX(L"메쉬 이펙트용 메쉬 로드 실패");
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_MagicShield", CModel::Create(m_pDevice, m_pDeviceContext,
 		"../bin/Resources/Mesh/Effect/", "magic_shield_00_01_mesh.fbx",
-		L"../bin/ShaderFile/Shader_MeshEffect.hlsl", matPivot, CModel::TYPE_STATIC, true))))
-	{
-		return E_FAIL;
-	}
+		L"../bin/ShaderFile/Shader_MeshEffect.hlsl", matPivot, CModel::TYPE_STATIC, true)))) MSGBOX(L"메쉬 이펙트용 메쉬 로드 실패");
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Parts", CModel::Create(m_pDevice, m_pDeviceContext,
+		"../bin/Resources/Mesh/Effect/", "parts.fbx",
+		L"../bin/ShaderFile/Shader_MeshEffect.hlsl", matPivot, CModel::TYPE_STATIC, true)))) MSGBOX(L"메쉬 이펙트용 메쉬 로드 실패");
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Twirl", CModel::Create(m_pDevice, m_pDeviceContext,
+		"../bin/Resources/Mesh/Effect/", "Twirl.fbx",
+		L"../bin/ShaderFile/Shader_MeshEffect.hlsl", matPivot, CModel::TYPE_STATIC, true)))) MSGBOX(L"메쉬 이펙트용 메쉬 로드 실패");
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Smoke", CModel::Create(m_pDevice, m_pDeviceContext,
+		"../bin/Resources/Mesh/Effect/", "smoke.fbx",
+		L"../bin/ShaderFile/Shader_MeshEffect.hlsl", matPivot, CModel::TYPE_STATIC, true)))) MSGBOX(L"메쉬 이펙트용 메쉬 로드 실패");
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Sphere00", CModel::Create(m_pDevice, m_pDeviceContext,
+		"../bin/Resources/Mesh/Effect/", "sphere00.fbx",
+		L"../bin/ShaderFile/Shader_MeshEffect.hlsl", matPivot, CModel::TYPE_STATIC, true)))) MSGBOX(L"메쉬 이펙트용 메쉬 로드 실패");
+#pragma endregion
+#pragma region FX12
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Circle_Midpoly", CModel::Create(m_pDevice, m_pDeviceContext,
+		"../bin/Resources/Mesh/Effect/FX12/", "ky_circle_midpoly.fbx",
+		L"../bin/ShaderFile/Shader_MeshEffect.hlsl", matPivot, CModel::TYPE_STATIC, true)))) MSGBOX(L"메쉬 이펙트용 메쉬 로드 실패");
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_CylinderBend04", CModel::Create(m_pDevice, m_pDeviceContext,
+		"../bin/Resources/Mesh/Effect/FX12/", "ky_cylinderBend04.fbx",
+		L"../bin/ShaderFile/Shader_MeshEffect.hlsl", matPivot, CModel::TYPE_STATIC, true)))) MSGBOX(L"메쉬 이펙트용 메쉬 로드 실패");
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Needle01", CModel::Create(m_pDevice, m_pDeviceContext,
+		"../bin/Resources/Mesh/Effect/FX12/", "ky_needle01.fbx",
+		L"../bin/ShaderFile/Shader_MeshEffect.hlsl", matPivot, CModel::TYPE_STATIC, true)))) MSGBOX(L"메쉬 이펙트용 메쉬 로드 실패");
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Quad_CenterRot", CModel::Create(m_pDevice, m_pDeviceContext,
+		"../bin/Resources/Mesh/Effect/FX12/", "ky_quad_centerRot.fbx",
+		L"../bin/ShaderFile/Shader_MeshEffect.hlsl", matPivot, CModel::TYPE_STATIC, true)))) MSGBOX(L"메쉬 이펙트용 메쉬 로드 실패");
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Sphere2", CModel::Create(m_pDevice, m_pDeviceContext,
+		"../bin/Resources/Mesh/Effect/FX12/", "ky_sphere.fbx",
+		L"../bin/ShaderFile/Shader_MeshEffect.hlsl", matPivot, CModel::TYPE_STATIC, true)))) MSGBOX(L"메쉬 이펙트용 메쉬 로드 실패");
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_SphereHarf03", CModel::Create(m_pDevice, m_pDeviceContext,
+		"../bin/Resources/Mesh/Effect/FX12/", "ky_sphereHarf03.fbx",
+		L"../bin/ShaderFile/Shader_MeshEffect.hlsl", matPivot, CModel::TYPE_STATIC, true)))) MSGBOX(L"메쉬 이펙트용 메쉬 로드 실패");
+#pragma endregion
+#pragma region FX13
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_AuraHousya", CModel::Create(m_pDevice, m_pDeviceContext,
+		"../bin/Resources/Mesh/Effect/FX13/", "ky_auraHousya.fbx",
+		L"../bin/ShaderFile/Shader_MeshEffect.hlsl", matPivot, CModel::TYPE_STATIC, true)))) MSGBOX(L"메쉬 이펙트용 메쉬 로드 실패");
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Circle_Inv", CModel::Create(m_pDevice, m_pDeviceContext,
+		"../bin/Resources/Mesh/Effect/FX13/", "ky_circle_inv.fbx",
+		L"../bin/ShaderFile/Shader_MeshEffect.hlsl", matPivot, CModel::TYPE_STATIC, true)))) MSGBOX(L"메쉬 이펙트용 메쉬 로드 실패");
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Circle_Inv2", CModel::Create(m_pDevice, m_pDeviceContext,
+		"../bin/Resources/Mesh/Effect/FX13/", "ky_circle_inv2.fbx",
+		L"../bin/ShaderFile/Shader_MeshEffect.hlsl", matPivot, CModel::TYPE_STATIC, true)))) MSGBOX(L"메쉬 이펙트용 메쉬 로드 실패");
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Circle_Lowpoly", CModel::Create(m_pDevice, m_pDeviceContext,
+		"../bin/Resources/Mesh/Effect/FX13/", "ky_circle_lowpoly.fbx",
+		L"../bin/ShaderFile/Shader_MeshEffect.hlsl", matPivot, CModel::TYPE_STATIC, true)))) MSGBOX(L"메쉬 이펙트용 메쉬 로드 실패");
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_CircleDist5", CModel::Create(m_pDevice, m_pDeviceContext,
+		"../bin/Resources/Mesh/Effect/FX13/", "ky_circleDist5.fbx",
+		L"../bin/ShaderFile/Shader_MeshEffect.hlsl", matPivot, CModel::TYPE_STATIC, true)))) MSGBOX(L"메쉬 이펙트용 메쉬 로드 실패");
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_CircleDist06", CModel::Create(m_pDevice, m_pDeviceContext,
+		"../bin/Resources/Mesh/Effect/FX13/", "ky_circleDist06.fbx",
+		L"../bin/ShaderFile/Shader_MeshEffect.hlsl", matPivot, CModel::TYPE_STATIC, true)))) MSGBOX(L"메쉬 이펙트용 메쉬 로드 실패");
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Cylinder_LowPoly_Idst", CModel::Create(m_pDevice, m_pDeviceContext,
+		"../bin/Resources/Mesh/Effect/FX13/", "ky_cylinder_lowPoly_idst.fbx",
+		L"../bin/ShaderFile/Shader_MeshEffect.hlsl", matPivot, CModel::TYPE_STATIC, true)))) MSGBOX(L"메쉬 이펙트용 메쉬 로드 실패");
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Cylinder_SuperLow_Inv", CModel::Create(m_pDevice, m_pDeviceContext,
+		"../bin/Resources/Mesh/Effect/FX13/", "ky_cylinder_superLow_inv.fbx",
+		L"../bin/ShaderFile/Shader_MeshEffect.hlsl", matPivot, CModel::TYPE_STATIC, true)))) MSGBOX(L"메쉬 이펙트용 메쉬 로드 실패");
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_CylinderBend03", CModel::Create(m_pDevice, m_pDeviceContext,
+		"../bin/Resources/Mesh/Effect/FX13/", "ky_cylinderBend03.fbx",
+		L"../bin/ShaderFile/Shader_MeshEffect.hlsl", matPivot, CModel::TYPE_STATIC, true)))) MSGBOX(L"메쉬 이펙트용 메쉬 로드 실패");
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_CylinderBend03b", CModel::Create(m_pDevice, m_pDeviceContext,
+		"../bin/Resources/Mesh/Effect/FX13/", "ky_cylinderBend03b.fbx",
+		L"../bin/ShaderFile/Shader_MeshEffect.hlsl", matPivot, CModel::TYPE_STATIC, true)))) MSGBOX(L"메쉬 이펙트용 메쉬 로드 실패");
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_CylinderBend06", CModel::Create(m_pDevice, m_pDeviceContext,
+		"../bin/Resources/Mesh/Effect/FX13/", "ky_cylinderBend06.fbx",
+		L"../bin/ShaderFile/Shader_MeshEffect.hlsl", matPivot, CModel::TYPE_STATIC, true)))) MSGBOX(L"메쉬 이펙트용 메쉬 로드 실패");
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Lans", CModel::Create(m_pDevice, m_pDeviceContext,
+		"../bin/Resources/Mesh/Effect/FX13/", "ky_lans.fbx",
+		L"../bin/ShaderFile/Shader_MeshEffect.hlsl", matPivot, CModel::TYPE_STATIC, true)))) MSGBOX(L"메쉬 이펙트용 메쉬 로드 실패");
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_LansHarf", CModel::Create(m_pDevice, m_pDeviceContext,
+		"../bin/Resources/Mesh/Effect/FX13/", "ky_lansHarf.fbx",
+		L"../bin/ShaderFile/Shader_MeshEffect.hlsl", matPivot, CModel::TYPE_STATIC, true)))) MSGBOX(L"메쉬 이펙트용 메쉬 로드 실패");
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Quads", CModel::Create(m_pDevice, m_pDeviceContext,
+		"../bin/Resources/Mesh/Effect/FX13/", "ky_quads.fbx",
+		L"../bin/ShaderFile/Shader_MeshEffect.hlsl", matPivot, CModel::TYPE_STATIC, true)))) MSGBOX(L"메쉬 이펙트용 메쉬 로드 실패");
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_RayOffset", CModel::Create(m_pDevice, m_pDeviceContext,
+		"../bin/Resources/Mesh/Effect/FX13/", "ky_rayOffset.fbx",
+		L"../bin/ShaderFile/Shader_MeshEffect.hlsl", matPivot, CModel::TYPE_STATIC, true)))) MSGBOX(L"메쉬 이펙트용 메쉬 로드 실패");
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Tornado06", CModel::Create(m_pDevice, m_pDeviceContext,
+		"../bin/Resources/Mesh/Effect/FX13/", "ky_tornado06.fbx",
+		L"../bin/ShaderFile/Shader_MeshEffect.hlsl", matPivot, CModel::TYPE_STATIC, true)))) MSGBOX(L"메쉬 이펙트용 메쉬 로드 실패");
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Tornado06_Back", CModel::Create(m_pDevice, m_pDeviceContext,
+		"../bin/Resources/Mesh/Effect/FX13/", "ky_tornado06_back.fbx",
+		L"../bin/ShaderFile/Shader_MeshEffect.hlsl", matPivot, CModel::TYPE_STATIC, true)))) MSGBOX(L"메쉬 이펙트용 메쉬 로드 실패");
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_WindLine30", CModel::Create(m_pDevice, m_pDeviceContext,
+		"../bin/Resources/Mesh/Effect/FX13/", "ky_windLine30.fbx",
+		L"../bin/ShaderFile/Shader_MeshEffect.hlsl", matPivot, CModel::TYPE_STATIC, true)))) MSGBOX(L"메쉬 이펙트용 메쉬 로드 실패");
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_WindSmoke", CModel::Create(m_pDevice, m_pDeviceContext,
+		"../bin/Resources/Mesh/Effect/FX13/", "ky_windSmoke.fbx",
+		L"../bin/ShaderFile/Shader_MeshEffect.hlsl", matPivot, CModel::TYPE_STATIC, true)))) MSGBOX(L"메쉬 이펙트용 메쉬 로드 실패");
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_WindSmokeVertRot", CModel::Create(m_pDevice, m_pDeviceContext,
+		"../bin/Resources/Mesh/Effect/FX13/", "ky_windSmokeVertRot.fbx",
+		L"../bin/ShaderFile/Shader_MeshEffect.hlsl", matPivot, CModel::TYPE_STATIC, true)))) MSGBOX(L"메쉬 이펙트용 메쉬 로드 실패");
+#pragma endregion
+#pragma region FXVerietyPack
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_AuraWall_DistB_Kai", CModel::Create(m_pDevice, m_pDeviceContext,
+		"../bin/Resources/Mesh/Effect/FXVarietyPack/", "ky_auraWall_distB_kai.fbx",
+		L"../bin/ShaderFile/Shader_MeshEffect.hlsl", matPivot, CModel::TYPE_STATIC, true)))) MSGBOX(L"메쉬 이펙트용 메쉬 로드 실패");
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Cylinder_LowPoly_Dist", CModel::Create(m_pDevice, m_pDeviceContext,
+		"../bin/Resources/Mesh/Effect/FXVarietyPack/", "ky_cylinder_lowPoly_dist.fbx",
+		L"../bin/ShaderFile/Shader_MeshEffect.hlsl", matPivot, CModel::TYPE_STATIC, true)))) MSGBOX(L"메쉬 이펙트용 메쉬 로드 실패");
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Cylinder_SuperLow", CModel::Create(m_pDevice, m_pDeviceContext,
+		"../bin/Resources/Mesh/Effect/FXVarietyPack/", "ky_cylinder_superLow.fbx",
+		L"../bin/ShaderFile/Shader_MeshEffect.hlsl", matPivot, CModel::TYPE_STATIC, true)))) MSGBOX(L"메쉬 이펙트용 메쉬 로드 실패");
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_CylinderBend07", CModel::Create(m_pDevice, m_pDeviceContext,
+		"../bin/Resources/Mesh/Effect/FXVarietyPack/", "ky_cylinderBend07.fbx",
+		L"../bin/ShaderFile/Shader_MeshEffect.hlsl", matPivot, CModel::TYPE_STATIC, true)))) MSGBOX(L"메쉬 이펙트용 메쉬 로드 실패");
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_PlaneBend", CModel::Create(m_pDevice, m_pDeviceContext,
+		"../bin/Resources/Mesh/Effect/FXVarietyPack/", "ky_planeBend.fbx",
+		L"../bin/ShaderFile/Shader_MeshEffect.hlsl", matPivot, CModel::TYPE_STATIC, true)))) MSGBOX(L"메쉬 이펙트용 메쉬 로드 실패");
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Tornado07", CModel::Create(m_pDevice, m_pDeviceContext,
+		"../bin/Resources/Mesh/Effect/FXVarietyPack/", "ky_tornado07.fbx",
+		L"../bin/ShaderFile/Shader_MeshEffect.hlsl", matPivot, CModel::TYPE_STATIC, true)))) MSGBOX(L"메쉬 이펙트용 메쉬 로드 실패");
+#pragma endregion
+
 
 
 	///////////////Rock
@@ -1593,6 +1849,8 @@ HRESULT CLoader::Load_MeshEffects()
 
 	//////////////////// Objects
 	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_MeshEffect_Test", CMeshEffect_Test::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_MeshEffect_Test2", CMeshEffect_Test2::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 
 

@@ -142,7 +142,8 @@ _int CQuest::LateTick(_double TimeDelta)
 
 HRESULT CQuest::Render()
 {
-	if (!g_pInvenUIManager->IsOpenModal())
+	if (!g_pInvenUIManager->IsOpenModal() &&
+		!g_pGuideManager->IsOpenDeathUI())
 	{
 		m_pQuestText->Render();
 

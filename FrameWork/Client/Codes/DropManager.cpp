@@ -3,6 +3,7 @@
 #include "InteractableObject.h"
 #include "DropObject.h"
 #include "GameObjectPool.h"
+#include "Loot_Shield.h"
 
 CDropManager::CDropManager(void)
 {
@@ -34,7 +35,7 @@ void CDropManager::Tick(void)
 {
 	if (nullptr == m_pPlayer)
 		m_pPlayer = *g_pGameInstance->getObjectList(m_curSceneId, L"Layer_Silvermane")->begin();
-
+	
 	for (_int i = 0; i < m_dropObjects.size(); i++)
 	{
 		if (false == m_dropObjects[i]->IsDrop())

@@ -80,6 +80,7 @@ _int CFlyingShield::Tick(_double _dDeltaTime)
 			_vector svPoint = m_pSpline->GetPoint(m_fAccTime / m_fLiveTime);
 			svPoint = XMVectorSetW(svPoint, 1.f);
 			m_pTransform->Set_State(CTransform::STATE_POSITION, svPoint);
+			m_pTransform->Rotation_Axis(m_pTransform->Get_State(CTransform::STATE_RIGHT), _dDeltaTime);
 		}
 	}
 	else
@@ -98,6 +99,7 @@ _int CFlyingShield::Tick(_double _dDeltaTime)
 			_vector svPoint = m_pSpline->GetPoint(m_fAccTime / m_fLiveTime);
 			svPoint = XMVectorSetW(svPoint, 1.f);
 			m_pTransform->Set_State(CTransform::STATE_POSITION, svPoint);
+			m_pTransform->Rotation_Axis(m_pTransform->Get_State(CTransform::STATE_RIGHT), -_dDeltaTime);
 		}
 	}
 
@@ -235,6 +237,7 @@ void CFlyingShield::Throw(const _fvector& _svTargetPos)
 	m_pTransform->Set_State(CTransform::STATE_LOOK, svLook);
 
 	m_pTransform->Rotation_Axis(CTransform::STATE_LOOK, XMConvertToRadians(45.f));
+	m_pTransform->Rotation_Axis(CTransform::STATE_RIGHT, XMConvertToRadians(-15.f));
 
 
 	Spline_Throw();
@@ -243,10 +246,13 @@ void CFlyingShield::Throw(const _fvector& _svTargetPos)
 	m_fLiveTime = m_fDis / m_fSpeed;
 	m_isAttack = true;
 	g_pObserver->Set_IsThrownObject(true);
+	m_pCollider->setShapeLayer((_uint)ELayer::Weapon);
 }
 
 HRESULT CFlyingShield::Ready_Components()
 {
+	m_pTransform->Set_TransformDesc(0.f, 1.f);
+
 	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Model_FlyingShield", L"Model", (CComponent**)&m_pModel)))
 		return E_FAIL;
 	m_pModel->Add_Material(g_pGameInstance->Get_Material(L"Mtrl_FlyingShield"), 0);
@@ -274,6 +280,7 @@ void CFlyingShield::Return()
 	m_fAccTime = 0.f;
 
 	m_pCollider->setShapeLayer((_uint)ELayer::MonsterWeapon);
+	Set_IsAttack(false);
 }
 
 void CFlyingShield::Spline_Throw()

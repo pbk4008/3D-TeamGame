@@ -1115,7 +1115,7 @@ CModel * CModel::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pDeviceCon
 CModel* CModel::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext, const wstring& pMeshFileName, TYPE eType ,_bool bUsingMaterial)
 {
 	CModel* pInstance = new CModel(pDevice, pDeviceContext);
-	if (pInstance->NativeConstruct_Prototype(pMeshFileName, eType,bUsingMaterial))
+	if (FAILED(pInstance->NativeConstruct_Prototype(pMeshFileName, eType,bUsingMaterial)))
 	{
 		MSGBOX("CModel Load Fail");
 		Safe_Release(pInstance);

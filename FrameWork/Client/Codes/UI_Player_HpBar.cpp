@@ -92,7 +92,8 @@ _int CUI_Player_HpBar::LateTick(_double TimeDelta)
 	if (FAILED(__super::LateTick(TimeDelta)))
 		return -1;
 
-	if (nullptr != m_pRenderer)
+	if (nullptr != m_pRenderer && 
+		!g_pGuideManager->IsOpenDeathUI())
 	{
 		if (g_pInvenUIManager->Get_OpenCheck() == false)
 			m_pRenderer->Add_RenderGroup(CRenderer::RENDER::RENDER_UI, this);

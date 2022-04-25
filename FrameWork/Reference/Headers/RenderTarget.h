@@ -29,8 +29,6 @@ public: HRESULT  Ready_Debug_Buffer(_float fX, _float fY, _float fSizeX, _float 
 public: HRESULT  Render_Debug_Buffer();
 #endif // _DEBUG
 
-//private: HRESULT CreateDSV(_uint iWidth, _uint iHeight, DXGI_FORMAT eFormat);
-
 private: ID3D11Device* m_pDevice = nullptr;
 private: ID3D11DeviceContext* m_pDeviceContext = nullptr;
 

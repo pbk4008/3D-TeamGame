@@ -9,7 +9,9 @@ float g_fAccTime;
 // Alpha
 float g_fAlpha;
 // UV
+bool g_isReverse;
 float2 g_vPlusUV;
+float2 g_vTiling;
 // X
 bool g_isFlowX;
 float g_fFlowSpeedX;
@@ -73,6 +75,14 @@ VS_OUT VS_MAIN_FLOW(VS_IN In)
 	{
 		Out.vTexUV.y += g_vPlusUV.y;
 	}
+	if (g_isReverse)
+	{
+		float2 TexUV = { Out.vTexUV.y, Out.vTexUV.x };
+		Out.vTexUV = TexUV;
+	}
+
+
+
 	Out.vProjPos = Out.vPosition;
 
 	return Out;
@@ -97,12 +107,12 @@ PS_OUT PS_MAIN(PS_IN In)
 {
 	PS_OUT		Out = (PS_OUT)0;
 
-	Out.vDiffuse = g_DiffuseTexture.Sample(DefaultSampler, In.vTexUV);
-	//if (g_isCustomColor)
-	//{
-	//	Out.vDiffuse.xyz = g_vColor.xyz;
-	//}
-	Out.vDiffuse.a = g_fAlpha;
+	Out.vDiffuse = g_DiffuseTexture.Sample(DefaultSampler, float2(In.vTexUV.x * g_vTiling.x, In.vTexUV.y * g_vTiling.y));
+	if (g_isCustomColor)
+	{
+		Out.vDiffuse.xyz *= g_vColor.xyz;
+	}
+	Out.vDiffuse.a *= g_fAlpha;
 
 	/* -1 ~ 1 */
 	/* 0 ~ 1 */
@@ -112,28 +122,97 @@ PS_OUT PS_MAIN(PS_IN In)
 	return Out;
 }
 
+PS_OUT PS_MAIN_Border(PS_IN In)
+{
+	PS_OUT		Out = (PS_OUT)0;
+
+	Out.vDiffuse = g_DiffuseTexture.Sample(BorderSampler, float2(In.vTexUV.x * g_vTiling.x, In.vTexUV.y * g_vTiling.y));
+	if (g_isCustomColor)
+	{
+		Out.vDiffuse.xyz *= g_vColor.xyz;
+	}
+	Out.vDiffuse.a *= g_fAlpha;
+
+	/* -1 ~ 1 */
+	/* 0 ~ 1 */
+	Out.vNormal = vector(In.vNormal.xyz * 0.5f + 0.5f, 0.f);
+	Out.vDepth = vector(In.vProjPos.z / In.vProjPos.w, In.vProjPos.w / 300.0f, 0.0f, 0.0f);
+
+	return Out;
+}
+
 technique11			DefaultTechnique
 {
+	// 0
 	pass Default
 	{
 		SetRasterizerState(CullMode_None);
 		SetDepthStencilState(ZDefault, 0);
-		SetBlendState(AlphaBlending, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+		SetBlendState(AlphaAdditive, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
 
 		/* 진입점함수를 지정한다. */
 		VertexShader = compile vs_5_0 VS_MAIN();
 		GeometryShader = NULL;
 		PixelShader = compile ps_5_0  PS_MAIN();
 	}
-	pass Flow
+	// 1
+	pass None_ZBufferDisable_AlphaAdditive
 	{
 		SetRasterizerState(CullMode_None);
 		SetDepthStencilState(ZBufferDisable, 0);
-		SetBlendState(AlphaBlending, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+		SetBlendState(AlphaAdditive, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
 
 		/* 진입점함수를 지정한다. */
 		VertexShader = compile vs_5_0 VS_MAIN_FLOW();
 		GeometryShader = NULL;
 		PixelShader = compile ps_5_0  PS_MAIN();
+	}
+	// 2
+	pass CCW_ZBufferDisable_AlphaAdditive
+	{
+		SetRasterizerState(CullMode_Default);
+		SetDepthStencilState(ZBufferDisable, 0);
+		SetBlendState(AlphaAdditive, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+
+		/* 진입점함수를 지정한다. */
+		VertexShader = compile vs_5_0 VS_MAIN_FLOW();
+		GeometryShader = NULL;
+		PixelShader = compile ps_5_0  PS_MAIN();
+	}
+	// 3
+	pass CW_ZBufferDisable_AlphaAdditive
+	{
+		SetRasterizerState(CullMode_Reverse);
+		SetDepthStencilState(ZBufferDisable, 0);
+		SetBlendState(AlphaAdditive, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+
+		/* 진입점함수를 지정한다. */
+		VertexShader = compile vs_5_0 VS_MAIN_FLOW();
+		GeometryShader = NULL;
+		PixelShader = compile ps_5_0  PS_MAIN();
+	}
+	// 4
+	pass None_ZDefault_AlphaAdditive
+	{
+		SetRasterizerState(CullMode_None);
+		SetDepthStencilState(ZDefault, 0);
+		SetBlendState(AlphaAdditive, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+
+		/* 진입점함수를 지정한다. */
+		VertexShader = compile vs_5_0 VS_MAIN_FLOW();
+		GeometryShader = NULL;
+		PixelShader = compile ps_5_0  PS_MAIN();
+	}
+	// 5
+	pass None_ZBufferDisable_AlphaAdditive_Border
+	{
+		SetRasterizerState(CullMode_None);
+		SetDepthStencilState(ZBufferDisable, 0);
+		SetBlendState(AlphaAdditive, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+
+		/* 진입점함수를 지정한다. */
+		VertexShader = compile vs_5_0 VS_MAIN_FLOW();
+		GeometryShader = NULL;
+		PixelShader = compile ps_5_0  PS_MAIN_Border();
 	}
 }

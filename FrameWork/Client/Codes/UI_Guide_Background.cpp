@@ -27,14 +27,20 @@ HRESULT CUI_Guide_Background::NativeConstruct(const _uint iSceneID, void* pArg)
 
 	if (FAILED(Ready_Component()))
 		return E_FAIL;
+	CTransform::TRANSFORMDESC desc;
+	desc.fRotationPerSec = 1.f;
+	m_pTransform->Set_TransformDesc(desc);
+	m_pTransform->Set_State(CTransform::STATE_POSITION, _fvector{ 0.f, 0.f, 0.2f, 1.f });
+	m_pTransform->Scaling(_fvector{ 1280.f, 720.f, 1.f, 0.f });
 
-	setActive(false);
+	setActive(true);
 
 	return S_OK;
 }
 
 _int CUI_Guide_Background::Tick(_double dDeltaTime)
 {
+
 	if (FAILED(CUI::Tick(dDeltaTime)))
 		return -1;
 
@@ -47,10 +53,9 @@ _int CUI_Guide_Background::LateTick(_double TimeDelta)
 		return -1;
 
 	if (nullptr != m_pRenderer)
-		m_pRenderer->Add_RenderGroup(CRenderer::RENDER::RENDER_UI, this);
+		m_pRenderer->Add_RenderGroup(CRenderer::RENDER::RENDER_UI_ACTIVE, this);
 
-	m_pTransform->Set_State(CTransform::STATE_POSITION, _fvector{ 0.f, 0.f, 0.2f, 1.f });
-	m_pTransform->Scaling(_fvector{ 1280.f, 720.f, 1.f, 0.f });
+	m_pTransform->Rotation_Axis(_vector{ 0.f, 0.f, 1.f, 0.f }, TimeDelta * 0.25f);
 
 	return _int();
 }

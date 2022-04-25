@@ -63,6 +63,14 @@ _int CUI_Blank_FKey::Tick(_double TimeDelta)
 	if (FAILED(CUI::Tick(TimeDelta)))
 		return -1;
 
+	return 0;
+}
+
+_int CUI_Blank_FKey::LateTick(_double TimeDelta)
+{
+	if (FAILED(CUI::LateTick(TimeDelta)))
+		return -1;
+
 	//ºôº¸µå
 	_matrix ViewMatrix;
 	ViewMatrix = g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_VIEW);
@@ -78,14 +86,6 @@ _int CUI_Blank_FKey::Tick(_double TimeDelta)
 	_vector vScale = XMVectorZero();
 	vScale = { fDistToUI * 0.08f,fDistToUI * 0.08f,1.f,1.f };
 	m_pTransform->Scaling(vScale);
-
-	return 0;
-}
-
-_int CUI_Blank_FKey::LateTick(_double TimeDelta)
-{
-	if (FAILED(CUI::LateTick(TimeDelta)))
-		return -1;
 
 	if (nullptr != m_pRenderer)
 	{

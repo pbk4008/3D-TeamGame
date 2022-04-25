@@ -46,7 +46,7 @@ HRESULT CWeaponGenerator::NativeConstruct(ID3D11Device* pDevice, ID3D11DeviceCon
 		desc.weaponName = L"Fury";
 		desc.modelName = L"Model_Fury";
 		desc.arrMaterial = g_arrMI_Fury;
-		desc.damage = 5.f;
+		desc.damage = 14.f;
 		desc.NumMat = 4;
 		desc.pHierarchyNode = pHierarchyNode;
 		desc.EWeaponType = CWeapon::EType::Hammer_2H;

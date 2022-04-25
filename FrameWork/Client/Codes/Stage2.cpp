@@ -5,6 +5,7 @@
 #include "Environment.h"
 
 #include "JumpNode.h"
+#include "BoxBridge.h"
 
 //UI
 #include "UI_Player_HpBar.h"
@@ -55,18 +56,14 @@ HRESULT CStage2::NativeConstruct()
 		return E_FAIL;
 
 	if (FAILED(Ready_Data_UI(L"../bin/SaveData/UI/UI.dat")))
-	{
-		return E_FAIL;
-	}
-
-
-	if (FAILED(Ready_TriggerSystem(L"../bin/SaveData/Trigger/MonsterSpawnTrigger2.dat")))
 		return E_FAIL;
 
-	g_pDropManager = CDropManager::GetInstance();
-	if (FAILED(g_pDropManager->NativeConstruct((SCENEID::SCENE_STAGE2))))
-		return E_FAIL;
+	//if (FAILED(Ready_TriggerSystem(L"../bin/SaveData/Trigger/MonsterSpawnTrigger2.dat")))
+	//	return E_FAIL;
 
+	//g_pDropManager = CDropManager::GetInstance();
+	//if (FAILED(g_pDropManager->NativeConstruct((SCENEID::SCENE_STAGE2))))
+	//	return E_FAIL;
 
 	return S_OK;
 }
@@ -81,6 +78,8 @@ _int CStage2::Tick(_double TimeDelta)
 		if (FAILED(g_pGameInstance->Open_Level((_uint)SCENEID::SCENE_LOADING, pLoading)))
 			return -1;
 		g_pDebugSystem->Set_LevelcMoveCheck(false);
+		m_pTriggerSystem = nullptr;
+		g_pDropManager = nullptr;
 	}
 	//list<CGameObject*>* pLayer = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE2, L"Layer_Crawler");
 
@@ -97,8 +96,24 @@ _int CStage2::Tick(_double TimeDelta)
 		if (m_iCountMonster == 0 && m_bFirst)
 			m_pTriggerSystem->Check_Clear();
 	}
+
+	if (g_pGameInstance->getkeyDown(DIK_I))
+	{
+		if (g_pInvenUIManager->IsOpenModal())
+		{
+			g_pInvenUIManager->CloseModal();
+			g_pMainApp->Set_DeltaTimeZero(false);
+		}
+		else
+		{
+			g_pInvenUIManager->OpenModal();
+			g_pMainApp->Set_DeltaTimeZero(true);
+		}
+	}
+
 	if(g_pInteractManager)
 		g_pInteractManager->Tick(TimeDelta);
+
 	if(g_pDropManager)
 		g_pDropManager->Tick();
 
@@ -242,14 +257,21 @@ HRESULT CStage2::Ready_MapObject()
 	tJumpNodeDesc.vPosition = { 27.f, 18.f, 228.f };
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE2, L"Layer_JumpNode", L"Proto_GameObject_JumpNode", &tJumpNodeDesc)))
 		return E_FAIL;
-	tJumpNodeDesc.vPosition = { -2.f, 15.f, 235.f };
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE2, L"Layer_JumpNode", L"Proto_GameObject_JumpNode", &tJumpNodeDesc)))
-		return E_FAIL;
+	//tJumpNodeDesc.vPosition = { -2.f, 15.f, 235.f };
+	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE2, L"Layer_JumpNode", L"Proto_GameObject_JumpNode", &tJumpNodeDesc)))
+	//	return E_FAIL;
 	tJumpNodeDesc.vPosition = { 39.f, 18.f, 268.f };
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE2, L"Layer_JumpNode", L"Proto_GameObject_JumpNode", &tJumpNodeDesc)))
 		return E_FAIL;
-	tJumpNodeDesc.vPosition = { 33.f, 15.f, 278.f };
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE2, L"Layer_JumpNode", L"Proto_GameObject_JumpNode", &tJumpNodeDesc)))
+	//tJumpNodeDesc.vPosition = { 33.f, 15.f, 278.f };
+	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE2, L"Layer_JumpNode", L"Proto_GameObject_JumpNode", &tJumpNodeDesc)))
+	//	return E_FAIL;
+	// 네비메쉬 끊어진곳 점프노드 삭제하고 박스 콜라이더로 대체
+	CBoxBridge::DESC tBoxBridgeDesc;
+	tBoxBridgeDesc.vPosition = { 34.5f , 11.5f, 276.f };
+	tBoxBridgeDesc.vRotation = { -10.f, -30.f, 0.f };
+	tBoxBridgeDesc.vScale = { 10.f, 1.f, 4.f };
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE2, L"Layer_BoxBridge", L"Proto_GameObject_BoxBridge", &tBoxBridgeDesc)))
 		return E_FAIL;
 
 	return S_OK;
@@ -325,11 +347,11 @@ HRESULT CStage2::Ready_UI(const _tchar* LayerTag)
 	//Blank_Ckey
 	CUI_Blank_CKey::UIACTIVEDESC Desc3;
 	ZeroMemory(&Desc3, sizeof(CUI_Blank_CKey::UIACTIVEDESC));
-	_tcscpy_s(Desc3.UIDesc.TextureTag, L"Texture_Blank_Ckey");
+	_tcscpy_s(Desc3.UIDesc.TextureTag, L"Texture_Fill_Ckey");
 	Desc3.UIDesc.bMinus = false;
 	Desc3.UIDesc.fAngle = 0.f;
 	Desc3.UIDesc.fPos = { 700.f, 390.f, 0.1f };
-	Desc3.UIDesc.fSize = { 60.f , 60.f };
+	Desc3.UIDesc.fSize = { 40.f , 40.f };
 	Desc3.UIDesc.IDTag = (_uint)GAMEOBJECT::UI_STATIC;
 
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE2, L"Layer_UI_BlankC", L"Proto_GameObject_UI_Blank_CKey", &Desc3)))
@@ -338,11 +360,11 @@ HRESULT CStage2::Ready_UI(const _tchar* LayerTag)
 	//Fill_Ckey
 	CUI_Fill_Ckey::UIACTIVEDESC Desc4;
 	ZeroMemory(&Desc4, sizeof(CUI_Fill_Ckey::UIACTIVEDESC));
-	_tcscpy_s(Desc4.UIDesc.TextureTag, L"Texture_Fill_Ckey");
+	_tcscpy_s(Desc4.UIDesc.TextureTag, L"Texture_Blank_Ckey");
 	Desc4.UIDesc.bMinus = false;
 	Desc4.UIDesc.fAngle = 0.f;
 	Desc4.UIDesc.fPos = { 700.f, 390.f, 0.09f };
-	Desc4.UIDesc.fSize = { 60.f , 60.f };
+	Desc4.UIDesc.fSize = { 40.f , 40.f };
 	Desc4.UIDesc.IDTag = (_uint)GAMEOBJECT::UI_STATIC;
 
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE2, L"Layer_UI_FillC", L"Proto_GameObject_UI_Fill_CKey", &Desc4)))
@@ -378,17 +400,17 @@ HRESULT CStage2::Ready_JumpTrigger()
 	// 점프 노드들
 	CJumpNode::DESC tJumpNodeDesc;
 	tJumpNodeDesc.vPosition = { 30.f , 23.f, 202.f };
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_JS, L"Layer_JumpNode", L"Proto_GameObject_JumpNode", &tJumpNodeDesc)))
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE2, L"Layer_JumpNode", L"Proto_GameObject_JumpNode", &tJumpNodeDesc)))
 		return E_FAIL;
 	tJumpNodeDesc.vPosition = { 27.f, 18.f, 228.f };
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_JS, L"Layer_JumpNode", L"Proto_GameObject_JumpNode", &tJumpNodeDesc)))
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE2, L"Layer_JumpNode", L"Proto_GameObject_JumpNode", &tJumpNodeDesc)))
 		return E_FAIL;
 	tJumpNodeDesc.vPosition = { -2.f, 15.f, 235.f };
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_JS, L"Layer_JumpNode", L"Proto_GameObject_JumpNode", &tJumpNodeDesc)))
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE2, L"Layer_JumpNode", L"Proto_GameObject_JumpNode", &tJumpNodeDesc)))
 		return E_FAIL;
-	tJumpNodeDesc.vPosition = { 39.f, 15.f, 268.f };
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_JS, L"Layer_JumpNode", L"Proto_GameObject_JumpNode", &tJumpNodeDesc)))
-		return E_FAIL;
+	//tJumpNodeDesc.vPosition = { 39.f, 15.f, 268.f };
+	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE2, L"Layer_JumpNode", L"Proto_GameObject_JumpNode", &tJumpNodeDesc)))
+	//	return E_FAIL;
 
 	return S_OK;
 }
@@ -1219,7 +1241,9 @@ CStage2* CStage2::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceCont
 void CStage2::Free()
 {
 	CLevel::Free();
+
 	Safe_Release(m_pTriggerSystem);
+
 	g_pInteractManager->Remove_Interactable();
 	CWeaponGenerator::DestroyInstance();
 	CDropManager::DestroyInstance();

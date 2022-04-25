@@ -50,8 +50,15 @@ HRESULT CExplosion_Rock::NativeConstruct(const _uint _iSceneID, void* _pArg)
 _int CExplosion_Rock::Tick(_double _dDeltaTime)
 {
 	m_pAnimModel->Update_CombinedTransformationMatrix(_dDeltaTime * 5.f);
-
-	_matrix matScale = XMMatrixScaling(0.0005f, 0.0005f, 0.0005f);
+	_matrix matScale = XMMatrixIdentity();
+	if ((_uint)SCENEID::SCENE_STAGE3 == g_pGameInstance->getCurrentLevel() || (_uint)SCENEID::SCENE_TEST_JS == g_pGameInstance->getCurrentLevel())
+	{
+		matScale = XMMatrixScaling(0.0007f, 0.0007f, 0.0007f);
+	}
+	else
+	{
+		matScale = XMMatrixScaling(0.0005f, 0.0005f, 0.0005f);
+	}
 	m_pAnimModel->Set_PivotMatrix(matScale);
 	
 	if (true == m_pAnimModel->Get_IsAnimFinished())

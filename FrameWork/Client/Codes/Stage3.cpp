@@ -21,6 +21,8 @@ HRESULT CStage3::NativeConstruct()
 	if (FAILED(Ready_MapObject()))
 		return E_FAIL;
 
+	g_pWeaponGenerator = CWeaponGenerator::GetInstance();
+
 	if (FAILED(Ready_Player(L"Layer_Silvermane")))
 		return E_FAIL;
 
@@ -44,6 +46,20 @@ _int CStage3::Tick(_double TimeDelta)
 		g_pDebugSystem->Set_LevelcMoveCheck(false);
 	}
 #endif //  _DEBUG
+
+	if (g_pGameInstance->getkeyDown(DIK_I))
+	{
+		if (g_pInvenUIManager->IsOpenModal())
+		{
+			g_pInvenUIManager->CloseModal();
+			g_pMainApp->Set_DeltaTimeZero(false);
+		}
+		else
+		{
+			g_pInvenUIManager->OpenModal();
+			g_pMainApp->Set_DeltaTimeZero(true);
+		}
+	}
 
 	return _int();
 }
@@ -90,31 +106,32 @@ HRESULT CStage3::Ready_MapObject()
 	}
 
 	//Test
-	LIGHTDESC			LightDesc;
+	//LIGHTDESC			LightDesc;
 
-	ZeroMemory(&LightDesc, sizeof(LIGHTDESC));
+	//ZeroMemory(&LightDesc, sizeof(LIGHTDESC));
 
-	LightDesc.eType = LIGHTDESC::TYPE_DIRECTIONAL;
-	LightDesc.vDirection = _float3(0.f, -1.f, 1.f);
-	LightDesc.vDiffuse = _float4(1.f, 1.f, 1.f, 1.f);
-	LightDesc.vSpecular = _float4(0.8f, 0.8f, 0.8f, 1.f);
-	LightDesc.vAmbient = _float4(0.6f, 0.6f, 0.6f, 1.f);
-	LightDesc.mOrthinfo[0] = 30.f;
+	//LightDesc.eType = LIGHTDESC::TYPE_DIRECTIONAL;
+	//LightDesc.vDirection = _float3(0.f, -1.f, 1.f);
+	//LightDesc.vDiffuse = _float4(1.f, 1.f, 1.f, 1.f);
+	//LightDesc.vSpecular = _float4(0.8f, 0.8f, 0.8f, 1.f);
+	//LightDesc.vAmbient = _float4(0.6f, 0.6f, 0.6f, 1.f);
+	//LightDesc.mOrthinfo[0] = 30.f;
 
-	if (FAILED(g_pGameInstance->CreateLightCam(m_pDevice, m_pDeviceContext, LightDesc))) MSGBOX("Failed To Creating DirectionLight Cam");
+	//if (FAILED(g_pGameInstance->CreateLightCam(m_pDevice, m_pDeviceContext, LightDesc))) MSGBOX("Failed To Creating DirectionLight Cam");
 
-	ZeroMemory(&LightDesc, sizeof(LIGHTDESC));
-	LightDesc.eType = LIGHTDESC::TYPE_POINT;
-	LightDesc.fRange = 10.f;
-	LightDesc.vDiffuse = _float4(1.f, 0.f, 0.f, 1.f);
-	LightDesc.vSpecular = _float4(0.8f, 0.8f, 0.8f, 1.f);
-	LightDesc.vAmbient = _float4(0.6f, 0.6f, 0.6f, 1.f);
-	LightDesc.vPosition = _float3(2.f, 15.f, 110.f);
+	//ZeroMemory(&LightDesc, sizeof(LIGHTDESC));
+	//LightDesc.eType = LIGHTDESC::TYPE_POINT;
+	//LightDesc.fRange = 10.f;
+	//LightDesc.vDiffuse = _float4(1.f, 0.f, 0.f, 1.f);
+	//LightDesc.vSpecular = _float4(0.8f, 0.8f, 0.8f, 1.f);
+	//LightDesc.vAmbient = _float4(0.6f, 0.6f, 0.6f, 1.f);
+	//LightDesc.vPosition = _float3(2.f, 15.f, 110.f);
 
-	if (FAILED(g_pGameInstance->Add_Light(m_pDevice, m_pDeviceContext, LightDesc))) MSGBOX("Failed To Adding PointLight");
+	//if (FAILED(g_pGameInstance->Add_Light(m_pDevice, m_pDeviceContext, LightDesc))) MSGBOX("Failed To Adding PointLight");
 
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE3, L"Layer_SkyBox", L"Proto_GameObject_SkyBox")))
-		return E_FAIL;
+	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE3, L"Layer_SkyBox", L"Proto_GameObject_SkyBox")))
+	//	return E_FAIL;
+
 
 	return S_OK;
 }
