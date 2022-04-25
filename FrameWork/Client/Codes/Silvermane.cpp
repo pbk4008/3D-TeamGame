@@ -367,6 +367,9 @@ _int CSilvermane::Tick(_double _dDeltaTime)
 		m_pPlayerData->SetExp(5);
 	}
 
+	if (g_pGameInstance->getCurrentLevel() != 3)
+		m_isLootShield = true;
+
 	return _int();
 }
 
@@ -936,7 +939,6 @@ HRESULT CSilvermane::Ready_Weapons(const _uint _iSceneID)
 
 		if (1 == m_pPlayerData->EquipedSlot)
 		{
-			assert(m_pEquipmentData->GetEquipment(EEquipSlot::Weapon1).weaponData.IsValid());
 			pWeapon = m_pEquipmentData->GetEquipment(EEquipSlot::Weapon1).weaponData.Get_Weapon();
 
 			if (pWeapon)

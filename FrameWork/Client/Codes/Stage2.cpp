@@ -78,6 +78,8 @@ _int CStage2::Tick(_double TimeDelta)
 		if (FAILED(g_pGameInstance->Open_Level((_uint)SCENEID::SCENE_LOADING, pLoading)))
 			return -1;
 		g_pDebugSystem->Set_LevelcMoveCheck(false);
+		m_pTriggerSystem = nullptr;
+		g_pDropManager = nullptr;
 	}
 	//list<CGameObject*>* pLayer = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE2, L"Layer_Crawler");
 
@@ -95,8 +97,23 @@ _int CStage2::Tick(_double TimeDelta)
 			m_pTriggerSystem->Check_Clear();
 	}
 
+	if (g_pGameInstance->getkeyDown(DIK_I))
+	{
+		if (g_pInvenUIManager->IsOpenModal())
+		{
+			g_pInvenUIManager->CloseModal();
+			g_pMainApp->Set_DeltaTimeZero(false);
+		}
+		else
+		{
+			g_pInvenUIManager->OpenModal();
+			g_pMainApp->Set_DeltaTimeZero(true);
+		}
+	}
+
 	if(g_pInteractManager)
 		g_pInteractManager->Tick(TimeDelta);
+
 	if(g_pDropManager)
 		g_pDropManager->Tick();
 
@@ -1224,7 +1241,9 @@ CStage2* CStage2::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceCont
 void CStage2::Free()
 {
 	CLevel::Free();
+
 	Safe_Release(m_pTriggerSystem);
+
 	g_pInteractManager->Remove_Interactable();
 	CWeaponGenerator::DestroyInstance();
 	CDropManager::DestroyInstance();

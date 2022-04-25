@@ -154,8 +154,8 @@ _int CMainApp::Tick(_double TimeDelta)
 	if (m_isDeltaTimeZero)
 		TimeDelta = 0.f;
 
-	//if (g_pInvenUIManager->IsOpenModal())
-	//	TimeDelta = 0.f;
+	if (g_pInvenUIManager->IsOpenModal())
+		TimeDelta = 0.f;
 
 	if (m_isFreeze)
 	{
@@ -288,9 +288,9 @@ if (FAILED(pMeshLoader->Reserve_MeshLoader(m_pDevice, m_pDeviceContext)))
 	if (FAILED(g_pQuestManager->NativeConstruct()))
 		return E_FAIL;
 
-	//g_pGuideManager = CGuideUIManager::GetInstance();
-	//if (FAILED(g_pGuideManager->NativeConstruct()))
-	//	return E_FAIL;
+	g_pGuideManager = CGuideUIManager::GetInstance();
+	if (FAILED(g_pGuideManager->NativeConstruct()))
+		return E_FAIL;
 
 	return S_OK;
 }

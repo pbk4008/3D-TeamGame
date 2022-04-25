@@ -95,7 +95,7 @@ _int CUI_Ingame::LateTick(_double TimeDelta)
 	if (FAILED(CUI::LateTick(TimeDelta)))
 		return -1;
 
-	if (nullptr != m_pRenderer)
+	if (nullptr != m_pRenderer && g_pGuideManager != nullptr)
 	{
 		if(!g_pInvenUIManager->Get_OpenCheck() &&
 			!g_pGuideManager->IsOpenDeathUI())
