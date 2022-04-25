@@ -40,6 +40,7 @@ _int CShooter_Chase::Tick(const _double& _dDeltaTime)
 	m_pTransform->Face_Target(g_pObserver->Get_PlayerPos());
 
 	_uint index = m_pAnimator->Get_CurrentAnimNode();
+	cout << index << endl;
 	//일정 거리가 되면 바로 공격
 	if (m_pAnimator->Get_CurrentAnimNode() == (_uint)CMonster_Bastion_Shooter::ANIM_TYPE::RUN_LOOP)
 		Chase_Target(_dDeltaTime);

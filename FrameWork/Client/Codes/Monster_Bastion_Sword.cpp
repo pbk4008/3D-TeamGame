@@ -397,11 +397,11 @@ HRESULT CMonster_Bastion_Sword::Set_Animation_FSM()
 
 	////////////////////Attack
 	pAnim = m_pModel->Get_Animation("Attack_Double 1");
-	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::ATTACK_DOUBLE, (_uint)ANIM_TYPE::HEAD, pAnim, true, false, false, ERootOption::XYZ)))
+	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::ATTACK_DOUBLE, (_uint)ANIM_TYPE::HEAD, pAnim, true, true, false, ERootOption::XYZ)))
 		return E_FAIL;
 
 	pAnim = m_pModel->Get_Animation("Attack_Single");
-	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::ATTACK_SINGLE, (_uint)ANIM_TYPE::HEAD, pAnim, true, false, false, ERootOption::XYZ)))
+	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::ATTACK_SINGLE, (_uint)ANIM_TYPE::HEAD, pAnim, true, true, false, ERootOption::XYZ)))
 		return E_FAIL;
 
 	//////////////////////Hit&Death

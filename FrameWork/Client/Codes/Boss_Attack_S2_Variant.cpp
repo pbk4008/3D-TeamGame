@@ -37,7 +37,7 @@ _int CBoss_Attack_S2_Variant::Tick(const _double& TimeDelta)
 	 
 	cout << iCurKeyFrameIndex << endl;
 
-	//m_pMonster->RimlightCheck(true, _float3(1, 0, 0));
+	m_pMonster->RimlightCheck(true, _float3(1, 0, 0));
 
 	if (42 <= iCurKeyFrameIndex && 44 >= iCurKeyFrameIndex && false == m_bShakeCheck)
 	{
@@ -78,6 +78,8 @@ _int CBoss_Attack_S2_Variant::Tick(const _double& TimeDelta)
 
 	if (m_pAnimator->Get_AnimController()->Is_Finished())
 	{
+		cout << "s2 Variant -> turn" << endl;
+
 		m_pStateController->Change_State(L"Turn");
 	}
 
@@ -105,6 +107,9 @@ HRESULT CBoss_Attack_S2_Variant::EnterState()
 {
 	if (FAILED(__super::EnterState()))
 		return E_FAIL;
+
+	cout << "Attack_S2_Variant" << endl;
+
 
 	m_bShakeCheck = false;
 	m_bEffectCheck = false;

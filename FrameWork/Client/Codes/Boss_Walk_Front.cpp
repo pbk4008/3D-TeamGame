@@ -152,14 +152,13 @@ HRESULT CBoss_Walk_Front::EnterState()
 	if (FAILED(__super::EnterState()))
 		return E_FAIL;
 
+	cout << "Walk Front" << endl;
+
 	m_vLook = { 0.f, 0.f, 0.f,0.f };
 	m_vRight = { 0.f, 0.f, 0.f,0.f };
 
 	static_cast<CBoss_Solaris*>(m_pMonster)->Set_HitMotion(true);
-
-
 	m_pAnimator->Get_AnimController()->Set_MoveSpeed(20.0f);
-
 	m_pAnimator->Change_AnyEntryAnimation((_uint)CBoss_Solaris::M_BossAnimState::WALK_FWD_START);
 	
 	//_vector vMonsterPos = m_pTransform->Get_State(CTransform::STATE::STATE_POSITION);

@@ -149,7 +149,7 @@ HRESULT CPlayer_Weapon::Render()
 	if (m_rimcheck == true)
 	{
 		rimdesc.rimcheck = m_rimcheck;
-		rimdesc.rimintensity = m_rimintensity;
+		rimdesc.rimintensity = m_rimintensity + 3.f;
 		rimdesc.rimcol = _float3(1, 0, 0);
 		XMStoreFloat4(&rimdesc.camdir, XMVector3Normalize(m_pTransform->Get_State(CTransform::STATE_POSITION) - g_pGameInstance->Get_CamPosition(L"Camera_Silvermane")));
 		CWeapon::SetRimIntensity(g_fDeltaTime * -4.f);
@@ -292,22 +292,17 @@ HRESULT CPlayer_Weapon::Ready_Components()
 		m_pCapsuleCollider->setShapeLayer((_uint)ELayer::Weapon);
 	}
 
-
 	return S_OK;
 }
 
 HRESULT CPlayer_Weapon::Ready_TrailEffects(const Desc& _tDesc)
 {
-	if (L"Needle" == _tDesc.weaponName)
+	switch (_tDesc.EWeaponType)
+	{
+	case CWeapon::EType::Sword_1H:
 	{
 		CTrailEffect::DESC tTrailDesc;
 		tTrailDesc.pOwnerTransform = m_pTransform;
-		tTrailDesc.fLength = 0.5f;
-		XMStoreFloat4x4(&tTrailDesc.matPivot, XMMatrixTranslation(0.f, 0.f, 2.f));
-		tTrailDesc.wstrTextureTag = L"Fire_02";
-		if (FAILED(g_pGameInstance->Add_GameObjectToLayer(m_iSceneID, L"Layer_Effect", L"Proto_GameObject_TrailEffect_Normal", &tTrailDesc, (CGameObject**)&m_pTrailEffect_Normal)))
-			MSGBOX(L"노말 트레일 생성 실패. from Needle");
-		Safe_AddRef(m_pTrailEffect_Normal);
 		tTrailDesc.fLength = 1.f;
 		XMStoreFloat4x4(&tTrailDesc.matPivot, XMMatrixTranslation(0.f, 0.f, 1.5f));
 		tTrailDesc.wstrTextureTag = L"TrailBase";
@@ -315,17 +310,67 @@ HRESULT CPlayer_Weapon::Ready_TrailEffects(const Desc& _tDesc)
 			MSGBOX(L"디스토션 트레일 생성 실패. from Needle");
 		Safe_AddRef(m_pTrailEffect_Distortion);
 	}
-	else if (L"Fury" == _tDesc.weaponName)
+		break;
+	case CWeapon::EType::Hammer_2H:
 	{
 		CTrailEffect::DESC tTrailDesc;
-		tTrailDesc.fLength = 0.2f;
-		XMStoreFloat4x4(&tTrailDesc.matPivot, XMMatrixTranslation(0.f, 0.f, 1.5f));
 		tTrailDesc.pOwnerTransform = m_pTransform;
-		tTrailDesc.wstrTextureTag = L"Wisp_01";
+		tTrailDesc.fLength = 0.6f;
+		XMStoreFloat4x4(&tTrailDesc.matPivot, XMMatrixTranslation(0.f, 0.f, 1.5f));
+		tTrailDesc.wstrTextureTag = L"TrailBase";
+		if (FAILED(g_pGameInstance->Add_GameObjectToLayer(m_iSceneID, L"Layer_Effect", L"Proto_GameObject_TrailEffect_Distortion", &tTrailDesc, (CGameObject**)&m_pTrailEffect_Distortion)))
+			MSGBOX(L"디스토션 트레일 생성 실패. from Needle");
+		Safe_AddRef(m_pTrailEffect_Distortion);
+	}
+		break;
+	}
+
+	if (L"Needle" == _tDesc.weaponName)
+	{
+		CTrailEffect::DESC tTrailDesc;
+		tTrailDesc.pOwnerTransform = m_pTransform;
+		tTrailDesc.fLength = 0.4f;
+		XMStoreFloat4x4(&tTrailDesc.matPivot, XMMatrixTranslation(0.f, 0.f, 2.f));
+		tTrailDesc.wstrTextureTag = L"Fire_02";
 		if (FAILED(g_pGameInstance->Add_GameObjectToLayer(m_iSceneID, L"Layer_Effect", L"Proto_GameObject_TrailEffect_Normal", &tTrailDesc, (CGameObject**)&m_pTrailEffect_Normal)))
 			MSGBOX(L"노말 트레일 생성 실패. from Needle");
 		Safe_AddRef(m_pTrailEffect_Normal);
 	}
+	else if (L"Justice" == _tDesc.weaponName)
+	{
+		CTrailEffect::DESC tTrailDesc;
+		tTrailDesc.pOwnerTransform = m_pTransform;
+		tTrailDesc.fLength = 0.4f;
+		XMStoreFloat4x4(&tTrailDesc.matPivot, XMMatrixTranslation(0.f, 0.f, 2.f));
+		tTrailDesc.wstrTextureTag = L"EnergyPlasma_Tile_H_01";
+		if (FAILED(g_pGameInstance->Add_GameObjectToLayer(m_iSceneID, L"Layer_Effect", L"Proto_GameObject_TrailEffect_Normal", &tTrailDesc, (CGameObject**)&m_pTrailEffect_Normal)))
+			MSGBOX(L"노말 트레일 생성 실패. from Needle");
+		Safe_AddRef(m_pTrailEffect_Normal);
+	}
+	////////////////////////////////////////////////// 해머
+	else if (L"Fury" == _tDesc.weaponName)
+	{
+		CTrailEffect::DESC tTrailDesc;
+		tTrailDesc.fLength = 0.4f;
+		XMStoreFloat4x4(&tTrailDesc.matPivot, XMMatrixTranslation(0.f, 0.f, 1.9f));
+		tTrailDesc.pOwnerTransform = m_pTransform;
+		tTrailDesc.wstrTextureTag = L"EnergyPlasma_Tile_H_01";
+		if (FAILED(g_pGameInstance->Add_GameObjectToLayer(m_iSceneID, L"Layer_Effect", L"Proto_GameObject_TrailEffect_Normal", &tTrailDesc, (CGameObject**)&m_pTrailEffect_Normal)))
+			MSGBOX(L"노말 트레일 생성 실패. from Needle");
+		Safe_AddRef(m_pTrailEffect_Normal);
+	}
+	else if (L"Ironstone" == _tDesc.weaponName)
+	{
+		CTrailEffect::DESC tTrailDesc;
+		tTrailDesc.fLength = 0.2f;
+		XMStoreFloat4x4(&tTrailDesc.matPivot, XMMatrixTranslation(0.f, 0.f, 1.9f));
+		tTrailDesc.pOwnerTransform = m_pTransform;
+		tTrailDesc.wstrTextureTag = L"SpeedTrails_Packed";
+		if (FAILED(g_pGameInstance->Add_GameObjectToLayer(m_iSceneID, L"Layer_Effect", L"Proto_GameObject_TrailEffect_Normal", &tTrailDesc, (CGameObject**)&m_pTrailEffect_Normal)))
+			MSGBOX(L"노말 트레일 생성 실패. from Needle");
+		Safe_AddRef(m_pTrailEffect_Normal);
+	}
+
 
 	return S_OK;
 }

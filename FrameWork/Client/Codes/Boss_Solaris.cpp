@@ -82,6 +82,8 @@ HRESULT CBoss_Solaris::NativeConstruct(const _uint _iSceneID, void* pArg)
 
 	m_tAttackDesc.iLevel = 3;
 
+	m_pTransform->Set_State(CTransform::STATE_POSITION, XMVectorSet(0.f, 1.f, 20.f, 1.f));
+
 	m_pWeapon->setActive(true);
 	setActive(true);
 	return S_OK;
@@ -93,14 +95,14 @@ _int CBoss_Solaris::Tick(_double TimeDelta)
 	{
 		return -1;
 	}
-	m_iObectTag = (_uint)GAMEOBJECT::BOSS;
 
 	if (true == m_rimcheck)
 	{
 		CActor::SetRimIntensity((_float)TimeDelta * -10.f);
 	}
 
-	cout << m_fCurrentHp << endl;
+	//cout << m_fCurrentHp << endl;
+
 	if (g_pGameInstance->getkeyDown(DIK_NUMPAD2))
 	{
 		m_pStateController->Change_State(L"Attack_R1");
@@ -149,17 +151,16 @@ _int CBoss_Solaris::Tick(_double TimeDelta)
 	_vector vDist = vMonsterPos - g_pObserver->Get_PlayerPos();
 	_float fDistToPlayer = XMVectorGetX(XMVector3Length(vDist));
 
-	if (m_fGroggyGauge >= m_fMaxGroggyGauge)
+	if (0 == m_fGroggyGauge)
 	{
 		//스턴상태일때 스턴state에서 현재 그로기 계속 0으로 고정시켜줌
 		m_bGroggy = true;
 		m_pStateController->Change_State(L"Stun");
-		m_fGroggyGauge = 0.f;
 	}
 	
 	if (true == m_bGroggy || true == m_bDead )
 	{
-		m_fGroggyGauge = 0.f;
+		m_fGroggyGauge = m_fMaxGroggyGauge;
 	}
 
 	if (STUN_END == m_pAnimator->Get_CurrentAnimNode())
@@ -215,7 +216,7 @@ HRESULT CBoss_Solaris::Render()
 		rimdesc.rimcheck = m_rimcheck;
 		rimdesc.rimcol = m_rimcol;
 		rimdesc.rimintensity = m_rimintensity; // intensity 낮을 수록 과하게 빛남
-		XMStoreFloat4(&rimdesc.camdir, XMVector3Normalize(g_pGameInstance->Get_CamPosition(L"Camera_Silvermane") - m_pTransform->Get_State(CTransform::STATE_POSITION)));
+		XMStoreFloat4(&rimdesc.camdir, XMVector3Normalize(m_pTransform->Get_State(CTransform::STATE_POSITION) - g_pGameInstance->Get_CamPosition(L"Camera_Silvermane")));
 		CActor::SetRimIntensity(g_fDeltaTime * -10.f);
 	}
 
@@ -590,7 +591,7 @@ HRESULT CBoss_Solaris::Set_Animation_FSM()
 
 
 	//시작애니메이션 지정
-	m_pAnimator->Change_AnyEntryAnimation(ATTACK_S5_SKEWER_PROTOCOL);
+	m_pAnimator->Change_AnyEntryAnimation(IDLE);
 
 	return S_OK;
 }
@@ -648,7 +649,7 @@ HRESULT CBoss_Solaris::Set_State_FSM()
 		static_cast<CMonster_FSM*>(pair.second)->Set_Animator(m_pAnimator);
 	}
 
-	m_pStateController->Change_State(L"Attack_S5_Protocol");
+	m_pStateController->Change_State(L"Idle");
 
 	return S_OK;
 }
@@ -681,9 +682,12 @@ void CBoss_Solaris::Hit(const ATTACKDESC& _tAttackDesc)
 		return;
 
 	m_fCurrentHp -= _tAttackDesc.fDamage;
-	m_fGroggyGauge += 2; //TODO::수치정해서바꿔줘야됨
-
-	++m_iHitCount;
+	
+	if (!m_bGroggy)
+	{
+		++m_iHitCount;
+		m_fGroggyGauge -= 2; //TODO::수치정해서바꿔줘야됨
+	}
 
 	if (m_bHitMotion)
 	{
@@ -713,11 +717,13 @@ void CBoss_Solaris::Hit(const ATTACKDESC& _tAttackDesc)
 
 	if (3 <= m_iHitCount)
 	{
-		_int iRandom = rand() % 2;
+		uniform_int_distribution<_uint> iRange(0, 1);
+		_uint iRandom = iRange(g_random);
+
 		switch (iRandom)
 		{
 		case 0:
-			m_pStateController->Change_State(L"Dash_Back");
+			m_pStateController->Change_State(L"Back_Flip");
 			break;
 		case 1:
 			m_pStateController->Change_State(L"Back_Flip");
@@ -750,6 +756,115 @@ void CBoss_Solaris::Set_IsAttack(const _bool _isAttack)
 
 void CBoss_Solaris::OnWeaponEffect()
 {
+}
+
+void CBoss_Solaris::Set_Random_AttackAnim()
+{
+	_vector vMonsterPos = m_pTransform->Get_State(CTransform::STATE::STATE_POSITION);
+	_vector vDist = vMonsterPos - g_pObserver->Get_PlayerPos();
+	_float fDistToPlayer = XMVectorGetX(XMVector3Length(vDist));
+
+	if (0.6f < Get_HpRatio())
+	{
+		//레이저없음
+		if (20.f > fDistToPlayer)
+		{
+			uniform_int_distribution<_uint> iRange(0, 4);
+			_uint iRandom = iRange(g_random);
+			
+			while (iRandom == m_iPreAnim)
+			{
+				iRandom = iRange(g_random);
+			}
+
+			switch (iRandom)
+			{
+			case 0:
+				m_pStateController->Change_State(L"Attack_Agg");
+				break;
+			case 1:
+				m_pStateController->Change_State(L"Attack_R2");
+				break;
+			case 2:
+				m_pStateController->Change_State(L"Attack_S3");
+				break;
+			case 3:
+				m_pStateController->Change_State(L"Attack_R1");
+				break;
+			case 4:
+				m_pStateController->Change_State(L"Attack_S5_Protocol");
+				break;
+			}
+
+			m_iPreAnim = iRandom;
+		}
+		else if (20.f <= fDistToPlayer)
+		{
+			m_pStateController->Change_State(L"Attack_S5_Protocol");
+		}
+	}
+	else if (0.6f >= Get_HpRatio())
+	{
+		if (20.f > fDistToPlayer)
+		{
+			uniform_int_distribution<_uint> iRange(0, 6);
+			_uint iRandom = iRange(g_random);
+
+			while (iRandom == m_iPreAnim)
+			{
+				iRandom = iRange(g_random);
+			}
+
+			switch (iRandom)
+			{
+			case 0:
+				m_pStateController->Change_State(L"Attack_Agg");
+				break;
+			case 1:
+				m_pStateController->Change_State(L"Attack_R2");
+				break;
+			case 2:
+				m_pStateController->Change_State(L"Attack_S3");
+				break;
+			case 3:
+				m_pStateController->Change_State(L"Attack_R1");
+				break;
+			case 4:
+				m_pStateController->Change_State(L"Attack_S5_Protocol");
+				break;
+			case 5:
+				m_pStateController->Change_State(L"Attack_S6");
+				break;
+			case 6:
+				m_pStateController->Change_State(L"Attack_S2_Variant");
+				break;
+			}
+
+			m_iPreAnim = iRandom;
+		}
+		else if (20.f <= fDistToPlayer)
+		{
+			uniform_int_distribution<_uint> iRange(0, 1);
+			_uint iRandom = iRange(g_random);
+
+			while (iRandom == m_iPreAnim)
+			{
+				iRandom = iRange(g_random);
+			}
+
+			switch (iRandom)
+			{
+			case 0:
+				m_pStateController->Change_State(L"Attack_S6");
+				break;
+			case 1:
+				m_pStateController->Change_State(L"Attack_S5_Protocol");
+				break;
+			}
+
+			m_iPreAnim = iRandom;
+		}
+	}
 }
 
 

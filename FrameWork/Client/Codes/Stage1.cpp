@@ -167,6 +167,7 @@ HRESULT CStage1::NativeConstruct()
 	if (FAILED(Ready_Treasure_Chest()))
 	{
 		MSGBOX("Stage1 Box");
+		MSGBOX("Stage1 Box");
 		return E_FAIL;
 	}
 
@@ -178,11 +179,11 @@ HRESULT CStage1::NativeConstruct()
 
 	g_pGameInstance->Change_BaseCamera(L"Camera_Silvermane");
 
-	if (FAILED(Ready_Meteor()))
-	{
-		MSGBOX("Meteor");
-		return E_FAIL;
-	}
+	//if (FAILED(Ready_Meteor()))
+	//{
+	//	MSGBOX("Meteor");
+	//	return E_FAIL;
+	//}
 
 	//if (FAILED(Ready_Cinema()))
 	// {
@@ -215,8 +216,8 @@ HRESULT CStage1::NativeConstruct()
 
 _int CStage1::Tick(_double TimeDelta)
 {
-	_vector vTmp = g_pObserver->Get_PlayerPos();
-	cout << XMVectorGetX(vTmp) << ", " << XMVectorGetY(vTmp) << ", " << XMVectorGetZ(vTmp) << endl;
+	/*_vector vTmp = g_pObserver->Get_PlayerPos();
+	cout << XMVectorGetX(vTmp) << ", " << XMVectorGetY(vTmp) << ", " << XMVectorGetZ(vTmp) << endl;*/
 #ifdef  _DEBUG
 	_int iLevel = 0;
 	if (g_pDebugSystem->Get_LevelMoveCheck(iLevel))
@@ -373,6 +374,7 @@ _int CStage1::Tick(_double TimeDelta)
 	//		return -1;
 	//	pMonster->setActive(true);
 	//}
+
 	//if (g_pGameInstance->getkeyDown(DIK_NUMPAD3))
 	//{
 	//	CMonster_Bastion_Shooter* pMonster = nullptr;
@@ -380,13 +382,12 @@ _int CStage1::Tick(_double TimeDelta)
 	//		return -1;
 	//	pMonster->setActive(true);
 	//}
-
+	// 
 	//if (g_pGameInstance->getkeyDown(DIK_NUMPAD4))
 	//{
 	//	CMonster_Bastion_Healer* pMonster = nullptr;
 	//	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Test", L"Proto_GameObject_Monster_Bastion_Healer", &fPos, (CGameObject**)&pMonster)))
 	//		return -1;
-
 	//	pMonster->setActive(true);
 	//}
 	//if (g_pGameInstance->getkeyDown(DIK_NUMPAD5))
@@ -426,13 +427,13 @@ _int CStage1::Tick(_double TimeDelta)
 		m_pIndicatorManager->Active_Indicator();
 
 	/*For Cinema*/
-	//if (m_pScenemaManager)
-	//{
-	//	if (g_pGameInstance->getkeyDown(DIK_END))
-	//		m_pScenemaManager->Active_Scenema((_uint)CINEMA_INDEX::CINEMA1_1);;
+	if (m_pScenemaManager)
+	{
+		if (g_pGameInstance->getkeyDown(DIK_END))
+			m_pScenemaManager->Active_Scenema((_uint)CINEMA_INDEX::CINEMA3_1);;
 
-	//	m_pScenemaManager->Tick(TimeDelta);
-	//}
+		m_pScenemaManager->Tick(TimeDelta);
+	}
 
 
 	/*for Meteor*/
@@ -614,9 +615,11 @@ HRESULT CStage1::Ready_Player(const _tchar* LayerTag)
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Camera", L"Proto_GameObject_Camera_Silvermane")))
 		return E_FAIL;
 
-	//Test
+	////Test
 	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Test", L"Proto_GameObject_TestObject")))
 	//	return E_FAIL;
+	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Test", L"Proto_GameObject_MeshEffect_Test2")))
+	//	MSGBOX(L"메쉬 이펙트 테스트2 생성 실패");
 
 	return S_OK;
 }
@@ -709,11 +712,11 @@ HRESULT CStage1::Ready_UI(const _tchar* LayerTag)
 	//Blank_Ckey
 	CUI_Blank_CKey::UIACTIVEDESC Desc3;
 	ZeroMemory(&Desc3, sizeof(CUI_Blank_CKey::UIACTIVEDESC));
-	_tcscpy_s(Desc3.UIDesc.TextureTag, L"Texture_Blank_Ckey");
+	_tcscpy_s(Desc3.UIDesc.TextureTag, L"Texture_Fill_Ckey");
 	Desc3.UIDesc.bMinus = false;
 	Desc3.UIDesc.fAngle = 0.f;
 	Desc3.UIDesc.fPos = { 700.f, 390.f, 0.1f };
-	Desc3.UIDesc.fSize = { 60.f , 60.f };
+	Desc3.UIDesc.fSize = { 40.f , 40.f };
 	Desc3.UIDesc.IDTag = (_uint)GAMEOBJECT::UI_STATIC;
 
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_UI_BlankC", L"Proto_GameObject_UI_Blank_CKey", &Desc3)))
@@ -722,11 +725,11 @@ HRESULT CStage1::Ready_UI(const _tchar* LayerTag)
 	//Fill_Ckey
 	CUI_Fill_Ckey::UIACTIVEDESC Desc4;
 	ZeroMemory(&Desc4, sizeof(CUI_Fill_Ckey::UIACTIVEDESC));
-	_tcscpy_s(Desc4.UIDesc.TextureTag, L"Texture_Fill_Ckey");
+	_tcscpy_s(Desc4.UIDesc.TextureTag, L"Texture_Blank_Ckey");
 	Desc4.UIDesc.bMinus = false;
 	Desc4.UIDesc.fAngle = 0.f;
 	Desc4.UIDesc.fPos = { 700.f, 390.f, 0.09f };
-	Desc4.UIDesc.fSize = { 60.f , 60.f };
+	Desc4.UIDesc.fSize = { 40.f , 40.f };
 	Desc4.UIDesc.IDTag = (_uint)GAMEOBJECT::UI_STATIC;
 
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_UI_FillC", L"Proto_GameObject_UI_Fill_CKey", &Desc4)))
@@ -2558,9 +2561,6 @@ void CStage1::Free()
 {
 	CLevel::Free();
 
-	Safe_Release(m_pScenemaManager);
-	CScenematicManager::DestroyInstance();
-
 	for (auto& iter : m_pDumyDropData)
 		Safe_Delete(iter);
 	m_pDumyDropData.clear();
@@ -2572,7 +2572,7 @@ void CStage1::Free()
 	Safe_Release(m_pIndicatorManager);
 	CScenematicManager::DestroyInstance();
 	CIndicator_Manager::DestroyInstance();
-
+	CWeaponGenerator::DestroyInstance();
 
 	CDropManager::DestroyInstance();
 	Safe_Release(m_pTriggerSystem);

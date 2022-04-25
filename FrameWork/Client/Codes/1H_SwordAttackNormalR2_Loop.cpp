@@ -22,6 +22,8 @@ _int C1H_SwordAttackNormalR2_Loop::Tick(const _double& _dDeltaTime)
 
 	m_fHoldTime += (_float)_dDeltaTime;
 
+	m_pSilvermane->Set_IsAttack(true);
+
 	return _int();
 }
 
@@ -62,7 +64,7 @@ HRESULT C1H_SwordAttackNormalR2_Loop::EnterState()
 	m_pAnimationController->Set_RootMotion(true, true);
 
 	m_pSilvermane->Set_IsTrasceCamera(false);
-	m_pSilvermane->Set_IsAttack(false);
+	m_pSilvermane->Set_IsAttack(true);
 
 	if (!m_isShake)
 	{

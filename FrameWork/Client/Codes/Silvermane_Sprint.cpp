@@ -130,7 +130,6 @@ _int CSilvermane_Sprint::Input(const _double& _dDeltaTime)
 			return STATE_CHANGE;
 			break;
 		}
-		
 	}
 	if (g_pGameInstance->getMouseKeyDown(CInputDev::MOUSESTATE::MB_RBUTTON))
 	{

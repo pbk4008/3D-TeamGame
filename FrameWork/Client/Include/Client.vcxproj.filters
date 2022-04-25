@@ -1056,7 +1056,7 @@
     </Filter>
     <Filter Include="02.GameObject\03.Character\02.Boss\01.Boss\State\03.Dash\01.Flip">
       <UniqueIdentifier>{ea86cf91-ea2a-402e-85f5-0e259717833a}</UniqueIdentifier>
-	</Filter>
+    </Filter>
     <Filter Include="03.System\10.GuideUIManager">
       <UniqueIdentifier>{8c873b28-f498-4e9e-8d48-c7a54e04cfd4}</UniqueIdentifier>
     </Filter>
@@ -1116,6 +1116,12 @@
     </Filter>
     <Filter Include="03.System\07.Scenematic\01.Stage1\04. Shot 04\Cinema3_6">
       <UniqueIdentifier>{391dcb6c-27df-4ddc-9818-c679d8e7091d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_Healer\State_Healer\Execution">
+      <UniqueIdentifier>{fb49967b-287f-4d2f-8d18-791f8f1804ee}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\02.Map\05.Bridge">
+      <UniqueIdentifier>{39c78171-d0dc-4108-aad2-bed06c971f23}</UniqueIdentifier>
     </Filter>
     <Filter Include="02.GameObject\05.UI\06.Death">
       <UniqueIdentifier>{57b1e098-fece-4051-bc58-2f63d9365e5d}</UniqueIdentifier>
@@ -2405,7 +2411,7 @@
     </ClInclude>
     <ClInclude Include="..\Headers\Boss_BackFlip.h">
       <Filter>02.GameObject\03.Character\02.Boss\01.Boss\State\03.Dash\01.Flip</Filter>
-	</ClInclude>
+    </ClInclude>
     <ClInclude Include="..\Headers\GuideUIManager.h">
       <Filter>03.System\10.GuideUIManager</Filter>
     </ClInclude>
@@ -2414,6 +2420,18 @@
     </ClInclude>
     <ClInclude Include="..\Headers\UI_Guide_Texture.h">
       <Filter>02.GameObject\05.UI\05.Hud\03.Guide\01.GuideTex</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Healer_Execution.h">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Healer\State_Healer\Execution</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\UI_Fill_CKey2.h">
+      <Filter>02.GameObject\05.UI\01.UI_Ingame\02.UI_JumpNode\01.Fill</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\MeshEffect_Test2.h">
+      <Filter>02.GameObject\04.Effect\02.MeshEffect</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\BoxBridge.h">
+      <Filter>02.GameObject\02.Map\05.Bridge</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\UI_Death.h">
       <Filter>02.GameObject\05.UI\06.Death</Filter>
@@ -3173,7 +3191,7 @@
     <ClCompile Include="..\Codes\1H_FlinchLeft.cpp">
       <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\HIt</Filter>
     </ClCompile>
-    <ClCompile Include="..\Codes\Siilvermane_Hit.cpp">
+    <ClCompile Include="..\Codes\Silvermane_Hit.cpp">
       <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\HIt</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\JumpBox.cpp">
@@ -3673,7 +3691,7 @@
     </ClCompile>
     <ClCompile Include="..\Codes\Boss_BackFlip.cpp">
       <Filter>02.GameObject\03.Character\02.Boss\01.Boss\State\03.Dash\01.Flip</Filter>
-	</ClCompile>
+    </ClCompile>
     <ClCompile Include="..\Codes\GuideUIManager.cpp">
       <Filter>03.System\10.GuideUIManager</Filter>
     </ClCompile>
@@ -3682,6 +3700,18 @@
     </ClCompile>
     <ClCompile Include="..\Codes\UI_Guide_Texture.cpp">
       <Filter>02.GameObject\05.UI\05.Hud\03.Guide\01.GuideTex</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Healer_Execution.cpp">
+      <Filter>02.GameObject\03.Character\01.Monster\Bastion_Healer\State_Healer\Execution</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\UI_Fill_CKey2.cpp">
+      <Filter>02.GameObject\05.UI\01.UI_Ingame\02.UI_JumpNode\01.Fill</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\MeshEffect_Test2.cpp">
+      <Filter>02.GameObject\04.Effect\02.MeshEffect</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\BoxBridge.cpp">
+      <Filter>02.GameObject\02.Map\05.Bridge</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\UI_Death.cpp">
       <Filter>02.GameObject\05.UI\06.Death</Filter>

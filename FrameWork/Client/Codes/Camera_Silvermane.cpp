@@ -106,16 +106,9 @@ _int CCamera_Silvermane::Tick(_double _dDeltaTime)
 	}
 	else
 	{
-		if (false == g_pMainApp->IsDeltaTimeZero())
-		{
-			iProgress = Input_Key(_dDeltaTime);
-			if (NO_EVENT != iProgress)
-				return iProgress;
-		}
-
 		m_fExecutionChangeTime += (_float)_dDeltaTime * 0.2f;
 		_float fRatio = m_fExecutionChangeTime / 1.f;
-		if (1.f >= fRatio)
+		if (0.2f >= fRatio)
 		{
 			_matrix smatResult = m_pLocalTransform->Get_WorldMatrix() * m_pWorldTransform->Get_WorldMatrix();
 			_matrix smatWorld = m_pTransform->Get_WorldMatrix();
@@ -127,7 +120,15 @@ _int CCamera_Silvermane::Tick(_double _dDeltaTime)
 			m_pTransform->Set_WorldMatrix(smatWorld);
 		}
 		else
+		{
+			if (false == g_pMainApp->IsDeltaTimeZero())
+			{
+				iProgress = Input_Key(_dDeltaTime);
+				if (NO_EVENT != iProgress)
+					return iProgress;
+			}
 			m_pTransform->Set_WorldMatrix(m_pLocalTransform->Get_WorldMatrix() * m_pWorldTransform->Get_WorldMatrix());
+		}
 
 		SpringArm();
 	}

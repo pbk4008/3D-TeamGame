@@ -124,6 +124,9 @@ HRESULT CSilvermane_Execution::EnterState()
 	case (_uint)GAMEOBJECT::MONSTER_ANIMUS:
 		m_pAnimationController->SetUp_NextAnimation("SK_Silvermane.ao|A_Attack_Execution_BronzeAnimus_Player", false);
 		break;
+	case (_uint)GAMEOBJECT::MONSTER_HEALER:
+		m_pAnimationController->SetUp_NextAnimation("SK_Silvermane.ao|A_Attack_Execution_CrimsonCaster_Player", false);
+		break;
 	case (_uint)GAMEOBJECT::MIDDLE_BOSS:
 		m_pAnimationController->SetUp_NextAnimation("SK_Silvermane.ao|A_Attack_Finisher_Phalanxar_Player", false);
 		break;

@@ -35,6 +35,8 @@ private:
 	_bool m_bEffectCheck = false;
 	_bool m_bShakeCheck = false;
 
+	_bool m_bFirstCheckDist = false;
+
 public:
 	static CBoss_Attack_S5_Protocol* Create(ID3D11Device * pDevice, ID3D11DeviceContext * pDeviceContext, void* pArg = nullptr);
 	virtual void Free() override;

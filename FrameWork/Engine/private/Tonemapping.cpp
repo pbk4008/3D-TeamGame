@@ -67,10 +67,10 @@ HRESULT CTonemapping::ToneMapping(CTarget_Manager* pTargetMgr)
 		return E_FAIL;
 	if (FAILED(m_pTonmapBuffer->SetUp_TextureOnShader("g_HDRSpecularTexture", pTargetMgr->Get_SRV(L"Target_HDRSpecular"))))
 		return E_FAIL;
-	if (FAILED(m_pTonmapBuffer->SetUp_TextureOnShader("g_LuminanceTexture", pTargetMgr->Get_SRV(L"Target_Lum5"))))
-		return E_FAIL;
-	if (FAILED(m_pTonmapBuffer->SetUp_TextureOnShader("g_BloomTexture", pTargetMgr->Get_SRV(L"Target_Bloom"))))
-		return E_FAIL;
+	//if (FAILED(m_pTonmapBuffer->SetUp_TextureOnShader("g_LuminanceTexture", pTargetMgr->Get_SRV(L"Target_Lum5"))))
+	//	return E_FAIL;
+	//if (FAILED(m_pTonmapBuffer->SetUp_TextureOnShader("g_BloomTexture", pTargetMgr->Get_SRV(L"Target_Bloom"))))
+	//	return E_FAIL;
 
 	_float rcp_w = (1.f / m_viewport.Width);
 	_float rcp_h = (1.f / m_viewport.Height);
@@ -82,9 +82,8 @@ HRESULT CTonemapping::ToneMapping(CTarget_Manager* pTargetMgr)
 	if (FAILED(m_pTonmapBuffer->SetUp_ValueOnShader("rcp_bloom_tex_w", &rcp_w, sizeof(_float)))) return E_FAIL;
 	if (FAILED(m_pTonmapBuffer->SetUp_ValueOnShader("rcp_bloom_tex_h", &rcp_h, sizeof(_float)))) return E_FAIL;
 
-	m_pTonmapBuffer->Render(0);
+	if(FAILED(m_pTonmapBuffer->Render(2))) MSGBOX("Failed To Tonemapping Not Apply PassNumver");
 
-	//if (FAILED(pTargetMgr->End_MRT(m_pDeviceContext)))return E_FAIL;
 	if (FAILED(pTargetMgr->End_MRTNotClear(m_pDeviceContext))) return E_FAIL;
 
 	return S_OK;
