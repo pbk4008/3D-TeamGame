@@ -201,6 +201,7 @@ _int CBoss_Bastion_Judicator::Tick(_double TimeDelta)
 		{
 			if (m_pAnimator->Get_CurrentAnimation()->Is_Finished())
 			{
+				m_bDead = true;
 				m_pPanel->Set_Show(false);
 				m_pPanel->Set_UIRemove(true);
 				m_bdissolve = true;
@@ -676,7 +677,7 @@ void CBoss_Bastion_Judicator::Hit(const ATTACKDESC& _tAttackDesc)
 
 void CBoss_Bastion_Judicator::Execution()
 {
-	m_bDead = true;
+	//m_bDead = true;
 	m_IsAttack = false;
 	m_pWeapon->Set_IsAttack(false);
 

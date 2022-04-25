@@ -246,6 +246,7 @@ void CFlyingShield::Throw(const _fvector& _svTargetPos)
 	m_fLiveTime = m_fDis / m_fSpeed;
 	m_isAttack = true;
 	g_pObserver->Set_IsThrownObject(true);
+	m_pCollider->setShapeLayer((_uint)ELayer::Weapon);
 }
 
 HRESULT CFlyingShield::Ready_Components()
@@ -279,6 +280,7 @@ void CFlyingShield::Return()
 	m_fAccTime = 0.f;
 
 	m_pCollider->setShapeLayer((_uint)ELayer::MonsterWeapon);
+	Set_IsAttack(false);
 }
 
 void CFlyingShield::Spline_Throw()

@@ -109,7 +109,10 @@ void CGuideUIManager::Ready_UIObject(void)
 	assert(m_pBg);
 
 	vector<TRIGGER> vecPonit;
-	g_pGameInstance->LoadFile<TRIGGER>(vecPonit, L"../bin/SaveData/Trigger/Stage1_GuideUITrigger.dat");
+	if (FAILED(g_pGameInstance->LoadFile<TRIGGER>(vecPonit, L"../bin/SaveData/Trigger/Stage1_GuideUITrigger.dat")))
+		MSGBOX(L"가이드트리거 데이터 못읽음");
+	if(0 == vecPonit.size())
+		MSGBOX(L"가이드트리거 데이터 못읽음");
 	CUI_Guide_Texture* pGuideTex = nullptr;
 
 	m_vecGuideTex.reserve(vecPonit.size());

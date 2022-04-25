@@ -314,6 +314,7 @@ HRESULT CPlayer_Weapon::Ready_TrailEffects(const Desc& _tDesc)
 	case CWeapon::EType::Hammer_2H:
 	{
 		CTrailEffect::DESC tTrailDesc;
+		tTrailDesc.pOwnerTransform = m_pTransform;
 		tTrailDesc.fLength = 0.6f;
 		XMStoreFloat4x4(&tTrailDesc.matPivot, XMMatrixTranslation(0.f, 0.f, 1.5f));
 		tTrailDesc.wstrTextureTag = L"TrailBase";
