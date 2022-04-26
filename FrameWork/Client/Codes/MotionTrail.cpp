@@ -35,6 +35,17 @@ HRESULT CMotionTrail::NativeConstruct(const _uint _iSceneID, void* _pArg)
 
 _int CMotionTrail::Tick(_double _dDeltaTime)
 {
+	if (m_runcheck == true)
+		m_lifetime -= (_float)_dDeltaTime * 2.f;
+	else
+		m_lifetime -= (_float)_dDeltaTime * 2.5f;
+
+	if (m_lifetime <= 0.f)
+	{
+		m_lifetime = 1.f;
+		m_bActive = false;
+	}
+
 	return _int();
 }
 
@@ -43,16 +54,6 @@ _int CMotionTrail::LateTick(_double _dDeltaTime)
 	if (m_pRenderer)
 	{
 		m_pRenderer->Add_RenderGroup(CRenderer::RENDER_MOTIONTRAIL, this);
-	}
-
-	if(m_runcheck == true)
-		m_lifetime -= (_float)_dDeltaTime * 2.f;
-	else
-		m_lifetime -= (_float)_dDeltaTime * 2.5f;
-	if (m_lifetime <= 0.f)
-	{
-		m_lifetime = 1.f;
-		m_bActive = false;
 	}
 
 	return _int();
@@ -128,12 +129,13 @@ void CMotionTrail::Set_BoneMat(_fmatrix* bone)
 	memcpy(m_bonematrix, bone, sizeof(_matrix) * 256);
 }
 
-void CMotionTrail::Set_Info(_fmatrix world, _fmatrix weapon, _fmatrix shield, _float UVdvid)
+void CMotionTrail::Set_Info(_fmatrix world, _fmatrix weapon, _fmatrix shield, _float UVdvid, CModel* pCurWeapon)
 {
 	m_worldamt = world;
 	m_weaponworldmat = weapon;
 	m_shieldworldmat = shield;
 	m_UVdvid = UVdvid;
+	m_pWeapon = pCurWeapon;
 }
 
 void CMotionTrail::Set_Model(CModel* pModel, CModel* pWeapon,CModel* pShield)

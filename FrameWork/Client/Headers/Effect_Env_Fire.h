@@ -7,6 +7,7 @@
 BEGIN(Engine)
 class CVIBuffer_Rect;
 class CTexture;
+class CLight;
 END
 
 BEGIN(Client)
@@ -38,6 +39,11 @@ private:
 private:
 	CEffect::EFFECTDESC m_Desc;
 	_vector		m_scale = XMVectorZero();
+
+	_float		m_range = 0.f;
+	CLight*		m_plight = nullptr;
+	_float		m_param = -1.f;
+
 public:
 	static CEffect_Env_Fire* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);
 	virtual CGameObject* Clone(const _uint _iSceneID, void* pArg) override;

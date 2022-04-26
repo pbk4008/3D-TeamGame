@@ -134,11 +134,11 @@ HRESULT CStage1::NativeConstruct()
 		return E_FAIL;
 	}
 
-	//if (FAILED(Ready_MapObject()))
-	//{
-	//	MSGBOX("Stage1 MapObject");
-	//	return E_FAIL;
-	//}
+	if (FAILED(Ready_MapObject()))
+	{
+		MSGBOX("Stage1 MapObject");
+		return E_FAIL;
+	}
 
 	//if (FAILED(Ready_TriggerSystem(L"../bin/SaveData/Trigger/MonsterSpawnTrigger.dat")))
 	//{
@@ -191,11 +191,11 @@ HRESULT CStage1::NativeConstruct()
 	// 		return E_FAIL;
 	//}
 	
-	if (FAILED(Ready_Indicator()))
-	{
-		MSGBOX("Indicator");
-		return E_FAIL;
-	}
+	//if (FAILED(Ready_Indicator()))
+	//{
+	//	MSGBOX("Indicator");
+	//	return E_FAIL;
+	//}
 
 	//if (FAILED(Ready_Portal()))
 	//{
@@ -530,10 +530,10 @@ HRESULT CStage1::Ready_MapObject()
 				Desc.fEffectPlaySpeed = 1.f;
 				Desc.ParticleMat = XMLoadFloat4x4(&iter);
 				Desc.bUsingGravity = true;
+				Desc.IDTag = 3;
 
 				if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_NoisFire", L"Proto_GameObject_Effect_Env_Fire", &Desc)))
 					MSGBOX("Failed To Clone NoisFire");
-
 
 				//fire smoke
 				ZeroMemory(&Desc, sizeof(Desc));
@@ -546,6 +546,7 @@ HRESULT CStage1::Ready_MapObject()
 				Desc.ParticleMat = XMLoadFloat4x4(&iter);
 				Desc.ParticleMat.r[3] = XMVectorSetY(Desc.ParticleMat.r[3], XMVectorGetY(Desc.ParticleMat.r[3]) + 0.5f);
 				Desc.bUsingGravity = true;
+				Desc.IDTag = 3;
 
 				if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Effect_Env_Fire_Smoke", L"Proto_GameObject_Effect_Env_Fire", &Desc)))
 				{
@@ -745,6 +746,8 @@ HRESULT CStage1::Ready_UI(const _tchar* LayerTag)
 
 HRESULT CStage1::Ready_Light()
 {
+	g_pGameInstance->RemoveLight();
+
 	LIGHTDESC			LightDesc;
 
 	ZeroMemory(&LightDesc, sizeof(LIGHTDESC));
