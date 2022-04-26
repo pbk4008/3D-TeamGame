@@ -240,7 +240,7 @@ HRESULT CCamera_Silvermane::Ready_Components()
 	transformDesc.fRotationPerSec = 0.f;
 	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_Transform", L"Com_LocalTransform", (CComponent**)&m_pLocalTransform, &transformDesc)))
 		return E_FAIL;
-	m_vLocalOriginPos = { 1.f, 3.f, -2.f };
+	m_vLocalOriginPos = { 0.5f, 3.f, -2.f };
 	m_pLocalTransform->Set_State(CTransform::STATE_POSITION, XMVectorSetW(XMLoadFloat3(&m_vLocalOriginPos), 1.f));
 	m_pLocalTransform->SetUp_Rotation(_vector{ 1.f, 0.f, 0.f, 0.f }, XMConvertToRadians(30.f));
 

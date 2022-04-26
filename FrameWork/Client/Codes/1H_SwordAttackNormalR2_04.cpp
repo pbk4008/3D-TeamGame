@@ -75,6 +75,13 @@ HRESULT C1H_SwordAttackNormalR2_04::EnterState()
 	m_iTrailStartIndex = 12;
 	m_iTrailEndIndex = 31;
 
+	m_tShakeEvent.tWaveX.fAmplitude = 0.1f;
+	m_tShakeEvent.tWaveX.fFrequency = 10.f;
+	m_tShakeEvent.tWaveY.fAmplitude = 0.1f;
+	m_tShakeEvent.tWaveY.fFrequency = 6.f;
+	m_tShakeEvent.tWaveZ.fAmplitude = 0.1f;
+	m_tShakeEvent.tWaveZ.fFrequency = 8.f;
+
 	return S_OK;
 }
 

@@ -101,7 +101,12 @@ HRESULT C2H_HammerAttackR1_04Swap::EnterState()
 		return E_FAIL;
 	m_pAnimationController->Set_RootMotion(true, true);
 
-	m_tShakeEvent2.tWaveY.fAdditionalOffset = -0.6f;
+	m_tShakeEvent2.fDuration = 1.6f;
+	m_tShakeEvent2.fBlendOutTime = 0.3f;
+	m_tShakeEvent2.tWaveY.fAdditionalOffset = -1.f;
+	m_tShakeEvent2.tWaveZ.fAdditionalOffset = 0.6f;
+	m_tShakeEvent2.tWaveZ.fAmplitude = 0.06f;
+	m_tShakeEvent2.tWaveZ.fFrequency = 1.f;
 
 	m_iAttackStartIndex = 25;
 	m_iAttackEndIndex = 45;

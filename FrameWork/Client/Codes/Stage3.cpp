@@ -4,6 +4,7 @@
 #include "Silvermane.h"
 #include "Environment.h"
 #include "TestObj.h"
+#include "CapsuleObstacle.h"
 
 CStage3::CStage3(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
 	:CLevel(pDevice, pDeviceContext)
@@ -135,6 +136,30 @@ HRESULT CStage3::Ready_MapObject()
 	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE3, L"Layer_SkyBox", L"Proto_GameObject_SkyBox")))
 	//	return E_FAIL;
 
+	//// 기둥들 못지나다니게 막기
+	CCapsuleObstacle::DESC tObstacleDesc;
+	tObstacleDesc.vPosition = { 35.9281349f, -4.35070515f, 131.292603f };
+	tObstacleDesc.fHeight = 14.f;
+	tObstacleDesc.fRadius = 1.2f;
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE3, L"Layer_Obstacle", L"Proto_GameObject_CapsuleObstacle", &tObstacleDesc)))
+		return E_FAIL;
+	tObstacleDesc.vPosition = { 36.7101517f, -4.35070515f, 154.704269f };
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE3, L"Layer_Obstacle", L"Proto_GameObject_CapsuleObstacle", &tObstacleDesc)))
+		return E_FAIL;
+	tObstacleDesc.vPosition = { 48.3579216f, -4.35070515f, 159.164658f };
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE3, L"Layer_Obstacle", L"Proto_GameObject_CapsuleObstacle", &tObstacleDesc)))
+		return E_FAIL;
+	tObstacleDesc.vPosition = { 59.9142151f, -4.35070515f, 154.434952f };
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE3, L"Layer_Obstacle", L"Proto_GameObject_CapsuleObstacle", &tObstacleDesc)))
+		return E_FAIL;
+	tObstacleDesc.vPosition = { 59.7f, -4.5f, 130.1f };
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE3, L"Layer_Obstacle", L"Proto_GameObject_CapsuleObstacle", &tObstacleDesc)))
+		return E_FAIL;
+	tObstacleDesc.vPosition = { 58.8f, -4.5f, 131.7f };
+	tObstacleDesc.fHeight = 4.f;
+	tObstacleDesc.fRadius = 1.f;
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE3, L"Layer_Obstacle", L"Proto_GameObject_CapsuleObstacle", &tObstacleDesc)))
+		return E_FAIL;
 
 	return S_OK;
 }

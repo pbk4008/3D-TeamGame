@@ -28,7 +28,7 @@ _int C1H_SwordSupermanStab::Tick(const _double& _dDeltaTime)
 
 	_uint iCurkeyFrameIndex = m_pAnimationController->Get_CurKeyFrameIndex();
 
-	if (m_iAttackStartIndex < iCurkeyFrameIndex && m_iAttackEndIndex > iCurkeyFrameIndex)
+	if (m_iAttackStartIndex - 2 < iCurkeyFrameIndex && m_iAttackEndIndex > iCurkeyFrameIndex)
 	{
 		if (!m_isShake2)
 		{
@@ -114,7 +114,7 @@ HRESULT C1H_SwordSupermanStab::EnterState()
 	m_tShakeEvent2.tWaveY.fAdditionalOffset = -0.5f;
 	m_tShakeEvent2.tWaveZ.fAmplitude = 0.04f;
 	m_tShakeEvent2.tWaveZ.fFrequency = 1.f;
-	m_tShakeEvent2.tWaveZ.fAdditionalOffset = 0.3f;
+	m_tShakeEvent2.tWaveZ.fAdditionalOffset = 0.8f;
 
 	m_motiontrailidx = 0;
 
