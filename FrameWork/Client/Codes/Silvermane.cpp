@@ -425,7 +425,9 @@ _int CSilvermane::LateTick(_double _dDeltaTime)
 	//Raycast_Camera();
 
 	//g_pObserver->Set_PlayerPos(m_pTransform->Get_State(CTransform::STATE_POSITION));
-	g_pGameInstance->UpdateLightCam(0, m_pTransform->Get_State(CTransform::STATE_POSITION));
+
+	if(g_pGameInstance->getCurrentLevel() == 3)
+		g_pGameInstance->UpdateLightCam(0, m_pTransform->Get_State(CTransform::STATE_POSITION));
 
 
 	return _int();
@@ -2023,7 +2025,7 @@ const void CSilvermane::Raycast_DropBox(const _double& _dDeltaTime)
 				CTransform* pTargetTransform = pHitObject->Get_Transform();
 				_vector svTargetPos = pTargetTransform->Get_State(CTransform::STATE_POSITION);
 				_vector svTargetLook = XMVector3Normalize(pTargetTransform->Get_State(CTransform::STATE_LOOK));
-				svTargetPos += _vector{ 0.f, 0.8f, 0.f, 0.f } + svTargetLook * 0.6f;
+				svTargetPos += _vector{ 0.f, 0.8f, 0.f, 0.f } + svTargetLook * 1.f;
 				m_pFillCKey2->Set_Position(svTargetPos);
 			}
 

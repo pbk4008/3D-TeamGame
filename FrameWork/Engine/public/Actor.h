@@ -6,6 +6,8 @@
 #include "GameObject.h"
 BEGIN(Engine)
 
+class CLight;
+
 class ENGINE_DLL CActor abstract : public CGameObject
 {
 protected:
@@ -109,6 +111,10 @@ protected:
 	// motion blur
 	_bool			m_motionblurcheck = false;
 	_float			m_timer = 0.f;
+
+	// Light
+	CLight*			m_pActiveLight = nullptr;
+	_float			m_LightRange = 0.f;
 };
 END
 #endif

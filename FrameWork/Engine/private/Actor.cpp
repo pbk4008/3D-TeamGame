@@ -68,6 +68,21 @@ HRESULT CActor::NativeConstruct(const _uint _iSceneID, void* pArg)
 	m_dissolveGradientTex = g_pGameInstance->Clone_Component<CTexture>(0, L"Proto_Component_Texture");
 	if (FAILED(m_dissolveGradientTex->Change_Texture(L"DissovleGradient"))) MSGBOX("Failed to Change Texture DissovleTex");
 
+	//LIGHTDESC LightDesc;
+
+	//ZeroMemory(&LightDesc, sizeof(LIGHTDESC));
+	//LightDesc.eType = LIGHTDESC::TYPE_POINT;
+	//LightDesc.fRange = 7.f;
+	//LightDesc.vDiffuse = _float4(0.3686f, 04941.f, 0.60784f, 1.f);
+	//LightDesc.vSpecular = _float4(0.7f, 0.7f, 0.7f, 1.f);
+	//LightDesc.vAmbient = _float4(0.8f, 0.8f, 0.8f, 1.f);
+	//LightDesc.bactive = false;
+	//LightDesc.vPosition = _float3(0, 0, 0);
+
+	//m_LightRange = LightDesc.fRange;
+
+	//if (FAILED(g_pGameInstance->Add_Light(m_pDevice, m_pDeviceContext, LightDesc, &m_pActiveLight))) MSGBOX("Failed To Adding PointLight");
+
 	return S_OK;
 }
 
@@ -211,7 +226,6 @@ void CActor::Active_Effect(_uint iEffectIndex)
 		pEffect->setActive(true);
 		pEffect->Set_Reset(true);
 	}
-	
 }
 
 void CActor::Active_Effect(_uint iEffectIndex, _fvector vPivot)
