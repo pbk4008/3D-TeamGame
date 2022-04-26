@@ -156,7 +156,7 @@ PS_OUT_Alpha PS_MAIN_Alpha (PS_IN In)
 	Out.Color = g_DiffuseTexture.Sample(DefaultSampler, float2(In.vTexUV.x * g_vTiling.x, In.vTexUV.y * g_vTiling.y));
 	if (g_isCustomColor)
 	{
-		Out.Color.xyz *= g_vColor.xyz;
+		Out.Color.rgb *= g_vColor.rgb;
 	}
 	Out.Color.a *= g_fAlpha;
 	
@@ -295,7 +295,7 @@ technique11			DefaultTechnique
 	{
 		SetRasterizerState(CullMode_None);
 		SetDepthStencilState(ZBufferDisable, 0);
-		SetBlendState(AlphaBlending, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+		SetBlendState(AlphaAdditive, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
 
 		/* 진입점함수를 지정한다. */
 		VertexShader = compile vs_5_0 VS_MAIN_FLOW();

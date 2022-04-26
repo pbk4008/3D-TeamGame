@@ -37,6 +37,28 @@ _int C2H_HammerAttackSprintR1::Tick(const _double& _dDeltaTime)
 		}
 	}
 
+	if (18 < iCurKeyFrameIndex)
+	{
+		if (!m_isShake3)
+		{
+			CCameraShake::SHAKEEVENT tShakeEvent;
+			tShakeEvent.fDuration = 3.f;
+			tShakeEvent.fBlendInTime = 0.5f;
+			tShakeEvent.fBlendOutTime = 2.f;
+			tShakeEvent.tWaveY.fAdditionalOffset = 2.f;
+			tShakeEvent.tWaveY.fFrequency = 0.01f;
+			tShakeEvent.tWaveY.fAmplitude = 0.01f;
+			tShakeEvent.tWaveZ.fAdditionalOffset = -4.f;
+			tShakeEvent.tWaveZ.fFrequency = 0.01f;
+			tShakeEvent.tWaveZ.fAmplitude = 0.01f;
+
+
+			_float3 vPos; XMStoreFloat3(&vPos, m_pTransform->Get_State(CTransform::STATE_POSITION));
+			g_pShakeManager->Shake(tShakeEvent, vPos);
+			m_isShake3 = true;
+		}
+	}
+
 	if (iCurKeyFrameIndex <= 35)
 	{
 		m_fMTAcc += g_fDeltaTime;
@@ -129,6 +151,7 @@ HRESULT C2H_HammerAttackSprintR1::ExitState()
 	if (FAILED(__super::ExitState()))
 		return E_FAIL;
 
+	m_isShake3 = false;
 	return S_OK;
 }
 

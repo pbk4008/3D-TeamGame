@@ -37,7 +37,6 @@ _int C2H_HammerAttackR1_04Swap::Tick(const _double& _dDeltaTime)
 		}
 	}
 
-
 	if (33 < iCurKeyFrameIndex && !m_isRangeAttack)
 	{
 		// ÆÄÆ¼Å¬
@@ -119,7 +118,6 @@ HRESULT C2H_HammerAttackR1_04Swap::ExitState()
 	if (FAILED(__super::ExitState()))
 		return E_FAIL;
 
-	m_isShake3 = false;
 	return S_OK;
 }
 

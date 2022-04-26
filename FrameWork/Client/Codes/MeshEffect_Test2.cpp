@@ -102,7 +102,7 @@ _int CMeshEffect_Test2::Tick(_double _dDeltaTime)
 		// decoLines
 		// magicCircle020
 		// noise17
-		if (FAILED(m_pMaterial->Change_Texture("g_DiffuseTexture", TEXTURETYPE::TEX_DIFFUSE, L"Venus_Trail")))
+		if (FAILED(m_pMaterial->Change_Texture("g_DiffuseTexture", TEXTURETYPE::TEX_DIFFUSE, L"Potal_Diffuse")))
 			return -1;
 	}
 	if (g_pGameInstance->getkeyDown(DIK_SEMICOLON))
@@ -119,6 +119,7 @@ _int CMeshEffect_Test2::Tick(_double _dDeltaTime)
 		// Model_Twirl
 		// Model_Smoke
 		// Model_Sphere00
+		// Model_Portal
 		//// FX12
 		// Model_Circle_Midpoly
 		// Model_CylinderBend04
@@ -155,7 +156,7 @@ _int CMeshEffect_Test2::Tick(_double _dDeltaTime)
 		// Model_PlaneBend
 		// Model_Tornado07
 		Safe_Release(m_pModel);
-		m_pModel = g_pGameInstance->Clone_Component<CModel>((_uint)SCENEID::SCENE_STATIC, L"Model_Cylinder_LowPoly_Idst");
+		m_pModel = g_pGameInstance->Clone_Component<CModel>((_uint)SCENEID::SCENE_STATIC, L"Model_Portal");
 		_uint iNumMesh = m_pModel->Get_NumMeshContainer();
 		for (_uint i = 0; i < iNumMesh; ++i)
 		{
@@ -177,47 +178,27 @@ _int CMeshEffect_Test2::Tick(_double _dDeltaTime)
 
 	///////////////////////////////////// UV
 	m_vTiling.x = 1.f;
-	m_vTiling.y = 6.f;
-	//// X
-	//m_isFlowX = true;
-	//m_fFlowSpeedX = 0.2f;
-	//m_vPlusUV.x += m_fFlowSpeedX * (_float)_dDeltaTime * -1.f;
-	////if (1.f < m_vPlusUV.x)
-	////	m_vPlusUV.x = 0.f;
-	//if (0.f >= m_vPlusUV.x)
-	//	m_vPlusUV.x = 1.f;
-	//// Y
-	//m_isFlowY = true;
-	//m_fFlowSpeedY = 0.2f;
-	//m_vPlusUV.y += m_fFlowSpeedY * (_float)_dDeltaTime * -1.f;
-	////if (1.f < m_vPlusUV.y)
-	////	m_vPlusUV.y = 0.f;
-	//if (0.f >= m_vPlusUV.y)
-	//	m_vPlusUV.y = 1.f;
-
+	m_vTiling.y = 1.f;
+	// X
+	m_isFlowX = true;
+	m_fFlowSpeedX = 0.2f;
+	m_vPlusUV.x += m_fFlowSpeedX * (_float)_dDeltaTime;
+	if (1.f < m_vPlusUV.x)
+		m_vPlusUV.x = 0.f;
+	// Y
+	m_isFlowY = true;
+	m_fFlowSpeedY = 0.2f;
+	m_vPlusUV.y += m_fFlowSpeedY * (_float)_dDeltaTime;
+	if (1.f < m_vPlusUV.y)
+		m_vPlusUV.y = 0.f;
 
 	///////////////////////////////// Color
 	m_isCustomColor = true;
-	m_vColor = { 1.f, 0.5f, 0.3f };
+	m_vColor = { 1.f, 1.f, 1.f };
 
 
 	//////////////////////////////////////////// Scale
-	//m_vScale = { 40.f, 40.f, 40.f };
-
-	
-	_float scales = 1000.;
-	//m_vScale = { 0.5f, 0.5f, scales };
-
-	m_vScale.x += (_float)_dDeltaTime * -0.7f;
-	if (0.f >= m_vScale.x)
-		m_vScale.x = 1.f;
-
-	m_vScale.y += (_float)_dDeltaTime * -0.7f;
-	if (0.f >= m_vScale.y)
-		m_vScale.y = 1.f;
-
-
-	m_vScale.z = scales;
+	m_vScale = { 1.f, 1.f, 1.f };
 	//m_vScale.x += 0.1f * (_float)_dDeltaTime;
 	//if (0.01f < m_vScale.x)
 	//	m_vScale.x = 0.001f;
@@ -230,10 +211,10 @@ _int CMeshEffect_Test2::Tick(_double _dDeltaTime)
 	m_pTransform->Scaling(_vector{ m_vScale.x, m_vScale.y, m_vScale.z, 0.f });
 
 	//////////////////////////////////////////// Rotation
-	m_pTransform->SetUp_Rotation(_float3(90.f, 0.f, 0.f));
+	m_pTransform->SetUp_Rotation(_float3(0.f, 0.f, 0.f));
 
 	///////////////////////////////////////////// Position
-	m_pTransform->Set_State(CTransform::STATE_POSITION, _vector{ 0.f, 0.f, 0.f, 1.f });
+	m_pTransform->Set_State(CTransform::STATE_POSITION, _vector{ 0.f, -4.f, 0.f, 1.f });
 
 	return _int();
 }
@@ -254,7 +235,7 @@ _int CMeshEffect_Test2::LateTick(_double _dDeltaTime)
 	//	m_bRemove = true;
 	//}
 
-	m_pRenderer->Add_RenderGroup(CRenderer::RENDER_NONALPHA, this);
+	m_pRenderer->Add_RenderGroup(CRenderer::RENDER_ALPHA, this);
 
 	return _int();
 }
@@ -264,11 +245,11 @@ HRESULT CMeshEffect_Test2::Render()
 	if (FAILED(__super::Render()))
 		return E_FAIL;
 
-	_float weight = 0.3f;
-	m_pModel->SetUp_ValueOnShader("g_Weight", &weight, sizeof(_float));
+	//_float weight = 0.1f;
+	//m_pModel->SetUp_ValueOnShader("g_Weight", &weight, sizeof(_float));
 
-	_float empower = 0.35f;
-	m_pModel->SetUp_ValueOnShader("g_empower", &empower, sizeof(_float));
+	//_float empower = 0.35f;
+	//m_pModel->SetUp_ValueOnShader("g_empower", &empower, sizeof(_float));
 
 
 	for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
