@@ -70,6 +70,7 @@
 #include "Cinema3_4.h"
 #include "Cinema3_5.h"
 #include "Cinema3_6.h"
+#include "MeshEffect_Razer.h"
 
 CStage1::CStage1()
 	: m_pTriggerSystem(nullptr)
@@ -122,11 +123,11 @@ HRESULT CStage1::NativeConstruct()
 		return E_FAIL;
 	}
 
-	if (FAILED(Ready_Trigger_Jump()))
-	{
-		MSGBOX("Stage1 Jump");
-		return E_FAIL;
-	}
+	//if (FAILED(Ready_Trigger_Jump()))
+	//{
+	//	MSGBOX("Stage1 Jump");
+	//	return E_FAIL;
+	//}
 
 	if (FAILED(Ready_Player(L"Layer_Silvermane")))
 	{
@@ -152,11 +153,11 @@ HRESULT CStage1::NativeConstruct()
 		return E_FAIL;
 	}
 
-	if (FAILED(Ready_Data_Effect()))
-	{
-		MSGBOX("Stage1 Effect");
-		return E_FAIL;
-	}
+	//if (FAILED(Ready_Data_Effect()))
+	//{
+	//	MSGBOX("Stage1 Effect");
+	//	return E_FAIL;
+	//}
 
 	if (FAILED(Ready_UI(L"Layer_UI")))
 	{
@@ -191,11 +192,11 @@ HRESULT CStage1::NativeConstruct()
 	// 		return E_FAIL;
 	//}
 	
-	if (FAILED(Ready_Indicator()))
-	{
-		MSGBOX("Indicator");
-		return E_FAIL;
-	}
+	//if (FAILED(Ready_Indicator()))
+	//{
+	//	MSGBOX("Indicator");
+	//	return E_FAIL;
+	//}
 
 	//if (FAILED(Ready_Portal()))
 	//{
@@ -347,6 +348,16 @@ _int CStage1::Tick(_double TimeDelta)
 #pragma region Using Debug
 	_float3 fPos = { 0.f,5.f,20.f };
 
+	if (g_pGameInstance->getkeyDown(DIK_NUMPAD0))
+	{
+		CMeshEffect_Razer* pRazer = nullptr;
+		CGameObject* pPlayer = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Layer_Silvermane")->front();
+		XMStoreFloat3(&fPos, pPlayer->Get_Transform()->Get_State(CTransform::STATE_POSITION) - _vector{ 0.f, 2.f, 0.f, 0.f });
+		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Test", L"Proto_GameObject_MeshEffect_Razer", &fPos, (CGameObject**)&pRazer)))
+			return -1;
+		//pRazer->setActive(true);
+	}
+
 	//if (g_pGameInstance->getkeyDown(DIK_NUMPAD0))
 	//{
 	//	CBoss_Bastion_Judicator* pMidBoss = nullptr;
@@ -387,13 +398,13 @@ _int CStage1::Tick(_double TimeDelta)
 	//	pMonster->setActive(true);
 	//}
 	// 
-	if (g_pGameInstance->getkeyDown(DIK_NUMPAD4))
-	{
-		CMonster_Bastion_Healer* pMonster = nullptr;
-		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Test", L"Proto_GameObject_Monster_Bastion_Healer", &fPos, (CGameObject**)&pMonster)))
-			return -1;
-		pMonster->setActive(true);
-	}
+	//if (g_pGameInstance->getkeyDown(DIK_NUMPAD4))
+	//{
+	//	CMonster_Bastion_Healer* pMonster = nullptr;
+	//	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Test", L"Proto_GameObject_Monster_Bastion_Healer", &fPos, (CGameObject**)&pMonster)))
+	//		return -1;
+	//	pMonster->setActive(true);
+	//}
 	//if (g_pGameInstance->getkeyDown(DIK_NUMPAD5))
 	//{
 	//	CMonster_Bastion_2HSword* pMonster = nullptr;

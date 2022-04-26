@@ -2448,6 +2448,9 @@
     <ClInclude Include="..\Headers\CapsuleObstacle.h">
       <Filter>02.GameObject\02.Map\05.Obstacle</Filter>
     </ClInclude>
+    <ClInclude Include="..\Headers\MeshEffect_Razer.h">
+      <Filter>02.GameObject\04.Effect\02.MeshEffect</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -3730,6 +3733,9 @@
     </ClCompile>
     <ClCompile Include="..\Codes\CapsuleObstacle.cpp">
       <Filter>02.GameObject\02.Map\05.Obstacle</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\MeshEffect_Razer.cpp">
+      <Filter>02.GameObject\04.Effect\02.MeshEffect</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
