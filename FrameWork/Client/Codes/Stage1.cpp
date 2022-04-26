@@ -134,11 +134,11 @@ HRESULT CStage1::NativeConstruct()
 		return E_FAIL;
 	}
 
-	if (FAILED(Ready_MapObject()))
-	{
-		MSGBOX("Stage1 MapObject");
-		return E_FAIL;
-	}
+	//if (FAILED(Ready_MapObject()))
+	//{
+	//	MSGBOX("Stage1 MapObject");
+	//	return E_FAIL;
+	//}
 
 	//if (FAILED(Ready_TriggerSystem(L"../bin/SaveData/Trigger/MonsterSpawnTrigger.dat")))
 	//{
@@ -164,12 +164,12 @@ HRESULT CStage1::NativeConstruct()
 		return E_FAIL;
 	}
 
-	if (FAILED(Ready_Treasure_Chest()))
-	{
-		MSGBOX("Stage1 Box");
-		MSGBOX("Stage1 Box");
-		return E_FAIL;
-	}
+	//if (FAILED(Ready_Treasure_Chest()))
+	//{
+	//	MSGBOX("Stage1 Box");
+	//	MSGBOX("Stage1 Box");
+	//	return E_FAIL;
+	//}
 
 	if (FAILED(Ready_GameManager()))
 	{
@@ -191,11 +191,11 @@ HRESULT CStage1::NativeConstruct()
 	// 		return E_FAIL;
 	//}
 	
-	//if (FAILED(Ready_Indicator()))
-	//{
-	//	MSGBOX("Indicator");
-	//	return E_FAIL;
-	//}
+	if (FAILED(Ready_Indicator()))
+	{
+		MSGBOX("Indicator");
+		return E_FAIL;
+	}
 
 	//if (FAILED(Ready_Portal()))
 	//{
@@ -387,13 +387,13 @@ _int CStage1::Tick(_double TimeDelta)
 	//	pMonster->setActive(true);
 	//}
 	// 
-	//if (g_pGameInstance->getkeyDown(DIK_NUMPAD4))
-	//{
-	//	CMonster_Bastion_Healer* pMonster = nullptr;
-	//	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Test", L"Proto_GameObject_Monster_Bastion_Healer", &fPos, (CGameObject**)&pMonster)))
-	//		return -1;
-	//	pMonster->setActive(true);
-	//}
+	if (g_pGameInstance->getkeyDown(DIK_NUMPAD4))
+	{
+		CMonster_Bastion_Healer* pMonster = nullptr;
+		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Test", L"Proto_GameObject_Monster_Bastion_Healer", &fPos, (CGameObject**)&pMonster)))
+			return -1;
+		pMonster->setActive(true);
+	}
 	//if (g_pGameInstance->getkeyDown(DIK_NUMPAD5))
 	//{
 	//	CMonster_Bastion_2HSword* pMonster = nullptr;
@@ -623,8 +623,8 @@ HRESULT CStage1::Ready_Player(const _tchar* LayerTag)
 	////Test
 	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Test", L"Proto_GameObject_TestObject")))
 	//	return E_FAIL;
-	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Test", L"Proto_GameObject_MeshEffect_Test2")))
-	//	MSGBOX(L"메쉬 이펙트 테스트2 생성 실패");
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Test", L"Proto_GameObject_MeshEffect_Test2")))
+		MSGBOX(L"메쉬 이펙트 테스트2 생성 실패");
 
 	return S_OK;
 }
@@ -782,9 +782,9 @@ HRESULT CStage1::Ready_Light()
 
 HRESULT CStage1::Ready_GameManager(void)
 {
-	g_pDropManager = CDropManager::GetInstance();
-	if (FAILED(g_pDropManager->NativeConstruct((SCENEID::SCENE_STAGE1))))
-		return E_FAIL;
+	//g_pDropManager = CDropManager::GetInstance();
+	//if (FAILED(g_pDropManager->NativeConstruct((SCENEID::SCENE_STAGE1))))
+	//	return E_FAIL;
 
 	m_pIndicatorManager = GET_INSTANCE(CIndicator_Manager);
 	//m_pScenemaManager = GET_INSTANCE(CScenematicManager);

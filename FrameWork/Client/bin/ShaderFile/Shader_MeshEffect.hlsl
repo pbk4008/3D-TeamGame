@@ -2,7 +2,11 @@
 #include "Shader_Share.hlsli"
 #include "Shader_ShareFuntion.hlsli"
 
+// Textures
 texture2D	g_DiffuseTexture;
+texture2D	g_NormalTex;
+texture2D	g_MaskTex;
+texture2D	g_NoiseTex;
 // Time
 float g_fLifeTime;
 float g_fAccTime;
@@ -80,8 +84,6 @@ VS_OUT VS_MAIN_FLOW(VS_IN In)
 		float2 TexUV = { Out.vTexUV.y, Out.vTexUV.x };
 		Out.vTexUV = TexUV;
 	}
-
-
 
 	Out.vProjPos = Out.vPosition;
 

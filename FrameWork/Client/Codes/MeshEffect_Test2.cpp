@@ -102,7 +102,7 @@ _int CMeshEffect_Test2::Tick(_double _dDeltaTime)
 		// decoLines
 		// magicCircle020
 		// noise17
-		if (FAILED(m_pMaterial->Change_Texture("g_DiffuseTexture", TEXTURETYPE::TEX_DIFFUSE, L"Lightning_Beam_Tile")))
+		if (FAILED(m_pMaterial->Change_Texture("g_DiffuseTexture", TEXTURETYPE::TEX_DIFFUSE, L"magic_aura01")))
 			return -1;
 	}
 	if (g_pGameInstance->getkeyDown(DIK_SEMICOLON))
@@ -155,7 +155,7 @@ _int CMeshEffect_Test2::Tick(_double _dDeltaTime)
 		// Model_PlaneBend
 		// Model_Tornado07
 		Safe_Release(m_pModel);
-		m_pModel = g_pGameInstance->Clone_Component<CModel>((_uint)SCENEID::SCENE_STATIC, L"Model_Tornado06");
+		m_pModel = g_pGameInstance->Clone_Component<CModel>((_uint)SCENEID::SCENE_STATIC, L"Model_CylinderBend07");
 		_uint iNumMesh = m_pModel->Get_NumMeshContainer();
 		for (_uint i = 0; i < iNumMesh; ++i)
 		{
@@ -166,10 +166,10 @@ _int CMeshEffect_Test2::Tick(_double _dDeltaTime)
 
 
 	///////////////////////////////////// Alpha
-	//if(0.f < m_fAlpha)
+	//if (0.f < m_fAlpha)
 	//	m_fAlpha += -2.f * (_float)_dDeltaTime;
 	//m_fAlpha += m_fFlowSpeedAlpha * (_float)_dDeltaTime;
-	//if (0.f >= m_fAlpha)
+	//if (0.2f >= m_fAlpha)
 	//	m_fFlowSpeedAlpha = 1.f;
 	//else if (1.f <= m_fAlpha)
 	//	m_fFlowSpeedAlpha = -1.f;
@@ -177,7 +177,7 @@ _int CMeshEffect_Test2::Tick(_double _dDeltaTime)
 
 	///////////////////////////////////// UV
 	m_isReverse = false;
-	m_vTiling.x = 2.f;
+	m_vTiling.x = 1.f;
 	m_vTiling.y = 6.f;
 	// X
 	m_isFlowX = true;
@@ -197,7 +197,7 @@ _int CMeshEffect_Test2::Tick(_double _dDeltaTime)
 		m_vPlusUV.y = 1.f;
 	///////////////////////////////// Color
 	m_isCustomColor = true;
-	m_vColor = { 1.f, 1.f, 1.f };
+	m_vColor = { 0.1f, 0.1f, 1.f };
 
 
 	//////////////////////////////////////////// Scale
@@ -214,7 +214,8 @@ _int CMeshEffect_Test2::Tick(_double _dDeltaTime)
 	m_pTransform->Scaling(_vector{ m_vScale.x, m_vScale.y, m_vScale.z, 0.f });
 
 	//////////////////////////////////////////// Rotation
-	m_pTransform->SetUp_Rotation(_float3(90.f, 0.f, 0.f));
+	m_pTransform->SetUp_Rotation(_float3(45.f, 0.f, 0.f));
+
 
 	///////////////////////////////////////////// Position
 	m_pTransform->Set_State(CTransform::STATE_POSITION, _vector{ 0.f, -4.f, 0.f, 1.f });
@@ -261,9 +262,26 @@ HRESULT CMeshEffect_Test2::Ready_Components()
 {
 	if (FAILED(m_pTexture->Change_Texture(L"smoke03")))
 		return E_FAIL;
+	if (FAILED(m_pNormalTex->Change_Texture(L"smoke03")))
+		return E_FAIL;
+	if (FAILED(m_pMaskTex->Change_Texture(L"smoke03")))
+		return E_FAIL;
+	if (FAILED(m_pNoiseTex->Change_Texture(L"smoke03")))
+		return E_FAIL;
+
+
 	if (FAILED(m_pMaterial->Set_Texture("g_DiffuseTexture", TEXTURETYPE::TEX_DIFFUSE, m_pTexture, 0)))
 		return E_FAIL;
 	Safe_AddRef(m_pTexture);
+	if (FAILED(m_pMaterial->Set_Texture("g_NormalTex", TEXTURETYPE::TEX_NORMAL, m_pNormalTex, 0)))
+		return E_FAIL;
+	Safe_AddRef(m_pNormalTex);
+	if (FAILED(m_pMaterial->Set_Texture("g_MaskTex", TEXTURETYPE::TEX_MASK, m_pMaskTex, 0)))
+		return E_FAIL;
+	Safe_AddRef(m_pMaskTex);
+	if (FAILED(m_pMaterial->Set_Texture("g_NoiseTex", TEXTURETYPE::TEX_TINT, m_pNoiseTex, 0)))
+		return E_FAIL;
+	Safe_AddRef(m_pNoiseTex);
 
 	m_pModel = g_pGameInstance->Clone_Component<CModel>((_uint)SCENEID::SCENE_STATIC, L"Model_AuraHousya");
 	if (FAILED(m_pModel->Add_Material(m_pMaterial, 0)))
