@@ -1136,8 +1136,8 @@
       <UniqueIdentifier>{97066897-9624-4786-8d1e-262419218ae8}</UniqueIdentifier>
     </Filter>
     <Filter Include="02.GameObject\96.Weapon\11.CinemaWeapon">
-    </Filter>
       <UniqueIdentifier>{23f1b595-3107-4b66-bb6b-199555507e33}</UniqueIdentifier>
+   </Filter>
     <Filter Include="02.GameObject\04.Effect\02.MeshEffect\01.EffectBossMesh">
       <UniqueIdentifier>{c754efa5-f05f-4f81-b1ef-15984349f16b}</UniqueIdentifier>
     </Filter>
@@ -2480,7 +2480,6 @@
     </ClInclude>
     <ClInclude Include="..\Headers\MeshEffect_Jupiter.h">
       <Filter>02.GameObject\04.Effect\02.MeshEffect</Filter>
->>>>>>> main
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

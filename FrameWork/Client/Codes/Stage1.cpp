@@ -179,23 +179,23 @@ HRESULT CStage1::NativeConstruct()
 	}
 
 	//Hammer_Dust
-	CEffect_Hammer_Dust* pHammer = nullptr;
-	CEffect_Hammer_Dust::EFFECTDESC Desc;
-	ZeroMemory(&Desc, sizeof(Desc));
+	//CEffect_Hammer_Dust* pHammer = nullptr;
+	//CEffect_Hammer_Dust::EFFECTDESC Desc;
+	//ZeroMemory(&Desc, sizeof(Desc));
 
-	_tcscpy_s(Desc.TextureTag, L"Hammer_Dust_2");
-	Desc.iRenderPassNum = 1;
-	Desc.iImageCountX = 8;
-	Desc.iImageCountY = 4;
-	Desc.fFrame = 32.f;
-	Desc.fEffectPlaySpeed = 1.f;
+	//_tcscpy_s(Desc.TextureTag, L"Hammer_Dust_2");
+	//Desc.iRenderPassNum = 1;
+	//Desc.iImageCountX = 8;
+	//Desc.iImageCountY = 4;
+	//Desc.fFrame = 32.f;
+	//Desc.fEffectPlaySpeed = 1.f;
 
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Effect_Hammer_Dust", L"Proto_GameObject_Effect_Hammer_Dust", &Desc, (CGameObject**)&pHammer)))
-	{
-		MSGBOX("Failed to Creating Effect_Hammer_Dust in CStage1::Ready_Effect()");
-		return E_FAIL;
+	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Effect_Hammer_Dust", L"Proto_GameObject_Effect_Hammer_Dust", &Desc, (CGameObject**)&pHammer)))
+	//{
+	//	MSGBOX("Failed to Creating Effect_Hammer_Dust in CStage1::Ready_Effect()");
+	//	return E_FAIL;
 
-	}
+	//}
 
 	g_pGameInstance->Change_BaseCamera(L"Camera_Silvermane");
 
@@ -234,7 +234,7 @@ HRESULT CStage1::NativeConstruct()
 
 	g_pGameInstance->PlayBGM(L"Stage1_BGM");
 	
-	m_pScenemaManager->Active_Scenema((_uint)CINEMA_INDEX::CINEMA1_1);;
+	m_pScenemaManager->Active_Scenema((_uint)CINEMA_INDEX::CINEMA1_1);
 
 	return S_OK;
 }
