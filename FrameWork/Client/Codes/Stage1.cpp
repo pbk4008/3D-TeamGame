@@ -216,24 +216,24 @@ HRESULT CStage1::NativeConstruct()
 	//	return E_FAIL;
 	//}
 
-	if (FAILED(Ready_Wall()))
-	{
-		MSGBOX("Wall");
-		return E_FAIL;
-	}
+	//if (FAILED(Ready_Wall()))
+	//{
+	//	MSGBOX("Wall");
+	//	return E_FAIL;
+	//}
 
-	if (FAILED(Ready_Pot()))
-		return E_FAIL;
+	//if (FAILED(Ready_Pot()))
+	//	return E_FAIL;
 
-	if (FAILED(Ready_Cinema()))
-	{
-		MSGBOX("Cinema");
-		return E_FAIL;
-	}
+	//if (FAILED(Ready_Cinema()))
+	//{
+	//	MSGBOX("Cinema");
+	//	return E_FAIL;
+	//}
 
 	g_pGameInstance->PlayBGM(L"Stage1_BGM");
 	
-	m_pScenemaManager->Active_Scenema((_uint)CINEMA_INDEX::CINEMA1_1);
+	//m_pScenemaManager->Active_Scenema((_uint)CINEMA_INDEX::CINEMA1_1);
 
 	return S_OK;
 }
@@ -435,13 +435,13 @@ _int CStage1::Tick(_double TimeDelta)
 	//	pMonster->setActive(true);
 	//}
 	// 
-	//if (g_pGameInstance->getkeyDown(DIK_NUMPAD4))
-	//{
-	//	CMonster_Bastion_Healer* pMonster = nullptr;
-	//	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Test", L"Proto_GameObject_Monster_Bastion_Healer", &fPos, (CGameObject**)&pMonster)))
-	//		return -1;
-	//	pMonster->setActive(true);
-	//}
+	if (g_pGameInstance->getkeyDown(DIK_NUMPAD4))
+	{
+		CMonster_Bastion_Healer* pMonster = nullptr;
+		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Test", L"Proto_GameObject_Monster_Bastion_Healer", &fPos, (CGameObject**)&pMonster)))
+			return -1;
+		pMonster->setActive(true);
+	}
 	//if (g_pGameInstance->getkeyDown(DIK_NUMPAD5))
 	//{
 	//	CMonster_Bastion_2HSword* pMonster = nullptr;
@@ -479,13 +479,13 @@ _int CStage1::Tick(_double TimeDelta)
 		m_pIndicatorManager->Active_Indicator();
 
 	/*For Cinema*/
-	if (m_pScenemaManager)
-	{
-		if (g_pGameInstance->getkeyDown(DIK_END))
-			m_pScenemaManager->Active_Scenema((_uint)CINEMA_INDEX::CINEMA1_2);
+	//if (m_pScenemaManager)
+	//{
+	//	if (g_pGameInstance->getkeyDown(DIK_END))
+	//		m_pScenemaManager->Active_Scenema((_uint)CINEMA_INDEX::CINEMA1_2);
 
-		m_pScenemaManager->Tick(TimeDelta);
-	}
+	//	m_pScenemaManager->Tick(TimeDelta);
+	//}
 	//if (m_pScenemaManager)
 	//{
 	//	m_pScenemaManager->Tick(TimeDelta);
@@ -512,13 +512,6 @@ _int CStage1::Tick(_double TimeDelta)
 	if (g_pGuideManager)
 		g_pGuideManager->Tick(g_dImmutableTime);
 
-	/*if (g_pGameInstance->getkeyDown(DIK_END))
-	{
-		CMeteor* pMeteor = Find_Meteor();
-		pMeteor->setActive(true);
-		_vector vPos = XMLoadFloat4(&m_vecMeteorPos[0]);;
-		pMeteor->Move(vPos, 0);
-	}*/
 	//Open_Wall();
 
 	return _int();
@@ -526,7 +519,6 @@ _int CStage1::Tick(_double TimeDelta)
 
 _int CStage1::LateTick(_double TimeDelta)
 {
-	//m_pPot->LateTick(TimeDelta);
 
 	if(m_pScenemaManager)
 		m_pScenemaManager->LateTick(TimeDelta);
