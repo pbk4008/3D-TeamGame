@@ -152,11 +152,11 @@ HRESULT CStage1::NativeConstruct()
 		return E_FAIL;
 	}
 
-	//if (FAILED(Ready_Data_Effect()))
-	//{
-	//	MSGBOX("Stage1 Effect");
-	//	return E_FAIL;
-	//}
+	if (FAILED(Ready_Data_Effect()))
+	{
+		MSGBOX("Stage1 Effect");
+		return E_FAIL;
+	}
 
 	if (FAILED(Ready_UI(L"Layer_UI")))
 	{
@@ -210,7 +210,7 @@ HRESULT CStage1::NativeConstruct()
 	//}
 
 	g_pGameInstance->PlayBGM(L"Stage1_BGM");
-	
+
 	return S_OK;
 }
 
@@ -1264,22 +1264,35 @@ HRESULT CStage1::Ready_Data_Effect()
 	}
 
 	//Hammer_Dust
+	//CEffect_Hammer_Dust* pHammer = nullptr;
+	//CEffect_Hammer_Dust::EFFECTDESC Desc;
+	//ZeroMemory(&Desc, sizeof(Desc));
+
+	//_tcscpy_s(Desc.TextureTag, L"Hammer_Dust");
+	//Desc.iRenderPassNum = 1;
+	//Desc.iImageCountX = 8;
+	//Desc.iImageCountY = 8;
+	//Desc.fFrame = 64.f;
+	//Desc.fEffectPlaySpeed = 1.f;
+
+	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Effect_Hammer_Dust", L"Proto_GameObject_Effect_Hammer_Dust", &Desc, (CGameObject**)&pHammer)))
+	//{
+	//	MSGBOX("Failed to Creating Effect_Hammer_Dust in CStage1::Ready_Effect()");
+	//	return E_FAIL;
+	//}
 	CEffect_Hammer_Dust* pHammer = nullptr;
 	CEffect_Hammer_Dust::EFFECTDESC Desc;
 	ZeroMemory(&Desc, sizeof(Desc));
 
-	_tcscpy_s(Desc.TextureTag, L"Hammer_Dust");
+	_tcscpy_s(Desc.TextureTag, L"Hammer_Dust_2");
 	Desc.iRenderPassNum = 1;
 	Desc.iImageCountX = 8;
-	Desc.iImageCountY = 8;
-	Desc.fFrame = 64.f;
+	Desc.iImageCountY = 4;
+	Desc.fFrame = 32.f;
 	Desc.fEffectPlaySpeed = 1.f;
 
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Effect_Hammer_Dust", L"Proto_GameObject_Effect_Hammer_Dust", &Desc, (CGameObject**)&pHammer)))
-	{
 		MSGBOX("Failed to Creating Effect_Hammer_Dust in CStage1::Ready_Effect()");
-		return E_FAIL;
-	}
 
 	if (FAILED(g_pGameInstance->Add_Effect((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Hammer_Dust", pHammer, 7)))
 	{

@@ -295,7 +295,7 @@ HRESULT CRendererAssit::Setup_RenderTarget()
 	//-----------------------------------//
 	if (FAILED(m_pTargetMgr->Add_MRT(TEXT("Target_AlphaBlend"), TEXT("Target_AlphaBlend"))))		return E_FAIL;
 	if (FAILED(m_pTargetMgr->Add_MRT(TEXT("Target_AlphaBlend"), TEXT("Target_AlphaWeight"))))		return E_FAIL;
-	if (FAILED(m_pTargetMgr->Add_MRT(TEXT("Target_AlphaNoBloom"), TEXT("Target_AlphaNoBloom"))))	return E_FAIL;
+	//if (FAILED(m_pTargetMgr->Add_MRT(TEXT("Target_AlphaNoBloom"), TEXT("Target_AlphaNoBloom"))))	return E_FAIL;
 	
 	if (FAILED(m_pTargetMgr->Add_MRT(TEXT("Target_Alpha"), TEXT("Target_Alpha"))))			return E_FAIL;
 
@@ -381,8 +381,8 @@ HRESULT CRendererAssit::Setup_RenderTarget()
 	if (FAILED(m_pTargetMgr->Ready_Debug_Buffer(TEXT("Target_Bloom"), fwidth - 200.f, fheight - 200.f, 100.f, 100.f)))					return E_FAIL;
 
 	if (FAILED(m_pTargetMgr->Ready_Debug_Buffer(TEXT("Target_Alpha"), fwidth - 100.f, fheight - 100.f, 100.f, 100.f)))					return E_FAIL;
-	if (FAILED(m_pTargetMgr->Ready_Debug_Buffer(TEXT("Target_AlphaNoBloom"), fwidth - 200.f, fheight - 100.f, 100.f, 100.f)))			return E_FAIL;
-	if (FAILED(m_pTargetMgr->Ready_Debug_Buffer(TEXT("Target_AlphaBlend"), fwidth - fwidth, fheight - 220.f, 100.f, 100.f)))			return E_FAIL;
+	if (FAILED(m_pTargetMgr->Ready_Debug_Buffer(TEXT("Target_AlphaBlend"), fwidth - 200.f, fheight - 100.f, 100.f, 100.f)))				return E_FAIL;
+	//if (FAILED(m_pTargetMgr->Ready_Debug_Buffer(TEXT("Target_AlphaNoBloom"), fwidth - 300.f, fheight - 100.f, 100.f, 100.f)))			return E_FAIL;
 	if (FAILED(m_pTargetMgr->Ready_Debug_Buffer(TEXT("Target_AlphaWeight"), fwidth - fwidth + 100.f, fheight - 220.f, 100.f, 100.f)))	return E_FAIL;
 	
 	if (FAILED(m_pTargetMgr->Ready_Debug_Buffer(TEXT("Target_BlurShadow"), 200.f, 100.f, 100.f, 100.f)))		return E_FAIL;
