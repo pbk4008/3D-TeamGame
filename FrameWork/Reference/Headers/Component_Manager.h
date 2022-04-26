@@ -22,6 +22,7 @@
 #include "VIBuffer_RectInstance.h"
 #include "VIBuffer_PointInstance.h"
 #include "VIBuffer_PointInstance_Explosion.h"
+#include "VIBuffer_PointInstance_Energy.h"
 #include "VIBuffer_PointInstance_Floating.h"
 #include "VIBuffer_PointInstance_Floating_Speed.h"
 #include "VIBuffer_PointInstance_Env_Floating.h"

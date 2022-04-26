@@ -41,6 +41,7 @@
 //Effect & UI
 #include "Effect_DashDust.h"
 #include "Effect_HitParticle.h"
+#include "Effect_Energy.h"
 #include "Effect_HitFloating.h"
 #include "Effect_Floating_Speed.h"
 #include "Effect_Env_Floating.h"
@@ -103,6 +104,7 @@
 
 #include "MeshEffect_Test.h"
 #include "MeshEffect_Test2.h"
+#include "MeshEffect_Boss_Effect.h"
 #pragma endregion
 
 //Test
@@ -568,6 +570,10 @@ HRESULT CLoader::Load_Stage1EffectLoad()
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_VIBuffer_PointInstance_Explosion",
 		CVIBuffer_PointInstance_Explosion::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
+
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_VIBuffer_PointInstance_Energy",
+		CVIBuffer_PointInstance_Energy::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
 	
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_VIBuffer_PointInstance_Floating",
 		CVIBuffer_PointInstance_Floating::Create(m_pDevice, m_pDeviceContext))))
@@ -600,6 +606,11 @@ HRESULT CLoader::Load_Stage1EffectLoad()
 	}
 
 	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_Effect_Explosion"), CEffect_HitParticle::Create(m_pDevice, m_pDeviceContext))))
+	{
+		return E_FAIL;
+	}
+
+	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_Effect_Energy"), CEffect_Energy::Create(m_pDevice, m_pDeviceContext))))
 	{
 		return E_FAIL;
 	}
@@ -1435,15 +1446,15 @@ HRESULT CLoader::Ready_Test_JS()
 	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_MotionTrail", CMotionTrail::Create(m_pDevice, m_pDeviceContext)))) MSGBOX(L"모션 더미 생성");
 
 
-	//Boss Solaris
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_TEST_JS, L"Model_Boss_Solaris", CModel::Create(m_pDevice, m_pDeviceContext,
-		L"../bin/FBX/Monster/Solaris.fbx", CModel::TYPE_ANIM, true))))
-		return E_FAIL;
-
-	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Solaris", CBoss_Solaris::Create(m_pDevice, m_pDeviceContext))))
-		return E_FAIL;
-	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Weapon_Boss", CBoss_Weapon::Create(m_pDevice, m_pDeviceContext))))
-		return E_FAIL;
+	////Boss Solaris
+	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_TEST_JS, L"Model_Boss_Solaris", CModel::Create(m_pDevice, m_pDeviceContext,
+	//	L"../bin/FBX/Monster/Solaris.fbx", CModel::TYPE_ANIM, true))))
+	//	return E_FAIL;
+	//
+	//if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Solaris", CBoss_Solaris::Create(m_pDevice, m_pDeviceContext))))
+	//	return E_FAIL;
+	//if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Weapon_Boss", CBoss_Weapon::Create(m_pDevice, m_pDeviceContext))))
+	//	return E_FAIL;
 #pragma endregion
 
 
@@ -1550,9 +1561,10 @@ HRESULT CLoader::Ready_Test_JS()
 	if (FAILED(Load_Stage1UILoad()))
 		return E_FAIL;
 
-	////// Effect
-	//if (FAILED(Load_Stage1EffectLoad()))
-	//	return E_FAIL;
+	//// Effect
+	if (FAILED(Load_Stage1EffectLoad()))
+		return E_FAIL;
+
 
 	///////////////////////////////////////// 소드 트레일
 	if (FAILED(Load_TrailEffects()))
@@ -1869,12 +1881,12 @@ HRESULT CLoader::Load_MeshEffects()
 		return E_FAIL;
 	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_MeshEffect_Test2", CMeshEffect_Test2::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
+	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_MeshEffect_Boss_Effect", CMeshEffect_Boss_Effect::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
 	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_MeshEffect_Razer", CMeshEffect_Razer::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_MeshEffect_Jupiter", CMeshEffect_Jupiter::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
-
-
 	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Explosion_Rock", CExplosion_Rock::Create(m_pDevice, m_pDeviceContext))))
 		return S_OK;
 

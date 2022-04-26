@@ -177,6 +177,25 @@ HRESULT CStage1::NativeConstruct()
 		return E_FAIL;
 	}
 
+	//Hammer_Dust
+	CEffect_Hammer_Dust* pHammer = nullptr;
+	CEffect_Hammer_Dust::EFFECTDESC Desc;
+	ZeroMemory(&Desc, sizeof(Desc));
+
+	_tcscpy_s(Desc.TextureTag, L"Hammer_Dust_2");
+	Desc.iRenderPassNum = 1;
+	Desc.iImageCountX = 8;
+	Desc.iImageCountY = 4;
+	Desc.fFrame = 32.f;
+	Desc.fEffectPlaySpeed = 1.f;
+
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Effect_Hammer_Dust", L"Proto_GameObject_Effect_Hammer_Dust", &Desc, (CGameObject**)&pHammer)))
+	{
+		MSGBOX("Failed to Creating Effect_Hammer_Dust in CStage1::Ready_Effect()");
+		return E_FAIL;
+
+	}
+
 	g_pGameInstance->Change_BaseCamera(L"Camera_Silvermane");
 
 	//if (FAILED(Ready_Meteor()))
@@ -1173,7 +1192,7 @@ HRESULT CStage1::Ready_Data_Effect()
 	tDesc.iRenderPassNum = 1;
 	tDesc.iImageCountX = 4;
 	tDesc.iImageCountY = 2;
-	tDesc.fFrame = 8;
+	tDesc.fFrame = 4;
 	tDesc.fEffectPlaySpeed = 20.f;
 	tDesc.fAlpha = 1.f;
 	tDesc.fWeight = 1.f;

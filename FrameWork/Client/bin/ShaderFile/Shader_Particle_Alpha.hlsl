@@ -212,6 +212,24 @@ PS_OUT PS_MAIN_MULTIIMAGE(PS_IN In)
 	
     return Out;
 }
+
+PS_OUT PS_MAIN_MULTIIMAGE_ALPHA(PS_IN In)
+{
+    PS_OUT Out = (PS_OUT) 0;
+
+    In.vTexUV.x = (In.vTexUV.x / g_iImageCountX) + (g_iFrame % g_iImageCountX) * (1.f / g_iImageCountX); //가로 이미지개수 , 프레임 , 1나누기 이미지개수 
+    In.vTexUV.y = (In.vTexUV.y / g_iImageCountY) + (g_iFrame / g_iImageCountX) * (1.f / g_iImageCountY); //세로 이미지개수 , 프레임 , 1나누기 이미지개수
+	
+    float4 Color = g_DiffuseTexture.Sample(DefaultSampler, In.vTexUV);
+    
+    Out.vColor = g_DiffuseTexture.Sample(DefaultSampler, In.vTexUV);
+    Out.weight = float4(g_Weight.xxx, 0.5f);
+	
+    Out.vColor.a = Out.vColor.a * g_fAlpha;
+    Out.weight = float4(g_Weight.xxx, Out.vColor.a);
+	
+    return Out;
+}
 technique11			DefaultTechnique
 {
 	pass Normal //0
@@ -276,6 +294,19 @@ technique11			DefaultTechnique
         VertexShader = compile vs_5_0 VS_MAIN();
         GeometryShader = compile gs_5_0 GS_MAIN();
         PixelShader = compile ps_5_0 PS_MAIN_MULTIIMAGE();
+    }
+
+    pass AlphaBlend2MultiImage //5
+    {
+		/* 렌더스테이츠에 대한 정의. */
+        SetRasterizerState(CullMode_Default);
+        SetDepthStencilState(ZBufferDisable, 0);
+        SetBlendState(AlphaBlending2, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+
+		/* 진입점함수를 지정한다. */
+        VertexShader = compile vs_5_0 VS_MAIN();
+        GeometryShader = compile gs_5_0 GS_MAIN();
+        PixelShader = compile ps_5_0 PS_MAIN_MULTIIMAGE_ALPHA();
     }
 }
 
