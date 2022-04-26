@@ -58,10 +58,10 @@ _int CMeshEffect_Razer::Tick(_double _dDeltaTime)
 	m_vColor = { 1.f, 0.5f, 0.3f };
 
 	//////////////////////////////////////////// Scale
-	m_vScale.x += (_float)_dDeltaTime * -0.7f;
+	m_vScale.x += (_float)_dDeltaTime * -1.f;
 	if (0.f >= m_vScale.x)
 		m_vScale.x = 0.f;
-	m_vScale.y += (_float)_dDeltaTime * -0.7f;
+	m_vScale.y += (_float)_dDeltaTime * -1.f;
 	if (0.f >= m_vScale.y)
 		m_vScale.y = 0.f;
 	m_pTransform->Scaling(_vector{ m_vScale.x, m_vScale.y, m_vScale.z, 0.f });
@@ -85,6 +85,31 @@ _int CMeshEffect_Razer::LateTick(_double _dDeltaTime)
 
 	if (0.f >= m_vScale.x)
 	{
+		OVERLAPDESC tOverlapDesc;
+		tOverlapDesc.geometry = PxSphereGeometry(6.f);
+		XMStoreFloat3(&tOverlapDesc.vOrigin, m_pTransform->Get_State(CTransform::STATE_POSITION) + _vector{ 0.f, 2.f, 0.f, 0.f });
+		CGameObject* pHitObject = nullptr;
+		tOverlapDesc.ppOutHitObject = &pHitObject;
+		tOverlapDesc.filterData.flags = PxQueryFlag::eANY_HIT | PxQueryFlag::eDYNAMIC;
+		tOverlapDesc.layerMask = (1 << (_uint)ELayer::Player);
+		if (g_pGameInstance->Overlap(tOverlapDesc))
+		{
+			if (pHitObject)
+			{
+				ATTACKDESC tAttackDesc;
+				tAttackDesc.fDamage = 5.f;
+				tAttackDesc.iLevel = 4;
+				tAttackDesc.pOwner = this;
+				tAttackDesc.pHitObject = this;
+				static_cast<CActor*>(pHitObject)->Hit(tAttackDesc);
+			}
+		}
+
+		CEffect* pEffect = CEffectManager::GetInstance()->Get_Effect((_uint)EFFECT::EXPLOSION_ROCK_UP);
+		pEffect->Get_Transform()->Set_State(CTransform::STATE_POSITION, m_pTransform->Get_State(CTransform::STATE_POSITION) + _vector{ 0.f, 2.f, 0.f, 0.f });
+		pEffect->Set_Reset(true);
+		pEffect->setActive(true);
+
 		m_bRemove = true;
 	}
 

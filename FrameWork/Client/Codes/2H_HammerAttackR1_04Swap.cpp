@@ -119,6 +119,7 @@ HRESULT C2H_HammerAttackR1_04Swap::ExitState()
 	if (FAILED(__super::ExitState()))
 		return E_FAIL;
 
+	m_isShake3 = false;
 	return S_OK;
 }
 
