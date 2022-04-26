@@ -1,5 +1,7 @@
 #include "pch.h"
 #include"CinemaActor.h"
+#include "HierarchyNode.h"
+
 
 CCinemaActor::CCinemaActor()
 	: m_pController(nullptr)
@@ -93,6 +95,9 @@ HRESULT CCinemaActor::Ready_Model(_uint iModel)
 	case (_uint)CINEMA_ACTOR::ACTOR_MIDBOSS:
 		hr=CGameObject::SetUp_Components(m_iSceneID, L"Model_Cinema_MidBoss", L"Model", (CComponent**)&m_pModel);
 		break;
+	case (_uint)CINEMA_ACTOR::ACTOR_SCREE:
+		hr=CGameObject::SetUp_Components(m_iSceneID, L"Model_Cinema_Scree", L"Model", (CComponent**)&m_pModel);
+		break;
 	}
 
 	if (FAILED(hr))
@@ -185,6 +190,18 @@ void CCinemaActor::Actor_AnimReset()
 {
 	if(m_pController)
 		m_pController->Reset_Animation();
+}
+
+CHierarchyNode* CCinemaActor::Get_Bone(const string& tBoneName)
+{
+	CHierarchyNode* pBone=m_pModel->Get_Bone(tBoneName);
+
+	return pBone;
+}
+
+_fmatrix CCinemaActor::Get_Pivot()
+{
+	return m_pModel->Get_PivotMatrix();
 }
 
 CCinemaActor* CCinemaActor::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)

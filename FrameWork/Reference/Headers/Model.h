@@ -28,6 +28,7 @@ public:
 	CHierarchyNode* Get_Bone(const string& pBoneName);
 	vector<CAnimation*>& Get_Animations() { return m_Animations; }
 	CAnimation* Get_Animation(const string& pName);
+	CAnimation* Get_Animation() { return m_Animations[m_iCurrentAnimation]; }
 	_bool getUsingMaterial() { return m_bUsingMaterial; }
 	vector<vector<CMeshContainer*>> Get_MeshContainer() { return m_MeshContainers; }
 	vector<CMaterial*> Get_Materials() { return m_vecMaterials; }

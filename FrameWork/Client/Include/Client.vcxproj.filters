@@ -1135,6 +1135,12 @@
     <Filter Include="02.GameObject\06.Interactable Object\Shield">
       <UniqueIdentifier>{6dfa7505-8405-4814-b738-f504a7ea30ca}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\02.Map\06.Pot">
+      <UniqueIdentifier>{97066897-9624-4786-8d1e-262419218ae8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\96.Weapon\11.CinemaWeapon">
+      <UniqueIdentifier>{23f1b595-3107-4b66-bb6b-199555507e33}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -2445,6 +2451,12 @@
     <ClInclude Include="..\Headers\Loot_Shield.h">
       <Filter>02.GameObject\06.Interactable Object\Shield</Filter>
     </ClInclude>
+    <ClInclude Include="..\Headers\Pot.h">
+      <Filter>02.GameObject\02.Map\06.Pot</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\CinemaWeapon.h">
+      <Filter>02.GameObject\96.Weapon\11.CinemaWeapon</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -3725,6 +3737,12 @@
     <ClCompile Include="..\Codes\Loot_Shield.cpp">
       <Filter>02.GameObject\06.Interactable Object\Shield</Filter>
     </ClCompile>
+    <ClCompile Include="..\Codes\Pot.cpp">
+      <Filter>02.GameObject\02.Map\06.Pot</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\CinemaWeapon.cpp">
+      <Filter>02.GameObject\96.Weapon\11.CinemaWeapon</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -3865,6 +3883,9 @@
     </FxCompile>
     <FxCompile Include="..\bin\ShaderFile\Shader_UI_Level_Bar.hlsl">
       <Filter>100.ShaderFiles\04.UI</Filter>
+    </FxCompile>
+    <FxCompile Include="..\bin\ShaderFile\Shader_PotAnim.hlsl">
+      <Filter>100.ShaderFiles\01.Environment</Filter>
     </FxCompile>
   </ItemGroup>
   <ItemGroup>

@@ -351,6 +351,7 @@ call Update_Client.bat</Command>
     <ClInclude Include="..\Headers\Cinema3_6.h" />
     <ClInclude Include="..\Headers\CinemaActor.h" />
     <ClInclude Include="..\Headers\CinemaCam.h" />
+    <ClInclude Include="..\Headers\CinemaWeapon.h" />
     <ClInclude Include="..\Headers\Client_Observer.h" />
     <ClInclude Include="..\Headers\Client_Trigger.h" />
     <ClInclude Include="..\Headers\Crawler_Attack.h" />
@@ -403,6 +404,7 @@ call Update_Client.bat</Command>
     <ClInclude Include="..\Headers\Level_Logo.h" />
     <ClInclude Include="..\Headers\MeshEffect_Test2.h" />
     <ClInclude Include="..\Headers\Loot_Shield.h" />
+    <ClInclude Include="..\Headers\Pot.h" />
     <ClInclude Include="..\Headers\Shooter_Excution.h" />
     <ClInclude Include="..\Headers\MidBoss_Execution.h" />
     <ClInclude Include="..\Headers\Quest.h" />
@@ -789,6 +791,7 @@ call Update_Client.bat</Command>
     <ClCompile Include="..\Codes\Cinema3_6.cpp" />
     <ClCompile Include="..\Codes\CinemaActor.cpp" />
     <ClCompile Include="..\Codes\CinemaCam.cpp" />
+    <ClCompile Include="..\Codes\CinemaWeapon.cpp" />
     <ClCompile Include="..\Codes\Client_Observer.cpp" />
     <ClCompile Include="..\Codes\Client_Trigger.cpp" />
     <ClCompile Include="..\Codes\Boss_Bastion_Judicator.cpp" />
@@ -837,6 +840,7 @@ call Update_Client.bat</Command>
     <ClCompile Include="..\Codes\JumpTrigger.cpp" />
     <ClCompile Include="..\Codes\MeshEffect_Test2.cpp" />
     <ClCompile Include="..\Codes\Loot_Shield.cpp" />
+    <ClCompile Include="..\Codes\Pot.cpp" />
     <ClCompile Include="..\Codes\Shooter_Excution.cpp" />
     <ClCompile Include="..\Codes\MidBoss_Execution.cpp" />
     <ClCompile Include="..\Codes\Quest.cpp" />
@@ -1114,6 +1118,7 @@ call Update_Client.bat</Command>
     <FxCompile Include="..\bin\ShaderFile\Shader_Particle_Alpha.hlsl" />
     <FxCompile Include="..\bin\ShaderFile\Shader_Particle_Size.hlsl" />
     <FxCompile Include="..\bin\ShaderFile\Shader_Potal.hlsl" />
+    <FxCompile Include="..\bin\ShaderFile\Shader_PotAnim.hlsl" />
     <FxCompile Include="..\bin\ShaderFile\Shader_RectFire.hlsl" />
     <FxCompile Include="..\bin\ShaderFile\Shader_Shield.hlsl" />
     <FxCompile Include="..\bin\ShaderFile\Shader_SilverMane.hlsl" />

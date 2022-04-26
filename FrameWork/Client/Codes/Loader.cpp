@@ -13,6 +13,7 @@
 #include "Treasure_Chest.h"
 #include "Potal.h"
 #include "Loot_Shield.h"
+#include "Pot.h"
 
 //Monster
 #include "Monster_Crawler.h"
@@ -75,6 +76,7 @@
 //Cinema
 #include "CinemaCam.h"
 #include "CinemaActor.h"
+#include "CinemaWeapon.h"
 
 
 #pragma region TestScene_JS
@@ -173,8 +175,8 @@ HRESULT CLoader::LoadForScene()
 
 HRESULT CLoader::SetUp_Stage1_Object()
 {
-	if (FAILED(Load_Stage1FBXLoad()))
-		return E_FAIL;
+	//if (FAILED(Load_Stage1FBXLoad()))
+	//	return E_FAIL;
 
 	if (FAILED(Load_Stage1Navi_SkyLoad()))
 		return E_FAIL;
@@ -182,8 +184,8 @@ HRESULT CLoader::SetUp_Stage1_Object()
 	if (FAILED(Load_Stage1PlayerLoad()))
 		return E_FAIL;
 
-	if (FAILED(Load_Stage1MonsterLoad()))
-		return E_FAIL;
+	//if (FAILED(Load_Stage1MonsterLoad()))
+	//	return E_FAIL;
 
 	//if (FAILED(Load_Stage1BossLoad()))
 	//	return E_FAIL;
@@ -203,20 +205,23 @@ HRESULT CLoader::SetUp_Stage1_Object()
 		return E_FAIL;
 #pragma endregion
 
-	//if (FAILED(Load_Stage1JumpTrigger()))
-	//	return E_FAIL;
+	if (FAILED(Load_Stage1JumpTrigger()))
+		return E_FAIL;
 
 	if (FAILED(Load_Stage1_TreasureChest_Load()))
 		return E_FAIL;
 
-	//if (FAILED(Load_Stage1TriggerLod()))
-	//	return E_FAIL;
+	if (FAILED(Load_Stage1TriggerLod()))
+		return E_FAIL;
 
 	//if (FAILED(Load_Stage1Meteor()))
 	//	return E_FAIL;
 
-	//if (FAILED(Load_Stage1_Cinema_Object()))
-	//	return E_FAIL;
+	if (FAILED(Load_Stage1_Cinema_Object()))
+		return E_FAIL;
+
+	if (FAILED(Load_Pot()))
+		return E_FAIL;
 
 	return S_OK;
 }
@@ -775,21 +780,39 @@ HRESULT CLoader::Load_Stage1_Cinema_Object()
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Model_Cinema_MidBoss", CModel::Create(m_pDevice, m_pDeviceContext,
 		L"../bin/FBX/Cinema/MidBoss_Cinema.fbx", CModel::TYPE_ANIM, true))))
 		return E_FAIL;
+	//Scree
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::	SCENE_STAGE1, L"Model_Cinema_Scree", CModel::Create(m_pDevice, m_pDeviceContext,
+		L"../bin/FBX/Cinema/Scree.fbx", CModel::TYPE_ANIM, true))))
+		return E_FAIL;
 
 	////Silvermane
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Cinema_Silvermane", CModel::Create(m_pDevice, m_pDeviceContext,
 		L"../bin/FBX/Cinema/Silvermane_Cinema.fbx", CModel::TYPE_ANIM, true))))
 		return E_FAIL;
 
-	//Camera1-1
+	//PhoenixWeapon
 	_matrix matPivot = XMMatrixIdentity();
+	std::wstring shaderPath = L"../../Reference/ShaderFile/Shader_StaticMesh.hlsl";
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Model_PoenixWeapon", CModel::Create(m_pDevice, m_pDeviceContext,
+		"../bin/Resources/Mesh/Phoenix/", "PhoenixSword.fbx",
+		shaderPath, matPivot, CModel::TYPE::TYPE_STATIC, true)))) 
+		return E_FAIL;
+
+	//GrayHwakWeapon
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Model_GrayHawkWeapon", CModel::Create(m_pDevice, m_pDeviceContext,
+		"../bin/Resources/Mesh/GrayHwak/", "GrayHwakWeapon.fbx",
+		shaderPath, matPivot, CModel::TYPE::TYPE_STATIC, true))))
+		return E_FAIL;
+
+	//Camera1-1
+	matPivot = XMMatrixIdentity();
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Model_Cinema_Cam1_1", CModel::Create(m_pDevice, m_pDeviceContext,
 		"../bin/FBX/Cinema/Camera/","camera_01_bone.fbx",
 		L"../../Reference/ShaderFile/Shader_AnimMesh.hlsl", matPivot,CModel::TYPE_ANIM, true))))
 		return E_FAIL;
 	//Camera1-2
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Model_Cinema_Cam1_2", CModel::Create(m_pDevice, m_pDeviceContext,
-		"../bin/FBX/Cinema/Camera/", "camera_bone_02.fbx",
+		"../bin/FBX/Cinema/Camera/", "camera_02_bone.fbx",
 		L"../../Reference/ShaderFile/Shader_AnimMesh.hlsl", matPivot, CModel::TYPE_ANIM, true))))
 		return E_FAIL;
 
@@ -846,6 +869,38 @@ HRESULT CLoader::Load_Stage1_Cinema_Object()
 	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_CinemaCamera", CCinemaCam::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 	if(FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_CinemaActor",CCinemaActor::Create(m_pDevice,m_pDeviceContext))))
+		return E_FAIL;
+	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_CinemaWeapon", CCinemaWeapon::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	return S_OK;
+}
+
+HRESULT CLoader::Load_Pot()
+{
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Pot1", CModel::Create(m_pDevice, m_pDeviceContext,
+		L"../bin/FBX/Pot/S_Moon_Urn_1_03_Bin.fbx", CModel::TYPE_STATIC, true))))
+	{
+		return E_FAIL;
+	}	
+
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Pot2", CModel::Create(m_pDevice, m_pDeviceContext,
+		L"../bin/FBX/Pot/S_Sun_Urns_01_Bin.fbx", CModel::TYPE_STATIC, true))))
+	{
+		return E_FAIL;
+	}
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Pot2_Anim", CModel::Create(m_pDevice, m_pDeviceContext,
+		L"../bin/FBX/Pot/S_Sun_Urns_01_Broken_Bin.fbx", CModel::TYPE_ANIM, true))))
+	{
+		return E_FAIL;
+	}
+
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Pot3", CModel::Create(m_pDevice, m_pDeviceContext,
+		L"../bin/FBX/Pot/S_Sun_Urns_Set02_Bin.fbx", CModel::TYPE_STATIC, true))))
+	{
+		return E_FAIL;
+	}
+
+	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Pot", CPot::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 
 	return S_OK;
@@ -1132,12 +1187,7 @@ HRESULT CLoader::Load_Stage1BossLoad()
 
 
 	//Boss Solaris
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Model_Boss_Solaris", CModel::Create(m_pDevice, m_pDeviceContext,
-		L"../bin/FBX/Monster/Solaris.fbx", CModel::TYPE_ANIM, true))))
-		return E_FAIL;
 
-	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Solaris", CBoss_Solaris::Create(m_pDevice, m_pDeviceContext))))
-		return E_FAIL;
 	
 	return S_OK;
 }
@@ -1315,7 +1365,6 @@ HRESULT CLoader::Ready_Stage2()
 
 HRESULT CLoader::Ready_Stage3()
 {
-
 	return S_OK;
 }
 
