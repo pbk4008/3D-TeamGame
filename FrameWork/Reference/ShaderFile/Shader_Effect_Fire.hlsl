@@ -130,6 +130,26 @@ PS_OUT PS_MAIN1(PS_IN In)
     return Out;
 }
 
+struct PS_OUT_NB
+{
+	vector vColor : SV_TARGET0;
+};
+
+PS_OUT_NB PS_MAINALPHANB(PS_IN In)
+{
+	PS_OUT_NB Out = (PS_OUT_NB) 0;
+
+	In.vTexUV.x = (In.vTexUV.x / g_iImageCountX) + (g_iFrame % g_iImageCountX) * (1.f / g_iImageCountX);
+	In.vTexUV.y = (In.vTexUV.y / g_iImageCountY) + (g_iFrame / g_iImageCountX) * (1.f / g_iImageCountY);
+
+	half4 color = g_DiffuseTexture.Sample(DefaultSampler, In.vTexUV);
+	
+	Out.vColor = color;
+	Out.vColor.a *= g_fAlpha;
+	
+	return Out;
+}
+
 struct PS_IN_NONALPHA
 {
 	float4 vPosition : SV_POSITION;
@@ -137,6 +157,7 @@ struct PS_IN_NONALPHA
 };
 struct PS_OUT_NONALPHA
 {
+	// 사용 금지
 	float4 diffuse : SV_TARGET0;
 	float4 normal : SV_TARGET1;
 	float4 depth : SV_TARGET2;
@@ -147,6 +168,7 @@ struct PS_OUT_NONALPHA
 };
 PS_OUT_NONALPHA PS_MAIN_NONALPHA(PS_IN_NONALPHA In)
 {
+	// 사용 금지
 	PS_OUT_NONALPHA Out = (PS_OUT_NONALPHA) 0;
 	
 	In.vUvDepth.x = (In.vUvDepth.x / g_iImageCountX) + (g_iFrame % g_iImageCountX) * (1.f / g_iImageCountX);
@@ -205,6 +227,18 @@ technique11 DefaultTechnique
 		VertexShader = compile vs_5_0 VS_MAIN_NONALPHA();
 		GeometryShader = NULL;
 		PixelShader = compile ps_5_0 PS_MAIN_NONALPHA();
+
+	}
+
+	pass AlphaBlendNB
+	{
+		SetRasterizerState(CullMode_Default);
+		SetDepthStencilState(ZBufferDisable, 0);
+		SetBlendState(AlphaBlending, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+
+		VertexShader = compile vs_5_0 VS_MAIN();
+		GeometryShader = NULL;
+		PixelShader = compile ps_5_0 PS_MAINALPHANB();
 
 	}
 }
