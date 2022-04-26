@@ -28,8 +28,8 @@ HRESULT CStage3::NativeConstruct()
 
 	g_pGameInstance->Change_BaseCamera(L"Camera_Silvermane");
 
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE3, L"Layer_Test", L"Proto_GameObject_TestObject")))
-		return E_FAIL;
+	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE3, L"Layer_Test", L"Proto_GameObject_TestObject")))
+	//	return E_FAIL;
 
 	return S_OK;
 }
