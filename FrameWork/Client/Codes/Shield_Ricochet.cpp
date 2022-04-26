@@ -78,6 +78,19 @@ HRESULT CShield_Ricochet::EnterState()
 	m_pSilvermane->Set_IsTrasceCamera(false);
 	m_pSilvermane->Set_EquipShieldAnim(false);
 	m_pSilvermane->Set_IsHit(true);
+
+	CCameraShake::SHAKEEVENT tShakeEvent;
+	tShakeEvent.fDuration = 0.5f;
+	tShakeEvent.fBlendInTime = 0.2f;
+	tShakeEvent.fBlendOutTime = 0.1f;
+	tShakeEvent.tWaveX.fAmplitude = 0.14f;
+	tShakeEvent.tWaveX.fFrequency = 6.f;
+	tShakeEvent.tWaveY.fAmplitude = 0.14f;
+	tShakeEvent.tWaveY.fFrequency = 8.f;
+
+	_float3 vPos; XMStoreFloat3(&vPos, m_pTransform->Get_State(CTransform::STATE_POSITION));
+	g_pShakeManager->Shake(tShakeEvent, vPos);
+
 	return S_OK;
 }
 

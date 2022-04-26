@@ -2,7 +2,7 @@
 #include "DropBox.h"
 
 #include "DropManager.h"
-
+#include "Light.h"
 #include "DropBox_State.h"
 #include "DropBox_Idle.h"
 #include "DropBox_Open.h"
@@ -67,6 +67,22 @@ HRESULT CDropBox::NativeConstruct(const _uint _iSceneID, void* _pArg)
 	matPos.r[3] = XMVectorSetY(matPos.r[3], XMVectorGetY(matPos.r[3]) - 0.5f);
 	Active_Effect_Target((_uint)EFFECT::BOX , matPos);
 
+	//light 
+	LIGHTDESC LightDesc;
+
+	ZeroMemory(&LightDesc, sizeof(LIGHTDESC));
+	LightDesc.eType = LIGHTDESC::TYPE_POINT;
+	LightDesc.fRange = 10.f;
+	LightDesc.vDiffuse = _float4(0.3686f, 04941.f, 0.60784f, 1.f);
+	LightDesc.vSpecular = _float4(0.7f, 0.7f, 0.7f, 1.f);
+	LightDesc.vAmbient = _float4(0.8f, 0.8f, 0.8f, 1.f);
+	LightDesc.bactive = true;
+	LightDesc.vPosition = _float3(m_tDesc.WorldMat._41, m_tDesc.WorldMat._42 + 2.f, m_tDesc.WorldMat._43);
+
+	m_range = LightDesc.fRange;
+
+	if (FAILED(g_pGameInstance->Add_Light(m_pDevice, m_pDeviceContext, LightDesc,&m_plight))) MSGBOX("Failed To Adding PointLight");
+
 	return S_OK;
 }
 
@@ -83,6 +99,8 @@ _int CDropBox::Tick(_double _dDeltaTime)
 	if (NO_EVENT != iProgress)
 		return iProgress;
 
+	m_plight->Set_Color(XMVectorSet(0.2f, 1.f, 0.5f, 1.f));
+
 	if (true == m_bBoxOpened && 0 < m_dropList.size())
 	{
 		m_dropElapsed += (_float)_dDeltaTime; /* drop time */
@@ -98,6 +116,15 @@ _int CDropBox::Tick(_double _dDeltaTime)
 			CDropManager::GetInstance()->DropItem(m_dropList.back(), m_pTransform->Get_State(CTransform::STATE_POSITION), EScatterType::Cone, Get_Transform());
 			m_dropList.pop_back();
 		}
+	}
+
+	if (m_bBoxOpened == true)
+	{
+		m_range += (g_fDeltaTime * -2.f);
+		m_plight->Set_Range(m_range);
+
+		if (m_range <= 0.f)
+			m_plight->Set_Active(false);
 	}
 
 	return _int();

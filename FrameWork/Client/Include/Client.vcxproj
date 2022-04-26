@@ -337,6 +337,7 @@ call Update_Client.bat</Command>
     <ClInclude Include="..\Headers\Camera_Culling.h" />
     <ClInclude Include="..\Headers\Camera_Silvermane.h" />
     <ClInclude Include="..\Headers\Camera_Debug.h" />
+    <ClInclude Include="..\Headers\CapsuleObstacle.h" />
     <ClInclude Include="..\Headers\Cinema1_1.h" />
     <ClInclude Include="..\Headers\Cinema1_2.h" />
     <ClInclude Include="..\Headers\Cinema2_1.h" />
@@ -775,6 +776,7 @@ call Update_Client.bat</Command>
     <ClCompile Include="..\Codes\Button_Skill.cpp" />
     <ClCompile Include="..\Codes\CameraShake.cpp" />
     <ClCompile Include="..\Codes\Camera_Culling.cpp" />
+    <ClCompile Include="..\Codes\CapsuleObstacle.cpp" />
     <ClCompile Include="..\Codes\Cinema1_1.cpp" />
     <ClCompile Include="..\Codes\Cinema1_2.cpp" />
     <ClCompile Include="..\Codes\Cinema2_1.cpp" />

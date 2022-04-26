@@ -56,6 +56,20 @@ HRESULT CSilvermane_Hit::EnterState()
 	m_pSilvermane->Active_Effect((_uint)EFFECT::PLAYER_HIT);
 	m_pSilvermane->Set_Radial(false);
 
+	CCameraShake::SHAKEEVENT tShakeEvent;
+	tShakeEvent.fDuration = 0.4f;
+	tShakeEvent.fBlendInTime = 0.1f;
+	tShakeEvent.fBlendOutTime = 0.2f;
+	tShakeEvent.tWaveX.fAmplitude = 0.1f;
+	tShakeEvent.tWaveX.fFrequency = 10.f;
+	tShakeEvent.tWaveY.fAmplitude = 0.1f;
+	tShakeEvent.tWaveY.fFrequency = 12.f;
+	tShakeEvent.tWaveZ.fAmplitude = 0.1f;
+	tShakeEvent.tWaveZ.fFrequency = 8.f;
+
+	_float3 vPos; XMStoreFloat3(&vPos, m_pTransform->Get_State(CTransform::STATE_POSITION));
+	g_pShakeManager->Shake(tShakeEvent, vPos);
+
 	return S_OK;
 }
 
@@ -65,7 +79,7 @@ HRESULT CSilvermane_Hit::ExitState()
 		return E_FAIL;
 
 	m_pSilvermane->Set_IsHit(false);
-
+	m_isShake = false;
 	return S_OK;
 }
 

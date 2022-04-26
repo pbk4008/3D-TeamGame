@@ -140,11 +140,11 @@ HRESULT CStage1::NativeConstruct()
 		return E_FAIL;
 	}
 
-	if (FAILED(Ready_TriggerSystem(L"../bin/SaveData/Trigger/MonsterSpawnTrigger.dat")))
-	{
-		MSGBOX("Stage1 Trigger");
-		return E_FAIL;
-	}
+	//if (FAILED(Ready_TriggerSystem(L"../bin/SaveData/Trigger/MonsterSpawnTrigger.dat")))
+	//{
+	//	MSGBOX("Stage1 Trigger");
+	//	return E_FAIL;
+	//}
 
 	if (FAILED(Ready_Data_UI(L"../bin/SaveData/UI/UI.dat")))
 	{
@@ -152,11 +152,11 @@ HRESULT CStage1::NativeConstruct()
 		return E_FAIL;
 	}
 
-	if (FAILED(Ready_Data_Effect()))
-	{
-		MSGBOX("Stage1 Effect");
-		return E_FAIL;
-	}
+	//if (FAILED(Ready_Data_Effect()))
+	//{
+	//	MSGBOX("Stage1 Effect");
+	//	return E_FAIL;
+	//}
 
 	if (FAILED(Ready_UI(L"Layer_UI")))
 	{
@@ -191,23 +191,23 @@ HRESULT CStage1::NativeConstruct()
 	// 		return E_FAIL;
 	//}
 	
-	if (FAILED(Ready_Indicator()))
-	{
-		MSGBOX("Indicator");
-		return E_FAIL;
-	}
+	//if (FAILED(Ready_Indicator()))
+	//{
+	//	MSGBOX("Indicator");
+	//	return E_FAIL;
+	//}
 
-	if (FAILED(Ready_Portal()))
-	{
-		MSGBOX("Portal");
-		return E_FAIL;
-	}
+	//if (FAILED(Ready_Portal()))
+	//{
+	//	MSGBOX("Portal");
+	//	return E_FAIL;
+	//}
 
-	if (FAILED(Ready_Wall()))
-	{
-		MSGBOX("Wall");
-		return E_FAIL;
-	}
+	//if (FAILED(Ready_Wall()))
+	//{
+	//	MSGBOX("Wall");
+	//	return E_FAIL;
+	//}
 
 	g_pGameInstance->PlayBGM(L"Stage1_BGM");
 	
@@ -218,6 +218,7 @@ _int CStage1::Tick(_double TimeDelta)
 {
 	/*_vector vTmp = g_pObserver->Get_PlayerPos();
 	cout << XMVectorGetX(vTmp) << ", " << XMVectorGetY(vTmp) << ", " << XMVectorGetZ(vTmp) << endl;*/
+
 #ifdef  _DEBUG
 	_int iLevel = 0;
 	if (g_pDebugSystem->Get_LevelMoveCheck(iLevel))
@@ -226,6 +227,8 @@ _int CStage1::Tick(_double TimeDelta)
 		if (FAILED(g_pGameInstance->Open_Level((_uint)SCENEID::SCENE_LOADING, pLoading)))
 			return -1;
 		g_pDebugSystem->Set_LevelcMoveCheck(false);
+		m_pTriggerSystem = nullptr;
+		g_pDropManager = nullptr;
 		return 0;
 	}
 #endif //  _DEBUG
@@ -357,6 +360,7 @@ _int CStage1::Tick(_double TimeDelta)
 	//	CMonster_Crawler* pMonster = nullptr;
 	//	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Test", L"Proto_GameObject_Monster_Crawler", &fPos, (CGameObject**)&pMonster)))
 	//		return -1;
+	//	pMonster->setActive(true);
 	//}
 
 	//if (g_pGameInstance->getkeyDown(DIK_NUMPAD1))
@@ -410,13 +414,13 @@ _int CStage1::Tick(_double TimeDelta)
 	//	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Test", L"Proto_GameObject_Boss_Bastion", &fPos, (CGameObject**)&pMonster)))
 	//		return -1;
 	//}
-	if (g_pGameInstance->getkeyDown(DIK_NUMPAD8))
-	{
-		CMonster_BronzeAnimus* pMonster = nullptr;
-		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Test", L"Proto_GameObject_Monster_BronzeAnimus", &fPos, (CGameObject**)&pMonster)))
-			return -1;
-		pMonster->setActive(true);
-	}
+	//if (g_pGameInstance->getkeyDown(DIK_NUMPAD8))
+	//{
+	//	CMonster_BronzeAnimus* pMonster = nullptr;
+	//	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Test", L"Proto_GameObject_Monster_BronzeAnimus", &fPos, (CGameObject**)&pMonster)))
+	//		return -1;
+	//	pMonster->setActive(true);
+	//}
 #pragma endregion
 
 	if(g_pDropManager)
@@ -526,10 +530,10 @@ HRESULT CStage1::Ready_MapObject()
 				Desc.fEffectPlaySpeed = 1.f;
 				Desc.ParticleMat = XMLoadFloat4x4(&iter);
 				Desc.bUsingGravity = true;
+				Desc.IDTag = 3;
 
 				if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_NoisFire", L"Proto_GameObject_Effect_Env_Fire", &Desc)))
 					MSGBOX("Failed To Clone NoisFire");
-
 
 				//fire smoke
 				ZeroMemory(&Desc, sizeof(Desc));
@@ -542,6 +546,7 @@ HRESULT CStage1::Ready_MapObject()
 				Desc.ParticleMat = XMLoadFloat4x4(&iter);
 				Desc.ParticleMat.r[3] = XMVectorSetY(Desc.ParticleMat.r[3], XMVectorGetY(Desc.ParticleMat.r[3]) + 0.5f);
 				Desc.bUsingGravity = true;
+				Desc.IDTag = 3;
 
 				if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Effect_Env_Fire_Smoke", L"Proto_GameObject_Effect_Env_Fire", &Desc)))
 				{
@@ -741,6 +746,8 @@ HRESULT CStage1::Ready_UI(const _tchar* LayerTag)
 
 HRESULT CStage1::Ready_Light()
 {
+	g_pGameInstance->RemoveLight();
+
 	LIGHTDESC			LightDesc;
 
 	ZeroMemory(&LightDesc, sizeof(LIGHTDESC));
@@ -2447,8 +2454,10 @@ HRESULT CStage1::Ready_Treasure_Chest()
 			MSGBOX("Treasure_Chest 파일을 불러오는 도중 오류가 발생했습니다. Stage1.cpp Line 306");
 			return E_FAIL;
 		}
+
 		m_pDumyDropData.push_back(pDropboxdata);
 	}
+
 
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_LootShield", L"Proto_GameObject_LootShield")))
 		return E_FAIL;
@@ -2514,7 +2523,7 @@ void CStage1::Shoot_Meteor(_double dDeltaTime)
 		for (_uint i = 0; i < iRandomShot; i++)
 		{
 			_vector vPos = XMVectorZero();
-			_uint randomPos = MathUtils::ReliableRandom(0, 6);
+			_uint randomPos = (_uint)MathUtils::ReliableRandom(0, 6);
 			vPos = XMLoadFloat4(&m_vecMeteorPos[randomPos]);
 
 			_vector vPivot;
@@ -2561,24 +2570,35 @@ void CStage1::Free()
 {
 	CLevel::Free();
 
+	if (m_pScenemaManager)
+	{
+		Safe_Release(m_pScenemaManager);
+		CScenematicManager::DestroyInstance();
+	}
+
 	for (auto& iter : m_pDumyDropData)
 		Safe_Delete(iter);
 	m_pDumyDropData.clear();
 
-	if(g_pInteractManager)
+	if (m_pIndicatorManager)
+	{
+		Safe_Release(m_pIndicatorManager);
+		CIndicator_Manager::DestroyInstance();
+	}
+
+	if (g_pInteractManager)
 		g_pInteractManager->Remove_Interactable();
 
-	Safe_Release(m_pScenemaManager);
-	Safe_Release(m_pIndicatorManager);
-	CScenematicManager::DestroyInstance();
-	CIndicator_Manager::DestroyInstance();
-	CWeaponGenerator::DestroyInstance();
-	CDropManager::DestroyInstance();
+	if (g_pDropManager)
+		CDropManager::DestroyInstance();
 
-	Safe_Release(m_pTriggerSystem);
+	if(m_pTriggerSystem)
+		Safe_Release(m_pTriggerSystem);
 
 	for (auto& pObj : m_vecMeteor)
 		Safe_Release(pObj);
 	m_vecMeteor.clear();
+
+	CWeaponGenerator::DestroyInstance();
 
 }

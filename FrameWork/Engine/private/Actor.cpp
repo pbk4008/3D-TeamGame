@@ -203,11 +203,15 @@ void CActor::Active_Effect(_uint iEffectIndex)
 		//MSGBOX("Effect Null!!");
 		return;
 	}
-	_vector Mypos = m_pTransform->Get_State(CTransform::STATE_POSITION);
-	Mypos = XMVectorSetY(Mypos, XMVectorGetY(Mypos) + 1.f);
-	pEffect->Get_Transform()->Set_State(CTransform::STATE_POSITION, Mypos);
-	pEffect->setActive(true);
-	pEffect->Set_Reset(true);
+	if (nullptr != pEffect)
+	{
+		_vector Mypos = m_pTransform->Get_State(CTransform::STATE_POSITION);
+		Mypos = XMVectorSetY(Mypos, XMVectorGetY(Mypos) + 1.f);
+		pEffect->Get_Transform()->Set_State(CTransform::STATE_POSITION, Mypos);
+		pEffect->setActive(true);
+		pEffect->Set_Reset(true);
+	}
+	
 }
 
 void CActor::Active_Effect(_uint iEffectIndex, _fvector vPivot)
@@ -218,11 +222,15 @@ void CActor::Active_Effect(_uint iEffectIndex, _fvector vPivot)
 		//MSGBOX("Effect Null!!");
 		return;
 	}
-	_vector Mypos = m_pTransform->Get_State(CTransform::STATE_POSITION);
-	Mypos += vPivot;
-	pEffect->Get_Transform()->Set_State(CTransform::STATE_POSITION, Mypos);
-	pEffect->setActive(true);
-	pEffect->Set_Reset(true);
+	if (nullptr != pEffect)
+	{
+		_vector Mypos = m_pTransform->Get_State(CTransform::STATE_POSITION);
+		Mypos += vPivot;
+		pEffect->Get_Transform()->Set_State(CTransform::STATE_POSITION, Mypos);
+		pEffect->setActive(true);
+		pEffect->Set_Reset(true);
+	}
+	
 }
 
 void CActor::Active_Effect_Target(_uint iEffectIndex, _matrix TargetMat)
@@ -233,11 +241,13 @@ void CActor::Active_Effect_Target(_uint iEffectIndex, _matrix TargetMat)
 		//MSGBOX("Effect Null!!");
 		return;
 	}
-
-	TargetMat.r[3] = XMVectorSetY(TargetMat.r[3], XMVectorGetY(TargetMat.r[3]) + 1.f);
-	pEffect->Get_Transform()->Set_WorldMatrix(TargetMat);
-	pEffect->setActive(true);
-	pEffect->Set_Reset(true);
+	if (nullptr != pEffect)
+	{
+		TargetMat.r[3] = XMVectorSetY(TargetMat.r[3], XMVectorGetY(TargetMat.r[3]) + 1.f);
+		pEffect->Get_Transform()->Set_WorldMatrix(TargetMat);
+		pEffect->setActive(true);
+		pEffect->Set_Reset(true);
+	}
 }
 
 

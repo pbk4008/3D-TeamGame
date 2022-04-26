@@ -119,8 +119,8 @@ _int CGameInstance::Tick_Engine(_double TimeDelta)
 
 	m_pPipeLine->Update_PipeLine();
 
-	//if (m_pPipeLine->getCameraCount())
-	//	m_pFrustum->Transform_ToWorldSpace(m_pPipeLine->getBaseCamera());	
+	if (m_pPipeLine->getCameraCount())
+		m_pFrustum->Transform_ToWorldSpace(m_pPipeLine->getBaseCamera());	
 	
 	m_pPhysicSystem->Tick(TimeDelta);
 
