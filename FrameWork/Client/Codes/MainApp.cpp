@@ -13,6 +13,7 @@
 #include "WeaponGenerator.h"
 #include "DropManager.h"
 #include "GuideUIManager.h"
+#include "ScenematicManager.h"
 
 //Inventory UI Object
 #include "Inven_UIManager.h"
@@ -109,9 +110,6 @@ HRESULT CMainApp::NativeConstruct()
 	// 몬스터
 	g_pGameInstance->Set_CollisionLayer((_uint)ELayer::Monster, (_uint)ELayer::Enviroment);
 	g_pGameInstance->Set_CollisionLayer((_uint)ELayer::Monster, (_uint)ELayer::Weapon);
-	//메테오
-	g_pGameInstance->Set_CollisionLayer((_uint)ELayer::Meteor, (_uint)ELayer::Enviroment);
-	g_pGameInstance->Set_CollisionLayer((_uint)ELayer::Meteor, (_uint)ELayer::Player);
 
 	g_pGameInstance->Set_CollisionLayer((_uint)ELayer::Weapon, (_uint)ELayer::Pot);
 
@@ -293,6 +291,7 @@ if (FAILED(pMeshLoader->Reserve_MeshLoader(m_pDevice, m_pDeviceContext)))
 	if (FAILED(g_pGuideManager->NativeConstruct()))
 		return E_FAIL;
 
+	CScenematicManager::GetInstance();
 	return S_OK;
 }
 
@@ -636,6 +635,7 @@ void CMainApp::Free()
 	CInteractManager::DestroyInstance();
 	CQuestManager::DestroyInstance();
 	CGuideUIManager::DestroyInstance();
+	CScenematicManager::DestroyInstance();
 
 	Safe_Release(g_pObserver);
 	Safe_Release(m_pRenderer);

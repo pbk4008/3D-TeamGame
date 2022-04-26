@@ -6,9 +6,18 @@
 #include "TestObj.h"
 #include "CapsuleObstacle.h"
 #include "MeshEffect_Jupiter.h"
+#include "ScenematicManager.h"
+
+#include "Cinema4_1.h"
+#include "Cinema4_2.h"
+#include "Cinema4_3.h"
+#include "Cinema4_4.h"
+#include "Cinema4_5.h"
+#include "Cinema4_6.h"
 
 CStage3::CStage3(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
 	:CLevel(pDevice, pDeviceContext)
+	, m_pCinematicManager(nullptr)
 {
 }
 
@@ -65,6 +74,15 @@ _int CStage3::Tick(_double TimeDelta)
 			g_pMainApp->Set_DeltaTimeZero(true);
 		}
 	}
+	if (m_pCinematicManager)
+		m_pCinematicManager->Tick(TimeDelta);
+
+	return _int();
+}
+_int CStage3::LateTick(_double TimeDelta)
+{
+	if (m_pCinematicManager)
+		m_pCinematicManager->LateTick(TimeDelta);
 
 	return _int();
 }
@@ -239,6 +257,26 @@ HRESULT CStage3::Ready_Light()
 	return S_OK;
 }
 
+HRESULT CStage3::Ready_Cinema()
+{
+	m_pCinematicManager = GET_INSTANCE(CScenematicManager);
+
+	if (FAILED(m_pCinematicManager->Add_Scenema(CCinema4_1::Create(m_pDevice, m_pDeviceContext, (_uint)SCENEID::SCENE_STAGE3))))
+		return E_FAIL;
+	if (FAILED(m_pCinematicManager->Add_Scenema(CCinema4_2::Create(m_pDevice, m_pDeviceContext, (_uint)SCENEID::SCENE_STAGE3))))
+		return E_FAIL;
+	if (FAILED(m_pCinematicManager->Add_Scenema(CCinema4_3::Create(m_pDevice, m_pDeviceContext, (_uint)SCENEID::SCENE_STAGE3))))
+		return E_FAIL;
+	if (FAILED(m_pCinematicManager->Add_Scenema(CCinema4_4::Create(m_pDevice, m_pDeviceContext, (_uint)SCENEID::SCENE_STAGE3))))
+		return E_FAIL;
+	if (FAILED(m_pCinematicManager->Add_Scenema(CCinema4_5::Create(m_pDevice, m_pDeviceContext, (_uint)SCENEID::SCENE_STAGE3))))
+		return E_FAIL;
+	if (FAILED(m_pCinematicManager->Add_Scenema(CCinema4_6::Create(m_pDevice, m_pDeviceContext, (_uint)SCENEID::SCENE_STAGE3))))
+		return E_FAIL;
+
+	return S_OK;
+}
+
 CStage3* CStage3::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
 {
 	CStage3* pInstance = new CStage3(pDevice, pDeviceContext);
@@ -255,4 +293,5 @@ void CStage3::Free()
 {
 	CLevel::Free();
 	CWeaponGenerator::DestroyInstance();
+	Safe_Release(m_pCinematicManager);
 }

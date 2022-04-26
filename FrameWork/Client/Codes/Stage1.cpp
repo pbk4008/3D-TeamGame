@@ -70,7 +70,6 @@
 #include "Cinema3_3.h"
 #include "Cinema3_4.h"
 #include "Cinema3_5.h"
-#include "Cinema3_6.h"
 #include "MeshEffect_Razer.h"
 
 CStage1::CStage1()
@@ -370,7 +369,7 @@ _int CStage1::Tick(_double TimeDelta)
 				}
 				else
 				{
-					if (m_pScenemaManager->Get_EventCinema((_uint)CINEMA_INDEX::CINEMA3_6))
+					if (m_pScenemaManager->Get_EventCinema((_uint)CINEMA_INDEX::CINEMA3_5))
 					{
 						m_pScenemaManager->ResetCinema();
 						if (FAILED(g_pGameInstance->Open_Level((_uint)SCENEID::SCENE_LOADING, CLoading::Create(m_pDevice, m_pDeviceContext, SCENEID::SCENE_STAGE2))))
@@ -2672,10 +2671,7 @@ void CStage1::Free()
 	CLevel::Free();
 
 	if (m_pScenemaManager)
-	{
 		Safe_Release(m_pScenemaManager);
-		CScenematicManager::DestroyInstance();
-	}
 
 	for (auto& iter : m_pDumyDropData)
 		Safe_Delete(iter);

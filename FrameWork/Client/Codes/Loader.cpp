@@ -54,6 +54,7 @@
 //#include "Effect_DeathParticle.h"
 //#include "Effect_Guard.h"
 #include "Explosion_Rock.h"
+#include "VIBuffer_PointInstance_Energy.h"
 
 
 #include "UI_Ingame.h"
@@ -968,6 +969,82 @@ HRESULT CLoader::Load_Stage2_Object()
 	return S_OK;
 }
 
+HRESULT CLoader::Set_Stage3_Prototype()
+{
+	return S_OK;
+}
+
+HRESULT CLoader::Load_Stage3_Object()
+{
+	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_CapsuleObstacle", CCapsuleObstacle::Create(m_pDevice, m_pDeviceContext))))
+	{
+		MSGBOX(L"캡슐 장애물 프로토타입 생성 실패")
+			return E_FAIL;
+	}
+	if (FAILED(Load_Stage3_Cinema_Object()))
+		return E_FAIL;
+	//Boss Solaris
+	if(FAILED(Load_Stage3_BossLoad()))
+		return E_FAIL;
+
+	return S_OK;
+}
+
+HRESULT CLoader::Load_Stage3_BossLoad()
+{
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE3, L"Model_Boss_Solaris", CModel::Create(m_pDevice, m_pDeviceContext,
+		L"../bin/FBX/Monster/Solaris.fbx", CModel::TYPE_ANIM, true))))
+		return E_FAIL;
+
+	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Solaris", CBoss_Solaris::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Weapon_Boss", CBoss_Weapon::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	return S_OK;
+}
+
+HRESULT CLoader::Load_Stage3_Cinema_Object()
+{
+	//4-1
+	_matrix matPivot = XMMatrixIdentity();
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE3, L"Model_Cinema_Cam4_1", CModel::Create(m_pDevice, m_pDeviceContext,
+		"../bin/FBX/Cinema/Camera/", "camera_05_01_bone.fbx",
+		L"../../Reference/ShaderFile/Shader_AnimMesh.hlsl", matPivot, CModel::TYPE_ANIM, true))))
+		return E_FAIL;
+
+	//4-2
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE3, L"Model_Cinema_Cam4_2", CModel::Create(m_pDevice, m_pDeviceContext,
+		"../bin/FBX/Cinema/Camera/", "camera_05_02_bone.fbx",
+		L"../../Reference/ShaderFile/Shader_AnimMesh.hlsl", matPivot, CModel::TYPE_ANIM, true))))
+		return E_FAIL;
+
+	//4-3
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE3, L"Model_Cinema_Cam4_3", CModel::Create(m_pDevice, m_pDeviceContext,
+		"../bin/FBX/Cinema/Camera/", "camera_05_03_bone.fbx",
+		L"../../Reference/ShaderFile/Shader_AnimMesh.hlsl", matPivot, CModel::TYPE_ANIM, true))))
+		return E_FAIL;
+
+	//4-4
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE3, L"Model_Cinema_Cam4_4", CModel::Create(m_pDevice, m_pDeviceContext,
+		"../bin/FBX/Cinema/Camera/", "camera_05_04_bone.fbx",
+		L"../../Reference/ShaderFile/Shader_AnimMesh.hlsl", matPivot, CModel::TYPE_ANIM, true))))
+		return E_FAIL;
+
+	//4-5
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE3, L"Model_Cinema_Cam4_5", CModel::Create(m_pDevice, m_pDeviceContext,
+		"../bin/FBX/Cinema/Camera/", "camera_05_05_bone.fbx",
+		L"../../Reference/ShaderFile/Shader_AnimMesh.hlsl", matPivot, CModel::TYPE_ANIM, true))))
+		return E_FAIL;
+
+	//4-6
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE3, L"Model_Cinema_Cam4_6", CModel::Create(m_pDevice, m_pDeviceContext,
+		"../bin/FBX/Cinema/Camera/", "camera_05_06_bone.fbx",
+		L"../../Reference/ShaderFile/Shader_AnimMesh.hlsl", matPivot, CModel::TYPE_ANIM, true))))
+		return E_FAIL;
+
+	return S_OK;
+}
+
 void CLoader::Add_LoadingThread(const wstring& pComponetTag, const wstring& pFilePath, _uint iType)
 {
 	CMeshLoader* pLoader = GET_INSTANCE(CMeshLoader);
@@ -1383,22 +1460,10 @@ HRESULT CLoader::Ready_Stage2()
 
 HRESULT CLoader::Ready_Stage3()
 {
-	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_CapsuleObstacle", CCapsuleObstacle::Create(m_pDevice, m_pDeviceContext))))
-	{
-		MSGBOX(L"캡슐 장애물 프로토타입 생성 실패")
-			return E_FAIL;
-	}
-
-	//Boss Solaris
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE3, L"Model_Boss_Solaris", CModel::Create(m_pDevice, m_pDeviceContext,
-		L"../bin/FBX/Monster/Solaris.fbx", CModel::TYPE_ANIM, true))))
+	if (FAILED(Set_Stage3_Prototype()))
 		return E_FAIL;
-
-	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Solaris", CBoss_Solaris::Create(m_pDevice, m_pDeviceContext))))
+	if(FAILED(Load_Stage3_Object()))
 		return E_FAIL;
-	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Weapon_Boss", CBoss_Weapon::Create(m_pDevice, m_pDeviceContext))))
-		return E_FAIL;
-
 	return S_OK;
 }
 
