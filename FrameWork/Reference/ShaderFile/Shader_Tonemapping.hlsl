@@ -170,8 +170,8 @@ PS_OUT_TONE PS_MAIN_ACESFilmicTone(PS_IN In)
 	float4 tone_mapped_color_D = float4(ACESFilmicToneMapping(vTotalcolor.xyz * Exposure), vTotalcolor.a);
 	float4 tone_mapped_color_S = float4(ACESFilmicToneMapping(vSpeccular.xyz * Exposure), vSpeccular.a);
 	
-	Out.vHDRDiffuse = tone_mapped_color_D;
-	Out.vHDRSpecualr = tone_mapped_color_S;
+	Out.vHDRDiffuse = pow(tone_mapped_color_D, 1.f / gamma);
+	Out.vHDRSpecualr = pow(tone_mapped_color_S, 1.f / gamma);
 	
 	return Out;
 }

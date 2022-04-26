@@ -337,6 +337,7 @@ call Update_Client.bat</Command>
     <ClInclude Include="..\Headers\Camera_Culling.h" />
     <ClInclude Include="..\Headers\Camera_Silvermane.h" />
     <ClInclude Include="..\Headers\Camera_Debug.h" />
+    <ClInclude Include="..\Headers\CapsuleObstacle.h" />
     <ClInclude Include="..\Headers\Cinema1_1.h" />
     <ClInclude Include="..\Headers\Cinema1_2.h" />
     <ClInclude Include="..\Headers\Cinema2_1.h" />
@@ -403,6 +404,8 @@ call Update_Client.bat</Command>
     <ClInclude Include="..\Headers\Level_Logo.h" />
     <ClInclude Include="..\Headers\MeshEffect_Boss_Effect.h" />
     <ClInclude Include="..\Headers\MeshEffect_Boss_Explosion.h" />
+    <ClInclude Include="..\Headers\MeshEffect_Jupiter.h" />
+    <ClInclude Include="..\Headers\MeshEffect_Razer.h" />
     <ClInclude Include="..\Headers\MeshEffect_Test2.h" />
     <ClInclude Include="..\Headers\Loot_Shield.h" />
     <ClInclude Include="..\Headers\Shooter_Excution.h" />
@@ -777,6 +780,7 @@ call Update_Client.bat</Command>
     <ClCompile Include="..\Codes\Button_Skill.cpp" />
     <ClCompile Include="..\Codes\CameraShake.cpp" />
     <ClCompile Include="..\Codes\Camera_Culling.cpp" />
+    <ClCompile Include="..\Codes\CapsuleObstacle.cpp" />
     <ClCompile Include="..\Codes\Cinema1_1.cpp" />
     <ClCompile Include="..\Codes\Cinema1_2.cpp" />
     <ClCompile Include="..\Codes\Cinema2_1.cpp" />
@@ -839,6 +843,8 @@ call Update_Client.bat</Command>
     <ClCompile Include="..\Codes\JumpTrigger.cpp" />
     <ClCompile Include="..\Codes\MeshEffect_Boss_Effect.cpp" />
     <ClCompile Include="..\Codes\MeshEffect_Boss_Explosion.cpp" />
+    <ClCompile Include="..\Codes\MeshEffect_Jupiter.cpp" />
+    <ClCompile Include="..\Codes\MeshEffect_Razer.cpp" />
     <ClCompile Include="..\Codes\MeshEffect_Test2.cpp" />
     <ClCompile Include="..\Codes\Loot_Shield.cpp" />
     <ClCompile Include="..\Codes\Shooter_Excution.cpp" />

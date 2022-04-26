@@ -37,6 +37,41 @@ _int C2H_HammerAttackSprintR1::Tick(const _double& _dDeltaTime)
 		}
 	}
 
+	if (18 < iCurKeyFrameIndex)
+	{
+		if (!m_isShake3)
+		{
+			CCameraShake::SHAKEEVENT tShakeEvent;
+			tShakeEvent.fDuration = 3.f;
+			tShakeEvent.fBlendInTime = 0.5f;
+			tShakeEvent.fBlendOutTime = 2.f;
+			tShakeEvent.tWaveY.fAdditionalOffset = 2.f;
+			tShakeEvent.tWaveY.fFrequency = 0.01f;
+			tShakeEvent.tWaveY.fAmplitude = 0.01f;
+			tShakeEvent.tWaveZ.fAdditionalOffset = -4.f;
+			tShakeEvent.tWaveZ.fFrequency = 0.01f;
+			tShakeEvent.tWaveZ.fAmplitude = 0.01f;
+
+
+			_float3 vPos; XMStoreFloat3(&vPos, m_pTransform->Get_State(CTransform::STATE_POSITION));
+			g_pShakeManager->Shake(tShakeEvent, vPos);
+			m_isShake3 = true;
+		}
+	}
+
+	if (iCurKeyFrameIndex <= 35)
+	{
+		m_fMTAcc += g_fDeltaTime;
+		if (0.05f < m_fMTAcc)
+		{
+			m_pSilvermane->Create_MotionTrail(m_motiontrailidx);
+			++m_motiontrailidx;
+			m_fMTAcc = 0.f;
+		}
+
+		if (m_motiontrailidx >= 20)
+			m_motiontrailidx = 0;
+	}
 
 	if (35 < iCurKeyFrameIndex && !m_isRangeAttack)
 	{
@@ -99,8 +134,10 @@ HRESULT C2H_HammerAttackSprintR1::EnterState()
 		m_pSilvermane->Set_WeaponFixedBone("weapon_r");
 	}
 
-	m_tShakeEvent2.tWaveY.fAdditionalOffset = -0.6f;
-
+	m_tShakeEvent2.tWaveY.fAdditionalOffset = -0.8f;
+	m_tShakeEvent2.tWaveZ.fAdditionalOffset = 0.6f;
+	m_tShakeEvent2.tWaveZ.fFrequency = 1.f;
+	m_tShakeEvent2.tWaveZ.fAmplitude = 0.04f;
 
 	m_iCutIndex = 40;
 	m_iAttackStartIndex = 30;
@@ -114,6 +151,7 @@ HRESULT C2H_HammerAttackSprintR1::ExitState()
 	if (FAILED(__super::ExitState()))
 		return E_FAIL;
 
+	m_isShake3 = false;
 	return S_OK;
 }
 

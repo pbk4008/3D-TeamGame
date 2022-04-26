@@ -83,6 +83,14 @@ HRESULT C1H_SwordAttackNormalR1_02::EnterState()
 	m_iTrailEndIndex = 20;
 
 	m_pSilvermane->Set_AttackDesc_Dir(EAttackDir::Right);
+
+	m_tShakeEvent.tWaveX.fAmplitude = 0.14f;
+	m_tShakeEvent.tWaveX.fFrequency = 10.f;
+	m_tShakeEvent.tWaveY.fAmplitude = 0.14f;
+	m_tShakeEvent.tWaveY.fFrequency = 6.f;
+	m_tShakeEvent.tWaveZ.fAmplitude = 0.14f;
+	m_tShakeEvent.tWaveZ.fFrequency = 8.f;
+
 	return S_OK;
 }
 

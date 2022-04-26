@@ -42,6 +42,7 @@ private:
 
 private:
 	CEffect::EFFECTDESC m_Desc;
+	_float				m_Alpha = 1.f;
 
 public:
 	static CEffect_Hammer_Dust* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);

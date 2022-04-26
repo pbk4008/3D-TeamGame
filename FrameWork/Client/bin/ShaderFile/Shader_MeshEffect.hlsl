@@ -2,8 +2,14 @@
 #include "Shader_Share.hlsli"
 #include "Shader_ShareFuntion.hlsli"
 
+// Textures
 texture2D	g_DiffuseTexture;
 texture2D	g_MaskTexture;
+
+texture2D	g_NormalTex;
+texture2D	g_MaskTex;
+texture2D	g_NoiseTex;
+
 // Time
 float g_fLifeTime;
 float g_fAccTime;
@@ -84,8 +90,6 @@ VS_OUT VS_MAIN_FLOW(VS_IN In)
 		Out.vTexUV = TexUV;
 	}
 
-
-
 	Out.vProjPos = Out.vPosition;
 
 	return Out;
@@ -162,7 +166,7 @@ PS_OUT PS_MAIN(PS_IN In)
 	/* 0 ~ 1 */
 	Out.vNormal = vector(In.vNormal.xyz * 0.5f + 0.5f, 0.f);
 	Out.vDepth = vector(In.vProjPos.z / In.vProjPos.w, In.vProjPos.w / 300.0f, 0.0f, 0.0f);
-	
+
 	return Out;
 }
 
@@ -201,6 +205,79 @@ PS_OUT2 PS_MAIN_MASK(PS_IN In)
 
     Out.vNormal = g_Weight;
     return Out;
+}
+
+struct PS_OUT_Alpha
+{
+	vector		Color : SV_TARGET0;
+	vector		Weight : SV_TARGET1;
+};
+
+PS_OUT_Alpha PS_MAIN_Alpha (PS_IN In)
+{
+	PS_OUT_Alpha		Out = (PS_OUT_Alpha)0;
+
+	Out.Color = g_DiffuseTexture.Sample(DefaultSampler, float2(In.vTexUV.x * g_vTiling.x, In.vTexUV.y * g_vTiling.y));
+	if (g_isCustomColor)
+	{
+		Out.Color.rgb *= g_vColor.rgb;
+	}
+	Out.Color.a *= g_fAlpha;
+	
+	Out.Weight = g_Weight;
+
+	return Out;
+}
+
+struct PS_OUT_AlphaNoBloom
+{
+	vector		Color : SV_TARGET0;
+};
+
+PS_OUT_AlphaNoBloom PS_MAIN_AlphaNoBloom(PS_IN In)
+{
+	PS_OUT_AlphaNoBloom		Out = (PS_OUT_AlphaNoBloom)0;
+
+	Out.Color = g_DiffuseTexture.Sample(DefaultSampler, float2(In.vTexUV.x * g_vTiling.x, In.vTexUV.y * g_vTiling.y));
+	if (g_isCustomColor)
+	{
+		Out.Color.xyz *= g_vColor.xyz;
+	}
+	Out.Color.a *= g_fAlpha;
+
+	
+	return Out;
+}
+
+struct PS_OUT_NONALPHA
+{
+	half4 diffuse	: SV_TARGET0;
+	half4 normal	: SV_TARGET1;
+	half4 depth		: SV_TARGET2;
+	half4 mra		: SV_Target3;
+	half4 emission	: SV_Target4;
+};
+
+PS_OUT_NONALPHA PS_MAIN_NonAlpha(PS_IN In)
+{
+	PS_OUT_NONALPHA Out = (PS_OUT_NONALPHA)0;
+
+	Out.diffuse = g_DiffuseTexture.Sample(DefaultSampler, In.vTexUV);
+
+	Out.depth = half4(In.vPosition.z / In.vPosition.w, In.vPosition.w / 300.f, 0.f, 0.f);
+	Out.normal = half4(1, 1, 1, 0);
+
+	Out.mra.r = 0.f;
+	Out.mra.g = 1.f;
+	Out.mra.b = 1.f;
+	Out.mra.a = 1.f;
+
+	Out.emission = half4(g_vColor,1.f) * g_empower;
+
+	//if (0.1f >= Out.diffuse.a)
+	//	discard;
+
+	return Out;
 }
 
 technique11			DefaultTechnique
@@ -289,4 +366,40 @@ technique11			DefaultTechnique
         GeometryShader = NULL;
         PixelShader = compile ps_5_0 PS_MAIN_MASK();
     }
+	//7
+	pass AlphaGroup
+	{
+		SetRasterizerState(CullMode_None);
+		SetDepthStencilState(ZBufferDisable, 0);
+		SetBlendState(AlphaAdditive, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+
+		/* 진입점함수를 지정한다. */
+		VertexShader = compile vs_5_0 VS_MAIN_FLOW();
+		GeometryShader = NULL;
+		PixelShader = compile ps_5_0  PS_MAIN_Alpha();
+	}
+	// 8
+	pass AlphaNoBloomGroup
+	{
+		SetRasterizerState(CullMode_None);
+		SetDepthStencilState(ZBufferDisable, 0);
+		/*SetBlendState(AlphaBlending2, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);*/
+
+		/* 진입점함수를 지정한다. */
+		VertexShader = compile vs_5_0 VS_MAIN_FLOW();
+		GeometryShader = NULL;
+		PixelShader = compile ps_5_0  PS_MAIN_AlphaNoBloom();
+	}
+	// 9 NonAlpha emesive  ex) laser
+	pass test
+	{
+		SetRasterizerState(CullMode_None);
+		SetDepthStencilState(ZDefault, 0);
+		SetBlendState(BlendDisable, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+
+		/* 진입점함수를 지정한다. */
+		VertexShader = compile vs_5_0 VS_MAIN_FLOW();
+		GeometryShader = NULL;
+		PixelShader = compile ps_5_0  PS_MAIN_NonAlpha();
+	}
 }

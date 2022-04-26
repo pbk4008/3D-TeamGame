@@ -38,6 +38,8 @@ HRESULT CStage2::NativeConstruct()
 #ifndef _DEBUG
 	m_bDebug = false;
 #endif
+	g_pWeaponGenerator = CWeaponGenerator::GetInstance();
+
 	if (FAILED(CLevel::NativeConstruct()))
 		return E_FAIL;
 
@@ -48,8 +50,6 @@ HRESULT CStage2::NativeConstruct()
 
 	if (FAILED(Ready_MapObject()))
 		return E_FAIL;
-
-	g_pWeaponGenerator = CWeaponGenerator::GetInstance();
 
 	if (FAILED(Ready_Player(L"Layer_Silvermane")))
 		return E_FAIL;
@@ -167,10 +167,15 @@ HRESULT CStage2::Ready_Light()
 
 	LightDesc.fRange = 30.f;
 	LightDesc.vDiffuse = _float4(1.0f, 0.34509f, 0.1333f, 1.f);
-	LightDesc.vPosition = _float3(54.f, 19.f, 237.f);
+	LightDesc.vPosition = _float3(55.f, 16.f, 237.f);
 	LightDesc.bactive = true;
 	if (FAILED(g_pGameInstance->Add_Light(m_pDevice, m_pDeviceContext, LightDesc))) MSGBOX("Failed To Adding PointLight");
-	
+
+	LightDesc.fRange = 50.f;
+	LightDesc.vDiffuse = _float4(0.8784f, 0.2607f, 0.0725f, 1.f);
+	LightDesc.vPosition = _float3(7.5f, 29.f, 331.f);
+	LightDesc.bactive = true;
+	if (FAILED(g_pGameInstance->Add_Light(m_pDevice, m_pDeviceContext, LightDesc))) MSGBOX("Failed To Adding PointLight");
 	
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE2, L"Layer_SkyBox", L"Proto_GameObject_SkyBox")))
 		return E_FAIL;
@@ -225,7 +230,7 @@ HRESULT CStage2::Ready_MapObject()
 				Desc.fEffectPlaySpeed = 1.f;
 				Desc.ParticleMat = XMLoadFloat4x4(&iter);
 				Desc.bUsingGravity = false;
-
+				Desc.IDTag = 4;
 				if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE2, L"Layer_NoisFire", L"Proto_GameObject_Effect_Env_Fire", &Desc)))
 					MSGBOX("Failed To Clone NoisFire");
 			}
@@ -243,7 +248,7 @@ HRESULT CStage2::Ready_MapObject()
 				Desc.fEffectPlaySpeed = 1.f;
 				Desc.ParticleMat = XMLoadFloat4x4(&iter);
 				Desc.bUsingGravity = true;
-
+				Desc.IDTag = 4;
 				if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_NoisFire", L"Proto_GameObject_Effect_Env_Fire", &Desc)))
 					MSGBOX("Failed To Clone NoisFire");
 			}
@@ -1288,14 +1293,18 @@ void CStage2::Free()
 {
 	CLevel::Free();
 
-	Safe_Release(m_pTriggerSystem);
+	if(m_pTriggerSystem)
+		Safe_Release(m_pTriggerSystem);
 
-	g_pInteractManager->Remove_Interactable();
-	CWeaponGenerator::DestroyInstance();
-	CDropManager::DestroyInstance();
+	if(g_pInteractManager)
+		g_pInteractManager->Remove_Interactable();
+
+	if (g_pDropManager)
+		CDropManager::DestroyInstance();
 
 	for (auto& iter : m_pDumyDropData)
 		Safe_Delete(iter);
 	m_pDumyDropData.clear();
 
+	CWeaponGenerator::DestroyInstance();
 }

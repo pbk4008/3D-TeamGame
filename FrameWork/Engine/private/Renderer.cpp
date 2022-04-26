@@ -184,7 +184,7 @@ HRESULT CRenderer::Draw_RenderGroup()
 
 			if (FAILED(Render_Alpha()))	MSGBOX("Failed To Rendering AlphaPass");
 
-			if (FAILED(Render_AlphaNoBloom()))	MSGBOX("Failed To Rendering AlphaNoBloomPass");
+			/*if (FAILED(Render_AlphaNoBloom()))	MSGBOX("Failed To Rendering AlphaNoBloomPass");*/
 
 			if (FAILED(m_pHDR->Render_HDRBase(m_pTargetMgr, m_bRenderbtn[SHADOW]))) MSGBOX("Failed To Rendering HDRBasePass");
 
@@ -251,15 +251,15 @@ HRESULT CRenderer::Draw_RenderGroup()
 			////if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("Target_Vertical16")))) return E_FAIL;
 			////if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("Target_Horizontal16")))) return E_FAIL;
 
-			//if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("Target_Blend")))) return E_FAIL;
-			////if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("Target_Final")))) return E_FAIL;
-			//if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("Target_Bloom")))) return E_FAIL;
-			//if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("Target_Alpha")))) return E_FAIL;
-			//if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("Target_AlphaBlend")))) return E_FAIL;
-			//if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("Target_BlurShadow")))) return E_FAIL;
-			//if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("Target_Distortion")))) return E_FAIL;
-			//if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("Target_Velocity")))) return E_FAIL;
-			//if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("Target_RimLight")))) return E_FAIL;
+			if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("Target_Blend")))) return E_FAIL;
+			//if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("Target_Final")))) return E_FAIL;
+			if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("Target_Bloom")))) return E_FAIL;
+			if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("Target_Alpha")))) return E_FAIL;
+			if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("Target_AlphaBlend")))) return E_FAIL;
+			if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("Target_BlurShadow")))) return E_FAIL;
+			if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("Target_Distortion")))) return E_FAIL;
+			if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("Target_Velocity")))) return E_FAIL;
+			if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("Target_RimLight")))) return E_FAIL;
 			//if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("Target_AlphaNoBloom")))) return E_FAIL;
 		}
 #endif // _DEBUG
@@ -356,7 +356,7 @@ HRESULT CRenderer::Render_Alpha()
 
 HRESULT CRenderer::Render_AlphaNoBloom()
 {
-	if (FAILED(m_pTargetMgr->Begin_MRT(m_pDeviceContext, TEXT("Target_AlphaNoBloom")))) return E_FAIL;
+	//if (FAILED(m_pTargetMgr->Begin_MRT(m_pDeviceContext, TEXT("Target_AlphaNoBloom")))) return E_FAIL;
 
 	AlphaSorting(RENDER_ALPHANB);
 
@@ -369,7 +369,7 @@ HRESULT CRenderer::Render_AlphaNoBloom()
 	}
 	m_RenderGroup[RENDER_ALPHANB].clear();
 
-	if (FAILED(m_pTargetMgr->End_MRTNotClear(m_pDeviceContext))) return E_FAIL;
+	//if (FAILED(m_pTargetMgr->End_MRTNotClear(m_pDeviceContext))) return E_FAIL;
 
 	return S_OK;
 }
@@ -564,9 +564,9 @@ HRESULT CRenderer::Render_Final()
 	{
 		m_bRenderbtn[FOG] = true;
 		m_bfogtype = false;
-		_float4 fogcolor = _float4(0.7019f, 0.5f, 0.6019f, 1.f);
-		_float fogstart = 30.f;
-		_float fogdensity = 0.05f;
+		_float4 fogcolor = _float4(0.3019f, 0.4f, 0.5019f, 1.f);
+		_float fogstart = 40.f;
+		_float fogdensity = 0.03f;
 		_float4 campos;
 		XMStoreFloat4(&campos,g_pGameInstance->Get_CamPosition(m_CameraTag));
 		_matrix		ViewMatrix = g_pGameInstance->Get_Transform(m_CameraTag, TRANSFORMSTATEMATRIX::D3DTS_VIEW);
@@ -603,16 +603,20 @@ HRESULT CRenderer::Render_Final()
 	if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_MotionblurCnt", &cnt, sizeof(_int)))) MSGBOX("Render Final Value RaidalCnt Not Apply");
 	if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_thick", &thick, sizeof(_float)))) MSGBOX("Render Final Value thick Not Apply");
 
+	//if (FAILED(m_pVIBuffer->SetUp_TextureOnShader("g_AlphaNBTexture", m_pTargetMgr->Get_SRV(L"Target_AlphaNoBloom")))) MSGBOX("Alpha Render Failed");
 	if (FAILED(m_pVIBuffer->Render(1))) MSGBOX("Final Rendering Failed");
+
+	if (FAILED(Render_AlphaNoBloom()))	MSGBOX("Failed To Rendering AlphaNoBloomPass");
 
 	if (m_bRenderbtn[PARTICLE] == true)
 	{
 		if (FAILED(m_pPostProcess->AlphaBlur(m_pTargetMgr, m_bRenderbtn[PARTICLE]))) MSGBOX("Alpha Blur Failed");
 		if (FAILED(m_pVIBuffer->SetUp_TextureOnShader("g_AlphaTexture", m_pTargetMgr->Get_SRV(L"Target_Alpha")))) MSGBOX("Alpha Render Failed");
-		if (FAILED(m_pVIBuffer->SetUp_TextureOnShader("g_AlphaNBTexture", m_pTargetMgr->Get_SRV(L"Target_AlphaNoBloom")))) MSGBOX("Alpha Render Failed");
-
+		//if (FAILED(m_pVIBuffer->SetUp_TextureOnShader("g_AlphaNBTexture", m_pTargetMgr->Get_SRV(L"Target_AlphaNoBloom")))) MSGBOX("Alpha Render Failed");
 		if (FAILED(m_pVIBuffer->Render(2))) MSGBOX("Alpha Rendering Failed");
+
 	}
+
 	return S_OK;
 }
 
