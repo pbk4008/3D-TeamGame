@@ -106,6 +106,8 @@ HRESULT CUI_Death::Ready_Component(void)
 
 void CUI_Death::HideSpaceKey(void)
 {  
+	this->setActive(false);
+
 	m_pBlankSpaceKey->setActive(false);
 	m_pFillSpaceKey->setActive(false);
 
