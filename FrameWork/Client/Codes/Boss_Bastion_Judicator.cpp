@@ -657,6 +657,7 @@ void CBoss_Bastion_Judicator::Hit(const ATTACKDESC& _tAttackDesc)
 	if (true == m_bFirstHit)
 	{
 		m_pPanel->Set_BackUIGapY(1.f);
+		m_pStateController->Change_State(L"BattleCry");
 	}
 	m_fCurrentHp -= _tAttackDesc.fDamage;
 	m_fGroggyGauge += 2; //TODO::¼öÄ¡Á¤ÇØ¼­¹Ù²ãÁà¾ßµÊ

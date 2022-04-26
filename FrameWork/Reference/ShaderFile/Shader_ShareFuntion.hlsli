@@ -1,3 +1,4 @@
+
 half3 Normalmapping(half3 normaltex, half3x3 tbn)
 {
 	normaltex = normaltex * 2 - 1;
@@ -9,6 +10,8 @@ half3 Normalmapping(half3 normaltex, half3x3 tbn)
 	return normaltex;
 }
 
+//--------------------------------------------------------------------------------------------------------//
+// Distortion
 float Scale1 = 0.3;
 float Scale2 = 3.5;
 float Amp = 20.0;
@@ -107,6 +110,54 @@ half4 Noisfunction(Texture2D MainTex, SamplerState sample, half2 UV, half delta,
 	
 	return color;
 }
+
+// Circle distortion
+half2 GetOffsetFromCenter(half2 screenCoords, half2 screenSize)
+{
+	half2 halfScreenSize = screenSize / 2.0;
+    
+	return (screenCoords.xy - halfScreenSize) / min(halfScreenSize.x, halfScreenSize.y);
+}
+
+
+float EffectDuration = 1.0;
+float EffectFadeInTimeFactor = 0.5;
+float EffectWidth = 0.4;
+float EffectMaxTexelOffset = 20.0;
+
+half2 GetDistortionTexelOffset(half2 offsetDirection, float offsetDistance, float time)
+{
+	half progress = fmod(time, EffectDuration) / EffectDuration;
+    
+	half halfWidth = EffectWidth / 2.0;
+	half lower = 1.0 - smoothstep(progress - halfWidth, progress, offsetDistance);
+	half upper = smoothstep(progress, progress + halfWidth, offsetDistance);
+    
+	half band = 1.0 - (upper + lower);
+    
+    
+	half strength = 1.0 - progress;
+	half fadeStrength = smoothstep(0.0, EffectFadeInTimeFactor, progress);
+    
+	half distortion = band * strength * fadeStrength;
+    
+    
+	return distortion * offsetDirection * EffectMaxTexelOffset;
+}
+
+
+half3 GetTextureOffset(half2 coords, half2 textureSize, half2 texelOffset)
+{
+	half2 texelSize = 1.0 / textureSize;
+	half2 offsetCoords = coords + texelSize * texelOffset;
+    
+	half2 halfTexelSize = texelSize / 2.0;
+	half2 clampedOffsetCoords = clamp(offsetCoords, halfTexelSize, 1.0 - halfTexelSize);
+    
+	return half3(0, 0, 0); /*texture(iChannel0, clampedOffsetCoords).rgb;*/
+}
+
+//--------------------------------------------------------------------------------------------------------//
 
 half4 Dissolve(Texture2D Diffuse, Texture2D dissolvetex, SamplerState sample, half2 UV, half time)
 {

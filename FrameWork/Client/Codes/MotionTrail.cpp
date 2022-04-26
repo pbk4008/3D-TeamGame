@@ -35,6 +35,17 @@ HRESULT CMotionTrail::NativeConstruct(const _uint _iSceneID, void* _pArg)
 
 _int CMotionTrail::Tick(_double _dDeltaTime)
 {
+	if (m_runcheck == true)
+		m_lifetime -= (_float)_dDeltaTime * 2.f;
+	else
+		m_lifetime -= (_float)_dDeltaTime * 2.5f;
+
+	if (m_lifetime <= 0.f)
+	{
+		m_lifetime = 1.f;
+		m_bActive = false;
+	}
+
 	return _int();
 }
 
@@ -43,16 +54,6 @@ _int CMotionTrail::LateTick(_double _dDeltaTime)
 	if (m_pRenderer)
 	{
 		m_pRenderer->Add_RenderGroup(CRenderer::RENDER_MOTIONTRAIL, this);
-	}
-
-	if(m_runcheck == true)
-		m_lifetime -= (_float)_dDeltaTime * 2.f;
-	else
-		m_lifetime -= (_float)_dDeltaTime * 2.5f;
-	if (m_lifetime <= 0.f)
-	{
-		m_lifetime = 1.f;
-		m_bActive = false;
 	}
 
 	return _int();
@@ -68,14 +69,8 @@ HRESULT CMotionTrail::Render_MotionTrail()
 	rimdesc.rimintensity = m_rimintensity; // intensity ³·À» ¼ö·Ï °úÇÏ°Ô ºû³²
 	XMStoreFloat4(&rimdesc.camdir, XMVector3Normalize(g_pGameInstance->Get_CamPosition(camtag) - m_worldamt.r[3]));
 
-	Set_ContantBuffer(m_pModel, m_worldamt, rimdesc);
-	if (FAILED(m_pModel->SetUp_ValueOnShader("g_TrailBoneMatrices", &m_bonematrix, sizeof(_matrix) * 256))) MSGBOX("Failed To Apply MotionTrail ConstantBuffer");
 
-	if (m_runcheck == true)
-	{
-		if (FAILED(m_pModel->Render(2, 4))) MSGBOX("Fialed To Rendering Player Cloak MotionTrail");
-	}
-	else if (m_throwchck == true)
+	if (m_runcheck == true || m_throwchck == true)
 	{
 		if (XMVector3Equal(m_shieldworldmat.r[3], XMMatrixIdentity().r[3]) != true)
 		{
@@ -89,8 +84,25 @@ HRESULT CMotionTrail::Render_MotionTrail()
 			}
 		}
 	}
+	//else if (m_throwchck == true)
+	//{
+	//	if (XMVector3Equal(m_shieldworldmat.r[3], XMMatrixIdentity().r[3]) != true)
+	//	{
+	//		_matrix shield;
+	//		shield = XMMatrixTranspose(m_shieldworldmat);
+	//		XMStoreFloat4(&rimdesc.camdir, XMVector3Normalize(g_pGameInstance->Get_CamPosition(camtag) - m_shieldworldmat.r[3]));
+	//		Set_ContantBuffer(m_pShield, m_shieldworldmat, rimdesc);
+	//		for (_uint i = 0; i < m_pShield->Get_NumMeshContainer(); ++i)
+	//		{
+	//			if (FAILED(m_pShield->Render(i, 4))) MSGBOX("Fialed To Rendering Shield MotionTrail");
+	//		}
+	//	}
+	//}
 	else
 	{
+		Set_ContantBuffer(m_pModel, m_worldamt, rimdesc);
+		if (FAILED(m_pModel->SetUp_ValueOnShader("g_TrailBoneMatrices", &m_bonematrix, sizeof(_matrix) * 256))) MSGBOX("Failed To Apply MotionTrail ConstantBuffer");
+
 		for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
 		{
 			if (FAILED(m_pModel->Render(i, 4))) MSGBOX("Fialed To Rendering Player MotionTrail");
@@ -117,12 +129,13 @@ void CMotionTrail::Set_BoneMat(_fmatrix* bone)
 	memcpy(m_bonematrix, bone, sizeof(_matrix) * 256);
 }
 
-void CMotionTrail::Set_Info(_fmatrix world, _fmatrix weapon, _fmatrix shield, _float UVdvid)
+void CMotionTrail::Set_Info(_fmatrix world, _fmatrix weapon, _fmatrix shield, _float UVdvid, CModel* pCurWeapon)
 {
 	m_worldamt = world;
 	m_weaponworldmat = weapon;
 	m_shieldworldmat = shield;
 	m_UVdvid = UVdvid;
+	m_pWeapon = pCurWeapon;
 }
 
 void CMotionTrail::Set_Model(CModel* pModel, CModel* pWeapon,CModel* pShield)
@@ -131,10 +144,10 @@ void CMotionTrail::Set_Model(CModel* pModel, CModel* pWeapon,CModel* pShield)
 	Safe_AddRef(m_pModel);
 
 	m_pWeapon = pWeapon;
-	Safe_AddRef(m_pWeapon);
+	//Safe_AddRef(m_pWeapon);
 
 	m_pShield = pShield;
-	Safe_AddRef(m_pShield);
+	//Safe_AddRef(m_pShield);
 }
 
 HRESULT CMotionTrail::Set_ContantBuffer(CModel* pmodel, _fmatrix worldmat, RIM& rimdesc)
@@ -190,7 +203,7 @@ CGameObject* CMotionTrail::Clone(const _uint _iSceneID, void* _pArg)
 void CMotionTrail::Free()
 {
 	CActor::Free();
-	Safe_Release(m_pWeapon);
-	Safe_Release(m_pShield);
+	//Safe_Release(m_pWeapon);
+	//Safe_Release(m_pShield);
 	Safe_Release(m_pGradientTex);
 }

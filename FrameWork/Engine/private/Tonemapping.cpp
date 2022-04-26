@@ -54,7 +54,7 @@ HRESULT CTonemapping::Blend_FinalPass(CTarget_Manager* pTargetMgr, _bool check)
 
 	m_pFinalBlend->Render(0);
 
-	if (FAILED(pTargetMgr->End_MRT(m_pDeviceContext))) return E_FAIL;
+	if (FAILED(pTargetMgr->End_MRTNotClear(m_pDeviceContext))) return E_FAIL;
 
 	return S_OK;
 }
@@ -74,8 +74,9 @@ HRESULT CTonemapping::ToneMapping(CTarget_Manager* pTargetMgr)
 
 	_float rcp_w = (1.f / m_viewport.Width);
 	_float rcp_h = (1.f / m_viewport.Height);
-	_float expsure = 0.25f;
+	_float expsure = 0.3f;
 	_float GaussianScalar = 0.4f;
+
 
 	if (FAILED(m_pTonmapBuffer->SetUp_ValueOnShader("Exposure", &expsure, sizeof(_float))))	return E_FAIL;
 	if (FAILED(m_pTonmapBuffer->SetUp_ValueOnShader("GaussianScalar", &GaussianScalar, sizeof(_float)))) return E_FAIL;

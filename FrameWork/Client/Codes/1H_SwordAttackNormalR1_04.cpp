@@ -91,10 +91,10 @@ HRESULT C1H_SwordAttackNormalR1_04::EnterState()
 	// 2
 	m_tShakeEvent2.fDuration = 1.2f;
 	m_tShakeEvent2.fBlendInTime = 0.2f;
-	m_tShakeEvent2.fBlendOutTime = 0.4f;
+	m_tShakeEvent2.fBlendOutTime = 0.3f;
 	m_tShakeEvent2.tWaveY.fAmplitude = 0.04f;
 	m_tShakeEvent2.tWaveY.fFrequency = 1.f;
-	m_tShakeEvent2.tWaveY.fAdditionalOffset = -0.5f;
+	m_tShakeEvent2.tWaveY.fAdditionalOffset = -1.f;
 	m_tShakeEvent2.tWaveZ.fAmplitude = 0.04f;
 	m_tShakeEvent2.tWaveZ.fFrequency = 1.f;
 	m_tShakeEvent2.tWaveZ.fAdditionalOffset = 0.5f;

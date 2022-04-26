@@ -20,7 +20,8 @@ _int CSilvermane_KnockBack::Tick(const _double& _dDeltaTime)
 	if (NO_EVENT != iProgress)
 		return iProgress;
 
-	if (m_iCutIndex < m_pAnimationController->Get_CurKeyFrameIndex())
+	_uint iCurKeyFrameIndex = m_pAnimationController->Get_CurKeyFrameIndex();
+	if (m_iCutIndex < iCurKeyFrameIndex)
 	{
 		if (m_pSilvermane->IsEquipWeapon())
 		{
@@ -44,6 +45,24 @@ _int CSilvermane_KnockBack::Tick(const _double& _dDeltaTime)
 				return -1;
 			return STATE_CHANGE;
 		}
+	}
+
+	if (!m_isShake && 19 < iCurKeyFrameIndex)
+	{
+		CCameraShake::SHAKEEVENT tShakeEvent;
+		tShakeEvent.fDuration = 0.4f;
+		tShakeEvent.fBlendInTime = 0.1f;
+		tShakeEvent.fBlendOutTime = 0.2f;
+		tShakeEvent.tWaveX.fAmplitude = 0.04f;
+		tShakeEvent.tWaveX.fFrequency = 8.f;
+		tShakeEvent.tWaveY.fAmplitude = 0.4f;
+		tShakeEvent.tWaveY.fFrequency = 2.f;
+		//tShakeEvent.tWaveZ.fAmplitude = 0.1f;
+		//tShakeEvent.tWaveZ.fFrequency = 8.f;
+
+		_float3 vPos; XMStoreFloat3(&vPos, m_pTransform->Get_State(CTransform::STATE_POSITION));
+		g_pShakeManager->Shake(tShakeEvent, vPos);
+		m_isShake = true;
 	}
 
 	return _int();
@@ -76,24 +95,6 @@ HRESULT CSilvermane_KnockBack::EnterState()
 	m_pAnimationController->Set_RootMotion(true, true);
 	m_pAnimationController->Mul_MoveSpeed(0.5f);
 
-	if (!m_isShake)
-	{
-		CCameraShake::SHAKEEVENT tShakeEvent;
-		tShakeEvent.fDuration = 0.4f;
-		tShakeEvent.fBlendInTime = 0.1f;
-		tShakeEvent.fBlendOutTime = 0.1f;
-		tShakeEvent.tWaveX.fAmplitude = 0.04f;
-		tShakeEvent.tWaveX.fFrequency = 12.f;
-		tShakeEvent.tWaveY.fAmplitude = 0.04f;
-		tShakeEvent.tWaveY.fFrequency = 14.f;
-		tShakeEvent.tWaveZ.fAmplitude = 0.04f;
-		tShakeEvent.tWaveZ.fFrequency = 10.f;
-
-		_float3 vPos; XMStoreFloat3(&vPos, m_pTransform->Get_State(CTransform::STATE_POSITION));
-		g_pShakeManager->Shake(tShakeEvent, vPos);
-		m_isShake = true;
-	}
-
 	m_iCutIndex = 70;
 
 	m_pSilvermane->Set_IsTrasceCamera(false);
@@ -122,25 +123,7 @@ HRESULT CSilvermane_KnockBack::EnterState(void* _pArg)
 	}
 	m_pAnimationController->Set_RootMotion(true, true);
 	m_pAnimationController->Mul_MoveSpeed(0.5f);
-
-	if (!m_isShake)
-	{
-		CCameraShake::SHAKEEVENT tShakeEvent;
-		tShakeEvent.fDuration = 0.4f;
-		tShakeEvent.fBlendInTime = 0.1f;
-		tShakeEvent.fBlendOutTime = 0.1f;
-		tShakeEvent.tWaveX.fAmplitude = 0.04f;
-		tShakeEvent.tWaveX.fFrequency = 12.f;
-		tShakeEvent.tWaveY.fAmplitude = 0.04f;
-		tShakeEvent.tWaveY.fFrequency = 14.f;
-		tShakeEvent.tWaveZ.fAmplitude = 0.04f;
-		tShakeEvent.tWaveZ.fFrequency = 10.f;
-
-		_float3 vPos; XMStoreFloat3(&vPos, m_pTransform->Get_State(CTransform::STATE_POSITION));
-		g_pShakeManager->Shake(tShakeEvent, vPos);
-		m_isShake = true;
-	}
-
+	
 	m_iCutIndex = 70;
 
 	m_pSilvermane->Set_IsTrasceCamera(false);

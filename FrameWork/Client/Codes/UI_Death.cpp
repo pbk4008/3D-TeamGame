@@ -89,7 +89,6 @@ HRESULT CUI_Death::Ready_Component(void)
 	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_SingleImage", L"SingleImage", (CComponent**)&m_pSigleImageCom, &ModalSprite)))
 		return E_FAIL;
 
-
 	//Death
 	list<CGameObject*>* listFillKeys = g_pGameInstance->getObjectList(m_iSceneID, L"Layer_UI_FillSpace");
 	if (listFillKeys)
@@ -107,9 +106,13 @@ HRESULT CUI_Death::Ready_Component(void)
 
 void CUI_Death::HideSpaceKey(void)
 {  
+	this->setActive(false);
+
 	m_pBlankSpaceKey->setActive(false);
 	m_pFillSpaceKey->setActive(false);
-	//m_pSigleImageCom->ResetAlpha();
+
+	m_pFillSpaceKey->ResetVal(); /* 리스폰 UI용 변수 초기화 */
+	m_pSigleImageCom->ResetAlpha();
 }
 
 CUI_Death* CUI_Death::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)

@@ -14,6 +14,7 @@
 #include "Effect_Guard.h"
 #include "Effect_Falling_Leaf.h"
 #include "Effect_Floating_Speed.h"
+#include "Effect_Energy.h"
 
 #include "UI.h"
 #include "UI_Blank_CKey.h"
@@ -54,6 +55,7 @@ HRESULT CTestScene_JS::NativeConstruct()
 
 	if (FAILED(Ready_UI(L"Layer_UI")))
 		return E_FAIL;
+
 
 	g_pGameInstance->Change_BaseCamera(L"Camera_Silvermane");
 	return S_OK;
@@ -142,9 +144,10 @@ HRESULT CTestScene_JS::Ready_Gameobject()
 		return E_FAIL;
  	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_JS, L"Layer_Camera", L"Proto_GameObject_Camera_Silvermane")))
 		return E_FAIL;
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_JS, L"Layer_Boss", L"Proto_GameObject_Solaris")))
-		return E_FAIL;
-
+	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_JS, L"Layer_Boss", L"Proto_GameObject_Solaris")))
+	//	return E_FAIL;
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_JS, L"Layer_Effect_Mesh_Boss", L"Proto_GameObject_MeshEffect_Boss_Effect")))
+		MSGBOX(L"메쉬 이펙트 보스 생성 실패");
 	
 	//// 점프 노드들
 	//CJumpNode::DESC tJumpNodeDesc;
@@ -172,7 +175,6 @@ HRESULT CTestScene_JS::Ready_Gameobject()
 	//	return E_FAIL;
 
 	///////////////////// 스테이지 2용
-	// 
 	// 점프 노드들
 	//tJumpNodeDesc.vPosition = { 30.f , 23.f, 202.f };
 	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_JS, L"Layer_JumpNode", L"Proto_GameObject_JumpNode", &tJumpNodeDesc)))
@@ -789,6 +791,27 @@ HRESULT CTestScene_JS::Ready_Data_Effect()
 		MSGBOX("Falild to Add_Effect_Explosion ROck in CStage1::Ready_Effect()");
 		return E_FAIL;
 	}
+
+	vector<CEffect_Energy::EF_PAR_ENERGY_DESC> vecEnergyParticle;
+	g_pGameInstance->LoadFile<CEffect_Energy::EF_PAR_ENERGY_DESC>(vecEnergyParticle, L"../bin/SaveData/Effect/Effect_Energy.dat");
+
+	FullName = L"Proto_GameObject_Effect_Energy";
+	vecEnergyParticle[0].ParticleColor = { 1.f , 0.6f, 0.3f ,1.f };
+	vecEnergyParticle[0].Power = 2.5f;
+
+	//마지막에 받을 Effect변수 넣기
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Energy", FullName, &vecEnergyParticle[0], (CGameObject**)&pEffect)))
+	{
+		MSGBOX("Failed to Creating Effect_Player_Attack1 in CStage1::Ready_Effect()");
+		return E_FAIL;
+	}
+	if (FAILED(g_pGameInstance->Add_Effect((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Energy", pEffect, 2)))
+	{
+		MSGBOX("Falild to Add_Effect_Energy in CStage1::Ready_Effect()");
+		return E_FAIL;
+	}
+
+
 
 #pragma endregion
 

@@ -35,6 +35,7 @@ public:
 	void Set_UIDesc(UIACTIVEDESC Desc) { m_Desc = Desc; }
 	UIACTIVEDESC Get_UIDesc() { return m_Desc; }
 	void Set_GapX(_float fGap) { m_fGapX = fGap; }
+	void ResetVal(void);
 
 private:
 	UIACTIVEDESC m_Desc;
@@ -42,7 +43,7 @@ private:
 	_float m_fGapY = 1.f;
 	_float m_fAlpha = 1.f;
 	_float m_fPressTiime = 0.f;
-
+	_bool  m_bRespawn = false;
 private:
 	virtual HRESULT SetUp_Components();
 

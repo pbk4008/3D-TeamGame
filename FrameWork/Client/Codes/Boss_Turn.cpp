@@ -30,90 +30,45 @@ _int CBoss_Turn::Tick(const _double& TimeDelta)
 
 	m_pAnimator->Tick(TimeDelta);
 
+
+	/* 몬스터의 현재 Look 방향 벡터 */
+	_vector vecMonsterLook = XMVector3Normalize(m_pTransform->Get_State(CTransform::STATE_LOOK));
+	/* 몬스터가 플레이어에게 향하는 방향 벡터 */
+	_vector vMonsterPos = m_pTransform->Get_State(CTransform::STATE::STATE_POSITION);
+	_vector vDist = vMonsterPos - g_pObserver->Get_PlayerPos();
+	/* 몬스터와 플레이어 사이의 거리 */
+	_float fDistToPlayer = XMVectorGetX(XMVector3Length(vDist));
+
+	/* 플레이어가 몬스터의 앞에 있는지 뒤에있는지 판단 */
+	_vector vecMonsterToPlayer = XMVector3Normalize(vDist);
+	_vector dotVec = XMVector3Dot(vecMonsterLook, vecMonsterToPlayer);
+	_float CheckFWD = XMVectorGetX(dotVec); /* 음수-> 플레이어가 앞에 있다*/
+
+	/* 플레이어,몬스터 위치 차 벡터 */
+	_vector vPlayerToMonster = g_pObserver->Get_PlayerPos() - vMonsterPos;
+
+	/* 위치차이에 따른 Y 값 0으로 셋팅 */
+	vecMonsterLook = XMVectorSetY(vecMonsterLook, 0.f);
+	vPlayerToMonster = XMVectorSetY(vPlayerToMonster, 0.f);
+
+	/* 두 벡터의 사이 각 */
+	_vector svAngle = XMVector3AngleBetweenVectors(vecMonsterLook, vPlayerToMonster);
+	_float LookRad = 0.f;
+	XMStoreFloat(&LookRad, svAngle);
+	LookRad = XMConvertToDegrees(LookRad);
+
+	if (0 > CheckFWD)
+	{
+		if (10.0f > LookRad)
+		{
+			static_cast<CBoss_Solaris*>(m_pMonster)->Set_Random_AttackAnim();
+		}
+	}
+
+
 	if (m_pAnimator->Get_AnimController()->Is_Finished())
 	{
-		_vector vMonsterPos = m_pTransform->Get_State(CTransform::STATE::STATE_POSITION);
-		_vector vDist = vMonsterPos - g_pObserver->Get_PlayerPos();
-		_float fDistToPlayer = XMVectorGetX(XMVector3Length(vDist));
-
-		if (0.6f < m_pMonster->Get_HpRatio()) 
-		{
-			//레이저없음
-
-			if (30.f > fDistToPlayer)
-			{
-				_int iRandom = rand() % 5;
-
-				switch (iRandom)
-				{
-				case 0:
-					m_pStateController->Change_State(L"Attack_Agg");
-					break;
-				case 1:
-					m_pStateController->Change_State(L"Attack_R2");
-					break;
-				case 2:
-					m_pStateController->Change_State(L"Attack_S3");
-					break;
-				case 3:
-					m_pStateController->Change_State(L"Attack_R1");
-					break;
-				case 4:
-					m_pStateController->Change_State(L"Attack_S5_Protocol");
-					break;
-				}
-			}
-			else if (30.f <= fDistToPlayer)
-			{
-				m_pStateController->Change_State(L"Attack_S5_Protocol");
-			}
-		}
-		else if (0.6f >= m_pMonster->Get_HpRatio())
-		{
-			if (30.f > fDistToPlayer)
-			{
-				_int iRandom = rand() % 7;
-
-				switch (iRandom)
-				{
-				case 0:
-					m_pStateController->Change_State(L"Attack_Agg");
-					break;
-				case 1:
-					m_pStateController->Change_State(L"Attack_R2");
-					break;
-				case 2:
-					m_pStateController->Change_State(L"Attack_S3");
-					break;
-				case 3:
-					m_pStateController->Change_State(L"Attack_R1");
-					break;
-				case 4:
-					m_pStateController->Change_State(L"Attack_S5_Protocol");
-					break;
-				case 5:
-					m_pStateController->Change_State(L"Attack_S6");
-					break;
-				case 6:
-					m_pStateController->Change_State(L"Attack_S2_Variant");
-					break;
-				}
-			}
-			else if (30.f <= fDistToPlayer)
-			{
-				_int iRandom = rand() % 2;
-
-				switch (iRandom)
-				{
-				case 0:
-					m_pStateController->Change_State(L"Attack_S6");
-					break;
-				case 1:
-					m_pStateController->Change_State(L"Attack_S5_Protocol");
-					break;
-				}
-			}
-		}
+		static_cast<CBoss_Solaris*>(m_pMonster)->Set_Random_AttackAnim();
 	}
 
 	return _int();
@@ -141,9 +96,11 @@ HRESULT CBoss_Turn::EnterState()
 	if (FAILED(__super::EnterState()))
 		return E_FAIL;
 
+	static_cast<CBoss_Solaris*>(m_pMonster)->Set_HitMotion(false);
+
 	//플레이어를 향한 방향벡터
 	_vector vBossPos = m_pTransform->Get_State(CTransform::STATE::STATE_POSITION);
-	_vector vDist = vBossPos - g_pObserver->Get_PlayerPos();
+	_vector  vDist = vBossPos - g_pObserver->Get_PlayerPos();
 	_vector vBossToPlayerLook = XMVector3Normalize(vDist);
 
 	//보스의 현재Look
@@ -155,7 +112,7 @@ HRESULT CBoss_Turn::EnterState()
 
 	//플레이어가 몬스터의 앞인지 뒤인지
 	_vector vecDot = XMVector3Dot(vMyLook, vBossToPlayerLook);
-	_float CheckFWD = XMVectorGetX(vecDot); //음수 = 플레이어가 앞에있다 
+	 _float CheckFWD = XMVectorGetX(vecDot); //음수 = 플레이어가 앞에있다 
 
 	vDist = XMVector3Normalize(XMVectorSetY(vDist, 0.f));
 	vMyLook = XMVector3Normalize(XMVectorSetY(vMyLook, 0.f));
@@ -164,7 +121,6 @@ HRESULT CBoss_Turn::EnterState()
 	_float fRadian = 0.f;
 	XMStoreFloat(&fRadian, vAngle);
 	_vector vCross = XMVector3Cross(vMyLook, vDist);
-
 
 	m_fRadian = fRadian;
 
@@ -254,7 +210,6 @@ HRESULT CBoss_Turn::EnterState()
 		}
 
 	}
-
 	if (0 < CheckFWD)
 	{
 		cout << "CheckFWD 양수" << endl;
@@ -339,9 +294,8 @@ HRESULT CBoss_Turn::EnterState()
 		}
 	}
 
-	static_cast<CBoss_Solaris*>(m_pMonster)->Set_HitMotion(false);
-
 	cout << "=============" << endl;
+
 	return S_OK;
 }
 

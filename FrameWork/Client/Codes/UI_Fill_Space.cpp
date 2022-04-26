@@ -69,20 +69,28 @@ _int CUI_Fill_Space::Tick(_double TimeDelta)
 	{
 		m_fGapX += (_float)TimeDelta;
 		m_fPressTiime += (_float)TimeDelta;
+
+		if (1.0f <= m_fPressTiime && false == m_bRespawn)
+		{
+			m_bRespawn = true;
+		}
 	}
+
 	if (g_pGameInstance->getkeyUp(DIK_SPACE))
 	{
 		m_fGapX = 0.f;
 		m_fPressTiime = 0.f;
 	}
+
 	if (false == m_bActive)
 	{
 		m_fGapX = 1.f;
 	}
-	if (1.0f < m_fGapX)
+
+	if (true == m_bRespawn)
 	{
 		g_pGuideManager->Respawn();
-		return -1;
+		m_bRespawn = false;
 	}
 	return 0;
 }
@@ -120,6 +128,12 @@ HRESULT CUI_Fill_Space::Render()
 	m_pBuffer->Render(1);
 
 	return S_OK;
+}
+
+void CUI_Fill_Space::ResetVal(void)
+{
+	m_fPressTiime = 0.f;
+	m_bRespawn = false;
 }
 
 HRESULT CUI_Fill_Space::SetUp_Components()

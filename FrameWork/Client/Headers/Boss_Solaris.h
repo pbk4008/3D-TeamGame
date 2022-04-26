@@ -44,15 +44,15 @@ private:
 
 public:
 	virtual void OnTriggerEnter(CCollision& collision) override;
-
 	virtual void Hit(const ATTACKDESC& _tAttackDesc) override;
 	virtual void Execution() override;
+
 
 public:
 	void Set_IsAttack(const _bool _isAttack);
 	void OnWeaponEffect();
 	void Set_HitMotion(_bool bHitMotion) { m_bHitMotion = bHitMotion; }
-
+	void Set_Random_AttackAnim();
 private:
 	CAnimator* m_pAnimator = nullptr;
 	CStateController* m_pStateController = nullptr;
@@ -61,6 +61,8 @@ private:
 private:
 	_uint m_iHitCount = 0;
 	_bool m_bHitMotion = false;
+
+	_uint m_iPreAnim = 0;
 
 private:
 	_bool	m_bIsFall = false;

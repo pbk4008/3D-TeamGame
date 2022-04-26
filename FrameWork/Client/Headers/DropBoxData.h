@@ -10,16 +10,17 @@ public:
 
 public:
 	vector<CItemData> GetItemData(_int i) { return m_vecIteamData[i]; }
+	vector<CItemData> Get2HDropList(_int i) { return m_vec2HItem[i]; }
+	vector<CItemData> GetStage2ItemData(_int i) { return m_vecStage2IteamData[i]; }
 
 private:
 	std::vector<CItemData> m_vecIteamData[10];
+	std::vector<CItemData> m_vecStage2IteamData[15];
+	std::vector<CItemData> m_vec2HItem[2];
 };
 
 END
 #endif // DropBoxData_h__
-
-
-
 
 
 /////MEMO//////////////////////////////////////////////////////////////////////////

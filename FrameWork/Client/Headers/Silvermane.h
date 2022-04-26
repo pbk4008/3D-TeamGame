@@ -151,6 +151,8 @@ public: /* For.Execute */
 	CHierarchyNode* Get_ExecutionTargetBone() const;
 	CUI_Blank_FKey* Get_Blank_FKey() const;
 
+public: void	Set_HealActive(_bool check) { m_bhealcheck = check; }
+
 private:
 	const _int	Trace_CameraLook(const _double& _dDeltaTime);
 	const _int	Input(const _double& _dDeltaTime);
@@ -230,6 +232,9 @@ private:
 private:
 	CTexture*	m_pTexture = nullptr;
 	vector<CGameObject*>	m_vecMotionTrail;
+	CModel*			m_pHealSphere = nullptr;
+	_bool			m_bhealcheck = false;
+	CHierarchyNode* m_pWeaponBone = nullptr;
 
 public:
 	static CSilvermane* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext);

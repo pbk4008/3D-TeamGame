@@ -51,6 +51,9 @@ CEffect* CEffectManager::Find_Effect(_uint iEffectIndex)
 	if (iEffectIndex<0 && iEffectIndex>(_uint)m_vecEffect.size())
 		return nullptr;
 
+	if (0 == m_vecEffect.size())
+		return nullptr;
+
 	CEffect* pFindEffect = nullptr;
 
 	list<CEffect*> pList = m_vecEffect[iEffectIndex];

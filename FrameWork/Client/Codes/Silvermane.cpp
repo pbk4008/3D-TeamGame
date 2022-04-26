@@ -171,6 +171,7 @@
 
 #include "Material.h"
 #include "MotionTrail.h"
+#include "HierarchyNode.h"
 
 CSilvermane::CSilvermane(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
 	: CActor(_pDevice, _pDeviceContext)
@@ -224,12 +225,13 @@ HRESULT CSilvermane::NativeConstruct(const _uint _iSceneID, void* _pArg)
 
 
 	m_isFall = true;
-	m_fMaxHp = 10.f;
+	m_fMaxHp = 100000.f;
 	m_fCurrentHp = m_fMaxHp;
 
 	m_pRenderer->SetRenderButton(CRenderer::PIXEL, true);
 	m_pRenderer->SetRenderButton(CRenderer::PBR, true);
 	m_pRenderer->SetRenderButton(CRenderer::HDR, true);
+	m_pRenderer->SetRenderButton(CRenderer::MOTIONTRAIL, true);
 	//m_pRenderer->SetRenderButton(CRenderer::SHADOW, true);
 
 	//Light 수정 해야됨
@@ -240,6 +242,7 @@ HRESULT CSilvermane::NativeConstruct(const _uint _iSceneID, void* _pArg)
 	LightDesc.vDiffuse = _float4(1.f, 0.2f, 0.2f, 1.f);
 	LightDesc.vSpecular = _float4(0.8f, 0.8f, 0.8f, 1.f);
 	LightDesc.vAmbient = _float4(1.f, 1.f, 1.f, 1.f);
+	LightDesc.bactive = false;
 	XMStoreFloat3(&LightDesc.vPosition, m_pTransform->Get_State(CTransform::STATE_POSITION));
 
 	m_LightDesc = LightDesc;
@@ -285,7 +288,7 @@ HRESULT CSilvermane::NativeConstruct(const _uint _iSceneID, void* _pArg)
 	if (m_pFillCKey2)
 		m_pFillCKey2->setActive(false);
 
-
+	m_isLootShield = true;
 	return S_OK;
 }
 
@@ -452,13 +455,34 @@ HRESULT CSilvermane::Render()
 			CActor::BindConstantBuffer(wstrCamTag, &desc, &rimdesc);
 
 		if (FAILED(m_pModel->Render(i, i))) MSGBOX("Fialed To Rendering Silvermane");
-		/*if (i != 2)
-		{
-			if (FAILED(m_pModel->Render(i, i))) MSGBOX("Fialed To Rendering Silvermane");
-		}*/
 	}
 	if (m_pRenderer->Get_RenderButton(CRenderer::VELOCITYBLUR) == false)
 		m_PreWroldMat = m_pTransform->Get_WorldMatrix();
+
+	if (m_bhealcheck == true)
+	{
+		_matrix smatWorld, smatView, smatProj;
+
+		smatWorld = XMMatrixTranspose(m_pWeaponBone->Get_CombinedMatrix() * m_pModel->Get_PivotMatrix() * m_pTransform->Get_WorldMatrix());
+		smatView = XMMatrixTranspose(g_pGameInstance->Get_Transform(wstrCamTag, TRANSFORMSTATEMATRIX::D3DTS_VIEW));
+		smatProj = XMMatrixTranspose(g_pGameInstance->Get_Transform(wstrCamTag, TRANSFORMSTATEMATRIX::D3DTS_PROJECTION));
+
+		if (FAILED(m_pHealSphere->SetUp_ValueOnShader("g_WorldMatrix", &smatWorld, sizeof(_matrix)))) MSGBOX("Failed To Apply Actor ConstantBuffer");
+		if (FAILED(m_pHealSphere->SetUp_ValueOnShader("g_ViewMatrix", &smatView, sizeof(_matrix)))) MSGBOX("Failed To Apply Actor ConstantBuffer");
+		if (FAILED(m_pHealSphere->SetUp_ValueOnShader("g_ProjMatrix", &smatProj, sizeof(_matrix)))) MSGBOX("Failed To Apply Actor ConstantBuffer");
+
+		_float4 color = _float4(0, 1, 0, 1);
+		_float empower = 0.5f;
+
+		if (FAILED(m_pHealSphere->SetUp_ValueOnShader("g_color", &color, sizeof(_float4)))) MSGBOX("Failed To Apply Actor ConstantBuffer");
+		if (FAILED(m_pHealSphere->SetUp_ValueOnShader("g_empower", &empower, sizeof(_float)))) MSGBOX("Failed To Apply Actor ConstantBuffer");
+
+		for (_uint i = 0; i < m_pHealSphere->Get_NumMeshContainer(); ++i)
+		{
+			if (FAILED(m_pHealSphere->Render(i, 2))) MSGBOX("Fialed To Rendering Silver HealSphere");
+		}
+	}
+
 #ifdef _DEBUG
 	Render_Debug();
 #endif
@@ -966,9 +990,9 @@ HRESULT CSilvermane::Ready_Weapons(const _uint _iSceneID)
 	}
 
 	///////////////////////////////////////////////////////////////////// 방패
-	CHierarchyNode* pWeaponBone = m_pModel->Get_BoneMatrix("weapon_l");
+	m_pWeaponBone = m_pModel->Get_BoneMatrix("weapon_l");
 	m_pShield = CShield::Create(m_pDevice, m_pDeviceContext);
-	if (FAILED(m_pShield->NativeConstruct(m_iSceneID, pWeaponBone)))
+	if (FAILED(m_pShield->NativeConstruct(m_iSceneID, m_pWeaponBone)))
 	{
 		Safe_Release(m_pShield);
 		return E_FAIL;
@@ -984,7 +1008,7 @@ HRESULT CSilvermane::Ready_Weapons(const _uint _iSceneID)
 	if (m_pFlyingShield)
 	{
 		m_pFlyingShield->Set_Owner(this);
-		m_pFlyingShield->Set_FixedBone(pWeaponBone);
+		m_pFlyingShield->Set_FixedBone(m_pWeaponBone);
 		m_pFlyingShield->Set_OwnerPivotMatrix(m_pModel->Get_PivotMatrix());
 	}
 
@@ -1002,6 +1026,23 @@ HRESULT CSilvermane::Ready_Weapons(const _uint _iSceneID)
 
 		m_vecMotionTrail.emplace_back(pobj);
 	}
+
+	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Model_Player_HealEffect", L"Model_HealShphere", (CComponent**)&m_pHealSphere)))	return E_FAIL;
+
+	if (!m_pHealSphere)
+		MSGBOX("HealSphere Null!!");
+
+	//HealBase
+	CMaterial* pMtrl = nullptr;
+	CTexture* pTexture = nullptr;
+	pMtrl = CMaterial::Create(m_pDevice, m_pDeviceContext, L"Mtrl_Needle", L"../../Reference/ShaderFile/Shader_StaticMesh.hlsl", CMaterial::EType::Static);
+	pTexture = CTexture::Create(m_pDevice, m_pDeviceContext, L"../bin/Resources/Mesh/Bullet/Dungeons_Texture_01.dds", 1);
+	pMtrl->Set_Texture("g_DiffuseTexture", TEXTURETYPE::TEX_DIFFUSE, pTexture, 0);
+	g_pGameInstance->Add_Material(L"Mtrl_HealSphere", pMtrl);
+	m_pHealSphere->Add_Material(g_pGameInstance->Get_Material(L"Mtrl_HealSphere"), 0);
+
+	m_pWeaponBone = m_pModel->Get_BoneMatrix("middle_01_l");
+
 	return S_OK;
 }
 
@@ -1304,8 +1345,11 @@ void CSilvermane::Respawn()
 {
 	m_pCharacterController->setPosition(m_vRespawnPos);
 	m_pTransform->SetUp_Rotation(_float3(0.f, 0.f, 0.f));
+	m_pTransform->Set_State(CTransform::STATE_POSITION,XMVectorSetW(XMLoadFloat3(&m_vRespawnPos), 1.f));
+
 	if (m_pCamera)
 		m_pCamera->Respawn();
+
 	m_fCurrentHp = m_fMaxHp;
 
 	if (!m_isEquipWeapon)
@@ -1617,7 +1661,7 @@ void CSilvermane::End_ThrowShield()
 		return;
 
 	m_pStateController->Change_State(L"Shield_Throw");
-	Set_EquipShield(true);
+	//Set_EquipShield(true);
 	Set_EquipShieldAnim(true);
 	m_pShield->Set_TrackAcc(6.0); // 방패가 펼쳐진상태로 켜지도록 함
 
@@ -1628,8 +1672,6 @@ void CSilvermane::End_ThrowShield()
 void CSilvermane::Loot_Shield()
 {
 	m_isLootShield = true;
-
-	m_pModel->Get_MeshContainer().size();
 }
 
 void CSilvermane::OnLight(_vector vColor, _vector vAmbient, _float fRange, _float fOffTimeSpeed)
@@ -1641,6 +1683,7 @@ void CSilvermane::OnLight(_vector vColor, _vector vAmbient, _float fRange, _floa
 		XMStoreFloat4(&m_LightDesc.vDiffuse, vColor);
 		XMStoreFloat4(&m_LightDesc.vAmbient, vAmbient);
 		m_LightDesc.fRange = fRange;
+		m_LightDesc.bactive = true;
 		m_fOffTimeSpeed = fOffTimeSpeed;
 
 		m_pLight->Set_Desc(m_LightDesc);
@@ -1785,7 +1828,10 @@ HRESULT CSilvermane::Create_MotionTrail(_int idex, _bool runcheck, _bool throwch
 			uvdvid = 0.7f;
 		else
 		{
-			uvdvid = 0.9f;
+			if (m_pCurWeapon->Get_Type() == CWeapon::EType::Sword_1H)
+				uvdvid = 0.9f;
+			else
+				uvdvid = 0.7f;
 			//if (idex <= 10)
 			//	uvdvid = idex * 0.1f;
 			//else
@@ -1795,7 +1841,7 @@ HRESULT CSilvermane::Create_MotionTrail(_int idex, _bool runcheck, _bool throwch
 		static_cast<CMotionTrail*>(m_vecMotionTrail[idex])->Set_Info(smatWorld
 																	,m_pCurWeapon->Get_Transform()->Get_WorldMatrix()
 																	, m_pFlyingShield->Get_Transform()->Get_WorldMatrix()
-																	,uvdvid);
+																	,uvdvid,m_pCurWeapon->Get_Model());
 
 		static_cast<CMotionTrail*>(m_vecMotionTrail[idex])->Set_RunCheck(runcheck);
 		static_cast<CMotionTrail*>(m_vecMotionTrail[idex])->Set_ThrowCheck(throwcheck);
@@ -2104,8 +2150,8 @@ CGameObject* CSilvermane::Clone(const _uint _iSceneID, void* _pArg)
 void CSilvermane::Free()
 {
 	__super::Free();
-
-	Safe_Release(m_pNeedle);
+	//Safe_Release(m_pNeedle);
+	Safe_Release(m_pHealSphere);
 	Safe_Release(m_pShield);
 	Safe_Release(m_pCharacterController);
 	Safe_Release(m_pStateController);

@@ -29,11 +29,81 @@ _int CBoss_Attack_S5_Protocol::Tick(const _double& TimeDelta)
 		return iProgress;
 
 	//Play_Sound();
-
 	m_pAnimator->Tick(TimeDelta);
 
-	//어택 체크
+
+	//자연스럽게 회전하면서 플레이어쪽으로뛰려고..
+	_vector vBossPos = m_pTransform->Get_State(CTransform::STATE::STATE_POSITION);
+	_vector vDist = vBossPos - g_pObserver->Get_PlayerPos();
+	_vector vBossToPlayerLook = XMVector3Normalize(vDist);
+
+	_vector vMyLook = XMVector3Normalize(m_pTransform->Get_State(CTransform::STATE_LOOK));
+	_vector vMyUp = m_pTransform->Get_State(CTransform::STATE_UP);
+
+	_float fDistToPlayer = XMVectorGetX(XMVector3Length(vDist));
+
+	_vector vecDot = XMVector3Dot(vMyLook, vBossToPlayerLook);
+	_float CheckFWD = XMVectorGetX(vecDot); //음수 = 플레이어가 앞에있다 
+
+	vDist = XMVector3Normalize(XMVectorSetY(vDist, 0.f));
+	vMyLook = XMVector3Normalize(XMVectorSetY(vMyLook, 0.f));
+
+	_vector vAngle = XMVector3AngleBetweenVectors(vMyLook, vDist);
+	_float fRadian = 0.f;
+	XMStoreFloat(&fRadian, vAngle);
+	_vector vCross = XMVector3Cross(vMyLook, vDist);
+
+
+	if (0 >= CheckFWD)
+	{
+		if (0.f > XMVectorGetY(vCross))
+		{
+			fRadian = XMConvertToRadians(XMConvertToRadians(180.f) - fRadian);
+
+			CheckFWD = 1.f - CheckFWD;
+			m_pTransform->Rotation_Axis(XMVectorSet(0.f, 1.f, 0.f, 0.f), fRadian * CheckFWD);
+			//cout << "1 : 여기" << endl;
+		}
+		else if (0.f <= XMVectorGetY(vCross))
+		{
+			fRadian = XMConvertToRadians(XMConvertToRadians(180.f) - fRadian);
+
+			//CheckFWD = CheckFWD;
+			m_pTransform->Rotation_Axis(XMVectorSet(0.f, 1.f, 0.f, 0.f), fRadian * CheckFWD * 2.f);
+			//cout << "1 : 아님" << endl;
+		}
+	}
+	else if (0 < CheckFWD)
+	{
+		if (0.f > XMVectorGetY(vCross))
+		{
+			//fRadian = XMConvertToRadians(XMConvertToRadians(180.f) - fRadian);
+			//
+			//CheckFWD = 1.f - CheckFWD;
+			m_pTransform->Rotation_Axis(XMVectorSet(0.f, 1.f, 0.f, 0.f), fRadian * CheckFWD);
+			//cout << "2 : 여기" << endl;
+		}
+		else if (0.f <= XMVectorGetY(vCross))
+		{
+			fRadian = XMConvertToRadians(XMConvertToRadians(180.f) - fRadian);
+
+			//CheckFWD = CheckFWD;
+			m_pTransform->Rotation_Axis(XMVectorSet(0.f, 1.f, 0.f, 0.f), fRadian * CheckFWD);
+			//cout << "2 : 아님" << endl;
+		}
+	}
+
+	//점프하기직전까지 플레이어거리판단
 	_uint iCurKeyFrameIndex = m_pAnimator->Get_AnimController()->Get_CurKeyFrameIndex();
+
+	if (40 <= iCurKeyFrameIndex && 44 >= iCurKeyFrameIndex && false == m_bFirstCheckDist)
+	{
+		m_pAnimator->Get_AnimController()->Set_MoveSpeed(fDistToPlayer * (1.f + (fDistToPlayer * 0.017f)));
+		m_bFirstCheckDist = true;
+	}
+
+
+	//어택 체크
 	
 	_vector svPos = m_pTransform->Get_State(CTransform::STATE_POSITION);
 	_vector svLook = XMVector3Normalize(m_pTransform->Get_State(CTransform::STATE_LOOK));
@@ -44,7 +114,7 @@ _int CBoss_Attack_S5_Protocol::Tick(const _double& TimeDelta)
 		if (66 <= iCurKeyFrameIndex && 80 >= iCurKeyFrameIndex)
 		{
 			OVERLAPDESC tOverlapDesc;
-			tOverlapDesc.geometry = PxSphereGeometry(10.f);
+			tOverlapDesc.geometry = PxSphereGeometry(7.f);
 			XMStoreFloat3(&tOverlapDesc.vOrigin, m_pTransform->Get_State(CTransform::STATE_POSITION));
 			CGameObject* pHitObject = nullptr;
 			tOverlapDesc.ppOutHitObject = &pHitObject;
@@ -90,7 +160,7 @@ _int CBoss_Attack_S5_Protocol::Tick(const _double& TimeDelta)
 				g_pShakeManager->Shake(tShakeEvent, m_pTransform->Get_State(CTransform::STATE_POSITION));
 
 				m_pMonster->Active_Effect((_uint)EFFECT::HIT_GROUND, svLook * 5.5f + svRight * 2.1f);
-				m_pMonster->Active_Effect((_uint)EFFECT::HIT_GROUND_SMOKE);
+				m_pMonster->Active_Effect((_uint)EFFECT::HIT_GROUND_SMOKE, XMVectorSet(0.f, -0.1f, 0.f, 0.f));
 				m_pMonster->Active_Effect((_uint)EFFECT::EXPLOSION_ROCK_UP, svLook * 5.5f + svRight * 2.1f);
 
 				m_bShakeCheck = true;
@@ -124,7 +194,7 @@ _int CBoss_Attack_S5_Protocol::Tick(const _double& TimeDelta)
 			g_pShakeManager->Shake(tShakeEvent, m_pTransform->Get_State(CTransform::STATE_POSITION));
 
 			//m_pMonster->Active_Effect((_uint)EFFECT::HIT_GROUND, svLook * 5.5f + svRight * 2.1f);
-			m_pMonster->Active_Effect((_uint)EFFECT::HIT_GROUND_SMOKE);
+			m_pMonster->Active_Effect((_uint)EFFECT::HIT_GROUND_SMOKE, XMVectorSet(0.f, -0.1f, 0.f, 0.f));
 			m_pMonster->Active_Effect((_uint)EFFECT::EXPLOSION_ROCK_UP, svLook * 5.5f + svRight * 2.1f);
 
 			m_bEffectCheck = true;
@@ -138,17 +208,21 @@ _int CBoss_Attack_S5_Protocol::Tick(const _double& TimeDelta)
 	}
 
 	_vector vMonsterPos = m_pTransform->Get_State(CTransform::STATE::STATE_POSITION);
-	_vector vDist = vMonsterPos - g_pObserver->Get_PlayerPos();
-	_float fDistToPlayer = XMVectorGetX(XMVector3Length(vDist));
+	vDist = vMonsterPos - g_pObserver->Get_PlayerPos();
+	fDistToPlayer = XMVectorGetX(XMVector3Length(vDist));
 
 	if (m_pAnimator->Get_AnimController()->Is_Finished())
 	{
-		if (20.f <= fDistToPlayer)
+		if (30.f <= fDistToPlayer)
 		{
+			cout << "protocol -> walk" << endl;
+
 			m_pStateController->Change_State(L"Walk_Front");
 		}
-		else if (20.f > fDistToPlayer )
+		else if (30.f > fDistToPlayer )
 		{
+			cout << "Protocol -> turn" << endl;
+
 			m_pStateController->Change_State(L"Turn");
 		}
 	}
@@ -178,17 +252,22 @@ HRESULT CBoss_Attack_S5_Protocol::EnterState()
 	if (FAILED(__super::EnterState()))
 		return E_FAIL;
 
+	cout << "Attack_S5_Protocol" << endl;
+
+	//m_pTransform->Face_Target()
 	static_cast<CBoss_Solaris*>(m_pMonster)->Set_HitMotion(false);
 
 	_vector vMonsterPos = m_pTransform->Get_State(CTransform::STATE::STATE_POSITION);
 	_vector vDist = vMonsterPos - g_pObserver->Get_PlayerPos();
 	_float fDistToPlayer = XMVectorGetX(XMVector3Length(vDist));
 
-	m_bShakeCheck = false;
-	m_bEffectCheck = false;
 	m_pAnimator->Get_AnimController()->Set_MoveSpeed(fDistToPlayer * (1.f + (fDistToPlayer * 0.016f)));
-
  	m_pAnimator->Change_AnyEntryAnimation((_uint)CBoss_Solaris::M_BossAnimState::ATTACK_S5_SKEWER_PROTOCOL);
+
+
+	m_bEffectCheck = false;
+	m_bFirstCheckDist = false;
+	m_bShakeCheck = false;
 
 	return S_OK;
 }
@@ -202,6 +281,8 @@ HRESULT CBoss_Attack_S5_Protocol::ExitState()
 	m_pMonster->RimlightCheck(false);
 
 	m_bEffectCheck = false;
+	m_bFirstCheckDist = false;
+	m_bShakeCheck = false;
 
 	return S_OK;
 }

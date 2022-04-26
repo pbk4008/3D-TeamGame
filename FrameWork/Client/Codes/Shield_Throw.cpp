@@ -47,11 +47,13 @@ _int CShield_Throw::Tick(const _double& _dDeltaTime)
 			{
 				m_pAnimationController->Set_PlaySpeed(0.1f);
 			}
-			if (73 < iCurKeyFrameIndex)
-			{
-				m_pSilvermane->Set_EquipShield(true);
-			}
 		//}
+	}
+
+	if (73 < iCurKeyFrameIndex)
+	{
+		m_pSilvermane->Set_EquipShield(true);
+		m_pAnimationController->Set_PlaySpeed(1.4f);
 	}
 
 	if (m_pAnimationController->Is_Finished())
@@ -116,6 +118,7 @@ HRESULT CShield_Throw::ExitState()
 
 	m_pSilvermane->Set_IsShieldThrow(false);
 	m_pSilvermane->Set_IsShieldReturn(false);
+	m_pSilvermane->Set_BlockTime(0.f);
 	return S_OK;
 }
 
@@ -161,10 +164,13 @@ _int CShield_Throw::Input(const _double& _dDeltaTime)
 		{
 			if (g_pGameInstance->getkeyDown(DIK_Q))
 			{
-				m_pSilvermane->Set_EquipShieldAnim(false);
-				if (FAILED(m_pStateController->Change_State(L"Shield_BlockStart")))
-					return E_FAIL;
-				return STATE_CHANGE;
+				if (m_pSilvermane->IsLootShield())
+				{
+					m_pSilvermane->Set_EquipShieldAnim(false);
+					if (FAILED(m_pStateController->Change_State(L"Shield_BlockStart")))
+						return E_FAIL;
+					return STATE_CHANGE;
+				}
 			}
 
 			if (g_pGameInstance->getkeyPress(DIK_LSHIFT))
@@ -222,27 +228,53 @@ void CShield_Throw::RaycastForThrow()
 	memcpy_s(&svRayDir, sizeof(_vector), &smatView.r[2], sizeof(_vector));
 	svRayDir = XMVector3Normalize(svRayDir);
 
-	svRayPos += svRayDir * 4.f;
+	svRayPos += svRayDir * 3.f;
+	// 몬스터용
+	SWEEPDESC tSweepDesc;
+	tSweepDesc.geometry = PxSphereGeometry(1.f);
+	XMStoreFloat3(&tSweepDesc.vOrigin, svRayPos);
+	XMStoreFloat3(&tSweepDesc.vDir, svRayDir);
+	tSweepDesc.fMaxDistance = 20.f;
+	tSweepDesc.filterData.flags |= PxQueryFlag::eANY_HIT;
+	tSweepDesc.layerMask = (1 << (_uint)ELayer::Monster);// + (1 << (_uint)ELayer::Enviroment);
+	CGameObject* pHitObject = nullptr;
+	tSweepDesc.ppOutHitObject = &pHitObject;
+	// 지형용
 	RAYCASTDESC tRaycastDesc;
 	XMStoreFloat3(&tRaycastDesc.vOrigin, svRayPos);
 	XMStoreFloat3(&tRaycastDesc.vDir, svRayDir);
 	tRaycastDesc.fMaxDistance = 20.f;
 	tRaycastDesc.filterData.flags |= PxQueryFlag::eANY_HIT;
-	tRaycastDesc.layerMask = (1 << (_uint)ELayer::Enviroment) + (1 << (_uint)ELayer::Monster);
-	CGameObject* pHitObject = nullptr;
+	tRaycastDesc.layerMask = (1 << (_uint)ELayer::Enviroment);
 	tRaycastDesc.ppOutHitObject = &pHitObject;
-	if (g_pGameInstance->Raycast(tRaycastDesc))
+
+	if (g_pGameInstance->Sweep(tSweepDesc))
 	{
+		//for (_uint i = 0; i < tSweepDesc.iHitNum; ++i)
+		//{
+		//	svTargetPos = XMLoadFloat3(&tSweepDesc.vecHitPositions[i]);
+		//	if ((_uint)GAMEOBJECT::ENVIRONMENT != tSweepDesc.vecHitObjects[i]->getTag())
+		//	{
+		//		break;
+		//	}
+		//}
 		if (pHitObject)
 		{
 			// 타겟이 있으면 그 위치를 받아오고 점 두개를 더 구해서 베지어 곡선을 구한다음에 해당 곡선을 따라 방패 던지기
 			//svTargetPos = pHitObject->Get_Transform()->Get_State(CTransform::STATE_POSITION);
+			svTargetPos = XMLoadFloat3(&tSweepDesc.vHitPos);
+		}
+	}
+	else if (g_pGameInstance->Raycast(tRaycastDesc))
+	{
+		if (pHitObject)
+		{
 			svTargetPos = XMLoadFloat3(&tRaycastDesc.vHitPos);
 		}
 	}
 	else
 	{
-		svTargetPos = svRayPos += svRayDir * tRaycastDesc.fMaxDistance;
+		svTargetPos = svRayPos += svRayDir * tSweepDesc.fMaxDistance;
 	}
 
 	m_pSilvermane->ThrowShield(svTargetPos);

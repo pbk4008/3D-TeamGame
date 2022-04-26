@@ -43,7 +43,83 @@ _int CBoss_Attack_R1::Tick(const _double& TimeDelta)
 	_vector svLook = XMVector3Normalize(m_pTransform->Get_State(CTransform::STATE_LOOK));
 	_vector svRight = XMVector3Normalize(m_pTransform->Get_State(CTransform::STATE_RIGHT));
 
-	if (50 <= iCurKeyFrameIndex && 67 >= iCurKeyFrameIndex)
+#pragma region ±¸°£º°·Î³ª´®
+	//if (50 <= iCurKeyFrameIndex && 67 >= iCurKeyFrameIndex)
+	//{
+	//	if (54 < iCurKeyFrameIndex && 57 > iCurKeyFrameIndex && false == m_bShakeCheckLeft)
+	//	{
+	//		//½¦ÀÌÅ· & ÀÌÆåÆ® //ÀÌÆåÆ®ÇÑÅ×¼­ »ý¼ºÇØÁà¾ßÇÒµí 
+	//		CCameraShake::SHAKEEVENT tShakeEvent;
+	//		tShakeEvent.fDuration = 0.3f;
+	//		tShakeEvent.fBlendInTime = 0.1f;
+	//		tShakeEvent.fBlendOutTime = 0.2f;
+	//		tShakeEvent.tWaveX.fAmplitude = 0.3f;
+	//		tShakeEvent.tWaveX.fFrequency = 7.f;
+	//		tShakeEvent.tWaveY.fAmplitude = -0.1f;
+	//		tShakeEvent.tWaveY.fFrequency = 0.3f;
+	//		tShakeEvent.tWaveZ.fAdditionalOffset = 0.6f;
+	//		tShakeEvent.tWaveZ.fAdditionalOffset = -1.f;
+	//		tShakeEvent.fInnerRadius = 10.f;
+	//		tShakeEvent.fOuterRadius = 20.f;
+	//		tShakeEvent.fDistanceRate = 20.f;
+
+	//		g_pShakeManager->Shake(tShakeEvent, m_pTransform->Get_State(CTransform::STATE_POSITION));
+	//		_matrix matPos = m_pTransform->Get_WorldMatrix();
+	//		matPos.r[3] = XMVectorSetY(matPos.r[3], XMVectorGetY(matPos.r[3]) + 2.f);
+	//		m_pMonster->Active_Effect_Target((_uint)EFFECT::EXPLOSION_ROCK_LEFT, matPos);
+
+	//		m_bShakeCheckLeft = true;
+	//	}
+	//	
+
+	//	m_pMonster->Set_IsAttack(true);
+
+	//	_float fDamage = 6.f;
+	//	_uint iLevel = 3;
+	//	m_pMonster->Set_AttackDesc_Damaga(fDamage);
+	//	m_pMonster->Set_AttackDesc_Level(iLevel);
+	//	m_pMonster->Set_AttackDesc_Dir(EAttackDir::Left);
+	//}
+
+	//if (114 <= iCurKeyFrameIndex && 135 >= iCurKeyFrameIndex)
+	//{
+	//	if (117 < iCurKeyFrameIndex && 119 > iCurKeyFrameIndex && false == m_bShakeCheckRight)
+	//	{
+	//		//½¦ÀÌÅ· & ÀÌÆåÆ® //ÀÌÆåÆ®ÇÑÅ×¼­ »ý¼ºÇØÁà¾ßÇÒµí 
+	//		CCameraShake::SHAKEEVENT tShakeEvent;
+	//		tShakeEvent.fDuration = 0.3f;
+	//		tShakeEvent.fBlendInTime = 0.1f;
+	//		tShakeEvent.fBlendOutTime = 0.2f;
+	//		tShakeEvent.tWaveX.fAmplitude = 0.3f;
+	//		tShakeEvent.tWaveX.fFrequency = 7.f;
+	//		tShakeEvent.tWaveY.fAmplitude = -0.1f;
+	//		tShakeEvent.tWaveY.fFrequency = 0.3f;
+	//		tShakeEvent.tWaveZ.fAdditionalOffset = 0.6f;
+	//		tShakeEvent.tWaveZ.fAdditionalOffset = -1.f;
+	//		tShakeEvent.fInnerRadius = 10.f;
+	//		tShakeEvent.fOuterRadius = 20.f;
+	//		tShakeEvent.fDistanceRate = 20.f;
+
+	//		g_pShakeManager->Shake(tShakeEvent, m_pTransform->Get_State(CTransform::STATE_POSITION));
+
+	//		_matrix matPos = m_pTransform->Get_WorldMatrix();
+	//		matPos.r[3] = XMVectorSetY(matPos.r[3], XMVectorGetY(matPos.r[3]) + 2.f);
+	//		m_pMonster->Active_Effect_Target((_uint)EFFECT::EXPLOSION_ROCK_RIGHT, matPos);
+
+	//		m_bShakeCheckRight = true;
+	//	}
+
+	//	m_pMonster->Set_IsAttack(true);
+
+	//	_float fDamage = 6.f;
+	//	_uint iLevel = 3;
+	//	m_pMonster->Set_AttackDesc_Damaga(fDamage);
+	//	m_pMonster->Set_AttackDesc_Level(iLevel);
+	//	m_pMonster->Set_AttackDesc_Dir(EAttackDir::Right);
+	//}
+#pragma endregion
+
+	if (50 <= iCurKeyFrameIndex && 135 >= iCurKeyFrameIndex)
 	{
 		if (54 < iCurKeyFrameIndex && 57 > iCurKeyFrameIndex && false == m_bShakeCheckLeft)
 		{
@@ -69,20 +145,10 @@ _int CBoss_Attack_R1::Tick(const _double& TimeDelta)
 			m_pMonster->Active_Effect_Target((_uint)EFFECT::EXPLOSION_ROCK_LEFT, matPos);
 
 			m_bShakeCheckLeft = true;
+			m_pMonster->Set_AttackDesc_Dir(EAttackDir::Left);
+
 		}
-		
 
-		m_pMonster->Set_IsAttack(true);
-
-		_float fDamage = 6.f;
-		_uint iLevel = 3;
-		m_pMonster->Set_AttackDesc_Damaga(fDamage);
-		m_pMonster->Set_AttackDesc_Level(iLevel);
-		m_pMonster->Set_AttackDesc_Dir(EAttackDir::Left);
-	}
-
-	if (114 <= iCurKeyFrameIndex && 135 >= iCurKeyFrameIndex)
-	{
 		if (117 < iCurKeyFrameIndex && 119 > iCurKeyFrameIndex && false == m_bShakeCheckRight)
 		{
 			//½¦ÀÌÅ· & ÀÌÆåÆ® //ÀÌÆåÆ®ÇÑÅ×¼­ »ý¼ºÇØÁà¾ßÇÒµí 
@@ -106,17 +172,19 @@ _int CBoss_Attack_R1::Tick(const _double& TimeDelta)
 			matPos.r[3] = XMVectorSetY(matPos.r[3], XMVectorGetY(matPos.r[3]) + 2.f);
 			m_pMonster->Active_Effect_Target((_uint)EFFECT::EXPLOSION_ROCK_RIGHT, matPos);
 
+			m_pMonster->Set_AttackDesc_Dir(EAttackDir::Right);
+
 			m_bShakeCheckRight = true;
 		}
 
 		m_pMonster->Set_IsAttack(true);
 
 		_float fDamage = 6.f;
-		_uint iLevel = 3;
+		_uint iLevel = 4;
 		m_pMonster->Set_AttackDesc_Damaga(fDamage);
 		m_pMonster->Set_AttackDesc_Level(iLevel);
-		m_pMonster->Set_AttackDesc_Dir(EAttackDir::Right);
 	}
+
 	else
 	{
 		m_pMonster->Set_IsAttack(false);
@@ -124,6 +192,8 @@ _int CBoss_Attack_R1::Tick(const _double& TimeDelta)
 
 	if (m_pAnimator->Get_AnimController()->Is_Finished())
 	{
+		cout << "r1 -> turn" << endl;
+
 		m_pStateController->Change_State(L"Turn");
 	}
 
@@ -156,6 +226,8 @@ HRESULT CBoss_Attack_R1::EnterState()
 	m_bShakeCheckRight = false;
 
 	static_cast<CBoss_Solaris*>(m_pMonster)->Set_HitMotion(false);
+
+	cout << "Attack_R1" << endl;
 
 
 	//¸²¶óÀÌÆ®

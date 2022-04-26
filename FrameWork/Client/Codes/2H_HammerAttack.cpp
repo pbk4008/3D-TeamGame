@@ -76,11 +76,11 @@ HRESULT C2H_HammerAttack::EnterState()
 	// 1
 	m_tShakeEvent.fDuration = 0.4f;
 	m_tShakeEvent.fBlendOutTime = 0.3f;
-	m_tShakeEvent.tWaveX.fAmplitude = 0.04f;
+	m_tShakeEvent.tWaveX.fAmplitude = 0.08f;
 	m_tShakeEvent.tWaveX.fFrequency = 10.f;
-	m_tShakeEvent.tWaveY.fAmplitude = 0.04f;
+	m_tShakeEvent.tWaveY.fAmplitude = 0.08f;
 	m_tShakeEvent.tWaveY.fFrequency = 6.f;
-	m_tShakeEvent.tWaveZ.fAmplitude = 0.04f;
+	m_tShakeEvent.tWaveZ.fAmplitude = 0.08f;
 	m_tShakeEvent.tWaveZ.fFrequency = 8.f;
 	// 2 
 	m_tShakeEvent2.fDuration = 1.f;
@@ -88,7 +88,7 @@ HRESULT C2H_HammerAttack::EnterState()
 	m_tShakeEvent2.fBlendOutTime = 0.5f;
 	m_tShakeEvent2.tWaveY.fAmplitude = 0.02f;
 	m_tShakeEvent2.tWaveY.fFrequency = 1.f;
-	m_tShakeEvent2.tWaveY.fAdditionalOffset = -0.3f;
+	m_tShakeEvent2.tWaveY.fAdditionalOffset = -0.6f;
 
 
 	g_pObserver->Set_PlayerAttackAnimStart(true);

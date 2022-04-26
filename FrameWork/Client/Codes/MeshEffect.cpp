@@ -12,9 +12,15 @@ CMeshEffect::CMeshEffect(const CMeshEffect& _rhs)
 	: CGameObject(_rhs)
 	, m_pMaterial(_rhs.m_pMaterial)
 	, m_pTexture(_rhs.m_pTexture)
+	, m_pNormalTex(_rhs.m_pNormalTex)
+	, m_pNoiseTex(_rhs.m_pNoiseTex)
+	, m_pMaskTex(_rhs.m_pMaskTex)
 {
 	Safe_AddRef(m_pMaterial);
 	Safe_AddRef(m_pTexture);
+	Safe_AddRef(m_pNormalTex);
+	Safe_AddRef(m_pNoiseTex);
+	Safe_AddRef(m_pMaskTex);
 }
 
 HRESULT CMeshEffect::NativeConstruct_Prototype()
@@ -24,6 +30,15 @@ HRESULT CMeshEffect::NativeConstruct_Prototype()
 
 	m_pTexture = g_pGameInstance->Clone_Component<CTexture>(0, L"Proto_Component_Texture");
 	if (!m_pTexture)
+		return E_FAIL;
+	m_pNormalTex = g_pGameInstance->Clone_Component<CTexture>(0, L"Proto_Component_Texture");
+	if (!m_pNormalTex)
+		return E_FAIL;
+	m_pNoiseTex = g_pGameInstance->Clone_Component<CTexture>(0, L"Proto_Component_Texture");
+	if (!m_pNoiseTex)
+		return E_FAIL;
+	m_pMaskTex = g_pGameInstance->Clone_Component<CTexture>(0, L"Proto_Component_Texture");
+	if (!m_pMaskTex)
 		return E_FAIL;
 
 	return S_OK;
@@ -98,7 +113,6 @@ HRESULT CMeshEffect::Render()
 	m_pModel->SetUp_ValueOnShader("g_isCustomColor", &m_isCustomColor, sizeof(_float));
 	m_pModel->SetUp_ValueOnShader("g_vColor", &m_vColor, sizeof(_float3));
 
-
 	return S_OK;
 }
 
@@ -109,4 +123,7 @@ void CMeshEffect::Free()
 	Safe_Release(m_pModel);
 	Safe_Release(m_pMaterial);
 	Safe_Release(m_pTexture);
+	Safe_Release(m_pNormalTex);
+	Safe_Release(m_pNoiseTex);
+	Safe_Release(m_pMaskTex);
 }

@@ -212,6 +212,21 @@ void CFlyingShield::OnTriggerEnter(CCollision& collision)
 		m_isAttack = false;
 
 		Return();
+
+		CCameraShake::SHAKEEVENT tShakeEvent;
+		tShakeEvent.fDuration = 0.4f;
+		tShakeEvent.fBlendInTime = 0.1f;
+		tShakeEvent.fBlendOutTime = 0.2f;
+		tShakeEvent.tWaveX.fAmplitude = 0.1f;
+		tShakeEvent.tWaveX.fFrequency = 10.f;
+		tShakeEvent.tWaveY.fAmplitude = 0.1f;
+		tShakeEvent.tWaveY.fFrequency = 12.f;
+		tShakeEvent.tWaveZ.fAmplitude = 0.1f;
+		tShakeEvent.tWaveZ.fFrequency = 8.f;
+
+		_float3 vPos; XMStoreFloat3(&vPos, m_pOwner->Get_Transform()->Get_State(CTransform::STATE_POSITION));
+		g_pShakeManager->Shake(tShakeEvent, vPos);
+
 		break;
 	}
 }

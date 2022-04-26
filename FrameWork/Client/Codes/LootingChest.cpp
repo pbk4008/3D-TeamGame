@@ -31,6 +31,27 @@ _int CLootingChest::Tick(const _double& _dDeltaTime)
 		if (pDropBox && !pDropBox->IsOpen())
 		{
 			pDropBox->Focus();
+
+			CCameraShake::SHAKEEVENT tShakeEvent;
+			tShakeEvent.fDuration = 0.7f;
+			tShakeEvent.fBlendInTime = 0.1f;
+			tShakeEvent.fBlendOutTime = 0.4f;
+			//tShakeEvent.tWaveX.fAmplitude = 0.1f;
+			//tShakeEvent.tWaveX.fFrequency = 10.f;
+			tShakeEvent.tWaveY.fAmplitude = 0.1f;
+			tShakeEvent.tWaveY.fFrequency = 1.f;
+			tShakeEvent.tWaveY.fAdditionalOffset = 0.4f;
+			//tShakeEvent.tWaveZ.fAmplitude = 0.1f;
+			//tShakeEvent.tWaveZ.fFrequency = 8.f;
+
+			_float3 vPos; XMStoreFloat3(&vPos, m_pTransform->Get_State(CTransform::STATE_POSITION));
+			g_pShakeManager->Shake(tShakeEvent, vPos);
+
+			tShakeEvent.fDuration = 0.4f;
+			tShakeEvent.tWaveX.fAmplitude = 0.1f;
+			tShakeEvent.tWaveX.fFrequency = 10.f;
+			XMStoreFloat3(&vPos, m_pTransform->Get_State(CTransform::STATE_POSITION));
+			g_pShakeManager->Shake(tShakeEvent, vPos);
 		}
 	}
 

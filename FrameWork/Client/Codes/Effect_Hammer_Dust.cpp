@@ -8,12 +8,12 @@ CEffect_Hammer_Dust::CEffect_Hammer_Dust()
 }
 
 CEffect_Hammer_Dust::CEffect_Hammer_Dust(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
-    :CEffect(pDevice,pDeviceContext)
+	:CEffect(pDevice, pDeviceContext)
 {
 }
 
 CEffect_Hammer_Dust::CEffect_Hammer_Dust(const CEffect& rhs)
-    :CEffect(rhs)
+	: CEffect(rhs)
 {
 }
 
@@ -24,7 +24,7 @@ HRESULT CEffect_Hammer_Dust::NativeConstruct_Prototype()
 		return E_FAIL;
 	}
 
-    return S_OK;
+	return S_OK;
 }
 
 HRESULT CEffect_Hammer_Dust::NativeConstruct(const _uint _iSceneID, void* pArg)
@@ -39,39 +39,51 @@ HRESULT CEffect_Hammer_Dust::NativeConstruct(const _uint _iSceneID, void* pArg)
 		memcpy(&m_Desc, pArg, sizeof(EFFECTDESC));
 	}
 	//여기서 필요한 모든 컴포넌트들 Clone해옴
-	if (FAILED(SetUp_Components())) 
+	if (FAILED(SetUp_Components()))
 	{
 		return E_FAIL;
 	}
 
-	setActive(false);
+	setActive(true);
 
 	return S_OK;
 }
 
 _int CEffect_Hammer_Dust::Tick(_double TimeDelta)
 {
-	
+
 	_uint iAllFrameCount = (m_Desc.iImageCountX * m_Desc.iImageCountY);
-	m_Desc.fFrame += (_float)(iAllFrameCount * TimeDelta * /*m_Desc.fEffectPlaySpeed*/1.f); //플레이속도 
+	
+	m_Desc.fFrame += (_float)(iAllFrameCount * TimeDelta * /*m_Desc.fEffectPlaySpeed*/1.7f); //플레이속도 
 
 	if (m_Desc.fFrame >= iAllFrameCount)
 	{
 		m_Desc.fFrame = 0;
-		setActive(false);
+		//setActive(false);
 	}
+
 
 	//빌보드
 	_matrix ViewMatrix;
 	ViewMatrix = g_pGameInstance->Get_Transform(L"Camera_Silvermane", TRANSFORMSTATEMATRIX::D3DTS_VIEW);
 	ViewMatrix = XMMatrixInverse(nullptr, ViewMatrix);
+
 	m_pTransform->Set_State(CTransform::STATE::STATE_RIGHT, ViewMatrix.r[0]);
 	m_pTransform->Set_State(CTransform::STATE::STATE_LOOK, ViewMatrix.r[2]);
 
-	_vector vec = { 2.5f,2.5f,2.5f,0.f };
-	m_pTransform->Scaling(vec);
-	
+	_fvector MyPos = m_pTransform->Get_State(CTransform::STATE::STATE_POSITION);
+	_fvector vDist = MyPos - g_pGameInstance->Get_CamPosition(L"Camera_Silvermane");
+	_float fDistToUI = XMVectorGetX(XMVector3Length(vDist));
+
+	_vector vScale = XMVectorZero();
+
+	vScale = { 1.f, 1.f,1.f,0.f };
+	m_pTransform->Scaling(vScale);
+
+
+	m_pTransform->Set_State(CTransform::STATE_POSITION, XMVectorSet(0.f, 2.f, 0.f, 1.f));
     return 0;
+
 }
 
 _int CEffect_Hammer_Dust::LateTick(_double TimeDelta)
@@ -102,13 +114,12 @@ HRESULT CEffect_Hammer_Dust::Render()
 	m_pBuffer->SetUp_ValueOnShader("g_iImageCountY", &m_Desc.iImageCountY, sizeof(_uint));
 
 	_uint iFrame = (_uint)m_Desc.fFrame;
-
 	m_pBuffer->SetUp_ValueOnShader("g_iFrame", &iFrame, sizeof(_uint));
-	
-	_float weight = 0.f;
-	m_pBuffer->SetUp_ValueOnShader("g_Weight", &weight, sizeof(_float));
 
-	m_pBuffer->Render(1);
+	m_Alpha = 1.f;
+	m_pBuffer->SetUp_ValueOnShader("g_fAlpha", &m_Alpha, sizeof(_float));
+
+	m_pBuffer->Render(3);
 
 	return S_OK;
 }
@@ -183,6 +194,6 @@ CGameObject* CEffect_Hammer_Dust::Clone(const _uint _iSceneID, void* pArg)
 
 void CEffect_Hammer_Dust::Free()
 {
-	Safe_Release(m_pBuffer);
 	__super::Free();
+	Safe_Release(m_pBuffer);
 }

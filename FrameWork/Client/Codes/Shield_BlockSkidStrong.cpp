@@ -57,6 +57,22 @@ HRESULT CShield_BlockSkidStrong::EnterState()
 
 	m_iCutIndex = 25;
 	m_pSilvermane->Set_IsTrasceCamera(false);
+
+	CCameraShake::SHAKEEVENT tShakeEvent;
+	tShakeEvent.fDuration = 0.4f;
+	tShakeEvent.fBlendInTime = 0.2f;
+	tShakeEvent.fBlendOutTime = 0.1f;
+	tShakeEvent.tWaveX.fAmplitude = 0.08f;
+	tShakeEvent.tWaveX.fFrequency = 10.f;
+	tShakeEvent.tWaveY.fAmplitude = 0.08f;
+	tShakeEvent.tWaveY.fFrequency = 12.f;
+	tShakeEvent.tWaveZ.fAmplitude = 0.08f;
+	tShakeEvent.tWaveZ.fFrequency = 8.f;
+
+	_float3 vPos; XMStoreFloat3(&vPos, m_pTransform->Get_State(CTransform::STATE_POSITION));
+	g_pShakeManager->Shake(tShakeEvent, vPos);
+
+
 	return S_OK;
 }
 

@@ -219,9 +219,9 @@ void CGuideUIManager::ShowNext(void)
 
 	m_vecGuideTex[m_iCurrentTrigerrIdx]->SetTexture(m_szTextureName);
 
-	if (true == m_bGuideUIShow && false == m_bInvenRender)
+	if (true == m_bGuideUIShow /*&& false == m_bInvenRender*/)
 	{
-		if (g_pGameInstance->getkeyDown(DIK_SPACE))
+		if (g_pGameInstance->getkeyDown(DIK_RETURN))
 		{
 			if (m_iTexIdx + 1 < m_vecGuideTex[m_iCurrentTrigerrIdx]->GetNumTex())
 			{

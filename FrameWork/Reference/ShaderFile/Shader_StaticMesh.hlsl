@@ -1,27 +1,6 @@
 #include "Shader_RenderState.hpp"
-
-cbuffer Matrices
-{
-	matrix g_WorldMatrix = (matrix) 0;
-	matrix g_ViewMatrix;
-	matrix g_ProjMatrix;
-};
-
-struct BoneMatrixArray
-{
-	matrix Bone[256];
-};
-
-cbuffer BoneMatricesBuffer
-{
-	BoneMatrixArray g_BoneMatrices;
-};
-
-cbuffer LightBuffer
-{
-	matrix g_LightView;
-	matrix g_LightProj;
-};
+#include "Shader_Share.hlsli"
+#include "Shader_ShareFuntion.hlsli"
 
 cbuffer ShadeCheck
 {
@@ -34,13 +13,7 @@ Texture2D g_BiNormalTexture;
 Texture2D g_ShadowTexture;
 Texture2D g_MRATexture;
 Texture2D g_CEOTexture;
-
-sampler DefaultSampler = sampler_state
-{
-	filter = min_mag_mip_linear;
-	AddressU = wrap;
-	AddressV = wrap;
-};
+Texture2D g_GradientTex;
 
 float3 Normalmapping(float3 normaltex, float3x3 tbn)
 {
@@ -195,7 +168,7 @@ PS_OUT PS_MAIN(PS_IN In)
 	Out.mra.g = Roughness;
 	Out.mra.b = Ao;
 	Out.mra.a = 1.f;
-	Out.emission = half4(0, 0, 0, 1);
+	Out.emission = g_color * g_empower;
 
 	return Out;
 }
@@ -312,6 +285,58 @@ PS_OUT_TOOL PS_MAIN_TOOL(PS_IN In)
 	return Out;
 }
 
+//*---------------------------------------------------------------------------------------------*
+// VS Motion Trail
+struct VS_OUT_MOTIONTRAIL
+{
+	float4 vPosition : SV_POSITION;
+	float4 vNormal : NORMAL;
+	float4 vUvDepth : TEXCOORD0;
+};
+
+VS_OUT_MOTIONTRAIL VS_MAIN_MOTIONTRAIL(VS_IN In)
+{
+	VS_OUT_MOTIONTRAIL Out = (VS_OUT_MOTIONTRAIL) 0;
+	
+	matrix matWV, matWVP;
+	
+	matWV = mul(g_WorldMatrix, g_ViewMatrix);
+	matWVP = mul(matWV, g_ProjMatrix);
+
+	Out.vPosition = mul(vector(In.vPosition, 1.f), matWVP);
+	Out.vNormal = normalize(mul(vector(In.vNormal, 0.f), g_WorldMatrix));
+	
+	Out.vUvDepth.xy = In.vTexUV.xy;
+	Out.vUvDepth.zw = Out.vPosition.zw;
+
+	return Out;
+}
+// PS Motion Trail
+struct PS_IN_MOTIONTRAIL
+{
+	float4 vPosition : SV_POSITION;
+	float4 vNormal : NORMAL;
+	float4 vUvDepth : TEXCOORD0;
+};
+
+struct PS_OUT_MOTIONTRAIL
+{
+	half4 Motiontrail : SV_TARGET0;
+};
+
+PS_OUT_MOTIONTRAIL PS_MAIN_MOTIONTRAIL(PS_IN_MOTIONTRAIL In)
+{
+	PS_OUT_MOTIONTRAIL Out = (PS_OUT_MOTIONTRAIL) 0;
+
+	half3 color = g_GradientTex.Sample(DefaultSampler, half2(g_UVdvid, 0)).rgb;
+	half4 normal = half4(In.vNormal.xyz, 0.f);
+	Out.Motiontrail = MotionTrailRim(normal, g_camdir, g_rimintensity, color);
+	Out.Motiontrail.a *= g_Fade;
+	
+	return Out;
+}
+//*---------------------------------------------------------------------------------------------*
+
 technique11 DefaultTechnique
 {
 	pass StaticMesh //------------------------------------------------------------------------------------0 StaticMeshRender
@@ -357,6 +382,18 @@ technique11 DefaultTechnique
 		VertexShader = compile vs_5_0 VS_SHADOWMAP_STATIC();
 		GeometryShader = NULL;
 		PixelShader = compile ps_5_0 PS_MAIN_SHADOW();
+	}
+
+	pass Motiontrail //------------------------------------------------------------------------------------4 motiontrail
+	{
+		SetRasterizerState(CullMode_None);
+		SetDepthStencilState(ZDefault, 0);
+		SetBlendState(BlendDisable, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+
+		/* 진입점함수를 지정한다. */
+		VertexShader = compile vs_5_0 VS_MAIN_MOTIONTRAIL();
+		GeometryShader = NULL;
+		PixelShader = compile ps_5_0 PS_MAIN_MOTIONTRAIL();
 	}
 }
 

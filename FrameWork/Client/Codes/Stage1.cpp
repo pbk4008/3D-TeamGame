@@ -71,6 +71,7 @@
 #include "Cinema3_4.h"
 #include "Cinema3_5.h"
 #include "Cinema3_6.h"
+#include "MeshEffect_Razer.h"
 
 CStage1::CStage1()
 	: m_pTriggerSystem(nullptr)
@@ -123,11 +124,11 @@ HRESULT CStage1::NativeConstruct()
 		return E_FAIL;
 	}
 
-	if (FAILED(Ready_Trigger_Jump()))
-	{
-		MSGBOX("Stage1 Jump");
-		return E_FAIL;
-	}
+	//if (FAILED(Ready_Trigger_Jump()))
+	//{
+	//	MSGBOX("Stage1 Jump");
+	//	return E_FAIL;
+	//}
 
 	if (FAILED(Ready_Player(L"Layer_Silvermane")))
 	{
@@ -153,11 +154,11 @@ HRESULT CStage1::NativeConstruct()
 		return E_FAIL;
 	}
 
-	if (FAILED(Ready_Data_Effect()))
-	{
-		MSGBOX("Stage1 Effect");
-		return E_FAIL;
-	}
+	//if (FAILED(Ready_Data_Effect()))
+	//{
+	//	MSGBOX("Stage1 Effect");
+	//	return E_FAIL;
+	//}
 
 	if (FAILED(Ready_UI(L"Layer_UI")))
 	{
@@ -165,17 +166,35 @@ HRESULT CStage1::NativeConstruct()
 		return E_FAIL;
 	}
 
-	if (FAILED(Ready_Treasure_Chest()))
-	{
-		MSGBOX("Stage1 Box");
-		MSGBOX("Stage1 Box");
-		return E_FAIL;
-	}
+	//if (FAILED(Ready_Treasure_Chest()))
+	//{
+	//	MSGBOX("Stage1 Box");
+	//	return E_FAIL;
+	//}
 
 	if (FAILED(Ready_GameManager()))
 	{
 		MSGBOX("Stage1 Manager");
 		return E_FAIL;
+	}
+
+	//Hammer_Dust
+	CEffect_Hammer_Dust* pHammer = nullptr;
+	CEffect_Hammer_Dust::EFFECTDESC Desc;
+	ZeroMemory(&Desc, sizeof(Desc));
+
+	_tcscpy_s(Desc.TextureTag, L"Hammer_Dust_2");
+	Desc.iRenderPassNum = 1;
+	Desc.iImageCountX = 8;
+	Desc.iImageCountY = 4;
+	Desc.fFrame = 32.f;
+	Desc.fEffectPlaySpeed = 1.f;
+
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Effect_Hammer_Dust", L"Proto_GameObject_Effect_Hammer_Dust", &Desc, (CGameObject**)&pHammer)))
+	{
+		MSGBOX("Failed to Creating Effect_Hammer_Dust in CStage1::Ready_Effect()");
+		return E_FAIL;
+
 	}
 
 	g_pGameInstance->Change_BaseCamera(L"Camera_Silvermane");
@@ -217,11 +236,6 @@ HRESULT CStage1::NativeConstruct()
 	
 	m_pScenemaManager->Active_Scenema((_uint)CINEMA_INDEX::CINEMA1_1);;
 
-	//CPot::POTDESC tDesc;
-	//tDesc.iType = 2;
-	//XMStoreFloat4x4(&tDesc.matWorld,XMMatrixIdentity());
-	//m_pPot = g_pGameInstance->Clone_GameObject<CPot>((_uint)SCENEID::SCENE_STAGE1, L"Proto_GameObject_Pot", &tDesc);
-
 	return S_OK;
 }
 
@@ -230,6 +244,7 @@ _int CStage1::Tick(_double TimeDelta)
 	//m_pPot->Tick(TimeDelta);
 	/*_vector vTmp = g_pObserver->Get_PlayerPos();
 	cout << XMVectorGetX(vTmp) << ", " << XMVectorGetY(vTmp) << ", " << XMVectorGetZ(vTmp) << endl;*/
+
 #ifdef  _DEBUG
 	_int iLevel = 0;
 	if (g_pDebugSystem->Get_LevelMoveCheck(iLevel))
@@ -238,6 +253,8 @@ _int CStage1::Tick(_double TimeDelta)
 		if (FAILED(g_pGameInstance->Open_Level((_uint)SCENEID::SCENE_LOADING, pLoading)))
 			return -1;
 		g_pDebugSystem->Set_LevelcMoveCheck(false);
+		m_pTriggerSystem = nullptr;
+		g_pDropManager = nullptr;
 		return 0;
 	}
 #endif //  _DEBUG
@@ -368,6 +385,17 @@ _int CStage1::Tick(_double TimeDelta)
 #pragma region Using Debug
 	_float3 fPos = { 0.f,5.f,20.f };
 
+	////////////// 레이저 이펙트
+	//if (g_pGameInstance->getkeyDown(DIK_NUMPAD0))
+	//{
+	//	CMeshEffect_Razer* pRazer = nullptr;
+	//	CGameObject* pPlayer = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Layer_Silvermane")->front();
+	//	XMStoreFloat3(&fPos, pPlayer->Get_Transform()->Get_State(CTransform::STATE_POSITION) - _vector{ 0.f, 2.f, 0.f, 0.f });
+	//	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Test", L"Proto_GameObject_MeshEffect_Razer", &fPos, (CGameObject**)&pRazer)))
+	//		return -1;
+	//	//pRazer->setActive(true);
+	//}
+
 	//if (g_pGameInstance->getkeyDown(DIK_NUMPAD0))
 	//{
 	//	CBoss_Bastion_Judicator* pMidBoss = nullptr;
@@ -381,6 +409,7 @@ _int CStage1::Tick(_double TimeDelta)
 	//	CMonster_Crawler* pMonster = nullptr;
 	//	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Test", L"Proto_GameObject_Monster_Crawler", &fPos, (CGameObject**)&pMonster)))
 	//		return -1;
+	//	pMonster->setActive(true);
 	//}
 
 	//if (g_pGameInstance->getkeyDown(DIK_NUMPAD1))
@@ -565,10 +594,10 @@ HRESULT CStage1::Ready_MapObject()
 				Desc.fEffectPlaySpeed = 1.f;
 				Desc.ParticleMat = XMLoadFloat4x4(&iter);
 				Desc.bUsingGravity = true;
+				Desc.IDTag = 3;
 
 				if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_NoisFire", L"Proto_GameObject_Effect_Env_Fire", &Desc)))
 					MSGBOX("Failed To Clone NoisFire");
-
 
 				//fire smoke
 				ZeroMemory(&Desc, sizeof(Desc));
@@ -581,6 +610,7 @@ HRESULT CStage1::Ready_MapObject()
 				Desc.ParticleMat = XMLoadFloat4x4(&iter);
 				Desc.ParticleMat.r[3] = XMVectorSetY(Desc.ParticleMat.r[3], XMVectorGetY(Desc.ParticleMat.r[3]) + 0.5f);
 				Desc.bUsingGravity = true;
+				Desc.IDTag = 3;
 
 				if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Effect_Env_Fire_Smoke", L"Proto_GameObject_Effect_Env_Fire", &Desc)))
 				{
@@ -657,8 +687,8 @@ HRESULT CStage1::Ready_Player(const _tchar* LayerTag)
 	////Test
 	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Test", L"Proto_GameObject_TestObject")))
 	//	return E_FAIL;
-	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Test", L"Proto_GameObject_MeshEffect_Test2")))
-	//	MSGBOX(L"메쉬 이펙트 테스트2 생성 실패");
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Test", L"Proto_GameObject_MeshEffect_Test2")))
+		MSGBOX(L"메쉬 이펙트 테스트2 생성 실패");
 
 	return S_OK;
 }
@@ -780,6 +810,8 @@ HRESULT CStage1::Ready_UI(const _tchar* LayerTag)
 
 HRESULT CStage1::Ready_Light()
 {
+	g_pGameInstance->RemoveLight();
+
 	LIGHTDESC			LightDesc;
 
 	ZeroMemory(&LightDesc, sizeof(LIGHTDESC));
@@ -814,12 +846,12 @@ HRESULT CStage1::Ready_Light()
 
 HRESULT CStage1::Ready_GameManager(void)
 {
-	g_pDropManager = CDropManager::GetInstance();
-	if (FAILED(g_pDropManager->NativeConstruct((SCENEID::SCENE_STAGE1))))
-		return E_FAIL;
+	//g_pDropManager = CDropManager::GetInstance();
+	//if (FAILED(g_pDropManager->NativeConstruct((SCENEID::SCENE_STAGE1))))
+	//	return E_FAIL;
 
 	m_pIndicatorManager = GET_INSTANCE(CIndicator_Manager);
-	m_pScenemaManager = GET_INSTANCE(CScenematicManager);
+	//m_pScenemaManager = GET_INSTANCE(CScenematicManager);
 
 	return S_OK;
 }
@@ -1194,7 +1226,7 @@ HRESULT CStage1::Ready_Data_Effect()
 	tDesc.iRenderPassNum = 1;
 	tDesc.iImageCountX = 4;
 	tDesc.iImageCountY = 2;
-	tDesc.fFrame = 8;
+	tDesc.fFrame = 4;
 	tDesc.fEffectPlaySpeed = 20.f;
 	tDesc.fAlpha = 1.f;
 	tDesc.fWeight = 1.f;
@@ -1296,22 +1328,35 @@ HRESULT CStage1::Ready_Data_Effect()
 	}
 
 	//Hammer_Dust
+	//CEffect_Hammer_Dust* pHammer = nullptr;
+	//CEffect_Hammer_Dust::EFFECTDESC Desc;
+	//ZeroMemory(&Desc, sizeof(Desc));
+
+	//_tcscpy_s(Desc.TextureTag, L"Hammer_Dust");
+	//Desc.iRenderPassNum = 1;
+	//Desc.iImageCountX = 8;
+	//Desc.iImageCountY = 8;
+	//Desc.fFrame = 64.f;
+	//Desc.fEffectPlaySpeed = 1.f;
+
+	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Effect_Hammer_Dust", L"Proto_GameObject_Effect_Hammer_Dust", &Desc, (CGameObject**)&pHammer)))
+	//{
+	//	MSGBOX("Failed to Creating Effect_Hammer_Dust in CStage1::Ready_Effect()");
+	//	return E_FAIL;
+	//}
 	CEffect_Hammer_Dust* pHammer = nullptr;
 	CEffect_Hammer_Dust::EFFECTDESC Desc;
 	ZeroMemory(&Desc, sizeof(Desc));
 
-	_tcscpy_s(Desc.TextureTag, L"Hammer_Dust");
+	_tcscpy_s(Desc.TextureTag, L"Hammer_Dust_2");
 	Desc.iRenderPassNum = 1;
 	Desc.iImageCountX = 8;
-	Desc.iImageCountY = 8;
-	Desc.fFrame = 64.f;
+	Desc.iImageCountY = 4;
+	Desc.fFrame = 32.f;
 	Desc.fEffectPlaySpeed = 1.f;
 
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Effect_Hammer_Dust", L"Proto_GameObject_Effect_Hammer_Dust", &Desc, (CGameObject**)&pHammer)))
-	{
 		MSGBOX("Failed to Creating Effect_Hammer_Dust in CStage1::Ready_Effect()");
-		return E_FAIL;
-	}
 
 	if (FAILED(g_pGameInstance->Add_Effect((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Hammer_Dust", pHammer, 7)))
 	{
@@ -2495,35 +2540,41 @@ HRESULT CStage1::Ready_Treasure_Chest()
 		vecObject.emplace_back(pData.WorldMat);
 	}
 
-
-	for (int i = 0; i < vecObject.size(); ++i)
+	for (_int j = 0; j < vecObject.size(); ++j)
 	{
-		CDropBoxData*  pDropboxdata = new CDropBoxData;
-		MABOBJECT MapObjectDesc;
+		DROPBOXDESC Desc;
 
-		MapObjectDesc.WorldMat = vecObject[i];
-		auto temp  = pDropboxdata->GetItemData(i);
-		std::vector<void*> test;
+		Desc.WorldMat = vecObject[j];
 
-		for (auto& iter : temp)
-		{
-			test.emplace_back(&iter);
-		}
-		MapObjectDesc.itemData.push_back(test);
+		CDropBoxData* pDropboxdata = new CDropBoxData;
 
-		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_DropBox", L"Proto_GameObject_Treasure_Chest", &MapObjectDesc)))
+		Desc.itemData = pDropboxdata->GetItemData(j);
+
+		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_DropBox", L"Proto_GameObject_Treasure_Chest", &Desc)))
 		{
 			MSGBOX("Treasure_Chest 파일을 불러오는 도중 오류가 발생했습니다. Stage1.cpp Line 306");
 			return E_FAIL;
 		}
+
 		m_pDumyDropData.push_back(pDropboxdata);
 	}
+
 
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_LootShield", L"Proto_GameObject_LootShield")))
 		return E_FAIL;
 
 	return S_OK;
 }
+
+
+//auto temp  = pDropboxdata->GetItemData(i);
+		//std::vector<CItemData*> test;
+
+		//for (auto& iter : temp)
+		//{
+		//	test.emplace_back(&iter);
+		//}
+		//MapObjectDesc.itemData.push_back(test);
 
 HRESULT CStage1::Ready_Meteor()
 {
@@ -2573,7 +2624,7 @@ void CStage1::Shoot_Meteor(_double dDeltaTime)
 		for (_uint i = 0; i < iRandomShot; i++)
 		{
 			_vector vPos = XMVectorZero();
-			_uint randomPos = MathUtils::ReliableRandom(0, 6);
+			_uint randomPos = (_uint)MathUtils::ReliableRandom(0, 6);
 			vPos = XMLoadFloat4(&m_vecMeteorPos[randomPos]);
 
 			_vector vPivot;
@@ -2620,22 +2671,35 @@ void CStage1::Free()
 {
 	CLevel::Free();
 
+	if (m_pScenemaManager)
+	{
+		Safe_Release(m_pScenemaManager);
+		CScenematicManager::DestroyInstance();
+	}
+
 	for (auto& iter : m_pDumyDropData)
 		Safe_Delete(iter);
+	m_pDumyDropData.clear();
 
-	if(g_pInteractManager)
+	if (m_pIndicatorManager)
+	{
+		Safe_Release(m_pIndicatorManager);
+		CIndicator_Manager::DestroyInstance();
+	}
+
+	if (g_pInteractManager)
 		g_pInteractManager->Remove_Interactable();
 
-	Safe_Release(m_pScenemaManager);
-	Safe_Release(m_pIndicatorManager);
-	CScenematicManager::DestroyInstance();
-	CIndicator_Manager::DestroyInstance();
+	if (g_pDropManager)
+		CDropManager::DestroyInstance();
 
-	CDropManager::DestroyInstance();
-	Safe_Release(m_pTriggerSystem);
+	if(m_pTriggerSystem)
+		Safe_Release(m_pTriggerSystem);
 
 	for (auto& pObj : m_vecMeteor)
 		Safe_Release(pObj);
 	m_vecMeteor.clear();
+
+	CWeaponGenerator::DestroyInstance();
 
 }

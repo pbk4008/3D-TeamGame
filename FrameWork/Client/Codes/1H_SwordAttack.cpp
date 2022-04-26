@@ -70,11 +70,11 @@ HRESULT C1H_SwordAttack::EnterState()
 
 	m_tShakeEvent.fDuration = 0.4f;
 	m_tShakeEvent.fBlendOutTime = 0.3f;
-	m_tShakeEvent.tWaveX.fAmplitude = 0.04f;
+	m_tShakeEvent.tWaveX.fAmplitude = 0.06f;
 	m_tShakeEvent.tWaveX.fFrequency = 10.f;
-	m_tShakeEvent.tWaveY.fAmplitude = 0.04f;
+	m_tShakeEvent.tWaveY.fAmplitude = 0.06f;
 	m_tShakeEvent.tWaveY.fFrequency = 6.f;
-	m_tShakeEvent.tWaveZ.fAmplitude = 0.04f;
+	m_tShakeEvent.tWaveZ.fAmplitude = 0.06f;
 	m_tShakeEvent.tWaveZ.fFrequency = 8.f;
 
 	m_pAnimationController->Set_PlaySpeed(1.2f);
@@ -98,6 +98,8 @@ HRESULT C1H_SwordAttack::ExitState()
 	g_pObserver->Set_PlayerAttackAnimStart(false);
 
 	m_pAnimationController->Div_MoveSpeed(0.5f);
+	
+	m_isShake = false;
 	return S_OK;
 }
 

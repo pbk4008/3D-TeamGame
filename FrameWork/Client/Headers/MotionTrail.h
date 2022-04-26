@@ -18,7 +18,7 @@ public: virtual HRESULT	Render_MotionTrail() override;
 
 public: _float	Get_LifeTime() { return m_lifetime; }
 public: void	Set_BoneMat(_fmatrix* bone);
-public: void	Set_Info(_fmatrix world, _fmatrix weapon = XMMatrixIdentity(), _fmatrix shield = XMMatrixIdentity(), _float UVdvid = 0.f);
+public: void	Set_Info(_fmatrix world, _fmatrix weapon = XMMatrixIdentity(), _fmatrix shield = XMMatrixIdentity(), _float UVdvid = 0.f,CModel* pCurWeapon = nullptr);
 public: void	Set_Model(CModel* pModel = nullptr, CModel* pWeapon = nullptr, CModel* pShield = nullptr);
 public: void	Set_RunCheck(_bool check) { m_runcheck = check; }
 public: void	Set_ThrowCheck(_bool check) { m_throwchck = check; }
