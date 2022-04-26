@@ -367,6 +367,9 @@
     <Filter Include="98.ShaderFiles\03.Lighting">
       <UniqueIdentifier>{3647b274-6337-4203-b259-0de4f2499d27}</UniqueIdentifier>
     </Filter>
+    <Filter Include="00.Utility\03.Component\05.VIBuffer\09.Instance\00.Particle\01.Energy">
+      <UniqueIdentifier>{251329a8-8125-4f62-b9d4-4a65e9a03a72}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\public\Base.h">
@@ -702,6 +705,9 @@
     <ClInclude Include="..\public\VIBuffer_PointInstance_Floating_Disappear.h">
       <Filter>00.Utility\03.Component\05.VIBuffer\09.Instance\00.Particle\02.Floating\02.ImageDisappear</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\VIBuffer_PointInstance_Energy.h">
+      <Filter>00.Utility\03.Component\05.VIBuffer\09.Instance\00.Particle\01.Energy</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\private\Base.cpp">
@@ -1006,6 +1012,9 @@
     </ClCompile>
     <ClCompile Include="..\private\VIBuffer_PointInstance_Floating_Disappear.cpp">
       <Filter>00.Utility\03.Component\05.VIBuffer\09.Instance\00.Particle\02.Floating\02.ImageDisappear</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\VIBuffer_PointInstance_Energy.cpp">
+      <Filter>00.Utility\03.Component\05.VIBuffer\09.Instance\00.Particle\01.Energy</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

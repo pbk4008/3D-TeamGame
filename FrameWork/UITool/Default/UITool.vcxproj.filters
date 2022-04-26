@@ -165,6 +165,9 @@
     <ClInclude Include="MFCEffect_floating_Disappear.h">
       <Filter>04.Object\02.Effect\Floating\02.Disappear</Filter>
     </ClInclude>
+    <ClInclude Include="MFCEffect_Energy.h">
+      <Filter>04.Object\02.Effect</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MainFrm.cpp">
@@ -232,6 +235,9 @@
     </ClCompile>
     <ClCompile Include="MFCEffect_floating_Disappear.cpp">
       <Filter>04.Object\02.Effect\Floating\02.Disappear</Filter>
+    </ClCompile>
+    <ClCompile Include="MFCEffect_Energy.cpp">
+      <Filter>04.Object\02.Effect</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

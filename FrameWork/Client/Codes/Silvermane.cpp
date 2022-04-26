@@ -224,7 +224,7 @@ HRESULT CSilvermane::NativeConstruct(const _uint _iSceneID, void* _pArg)
 
 
 	m_isFall = true;
-	m_fMaxHp = 100.f;
+	m_fMaxHp = 100000.f;
 	m_fCurrentHp = m_fMaxHp;
 
 	m_pRenderer->SetRenderButton(CRenderer::PIXEL, true);
@@ -240,6 +240,7 @@ HRESULT CSilvermane::NativeConstruct(const _uint _iSceneID, void* _pArg)
 	LightDesc.vDiffuse = _float4(1.f, 0.2f, 0.2f, 1.f);
 	LightDesc.vSpecular = _float4(0.8f, 0.8f, 0.8f, 1.f);
 	LightDesc.vAmbient = _float4(1.f, 1.f, 1.f, 1.f);
+	LightDesc.bactive = false;
 	XMStoreFloat3(&LightDesc.vPosition, m_pTransform->Get_State(CTransform::STATE_POSITION));
 
 	m_LightDesc = LightDesc;
@@ -1644,6 +1645,7 @@ void CSilvermane::OnLight(_vector vColor, _vector vAmbient, _float fRange, _floa
 		XMStoreFloat4(&m_LightDesc.vDiffuse, vColor);
 		XMStoreFloat4(&m_LightDesc.vAmbient, vAmbient);
 		m_LightDesc.fRange = fRange;
+		m_LightDesc.bactive = true;
 		m_fOffTimeSpeed = fOffTimeSpeed;
 
 		m_pLight->Set_Desc(m_LightDesc);

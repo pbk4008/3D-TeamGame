@@ -80,7 +80,7 @@ _int CBoss_Attack_S3::Tick(const _double& TimeDelta)
 	if (38 < iCurKeyFrameIndex && 50 > iCurKeyFrameIndex)
 	{
 		OVERLAPDESC tOverlapDesc;
-		tOverlapDesc.geometry = PxSphereGeometry(7.f);
+		tOverlapDesc.geometry = PxSphereGeometry(5.0f);
 		XMStoreFloat3(&tOverlapDesc.vOrigin, m_pTransform->Get_State(CTransform::STATE_POSITION));
 		CGameObject* pHitObject = nullptr;
 		tOverlapDesc.ppOutHitObject = &pHitObject;

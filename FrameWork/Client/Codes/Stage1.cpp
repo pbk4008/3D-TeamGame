@@ -122,11 +122,11 @@ HRESULT CStage1::NativeConstruct()
 		return E_FAIL;
 	}
 
-	if (FAILED(Ready_Trigger_Jump()))
-	{
-		MSGBOX("Stage1 Jump");
-		return E_FAIL;
-	}
+	//if (FAILED(Ready_Trigger_Jump()))
+	//{
+	//	MSGBOX("Stage1 Jump");
+	//	return E_FAIL;
+	//}
 
 	if (FAILED(Ready_Player(L"Layer_Silvermane")))
 	{
@@ -140,11 +140,11 @@ HRESULT CStage1::NativeConstruct()
 		return E_FAIL;
 	}
 
-	if (FAILED(Ready_TriggerSystem(L"../bin/SaveData/Trigger/MonsterSpawnTrigger.dat")))
-	{
-		MSGBOX("Stage1 Trigger");
-		return E_FAIL;
-	}
+	//if (FAILED(Ready_TriggerSystem(L"../bin/SaveData/Trigger/MonsterSpawnTrigger.dat")))
+	//{
+	//	MSGBOX("Stage1 Trigger");
+	//	return E_FAIL;
+	//}
 
 	if (FAILED(Ready_Data_UI(L"../bin/SaveData/UI/UI.dat")))
 	{
@@ -152,11 +152,11 @@ HRESULT CStage1::NativeConstruct()
 		return E_FAIL;
 	}
 
-	if (FAILED(Ready_Data_Effect()))
-	{
-		MSGBOX("Stage1 Effect");
-		return E_FAIL;
-	}
+	//if (FAILED(Ready_Data_Effect()))
+	//{
+	//	MSGBOX("Stage1 Effect");
+	//	return E_FAIL;
+	//}
 
 	if (FAILED(Ready_UI(L"Layer_UI")))
 	{
@@ -167,7 +167,6 @@ HRESULT CStage1::NativeConstruct()
 	if (FAILED(Ready_Treasure_Chest()))
 	{
 		MSGBOX("Stage1 Box");
-		MSGBOX("Stage1 Box");
 		return E_FAIL;
 	}
 
@@ -175,6 +174,25 @@ HRESULT CStage1::NativeConstruct()
 	{
 		MSGBOX("Stage1 Manager");
 		return E_FAIL;
+	}
+
+	//Hammer_Dust
+	CEffect_Hammer_Dust* pHammer = nullptr;
+	CEffect_Hammer_Dust::EFFECTDESC Desc;
+	ZeroMemory(&Desc, sizeof(Desc));
+
+	_tcscpy_s(Desc.TextureTag, L"Hammer_Dust_2");
+	Desc.iRenderPassNum = 1;
+	Desc.iImageCountX = 8;
+	Desc.iImageCountY = 4;
+	Desc.fFrame = 32.f;
+	Desc.fEffectPlaySpeed = 1.f;
+
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Effect_Hammer_Dust", L"Proto_GameObject_Effect_Hammer_Dust", &Desc, (CGameObject**)&pHammer)))
+	{
+		MSGBOX("Failed to Creating Effect_Hammer_Dust in CStage1::Ready_Effect()");
+		return E_FAIL;
+
 	}
 
 	g_pGameInstance->Change_BaseCamera(L"Camera_Silvermane");
@@ -191,23 +209,23 @@ HRESULT CStage1::NativeConstruct()
 	// 		return E_FAIL;
 	//}
 	
-	if (FAILED(Ready_Indicator()))
-	{
-		MSGBOX("Indicator");
-		return E_FAIL;
-	}
-
-	if (FAILED(Ready_Portal()))
-	{
-		MSGBOX("Portal");
-		return E_FAIL;
-	}
-
-	if (FAILED(Ready_Wall()))
-	{
-		MSGBOX("Wall");
-		return E_FAIL;
-	}
+	//if (FAILED(Ready_Indicator()))
+	//{
+	//	MSGBOX("Indicator");
+	//	return E_FAIL;
+	//}
+	//
+	//if (FAILED(Ready_Portal()))
+	//{
+	//	MSGBOX("Portal");
+	//	return E_FAIL;
+	//}
+	//
+	//if (FAILED(Ready_Wall()))
+	//{
+	//	MSGBOX("Wall");
+	//	return E_FAIL;
+	//}
 
 	g_pGameInstance->PlayBGM(L"Stage1_BGM");
 	
@@ -1155,7 +1173,7 @@ HRESULT CStage1::Ready_Data_Effect()
 	tDesc.iRenderPassNum = 1;
 	tDesc.iImageCountX = 4;
 	tDesc.iImageCountY = 2;
-	tDesc.fFrame = 8;
+	tDesc.fFrame = 4;
 	tDesc.fEffectPlaySpeed = 20.f;
 	tDesc.fAlpha = 1.f;
 	tDesc.fWeight = 1.f;
@@ -1261,11 +1279,11 @@ HRESULT CStage1::Ready_Data_Effect()
 	CEffect_Hammer_Dust::EFFECTDESC Desc;
 	ZeroMemory(&Desc, sizeof(Desc));
 
-	_tcscpy_s(Desc.TextureTag, L"Hammer_Dust");
+	_tcscpy_s(Desc.TextureTag, L"Hammer_Dust_2");
 	Desc.iRenderPassNum = 1;
 	Desc.iImageCountX = 8;
-	Desc.iImageCountY = 8;
-	Desc.fFrame = 64.f;
+	Desc.iImageCountY = 4;
+	Desc.fFrame = 32.f;
 	Desc.fEffectPlaySpeed = 1.f;
 
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Effect_Hammer_Dust", L"Proto_GameObject_Effect_Hammer_Dust", &Desc, (CGameObject**)&pHammer)))

@@ -1135,6 +1135,15 @@
     <Filter Include="02.GameObject\06.Interactable Object\Shield">
       <UniqueIdentifier>{6dfa7505-8405-4814-b738-f504a7ea30ca}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\04.Effect\02.MeshEffect\01.EffectBossMesh">
+      <UniqueIdentifier>{c754efa5-f05f-4f81-b1ef-15984349f16b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\04.Effect\00.Particle\08.Effect_Energy">
+      <UniqueIdentifier>{2d6e6e86-8d51-4d8d-91e1-2189d6431a68}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\04.Effect\02.MeshEffect\01.EffectBossMesh\00.Test">
+      <UniqueIdentifier>{80bd93cf-e7bc-404e-9e3f-533bffe4f791}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -1923,9 +1932,6 @@
     <ClInclude Include="..\Headers\TrailEffect.h">
       <Filter>02.GameObject\04.Effect\01.TrailEffect</Filter>
     </ClInclude>
-    <ClInclude Include="..\Headers\Effect_DeathParticle.h">
-      <Filter>02.GameObject\04.Effect\00.Particle\04.Effect_Death_연기이펙트로바꾸면될듯</Filter>
-    </ClInclude>
     <ClInclude Include="..\Headers\Effect_Env_Floating.h">
       <Filter>02.GameObject\04.Effect\00.Particle\05.Effect_Env_Floating</Filter>
     </ClInclude>
@@ -2444,6 +2450,15 @@
     </ClInclude>
     <ClInclude Include="..\Headers\Loot_Shield.h">
       <Filter>02.GameObject\06.Interactable Object\Shield</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Effect_Energy.h">
+      <Filter>02.GameObject\04.Effect\00.Particle\08.Effect_Energy</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\MeshEffect_Boss_Effect.h">
+      <Filter>02.GameObject\04.Effect\02.MeshEffect\01.EffectBossMesh\00.Test</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\MeshEffect_Boss_Explosion.h">
+      <Filter>02.GameObject\04.Effect\02.MeshEffect\01.EffectBossMesh</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -3209,9 +3224,6 @@
     <ClCompile Include="..\Codes\TrailEffect.cpp">
       <Filter>02.GameObject\04.Effect\01.TrailEffect</Filter>
     </ClCompile>
-    <ClCompile Include="..\Codes\Effect_DeathParticle.cpp">
-      <Filter>02.GameObject\04.Effect\00.Particle\04.Effect_Death_연기이펙트로바꾸면될듯</Filter>
-    </ClCompile>
     <ClCompile Include="..\Codes\Effect_Env_Floating.cpp">
       <Filter>02.GameObject\04.Effect\00.Particle\05.Effect_Env_Floating</Filter>
     </ClCompile>
@@ -3724,6 +3736,15 @@
     </ClCompile>
     <ClCompile Include="..\Codes\Loot_Shield.cpp">
       <Filter>02.GameObject\06.Interactable Object\Shield</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Effect_Energy.cpp">
+      <Filter>02.GameObject\04.Effect\00.Particle\08.Effect_Energy</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\MeshEffect_Boss_Effect.cpp">
+      <Filter>02.GameObject\04.Effect\02.MeshEffect\01.EffectBossMesh\00.Test</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\MeshEffect_Boss_Explosion.cpp">
+      <Filter>02.GameObject\04.Effect\02.MeshEffect\01.EffectBossMesh</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

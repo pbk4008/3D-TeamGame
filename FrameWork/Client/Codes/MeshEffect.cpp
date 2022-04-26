@@ -99,6 +99,8 @@ HRESULT CMeshEffect::Render()
 	m_pModel->SetUp_ValueOnShader("g_vColor", &m_vColor, sizeof(_float3));
 
 
+	
+
 	return S_OK;
 }
 
