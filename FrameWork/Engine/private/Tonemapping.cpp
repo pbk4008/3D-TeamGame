@@ -74,7 +74,7 @@ HRESULT CTonemapping::ToneMapping(CTarget_Manager* pTargetMgr)
 
 	_float rcp_w = (1.f / m_viewport.Width);
 	_float rcp_h = (1.f / m_viewport.Height);
-	_float expsure = 0.2f;
+	_float expsure = 0.3f;
 	_float GaussianScalar = 0.4f;
 
 

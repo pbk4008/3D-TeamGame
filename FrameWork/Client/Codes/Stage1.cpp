@@ -134,11 +134,11 @@ HRESULT CStage1::NativeConstruct()
 		return E_FAIL;
 	}
 
-	//if (FAILED(Ready_MapObject()))
-	//{
-	//	MSGBOX("Stage1 MapObject");
-	//	return E_FAIL;
-	//}
+	if (FAILED(Ready_MapObject()))
+	{
+		MSGBOX("Stage1 MapObject");
+		return E_FAIL;
+	}
 
 	//if (FAILED(Ready_TriggerSystem(L"../bin/SaveData/Trigger/MonsterSpawnTrigger.dat")))
 	//{
@@ -191,11 +191,11 @@ HRESULT CStage1::NativeConstruct()
 	// 		return E_FAIL;
 	//}
 	
-	if (FAILED(Ready_Indicator()))
-	{
-		MSGBOX("Indicator");
-		return E_FAIL;
-	}
+	//if (FAILED(Ready_Indicator()))
+	//{
+	//	MSGBOX("Indicator");
+	//	return E_FAIL;
+	//}
 
 	//if (FAILED(Ready_Portal()))
 	//{

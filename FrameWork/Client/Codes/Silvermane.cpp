@@ -231,6 +231,7 @@ HRESULT CSilvermane::NativeConstruct(const _uint _iSceneID, void* _pArg)
 	m_pRenderer->SetRenderButton(CRenderer::PIXEL, true);
 	m_pRenderer->SetRenderButton(CRenderer::PBR, true);
 	m_pRenderer->SetRenderButton(CRenderer::HDR, true);
+	m_pRenderer->SetRenderButton(CRenderer::MOTIONTRAIL, true);
 	//m_pRenderer->SetRenderButton(CRenderer::SHADOW, true);
 
 	//Light ¼öÁ¤ ÇØ¾ßµÊ
@@ -1825,7 +1826,10 @@ HRESULT CSilvermane::Create_MotionTrail(_int idex, _bool runcheck, _bool throwch
 			uvdvid = 0.7f;
 		else
 		{
-			uvdvid = 0.9f;
+			if (m_pCurWeapon->Get_Type() == CWeapon::EType::Sword_1H)
+				uvdvid = 0.9f;
+			else
+				uvdvid = 0.7f;
 			//if (idex <= 10)
 			//	uvdvid = idex * 0.1f;
 			//else
@@ -1835,7 +1839,7 @@ HRESULT CSilvermane::Create_MotionTrail(_int idex, _bool runcheck, _bool throwch
 		static_cast<CMotionTrail*>(m_vecMotionTrail[idex])->Set_Info(smatWorld
 																	,m_pCurWeapon->Get_Transform()->Get_WorldMatrix()
 																	, m_pFlyingShield->Get_Transform()->Get_WorldMatrix()
-																	,uvdvid);
+																	,uvdvid,m_pCurWeapon->Get_Model());
 
 		static_cast<CMotionTrail*>(m_vecMotionTrail[idex])->Set_RunCheck(runcheck);
 		static_cast<CMotionTrail*>(m_vecMotionTrail[idex])->Set_ThrowCheck(throwcheck);
@@ -2145,6 +2149,7 @@ void CSilvermane::Free()
 {
 	__super::Free();
 	//Safe_Release(m_pNeedle);
+	Safe_Release(m_pHealSphere);
 	Safe_Release(m_pShield);
 	Safe_Release(m_pCharacterController);
 	Safe_Release(m_pStateController);
