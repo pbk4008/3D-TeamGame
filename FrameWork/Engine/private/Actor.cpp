@@ -1,6 +1,7 @@
 #include "Actor.h"
 #include "Transform.h"
 #include "Effect.h"
+#include "Light.h"
 #include "GameInstance.h"
 
 CActor::CActor()
@@ -68,20 +69,23 @@ HRESULT CActor::NativeConstruct(const _uint _iSceneID, void* pArg)
 	m_dissolveGradientTex = g_pGameInstance->Clone_Component<CTexture>(0, L"Proto_Component_Texture");
 	if (FAILED(m_dissolveGradientTex->Change_Texture(L"DissovleGradient"))) MSGBOX("Failed to Change Texture DissovleTex");
 
-	//LIGHTDESC LightDesc;
+	LIGHTDESC LightDesc;
 
-	//ZeroMemory(&LightDesc, sizeof(LIGHTDESC));
-	//LightDesc.eType = LIGHTDESC::TYPE_POINT;
-	//LightDesc.fRange = 7.f;
-	//LightDesc.vDiffuse = _float4(0.3686f, 04941.f, 0.60784f, 1.f);
-	//LightDesc.vSpecular = _float4(0.7f, 0.7f, 0.7f, 1.f);
-	//LightDesc.vAmbient = _float4(0.8f, 0.8f, 0.8f, 1.f);
-	//LightDesc.bactive = false;
-	//LightDesc.vPosition = _float3(0, 0, 0);
+	ZeroMemory(&LightDesc, sizeof(LIGHTDESC));
+	LightDesc.eType = LIGHTDESC::TYPE_POINT;
+	LightDesc.fRange = 5.f;
+	LightDesc.vDiffuse = _float4(0.3686f, 04941.f, 0.60784f, 1.f);
+	LightDesc.vSpecular = _float4(0.7f, 0.7f, 0.7f, 1.f);
+	LightDesc.vAmbient = _float4(0.8f, 0.8f, 0.8f, 1.f);
+	LightDesc.bactive = false;
+	LightDesc.vPosition = _float3(0, 0, 0);
 
-	//m_LightRange = LightDesc.fRange;
+	m_LightRange = LightDesc.fRange;
+	m_OrigLightRange = LightDesc.fRange;
 
-	//if (FAILED(g_pGameInstance->Add_Light(m_pDevice, m_pDeviceContext, LightDesc, &m_pActiveLight))) MSGBOX("Failed To Adding PointLight");
+	if (FAILED(g_pGameInstance->Add_Light(m_pDevice, m_pDeviceContext, LightDesc, &m_pActiveLight))) MSGBOX("Failed To Adding PointLight");
+
+	m_bUIShow = false;
 
 	return S_OK;
 }
@@ -305,6 +309,30 @@ HRESULT CActor::DissolveOn(_float dissolveSpeed)
 	return S_OK;
 }
 
+void CActor::LightOnOff(_fvector pos, _fvector color, _float deltaspeed)
+{
+	if (m_bLightCheck == true)
+	{
+		m_LightRange += g_fDeltaTime * -deltaspeed;
+
+		m_pActiveLight->Set_Range(m_LightRange);
+		m_pActiveLight->Set_Pos(pos);
+		m_pActiveLight->Set_Color(color);
+
+		if (m_LightRange <= 0.f)
+		{
+			m_LightRange = m_OrigLightRange;
+			m_pActiveLight->Set_Active(false);
+		}
+	}
+}
+
+void CActor::Set_LightCheck(_bool check)
+{
+	m_bLightCheck = check;
+	m_pActiveLight->Set_Active(check);
+}
+
 void CActor::Hit(const ATTACKDESC& _tAttackDesc)
 {
 }
@@ -325,6 +353,7 @@ void CActor::Free()
 {
 	CGameObject::Free();
 
+	Safe_Release(m_pActiveLight);
 	Safe_Release(m_pModel);
 	Safe_Release(m_dissolveTex);
 	Safe_Release(m_dissolveGradientTex);

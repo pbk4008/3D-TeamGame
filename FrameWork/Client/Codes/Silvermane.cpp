@@ -2067,8 +2067,9 @@ const void CSilvermane::Raycast_DropBox(const _double& _dDeltaTime)
 			{
 				m_pBlankFKey->setActive(true);
 				CTransform* pTargetTransform = pHitObject->Get_Transform();
+				_vector svTargetLook = XMVector3Normalize(pTargetTransform->Get_State(CTransform::STATE_LOOK));
 				_vector svTargetPos = pTargetTransform->Get_State(CTransform::STATE_POSITION);
-				svTargetPos += _vector{ 0.f, 1.2f, 0.f, 0.f };
+				svTargetPos += _vector{ 0.f, 1.2f, 0.f, 0.f } + svTargetLook * 1.f;
 				m_pBlankFKey->Set_Position(svTargetPos);
 			}
 

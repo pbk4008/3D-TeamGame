@@ -80,7 +80,7 @@ HRESULT CUI_Monster_Panel::NativeConstruct(const _uint _iSceneID, void* pArg)
 	Safe_AddRef(m_pUIName);
 	Safe_AddRef(m_pUIGroggyBar);
 
-	//setActive(false);
+	//setActive(false);p
 	return S_OK;
 }
 

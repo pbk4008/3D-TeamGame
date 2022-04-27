@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "..\Headers\Bullet.h"
 #include "SphereCollider.h"
+#include "Material.h"
 
 CBullet::CBullet(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
 	:CGameObject(_pDevice, _pDeviceContext)
@@ -89,17 +90,18 @@ HRESULT CBullet::Render()
 	smatView = XMMatrixTranspose(g_pGameInstance->Get_Transform(wstrCamTag, TRANSFORMSTATEMATRIX::D3DTS_VIEW));
 	smatProj = XMMatrixTranspose(g_pGameInstance->Get_Transform(wstrCamTag, TRANSFORMSTATEMATRIX::D3DTS_PROJECTION));
 
-	if (FAILED(m_pModelCom->SetUp_ValueOnShader("g_WorldMatrix", &smatWorld, sizeof(_matrix))))
-		return E_FAIL;
-	if (FAILED(m_pModelCom->SetUp_ValueOnShader("g_ViewMatrix", &smatView, sizeof(_matrix))))
-		return E_FAIL;
-	if (FAILED(m_pModelCom->SetUp_ValueOnShader("g_ProjMatrix", &smatProj, sizeof(_matrix))))
-		return E_FAIL;
+	if (FAILED(m_pModelCom->SetUp_ValueOnShader("g_WorldMatrix", &smatWorld, sizeof(_matrix))))	return E_FAIL;
+	if (FAILED(m_pModelCom->SetUp_ValueOnShader("g_ViewMatrix", &smatView, sizeof(_matrix))))	return E_FAIL;
+	if (FAILED(m_pModelCom->SetUp_ValueOnShader("g_ProjMatrix", &smatProj, sizeof(_matrix))))	return E_FAIL;
 
+	_float4 color = _float4(0, 0, 1.0f, 1);
+	_float empower = 10.f;
 
+	if (FAILED(m_pModelCom->SetUp_ValueOnShader("g_color", &color, sizeof(_float4)))) MSGBOX("Failed To Apply Actor ConstantBuffer");
+	if (FAILED(m_pModelCom->SetUp_ValueOnShader("g_empower", &empower, sizeof(_float)))) MSGBOX("Failed To Apply Actor ConstantBuffer");
 
 	for (_uint i = 0; i < m_pModelCom->Get_NumMeshContainer(); ++i)
-		if (FAILED(m_pModelCom->Render(i, 0))) 	return E_FAIL;
+		if (FAILED(m_pModelCom->Render(i, 2))) 	return E_FAIL;
 
 	return S_OK;
 }
@@ -127,6 +129,14 @@ HRESULT CBullet::Ready_Component(const _uint iSceneID)
 
 	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_SphereCollider", L"Collider", (CComponent**)&m_pCollider,&tColliderDesc)))
 		return E_FAIL;
+
+	//CMaterial* pMtrl = nullptr;
+	//CTexture* pTexture = nullptr;
+	//pMtrl = CMaterial::Create(m_pDevice, m_pDeviceContext, L"Mtrl_Needle", L"../../Reference/ShaderFile/Shader_StaticMesh.hlsl", CMaterial::EType::Static);
+	//pTexture = CTexture::Create(m_pDevice, m_pDeviceContext, L"../bin/Resources/Mesh/Bullet/Dungeons_Texture_01.dds", 1);
+	//pMtrl->Set_Texture("g_DiffuseTexture", TEXTURETYPE::TEX_DIFFUSE, pTexture, 0);
+	//g_pGameInstance->Add_Material(L"Mtrl_HealSphere", pMtrl);
+	//m_pModelCom->Add_Material(g_pGameInstance->Get_Material(L"Mtrl_HealSphere"), 0);
 
 	return S_OK;
 }

@@ -33,6 +33,12 @@ _int CShooter_Idle::Tick(const _double& _dDeltaTime)
 		return iProgress;
 
 	m_pAnimator->Tick(_dDeltaTime);
+	//_float dist = MathUtils::Length(m_pTransform->Get_State(CTransform::STATE_POSITION), g_pObserver->Get_PlayerPos());
+
+	//if (5.f < dist && 20.f >= dist)
+	//{
+	//	m_pStateController->Change_State(L"Idle");
+	//}
 
 	return _int();
 }

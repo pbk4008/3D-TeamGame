@@ -29,16 +29,28 @@ _int CCrawler_Idle::Tick(const _double& TimeDelta)
 
 	m_pAnimator->Tick(TimeDelta);
 
-	_fvector vMonsterPos = m_pTransform->Get_State(CTransform::STATE::STATE_POSITION);
-	_fvector vDist = vMonsterPos - g_pObserver->Get_PlayerPos();
-	_float fDistToPlayer = XMVectorGetX(XMVector3Length(vDist));
+	_float dist = MathUtils::Length(m_pTransform->Get_State(CTransform::STATE::STATE_POSITION), g_pObserver->Get_PlayerPos());
 
-	if ( 5.f > fDistToPlayer)
+	m_timer += g_fDeltaTime;
+
+	if (m_timer >= 0.5f)
 	{
-		m_pTransform->Face_Target(g_pObserver->Get_PlayerPos());
-		m_pStateController->Change_State(L"Walk");
-		//cout << "°È±â·Î º¯°æ" << endl;
+		if (2.f < dist && 5.f > dist)
+		{
+			m_pTransform->Face_Target(g_pObserver->Get_PlayerPos());
+			m_pStateController->Change_State(L"Walk");
+			m_pAnimator->Change_AnyEntryAnimation(CMonster_Crawler::MON_STATE::WALK_FWD);
+			//cout << "°È±â·Î º¯°æ" << endl;
+		}
+		else if (2.f > dist)
+		{
+
+			m_pStateController->Change_State(L"Attack");
+			m_pAnimator->Change_AnyEntryAnimation(CMonster_Crawler::MON_STATE::ATTACK_R1);
+		}
+		m_timer = 0.f;
 	}
+
 
 	return _int();
 }
@@ -69,6 +81,7 @@ HRESULT CCrawler_Idle::EnterState()
 	//m_pTransform->SetUp_Rotation(vec, (XMConvertToRadians(180.f)));
 	//m_pTransform->Face_Target(g_pObserver->Get_PlayerPos());
 	m_pAnimator->Change_AnyEntryAnimation(CMonster_Crawler::MON_STATE::IDLE);
+
 	return S_OK;
 }
 

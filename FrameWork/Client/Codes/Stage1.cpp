@@ -191,11 +191,11 @@ HRESULT CStage1::NativeConstruct()
 	// 		return E_FAIL;
 	//}
 	
-	//if (FAILED(Ready_Indicator()))
-	//{
-	//	MSGBOX("Indicator");
-	//	return E_FAIL;
-	//}
+	if (FAILED(Ready_Indicator()))
+	{
+		MSGBOX("Indicator");
+		return E_FAIL;
+	}
 
 	//if (FAILED(Ready_Portal()))
 	//{
@@ -370,14 +370,14 @@ _int CStage1::Tick(_double TimeDelta)
 	//		return -1;
 	//	pMonster->setActive(true);
 	//}
-	//
-	//if (g_pGameInstance->getkeyDown(DIK_NUMPAD2))
-	//{
-	//	CMonster_Bastion_Sword* pMonster = nullptr;
-	//	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Test", L"Proto_GameObject_Monster_Bastion_Sword", &fPos, (CGameObject**)&pMonster)))
-	//		return -1;
-	//	pMonster->setActive(true);
-	//}
+	// 
+	if (g_pGameInstance->getkeyDown(DIK_NUMPAD2))
+	{
+		CMonster_Bastion_Sword* pMonster = nullptr;
+		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Test", L"Proto_GameObject_Monster_Bastion_Sword", &fPos, (CGameObject**)&pMonster)))
+			return -1;
+		pMonster->setActive(true);
+	}
 
 	//if (g_pGameInstance->getkeyDown(DIK_NUMPAD3))
 	//{
@@ -386,7 +386,7 @@ _int CStage1::Tick(_double TimeDelta)
 	//		return -1;
 	//	pMonster->setActive(true);
 	//}
-	// 
+	 
 	//if (g_pGameInstance->getkeyDown(DIK_NUMPAD4))
 	//{
 	//	CMonster_Bastion_Healer* pMonster = nullptr;
@@ -401,7 +401,6 @@ _int CStage1::Tick(_double TimeDelta)
 	//		return -1;
 	//	pMonster->setActive(true);
 	//}
-
 	//if (g_pGameInstance->getkeyDown(DIK_NUMPAD6))
 	//{
 	//	CMonster_Bastion_Spear* pMonster = nullptr;
@@ -431,13 +430,13 @@ _int CStage1::Tick(_double TimeDelta)
 		m_pIndicatorManager->Active_Indicator();
 
 	/*For Cinema*/
-	if (m_pScenemaManager)
+	/*if (m_pScenemaManager)
 	{
 		if (g_pGameInstance->getkeyDown(DIK_END))
 			m_pScenemaManager->Active_Scenema((_uint)CINEMA_INDEX::CINEMA3_1);;
 
 		m_pScenemaManager->Tick(TimeDelta);
-	}
+	}*/
 
 
 	/*for Meteor*/
@@ -451,13 +450,13 @@ _int CStage1::Tick(_double TimeDelta)
 	if (g_pGuideManager)
 		g_pGuideManager->Tick(g_dImmutableTime);
 
-	if (g_pGameInstance->getkeyDown(DIK_END))
-	{
-		CMeteor* pMeteor = Find_Meteor();
-		pMeteor->setActive(true);
-		_vector vPos = XMLoadFloat4(&m_vecMeteorPos[0]);;
-		pMeteor->Move(vPos, 0);
-	}
+	//if (g_pGameInstance->getkeyDown(DIK_END))
+	//{
+	//	CMeteor* pMeteor = Find_Meteor();
+	//	pMeteor->setActive(true);
+	//	_vector vPos = XMLoadFloat4(&m_vecMeteorPos[0]);;
+	//	pMeteor->Move(vPos, 0);
+	//}
 	Open_Wall();
 
 	return _int();
