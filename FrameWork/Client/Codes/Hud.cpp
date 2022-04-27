@@ -50,7 +50,7 @@ _int CHud::Tick(_double dDeltaTime)
 	if (true == m_bOnLevelUpUI)
 	{
 		/* 몹을 잡아서 경험치가 계속 들어올 때 */
-		m_fOnTime += dDeltaTime;
+		m_fOnTime += (_float)dDeltaTime;
 		m_bHideLevelUpUI = false;
 		FixPos();
 		if (4.f <= m_fOnTime) /* 4초내로 추가로 잡은 몹이 없을 경우 */

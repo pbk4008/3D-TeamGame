@@ -155,11 +155,11 @@ HRESULT CStage1::NativeConstruct()
 		return E_FAIL;
 	}
 
-	if (FAILED(Ready_Data_Effect()))
-	{
-		MSGBOX("Stage1 Effect");
-		return E_FAIL;
-	}
+	//if (FAILED(Ready_Data_Effect()))
+	//{
+	//	MSGBOX("Stage1 Effect");
+	//	return E_FAIL;
+	//}
 
 	if (FAILED(Ready_UI(L"Layer_UI")))
 	{
@@ -187,11 +187,11 @@ HRESULT CStage1::NativeConstruct()
 	//	return E_FAIL;
 	//}
 	
-	//if (FAILED(Ready_Indicator()))
-	//{
-	//	MSGBOX("Indicator");
-	//	return E_FAIL;
-	//}
+	if (FAILED(Ready_Indicator()))
+	{
+		MSGBOX("Indicator");
+		return E_FAIL;
+	}
 
 	//if (FAILED(Ready_Portal()))
 	//{

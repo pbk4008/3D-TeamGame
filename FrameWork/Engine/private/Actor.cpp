@@ -333,6 +333,12 @@ void CActor::Set_LightCheck(_bool check)
 	m_pActiveLight->Set_Active(check);
 }
 
+void CActor::Set_LightAmbientSpecular(_float4 ambient, _float4 specular)
+{
+	m_pActiveLight->Set_Ambient(ambient);
+	m_pActiveLight->Set_Sepcular(specular);
+}
+
 void CActor::Hit(const ATTACKDESC& _tAttackDesc)
 {
 }

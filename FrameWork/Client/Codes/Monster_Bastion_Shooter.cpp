@@ -437,8 +437,11 @@ HRESULT CMonster_Bastion_Shooter::Ready_AnimationFSM()
 	m_pAnimator->Set_UpAutoChangeAnimation((_uint)ANIM_TYPE::RUN_LOOP, (_uint)ANIM_TYPE::RUN_END);
 	m_pAnimator->Set_UpAutoChangeAnimation((_uint)ANIM_TYPE::RUN_END, (_uint)ANIM_TYPE::IDLE);
 
-	m_pAnimator->Set_UpAutoChangeAnimation((_uint)ANIM_TYPE::ATTACK, (_uint)ANIM_TYPE::IDLE);
+	m_pAnimator->Set_UpAutoChangeAnimation((_uint)ANIM_TYPE::GROGGY_START, (_uint)ANIM_TYPE::GROGGY_LOOP);
+	m_pAnimator->Set_UpAutoChangeAnimation((_uint)ANIM_TYPE::GROGGY_LOOP, (_uint)ANIM_TYPE::GROGGY_END);
+	m_pAnimator->Set_UpAutoChangeAnimation((_uint)ANIM_TYPE::GROGGY_END, (_uint)ANIM_TYPE::IDLE);
 
+	m_pAnimator->Set_UpAutoChangeAnimation((_uint)ANIM_TYPE::ATTACK, (_uint)ANIM_TYPE::IDLE);
 	m_pAnimator->Set_UpAutoChangeAnimation((_uint)ANIM_TYPE::HIT1, (_uint)ANIM_TYPE::IDLE);
 
 
@@ -624,6 +627,15 @@ _int CMonster_Bastion_Shooter::Change_State()
 		m_fGroggyGauge = 0.f;
 		m_pPanel->Set_GroggyBar(Get_GroggyGaugeRatio());
 	}
+
+	if ((_uint)CMonster_Bastion_Shooter::ANIM_TYPE::GROGGY_END == m_pAnimator->Get_CurrentAnimNode())
+	{
+		if (m_pAnimator->Get_AnimController()->Is_Finished())
+		{
+			m_bGroggy = false;
+		}
+	}
+
 	return _int();
 }
 

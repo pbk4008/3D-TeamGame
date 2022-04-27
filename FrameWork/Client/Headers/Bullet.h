@@ -51,9 +51,6 @@ private:
 	_float4 m_fDir;
 	_float m_fSpeed;
 	_float m_fDamage = 0.f;
-
-	CMaterial* pMtrl = nullptr;
-	CTexture* pTexture = nullptr;
 };
 END
 #endif

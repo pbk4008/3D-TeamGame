@@ -2,6 +2,7 @@
 #include "..\Headers\Bullet.h"
 #include "SphereCollider.h"
 #include "Material.h"
+#include "Texture.h"
 
 CBullet::CBullet(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
 	:CGameObject(_pDevice, _pDeviceContext)
@@ -35,6 +36,13 @@ HRESULT CBullet::NativeConstruct_Prototype()
 
 	m_iObectTag = (_uint)GAMEOBJECT::WEAPON_BULLET;
 	m_fSpeed = 50.f;
+
+	CMaterial* pMtrl = nullptr;
+	CTexture*  pTexture = nullptr;
+	pMtrl = CMaterial::Create(m_pDevice, m_pDeviceContext, L"Mtrl_Needle", L"../../Reference/ShaderFile/Shader_MeshEffect.hlsl", CMaterial::EType::Static);
+	pMtrl->Change_Texture("g_DiffuseTexture", TEXTURETYPE::TEX_DIFFUSE, L"TrailBase");
+	g_pGameInstance->Add_Material(L"Mtrl_Bullet", pMtrl);
+
 	return S_OK;
 }
 
@@ -78,7 +86,8 @@ _int CBullet::LateTick(_double _dDeltaTime)
 	if (!m_pRenderer)
 		return E_FAIL;
 
-	m_pRenderer->Add_RenderGroup(CRenderer::RENDER_NONALPHA, this);
+	m_pRenderer->Add_RenderGroup(CRenderer::RENDER_ALPHA, this);
+
 	return _int();
 }
 
@@ -94,14 +103,19 @@ HRESULT CBullet::Render()
 	if (FAILED(m_pModelCom->SetUp_ValueOnShader("g_ViewMatrix", &smatView, sizeof(_matrix))))	return E_FAIL;
 	if (FAILED(m_pModelCom->SetUp_ValueOnShader("g_ProjMatrix", &smatProj, sizeof(_matrix))))	return E_FAIL;
 
-	_float4 color = _float4(0, 0, 1.0f, 1);
-	_float empower = 10.f;
-
-	if (FAILED(m_pModelCom->SetUp_ValueOnShader("g_color", &color, sizeof(_float4)))) MSGBOX("Failed To Apply Actor ConstantBuffer");
+	_float3 color = _float3(1, 1, 1.f);
+	_float empower = 1.f;
+	_float weight = 1.f;
+	_float alpha = 1.f;
+	if (FAILED(m_pModelCom->SetUp_ValueOnShader("g_vColor", &color, sizeof(_float3)))) MSGBOX("Failed To Apply Actor ConstantBuffer");
 	if (FAILED(m_pModelCom->SetUp_ValueOnShader("g_empower", &empower, sizeof(_float)))) MSGBOX("Failed To Apply Actor ConstantBuffer");
+	if (FAILED(m_pModelCom->SetUp_ValueOnShader("g_Weight", &weight, sizeof(_float)))) MSGBOX("Failed To Apply Actor ConstantBuffer");
+	if (FAILED(m_pModelCom->SetUp_ValueOnShader("g_fAlpha", &alpha, sizeof(_float)))) MSGBOX("Failed To Apply Actor ConstantBuffer");
 
 	for (_uint i = 0; i < m_pModelCom->Get_NumMeshContainer(); ++i)
-		if (FAILED(m_pModelCom->Render(i, 2))) 	return E_FAIL;
+	{
+		if (FAILED(m_pModelCom->Render(i, 7))) return E_FAIL;
+	}
 
 	return S_OK;
 }
@@ -130,6 +144,7 @@ HRESULT CBullet::Ready_Component(const _uint iSceneID)
 	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_SphereCollider", L"Collider", (CComponent**)&m_pCollider,&tColliderDesc)))
 		return E_FAIL;
 
+	m_pModelCom->Add_Material(g_pGameInstance->Get_Material(L"Mtrl_Bullet"), 0);
 	//CMaterial* pMtrl = nullptr;
 	//CTexture* pTexture = nullptr;
 	//pMtrl = CMaterial::Create(m_pDevice, m_pDeviceContext, L"Mtrl_Needle", L"../../Reference/ShaderFile/Shader_StaticMesh.hlsl", CMaterial::EType::Static);

@@ -99,7 +99,7 @@ void CUI_EquippedWeapon_Slot_1::UpdateSlot(_double TimeDelta)
 	{
 		if (m_fInitPos2 < m_fEndPos2)
 		{
-			m_fInitPos2 += TimeDelta * 100.0f;
+			m_fInitPos2 += (_float)TimeDelta * 100.0f;
 
 			if (m_fInitPos2 >= m_fEndPos2)
 			{
@@ -113,7 +113,7 @@ void CUI_EquippedWeapon_Slot_1::UpdateSlot(_double TimeDelta)
 	{
 		if (m_fInitPos < m_fEndPos)
 		{
-			m_fInitPos += TimeDelta * 100.0f;
+			m_fInitPos += (_float)TimeDelta * 100.0f;
 
 			if (m_fInitPos >= m_fEndPos)
 			{
@@ -131,7 +131,7 @@ void CUI_EquippedWeapon_Slot_1::UpdateSlotImage(_double TimeDelta)
 	/* Init Pos 470 -> EndPos 450 */
 	if (m_fInitPos2 > m_fEndPos2)
 	{
-		m_fInitPos2 -= TimeDelta * 100.f;
+		m_fInitPos2 -= (_float)TimeDelta * 100.f;
 
 		if (m_fInitPos2 < m_fEndPos2)
 		{

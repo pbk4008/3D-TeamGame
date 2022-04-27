@@ -22,7 +22,6 @@ HRESULT CShooter_Groggy::NativeConstruct(void* _pArg)
 
 	//Safe_AddRef(m_pAnimator);
 
-
 	if (FAILED(CMonster_FSM::NativeConstruct(_pArg)))
 		return E_FAIL;
 
@@ -44,7 +43,9 @@ _int CShooter_Groggy::Tick(const _double& _dDeltaTime)
 		Stun(_dDeltaTime);
 
 	if (m_pAnimator->Get_CurrentAnimNode() == (_uint)CMonster_Bastion_Shooter::ANIM_TYPE::IDLE)
+	{
 		m_pStateController->Change_State(L"Idle");
+	}
 
 	return _int();
 }
@@ -88,7 +89,9 @@ void CShooter_Groggy::Stun(_double dDeltaTime)
 	{
 		m_fAccStunTime += (_float)dDeltaTime;
 		if (m_fAccStunTime > 3.f)
+		{
 			m_pAnimator->Change_LoopAnim();
+		}
 	}
 }
 
