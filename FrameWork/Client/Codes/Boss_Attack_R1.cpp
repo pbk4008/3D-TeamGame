@@ -180,7 +180,7 @@ _int CBoss_Attack_R1::Tick(const _double& TimeDelta)
 		m_pMonster->Set_IsAttack(true);
 
 		_float fDamage = 6.f;
-		_uint iLevel = 3;
+		_uint iLevel = 4;
 		m_pMonster->Set_AttackDesc_Damaga(fDamage);
 		m_pMonster->Set_AttackDesc_Level(iLevel);
 	}

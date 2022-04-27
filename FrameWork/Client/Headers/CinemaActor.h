@@ -24,6 +24,9 @@ public:
 	void AnimSpeed(_float fSpeed);
 	void Actor_AnimReset();
 public:
+	class CHierarchyNode* Get_Bone(const string& tBoneName);
+	_fmatrix Get_Pivot();
+public:
 	static CCinemaActor* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);
 	virtual CGameObject* Clone(const _uint iSceneID, void* pArg);
 private:

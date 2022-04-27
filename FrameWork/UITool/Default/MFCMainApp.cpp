@@ -10,6 +10,7 @@
 #include "MFCCamera_Proj.h"
 #include "MFCEffect.h"
 #include "MFCEffect_floating.h"
+#include "MFCEffect_Energy.h"
 #include "MFCEffect_floating_Speed.h"
 #include "MFCEffect_floating_Disappear.h"
 #include "MFCEffect_Env_floating.h"
@@ -194,6 +195,11 @@ HRESULT CMFCMainApp::Ready_Component_Prototype()
 		return E_FAIL;
 	}
 
+	if (FAILED(g_pGameInstance->Add_Prototype(TOOL_LEVEL::TOOL_LEVEL_LOGO, L"Prototype_Component_VIBuffer_PointInstance_Energy", CVIBuffer_PointInstance_Energy::Create(m_pDevice, m_pDeviceContext/*, L"../../Reference/ShaderFile/Shader_Particle.hlsl", 100*/))))
+	{
+		return E_FAIL;
+	}
+
 	if (FAILED(g_pGameInstance->Add_Prototype(TOOL_LEVEL::TOOL_LEVEL_LOGO, L"Prototype_Component_VIBuffer_PointInstance_Floating", CVIBuffer_PointInstance_Floating::Create(m_pDevice, m_pDeviceContext/*, L"../../Reference/ShaderFile/Shader_Particle.hlsl", 100*/))))
 	{
 		return E_FAIL;
@@ -359,6 +365,11 @@ HRESULT CMFCMainApp::Ready_GameObject_Prototype()
 	//}
 
 	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Effect"), CMFCEffect::Create(m_pDevice, m_pDeviceContext))))
+	{
+		return E_FAIL;
+	}
+
+	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Effect_Energy"), CMFCEffect_Energy::Create(m_pDevice, m_pDeviceContext))))
 	{
 		return E_FAIL;
 	}

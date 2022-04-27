@@ -4,6 +4,8 @@
 
 CScenematicManager::CScenematicManager()
 	:m_pCurCinema(nullptr)
+	, m_iCurCinema(-1)
+	, m_bCinemaEnd(false)
 {
 }
 
@@ -23,6 +25,8 @@ HRESULT CScenematicManager::Active_Scenema(_uint iScenemaIndex)
 
 	m_vecScenema[iScenemaIndex]->Set_Active(true);
 	m_pCurCinema = m_vecScenema[iScenemaIndex];
+	m_iCurCinema = iScenemaIndex;
+	m_bCinemaEnd = true;
 
 	return S_OK;
 }
@@ -35,8 +39,25 @@ HRESULT CScenematicManager::Change_Cinema(_uint iCinemaIndex)
 	m_pCurCinema->Set_Active(false);
 	m_pCurCinema = m_vecScenema[iCinemaIndex];
 	m_pCurCinema->Set_Active(true);
+	m_iCurCinema = iCinemaIndex;
 
 	return S_OK;
+}
+
+_bool CScenematicManager::Get_EventCinema(_uint iCinemaIndex)
+{
+	if (m_iCurCinema != -1&&m_iCurCinema == iCinemaIndex)
+	{
+		if (m_bCinemaEnd)
+			return true;
+	}
+	return false;
+}
+
+void CScenematicManager::ResetCinema()
+{
+	m_iCurCinema = -1;
+	m_bCinemaEnd = false;
 }
 
 _uint CScenematicManager::Tick(_double TimeDelta)
@@ -46,8 +67,6 @@ _uint CScenematicManager::Tick(_double TimeDelta)
 		if (m_pCurCinema->Get_Active())
 			m_pCurCinema->Tick(TimeDelta);
 	}
-
-
 	return _uint();
 }
 
@@ -57,6 +76,11 @@ _uint CScenematicManager::LateTick(_double TimeDelta)
 	{
 		if (m_pCurCinema->Get_Active())
 			m_pCurCinema->LateTick(TimeDelta);
+		else
+		{
+			m_pCurCinema = nullptr;
+			m_bCinemaEnd = true;
+		}
 	}
 
 	return _uint();

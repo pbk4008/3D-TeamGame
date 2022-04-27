@@ -65,7 +65,7 @@ HRESULT CMFCEffect_Floating_Disappear::NativeConstruct(const _uint iSceneID, voi
 	m_pBuffer->Set_Desc(Desc);
 	m_pBuffer->Particle_Reset();
 
-	m_fAlpha = 0.1f;
+	m_fAlpha = 0.2f;
 
 	m_bReset = false;
 

@@ -37,7 +37,7 @@ _int CBoss_Turn::Tick(const _double& TimeDelta)
 	_vector vMonsterPos = m_pTransform->Get_State(CTransform::STATE::STATE_POSITION);
 	_vector vDist = vMonsterPos - g_pObserver->Get_PlayerPos();
 	/* 몬스터와 플레이어 사이의 거리 */
-	_float tfDistToPlayer = XMVectorGetX(XMVector3Length(vDist));
+	_float fDistToPlayer = XMVectorGetX(XMVector3Length(vDist));
 
 	/* 플레이어가 몬스터의 앞에 있는지 뒤에있는지 판단 */
 	_vector vecMonsterToPlayer = XMVector3Normalize(vDist);

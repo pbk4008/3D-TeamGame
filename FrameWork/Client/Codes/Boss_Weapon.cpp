@@ -56,7 +56,7 @@ _int CBoss_Weapon::Tick(_double TimeDelta)
 		return -1;
 
 
-	_matrix matPivot = XMMatrixRotationY(XMConvertToRadians(180.f)) * XMMatrixRotationZ(XMConvertToRadians(90.f)) * XMMatrixTranslation(0.f, 1.f, 0.0f);
+	_matrix matPivot = XMMatrixRotationY(XMConvertToRadians(180.f)) * XMMatrixRotationZ(XMConvertToRadians(90.f)) * XMMatrixTranslation(0.f, 1.6f, 0.0f);
 	m_pCollider->setPivotMatrix(matPivot);
 
 
@@ -135,7 +135,7 @@ HRESULT CBoss_Weapon::Ready_Components()
 
 	CCapsuleCollider::DESC tCapsuleColliderDesc;
 	tCapsuleColliderDesc.tColliderDesc = tColliderDesc;
-	tCapsuleColliderDesc.fHeight = 3.f;
+	tCapsuleColliderDesc.fHeight = 4.f;
 	tCapsuleColliderDesc.fRadius = 0.8f;
 	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_CapsuleCollider", L"Collider", (CComponent**)&m_pCollider, &tCapsuleColliderDesc)))
 		return E_FAIL;

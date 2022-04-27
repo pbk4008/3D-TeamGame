@@ -25,6 +25,7 @@ public:
 protected:
 	HRESULT Set_UpComponents(CComponent* pComponent);
 	HRESULT Ready_Actor(class CCinemaActor** pOut, _uint iActorTag);
+	HRESULT Ready_Weapon(class CCinemaWeapon** pOut, _uint iActorTag);
 private:
 	void OnOffPlayerWithUI(_bool bCheck);
 protected:

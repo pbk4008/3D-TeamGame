@@ -116,6 +116,7 @@ HRESULT CMainApp::NativeConstruct()
 	g_pGameInstance->Set_CollisionLayer((_uint)ELayer::Meteor, (_uint)ELayer::Enviroment);
 	g_pGameInstance->Set_CollisionLayer((_uint)ELayer::Meteor, (_uint)ELayer::Player);
 
+	g_pGameInstance->Set_CollisionLayer((_uint)ELayer::Weapon, (_uint)ELayer::Pot);
 
 	if (FAILED(Ready_Fonts()))
 		return E_FAIL;
