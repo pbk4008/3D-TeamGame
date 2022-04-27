@@ -48,8 +48,8 @@ HRESULT CStage2::NativeConstruct()
 	if (FAILED(Ready_NaviMesh()))
 		return E_FAIL;
 
-	if (FAILED(Ready_MapObject()))
-		return E_FAIL;
+	/*if (FAILED(Ready_MapObject()))
+		return E_FAIL;*/
 
 	if (FAILED(Ready_Player(L"Layer_Silvermane")))
 		return E_FAIL;
@@ -102,7 +102,11 @@ _int CStage2::Tick(_double TimeDelta)
 		m_pTriggerSystem->Tick(TimeDelta);
 
 		if (m_iCountMonster == 0 && m_bFirst)
+		{
 			m_pTriggerSystem->Check_Clear();
+		if (m_pTriggerSystem->Get_CurrentTriggerNumber() == 8)
+			m_pTriggerSystem->setAllTriggerClear(true);
+		}
 	}
 
 	if (g_pGameInstance->getkeyDown(DIK_I))

@@ -1,5 +1,4 @@
 #pragma once
-#pragma once
 #ifndef __STAGE2_H__
 #define __STAGE2_H__
 #include "Level.h"

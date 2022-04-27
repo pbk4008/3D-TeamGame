@@ -174,7 +174,7 @@ HRESULT CEnvironment::Render_Velocity()
 
 HRESULT CEnvironment::Ready_Component()
 {
-	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, m_tEnvironmentDesc.wstrInstaneTag, m_tEnvironmentDesc.wstrInstaneTag, (CComponent * *)& m_pInstanceMesh, &m_tEnvironmentDesc.tInstanceDesc)))
+	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, m_tEnvironmentDesc.wstrInstaneTag, m_tEnvironmentDesc.wstrInstaneTag, (CComponent**)& m_pInstanceMesh, &m_tEnvironmentDesc.tInstanceDesc)))
 		return E_FAIL;
 
 	m_Nummeshcontainer = m_pInstanceMesh->Get_NumMeshContainer();

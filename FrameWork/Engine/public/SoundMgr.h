@@ -11,7 +11,7 @@ class CSoundMgr final : public CSingleTon<CSoundMgr>
 {
 friend CSingleTon;
 public:
-	enum  { BGM, PLAYER1, PLAYER2, PLAYER3, MONSTER, EFFECT, UI,
+	enum  CHANNELID { BGM, PLAYER1, PLAYER2, PLAYER3, MONSTER, EFFECT, UI,
 		Player_Sword_Attack,
 		Power_Resonance_01,
 		Unequip_Needle, Equip_Needle,

@@ -20,6 +20,8 @@
 
 /* for. UI */
 #include "UI_Monster_Panel.h"
+#include "Stage1.h"
+#include "Stage2.h"
 
 CMonster_Bastion_2HSword::CMonster_Bastion_2HSword(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
 	: CActor(_pDevice, _pDeviceContext)
@@ -125,8 +127,17 @@ _int CMonster_Bastion_2HSword::Tick(_double _dDeltaTime)
 				m_bdissolve = true;
 				m_pPanel->Set_UIRemove(true);
 			}
+
 			if (m_lifetime >= 1.f)
+			{
+				CLevel* pLevel = g_pGameInstance->getCurrentLevelScene();
+				if (g_pGameInstance->getCurrentLevel() == (_uint)SCENEID::SCENE_STAGE1)
+					static_cast<CStage1*>(pLevel)->Minus_MonsterCount();
+				else if (g_pGameInstance->getCurrentLevel() == (_uint)SCENEID::SCENE_STAGE2)
+					static_cast<CStage2*>(pLevel)->Minus_MonsterCount();
+
 				Set_Remove(true);
+			}
 
 			if (1 <= m_pAnimator->Get_AnimController()->Get_CurKeyFrameIndex() && 2 > m_pAnimator->Get_AnimController()->Get_CurKeyFrameIndex())
 				Active_Effect((_uint)EFFECT::DEATH);

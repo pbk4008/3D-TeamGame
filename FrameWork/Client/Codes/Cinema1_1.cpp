@@ -137,14 +137,16 @@ _int CCinema1_1::Tick(_double dDeltaTime)
 
 _int CCinema1_1::LateTick(_double dDeltaTime)
 {
-	if (m_pCam->Get_CamFrame() > 850)
+	cout << m_pCam->Get_CamFrame() << endl;
+	if (m_pCam->Get_CamFrame() > 650)
 	{
 		m_bCinemaEnd = true;
 		m_pCam->Reset_Camera();
-	/*	CScenematicManager* pInstance = GET_INSTANCE(CScenematicManager);
+		CScenematicManager* pInstance = GET_INSTANCE(CScenematicManager);
 		pInstance->Change_Cinema((_uint)CINEMA_INDEX::CINEMA1_2);
-		RELEASE_INSTANCE(CScenematicManager);*/
+		RELEASE_INSTANCE(CScenematicManager);
 		return 0;
+
 	}
 	m_pGrayeHwak->LateTick(dDeltaTime);
 	m_pPhoenix->LateTick(dDeltaTime);
