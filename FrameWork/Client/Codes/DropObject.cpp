@@ -295,10 +295,24 @@ void CDropObject::Take(void)
 
 		_vector pivot = { 0.f, -0.05f, 0.f, 0.f };
 		Active_Effect((_uint)EFFECT::EAT_ITEM, pivot);
-	}
 
-	m_bInteractDead = true;
-	m_bTakable = false;
+		m_bInteractDead = true;
+		m_bTakable = false;
+	}
+	else if (m_droppedItem.ItemType == EItemType::Potion)
+	{
+		if (true == m_pInventoryData->PushPotion())
+		{
+			m_bInteractDead = true;
+			m_bTakable = false;
+		}
+		else
+		{
+			m_bInteractDead = false;
+			m_bTakable = true;
+			m_bDrop = true;
+		}
+	}
 }
 
 void CDropObject::SetTakableState(_bool bState)

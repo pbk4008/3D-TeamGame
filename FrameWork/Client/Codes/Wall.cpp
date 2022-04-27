@@ -47,7 +47,7 @@ _int CWall::LateTick(_double _dDeltaTime)
 {
 	if (nullptr != m_pRenderer)
 	{
-		m_pRenderer->Add_RenderGroup(CRenderer::RENDER_ALPHANB, this);
+		m_pRenderer->Add_RenderGroup(CRenderer::RENDER_ALPHA, this);
 		//m_pRenderer->Add_RenderGroup(CRenderer::RENDER_DYDISTORTION, this);
 		//m_pRenderer->Add_RenderGroup(CRenderer::RENDER_ALPHA, this);
 	}

@@ -63,6 +63,8 @@ HRESULT CBoss_Stun::EnterState()
 	if (FAILED(__super::EnterState()))
 		return E_FAIL;
 
+	m_pMonster->Set_IsAttack(false);
+
 	cout << "Boss Stun" << endl;
 
 	static_cast<CBoss_Solaris*>(m_pMonster)->Set_HitMotion(false);

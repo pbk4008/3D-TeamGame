@@ -217,7 +217,7 @@ HRESULT CBoss_Solaris::Render()
 	{
 		rimdesc.rimcheck = m_rimcheck;
 		rimdesc.rimcol = m_rimcol;
-		rimdesc.rimintensity = m_rimintensity; // intensity 낮을 수록 과하게 빛남
+		rimdesc.rimintensity = 50.f; // intensity 낮을 수록 과하게 빛남
 		XMStoreFloat4(&rimdesc.camdir, XMVector3Normalize(m_pTransform->Get_State(CTransform::STATE_POSITION) - g_pGameInstance->Get_CamPosition(L"Camera_Silvermane")));
 		CActor::SetRimIntensity(g_fDeltaTime * -10.f);
 	}
@@ -718,7 +718,7 @@ void CBoss_Solaris::Hit(const ATTACKDESC& _tAttackDesc)
 		}
 	}
 
-	if (3 <= m_iHitCount)
+	if (3 <= m_iHitCount && ATTACK_S6 != m_pAnimator->Get_CurrentAnimNode())
 	{
 		uniform_int_distribution<_uint> iRange(0, 1);
 		_uint iRandom = iRange(g_random);
@@ -726,7 +726,7 @@ void CBoss_Solaris::Hit(const ATTACKDESC& _tAttackDesc)
 		switch (iRandom)
 		{
 		case 0:
-			m_pStateController->Change_State(L"Back_Flip");
+			m_pStateController->Change_State(L"Dash_Back");
 			break;
 		case 1:
 			m_pStateController->Change_State(L"Back_Flip");
@@ -767,12 +767,13 @@ void CBoss_Solaris::Set_Random_AttackAnim()
 	_vector vDist = vMonsterPos - g_pObserver->Get_PlayerPos();
 	_float fDistToPlayer = XMVectorGetX(XMVector3Length(vDist));
 
+	cout << fDistToPlayer << endl;
 	if (0.6f < Get_HpRatio())
 	{
 		//레이저없음
-		if (20.f > fDistToPlayer)
+		if (8.f > fDistToPlayer)
 		{
-			uniform_int_distribution<_uint> iRange(0, 4);
+			uniform_int_distribution<_uint> iRange(0, 2);
 			_uint iRandom = iRange(g_random);
 			
 			while (iRandom == m_iPreAnim)
@@ -791,26 +792,23 @@ void CBoss_Solaris::Set_Random_AttackAnim()
 			case 2:
 				m_pStateController->Change_State(L"Attack_S3");
 				break;
-			case 3:
-				m_pStateController->Change_State(L"Attack_R1");
-				break;
-			case 4:
-				m_pStateController->Change_State(L"Attack_S5_Protocol");
-				break;
 			}
-
 			m_iPreAnim = iRandom;
 		}
-		else if (20.f <= fDistToPlayer)
+		else if (8.f <= fDistToPlayer && 10.f >= fDistToPlayer)
+		{
+			m_pStateController->Change_State(L"Attack_R1");
+		}
+		else if (10.f <= fDistToPlayer)
 		{
 			m_pStateController->Change_State(L"Attack_S5_Protocol");
 		}
 	}
 	else if (0.6f >= Get_HpRatio())
 	{
-		if (20.f > fDistToPlayer)
+		if (8.f > fDistToPlayer)
 		{
-			uniform_int_distribution<_uint> iRange(0, 6);
+			uniform_int_distribution<_uint> iRange(0, 3);
 			_uint iRandom = iRange(g_random);
 
 			while (iRandom == m_iPreAnim)
@@ -830,24 +828,14 @@ void CBoss_Solaris::Set_Random_AttackAnim()
 				m_pStateController->Change_State(L"Attack_S3");
 				break;
 			case 3:
-				m_pStateController->Change_State(L"Attack_R1");
-				break;
-			case 4:
-				m_pStateController->Change_State(L"Attack_S5_Protocol");
-				break;
-			case 5:
-				m_pStateController->Change_State(L"Attack_S6");
-				break;
-			case 6:
 				m_pStateController->Change_State(L"Attack_S2_Variant");
 				break;
 			}
-
 			m_iPreAnim = iRandom;
 		}
-		else if (20.f <= fDistToPlayer)
+		if (8.f <= fDistToPlayer)
 		{
-			uniform_int_distribution<_uint> iRange(0, 1);
+			uniform_int_distribution<_uint> iRange(0, 2);
 			_uint iRandom = iRange(g_random);
 
 			while (iRandom == m_iPreAnim)
@@ -858,16 +846,20 @@ void CBoss_Solaris::Set_Random_AttackAnim()
 			switch (iRandom)
 			{
 			case 0:
-				m_pStateController->Change_State(L"Attack_S6");
-				break;
-			case 1:
 				m_pStateController->Change_State(L"Attack_S5_Protocol");
 				break;
+			case 1:
+				m_pStateController->Change_State(L"Attack_S6");
+				break;
+			case 2:
+				m_pStateController->Change_State(L"Attack_R1");
+				break;
 			}
-
 			m_iPreAnim = iRandom;
 		}
 	}
+
+	m_pStateController->Change_State(L"Attack_R2");
 }
 
 

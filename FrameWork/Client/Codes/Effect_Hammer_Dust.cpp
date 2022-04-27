@@ -53,7 +53,8 @@ _int CEffect_Hammer_Dust::Tick(_double TimeDelta)
 {
 
 	_uint iAllFrameCount = (m_Desc.iImageCountX * m_Desc.iImageCountY);
-	m_Desc.fFrame += (_float)(iAllFrameCount * TimeDelta * /*m_Desc.fEffectPlaySpeed*/2.0f); //플레이속도 
+	
+	m_Desc.fFrame += (_float)(iAllFrameCount * TimeDelta * /*m_Desc.fEffectPlaySpeed*/1.7f); //플레이속도 
 
 	if (m_Desc.fFrame >= iAllFrameCount)
 	{
@@ -75,12 +76,14 @@ _int CEffect_Hammer_Dust::Tick(_double TimeDelta)
 	_float fDistToUI = XMVectorGetX(XMVector3Length(vDist));
 
 	_vector vScale = XMVectorZero();
-	vScale = { 5.f, 5.f,1.f,0.f };
+
+	vScale = { 1.f, 1.f,1.f,0.f };
 	m_pTransform->Scaling(vScale);
 
 
-	m_pTransform->Set_State(CTransform::STATE_POSITION, XMVectorSet(-175.f, 55.f, 422.f, 1.f));
-	return 0;
+	m_pTransform->Set_State(CTransform::STATE_POSITION, XMVectorSet(0.f, 2.f, 0.f, 1.f));
+    return 0;
+
 }
 
 _int CEffect_Hammer_Dust::LateTick(_double TimeDelta)
@@ -116,9 +119,6 @@ HRESULT CEffect_Hammer_Dust::Render()
 	m_Alpha = 1.f;
 	m_pBuffer->SetUp_ValueOnShader("g_fAlpha", &m_Alpha, sizeof(_float));
 
-	//_float weight = 0.f;
-	//m_pBuffer->SetUp_ValueOnShader("g_Weight", &weight, sizeof(_float));
-	
 	m_pBuffer->Render(3);
 
 	return S_OK;

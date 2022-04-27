@@ -17,7 +17,8 @@ protected:
 	explicit CEffect_Hammer_Dust(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);
 	explicit CEffect_Hammer_Dust(const CEffect& rhs);
 	virtual ~CEffect_Hammer_Dust() = default;
-protected:
+
+public:
 	/* 원형객체가 생성될때 호출되는 함수. */
 	virtual HRESULT NativeConstruct_Prototype();
 	/* 복제본객체가 생성될때 호출되는 함수. */

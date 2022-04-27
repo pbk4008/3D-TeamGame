@@ -28,17 +28,23 @@ public: /* Get Item */
 	CItemData GetItem(void);
 	CItemData* GetItemByID(_ulong _uid);
 	_int GetCount(void);
+	_int GetPotionCount(void);
 
 public: /* Set Item */
 	_bool IsFull(void);
 	void SetEquiped(_int iIndex, _bool bEquiped);
 	void SetResource(_int iResource);
+	_bool PushPotion(void);
+	_bool UsingPotion(void);
 
 public:
 	std::vector<CItemData> InventoryItems;
 	_int m_iResources = 0;
+	_int m_iNumofPotion = 3;
 	const _int ModalMaxCount = 32;
 };
+
+#define MAX_POTION 3
 
 END
 #endif // InventoryData_h__

@@ -20,6 +20,8 @@
 
 /* for. UI */
 #include "UI_Monster_Panel.h"
+#include "Stage1.h"
+#include "Stage2.h"
 
 #include "Stage1.h"
 #include "Stage2.h"
@@ -130,6 +132,7 @@ _int CMonster_Bastion_2HSword::Tick(_double _dDeltaTime)
 				m_bdissolve = true;
 				m_pPanel->Set_UIRemove(true);
 			}
+
 			if (m_lifetime >= 1.f)
 			{
 				CLevel* pLevel = g_pGameInstance->getCurrentLevelScene();

@@ -124,7 +124,8 @@ void CCinemaCam::Reset_Camera()
 void CCinemaCam::Add_Fov(_float fSpeed, _float fGoalAngle)
 {
 	_float fAngle = m_pCamera->Get_FovAngle();
-	if (fAngle < fGoalAngle)
+	fAngle = XMConvertToDegrees(fAngle);
+	if (fAngle < XMConvertToDegrees(fGoalAngle))
 	{
 		fAngle += fSpeed;
 		m_pCamera->Change_Fov(fAngle);
@@ -134,8 +135,8 @@ void CCinemaCam::Add_Fov(_float fSpeed, _float fGoalAngle)
 void CCinemaCam::Minus_Fov(_float fSpeed, _float fGoalAngle)
 {
 	_float fAngle = m_pCamera->Get_FovAngle();
-		m_fFovAngle = fAngle;
-	if (fAngle > fGoalAngle)
+	fAngle = XMConvertToDegrees(fAngle);
+	if (fAngle > XMConvertToDegrees(fGoalAngle))
 	{
 		fAngle -= fSpeed;
 		cout << fAngle << endl;

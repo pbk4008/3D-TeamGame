@@ -29,6 +29,9 @@ protected:
 	CModel* m_pModel = nullptr;
 	CMaterial* m_pMaterial = nullptr;
 	CTexture* m_pTexture = nullptr;
+	CTexture* m_pNormalTex = nullptr;
+	CTexture* m_pNoiseTex = nullptr;
+	CTexture* m_pMaskTex = nullptr;
 
 	// Time
 	_float m_fLifeTime = 0.f;

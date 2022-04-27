@@ -67,6 +67,7 @@ HRESULT CSpear_Death::EnterState()
 	g_pShakeManager->Shake(CShakeManager::ETemplate::MonsterDeath, m_pTransform->Get_State(CTransform::STATE_POSITION));
 	g_pMainApp->FreezeTime();
 
+	g_pObserver->Set_Exp(10.f);
 	return S_OK;
 }
 

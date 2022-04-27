@@ -62,6 +62,7 @@ HRESULT CBastion_Healer_Death::EnterState()
 	g_pShakeManager->Shake(CShakeManager::ETemplate::MonsterDeath, m_pTransform->Get_State(CTransform::STATE_POSITION));
 	m_pAnimator->Change_AnyEntryAnimation((_uint)CMonster_Bastion_Healer::ANIM_TYPE::A_DEATH);
 	g_pMainApp->FreezeTime();
+	g_pObserver->Set_Exp(10.f);
 
 	return S_OK;
 }

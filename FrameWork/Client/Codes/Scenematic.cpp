@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "..\Headers\Scenematic.h"
 #include "CinemaActor.h"
+#include "CinemaWeapon.h"
 
 CScenematic::CScenematic()
 	: m_pDevice(nullptr)
@@ -86,6 +87,17 @@ HRESULT CScenematic::Ready_Actor(CCinemaActor** pOut, _uint iActorTag)
 	if (*pOut == nullptr)
 	{
 		MSGBOX("Ready Actor Fail");
+		return E_FAIL;
+	}
+	return S_OK;
+}
+
+HRESULT CScenematic::Ready_Weapon(CCinemaWeapon** pOut, _uint iWeaponTag)
+{
+	*pOut = g_pGameInstance->Clone_GameObject<CCinemaWeapon>((_uint)SCENEID::SCENE_STAGE1, L"Proto_GameObject_CinemaWeapon", &iWeaponTag);
+	if (*pOut == nullptr)
+	{
+		MSGBOX("Ready Weapon Fail");
 		return E_FAIL;
 	}
 	return S_OK;

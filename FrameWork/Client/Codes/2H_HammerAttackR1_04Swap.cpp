@@ -37,7 +37,6 @@ _int C2H_HammerAttackR1_04Swap::Tick(const _double& _dDeltaTime)
 		}
 	}
 
-
 	if (33 < iCurKeyFrameIndex && !m_isRangeAttack)
 	{
 		// ÆÄÆ¼Å¬

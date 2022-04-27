@@ -397,7 +397,7 @@ HRESULT CMonster_Bastion_Shooter::Ready_AnimationFSM()
 		return E_FAIL;
 
 	pAnim = m_pModel->Get_Animation("Attack");
-	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::ATTACK, (_uint)ANIM_TYPE::HEAD, pAnim, true, false, false, ERootOption::XYZ)))
+	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::ATTACK, (_uint)ANIM_TYPE::HEAD, pAnim, true, true, false, ERootOption::XYZ)))
 		return E_FAIL;
 
 	pAnim = m_pModel->Get_Animation("Hit1");

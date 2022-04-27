@@ -72,6 +72,7 @@ public:
 public:
 	void Fall(_double dDeltaTime);
 	void SetPosY(_float fPosY);
+	void SetPosX(_float fPosX);
 
 public:
 	void Mesh_Straight(_double TimeDelta, class CNavigation* pNavigation = nullptr);

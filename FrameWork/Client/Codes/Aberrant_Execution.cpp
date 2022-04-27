@@ -59,6 +59,7 @@ HRESULT CAberrant_Execution::EnterState()
 	g_pGameInstance->Play_Shot(L"Earth_Death", CSoundMgr::CHANNELID::Earth_Death);
 	//g_pShakeManager->Shake(CShakeManager::ETemplate::MonsterDeath, m_pTransform->Get_State(CTransform::STATE_POSITION));
 	m_pAnimator->Change_AnyEntryAnimation(CMonster_EarthAberrant::MON_STATE::ATTACK_EXECUTION);
+	g_pObserver->Set_Exp(10.f);
 
 	return S_OK;
 }

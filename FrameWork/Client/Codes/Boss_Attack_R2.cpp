@@ -35,12 +35,25 @@ _int CBoss_Attack_R2::Tick(const _double& TimeDelta)
 	//어택 체크
 	_uint iCurKeyFrameIndex = m_pAnimator->Get_AnimController()->Get_CurKeyFrameIndex();
 	 
-	//cout << iCurKeyFrameIndex << endl;
+	cout << iCurKeyFrameIndex << endl;
+
+	if (15 <= iCurKeyFrameIndex && 38 >= iCurKeyFrameIndex )
+	{
+		m_pAnimator->Get_AnimController()->Set_PlaySpeed(0.6f);
+	}
+
+	if (9 <= iCurKeyFrameIndex && 12 >= iCurKeyFrameIndex && false == m_bEffectCheck)
+	{
+		m_pMonster->Active_Effect((_uint)EFFECT::ENERGY);
+		m_bEffectCheck = true;
+	}
 
 	m_pMonster->RimlightCheck(true, _float3(1, 0, 0));
 
 	if (39 <= iCurKeyFrameIndex && 42 >= iCurKeyFrameIndex && false == m_bShakeCheck)
 	{
+		m_pAnimator->Get_AnimController()->Set_PlaySpeed(1.f);
+
 		//쉐이킹 & 이펙트 //이펙트한테서 생성해줘야할듯 
 		CCameraShake::SHAKEEVENT tShakeEvent;
 		tShakeEvent.fDuration = 0.6f;
@@ -62,9 +75,9 @@ _int CBoss_Attack_R2::Tick(const _double& TimeDelta)
 		_vector svLook = XMVector3Normalize(m_pTransform->Get_State(CTransform::STATE_LOOK));
 		_vector svRight = XMVector3Normalize(m_pTransform->Get_State(CTransform::STATE_RIGHT));
 
-		m_pMonster->Active_Effect((_uint)EFFECT::HIT_GROUND_SMOKE);
-		m_pMonster->Active_Effect((_uint)EFFECT::HIT_GROUND);
-		m_pMonster->Active_Effect((_uint)EFFECT::EXPLOSION_ROCK_UP);
+		//m_pMonster->Active_Effect((_uint)EFFECT::HIT_GROUND_SMOKE);
+		//m_pMonster->Active_Effect((_uint)EFFECT::HIT_GROUND);
+		//m_pMonster->Active_Effect((_uint)EFFECT::EXPLOSION_ROCK_UP);
 
 		m_bShakeCheck = true;
 

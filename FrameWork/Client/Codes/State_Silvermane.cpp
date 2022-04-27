@@ -513,7 +513,7 @@ void CState_Silvermane::Reflect_Bullet(const ATTACKDESC& _tAttackDesc)
 
 void CState_Silvermane::Hit(const ATTACKDESC& _tAttackDesc)
 {
-	if (m_pSilvermane->IsHit() || m_pSilvermane->IsAttack() || m_pSilvermane->Get_Dead())
+	if (m_pSilvermane->IsHit() || m_pSilvermane->IsAttack() || m_pSilvermane->Get_Dead() || m_pSilvermane->IsExecution())
 		return;
 
 	m_pSilvermane->Add_HP(-_tAttackDesc.fDamage);

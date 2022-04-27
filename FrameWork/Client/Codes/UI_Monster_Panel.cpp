@@ -89,6 +89,10 @@ _int CUI_Monster_Panel::Tick(_double TimeDelta)
 	if (FAILED(__super::Tick(TimeDelta)))
 		return -1;
 
+	if (true == g_pObserver->Get_Player()->Get_Dead())
+	{
+		m_bShow = false;
+	}
 	Update_Panel(TimeDelta);
 
 	return 0;

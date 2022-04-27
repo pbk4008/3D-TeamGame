@@ -50,6 +50,8 @@ public:
 	void SetUI(CPlayerData* pPlayerData);
 public:
 	void SetBg(const std::wstring& _szFileName);
+	void SetFadeOut(void);
+	void FadeIn(void);
 
 public:
 	const _float Get_Ratio() const { return Bufferdesc.fGapX; }

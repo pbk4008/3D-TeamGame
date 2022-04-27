@@ -19,11 +19,17 @@ public:
 	HRESULT Add_Scenema(CScenematic* pScenema);
 	HRESULT Active_Scenema(_uint iScenemaIndex);
 	HRESULT Change_Cinema(_uint iCinemaIndex);
+public:
+	_bool Get_EventCinema(_uint iCinemaIndex);
+public:
+	void ResetCinema();
 private:
 	virtual void Free() override;
 private:
 	vector<CScenematic*> m_vecScenema;
 	CScenematic* m_pCurCinema;
+	_uint m_iCurCinema;
+	_bool m_bCinemaEnd;
 };
 END
 #endif

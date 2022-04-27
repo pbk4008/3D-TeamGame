@@ -136,6 +136,9 @@ HRESULT CSilvermane_Execution::EnterState()
 	m_pFixedBone = m_pModel->Get_BoneMatrix("root");
 
 	m_pAnimationController->Mul_MoveSpeed(0.5f);
+	m_pSilvermane->Set_EquipShield(false);
+	m_pSilvermane->Set_EquipShieldAnim(false);
+
 	return S_OK;
 }
 

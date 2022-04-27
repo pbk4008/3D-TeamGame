@@ -318,6 +318,7 @@ call Update_Library_Release.bat</Command>
     <ClInclude Include="..\public\VIBuffer_Cube.h" />
     <ClInclude Include="..\public\VIBuffer_Plane.h" />
     <ClInclude Include="..\public\VIBuffer_PointInstance.h" />
+    <ClInclude Include="..\public\VIBuffer_PointInstance_Energy.h" />
     <ClInclude Include="..\public\VIBuffer_PointInstance_Env_Floating.h" />
     <ClInclude Include="..\public\VIBuffer_PointInstance_Explosion.h" />
     <ClInclude Include="..\public\VIBuffer_PointInstance_Floating.h" />
@@ -435,6 +436,7 @@ call Update_Library_Release.bat</Command>
     <ClCompile Include="..\private\VIBuffer_Cube.cpp" />
     <ClCompile Include="..\private\VIBuffer_Plane.cpp" />
     <ClCompile Include="..\private\VIBuffer_PointInstance.cpp" />
+    <ClCompile Include="..\private\VIBuffer_PointInstance_Energy.cpp" />
     <ClCompile Include="..\private\VIBuffer_PointInstance_Env_Floating.cpp" />
     <ClCompile Include="..\private\VIBuffer_PointInstance_Explosion.cpp" />
     <ClCompile Include="..\private\VIBuffer_PointInstance_Floating.cpp" />
