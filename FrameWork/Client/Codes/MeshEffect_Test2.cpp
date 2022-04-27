@@ -104,7 +104,7 @@ _int CMeshEffect_Test2::Tick(_double _dDeltaTime)
 		// noise17
 		if (FAILED(m_pMaterial->Change_Texture("g_DiffuseTexture", TEXTURETYPE::TEX_DIFFUSE, L"ice02")))
 			return -1;
-		if (FAILED(m_pMaterial->Change_Texture("g_NoiseTex", TEXTURETYPE::TEX_TINT, L"noise4")))
+		if (FAILED(m_pMaterial->Change_Texture("g_MaskTexture", TEXTURETYPE::TEX_MASK, L"noise4")))
 			return -1;
 	}
 	if (g_pGameInstance->getkeyDown(DIK_SEMICOLON))
@@ -180,24 +180,24 @@ _int CMeshEffect_Test2::Tick(_double _dDeltaTime)
 
 	///////////////////////////////////// UV
 	m_vTiling.x = 1.f;
-	m_vTiling.y = 1.f;
-	//// X
-	//m_isFlowX = true;
-	//m_fFlowSpeedX = 0.2f;
-	//m_vPlusUV.x += m_fFlowSpeedX * (_float)_dDeltaTime;
-	//if (1.f < m_vPlusUV.x)
-	//	m_vPlusUV.x = 0.f;
-	//// Y
-	//m_isFlowY = true;
-	//m_fFlowSpeedY = 0.2f;
-	//m_vPlusUV.y -= m_fFlowSpeedY * (_float)_dDeltaTime;
-	//if (1.f < m_vPlusUV.y)
-	//	m_vPlusUV.y = 0.f;
-	m_vPlusUV = { 0.f, 0.f };
+	m_vTiling.y = 2.f;
+	// X
+	m_isFlowX = true;
+	m_fFlowSpeedX = 0.2f;
+	m_vPlusUV.x += m_fFlowSpeedX * (_float)_dDeltaTime;
+	if (1.f < m_vPlusUV.x)
+		m_vPlusUV.x = 0.f;
+	// Y
+	m_isFlowY = true;
+	m_fFlowSpeedY = 0.4f;
+	m_vPlusUV.y += m_fFlowSpeedY * (_float)_dDeltaTime;
+	if (1.f < m_vPlusUV.y)
+		m_vPlusUV.y = 0.f;
+	//m_vPlusUV = { 0.f, 0.f };
 
 	///////////////////////////////// Color
 	m_isCustomColor = true;
-	m_vColor = { 0.2f, 0.2f, 0.6f };
+	m_vColor = { 0.2f, 0.2f, 1.f };
 
 
 	//////////////////////////////////////////// Scale
@@ -215,7 +215,7 @@ _int CMeshEffect_Test2::Tick(_double _dDeltaTime)
 
 	//////////////////////////////////////////// Rotation
 	//_pTransform->SetUp_Rotation(_float3(0.f, 0.f, 0.f));
-	m_pTransform->Set_TransformDesc(0.f, 1.f);
+	m_pTransform->Set_TransformDesc(0.f, 0.5f);
 	m_pTransform->Rotation_Axis(m_pTransform->Get_State(CTransform::STATE_LOOK), _dDeltaTime);
 
 	///////////////////////////////////////////// Position
@@ -259,7 +259,7 @@ HRESULT CMeshEffect_Test2::Render()
 
 	for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
 	{
-		if (FAILED(m_pModel->Render(i, 9)))
+		if (FAILED(m_pModel->Render(i, 6)))
 			return E_FAIL;
 	}
 
@@ -284,7 +284,7 @@ HRESULT CMeshEffect_Test2::Ready_Components()
 	if (FAILED(m_pMaterial->Set_Texture("g_NormalTex", TEXTURETYPE::TEX_NORMAL, m_pNormalTex, 0)))
 		return E_FAIL;
 	Safe_AddRef(m_pNormalTex);
-	if (FAILED(m_pMaterial->Set_Texture("g_MaskTex", TEXTURETYPE::TEX_MASK, m_pMaskTex, 0)))
+	if (FAILED(m_pMaterial->Set_Texture("g_MaskTexture", TEXTURETYPE::TEX_MASK, m_pMaskTex, 0)))
 		return E_FAIL;
 	Safe_AddRef(m_pMaskTex);
 	if (FAILED(m_pMaterial->Set_Texture("g_NoiseTex", TEXTURETYPE::TEX_TINT, m_pNoiseTex, 0)))

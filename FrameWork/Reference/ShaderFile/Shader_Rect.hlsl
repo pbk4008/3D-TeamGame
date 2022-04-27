@@ -17,6 +17,16 @@ cbuffer fadeinout
 };
 Texture2D		g_DiffuseTexture;
 
+cbuffer Information
+{
+	uint g_iRow; // 가로줄수
+	uint g_iColumn; // 세로줄수
+	uint g_iIndex; // 인덱스
+	float g_fLifeTime;
+	float g_fCurTime;
+	float2 g_vUV;
+};
+
 sampler DefaultSampler = sampler_state
 {		
 	filter = min_mag_mip_linear;
@@ -81,6 +91,93 @@ VS_OUT VS_MAIN(VS_IN In)
 	return Out;
 }
 
+ VS_OUT VS_MAIN_DAMAGEFONT(VS_IN In)
+ {
+	 VS_OUT			Out = (VS_OUT)0;
+
+	 matrix			matWV, matWVP;
+
+	 matWV = mul(g_WorldMatrix, g_ViewMatrix);
+	 matWVP = mul(matWV, g_ProjMatrix);
+
+	 Out.vPosition = mul(vector(In.vPosition, 1.f), matWVP);
+	 //In.vTexUV.x = (In.vTexUV.x / g_iRow) + ((g_iIndex % g_iRow) * (1.f / g_iRow));
+	 //In.vTexUV.y = (In.vTexUV.y / g_iColumn) + ((g_iIndex / g_iColumn) * (1.f / g_iColumn));
+	 //// X
+	 //switch (g_iIndex)
+	 //{
+	 //case 0:
+	 //case 5:
+		// if (0 == In.vTexUV.x)
+		//	 In.vTexUV.x = 0.f;
+		// else
+		//	 In.vTexUV.x = 0.2f;
+		// break;
+	 //case 1:
+	 //case 6:
+
+		// if (0 == In.vTexUV.x)
+		//	 In.vTexUV.x = 0.2f;
+		// else
+		//	 In.vTexUV.x = 0.4f;
+		// break;
+	 //case 2:
+	 //case 7:
+
+		// if (0 == In.vTexUV.x)
+		//	 In.vTexUV.x = 0.4f;
+		// else
+		//	 In.vTexUV.x = 0.6f;
+		// break;
+	 //case 3:
+	 //case 8:
+
+		// if (0 == In.vTexUV.x)
+		//	 In.vTexUV.x = 0.6f;
+		// else
+		//	 In.vTexUV.x = 0.8f;
+		// break;
+	 //case 4:
+	 //case 9:
+
+		// if (0 == In.vTexUV.x)
+		//	 In.vTexUV.x = 0.8f;
+		// else
+		//	 In.vTexUV.x = 1.f;
+		// break;
+	 //}
+	 //// Y
+	 //switch (g_iIndex)
+	 //{
+	 //case 0:
+	 //case 1:
+	 //case 2:
+	 //case 3:
+	 //case 4:
+		// if (0 == In.vTexUV.y)
+		//	 In.vTexUV.y = 0.f;
+		// else
+		//	 In.vTexUV.y = 0.5f;
+		// break;
+	 //case 5:
+	 //case 6:
+	 //case 7:
+	 //case 8:
+	 //case 9:
+		// if (0 == In.vTexUV.y)
+		//	 In.vTexUV.y = 0.5f;
+		// else
+		//	 In.vTexUV.y = 1.f;
+		// break;
+	 //}
+
+	 In.vTexUV.x = (In.vTexUV.x / g_iRow) + ((g_iIndex % g_iRow) * (1.f / g_iRow));
+
+	 Out.vTexUV = In.vTexUV;
+	 
+	 return Out;
+ }
+
 VS_OUT VS_MAIN_VIEWPORT(VS_IN In)
 {
 	VS_OUT			Out = (VS_OUT)0;
@@ -124,6 +221,23 @@ PS_OUT PS_MAIN(PS_IN In)
 	//	discard;
 	
 	return Out;	
+}
+
+PS_OUT PS_MAIN_DAMAGEFONT(PS_IN In)
+{
+	PS_OUT		Out = (PS_OUT)0;
+
+	Out.vColor = g_DiffuseTexture.Sample(DefaultSampler, In.vTexUV);
+
+	//if (Out.vColor.a <= 0.1)
+	//	discard;
+
+	//if (g_Fade)
+	//{
+	//	Out.vColor.a *= g_Alpha;
+	//}
+
+	return Out;
 }
 
 struct PS_IN_TRAIL
@@ -183,7 +297,7 @@ technique11			DefaultTechnique
 		GeometryShader = NULL;
 		PixelShader = compile ps_5_0  PS_MAIN();
 	}
-
+	// 1
 	pass Viewport
 	{
 		SetRasterizerState(CullMode_None);
@@ -193,7 +307,7 @@ technique11			DefaultTechnique
 		GeometryShader = NULL;
 		PixelShader = compile ps_5_0  PS_MAIN();
 	}
-
+	// 2
 	pass Viewport2
 	{
 		SetRasterizerState(CullMode_None);
@@ -203,7 +317,7 @@ technique11			DefaultTechnique
 		GeometryShader = NULL;
 		PixelShader = compile ps_5_0  PS_MAIN();
 	}
-
+	// 3
 	pass TrailRect
 	{
 		SetRasterizerState(CullMode_None);
@@ -213,7 +327,7 @@ technique11			DefaultTechnique
 		GeometryShader = NULL;
 		PixelShader = compile ps_5_0 PS_MAIN_TRAIL();
 	}
-
+	// 4
     pass AlphaBlend
     {
         SetRasterizerState(CullMode_None);
@@ -224,9 +338,14 @@ technique11			DefaultTechnique
         GeometryShader = NULL;
         PixelShader = compile ps_5_0 PS_MAIN();
     }
-	
+	// 5
+	pass DamageFont
+	{
+		SetRasterizerState(CullMode_Default);
+		SetDepthStencilState(ZBufferDisable, 0);
+		SetBlendState(AlphaBlending, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+		VertexShader = compile vs_5_0 VS_MAIN_DAMAGEFONT();
+		GeometryShader = NULL;
+		PixelShader = compile ps_5_0  PS_MAIN_DAMAGEFONT();
+	}
 }
-
-
-
-

@@ -71,6 +71,7 @@
 #include "Cinema3_5.h"
 #include "Cinema3_6.h"
 #include "MeshEffect_Razer.h"
+#include "DamageFont.h"
 
 CStage1::CStage1()
 	: m_pTriggerSystem(nullptr)
@@ -177,24 +178,24 @@ HRESULT CStage1::NativeConstruct()
 		return E_FAIL;
 	}
 
-	//Hammer_Dust
-	CEffect_Hammer_Dust* pHammer = nullptr;
-	CEffect_Hammer_Dust::EFFECTDESC Desc;
-	ZeroMemory(&Desc, sizeof(Desc));
+	////Hammer_Dust
+	//CEffect_Hammer_Dust* pHammer = nullptr;
+	//CEffect_Hammer_Dust::EFFECTDESC Desc;
+	//ZeroMemory(&Desc, sizeof(Desc));
 
-	_tcscpy_s(Desc.TextureTag, L"Hammer_Dust_2");
-	Desc.iRenderPassNum = 1;
-	Desc.iImageCountX = 8;
-	Desc.iImageCountY = 4;
-	Desc.fFrame = 32.f;
-	Desc.fEffectPlaySpeed = 1.f;
+	//_tcscpy_s(Desc.TextureTag, L"Hammer_Dust_2");
+	//Desc.iRenderPassNum = 1;
+	//Desc.iImageCountX = 8;
+	//Desc.iImageCountY = 4;
+	//Desc.fFrame = 32.f;
+	//Desc.fEffectPlaySpeed = 1.f;
 
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Effect_Hammer_Dust", L"Proto_GameObject_Effect_Hammer_Dust", &Desc, (CGameObject**)&pHammer)))
-	{
-		MSGBOX("Failed to Creating Effect_Hammer_Dust in CStage1::Ready_Effect()");
-		return E_FAIL;
+	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Effect_Hammer_Dust", L"Proto_GameObject_Effect_Hammer_Dust", &Desc, (CGameObject**)&pHammer)))
+	//{
+	//	MSGBOX("Failed to Creating Effect_Hammer_Dust in CStage1::Ready_Effect()");
+	//	return E_FAIL;
 
-	}
+	//}
 
 	g_pGameInstance->Change_BaseCamera(L"Camera_Silvermane");
 
@@ -655,6 +656,12 @@ HRESULT CStage1::Ready_Player(const _tchar* LayerTag)
 	//	return E_FAIL;
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Test", L"Proto_GameObject_MeshEffect_Test2")))
 		MSGBOX(L"메쉬 이펙트 테스트2 생성 실패");
+
+	CDamageFont::DESC tDamageDesc;
+	tDamageDesc.vPos = { 0.f, 2.f, 0.f };
+	tDamageDesc.fDamage = 108;
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_DamageFont", L"Proto_GameObject_DamageFont", &tDamageDesc)))
+		return E_FAIL;
 
 	return S_OK;
 }

@@ -360,6 +360,7 @@ call Update_Client.bat</Command>
     <ClInclude Include="..\Headers\Crawler_Idle.h" />
     <ClInclude Include="..\Headers\Crawler_Ricochet.h" />
     <ClInclude Include="..\Headers\Crawler_Walk.h" />
+    <ClInclude Include="..\Headers\DamageFont.h" />
     <ClInclude Include="..\Headers\DataManager.h" />
     <ClInclude Include="..\Headers\DebugSystem.h" />
     <ClInclude Include="..\Headers\DodgeSlide.h" />
@@ -804,6 +805,7 @@ call Update_Client.bat</Command>
     <ClCompile Include="..\Codes\Crawler_Idle.cpp" />
     <ClCompile Include="..\Codes\Crawler_Ricochet.cpp" />
     <ClCompile Include="..\Codes\Crawler_Walk.cpp" />
+    <ClCompile Include="..\Codes\DamageFont.cpp" />
     <ClCompile Include="..\Codes\DataManager.cpp" />
     <ClCompile Include="..\Codes\DodgeSlide.cpp" />
     <ClCompile Include="..\Codes\DropBox.cpp" />

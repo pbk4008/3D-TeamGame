@@ -22,7 +22,7 @@ private:
 	HRESULT Ready_Components();
 
 private:
-	CTexture* m_pMaskTexture;
+	CTexture* m_pMaskTexture = nullptr;
 
 
 public:

@@ -111,6 +111,7 @@
 #include "TestObj.h"
 #include "MeshEffect_Razer.h"
 #include "MeshEffect_Jupiter.h"
+#include "DamageFont.h"
 
 CLoader::CLoader() 
 	: m_hThread(nullptr)
@@ -558,6 +559,15 @@ HRESULT CLoader::Load_Stage1UILoad()
 	{
 		return E_FAIL;
 	}
+
+	// DamageFont
+	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"Texture_DamageFont", L"../bin/Resources/Texture/UI/DamageFont.dds")))
+	{
+		return E_FAIL;
+	}
+	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_DamageFont"), CDamageFont::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+
 	return S_OK;
 }
 
