@@ -30,7 +30,7 @@ HRESULT CUI_LevelUP_Background::NativeConstruct(const _uint iSceneID, void* pArg
 
 	m_pLocalTransform = g_pGameInstance->Clone_Component<CTransform>(0, L"Proto_Component_Transform");
 	m_pLocalTransform->Set_State(CTransform::STATE_POSITION, _vector{ 0.f , -270.f, 0.1f, 1.f });
-	m_pLocalTransform->Scaling(_vector{ 48.f, 56.f, 1.f, 0.f });
+	m_pLocalTransform->Scaling(_vector{ 47.f, 47.f, 1.f, 0.f });
 
 	m_pOwner = desc.pOwner;
 	assert(m_pOwner);
@@ -58,6 +58,9 @@ _int CUI_LevelUP_Background::LateTick(_double TimeDelta)
 	if (FAILED(CUI::LateTick(TimeDelta)))
 		return -1;
 
+	if (true == m_bShow)
+		Show(TimeDelta);
+
 	Attach_Owner();
 
 	if (nullptr != m_pRenderer)
@@ -81,14 +84,17 @@ HRESULT CUI_LevelUP_Background::Ready_Component(void)
 {
 	/* for. Single Image Com */
 	CSingleImage::Desc ModalSprite;
-	ModalSprite.textureName = L"T_HUD_Level_BG";
+	ModalSprite.textureName = L"T_HUD_Level_BG_1";
 	ModalSprite.pCreator = this;
 	ModalSprite.pRenderer = this->m_pRenderer;
 	ModalSprite.pTransform = this->m_pTransform;
 	//ModalSprite.renderType = CSingleImage::Alpha;
+	ModalSprite.bFadeOption = true;
 
 	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_SingleImage", L"SingleImage", (CComponent**)&m_pSigleImageCom, &ModalSprite)))
 		return E_FAIL;
+
+	m_pSigleImageCom->SetFadeTime(3.f);
 
 	return S_OK;
 }
@@ -106,9 +112,46 @@ _int CUI_LevelUP_Background::Attach_Owner()
 	return _int();
 }
   
-void CUI_LevelUP_Background::SetBg(const std::wstring& _szFileName)
+void CUI_LevelUP_Background::Show(_double dTimeDelta)
 {
-	m_pSigleImageCom->SetTexture(_szFileName);
+	if (m_fInitScale.x > m_fEndScale.x)
+	{
+		m_fInitScale.y = m_fInitScale.x -= (_float)dTimeDelta * 300.f;
+
+		if (m_fInitScale.x <= m_fEndScale.x)
+		{
+			m_fInitScale.x = m_fEndScale.x;
+			m_fInitScale.y = m_fEndScale.y;
+			m_bShow = false;
+		}
+		m_pLocalTransform->Scaling(_vector{ m_fInitScale.x , m_fInitScale.y, 1.f, 0.f });
+	}
+}
+
+void CUI_LevelUP_Background::SetBg(_int PlayerLevel)
+{
+	/* Level Up하면 들어오는 곳*/
+	m_pSigleImageCom->SetTexture(m_arrLevelBgTex[PlayerLevel]);
+	m_bShow = true;
+}
+
+void CUI_LevelUP_Background::SetFadeOut(void)
+{
+	/* 일정 시간동안 몹을 잡지 않은 경우 */
+	m_pSigleImageCom->SetFadeOut();
+	m_fInitScale = { 80.f, 80.f };
+
+	m_pLocalTransform->Scaling(_vector{ 47.f , 47.f, 1.f, 0.f });
+}
+
+void CUI_LevelUP_Background::FadeIn(void)
+{
+	m_pSigleImageCom->SetFadeOutFalse();
+}
+
+void CUI_LevelUP_Background::FixPos(void)
+{
+	m_pTransform->Set_State(CTransform::STATE_POSITION, _vector{ 0.f , -270.f, 0.1f, 1.f });
 }
 
 CUI_LevelUP_Background* CUI_LevelUP_Background::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)

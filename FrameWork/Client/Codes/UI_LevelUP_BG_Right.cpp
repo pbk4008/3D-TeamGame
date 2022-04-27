@@ -29,8 +29,8 @@ HRESULT CUI_LevelUP_BG_Right::NativeConstruct(const _uint iSceneID, void* pArg)
 	desc = (*(Desc*)pArg);
 
 	m_pLocalTransform = g_pGameInstance->Clone_Component<CTransform>(0, L"Proto_Component_Transform");
-	m_pLocalTransform->Set_State(CTransform::STATE_POSITION, _vector{ 140.f , -270.f, 0.3f, 1.f });
-	m_pLocalTransform->Scaling(_vector{ 230.f, 30.f, 1.f, 0.f });
+	m_pLocalTransform->Set_State(CTransform::STATE_POSITION, _vector{ 155.f , -270.f, 0.1f, 1.f });
+	m_pLocalTransform->Scaling(_vector{ 250.f, 30.f, 1.f, 0.f });
 
 	m_pOwner = desc.pOwner;
 	assert(m_pOwner);
@@ -58,13 +58,10 @@ _int CUI_LevelUP_BG_Right::LateTick(_double TimeDelta)
 	if (FAILED(CUI::LateTick(TimeDelta)))
 		return -1;
 
-	Attach_Owner();
-
-	m_pTransform->Set_State(CTransform::STATE_POSITION, _vector{ 155.f , -270.f, 0.1f, 1.f });
-
-	m_pLocalTransform->Scaling(_vector{ 250.f, 30.f, 1.f, 0.f });
 	if (nullptr != m_pRenderer)
 		m_pRenderer->Add_RenderGroup(CRenderer::RENDER::RENDER_UI, this);
+
+	Attach_Owner();
 
 	return _int();
 }
@@ -89,6 +86,7 @@ HRESULT CUI_LevelUP_BG_Right::Ready_Component(void)
 	ModalSprite.pRenderer = this->m_pRenderer;
 	ModalSprite.pTransform = this->m_pTransform;
 	ModalSprite.renderType = CSingleImage::Alpha;
+	ModalSprite.bFadeOption = true;
 
 	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_SingleImage", L"SingleImage", (CComponent**)&m_pSigleImageCom, &ModalSprite)))
 		return E_FAIL;
@@ -112,6 +110,16 @@ _int CUI_LevelUP_BG_Right::Attach_Owner()
 void CUI_LevelUP_BG_Right::SetBg(const std::wstring& _szFileName)
 {
 	m_pSigleImageCom->SetTexture(_szFileName);
+}
+
+void CUI_LevelUP_BG_Right::SetFadeOut(void)
+{
+	m_pSigleImageCom->SetFadeOut();
+}
+
+void CUI_LevelUP_BG_Right::FadeIn(void)
+{
+	m_pSigleImageCom->SetFadeOutFalse();
 }
 
 CUI_LevelUP_BG_Right* CUI_LevelUP_BG_Right::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)

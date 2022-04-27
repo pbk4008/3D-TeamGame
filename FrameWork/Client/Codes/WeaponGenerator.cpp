@@ -328,7 +328,7 @@ HRESULT CWeaponGenerator::NativeConstruct(ID3D11Device* pDevice, ID3D11DeviceCon
 		desc.NumMat = 4;
 		desc.pHierarchyNode = pHierarchyNode;
 		desc.EWeaponType = CWeapon::EType::Hammer_2H;
-
+	
 		CPlayer_Weapon* pWeapon = CPlayer_Weapon::Create(pDevice, pDeviceContext);
 		pWeapon->NativeConstruct(_iSceneID, desc);
 		pWeapon->Set_OwnerPivotMatrix(_pModel->Get_PivotMatrix());

@@ -15,6 +15,7 @@ CDropBoxData::CDropBoxData(void)
 		item1.weaponData.weaponName = L"Hinterclaw";
 		item1.equipmentName = EEquipmentName::Hinterclaw;
 		item1.szStatusName = L"T_2H_DPS_147";
+		item1.weaponType = Hammer;
 
 		CItemData item2;
 		item2.iconTexName = L"T_Weapon_Hammer_2H_Player_Harbinger";
@@ -28,6 +29,7 @@ CDropBoxData::CDropBoxData(void)
 		item2.weaponData.weaponName = L"Harbinger";
 		item2.equipmentName = EEquipmentName::Harbinger;
 		item2.szStatusName = L"T_2H_DPS_132";
+		item2.weaponType = Hammer;
 
 		CItemData item3;
 		item3.iconTexName = L"T_Weapon_Sword_1H_Player_Crossblade";
@@ -41,10 +43,28 @@ CDropBoxData::CDropBoxData(void)
 		item3.weaponData.weaponName = L"Crossblade";
 		item3.equipmentName = EEquipmentName::Crossblade;
 		item3.szStatusName = L"T_2H_DPS_135";
+		item3.weaponType = LongSword;
+
+		CItemData item4;
+		item4.ItemType = EItemType::Potion;
+
+		CItemData item5;
+		item5.ItemType = EItemType::Potion;
+
+		CItemData item6;
+		item6.ItemType = EItemType::Potion;
+
+		CItemData item7;
+		item7.ItemType = EItemType::Potion;
 
 		m_vecIteamData[0].push_back(item1);
 		m_vecIteamData[0].push_back(item2);
 		m_vecIteamData[0].push_back(item3);
+		m_vecIteamData[0].push_back(item4);
+		m_vecIteamData[0].push_back(item5);
+		m_vecIteamData[0].push_back(item6);
+		m_vecIteamData[0].push_back(item7);
+
 	}
 	{
 		CItemData item1;

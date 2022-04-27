@@ -11,7 +11,7 @@ enum class CINEMA_INDEX
 	CINEMA3_1, CINEMA3_2, CINEMA3_3, CINEMA3_4, CINEMA3_5, CINEMA3_6,
 	CINEMA_END
 };
-enum class CINEMA_ACTOR {	ACTOR_SILVERMANE, ACTOR_GRAYEHAWK, ACTOR_PHOENIX, ACTOR_MIDBOSS, ACTOR_END};
+enum class CINEMA_ACTOR {	ACTOR_SILVERMANE, ACTOR_GRAYEHAWK, ACTOR_PHOENIX, ACTOR_MIDBOSS, ACTOR_SCREE, ACTOR_END};
 enum class GAMEOBJECT
 {
 	ENVIRONMENT,
@@ -95,6 +95,7 @@ enum class ELayer
 	JumpTrigger,
 	ItemBox,
 	Trigger,
+	Pot,
 	Max
 };
 
@@ -110,6 +111,7 @@ enum class EItemType
 	NONE,			//πÃ¿Â¬¯
 	Equipment,		
 	Resorce,
+	Potion,
 	ITEMTYPE_END
 };
 

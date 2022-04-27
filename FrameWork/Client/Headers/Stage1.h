@@ -10,6 +10,7 @@ class CMeteor;
 class CIndicator_Manager;
 class CDropBoxData;
 class CWall;
+class CPot;
 class CStage1 final : public CLevel
 {
 private:
@@ -39,6 +40,7 @@ private:
 
 	HRESULT Ready_Cinema();
 	HRESULT Ready_Wall();
+	HRESULT Ready_Pot();
 
 public:
 	void Minus_MonsterCount() { m_iCountMonster--; }
@@ -96,8 +98,9 @@ private:/*for Meteor*/
 private:
 	_int m_iPortalCount;
 	_bool m_bPortalClear = false;
-
-	std::vector<CWall*>	m_vecwall;
+	CPot* m_pPot = nullptr;
+private:
+	_bool m_bBossClear=false;
 };
 #endif
 

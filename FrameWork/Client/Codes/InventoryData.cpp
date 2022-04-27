@@ -92,6 +92,11 @@ _int CInventoryData::GetCount(void)
 	return (_int)InventoryItems.size();
 }
 
+_int CInventoryData::GetPotionCount(void)
+{
+	return m_iNumofPotion;
+}
+
 _bool CInventoryData::IsFull(void)
 {
 	return InventoryItems.size() >= ModalMaxCount;
@@ -105,6 +110,26 @@ void CInventoryData::SetEquiped(_int iIndex, _bool bEquiped)
 void CInventoryData::SetResource(_int iResource)
 {
 	m_iResources = iResource;
+}
+
+_bool CInventoryData::PushPotion(void)
+{
+	if (m_iNumofPotion < MAX_POTION)
+	{
+		++m_iNumofPotion;
+		return true;
+	}
+	return false;
+}
+
+_bool CInventoryData::UsingPotion(void)
+{
+	if (0 >= m_iNumofPotion)
+		return false;
+
+	--m_iNumofPotion;
+
+	return true;
 }
 
 

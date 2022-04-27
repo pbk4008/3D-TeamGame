@@ -96,6 +96,11 @@ _bool CInven_UIManager::IsOpenModal(void)
 	return m_bOpenModal;
 }
 
+void CInven_UIManager::ShowLevelUp(void)
+{
+	m_pHud->ShowLevelUp_HUD();
+}
+
 CHud* CInven_UIManager::GetHud(void)
 {
 	if(nullptr == m_pHud)
@@ -126,6 +131,11 @@ void CInven_UIManager::HideItemStatus(void)
 		else
 			m_pPlayerStatus->Hide();
 	}
+}
+
+void CInven_UIManager::SetLevelBG(_int PlayerLevel)
+{
+	m_pHud->SetLevelBG(PlayerLevel);
 }
 
 void CInven_UIManager::Free()

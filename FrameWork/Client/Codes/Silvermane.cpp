@@ -199,6 +199,7 @@ HRESULT CSilvermane::NativeConstruct(const _uint _iSceneID, void* _pArg)
 		return E_FAIL;
 
 	m_pPlayerData = g_pDataManager->GET_DATA(CPlayerData, L"PlayerData");
+	m_pInventoryData = g_pDataManager->GET_DATA(CInventoryData, L"InventoryData");
 
 	if (_pArg)
 	{

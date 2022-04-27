@@ -112,7 +112,7 @@ void CUI_Death::HideSpaceKey(void)
 	m_pFillSpaceKey->setActive(false);
 
 	m_pFillSpaceKey->ResetVal(); /* 리스폰 UI용 변수 초기화 */
-	m_pSigleImageCom->ResetAlpha();
+	m_pSigleImageCom->ResetAlpha(0.f);
 }
 
 CUI_Death* CUI_Death::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)

@@ -152,12 +152,6 @@ _int CMonster_Crawler::Tick(_double _dDeltaTime)
 	{
 		if (0 >= m_fCurrentHp)
 		{
-			CLevel* pLevel = g_pGameInstance->getCurrentLevelScene();
-			if (g_pGameInstance->getCurrentLevel() == (_uint)SCENEID::SCENE_STAGE1)
-				static_cast<CStage1*>(pLevel)->Minus_MonsterCount();
-			else if (g_pGameInstance->getCurrentLevel() == (_uint)SCENEID::SCENE_STAGE2)
-				static_cast<CStage2*>(pLevel)->Minus_MonsterCount();
-
 			m_bDead = true;
 			m_pStateController->Change_State(L"Death");
 			m_pCollider->Remove_ActorFromScene();
@@ -186,7 +180,15 @@ _int CMonster_Crawler::Tick(_double _dDeltaTime)
 			}
 
 			if (m_lifetime >= 1.f)
+			{
+				CLevel* pLevel = g_pGameInstance->getCurrentLevelScene();
+				if (g_pGameInstance->getCurrentLevel() == (_uint)SCENEID::SCENE_STAGE1)
+					static_cast<CStage1*>(pLevel)->Minus_MonsterCount();
+				else if (g_pGameInstance->getCurrentLevel() == (_uint)SCENEID::SCENE_STAGE2)
+					static_cast<CStage2*>(pLevel)->Minus_MonsterCount();
+
 				Set_Remove(true);
+			}
 		}
 		else
 		{

@@ -45,6 +45,8 @@ public:
 	const _bool IsAttack() { return m_IsAttack; }
 	_bool Get_Groggy() { return m_bGroggy; }
 	const ATTACKDESC& Get_AttackDesc() const;
+	_bool IsExecution(void) { return m_isExecution; }
+
 public:
 	virtual void Set_IsAttack(const _bool _isAttack) { m_IsAttack = _isAttack; }
 	void Set_CurrentHp(_float fCurrentHp) { m_fCurrentHp = fCurrentHp; }

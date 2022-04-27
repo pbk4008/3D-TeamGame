@@ -56,6 +56,7 @@
 #include "Wall.h"
 #include "Potal.h"
 #include "DropBoxData.h"
+#include "Pot.h"
 
 //Cinema
 #include "Cinema1_1.h"
@@ -124,11 +125,11 @@ HRESULT CStage1::NativeConstruct()
 		return E_FAIL;
 	}
 
-	//if (FAILED(Ready_Trigger_Jump()))
-	//{
-	//	MSGBOX("Stage1 Jump");
-	//	return E_FAIL;
-	//}
+	if (FAILED(Ready_Trigger_Jump()))
+	{
+		MSGBOX("Stage1 Jump");
+		return E_FAIL;
+	}
 
 	if (FAILED(Ready_Player(L"Layer_Silvermane")))
 	{
@@ -136,17 +137,17 @@ HRESULT CStage1::NativeConstruct()
 		return E_FAIL;
 	}
 
-	//if (FAILED(Ready_MapObject()))
-	//{
-	//	MSGBOX("Stage1 MapObject");
-	//	return E_FAIL;
-	//}
+	if (FAILED(Ready_MapObject()))
+	{
+		MSGBOX("Stage1 MapObject");
+		return E_FAIL;
+	}
 
-	//if (FAILED(Ready_TriggerSystem(L"../bin/SaveData/Trigger/MonsterSpawnTrigger.dat")))
-	//{
-	//	MSGBOX("Stage1 Trigger");
-	//	return E_FAIL;
-	//}
+	if (FAILED(Ready_TriggerSystem(L"../bin/SaveData/Trigger/MonsterSpawnTrigger.dat")))
+	{
+		MSGBOX("Stage1 Trigger");
+		return E_FAIL;
+	}
 
 	if (FAILED(Ready_Data_UI(L"../bin/SaveData/UI/UI.dat")))
 	{
@@ -154,11 +155,11 @@ HRESULT CStage1::NativeConstruct()
 		return E_FAIL;
 	}
 
-	//if (FAILED(Ready_Data_Effect()))
-	//{
-	//	MSGBOX("Stage1 Effect");
-	//	return E_FAIL;
-	//}
+	if (FAILED(Ready_Data_Effect()))
+	{
+		MSGBOX("Stage1 Effect");
+		return E_FAIL;
+	}
 
 	if (FAILED(Ready_UI(L"Layer_UI")))
 	{
@@ -166,11 +167,11 @@ HRESULT CStage1::NativeConstruct()
 		return E_FAIL;
 	}
 
-	//if (FAILED(Ready_Treasure_Chest()))
-	//{
-	//	MSGBOX("Stage1 Box");
-	//	return E_FAIL;
-	//}
+	if (FAILED(Ready_Treasure_Chest()))
+	{
+		MSGBOX("Stage1 Box");
+		return E_FAIL;
+	}
 
 	if (FAILED(Ready_GameManager()))
 	{
@@ -178,64 +179,50 @@ HRESULT CStage1::NativeConstruct()
 		return E_FAIL;
 	}
 
-	////Hammer_Dust
-	//CEffect_Hammer_Dust* pHammer = nullptr;
-	//CEffect_Hammer_Dust::EFFECTDESC Desc;
-	//ZeroMemory(&Desc, sizeof(Desc));
-
-	//_tcscpy_s(Desc.TextureTag, L"Hammer_Dust_2");
-	//Desc.iRenderPassNum = 1;
-	//Desc.iImageCountX = 8;
-	//Desc.iImageCountY = 4;
-	//Desc.fFrame = 32.f;
-	//Desc.fEffectPlaySpeed = 1.f;
-
-	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Effect_Hammer_Dust", L"Proto_GameObject_Effect_Hammer_Dust", &Desc, (CGameObject**)&pHammer)))
-	//{
-	//	MSGBOX("Failed to Creating Effect_Hammer_Dust in CStage1::Ready_Effect()");
-	//	return E_FAIL;
-
-	//}
-
 	g_pGameInstance->Change_BaseCamera(L"Camera_Silvermane");
 
-	//if (FAILED(Ready_Meteor()))
-	//{
-	//	MSGBOX("Meteor");
-	//	return E_FAIL;
-	//}
-
-	//if (FAILED(Ready_Cinema()))
-	// {
-	//	MSGBOX("Cinema");
-	// 		return E_FAIL;
-	//}
+	if (FAILED(Ready_Meteor()))
+	{
+		MSGBOX("Meteor");
+		return E_FAIL;
+	}
 	
-	//if (FAILED(Ready_Indicator()))
-	//{
-	//	MSGBOX("Indicator");
-	//	return E_FAIL;
-	//}
+	if (FAILED(Ready_Indicator()))
+	{
+		MSGBOX("Indicator");
+		return E_FAIL;
+	}
 
-	//if (FAILED(Ready_Portal()))
-	//{
-	//	MSGBOX("Portal");
-	//	return E_FAIL;
-	//}
+	if (FAILED(Ready_Portal()))
+	{
+		MSGBOX("Portal");
+		return E_FAIL;
+	}
 
-	//if (FAILED(Ready_Wall()))
-	//{
-	//	MSGBOX("Wall");
-	//	return E_FAIL;
-	//}
+	if (FAILED(Ready_Wall()))
+	{
+		MSGBOX("Wall");
+		return E_FAIL;
+	}
 
-	g_pGameInstance->PlayBGM(L"Stage1_BGM");
+	if (FAILED(Ready_Pot()))
+		return E_FAIL;
+
+	/*if (FAILED(Ready_Cinema()))
+	{
+		MSGBOX("Cinema");
+		return E_FAIL;
+	}*/
+
+	//g_pGameInstance->PlayBGM(L"Stage1_BGM");
+	//m_pScenemaManager->Active_Scenema((_uint)CINEMA_INDEX::CINEMA1_1);
 
 	return S_OK;
 }
 
 _int CStage1::Tick(_double TimeDelta)
 {
+	//m_pPot->Tick(TimeDelta);
 	/*_vector vTmp = g_pObserver->Get_PlayerPos();
 	cout << XMVectorGetX(vTmp) << ", " << XMVectorGetY(vTmp) << ", " << XMVectorGetZ(vTmp) << endl;*/
 
@@ -357,9 +344,20 @@ _int CStage1::Tick(_double TimeDelta)
 		{
 			if (true == pBoss->Get_Dead())
 			{
-				if (FAILED(g_pGameInstance->Open_Level((_uint)SCENEID::SCENE_LOADING, CLoading::Create(m_pDevice, m_pDeviceContext, SCENEID::SCENE_STAGE2))))
-					return -1;
-				return 0;
+				if (!m_bBossClear)
+				{
+					m_bBossClear = true;
+					m_pScenemaManager->Active_Scenema((_uint)CINEMA_INDEX::CINEMA3_1);
+				}
+				else
+				{
+					if (m_pScenemaManager->Get_EventCinema((_uint)CINEMA_INDEX::CINEMA3_5))
+					{
+						m_pScenemaManager->ResetCinema();
+						if (FAILED(g_pGameInstance->Open_Level((_uint)SCENEID::SCENE_LOADING, CLoading::Create(m_pDevice, m_pDeviceContext, SCENEID::SCENE_STAGE2))))
+							return -1;
+					}
+				}
 			}
 		}
 	}
@@ -460,14 +458,29 @@ _int CStage1::Tick(_double TimeDelta)
 		g_pInteractManager->Tick(TimeDelta);
 	if(m_pIndicatorManager)
 		m_pIndicatorManager->Active_Indicator();
+	if (g_pGameInstance->getkeyDown(DIK_END))
+		m_pScenemaManager->Active_Scenema((_uint)CINEMA_INDEX::CINEMA2_1);
 
 	/*For Cinema*/
+	//if (m_pScenemaManager)
+	//{
+	//	if (g_pGameInstance->getkeyDown(DIK_END))
+	//		m_pScenemaManager->Active_Scenema((_uint)CINEMA_INDEX::CINEMA2_3);
+
+	//	m_pScenemaManager->Tick(TimeDelta);
+	//}
 	if (m_pScenemaManager)
 	{
-		if (g_pGameInstance->getkeyDown(DIK_END))
-			m_pScenemaManager->Active_Scenema((_uint)CINEMA_INDEX::CINEMA3_1);;
-
 		m_pScenemaManager->Tick(TimeDelta);
+		if (m_pScenemaManager->Get_EventCinema((_uint)CINEMA_INDEX::CINEMA2_4))
+		{
+			CBoss_Bastion_Judicator* pBoss = (CBoss_Bastion_Judicator*)g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Layer_Boss")->front();
+			if (nullptr != pBoss)
+			{
+				pBoss->setActive(true);
+				m_pScenemaManager->ResetCinema();
+			}
+		}
 	}
 
 
@@ -482,13 +495,13 @@ _int CStage1::Tick(_double TimeDelta)
 	if (g_pGuideManager)
 		g_pGuideManager->Tick(g_dImmutableTime);
 
-	if (g_pGameInstance->getkeyDown(DIK_END))
+	/*if (g_pGameInstance->getkeyDown(DIK_END))
 	{
 		CMeteor* pMeteor = Find_Meteor();
 		pMeteor->setActive(true);
 		_vector vPos = XMLoadFloat4(&m_vecMeteorPos[0]);;
 		pMeteor->Move(vPos, 0);
-	}
+	}*/
 	Open_Wall();
 
 	return _int();
@@ -496,6 +509,8 @@ _int CStage1::Tick(_double TimeDelta)
 
 _int CStage1::LateTick(_double TimeDelta)
 {
+	//m_pPot->LateTick(TimeDelta);
+
 	if(m_pScenemaManager)
 		m_pScenemaManager->LateTick(TimeDelta);
 
@@ -819,9 +834,9 @@ HRESULT CStage1::Ready_Light()
 
 HRESULT CStage1::Ready_GameManager(void)
 {
-	//g_pDropManager = CDropManager::GetInstance();
-	//if (FAILED(g_pDropManager->NativeConstruct((SCENEID::SCENE_STAGE1))))
-	//	return E_FAIL;
+	g_pDropManager = CDropManager::GetInstance();
+	if (FAILED(g_pDropManager->NativeConstruct((SCENEID::SCENE_STAGE1))))
+		return E_FAIL;
 
 	m_pIndicatorManager = GET_INSTANCE(CIndicator_Manager);
 	//m_pScenemaManager = GET_INSTANCE(CScenematicManager);
@@ -1631,6 +1646,29 @@ HRESULT CStage1::Ready_Wall()
 	return S_OK;
 }
 
+HRESULT CStage1::Ready_Pot()
+{
+	vector<ENVIRONMENTLOADDATA> vecEnvironmentData;
+	g_pGameInstance->LoadFile<ENVIRONMENTLOADDATA>(vecEnvironmentData, L"../bin/SaveData/Stage1_Pot.dat");
+
+	for (auto& pData : vecEnvironmentData)
+	{
+		CPot::POTDESC tDesc;
+		ZeroMemory(&tDesc, sizeof(tDesc));
+		if (!lstrcmp(pData.FileName, L"S_Moon_Urn_1_03.fbx"))
+			tDesc.iType = 0;
+		if (!lstrcmp(pData.FileName, L"S_Sun_Urns_01.fbx"))
+			tDesc.iType = 1;
+		if (!lstrcmp(pData.FileName, L"S_Sun_Urns_Set02.fbx"))
+			tDesc.iType = 2;
+
+		tDesc.matWorld = pData.WorldMat;
+		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Pot", L"Proto_GameObject_Pot", &tDesc)))
+			return E_FAIL;
+	}
+	return S_OK;
+}
+
 HRESULT CStage1::Ready_Portal()
 {
 	for (_uint i = 0; i < 10; i++)
@@ -2172,7 +2210,7 @@ void CStage1::Trgger_Function8()
 	}
 	m_iCountMonster = 4;
 }
-//Èú·¯1 ÃÑ2 ¼Òµå1(Æ÷Å» 4°³)
+//Èú·¯1 ÃÑ2 ¼Òµå2(Æ÷Å» 4°³)
 void CStage1::Trgger_Function9()
 {
 	list<CGameObject*>* pLayer = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Layer_Bastion_Sword");
@@ -2222,9 +2260,11 @@ void CStage1::Trgger_Function9()
 		}
 		(*iter)->setActive(true);
 		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
+
 		iter++;
 		(*iter)->setActive(true);
 		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
+
 		pLayer = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Layer_Healer");
 		if (!pLayer)
 			return;
@@ -2239,6 +2279,7 @@ void CStage1::Trgger_Function9()
 		}
 		(*iter)->setActive(true);
 		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
+
 		pLayer = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Layer_Bastion_Shooter");
 		if (!pLayer)
 			return;
@@ -2253,6 +2294,7 @@ void CStage1::Trgger_Function9()
 		}
 		(*iter)->setActive(true);
 		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
+
 		iter++;
 		(*iter)->setActive(true);
 		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
@@ -2348,14 +2390,15 @@ void CStage1::Trgger_Function11()
 //º¸½º
 void CStage1::Trgger_FunctionBoss()
 {
-	list<CGameObject*>* pLayer = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Layer_Boss");
-	if (!pLayer)
-		return;
-
 	g_pGameInstance->StopSound(CSoundMgr::CHANNELID::BGM);
 	g_pGameInstance->PlayBGM(L"Stage1_Boss_BGM");
 
-	if (m_bDebug)
+	m_pScenemaManager->Active_Scenema((_uint)CINEMA_INDEX::CINEMA2_1);
+
+	list<CGameObject*>* pLayer = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Layer_Boss");
+	if (!pLayer)
+		return;
+	/*if (m_bDebug)
 	{
 		auto iter = pLayer->begin();
 		advance(iter, 0);
@@ -2374,7 +2417,7 @@ void CStage1::Trgger_FunctionBoss()
 		}
 		(*iter)->setActive(true);
 		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
-	}
+	}*/
 }
 
 HRESULT CStage1::Ready_Trigger_Lod(const _tchar* pDataFilePath)
