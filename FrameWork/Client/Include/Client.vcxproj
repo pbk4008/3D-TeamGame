@@ -409,6 +409,9 @@ call Update_Client.bat</Command>
     <ClInclude Include="..\Headers\Quest.h" />
     <ClInclude Include="..\Headers\QuestManager.h" />
     <ClInclude Include="..\Headers\UI_Blank_FKey.h" />
+    <ClInclude Include="..\Headers\UI_EquippedWeapon.h" />
+    <ClInclude Include="..\Headers\UI_EquippedWeapon_Slot_1.h" />
+    <ClInclude Include="..\Headers\UI_EquippedWeapon_Slot_2.h" />
     <ClInclude Include="..\Headers\UI_Fill_CKey2.h" />
     <ClInclude Include="..\Headers\UI_Blank_Space.h" />
     <ClInclude Include="..\Headers\UI_Death.h" />
@@ -844,6 +847,9 @@ call Update_Client.bat</Command>
     <ClCompile Include="..\Codes\Quest.cpp" />
     <ClCompile Include="..\Codes\QuestManager.cpp" />
     <ClCompile Include="..\Codes\UI_Blank_FKey.cpp" />
+    <ClCompile Include="..\Codes\UI_EquippedWeapon.cpp" />
+    <ClCompile Include="..\Codes\UI_EquippedWeapon_Slot_1.cpp" />
+    <ClCompile Include="..\Codes\UI_EquippedWeapon_Slot_2.cpp" />
     <ClCompile Include="..\Codes\UI_Fill_CKey2.cpp" />
     <ClCompile Include="..\Codes\UI_Blank_Space.cpp" />
     <ClCompile Include="..\Codes\UI_Death.cpp" />

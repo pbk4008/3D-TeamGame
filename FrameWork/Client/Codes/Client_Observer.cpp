@@ -144,6 +144,21 @@ void CClient_Observer::Player_Active(_bool bCheck)
 	m_pPlayer->setActive(bCheck);
 }
 
+void CClient_Observer::Set_Exp(_float fExp)
+{
+	if (!m_pPlayer)
+		return;
+
+	m_bLevelUp = false;
+
+	if (true == m_pPlayer->Get_PlayerData()->SetExp(fExp))
+	{
+		m_bLevelUp = true;
+	}
+
+	g_pInvenUIManager->ShowLevelUp();
+}
+
 void CClient_Observer::Set_IsAttack(const _bool bAttack)
 {
 	if (!m_pPlayer)

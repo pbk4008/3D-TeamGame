@@ -374,6 +374,17 @@ void CTransform::SetPosY(_float fPosY)
 	Set_WorldMatrix(XMLoadFloat4x4(&Temp));
 }
 
+void CTransform::SetPosX(_float fPosX)
+{
+	_matrix WorldMat = Get_WorldMatrix();
+	_float4x4 Temp;
+
+	XMStoreFloat4x4(&Temp, WorldMat);
+	Temp._41 = fPosX;
+
+	Set_WorldMatrix(XMLoadFloat4x4(&Temp));
+}
+
 void CTransform::Mesh_Straight(_double TimeDelta, CNavigation* pNavigation)
 {
 	_vector		vLook = Get_State(CTransform::STATE_LOOK);

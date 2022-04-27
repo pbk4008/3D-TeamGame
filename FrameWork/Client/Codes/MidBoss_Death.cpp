@@ -70,6 +70,7 @@ HRESULT CMidBoss_Death::EnterState()
 	//_float fDistToPlayer = XMVectorGetX(XMVector3Length(vDist));
 
 	m_pAnimator->Change_AnyEntryAnimation(CBoss_Bastion_Judicator::DEATH);
+	g_pObserver->Set_Exp(20.f);
 
 	return S_OK;
 }

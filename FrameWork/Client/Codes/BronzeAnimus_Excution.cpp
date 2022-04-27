@@ -58,6 +58,7 @@ HRESULT CBronzeAnimus_Excution::EnterState()
 		return E_FAIL;
 
 	m_pAnimator->Change_AnyEntryAnimation((_uint)CMonster_BronzeAnimus::ANIM_TYPE::A_EXCUTION);
+	g_pObserver->Set_Exp(10.f);
 
 	return S_OK;
 }
@@ -66,7 +67,6 @@ HRESULT CBronzeAnimus_Excution::ExitState()
 {
 	if (FAILED(__super::ExitState()))
 		return E_FAIL;
-
 
 	return S_OK;
 }

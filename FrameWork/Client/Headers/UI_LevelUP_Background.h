@@ -43,14 +43,50 @@ public:
 	_int Attach_Owner(void);
 
 public:
-	void SetBg(const std::wstring& _szFileName);
+	void Show(_double dTimeDelta);
+	void SetBg(_int PlayerLevel);
+	void SetFadeOut(void);
+	void FadeIn(void);
+	void FixPos(void);
 
 private:
 	CSingleImage* m_pSigleImageCom = nullptr;
-	Desc		  desc;
+	CTransform*   m_pLocalTransform = nullptr;
 	CUI*		  m_pOwner = nullptr;
-	CTransform*	  m_pLocalTransform = nullptr;
-	_bool		  m_bSetScale = true;
+	Desc		  desc;
+	_bool		  m_bShow = false;
+	
+private:
+	_float2		  m_fInitScale = { 80.f, 80.f };
+	_float2		  m_fEndScale = { 47.f , 47.f };
+
+private:
+	enum class ELevel
+	{
+		Level_1,
+		Level_2,
+		Level_3,
+		Level_4,
+		Level_5,
+		Level_6,
+		Level_7,
+		Level_8,
+		Level_9,
+		Level_End
+	};
+
+	const wstring m_arrLevelBgTex[(int)ELevel::Level_End]
+	{
+		L"T_HUD_Level_BG_1",
+		L"T_HUD_Level_BG_2",
+		L"T_HUD_Level_BG_3",
+		L"T_HUD_Level_BG_4",
+		L"T_HUD_Level_BG_5",
+		L"T_HUD_Level_BG_6",
+		L"T_HUD_Level_BG_7",
+		L"T_HUD_Level_BG_8",
+		L"T_HUD_Level_BG_9",
+	};
 
 public:
 	static CUI_LevelUP_Background* Create(ID3D11Device * pDevice, ID3D11DeviceContext * pDeviceContext);

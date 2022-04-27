@@ -70,6 +70,9 @@ HRESULT CStage2::NativeConstruct()
 	if (FAILED(g_pDropManager->NativeConstruct((SCENEID::SCENE_STAGE2))))
 		return E_FAIL;
 
+	g_pGameInstance->StopSound(CSoundMgr::CHANNELID::BGM);
+	//g_pGameInstance->PlayBGM(L"Stage2_BGM");
+
 	return S_OK;
 }
 

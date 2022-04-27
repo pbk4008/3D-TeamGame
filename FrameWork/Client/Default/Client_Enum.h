@@ -109,6 +109,7 @@ enum class EItemType
 	NONE,			//¹ÌÀåÂø
 	Equipment,		
 	Resorce,
+	Potion,
 	ITEMTYPE_END
 };
 

@@ -14,10 +14,10 @@ public:
 public:
 	void Reset(void);
 	_float GetExp(void);
-	void SetExp(_float iExp);
+	_bool SetExp(_float iExp);
 
 public:
-	_int Level	  = 1;
+	_int Level	    = 0;
 	_float MaxExp   = 100;
 	_float CurExp	  = 0;
 

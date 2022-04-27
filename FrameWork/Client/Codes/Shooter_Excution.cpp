@@ -48,6 +48,7 @@ HRESULT CShooter_Excution::Render()
 HRESULT CShooter_Excution::EnterState()
 {
 	m_pAnimator->Change_AnyEntryAnimation((_uint)CMonster_Bastion_Shooter::ANIM_TYPE::EXCUTION);
+	g_pObserver->Set_Exp(10.f);
 
 	return S_OK;
 }

@@ -1135,6 +1135,18 @@
     <Filter Include="02.GameObject\02.Map\05.Obstacle">
       <UniqueIdentifier>{39c78171-d0dc-4108-aad2-bed06c971f23}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\05.UI\05.Hud\04.EquippedWeapon">
+      <UniqueIdentifier>{e7eb33d7-44fb-4063-9e70-97db396cb4ef}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.UI\05.Hud\04.EquippedWeapon\00.Default">
+      <UniqueIdentifier>{3b9d6407-d061-4940-8094-3813c8a311a3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.UI\05.Hud\04.EquippedWeapon\01.Slot_1">
+      <UniqueIdentifier>{07f350f1-4e76-496f-ad38-f68a2fe12426}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.UI\05.Hud\04.EquippedWeapon\02.Slot_2">
+      <UniqueIdentifier>{f31fecd8-ce35-4091-a129-35627d27ce99}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -2448,6 +2460,15 @@
     <ClInclude Include="..\Headers\CapsuleObstacle.h">
       <Filter>02.GameObject\02.Map\05.Obstacle</Filter>
     </ClInclude>
+    <ClInclude Include="..\Headers\UI_EquippedWeapon.h">
+      <Filter>02.GameObject\05.UI\05.Hud\04.EquippedWeapon\00.Default</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\UI_EquippedWeapon_Slot_1.h">
+      <Filter>02.GameObject\05.UI\05.Hud\04.EquippedWeapon\01.Slot_1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\UI_EquippedWeapon_Slot_2.h">
+      <Filter>02.GameObject\05.UI\05.Hud\04.EquippedWeapon\02.Slot_2</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -3730,6 +3751,15 @@
     </ClCompile>
     <ClCompile Include="..\Codes\CapsuleObstacle.cpp">
       <Filter>02.GameObject\02.Map\05.Obstacle</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\UI_EquippedWeapon.cpp">
+      <Filter>02.GameObject\05.UI\05.Hud\04.EquippedWeapon\00.Default</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\UI_EquippedWeapon_Slot_1.cpp">
+      <Filter>02.GameObject\05.UI\05.Hud\04.EquippedWeapon\01.Slot_1</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\UI_EquippedWeapon_Slot_2.cpp">
+      <Filter>02.GameObject\05.UI\05.Hud\04.EquippedWeapon\02.Slot_2</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
