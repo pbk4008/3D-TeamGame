@@ -106,6 +106,7 @@ public: /* For.Weapon */
 	void Set_EquipWeapon(const _bool _isEquipWeapon);
 	void Set_WeaponFixedBone(const string& _wstrFixedBoneTag);
 	void Set_WeaponFixedBone(CHierarchyNode* _pFixedBone);
+	void Set_WeaponActive(const _bool _isActive);
 	const _bool Change_Weapon(const wstring& _name);
 	const _bool Change_Weapon(void);
 	void Change_WeaponOnInventory(void);

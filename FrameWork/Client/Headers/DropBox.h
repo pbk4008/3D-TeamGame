@@ -69,7 +69,6 @@ private:
 	CAnimator*			  m_pAnimator = nullptr;
 	CStateController*	  m_pStateController = nullptr;
 	CBoxCollider*		  m_pCollider = nullptr;
-	CModel*				  m_pModel = nullptr;
 	DROPBOXDESC			  m_tDesc;
 	CLight* m_plight = nullptr;
 	_float				  m_range = 0.f;

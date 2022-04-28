@@ -7,9 +7,6 @@
     <Filter Include="98.Headers">
       <UniqueIdentifier>{96eda15f-74ed-47dc-ba01-308cf57bfc5c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="00.MainGame">
-      <UniqueIdentifier>{77744ede-73e8-4a86-9387-22f105cb42bb}</UniqueIdentifier>
-    </Filter>
     <Filter Include="01.Scene">
       <UniqueIdentifier>{9e263673-2d49-4631-b81e-17e3fed66b69}</UniqueIdentifier>
     </Filter>
@@ -1137,7 +1134,7 @@
     </Filter>
     <Filter Include="02.GameObject\96.Weapon\11.CinemaWeapon">
       <UniqueIdentifier>{23f1b595-3107-4b66-bb6b-199555507e33}</UniqueIdentifier>
-   </Filter>
+    </Filter>
     <Filter Include="02.GameObject\04.Effect\02.MeshEffect\01.EffectBossMesh">
       <UniqueIdentifier>{c754efa5-f05f-4f81-b1ef-15984349f16b}</UniqueIdentifier>
     </Filter>
@@ -1152,7 +1149,7 @@
     </Filter>
     <Filter Include="02.GameObject\05.UI\07.DamageFont">
       <UniqueIdentifier>{0abfda8d-6202-4ded-a379-6fb07042a1ad}</UniqueIdentifier>
-	</Filter>
+    </Filter>
     <Filter Include="02.GameObject\05.UI\05.Hud\04.EquippedWeapon">
       <UniqueIdentifier>{e7eb33d7-44fb-4063-9e70-97db396cb4ef}</UniqueIdentifier>
     </Filter>
@@ -1164,6 +1161,12 @@
     </Filter>
     <Filter Include="02.GameObject\05.UI\05.Hud\04.EquippedWeapon\02.Slot_2">
       <UniqueIdentifier>{f31fecd8-ce35-4091-a129-35627d27ce99}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Scene\00.MainGame">
+      <UniqueIdentifier>{77744ede-73e8-4a86-9387-22f105cb42bb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\00.Player\00.Silvermane\State\Emote">
+      <UniqueIdentifier>{4259ea1f-b5b7-4d9f-b769-4bfcc182f1f1}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -1195,7 +1198,7 @@
       <Filter>98.Headers</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\MainApp.h">
-      <Filter>00.MainGame</Filter>
+      <Filter>01.Scene\00.MainGame</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\Level_Logo.h">
       <Filter>01.Scene\00.Logo</Filter>
@@ -2498,7 +2501,7 @@
     </ClInclude>
     <ClInclude Include="..\Headers\UI_EquippedWeapon_Slot_2.h">
       <Filter>02.GameObject\05.UI\05.Hud\04.EquippedWeapon\02.Slot_2</Filter>
-	</ClInclude>
+    </ClInclude>
     <ClInclude Include="..\Headers\MeshEffect_Razer.h">
       <Filter>02.GameObject\04.Effect\02.MeshEffect</Filter>
     </ClInclude>
@@ -2508,13 +2511,16 @@
     <ClInclude Include="..\Headers\DamageFont.h">
       <Filter>02.GameObject\05.UI\07.DamageFont</Filter>
     </ClInclude>
+    <ClInclude Include="..\Headers\Silvermane_Bow.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Emote</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
       <Filter>99.Default</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\MainApp.cpp">
-      <Filter>00.MainGame</Filter>
+      <Filter>01.Scene\00.MainGame</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\Level_Logo.cpp">
       <Filter>01.Scene\00.Logo</Filter>
@@ -3811,7 +3817,7 @@
     </ClCompile>
     <ClCompile Include="..\Codes\UI_EquippedWeapon_Slot_2.cpp">
       <Filter>02.GameObject\05.UI\05.Hud\04.EquippedWeapon\02.Slot_2</Filter>
-	</ClCompile>
+    </ClCompile>
     <ClCompile Include="..\Codes\MeshEffect_Razer.cpp">
       <Filter>02.GameObject\04.Effect\02.MeshEffect</Filter>
     </ClCompile>
@@ -3820,6 +3826,9 @@
     </ClCompile>
     <ClCompile Include="..\Codes\DamageFont.cpp">
       <Filter>02.GameObject\05.UI\07.DamageFont</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Silvermane_Bow.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Emote</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

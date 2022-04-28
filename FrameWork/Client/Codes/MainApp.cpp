@@ -112,6 +112,7 @@ HRESULT CMainApp::NativeConstruct()
 	// 몬스터
 	g_pGameInstance->Set_CollisionLayer((_uint)ELayer::Monster, (_uint)ELayer::Enviroment);
 	g_pGameInstance->Set_CollisionLayer((_uint)ELayer::Monster, (_uint)ELayer::Weapon);
+	g_pGameInstance->Set_CollisionLayer((_uint)ELayer::Monster, (_uint)ELayer::Monster);
 	//메테오
 	g_pGameInstance->Set_CollisionLayer((_uint)ELayer::Meteor, (_uint)ELayer::Enviroment);
 	g_pGameInstance->Set_CollisionLayer((_uint)ELayer::Meteor, (_uint)ELayer::Player);

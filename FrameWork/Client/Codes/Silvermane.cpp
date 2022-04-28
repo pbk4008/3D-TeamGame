@@ -167,6 +167,8 @@
 #include "Silvermane_Heal.h"
 ///////////////////////////////////////////// Execution
 #include "Silvermane_Execution.h"
+///////////////////////////////////////////// Emote
+#include "Silvermane_Bow.h"
 #pragma endregion
 
 #include "Material.h"
@@ -207,6 +209,7 @@ HRESULT CSilvermane::NativeConstruct(const _uint _iSceneID, void* _pArg)
 		_vector vPos = XMLoadFloat3(&tDesc.vPos);
 		vPos = XMVectorSetW(vPos, 1.f);
 		m_pTransform->Set_State(CTransform::STATE_POSITION, vPos);
+		m_vRespawnPos = tDesc.vPos;
 	}
 	else
 		m_pTransform->Set_State(CTransform::STATE_POSITION, XMVectorSet(2.f, 1.f, -1.f, 1.f));
@@ -223,7 +226,6 @@ HRESULT CSilvermane::NativeConstruct(const _uint _iSceneID, void* _pArg)
 	//생성될때 옵저버에 플레이어 셋팅
 	if (FAILED(g_pObserver->Set_Player(this)))
 		return E_FAIL;
-
 
 	m_isFall = true;
 	m_fMaxHp = 100000.f;
@@ -338,7 +340,7 @@ _int CSilvermane::Tick(_double _dDeltaTime)
 	Raycast_DropBox(_dDeltaTime);
 
 	// 무기 업뎃
-	if (m_pCurWeapon)
+	if (m_pCurWeapon && m_pCurWeapon->getActive())
 	{
 		iProgress = m_pCurWeapon->Tick(_dDeltaTime);
 		if (NO_EVENT != iProgress)
@@ -411,7 +413,7 @@ _int CSilvermane::LateTick(_double _dDeltaTime)
 	}
 
 	// 무기 레잇업뎃
-	if (m_pCurWeapon)
+	if (m_pCurWeapon && m_pCurWeapon->getActive())
 	{
 		iProgress = m_pCurWeapon->LateTick(_dDeltaTime);
 		if (NO_EVENT != iProgress)
@@ -936,6 +938,9 @@ HRESULT CSilvermane::Ready_States()
 	// Execution
 	if (FAILED(m_pStateController->Add_State(L"Execution", CSilvermane_Execution::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
+	// Emote
+	if (FAILED(m_pStateController->Add_State(L"Bow", CSilvermane_Bow::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
 
 	for (auto& pair : m_pStateController->Get_States())
 	{
@@ -1269,6 +1274,11 @@ void CSilvermane::Set_WeaponFixedBone(CHierarchyNode* _pFixedBone)
 {
 	if (m_pCurWeapon)
 		m_pCurWeapon->Set_FixedBone(_pFixedBone);
+}
+
+void CSilvermane::Set_WeaponActive(const _bool _isActive)
+{
+	m_pCurWeapon->setActive(_isActive);
 }
 
 void CSilvermane::Set_Camera(CCamera_Silvermane* _pCamera)
@@ -1748,8 +1758,8 @@ const _int CSilvermane::Input(const _double& _dDeltaTime)
 {
 	if (g_pGameInstance->getkeyDown(DIK_HOME))
 	{
-		m_pCharacterController->setFootPosition(_float3(0.f, 2.f, 0.f));
-		m_isFall = true;
+		if (FAILED(m_pStateController->Change_State(L"Bow")))
+			return -1;
 	}
 	if (g_pGameInstance->getkeyDown(DIK_END))
 	{

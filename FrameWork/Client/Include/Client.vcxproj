@@ -415,6 +415,7 @@ call Update_Client.bat</Command>
     <ClInclude Include="..\Headers\MidBoss_Execution.h" />
     <ClInclude Include="..\Headers\Quest.h" />
     <ClInclude Include="..\Headers\QuestManager.h" />
+    <ClInclude Include="..\Headers\Silvermane_Bow.h" />
     <ClInclude Include="..\Headers\UI_Blank_FKey.h" />
     <ClInclude Include="..\Headers\UI_EquippedWeapon.h" />
     <ClInclude Include="..\Headers\UI_EquippedWeapon_Slot_1.h" />
@@ -860,6 +861,7 @@ call Update_Client.bat</Command>
     <ClCompile Include="..\Codes\MidBoss_Execution.cpp" />
     <ClCompile Include="..\Codes\Quest.cpp" />
     <ClCompile Include="..\Codes\QuestManager.cpp" />
+    <ClCompile Include="..\Codes\Silvermane_Bow.cpp" />
     <ClCompile Include="..\Codes\UI_Blank_FKey.cpp" />
     <ClCompile Include="..\Codes\UI_EquippedWeapon.cpp" />
     <ClCompile Include="..\Codes\UI_EquippedWeapon_Slot_1.cpp" />
