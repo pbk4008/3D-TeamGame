@@ -23,7 +23,9 @@ _bool CPlayerData::SetExp(_float iExp)
 	}
 	if (CurExp >= MaxExp)
 	{
-		g_pInvenUIManager->SetLevelBG(++Level);
+		if(9 >	Level)
+			g_pInvenUIManager->SetLevelBG(++Level);
+
 		CurExp = 0;
 
 		if (10 <= Level)

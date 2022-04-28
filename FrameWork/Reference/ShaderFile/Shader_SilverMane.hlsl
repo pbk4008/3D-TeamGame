@@ -390,7 +390,7 @@ PS_OUT PS_MAIN_HAIR(PS_IN In)
 	Out.mra.g = omer.a + g_Roughness;
 	Out.mra.b = omer.r + g_AO;
 	Out.mra.a = 1.f;
-	Out.emission = half4(omer.b, omer.b, omer.b, 1) * g_color + g_empower;
+	Out.emission = g_color * g_empower * omer.b;
 	
 	return Out;
 }
