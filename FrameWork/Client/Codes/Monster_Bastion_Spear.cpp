@@ -658,6 +658,7 @@ void CMonster_Bastion_Spear::Parry(const PARRYDESC& _tParryDesc)
 {
 	m_fGroggyGauge += (m_fMaxGroggyGauge - m_fGroggyGauge);
 	Groggy_Start();
+	Set_IsAttack(false);
 }
 
 void CMonster_Bastion_Spear::Hit(CCollision& collision)
