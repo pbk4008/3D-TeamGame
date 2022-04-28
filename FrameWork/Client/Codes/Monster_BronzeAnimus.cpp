@@ -222,7 +222,7 @@ _int CMonster_BronzeAnimus::LateTick(_double _dDeltaTime)
 HRESULT CMonster_BronzeAnimus::Render()
 {
 	if (m_bdissolve == true)
-		CActor::DissolveOn(0.5f);
+		CActor::DissolveOn(1.2f);
 
 	if (FAILED(m_pModel->SetUp_ValueOnShader("g_bdissolve", &m_bdissolve, sizeof(_bool)))) MSGBOX("Failed to Apply dissolvetime");
 

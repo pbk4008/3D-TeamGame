@@ -193,7 +193,7 @@ _int CMonster_Crawler::LateTick(_double _dDeltaTime)
 HRESULT CMonster_Crawler::Render()
 {
 	if (m_bdissolve == true)
-		CActor::DissolveOn(0.25f);
+		CActor::DissolveOn(1.2f);
 
 	if (FAILED(m_pModel->SetUp_ValueOnShader("g_bdissolve", &m_bdissolve, sizeof(_bool)))) MSGBOX("Failed to Apply dissolvetime");
 
