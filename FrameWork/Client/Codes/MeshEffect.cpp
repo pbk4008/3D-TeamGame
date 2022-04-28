@@ -110,7 +110,7 @@ HRESULT CMeshEffect::Render()
 	m_pModel->SetUp_ValueOnShader("g_isFlowY", &m_isFlowY, sizeof(_bool));
 	m_pModel->SetUp_ValueOnShader("g_fFlowSpeedY", &m_fFlowSpeedY, sizeof(_float));
 	//Color
-	m_pModel->SetUp_ValueOnShader("g_isCustomColor", &m_isCustomColor, sizeof(_float));
+	m_pModel->SetUp_ValueOnShader("g_isCustomColor", &m_isCustomColor, sizeof(_bool));
 	m_pModel->SetUp_ValueOnShader("g_vColor", &m_vColor, sizeof(_float3));
 
 	return S_OK;

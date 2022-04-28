@@ -7,6 +7,7 @@
 #include "TrailEffect_Normal.h"
 #include "TrailEffect_Distortion.h"
 #include "Pot.h"
+#include "Light.h"
 
 CPlayer_Weapon::CPlayer_Weapon(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
 	: CWeapon(_pDevice, _pDeviceContext)
@@ -77,6 +78,23 @@ HRESULT CPlayer_Weapon::NativeConstruct(const _uint _iSceneID, Desc _desc)
 	else
 		m_pBoxCollider->Remove_ActorFromScene();
 
+	LIGHTDESC LightDesc;
+
+	ZeroMemory(&LightDesc, sizeof(LIGHTDESC));
+	LightDesc.eType = LIGHTDESC::TYPE_POINT;
+	LightDesc.fRange = 5.f;
+	LightDesc.vDiffuse = _float4(0.3686f, 04941.f, 0.60784f, 1.f);
+	LightDesc.vSpecular = _float4(0.7f, 0.7f, 0.7f, 1.f);
+	LightDesc.vAmbient = _float4(0.8f, 0.8f, 0.8f, 1.f);
+	LightDesc.bactive = false;
+	LightDesc.vPosition = _float3(0, 0, 0);
+
+	m_LightRange = LightDesc.fRange;
+	m_OrigLightRange = LightDesc.fRange;
+
+	if (FAILED(g_pGameInstance->Add_Light(m_pDevice, m_pDeviceContext, LightDesc, &m_pActiveLight))) MSGBOX("Failed To Adding PointLight");
+
+
 	return S_OK;
 }
 
@@ -92,6 +110,8 @@ _int CPlayer_Weapon::Tick(_double _dDeltaTime)
 		m_pBoxCollider->Tick(_dDeltaTime);
 	if(nullptr != m_pCapsuleCollider)
 		m_pCapsuleCollider->Tick(_dDeltaTime);
+
+	LightOnOff(m_HitPosition, XMVectorSet(1.f, 1.f, 1.f, 1.f), 20.f);
 
 	return _int();
 }
@@ -199,8 +219,19 @@ void CPlayer_Weapon::OnTriggerEnter(CCollision& collision)
 		tAttackDesc.fDamage += m_fDamage;
 		tAttackDesc.pHitObject = this;
 		static_cast<CActor*>(collision.pGameObject)->Hit(tAttackDesc);
+
+		if (m_pActiveLight != nullptr)
+		{
+			m_bLightCheck = true;
+			m_pActiveLight->Set_Active(true);
+			m_LightRange = m_OrigLightRange;
+			m_HitPosition = static_cast<CActor*>(collision.pGameObject)->Get_Transform()->Get_State(CTransform::STATE_POSITION);
+		}
+
+
 		break;
 	}
+
 }
 
 void CPlayer_Weapon::RangeAttack()
@@ -254,6 +285,24 @@ void CPlayer_Weapon::RangeAttack()
 				static_cast<CPot*>(tOverlapDesc.vecHitObjects[i])->OnTriggerEnter(Collision);
 				break;
 			}
+		}
+	}
+}
+
+void CPlayer_Weapon::LightOnOff(_fvector pos, _fvector color, _float deltaspeed)
+{
+	if (m_bLightCheck == true)
+	{
+		m_LightRange += g_fDeltaTime * -deltaspeed;
+
+		m_pActiveLight->Set_Range(m_LightRange);
+		m_pActiveLight->Set_Pos(pos);
+		m_pActiveLight->Set_Color(color);
+
+		if (m_LightRange <= 0.f)
+		{
+			m_LightRange = m_OrigLightRange;
+			m_pActiveLight->Set_Active(false);
 		}
 	}
 }

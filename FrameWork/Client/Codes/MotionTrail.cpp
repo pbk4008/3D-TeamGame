@@ -3,12 +3,12 @@
 #include "Silvermane.h"
 
 CMotionTrail::CMotionTrail(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
-	: CActor(_pDevice, _pDeviceContext)
+	: CGameObject(_pDevice, _pDeviceContext)
 {
 }
 
 CMotionTrail::CMotionTrail(const CMotionTrail& _rhs)
-	: CActor(_rhs)
+	: CGameObject(_rhs)
 {
 }
 
@@ -66,7 +66,7 @@ HRESULT CMotionTrail::Render_MotionTrail()
 	ZeroMemory(&rimdesc, sizeof(RIM));
 	rimdesc.rimcheck = m_rimcheck;
 	rimdesc.rimcol = _float3(0.7529f, 0.7529f, 0.7529f);
-	rimdesc.rimintensity = m_rimintensity; // intensity ³·À» ¼ö·Ï °úÇÏ°Ô ºû³²
+	rimdesc.rimintensity = m_rimintensity;
 	XMStoreFloat4(&rimdesc.camdir, XMVector3Normalize(g_pGameInstance->Get_CamPosition(camtag) - m_worldamt.r[3]));
 
 
@@ -74,8 +74,6 @@ HRESULT CMotionTrail::Render_MotionTrail()
 	{
 		if (XMVector3Equal(m_shieldworldmat.r[3], XMMatrixIdentity().r[3]) != true)
 		{
-			_matrix shield;
-			shield = XMMatrixTranspose(m_shieldworldmat);
 			XMStoreFloat4(&rimdesc.camdir, XMVector3Normalize(g_pGameInstance->Get_CamPosition(camtag) - m_shieldworldmat.r[3]));
 			Set_ContantBuffer(m_pShield, m_shieldworldmat, rimdesc);
 			for (_uint i = 0; i < m_pShield->Get_NumMeshContainer(); ++i)
@@ -84,20 +82,6 @@ HRESULT CMotionTrail::Render_MotionTrail()
 			}
 		}
 	}
-	//else if (m_throwchck == true)
-	//{
-	//	if (XMVector3Equal(m_shieldworldmat.r[3], XMMatrixIdentity().r[3]) != true)
-	//	{
-	//		_matrix shield;
-	//		shield = XMMatrixTranspose(m_shieldworldmat);
-	//		XMStoreFloat4(&rimdesc.camdir, XMVector3Normalize(g_pGameInstance->Get_CamPosition(camtag) - m_shieldworldmat.r[3]));
-	//		Set_ContantBuffer(m_pShield, m_shieldworldmat, rimdesc);
-	//		for (_uint i = 0; i < m_pShield->Get_NumMeshContainer(); ++i)
-	//		{
-	//			if (FAILED(m_pShield->Render(i, 4))) MSGBOX("Fialed To Rendering Shield MotionTrail");
-	//		}
-	//	}
-	//}
 	else
 	{
 		Set_ContantBuffer(m_pModel, m_worldamt, rimdesc);
@@ -141,13 +125,8 @@ void CMotionTrail::Set_Info(_fmatrix world, _fmatrix weapon, _fmatrix shield, _f
 void CMotionTrail::Set_Model(CModel* pModel, CModel* pWeapon,CModel* pShield)
 {
 	m_pModel = pModel;
-	Safe_AddRef(m_pModel);
-
 	m_pWeapon = pWeapon;
-	//Safe_AddRef(m_pWeapon);
-
 	m_pShield = pShield;
-	//Safe_AddRef(m_pShield);
 }
 
 HRESULT CMotionTrail::Set_ContantBuffer(CModel* pmodel, _fmatrix worldmat, RIM& rimdesc)
@@ -202,7 +181,7 @@ CGameObject* CMotionTrail::Clone(const _uint _iSceneID, void* _pArg)
 
 void CMotionTrail::Free()
 {
-	CActor::Free();
+	__super::Free();
 	//Safe_Release(m_pWeapon);
 	//Safe_Release(m_pShield);
 	Safe_Release(m_pGradientTex);

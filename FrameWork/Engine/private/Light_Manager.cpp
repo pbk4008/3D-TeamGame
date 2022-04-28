@@ -27,13 +27,18 @@ HRESULT CLight_Manager::CreateLightCam(ID3D11Device* pDevice, ID3D11DeviceContex
 	_vector up = { 0, 1.f, 0,0 };
 	_vector lookat = { -1.f,1.f,1.f,0.f };
 
-	_float3 dir = _float3(-1.f, -1.f, 1.f);
-	_vector vdir = XMVector3Normalize(XMLoadFloat3(&desc.vDirection));
-
-	if(desc.vPosition.x == 0 )
+	if (desc.mlookat.w != 0)
+	{
+		lookat = XMLoadFloat4(&desc.mlookat);
+		desc.mLightView = XMMatrixLookAtLH(XMLoadFloat3(&desc.vPosition), lookat, up);
+	}
+	else
+	{
+		_float3 dir = _float3(-1.f, -1.f, 1.f);
+		_vector vdir = XMVector3Normalize(XMLoadFloat3(&desc.vDirection));
 		XMStoreFloat3(&desc.vPosition, (vdir * desc.mOrthinfo[0] * -1.f) + lookat);
-
-	desc.mLightView = XMMatrixLookAtLH(XMLoadFloat3(&desc.vPosition), lookat, up);
+		desc.mLightView = XMMatrixLookAtLH(XMLoadFloat3(&desc.vPosition), lookat, up);
+	}
 
 	_vector origin = { 0,0,0,0 };
 	_float3	forigin;

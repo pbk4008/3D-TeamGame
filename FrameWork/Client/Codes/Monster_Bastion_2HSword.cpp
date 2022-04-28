@@ -23,6 +23,11 @@
 #include "Stage1.h"
 #include "Stage2.h"
 
+#include "Stage1.h"
+#include "Stage2.h"
+
+#include "Light.h"
+
 CMonster_Bastion_2HSword::CMonster_Bastion_2HSword(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
 	: CActor(_pDevice, _pDeviceContext)
 	, m_pCharacterController(nullptr)
@@ -183,8 +188,9 @@ _int CMonster_Bastion_2HSword::Tick(_double _dDeltaTime)
 		}
 	}
 
-	
 	m_pPanel->Set_TargetWorldMatrix(m_pTransform->Get_WorldMatrix());
+
+	CActor::LightOnOff(m_pTransform->Get_State(CTransform::STATE_POSITION), XMVectorSet(0.f, 1.f, 0.f, 1.f), 10.f);
 
 	return _int();
 }

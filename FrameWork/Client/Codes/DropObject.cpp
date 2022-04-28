@@ -1,4 +1,5 @@
 #include "pch.h"
+#include "GameInstance.h"
 #include "DropObject.h"
 #include "ItemData.h"
 #include "Client_Function.h"

@@ -6,6 +6,8 @@
 #include "GameObject.h"
 BEGIN(Engine)
 
+class CLight;
+
 class ENGINE_DLL CActor abstract : public CGameObject
 {
 protected:
@@ -67,9 +69,12 @@ public:
 	void RimlightCheck(_bool check, _float3 color = _float3(0,0,0));
 	_bool GetRimCheck() { return m_rimcheck; }
 	void SetRimIntensity(_float time);
-	
+
 	void Set_Dissolve(_bool on) { m_bdissolve = on; }
 	HRESULT DissolveOn(_float dissolveSpeed = 1.f);
+
+	void	LightOnOff(_fvector pos, _fvector color, _float deltaspeed = 1.f);
+	void	Set_LightCheck(_bool check);
 
 public:
 	virtual void Hit(const ATTACKDESC& _tAttackDesc);
@@ -111,6 +116,12 @@ protected:
 	// motion blur
 	_bool			m_motionblurcheck = false;
 	_float			m_timer = 0.f;
+
+	// Light
+	_bool			m_bLightCheck = false;
+	CLight*			m_pActiveLight = nullptr;
+	_float			m_LightRange = 0.f;
+	_float			m_OrigLightRange = 0.f;
 };
 END
 #endif

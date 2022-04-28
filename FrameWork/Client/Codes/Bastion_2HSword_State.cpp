@@ -145,6 +145,8 @@ _int CBastion_2HSword_State::Tick(const _double& _dDeltaTime)
 		m_pAnimator->Get_AnimController()->Set_PlaySpeed(1.f);
 
 		m_pStateController->Change_State(L"Death");
+
+		m_pOwner->Set_LightCheck(true);
 	}
 
 	return _int();

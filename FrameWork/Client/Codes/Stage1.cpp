@@ -72,6 +72,7 @@
 #include "Cinema3_5.h"
 #include "Cinema3_6.h"
 #include "MeshEffect_Razer.h"
+#include "DamageFont.h"
 
 CStage1::CStage1()
 	: m_pTriggerSystem(nullptr)
@@ -402,7 +403,7 @@ _int CStage1::Tick(_double TimeDelta)
 	//		return -1;
 	//	pMonster->setActive(true);
 	//}
-	//
+	// 
 	//if (g_pGameInstance->getkeyDown(DIK_NUMPAD2))
 	//{
 	//	CMonster_Bastion_Sword* pMonster = nullptr;
@@ -411,14 +412,13 @@ _int CStage1::Tick(_double TimeDelta)
 	//	pMonster->setActive(true);
 	//}
 
-	//if (g_pGameInstance->getkeyDown(DIK_NUMPAD3))
-	//{
-	//	CMonster_Bastion_Shooter* pMonster = nullptr;
-	//	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Test", L"Proto_GameObject_Monster_Bastion_Shooter", &fPos, (CGameObject**)&pMonster)))
-	//		return -1;
-	//	pMonster->setActive(true);
-	//}
-	// 
+	if (g_pGameInstance->getkeyDown(DIK_NUMPAD3))
+	{
+		CMonster_Bastion_Shooter* pMonster = nullptr;
+		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Test", L"Proto_GameObject_Monster_Bastion_Shooter", &fPos, (CGameObject**)&pMonster)))
+			return -1;
+		pMonster->setActive(true);
+	}
 	//if (g_pGameInstance->getkeyDown(DIK_NUMPAD4))
 	//{
 	//	CMonster_Bastion_Healer* pMonster = nullptr;
@@ -433,7 +433,6 @@ _int CStage1::Tick(_double TimeDelta)
 	//		return -1;
 	//	pMonster->setActive(true);
 	//}
-
 	//if (g_pGameInstance->getkeyDown(DIK_NUMPAD6))
 	//{
 	//	CMonster_Bastion_Spear* pMonster = nullptr;
@@ -457,23 +456,24 @@ _int CStage1::Tick(_double TimeDelta)
 
 	if(g_pDropManager)
 		g_pDropManager->Tick();
+
 	if (g_pInteractManager)
 		g_pInteractManager->Tick(TimeDelta);
-	
+
 	if (g_pGameInstance->getkeyDown(DIK_END))
 		m_pScenemaManager->Active_Scenema((_uint)CINEMA_INDEX::CINEMA2_1);
 
-	/*For Cinema*/
-	//if (m_pScenemaManager)
-	//{
-	//	if (g_pGameInstance->getkeyDown(DIK_END))
-	//		m_pScenemaManager->Active_Scenema((_uint)CINEMA_INDEX::CINEMA2_3);
+	if(m_pIndicatorManager)
+		m_pIndicatorManager->Active_Indicator();
 
-	//	m_pScenemaManager->Tick(TimeDelta);
-	//}
+	/*For Cinema*/
 	if (m_pScenemaManager)
 	{
+		if (g_pGameInstance->getkeyDown(DIK_END))
+			m_pScenemaManager->Active_Scenema((_uint)CINEMA_INDEX::CINEMA2_3);
+
 		m_pScenemaManager->Tick(TimeDelta);
+
 		if (m_pScenemaManager->Get_EventCinema((_uint)CINEMA_INDEX::CINEMA2_4))
 		{
 			CBoss_Bastion_Judicator* pBoss = (CBoss_Bastion_Judicator*)g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Layer_Boss")->front();
@@ -497,13 +497,6 @@ _int CStage1::Tick(_double TimeDelta)
 	if (g_pGuideManager)
 		g_pGuideManager->Tick(g_dImmutableTime);
 
-	/*if (g_pGameInstance->getkeyDown(DIK_END))
-	{
-		CMeteor* pMeteor = Find_Meteor();
-		pMeteor->setActive(true);
-		_vector vPos = XMLoadFloat4(&m_vecMeteorPos[0]);;
-		pMeteor->Move(vPos, 0);
-	}*/
 	Open_Wall();
 
 	return _int();
@@ -671,8 +664,15 @@ HRESULT CStage1::Ready_Player(const _tchar* LayerTag)
 	////Test
 	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Test", L"Proto_GameObject_TestObject")))
 	//	return E_FAIL;
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Test", L"Proto_GameObject_MeshEffect_Test2")))
-		MSGBOX(L"메쉬 이펙트 테스트2 생성 실패");
+	// 
+	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Test", L"Proto_GameObject_MeshEffect_Test2")))
+	//	MSGBOX(L"메쉬 이펙트 테스트2 생성 실패");
+
+	//CDamageFont::DESC tDamageDesc;
+	//tDamageDesc.vPos = { 0.f, 2.f, 0.f };
+	//tDamageDesc.fDamage = 108;
+	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_DamageFont", L"Proto_GameObject_DamageFont", &tDamageDesc)))
+	//	return E_FAIL;
 
 	return S_OK;
 }

@@ -1,14 +1,15 @@
 #include "pch.h"
 #include "InteractableObject.h"
 #include "InteractManager.h"
+#include "Effect.h"
 
 CInteractableObject::CInteractableObject(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
-	:CActor(_pDevice, _pDeviceContext)
+	:CGameObject(_pDevice, _pDeviceContext)
 {
 }
 
 CInteractableObject::CInteractableObject(const CInteractableObject& _rhs)
-	: CActor(_rhs)
+	: CGameObject(_rhs)
 	, m_bInteracting(_rhs.m_bInteracting)
 	, m_bShowGuideUI(_rhs.m_bShowGuideUI)
 	, m_bInteractDead(_rhs.m_bInteractDead)
@@ -115,6 +116,59 @@ _bool CInteractableObject::IsFocused(void)
 	return m_isFocused;
 }
 
+void CInteractableObject::Active_Effect(_uint iEffectIndex)
+{
+	CEffect* pEffect = g_pGameInstance->Get_Effect(iEffectIndex);
+	if (!pEffect)
+	{
+		//MSGBOX("Effect Null!!");
+		return;
+	}
+	if (nullptr != pEffect)
+	{
+		_vector Mypos = m_pTransform->Get_State(CTransform::STATE_POSITION);
+		Mypos = XMVectorSetY(Mypos, XMVectorGetY(Mypos) + 1.f);
+		pEffect->Get_Transform()->Set_State(CTransform::STATE_POSITION, Mypos);
+		pEffect->setActive(true);
+		pEffect->Set_Reset(true);
+	}
+}
+
+void CInteractableObject::Active_Effect(_uint iEffectIndex, _fvector vPivot)
+{
+	CEffect* pEffect = g_pGameInstance->Get_Effect(iEffectIndex);
+	if (!pEffect)
+	{
+		//MSGBOX("Effect Null!!");
+		return;
+	}
+	if (nullptr != pEffect)
+	{
+		_vector Mypos = m_pTransform->Get_State(CTransform::STATE_POSITION);
+		Mypos += vPivot;
+		pEffect->Get_Transform()->Set_State(CTransform::STATE_POSITION, Mypos);
+		pEffect->setActive(true);
+		pEffect->Set_Reset(true);
+	}
+}
+
+void CInteractableObject::Active_Effect_Target(_uint iEffectIndex, _matrix TargetMat)
+{
+	CEffect* pEffect = g_pGameInstance->Get_Effect(iEffectIndex);
+	if (!pEffect)
+	{
+		//MSGBOX("Effect Null!!");
+		return;
+	}
+	if (nullptr != pEffect)
+	{
+		TargetMat.r[3] = XMVectorSetY(TargetMat.r[3], XMVectorGetY(TargetMat.r[3]) + 1.f);
+		pEffect->Get_Transform()->Set_WorldMatrix(TargetMat);
+		pEffect->setActive(true);
+		pEffect->Set_Reset(true);
+	}
+}
+
 void CInteractableObject::OnTriggerEnter(CCollision& collision)
 {
 	__super::OnTriggerEnter(collision);
@@ -143,6 +197,7 @@ void CInteractableObject::OnCollisionExit(CCollision& collision)
 void CInteractableObject::Free()
 {
 	__super::Free();
+	Safe_Release(m_pModel);
 }
 
 
