@@ -48,6 +48,9 @@ public:
 	virtual void Parry(const PARRYDESC& _tParryDesc) override;
 	virtual void Execution() override;
 	void Remove_Collider();
+	void Link_Empty();
+	void Link();
+	void Check_LinkMonster();
 private:
 	HRESULT Ready_Components();
 	HRESULT Ready_Weapon(void);
@@ -70,13 +73,20 @@ public:
 public:
 	void set_Target(_bool bCheck) { m_bTargetOn = bCheck; }
 	void set_Attack(_bool bCheck) { m_bAttackOn = bCheck; }
-
+	void set_Link(_bool bCheck) { m_bLink = bCheck; }
+	void set_Empty(_bool bCheck) { m_bEmpty = bCheck; }
 public:
 	_bool get_Target() { return m_bTargetOn; }
 	_bool get_Attack() { return m_bAttackOn; }
+	_bool get_Link() { return m_bLink; }
+	_bool get_Empty() { return m_bEmpty; }
+	CActor* get_LinkMonster() { return m_pLinkMonster; }
+
 private:
 	_bool		m_bTargetOn = false;
 	_bool		m_bAttackOn = false;
+	_bool		m_bLink = false;
+	_bool		m_bEmpty = false;
 private:
 	CAnimation* m_pAnimation = nullptr;
 	CAnimator* m_pAnimator = nullptr;
@@ -92,7 +102,8 @@ private: /* For.Weapon */
 private:
 	class CUI_Monster_Panel* m_pPanel = nullptr;
 	_bool m_bFirst = false;
-
+private:
+	CActor* m_pLinkMonster = nullptr;
 private:
 	_int	m_iHp = 3;
 	_bool	m_bRender = true;

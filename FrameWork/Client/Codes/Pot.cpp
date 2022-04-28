@@ -38,6 +38,8 @@ HRESULT CPot::NativeConstruct_Prototype()
 	if (FAILED(CLandScape::NativeConstruct_Prototype()))
 		return E_FAIL;
 
+	m_iObectTag = (_uint)GAMEOBJECT::POT;
+
 	return S_OK;
 }
 

@@ -1114,9 +1114,6 @@
     <Filter Include="03.System\07.Scenematic\01.Stage1\04. Shot 04\Cinema3_5">
       <UniqueIdentifier>{1960ad1b-84bd-4124-8821-6dd762fdac17}</UniqueIdentifier>
     </Filter>
-    <Filter Include="03.System\07.Scenematic\01.Stage1\04. Shot 04\Cinema3_6">
-      <UniqueIdentifier>{391dcb6c-27df-4ddc-9818-c679d8e7091d}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_Healer\State_Healer\Execution">
       <UniqueIdentifier>{fb49967b-287f-4d2f-8d18-791f8f1804ee}</UniqueIdentifier>
     </Filter>
@@ -1137,7 +1134,7 @@
     </Filter>
     <Filter Include="02.GameObject\96.Weapon\11.CinemaWeapon">
       <UniqueIdentifier>{23f1b595-3107-4b66-bb6b-199555507e33}</UniqueIdentifier>
-   </Filter>
+    </Filter>
     <Filter Include="02.GameObject\04.Effect\02.MeshEffect\01.EffectBossMesh">
       <UniqueIdentifier>{c754efa5-f05f-4f81-b1ef-15984349f16b}</UniqueIdentifier>
     </Filter>
@@ -1150,6 +1147,30 @@
     <Filter Include="02.GameObject\02.Map\05.Obstacle">
       <UniqueIdentifier>{39c78171-d0dc-4108-aad2-bed06c971f23}</UniqueIdentifier>
     </Filter>
+    <Filter Include="03.System\07.Scenematic\02.Stage2">
+      <UniqueIdentifier>{42bbd93c-9814-47a1-88bf-5d18bcda6f74}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.System\07.Scenematic\02.Stage2\00.Shot05">
+      <UniqueIdentifier>{5df2fd54-1254-4960-a2f2-2eca6f968ee4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.System\07.Scenematic\02.Stage2\00.Shot05\Cinema4-1">
+      <UniqueIdentifier>{94b42337-7959-4a14-8680-0637abf4e770}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.System\07.Scenematic\02.Stage2\00.Shot05\Cinema4-2">
+      <UniqueIdentifier>{6ccb870d-35bc-48c0-9dce-5116e4da1582}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.System\07.Scenematic\02.Stage2\00.Shot05\Cinema4-3">
+      <UniqueIdentifier>{a26fbf95-53a9-4d6e-b133-c0701f70f4b5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.System\07.Scenematic\02.Stage2\00.Shot05\Cinema4-4">
+      <UniqueIdentifier>{31250e4b-8267-472d-b277-b190822f2734}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.System\07.Scenematic\02.Stage2\00.Shot05\Cinema4-5">
+      <UniqueIdentifier>{6f4d7b3a-7e61-456a-bd7c-709a17a857fe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.System\07.Scenematic\02.Stage2\00.Shot05\Cinema4-6">
+      <UniqueIdentifier>{c8723d78-b6a2-4550-844c-a292633d04bf}</UniqueIdentifier>
+   </Filter>
     <Filter Include="02.GameObject\05.UI\07.DamageFont">
       <UniqueIdentifier>{0abfda8d-6202-4ded-a379-6fb07042a1ad}</UniqueIdentifier>
 	</Filter>
@@ -2373,9 +2394,6 @@
     <ClInclude Include="..\Headers\Cinema3_5.h">
       <Filter>03.System\07.Scenematic\01.Stage1\04. Shot 04\Cinema3_5</Filter>
     </ClInclude>
-    <ClInclude Include="..\Headers\Cinema3_6.h">
-      <Filter>03.System\07.Scenematic\01.Stage1\04. Shot 04\Cinema3_6</Filter>
-    </ClInclude>
     <ClInclude Include="..\Headers\UI_Blank_FKey.h">
       <Filter>02.GameObject\05.UI\01.UI_Ingame\02.UI_JumpNode\00.Blank</Filter>
     </ClInclude>
@@ -2504,6 +2522,24 @@
     </ClInclude>
     <ClInclude Include="..\Headers\MeshEffect_Jupiter.h">
       <Filter>02.GameObject\04.Effect\02.MeshEffect</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Cinema4_1.h">
+      <Filter>03.System\07.Scenematic\02.Stage2\00.Shot05\Cinema4-1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Cinema4_2.h">
+      <Filter>03.System\07.Scenematic\02.Stage2\00.Shot05\Cinema4-2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Cinema4_3.h">
+      <Filter>03.System\07.Scenematic\02.Stage2\00.Shot05\Cinema4-3</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Cinema4_4.h">
+      <Filter>03.System\07.Scenematic\02.Stage2\00.Shot05\Cinema4-4</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Cinema4_5.h">
+      <Filter>03.System\07.Scenematic\02.Stage2\00.Shot05\Cinema4-5</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Cinema4_6.h">
+      <Filter>03.System\07.Scenematic\02.Stage2\00.Shot05\Cinema4-6</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\DamageFont.h">
       <Filter>02.GameObject\05.UI\07.DamageFont</Filter>
@@ -3686,9 +3722,6 @@
     <ClCompile Include="..\Codes\Cinema3_5.cpp">
       <Filter>03.System\07.Scenematic\01.Stage1\04. Shot 04\Cinema3_5</Filter>
     </ClCompile>
-    <ClCompile Include="..\Codes\Cinema3_6.cpp">
-      <Filter>03.System\07.Scenematic\01.Stage1\04. Shot 04\Cinema3_6</Filter>
-    </ClCompile>
     <ClCompile Include="..\Codes\UI_Blank_FKey.cpp">
       <Filter>02.GameObject\05.UI\01.UI_Ingame\02.UI_JumpNode\00.Blank</Filter>
     </ClCompile>
@@ -3818,6 +3851,24 @@
     <ClCompile Include="..\Codes\MeshEffect_Jupiter.cpp">
       <Filter>02.GameObject\04.Effect\02.MeshEffect</Filter>
     </ClCompile>
+    <ClCompile Include="..\Codes\Cinema4_1.cpp">
+      <Filter>03.System\07.Scenematic\02.Stage2\00.Shot05\Cinema4-1</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Cinema4_2.cpp">
+      <Filter>03.System\07.Scenematic\02.Stage2\00.Shot05\Cinema4-2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Cinema4_3.cpp">
+      <Filter>03.System\07.Scenematic\02.Stage2\00.Shot05\Cinema4-3</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Cinema4_4.cpp">
+      <Filter>03.System\07.Scenematic\02.Stage2\00.Shot05\Cinema4-4</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Cinema4_5.cpp">
+      <Filter>03.System\07.Scenematic\02.Stage2\00.Shot05\Cinema4-5</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Cinema4_6.cpp">
+      <Filter>03.System\07.Scenematic\02.Stage2\00.Shot05\Cinema4-6</Filter>
+     </ClCompile>
     <ClCompile Include="..\Codes\DamageFont.cpp">
       <Filter>02.GameObject\05.UI\07.DamageFont</Filter>
     </ClCompile>

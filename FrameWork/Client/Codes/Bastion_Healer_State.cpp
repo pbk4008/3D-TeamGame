@@ -31,6 +31,9 @@ _int CBastion_Healer_State::Tick(const _double& _dDeltaTime)
 		return iProgress;
 	m_pOwner = static_cast<CMonster_Bastion_Healer*>(m_pMonster);
 
+	if (m_pOwner->get_LinkMonster())
+		m_pOwner->Check_LinkMonster();
+
 	/*m_bTargetOn = false;
 	m_bAttackOn = false;*/
 	//Check_Attack(_dDeltaTime);
@@ -40,23 +43,34 @@ _int CBastion_Healer_State::Tick(const _double& _dDeltaTime)
 	_float fDist = g_pObserver->Get_Dist(m_pTransform->Get_State(CTransform::STATE_POSITION));
 	if (!m_pOwner->get_Attack())
 	{
-		if (8.f >= fDist && 2.f <= fDist)
+		if (fDist < 15.f)
 		{
-			m_pOwner->set_Target(true);
-			m_pOwner->set_Attack(false);
+			if (8.f > fDist && 2.f < fDist)
+			{
+				m_pOwner->set_Link(false);
+				m_pOwner->set_Target(true);
+				m_pOwner->set_Attack(false);
+			}
+			else if (2.f >= fDist)
+			{
+				m_pOwner->set_Target(false);
+				m_pOwner->set_Link(false);
+				m_pOwner->set_Attack(true);
+			}
+			else if (8.f <= fDist)
+			{
+				m_pOwner->set_Link(true);
+				m_pOwner->set_Target(false);
+				m_pOwner->set_Attack(false);
+			}
 		}
-		else if (2.f >= fDist)
+		else
 		{
-			m_pOwner->set_Target(false);
-			m_pOwner->set_Attack(true);
-		}
-		else if (10.f <= fDist)
-		{
+			m_pOwner->set_Link(false);
 			m_pOwner->set_Target(false);
 			m_pOwner->set_Attack(false);
 		}
 	}
-		//m_bAttackOn = true;
 	if (FAILED(Check_State()))
 		return -1;
 
@@ -109,9 +123,6 @@ HRESULT CBastion_Healer_State::Render()
 HRESULT CBastion_Healer_State::EnterState()
 {
 	if (FAILED(__super::EnterState()))
-		return E_FAIL;
-
-	if (FAILED(m_pAnimator->Change_AnyEntryAnimation((_uint)CMonster_Bastion_Healer::ANIM_TYPE::A_IDLE)))
 		return E_FAIL;
 
 	return S_OK;
@@ -245,9 +256,33 @@ HRESULT CBastion_Healer_State::Check_State()
 	if (!m_pOwner->Get_Dead()&&!m_pOwner->Get_Groggy())
 	{
 		if (m_pOwner->get_Target())
-			m_pStateController->Change_State(L"Run");
+		{
+			if (!m_pOwner->get_LinkMonster())
+			{
+				m_pOwner->Link_Empty();
+				if (!m_pOwner->get_Empty())
+					m_pStateController->Change_State(L"Cast_Protect");
+				else
+					m_pStateController->Change_State(L"Run");
+			}
+			else
+				m_pStateController->Change_State(L"Run");
+		}
 		else if (m_pOwner->get_Attack())
 			m_pStateController->Change_State(L"Attack");
+		else if (m_pOwner->get_Link())
+		{
+			m_pOwner->Link_Empty();
+			if (!m_pOwner->get_Empty())//비어있지 않다
+			{
+				if(!m_pOwner->get_LinkMonster())
+					m_pStateController->Change_State(L"Cast_Protect");
+				else
+					m_pStateController->Change_State(L"Idle");
+			}
+			else
+				m_pStateController->Change_State(L"Idle");
+		}
 		else
 			m_pStateController->Change_State(L"Idle");
 	}

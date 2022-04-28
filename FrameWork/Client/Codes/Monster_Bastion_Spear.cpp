@@ -113,6 +113,7 @@ _int CMonster_Bastion_Spear::Tick(_double _dDeltaTime)
 	_int iProgress = __super::Tick(_dDeltaTime);
 	if (NO_EVENT != iProgress) 
 		return iProgress;
+	Check_NoDamage(_dDeltaTime);
 	m_pTransform->Set_Velocity(XMVectorZero());
 
 	/* State FSM Update */
@@ -226,7 +227,19 @@ HRESULT CMonster_Bastion_Spear::Render()
 	SCB desc;
 	ZeroMemory(&desc, sizeof(SCB));
 	wstring wstrCamTag = g_pGameInstance->Get_BaseCameraTag();
-	CActor::BindConstantBuffer(wstrCamTag, &desc);
+	RIM RimDesc;
+	ZeroMemory(&RimDesc, sizeof(RIM));
+
+	RimDesc.rimcol = _float3(0.f, 1.f, 1.f);
+	RimDesc.rimintensity = 5.f;
+	XMStoreFloat4(&RimDesc.camdir, XMVector3Normalize(m_pTransform->Get_State(CTransform::STATE_POSITION) - g_pGameInstance->Get_CamPosition(L"Camera_Silvermane")));
+
+	if (m_isNoDamage)
+		RimDesc.rimcheck = true;
+	else
+		RimDesc.rimcheck = false;
+
+	CActor::BindConstantBuffer(wstrCamTag, &desc, &RimDesc);
 	for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
 		m_pModel->Render(i, 0);
 
@@ -630,6 +643,9 @@ void CMonster_Bastion_Spear::Hit(CCollision& collision)
 {
 	if (!m_bDead)
 	{
+		if (m_isNoDamage)
+			return;
+
 		if (false == m_bFirstHit)
 		{
 			m_bFirstHit = true; //µü ÇÑ¹ø true·Î º¯°æÇØÁÜ

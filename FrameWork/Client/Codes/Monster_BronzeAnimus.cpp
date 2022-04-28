@@ -273,9 +273,9 @@ void CMonster_BronzeAnimus::Parry(const PARRYDESC& _tParryDesc)
 
 void CMonster_BronzeAnimus::Execution()
 {
-	/*CLevel* pLevel = g_pGameInstance->getCurrentLevelScene();
+	CLevel* pLevel = g_pGameInstance->getCurrentLevelScene();
 	if (g_pGameInstance->getCurrentLevel() == (_uint)SCENEID::SCENE_STAGE2)
-		static_cast<CStage2*>(pLevel)->Minus_MonsterCount();*/
+		static_cast<CStage2*>(pLevel)->Minus_MonsterCount();
 
 	Set_Dead();
 	Remove_Collider();

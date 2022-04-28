@@ -13,6 +13,7 @@ CActor::CActor()
 	, m_fGroggyGauge(0.f)
 	, m_fMaxGroggyGauge(0.f)
 	, m_bGroggy(false)
+	, m_fAccNoDamageTime(0.f)
 {
 }
 
@@ -26,6 +27,7 @@ CActor::CActor(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
 	, m_fGroggyGauge(0.f)
 	, m_fMaxGroggyGauge(0.f)
 	, m_bGroggy(false)
+	, m_fAccNoDamageTime(0.f)
 {
 }
 
@@ -39,6 +41,7 @@ CActor::CActor(const CActor& rhs)
 	, m_fGroggyGauge(rhs.m_fGroggyGauge)
 	, m_fMaxGroggyGauge(rhs.m_fMaxGroggyGauge)
 	, m_bGroggy(rhs.m_bGroggy)
+	, m_fAccNoDamageTime(0.f)
 {
 }
 
@@ -265,6 +268,19 @@ void CActor::Active_Effect_Target(_uint iEffectIndex, _matrix TargetMat)
 		pEffect->Get_Transform()->Set_WorldMatrix(TargetMat);
 		pEffect->setActive(true);
 		pEffect->Set_Reset(true);
+	}
+}
+
+void CActor::Check_NoDamage(_double dDeltaTime)
+{
+	if (m_isNoDamage)
+	{
+		m_fAccNoDamageTime += (_float)dDeltaTime;
+		if (m_fAccNoDamageTime > 8.f)
+		{
+			m_fAccNoDamageTime = 0.f;
+			m_isNoDamage = false;
+		}
 	}
 }
 

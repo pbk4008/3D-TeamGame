@@ -288,7 +288,6 @@ HRESULT CMeteor::Ready_Component()
 	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_SphereCollider", L"Collider", (CComponent**)&m_pCollider, &tColliderDesc)))
 		return E_FAIL;
 
-	m_pCollider->setShapeLayer((_uint)ELayer::Pot);
 	m_pCollider->Remove_ActorFromScene();
 	
 	return S_OK;
