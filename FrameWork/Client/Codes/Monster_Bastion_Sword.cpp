@@ -171,7 +171,7 @@ _int CMonster_Bastion_Sword::LateTick(_double _dDeltaTime)
 HRESULT CMonster_Bastion_Sword::Render()
 {
 	if (m_bdissolve == true)
-		CActor::DissolveOn(0.5f);
+		CActor::DissolveOn(0.7f);
 
 	if (FAILED(m_pModel->SetUp_ValueOnShader("g_bdissolve", &m_bdissolve, sizeof(_bool)))) MSGBOX("Failed to Apply dissolvetime");
 

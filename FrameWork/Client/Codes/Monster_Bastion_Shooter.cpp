@@ -152,7 +152,7 @@ _int CMonster_Bastion_Shooter::LateTick(_double _dDeltaTime)
 HRESULT CMonster_Bastion_Shooter::Render()
 {
 	if (m_bdissolve == true)
-		CActor::DissolveOn(1.2f);
+		CActor::DissolveOn(0.7f);
 
 	if (FAILED(m_pModel->SetUp_ValueOnShader("g_bdissolve", &m_bdissolve, sizeof(_bool)))) MSGBOX("Failed to Apply dissolvetime");
 

@@ -42,8 +42,7 @@ _int CCinemaWeapon::Tick(_double _dDeltaTime)
 
 _int CCinemaWeapon::LateTick(_double _dDeltaTime)
 {
-	m_pRenderer->Add_RenderGroup(CRenderer::RENDER_NONALPHA, this);
-
+	//m_pRenderer->Add_RenderGroup(CRenderer::RENDER_NONALPHA, this);
 	return _int();
 }
 

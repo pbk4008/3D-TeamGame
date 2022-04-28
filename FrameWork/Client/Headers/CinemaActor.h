@@ -2,6 +2,10 @@
 #ifndef __CINEMA_ACTOR_H__
 #define __CINEMA_ACTOR_H__
 
+BEGIN(Engine)
+class CTexture;
+END
+
 BEGIN(Client)
 class CCinemaActor final :public CActor
 {
@@ -33,7 +37,9 @@ private:
 	virtual void Free()override;
 private:
 	CAnimationController* m_pController;
-	_uint m_iActorTag;
+	_uint		m_iActorTag;
+
+	CTexture*	m_PhFSDTexture = nullptr;
 };
 END
 #endif

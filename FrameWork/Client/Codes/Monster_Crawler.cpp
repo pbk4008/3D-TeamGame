@@ -169,7 +169,7 @@ _int CMonster_Crawler::Tick(_double _dDeltaTime)
 	if (false == m_bUIShow)
 		m_pPanel->Set_Show(false);
 
-	CActor::LightOnOff(m_pTransform->Get_State(CTransform::STATE_POSITION), XMVectorSet(0.0f, 0.0f, 1.f,1.f), 4.f);
+	CActor::LightOnOff(m_pTransform->Get_State(CTransform::STATE_POSITION), XMVectorSet(0.0f, 1.0f, 0.f,1.f), 4.f);
 
 	return 0;
 }
@@ -194,7 +194,7 @@ _int CMonster_Crawler::LateTick(_double _dDeltaTime)
 HRESULT CMonster_Crawler::Render()
 {
 	if (m_bdissolve == true)
-		CActor::DissolveOn(1.2f);
+		CActor::DissolveOn(0.7f);
 
 	if (FAILED(m_pModel->SetUp_ValueOnShader("g_bdissolve", &m_bdissolve, sizeof(_bool)))) MSGBOX("Failed to Apply dissolvetime");
 

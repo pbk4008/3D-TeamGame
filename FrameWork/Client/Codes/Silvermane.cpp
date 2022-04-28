@@ -233,7 +233,7 @@ HRESULT CSilvermane::NativeConstruct(const _uint _iSceneID, void* _pArg)
 	m_pRenderer->SetRenderButton(CRenderer::PIXEL, true);
 	m_pRenderer->SetRenderButton(CRenderer::PBR, true);
 	m_pRenderer->SetRenderButton(CRenderer::HDR, true);
-	m_pRenderer->SetRenderButton(CRenderer::MOTIONTRAIL, true);
+	m_pRenderer->SetRenderButton(CRenderer::OUTLINE, true);
 	//m_pRenderer->SetRenderButton(CRenderer::SHADOW, true);
 
 	m_pTransform->Set_State(CTransform::STATE_POSITION, XMVectorSet(0.f,5.f, 10.f, 1.f));

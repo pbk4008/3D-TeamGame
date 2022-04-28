@@ -237,7 +237,7 @@ _int CMonster_Bastion_Healer::LateTick(_double _dDeltaTime)
 HRESULT CMonster_Bastion_Healer::Render()
 {
 	if (m_bdissolve == true)
-		CActor::DissolveOn(1.2f);
+		CActor::DissolveOn(0.7f);
 
 	wstring wstrCamTag = g_pGameInstance->Get_BaseCameraTag();
 
