@@ -191,6 +191,16 @@ void CAnimator::Add_AnimFrame(_uint iTag, _uint iFrame)
 	pAnimNode->Get_Animation()->Add_TrackAcc(iFrame);
 }
 
+void CAnimator::Reset_Animation(_uint iTag)
+{
+	CAnimNode* pAnimNode = Find_Animation(iTag);
+
+	if (!pAnimNode)
+		return;
+
+	pAnimNode->Get_Animation()->Reset_Animation();
+}
+
 
 const _uint CAnimator::Get_CurrentAnimNode()
 {
@@ -199,6 +209,8 @@ const _uint CAnimator::Get_CurrentAnimNode()
 
 	return m_pCulAnimNode->Get_Index();
 }
+
+
 
 CAnimation* CAnimator::Get_CurrentAnimation()
 {

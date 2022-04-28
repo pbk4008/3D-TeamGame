@@ -427,13 +427,13 @@ _int CStage1::Tick(_double TimeDelta)
 	//	pMonster->setActive(true);
 	//}
 
-	//if (g_pGameInstance->getkeyDown(DIK_NUMPAD3))
-	//{
-	//	CMonster_Bastion_Shooter* pMonster = nullptr;
-	//	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Test", L"Proto_GameObject_Monster_Bastion_Shooter", &fPos, (CGameObject**)&pMonster)))
-	//		return -1;
-	//	pMonster->setActive(true);
-	//}
+	/*if (g_pGameInstance->getkeyDown(DIK_NUMPAD3))
+	{
+		CMonster_Bastion_Shooter* pMonster = nullptr;
+		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Test", L"Proto_GameObject_Monster_Bastion_Shooter", &fPos, (CGameObject**)&pMonster)))
+			return -1;
+		pMonster->setActive(true);
+	}*/
 	// 
 	if (g_pGameInstance->getkeyDown(DIK_NUMPAD4))
 	{
@@ -450,18 +450,19 @@ _int CStage1::Tick(_double TimeDelta)
 	//	pMonster->setActive(true);
 	//}
 
-	//if (g_pGameInstance->getkeyDown(DIK_NUMPAD6))
-	//{
-	//	CMonster_Bastion_Spear* pMonster = nullptr;
-	//	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Test", L"Proto_GameObject_Monster_Bastion_Spear", &fPos, (CGameObject**)&pMonster)))
-	//		return -1;
-	//}
-	//if (g_pGameInstance->getkeyDown(DIK_NUMPAD7))
-	//{
-	//	CBoss_Bastion_Judicator* pMonster = nullptr;
-	//	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Test", L"Proto_GameObject_Boss_Bastion", &fPos, (CGameObject**)&pMonster)))
-	//		return -1;
-	//}
+	if (g_pGameInstance->getkeyDown(DIK_NUMPAD6))
+	{
+		CMonster_Bastion_Spear* pMonster = nullptr;
+		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Test", L"Proto_GameObject_Monster_Bastion_Spear", &fPos, (CGameObject**)&pMonster)))
+			return -1;
+		pMonster->setActive(true);
+	}
+	if (g_pGameInstance->getkeyDown(DIK_NUMPAD7))
+	{
+		CBoss_Bastion_Judicator* pMonster = nullptr;
+		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Test", L"Proto_GameObject_Boss_Bastion", &fPos, (CGameObject**)&pMonster)))
+			return -1;
+	}
 	//if (g_pGameInstance->getkeyDown(DIK_NUMPAD8))
 	//{
 	//	CMonster_BronzeAnimus* pMonster = nullptr;
@@ -486,19 +487,20 @@ _int CStage1::Tick(_double TimeDelta)
 
 	//	m_pScenemaManager->Tick(TimeDelta);
 	//}
-	//if (m_pScenemaManager)
-	//{
-	//	m_pScenemaManager->Tick(TimeDelta);
-	//	if (m_pScenemaManager->Get_EventCinema((_uint)CINEMA_INDEX::CINEMA2_4))
-	//	{
-	//		CBoss_Bastion_Judicator* pBoss = (CBoss_Bastion_Judicator*)g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Layer_Boss")->front();
-	//		if (nullptr != pBoss)
-	//		{
-	//			pBoss->setActive(true);
-	//			m_pScenemaManager->ResetCinema();
-	//		}
-	//	}
-	//}
+	if (m_pScenemaManager)
+	{
+		m_pScenemaManager->Tick(TimeDelta);
+
+		if (m_pScenemaManager->Get_EventCinema((_uint)CINEMA_INDEX::CINEMA2_4))
+		{
+			CBoss_Bastion_Judicator* pBoss = (CBoss_Bastion_Judicator*)g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Layer_Boss")->front();
+			if (nullptr != pBoss)
+			{
+				pBoss->setActive(true);
+				m_pScenemaManager->ResetCinema();
+			}
+		}
+	}
 
 
 	/*for Meteor*/

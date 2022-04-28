@@ -114,6 +114,7 @@ _int CMonster_EarthAberrant::Tick(_double _dDeltaTime)
 	{
 		return -1;
 	}
+	Check_NoDamage(_dDeltaTime);
 	//string str;
 	//str.assign(m_pStateController->Get_CurStateTag().begin(), m_pStateController->Get_CurStateTag().end());
 	//cout << str << endl;
@@ -259,6 +260,19 @@ HRESULT CMonster_EarthAberrant::Render()
 	if (FAILED(m_pModel->SetUp_ValueOnShader("g_bdissolve", &m_bdissolve, sizeof(_bool)))) MSGBOX("Failed to Apply dissolvetime");
 
 	wstring wstrCamTag = g_pGameInstance->Get_BaseCameraTag();
+
+	RIM RimDesc;
+	ZeroMemory(&RimDesc, sizeof(RIM));
+
+	RimDesc.rimcol = _float3(0.f, 1.f, 1.f);
+	RimDesc.rimintensity = 5.f;
+	XMStoreFloat4(&RimDesc.camdir, XMVector3Normalize(m_pTransform->Get_State(CTransform::STATE_POSITION) - g_pGameInstance->Get_CamPosition(L"Camera_Silvermane")));
+
+	if (m_isNoDamage)
+		RimDesc.rimcheck = true;
+	else
+		RimDesc.rimcheck = false;
+
 	for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
 	{
 		SCB desc;
@@ -268,11 +282,11 @@ HRESULT CMonster_EarthAberrant::Render()
 		case 0: // crystal
 			desc.color = _float4(0.831f, 0.43f, 0.643f, 1.f);
 			desc.empower = 0.7f;
-			CActor::BindConstantBuffer(wstrCamTag, &desc);
+			CActor::BindConstantBuffer(wstrCamTag, &desc,&RimDesc);
 			m_pModel->Render(i, 5);
 			break;
 		case 1: // body
-			CActor::BindConstantBuffer(wstrCamTag, &desc);
+			CActor::BindConstantBuffer(wstrCamTag, &desc,&RimDesc);
 			m_pModel->Render(i, 4);
 			break;
 		}
@@ -657,6 +671,9 @@ void CMonster_EarthAberrant::OnTriggerExit(CCollision& collision)
 void CMonster_EarthAberrant::Hit(const ATTACKDESC& _tAttackDesc)
 {
 	if (m_bDead || 0.f >= m_fCurrentHp)
+		return;
+
+	if (m_isNoDamage)
 		return;
 
 	m_pPanel->Set_Show(true);

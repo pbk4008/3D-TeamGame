@@ -105,6 +105,7 @@ _int CMonster_Bastion_Sword::Tick(_double _dDeltaTime)
 	{
 		return -1;
 	}
+	Check_NoDamage(_dDeltaTime);
 	m_pTransform->Set_Velocity(XMVectorZero());
 
 	m_pTransform->Fall(_dDeltaTime);
@@ -174,20 +175,34 @@ HRESULT CMonster_Bastion_Sword::Render()
 
 	wstring wstrCamTag = g_pGameInstance->Get_BaseCameraTag();
 	SCB desc;
+
+	RIM RimDesc;
+	ZeroMemory(&RimDesc, sizeof(RIM));
+
+	RimDesc.rimcol = _float3(0.f, 1.f, 1.f);
+	RimDesc.rimintensity = 5.f;
+	XMStoreFloat4(&RimDesc.camdir, XMVector3Normalize(m_pTransform->Get_State(CTransform::STATE_POSITION)- g_pGameInstance->Get_CamPosition(L"Camera_Silvermane")));
+
+
+	if (m_isNoDamage)
+		RimDesc.rimcheck = true;
+	else
+		RimDesc.rimcheck = false;
+
 	for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
 	{
 		switch (i)
 		{
 		case 2:
 			ZeroMemory(&desc, sizeof(SCB));
-			CActor::BindConstantBuffer(wstrCamTag, &desc);
+			CActor::BindConstantBuffer(wstrCamTag, &desc,&RimDesc);
 			if (FAILED(m_pModel->Render(i, 1))) MSGBOX("Failed To Rendering Shooter");
 			break;
 		default:
 			ZeroMemory(&desc, sizeof(SCB));
 			desc.color = _float4(1.f, 1.f, 0.f, 1.f);
 			desc.empower = 1.f;
-			CActor::BindConstantBuffer(wstrCamTag, &desc);
+			CActor::BindConstantBuffer(wstrCamTag, &desc, &RimDesc);
 			if (FAILED(m_pModel->Render(i, 0))) MSGBOX("Failed To Rendering Shooter");
 			break;
 		}
@@ -408,7 +423,7 @@ HRESULT CMonster_Bastion_Sword::Set_Animation_FSM()
 	pAnim = m_pModel->Get_Animation("Hit1");
 	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::HIT1, (_uint)ANIM_TYPE::HEAD, pAnim, true, false, false, ERootOption::XYZ)))
 		return E_FAIL;
-	pAnim = m_pModel->Get_Animation("Hit2");
+	/*pAnim = m_pModel->Get_Animation("Hit2");
 	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::HIT2, (_uint)ANIM_TYPE::HEAD, pAnim, true, false, false, ERootOption::XYZ)))
 		return E_FAIL;
 	pAnim = m_pModel->Get_Animation("Hit4");
@@ -416,7 +431,7 @@ HRESULT CMonster_Bastion_Sword::Set_Animation_FSM()
 		return E_FAIL;
 	pAnim = m_pModel->Get_Animation("Hit5");
 	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::HIT4, (_uint)ANIM_TYPE::HEAD, pAnim, true, false, false, ERootOption::XYZ)))
-		return E_FAIL;
+		return E_FAIL;*/
 	pAnim = m_pModel->Get_Animation("Death");
 	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::DEATH, (_uint)ANIM_TYPE::HIT1, pAnim, true, false, false, ERootOption::XYZ)))
 		return E_FAIL;
@@ -433,68 +448,68 @@ HRESULT CMonster_Bastion_Sword::Set_Animation_FSM()
 		return E_FAIL;
 
 	///////////////////Paring
-	pAnim = m_pModel->Get_Animation("Paring");
-	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::PARING, (_uint)ANIM_TYPE::HEAD, pAnim, true, false, false, ERootOption::XYZ)))
-		return E_FAIL;
+	//pAnim = m_pModel->Get_Animation("Paring");
+	//if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::PARING, (_uint)ANIM_TYPE::HEAD, pAnim, true, false, false, ERootOption::XYZ)))
+	//	return E_FAIL;
 	pAnim = m_pModel->Get_Animation("Excution");
 	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::EXCUTION, (_uint)ANIM_TYPE::HEAD, pAnim, true, true, false, ERootOption::XYZ)))
 		return E_FAIL;
 
 	////////////////Walk_BackWard
-	pAnim = m_pModel->Get_Animation("Walk_BackWard_Start");
-	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::BACKWARD_START, (_uint)ANIM_TYPE::HEAD, pAnim, true, false, false, ERootOption::XYZ)))
-		return E_FAIL;
-	pAnim = m_pModel->Get_Animation("Walk_BackWard_Loop");
-	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::BACKWARD_LOOP, (_uint)ANIM_TYPE::BACKWARD_START, pAnim, true, false, true, ERootOption::XYZ)))
-		return E_FAIL;
-	pAnim = m_pModel->Get_Animation("Walk_BackWard_Stop");
-	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::BACKWARD_END, (_uint)ANIM_TYPE::BACKWARD_LOOP, pAnim, true, false, false, ERootOption::XYZ)))
-		return E_FAIL;
+	//pAnim = m_pModel->Get_Animation("Walk_BackWard_Start");
+	//if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::BACKWARD_START, (_uint)ANIM_TYPE::HEAD, pAnim, true, false, false, ERootOption::XYZ)))
+	//	return E_FAIL;
+	//pAnim = m_pModel->Get_Animation("Walk_BackWard_Loop");
+	//if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::BACKWARD_LOOP, (_uint)ANIM_TYPE::BACKWARD_START, pAnim, true, false, true, ERootOption::XYZ)))
+	//	return E_FAIL;
+	//pAnim = m_pModel->Get_Animation("Walk_BackWard_Stop");
+	//if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::BACKWARD_END, (_uint)ANIM_TYPE::BACKWARD_LOOP, pAnim, true, false, false, ERootOption::XYZ)))
+	//	return E_FAIL;
 
-	//////////////Walk_Forward
-	pAnim = m_pModel->Get_Animation("Walk_Forward_Start");
-	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::FORWARD_START, (_uint)ANIM_TYPE::HEAD, pAnim, true, false, false, ERootOption::XYZ)))
-		return E_FAIL;
-	pAnim = m_pModel->Get_Animation("Walk_Forward_Loop");
-	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::FORWARD_LOOP, (_uint)ANIM_TYPE::FORWARD_START, pAnim, true, false, true, ERootOption::XYZ)))
-		return E_FAIL;
-	pAnim = m_pModel->Get_Animation("Walk_Forward_Stop");
-	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::FORWARD_END, (_uint)ANIM_TYPE::FORWARD_LOOP, pAnim, true, false, false, ERootOption::XYZ)))
-		return E_FAIL;
+	////////////////Walk_Forward
+	//pAnim = m_pModel->Get_Animation("Walk_Forward_Start");
+	//if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::FORWARD_START, (_uint)ANIM_TYPE::HEAD, pAnim, true, false, false, ERootOption::XYZ)))
+	//	return E_FAIL;
+	//pAnim = m_pModel->Get_Animation("Walk_Forward_Loop");
+	//if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::FORWARD_LOOP, (_uint)ANIM_TYPE::FORWARD_START, pAnim, true, false, true, ERootOption::XYZ)))
+	//	return E_FAIL;
+	//pAnim = m_pModel->Get_Animation("Walk_Forward_Stop");
+	//if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::FORWARD_END, (_uint)ANIM_TYPE::FORWARD_LOOP, pAnim, true, false, false, ERootOption::XYZ)))
+	//	return E_FAIL;
 
-	//////////////Walk_Left
-	pAnim = m_pModel->Get_Animation("Walk_Left_Start");
-	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::LEFTWALK_START, (_uint)ANIM_TYPE::HEAD, pAnim, true, false, false, ERootOption::XYZ)))
-		return E_FAIL;
-	pAnim = m_pModel->Get_Animation("Walk_Left_Loop");
-	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::LEFTWALK_LOOP, (_uint)ANIM_TYPE::LEFTWALK_START, pAnim, true, false, true, ERootOption::XYZ)))
-		return E_FAIL;
-	pAnim = m_pModel->Get_Animation("Walk_Forward_Stop");
-	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::LEFTWALK_END, (_uint)ANIM_TYPE::LEFTWALK_LOOP, pAnim, true, false, false, ERootOption::XYZ)))
-		return E_FAIL;
+	////////////////Walk_Left
+	//pAnim = m_pModel->Get_Animation("Walk_Left_Start");
+	//if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::LEFTWALK_START, (_uint)ANIM_TYPE::HEAD, pAnim, true, false, false, ERootOption::XYZ)))
+	//	return E_FAIL;
+	//pAnim = m_pModel->Get_Animation("Walk_Left_Loop");
+	//if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::LEFTWALK_LOOP, (_uint)ANIM_TYPE::LEFTWALK_START, pAnim, true, false, true, ERootOption::XYZ)))
+	//	return E_FAIL;
+	//pAnim = m_pModel->Get_Animation("Walk_Forward_Stop");
+	//if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::LEFTWALK_END, (_uint)ANIM_TYPE::LEFTWALK_LOOP, pAnim, true, false, false, ERootOption::XYZ)))
+	//	return E_FAIL;
 
-	///////////////Walk_Right
-	pAnim = m_pModel->Get_Animation("Walk_Right_Start");
-	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::RIGHTWALK_START, (_uint)ANIM_TYPE::HEAD, pAnim, true, true, false, ERootOption::XYZ)))
-		return E_FAIL;
-	pAnim = m_pModel->Get_Animation("Walk_Right_Loop");
-	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::RIGHTWALK_LOOP, (_uint)ANIM_TYPE::RIGHTWALK_START, pAnim, true, true, false, ERootOption::XYZ)))
-		return E_FAIL;
-	pAnim = m_pModel->Get_Animation("Walk_Right_Stop");
-	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::RIGHTWALK_END, (_uint)ANIM_TYPE::RIGHTWALK_LOOP, pAnim, true, true, false, ERootOption::XYZ)))
-		return E_FAIL;
+	/////////////////Walk_Right
+	//pAnim = m_pModel->Get_Animation("Walk_Right_Start");
+	//if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::RIGHTWALK_START, (_uint)ANIM_TYPE::HEAD, pAnim, true, true, false, ERootOption::XYZ)))
+	//	return E_FAIL;
+	//pAnim = m_pModel->Get_Animation("Walk_Right_Loop");
+	//if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::RIGHTWALK_LOOP, (_uint)ANIM_TYPE::RIGHTWALK_START, pAnim, true, true, false, ERootOption::XYZ)))
+	//	return E_FAIL;
+	//pAnim = m_pModel->Get_Animation("Walk_Right_Stop");
+	//if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::RIGHTWALK_END, (_uint)ANIM_TYPE::RIGHTWALK_LOOP, pAnim, true, true, false, ERootOption::XYZ)))
+	//	return E_FAIL;
 
-	pAnim = m_pModel->Get_Animation("Turn");
-	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::TURN, (_uint)ANIM_TYPE::HEAD, pAnim, true, false, false, ERootOption::XYZ)))
-		return E_FAIL;
+	//pAnim = m_pModel->Get_Animation("Turn");
+	//if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::TURN, (_uint)ANIM_TYPE::HEAD, pAnim, true, false, false, ERootOption::XYZ)))
+	//	return E_FAIL;
 
 	//애니메이션 연결(연결 당할 애, 연결할 애, 쌍방으로 연결할지 안할지)
-	if (FAILED(m_pAnimator->Connect_Animation((_uint)ANIM_TYPE::DEATH, (_uint)ANIM_TYPE::HIT2, false)))
+	/*if (FAILED(m_pAnimator->Connect_Animation((_uint)ANIM_TYPE::DEATH, (_uint)ANIM_TYPE::HIT2, false)))
 		return E_FAIL;
 	if (FAILED(m_pAnimator->Connect_Animation((_uint)ANIM_TYPE::DEATH, (_uint)ANIM_TYPE::HIT3, false)))
 		return E_FAIL;
 	if (FAILED(m_pAnimator->Connect_Animation((_uint)ANIM_TYPE::DEATH, (_uint)ANIM_TYPE::HIT4, false)))
-		return E_FAIL;
+		return E_FAIL;*/
 
 	//자동으로 돌릴 애들(끝나는애, 끝나고 시작할 애)
 	m_pAnimator->Set_UpAutoChangeAnimation((_uint)ANIM_TYPE::RUN_START, (_uint)ANIM_TYPE::RUN_LOOP);
@@ -508,31 +523,31 @@ HRESULT CMonster_Bastion_Sword::Set_Animation_FSM()
 	m_pAnimator->Set_UpAutoChangeAnimation((_uint)ANIM_TYPE::ATTACK_DOUBLE, (_uint)ANIM_TYPE::IDLE);
 
 	m_pAnimator->Set_UpAutoChangeAnimation((_uint)ANIM_TYPE::HIT1, (_uint)ANIM_TYPE::IDLE);
-	m_pAnimator->Set_UpAutoChangeAnimation((_uint)ANIM_TYPE::HIT2, (_uint)ANIM_TYPE::IDLE);
+	/*m_pAnimator->Set_UpAutoChangeAnimation((_uint)ANIM_TYPE::HIT2, (_uint)ANIM_TYPE::IDLE);
 	m_pAnimator->Set_UpAutoChangeAnimation((_uint)ANIM_TYPE::HIT3, (_uint)ANIM_TYPE::IDLE);
-	m_pAnimator->Set_UpAutoChangeAnimation((_uint)ANIM_TYPE::HIT4, (_uint)ANIM_TYPE::IDLE);
+	m_pAnimator->Set_UpAutoChangeAnimation((_uint)ANIM_TYPE::HIT4, (_uint)ANIM_TYPE::IDLE);*/
 	
 	m_pAnimator->Set_UpAutoChangeAnimation((_uint)ANIM_TYPE::GROGGY_START, (_uint)ANIM_TYPE::GROGGY_LOOP);
 	m_pAnimator->Set_UpAutoChangeAnimation((_uint)ANIM_TYPE::GROGGY_LOOP, (_uint)ANIM_TYPE::GROGGY_END);
 	m_pAnimator->Set_UpAutoChangeAnimation((_uint)ANIM_TYPE::GROGGY_END, (_uint)ANIM_TYPE::IDLE);
 	
-	m_pAnimator->Set_UpAutoChangeAnimation((_uint)ANIM_TYPE::BACKWARD_START, (_uint)ANIM_TYPE::BACKWARD_LOOP);
-	m_pAnimator->Set_UpAutoChangeAnimation((_uint)ANIM_TYPE::BACKWARD_LOOP, (_uint)ANIM_TYPE::BACKWARD_END);
-	m_pAnimator->Set_UpAutoChangeAnimation((_uint)ANIM_TYPE::BACKWARD_END, (_uint)ANIM_TYPE::IDLE);
+	//m_pAnimator->Set_UpAutoChangeAnimation((_uint)ANIM_TYPE::BACKWARD_START, (_uint)ANIM_TYPE::BACKWARD_LOOP);
+	//m_pAnimator->Set_UpAutoChangeAnimation((_uint)ANIM_TYPE::BACKWARD_LOOP, (_uint)ANIM_TYPE::BACKWARD_END);
+	//m_pAnimator->Set_UpAutoChangeAnimation((_uint)ANIM_TYPE::BACKWARD_END, (_uint)ANIM_TYPE::IDLE);
 
-	m_pAnimator->Set_UpAutoChangeAnimation((_uint)ANIM_TYPE::FORWARD_START, (_uint)ANIM_TYPE::FORWARD_LOOP);
-	m_pAnimator->Set_UpAutoChangeAnimation((_uint)ANIM_TYPE::FORWARD_LOOP, (_uint)ANIM_TYPE::FORWARD_END);
-	m_pAnimator->Set_UpAutoChangeAnimation((_uint)ANIM_TYPE::FORWARD_END, (_uint)ANIM_TYPE::IDLE);
+	//m_pAnimator->Set_UpAutoChangeAnimation((_uint)ANIM_TYPE::FORWARD_START, (_uint)ANIM_TYPE::FORWARD_LOOP);
+	//m_pAnimator->Set_UpAutoChangeAnimation((_uint)ANIM_TYPE::FORWARD_LOOP, (_uint)ANIM_TYPE::FORWARD_END);
+	//m_pAnimator->Set_UpAutoChangeAnimation((_uint)ANIM_TYPE::FORWARD_END, (_uint)ANIM_TYPE::IDLE);
 
-	m_pAnimator->Set_UpAutoChangeAnimation((_uint)ANIM_TYPE::LEFTWALK_START, (_uint)ANIM_TYPE::LEFTWALK_LOOP);
-	m_pAnimator->Set_UpAutoChangeAnimation((_uint)ANIM_TYPE::LEFTWALK_LOOP, (_uint)ANIM_TYPE::LEFTWALK_END);
-	m_pAnimator->Set_UpAutoChangeAnimation((_uint)ANIM_TYPE::LEFTWALK_END, (_uint)ANIM_TYPE::IDLE);
+	//m_pAnimator->Set_UpAutoChangeAnimation((_uint)ANIM_TYPE::LEFTWALK_START, (_uint)ANIM_TYPE::LEFTWALK_LOOP);
+	//m_pAnimator->Set_UpAutoChangeAnimation((_uint)ANIM_TYPE::LEFTWALK_LOOP, (_uint)ANIM_TYPE::LEFTWALK_END);
+	//m_pAnimator->Set_UpAutoChangeAnimation((_uint)ANIM_TYPE::LEFTWALK_END, (_uint)ANIM_TYPE::IDLE);
 
-	m_pAnimator->Set_UpAutoChangeAnimation((_uint)ANIM_TYPE::RIGHTWALK_START, (_uint)ANIM_TYPE::RIGHTWALK_LOOP);
-	m_pAnimator->Set_UpAutoChangeAnimation((_uint)ANIM_TYPE::RIGHTWALK_LOOP, (_uint)ANIM_TYPE::RIGHTWALK_END);
-	m_pAnimator->Set_UpAutoChangeAnimation((_uint)ANIM_TYPE::RIGHTWALK_END, (_uint)ANIM_TYPE::IDLE);
-	
-	m_pAnimator->Set_UpAutoChangeAnimation((_uint)ANIM_TYPE::TURN, (_uint)ANIM_TYPE::IDLE);
+	//m_pAnimator->Set_UpAutoChangeAnimation((_uint)ANIM_TYPE::RIGHTWALK_START, (_uint)ANIM_TYPE::RIGHTWALK_LOOP);
+	//m_pAnimator->Set_UpAutoChangeAnimation((_uint)ANIM_TYPE::RIGHTWALK_LOOP, (_uint)ANIM_TYPE::RIGHTWALK_END);
+	//m_pAnimator->Set_UpAutoChangeAnimation((_uint)ANIM_TYPE::RIGHTWALK_END, (_uint)ANIM_TYPE::IDLE);
+	//
+	//m_pAnimator->Set_UpAutoChangeAnimation((_uint)ANIM_TYPE::TURN, (_uint)ANIM_TYPE::IDLE);
 
 	//언제든지 바꿀 수 있는애들 생성
 	m_pAnimator->Insert_AnyEntryAnimation((_uint)ANIM_TYPE::RUN_START);
@@ -542,22 +557,22 @@ HRESULT CMonster_Bastion_Sword::Set_Animation_FSM()
 	m_pAnimator->Insert_AnyEntryAnimation((_uint)ANIM_TYPE::ATTACK_SINGLE);
 
 	m_pAnimator->Insert_AnyEntryAnimation((_uint)ANIM_TYPE::HIT1);
-	m_pAnimator->Insert_AnyEntryAnimation((_uint)ANIM_TYPE::HIT2);
-	m_pAnimator->Insert_AnyEntryAnimation((_uint)ANIM_TYPE::HIT3);
-	m_pAnimator->Insert_AnyEntryAnimation((_uint)ANIM_TYPE::HIT4);
+	//m_pAnimator->Insert_AnyEntryAnimation((_uint)ANIM_TYPE::HIT2);
+	//m_pAnimator->Insert_AnyEntryAnimation((_uint)ANIM_TYPE::HIT3);
+	//m_pAnimator->Insert_AnyEntryAnimation((_uint)ANIM_TYPE::HIT4);
 	m_pAnimator->Insert_AnyEntryAnimation((_uint)ANIM_TYPE::DEATH);
 	
 
 	m_pAnimator->Insert_AnyEntryAnimation((_uint)ANIM_TYPE::GROGGY_START);
 
-	m_pAnimator->Insert_AnyEntryAnimation((_uint)ANIM_TYPE::PARING);
+	//m_pAnimator->Insert_AnyEntryAnimation((_uint)ANIM_TYPE::PARING);
 
-	m_pAnimator->Insert_AnyEntryAnimation((_uint)ANIM_TYPE::BACKWARD_START);
-	m_pAnimator->Insert_AnyEntryAnimation((_uint)ANIM_TYPE::FORWARD_START);
-	m_pAnimator->Insert_AnyEntryAnimation((_uint)ANIM_TYPE::LEFTWALK_START);
-	m_pAnimator->Insert_AnyEntryAnimation((_uint)ANIM_TYPE::RIGHTWALK_START);
+	//m_pAnimator->Insert_AnyEntryAnimation((_uint)ANIM_TYPE::BACKWARD_START);
+	//m_pAnimator->Insert_AnyEntryAnimation((_uint)ANIM_TYPE::FORWARD_START);
+	//m_pAnimator->Insert_AnyEntryAnimation((_uint)ANIM_TYPE::LEFTWALK_START);
+	//m_pAnimator->Insert_AnyEntryAnimation((_uint)ANIM_TYPE::RIGHTWALK_START);
 
-	m_pAnimator->Insert_AnyEntryAnimation((_uint)ANIM_TYPE::TURN);
+	//m_pAnimator->Insert_AnyEntryAnimation((_uint)ANIM_TYPE::TURN);
 	m_pAnimator->Insert_AnyEntryAnimation((_uint)ANIM_TYPE::EXCUTION);
 
 
@@ -616,17 +631,17 @@ HRESULT CMonster_Bastion_Sword::Set_State_FSM()
 	if (FAILED(m_pStateController->Add_State(L"Groggy", CBastion_Sword_Groggy::Create(m_pDevice, m_pDeviceContext, &tActorDesc))))
 		return E_FAIL;
 
-	lstrcpy(tFSMDesc.pName, L"Paring");
-	if (FAILED(m_pStateController->Add_State(L"Paring", CBastion_Sword_Paring::Create(m_pDevice, m_pDeviceContext, &tFSMDesc))))
-		return E_FAIL;
+	//lstrcpy(tFSMDesc.pName, L"Paring");
+	//if (FAILED(m_pStateController->Add_State(L"Paring", CBastion_Sword_Paring::Create(m_pDevice, m_pDeviceContext, &tFSMDesc))))
+	//	return E_FAIL;
 
-	lstrcpy(tFSMDesc.pName, L"Turn");
-	if (FAILED(m_pStateController->Add_State(L"Turn", CBastion_Sword_Turn::Create(m_pDevice, m_pDeviceContext, &tFSMDesc))))
-		return E_FAIL;
+	//lstrcpy(tFSMDesc.pName, L"Turn");
+	//if (FAILED(m_pStateController->Add_State(L"Turn", CBastion_Sword_Turn::Create(m_pDevice, m_pDeviceContext, &tFSMDesc))))
+	//	return E_FAIL;
 
-	lstrcpy(tMoveDesc.pName, L"Walk");
-	if (FAILED(m_pStateController->Add_State(L"Walk", CBastion_Sword_Walk::Create(m_pDevice, m_pDeviceContext, &tMoveDesc))))
-		return E_FAIL;
+	//lstrcpy(tMoveDesc.pName, L"Walk");
+	//if (FAILED(m_pStateController->Add_State(L"Walk", CBastion_Sword_Walk::Create(m_pDevice, m_pDeviceContext, &tMoveDesc))))
+	//	return E_FAIL;
 
 	lstrcpy(tActorDesc.pName, L"Excution");
 	if (FAILED(m_pStateController->Add_State(L"Excution", CBastion_Sword_Excution::Create(m_pDevice, m_pDeviceContext, &tActorDesc))))
@@ -754,6 +769,9 @@ _int CMonster_Bastion_Sword::Dead_Check()
 
 void CMonster_Bastion_Sword::Hit()
 {
+	if (m_isNoDamage)
+		return;
+
 	m_eHitType = ANIM_TYPE::HIT1;
 	CBastion_Sword_Hit::HITDATA tData;
 	ZeroMemory(&tData, sizeof(tData));
