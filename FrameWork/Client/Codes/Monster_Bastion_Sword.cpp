@@ -171,7 +171,7 @@ _int CMonster_Bastion_Sword::LateTick(_double _dDeltaTime)
 HRESULT CMonster_Bastion_Sword::Render()
 {
 	if (m_bdissolve == true)
-		CActor::DissolveOn(1.2f);
+		CActor::DissolveOn(0.5f);
 
 	if (FAILED(m_pModel->SetUp_ValueOnShader("g_bdissolve", &m_bdissolve, sizeof(_bool)))) MSGBOX("Failed to Apply dissolvetime");
 
@@ -609,7 +609,6 @@ _int CMonster_Bastion_Sword::Dead_Check()
 					CLevel* pLevel = g_pGameInstance->getCurrentLevelScene();
 					if (g_pGameInstance->getCurrentLevel() == (_uint)SCENEID::SCENE_STAGE1)
 						static_cast<CStage1*>(pLevel)->Minus_MonsterCount();
-
 					else if (g_pGameInstance->getCurrentLevel() == (_uint)SCENEID::SCENE_STAGE2)
 						static_cast<CStage2*>(pLevel)->Minus_MonsterCount();
 
@@ -633,7 +632,7 @@ _int CMonster_Bastion_Sword::Dead_Check()
 			{
 				m_bUIShow = false;
 				m_pPanel->Set_Show(false);
-				//m_pPanel->Set_UIRemove(false);
+				m_pPanel->Set_UIRemove(false);
 				m_bdissolve = true;
 
 				if (m_lifetime >= 1.f)
@@ -641,7 +640,6 @@ _int CMonster_Bastion_Sword::Dead_Check()
 					CLevel* pLevel = g_pGameInstance->getCurrentLevelScene();
 					if (g_pGameInstance->getCurrentLevel() == (_uint)SCENEID::SCENE_STAGE1)
 						static_cast<CStage1*>(pLevel)->Minus_MonsterCount();
-
 					else if (g_pGameInstance->getCurrentLevel() == (_uint)SCENEID::SCENE_STAGE2)
 						static_cast<CStage2*>(pLevel)->Minus_MonsterCount();
 

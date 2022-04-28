@@ -43,9 +43,9 @@ _int C1H_SwordAttackNormalR1_04Swap::Tick(const _double& _dDeltaTime)
 
 		// 라이트
 		m_pSilvermane->Set_LightCheck(true);
-		m_pSilvermane->Set_LightColor(XMVectorSet(1.f, 1.f, 1.f, 1.f));
-		m_pSilvermane->Set_LightOrigRange(5.f);
-		m_pSilvermane->Set_LightAmbientSpecular(_float4(0.3f, 0.3f, 0.3f, 1.f), _float4(0.2f, 0.2f, 0.2f, 1.f));
+		m_pSilvermane->Set_LightColor(XMVectorSet(1.f, 0.f, 0.f, 1.f));
+		m_pSilvermane->Set_LightOrigRange(10.f);
+		m_pSilvermane->Set_LightAmbientSpecular(_float4(0.8f, 0.8f, 0.8f, 1.f), _float4(0.5f, 0.5f, 0.5f, 1.f));
 
 		// 메쉬 이펙트
 		_vector svPos = m_pTransform->Get_State(CTransform::STATE_POSITION);
@@ -137,7 +137,6 @@ HRESULT C1H_SwordAttackNormalR1_04Swap::EnterState()
 	m_tShakeEvent2.tWaveZ.fAmplitude = 0.04f;
 	m_tShakeEvent2.tWaveZ.fFrequency = 1.f;
 	m_tShakeEvent2.tWaveZ.fAdditionalOffset = 1.f;
-
 
 	return S_OK;
 }

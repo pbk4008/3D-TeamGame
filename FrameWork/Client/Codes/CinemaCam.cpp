@@ -239,6 +239,7 @@ void CCinemaCam::Change_CurrentCam()
 	vecAnim[0]->Reset_Animation();
 
 	g_pGameInstance->Change_BaseCamera(m_pCamTag);
+	m_pRenderer->SetCameraTag(m_pCamTag);
 }
 
 CCinemaCam* CCinemaCam::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)

@@ -1170,10 +1170,10 @@
     </Filter>
     <Filter Include="03.System\07.Scenematic\02.Stage2\00.Shot05\Cinema4-6">
       <UniqueIdentifier>{c8723d78-b6a2-4550-844c-a292633d04bf}</UniqueIdentifier>
-   </Filter>
+    </Filter>
     <Filter Include="02.GameObject\05.UI\07.DamageFont">
       <UniqueIdentifier>{0abfda8d-6202-4ded-a379-6fb07042a1ad}</UniqueIdentifier>
-	</Filter>
+    </Filter>
     <Filter Include="02.GameObject\05.UI\05.Hud\04.EquippedWeapon">
       <UniqueIdentifier>{e7eb33d7-44fb-4063-9e70-97db396cb4ef}</UniqueIdentifier>
     </Filter>
@@ -2516,7 +2516,7 @@
     </ClInclude>
     <ClInclude Include="..\Headers\UI_EquippedWeapon_Slot_2.h">
       <Filter>02.GameObject\05.UI\05.Hud\04.EquippedWeapon\02.Slot_2</Filter>
-	</ClInclude>
+    </ClInclude>
     <ClInclude Include="..\Headers\MeshEffect_Razer.h">
       <Filter>02.GameObject\04.Effect\02.MeshEffect</Filter>
     </ClInclude>
@@ -3844,7 +3844,7 @@
     </ClCompile>
     <ClCompile Include="..\Codes\UI_EquippedWeapon_Slot_2.cpp">
       <Filter>02.GameObject\05.UI\05.Hud\04.EquippedWeapon\02.Slot_2</Filter>
-	</ClCompile>
+    </ClCompile>
     <ClCompile Include="..\Codes\MeshEffect_Razer.cpp">
       <Filter>02.GameObject\04.Effect\02.MeshEffect</Filter>
     </ClCompile>
@@ -3868,7 +3868,7 @@
     </ClCompile>
     <ClCompile Include="..\Codes\Cinema4_6.cpp">
       <Filter>03.System\07.Scenematic\02.Stage2\00.Shot05\Cinema4-6</Filter>
-     </ClCompile>
+    </ClCompile>
     <ClCompile Include="..\Codes\DamageFont.cpp">
       <Filter>02.GameObject\05.UI\07.DamageFont</Filter>
     </ClCompile>
@@ -4014,6 +4014,18 @@
       <Filter>100.ShaderFiles\04.UI</Filter>
     </FxCompile>
     <FxCompile Include="..\bin\ShaderFile\Shader_PotAnim.hlsl">
+      <Filter>100.ShaderFiles\01.Environment</Filter>
+    </FxCompile>
+    <FxCompile Include="..\bin\ShaderFile\Shader_ORM_Gold_Static.hlsl">
+      <Filter>100.ShaderFiles\01.Environment</Filter>
+    </FxCompile>
+    <FxCompile Include="..\bin\ShaderFile\Shader_OMER_Static.hlsl">
+      <Filter>100.ShaderFiles\01.Environment</Filter>
+    </FxCompile>
+    <FxCompile Include="..\bin\ShaderFile\Shader_ORME_Static.hlsl">
+      <Filter>100.ShaderFiles\01.Environment</Filter>
+    </FxCompile>
+    <FxCompile Include="..\bin\ShaderFile\Shader_Rock_Static.hlsl">
       <Filter>100.ShaderFiles\01.Environment</Filter>
     </FxCompile>
   </ItemGroup>

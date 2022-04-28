@@ -1141,6 +1141,9 @@ call Update_Client.bat</Command>
     <FxCompile Include="..\bin\ShaderFile\Shader_Metor.hlsl" />
     <FxCompile Include="..\bin\ShaderFile\Shader_MetorAnim.hlsl" />
     <FxCompile Include="..\bin\ShaderFile\Shader_Monster.hlsl" />
+    <FxCompile Include="..\bin\ShaderFile\Shader_OMER_Static.hlsl" />
+    <FxCompile Include="..\bin\ShaderFile\Shader_ORME_Static.hlsl" />
+    <FxCompile Include="..\bin\ShaderFile\Shader_ORM_Gold_Static.hlsl" />
     <FxCompile Include="..\bin\ShaderFile\Shader_Panel_UI.hlsl" />
     <FxCompile Include="..\bin\ShaderFile\Shader_Particle.hlsl" />
     <FxCompile Include="..\bin\ShaderFile\Shader_Particle_Alpha.hlsl" />
@@ -1148,6 +1151,7 @@ call Update_Client.bat</Command>
     <FxCompile Include="..\bin\ShaderFile\Shader_Potal.hlsl" />
     <FxCompile Include="..\bin\ShaderFile\Shader_PotAnim.hlsl" />
     <FxCompile Include="..\bin\ShaderFile\Shader_RectFire.hlsl" />
+    <FxCompile Include="..\bin\ShaderFile\Shader_Rock_Static.hlsl" />
     <FxCompile Include="..\bin\ShaderFile\Shader_Shield.hlsl" />
     <FxCompile Include="..\bin\ShaderFile\Shader_SilverMane.hlsl" />
     <FxCompile Include="..\bin\ShaderFile\Shader_StaticMesh.hlsl" />

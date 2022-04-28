@@ -41,9 +41,9 @@ _int C2H_HammerAttackR1_04Swap::Tick(const _double& _dDeltaTime)
 	{
 		// ÆÄÆ¼Å¬
 		m_pSilvermane->Set_LightCheck(true);
-		m_pSilvermane->Set_LightColor(XMVectorSet(1.f, 1.f, 1.f, 1.f));
-		m_pSilvermane->Set_LightOrigRange(5.f);
-		m_pSilvermane->Set_LightAmbientSpecular(_float4(0.3f, 0.3f, 0.3f, 1.f), _float4(0.2f, 0.2f, 0.2f, 1.f));
+		m_pSilvermane->Set_LightColor(XMVectorSet(1.f, 0.f, 0.f, 1.f));
+		m_pSilvermane->Set_LightOrigRange(10.f);
+		m_pSilvermane->Set_LightAmbientSpecular(_float4(0.8f, 0.8f, 0.8f, 1.f), _float4(0.5f, 0.5f, 0.5f, 1.f));
 
 		_vector Pos = { 0.f, 0.f, 0.f ,0.f};
 		m_pSilvermane->Active_Effect((_uint)EFFECT::ATTACK_GROUND, Pos);

@@ -48,8 +48,8 @@ HRESULT CStage2::NativeConstruct()
 	if (FAILED(Ready_NaviMesh()))
 		return E_FAIL;
 
-	/*if (FAILED(Ready_MapObject()))
-		return E_FAIL;*/
+	if (FAILED(Ready_MapObject()))
+		return E_FAIL;
 
 	if (FAILED(Ready_Player(L"Layer_Silvermane")))
 		return E_FAIL;
@@ -60,8 +60,8 @@ HRESULT CStage2::NativeConstruct()
 	if (FAILED(Ready_Data_UI(L"../bin/SaveData/UI/UI.dat")))
 		return E_FAIL;
 
-	//if (FAILED(Ready_TriggerSystem(L"../bin/SaveData/Trigger/MonsterSpawnTrigger2.dat")))
-	//	return E_FAIL;
+	if (FAILED(Ready_TriggerSystem(L"../bin/SaveData/Trigger/MonsterSpawnTrigger2.dat")))
+		return E_FAIL;
 
 	if (FAILED(Ready_Treasure_Chest()))
 		return E_FAIL;
@@ -71,7 +71,7 @@ HRESULT CStage2::NativeConstruct()
 		return E_FAIL;
 
 	g_pGameInstance->StopSound(CSoundMgr::CHANNELID::BGM);
-	//g_pGameInstance->PlayBGM(L"Stage2_BGM");
+	g_pGameInstance->PlayBGM(L"Stage2_BGM");
 
 	return S_OK;
 }
