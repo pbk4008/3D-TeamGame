@@ -191,11 +191,11 @@ HRESULT CLoader::SetUp_Stage1_Object()
 	if (FAILED(Load_Stage1PlayerLoad()))
 		return E_FAIL;
 
-	/*if (FAILED(Load_Stage1MonsterLoad()))
+	if (FAILED(Load_Stage1MonsterLoad()))
 		return E_FAIL;
 
 	if (FAILED(Load_Stage1BossLoad()))
-		return E_FAIL;*/
+		return E_FAIL;
 
 	if (FAILED(Load_Stage1StaticUILoad()))
 		return E_FAIL;
@@ -2046,8 +2046,7 @@ HRESULT CLoader::Load_MeshEffects()
 		return E_FAIL;
 	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Explosion_Rock", CExplosion_Rock::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
-	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Shooter_Bullet", CBullet::Create(m_pDevice, m_pDeviceContext))))
-		return E_FAIL;
+
 
 	return S_OK;
 }

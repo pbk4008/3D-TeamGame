@@ -142,11 +142,11 @@ HRESULT CStage1::NativeConstruct()
 		return E_FAIL;
 	}
 
-	//if (FAILED(Ready_TriggerSystem(L"../bin/SaveData/Trigger/MonsterSpawnTrigger.dat")))
-	//{
-	//	MSGBOX("Stage1 Trigger");
-	//	return E_FAIL;
-	//}
+	if (FAILED(Ready_TriggerSystem(L"../bin/SaveData/Trigger/MonsterSpawnTrigger.dat")))
+	{
+		MSGBOX("Stage1 Trigger");
+		return E_FAIL;
+	}
 
 	if (FAILED(Ready_Data_UI(L"../bin/SaveData/UI/UI.dat")))
 	{
@@ -192,11 +192,11 @@ HRESULT CStage1::NativeConstruct()
 		return E_FAIL;
 	}
 
-	//if (FAILED(Ready_Portal()))
-	//{
-	//	MSGBOX("Portal");
-	//	return E_FAIL;
-	//}
+	if (FAILED(Ready_Portal()))
+	{
+		MSGBOX("Portal");
+		return E_FAIL;
+	}
 
 	if (FAILED(Ready_Wall()))
 	{
@@ -390,8 +390,8 @@ _int CStage1::Tick(_double TimeDelta)
 					if (m_pScenemaManager->Get_EventCinema((_uint)CINEMA_INDEX::CINEMA3_5))
 					{
 						m_pScenemaManager->ResetCinema();
-						g_pInvenUIManager->SetRender(false);
-						g_pQuestManager->SetRender(false);
+						g_pInvenUIManager->SetRender(true);
+						g_pQuestManager->SetRender(true);
 						if (FAILED(g_pGameInstance->Open_Level((_uint)SCENEID::SCENE_LOADING, CLoading::Create(m_pDevice, m_pDeviceContext, SCENEID::SCENE_STAGE2))))
 							return -1;
 
@@ -1753,7 +1753,7 @@ void CStage1::Open_Wall()
 			if((*iter)->getActive())
 				static_cast<CWall*>(*iter)->Destroy();
 		}
-		if (m_iCountMonster == 0 && m_iPortalCount ==3)
+		if (m_iCountMonster == 0 && m_iPortalCount == 6)
 		{
 			advance(iter, 1);
 			if ((*iter)->getActive())
@@ -1762,7 +1762,7 @@ void CStage1::Open_Wall()
 	}
 	else if (m_pTriggerSystem->Get_CurrentTriggerNumber() == 5)
 	{
-		if (m_iCountMonster == 0 && m_iPortalCount == 6)
+		if (m_iCountMonster == 0 && m_iPortalCount == 9)
 		{
 			advance(iter, 2);
 			if ((*iter)->getActive())
@@ -1776,6 +1776,7 @@ void CStage1::Open_Wall()
 			advance(iter, 3);
 			if ((*iter)->getActive())
 				static_cast<CWall*>(*iter)->Destroy();
+
 		}
 	}
 	else if (m_pTriggerSystem->Get_CurrentTriggerNumber() == 9)
