@@ -297,7 +297,7 @@ PS_OUT PS_MAIN_DOWN(PS_IN In)
 	
 	normal = Normalmapping(normal, tbn);
 	
-	Out.diffuse = diffuse;
+	Out.diffuse = diffuse * g_MainColor;
 	Out.normal = half4(normal, 0.f);
 	Out.depth = half4(In.vUvDepth.z / In.vUvDepth.w, In.vUvDepth.w / 300.f, 0.f, 0.f);
 	

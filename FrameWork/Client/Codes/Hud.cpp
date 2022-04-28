@@ -50,7 +50,7 @@ _int CHud::Tick(_double dDeltaTime)
 	if (true == m_bOnLevelUpUI)
 	{
 		/* 몹을 잡아서 경험치가 계속 들어올 때 */
-		m_fOnTime += dDeltaTime;
+		m_fOnTime += (_float)dDeltaTime;
 		m_bHideLevelUpUI = false;
 		FixPos();
 		if (4.f <= m_fOnTime) /* 4초내로 추가로 잡은 몹이 없을 경우 */
@@ -86,35 +86,38 @@ _int CHud::LateTick(_double TimeDelta)
 {
 	TimeDelta = g_dImmutableTime;
 
-	if (!g_pInvenUIManager->IsOpenModal() &&
-		!g_pGuideManager->IsOpenDeathUI())
+	if (true == m_bRender)
 	{
-		if (nullptr != m_pRenderer)
-			m_pRenderer->Add_RenderGroup(CRenderer::RENDER::RENDER_UI_ACTIVE, this);
-
-		if (0 != m_vecLootEquipment.size())
+		if (!g_pInvenUIManager->IsOpenModal() &&
+			!g_pGuideManager->IsOpenDeathUI())
 		{
-			for (_int i = 0; i < m_vecLootEquipment.size(); ++i)
+			if (nullptr != m_pRenderer)
+				m_pRenderer->Add_RenderGroup(CRenderer::RENDER::RENDER_UI_ACTIVE, this);
+
+			if (0 != m_vecLootEquipment.size())
 			{
-				if (true == m_vecLootEquipment[i]->getActive())
+				for (_int i = 0; i < m_vecLootEquipment.size(); ++i)
 				{
-					m_vecLootEquipment[i]->LateTick(TimeDelta);
+					if (true == m_vecLootEquipment[i]->getActive())
+					{
+						m_vecLootEquipment[i]->LateTick(TimeDelta);
+					}
 				}
 			}
-		}
-		if (m_pEquipWeapon->getActive())
-			m_pEquipWeapon->LateTick(TimeDelta);
+			if (m_pEquipWeapon->getActive())
+				m_pEquipWeapon->LateTick(TimeDelta);
 
-		if (m_pEquipWeapon_Slot_1->getActive())
-		{
-			m_pEquipWeapon_Slot_1->LateTick(TimeDelta);
-			m_pEquipWeapon_Slot_2->LateTick(TimeDelta);
+			if (m_pEquipWeapon_Slot_1->getActive())
+			{
+				m_pEquipWeapon_Slot_1->LateTick(TimeDelta);
+				m_pEquipWeapon_Slot_2->LateTick(TimeDelta);
+			}
 		}
-	}
-	if (m_pLevelUp)
-	{
-		if (m_pLevelUp->getActive())
-			m_pLevelUp->LateTick(TimeDelta);
+		if (m_pLevelUp)
+		{
+			if (m_pLevelUp->getActive())
+				m_pLevelUp->LateTick(TimeDelta);
+		}
 	}
 	return _int();
 }
@@ -350,6 +353,21 @@ void CHud::SetLevelBG(_int PlayerLevel)
 void CHud::FixPos(void)
 {
 	m_pLevelUp->FixPos();
+}
+
+void CHud::EquipmentRenderNo(_bool bOnoff)
+{
+	m_bRender = bOnoff;
+	//m_pEquipWeapon->setActive(false);
+	//m_pEquipWeapon_Slot_1->setActive(false);
+	//m_pEquipWeapon_Slot_2->setActive(false);
+}
+
+void CHud::EquipmentRenderYes(void)
+{
+	m_pEquipWeapon->setActive(true);
+	m_pEquipWeapon_Slot_1->setActive(true);
+	m_pEquipWeapon_Slot_2->setActive(true);
 }
 
 CHud* CHud::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)

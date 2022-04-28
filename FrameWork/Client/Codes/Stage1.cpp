@@ -70,7 +70,6 @@
 #include "Cinema3_3.h"
 #include "Cinema3_4.h"
 #include "Cinema3_5.h"
-#include "Cinema3_6.h"
 #include "MeshEffect_Razer.h"
 #include "DamageFont.h"
 
@@ -143,11 +142,11 @@ HRESULT CStage1::NativeConstruct()
 	//	return E_FAIL;
 	//}
 
-	/*if (FAILED(Ready_TriggerSystem(L"../bin/SaveData/Trigger/MonsterSpawnTrigger.dat")))
+	if (FAILED(Ready_TriggerSystem(L"../bin/SaveData/Trigger/MonsterSpawnTrigger.dat")))
 	{
 		MSGBOX("Stage1 Trigger");
 		return E_FAIL;
-	}*/
+	}
 
 	if (FAILED(Ready_Data_UI(L"../bin/SaveData/UI/UI.dat")))
 	{
@@ -187,35 +186,36 @@ HRESULT CStage1::NativeConstruct()
 	//	return E_FAIL;
 	//}
 	
-	//if (FAILED(Ready_Indicator()))
-	//{
-	//	MSGBOX("Indicator");
-	//	return E_FAIL;
-	//}
+	if (FAILED(Ready_Indicator()))
+	{
+		MSGBOX("Indicator");
+		return E_FAIL;
+	}
 
-	//if (FAILED(Ready_Portal()))
-	//{
-	//	MSGBOX("Portal");
-	//	return E_FAIL;
-	//}
+	if (FAILED(Ready_Portal()))
+	{
+		MSGBOX("Portal");
+		return E_FAIL;
+	}
 
-	//if (FAILED(Ready_Wall()))
-	//{
-	//	MSGBOX("Wall");
-	//	return E_FAIL;
-	//}
+	if (FAILED(Ready_Wall()))
+	{
+		MSGBOX("Wall");
+		return E_FAIL;
+	}
 
-	//if (FAILED(Ready_Pot()))
-	//	return E_FAIL;
+	if (FAILED(Ready_Pot()))
+		return E_FAIL;
 
-	/*if (FAILED(Ready_Cinema()))
+	if (FAILED(Ready_Cinema()))
 	{
 		MSGBOX("Cinema");
 		return E_FAIL;
-	}*/
+	}
 
-	//g_pGameInstance->PlayBGM(L"Stage1_BGM");
-	//m_pScenemaManager->Active_Scenema((_uint)CINEMA_INDEX::CINEMA1_1);
+	g_pGameInstance->PlayBGM(L"Stage1_BGM");
+	
+	m_pScenemaManager->Active_Scenema((_uint)CINEMA_INDEX::CINEMA1_1);
 
 	return S_OK;
 }
@@ -225,6 +225,9 @@ _int CStage1::Tick(_double TimeDelta)
 	//m_pPot->Tick(TimeDelta);
 	/*_vector vTmp = g_pObserver->Get_PlayerPos();
 	cout << XMVectorGetX(vTmp) << ", " << XMVectorGetY(vTmp) << ", " << XMVectorGetZ(vTmp) << endl;*/
+
+	if (m_pIndicatorManager)
+		m_pIndicatorManager->Active_Indicator();
 
 #ifdef  _DEBUG
 	_int iLevel = 0;
@@ -241,6 +244,8 @@ _int CStage1::Tick(_double TimeDelta)
 #endif //  _DEBUG
 
 	CheckTriggerForQuest();
+
+	g_pInvenUIManager->Tick(TimeDelta);
 
 	if (g_pGameInstance->getkeyDown(DIK_I))
 	{
@@ -356,6 +361,8 @@ _int CStage1::Tick(_double TimeDelta)
 						m_pScenemaManager->ResetCinema();
 						if (FAILED(g_pGameInstance->Open_Level((_uint)SCENEID::SCENE_LOADING, CLoading::Create(m_pDevice, m_pDeviceContext, SCENEID::SCENE_STAGE2))))
 							return -1;
+
+						return 0;
 					}
 				}
 			}
@@ -375,7 +382,6 @@ _int CStage1::Tick(_double TimeDelta)
 	//		return -1;
 	//	//pRazer->setActive(true);
 	//}
-
 	//if (g_pGameInstance->getkeyDown(DIK_NUMPAD0))
 	//{
 	//	CBoss_Bastion_Judicator* pMidBoss = nullptr;
@@ -383,7 +389,6 @@ _int CStage1::Tick(_double TimeDelta)
 	//		return -1;
 	//	pMidBoss->setActive(true);
 	//}
-
 	//if (g_pGameInstance->getkeyDown(DIK_NUMPAD0))
 	//{
 	//	CMonster_Crawler* pMonster = nullptr;
@@ -391,7 +396,6 @@ _int CStage1::Tick(_double TimeDelta)
 	//		return -1;
 	//	pMonster->setActive(true);
 	//}
-
 	//if (g_pGameInstance->getkeyDown(DIK_NUMPAD1))
 	//{
 	//	CMonster_EarthAberrant* pMonster = nullptr;
@@ -399,7 +403,6 @@ _int CStage1::Tick(_double TimeDelta)
 	//		return -1;
 	//	pMonster->setActive(true);
 	//}
-	// 
 	//if (g_pGameInstance->getkeyDown(DIK_NUMPAD2))
 	//{
 	//	CMonster_Bastion_Sword* pMonster = nullptr;
@@ -407,7 +410,6 @@ _int CStage1::Tick(_double TimeDelta)
 	//		return -1;
 	//	pMonster->setActive(true);
 	//}
-
 	//if (g_pGameInstance->getkeyDown(DIK_NUMPAD3))
 	//{
 	//	CMonster_Bastion_Shooter* pMonster = nullptr;
@@ -453,12 +455,13 @@ _int CStage1::Tick(_double TimeDelta)
 
 	if(g_pDropManager)
 		g_pDropManager->Tick();
+
 	if (g_pInteractManager)
 		g_pInteractManager->Tick(TimeDelta);
+
 	if(m_pIndicatorManager)
 		m_pIndicatorManager->Active_Indicator();
 
-	/*For Cinema*/
 	if (m_pScenemaManager)
 	{
 		if (g_pGameInstance->getkeyDown(DIK_END))
@@ -476,7 +479,6 @@ _int CStage1::Tick(_double TimeDelta)
 			}
 		}
 	}
-
 
 	/*for Meteor*/
 	//m_fAccMeteorStartTime += (_float)TimeDelta;
@@ -496,7 +498,6 @@ _int CStage1::Tick(_double TimeDelta)
 
 _int CStage1::LateTick(_double TimeDelta)
 {
-	//m_pPot->LateTick(TimeDelta);
 
 	if(m_pScenemaManager)
 		m_pScenemaManager->LateTick(TimeDelta);
@@ -826,8 +827,8 @@ HRESULT CStage1::Ready_GameManager(void)
 	if (FAILED(g_pDropManager->NativeConstruct((SCENEID::SCENE_STAGE1))))
 		return E_FAIL;
 
-	//m_pIndicatorManager = GET_INSTANCE(CIndicator_Manager);
-	//m_pScenemaManager = GET_INSTANCE(CScenematicManager);
+	m_pIndicatorManager = GET_INSTANCE(CIndicator_Manager);
+	m_pScenemaManager = GET_INSTANCE(CScenematicManager);
 
 	return S_OK;
 }
@@ -2652,10 +2653,7 @@ void CStage1::Free()
 	CLevel::Free();
 
 	if (m_pScenemaManager)
-	{
 		Safe_Release(m_pScenemaManager);
-		CScenematicManager::DestroyInstance();
-	}
 
 	for (auto& iter : m_pDumyDropData)
 		Safe_Delete(iter);

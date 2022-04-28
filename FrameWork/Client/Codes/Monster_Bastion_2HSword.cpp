@@ -108,6 +108,9 @@ _int CMonster_Bastion_2HSword::Tick(_double _dDeltaTime)
 	_int iProgress = __super::Tick(_dDeltaTime);
 	if (NO_EVENT != iProgress) 
 		return iProgress;
+
+	Check_NoDamage(_dDeltaTime);
+
 	m_pTransform->Set_Velocity(XMVectorZero());
 
 	/* State FSM Update */
@@ -220,10 +223,22 @@ _int CMonster_Bastion_2HSword::LateTick(_double _dDeltaTime)
 HRESULT CMonster_Bastion_2HSword::Render()
 {
 	if (m_bdissolve == true)
-		CActor::DissolveOn(0.5f);
+		CActor::DissolveOn(1.2f);
 
 	if (FAILED(m_pModel->SetUp_ValueOnShader("g_bdissolve", &m_bdissolve, sizeof(_bool)))) MSGBOX("Failed to Apply dissolvetime");
 
+
+	RIM RimDesc;
+	ZeroMemory(&RimDesc, sizeof(RIM));
+
+	RimDesc.rimcol = _float3(0.f, 1.f, 1.f);
+	RimDesc.rimintensity = 5.f;
+	XMStoreFloat4(&RimDesc.camdir, XMVector3Normalize(g_pGameInstance->Get_CamPosition(L"Camera_Silvermane")- m_pTransform->Get_State(CTransform::STATE_POSITION)));
+
+	if (m_isNoDamage)
+		RimDesc.rimcheck = true;
+	else
+		RimDesc.rimcheck = false;
 
 	wstring wstrCamTag = g_pGameInstance->Get_BaseCameraTag();
 	for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
@@ -234,7 +249,7 @@ HRESULT CMonster_Bastion_2HSword::Render()
 		switch (i)
 		{
 		case 2:
-			CActor::BindConstantBuffer(wstrCamTag, &desc);
+			CActor::BindConstantBuffer(wstrCamTag, &desc, &RimDesc);
 			if (FAILED(m_pModel->Render(i, 1))) MSGBOX("Failed To Rendering Shooter");
 			break;
 		default:
@@ -243,7 +258,7 @@ HRESULT CMonster_Bastion_2HSword::Render()
 			desc.color = _float4(0.254f, 1.f, 0.f, 1.f);
 			desc.empower = 1.f;
 
-			CActor::BindConstantBuffer(wstrCamTag, &desc);
+			CActor::BindConstantBuffer(wstrCamTag, &desc, &RimDesc);
 			if (FAILED(m_pModel->Render(i, 0))) MSGBOX("Failed To Rendering Shooter");
 			break;
 		}
@@ -634,6 +649,9 @@ void CMonster_Bastion_2HSword::Hit(CCollision& pCol)
 {
 	if (!m_bDead)
 	{
+		if (m_isNoDamage)
+			return;
+
 		if (false == m_bFirstHit)
 		{
 			m_bFirstHit = true; //µü ÇÑ¹ø true·Î º¯°æÇØÁÜ

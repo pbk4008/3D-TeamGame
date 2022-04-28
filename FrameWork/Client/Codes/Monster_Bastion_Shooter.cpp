@@ -97,6 +97,8 @@ _int CMonster_Bastion_Shooter::Tick(_double _dDeltaTime)
 	if (NO_EVENT != iProgress)
 		return iProgress;
 
+	Check_NoDamage(_dDeltaTime);
+
 	m_pTransform->Set_Velocity(XMVectorZero());
 
 	m_pTransform->Fall(_dDeltaTime);
@@ -151,14 +153,27 @@ _int CMonster_Bastion_Shooter::LateTick(_double _dDeltaTime)
 HRESULT CMonster_Bastion_Shooter::Render()
 {
 	if (m_bdissolve == true)
-		CActor::DissolveOn(0.5f);
+		CActor::DissolveOn(1.2f);
 
 	if (FAILED(m_pModel->SetUp_ValueOnShader("g_bdissolve", &m_bdissolve, sizeof(_bool)))) MSGBOX("Failed to Apply dissolvetime");
 
 	SCB desc;
 	ZeroMemory(&desc, sizeof(SCB));
 
-	CActor::BindConstantBuffer(L"Camera_Silvermane", &desc);
+	RIM RimDesc;
+	ZeroMemory(&RimDesc, sizeof(RIM));
+
+	RimDesc.rimcol = _float3(0.f, 1.f, 1.f);
+	RimDesc.rimintensity = 5.f;
+	XMStoreFloat4(&RimDesc.camdir, XMVector3Normalize(m_pTransform->Get_State(CTransform::STATE_POSITION) - g_pGameInstance->Get_CamPosition(L"Camera_Silvermane")));
+
+	if (m_isNoDamage)
+		RimDesc.rimcheck = true;
+	else
+		RimDesc.rimcheck = false;
+
+
+	CActor::BindConstantBuffer(L"Camera_Silvermane", &desc, &RimDesc);
 	for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
 	{
 		switch (i)
@@ -318,6 +333,9 @@ void CMonster_Bastion_Shooter::Chase()
 
 void CMonster_Bastion_Shooter::Hit()
 {
+	if (m_isNoDamage)
+		return;
+
 	m_eHitType = ANIM_TYPE::HIT1;
 	CShooter_Hit::HITDATA tData;
 	ZeroMemory(&tData, sizeof(tData));
@@ -439,6 +457,7 @@ HRESULT CMonster_Bastion_Shooter::Ready_AnimationFSM()
 	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::GROGGY_END, (_uint)ANIM_TYPE::GROGGY_LOOP, pAnim, true, false, false, ERootOption::XYZ)))
 		return E_FAIL;
 
+
 	pAnim = m_pModel->Get_Animation("Excution");
 	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::EXCUTION, (_uint)ANIM_TYPE::HEAD, pAnim, true, true, false, ERootOption::XYZ)))
 		return E_FAIL;
@@ -458,21 +477,23 @@ HRESULT CMonster_Bastion_Shooter::Ready_AnimationFSM()
 	m_pAnimator->Set_UpAutoChangeAnimation((_uint)ANIM_TYPE::RUN_LOOP, (_uint)ANIM_TYPE::RUN_END);
 	m_pAnimator->Set_UpAutoChangeAnimation((_uint)ANIM_TYPE::RUN_END, (_uint)ANIM_TYPE::IDLE);
 
-	m_pAnimator->Set_UpAutoChangeAnimation((_uint)ANIM_TYPE::ATTACK, (_uint)ANIM_TYPE::IDLE);
+	m_pAnimator->Set_UpAutoChangeAnimation((_uint)ANIM_TYPE::GROGGY_START, (_uint)ANIM_TYPE::GROGGY_LOOP);
+	m_pAnimator->Set_UpAutoChangeAnimation((_uint)ANIM_TYPE::GROGGY_LOOP, (_uint)ANIM_TYPE::GROGGY_END);
+	m_pAnimator->Set_UpAutoChangeAnimation((_uint)ANIM_TYPE::GROGGY_END, (_uint)ANIM_TYPE::IDLE);
 
+	m_pAnimator->Set_UpAutoChangeAnimation((_uint)ANIM_TYPE::ATTACK, (_uint)ANIM_TYPE::IDLE);
 	m_pAnimator->Set_UpAutoChangeAnimation((_uint)ANIM_TYPE::HIT1, (_uint)ANIM_TYPE::IDLE);
 
+	m_pAnimator->Set_UpAutoChangeAnimation((_uint)ANIM_TYPE::GROGGY_START, (_uint)ANIM_TYPE::GROGGY_LOOP);
+	m_pAnimator->Set_UpAutoChangeAnimation((_uint)ANIM_TYPE::GROGGY_LOOP, (_uint)ANIM_TYPE::GROGGY_END);
+	m_pAnimator->Set_UpAutoChangeAnimation((_uint)ANIM_TYPE::GROGGY_END, (_uint)ANIM_TYPE::IDLE);
 
 	m_pAnimator->Insert_AnyEntryAnimation((_uint)ANIM_TYPE::IDLE);
 	m_pAnimator->Insert_AnyEntryAnimation((_uint)ANIM_TYPE::RUN_START);
-
 	m_pAnimator->Insert_AnyEntryAnimation((_uint)ANIM_TYPE::ATTACK);
-
 	m_pAnimator->Insert_AnyEntryAnimation((_uint)ANIM_TYPE::HIT1);
 	m_pAnimator->Insert_AnyEntryAnimation((_uint)ANIM_TYPE::DEATH);
-
 	m_pAnimator->Insert_AnyEntryAnimation((_uint)ANIM_TYPE::GROGGY_START);
-	
 	m_pAnimator->Insert_AnyEntryAnimation((_uint)ANIM_TYPE::EXCUTION);
 
 	m_pAnimator->Change_Animation((_uint)ANIM_TYPE::IDLE);
@@ -645,6 +666,15 @@ _int CMonster_Bastion_Shooter::Change_State()
 		m_fGroggyGauge = 0.f;
 		m_pPanel->Set_GroggyBar(Get_GroggyGaugeRatio());
 	}
+
+	if ((_uint)CMonster_Bastion_Shooter::ANIM_TYPE::GROGGY_END == m_pAnimator->Get_CurrentAnimNode())
+	{
+		if (m_pAnimator->Get_AnimController()->Is_Finished())
+		{
+			m_bGroggy = false;
+		}
+	}
+
 	return _int();
 }
 

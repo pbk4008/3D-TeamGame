@@ -72,6 +72,7 @@ HRESULT CBastion_Healer_Run::ExitState()
 {
 	if (FAILED(__super::ExitState()))
 		return E_FAIL;
+	m_pAnimator->Reset_Animation((_uint)CMonster_Bastion_Healer::ANIM_TYPE::A_WALK_BWD_ST);
 	return S_OK;
 }
 

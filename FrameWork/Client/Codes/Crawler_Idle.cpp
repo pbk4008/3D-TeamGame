@@ -35,7 +35,7 @@ _int CCrawler_Idle::Tick(const _double& TimeDelta)
 
 	if (m_timer >= 0.5f)
 	{
-		if (2.f < dist && 5.f > dist)
+		if (2.f < dist && 7.f > dist)
 		{
 			m_pTransform->Face_Target(g_pObserver->Get_PlayerPos());
 			m_pStateController->Change_State(L"Walk");

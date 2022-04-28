@@ -349,7 +349,12 @@ call Update_Client.bat</Command>
     <ClInclude Include="..\Headers\Cinema3_3.h" />
     <ClInclude Include="..\Headers\Cinema3_4.h" />
     <ClInclude Include="..\Headers\Cinema3_5.h" />
-    <ClInclude Include="..\Headers\Cinema3_6.h" />
+    <ClInclude Include="..\Headers\Cinema4_1.h" />
+    <ClInclude Include="..\Headers\Cinema4_2.h" />
+    <ClInclude Include="..\Headers\Cinema4_3.h" />
+    <ClInclude Include="..\Headers\Cinema4_4.h" />
+    <ClInclude Include="..\Headers\Cinema4_5.h" />
+    <ClInclude Include="..\Headers\Cinema4_6.h" />
     <ClInclude Include="..\Headers\CinemaActor.h" />
     <ClInclude Include="..\Headers\CinemaCam.h" />
     <ClInclude Include="..\Headers\CinemaWeapon.h" />
@@ -799,7 +804,12 @@ call Update_Client.bat</Command>
     <ClCompile Include="..\Codes\Cinema3_3.cpp" />
     <ClCompile Include="..\Codes\Cinema3_4.cpp" />
     <ClCompile Include="..\Codes\Cinema3_5.cpp" />
-    <ClCompile Include="..\Codes\Cinema3_6.cpp" />
+    <ClCompile Include="..\Codes\Cinema4_1.cpp" />
+    <ClCompile Include="..\Codes\Cinema4_2.cpp" />
+    <ClCompile Include="..\Codes\Cinema4_3.cpp" />
+    <ClCompile Include="..\Codes\Cinema4_4.cpp" />
+    <ClCompile Include="..\Codes\Cinema4_5.cpp" />
+    <ClCompile Include="..\Codes\Cinema4_6.cpp" />
     <ClCompile Include="..\Codes\CinemaActor.cpp" />
     <ClCompile Include="..\Codes\CinemaCam.cpp" />
     <ClCompile Include="..\Codes\CinemaWeapon.cpp" />
@@ -1133,6 +1143,9 @@ call Update_Client.bat</Command>
     <FxCompile Include="..\bin\ShaderFile\Shader_Metor.hlsl" />
     <FxCompile Include="..\bin\ShaderFile\Shader_MetorAnim.hlsl" />
     <FxCompile Include="..\bin\ShaderFile\Shader_Monster.hlsl" />
+    <FxCompile Include="..\bin\ShaderFile\Shader_OMER_Static.hlsl" />
+    <FxCompile Include="..\bin\ShaderFile\Shader_ORME_Static.hlsl" />
+    <FxCompile Include="..\bin\ShaderFile\Shader_ORM_Gold_Static.hlsl" />
     <FxCompile Include="..\bin\ShaderFile\Shader_Panel_UI.hlsl" />
     <FxCompile Include="..\bin\ShaderFile\Shader_Particle.hlsl" />
     <FxCompile Include="..\bin\ShaderFile\Shader_Particle_Alpha.hlsl" />
@@ -1140,6 +1153,7 @@ call Update_Client.bat</Command>
     <FxCompile Include="..\bin\ShaderFile\Shader_Potal.hlsl" />
     <FxCompile Include="..\bin\ShaderFile\Shader_PotAnim.hlsl" />
     <FxCompile Include="..\bin\ShaderFile\Shader_RectFire.hlsl" />
+    <FxCompile Include="..\bin\ShaderFile\Shader_Rock_Static.hlsl" />
     <FxCompile Include="..\bin\ShaderFile\Shader_Shield.hlsl" />
     <FxCompile Include="..\bin\ShaderFile\Shader_SilverMane.hlsl" />
     <FxCompile Include="..\bin\ShaderFile\Shader_StaticMesh.hlsl" />

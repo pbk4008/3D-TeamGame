@@ -121,7 +121,7 @@ _int CQuest::LateTick(_double TimeDelta)
 	{
 		if (m_fUpYInitPos < m_fUpYEndPos)
 		{
-			m_fUpYInitPos += TimeDelta * 25;
+			m_fUpYInitPos += (_float)TimeDelta * 25;
 
 			if (m_fUpYInitPos >= m_fUpYEndPos)
 			{

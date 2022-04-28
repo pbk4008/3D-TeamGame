@@ -346,7 +346,7 @@ HRESULT CBoss_Bastion_Judicator::SetUp_Components()
 	Desc.fRotationPerSec = XMConvertToRadians(60.f);
 	m_pTransform->Set_TransformDesc(Desc);
 
-	if (FAILED(__super::SetUp_Components((_uint)SCENEID::SCENE_STAGE1, L"Model_Boss_Bastion_Tier4", L"Model", (CComponent**)&m_pModel)))
+	if (FAILED(__super::SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Model_Boss_Bastion_Tier4", L"Model", (CComponent**)&m_pModel)))
 	{
 		return E_FAIL;
 	}

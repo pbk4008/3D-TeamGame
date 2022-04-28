@@ -135,10 +135,6 @@ public: /* For.Shield */
 	void Loot_Shield();
 	_bool IsLootShield() { return m_isLootShield; }
 
-public:
-	//light test ÇÔ¼ö
-	void OnLight(_vector vColor, _vector vAmbient, _float fRange, _float fOffTimeSpeed);
-
 public: /* For.JumpNode */
 	CJumpNode* Get_TargetJumpNode() const;
 	CJumpTrigger* Get_TargetJumpTrigger() const;
@@ -157,6 +153,7 @@ public: /* For.Execute */
 	CUI_Blank_FKey* Get_Blank_FKey() const;
 
 public: void	Set_HealActive(_bool check) { m_bhealcheck = check; }
+public: void	Set_LightColor(_fvector color) { m_lightcolor = color; }
 
 private:
 	const _int	Trace_CameraLook(const _double& _dDeltaTime);
@@ -229,10 +226,8 @@ private:/* for. Player& Inventory& Equipment Data */
 	CEquipmentData* m_pEquipmentData = nullptr;
 
 private:
-	LIGHTDESC m_LightDesc;
-	CLight* m_pLight = nullptr;
-	_bool m_bLight = false;
-	_float m_fOffTimeSpeed = 15.f;
+	LIGHTDESC	m_LightDesc;
+	_vector		m_lightcolor = XMVectorZero();
 
 private:
 	CTexture*	m_pTexture = nullptr;

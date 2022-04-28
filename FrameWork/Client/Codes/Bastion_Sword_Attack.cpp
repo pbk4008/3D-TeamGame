@@ -151,17 +151,17 @@ HRESULT CBastion_Sword_Attack::EnterState(void* pArg)
 	case ATTACK_TYPE::ATTACK_SINGLE:
 		if (FAILED(m_pAnimator->Change_AnyEntryAnimation((_uint)CMonster_Bastion_Sword::ANIM_TYPE::ATTACK_SINGLE)))
 			return E_FAIL;
-		m_pAnimator->Get_AnimController()->Mul_MoveSpeed(3.5f);
+		//m_pAnimator->Get_AnimController()->Mul_MoveSpeed(3.5f);
 		break;
 	case ATTACK_TYPE::ATTACK_DOUBLE:
 		if (FAILED(m_pAnimator->Change_AnyEntryAnimation((_uint)CMonster_Bastion_Sword::ANIM_TYPE::ATTACK_DOUBLE)))
 			return E_FAIL;
-		m_pAnimator->Get_AnimController()->Mul_MoveSpeed(3.5f);
+		//m_pAnimator->Get_AnimController()->Mul_MoveSpeed(3.5f);
 		break;
 	case ATTACK_TYPE::ATTACK_JUMP:
 		if (FAILED(m_pAnimator->Change_AnyEntryAnimation((_uint)CMonster_Bastion_Sword::ANIM_TYPE::ATTACK_JUMPSTART)))
 			return E_FAIL;
-		m_pAnimator->Get_AnimController()->Mul_MoveSpeed(1.5f);
+		//m_pAnimator->Get_AnimController()->Mul_MoveSpeed(1.5f);
 		break;
 	}
 
@@ -245,17 +245,17 @@ HRESULT CBastion_Sword_Attack::ExitState()
 	case ATTACK_TYPE::ATTACK_SINGLE:
 		if (FAILED(m_pAnimator->Change_AnyEntryAnimation((_uint)CMonster_Bastion_Sword::ANIM_TYPE::ATTACK_SINGLE)))
 			return E_FAIL;
-		m_pAnimator->Get_AnimController()->Div_MoveSpeed(3.5f);
+		//m_pAnimator->Get_AnimController()->Div_MoveSpeed(3.5f);
 		break;
 	case ATTACK_TYPE::ATTACK_DOUBLE:
 		if (FAILED(m_pAnimator->Change_AnyEntryAnimation((_uint)CMonster_Bastion_Sword::ANIM_TYPE::ATTACK_DOUBLE)))
 			return E_FAIL;
-		m_pAnimator->Get_AnimController()->Div_MoveSpeed(3.5f);
+		//m_pAnimator->Get_AnimController()->Div_MoveSpeed(3.5f);
 		break;
 	case ATTACK_TYPE::ATTACK_JUMP:
 		if (FAILED(m_pAnimator->Change_AnyEntryAnimation((_uint)CMonster_Bastion_Sword::ANIM_TYPE::ATTACK_JUMPSTART)))
 			return E_FAIL;
-		m_pAnimator->Get_AnimController()->Div_MoveSpeed(1.5f);
+		//m_pAnimator->Get_AnimController()->Div_MoveSpeed(1.5f);
 		break;
 	}
 	return S_OK;
