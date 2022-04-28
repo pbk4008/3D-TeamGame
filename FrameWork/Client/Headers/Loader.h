@@ -40,10 +40,17 @@ private:
 	HRESULT Load_Stage1TriggerLod();
 	HRESULT	Load_Stage1_TreasureChest_Load();
 	HRESULT Load_Stage1_Cinema_Object();
+	HRESULT Load_Pot();
 private:
 	//Stage2
 	HRESULT Set_Stage2_Prototype();
 	HRESULT Load_Stage2_Object();
+private:
+	//Stage3
+	HRESULT Set_Stage3_Prototype();
+	HRESULT Load_Stage3_Object();
+	HRESULT Load_Stage3_BossLoad();
+	HRESULT Load_Stage3_Cinema_Object();
 private:
 	HRESULT Load_TrailEffects();
 	HRESULT Load_MeshEffects();

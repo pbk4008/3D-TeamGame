@@ -10,6 +10,8 @@ Texture2D	g_CEOTexture;
 Texture2D	g_OtherTexture;
 Texture2D	g_GradientTex;
 
+Texture2D	g_FSDTexture;
+
 struct VS_IN
 {
 	float3	vPosition : POSITION;
@@ -245,35 +247,48 @@ PS_OUT PS_MAIN_TOP(PS_IN In)
 	
 	Out.depth = float4(In.vUvDepth.z / In.vUvDepth.w, In.vUvDepth.w / 300.f, 0.5f, 0.f);
 	
-	half accvalue = diffuse.r + diffuse.g - diffuse.b;
-	if(accvalue > 0.6f)
-	{
-		Out.diffuse = half4(0.9f, 0.57f, 0.f, 1.f) * accvalue;
-		Out.normal = half4(normal, 0.f);
-		half metalic = omer.g * 0.05f + mra.r;
-		half roughness = omer.a + mra.g * 3.3f - mra.r - mra.b - (1 - omer.g);
-		half ao = mra.b;
-		Out.mra.r = metalic + g_Metalic;
-		Out.mra.g = roughness + g_Roughness;
-		Out.mra.b = ao + g_AO;
-		Out.mra.a = 1.f;
-		Out.emission = g_color * g_empower * omer.b;
-	}
-	else
-	{	
-		Out.normal = half4(normal, 0.f);
-		Out.diffuse = diffuse;
+	//half accvalue = diffuse.r + diffuse.g - diffuse.b;
+	//if(accvalue > 0.6f)
+	//{
+	//	Out.diffuse = half4(0.9f, 0.57f, 0.f, 1.f) * accvalue;
+	//	Out.normal = half4(normal, 0.f);
+	//	half metalic = omer.g * 0.05f + mra.r;
+	//	half roughness = omer.a + mra.g * 3.3f - mra.r - mra.b - (1 - omer.g);
+	//	half ao = mra.b;
+	//	Out.mra.r = metalic + g_Metalic;
+	//	Out.mra.g = roughness + g_Roughness;
+	//	Out.mra.b = ao + g_AO;
+	//	Out.mra.a = 1.f;
+	//	Out.emission = g_color * g_empower * omer.b;
+	//}
+	//else
+	//{	
+	//	Out.normal = half4(normal, 0.f);
+	//	Out.diffuse = diffuse;
 		
-		half metalic = omer.g * 0.05f + mra.r;
-		half roughness = omer.a + mra.g * 3.f - mra.r - mra.b - (1 - omer.g);
-		half ao = mra.b;
-		Out.mra.r = metalic + g_Metalic;
-		Out.mra.g = roughness + g_Roughness;
-		Out.mra.b = ao + g_AO;
-		Out.mra.a = 1.f;
-		Out.emission = g_color * g_empower * omer.b;
+	//	half metalic = omer.g * 0.05f + mra.r;
+	//	half roughness = omer.a + mra.g * 3.f - mra.r - mra.b - (1 - omer.g);
+	//	half ao = mra.b;
+	//	Out.mra.r = metalic + g_Metalic;
+	//	Out.mra.g = roughness + g_Roughness;
+	//	Out.mra.b = ao + g_AO;
+	//	Out.mra.a = 1.f;
+	//	Out.emission = g_color * g_empower * omer.b;
 
-	}
+	//}
+	
+	Out.normal = half4(normal, 0.f);
+	Out.diffuse = diffuse * g_MainColor;
+
+		
+	half metalic = omer.g * 0.05f + mra.r;
+	half roughness = omer.a + mra.g * 3.f - mra.r - mra.b - (1 - omer.g);
+	half ao = mra.b;
+	Out.mra.r = metalic + g_Metalic;
+	Out.mra.g = roughness + g_Roughness;
+	Out.mra.b = ao + g_AO;
+	Out.mra.a = 1.f;
+	Out.emission = g_color * g_empower * omer.b;
 	
 	if(g_rimlightcheck == true)
 	{
@@ -297,7 +312,16 @@ PS_OUT PS_MAIN_DOWN(PS_IN In)
 	
 	normal = Normalmapping(normal, tbn);
 	
-	Out.diffuse = diffuse;
+	if (g_FSDCheck == true)
+	{
+		half4 fsd = g_FSDTexture.Sample(DefaultSampler, In.vUvDepth.xy);
+		Out.diffuse = diffuse * fsd;
+	}
+	else
+	{
+		Out.diffuse = diffuse * g_MainColor;
+	}
+	
 	Out.normal = half4(normal, 0.f);
 	Out.depth = half4(In.vUvDepth.z / In.vUvDepth.w, In.vUvDepth.w / 300.f, 0.f, 0.f);
 	
@@ -366,7 +390,7 @@ PS_OUT PS_MAIN_HAIR(PS_IN In)
 	Out.mra.g = omer.a + g_Roughness;
 	Out.mra.b = omer.r + g_AO;
 	Out.mra.a = 1.f;
-	Out.emission = half4(omer.b, omer.b, omer.b, 1) * g_color + g_empower;
+	Out.emission = g_color * g_empower * omer.b;
 	
 	return Out;
 }

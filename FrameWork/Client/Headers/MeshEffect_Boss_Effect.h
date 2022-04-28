@@ -26,6 +26,8 @@ private:
 
 private:
 	_bool m_bBeSmall = false; //한번커지고난뒤에 작아져야할때 
+	CTexture* m_pMaskTexture = nullptr;
+>>>>>>> main
 
 public:
 	static CMeshEffect_Boss_Effect* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext);

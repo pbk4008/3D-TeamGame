@@ -63,8 +63,13 @@ HRESULT CInven_UIManager::NativeConstruct(void)
 
 _int CInven_UIManager::Tick(_double _dTimeDelta)
 {
-	if (m_pHud)
-		m_pHud->Tick(g_dImmutableTime);
+
+	//if (m_pHud)
+	//	m_pHud->Tick(g_dImmutableTime);
+	
+
+	m_pHud->EquipmentRenderNo(m_bRender);
+
 
 	return _int();
 }
@@ -94,6 +99,11 @@ void CInven_UIManager::CloseModal(void)
 _bool CInven_UIManager::IsOpenModal(void)
 {
 	return m_bOpenModal;
+}
+
+void CInven_UIManager::ShowLevelUp(void)
+{
+	m_pHud->ShowLevelUp_HUD();
 }
 
 CHud* CInven_UIManager::GetHud(void)
@@ -126,6 +136,11 @@ void CInven_UIManager::HideItemStatus(void)
 		else
 			m_pPlayerStatus->Hide();
 	}
+}
+
+void CInven_UIManager::SetLevelBG(_int PlayerLevel)
+{
+	m_pHud->SetLevelBG(PlayerLevel);
 }
 
 void CInven_UIManager::Free()

@@ -69,9 +69,8 @@ private:
 	CAnimator*			  m_pAnimator = nullptr;
 	CStateController*	  m_pStateController = nullptr;
 	CBoxCollider*		  m_pCollider = nullptr;
-	CModel*				  m_pModel = nullptr;
 	DROPBOXDESC			  m_tDesc;
-	CLight* m_plight = nullptr;
+	CLight*				  m_plight = nullptr;
 	_float				  m_range = 0.f;
 private:
 	const _float m_openDelay = 2.0f;

@@ -324,8 +324,8 @@ HRESULT CRendererAssit::Setup_RenderTarget()
 	if (FAILED(m_pTargetMgr->Ready_Debug_Buffer(TEXT("Target_Normal"), (fwidth - fwidth) + 100.f, (fheight - fheight), 100.f, 100.f)))	return E_FAIL;
 	if (FAILED(m_pTargetMgr->Ready_Debug_Buffer(TEXT("Target_Depth"), (fwidth - fwidth) + 200.f, (fheight - fheight), 100.f, 100.f)))	return E_FAIL;
 	if (FAILED(m_pTargetMgr->Ready_Debug_Buffer(TEXT("Target_MRA"), (fwidth - fwidth) +300.f, (fheight - fheight), 100.f, 100.f)))	return E_FAIL;
-  	if (FAILED(m_pTargetMgr->Ready_Debug_Buffer(TEXT("Target_Emission"), (fwidth - fwidth) + 400.f, (fheight - fheight), 100.f, 100.f)))	return E_FAIL;
-	if (FAILED(m_pTargetMgr->Ready_Debug_Buffer(TEXT("Target_RimLight"), (fwidth - fwidth) + 500.f, (fheight - fheight) + 100.f, 100.f, 100.f)))	return E_FAIL;
+	if (FAILED(m_pTargetMgr->Ready_Debug_Buffer(TEXT("Target_Emission"), fwidth - 100.f, (fheight - fheight), 100.f, 100.f)))	return E_FAIL;
+	if (FAILED(m_pTargetMgr->Ready_Debug_Buffer(TEXT("Target_RimLight"), fwidth - 200.f, (fheight - fheight) + 100.f, 100.f, 100.f)))	return E_FAIL;
 
 	if (FAILED(m_pTargetMgr->Ready_Debug_Buffer(TEXT("Target_Shadow"), (fwidth - fwidth), (fheight - fheight) + 100.f, 100.f, 100.f)))				return E_FAIL;
 	if (FAILED(m_pTargetMgr->Ready_Debug_Buffer(TEXT("Target_ShadeShadow"), (fwidth - fwidth) + 100.f, (fheight - fheight) + 100.f, 100.f, 100.f)))	return E_FAIL;

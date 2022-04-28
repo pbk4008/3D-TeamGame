@@ -33,7 +33,7 @@ void CLight::Tick()
 
 HRESULT CLight::Render(CTarget_Manager* pTarget_Manager,const wstring& pCameraTag, _bool PBRHDRcheck, _bool Shadow)
 {
-	if (m_pVIBuffer != nullptr && true == m_bShow)
+	if (m_pVIBuffer != nullptr)
 	{
 		_uint		iPassIndex = 0;
 
@@ -141,7 +141,7 @@ HRESULT CLight::Ready_PBRLighting(CTarget_Manager* pTarget_Manager, const wstrin
 			0,0,scale,0,
 			m_LightDesc.vPosition.x,m_LightDesc.vPosition.y,m_LightDesc.vPosition.z,1
 		};
-		if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_PointWorld", &XMMatrixTranspose(world), sizeof(_float4x4)))) MSGBOX("Failed To Apply LightRender ViewMatrix");
+		if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_fRange", &m_LightDesc.fRange, sizeof(_float)))) MSGBOX("Failed To Apply LightRender ViewMatrix");
 		if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_ViewMatrix", &XMMatrixTranspose(ViewMatrix), sizeof(_float4x4)))) MSGBOX("Failed To Apply LightRender ViewMatrix");
 		if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_ProjMatrix", &XMMatrixTranspose(ProjMatrix), sizeof(_float4x4)))) MSGBOX("Failed To Apply LightRender ProjMatrix");
 	}

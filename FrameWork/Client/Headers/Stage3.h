@@ -3,6 +3,7 @@
 #define __STAGE3_H__
 #include "Level.h"
 BEGIN(Client)
+class CScenematicManager;
 class CStage3 final : public CLevel
 {
 private:
@@ -12,6 +13,7 @@ private:
 public:
 	virtual HRESULT NativeConstruct();
 	virtual _int Tick(_double TimeDelta);
+	virtual _int LateTick(_double TimeDelta);
 	virtual HRESULT Render();
 private:
 	HRESULT Ready_MapObject();
@@ -23,6 +25,7 @@ private:
 	HRESULT Ready_Data_UI(const _tchar* pDataFilePath);
 	HRESULT Ready_Light();
 	HRESULT Ready_Data_Effect();
+	HRESULT Ready_Cinema();
 
 	//HRESULT Ready_Data_Effect(const _tchar* pDataFilePath);
 	//HRESULT Ready_Data_UI(const _tchar* pDataFilePath);
@@ -37,6 +40,8 @@ public:
 	static CStage3* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);
 private:
 	virtual void Free() override;
+private:
+	CScenematicManager* m_pCinematicManager;
 };
 END
 #endif

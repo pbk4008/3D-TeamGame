@@ -57,9 +57,9 @@ _int CCinema2_4::LateTick(_double dDeltaTime)
 	if (m_pCam->Get_CamMoveEnd())
 	{
 		m_bCinemaEnd = true;
-		CScenematicManager* pInstance = GET_INSTANCE(CScenematicManager);
+		/*CScenematicManager* pInstance = GET_INSTANCE(CScenematicManager);
 		pInstance->Change_Cinema((_uint)CINEMA_INDEX::CINEMA3_1);
-		RELEASE_INSTANCE(CScenematicManager);
+		RELEASE_INSTANCE(CScenematicManager);*/
 		return 0;
 	}
 	m_pMidBoss->LateTick(dDeltaTime);

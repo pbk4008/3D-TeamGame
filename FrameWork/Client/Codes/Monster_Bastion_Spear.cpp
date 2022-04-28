@@ -18,6 +18,8 @@
 #include "Spear_Charge_Attack.h"
 #include "Spear_Guard.h"
 
+#include "Stage2.h"
+#include "DamageFont.h"
 
 CMonster_Bastion_Spear::CMonster_Bastion_Spear(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
 	: CActor(_pDevice, _pDeviceContext)
@@ -58,7 +60,7 @@ HRESULT CMonster_Bastion_Spear::NativeConstruct(const _uint _iSceneID, void* _pA
 	if (_pArg)
 	{
 		_float3 vPoint = (*(_float3*)_pArg);
-		if (FAILED(Set_SpawnPosition(vPoint)))
+		if (FAILED(CActor::Set_SpawnPosition(vPoint)))
 			return E_FAIL;
 	}
 	else
@@ -112,6 +114,7 @@ _int CMonster_Bastion_Spear::Tick(_double _dDeltaTime)
 	_int iProgress = __super::Tick(_dDeltaTime);
 	if (NO_EVENT != iProgress) 
 		return iProgress;
+	Check_NoDamage(_dDeltaTime);
 	m_pTransform->Set_Velocity(XMVectorZero());
 
 	/* State FSM Update */
@@ -137,7 +140,13 @@ _int CMonster_Bastion_Spear::Tick(_double _dDeltaTime)
 				m_bdissolve = true;
 			}
 			if (m_lifetime >= 1.f)
+			{
+				CLevel* pLevel = g_pGameInstance->getCurrentLevelScene();
+				if (g_pGameInstance->getCurrentLevel() == (_uint)SCENEID::SCENE_STAGE2)
+					static_cast<CStage2*>(pLevel)->Minus_MonsterCount();
+
 				Set_Remove(true);
+			}
 			if (1 < m_pAnimator->Get_AnimController()->Get_CurKeyFrameIndex() && 2 >= m_pAnimator->Get_AnimController()->Get_CurKeyFrameIndex())
 			{
 				Active_Effect((_uint)EFFECT::DEATH);
@@ -180,9 +189,9 @@ _int CMonster_Bastion_Spear::Tick(_double _dDeltaTime)
 	}
 
 	//죽을때
-
-
 	m_pPanel->Set_TargetWorldMatrix(m_pTransform->Get_WorldMatrix());
+
+	CActor::LightOnOff(m_pTransform->Get_State(CTransform::STATE_POSITION), XMVectorSet(0.f, 1.f, 0.f, 1.f), 10.f);
 
 	return _int();
 }
@@ -212,14 +221,26 @@ _int CMonster_Bastion_Spear::LateTick(_double _dDeltaTime)
 HRESULT CMonster_Bastion_Spear::Render()
 {
 	if (m_bdissolve == true)
-		CActor::DissolveOn(0.5f);
+		CActor::DissolveOn(0.7f);
 
 	if (FAILED(m_pModel->SetUp_ValueOnShader("g_bdissolve", &m_bdissolve, sizeof(_bool)))) MSGBOX("Failed to Apply dissolvetime");
 
 	SCB desc;
 	ZeroMemory(&desc, sizeof(SCB));
 	wstring wstrCamTag = g_pGameInstance->Get_BaseCameraTag();
-	CActor::BindConstantBuffer(wstrCamTag, &desc);
+	RIM RimDesc;
+	ZeroMemory(&RimDesc, sizeof(RIM));
+
+	RimDesc.rimcol = _float3(0.f, 1.f, 1.f);
+	RimDesc.rimintensity = 5.f;
+	XMStoreFloat4(&RimDesc.camdir, XMVector3Normalize(m_pTransform->Get_State(CTransform::STATE_POSITION) - g_pGameInstance->Get_CamPosition(L"Camera_Silvermane")));
+
+	if (m_isNoDamage)
+		RimDesc.rimcheck = true;
+	else
+		RimDesc.rimcheck = false;
+
+	CActor::BindConstantBuffer(wstrCamTag, &desc, &RimDesc);
 	for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
 		m_pModel->Render(i, 0);
 
@@ -237,6 +258,15 @@ HRESULT CMonster_Bastion_Spear::Render_Shadow()
 	for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
 		m_pModel->Render(i, 3);
 
+	return S_OK;
+}
+
+HRESULT CMonster_Bastion_Spear::Set_SpawnPosition(_fvector vPos)
+{
+	CActor::Set_SpawnPosition(vPos);
+	_float3 tmpPos;
+	XMStoreFloat3(&tmpPos, vPos);
+	m_pCharacterController->setFootPosition(tmpPos);
 	return S_OK;
 }
 
@@ -588,6 +618,9 @@ void CMonster_Bastion_Spear::Groggy_Start()
 
 void CMonster_Bastion_Spear::Hit(const ATTACKDESC& _tAttackDesc)
 {
+	if (m_isNoDamage)
+		return;
+
 	if (m_bDead || 0.f >= m_fCurrentHp)
 		return;
 
@@ -610,6 +643,26 @@ void CMonster_Bastion_Spear::Hit(const ATTACKDESC& _tAttackDesc)
 	CCollision collision;
 	collision.pGameObject = _tAttackDesc.pHitObject;
 
+	Active_Effect((_uint)EFFECT::HIT);
+	Active_Effect((_uint)EFFECT::HIT_FLOATING);
+	Active_Effect((_uint)EFFECT::HIT_FLOATING_2);
+	Active_Effect((_uint)EFFECT::HIT_IMAGE);
+
+	CTransform* pOtherTransform = _tAttackDesc.pOwner->Get_Transform();
+	_vector svOtherLook = XMVector3Normalize(pOtherTransform->Get_State(CTransform::STATE_LOOK));
+	_vector svOtherRight = XMVector3Normalize(pOtherTransform->Get_State(CTransform::STATE_RIGHT));
+
+	uniform_real_distribution<_float> fRange(-0.5f, 0.5f);
+	uniform_real_distribution<_float> fRange2(-0.2f, 0.2f);
+	uniform_int_distribution<_int> iRange(-5, 5);
+	CDamageFont::DESC tDamageDesc;
+	_vector svPos = m_pTransform->Get_State(CTransform::STATE_POSITION) + _vector{ 0.f, 2.f + fRange2(g_random), 0.f, 0.f };
+	svPos += svOtherRight * fRange(g_random) - svOtherLook * 0.5f;
+	XMStoreFloat3(&tDamageDesc.vPos, svPos);
+	tDamageDesc.fDamage = _tAttackDesc.fDamage + (_float)iRange(g_random);
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_DamageFont", L"Proto_GameObject_DamageFont", &tDamageDesc)))
+		MSGBOX(L"데미지 폰트 생성 실패");
+
 	Hit(collision);
 }
 
@@ -617,12 +670,14 @@ void CMonster_Bastion_Spear::Parry(const PARRYDESC& _tParryDesc)
 {
 	m_fGroggyGauge += (m_fMaxGroggyGauge - m_fGroggyGauge);
 	Groggy_Start();
+	Set_IsAttack(false);
 }
 
 void CMonster_Bastion_Spear::Hit(CCollision& collision)
 {
 	if (!m_bDead)
 	{
+
 		if (false == m_bFirstHit)
 		{
 			m_bFirstHit = true; //딱 한번 true로 변경해줌

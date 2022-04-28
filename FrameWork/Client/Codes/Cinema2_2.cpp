@@ -60,7 +60,7 @@ _int CCinema2_2::LateTick(_double dDeltaTime)
 		m_bCinemaEnd = true;
 		m_pCam->Reset_Camera();
 		CScenematicManager* pInstance = GET_INSTANCE(CScenematicManager);
-		pInstance->Change_Cinema((_uint)CINEMA_INDEX::CINEMA2_2);
+		pInstance->Change_Cinema((_uint)CINEMA_INDEX::CINEMA2_3);
 		RELEASE_INSTANCE(CScenematicManager);
 		return 0;
 	}

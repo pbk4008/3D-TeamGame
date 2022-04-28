@@ -64,6 +64,13 @@ DepthStencilState ZWriteDisable
 	DepthFunc = less;
 };
 
+DepthStencilState ZReadDisable
+{
+	DepthEnable = true;
+	DepthWriteMask = all;
+	DepthFunc = always;
+};
+
 DepthStencilState ZBufferDisable
 {
 	DepthEnable = true;

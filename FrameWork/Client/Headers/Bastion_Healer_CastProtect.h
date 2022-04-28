@@ -25,7 +25,8 @@ public:
 public:
 	virtual HRESULT EnterState();
 	virtual HRESULT ExitState();
-
+private:
+	_bool Link();
 public:
 	static CBastion_Healer_CastProtect* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext, void* _pArg = nullptr);
 

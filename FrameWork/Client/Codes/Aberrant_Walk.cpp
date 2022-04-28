@@ -36,20 +36,25 @@ _int CAberrant_Walk::Tick(const _double& TimeDelta)
 	_vector vMonsterPos = m_pTransform->Get_State(CTransform::STATE::STATE_POSITION);
 	_float fDist = g_pObserver->Get_Dist(vMonsterPos);
 
-	//_vector vDist = vMonsterPos - g_pObserver->Get_PlayerPos();
-	//_float fDistToPlayer = XMVectorGetX(XMVector3Length(vDist));
+	_vector vDist = vMonsterPos - g_pObserver->Get_PlayerPos();
+	_float fDistToPlayer = XMVectorGetX(XMVector3Length(vDist));
 
-	if (m_iRand == 0)
-	{
-		if (4.f > fDist)
-			m_pStateController->Change_State(L"Attack", &m_iRand);
-	}
-	else
-	{
-		if (2.f > fDist)
-			m_pStateController->Change_State(L"Attack", &m_iRand);
-		//cout << "공격으로 변경" << endl;
-	}
+	if (2.f > fDistToPlayer)
+		m_pStateController->Change_State(L"Attack");
+
+	//if (m_iRand == 0)
+	//{
+	//	if (4.f > fDist)
+	//		m_pStateController->Change_State(L"Attack", &m_iRand);
+	//}
+	//else
+	//{
+	//	if (2.f > fDist)
+	//		m_pStateController->Change_State(L"Attack", &m_iRand);
+	//	//cout << "공격으로 변경" << endl;
+	//}
+	
+
 
 	return _int();
 }
@@ -78,7 +83,7 @@ HRESULT CAberrant_Walk::EnterState()
 
 	m_pAnimator->Change_AnyEntryAnimation(CMonster_EarthAberrant::MON_STATE::WALK_FWD_START);
 
-	m_iRand = rand() % 2;
+	//m_iRand = rand() % 2;
 	//_vector vec = { 0.f, 1.f, 0.f,0.f };
 	//m_pTransform->SetUp_Rotation(vec, (XMConvertToRadians(180.f)));
 

@@ -3,6 +3,7 @@
 #include "Loading.h"
 #include "Silvermane.h"
 #include "Environment.h"
+
 #include "TestObj.h"
 #include "CapsuleObstacle.h"
 #include "MeshEffect_Jupiter.h"
@@ -27,9 +28,18 @@
 #include "Effect_Dead_Spray.h"
 #include "Explosion_Rock.h"
 #include "Effect_Hammer_Dust.h"
+#include "ScenematicManager.h"
+
+#include "Cinema4_1.h"
+#include "Cinema4_2.h"
+#include "Cinema4_3.h"
+#include "Cinema4_4.h"
+#include "Cinema4_5.h"
+#include "Cinema4_6.h"
 
 CStage3::CStage3(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
 	:CLevel(pDevice, pDeviceContext)
+	, m_pCinematicManager(nullptr)
 {
 }
 
@@ -95,6 +105,15 @@ _int CStage3::Tick(_double TimeDelta)
 			g_pMainApp->Set_DeltaTimeZero(true);
 		}
 	}
+	if (m_pCinematicManager)
+		m_pCinematicManager->Tick(TimeDelta);
+
+	return _int();
+}
+_int CStage3::LateTick(_double TimeDelta)
+{
+	if (m_pCinematicManager)
+		m_pCinematicManager->LateTick(TimeDelta);
 
 	return _int();
 }
@@ -296,25 +315,26 @@ HRESULT CStage3::Ready_Light()
 	ZeroMemory(&LightDesc, sizeof(LIGHTDESC));
 
 	LightDesc.eType = LIGHTDESC::TYPE_DIRECTIONAL;
-	LightDesc.vDirection = _float3(0.f, -1.f, 1.f);
+	LightDesc.vDirection = _float3(-1.f, -1.f, -1.f);
 	LightDesc.vDiffuse = _float4(1.f, 1.f, 1.f, 1.f);
 	LightDesc.vSpecular = _float4(0.8f, 0.8f, 0.8f, 1.f);
 	LightDesc.vAmbient = _float4(0.6f, 0.6f, 0.6f, 1.f);
-	LightDesc.mOrthinfo[0] = 30.f;
+	LightDesc.vPosition = _float3(57.f,150.f,243.f);
+	LightDesc.mlookat = _float4(48.f,-4.f,141.f,1.f);
+	LightDesc.mOrthinfo[0] = 50.f;
 	LightDesc.bactive = true;
-
 	if (FAILED(g_pGameInstance->CreateLightCam(m_pDevice, m_pDeviceContext, LightDesc))) MSGBOX("Failed To Creating DirectionLight Cam");
 
-	ZeroMemory(&LightDesc, sizeof(LIGHTDESC));
-	LightDesc.eType = LIGHTDESC::TYPE_POINT;
-	LightDesc.fRange = 10.f;
-	LightDesc.vDiffuse = _float4(1.f, 0.f, 0.f, 1.f);
-	LightDesc.vSpecular = _float4(0.8f, 0.8f, 0.8f, 1.f);
-	LightDesc.vAmbient = _float4(0.6f, 0.6f, 0.6f, 1.f);
-	LightDesc.vPosition = _float3(2.f, 15.f, 110.f);
-	LightDesc.bactive = true;
+	//ZeroMemory(&LightDesc, sizeof(LIGHTDESC));
+	//LightDesc.eType = LIGHTDESC::TYPE_POINT;
+	//LightDesc.fRange = 10.f;
+	//LightDesc.vDiffuse = _float4(1.f, 0.f, 0.f, 1.f);
+	//LightDesc.vSpecular = _float4(0.8f, 0.8f, 0.8f, 1.f);
+	//LightDesc.vAmbient = _float4(0.6f, 0.6f, 0.6f, 1.f);
+	//LightDesc.vPosition = _float3(2.f, 15.f, 110.f);
+	//LightDesc.bactive = true;
 
-	if (FAILED(g_pGameInstance->Add_Light(m_pDevice, m_pDeviceContext, LightDesc))) MSGBOX("Failed To Adding PointLight");
+	//if (FAILED(g_pGameInstance->Add_Light(m_pDevice, m_pDeviceContext, LightDesc))) MSGBOX("Failed To Adding PointLight");
 
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE3, L"Layer_SkyBox", L"Proto_GameObject_SkyBox")))
 		return E_FAIL;
@@ -838,6 +858,25 @@ HRESULT CStage3::Ready_Data_Effect()
 	}
 
 #pragma endregion
+}
+
+
+HRESULT CStage3::Ready_Cinema()
+{
+	m_pCinematicManager = GET_INSTANCE(CScenematicManager);
+
+	if (FAILED(m_pCinematicManager->Add_Scenema(CCinema4_1::Create(m_pDevice, m_pDeviceContext, (_uint)SCENEID::SCENE_STAGE3))))
+		return E_FAIL;
+	if (FAILED(m_pCinematicManager->Add_Scenema(CCinema4_2::Create(m_pDevice, m_pDeviceContext, (_uint)SCENEID::SCENE_STAGE3))))
+		return E_FAIL;
+	if (FAILED(m_pCinematicManager->Add_Scenema(CCinema4_3::Create(m_pDevice, m_pDeviceContext, (_uint)SCENEID::SCENE_STAGE3))))
+		return E_FAIL;
+	if (FAILED(m_pCinematicManager->Add_Scenema(CCinema4_4::Create(m_pDevice, m_pDeviceContext, (_uint)SCENEID::SCENE_STAGE3))))
+		return E_FAIL;
+	if (FAILED(m_pCinematicManager->Add_Scenema(CCinema4_5::Create(m_pDevice, m_pDeviceContext, (_uint)SCENEID::SCENE_STAGE3))))
+		return E_FAIL;
+	if (FAILED(m_pCinematicManager->Add_Scenema(CCinema4_6::Create(m_pDevice, m_pDeviceContext, (_uint)SCENEID::SCENE_STAGE3))))
+		return E_FAIL;
 
 	return S_OK;
 }
@@ -858,4 +897,5 @@ void CStage3::Free()
 {
 	CLevel::Free();
 	CWeaponGenerator::DestroyInstance();
+	Safe_Release(m_pCinematicManager);
 }

@@ -29,6 +29,14 @@ _int CShield_Parry::Tick(const _double& _dDeltaTime)
 		return STATE_CHANGE;
 	}
 
+		if (m_radialcnt > 2)
+		{
+			m_radialcnt--;
+			m_pSilvermane->Set_RadialCnt(m_radialcnt);
+		}
+		else
+			m_pSilvermane->Set_Radial(false);
+
 	return _int();
 }
 
@@ -77,6 +85,13 @@ HRESULT CShield_Parry::EnterState()
 	_float3 vPos; XMStoreFloat3(&vPos, m_pTransform->Get_State(CTransform::STATE_POSITION));
 	g_pShakeManager->Shake(tShakeEvent, vPos);
 
+	m_pSilvermane->Set_Radial(true);
+	m_pSilvermane->Set_RadialCnt(m_radialcnt);
+
+	m_pSilvermane->Set_LightCheck(true);
+	m_pSilvermane->Set_LightColor(XMVectorSet(1.f, 1.f, 1.f, 1.f));
+	m_pSilvermane->Set_LightOrigRange(8.f);
+	m_pSilvermane->Set_LightAmbientSpecular(_float4(0.8f, 0.8f, 0.8f, 1.f), _float4(0.5f, 0.5f, 0.5f, 1.f));
 
 	return S_OK;
 }
@@ -98,6 +113,8 @@ HRESULT CShield_Parry::ExitState()
 		m_pSilvermane->Set_EquipShieldAnim(false);
 		m_pSilvermane->Set_BlockTime(0.f);
 	}
+
+	m_radialcnt = 15;
 
 	return S_OK;
 }

@@ -2,6 +2,10 @@
 #ifndef __CINEMA_ACTOR_H__
 #define __CINEMA_ACTOR_H__
 
+BEGIN(Engine)
+class CTexture;
+END
+
 BEGIN(Client)
 class CCinemaActor final :public CActor
 {
@@ -24,13 +28,18 @@ public:
 	void AnimSpeed(_float fSpeed);
 	void Actor_AnimReset();
 public:
+	class CHierarchyNode* Get_Bone(const string& tBoneName);
+	_fmatrix Get_Pivot();
+public:
 	static CCinemaActor* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);
 	virtual CGameObject* Clone(const _uint iSceneID, void* pArg);
 private:
 	virtual void Free()override;
 private:
 	CAnimationController* m_pController;
-	_uint m_iActorTag;
+	_uint		m_iActorTag;
+
+	CTexture*	m_PhFSDTexture = nullptr;
 };
 END
 #endif

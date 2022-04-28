@@ -44,6 +44,11 @@ public:
 	_fvector Get_Dir(_fvector vPos);
 	CSilvermane* Get_Player() { return m_pPlayer; }
 	void Player_Active(_bool bCheck);
+	//플레이어 경험치 증가
+	void Set_Exp(_float fExp);
+	//HUD에게 레벨업 소식을 전달
+	_bool IsLevelUp(void) { return m_bLevelUp; }
+	CSilvermane* Get_Player() { return m_pPlayer; }
 public:
 	//플레이어 공격 셋팅
 	void Set_IsAttack(const _bool bAttack);
@@ -57,8 +62,12 @@ private:
 private: /* 옵저버의 고유 멤버변수 */
 	_bool m_isThrownObject = false;
 	_bool m_bAttackAnimStart = false;
+	_bool m_bLevelUp = false;
 public:
 	virtual void Free(void) override;
 };
 END
+
+#define CHECK_LEVELUP() g_pObserver->IsLevelUp();
+
 #endif // Client_Observer_h__

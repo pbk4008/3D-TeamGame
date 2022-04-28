@@ -29,6 +29,9 @@ private:
 	void	Ready_Quest(void);
 	void    PullingQuest(void);
 
+public:
+	void	SetRender(_bool bOnOff) { m_bRender = bOnOff; }
+
 private:
 	CUI_QuestHeadText*  m_pQuesthead = nullptr;
 
@@ -37,11 +40,15 @@ private:
 	std::vector<CQuest*> m_vecQuest;							   /* Æ½ ¿ë */
 
 private:
+	_bool	m_bRender = true;
+
+
+private:
 	virtual void Free() override;
 };
 
 #define  START_QUEST(Type, Key) g_pQuestManager->Start_Quest(Type, Key)
-#define	 CLEAR_QUEST(Key) g_pQuestManager->End_Quest(Key)
-
+#define	 CLEAR_QUEST(Key)		g_pQuestManager->End_Quest(Key)
+//#define  CLEAR_QUEST() 
 END
 #endif // QuestManager_h__

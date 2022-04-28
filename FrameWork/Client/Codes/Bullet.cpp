@@ -1,10 +1,11 @@
 #include "pch.h"
 #include "..\Headers\Bullet.h"
 #include "SphereCollider.h"
+#include "Material.h"
+#include "Texture.h"
 
 CBullet::CBullet(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
-	:CGameObject(_pDevice, _pDeviceContext)
-	, m_pModelCom(nullptr)
+	:CMeshEffect(_pDevice, _pDeviceContext)
 	, m_pCollider(nullptr)
 	, m_fSpawnTime(0.f)
 	, m_fSpeed(0.f)
@@ -14,32 +15,30 @@ CBullet::CBullet(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
 }
 
 CBullet::CBullet(const CBullet& _rhs)
-	: CGameObject(_rhs)
-	, m_pModelCom(_rhs.m_pModelCom)
-	, m_pCollider(_rhs.m_pCollider)
+	: CMeshEffect(_rhs)
 	, m_fSpawnTime(0.f)
 	, m_fDir(_rhs.m_fDir)
 	, m_fSpeed(_rhs.m_fSpeed)
 	, m_matBulletPosMatrix(_rhs.m_matBulletPosMatrix)
 {
-	Safe_AddRef(m_pModelCom);
-	Safe_AddRef(m_pCollider);
-
 }
 
 HRESULT CBullet::NativeConstruct_Prototype()
 {
-	if (FAILED(CGameObject::NativeConstruct_Prototype()))
+	if (FAILED(__super::NativeConstruct_Prototype()))
 		return E_FAIL;
 
 	m_iObectTag = (_uint)GAMEOBJECT::WEAPON_BULLET;
-	m_fSpeed = 50.f;
+	m_fSpeed = 30.f;
+
+	m_pMaterial = CMaterial::Create(m_pDevice, m_pDeviceContext, L"Mtrl_MeshEffect", L"../bin/ShaderFile/Shader_MeshEffect.hlsl", CMaterial::EType::Static);
+
 	return S_OK;
 }
 
 HRESULT CBullet::NativeConstruct(const _uint _iSceneID, void* _pArg)
 {
-	if (FAILED(CGameObject::NativeConstruct(_iSceneID, _pArg)))
+	if (FAILED(__super::NativeConstruct(_iSceneID, _pArg)))
 		return E_FAIL;
 
 	if (_pArg)
@@ -55,11 +54,46 @@ HRESULT CBullet::NativeConstruct(const _uint _iSceneID, void* _pArg)
 
 	m_fDamage = 3.f;
 
+	m_fAlpha = 1.f;
+	m_fFlowSpeedAlpha = 1.f;
+
 	return S_OK;
 }
 
 _int CBullet::Tick(_double _dDeltaTime)
 {
+	_int iProcess = __super::Tick(_dDeltaTime);
+	if (NO_EVENT != iProcess)
+		return iProcess;
+
+	///////////////////////////////////// UV
+	m_vTiling.x = 1.f;
+	m_vTiling.y = 6.f;
+	// X
+	m_isFlowX = true;
+	m_fFlowSpeedX = 0.2f;
+	m_vPlusUV.x += m_fFlowSpeedX * (_float)_dDeltaTime;
+	if (1.f < m_vPlusUV.x)
+		m_vPlusUV.x = 0.f;
+	// Y
+	m_isFlowY = true;
+	m_fFlowSpeedY = 0.2f;
+	m_vPlusUV.y += m_fFlowSpeedY * (_float)_dDeltaTime;
+	if (1.f < m_vPlusUV.y)
+		m_vPlusUV.y = 0.f;
+
+	///////////////////////////////// Color
+	m_isCustomColor = true;
+	m_vColor = { 0.156f, 0.36f, 1.f };
+
+
+	//////////////////////////////////////////// Scale
+	m_vScale = { 2.f, 2.f, 2.f };
+	m_pTransform->Scaling(_vector{ m_vScale.x, m_vScale.y, m_vScale.z, 0.f });
+
+	//////////////////////////////////////////// Rotation
+	//m_pTransform->SetUp_Rotation(_float3(90.f, 0.f, 0.f));
+
 	_uint iProgress = Move(_dDeltaTime);
 	if (iProgress == OBJ_DEAD)
 		return 0;
@@ -74,32 +108,60 @@ _int CBullet::Tick(_double _dDeltaTime)
 
 _int CBullet::LateTick(_double _dDeltaTime)
 {
-	if (!m_pRenderer)
-		return E_FAIL;
+	_int iProcess = __super::LateTick(_dDeltaTime);
+	if (NO_EVENT != iProcess)
+		return iProcess;
 
-	m_pRenderer->Add_RenderGroup(CRenderer::RENDER_NONALPHA, this);
+	if (m_fAccTime > m_fLifeTime)
+	{
+		m_fAccTime = 0.f;
+	}
+
+	m_pRenderer->Add_RenderGroup(CRenderer::RENDER_ALPHA, this);
+
 	return _int();
 }
 
 HRESULT CBullet::Render()
 {
-	_matrix smatWorld, smatView, smatProj;
+	if (FAILED(__super::Render()))
+		return E_FAIL;
+
+	_float weight = 1.f;
+	m_pModel->SetUp_ValueOnShader("g_Weight", &weight, sizeof(_float));
+
+	_float empower = 0.35f;
+	m_pModel->SetUp_ValueOnShader("g_empower", &empower, sizeof(_float));
+
+	for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
+	{
+		if (FAILED(m_pModel->Render(i, 7)))
+			return E_FAIL;
+	}
+
+	/*_matrix smatWorld, smatView, smatProj;
 	wstring wstrCamTag = g_pGameInstance->Get_BaseCameraTag();
 	smatWorld = XMMatrixTranspose(m_pTransform->Get_WorldMatrix());
 	smatView = XMMatrixTranspose(g_pGameInstance->Get_Transform(wstrCamTag, TRANSFORMSTATEMATRIX::D3DTS_VIEW));
 	smatProj = XMMatrixTranspose(g_pGameInstance->Get_Transform(wstrCamTag, TRANSFORMSTATEMATRIX::D3DTS_PROJECTION));
 
-	if (FAILED(m_pModelCom->SetUp_ValueOnShader("g_WorldMatrix", &smatWorld, sizeof(_matrix))))
-		return E_FAIL;
-	if (FAILED(m_pModelCom->SetUp_ValueOnShader("g_ViewMatrix", &smatView, sizeof(_matrix))))
-		return E_FAIL;
-	if (FAILED(m_pModelCom->SetUp_ValueOnShader("g_ProjMatrix", &smatProj, sizeof(_matrix))))
-		return E_FAIL;
+	if (FAILED(m_pModel->SetUp_ValueOnShader("g_WorldMatrix", &smatWorld, sizeof(_matrix))))	return E_FAIL;
+	if (FAILED(m_pModel->SetUp_ValueOnShader("g_ViewMatrix", &smatView, sizeof(_matrix))))	return E_FAIL;
+	if (FAILED(m_pModel->SetUp_ValueOnShader("g_ProjMatrix", &smatProj, sizeof(_matrix))))	return E_FAIL;
 
+	_float3 color = _float3(1, 1, 1.f);
+	_float empower = 1.f;
+	_float weight = 1.f;
+	_float alpha = 1.f;
+	if (FAILED(m_pModel->SetUp_ValueOnShader("g_vColor", &color, sizeof(_float3)))) MSGBOX("Failed To Apply Actor ConstantBuffer");
+	if (FAILED(m_pModel->SetUp_ValueOnShader("g_empower", &empower, sizeof(_float)))) MSGBOX("Failed To Apply Actor ConstantBuffer");
+	if (FAILED(m_pModel->SetUp_ValueOnShader("g_Weight", &weight, sizeof(_float)))) MSGBOX("Failed To Apply Actor ConstantBuffer");
+	if (FAILED(m_pModel->SetUp_ValueOnShader("g_fAlpha", &alpha, sizeof(_float)))) MSGBOX("Failed To Apply Actor ConstantBuffer");
 
-
-	for (_uint i = 0; i < m_pModelCom->Get_NumMeshContainer(); ++i)
-		if (FAILED(m_pModelCom->Render(i, 0))) 	return E_FAIL;
+	for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
+	{
+		if (FAILED(m_pModel->Render(i, 7))) return E_FAIL;
+	}*/
 
 	return S_OK;
 }
@@ -113,9 +175,6 @@ HRESULT CBullet::Ready_Component(const _uint iSceneID)
 
 	m_pTransform->Set_TransformDesc(tDesc);
 
-	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Model_Shooter_Bullet", L"BulletModel", (CComponent**)&m_pModelCom)))
-		return E_FAIL;
-
 	CSphereCollider::DESC tColliderDesc;
 
 	tColliderDesc.fRadius = 0.5f;
@@ -126,6 +185,18 @@ HRESULT CBullet::Ready_Component(const _uint iSceneID)
 	tColliderDesc.tColliderDesc.pGameObject = this;
 
 	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_SphereCollider", L"Collider", (CComponent**)&m_pCollider,&tColliderDesc)))
+		return E_FAIL;
+
+	//
+	if (FAILED(m_pTexture->Change_Texture(L"Venus_Trail")))
+		return E_FAIL;
+
+	if (FAILED(m_pMaterial->Set_Texture("g_DiffuseTexture", TEXTURETYPE::TEX_DIFFUSE, m_pTexture, 0)))
+		return E_FAIL;
+	Safe_AddRef(m_pTexture);
+
+	m_pModel = g_pGameInstance->Clone_Component<CModel>((_uint)SCENEID::SCENE_STATIC, L"Model_Sphere2");
+	if (FAILED(m_pModel->Add_Material(m_pMaterial, 0)))
 		return E_FAIL;
 
 	return S_OK;
@@ -234,6 +305,5 @@ void CBullet::Free()
 {
 	__super::Free();
 
-	Safe_Release(m_pModelCom);
 	Safe_Release(m_pCollider);
 }

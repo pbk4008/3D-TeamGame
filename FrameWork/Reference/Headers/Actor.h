@@ -6,6 +6,8 @@
 #include "GameObject.h"
 BEGIN(Engine)
 
+class CLight;
+
 class ENGINE_DLL CActor abstract : public CGameObject
 {
 protected:
@@ -36,6 +38,7 @@ public:
 	//Effect 좌표받아와서 불러오는 함수
 	void Active_Effect(_uint iEffectIndex, _fvector vPivot);
 	void Active_Effect_Target(_uint iEffectIndex, _matrix TargetMat);
+	void Check_NoDamage(_double dDeltaTime);
 public:
 	const _bool Get_Dead() { return m_bDead; }
 	_float Get_CurrentHp() { return m_fCurrentHp; }
@@ -45,6 +48,9 @@ public:
 	const _bool IsAttack() { return m_IsAttack; }
 	_bool Get_Groggy() { return m_bGroggy; }
 	const ATTACKDESC& Get_AttackDesc() const;
+	_bool Get_NoDamage() { return m_isNoDamage; }
+	_bool IsExecution(void) { return m_isExecution; }
+
 public:
 	virtual void Set_IsAttack(const _bool _isAttack) { m_IsAttack = _isAttack; }
 	void Set_CurrentHp(_float fCurrentHp) { m_fCurrentHp = fCurrentHp; }
@@ -60,14 +66,21 @@ public:
 	void Set_AttackDesc_Level(_uint iLevel) { m_tAttackDesc.iLevel = iLevel; }
 	void Set_AttackDesc_Dir(const EAttackDir _eDir) { m_tAttackDesc.eDir = _eDir; }
 
+	void Set_NoDamage(_bool bCheck) { m_isNoDamage = bCheck; }
+
 	virtual void Set_FootPosition(const _float3& _vPos);
 
 	void RimlightCheck(_bool check, _float3 color = _float3(0,0,0));
 	_bool GetRimCheck() { return m_rimcheck; }
 	void SetRimIntensity(_float time);
-	
+
 	void Set_Dissolve(_bool on) { m_bdissolve = on; }
 	HRESULT DissolveOn(_float dissolveSpeed = 1.f);
+
+	void	LightOnOff(_fvector pos, _fvector color, _float deltaspeed = 1.f);
+	void	Set_LightCheck(_bool check);
+	void	Set_LightOrigRange(_float range);
+	void	Set_LightAmbientSpecular(_float4 ambient, _float4 specular);
 
 public:
 	virtual void Hit(const ATTACKDESC& _tAttackDesc);
@@ -85,12 +98,14 @@ protected:
 	_bool m_bUIShow = false; //몬스터머리위에 ui보이는상태인지아닌지
 	_bool m_isParry = false; // 패링상태 체크
 	_bool m_isExecution = false; // 처형당하는 중인지 체크
+	_bool m_isNoDamage = false;// 무적상태인지 안닌지 체크
 
 	_float m_fSpeed;//이동 속도
 	_float m_fMaxHp;//최대 체력
 	_float m_fCurrentHp;//현재 체력
 	_float m_fGroggyGauge; //스턴게이지
 	_float m_fMaxGroggyGauge; //스턴게이지
+	_float m_fAccNoDamageTime;//무적상태 Time
 
 	ATTACKDESC m_tAttackDesc;
 	const LIGHTDESC* m_lightdesc;
@@ -109,6 +124,12 @@ protected:
 	// motion blur
 	_bool			m_motionblurcheck = false;
 	_float			m_timer = 0.f;
+
+	// Light
+	_bool			m_bLightCheck = false;
+	CLight*			m_pActiveLight = nullptr;
+	_float			m_LightRange = 0.f;
+	_float			m_OrigLightRange = 0.f;
 };
 END
 #endif

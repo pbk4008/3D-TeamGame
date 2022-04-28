@@ -1,6 +1,7 @@
 #include "Actor.h"
 #include "Transform.h"
 #include "Effect.h"
+#include "Light.h"
 #include "GameInstance.h"
 
 CActor::CActor()
@@ -12,6 +13,7 @@ CActor::CActor()
 	, m_fGroggyGauge(0.f)
 	, m_fMaxGroggyGauge(0.f)
 	, m_bGroggy(false)
+	, m_fAccNoDamageTime(0.f)
 {
 }
 
@@ -25,6 +27,7 @@ CActor::CActor(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
 	, m_fGroggyGauge(0.f)
 	, m_fMaxGroggyGauge(0.f)
 	, m_bGroggy(false)
+	, m_fAccNoDamageTime(0.f)
 {
 }
 
@@ -38,6 +41,7 @@ CActor::CActor(const CActor& rhs)
 	, m_fGroggyGauge(rhs.m_fGroggyGauge)
 	, m_fMaxGroggyGauge(rhs.m_fMaxGroggyGauge)
 	, m_bGroggy(rhs.m_bGroggy)
+	, m_fAccNoDamageTime(0.f)
 {
 }
 
@@ -67,6 +71,24 @@ HRESULT CActor::NativeConstruct(const _uint _iSceneID, void* pArg)
 	if (FAILED(m_dissolveTex->Change_Texture(L"DissovleBase"))) MSGBOX("Failed to Change Texture DissovleTex");
 	m_dissolveGradientTex = g_pGameInstance->Clone_Component<CTexture>(0, L"Proto_Component_Texture");
 	if (FAILED(m_dissolveGradientTex->Change_Texture(L"DissovleGradient"))) MSGBOX("Failed to Change Texture DissovleTex");
+
+	LIGHTDESC LightDesc;
+
+	ZeroMemory(&LightDesc, sizeof(LIGHTDESC));
+	LightDesc.eType = LIGHTDESC::TYPE_POINT;
+	LightDesc.fRange = 5.f;
+	LightDesc.vDiffuse = _float4(0.3686f, 04941.f, 0.60784f, 1.f);
+	LightDesc.vSpecular = _float4(0.7f, 0.7f, 0.7f, 1.f);
+	LightDesc.vAmbient = _float4(0.8f, 0.8f, 0.8f, 1.f);
+	LightDesc.bactive = false;
+	LightDesc.vPosition = _float3(0, 0, 0);
+
+	m_LightRange = LightDesc.fRange;
+	m_OrigLightRange = LightDesc.fRange;
+
+	if (FAILED(g_pGameInstance->Add_Light(m_pDevice, m_pDeviceContext, LightDesc, &m_pActiveLight))) MSGBOX("Failed To Adding PointLight");
+
+	m_bUIShow = false;
 
 	return S_OK;
 }
@@ -211,7 +233,6 @@ void CActor::Active_Effect(_uint iEffectIndex)
 		pEffect->setActive(true);
 		pEffect->Set_Reset(true);
 	}
-	
 }
 
 void CActor::Active_Effect(_uint iEffectIndex, _fvector vPivot)
@@ -247,6 +268,19 @@ void CActor::Active_Effect_Target(_uint iEffectIndex, _matrix TargetMat)
 		pEffect->Get_Transform()->Set_WorldMatrix(TargetMat);
 		pEffect->setActive(true);
 		pEffect->Set_Reset(true);
+	}
+}
+
+void CActor::Check_NoDamage(_double dDeltaTime)
+{
+	if (m_isNoDamage)
+	{
+		m_fAccNoDamageTime += (_float)dDeltaTime;
+		if (m_fAccNoDamageTime > 8.f)
+		{
+			m_fAccNoDamageTime = 0.f;
+			m_isNoDamage = false;
+		}
 	}
 }
 
@@ -289,6 +323,42 @@ HRESULT CActor::DissolveOn(_float dissolveSpeed)
 	if (FAILED(m_pModel->SetUp_TextureOnShader("g_DissolveGrTex", m_dissolveGradientTex, 0))) MSGBOX("Failed to Apply dissolveTex");
 
 	return S_OK;
+}
+
+void CActor::LightOnOff(_fvector pos, _fvector color, _float deltaspeed)
+{
+	if (m_bLightCheck == true)
+	{
+		m_LightRange += g_fDeltaTime * -deltaspeed;
+
+		m_pActiveLight->Set_Range(m_LightRange);
+		m_pActiveLight->Set_Pos(pos);
+		m_pActiveLight->Set_Color(color);
+
+		if (m_LightRange <= 0.f)
+		{
+			m_LightRange = m_OrigLightRange;
+			m_pActiveLight->Set_Active(false);
+		}
+	}
+}
+
+void CActor::Set_LightCheck(_bool check)
+{
+	m_bLightCheck = check;
+	m_pActiveLight->Set_Active(check);
+}
+
+void CActor::Set_LightOrigRange(_float range)
+{
+	m_OrigLightRange = range;
+	m_LightRange = range;
+}
+
+void CActor::Set_LightAmbientSpecular(_float4 ambient, _float4 specular)
+{
+	m_pActiveLight->Set_Ambient(ambient);
+	m_pActiveLight->Set_Sepcular(specular);
 }
 
 void CActor::Hit(const ATTACKDESC& _tAttackDesc)

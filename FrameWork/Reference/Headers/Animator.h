@@ -54,6 +54,8 @@ public:
 	void Set_PivotMat(const _fmatrix& matPivot);
 	//만들어진 애니메이션노드의 프레임 조절
 	void Add_AnimFrame(_uint iTag, _uint iFrame);
+	//해당 애니메이션 리셋
+	void Reset_Animation(_uint iTag);
 public:
 	const _uint Get_CurrentAnimNode();
 	CAnimation* Get_CurrentAnimation();

@@ -61,6 +61,8 @@ HRESULT CSilvermane_Heal::EnterState()
 	m_pSilvermane->Set_HealActive(true);
 	m_fValue = m_pSilvermane->Get_MaxHp() * 0.2f;
 
+	m_pSilvermane->Get_InvenData()->UsingPotion();
+
 	return S_OK;
 }
 

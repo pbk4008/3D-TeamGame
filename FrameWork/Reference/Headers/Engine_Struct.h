@@ -69,6 +69,7 @@ namespace Engine
 		_float			mOrthinfo[5];
 
 		_bool			bactive;
+		_float4			mlookat = _float4(0,0,0,0);
 	}LIGHTDESC;
 
 	typedef struct tagMtrlDesc

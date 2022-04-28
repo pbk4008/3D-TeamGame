@@ -1,14 +1,17 @@
 #pragma once
 #ifndef __BULLET_H__
 #define __BULLET_H__
-#include "GameObject.h"
+
 BEGIN(Engine)
 class CModel;
 class CSphereCollider;
 END
+
+#include "MeshEffect.h"
+
 BEGIN(Client)
 
-class CBullet final : public CGameObject
+class CBullet final : public CMeshEffect
 {
 private:
 	explicit CBullet(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext);
@@ -39,8 +42,7 @@ public:
 private:
 	virtual void Free()override;
 private:
-	CModel* m_pModelCom;
-	CSphereCollider* m_pCollider;
+	CSphereCollider* m_pCollider = nullptr;
 	CActor* m_pOwner = nullptr;
 private:
 	_float4x4 m_matBulletPosMatrix;

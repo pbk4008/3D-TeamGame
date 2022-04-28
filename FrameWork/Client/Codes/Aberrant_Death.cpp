@@ -60,6 +60,8 @@ HRESULT CAberrant_Death::EnterState()
 	g_pShakeManager->Shake(CShakeManager::ETemplate::MonsterDeath, m_pTransform->Get_State(CTransform::STATE_POSITION));
 	m_pAnimator->Change_AnyEntryAnimation(CMonster_EarthAberrant::MON_STATE::DEATH);
 
+	g_pObserver->Set_Exp(10.f);
+
 	//_vector vec = { 0.f, 1.f, 0.f,0.f };
 	//m_pTransform->SetUp_Rotation(vec, (XMConvertToRadians(180.f)));
 

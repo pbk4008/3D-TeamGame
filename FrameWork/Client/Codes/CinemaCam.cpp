@@ -124,7 +124,8 @@ void CCinemaCam::Reset_Camera()
 void CCinemaCam::Add_Fov(_float fSpeed, _float fGoalAngle)
 {
 	_float fAngle = m_pCamera->Get_FovAngle();
-	if (fAngle < fGoalAngle)
+	fAngle = XMConvertToDegrees(fAngle);
+	if (fAngle < XMConvertToDegrees(fGoalAngle))
 	{
 		fAngle += fSpeed;
 		m_pCamera->Change_Fov(fAngle);
@@ -134,8 +135,8 @@ void CCinemaCam::Add_Fov(_float fSpeed, _float fGoalAngle)
 void CCinemaCam::Minus_Fov(_float fSpeed, _float fGoalAngle)
 {
 	_float fAngle = m_pCamera->Get_FovAngle();
-		m_fFovAngle = fAngle;
-	if (fAngle > fGoalAngle)
+	fAngle = XMConvertToDegrees(fAngle);
+	if (fAngle > XMConvertToDegrees(fGoalAngle))
 	{
 		fAngle -= fSpeed;
 		cout << fAngle << endl;
@@ -186,8 +187,23 @@ HRESULT CCinemaCam::Set_Camera(_uint iSceneTag)
 	case (_uint)CINEMA_INDEX::CINEMA3_5:
 		hr = CGameObject::SetUp_Components(m_iSceneID, L"Model_Cinema_Cam3_5", L"CamModel", (CComponent**)&m_pModel);
 		break;
-	case (_uint)CINEMA_INDEX::CINEMA3_6:
-		hr = CGameObject::SetUp_Components(m_iSceneID, L"Model_Cinema_Cam3_6", L"CamModel", (CComponent**)&m_pModel);
+	case (_uint)CINEMA_INDEX::CINEMA4_1:
+		hr = CGameObject::SetUp_Components(m_iSceneID, L"Model_Cinema_Cam4_1", L"CamModel", (CComponent**)&m_pModel);
+		break;
+	case (_uint)CINEMA_INDEX::CINEMA4_2:
+		hr = CGameObject::SetUp_Components(m_iSceneID, L"Model_Cinema_Cam4_2", L"CamModel", (CComponent**)&m_pModel);
+		break;
+	case (_uint)CINEMA_INDEX::CINEMA4_3:
+		hr = CGameObject::SetUp_Components(m_iSceneID, L"Model_Cinema_Cam4_3", L"CamModel", (CComponent**)&m_pModel);
+		break;
+	case (_uint)CINEMA_INDEX::CINEMA4_4:
+		hr = CGameObject::SetUp_Components(m_iSceneID, L"Model_Cinema_Cam4_4", L"CamModel", (CComponent**)&m_pModel);
+		break;
+	case (_uint)CINEMA_INDEX::CINEMA4_5:
+		hr = CGameObject::SetUp_Components(m_iSceneID, L"Model_Cinema_Cam4_5", L"CamModel", (CComponent**)&m_pModel);
+		break;
+	case (_uint)CINEMA_INDEX::CINEMA4_6:
+		hr = CGameObject::SetUp_Components(m_iSceneID, L"Model_Cinema_Cam4_6", L"CamModel", (CComponent**)&m_pModel);
 		break;
 	}
 
@@ -223,6 +239,7 @@ void CCinemaCam::Change_CurrentCam()
 	vecAnim[0]->Reset_Animation();
 
 	g_pGameInstance->Change_BaseCamera(m_pCamTag);
+	m_pRenderer->SetCameraTag(m_pCamTag);
 }
 
 CCinemaCam* CCinemaCam::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)

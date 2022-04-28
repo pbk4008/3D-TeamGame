@@ -19,12 +19,14 @@
 
 #include "Stage1.h"
 #include "Stage2.h"
+#include "DamageFont.h"
 
 CMonster_Bastion_Healer::CMonster_Bastion_Healer(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
 	: CActor(_pDevice, _pDeviceContext)
 	, m_pCharacterController(nullptr)
 	, m_pStateController(nullptr)
 	, m_pAnimator(nullptr)
+	, m_pLinkMonster(nullptr)
 {
 }
 
@@ -33,6 +35,7 @@ CMonster_Bastion_Healer::CMonster_Bastion_Healer(const CMonster_Bastion_Healer& 
 	, m_pCharacterController(_rhs.m_pCharacterController)
 	, m_pStateController(_rhs.m_pStateController)
 	, m_pAnimator(_rhs.m_pAnimator)
+	, m_pLinkMonster(nullptr)
 {
 	Safe_AddRef(m_pCharacterController);
 	Safe_AddRef(m_pStateController);
@@ -56,7 +59,7 @@ HRESULT CMonster_Bastion_Healer::NativeConstruct(const _uint _iSceneID, void* _p
 	if (_pArg)
 	{
 		_float3 vPoint = (*(_float3*)_pArg);
-		if (FAILED(Set_SpawnPosition(vPoint)))
+		if (FAILED(CActor::Set_SpawnPosition(vPoint)))
 			return E_FAIL;
 	}
 	else
@@ -134,7 +137,15 @@ _int CMonster_Bastion_Healer::Tick(_double _dDeltaTime)
 			}
 
 			if (m_lifetime >= 1.f)
+			{
+				CLevel* pLevel = g_pGameInstance->getCurrentLevelScene();
+				if (g_pGameInstance->getCurrentLevel() == (_uint)SCENEID::SCENE_STAGE1)
+					static_cast<CStage1*>(pLevel)->Minus_MonsterCount();
+				else if (g_pGameInstance->getCurrentLevel() == (_uint)SCENEID::SCENE_STAGE2)
+					static_cast<CStage2*>(pLevel)->Minus_MonsterCount();
+
 				Set_Remove(true);
+			}
 
 			if (1 == m_pAnimator->Get_AnimController()->Get_CurKeyFrameIndex())
 			{
@@ -150,7 +161,15 @@ _int CMonster_Bastion_Healer::Tick(_double _dDeltaTime)
 			}
 
 			if (m_lifetime >= 1.f)
+			{
+				CLevel* pLevel = g_pGameInstance->getCurrentLevelScene();
+				if (g_pGameInstance->getCurrentLevel() == (_uint)SCENEID::SCENE_STAGE1)
+					static_cast<CStage1*>(pLevel)->Minus_MonsterCount();
+				else if (g_pGameInstance->getCurrentLevel() == (_uint)SCENEID::SCENE_STAGE2)
+					static_cast<CStage2*>(pLevel)->Minus_MonsterCount();
+
 				Set_Remove(true);
+			}
 		}
 		else
 		{
@@ -188,6 +207,9 @@ _int CMonster_Bastion_Healer::Tick(_double _dDeltaTime)
 	}
 	m_pPanel->Set_TargetWorldMatrix(m_pTransform->Get_WorldMatrix());
 
+
+	CActor::LightOnOff(m_pTransform->Get_State(CTransform::STATE_POSITION), XMVectorSet(0.f, 1.f, 0.f, 1.f), 10.f);
+
 	return _int();
 }
 
@@ -216,11 +238,23 @@ _int CMonster_Bastion_Healer::LateTick(_double _dDeltaTime)
 HRESULT CMonster_Bastion_Healer::Render()
 {
 	if (m_bdissolve == true)
-		CActor::DissolveOn(0.5f);
+		CActor::DissolveOn(0.7f);
 
 	wstring wstrCamTag = g_pGameInstance->Get_BaseCameraTag();
 
 	if (FAILED(m_pModel->SetUp_ValueOnShader("g_bdissolve", &m_bdissolve, sizeof(_bool)))) MSGBOX("Failed to Apply dissolvetime");
+
+	RIM RimDesc;
+	ZeroMemory(&RimDesc, sizeof(RIM));
+
+	RimDesc.rimcol = _float3(0.f, 1.f, 1.f);
+	RimDesc.rimintensity = 5.f;
+	XMStoreFloat4(&RimDesc.camdir, XMVector3Normalize(g_pGameInstance->Get_CamPosition(L"Camera_Silvermane")-m_pTransform->Get_State(CTransform::STATE_POSITION)));
+
+	if (m_pLinkMonster)
+		RimDesc.rimcheck = true;
+	else
+		RimDesc.rimcheck = false;
 
 	for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
 	{
@@ -230,7 +264,7 @@ HRESULT CMonster_Bastion_Healer::Render()
 		switch (i)
 		{
 		case 2:
-			CActor::BindConstantBuffer(wstrCamTag, &desc);
+			CActor::BindConstantBuffer(wstrCamTag, &desc, &RimDesc);
 			if (FAILED(m_pModel->Render(i, 1))) MSGBOX("Failed To Rendering Healer");
 			break;
 		default:
@@ -239,7 +273,7 @@ HRESULT CMonster_Bastion_Healer::Render()
 			desc.color = _float4(0.254f, 1.f, 0.f, 1.f);
 			desc.empower = 1.f;
 
-			CActor::BindConstantBuffer(wstrCamTag, &desc);
+			CActor::BindConstantBuffer(wstrCamTag, &desc, &RimDesc);
 			if (FAILED(m_pModel->Render(i, 0))) MSGBOX("Failed To Rendering Healer");
 			break;
 		}
@@ -318,6 +352,26 @@ void CMonster_Bastion_Healer::Hit(const ATTACKDESC& _tAttackDesc)
 	CCollision collision;
 	collision.pGameObject = _tAttackDesc.pHitObject;
 
+	Active_Effect((_uint)EFFECT::HIT);
+	Active_Effect((_uint)EFFECT::HIT_FLOATING);
+	Active_Effect((_uint)EFFECT::HIT_FLOATING_2);
+	Active_Effect((_uint)EFFECT::HIT_IMAGE);
+
+	CTransform* pOtherTransform = _tAttackDesc.pOwner->Get_Transform();
+	_vector svOtherLook = XMVector3Normalize(pOtherTransform->Get_State(CTransform::STATE_LOOK));
+	_vector svOtherRight = XMVector3Normalize(pOtherTransform->Get_State(CTransform::STATE_RIGHT));
+
+	uniform_real_distribution<_float> fRange(-0.5f, 0.5f);
+	uniform_real_distribution<_float> fRange2(-0.2f, 0.2f);
+	uniform_int_distribution<_int> iRange(-5, 5);
+	CDamageFont::DESC tDamageDesc;
+	_vector svPos = m_pTransform->Get_State(CTransform::STATE_POSITION) + _vector{ 0.f, 2.f + fRange2(g_random), 0.f, 0.f };
+	svPos += svOtherRight * fRange(g_random) - svOtherLook * 0.5f;
+	XMStoreFloat3(&tDamageDesc.vPos, svPos);
+	tDamageDesc.fDamage = _tAttackDesc.fDamage + (_float)iRange(g_random);
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_DamageFont", L"Proto_GameObject_DamageFont", &tDamageDesc)))
+		MSGBOX(L"데미지 폰트 생성 실패");
+
 	Hit(collision);
 }
 
@@ -343,6 +397,97 @@ void CMonster_Bastion_Healer::Execution()
 void CMonster_Bastion_Healer::Remove_Collider()
 {
 	m_pCharacterController->Remove_CCT();
+}
+
+void CMonster_Bastion_Healer::Link_Empty()
+{
+	OVERLAPDESC tOverlapDesc;
+	tOverlapDesc.geometry = PxSphereGeometry(5.f);
+	XMStoreFloat3(&tOverlapDesc.vOrigin, m_pTransform->Get_State(CTransform::STATE_POSITION));
+	CGameObject* pHitObject = nullptr;
+	tOverlapDesc.ppOutHitObject = &pHitObject;
+	tOverlapDesc.filterData.flags = PxQueryFlag::eDYNAMIC;
+	tOverlapDesc.layerMask = (1 << (_uint)ELayer::Monster);
+	if (g_pGameInstance->Overlap(tOverlapDesc))
+	{
+		if (tOverlapDesc.vecHitObjects.empty())
+			m_bEmpty = true;
+		else
+		{
+			if (tOverlapDesc.vecHitObjects.size() == 1 && tOverlapDesc.vecHitObjects[0]->getTag() == (_uint)GAMEOBJECT::MONSTER_HEALER)
+				m_bEmpty = true;
+			else
+			{
+				_bool bCheck = false;
+				for (auto& pObj : tOverlapDesc.vecHitObjects)
+				{
+					if (pObj->getTag() == (_uint)GAMEOBJECT::MONSTER_HEALER)
+						continue;
+
+					CActor* pActor = static_cast<CActor*>(pObj);
+					if (pActor->Get_Dead())
+						bCheck = true;
+				}
+				m_bEmpty = bCheck;
+			}
+		}
+	}
+}
+
+void CMonster_Bastion_Healer::Link()
+{
+	if (!m_pLinkMonster)
+	{
+		OVERLAPDESC tOverlapDesc;
+		tOverlapDesc.geometry = PxSphereGeometry(5.f);
+		XMStoreFloat3(&tOverlapDesc.vOrigin, m_pTransform->Get_State(CTransform::STATE_POSITION));
+		CGameObject* pHitObject = nullptr;
+		tOverlapDesc.ppOutHitObject = &pHitObject;
+		tOverlapDesc.filterData.flags = PxQueryFlag::eDYNAMIC;
+		tOverlapDesc.layerMask = (1 << (_uint)ELayer::Monster);
+		if (g_pGameInstance->Overlap(tOverlapDesc))
+		{
+			if (tOverlapDesc.vecHitObjects.empty())
+				return;
+			_float fMin = 100000.f;
+			_vector vPos = m_pTransform->Get_State(CTransform::STATE_POSITION);
+			for (auto pMonster : tOverlapDesc.vecHitObjects)
+			{
+				if (pMonster->getTag() == (_uint)GAMEOBJECT::MONSTER_HEALER)
+					continue;
+				
+				_vector vMonPos = pMonster->Get_Transform()->Get_State(CTransform::STATE_POSITION);
+				_float fDist = XMVectorGetX(XMVector3Length(vMonPos - vPos));
+				if (fDist < fMin)
+				{
+					fMin = fDist;
+					m_pLinkMonster = static_cast<CActor*>(pMonster);
+				}
+			}
+			if (!m_pLinkMonster)
+				return;
+			else
+				m_pLinkMonster->Set_NoDamage(true);
+		}
+	}
+}
+
+void CMonster_Bastion_Healer::Check_LinkMonster()
+{
+	if (m_pLinkMonster)
+	{
+		if (m_pLinkMonster->Get_HpRatio()<0.f || !m_pLinkMonster->Get_NoDamage())
+			m_pLinkMonster = nullptr;
+	}
+}
+
+HRESULT CMonster_Bastion_Healer::Set_SpawnPosition(_fvector vPos)
+{
+	CActor::Set_SpawnPosition(vPos);
+	_float3 tmpPos;
+	XMStoreFloat3(&tmpPos, vPos);
+	m_pCharacterController->setFootPosition(tmpPos);
+	return S_OK;
 }
 
 HRESULT CMonster_Bastion_Healer::Ready_Components()
@@ -432,7 +577,7 @@ HRESULT CMonster_Bastion_Healer::Ready_AnimFSM(void)
 #pragma endregion
 #pragma region Attack
 	pAnimation = m_pModel->Get_Animation("A_Cast_Protect");
-	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::A_CAST_PROTECT, (_uint)ANIM_TYPE::A_HEAD, pAnimation, TRUE, TRUE, FALSE, ERootOption::XYZ)))
+	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::A_CAST_PROTECT, (_uint)ANIM_TYPE::A_HEAD, pAnimation, TRUE, false, FALSE, ERootOption::XYZ)))
 		return E_FAIL;
 	pAnimation = m_pModel->Get_Animation("A_Attack_Blind");
 	if (FAILED(m_pAnimator->Insert_Animation((_uint)ANIM_TYPE::A_ATTACK_BLIND, (_uint)ANIM_TYPE::A_HEAD, pAnimation, TRUE, FALSE, FALSE, ERootOption::XYZ)))
@@ -546,6 +691,9 @@ HRESULT CMonster_Bastion_Healer::Ready_AnimFSM(void)
 	if (FAILED(m_pAnimator->Connect_Animation((_uint)ANIM_TYPE::A_WALK_FWD_ED, (_uint)ANIM_TYPE::A_WALK_FWD_ST, TRUE)))
 		return E_FAIL;
 #pragma endregion
+
+	m_pAnimator->Change_Animation((_uint)ANIM_TYPE::A_IDLE);
+
 	return S_OK;
 }
 

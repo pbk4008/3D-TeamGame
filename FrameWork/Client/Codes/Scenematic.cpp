@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "..\Headers\Scenematic.h"
 #include "CinemaActor.h"
+#include "CinemaWeapon.h"
 
 CScenematic::CScenematic()
 	: m_pDevice(nullptr)
@@ -67,6 +68,7 @@ void CScenematic::End_Cinema()
 	{
 		OnOffPlayerWithUI(true);
 		g_pGameInstance->Change_BaseCamera(L"Camera_Silvermane");
+		g_pMainApp->Change_RenderCamTag(L"Camera_Silvermane");
 	}
 }
 
@@ -91,6 +93,17 @@ HRESULT CScenematic::Ready_Actor(CCinemaActor** pOut, _uint iActorTag)
 	return S_OK;
 }
 
+HRESULT CScenematic::Ready_Weapon(CCinemaWeapon** pOut, _uint iWeaponTag)
+{
+	*pOut = g_pGameInstance->Clone_GameObject<CCinemaWeapon>((_uint)SCENEID::SCENE_STAGE1, L"Proto_GameObject_CinemaWeapon", &iWeaponTag);
+	if (*pOut == nullptr)
+	{
+		MSGBOX("Ready Weapon Fail");
+		return E_FAIL;
+	}
+	return S_OK;
+}
+
 void CScenematic::OnOffPlayerWithUI(_bool bCheck)
 {
 	g_pObserver->Player_Active(bCheck);
@@ -100,6 +113,10 @@ void CScenematic::OnOffPlayerWithUI(_bool bCheck)
 	pUIList = g_pGameInstance->getObjectList(m_iSceneID, L"Layer_UI");
 	for (auto& pUI : *pUIList)
 		pUI->setActive(bCheck);
+
+	g_pQuestManager->SetRender(bCheck);
+	g_pInvenUIManager->SetRender(bCheck);
+
 }
 
 void CScenematic::Free()

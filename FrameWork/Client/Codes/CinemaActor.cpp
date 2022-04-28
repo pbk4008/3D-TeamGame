@@ -1,5 +1,7 @@
 #include "pch.h"
 #include"CinemaActor.h"
+#include "HierarchyNode.h"
+
 
 CCinemaActor::CCinemaActor()
 	: m_pController(nullptr)
@@ -48,6 +50,8 @@ HRESULT CCinemaActor::NativeConstruct(const _uint _iSceneID, void* pArg)
 	m_pController->Set_Transform(m_pTransform);
 	m_pController->Set_MoveSpeed(40.f);
 	
+	if (iActorTag == (_uint)CINEMA_ACTOR::ACTOR_PHOENIX)
+		m_PhFSDTexture = g_pGameInstance->Clone_Component<CTexture>(0, L"Proto_Component_Texture");
 
 	return S_OK;
 }
@@ -64,7 +68,9 @@ _int CCinemaActor::Tick(_double TimeDelta)
 
 _int CCinemaActor::LateTick(_double TimeDelta)
 {
-	m_pRenderer->Add_RenderGroup(CRenderer::RENDER_NONALPHA,this);
+	if(m_pRenderer != nullptr)
+		m_pRenderer->Add_RenderGroup(CRenderer::RENDER_NONALPHA,this);
+
 	return _int();
 }
 
@@ -93,6 +99,12 @@ HRESULT CCinemaActor::Ready_Model(_uint iModel)
 	case (_uint)CINEMA_ACTOR::ACTOR_MIDBOSS:
 		hr=CGameObject::SetUp_Components(m_iSceneID, L"Model_Cinema_MidBoss", L"Model", (CComponent**)&m_pModel);
 		break;
+	case (_uint)CINEMA_ACTOR::ACTOR_SCREE:
+		hr=CGameObject::SetUp_Components(m_iSceneID, L"Model_Cinema_Scree", L"Model", (CComponent**)&m_pModel);
+		break;
+	case (_uint)CINEMA_ACTOR::ACTOR_BOSS:
+		//hr=CGameObject::SetUp_Components(m_iSceneID, L"Model_Cinema_Scree", L"Model", (CComponent**)&m_pModel);
+		break;
 	}
 
 	if (FAILED(hr))
@@ -106,9 +118,9 @@ HRESULT CCinemaActor::Ready_Model(_uint iModel)
 HRESULT CCinemaActor::Render_Acoter()
 {
 	wstring CameraTag = g_pGameInstance->Get_BaseCameraTag();
-	CActor::BindConstantBuffer(CameraTag);
 	if (m_iActorTag == (_uint)CINEMA_ACTOR::ACTOR_MIDBOSS)
 	{
+		CActor::BindConstantBuffer(CameraTag);
 		for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
 		{
 			if (FAILED(m_pModel->Render(i, 0)))
@@ -117,55 +129,72 @@ HRESULT CCinemaActor::Render_Acoter()
 	}
 	else if(m_iActorTag == (_uint)CINEMA_ACTOR::ACTOR_GRAYEHAWK)
 	{
+		_float4 color = _float4(0.f, 0.f, 1.f, 1.f);
+		if (FAILED(m_pModel->SetUp_ValueOnShader("g_MainColor", &color, sizeof(_float4)))) MSGBOX("Failed To Apply Actor ConstantBuffer");
+
 		for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
 		{
+			SCB desc;
+			ZeroMemory(&desc, sizeof(SCB));
+
 			switch (i)
 			{
 			case 0:
-				if (FAILED(m_pModel->Render(i, 2)))
-					MSGBOX("Failed To Rendering Actor");
+				CActor::BindConstantBuffer(CameraTag);
+				if (FAILED(m_pModel->Render(i, 1)))	MSGBOX("Failed To Rendering Actor");
 				break;
-			case 1:
-				if (FAILED(m_pModel->Render(i, 1)))
-					MSGBOX("Failed To Rendering Actor");
-				break;
-			case 2:
-				if (FAILED(m_pModel->Render(i, 0)))
-					MSGBOX("Failed To Rendering Actor");
+			default:
+				desc.color = _float4(0.f,0.f,1.f,1.f);
+				desc.empower = 0.5f;
+				CActor::BindConstantBuffer(CameraTag,&desc);
+				if (FAILED(m_pModel->Render(i, 0)))	MSGBOX("Failed To Rendering Actor");
 				break;
 			}
 		}
+
 	}
 	else if (m_iActorTag == (_uint)CINEMA_ACTOR::ACTOR_PHOENIX)
 	{
+		_bool check = true;
+		if (FAILED(m_pModel->SetUp_ValueOnShader("g_FSDCheck", &check, sizeof(_bool)))) MSGBOX("Failed To Apply Actor ConstantBuffer");
+		CActor::BindConstantBuffer(CameraTag);
 		for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
 		{
 			switch (i)
 			{
 			case 0:
-				if (FAILED(m_pModel->Render(i, 1)))
-					MSGBOX("Failed To Rendering Actor");
+				m_PhFSDTexture->Change_Texture(L"FSD_Down");
+				m_pModel->SetUp_TextureOnShader("g_FSDTexture", m_PhFSDTexture);
 				break;
 			case 1:
-				if (FAILED(m_pModel->Render(i, 0)))
-					MSGBOX("Failed To Rendering Actor");
+				m_PhFSDTexture->Change_Texture(L"FSD_Top");
+				m_pModel->SetUp_TextureOnShader("g_FSDTexture", m_PhFSDTexture);
 				break;
 			case 2:
-				if (FAILED(m_pModel->Render(i, 2)))
-					MSGBOX("Failed To Rendering Actor");
+				m_PhFSDTexture->Change_Texture(L"FSD_Cloth");
+				m_pModel->SetUp_TextureOnShader("g_FSDTexture", m_PhFSDTexture);
 				break;
-			case 3:
-				if (FAILED(m_pModel->Render(i, 3)))
-					MSGBOX("Failed To Rendering Actor");
 			}
+			if (FAILED(m_pModel->Render(i, 1)))	MSGBOX("Failed To Rendering Actor");
 		}
 	}
 	else
 	{
 		for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); i++)
 		{
-			if (FAILED(m_pModel->Render(i, i)))
-				MSGBOX("Fialed To Rendering Silvermane");
+			SCB desc;
+			ZeroMemory(&desc, sizeof(SCB));
+
+			if (i == 0)
+			{
+				desc.color = _float4(0.784f, 0.137f, 0.137f, 1.f);;
+				desc.empower = 0.5f;
+				CActor::BindConstantBuffer(CameraTag, &desc);
+			}
+			else
+				CActor::BindConstantBuffer(CameraTag, &desc);
+
+			if (FAILED(m_pModel->Render(i, i))) MSGBOX("Fialed To Rendering Silvermane");
 		}
 	}
 	return S_OK;
@@ -185,6 +214,18 @@ void CCinemaActor::Actor_AnimReset()
 {
 	if(m_pController)
 		m_pController->Reset_Animation();
+}
+
+CHierarchyNode* CCinemaActor::Get_Bone(const string& tBoneName)
+{
+	CHierarchyNode* pBone=m_pModel->Get_Bone(tBoneName);
+
+	return pBone;
+}
+
+_fmatrix CCinemaActor::Get_Pivot()
+{
+	return m_pModel->Get_PivotMatrix();
 }
 
 CCinemaActor* CCinemaActor::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
@@ -215,4 +256,5 @@ void CCinemaActor::Free()
 {
 	CActor::Free();
 	Safe_Release(m_pController);
+	Safe_Release(m_PhFSDTexture);
 }

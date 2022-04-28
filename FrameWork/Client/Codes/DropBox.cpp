@@ -72,7 +72,7 @@ HRESULT CDropBox::NativeConstruct(const _uint _iSceneID, void* _pArg)
 
 	ZeroMemory(&LightDesc, sizeof(LIGHTDESC));
 	LightDesc.eType = LIGHTDESC::TYPE_POINT;
-	LightDesc.fRange = 10.f;
+	LightDesc.fRange = 7.f;
 	LightDesc.vDiffuse = _float4(0.3686f, 04941.f, 0.60784f, 1.f);
 	LightDesc.vSpecular = _float4(0.7f, 0.7f, 0.7f, 1.f);
 	LightDesc.vAmbient = _float4(0.8f, 0.8f, 0.8f, 1.f);
@@ -99,7 +99,9 @@ _int CDropBox::Tick(_double _dDeltaTime)
 	if (NO_EVENT != iProgress)
 		return iProgress;
 
-	m_plight->Set_Color(XMVectorSet(0.2f, 1.f, 0.5f, 1.f));
+	m_plight->Set_Color(XMVectorSet(0.2f, 0.5f, 0.1f, 1.f));
+	m_plight->Set_Ambient(_float4(0.01f, 0.01f, 0.01f, 1.f));
+	m_plight->Set_Sepcular(_float4(0.01f, 0.01f, 0.01f, 1.f));
 
 	if (true == m_bBoxOpened && 0 < m_dropList.size())
 	{
@@ -370,12 +372,10 @@ CGameObject* CDropBox::Clone(const _uint _iSceneID, void* _pArg)
 
 void CDropBox::Free()
 {
+	__super::Free();
+
 	Safe_Release(m_pAnimationController);
 	Safe_Release(m_pStateController);
 	Safe_Release(m_pCollider);
 	Safe_Release(m_pAnimator);
-	Safe_Release(m_pModel);
-
-	__super::Free();
-
 }

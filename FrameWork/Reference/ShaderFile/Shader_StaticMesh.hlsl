@@ -172,6 +172,27 @@ PS_OUT PS_MAIN(PS_IN In)
 
 	return Out;
 }
+
+struct PS_OUT_Alpha
+{
+	float4 vColor : SV_TARGET0;
+	float4 vWeight : SV_TARGET1;
+};
+
+PS_OUT_Alpha PS_MAIN_Alpha(PS_IN In)
+{
+	PS_OUT_Alpha Out = (PS_OUT_Alpha) 0;
+	
+	//half4 diffuse = g_DiffuseTexture.Sample(DefaultSampler, In.vUvDepth.xy);
+
+	Out.vColor.rgb = g_color;
+	
+	half4 weight = half4(g_Weight.xxx, 1.f);
+	
+	Out.vWeight = weight;
+
+	return Out;
+}
 // SHADOWMAP
 //*---------------------------------------------------------------------------------------------*
 struct PS_IN_SHADOW
@@ -394,6 +415,18 @@ technique11 DefaultTechnique
 		VertexShader = compile vs_5_0 VS_MAIN_MOTIONTRAIL();
 		GeometryShader = NULL;
 		PixelShader = compile ps_5_0 PS_MAIN_MOTIONTRAIL();
+	}
+
+	pass StaticMeshAlpha //------------------------------------------------------------------------------------5 Alpha
+	{
+		SetRasterizerState(CullMode_Default);
+		SetDepthStencilState(ZBufferDisable, 0);
+		SetBlendState(AlphaAdditive, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+
+		/* 진입점함수를 지정한다. */
+		VertexShader = compile vs_5_0 VS_MAIN_STATIC();
+		GeometryShader = NULL;
+		PixelShader = compile ps_5_0 PS_MAIN_Alpha();
 	}
 }
 

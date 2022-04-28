@@ -8,7 +8,6 @@
 #include "DropBoxData.h"
 #include "BoxBridge.h"
 
-
 //UI
 #include "UI_Player_HpBar.h"
 #include "UI_Player_HpBar_Red.h"
@@ -16,12 +15,13 @@
 #include "UI_Fill_CKey.h"
 #include "UI_Tuto_Base.h"
 #include "UI_Tuto_Font.h"
-
 //Effect
 #include "Effect_Env_Fire.h"
 #include "Effect_Env_Floating.h"
 
 #include "DropManager.h"
+#include "Potal.h"
+#include <Boss_Bastion_Judicator.h>
 
 CStage2::CStage2(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
 	: CLevel(pDevice, pDeviceContext)
@@ -49,26 +49,48 @@ HRESULT CStage2::NativeConstruct()
 		return E_FAIL;
 
 	if (FAILED(Ready_MapObject()))
+	{
+		MSGBOX("MapObject");
 		return E_FAIL;
+	}
 
 	if (FAILED(Ready_Player(L"Layer_Silvermane")))
+	{
+		MSGBOX("Player");
+
 		return E_FAIL;
+	}
 
 	if (FAILED(Ready_UI(L"Layer_UI")))
+	{
+		MSGBOX("UI");
+
 		return E_FAIL;
+	}
 
 	if (FAILED(Ready_Data_UI(L"../bin/SaveData/UI/UI.dat")))
+	{
+		MSGBOX("UIData");
 		return E_FAIL;
+	}
 
 	if (FAILED(Ready_TriggerSystem(L"../bin/SaveData/Trigger/MonsterSpawnTrigger2.dat")))
 		return E_FAIL;
 
 	if (FAILED(Ready_Treasure_Chest()))
+	{
+		MSGBOX("Chest");
+		return E_FAIL;
+	}
+	if (FAILED(Ready_Portal()))
 		return E_FAIL;
 
 	g_pDropManager = CDropManager::GetInstance();
 	if (FAILED(g_pDropManager->NativeConstruct((SCENEID::SCENE_STAGE2))))
 		return E_FAIL;
+
+	g_pGameInstance->StopSound(CSoundMgr::CHANNELID::BGM);
+	g_pGameInstance->PlayBGM(L"Stage2_BGM");
 
 	return S_OK;
 }
@@ -99,8 +121,95 @@ _int CStage2::Tick(_double TimeDelta)
 		m_pTriggerSystem->Tick(TimeDelta);
 
 		if (m_iCountMonster == 0 && m_bFirst)
-			m_pTriggerSystem->Check_Clear();
+		{
+			if (m_pTriggerSystem->Get_CurrentTriggerNumber() == 1)
+			{
+				if (m_iPortalCount == 0)
+				{
+					m_pTriggerSystem->Trigger_Clear();
+
+					Open_Potal(XMVectorSet(67.f, 18.f, 160.f, 1.f), (_uint)GAMEOBJECT::MONSTER_2H);
+					Open_Potal(XMVectorSet(76.f, 18.f, 157.f, 1.f), (_uint)GAMEOBJECT::MONSTER_SHOOTER);
+					Open_Potal(XMVectorSet(71.f, 18.f, 151.f, 1.f), (_uint)GAMEOBJECT::MONSTER_HEALER);
+					m_iPortalCount = 3;
+					m_iCountMonster += 3;
+					m_bPortalClear = true;
+				}
+				else if(m_bPortalClear)
+				{
+					m_pTriggerSystem->Next_TriggerOn();
+					m_bPortalClear = false;
+				}
+			}
+			else if (m_pTriggerSystem->Get_CurrentTriggerNumber() == 5)
+			{
+				if (m_iPortalCount == 3)
+				{
+					m_pTriggerSystem->Trigger_Clear();
+
+					Open_Potal(XMVectorSet(6.f, 17.f, 321.f, 1.f), (_uint)GAMEOBJECT::MONSTER_SHOOTER);
+					Open_Potal(XMVectorSet(5.f, 17.f, 331.f, 1.f), (_uint)GAMEOBJECT::MONSTER_1H);
+					Open_Potal(XMVectorSet(3.f, 17.f, 310.f, 1.f), (_uint)GAMEOBJECT::MONSTER_SPEAR);
+					m_iPortalCount +=3;
+					m_iCountMonster += 3;
+					m_bPortalClear = true;
+				}
+				else if (m_bPortalClear)
+				{
+					m_pTriggerSystem->Next_TriggerOn();
+					m_bPortalClear = false;
+				}
+			}
+			else if (m_pTriggerSystem->Get_CurrentTriggerNumber() == 8)
+			{
+				if (m_iPortalCount == 6)
+				{
+					m_pTriggerSystem->Trigger_Clear();
+					Open_Potal(XMVectorSet(59.f, 32.f, 460.f, 1.f), (_uint)GAMEOBJECT::MONSTER_1H);
+					Open_Potal(XMVectorSet(62.f, 32.f, 443.f, 1.f), (_uint)GAMEOBJECT::MONSTER_SHOOTER);
+					m_iPortalCount += 2;
+					m_iCountMonster += 2;
+				}
+				else if (m_iPortalCount == 8)
+				{
+					Open_Potal(XMVectorSet(59.f, 32.f, 448, 1.f), (_uint)GAMEOBJECT::MONSTER_HEALER);
+					Open_Potal(XMVectorSet(64.f, 32.f, 449.f, 1.f), (_uint)GAMEOBJECT::MONSTER_2H);
+					Open_Potal(XMVectorSet(74.f, 32.f, 462.f, 1.f), (_uint)GAMEOBJECT::MONSTER_SPEAR);
+					m_iPortalCount += 3;
+					m_iCountMonster += 3;
+				}
+				else if (m_iPortalCount == 11)
+				{
+					Open_Potal(XMVectorSet(61.f, 32.f, 462, 1.f), (_uint)GAMEOBJECT::MONSTER_SHOOTER);
+					Open_Potal(XMVectorSet(68.f, 32.f, 452.f, 1.f), (_uint)GAMEOBJECT::MONSTER_1H);
+					m_iPortalCount += 2;
+					m_iCountMonster += 2;
+					m_bPortalClear = true;
+				}
+				else if (m_bPortalClear)
+				{
+					m_bPortalClear = false;
+					m_pTriggerSystem->setAllTriggerClear(true); 
+				}
+			}
+			else
+				m_pTriggerSystem->Check_Clear();
+
+			CBoss_Bastion_Judicator* pBoss = (CBoss_Bastion_Judicator*)g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE2, L"Layer_Boss")->front();
+			if (nullptr != pBoss)
+			{
+				if (m_iCountMonster == 0 && pBoss->Get_Dead())
+				{
+					if (FAILED(g_pGameInstance->Open_Level((_uint)SCENEID::SCENE_LOADING, CLoading::Create(m_pDevice, m_pDeviceContext, SCENEID::SCENE_STAGE3))))
+						return -1;
+
+					return 0;
+				}
+			}
+		}
 	}
+
+	g_pInvenUIManager->Tick(TimeDelta);
 
 	if (g_pGameInstance->getkeyDown(DIK_I))
 	{
@@ -426,6 +535,43 @@ HRESULT CStage2::Ready_JumpTrigger()
 	return S_OK;
 }
 
+HRESULT CStage2::Ready_Portal()
+{
+	for (_uint i = 0; i < 13; i++)
+	{
+		if (i < 3)
+		{
+			if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE2, L"Layer_PortalMonster", L"Proto_GameObject_Monster_Bastion_Healer")))
+				return E_FAIL;
+		}
+		else if (i >= 3 && i < 5)
+		{
+			if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE2, L"Layer_PortalMonster", L"Proto_GameObject_Monster_Bastion_2HSword")))
+				return E_FAIL;
+		}
+		else if(i>=5 && i<9)
+		{
+			if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE2, L"Layer_PortalMonster", L"Proto_GameObject_Monster_Bastion_Shooter")))
+				return E_FAIL;
+		}
+		else if (i >= 9 && i < 11)
+		{
+			if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE2, L"Layer_PortalMonster", L"Proto_GameObject_Monster_Bastion_Spear")))
+				return E_FAIL;
+		}
+		else if (i >= 11 && i < 13)
+		{
+			if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE2, L"Layer_PortalMonster", L"Proto_GameObject_Monster_Bastion_Sword")))
+				return E_FAIL;
+		}
+
+		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE2, L"Layer_Portal", L"Proto_GameObject_Portal")))
+			return E_FAIL;
+	}
+
+	return S_OK;
+}
+
 HRESULT CStage2::Ready_Data_Effect(const _tchar* pDataFilePath)
 {
 #pragma region 이펙트매니저에 안들어가는것들
@@ -516,6 +662,8 @@ HRESULT CStage2::Ready_TriggerFunctionSetting()
 
 void CStage2::Trgger_Function1()
 {
+	//CLEAR_QUEST(L"T_HUD_FirstStep");
+
 	list<CGameObject*>* pLayer = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE2, L"Layer_Crawler");
 
 	m_bFirst = true;
@@ -617,6 +765,8 @@ void CStage2::Trgger_Function1()
 		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 	}
 	m_iCountMonster = 9;
+	
+	//START_QUEST(EQuestHeaderType::Sunforge, L"T_HUD_GotoDungeon");
 }
 
 void CStage2::Trgger_Function2()
@@ -1234,6 +1384,7 @@ void CStage2::Trgger_FunctionBoss()
 	auto iter = pLayer->begin();
 	(*iter)->setActive(true);
 	m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
+	m_iCountMonster += 1;
 }
 
 
@@ -1274,6 +1425,22 @@ HRESULT CStage2::Ready_Treasure_Chest()
 	}
 
 	return S_OK;
+}
+
+void CStage2::Open_Potal(_fvector vPos, _uint iMonTag)
+{
+	list<CGameObject*>* pLayer = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE2, L"Layer_Portal");
+	for (auto& pObj : *pLayer)
+	{
+		CPotal* pPotal = nullptr;
+		if (!pObj->getActive())
+		{
+			pPotal = static_cast<CPotal*>(pObj);
+			pPotal->Open_Potal(iMonTag, vPos);
+			pPotal->setActive(true);
+			break;
+		}
+	}
 }
 
 CStage2* CStage2::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)

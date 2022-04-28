@@ -43,17 +43,18 @@ public:
 	HRESULT Ready_Component(void);
 	_int Attach_Owner(void);
 
-	void Set_Fill(UI_LevelUP_Fill_Right* pObj) {
-		m_pFill = pObj; Safe_AddRef(m_pFill);
-	}
+	void Set_Fill(UI_LevelUP_Fill_Right* pObj) { m_pFill = pObj; }
+
 public:
 	void SetBg(const std::wstring& _szFileName);
+	void SetFadeOut(void);
+	void FadeIn(void);
 
 private:
 	CSingleImage* m_pSigleImageCom = nullptr;
+	CTransform*	  m_pLocalTransform = nullptr;
 	Desc    desc;
 	CUI*		  m_pOwner = nullptr;
-	CTransform*	  m_pLocalTransform = nullptr;
 	_bool		  m_bSetScale = true;
 
 	UI_LevelUP_Fill_Right* m_pFill = nullptr;

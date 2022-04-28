@@ -18,6 +18,8 @@
 #include "BronzeAnimus_Excution.h"
 
 #include "Stage1.h"
+#include "Stage2.h"
+#include "DamageFont.h"
 
 CMonster_BronzeAnimus::CMonster_BronzeAnimus(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
 	: CActor(_pDevice, _pDeviceContext)
@@ -133,7 +135,13 @@ _int CMonster_BronzeAnimus::Tick(_double _dDeltaTime)
 			}
 
 			if (m_lifetime >= 1.f)
+			{
+				CLevel* pLevel = g_pGameInstance->getCurrentLevelScene();
+				if (g_pGameInstance->getCurrentLevel() == (_uint)SCENEID::SCENE_STAGE2)
+					static_cast<CStage2*>(pLevel)->Minus_MonsterCount();
+
 				Set_Remove(true);
+			}
 		}
 		else if (m_pStateController->Get_CurStateTag() == L"Excution")
 		{
@@ -144,7 +152,13 @@ _int CMonster_BronzeAnimus::Tick(_double _dDeltaTime)
 			}
 
 			if (m_lifetime >= 1.f)
+			{
+				CLevel* pLevel = g_pGameInstance->getCurrentLevelScene();
+				if (g_pGameInstance->getCurrentLevel() == (_uint)SCENEID::SCENE_STAGE2)
+					static_cast<CStage2*>(pLevel)->Minus_MonsterCount();
+
 				Set_Remove(true);
+			}
 		}
 		else
 		{
@@ -177,8 +191,9 @@ _int CMonster_BronzeAnimus::Tick(_double _dDeltaTime)
 		}
 	}
 
-
 	m_pPanel->Set_TargetWorldMatrix(m_pTransform->Get_WorldMatrix());
+
+	CActor::LightOnOff(m_pTransform->Get_State(CTransform::STATE_POSITION), XMVectorSet(0.f, 1.f, 0.f, 1.f), 10.f);
 
 	return _int();
 }
@@ -208,7 +223,7 @@ _int CMonster_BronzeAnimus::LateTick(_double _dDeltaTime)
 HRESULT CMonster_BronzeAnimus::Render()
 {
 	if (m_bdissolve == true)
-		CActor::DissolveOn(0.5f);
+		CActor::DissolveOn(0.7f);
 
 	if (FAILED(m_pModel->SetUp_ValueOnShader("g_bdissolve", &m_bdissolve, sizeof(_bool)))) MSGBOX("Failed to Apply dissolvetime");
 
@@ -248,6 +263,26 @@ void CMonster_BronzeAnimus::Hit(const ATTACKDESC& _tAttackDesc)
 	CCollision collision;
 	collision.pGameObject = _tAttackDesc.pHitObject;
 
+	Active_Effect((_uint)EFFECT::HIT);
+	Active_Effect((_uint)EFFECT::HIT_FLOATING);
+	Active_Effect((_uint)EFFECT::HIT_FLOATING_2);
+	Active_Effect((_uint)EFFECT::HIT_IMAGE);
+
+	CTransform* pOtherTransform = _tAttackDesc.pOwner->Get_Transform();
+	_vector svOtherLook = XMVector3Normalize(pOtherTransform->Get_State(CTransform::STATE_LOOK));
+	_vector svOtherRight = XMVector3Normalize(pOtherTransform->Get_State(CTransform::STATE_RIGHT));
+
+	uniform_real_distribution<_float> fRange(-0.5f, 0.5f);
+	uniform_real_distribution<_float> fRange2(-0.2f, 0.2f);
+	uniform_int_distribution<_int> iRange(-5, 5);
+	CDamageFont::DESC tDamageDesc;
+	_vector svPos = m_pTransform->Get_State(CTransform::STATE_POSITION) + _vector{ 0.f, 2.f + fRange2(g_random), 0.f, 0.f };
+	svPos += svOtherRight * fRange(g_random) - svOtherLook * 0.5f;
+	XMStoreFloat3(&tDamageDesc.vPos, svPos);
+	tDamageDesc.fDamage = _tAttackDesc.fDamage + (_float)iRange(g_random);
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_DamageFont", L"Proto_GameObject_DamageFont", &tDamageDesc)))
+		MSGBOX(L"데미지 폰트 생성 실패");
+
 	Hit(collision);
 }
 
@@ -259,9 +294,9 @@ void CMonster_BronzeAnimus::Parry(const PARRYDESC& _tParryDesc)
 
 void CMonster_BronzeAnimus::Execution()
 {
-	/*CLevel* pLevel = g_pGameInstance->getCurrentLevelScene();
+	CLevel* pLevel = g_pGameInstance->getCurrentLevelScene();
 	if (g_pGameInstance->getCurrentLevel() == (_uint)SCENEID::SCENE_STAGE2)
-		static_cast<CStage2*>(pLevel)->Minus_MonsterCount();*/
+		static_cast<CStage2*>(pLevel)->Minus_MonsterCount();
 
 	Set_Dead();
 	Remove_Collider();

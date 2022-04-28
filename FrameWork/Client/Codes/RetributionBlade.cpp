@@ -5,6 +5,7 @@
 #include "Monster_Bastion_2HSword.h"
 #include "Material.h"
 #include "StateController.h"
+#include "TrailEffect_Distortion.h"
 
 CRetributionBlade::CRetributionBlade(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
 	: CWeapon(_pDevice, _pDeviceContext)
@@ -63,6 +64,15 @@ HRESULT CRetributionBlade::NativeConstruct(const _uint _iSceneID, void* _pArg)
 
 	m_fDamage = 7.f;
 
+	CTrailEffect::DESC tTrailDesc;
+	tTrailDesc.pOwnerTransform = m_pTransform;
+	tTrailDesc.fLength = 1.f;
+	XMStoreFloat4x4(&tTrailDesc.matPivot, XMMatrixTranslation(0.f, 0.f, 1.5f));
+	tTrailDesc.wstrTextureTag = L"TrailBase";
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer(m_iSceneID, L"Layer_Effect", L"Proto_GameObject_TrailEffect_Distortion", &tTrailDesc, (CGameObject**)&m_pTrailEffect_Distortion)))
+		MSGBOX(L"디스토션 트레일 생성 실패. from Needle");
+	Safe_AddRef(m_pTrailEffect_Distortion);
+
 	return S_OK;
 }
 
@@ -84,6 +94,25 @@ _int CRetributionBlade::LateTick(_double _dDeltaTime)
 {
 	if (0 > __super::LateTick(_dDeltaTime))
 		return -1;
+
+	if (m_isAttack)
+	{
+		if (m_pTrailEffect_Distortion)
+		{
+			m_pTrailEffect_Distortion->Record_Points(_dDeltaTime);
+			m_pTrailEffect_Distortion->Set_IsRender(true);
+			m_pRenderer->SetRenderButton(CRenderer::DISTORTION, true);
+		}
+	}
+	else
+	{
+		if (m_pTrailEffect_Distortion)
+		{
+			m_pTrailEffect_Distortion->Clear_Points();
+			m_pTrailEffect_Distortion->Set_IsRender(false);
+			m_pRenderer->SetRenderButton(CRenderer::DISTORTION, false);
+		}
+	}
 
 	if(m_pRenderer)
 		m_pRenderer->Add_RenderGroup(CRenderer::RENDER_NONALPHA, this);
@@ -240,4 +269,5 @@ void CRetributionBlade::Free()
 	CWeapon::Free();
 
 	Safe_Release(m_pCollider);
+	Safe_Release(m_pTrailEffect_Distortion);
 }

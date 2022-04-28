@@ -51,6 +51,7 @@ HRESULT CHealer_Execution::EnterState()
 
 	m_pAnimator->Change_AnyEntryAnimation((_uint)CMonster_Bastion_Healer::ANIM_TYPE::A_Execution);
 	g_pMainApp->FreezeTime();
+	g_pObserver->Set_Exp(10.f);
 
 	return S_OK;
 }

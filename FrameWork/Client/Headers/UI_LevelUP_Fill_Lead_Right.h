@@ -47,6 +47,8 @@ public:
 
 public:
 	void SetBg(const std::wstring& _szFileName);
+	void SetFadeOut(void);
+	void FadeIn(void);
 
 private:
 	CSingleImage* m_pSigleImageCom = nullptr;

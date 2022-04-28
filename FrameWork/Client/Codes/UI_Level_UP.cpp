@@ -45,6 +45,9 @@ _int CLevel_UP::Tick(_double dDeltaTime)
 	m_pFIll_Left->Tick(dDeltaTime);
 	m_pFIll_Right->Tick(dDeltaTime);
 
+	if (this->getActive())
+		ShowUp(dDeltaTime);
+
 	return _int();
 }
 
@@ -67,17 +70,6 @@ _int CLevel_UP::LateTick(_double TimeDelta)
 
 HRESULT CLevel_UP::Render()
 {
-	//m_pBg->Render();
-
-	//m_pBgLeft->Render();
-	//m_pBgRight->Render();
-
-	//m_pFill_Lead_Left->Render();
-	//m_pFill_Lead_Right->Render();
-
-	//m_pFIll_Left->Render();
-	//m_pFIll_Right->Render();
-
 	return S_OK;
 }
 
@@ -150,6 +142,7 @@ HRESULT CLevel_UP::Ready_UIObject(void)
 void CLevel_UP::Show(CPlayerData* pPlayerData)
 {
 	this->setActive(true);
+    FadeInAll();
 
 	m_pBg->setActive(true);
 
@@ -167,6 +160,70 @@ void CLevel_UP::Show(CPlayerData* pPlayerData)
 
 	m_pFIll_Left->setActive(true);
 	m_pFIll_Right->setActive(true);
+}
+
+void CLevel_UP::Hide(void)
+{
+	if (m_fHideYInitPos > m_fHideYEndPos)
+	{
+		m_fHideYInitPos -= g_fImmutableTime * 250.f;
+
+		if (m_fHideYInitPos <= m_fHideYEndPos)
+		{
+			m_fHideYInitPos = m_fHideYEndPos;
+			m_fInitYPos = -100.f;
+			this->setActive(false);
+		}
+		m_pTransform->Set_State(CTransform::STATE_POSITION, _fvector{ 0.f, m_fHideYInitPos, 0.f, 1.f });
+		FadeOutAll();
+	}
+}
+
+void CLevel_UP::ShowUp(_double TimeDelta)
+{
+	if (m_fInitYPos < m_fEndYPos)
+	{
+		m_fInitYPos += (_float)TimeDelta * 250.f;
+		if (m_fInitYPos >= m_fEndYPos)
+		{
+			m_fInitYPos = m_fEndYPos;
+			m_fHideYInitPos = 0.f;
+		}
+		m_pTransform->Set_State(CTransform::STATE_POSITION, _fvector{ 0.f, m_fInitYPos, 0.f, 1.f });
+		FadeInAll();
+	}
+}
+
+void CLevel_UP::FadeOutAll(void)
+{
+	m_pBg->SetFadeOut();
+	m_pBgLeft->SetFadeOut();
+	m_pBgRight->SetFadeOut();
+	m_pFill_Lead_Left->SetFadeOut();
+	m_pFill_Lead_Right->SetFadeOut();
+	m_pFIll_Left->SetFadeOut();
+	m_pFIll_Right->SetFadeOut();
+}
+
+void CLevel_UP::FadeInAll(void)
+{
+	m_pBg->FadeIn();
+	m_pBgLeft->FadeIn();
+	m_pBgRight->FadeIn();
+	m_pFill_Lead_Left->FadeIn();
+	m_pFill_Lead_Right->FadeIn();
+	m_pFIll_Left->FadeIn();
+	m_pFIll_Right->FadeIn();
+}
+
+void CLevel_UP::SetLevelBG(_int PlayerLevel)
+{
+	m_pBg->SetBg(PlayerLevel);
+}
+
+void CLevel_UP::FixPos(void)
+{
+	m_pBg->FixPos();
 }
 
 CLevel_UP* CLevel_UP::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)

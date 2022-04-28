@@ -50,7 +50,8 @@ HRESULT C1H_SwordAttackNormalR2_Loop::EnterState()
 		return E_FAIL;
 
 	// ¶óÀÌÆ®
-	m_pSilvermane->OnLight(XMVectorSet(1.f, 0.2f, 0.2f, 1.f), XMVectorSet(1.f, 1.f, 1.f, 1.f), 10.f, 12.f);
+	m_pSilvermane->Set_LightCheck(true);
+	m_pSilvermane->Set_LightColor(XMVectorSet(1.f, 0.f, 0.f, 1.f));
 
 	_vector Pos = { 0.f, 0.03f, 0.f ,0.f };
 	m_pSilvermane->Active_Effect((_uint)EFFECT::ATTACK_GROUND, Pos);

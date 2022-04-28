@@ -49,9 +49,11 @@ cbuffer LightBuffer
 
 cbuffer PRTMaterialBuffer
 {
+	bool g_FSDCheck = (bool) 0;
 	float g_Metalic = (float) 0;
 	float g_Roughness = (float) 0;
 	float g_AO = (float) 0;
+	float4 g_MainColor = (float4) 1;
 };
 
 cbuffer Colorbuffer

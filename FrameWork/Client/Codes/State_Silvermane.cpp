@@ -513,7 +513,7 @@ void CState_Silvermane::Reflect_Bullet(const ATTACKDESC& _tAttackDesc)
 
 void CState_Silvermane::Hit(const ATTACKDESC& _tAttackDesc)
 {
-	if (m_pSilvermane->IsHit() || m_pSilvermane->IsAttack() || m_pSilvermane->Get_Dead())
+	if (m_pSilvermane->IsHit() || m_pSilvermane->IsAttack() || m_pSilvermane->Get_Dead() || m_pSilvermane->IsExecution() || m_pSilvermane->IsDash())
 		return;
 
 	m_pSilvermane->Add_HP(-_tAttackDesc.fDamage);
@@ -572,8 +572,6 @@ void CState_Silvermane::Block(const ATTACKDESC& _tAttackDesc)
 {
 	if (m_pSilvermane->IsHit() || m_pSilvermane->Get_Dead())
 		return;
-
-	m_pSilvermane->OnLight(XMVectorSet(1.f, 1.f, 1.f, 1.f), XMVectorSet(5.f, 5.f, 5.f, 5.f), 15.0f, 60.f);
 
 	EDir eDirFB = EDir::Max;
 	_vector svDir = XMVector3Normalize(XMVectorSetY(_tAttackDesc.pOwner->Get_Transform()->Get_State(CTransform::STATE_POSITION) - m_pTransform->Get_State(CTransform::STATE_POSITION), 0.f));

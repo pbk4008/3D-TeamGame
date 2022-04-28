@@ -20,6 +20,14 @@
 
 /* for. UI */
 #include "UI_Monster_Panel.h"
+#include "Stage1.h"
+#include "Stage2.h"
+
+#include "Stage1.h"
+#include "Stage2.h"
+
+#include "Light.h"
+#include "DamageFont.h"
 
 CMonster_Bastion_2HSword::CMonster_Bastion_2HSword(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
 	: CActor(_pDevice, _pDeviceContext)
@@ -59,7 +67,7 @@ HRESULT CMonster_Bastion_2HSword::NativeConstruct(const _uint _iSceneID, void* _
 	if (_pArg)
 	{
 		_float3 vPoint = (*(_float3*)_pArg);
-		if (FAILED(Set_SpawnPosition(vPoint)))
+		if (FAILED(CActor::Set_SpawnPosition(vPoint)))
 			return E_FAIL;
 	}
 	else
@@ -100,6 +108,9 @@ _int CMonster_Bastion_2HSword::Tick(_double _dDeltaTime)
 	_int iProgress = __super::Tick(_dDeltaTime);
 	if (NO_EVENT != iProgress) 
 		return iProgress;
+
+	Check_NoDamage(_dDeltaTime);
+
 	m_pTransform->Set_Velocity(XMVectorZero());
 
 	/* State FSM Update */
@@ -125,8 +136,17 @@ _int CMonster_Bastion_2HSword::Tick(_double _dDeltaTime)
 				m_bdissolve = true;
 				m_pPanel->Set_UIRemove(true);
 			}
+
 			if (m_lifetime >= 1.f)
+			{
+				CLevel* pLevel = g_pGameInstance->getCurrentLevelScene();
+				if (g_pGameInstance->getCurrentLevel() == (_uint)SCENEID::SCENE_STAGE1)
+					static_cast<CStage1*>(pLevel)->Minus_MonsterCount();
+				else if (g_pGameInstance->getCurrentLevel() == (_uint)SCENEID::SCENE_STAGE2)
+					static_cast<CStage2*>(pLevel)->Minus_MonsterCount();
+
 				Set_Remove(true);
+			}
 
 			if (1 <= m_pAnimator->Get_AnimController()->Get_CurKeyFrameIndex() && 2 > m_pAnimator->Get_AnimController()->Get_CurKeyFrameIndex())
 				Active_Effect((_uint)EFFECT::DEATH);
@@ -172,8 +192,9 @@ _int CMonster_Bastion_2HSword::Tick(_double _dDeltaTime)
 		}
 	}
 
-	
 	m_pPanel->Set_TargetWorldMatrix(m_pTransform->Get_WorldMatrix());
+
+	CActor::LightOnOff(m_pTransform->Get_State(CTransform::STATE_POSITION), XMVectorSet(0.f, 1.f, 0.f, 1.f), 10.f);
 
 	return _int();
 }
@@ -202,10 +223,22 @@ _int CMonster_Bastion_2HSword::LateTick(_double _dDeltaTime)
 HRESULT CMonster_Bastion_2HSword::Render()
 {
 	if (m_bdissolve == true)
-		CActor::DissolveOn(0.5f);
+		CActor::DissolveOn(0.7f);
 
 	if (FAILED(m_pModel->SetUp_ValueOnShader("g_bdissolve", &m_bdissolve, sizeof(_bool)))) MSGBOX("Failed to Apply dissolvetime");
 
+
+	RIM RimDesc;
+	ZeroMemory(&RimDesc, sizeof(RIM));
+
+	RimDesc.rimcol = _float3(0.f, 1.f, 1.f);
+	RimDesc.rimintensity = 5.f;
+	XMStoreFloat4(&RimDesc.camdir, XMVector3Normalize(g_pGameInstance->Get_CamPosition(L"Camera_Silvermane")- m_pTransform->Get_State(CTransform::STATE_POSITION)));
+
+	if (m_isNoDamage)
+		RimDesc.rimcheck = true;
+	else
+		RimDesc.rimcheck = false;
 
 	wstring wstrCamTag = g_pGameInstance->Get_BaseCameraTag();
 	for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
@@ -216,7 +249,7 @@ HRESULT CMonster_Bastion_2HSword::Render()
 		switch (i)
 		{
 		case 2:
-			CActor::BindConstantBuffer(wstrCamTag, &desc);
+			CActor::BindConstantBuffer(wstrCamTag, &desc, &RimDesc);
 			if (FAILED(m_pModel->Render(i, 1))) MSGBOX("Failed To Rendering Shooter");
 			break;
 		default:
@@ -225,7 +258,7 @@ HRESULT CMonster_Bastion_2HSword::Render()
 			desc.color = _float4(0.254f, 1.f, 0.f, 1.f);
 			desc.empower = 1.f;
 
-			CActor::BindConstantBuffer(wstrCamTag, &desc);
+			CActor::BindConstantBuffer(wstrCamTag, &desc, &RimDesc);
 			if (FAILED(m_pModel->Render(i, 0))) MSGBOX("Failed To Rendering Shooter");
 			break;
 		}
@@ -616,6 +649,7 @@ void CMonster_Bastion_2HSword::Hit(CCollision& pCol)
 {
 	if (!m_bDead)
 	{
+
 		if (false == m_bFirstHit)
 		{
 			m_bFirstHit = true; //딱 한번 true로 변경해줌
@@ -649,6 +683,9 @@ void CMonster_Bastion_2HSword::Hit(CCollision& pCol)
 
 void CMonster_Bastion_2HSword::Hit(const ATTACKDESC& _tAttackDesc)
 {
+	if (m_isNoDamage)
+		return;
+
 	if (m_bDead || 0.f >= m_fCurrentHp)
 		return;
 
@@ -657,6 +694,26 @@ void CMonster_Bastion_2HSword::Hit(const ATTACKDESC& _tAttackDesc)
 	m_fCurrentHp -= _tAttackDesc.fDamage;
 	CCollision collision;
 	collision.pGameObject = _tAttackDesc.pHitObject;
+
+	Active_Effect((_uint)EFFECT::HIT);
+	Active_Effect((_uint)EFFECT::HIT_FLOATING);
+	Active_Effect((_uint)EFFECT::HIT_FLOATING_2);
+	Active_Effect((_uint)EFFECT::HIT_IMAGE);
+
+	CTransform* pOtherTransform = _tAttackDesc.pOwner->Get_Transform();
+	_vector svOtherLook = XMVector3Normalize(pOtherTransform->Get_State(CTransform::STATE_LOOK));
+	_vector svOtherRight = XMVector3Normalize(pOtherTransform->Get_State(CTransform::STATE_RIGHT));
+
+	uniform_real_distribution<_float> fRange(-0.5f, 0.5f);
+	uniform_real_distribution<_float> fRange2(-0.2f, 0.2f);
+	uniform_int_distribution<_int> iRange(-5, 5);
+	CDamageFont::DESC tDamageDesc;
+	_vector svPos = m_pTransform->Get_State(CTransform::STATE_POSITION) + _vector{ 0.f, 2.f + fRange2(g_random), 0.f, 0.f };
+	svPos += svOtherRight * fRange(g_random) - svOtherLook * 0.5f;
+	XMStoreFloat3(&tDamageDesc.vPos, svPos);
+	tDamageDesc.fDamage = _tAttackDesc.fDamage + (_float)iRange(g_random);
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_DamageFont", L"Proto_GameObject_DamageFont", &tDamageDesc)))
+		MSGBOX(L"데미지 폰트 생성 실패");
 
 	Hit(collision);
 }
@@ -670,6 +727,15 @@ void CMonster_Bastion_2HSword::Parry(const PARRYDESC& _tParrykDesc)
 void CMonster_Bastion_2HSword::Remove_Collider()
 {
 	m_pCharacterController->Remove_CCT();
+}
+
+HRESULT CMonster_Bastion_2HSword::Set_SpawnPosition(_fvector vPos)
+{
+	CActor::Set_SpawnPosition(vPos);
+	_float3 tmpPos;
+	XMStoreFloat3(&tmpPos, vPos);
+	m_pCharacterController->setFootPosition(tmpPos);
+	return S_OK;
 }
 
 
