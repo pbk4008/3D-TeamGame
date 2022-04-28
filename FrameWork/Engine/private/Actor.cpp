@@ -13,6 +13,7 @@ CActor::CActor()
 	, m_fGroggyGauge(0.f)
 	, m_fMaxGroggyGauge(0.f)
 	, m_bGroggy(false)
+	, m_fAccNoDamageTime(0.f)
 {
 }
 
@@ -26,6 +27,7 @@ CActor::CActor(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
 	, m_fGroggyGauge(0.f)
 	, m_fMaxGroggyGauge(0.f)
 	, m_bGroggy(false)
+	, m_fAccNoDamageTime(0.f)
 {
 }
 
@@ -39,6 +41,7 @@ CActor::CActor(const CActor& rhs)
 	, m_fGroggyGauge(rhs.m_fGroggyGauge)
 	, m_fMaxGroggyGauge(rhs.m_fMaxGroggyGauge)
 	, m_bGroggy(rhs.m_bGroggy)
+	, m_fAccNoDamageTime(0.f)
 {
 }
 
@@ -268,6 +271,19 @@ void CActor::Active_Effect_Target(_uint iEffectIndex, _matrix TargetMat)
 	}
 }
 
+void CActor::Check_NoDamage(_double dDeltaTime)
+{
+	if (m_isNoDamage)
+	{
+		m_fAccNoDamageTime += (_float)dDeltaTime;
+		if (m_fAccNoDamageTime > 8.f)
+		{
+			m_fAccNoDamageTime = 0.f;
+			m_isNoDamage = false;
+		}
+	}
+}
+
 
 void CActor::Set_AttackDesc(const ATTACKDESC& _tAttackDesc)
 {
@@ -333,6 +349,18 @@ void CActor::Set_LightCheck(_bool check)
 	m_pActiveLight->Set_Active(check);
 }
 
+void CActor::Set_LightOrigRange(_float range)
+{
+	m_OrigLightRange = range;
+	m_LightRange = range;
+}
+
+void CActor::Set_LightAmbientSpecular(_float4 ambient, _float4 specular)
+{
+	m_pActiveLight->Set_Ambient(ambient);
+	m_pActiveLight->Set_Sepcular(specular);
+}
+
 void CActor::Hit(const ATTACKDESC& _tAttackDesc)
 {
 }
@@ -353,7 +381,6 @@ void CActor::Free()
 {
 	CGameObject::Free();
 
-	Safe_Release(m_pActiveLight);
 	Safe_Release(m_pModel);
 	Safe_Release(m_dissolveTex);
 	Safe_Release(m_dissolveGradientTex);

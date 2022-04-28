@@ -98,6 +98,9 @@ HRESULT CCinemaActor::Ready_Model(_uint iModel)
 	case (_uint)CINEMA_ACTOR::ACTOR_SCREE:
 		hr=CGameObject::SetUp_Components(m_iSceneID, L"Model_Cinema_Scree", L"Model", (CComponent**)&m_pModel);
 		break;
+	case (_uint)CINEMA_ACTOR::ACTOR_BOSS:
+		//hr=CGameObject::SetUp_Components(m_iSceneID, L"Model_Cinema_Scree", L"Model", (CComponent**)&m_pModel);
+		break;
 	}
 
 	if (FAILED(hr))
@@ -122,47 +125,23 @@ HRESULT CCinemaActor::Render_Acoter()
 	}
 	else if(m_iActorTag == (_uint)CINEMA_ACTOR::ACTOR_GRAYEHAWK)
 	{
+		_float4 color = _float4(0.f, 0.f, 1.f, 1.f);
+		if (FAILED(m_pModel->SetUp_ValueOnShader("g_MainColor", &color, sizeof(_float4)))) MSGBOX("Failed To Apply Actor ConstantBuffer");
+
 		for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
 		{
-			switch (i)
-			{
-			case 0:
-				if (FAILED(m_pModel->Render(i, 2)))
-					MSGBOX("Failed To Rendering Actor");
-				break;
-			case 1:
-				if (FAILED(m_pModel->Render(i, 1)))
-					MSGBOX("Failed To Rendering Actor");
-				break;
-			case 2:
-				if (FAILED(m_pModel->Render(i, 0)))
-					MSGBOX("Failed To Rendering Actor");
-				break;
-			}
+			if (FAILED(m_pModel->Render(i, 1)))	MSGBOX("Failed To Rendering Actor");
 		}
+
 	}
 	else if (m_iActorTag == (_uint)CINEMA_ACTOR::ACTOR_PHOENIX)
 	{
+		_float4 color = _float4(1.f, 0.f, 0.f, 1.f);
+		if (FAILED(m_pModel->SetUp_ValueOnShader("g_MainColor", &color, sizeof(_float4)))) MSGBOX("Failed To Apply Actor ConstantBuffer");
+
 		for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
 		{
-			switch (i)
-			{
-			case 0:
-				if (FAILED(m_pModel->Render(i, 1)))
-					MSGBOX("Failed To Rendering Actor");
-				break;
-			case 1:
-				if (FAILED(m_pModel->Render(i, 0)))
-					MSGBOX("Failed To Rendering Actor");
-				break;
-			case 2:
-				if (FAILED(m_pModel->Render(i, 2)))
-					MSGBOX("Failed To Rendering Actor");
-				break;
-			case 3:
-				if (FAILED(m_pModel->Render(i, 3)))
-					MSGBOX("Failed To Rendering Actor");
-			}
+			if (FAILED(m_pModel->Render(i, 1)))	MSGBOX("Failed To Rendering Actor");
 		}
 	}
 	else

@@ -68,6 +68,7 @@ void CScenematic::End_Cinema()
 	{
 		OnOffPlayerWithUI(true);
 		g_pGameInstance->Change_BaseCamera(L"Camera_Silvermane");
+		g_pMainApp->Change_RenderCamTag(L"Camera_Silvermane");
 	}
 }
 

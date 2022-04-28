@@ -70,7 +70,6 @@
 #include "Cinema3_3.h"
 #include "Cinema3_4.h"
 #include "Cinema3_5.h"
-#include "Cinema3_6.h"
 #include "MeshEffect_Razer.h"
 #include "DamageFont.h"
 
@@ -215,6 +214,7 @@ HRESULT CStage1::NativeConstruct()
 	}
 
 	g_pGameInstance->PlayBGM(L"Stage1_BGM");
+	
 	m_pScenemaManager->Active_Scenema((_uint)CINEMA_INDEX::CINEMA1_1);
 
 	return S_OK;
@@ -359,6 +359,7 @@ _int CStage1::Tick(_double TimeDelta)
 						m_pScenemaManager->ResetCinema();
 						if (FAILED(g_pGameInstance->Open_Level((_uint)SCENEID::SCENE_LOADING, CLoading::Create(m_pDevice, m_pDeviceContext, SCENEID::SCENE_STAGE2))))
 							return -1;
+
 						return 0;
 					}
 				}
@@ -412,13 +413,14 @@ _int CStage1::Tick(_double TimeDelta)
 	//	pMonster->setActive(true);
 	//}
 
-	if (g_pGameInstance->getkeyDown(DIK_NUMPAD3))
-	{
-		CMonster_Bastion_Shooter* pMonster = nullptr;
-		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Test", L"Proto_GameObject_Monster_Bastion_Shooter", &fPos, (CGameObject**)&pMonster)))
-			return -1;
-		pMonster->setActive(true);
-	}
+	//if (g_pGameInstance->getkeyDown(DIK_NUMPAD3))
+	//{
+	//	CMonster_Bastion_Shooter* pMonster = nullptr;
+	//	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Test", L"Proto_GameObject_Monster_Bastion_Shooter", &fPos, (CGameObject**)&pMonster)))
+	//		return -1;
+	//	pMonster->setActive(true);
+	//}
+	//// 
 	//if (g_pGameInstance->getkeyDown(DIK_NUMPAD4))
 	//{
 	//	CMonster_Bastion_Healer* pMonster = nullptr;
@@ -433,11 +435,13 @@ _int CStage1::Tick(_double TimeDelta)
 	//		return -1;
 	//	pMonster->setActive(true);
 	//}
+
 	//if (g_pGameInstance->getkeyDown(DIK_NUMPAD6))
 	//{
 	//	CMonster_Bastion_Spear* pMonster = nullptr;
 	//	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Test", L"Proto_GameObject_Monster_Bastion_Spear", &fPos, (CGameObject**)&pMonster)))
 	//		return -1;
+	//	pMonster->setActive(true);
 	//}
 	//if (g_pGameInstance->getkeyDown(DIK_NUMPAD7))
 	//{
@@ -460,13 +464,9 @@ _int CStage1::Tick(_double TimeDelta)
 	if (g_pInteractManager)
 		g_pInteractManager->Tick(TimeDelta);
 
-	if (g_pGameInstance->getkeyDown(DIK_END))
-		m_pScenemaManager->Active_Scenema((_uint)CINEMA_INDEX::CINEMA2_1);
-
 	if(m_pIndicatorManager)
 		m_pIndicatorManager->Active_Indicator();
 
-	/*For Cinema*/
 	if (m_pScenemaManager)
 	{
 		if (g_pGameInstance->getkeyDown(DIK_END))
@@ -484,7 +484,6 @@ _int CStage1::Tick(_double TimeDelta)
 			}
 		}
 	}
-
 
 	/*for Meteor*/
 	//m_fAccMeteorStartTime += (_float)TimeDelta;
@@ -504,7 +503,6 @@ _int CStage1::Tick(_double TimeDelta)
 
 _int CStage1::LateTick(_double TimeDelta)
 {
-	//m_pPot->LateTick(TimeDelta);
 
 	if(m_pScenemaManager)
 		m_pScenemaManager->LateTick(TimeDelta);
@@ -2660,10 +2658,7 @@ void CStage1::Free()
 	CLevel::Free();
 
 	if (m_pScenemaManager)
-	{
 		Safe_Release(m_pScenemaManager);
-		CScenematicManager::DestroyInstance();
-	}
 
 	for (auto& iter : m_pDumyDropData)
 		Safe_Delete(iter);

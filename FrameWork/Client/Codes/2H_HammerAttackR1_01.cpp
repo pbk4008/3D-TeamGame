@@ -39,6 +39,11 @@ _int C2H_HammerAttackR1_01::Tick(const _double& _dDeltaTime)
 
 	if (33 < iCurKeyFrameIndex && !m_isRangeAttack)
 	{
+		m_pSilvermane->Set_LightCheck(true);
+		m_pSilvermane->Set_LightColor(XMVectorSet(1.f, 0.f, 0.f, 1.f));
+		m_pSilvermane->Set_LightOrigRange(5.f);
+		m_pSilvermane->Set_LightAmbientSpecular(_float4(0.8f, 0.8f, 0.8f, 1.f), _float4(0.5f, 0.5f, 0.5f, 1.f));
+
 		// ¸Þ½¬ ÀÌÆåÆ®
 		_vector svPos = m_pTransform->Get_State(CTransform::STATE_POSITION);
 		_vector svLook = m_pTransform->Get_State(CTransform::STATE_LOOK);

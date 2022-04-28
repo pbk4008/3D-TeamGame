@@ -134,6 +134,9 @@ _uint CShooter_Attack::Shot(_double dDeltaTime)
 		if (iProgress == -1)
 			return -1;
 	}
+	else
+		m_pTransform->Face_Target(g_pObserver->Get_PlayerPos());
+
 	return _uint();
 }
 

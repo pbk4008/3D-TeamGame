@@ -7,13 +7,11 @@
 
 CBastion_Healer_Attack::CBastion_Healer_Attack(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
 	: CBastion_Healer_State(_pDevice, _pDeviceContext)
-	, m_bSpawn(false)
 {
 }
 
 CBastion_Healer_Attack::CBastion_Healer_Attack(const CBastion_Healer_Attack& _rhs)
 	: CBastion_Healer_State(_rhs)
-	, m_bSpawn(false)
 {
 }
 
@@ -35,7 +33,6 @@ _int CBastion_Healer_Attack::Tick(const _double& _dDeltaTime)
 	m_pAnimator->Tick(_dDeltaTime);
 	if (m_pAnimator->Get_CurrentAnimation()->Is_Finished())
 	{
-		m_bSpawn = false;
 		m_pOwner->set_Attack(false);
 		m_pStateController->Change_State(L"Idle");
 	}
@@ -82,50 +79,27 @@ HRESULT CBastion_Healer_Attack::ExitState()
 void CBastion_Healer_Attack::Check_Attack()
 {
 	_uint iCurAnimFrame = m_pAnimator->Get_CurrentAnimation()->Get_CurrentKeyFrameIndex();
-	//cout << iCurAnimFrame << endl;
-	if (iCurAnimFrame >= 160 && !m_bSpawn)
+	if (iCurAnimFrame >= 160 && iCurAnimFrame<165)
 	{
-		//m_bSpawn = true;
-		//_uint iSceneID = g_pGameInstance->getCurrentLevel();
-
-		//_vector vPos = m_pTransform->Get_State(CTransform::STATE_POSITION);
-		//vPos=XMVectorSetY(vPos, 10.f);
-		//
-		//_vector vLook = m_pTransform->Get_State(CTransform::STATE_LOOK);
-		//vLook=XMVector3Normalize(vLook);
-		//vLook *= -30.f;
-		//vPos += vLook;
-
-
-		//vector<_vector> vecRand;
-		//while (true)
-		//{
-		//	_uint iVecSize = vecRand.size();
-		//	if (iVecSize > 5)
-		//		break;
-		//	//_float fSizeX = MathUtils::ReliableRandom(-30.f, 30.f);
-		//	_float fSizeY = MathUtils::ReliableRandom(0.f, 5.f);
-		//	_vector vRand = XMVectorSet(0.f, fSizeY, 0.f, 0.f);
-		//	vPos += vRand;
-		//	_bool bCheck = false;
-		//	for (auto& vRandPos : vecRand)
-		//	{
-		//		_float fLen = XMVectorGetX(XMVector3Length(vPos - vRandPos));
-		//		if (fLen < 6)
-		//		{
-		//			bCheck = true;
-		//			break;
-		//		}
-		//	}
-		//	if (bCheck)
-		//		continue;
-		//	vecRand.emplace_back(vPos);
-		//}
-		//g_pGameInstance->Add_GameObjectToLayer(iSceneID, L"Layer_Potal", L"Proto_GameObject_Portal", &vecRand[0]);
-		//for (_uint i = 0; i < 5; i++)
-		//{
-		//	g_pGameInstance->Add_GameObjectToLayer(iSceneID, L"Layer_Potal", L"Proto_GameObject_Portal", &vecRand[i]);
-		//}
+		OVERLAPDESC tOverlapDesc;
+		tOverlapDesc.geometry = PxSphereGeometry(3.f);
+		XMStoreFloat3(&tOverlapDesc.vOrigin, m_pTransform->Get_State(CTransform::STATE_POSITION));
+		CGameObject* pHitObject = nullptr;
+		tOverlapDesc.ppOutHitObject = &pHitObject;
+		tOverlapDesc.filterData.flags = PxQueryFlag::eDYNAMIC;
+		tOverlapDesc.layerMask = (1 << (_uint)ELayer::Player);
+		if (g_pGameInstance->Overlap(tOverlapDesc))
+		{
+			if (tOverlapDesc.vecHitObjects.empty())
+				return;
+			CActor* pActor = static_cast<CActor*>(tOverlapDesc.vecHitObjects[0]);
+			
+			ATTACKDESC tAttackDesc = m_pMonster->Get_AttackDesc();
+			tAttackDesc.fDamage = 15.f;
+			tAttackDesc.iLevel = 3;
+			tAttackDesc.pHitObject = m_pMonster;
+			pActor->Hit(tAttackDesc);
+		}
 	}
 }
 

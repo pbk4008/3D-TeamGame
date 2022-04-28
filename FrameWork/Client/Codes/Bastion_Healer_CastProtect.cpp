@@ -22,8 +22,12 @@ _int CBastion_Healer_CastProtect::Tick(const _double& _dDeltaTime)
 	if (NO_EVENT != iProgress)
 		return iProgress;
 
+	Link();
 	m_pAnimator->Tick(_dDeltaTime);
-	
+	if (m_pAnimator->Get_CurrentAnimation()->Is_Finished()&&
+		m_pAnimator->Get_CurrentAnimNode()==(_uint)CMonster_Bastion_Healer::ANIM_TYPE::A_CAST_PROTECT)
+		m_pStateController->Change_State(L"Idle");
+
 	return _int();
 }
 
@@ -47,8 +51,7 @@ void CBastion_Healer_CastProtect::Look_Player(void)
 
 void CBastion_Healer_CastProtect::Look_Monster(void)
 {
-	if (m_pAnimator->Get_CurrentAnimation()->Is_Finished())
-		m_pStateController->Change_State(L"Idle");
+	
 }
 
 void CBastion_Healer_CastProtect::OnTriggerEnter(CCollision& collision)
@@ -57,14 +60,29 @@ void CBastion_Healer_CastProtect::OnTriggerEnter(CCollision& collision)
 
 HRESULT CBastion_Healer_CastProtect::EnterState()
 {
-	m_pAnimator->Change_AnyEntryAnimation((_uint)CMonster_Bastion_Healer::ANIM_TYPE::A_CAST_PROTECT);
+	m_pTransform->Face_Target(g_pObserver->Get_PlayerPos());
 
+	m_pAnimator->Change_AnyEntryAnimation((_uint)CMonster_Bastion_Healer::ANIM_TYPE::A_CAST_PROTECT);
+	m_pAnimator->Get_CurrentAnimation()->Reset_Animation();
+	
 	return S_OK;
 }
 
 HRESULT CBastion_Healer_CastProtect::ExitState()
 {
+	m_pAnimator->Reset_Animation((_uint)CMonster_Bastion_Healer::ANIM_TYPE::A_CAST_PROTECT);
 	return S_OK;
+}
+
+_bool CBastion_Healer_CastProtect::Link()
+{
+	//프레임 체크 후 링크
+	CAnimation* pAnim = m_pAnimator->Get_CurrentAnimation();
+	_uint dFrame = pAnim->Get_CurrentKeyFrameIndex();
+	cout << dFrame << endl;
+	if(dFrame>100)
+		m_pOwner->Link();
+	return true;
 }
 
 CBastion_Healer_CastProtect* CBastion_Healer_CastProtect::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext, void* _pArg)
