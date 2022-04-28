@@ -247,6 +247,9 @@ void CMonster_Bastion_Shooter::Set_Remove(_bool bCheck)
 
 void CMonster_Bastion_Shooter::Hit(const ATTACKDESC& _tAttackDesc)
 {
+	if (m_isNoDamage)
+		return;
+
 	if (m_bDead || 0.f >= m_fCurrentHp )
 		return;
 
@@ -333,9 +336,6 @@ void CMonster_Bastion_Shooter::Chase()
 
 void CMonster_Bastion_Shooter::Hit()
 {
-	if (m_isNoDamage)
-		return;
-
 	m_eHitType = ANIM_TYPE::HIT1;
 	CShooter_Hit::HITDATA tData;
 	ZeroMemory(&tData, sizeof(tData));

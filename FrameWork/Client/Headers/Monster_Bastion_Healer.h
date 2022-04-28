@@ -51,6 +51,7 @@ public:
 	void Link_Empty();
 	void Link();
 	void Check_LinkMonster();
+	virtual HRESULT Set_SpawnPosition(_fvector vPos);
 private:
 	HRESULT Ready_Components();
 	HRESULT Ready_Weapon(void);

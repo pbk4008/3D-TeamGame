@@ -226,6 +226,9 @@ HRESULT CMonster_Bastion_Sword::Render_Shadow()
 
 void CMonster_Bastion_Sword::Hit(const ATTACKDESC& _tAttackDesc)
 {
+	if (m_isNoDamage)
+		return;
+
 	if (m_bDead || 0.f >= m_fCurrentHp)
 		return;
 
@@ -691,9 +694,6 @@ _int CMonster_Bastion_Sword::Dead_Check()
 
 void CMonster_Bastion_Sword::Hit()
 {
-	if (m_isNoDamage)
-		return;
-
 	m_eHitType = ANIM_TYPE::HIT1;
 	CBastion_Sword_Hit::HITDATA tData;
 	ZeroMemory(&tData, sizeof(tData));

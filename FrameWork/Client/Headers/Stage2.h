@@ -28,7 +28,7 @@ private:
 	HRESULT Ready_Data_UI(const _tchar* pDataFilePath);
 	//HRESULT Ready_LightDesc();
 	HRESULT Ready_JumpTrigger();
-
+	HRESULT Ready_Portal();
 
 	HRESULT Ready_Data_Effect(const _tchar* pDataFilePath);
 	//HRESULT Ready_Data_UI(const _tchar* pDataFilePath);
@@ -36,7 +36,7 @@ private:
 private:
 	HRESULT Ready_TriggerSystem(const _tchar* pTriggerFile);
 	HRESULT Ready_TriggerFunctionSetting();
-private:
+public:
 	void Trgger_Function1();
 	void Trgger_Function2();
 	void Trgger_Function3();
@@ -55,9 +55,10 @@ private:
 
 private:
 	HRESULT Ready_Treasure_Chest(void);
-
 public:
 	void Minus_MonsterCount() { m_iCountMonster--; }
+private:
+	void Open_Potal(_fvector vPos, _uint iMonTag);
 public:
 	static CStage2* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);
 private:
@@ -71,6 +72,8 @@ private:
 	_bool m_bDebug;
 	_uint m_iCountMonster;
 	_bool m_bFirst;
+	_uint m_iPortalCount = 0;
+	_bool m_bPortalClear = false;
 };
 END
 #endif
