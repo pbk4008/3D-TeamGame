@@ -922,7 +922,7 @@ HRESULT CSilvermane::Ready_States()
 	if (FAILED(m_pStateController->Add_State(L"1H_Stagger", C1H_Stagger::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 	if (FAILED(m_pStateController->Add_State(L"1H_KnockBack", C1H_KnockBack::Create(m_pDevice, m_pDeviceContext))))
-		return E_FAIL;
+ 		return E_FAIL;
 	if (FAILED(m_pStateController->Add_State(L"KnockBack", CSilvermane_KnockBack::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 	if (FAILED(m_pStateController->Add_State(L"Death", CSilvermane_Death::Create(m_pDevice, m_pDeviceContext))))
