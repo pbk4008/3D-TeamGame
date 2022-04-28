@@ -44,14 +44,13 @@ HRESULT CEffect_Hammer_Dust::NativeConstruct(const _uint _iSceneID, void* pArg)
 		return E_FAIL;
 	}
 
-	setActive(true);
+	setActive(false);
 
 	return S_OK;
 }
 
 _int CEffect_Hammer_Dust::Tick(_double TimeDelta)
 {
-
 	_uint iAllFrameCount = (m_Desc.iImageCountX * m_Desc.iImageCountY);
 	
 	m_Desc.fFrame += (_float)(iAllFrameCount * TimeDelta * /*m_Desc.fEffectPlaySpeed*/1.7f); //플레이속도 
