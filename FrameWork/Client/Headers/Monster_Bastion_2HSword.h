@@ -56,6 +56,8 @@ public:
 	virtual void Hit(const ATTACKDESC& _tAttackDesc) override;
 	virtual void Parry(const PARRYDESC& _tParrykDesc) override;
 	void Remove_Collider();
+	HRESULT Set_SpawnPosition(_fvector vPos);
+
 private:
 	virtual void OnTriggerEnter(CCollision& collision) override;
 	virtual void OnTriggerExit(CCollision& collision) override;

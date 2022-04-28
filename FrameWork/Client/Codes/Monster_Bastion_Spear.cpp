@@ -59,7 +59,7 @@ HRESULT CMonster_Bastion_Spear::NativeConstruct(const _uint _iSceneID, void* _pA
 	if (_pArg)
 	{
 		_float3 vPoint = (*(_float3*)_pArg);
-		if (FAILED(Set_SpawnPosition(vPoint)))
+		if (FAILED(CActor::Set_SpawnPosition(vPoint)))
 			return E_FAIL;
 	}
 	else
@@ -257,6 +257,15 @@ HRESULT CMonster_Bastion_Spear::Render_Shadow()
 	for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
 		m_pModel->Render(i, 3);
 
+	return S_OK;
+}
+
+HRESULT CMonster_Bastion_Spear::Set_SpawnPosition(_fvector vPos)
+{
+	CActor::Set_SpawnPosition(vPos);
+	_float3 tmpPos;
+	XMStoreFloat3(&tmpPos, vPos);
+	m_pCharacterController->setFootPosition(tmpPos);
 	return S_OK;
 }
 
@@ -608,6 +617,9 @@ void CMonster_Bastion_Spear::Groggy_Start()
 
 void CMonster_Bastion_Spear::Hit(const ATTACKDESC& _tAttackDesc)
 {
+	if (m_isNoDamage)
+		return;
+
 	if (m_bDead || 0.f >= m_fCurrentHp)
 		return;
 
@@ -643,8 +655,6 @@ void CMonster_Bastion_Spear::Hit(CCollision& collision)
 {
 	if (!m_bDead)
 	{
-		if (m_isNoDamage)
-			return;
 
 		if (false == m_bFirstHit)
 		{

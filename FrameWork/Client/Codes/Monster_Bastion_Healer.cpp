@@ -58,7 +58,7 @@ HRESULT CMonster_Bastion_Healer::NativeConstruct(const _uint _iSceneID, void* _p
 	if (_pArg)
 	{
 		_float3 vPoint = (*(_float3*)_pArg);
-		if (FAILED(Set_SpawnPosition(vPoint)))
+		if (FAILED(CActor::Set_SpawnPosition(vPoint)))
 			return E_FAIL;
 	}
 	else
@@ -460,6 +460,15 @@ void CMonster_Bastion_Healer::Check_LinkMonster()
 	}
 }
 
+HRESULT CMonster_Bastion_Healer::Set_SpawnPosition(_fvector vPos)
+{
+	CActor::Set_SpawnPosition(vPos);
+	_float3 tmpPos;
+	XMStoreFloat3(&tmpPos, vPos);
+	m_pCharacterController->setFootPosition(tmpPos);
+	return S_OK;
+}
+
 HRESULT CMonster_Bastion_Healer::Ready_Components()
 {
 	CTransform::TRANSFORMDESC transformDesc;
@@ -661,6 +670,9 @@ HRESULT CMonster_Bastion_Healer::Ready_AnimFSM(void)
 	if (FAILED(m_pAnimator->Connect_Animation((_uint)ANIM_TYPE::A_WALK_FWD_ED, (_uint)ANIM_TYPE::A_WALK_FWD_ST, TRUE)))
 		return E_FAIL;
 #pragma endregion
+
+	m_pAnimator->Change_Animation((_uint)ANIM_TYPE::A_IDLE);
+
 	return S_OK;
 }
 

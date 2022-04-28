@@ -66,7 +66,7 @@ HRESULT CMonster_Bastion_2HSword::NativeConstruct(const _uint _iSceneID, void* _
 	if (_pArg)
 	{
 		_float3 vPoint = (*(_float3*)_pArg);
-		if (FAILED(Set_SpawnPosition(vPoint)))
+		if (FAILED(CActor::Set_SpawnPosition(vPoint)))
 			return E_FAIL;
 	}
 	else
@@ -648,8 +648,6 @@ void CMonster_Bastion_2HSword::Hit(CCollision& pCol)
 {
 	if (!m_bDead)
 	{
-		if (m_isNoDamage)
-			return;
 
 		if (false == m_bFirstHit)
 		{
@@ -684,6 +682,9 @@ void CMonster_Bastion_2HSword::Hit(CCollision& pCol)
 
 void CMonster_Bastion_2HSword::Hit(const ATTACKDESC& _tAttackDesc)
 {
+	if (m_isNoDamage)
+		return;
+
 	if (m_bDead || 0.f >= m_fCurrentHp)
 		return;
 
@@ -705,6 +706,15 @@ void CMonster_Bastion_2HSword::Parry(const PARRYDESC& _tParrykDesc)
 void CMonster_Bastion_2HSword::Remove_Collider()
 {
 	m_pCharacterController->Remove_CCT();
+}
+
+HRESULT CMonster_Bastion_2HSword::Set_SpawnPosition(_fvector vPos)
+{
+	CActor::Set_SpawnPosition(vPos);
+	_float3 tmpPos;
+	XMStoreFloat3(&tmpPos, vPos);
+	m_pCharacterController->setFootPosition(tmpPos);
+	return S_OK;
 }
 
 
