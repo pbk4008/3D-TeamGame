@@ -40,7 +40,7 @@ public:
 	virtual _int LateTick(_double _dDeltaTime) override;
 	virtual HRESULT Render() override;
 	virtual HRESULT	Render_Shadow() override;
-
+	virtual HRESULT Set_SpawnPosition(_fvector vPos);
 	virtual void setActive(_bool bActive) override;
 
 private:

@@ -393,6 +393,17 @@ HRESULT CPlayer_Weapon::Ready_TrailEffects(const Desc& _tDesc)
 			MSGBOX(L"노말 트레일 생성 실패. from Needle");
 		Safe_AddRef(m_pTrailEffect_Normal);
 	}
+	else if (L"Eclipse" == _tDesc.weaponName)
+	{
+		CTrailEffect::DESC tTrailDesc;
+		tTrailDesc.pOwnerTransform = m_pTransform;
+		tTrailDesc.fLength = 0.4f;
+		XMStoreFloat4x4(&tTrailDesc.matPivot, XMMatrixTranslation(0.f, 0.f, 2.f));
+		tTrailDesc.wstrTextureTag = L"Fire_02";
+		if (FAILED(g_pGameInstance->Add_GameObjectToLayer(m_iSceneID, L"Layer_Effect", L"Proto_GameObject_TrailEffect_Normal", &tTrailDesc, (CGameObject**)&m_pTrailEffect_Normal)))
+			MSGBOX(L"노말 트레일 생성 실패. from Eclipse");
+		Safe_AddRef(m_pTrailEffect_Normal);
+	}
 	else if (L"Justice" == _tDesc.weaponName)
 	{
 		CTrailEffect::DESC tTrailDesc;
@@ -401,7 +412,18 @@ HRESULT CPlayer_Weapon::Ready_TrailEffects(const Desc& _tDesc)
 		XMStoreFloat4x4(&tTrailDesc.matPivot, XMMatrixTranslation(0.f, 0.f, 2.f));
 		tTrailDesc.wstrTextureTag = L"EnergyPlasma_Tile_H_01";
 		if (FAILED(g_pGameInstance->Add_GameObjectToLayer(m_iSceneID, L"Layer_Effect", L"Proto_GameObject_TrailEffect_Normal", &tTrailDesc, (CGameObject**)&m_pTrailEffect_Normal)))
-			MSGBOX(L"노말 트레일 생성 실패. from Needle");
+			MSGBOX(L"노말 트레일 생성 실패. from Justice");
+		Safe_AddRef(m_pTrailEffect_Normal);
+	}
+	else if (L"Dragon" == _tDesc.weaponName)
+	{
+		CTrailEffect::DESC tTrailDesc;
+		tTrailDesc.pOwnerTransform = m_pTransform;
+		tTrailDesc.fLength = 0.4f;
+		XMStoreFloat4x4(&tTrailDesc.matPivot, XMMatrixTranslation(0.f, 0.f, 2.f));
+		tTrailDesc.wstrTextureTag = L"waterfall02";
+		if (FAILED(g_pGameInstance->Add_GameObjectToLayer(m_iSceneID, L"Layer_Effect", L"Proto_GameObject_TrailEffect_Normal", &tTrailDesc, (CGameObject**)&m_pTrailEffect_Normal)))
+			MSGBOX(L"노말 트레일 생성 실패. from Dragon");
 		Safe_AddRef(m_pTrailEffect_Normal);
 	}
 	////////////////////////////////////////////////// 해머
@@ -413,7 +435,7 @@ HRESULT CPlayer_Weapon::Ready_TrailEffects(const Desc& _tDesc)
 		tTrailDesc.pOwnerTransform = m_pTransform;
 		tTrailDesc.wstrTextureTag = L"EnergyPlasma_Tile_H_01";
 		if (FAILED(g_pGameInstance->Add_GameObjectToLayer(m_iSceneID, L"Layer_Effect", L"Proto_GameObject_TrailEffect_Normal", &tTrailDesc, (CGameObject**)&m_pTrailEffect_Normal)))
-			MSGBOX(L"노말 트레일 생성 실패. from Needle");
+			MSGBOX(L"노말 트레일 생성 실패. from Fury");
 		Safe_AddRef(m_pTrailEffect_Normal);
 	}
 	else if (L"Ironstone" == _tDesc.weaponName)
@@ -424,10 +446,31 @@ HRESULT CPlayer_Weapon::Ready_TrailEffects(const Desc& _tDesc)
 		tTrailDesc.pOwnerTransform = m_pTransform;
 		tTrailDesc.wstrTextureTag = L"SpeedTrails_Packed";
 		if (FAILED(g_pGameInstance->Add_GameObjectToLayer(m_iSceneID, L"Layer_Effect", L"Proto_GameObject_TrailEffect_Normal", &tTrailDesc, (CGameObject**)&m_pTrailEffect_Normal)))
-			MSGBOX(L"노말 트레일 생성 실패. from Needle");
+			MSGBOX(L"노말 트레일 생성 실패. from Ironstone");
 		Safe_AddRef(m_pTrailEffect_Normal);
 	}
-
+	else if (L"Legend1" == _tDesc.weaponName)
+	{
+		CTrailEffect::DESC tTrailDesc;
+		tTrailDesc.fLength = 0.2f;
+		XMStoreFloat4x4(&tTrailDesc.matPivot, XMMatrixTranslation(0.f, 0.f, 1.9f));
+		tTrailDesc.pOwnerTransform = m_pTransform;
+		tTrailDesc.wstrTextureTag = L"ice02";
+		if (FAILED(g_pGameInstance->Add_GameObjectToLayer(m_iSceneID, L"Layer_Effect", L"Proto_GameObject_TrailEffect_Normal", &tTrailDesc, (CGameObject**)&m_pTrailEffect_Normal)))
+			MSGBOX(L"노말 트레일 생성 실패. from Legend1");
+		Safe_AddRef(m_pTrailEffect_Normal);
+	}
+	else if (L"Legend5" == _tDesc.weaponName)
+	{
+		CTrailEffect::DESC tTrailDesc;
+		tTrailDesc.fLength = 0.2f;
+		XMStoreFloat4x4(&tTrailDesc.matPivot, XMMatrixTranslation(0.f, 0.f, 1.9f));
+		tTrailDesc.pOwnerTransform = m_pTransform;
+		tTrailDesc.wstrTextureTag = L"PerlinElectric_Packed";
+		if (FAILED(g_pGameInstance->Add_GameObjectToLayer(m_iSceneID, L"Layer_Effect", L"Proto_GameObject_TrailEffect_Normal", &tTrailDesc, (CGameObject**)&m_pTrailEffect_Normal)))
+			MSGBOX(L"노말 트레일 생성 실패. from Legend5");
+		Safe_AddRef(m_pTrailEffect_Normal);
+	}
 
 	return S_OK;
 }

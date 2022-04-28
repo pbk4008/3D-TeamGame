@@ -27,6 +27,7 @@
 #include "Stage2.h"
 
 #include "Light.h"
+#include "DamageFont.h"
 
 CMonster_Bastion_2HSword::CMonster_Bastion_2HSword(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
 	: CActor(_pDevice, _pDeviceContext)
@@ -66,7 +67,7 @@ HRESULT CMonster_Bastion_2HSword::NativeConstruct(const _uint _iSceneID, void* _
 	if (_pArg)
 	{
 		_float3 vPoint = (*(_float3*)_pArg);
-		if (FAILED(Set_SpawnPosition(vPoint)))
+		if (FAILED(CActor::Set_SpawnPosition(vPoint)))
 			return E_FAIL;
 	}
 	else
@@ -648,8 +649,6 @@ void CMonster_Bastion_2HSword::Hit(CCollision& pCol)
 {
 	if (!m_bDead)
 	{
-		if (m_isNoDamage)
-			return;
 
 		if (false == m_bFirstHit)
 		{
@@ -684,6 +683,9 @@ void CMonster_Bastion_2HSword::Hit(CCollision& pCol)
 
 void CMonster_Bastion_2HSword::Hit(const ATTACKDESC& _tAttackDesc)
 {
+	if (m_isNoDamage)
+		return;
+
 	if (m_bDead || 0.f >= m_fCurrentHp)
 		return;
 
@@ -692,6 +694,26 @@ void CMonster_Bastion_2HSword::Hit(const ATTACKDESC& _tAttackDesc)
 	m_fCurrentHp -= _tAttackDesc.fDamage;
 	CCollision collision;
 	collision.pGameObject = _tAttackDesc.pHitObject;
+
+	Active_Effect((_uint)EFFECT::HIT);
+	Active_Effect((_uint)EFFECT::HIT_FLOATING);
+	Active_Effect((_uint)EFFECT::HIT_FLOATING_2);
+	Active_Effect((_uint)EFFECT::HIT_IMAGE);
+
+	CTransform* pOtherTransform = _tAttackDesc.pOwner->Get_Transform();
+	_vector svOtherLook = XMVector3Normalize(pOtherTransform->Get_State(CTransform::STATE_LOOK));
+	_vector svOtherRight = XMVector3Normalize(pOtherTransform->Get_State(CTransform::STATE_RIGHT));
+
+	uniform_real_distribution<_float> fRange(-0.5f, 0.5f);
+	uniform_real_distribution<_float> fRange2(-0.2f, 0.2f);
+	uniform_int_distribution<_int> iRange(-5, 5);
+	CDamageFont::DESC tDamageDesc;
+	_vector svPos = m_pTransform->Get_State(CTransform::STATE_POSITION) + _vector{ 0.f, 2.f + fRange2(g_random), 0.f, 0.f };
+	svPos += svOtherRight * fRange(g_random) - svOtherLook * 0.5f;
+	XMStoreFloat3(&tDamageDesc.vPos, svPos);
+	tDamageDesc.fDamage = _tAttackDesc.fDamage + (_float)iRange(g_random);
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_DamageFont", L"Proto_GameObject_DamageFont", &tDamageDesc)))
+		MSGBOX(L"데미지 폰트 생성 실패");
 
 	Hit(collision);
 }
@@ -705,6 +727,15 @@ void CMonster_Bastion_2HSword::Parry(const PARRYDESC& _tParrykDesc)
 void CMonster_Bastion_2HSword::Remove_Collider()
 {
 	m_pCharacterController->Remove_CCT();
+}
+
+HRESULT CMonster_Bastion_2HSword::Set_SpawnPosition(_fvector vPos)
+{
+	CActor::Set_SpawnPosition(vPos);
+	_float3 tmpPos;
+	XMStoreFloat3(&tmpPos, vPos);
+	m_pCharacterController->setFootPosition(tmpPos);
+	return S_OK;
 }
 
 

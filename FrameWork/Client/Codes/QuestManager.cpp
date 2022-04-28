@@ -23,38 +23,44 @@ HRESULT CQuestManager::NativeConstruct(void)
 
 _int CQuestManager::Tick(_double dTimeDelta)
 {
-	PullingQuest();
-
-	for (_int i = 0; i < m_vecQuest.size(); ++i)
+	if (true == m_bRender)
 	{
-		m_vecQuest[i]->Tick(dTimeDelta);
-	}
+		PullingQuest();
 
+		for (_int i = 0; i < m_vecQuest.size(); ++i)
+		{
+			m_vecQuest[i]->Tick(dTimeDelta);
+		}
+	}
 	return _int();
 }
 
 _int CQuestManager::Late_Tick(_double dTimeDelta)
 {
-	
-	for (_int i = 0; i < m_vecQuest.size(); ++i)
+	if (true == m_bRender)
 	{
-		m_vecQuest[i]->LateTick(dTimeDelta);
+		for (_int i = 0; i < m_vecQuest.size(); ++i)
+		{
+			m_vecQuest[i]->LateTick(dTimeDelta);
+		}
+		m_pQuesthead->LateTick(dTimeDelta);
 	}
-	m_pQuesthead->LateTick(dTimeDelta);
-
 	return _int();
 }
 
 HRESULT CQuestManager::Render(void)
 {
-	if (!g_pInvenUIManager->IsOpenModal() &&
-		!g_pGuideManager->IsOpenDeathUI())
+	if (true == m_bRender)
 	{
-		for (_int i = 0; i < m_vecQuest.size(); ++i)
+		if (!g_pInvenUIManager->IsOpenModal() &&
+			!g_pGuideManager->IsOpenDeathUI())
 		{
-			m_vecQuest[i]->Render();
+			for (_int i = 0; i < m_vecQuest.size(); ++i)
+			{
+				m_vecQuest[i]->Render();
+			}
+			m_pQuesthead->Render();
 		}
-		m_pQuesthead->Render();
 	}
 	return S_OK;
 }

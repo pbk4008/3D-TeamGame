@@ -1,7 +1,8 @@
 #include "pch.h"
 #include "..\Headers\Potal.h"
 #include "Monster_Bastion_Sword.h"
-#include "Monster_Bastion_Shooter.H"
+#include "Monster_Bastion_Shooter.h"
+#include "Monster_Bastion_2HSword.h"
 
 CPotal::CPotal()
 	: m_pRect(nullptr)
@@ -84,7 +85,7 @@ _int CPotal::Tick(_double _dDeltaTime)
 
 _int CPotal::LateTick(_double _dDeltaTime)
 {
-	m_pRenderer->Add_RenderGroup(CRenderer::RENDER_UI, this);
+	m_pRenderer->Add_RenderGroup(CRenderer::RENDER_ALPHANB, this);
 
 	return _int();
 }
@@ -228,7 +229,21 @@ _uint CPotal::Spawn_Monster(_double dDeltaTime)
 						pMon->setActive(true);
 						static_cast<CMonster_Bastion_Shooter*>(pMon)->Set_SpawnPosition(vPos);
 					}
-					m_bCreate = true;
+					else if (m_iMonTag == (_uint)GAMEOBJECT::MONSTER_2H)
+					{
+						pMon->setActive(true);
+						static_cast<CMonster_Bastion_2HSword*>(pMon)->Set_SpawnPosition(vPos);
+					}
+					else if (m_iMonTag == (_uint)GAMEOBJECT::MONSTER_HEALER)
+					{
+						pMon->setActive(true);
+						static_cast<CMonster_Bastion_2HSword*>(pMon)->Set_SpawnPosition(vPos);
+					}
+					else if (m_iMonTag == (_uint)GAMEOBJECT::MONSTER_SPEAR)
+					{
+						pMon->setActive(true);
+						static_cast<CMonster_Bastion_2HSword*>(pMon)->Set_SpawnPosition(vPos);
+					}
 					break;
 				}
 			}

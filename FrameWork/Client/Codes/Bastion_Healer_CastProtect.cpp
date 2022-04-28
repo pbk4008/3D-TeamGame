@@ -24,10 +24,13 @@ _int CBastion_Healer_CastProtect::Tick(const _double& _dDeltaTime)
 
 	Link();
 	m_pAnimator->Tick(_dDeltaTime);
-	if (m_pAnimator->Get_CurrentAnimation()->Is_Finished()&&
-		m_pAnimator->Get_CurrentAnimNode()==(_uint)CMonster_Bastion_Healer::ANIM_TYPE::A_CAST_PROTECT)
-		m_pStateController->Change_State(L"Idle");
-
+	CAnimation* pAnim = m_pAnimator->Get_CurrentAnimation();
+	if (pAnim)
+	{
+		if (pAnim->Is_Finished() 
+			&&m_pAnimator->Get_CurrentAnimNode() == (_uint)CMonster_Bastion_Healer::ANIM_TYPE::A_CAST_PROTECT)
+			m_pStateController->Change_State(L"Idle");
+	}
 	return _int();
 }
 
@@ -63,7 +66,7 @@ HRESULT CBastion_Healer_CastProtect::EnterState()
 	m_pTransform->Face_Target(g_pObserver->Get_PlayerPos());
 
 	m_pAnimator->Change_AnyEntryAnimation((_uint)CMonster_Bastion_Healer::ANIM_TYPE::A_CAST_PROTECT);
-	m_pAnimator->Get_CurrentAnimation()->Reset_Animation();
+	m_pAnimator->Reset_Animation((_uint)CMonster_Bastion_Healer::ANIM_TYPE::A_CAST_PROTECT);
 	
 	return S_OK;
 }
@@ -78,10 +81,13 @@ _bool CBastion_Healer_CastProtect::Link()
 {
 	//프레임 체크 후 링크
 	CAnimation* pAnim = m_pAnimator->Get_CurrentAnimation();
-	_uint dFrame = pAnim->Get_CurrentKeyFrameIndex();
-	cout << dFrame << endl;
-	if(dFrame>100)
-		m_pOwner->Link();
+	if (pAnim)
+	{
+		_uint dFrame = pAnim->Get_CurrentKeyFrameIndex();
+		cout << dFrame << endl;
+		if (dFrame > 100)
+			m_pOwner->Link();
+	}
 	return true;
 }
 

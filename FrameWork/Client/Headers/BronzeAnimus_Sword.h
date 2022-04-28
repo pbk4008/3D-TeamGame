@@ -5,6 +5,8 @@
 
 BEGIN(Client)
 
+class CTrailEffect_Distortion;
+
 class CBronzeAnimus_Sword final : public CWeapon
 {
 private:
@@ -31,6 +33,7 @@ private:
 private:
 	_matrix m_smatPivot = XMMatrixIdentity();
 	CCapsuleCollider* m_pCollider = nullptr;
+	CTrailEffect_Distortion* m_pTrailEffect_Distortion = nullptr;
 
 public:
 	static CBronzeAnimus_Sword* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext);

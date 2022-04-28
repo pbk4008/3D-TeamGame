@@ -187,8 +187,9 @@ HRESULT CMeteor::Render()
 
 	rimDesc.rimcheck = true;
 	rimDesc.rimcol = _float3(1.f, 0.49f, 0.f);
-	rimDesc.rimintensity = 30.f;
-	XMStoreFloat4(&rimDesc.camdir, XMVector3Normalize(g_pGameInstance->Get_CamPosition(L"Camera_Silvermane") - m_pTransform->Get_State(CTransform::STATE_POSITION)));
+	rimDesc.rimintensity = 3.f;
+	XMStoreFloat4(&rimDesc.camdir, XMVector3Normalize(m_pTransform->Get_State(CTransform::STATE_POSITION)-g_pGameInstance->Get_CamPosition(L"Camera_Silvermane")));
+
 
 	_float4 fColor = _float4(0.f, 0.f, 0.f, 1.f);
 	_float fEmpower = 1.f;

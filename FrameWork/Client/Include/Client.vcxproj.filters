@@ -7,9 +7,6 @@
     <Filter Include="98.Headers">
       <UniqueIdentifier>{96eda15f-74ed-47dc-ba01-308cf57bfc5c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="00.MainGame">
-      <UniqueIdentifier>{77744ede-73e8-4a86-9387-22f105cb42bb}</UniqueIdentifier>
-    </Filter>
     <Filter Include="01.Scene">
       <UniqueIdentifier>{9e263673-2d49-4631-b81e-17e3fed66b69}</UniqueIdentifier>
     </Filter>
@@ -1186,6 +1183,12 @@
     <Filter Include="02.GameObject\05.UI\05.Hud\04.EquippedWeapon\02.Slot_2">
       <UniqueIdentifier>{f31fecd8-ce35-4091-a129-35627d27ce99}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01.Scene\00.MainGame">
+      <UniqueIdentifier>{77744ede-73e8-4a86-9387-22f105cb42bb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\00.Player\00.Silvermane\State\Emote">
+      <UniqueIdentifier>{4259ea1f-b5b7-4d9f-b769-4bfcc182f1f1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -1216,7 +1219,7 @@
       <Filter>98.Headers</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\MainApp.h">
-      <Filter>00.MainGame</Filter>
+      <Filter>01.Scene\00.MainGame</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\Level_Logo.h">
       <Filter>01.Scene\00.Logo</Filter>
@@ -2544,13 +2547,16 @@
     <ClInclude Include="..\Headers\DamageFont.h">
       <Filter>02.GameObject\05.UI\07.DamageFont</Filter>
     </ClInclude>
+    <ClInclude Include="..\Headers\Silvermane_Bow.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Emote</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
       <Filter>99.Default</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\MainApp.cpp">
-      <Filter>00.MainGame</Filter>
+      <Filter>01.Scene\00.MainGame</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\Level_Logo.cpp">
       <Filter>01.Scene\00.Logo</Filter>
@@ -3871,6 +3877,9 @@
     </ClCompile>
     <ClCompile Include="..\Codes\DamageFont.cpp">
       <Filter>02.GameObject\05.UI\07.DamageFont</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Silvermane_Bow.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Emote</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
