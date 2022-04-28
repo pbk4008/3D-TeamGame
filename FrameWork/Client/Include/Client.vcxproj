@@ -404,6 +404,8 @@ call Update_Client.bat</Command>
     <ClInclude Include="..\Headers\Level_Logo.h" />
     <ClInclude Include="..\Headers\MeshEffect_Boss_Effect.h" />
     <ClInclude Include="..\Headers\MeshEffect_Boss_Explosion.h" />
+    <ClInclude Include="..\Headers\MeshEffect_Boss_Shield.h" />
+    <ClInclude Include="..\Headers\MeshEffect_EyeRazer.h" />
     <ClInclude Include="..\Headers\MeshEffect_Jupiter.h" />
     <ClInclude Include="..\Headers\MeshEffect_Razer.h" />
     <ClInclude Include="..\Headers\MeshEffect_Test2.h" />
@@ -843,6 +845,8 @@ call Update_Client.bat</Command>
     <ClCompile Include="..\Codes\JumpTrigger.cpp" />
     <ClCompile Include="..\Codes\MeshEffect_Boss_Effect.cpp" />
     <ClCompile Include="..\Codes\MeshEffect_Boss_Explosion.cpp" />
+    <ClCompile Include="..\Codes\MeshEffect_Boss_Shield.cpp" />
+    <ClCompile Include="..\Codes\MeshEffect_EyeRazer.cpp" />
     <ClCompile Include="..\Codes\MeshEffect_Jupiter.cpp" />
     <ClCompile Include="..\Codes\MeshEffect_Razer.cpp" />
     <ClCompile Include="..\Codes\MeshEffect_Test2.cpp" />

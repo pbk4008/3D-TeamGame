@@ -41,6 +41,7 @@ private:
 	HRESULT Set_Animation_FSM();
 	HRESULT Set_State_FSM();
 	HRESULT Set_Weapon();
+	HRESULT Set_Boss_Effect();
 
 public:
 	virtual void OnTriggerEnter(CCollision& collision) override;
@@ -53,16 +54,34 @@ public:
 	void OnWeaponEffect();
 	void Set_HitMotion(_bool bHitMotion) { m_bHitMotion = bHitMotion; }
 	void Set_Random_AttackAnim();
+
+public:
+	void OnEff_MeshExplosion(_bool Active);
+	void OnEff_MeshRazer(_bool Active);
+	void OnEff_MeshShield(_bool Active);
+	void OnEff_MeshEyeRazer(_bool Active);
+	void Set_RazerAngle(_bool Check);
+	
 private:
 	CAnimator* m_pAnimator = nullptr;
 	CStateController* m_pStateController = nullptr;
 	CCharacterController* m_pCharacterController = nullptr;
+
 	class CBoss_Weapon* m_pWeapon = nullptr;
+
+	//effect
+	class CMeshEffect_Boss_Explosion* m_pEff_Explosion = nullptr;
+	class CMeshEffect_Razer* m_pEff_Razer = nullptr;
+	class CMeshEffect_Boss_Shield* m_pEff_Shield = nullptr;
+	class CMeshEffect_EyeRazer* m_pEff_EyeRazer = nullptr;
+
 private:
 	_uint m_iHitCount = 0;
 	_bool m_bHitMotion = false;
 
 	_uint m_iPreAnim = 0;
+
+	_bool m_bFirstAnim = false;
 
 private:
 	_bool	m_bIsFall = false;

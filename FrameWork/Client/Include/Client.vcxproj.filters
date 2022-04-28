@@ -1140,9 +1140,21 @@
     </Filter>
     <Filter Include="02.GameObject\04.Effect\02.MeshEffect\01.EffectBossMesh\00.Test">
       <UniqueIdentifier>{80bd93cf-e7bc-404e-9e3f-533bffe4f791}</UniqueIdentifier>
-	</Filter>
+    </Filter>
     <Filter Include="02.GameObject\02.Map\05.Obstacle">
       <UniqueIdentifier>{39c78171-d0dc-4108-aad2-bed06c971f23}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\04.Effect\02.MeshEffect\01.EffectBossMesh\01.MeshEff_Boss_Explosion">
+      <UniqueIdentifier>{490f24ac-dbee-42ae-861a-19a46e30aff8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\04.Effect\02.MeshEffect\01.EffectBossMesh\02.MeshEff_Boss_Razer">
+      <UniqueIdentifier>{8d0aa71d-7953-48ac-a923-89eb9f8deb2e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\04.Effect\02.MeshEffect\01.EffectBossMesh\03.MeshEff_Boss_Shield">
+      <UniqueIdentifier>{dc519918-7389-416b-a4c3-22a90ad1751c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\04.Effect\02.MeshEffect\01.EffectBossMesh\04.MeshEffect_Boss_EyeRazer">
+      <UniqueIdentifier>{48f969c3-12ba-43c2-8b75-b867809c94e1}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -2457,17 +2469,23 @@
     <ClInclude Include="..\Headers\MeshEffect_Boss_Effect.h">
       <Filter>02.GameObject\04.Effect\02.MeshEffect\01.EffectBossMesh\00.Test</Filter>
     </ClInclude>
-    <ClInclude Include="..\Headers\MeshEffect_Boss_Explosion.h">
-      <Filter>02.GameObject\04.Effect\02.MeshEffect\01.EffectBossMesh</Filter>
-	</ClInclude>
     <ClInclude Include="..\Headers\CapsuleObstacle.h">
       <Filter>02.GameObject\02.Map\05.Obstacle</Filter>
     </ClInclude>
-    <ClInclude Include="..\Headers\MeshEffect_Razer.h">
-      <Filter>02.GameObject\04.Effect\02.MeshEffect</Filter>
-    </ClInclude>
     <ClInclude Include="..\Headers\MeshEffect_Jupiter.h">
       <Filter>02.GameObject\04.Effect\02.MeshEffect</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\MeshEffect_Boss_Explosion.h">
+      <Filter>02.GameObject\04.Effect\02.MeshEffect\01.EffectBossMesh\01.MeshEff_Boss_Explosion</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\MeshEffect_Razer.h">
+      <Filter>02.GameObject\04.Effect\02.MeshEffect\01.EffectBossMesh\02.MeshEff_Boss_Razer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\MeshEffect_Boss_Shield.h">
+      <Filter>02.GameObject\04.Effect\02.MeshEffect\01.EffectBossMesh\03.MeshEff_Boss_Shield</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\MeshEffect_EyeRazer.h">
+      <Filter>02.GameObject\04.Effect\02.MeshEffect\01.EffectBossMesh\04.MeshEffect_Boss_EyeRazer</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -3752,17 +3770,23 @@
     <ClCompile Include="..\Codes\MeshEffect_Boss_Effect.cpp">
       <Filter>02.GameObject\04.Effect\02.MeshEffect\01.EffectBossMesh\00.Test</Filter>
     </ClCompile>
-    <ClCompile Include="..\Codes\MeshEffect_Boss_Explosion.cpp">
-      <Filter>02.GameObject\04.Effect\02.MeshEffect\01.EffectBossMesh</Filter>
-	</ClCompile>
     <ClCompile Include="..\Codes\CapsuleObstacle.cpp">
       <Filter>02.GameObject\02.Map\05.Obstacle</Filter>
     </ClCompile>
-    <ClCompile Include="..\Codes\MeshEffect_Razer.cpp">
-      <Filter>02.GameObject\04.Effect\02.MeshEffect</Filter>
-    </ClCompile>
     <ClCompile Include="..\Codes\MeshEffect_Jupiter.cpp">
       <Filter>02.GameObject\04.Effect\02.MeshEffect</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\MeshEffect_Boss_Explosion.cpp">
+      <Filter>02.GameObject\04.Effect\02.MeshEffect\01.EffectBossMesh\01.MeshEff_Boss_Explosion</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\MeshEffect_Razer.cpp">
+      <Filter>02.GameObject\04.Effect\02.MeshEffect\01.EffectBossMesh\02.MeshEff_Boss_Razer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\MeshEffect_Boss_Shield.cpp">
+      <Filter>02.GameObject\04.Effect\02.MeshEffect\01.EffectBossMesh\03.MeshEff_Boss_Shield</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\MeshEffect_EyeRazer.cpp">
+      <Filter>02.GameObject\04.Effect\02.MeshEffect\01.EffectBossMesh\04.MeshEffect_Boss_EyeRazer</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

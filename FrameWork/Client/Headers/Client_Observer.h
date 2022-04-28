@@ -42,6 +42,7 @@ public:
 	const _bool Get_PlayerFrontBackCheck(_fvector vPos);
 	//해당 좌표까지의 방향벡터
 	_fvector Get_Dir(_fvector vPos);
+	CSilvermane* Get_Player() { return m_pPlayer; }
 	void Player_Active(_bool bCheck);
 public:
 	//플레이어 공격 셋팅

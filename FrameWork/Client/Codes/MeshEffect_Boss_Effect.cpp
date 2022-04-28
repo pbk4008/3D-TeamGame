@@ -33,6 +33,9 @@ HRESULT CMeshEffect_Boss_Effect::NativeConstruct(_uint _iSceneID, void* _pArg)
 
 	m_fAlpha = 1.f;
 	m_fFlowSpeedAlpha = 1.f;
+
+	m_vScale = { 20.f, 20.f, 20.f };
+	m_pTransform->Scaling(_vector{ m_vScale.x, m_vScale.y, m_vScale.z, 0.f });
 	return S_OK;
 }
 
@@ -102,10 +105,11 @@ _int CMeshEffect_Boss_Effect::Tick(_double _dDeltaTime)
 		// decoLines
 		// magicCircle020
 		// noise17
-		if (FAILED(m_pMaterial->Change_Texture("g_DiffuseTexture", TEXTURETYPE::TEX_DIFFUSE, L"Hexgrid")))
+		// T_ShieldPattern2
+		if (FAILED(m_pMaterial->Change_Texture("g_DiffuseTexture", TEXTURETYPE::TEX_DIFFUSE, L"T_ShieldPattern2")))
 			return -1;
 
-		if (FAILED(m_pMaterial->Change_Texture("g_MaskTexture", TEXTURETYPE::TEX_MASK, L"Hexgrid")))
+		if (FAILED(m_pMaterial->Change_Texture("g_MaskTexture", TEXTURETYPE::TEX_MASK, L"T_ShieldPattern2")))
 			return -1;;
 	}
 	if (g_pGameInstance->getkeyDown(DIK_NUMPAD8))
@@ -176,12 +180,12 @@ _int CMeshEffect_Boss_Effect::Tick(_double _dDeltaTime)
 	//	m_fFlowSpeedAlpha = 1.f;
 	//else if (1.f <= m_fAlpha)
 	//	m_fFlowSpeedAlpha = -1.f;
-	m_fAlpha = 1.f;
+	m_fAlpha = 2.f;
 
 	///////////////////////////////////// UV
 	m_isReverse = false;
-	m_vTiling.x = 1.f;
-	m_vTiling.y = 1.f;
+	m_vTiling.x = 15.f;
+	m_vTiling.y = 15.f;
 	//// X
 	//m_isFlowX = true;
 	//m_fFlowSpeedX = 0.2f;
@@ -200,21 +204,37 @@ _int CMeshEffect_Boss_Effect::Tick(_double _dDeltaTime)
 	//	m_vPlusUV.y = 1.f;
 	///////////////////////////////// Color
 	m_isCustomColor = true;
-	m_vColor = { 0.9f, 0.3f, 0.1f };
+	m_vColor = { 0.1f, 0.3f, 1.f };
 
 
 	//m_vScale = { 20.f, 20.f, 20.f };
 	//////////////////////////////////////////// Scale
-	m_vScale.x += 5.f * (_float)_dDeltaTime;
-	if (30.f < m_vScale.x)
-		m_vScale.x = 20.f;
-	m_vScale.y += 5.f * (_float)_dDeltaTime;
-	if (30.f < m_vScale.y)
-		m_vScale.y = 20.f;
-	m_vScale.z += 5.f * (_float)_dDeltaTime;
-	if (30.f < m_vScale.z)
-		m_vScale.z = 20.f;
 
+	if (false == m_bBeSmall)
+	{
+		m_vScale.x += 200.f * (_float)_dDeltaTime;
+		m_vScale.y += 200.f * (_float)_dDeltaTime;
+		m_vScale.z += 200.f * (_float)_dDeltaTime;
+	}
+
+	if (30.f < m_vScale.x)
+	{
+		m_bBeSmall = true;
+	}
+
+	if (m_bBeSmall)
+	{
+		m_vScale.x -= 50.f * (_float)_dDeltaTime;
+		m_vScale.y -= 50.f * (_float)_dDeltaTime;
+		m_vScale.z -= 50.f * (_float)_dDeltaTime;
+	}
+
+	if (5.f >= m_vScale.x)
+	{
+		m_bBeSmall = false;
+	}
+
+	m_vScale = { 20.f, 20.f, 20.f };
 	m_pTransform->Scaling(_vector{ m_vScale.x, m_vScale.y, m_vScale.z, 0.f });
 
 	//////////////////////////////////////////// Rotation
@@ -278,8 +298,6 @@ HRESULT CMeshEffect_Boss_Effect::Ready_Components()
 	if (FAILED(m_pMaterial->Set_Texture("g_DiffuseTexture", TEXTURETYPE::TEX_DIFFUSE, m_pTexture, 0)))
 		return E_FAIL;
 	Safe_AddRef(m_pTexture);
-
-
 
 	m_pModel = g_pGameInstance->Clone_Component<CModel>((_uint)SCENEID::SCENE_STATIC, L"Model_AuraHousya");
 	if (FAILED(m_pModel->Add_Material(m_pMaterial, 0)))

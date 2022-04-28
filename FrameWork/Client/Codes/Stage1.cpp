@@ -18,6 +18,7 @@
 #include "Effect_FloatingUp.h"
 #include "Effect_Hammer_Dust.h"
 #include "Effect_Dead_Spray.h"
+#include "Effect_Energy.h"
 #include "Explosion_Rock.h"
 
 
@@ -175,25 +176,6 @@ HRESULT CStage1::NativeConstruct()
 	{
 		MSGBOX("Stage1 Manager");
 		return E_FAIL;
-	}
-
-	//Hammer_Dust
-	CEffect_Hammer_Dust* pHammer = nullptr;
-	CEffect_Hammer_Dust::EFFECTDESC Desc;
-	ZeroMemory(&Desc, sizeof(Desc));
-
-	_tcscpy_s(Desc.TextureTag, L"Hammer_Dust_2");
-	Desc.iRenderPassNum = 1;
-	Desc.iImageCountX = 8;
-	Desc.iImageCountY = 4;
-	Desc.fFrame = 32.f;
-	Desc.fEffectPlaySpeed = 1.f;
-
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Effect_Hammer_Dust", L"Proto_GameObject_Effect_Hammer_Dust", &Desc, (CGameObject**)&pHammer)))
-	{
-		MSGBOX("Failed to Creating Effect_Hammer_Dust in CStage1::Ready_Effect()");
-		return E_FAIL;
-
 	}
 
 	g_pGameInstance->Change_BaseCamera(L"Camera_Silvermane");
@@ -457,6 +439,7 @@ _int CStage1::Tick(_double TimeDelta)
 		g_pDropManager->Tick();
 	if (g_pInteractManager)
 		g_pInteractManager->Tick(TimeDelta);
+
 	if(m_pIndicatorManager)
 		m_pIndicatorManager->Active_Indicator();
 
@@ -1294,22 +1277,6 @@ HRESULT CStage1::Ready_Data_Effect()
 	}
 
 	//Hammer_Dust
-	//CEffect_Hammer_Dust* pHammer = nullptr;
-	//CEffect_Hammer_Dust::EFFECTDESC Desc;
-	//ZeroMemory(&Desc, sizeof(Desc));
-
-	//_tcscpy_s(Desc.TextureTag, L"Hammer_Dust");
-	//Desc.iRenderPassNum = 1;
-	//Desc.iImageCountX = 8;
-	//Desc.iImageCountY = 8;
-	//Desc.fFrame = 64.f;
-	//Desc.fEffectPlaySpeed = 1.f;
-
-	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Effect_Hammer_Dust", L"Proto_GameObject_Effect_Hammer_Dust", &Desc, (CGameObject**)&pHammer)))
-	//{
-	//	MSGBOX("Failed to Creating Effect_Hammer_Dust in CStage1::Ready_Effect()");
-	//	return E_FAIL;
-	//}
 	CEffect_Hammer_Dust* pHammer = nullptr;
 	CEffect_Hammer_Dust::EFFECTDESC Desc;
 	ZeroMemory(&Desc, sizeof(Desc));
@@ -1321,12 +1288,34 @@ HRESULT CStage1::Ready_Data_Effect()
 	Desc.fFrame = 32.f;
 	Desc.fEffectPlaySpeed = 1.f;
 
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Effect_Hammer_Dust", L"Proto_GameObject_Effect_Hammer_Dust", &Desc, (CGameObject**)&pHammer)))
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Hammer_Dust", L"Proto_GameObject_Effect_Hammer_Dust", &Desc, (CGameObject**)&pHammer)))
+	{
 		MSGBOX("Failed to Creating Effect_Hammer_Dust in CStage1::Ready_Effect()");
+		return E_FAIL;
+	}
 
 	if (FAILED(g_pGameInstance->Add_Effect((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Hammer_Dust", pHammer, 7)))
 	{
 		MSGBOX("Falild to Add_Effect_Explosion ROck in CStage1::Ready_Effect()");
+		return E_FAIL;
+	}
+
+	vector<CEffect_Energy::EF_PAR_ENERGY_DESC> vecEnergyParticle;
+	g_pGameInstance->LoadFile<CEffect_Energy::EF_PAR_ENERGY_DESC>(vecEnergyParticle, L"../bin/SaveData/Effect/Effect_Energy.dat");
+
+	FullName = L"Proto_GameObject_Effect_Energy";
+	vecEnergyParticle[0].ParticleColor = { 1.f , 0.6f, 0.3f ,1.f };
+	vecEnergyParticle[0].Power = 2.5f;
+
+	//마지막에 받을 Effect변수 넣기
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Energy", FullName, &vecEnergyParticle[0], (CGameObject**)&pEffect)))
+	{
+		MSGBOX("Failed to Creating Effect_Player_Attack1 in CStage1::Ready_Effect()");
+		return E_FAIL;
+	}
+	if (FAILED(g_pGameInstance->Add_Effect((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Energy", pEffect, 2)))
+	{
+		MSGBOX("Falild to Add_Effect_Energy in CStage1::Ready_Effect()");
 		return E_FAIL;
 	}
 

@@ -35,11 +35,11 @@ _int CBoss_Attack_R2::Tick(const _double& TimeDelta)
 	//어택 체크
 	_uint iCurKeyFrameIndex = m_pAnimator->Get_AnimController()->Get_CurKeyFrameIndex();
 	 
-	cout << iCurKeyFrameIndex << endl;
+	//cout << iCurKeyFrameIndex << endl;
 
 	if (15 <= iCurKeyFrameIndex && 38 >= iCurKeyFrameIndex )
 	{
-		m_pAnimator->Get_AnimController()->Set_PlaySpeed(0.6f);
+		m_pAnimator->Get_AnimController()->Set_PlaySpeed(0.4f);
 	}
 
 	if (9 <= iCurKeyFrameIndex && 12 >= iCurKeyFrameIndex && false == m_bEffectCheck)
@@ -65,21 +65,22 @@ _int CBoss_Attack_R2::Tick(const _double& TimeDelta)
 		tShakeEvent.tWaveY.fFrequency = 10.f;
 		tShakeEvent.tWaveZ.fAdditionalOffset = 0.2f;
 		tShakeEvent.tWaveZ.fAdditionalOffset = -1.f;
-		tShakeEvent.fInnerRadius = 10.f;
-		tShakeEvent.fOuterRadius = 20.f;
-		tShakeEvent.fDistanceRate = 10.f;
+		tShakeEvent.fInnerRadius = 20.f;
+		tShakeEvent.fOuterRadius = 30.f;
+		tShakeEvent.fDistanceRate = 30.0f;
 
 		g_pShakeManager->Shake(tShakeEvent, m_pTransform->Get_State(CTransform::STATE_POSITION));
+		m_bShakeCheck = true;
 
+		//이펙트위치지정
 		_vector svPos = m_pTransform->Get_State(CTransform::STATE_POSITION);
 		_vector svLook = XMVector3Normalize(m_pTransform->Get_State(CTransform::STATE_LOOK));
 		_vector svRight = XMVector3Normalize(m_pTransform->Get_State(CTransform::STATE_RIGHT));
 
-		//m_pMonster->Active_Effect((_uint)EFFECT::HIT_GROUND_SMOKE);
-		//m_pMonster->Active_Effect((_uint)EFFECT::HIT_GROUND);
-		//m_pMonster->Active_Effect((_uint)EFFECT::EXPLOSION_ROCK_UP);
+		m_pMonster->Active_Effect((_uint)EFFECT::HIT_GROUND_SMOKE);
+		m_pMonster->Active_Effect((_uint)EFFECT::EXPLOSION_ROCK_UP);
+		static_cast<CBoss_Solaris*>(m_pMonster)->OnEff_MeshExplosion(true);
 
-		m_bShakeCheck = true;
 
 		m_pMonster->Set_IsAttack(true);
 
@@ -90,6 +91,7 @@ _int CBoss_Attack_R2::Tick(const _double& TimeDelta)
 		m_pMonster->Set_AttackDesc_Dir(EAttackDir::Forward);
 	}
 
+	//범위공격
 	if (38 < iCurKeyFrameIndex && 50 > iCurKeyFrameIndex)
 	{
 		OVERLAPDESC tOverlapDesc;
@@ -125,7 +127,6 @@ _int CBoss_Attack_R2::Tick(const _double& TimeDelta)
 	if (m_pAnimator->Get_AnimController()->Is_Finished())
 	{
 		cout << "r2 -> turn" << endl;
-
 		m_pStateController->Change_State(L"Turn");
 	}
 
@@ -155,7 +156,6 @@ HRESULT CBoss_Attack_R2::EnterState()
 		return E_FAIL;
 
 	cout << "Attack_R2" << endl;
-
 
 	m_bShakeCheck = false;
 	m_bEffectCheck = false;

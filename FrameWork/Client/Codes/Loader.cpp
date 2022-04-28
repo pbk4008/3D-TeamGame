@@ -105,6 +105,9 @@
 #include "MeshEffect_Test.h"
 #include "MeshEffect_Test2.h"
 #include "MeshEffect_Boss_Effect.h"
+#include "MeshEffect_Boss_Explosion.h"
+#include "MeshEffect_Boss_Shield.h"
+#include "MeshEffect_EyeRazer.h"
 #pragma endregion
 
 //Test
@@ -178,8 +181,8 @@ HRESULT CLoader::LoadForScene()
 
 HRESULT CLoader::SetUp_Stage1_Object()
 {
-	//if (FAILED(Load_Stage1FBXLoad()))
-	//	return E_FAIL;
+	if (FAILED(Load_Stage1FBXLoad()))
+		return E_FAIL;
 
 	if (FAILED(Load_Stage1Navi_SkyLoad()))
 		return E_FAIL;
@@ -200,8 +203,8 @@ HRESULT CLoader::SetUp_Stage1_Object()
 		return E_FAIL;
 
 #pragma region 이펙트들
-	//if (FAILED(Load_Stage1EffectLoad()))
-	//	return E_FAIL;
+	if (FAILED(Load_Stage1EffectLoad()))
+		return E_FAIL;
 	if (FAILED(Load_TrailEffects())) //소드
 		return E_FAIL;
 	if (FAILED(Load_MeshEffects())) //매쉬
@@ -1341,6 +1344,15 @@ HRESULT CLoader::Ready_Stage3()
 	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Weapon_Boss", CBoss_Weapon::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 
+
+	_matrix matPivot = XMMatrixIdentity();
+	matPivot *= XMMatrixRotationZ(XMConvertToRadians(90.f)); //정수리옆으로나옴..
+	//matPivot *= XMMatrixRotationX(XMConvertToRadians(90.f)); //정수리관통하고 속까지보임
+	//matPivot *= XMMatrixRotationY(XMConvertToRadians(90.f)); 정수리관통함
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Cylinder_LowPoly_Idst_Razer", CModel::Create(m_pDevice, m_pDeviceContext,
+		"../bin/Resources/Mesh/Effect/FX13/", "ky_cylinder_lowPoly_idst.fbx",
+		L"../bin/ShaderFile/Shader_MeshEffect.hlsl", matPivot, CModel::TYPE_STATIC, true)))) MSGBOX(L"메쉬 이펙트용 메쉬 로드 실패");
+
 	return S_OK;
 }
 
@@ -1442,19 +1454,17 @@ HRESULT CLoader::Ready_Test_JS()
 	//	return E_FAIL;
 	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_FlyingShield", CFlyingShield::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
-
 	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_MotionTrail", CMotionTrail::Create(m_pDevice, m_pDeviceContext)))) MSGBOX(L"모션 더미 생성");
 
-
-	////Boss Solaris
-	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_TEST_JS, L"Model_Boss_Solaris", CModel::Create(m_pDevice, m_pDeviceContext,
-	//	L"../bin/FBX/Monster/Solaris.fbx", CModel::TYPE_ANIM, true))))
-	//	return E_FAIL;
-	//
-	//if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Solaris", CBoss_Solaris::Create(m_pDevice, m_pDeviceContext))))
-	//	return E_FAIL;
-	//if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Weapon_Boss", CBoss_Weapon::Create(m_pDevice, m_pDeviceContext))))
-	//	return E_FAIL;
+	//Boss Solaris
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_TEST_JS, L"Model_Boss_Solaris", CModel::Create(m_pDevice, m_pDeviceContext,
+		L"../bin/FBX/Monster/Solaris.fbx", CModel::TYPE_ANIM, true))))
+		return E_FAIL;
+	
+	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Solaris", CBoss_Solaris::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Weapon_Boss", CBoss_Weapon::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
 #pragma endregion
 
 
@@ -1574,6 +1584,10 @@ HRESULT CLoader::Ready_Test_JS()
 	if (FAILED(Load_MeshEffects()))
 		return E_FAIL;
 
+	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_MeshEffect_Boss_Effect", CMeshEffect_Boss_Effect::Create(m_pDevice, m_pDeviceContext)))) //보스이펙트테스트파일
+		return E_FAIL;
+
+
 	cout << "TestScene_JS 로딩 완료..." << endl;
 	return S_OK;
 }
@@ -1659,6 +1673,8 @@ HRESULT CLoader::Load_MeshEffects()
 	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"myfire", L"../bin/Resources/Mesh/Effect/myfire.dds")))
 		MSGBOX("Failed To Add 메쉬이펙트용 텍스처 Tex");
 	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"waterfall02", L"../bin/Resources/Mesh/Effect/waterfall02_water_atos.dds")))
+		MSGBOX("Failed To Add 메쉬이펙트용 텍스처 Tex");
+	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"T_ShieldPattern2", L"../bin/Resources/Mesh/Effect/T_ShieldPattern2.dds")))
 		MSGBOX("Failed To Add 메쉬이펙트용 텍스처 Tex");
 #pragma endregion
 #pragma region FX12
@@ -1875,20 +1891,33 @@ HRESULT CLoader::Load_MeshEffects()
 		L"../bin/FBX/Eff_fbx/Rock_Explosion_Right.fbx", CModel::TYPE_ANIM, true))))
 		return E_FAIL;
 
-
 	//////////////////// Objects
 	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_MeshEffect_Test", CMeshEffect_Test::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_MeshEffect_Test2", CMeshEffect_Test2::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
-	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_MeshEffect_Boss_Effect", CMeshEffect_Boss_Effect::Create(m_pDevice, m_pDeviceContext))))
-		return E_FAIL;
+	
 	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_MeshEffect_Razer", CMeshEffect_Razer::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_MeshEffect_Jupiter", CMeshEffect_Jupiter::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Explosion_Rock", CExplosion_Rock::Create(m_pDevice, m_pDeviceContext))))
 		return S_OK;
+	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_MeshEffect_Boss_Explosion", CMeshEffect_Boss_Explosion::Create(m_pDevice, m_pDeviceContext))))
+		return S_OK;
+	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_MeshEffect_Boss_Shield", CMeshEffect_Boss_Shield::Create(m_pDevice, m_pDeviceContext))))
+		return S_OK;
+	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_MeshEffect_EyeRazer", CMeshEffect_EyeRazer::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+
+	//힐이펙트
+	//Heal
+	matPivot = XMMatrixScaling(0.005f, 0.005f, 0.005f);
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Player_HealEffect", CModel::Create(m_pDevice, m_pDeviceContext,
+		"../bin/Resources/Mesh/Bullet/", "Sphere.fbx",
+		L"../../Reference/ShaderFile/Shader_StaticMesh.hlsl", matPivot, CModel::TYPE_STATIC, true))))
+		return E_FAIL;
+
 
 	return S_OK;
 }

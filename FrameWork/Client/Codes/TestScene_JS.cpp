@@ -16,6 +16,7 @@
 #include "Effect_Floating_Speed.h"
 #include "Effect_Energy.h"
 
+
 #include "UI.h"
 #include "UI_Blank_CKey.h"
 #include "UI_Tuto_Font.h"
@@ -144,10 +145,10 @@ HRESULT CTestScene_JS::Ready_Gameobject()
 		return E_FAIL;
  	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_JS, L"Layer_Camera", L"Proto_GameObject_Camera_Silvermane")))
 		return E_FAIL;
-	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_JS, L"Layer_Boss", L"Proto_GameObject_Solaris")))
-	//	return E_FAIL;
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_JS, L"Layer_Boss", L"Proto_GameObject_Solaris")))
+		return E_FAIL;
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_JS, L"Layer_Effect_Mesh_Boss", L"Proto_GameObject_MeshEffect_Boss_Effect")))
-		MSGBOX(L"메쉬 이펙트 보스 생성 실패");
+		MSGBOX(L"메쉬 이펙트 보스 생성 실패"); //테스트파일
 	
 	//// 점프 노드들
 	//CJumpNode::DESC tJumpNodeDesc;
@@ -773,14 +774,14 @@ HRESULT CTestScene_JS::Ready_Data_Effect()
 	CEffect_Hammer_Dust::EFFECTDESC Desc;
 	ZeroMemory(&Desc, sizeof(Desc));
 
-	_tcscpy_s(Desc.TextureTag, L"Hammer_Dust");
+	_tcscpy_s(Desc.TextureTag, L"Hammer_Dust_2");
 	Desc.iRenderPassNum = 1;
 	Desc.iImageCountX = 8;
-	Desc.iImageCountY = 8;
-	Desc.fFrame = 64.f;
+	Desc.iImageCountY = 4;
+	Desc.fFrame = 32.f;
 	Desc.fEffectPlaySpeed = 1.f;
 
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_JS, L"Layer_Effect_Hammer_Dust", L"Proto_GameObject_Effect_Hammer_Dust", &Desc, (CGameObject**)&pHammer)))
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Hammer_Dust", L"Proto_GameObject_Effect_Hammer_Dust", &Desc, (CGameObject**)&pHammer)))
 	{
 		MSGBOX("Failed to Creating Effect_Hammer_Dust in CStage1::Ready_Effect()");
 		return E_FAIL;
@@ -810,12 +811,6 @@ HRESULT CTestScene_JS::Ready_Data_Effect()
 		MSGBOX("Falild to Add_Effect_Energy in CStage1::Ready_Effect()");
 		return E_FAIL;
 	}
-
-
-
-#pragma endregion
-
-#pragma region 이펙트매니저에 안들어가는것들
 	
 #pragma endregion
 

@@ -77,7 +77,6 @@ void CIndicator_Manager::Active_Indicator()
 							m_iHitNum = tOverlapDesc.iHitNum;
 						}
 					}
-
 				}
 				else if (tOverlapDesc.iHitNum < m_iHitNum)
 				{
