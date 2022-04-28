@@ -130,7 +130,7 @@ _int CCinema1_1::Tick(_double dDeltaTime)
 	m_pCam->Set_CameraMatrix(matPivot);
 	m_pCam->Tick(dDeltaTime);;
 
-	m_pGrayHwakSpear->Tick(dDeltaTime);
+	//m_pGrayHwakSpear->Tick(dDeltaTime);
 
 	return _int();
 }

@@ -63,8 +63,13 @@ HRESULT CInven_UIManager::NativeConstruct(void)
 
 _int CInven_UIManager::Tick(_double _dTimeDelta)
 {
-	if (m_pHud)
-		m_pHud->Tick(g_dImmutableTime);
+
+	//if (m_pHud)
+	//	m_pHud->Tick(g_dImmutableTime);
+	
+
+	m_pHud->EquipmentRenderNo(m_bRender);
+
 
 	return _int();
 }

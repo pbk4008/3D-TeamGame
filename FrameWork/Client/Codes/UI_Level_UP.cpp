@@ -183,7 +183,7 @@ void CLevel_UP::ShowUp(_double TimeDelta)
 {
 	if (m_fInitYPos < m_fEndYPos)
 	{
-		m_fInitYPos += TimeDelta * 250.f;
+		m_fInitYPos += (_float)TimeDelta * 250.f;
 		if (m_fInitYPos >= m_fEndYPos)
 		{
 			m_fInitYPos = m_fEndYPos;

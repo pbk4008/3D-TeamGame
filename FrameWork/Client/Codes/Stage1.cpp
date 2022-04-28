@@ -245,6 +245,8 @@ _int CStage1::Tick(_double TimeDelta)
 
 	CheckTriggerForQuest();
 
+	g_pInvenUIManager->Tick(TimeDelta);
+
 	if (g_pGameInstance->getkeyDown(DIK_I))
 	{
 		if (g_pInvenUIManager->IsOpenModal())

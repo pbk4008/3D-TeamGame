@@ -50,8 +50,12 @@ private: /* Notify UI */
 public: /* set Level tex */
 	void	SetLevelBG(_int PlayerLevel);
 
+public:
+	void SetRender(_bool bOnoff) { m_bRender = bOnoff; }
+
 private:
 	_bool m_bOpenModal = false;
+	_bool m_bRender = true;
 
 private:
 	virtual void Free() override;
