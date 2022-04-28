@@ -898,6 +898,14 @@ HRESULT CLoader::Load_Stage1_Cinema_Object()
 		return E_FAIL;
 	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_CinemaWeapon", CCinemaWeapon::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
+
+	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"FSD_Cloth", L"../bin/FBX/Texture/T_Phoenix_Cloth_FSD.dds")))
+		MSGBOX("Failed To Add T_Phoenix_Cloth_FSD Tex");
+	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"FSD_Top", L"../bin/FBX/Texture/T_Phoenix_Upper_FSD.dds")))
+		MSGBOX("Failed To Add T_Phoenix_Cloth_FSD Tex");
+	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"FSD_Down", L"../bin/FBX/Texture/T_Phoenix_Lower_FSD.dds")))
+		MSGBOX("Failed To Add T_Phoenix_Cloth_FSD Tex");
+
 	return S_OK;
 }
 

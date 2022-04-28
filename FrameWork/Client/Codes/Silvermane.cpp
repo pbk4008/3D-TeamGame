@@ -235,7 +235,7 @@ HRESULT CSilvermane::NativeConstruct(const _uint _iSceneID, void* _pArg)
 	m_pRenderer->SetRenderButton(CRenderer::PIXEL, true);
 	m_pRenderer->SetRenderButton(CRenderer::PBR, true);
 	m_pRenderer->SetRenderButton(CRenderer::HDR, true);
-	m_pRenderer->SetRenderButton(CRenderer::MOTIONTRAIL, true);
+	m_pRenderer->SetRenderButton(CRenderer::OUTLINE, true);
 	//m_pRenderer->SetRenderButton(CRenderer::SHADOW, true);
 
 	m_pTransform->Set_State(CTransform::STATE_POSITION, XMVectorSet(0.f,5.f, 10.f, 1.f));
@@ -1407,11 +1407,13 @@ const _bool CSilvermane::Change_Weapon()
 				{
 					if (nullptr != m_pCurWeapon)
 					{
+						m_pCurWeapon->setActive(false);
 						Set_EquipWeapon(false); /* 현재 착용중인 무기를 해제 */
 						Set_WeaponFixedBone("spine_03");
 					}
 					m_pCurWeapon = m_pEquipmentData->GetEquipment(EEquipSlot::Weapon2).weaponData.Get_Weapon(); /* 2번슬롯의 무기로 바꿔서 든다  */
 					m_pCurWeapon->Set_Owner(this);
+					m_pCurWeapon->setActive(true);
 					m_pPlayerData->EquipedSlot = 2;
 					return true;
 				}
@@ -1439,11 +1441,13 @@ const _bool CSilvermane::Change_Weapon()
 				{
 					if (nullptr != m_pCurWeapon)
 					{
+						m_pCurWeapon->setActive(false);
 						Set_EquipWeapon(false); /* 현재 착용중인 무기를 해제 */
 						Set_WeaponFixedBone("spine_03");
 					}
 					m_pCurWeapon = m_pEquipmentData->GetEquipment(EEquipSlot::Weapon1).weaponData.Get_Weapon(); /* 1번슬롯의 무기로 바꿔서 든다  */
 					m_pCurWeapon->Set_Owner(this);
+					m_pCurWeapon->setActive(true);
 					m_pPlayerData->EquipedSlot = 1;
 					return true;
 				}
@@ -2023,29 +2027,29 @@ const void CSilvermane::Raycast_DropBox(const _double& _dDeltaTime)
 	case (_uint)GAMEOBJECT::MONSTER_ANIMUS:
 	case (_uint)GAMEOBJECT::MONSTER_HEALER:
 	case (_uint)GAMEOBJECT::MIDDLE_BOSS:
-		//if (static_cast<CActor*>(pHitObject)->Get_Groggy())
-		//{
-		if (!m_isExecution)
+		if (static_cast<CActor*>(pHitObject)->Get_Groggy())
 		{
-			if (m_pBlankFKey)
+			if (!m_isExecution)
 			{
-				m_pBlankFKey->setActive(true);
-				CTransform* pTargetTransform = pHitObject->Get_Transform();
-				_vector svTargetLook = XMVector3Normalize(pTargetTransform->Get_State(CTransform::STATE_LOOK));
-				_vector svTargetPos = pTargetTransform->Get_State(CTransform::STATE_POSITION);
-				svTargetPos += _vector{ 0.f, 1.2f, 0.f, 0.f } + svTargetLook * 1.f;
-				m_pBlankFKey->Set_Position(svTargetPos);
-			}
+				if (m_pBlankFKey)
+				{
+					m_pBlankFKey->setActive(true);
+					CTransform* pTargetTransform = pHitObject->Get_Transform();
+					_vector svTargetLook = XMVector3Normalize(pTargetTransform->Get_State(CTransform::STATE_LOOK));
+					_vector svTargetPos = pTargetTransform->Get_State(CTransform::STATE_POSITION);
+					svTargetPos += _vector{ 0.f, 1.2f, 0.f, 0.f } + svTargetLook * 1.f;
+					m_pBlankFKey->Set_Position(svTargetPos);
+				}
 
-			if (g_pGameInstance->getkeyDown(DIK_F))
-			{
-				m_pTargetExecution = static_cast<CActor*>(pHitObject);
-				m_pTargetExecution->Execution();
-				Set_Execution(true);
-				m_pBlankFKey->setActive(false);
+				if (g_pGameInstance->getkeyDown(DIK_F))
+				{
+					m_pTargetExecution = static_cast<CActor*>(pHitObject);
+					m_pTargetExecution->Execution();
+					Set_Execution(true);
+					m_pBlankFKey->setActive(false);
+				}
 			}
 		}
-		//}
 		break;
 	default:
 		if (m_pBlankFKey)

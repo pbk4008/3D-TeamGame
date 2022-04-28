@@ -99,7 +99,9 @@ _int CDropBox::Tick(_double _dDeltaTime)
 	if (NO_EVENT != iProgress)
 		return iProgress;
 
-	m_plight->Set_Color(XMVectorSet(0.2f, 1.f, 0.5f, 1.f));
+	m_plight->Set_Color(XMVectorSet(0.2f, 0.5f, 0.1f, 1.f));
+	m_plight->Set_Ambient(_float4(0.01f, 0.01f, 0.01f, 1.f));
+	m_plight->Set_Sepcular(_float4(0.01f, 0.01f, 0.01f, 1.f));
 
 	if (true == m_bBoxOpened && 0 < m_dropList.size())
 	{
