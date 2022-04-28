@@ -4,6 +4,8 @@
 
 BEGIN(Client)
 
+class CTrailEffect_Distortion;
+
 class CEarthAberrant_Pick final : public CWeapon
 {
 private:
@@ -30,6 +32,7 @@ private:
 private:
 	_float4x4 m_matPivot;
 	CCapsuleCollider* m_pCollider = nullptr;
+	CTrailEffect_Distortion* m_pTrailEffect_Distortion = nullptr;
 
 public:
 	static CEarthAberrant_Pick* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);

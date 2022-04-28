@@ -98,7 +98,7 @@ HRESULT CBastion_Sword_Chase::EnterState()
 	if (FAILED(m_pAnimator->Change_AnyEntryAnimation((_uint)CMonster_Bastion_Sword::ANIM_TYPE::RUN_START)))
 		return E_FAIL;
 
-	m_pAnimator->Get_AnimController()->Mul_MoveSpeed(2.f);
+	//m_pAnimator->Get_AnimController()->Mul_MoveSpeed(2.f);
 
 	//_matrix matRotate = XMMatrixRotationAxis(XMVectorSet(0.f, 1.f, 0.f, 0.f), XMConvertToRadians(180.f));
 	//m_pAnimator->Set_PivotMatrix(matRotate);
@@ -111,7 +111,8 @@ HRESULT CBastion_Sword_Chase::ExitState()
 	/*_matrix matIdentity = XMMatrixIdentity();
 	m_pAnimator->Set_PivotMatrix(matIdentity);*/
 
-	m_pAnimator->Get_AnimController()->Div_MoveSpeed(2.f);
+	//m_pAnimator->Get_AnimController()->Div_MoveSpeed(2.f);
+
 	return S_OK;
 }
 

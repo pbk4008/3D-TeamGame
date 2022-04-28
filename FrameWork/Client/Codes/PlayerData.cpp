@@ -26,7 +26,7 @@ _bool CPlayerData::SetExp(_float iExp)
 		g_pInvenUIManager->SetLevelBG(++Level);
 		CurExp = 0;
 
-		if (10 < Level)
+		if (10 <= Level)
 			Level = 9;
 
 		return true;

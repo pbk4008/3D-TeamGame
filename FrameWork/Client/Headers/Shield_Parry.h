@@ -21,6 +21,8 @@ public:
 
 public:
 	virtual _int Input(const _double & _dDeltaTime) override;
+	
+private: _int m_radialcnt = 20;
 
 public:
 	static CShield_Parry* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext, void* _pArg = nullptr);

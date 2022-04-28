@@ -49,6 +49,7 @@ HRESULT CBastion_Sword_Excution::EnterState()
 {
 	m_pAnimator->Change_AnyEntryAnimation((_uint)CMonster_Bastion_Sword::ANIM_TYPE::EXCUTION);
 	g_pObserver->Set_Exp(10.f);
+	//m_pAnimator->Set_AnimSpeed(1.f)
 
 	return S_OK;
 }

@@ -59,6 +59,8 @@ public:
 public:
 	void SetLevelBG(_int PlayerLevel);
 	void FixPos(void);
+	void EquipmentRenderNo(_bool bOnoff);
+	void EquipmentRenderYes(void);
 
 private:
 	CLevel_UP*			m_pLevelUp = nullptr;
@@ -77,6 +79,7 @@ private:
 	_bool  m_bOnLevelUpUI = false;
 	_bool  m_bHideLevelUpUI = false;
 	_float m_fOnTime = 0.f;
+	_bool  m_bRender = true;
 
 public:
 	static CHud* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);

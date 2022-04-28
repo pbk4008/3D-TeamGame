@@ -79,6 +79,8 @@ public:
 
 	void	LightOnOff(_fvector pos, _fvector color, _float deltaspeed = 1.f);
 	void	Set_LightCheck(_bool check);
+	void	Set_LightOrigRange(_float range);
+	void	Set_LightAmbientSpecular(_float4 ambient, _float4 specular);
 
 public:
 	virtual void Hit(const ATTACKDESC& _tAttackDesc);

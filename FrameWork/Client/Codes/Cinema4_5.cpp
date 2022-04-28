@@ -39,7 +39,7 @@ HRESULT CCinema4_5::NativeContruct(_uint iSceneID)
 	pMidBossTr->Set_State(CTransform::STATE_POSITION, XMVectorSet(-180.f, 52.f, 425.f, 1.f));
 	pMidBossTr->SetUp_Rotation(XMVectorSet(0.f, 1.f, 0.f, 0.f), XMConvertToRadians(240.f));;
 
-	m_pCam->Set_Fov(XMConvertToRadians(54.43));
+	m_pCam->Set_Fov(XMConvertToRadians(54.43f));
 	_matrix matPivot = XMMatrixTranslation(-180.f, 52.f, 425.f);
 	m_pCam->Set_CameraMatrix(matPivot);
 

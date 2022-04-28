@@ -154,11 +154,11 @@ HRESULT CStage1::NativeConstruct()
 		return E_FAIL;
 	}
 
-	if (FAILED(Ready_Data_Effect()))
-	{
-		MSGBOX("Stage1 Effect");
-		return E_FAIL;
-	}
+	//if (FAILED(Ready_Data_Effect()))
+	//{
+	//	MSGBOX("Stage1 Effect");
+	//	return E_FAIL;
+	//}
 
 	if (FAILED(Ready_UI(L"Layer_UI")))
 	{
@@ -180,11 +180,11 @@ HRESULT CStage1::NativeConstruct()
 
 	g_pGameInstance->Change_BaseCamera(L"Camera_Silvermane");
 
-	//if (FAILED(Ready_Meteor()))
-	//{
-	//	MSGBOX("Meteor");
-	//	return E_FAIL;
-	//}
+	if (FAILED(Ready_Meteor()))
+	{
+		MSGBOX("Meteor");
+		return E_FAIL;
+	}
 	
 	if (FAILED(Ready_Indicator()))
 	{
@@ -198,24 +198,24 @@ HRESULT CStage1::NativeConstruct()
 	//	return E_FAIL;
 	//}
 
-	//if (FAILED(Ready_Wall()))
-	//{
-	//	MSGBOX("Wall");
-	//	return E_FAIL;
-	//}
+	if (FAILED(Ready_Wall()))
+	{
+		MSGBOX("Wall");
+		return E_FAIL;
+	}
 
-	//if (FAILED(Ready_Pot()))
-	//	return E_FAIL;
+	if (FAILED(Ready_Pot()))
+		return E_FAIL;
 
-	//if (FAILED(Ready_Cinema()))
-	//{
-	//	MSGBOX("Cinema");
-	//	return E_FAIL;
-	//}
+	if (FAILED(Ready_Cinema()))
+	{
+		MSGBOX("Cinema");
+		return E_FAIL;
+	}
 
 	g_pGameInstance->PlayBGM(L"Stage1_BGM");
 	
-	//m_pScenemaManager->Active_Scenema((_uint)CINEMA_INDEX::CINEMA1_1);
+	m_pScenemaManager->Active_Scenema((_uint)CINEMA_INDEX::CINEMA1_1);
 
 	return S_OK;
 }
@@ -247,6 +247,8 @@ _int CStage1::Tick(_double TimeDelta)
 
 	CheckTriggerForQuest();
 
+	g_pInvenUIManager->Tick(TimeDelta);
+
 	if (g_pGameInstance->getkeyDown(DIK_I))
 	{
 		if (g_pInvenUIManager->IsOpenModal())
@@ -271,6 +273,8 @@ _int CStage1::Tick(_double TimeDelta)
 
 		m_pTriggerSystem->Tick(TimeDelta);
 
+		if (m_iCountMonster > 10000)
+			m_iCountMonster = 0;
 		if (m_iCountMonster == 0 && m_bFirst)//트리거 몬스터 다 잡힘
 		{
 			//포탈 위치 체크 
@@ -386,6 +390,8 @@ _int CStage1::Tick(_double TimeDelta)
 					if (m_pScenemaManager->Get_EventCinema((_uint)CINEMA_INDEX::CINEMA3_5))
 					{
 						m_pScenemaManager->ResetCinema();
+						g_pInvenUIManager->SetRender(false);
+						g_pQuestManager->SetRender(false);
 						if (FAILED(g_pGameInstance->Open_Level((_uint)SCENEID::SCENE_LOADING, CLoading::Create(m_pDevice, m_pDeviceContext, SCENEID::SCENE_STAGE2))))
 							return -1;
 
@@ -409,7 +415,6 @@ _int CStage1::Tick(_double TimeDelta)
 	//		return -1;
 	//	//pRazer->setActive(true);
 	//}
-
 	//if (g_pGameInstance->getkeyDown(DIK_NUMPAD0))
 	//{
 	//	CBoss_Bastion_Judicator* pMidBoss = nullptr;
@@ -417,7 +422,6 @@ _int CStage1::Tick(_double TimeDelta)
 	//		return -1;
 	//	pMidBoss->setActive(true);
 	//}
-
 	//if (g_pGameInstance->getkeyDown(DIK_NUMPAD0))
 	//{
 	//	CMonster_Crawler* pMonster = nullptr;
@@ -425,7 +429,6 @@ _int CStage1::Tick(_double TimeDelta)
 	//		return -1;
 	//	pMonster->setActive(true);
 	//}
-
 	//if (g_pGameInstance->getkeyDown(DIK_NUMPAD1))
 	//{
 	//	CMonster_EarthAberrant* pMonster = nullptr;
@@ -433,7 +436,6 @@ _int CStage1::Tick(_double TimeDelta)
 	//		return -1;
 	//	pMonster->setActive(true);
 	//}
-	// 
 	//if (g_pGameInstance->getkeyDown(DIK_NUMPAD2))
 	//{
 	//	CMonster_Bastion_Sword* pMonster = nullptr;
@@ -441,7 +443,6 @@ _int CStage1::Tick(_double TimeDelta)
 	//		return -1;
 	//	pMonster->setActive(true);
 	//}
-
 	//if (g_pGameInstance->getkeyDown(DIK_NUMPAD3))
 	//{
 	//	CMonster_Bastion_Shooter* pMonster = nullptr;
@@ -449,7 +450,6 @@ _int CStage1::Tick(_double TimeDelta)
 	//		return -1;
 	//	pMonster->setActive(true);
 	//}
-	//// 
 	//if (g_pGameInstance->getkeyDown(DIK_NUMPAD4))
 	//{
 	//	CMonster_Bastion_Healer* pMonster = nullptr;
@@ -464,7 +464,6 @@ _int CStage1::Tick(_double TimeDelta)
 	//		return -1;
 	//	pMonster->setActive(true);
 	//}
-
 	//if (g_pGameInstance->getkeyDown(DIK_NUMPAD6))
 	//{
 	//	CMonster_Bastion_Spear* pMonster = nullptr;
@@ -515,9 +514,9 @@ _int CStage1::Tick(_double TimeDelta)
 	}
 
 	/*for Meteor*/
-	//m_fAccMeteorStartTime += (_float)TimeDelta;
-	//if (m_fAccMeteorStartTime > 15.f)
-	//	Shoot_Meteor(TimeDelta);
+	m_fAccMeteorStartTime += (_float)TimeDelta;
+	if (m_fAccMeteorStartTime > 15.f)
+		Shoot_Meteor(TimeDelta);
 
 	if(g_pQuestManager)
 		g_pQuestManager->Tick(g_dImmutableTime);
@@ -526,6 +525,7 @@ _int CStage1::Tick(_double TimeDelta)
 		g_pGuideManager->Tick(g_dImmutableTime);
 
 	Open_Wall();
+
 
 	return _int();
 }

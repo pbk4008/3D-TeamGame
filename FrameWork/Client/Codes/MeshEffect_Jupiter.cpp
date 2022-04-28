@@ -171,4 +171,6 @@ CGameObject* CMeshEffect_Jupiter::Clone(const _uint _iSceneID, void* _pArg)
 void CMeshEffect_Jupiter::Free()
 {
 	__super::Free();
+
+	Safe_Release(m_pTexture);
 }

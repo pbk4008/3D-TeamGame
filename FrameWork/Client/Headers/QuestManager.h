@@ -29,12 +29,19 @@ private:
 	void	Ready_Quest(void);
 	void    PullingQuest(void);
 
+public:
+	void	SetRender(_bool bOnOff) { m_bRender = bOnOff; }
+
 private:
 	CUI_QuestHeadText*  m_pQuesthead = nullptr;
 
 private:
 	std::vector<std::pair<std::wstring, CQuest*> > m_vecQuestList; /* 담아두는 용도 */
 	std::vector<CQuest*> m_vecQuest;							   /* 틱 용 */
+
+private:
+	_bool	m_bRender = true;
+
 
 private:
 	virtual void Free() override;

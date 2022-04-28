@@ -68,6 +68,7 @@ void CScenematic::End_Cinema()
 	{
 		OnOffPlayerWithUI(true);
 		g_pGameInstance->Change_BaseCamera(L"Camera_Silvermane");
+		g_pMainApp->Change_RenderCamTag(L"Camera_Silvermane");
 	}
 }
 
@@ -112,6 +113,10 @@ void CScenematic::OnOffPlayerWithUI(_bool bCheck)
 	pUIList = g_pGameInstance->getObjectList(m_iSceneID, L"Layer_UI");
 	for (auto& pUI : *pUIList)
 		pUI->setActive(bCheck);
+
+	g_pQuestManager->SetRender(bCheck);
+	g_pInvenUIManager->SetRender(bCheck);
+
 }
 
 void CScenematic::Free()

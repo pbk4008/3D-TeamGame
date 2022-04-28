@@ -74,8 +74,8 @@ HRESULT CStage2::NativeConstruct()
 		return E_FAIL;
 	}
 
-	//if (FAILED(Ready_TriggerSystem(L"../bin/SaveData/Trigger/MonsterSpawnTrigger2.dat")))
-	//	return E_FAIL;
+	if (FAILED(Ready_TriggerSystem(L"../bin/SaveData/Trigger/MonsterSpawnTrigger2.dat")))
+		return E_FAIL;
 
 	if (FAILED(Ready_Treasure_Chest()))
 	{
@@ -90,7 +90,7 @@ HRESULT CStage2::NativeConstruct()
 		return E_FAIL;
 
 	g_pGameInstance->StopSound(CSoundMgr::CHANNELID::BGM);
-	//g_pGameInstance->PlayBGM(L"Stage2_BGM");
+	g_pGameInstance->PlayBGM(L"Stage2_BGM");
 
 	return S_OK;
 }

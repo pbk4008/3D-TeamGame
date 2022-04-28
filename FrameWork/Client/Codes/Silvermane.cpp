@@ -167,11 +167,14 @@
 #include "Silvermane_Heal.h"
 ///////////////////////////////////////////// Execution
 #include "Silvermane_Execution.h"
+///////////////////////////////////////////// Emote
+#include "Silvermane_Bow.h"
 #pragma endregion
 
 #include "Material.h"
 #include "MotionTrail.h"
 #include "HierarchyNode.h"
+#include "Light.h"
 
 CSilvermane::CSilvermane(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
 	: CActor(_pDevice, _pDeviceContext)
@@ -207,6 +210,7 @@ HRESULT CSilvermane::NativeConstruct(const _uint _iSceneID, void* _pArg)
 		_vector vPos = XMLoadFloat3(&tDesc.vPos);
 		vPos = XMVectorSetW(vPos, 1.f);
 		m_pTransform->Set_State(CTransform::STATE_POSITION, vPos);
+		m_vRespawnPos = tDesc.vPos;
 	}
 	else
 		m_pTransform->Set_State(CTransform::STATE_POSITION, XMVectorSet(2.f, 1.f, -1.f, 1.f));
@@ -224,7 +228,6 @@ HRESULT CSilvermane::NativeConstruct(const _uint _iSceneID, void* _pArg)
 	if (FAILED(g_pObserver->Set_Player(this)))
 		return E_FAIL;
 
-
 	m_isFall = true;
 	m_fMaxHp = 100000.f;
 	m_fCurrentHp = m_fMaxHp;
@@ -234,28 +237,6 @@ HRESULT CSilvermane::NativeConstruct(const _uint _iSceneID, void* _pArg)
 	m_pRenderer->SetRenderButton(CRenderer::HDR, true);
 	m_pRenderer->SetRenderButton(CRenderer::MOTIONTRAIL, true);
 	//m_pRenderer->SetRenderButton(CRenderer::SHADOW, true);
-
-	//Light ¼öÁ¤ ÇØ¾ßµÊ
-	LIGHTDESC			LightDesc;
-	ZeroMemory(&LightDesc, sizeof(LIGHTDESC));
-	LightDesc.eType = LIGHTDESC::TYPE_POINT;
-	LightDesc.fRange = 7.f;
-	LightDesc.vDiffuse = _float4(1.f, 0.2f, 0.2f, 1.f);
-	LightDesc.vSpecular = _float4(0.8f, 0.8f, 0.8f, 1.f);
-	LightDesc.vAmbient = _float4(1.f, 1.f, 1.f, 1.f);
-	LightDesc.bactive = false;
-	XMStoreFloat3(&LightDesc.vPosition, m_pTransform->Get_State(CTransform::STATE_POSITION));
-
-	m_LightDesc = LightDesc;
-
-	if (nullptr == m_pLight)
-	{
-		if (FAILED(g_pGameInstance->Add_Light(m_pDevice, m_pDeviceContext, m_LightDesc, &m_pLight)))
-			MSGBOX("Failed To Adding PointLight");
-	}
-
-	m_pLight->Set_Show(false);
-
 
 	m_pTransform->Set_State(CTransform::STATE_POSITION, XMVectorSet(0.f,5.f, 10.f, 1.f));
 
@@ -290,6 +271,7 @@ HRESULT CSilvermane::NativeConstruct(const _uint _iSceneID, void* _pArg)
 		m_pFillCKey2->setActive(false);
 
 	m_isLootShield = true;
+
 	return S_OK;
 }
 
@@ -338,7 +320,7 @@ _int CSilvermane::Tick(_double _dDeltaTime)
 	Raycast_DropBox(_dDeltaTime);
 
 	// ¹«±â ¾÷µ«
-	if (m_pCurWeapon)
+	if (m_pCurWeapon && m_pCurWeapon->getActive())
 	{
 		iProgress = m_pCurWeapon->Tick(_dDeltaTime);
 		if (NO_EVENT != iProgress)
@@ -351,21 +333,6 @@ _int CSilvermane::Tick(_double _dDeltaTime)
 			return iProgress;
 	}
 
-	
-	//light °ü·Ã 
-	if (m_bLight && 0.f <= m_LightDesc.fRange)
-	{
-		m_LightDesc.fRange -= (_float)_dDeltaTime * m_fOffTimeSpeed;
-		m_pLight->Set_Range(m_LightDesc.fRange);
-	}
-
-	if (0.f >= m_LightDesc.fRange)
-	{
-		m_LightDesc.fRange = 0.f;
-		m_pLight->Set_Show(false);
-		m_bLight = false;
-	}
-
 	if (g_pGameInstance->getkeyDown(DIK_O))
 	{
 		m_pPlayerData->SetExp(5);
@@ -373,6 +340,10 @@ _int CSilvermane::Tick(_double _dDeltaTime)
 
 	if (g_pGameInstance->getCurrentLevel() != 3)
 		m_isLootShield = true;
+
+
+	CActor::LightOnOff(m_pTransform->Get_State(CTransform::STATE_POSITION), m_lightcolor, 15.f);
+
 
 	return _int();
 }
@@ -411,7 +382,7 @@ _int CSilvermane::LateTick(_double _dDeltaTime)
 	}
 
 	// ¹«±â ·¹ÀÕ¾÷µ«
-	if (m_pCurWeapon)
+	if (m_pCurWeapon && m_pCurWeapon->getActive())
 	{
 		iProgress = m_pCurWeapon->LateTick(_dDeltaTime);
 		if (NO_EVENT != iProgress)
@@ -922,7 +893,7 @@ HRESULT CSilvermane::Ready_States()
 	if (FAILED(m_pStateController->Add_State(L"1H_Stagger", C1H_Stagger::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 	if (FAILED(m_pStateController->Add_State(L"1H_KnockBack", C1H_KnockBack::Create(m_pDevice, m_pDeviceContext))))
-		return E_FAIL;
+ 		return E_FAIL;
 	if (FAILED(m_pStateController->Add_State(L"KnockBack", CSilvermane_KnockBack::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 	if (FAILED(m_pStateController->Add_State(L"Death", CSilvermane_Death::Create(m_pDevice, m_pDeviceContext))))
@@ -935,6 +906,9 @@ HRESULT CSilvermane::Ready_States()
 		return E_FAIL;
 	// Execution
 	if (FAILED(m_pStateController->Add_State(L"Execution", CSilvermane_Execution::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	// Emote
+	if (FAILED(m_pStateController->Add_State(L"Bow", CSilvermane_Bow::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 
 	for (auto& pair : m_pStateController->Get_States())
@@ -1269,6 +1243,11 @@ void CSilvermane::Set_WeaponFixedBone(CHierarchyNode* _pFixedBone)
 {
 	if (m_pCurWeapon)
 		m_pCurWeapon->Set_FixedBone(_pFixedBone);
+}
+
+void CSilvermane::Set_WeaponActive(const _bool _isActive)
+{
+	m_pCurWeapon->setActive(_isActive);
 }
 
 void CSilvermane::Set_Camera(CCamera_Silvermane* _pCamera)
@@ -1677,24 +1656,6 @@ void CSilvermane::Loot_Shield()
 	m_isLootShield = true;
 }
 
-void CSilvermane::OnLight(_vector vColor, _vector vAmbient, _float fRange, _float fOffTimeSpeed)
-{
-	if (nullptr != m_pLight)
-	{
-		_vector Pos = m_pTransform->Get_State(CTransform::STATE_POSITION);
-		m_LightDesc.vPosition = _float3(XMVectorGetX(Pos) , XMVectorGetY(Pos), XMVectorGetZ(Pos));
-		XMStoreFloat4(&m_LightDesc.vDiffuse, vColor);
-		XMStoreFloat4(&m_LightDesc.vAmbient, vAmbient);
-		m_LightDesc.fRange = fRange;
-		m_LightDesc.bactive = true;
-		m_fOffTimeSpeed = fOffTimeSpeed;
-
-		m_pLight->Set_Desc(m_LightDesc);
-		m_pLight->Set_Show(true);
-		m_bLight = true;
-	}
-}
-
 const _int CSilvermane::Trace_CameraLook(const _double& _dDeltaTime)
 {
 	_vector svCameraLook = m_pCamera->Get_Look();
@@ -1748,8 +1709,8 @@ const _int CSilvermane::Input(const _double& _dDeltaTime)
 {
 	if (g_pGameInstance->getkeyDown(DIK_HOME))
 	{
-		m_pCharacterController->setFootPosition(_float3(0.f, 2.f, 0.f));
-		m_isFall = true;
+		if (FAILED(m_pStateController->Change_State(L"Bow")))
+			return -1;
 	}
 	if (g_pGameInstance->getkeyDown(DIK_END))
 	{
@@ -2154,7 +2115,7 @@ CGameObject* CSilvermane::Clone(const _uint _iSceneID, void* _pArg)
 void CSilvermane::Free()
 {
 	__super::Free();
-	//Safe_Release(m_pNeedle);
+
 	Safe_Release(m_pHealSphere);
 	Safe_Release(m_pShield);
 	Safe_Release(m_pCharacterController);

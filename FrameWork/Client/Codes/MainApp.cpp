@@ -113,7 +113,8 @@ HRESULT CMainApp::NativeConstruct()
 	// 몬스터
 	g_pGameInstance->Set_CollisionLayer((_uint)ELayer::Monster, (_uint)ELayer::Enviroment);
 	g_pGameInstance->Set_CollisionLayer((_uint)ELayer::Monster, (_uint)ELayer::Weapon);
-
+	g_pGameInstance->Set_CollisionLayer((_uint)ELayer::Monster, (_uint)ELayer::Monster);
+	// 항아리
 	g_pGameInstance->Set_CollisionLayer((_uint)ELayer::Weapon, (_uint)ELayer::Pot);
 
 	if (FAILED(Ready_Fonts()))

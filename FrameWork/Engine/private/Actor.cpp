@@ -349,6 +349,18 @@ void CActor::Set_LightCheck(_bool check)
 	m_pActiveLight->Set_Active(check);
 }
 
+void CActor::Set_LightOrigRange(_float range)
+{
+	m_OrigLightRange = range;
+	m_LightRange = range;
+}
+
+void CActor::Set_LightAmbientSpecular(_float4 ambient, _float4 specular)
+{
+	m_pActiveLight->Set_Ambient(ambient);
+	m_pActiveLight->Set_Sepcular(specular);
+}
+
 void CActor::Hit(const ATTACKDESC& _tAttackDesc)
 {
 }
@@ -369,7 +381,6 @@ void CActor::Free()
 {
 	CGameObject::Free();
 
-	Safe_Release(m_pActiveLight);
 	Safe_Release(m_pModel);
 	Safe_Release(m_dissolveTex);
 	Safe_Release(m_dissolveGradientTex);
