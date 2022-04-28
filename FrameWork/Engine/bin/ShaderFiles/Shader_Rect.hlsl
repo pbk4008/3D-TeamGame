@@ -14,8 +14,10 @@ cbuffer fadeinout
 {
 	bool g_Fade = false;
 	float g_Alpha = 0.f;
+	float g_Weight = 0.f;
 };
 Texture2D		g_DiffuseTexture;
+Texture2D		g_MaskTexture;
 
 cbuffer Information
 {
@@ -70,7 +72,7 @@ VS_OUT VS_MAIN(VS_IN In)
 		
 	Out.vPosition = mul(vector(In.vPosition, 1.f), matWVP);	
 	Out.vTexUV = In.vTexUV;	
-	;
+
 	return Out;
 }
 
@@ -115,7 +117,6 @@ VS_OUT VS_MAIN(VS_IN In)
 		// break;
 	 //case 1:
 	 //case 6:
-
 		// if (0 == In.vTexUV.x)
 		//	 In.vTexUV.x = 0.2f;
 		// else
@@ -123,7 +124,6 @@ VS_OUT VS_MAIN(VS_IN In)
 		// break;
 	 //case 2:
 	 //case 7:
-
 		// if (0 == In.vTexUV.x)
 		//	 In.vTexUV.x = 0.4f;
 		// else
@@ -131,7 +131,6 @@ VS_OUT VS_MAIN(VS_IN In)
 		// break;
 	 //case 3:
 	 //case 8:
-
 		// if (0 == In.vTexUV.x)
 		//	 In.vTexUV.x = 0.6f;
 		// else
@@ -139,7 +138,6 @@ VS_OUT VS_MAIN(VS_IN In)
 		// break;
 	 //case 4:
 	 //case 9:
-
 		// if (0 == In.vTexUV.x)
 		//	 In.vTexUV.x = 0.8f;
 		// else
@@ -170,9 +168,6 @@ VS_OUT VS_MAIN(VS_IN In)
 		//	 In.vTexUV.y = 1.f;
 		// break;
 	 //}
-
-	 In.vTexUV.x = (In.vTexUV.x / g_iRow) + ((g_iIndex % g_iRow) * (1.f / g_iRow));
-
 	 Out.vTexUV = In.vTexUV;
 	 
 	 return Out;
@@ -223,19 +218,33 @@ PS_OUT PS_MAIN(PS_IN In)
 	return Out;	
 }
 
-PS_OUT PS_MAIN_DAMAGEFONT(PS_IN In)
+struct PS_OUT_Alpha
 {
-	PS_OUT		Out = (PS_OUT)0;
+	half4		vColor : SV_TARGET0;
+	half4		vWeight : SV_TARGET1;
+};
+
+PS_OUT_Alpha PS_MAIN_DAMAGEFONT_BG(PS_IN In)
+{
+	PS_OUT_Alpha		Out = (PS_OUT_Alpha)0;
 
 	Out.vColor = g_DiffuseTexture.Sample(DefaultSampler, In.vTexUV);
+	Out.vColor.a *= g_Alpha;
+	Out.vWeight = half4(g_Weight.xxx, 1.f);
 
-	//if (Out.vColor.a <= 0.1)
-	//	discard;
+	return Out;
+}
 
-	//if (g_Fade)
-	//{
-	//	Out.vColor.a *= g_Alpha;
-	//}
+PS_OUT_Alpha PS_MAIN_DAMAGEFONT(PS_IN In)
+{
+	PS_OUT_Alpha		Out = (PS_OUT_Alpha)0;
+
+	vector vMaskColor = g_MaskTexture.Sample(DefaultSampler, In.vTexUV);
+	In.vTexUV.x = (In.vTexUV.x / g_iRow) + ((g_iIndex % g_iRow) * (1.f / g_iRow));
+	Out.vColor = g_DiffuseTexture.Sample(DefaultSampler, In.vTexUV);
+	Out.vColor *= vMaskColor;
+	Out.vColor.a *= g_Alpha;
+	Out.vWeight = half4(g_Weight.xxx, 1.f);
 
 	return Out;
 }
@@ -342,10 +351,20 @@ technique11			DefaultTechnique
 	pass DamageFont
 	{
 		SetRasterizerState(CullMode_Default);
-		SetDepthStencilState(ZBufferDisable, 0);
-		SetBlendState(AlphaBlending, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+		SetDepthStencilState(ZReadDisable, 0);
+		SetBlendState(AlphaAdditive, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
 		VertexShader = compile vs_5_0 VS_MAIN_DAMAGEFONT();
 		GeometryShader = NULL;
 		PixelShader = compile ps_5_0  PS_MAIN_DAMAGEFONT();
+	}
+	// 6
+	pass Normal_ZreadDisable
+	{
+		SetRasterizerState(CullMode_Default);
+		SetDepthStencilState(ZReadDisable, 0);
+		SetBlendState(AlphaAdditive, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+		VertexShader = compile vs_5_0 VS_MAIN();
+		GeometryShader = NULL;
+		PixelShader = compile ps_5_0  PS_MAIN_DAMAGEFONT_BG();
 	}
 }

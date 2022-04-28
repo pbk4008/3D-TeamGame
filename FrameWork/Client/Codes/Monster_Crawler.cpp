@@ -19,6 +19,7 @@
 
 #include "Stage1.h"
 #include "Stage2.h"
+#include "DamageFont.h"
 
 CMonster_Crawler::CMonster_Crawler(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
 	:CActor(_pDevice, _pDeviceContext)
@@ -78,7 +79,7 @@ HRESULT CMonster_Crawler::NativeConstruct(const _uint _iSceneID, void* _pArg)
 
 	m_iObectTag = (_uint)GAMEOBJECT::MONSTER_CRYSTAL;
 
-	m_fMaxHp = 20.f;
+	m_fMaxHp = 10.f;
 	m_fCurrentHp = m_fMaxHp;
 
 	m_fMaxGroggyGauge = 3.f;
@@ -97,7 +98,6 @@ HRESULT CMonster_Crawler::NativeConstruct(const _uint _iSceneID, void* _pArg)
 
 _int CMonster_Crawler::Tick(_double _dDeltaTime)
 {	
-
 	if (0 > __super::Tick(_dDeltaTime))
 	{
 		return -1;
@@ -266,7 +266,6 @@ void CMonster_Crawler::Hit(const ATTACKDESC& _tAttackDesc)
 
 	m_pPanel->Set_Show(true);
 
-
 	if (false == m_bFirstHit)
 	{
 		m_bFirstHit = true; //딱 한번 true로 변경해줌
@@ -293,6 +292,20 @@ void CMonster_Crawler::Hit(const ATTACKDESC& _tAttackDesc)
 	Active_Effect((_uint)EFFECT::HIT_IMAGE);
 	//Active_Effect((_uint)EFFECT::DEAD_SMOKE);
 
+	CTransform* pOtherTransform = _tAttackDesc.pOwner->Get_Transform();
+	_vector svOtherLook = XMVector3Normalize(pOtherTransform->Get_State(CTransform::STATE_LOOK));
+	_vector svOtherRight = XMVector3Normalize(pOtherTransform->Get_State(CTransform::STATE_RIGHT));
+
+	uniform_real_distribution<_float> fRange(-0.5f, 0.5f);
+	uniform_real_distribution<_float> fRange2(-0.2f, 0.2f);
+	uniform_int_distribution<_int> iRange(-5, 5);
+	CDamageFont::DESC tDamageDesc;
+	_vector svPos = m_pTransform->Get_State(CTransform::STATE_POSITION) + _vector{ 0.f, 1.f + fRange2(g_random), 0.f, 0.f };
+	svPos += svOtherRight * fRange(g_random) - svOtherLook * 0.5f;
+	XMStoreFloat3(&tDamageDesc.vPos, svPos);
+	tDamageDesc.fDamage = _tAttackDesc.fDamage + (_float)iRange(g_random);
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_DamageFont", L"Proto_GameObject_DamageFont", &tDamageDesc)))
+		MSGBOX(L"데미지 폰트 생성 실패");
 }
 
 void CMonster_Crawler::Parry(const PARRYDESC& _tParryDesc)
@@ -318,8 +331,8 @@ void CMonster_Crawler::setActive(_bool bActive)
 		{
 			//Ch_controller
 			CCharacterController::DESC tCCTDesc;
-			tCCTDesc.fHeight = 1.f;
-			tCCTDesc.fRadius = 0.5f;
+			tCCTDesc.fHeight = 0.6f;
+			tCCTDesc.fRadius = 0.8f;
 			tCCTDesc.fContactOffset = tCCTDesc.fRadius * 0.1f;
 			tCCTDesc.fStaticFriction = 0.5f;
 			tCCTDesc.fDynamicFriction = 0.5f;

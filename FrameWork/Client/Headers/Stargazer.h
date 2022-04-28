@@ -7,6 +7,7 @@ BEGIN(Engine)
 class CCapsuleCollider;
 END
 BEGIN(Client)
+class CTrailEffect_Distortion;
 class CStargazer final : public CWeapon
 {
 private:
@@ -44,6 +45,7 @@ private:
 	virtual void Free() override;
 private:
 	CCapsuleCollider* m_pCollider;
+	CTrailEffect_Distortion* m_pTrailEffect_Distortion = nullptr;
 };
 END
 #endif

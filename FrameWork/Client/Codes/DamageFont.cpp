@@ -34,6 +34,7 @@ HRESULT CDamageFont::NativeConstruct(_uint _iSceneID, void* _pArg)
 	if (FAILED(Ready_Components()))
 		return E_FAIL;
 
+	m_vScale = { 0.2f, 0.2f };
 	return S_OK;
 }
 
@@ -43,8 +44,23 @@ _int CDamageFont::Tick(_double _dDeltaTime)
 	if (NO_EVENT != iProgress)
 		return iProgress;
 
-	//m_pTransform->Set_State(CTransform::STATE_POSITION, _vector{ 0.f, 2.f, 0.f, 1.f });
+	m_fAccTime += (_float)_dDeltaTime;
 
+	m_vScale.x -= (_float)_dDeltaTime * 0.4f;
+	if (0.06f > m_vScale.x)
+		m_vScale.x = 0.06f;
+	m_vScale.y -= (_float)_dDeltaTime * 0.4f;
+	if (0.06f > m_vScale.y)
+		m_vScale.y = 0.06f;
+
+	if (0.5f < m_fAccTime)
+	{
+		_vector svPos = m_pTransform->Get_State(CTransform::STATE_POSITION);
+		svPos += _vector{ 0.f, 1.f, 0.f, 0.f } * (_float)_dDeltaTime * 0.5f;
+		m_pTransform->Set_State(CTransform::STATE_POSITION, svPos);
+
+		m_fAlpha -= (_float)_dDeltaTime;
+	}
 
 	return _int();
 }
@@ -54,6 +70,12 @@ _int CDamageFont::LateTick(_double _dDeltaTime)
 	_int iProgress = __super::LateTick(_dDeltaTime);
 	if (NO_EVENT != iProgress)
 		return iProgress;
+
+	if (0.f >= m_fAlpha)
+	{
+		Set_Remove(true);
+		return NO_EVENT;
+	}
 
 	//빌보드
 	_matrix smatView;
@@ -68,14 +90,9 @@ _int CDamageFont::LateTick(_double _dDeltaTime)
 	_float fDistToUI = XMVectorGetX(XMVector3Length(svDist));
 
 	_vector svScale = XMVectorZero();
-	svScale = { fDistToUI * 0.06f, fDistToUI * 0.06f, 1.f, 1.f };
+	svScale = { fDistToUI * m_vScale.x, fDistToUI * m_vScale.y, 1.f, 1.f };
 	//svScale = { fDistToUI * 0.1f, fDistToUI * 0.1f, 1.f, 1.f };
 	m_pTransform->Scaling(svScale);
-
-	for (_uint i = 0; i < m_iFontSize; ++i)
-	{
-		m_vecWorldTransforms[i]->Set_WorldMatrix(m_vecLocalTransforms[i]->Get_WorldMatrix() * m_pTransform->Get_WorldMatrix());
-	}
 
 	m_pRenderer->Add_RenderGroup(CRenderer::RENDER::RENDER_UI, this);
 
@@ -87,27 +104,41 @@ HRESULT CDamageFont::Render()
 	if (FAILED(__super::Render()))
 		return E_FAIL;
 
+	_float weight = 0.5f;
+
+	// BG
 	wstring wstrCamTag = g_pGameInstance->Get_BaseCameraTag();
 	_matrix smatView = XMMatrixTranspose(g_pGameInstance->Get_Transform(wstrCamTag, TRANSFORMSTATEMATRIX::D3DTS_VIEW));
 	_matrix smatProj = XMMatrixTranspose(g_pGameInstance->Get_Transform(wstrCamTag, TRANSFORMSTATEMATRIX::D3DTS_PROJECTION));
 
-	_uint iColumn = 2;
+	_matrix smatWorld = XMMatrixTranspose(m_pBGLocal->Get_WorldMatrix() * m_pTransform->Get_WorldMatrix());
+	m_pBG->SetUp_ValueOnShader("g_WorldMatrix", &smatWorld, sizeof(XMMATRIX));
+	m_pBG->SetUp_ValueOnShader("g_ViewMatrix", &smatView, sizeof(XMMATRIX));
+	m_pBG->SetUp_ValueOnShader("g_ProjMatrix", &smatProj, sizeof(XMMATRIX));
+	m_pBG->SetUp_ValueOnShader("g_Alpha", &m_fAlpha, sizeof(_float));
+	m_pBG->SetUp_TextureOnShader("g_DiffuseTexture", m_pBGTex);
+	
+	m_pBG->Render(6);
+
+	// Fonts
+	_uint iColumn = 1;
 	_uint iRow = 10;
-	_uint iIndex[3] = { 5, 9, 7 };
 	for (_uint i = 0; i < m_iFontSize; ++i)
 	{
-		_matrix smatWorld = XMMatrixTranspose(m_vecWorldTransforms[i]->Get_WorldMatrix());
-		m_vecFonts[i].first->SetUp_ValueOnShader("g_WorldMatrix", &smatWorld, sizeof(XMMATRIX));
-		m_vecFonts[i].first->SetUp_ValueOnShader("g_ViewMatrix", &smatView, sizeof(XMMATRIX));
-		m_vecFonts[i].first->SetUp_ValueOnShader("g_ProjMatrix", &smatProj, sizeof(XMMATRIX));
-		m_vecFonts[i].first->SetUp_TextureOnShader("g_DiffuseTexture", m_vecFonts[i].second);
+		smatWorld = XMMatrixTranspose(m_vecLocalTransforms[i]->Get_WorldMatrix() * m_pTransform->Get_WorldMatrix());
+		m_vecFonts[i]->SetUp_ValueOnShader("g_WorldMatrix", &smatWorld, sizeof(XMMATRIX));
+		m_vecFonts[i]->SetUp_ValueOnShader("g_ViewMatrix", &smatView, sizeof(XMMATRIX));
+		m_vecFonts[i]->SetUp_ValueOnShader("g_ProjMatrix", &smatProj, sizeof(XMMATRIX));
+		m_vecFonts[i]->SetUp_TextureOnShader("g_DiffuseTexture", m_pTexture);
+		m_vecFonts[i]->SetUp_TextureOnShader("g_MaskTexture", m_pMaskTex);
 
-		m_vecFonts[i].first->SetUp_ValueOnShader("g_iIndex", &m_vecIndex[i], sizeof(_uint));
-		m_vecFonts[i].first->SetUp_ValueOnShader("g_iIndex", &iIndex[i], sizeof(_uint));
-		m_vecFonts[i].first->SetUp_ValueOnShader("g_iColumn", &iColumn, sizeof(_uint));
-		m_vecFonts[i].first->SetUp_ValueOnShader("g_iRow", &iRow, sizeof(_uint));
+		m_vecFonts[i]->SetUp_ValueOnShader("g_iIndex", &m_vecIndex[i], sizeof(_uint));
+		m_vecFonts[i]->SetUp_ValueOnShader("g_iColumn", &iColumn, sizeof(_uint));
+		m_vecFonts[i]->SetUp_ValueOnShader("g_iRow", &iRow, sizeof(_uint));
+		m_vecFonts[i]->SetUp_ValueOnShader("g_Alpha", &m_fAlpha, sizeof(_float));
+		m_vecFonts[i]->SetUp_ValueOnShader("g_Weight", &weight, sizeof(_float));
 
-		m_vecFonts[i].first->Render(5);
+		m_vecFonts[i]->Render(5);
 	}
 
 	return S_OK;
@@ -116,37 +147,70 @@ HRESULT CDamageFont::Render()
 HRESULT CDamageFont::Ready_Components()
 {
 	m_pTransform->Set_State(CTransform::STATE_POSITION, XMVectorSetW(XMLoadFloat3(&m_vPos), 1.f));
-
 	_uint iDamage = (_uint)m_fDamage;
 	while (iDamage != 0)
 	{
 		iDamage = iDamage / 10;
 		++m_iFontSize;
 	}
+
+	/* For.BackGround */
+	m_pBG = g_pGameInstance->Clone_Component<CVIBuffer_Rect>(0, L"Proto_Component_RectBuffer");
+	m_pBGTex = g_pGameInstance->Clone_Component<CTexture>(0, L"Proto_Component_Texture");
+	m_pBGTex->Change_Texture(L"Texture_Tuto_Base");
+	m_pBGLocal = g_pGameInstance->Clone_Component<CTransform>(0, L"Proto_Component_Transform");
+	m_pBGLocal->Scaling(_vector{ (_float)m_iFontSize, 1.f, 1.f ,0.f });
+
+	/* For.Fonts */
 	m_vecIndex.resize(m_iFontSize);
 
 	_float fValue = (m_iFontSize - 1) * 0.5f;
 	m_pTexture = g_pGameInstance->Clone_Component<CTexture>(0, L"Proto_Component_Texture");
 	m_pTexture->Change_Texture(L"Texture_DamageFont");
+	m_pMaskTex = g_pGameInstance->Clone_Component<CTexture>(0, L"Proto_Component_Texture");
+	m_pMaskTex->Change_Texture(L"Texture_GreenGradi");
 	for (_uint i = 0; i < m_iFontSize; ++i)
 	{
 		// 버퍼와 텍스처
 		CVIBuffer_Rect* pBuffer = g_pGameInstance->Clone_Component<CVIBuffer_Rect>(0, L"Proto_Component_RectBuffer");
 		// 로컬 트랜스폼
 		CTransform* pLocalTransform = g_pGameInstance->Clone_Component<CTransform>(0, L"Proto_Component_Transform");
-		//_vector svLocalPos = { (_float)i - (0.5f * (m_iFontSize)), 0.f, 0.f, 1.f };
-		_vector svLocalPos = { (_float)(i * 0.52f) - (0.5f * (m_iFontSize)), 0.f, 0.f, 1.f };
-		pLocalTransform->Set_State(CTransform::STATE_POSITION, svLocalPos);
-		// 월드 트랜스폼 : 로컬 * 부모 값을 넣어서 출력할 찐 트랜스폼
-		CTransform* pWorldTransform = g_pGameInstance->Clone_Component<CTransform>(0, L"Proto_Component_Transform");
 
+		switch (m_iFontSize % 2)
+		{
+		case 0:
+			if (m_iFontSize * 0.5f > i * 0.5f)
+			{
+				_vector svLocalPos = { -(0.35f * (m_iFontSize - (i + 1))), 0.f, 0.f, 1.f };
+				pLocalTransform->Set_State(CTransform::STATE_POSITION, svLocalPos);
+			}
+			else
+			{
+				_vector svLocalPos = { (0.35f * (i + 1)), 0.f, 0.f, 1.f };
+				pLocalTransform->Set_State(CTransform::STATE_POSITION, svLocalPos);
+			}
+			break;
+		case 1:
+			if (m_iFontSize * 0.5f > i * 0.5f)
+			{
+				_vector svLocalPos = { -(0.35f * (m_iFontSize - (i + 1))), 0.f, 0.f, 1.f };
+				pLocalTransform->Set_State(CTransform::STATE_POSITION, svLocalPos);
+			}
+			else if (m_iFontSize * 0.5f < i * 0.5f)
+			{
+				_vector svLocalPos = { (0.35f * (i + 1)), 0.f, 0.f, 1.f };
+				pLocalTransform->Set_State(CTransform::STATE_POSITION, svLocalPos);
+			}
+			break;
+		}
+
+		// 인덱스 설정
 		_int iIndex = (_uint)m_fDamage % (_uint)pow(10, i + 1) / (_uint)pow(10, i);
 		iIndex = 0 == iIndex ? 9 : --iIndex;
 
-		m_vecFonts.emplace_back(pBuffer, m_pTexture);
+		m_vecFonts.emplace_back(pBuffer);
 		m_vecIndex[m_iFontSize - (i + 1)] = (iIndex);
 		m_vecLocalTransforms.emplace_back(pLocalTransform);
-		m_vecWorldTransforms.emplace_back(pWorldTransform);
 	}
 
 	return S_OK;
@@ -180,15 +244,17 @@ void CDamageFont::Free()
 
 	for (auto& font : m_vecFonts)
 	{
-		Safe_Release((font).first);
+		Safe_Release(font);
 	}
 	m_vecFonts.clear();
 	Safe_Release(m_pTexture);
+	Safe_Release(m_pMaskTex);
 
 	for (auto& pLocal : m_vecLocalTransforms)
 		Safe_Release(pLocal);
 	m_vecLocalTransforms.clear();
-	for (auto& pWorld : m_vecWorldTransforms)
-		Safe_Release(pWorld);
-	m_vecWorldTransforms.clear();
+
+	Safe_Release(m_pBG);
+	Safe_Release(m_pBGTex);
+	Safe_Release(m_pBGLocal);
 }

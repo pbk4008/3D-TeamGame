@@ -5,6 +5,7 @@
 #include "HierarchyNode.h"
 
 #include "Material.h"
+#include "TrailEffect_Distortion.h"
 
 
 CEarthAberrant_Pick::CEarthAberrant_Pick(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
@@ -76,6 +77,15 @@ HRESULT CEarthAberrant_Pick::NativeConstruct(const _uint _iSceneID, void* pArg)
 
 	m_fDamage = 3.f;
 
+	CTrailEffect::DESC tTrailDesc;
+	tTrailDesc.pOwnerTransform = m_pTransform;
+	tTrailDesc.fLength = 0.6f;
+	XMStoreFloat4x4(&tTrailDesc.matPivot, XMMatrixTranslation(0.f, 0.f, 1.f));
+	tTrailDesc.wstrTextureTag = L"TrailBase";
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer(m_iSceneID, L"Layer_Effect", L"Proto_GameObject_TrailEffect_Distortion", &tTrailDesc, (CGameObject**)&m_pTrailEffect_Distortion)))
+		MSGBOX(L"디스토션 트레일 생성 실패. from Needle");
+	Safe_AddRef(m_pTrailEffect_Distortion);
+
 	return S_OK;
 }
 
@@ -101,6 +111,25 @@ _int CEarthAberrant_Pick::LateTick(_double TimeDelta)
 {
 	if (0 > __super::LateTick(TimeDelta))
 		return -1;
+
+	if (m_isAttack)
+	{
+		if (m_pTrailEffect_Distortion)
+		{
+			m_pTrailEffect_Distortion->Record_Points(TimeDelta);
+			m_pTrailEffect_Distortion->Set_IsRender(true);
+			m_pRenderer->SetRenderButton(CRenderer::DISTORTION, true);
+		}
+	}
+	else
+	{
+		if (m_pTrailEffect_Distortion)
+		{
+			m_pTrailEffect_Distortion->Clear_Points();
+			m_pTrailEffect_Distortion->Set_IsRender(false);
+			m_pRenderer->SetRenderButton(CRenderer::DISTORTION, false);
+		}
+	}
 
 	if(m_pRenderer)
 		m_pRenderer->Add_RenderGroup(CRenderer::RENDER_NONALPHA, this);
@@ -245,4 +274,5 @@ void CEarthAberrant_Pick::Free()
 {
 	CWeapon::Free();
 	Safe_Release(m_pCollider);
+	Safe_Release(m_pTrailEffect_Distortion);
 }

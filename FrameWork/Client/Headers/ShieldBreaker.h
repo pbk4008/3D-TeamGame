@@ -4,6 +4,8 @@
 
 BEGIN(Client)
 
+class CTrailEffect_Distortion;
+
 class CShieldBreaker final : public CWeapon
 {
 private:
@@ -36,6 +38,7 @@ private:
 	_float4x4 m_matPivot;
 	CCapsuleCollider* m_pCollider = nullptr;
 	_bool m_bHitGround = false;
+	CTrailEffect_Distortion* m_pTrailEffect_Distortion = nullptr;
 
 public:
 	static CShieldBreaker* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);
