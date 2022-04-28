@@ -209,6 +209,8 @@ _int CStage2::Tick(_double TimeDelta)
 		}
 	}
 
+	g_pInvenUIManager->Tick(TimeDelta);
+
 	if (g_pGameInstance->getkeyDown(DIK_I))
 	{
 		if (g_pInvenUIManager->IsOpenModal())
@@ -660,6 +662,8 @@ HRESULT CStage2::Ready_TriggerFunctionSetting()
 
 void CStage2::Trgger_Function1()
 {
+	//CLEAR_QUEST(L"T_HUD_FirstStep");
+
 	list<CGameObject*>* pLayer = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE2, L"Layer_Crawler");
 
 	m_bFirst = true;
@@ -761,6 +765,8 @@ void CStage2::Trgger_Function1()
 		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 	}
 	m_iCountMonster = 9;
+	
+	//START_QUEST(EQuestHeaderType::Sunforge, L"T_HUD_GotoDungeon");
 }
 
 void CStage2::Trgger_Function2()

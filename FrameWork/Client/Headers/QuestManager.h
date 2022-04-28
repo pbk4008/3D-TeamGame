@@ -48,7 +48,7 @@ private:
 };
 
 #define  START_QUEST(Type, Key) g_pQuestManager->Start_Quest(Type, Key)
-#define	 CLEAR_QUEST(Key) g_pQuestManager->End_Quest(Key)
-
+#define	 CLEAR_QUEST(Key)		g_pQuestManager->End_Quest(Key)
+//#define  CLEAR_QUEST() 
 END
 #endif // QuestManager_h__
