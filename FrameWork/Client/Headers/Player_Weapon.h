@@ -3,6 +3,10 @@
 
 #include "Weapon.h"
 
+BEGIN(Engine)
+class CLight;
+END	
+
 BEGIN(Client)
 
 class CTrailEffect_Normal;
@@ -44,12 +48,16 @@ public:
 	virtual void OnTriggerEnter(CCollision& collision) override;
 	virtual void RangeAttack() override;
 
+public: void	SetLightCheck(_bool check) { m_bLightCheck = check; }
+
 private:
 	HRESULT Ready_Components();
 	HRESULT Ready_TrailEffects(const Desc& _tDesc);
 	_int Attach_FixedBone(const _double& _dDeltaTime);
 	_int Attach_Owner(const _double& _dDeltaTime);
 	virtual void Set_Equip(const _bool _isEquip, void* _pArg = nullptr);
+
+private: void	LightOnOff(_fvector pos, _fvector color, _float deltaspeed = 1.f);
 
 private:
 	_float4x4 m_matPivot;
@@ -65,6 +73,13 @@ private:
 private: /* TrailEffect */
 	CTrailEffect_Normal* m_pTrailEffect_Normal = nullptr;
 	CTrailEffect_Distortion* m_pTrailEffect_Distortion = nullptr;
+
+private: 
+	_bool			m_bLightCheck = false;
+	CLight*			m_pActiveLight = nullptr;
+	_float			m_LightRange = 0.f;
+	_float			m_OrigLightRange = 0.f;
+	_vector			m_HitPosition = XMVectorZero();
 
 public:
 	static CPlayer_Weapon* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext);

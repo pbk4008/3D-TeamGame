@@ -86,14 +86,9 @@ _int CBastion_Healer_State::Tick(const _double& _dDeltaTime)
 		m_pOwner->Set_Dead();
 		m_pOwner->Remove_Collider();
 
-		CLevel* pLevel = g_pGameInstance->getCurrentLevelScene();
-		if (g_pGameInstance->getCurrentLevel() == (_uint)SCENEID::SCENE_STAGE1)
-			static_cast<CStage1*>(pLevel)->Minus_MonsterCount();
-
-		else if (g_pGameInstance->getCurrentLevel() == (_uint)SCENEID::SCENE_STAGE2)
-			static_cast<CStage2*>(pLevel)->Minus_MonsterCount();
-
 		m_pStateController->Change_State(L"Death");
+
+		m_pOwner->Set_LightCheck(true);
 
 		return 0;
 	}

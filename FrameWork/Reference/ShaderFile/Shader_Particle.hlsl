@@ -12,7 +12,7 @@ cbuffer Information
 {
 	uint g_iImageCountX; //가로줄수
 	uint g_iImageCountY; //세로줄수
-	uint g_iFrame; //전체장수
+	uint g_iFrame; //인덱스
 	float g_fLifeTime;
 	float g_fCurTime;
 };

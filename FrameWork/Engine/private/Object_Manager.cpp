@@ -32,9 +32,12 @@ HRESULT CObject_Manager::Reserve_Manager(_uint iNumLevels)
 
 HRESULT CObject_Manager::Add_Prototype(const wstring& pPrototypeTag, CGameObject * pPrototype)
 {
-	if (nullptr == pPrototype || 
+	if (nullptr == pPrototype ||
 		nullptr != Find_Prototype(pPrototypeTag))
+	{
+		Safe_Release(pPrototype);
 		return E_FAIL;
+	}
 
 	m_Prototype.insert(PROTOTYPES::value_type(pPrototypeTag, pPrototype));	
 

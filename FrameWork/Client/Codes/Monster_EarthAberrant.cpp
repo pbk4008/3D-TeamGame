@@ -17,6 +17,8 @@
 
 #include "Stage1.h"
 
+#include "Light.h"
+
 CMonster_EarthAberrant::CMonster_EarthAberrant(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
 	:CActor(_pDevice, _pDeviceContext)
 {
@@ -90,7 +92,7 @@ HRESULT CMonster_EarthAberrant::NativeConstruct(const _uint _iSceneID, void* _pA
 	m_bIsFall = true;
 	m_iObectTag = (_uint)GAMEOBJECT::MONSTER_ABERRANT;
 
-	m_fMaxHp = 5.f;
+	m_fMaxHp = 20.f;
 	m_fCurrentHp = m_fMaxHp;
 
 	m_fMaxGroggyGauge = 100.f;
@@ -105,6 +107,7 @@ HRESULT CMonster_EarthAberrant::NativeConstruct(const _uint _iSceneID, void* _pA
 	m_pWeapon->setActive(false);
 	m_pPanel->setActive(false);
 	setActive(false);
+
 	return S_OK;
 }
 
@@ -114,11 +117,12 @@ _int CMonster_EarthAberrant::Tick(_double _dDeltaTime)
 	{
 		return -1;
 	}
-	Check_NoDamage(_dDeltaTime);
 	//string str;
 	//str.assign(m_pStateController->Get_CurStateTag().begin(), m_pStateController->Get_CurStateTag().end());
 	//cout << str << endl;
+
 	m_pTransform->Set_Velocity(XMVectorZero());
+
 	m_pPanel->Set_TargetWorldMatrix(m_pTransform->Get_WorldMatrix());
 
 	if (m_bIsFall)
@@ -139,15 +143,13 @@ _int CMonster_EarthAberrant::Tick(_double _dDeltaTime)
 	{
 		if (0 >= m_fCurrentHp)
 		{
-			CLevel* pLevel = g_pGameInstance->getCurrentLevelScene();
-			if (g_pGameInstance->getCurrentLevel() == (_uint)SCENEID::SCENE_STAGE1)
-				static_cast<CStage1*>(pLevel)->Minus_MonsterCount();
-
 			m_bDead = true;
 			m_IsAttack = false;
 			m_pWeapon->Set_IsAttack(false);
 			m_pStateController->Change_State(L"Death");
 			m_pCharacterController->Remove_CCT();
+			m_bLightCheck = true;
+			m_pActiveLight->Set_Active(true);
 		}
 		else
 			m_pCharacterController->Move(_dDeltaTime, m_pTransform->Get_Velocity());
@@ -165,7 +167,13 @@ _int CMonster_EarthAberrant::Tick(_double _dDeltaTime)
 			}
 
 			if (m_lifetime >= 1.f)
+			{
+				CLevel* pLevel = g_pGameInstance->getCurrentLevelScene();
+				if (g_pGameInstance->getCurrentLevel() == (_uint)SCENEID::SCENE_STAGE1)
+					static_cast<CStage1*>(pLevel)->Minus_MonsterCount();
+
 				Set_Remove(true);
+			}
 
 			if (9 <= m_pAnimatorCom->Get_AnimController()->Get_CurKeyFrameIndex() 
 				&& 10 > m_pAnimatorCom->Get_AnimController()->Get_CurKeyFrameIndex())
@@ -175,15 +183,22 @@ _int CMonster_EarthAberrant::Tick(_double _dDeltaTime)
 		}
 		else if (L"Execution" == stateTag)
 		{
+			m_pPanel->Set_UIRemove(true);
+
 			if (m_pAnimatorCom->Get_CurrentAnimation()->Is_Finished() &&
 				!m_pAnimatorCom->Get_IsLerp() && m_lifetime <= 0.f)
 			{
-				m_pPanel->Set_UIRemove(true);
 				m_bdissolve = true;
 			}
 
 			if (m_lifetime >= 1.f)
+			{
+				CLevel* pLevel = g_pGameInstance->getCurrentLevelScene();
+				if (g_pGameInstance->getCurrentLevel() == (_uint)SCENEID::SCENE_STAGE1)
+					static_cast<CStage1*>(pLevel)->Minus_MonsterCount();
+
 				Set_Remove(true);
+			}
  		}
 		else
 		{
@@ -195,8 +210,7 @@ _int CMonster_EarthAberrant::Tick(_double _dDeltaTime)
 
 	if (true == m_bUIShow)
 		m_pPanel->Set_Show(true);
-
-	if (false == m_bUIShow)
+	else
 		m_pPanel->Set_Show(false);
 
 	if (m_fGroggyGauge >= m_fMaxGroggyGauge)
@@ -220,6 +234,8 @@ _int CMonster_EarthAberrant::Tick(_double _dDeltaTime)
 			m_bGroggy = false;
 		}
 	}
+
+	CActor::LightOnOff(m_pTransform->Get_State(CTransform::STATE_POSITION), XMVectorSet(0.0f, 1.f, 0.f, 1.f), 10.f);
 
 	return 0;
 }
@@ -261,18 +277,6 @@ HRESULT CMonster_EarthAberrant::Render()
 
 	wstring wstrCamTag = g_pGameInstance->Get_BaseCameraTag();
 
-	RIM RimDesc;
-	ZeroMemory(&RimDesc, sizeof(RIM));
-
-	RimDesc.rimcol = _float3(0.f, 1.f, 1.f);
-	RimDesc.rimintensity = 5.f;
-	XMStoreFloat4(&RimDesc.camdir, XMVector3Normalize(m_pTransform->Get_State(CTransform::STATE_POSITION) - g_pGameInstance->Get_CamPosition(L"Camera_Silvermane")));
-
-	if (m_isNoDamage)
-		RimDesc.rimcheck = true;
-	else
-		RimDesc.rimcheck = false;
-
 	for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
 	{
 		SCB desc;
@@ -281,12 +285,12 @@ HRESULT CMonster_EarthAberrant::Render()
 		{
 		case 0: // crystal
 			desc.color = _float4(0.831f, 0.43f, 0.643f, 1.f);
-			desc.empower = 0.7f;
-			CActor::BindConstantBuffer(wstrCamTag, &desc,&RimDesc);
+			desc.empower = 0.3f;
+			CActor::BindConstantBuffer(wstrCamTag, &desc);
 			m_pModel->Render(i, 5);
 			break;
 		case 1: // body
-			CActor::BindConstantBuffer(wstrCamTag, &desc,&RimDesc);
+			CActor::BindConstantBuffer(wstrCamTag, &desc);
 			m_pModel->Render(i, 4);
 			break;
 		}
@@ -313,9 +317,7 @@ HRESULT CMonster_EarthAberrant::SetUp_Components()
 	m_pTransform->Set_TransformDesc(Desc);
 
 	if (FAILED(__super::SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Model_Monster_EarthAberrant", L"Com_Model", (CComponent**)&m_pModel)))
-	{
 		return E_FAIL;
-	}
 
 	_matrix matPivot = XMMatrixIdentity();
 	matPivot = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(180.f));
@@ -329,15 +331,12 @@ HRESULT CMonster_EarthAberrant::SetUp_Components()
 	tDesc.eType = CAnimationController::EType::CharacterController;
 
 	if (FAILED(__super::SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_Animator", L"Com_Animator", (CComponent**)&m_pAnimatorCom, &tDesc)))
-	{
 		return E_FAIL;
-	}
 
 	if (FAILED(__super::SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_StateController", L"Com_StateController", (CComponent**)&m_pStateController)))
 		return E_FAIL;
+
 	m_pStateController->Set_GameObject(this);
-
-
 
 	///* for.Character Controller */
 	//CCharacterController::DESC tCharacterControllerDesc;
@@ -671,9 +670,6 @@ void CMonster_EarthAberrant::OnTriggerExit(CCollision& collision)
 void CMonster_EarthAberrant::Hit(const ATTACKDESC& _tAttackDesc)
 {
 	if (m_bDead || 0.f >= m_fCurrentHp)
-		return;
-
-	if (m_isNoDamage)
 		return;
 
 	m_pPanel->Set_Show(true);

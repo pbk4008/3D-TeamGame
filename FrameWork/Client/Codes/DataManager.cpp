@@ -28,7 +28,7 @@ HRESULT CDataManager::NativeConstruct(void)
 	weaponDesc.weaponName = L"Needle";
 	weaponDesc.damage = 30.f;
 	weaponDesc.weaponType = EWeaponType::LongSword;
-
+	
 	CWeaponData weaponData(weaponDesc);
 
 	/* Default Weapon ItemData */
@@ -41,9 +41,26 @@ HRESULT CDataManager::NativeConstruct(void)
 	weaponItemData.bEquiped = true;
 	weaponItemData.equipmentName = EEquipmentName::Needle;
 	weaponItemData.szStatusName = L"T_1H_DPS_100";
+	weaponItemData.weaponType = EWeaponType::LongSword;
+
+
+	/* Default Weapon ItemData */
+	CItemData weaponItemData2;
+	weaponItemData2.equipmentGrade = EEquipmentGrade::Common;
+	weaponItemData2.equipmentType = EEquipmentType::Weapon;
+	weaponItemData2.ItemType = EItemType::Equipment;
+	weaponItemData2.iconTexName = L"T_Weapon_Hammer_2H_Player_INE";
+	weaponItemData2.weaponData = weaponData;
+	weaponItemData2.bEquiped = true;
+	weaponItemData2.equipmentName = EEquipmentName::Legend5;
+	weaponItemData2.szStatusName = L"T_1H_DPS_100";
+	weaponItemData2.weaponType = EWeaponType::Hammer;
+
 	pInventoryData->PushItem(weaponItemData);
+	pInventoryData->PushItem(weaponItemData2);
 	pEquipmentData->SetEquipment(EEquipSlot::Weapon1, weaponItemData);
-	
+	pEquipmentData->SetEquipment(EEquipSlot::Weapon2, weaponItemData2);
+
 	return S_OK;
 }
 

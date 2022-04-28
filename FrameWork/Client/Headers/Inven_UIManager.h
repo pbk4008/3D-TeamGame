@@ -30,7 +30,7 @@ public: /* Open Modal */
 	void  OpenModal(void);
 	void  CloseModal(void);
 	_bool IsOpenModal(void);
-
+	void ShowLevelUp(void);
 public: 
 	_bool Get_OpenCheck(void) { return m_bOpenModal; }
 	CHud* GetHud(void);
@@ -46,6 +46,9 @@ private: /* Inventory */
 
 private: /* Notify UI */
 	CHud*	m_pHud = nullptr;
+
+public: /* set Level tex */
+	void	SetLevelBG(_int PlayerLevel);
 
 private:
 	_bool m_bOpenModal = false;

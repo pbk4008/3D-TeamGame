@@ -1,10 +1,11 @@
 #pragma once
 
-#include "Actor.h"
+//#include "Actor.h"
+#include "GameObject.h"
 
 BEGIN(Client)
 
-class CMotionTrail : public CActor
+class CMotionTrail : public CGameObject
 {
 private: explicit CMotionTrail(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext);
 private: explicit CMotionTrail(const CMotionTrail& _rhs);
@@ -34,12 +35,16 @@ private: _matrix	m_WVP = XMMatrixIdentity();
 private: _float		m_lifetime = 1.f;
 private: _float		m_UVdvid = 0.f;
 
+private: CModel*	m_pModel = nullptr;
 private: CModel*	m_pWeapon = nullptr;
 private: CModel*	m_pShield = nullptr;
 private: CTexture*	m_pGradientTex = nullptr;
 
 private: _bool		m_runcheck = false;
 private: _bool		m_throwchck = false;
+
+private: _bool		m_rimcheck = false;
+private: _float		m_rimintensity = 30.f;
 
 public: static CMotionTrail* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext);
 public: virtual CGameObject* Clone(const _uint _iSceneID, void* _pArg = nullptr) override;

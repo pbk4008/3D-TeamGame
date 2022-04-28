@@ -30,8 +30,9 @@ HRESULT UI_LevelUP_Fill_Left::NativeConstruct(const _uint iSceneID, void* pArg)
 	desc = (*(Desc*)pArg);
 
 	m_pLocalTransform = g_pGameInstance->Clone_Component<CTransform>(0, L"Proto_Component_Transform");
-	m_pLocalTransform->Set_State(CTransform::STATE_POSITION, _vector{ -140.f , -270.f, 0.2f, 1.f });
-	m_pLocalTransform->Scaling(_vector{ 230.f, 30.f, 1.f, 0.f });
+
+	m_pLocalTransform->Set_State(CTransform::STATE_POSITION, _vector{ -155.f , -270.f, 0.09f, 1.f });
+	m_pLocalTransform->Scaling(_vector{ 250.f, 30.f, 1.f, 0.f });
 
 	m_pOwner = desc.pOwner;
 	assert(m_pOwner);
@@ -99,10 +100,6 @@ _int UI_LevelUP_Fill_Left::LateTick(_double TimeDelta)
 
 	Attach_Owner();
 
-	m_pTransform->Set_State(CTransform::STATE_POSITION, _vector{ -155.f , -270.f, 0.09f, 1.f });
-
-	m_pLocalTransform->Scaling(_vector{ 250.f, 30.f, 1.f, 0.f });
-
 	if (nullptr != m_pRenderer)
 		m_pRenderer->Add_RenderGroup(CRenderer::RENDER::RENDER_UI_ACTIVE, this);
 
@@ -134,6 +131,7 @@ HRESULT UI_LevelUP_Fill_Left::Ready_Component(void)
 	ModalSprite.pTransform = this->m_pTransform;
 	ModalSprite.fColor = { 1.f, 1.f, 1.f, 0.f };
 	ModalSprite.renderType = CSingleImage::VerticalGaugeLeft;
+	ModalSprite.bFadeOption = true;
 
 	ModalSprite.pBuffer = m_pBuffer;
 	ModalSprite.fGapX = Bufferdesc.fGapX;
@@ -163,6 +161,16 @@ void UI_LevelUP_Fill_Left::SetUI(CPlayerData* pPlayerData)
 	Bufferdesc.fExpRatio = pPlayerData->GetExp() / 100.f;
 }
  
+
+void UI_LevelUP_Fill_Left::SetFadeOut(void)
+{
+	m_pSigleImageCom->SetFadeOut();
+}
+
+void UI_LevelUP_Fill_Left::FadeIn(void)
+{
+	m_pSigleImageCom->SetFadeOutFalse();
+}
 
 UI_LevelUP_Fill_Left* UI_LevelUP_Fill_Left::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
 {

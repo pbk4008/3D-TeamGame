@@ -63,7 +63,9 @@ public:
 	void SetRenderVal(void* val);
 	void SetFadeOut(void);
 	void SetRenderPass(_int iPassIdx) { m_iRenderPass = iPassIdx;  }
-	void ResetAlpha(void) { m_fAlpha = 0.f; }
+	void ResetAlpha(_float fAlpha) { m_fAlpha = fAlpha; }
+	void SetFadeTime(_float fTime) { m_fFadeTime = fTime; }
+	void SetFadeOutFalse(void) { m_bFadeOut = false; }
 
 private:
 	ID3D11ShaderResourceView* m_pImage = nullptr;
@@ -78,7 +80,8 @@ private:
 	_float  m_fGapX;
 	_float  m_fAlpha = 0.f;
 	_float	m_fExpRatio = 0.f;
-	_float  m_fTime;
+	_float  m_fFadeTime = 1.f;
+
 private:
 	CVIBuffer_Rect*		 m_pBuffer;
 	CVIBuffer_Trapezium* m_pTrapziumBuffer = nullptr;

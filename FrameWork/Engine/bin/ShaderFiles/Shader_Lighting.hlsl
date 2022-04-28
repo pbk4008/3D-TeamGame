@@ -179,8 +179,7 @@ struct PS_OUT_DIRLIGHTACC
 struct PS_OUT_POINTLIGHTACC
 {
 	half4 vShade		: SV_TARGET0;
-	half4 vSpecular	: SV_TARGET1;
-	half4 vShadow		: SV_TARGET2;
+	half4 vSpecular		: SV_TARGET1;
 };
 
 PS_OUT_DIRLIGHTACC PS_MAIN_LIGHTACC_DIRECTIONAL(PS_IN In)
@@ -269,6 +268,67 @@ PS_OUT_DIRLIGHTACC PS_MAIN_LIGHTACC_DIRECTIONAL(PS_IN In)
 	return Out;
 }
 
+PS_OUT_POINTLIGHTACC PS_MAIN_LIGHTACC_TEST(PS_IN In)
+{
+	PS_OUT_POINTLIGHTACC Out = (PS_OUT_POINTLIGHTACC) 0;
+	
+	half2 uvRT = In.vTexUV;
+	
+	half4 vDiffuseDesc = g_DiffuseTexture.Sample(DefaultSampler, uvRT);
+	half4 vNormalDesc = g_NormalTexture.Sample(DefaultSampler, uvRT);
+	half4 vDepthDesc = g_DepthTexture.Sample(DefaultSampler, uvRT);
+	half3 MRA = g_MRATexture.Sample(DefaultSampler, uvRT).xyz;
+	half fViewZ = vDepthDesc.y * 300.f;
+	
+	half3 normaltest = vNormalDesc.xyz;
+	if (!any(normaltest))
+		clip(0);
+
+	half4 vWorldPos;
+	vWorldPos.x = (uvRT.x * 2.f - 1.f) * fViewZ;
+	vWorldPos.y = (uvRT.y * -2.f + 1.f) * fViewZ;
+	vWorldPos.z = vDepthDesc.x * fViewZ;
+	vWorldPos.w = fViewZ;
+	
+	vWorldPos = mul(vWorldPos, g_ProjMatrixInv);
+	vWorldPos = mul(vWorldPos, g_ViewMatrixInv);
+	
+	half4 normal = half4(normaltest * 2.f - 1.f, 0.f);
+	
+	half4 vLightDir = vWorldPos - g_vLightPos;
+	
+
+	half3 normal3 = normalize(normal.xyz);
+	half3 N = normal3;
+	half3 V = normalize(g_vCamPosition.xyz - vWorldPos.xyz);
+	half3 L = vLightDir.xyz * -1;
+	half F0 = 0.93;
+		
+	half specular = LightingGGX_Ref(N, V, L, F0, MRA.g);
+		
+	////-------------------------------------------------------------------------//
+	half3 color = half3(0.97f, 0.95f, 0.8f);
+	half ambientintensity = 0.2f;
+	half fDistance = length(vLightDir);
+	half fAtt = saturate((g_fRange - fDistance) / g_fRange);
+	half4 light = g_vLightDiffuse * (saturate(dot(normalize(vLightDir) * -1.f, normal)) + (g_vLightAmbient * g_vMtrlAmbient)) * fAtt;
+		
+	half3 CamToWorldDirection = normalize(vWorldPos.xyz - g_vCamPosition.xyz);
+	half3 worldReflectDirection = reflect(CamToWorldDirection, normal3);
+		
+	half4 cubeRef1 = g_SkyBoxTexture.Sample(SkyBoxSampler, worldReflectDirection.xy);
+		
+	half smoothness = 1 - MRA.g;
+	half InvMetalic = (1 - MRA.r);
+	InvMetalic = max(InvMetalic, 0.5f);
+	half4 lightpower = InvMetalic * light * MRA.b;
+		
+	Out.vSpecular = mul((g_vLightSpecular * g_vMtrlSpecular) , pow(specular, 1.f) * fAtt);
+	Out.vShade = saturate(lightpower);
+	
+	return Out;
+}
+
 PS_OUT_POINTLIGHTACC PS_MAIN_LIGHTACC_POINT(PS_IN In)
 {
 	PS_OUT_POINTLIGHTACC Out = (PS_OUT_POINTLIGHTACC) 0;
@@ -332,5 +392,16 @@ technique11 DefaultTechnique
 		VertexShader = compile vs_5_0 VS_MAIN_VIEWPORT();
 		GeometryShader = NULL;
 		PixelShader = compile ps_5_0 PS_MAIN_LIGHTACC_POINT();
+	}
+
+	pass Light_Test // 2
+	{
+		SetRasterizerState(CullMode_Default);
+		SetDepthStencilState(ZTestDiable, 0);
+		SetBlendState(OneBlending, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+
+		VertexShader = compile vs_5_0 VS_MAIN_VIEWPORT();
+		GeometryShader = NULL;
+		PixelShader = compile ps_5_0 PS_MAIN_LIGHTACC_TEST();
 	}
 }

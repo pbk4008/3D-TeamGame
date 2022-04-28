@@ -366,6 +366,7 @@ call Update_Client.bat</Command>
     <ClInclude Include="..\Headers\Crawler_Idle.h" />
     <ClInclude Include="..\Headers\Crawler_Ricochet.h" />
     <ClInclude Include="..\Headers\Crawler_Walk.h" />
+    <ClInclude Include="..\Headers\DamageFont.h" />
     <ClInclude Include="..\Headers\DataManager.h" />
     <ClInclude Include="..\Headers\DebugSystem.h" />
     <ClInclude Include="..\Headers\DodgeSlide.h" />
@@ -420,6 +421,9 @@ call Update_Client.bat</Command>
     <ClInclude Include="..\Headers\Quest.h" />
     <ClInclude Include="..\Headers\QuestManager.h" />
     <ClInclude Include="..\Headers\UI_Blank_FKey.h" />
+    <ClInclude Include="..\Headers\UI_EquippedWeapon.h" />
+    <ClInclude Include="..\Headers\UI_EquippedWeapon_Slot_1.h" />
+    <ClInclude Include="..\Headers\UI_EquippedWeapon_Slot_2.h" />
     <ClInclude Include="..\Headers\UI_Fill_CKey2.h" />
     <ClInclude Include="..\Headers\UI_Blank_Space.h" />
     <ClInclude Include="..\Headers\UI_Death.h" />
@@ -817,6 +821,7 @@ call Update_Client.bat</Command>
     <ClCompile Include="..\Codes\Crawler_Idle.cpp" />
     <ClCompile Include="..\Codes\Crawler_Ricochet.cpp" />
     <ClCompile Include="..\Codes\Crawler_Walk.cpp" />
+    <ClCompile Include="..\Codes\DamageFont.cpp" />
     <ClCompile Include="..\Codes\DataManager.cpp" />
     <ClCompile Include="..\Codes\DodgeSlide.cpp" />
     <ClCompile Include="..\Codes\DropBox.cpp" />
@@ -866,6 +871,9 @@ call Update_Client.bat</Command>
     <ClCompile Include="..\Codes\Quest.cpp" />
     <ClCompile Include="..\Codes\QuestManager.cpp" />
     <ClCompile Include="..\Codes\UI_Blank_FKey.cpp" />
+    <ClCompile Include="..\Codes\UI_EquippedWeapon.cpp" />
+    <ClCompile Include="..\Codes\UI_EquippedWeapon_Slot_1.cpp" />
+    <ClCompile Include="..\Codes\UI_EquippedWeapon_Slot_2.cpp" />
     <ClCompile Include="..\Codes\UI_Fill_CKey2.cpp" />
     <ClCompile Include="..\Codes\UI_Blank_Space.cpp" />
     <ClCompile Include="..\Codes\UI_Death.cpp" />

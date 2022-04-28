@@ -50,6 +50,7 @@ enum class GAMEOBJECT
 	JUMP_BOX,
 	DROP_BOX,
 	EXPLOSION_ROCK,
+	POT,
 	// END, MAX, SIZE
 	GAMEOBJECT_END,
 };
@@ -111,6 +112,7 @@ enum class EItemType
 	NONE,			//πÃ¿Â¬¯
 	Equipment,		
 	Resorce,
+	Potion,
 	ITEMTYPE_END
 };
 

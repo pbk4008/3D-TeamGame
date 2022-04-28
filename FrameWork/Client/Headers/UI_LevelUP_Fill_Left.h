@@ -50,6 +50,8 @@ public:
 	HRESULT Ready_Component(void);
 	_int Attach_Owner(void);
 	void SetUI(CPlayerData* pPlayerData);
+	void SetFadeOut(void);
+	void FadeIn(void);
 
 public:
 	void Set_ExpRatio(_float Ratio) { Bufferdesc.fExpRatio = Ratio; }
@@ -59,9 +61,9 @@ public:
 
 private:
 	CSingleImage* m_pSigleImageCom = nullptr;
+	CTransform*	  m_pLocalTransform = nullptr;
 	Desc		  desc;
 	CUI*		  m_pOwner = nullptr;
-	CTransform*	  m_pLocalTransform = nullptr;
 	_bool		  m_bSetScale = true;
 
 private:

@@ -33,6 +33,14 @@ public:
 
 public:
 	void Show(CPlayerData* pPlayerData);
+	void Hide(void);
+	void ShowUp(_double TimeDelta);
+	void FadeOutAll(void);
+	void FadeInAll(void);
+
+public:
+	void SetLevelBG(_int PlayerLevel);
+	void FixPos(void);
 
 public:
 	static CLevel_UP* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);
@@ -46,6 +54,13 @@ private:
 	CUI_LevelUP_Fill_Lead_Right*	m_pFill_Lead_Right = nullptr;
 	UI_LevelUP_Fill_Left*			m_pFIll_Left = nullptr;
 	UI_LevelUP_Fill_Right*			m_pFIll_Right = nullptr;
+
+private:
+	_float m_fInitYPos = -60.f;
+	_float m_fEndYPos  = 0.f;
+
+	_float m_fHideYInitPos = 0.f;
+	_float m_fHideYEndPos = -60.f;
 
 private:
 	virtual void Free() override;

@@ -8,6 +8,11 @@ BEGIN(Client)
 class CLoot_Equipment;
 class CLevel_UP;
 class CPlayerData;
+class CEquipmentData;
+class CUI_EquippedWeapon;
+class CUI_EquippedWeapon_Slot_1;
+class CUI_EquippedWeapon_Slot_2;
+
 class CHud : public CUI
 {
 public:
@@ -46,13 +51,33 @@ public:
 
 public:
 	void OnLootEquipment(void* pItemData);
+	void CheckEuipWeaponSlot(void);
+	void CheckCurEquipSlot(void);
+	void SetActiveOnlyDefault(void);
+	void SetActiveOnlySlots(void);
+
+public:
+	void SetLevelBG(_int PlayerLevel);
+	void FixPos(void);
 
 private:
-	CLevel_UP* m_pLevelUp = nullptr;
-	CPlayerData* m_pPlayerData = nullptr;
+	CLevel_UP*			m_pLevelUp = nullptr;
+	CUI_EquippedWeapon* m_pEquipWeapon = nullptr;
+	CUI_EquippedWeapon_Slot_1* m_pEquipWeapon_Slot_1 = nullptr;
+	CUI_EquippedWeapon_Slot_2* m_pEquipWeapon_Slot_2 = nullptr;
+
+private:
+	CPlayerData*	m_pPlayerData = nullptr;
+	CEquipmentData* m_pEquipData = nullptr;
 
 private:
 	std::vector< CLoot_Equipment*> m_vecLootEquipment;
+	
+private:
+	_bool  m_bOnLevelUpUI = false;
+	_bool  m_bHideLevelUpUI = false;
+	_float m_fOnTime = 0.f;
+
 public:
 	static CHud* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);
 	virtual CGameObject* Clone(const _uint _iSceneID, void* _pArg = nullptr);

@@ -367,7 +367,7 @@ technique11			DefaultTechnique
 		PixelShader = compile ps_5_0 PS_MAIN_SHADOW();
 	}
 
-	pass VelocityMap //-----------------------------------------------------------------------------------------4 MotionTrail
+	pass VelocityMap //-----------------------------------------------------------------------------------------3 VeloCityMap
 	{
 		SetRasterizerState(CullMode_Default);
 		SetDepthStencilState(ZDefault, 0);
@@ -379,7 +379,7 @@ technique11			DefaultTechnique
 		PixelShader = compile ps_5_0 PS_MAIN_VELOCITY();
 	}
 
-	pass MotionTrail //-----------------------------------------------------------------------------------------3 VeloCityMap
+	pass MotionTrail //-----------------------------------------------------------------------------------------4 MotionTrai
 	{
 		SetRasterizerState(CullMode_Default);
 		SetDepthStencilState(ZDefault, 0);

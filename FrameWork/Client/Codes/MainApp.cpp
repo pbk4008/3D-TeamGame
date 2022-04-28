@@ -73,6 +73,9 @@
 //Guide
 #include "UI_Guide_Background.h"
 #include "UI_Guide_Texture.h"
+#include "UI_EquippedWeapon.h"
+#include "UI_EquippedWeapon_Slot_1.h"
+#include "UI_EquippedWeapon_Slot_2.h"
 
 //Inventory UI Component
 #include "SingleImage.h"
@@ -488,7 +491,15 @@ HRESULT CMainApp::Ready_GameObject_Prototype()
 	//Tex
 	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_UI_Guide_Texture"), CUI_Guide_Texture::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
-
+	//Equip Weapon
+	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_UI_EquipWeapon"), CUI_EquippedWeapon::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	//Equip Weapon Slot_1
+	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_UI_EquipWeapon_Slot_1"), CUI_EquippedWeapon_Slot_1::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	//Equip Weapon Slot_2
+	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_UI_EquipWeapon_Slot_2"), CUI_EquippedWeapon_Slot_2::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
 	return S_OK;
 }
 

@@ -18,6 +18,7 @@
 #include "BronzeAnimus_Excution.h"
 
 #include "Stage1.h"
+#include "Stage2.h"
 
 CMonster_BronzeAnimus::CMonster_BronzeAnimus(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
 	: CActor(_pDevice, _pDeviceContext)
@@ -133,7 +134,13 @@ _int CMonster_BronzeAnimus::Tick(_double _dDeltaTime)
 			}
 
 			if (m_lifetime >= 1.f)
+			{
+				CLevel* pLevel = g_pGameInstance->getCurrentLevelScene();
+				if (g_pGameInstance->getCurrentLevel() == (_uint)SCENEID::SCENE_STAGE2)
+					static_cast<CStage2*>(pLevel)->Minus_MonsterCount();
+
 				Set_Remove(true);
+			}
 		}
 		else if (m_pStateController->Get_CurStateTag() == L"Excution")
 		{
@@ -144,7 +151,13 @@ _int CMonster_BronzeAnimus::Tick(_double _dDeltaTime)
 			}
 
 			if (m_lifetime >= 1.f)
+			{
+				CLevel* pLevel = g_pGameInstance->getCurrentLevelScene();
+				if (g_pGameInstance->getCurrentLevel() == (_uint)SCENEID::SCENE_STAGE2)
+					static_cast<CStage2*>(pLevel)->Minus_MonsterCount();
+
 				Set_Remove(true);
+			}
 		}
 		else
 		{
@@ -177,8 +190,9 @@ _int CMonster_BronzeAnimus::Tick(_double _dDeltaTime)
 		}
 	}
 
-
 	m_pPanel->Set_TargetWorldMatrix(m_pTransform->Get_WorldMatrix());
+
+	CActor::LightOnOff(m_pTransform->Get_State(CTransform::STATE_POSITION), XMVectorSet(0.f, 1.f, 0.f, 1.f), 10.f);
 
 	return _int();
 }
@@ -259,9 +273,9 @@ void CMonster_BronzeAnimus::Parry(const PARRYDESC& _tParryDesc)
 
 void CMonster_BronzeAnimus::Execution()
 {
-	/*CLevel* pLevel = g_pGameInstance->getCurrentLevelScene();
+	CLevel* pLevel = g_pGameInstance->getCurrentLevelScene();
 	if (g_pGameInstance->getCurrentLevel() == (_uint)SCENEID::SCENE_STAGE2)
-		static_cast<CStage2*>(pLevel)->Minus_MonsterCount();*/
+		static_cast<CStage2*>(pLevel)->Minus_MonsterCount();
 
 	Set_Dead();
 	Remove_Collider();

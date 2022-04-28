@@ -199,6 +199,7 @@ HRESULT CSilvermane::NativeConstruct(const _uint _iSceneID, void* _pArg)
 		return E_FAIL;
 
 	m_pPlayerData = g_pDataManager->GET_DATA(CPlayerData, L"PlayerData");
+	m_pInventoryData = g_pDataManager->GET_DATA(CInventoryData, L"InventoryData");
 
 	if (_pArg)
 	{
@@ -426,7 +427,9 @@ _int CSilvermane::LateTick(_double _dDeltaTime)
 	//Raycast_Camera();
 
 	//g_pObserver->Set_PlayerPos(m_pTransform->Get_State(CTransform::STATE_POSITION));
-	g_pGameInstance->UpdateLightCam(0, m_pTransform->Get_State(CTransform::STATE_POSITION));
+
+	if(g_pGameInstance->getCurrentLevel() == 3)
+		g_pGameInstance->UpdateLightCam(0, m_pTransform->Get_State(CTransform::STATE_POSITION));
 
 
 	return _int();
@@ -2025,7 +2028,7 @@ const void CSilvermane::Raycast_DropBox(const _double& _dDeltaTime)
 				CTransform* pTargetTransform = pHitObject->Get_Transform();
 				_vector svTargetPos = pTargetTransform->Get_State(CTransform::STATE_POSITION);
 				_vector svTargetLook = XMVector3Normalize(pTargetTransform->Get_State(CTransform::STATE_LOOK));
-				svTargetPos += _vector{ 0.f, 0.8f, 0.f, 0.f } + svTargetLook * 0.6f;
+				svTargetPos += _vector{ 0.f, 0.8f, 0.f, 0.f } + svTargetLook * 1.f;
 				m_pFillCKey2->Set_Position(svTargetPos);
 			}
 
@@ -2067,8 +2070,9 @@ const void CSilvermane::Raycast_DropBox(const _double& _dDeltaTime)
 			{
 				m_pBlankFKey->setActive(true);
 				CTransform* pTargetTransform = pHitObject->Get_Transform();
+				_vector svTargetLook = XMVector3Normalize(pTargetTransform->Get_State(CTransform::STATE_LOOK));
 				_vector svTargetPos = pTargetTransform->Get_State(CTransform::STATE_POSITION);
-				svTargetPos += _vector{ 0.f, 1.2f, 0.f, 0.f };
+				svTargetPos += _vector{ 0.f, 1.2f, 0.f, 0.f } + svTargetLook * 1.f;
 				m_pBlankFKey->Set_Position(svTargetPos);
 			}
 

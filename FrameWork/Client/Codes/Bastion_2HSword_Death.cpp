@@ -62,13 +62,16 @@ HRESULT CBastion_2HSword_Death::EnterState()
 	m_pAnimator->Change_AnyEntryAnimation((_uint)CMonster_Bastion_2HSword::ANIM_TYPE::A_DEATH);
 	g_pMainApp->FreezeTime();
 
-	CDropBoxData* pDropboxdata = new CDropBoxData;
-	std::vector<CItemData> dropList = pDropboxdata->Get2HDropList(m_iDropIdx);
+	//CDropBoxData* pDropboxdata = new CDropBoxData;
+	//std::vector<CItemData> dropList = pDropboxdata->Get2HDropList(m_iDropIdx);
 
-	for (_int i = 0; i < dropList.size(); ++i)
-		DROP_ITEM(dropList[i], m_pTransform->Get_State(CTransform::STATE_POSITION), this->m_pTransform);
+	//for (_int i = 0; i < dropList.size(); ++i)
+	//	DROP_ITEM(dropList[i], m_pTransform->Get_State(CTransform::STATE_POSITION), this->m_pTransform);
 
-	Safe_Delete(pDropboxdata);
+	//Safe_Delete(pDropboxdata);
+
+
+	g_pObserver->Set_Exp(10.f);
 
 	return S_OK;
 }

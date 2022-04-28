@@ -103,18 +103,7 @@ HRESULT CLoot_Shield::Render()
 	if (FAILED(__super::Render()))
 		return E_FAIL;
 
-	_matrix smatWorld, smatView, smatProj;
 	wstring wstrCamTag = g_pGameInstance->Get_BaseCameraTag();
-	smatWorld = XMMatrixTranspose(m_pTransform->Get_CombinedMatrix());
-	smatView = XMMatrixTranspose(g_pGameInstance->Get_Transform(wstrCamTag, TRANSFORMSTATEMATRIX::D3DTS_VIEW));
-	smatProj = XMMatrixTranspose(g_pGameInstance->Get_Transform(wstrCamTag, TRANSFORMSTATEMATRIX::D3DTS_PROJECTION));
-
-	if (FAILED(m_pModel->SetUp_ValueOnShader("g_WorldMatrix", &smatWorld, sizeof(_matrix))))
-		return E_FAIL;
-	if (FAILED(m_pModel->SetUp_ValueOnShader("g_ViewMatrix", &smatView, sizeof(_matrix))))
-		return E_FAIL;
-	if (FAILED(m_pModel->SetUp_ValueOnShader("g_ProjMatrix", &smatProj, sizeof(_matrix))))
-		return E_FAIL;
 
 	SCB desc;
 	ZeroMemory(&desc, sizeof(SCB));
@@ -125,7 +114,20 @@ HRESULT CLoot_Shield::Render()
 	desc.empower = 20.f;
 
 
-	CActor::BindConstantBuffer(wstrCamTag, &desc);
+	_matrix smatWorld, smatView, smatProj;
+	smatWorld = XMMatrixTranspose(m_pTransform->Get_WorldMatrix());
+	smatView = XMMatrixTranspose(g_pGameInstance->Get_Transform(wstrCamTag, TRANSFORMSTATEMATRIX::D3DTS_VIEW));
+	smatProj = XMMatrixTranspose(g_pGameInstance->Get_Transform(wstrCamTag, TRANSFORMSTATEMATRIX::D3DTS_PROJECTION));
+
+	if (FAILED(m_pModel->SetUp_ValueOnShader("g_WorldMatrix", &smatWorld, sizeof(_matrix)))) MSGBOX("Failed To Apply Actor ConstantBuffer");
+	if (FAILED(m_pModel->SetUp_ValueOnShader("g_ViewMatrix", &smatView, sizeof(_matrix)))) MSGBOX("Failed To Apply Actor ConstantBuffer");
+	if (FAILED(m_pModel->SetUp_ValueOnShader("g_ProjMatrix", &smatProj, sizeof(_matrix)))) MSGBOX("Failed To Apply Actor ConstantBuffer");
+
+	if (FAILED(m_pModel->SetUp_ValueOnShader("g_Metalic", &desc.metalic, sizeof(_float)))) MSGBOX("Failed To Apply Actor ConstantBuffer");
+	if (FAILED(m_pModel->SetUp_ValueOnShader("g_Roughness", &desc.roughness, sizeof(_float)))) MSGBOX("Failed To Apply Actor ConstantBuffer");
+	if (FAILED(m_pModel->SetUp_ValueOnShader("g_AO", &desc.ao, sizeof(_float)))) MSGBOX("Failed To Apply Actor ConstantBuffer");
+	if (FAILED(m_pModel->SetUp_ValueOnShader("g_color", &desc.color, sizeof(_float4)))) MSGBOX("Failed To Apply Actor ConstantBuffer");
+	if (FAILED(m_pModel->SetUp_ValueOnShader("g_empower", &desc.empower, sizeof(_float)))) MSGBOX("Failed To Apply Actor ConstantBuffer");
 
 	for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
 	{

@@ -94,6 +94,8 @@ void CIndicator_Manager::Active_Indicator()
 	else 
 	{
 		//충돌된거없을때 
+		if (0 == m_vecIndicator.size())
+			return;
 		for (_uint i = 0; i < m_vecIndicator.size(); ++i)
 		{
 			m_vecIndicator[i]->setActive(false);

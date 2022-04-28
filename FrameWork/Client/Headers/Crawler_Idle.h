@@ -31,6 +31,8 @@ public:
 public:
 	static CCrawler_Idle* Create(ID3D11Device * pDevice, ID3D11DeviceContext * pDeviceContext, void* pArg = nullptr);
 	virtual void Free() override;
+
+private: _float m_timer = 0.f;
 };
 
 END

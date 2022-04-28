@@ -30,13 +30,30 @@ _int CCrawler_Flinch_Left::Tick(const _double& TimeDelta)
 
 	m_pAnimator->Tick(TimeDelta);
 
+	//if (m_pAnimator->Get_AnimController()->Is_Finished())
+	//{
+	//	m_pStateController->Change_State(L"Idle");
+	//}
+
+	_float fDistToPlayer = MathUtils::Length(m_pTransform->Get_State(CTransform::STATE::STATE_POSITION), g_pObserver->Get_PlayerPos());
+
 	if (m_pAnimator->Get_AnimController()->Is_Finished())
 	{
-		m_pStateController->Change_State(L"Walk");
+		//if (m_pMonster->Get_CurrentHp() <= 0)
+		//	m_pStateController->Change_State(L"Death");
+		
+		if (2.f > fDistToPlayer)
+		{
+			m_pStateController->Change_State(L"Attack");
+			m_pAnimator->Change_AnyEntryAnimation(CMonster_Crawler::MON_STATE::ATTACK_R1);
+		}
+		else if (2.f < fDistToPlayer)
+		{
+			m_pStateController->Change_State(L"Idle");
+			m_pAnimator->Change_AnyEntryAnimation(CMonster_Crawler::MON_STATE::IDLE);
+		}
 	}
 
-	if (m_pMonster->Get_CurrentHp() <= 0)
-		m_pStateController->Change_State(L"Death");
 
 	return _int();
 }
@@ -62,6 +79,7 @@ HRESULT CCrawler_Flinch_Left::EnterState()
 {
 	if (FAILED(__super::EnterState()))
 		return E_FAIL;
+
 	m_pAnimator->Change_AnyEntryAnimation(CMonster_Crawler::MON_STATE::FLINCH_LEFT);
 
 	return S_OK;

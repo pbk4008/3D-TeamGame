@@ -41,7 +41,7 @@ _int CBastion_Sword_Chase::Tick(const _double& _dDeltaTime)
 	//m_pTransform->Face_Target(g_pObserver->Get_PlayerPos());
 	//일정 거리가 되면 바로 공
 	_float fDist = g_pObserver->Get_Dist(m_pTransform->Get_State(CTransform::STATE_POSITION));
-	_uint iAtkType = rand() % 3;
+	_uint iAtkType = rand() % 3/*(_uint)MathUtils::ReliableRandom(0, 3)*/;
 	if (fDist >= 10.f)
 		m_pStateController->Change_State(L"Idle");
 	else
@@ -98,6 +98,8 @@ HRESULT CBastion_Sword_Chase::EnterState()
 	if (FAILED(m_pAnimator->Change_AnyEntryAnimation((_uint)CMonster_Bastion_Sword::ANIM_TYPE::RUN_START)))
 		return E_FAIL;
 
+	m_pAnimator->Get_AnimController()->Mul_MoveSpeed(2.f);
+
 	//_matrix matRotate = XMMatrixRotationAxis(XMVectorSet(0.f, 1.f, 0.f, 0.f), XMConvertToRadians(180.f));
 	//m_pAnimator->Set_PivotMatrix(matRotate);
 
@@ -108,6 +110,8 @@ HRESULT CBastion_Sword_Chase::ExitState()
 {
 	/*_matrix matIdentity = XMMatrixIdentity();
 	m_pAnimator->Set_PivotMatrix(matIdentity);*/
+
+	m_pAnimator->Get_AnimController()->Div_MoveSpeed(2.f);
 	return S_OK;
 }
 
@@ -117,6 +121,7 @@ HRESULT CBastion_Sword_Chase::EnterState(void* pArg)
 	//	return E_FAIL;
 
 	//_matrix matRotate = XMMatrixRotationAxis(XMVectorSet(0.f, 1.f, 0.f, 0.f), XMConvertToRadians(180.f));
+	 
 	//m_pAnimator->Set_PivotMatrix(matRotate);
 	return S_OK;
 }
@@ -125,6 +130,7 @@ HRESULT CBastion_Sword_Chase::ExitState(void* pArg)
 {
 	//_matrix matIdentity = XMMatrixIdentity();
 	//m_pAnimator->Set_PivotMatrix(matIdentity);
+
 	return S_OK;
 }
 

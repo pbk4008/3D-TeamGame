@@ -77,12 +77,10 @@ _int CBronzeAnimus_State::Tick(const _double& _dDeltaTime)
 		m_pOwner->Set_Dead();
 		m_pOwner->Remove_Collider();
 		m_pOwner->Set_IsAttack(false);
-
-		CLevel* pLevel = g_pGameInstance->getCurrentLevelScene();
-		if (g_pGameInstance->getCurrentLevel() == (_uint)SCENEID::SCENE_STAGE2)
-			static_cast<CStage2*>(pLevel)->Minus_MonsterCount();
 		
 		m_pStateController->Change_State(L"Death");
+
+		m_pOwner->Set_LightCheck(true);
 	}
 
 	return _int();

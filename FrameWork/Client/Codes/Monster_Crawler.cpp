@@ -73,34 +73,12 @@ HRESULT CMonster_Crawler::NativeConstruct(const _uint _iSceneID, void* _pArg)
 		return E_FAIL;
 	if (FAILED(Set_Panel()))
 		return E_FAIL;
-	
-
-	//Light
-	LIGHTDESC			LightDesc;
-	ZeroMemory(&LightDesc, sizeof(LIGHTDESC));
-	LightDesc.eType = LIGHTDESC::TYPE_POINT;
-	LightDesc.fRange = 7.f;
-	LightDesc.vDiffuse = _float4(0.7f, 1.0f, 0.5f, 1.f);
-	LightDesc.vSpecular = _float4(0.8f, 0.8f, 0.8f, 1.f);
-	LightDesc.vAmbient = _float4(1.f, 1.f, 1.f, 1.f);
-	XMStoreFloat3(&LightDesc.vPosition, m_pTransform->Get_State(CTransform::STATE_POSITION));
-
-	if (nullptr == m_pLight)
-	{
-		if (FAILED(g_pGameInstance->Add_Light(m_pDevice, m_pDeviceContext, LightDesc, &m_pLight)))
-			MSGBOX("Failed To Adding PointLight");
-	}
-
-	Safe_AddRef(m_pLight);
-	m_pLight->Set_Show(false);
-	m_fLightRange = LightDesc.fRange;
-
 
 	m_bIsFall = true;
 
 	m_iObectTag = (_uint)GAMEOBJECT::MONSTER_CRYSTAL;
 
-	m_fMaxHp = 10.f;
+	m_fMaxHp = 20.f;
 	m_fCurrentHp = m_fMaxHp;
 
 	m_fMaxGroggyGauge = 3.f;
@@ -136,31 +114,14 @@ _int CMonster_Crawler::Tick(_double _dDeltaTime)
 	if (NO_EVENT != iProgress)
 		return iProgress;
 
-	if (m_bLight && 0.f <= m_fLightRange)
-	{
-		m_fLightRange -= (_float)_dDeltaTime * 2.f;
-		m_pLight->Set_Range(m_fLightRange);
-	}
-
-	if (0.f >= m_fLightRange)
-	{
-		m_fLightRange = 0.f;
-		m_pLight->Set_Show(false);
-		m_bLight = false;
-	}
-
 	if (!m_bDead)
 	{
 		if (0 >= m_fCurrentHp)
 		{
-			CLevel* pLevel = g_pGameInstance->getCurrentLevelScene();
-			if (g_pGameInstance->getCurrentLevel() == (_uint)SCENEID::SCENE_STAGE1)
-				static_cast<CStage1*>(pLevel)->Minus_MonsterCount();
-			else if (g_pGameInstance->getCurrentLevel() == (_uint)SCENEID::SCENE_STAGE2)
-				static_cast<CStage2*>(pLevel)->Minus_MonsterCount();
-
 			m_bDead = true;
 			m_pStateController->Change_State(L"Death");
+			m_bLightCheck = true;
+			m_pActiveLight->Set_Active(true);
 			m_pCollider->Remove_ActorFromScene();
 
 			return 0;
@@ -171,23 +132,22 @@ _int CMonster_Crawler::Tick(_double _dDeltaTime)
 		if (L"Death" == m_pStateController->Get_CurStateTag())
 		{
 			if (m_pAnimatorCom->Get_CurrentAnimation()->Is_Finished() && m_lifetime <= 0.f)
-			{
-				if (nullptr != m_pLight)
-				{
-					m_pLight->Set_Pos(m_pTransform->Get_State(CTransform::STATE_POSITION));
-					m_pLight->Set_Show(true);
-					m_fLightRange = 3.f;
-					m_pLight->Set_Range(m_fLightRange);
-					m_bLight = true;
-				}
-
+			{	
 				m_pPanel->Set_UIRemove(true);
 				Active_Effect((_uint)EFFECT::DEATH);
 				m_bdissolve = true;
 			}
 
 			if (m_lifetime >= 1.f)
+			{
+				CLevel* pLevel = g_pGameInstance->getCurrentLevelScene();
+				if (g_pGameInstance->getCurrentLevel() == (_uint)SCENEID::SCENE_STAGE1)
+					static_cast<CStage1*>(pLevel)->Minus_MonsterCount();
+				else if (g_pGameInstance->getCurrentLevel() == (_uint)SCENEID::SCENE_STAGE2)
+					static_cast<CStage2*>(pLevel)->Minus_MonsterCount();
+
 				Set_Remove(true);
+			}
 		}
 		else
 		{
@@ -196,6 +156,7 @@ _int CMonster_Crawler::Tick(_double _dDeltaTime)
 			Active_Effect((_uint)EFFECT::DEATH);
 		}
 	}
+
 	if (!m_bRemove)
 	{
 		m_pCharacterController->Move(_dDeltaTime, m_pTransform->Get_Velocity());
@@ -207,6 +168,8 @@ _int CMonster_Crawler::Tick(_double _dDeltaTime)
 
 	if (false == m_bUIShow)
 		m_pPanel->Set_Show(false);
+
+	CActor::LightOnOff(m_pTransform->Get_State(CTransform::STATE_POSITION), XMVectorSet(0.0f, 0.0f, 1.f,1.f), 4.f);
 
 	return 0;
 }
@@ -459,7 +422,7 @@ HRESULT CMonster_Crawler::Set_Animation_FSM()
 		return E_FAIL;
 
 	pAnim = m_pModel->Get_Animation("SK_Crystal_Crawler_v1.ao|A_Attack_R1_CrystalCrawler");
-	if (FAILED(m_pAnimatorCom->Insert_Animation(ATTACK_R1, HEAD, pAnim, true, true, true, ERootOption::XYZ, true)))
+	if (FAILED(m_pAnimatorCom->Insert_Animation(ATTACK_R1, HEAD, pAnim, true, true, false, ERootOption::XYZ, true)))
 		return E_FAIL;
 
 	pAnim = m_pModel->Get_Animation("SK_Crystal_Crawler_v1.ao|A_Death_CrystalCrawler");
@@ -475,7 +438,7 @@ HRESULT CMonster_Crawler::Set_Animation_FSM()
 		return E_FAIL;
 
 	pAnim = m_pModel->Get_Animation("SK_Crystal_Crawler_v1.ao|A_Flinch_Left_CrystalCrawler");
-	if (FAILED(m_pAnimatorCom->Insert_Animation(FLINCH_LEFT, HEAD, pAnim, true, true, false, ERootOption::XYZ, true)))
+	if (FAILED(m_pAnimatorCom->Insert_Animation(FLINCH_LEFT, HEAD, pAnim, true, true, true, ERootOption::XYZ, true)))
 		return E_FAIL;
 
 	//³Ë¹é
@@ -487,9 +450,10 @@ HRESULT CMonster_Crawler::Set_Animation_FSM()
 	if (FAILED(m_pAnimatorCom->Insert_Animation(KNOCKBACK_END, KNOCKBACK_START, pAnim, true, true, false, ERootOption::XYZ, true)))
 		return E_FAIL;
 
-	if (FAILED(m_pAnimatorCom->Connect_Animation(IDLE, KNOCKBACK_END, false)))	return E_FAIL;
-	if (FAILED(m_pAnimatorCom->Connect_Animation(IDLE, ATTACK_R1, true)))	return E_FAIL;
+	//if (FAILED(m_pAnimatorCom->Connect_Animation(IDLE, KNOCKBACK_END, false)))	return E_FAIL;
 
+	//m_pAnimatorCom->Set_UpAutoChangeAnimation(ATTACK_R1, IDLE);
+	//if (FAILED(m_pAnimatorCom->Connect_Animation(IDLE, ATTACK_R1, false)))	return E_FAIL;
 
 	m_pAnimatorCom->Insert_AnyEntryAnimation(IDLE);
 	m_pAnimatorCom->Insert_AnyEntryAnimation(WALK_FWD);
@@ -590,8 +554,6 @@ CGameObject* CMonster_Crawler::Clone(const _uint _iSceneID, void* _pArg)
 
 void CMonster_Crawler::Free()
 {
-	Safe_Release(m_pLight);
-
 	Safe_Release(m_pCollider);
 	Safe_Release(m_pCharacterController);
 	Safe_Release(m_pPanel);

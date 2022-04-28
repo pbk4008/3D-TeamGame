@@ -1170,6 +1170,21 @@
     </Filter>
     <Filter Include="03.System\07.Scenematic\02.Stage2\00.Shot05\Cinema4-6">
       <UniqueIdentifier>{c8723d78-b6a2-4550-844c-a292633d04bf}</UniqueIdentifier>
+   </Filter>
+    <Filter Include="02.GameObject\05.UI\07.DamageFont">
+      <UniqueIdentifier>{0abfda8d-6202-4ded-a379-6fb07042a1ad}</UniqueIdentifier>
+	</Filter>
+    <Filter Include="02.GameObject\05.UI\05.Hud\04.EquippedWeapon">
+      <UniqueIdentifier>{e7eb33d7-44fb-4063-9e70-97db396cb4ef}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.UI\05.Hud\04.EquippedWeapon\00.Default">
+      <UniqueIdentifier>{3b9d6407-d061-4940-8094-3813c8a311a3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.UI\05.Hud\04.EquippedWeapon\01.Slot_1">
+      <UniqueIdentifier>{07f350f1-4e76-496f-ad38-f68a2fe12426}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.UI\05.Hud\04.EquippedWeapon\02.Slot_2">
+      <UniqueIdentifier>{f31fecd8-ce35-4091-a129-35627d27ce99}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -2493,6 +2508,15 @@
     <ClInclude Include="..\Headers\CapsuleObstacle.h">
       <Filter>02.GameObject\02.Map\05.Obstacle</Filter>
     </ClInclude>
+    <ClInclude Include="..\Headers\UI_EquippedWeapon.h">
+      <Filter>02.GameObject\05.UI\05.Hud\04.EquippedWeapon\00.Default</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\UI_EquippedWeapon_Slot_1.h">
+      <Filter>02.GameObject\05.UI\05.Hud\04.EquippedWeapon\01.Slot_1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\UI_EquippedWeapon_Slot_2.h">
+      <Filter>02.GameObject\05.UI\05.Hud\04.EquippedWeapon\02.Slot_2</Filter>
+	</ClInclude>
     <ClInclude Include="..\Headers\MeshEffect_Razer.h">
       <Filter>02.GameObject\04.Effect\02.MeshEffect</Filter>
     </ClInclude>
@@ -2516,6 +2540,9 @@
     </ClInclude>
     <ClInclude Include="..\Headers\Cinema4_6.h">
       <Filter>03.System\07.Scenematic\02.Stage2\00.Shot05\Cinema4-6</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\DamageFont.h">
+      <Filter>02.GameObject\05.UI\07.DamageFont</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -3809,6 +3836,15 @@
     <ClCompile Include="..\Codes\CapsuleObstacle.cpp">
       <Filter>02.GameObject\02.Map\05.Obstacle</Filter>
     </ClCompile>
+    <ClCompile Include="..\Codes\UI_EquippedWeapon.cpp">
+      <Filter>02.GameObject\05.UI\05.Hud\04.EquippedWeapon\00.Default</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\UI_EquippedWeapon_Slot_1.cpp">
+      <Filter>02.GameObject\05.UI\05.Hud\04.EquippedWeapon\01.Slot_1</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\UI_EquippedWeapon_Slot_2.cpp">
+      <Filter>02.GameObject\05.UI\05.Hud\04.EquippedWeapon\02.Slot_2</Filter>
+	</ClCompile>
     <ClCompile Include="..\Codes\MeshEffect_Razer.cpp">
       <Filter>02.GameObject\04.Effect\02.MeshEffect</Filter>
     </ClCompile>
@@ -3832,6 +3868,9 @@
     </ClCompile>
     <ClCompile Include="..\Codes\Cinema4_6.cpp">
       <Filter>03.System\07.Scenematic\02.Stage2\00.Shot05\Cinema4-6</Filter>
+     </ClCompile>
+    <ClCompile Include="..\Codes\DamageFont.cpp">
+      <Filter>02.GameObject\05.UI\07.DamageFont</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

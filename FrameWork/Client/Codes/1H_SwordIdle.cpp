@@ -107,9 +107,12 @@ _int C1H_SwordIdle::Input(const _double& _dDeltaTime)
 
 	if (g_pGameInstance->getkeyDown(DIK_R))
 	{
-		if (FAILED(m_pStateController->Change_State(L"Silvermane_Heal")))
-			return E_FAIL;
-		return STATE_CHANGE;
+		if (1 <= m_pSilvermane->Get_InvenData()->GetPotionCount())
+		{
+			if (FAILED(m_pStateController->Change_State(L"Silvermane_Heal")))
+				return E_FAIL;
+			return STATE_CHANGE;
+		}
 	}
 
 	if (g_pGameInstance->getkeyDown(DIK_Q))
