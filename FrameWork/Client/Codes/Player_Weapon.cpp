@@ -6,6 +6,7 @@
 #include "Material.h"
 #include "TrailEffect_Normal.h"
 #include "TrailEffect_Distortion.h"
+#include "Pot.h"
 
 CPlayer_Weapon::CPlayer_Weapon(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
 	: CWeapon(_pDevice, _pDeviceContext)
@@ -217,8 +218,8 @@ void CPlayer_Weapon::RangeAttack()
 	XMStoreFloat3(&tOverlapDesc.vOrigin, m_pTransform->Get_State(CTransform::STATE_POSITION));
 	CGameObject* pHitObject = nullptr;
 	tOverlapDesc.ppOutHitObject = &pHitObject;
-	tOverlapDesc.filterData.flags = PxQueryFlag::eDYNAMIC;
-	tOverlapDesc.layerMask = (1 << (_uint)ELayer::Monster);
+	//tOverlapDesc.filterData.flags = PxQueryFlag::eDYNAMIC;
+	tOverlapDesc.layerMask = (1 << (_uint)ELayer::Monster) + (1 << (_uint)ELayer::Pot);
 	if (g_pGameInstance->Overlap(tOverlapDesc))
 	{
 		_uint iSize = (_uint)tOverlapDesc.vecHitObjects.size();
@@ -238,12 +239,19 @@ void CPlayer_Weapon::RangeAttack()
 			case (_uint)GAMEOBJECT::MONSTER_ANIMUS:
 			case (_uint)GAMEOBJECT::MIDDLE_BOSS:
 			case (_uint)GAMEOBJECT::BOSS:
-
+			{
 				ATTACKDESC tAttackDesc = m_pOwner->Get_AttackDesc();
 				tAttackDesc.fDamage += m_fDamage * 0.8f;
 				tAttackDesc.iLevel = 2;
 				tAttackDesc.pHitObject = this;
 				pActor->Hit(tAttackDesc);
+			}
+				break;
+			
+			case (_uint)GAMEOBJECT::POT:
+				CCollision Collision;
+				Collision.pGameObject = this;
+				static_cast<CPot*>(tOverlapDesc.vecHitObjects[i])->OnTriggerEnter(Collision);
 				break;
 			}
 		}

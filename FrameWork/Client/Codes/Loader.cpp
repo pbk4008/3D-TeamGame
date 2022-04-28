@@ -180,8 +180,8 @@ HRESULT CLoader::LoadForScene()
 
 HRESULT CLoader::SetUp_Stage1_Object()
 {
-	//if (FAILED(Load_Stage1FBXLoad()))
-	//	return E_FAIL;
+	if (FAILED(Load_Stage1FBXLoad()))
+		return E_FAIL;
 
 	if (FAILED(Load_Stage1Navi_SkyLoad()))
 		return E_FAIL;
@@ -222,8 +222,8 @@ HRESULT CLoader::SetUp_Stage1_Object()
 	//if (FAILED(Load_Stage1Meteor()))
 	//	return E_FAIL;
 
-	/*if (FAILED(Load_Stage1_Cinema_Object()))
-		return E_FAIL;*/
+	if (FAILED(Load_Stage1_Cinema_Object()))
+		return E_FAIL;
 
 	if (FAILED(Load_Pot()))
 		return E_FAIL;
@@ -1183,7 +1183,7 @@ HRESULT CLoader::Load_Stage1PlayerLoad()
 HRESULT CLoader::Load_Stage1BossLoad()
 {
 	//Boss Bastion_Tier4
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Model_Boss_Bastion_Tier4", CModel::Create(m_pDevice, m_pDeviceContext,
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Boss_Bastion_Tier4", CModel::Create(m_pDevice, m_pDeviceContext,
 		L"../bin/FBX/Monster/Bastion_Tier4.fbx",CModel::TYPE_ANIM, true))))
 		return E_FAIL;
 
@@ -1194,7 +1194,7 @@ HRESULT CLoader::Load_Stage1BossLoad()
 	//ShieldBreaker_BossWeapon
 	_matrix matPivot = XMMatrixIdentity();
 
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Model_Weapon_ShieldBreaker", CModel::Create(m_pDevice, m_pDeviceContext,
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Weapon_ShieldBreaker", CModel::Create(m_pDevice, m_pDeviceContext,
 		"../bin/Resources/Mesh/ShieldBreaker/", "ShieldBreaker.fbx",
 		L"../../Reference/ShaderFile/Shader_StaticMesh.hlsl", matPivot, CModel::TYPE_STATIC, true))))
 	{

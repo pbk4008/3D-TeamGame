@@ -136,11 +136,11 @@ HRESULT CStage1::NativeConstruct()
 		return E_FAIL;
 	}
 
-	//if (FAILED(Ready_MapObject()))
-	//{
-	//	MSGBOX("Stage1 MapObject");
-	//	return E_FAIL;
-	//}
+	if (FAILED(Ready_MapObject()))
+	{
+		MSGBOX("Stage1 MapObject");
+		return E_FAIL;
+	}
 
 	if (FAILED(Ready_TriggerSystem(L"../bin/SaveData/Trigger/MonsterSpawnTrigger.dat")))
 	{
@@ -207,14 +207,14 @@ HRESULT CStage1::NativeConstruct()
 	if (FAILED(Ready_Pot()))
 		return E_FAIL;
 
-	/*if (FAILED(Ready_Cinema()))
+	if (FAILED(Ready_Cinema()))
 	{
 		MSGBOX("Cinema");
 		return E_FAIL;
-	}*/
+	}
 
-	//g_pGameInstance->PlayBGM(L"Stage1_BGM");
-	//m_pScenemaManager->Active_Scenema((_uint)CINEMA_INDEX::CINEMA1_1);
+	g_pGameInstance->PlayBGM(L"Stage1_BGM");
+	m_pScenemaManager->Active_Scenema((_uint)CINEMA_INDEX::CINEMA1_1);
 
 	return S_OK;
 }
@@ -224,6 +224,9 @@ _int CStage1::Tick(_double TimeDelta)
 	//m_pPot->Tick(TimeDelta);
 	/*_vector vTmp = g_pObserver->Get_PlayerPos();
 	cout << XMVectorGetX(vTmp) << ", " << XMVectorGetY(vTmp) << ", " << XMVectorGetZ(vTmp) << endl;*/
+
+	if (m_pIndicatorManager)
+		m_pIndicatorManager->Active_Indicator();
 
 #ifdef  _DEBUG
 	_int iLevel = 0;
@@ -355,6 +358,7 @@ _int CStage1::Tick(_double TimeDelta)
 						m_pScenemaManager->ResetCinema();
 						if (FAILED(g_pGameInstance->Open_Level((_uint)SCENEID::SCENE_LOADING, CLoading::Create(m_pDevice, m_pDeviceContext, SCENEID::SCENE_STAGE2))))
 							return -1;
+						return 0;
 					}
 				}
 			}
@@ -455,8 +459,7 @@ _int CStage1::Tick(_double TimeDelta)
 		g_pDropManager->Tick();
 	if (g_pInteractManager)
 		g_pInteractManager->Tick(TimeDelta);
-	if(m_pIndicatorManager)
-		m_pIndicatorManager->Active_Indicator();
+	
 	if (g_pGameInstance->getkeyDown(DIK_END))
 		m_pScenemaManager->Active_Scenema((_uint)CINEMA_INDEX::CINEMA2_1);
 
@@ -832,7 +835,7 @@ HRESULT CStage1::Ready_GameManager(void)
 		return E_FAIL;
 
 	m_pIndicatorManager = GET_INSTANCE(CIndicator_Manager);
-	//m_pScenemaManager = GET_INSTANCE(CScenematicManager);
+	m_pScenemaManager = GET_INSTANCE(CScenematicManager);
 
 	return S_OK;
 }

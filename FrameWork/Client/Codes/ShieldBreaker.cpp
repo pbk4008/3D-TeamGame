@@ -173,7 +173,7 @@ HRESULT CShieldBreaker::Ready_Components()
 	m_pTransform->Set_TransformDesc(transformDesc);
 	m_pLocalTransform->Set_TransformDesc(transformDesc);
 
-	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STAGE1, L"Model_Weapon_ShieldBreaker", L"Com_Model", (CComponent**)&m_pModel)))
+	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Model_Weapon_ShieldBreaker", L"Com_Model", (CComponent**)&m_pModel)))
 		return E_FAIL;
 
 	m_pModel->Add_Material(g_pGameInstance->Get_Material(L"MI_2H_hammer_Shieldbreaker"), 0);
