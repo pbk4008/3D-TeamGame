@@ -31,9 +31,19 @@ HRESULT CMeshEffect_Razer::NativeConstruct(_uint _iSceneID, void* _pArg)
 	if (FAILED(Ready_Components()))
 		return E_FAIL;
 
-	m_fAlpha = 1.f;
 	m_fFlowSpeedAlpha = 1.f;
 	m_vScale = { 1.f, 1.f, 1000.f };
+	m_pTransform->Scaling(_vector{ m_vScale.x, m_vScale.y, m_vScale.z, 0.f });
+
+	///////////////////////////////////// Alpha
+	m_fAlpha = 1.f;
+
+	///////////////////////////////////// UV
+	m_vTiling.x = 1.f;
+	m_vTiling.y = 6.f;
+
+	//////////////////////////////////////////// Rotation
+	m_pTransform->SetUp_Rotation(_float3(90.f, 0.f, 0.f));
 
 	return S_OK;
 }
@@ -43,15 +53,6 @@ _int CMeshEffect_Razer::Tick(_double _dDeltaTime)
 	_int iProcess = __super::Tick(_dDeltaTime);
 	if (NO_EVENT != iProcess)
 		return iProcess;
-
-	m_fAccTime += (_float)_dDeltaTime;
-
-	///////////////////////////////////// Alpha
-	m_fAlpha = 1.f;
-
-	///////////////////////////////////// UV
-	m_vTiling.x = 1.f;
-	m_vTiling.y = 6.f;
 
 	///////////////////////////////// Color
 	m_isCustomColor = true;
@@ -65,9 +66,6 @@ _int CMeshEffect_Razer::Tick(_double _dDeltaTime)
 	if (0.f >= m_vScale.y)
 		m_vScale.y = 0.f;
 	m_pTransform->Scaling(_vector{ m_vScale.x, m_vScale.y, m_vScale.z, 0.f });
-
-	//////////////////////////////////////////// Rotation
-	m_pTransform->SetUp_Rotation(_float3(90.f, 0.f, 0.f));
 
 	return _int();
 }
@@ -83,11 +81,11 @@ _int CMeshEffect_Razer::LateTick(_double _dDeltaTime)
 		m_fAccTime = 0.f;
 	}
 
-	if (0.f >= m_vScale.x)
+	if (0.1f >= m_vScale.x)
 	{
 		OVERLAPDESC tOverlapDesc;
-		tOverlapDesc.geometry = PxSphereGeometry(6.f);
-		XMStoreFloat3(&tOverlapDesc.vOrigin, m_pTransform->Get_State(CTransform::STATE_POSITION) + _vector{ 0.f, 2.f, 0.f, 0.f });
+		tOverlapDesc.geometry = PxSphereGeometry(2.f);
+		XMStoreFloat3(&tOverlapDesc.vOrigin, m_pTransform->Get_State(CTransform::STATE_POSITION) + _vector{ 0.f, 0.f, 0.f, 0.f });
 		CGameObject* pHitObject = nullptr;
 		tOverlapDesc.ppOutHitObject = &pHitObject;
 		tOverlapDesc.filterData.flags = PxQueryFlag::eANY_HIT | PxQueryFlag::eDYNAMIC;
@@ -97,7 +95,7 @@ _int CMeshEffect_Razer::LateTick(_double _dDeltaTime)
 			if (pHitObject)
 			{
 				ATTACKDESC tAttackDesc;
-				tAttackDesc.fDamage = 5.f;
+				tAttackDesc.fDamage = 15.f;
 				tAttackDesc.iLevel = 4;
 				tAttackDesc.pOwner = this;
 				tAttackDesc.pHitObject = this;
@@ -105,12 +103,43 @@ _int CMeshEffect_Razer::LateTick(_double _dDeltaTime)
 			}
 		}
 
+		//ÀÌÆåÆ®¿Â
 		CEffect* pEffect = CEffectManager::GetInstance()->Get_Effect((_uint)EFFECT::EXPLOSION_ROCK_UP);
-		pEffect->Get_Transform()->Set_State(CTransform::STATE_POSITION, m_pTransform->Get_State(CTransform::STATE_POSITION) + _vector{ 0.f, 2.f, 0.f, 0.f });
+		pEffect->Get_Transform()->Set_State(CTransform::STATE_POSITION, m_pTransform->Get_State(CTransform::STATE_POSITION) + _vector{ 0.f, 0.f, 0.f, 0.f });
 		pEffect->Set_Reset(true);
 		pEffect->setActive(true);
 
-		m_bRemove = true;
+		pEffect = CEffectManager::GetInstance()->Get_Effect((_uint)EFFECT::ATTACK_GROUND);
+		pEffect->Get_Transform()->Set_State(CTransform::STATE_POSITION, m_pTransform->Get_State(CTransform::STATE_POSITION) + _vector{ 0.f, 0.f, 0.f, 0.f });
+		pEffect->Set_Reset(true);
+		pEffect->setActive(true);
+
+		pEffect = CEffectManager::GetInstance()->Get_Effect((_uint)EFFECT::HIT_GROUND); //·¹ÀÌÀúÀÌÆåÆ®·Î ¹Ù²ãÁà¾ßµÉµí 
+		pEffect->Get_Transform()->Set_State(CTransform::STATE_POSITION, m_pTransform->Get_State(CTransform::STATE_POSITION) + _vector{ 0.f, 0.f, 0.f, 0.f });
+		pEffect->Set_Reset(true);
+		pEffect->setActive(true);
+
+		//½¦ÀÌÅ·
+		CCameraShake::SHAKEEVENT tShakeEvent;
+		tShakeEvent.fDuration = 1.f;
+		tShakeEvent.fBlendInTime = 0.3f;
+		tShakeEvent.fBlendOutTime = 0.7f;
+		tShakeEvent.tWaveX.fAmplitude = -0.1f;
+		tShakeEvent.tWaveX.fFrequency = 20.f;
+		tShakeEvent.tWaveY.fAmplitude = 0.1f;
+		tShakeEvent.tWaveY.fFrequency = 10.f;
+		tShakeEvent.tWaveZ.fAdditionalOffset = 0.2f;
+		tShakeEvent.tWaveZ.fAdditionalOffset = -1.f;
+		tShakeEvent.fInnerRadius = 10.f;
+		tShakeEvent.fOuterRadius = 20.f;
+		tShakeEvent.fDistanceRate = 10.f;
+
+		g_pShakeManager->Shake(tShakeEvent, m_pTransform->Get_State(CTransform::STATE_POSITION));
+
+		//ÃÊ±âÈ­
+		m_vScale = { 1.f, 1.f, 1000.f };
+		m_pTransform->Scaling(_vector{ m_vScale.x, m_vScale.y, m_vScale.z, 0.f });
+		setActive(false);
 	}
 
 	m_pRenderer->Add_RenderGroup(CRenderer::RENDER_NONALPHA, this);
@@ -132,7 +161,7 @@ HRESULT CMeshEffect_Razer::Render()
 
 	for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
 	{
-		if (FAILED(m_pModel->Render(i, 8)))
+		if (FAILED(m_pModel->Render(i, 9)))
 			return E_FAIL;
 	}
 

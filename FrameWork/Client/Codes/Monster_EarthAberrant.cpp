@@ -96,7 +96,7 @@ HRESULT CMonster_EarthAberrant::NativeConstruct(const _uint _iSceneID, void* _pA
 	m_fMaxHp = 20.f;
 	m_fCurrentHp = m_fMaxHp;
 
-	m_fMaxGroggyGauge = 100.f;
+	m_fMaxGroggyGauge = 20.f;
 	m_fGroggyGauge = 0.f;
 
 	m_pPanel->Set_HpBar(Get_HpRatio());
@@ -108,6 +108,8 @@ HRESULT CMonster_EarthAberrant::NativeConstruct(const _uint _iSceneID, void* _pA
 	m_pWeapon->setActive(false);
 	m_pPanel->setActive(false);
 	setActive(false);
+
+	m_bUIShow = false;
 
 	return S_OK;
 }
@@ -182,6 +184,7 @@ _int CMonster_EarthAberrant::Tick(_double _dDeltaTime)
 				Active_Effect((_uint)EFFECT::DEATH);
 			}
 		}
+
 		else if (L"Execution" == stateTag)
 		{
 			m_pPanel->Set_UIRemove(true);

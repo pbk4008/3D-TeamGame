@@ -108,6 +108,9 @@
 #include "MeshEffect_Test.h"
 #include "MeshEffect_Test2.h"
 #include "MeshEffect_Boss_Effect.h"
+#include "MeshEffect_Boss_Explosion.h"
+#include "MeshEffect_Boss_Shield.h"
+#include "MeshEffect_EyeRazer.h"
 #pragma endregion
 
 //Test
@@ -193,7 +196,7 @@ HRESULT CLoader::SetUp_Stage1_Object()
 
 	if (FAILED(Load_Stage1MonsterLoad()))
 		return E_FAIL;
-
+	
 	if (FAILED(Load_Stage1BossLoad()))
 		return E_FAIL;
 
@@ -833,62 +836,68 @@ HRESULT CLoader::Load_Stage1_Cinema_Object()
 	//Camera1-1
 	matPivot = XMMatrixIdentity();
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Model_Cinema_Cam1_1", CModel::Create(m_pDevice, m_pDeviceContext,
-		"../bin/FBX/Cinema/Camera/","camera_01_bone.fbx",
+		"../bin/FBX/Cinema/Camera/","Shot_01_01_bone.fbx",
 		L"../../Reference/ShaderFile/Shader_AnimMesh.hlsl", matPivot,CModel::TYPE_ANIM, true))))
 		return E_FAIL;
 	//Camera1-2
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Model_Cinema_Cam1_2", CModel::Create(m_pDevice, m_pDeviceContext,
-		"../bin/FBX/Cinema/Camera/", "camera_02_bone.fbx",
+		"../bin/FBX/Cinema/Camera/", "Shot_01_02_bone.fbx",
 		L"../../Reference/ShaderFile/Shader_AnimMesh.hlsl", matPivot, CModel::TYPE_ANIM, true))))
 		return E_FAIL;
 
 	//Camera2-1
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Model_Cinema_Cam2_1", CModel::Create(m_pDevice, m_pDeviceContext,
-		"../bin/FBX/Cinema/Camera/", "camera_03_01_bone.fbx",
+		"../bin/FBX/Cinema/Camera/", "Shot_02_01_bone.fbx",
 		L"../../Reference/ShaderFile/Shader_AnimMesh.hlsl", matPivot, CModel::TYPE_ANIM, true))))
 		return E_FAIL;
 	//Camera2-2
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Model_Cinema_Cam2_2", CModel::Create(m_pDevice, m_pDeviceContext,
-		"../bin/FBX/Cinema/Camera/", "camera_03_02_bone.fbx",
+		"../bin/FBX/Cinema/Camera/", "Shot_02_02_bone.fbx",
 		L"../../Reference/ShaderFile/Shader_AnimMesh.hlsl", matPivot, CModel::TYPE_ANIM, true))))
 		return E_FAIL;
 	//Camera2-3
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Model_Cinema_Cam2_3", CModel::Create(m_pDevice, m_pDeviceContext,
-		"../bin/FBX/Cinema/Camera/", "camera_03_03_bone.fbx",
+		"../bin/FBX/Cinema/Camera/", "Shot_02_03_bone.fbx",
 		L"../../Reference/ShaderFile/Shader_AnimMesh.hlsl", matPivot, CModel::TYPE_ANIM, true))))
 		return E_FAIL;
 	//Camera2-4
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Model_Cinema_Cam2_4", CModel::Create(m_pDevice, m_pDeviceContext,
-		"../bin/FBX/Cinema/Camera/", "camera_03_04_bone.fbx",
+		"../bin/FBX/Cinema/Camera/", "Shot_02_04_bone.fbx",
 		L"../../Reference/ShaderFile/Shader_AnimMesh.hlsl", matPivot, CModel::TYPE_ANIM, true))))
 		return E_FAIL;
 	//Camera3-1
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Model_Cinema_Cam3_1", CModel::Create(m_pDevice, m_pDeviceContext,
-		"../bin/FBX/Cinema/Camera/", "camera_04_01_bone.fbx",
+		"../bin/FBX/Cinema/Camera/", "Shot_03_01_bone.fbx",
 		L"../../Reference/ShaderFile/Shader_AnimMesh.hlsl", matPivot, CModel::TYPE_ANIM, true))))
 		return E_FAIL;
 
 	//Camera3-2
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Model_Cinema_Cam3_2", CModel::Create(m_pDevice, m_pDeviceContext,
-		"../bin/FBX/Cinema/Camera/", "camera_04_02_bone.fbx",
+		"../bin/FBX/Cinema/Camera/", "Shot_03_02_bone.fbx",
 		L"../../Reference/ShaderFile/Shader_AnimMesh.hlsl", matPivot, CModel::TYPE_ANIM, true))))
 		return E_FAIL;
 
 	//Camera3-3
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Model_Cinema_Cam3_3", CModel::Create(m_pDevice, m_pDeviceContext,
-		"../bin/FBX/Cinema/Camera/", "camera_04_03_bone.fbx",
+		"../bin/FBX/Cinema/Camera/", "Shot_03_03_bone.fbx",
 		L"../../Reference/ShaderFile/Shader_AnimMesh.hlsl", matPivot, CModel::TYPE_ANIM, true))))
 		return E_FAIL;
 
 	//Camera3-4
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Model_Cinema_Cam3_4", CModel::Create(m_pDevice, m_pDeviceContext,
-		"../bin/FBX/Cinema/Camera/", "camera_04_04_bone.fbx",
+		"../bin/FBX/Cinema/Camera/", "Shot_03_04_bone.fbx",
 		L"../../Reference/ShaderFile/Shader_AnimMesh.hlsl", matPivot, CModel::TYPE_ANIM, true))))
 		return E_FAIL;
 
 	//Camera3-5
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Model_Cinema_Cam3_5", CModel::Create(m_pDevice, m_pDeviceContext,
-		"../bin/FBX/Cinema/Camera/", "camera_04_05_bone.fbx",
+		"../bin/FBX/Cinema/Camera/", "Shot_03_05_bone.fbx",
+		L"../../Reference/ShaderFile/Shader_AnimMesh.hlsl", matPivot, CModel::TYPE_ANIM, true))))
+		return E_FAIL;
+
+	//Camera3-6
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Model_Cinema_Cam3_6", CModel::Create(m_pDevice, m_pDeviceContext,
+		"../bin/FBX/Cinema/Camera/", "Shot_03_06_bone.fbx",
 		L"../../Reference/ShaderFile/Shader_AnimMesh.hlsl", matPivot, CModel::TYPE_ANIM, true))))
 		return E_FAIL;
 
@@ -986,21 +995,94 @@ HRESULT CLoader::Load_Stage2_Object()
 
 HRESULT CLoader::Set_Stage3_Prototype()
 {
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_CapsuleCollider", CCapsuleCollider::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_BoxCollider", CBoxCollider::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_SphereCollider", CSphereCollider::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_AnimationController", CAnimationController::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_Animator", CAnimator::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_CharacterController", CCharacterController::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_StateController", CStateController::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_Rect_Buffer_Potal", CVIBuffer_Rect::Create(m_pDevice, m_pDeviceContext, L"../../Reference/ShaderFile/Shader_Potal.hlsl"))))
+		return E_FAIL;
+
+	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Environment", CEnvironment::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+
+	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_SubEnvironment", CSubEnvironment::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+
+	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Treasure_Chest", CDropBox::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+
+	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Portal", CPotal::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+
+	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_LootShield", CLoot_Shield::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+
+	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_CapsuleObstacle", CCapsuleObstacle::Create(m_pDevice, m_pDeviceContext))))
+	{
+		MSGBOX(L"캡슐 장애물 프로토타입 생성 실패")
+		return E_FAIL;
+	}
 	return S_OK;
 }
 
 HRESULT CLoader::Load_Stage3_Object()
 {
-	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_CapsuleObstacle", CCapsuleObstacle::Create(m_pDevice, m_pDeviceContext))))
-	{
-		MSGBOX(L"캡슐 장애물 프로토타입 생성 실패")
-			return E_FAIL;
-	}
 	if (FAILED(Load_Stage3_Cinema_Object()))
 		return E_FAIL;
+
 	//Boss Solaris
 	if(FAILED(Load_Stage3_BossLoad()))
 		return E_FAIL;
+
+	if (FAILED(Load_Stage1PlayerLoad()))
+		return E_FAIL;
+
+	if (FAILED(Load_Stage1FBXLoad()))
+		return E_FAIL;
+
+	if (FAILED(Load_Stage1Navi_SkyLoad()))
+		return E_FAIL;
+
+	if (FAILED(Load_Stage1StaticUILoad()))
+		return E_FAIL;
+
+	if (FAILED(Load_Stage1UILoad()))
+		return E_FAIL;
+
+#pragma region 이펙트들
+	if (FAILED(Load_Stage1EffectLoad()))
+		return E_FAIL;
+	if (FAILED(Load_TrailEffects())) //소드
+		return E_FAIL;
+	if (FAILED(Load_MeshEffects())) //매쉬
+		return E_FAIL;
+#pragma endregion
+
+	_matrix matPivot = XMMatrixIdentity();
+	matPivot *= XMMatrixRotationZ(XMConvertToRadians(90.f)); //정수리옆으로나옴..
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Cylinder_LowPoly_Idst_Razer", CModel::Create(m_pDevice, m_pDeviceContext,
+		"../bin/Resources/Mesh/Effect/FX13/", "ky_cylinder_lowPoly_idst.fbx",
+		L"../bin/ShaderFile/Shader_MeshEffect.hlsl", matPivot, CModel::TYPE_STATIC, true)))) MSGBOX(L"메쉬 이펙트용 메쉬 로드 실패");
+
+
+
 
 	return S_OK;
 }
@@ -1023,39 +1105,59 @@ HRESULT CLoader::Load_Stage3_Cinema_Object()
 	//4-1
 	_matrix matPivot = XMMatrixIdentity();
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE3, L"Model_Cinema_Cam4_1", CModel::Create(m_pDevice, m_pDeviceContext,
-		"../bin/FBX/Cinema/Camera/", "camera_05_01_bone.fbx",
+		"../bin/FBX/Cinema/Camera/", "Shot_04_01_bone.fbx",
 		L"../../Reference/ShaderFile/Shader_AnimMesh.hlsl", matPivot, CModel::TYPE_ANIM, true))))
 		return E_FAIL;
 
 	//4-2
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE3, L"Model_Cinema_Cam4_2", CModel::Create(m_pDevice, m_pDeviceContext,
-		"../bin/FBX/Cinema/Camera/", "camera_05_02_bone.fbx",
+		"../bin/FBX/Cinema/Camera/", "Shot_04_02_bone.fbx",
 		L"../../Reference/ShaderFile/Shader_AnimMesh.hlsl", matPivot, CModel::TYPE_ANIM, true))))
 		return E_FAIL;
 
 	//4-3
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE3, L"Model_Cinema_Cam4_3", CModel::Create(m_pDevice, m_pDeviceContext,
-		"../bin/FBX/Cinema/Camera/", "camera_05_03_bone.fbx",
+		"../bin/FBX/Cinema/Camera/", "Shot_04_03_bone.fbx",
 		L"../../Reference/ShaderFile/Shader_AnimMesh.hlsl", matPivot, CModel::TYPE_ANIM, true))))
 		return E_FAIL;
 
 	//4-4
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE3, L"Model_Cinema_Cam4_4", CModel::Create(m_pDevice, m_pDeviceContext,
-		"../bin/FBX/Cinema/Camera/", "camera_05_04_bone.fbx",
+		"../bin/FBX/Cinema/Camera/", "Shot_04_04_bone.fbx",
 		L"../../Reference/ShaderFile/Shader_AnimMesh.hlsl", matPivot, CModel::TYPE_ANIM, true))))
 		return E_FAIL;
 
 	//4-5
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE3, L"Model_Cinema_Cam4_5", CModel::Create(m_pDevice, m_pDeviceContext,
-		"../bin/FBX/Cinema/Camera/", "camera_05_05_bone.fbx",
+		"../bin/FBX/Cinema/Camera/", "Shot_04_05_bone.fbx",
 		L"../../Reference/ShaderFile/Shader_AnimMesh.hlsl", matPivot, CModel::TYPE_ANIM, true))))
 		return E_FAIL;
 
 	//4-6
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE3, L"Model_Cinema_Cam4_6", CModel::Create(m_pDevice, m_pDeviceContext,
-		"../bin/FBX/Cinema/Camera/", "camera_05_06_bone.fbx",
+		"../bin/FBX/Cinema/Camera/", "Shot_04_06_bone.fbx",
 		L"../../Reference/ShaderFile/Shader_AnimMesh.hlsl", matPivot, CModel::TYPE_ANIM, true))))
 		return E_FAIL;
+
+
+	//5-1
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE3, L"Model_Cinema_Cam5_1", CModel::Create(m_pDevice, m_pDeviceContext,
+		"../bin/FBX/Cinema/Camera/", "Shot_05_01_bone.fbx",
+		L"../../Reference/ShaderFile/Shader_AnimMesh.hlsl", matPivot, CModel::TYPE_ANIM, true))))
+		return E_FAIL;
+
+	//5-2
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE3, L"Model_Cinema_Cam5_2", CModel::Create(m_pDevice, m_pDeviceContext,
+		"../bin/FBX/Cinema/Camera/", "Shot_05_02_bone.fbx",
+		L"../../Reference/ShaderFile/Shader_AnimMesh.hlsl", matPivot, CModel::TYPE_ANIM, true))))
+		return E_FAIL;
+
+	//5-3
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE3, L"Model_Cinema_Cam5_3", CModel::Create(m_pDevice, m_pDeviceContext,
+		"../bin/FBX/Cinema/Camera/", "Shot_05_03_bone.fbx",
+		L"../../Reference/ShaderFile/Shader_AnimMesh.hlsl", matPivot, CModel::TYPE_ANIM, true))))
+		return E_FAIL;
+
 
 	return S_OK;
 }
@@ -1254,12 +1356,6 @@ HRESULT CLoader::Load_Stage1PlayerLoad()
 	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_FlyingShield", CFlyingShield::Create(m_pDevice, m_pDeviceContext)))) MSGBOX(L"날으는 쉴드 원본 생성 실패");
 	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_MotionTrail", CMotionTrail::Create(m_pDevice, m_pDeviceContext)))) MSGBOX(L"모션 더미 생성");
 #pragma endregion
-
-	matPivot = XMMatrixScaling(0.005f, 0.005f, 0.005f);
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Player_HealEffect", CModel::Create(m_pDevice, m_pDeviceContext,
-		"../bin/Resources/Mesh/Bullet/", "Sphere.fbx",
-		L"../../Reference/ShaderFile/Shader_StaticMesh.hlsl", matPivot, CModel::TYPE_STATIC, true))))
-		return E_FAIL;
 
 	//// Test Object
 	//matPivot = XMMatrixIdentity();
@@ -1504,8 +1600,12 @@ HRESULT CLoader::Ready_Stage3()
 {
 	if (FAILED(Set_Stage3_Prototype()))
 		return E_FAIL;
+
 	if(FAILED(Load_Stage3_Object()))
 		return E_FAIL;
+
+
+
 	return S_OK;
 }
 
@@ -1607,19 +1707,17 @@ HRESULT CLoader::Ready_Test_JS()
 	//	return E_FAIL;
 	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_FlyingShield", CFlyingShield::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
-
 	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_MotionTrail", CMotionTrail::Create(m_pDevice, m_pDeviceContext)))) MSGBOX(L"모션 더미 생성");
 
-
-	////Boss Solaris
-	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_TEST_JS, L"Model_Boss_Solaris", CModel::Create(m_pDevice, m_pDeviceContext,
-	//	L"../bin/FBX/Monster/Solaris.fbx", CModel::TYPE_ANIM, true))))
-	//	return E_FAIL;
-	//
-	//if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Solaris", CBoss_Solaris::Create(m_pDevice, m_pDeviceContext))))
-	//	return E_FAIL;
-	//if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Weapon_Boss", CBoss_Weapon::Create(m_pDevice, m_pDeviceContext))))
-	//	return E_FAIL;
+	//Boss Solaris
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_TEST_JS, L"Model_Boss_Solaris", CModel::Create(m_pDevice, m_pDeviceContext,
+		L"../bin/FBX/Monster/Solaris.fbx", CModel::TYPE_ANIM, true))))
+		return E_FAIL;
+	
+	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Solaris", CBoss_Solaris::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Weapon_Boss", CBoss_Weapon::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
 #pragma endregion
 
 
@@ -1824,6 +1922,8 @@ HRESULT CLoader::Load_MeshEffects()
 	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"myfire", L"../bin/Resources/Mesh/Effect/myfire.dds")))
 		MSGBOX("Failed To Add 메쉬이펙트용 텍스처 Tex");
 	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"waterfall02", L"../bin/Resources/Mesh/Effect/waterfall02_water_atos.dds")))
+		MSGBOX("Failed To Add 메쉬이펙트용 텍스처 Tex");
+	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"T_ShieldPattern2", L"../bin/Resources/Mesh/Effect/T_ShieldPattern2.dds")))
 		MSGBOX("Failed To Add 메쉬이펙트용 텍스처 Tex");
 #pragma endregion
 #pragma region FX12
@@ -2040,21 +2140,33 @@ HRESULT CLoader::Load_MeshEffects()
 		L"../bin/FBX/Eff_fbx/Rock_Explosion_Right.fbx", CModel::TYPE_ANIM, true))))
 		return E_FAIL;
 
-	
+
 	//////////////////// Objects
 	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_MeshEffect_Test", CMeshEffect_Test::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_MeshEffect_Test2", CMeshEffect_Test2::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
-	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_MeshEffect_Boss_Effect", CMeshEffect_Boss_Effect::Create(m_pDevice, m_pDeviceContext))))
-		return E_FAIL;
+	
 	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_MeshEffect_Razer", CMeshEffect_Razer::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_MeshEffect_Jupiter", CMeshEffect_Jupiter::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Explosion_Rock", CExplosion_Rock::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
+	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_MeshEffect_Boss_Explosion", CMeshEffect_Boss_Explosion::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_MeshEffect_Boss_Shield", CMeshEffect_Boss_Shield::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_MeshEffect_EyeRazer", CMeshEffect_EyeRazer::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
 
+	//힐이펙트
+	//Heal
+	matPivot = XMMatrixScaling(0.005f, 0.005f, 0.005f);
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Player_HealEffect", CModel::Create(m_pDevice, m_pDeviceContext,
+		"../bin/Resources/Mesh/Bullet/", "Sphere.fbx",
+		L"../../Reference/ShaderFile/Shader_StaticMesh.hlsl", matPivot, CModel::TYPE_STATIC, true))))
+		return E_FAIL;
 
 	return S_OK;
 }

@@ -80,7 +80,9 @@ HRESULT CUI_Monster_Panel::NativeConstruct(const _uint _iSceneID, void* pArg)
 	Safe_AddRef(m_pUIName);
 	Safe_AddRef(m_pUIGroggyBar);
 
-	//setActive(false);p
+
+	//setActive(false);
+
 	return S_OK;
 }
 
@@ -94,6 +96,11 @@ _int CUI_Monster_Panel::Tick(_double TimeDelta)
 		m_bShow = false;
 	}
 	Update_Panel(TimeDelta);
+
+	if (true == g_pObserver->Get_Player()->Get_Dead())
+	{
+		m_bShow = false;
+	}
 
 	return 0;
 }

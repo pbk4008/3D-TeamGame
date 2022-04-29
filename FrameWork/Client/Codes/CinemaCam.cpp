@@ -67,7 +67,10 @@ _int CCinemaCam::Tick(_double TimeDelta)
 	//BornÀÌ¸§ : Camera_01_born
 	m_pModel->Update_CombinedTransformationMatrix(TimeDelta);
 
+	
+
 	CHierarchyNode* pBorn = m_pModel->Get_BoneMatrix("camera_bone");
+	//CHierarchyNode* pBorn = Get_CamBone();
 	_matrix matBone = pBorn->Get_CombinedMatrix()*m_pModel->Get_PivotMatrix();
 	matBone *= m_pTransform->Get_WorldMatrix();
 	m_pCamera->Update_Matrix(matBone);
@@ -221,10 +224,11 @@ CHierarchyNode* CCinemaCam::Get_CamBone()
 	switch (m_iShortTag)
 	{
 	case (_uint)CINEMA_INDEX::CINEMA1_1:
-		pBorn=m_pModel->Get_BoneMatrix("Camera_01_born");
+		pBorn=m_pModel->Get_BoneMatrix("camera_bone");
+		
 		break;
 	case (_uint)CINEMA_INDEX::CINEMA1_2:
-		pBorn=m_pModel->Get_BoneMatrix("Shot_02_born");
+		pBorn=m_pModel->Get_BoneMatrix("camera_bone");
 		break;
 	case (_uint)CINEMA_INDEX::CINEMA2_1:
 		pBorn=m_pModel->Get_BoneMatrix("joint1");

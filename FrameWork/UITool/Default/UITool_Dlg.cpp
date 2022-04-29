@@ -42,7 +42,7 @@ void CUITool_Dlg::DoDataExchange(CDataExchange* pDX)
 
 	DDV_MinMaxFloat(pDX, m_PositionX, 0, 99999);
 	DDV_MinMaxFloat(pDX, m_PositionY, 0, 99999);
-	DDV_MinMaxFloat(pDX, m_PositionZ, 0.1, 99999);
+	DDV_MinMaxFloat(pDX, m_PositionZ, 0.0001, 99999);
 	DDV_MinMaxFloat(pDX, m_SizeX, 1, 99999);
 	DDV_MinMaxFloat(pDX, m_SizeY, 1, 99999);
 	DDV_MinMaxFloat(pDX, m_IDTag, 0, 99999);
