@@ -11,6 +11,7 @@ public:
 	{
 		_float3 vPos{};
 		_float fDamage = 0.f;
+		_bool isCritical = false;
 	}DESC;
 private:
 	explicit CDamageFont(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext);
@@ -49,6 +50,8 @@ private:
 	_float m_fAlpha = 1.f;
 
 	_float2 m_vScale{};
+
+	_bool m_isCritical = false;
 
 public:
 	static CDamageFont* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext);

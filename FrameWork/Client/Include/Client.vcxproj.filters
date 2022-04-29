@@ -1189,6 +1189,9 @@
     <Filter Include="02.GameObject\03.Character\00.Player\00.Silvermane\State\Emote">
       <UniqueIdentifier>{4259ea1f-b5b7-4d9f-b769-4bfcc182f1f1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\03.Character\00.Player\00.Silvermane\State\1H_Sword\Skill">
+      <UniqueIdentifier>{e81819a1-f90c-4330-ad94-8fc5e9d603ea}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -2550,6 +2553,9 @@
     <ClInclude Include="..\Headers\Silvermane_Bow.h">
       <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Emote</Filter>
     </ClInclude>
+    <ClInclude Include="..\Headers\1H_Multishlash.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\1H_Sword\Skill</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -3880,6 +3886,9 @@
     </ClCompile>
     <ClCompile Include="..\Codes\Silvermane_Bow.cpp">
       <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Emote</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\1H_Multishlash.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\1H_Sword\Skill</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

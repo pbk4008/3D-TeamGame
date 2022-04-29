@@ -84,6 +84,8 @@
 #include "1H_SwordAttackNormalR2_ReleaseDoubleSwing.h"
 // 패링 당함
 #include "1H_SwordRicochetReaction.h"
+// 스킬
+#include "1H_Multishlash.h"
 //////////////////////// 2H_Hammer
 #include "2H_HammerEquipOff.h"
 #include "2H_HammerEquipOn.h"
@@ -755,6 +757,9 @@ HRESULT CSilvermane::Ready_States()
 		return E_FAIL;
 	// 패랭 당함
 	if (FAILED(m_pStateController->Add_State(L"1H_SwordRicochetReaction", C1H_SwordRicochetReaction::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	// 스킬
+	if (FAILED(m_pStateController->Add_State(L"1H_Multishlash", C1H_Multishlash::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 #pragma endregion
 #pragma region 2H_Hammer
@@ -1647,7 +1652,7 @@ void CSilvermane::End_ThrowShield()
 		return;
 
 	m_pStateController->Change_State(L"Shield_Throw");
-	//Set_EquipShield(true);
+	Set_EquipShield(true);
 	Set_EquipShieldAnim(true);
 	m_pShield->Set_TrackAcc(6.0); // 방패가 펼쳐진상태로 켜지도록 함
 
@@ -2056,6 +2061,48 @@ const void CSilvermane::Raycast_DropBox(const _double& _dDeltaTime)
 			m_pBlankFKey->setActive(false);
 		break;
 	}
+
+	if ((_uint)GAMEOBJECT::DROP_BOX != iObjectTag && -1 != iObjectTag)
+	{
+		if (g_pGameInstance->getkeyPress(DIK_E))
+		{
+			if (!m_isSkill)
+			{
+				if (g_pGameInstance->getMousePress(CInputDev::MOUSESTATE::MB_LBUTTON))
+				{
+					switch (m_pCurWeapon->Get_Type())
+					{
+					case CWeapon::EType::Sword_1H:
+						if (FAILED(m_pStateController->Change_State(L"1H_Multishlash")))
+						{
+							MSGBOX(L"멀티슬래시 공격이 실패했어!!!");
+						}
+						else
+						{
+							m_pTargetExecution = static_cast<CActor*>(pHitObject);
+							m_isSkill = true;
+						}
+						break;
+					case CWeapon::EType::Hammer_2H:
+
+						break;
+					}
+				}
+				else if (g_pGameInstance->getMousePress(CInputDev::MOUSESTATE::MB_RBUTTON))
+				{
+					switch (m_pCurWeapon->Get_Type())
+					{
+					case CWeapon::EType::Sword_1H:
+
+						break;
+					case CWeapon::EType::Hammer_2H:
+
+						break;
+					}
+				}
+			}
+		}
+	}
 }
 
 void CSilvermane::Set_Execution(const _bool _isExecution, CActor* _pTarget)
@@ -2092,6 +2139,28 @@ CHierarchyNode* CSilvermane::Get_ExecutionTargetBone() const
 CUI_Blank_FKey* CSilvermane::Get_Blank_FKey() const
 {
 	return m_pBlankFKey;
+}
+
+void CSilvermane::Set_IsSkill(const _bool _isSkill)
+{
+	m_isSkill = _isSkill;
+}
+
+void CSilvermane::Set_Skill(const _bool _isSkil)
+{
+	if (m_pCamera)
+	{
+		CHierarchyNode* pEyeBone = nullptr;
+		CHierarchyNode* pAtBone = nullptr;
+		switch (_isSkil)
+		{
+		case true:
+			pEyeBone = m_pModel->Get_BoneMatrix("camera_location_2");
+			pAtBone = m_pModel->Get_BoneMatrix("camera_look_at_2");
+			break;
+		}
+		m_pCamera->Set_Skill(_isSkil, pEyeBone, pAtBone);
+	}
 }
 
 CSilvermane* CSilvermane::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)

@@ -53,7 +53,7 @@ HRESULT CFlyingShield::NativeConstruct(const _uint _iSceneID, void* _pArg)
 	if (FAILED(Ready_Components()))
 		return E_FAIL;
 
-	m_fDamage = 3.f;
+	m_fDamage = 40.f;
 	m_fSpeed = 30.f;
 
 	m_pSpline = new CSplineCurve();

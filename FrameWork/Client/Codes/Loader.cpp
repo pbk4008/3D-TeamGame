@@ -182,8 +182,8 @@ HRESULT CLoader::LoadForScene()
 
 HRESULT CLoader::SetUp_Stage1_Object()
 {
-	if (FAILED(Load_Stage1FBXLoad()))
-		return E_FAIL;
+	//if (FAILED(Load_Stage1FBXLoad()))
+	//	return E_FAIL;
 
 	if (FAILED(Load_Stage1Navi_SkyLoad()))
 		return E_FAIL;
@@ -194,8 +194,8 @@ HRESULT CLoader::SetUp_Stage1_Object()
 	if (FAILED(Load_Stage1MonsterLoad()))
 		return E_FAIL;
 
-	if (FAILED(Load_Stage1BossLoad()))
-		return E_FAIL;
+	//if (FAILED(Load_Stage1BossLoad()))
+	//	return E_FAIL;
 
 	if (FAILED(Load_Stage1StaticUILoad()))
 		return E_FAIL;
@@ -204,31 +204,31 @@ HRESULT CLoader::SetUp_Stage1_Object()
 		return E_FAIL;
 
 #pragma region 이펙트들
-	if (FAILED(Load_Stage1EffectLoad()))
-		return E_FAIL;
+	//if (FAILED(Load_Stage1EffectLoad()))
+	//	return E_FAIL;
 	if (FAILED(Load_TrailEffects())) //소드
 		return E_FAIL;
 	if (FAILED(Load_MeshEffects())) //매쉬
 		return E_FAIL;
 #pragma endregion
 
-	if (FAILED(Load_Stage1JumpTrigger()))
-		return E_FAIL;
+	//if (FAILED(Load_Stage1JumpTrigger()))
+	//	return E_FAIL;
 
-	if (FAILED(Load_Stage1_TreasureChest_Load()))
-		return E_FAIL;
+	//if (FAILED(Load_Stage1_TreasureChest_Load()))
+	//	return E_FAIL;
 
-	if (FAILED(Load_Stage1TriggerLod()))
-		return E_FAIL;
+	//if (FAILED(Load_Stage1TriggerLod()))
+	//	return E_FAIL;
 
-	if (FAILED(Load_Stage1Meteor()))
-		return E_FAIL;
+	//if (FAILED(Load_Stage1Meteor()))
+	//	return E_FAIL;
 
-	if (FAILED(Load_Stage1_Cinema_Object()))
-		return E_FAIL;
+	//if (FAILED(Load_Stage1_Cinema_Object()))
+	//	return E_FAIL;
 
-	if (FAILED(Load_Pot()))
-		return E_FAIL;
+	//if (FAILED(Load_Pot()))
+	//	return E_FAIL;
 
 	return S_OK;
 }
@@ -568,11 +568,15 @@ HRESULT CLoader::Load_Stage1UILoad()
 
 	// DamageFont
 	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"Texture_DamageFont", L"../bin/Resources/Texture/UI/DamageFont.dds")))
-		return E_FAIL;
+		MSGBOX(L"데미지 폰트 Add_Texture() 실패");
 	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"Texture_GreenGradi", L"../bin/Resources/Texture/UI/GreenGradi.dds")))
-		return E_FAIL;
+		MSGBOX(L"데미지 폰트 Add_Texture() 실패");
+	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"Texture_DamageFontBG", L"../bin/Resources/Texture/UI/Static/Active/T_HUD_BossHealth_Blob.dds")))
+		MSGBOX(L"데미지 폰트 Add_Texture() 실패");
+	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"Texture_DamageFontBG2", L"../bin/Resources/Texture/UI/Static/Active/T_HUD_CompassMarker_TextBlob.dds")))
+		MSGBOX(L"데미지 폰트 Add_Texture() 실패");
 	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_DamageFont"), CDamageFont::Create(m_pDevice, m_pDeviceContext))))
-		return E_FAIL;
+		MSGBOX(L"데미지 폰트 Add_Texture() 실패");
 
 
 	return S_OK;
@@ -991,11 +995,6 @@ HRESULT CLoader::Set_Stage3_Prototype()
 
 HRESULT CLoader::Load_Stage3_Object()
 {
-	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_CapsuleObstacle", CCapsuleObstacle::Create(m_pDevice, m_pDeviceContext))))
-	{
-		MSGBOX(L"캡슐 장애물 프로토타입 생성 실패")
-			return E_FAIL;
-	}
 	if (FAILED(Load_Stage3_Cinema_Object()))
 		return E_FAIL;
 	//Boss Solaris
@@ -1126,6 +1125,12 @@ HRESULT CLoader::SetUp_Stage1_Prototype()
 
 	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_LootShield", CLoot_Shield::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
+
+	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_CapsuleObstacle", CCapsuleObstacle::Create(m_pDevice, m_pDeviceContext))))
+	{
+		MSGBOX(L"캡슐 장애물 프로토타입 생성 실패");
+		return E_FAIL;
+	}
 
 	return S_OK;
 }

@@ -188,6 +188,7 @@ call Update_Client.bat</Command>
     <ClInclude Include="..\Headers\1H_Dash.h" />
     <ClInclude Include="..\Headers\1H_FlinchLeft.h" />
     <ClInclude Include="..\Headers\1H_KnockBack.h" />
+    <ClInclude Include="..\Headers\1H_Multishlash.h" />
     <ClInclude Include="..\Headers\1H_SwordRicochetReaction.h" />
     <ClInclude Include="..\Headers\1H_Stagger.h" />
     <ClInclude Include="..\Headers\1H_SwordAttack.h" />
@@ -646,6 +647,7 @@ call Update_Client.bat</Command>
     <ClCompile Include="..\Codes\1H_Dash.cpp" />
     <ClCompile Include="..\Codes\1H_FlinchLeft.cpp" />
     <ClCompile Include="..\Codes\1H_KnockBack.cpp" />
+    <ClCompile Include="..\Codes\1H_Multishlash.cpp" />
     <ClCompile Include="..\Codes\1H_SwordRicochetReaction.cpp" />
     <ClCompile Include="..\Codes\1H_Stagger.cpp" />
     <ClCompile Include="..\Codes\1H_SwordAttack.cpp" />
