@@ -70,9 +70,11 @@ public:
 
 	virtual void Set_FootPosition(const _float3& _vPos);
 
-	void RimlightCheck(_bool check, _float3 color = _float3(0,0,0));
+	void RimlightCheck(_bool check, _float3 color = _float3(0,0,0),_float rimtime = 0.f);
 	_bool GetRimCheck() { return m_rimcheck; }
-	void SetRimIntensity(_float time);
+	void RimIntensity(_float time);
+	void Set_Rimtimer(_float fparam) { m_rimtimer = fparam; }
+	void Set_RimInten(_float fparam) { m_rimintensity = fparam; }
 
 	void Set_Dissolve(_bool on) { m_bdissolve = on; }
 	HRESULT DissolveOn(_float dissolveSpeed = 1.f);
@@ -118,8 +120,10 @@ protected:
 
 	// rim light
 	_bool			m_rimcheck = false;
-	_float			m_rimintensity = 30.f;
+	_float			m_rimintensity = 5.f;
 	_float3			m_rimcol = _float3(0, 0, 0);
+	_float			m_rimtime = 0.f;
+	_float			m_rimtimer = 3.f;
 
 	// motion blur
 	_bool			m_motionblurcheck = false;

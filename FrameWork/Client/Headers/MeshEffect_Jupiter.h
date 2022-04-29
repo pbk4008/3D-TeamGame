@@ -2,6 +2,10 @@
 
 #include "MeshEffect.h"
 
+BEGIN(Engine)
+class CLight;
+END
+
 BEGIN(Client)
 
 class CMeshEffect_Jupiter : public CMeshEffect
@@ -25,6 +29,8 @@ public:
 
 private:
 	HRESULT Ready_Components();
+
+private: CLight* m_pLight = nullptr;
 
 public:
 	static CMeshEffect_Jupiter* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext);

@@ -27,7 +27,10 @@ cbuffer Information
 	float g_fLifeTime;
 	float g_fCurTime;
 	float2 g_vUV;
+	bool g_isCustomColor;
+	float3 g_vColor;
 };
+bool g_isCritical;
 
 sampler DefaultSampler = sampler_state
 {		
@@ -232,6 +235,11 @@ PS_OUT_Alpha PS_MAIN_DAMAGEFONT_BG(PS_IN In)
 	Out.vColor.a *= g_Alpha;
 	Out.vWeight = half4(g_Weight.xxx, 1.f);
 
+	if (g_isCustomColor)
+	{
+		Out.vColor.rgb *= g_vColor.rgb;
+	}
+
 	return Out;
 }
 
@@ -242,7 +250,10 @@ PS_OUT_Alpha PS_MAIN_DAMAGEFONT(PS_IN In)
 	vector vMaskColor = g_MaskTexture.Sample(DefaultSampler, In.vTexUV);
 	In.vTexUV.x = (In.vTexUV.x / g_iRow) + ((g_iIndex % g_iRow) * (1.f / g_iRow));
 	Out.vColor = g_DiffuseTexture.Sample(DefaultSampler, In.vTexUV);
-	Out.vColor *= vMaskColor;
+	if (g_isCritical)
+	{
+		Out.vColor *= vMaskColor;
+	}
 	Out.vColor.a *= g_Alpha;
 	Out.vWeight = half4(g_Weight.xxx, 1.f);
 
@@ -361,8 +372,8 @@ technique11			DefaultTechnique
 	pass Normal_ZreadDisable
 	{
 		SetRasterizerState(CullMode_Default);
-		SetDepthStencilState(ZReadDisable, 0);
-		SetBlendState(AlphaAdditive, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+		SetDepthStencilState(ZDefault, 0);
+		SetBlendState(AlphaBlending, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
 		VertexShader = compile vs_5_0 VS_MAIN();
 		GeometryShader = NULL;
 		PixelShader = compile ps_5_0  PS_MAIN_DAMAGEFONT_BG();

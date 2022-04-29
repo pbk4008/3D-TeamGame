@@ -122,7 +122,6 @@ HRESULT CStage3::Render()
 {
 	_vector vPos = g_pObserver->Get_PlayerPos();
 	//cout << "현재 플레이어 위치 : " << XMVectorGetX(vPos) << ", " << XMVectorGetY(vPos) << ", " << XMVectorGetZ(vPos) << ", " << endl;
-	
 
 	return S_OK;
 }

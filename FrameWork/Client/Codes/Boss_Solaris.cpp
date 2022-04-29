@@ -113,12 +113,6 @@ _int CBoss_Solaris::Tick(_double TimeDelta)
 		return -1;
 	}
 
-
-	if (true == m_rimcheck)
-	{
-		CActor::SetRimIntensity((_float)TimeDelta * -10.f);
-	}
-
 	m_pCharacterController->setFootPosition(_float3(48.f, -5.f, 146.f));
 	_vector Pos = m_pTransform->Get_State(CTransform::STATE_POSITION);
 
@@ -195,6 +189,7 @@ _int CBoss_Solaris::Tick(_double TimeDelta)
 	m_pCharacterController->Move(TimeDelta, m_pTransform->Get_Velocity());
 
 	//cout << fDistToPlayer << endl;
+
 	return 0;
 }
 
@@ -234,11 +229,13 @@ HRESULT CBoss_Solaris::Render()
 
 	if (m_rimcheck == true)
 	{
+		CActor::RimIntensity(g_fDeltaTime * -1.f);
+
 		rimdesc.rimcheck = m_rimcheck;
 		rimdesc.rimcol = m_rimcol;
-		rimdesc.rimintensity = 50.f; // intensity ³·À» ¼ö·Ï °úÇÏ°Ô ºû³²
+		rimdesc.rimintensity = m_rimintensity; // intensity ³·À» ¼ö·Ï °úÇÏ°Ô ºû³²
 		XMStoreFloat4(&rimdesc.camdir, XMVector3Normalize(m_pTransform->Get_State(CTransform::STATE_POSITION) - g_pGameInstance->Get_CamPosition(L"Camera_Silvermane")));
-		CActor::SetRimIntensity(g_fDeltaTime * -10.f);
+		if (FAILED(m_pModel->SetUp_ValueOnShader("g_rimtimer", &m_rimtime, sizeof(_float)))) MSGBOX("Failed to Apply RimTime Value");
 	}
 
 

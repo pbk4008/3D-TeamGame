@@ -293,7 +293,7 @@ PS_OUT PS_MAIN_TOP(PS_IN In)
 	if(g_rimlightcheck == true)
 	{
 		half4 normal = half4(In.vNormal.xyz, 0.f);
-		float4 rim = RimLighting(normal, g_camdir, g_rimintensity, g_rimcolor);
+		float4 rim = RimLighting(normal, g_camdir, g_rimintensity, g_rimcolor, g_rimtimer);
 		Out.emission += rim;
 	}
 	
@@ -315,7 +315,8 @@ PS_OUT PS_MAIN_DOWN(PS_IN In)
 	if (g_FSDCheck == true)
 	{
 		half4 fsd = g_FSDTexture.Sample(DefaultSampler, In.vUvDepth.xy);
-		Out.diffuse = diffuse * fsd;
+		
+		Out.diffuse = diffuse + (fsd * float4(1.f, 0.f, 0.f, 1.f));
 	}
 	else
 	{
@@ -326,7 +327,7 @@ PS_OUT PS_MAIN_DOWN(PS_IN In)
 	Out.depth = half4(In.vUvDepth.z / In.vUvDepth.w, In.vUvDepth.w / 300.f, 0.f, 0.f);
 	
 	half metalic = mra.r;
-	half roughness = 0.5f + mra.g * 3.f - mra.r * 2;
+	half roughness = g_Roughness + mra.g * 3.f - mra.r * 2.f;
 	half ao = ceo.b * 1.f * mra.b;
 	half4 E = ceo.g * g_color * g_empower;
 	
@@ -339,7 +340,7 @@ PS_OUT PS_MAIN_DOWN(PS_IN In)
 	if (g_rimlightcheck == true)
 	{
 		half4 normal = half4(In.vNormal.xyz, 0.f);
-		float4 rim = RimLighting(normal, g_camdir, g_rimintensity, g_rimcolor);
+		float4 rim = RimLighting(normal, g_camdir, g_rimintensity, g_rimcolor, g_rimtimer);
 		Out.emission += rim;
 	}
 	

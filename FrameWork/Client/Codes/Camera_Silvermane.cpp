@@ -65,7 +65,7 @@ _int CCamera_Silvermane::Tick(_double _dDeltaTime)
 	if (NO_EVENT != iProgress)
 		return iProgress;
 
-	if (m_isExecution)
+	if (m_isExecution || m_isSkill)
 	{
 		m_fExecutionChangeTime += (_float)_dDeltaTime;
 
@@ -108,7 +108,7 @@ _int CCamera_Silvermane::Tick(_double _dDeltaTime)
 	{
 		m_fExecutionChangeTime += (_float)_dDeltaTime * 0.2f;
 		_float fRatio = m_fExecutionChangeTime / 1.f;
-		if (0.2f >= fRatio)
+		if (0.1f >= fRatio)
 		{
 			_matrix smatResult = m_pLocalTransform->Get_WorldMatrix() * m_pWorldTransform->Get_WorldMatrix();
 			_matrix smatWorld = m_pTransform->Get_WorldMatrix();
@@ -172,7 +172,6 @@ _int CCamera_Silvermane::Tick(_double _dDeltaTime)
 		tShakeEvent.tWaveY.fFrequency = 6.f;
 		tShakeEvent.tWaveZ.fAmplitude = 0.04f;
 		tShakeEvent.tWaveZ.fFrequency = 8.f;
-		tShakeEvent.fBlendOutTime = 0.3f;
 		if (g_pGameInstance->getkeyDown(DIK_RIGHT))
 		{
 			g_pShakeManager->Shake(tShakeEvent, _float3(0.f, 0.f, 0.f));
@@ -282,6 +281,31 @@ void CCamera_Silvermane::Set_Execution(const _bool _isExecution, CHierarchyNode*
 		}
 
 		m_isExecution = _isExecution;
+	}
+}
+
+void CCamera_Silvermane::Set_Skill(const _bool _isSkill, CHierarchyNode* _pEyeBone, CHierarchyNode* _pAtBone)
+{
+	if (_isSkill != m_isSkill)
+	{
+		if (_pEyeBone)
+			m_pEyeBone = _pEyeBone;
+		if (_pAtBone)
+			m_pAtBone = _pAtBone;
+
+		switch (_isSkill)
+		{
+		case true:
+			m_fExecutionChangeTime = 0.f;
+			break;
+		case false:
+			m_pLocalTransform->Set_State(CTransform::STATE_POSITION, XMVectorSetW(XMLoadFloat3(&m_vLocalOriginPos), 1.f));
+			m_pLocalTransform->SetUp_Rotation(_vector{ 1.f, 0.f, 0.f, 0.f }, XMConvertToRadians(30.f));
+			m_fExecutionChangeTime = 0.f;
+			break;
+		}
+
+		m_isSkill = _isSkill;
 	}
 }
 

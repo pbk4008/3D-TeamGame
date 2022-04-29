@@ -62,7 +62,7 @@ HRESULT CShield::NativeConstruct(const _uint _iSceneID, void* _pArg)
 	m_bActive = false;
 	m_pCollider->Remove_ActorFromScene();
 
-	m_fDamage = 3.f;
+	m_fDamage = 40.f;
 	return S_OK;
 }
 

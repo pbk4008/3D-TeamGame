@@ -29,6 +29,7 @@ private:
 public:
 	void Set_ChaseTarget(const _bool _isChase);
 	void Set_Execution(const _bool _isExecution, CHierarchyNode* _pEyeBone = nullptr, CHierarchyNode* _pAtBone = nullptr);
+	void Set_Skill(const _bool _isSkill, CHierarchyNode* _pEyeBone = nullptr, CHierarchyNode* _pAtBone = nullptr);
 	void Respawn();
 
 private:
@@ -59,6 +60,9 @@ private:
 	CHierarchyNode* m_pEyeBone = nullptr;
 	CHierarchyNode* m_pAtBone = nullptr;
 	_float m_fExecutionChangeTime = 0.f;
+
+	/* For.Skill */
+	_bool m_isSkill = false;
 
 private: /* For.Shake */
 	CCameraShake* m_pCameraShake = nullptr;

@@ -96,9 +96,8 @@ void CCameraShake::PlayShake(CGameObject* _pCamera, const _double& _dDeltaTime)
 			++iter;
 	}
 
-	//D3DXQuaternionRotationYawPitchRoll(&m_transform->rotation, vAccRot.y, vAccRot.x, vAccRot.z);
-	//pTargetLocalTransform->Set_State(CTransform::STATE_POSITION, XMVectorSetW(XMLoadFloat3(&vCamLocalOriginPos) + XMLoadFloat3(&vAccPos), 1.f));
 	pCamera_Silvermane->m_vShakeAccPos = vAccPos;
+	//XMStoreFloat3(&pCamera_Silvermane->m_vRot, XMQuaternionRotationRollPitchYaw(vAccRot.x, vAccRot.y, vAccRot.z));
 }
 
 const _bool CCameraShake::IsShaking() const

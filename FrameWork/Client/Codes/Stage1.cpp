@@ -73,6 +73,7 @@
 #include "Cinema3_5.h"
 #include "MeshEffect_Razer.h"
 #include "DamageFont.h"
+#include "CapsuleObstacle.h"
 
 CStage1::CStage1()
 	: m_pTriggerSystem(nullptr)
@@ -125,11 +126,11 @@ HRESULT CStage1::NativeConstruct()
 		return E_FAIL;
 	}
 
-	if (FAILED(Ready_Trigger_Jump()))
-	{
-		MSGBOX("Stage1 Jump");
-		return E_FAIL;
-	}
+	//if (FAILED(Ready_Trigger_Jump()))
+	//{
+	//	MSGBOX("Stage1 Jump");
+	//	return E_FAIL;
+	//}
 
 	if (FAILED(Ready_Player(L"Layer_Silvermane")))
 	{
@@ -137,11 +138,12 @@ HRESULT CStage1::NativeConstruct()
 		return E_FAIL;
 	}
 
-	if (FAILED(Ready_MapObject()))
-	{
-		MSGBOX("Stage1 MapObject");
-		return E_FAIL;
-	}
+
+	//if (FAILED(Ready_MapObject()))
+	//{
+	//	MSGBOX("Stage1 MapObject");
+	//	return E_FAIL;
+	//}
 
 	//if (FAILED(Ready_TriggerSystem(L"../bin/SaveData/Trigger/MonsterSpawnTrigger.dat")))
 	//{
@@ -149,17 +151,19 @@ HRESULT CStage1::NativeConstruct()
 	//	return E_FAIL;
 	//}
 
+
+
 	if (FAILED(Ready_Data_UI(L"../bin/SaveData/UI/UI.dat")))
 	{
 		MSGBOX("Stage1 UI Data");
 		return E_FAIL;
 	}
 
-	if (FAILED(Ready_Data_Effect()))
-	{
-		MSGBOX("Stage1 Effect");
-		return E_FAIL;
-	}
+	//if (FAILED(Ready_Data_Effect()))
+	//{
+	//	MSGBOX("Stage1 Effect");
+	//	return E_FAIL;
+	//}
 
 	if (FAILED(Ready_UI(L"Layer_UI")))
 	{
@@ -167,17 +171,17 @@ HRESULT CStage1::NativeConstruct()
 		return E_FAIL;
 	}
 
-	if (FAILED(Ready_Treasure_Chest()))
-	{
-		MSGBOX("Stage1 Box");
-		return E_FAIL;
-	}
+	//if (FAILED(Ready_Treasure_Chest()))
+	//{
+	//	MSGBOX("Stage1 Box");
+	//	return E_FAIL;
+	//}
 
-	if (FAILED(Ready_GameManager()))
-	{
-		MSGBOX("Stage1 Manager");
-		return E_FAIL;
-	}
+	//if (FAILED(Ready_GameManager()))
+	//{
+	//	MSGBOX("Stage1 Manager");
+	//	return E_FAIL;
+	//}
 
 	g_pGameInstance->Change_BaseCamera(L"Camera_Silvermane");
 
@@ -187,11 +191,11 @@ HRESULT CStage1::NativeConstruct()
 	//	return E_FAIL;
 	//}
 	
-	if (FAILED(Ready_Indicator()))
-	{
-		MSGBOX("Indicator");
-		return E_FAIL;
-	}
+	//if (FAILED(Ready_Indicator()))
+	//{
+	//	MSGBOX("Indicator");
+	//	return E_FAIL;
+	//}
 
 	//if (FAILED(Ready_Portal()))
 	//{
@@ -214,9 +218,12 @@ HRESULT CStage1::NativeConstruct()
 		return E_FAIL;
 	}
 
-	g_pGameInstance->PlayBGM(L"Stage1_BGM");
-	
+	//g_pGameInstance->PlayBGM(L"Stage1_BGM");
+	//
 	//m_pScenemaManager->Active_Scenema((_uint)CINEMA_INDEX::CINEMA1_1);
+
+	if (FAILED(Ready_Obstacle()))
+		return E_FAIL;
 
 	return S_OK;
 }
@@ -440,6 +447,7 @@ _int CStage1::Tick(_double TimeDelta)
 	//		return -1;
 	//	//pRazer->setActive(true);
 	//}
+	// boss
 	//if (g_pGameInstance->getkeyDown(DIK_NUMPAD0))
 	//{
 	//	CBoss_Bastion_Judicator* pMidBoss = nullptr;
@@ -447,6 +455,7 @@ _int CStage1::Tick(_double TimeDelta)
 	//		return -1;
 	//	pMidBoss->setActive(true);
 	//}
+	// monster
 	//if (g_pGameInstance->getkeyDown(DIK_NUMPAD0))
 	//{
 	//	CMonster_Crawler* pMonster = nullptr;
@@ -454,13 +463,13 @@ _int CStage1::Tick(_double TimeDelta)
 	//		return -1;
 	//	pMonster->setActive(true);
 	//}
-	//if (g_pGameInstance->getkeyDown(DIK_NUMPAD1))
-	//{
-	//	CMonster_EarthAberrant* pMonster = nullptr;
-	//	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Test", L"Proto_GameObject_Monster_EarthAberrant", &fPos, (CGameObject**)&pMonster)))
-	//		return -1;
-	//	pMonster->setActive(true);
-	//}
+	if (g_pGameInstance->getkeyDown(DIK_NUMPAD1))
+	{
+		CMonster_EarthAberrant* pMonster = nullptr;
+		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Test", L"Proto_GameObject_Monster_EarthAberrant", &fPos, (CGameObject**)&pMonster)))
+			return -1;
+		pMonster->setActive(true);
+	}
 	//if (g_pGameInstance->getkeyDown(DIK_NUMPAD2))
 	//{
 	//	CMonster_Bastion_Sword* pMonster = nullptr;
@@ -475,13 +484,13 @@ _int CStage1::Tick(_double TimeDelta)
 	//		return -1;
 	//	pMonster->setActive(true);
 	//}
-	//if (g_pGameInstance->getkeyDown(DIK_NUMPAD4))
-	//{
-	//	CMonster_Bastion_Healer* pMonster = nullptr;
-	//	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Test", L"Proto_GameObject_Monster_Bastion_Healer", &fPos, (CGameObject**)&pMonster)))
-	//		return -1;
-	//	pMonster->setActive(true);
-	//}
+	if (g_pGameInstance->getkeyDown(DIK_NUMPAD4))
+	{
+		CMonster_Bastion_Healer* pMonster = nullptr;
+		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Test", L"Proto_GameObject_Monster_Bastion_Healer", &fPos, (CGameObject**)&pMonster)))
+			return -1;
+		pMonster->setActive(true);
+	}
 	//if (g_pGameInstance->getkeyDown(DIK_NUMPAD5))
 	//{
 	//	CMonster_Bastion_2HSword* pMonster = nullptr;
@@ -1739,6 +1748,29 @@ HRESULT CStage1::Ready_Pot()
 		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Pot", L"Proto_GameObject_Pot", &tDesc)))
 			return E_FAIL;
 	}
+	return S_OK;
+}
+
+HRESULT CStage1::Ready_Obstacle()
+{
+	CCapsuleObstacle::DESC tObstacleDesc;
+	tObstacleDesc.vPosition = { -36.9665833f, -4.63226175f, 86.0816040f };
+	tObstacleDesc.fHeight = 1.f;
+	tObstacleDesc.fRadius = 0.5f;
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE3, L"Layer_Obstacle", L"Proto_GameObject_CapsuleObstacle", &tObstacleDesc)))
+	{
+		MSGBOX(L"스테이지1 캡슐 장애물 설치 실패");
+		return E_FAIL;
+	}
+	tObstacleDesc.vPosition = { -175.753589f, 28.702583f, 308.261066f};
+	tObstacleDesc.fHeight = 2.f;
+	tObstacleDesc.fRadius = 1.7f;
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE3, L"Layer_Obstacle", L"Proto_GameObject_CapsuleObstacle", &tObstacleDesc)))
+	{
+		MSGBOX(L"스테이지1 캡슐 장애물 설치 실패");
+		return E_FAIL;
+	}
+
 	return S_OK;
 }
 

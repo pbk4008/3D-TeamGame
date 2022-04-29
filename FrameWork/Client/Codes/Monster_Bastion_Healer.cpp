@@ -247,12 +247,15 @@ HRESULT CMonster_Bastion_Healer::Render()
 	RIM RimDesc;
 	ZeroMemory(&RimDesc, sizeof(RIM));
 
-	RimDesc.rimcol = _float3(0.f, 1.f, 1.f);
-	RimDesc.rimintensity = 5.f;
-	XMStoreFloat4(&RimDesc.camdir, XMVector3Normalize(g_pGameInstance->Get_CamPosition(L"Camera_Silvermane")-m_pTransform->Get_State(CTransform::STATE_POSITION)));
-
 	if (m_pLinkMonster)
+	{
 		RimDesc.rimcheck = true;
+		RimDesc.rimcol = _float3(0.f, 1.f, 1.f);
+		RimDesc.rimintensity = m_rimintensity + 3.f;
+		XMStoreFloat4(&RimDesc.camdir, XMVector3Normalize(g_pGameInstance->Get_CamPosition(L"Camera_Silvermane") - m_pTransform->Get_State(CTransform::STATE_POSITION)));
+		_float time = 1.f;
+		if (FAILED(m_pModel->SetUp_ValueOnShader("g_rimtimer", &time, sizeof(_float)))) MSGBOX("Failed to Apply RimTime Value");
+	}
 	else
 		RimDesc.rimcheck = false;
 
@@ -361,7 +364,7 @@ void CMonster_Bastion_Healer::Hit(const ATTACKDESC& _tAttackDesc)
 	_vector svOtherLook = XMVector3Normalize(pOtherTransform->Get_State(CTransform::STATE_LOOK));
 	_vector svOtherRight = XMVector3Normalize(pOtherTransform->Get_State(CTransform::STATE_RIGHT));
 
-	uniform_real_distribution<_float> fRange(-0.5f, 0.5f);
+	uniform_real_distribution<_float> fRange(-0.4f, 0.4f);
 	uniform_real_distribution<_float> fRange2(-0.2f, 0.2f);
 	uniform_int_distribution<_int> iRange(-5, 5);
 	CDamageFont::DESC tDamageDesc;

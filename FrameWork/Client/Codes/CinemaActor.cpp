@@ -120,6 +120,9 @@ HRESULT CCinemaActor::Render_Acoter()
 	wstring CameraTag = g_pGameInstance->Get_BaseCameraTag();
 	if (m_iActorTag == (_uint)CINEMA_ACTOR::ACTOR_MIDBOSS)
 	{
+		wstring wstrCamTag = g_pGameInstance->Get_BaseCameraTag();
+
+		CActor::BindConstantBuffer(CameraTag);
 		for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
 		{
 			SCB desc;
@@ -127,21 +130,22 @@ HRESULT CCinemaActor::Render_Acoter()
 			switch (i)
 			{
 			case 0: case 3:  // body
-				desc.metalic = 0.3f;
-				desc.roughness = -0.1f;
+				desc.metalic = 0.5f;
+				desc.roughness = 0.f;
+				desc.ao = 0.5f;
 				desc.color = _float4(0.811f, 1.f, 0.898f, 1.f);
 				desc.empower = 0.7f;
-				CActor::BindConstantBuffer(CameraTag, &desc);
+				CActor::BindConstantBuffer(wstrCamTag, &desc);
 				m_pModel->Render(i, 0);
 				break;
 			case 1: // fur
 				desc.color = _float4(1.f, 0.466f, 0.901f, 1.f);
 				desc.empower = 0.01f;
-				CActor::BindConstantBuffer(CameraTag, &desc);
+				CActor::BindConstantBuffer(wstrCamTag, &desc);
 				m_pModel->Render(i, 1);
 				break;
 			case 2:  // cloak
-				CActor::BindConstantBuffer(CameraTag, &desc);
+				CActor::BindConstantBuffer(wstrCamTag, &desc);
 				m_pModel->Render(i, 2);
 				break;
 			}
@@ -149,7 +153,7 @@ HRESULT CCinemaActor::Render_Acoter()
 	}
 	else if(m_iActorTag == (_uint)CINEMA_ACTOR::ACTOR_GRAYEHAWK)
 	{
-		_float4 color = _float4(0.f, 0.f, 1.f, 1.f);
+		_float4 color = _float4(1.f, 1.f, 1.f, 1.f);
 		if (FAILED(m_pModel->SetUp_ValueOnShader("g_MainColor", &color, sizeof(_float4)))) MSGBOX("Failed To Apply Actor ConstantBuffer");
 
 		for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
@@ -160,12 +164,15 @@ HRESULT CCinemaActor::Render_Acoter()
 			switch (i)
 			{
 			case 0:
-				CActor::BindConstantBuffer(CameraTag);
+				CActor::BindConstantBuffer(CameraTag, &desc);
 				if (FAILED(m_pModel->Render(i, 1)))	MSGBOX("Failed To Rendering Actor");
 				break;
 			default:
+				desc.metalic = 0.3f;
+				desc.roughness = 0.1f;
+				desc.ao = 0.4f;
 				desc.color = _float4(0.f,0.f,1.f,1.f);
-				desc.empower = 0.5f;
+				desc.empower = 1.f;
 				CActor::BindConstantBuffer(CameraTag,&desc);
 				if (FAILED(m_pModel->Render(i, 0)))	MSGBOX("Failed To Rendering Actor");
 				break;
@@ -177,7 +184,16 @@ HRESULT CCinemaActor::Render_Acoter()
 	{
 		_bool check = true;
 		if (FAILED(m_pModel->SetUp_ValueOnShader("g_FSDCheck", &check, sizeof(_bool)))) MSGBOX("Failed To Apply Actor ConstantBuffer");
-		CActor::BindConstantBuffer(CameraTag);
+
+		_float4 color = _float4(1.f, 0.f, 0.f, 1.f);
+		if (FAILED(m_pModel->SetUp_ValueOnShader("g_MainColor", &color, sizeof(_float4)))) MSGBOX("Failed To Apply Actor ConstantBuffer");
+
+		SCB desc;
+		ZeroMemory(&desc, sizeof(SCB));
+		desc.metalic = 0.5f;
+		desc.roughness = 0.3f;
+		desc.ao = 0.8f;
+		CActor::BindConstantBuffer(CameraTag,&desc);
 		for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
 		{
 			switch (i)
@@ -234,16 +250,6 @@ void CCinemaActor::Actor_AnimReset()
 {
 	if(m_pController)
 		m_pController->Reset_Animation();
-}
-
-void CCinemaActor::Acotr_AnimFrameSet(_double iFrame)
-{
-	m_pController->Add_TrackAcc(iFrame);
-}
-
-_uint CCinemaActor::Get_AnimFrame()
-{
-	return m_pController->Get_CurKeyFrameIndex();
 }
 
 CHierarchyNode* CCinemaActor::Get_Bone(const string& tBoneName)

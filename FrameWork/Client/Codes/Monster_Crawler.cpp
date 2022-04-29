@@ -79,7 +79,7 @@ HRESULT CMonster_Crawler::NativeConstruct(const _uint _iSceneID, void* _pArg)
 
 	m_iObectTag = (_uint)GAMEOBJECT::MONSTER_CRYSTAL;
 
-	m_fMaxHp = 10.f;
+	m_fMaxHp = 10000.f;
 	m_fCurrentHp = m_fMaxHp;
 
 	m_fMaxGroggyGauge = 3.f;
@@ -279,11 +279,11 @@ void CMonster_Crawler::Hit(const ATTACKDESC& _tAttackDesc)
 	_vector svOtherLook = XMVector3Normalize(pOtherTransform->Get_State(CTransform::STATE_LOOK));
 	_vector svOtherRight = XMVector3Normalize(pOtherTransform->Get_State(CTransform::STATE_RIGHT));
 
-	uniform_real_distribution<_float> fRange(-0.5f, 0.5f);
+	uniform_real_distribution<_float> fRange(-0.4f, 0.4f);
 	uniform_real_distribution<_float> fRange2(-0.2f, 0.2f);
 	uniform_int_distribution<_int> iRange(-5, 5);
 	CDamageFont::DESC tDamageDesc;
-	_vector svPos = m_pTransform->Get_State(CTransform::STATE_POSITION) + _vector{ 0.f, 1.f + fRange2(g_random), 0.f, 0.f };
+	_vector svPos = m_pTransform->Get_State(CTransform::STATE_POSITION) + _vector{ 0.f, 1.5f + fRange2(g_random), 0.f, 0.f };
 	svPos += svOtherRight * fRange(g_random) - svOtherLook * 0.5f;
 	XMStoreFloat3(&tDamageDesc.vPos, svPos);
 	tDamageDesc.fDamage = _tAttackDesc.fDamage + (_float)iRange(g_random);
