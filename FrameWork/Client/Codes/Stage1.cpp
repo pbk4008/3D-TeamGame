@@ -142,11 +142,11 @@ HRESULT CStage1::NativeConstruct()
 		return E_FAIL;
 	}
 
-	if (FAILED(Ready_TriggerSystem(L"../bin/SaveData/Trigger/MonsterSpawnTrigger.dat")))
-	{
-		MSGBOX("Stage1 Trigger");
-		return E_FAIL;
-	}
+	//if (FAILED(Ready_TriggerSystem(L"../bin/SaveData/Trigger/MonsterSpawnTrigger.dat")))
+	//{
+	//	MSGBOX("Stage1 Trigger");
+	//	return E_FAIL;
+	//}
 
 	if (FAILED(Ready_Data_UI(L"../bin/SaveData/UI/UI.dat")))
 	{
@@ -180,11 +180,11 @@ HRESULT CStage1::NativeConstruct()
 
 	g_pGameInstance->Change_BaseCamera(L"Camera_Silvermane");
 
-	if (FAILED(Ready_Meteor()))
-	{
-		MSGBOX("Meteor");
-		return E_FAIL;
-	}
+	//if (FAILED(Ready_Meteor()))
+	//{
+	//	MSGBOX("Meteor");
+	//	return E_FAIL;
+	//}
 	
 	if (FAILED(Ready_Indicator()))
 	{
@@ -192,26 +192,26 @@ HRESULT CStage1::NativeConstruct()
 		return E_FAIL;
 	}
 
-	if (FAILED(Ready_Portal()))
-	{
-		MSGBOX("Portal");
-		return E_FAIL;
-	}
+	//if (FAILED(Ready_Portal()))
+	//{
+	//	MSGBOX("Portal");
+	//	return E_FAIL;
+	//}
 
-	if (FAILED(Ready_Wall()))
-	{
-		MSGBOX("Wall");
-		return E_FAIL;
-	}
+	//if (FAILED(Ready_Wall()))
+	//{
+	//	MSGBOX("Wall");
+	//	return E_FAIL;
+	//}
 
-	if (FAILED(Ready_Pot()))
-		return E_FAIL;
+	//if (FAILED(Ready_Pot()))
+	//	return E_FAIL;
 
-	if (FAILED(Ready_Cinema()))
-	{
-		MSGBOX("Cinema");
-		return E_FAIL;
-	}
+	//if (FAILED(Ready_Cinema()))
+	//{
+	//	MSGBOX("Cinema");
+	//	return E_FAIL;
+	//}
 
 	g_pGameInstance->PlayBGM(L"Stage1_BGM");
 	
@@ -415,6 +415,7 @@ _int CStage1::Tick(_double TimeDelta)
 	//		return -1;
 	//	//pRazer->setActive(true);
 	//}
+	// boss
 	//if (g_pGameInstance->getkeyDown(DIK_NUMPAD0))
 	//{
 	//	CBoss_Bastion_Judicator* pMidBoss = nullptr;
@@ -422,6 +423,7 @@ _int CStage1::Tick(_double TimeDelta)
 	//		return -1;
 	//	pMidBoss->setActive(true);
 	//}
+	// monster
 	//if (g_pGameInstance->getkeyDown(DIK_NUMPAD0))
 	//{
 	//	CMonster_Crawler* pMonster = nullptr;
@@ -436,13 +438,13 @@ _int CStage1::Tick(_double TimeDelta)
 	//		return -1;
 	//	pMonster->setActive(true);
 	//}
-	//if (g_pGameInstance->getkeyDown(DIK_NUMPAD2))
-	//{
-	//	CMonster_Bastion_Sword* pMonster = nullptr;
-	//	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Test", L"Proto_GameObject_Monster_Bastion_Sword", &fPos, (CGameObject**)&pMonster)))
-	//		return -1;
-	//	pMonster->setActive(true);
-	//}
+	if (g_pGameInstance->getkeyDown(DIK_NUMPAD2))
+	{
+		CMonster_Bastion_Sword* pMonster = nullptr;
+		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Test", L"Proto_GameObject_Monster_Bastion_Sword", &fPos, (CGameObject**)&pMonster)))
+			return -1;
+		pMonster->setActive(true);
+	}
 	//if (g_pGameInstance->getkeyDown(DIK_NUMPAD3))
 	//{
 	//	CMonster_Bastion_Shooter* pMonster = nullptr;
@@ -450,13 +452,13 @@ _int CStage1::Tick(_double TimeDelta)
 	//		return -1;
 	//	pMonster->setActive(true);
 	//}
-	//if (g_pGameInstance->getkeyDown(DIK_NUMPAD4))
-	//{
-	//	CMonster_Bastion_Healer* pMonster = nullptr;
-	//	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Test", L"Proto_GameObject_Monster_Bastion_Healer", &fPos, (CGameObject**)&pMonster)))
-	//		return -1;
-	//	pMonster->setActive(true);
-	//}
+	if (g_pGameInstance->getkeyDown(DIK_NUMPAD4))
+	{
+		CMonster_Bastion_Healer* pMonster = nullptr;
+		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Test", L"Proto_GameObject_Monster_Bastion_Healer", &fPos, (CGameObject**)&pMonster)))
+			return -1;
+		pMonster->setActive(true);
+	}
 	//if (g_pGameInstance->getkeyDown(DIK_NUMPAD5))
 	//{
 	//	CMonster_Bastion_2HSword* pMonster = nullptr;

@@ -111,6 +111,7 @@ HRESULT C1H_SwordAttackNormalR2_ReleaseStab::ExitState()
 		return E_FAIL;
 
 	m_isShake2 = false;
+	m_pSilvermane->RimlightCheck(false);
 
 	return S_OK;
 }

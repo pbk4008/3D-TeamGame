@@ -95,7 +95,7 @@ HRESULT CLootingChest::EnterState(void* _pArg)
 
 	m_pSilvermane->Set_IsTrasceCamera(false);
 
-	m_pSilvermane->RimlightCheck(true, _float3(0, 0, 1));
+	m_pSilvermane->RimlightCheck(true, _float3(0, 0, 1),3.f);
 
 	return S_OK;
 }
@@ -109,7 +109,6 @@ HRESULT CLootingChest::ExitState()
 
 	m_pSilvermane->Set_IsTrasceCamera(true);
 
-	m_pSilvermane->RimlightCheck(false);
 	return S_OK;
 }
 

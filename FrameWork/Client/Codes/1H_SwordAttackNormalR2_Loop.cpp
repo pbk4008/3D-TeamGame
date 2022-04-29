@@ -51,7 +51,9 @@ HRESULT C1H_SwordAttackNormalR2_Loop::EnterState()
 
 	// ¶óÀÌÆ®
 	m_pSilvermane->Set_LightCheck(true);
-	m_pSilvermane->Set_LightColor(XMVectorSet(1.f, 0.f, 0.f, 1.f));
+	m_pSilvermane->Set_LightColor(XMVectorSet(0.8f, 0.f, 0.f, 1.f));
+	m_pSilvermane->Set_LightOrigRange(8.f);
+	m_pSilvermane->Set_LightAmbientSpecular(_float4(0.8f, 0.8f, 0.8f, 1.f), _float4(0.5f, 0.5f, 0.5f, 1.f));
 
 	_vector Pos = { 0.f, 0.03f, 0.f ,0.f };
 	m_pSilvermane->Active_Effect((_uint)EFFECT::ATTACK_GROUND, Pos);
@@ -86,8 +88,7 @@ HRESULT C1H_SwordAttackNormalR2_Loop::ExitState()
 	m_fHoldTime = 0.f;
 
 	m_isShake = false;
-	m_pSilvermane->RimlightCheck(false);
-	m_pSilvermane->Get_CurerntWeapon()->RimlightCheck(false);
+
 	return S_OK;
 }
 

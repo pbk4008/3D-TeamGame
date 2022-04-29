@@ -412,9 +412,6 @@
     <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_2HSword\State_2HSword\Groggy">
       <UniqueIdentifier>{903a9638-b5eb-482e-924a-0a015449b4a1}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObject\03.Character\00.Player\00.Silvermane\State\HIt">
-      <UniqueIdentifier>{c0836172-4e03-4723-b9f5-2ce38812b858}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObject\01. MainCamera\CullingCam">
       <UniqueIdentifier>{448dfa35-cb38-4df2-bd37-7952d6ae674d}</UniqueIdentifier>
     </Filter>
@@ -1188,6 +1185,9 @@
     </Filter>
     <Filter Include="02.GameObject\03.Character\00.Player\00.Silvermane\State\Emote">
       <UniqueIdentifier>{4259ea1f-b5b7-4d9f-b769-4bfcc182f1f1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\00.Player\00.Silvermane\State\HIt">
+      <UniqueIdentifier>{c0836172-4e03-4723-b9f5-2ce38812b858}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

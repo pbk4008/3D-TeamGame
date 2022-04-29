@@ -341,9 +341,9 @@ _int CSilvermane::Tick(_double _dDeltaTime)
 	if (g_pGameInstance->getCurrentLevel() != 3)
 		m_isLootShield = true;
 
-
+	//CActor::Set_RimInten(5.f);
+	//CActor::Set_Rimtimer(3.f);
 	CActor::LightOnOff(m_pTransform->Get_State(CTransform::STATE_POSITION), m_lightcolor, 15.f);
-
 
 	return _int();
 }
@@ -413,16 +413,19 @@ HRESULT CSilvermane::Render()
 	RIM rimdesc;
 	ZeroMemory(&rimdesc, sizeof(RIM));
 	rimdesc = ColorChange_RimCheck(rimdesc);
-	
+
 	for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
 	{
 		SCB desc;
 		ZeroMemory(&desc, sizeof(SCB));
 
-		if (i == 0)
+		if (i == 0 || i == 1)
 		{
+			desc.metalic = 0.3f;
+			desc.roughness = 0.3f;
+			desc.ao = 0.8f;
 			desc.color = m_color;
-			desc.empower = 0.5f;
+			desc.empower = 0.7f;
 			CActor::BindConstantBuffer(wstrCamTag, &desc, &rimdesc);
 		}
 		else
@@ -1766,11 +1769,12 @@ RIM CSilvermane::ColorChange_RimCheck(RIM& rimdesc)
 	
 	if (m_rimcheck == true)
 	{
+		CActor::RimIntensity(g_fDeltaTime * -1.f);
 		rimdesc.rimcheck = m_rimcheck;
 		rimdesc.rimcol = m_rimcol;
-		CActor::SetRimIntensity(g_fDeltaTime * -1.f);
 		rimdesc.rimintensity = m_rimintensity; // intensity ³·À» ¼ö·Ï °úÇÏ°Ô ºû³²
 		XMStoreFloat4(&rimdesc.camdir, XMVector3Normalize(m_pTransform->Get_State(CTransform::STATE_POSITION) - g_pGameInstance->Get_CamPosition(L"Camera_Silvermane")));
+		if(FAILED(m_pModel->SetUp_ValueOnShader("g_rimtimer", &m_rimtime, sizeof(_float)))) MSGBOX("Failed to Apply RimTime Value");
 	}
 
 	return rimdesc;

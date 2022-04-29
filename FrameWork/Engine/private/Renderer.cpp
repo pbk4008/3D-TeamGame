@@ -536,7 +536,7 @@ HRESULT CRenderer::ShadowPass()
 
 	if (FAILED(m_pTargetMgr->End_MRTNotClear(m_pDeviceContext))) return E_FAIL;
 
-	if (FAILED(m_pPostProcess->Shadowblur(m_pTargetMgr, m_bRenderbtn[SHADOW], 1.f))) MSGBOX("Failed To Rendering ShadowBlurPass");
+	if (FAILED(m_pPostProcess->Shadowblur(m_pTargetMgr, m_bRenderbtn[SHADOW], 0.5f))) MSGBOX("Failed To Rendering ShadowBlurPass");
 
 	return S_OK;
 }

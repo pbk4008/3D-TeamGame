@@ -247,12 +247,15 @@ HRESULT CMonster_Bastion_Healer::Render()
 	RIM RimDesc;
 	ZeroMemory(&RimDesc, sizeof(RIM));
 
-	RimDesc.rimcol = _float3(0.f, 1.f, 1.f);
-	RimDesc.rimintensity = 5.f;
-	XMStoreFloat4(&RimDesc.camdir, XMVector3Normalize(g_pGameInstance->Get_CamPosition(L"Camera_Silvermane")-m_pTransform->Get_State(CTransform::STATE_POSITION)));
-
 	if (m_pLinkMonster)
+	{
 		RimDesc.rimcheck = true;
+		RimDesc.rimcol = _float3(0.f, 1.f, 1.f);
+		RimDesc.rimintensity = m_rimintensity + 3.f;
+		XMStoreFloat4(&RimDesc.camdir, XMVector3Normalize(g_pGameInstance->Get_CamPosition(L"Camera_Silvermane") - m_pTransform->Get_State(CTransform::STATE_POSITION)));
+		_float time = 1.f;
+		if (FAILED(m_pModel->SetUp_ValueOnShader("g_rimtimer", &time, sizeof(_float)))) MSGBOX("Failed to Apply RimTime Value");
+	}
 	else
 		RimDesc.rimcheck = false;
 
