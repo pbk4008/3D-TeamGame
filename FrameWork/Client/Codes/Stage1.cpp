@@ -137,17 +137,17 @@ HRESULT CStage1::NativeConstruct()
 		return E_FAIL;
 	}
 
-	//if (FAILED(Ready_MapObject()))
-	//{
-	//	MSGBOX("Stage1 MapObject");
-	//	return E_FAIL;
-	//}
-
-	if (FAILED(Ready_TriggerSystem(L"../bin/SaveData/Trigger/MonsterSpawnTrigger.dat")))
+	if (FAILED(Ready_MapObject()))
 	{
-		MSGBOX("Stage1 Trigger");
+		MSGBOX("Stage1 MapObject");
 		return E_FAIL;
 	}
+
+	//if (FAILED(Ready_TriggerSystem(L"../bin/SaveData/Trigger/MonsterSpawnTrigger.dat")))
+	//{
+	//	MSGBOX("Stage1 Trigger");
+	//	return E_FAIL;
+	//}
 
 	if (FAILED(Ready_Data_UI(L"../bin/SaveData/UI/UI.dat")))
 	{
@@ -199,20 +199,20 @@ HRESULT CStage1::NativeConstruct()
 	//	return E_FAIL;
 	//}
 
-	if (FAILED(Ready_Wall()))
-	{
-		MSGBOX("Wall");
-		return E_FAIL;
-	}
+	//if (FAILED(Ready_Wall()))
+	//{
+	//	MSGBOX("Wall");
+	//	return E_FAIL;
+	//}
 
 	//if (FAILED(Ready_Pot()))
 	//	return E_FAIL;
 
-	//if (FAILED(Ready_Cinema()))
-	//{
-	//	MSGBOX("Cinema");
-	//	return E_FAIL;
-	//}
+	if (FAILED(Ready_Cinema()))
+	{
+		MSGBOX("Cinema");
+		return E_FAIL;
+	}
 
 	g_pGameInstance->PlayBGM(L"Stage1_BGM");
 	
@@ -523,19 +523,19 @@ _int CStage1::Tick(_double TimeDelta)
 	if (m_pScenemaManager)
 	{
 		if (g_pGameInstance->getkeyDown(DIK_END))
-			m_pScenemaManager->Active_Scenema((_uint)CINEMA_INDEX::CINEMA1_1);
+			m_pScenemaManager->Active_Scenema((_uint)CINEMA_INDEX::CINEMA3_3);
 
 		m_pScenemaManager->Tick(TimeDelta);
 
-		if (m_pScenemaManager->Get_EventCinema((_uint)CINEMA_INDEX::CINEMA2_4))
-		{
-			CBoss_Bastion_Judicator* pBoss = (CBoss_Bastion_Judicator*)g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Layer_Boss")->front();
-			if (nullptr != pBoss)
-			{
-				pBoss->setActive(true);
-				m_pScenemaManager->ResetCinema();
-			}
-		}
+		//if (m_pScenemaManager->Get_EventCinema((_uint)CINEMA_INDEX::CINEMA2_4))
+		//{
+		//	CBoss_Bastion_Judicator* pBoss = (CBoss_Bastion_Judicator*)g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Layer_Boss")->front();
+		//	if (nullptr != pBoss)
+		//	{
+		//		pBoss->setActive(true);
+		//		m_pScenemaManager->ResetCinema();
+		//	}
+		//}
 	}
 
 	/*for Meteor*/

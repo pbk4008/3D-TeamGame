@@ -7,6 +7,7 @@ BEGIN(Client)
 class CCinemaCam;
 class CCinemaActor;
 class CCinemaWeapon;
+class CWall;
 class CCinema1_1 final : public CScenematic
 {
 private:
@@ -38,6 +39,8 @@ private:
 	CCinemaActor* m_pScree4;
 private:
 	CCinemaWeapon* m_pGrayHwakSpear;
+private:
+	CWall* m_pCinemaPortal;
 };
 END
 #endif

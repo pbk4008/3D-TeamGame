@@ -120,11 +120,31 @@ HRESULT CCinemaActor::Render_Acoter()
 	wstring CameraTag = g_pGameInstance->Get_BaseCameraTag();
 	if (m_iActorTag == (_uint)CINEMA_ACTOR::ACTOR_MIDBOSS)
 	{
-		CActor::BindConstantBuffer(CameraTag);
 		for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
 		{
-			if (FAILED(m_pModel->Render(i, 0)))
-				MSGBOX("Fialed To Rendering MidBoss");
+			SCB desc;
+			ZeroMemory(&desc, sizeof(SCB));
+			switch (i)
+			{
+			case 0: case 3:  // body
+				desc.metalic = 0.3f;
+				desc.roughness = -0.1f;
+				desc.color = _float4(0.811f, 1.f, 0.898f, 1.f);
+				desc.empower = 0.7f;
+				CActor::BindConstantBuffer(CameraTag, &desc);
+				m_pModel->Render(i, 0);
+				break;
+			case 1: // fur
+				desc.color = _float4(1.f, 0.466f, 0.901f, 1.f);
+				desc.empower = 0.01f;
+				CActor::BindConstantBuffer(CameraTag, &desc);
+				m_pModel->Render(i, 1);
+				break;
+			case 2:  // cloak
+				CActor::BindConstantBuffer(CameraTag, &desc);
+				m_pModel->Render(i, 2);
+				break;
+			}
 		}
 	}
 	else if(m_iActorTag == (_uint)CINEMA_ACTOR::ACTOR_GRAYEHAWK)
@@ -214,6 +234,16 @@ void CCinemaActor::Actor_AnimReset()
 {
 	if(m_pController)
 		m_pController->Reset_Animation();
+}
+
+void CCinemaActor::Acotr_AnimFrameSet(_double iFrame)
+{
+	m_pController->Add_TrackAcc(iFrame);
+}
+
+_uint CCinemaActor::Get_AnimFrame()
+{
+	return m_pController->Get_CurKeyFrameIndex();
 }
 
 CHierarchyNode* CCinemaActor::Get_Bone(const string& tBoneName)

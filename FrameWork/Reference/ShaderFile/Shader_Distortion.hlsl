@@ -94,6 +94,22 @@ PS_OUT_DISTORTION PS_MAIN_WALL(PS_IN_DISTORTION In)
 	
 	return Out;
 }
+PS_OUT_DISTORTION PS_MAIN_Cinema_WALL(PS_IN_DISTORTION In)
+{
+	PS_OUT_DISTORTION Out = (PS_OUT_DISTORTION)0;
+
+	Out.diffuse = Noisfunction(g_DiffuseTexture, DefaultSampler, In.vUvDepth.xy, g_deltatime, g_color);
+
+	float4 vColor = float4(0.f, 0.f, 1.f, 1.f);
+	Out.diffuse += vColor;
+
+	if (g_bdissolve == true)
+	{
+		Out.diffuse = Dissolve(g_DiffuseTexture, g_DissolveTex, DefaultSampler, In.vUvDepth.xy, g_dissolvetime);
+	}
+
+	return Out;
+}
 
 technique11 DefaultTechnique
 {
@@ -117,5 +133,16 @@ technique11 DefaultTechnique
 		VertexShader = compile vs_5_0 VS_MAIN_DISTORTION();
 		GeometryShader = NULL;
 		PixelShader = compile ps_5_0 PS_MAIN_WALL();
+	}
+
+	pass Cinema_Wall
+	{
+		SetRasterizerState(CullMode_None);
+		SetDepthStencilState(ZDefault, 0);
+		SetBlendState(BlendDisable, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+
+		VertexShader = compile vs_5_0 VS_MAIN_DISTORTION();
+		GeometryShader = NULL;
+		PixelShader = compile ps_5_0 PS_MAIN_Cinema_WALL();
 	}
 }

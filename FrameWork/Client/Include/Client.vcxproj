@@ -180,6 +180,7 @@ call Update_Client.bat</Command>
     </FxCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\Codes\Circle_Floor.h" />
     <ClInclude Include="..\Default\Client_Enum.h" />
     <ClInclude Include="..\Default\Client_Function.h" />
     <ClInclude Include="..\Default\Client_Include.h" />
@@ -815,6 +816,7 @@ call Update_Client.bat</Command>
     <ClCompile Include="..\Codes\CinemaActor.cpp" />
     <ClCompile Include="..\Codes\CinemaCam.cpp" />
     <ClCompile Include="..\Codes\CinemaWeapon.cpp" />
+    <ClCompile Include="..\Codes\Circle_Floor.cpp" />
     <ClCompile Include="..\Codes\Client_Observer.cpp" />
     <ClCompile Include="..\Codes\Client_Trigger.cpp" />
     <ClCompile Include="..\Codes\Boss_Bastion_Judicator.cpp" />

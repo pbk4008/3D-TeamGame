@@ -1152,7 +1152,7 @@
     </Filter>
     <Filter Include="02.GameObject\04.Effect\02.MeshEffect\01.EffectBossMesh\04.MeshEffect_Boss_EyeRazer">
       <UniqueIdentifier>{48f969c3-12ba-43c2-8b75-b867809c94e1}</UniqueIdentifier>
-	</Filter>
+    </Filter>
     <Filter Include="03.System\07.Scenematic\02.Stage2">
       <UniqueIdentifier>{42bbd93c-9814-47a1-88bf-5d18bcda6f74}</UniqueIdentifier>
     </Filter>
@@ -1200,6 +1200,9 @@
     </Filter>
     <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_Spear\State\00.Idle">
       <UniqueIdentifier>{2398d3e4-0aad-4c0a-b779-2676cae6f42f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\02.Map\01.Environment\03.Circle_Floor">
+      <UniqueIdentifier>{6c43c0c8-7a09-4c56-afaf-c358d946e1e1}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -2534,7 +2537,7 @@
     </ClInclude>
     <ClInclude Include="..\Headers\MeshEffect_EyeRazer.h">
       <Filter>02.GameObject\04.Effect\02.MeshEffect\01.EffectBossMesh\04.MeshEffect_Boss_EyeRazer</Filter>
-	</ClInclude>
+    </ClInclude>
     <ClInclude Include="..\Headers\MeshEffect_Boss_Explosion.h">
       <Filter>02.GameObject\04.Effect\02.MeshEffect\01.EffectBossMesh</Filter>
     </ClInclude>
@@ -2579,6 +2582,9 @@
     </ClInclude>
     <ClInclude Include="..\Headers\Silvermane_Bow.h">
       <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Emote</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Codes\Circle_Floor.h">
+      <Filter>02.GameObject\02.Map\01.Environment\03.Circle_Floor</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -3883,7 +3889,7 @@
     </ClCompile>
     <ClCompile Include="..\Codes\MeshEffect_EyeRazer.cpp">
       <Filter>02.GameObject\04.Effect\02.MeshEffect\01.EffectBossMesh\04.MeshEffect_Boss_EyeRazer</Filter>
-	</ClCompile>
+    </ClCompile>
     <ClCompile Include="..\Codes\MeshEffect_Boss_Explosion.cpp">
       <Filter>02.GameObject\04.Effect\02.MeshEffect\01.EffectBossMesh</Filter>
     </ClCompile>
@@ -3928,6 +3934,9 @@
     </ClCompile>
     <ClCompile Include="..\Codes\Silvermane_Bow.cpp">
       <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Emote</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Circle_Floor.cpp">
+      <Filter>02.GameObject\02.Map\01.Environment\03.Circle_Floor</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

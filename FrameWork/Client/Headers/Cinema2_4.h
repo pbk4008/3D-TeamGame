@@ -6,6 +6,7 @@
 BEGIN(Client)
 class CCinemaCam;
 class CCinemaActor;
+class CCinemaWeapon;
 class CCinema2_4 final : public CScenematic
 {
 private:
@@ -28,6 +29,8 @@ private:
 	CCinemaCam* m_pCam;
 	CCinemaActor* m_pMidBoss;
 	_bool m_bActorAnimOn;
+private:
+	CCinemaWeapon* m_pMidWeapon;
 };
 END
 #endif

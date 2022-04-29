@@ -30,33 +30,37 @@ HRESULT CShieldBreaker::NativeConstruct_Prototype()
 	m_eType = EType::Hammer_2H;
 	m_wstrName = L"ShieldBreaker";
 
-	CTexture* pTexture = CTexture::Create(m_pDevice, m_pDeviceContext);
-	if (FAILED(pTexture->NativeConstruct_Prototype(L"../Bin/Resources/Mesh/ShieldBreaker/T_2H_hammer_Shieldbreaker_D.dds", 1)))
-		return E_FAIL;
-	CMaterial* pMtrl = CMaterial::Create(m_pDevice, m_pDeviceContext, L"2H_hammer_Shieldbreaker", L"../../Reference/ShaderFile/Shader_Weapon.hlsl", CMaterial::EType::Static);
-	if (FAILED(pMtrl->Set_Texture("g_DiffuseTexture", TEXTURETYPE::TEX_DIFFUSE, pTexture, 0)))
-		return E_FAIL;
+	CMaterial* pMtrl = g_pGameInstance->Get_Material(L"MI_2H_hammer_Shieldbreaker");
+	if(!pMtrl)
+	{
+		CTexture* pTexture = CTexture::Create(m_pDevice, m_pDeviceContext);
+		if (FAILED(pTexture->NativeConstruct_Prototype(L"../Bin/Resources/Mesh/ShieldBreaker/T_2H_hammer_Shieldbreaker_D.dds", 1)))
+			return E_FAIL;
 
-	pTexture = CTexture::Create(m_pDevice, m_pDeviceContext);
-	if (FAILED(pTexture->NativeConstruct_Prototype(L"../Bin/Resources/Mesh/ShieldBreaker/T_2H_hammer_Shieldbreaker_N.dds", 1)))
-		return E_FAIL;
-	if (FAILED(pMtrl->Set_Texture("g_BiNormalTexture", TEXTURETYPE::TEX_NORMAL, pTexture, 0)))
-		return E_FAIL;
+		pMtrl = CMaterial::Create(m_pDevice, m_pDeviceContext, L"2H_hammer_Shieldbreaker", L"../../Reference/ShaderFile/Shader_Weapon.hlsl", CMaterial::EType::Static);
+		if (FAILED(pMtrl->Set_Texture("g_DiffuseTexture", TEXTURETYPE::TEX_DIFFUSE, pTexture, 0)))
+			return E_FAIL;
+		pTexture = CTexture::Create(m_pDevice, m_pDeviceContext);
+		if (FAILED(pTexture->NativeConstruct_Prototype(L"../Bin/Resources/Mesh/ShieldBreaker/T_2H_hammer_Shieldbreaker_N.dds", 1)))
+			return E_FAIL;
+		if (FAILED(pMtrl->Set_Texture("g_BiNormalTexture", TEXTURETYPE::TEX_NORMAL, pTexture, 0)))
+			return E_FAIL;
 
-	pTexture = CTexture::Create(m_pDevice, m_pDeviceContext);
-	if (FAILED(pTexture->NativeConstruct_Prototype(L"../Bin/Resources/Mesh/ShieldBreaker/T_2H_hammer_Shieldbreaker_CEO.dds", 1)))
-		return E_FAIL;
-	if (FAILED(pMtrl->Set_Texture("g_CEOTexture", TEXTURETYPE::TEX_CEO, pTexture, 0)))
-		return E_FAIL;
+		pTexture = CTexture::Create(m_pDevice, m_pDeviceContext);
+		if (FAILED(pTexture->NativeConstruct_Prototype(L"../Bin/Resources/Mesh/ShieldBreaker/T_2H_hammer_Shieldbreaker_CEO.dds", 1)))
+			return E_FAIL;
+		if (FAILED(pMtrl->Set_Texture("g_CEOTexture", TEXTURETYPE::TEX_CEO, pTexture, 0)))
+			return E_FAIL;
 
-	pTexture = CTexture::Create(m_pDevice, m_pDeviceContext);
-	if (FAILED(pTexture->NativeConstruct_Prototype(L"../Bin/Resources/Mesh/ShieldBreaker/T_2H_hammer_Shieldbreaker_MRA.dds", 1)))
-		return E_FAIL;
-	if (FAILED(pMtrl->Set_Texture("g_MRATexture", TEXTURETYPE::TEX_MRA, pTexture, 0)))
-		return E_FAIL;
+		pTexture = CTexture::Create(m_pDevice, m_pDeviceContext);
+		if (FAILED(pTexture->NativeConstruct_Prototype(L"../Bin/Resources/Mesh/ShieldBreaker/T_2H_hammer_Shieldbreaker_MRA.dds", 1)))
+			return E_FAIL;
+		if (FAILED(pMtrl->Set_Texture("g_MRATexture", TEXTURETYPE::TEX_MRA, pTexture, 0)))
+			return E_FAIL;
 
-	if (FAILED(g_pGameInstance->Add_Material(L"MI_2H_hammer_Shieldbreaker", pMtrl)))
-		return E_FAIL;
+		if (FAILED(g_pGameInstance->Add_Material(L"MI_2H_hammer_Shieldbreaker", pMtrl)))
+			return E_FAIL;
+	}
 
 	return S_OK;
 }

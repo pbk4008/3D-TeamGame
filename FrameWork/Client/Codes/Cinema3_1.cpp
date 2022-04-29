@@ -2,12 +2,14 @@
 #include "Cinema3_1.h"
 #include "CinemaCam.h"
 #include "CinemaActor.h"
+#include "CinemaWeapon.h"
 #include "ScenematicManager.h"
 
 CCinema3_1::CCinema3_1()
 	: m_pCam(nullptr)
 	, m_pMidBoss(nullptr)
 	, m_pSilvermane(nullptr)
+	, m_pMidWeapon(nullptr)
 {
 }
 
@@ -16,6 +18,7 @@ CCinema3_1::CCinema3_1(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContex
 	, m_pCam(nullptr)
 	, m_pMidBoss(nullptr)
 	, m_pSilvermane(nullptr)
+	, m_pMidWeapon(nullptr)
 {
 }
 
@@ -42,6 +45,10 @@ HRESULT CCinema3_1::NativeContruct(_uint iSceneID)
 	m_pSilvermane->Actor_AnimPlay(0);
 	m_pMidBoss->Actor_AnimPlay(0);
 
+	m_pMidWeapon->Set_FixedBone(m_pMidBoss->Get_Bone("weapon_1"));
+	m_pMidWeapon->Set_OwnerPivotMatrix(m_pMidBoss->Get_Pivot());
+	m_pMidWeapon->set_OwerMatrix(m_pMidBoss->Get_Transform()->Get_WorldMatrix());
+
 	return S_OK;
 }
 
@@ -54,6 +61,7 @@ _int CCinema3_1::Tick(_double dDeltaTime)
 	m_pSilvermane->Tick(dDeltaTime);
 	m_pMidBoss->Tick(dDeltaTime);
 	m_pCam->Tick(dDeltaTime);
+	m_pMidWeapon->Tick(dDeltaTime);
 
 	return _int();
 }
@@ -71,7 +79,7 @@ _int CCinema3_1::LateTick(_double dDeltaTime)
 	}
 	m_pMidBoss->LateTick(dDeltaTime);
 	m_pSilvermane->LateTick(dDeltaTime);
-
+	m_pMidWeapon->LateTick(dDeltaTime);
 	
 	return _int();
 }
@@ -80,10 +88,10 @@ void CCinema3_1::Set_Active(_bool bCheck)
 {
 	CScenematic::Set_Active(bCheck);
 
-
 	m_pMidBoss->Actor_AnimReset();
 	m_pSilvermane->Actor_AnimReset();
 	m_pCam->Reset_Camera();
+	m_pMidBoss->AnimSpeed(1.25);
 	if (m_bActive)
 		m_pCam->Change_CurrentCam();
 }
@@ -118,7 +126,8 @@ HRESULT CCinema3_1::Ready_Components()
 		return E_FAIL;
 	if (FAILED(Ready_Actor(&m_pMidBoss, (_uint)CINEMA_ACTOR::ACTOR_MIDBOSS)))
 		return E_FAIL;
-
+	if (FAILED(Ready_Weapon(&m_pMidWeapon, 2)))
+		return E_FAIL;
 
 	return S_OK;
 }
@@ -140,4 +149,6 @@ void CCinema3_1::Free()
 	Safe_Release(m_pCam);
 	Safe_Release(m_pSilvermane);
 	Safe_Release(m_pMidBoss);
+
+	Safe_Release(m_pMidWeapon);
 }
