@@ -35,42 +35,19 @@ _int CBoss_Attack_S2_Variant::Tick(const _double& TimeDelta)
 	//어택 체크
 	_uint iCurKeyFrameIndex = m_pAnimator->Get_AnimController()->Get_CurKeyFrameIndex();
 	 
-	cout << iCurKeyFrameIndex << endl;
+	//cout << iCurKeyFrameIndex << endl;
 
-	m_pMonster->RimlightCheck(true, _float3(1, 0, 0));
-
-	if (42 <= iCurKeyFrameIndex && 44 >= iCurKeyFrameIndex && false == m_bShakeCheck)
+	if (42 <= iCurKeyFrameIndex && 44 >= iCurKeyFrameIndex && false == m_bEffectCheck)
 	{
-		//쉐이킹 & 이펙트 //이펙트한테서 생성해줘야할듯 
-		CCameraShake::SHAKEEVENT tShakeEvent;
-		tShakeEvent.fDuration = 0.3f;
-		tShakeEvent.fBlendInTime = 0.1f;
-		tShakeEvent.fBlendOutTime = 0.2f;
-		tShakeEvent.tWaveX.fAmplitude = 0.3f;
-		tShakeEvent.tWaveX.fFrequency = 10.f;
-		tShakeEvent.tWaveY.fAmplitude = -0.3f;
-		tShakeEvent.tWaveY.fFrequency = 6.f;
-		tShakeEvent.tWaveZ.fAdditionalOffset = 0.2f;
-		tShakeEvent.tWaveZ.fAdditionalOffset = -1.f;
-		tShakeEvent.fInnerRadius = 10.f;
-		tShakeEvent.fOuterRadius = 20.f;
-		tShakeEvent.fDistanceRate = 10.f;
+		static_cast<CBoss_Solaris*>(m_pMonster)->OnEff_MeshEyeRazer(true);
+		static_cast<CBoss_Solaris*>(m_pMonster)->Set_RazerAngle(false);
+		m_bEffectCheck = true;
+	}
 
-		g_pShakeManager->Shake(tShakeEvent, m_pTransform->Get_State(CTransform::STATE_POSITION));
-
-		m_pMonster->Active_Effect((_uint)EFFECT::HIT_GROUND_SMOKE);
-		m_pMonster->Active_Effect((_uint)EFFECT::HIT_GROUND);
-		m_pMonster->Active_Effect((_uint)EFFECT::EXPLOSION_ROCK_UP);
-
-		m_bShakeCheck = true;
-
-		m_pMonster->Set_IsAttack(true);
-
-		_float fDamage = 6.f;
-		_uint iLevel = 3;
-		m_pMonster->Set_AttackDesc_Damaga(fDamage);
-		m_pMonster->Set_AttackDesc_Level(iLevel);
-		m_pMonster->Set_AttackDesc_Dir(EAttackDir::Forward);
+	if (72 <= iCurKeyFrameIndex && 74 >= iCurKeyFrameIndex && true == m_bEffectCheck)
+	{
+		m_bEffectCheck = false;
+		static_cast<CBoss_Solaris*>(m_pMonster)->OnEff_MeshEyeRazer(false);
 	}
 
 	else
@@ -110,13 +87,14 @@ HRESULT CBoss_Attack_S2_Variant::EnterState()
 
 	cout << "Attack_S2_Variant" << endl;
 
-
 	m_bShakeCheck = false;
 	m_bEffectCheck = false;
 
+	m_pMonster->RimlightCheck(true, _float3(0.1f, 0, 0), 6.f);
+
+	static_cast<CBoss_Solaris*>(m_pMonster)->OnEff_MeshEyeRazer(false);
+
 	static_cast<CBoss_Solaris*>(m_pMonster)->Set_HitMotion(false);
-	//림라이트
-	//m_pMonster->RimlightCheck(true);
 
 	m_pAnimator->Get_AnimController()->Set_PlaySpeed(1.f);
  	m_pAnimator->Change_AnyEntryAnimation((_uint)CBoss_Solaris::M_BossAnimState::ATTACK_S2_VARIANT);
@@ -129,8 +107,9 @@ HRESULT CBoss_Attack_S2_Variant::ExitState()
 	if (FAILED(__super::ExitState()))
 		return E_FAIL;
 
-	m_pMonster->RimlightCheck(false);
+	static_cast<CBoss_Solaris*>(m_pMonster)->OnEff_MeshEyeRazer(false);
 
+	m_bShakeCheck = false;
 	m_bEffectCheck = false;
 
 	return S_OK;

@@ -50,7 +50,8 @@ public:
 	virtual void Set_Remove(_bool bCheck) override;
 	virtual void Set_FootPosition(const _float3& _vPos) override;
 	virtual void setActive(_bool bActive) override;
-
+public:
+	virtual HRESULT Set_SpawnPosition(_fvector vPos);
 private:
 	CAnimator* m_pAnimatorCom = nullptr;
 	CStateController* m_pStateController = nullptr;

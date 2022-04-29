@@ -3,6 +3,10 @@
 #include "Monster_Bastion_Sword.h"
 #include "Monster_Bastion_Shooter.h"
 #include "Monster_Bastion_2HSword.h"
+#include "Monster_Bastion_Healer.h"
+#include "Monster_Bastion_Spear.h"
+#include "Monster_Crawler.h"
+#include "Monster_EarthAberrant.h"
 
 CPotal::CPotal()
 	: m_pRect(nullptr)
@@ -243,6 +247,16 @@ _uint CPotal::Spawn_Monster(_double dDeltaTime)
 					{
 						pMon->setActive(true);
 						static_cast<CMonster_Bastion_2HSword*>(pMon)->Set_SpawnPosition(vPos);
+					}
+					else if (m_iMonTag == (_uint)GAMEOBJECT::MONSTER_ABERRANT)
+					{
+						pMon->setActive(true);
+						static_cast<CMonster_EarthAberrant*>(pMon)->Set_SpawnPosition(vPos);
+					}
+					else if (m_iMonTag == (_uint)GAMEOBJECT::MONSTER_CRYSTAL)
+					{
+						pMon->setActive(true);
+						static_cast<CMonster_Crawler*>(pMon)->Set_SpawnPosition(vPos);
 					}
 					break;
 				}

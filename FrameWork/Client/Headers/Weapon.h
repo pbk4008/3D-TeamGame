@@ -51,9 +51,11 @@ public:
 	const _bool IsTrail() const;
 
 	// rimlight
+	void RimlightCheck(_bool check, _float3 color = _float3(0, 0, 0), _float rimtime = 0.f);
 	_bool GetRimCheck() { return m_rimcheck; }
-	void RimlightCheck(_bool check);
-	void SetRimIntensity(_float time);
+	void RimIntensity(_float time);
+	void Set_Rimtimer(_float fparam) { m_rimtimer = fparam; }
+	void Set_RimInten(_float fparam) { m_rimintensity = fparam; }
 
 public:
 	virtual void RangeAttack();
@@ -95,6 +97,8 @@ protected:
 	_bool			m_rimcheck = false;
 	_float			m_rimintensity = 8.f;
 	_float3			m_rimcol = _float3(0, 0, 0);
+	_float			m_rimtime = 0.f;
+	_float			m_rimtimer = 3.f;
 	_float3			m_vEndPos{};
 
 public:

@@ -48,6 +48,7 @@ _int C1H_SwordAttackNormalR2_ReleaseDoubleSwing::Tick(const _double& _dDeltaTime
 
 	if (iCurkeyFrameIndex <= 50)
 	{
+		m_pSilvermane->RimlightCheck(false);
 		m_fMTAcc += g_fDeltaTime;
 		if (0.05f < m_fMTAcc)
 		{
@@ -117,7 +118,7 @@ HRESULT C1H_SwordAttackNormalR2_ReleaseDoubleSwing::EnterState()
 	m_tShakeEvent2.tWaveY.fAmplitude = 0.004f;
 	m_tShakeEvent2.tWaveY.fFrequency = 1.f;
 	m_tShakeEvent2.tWaveY.fAdditionalOffset = -0.5f;
-
+	
 	return S_OK;
 }
 
@@ -129,7 +130,6 @@ HRESULT C1H_SwordAttackNormalR2_ReleaseDoubleSwing::ExitState()
 	g_pGameInstance->StopSound(CSoundMgr::CHANNELID::Player_Sword_Attack);
 
 	m_pAnimationController->Set_PlaySpeed(1.f);
-
 	m_pSilvermane->Set_IsTrasceCamera(true);
 	m_fRotTime = 0.f;
 

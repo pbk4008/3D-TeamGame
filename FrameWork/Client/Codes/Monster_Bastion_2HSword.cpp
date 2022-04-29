@@ -100,6 +100,10 @@ HRESULT CMonster_Bastion_2HSword::NativeConstruct(const _uint _iSceneID, void* _
 	m_pWeapon->setActive(false);
 	m_pPanel->setActive(false);
 	setActive(false);
+
+	m_rimtime = 1.f;
+	m_rimtimer = 1.f;
+
 	return S_OK;
 }
 
@@ -108,8 +112,6 @@ _int CMonster_Bastion_2HSword::Tick(_double _dDeltaTime)
 	_int iProgress = __super::Tick(_dDeltaTime);
 	if (NO_EVENT != iProgress) 
 		return iProgress;
-
-	Check_NoDamage(_dDeltaTime);
 
 	m_pTransform->Set_Velocity(XMVectorZero());
 
@@ -231,14 +233,27 @@ HRESULT CMonster_Bastion_2HSword::Render()
 	RIM RimDesc;
 	ZeroMemory(&RimDesc, sizeof(RIM));
 
-	RimDesc.rimcol = _float3(0.f, 1.f, 1.f);
-	RimDesc.rimintensity = 5.f;
-	XMStoreFloat4(&RimDesc.camdir, XMVector3Normalize(g_pGameInstance->Get_CamPosition(L"Camera_Silvermane")- m_pTransform->Get_State(CTransform::STATE_POSITION)));
-
 	if (m_isNoDamage)
+	{
 		RimDesc.rimcheck = true;
-	else
+		m_rimcheck = true;
+		_float time = 1.f;
+		if (FAILED(m_pModel->SetUp_ValueOnShader("g_rimtimer", &time, sizeof(_float)))) MSGBOX("Failed to Apply RimTime Value");
+	}
+	else if (m_isNoDamage == false && m_rimcheck == true)
+	{
+		if (FAILED(m_pModel->SetUp_ValueOnShader("g_rimtimer", &m_rimtime, sizeof(_float)))) MSGBOX("Failed to Apply RimTime Value");
+		CActor::RimIntensity(g_fDeltaTime * -0.5f);
+		RimDesc.rimcheck = true;
+	}
+	else if (m_rimcheck == false)
+	{
 		RimDesc.rimcheck = false;
+	}
+
+	RimDesc.rimcol = _float3(0.f, 0.5f, 0.5f);
+	RimDesc.rimintensity = 30.f;
+	XMStoreFloat4(&RimDesc.camdir, XMVector3Normalize(m_pTransform->Get_State(CTransform::STATE_POSITION) - g_pGameInstance->Get_CamPosition(L"Camera_Silvermane")));
 
 	wstring wstrCamTag = g_pGameInstance->Get_BaseCameraTag();
 	for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)

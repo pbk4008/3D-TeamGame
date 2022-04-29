@@ -82,6 +82,8 @@ HRESULT CMonster_Bastion_Shooter::NativeConstruct(const _uint _iSceneID, void* _
 	if (FAILED(Ready_UI()))
 		return E_FAIL;
 
+	m_rimtime = 1.f;
+	m_rimtimer = 1.f;
 
 	m_wstrCurState = L"";
 	m_tAttackDesc.iLevel = 2;
@@ -96,8 +98,6 @@ _int CMonster_Bastion_Shooter::Tick(_double _dDeltaTime)
 	_int iProgress = __super::Tick(_dDeltaTime);
 	if (NO_EVENT != iProgress)
 		return iProgress;
-
-	Check_NoDamage(_dDeltaTime);
 
 	m_pTransform->Set_Velocity(XMVectorZero());
 
@@ -163,14 +163,27 @@ HRESULT CMonster_Bastion_Shooter::Render()
 	RIM RimDesc;
 	ZeroMemory(&RimDesc, sizeof(RIM));
 
-	RimDesc.rimcol = _float3(0.f, 1.f, 1.f);
-	RimDesc.rimintensity = 5.f;
-	XMStoreFloat4(&RimDesc.camdir, XMVector3Normalize(m_pTransform->Get_State(CTransform::STATE_POSITION) - g_pGameInstance->Get_CamPosition(L"Camera_Silvermane")));
-
 	if (m_isNoDamage)
+	{
 		RimDesc.rimcheck = true;
-	else
+		m_rimcheck = true;
+		_float time = 1.f;
+		if (FAILED(m_pModel->SetUp_ValueOnShader("g_rimtimer", &time, sizeof(_float)))) MSGBOX("Failed to Apply RimTime Value");
+	}
+	else if (m_isNoDamage == false && m_rimcheck == true)
+	{
+		if (FAILED(m_pModel->SetUp_ValueOnShader("g_rimtimer", &m_rimtime, sizeof(_float)))) MSGBOX("Failed to Apply RimTime Value");
+		CActor::RimIntensity(g_fDeltaTime * -0.5f);
+		RimDesc.rimcheck = true;
+	}
+	else if (m_rimcheck == false)
+	{
 		RimDesc.rimcheck = false;
+	}
+
+	RimDesc.rimcol = _float3(0.f, 0.5f, 0.5f);
+	RimDesc.rimintensity = 30.f;
+	XMStoreFloat4(&RimDesc.camdir, XMVector3Normalize(m_pTransform->Get_State(CTransform::STATE_POSITION) - g_pGameInstance->Get_CamPosition(L"Camera_Silvermane")));
 
 
 	CActor::BindConstantBuffer(L"Camera_Silvermane", &desc, &RimDesc);
@@ -632,10 +645,11 @@ _int CMonster_Bastion_Shooter::Change_State()
 		}
 		else if (tmpState == L"Excution")
 		{
+			m_pPanel->Set_UIRemove(false);
+
 			if (m_pAnimator->Get_CurrentAnimNode() == (_uint)ANIM_TYPE::EXCUTION
 				&& m_pAnimator->Get_CurrentAnimation()->Is_Finished() && m_lifetime <= 0.f)
 			{
-				m_pPanel->Set_UIRemove(false);
 				m_bdissolve = true;
 			}
 

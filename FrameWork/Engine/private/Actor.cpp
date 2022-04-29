@@ -90,6 +90,8 @@ HRESULT CActor::NativeConstruct(const _uint _iSceneID, void* pArg)
 
 	m_bUIShow = false;
 
+	m_rimtime = m_rimtimer;
+
 	return S_OK;
 }
 
@@ -280,6 +282,7 @@ void CActor::Check_NoDamage(_double dDeltaTime)
 		{
 			m_fAccNoDamageTime = 0.f;
 			m_isNoDamage = false;
+			m_rimcheck = true;
 		}
 	}
 }
@@ -294,21 +297,29 @@ void CActor::Set_FootPosition(const _float3& _vPos)
 {
 }
 
-void CActor::RimlightCheck(_bool check, _float3 color)
+void CActor::RimlightCheck(_bool check, _float3 color, _float rimtime)
 {
 	m_rimcheck = check;
-	if (check == false)
-		m_rimintensity = 30.f;
-
 	m_rimcol = color;
+	m_rimtime = rimtime;
+	m_rimtimer = rimtime;
+
+	if (check == false)
+		m_rimtime = m_rimtimer;
 }
 
-void CActor::SetRimIntensity(_float time)
+void CActor::RimIntensity(_float time)
 {
-	m_rimintensity += time;
+	if (m_rimcheck == true)
+	{
+		m_rimtime += time;
+		if (m_rimtime <= 0.f)
+		{
+			m_rimtime = m_rimtimer;
+			m_rimcheck = false;
+		}
+	}
 
-	if (m_rimintensity <= 5.f)
-		m_rimintensity = 5.f;
 }
 
 HRESULT CActor::DissolveOn(_float dissolveSpeed)

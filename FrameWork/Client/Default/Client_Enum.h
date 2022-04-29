@@ -83,7 +83,8 @@ enum class EFFECT
 	EXPLOSION_ROCK_RIGHT,
 	EXPLOSION_ROCK,
 	HAMMER_DUST,
-	ENERGY
+	ENERGY,
+	RAZER
 };
 
 enum class ELayer

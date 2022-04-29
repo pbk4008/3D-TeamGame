@@ -28,6 +28,9 @@ public:
 public:
 	virtual void Look_Player(void) override;
 
+private:
+	_bool m_bOnEffect = false;
+
 public:
 	static CBoss_Dash_Back* Create(ID3D11Device * pDevice, ID3D11DeviceContext * pDeviceContext, void* pArg = nullptr);
 	virtual void Free() override;

@@ -57,7 +57,7 @@ HRESULT CMonster_EarthAberrant::NativeConstruct(const _uint _iSceneID, void* _pA
 	if (_pArg)
 	{
 		_float3 vPoint = (*(_float3*)_pArg);
-		if (FAILED(Set_SpawnPosition(vPoint)))
+		if (FAILED(CActor::Set_SpawnPosition(vPoint)))
 			return E_FAIL;
 	}
 	else
@@ -96,7 +96,7 @@ HRESULT CMonster_EarthAberrant::NativeConstruct(const _uint _iSceneID, void* _pA
 	m_fMaxHp = 200.f;
 	m_fCurrentHp = m_fMaxHp;
 
-	m_fMaxGroggyGauge = 100.f;
+	m_fMaxGroggyGauge = 20.f;
 	m_fGroggyGauge = 0.f;
 
 	m_pPanel->Set_HpBar(Get_HpRatio());
@@ -108,6 +108,8 @@ HRESULT CMonster_EarthAberrant::NativeConstruct(const _uint _iSceneID, void* _pA
 	m_pWeapon->setActive(false);
 	m_pPanel->setActive(false);
 	setActive(false);
+
+	m_bUIShow = false;
 
 	return S_OK;
 }
@@ -182,6 +184,7 @@ _int CMonster_EarthAberrant::Tick(_double _dDeltaTime)
 				Active_Effect((_uint)EFFECT::DEATH);
 			}
 		}
+
 		else if (L"Execution" == stateTag)
 		{
 			m_pPanel->Set_UIRemove(true);
@@ -783,6 +786,16 @@ void CMonster_EarthAberrant::setActive(_bool bActive)
 		if (m_pPanel)
 			m_pPanel->setActive(true);
 	}
+}
+
+HRESULT CMonster_EarthAberrant::Set_SpawnPosition(_fvector vPos)
+{
+	CActor::Set_SpawnPosition(vPos);
+	_float3 tmpPos;
+	XMStoreFloat3(&tmpPos, vPos);
+	m_pCharacterController->setFootPosition(tmpPos);
+
+	return S_OK;
 }
 
 CMonster_EarthAberrant* CMonster_EarthAberrant::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)

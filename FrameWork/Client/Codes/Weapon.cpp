@@ -278,19 +278,28 @@ const _bool CWeapon::IsTrail() const
 	return m_isTrail;
 }
 
-void CWeapon::RimlightCheck(_bool check)
+void CWeapon::RimlightCheck(_bool check, _float3 color, _float rimtime)
 {
 	m_rimcheck = check;
+	m_rimcol = color;
+	m_rimtime = rimtime;
+	m_rimtimer = rimtime;
+
 	if (check == false)
-		m_rimintensity = 5.f;
+		m_rimtime = m_rimtimer;
 }
 
-void CWeapon::SetRimIntensity(_float time)
+void CWeapon::RimIntensity(_float time)
 {
-	m_rimintensity += time * 1.3f;
-	
-	if (m_rimintensity <= 2.0f)
-		m_rimintensity = 2.0f;
+	if (m_rimcheck == true)
+	{
+		m_rimtime += time;
+		if (m_rimtime <= 0.f)
+		{
+			m_rimtime = m_rimtimer;
+			m_rimcheck = false;
+		}
+	}
 }
 
 void CWeapon::RangeAttack()

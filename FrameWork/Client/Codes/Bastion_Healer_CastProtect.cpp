@@ -66,7 +66,9 @@ HRESULT CBastion_Healer_CastProtect::EnterState()
 	m_pTransform->Face_Target(g_pObserver->Get_PlayerPos());
 
 	m_pAnimator->Change_AnyEntryAnimation((_uint)CMonster_Bastion_Healer::ANIM_TYPE::A_CAST_PROTECT);
-	m_pAnimator->Reset_Animation((_uint)CMonster_Bastion_Healer::ANIM_TYPE::A_CAST_PROTECT);
+
+	if(m_pAnimator->Get_CurrentAnimation())
+		m_pAnimator->Get_CurrentAnimation()->Reset_Animation();
 	
 	return S_OK;
 }

@@ -2,23 +2,14 @@
 
 #include "MeshEffect.h"
 
-BEGIN(Engine)
-class CLight;
-END
-
 BEGIN(Client)
 
-class CMeshEffect_Jupiter : public CMeshEffect
+class CMeshEffect_Boss_Shield : public CMeshEffect
 {
-public:
-	typedef struct tagDesc
-	{
-		_float3 vPos{};
-	}DESC;
 private:
-	explicit CMeshEffect_Jupiter(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext);
-	explicit CMeshEffect_Jupiter(const CMeshEffect_Jupiter& _rhs);
-	virtual ~CMeshEffect_Jupiter() = default;
+	explicit CMeshEffect_Boss_Shield(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext);
+	explicit CMeshEffect_Boss_Shield(const CMeshEffect_Boss_Shield& _rhs);
+	virtual ~CMeshEffect_Boss_Shield() = default;
 
 public:
 	virtual HRESULT NativeConstruct_Prototype() override;
@@ -30,10 +21,11 @@ public:
 private:
 	HRESULT Ready_Components();
 
-private: CLight* m_pLight = nullptr;
+private:
+	_bool m_bBeSmall = false; //한번커지고난뒤에 작아져야할때 
 
 public:
-	static CMeshEffect_Jupiter* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext);
+	static CMeshEffect_Boss_Shield* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext);
 	virtual CGameObject* Clone(const _uint _iSceneID, void* _pArg = nullptr);
 	virtual void Free() override;
 };
