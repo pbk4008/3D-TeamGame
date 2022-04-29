@@ -429,7 +429,8 @@ void CVIBuffer_PointInstance_Energy::Free()
 	Safe_Delete_Array(m_pRandomPos);
 	Safe_Delete_Array(m_pVertices);
 	Safe_Delete_Array(m_pIndices);
-
+	Safe_Delete_Array(m_pFirstPos);
+	
 	Safe_Release(m_pVBInstance);
 
 	for (auto& pEffectDesc : m_EffectDescs)

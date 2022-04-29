@@ -189,14 +189,15 @@ HRESULT CMonster_Bastion_Sword::Render()
 	if (m_isNoDamage)
 	{
 		RimDesc.rimcheck = true;
+		m_rimcheck = true;
 		_float time = 1.f;
 		if (FAILED(m_pModel->SetUp_ValueOnShader("g_rimtimer", &time, sizeof(_float)))) MSGBOX("Failed to Apply RimTime Value");
 	}
 	else if (m_isNoDamage == false && m_rimcheck == true)
 	{
-		RimDesc.rimcheck = true;
-		CActor::RimIntensity(g_fDeltaTime * -1.f);
 		if (FAILED(m_pModel->SetUp_ValueOnShader("g_rimtimer", &m_rimtime, sizeof(_float)))) MSGBOX("Failed to Apply RimTime Value");
+		CActor::RimIntensity(g_fDeltaTime * -0.5f);
+		RimDesc.rimcheck = true;
 	}
 	else if (m_rimcheck == false)
 	{
@@ -667,12 +668,13 @@ _int CMonster_Bastion_Sword::Dead_Check()
 		}
 		else if (m_pStateController->Get_CurStateTag() == L"Excution")
 		{
+			m_bUIShow = false;
+			m_pPanel->Set_Show(false);
+			m_pPanel->Set_UIRemove(false);
+
 			if (m_pAnimator->Get_CurrentAnimNode() == (_uint)ANIM_TYPE::EXCUTION
 				&& m_pAnimator->Get_CurrentAnimation()->Is_Finished())
 			{
-				m_bUIShow = false;
-				m_pPanel->Set_Show(false);
-				m_pPanel->Set_UIRemove(false);
 				m_bdissolve = true;
 
 				if (m_lifetime >= 1.f)

@@ -196,11 +196,12 @@ _int CBoss_Bastion_Judicator::Tick(_double TimeDelta)
 	{
 		if (L"Execution" == m_pStateController->Get_CurStateTag())
 		{
+			m_pPanel->Set_Show(false);
+			m_pPanel->Set_UIRemove(true);
+
 			if (m_pAnimator->Get_CurrentAnimation()->Is_Finished())
 			{
 				m_bDead = true;
-				m_pPanel->Set_Show(false);
-				m_pPanel->Set_UIRemove(true);
 				m_bdissolve = true;
 				return 0;
 			}

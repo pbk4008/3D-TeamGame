@@ -227,8 +227,9 @@ CGameObject* CEffect_Guard::Clone(const _uint _iSceneID, void* pArg)
 
 void CEffect_Guard::Free()
 {
+	__super::Free();
+
 	Safe_Release(m_pBox);
 	Safe_Release(m_pBuffer);
 
-	__super::Free();
 }

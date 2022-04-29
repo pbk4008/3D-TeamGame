@@ -238,9 +238,8 @@ HRESULT CBoss_Attack_R1::EnterState()
 
 	cout << "Attack_R1" << endl;
 
-
 	//림라이트
-	m_pMonster->RimlightCheck(true);
+	m_pMonster->RimlightCheck(true, _float3(0.1f, 0, 0), 6.f);
 
 	m_pAnimator->Get_AnimController()->Set_PlaySpeed(1.f);
 	m_pAnimator->Get_AnimController()->Set_MoveSpeed(1.f);
@@ -254,8 +253,6 @@ HRESULT CBoss_Attack_R1::ExitState()
 {
 	if (FAILED(__super::ExitState()))
 		return E_FAIL;
-
-	m_pMonster->RimlightCheck(false);
 
 	m_bShakeCheckLeft = false;
 	m_bShakeCheckRight = false;
