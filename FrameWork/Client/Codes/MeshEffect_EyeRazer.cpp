@@ -46,6 +46,9 @@ HRESULT CMeshEffect_EyeRazer::NativeConstruct(_uint _iSceneID, void* _pArg)
 	m_vTiling.x = 1.f;
 	m_vTiling.y = 6.f;
 
+	m_isCustomColor = true;
+	m_vColor = { 1.f, 0.5f, 0.3f };
+
 	return S_OK;
 }
 
@@ -54,19 +57,6 @@ _int CMeshEffect_EyeRazer::Tick(_double _dDeltaTime)
 	_int iProcess = __super::Tick(_dDeltaTime);
 	if (NO_EVENT != iProcess)
 		return iProcess;
-
-	///////////////////////////////// Color
-	m_isCustomColor = true;
-	m_vColor = { 1.f, 0.5f, 0.3f };
-
-	//////////////////////////////////////////// Scale
-	//m_vScale.x += (_float)_dDeltaTime * -1.f;
-	//if (0.f >= m_vScale.x)
-	//	m_vScale.x = 0.f;
-	//m_vScale.y += (_float)_dDeltaTime * -1.f;
-	//if (0.f >= m_vScale.y)
-	//	m_vScale.y = 0.f;
-	//m_pTransform->Scaling(_vector{ m_vScale.x, m_vScale.y, m_vScale.z, 0.f });
 
 	if (nullptr != m_pEyeNode)
 	{
@@ -142,7 +132,40 @@ _int CMeshEffect_EyeRazer::LateTick(_double _dDeltaTime)
 		g_pShakeManager->Shake(tShakeEvent, g_pObserver->Get_PlayerPos());
 	}
 
+	
+
 	m_pTransform->Scaling(_vector{ m_vScale.x, m_vScale.y, m_vScale.z, 0.f });
+
+
+	_vector svPos = m_pTransform->Get_State(CTransform::STATE_POSITION);
+	_vector svLook = XMVector3Normalize(m_pTransform->Get_State(CTransform::STATE_LOOK));
+	_vector svRight = XMVector3Normalize(m_pTransform->Get_State(CTransform::STATE_RIGHT));
+	CEffect* pEffect = CEffectManager::GetInstance()->Get_Effect((_uint)EFFECT::RAZER);
+	pEffect->Get_Transform()->Set_State(CTransform::STATE_POSITION,
+		m_pTransform->Get_State(CTransform::STATE_POSITION) + (m_pTransform->Get_Scale(CTransform::STATE_LOOK) * svLook * -0.3f));
+
+	if (false == m_isFlowY && 0.f <= m_fFlowSpeedAlpha)
+	{
+		//이펙트온
+
+		pEffect->Set_Reset(true);
+		pEffect->setActive(true);
+
+		m_isFlowY = true;
+		cout << "초기화" << endl;
+	}
+
+	if (m_isFlowY)
+	{
+		m_fFlowSpeedAlpha += _dDeltaTime;
+	}
+
+	if (0.05f <= m_fFlowSpeedAlpha)
+	{
+		m_isFlowY = false;
+		m_fFlowSpeedAlpha = 0.f;
+		cout << "탔음" << endl;
+	}
 
 	//충돌
 	SWEEPDESC tSweepDesc;

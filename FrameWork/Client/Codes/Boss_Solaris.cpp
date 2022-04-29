@@ -104,7 +104,6 @@ _int CBoss_Solaris::Tick(_double TimeDelta)
 	{
 		m_bFirstAnim = true;
 
-
 		//시작애니메이션 지정
 		m_pAnimator->Change_AnyEntryAnimation(IDLE);
 		m_pStateController->Change_State(L"Idle");
@@ -119,6 +118,9 @@ _int CBoss_Solaris::Tick(_double TimeDelta)
 	{
 		CActor::SetRimIntensity((_float)TimeDelta * -10.f);
 	}
+
+	m_pCharacterController->setFootPosition(_float3(48.f, -5.f, 146.f));
+	_vector Pos = m_pTransform->Get_State(CTransform::STATE_POSITION);
 
 	//cout << m_fCurrentHp << endl;
 
@@ -919,8 +921,7 @@ void CBoss_Solaris::Set_Random_AttackAnim()
 		}
 	}
 
-	m_pStateController->Change_State(L"Attack_S6");
-
+	m_pStateController->Change_State(L"Attack_S5_Protocol");
 }
 
 void CBoss_Solaris::OnEff_MeshExplosion(_bool Active)

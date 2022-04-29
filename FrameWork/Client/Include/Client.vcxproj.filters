@@ -1200,7 +1200,6 @@
     </Filter>
     <Filter Include="02.GameObject\03.Character\00.Player\00.Silvermane\State\Emote">
       <UniqueIdentifier>{4259ea1f-b5b7-4d9f-b769-4bfcc182f1f1}</UniqueIdentifier>
->>>>>>> main
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -2580,7 +2579,6 @@
     </ClInclude>
     <ClInclude Include="..\Headers\Silvermane_Bow.h">
       <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Emote</Filter>
->>>>>>> main
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

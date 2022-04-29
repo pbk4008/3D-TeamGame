@@ -53,6 +53,9 @@ HRESULT CStage3::NativeConstruct()
 	if (FAILED(Ready_Light()))
 		MSGBOX("Failed To Creating Light");
 
+	if (FAILED(Ready_Player(L"Layer_Silvermane")))
+		return E_FAIL;
+
 	if (FAILED(Ready_MapObject()))
 		return E_FAIL;
 
@@ -65,8 +68,6 @@ HRESULT CStage3::NativeConstruct()
 	if (FAILED(Ready_UI(L"Layer_UI")))
 		return E_FAIL;
 
-	if (FAILED(Ready_Player(L"Layer_Silvermane")))
-		return E_FAIL;
 
 	if (FAILED(Ready_Data_Effect()))
 		return E_FAIL;
@@ -234,7 +235,7 @@ HRESULT CStage3::Ready_Player(const _tchar* LayerTag)
 	CSilvermane::SCENEMOVEDATA tDesc = g_pObserver->Get_SceneMoveData();
 
 	//스폰 하고자 하는 위치 지정
-	tDesc.vPos = _float3(48.f, -2.f, 146.f);
+	tDesc.vPos = _float3(47.f, 5.f, 28.f);
 	wstring wstrNaviFile = L"../Data/NavMesh/Stage_3_Nav.dat";
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE3, L"Layer_Plane", L"Proto_GameObject_Plane_Test", &wstrNaviFile)))
 		return E_FAIL;
@@ -248,7 +249,7 @@ HRESULT CStage3::Ready_Player(const _tchar* LayerTag)
 
 HRESULT CStage3::Ready_Boss(const _tchar* LayerTag)
 {
-	_float3 vpos = { 48.f, -2.f, 146.f };
+	_float3 vpos = { 48.f, 3.f, 146.f };
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE3, L"Layer_Boss", L"Proto_GameObject_Solaris"), &vpos))
 		return E_FAIL;
 	return S_OK;
@@ -854,6 +855,27 @@ HRESULT CStage3::Ready_Data_Effect()
 	if (FAILED(g_pGameInstance->Add_Effect((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Energy", pEffect, 2)))
 	{
 		MSGBOX("Falild to Add_Effect_Energy in CStage1::Ready_Effect()");
+		return E_FAIL;
+	}
+
+
+	//EyeRazer 
+	vecHitParticle.clear();
+	g_pGameInstance->LoadFile<CEffect_HitParticle::EF_PAR_HIT_DESC>(vecHitParticle, L"../bin/SaveData/Effect/Effect_Boss_Razer.dat");
+
+	FullName = L"Proto_GameObject_Effect_Explosion";
+	vecHitParticle[0].ParticleColor = { 1.f , 0.4f, 0.3f ,1.f };
+	vecHitParticle[0].Power = 2.5f;
+
+	//마지막에 받을 Effect변수 넣기
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Razer", FullName, &vecHitParticle[0], (CGameObject**)&pEffect)))
+	{
+		MSGBOX("Failed to Creating Effect_Razer in CStage1::Ready_Effect()");
+		return E_FAIL;
+	}
+	if (FAILED(g_pGameInstance->Add_Effect((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Razer", pEffect, 30)))
+	{
+		MSGBOX("Falild to Add Effect_Razer in CStage1::Ready_Effect()");
 		return E_FAIL;
 	}
 

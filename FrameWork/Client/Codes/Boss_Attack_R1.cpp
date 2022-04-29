@@ -145,7 +145,8 @@ _int CBoss_Attack_R1::Tick(const _double& TimeDelta)
 			m_pMonster->Active_Effect_Target((_uint)EFFECT::EXPLOSION_ROCK_LEFT, matPos);
 
 			matPos.r[3] = XMVectorSetY(matPos.r[3], XMVectorGetY(matPos.r[3]) - 2.5f) + svLook * 1.5f + svRight * -1.5f;
-			m_pMonster->Active_Effect_Target((_uint)EFFECT::DASH, XMMatrixRotationY(XMConvertToRadians(-10.f)) * matPos);
+			//m_pMonster->Active_Effect_Target((_uint)EFFECT::DASH, XMMatrixRotationY(XMConvertToRadians(-10.f)) * matPos);
+			m_pMonster->Active_Effect_Target((_uint)EFFECT::HIT_GROUND_SMOKE, matPos);
 
 
 			m_bShakeCheckLeft = true;
@@ -177,7 +178,8 @@ _int CBoss_Attack_R1::Tick(const _double& TimeDelta)
 			m_pMonster->Active_Effect_Target((_uint)EFFECT::EXPLOSION_ROCK_RIGHT, matPos);
 
 			matPos.r[3] = XMVectorSetY(matPos.r[3], XMVectorGetY(matPos.r[3]) - 2.5f) + svLook * 1.5f + svRight * -1.5f;
-			m_pMonster->Active_Effect_Target((_uint)EFFECT::DASH, XMMatrixRotationY(XMConvertToRadians(190.f)) * matPos);
+			//m_pMonster->Active_Effect_Target((_uint)EFFECT::DASH, XMMatrixRotationY(XMConvertToRadians(190.f)) * matPos);
+			m_pMonster->Active_Effect_Target((_uint)EFFECT::HIT_GROUND_SMOKE,  matPos);
 
 			m_pMonster->Set_AttackDesc_Dir(EAttackDir::Right);
 

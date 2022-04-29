@@ -48,7 +48,7 @@ public:
 	void Set_Exp(_float fExp);
 	//HUD에게 레벨업 소식을 전달
 	_bool IsLevelUp(void) { return m_bLevelUp; }
-	CSilvermane* Get_Player() { return m_pPlayer; }
+
 public:
 	//플레이어 공격 셋팅
 	void Set_IsAttack(const _bool bAttack);

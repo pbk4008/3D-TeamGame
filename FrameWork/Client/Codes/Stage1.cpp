@@ -1255,7 +1255,7 @@ HRESULT CStage1::Ready_Data_Effect()
 		return E_FAIL;
 	}
 
-	//Death smoke
+	//Death smoke image
 	ZeroMemory(&tDesc, sizeof(tDesc));
 	_tcscpy_s(tDesc.TextureTag, L"Smoke_4x4_1");
 	tDesc.iRenderPassNum = 1;
@@ -1280,7 +1280,7 @@ HRESULT CStage1::Ready_Data_Effect()
 	}
 
 
-	//Explosion Rock 
+	//Explosion Rock mesh
 	CExplosion_Rock* pObj = nullptr;
 	CExplosion_Rock::ROCKINFO DescRock;
 	FullName = L"Proto_GameObject_Explosion_Rock";
@@ -1297,7 +1297,7 @@ HRESULT CStage1::Ready_Data_Effect()
 		return E_FAIL;
 	}
 
-	//explosion rock left
+	//explosion rock left mesh
 	_tcscpy_s(DescRock.ModelTag, L"Model_Explosion_Rock_Left_Anim");
 
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_Explosion_Rock_Left", FullName, &DescRock, (CGameObject**)&pObj)))
@@ -1311,7 +1311,7 @@ HRESULT CStage1::Ready_Data_Effect()
 		return E_FAIL;
 	}
 
-	//explosion rock right
+	//explosion rock right mesh
 	_tcscpy_s(DescRock.ModelTag, L"Model_Explosion_Rock_Right_Anim");
 
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_Explosion_Rock_Right", FullName, &DescRock, (CGameObject**)&pObj)))
@@ -1325,7 +1325,7 @@ HRESULT CStage1::Ready_Data_Effect()
 		return E_FAIL;
 	}
 
-	//explosion rock
+	//explosion rock mesh
 	_tcscpy_s(DescRock.ModelTag, L"Model_Explosion_Rock_Anim");
 
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_Explosion_Rock", FullName, &DescRock, (CGameObject**)&pObj)))
@@ -1339,30 +1339,28 @@ HRESULT CStage1::Ready_Data_Effect()
 		return E_FAIL;
 	}
 
-	//Hammer_Dust
+	//Hammer_Dust image
 	CEffect_Hammer_Dust* pHammer = nullptr;
 	CEffect_Hammer_Dust::EFFECTDESC Desc;
 	ZeroMemory(&Desc, sizeof(Desc));
-
 	_tcscpy_s(Desc.TextureTag, L"Hammer_Dust_2");
 	Desc.iRenderPassNum = 1;
 	Desc.iImageCountX = 8;
 	Desc.iImageCountY = 4;
 	Desc.fFrame = 32.f;
 	Desc.fEffectPlaySpeed = 1.f;
-
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Hammer_Dust", L"Proto_GameObject_Effect_Hammer_Dust", &Desc, (CGameObject**)&pHammer)))
 	{
 		MSGBOX("Failed to Creating Effect_Hammer_Dust in CStage1::Ready_Effect()");
 		return E_FAIL;
 	}
-
 	if (FAILED(g_pGameInstance->Add_Effect((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Hammer_Dust", pHammer, 7)))
 	{
 		MSGBOX("Falild to Add_Effect_Explosion ROck in CStage1::Ready_Effect()");
 		return E_FAIL;
 	}
 
+	//Energy 
 	vector<CEffect_Energy::EF_PAR_ENERGY_DESC> vecEnergyParticle;
 	g_pGameInstance->LoadFile<CEffect_Energy::EF_PAR_ENERGY_DESC>(vecEnergyParticle, L"../bin/SaveData/Effect/Effect_Energy.dat");
 
@@ -1379,6 +1377,27 @@ HRESULT CStage1::Ready_Data_Effect()
 	if (FAILED(g_pGameInstance->Add_Effect((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Energy", pEffect, 2)))
 	{
 		MSGBOX("Falild to Add_Effect_Energy in CStage1::Ready_Effect()");
+		return E_FAIL;
+	}
+
+
+	//EyeRazer 
+	vecHitParticle.clear();
+	g_pGameInstance->LoadFile<CEffect_HitParticle::EF_PAR_HIT_DESC>(vecHitParticle, L"../bin/SaveData/Effect/Effect_Boss_Razer.dat");
+
+	FullName = L"Proto_GameObject_Effect_Explosion";
+	vecHitParticle[0].ParticleColor = { 1.f , 0.6f, 0.3f ,1.f };
+	vecHitParticle[0].Power = 2.5f;
+
+	//마지막에 받을 Effect변수 넣기
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Razer", FullName, &vecHitParticle[0], (CGameObject**)&pEffect)))
+	{
+		MSGBOX("Failed to Creating Effect_Razer in CStage1::Ready_Effect()");
+		return E_FAIL;
+	}
+	if (FAILED(g_pGameInstance->Add_Effect((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Razer", pEffect, 30)))
+	{
+		MSGBOX("Falild to Add Effect_Razer in CStage1::Ready_Effect()");
 		return E_FAIL;
 	}
 
