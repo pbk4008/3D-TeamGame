@@ -1,19 +1,19 @@
 #include "pch.h"
-#include "MeshEffect_Boss_Explosion.h"
+#include "MeshEffect_Boss_Shield.h"
 
 #include "Material.h"
 
-CMeshEffect_Boss_Explosion::CMeshEffect_Boss_Explosion(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
+CMeshEffect_Boss_Shield::CMeshEffect_Boss_Shield(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
 	: CMeshEffect(_pDevice, _pDeviceContext)
 {
 }
-//나중에 정리해서 이펙트로써야됨 
-CMeshEffect_Boss_Explosion::CMeshEffect_Boss_Explosion(const CMeshEffect_Boss_Explosion& _rhs)
+
+CMeshEffect_Boss_Shield::CMeshEffect_Boss_Shield(const CMeshEffect_Boss_Shield& _rhs)
 	: CMeshEffect(_rhs)
 {
 }
 
-HRESULT CMeshEffect_Boss_Explosion::NativeConstruct_Prototype()
+HRESULT CMeshEffect_Boss_Shield::NativeConstruct_Prototype()
 {
 	if (FAILED(__super::NativeConstruct_Prototype()))
 		return E_FAIL;
@@ -23,7 +23,7 @@ HRESULT CMeshEffect_Boss_Explosion::NativeConstruct_Prototype()
 	return S_OK;
 }
 
-HRESULT CMeshEffect_Boss_Explosion::NativeConstruct(_uint _iSceneID, void* _pArg)
+HRESULT CMeshEffect_Boss_Shield::NativeConstruct(_uint _iSceneID, void* _pArg)
 {
 	if (FAILED(__super::NativeConstruct(_iSceneID, _pArg)))
 		return E_FAIL;
@@ -31,10 +31,10 @@ HRESULT CMeshEffect_Boss_Explosion::NativeConstruct(_uint _iSceneID, void* _pArg
 	if (FAILED(Ready_Components()))
 		return E_FAIL;
 
-	m_fAlpha = 1.f;
+	m_fAlpha = 2.f;
 	m_fFlowSpeedAlpha = 1.f;
 
-	m_vScale = { 5.f, 5.f, 5.f };
+	m_vScale = { 42.f, 42.f, 42.f };
 	m_pTransform->Scaling(_vector{ m_vScale.x, m_vScale.y, m_vScale.z, 0.f });
 
 	//////////////////////////////////////////// Rotation
@@ -47,7 +47,7 @@ HRESULT CMeshEffect_Boss_Explosion::NativeConstruct(_uint _iSceneID, void* _pArg
 	return S_OK;
 }
 
-_int CMeshEffect_Boss_Explosion::Tick(_double _dDeltaTime)
+_int CMeshEffect_Boss_Shield::Tick(_double _dDeltaTime)
 {
 	_int iProcess = __super::Tick(_dDeltaTime);
 	if (NO_EVENT != iProcess)
@@ -56,17 +56,14 @@ _int CMeshEffect_Boss_Explosion::Tick(_double _dDeltaTime)
 	m_fAccTime += (_float)_dDeltaTime;
 
 
-	m_fAlpha = 1.f;
-
-
 	m_isReverse = false;
-	m_vTiling.x = 2.f;
-	m_vTiling.y = 2.f;
+	m_vTiling.x = 15.f;
+	m_vTiling.y = 15.f;
 	
-	m_isCustomColor = true;
-	m_vColor = { 1.f, 0.3f, 0.1f };
-
-	if (false == m_bBeSmall)
+	m_isCustomColor = true;	
+	m_vColor = { 0.1f, 0.3f, 1.f };
+	
+	/*if (false == m_bBeSmall)
 	{
 		m_vScale.x += 250.f * (_float)_dDeltaTime;
 		m_vScale.y += 250.f * (_float)_dDeltaTime;
@@ -87,16 +84,8 @@ _int CMeshEffect_Boss_Explosion::Tick(_double _dDeltaTime)
 		m_vScale.x -= 250.f * (_float)_dDeltaTime;
 		m_vScale.y -= 250.f * (_float)_dDeltaTime;
 		m_vScale.z -= 250.f * (_float)_dDeltaTime;
-	}
+	}*/
 
-	if (5.f >= m_vScale.x)
-	{
-		m_bBeSmall = false;
-		setActive(false);
-	}
-
-	m_pTransform->Scaling(_vector{ m_vScale.x, m_vScale.y, m_vScale.z, 0.f });
-	
 	CTransform* pBossTransform = g_pGameInstance->getObjectList(m_iSceneID, L"Layer_Boss")->front()->Get_Transform();
 
 	_vector svPos = pBossTransform->Get_State(CTransform::STATE_POSITION);
@@ -106,15 +95,14 @@ _int CMeshEffect_Boss_Explosion::Tick(_double _dDeltaTime)
 	if (pBossTransform)
 	{
 		_vector BossPos = pBossTransform->Get_State(CTransform::STATE_POSITION);
-		_vector NewPos = { XMVectorGetX(BossPos), XMVectorGetY(BossPos) + 3.f, XMVectorGetZ(BossPos), 1.f };
-		m_pTransform->Set_State(CTransform::STATE_POSITION, NewPos + svRight * -0.4f);
+		_vector NewPos = { XMVectorGetX(BossPos), XMVectorGetY(BossPos) + 2.f, XMVectorGetZ(BossPos), 1.f };
+		m_pTransform->Set_State(CTransform::STATE_POSITION, NewPos + svLook * 0.f);
 	}
-
 
 	return _int();
 }
 
-_int CMeshEffect_Boss_Explosion::LateTick(_double _dDeltaTime)
+_int CMeshEffect_Boss_Shield::LateTick(_double _dDeltaTime)
 {
 	_int iProcess = __super::LateTick(_dDeltaTime);
 	if (NO_EVENT != iProcess)
@@ -130,7 +118,7 @@ _int CMeshEffect_Boss_Explosion::LateTick(_double _dDeltaTime)
 	return _int();
 }
 
-HRESULT CMeshEffect_Boss_Explosion::Render()
+HRESULT CMeshEffect_Boss_Shield::Render()
 {
 	if (FAILED(__super::Render()))
 		return E_FAIL;
@@ -147,16 +135,16 @@ HRESULT CMeshEffect_Boss_Explosion::Render()
 	return S_OK;
 }
 
-HRESULT CMeshEffect_Boss_Explosion::Ready_Components()
+HRESULT CMeshEffect_Boss_Shield::Ready_Components()
 {
 	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_Texture", L"MaskTexture", (CComponent**)&m_pMaskTexture)))
 		return E_FAIL;
 
-	m_pMaskTexture->Change_Texture(L"Hexgrid");
+	m_pMaskTexture->Change_Texture(L"T_ShieldPattern2");
 	if (FAILED(m_pMaterial->Set_Texture("g_MaskTexture", TEXTURETYPE::TEX_MASK, m_pMaskTexture, 0)))
 		return E_FAIL;
 
-	if (FAILED(m_pTexture->Change_Texture(L"Hexgrid")))
+	if (FAILED(m_pTexture->Change_Texture(L"T_ShieldPattern2")))
 		return E_FAIL;
 	if (FAILED(m_pMaterial->Set_Texture("g_DiffuseTexture", TEXTURETYPE::TEX_DIFFUSE, m_pTexture, 0)))
 		return E_FAIL;
@@ -170,29 +158,29 @@ HRESULT CMeshEffect_Boss_Explosion::Ready_Components()
 	return S_OK;
 }
 
-CMeshEffect_Boss_Explosion* CMeshEffect_Boss_Explosion::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
+CMeshEffect_Boss_Shield* CMeshEffect_Boss_Shield::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
 {
-	CMeshEffect_Boss_Explosion* pInstance = new CMeshEffect_Boss_Explosion(_pDevice, _pDeviceContext);
+	CMeshEffect_Boss_Shield* pInstance = new CMeshEffect_Boss_Shield(_pDevice, _pDeviceContext);
 	if (FAILED(pInstance->NativeConstruct_Prototype()))
 	{
-		MSGBOX("Failed to Creating CMeshEffect_Boss_Explosion");
+		MSGBOX("Failed to Creating CMeshEffect_Boss_Shield");
 		Safe_Release(pInstance);
 	}
 	return pInstance;
 }
 
-CGameObject* CMeshEffect_Boss_Explosion::Clone(const _uint _iSceneID, void* _pArg)
+CGameObject* CMeshEffect_Boss_Shield::Clone(const _uint _iSceneID, void* _pArg)
 {
-	CMeshEffect_Boss_Explosion* pInstance = new CMeshEffect_Boss_Explosion(*this);
+	CMeshEffect_Boss_Shield* pInstance = new CMeshEffect_Boss_Shield(*this);
 	if (FAILED(pInstance->NativeConstruct(_iSceneID, _pArg)))
 	{
-		MSGBOX("Failed to Creating Clone CMeshEffect_Boss_Explosion");
+		MSGBOX("Failed to Creating Clone CMeshEffect_Boss_Shield");
 		Safe_Release(pInstance);
 	}
 	return pInstance;
 }
 
-void CMeshEffect_Boss_Explosion::Free()
+void CMeshEffect_Boss_Shield::Free()
 {
 	__super::Free();
 	Safe_Release(m_pMaskTexture);

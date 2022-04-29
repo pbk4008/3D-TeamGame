@@ -104,7 +104,6 @@ _int CBoss_Attack_S5_Protocol::Tick(const _double& TimeDelta)
 
 
 	//어택 체크
-	
 	_vector svPos = m_pTransform->Get_State(CTransform::STATE_POSITION);
 	_vector svLook = XMVector3Normalize(m_pTransform->Get_State(CTransform::STATE_LOOK));
 	_vector svRight = XMVector3Normalize(m_pTransform->Get_State(CTransform::STATE_RIGHT));
@@ -160,8 +159,9 @@ _int CBoss_Attack_S5_Protocol::Tick(const _double& TimeDelta)
 				g_pShakeManager->Shake(tShakeEvent, m_pTransform->Get_State(CTransform::STATE_POSITION));
 
 				m_pMonster->Active_Effect((_uint)EFFECT::HIT_GROUND, svLook * 5.5f + svRight * 2.1f);
-				m_pMonster->Active_Effect((_uint)EFFECT::HIT_GROUND_SMOKE, XMVectorSet(0.f, -0.1f, 0.f, 0.f));
+				m_pMonster->Active_Effect((_uint)EFFECT::HIT_GROUND_SMOKE, XMVectorSet(0.f, 0.f, 0.f, 0.f));
 				m_pMonster->Active_Effect((_uint)EFFECT::EXPLOSION_ROCK_UP, svLook * 5.5f + svRight * 2.1f);
+				m_pMonster->Active_Effect((_uint)EFFECT::ATTACK_GROUND, XMVectorSet(0.f, 0.f, 0.f, 0.f));
 
 				m_bShakeCheck = true;
 			}
@@ -194,7 +194,7 @@ _int CBoss_Attack_S5_Protocol::Tick(const _double& TimeDelta)
 			g_pShakeManager->Shake(tShakeEvent, m_pTransform->Get_State(CTransform::STATE_POSITION));
 
 			//m_pMonster->Active_Effect((_uint)EFFECT::HIT_GROUND, svLook * 5.5f + svRight * 2.1f);
-			m_pMonster->Active_Effect((_uint)EFFECT::HIT_GROUND_SMOKE, XMVectorSet(0.f, -0.1f, 0.f, 0.f));
+			m_pMonster->Active_Effect((_uint)EFFECT::HIT_GROUND_SMOKE, XMVectorSet(0.f, 0.f, 0.f, 0.f));
 			m_pMonster->Active_Effect((_uint)EFFECT::EXPLOSION_ROCK_UP, svLook * 5.5f + svRight * 2.1f);
 
 			m_bEffectCheck = true;

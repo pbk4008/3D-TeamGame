@@ -35,6 +35,19 @@ _int CBoss_Dash_Back::Tick(const _double& TimeDelta)
 		static_cast<CBoss_Solaris*>(m_pMonster)->Set_Random_AttackAnim();
 	}
 
+	//어택 체크
+	_uint iCurKeyFrameIndex = m_pAnimator->Get_AnimController()->Get_CurKeyFrameIndex();
+
+	cout << iCurKeyFrameIndex << endl;
+
+	if (25 <= iCurKeyFrameIndex && 27 >= iCurKeyFrameIndex && false == m_bOnEffect)
+	{
+		_matrix matPos = m_pTransform->Get_WorldMatrix();
+		matPos.r[3] = XMVectorSetY(matPos.r[3], XMVectorGetY(matPos.r[3]) - 1.0f);
+		m_pMonster->Active_Effect_Target((_uint)EFFECT::HIT_GROUND_SMOKE, matPos);
+		m_bOnEffect = true;
+	}
+
 	return _int();
 }
 
@@ -62,8 +75,10 @@ HRESULT CBoss_Dash_Back::EnterState()
 
 	cout << "Dash_Back" << endl;
 
+	m_bOnEffect = false;
 	m_pAnimator->Get_AnimController()->Set_MoveSpeed(35.0f);
 	m_pAnimator->Get_AnimController()->Set_PlaySpeed(1.5f);
+
 	static_cast<CBoss_Solaris*>(m_pMonster)->Set_HitMotion(true);
 
 	//g_pGameInstance->StopSound(CSoundMgr::CHANNELID::MidBoss);
@@ -77,6 +92,8 @@ HRESULT CBoss_Dash_Back::ExitState()
 {
 	if (FAILED(__super::ExitState()))
 		return E_FAIL;
+
+	m_bOnEffect = false;
 
 	//_vector vec = { 0.f, 1.f, 0.f,0.f };
 	//m_pTransform->SetUp_Rotation(vec, (XMConvertToRadians(0.f)));

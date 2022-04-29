@@ -24,6 +24,11 @@
 #include "Boss_Attack_S5_Protocol.h"
 #include "Boss_Attack_S6.h"
 
+#include "MeshEffect_Boss_Explosion.h"
+#include "MeshEffect_Razer.h"
+#include "MeshEffect_Boss_Shield.h"
+#include "MeshEffect_EyeRazer.h"
+
 CBoss_Solaris::CBoss_Solaris(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
 	:CActor(pDevice, pDeviceContext)
 {
@@ -72,31 +77,44 @@ HRESULT CBoss_Solaris::NativeConstruct(const _uint _iSceneID, void* pArg)
 
 	if (FAILED(Set_Weapon()))
 		return E_FAIL;
+
+	if (FAILED(Set_Boss_Effect()))
+		return E_FAIL;
 	
 	m_iObectTag = (_uint)GAMEOBJECT::BOSS;
 	m_fMaxHp = 500.f;
 	m_fCurrentHp = m_fMaxHp;
 
-	m_fMaxGroggyGauge = 10.f;
+	m_fMaxGroggyGauge = 50.f;
 	m_fGroggyGauge = m_fMaxGroggyGauge;
 
 	m_tAttackDesc.iLevel = 3;
 
-	m_pTransform->Set_State(CTransform::STATE_POSITION, XMVectorSet(0.f, 1.f, 20.f, 1.f));
 
 	m_pWeapon->setActive(true);
 	setActive(true);
 
-	//원래는 active false였다가 시네마틱끝나고 true로 바꿔줘야함 
+
 	return S_OK;
 }
 
 _int CBoss_Solaris::Tick(_double TimeDelta)
 {
+	if (false == m_bFirstAnim)
+	{
+		m_bFirstAnim = true;
+
+		//시작애니메이션 지정
+		m_pAnimator->Change_AnyEntryAnimation(IDLE);
+		m_pStateController->Change_State(L"Idle");
+	}
 	if (0 > __super::Tick(TimeDelta))
 	{
 		return -1;
 	}
+
+	m_pCharacterController->setFootPosition(_float3(48.f, -5.f, 146.f));
+	_vector Pos = m_pTransform->Get_State(CTransform::STATE_POSITION);
 
 	//cout << m_fCurrentHp << endl;
 
@@ -172,7 +190,6 @@ _int CBoss_Solaris::Tick(_double TimeDelta)
 
 	//cout << fDistToPlayer << endl;
 
-	CActor::RimIntensity(g_fDeltaTime * -1.f);
 	return 0;
 }
 
@@ -212,6 +229,8 @@ HRESULT CBoss_Solaris::Render()
 
 	if (m_rimcheck == true)
 	{
+		CActor::RimIntensity(g_fDeltaTime * -1.f);
+
 		rimdesc.rimcheck = m_rimcheck;
 		rimdesc.rimcol = m_rimcol;
 		rimdesc.rimintensity = m_rimintensity; // intensity 낮을 수록 과하게 빛남
@@ -590,9 +609,6 @@ HRESULT CBoss_Solaris::Set_Animation_FSM()
 	m_pAnimator->Insert_AnyEntryAnimation(TURN_45RIGHT);
 
 
-	//시작애니메이션 지정
-	m_pAnimator->Change_AnyEntryAnimation(IDLE);
-
 	return S_OK;
 }
 
@@ -649,7 +665,7 @@ HRESULT CBoss_Solaris::Set_State_FSM()
 		static_cast<CMonster_FSM*>(pair.second)->Set_Animator(m_pAnimator);
 	}
 
-	m_pStateController->Change_State(L"Idle");
+
 
 	return S_OK;
 }
@@ -669,6 +685,51 @@ HRESULT CBoss_Solaris::Set_Weapon()
 	m_pWeapon->Set_FixedBone(pBone);
 	m_pWeapon->Set_OwnerPivotMatrix(m_pModel->Get_PivotMatrix());
 
+	return S_OK;
+}
+
+HRESULT CBoss_Solaris::Set_Boss_Effect()
+{
+	//boss Explosion
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer(m_iSceneID, L"Layer_MeshEffect_Boss_Explosion", L"Proto_GameObject_MeshEffect_Boss_Explosion",
+		nullptr, (CGameObject**)&m_pEff_Explosion)))
+	{
+		MSGBOX("Failed to Creating MeshEffect_Boss_Explosion in CStage1::Ready_Effect()");
+		return E_FAIL;
+	}
+	m_pEff_Explosion->setActive(false);
+
+	
+	//boss Razer
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer(m_iSceneID, L"Layer_MeshEffect_Razer", L"Proto_GameObject_MeshEffect_Razer",
+		nullptr, (CGameObject**)&m_pEff_Razer)))
+	{
+		MSGBOX("Failed to Creating MeshEffect_Razer in CStage1::Ready_Effect()");
+		return E_FAIL;
+	}
+	m_pEff_Razer->setActive(false);
+
+	//boss Shield
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer(m_iSceneID, L"Layer_MeshEffect_Shield", L"Proto_GameObject_MeshEffect_Boss_Shield",
+		nullptr, (CGameObject**)&m_pEff_Shield)))
+	{
+		MSGBOX("Failed to Creating MeshEffect_Shield in CStage1::Ready_Effect()");
+		return E_FAIL;
+	}
+	m_pEff_Shield->setActive(false);
+
+	//boss EyeRazer
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer(m_iSceneID, L"Layer_MeshEffect_EyeRazer", L"Proto_GameObject_MeshEffect_EyeRazer",
+		nullptr, (CGameObject**)&m_pEff_EyeRazer)))
+	{
+		MSGBOX("Failed to Creating MeshEffect_EyeRazer in CStage1::Ready_Effect()");
+		return E_FAIL;
+	}
+	m_pEff_EyeRazer->setActive(false);
+
+	CHierarchyNode* pBoneNode = m_pModel->Get_BoneMatrix("eyeball");
+	m_pEff_EyeRazer->Set_EyeNode(pBoneNode);
+	
 	return S_OK;
 }
 
@@ -715,7 +776,8 @@ void CBoss_Solaris::Hit(const ATTACKDESC& _tAttackDesc)
 		}
 	}
 
-	if (3 <= m_iHitCount && ATTACK_S6 != m_pAnimator->Get_CurrentAnimNode())
+	if (3 <= m_iHitCount && ATTACK_S6 != m_pAnimator->Get_CurrentAnimNode() && STUN_END != m_pAnimator->Get_CurrentAnimNode()
+		&& STUN_START != m_pAnimator->Get_CurrentAnimNode() && STUN_LOOP != m_pAnimator->Get_CurrentAnimNode())
 	{
 		uniform_int_distribution<_uint> iRange(0, 1);
 		_uint iRandom = iRange(g_random);
@@ -856,9 +918,35 @@ void CBoss_Solaris::Set_Random_AttackAnim()
 		}
 	}
 
-	m_pStateController->Change_State(L"Attack_R2");
+	m_pStateController->Change_State(L"Attack_S5_Protocol");
 }
 
+void CBoss_Solaris::OnEff_MeshExplosion(_bool Active)
+{
+	m_pEff_Explosion->setActive(Active);
+}
+
+void CBoss_Solaris::OnEff_MeshRazer(_bool Active)
+{
+	m_pEff_Razer->setActive(Active);
+	CTransform* pTrans = m_pEff_Razer->Get_Transform();
+	pTrans->Set_State(CTransform::STATE_POSITION, g_pObserver->Get_PlayerPos());
+}
+
+void CBoss_Solaris::OnEff_MeshShield(_bool Active)
+{
+	m_pEff_Shield->setActive(Active);
+}
+
+void CBoss_Solaris::OnEff_MeshEyeRazer(_bool Active)
+{
+	m_pEff_EyeRazer->setActive(Active);
+}
+
+void CBoss_Solaris::Set_RazerAngle(_bool Check)
+{
+	m_pEff_EyeRazer->Set_RazerRotate(Check);
+}
 
 CBoss_Solaris* CBoss_Solaris::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
 {
@@ -886,8 +974,14 @@ void CBoss_Solaris::Free()
 {
 	__super::Free();
 
+	Safe_Release(m_pEff_Razer);
+	Safe_Release(m_pEff_Explosion);
+	Safe_Release(m_pEff_Shield);
+	Safe_Release(m_pEff_EyeRazer);
+
 	Safe_Release(m_pCharacterController);
 	Safe_Release(m_pWeapon);
 	Safe_Release(m_pStateController);
 	Safe_Release(m_pAnimator);
+
 }

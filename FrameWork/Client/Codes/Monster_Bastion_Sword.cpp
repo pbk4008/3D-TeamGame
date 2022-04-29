@@ -113,7 +113,6 @@ _int CMonster_Bastion_Sword::Tick(_double _dDeltaTime)
 	{
 		return -1;
 	}
-	Check_NoDamage(_dDeltaTime);
 	m_pTransform->Set_Velocity(XMVectorZero());
 
 	m_pTransform->Fall(_dDeltaTime);

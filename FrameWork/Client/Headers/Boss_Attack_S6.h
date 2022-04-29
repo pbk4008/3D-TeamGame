@@ -32,8 +32,9 @@ private:
 	void Play_Sound(void);
 
 private:
-	_bool m_bEffectCheck = false;
-	_bool m_bShakeCheck = false;
+	_bool m_bEffectCheck1 = false;
+	_bool m_bEffectCheck2 = false;
+	_bool m_bEffectCheck3 = false;
 
 public:
 	static CBoss_Attack_S6* Create(ID3D11Device * pDevice, ID3D11DeviceContext * pDeviceContext, void* pArg = nullptr);

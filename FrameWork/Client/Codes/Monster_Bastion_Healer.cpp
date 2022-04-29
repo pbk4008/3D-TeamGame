@@ -456,7 +456,9 @@ void CMonster_Bastion_Healer::Link()
 			_vector vPos = m_pTransform->Get_State(CTransform::STATE_POSITION);
 			for (auto pMonster : tOverlapDesc.vecHitObjects)
 			{
-				if (pMonster->getTag() == (_uint)GAMEOBJECT::MONSTER_HEALER)
+				if (pMonster->getTag() == (_uint)GAMEOBJECT::MONSTER_HEALER
+					||pMonster->getTag() == (_uint)GAMEOBJECT::MONSTER_ABERRANT
+					||pMonster->getTag() == (_uint)GAMEOBJECT::MONSTER_CRYSTAL)
 					continue;
 				
 				_vector vMonPos = pMonster->Get_Transform()->Get_State(CTransform::STATE_POSITION);
@@ -481,6 +483,15 @@ void CMonster_Bastion_Healer::Check_LinkMonster()
 	{
 		if (m_pLinkMonster->Get_HpRatio()<0.f || !m_pLinkMonster->Get_NoDamage())
 			m_pLinkMonster = nullptr;
+	}
+}
+
+void CMonster_Bastion_Healer::Resolve_Link()
+{
+	if (m_pLinkMonster)
+	{
+		m_pLinkMonster->Set_NoDamage(false);
+		m_pLinkMonster = nullptr;
 	}
 }
 

@@ -39,65 +39,34 @@ _int CBoss_Attack_S6::Tick(const _double& TimeDelta)
 	{
 		m_pAnimator->Get_AnimController()->Set_PlaySpeed(0.4f);
 
-		//Ω¶¿Ã≈∑ & ¿Ã∆Â∆Æ //¿Ã∆Â∆Æ«—≈◊º≠ ª˝º∫«ÿ¡‡æﬂ«“µÌ 
-		CCameraShake::SHAKEEVENT tShakeEvent;
-		tShakeEvent.fDuration = 0.1f;
-		tShakeEvent.fBlendInTime = 0.02f;
-		tShakeEvent.fBlendOutTime = 0.07f;
-		tShakeEvent.tWaveX.fAmplitude = -0.1f;
-		tShakeEvent.tWaveX.fFrequency = 20.f;
-		tShakeEvent.tWaveY.fAmplitude = 0.1f;
-		tShakeEvent.tWaveY.fFrequency = 6.f;
-		tShakeEvent.tWaveZ.fAdditionalOffset = 0.2f;
-		tShakeEvent.tWaveZ.fAdditionalOffset = -1.f;
-		tShakeEvent.fInnerRadius = 10.f;
-		tShakeEvent.fOuterRadius = 20.f;
-		tShakeEvent.fDistanceRate = 10.f;
+		
 
-		if (66 < iCurKeyFrameIndex && 69 > iCurKeyFrameIndex && false == m_bShakeCheck)
+		if (61 < iCurKeyFrameIndex && 64 > iCurKeyFrameIndex && false == m_bEffectCheck1)
 		{
-			g_pShakeManager->Shake(tShakeEvent, m_pTransform->Get_State(CTransform::STATE_POSITION));
+			static_cast<CBoss_Solaris*>(m_pMonster)->OnEff_MeshRazer(true);
 
-			m_pMonster->Active_Effect((_uint)EFFECT::HIT_GROUND);
-			m_pMonster->Active_Effect((_uint)EFFECT::HIT_GROUND_SMOKE);
-
-			m_bShakeCheck = true;
+			m_bEffectCheck1 = true;
 		}
 
-		if (82 < iCurKeyFrameIndex && 85 > iCurKeyFrameIndex && false == m_bShakeCheck)
+		if (90 < iCurKeyFrameIndex && 93 > iCurKeyFrameIndex && false == m_bEffectCheck2)
 		{
-			g_pShakeManager->Shake(tShakeEvent, m_pTransform->Get_State(CTransform::STATE_POSITION));
+			static_cast<CBoss_Solaris*>(m_pMonster)->OnEff_MeshRazer(true);
 
-			m_pMonster->Active_Effect((_uint)EFFECT::HIT_GROUND);
-			m_pMonster->Active_Effect((_uint)EFFECT::HIT_GROUND_SMOKE);
-
-			m_bShakeCheck = true;
+			m_bEffectCheck2 = true;
 		}
 
-		if (100 < iCurKeyFrameIndex && 103 > iCurKeyFrameIndex && false == m_bShakeCheck)
+		if (120 < iCurKeyFrameIndex && 123 > iCurKeyFrameIndex && false == m_bEffectCheck3)
 		{
-			g_pShakeManager->Shake(tShakeEvent, m_pTransform->Get_State(CTransform::STATE_POSITION));
+			static_cast<CBoss_Solaris*>(m_pMonster)->OnEff_MeshRazer(true);
 
-			m_pMonster->Active_Effect((_uint)EFFECT::HIT_GROUND);
-			m_pMonster->Active_Effect((_uint)EFFECT::HIT_GROUND_SMOKE);
-
-			m_bShakeCheck = true;
+			m_bEffectCheck3 = true;
 		}
 
-		if (120 < iCurKeyFrameIndex && 123 > iCurKeyFrameIndex && false == m_bShakeCheck)
-		{
-			g_pShakeManager->Shake(tShakeEvent, m_pTransform->Get_State(CTransform::STATE_POSITION));
-
-			m_pMonster->Active_Effect((_uint)EFFECT::HIT_GROUND);
-			m_pMonster->Active_Effect((_uint)EFFECT::HIT_GROUND_SMOKE);
-
-			m_bShakeCheck = true;
-		}
-
-		m_bShakeCheck = false;
+		m_bEffectCheck1 = false;
+		m_bEffectCheck2 = false;
+		m_bEffectCheck3 = false;
 
 		m_pMonster->Set_IsAttack(true);
-
 		_float fDamage = 6.f;
 		_uint iLevel = 3;
 		m_pMonster->Set_AttackDesc_Damaga(fDamage);
@@ -156,8 +125,9 @@ HRESULT CBoss_Attack_S6::EnterState()
 	_vector vDist = vMonsterPos - g_pObserver->Get_PlayerPos();
 	_float fDistToPlayer = XMVectorGetX(XMVector3Length(vDist));
 
-	m_bShakeCheck = false;
-	m_bEffectCheck = false;
+	m_bEffectCheck1 = false;
+	m_bEffectCheck2 = false;
+	m_bEffectCheck3 = false;
 
  	m_pAnimator->Change_AnyEntryAnimation((_uint)CBoss_Solaris::M_BossAnimState::ATTACK_S6);
 
@@ -169,10 +139,12 @@ HRESULT CBoss_Attack_S6::ExitState()
 	if (FAILED(__super::ExitState()))
 		return E_FAIL;
 
-	CBoss_Solaris* m_pMonster = (CBoss_Solaris*)m_pStateController->Get_GameObject();
 	m_pMonster->RimlightCheck(false);
 
-	m_bEffectCheck = false;
+	m_bEffectCheck1 = false;
+	m_bEffectCheck2 = false;
+	m_bEffectCheck3 = false;
+
 
 	return S_OK;
 }

@@ -97,8 +97,6 @@ _int CMonster_Bastion_Shooter::Tick(_double _dDeltaTime)
 	if (NO_EVENT != iProgress)
 		return iProgress;
 
-	Check_NoDamage(_dDeltaTime);
-
 	m_pTransform->Set_Velocity(XMVectorZero());
 
 	m_pTransform->Fall(_dDeltaTime);
