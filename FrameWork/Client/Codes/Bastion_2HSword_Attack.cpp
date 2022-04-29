@@ -32,6 +32,10 @@ _int CBastion_2HSword_Attack::Tick(const _double& _dDeltaTime)
 	m_pTransform->Face_Target(g_pObserver->Get_PlayerPos());
 	m_pAnimator->Tick(_dDeltaTime);
 
+	CAnimation* pAnim = m_pAnimator->Get_CurrentAnimation();
+	if (!pAnim)
+		return 0;
+
 	if (m_pAnimator->Get_CurrentAnimation()->Is_Finished() && !m_pAnimator->Get_IsLerp())
 	{
 		m_pOwner->set_Attack(false);

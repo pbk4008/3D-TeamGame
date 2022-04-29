@@ -41,20 +41,25 @@ _int CBastion_Sword_Chase::Tick(const _double& _dDeltaTime)
 	//m_pTransform->Face_Target(g_pObserver->Get_PlayerPos());
 	//일정 거리가 되면 바로 공
 	_float fDist = g_pObserver->Get_Dist(m_pTransform->Get_State(CTransform::STATE_POSITION));
-	_uint iAtkType = rand() % 3/*(_uint)MathUtils::ReliableRandom(0, 3)*/;
 	if (fDist >= 10.f)
 		m_pStateController->Change_State(L"Idle");
 	else
 	{
-		if (iAtkType == 2)
+		if (m_iAttackType == 2)
 		{
 			if (fDist < 4.f)
-				m_pStateController->Change_State(L"Attack", &iAtkType);
+			{
+				m_pStateController->Change_State(L"Attack", &m_iAttackType);
+				m_iAttackType=0;
+			}
 		}
 		else
 		{
 			if (fDist < 2.f)
-				m_pStateController->Change_State(L"Attack", &iAtkType);
+			{
+				m_pStateController->Change_State(L"Attack", &m_iAttackType);
+				m_iAttackType++;
+			}
 		}
 	}
 	//if (iAtkType == 2)

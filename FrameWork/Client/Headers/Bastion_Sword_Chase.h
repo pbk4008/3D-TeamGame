@@ -29,6 +29,7 @@ private:
 	virtual void Free() override;
 private:
 	_float m_fAngle;
+	_uint m_iAttackType=0;
 };
 END
 #endif

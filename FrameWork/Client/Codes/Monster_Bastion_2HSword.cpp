@@ -109,8 +109,6 @@ _int CMonster_Bastion_2HSword::Tick(_double _dDeltaTime)
 	if (NO_EVENT != iProgress) 
 		return iProgress;
 
-	Check_NoDamage(_dDeltaTime);
-
 	m_pTransform->Set_Velocity(XMVectorZero());
 
 	/* State FSM Update */

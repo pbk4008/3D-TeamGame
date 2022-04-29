@@ -114,7 +114,6 @@ _int CMonster_Bastion_Spear::Tick(_double _dDeltaTime)
 	_int iProgress = __super::Tick(_dDeltaTime);
 	if (NO_EVENT != iProgress) 
 		return iProgress;
-	Check_NoDamage(_dDeltaTime);
 	m_pTransform->Set_Velocity(XMVectorZero());
 
 	/* State FSM Update */

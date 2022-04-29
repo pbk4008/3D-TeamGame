@@ -31,7 +31,10 @@ _int CBastion_Healer_Attack::Tick(const _double& _dDeltaTime)
 
 	Check_Attack();
 	m_pAnimator->Tick(_dDeltaTime);
-	if (m_pAnimator->Get_CurrentAnimation()->Is_Finished())
+	CAnimation* pAnim = m_pAnimator->Get_CurrentAnimation();
+	if (!pAnim)
+		return 0;
+	if (pAnim->Is_Finished())
 	{
 		m_pOwner->set_Attack(false);
 		m_pStateController->Change_State(L"Idle");
@@ -78,7 +81,11 @@ HRESULT CBastion_Healer_Attack::ExitState()
 
 void CBastion_Healer_Attack::Check_Attack()
 {
-	_uint iCurAnimFrame = m_pAnimator->Get_CurrentAnimation()->Get_CurrentKeyFrameIndex();
+	CAnimation* pAnim = m_pAnimator->Get_CurrentAnimation();
+	if (!pAnim)
+		return;
+	_uint iCurAnimFrame = pAnim->Get_CurrentKeyFrameIndex();
+
 	if (iCurAnimFrame >= 160 && iCurAnimFrame<165)
 	{
 		OVERLAPDESC tOverlapDesc;

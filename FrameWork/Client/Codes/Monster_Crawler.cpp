@@ -55,7 +55,7 @@ HRESULT CMonster_Crawler::NativeConstruct(const _uint _iSceneID, void* _pArg)
 	if (_pArg)
 	{
 		_float3 vPoint = (*(_float3*)_pArg);
-		if (FAILED(Set_SpawnPosition(vPoint)))
+		if (FAILED(CActor::Set_SpawnPosition(vPoint)))
 			return E_FAIL;
 	}
 	else
@@ -102,7 +102,6 @@ _int CMonster_Crawler::Tick(_double _dDeltaTime)
 	{
 		return -1;
 	}
-	Check_NoDamage(_dDeltaTime);
 
 	m_pTransform->Set_Velocity(XMVectorZero());
 	m_pPanel->Set_TargetWorldMatrix(m_pTransform->Get_WorldMatrix());
@@ -202,20 +201,7 @@ HRESULT CMonster_Crawler::Render()
 	ZeroMemory(&desc, sizeof(SCB));
 	wstring wstrCamTag = g_pGameInstance->Get_BaseCameraTag();
 
-	RIM RimDesc;
-	ZeroMemory(&RimDesc, sizeof(RIM));
-
-	RimDesc.rimcol = _float3(0.f, 1.f, 1.f);
-	RimDesc.rimintensity = 5.f;
-	XMStoreFloat4(&RimDesc.camdir, XMVector3Normalize(m_pTransform->Get_State(CTransform::STATE_POSITION) - g_pGameInstance->Get_CamPosition(L"Camera_Silvermane")));
-
-	if (m_isNoDamage)
-		RimDesc.rimcheck = true;
-	else
-		RimDesc.rimcheck = false;
-
-
-	CActor::BindConstantBuffer(wstrCamTag,&desc,&RimDesc);
+	CActor::BindConstantBuffer(wstrCamTag,&desc);
 
 	for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
 		m_pModel->Render(i, 0);
@@ -258,9 +244,6 @@ void CMonster_Crawler::OnTriggerExit(CCollision& collision)
 
 void CMonster_Crawler::Hit(const ATTACKDESC& _tAttackDesc)
 {
-	if (m_isNoDamage)//무적이면 데미지 안받음
-		return;
-
 	if (m_bDead || 0.f >= m_fCurrentHp)
 		return;
 
@@ -312,6 +295,16 @@ void CMonster_Crawler::Parry(const PARRYDESC& _tParryDesc)
 {
 	// 그로기 처리를 해야한다.
 	m_fGroggyGauge += (m_fMaxGroggyGauge - m_fGroggyGauge);
+}
+
+HRESULT CMonster_Crawler::Set_SpawnPosition(_fvector vPos)
+{
+	CActor::Set_SpawnPosition(vPos);
+	_float3 tmpPos;
+	XMStoreFloat3(&tmpPos, vPos);
+	m_pCharacterController->setFootPosition(tmpPos);
+
+	return S_OK;
 }
 
 void CMonster_Crawler::Set_IsAttack(const _bool _isAttack)

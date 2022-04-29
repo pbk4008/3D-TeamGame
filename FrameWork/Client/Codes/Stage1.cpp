@@ -136,11 +136,11 @@ HRESULT CStage1::NativeConstruct()
 		return E_FAIL;
 	}
 
-	if (FAILED(Ready_MapObject()))
-	{
-		MSGBOX("Stage1 MapObject");
-		return E_FAIL;
-	}
+	//if (FAILED(Ready_MapObject()))
+	//{
+	//	MSGBOX("Stage1 MapObject");
+	//	return E_FAIL;
+	//}
 
 	if (FAILED(Ready_TriggerSystem(L"../bin/SaveData/Trigger/MonsterSpawnTrigger.dat")))
 	{
@@ -180,11 +180,11 @@ HRESULT CStage1::NativeConstruct()
 
 	g_pGameInstance->Change_BaseCamera(L"Camera_Silvermane");
 
-	if (FAILED(Ready_Meteor()))
-	{
-		MSGBOX("Meteor");
-		return E_FAIL;
-	}
+	//if (FAILED(Ready_Meteor()))
+	//{
+	//	MSGBOX("Meteor");
+	//	return E_FAIL;
+	//}
 	
 	if (FAILED(Ready_Indicator()))
 	{
@@ -192,11 +192,11 @@ HRESULT CStage1::NativeConstruct()
 		return E_FAIL;
 	}
 
-	if (FAILED(Ready_Portal()))
-	{
-		MSGBOX("Portal");
-		return E_FAIL;
-	}
+	//if (FAILED(Ready_Portal()))
+	//{
+	//	MSGBOX("Portal");
+	//	return E_FAIL;
+	//}
 
 	if (FAILED(Ready_Wall()))
 	{
@@ -204,18 +204,18 @@ HRESULT CStage1::NativeConstruct()
 		return E_FAIL;
 	}
 
-	if (FAILED(Ready_Pot()))
-		return E_FAIL;
+	//if (FAILED(Ready_Pot()))
+	//	return E_FAIL;
 
-	if (FAILED(Ready_Cinema()))
-	{
-		MSGBOX("Cinema");
-		return E_FAIL;
-	}
+	//if (FAILED(Ready_Cinema()))
+	//{
+	//	MSGBOX("Cinema");
+	//	return E_FAIL;
+	//}
 
 	g_pGameInstance->PlayBGM(L"Stage1_BGM");
 	
-	m_pScenemaManager->Active_Scenema((_uint)CINEMA_INDEX::CINEMA1_1);
+	//m_pScenemaManager->Active_Scenema((_uint)CINEMA_INDEX::CINEMA1_1);
 
 	return S_OK;
 }
@@ -263,6 +263,7 @@ _int CStage1::Tick(_double TimeDelta)
 			g_pMainApp->Set_DeltaTimeZero(true);
 		}
 	}
+
 	if (nullptr != m_pTriggerSystem)
 	{
 		if (g_pGameInstance->getkeyDown(DIK_BACKSPACE))
@@ -275,105 +276,128 @@ _int CStage1::Tick(_double TimeDelta)
 
 		if (m_iCountMonster > 10000)
 			m_iCountMonster = 0;
-		if (m_iCountMonster == 0 && m_bFirst)//트리거 몬스터 다 잡힘
+
+		if (m_pTriggerSystem->Get_CurrentTriggerNumber() == 2)
+			Portal_Spot1();
+		else if (m_pTriggerSystem->Get_CurrentTriggerNumber() == 4)
+			Portal_Spot2();
+		else if (m_pTriggerSystem->Get_CurrentTriggerNumber() == 5)
+			Portal_Spot3();
+		else if (m_pTriggerSystem->Get_CurrentTriggerNumber() == 6)
+			Portal_Spot4();
+		else if (m_pTriggerSystem->Get_CurrentTriggerNumber() == 7)
+			Portal_Spot5();
+		else if (m_pTriggerSystem->Get_CurrentTriggerNumber() == 9)
+			Portal_Spot6();
+		else
 		{
-			//포탈 위치 체크 
-			if (m_pTriggerSystem->Get_CurrentTriggerNumber() == 4)
+			if (m_iCountMonster == 0&&m_pTriggerSystem->Get_CurrentTriggerNumber() != -1)
 			{
-				if (m_iPortalCount == 0)
-				{
-					m_pTriggerSystem->Trigger_Clear();
-
-					m_iPortalCount = 4;
-					Open_Potal(XMVectorSet(-58.f, 15.f, 213.f, 1.f), (_uint)GAMEOBJECT::MONSTER_1H);
-					Open_Potal(XMVectorSet(-64.f, 15.f, 230.f, 1.f), (_uint)GAMEOBJECT::MONSTER_1H);
-					Open_Potal(XMVectorSet(-77.f, 15.f, 220.f, 1.f), (_uint)GAMEOBJECT::MONSTER_1H);
-					Open_Potal(XMVectorSet(-62.f, 15.f, 206.f, 1.f), (_uint)GAMEOBJECT::MONSTER_SHOOTER);
-					m_iCountMonster += 4;
-				}
-				else if (m_iPortalCount == 4)
-				{
-					Open_Potal(XMVectorSet(-80.f, 15.f, 220.f, 1.f), (_uint)GAMEOBJECT::MONSTER_1H);
-					Open_Potal(XMVectorSet(-56.f, 18.f, 222.f, 1.f), (_uint)GAMEOBJECT::MONSTER_SHOOTER);
-					m_iCountMonster += 2;
-					m_iPortalCount += 2;
-					m_bPortalClear = true;
-				}
-				else if (m_bPortalClear)
-				{
-					CLEAR_QUEST(L"T_HUD_KillAllMonster");
-					m_pTriggerSystem->Next_TriggerOn();
-					m_bPortalClear = false;
-				}
-			}
-			else if (m_pTriggerSystem->Get_CurrentTriggerNumber() == 5)
-			{
-				if (m_iPortalCount == 6)
-				{
-					m_pTriggerSystem->Trigger_Clear();
-					Open_Potal(XMVectorSet(-130.f, 20.f, 216.f, 1.f), (_uint)GAMEOBJECT::MONSTER_SHOOTER);
-					m_iPortalCount++;
-					m_iCountMonster++;
-				}
-				else if (m_iPortalCount == 7)
-				{
-					Open_Potal(XMVectorSet(-126.f, 20.f, 220.f, 1.f), (_uint)GAMEOBJECT::MONSTER_1H);
-					Open_Potal(XMVectorSet(-127.f, 20.f, 214.f, 1.f), (_uint)GAMEOBJECT::MONSTER_SHOOTER);
-					m_iCountMonster += 2;
-					m_iPortalCount += 2;
-					m_bPortalClear = true;
-				}
-				else if (m_bPortalClear)
-				{
-					CLEAR_QUEST(L"T_HUD_KillAllMonster");
-					m_bPortalClear = false;
-					m_pTriggerSystem->Next_TriggerOn();
-				}
-			}
-			else if (m_pTriggerSystem->Get_CurrentTriggerNumber() == 6)
-			{
-				if (m_iPortalCount == 9)
-				{
-					m_pTriggerSystem->Trigger_Clear();
-					Open_Potal(XMVectorSet(-135.f, 18.f, 255, 1.f), (_uint)GAMEOBJECT::MONSTER_HEALER);
-					Open_Potal(XMVectorSet(-129.f, 18.f, 257.f, 1.f), (_uint)GAMEOBJECT::MONSTER_SHOOTER);
-					Open_Potal(XMVectorSet(-138, 18.f, 266.f, 1.f), (_uint)GAMEOBJECT::MONSTER_1H);
-					m_iPortalCount+=3;
-					m_iCountMonster+=3;
-					m_bPortalClear = true;
-				}
-				else if (m_bPortalClear)
-				{
-					CLEAR_QUEST(L"T_HUD_KillAllMonster");
-					m_bPortalClear = false;
-					m_pTriggerSystem->Next_TriggerOn();
-				}
-			}
-			else if (m_pTriggerSystem->Get_CurrentTriggerNumber() == 7)
-			{
-				if (m_iPortalCount == 12)
-				{
-					m_pTriggerSystem->Trigger_Clear();
-					Open_Potal(XMVectorSet(-177.f, 29.f, 300.f, 1.f), (_uint)GAMEOBJECT::MONSTER_1H);
-					Open_Potal(XMVectorSet(-172.f, 29.f, 316.f, 1.f), (_uint)GAMEOBJECT::MONSTER_1H);
-					Open_Potal(XMVectorSet(-168.f, 29.f, 306.f, 1.f), (_uint)GAMEOBJECT::MONSTER_1H);
-					Open_Potal(XMVectorSet(-173.f, 29.f, 300.f, 1.f), (_uint)GAMEOBJECT::MONSTER_SHOOTER);
-					m_iCountMonster += 4;
-					m_iPortalCount += 4;
-					m_bPortalClear = true;
-				}
-				else if (m_bPortalClear)
-				{
-					CLEAR_QUEST(L"T_HUD_KillAllMonster");
-					m_pTriggerSystem->Next_TriggerOn();
-					m_bPortalClear = false;
-				}
-			}
-			else
+				CLEAR_QUEST(L"T_HUD_KillAllMonster");
 				m_pTriggerSystem->Check_Clear();
-
-			CLEAR_QUEST(L"T_HUD_KillAllMonster"); /* 포탈로 등장하는 몬스터가 아닌 경우에 몹이 다 잡힌 경우 */
+			}
 		}
+
+
+		//if (m_iCountMonster == 0 && m_bFirst)//트리거 몬스터 다 잡힘
+		//{
+		//	//포탈 위치 체크 
+		//	if (m_pTriggerSystem->Get_CurrentTriggerNumber() == 4)
+		//	{
+		//		if (m_iPortalCount == 0)
+		//		{
+		//			m_pTriggerSystem->Trigger_Clear();
+
+		//			m_iPortalCount = 4;
+		//			Open_Potal(XMVectorSet(-58.f, 15.f, 213.f, 1.f), (_uint)GAMEOBJECT::MONSTER_1H);
+		//			Open_Potal(XMVectorSet(-64.f, 15.f, 230.f, 1.f), (_uint)GAMEOBJECT::MONSTER_1H);
+		//			Open_Potal(XMVectorSet(-77.f, 15.f, 220.f, 1.f), (_uint)GAMEOBJECT::MONSTER_1H);
+		//			Open_Potal(XMVectorSet(-62.f, 15.f, 206.f, 1.f), (_uint)GAMEOBJECT::MONSTER_SHOOTER);
+		//			m_iCountMonster += 4;
+		//		}
+		//		else if (m_iPortalCount == 4)
+		//		{
+		//			Open_Potal(XMVectorSet(-80.f, 15.f, 220.f, 1.f), (_uint)GAMEOBJECT::MONSTER_1H);
+		//			Open_Potal(XMVectorSet(-56.f, 18.f, 222.f, 1.f), (_uint)GAMEOBJECT::MONSTER_SHOOTER);
+		//			m_iCountMonster += 2;
+		//			m_iPortalCount += 2;
+		//			m_bPortalClear = true;
+		//		}
+		//		else if (m_bPortalClear)
+		//		{
+		//			CLEAR_QUEST(L"T_HUD_KillAllMonster");
+		//			m_pTriggerSystem->Next_TriggerOn();
+		//			m_bPortalClear = false;
+		//		}
+		//	}
+		//	else if (m_pTriggerSystem->Get_CurrentTriggerNumber() == 5)
+		//	{
+		//		if (m_iPortalCount == 6)
+		//		{
+		//			m_pTriggerSystem->Trigger_Clear();
+		//			Open_Potal(XMVectorSet(-130.f, 20.f, 216.f, 1.f), (_uint)GAMEOBJECT::MONSTER_SHOOTER);
+		//			m_iPortalCount++;
+		//			m_iCountMonster++;
+		//		}
+		//		else if (m_iPortalCount == 7)
+		//		{
+		//			Open_Potal(XMVectorSet(-126.f, 20.f, 220.f, 1.f), (_uint)GAMEOBJECT::MONSTER_1H);
+		//			Open_Potal(XMVectorSet(-127.f, 20.f, 214.f, 1.f), (_uint)GAMEOBJECT::MONSTER_SHOOTER);
+		//			m_iCountMonster += 2;
+		//			m_iPortalCount += 2;
+		//			m_bPortalClear = true;
+		//		}
+		//		else if (m_bPortalClear)
+		//		{
+		//			CLEAR_QUEST(L"T_HUD_KillAllMonster");
+		//			m_bPortalClear = false;
+		//			m_pTriggerSystem->Next_TriggerOn();
+		//		}
+		//	}
+		//	else if (m_pTriggerSystem->Get_CurrentTriggerNumber() == 6)
+		//	{
+		//		if (m_iPortalCount == 9)
+		//		{
+		//			m_pTriggerSystem->Trigger_Clear();
+		//			Open_Potal(XMVectorSet(-135.f, 18.f, 255, 1.f), (_uint)GAMEOBJECT::MONSTER_HEALER);
+		//			Open_Potal(XMVectorSet(-129.f, 18.f, 257.f, 1.f), (_uint)GAMEOBJECT::MONSTER_SHOOTER);
+		//			Open_Potal(XMVectorSet(-138, 18.f, 266.f, 1.f), (_uint)GAMEOBJECT::MONSTER_1H);
+		//			m_iPortalCount+=3;
+		//			m_iCountMonster+=3;
+		//			m_bPortalClear = true;
+		//		}
+		//		else if (m_bPortalClear)
+		//		{
+		//			CLEAR_QUEST(L"T_HUD_KillAllMonster");
+		//			m_bPortalClear = false;
+		//			m_pTriggerSystem->Next_TriggerOn();
+		//		}
+		//	}
+		//	else if (m_pTriggerSystem->Get_CurrentTriggerNumber() == 7)
+		//	{
+		//		if (m_iPortalCount == 12)
+		//		{
+		//			m_pTriggerSystem->Trigger_Clear();
+		//			Open_Potal(XMVectorSet(-177.f, 29.f, 300.f, 1.f), (_uint)GAMEOBJECT::MONSTER_1H);
+		//			Open_Potal(XMVectorSet(-172.f, 29.f, 316.f, 1.f), (_uint)GAMEOBJECT::MONSTER_1H);
+		//			Open_Potal(XMVectorSet(-168.f, 29.f, 306.f, 1.f), (_uint)GAMEOBJECT::MONSTER_1H);
+		//			Open_Potal(XMVectorSet(-173.f, 29.f, 300.f, 1.f), (_uint)GAMEOBJECT::MONSTER_SHOOTER);
+		//			m_iCountMonster += 4;
+		//			m_iPortalCount += 4;
+		//			m_bPortalClear = true;
+		//		}
+		//		else if (m_bPortalClear)
+		//		{
+		//			CLEAR_QUEST(L"T_HUD_KillAllMonster");
+		//			m_pTriggerSystem->Next_TriggerOn();
+		//			m_bPortalClear = false;
+		//		}
+		//	}
+		//	else
+		//		m_pTriggerSystem->Check_Clear();
+
+		//	CLEAR_QUEST(L"T_HUD_KillAllMonster"); /* 포탈로 등장하는 몬스터가 아닌 경우에 몹이 다 잡힌 경우 */
+		//}
 
 		CBoss_Bastion_Judicator* pBoss = (CBoss_Bastion_Judicator*)g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Layer_Boss")->front();
 		if (nullptr != pBoss)
@@ -1694,24 +1718,33 @@ HRESULT CStage1::Ready_Pot()
 
 HRESULT CStage1::Ready_Portal()
 {
-	for (_uint i = 0; i < 16; i++)
+	for (_uint i = 1; i <= 73; i++)
 	{
-		if (i < 9)
+		if (i <= 19)//19개
 		{
 			if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_PortalMonster", L"Proto_GameObject_Monster_Bastion_Sword")))
 				return E_FAIL;
 		}
-		else if(i>=9 && i<15)
+		else if(i>=20 && i<=38)//19
 		{
 			if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_PortalMonster", L"Proto_GameObject_Monster_Bastion_Shooter")))
 				return E_FAIL;
 		}
-		else
+		else if(i>=39 && i<=54)//16개
 		{
 			if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_PortalMonster", L"Proto_GameObject_Monster_Bastion_Healer")))
 				return E_FAIL;
 		}
-	
+		else if (i >= 55 && i <=63)
+		{
+			if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_PortalMonster", L"Proto_GameObject_Monster_Crawler")))
+				return E_FAIL;
+		}
+		else if (i >= 64 && i <=73)
+		{
+			if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_PortalMonster", L"Proto_GameObject_Monster_EarthAberrant")))
+				return E_FAIL;
+		}
 		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Portal", L"Proto_GameObject_Portal")))
 			return E_FAIL;
 	}
@@ -1721,6 +1754,9 @@ HRESULT CStage1::Ready_Portal()
 void CStage1::Open_Potal(_fvector vPos, _uint iMonTag)
 {
 	list<CGameObject*>* pLayer = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Layer_Portal");
+	if (!pLayer)
+		return;
+
 	for (auto& pObj : *pLayer)
 	{
 		CPotal* pPotal = nullptr;
@@ -1737,8 +1773,221 @@ void CStage1::CheckTriggerForQuest(void)
 {
 }
 
+void CStage1::Portal_Spot1()
+{
+	if (m_iCountMonster == 2 && m_iPortalCount == 0)
+	{
+		m_iPortalCount = 1;
+		Open_Potal(XMVectorSet(-46.f, -3.f, 79.f, 1.f), (_uint)GAMEOBJECT::MONSTER_1H);
+		Open_Potal(XMVectorSet(-38.f, -3.f, 87.f, 1.f), (_uint)GAMEOBJECT::MONSTER_ABERRANT);
+		Open_Potal(XMVectorSet(-33.f, -3.f, 87.f, 1.f), (_uint)GAMEOBJECT::MONSTER_HEALER);
+		Open_Potal(XMVectorSet(-37.f, -3.f, 79.f, 1.f), (_uint)GAMEOBJECT::MONSTER_CRYSTAL);
+		Open_Potal(XMVectorSet(-37.f, -3.f, 83.f, 1.f), (_uint)GAMEOBJECT::MONSTER_SHOOTER);
+		m_iCountMonster += 5;
+	}
+	else if (m_iCountMonster == 5 && m_iPortalCount == 1)
+	{
+		m_iPortalCount = 2;
+		Open_Potal(XMVectorSet(-46.f, -3.f, 79.f, 1.f), (_uint)GAMEOBJECT::MONSTER_1H);
+		Open_Potal(XMVectorSet(-46.f, -3.f, 79.f, 1.f), (_uint)GAMEOBJECT::MONSTER_1H);
+		m_iCountMonster += 2;
+	}
+	else if (m_iCountMonster == 0 && m_iPortalCount == 2)
+		m_pTriggerSystem->Check_Clear();
+}
+
+void CStage1::Portal_Spot2()
+{
+	if (m_iCountMonster == 3 && m_iPortalCount == 2)
+	{
+		m_iPortalCount = 3;
+		Open_Potal(XMVectorSet(-84.f, 15.f, 215.f, 1.f), (_uint)GAMEOBJECT::MONSTER_1H);
+		Open_Potal(XMVectorSet(-78.f, 15.f, 221.f, 1.f), (_uint)GAMEOBJECT::MONSTER_CRYSTAL);
+		Open_Potal(XMVectorSet(-70.f, 15.f, 228.f, 1.f), (_uint)GAMEOBJECT::MONSTER_1H);
+		Open_Potal(XMVectorSet(-61.f, 15.f, 227.f, 1.f), (_uint)GAMEOBJECT::MONSTER_SHOOTER);
+		Open_Potal(XMVectorSet(-60.f, 15.f, 217.f, 1.f), (_uint)GAMEOBJECT::MONSTER_HEALER);
+		Open_Potal(XMVectorSet(-62.f, 15.f, 206.f, 1.f), (_uint)GAMEOBJECT::MONSTER_ABERRANT);
+		Open_Potal(XMVectorSet(-71.f, 15.f, 203.f, 1.f), (_uint)GAMEOBJECT::MONSTER_HEALER);
+		m_iCountMonster += 7;
+	}
+	else if (m_iCountMonster == 5 && m_iPortalCount == 3)
+	{
+		m_iPortalCount = 4;
+		Open_Potal(XMVectorSet(-81.f, 15.f, 208.f, 1.f), (_uint)GAMEOBJECT::MONSTER_SHOOTER);
+		Open_Potal(XMVectorSet(-74.f, 15.f, 207.f, 1.f), (_uint)GAMEOBJECT::MONSTER_HEALER);
+		Open_Potal(XMVectorSet(-70.f, 15.f, 202.f, 1.f), (_uint)GAMEOBJECT::MONSTER_SHOOTER);
+		Open_Potal(XMVectorSet(-73.f, 15.f, 205.f, 1.f), (_uint)GAMEOBJECT::MONSTER_ABERRANT);
+		m_iCountMonster += 4;
+	}
+	else if (m_iCountMonster == 3 && m_iPortalCount == 4)
+	{
+		m_iPortalCount = 5;
+		Open_Potal(XMVectorSet(-76.f, 15.f, 206.f, 1.f), (_uint)GAMEOBJECT::MONSTER_1H);
+		Open_Potal(XMVectorSet(-67.f, 15.f, 202.f, 1.f), (_uint)GAMEOBJECT::MONSTER_HEALER);
+		Open_Potal(XMVectorSet(-57.f, 15.f, 224.f, 1.f), (_uint)GAMEOBJECT::MONSTER_ABERRANT);
+		Open_Potal(XMVectorSet(-67.f, 15.f, 230.f, 1.f), (_uint)GAMEOBJECT::MONSTER_CRYSTAL);
+		Open_Potal(XMVectorSet(-54.f, 15.f, 224.f, 1.f), (_uint)GAMEOBJECT::MONSTER_HEALER);
+		Open_Potal(XMVectorSet(-56.f, 15.f, 234.f, 1.f), (_uint)GAMEOBJECT::MONSTER_SHOOTER);
+		m_iCountMonster += 6;
+	}
+	else if (m_iCountMonster == 5 && m_iPortalCount == 5)
+	{
+		m_iPortalCount = 6;
+		Open_Potal(XMVectorSet(-59.f, 15.f, 223.f, 1.f), (_uint)GAMEOBJECT::MONSTER_1H);
+		Open_Potal(XMVectorSet(-71.f, 15.f, 221.f, 1.f), (_uint)GAMEOBJECT::MONSTER_1H);
+		Open_Potal(XMVectorSet(-76.f, 15.f, 233.f, 1.f), (_uint)GAMEOBJECT::MONSTER_SHOOTER);
+		m_iCountMonster += 3;
+	}
+	else if (m_iCountMonster == 0 && m_iPortalCount == 6)
+	{
+		CLEAR_QUEST(L"T_HUD_KillAllMonster");
+		m_pTriggerSystem->Check_Clear();
+	}
+}
+
+void CStage1::Portal_Spot3()
+{
+	if (m_iPortalCount == 6 && m_iCountMonster == 1)
+	{
+		m_iPortalCount = 7;
+		Open_Potal(XMVectorSet(-131.f, 19.f, 221.f, 1.f), (_uint)GAMEOBJECT::MONSTER_SHOOTER);
+		Open_Potal(XMVectorSet(-130.f, 19.f, 214.f, 1.f), (_uint)GAMEOBJECT::MONSTER_SHOOTER);
+		Open_Potal(XMVectorSet(-133.f, 19.f, 219.f, 1.f), (_uint)GAMEOBJECT::MONSTER_1H);
+		m_iCountMonster += 3;
+	}
+	else if (m_iPortalCount == 7 && m_iCountMonster == 1)
+	{
+		m_iPortalCount = 8;
+		Open_Potal(XMVectorSet(-141.f, 19.f, 214.f, 1.f), (_uint)GAMEOBJECT::MONSTER_ABERRANT);
+		Open_Potal(XMVectorSet(-141.f, 19.f, 221.f, 1.f), (_uint)GAMEOBJECT::MONSTER_HEALER);
+		m_iCountMonster += 2;
+	}
+	else if (m_iPortalCount == 8 && m_iCountMonster == 2)
+	{
+		m_iPortalCount = 9;
+		Open_Potal(XMVectorSet(-141.f, 19.f, 214.f, 1.f), (_uint)GAMEOBJECT::MONSTER_CRYSTAL);
+		Open_Potal(XMVectorSet(-139.f, 19.f, 221.f, 1.f), (_uint)GAMEOBJECT::MONSTER_HEALER);
+		Open_Potal(XMVectorSet(-133.f, 19.f, 220.f, 1.f), (_uint)GAMEOBJECT::MONSTER_1H);
+		Open_Potal(XMVectorSet(-129.f, 19.f, 214.f, 1.f), (_uint)GAMEOBJECT::MONSTER_1H);
+		m_iCountMonster += 4;
+	}
+	else if (m_iPortalCount == 9 && m_iCountMonster == 0)
+	{
+		CLEAR_QUEST(L"T_HUD_KillAllMonster");
+		m_pTriggerSystem->Check_Clear();
+	}
+}
+
+void CStage1::Portal_Spot4()
+{
+	if (m_iPortalCount == 9 && m_iCountMonster == 3)
+	{
+		m_iPortalCount = 10;
+		Open_Potal(XMVectorSet(-130.f, 18.f, 255.f, 1.f), (_uint)GAMEOBJECT::MONSTER_SHOOTER);
+		Open_Potal(XMVectorSet(-139.f, 18.f, 255.f, 1.f), (_uint)GAMEOBJECT::MONSTER_1H);
+		Open_Potal(XMVectorSet(-136.f, 18.f, 262.f, 1.f), (_uint)GAMEOBJECT::MONSTER_1H);
+		Open_Potal(XMVectorSet(-126.f, 18.f, 267.f, 1.f), (_uint)GAMEOBJECT::MONSTER_HEALER);
+		Open_Potal(XMVectorSet(-135.f, 18.f, 273.f, 1.f), (_uint)GAMEOBJECT::MONSTER_SHOOTER);
+		m_iCountMonster += 5;
+	}
+	else if (m_iPortalCount == 10 && m_iCountMonster == 3)
+	{
+		m_iPortalCount = 11;
+		Open_Potal(XMVectorSet(-130.f, 18.f, 263.f, 1.f), (_uint)GAMEOBJECT::MONSTER_ABERRANT);
+		Open_Potal(XMVectorSet(-136.f, 18.f, 263.f, 1.f), (_uint)GAMEOBJECT::MONSTER_ABERRANT);
+		Open_Potal(XMVectorSet(-142.f, 18.f, 261.f, 1.f), (_uint)GAMEOBJECT::MONSTER_CRYSTAL);
+		m_iCountMonster += 3;
+	}
+	else if (m_iPortalCount == 11 && m_iCountMonster == 4)
+	{
+		m_iPortalCount = 12;
+		Open_Potal(XMVectorSet(-131.f, 18.f, 256.f, 1.f), (_uint)GAMEOBJECT::MONSTER_ABERRANT);
+		Open_Potal(XMVectorSet(-141.f, 18.f, 258.f, 1.f), (_uint)GAMEOBJECT::MONSTER_ABERRANT);
+		Open_Potal(XMVectorSet(-136.f, 18.f, 261.f, 1.f), (_uint)GAMEOBJECT::MONSTER_SHOOTER);
+		Open_Potal(XMVectorSet(-125.f, 18.f, 271.f, 1.f), (_uint)GAMEOBJECT::MONSTER_SHOOTER);
+		Open_Potal(XMVectorSet(-139.f, 18.f, 274.f, 1.f), (_uint)GAMEOBJECT::MONSTER_HEALER);
+		m_iCountMonster += 5;
+	}
+	else if (m_iPortalCount == 12 && m_iCountMonster == 0)
+	{
+		CLEAR_QUEST(L"T_HUD_KillAllMonster");
+		m_pTriggerSystem->Check_Clear();
+	}
+}
+
+void CStage1::Portal_Spot5()
+{
+	if (m_iPortalCount == 12 && m_iCountMonster == 3)
+	{
+		m_iPortalCount = 13;
+		Open_Potal(XMVectorSet(-178.f, 29.f, 301.f, 1.f), (_uint)GAMEOBJECT::MONSTER_HEALER);
+		Open_Potal(XMVectorSet(-178.f, 29.f, 309.f, 1.f), (_uint)GAMEOBJECT::MONSTER_SHOOTER);
+		Open_Potal(XMVectorSet(-171.f, 29.f, 310.f, 1.f), (_uint)GAMEOBJECT::MONSTER_SHOOTER);
+		Open_Potal(XMVectorSet(-171.f, 29.f, 301.f, 1.f), (_uint)GAMEOBJECT::MONSTER_1H);
+		Open_Potal(XMVectorSet(-165.f, 29.f, 309.f, 1.f), (_uint)GAMEOBJECT::MONSTER_1H);
+		m_iCountMonster += 5;
+	}
+	else if (m_iPortalCount == 13 && m_iCountMonster == 3)
+	{
+		m_iPortalCount = 14;
+		Open_Potal(XMVectorSet(-176.f, 29.f, 304.f, 1.f), (_uint)GAMEOBJECT::MONSTER_HEALER);
+		Open_Potal(XMVectorSet(-177.f, 29.f, 317.f, 1.f), (_uint)GAMEOBJECT::MONSTER_ABERRANT);
+		Open_Potal(XMVectorSet(-174.f, 30.f, 320.f, 1.f), (_uint)GAMEOBJECT::MONSTER_ABERRANT);
+		m_iCountMonster += 3;
+	}
+	else if (m_iPortalCount == 14 && m_iCountMonster == 2)
+	{
+		m_iPortalCount = 15;
+		Open_Potal(XMVectorSet(-170.f, 29.f, 301.f, 1.f), (_uint)GAMEOBJECT::MONSTER_SHOOTER);
+		Open_Potal(XMVectorSet(-176.f, 29.f, 301.f, 1.f), (_uint)GAMEOBJECT::MONSTER_SHOOTER);
+		Open_Potal(XMVectorSet(-181.f, 29.f, 307.f, 1.f), (_uint)GAMEOBJECT::MONSTER_CRYSTAL);
+		Open_Potal(XMVectorSet(-175.f, 29.f, 314.f, 1.f), (_uint)GAMEOBJECT::MONSTER_CRYSTAL);
+		Open_Potal(XMVectorSet(-178.f, 30.f, 320.f, 1.f), (_uint)GAMEOBJECT::MONSTER_HEALER);
+		Open_Potal(XMVectorSet(-173.f, 30.f, 323.f, 1.f), (_uint)GAMEOBJECT::MONSTER_1H);
+		m_iCountMonster += 6;
+	}
+	else if (m_iPortalCount == 15 && m_iCountMonster == 6)
+	{
+		m_iPortalCount = 16;
+		Open_Potal(XMVectorSet(-171.f, 29.f, 300.f, 1.f), (_uint)GAMEOBJECT::MONSTER_1H);
+		Open_Potal(XMVectorSet(-181.f, 29.f, 301.f, 1.f), (_uint)GAMEOBJECT::MONSTER_1H);
+		Open_Potal(XMVectorSet(-183.f, 29.f, 310.f, 1.f), (_uint)GAMEOBJECT::MONSTER_HEALER);
+		m_iCountMonster += 3;
+	}
+	else if (m_iPortalCount == 16 && m_iCountMonster == 0)
+	{
+		CLEAR_QUEST(L"T_HUD_KillAllMonster");
+		m_pTriggerSystem->Check_Clear();
+	}
+}
+
+void CStage1::Portal_Spot6()
+{
+	list<CGameObject*>* vecObj = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Layer_Bastion_2HSword");
+	auto iter = vecObj->begin();
+	CActor* pActor = static_cast<CActor*>(*iter);
+	if (pActor->Get_HpRatio() < 0.3f && m_iPortalCount ==16)
+	{
+		m_iPortalCount = 17;
+		Open_Potal(XMVectorSet(-180.f, 52.f, 393.f, 1.f), (_uint)GAMEOBJECT::MONSTER_HEALER);
+		Open_Potal(XMVectorSet(-172.f, 52.f, 393.f, 1.f), (_uint)GAMEOBJECT::MONSTER_SHOOTER);
+		Open_Potal(XMVectorSet(-175.f, 52.f, 388.f, 1.f), (_uint)GAMEOBJECT::MONSTER_1H);
+		m_iCountMonster += 3;
+	}
+	else if (m_iPortalCount == 17 && m_iCountMonster == 3)
+	{
+		m_iPortalCount = 18;
+		Open_Potal(XMVectorSet(-178.f, 52.f, 391.f, 1.f), (_uint)GAMEOBJECT::MONSTER_1H);
+		Open_Potal(XMVectorSet(-170.f, 52.f, 390.f, 1.f), (_uint)GAMEOBJECT::MONSTER_1H);
+		Open_Potal(XMVectorSet(-171.f, 52.f, 383.f, 1.f), (_uint)GAMEOBJECT::MONSTER_HEALER);
+		m_iCountMonster += 3;
+	}
+}
+
 void CStage1::Open_Wall()
 {
+	if (!m_pTriggerSystem)
+		return;
 	list<CGameObject*>* pLayer = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Layer_Wall");
 
 	if (!pLayer)
@@ -1753,7 +2002,7 @@ void CStage1::Open_Wall()
 			if((*iter)->getActive())
 				static_cast<CWall*>(*iter)->Destroy();
 		}
-		if (m_iCountMonster == 0 && m_iPortalCount == 6)
+		if (m_iCountMonster == 0)
 		{
 			advance(iter, 1);
 			if ((*iter)->getActive())
@@ -1762,7 +2011,7 @@ void CStage1::Open_Wall()
 	}
 	else if (m_pTriggerSystem->Get_CurrentTriggerNumber() == 5)
 	{
-		if (m_iCountMonster == 0 && m_iPortalCount == 9)
+		if (m_iCountMonster == 0)
 		{
 			advance(iter, 2);
 			if ((*iter)->getActive())

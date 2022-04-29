@@ -57,7 +57,7 @@ HRESULT CMonster_EarthAberrant::NativeConstruct(const _uint _iSceneID, void* _pA
 	if (_pArg)
 	{
 		_float3 vPoint = (*(_float3*)_pArg);
-		if (FAILED(Set_SpawnPosition(vPoint)))
+		if (FAILED(CActor::Set_SpawnPosition(vPoint)))
 			return E_FAIL;
 	}
 	else
@@ -783,6 +783,16 @@ void CMonster_EarthAberrant::setActive(_bool bActive)
 		if (m_pPanel)
 			m_pPanel->setActive(true);
 	}
+}
+
+HRESULT CMonster_EarthAberrant::Set_SpawnPosition(_fvector vPos)
+{
+	CActor::Set_SpawnPosition(vPos);
+	_float3 tmpPos;
+	XMStoreFloat3(&tmpPos, vPos);
+	m_pCharacterController->setFootPosition(tmpPos);
+
+	return S_OK;
 }
 
 CMonster_EarthAberrant* CMonster_EarthAberrant::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
