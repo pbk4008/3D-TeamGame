@@ -54,7 +54,12 @@ cbuffer ShaderCheck
 	bool g_distort;
 	bool g_fog;
 	bool g_motion;
+	bool g_fadein;
+	bool g_fadeout;
+	
 	float g_test;
+	
+	float g_fadetime;
 };
 
 cbuffer CountBuffer
@@ -328,6 +333,11 @@ PS_OUT_BLEND PS_MAIN_BLEND(PS_IN In)
 		Out.vColor += DOF(Out.vColor, g_BlurTexture, DefaultSampler, In.vTexUV, depth.x);
 	}
 	
+	if (g_fadein == true)
+		Out.vColor *= g_fadetime;
+	else if (g_fadeout == true)
+		Out.vColor *= g_fadetime;
+	
 	return Out;
 }
 
@@ -336,19 +346,13 @@ PS_OUT_BLEND PS_MAIN_ALPHA(PS_IN In)
 	PS_OUT_BLEND Out = (PS_OUT_BLEND) 0;
 	
 	half4 color = g_AlphaTexture.Sample(DefaultSampler, In.vTexUV);
-	Out.vColor = color;
-	//half4 color2 = g_AlphaNBTexture.Sample(DefaultSampler, In.vTexUV);
-	//Out.vColor = color + color2;
+	half4 color2 = g_AlphaNBTexture.Sample(DefaultSampler, In.vTexUV);
+	Out.vColor = color + color2;
 	
-	return Out;
-}
-
-PS_OUT_BLEND PS_MAIN_Final(PS_IN In)
-{
-	PS_OUT_BLEND Out = (PS_OUT_BLEND) 0;
-	
-	half4 color = g_AlphaNBTexture.Sample(DefaultSampler, In.vTexUV);
-	Out.vColor = color;
+	if (g_fadein == true)
+		Out.vColor *= g_fadetime;
+	else if (g_fadeout == true)
+		Out.vColor *= g_fadetime;
 	
 	return Out;
 }

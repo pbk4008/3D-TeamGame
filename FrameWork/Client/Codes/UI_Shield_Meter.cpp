@@ -81,7 +81,7 @@ _int CUI_Shield_Meter::Tick(_double TimeDelta)
 
 	if (m_bCoolTime) //실드를사용했으면 쿨타임을돌려서 
 	{
-		m_fFillTimeAcc += TimeDelta;
+		m_fFillTimeAcc += (_float)TimeDelta;
 	}
 
 	if (0.5f <= m_fFillTimeAcc) //0.5초가 지나면 한칸씩채워줌

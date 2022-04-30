@@ -169,7 +169,7 @@ _int CMonster_Bastion_Spear::Tick(_double _dDeltaTime)
 		m_pPanel->setActive(true);
 		m_pPanel->Set_Show(true);
 
-		m_fUIShowTimeAcc += _dDeltaTime;
+		m_fUIShowTimeAcc += (_float)_dDeltaTime;
 	}
 	if (1.f <= m_fUIShowTimeAcc && m_bUIShow)
 	{

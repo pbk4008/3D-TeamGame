@@ -243,6 +243,7 @@ HRESULT CSilvermane::NativeConstruct(const _uint _iSceneID, void* _pArg)
 	m_pRenderer->SetRenderButton(CRenderer::PBR, true);
 	m_pRenderer->SetRenderButton(CRenderer::HDR, true);
 	m_pRenderer->SetRenderButton(CRenderer::OUTLINE, true);
+
 	//m_pRenderer->SetRenderButton(CRenderer::SHADOW, true);
 
 	m_pTransform->Set_State(CTransform::STATE_POSITION, XMVectorSet(0.f,5.f, 10.f, 1.f));
@@ -278,7 +279,7 @@ HRESULT CSilvermane::NativeConstruct(const _uint _iSceneID, void* _pArg)
 		m_pFillCKey2->setActive(false);
 
 	m_isLootShield = true;
-
+	
 	return S_OK;
 }
 
@@ -2174,6 +2175,11 @@ void CSilvermane::Set_Execution(const _bool _isExecution, CActor* _pTarget)
 CActor* CSilvermane::Get_TargetExecution() const
 {
 	return m_pTargetExecution;
+}
+
+void CSilvermane::Set_TargetExecution(CActor* pTarget)
+{
+	m_pTargetExecution = pTarget;
 }
 
 CHierarchyNode* CSilvermane::Get_ExecutionTargetBone() const

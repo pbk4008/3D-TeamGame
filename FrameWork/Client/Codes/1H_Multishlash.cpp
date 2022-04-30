@@ -25,6 +25,15 @@ _int C1H_Multishlash::Tick(const _double& _dDeltaTime)
 	CActor* pTarget = m_pSilvermane->Get_TargetExecution();
 	if (pTarget)
 	{
+		if (pTarget->Get_Dead())
+		{
+			pTarget = nullptr;
+			m_pSilvermane->Set_TargetExecution(nullptr);
+		}
+	}
+
+	if (pTarget)
+	{
 		CTransform* pTargetTransform = pTarget->Get_Transform();
 		_vector svTargetPos = XMVectorSetY(pTargetTransform->Get_State(CTransform::STATE_POSITION), 0.f);
 		_vector svPos = XMVectorSetY(m_pTransform->Get_State(CTransform::STATE_POSITION), 0.f);

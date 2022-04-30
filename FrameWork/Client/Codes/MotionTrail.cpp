@@ -149,7 +149,7 @@ HRESULT CMotionTrail::Set_ContantBuffer(CModel* pmodel, _fmatrix worldmat, RIM& 
 	if (FAILED(pmodel->SetUp_ValueOnShader("g_rimcolor", &rimdesc.rimcol, sizeof(_float3)))) MSGBOX("Failed To Apply MotionTrail ConstantBuffer");
 	if (FAILED(pmodel->SetUp_ValueOnShader("g_camdir", &rimdesc.camdir, sizeof(_float4)))) MSGBOX("Failed To Apply MotionTrail ConstantBuffer");
 	
-	if (FAILED(pmodel->SetUp_ValueOnShader("g_Fade", &m_lifetime, sizeof(_float)))) MSGBOX("Failed To Apply MotionTrail ConstantBuffer");
+	/*if (FAILED(pmodel->SetUp_ValueOnShader("g_Fade", &m_lifetime, sizeof(_float)))) MSGBOX("Failed To Apply MotionTrail ConstantBuffer");*/
 	if (FAILED(pmodel->SetUp_ValueOnShader("g_UVdvid", &m_UVdvid, sizeof(_float)))) MSGBOX("Failed To Apply MotionTrail ConstantBuffer");
 
 	if (FAILED(pmodel->SetUp_TextureOnShader("g_GradientTex", m_pGradientTex))) MSGBOX("Failed To Apply MotionTrail ConstantBuffer");

@@ -13,8 +13,10 @@ cbuffer Matrices
 cbuffer fadeinout
 {
 	bool g_Fade = false;
+	bool g_FadeOut = false;
 	float g_Alpha = 0.f;
 	float g_Weight = 0.f;
+	float4 g_fadecolor = (float4) 0;
 };
 Texture2D		g_DiffuseTexture;
 Texture2D		g_MaskTexture;
@@ -215,8 +217,11 @@ PS_OUT PS_MAIN(PS_IN In)
 	{
 		Out.vColor.a *= g_Alpha;
 	}
-	//if (Out.vColor.a <= 0.1)
-	//	discard;
+	
+	if(g_FadeOut == true)
+	{
+		Out.vColor *= float4(g_Alpha.xxxx);
+	}
 	
 	return Out;	
 }
@@ -300,8 +305,6 @@ PS_OUT_TRAIL PS_MAIN_TRAIL(PS_IN_TRAIL In)
 
 	return Out;
 }
-
-
 
 
 technique11			DefaultTechnique

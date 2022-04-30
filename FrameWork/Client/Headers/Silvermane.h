@@ -27,6 +27,8 @@ class CEquipmentData;
 class CPlayerData;
 class CDropBox;
 #pragma endregion
+
+
 class CSilvermane final : public CActor
 {
 public:
@@ -151,6 +153,7 @@ public: /* For.DropBox */
 public: /* For.Execute */
 	void Set_Execution(const _bool _isExecution, CActor* _pTarget = nullptr);
 	CActor* Get_TargetExecution() const;
+	void	Set_TargetExecution(CActor* pTarget);
 	CHierarchyNode* Get_ExecutionTargetBone() const;
 	CUI_Blank_FKey* Get_Blank_FKey() const;
 
@@ -244,7 +247,7 @@ private:
 	_vector		m_lightcolor = XMVectorZero();
 
 private:
-	CTexture*	m_pTexture = nullptr;
+	CTexture*		m_pTexture = nullptr;
 	vector<CGameObject*>	m_vecMotionTrail;
 	CModel*			m_pHealSphere = nullptr;
 	_bool			m_bhealcheck = false;
