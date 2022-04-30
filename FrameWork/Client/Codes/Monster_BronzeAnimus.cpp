@@ -95,12 +95,16 @@ _int CMonster_BronzeAnimus::Tick(_double _dDeltaTime)
 {
 	if (true == m_bUIShow)
 	{
+		m_pPanel->setActive(true);
 		m_pPanel->Set_Show(true);
-	}
 
-	if (false == m_bUIShow)
+		m_fUIShowTimeAcc += _dDeltaTime;
+	}
+	if (1.f <= m_fUIShowTimeAcc && m_bUIShow)
 	{
 		m_pPanel->Set_Show(false);
+		m_bUIShow = false;
+		m_fUIShowTimeAcc = 0.f;
 	}
 
 	_int iProgress = __super::Tick(_dDeltaTime);
@@ -330,8 +334,8 @@ void CMonster_BronzeAnimus::setActive(_bool bActive)
 		}
 		if (m_pWeapon)
 			m_pWeapon->setActive(true);
-		if (m_pPanel)
-			m_pPanel->setActive(true);
+		//if (m_pPanel)
+		//	m_pPanel->setActive(true);
 	}
 }
 

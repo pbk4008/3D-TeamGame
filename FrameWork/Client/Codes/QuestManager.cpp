@@ -106,6 +106,12 @@ void CQuestManager::PullingQuest(void)
 	}
 }
 
+void CQuestManager::Clear_All(void)
+{
+	if(0 != m_vecQuest.size())
+		m_vecQuest.clear();
+}
+
 void CQuestManager::Start_Quest(EQuestHeaderType eQuestHead, std::wstring szQuestText)
 {
 	CQuest* pQuest = nullptr;

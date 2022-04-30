@@ -1,9 +1,9 @@
 #pragma once
 
-#ifndef UI_Monster_Level_h__
-#define UI_Monster_Level_h__
+#ifndef UI_HpHeal_Num_h__
+#define UI_HpHeal_Num_h__
 
-#include "UI.h"
+#include "UI_Monster_Panel.h"
 
 BEGIN(Engine)
 class CVIBuffer_Rect;
@@ -13,18 +13,18 @@ class CTransform;
 END
 
 BEGIN(Client)
-class CUI_Monster_Level final : public CUI
+class CUI_HpHeal_Num final : public CUI_Monster_Panel
 {
 public:
-	typedef struct tagUIDesc
+	typedef struct tagUIDesc : public CUI::UIDESC
 	{
-		CUI::UIDESC UIDesc;
+		_uint iTextureNum;
 	}UIACTIVEDESC;
 
 private:
-	explicit CUI_Monster_Level(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);
-	explicit CUI_Monster_Level(const CUI_Monster_Level& rhs);
-	virtual ~CUI_Monster_Level() = default;
+	explicit CUI_HpHeal_Num(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);
+	explicit CUI_HpHeal_Num(const CUI_Monster_Panel& rhs);
+	virtual ~CUI_HpHeal_Num() = default;
 
 public:
 	virtual HRESULT NativeConstruct_Prototype() override;
@@ -37,22 +37,22 @@ public:
 	void Set_UIDesc(UIACTIVEDESC Desc) { m_Desc = Desc; }
 	UIACTIVEDESC Get_UIDesc() { return m_Desc; }
 
+public:
+	void Set_HpHealNum(_uint iNum) { m_Desc.iTextureNum = iNum; }
+
 private:
 	UIACTIVEDESC m_Desc;
-	_float m_fAlpha = 1.f;
-	_float m_fDisappearTimeAcc = 0.f;
 
-	_bool m_bAutoDis = false; //자동으로꺼질수있게
-	_float m_fAutoDisTimeAcc = 0.f; //자동으로꺼질시간
+	class CInventoryData* m_pInventoryData = nullptr;
 
 private:
 	virtual HRESULT SetUp_Components();
 
 public:
-	static CUI_Monster_Level* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);
+	static CUI_HpHeal_Num* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);
 	virtual CGameObject* Clone(const _uint _iSceneID, void* pArg) override;
 	virtual void Free() override;
 };
 
 END
-#endif // UI_Monster_Level_h__
+#endif // UI_HpHeal_Num_h__

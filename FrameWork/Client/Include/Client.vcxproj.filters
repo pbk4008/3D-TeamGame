@@ -73,9 +73,6 @@
     <Filter Include="02.GameObject\05.UI\01.UI_Ingame\00.UI_Ingame_Static">
       <UniqueIdentifier>{25165615-4570-4a4e-bba1-7184efc01ed4}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObject\05.UI\01.UI_Ingame\01.Meter\03.Experience">
-      <UniqueIdentifier>{e9863d16-3274-42ad-b939-668432992c6a}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObject\05.UI\01.UI_Ingame\01.Meter\04.Quest">
       <UniqueIdentifier>{27923a70-84a2-468f-a230-34f40a40682f}</UniqueIdentifier>
     </Filter>
@@ -1204,6 +1201,15 @@
     <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_Spear\State\00.Idle">
       <UniqueIdentifier>{2398d3e4-0aad-4c0a-b779-2676cae6f42f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\05.UI\01.UI_Ingame\01.Meter\03.Shield">
+      <UniqueIdentifier>{e9863d16-3274-42ad-b939-668432992c6a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.UI\01.UI_Ingame\01.Meter\02.Monster\06.LevelNum">
+      <UniqueIdentifier>{110ce544-5285-4e2e-9d7e-e77fb0b79b91}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.UI\01.UI_Ingame\01.Meter\00.Player\02.HpHeal_Num">
+      <UniqueIdentifier>{929536fd-efd3-4f5e-9408-f742af589180}</UniqueIdentifier>
+	</Filter>
     <Filter Include="02.GameObject\02.Map\01.Environment\03.Circle_Floor">
       <UniqueIdentifier>{6c43c0c8-7a09-4c56-afaf-c358d946e1e1}</UniqueIdentifier>
     </Filter>
@@ -2589,6 +2595,15 @@
     <ClInclude Include="..\Headers\Silvermane_Bow.h">
       <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Emote</Filter>
     </ClInclude>
+    <ClInclude Include="..\Headers\UI_Shield_Meter.h">
+      <Filter>02.GameObject\05.UI\01.UI_Ingame\01.Meter\03.Shield</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\UI_Monster_LevelNum.h">
+      <Filter>02.GameObject\05.UI\01.UI_Ingame\01.Meter\02.Monster\06.LevelNum</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\UI_HpHeal_Num.h">
+      <Filter>02.GameObject\05.UI\01.UI_Ingame\01.Meter\00.Player\02.HpHeal_Num</Filter>
+	</ClInclude>
     <ClInclude Include="..\Codes\Circle_Floor.h">
       <Filter>02.GameObject\02.Map\01.Environment\03.Circle_Floor</Filter>
     </ClInclude>
@@ -3956,6 +3971,15 @@
     <ClCompile Include="..\Codes\Silvermane_Bow.cpp">
       <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\Emote</Filter>
     </ClCompile>
+    <ClCompile Include="..\Codes\UI_Shield_Meter.cpp">
+      <Filter>02.GameObject\05.UI\01.UI_Ingame\01.Meter\03.Shield</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\UI_Monster_LevelNum.cpp">
+      <Filter>02.GameObject\05.UI\01.UI_Ingame\01.Meter\02.Monster\06.LevelNum</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\UI_HpHeal_Num.cpp">
+      <Filter>02.GameObject\05.UI\01.UI_Ingame\01.Meter\00.Player\02.HpHeal_Num</Filter>
+	</ClCompile>
     <ClCompile Include="..\Codes\Circle_Floor.cpp">
       <Filter>02.GameObject\02.Map\01.Environment\03.Circle_Floor</Filter>
     </ClCompile>

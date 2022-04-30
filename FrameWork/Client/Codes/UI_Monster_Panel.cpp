@@ -8,6 +8,7 @@
 
 #include "UI_Monster_Back.h"
 #include "UI_Monster_Level.h"
+#include "UI_Monster_LevelNum.h"
 #include "UI_Monster_HpBar.h"
 #include "UI_Monster_BackHpBar.h"
 #include "UI_Monster_Name.h"
@@ -29,6 +30,7 @@ CUI_Monster_Panel::CUI_Monster_Panel(const CUI_Monster_Panel& rhs)
 	, m_pUIHpBar(rhs.m_pUIHpBar)
 	, m_pUIBackHpBar(rhs.m_pUIBackHpBar)
 	, m_pUILevel(rhs.m_pUILevel)
+	, m_pUILevelNum(rhs.m_pUILevelNum)
 	, m_pUIName(rhs.m_pUIName)
 	, m_pUIGroggyBar(rhs.m_pUIGroggyBar)
 {
@@ -36,6 +38,7 @@ CUI_Monster_Panel::CUI_Monster_Panel(const CUI_Monster_Panel& rhs)
 	Safe_AddRef(m_pUIHpBar);
 	Safe_AddRef(m_pUIBackHpBar);
 	Safe_AddRef(m_pUILevel);
+	Safe_AddRef(m_pUILevelNum);
 	Safe_AddRef(m_pUIName);
 	Safe_AddRef(m_pUIGroggyBar);
 }
@@ -75,13 +78,23 @@ HRESULT CUI_Monster_Panel::NativeConstruct(const _uint _iSceneID, void* pArg)
 
 	Safe_AddRef(m_pUIBack);
 	Safe_AddRef(m_pUILevel);
+	Safe_AddRef(m_pUILevelNum);
 	Safe_AddRef(m_pUIHpBar);
 	Safe_AddRef(m_pUIBackHpBar);
 	Safe_AddRef(m_pUIName);
 	Safe_AddRef(m_pUIGroggyBar);
 
+	m_bShow = false;
 
-	//setActive(false);
+	m_pUIBack->setActive(false);
+	m_pUILevel->setActive(false);
+	m_pUILevelNum->setActive(false);
+	m_pUIName->setActive(false);
+	m_pUIHpBar->setActive(false);
+	m_pUIBackHpBar->setActive(false);
+	m_pUIGroggyBar->setActive(false);
+
+	setActive(false);
 
 	return S_OK;
 }
@@ -97,10 +110,6 @@ _int CUI_Monster_Panel::Tick(_double TimeDelta)
 	}
 	Update_Panel(TimeDelta);
 
-	if (true == g_pObserver->Get_Player()->Get_Dead())
-	{
-		m_bShow = false;
-	}
 
 	return 0;
 }
@@ -112,7 +121,7 @@ _int CUI_Monster_Panel::LateTick(_double TimeDelta)
 
 	if (nullptr != m_pRenderer)
 	{
-		m_pRenderer->Add_RenderGroup(CRenderer::RENDER::RENDER_UI, this);
+		m_pRenderer->Add_RenderGroup(CRenderer::RENDER::RENDER_ALPHANB, this);
 	}
 	return _int();
 }
@@ -121,8 +130,17 @@ HRESULT CUI_Monster_Panel::Render()
 {
 	if (m_bShow)
 	{
+		m_pUIBack->setActive(true);
+		m_pUILevel->setActive(true);
+		m_pUILevelNum->setActive(true);
+		m_pUIName->setActive(true);
+		m_pUIHpBar->setActive(true);
+		m_pUIBackHpBar->setActive(true);
+		m_pUIGroggyBar->setActive(true);
+
 		m_pUIBack->Set_Show(true);
 		m_pUILevel->Set_Show(true);
+		m_pUILevelNum->Set_Show(true);
 		m_pUIName->Set_Show(true);
 		m_pUIHpBar->Set_Show(true);
 		m_pUIBackHpBar->Set_Show(true);
@@ -132,6 +150,7 @@ HRESULT CUI_Monster_Panel::Render()
 	{
 		m_pUIBack->Set_Show(false);
 		m_pUILevel->Set_Show(false);
+		m_pUILevelNum->Set_Show(false);
 		m_pUIName->Set_Show(false);
 		m_pUIHpBar->Set_Show(false);
 		m_pUIBackHpBar->Set_Show(false);
@@ -225,6 +244,20 @@ HRESULT CUI_Monster_Panel::Setting_Crawler()
 		(CGameObject**)&m_pUIBack)))
 		return E_FAIL;
 
+	//MonsterBar LevelNum
+	CUI_Monster_LevelNum::UIACTIVEDESC Desc1;
+	_tcscpy_s(Desc1.UIDesc.TextureTag, L"Texture_Monster_LevelNum");
+	Desc1.UIDesc.IDTag = 13;
+	Desc1.UIDesc.bMinus = false;
+	Desc1.UIDesc.fAngle = 0.f;
+	Desc1.UIDesc.fPos = { 0.f, 0.f, 0.f };
+	Desc1.UIDesc.fSize = { 1.f, 1.f };
+	Desc1.iTextureNum = 1;
+
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer(m_iSceneID, L"Layer_UI", L"Proto_GameObject_UI_Monster_LevelNum", &Desc1,
+		(CGameObject**)&m_pUILevelNum)))
+		return E_FAIL;
+
 	//MonsterBar Level
 	CUI_Monster_Level::UIACTIVEDESC Desc2;
 	_tcscpy_s(Desc2.UIDesc.TextureTag, L"Texture_Monster_Level_1");
@@ -237,6 +270,7 @@ HRESULT CUI_Monster_Panel::Setting_Crawler()
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer(m_iSceneID, L"Layer_UI", L"Proto_GameObject_UI_Monster_Level", &Desc2,
 		(CGameObject**)&m_pUILevel)))
 		return E_FAIL;
+
 
 	//MonsterBar Bar
 	CUI_Monster_HpBar::UIBARDESC Desc3;
@@ -312,6 +346,20 @@ HRESULT CUI_Monster_Panel::Setting_Aberrant()
 
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer(m_iSceneID, L"Layer_UI", L"Proto_GameObject_UI_Monster_Back", &Desc,
 		(CGameObject**)&m_pUIBack)))
+		return E_FAIL;
+
+	//MonsterBar LevelNum
+	CUI_Monster_LevelNum::UIACTIVEDESC Desc1;
+	_tcscpy_s(Desc1.UIDesc.TextureTag, L"Texture_Monster_LevelNum");
+	Desc1.UIDesc.IDTag = 13;
+	Desc1.UIDesc.bMinus = false;
+	Desc1.UIDesc.fAngle = 0.f;
+	Desc1.UIDesc.fPos = { 0.f, 0.f, 0.f };
+	Desc1.UIDesc.fSize = { 1.f, 1.f };
+	Desc1.iTextureNum = 2;
+
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer(m_iSceneID, L"Layer_UI", L"Proto_GameObject_UI_Monster_LevelNum", &Desc1,
+		(CGameObject**)&m_pUILevelNum)))
 		return E_FAIL;
 
 	//MonsterBar Level
@@ -401,6 +449,20 @@ HRESULT CUI_Monster_Panel::Setting_Animus()
 		(CGameObject**)&m_pUIBack)))
 		return E_FAIL;
 
+	//MonsterBar LevelNum
+	CUI_Monster_LevelNum::UIACTIVEDESC Desc1;
+	_tcscpy_s(Desc1.UIDesc.TextureTag, L"Texture_Monster_LevelNum");
+	Desc1.UIDesc.IDTag = 13;
+	Desc1.UIDesc.bMinus = false;
+	Desc1.UIDesc.fAngle = 0.f;
+	Desc1.UIDesc.fPos = { 0.f, 0.f, 0.f };
+	Desc1.UIDesc.fSize = { 1.f, 1.f };
+	Desc1.iTextureNum = 8;
+
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer(m_iSceneID, L"Layer_UI", L"Proto_GameObject_UI_Monster_LevelNum", &Desc1,
+		(CGameObject**)&m_pUILevelNum)))
+		return E_FAIL;
+
 	//MonsterBar Level
 	CUI_Monster_Level::UIACTIVEDESC Desc2;
 	_tcscpy_s(Desc2.UIDesc.TextureTag, L"Texture_Monster_Level_2");
@@ -486,6 +548,20 @@ HRESULT CUI_Monster_Panel::Setting_Sword()
 
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer(m_iSceneID, L"Layer_UI", L"Proto_GameObject_UI_Monster_Back", &Desc,
 		(CGameObject**)&m_pUIBack)))
+		return E_FAIL;
+
+	//MonsterBar LevelNum
+	CUI_Monster_LevelNum::UIACTIVEDESC Desc1;
+	_tcscpy_s(Desc1.UIDesc.TextureTag, L"Texture_Monster_LevelNum");
+	Desc1.UIDesc.IDTag = 13;
+	Desc1.UIDesc.bMinus = false;
+	Desc1.UIDesc.fAngle = 0.f;
+	Desc1.UIDesc.fPos = { 0.f, 0.f, 0.f };
+	Desc1.UIDesc.fSize = { 1.f, 1.f };
+	Desc1.iTextureNum = 5;
+
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer(m_iSceneID, L"Layer_UI", L"Proto_GameObject_UI_Monster_LevelNum", &Desc1,
+		(CGameObject**)&m_pUILevelNum)))
 		return E_FAIL;
 
 	//MonsterBar Level
@@ -576,6 +652,20 @@ HRESULT CUI_Monster_Panel::Setting_Spear()
 		(CGameObject**)&m_pUIBack)))
 		return E_FAIL;
 
+	//MonsterBar LevelNum
+	CUI_Monster_LevelNum::UIACTIVEDESC Desc1;
+	_tcscpy_s(Desc1.UIDesc.TextureTag, L"Texture_Monster_LevelNum");
+	Desc1.UIDesc.IDTag = 13;
+	Desc1.UIDesc.bMinus = false;
+	Desc1.UIDesc.fAngle = 0.f;
+	Desc1.UIDesc.fPos = { 0.f, 0.f, 0.f };
+	Desc1.UIDesc.fSize = { 1.f, 1.f };
+	Desc1.iTextureNum = 8;
+
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer(m_iSceneID, L"Layer_UI", L"Proto_GameObject_UI_Monster_LevelNum", &Desc1,
+		(CGameObject**)&m_pUILevelNum)))
+		return E_FAIL;
+
 	//MonsterBar Level
 	CUI_Monster_Level::UIACTIVEDESC Desc2;
 	_tcscpy_s(Desc2.UIDesc.TextureTag, L"Texture_Monster_Level_2");
@@ -662,6 +752,20 @@ HRESULT CUI_Monster_Panel::Setting_Shooter()
 
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer(m_iSceneID, L"Layer_UI", L"Proto_GameObject_UI_Monster_Back", &Desc,
 		(CGameObject**)&m_pUIBack)))
+		return E_FAIL;
+
+	//MonsterBar LevelNum
+	CUI_Monster_LevelNum::UIACTIVEDESC Desc1;
+	_tcscpy_s(Desc1.UIDesc.TextureTag, L"Texture_Monster_LevelNum");
+	Desc1.UIDesc.IDTag = 13;
+	Desc1.UIDesc.bMinus = false;
+	Desc1.UIDesc.fAngle = 0.f;
+	Desc1.UIDesc.fPos = { 0.f, 0.f, 0.f };
+	Desc1.UIDesc.fSize = { 1.f, 1.f };
+	Desc1.iTextureNum = 6;
+
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer(m_iSceneID, L"Layer_UI", L"Proto_GameObject_UI_Monster_LevelNum", &Desc1,
+		(CGameObject**)&m_pUILevelNum)))
 		return E_FAIL;
 
 	//MonsterBar Level
@@ -752,6 +856,20 @@ HRESULT CUI_Monster_Panel::Setting_Healer()
 		(CGameObject**)&m_pUIBack)))
 		return E_FAIL;
 
+	//MonsterBar LevelNum
+	CUI_Monster_LevelNum::UIACTIVEDESC Desc1;
+	_tcscpy_s(Desc1.UIDesc.TextureTag, L"Texture_Monster_LevelNum");
+	Desc1.UIDesc.IDTag = 13;
+	Desc1.UIDesc.bMinus = false;
+	Desc1.UIDesc.fAngle = 0.f;
+	Desc1.UIDesc.fPos = { 0.f, 0.f, 0.f };
+	Desc1.UIDesc.fSize = { 1.f, 1.f };
+	Desc1.iTextureNum = 4;
+
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer(m_iSceneID, L"Layer_UI", L"Proto_GameObject_UI_Monster_LevelNum", &Desc1,
+		(CGameObject**)&m_pUILevelNum)))
+		return E_FAIL;
+
 	//MonsterBar Level
 	CUI_Monster_Level::UIACTIVEDESC Desc2;
 	_tcscpy_s(Desc2.UIDesc.TextureTag, L"Texture_Monster_Level_2");
@@ -840,6 +958,20 @@ HRESULT CUI_Monster_Panel::Setting_2HSword()
 		(CGameObject**)&m_pUIBack)))
 		return E_FAIL;
 
+	//MonsterBar LevelNum
+	CUI_Monster_LevelNum::UIACTIVEDESC Desc1;
+	_tcscpy_s(Desc1.UIDesc.TextureTag, L"Texture_Monster_LevelNum");
+	Desc1.UIDesc.IDTag = 13;
+	Desc1.UIDesc.bMinus = false;
+	Desc1.UIDesc.fAngle = 0.f;
+	Desc1.UIDesc.fPos = { 0.f, 0.f, 0.f };
+	Desc1.UIDesc.fSize = { 1.f, 1.f };
+	Desc1.iTextureNum = 7;
+
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer(m_iSceneID, L"Layer_UI", L"Proto_GameObject_UI_Monster_LevelNum", &Desc1,
+		(CGameObject**)&m_pUILevelNum)))
+		return E_FAIL;
+
 	//MonsterBar Level
 	CUI_Monster_Level::UIACTIVEDESC Desc2;
 	_tcscpy_s(Desc2.UIDesc.TextureTag, L"Texture_Monster_Level_2");
@@ -926,6 +1058,20 @@ HRESULT CUI_Monster_Panel::Setting_MidBoss()
 
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer(m_iSceneID, L"Layer_UI", L"Proto_GameObject_UI_Monster_Back", &Desc,
 		(CGameObject**)&m_pUIBack)))
+		return E_FAIL;
+
+	//MonsterBar LevelNum
+	CUI_Monster_LevelNum::UIACTIVEDESC Desc1;
+	_tcscpy_s(Desc1.UIDesc.TextureTag, L"Texture_Monster_LevelNum");
+	Desc1.UIDesc.IDTag = 13;
+	Desc1.UIDesc.bMinus = false;
+	Desc1.UIDesc.fAngle = 0.f;
+	Desc1.UIDesc.fPos = { 0.f, 0.f, 0.f };
+	Desc1.UIDesc.fSize = { 1.f, 1.f };
+	Desc1.iTextureNum = 9;
+
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer(m_iSceneID, L"Layer_UI", L"Proto_GameObject_UI_Monster_LevelNum", &Desc1,
+		(CGameObject**)&m_pUILevelNum)))
 		return E_FAIL;
 
 	//MonsterBar Level
@@ -1106,6 +1252,14 @@ void CUI_Monster_Panel::Update_Setting_Crawler(_double TimeDelta)
 	Backmat.r[3] = { 0.f, 0.f, 0.f, 1.f };
 	BackTransform->Set_WorldMatrix(Backmat * m_pTransform->Get_WorldMatrix());
 
+	//UI Level Num
+	CTransform* LevelNumTransform = (CTransform*)m_pUILevelNum->Get_Component(L"Com_Transform");
+	_matrix LevelNummat = XMMatrixIdentity();
+	LevelNummat.r[0] = XMVectorSetX(LevelNummat.r[0], 0.55f);
+	LevelNummat.r[1] = XMVectorSetY(LevelNummat.r[1], 0.55f);
+	LevelNummat.r[3] = { -1.55f, 0.13f, -0.02f, 1.f };
+	LevelNumTransform->Set_WorldMatrix(LevelNummat * m_pTransform->Get_WorldMatrix());
+
 	//UI Level
 	CTransform* LevelTransform = (CTransform*)m_pUILevel->Get_Component(L"Com_Transform");
 	_matrix Levelmat = XMMatrixIdentity();
@@ -1178,6 +1332,14 @@ void CUI_Monster_Panel::Update_Setting_Aberrant(_double TimeDelta)
 	Backmat.r[1] = XMVectorSetY(Backmat.r[1], 0.40f);
 	Backmat.r[3] = { 0.f, 0.f, 0.f, 1.f };
 	BackTransform->Set_WorldMatrix(Backmat * m_pTransform->Get_WorldMatrix());
+
+	//UI Level Num
+	CTransform* LevelNumTransform = (CTransform*)m_pUILevelNum->Get_Component(L"Com_Transform");
+	_matrix LevelNummat = XMMatrixIdentity();
+	LevelNummat.r[0] = XMVectorSetX(LevelNummat.r[0], 0.55f);
+	LevelNummat.r[1] = XMVectorSetY(LevelNummat.r[1], 0.55f);
+	LevelNummat.r[3] = { -1.55f, 0.13f, -0.02f, 1.f };
+	LevelNumTransform->Set_WorldMatrix(LevelNummat * m_pTransform->Get_WorldMatrix());
 
 	//UI Level
 	CTransform* LevelTransform = (CTransform*)m_pUILevel->Get_Component(L"Com_Transform");
@@ -1252,6 +1414,14 @@ void CUI_Monster_Panel::Update_Setting_Animus(_double TimeDelta)
 	Backmat.r[3] = { 0.f, 0.f, 0.f, 1.f };
 	BackTransform->Set_WorldMatrix(Backmat * m_pTransform->Get_WorldMatrix());
 
+	//UI Level Num
+	CTransform* LevelNumTransform = (CTransform*)m_pUILevelNum->Get_Component(L"Com_Transform");
+	_matrix LevelNummat = XMMatrixIdentity();
+	LevelNummat.r[0] = XMVectorSetX(LevelNummat.r[0], 0.55f);
+	LevelNummat.r[1] = XMVectorSetY(LevelNummat.r[1], 0.55f);
+	LevelNummat.r[3] = { -1.55f, 0.13f, -0.02f, 1.f };
+	LevelNumTransform->Set_WorldMatrix(LevelNummat * m_pTransform->Get_WorldMatrix());
+
 	//UI Level
 	CTransform* LevelTransform = (CTransform*)m_pUILevel->Get_Component(L"Com_Transform");
 	_matrix Levelmat = XMMatrixIdentity();
@@ -1324,6 +1494,14 @@ void CUI_Monster_Panel::Update_Setting_Sword(_double TimeDelta)
 	Backmat.r[1] = XMVectorSetY(Backmat.r[1], 0.40f);
 	Backmat.r[3] = { 0.f, 0.f, 0.f, 1.f };
 	BackTransform->Set_WorldMatrix(Backmat * m_pTransform->Get_WorldMatrix());
+
+	//UI Level Num
+	CTransform* LevelNumTransform = (CTransform*)m_pUILevelNum->Get_Component(L"Com_Transform");
+	_matrix LevelNummat = XMMatrixIdentity();
+	LevelNummat.r[0] = XMVectorSetX(LevelNummat.r[0], 0.55f);
+	LevelNummat.r[1] = XMVectorSetY(LevelNummat.r[1], 0.55f);
+	LevelNummat.r[3] = { -1.55f, 0.13f, -0.02f, 1.f };
+	LevelNumTransform->Set_WorldMatrix(LevelNummat * m_pTransform->Get_WorldMatrix());
 
 	//UI Level
 	CTransform* LevelTransform = (CTransform*)m_pUILevel->Get_Component(L"Com_Transform");
@@ -1398,6 +1576,14 @@ void CUI_Monster_Panel::Update_Setting_Spear(_double TimeDelta)
 	Backmat.r[3] = { 0.f, 0.f, 0.f, 1.f };
 	BackTransform->Set_WorldMatrix(Backmat * m_pTransform->Get_WorldMatrix());
 
+	//UI Level Num
+	CTransform* LevelNumTransform = (CTransform*)m_pUILevelNum->Get_Component(L"Com_Transform");
+	_matrix LevelNummat = XMMatrixIdentity();
+	LevelNummat.r[0] = XMVectorSetX(LevelNummat.r[0], 0.55f);
+	LevelNummat.r[1] = XMVectorSetY(LevelNummat.r[1], 0.55f);
+	LevelNummat.r[3] = { -1.55f, 0.13f, -0.02f, 1.f };
+	LevelNumTransform->Set_WorldMatrix(LevelNummat * m_pTransform->Get_WorldMatrix());
+
 	//UI Level
 	CTransform* LevelTransform = (CTransform*)m_pUILevel->Get_Component(L"Com_Transform");
 	_matrix Levelmat = XMMatrixIdentity();
@@ -1470,6 +1656,14 @@ void CUI_Monster_Panel::Update_Setting_Shooter(_double TimeDelta)
 	Backmat.r[1] = XMVectorSetY(Backmat.r[1], 0.40f);
 	Backmat.r[3] = { 0.f, 0.f, 0.f, 1.f };
 	BackTransform->Set_WorldMatrix(Backmat * m_pTransform->Get_WorldMatrix());
+
+	//UI Level Num
+	CTransform* LevelNumTransform = (CTransform*)m_pUILevelNum->Get_Component(L"Com_Transform");
+	_matrix LevelNummat = XMMatrixIdentity();
+	LevelNummat.r[0] = XMVectorSetX(LevelNummat.r[0], 0.55f);
+	LevelNummat.r[1] = XMVectorSetY(LevelNummat.r[1], 0.55f);
+	LevelNummat.r[3] = { -1.55f, 0.13f, -0.02f, 1.f };
+	LevelNumTransform->Set_WorldMatrix(LevelNummat * m_pTransform->Get_WorldMatrix());
 
 	//UI Level
 	CTransform* LevelTransform = (CTransform*)m_pUILevel->Get_Component(L"Com_Transform");
@@ -1544,6 +1738,14 @@ void CUI_Monster_Panel::Update_Setting_Healer(_double TimeDelta)
 	Backmat.r[3] = { 0.f, 0.f, 0.f, 1.f };
 	BackTransform->Set_WorldMatrix(Backmat * m_pTransform->Get_WorldMatrix());
 
+	//UI Level Num
+	CTransform* LevelNumTransform = (CTransform*)m_pUILevelNum->Get_Component(L"Com_Transform");
+	_matrix LevelNummat = XMMatrixIdentity();
+	LevelNummat.r[0] = XMVectorSetX(LevelNummat.r[0], 0.55f);
+	LevelNummat.r[1] = XMVectorSetY(LevelNummat.r[1], 0.55f);
+	LevelNummat.r[3] = { -1.55f, 0.13f, -0.02f, 1.f };
+	LevelNumTransform->Set_WorldMatrix(LevelNummat * m_pTransform->Get_WorldMatrix());
+
 	//UI Level
 	CTransform* LevelTransform = (CTransform*)m_pUILevel->Get_Component(L"Com_Transform");
 	_matrix Levelmat = XMMatrixIdentity();
@@ -1616,6 +1818,15 @@ void CUI_Monster_Panel::Update_Setting_2HSword(_double TimeDelta)
 	Backmat.r[1] = XMVectorSetY(Backmat.r[1], 0.40f);
 	Backmat.r[3] = { 0.f, 0.f, 0.f, 1.f };
 	BackTransform->Set_WorldMatrix(Backmat * m_pTransform->Get_WorldMatrix());
+
+	//UI Level Num
+	CTransform* LevelNumTransform = (CTransform*)m_pUILevelNum->Get_Component(L"Com_Transform");
+	_matrix LevelNummat = XMMatrixIdentity();
+	LevelNummat.r[0] = XMVectorSetX(LevelNummat.r[0], 0.55f);
+	LevelNummat.r[1] = XMVectorSetY(LevelNummat.r[1], 0.55f);
+	LevelNummat.r[3] = { -1.55f, 0.13f, -0.02f, 1.f };
+	LevelNumTransform->Set_WorldMatrix(LevelNummat * m_pTransform->Get_WorldMatrix());
+
 
 	//UI Level
 	CTransform* LevelTransform = (CTransform*)m_pUILevel->Get_Component(L"Com_Transform");
@@ -1690,6 +1901,14 @@ void CUI_Monster_Panel::Update_Setting_MidBoss(_double TimeDelta)
 	Backmat.r[3] = { 0.f, 0.f, 0.f, 1.f };
 	BackTransform->Set_WorldMatrix(Backmat * m_pTransform->Get_WorldMatrix());
 
+	//UI Level Num
+	CTransform* LevelNumTransform = (CTransform*)m_pUILevelNum->Get_Component(L"Com_Transform");
+	_matrix LevelNummat = XMMatrixIdentity();
+	LevelNummat.r[0] = XMVectorSetX(LevelNummat.r[0], 0.55f);
+	LevelNummat.r[1] = XMVectorSetY(LevelNummat.r[1], 0.55f);
+	LevelNummat.r[3] = { -1.55f, 0.13f, -0.02f, 1.f };
+	LevelNumTransform->Set_WorldMatrix(LevelNummat * m_pTransform->Get_WorldMatrix());
+
 	//UI Level
 	CTransform* LevelTransform = (CTransform*)m_pUILevel->Get_Component(L"Com_Transform");
 	_matrix Levelmat = XMMatrixIdentity();
@@ -1758,6 +1977,7 @@ void CUI_Monster_Panel::Set_UIRemove(_bool bCheck)
 
 	m_pUIBack->Set_Remove(m_bRemove);
 	m_pUILevel->Set_Remove(m_bRemove);
+	m_pUILevelNum->Set_Remove(m_bRemove);
 	m_pUIHpBar->Set_Remove(m_bRemove);
 	m_pUIBackHpBar->Set_Remove(m_bRemove);
 	m_pUIName->Set_Remove(m_bRemove);
@@ -1795,6 +2015,7 @@ void CUI_Monster_Panel::Free()
 	__super::Free();
 	Safe_Release(m_pUIBack);//°ª
 	Safe_Release(m_pUILevel);//°ª
+	Safe_Release(m_pUILevelNum);//°ª
 	Safe_Release(m_pUIHpBar);
 	Safe_Release(m_pUIBackHpBar);
 	Safe_Release(m_pUIName);

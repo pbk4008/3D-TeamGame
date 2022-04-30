@@ -47,7 +47,7 @@ _int CMeshEffect_Boss_Effect::Tick(_double _dDeltaTime)
 
 	m_fAccTime += (_float)_dDeltaTime;
 
-	if (g_pGameInstance->getkeyDown(DIK_NUMPAD7))
+	if (g_pGameInstance->getkeyDown(DIK_NUMPAD2))
 	{
 		//////////////////////// 태그
 		//// 트레일
@@ -112,7 +112,7 @@ _int CMeshEffect_Boss_Effect::Tick(_double _dDeltaTime)
 		if (FAILED(m_pMaterial->Change_Texture("g_MaskTexture", TEXTURETYPE::TEX_MASK, L"T_ShieldPattern2")))
 			return -1;;
 	}
-	if (g_pGameInstance->getkeyDown(DIK_NUMPAD8))
+	if (g_pGameInstance->getkeyDown(DIK_NUMPAD3))
 	{
 		///////////////////////// 태그
 		// Model_MeshEffect

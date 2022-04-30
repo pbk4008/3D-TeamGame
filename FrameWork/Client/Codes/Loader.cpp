@@ -60,15 +60,18 @@
 #include "UI_Ingame.h"
 #include "UI_Player_HpBar.h"
 #include "UI_Player_HpBar_Red.h"
+#include "UI_HpHeal_Num.h"
 #include "UI_Monster_Panel.h"
 #include "UI_Monster_Back.h"
 #include "UI_Monster_Level.h"
+#include "UI_Monster_LevelNum.h"
 #include "UI_Monster_HpBar.h"
 #include "UI_Monster_BackHpBar.h"
 #include "UI_Monster_GroggyBar.h"
 #include "UI_Monster_Name.h"
-#include "UI_Tuto_Base.h"
-#include "UI_Tuto_Font.h"
+//#include "UI_Tuto_Base.h"
+//#include "UI_Tuto_Font.h"
+#include "UI_Shield_Meter.h"
 #include "UI_Blank_CKey.h"
 #include "UI_Blank_FKey.h"
 #include "UI_Fill_CKey.h"
@@ -197,8 +200,8 @@ HRESULT CLoader::SetUp_Stage1_Object()
 	if (FAILED(Load_Stage1MonsterLoad()))
 		return E_FAIL;
 	
-	//if (FAILED(Load_Stage1BossLoad()))
-	//	return E_FAIL;
+	if (FAILED(Load_Stage1BossLoad()))
+		return E_FAIL;
 
 	if (FAILED(Load_Stage1StaticUILoad()))
 		return E_FAIL;
@@ -215,23 +218,23 @@ HRESULT CLoader::SetUp_Stage1_Object()
 		return E_FAIL;
 #pragma endregion
 
-	//if (FAILED(Load_Stage1JumpTrigger()))
-	//	return E_FAIL;
+	if (FAILED(Load_Stage1JumpTrigger()))
+		return E_FAIL;
 
 	if (FAILED(Load_Stage1_TreasureChest_Load()))
 		return E_FAIL;
 
-	//if (FAILED(Load_Stage1TriggerLod()))
-	//	return E_FAIL;
+	if (FAILED(Load_Stage1TriggerLod()))
+		return E_FAIL;
 
-	//if (FAILED(Load_Stage1Meteor()))
-	//	return E_FAIL;
+	if (FAILED(Load_Stage1Meteor()))
+		return E_FAIL;
 
 	//if (FAILED(Load_Stage1_Cinema_Object()))
 	//	return E_FAIL;
 
-	//if (FAILED(Load_Pot()))
-	//	return E_FAIL;
+	if (FAILED(Load_Pot()))
+		return E_FAIL;
 
 	return S_OK;
 }
@@ -454,6 +457,22 @@ HRESULT CLoader::Load_Stage1UILoad()
 		return E_FAIL;
 	}
 
+	//Level
+	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_UI_Monster_LevelNum"), CUI_Monster_LevelNum::Create(m_pDevice, m_pDeviceContext))))
+	{
+		return E_FAIL;
+	}
+	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"Texture_Monster_LevelNum", L"../bin/Resources/Texture/UI/Number/%d.dds", 10)))
+	{
+		return E_FAIL;
+	}
+
+	//PlayerHpHealNum
+	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_UI_HpHeal_Num"), CUI_HpHeal_Num::Create(m_pDevice, m_pDeviceContext))))
+	{
+		return E_FAIL;
+	}
+
 	//PlayerHpBar
 	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_UI_Player_HpBar"), CUI_Player_HpBar::Create(m_pDevice, m_pDeviceContext))))
 	{
@@ -505,26 +524,35 @@ HRESULT CLoader::Load_Stage1UILoad()
 		return E_FAIL;
 	}
 
+	//Shield_Meter
+	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_UI_Shield_Meter"), CUI_Shield_Meter::Create(m_pDevice, m_pDeviceContext))))
+	{
+		return E_FAIL;
+	}
+	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"Texture_Shield_Meter", L"../bin/Resources/Texture/UI/Shield_Meter/%d.dds", 16)))
+	{
+		return E_FAIL;
+	}
+ 
+	////Tuto_Base
+	//if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_UI_Tuto_Base"), CUI_Tuto_Base::Create(m_pDevice, m_pDeviceContext))))
+	//{
+	//	return E_FAIL;
+	//}
+	//if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"Texture_Tuto_Base", L"../bin/Resources/Texture/UI/Static/Active/T_HUD_Tutorial_Backplate.dds")))
+	//{
+	//	return E_FAIL;
+	//}
 
-	//Tuto_Base
-	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_UI_Tuto_Base"), CUI_Tuto_Base::Create(m_pDevice, m_pDeviceContext))))
-	{
-		return E_FAIL;
-	}
-	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"Texture_Tuto_Base", L"../bin/Resources/Texture/UI/Static/Active/T_HUD_Tutorial_Backplate.dds")))
-	{
-		return E_FAIL;
-	}
-
-	//Tuto_Font
-	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_UI_Tuto_Font"), CUI_Tuto_Font::Create(m_pDevice, m_pDeviceContext))))
-	{
-		return E_FAIL;
-	}
-	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"Texture_Tuto_Font", L"../bin/Resources/Texture/UI/Static/Active/Tuto_Font_%d.dds", 4)))
-	{
-		return E_FAIL;
-	}
+	////Tuto_Font
+	//if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_UI_Tuto_Font"), CUI_Tuto_Font::Create(m_pDevice, m_pDeviceContext))))
+	//{
+	//	return E_FAIL;
+	//}
+	//if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"Texture_Tuto_Font", L"../bin/Resources/Texture/UI/Static/Active/Tuto_Font_%d.dds", 4)))
+	//{
+	//	return E_FAIL;
+	//}
 
 	//Blank_CKey
 	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_UI_Blank_CKey"), CUI_Blank_CKey::Create(m_pDevice, m_pDeviceContext))))
@@ -1361,8 +1389,10 @@ HRESULT CLoader::Load_Stage1PlayerLoad()
 	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"DissovleGradient", L"../bin/Resources/Texture/T_FlameGradient_01.dds"))) MSGBOX("Failed To Add dissolveGradient Tex");
 
 #pragma region 오브젝트
-	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Silvermane", CSilvermane::Create(m_pDevice, m_pDeviceContext))))	return E_FAIL;
-	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Camera_Silvermane", CCamera_Silvermane::Create(m_pDevice, m_pDeviceContext))))		return E_FAIL;
+	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Silvermane", CSilvermane::Create(m_pDevice, m_pDeviceContext))))	
+		return E_FAIL;
+	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Camera_Silvermane", CCamera_Silvermane::Create(m_pDevice, m_pDeviceContext))))		
+		return E_FAIL;
 	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Wall", CWall::Create(m_pDevice, m_pDeviceContext)))) MSGBOX(L"Wall 원본 생성 실패");
 	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_FlyingShield", CFlyingShield::Create(m_pDevice, m_pDeviceContext)))) MSGBOX(L"날으는 쉴드 원본 생성 실패");
 	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_MotionTrail", CMotionTrail::Create(m_pDevice, m_pDeviceContext)))) MSGBOX(L"모션 더미 생성");
@@ -1483,7 +1513,7 @@ HRESULT CLoader::Load_Stage1MonsterLoad()
 	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Weapon_RetributionBlade", CRetributionBlade::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 
-	////Bastion_Healer
+	//Bastion_Healer
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Bastion_Healer", CModel::Create(m_pDevice, m_pDeviceContext,
 		L"../bin/FBX/Monster/Bastion_Healer_Bin.fbx", CModel::TYPE_ANIM, true))))
 		return E_FAIL;
@@ -1722,15 +1752,15 @@ HRESULT CLoader::Ready_Test_JS()
 		return E_FAIL;
 	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_MotionTrail", CMotionTrail::Create(m_pDevice, m_pDeviceContext)))) MSGBOX(L"모션 더미 생성");
 
-	//Boss Solaris
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_TEST_JS, L"Model_Boss_Solaris", CModel::Create(m_pDevice, m_pDeviceContext,
-		L"../bin/FBX/Monster/Solaris.fbx", CModel::TYPE_ANIM, true))))
-		return E_FAIL;
-	
-	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Solaris", CBoss_Solaris::Create(m_pDevice, m_pDeviceContext))))
-		return E_FAIL;
-	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Weapon_Boss", CBoss_Weapon::Create(m_pDevice, m_pDeviceContext))))
-		return E_FAIL;
+	////Boss Solaris
+	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_TEST_JS, L"Model_Boss_Solaris", CModel::Create(m_pDevice, m_pDeviceContext,
+	//	L"../bin/FBX/Monster/Solaris.fbx", CModel::TYPE_ANIM, true))))
+	//	return E_FAIL;
+	//
+	//if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Solaris", CBoss_Solaris::Create(m_pDevice, m_pDeviceContext))))
+	//	return E_FAIL;
+	//if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Weapon_Boss", CBoss_Weapon::Create(m_pDevice, m_pDeviceContext))))
+	//	return E_FAIL;
 #pragma endregion
 
 

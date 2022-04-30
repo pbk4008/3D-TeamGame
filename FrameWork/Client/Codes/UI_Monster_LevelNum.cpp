@@ -1,21 +1,21 @@
 #include "framework.h"
 #include "pch.h"
-#include "UI_Monster_Level.h"
+#include "UI_Monster_LevelNum.h"
 #include "GameInstance.h"
 
-CUI_Monster_Level::CUI_Monster_Level(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
+CUI_Monster_LevelNum::CUI_Monster_LevelNum(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
 	:CUI(pDevice,pDeviceContext)
 {
 	ZeroMemory(&m_Desc, sizeof(m_Desc));
 }
 
-CUI_Monster_Level::CUI_Monster_Level(const CUI_Monster_Level& rhs)
+CUI_Monster_LevelNum::CUI_Monster_LevelNum(const CUI_Monster_LevelNum& rhs)
 	: CUI(rhs)
 	, m_Desc(rhs.m_Desc)
 {
 }
 
-HRESULT CUI_Monster_Level::NativeConstruct_Prototype()
+HRESULT CUI_Monster_LevelNum::NativeConstruct_Prototype()
 {
 	if (FAILED(CUI::NativeConstruct_Prototype()))
 	{
@@ -25,7 +25,7 @@ HRESULT CUI_Monster_Level::NativeConstruct_Prototype()
 	return S_OK;
 }
 
-HRESULT CUI_Monster_Level::NativeConstruct(const _uint _iSceneID, void* pArg)
+HRESULT CUI_Monster_LevelNum::NativeConstruct(const _uint _iSceneID, void* pArg)
 {
 	if (nullptr != pArg)
 	{
@@ -54,7 +54,7 @@ HRESULT CUI_Monster_Level::NativeConstruct(const _uint _iSceneID, void* pArg)
 	return S_OK;
 }
 
-_int CUI_Monster_Level::Tick(_double TimeDelta)
+_int CUI_Monster_LevelNum::Tick(_double TimeDelta)
 {
 	//if (false == m_bFirstShow)
 	//{
@@ -108,7 +108,7 @@ _int CUI_Monster_Level::Tick(_double TimeDelta)
 	return 0;
 }
 
-_int CUI_Monster_Level::LateTick(_double TimeDelta)
+_int CUI_Monster_LevelNum::LateTick(_double TimeDelta)
 {
 	if (FAILED(CUI::LateTick(TimeDelta)))
 		return -1;
@@ -120,7 +120,7 @@ _int CUI_Monster_Level::LateTick(_double TimeDelta)
 	return _int();
 }
 
-HRESULT CUI_Monster_Level::Render()
+HRESULT CUI_Monster_LevelNum::Render()
 {
 	if (m_bAutoDis)
 	{
@@ -134,16 +134,15 @@ HRESULT CUI_Monster_Level::Render()
 		m_pBuffer->SetUp_ValueOnShader("g_ProjMatrix", &XMProjectMatrix, sizeof(XMMATRIX));
 		m_pBuffer->SetUp_ValueOnShader("g_fAlpha", &m_fAlpha, sizeof(_float));
 
-		m_pBuffer->SetUp_TextureOnShader("g_DiffuseTexture", m_pTexture);
+		m_pBuffer->SetUp_TextureOnShader("g_DiffuseTexture", m_pTexture, m_Desc.iTextureNum);
 
-		m_pBuffer->Render(1);;
+		m_pBuffer->Render(1);
 	}
-
-
+	
 	return S_OK;
 }
 
-HRESULT CUI_Monster_Level::SetUp_Components()
+HRESULT CUI_Monster_LevelNum::SetUp_Components()
 {
 	if (FAILED(CGameObject::SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_Rect_Panel_UI", L"Com_Rect_Panel_UI", (CComponent**)&m_pBuffer)))
 		return E_FAIL;
@@ -161,33 +160,33 @@ HRESULT CUI_Monster_Level::SetUp_Components()
 	return S_OK;
 }
 
-CUI_Monster_Level* CUI_Monster_Level::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
+CUI_Monster_LevelNum* CUI_Monster_LevelNum::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
 {
 	/* 원형객체 생성할때 초기화 */
-	CUI_Monster_Level* pInstance = new CUI_Monster_Level(pDevice, pDeviceContext);
+	CUI_Monster_LevelNum* pInstance = new CUI_Monster_LevelNum(pDevice, pDeviceContext);
 
 	if (FAILED(pInstance->NativeConstruct_Prototype()))
 	{
-		MSGBOX("Failed to Creating CUI_Monster_Level");
+		MSGBOX("Failed to Creating CUI_Monster_LevelNum");
 		Safe_Release(pInstance);
 	}
 
 	return pInstance;
 }
 
-CGameObject* CUI_Monster_Level::Clone(const _uint _iSceneID, void* pArg)
+CGameObject* CUI_Monster_LevelNum::Clone(const _uint _iSceneID, void* pArg)
 {
-	CUI_Monster_Level* pInstance = new CUI_Monster_Level(*this);
+	CUI_Monster_LevelNum* pInstance = new CUI_Monster_LevelNum(*this);
 	if (FAILED(pInstance->NativeConstruct(_iSceneID, pArg)))
 	{
-		MSGBOX("Failed to Creating Clone CUI_Monster_Level");
+		MSGBOX("Failed to Creating Clone CUI_Monster_LevelNum");
 		Safe_Release(pInstance);
 	}
 
 	return pInstance;
 }
 
-void CUI_Monster_Level::Free()
+void CUI_Monster_LevelNum::Free()
 {
 	__super::Free();
 }
