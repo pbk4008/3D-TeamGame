@@ -2087,7 +2087,16 @@ const void CSilvermane::Raycast_DropBox(const _double& _dDeltaTime)
 		break;
 	}
 
-	if ((_uint)GAMEOBJECT::DROP_BOX != iObjectTag && -1 != iObjectTag)
+	tSweepDesc.geometry = PxSphereGeometry(1.f);
+	XMStoreFloat3(&tSweepDesc.vOrigin, svRayPos);
+	XMStoreFloat3(&tSweepDesc.vDir, svRayDir);
+	tSweepDesc.fMaxDistance = 8.f;
+	tSweepDesc.filterData.flags = PxQueryFlag::eANY_HIT | PxQueryFlag::eDYNAMIC;
+	tSweepDesc.layerMask = (1 << (_uint)ELayer::Monster);
+
+	CGameObject* pHitObject2 = nullptr;
+	tSweepDesc.ppOutHitObject = &pHitObject2;
+	if (g_pGameInstance->Sweep(tSweepDesc))
 	{
 		if (g_pGameInstance->getkeyPress(DIK_E))
 		{
@@ -2104,7 +2113,23 @@ const void CSilvermane::Raycast_DropBox(const _double& _dDeltaTime)
 						}
 						else
 						{
-							m_pTargetExecution = static_cast<CActor*>(pHitObject);
+							m_pTargetExecution = static_cast<CActor*>(pHitObject2);
+						}
+						break;
+					}
+				}
+				else if (g_pGameInstance->getMousePress(CInputDev::MOUSESTATE::MB_RBUTTON))
+				{
+					switch (m_pCurWeapon->Get_Type())
+					{
+					case CWeapon::EType::Sword_1H:
+						if (FAILED(m_pStateController->Change_State(L"1H_SwordSkill_3")))
+						{
+							MSGBOX(L"소드스킬_3 공격이 실패했어!!!");
+						}
+						else
+						{
+							m_pTargetExecution = static_cast<CActor*>(pHitObject2);
 						}
 						break;
 					}

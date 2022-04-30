@@ -81,6 +81,11 @@ _int C1H_SwordJog::Input(const _double& _dDeltaTime)
 		}
 	}
 
+	if (g_pGameInstance->getkeyPress(DIK_E))
+	{
+		return ToSkill();
+	}
+
 	if (g_pGameInstance->getkeyDown(DIK_SPACE))
 	{
 		if (g_pGameInstance->getkeyPress(DIK_A))

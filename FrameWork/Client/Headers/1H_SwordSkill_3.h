@@ -24,6 +24,7 @@ public:
 
 private:
 	_bool m_isAttack = false;
+	_bool m_isAttack2 = false;
 	_float3 m_vDir{};
 
 public:
