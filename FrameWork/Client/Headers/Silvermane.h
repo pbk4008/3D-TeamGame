@@ -121,6 +121,7 @@ public: /* For.Shield */
 	const _bool IsEquipShield() const;
 	const _bool IsShieldThrow() const;
 	const _bool IsShieldReturn() const;
+	const _bool IsCoolTime_ShieldThrow() const;
 	const _float Get_BlockTime() const;
 	void Set_EquipShield(const _bool _isEquipShield);
 	void Set_EquipShieldAnim(const _bool _isEquipShield);
@@ -128,6 +129,7 @@ public: /* For.Shield */
 	void Set_IsShieldAttack(const _bool _isAttack);
 	void Set_IsShieldThrow(const _bool _isShieldThrow);
 	void Set_IsShieldReturn(const _bool _isShieldReturn);
+	void Set_IsShieldCoolTime(const _bool _isCoolTime);
 	void Add_BlockTime(const _float _fValue);
 	HRESULT ThrowShield(const _fvector& _svTargetPos);
 	void Return_Shield();
@@ -201,6 +203,7 @@ private: /* For.Shield */
 	_bool m_isShieldThrow = false;
 	_bool m_isShieldReturn = false;
 	_bool m_isLootShield = false;
+	_bool m_isCoolTime_ShieldThrow = false;
 	_float m_fBlockTime = 0.f;
 
 private: /* For.JumpNode */

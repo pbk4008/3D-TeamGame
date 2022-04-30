@@ -197,7 +197,19 @@ _int CBoss_Attack_R1::Tick(const _double& TimeDelta)
 			m_bShakeCheckRight = true;
 		}
 
-		m_pMonster->Set_IsAttack(true);
+
+		if (50 <= iCurKeyFrameIndex && 65 >= iCurKeyFrameIndex)
+		{
+			m_pMonster->Set_IsAttack(true);
+		}
+		else if (115 <= iCurKeyFrameIndex && 130 >= iCurKeyFrameIndex)
+		{
+			m_pMonster->Set_IsAttack(true);
+		}
+		else
+		{
+			m_pMonster->Set_IsAttack(false);
+		}
 
 		_float fDamage = 6.f;
 		_uint iLevel = 4;

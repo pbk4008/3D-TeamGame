@@ -1309,6 +1309,11 @@ const _bool CSilvermane::IsShieldReturn() const
 	return m_isShieldReturn;
 }
 
+const _bool CSilvermane::IsCoolTime_ShieldThrow() const
+{
+	return m_isCoolTime_ShieldThrow;
+}
+
 const CWeapon::EType CSilvermane::Get_WeaponType() const
 {
 	return m_pCurWeapon->Get_Type();
@@ -1648,6 +1653,11 @@ void CSilvermane::Set_IsShieldReturn(const _bool _isShieldReturn)
 	m_isShieldReturn = _isShieldReturn;
 }
 
+void CSilvermane::Set_IsShieldCoolTime(const _bool _isCoolTime)
+{
+	m_isCoolTime_ShieldThrow = _isCoolTime;
+}
+
 void CSilvermane::Add_BlockTime(const _float _fValue)
 {
 	m_fBlockTime += _fValue;
@@ -1659,6 +1669,7 @@ HRESULT CSilvermane::ThrowShield(const _fvector& _svTargetPos)
 		return E_FAIL;
 
 	m_pFlyingShield->Throw(_svTargetPos);
+	m_isCoolTime_ShieldThrow = true;
 
 	return S_OK;
 }

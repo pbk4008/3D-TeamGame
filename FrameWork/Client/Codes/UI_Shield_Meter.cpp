@@ -64,15 +64,18 @@ _int CUI_Shield_Meter::Tick(_double TimeDelta)
 	if (FAILED(CUI::Tick(TimeDelta)))
 		return -1;
 
-	if (g_pGameInstance->getkeyDown(DIK_NUMPAD4))
+	if (!m_bCoolTime)
 	{
-		m_bUseShield = true; //실드를사용했을때 , 전체 다 차기전까지는 실드를 못씀. 
-		m_bCoolTime = true;
+		if (g_pObserver->Get_Player()->IsCoolTime_ShieldThrow())
+		{
+			m_bUseShield = true; //실드를사용했을때 , 전체 다 차기전까지는 실드를 못씀. 
+			m_bCoolTime = true;
+		}
 	}
 
 	if (m_bUseShield)
 	{
-		m_iTextureNum = 0.f; //실드를 썼으니까 다 꺼주고
+		m_iTextureNum = 0; //실드를 썼으니까 다 꺼주고
 		m_bUseShield = false;
 	}
 
@@ -83,7 +86,6 @@ _int CUI_Shield_Meter::Tick(_double TimeDelta)
 
 	if (0.5f <= m_fFillTimeAcc) //0.5초가 지나면 한칸씩채워줌
 	{
-
 		if (15 > m_iTextureNum) 
 		{
 			++m_iTextureNum;
@@ -93,6 +95,7 @@ _int CUI_Shield_Meter::Tick(_double TimeDelta)
 			//마지막까지 다 찼으면 쿨타임끝
 			m_iTextureNum = 15;
 			m_bCoolTime = false;
+			g_pObserver->Get_Player()->Set_IsShieldCoolTime(false);
 		}
 
 		m_fFillTimeAcc = 0.f;
@@ -140,8 +143,6 @@ HRESULT CUI_Shield_Meter::SetUp_Components()
 
 	if (FAILED(CGameObject::SetUp_Components(L"Com_Rect_UI", m_pBuffer)))
 		return E_FAIL;
-
-
 
 	return S_OK;
 }
