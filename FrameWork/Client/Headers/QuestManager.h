@@ -24,6 +24,7 @@ public:
 public:
 	void	Start_Quest(EQuestHeaderType eQuestHead, std::wstring szQuestText);
 	void	End_Quest(std::wstring szQuestText);
+	void	Clear_All(void);
 
 private:
 	void	Ready_Quest(void);
@@ -49,6 +50,7 @@ private:
 
 #define  START_QUEST(Type, Key) g_pQuestManager->Start_Quest(Type, Key)
 #define	 CLEAR_QUEST(Key)		g_pQuestManager->End_Quest(Key)
-//#define  CLEAR_QUEST() 
+#define  CLEAR_ALLQUEST()		g_pQuestManager->Clear_All()
+
 END
 #endif // QuestManager_h__

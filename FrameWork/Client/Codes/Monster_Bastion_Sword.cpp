@@ -146,9 +146,18 @@ _int CMonster_Bastion_Sword::Tick(_double _dDeltaTime)
 	Dead_Check();
 
 	if (true == m_bUIShow)
+	{
+		m_pPanel->setActive(true);
 		m_pPanel->Set_Show(true);
-	else if (false == m_bUIShow)
+
+		m_fUIShowTimeAcc += _dDeltaTime;
+	}
+	if (1.f <= m_fUIShowTimeAcc && m_bUIShow)
+	{
 		m_pPanel->Set_Show(false);
+		m_bUIShow = false;
+		m_fUIShowTimeAcc = 0.f;
+	}
 
 	m_pPanel->Set_TargetWorldMatrix(m_pTransform->Get_WorldMatrix());
 
@@ -263,7 +272,7 @@ void CMonster_Bastion_Sword::Hit(const ATTACKDESC& _tAttackDesc)
 	_vector svOtherLook = XMVector3Normalize(pOtherTransform->Get_State(CTransform::STATE_LOOK));
 	_vector svOtherRight = XMVector3Normalize(pOtherTransform->Get_State(CTransform::STATE_RIGHT));
 
-	uniform_real_distribution<_float> fRange(-0.5f, 0.5f);
+	uniform_real_distribution<_float> fRange(-0.4f, 0.4f);
 	uniform_real_distribution<_float> fRange2(-0.2f, 0.2f);
 	uniform_int_distribution<_int> iRange(-5, 5);
 	CDamageFont::DESC tDamageDesc;
@@ -343,8 +352,8 @@ void CMonster_Bastion_Sword::setActive(_bool bActive)
 		}
 		if (m_pWeapon)
 			m_pWeapon->setActive(true);
-		if (m_pPanel)
-			m_pPanel->setActive(true);
+		//if (m_pPanel)
+		//	m_pPanel->setActive(true);
 	}
 }
 

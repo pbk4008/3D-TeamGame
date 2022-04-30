@@ -59,6 +59,7 @@ _int CExplosion_Rock::Tick(_double _dDeltaTime)
 	{
 		matScale = XMMatrixScaling(0.0005f, 0.0005f, 0.0005f);
 	}
+
 	m_pAnimModel->Set_PivotMatrix(matScale);
 	
 	if (true == m_pAnimModel->Get_IsAnimFinished())

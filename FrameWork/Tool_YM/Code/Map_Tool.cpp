@@ -576,8 +576,8 @@ void CMap_Tool::OnBnClickedSaveButton()
 {
 	// TODO: 맵 데이터를 저장합니다.
 	//list<CGameObject*> ListObj = g_pGameInstance->getAllObjectList();
-	list<CGameObject*> ListObj = *(g_pGameInstance->getObjectList(1, L"DropBox"));
-	//list<CGameObject*> ListObj = *(g_pGameInstance->getObjectList(1, L"Env_Tree"));
+	//list<CGameObject*> ListObj = *(g_pGameInstance->getObjectList(1, L"DropBox"));
+	list<CGameObject*> ListObj = *(g_pGameInstance->getObjectList(1, L"Env_Tree"));
 	//list<CGameObject*> ListObj = *(g_pGameInstance->getObjectList(1, L"Pot"));
 
 	m_vecMesh.clear();
@@ -622,10 +622,10 @@ void CMap_Tool::OnBnClickedLoadButton()
 	lstrcat(szFilePath, L"\\Data\\Map\\");
 	Dlg.m_ofn.lpstrInitialDir = szFilePath;
 
-	Clear_Tree();
-	g_pGameInstance->Clear_Component();
-	g_pGameInstance->Clear_Object_List();
-	m_pMenuForm->m_pInspec_Form->Clear_Clone_ModelList();
+	//Clear_Tree();
+	//g_pGameInstance->Clear_Component();
+	//g_pGameInstance->Clear_Object_List();
+	//m_pMenuForm->m_pInspec_Form->Clear_Clone_ModelList();
 	m_vecMesh.clear();
 
 	if (IDOK == Dlg.DoModal())
@@ -649,7 +649,7 @@ void CMap_Tool::OnBnClickedLoadButton()
 
  		auto TagFinder = find(m_ProtoTag.begin(), m_ProtoTag.end(), FileInfo.cstrFileName);
 
-		if (TagFinder == m_ProtoTag.end())
+  		if (TagFinder == m_ProtoTag.end())
 		{
 			hr = m_pMenuForm->Create_Model_Prototype(FileInfo);
 			m_ProtoTag.push_back(FileInfo.cstrFileName);

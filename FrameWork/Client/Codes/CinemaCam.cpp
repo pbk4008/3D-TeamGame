@@ -9,6 +9,7 @@ CCinemaCam::CCinemaCam()
 	, m_pModel(nullptr)
 	, m_iShortTag(0)
 	, m_fFovAngle(0.f)
+	, m_fAnimSpeed(1.f)
 {
 }
 
@@ -18,6 +19,7 @@ CCinemaCam::CCinemaCam(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContex
 	, m_pModel(nullptr)
 	, m_iShortTag(0)
 	, m_fFovAngle(0.f)
+	, m_fAnimSpeed(1.f)
 {
 }
 
@@ -27,6 +29,7 @@ CCinemaCam::CCinemaCam(const CCinemaCam& rhs)
 	, m_pModel(rhs.m_pModel)
 	, m_iShortTag(0)
 	, m_fFovAngle(0.f)
+	, m_fAnimSpeed(1.f)
 {
 }
 
@@ -62,7 +65,7 @@ HRESULT CCinemaCam::NativeConstruct(const _uint iSceneID, void* pArg)
 _int CCinemaCam::Tick(_double TimeDelta)
 {
 	//BornÀÌ¸§ : Camera_01_born
-	m_pModel->Update_CombinedTransformationMatrix(TimeDelta);
+	m_pModel->Update_CombinedTransformationMatrix(TimeDelta*m_fAnimSpeed);
 
 	CHierarchyNode* pBorn = m_pModel->Get_BoneMatrix("camera_bone");
 	//CHierarchyNode* pBorn = Get_CamBone();

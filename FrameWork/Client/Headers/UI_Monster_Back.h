@@ -44,6 +44,9 @@ private:
 	_float m_fAlpha = 1.f;
 	_float m_fDisappearTimeAcc = 0.f;
 
+	_bool m_bAutoDis = false; //자동으로꺼질수있게
+	_float m_fAutoDisTimeAcc = 0.f; //자동으로꺼질시간
+
 private:
 	virtual HRESULT SetUp_Components();
 public:

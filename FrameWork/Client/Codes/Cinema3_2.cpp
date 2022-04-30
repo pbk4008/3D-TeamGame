@@ -2,6 +2,8 @@
 #include "Cinema3_2.h"
 #include "CinemaCam.h"
 #include "CinemaActor.h"
+#include "CinemaWeapon.h"
+
 #include "ScenematicManager.h"
 
 CCinema3_2::CCinema3_2()
@@ -42,6 +44,10 @@ HRESULT CCinema3_2::NativeContruct(_uint iSceneID)
 	_matrix matPivot = XMMatrixTranslation(-178.f, 52.f, 426.f);
 	m_pCam->Set_CameraMatrix(matPivot);
 
+	m_pMidWeapon->Set_FixedBone(m_pMidBoss->Get_Bone("weapon_1"));
+	m_pMidWeapon->Set_OwnerPivotMatrix(m_pMidBoss->Get_Pivot());
+	m_pMidWeapon->set_OwerMatrix(m_pMidBoss->Get_Transform()->Get_WorldMatrix());
+
 	return S_OK;
 }
 
@@ -51,10 +57,20 @@ _int CCinema3_2::Tick(_double dDeltaTime)
 	if (iProgress == 1)
 		return 0;
 
+
+	_matrix matPivot = XMMatrixTranslation(-178.f, 52.f, 424.f);
+	m_pCam->Set_CameraMatrix(matPivot);
+
+	CTransform* pSilvermaneTr = m_pSilvermane->Get_Transform();
+	pSilvermaneTr->Set_State(CTransform::STATE_POSITION, XMVectorSet(-177.f, 52.f, 426.f, 1.f));
+	pSilvermaneTr->SetUp_Rotation(XMVectorSet(0.f, 1.f, 0.f, 0.f), XMConvertToRadians(260.f));
+
+
+
 	m_pSilvermane->Tick(dDeltaTime);
 	m_pMidBoss->Tick(dDeltaTime);
 	m_pCam->Tick(dDeltaTime);
-
+	m_pMidWeapon->Tick(dDeltaTime);
 
 
 	return _int();
@@ -62,7 +78,7 @@ _int CCinema3_2::Tick(_double dDeltaTime)
 
 _int CCinema3_2::LateTick(_double dDeltaTime)
 {
-	if (m_pCam->Get_CamMoveEnd())
+	if (m_pCam->Get_CamFrame()>=130.f)
 	{
 		m_bCinemaEnd = true;
 		m_pCam->Reset_Camera();
@@ -73,6 +89,7 @@ _int CCinema3_2::LateTick(_double dDeltaTime)
 	}
 	m_pMidBoss->LateTick(dDeltaTime);
 	m_pSilvermane->LateTick(dDeltaTime);
+	m_pMidWeapon->LateTick(dDeltaTime);
 
 
 	return _int();
@@ -85,6 +102,8 @@ void CCinema3_2::Set_Active(_bool bCheck)
 	m_pMidBoss->Actor_AnimReset();
 	m_pSilvermane->Actor_AnimReset();
 	m_pCam->Reset_Camera();
+
+	m_pSilvermane->AnimSpeed(1.25f);
 	if (m_bActive)
 		m_pCam->Change_CurrentCam();
 }
@@ -119,7 +138,8 @@ HRESULT CCinema3_2::Ready_Components()
 		return E_FAIL;
 	if (FAILED(Ready_Actor(&m_pMidBoss, (_uint)CINEMA_ACTOR::ACTOR_MIDBOSS)))
 		return E_FAIL;
-
+	if (FAILED(Ready_Weapon(&m_pMidWeapon, 2)))
+		return E_FAIL;
 
 	return S_OK;
 }
@@ -141,4 +161,5 @@ void CCinema3_2::Free()
 	Safe_Release(m_pCam);
 	Safe_Release(m_pSilvermane);
 	Safe_Release(m_pMidBoss);
+	Safe_Release(m_pMidWeapon);
 }

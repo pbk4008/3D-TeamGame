@@ -30,6 +30,7 @@ public: virtual HRESULT		Render() override;
 
 public: void set_dissovle(_bool check) { m_bdissolve = check; }
 public: void set_DissolveRest();
+public: void Using_Cinema();
 
 public:
 	void Destroy();
@@ -45,6 +46,7 @@ private: CBoxCollider* m_pCollider = nullptr;
 private: _bool				m_bdissolve = false;
 private: _float				m_lifetime = 0.f;
 private: CTexture*			m_dissolveTex = nullptr;
+private: _bool				m_bUsingCinema = false;
 public: static CWall* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContex);
 public: virtual CGameObject* Clone(_uint iSeneid, void* pArg) override;
 public: virtual void Free() override;

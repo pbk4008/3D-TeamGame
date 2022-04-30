@@ -230,6 +230,20 @@ void CCinemaActor::Actor_AnimReset()
 		m_pController->Reset_Animation();
 }
 
+void CCinemaActor::Acotr_AnimFrameSet(_double iFrame)
+{
+	if (m_pController)
+		m_pController->Add_TrackAcc(iFrame);
+}
+
+_uint CCinemaActor::Get_AnimFrame()
+{
+	if (!m_pController)
+		return 0;
+
+	return m_pController->Get_CurAnimIndex();
+}
+
 CHierarchyNode* CCinemaActor::Get_Bone(const string& tBoneName)
 {
 	CHierarchyNode* pBone=m_pModel->Get_Bone(tBoneName);

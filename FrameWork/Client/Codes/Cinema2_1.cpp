@@ -2,6 +2,8 @@
 #include "Cinema2_1.h"
 #include "CinemaCam.h"
 #include "CinemaActor.h"
+#include "CinemaWeapon.h"
+
 #include "ScenematicManager.h"
 
 CCinema2_1::CCinema2_1()
@@ -43,6 +45,11 @@ HRESULT CCinema2_1::NativeContruct(_uint iSceneID)
 	_matrix matPivot = XMMatrixTranslation(-172.f, 42.5f, 404.3f);
 	m_pCam->Set_CameraMatrix(matPivot);
 
+	m_pMidWeapon->Set_FixedBone(m_pMidBoss->Get_Bone("weapon_r"));
+	m_pMidWeapon->Set_OwnerPivotMatrix(m_pMidBoss->Get_Pivot());
+	m_pMidWeapon->set_OwerMatrix(m_pMidBoss->Get_Transform()->Get_WorldMatrix());
+
+
 	return S_OK;
 }
 
@@ -51,10 +58,29 @@ _int CCinema2_1::Tick(_double dDeltaTime)
 	_uint iProgress=CScenematic::Tick(dDeltaTime);
 	if (iProgress == 1)
 		return 0;
+	
+	m_pCam->Set_Fov(XMConvertToRadians(90.f));
+	_matrix matPivot = XMMatrixTranslation(-172.f, 42.5f, 404.3f);
+	m_pCam->Set_CameraMatrix(matPivot);
 
+	CTransform* pBossTr = m_pMidBoss->Get_Transform();
+	pBossTr->Set_State(CTransform::STATE_POSITION, XMVectorSet(-175.7f, 51.5f, 419.8f, 1.f));
+	pBossTr->SetUp_Rotation(XMVectorSet(0.f, 1.f, 0.f, 0.f), XMConvertToRadians(240.f));
+	pBossTr->Scale_One();
+	pBossTr->Scaling(XMVectorSet(0.5f, 0.5f, 0.5f, 0.f));
+	cout << m_pCam->Get_CamFrame() << endl;
+
+	m_pMidWeapon->Set_OwnerPivotMatrix(m_pMidBoss->Get_Pivot());
+	m_pMidWeapon->set_OwerMatrix(m_pMidBoss->Get_Transform()->Get_WorldMatrix());
+
+	if (m_pCam->Get_CamFrame() >= 480.f)
+	{
+		m_pMidBoss->Tick(dDeltaTime);
+	}
 	m_pSilvermane->Tick(dDeltaTime);
-	m_pMidBoss->Tick(dDeltaTime);
 	m_pCam->Tick(dDeltaTime);
+	m_pMidWeapon->Tick(dDeltaTime);
+
 
 	return _int();
 }
@@ -72,6 +98,7 @@ _int CCinema2_1::LateTick(_double dDeltaTime)
 	}
 	m_pSilvermane->LateTick(dDeltaTime);
 	m_pMidBoss->LateTick(dDeltaTime);
+	m_pMidWeapon->LateTick(dDeltaTime);
 
 	
 
@@ -85,6 +112,8 @@ void CCinema2_1::Set_Active(_bool bCheck)
 	m_pSilvermane->Actor_AnimReset();
 	m_pMidBoss->Actor_AnimReset();
 	m_pCam->Reset_Camera();
+	m_pMidBoss->Acotr_AnimFrameSet(260.0);
+	m_pCam->Set_Fov(XMConvertToRadians(90.f));
 	if (m_bActive)
 		m_pCam->Change_CurrentCam();
 }
@@ -121,6 +150,9 @@ HRESULT CCinema2_1::Ready_Components()
 	if (FAILED(Ready_Actor(&m_pSilvermane, (_uint)CINEMA_ACTOR::ACTOR_SILVERMANE)))
 		return E_FAIL;
 
+	if (FAILED(Ready_Weapon(&m_pMidWeapon, 2)))
+		return E_FAIL;
+
 	return S_OK;
 }
 
@@ -141,4 +173,5 @@ void CCinema2_1::Free()
 	Safe_Release(m_pCam);
 	Safe_Release(m_pSilvermane);
 	Safe_Release(m_pMidBoss);
+	Safe_Release(m_pMidWeapon);
 }

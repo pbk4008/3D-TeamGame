@@ -154,6 +154,13 @@ public: /* For.Execute */
 	CHierarchyNode* Get_ExecutionTargetBone() const;
 	CUI_Blank_FKey* Get_Blank_FKey() const;
 
+public: /* For.Skill */
+	const _bool IsSkill() const;
+	const _float Get_SkillGuage() const;
+	void Set_IsSkill(const _bool _isSkill);
+	void Set_Skill(const _bool _isSkil);
+	void Add_SkillGuage(const _float _fValue);
+
 public: void	Set_HealActive(_bool check) { m_bhealcheck = check; }
 public: void	Set_LightColor(_fvector color) { m_lightcolor = color; }
 
@@ -216,6 +223,10 @@ private: /* For.Execution */
 	CActor* m_pTargetExecution = nullptr;
 	CHierarchyNode* m_pExecutionTargetBone = nullptr;
 	CUI_Blank_FKey* m_pBlankFKey = nullptr;
+
+private: /* For.Skill */
+	_bool m_isSkill = false;
+	_float m_fSkillGuage = 0.f;
 
 private: /* For.Cheat */
 	_bool m_isHighSpeedMode = false;

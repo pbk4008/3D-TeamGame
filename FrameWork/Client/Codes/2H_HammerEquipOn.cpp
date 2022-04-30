@@ -71,6 +71,8 @@ HRESULT C2H_HammerEquipOn::EnterState()
 		return E_FAIL;
 	m_pAnimationController->Set_RootMotion(true, true);
 
+	m_pAnimationController->Set_PlaySpeed(1.4f);
+
 	return S_OK;
 }
 
@@ -78,6 +80,8 @@ HRESULT C2H_HammerEquipOn::ExitState()
 {
 	if (FAILED(__super::ExitState()))
 		return E_FAIL;
+
+	m_pAnimationController->Set_PlaySpeed(1.f);
 
 	return S_OK;
 }

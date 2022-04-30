@@ -25,7 +25,6 @@ _int C2H_HammerAttackSprintR1::Tick(const _double& _dDeltaTime)
 
 	Add_PlusAngle(EDir::Forward, _dDeltaTime);
 
-
 	_uint iCurKeyFrameIndex = m_pAnimationController->Get_CurKeyFrameIndex();
 	if (iCurKeyFrameIndex == m_iShakeIndex)
 	{
@@ -51,7 +50,6 @@ _int C2H_HammerAttackSprintR1::Tick(const _double& _dDeltaTime)
 			tShakeEvent.tWaveZ.fAdditionalOffset = -4.f;
 			tShakeEvent.tWaveZ.fFrequency = 0.01f;
 			tShakeEvent.tWaveZ.fAmplitude = 0.01f;
-
 
 			_float3 vPos; XMStoreFloat3(&vPos, m_pTransform->Get_State(CTransform::STATE_POSITION));
 			g_pShakeManager->Shake(tShakeEvent, vPos);

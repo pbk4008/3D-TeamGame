@@ -96,6 +96,7 @@ HRESULT CScenematic::Ready_Actor(CCinemaActor** pOut, _uint iActorTag)
 HRESULT CScenematic::Ready_Weapon(CCinemaWeapon** pOut, _uint iWeaponTag)
 {
 	*pOut = g_pGameInstance->Clone_GameObject<CCinemaWeapon>((_uint)SCENEID::SCENE_STAGE1, L"Proto_GameObject_CinemaWeapon", &iWeaponTag);
+
 	if (*pOut == nullptr)
 	{
 		MSGBOX("Ready Weapon Fail");

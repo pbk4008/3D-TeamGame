@@ -19,6 +19,12 @@ _int C2H_HammerAttackR2_01::Tick(const _double& _dDeltaTime)
 	_int iProgress = __super::Tick(_dDeltaTime);
 	if (NO_EVENT != iProgress)
 		return iProgress;
+	
+	_uint iCurKeyFrameIndex = m_pAnimationController->Get_CurKeyFrameIndex();
+	if (30 < iCurKeyFrameIndex)
+	{
+		m_pAnimationController->Set_PlaySpeed(1.2f);
+	}
 
 	if (m_pAnimationController->Is_Finished())
 	{
@@ -62,8 +68,8 @@ HRESULT C2H_HammerAttackR2_01::EnterState()
 	}
 
 
-	m_iCutIndex = 55;
-	m_pAnimationController->Set_PlaySpeed(1.2f);
+	m_iCutIndex = 45;
+	m_pAnimationController->Set_PlaySpeed(2.f);
 
 
 	m_iAttackStartIndex = 30;

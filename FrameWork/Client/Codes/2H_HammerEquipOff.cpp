@@ -60,6 +60,8 @@ HRESULT C2H_HammerEquipOff::EnterState()
 		return E_FAIL;
 	m_pAnimationController->Set_RootMotion(true, true);
 
+	m_pAnimationController->Set_PlaySpeed(1.4f);
+
 	return S_OK;
 }
 
@@ -70,6 +72,8 @@ HRESULT C2H_HammerEquipOff::ExitState()
 
 	m_pSilvermane->Set_EquipWeapon(false);
 	m_pSilvermane->Set_WeaponFixedBone("spine_03");
+
+	m_pAnimationController->Set_PlaySpeed(1.f);
 
 	return S_OK;
 }

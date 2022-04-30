@@ -3,6 +3,7 @@
 #include "CinemaCam.h"
 #include "CinemaActor.h"
 #include "CinemaWeapon.h"
+#include "Wall.h"
 
 #include "ScenematicManager.h"
 
@@ -16,6 +17,8 @@ CCinema1_1::CCinema1_1()
 	,m_pScree2(nullptr)
 	,m_pScree3(nullptr)
 	,m_pScree4(nullptr)
+	, m_pCinemaPortal(nullptr)
+	, m_pGrayHwakSpear(nullptr)
 {
 }
 
@@ -30,6 +33,8 @@ CCinema1_1::CCinema1_1(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContex
 	, m_pScree2(nullptr)
 	, m_pScree3(nullptr)
 	, m_pScree4(nullptr)
+	, m_pCinemaPortal(nullptr)
+	, m_pGrayHwakSpear(nullptr)
 {
 }
 
@@ -39,10 +44,10 @@ HRESULT CCinema1_1::NativeContruct(_uint iSceneID)
 		return E_FAIL;
 	if (FAILED(Ready_Components()))
 		return E_FAIL;
-
+	
 	_matrix matPivot = XMMatrixRotationY(XMConvertToRadians(270.f)) * XMMatrixTranslation(3.f, -5.f, 13.f);
 	m_pCam->Set_CameraMatrix(matPivot);
-	m_pCam->Set_Fov(XMConvertToRadians(70.f));
+	m_pCam->Set_Fov(XMConvertToRadians(71.51f));
 
 	m_pPhoenix->Actor_AnimPlay(0);
 	CTransform* pPhoenixTr = m_pPhoenix->Get_Transform();
@@ -63,6 +68,9 @@ HRESULT CCinema1_1::NativeContruct(_uint iSceneID)
 	m_pScree3->Actor_AnimPlay(3);
 	m_pScree4->Actor_AnimPlay(4);
 
+	matPivot = XMMatrixIdentity();
+	m_pGrayHwakSpear->set_OwerMatrix(matPivot);
+
 	CTransform* pScreeTr = m_pScree0->Get_Transform();
 	pScreeTr->Set_State(CTransform::STATE_POSITION, XMVectorSet(0.5f, -1.5f, 17.f, 1.f));
 
@@ -79,9 +87,7 @@ HRESULT CCinema1_1::NativeContruct(_uint iSceneID)
 	pScreeTr = m_pScree4->Get_Transform();
 	pScreeTr->Set_State(CTransform::STATE_POSITION, XMVectorSet(4.f, -1.8f, 13.f, 1.f));
 
-	CTransform* pWeaponTr = m_pGrayHwakSpear->Get_Transform();
-	pWeaponTr->SetUp_Rotation(XMVectorSet(1.f, 0.f, 0.f, 0.f), XMConvertToRadians(90.f));
-	pWeaponTr->Set_State(CTransform::STATE_POSITION, XMVectorSet(2.f, -0.5f, 10.5f, 1.f));
+	m_pCinemaPortal->Using_Cinema();
 
 	return S_OK;
 }
@@ -91,7 +97,7 @@ _int CCinema1_1::Tick(_double dDeltaTime)
 	_uint iProgress=CScenematic::Tick(dDeltaTime);
 	if (iProgress == 1)
 		return 0;
-
+	m_pCam->Set_Fov(XMConvertToRadians(71.51f));
 	/*CTransform* pPhoenixTr = m_pPhoenix->Get_Transform();
 	pPhoenixTr->Set_State(CTransform::STATE_POSITION, XMVectorSet(2.f, -1.f, 15.f, 1.f));
 	pPhoenixTr->SetUp_Rotation(XMVectorSet(0.f, 1.f,0.f,0.f), XMConvertToRadians(180.f));*/
@@ -124,13 +130,21 @@ _int CCinema1_1::Tick(_double dDeltaTime)
 	m_pScree3->Tick(dDeltaTime);;
 	m_pScree4->Tick(dDeltaTime);
 
-	m_pGrayeHwak->Tick(dDeltaTime);
-
 	_matrix matPivot = XMMatrixRotationY(XMConvertToRadians(270.f)) * XMMatrixTranslation(3.f, -5.f, 13.f);
 	m_pCam->Set_CameraMatrix(matPivot);
 	m_pCam->Tick(dDeltaTime);;
 
-	//m_pGrayHwakSpear->Tick(dDeltaTime);
+	m_pGrayHwakSpear->Tick(dDeltaTime);
+
+	CTransform* pWallTr = m_pCinemaPortal->Get_Transform();
+	pWallTr->Scaling(XMVectorSet(11.5f, 15.f, 1.f, 0.f));
+	pWallTr->Set_State(CTransform::STATE_POSITION, XMVectorSet(2.f, 6.f, 10.f, 1.f));;
+	m_pCinemaPortal->Tick(dDeltaTime);
+
+	CTransform* pWeaponTr = m_pGrayHwakSpear->Get_Transform();
+	pWeaponTr->SetUp_Rotation(XMVectorSet(1.f, 0.f, 0.f, 0.f), XMConvertToRadians(90.f));
+	pWeaponTr->Set_State(CTransform::STATE_POSITION, XMVectorSet(2.f, -0.5f, 10.5f, 1.f));
+
 
 	return _int();
 }
@@ -158,6 +172,8 @@ _int CCinema1_1::LateTick(_double dDeltaTime)
 	m_pScree4->LateTick(dDeltaTime);
 
 	m_pGrayHwakSpear->LateTick(dDeltaTime);
+
+	m_pCinemaPortal->LateTick(dDeltaTime);
 
 	return _int();
 }
@@ -222,6 +238,15 @@ HRESULT CCinema1_1::Ready_Components()
 	if (FAILED(Ready_Weapon(&m_pGrayHwakSpear, 0)))
 		return E_FAIL;
 
+	CWall::WALLDESC desc;
+	ZeroMemory(&desc, sizeof(desc));
+
+	desc.pos = _float4(0.f, 0.f, 0.f, 1.f);
+	desc.scale = _float2(6.f, 6.f);
+	desc.radian = 0.f;
+	desc.color = _float4(0.f, 0.f, 1.f, 1.f);
+
+	m_pCinemaPortal=g_pGameInstance->Clone_GameObject<CWall>((_uint)SCENEID::SCENE_STAGE1, L"Proto_GameObject_Wall", &desc);
 
 	return S_OK;
 }
@@ -251,4 +276,6 @@ void CCinema1_1::Free()
 	Safe_Release(m_pScree4);
 
 	Safe_Release(m_pGrayHwakSpear);
+
+	Safe_Release(m_pCinemaPortal);
 }

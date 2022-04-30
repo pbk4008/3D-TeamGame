@@ -93,7 +93,7 @@ HRESULT CMonster_EarthAberrant::NativeConstruct(const _uint _iSceneID, void* _pA
 	m_bIsFall = true;
 	m_iObectTag = (_uint)GAMEOBJECT::MONSTER_ABERRANT;
 
-	m_fMaxHp = 20.f;
+	m_fMaxHp = 200.f;
 	m_fCurrentHp = m_fMaxHp;
 
 	m_fMaxGroggyGauge = 20.f;
@@ -213,9 +213,18 @@ _int CMonster_EarthAberrant::Tick(_double _dDeltaTime)
 	}
 
 	if (true == m_bUIShow)
+	{
+		m_pPanel->setActive(true);
 		m_pPanel->Set_Show(true);
-	else
+
+		m_fUIShowTimeAcc += _dDeltaTime;
+	}
+	if (1.f <= m_fUIShowTimeAcc && m_bUIShow)
+	{
 		m_pPanel->Set_Show(false);
+		m_bUIShow = false;
+		m_fUIShowTimeAcc = 0.f;
+	}
 
 	if (m_fGroggyGauge >= m_fMaxGroggyGauge)
 	{
@@ -708,7 +717,7 @@ void CMonster_EarthAberrant::Hit(const ATTACKDESC& _tAttackDesc)
 	_vector svOtherLook = XMVector3Normalize(pOtherTransform->Get_State(CTransform::STATE_LOOK));
 	_vector svOtherRight = XMVector3Normalize(pOtherTransform->Get_State(CTransform::STATE_RIGHT));
 
-	uniform_real_distribution<_float> fRange(-0.5f, 0.5f);
+	uniform_real_distribution<_float> fRange(-0.4f, 0.4f);
 	uniform_real_distribution<_float> fRange2(-0.2f, 0.2f);
 	uniform_int_distribution<_int> iRange(-5, 5);
 	CDamageFont::DESC tDamageDesc;

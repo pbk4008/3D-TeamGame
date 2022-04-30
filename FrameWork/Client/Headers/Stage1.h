@@ -41,6 +41,7 @@ private:
 	HRESULT Ready_Cinema();
 	HRESULT Ready_Wall();
 	HRESULT Ready_Pot();
+	HRESULT Ready_Obstacle();
 
 public:
 	void Minus_MonsterCount() { m_iCountMonster--; }
