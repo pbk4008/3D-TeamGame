@@ -1197,15 +1197,27 @@
     </Filter>
     <Filter Include="02.GameObject\03.Character\00.Player\00.Silvermane\State\1H_Sword\Skill">
       <UniqueIdentifier>{e81819a1-f90c-4330-ad94-8fc5e9d603ea}</UniqueIdentifier>
-	</Filter>
+    </Filter>
     <Filter Include="02.GameObject\03.Character\00.Player\00.Silvermane\State\HIt">
       <UniqueIdentifier>{c0836172-4e03-4723-b9f5-2ce38812b858}</UniqueIdentifier>
-	</Filter>
+    </Filter>
     <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_Spear\State\00.Idle">
       <UniqueIdentifier>{2398d3e4-0aad-4c0a-b779-2676cae6f42f}</UniqueIdentifier>
     </Filter>
     <Filter Include="02.GameObject\02.Map\01.Environment\03.Circle_Floor">
       <UniqueIdentifier>{6c43c0c8-7a09-4c56-afaf-c358d946e1e1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.System\07.Scenematic\02.Stage2\01.Shot06">
+      <UniqueIdentifier>{da3a57ee-5af9-4fe8-98ff-f494776e42d9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.System\07.Scenematic\02.Stage2\01.Shot06\Cinema5-1">
+      <UniqueIdentifier>{f476b6f8-b79c-4910-9d10-6e551241c4eb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.System\07.Scenematic\02.Stage2\01.Shot06\Cinema5-2">
+      <UniqueIdentifier>{99309603-08ba-429a-9eb5-f817de281cb0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.System\07.Scenematic\02.Stage2\01.Shot06\Cinema5-3">
+      <UniqueIdentifier>{3ca64b96-bfed-46e0-a1a1-7a42d1276480}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -2592,6 +2604,15 @@
     <ClInclude Include="..\Headers\1H_Multishlash.h">
       <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\1H_Sword\Skill</Filter>
     </ClInclude>
+    <ClInclude Include="..\Headers\Cinema5_1.h">
+      <Filter>03.System\07.Scenematic\02.Stage2\01.Shot06\Cinema5-1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Cinema5_2.h">
+      <Filter>03.System\07.Scenematic\02.Stage2\01.Shot06\Cinema5-2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Cinema5_3.h">
+      <Filter>03.System\07.Scenematic\02.Stage2\01.Shot06\Cinema5-3</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -3946,6 +3967,15 @@
     </ClCompile>
     <ClCompile Include="..\Codes\1H_Multishlash.cpp">
       <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\1H_Sword\Skill</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Cinema5_1.cpp">
+      <Filter>03.System\07.Scenematic\02.Stage2\01.Shot06\Cinema5-1</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Cinema5_3.cpp">
+      <Filter>03.System\07.Scenematic\02.Stage2\01.Shot06\Cinema5-3</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Cinema5_2.cpp">
+      <Filter>03.System\07.Scenematic\02.Stage2\01.Shot06\Cinema5-2</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

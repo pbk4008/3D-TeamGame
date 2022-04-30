@@ -357,6 +357,9 @@ call Update_Client.bat</Command>
     <ClInclude Include="..\Headers\Cinema4_4.h" />
     <ClInclude Include="..\Headers\Cinema4_5.h" />
     <ClInclude Include="..\Headers\Cinema4_6.h" />
+    <ClInclude Include="..\Headers\Cinema5_1.h" />
+    <ClInclude Include="..\Headers\Cinema5_2.h" />
+    <ClInclude Include="..\Headers\Cinema5_3.h" />
     <ClInclude Include="..\Headers\CinemaActor.h" />
     <ClInclude Include="..\Headers\CinemaCam.h" />
     <ClInclude Include="..\Headers\CinemaWeapon.h" />
@@ -815,6 +818,9 @@ call Update_Client.bat</Command>
     <ClCompile Include="..\Codes\Cinema4_4.cpp" />
     <ClCompile Include="..\Codes\Cinema4_5.cpp" />
     <ClCompile Include="..\Codes\Cinema4_6.cpp" />
+    <ClCompile Include="..\Codes\Cinema5_1.cpp" />
+    <ClCompile Include="..\Codes\Cinema5_2.cpp" />
+    <ClCompile Include="..\Codes\Cinema5_3.cpp" />
     <ClCompile Include="..\Codes\CinemaActor.cpp" />
     <ClCompile Include="..\Codes\CinemaCam.cpp" />
     <ClCompile Include="..\Codes\CinemaWeapon.cpp" />

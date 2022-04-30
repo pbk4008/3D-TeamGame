@@ -206,9 +206,9 @@ _int CBoss_Solaris::LateTick(_double TimeDelta)
 		return iProgress;
 	}
 
-	m_pCharacterController->Update_OwnerTransform();
+	m_pCharacterController->Update_OwnerTransform();;
 
-	m_pRenderer->Add_RenderGroup(CRenderer::RENDER_NONALPHA, this);
+	//m_pRenderer->Add_RenderGroup(CRenderer::RENDER_NONALPHA, this);
 
 	if (nullptr != m_pWeapon)
 	{

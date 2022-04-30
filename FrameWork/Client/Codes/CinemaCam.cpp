@@ -211,6 +211,15 @@ HRESULT CCinemaCam::Set_Camera(_uint iSceneTag)
 	case (_uint)CINEMA_INDEX::CINEMA4_6:
 		hr = CGameObject::SetUp_Components(m_iSceneID, L"Model_Cinema_Cam4_6", L"CamModel", (CComponent**)&m_pModel);
 		break;
+	case (_uint)CINEMA_INDEX::CINEMA5_1:
+		hr = CGameObject::SetUp_Components(m_iSceneID, L"Model_Cinema_Cam5_1", L"CamModel", (CComponent**)&m_pModel);
+		break;
+	case (_uint)CINEMA_INDEX::CINEMA5_2:
+		hr = CGameObject::SetUp_Components(m_iSceneID, L"Model_Cinema_Cam5_2", L"CamModel", (CComponent**)&m_pModel);
+		break;
+	case (_uint)CINEMA_INDEX::CINEMA5_3:
+		hr = CGameObject::SetUp_Components(m_iSceneID, L"Model_Cinema_Cam5_3", L"CamModel", (CComponent**)&m_pModel);
+		break;
 	}
 
 	if (FAILED(hr))

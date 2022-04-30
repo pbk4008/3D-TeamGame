@@ -26,7 +26,6 @@ private:
 	virtual void Free() override;
 private:
 	CCinemaCam* m_pCam;
-	CCinemaActor* m_pSilvermane;
 	CCinemaActor* m_pBoss;
 };
 END

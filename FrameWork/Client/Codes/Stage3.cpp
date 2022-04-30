@@ -36,6 +36,9 @@
 #include "Cinema4_4.h"
 #include "Cinema4_5.h"
 #include "Cinema4_6.h"
+#include "Cinema5_1.h"
+#include "Cinema5_2.h"
+#include "Cinema5_3.h"
 
 CStage3::CStage3(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
 	:CLevel(pDevice, pDeviceContext)
@@ -66,6 +69,9 @@ HRESULT CStage3::NativeConstruct()
 		return E_FAIL;
 
 	if (FAILED(Ready_UI(L"Layer_UI")))
+		return E_FAIL;
+
+	if (FAILED(Ready_Cinema()))
 		return E_FAIL;
 
 
@@ -107,7 +113,12 @@ _int CStage3::Tick(_double TimeDelta)
 		}
 	}
 	if (m_pCinematicManager)
+	{
+		if (g_pGameInstance->getkeyDown(DIK_END))
+			m_pCinematicManager->Active_Scenema(8);
+
 		m_pCinematicManager->Tick(TimeDelta);
+	}
 
 	return _int();
 }
@@ -897,6 +908,12 @@ HRESULT CStage3::Ready_Cinema()
 	if (FAILED(m_pCinematicManager->Add_Scenema(CCinema4_5::Create(m_pDevice, m_pDeviceContext, (_uint)SCENEID::SCENE_STAGE3))))
 		return E_FAIL;
 	if (FAILED(m_pCinematicManager->Add_Scenema(CCinema4_6::Create(m_pDevice, m_pDeviceContext, (_uint)SCENEID::SCENE_STAGE3))))
+		return E_FAIL;
+	if (FAILED(m_pCinematicManager->Add_Scenema(CCinema5_1::Create(m_pDevice, m_pDeviceContext, (_uint)SCENEID::SCENE_STAGE3))))
+		return E_FAIL;
+	if (FAILED(m_pCinematicManager->Add_Scenema(CCinema5_2::Create(m_pDevice, m_pDeviceContext, (_uint)SCENEID::SCENE_STAGE3))))
+		return E_FAIL;
+	if (FAILED(m_pCinematicManager->Add_Scenema(CCinema5_3::Create(m_pDevice, m_pDeviceContext, (_uint)SCENEID::SCENE_STAGE3))))
 		return E_FAIL;
 
 	return S_OK;

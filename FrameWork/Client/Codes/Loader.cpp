@@ -1074,6 +1074,7 @@ HRESULT CLoader::Load_Stage3_Object()
 	if(FAILED(Load_Stage3_BossLoad()))
 		return E_FAIL;
 
+
 	if (FAILED(Load_Stage1PlayerLoad()))
 		return E_FAIL;
 
@@ -1163,7 +1164,6 @@ HRESULT CLoader::Load_Stage3_Cinema_Object()
 		L"../../Reference/ShaderFile/Shader_AnimMesh.hlsl", matPivot, CModel::TYPE_ANIM, true))))
 		return E_FAIL;
 
-
 	//5-1
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE3, L"Model_Cinema_Cam5_1", CModel::Create(m_pDevice, m_pDeviceContext,
 		"../bin/FBX/Cinema/Camera/", "Shot_05_01_bone.fbx",
@@ -1182,6 +1182,22 @@ HRESULT CLoader::Load_Stage3_Cinema_Object()
 		L"../../Reference/ShaderFile/Shader_AnimMesh.hlsl", matPivot, CModel::TYPE_ANIM, true))))
 		return E_FAIL;
 
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE3, L"Model_Cinema_Solaris", CModel::Create(m_pDevice, m_pDeviceContext,
+		L"../bin/FBX/Cinema/Solrais_Cinema.fbx", CModel::TYPE_ANIM, true))))
+		return E_FAIL;
+
+	//Áö¿ï°Í!!
+
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Cinema_Silvermane", CModel::Create(m_pDevice, m_pDeviceContext,
+		L"../bin/FBX/Cinema/Silvermane_Cinema.fbx", CModel::TYPE_ANIM, true))))
+		return E_FAIL;
+
+	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_CinemaCamera", CCinemaCam::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_CinemaActor", CCinemaActor::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_CinemaWeapon", CCinemaWeapon::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
 
 	return S_OK;
 }
