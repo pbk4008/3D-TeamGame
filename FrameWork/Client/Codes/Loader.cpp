@@ -40,20 +40,20 @@
 #include "Boss_Weapon.h"
 
 //Effect & UI
-#include "Effect_DashDust.h" //
-#include "Effect_HitParticle.h" //
-#include "Effect_Energy.h" //
-#include "Effect_HitFloating.h" //
-#include "Effect_Floating_Speed.h" //
-#include "Effect_Env_Floating.h" //
-#include "Effect_Env_Fire.h" //
-#include "Effect_Falling_Leaf.h" //
-#include "Effect_FloatingUp.h" //
-#include "Effect_Hammer_Dust.h"//
-#include "Effect_Dead_Spray.h" //
+#include "Effect_DashDust.h"
+#include "Effect_HitParticle.h"
+#include "Effect_Energy.h"
+#include "Effect_HitFloating.h"
+#include "Effect_Floating_Speed.h"
+#include "Effect_Env_Floating.h"
+#include "Effect_Env_Fire.h"
+#include "Effect_Falling_Leaf.h"
+#include "Effect_FloatingUp.h" 
+#include "Effect_Hammer_Dust.h"
+#include "Effect_Dead_Spray.h"
 #include "Effect_DeathParticle.h"
 #include "Effect_Guard.h"
-#include "Explosion_Rock.h" //
+#include "Explosion_Rock.h" 
 #include "VIBuffer_PointInstance_Energy.h"
 
 
@@ -197,8 +197,8 @@ HRESULT CLoader::SetUp_Stage1_Object()
 	if (FAILED(Load_Stage1PlayerLoad()))
 		return E_FAIL;
 
-	//if (FAILED(Load_Stage1MonsterLoad()))
-	//	return E_FAIL;
+	if (FAILED(Load_Stage1MonsterLoad()))
+		return E_FAIL;
 	
 	if (FAILED(Load_Stage1BossLoad()))
 		return E_FAIL;
@@ -210,8 +210,8 @@ HRESULT CLoader::SetUp_Stage1_Object()
 		return E_FAIL;
 
 #pragma region 이펙트들
-	//if (FAILED(Load_Stage1EffectLoad()))
-	//	return E_FAIL;
+	if (FAILED(Load_Stage1EffectLoad()))
+		return E_FAIL;
 	if (FAILED(Load_TrailEffects())) //소드
 		return E_FAIL;
 	if (FAILED(Load_MeshEffects())) //매쉬
@@ -226,17 +226,17 @@ HRESULT CLoader::SetUp_Stage1_Object()
 	if (FAILED(Load_Stage1_TreasureChest_Load()))
 		return E_FAIL;
 
-	//if (FAILED(Load_Stage1TriggerLod()))
-	//	return E_FAIL;
+	if (FAILED(Load_Stage1TriggerLod()))
+		return E_FAIL;
 
-	//if (FAILED(Load_Stage1Meteor()))
-	//	return E_FAIL;
+	if (FAILED(Load_Stage1Meteor()))
+		return E_FAIL;
 
-	//if (FAILED(Load_Stage1_Cinema_Object()))
-	//	return E_FAIL;
+	if (FAILED(Load_Stage1_Cinema_Object()))
+		return E_FAIL;
 
-	//if (FAILED(Load_Pot()))
-	//	return E_FAIL;
+	if (FAILED(Load_Pot()))
+		return E_FAIL;
 
 	return S_OK;
 }
@@ -1429,9 +1429,8 @@ HRESULT CLoader::Load_Stage1BossLoad()
 		return E_FAIL;
 
 	//Boss Solaris
-
-	if (FAILED(Load_Stage3_BossLoad()))
-		return E_FAIL;
+	//if (FAILED(Load_Stage3_BossLoad()))
+	//	return E_FAIL;
 
 	return S_OK;
 }
@@ -2212,8 +2211,8 @@ HRESULT CLoader::Load_MeshEffects()
 HRESULT CLoader::Load_StaticEffects()
 {
 	//이펙트 매니저에 넣으면서 생성
-// 주의 사항!! 넣을때 순서가 ENUM순서
-//Manager에 넣을 Effect;
+	// 주의 사항!! 넣을때 순서가 ENUM순서
+	//Manager에 넣을 Effect;
 #pragma region 이펙트매니저에 들어가는것들, 순서지켜서 enum에 맞춰줘야됨 
 
 //	//Player Dash
@@ -2238,7 +2237,6 @@ HRESULT CLoader::Load_StaticEffects()
 		MSGBOX("Falild to Add_Effect_Player_Foot_Dash in CStage1::Ready_Effect()");
 		return E_FAIL;
 	}
-
 
 	////HitGroundSmoke
 	vecDashEffect.clear();

@@ -151,6 +151,7 @@ public: /* For.DropBox */
 public: /* For.Execute */
 	void Set_Execution(const _bool _isExecution, CActor* _pTarget = nullptr);
 	CActor* Get_TargetExecution() const;
+	void	Set_TargetExecution(CActor* pTarget);
 	CHierarchyNode* Get_ExecutionTargetBone() const;
 	CUI_Blank_FKey* Get_Blank_FKey() const;
 

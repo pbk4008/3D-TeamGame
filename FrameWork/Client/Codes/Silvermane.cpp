@@ -2166,6 +2166,11 @@ CActor* CSilvermane::Get_TargetExecution() const
 	return m_pTargetExecution;
 }
 
+void CSilvermane::Set_TargetExecution(CActor* pTarget)
+{
+	m_pTargetExecution = pTarget;
+}
+
 CHierarchyNode* CSilvermane::Get_ExecutionTargetBone() const
 {
 	return m_pExecutionTargetBone;

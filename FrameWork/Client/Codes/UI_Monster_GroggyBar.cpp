@@ -74,7 +74,7 @@ _int CUI_Monster_GroggyBar::Tick(_double TimeDelta)
 
 	if (m_bAutoDis && m_bShow) //m_bshow가 false가안되어버리고 버그가있을때 오토로 끌수있게끔
 	{
-		m_fAutoDisTimeAcc += TimeDelta;
+		m_fAutoDisTimeAcc += (_float)TimeDelta;
 	}
 
 	if (5.f <= m_fAutoDisTimeAcc) //완전 처음세팅으로 다시 돌려줌

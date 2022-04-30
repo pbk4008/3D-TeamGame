@@ -254,7 +254,7 @@ HRESULT CStage3::Ready_Player(const _tchar* LayerTag)
 HRESULT CStage3::Ready_Boss(const _tchar* LayerTag)
 {
 	_float3 vpos = { 48.f, 5.f, 146.f };
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE3, L"Layer_Boss", L"Proto_GameObject_Solaris"), &vpos))
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE3, L"Layer_Boss", L"Proto_GameObject_Solaris", &vpos)))
 		return E_FAIL;
 
 	return S_OK;

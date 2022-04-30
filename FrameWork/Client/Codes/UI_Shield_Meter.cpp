@@ -72,13 +72,13 @@ _int CUI_Shield_Meter::Tick(_double TimeDelta)
 
 	if (m_bUseShield)
 	{
-		m_iTextureNum = 0.f; //실드를 썼으니까 다 꺼주고
+		m_iTextureNum = 0; //실드를 썼으니까 다 꺼주고
 		m_bUseShield = false;
 	}
 
 	if (m_bCoolTime) //실드를사용했으면 쿨타임을돌려서 
 	{
-		m_fFillTimeAcc += TimeDelta;
+		m_fFillTimeAcc += (_float)TimeDelta;
 	}
 
 	if (0.5f <= m_fFillTimeAcc) //0.5초가 지나면 한칸씩채워줌

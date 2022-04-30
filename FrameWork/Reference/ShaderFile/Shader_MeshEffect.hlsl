@@ -214,14 +214,6 @@ PS_OUT2 PS_MAIN_MASK(PS_IN In)
 
 		if(amount <= 0.f)
 			discard;
-		//if (g_dissolvetime > 0 && g_dissolvetime < 1)
-		//{
-		//	if (amount < 0.06f)
-		//	{
-		//		Out.vDiffuse = g_DissolveGrTex.Sample(DefaultSampler, half2(1 - g_dissolvetime, 0)) * 0.5f;
-		//	}
-		//}
-
 	}
 	
 	return Out;
