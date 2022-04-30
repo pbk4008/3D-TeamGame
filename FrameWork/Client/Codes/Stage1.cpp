@@ -207,6 +207,7 @@ HRESULT CStage1::NativeConstruct()
 	if (FAILED(Ready_Pot()))
 		return E_FAIL;
 
+	///* ¸¯ ³²½¿¿ä */
 	if (FAILED(Ready_Cinema()))
 	{
 		MSGBOX("Cinema");

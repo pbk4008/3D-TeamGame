@@ -112,24 +112,25 @@ _bool CUIHelper::MouseClickItem(void)
 
 _bool CUIHelper::MouseClickEquipBtn(void)
 {
-	if (g_pGameInstance->getkeyDown(DIK_J))
+	if (g_pGameInstance->getMouseKeyDown(CInputDev::MOUSESTATE::MB_LBUTTON))
 	{
-		/*	if (IsCursorRect())
-			{
-			}*/
+		if (IsCursorRect())
+		{
 			return true;
+		}
 	}
 	return false;
 }
 
+
 _bool CUIHelper::MouseClickArmoryBtn(void)
 {
-	if (g_pGameInstance->getkeyDown(DIK_K))
+	if (g_pGameInstance->getMouseKeyDown(CInputDev::MOUSESTATE::MB_LBUTTON))
 	{
-		/*if (IsCursorRect())
+		if (IsCursorRect())
 		{
-		}*/
 			return true;
+		}
 	}
 	return false;
 }

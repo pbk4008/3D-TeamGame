@@ -259,6 +259,7 @@ enum class EQuestTextType
 	AllKillMonster, /* 모든 몬스터 처치 */
 	FindDropBox,    /* 은닉품 조사 */
 	ChageNewWeapon, /* 새로운 무기로 교체 */
+	GoDeepDungeon,
 	QuestText_END
 };
 
@@ -267,7 +268,8 @@ const wstring g_arrQuestTextTex[(int)EQuestTextType::QuestText_END]
 	L"T_HUD_Find_Sunforge",
 	L"T_HUD_KillAllMonster",
 	L"T_HUD_Find_DropBox",
-	L"T_HUD_EquipNewWeapon"
+	L"T_HUD_EquipNewWeapon",
+	L"T_HUD_GotoDungeon"
 };
 
 enum class EQuestHeaderType
@@ -281,7 +283,7 @@ enum class EQuestHeaderType
 const wstring g_arrQuestHeaderTex[(int)EQuestHeaderType::QuestHeader_END]
 {
 	L"T_HUD_FirstStep",
-	L"T_HUD_GUARD",
+	L"T_HUD_Sunforge",
 	L"T_HUD_GUARD"
 };
 

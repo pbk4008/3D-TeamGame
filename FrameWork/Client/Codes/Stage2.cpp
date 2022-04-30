@@ -74,6 +74,7 @@ HRESULT CStage2::NativeConstruct()
 		return E_FAIL;
 	}
 
+	/* 랜더타겟 지우지 못하는 버그있음요 */
 	if (FAILED(Ready_TriggerSystem(L"../bin/SaveData/Trigger/MonsterSpawnTrigger2.dat")))
 		return E_FAIL;
 
@@ -231,6 +232,16 @@ _int CStage2::Tick(_double TimeDelta)
 	if(g_pDropManager)
 		g_pDropManager->Tick();
 
+	if (g_pQuestManager)
+		g_pQuestManager->Tick(TimeDelta);
+
+	return _int();
+}
+
+_int CStage2::LateTick(_double TimeDelta)
+{
+	if (g_pQuestManager)
+		g_pQuestManager->Late_Tick(TimeDelta);
 
 	return _int();
 }
@@ -662,7 +673,7 @@ HRESULT CStage2::Ready_TriggerFunctionSetting()
 
 void CStage2::Trgger_Function1()
 {
-	//CLEAR_QUEST(L"T_HUD_FirstStep");
+	CLEAR_ALLQUEST();
 
 	list<CGameObject*>* pLayer = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE2, L"Layer_Crawler");
 
@@ -766,7 +777,7 @@ void CStage2::Trgger_Function1()
 	}
 	m_iCountMonster = 9;
 	
-	//START_QUEST(EQuestHeaderType::Sunforge, L"T_HUD_GotoDungeon");
+	START_QUEST(EQuestHeaderType::Sunforge, L"T_HUD_GotoDungeon");
 }
 
 void CStage2::Trgger_Function2()
