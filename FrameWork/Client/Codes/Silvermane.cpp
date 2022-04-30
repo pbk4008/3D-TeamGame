@@ -86,7 +86,9 @@
 #include "1H_SwordRicochetReaction.h"
 // 스킬
 #include "1H_Multishlash.h"
-//////////////////////// 2H_Hammer
+#include "1H_SwordSkill_2.h"
+#include "1H_SwordSkill_3.h"
+////////////////////////////////////////////////// 2H_Hammer
 #include "2H_HammerEquipOff.h"
 #include "2H_HammerEquipOn.h"
 #include "2H_HammerIdle.h"
@@ -122,6 +124,9 @@
 #include "2H_HammerAttackSprintR1.h"
 // 패링 당함
 #include "2H_HammerRicochetReaction.h"
+// Skills
+#include "2H_HammerSkill_1.h"
+#include "2H_HammerSkill_2.h"
 ///////////////////////////////////////////// Shield
 // 막기
 #include "Shield_BlockStart.h"
@@ -286,6 +291,13 @@ _int CSilvermane::Tick(_double _dDeltaTime)
 	if (NO_EVENT != iProgress)
 		return iProgress;
 	m_pTransform->Set_Velocity(XMVectorZero());
+
+	if (!m_isSkill)
+	{
+		m_fSkillGuage += (_float)_dDeltaTime * 10.f;
+		if (100.f < m_fSkillGuage)
+			m_fSkillGuage = 100.f;
+	}
 
 	iProgress = m_pStateController->Tick(_dDeltaTime);
 	if (NO_EVENT != iProgress && STATE_CHANGE != iProgress)
@@ -764,6 +776,10 @@ HRESULT CSilvermane::Ready_States()
 	// 스킬
 	if (FAILED(m_pStateController->Add_State(L"1H_Multishlash", C1H_Multishlash::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
+	if (FAILED(m_pStateController->Add_State(L"1H_SwordSkill_2", C1H_SwordSkill_2::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	if (FAILED(m_pStateController->Add_State(L"1H_SwordSkill_3", C1H_SwordSkill_3::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
 #pragma endregion
 #pragma region 2H_Hammer
 	if (FAILED(m_pStateController->Add_State(L"2H_HammerEquipOn", C2H_HammerEquipOn::Create(m_pDevice, m_pDeviceContext))))
@@ -828,6 +844,11 @@ HRESULT CSilvermane::Ready_States()
 		return E_FAIL;
 	// 패랭 당함
 	if (FAILED(m_pStateController->Add_State(L"2H_HammerRicochetReaction", C2H_HammerRicochetReaction::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	// Skills
+	if (FAILED(m_pStateController->Add_State(L"2H_HammerSkill_1", C2H_HammerSkill_1::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	if (FAILED(m_pStateController->Add_State(L"2H_HammerSkill_2", C2H_HammerSkill_2::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 #pragma endregion
 #pragma region Shield
@@ -2070,7 +2091,7 @@ const void CSilvermane::Raycast_DropBox(const _double& _dDeltaTime)
 	{
 		if (g_pGameInstance->getkeyPress(DIK_E))
 		{
-			if (!m_isSkill)
+			if (!m_isSkill && 50.f < m_fSkillGuage)
 			{
 				if (g_pGameInstance->getMousePress(CInputDev::MOUSESTATE::MB_LBUTTON))
 				{
@@ -2084,23 +2105,7 @@ const void CSilvermane::Raycast_DropBox(const _double& _dDeltaTime)
 						else
 						{
 							m_pTargetExecution = static_cast<CActor*>(pHitObject);
-							m_isSkill = true;
 						}
-						break;
-					case CWeapon::EType::Hammer_2H:
-
-						break;
-					}
-				}
-				else if (g_pGameInstance->getMousePress(CInputDev::MOUSESTATE::MB_RBUTTON))
-				{
-					switch (m_pCurWeapon->Get_Type())
-					{
-					case CWeapon::EType::Sword_1H:
-
-						break;
-					case CWeapon::EType::Hammer_2H:
-
 						break;
 					}
 				}
@@ -2165,6 +2170,21 @@ void CSilvermane::Set_Skill(const _bool _isSkil)
 		}
 		m_pCamera->Set_Skill(_isSkil, pEyeBone, pAtBone);
 	}
+}
+
+void CSilvermane::Add_SkillGuage(const _float _fValue)
+{
+	m_fSkillGuage += _fValue;
+}
+
+const _bool CSilvermane::IsSkill() const
+{
+	return m_isSkill;
+}
+
+const _float CSilvermane::Get_SkillGuage() const
+{
+	return m_fSkillGuage;
 }
 
 CSilvermane* CSilvermane::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)

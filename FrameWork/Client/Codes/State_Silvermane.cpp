@@ -465,6 +465,42 @@ const _int CState_Silvermane::ToJogRight()
 	return STATE_CHANGE;
 }
 
+const _int CState_Silvermane::ToSkill()
+{
+	if (!m_pSilvermane->IsSkill() && 50.f < m_pSilvermane->Get_SkillGuage())
+	{
+		if (g_pGameInstance->getMousePress(CInputDev::MOUSESTATE::MB_LBUTTON))
+		{
+			switch (m_pSilvermane->Get_WeaponType())
+			{
+			case CWeapon::EType::Hammer_2H:
+				if (FAILED(m_pStateController->Change_State(L"2H_HammerSkill_1")))
+					return -1;
+				return STATE_CHANGE;
+				break;
+			}
+		}
+		else if (g_pGameInstance->getMousePress(CInputDev::MOUSESTATE::MB_RBUTTON))
+		{
+			switch (m_pSilvermane->Get_WeaponType())
+			{
+			case CWeapon::EType::Sword_1H:
+				if (FAILED(m_pStateController->Change_State(L"1H_SwordSkill_2")))
+					return -1;
+				return STATE_CHANGE;
+				break;
+			case CWeapon::EType::Hammer_2H:
+				if (FAILED(m_pStateController->Change_State(L"2H_HammerSkill_2")))
+					return -1;
+				return STATE_CHANGE;
+				break;
+			}
+		}
+	}
+
+	return _int();
+}
+
 void CState_Silvermane::Set_Silvermane(CSilvermane* _pSilvermane)
 {
 	m_pSilvermane = _pSilvermane;

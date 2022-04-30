@@ -117,6 +117,11 @@ _int C2H_HammerIdle::Input(const _double& _dDeltaTime)
 		}
 	}
 
+	if (g_pGameInstance->getkeyPress(DIK_E))
+	{
+		return ToSkill();
+	}
+
 	if (g_pGameInstance->getMouseKeyDown(CInputDev::MOUSESTATE::MB_LBUTTON))
 	{
 		if (FAILED(m_pStateController->Change_State(L"2H_HammerAttackR1_01")))
@@ -132,19 +137,19 @@ _int C2H_HammerIdle::Input(const _double& _dDeltaTime)
 
 	if (g_pGameInstance->getkeyDown(DIK_SPACE))
 	{
-		if (g_pGameInstance->getkeyDown(DIK_W))
+		if (g_pGameInstance->getkeyPress(DIK_W))
 		{
 			if (FAILED(m_pStateController->Change_State(L"1H_DodgeSpin")))
 				return -1;
 			return STATE_CHANGE;
 		}
-		else if (g_pGameInstance->getkeyDown(DIK_A))
+		else if (g_pGameInstance->getkeyPress(DIK_A))
 		{
 			if (FAILED(m_pStateController->Change_State(L"1H_SidestepLeft")))
 				return -1;
 			return STATE_CHANGE;
 		}
-		else if (g_pGameInstance->getkeyDown(DIK_D))
+		else if (g_pGameInstance->getkeyPress(DIK_D))
 		{
 			if (FAILED(m_pStateController->Change_State(L"1H_SidestepRight")))
 				return -1;

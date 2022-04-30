@@ -1,12 +1,14 @@
 #include "pch.h"
-#include "1H_Multishlash.h"
+#include "1H_SwordSkill_3.h"
 
-C1H_Multishlash::C1H_Multishlash(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
+#include "MeshEffect_Test.h"
+
+C1H_SwordSkill_3::C1H_SwordSkill_3(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
 	: CState_Silvermane(_pDevice, _pDeviceContext)
 {
 }
 
-HRESULT C1H_Multishlash::NativeConstruct(void* _pArg)
+HRESULT C1H_SwordSkill_3::NativeConstruct(void* _pArg)
 {
 	if (FAILED(__super::NativeConstruct(_pArg)))
 		return E_FAIL;
@@ -14,7 +16,7 @@ HRESULT C1H_Multishlash::NativeConstruct(void* _pArg)
 	return S_OK;
 }
 
-_int C1H_Multishlash::Tick(const _double& _dDeltaTime)
+_int C1H_SwordSkill_3::Tick(const _double& _dDeltaTime)
 {
 	_int iProgress = __super::Tick(_dDeltaTime);
 	if (NO_EVENT != iProgress)
@@ -40,49 +42,19 @@ _int C1H_Multishlash::Tick(const _double& _dDeltaTime)
 		m_pTransform->Set_State(CTransform::STATE_LOOK, svLook);
 		m_pTransform->Set_State(CTransform::STATE_RIGHT, svRight);
 		m_pTransform->Set_State(CTransform::STATE_UP, svUp);
-
-		if (16 < iCurKeyFrameIndex && 18 > iCurKeyFrameIndex ||
-			26 < iCurKeyFrameIndex && 28 > iCurKeyFrameIndex ||
-			38 < iCurKeyFrameIndex && 40 > iCurKeyFrameIndex ||
-			52 < iCurKeyFrameIndex && 54 > iCurKeyFrameIndex)
-		{
-			if (!m_isAttack)
-			{
-				ATTACKDESC tAttackDesc = m_pSilvermane->Get_AttackDesc();
-				tAttackDesc.fDamage += 50.f;
-				tAttackDesc.pHitObject = m_pSilvermane->Get_CurerntWeapon();
-				pTarget->Hit(tAttackDesc);
-				m_isAttack = true;
-
-				CCameraShake::SHAKEEVENT tShakeEvent;
-				tShakeEvent.fDuration = 0.4f;
-				tShakeEvent.fBlendOutTime = 0.3f;
-				tShakeEvent.tWaveX.fAmplitude = 0.06f;
-				tShakeEvent.tWaveX.fFrequency = 10.f;
-				tShakeEvent.tWaveY.fAmplitude = 0.06f;
-				tShakeEvent.tWaveY.fFrequency = 6.f;
-				tShakeEvent.tWaveZ.fAmplitude = 0.06f;
-				tShakeEvent.tWaveZ.fFrequency = 8.f;
-				_float3 vPos; XMStoreFloat3(&vPos, m_pTransform->Get_State(CTransform::STATE_POSITION));
-				g_pShakeManager->Shake(tShakeEvent, vPos);
-			}
-		}
-		else
-			m_isAttack = false;
 	}
 
-	if (10 < iCurKeyFrameIndex && 60 > iCurKeyFrameIndex)
+	if (20 < iCurKeyFrameIndex && 30 > iCurKeyFrameIndex)
 	{
-		m_fMTAcc += g_fDeltaTime;
-		if (0.1f < m_fMTAcc)
-		{
-			m_pSilvermane->Create_MotionTrail(m_motiontrailidx);
-			++m_motiontrailidx;
-			m_fMTAcc = 0.f;
-		}
+		m_pTransform->Rotation_Axis(CTransform::STATE_UP, (_float)_dDeltaTime * 10.f);
 
-		if (m_motiontrailidx >= 20)
-			m_motiontrailidx = 0;
+		_vector svPos = m_pTransform->Get_State(CTransform::STATE_POSITION);
+
+		svPos += XMLoadFloat3(&m_vDir) * (_float)_dDeltaTime * 14.f;
+		_float3 vPos{}; XMStoreFloat3(&vPos, svPos);
+		m_pSilvermane->Set_FootPosition(vPos);
+
+		m_pAnimationController->Set_RootMotion(true, false);
 	}
 
 	if (m_pAnimationController->Is_Finished())
@@ -91,7 +63,7 @@ _int C1H_Multishlash::Tick(const _double& _dDeltaTime)
 	return _int();
 }
 
-_int C1H_Multishlash::LateTick(const _double& _dDeltaTime)
+_int C1H_SwordSkill_3::LateTick(const _double& _dDeltaTime)
 {
 	_int iProgress = __super::LateTick(_dDeltaTime);
 	if (NO_EVENT != iProgress)
@@ -100,7 +72,7 @@ _int C1H_Multishlash::LateTick(const _double& _dDeltaTime)
 	return _int();
 }
 
-HRESULT C1H_Multishlash::Render()
+HRESULT C1H_SwordSkill_3::Render()
 {
 	if (FAILED(__super::Render()))
 		return E_FAIL;
@@ -108,19 +80,19 @@ HRESULT C1H_Multishlash::Render()
 	return S_OK;
 }
 
-HRESULT C1H_Multishlash::EnterState()
+HRESULT C1H_SwordSkill_3::EnterState()
 {
 	if (FAILED(__super::EnterState()))
 		return E_FAIL;
 
-	if (FAILED(m_pAnimationController->SetUp_NextAnimation("SK_Silvermane.ao|A_1H_Sword_Normal_JustFrame_Multishlash", false)))
+	if (FAILED(m_pAnimationController->SetUp_NextAnimation("SK_Silvermane.ao|A_1H_Sword_Attack_Normal_L1_R2_Offset_10deg", false)))
 		return E_FAIL;
 	m_pAnimationController->Set_RootMotion(true, true);
 
 	m_pSilvermane->Set_IsTrasceCamera(false);
 	m_pSilvermane->Set_IsDash(true);
 	m_pSilvermane->Set_IsSkill(true);
-	m_pSilvermane->Add_SkillGuage(-50.f);
+	//m_pSilvermane->Add_SkillGuage(-50.f);
 
 	if (!m_pSilvermane->IsEquipWeapon())
 	{
@@ -128,12 +100,17 @@ HRESULT C1H_Multishlash::EnterState()
 		m_pSilvermane->Set_WeaponFixedBone("weapon_r");
 	}
 
-	m_iCutIndex = 70;
+	m_iCutIndex = 50;
+
+	_vector svLook = XMVector3Normalize(XMVectorSetY(m_pTransform->Get_State(CTransform::STATE_LOOK), 0.f));
+	_vector svRight = XMVector3Normalize(XMVectorSetY(m_pTransform->Get_State(CTransform::STATE_RIGHT), 0.f));
+
+	XMStoreFloat3(&m_vDir, XMVector3Normalize(svLook + svRight));
 
 	return S_OK;
 }
 
-HRESULT C1H_Multishlash::ExitState()
+HRESULT C1H_SwordSkill_3::ExitState()
 {
 	if (FAILED(__super::ExitState()))
 		return E_FAIL;
@@ -147,7 +124,7 @@ HRESULT C1H_Multishlash::ExitState()
 	return S_OK;
 }
 
-_int C1H_Multishlash::Input(const _double& _dDeltaTime)
+_int C1H_SwordSkill_3::Input(const _double& _dDeltaTime)
 {
 	_int iProgress = __super::Input(_dDeltaTime);
 	if (NO_EVENT != iProgress)
@@ -183,7 +160,6 @@ _int C1H_Multishlash::Input(const _double& _dDeltaTime)
 				return STATE_CHANGE;
 			}
 		}
-
 		if (g_pGameInstance->getkeyPress(DIK_Q))
 		{
 			if (m_pSilvermane->IsLootShield())
@@ -259,18 +235,18 @@ _int C1H_Multishlash::Input(const _double& _dDeltaTime)
 	return _int();
 }
 
-C1H_Multishlash* C1H_Multishlash::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext, void* _pArg)
+C1H_SwordSkill_3* C1H_SwordSkill_3::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext, void* _pArg)
 {
-	C1H_Multishlash* pInstance = new C1H_Multishlash(_pDevice, _pDeviceContext);
+	C1H_SwordSkill_3* pInstance = new C1H_SwordSkill_3(_pDevice, _pDeviceContext);
 	if (FAILED(pInstance->NativeConstruct(_pArg)))
 	{
-		MSGBOX("C1H_Multishlash Create Fail");
+		MSGBOX("C1H_SwordSkill_3 Create Fail");
 		Safe_Release(pInstance);
 	}
 	return pInstance;
 }
 
-void C1H_Multishlash::Free()
+void C1H_SwordSkill_3::Free()
 {
 	__super::Free();
 }

@@ -56,9 +56,9 @@ _int CDamageFont::Tick(_double _dDeltaTime)
 
 	if (0.5f < m_fAccTime)
 	{
-		_vector svPos = m_pTransform->Get_State(CTransform::STATE_POSITION);
-		svPos += _vector{ 0.f, 1.f, 0.f, 0.f } * (_float)_dDeltaTime * 0.5f;
-		m_pTransform->Set_State(CTransform::STATE_POSITION, svPos);
+		//_vector svPos = m_pTransform->Get_State(CTransform::STATE_POSITION);
+		//svPos += _vector{ 0.f, 1.f, 0.f, 0.f } * (_float)_dDeltaTime * 0.5f;
+		//m_pTransform->Set_State(CTransform::STATE_POSITION, svPos);
 
 		m_fAlpha -= (_float)_dDeltaTime;
 	}

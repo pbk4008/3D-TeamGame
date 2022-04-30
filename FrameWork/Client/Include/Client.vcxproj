@@ -220,6 +220,8 @@ call Update_Client.bat</Command>
     <ClInclude Include="..\Headers\1H_SwordJogRight.h" />
     <ClInclude Include="..\Headers\1H_SwordJogRightPivot180.h" />
     <ClInclude Include="..\Headers\1H_SwordJogRightStart.h" />
+    <ClInclude Include="..\Headers\1H_SwordSkill_2.h" />
+    <ClInclude Include="..\Headers\1H_SwordSkill_3.h" />
     <ClInclude Include="..\Headers\1H_SwordSupermanStab.h" />
     <ClInclude Include="..\Headers\1H_SwordDodgeSpinFwd_V3.h" />
     <ClInclude Include="..\Headers\1H_SwordEquipOff.h" />
@@ -259,6 +261,8 @@ call Update_Client.bat</Command>
     <ClInclude Include="..\Headers\2H_HammerJogRightPivot180.h" />
     <ClInclude Include="..\Headers\2H_HammerJogRightStart.h" />
     <ClInclude Include="..\Headers\2H_HammerRicochetReaction.h" />
+    <ClInclude Include="..\Headers\2H_HammerSkill_1.h" />
+    <ClInclude Include="..\Headers\2H_HammerSkill_2.h" />
     <ClInclude Include="..\Headers\Aberrant_Attack.h" />
     <ClInclude Include="..\Headers\Aberrant_Dash_Bwd.h" />
     <ClInclude Include="..\Headers\Aberrant_Death.h" />
@@ -680,6 +684,8 @@ call Update_Client.bat</Command>
     <ClCompile Include="..\Codes\1H_SwordJogRight.cpp" />
     <ClCompile Include="..\Codes\1H_SwordJogRightPivot180.cpp" />
     <ClCompile Include="..\Codes\1H_SwordJogRightStart.cpp" />
+    <ClCompile Include="..\Codes\1H_SwordSkill_2.cpp" />
+    <ClCompile Include="..\Codes\1H_SwordSkill_3.cpp" />
     <ClCompile Include="..\Codes\1H_SwordSupermanStab.cpp" />
     <ClCompile Include="..\Codes\1H_SwordDodgeSpinFwd_V3.cpp" />
     <ClCompile Include="..\Codes\1H_SwordEquipOff.cpp" />
@@ -719,6 +725,8 @@ call Update_Client.bat</Command>
     <ClCompile Include="..\Codes\2H_HammerEquipOff.cpp" />
     <ClCompile Include="..\Codes\2H_HammerEquipOn.cpp" />
     <ClCompile Include="..\Codes\2H_HammerRicochetReaction.cpp" />
+    <ClCompile Include="..\Codes\2H_HammerSkill_1.cpp" />
+    <ClCompile Include="..\Codes\2H_HammerSkill_2.cpp" />
     <ClCompile Include="..\Codes\Aberrant_Attack.cpp" />
     <ClCompile Include="..\Codes\Aberrant_Dash_Bwd.cpp" />
     <ClCompile Include="..\Codes\Aberrant_Death.cpp" />
