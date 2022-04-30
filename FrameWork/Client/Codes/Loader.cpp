@@ -14,6 +14,7 @@
 #include "Potal.h"
 #include "Loot_Shield.h"
 #include "Pot.h"
+#include "Circle_Floor.h"
 
 //Monster
 #include "Monster_Crawler.h"
@@ -197,8 +198,8 @@ HRESULT CLoader::SetUp_Stage1_Object()
 	if (FAILED(Load_Stage1MonsterLoad()))
 		return E_FAIL;
 	
-	//if (FAILED(Load_Stage1BossLoad()))
-	//	return E_FAIL;
+	if (FAILED(Load_Stage1BossLoad()))
+		return E_FAIL;
 
 	if (FAILED(Load_Stage1StaticUILoad()))
 		return E_FAIL;
@@ -207,8 +208,8 @@ HRESULT CLoader::SetUp_Stage1_Object()
 		return E_FAIL;
 
 #pragma region 이펙트들
-	//if (FAILED(Load_Stage1EffectLoad()))
-	//	return E_FAIL;
+	if (FAILED(Load_Stage1EffectLoad()))
+		return E_FAIL;
 	if (FAILED(Load_TrailEffects())) //소드
 		return E_FAIL;
 	if (FAILED(Load_MeshEffects())) //매쉬
@@ -218,8 +219,8 @@ HRESULT CLoader::SetUp_Stage1_Object()
 	//if (FAILED(Load_Stage1JumpTrigger()))
 	//	return E_FAIL;
 
-	//if (FAILED(Load_Stage1_TreasureChest_Load()))
-	//	return E_FAIL;
+	if (FAILED(Load_Stage1_TreasureChest_Load()))
+		return E_FAIL;
 
 	//if (FAILED(Load_Stage1TriggerLod()))
 	//	return E_FAIL;
@@ -303,6 +304,15 @@ HRESULT CLoader::Load_Stage1FBXLoad()
 	}*/
 	
 	RELEASE_INSTANCE(CMeshLoader);
+
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"PavementDecor_01_Lod0.fbx",
+		CModel::Create(m_pDevice, m_pDeviceContext, 
+			L"../bin/FBX/Floor/PavementDecor_01_Lod0.fbx", CModel::TYPE_STATIC,true))))
+		return E_FAIL;
+
+	if(FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Circle_Floor",CCircle_Floor::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+
 
 	return S_OK;
 }
@@ -818,10 +828,17 @@ HRESULT CLoader::Load_Stage1_Cinema_Object()
 		L"../bin/FBX/Cinema/Scree.fbx", CModel::TYPE_ANIM, true))))
 		return E_FAIL;
 
+	//Floor_Crack
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Model_Cinema_Floor", CModel::Create(m_pDevice, m_pDeviceContext,
+		L"../bin/FBX/Cinema/Floor_Crack.fbx", CModel::TYPE_ANIM, true))))
+		return E_FAIL;
+
 	////Silvermane
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Cinema_Silvermane", CModel::Create(m_pDevice, m_pDeviceContext,
 		L"../bin/FBX/Cinema/Silvermane_Cinema.fbx", CModel::TYPE_ANIM, true))))
 		return E_FAIL;
+
+
 
 	//PhoenixWeapon
 	_matrix matPivot = XMMatrixIdentity();
@@ -836,6 +853,8 @@ HRESULT CLoader::Load_Stage1_Cinema_Object()
 		"../bin/Resources/Mesh/GrayHwak/", "GrayHwakWeapon.fbx",
 		shaderPath, matPivot, CModel::TYPE::TYPE_STATIC, true))))
 		return E_FAIL;
+
+
 
 	//Camera1-1
 	matPivot = XMMatrixIdentity();
@@ -1405,8 +1424,8 @@ HRESULT CLoader::Load_Stage1BossLoad()
 
 	//Boss Solaris
 
-	if (FAILED(Load_Stage3_BossLoad()))
-		return E_FAIL;
+	//if (FAILED(Load_Stage3_BossLoad()))
+	//	return E_FAIL;
 
 	return S_OK;
 }
