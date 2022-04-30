@@ -30,7 +30,11 @@ private:
 	class CHierarchyNode* m_pEyeNode = nullptr;
 
 	_float m_fAngle = 0.f;
+	
+	_float m_fEffectAcc = 0.f;
 	_bool m_bRotate = false;
+	_bool m_bEffectOn = false;
+
 
 public:
 	static CMeshEffect_EyeRazer* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext);

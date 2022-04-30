@@ -95,29 +95,38 @@ _int CEffect_FloatingUp::Tick(_double TimeDelta)
 		m_Desc.fCurTime += (_float)TimeDelta;
 	}
 
-	_matrix matCullingBoxPivot = XMMatrixIdentity();
-	matCullingBoxPivot.r[3] = { m_Desc.CullingBoxPos.x, m_Desc.CullingBoxPos.y,m_Desc.CullingBoxPos.z, 1.f };
-	m_pBox->Update_Matrix(matCullingBoxPivot * m_pTransform->Get_WorldMatrix());
+	if ((_uint)SCENEID::SCENE_STAGE3 != m_iSceneID)
+	{
+		_matrix matCullingBoxPivot = XMMatrixIdentity();
+		matCullingBoxPivot.r[3] = { m_Desc.CullingBoxPos.x, m_Desc.CullingBoxPos.y,m_Desc.CullingBoxPos.z, 1.f };
+		m_pBox->Update_Matrix(matCullingBoxPivot * m_pTransform->Get_WorldMatrix());
 
-	_float dist = MathUtils::Length(g_pObserver->Get_PlayerPos() , m_pTransform->Get_State(CTransform::STATE_POSITION) );
+		_float dist = MathUtils::Length(g_pObserver->Get_PlayerPos(), m_pTransform->Get_State(CTransform::STATE_POSITION));
 
-	if (dist <= 1.0f)
-		setActive(false);
+		if (dist <= 1.0f)
+			setActive(false);
+	}
+	
 
     return 0;
 }
 
 _int CEffect_FloatingUp::LateTick(_double TimeDelta)
 {
-	_bool bCulling = g_pGameInstance->isIn_WorldFrustum(m_pBox->Get_Points(), 1.f);
-	if (true == bCulling)
+	if ((_uint)SCENEID::SCENE_STAGE3 != m_iSceneID)
 	{
-		if (nullptr != m_pRenderer)
+		_bool bCulling = g_pGameInstance->isIn_WorldFrustum(m_pBox->Get_Points(), 1.f);
+		if (true == bCulling)
 		{
-			m_pRenderer->Add_RenderGroup(CRenderer::RENDER::RENDER_NONALPHA, this);
+			if (nullptr != m_pRenderer)
+			{
+				m_pRenderer->Add_RenderGroup(CRenderer::RENDER::RENDER_NONALPHA, this);
+			}
 		}
 	}
-
+	
+	if ((_uint)SCENEID::SCENE_STAGE3 == m_iSceneID)
+		m_pRenderer->Add_RenderGroup(CRenderer::RENDER::RENDER_NONALPHA, this);
 	//cout << bCulling << endl;
 
 	return 0;

@@ -88,6 +88,8 @@ _int CUI_Monster_HpBar::Tick(_double TimeDelta)
 	{
 		m_fAlpha = 0.f;
 		m_fDisappearTimeAcc = 0.f;
+		setActive(false);
+
 	}
 #pragma endregion
 
@@ -111,7 +113,7 @@ _int CUI_Monster_HpBar::LateTick(_double TimeDelta)
 
 	if (nullptr != m_pRenderer)
 	{
-		m_pRenderer->Add_RenderGroup(CRenderer::RENDER::RENDER_UI, this);
+		m_pRenderer->Add_RenderGroup(CRenderer::RENDER::RENDER_ALPHANB, this);;
 	}
 	return _int();
 }

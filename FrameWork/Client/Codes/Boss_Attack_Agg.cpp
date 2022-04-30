@@ -38,32 +38,35 @@ _int CBoss_Attack_Agg::Tick(const _double& TimeDelta)
 
 	m_pMonster->RimlightCheck(true, _float3(1, 0, 0));
 
-	_vector svPos = m_pTransform->Get_State(CTransform::STATE_POSITION);
-	_vector svLook = XMVector3Normalize(m_pTransform->Get_State(CTransform::STATE_LOOK));
-	_vector svRight = XMVector3Normalize(m_pTransform->Get_State(CTransform::STATE_RIGHT));
+	_vector BossPos = m_pMonster->Get_Transform()->Get_State(CTransform::STATE_POSITION);
+	_vector BossLook = XMVector3Normalize(m_pMonster->Get_Transform()->Get_State(CTransform::STATE_LOOK));
+	_vector BossRight = XMVector3Normalize(m_pMonster->Get_Transform()->Get_State(CTransform::STATE_RIGHT));
 
 	if(52 <= iCurKeyFrameIndex && 70 >= iCurKeyFrameIndex)
 	{ 
 		if (53 <= iCurKeyFrameIndex && 55 >= iCurKeyFrameIndex && false == m_bShakeCheck)
 		{
 			CCameraShake::SHAKEEVENT tShakeEvent;
-			tShakeEvent.fDuration = 0.3f;
-			tShakeEvent.fBlendInTime = 0.1f;
-			tShakeEvent.fBlendOutTime = 0.2f;
-			tShakeEvent.tWaveX.fAmplitude = 0.3f;
+			tShakeEvent.fDuration = 0.6f;
+			tShakeEvent.fBlendInTime = 0.2f;
+			tShakeEvent.fBlendOutTime = 0.4f;
+			tShakeEvent.tWaveX.fAmplitude = 0.7f;
 			tShakeEvent.tWaveX.fFrequency = 7.f;
 			tShakeEvent.tWaveY.fAmplitude = -0.1f;
-			tShakeEvent.tWaveY.fFrequency = 0.3f;
+			tShakeEvent.tWaveY.fFrequency = 0.5f;
 			tShakeEvent.tWaveZ.fAdditionalOffset = 0.6f;
 			tShakeEvent.tWaveZ.fAdditionalOffset = -1.f;
 			tShakeEvent.fInnerRadius = 10.f;
 			tShakeEvent.fOuterRadius = 20.f;
-			tShakeEvent.fDistanceRate = 20.f;
+			tShakeEvent.fDistanceRate = 30.f;
 
 			g_pShakeManager->Shake(tShakeEvent, m_pTransform->Get_State(CTransform::STATE_POSITION));
 
-			m_pMonster->Active_Effect((_uint)EFFECT::HIT_GROUND_SMOKE);
-			//m_pMonster->Active_Effect((_uint)EFFECT::HIT_GROUND, svLook * 2.6f + svRight * -2.1f);
+			_matrix mat = m_pMonster->Get_Transform()->Get_WorldMatrix();
+			mat = XMMatrixRotationY(XMConvertToRadians(45.f))
+				* XMMatrixTranslation(XMVectorGetX(BossRight) * -1.f , 0.f, 0.f) * mat;
+			m_pMonster->Active_Effect_Target((_uint)EFFECT::BOSS_SIDE_ATTACK_SMOKE, mat);
+			m_pMonster->Active_Effect_Target((_uint)EFFECT::BOSS_SIDE_ATTACK, mat);
 			m_pMonster->Active_Effect((_uint)EFFECT::EXPLOSION_ROCK_RIGHT);
 			m_bShakeCheck = true;
 		}

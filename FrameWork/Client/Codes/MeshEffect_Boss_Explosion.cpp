@@ -75,7 +75,7 @@ _int CMeshEffect_Boss_Explosion::Tick(_double _dDeltaTime)
 		m_fAlpha = 3.0f;
 	}
 
-	if (90.f < m_vScale.x)
+	if (100.f < m_vScale.x)
 	{
 		m_bBeSmall = true;
 	}
@@ -84,13 +84,14 @@ _int CMeshEffect_Boss_Explosion::Tick(_double _dDeltaTime)
 	{
 		m_fAlpha = 1.0f;
 
-		m_vScale.x -= 250.f * (_float)_dDeltaTime;
-		m_vScale.y -= 250.f * (_float)_dDeltaTime;
-		m_vScale.z -= 250.f * (_float)_dDeltaTime;
+		m_vScale.x -= 200.f * (_float)_dDeltaTime;
+		m_vScale.y -= 200.f * (_float)_dDeltaTime;
+		m_vScale.z -= 200.f * (_float)_dDeltaTime;
 	}
 
 	if (5.f >= m_vScale.x)
 	{
+		m_vScale = { 5.f, 5.f, 5.f };
 		m_bBeSmall = false;
 		setActive(false);
 	}

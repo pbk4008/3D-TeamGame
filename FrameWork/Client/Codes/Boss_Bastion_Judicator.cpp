@@ -143,10 +143,6 @@ _int CBoss_Bastion_Judicator::Tick(_double TimeDelta)
 	{
 		m_pPanel->Set_Show(true);
 	}
-	if (g_pGameInstance->getkeyDown(DIK_NUMPAD8))
-	{
-		m_pStateController->Change_State(L"Execution");
-	}
 
 	if (m_fGroggyGauge >= m_fMaxGroggyGauge)
 	{
@@ -209,6 +205,11 @@ _int CBoss_Bastion_Judicator::Tick(_double TimeDelta)
 				return 0;
 			}
 		}
+	}
+
+	if (0.5f >= Get_HpRatio())
+	{
+		m_pWeapon->setActive(false);
 	}
 
 	m_pCharacterController->Move(TimeDelta, m_pTransform->Get_Velocity());

@@ -433,6 +433,7 @@ call Update_Client.bat</Command>
     <ClInclude Include="..\Headers\UI_Fill_Space.h" />
     <ClInclude Include="..\Headers\UI_Guide_Background.h" />
     <ClInclude Include="..\Headers\UI_Guide_Texture.h" />
+    <ClInclude Include="..\Headers\UI_HpHeal_Num.h" />
     <ClInclude Include="..\Headers\UI_LevelUP_Background.h" />
     <ClInclude Include="..\Headers\UI_LevelUP_BG_Left.h" />
     <ClInclude Include="..\Headers\UI_LevelUP_BG_Right.h" />
@@ -612,6 +613,7 @@ call Update_Client.bat</Command>
     <ClInclude Include="..\Headers\UI_Monster_GroggyBar.h" />
     <ClInclude Include="..\Headers\UI_Monster_HpBar.h" />
     <ClInclude Include="..\Headers\UI_Monster_Level.h" />
+    <ClInclude Include="..\Headers\UI_Monster_LevelNum.h" />
     <ClInclude Include="..\Headers\UI_Monster_Name.h" />
     <ClInclude Include="..\Headers\UI_Monster_Panel.h" />
     <ClInclude Include="..\Headers\UI_PlayerStatusWindow.h" />
@@ -628,6 +630,7 @@ call Update_Client.bat</Command>
     <ClInclude Include="..\Headers\UI_QuestHeadText.h" />
     <ClInclude Include="..\Headers\UI_QuestText.h" />
     <ClInclude Include="..\Headers\UI_SelectEffect.h" />
+    <ClInclude Include="..\Headers\UI_Shield_Meter.h" />
     <ClInclude Include="..\Headers\UI_SlotBackground.h" />
     <ClInclude Include="..\Headers\UI_SlotGrade.h" />
     <ClInclude Include="..\Headers\UI_SlotItemEffect.h" />
@@ -886,6 +889,7 @@ call Update_Client.bat</Command>
     <ClCompile Include="..\Codes\UI_Fill_Space.cpp" />
     <ClCompile Include="..\Codes\UI_Guide_Background.cpp" />
     <ClCompile Include="..\Codes\UI_Guide_Texture.cpp" />
+    <ClCompile Include="..\Codes\UI_HpHeal_Num.cpp" />
     <ClCompile Include="..\Codes\UI_LevelUP_Background.cpp" />
     <ClCompile Include="..\Codes\UI_LevelUP_BG_Left.cpp" />
     <ClCompile Include="..\Codes\UI_LevelUP_BG_Right.cpp" />
@@ -1073,6 +1077,7 @@ call Update_Client.bat</Command>
     <ClCompile Include="..\Codes\UI_Monster_GroggyBar.cpp" />
     <ClCompile Include="..\Codes\UI_Monster_HpBar.cpp" />
     <ClCompile Include="..\Codes\UI_Monster_Level.cpp" />
+    <ClCompile Include="..\Codes\UI_Monster_LevelNum.cpp" />
     <ClCompile Include="..\Codes\UI_Monster_Name.cpp" />
     <ClCompile Include="..\Codes\UI_Monster_Panel.cpp" />
     <ClCompile Include="..\Codes\UI_PlayerStatusWindow.cpp" />
@@ -1089,6 +1094,7 @@ call Update_Client.bat</Command>
     <ClCompile Include="..\Codes\UI_QuestHeadText.cpp" />
     <ClCompile Include="..\Codes\UI_QuestText.cpp" />
     <ClCompile Include="..\Codes\UI_SelectEffect.cpp" />
+    <ClCompile Include="..\Codes\UI_Shield_Meter.cpp" />
     <ClCompile Include="..\Codes\UI_SlotBackground.cpp" />
     <ClCompile Include="..\Codes\UI_SlotGrade.cpp" />
     <ClCompile Include="..\Codes\UI_SlotItemEffect.cpp" />

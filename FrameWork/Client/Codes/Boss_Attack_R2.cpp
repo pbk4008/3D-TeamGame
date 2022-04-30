@@ -77,8 +77,10 @@ _int CBoss_Attack_R2::Tick(const _double& TimeDelta)
 		_vector svLook = XMVector3Normalize(m_pTransform->Get_State(CTransform::STATE_LOOK));
 		_vector svRight = XMVector3Normalize(m_pTransform->Get_State(CTransform::STATE_RIGHT));
 
-		m_pMonster->Active_Effect((_uint)EFFECT::HIT_GROUND_SMOKE);
+		m_pMonster->Active_Effect((_uint)EFFECT::BOSS_HIT_GROUND_SMOKE);
 		m_pMonster->Active_Effect((_uint)EFFECT::EXPLOSION_ROCK_UP);
+		m_pMonster->Active_Effect((_uint)EFFECT::BOSS_ATTACK_GROUND, XMVectorSet(0.f, 0.f, 0.f, 0.f));
+		m_pMonster->Active_Effect((_uint)EFFECT::BOSS_ATTACK_GROUND2, XMVectorSet(0.f, -1.f, 0.f, 0.f));
 		static_cast<CBoss_Solaris*>(m_pMonster)->OnEff_MeshExplosion(true);
 
 
@@ -95,7 +97,7 @@ _int CBoss_Attack_R2::Tick(const _double& TimeDelta)
 	if (38 < iCurKeyFrameIndex && 50 > iCurKeyFrameIndex)
 	{
 		OVERLAPDESC tOverlapDesc;
-		tOverlapDesc.geometry = PxSphereGeometry(7.f);
+		tOverlapDesc.geometry = PxSphereGeometry(10.f);
 		XMStoreFloat3(&tOverlapDesc.vOrigin, m_pTransform->Get_State(CTransform::STATE_POSITION));
 		CGameObject* pHitObject = nullptr;
 		tOverlapDesc.ppOutHitObject = &pHitObject;

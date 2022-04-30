@@ -83,7 +83,9 @@ _int CUI_Monster_GroggyBar::Tick(_double TimeDelta)
 	{
 		m_fAlpha = 0.f;
 		m_fDisappearTimeAcc = 0.f;
+		setActive(false);
 	}
+
 
 	if (FAILED(CUI::Tick(TimeDelta)))
 		return -1;
@@ -105,7 +107,7 @@ _int CUI_Monster_GroggyBar::LateTick(_double TimeDelta)
 
 	if (nullptr != m_pRenderer)
 	{
-		m_pRenderer->Add_RenderGroup(CRenderer::RENDER::RENDER_UI, this);
+		m_pRenderer->Add_RenderGroup(CRenderer::RENDER::RENDER_ALPHANB, this);
 	}
 	return _int();
 }

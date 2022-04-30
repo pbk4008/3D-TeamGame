@@ -36,15 +36,11 @@ _int CBoss_Idle::Tick(const _double& TimeDelta)
 	
 	cout << fDistToPlayer << endl;
 
-	//if (20.f >= fDistToPlayer)
-	//{
-	//	m_pStateController->Change_State(L"Attack_S5_Protocol");
-	//}
-
-	if (g_pGameInstance->getkeyDown(DIK_NUMPAD8))
+	if (20.f >= fDistToPlayer)
 	{
 		m_pStateController->Change_State(L"Attack_S5_Protocol");
 	}
+	
 	return _int();
 }
 

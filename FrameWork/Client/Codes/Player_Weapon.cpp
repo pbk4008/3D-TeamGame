@@ -111,8 +111,16 @@ _int CPlayer_Weapon::Tick(_double _dDeltaTime)
 	if(nullptr != m_pCapsuleCollider)
 		m_pCapsuleCollider->Tick(_dDeltaTime);
 
-	LightOnOff(m_HitPosition, XMVectorSet(1.f, 1.f, 1.f, 1.f), 20.f);
 
+	if ((_uint)SCENEID::SCENE_STAGE3 != m_iSceneID)
+	{
+		LightOnOff(m_HitPosition, XMVectorSet(1.f, 1.f, 1.f, 1.f), 20.f);
+	}
+
+	else if ((_uint)SCENEID::SCENE_STAGE3 == m_iSceneID)
+	{
+		LightOnOff(m_HitPosition, XMVectorSet(1.f, 1.f, 1.f, 1.f), 1.f);
+	}
 	return _int();
 }
 
@@ -301,7 +309,8 @@ void CPlayer_Weapon::LightOnOff(_fvector pos, _fvector color, _float deltaspeed)
 
 		if (m_LightRange <= 0.f)
 		{
-			m_LightRange = m_OrigLightRange;
+			m_LightRange = 20.f;
+			m_bLightCheck = false;
 			m_pActiveLight->Set_Active(false);
 		}
 	}

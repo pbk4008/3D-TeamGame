@@ -24,8 +24,8 @@
 
 #include "UI_Ingame.h"
 #include "UI_Player_HpBar.h"
-#include "UI_Tuto_Base.h"
-#include "UI_Tuto_Font.h"
+#include "UI_HpHeal_Num.h"
+#include "UI_Shield_Meter.h"
 #include "UI_Blank_CKey.h"
 #include "UI_Blank_FKey.h"
 #include "UI_Fill_CKey.h"
@@ -125,11 +125,11 @@ HRESULT CStage1::NativeConstruct()
 		return E_FAIL;
 	}
 
-	if (FAILED(Ready_Trigger_Jump()))
-	{
-		MSGBOX("Stage1 Jump");
-		return E_FAIL;
-	}
+	//if (FAILED(Ready_Trigger_Jump()))
+	//{
+	//	MSGBOX("Stage1 Jump");
+	//	return E_FAIL;
+	//}
 
 	if (FAILED(Ready_Player(L"Layer_Silvermane")))
 	{
@@ -400,31 +400,31 @@ _int CStage1::Tick(_double TimeDelta)
 		//	CLEAR_QUEST(L"T_HUD_KillAllMonster"); /* 포탈로 등장하는 몬스터가 아닌 경우에 몹이 다 잡힌 경우 */
 		//}
 
-		CBoss_Bastion_Judicator* pBoss = (CBoss_Bastion_Judicator*)g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Layer_Boss")->front();
-		if (nullptr != pBoss)
-		{
-			if (true == pBoss->Get_Dead())
-			{
-				if (!m_bBossClear)
-				{
-					m_bBossClear = true;
-					m_pScenemaManager->Active_Scenema((_uint)CINEMA_INDEX::CINEMA3_1);
-				}
-				else
-				{
-					if (m_pScenemaManager->Get_EventCinema((_uint)CINEMA_INDEX::CINEMA3_5))
-					{
-						m_pScenemaManager->ResetCinema();
-						g_pInvenUIManager->SetRender(true);
-						g_pQuestManager->SetRender(true);
-						if (FAILED(g_pGameInstance->Open_Level((_uint)SCENEID::SCENE_LOADING, CLoading::Create(m_pDevice, m_pDeviceContext, SCENEID::SCENE_STAGE2))))
-							return -1;
-
-						return 0;
-					}
-				}
-			}
-		}
+		//CBoss_Bastion_Judicator* pBoss = (CBoss_Bastion_Judicator*)g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Layer_Boss")->front();
+		//if (nullptr != pBoss)
+		//{
+		//	if (true == pBoss->Get_Dead())
+		//	{
+		//		if (!m_bBossClear)
+		//		{
+		//			m_bBossClear = true;
+		//			m_pScenemaManager->Active_Scenema((_uint)CINEMA_INDEX::CINEMA3_1);
+		//		}
+		//		else
+		//		{
+		//			if (m_pScenemaManager->Get_EventCinema((_uint)CINEMA_INDEX::CINEMA3_5))
+		//			{
+		//				m_pScenemaManager->ResetCinema();
+		//				g_pInvenUIManager->SetRender(true);
+		//				g_pQuestManager->SetRender(true);
+		//				if (FAILED(g_pGameInstance->Open_Level((_uint)SCENEID::SCENE_LOADING, CLoading::Create(m_pDevice, m_pDeviceContext, SCENEID::SCENE_STAGE2))))
+		//					return -1;
+		//
+		//				return 0;
+		//			}
+		//		}
+		//	}
+		//}
 	}
 
 #pragma region Using Debug
@@ -778,7 +778,7 @@ HRESULT CStage1::Ready_UI(const _tchar* LayerTag)
 	ZeroMemory(&Desc, sizeof(CUI_Player_HpBar::UIDESC));
 	_tcscpy_s(Desc.TextureTag, L"Texture_Player_HpBar_Red");
 	Desc.bMinus = true;
-	Desc.fAngle = 0.3f;
+	Desc.fAngle = 0.f;
 	Desc.fPos = { 0.f, 0.f, 0.f };
 	Desc.fSize = { 200.f , 30.f };
 	Desc.IDTag = (_uint)GAMEOBJECT::UI_DYNAMIC;
@@ -786,33 +786,58 @@ HRESULT CStage1::Ready_UI(const _tchar* LayerTag)
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Proto_GameObject_UI_Player_HpBar_Red", &Desc)))
 		return E_FAIL;
 
+	//Player HpHeal Num
+	CUI_HpHeal_Num::UIACTIVEDESC Desc0;
+	ZeroMemory(&Desc0, sizeof(CUI_HpHeal_Num::UIACTIVEDESC));
+	_tcscpy_s(Desc0.TextureTag, L"Texture_Monster_LevelNum");
+	Desc0.bMinus = false;
+	Desc0.fAngle = 0.f;
+	Desc0.fPos = { 175.f, 638.f, 0.08f };
+	Desc0.fSize = { 40.f , 40.f };
+	Desc0.IDTag = (_uint)GAMEOBJECT::UI_STATIC;
 
-	//Tuto Base
-	CUI_Tuto_Base::UIACTIVEDESC Desc1;
-	ZeroMemory(&Desc1, sizeof(CUI_Tuto_Base::UIACTIVEDESC));
-	_tcscpy_s(Desc1.UIDesc.TextureTag, L"Texture_Tuto_Base");
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Proto_GameObject_UI_HpHeal_Num", &Desc0)))
+		return E_FAIL;
+
+	//Shield_Meter
+	CUI_Shield_Meter::UIACTIVEDESC Desc1;
+	ZeroMemory(&Desc1, sizeof(CUI_Shield_Meter::UIACTIVEDESC));
+	_tcscpy_s(Desc1.UIDesc.TextureTag, L"Texture_Shield_Meter");
 	Desc1.UIDesc.bMinus = false;
 	Desc1.UIDesc.fAngle = 0.f;
-	Desc1.UIDesc.fPos = { 1150.f, 360.f, 0.2f };
-	Desc1.UIDesc.fSize = { 333.f , 105.f };
+	Desc1.UIDesc.fPos = { 100.f, 620.f, 0.06f };
+	Desc1.UIDesc.fSize = { 50.f, 50.f };
 	Desc1.UIDesc.IDTag = (_uint)GAMEOBJECT::UI_STATIC;
 
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Proto_GameObject_UI_Tuto_Base", &Desc1)))
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Proto_GameObject_UI_Shield_Meter", &Desc1)))
 		return E_FAIL;
 
-	//Tuto Font
-	CUI_Tuto_Font::UIACTIVEDESC Desc2;
-	ZeroMemory(&Desc2, sizeof(CUI_Tuto_Font::UIACTIVEDESC));
-	_tcscpy_s(Desc2.UIDesc.TextureTag, L"Texture_Tuto_Font");
-	Desc2.UIDesc.bMinus = false;
-	Desc2.UIDesc.fAngle = 0.f;
-	Desc2.UIDesc.fPos = { 1130.f, 360.f, 0.1f };
-	Desc2.UIDesc.fSize = { 73.f , 73.f };
-	Desc2.UIDesc.IDTag = (_uint)GAMEOBJECT::UI_STATIC;
-	Desc2.iTextureNum = 0;
+	////Tuto Base
+	//CUI_Tuto_Base::UIACTIVEDESC Desc1;
+	//ZeroMemory(&Desc1, sizeof(CUI_Tuto_Base::UIACTIVEDESC));
+	//_tcscpy_s(Desc1.UIDesc.TextureTag, L"Texture_Tuto_Base");
+	//Desc1.UIDesc.bMinus = false;
+	//Desc1.UIDesc.fAngle = 0.f;
+	//Desc1.UIDesc.fPos = { 1150.f, 360.f, 0.2f };
+	//Desc1.UIDesc.fSize = { 333.f , 105.f };
+	//Desc1.UIDesc.IDTag = (_uint)GAMEOBJECT::UI_STATIC;
 
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Proto_GameObject_UI_Tuto_Font", &Desc2)))
-		return E_FAIL;
+	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Proto_GameObject_UI_Tuto_Base", &Desc1)))
+	//	return E_FAIL;
+
+	////Tuto Font
+	//CUI_Tuto_Font::UIACTIVEDESC Desc2;
+	//ZeroMemory(&Desc2, sizeof(CUI_Tuto_Font::UIACTIVEDESC));
+	//_tcscpy_s(Desc2.UIDesc.TextureTag, L"Texture_Tuto_Font");
+	//Desc2.UIDesc.bMinus = false;
+	//Desc2.UIDesc.fAngle = 0.f;
+	//Desc2.UIDesc.fPos = { 1130.f, 360.f, 0.1f };
+	//Desc2.UIDesc.fSize = { 73.f , 73.f };
+	//Desc2.UIDesc.IDTag = (_uint)GAMEOBJECT::UI_STATIC;
+	//Desc2.iTextureNum = 0;
+
+	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Proto_GameObject_UI_Tuto_Font", &Desc2)))
+	//	return E_FAIL;
 
 	//Blank_Ckey
 	CUI_Blank_CKey::UIACTIVEDESC Desc3;
