@@ -27,6 +27,8 @@ class CEquipmentData;
 class CPlayerData;
 class CDropBox;
 #pragma endregion
+
+
 class CSilvermane final : public CActor
 {
 public:
@@ -230,7 +232,7 @@ private:
 	_vector		m_lightcolor = XMVectorZero();
 
 private:
-	CTexture*	m_pTexture = nullptr;
+	CTexture*		m_pTexture = nullptr;
 	vector<CGameObject*>	m_vecMotionTrail;
 	CModel*			m_pHealSphere = nullptr;
 	_bool			m_bhealcheck = false;

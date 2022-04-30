@@ -68,7 +68,6 @@ HRESULT CStage3::NativeConstruct()
 	if (FAILED(Ready_UI(L"Layer_UI")))
 		return E_FAIL;
 
-
 	if (FAILED(Ready_Data_Effect()))
 		return E_FAIL;
 
@@ -249,8 +248,9 @@ HRESULT CStage3::Ready_Player(const _tchar* LayerTag)
 HRESULT CStage3::Ready_Boss(const _tchar* LayerTag)
 {
 	_float3 vpos = { 48.f, 3.f, 146.f };
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE3, L"Layer_Boss", L"Proto_GameObject_Solaris"), &vpos))
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE3, L"Layer_Boss", L"Proto_GameObject_Solaris", &vpos)))
 		return E_FAIL;
+
 	return S_OK;
 }
 
@@ -878,8 +878,9 @@ HRESULT CStage3::Ready_Data_Effect()
 		return E_FAIL;
 	}
 
-#pragma endregion
+	return S_OK;
 }
+#pragma endregion
 
 
 HRESULT CStage3::Ready_Cinema()

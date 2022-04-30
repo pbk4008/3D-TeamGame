@@ -1149,7 +1149,7 @@
     </Filter>
     <Filter Include="02.GameObject\04.Effect\02.MeshEffect\01.EffectBossMesh\04.MeshEffect_Boss_EyeRazer">
       <UniqueIdentifier>{48f969c3-12ba-43c2-8b75-b867809c94e1}</UniqueIdentifier>
-	</Filter>
+    </Filter>
     <Filter Include="03.System\07.Scenematic\02.Stage2">
       <UniqueIdentifier>{42bbd93c-9814-47a1-88bf-5d18bcda6f74}</UniqueIdentifier>
     </Filter>
@@ -1197,7 +1197,7 @@
     </Filter>
     <Filter Include="02.GameObject\03.Character\00.Player\00.Silvermane\State\HIt">
       <UniqueIdentifier>{c0836172-4e03-4723-b9f5-2ce38812b858}</UniqueIdentifier>
-	</Filter>
+    </Filter>
     <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_Spear\State\00.Idle">
       <UniqueIdentifier>{2398d3e4-0aad-4c0a-b779-2676cae6f42f}</UniqueIdentifier>
     </Filter>
@@ -2534,7 +2534,7 @@
     </ClInclude>
     <ClInclude Include="..\Headers\MeshEffect_EyeRazer.h">
       <Filter>02.GameObject\04.Effect\02.MeshEffect\01.EffectBossMesh\04.MeshEffect_Boss_EyeRazer</Filter>
-	</ClInclude>
+    </ClInclude>
     <ClInclude Include="..\Headers\MeshEffect_Boss_Explosion.h">
       <Filter>02.GameObject\04.Effect\02.MeshEffect\01.EffectBossMesh</Filter>
     </ClInclude>
@@ -3883,7 +3883,7 @@
     </ClCompile>
     <ClCompile Include="..\Codes\MeshEffect_EyeRazer.cpp">
       <Filter>02.GameObject\04.Effect\02.MeshEffect\01.EffectBossMesh\04.MeshEffect_Boss_EyeRazer</Filter>
-	</ClCompile>
+    </ClCompile>
     <ClCompile Include="..\Codes\MeshEffect_Boss_Explosion.cpp">
       <Filter>02.GameObject\04.Effect\02.MeshEffect\01.EffectBossMesh</Filter>
     </ClCompile>

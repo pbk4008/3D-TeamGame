@@ -220,6 +220,7 @@ HRESULT CMonster_Bastion_Sword::Render()
 			break;
 		default:
 			ZeroMemory(&desc, sizeof(SCB));
+			desc.metalic = 0.1f;
 			desc.color = _float4(1.f, 1.f, 0.f, 1.f);
 			desc.empower = 1.f;
 			CActor::BindConstantBuffer(wstrCamTag, &desc, &RimDesc);

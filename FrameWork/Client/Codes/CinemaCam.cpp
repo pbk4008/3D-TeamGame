@@ -28,15 +28,12 @@ CCinemaCam::CCinemaCam(const CCinemaCam& rhs)
 	, m_iShortTag(0)
 	, m_fFovAngle(0.f)
 {
-	Safe_AddRef(m_pCamera);
-	Safe_AddRef(m_pModel);
 }
 
 HRESULT CCinemaCam::NativeConstruct_Prototype()
 {
 	if (FAILED(CGameObject::NativeConstruct_Prototype()))
 		return E_FAIL;
-		
 
 	return S_OK;
 }
@@ -50,7 +47,7 @@ HRESULT CCinemaCam::NativeConstruct(const _uint iSceneID, void* pArg)
 	CINEMADESC tDesc = (*(CINEMADESC*)pArg);
 
 	m_pCamTag = tDesc.tCameraDesc.pCameraTag;
-	
+
 	if (FAILED(CGameObject::SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_Camera", L"CameraCom", (CComponent**)&m_pCamera, &tDesc.tCameraDesc)))
 		return E_FAIL;
 
@@ -66,8 +63,6 @@ _int CCinemaCam::Tick(_double TimeDelta)
 {
 	//BornÀÌ¸§ : Camera_01_born
 	m_pModel->Update_CombinedTransformationMatrix(TimeDelta);
-
-	
 
 	CHierarchyNode* pBorn = m_pModel->Get_BoneMatrix("camera_bone");
 	//CHierarchyNode* pBorn = Get_CamBone();

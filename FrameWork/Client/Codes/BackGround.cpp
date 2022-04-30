@@ -1,26 +1,18 @@
 #include "pch.h"
 #include "BackGround.h"
 
-CBackGround::CBackGround()
-	:m_pRcTex(nullptr)
-	,m_pTexture(nullptr)
-{
-}
-
 CBackGround::CBackGround(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext) 
 	: CGameObject(pDevice, pDeviceContext)
-	, m_pRcTex(nullptr)
-	, m_pTexture(nullptr)
 {
 }
 
 CBackGround::CBackGround(const CBackGround& rhs)
 	: CGameObject(rhs)
-	,m_pRcTex(rhs.m_pRcTex)
 	, m_pTexture(rhs.m_pTexture)
+	, m_pRcTex(rhs.m_pRcTex)
 {
-	Safe_AddRef(m_pRcTex);
 	Safe_AddRef(m_pTexture);
+	Safe_AddRef(m_pRcTex);
 }
 
 HRESULT CBackGround::NativeConstruct_Prototype()
@@ -28,10 +20,10 @@ HRESULT CBackGround::NativeConstruct_Prototype()
 	if (FAILED(CGameObject::NativeConstruct_Prototype()))
 		return E_FAIL;
 
-	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_Texture", L"Com_Texture", (CComponent * *)& m_pTexture)))
+	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_Texture", L"Com_Texture", (CComponent**)&m_pTexture)))
 		return E_FAIL;
 
-	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_RectBuffer", L"Com_Buffer", (CComponent * *)& m_pRcTex)))
+	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_RectBuffer", L"Com_Buffer", (CComponent**)&m_pRcTex)))
 		return E_FAIL;
 
 	return S_OK;
@@ -69,6 +61,7 @@ _int CBackGround::LateTick(_double fDeltaTime)
 {
 	if (FAILED(CGameObject::LateTick(fDeltaTime)))
 		return -1;
+
 	if (!m_pRenderer)
 		return -1;
 
@@ -95,7 +88,10 @@ HRESULT CBackGround::Render()
 	m_pRcTex->SetUp_ValueOnShader("g_ProjMatrix", &matProj, sizeof(_matrix));
 	m_pRcTex->SetUp_TextureOnShader("g_DiffuseTexture", m_pTexture);
 
+	CGameObject::FadeInOut(m_pRcTex);
+
 	m_pRcTex->Render(0);
+	
 
 	return S_OK;
 }

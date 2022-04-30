@@ -105,7 +105,7 @@ private:/*for Meteor*/
 private:
 	_int m_iPortalCount;
 	_bool m_bPortalClear = false;
-
+	CGameObject* m_pobj = nullptr;
 private:
 	_bool m_bBossClear=false;
 };

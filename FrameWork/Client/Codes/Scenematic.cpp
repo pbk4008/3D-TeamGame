@@ -19,8 +19,8 @@ CScenematic::CScenematic(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceCont
 	, m_bCinemaEnd(false)
 	, m_iSceneID(0)
 {
-	Safe_AddRef(pDevice);
-	Safe_AddRef(pDeviceContext);
+	Safe_AddRef(m_pDevice);
+	Safe_AddRef(m_pDeviceContext);
 }
 
 HRESULT CScenematic::NativeContruct(_uint iSceneID)
@@ -69,6 +69,7 @@ void CScenematic::End_Cinema()
 		OnOffPlayerWithUI(true);
 		g_pGameInstance->Change_BaseCamera(L"Camera_Silvermane");
 		g_pMainApp->Change_RenderCamTag(L"Camera_Silvermane");
+		g_pMainApp->Set_RenderBtn(CRenderer::RENDERBUTTON::FADEOUT, true);
 	}
 }
 
@@ -77,7 +78,6 @@ HRESULT CScenematic::Set_UpComponents(CComponent* pComponent)
 	if (!pComponent)
 		return E_FAIL;
 	m_vecScenemaComponents.emplace_back(pComponent);
-	Safe_AddRef(pComponent);
 
 	return S_OK;
 }
@@ -121,8 +121,11 @@ void CScenematic::OnOffPlayerWithUI(_bool bCheck)
 
 void CScenematic::Free()
 {
-	for (auto& pCom : m_vecScenemaComponents)
-		Safe_AddRef(pCom);
+	//for (auto& pCom : m_vecScenemaComponents)
+	//	Safe_Release(pCom);
 
 	m_vecScenemaComponents.clear();
+
+	Safe_Release(m_pDeviceContext);
+	Safe_Release(m_pDevice);
 }

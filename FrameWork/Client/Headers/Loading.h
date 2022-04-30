@@ -24,6 +24,7 @@ private:
 private:
 	SCENEID m_eSceneID;
 	CLoader* m_pLoader;
+	CGameObject* m_pobj = nullptr;
 };
 END
 #endif

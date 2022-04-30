@@ -70,7 +70,6 @@ _int CCinema3_5::LateTick(_double dDeltaTime)
 	m_pMidBoss->LateTick(dDeltaTime);
 	m_pSilvermane->LateTick(dDeltaTime);
 	
-
 	return _int();
 }
 
@@ -100,7 +99,7 @@ HRESULT CCinema3_5::Ready_Components()
 	tDesc.fAspect = (_float)g_iWinCx / g_iWinCy;
 
 	CCinemaCam::CINEMADESC tCinemaDesc;
-	ZeroMemory(&tCinemaDesc, sizeof(tCinemaDesc));
+	//ZeroMemory(&tCinemaDesc, sizeof(tCinemaDesc));
 
 	tCinemaDesc.tCameraDesc = tDesc;
 	tCinemaDesc.iShotTag = (_uint)CINEMA_INDEX::CINEMA3_5;
