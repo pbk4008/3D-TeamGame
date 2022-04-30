@@ -58,9 +58,9 @@ cbuffer ShaderCheck
 
 cbuffer CountBuffer
 {
-	int g_RadialCnt;
-	float g_delta;
-	int g_MotionblurCnt;
+	float3 g_lightcolor = (float3) 0;
+	float g_ambientintensity = (float) 0;
+	float g_InvMetalicMax = (float) 0;
 };
 
 cbuffer Fogbuffer
@@ -220,8 +220,8 @@ PS_OUT_DIRLIGHTACC PS_MAIN_LIGHTACC_DIRECTIONAL(PS_IN In)
 		half specular = LightingGGX_Ref(N, V, L, F0, MRA.g);
 	
 		////-------------------------------------------------------------------------//
-		half3 color = half3(0.97f, 0.95f, 0.8f);
-		half ambientintensity = 0.2f;
+		half3 color = g_lightcolor;
+		half ambientintensity = g_ambientintensity;
 		half4 light = CalcLightInternal(color, ambientintensity, g_vCamPosition.xyz, g_vLightDir.xyz, vWorldPos.xyz, normal3);
 		//half4 light = g_vLightDiffuse * (saturate(dot(normalize(g_vLightPos - vWorldPos) * -1.f, normal)) + (g_vLightAmbient * g_vMtrlAmbient)); // Lamburt
 		//half lightpow = 2.f;
@@ -234,7 +234,7 @@ PS_OUT_DIRLIGHTACC PS_MAIN_LIGHTACC_DIRECTIONAL(PS_IN In)
 		
 		half smoothness = 1 - MRA.g;
 		half InvMetalic = (1 - MRA.r);
-		InvMetalic = max(InvMetalic, 0.5f);
+		InvMetalic = max(InvMetalic, g_InvMetalicMax);
 		half4 lightpower = InvMetalic * light * MRA.b;
 		
 		if (g_shadow == true)

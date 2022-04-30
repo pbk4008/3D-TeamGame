@@ -72,6 +72,8 @@ private:
 	_bool m_bAttackLegacy = false;
 	_bool m_bAttackLegacy_2 = false;
 
+	//Rim
+	_bool m_rimcheck = true;
 
 public:
 	static CMidBoss_Attack* Create(ID3D11Device * pDevice, ID3D11DeviceContext * pDeviceContext, void* pArg = nullptr);

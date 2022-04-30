@@ -169,11 +169,13 @@ HRESULT CPlayer_Weapon::Render()
 
 	if (m_rimcheck == true)
 	{
+		CWeapon::RimIntensity(g_fDeltaTime * -1.f);
+
 		rimdesc.rimcheck = m_rimcheck;
-		rimdesc.rimintensity = m_rimintensity + 3.f;
-		rimdesc.rimcol = _float3(1, 0, 0);
+		rimdesc.rimintensity = m_rimintensity - 3.f;
+		rimdesc.rimcol = m_rimcol;
 		XMStoreFloat4(&rimdesc.camdir, XMVector3Normalize(m_pTransform->Get_State(CTransform::STATE_POSITION) - g_pGameInstance->Get_CamPosition(L"Camera_Silvermane")));
-		CWeapon::SetRimIntensity(g_fDeltaTime * -4.f);
+		if (FAILED(m_pModel->SetUp_ValueOnShader("g_rimtimer", &m_rimtime, sizeof(_float)))) MSGBOX("Failed to Apply RimTime Value");
 	}
 
 	CWeapon::BindConstantBuffer(wstrCamTag,&desc, &rimdesc);
@@ -302,6 +304,7 @@ void CPlayer_Weapon::LightOnOff(_fvector pos, _fvector color, _float deltaspeed)
 		if (m_LightRange <= 0.f)
 		{
 			m_LightRange = m_OrigLightRange;
+			m_bLightCheck = false;
 			m_pActiveLight->Set_Active(false);
 		}
 	}

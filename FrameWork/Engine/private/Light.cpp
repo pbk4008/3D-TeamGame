@@ -129,7 +129,8 @@ HRESULT CLight::Ready_PBRLighting(CTarget_Manager* pTarget_Manager, const wstrin
 
 	if (Type == LIGHTDESC::TYPE::TYPE_DIRECTIONAL)
 	{
-		if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_vLightDir", &_float4(m_LightDesc.vDirection.x, m_LightDesc.vDirection.y, m_LightDesc.vDirection.z, 0.f), sizeof(_float4)))) MSGBOX("Failed To Apply Directional LightDir");
+		_float4 dir = _float4(m_LightDesc.vDirection.x, m_LightDesc.vDirection.y, m_LightDesc.vDirection.z, 0.f);
+		if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_vLightDir", &dir, sizeof(_float4)))) MSGBOX("Failed To Apply Directional LightDir");
 	}
 	else if (Type == LIGHTDESC::TYPE::TYPE_POINT)
 	{
@@ -158,6 +159,13 @@ HRESULT CLight::Ready_PBRLighting(CTarget_Manager* pTarget_Manager, const wstrin
 	if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_ViewMatrixInv", &XMMatrixTranspose(ViewMatrix), sizeof(_float4x4)))) MSGBOX("Failed To Apply LightRender ViewInvers");
 	if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_ProjMatrixInv", &XMMatrixTranspose(ProjMatrix), sizeof(_float4x4)))) MSGBOX("Failed To Apply LightRender ProjInvers");
 
+	_float3 color = _float3(0.97f, 0.95f, 0.8f);
+	_float ambient = 0.2f;
+	_float maxInvMetalic = 0.2f;
+	if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_lightcolor", &color, sizeof(_float3)))) MSGBOX("Failed To Apply LightRender ProjInvers");
+	if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_ambientintensity", &ambient, sizeof(_float)))) MSGBOX("Failed To Apply LightRender ProjInvers");
+	if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_InvMetalicMax", &maxInvMetalic, sizeof(_float)))) MSGBOX("Failed To Apply LightRender ProjInvers");
+	
 	return S_OK;
 }
 

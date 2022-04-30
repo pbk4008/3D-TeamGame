@@ -34,11 +34,17 @@ _int CBoss_Idle::Tick(const _double& TimeDelta)
 
 	m_pAnimator->Tick(TimeDelta);
 	
-	if (fDistToPlayer >= 15.f)
+	cout << fDistToPlayer << endl;
+
+	//if (20.f >= fDistToPlayer)
+	//{
+	//	m_pStateController->Change_State(L"Attack_S5_Protocol");
+	//}
+
+	if (g_pGameInstance->getkeyDown(DIK_NUMPAD8))
 	{
 		m_pStateController->Change_State(L"Attack_S5_Protocol");
 	}
-
 	return _int();
 }
 
@@ -66,6 +72,8 @@ HRESULT CBoss_Idle::EnterState()
 
 
 	cout << "Boss Idle" << endl;
+
+	m_pTransform->Face_Target(g_pObserver->Get_PlayerPos());
 
 	static_cast<CBoss_Solaris*>(m_pMonster)->Set_HitMotion(true);
 	m_pAnimator->Change_AnyEntryAnimation(CBoss_Solaris::M_BossAnimState::IDLE);

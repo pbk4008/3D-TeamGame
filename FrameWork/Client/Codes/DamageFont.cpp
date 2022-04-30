@@ -29,6 +29,7 @@ HRESULT CDamageFont::NativeConstruct(_uint _iSceneID, void* _pArg)
 		DESC tDesc = *static_cast<DESC*>(_pArg);
 		m_vPos = tDesc.vPos;
 		m_fDamage = tDesc.fDamage;
+		m_isCritical = tDesc.isCritical;
 	}
 
 	if (FAILED(Ready_Components()))
@@ -94,7 +95,7 @@ _int CDamageFont::LateTick(_double _dDeltaTime)
 	//svScale = { fDistToUI * 0.1f, fDistToUI * 0.1f, 1.f, 1.f };
 	m_pTransform->Scaling(svScale);
 
-	m_pRenderer->Add_RenderGroup(CRenderer::RENDER::RENDER_UI, this);
+	m_pRenderer->Add_RenderGroup(CRenderer::RENDER::RENDER_UI_ACTIVE, this);
 
 	return _int();
 }
@@ -112,10 +113,14 @@ HRESULT CDamageFont::Render()
 	_matrix smatProj = XMMatrixTranspose(g_pGameInstance->Get_Transform(wstrCamTag, TRANSFORMSTATEMATRIX::D3DTS_PROJECTION));
 
 	_matrix smatWorld = XMMatrixTranspose(m_pBGLocal->Get_WorldMatrix() * m_pTransform->Get_WorldMatrix());
+	_bool isCustomColor = false;
+	_float3 vColor = { 0.f, 0.f, 0.f };
 	m_pBG->SetUp_ValueOnShader("g_WorldMatrix", &smatWorld, sizeof(XMMATRIX));
 	m_pBG->SetUp_ValueOnShader("g_ViewMatrix", &smatView, sizeof(XMMATRIX));
 	m_pBG->SetUp_ValueOnShader("g_ProjMatrix", &smatProj, sizeof(XMMATRIX));
 	m_pBG->SetUp_ValueOnShader("g_Alpha", &m_fAlpha, sizeof(_float));
+	m_pBG->SetUp_ValueOnShader("g_isCustomColor", &isCustomColor, sizeof(_bool));
+	m_pBG->SetUp_ValueOnShader("g_vColor", &vColor, sizeof(_float3));
 	m_pBG->SetUp_TextureOnShader("g_DiffuseTexture", m_pBGTex);
 	
 	m_pBG->Render(6);
@@ -137,6 +142,7 @@ HRESULT CDamageFont::Render()
 		m_vecFonts[i]->SetUp_ValueOnShader("g_iRow", &iRow, sizeof(_uint));
 		m_vecFonts[i]->SetUp_ValueOnShader("g_Alpha", &m_fAlpha, sizeof(_float));
 		m_vecFonts[i]->SetUp_ValueOnShader("g_Weight", &weight, sizeof(_float));
+		m_vecFonts[i]->SetUp_ValueOnShader("g_isCritical", &m_isCritical, sizeof(_bool));
 
 		m_vecFonts[i]->Render(5);
 	}
@@ -146,6 +152,14 @@ HRESULT CDamageFont::Render()
 
 HRESULT CDamageFont::Ready_Components()
 {
+	uniform_int_distribution<_uint> iRange(1, 10);
+	_uint iRandom = iRange(g_random);
+
+	if (7 == iRandom)
+	{
+		m_fDamage *= 1.5f;
+		m_isCritical = true;
+	}
 	m_pTransform->Set_State(CTransform::STATE_POSITION, XMVectorSetW(XMLoadFloat3(&m_vPos), 1.f));
 	_uint iDamage = (_uint)m_fDamage;
 	while (iDamage != 0)
@@ -157,9 +171,11 @@ HRESULT CDamageFont::Ready_Components()
 	/* For.BackGround */
 	m_pBG = g_pGameInstance->Clone_Component<CVIBuffer_Rect>(0, L"Proto_Component_RectBuffer");
 	m_pBGTex = g_pGameInstance->Clone_Component<CTexture>(0, L"Proto_Component_Texture");
-	m_pBGTex->Change_Texture(L"Texture_Tuto_Base");
+	//m_pBGTex->Change_Texture(L"Texture_Tuto_Base");
+	m_pBGTex->Change_Texture(L"Texture_DamageFontBG2");
 	m_pBGLocal = g_pGameInstance->Clone_Component<CTransform>(0, L"Proto_Component_Transform");
 	m_pBGLocal->Scaling(_vector{ (_float)m_iFontSize, 1.f, 1.f ,0.f });
+	m_pBGLocal->Set_State(CTransform::STATE_POSITION, _vector{ 0.f, 0.f, 0.f, 1.f });
 
 	/* For.Fonts */
 	m_vecIndex.resize(m_iFontSize);
@@ -179,26 +195,26 @@ HRESULT CDamageFont::Ready_Components()
 		switch (m_iFontSize % 2)
 		{
 		case 0:
-			if (m_iFontSize * 0.5f > i * 0.5f)
+			if (m_iFontSize * 0.5f > ((_float)i + 0.5f))
 			{
-				_vector svLocalPos = { -(0.35f * (m_iFontSize - (i + 1))), 0.f, 0.f, 1.f };
+				_vector svLocalPos = { -(0.25f * (m_iFontSize - (i + 1))), 0.f, 0.f, 1.f };
 				pLocalTransform->Set_State(CTransform::STATE_POSITION, svLocalPos);
 			}
 			else
 			{
-				_vector svLocalPos = { (0.35f * (i + 1)), 0.f, 0.f, 1.f };
+				_vector svLocalPos = { (0.25f * (m_iFontSize - i)), 0.f, 0.f, 1.f };
 				pLocalTransform->Set_State(CTransform::STATE_POSITION, svLocalPos);
 			}
 			break;
 		case 1:
-			if (m_iFontSize * 0.5f > i * 0.5f)
+			if (m_iFontSize * 0.5f > ((_float)i + 0.5f))
 			{
-				_vector svLocalPos = { -(0.35f * (m_iFontSize - (i + 1))), 0.f, 0.f, 1.f };
+				_vector svLocalPos = { -(0.25f * (m_iFontSize - (i + 1))), 0.f, 0.f, 1.f };
 				pLocalTransform->Set_State(CTransform::STATE_POSITION, svLocalPos);
 			}
-			else if (m_iFontSize * 0.5f < i * 0.5f)
+			else if (m_iFontSize * 0.5f < ((_float)i + 0.5f))
 			{
-				_vector svLocalPos = { (0.35f * (i + 1)), 0.f, 0.f, 1.f };
+				_vector svLocalPos = { (0.25f * i), 0.f, 0.f, 1.f };
 				pLocalTransform->Set_State(CTransform::STATE_POSITION, svLocalPos);
 			}
 			break;

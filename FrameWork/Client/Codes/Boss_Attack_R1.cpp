@@ -144,6 +144,11 @@ _int CBoss_Attack_R1::Tick(const _double& TimeDelta)
 			matPos.r[3] = XMVectorSetY(matPos.r[3], XMVectorGetY(matPos.r[3]) + 2.f);
 			m_pMonster->Active_Effect_Target((_uint)EFFECT::EXPLOSION_ROCK_LEFT, matPos);
 
+			matPos.r[3] = XMVectorSetY(matPos.r[3], XMVectorGetY(matPos.r[3]) - 2.5f) + svLook * 1.5f + svRight * -1.5f;
+			//m_pMonster->Active_Effect_Target((_uint)EFFECT::DASH, XMMatrixRotationY(XMConvertToRadians(-10.f)) * matPos);
+			m_pMonster->Active_Effect_Target((_uint)EFFECT::HIT_GROUND_SMOKE, matPos);
+
+
 			m_bShakeCheckLeft = true;
 			m_pMonster->Set_AttackDesc_Dir(EAttackDir::Left);
 
@@ -171,6 +176,10 @@ _int CBoss_Attack_R1::Tick(const _double& TimeDelta)
 			_matrix matPos = m_pTransform->Get_WorldMatrix();
 			matPos.r[3] = XMVectorSetY(matPos.r[3], XMVectorGetY(matPos.r[3]) + 2.f);
 			m_pMonster->Active_Effect_Target((_uint)EFFECT::EXPLOSION_ROCK_RIGHT, matPos);
+
+			matPos.r[3] = XMVectorSetY(matPos.r[3], XMVectorGetY(matPos.r[3]) - 2.5f) + svLook * 1.5f + svRight * -1.5f;
+			//m_pMonster->Active_Effect_Target((_uint)EFFECT::DASH, XMMatrixRotationY(XMConvertToRadians(190.f)) * matPos);
+			m_pMonster->Active_Effect_Target((_uint)EFFECT::HIT_GROUND_SMOKE,  matPos);
 
 			m_pMonster->Set_AttackDesc_Dir(EAttackDir::Right);
 
@@ -229,9 +238,8 @@ HRESULT CBoss_Attack_R1::EnterState()
 
 	cout << "Attack_R1" << endl;
 
-
 	//림라이트
-	m_pMonster->RimlightCheck(true);
+	m_pMonster->RimlightCheck(true, _float3(0.1f, 0, 0), 6.f);
 
 	m_pAnimator->Get_AnimController()->Set_PlaySpeed(1.f);
 	m_pAnimator->Get_AnimController()->Set_MoveSpeed(1.f);
@@ -245,8 +253,6 @@ HRESULT CBoss_Attack_R1::ExitState()
 {
 	if (FAILED(__super::ExitState()))
 		return E_FAIL;
-
-	m_pMonster->RimlightCheck(false);
 
 	m_bShakeCheckLeft = false;
 	m_bShakeCheckRight = false;

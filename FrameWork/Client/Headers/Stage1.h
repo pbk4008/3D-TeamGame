@@ -41,6 +41,7 @@ private:
 	HRESULT Ready_Cinema();
 	HRESULT Ready_Wall();
 	HRESULT Ready_Pot();
+	HRESULT Ready_Obstacle();
 
 public:
 	void Minus_MonsterCount() { m_iCountMonster--; }
@@ -74,6 +75,13 @@ private:
 	void Open_Potal(_fvector vPos, _uint iMonTag);
 	void CheckTriggerForQuest(void);
 private:
+	void Portal_Spot1();
+	void Portal_Spot2();
+	void Portal_Spot3();
+	void Portal_Spot4();
+	void Portal_Spot5();
+	void Portal_Spot6();
+private:
 	void Open_Wall();
 public:
 	static CStage1* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);
@@ -98,7 +106,7 @@ private:/*for Meteor*/
 private:
 	_int m_iPortalCount;
 	_bool m_bPortalClear = false;
-	CPot* m_pPot = nullptr;
+
 private:
 	_bool m_bBossClear=false;
 };

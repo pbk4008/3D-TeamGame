@@ -96,6 +96,11 @@ HRESULT CMonster_Bastion_Sword::NativeConstruct(const _uint _iSceneID, void* _pA
 	m_tAttackDesc.iLevel = 2;
 	m_tAttackDesc.fDamage = 5.f;
 	
+	m_fMaxHp = 100.f;
+	m_fCurrentHp = m_fMaxHp;
+
+	m_rimtime = 1.f;
+	m_rimtimer = 1.f;
 	m_pWeapon->setActive(false);
 	m_pPanel->setActive(false);
 	setActive(false);
@@ -108,7 +113,6 @@ _int CMonster_Bastion_Sword::Tick(_double _dDeltaTime)
 	{
 		return -1;
 	}
-	Check_NoDamage(_dDeltaTime);
 	m_pTransform->Set_Velocity(XMVectorZero());
 
 	m_pTransform->Fall(_dDeltaTime);
@@ -182,15 +186,28 @@ HRESULT CMonster_Bastion_Sword::Render()
 	RIM RimDesc;
 	ZeroMemory(&RimDesc, sizeof(RIM));
 
-	RimDesc.rimcol = _float3(0.f, 1.f, 1.f);
-	RimDesc.rimintensity = 5.f;
-	XMStoreFloat4(&RimDesc.camdir, XMVector3Normalize(m_pTransform->Get_State(CTransform::STATE_POSITION)- g_pGameInstance->Get_CamPosition(L"Camera_Silvermane")));
-
-
 	if (m_isNoDamage)
+	{
 		RimDesc.rimcheck = true;
-	else
+		m_rimcheck = true;
+		_float time = 1.f;
+		if (FAILED(m_pModel->SetUp_ValueOnShader("g_rimtimer", &time, sizeof(_float)))) MSGBOX("Failed to Apply RimTime Value");
+	}
+	else if (m_isNoDamage == false && m_rimcheck == true)
+	{
+		if (FAILED(m_pModel->SetUp_ValueOnShader("g_rimtimer", &m_rimtime, sizeof(_float)))) MSGBOX("Failed to Apply RimTime Value");
+		CActor::RimIntensity(g_fDeltaTime * -0.5f);
+		RimDesc.rimcheck = true;
+	}
+	else if (m_rimcheck == false)
+	{
 		RimDesc.rimcheck = false;
+	}
+
+	RimDesc.rimcol = _float3(0.f, 0.5f, 0.5f);
+	RimDesc.rimintensity = 30.f;
+	XMStoreFloat4(&RimDesc.camdir, XMVector3Normalize(m_pTransform->Get_State(CTransform::STATE_POSITION) - g_pGameInstance->Get_CamPosition(L"Camera_Silvermane")));
+
 
 	for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
 	{
@@ -245,7 +262,7 @@ void CMonster_Bastion_Sword::Hit(const ATTACKDESC& _tAttackDesc)
 	_vector svOtherLook = XMVector3Normalize(pOtherTransform->Get_State(CTransform::STATE_LOOK));
 	_vector svOtherRight = XMVector3Normalize(pOtherTransform->Get_State(CTransform::STATE_RIGHT));
 
-	uniform_real_distribution<_float> fRange(-0.5f, 0.5f);
+	uniform_real_distribution<_float> fRange(-0.4f, 0.4f);
 	uniform_real_distribution<_float> fRange2(-0.2f, 0.2f);
 	uniform_int_distribution<_int> iRange(-5, 5);
 	CDamageFont::DESC tDamageDesc;
@@ -651,12 +668,13 @@ _int CMonster_Bastion_Sword::Dead_Check()
 		}
 		else if (m_pStateController->Get_CurStateTag() == L"Excution")
 		{
+			m_bUIShow = false;
+			m_pPanel->Set_Show(false);
+			m_pPanel->Set_UIRemove(false);
+
 			if (m_pAnimator->Get_CurrentAnimNode() == (_uint)ANIM_TYPE::EXCUTION
 				&& m_pAnimator->Get_CurrentAnimation()->Is_Finished())
 			{
-				m_bUIShow = false;
-				m_pPanel->Set_Show(false);
-				m_pPanel->Set_UIRemove(false);
 				m_bdissolve = true;
 
 				if (m_lifetime >= 1.f)

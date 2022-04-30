@@ -233,7 +233,7 @@ PS_OUT PS_MAIN_WEAPONE(PS_IN In)
 	if (g_rimlightcheck == true)
 	{
 		half4 normal = half4(Out.normal.rgb * 2.f - 1.f, 0.f);
-		float4 rim = RimLighting(normal, g_camdir, g_rimintensity, g_rimcolor);
+		float4 rim = RimLighting(normal, g_camdir, g_rimintensity, g_rimcolor,g_rimtimer);
 		Out.emission += rim;
 	}
 	

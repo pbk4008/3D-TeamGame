@@ -42,7 +42,7 @@ _int CCinemaWeapon::Tick(_double _dDeltaTime)
 
 _int CCinemaWeapon::LateTick(_double _dDeltaTime)
 {
-	//m_pRenderer->Add_RenderGroup(CRenderer::RENDER_NONALPHA, this);
+	m_pRenderer->Add_RenderGroup(CRenderer::RENDER_NONALPHA, this);
 	return _int();
 }
 
@@ -82,6 +82,10 @@ HRESULT CCinemaWeapon::Ready_Model()
 		hr = CGameObject::SetUp_Components(m_iSceneID, L"Model_PoenixWeapon", L"Weapon_Model", (CComponent**)&m_pModel);
 		hr = Ready_PoenixMaterial();
 		break;
+	case 2:
+		hr = CGameObject::SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Model_Weapon_ShieldBreaker", L"Weapon_Model", (CComponent**)&m_pModel);
+		hr = Ready_ShieldBreaker();
+		break;
 	}
 
 	if (FAILED(hr))
@@ -116,8 +120,6 @@ HRESULT CCinemaWeapon::Ready_PoenixMaterial()
 		pMtrl->Set_Texture("g_CEOTexture", TEXTURETYPE::TEX_CEO, pTexture, 0);
 
 		g_pGameInstance->Add_Material(L"Mtrl_PoenixWeapon", pMtrl);
-
-		return S_OK;
 	}
 	m_pModel->Add_Material(pMtrl, 0);
 
@@ -147,8 +149,44 @@ HRESULT CCinemaWeapon::Ready_GrayHwakMaterial()
 		pMtrl->Set_Texture("g_CEOTexture", TEXTURETYPE::TEX_CEO, pTexture, 0);
 
 		g_pGameInstance->Add_Material(L"Mtrl_GrayHwakWeapon", pMtrl);
+	}
+	m_pModel->Add_Material(pMtrl, 0);
 
-		return S_OK;
+	return S_OK;
+}
+
+HRESULT CCinemaWeapon::Ready_ShieldBreaker()
+{
+	CMaterial* pMtrl = g_pGameInstance->Get_Material(L"MI_2H_hammer_Shieldbreaker");
+	if (!pMtrl)
+	{
+		CTexture* pTexture = CTexture::Create(m_pDevice, m_pDeviceContext);
+		if (FAILED(pTexture->NativeConstruct_Prototype(L"../Bin/Resources/Mesh/ShieldBreaker/T_2H_hammer_Shieldbreaker_D.dds", 1)))
+			return E_FAIL;
+
+		pMtrl = CMaterial::Create(m_pDevice, m_pDeviceContext, L"2H_hammer_Shieldbreaker", L"../../Reference/ShaderFile/Shader_Weapon.hlsl", CMaterial::EType::Static);
+		if (FAILED(pMtrl->Set_Texture("g_DiffuseTexture", TEXTURETYPE::TEX_DIFFUSE, pTexture, 0)))
+			return E_FAIL;
+		pTexture = CTexture::Create(m_pDevice, m_pDeviceContext);
+		if (FAILED(pTexture->NativeConstruct_Prototype(L"../Bin/Resources/Mesh/ShieldBreaker/T_2H_hammer_Shieldbreaker_N.dds", 1)))
+			return E_FAIL;
+		if (FAILED(pMtrl->Set_Texture("g_BiNormalTexture", TEXTURETYPE::TEX_NORMAL, pTexture, 0)))
+			return E_FAIL;
+
+		pTexture = CTexture::Create(m_pDevice, m_pDeviceContext);
+		if (FAILED(pTexture->NativeConstruct_Prototype(L"../Bin/Resources/Mesh/ShieldBreaker/T_2H_hammer_Shieldbreaker_CEO.dds", 1)))
+			return E_FAIL;
+		if (FAILED(pMtrl->Set_Texture("g_CEOTexture", TEXTURETYPE::TEX_CEO, pTexture, 0)))
+			return E_FAIL;
+
+		pTexture = CTexture::Create(m_pDevice, m_pDeviceContext);
+		if (FAILED(pTexture->NativeConstruct_Prototype(L"../Bin/Resources/Mesh/ShieldBreaker/T_2H_hammer_Shieldbreaker_MRA.dds", 1)))
+			return E_FAIL;
+		if (FAILED(pMtrl->Set_Texture("g_MRATexture", TEXTURETYPE::TEX_MRA, pTexture, 0)))
+			return E_FAIL;
+
+		if (FAILED(g_pGameInstance->Add_Material(L"MI_2H_hammer_Shieldbreaker", pMtrl)))
+			return E_FAIL;
 	}
 	m_pModel->Add_Material(pMtrl, 0);
 

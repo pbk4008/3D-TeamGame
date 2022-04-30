@@ -181,7 +181,7 @@ HRESULT CNeedle::Render()
 		rimdesc.rimintensity = m_rimintensity;
 		rimdesc.rimcol = _float3(1,0,0);
 		XMStoreFloat4(&rimdesc.camdir, XMVector3Normalize(m_pTransform->Get_State(CTransform::STATE_POSITION) - g_pGameInstance->Get_CamPosition(L"Camera_Silvermane")));
-		CWeapon::SetRimIntensity(g_fDeltaTime * -4.f);
+		CWeapon::RimIntensity(g_fDeltaTime * -4.f);
 	}
 
 	CWeapon::BindConstantBuffer(wstrCamTag, &desc, &rimdesc);

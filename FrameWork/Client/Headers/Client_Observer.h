@@ -42,12 +42,13 @@ public:
 	const _bool Get_PlayerFrontBackCheck(_fvector vPos);
 	//해당 좌표까지의 방향벡터
 	_fvector Get_Dir(_fvector vPos);
+	CSilvermane* Get_Player() { return m_pPlayer; }
 	void Player_Active(_bool bCheck);
 	//플레이어 경험치 증가
 	void Set_Exp(_float fExp);
 	//HUD에게 레벨업 소식을 전달
 	_bool IsLevelUp(void) { return m_bLevelUp; }
-	CSilvermane* Get_Player() { return m_pPlayer; }
+
 public:
 	//플레이어 공격 셋팅
 	void Set_IsAttack(const _bool bAttack);

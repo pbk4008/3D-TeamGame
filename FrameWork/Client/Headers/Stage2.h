@@ -48,12 +48,13 @@ public:
 	void Trgger_Function8();
 	void Trgger_Function9();
 	void Trgger_FunctionBoss();
-
-	/*HRESULT Ready_Trigger_Lod(const _tchar* pDataFilePath);
-	HRESULT Ready_Trigger_Light(const _tchar* pDataFilePath);
-	HRESULT Ready_Trigger_Scene(const _tchar* pDataFilePath);
-	HRESULT Ready_Trigger_Monster(const _tchar* pDataFilePath);*/
-
+private:
+	void Portal_Spot1();
+	void Portal_Spot2();
+	void Portal_Spot3();
+	void Portal_Spot4();
+	void Portal_Spot5();
+	
 private:
 	HRESULT Ready_Treasure_Chest(void);
 public:

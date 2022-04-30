@@ -9,6 +9,7 @@ CCinemaCam::CCinemaCam()
 	, m_pModel(nullptr)
 	, m_iShortTag(0)
 	, m_fFovAngle(0.f)
+	, m_fAnimSpeed(1.f)
 {
 }
 
@@ -18,6 +19,7 @@ CCinemaCam::CCinemaCam(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContex
 	, m_pModel(nullptr)
 	, m_iShortTag(0)
 	, m_fFovAngle(0.f)
+	, m_fAnimSpeed(1.f)
 {
 }
 
@@ -27,6 +29,7 @@ CCinemaCam::CCinemaCam(const CCinemaCam& rhs)
 	, m_pModel(rhs.m_pModel)
 	, m_iShortTag(0)
 	, m_fFovAngle(0.f)
+	, m_fAnimSpeed(1.f)
 {
 	Safe_AddRef(m_pCamera);
 	Safe_AddRef(m_pModel);
@@ -65,9 +68,12 @@ HRESULT CCinemaCam::NativeConstruct(const _uint iSceneID, void* pArg)
 _int CCinemaCam::Tick(_double TimeDelta)
 {
 	//BornÀÌ¸§ : Camera_01_born
-	m_pModel->Update_CombinedTransformationMatrix(TimeDelta);
+	m_pModel->Update_CombinedTransformationMatrix(TimeDelta*m_fAnimSpeed);
+
+	
 
 	CHierarchyNode* pBorn = m_pModel->Get_BoneMatrix("camera_bone");
+	//CHierarchyNode* pBorn = Get_CamBone();
 	_matrix matBone = pBorn->Get_CombinedMatrix()*m_pModel->Get_PivotMatrix();
 	matBone *= m_pTransform->Get_WorldMatrix();
 	m_pCamera->Update_Matrix(matBone);
@@ -221,10 +227,11 @@ CHierarchyNode* CCinemaCam::Get_CamBone()
 	switch (m_iShortTag)
 	{
 	case (_uint)CINEMA_INDEX::CINEMA1_1:
-		pBorn=m_pModel->Get_BoneMatrix("Camera_01_born");
+		pBorn=m_pModel->Get_BoneMatrix("camera_bone");
+		
 		break;
 	case (_uint)CINEMA_INDEX::CINEMA1_2:
-		pBorn=m_pModel->Get_BoneMatrix("Shot_02_born");
+		pBorn=m_pModel->Get_BoneMatrix("camera_bone");
 		break;
 	case (_uint)CINEMA_INDEX::CINEMA2_1:
 		pBorn=m_pModel->Get_BoneMatrix("joint1");

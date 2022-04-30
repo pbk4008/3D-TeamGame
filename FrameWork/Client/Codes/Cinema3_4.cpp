@@ -2,12 +2,15 @@
 #include "Cinema3_4.h"
 #include "CinemaCam.h"
 #include "CinemaActor.h"
+#include "CinemaWeapon.h"
+
 #include "ScenematicManager.h"
 
 CCinema3_4::CCinema3_4()
 	: m_pCam(nullptr)
 	, m_pMidBoss(nullptr)
 	, m_pSilvermane(nullptr)
+	, m_pMidWeapon(nullptr)
 {
 }
 
@@ -16,6 +19,7 @@ CCinema3_4::CCinema3_4(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContex
 	, m_pCam(nullptr)
 	, m_pMidBoss(nullptr)
 	, m_pSilvermane(nullptr)
+	, m_pMidWeapon(nullptr)
 {
 }
 
@@ -41,6 +45,9 @@ HRESULT CCinema3_4::NativeContruct(_uint iSceneID)
 	_matrix matPivot = XMMatrixRotationX(XMConvertToRadians(90.f)) * XMMatrixTranslation(-177.f, 60.f, 413.f);
 	m_pCam->Set_CameraMatrix(matPivot);
 
+	m_pMidWeapon->Set_FixedBone(m_pMidBoss->Get_Bone("weapon_1"));
+	m_pMidWeapon->Set_OwnerPivotMatrix(m_pMidBoss->Get_Pivot());
+	m_pMidWeapon->set_OwerMatrix(m_pMidBoss->Get_Transform()->Get_WorldMatrix());
 
 	return S_OK;
 }
@@ -54,6 +61,7 @@ _int CCinema3_4::Tick(_double dDeltaTime)
 	m_pSilvermane->Tick(dDeltaTime);
 	m_pMidBoss->Tick(dDeltaTime);
 	m_pCam->Tick(dDeltaTime);
+	m_pMidWeapon->Tick(dDeltaTime);
 
 	return _int();
 }
@@ -71,6 +79,7 @@ _int CCinema3_4::LateTick(_double dDeltaTime)
 	}
 	m_pMidBoss->LateTick(dDeltaTime);
 	m_pSilvermane->LateTick(dDeltaTime);
+	m_pMidWeapon->LateTick(dDeltaTime);
 
 	return _int();
 }
@@ -116,6 +125,8 @@ HRESULT CCinema3_4::Ready_Components()
 		return E_FAIL;
 	if (FAILED(Ready_Actor(&m_pMidBoss, (_uint)CINEMA_ACTOR::ACTOR_MIDBOSS)))
 		return E_FAIL;
+	if (FAILED(Ready_Weapon(&m_pMidWeapon, 2)))
+		return E_FAIL;
 
 
 	return S_OK;
@@ -138,4 +149,5 @@ void CCinema3_4::Free()
 	Safe_Release(m_pCam);
 	Safe_Release(m_pSilvermane);
 	Safe_Release(m_pMidBoss);
+	Safe_Release(m_pMidWeapon);
 }

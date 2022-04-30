@@ -84,7 +84,16 @@ HRESULT CWall::Render()
 	if (FAILED(m_pbuffer->SetUp_ValueOnShader("g_color", &m_desc.color, sizeof(_float4)))) MSGBOX("Wall ConstBuffer delta Not Apply");
 	if (FAILED(m_pbuffer->SetUp_TextureOnShader("g_DiffuseTexture", m_pdiffusetex)))	MSGBOX("Wall ConstBuffer DiffuseTex Not Apply");
 
-	if (FAILED(m_pbuffer->Render(1))) MSGBOX("Failed To Wall Rendering");
+	if (!m_bUsingCinema)
+	{
+		if (FAILED(m_pbuffer->Render(1))) MSGBOX("Failed To Wall Rendering");
+	}
+	else
+	{
+		if (FAILED(m_pbuffer->Render(2))) MSGBOX("Failed To Wall Rendering");
+	}
+
+
 
 	return S_OK;
 }
@@ -93,6 +102,12 @@ void CWall::set_DissolveRest()
 {
 	m_bdissolve = false;
 	m_lifetime = 0.f;
+}
+
+void CWall::Using_Cinema()
+{
+	m_bUsingCinema = true;
+	m_pCollider->Remove_ActorFromScene();
 }
 
 void CWall::Destroy()

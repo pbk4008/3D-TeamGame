@@ -23,6 +23,7 @@ private:
 	HRESULT Ready_Model();
 	HRESULT Ready_PoenixMaterial();
 	HRESULT Ready_GrayHwakMaterial();
+	HRESULT Ready_ShieldBreaker();
 private:
 	_int Attach_FixedBone(const _double& _dDeltaTime);
 	_int Attach_Owner(const _double& _dDeltaTime);

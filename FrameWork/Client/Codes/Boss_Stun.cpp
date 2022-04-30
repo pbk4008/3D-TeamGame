@@ -30,8 +30,14 @@ _int CBoss_Stun::Tick(const _double& TimeDelta)
 
 	m_pAnimator->Tick(TimeDelta);
 
+	_uint iCurKeyFrameIndex = m_pAnimator->Get_AnimController()->Get_CurKeyFrameIndex();
+
+	//cout << iCurKeyFrameIndex << endl;
+
 	if (CBoss_Solaris::M_BossAnimState::STUN_END == m_pAnimator->Get_CurrentAnimNode())
 	{
+		static_cast<CBoss_Solaris*>(m_pMonster)->OnEff_MeshShield(false);
+
 		if (m_pAnimator->Get_AnimController()->Is_Finished())
 		{
 			m_pStateController->Change_State(L"Turn");
@@ -67,6 +73,8 @@ HRESULT CBoss_Stun::EnterState()
 
 	cout << "Boss Stun" << endl;
 
+	static_cast<CBoss_Solaris*>(m_pMonster)->OnEff_MeshShield(true);
+
 	static_cast<CBoss_Solaris*>(m_pMonster)->Set_HitMotion(false);
 	m_pAnimator->Change_AnyEntryAnimation((_uint)CBoss_Solaris::M_BossAnimState::STUN_START);
 	
@@ -77,6 +85,7 @@ HRESULT CBoss_Stun::ExitState()
 {
 	if (FAILED(__super::ExitState()))
 		return E_FAIL;
+
 
 	return S_OK;
 }
