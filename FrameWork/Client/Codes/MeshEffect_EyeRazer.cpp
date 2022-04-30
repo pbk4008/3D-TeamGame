@@ -157,7 +157,7 @@ _int CMeshEffect_EyeRazer::LateTick(_double _dDeltaTime)
 
 	if (m_isFlowY)
 	{
-		m_fFlowSpeedAlpha += _dDeltaTime;
+		m_fFlowSpeedAlpha += (_float)_dDeltaTime;
 	}
 
 	if (0.05f <= m_fFlowSpeedAlpha)

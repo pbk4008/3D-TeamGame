@@ -126,11 +126,11 @@ HRESULT CStage1::NativeConstruct()
 		return E_FAIL;
 	}
 
-	//if (FAILED(Ready_Trigger_Jump()))
-	//{
-	//	MSGBOX("Stage1 Jump");
-	//	return E_FAIL;
-	//}
+	if (FAILED(Ready_Trigger_Jump()))
+	{
+		MSGBOX("Stage1 Jump");
+		return E_FAIL;
+	}
 
 	if (FAILED(Ready_Player(L"Layer_Silvermane")))
 	{
@@ -138,20 +138,17 @@ HRESULT CStage1::NativeConstruct()
 		return E_FAIL;
 	}
 
+	if (FAILED(Ready_MapObject()))
+	{
+		MSGBOX("Stage1 MapObject");
+		return E_FAIL;
+	}
 
-	//if (FAILED(Ready_MapObject()))
-	//{
-	//	MSGBOX("Stage1 MapObject");
-	//	return E_FAIL;
-	//}
-
-	//if (FAILED(Ready_TriggerSystem(L"../bin/SaveData/Trigger/MonsterSpawnTrigger.dat")))
-	//{
-	//	MSGBOX("Stage1 Trigger");
-	//	return E_FAIL;
-	//}
-
-
+	if (FAILED(Ready_TriggerSystem(L"../bin/SaveData/Trigger/MonsterSpawnTrigger.dat")))
+	{
+		MSGBOX("Stage1 Trigger");
+		return E_FAIL;
+	}
 
 	if (FAILED(Ready_Data_UI(L"../bin/SaveData/UI/UI.dat")))
 	{
@@ -159,11 +156,11 @@ HRESULT CStage1::NativeConstruct()
 		return E_FAIL;
 	}
 
-	//if (FAILED(Ready_Data_Effect()))
-	//{
-	//	MSGBOX("Stage1 Effect");
-	//	return E_FAIL;
-	//}
+	if (FAILED(Ready_Data_Effect()))
+	{
+		MSGBOX("Stage1 Effect");
+		return E_FAIL;
+	}
 
 	if (FAILED(Ready_UI(L"Layer_UI")))
 	{
@@ -171,57 +168,56 @@ HRESULT CStage1::NativeConstruct()
 		return E_FAIL;
 	}
 
-	//if (FAILED(Ready_Treasure_Chest()))
-	//{
-	//	MSGBOX("Stage1 Box");
-	//	return E_FAIL;
-	//}
+	if (FAILED(Ready_Treasure_Chest()))
+	{
+		MSGBOX("Stage1 Box");
+		return E_FAIL;
+	}
 
-	//if (FAILED(Ready_GameManager()))
-	//{
-	//	MSGBOX("Stage1 Manager");
-	//	return E_FAIL;
-	//}
+	if (FAILED(Ready_GameManager()))
+	{
+		MSGBOX("Stage1 Manager");
+		return E_FAIL;
+	}
 
 	g_pGameInstance->Change_BaseCamera(L"Camera_Silvermane");
 
-	//if (FAILED(Ready_Meteor()))
-	//{
-	//	MSGBOX("Meteor");
-	//	return E_FAIL;
-	//}
-	
-	//if (FAILED(Ready_Indicator()))
-	//{
-	//	MSGBOX("Indicator");
-	//	return E_FAIL;
-	//}
+	if (FAILED(Ready_Meteor()))
+	{
+		MSGBOX("Meteor");
+		return E_FAIL;
+	}
 
-	//if (FAILED(Ready_Portal()))
-	//{
-	//	MSGBOX("Portal");
-	//	return E_FAIL;
-	//}
+	if (FAILED(Ready_Indicator()))
+	{
+		MSGBOX("Indicator");
+		return E_FAIL;
+	}
 
-	//if (FAILED(Ready_Wall()))
-	//{
-	//	MSGBOX("Wall");
-	//	return E_FAIL;
-	//}
+	if (FAILED(Ready_Portal()))
+	{
+		MSGBOX("Portal");
+		return E_FAIL;
+	}
 
-	//if (FAILED(Ready_Pot()))
-	//	return E_FAIL;
+	if (FAILED(Ready_Wall()))
+	{
+		MSGBOX("Wall");
+		return E_FAIL;
+	}
 
-	///* ¸¯ ³²½¿¿ä */
+	if (FAILED(Ready_Pot()))
+		return E_FAIL;
+
+	/* ¸¯ ³²½¿¿ä */
 	if (FAILED(Ready_Cinema()))
 	{
 		MSGBOX("Cinema");
 		return E_FAIL;
 	}
 
-	//g_pGameInstance->PlayBGM(L"Stage1_BGM");
-	//
-	//m_pScenemaManager->Active_Scenema((_uint)CINEMA_INDEX::CINEMA1_1);
+	g_pGameInstance->PlayBGM(L"Stage1_BGM");
+	m_pScenemaManager->Active_Scenema((_uint)CINEMA_INDEX::CINEMA1_1);
 
 	if (FAILED(Ready_Obstacle()))
 		return E_FAIL;
@@ -1582,8 +1578,10 @@ HRESULT CStage1::Ready_Indicator()
 	//monster Indicator
 	if (FAILED(m_pIndicatorManager->Add_Indicator((_uint)SCENEID::SCENE_STAGE1, L"Layer_UI_Indicator", 10)))
 	{
+		MSGBOX("Failed to Create Indicator");
 		return E_FAIL;
 	}
+	
 
 	return S_OK;
 }
@@ -1782,30 +1780,48 @@ HRESULT CStage1::Ready_Portal()
 		if (i <= 19)//19°³
 		{
 			if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_PortalMonster", L"Proto_GameObject_Monster_Bastion_Sword")))
+			{
 				return E_FAIL;
+				MSGBOX("Failed to Create Portal");
+			}
 		}
 		else if(i>=20 && i<=38)//19
 		{
 			if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_PortalMonster", L"Proto_GameObject_Monster_Bastion_Shooter")))
+			{
 				return E_FAIL;
+				MSGBOX("Failed to Create Portal");
+			}
 		}
 		else if(i>=39 && i<=54)//16°³
 		{
 			if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_PortalMonster", L"Proto_GameObject_Monster_Bastion_Healer")))
+			{
 				return E_FAIL;
+				MSGBOX("Failed to Create Portal"); 
+			}
 		}
 		else if (i >= 55 && i <=63)
 		{
 			if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_PortalMonster", L"Proto_GameObject_Monster_Crawler")))
+			{
 				return E_FAIL;
+				MSGBOX("Failed to Create Portal");
+			}
 		}
 		else if (i >= 64 && i <=73)
 		{
 			if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_PortalMonster", L"Proto_GameObject_Monster_EarthAberrant")))
+			{
 				return E_FAIL;
+				MSGBOX("Failed to Create Portal"); 
+			}
 		}
 		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Portal", L"Proto_GameObject_Portal")))
+		{
 			return E_FAIL;
+			MSGBOX("Failed to Create Portal");
+		}
 	}
 
 	return S_OK;
@@ -2911,6 +2927,7 @@ HRESULT CStage1::Ready_Meteor()
 	{
 		CMeteor* pObj = nullptr;
 		g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Meteor", L"Proto_GameObject_Weapon_Meteor", nullptr,(CGameObject**)&pObj);
+		assert(pObj);
 		pObj->setActive(false);
 		Safe_AddRef(pObj);
 		m_vecMeteor.emplace_back(pObj);
