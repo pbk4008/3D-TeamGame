@@ -84,6 +84,15 @@ HRESULT CUI_Monster_Panel::NativeConstruct(const _uint _iSceneID, void* pArg)
 	Safe_AddRef(m_pUIName);
 	Safe_AddRef(m_pUIGroggyBar);
 
+	m_bShow = false;
+
+	m_pUIBack->setActive(false);
+	m_pUILevel->setActive(false);
+	m_pUILevelNum->setActive(false);
+	m_pUIName->setActive(false);
+	m_pUIHpBar->setActive(false);
+	m_pUIBackHpBar->setActive(false);
+	m_pUIGroggyBar->setActive(false);
 
 	setActive(false);
 

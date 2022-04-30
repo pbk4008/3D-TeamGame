@@ -52,17 +52,18 @@ HRESULT CUI_Monster_Back::NativeConstruct(const _uint _iSceneID, void* pArg)
 	m_fGapY = 0.63f;
 
 	setActive(false);
+	m_bShow = false;
 
 	return S_OK;
 }
 
 _int CUI_Monster_Back::Tick(_double TimeDelta)
 {
-	if (false == m_bFirstShow)
-	{
-		setActive(true);
-		m_bFirstShow = true;
-	}
+	//if (false == m_bFirstShow)
+	//{
+	//	setActive(true);
+	//	m_bFirstShow = true;
+	//}
 
 	if (true == m_bShow)
 	{
@@ -79,8 +80,8 @@ _int CUI_Monster_Back::Tick(_double TimeDelta)
 
 	if (5.f <= m_fAutoDisTimeAcc) //완전 처음세팅으로 다시 돌려줌
 	{
-		m_bAutoDis = false;
 		m_fAutoDisTimeAcc = 0.f;
+		m_bAutoDis = false;
 		m_fAlpha = 0.f;
 		m_fDisappearTimeAcc = 0.f;
 		m_bShow = false;
@@ -124,24 +125,27 @@ _int CUI_Monster_Back::LateTick(_double TimeDelta)
 
 HRESULT CUI_Monster_Back::Render()
 {
-	wstring wstrCamTag = g_pGameInstance->Get_BaseCameraTag();
-	_matrix XMWorldMatrix = XMMatrixTranspose(m_pTransform->Get_WorldMatrix());
-	_matrix XMViewMatrix = XMMatrixTranspose(g_pGameInstance->Get_Transform(wstrCamTag, TRANSFORMSTATEMATRIX::D3DTS_VIEW));
-	_matrix XMProjectMatrix = XMMatrixTranspose(g_pGameInstance->Get_Transform(wstrCamTag, TRANSFORMSTATEMATRIX::D3DTS_PROJECTION));
+	if (m_bAutoDis)
+	{
+		wstring wstrCamTag = g_pGameInstance->Get_BaseCameraTag();
+		_matrix XMWorldMatrix = XMMatrixTranspose(m_pTransform->Get_WorldMatrix());
+		_matrix XMViewMatrix = XMMatrixTranspose(g_pGameInstance->Get_Transform(wstrCamTag, TRANSFORMSTATEMATRIX::D3DTS_VIEW));
+		_matrix XMProjectMatrix = XMMatrixTranspose(g_pGameInstance->Get_Transform(wstrCamTag, TRANSFORMSTATEMATRIX::D3DTS_PROJECTION));
 
-	m_pTrapziumBuffer->SetUp_ValueOnShader("g_WorldMatrix", &XMWorldMatrix, sizeof(_float) * 16);
-	m_pTrapziumBuffer->SetUp_ValueOnShader("g_ViewMatrix", &XMViewMatrix, sizeof(_float) * 16);
-	m_pTrapziumBuffer->SetUp_ValueOnShader("g_ProjMatrix", &XMProjectMatrix, sizeof(XMMATRIX));
-	m_pTrapziumBuffer->SetUp_ValueOnShader("g_fX", &m_fGapX, sizeof(_float));
-	m_pTrapziumBuffer->SetUp_ValueOnShader("g_fY", &m_fGapY, sizeof(_float));
-	m_pTrapziumBuffer->SetUp_ValueOnShader("g_fAlpha", &m_fAlpha, sizeof(_float));
+		m_pTrapziumBuffer->SetUp_ValueOnShader("g_WorldMatrix", &XMWorldMatrix, sizeof(_float) * 16);
+		m_pTrapziumBuffer->SetUp_ValueOnShader("g_ViewMatrix", &XMViewMatrix, sizeof(_float) * 16);
+		m_pTrapziumBuffer->SetUp_ValueOnShader("g_ProjMatrix", &XMProjectMatrix, sizeof(XMMATRIX));
+		m_pTrapziumBuffer->SetUp_ValueOnShader("g_fX", &m_fGapX, sizeof(_float));
+		m_pTrapziumBuffer->SetUp_ValueOnShader("g_fY", &m_fGapY, sizeof(_float));
+		m_pTrapziumBuffer->SetUp_ValueOnShader("g_fAlpha", &m_fAlpha, sizeof(_float));
 
-	_float CurAttackGauge = 0.f;
-	m_pTrapziumBuffer->SetUp_ValueOnShader("g_fCurAttack", &CurAttackGauge, sizeof(_float));
+		_float CurAttackGauge = 0.f;
+		m_pTrapziumBuffer->SetUp_ValueOnShader("g_fCurAttack", &CurAttackGauge, sizeof(_float));
 
-	m_pTrapziumBuffer->SetUp_TextureOnShader("g_DiffuseTexture", m_pTexture);
+		m_pTrapziumBuffer->SetUp_TextureOnShader("g_DiffuseTexture", m_pTexture);
 
-	m_pTrapziumBuffer->Render(1); //테스트로하면 알파값적용이안돼서 바로꺼지는거같음, 근데 블랜드하면,, 소팅해줘야함,,
+		m_pTrapziumBuffer->Render(1); //테스트로하면 알파값적용이안돼서 바로꺼지는거같음, 근데 블랜드하면,, 소팅해줘야함,,
+	}
 	return S_OK;
 }
 

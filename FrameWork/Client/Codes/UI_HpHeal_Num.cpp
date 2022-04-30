@@ -89,6 +89,14 @@ HRESULT CUI_HpHeal_Num::Render()
 	m_pBuffer->SetUp_ValueOnShader("g_ProjMatrix", &XMProjectMatrix, sizeof(XMMATRIX));
 
 	_uint iPotionCount = m_pInventoryData->GetPotionCount();
+	if (3 <= iPotionCount)
+	{
+		iPotionCount = 3;
+	}
+	else if (0 >= iPotionCount)
+	{
+		iPotionCount = 0;
+	}
 	m_pBuffer->SetUp_TextureOnShader("g_DiffuseTexture", m_pTexture, iPotionCount);
 
 	m_pBuffer->Render(1);

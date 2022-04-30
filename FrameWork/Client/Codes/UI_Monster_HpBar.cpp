@@ -48,6 +48,9 @@ HRESULT CUI_Monster_HpBar::NativeConstruct(const _uint _iSceneID, void* pArg)
 		return E_FAIL;
 	}
 
+	setActive(false);
+	m_bShow = false;
+
 	m_fGapX = 1.f;
 	m_fGapY = 0.5f;
 
@@ -60,17 +63,33 @@ _int CUI_Monster_HpBar::Tick(_double TimeDelta)
 	if (FAILED(CUI::Tick(TimeDelta)))
 		return -1;
 
-	if (false == m_bFirstShow)
-	{
-		setActive(true);
-		m_bFirstShow = true;
-	}
+	//if (false == m_bFirstShow)
+	//{
+	//	setActive(true);
+	//	m_bFirstShow = true;
+	//}
 
 #pragma region raycast때 화면중앙에 닿으면 ui보였다가 5초뒤에 사라질수있게 해주는
 	if (true == m_bShow)
 	{
 		m_fAlpha = 1.f;
 		m_fDisappearTimeAcc = 0.f;
+		m_bAutoDis = true; //true로 들어왔을대 제대로 안꺼지게되면 자동으로꺼질수있게
+	}
+
+	if (m_bAutoDis && m_bShow) //m_bshow가 false가안되어버리고 버그가있을때 오토로 끌수있게끔
+	{
+		m_fAutoDisTimeAcc += TimeDelta;
+	}
+
+	if (5.f <= m_fAutoDisTimeAcc) //완전 처음세팅으로 다시 돌려줌
+	{
+		m_bAutoDis = false;
+		m_fAutoDisTimeAcc = 0.f;
+		m_fAlpha = 0.f;
+		m_fDisappearTimeAcc = 0.f;
+		m_bShow = false;
+		//setActive(false);
 	}
 
 	else if (false == m_bShow)
@@ -89,7 +108,6 @@ _int CUI_Monster_HpBar::Tick(_double TimeDelta)
 		m_fAlpha = 0.f;
 		m_fDisappearTimeAcc = 0.f;
 		setActive(false);
-
 	}
 #pragma endregion
 
@@ -120,23 +138,26 @@ _int CUI_Monster_HpBar::LateTick(_double TimeDelta)
 
 HRESULT CUI_Monster_HpBar::Render()
 {
-	wstring wstrCamTag = g_pGameInstance->Get_BaseCameraTag();
-	_matrix XMWorldMatrix = XMMatrixTranspose(m_pTransform->Get_WorldMatrix());
-	_matrix XMViewMatrix = XMMatrixTranspose(g_pGameInstance->Get_Transform(wstrCamTag, TRANSFORMSTATEMATRIX::D3DTS_VIEW));
-	_matrix XMProjectMatrix = XMMatrixTranspose(g_pGameInstance->Get_Transform(wstrCamTag, TRANSFORMSTATEMATRIX::D3DTS_PROJECTION));
+	if (m_bAutoDis)
+	{
+		wstring wstrCamTag = g_pGameInstance->Get_BaseCameraTag();
+		_matrix XMWorldMatrix = XMMatrixTranspose(m_pTransform->Get_WorldMatrix());
+		_matrix XMViewMatrix = XMMatrixTranspose(g_pGameInstance->Get_Transform(wstrCamTag, TRANSFORMSTATEMATRIX::D3DTS_VIEW));
+		_matrix XMProjectMatrix = XMMatrixTranspose(g_pGameInstance->Get_Transform(wstrCamTag, TRANSFORMSTATEMATRIX::D3DTS_PROJECTION));
 
-	m_pTrapziumBuffer->SetUp_ValueOnShader("g_WorldMatrix", &XMWorldMatrix, sizeof(_float) * 16);
-	m_pTrapziumBuffer->SetUp_ValueOnShader("g_ViewMatrix", &XMViewMatrix, sizeof(_float) * 16);
-	m_pTrapziumBuffer->SetUp_ValueOnShader("g_ProjMatrix", &XMProjectMatrix, sizeof(XMMATRIX));
-	m_pTrapziumBuffer->SetUp_ValueOnShader("g_fX", &m_fGapX, sizeof(_float)); 
-	m_pTrapziumBuffer->SetUp_ValueOnShader("g_fY", &m_fGapY, sizeof(_float));
+		m_pTrapziumBuffer->SetUp_ValueOnShader("g_WorldMatrix", &XMWorldMatrix, sizeof(_float) * 16);
+		m_pTrapziumBuffer->SetUp_ValueOnShader("g_ViewMatrix", &XMViewMatrix, sizeof(_float) * 16);
+		m_pTrapziumBuffer->SetUp_ValueOnShader("g_ProjMatrix", &XMProjectMatrix, sizeof(XMMATRIX));
+		m_pTrapziumBuffer->SetUp_ValueOnShader("g_fX", &m_fGapX, sizeof(_float));
+		m_pTrapziumBuffer->SetUp_ValueOnShader("g_fY", &m_fGapY, sizeof(_float));
 
-	m_pTrapziumBuffer->SetUp_ValueOnShader("g_fAlpha", &m_fAlpha, sizeof(_float));
-	m_pTrapziumBuffer->SetUp_ValueOnShader("g_fCurAttack", &m_fCurAttackGauge, sizeof(_float));
+		m_pTrapziumBuffer->SetUp_ValueOnShader("g_fAlpha", &m_fAlpha, sizeof(_float));
+		m_pTrapziumBuffer->SetUp_ValueOnShader("g_fCurAttack", &m_fCurAttackGauge, sizeof(_float));
 
-	m_pTrapziumBuffer->SetUp_TextureOnShader("g_DiffuseTexture", m_pTexture);
+		m_pTrapziumBuffer->SetUp_TextureOnShader("g_DiffuseTexture", m_pTexture);
 
-	m_pTrapziumBuffer->Render(m_UIBarDesc.iRenderPass);
+		m_pTrapziumBuffer->Render(m_UIBarDesc.iRenderPass);
+	}
 
 	return S_OK;
 }

@@ -123,10 +123,18 @@ _int CMonster_Bastion_Shooter::Tick(_double _dDeltaTime)
 	Change_State();
 
 	if (true == m_bUIShow)
+	{
+		m_pPanel->setActive(true);
 		m_pPanel->Set_Show(true);
 
-	if (false == m_bUIShow)
+		m_fUIShowTimeAcc += _dDeltaTime;
+	}
+	if (1.f <= m_fUIShowTimeAcc && m_bUIShow)
+	{
 		m_pPanel->Set_Show(false);
+		m_bUIShow = false;
+		m_fUIShowTimeAcc = 0.f;
+	}
 
 	m_pPanel->Set_TargetWorldMatrix(m_pTransform->Get_WorldMatrix());
 
@@ -247,8 +255,8 @@ void CMonster_Bastion_Shooter::setActive(_bool bActive)
 			m_pCharacterController->setOwnerTransform(m_pTransform);
 			m_pCharacterController->setShapeLayer((_uint)ELayer::Monster);
 		}
-		if (m_pPanel)
-			m_pPanel->setActive(true);
+		//if (m_pPanel)
+		//	m_pPanel->setActive(true);
 	}
 }
 

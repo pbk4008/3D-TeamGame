@@ -165,9 +165,18 @@ _int CMonster_Bastion_Spear::Tick(_double _dDeltaTime)
 	}
 
 	if (true == m_bUIShow)
+	{
+		m_pPanel->setActive(true);
 		m_pPanel->Set_Show(true);
-	else
+
+		m_fUIShowTimeAcc += _dDeltaTime;
+	}
+	if (1.f <= m_fUIShowTimeAcc && m_bUIShow)
+	{
 		m_pPanel->Set_Show(false);
+		m_bUIShow = false;
+		m_fUIShowTimeAcc = 0.f;
+	}
 
 	if (m_fGroggyGauge >= m_fMaxGroggyGauge)
 	{
@@ -313,8 +322,8 @@ void CMonster_Bastion_Spear::setActive(_bool bActive)
 		}
 		if (m_pWeapon)
 			m_pWeapon->setActive(true);
-		if (m_pPanel)
-			m_pPanel->setActive(true);
+		//if (m_pPanel)
+		//	m_pPanel->setActive(true);
 	}
 }
 

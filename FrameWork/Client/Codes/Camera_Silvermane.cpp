@@ -442,13 +442,13 @@ void CCamera_Silvermane::OnOffMonsterUI()
 			break;
 		}
 	}
-	else
+	/*else
 	{
 		if (m_pTargetMonster)
 		{
 			static_cast<CActor*>(m_pTargetMonster)->Set_UIShow(false);
 		}
-	}
+	}*/
 }
 
 const _fvector CCamera_Silvermane::Get_Look() const

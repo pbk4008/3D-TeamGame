@@ -146,9 +146,18 @@ _int CMonster_Bastion_Sword::Tick(_double _dDeltaTime)
 	Dead_Check();
 
 	if (true == m_bUIShow)
+	{
+		m_pPanel->setActive(true);
 		m_pPanel->Set_Show(true);
-	else if (false == m_bUIShow)
+
+		m_fUIShowTimeAcc += _dDeltaTime;
+	}
+	if (1.f <= m_fUIShowTimeAcc && m_bUIShow)
+	{
 		m_pPanel->Set_Show(false);
+		m_bUIShow = false;
+		m_fUIShowTimeAcc = 0.f;
+	}
 
 	m_pPanel->Set_TargetWorldMatrix(m_pTransform->Get_WorldMatrix());
 
@@ -342,8 +351,8 @@ void CMonster_Bastion_Sword::setActive(_bool bActive)
 		}
 		if (m_pWeapon)
 			m_pWeapon->setActive(true);
-		if (m_pPanel)
-			m_pPanel->setActive(true);
+		//if (m_pPanel)
+		//	m_pPanel->setActive(true);
 	}
 }
 
