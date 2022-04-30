@@ -178,7 +178,11 @@ _int CMidBoss_Attack::Tick(const _double& TimeDelta)
 		cout << "S1 : " << iCurKeyFrameIndex << endl;
 
 		//림라이트
-		m_pMonster->RimlightCheck(true, _float3(1, 0, 0));
+		if (m_rimcheck == true)
+		{
+			m_pMonster->RimlightCheck(true, _float3(0.1f, 0, 0), 6.f);
+			m_rimcheck = false;
+		}
 
 		m_pTransform->Face_Target(g_pObserver->Get_PlayerPos());
 
@@ -227,7 +231,12 @@ _int CMidBoss_Attack::Tick(const _double& TimeDelta)
 		cout << "S2 : " << iCurKeyFrameIndex << endl;
 
 		//림라이트
-		m_pMonster->RimlightCheck(true);
+		if (m_rimcheck == true)
+		{
+			m_pMonster->RimlightCheck(true, _float3(0.1f, 0, 0), 5.f);
+			m_rimcheck = false;
+		}
+
 
 		if (35 < iCurKeyFrameIndex && 55 > iCurKeyFrameIndex)
 		{
@@ -383,7 +392,6 @@ HRESULT CMidBoss_Attack::ExitState()
 		return E_FAIL;
 
 	CBoss_Bastion_Judicator* m_pMonster = (CBoss_Bastion_Judicator*)m_pStateController->Get_GameObject();
-	m_pMonster->RimlightCheck(false);
 
 	m_bEffectCheck = false; //이펙트다시켜야됨 
 
@@ -397,6 +405,7 @@ HRESULT CMidBoss_Attack::ExitState()
 	m_bAttackSprint = false;
 	m_bAttackLegacy = false;
 	m_bAttackLegacy_2 = false;
+	m_rimcheck = true;
 
 	return S_OK;
 }

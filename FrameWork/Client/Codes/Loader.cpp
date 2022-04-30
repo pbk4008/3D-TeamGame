@@ -188,8 +188,8 @@ HRESULT CLoader::LoadForScene()
 
 HRESULT CLoader::SetUp_Stage1_Object()
 {
-	//if (FAILED(Load_Stage1FBXLoad()))
-	//	return E_FAIL;
+	if (FAILED(Load_Stage1FBXLoad()))
+		return E_FAIL;
 
 	if (FAILED(Load_Stage1Navi_SkyLoad()))
 		return E_FAIL;
@@ -227,14 +227,14 @@ HRESULT CLoader::SetUp_Stage1_Object()
 	if (FAILED(Load_Stage1TriggerLod()))
 		return E_FAIL;
 
-	//if (FAILED(Load_Stage1Meteor()))
-	//	return E_FAIL;
+	if (FAILED(Load_Stage1Meteor()))
+		return E_FAIL;
 
-	//if (FAILED(Load_Stage1_Cinema_Object()))
-	//	return E_FAIL;
+	if (FAILED(Load_Stage1_Cinema_Object()))
+		return E_FAIL;
 
-	//if (FAILED(Load_Pot()))
-	//	return E_FAIL;
+	if (FAILED(Load_Pot()))
+		return E_FAIL;
 
 	return S_OK;
 }
@@ -599,11 +599,15 @@ HRESULT CLoader::Load_Stage1UILoad()
 
 	// DamageFont
 	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"Texture_DamageFont", L"../bin/Resources/Texture/UI/DamageFont.dds")))
-		return E_FAIL;
+		MSGBOX(L"데미지 폰트 Add_Texture() 실패");
 	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"Texture_GreenGradi", L"../bin/Resources/Texture/UI/GreenGradi.dds")))
-		return E_FAIL;
+		MSGBOX(L"데미지 폰트 Add_Texture() 실패");
+	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"Texture_DamageFontBG", L"../bin/Resources/Texture/UI/Static/Active/T_HUD_BossHealth_Blob.dds")))
+		MSGBOX(L"데미지 폰트 Add_Texture() 실패");
+	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"Texture_DamageFontBG2", L"../bin/Resources/Texture/UI/Static/Active/T_HUD_CompassMarker_TextBlob.dds")))
+		MSGBOX(L"데미지 폰트 Add_Texture() 실패");
 	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_DamageFont"), CDamageFont::Create(m_pDevice, m_pDeviceContext))))
-		return E_FAIL;
+		MSGBOX(L"데미지 폰트 Add_Texture() 실패");
 
 
 	return S_OK;
@@ -1125,6 +1129,7 @@ HRESULT CLoader::Load_Stage3_BossLoad()
 		return E_FAIL;
 	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Weapon_Boss", CBoss_Weapon::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
+
 	return S_OK;
 }
 
@@ -1257,6 +1262,12 @@ HRESULT CLoader::SetUp_Stage1_Prototype()
 	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_LootShield", CLoot_Shield::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 
+	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_CapsuleObstacle", CCapsuleObstacle::Create(m_pDevice, m_pDeviceContext))))
+	{
+		MSGBOX(L"캡슐 장애물 프로토타입 생성 실패");
+		return E_FAIL;
+	}
+
 	return S_OK;
 }
 
@@ -1378,8 +1389,10 @@ HRESULT CLoader::Load_Stage1PlayerLoad()
 	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"DissovleGradient", L"../bin/Resources/Texture/T_FlameGradient_01.dds"))) MSGBOX("Failed To Add dissolveGradient Tex");
 
 #pragma region 오브젝트
-	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Silvermane", CSilvermane::Create(m_pDevice, m_pDeviceContext))))	return E_FAIL;
-	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Camera_Silvermane", CCamera_Silvermane::Create(m_pDevice, m_pDeviceContext))))		return E_FAIL;
+	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Silvermane", CSilvermane::Create(m_pDevice, m_pDeviceContext))))	
+		return E_FAIL;
+	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Camera_Silvermane", CCamera_Silvermane::Create(m_pDevice, m_pDeviceContext))))		
+		return E_FAIL;
 	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Wall", CWall::Create(m_pDevice, m_pDeviceContext)))) MSGBOX(L"Wall 원본 생성 실패");
 	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_FlyingShield", CFlyingShield::Create(m_pDevice, m_pDeviceContext)))) MSGBOX(L"날으는 쉴드 원본 생성 실패");
 	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_MotionTrail", CMotionTrail::Create(m_pDevice, m_pDeviceContext)))) MSGBOX(L"모션 더미 생성");
@@ -1420,8 +1433,10 @@ HRESULT CLoader::Load_Stage1BossLoad()
 	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Weapon_ShieldBreaker", CShieldBreaker::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 
-
 	//Boss Solaris
+
+	if (FAILED(Load_Stage3_BossLoad()))
+		return E_FAIL;
 
 	return S_OK;
 }
@@ -1430,7 +1445,7 @@ HRESULT CLoader::Load_Stage1MonsterLoad()
 {
 	_matrix matPivot = XMMatrixIdentity();
 
-	//Monster Crystal_Crawler
+	//////Monster Crystal_Crawler
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Monster_Crawler", CModel::Create(m_pDevice, m_pDeviceContext,
 		L"../bin/FBX/Monster/Crystal_Crawler.fbx", CModel::TYPE_ANIM, true))))
 		return E_FAIL;
@@ -1466,7 +1481,7 @@ HRESULT CLoader::Load_Stage1MonsterLoad()
 	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Weapon_Stargazer", CStargazer::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 
-	//Monster Bastion_Shooter
+	////Monster Bastion_Shooter
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Monster_Bastion_Shooter", CModel::Create(m_pDevice, m_pDeviceContext,
 		L"../bin/FBX/Monster/Bastion_Shooter.fbx", CModel::TYPE_ANIM, true))))
 		return E_FAIL;
@@ -1498,7 +1513,7 @@ HRESULT CLoader::Load_Stage1MonsterLoad()
 	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Weapon_RetributionBlade", CRetributionBlade::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 
-	////Bastion_Healer
+	//Bastion_Healer
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Bastion_Healer", CModel::Create(m_pDevice, m_pDeviceContext,
 		L"../bin/FBX/Monster/Bastion_Healer_Bin.fbx", CModel::TYPE_ANIM, true))))
 		return E_FAIL;

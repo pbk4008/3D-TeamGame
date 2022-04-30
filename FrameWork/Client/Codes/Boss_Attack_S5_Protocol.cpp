@@ -299,7 +299,6 @@ HRESULT CBoss_Attack_S5_Protocol::ExitState()
 		return E_FAIL;
 
 	CBoss_Solaris* m_pMonster = (CBoss_Solaris*)m_pStateController->Get_GameObject();
-	m_pMonster->RimlightCheck(false);
 
 	m_bEffectCheck = false;
 	m_bFirstCheckDist = false;

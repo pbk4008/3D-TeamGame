@@ -27,6 +27,8 @@ public:
 	void Actor_AnimPlay(_int iIndex);
 	void AnimSpeed(_float fSpeed);
 	void Actor_AnimReset();
+	void Acotr_AnimFrameSet(_double iFrame);
+	_uint Get_AnimFrame();
 public:
 	class CHierarchyNode* Get_Bone(const string& tBoneName);
 	_fmatrix Get_Pivot();

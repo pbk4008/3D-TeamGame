@@ -59,8 +59,8 @@ HRESULT CSilvermane_Bow::EnterState()
 
 	m_pSilvermane->Set_WeaponActive(false);
 
-	m_pSilvermane->RimlightCheck(true, _float3(1.f, 1.f, 0.f));
-	
+	m_pSilvermane->RimlightCheck(true, _float3(0.3f, 0.1f, 0), 2.5f);
+
 	return S_OK;
 }
 
@@ -72,7 +72,6 @@ HRESULT CSilvermane_Bow::ExitState()
 	m_pModel->Set_PivotMatrix(XMLoadFloat4x4(&m_matPrePivot));
 	m_pSilvermane->Set_WeaponActive(true);
 
-	m_pSilvermane->RimlightCheck(false);
 	return S_OK;
 }
 

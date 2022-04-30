@@ -409,9 +409,6 @@
     <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_2HSword\State_2HSword\Groggy">
       <UniqueIdentifier>{903a9638-b5eb-482e-924a-0a015449b4a1}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObject\03.Character\00.Player\00.Silvermane\State\HIt">
-      <UniqueIdentifier>{c0836172-4e03-4723-b9f5-2ce38812b858}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObject\01. MainCamera\CullingCam">
       <UniqueIdentifier>{448dfa35-cb38-4df2-bd37-7952d6ae674d}</UniqueIdentifier>
     </Filter>
@@ -1195,6 +1192,12 @@
     <Filter Include="02.GameObject\03.Character\00.Player\00.Silvermane\State\Emote">
       <UniqueIdentifier>{4259ea1f-b5b7-4d9f-b769-4bfcc182f1f1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\03.Character\00.Player\00.Silvermane\State\1H_Sword\Skill">
+      <UniqueIdentifier>{e81819a1-f90c-4330-ad94-8fc5e9d603ea}</UniqueIdentifier>
+	</Filter>
+    <Filter Include="02.GameObject\03.Character\00.Player\00.Silvermane\State\HIt">
+      <UniqueIdentifier>{c0836172-4e03-4723-b9f5-2ce38812b858}</UniqueIdentifier>
+	</Filter>
     <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_Spear\State\00.Idle">
       <UniqueIdentifier>{2398d3e4-0aad-4c0a-b779-2676cae6f42f}</UniqueIdentifier>
     </Filter>
@@ -1206,6 +1209,9 @@
     </Filter>
     <Filter Include="02.GameObject\05.UI\01.UI_Ingame\01.Meter\00.Player\02.HpHeal_Num">
       <UniqueIdentifier>{929536fd-efd3-4f5e-9408-f742af589180}</UniqueIdentifier>
+	</Filter>
+    <Filter Include="02.GameObject\02.Map\01.Environment\03.Circle_Floor">
+      <UniqueIdentifier>{6c43c0c8-7a09-4c56-afaf-c358d946e1e1}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -2594,6 +2600,12 @@
     </ClInclude>
     <ClInclude Include="..\Headers\UI_HpHeal_Num.h">
       <Filter>02.GameObject\05.UI\01.UI_Ingame\01.Meter\00.Player\02.HpHeal_Num</Filter>
+	</ClInclude>
+    <ClInclude Include="..\Codes\Circle_Floor.h">
+      <Filter>02.GameObject\02.Map\01.Environment\03.Circle_Floor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\1H_Multishlash.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\1H_Sword\Skill</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -3952,6 +3964,12 @@
     </ClCompile>
     <ClCompile Include="..\Codes\UI_HpHeal_Num.cpp">
       <Filter>02.GameObject\05.UI\01.UI_Ingame\01.Meter\00.Player\02.HpHeal_Num</Filter>
+	</ClCompile>
+    <ClCompile Include="..\Codes\Circle_Floor.cpp">
+      <Filter>02.GameObject\02.Map\01.Environment\03.Circle_Floor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\1H_Multishlash.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\1H_Sword\Skill</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

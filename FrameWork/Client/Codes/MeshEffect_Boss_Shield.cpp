@@ -14,7 +14,7 @@ CMeshEffect_Boss_Shield::CMeshEffect_Boss_Shield(const CMeshEffect_Boss_Shield& 
 }
 
 HRESULT CMeshEffect_Boss_Shield::NativeConstruct_Prototype()
-{
+{ 
 	if (FAILED(__super::NativeConstruct_Prototype()))
 		return E_FAIL;
 
@@ -137,18 +137,15 @@ HRESULT CMeshEffect_Boss_Shield::Render()
 
 HRESULT CMeshEffect_Boss_Shield::Ready_Components()
 {
-	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_Texture", L"MaskTexture", (CComponent**)&m_pMaskTexture)))
+	if (FAILED(m_pMaskTex->Change_Texture(L"T_ShieldPattern2")))
 		return E_FAIL;
-
-	m_pMaskTexture->Change_Texture(L"T_ShieldPattern2");
-	if (FAILED(m_pMaterial->Set_Texture("g_MaskTexture", TEXTURETYPE::TEX_MASK, m_pMaskTexture, 0)))
+	if (FAILED(m_pMaterial->Set_Texture("g_MaskTexture", TEXTURETYPE::TEX_MASK, m_pMaskTex, 0)))
 		return E_FAIL;
 
 	if (FAILED(m_pTexture->Change_Texture(L"T_ShieldPattern2")))
 		return E_FAIL;
 	if (FAILED(m_pMaterial->Set_Texture("g_DiffuseTexture", TEXTURETYPE::TEX_DIFFUSE, m_pTexture, 0)))
 		return E_FAIL;
-	Safe_AddRef(m_pTexture);
 
 
 	m_pModel = g_pGameInstance->Clone_Component<CModel>((_uint)SCENEID::SCENE_STATIC, L"Model_Sphere2");
@@ -183,5 +180,4 @@ CGameObject* CMeshEffect_Boss_Shield::Clone(const _uint _iSceneID, void* _pArg)
 void CMeshEffect_Boss_Shield::Free()
 {
 	__super::Free();
-	Safe_Release(m_pMaskTexture);
 }

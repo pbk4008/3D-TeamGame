@@ -77,9 +77,6 @@ HRESULT CStage3::NativeConstruct()
 
 	g_pGameInstance->Change_BaseCamera(L"Camera_Silvermane");
 
-	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE3, L"Layer_Test", L"Proto_GameObject_TestObject")))
-	//	return E_FAIL;
-
 	return S_OK;
 }
 
@@ -131,7 +128,6 @@ HRESULT CStage3::Render()
 {
 	_vector vPos = g_pObserver->Get_PlayerPos();
 	//cout << "현재 플레이어 위치 : " << XMVectorGetX(vPos) << ", " << XMVectorGetY(vPos) << ", " << XMVectorGetZ(vPos) << ", " << endl;
-	
 
 	return S_OK;
 }
@@ -260,6 +256,7 @@ HRESULT CStage3::Ready_Boss(const _tchar* LayerTag)
 {
 	_float3 vpos = { 48.f, 5.f, 146.f };
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE3, L"Layer_Boss", L"Proto_GameObject_Solaris"), &vpos))
+
 		return E_FAIL;
 	return S_OK;
 }
@@ -1069,7 +1066,6 @@ HRESULT CStage3::Ready_Data_Effect()
 
 #pragma endregion
 
-
 	//이펙트매니저 안들어가는거 
 	//Stage3 Env Respawn
 	vecFloatingUp.clear();
@@ -1095,6 +1091,7 @@ HRESULT CStage3::Ready_Data_Effect()
 		return E_FAIL;
 	pEffect->setActive(true);
 
+	return S_OK;
 }
 
 

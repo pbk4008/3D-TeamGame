@@ -37,8 +37,6 @@ _int CBoss_Attack_S2_Variant::Tick(const _double& TimeDelta)
 	 
 	//cout << iCurKeyFrameIndex << endl;
 
-	m_pMonster->RimlightCheck(true, _float3(1, 0, 0));
-
 	if (42 <= iCurKeyFrameIndex && 44 >= iCurKeyFrameIndex && false == m_bEffectCheck)
 	{
 		static_cast<CBoss_Solaris*>(m_pMonster)->OnEff_MeshEyeRazer(true);
@@ -92,6 +90,8 @@ HRESULT CBoss_Attack_S2_Variant::EnterState()
 	m_bShakeCheck = false;
 	m_bEffectCheck = false;
 
+	m_pMonster->RimlightCheck(true, _float3(0.1f, 0, 0), 6.f);
+
 	static_cast<CBoss_Solaris*>(m_pMonster)->OnEff_MeshEyeRazer(false);
 
 	static_cast<CBoss_Solaris*>(m_pMonster)->Set_HitMotion(false);
@@ -108,8 +108,6 @@ HRESULT CBoss_Attack_S2_Variant::ExitState()
 		return E_FAIL;
 
 	static_cast<CBoss_Solaris*>(m_pMonster)->OnEff_MeshEyeRazer(false);
-
-	m_pMonster->RimlightCheck(false);
 
 	m_bShakeCheck = false;
 	m_bEffectCheck = false;

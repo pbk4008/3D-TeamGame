@@ -37,6 +37,8 @@ private:
 public:
 	void Change_CurrentCam();
 public:
+	void Set_AnimSpeed(_float fSpeed) { m_fAnimSpeed = fSpeed; }
+public:
 	static CCinemaCam* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);
 	virtual CGameObject* Clone(const _uint iSceneID, void* pArg);
 private:
@@ -47,6 +49,7 @@ private:
 	CModel* m_pModel;
 	_uint m_iShortTag;
 	_float m_fFovAngle;
+	_float m_fAnimSpeed = 1.f;
 };
 END
 #endif

@@ -48,8 +48,6 @@ _int CBoss_Attack_R2::Tick(const _double& TimeDelta)
 		m_bEffectCheck = true;
 	}
 
-	m_pMonster->RimlightCheck(true, _float3(1, 0, 0));
-
 	if (39 <= iCurKeyFrameIndex && 42 >= iCurKeyFrameIndex && false == m_bShakeCheck)
 	{
 		m_pAnimator->Get_AnimController()->Set_PlaySpeed(1.f);
@@ -165,7 +163,7 @@ HRESULT CBoss_Attack_R2::EnterState()
 	static_cast<CBoss_Solaris*>(m_pMonster)->Set_HitMotion(false);
 
 	//림라이트
-	m_pMonster->RimlightCheck(true);
+	m_pMonster->RimlightCheck(true, _float3(0.1f, 0, 0), 6.f);
 
 	m_pAnimator->Get_AnimController()->Set_PlaySpeed(1.f);
 
@@ -178,8 +176,6 @@ HRESULT CBoss_Attack_R2::ExitState()
 {
 	if (FAILED(__super::ExitState()))
 		return E_FAIL;
-
-	m_pMonster->RimlightCheck(false);
 
 	m_bEffectCheck = false;
 

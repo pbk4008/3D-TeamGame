@@ -22,9 +22,6 @@ private:
 	HRESULT Ready_Components();
 
 private:
-	CTexture* m_pMaskTexture;
-
-private:
 	_bool m_bBeSmall = false; //한번커지고난뒤에 작아져야할때 
 
 public:

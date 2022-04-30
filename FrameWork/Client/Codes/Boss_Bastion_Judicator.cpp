@@ -86,6 +86,7 @@ HRESULT CBoss_Bastion_Judicator::NativeConstruct(const _uint _iSceneID, void* pA
 	m_pWeapon->setActive(false);
 	m_pPanel->setActive(false);
 	setActive(false);
+
 	return S_OK;
 }
 
@@ -99,11 +100,6 @@ _int CBoss_Bastion_Judicator::Tick(_double TimeDelta)
 	_matrix matPivot = XMMatrixIdentity();
 	matPivot = XMMatrixScaling(0.013f, 0.013f, 0.013f) * XMMatrixRotationY(XMConvertToRadians(180.f));
 	m_pModel->Set_PivotMatrix(matPivot);
-
-	if (m_rimcheck)
-	{
-		CActor::SetRimIntensity((_float)TimeDelta * -10.f);
-	}
 
 	if (0 >= m_fCurrentHp)
 	{
@@ -196,11 +192,12 @@ _int CBoss_Bastion_Judicator::Tick(_double TimeDelta)
 	{
 		if (L"Execution" == m_pStateController->Get_CurStateTag())
 		{
+			m_pPanel->Set_Show(false);
+			m_pPanel->Set_UIRemove(true);
+
 			if (m_pAnimator->Get_CurrentAnimation()->Is_Finished())
 			{
 				m_bDead = true;
-				m_pPanel->Set_Show(false);
-				m_pPanel->Set_UIRemove(true);
 				m_bdissolve = true;
 				return 0;
 			}
@@ -257,11 +254,13 @@ HRESULT CBoss_Bastion_Judicator::Render()
 
 	if (m_rimcheck == true)
 	{
+		CActor::RimIntensity(g_fDeltaTime * -1.f);
+
 		rimdesc.rimcheck = m_rimcheck;
 		rimdesc.rimcol = m_rimcol;
-		rimdesc.rimintensity = m_rimintensity; // intensity ³·À» ¼ö·Ï °úÇÏ°Ô ºû³²
+		rimdesc.rimintensity = 3.f; // intensity ³·À» ¼ö·Ï °úÇÏ°Ô ºû³²
 		XMStoreFloat4(&rimdesc.camdir, XMVector3Normalize(g_pGameInstance->Get_CamPosition(L"Camera_Silvermane") - m_pTransform->Get_State(CTransform::STATE_POSITION)));
-		CActor::SetRimIntensity(g_fDeltaTime * -10.f);
+		if (FAILED(m_pModel->SetUp_ValueOnShader("g_rimtimer", &m_rimtime, sizeof(_float)))) MSGBOX("Failed to Apply RimTime Value");
 	}
 
 
@@ -275,8 +274,9 @@ HRESULT CBoss_Bastion_Judicator::Render()
 		switch (i)
 		{
 		case 0 : case 3:  // body
-			desc.metalic = 0.3f;
-			desc.roughness = -0.1f;
+			desc.metalic = 0.5f;
+			desc.roughness = 0.f;
+			desc.ao = 0.5f;
 			desc.color = _float4(0.811f, 1.f, 0.898f, 1.f);
 			desc.empower = 0.7f;
 			CActor::BindConstantBuffer(wstrCamTag,&desc, &rimdesc);

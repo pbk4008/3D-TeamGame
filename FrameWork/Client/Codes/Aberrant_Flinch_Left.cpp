@@ -30,6 +30,14 @@ _int CAberrant_Flinch_Left::Tick(const _double& TimeDelta)
 
 	m_pAnimator->Tick(TimeDelta);
 
+
+	//_vector svTargetPos = g_pObserver->Get_PlayerPos();
+	//_vector svPos = m_pTransform->Get_State(CTransform::STATE_POSITION);
+
+	//_vector svDir = XMVector3Normalize(svPos - svTargetPos);
+
+	//m_pTransform->Add_Velocity(svDir * TimeDelta * 2.f);
+
 	if (m_pAnimator->Get_AnimController()->Is_Finished())
 	{
 		m_pStateController->Change_State(L"Run");

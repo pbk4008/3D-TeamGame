@@ -86,6 +86,7 @@ cbuffer Limlight
 	float	g_rimintensity = (float)0;
 	float3	g_rimcolor = (float3)0;
 	float4	g_camdir = (float4)0;
+	float	g_rimtimer = (float) 0;
 };
 
 cbuffer Motionblur

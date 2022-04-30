@@ -50,7 +50,6 @@ _int CSilvermane_Execution::Tick(const _double& _dDeltaTime)
 			pTargetTransform->Set_State(CTransform::STATE_UP, svUp);
 			pTargetTransform->Set_State(CTransform::STATE_LOOK, svLook);
 
-
 			m_fLerpTime += (_float)_dDeltaTime;
 			_float fRatio = m_fLerpTime / 1.f;
 			if (1.f < fRatio)

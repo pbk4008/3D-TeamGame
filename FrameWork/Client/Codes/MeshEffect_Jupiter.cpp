@@ -2,6 +2,7 @@
 #include "MeshEffect_Jupiter.h"
 
 #include "Material.h"
+#include "Light.h"
 
 CMeshEffect_Jupiter::CMeshEffect_Jupiter(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
 	: CMeshEffect(_pDevice, _pDeviceContext)
@@ -32,6 +33,22 @@ HRESULT CMeshEffect_Jupiter::NativeConstruct(_uint _iSceneID, void* _pArg)
 	{
 		DESC tDesc = *static_cast<DESC*>(_pArg);
 		m_pTransform->Set_State(CTransform::STATE_POSITION, XMVectorSetW(XMLoadFloat3(&tDesc.vPos), 1.f));
+
+		LIGHTDESC LightDesc;
+
+		ZeroMemory(&LightDesc, sizeof(LIGHTDESC));
+		LightDesc.eType = LIGHTDESC::TYPE_POINT;
+		LightDesc.fRange = 5.f;
+		LightDesc.vDiffuse = _float4(0.1686f, 02941.f, 0.60784f, 1.f);
+		LightDesc.vSpecular = _float4(0.5f, 0.5f, 0.5f, 1.f);
+		LightDesc.vAmbient = _float4(0.4f, 0.4f, 0.4f, 1.f);
+		LightDesc.bactive = true;
+		LightDesc.vPosition = tDesc.vPos;
+
+		if (FAILED(g_pGameInstance->Add_Light(m_pDevice, m_pDeviceContext, LightDesc, &m_pLight))) MSGBOX("Failed To Adding PointLight");
+
+		if (m_pLight == nullptr)
+			MSGBOX("Jupiter Light NULL");
 	}
 
 	if (FAILED(Ready_Components()))
@@ -39,11 +56,16 @@ HRESULT CMeshEffect_Jupiter::NativeConstruct(_uint _iSceneID, void* _pArg)
 
 	m_fAlpha = 1.f;
 	m_fFlowSpeedAlpha = 1.f;
+
 	return S_OK;
 }
 
 _int CMeshEffect_Jupiter::Tick(_double _dDeltaTime)
 {
+
+	m_pLight->Set_Color(XMVectorSet(0.f, 0.2862f, 0.5490f, 1.f));
+	m_pLight->Set_Range(10.f);
+	m_pLight->Set_Ambient(_float4(0.8f, 0.8f, 0.8f, 1.f));
 	_int iProcess = __super::Tick(_dDeltaTime);
 	if (NO_EVENT != iProcess)
 		return iProcess;

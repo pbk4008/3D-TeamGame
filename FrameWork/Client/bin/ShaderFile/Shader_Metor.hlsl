@@ -141,7 +141,7 @@ PS_OUT PS_MAIN(PS_IN In)
 	Out.mra.a = 1.f;
 	
 	half4 tmp = half4(Out.normal.rgb * 2.f - 1.f, 0.f);
-	float4 rim = RimLighting(tmp, g_camdir, g_rimintensity, g_rimcolor);
+	float4 rim = RimLighting(tmp, g_camdir, g_rimintensity, g_rimcolor,g_rimtimer);
 	Out.emission = g_color * g_empower;
 	Out.emission += rim;
 

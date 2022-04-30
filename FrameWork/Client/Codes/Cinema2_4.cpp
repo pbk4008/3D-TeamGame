@@ -2,6 +2,7 @@
 #include "Cinema2_4.h"
 #include "CinemaCam.h"
 #include "CinemaActor.h"
+#include "CinemaWeapon.h"
 #include "ScenematicManager.h"
 
 CCinema2_4::CCinema2_4()
@@ -37,6 +38,10 @@ HRESULT CCinema2_4::NativeContruct(_uint iSceneID)
 	m_pCam->Set_CameraMatrix(matPivot);
 	m_pCam->Set_Fov(XMConvertToRadians(30.f));
 
+	m_pMidWeapon->Set_FixedBone(m_pMidBoss->Get_Bone("weapon_r"));
+	m_pMidWeapon->Set_OwnerPivotMatrix(m_pMidBoss->Get_Pivot());
+	m_pMidWeapon->set_OwerMatrix(m_pMidBoss->Get_Transform()->Get_WorldMatrix());
+
 	return S_OK;
 }
 
@@ -46,8 +51,20 @@ _int CCinema2_4::Tick(_double dDeltaTime)
 	if (iProgress == 1)
 		return 0;
 
+	m_pCam->Set_Fov(XMConvertToRadians(33.4f));
+	_matrix matPivot = XMMatrixTranslation(-172.9f, 52.2f, 411.1f);
+	m_pCam->Set_CameraMatrix(matPivot);
+
+	CTransform* pBossTr = m_pMidBoss->Get_Transform();
+	pBossTr->Set_State(CTransform::STATE_POSITION, XMVectorSet(-172.7f, 52.2f, 410.8f, 1.f));;
+	pBossTr->SetUp_Rotation(XMVectorSet(0.f, 1.f, 0.f, 0.f), XMConvertToRadians(230.f));
+
+
+	m_pMidWeapon->set_OwerMatrix(m_pMidBoss->Get_Transform()->Get_WorldMatrix());
+
 	m_pMidBoss->Tick(dDeltaTime);
 	m_pCam->Tick(dDeltaTime);
+	m_pMidWeapon->Tick(dDeltaTime);
 
 	return _int();
 }
@@ -63,7 +80,8 @@ _int CCinema2_4::LateTick(_double dDeltaTime)
 		return 0;
 	}
 	m_pMidBoss->LateTick(dDeltaTime);
-
+	m_pCam->LateTick(dDeltaTime);
+	m_pMidWeapon->LateTick(dDeltaTime);
 	
 
 	return _int();
@@ -75,6 +93,8 @@ void CCinema2_4::Set_Active(_bool bCheck)
 	m_bActorAnimOn = false;
 	m_pMidBoss->Actor_AnimReset();
 	m_pCam->Reset_Camera();
+	m_pMidBoss->AnimSpeed(1.f);;
+	m_pCam->Set_AnimSpeed(0.55f);
 	if (m_bActive)
 		m_pCam->Change_CurrentCam();
 }
@@ -107,6 +127,8 @@ HRESULT CCinema2_4::Ready_Components()
 
 	if (FAILED(Ready_Actor(&m_pMidBoss, (_uint)CINEMA_ACTOR::ACTOR_MIDBOSS)))
 		return E_FAIL;
+	if (FAILED(Ready_Weapon(&m_pMidWeapon, 2)))
+		return E_FAIL;
 
 	return S_OK;
 }
@@ -127,4 +149,5 @@ void CCinema2_4::Free()
 	CScenematic::Free();
 	Safe_Release(m_pCam);
 	Safe_Release(m_pMidBoss);
+	Safe_Release(m_pMidWeapon);
 }

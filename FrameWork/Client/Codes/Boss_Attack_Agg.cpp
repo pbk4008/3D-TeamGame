@@ -36,11 +36,13 @@ _int CBoss_Attack_Agg::Tick(const _double& TimeDelta)
 	_uint iCurKeyFrameIndex = m_pAnimator->Get_AnimController()->Get_CurKeyFrameIndex();
 	//cout << iCurKeyFrameIndex << endl;
 
-	m_pMonster->RimlightCheck(true, _float3(1, 0, 0));
-
 	_vector BossPos = m_pMonster->Get_Transform()->Get_State(CTransform::STATE_POSITION);
 	_vector BossLook = XMVector3Normalize(m_pMonster->Get_Transform()->Get_State(CTransform::STATE_LOOK));
 	_vector BossRight = XMVector3Normalize(m_pMonster->Get_Transform()->Get_State(CTransform::STATE_RIGHT));
+
+	_vector svPos = m_pTransform->Get_State(CTransform::STATE_POSITION);
+	_vector svLook = XMVector3Normalize(m_pTransform->Get_State(CTransform::STATE_LOOK));
+	_vector svRight = XMVector3Normalize(m_pTransform->Get_State(CTransform::STATE_RIGHT));
 
 	if(52 <= iCurKeyFrameIndex && 70 >= iCurKeyFrameIndex)
 	{ 
@@ -134,7 +136,7 @@ HRESULT CBoss_Attack_Agg::EnterState()
 	m_bEffectCheck = false;
 
 	//림라이트
-	m_pMonster->RimlightCheck(true);
+	m_pMonster->RimlightCheck(true, _float3(0.1f, 0, 0), 6.f);
 
 	m_pAnimator->Get_AnimController()->Set_PlaySpeed(1.f);
  	m_pAnimator->Change_AnyEntryAnimation((_uint)CBoss_Solaris::M_BossAnimState::ATTACK_AGG_SPIN_360);
@@ -148,7 +150,6 @@ HRESULT CBoss_Attack_Agg::ExitState()
 		return E_FAIL;
 
 	CBoss_Solaris* m_pMonster = (CBoss_Solaris*)m_pStateController->Get_GameObject();
-	m_pMonster->RimlightCheck(false);
 
 	m_bEffectCheck = false;
 

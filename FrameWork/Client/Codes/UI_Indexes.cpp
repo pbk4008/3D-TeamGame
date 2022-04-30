@@ -178,24 +178,30 @@ void CUI_Indexes::MenuAllOff(void)
 
 _bool CUI_Indexes::Click_Equipment(void)
 {
-	if (m_pEquipmentBtn->ButtonClicked())
+	if (false == m_bClickEquipment) /* 클릭 중복 이벤트 방지 */
 	{
-		m_pIndexIndicator->SetInitEquipXPos(-550.f);
-		m_bClickEquipment = true;
-		m_bClickArmory = false;
-		return true;
+		if (m_pEquipmentBtn->ButtonClicked())
+		{
+			m_pIndexIndicator->SetInitEquipXPos(-550.f);
+			m_bClickEquipment = true;
+			m_bClickArmory = false;
+			return true;
+		}
 	}
 	return false;
 }
 
 _bool CUI_Indexes::Click_Armory(void)
 {
-	if (m_pArmoryBtn->ButtonClicked())
+	if (false == m_bClickArmory) /* 클릭 중복 이벤트 방지 */
 	{
-		m_pIndexIndicator->SetInitArmoryXPos(-450.f);
-		m_bClickEquipment = false;
-		m_bClickArmory = true;
-		return true;
+		if (m_pArmoryBtn->ButtonClicked())
+		{
+			m_pIndexIndicator->SetInitArmoryXPos(-450.f);
+			m_bClickEquipment = false;
+			m_bClickArmory = true;
+			return true;
+		}
 	}
 	return false;
 }

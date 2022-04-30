@@ -58,6 +58,9 @@ HRESULT C1H_SwordAttackNormalR2_Start::EnterState()
 	if (FAILED(__super::EnterState()))
 		return E_FAIL;
 
+	m_pSilvermane->RimlightCheck(true, _float3(0.5f, 0, 0), 3.f);
+	m_pSilvermane->Get_CurerntWeapon()->RimlightCheck(true, _float3(0.5f, 0, 0), 3.f);
+
 	g_pGameInstance->StopSound(CSoundMgr::CHANNELID::Player_Sword_Attack);
 	g_pGameInstance->Play_Shot(L"Needle_Attack_R_P1", CSoundMgr::CHANNELID::Player_Sword_Attack);
 
@@ -74,8 +77,6 @@ HRESULT C1H_SwordAttackNormalR2_Start::EnterState()
 	m_pSilvermane->Set_IsTrasceCamera(false);
 	m_pSilvermane->Set_IsAttack(true);
 
-	m_pSilvermane->RimlightCheck(true,_float3(1,0,0));
-	m_pSilvermane->Get_CurerntWeapon()->RimlightCheck(true);
 
 	return S_OK;
 }

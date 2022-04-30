@@ -37,8 +37,6 @@ _int CBoss_Attack_S3::Tick(const _double& TimeDelta)
 	 
 	//cout << iCurKeyFrameIndex << endl;
 
-	m_pMonster->RimlightCheck(true, _float3(1, 0, 0));
-
 	if (39 <= iCurKeyFrameIndex && 42 >= iCurKeyFrameIndex && false == m_bShakeCheck)
 	{
 		//쉐이킹 & 이펙트 //이펙트한테서 생성해줘야할듯 
@@ -150,7 +148,7 @@ HRESULT CBoss_Attack_S3::EnterState()
 	static_cast<CBoss_Solaris*>(m_pMonster)->Set_HitMotion(false);
 
 	//림라이트
-	m_pMonster->RimlightCheck(true);
+	m_pMonster->RimlightCheck(true, _float3(0.1f, 0, 0), 6.f);
 
 	m_pAnimator->Get_AnimController()->Set_PlaySpeed(1.f);
 
@@ -165,7 +163,6 @@ HRESULT CBoss_Attack_S3::ExitState()
 		return E_FAIL;
 
 	CBoss_Solaris* m_pMonster = (CBoss_Solaris*)m_pStateController->Get_GameObject();
-	m_pMonster->RimlightCheck(false);
 
 	m_bEffectCheck = false;
 
