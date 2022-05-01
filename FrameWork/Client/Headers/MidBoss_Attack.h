@@ -41,7 +41,7 @@ private:
 
 
 private:
-	_uint m_iAttackR1_H = 25;
+	_uint m_iAttackR1_H = 32;
 
 	_uint m_iAttackR1_1 = 54;
 	_uint m_iAttackR1_2 = 105;
@@ -61,6 +61,13 @@ private:
 	_uint m_iAttackLegacy_3 = 30;
 
 	_bool m_bAttackTypeFar = false;
+	_bool m_bEffectCheck2 = false;
+	_bool m_bExplosion = false;
+	_bool m_bEnergy = false;
+
+	_bool m_bSideAttack1 = false;
+	_bool m_bSideAttack2 = false;
+
 
 	//사운드 1번 재생하려고
 	_bool m_bAttackR1_H = false;

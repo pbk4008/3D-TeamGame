@@ -85,11 +85,10 @@ HRESULT CBoss_Solaris::NativeConstruct(const _uint _iSceneID, void* pArg)
 	m_fMaxHp = 500.f;
 	m_fCurrentHp = m_fMaxHp;
 
-	m_fMaxGroggyGauge = 50.f;
+	m_fMaxGroggyGauge = 500.f;
 	m_fGroggyGauge = m_fMaxGroggyGauge;
 
 	m_tAttackDesc.iLevel = 3;
-
 
 	m_pWeapon->setActive(true);
 	setActive(true);
@@ -145,15 +144,17 @@ _int CBoss_Solaris::Tick(_double TimeDelta)
 	_vector vDist = vMonsterPos - g_pObserver->Get_PlayerPos();
 	_float fDistToPlayer = XMVectorGetX(XMVector3Length(vDist));
 
-	if (0 == m_fGroggyGauge)
+	if (0.f >= m_fGroggyGauge && 0.32f <= Get_HpRatio())
 	{
 		//스턴상태일때 스턴state에서 현재 그로기 계속 0으로 고정시켜줌
 		m_bGroggy = true;
 		m_pStateController->Change_State(L"Stun");
 	}
 	
-	if (true == m_bGroggy || true == m_bDead )
+	if (0.33f >= Get_HpRatio() && false == m_bFillShield)
 	{
+		//일정체력이상닳면 다시 실드채워줌 
+		m_bFillShield = true;
 		m_fGroggyGauge = m_fMaxGroggyGauge;
 	}
 
@@ -306,7 +307,7 @@ HRESULT CBoss_Solaris::SetUp_Components()
 
 	_matrix matPivot = XMMatrixIdentity();
 
-	matPivot = XMMatrixScaling(0.012f, 0.012f, 0.012f) * XMMatrixRotationY(XMConvertToRadians(180.f));
+	matPivot = XMMatrixScaling(0.011f, 0.011f, 0.011f) * XMMatrixRotationY(XMConvertToRadians(180.f));
 	m_pModel->Set_PivotMatrix(matPivot);
 
 	CAnimator::ANIMATORDESC tDesc;
@@ -721,12 +722,23 @@ void CBoss_Solaris::Hit(const ATTACKDESC& _tAttackDesc)
 	if (m_bDead || 0.f >= m_fCurrentHp)
 		return;
 
-	m_fCurrentHp -= _tAttackDesc.fDamage;
-	
-	if (!m_bGroggy)
+	if (0 < m_fGroggyGauge)
+	{
+		//실드게이지가있을때는 실드게이지를 깎고 
+		m_fGroggyGauge -= _tAttackDesc.fDamage;
+	}
+
+	else if (0 >= m_fGroggyGauge)
+	{
+		//실드게이지가 모두 닳았을때는 피를 깎아줌 
+		m_fCurrentHp -= _tAttackDesc.fDamage;
+	}
+
+	if (!m_bGroggy && ATTACK_AGG_SPIN_360 != m_pAnimator->Get_CurrentAnimNode()
+		&& ATTACK_R1 != m_pAnimator->Get_CurrentAnimNode() && ATTACK_R2 != m_pAnimator->Get_CurrentAnimNode() && ATTACK_S3 != m_pAnimator->Get_CurrentAnimNode()
+		&& ATTACK_S2_VARIANT != m_pAnimator->Get_CurrentAnimNode() && ATTACK_S5_SKEWER_PROTOCOL != m_pAnimator->Get_CurrentAnimNode())
 	{
 		++m_iHitCount;
-		m_fGroggyGauge -= 2; //TODO::수치정해서바꿔줘야됨
 	}
 
 	if (m_bHitMotion)
@@ -755,8 +767,8 @@ void CBoss_Solaris::Hit(const ATTACKDESC& _tAttackDesc)
 		}
 	}
 
-	if (3 <= m_iHitCount && ATTACK_S6 != m_pAnimator->Get_CurrentAnimNode() && STUN_END != m_pAnimator->Get_CurrentAnimNode()
-		&& STUN_START != m_pAnimator->Get_CurrentAnimNode() && STUN_LOOP != m_pAnimator->Get_CurrentAnimNode())
+	if (3 <= m_iHitCount && ATTACK_S6 != m_pAnimator->Get_CurrentAnimNode()  
+		&& STUN_END != m_pAnimator->Get_CurrentAnimNode() && STUN_START != m_pAnimator->Get_CurrentAnimNode() && STUN_LOOP != m_pAnimator->Get_CurrentAnimNode())
 	{
 		uniform_int_distribution<_uint> iRange(0, 1);
 		_uint iRandom = iRange(g_random);
@@ -806,7 +818,7 @@ void CBoss_Solaris::Set_Random_AttackAnim()
 	_float fDistToPlayer = XMVectorGetX(XMVector3Length(vDist));
 
 	cout << fDistToPlayer << endl;
-	if (0.6f < Get_HpRatio())
+	if (0.66f < Get_HpRatio())
 	{
 		//레이저없음
 		if (8.f > fDistToPlayer)
@@ -842,11 +854,11 @@ void CBoss_Solaris::Set_Random_AttackAnim()
 			m_pStateController->Change_State(L"Attack_S5_Protocol");
 		}
 	}
-	else if (0.6f >= Get_HpRatio())
+	else if (0.66f >= Get_HpRatio())
 	{
 		if (8.f > fDistToPlayer)
 		{
-			uniform_int_distribution<_uint> iRange(0, 3);
+			uniform_int_distribution<_uint> iRange(0, 4);
 			_uint iRandom = iRange(g_random);
 
 			while (iRandom == m_iPreAnim)
@@ -868,12 +880,15 @@ void CBoss_Solaris::Set_Random_AttackAnim()
 			case 3:
 				m_pStateController->Change_State(L"Attack_S2_Variant");
 				break;
+			case 4:
+				m_pStateController->Change_State(L"Attack_S6");
+				break;
 			}
 			m_iPreAnim = iRandom;
 		}
 		if (8.f <= fDistToPlayer)
 		{
-			uniform_int_distribution<_uint> iRange(0, 2);
+			uniform_int_distribution<_uint> iRange(0, 3);
 			_uint iRandom = iRange(g_random);
 
 			while (iRandom == m_iPreAnim)
@@ -887,15 +902,19 @@ void CBoss_Solaris::Set_Random_AttackAnim()
 				m_pStateController->Change_State(L"Attack_S5_Protocol");
 				break;
 			case 1:
-				m_pStateController->Change_State(L"Attack_S6");
+				m_pStateController->Change_State(L"Attack_S2_Variant");
 				break;
 			case 2:
 				m_pStateController->Change_State(L"Attack_R1");
+				break;
+			case 3:
+				m_pStateController->Change_State(L"Attack_S2_Variant");
 				break;
 			}
 			m_iPreAnim = iRandom;
 		}
 	}
+
 }
 
 void CBoss_Solaris::OnEff_MeshExplosion(_bool Active)

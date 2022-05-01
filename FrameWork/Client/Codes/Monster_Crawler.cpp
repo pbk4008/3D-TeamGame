@@ -260,7 +260,7 @@ void CMonster_Crawler::Hit(const ATTACKDESC& _tAttackDesc)
 	if (m_bDead || 0.f >= m_fCurrentHp)
 		return;
 
-	//m_pPanel->Set_Show(true);
+	m_pPanel->Set_Show(true);
 
 	if (false == m_bFirstHit)
 	{

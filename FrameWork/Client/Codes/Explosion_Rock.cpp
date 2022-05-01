@@ -51,9 +51,9 @@ _int CExplosion_Rock::Tick(_double _dDeltaTime)
 {
 	m_pAnimModel->Update_CombinedTransformationMatrix(_dDeltaTime * 5.f);
 	_matrix matScale = XMMatrixIdentity();
-	if ((_uint)SCENEID::SCENE_STAGE3 == g_pGameInstance->getCurrentLevel() || (_uint)SCENEID::SCENE_TEST_JS == g_pGameInstance->getCurrentLevel())
+	if ((_uint)SCENEID::SCENE_STAGE3 == g_pGameInstance->getCurrentLevel())
 	{
-		matScale = XMMatrixScaling(0.0007f, 0.0007f, 0.0007f);
+		matScale = XMMatrixScaling(0.001f, 0.001f, 0.001f);
 	}
 	else
 	{

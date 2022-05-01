@@ -146,13 +146,15 @@ _int CBoss_Attack_R1::Tick(const _double& TimeDelta)
 
 			//Rock
 			_matrix matPos = m_pTransform->Get_WorldMatrix();
-			matPos.r[3] = XMVectorSetY(matPos.r[3], XMVectorGetY(matPos.r[3]) + 2.f);
+			matPos.r[3] = XMVectorSetY(matPos.r[3], XMVectorGetY(matPos.r[3]) + 2.5f);
+			m_pMonster->Active_Effect_Target((_uint)EFFECT::EXPLOSION_ROCK_LEFT, matPos);
+			matPos.r[3] = XMVectorSetY(matPos.r[3], XMVectorGetY(matPos.r[3]) + 1.5f);
 			m_pMonster->Active_Effect_Target((_uint)EFFECT::EXPLOSION_ROCK_LEFT, matPos);
 
 			//Smoke
 			_matrix mat = m_pMonster->Get_Transform()->Get_WorldMatrix();
 			mat = XMMatrixRotationY(XMConvertToRadians(45.f))
-				* XMMatrixTranslation(XMVectorGetX(BossRight) * -1.f, 0.f, 0.f) * mat;
+				* XMMatrixTranslation(XMVectorGetX(BossRight) * 3.3f, 0.f, 3.f) * mat;
 			m_pMonster->Active_Effect_Target((_uint)EFFECT::BOSS_SIDE_ATTACK_SMOKE, mat);
 			m_pMonster->Active_Effect_Target((_uint)EFFECT::BOSS_SIDE_ATTACK, mat);
 
@@ -182,13 +184,15 @@ _int CBoss_Attack_R1::Tick(const _double& TimeDelta)
 
 			//Rock
 			_matrix matPos = m_pTransform->Get_WorldMatrix();
-			matPos.r[3] = XMVectorSetY(matPos.r[3], XMVectorGetY(matPos.r[3]) + 2.f);
+			matPos.r[3] = XMVectorSetY(matPos.r[3], XMVectorGetY(matPos.r[3]) + 2.5f);
+			m_pMonster->Active_Effect_Target((_uint)EFFECT::EXPLOSION_ROCK_RIGHT, matPos);
+			matPos.r[3] = XMVectorSetY(matPos.r[3], XMVectorGetY(matPos.r[3]) + 1.5f);
 			m_pMonster->Active_Effect_Target((_uint)EFFECT::EXPLOSION_ROCK_RIGHT, matPos);
 
 			//Smoke
 			_matrix mat = m_pMonster->Get_Transform()->Get_WorldMatrix();
 			mat = XMMatrixRotationY(XMConvertToRadians(-70.f))
-				* XMMatrixTranslation(XMVectorGetX(BossRight) * 1.f, 0.f, 0.f) * mat;
+				* XMMatrixTranslation(XMVectorGetX(BossRight) * -3.3f, 0.f, 3.f) * mat;
 			m_pMonster->Active_Effect_Target((_uint)EFFECT::BOSS_SIDE_ATTACK_SMOKE, mat);
 			m_pMonster->Active_Effect_Target((_uint)EFFECT::BOSS_SIDE_ATTACK, mat);
 

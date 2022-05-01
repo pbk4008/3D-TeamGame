@@ -61,7 +61,7 @@ public:
 	void OnEff_MeshShield(_bool Active);
 	void OnEff_MeshEyeRazer(_bool Active);
 	void Set_RazerAngle(_bool Check);
-	
+
 private:
 	CAnimator* m_pAnimator = nullptr;
 	CStateController* m_pStateController = nullptr;
@@ -82,6 +82,8 @@ private:
 	_uint m_iPreAnim = 0;
 
 	_bool m_bFirstAnim = false;
+
+	_bool m_bFillShield = false;
 
 private:
 	_bool	m_bIsFall = false;

@@ -425,7 +425,10 @@ call Update_Client.bat</Command>
     <ClInclude Include="..\Headers\Quest.h" />
     <ClInclude Include="..\Headers\QuestManager.h" />
     <ClInclude Include="..\Headers\Silvermane_Bow.h" />
+    <ClInclude Include="..\Headers\UI_Bar_Mark.h" />
     <ClInclude Include="..\Headers\UI_Blank_FKey.h" />
+    <ClInclude Include="..\Headers\UI_Boss_HpBar_Red.h" />
+    <ClInclude Include="..\Headers\UI_Boss_ShieldBar_Blue.h" />
     <ClInclude Include="..\Headers\UI_EquippedWeapon.h" />
     <ClInclude Include="..\Headers\UI_EquippedWeapon_Slot_1.h" />
     <ClInclude Include="..\Headers\UI_EquippedWeapon_Slot_2.h" />
@@ -883,7 +886,10 @@ call Update_Client.bat</Command>
     <ClCompile Include="..\Codes\Quest.cpp" />
     <ClCompile Include="..\Codes\QuestManager.cpp" />
     <ClCompile Include="..\Codes\Silvermane_Bow.cpp" />
+    <ClCompile Include="..\Codes\UI_Bar_Mark.cpp" />
     <ClCompile Include="..\Codes\UI_Blank_FKey.cpp" />
+    <ClCompile Include="..\Codes\UI_Boss_HpBar_Red.cpp" />
+    <ClCompile Include="..\Codes\UI_Boss_ShieldBar_Blue.cpp" />
     <ClCompile Include="..\Codes\UI_EquippedWeapon.cpp" />
     <ClCompile Include="..\Codes\UI_EquippedWeapon_Slot_1.cpp" />
     <ClCompile Include="..\Codes\UI_EquippedWeapon_Slot_2.cpp" />

@@ -66,10 +66,10 @@ _int CBoss_Attack_Agg::Tick(const _double& TimeDelta)
 
 			_matrix mat = m_pMonster->Get_Transform()->Get_WorldMatrix();
 			mat = XMMatrixRotationY(XMConvertToRadians(45.f))
-				* XMMatrixTranslation(XMVectorGetX(BossRight) * -1.f , 0.f, 0.f) * mat;
+				* XMMatrixTranslation(XMVectorGetX(BossRight) * 3.3f , 0.f, 3.f) * mat;
 			m_pMonster->Active_Effect_Target((_uint)EFFECT::BOSS_SIDE_ATTACK_SMOKE, mat);
 			m_pMonster->Active_Effect_Target((_uint)EFFECT::BOSS_SIDE_ATTACK, mat);
-			m_pMonster->Active_Effect((_uint)EFFECT::EXPLOSION_ROCK_RIGHT);
+			m_pMonster->Active_Effect((_uint)EFFECT::EXPLOSION_ROCK_RIGHT, XMVectorSet(0.f, 2.f, 0.f, 0.f));
 			m_bShakeCheck = true;
 		}
 		m_pMonster->Set_IsAttack(true);

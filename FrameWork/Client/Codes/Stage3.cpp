@@ -26,6 +26,8 @@
 #include "UI_Fill_CKey.h"
 #include "UI_HpHeal_Num.h"
 #include "UI_Shield_Meter.h"
+#include "UI_Boss_HpBar_Red.h"
+#include "UI_Boss_ShieldBar_Blue.h"
 
 #include "Effect_FloatingUp.h"
 #include "Effect_Dead_Spray.h"
@@ -314,6 +316,29 @@ HRESULT CStage3::Ready_UI(const _tchar* LayerTag)
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE3, LayerTag, L"Proto_GameObject_UI_Shield_Meter", &Desc1)))
 		return E_FAIL;
 
+	//Boss HpBar Red
+	CUI_Boss_HpBar_Red::UIDESC Desc2;
+	_tcscpy_s(Desc2.TextureTag, L"Texture_Boss_HpBar_Red");
+	Desc2.bMinus = false;
+	Desc2.fAngle = 0.46f;
+	Desc2.fPos = { 625.f, 40.f, 0.08f };
+	Desc2.fSize = { 356.f , 14.f };
+	Desc2.IDTag = (_uint)GAMEOBJECT::UI_DYNAMIC;
+
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE3, L"Layer_UI_Boss_HpBar", L"Proto_GameObject_UI_Boss_HpBar_Red", &Desc2)))
+		return E_FAIL;
+
+	//Boss ShieldBar Blue
+	_tcscpy_s(Desc2.TextureTag, L"Texture_Boss_ShieldBar_Blue");
+	Desc2.bMinus = false;
+	Desc2.fAngle = 0.46f;
+	Desc2.fPos = { 640.f, 55.f, 0.08f };
+	Desc2.fSize = { 356.f , 14.f };
+	Desc2.IDTag = (_uint)GAMEOBJECT::UI_DYNAMIC;
+
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE3, L"Layer_UI_Boss_ShieldBar", L"Proto_GameObject_UI_Boss_ShieldBar_Blue", &Desc2)))
+		return E_FAIL;
+
 	return S_OK;
 }
 
@@ -335,6 +360,21 @@ HRESULT CStage3::Ready_Data_UI(const _tchar* pDataFilePath)
 		}
 	}
 
+	//º¸½º ui
+	vecUI.clear();
+	g_pGameInstance->LoadFile<CUI::UIDESC>(vecUI, L"../bin/SaveData/UI/UI_Boss.dat");
+
+	for (int i = 0; i < vecUI.size(); ++i)
+	{
+		wstring Tag = vecUI[i].TextureTag;
+		wstring FullName = L"Proto_GameObject_UI_" + Tag;
+
+		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE3, L"Layer_UI", FullName, &vecUI[i])))
+		{
+			MSGBOX("Failed to Creating in CStage1::Ready_UI()");
+			return E_FAIL;
+		}
+	}
 	return S_OK;
 }
 
