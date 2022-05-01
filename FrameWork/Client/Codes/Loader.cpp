@@ -75,6 +75,9 @@
 #include "UI_Monster_Name.h"
 //#include "UI_Tuto_Base.h"
 //#include "UI_Tuto_Font.h"
+#include "UI_Skill_Meter_Back.h"
+#include "UI_Skill_Meter_Gauge.h"
+#include "UI_Skill_Meter_Gauge_Right.h"
 #include "UI_Shield_Meter.h"
 #include "UI_Blank_CKey.h"
 #include "UI_Blank_FKey.h"
@@ -510,7 +513,37 @@ HRESULT CLoader::Load_Stage1UILoad()
 		return E_FAIL;
 	}
 
+	//PlayerSkill Meter Back
+	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_UI_Player_Skill_Meter_Back"), CUI_Skill_Meter_Back::Create(m_pDevice, m_pDeviceContext))))
+	{
+		return E_FAIL;
+	}
+	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"Texture_Skill_Meter_Back", L"../bin/Resources/Texture/UI/Dynamic/Active/T_HUD_WeaponArt_Meter_BG.dds")))
+	{
+		return E_FAIL;
+	}
 	
+	//PlayerSkill Meter Gauge //노란색 왼쪽
+	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_UI_Player_Skill_Meter_Gauge"), CUI_Skill_Meter_Gauge::Create(m_pDevice, m_pDeviceContext))))
+	{
+		return E_FAIL;
+	}
+	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"Texture_Skill_Meter_Gauge_Full", L"../bin/Resources/Texture/UI/Dynamic/Active/T_HUD_WeaponArt_Meter_Full.dds")))
+	{
+		return E_FAIL;
+	}
+
+	//PlayerSkill Meter Gauge Right //주황색 오른쪽 
+	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_UI_Player_Skill_Meter_Gauge_Right"), CUI_Skill_Meter_Gauge_Right::Create(m_pDevice, m_pDeviceContext))))
+	{
+		return E_FAIL;
+	}
+	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"Texture_Skill_Meter_Gauge_Fill", L"../bin/Resources/Texture/UI/Dynamic/Active/T_HUD_WeaponArt_Meter_Fill.dds")))
+	{
+		return E_FAIL;
+	}
+	
+
 	//MonsterHpBar
 	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_UI_Monster_HpBar"), CUI_Monster_HpBar::Create(m_pDevice, m_pDeviceContext))))
 	{
@@ -1124,6 +1157,8 @@ HRESULT CLoader::Load_Stage3_Object()
 	if (FAILED(Load_TrailEffects())) //소드
 		return E_FAIL;
 	if (FAILED(Load_MeshEffects())) //매쉬
+		return E_FAIL;
+	if (FAILED(Load_StaticEffects()))
 		return E_FAIL;
 #pragma endregion
 
@@ -1957,7 +1992,7 @@ HRESULT CLoader::Ready_Test_JS()
 	if (FAILED(Load_Stage1EffectLoad()))
 		return E_FAIL;
 
-
+	
 	///////////////////////////////////////// 소드 트레일
 	if (FAILED(Load_TrailEffects()))
 		return E_FAIL;

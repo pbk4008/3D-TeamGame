@@ -28,6 +28,9 @@
 #include "UI_Shield_Meter.h"
 #include "UI_Boss_HpBar_Red.h"
 #include "UI_Boss_ShieldBar_Blue.h"
+#include "UI_Skill_Meter_Back.h"
+#include "UI_Skill_Meter_Gauge.h"
+#include "UI_Skill_Meter_Gauge_Right.h"
 
 #include "Effect_FloatingUp.h"
 #include "Effect_Dead_Spray.h"
@@ -311,6 +314,51 @@ HRESULT CStage3::Ready_UI(const _tchar* LayerTag)
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE3, LayerTag, L"Proto_GameObject_UI_Shield_Meter", &Desc1)))
 		return E_FAIL;
 
+	//Player Skill_Meter_Back
+	CUI_Skill_Meter_Back::UIDESC DescBack;
+	_tcscpy_s(DescBack.TextureTag, L"Texture_Skill_Meter_Back");
+	DescBack.bMinus = false;
+	DescBack.fAngle = 0.3f;
+	DescBack.fPos = { 1002.f, 557.f, 0.1f };
+	DescBack.fSize = { 85.f , 13.f };
+	DescBack.IDTag = (_uint)GAMEOBJECT::UI_DYNAMIC;
+
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE3, L"Layer_UI_Skill_Meter_Back", L"Proto_GameObject_UI_Player_Skill_Meter_Back", &DescBack)))
+		return E_FAIL;
+
+	//Player Skill_Meter_Back2
+	_tcscpy_s(DescBack.TextureTag, L"Texture_Skill_Meter_Back");
+	DescBack.bMinus = false;
+	DescBack.fAngle = 0.3f;
+	DescBack.fPos = { 1096.f, 557.f, 0.1f };
+	DescBack.fSize = { 85.f , 13.f };
+	DescBack.IDTag = (_uint)GAMEOBJECT::UI_DYNAMIC;
+
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE3, L"Layer_UI_Skill_Meter_Back2", L"Proto_GameObject_UI_Player_Skill_Meter_Back", &DescBack)))
+		return E_FAIL;
+
+	//Player Skill_Meter_Gauge
+	_tcscpy_s(DescBack.TextureTag, L"Texture_Skill_Meter_Gauge_Full");
+	DescBack.bMinus = false;
+	DescBack.fAngle = 0.3f;
+	DescBack.fPos = { 1000.f, 555.f, 0.08f };
+	DescBack.fSize = { 85.f , 13.f };
+	DescBack.IDTag = (_uint)GAMEOBJECT::UI_DYNAMIC;
+
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE3, L"Layer_UI_Skill_Meter_Gauge_Full", L"Proto_GameObject_UI_Player_Skill_Meter_Gauge", &DescBack)))
+		return E_FAIL;
+
+	//Player Skill_Meter_Gauge
+	_tcscpy_s(DescBack.TextureTag, L"Texture_Skill_Meter_Gauge_Fill");
+	DescBack.bMinus = false;
+	DescBack.fAngle = 0.3f;
+	DescBack.fPos = { 1095.f, 556.f, 0.08f };
+	DescBack.fSize = { 85.f , 13.f };
+	DescBack.IDTag = (_uint)GAMEOBJECT::UI_DYNAMIC;
+
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE3, L"Layer_UI_Skill_Meter_Gauge_Fill", L"Proto_GameObject_UI_Player_Skill_Meter_Gauge_Right", &DescBack)))
+		return E_FAIL;
+
 	//Boss HpBar Red
 	CUI_Boss_HpBar_Red::UIDESC Desc2;
 	_tcscpy_s(Desc2.TextureTag, L"Texture_Boss_HpBar_Red");
@@ -411,7 +459,6 @@ HRESULT CStage3::Ready_Light()
 
 HRESULT CStage3::Ready_Data_Effect()
 {
-
 	//이펙트 매니저에 넣으면서 생성
 	// 주의 사항!! 넣을때 순서가 ENUM순서
 	//Manager에 넣을 Effect;
