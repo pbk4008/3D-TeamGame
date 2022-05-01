@@ -182,6 +182,8 @@ _bool CUI_Indexes::Click_Equipment(void)
 	{
 		if (m_pEquipmentBtn->ButtonClicked())
 		{
+			STOP_SOUND(CHANNEL::EFFECT);
+			PLAY_SOUND(L"UI_tab_over", CHANNEL::EFFECT);
 			m_pIndexIndicator->SetInitEquipXPos(-550.f);
 			m_bClickEquipment = true;
 			m_bClickArmory = false;
@@ -197,6 +199,8 @@ _bool CUI_Indexes::Click_Armory(void)
 	{
 		if (m_pArmoryBtn->ButtonClicked())
 		{
+			STOP_SOUND(CHANNEL::EFFECT);
+			PLAY_SOUND(L"UI_tab_over", CHANNEL::EFFECT);
 			m_pIndexIndicator->SetInitArmoryXPos(-450.f);
 			m_bClickEquipment = false;
 			m_bClickArmory = true;

@@ -31,11 +31,12 @@ _int CVoiceManager::Late_Tick(_double dTimeDelta)
 		if (false == m_bPlayOne)
 		{
  			g_pGameInstance->Play_Shot(m_szSoundKey, m_EChannel);
+			g_pGameInstance->VolumeChange(m_EChannel, 1.4f);
+
 			m_bPlayOne = true;
 			m_bIsPlaying = true;
 			g_pGameInstance->VolumeChange(CSoundMgr::CHANNELID::BGM, 0.5f);
 		}
-
 
 		if (false == g_pGameInstance->IsPlaying(m_EChannel))
 		{

@@ -88,6 +88,9 @@ HRESULT C1H_KnockBack::EnterState()
 	if (FAILED(__super::EnterState()))
 		return E_FAIL;
 
+	STOP_SOUND(CHANNEL::PLAYER1);
+	PLAY_SOUND(L"Player_Knockback", CHANNEL::PLAYER1);
+
 	//uniform_int_distribution<_uint> iRange(0, 1);
 	//switch (iRange(g_random))
 	//{

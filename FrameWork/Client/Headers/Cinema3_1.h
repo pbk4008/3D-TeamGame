@@ -31,6 +31,8 @@ private:
 	CCinemaActor* m_pMidBoss;
 private:
 	CCinemaWeapon* m_pMidWeapon;
+private:
+	_bool m_bFirst = false;
 };
 END
 #endif

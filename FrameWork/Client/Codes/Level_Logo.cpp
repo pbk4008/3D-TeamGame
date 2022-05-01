@@ -18,6 +18,10 @@ HRESULT CLevel_Logo::NativeConstruct()
 
 	m_pobj->Set_FadeInCheck(true);
 	m_pobj->setActive(true);
+	
+	STOP_SOUND(CHANNEL::BGM);
+	PLAY_SOUND(L"Logo_BGM", CHANNEL::BGM);
+	VOLUME_CHANGE(CHANNEL::BGM, 0.7f);
 
 	return S_OK;
 }
@@ -30,6 +34,7 @@ _int CLevel_Logo::Tick(_double TimeDelta)
 	if (g_pGameInstance->getkeyDown(DIK_RETURN) && m_pobj->Get_FadeIn() == false)
 	{
 		m_pobj->Set_FadeOutCheck(true);
+		PLAY_SOUND(L"UI_tab_over", CHANNEL::UI);
 	}
 	else if (g_pGameInstance->getkeyDown(DIK_0))
 	{

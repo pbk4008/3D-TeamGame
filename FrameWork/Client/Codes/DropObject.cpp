@@ -313,6 +313,9 @@ void CDropObject::Take(void)
 			m_bDrop = true;
 		}
 	}
+	STOP_SOUND(CHANNEL::EFFECT);
+	PLAY_SOUND(L"Item_PickUp", CHANNEL::EFFECT);
+	
 }
 
 void CDropObject::SetTakableState(_bool bState)

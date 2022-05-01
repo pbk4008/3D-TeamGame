@@ -336,9 +336,13 @@ void CHud::CheckCurEquipSlot(void)
 		{
 		case EWeaponType::LongSword:
 			m_pEquipWeapon_Slot_2->SetImage(L"T_HUD_EquippedWeapon_Border_Longsword");
+			STOP_SOUND(CHANNEL::PLAYER2);
+			PLAY_SOUND(L"Swap_Longsword", CHANNEL::PLAYER2);
 			break;
 		case EWeaponType::Hammer:
 			m_pEquipWeapon_Slot_2->SetImage(L"T_HUD_EquippedWeapon_Border_Hammer");
+			STOP_SOUND(CHANNEL::PLAYER3);
+			PLAY_SOUND(L"Swap_Hammer", CHANNEL::PLAYER3);
 			break;
 		}
 
@@ -351,18 +355,26 @@ void CHud::CheckCurEquipSlot(void)
 		{
 		case EWeaponType::LongSword:
 			m_pEquipWeapon_Slot_1->SetImage(L"T_HUD_EquippedWeapon_Border_Longsword");
+			STOP_SOUND(CHANNEL::PLAYER2);
+			PLAY_SOUND(L"Swap_Longsword", CHANNEL::PLAYER2);
 			break;
 		case EWeaponType::Hammer:
 			m_pEquipWeapon_Slot_1->SetImage(L"T_HUD_EquippedWeapon_Border_Hammer");
+			STOP_SOUND(CHANNEL::PLAYER2);
+			PLAY_SOUND(L"Swap_Hammer", CHANNEL::PLAYER2);
 			break;
 		}
 		switch (m_pEquipData->GetEquipment(EEquipSlot::Weapon1).weaponType)
 		{
 		case EWeaponType::LongSword:
 			m_pEquipWeapon_Slot_2->SetImage(L"T_HUD_EquippedWeapon_Border_Longsword");
+			STOP_SOUND(CHANNEL::PLAYER2);
+			PLAY_SOUND(L"Swap_Longsword", CHANNEL::PLAYER2);
 			break;
 		case EWeaponType::Hammer:
 			m_pEquipWeapon_Slot_2->SetImage(L"T_HUD_EquippedWeapon_Border_Hammer");
+			STOP_SOUND(CHANNEL::PLAYER2);
+			PLAY_SOUND(L"Swap_Hammer", CHANNEL::PLAYER2);
 			break;
 		}
 	}

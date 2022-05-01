@@ -222,8 +222,9 @@ _int CStage2::Tick(_double TimeDelta)
 			{
 				if (m_iCountMonster == 0 && pBoss->Get_ChangeLevel())
 				{
-					g_pMainApp->Set_RenderBtn(CRenderer::RENDERBUTTON::FADEOUT, true);
-
+					g_pMainApp->Set_RenderBtn(CRenderer::RENDERBUTTON::FADEIN, true);
+					g_pQuestManager->SetRender(false);
+					g_pInvenUIManager->SetRender(false);
 					if (FAILED(g_pGameInstance->Open_Level((_uint)SCENEID::SCENE_LOADING, CLoading::Create(m_pDevice, m_pDeviceContext, SCENEID::SCENE_STAGE3))))
 						return -1;
 
@@ -1544,7 +1545,7 @@ void CStage2::Portal_Spot2()
 		Open_Potal(XMVectorSet(44.f, 13.f, 232.f, 1.f), (_uint)GAMEOBJECT::MONSTER_2H);
 		m_iCountMonster += 4;
 	}
-	else if (m_iCountMonster == 0 && m_iPortalCount == 7)
+	else if (m_iCountMonster <= 0 && m_iPortalCount == 7)
 		m_pTriggerSystem->Check_Clear();
 }
 

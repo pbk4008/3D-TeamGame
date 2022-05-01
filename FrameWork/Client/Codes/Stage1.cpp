@@ -270,6 +270,7 @@ _int CStage1::Tick(_double TimeDelta)
 		else
 		{
 			SHOW_GUIDE();
+			PLAY_SOUND(L"UI_InvenOpen", CHANNEL::EFFECT);
 			g_pInvenUIManager->OpenModal();
 			g_pMainApp->Set_DeltaTimeZero(true);
 		}
@@ -318,19 +319,6 @@ _int CStage1::Tick(_double TimeDelta)
 				{
 					m_bBossClear = true;
 					m_pScenemaManager->Active_Scenema((_uint)CINEMA_INDEX::CINEMA3_1);
-				}
-				else
-				{
-					if (m_pScenemaManager->Get_EventCinema((_uint)CINEMA_INDEX::CINEMA3_5))
-					{
-						m_pScenemaManager->ResetCinema();
-						g_pInvenUIManager->SetRender(true);
-						g_pQuestManager->SetRender(true);
-						if (FAILED(g_pGameInstance->Open_Level((_uint)SCENEID::SCENE_LOADING, CLoading::Create(m_pDevice, m_pDeviceContext, SCENEID::SCENE_STAGE2))))
-							return -1;
-		
-						return 0;
-					}
 				}
 			}
 		}
@@ -435,20 +423,9 @@ _int CStage1::Tick(_double TimeDelta)
 	if (m_pScenemaManager)
 	{
 		if (g_pGameInstance->getkeyDown(DIK_END))
-			m_pScenemaManager->Active_Scenema((_uint)CINEMA_INDEX::CINEMA1_1);
+			m_pScenemaManager->Active_Scenema((_uint)CINEMA_INDEX::CINEMA3_1);;
 
 		m_pScenemaManager->Tick(TimeDelta);
-
-		if (m_pScenemaManager->Get_EventCinema((_uint)CINEMA_INDEX::CINEMA2_4))
-		{
-			CBoss_Bastion_Judicator* pBoss = (CBoss_Bastion_Judicator*)g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Layer_Boss")->front();
-			if (nullptr != pBoss)
-			{
-				pBoss->setActive(true);
-				m_pScenemaManager->ResetCinema();
-				SHOW_MAPINFO(TRUE, 1); /* 중간보스 HUD */
-			}
-		}
 	}
 
 	/*for Meteor*/
@@ -474,8 +451,12 @@ _int CStage1::Tick(_double TimeDelta)
 _int CStage1::LateTick(_double TimeDelta)
 {
 
-	if(m_pScenemaManager)
-		m_pScenemaManager->LateTick(TimeDelta);
+	if (m_pScenemaManager)
+	{
+		_uint iProgress = m_pScenemaManager->LateTick(TimeDelta);
+		if (iProgress == 1)
+			return 0;
+	}
 
 	if(g_pQuestManager)
 		g_pQuestManager->Late_Tick(TimeDelta);
@@ -638,6 +619,7 @@ HRESULT CStage1::Ready_Player(const _tchar* LayerTag)
 		return E_FAIL;
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Camera", L"Proto_GameObject_Camera_Silvermane")))
 		return E_FAIL;
+
 
 	////Test
 	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Test", L"Proto_GameObject_TestObject")))
@@ -1351,6 +1333,8 @@ void CStage1::Portal_Spot2()
 	else if (m_iCountMonster <= 0 && m_iPortalCount == 6)
 	{
 		CLEAR_QUEST(L"T_HUD_KillAllMonster");
+		STOP_SOUND(CHANNEL::BATTLE);
+		VOLUME_CHANGE(CHANNEL::BGM, 1.0f);
 		m_pTriggerSystem->Check_Clear();
 	}
 }
@@ -1406,6 +1390,8 @@ void CStage1::Portal_Spot4()
 	{
 		CLEAR_QUEST(L"T_HUD_KillAllMonster");
 		m_pTriggerSystem->Check_Clear();
+		STOP_SOUND(CHANNEL::BATTLE);
+		VOLUME_CHANGE(CHANNEL::BGM, 1.0f);
 	}
 }
 
@@ -1428,7 +1414,7 @@ void CStage1::Portal_Spot5()
 		Open_Potal(XMVectorSet(-176.f, 29.f, 301.f, 1.f), (_uint)GAMEOBJECT::MONSTER_SHOOTER);
 		Open_Potal(XMVectorSet(-181.f, 29.f, 307.f, 1.f), (_uint)GAMEOBJECT::MONSTER_CRYSTAL);
 		Open_Potal(XMVectorSet(-175.f, 29.f, 314.f, 1.f), (_uint)GAMEOBJECT::MONSTER_CRYSTAL);
-		Open_Potal(XMVectorSet(-178.f, 30.f, 320.f, 1.f), (_uint)GAMEOBJECT::MONSTER_HEALER);
+		Open_Potal(XMVectorSet(-175.f, 30.f, 391.f, 1.f), (_uint)GAMEOBJECT::MONSTER_HEALER);
 		Open_Potal(XMVectorSet(-173.f, 30.f, 323.f, 1.f), (_uint)GAMEOBJECT::MONSTER_1H);
 		m_iCountMonster += 6;
 	}
@@ -1490,6 +1476,8 @@ void CStage1::Open_Wall()
 			advance(iter, 0);
 			if((*iter)->getActive())
 				static_cast<CWall*>(*iter)->Destroy();
+			PLAY_SOUND(L"Monster_Battle", CHANNEL::BATTLE);
+			VOLUME_CHANGE(CHANNEL::BGM, 1.5f);
 		}
 		if (m_iCountMonster == 0)
 		{
@@ -1505,6 +1493,8 @@ void CStage1::Open_Wall()
 			advance(iter, 2);
 			if ((*iter)->getActive())
 				static_cast<CWall*>(*iter)->Destroy();
+			PLAY_SOUND(L"Monster_Battle_2", CHANNEL::BATTLE);
+			VOLUME_CHANGE(CHANNEL::BGM, 1.5f);
 		}
 	}
 	else if (m_pTriggerSystem->Get_CurrentTriggerNumber() == 8)

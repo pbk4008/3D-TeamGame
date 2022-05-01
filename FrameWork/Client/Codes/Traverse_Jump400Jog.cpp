@@ -99,6 +99,10 @@ HRESULT CTraverse_Jump400Jog::EnterState()
 	m_pAnimationController->Mul_MoveSpeed(0.8f);
 	m_pSilvermane->Set_IsFall(false);
 	m_iCutIndex = 45;
+
+	STOP_SOUND(CHANNEL::PLAYER1);
+	PLAY_SOUND(L"Player_GapJump", CHANNEL::PLAYER1);
+
 	return S_OK;
 }
 

@@ -130,6 +130,7 @@ _int CGameInstance::Tick_Engine(_double TimeDelta)
 	iProgress = m_pObject_Manager->LateTick(TimeDelta);
 	if (0 > iProgress)
 		return -1;
+
 	iProgress = m_pLevel_Manager->LateTick(TimeDelta);
 
 	if (0 > iProgress)

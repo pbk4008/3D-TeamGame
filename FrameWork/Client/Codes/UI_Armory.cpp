@@ -213,6 +213,8 @@ void CUI_Armory::ClickSlot(void)
 							m_pInventoryData->SetEquiped(i, TRUE);
 							m_pEquipData->ChangeEquipment(EEquipSlot::Weapon2, SelectedItem);
 							UpdateSlot(i);
+							STOP_SOUND(CHANNEL::EFFECT);
+							PLAY_SOUND(L"UI_Equip", CHANNEL::EFFECT);
 						}
 					}
 					else
@@ -220,6 +222,8 @@ void CUI_Armory::ClickSlot(void)
 						m_pInventoryData->SetEquiped(i, TRUE);
 						m_pEquipData->ChangeEquipment(EEquipSlot::Weapon1, SelectedItem);
 						UpdateSlot(i);
+						STOP_SOUND(CHANNEL::EFFECT);
+						PLAY_SOUND(L"UI_Equip", CHANNEL::EFFECT);
 					}
 				}
 				break;
@@ -234,6 +238,8 @@ void CUI_Armory::ClickSlot(void)
 							m_pInventoryData->SetEquiped(i, TRUE);
 							m_pEquipData->ChangeEquipment(EEquipSlot::Ring2, SelectedItem);
 							UpdateSlot(i);
+							STOP_SOUND(CHANNEL::EFFECT);
+							PLAY_SOUND(L"UI_Equip", CHANNEL::EFFECT);
 						}
 					}
 					else
@@ -241,6 +247,8 @@ void CUI_Armory::ClickSlot(void)
 						m_pInventoryData->SetEquiped(i, TRUE);
 						m_pEquipData->ChangeEquipment(EEquipSlot::Ring1, SelectedItem);
 						UpdateSlot(i);
+						STOP_SOUND(CHANNEL::EFFECT);
+						PLAY_SOUND(L"UI_Equip", CHANNEL::EFFECT);
 					}
 				}
 				break;
@@ -253,6 +261,8 @@ void CUI_Armory::ClickSlot(void)
 						m_pInventoryData->SetEquiped(i, TRUE);
 						m_pEquipData->ChangeEquipment(EEquipSlot::Amulet, SelectedItem);
 						UpdateSlot(i);
+						STOP_SOUND(CHANNEL::EFFECT);
+						PLAY_SOUND(L"UI_Equip", CHANNEL::EFFECT);
 					}
 				}
 				break;
@@ -265,6 +275,8 @@ void CUI_Armory::ClickSlot(void)
 						m_pInventoryData->SetEquiped(i, TRUE);
 						m_pEquipData->ChangeEquipment(EEquipSlot::Charm, SelectedItem);
 						UpdateSlot(i);
+						STOP_SOUND(CHANNEL::EFFECT);
+						PLAY_SOUND(L"UI_Equip", CHANNEL::EFFECT);
 					}
 				}
 				break;
@@ -277,6 +289,8 @@ void CUI_Armory::ClickSlot(void)
 						m_pInventoryData->SetEquiped(i, TRUE);
 						m_pEquipData->ChangeEquipment(EEquipSlot::LifeStone, SelectedItem);
 						UpdateSlot(i);
+						STOP_SOUND(CHANNEL::EFFECT);
+						PLAY_SOUND(L"UI_Equip", CHANNEL::EFFECT);
 					}
 				}
 				break;
@@ -289,6 +303,8 @@ void CUI_Armory::ClickSlot(void)
 						m_pInventoryData->SetEquiped(i, TRUE);
 						m_pEquipData->ChangeEquipment(EEquipSlot::Banner, SelectedItem);
 						UpdateSlot(i);
+						STOP_SOUND(CHANNEL::EFFECT);
+						PLAY_SOUND(L"UI_Equip", CHANNEL::EFFECT);
 					}
 				}
 				break;
