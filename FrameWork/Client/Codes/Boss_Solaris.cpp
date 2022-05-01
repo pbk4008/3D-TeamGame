@@ -293,7 +293,7 @@ void CBoss_Solaris::setActive(_bool bActive)
 
 	if (bActive)
 	{
-		if (!m_pCharacterController);
+		if (!m_pCharacterController)
 		{
 			/* for.Character Controller */
 			CCharacterController::DESC tCharacterControllerDesc;
@@ -668,8 +668,6 @@ HRESULT CBoss_Solaris::Set_State_FSM()
 		static_cast<CMonster_FSM*>(pair.second)->Set_Model(m_pModel);
 		static_cast<CMonster_FSM*>(pair.second)->Set_Animator(m_pAnimator);
 	}
-
-
 
 	return S_OK;
 }

@@ -83,10 +83,10 @@ HRESULT CBoss_Bastion_Judicator::NativeConstruct(const _uint _iSceneID, void* pA
 	m_pEff_Explosion->setActive(false);
 
 	//TODO : 아래 세팅은 꼭 해줄것, 그래야 UI나옴 초기값 넣어줘야됨
-	m_fMaxHp = 700.f;
+	m_fMaxHp = 500.f;
 	m_fCurrentHp = m_fMaxHp;
 
-	m_fMaxGroggyGauge = 10.f;
+	m_fMaxGroggyGauge = 50.f;
 	m_fGroggyGauge = 0.f;
 
 	m_pPanel->Set_HpBar(Get_HpRatio());
@@ -111,7 +111,7 @@ _int CBoss_Bastion_Judicator::Tick(_double TimeDelta)
 		return -1;
 	}
 
-	if (this->Get_HpRatio()<0.3f)
+	if (this->Get_HpRatio()<0.3f && g_pGameInstance->getCurrentLevel() == (_uint)SCENEID::SCENE_STAGE1)
 	{
 		m_bDead = true;
 		m_pWeapon->setActive(false);
@@ -186,6 +186,12 @@ _int CBoss_Bastion_Judicator::Tick(_double TimeDelta)
 		}
 	}
 
+	if (m_fCurrentHp <= 0.f && m_bDead == false)
+	{
+		m_bDead = true;
+		m_pStateController->Change_State(L"Death");
+	}
+
 	if (DEATH == m_pAnimator->Get_CurrentAnimNode())
 	{
 		if (L"Death" == m_pStateController->Get_CurStateTag())
@@ -229,6 +235,10 @@ _int CBoss_Bastion_Judicator::Tick(_double TimeDelta)
 			{
 				m_bDead = true;
 				m_bdissolve = true;
+				
+				if (m_lifetime >= 1.f)
+					m_bchanglevel = true;
+
 				return 0;
 			}
 		}
@@ -731,6 +741,7 @@ void CBoss_Bastion_Judicator::Hit(const ATTACKDESC& _tAttackDesc)
 void CBoss_Bastion_Judicator::Execution()
 {
 	//m_bDead = true;
+	m_bGroggy = false;
 	m_IsAttack = false;
 	m_pWeapon->Set_IsAttack(false);
 

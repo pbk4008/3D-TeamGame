@@ -37,8 +37,6 @@ _int CShield_Parry::Tick(const _double& _dDeltaTime)
 		else
 			m_pSilvermane->Set_Radial(false);
 
-		PLAY_SOUND(L"Shield_Block", CHANNEL::Equip_Shield);
-
 	return _int();
 }
 
@@ -94,6 +92,8 @@ HRESULT CShield_Parry::EnterState()
 	m_pSilvermane->Set_LightColor(XMVectorSet(1.f, 1.f, 1.f, 1.f));
 	m_pSilvermane->Set_LightOrigRange(8.f);
 	m_pSilvermane->Set_LightAmbientSpecular(_float4(0.8f, 0.8f, 0.8f, 1.f), _float4(0.5f, 0.5f, 0.5f, 1.f));
+
+	PLAY_SOUND(L"Shield_Block", CHANNEL::Equip_Shield);
 
 	return S_OK;
 }

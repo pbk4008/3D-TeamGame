@@ -31,7 +31,7 @@ _int CMidBoss_Rage::Tick(const _double& TimeDelta)
 	m_pAnimator->Tick(TimeDelta);
 
 	m_pTransform->Face_Target(g_pObserver->Get_PlayerPos());
-	cout << "rage" << endl;
+	/*cout << "rage" << endl;*/
 	if (m_pAnimator->Get_CurrentAnimation() == nullptr)
 		return 0;
 

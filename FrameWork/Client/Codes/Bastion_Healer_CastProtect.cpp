@@ -86,7 +86,7 @@ _bool CBastion_Healer_CastProtect::Link()
 	if (pAnim)
 	{
 		_uint dFrame = pAnim->Get_CurrentKeyFrameIndex();
-		cout << dFrame << endl;
+		/*cout << dFrame << endl;*/
 		if (dFrame > 100)
 			m_pOwner->Link();
 	}
