@@ -148,9 +148,9 @@ HRESULT CMeshEffect_Boss_Shield::Render()
 	}
 
 	if (m_bdissolveOn == true)
-		DissolveOn(0.5f);
+		DissolveOn(0.25f);
 	else if (m_bdissolveOff == true)
-		DissolveOff(0.5f);
+		DissolveOff(0.25f);
 
 	return S_OK;
 }

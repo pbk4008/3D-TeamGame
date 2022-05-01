@@ -30,6 +30,14 @@ _int CBoss_BackFlip::Tick(const _double& TimeDelta)
 
 	m_pAnimator->Tick(TimeDelta);
 
+	_uint iCurKeyFrameIndex = m_pAnimator->Get_AnimController()->Get_CurKeyFrameIndex();
+
+	if (29 < iCurKeyFrameIndex && 31 > iCurKeyFrameIndex)
+	{
+		STOP_SOUND(CHANNEL::Boss_Skill1);
+		PLAY_SOUND(L"BeamMassacre_End_01", CHANNEL::Boss_Skill1);
+	}
+
 	if (m_pAnimator->Get_CurrentAnimation()->Is_Finished())
 	{
 		static_cast<CBoss_Solaris*>(m_pMonster)->Set_Random_AttackAnim();
@@ -70,6 +78,9 @@ HRESULT CBoss_BackFlip::EnterState()
 	//g_pGameInstance->StopSound(CSoundMgr::CHANNELID::MidBoss);
 	//g_pGameInstance->Play_Shot(L"MidBoss_Roar", CSoundMgr::CHANNELID::MidBoss);
 	m_pAnimator->Change_AnyEntryAnimation((_uint)CBoss_Solaris::M_BossAnimState::DASH_BACK_FLIP);
+
+	STOP_SOUND(CHANNEL::Boss_Skill1);
+	PLAY_SOUND(L"BeamMassacre_FlyUp_01", CHANNEL::Boss_Skill1);
 
 	return S_OK;
 }

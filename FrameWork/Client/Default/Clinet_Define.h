@@ -12,6 +12,8 @@ const float MAXGROOGUGAGUE  = 10.0f;
 #define Max_EquipmentSlot 8
 typedef CSoundMgr::CHANNELID CHANNEL;
 
+typedef CSoundMgr::CHANNELID CHANNEL;
+
 extern HWND g_hWnd;
 extern HINSTANCE  g_hInst;
 

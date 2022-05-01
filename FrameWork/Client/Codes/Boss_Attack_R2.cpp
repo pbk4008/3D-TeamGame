@@ -125,6 +125,12 @@ _int CBoss_Attack_R2::Tick(const _double& TimeDelta)
 	else
 		m_pMonster->Set_IsAttack(false);
 
+	if (38 < iCurKeyFrameIndex && 40 > iCurKeyFrameIndex)
+	{
+		STOP_SOUND(CHANNEL::Boss_Attack1);
+		PLAY_SOUND(L"RageOrb_ChargeShot_01", CHANNEL::Boss_Attack1);
+	}
+
 	if (m_pAnimator->Get_AnimController()->Is_Finished())
 	{
 		cout << "r2 -> turn" << endl;
@@ -169,6 +175,9 @@ HRESULT CBoss_Attack_R2::EnterState()
 	m_pAnimator->Get_AnimController()->Set_PlaySpeed(1.f);
 
  	m_pAnimator->Change_AnyEntryAnimation((_uint)CBoss_Solaris::M_BossAnimState::ATTACK_R2);
+
+	STOP_SOUND(CHANNEL::Boss_Skill1);
+	PLAY_SOUND(L"BeamMassacre_Start_01", CHANNEL::Boss_Skill1);
 
 	return S_OK;
 }

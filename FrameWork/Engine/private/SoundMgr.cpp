@@ -128,8 +128,8 @@ HRESULT CSoundMgr::LoadSoundFile()
 		"../bin/Resources/Sound/Bgm/BM_ZU_AveyronPeak_78_v3_body_38bars.ogg", FMOD_DEFAULT, 0, &pSound);
 	if (eRes == FMOD_OK) m_mapSound.emplace(L"Stage1_BGM", pSound); else return E_FAIL;
 
-	eRes = FMOD_System_CreateSound(m_pSystem, "../bin/Resources/Sound/Bgm/A_Amb_SunforgeTemple_Bed.ogg", FMOD_DEFAULT, 0, &pSound);
-	if (eRes == FMOD_OK) m_mapSound.emplace(L"Stage2_BGM", pSound); else return E_FAIL;
+	//eRes = FMOD_System_CreateSound(m_pSystem, "../bin/Resources/Sound/Bgm/A_Amb_SunforgeTemple_Bed.ogg", FMOD_DEFAULT, 0, &pSound);
+	//if (eRes == FMOD_OK) m_mapSound.emplace(L"Stage2_BGM", pSound); else return E_FAIL;
 
 	eRes = FMOD_System_CreateSound(m_pSystem, "../bin/Resources/Sound/Bgm/BM_DynamicFightMusic081619_Loop_v2_body.ogg", FMOD_DEFAULT, 0, &pSound);
 	if (eRes == FMOD_OK) m_mapSound.emplace(L"Stage1_Boss_BGM", pSound); else return E_FAIL;
@@ -447,6 +447,58 @@ HRESULT CSoundMgr::LoadSoundFile()
 
 	eRes = FMOD_System_CreateSound(m_pSystem, "../bin/Resources/Sound/Voice/Sanctum/VO_SM1a2_007c_SeventhSanctum_YouWontLike.ogg", FMOD_DEFAULT, 0, &pSound);
 	if (eRes == FMOD_OK) m_mapSound.emplace(L"YouWontLike", pSound); else return E_FAIL;
+
+	/* For.Boss *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+#pragma region 보스 사운드들
+	// Beam
+	eRes = FMOD_System_CreateSound(m_pSystem, "../bin/Resources/Sound/Boss/A_Solaris_Attack_BeamMassacre_ChargeShot_01.ogg", FMOD_DEFAULT, 0, &pSound);
+	if (eRes == FMOD_OK) m_mapSound.emplace(L"BeamMassacre_ChargeShot_01", pSound); else MSGBOX(L"보스 사운드 로드 실패");
+	eRes = FMOD_System_CreateSound(m_pSystem, "../bin/Resources/Sound/Boss/A_Solaris_Attack_BeamMassacre_End_01.ogg", FMOD_DEFAULT, 0, &pSound);
+	if (eRes == FMOD_OK) m_mapSound.emplace(L"BeamMassacre_End_01", pSound); else MSGBOX(L"보스 사운드 로드 실패");
+	eRes = FMOD_System_CreateSound(m_pSystem, "../bin/Resources/Sound/Boss/A_Solaris_Attack_BeamMassacre_FlyUp_01.ogg", FMOD_DEFAULT, 0, &pSound);
+	if (eRes == FMOD_OK) m_mapSound.emplace(L"BeamMassacre_FlyUp_01", pSound); else MSGBOX(L"보스 사운드 로드 실패");
+	eRes = FMOD_System_CreateSound(m_pSystem, "../bin/Resources/Sound/Boss/A_Solaris_Attack_BeamMassacre_Loop.ogg", FMOD_DEFAULT, 0, &pSound);
+	if (eRes == FMOD_OK) m_mapSound.emplace(L"BeamMassacre_Loop", pSound); else MSGBOX(L"보스 사운드 로드 실패");
+	eRes = FMOD_System_CreateSound(m_pSystem, "../bin/Resources/Sound/Boss/A_Solaris_Attack_BeamMassacre_Shoot_Explode_01.ogg", FMOD_DEFAULT, 0, &pSound);
+	if (eRes == FMOD_OK) m_mapSound.emplace(L"BeamMassacre_Shoot_Explode_01", pSound); else MSGBOX(L"보스 사운드 로드 실패");
+	eRes = FMOD_System_CreateSound(m_pSystem, "../bin/Resources/Sound/Boss/A_Solaris_Attack_BeamMassacre_Start_01.ogg", FMOD_DEFAULT, 0, &pSound);
+	if (eRes == FMOD_OK) m_mapSound.emplace(L"BeamMassacre_Start_01", pSound); else MSGBOX(L"보스 사운드 로드 실패");
+	// FistSmash
+	eRes = FMOD_System_CreateSound(m_pSystem, "../bin/Resources/Sound/Boss/A_Solaris_Attack_FistSmash_Charge_01.ogg", FMOD_DEFAULT, 0, &pSound);
+	if (eRes == FMOD_OK) m_mapSound.emplace(L"FistSmash_Charge_01", pSound); else MSGBOX(L"보스 사운드 로드 실패");
+	// GapClose
+	eRes = FMOD_System_CreateSound(m_pSystem, "../bin/Resources/Sound/Boss/A_Solaris_Attack_GapClose_Land_01.ogg", FMOD_DEFAULT, 0, &pSound);
+	if (eRes == FMOD_OK) m_mapSound.emplace(L"GapClose_Land_01", pSound); else MSGBOX(L"보스 사운드 로드 실패");
+	eRes = FMOD_System_CreateSound(m_pSystem, "../bin/Resources/Sound/Boss/A_Solaris_Attack_GapClose_PreLand_01.ogg", FMOD_DEFAULT, 0, &pSound);
+	if (eRes == FMOD_OK) m_mapSound.emplace(L"GapClose_PreLand_01", pSound); else MSGBOX(L"보스 사운드 로드 실패");
+	// OverloadProtocol
+	eRes = FMOD_System_CreateSound(m_pSystem, "../bin/Resources/Sound/Boss/A_Solaris_Attack_OverloadProtocol_Charge_Start_01.ogg", FMOD_DEFAULT, 0, &pSound);
+	if (eRes == FMOD_OK) m_mapSound.emplace(L"OverloadProtocol_Charge_Start_01", pSound); else MSGBOX(L"보스 사운드 로드 실패");
+	eRes = FMOD_System_CreateSound(m_pSystem, "../bin/Resources/Sound/Boss/A_Solaris_Attack_OverloadProtocol_Explode_01.ogg", FMOD_DEFAULT, 0, &pSound);
+	if (eRes == FMOD_OK) m_mapSound.emplace(L"OverloadProtocol_Explode_01", pSound); else MSGBOX(L"보스 사운드 로드 실패");
+	// RageOrb
+	eRes = FMOD_System_CreateSound(m_pSystem, "../bin/Resources/Sound/Boss/A_Solaris_Attack_RageOrb_ChargeShot_01.ogg", FMOD_DEFAULT, 0, &pSound);
+	if (eRes == FMOD_OK) m_mapSound.emplace(L"RageOrb_ChargeShot_01", pSound); else MSGBOX(L"보스 사운드 로드 실패");
+	eRes = FMOD_System_CreateSound(m_pSystem, "../bin/Resources/Sound/Boss/A_Solaris_Attack_RageOrb_Shoot_Explode_01.ogg", FMOD_DEFAULT, 0, &pSound);
+	if (eRes == FMOD_OK) m_mapSound.emplace(L"RageOrb_Shoot_Explode_01", pSound); else MSGBOX(L"보스 사운드 로드 실패");
+	// StrafeLazer
+	eRes = FMOD_System_CreateSound(m_pSystem, "../bin/Resources/Sound/Boss/A_Solaris_Attack_StrafeLazer_Explode_01.ogg", FMOD_DEFAULT, 0, &pSound);
+	if (eRes == FMOD_OK) m_mapSound.emplace(L"StrafeLazer_Explode_01", pSound); else MSGBOX(L"보스 사운드 로드 실패");
+	// Intermission
+	eRes = FMOD_System_CreateSound(m_pSystem, "../bin/Resources/Sound/Boss/A_Solaris_Intermission_Hit_01.ogg", FMOD_DEFAULT, 0, &pSound);
+	if (eRes == FMOD_OK) m_mapSound.emplace(L"Intermission_Hit_01", pSound); else MSGBOX(L"보스 사운드 로드 실패");
+	eRes = FMOD_System_CreateSound(m_pSystem, "../bin/Resources/Sound/Boss/A_Solaris_Intermission_RageRestored_01.ogg", FMOD_DEFAULT, 0, &pSound);
+	if (eRes == FMOD_OK) m_mapSound.emplace(L"Intermission_RageRestored_01", pSound); else MSGBOX(L"보스 사운드 로드 실패");
+	eRes = FMOD_System_CreateSound(m_pSystem, "../bin/Resources/Sound/Boss/A_Solaris_Intermission_ShieldRestored_01.ogg", FMOD_DEFAULT, 0, &pSound);
+	if (eRes == FMOD_OK) m_mapSound.emplace(L"Intermission_ShieldRestored_01", pSound); else MSGBOX(L"보스 사운드 로드 실패");
+	eRes = FMOD_System_CreateSound(m_pSystem, "../bin/Resources/Sound/Boss/A_Solaris_Intermission_Start_01.ogg", FMOD_DEFAULT, 0, &pSound);
+	if (eRes == FMOD_OK) m_mapSound.emplace(L"Intermission_Start_01", pSound); else MSGBOX(L"보스 사운드 로드 실패");
+	// Shield
+	eRes = FMOD_System_CreateSound(m_pSystem, "../bin/Resources/Sound/Boss/A_Solaris_Shield_Destroyed_01.ogg", FMOD_DEFAULT, 0, &pSound);
+	if (eRes == FMOD_OK) m_mapSound.emplace(L"Shield_Destroyed_01", pSound); else MSGBOX(L"보스 사운드 로드 실패");
+	eRes = FMOD_System_CreateSound(m_pSystem, "../bin/Resources/Sound/Boss/A_Solaris_Shield_Hit_01.ogg", FMOD_DEFAULT, 0, &pSound);
+	if (eRes == FMOD_OK) m_mapSound.emplace(L"Shield_Hit_01", pSound); else MSGBOX(L"보스 사운드 로드 실패");
+#pragma endregion
 
 	/* for. Cinema */
 	eRes = FMOD_System_CreateSound(m_pSystem, "../bin/Resources/Sound/Cinema/Shot1/VO_SM1a1_002a_Soras_ThisWontBe.ogg", FMOD_DEFAULT, 0, &pSound);

@@ -74,6 +74,9 @@ _int CBoss_Attack_S3::Tick(const _double& TimeDelta)
 		m_pMonster->Set_AttackDesc_Damaga(fDamage);
 		m_pMonster->Set_AttackDesc_Level(iLevel);
 		m_pMonster->Set_AttackDesc_Dir(EAttackDir::Forward);
+
+		STOP_SOUND(CHANNEL::Boss_Attack1);
+		PLAY_SOUND(L"RageOrb_Shoot_Explode_01", CHANNEL::Boss_Attack1);
 	}
 
 	if (38 < iCurKeyFrameIndex && 50 > iCurKeyFrameIndex)
@@ -153,6 +156,10 @@ HRESULT CBoss_Attack_S3::EnterState()
 	m_pAnimator->Get_AnimController()->Set_PlaySpeed(1.f);
 
  	m_pAnimator->Change_AnyEntryAnimation((_uint)CBoss_Solaris::M_BossAnimState::ATTACK_S3);
+
+
+	STOP_SOUND(CHANNEL::Boss_Attack1);
+	PLAY_SOUND(L"BeamMassacre_ChargeShot_01", CHANNEL::Boss_Attack1);
 
 	return S_OK;
 }

@@ -32,6 +32,9 @@
 #include "UI_Indicator.h"
 #include "UI_Fill_Space.h"
 #include "UI_Blank_Space.h"
+#include "UI_Skill_Meter_Back.h"
+#include "UI_Skill_Meter_Gauge.h"
+#include "UI_Skill_Meter_Gauge_Right.h"
 
 #include "JumpNode.h"
 #include "JumpBox.h"
@@ -145,11 +148,11 @@ HRESULT CStage1::NativeConstruct()
 		return E_FAIL;
 	}
 
-	//if (FAILED(Ready_TriggerSystem(L"../bin/SaveData/Trigger/MonsterSpawnTrigger.dat")))
-	//{
-	//	MSGBOX("Stage1 Trigger");
-	//	return E_FAIL;
-	//}
+	if (FAILED(Ready_TriggerSystem(L"../bin/SaveData/Trigger/MonsterSpawnTrigger.dat")))
+	{
+		MSGBOX("Stage1 Trigger");
+		return E_FAIL;
+	}
 
 	if (FAILED(Ready_Data_UI(L"../bin/SaveData/UI/UI.dat")))
 	{
@@ -195,11 +198,11 @@ HRESULT CStage1::NativeConstruct()
 		return E_FAIL;
 	}
 
-	//if (FAILED(Ready_Portal()))
-	//{
-	//	MSGBOX("Portal");
-	//	return E_FAIL;
-	//}
+	if (FAILED(Ready_Portal()))
+	{
+		MSGBOX("Portal");
+		return E_FAIL;
+	}
 
 	if (FAILED(Ready_Wall()))
 	{
@@ -210,6 +213,7 @@ HRESULT CStage1::NativeConstruct()
 	if (FAILED(Ready_Pot()))
 		return E_FAIL;
 
+	//// 시네마 릭 남으면 시네마 캠 레디 컴포넌트에 디스크립션 제로메모리 확인 
 	if (FAILED(Ready_Cinema()))
 	{
 		MSGBOX("Cinema");
@@ -724,32 +728,50 @@ HRESULT CStage1::Ready_UI(const _tchar* LayerTag)
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Proto_GameObject_UI_Shield_Meter", &Desc1)))
 		return E_FAIL;
 
-	////Tuto Base
-	//CUI_Tuto_Base::UIACTIVEDESC Desc1;
-	//ZeroMemory(&Desc1, sizeof(CUI_Tuto_Base::UIACTIVEDESC));
-	//_tcscpy_s(Desc1.UIDesc.TextureTag, L"Texture_Tuto_Base");
-	//Desc1.UIDesc.bMinus = false;
-	//Desc1.UIDesc.fAngle = 0.f;
-	//Desc1.UIDesc.fPos = { 1150.f, 360.f, 0.2f };
-	//Desc1.UIDesc.fSize = { 333.f , 105.f };
-	//Desc1.UIDesc.IDTag = (_uint)GAMEOBJECT::UI_STATIC;
+	//Player Skill_Meter_Back
+	CUI_Skill_Meter_Back::UIDESC DescBack;
+	_tcscpy_s(DescBack.TextureTag, L"Texture_Skill_Meter_Back");
+	DescBack.bMinus = false;
+	DescBack.fAngle = 0.3f;
+	DescBack.fPos = { 1002.f, 557.f, 0.1f };
+	DescBack.fSize = { 85.f , 13.f };
+	DescBack.IDTag = (_uint)GAMEOBJECT::UI_DYNAMIC;
 
-	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Proto_GameObject_UI_Tuto_Base", &Desc1)))
-	//	return E_FAIL;
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_UI_Skill_Meter_Back", L"Proto_GameObject_UI_Player_Skill_Meter_Back", &DescBack)))
+		return E_FAIL;
 
-	////Tuto Font
-	//CUI_Tuto_Font::UIACTIVEDESC Desc2;
-	//ZeroMemory(&Desc2, sizeof(CUI_Tuto_Font::UIACTIVEDESC));
-	//_tcscpy_s(Desc2.UIDesc.TextureTag, L"Texture_Tuto_Font");
-	//Desc2.UIDesc.bMinus = false;
-	//Desc2.UIDesc.fAngle = 0.f;
-	//Desc2.UIDesc.fPos = { 1130.f, 360.f, 0.1f };
-	//Desc2.UIDesc.fSize = { 73.f , 73.f };
-	//Desc2.UIDesc.IDTag = (_uint)GAMEOBJECT::UI_STATIC;
-	//Desc2.iTextureNum = 0;
+	//Player Skill_Meter_Back2
+	_tcscpy_s(DescBack.TextureTag, L"Texture_Skill_Meter_Back");
+	DescBack.bMinus = false;
+	DescBack.fAngle = 0.3f;
+	DescBack.fPos = { 1096.f, 557.f, 0.1f };
+	DescBack.fSize = { 85.f , 13.f };
+	DescBack.IDTag = (_uint)GAMEOBJECT::UI_DYNAMIC;
 
-	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Proto_GameObject_UI_Tuto_Font", &Desc2)))
-	//	return E_FAIL;
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_UI_Skill_Meter_Back2", L"Proto_GameObject_UI_Player_Skill_Meter_Back", &DescBack)))
+		return E_FAIL;
+
+	//Player Skill_Meter_Gauge
+	_tcscpy_s(DescBack.TextureTag, L"Texture_Skill_Meter_Gauge_Full");
+	DescBack.bMinus = false;
+	DescBack.fAngle = 0.3f;
+	DescBack.fPos = { 1000.f, 555.f, 0.08f };
+	DescBack.fSize = { 85.f , 13.f };
+	DescBack.IDTag = (_uint)GAMEOBJECT::UI_DYNAMIC;
+
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_UI_Skill_Meter_Gauge_Full", L"Proto_GameObject_UI_Player_Skill_Meter_Gauge", &DescBack)))
+		return E_FAIL;
+
+	//Player Skill_Meter_Gauge
+	_tcscpy_s(DescBack.TextureTag, L"Texture_Skill_Meter_Gauge_Fill");
+	DescBack.bMinus = false;
+	DescBack.fAngle = 0.3f;
+	DescBack.fPos = { 1095.f, 556.f, 0.08f };
+	DescBack.fSize = { 85.f , 13.f };
+	DescBack.IDTag = (_uint)GAMEOBJECT::UI_DYNAMIC;
+
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_UI_Skill_Meter_Gauge_Fill", L"Proto_GameObject_UI_Player_Skill_Meter_Gauge_Right", &DescBack)))
+		return E_FAIL;
 
 	//Blank_Ckey
 	CUI_Blank_CKey::UIACTIVEDESC Desc3;
@@ -1165,6 +1187,9 @@ HRESULT CStage1::Ready_Obstacle()
 		MSGBOX(L"스테이지1 캡슐 장애물 설치 실패");
 		return E_FAIL;
 	}
+
+
+
 	tObstacleDesc.vPosition = { -175.753589f, 28.702583f, 308.261066f};
 	tObstacleDesc.fHeight = 2.f;
 	tObstacleDesc.fRadius = 1.7f;
