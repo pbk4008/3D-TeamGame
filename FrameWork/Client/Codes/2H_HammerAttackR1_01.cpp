@@ -60,6 +60,9 @@ _int C2H_HammerAttackR1_01::Tick(const _double& _dDeltaTime)
 
 		m_pSilvermane->RangeAttack();
 		m_isRangeAttack = true;
+
+		STOP_SOUND(CHANNEL::PLAYER1);
+		PLAY_SOUND(L"Warhammer_R1_Impact_01", CHANNEL::PLAYER1);
 	}
 
 

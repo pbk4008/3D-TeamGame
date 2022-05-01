@@ -746,6 +746,9 @@ void CBoss_Solaris::Hit(const ATTACKDESC& _tAttackDesc)
 	if (m_bDead || 0.f >= m_fCurrentHp)
 		return;
 
+	STOP_SOUND(CHANNEL::Boss);
+	PLAY_SOUND(L"Longsword_v_Metal_01", CHANNEL::Boss);
+
 	if (0 < m_fGroggyGauge)
 	{
 		//실드게이지가있을때는 실드게이지를 깎고 
@@ -928,7 +931,7 @@ void CBoss_Solaris::Set_Random_AttackAnim()
 		}
 		if (8.f <= fDistToPlayer)
 		{
-			uniform_int_distribution<_uint> iRange(0, 3);
+			uniform_int_distribution<_uint> iRange(0, 2);
 			_uint iRandom = iRange(g_random);
 
 			while (iRandom == m_iPreAnim)
@@ -947,14 +950,10 @@ void CBoss_Solaris::Set_Random_AttackAnim()
 			case 2:
 				m_pStateController->Change_State(L"Attack_R1");
 				break;
-			case 3:
-				m_pStateController->Change_State(L"Attack_S2_Variant");
-				break;
 			}
 			m_iPreAnim = iRandom;
 		}
 	}
-	m_pStateController->Change_State(L"Back_Flip");
 }
 
 void CBoss_Solaris::Active_Light()

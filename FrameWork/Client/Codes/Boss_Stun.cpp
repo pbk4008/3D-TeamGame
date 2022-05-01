@@ -80,6 +80,9 @@ HRESULT CBoss_Stun::EnterState()
 
 	static_cast<CBoss_Solaris*>(m_pMonster)->Set_ShieldDissolveOff();
 
+	STOP_SOUND(CHANNEL::Boss_Skill1);
+	PLAY_SOUND(L"Shield_Hit_01", CHANNEL::Boss_Skill1);
+
 	return S_OK;
 }
 

@@ -30,6 +30,12 @@ _int CBoss_Taunt_Fist::Tick(const _double& TimeDelta)
 
 	m_pAnimator->Tick(TimeDelta);
 
+	_uint iCurKeyframeIndex = m_pAnimator->Get_AnimController()->Get_CurKeyFrameIndex();
+	if (12 < iCurKeyframeIndex && 14 > iCurKeyframeIndex)
+	{
+		PLAY_SOUND(L"FistSmash_Charge_01", CHANNEL::Boss_Skill1);
+	}
+
 	if (m_pAnimator->Get_CurrentAnimation()->Is_Finished())
 	{
 		static_cast<CBoss_Solaris*>(m_pMonster)->Set_Random_AttackAnim();

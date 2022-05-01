@@ -67,8 +67,16 @@ _int C2H_HammerAttackR1_04Swap::Tick(const _double& _dDeltaTime)
 		// 범위 공격
 		m_pSilvermane->RangeAttack();
 		m_isRangeAttack = true;
+
+		STOP_SOUND(CHANNEL::PLAYER1);
+		PLAY_SOUND(L"Warhammer_R1_Impact_01", CHANNEL::PLAYER1);
 	}
 
+	if (14 < iCurKeyFrameIndex && 16 > iCurKeyFrameIndex)
+	{
+		STOP_SOUND(CHANNEL::Player_Sword_Attack);
+		PLAY_SOUND(L"Skill_3_Jump", CHANNEL::Player_Sword_Attack);
+	}
 
 	if (m_pAnimationController->Is_Finished())
 	{
@@ -115,6 +123,7 @@ HRESULT C2H_HammerAttackR1_04Swap::EnterState()
 	m_iAttackStartIndex = 25;
 	m_iAttackEndIndex = 45;
 	m_iShakeIndex = 33;
+
 	return S_OK;
 }
 
