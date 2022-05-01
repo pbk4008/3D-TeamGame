@@ -641,6 +641,7 @@ call Update_Client.bat</Command>
     <ClInclude Include="..\Headers\UI_QuestText.h" />
     <ClInclude Include="..\Headers\UI_SelectEffect.h" />
     <ClInclude Include="..\Headers\UI_Shield_Meter.h" />
+    <ClInclude Include="..\Headers\UI_Skill_Meter.h" />
     <ClInclude Include="..\Headers\UI_SlotBackground.h" />
     <ClInclude Include="..\Headers\UI_SlotGrade.h" />
     <ClInclude Include="..\Headers\UI_SlotItemEffect.h" />
@@ -1116,6 +1117,7 @@ call Update_Client.bat</Command>
     <ClCompile Include="..\Codes\UI_QuestText.cpp" />
     <ClCompile Include="..\Codes\UI_SelectEffect.cpp" />
     <ClCompile Include="..\Codes\UI_Shield_Meter.cpp" />
+    <ClCompile Include="..\Codes\UI_Skill_Meter.cpp" />
     <ClCompile Include="..\Codes\UI_SlotBackground.cpp" />
     <ClCompile Include="..\Codes\UI_SlotGrade.cpp" />
     <ClCompile Include="..\Codes\UI_SlotItemEffect.cpp" />

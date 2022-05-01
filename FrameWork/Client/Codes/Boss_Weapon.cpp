@@ -50,7 +50,7 @@ HRESULT CBoss_Weapon::NativeConstruct(const _uint _iSceneID, void* pArg)
 
 	CTrailEffect::DESC tTrailDesc;
 	tTrailDesc.pOwnerTransform = m_pTransform;
-	tTrailDesc.fLength = 2.f;
+	tTrailDesc.fLength = 1.f;
 	XMStoreFloat4x4(&tTrailDesc.matPivot, XMMatrixTranslation(0.f, 0.f, 5.f));
 	tTrailDesc.wstrTextureTag = L"TrailBase";
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer(m_iSceneID, L"Layer_Effect", L"Proto_GameObject_TrailEffect_Distortion", &tTrailDesc, (CGameObject**)&m_pTrailEffect_Distortion)))

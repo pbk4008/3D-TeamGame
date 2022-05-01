@@ -124,7 +124,7 @@ HRESULT CSilvermane_KnockBack::EnterState(void* _pArg)
 	m_pAnimationController->Set_RootMotion(true, true);
 	m_pAnimationController->Mul_MoveSpeed(0.5f);
 	
-	m_iCutIndex = 70;
+	m_iCutIndex = 60;
 
 	m_pSilvermane->Set_IsTrasceCamera(false);
 	return S_OK;

@@ -28,6 +28,7 @@
 #include "MeshEffect_Razer.h"
 #include "MeshEffect_Boss_Shield.h"
 #include "MeshEffect_EyeRazer.h"
+#include "DamageFont.h"
 
 CBoss_Solaris::CBoss_Solaris(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
 	:CActor(pDevice, pDeviceContext)
@@ -82,7 +83,7 @@ HRESULT CBoss_Solaris::NativeConstruct(const _uint _iSceneID, void* pArg)
 		return E_FAIL;
 	
 	m_iObectTag = (_uint)GAMEOBJECT::BOSS;
-	m_fMaxHp = 500.f;
+	m_fMaxHp = 10000.f;
 	m_fCurrentHp = m_fMaxHp;
 
 	m_fMaxGroggyGauge = 50.f;
@@ -187,7 +188,7 @@ _int CBoss_Solaris::LateTick(_double TimeDelta)
 
 	m_pCharacterController->Update_OwnerTransform();;
 
-	//m_pRenderer->Add_RenderGroup(CRenderer::RENDER_NONALPHA, this);
+	m_pRenderer->Add_RenderGroup(CRenderer::RENDER_NONALPHA, this);
 
 	if (nullptr != m_pWeapon)
 	{
@@ -777,6 +778,22 @@ void CBoss_Solaris::Hit(const ATTACKDESC& _tAttackDesc)
 	Active_Effect((_uint)EFFECT::HIT_FLOATING);
 	Active_Effect((_uint)EFFECT::HIT_FLOATING_2);
 	Active_Effect((_uint)EFFECT::HIT_IMAGE);
+
+	//// 데미지 폰트!
+	CTransform* pOtherTransform = _tAttackDesc.pOwner->Get_Transform();
+	_vector svOtherLook = XMVector3Normalize(pOtherTransform->Get_State(CTransform::STATE_LOOK));
+	_vector svOtherRight = XMVector3Normalize(pOtherTransform->Get_State(CTransform::STATE_RIGHT));
+
+	uniform_real_distribution<_float> fRange(-1.f, 1.5f);
+	uniform_real_distribution<_float> fRange2(-0.4f, 0.4f);
+	uniform_int_distribution<_int> iRange(-5, 5);
+	CDamageFont::DESC tDamageDesc;
+	_vector svPos = m_pTransform->Get_State(CTransform::STATE_POSITION) + _vector{ 0.f, 2.f + fRange2(g_random), 0.f, 0.f };
+	svPos += svOtherRight * fRange(g_random) - svOtherLook * 0.5f;
+	XMStoreFloat3(&tDamageDesc.vPos, svPos);
+	tDamageDesc.fDamage = _tAttackDesc.fDamage + (_float)iRange(g_random);
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_DamageFont", L"Proto_GameObject_DamageFont", &tDamageDesc)))
+		MSGBOX(L"데미지 폰트 생성 실패");
 }
 
 void CBoss_Solaris::Execution()
