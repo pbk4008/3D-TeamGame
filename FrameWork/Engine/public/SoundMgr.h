@@ -27,6 +27,7 @@ public:
 		MidBoss, MidBoss_Hit, MidBoss_Death, MidBoss_Attack_1, MidBoss_Attack_2, MidBoss_Attack_3,
 		Jump_Node,
 		Item_Drop, Item_Drop_2,
+		Orin, Ravenna, Soras, Sanctum,
 		MAXCHANNEL};
 private:
 	NO_COPY(CSoundMgr);
@@ -40,6 +41,7 @@ public:
 	void PlayBGM(const wstring& pSoundKey);
 	void StopSound(CHANNELID eID);
 	void StopAll();
+	_bool IsPlaying(CHANNELID eID);
 
 public:
 	void VolumeChange(CHANNELID eID,_float fVolume);

@@ -180,6 +180,8 @@ HRESULT CLoader::LoadForScene()
 	if (FAILED(hr))
 		return E_FAIL;
 
+	g_pGameInstance->StopSound(CSoundMgr::CHANNELID::BGM);
+
 	return S_OK;
 }
 

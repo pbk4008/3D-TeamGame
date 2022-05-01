@@ -1197,15 +1197,21 @@
     </Filter>
     <Filter Include="02.GameObject\03.Character\00.Player\00.Silvermane\State\1H_Sword\Skill">
       <UniqueIdentifier>{e81819a1-f90c-4330-ad94-8fc5e9d603ea}</UniqueIdentifier>
-	</Filter>
+    </Filter>
     <Filter Include="02.GameObject\03.Character\00.Player\00.Silvermane\State\HIt">
       <UniqueIdentifier>{c0836172-4e03-4723-b9f5-2ce38812b858}</UniqueIdentifier>
-	</Filter>
+    </Filter>
     <Filter Include="02.GameObject\03.Character\01.Monster\Bastion_Spear\State\00.Idle">
       <UniqueIdentifier>{2398d3e4-0aad-4c0a-b779-2676cae6f42f}</UniqueIdentifier>
     </Filter>
     <Filter Include="02.GameObject\02.Map\01.Environment\03.Circle_Floor">
       <UniqueIdentifier>{6c43c0c8-7a09-4c56-afaf-c358d946e1e1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.System\11.VoiceManager">
+      <UniqueIdentifier>{d737128b-16a7-4924-af73-5c4889d9665e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.UI\05.Hud\05.Subtitles">
+      <UniqueIdentifier>{3108a7ab-02af-4407-a76f-e8aae98837c3}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -2592,6 +2598,12 @@
     <ClInclude Include="..\Headers\1H_Multishlash.h">
       <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\1H_Sword\Skill</Filter>
     </ClInclude>
+    <ClInclude Include="..\Headers\VoiceManager.h">
+      <Filter>03.System\11.VoiceManager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Subtitles.h">
+      <Filter>02.GameObject\05.UI\05.Hud\05.Subtitles</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -3946,6 +3958,12 @@
     </ClCompile>
     <ClCompile Include="..\Codes\1H_Multishlash.cpp">
       <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\1H_Sword\Skill</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\VoiceManager.cpp">
+      <Filter>03.System\11.VoiceManager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Subtitles.cpp">
+      <Filter>02.GameObject\05.UI\05.Hud\05.Subtitles</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

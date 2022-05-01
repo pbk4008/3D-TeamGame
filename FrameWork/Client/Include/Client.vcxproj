@@ -425,6 +425,7 @@ call Update_Client.bat</Command>
     <ClInclude Include="..\Headers\Quest.h" />
     <ClInclude Include="..\Headers\QuestManager.h" />
     <ClInclude Include="..\Headers\Silvermane_Bow.h" />
+    <ClInclude Include="..\Headers\Subtitles.h" />
     <ClInclude Include="..\Headers\UI_Blank_FKey.h" />
     <ClInclude Include="..\Headers\UI_EquippedWeapon.h" />
     <ClInclude Include="..\Headers\UI_EquippedWeapon_Slot_1.h" />
@@ -636,6 +637,7 @@ call Update_Client.bat</Command>
     <ClInclude Include="..\Headers\UI_SlotItemIcon.h" />
     <ClInclude Include="..\Headers\UI_Tuto_Base.h" />
     <ClInclude Include="..\Headers\UI_Tuto_Font.h" />
+    <ClInclude Include="..\Headers\VoiceManager.h" />
     <ClInclude Include="..\Headers\Wall.h" />
     <ClInclude Include="..\Headers\Weapon.h" />
     <ClInclude Include="..\Headers\WeaponData.h" />
@@ -880,6 +882,7 @@ call Update_Client.bat</Command>
     <ClCompile Include="..\Codes\Quest.cpp" />
     <ClCompile Include="..\Codes\QuestManager.cpp" />
     <ClCompile Include="..\Codes\Silvermane_Bow.cpp" />
+    <ClCompile Include="..\Codes\Subtitles.cpp" />
     <ClCompile Include="..\Codes\UI_Blank_FKey.cpp" />
     <ClCompile Include="..\Codes\UI_EquippedWeapon.cpp" />
     <ClCompile Include="..\Codes\UI_EquippedWeapon_Slot_1.cpp" />
@@ -1099,6 +1102,7 @@ call Update_Client.bat</Command>
     <ClCompile Include="..\Codes\UI_SlotItemIcon.cpp" />
     <ClCompile Include="..\Codes\UI_Tuto_Base.cpp" />
     <ClCompile Include="..\Codes\UI_Tuto_Font.cpp" />
+    <ClCompile Include="..\Codes\VoiceManager.cpp" />
     <ClCompile Include="..\Codes\Wall.cpp" />
     <ClCompile Include="..\Codes\Weapon.cpp" />
     <ClCompile Include="..\Codes\WeaponData.cpp" />

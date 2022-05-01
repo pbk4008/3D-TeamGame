@@ -555,6 +555,9 @@ _int CStage1::Tick(_double TimeDelta)
 	if (g_pGuideManager)
 		g_pGuideManager->Tick(g_dImmutableTime);
 
+	if (g_pVoiceManager)
+		g_pVoiceManager->Tick(TimeDelta);
+
 	Open_Wall();
 
 
@@ -572,6 +575,9 @@ _int CStage1::LateTick(_double TimeDelta)
 
 	if (g_pGuideManager)
 		g_pGuideManager->Late_Tick(g_dImmutableTime);
+
+	if (g_pVoiceManager)
+		g_pVoiceManager->Late_Tick(TimeDelta);
 
 	return _int();
 }
@@ -894,6 +900,10 @@ HRESULT CStage1::Ready_GameManager(void)
 
 	m_pIndicatorManager = GET_INSTANCE(CIndicator_Manager);
 	m_pScenemaManager = GET_INSTANCE(CScenematicManager);
+
+	g_pVoiceManager = CVoiceManager::GetInstance();
+	if (FAILED(g_pVoiceManager->NativeConstruct(SCENEID::SCENE_STAGE1)))
+		return E_FAIL;
 
 	return S_OK;
 }
@@ -3044,5 +3054,5 @@ void CStage1::Free()
 	m_vecMeteor.clear();
 
 	CWeaponGenerator::DestroyInstance();
-
+	CVoiceManager::DestroyInstance();
 }

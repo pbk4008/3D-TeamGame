@@ -68,8 +68,10 @@ HRESULT CStage3::NativeConstruct()
 	if (FAILED(Ready_UI(L"Layer_UI")))
 		return E_FAIL;
 
-
 	if (FAILED(Ready_Data_Effect()))
+		return E_FAIL;
+
+	if (FAILED(Ready_GameManager()))
 		return E_FAIL;
 
 	g_pGameInstance->Change_BaseCamera(L"Camera_Silvermane");
@@ -895,6 +897,15 @@ HRESULT CStage3::Ready_Cinema()
 	if (FAILED(m_pCinematicManager->Add_Scenema(CCinema4_5::Create(m_pDevice, m_pDeviceContext, (_uint)SCENEID::SCENE_STAGE3))))
 		return E_FAIL;
 	if (FAILED(m_pCinematicManager->Add_Scenema(CCinema4_6::Create(m_pDevice, m_pDeviceContext, (_uint)SCENEID::SCENE_STAGE3))))
+		return E_FAIL;
+
+	return S_OK;
+}
+
+HRESULT CStage3::Ready_GameManager(void)
+{
+	g_pVoiceManager = CVoiceManager::GetInstance();
+	if (FAILED(g_pVoiceManager->NativeConstruct(SCENEID::SCENE_STAGE3)))
 		return E_FAIL;
 
 	return S_OK;

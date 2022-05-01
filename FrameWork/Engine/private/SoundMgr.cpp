@@ -72,6 +72,14 @@ void CSoundMgr::StopAll()
 		FMOD_Channel_Stop(m_pChannelArr[i]);
 }
 
+_bool CSoundMgr::IsPlaying(CHANNELID eID)
+{
+	FMOD_BOOL bPlay = false;
+	FMOD_Channel_IsPlaying(m_pChannelArr[eID], &bPlay);
+
+	return bPlay;
+}
+
 void CSoundMgr::VolumeChange(CHANNELID eID, _float fVolume)
 {
 	FMOD_BOOL bPlay = false;
@@ -120,8 +128,8 @@ HRESULT CSoundMgr::LoadSoundFile()
 		"../bin/Resources/Sound/Bgm/BM_ZU_AveyronPeak_78_v3_body_38bars.ogg", FMOD_DEFAULT, 0, &pSound);
 	if (eRes == FMOD_OK) m_mapSound.emplace(L"Stage1_BGM", pSound); else return E_FAIL;
 
-	/*eRes = FMOD_System_CreateSound(m_pSystem, "../bin/Resources/Sound/Bgm/A_Amb_SunforgeTemple_Bed.ogg", FMOD_DEFAULT, 0, &pSound);
-	if (eRes == FMOD_OK) m_mapSound.emplace(L"Stage2_BGM", pSound); else return E_FAIL;*/
+	eRes = FMOD_System_CreateSound(m_pSystem, "../bin/Resources/Sound/Bgm/A_Amb_SunforgeTemple_Bed.ogg", FMOD_DEFAULT, 0, &pSound);
+	if (eRes == FMOD_OK) m_mapSound.emplace(L"Stage2_BGM", pSound); else return E_FAIL;
 
 	eRes = FMOD_System_CreateSound(m_pSystem, "../bin/Resources/Sound/Bgm/BM_DynamicFightMusic081619_Loop_v2_body.ogg", FMOD_DEFAULT, 0, &pSound);
 	if (eRes == FMOD_OK) m_mapSound.emplace(L"Stage1_Boss_BGM", pSound); else return E_FAIL;
@@ -361,6 +369,84 @@ HRESULT CSoundMgr::LoadSoundFile()
 	eRes = FMOD_System_CreateSound(m_pSystem, "../bin/Resources/Sound/JumpNode/A_Effect_JumpNode_Close_01.ogg", FMOD_DEFAULT, 0, &pSound);
 	if (eRes == FMOD_OK) m_mapSound.emplace(L"JumpNode_Close", pSound); else return E_FAIL;
 
+	/*for. Voice Orin */
+	eRes = FMOD_System_CreateSound(m_pSystem, "../bin/Resources/Sound/Voice/Orin/VO_SM1a1_003b_Orin_ItsSluggish.ogg", FMOD_DEFAULT, 0, &pSound);
+	if (eRes == FMOD_OK) m_mapSound.emplace(L"ItsSluggish", pSound); else return E_FAIL;
+
+	eRes = FMOD_System_CreateSound(m_pSystem, "../bin/Resources/Sound/Voice/Orin/VO_SI3a1_028b_Orin_ItDoesntMatter.ogg", FMOD_DEFAULT, 0, &pSound);
+	if (eRes == FMOD_OK) m_mapSound.emplace(L"ItDoesntMatter", pSound); else return E_FAIL;
+
+	eRes = FMOD_System_CreateSound(m_pSystem, "../bin/Resources/Sound/Voice/Orin/VO_SM1a1_003g_Orin_IKnow.ogg", FMOD_DEFAULT, 0, &pSound);
+	if (eRes == FMOD_OK) m_mapSound.emplace(L"IKnow", pSound); else return E_FAIL;
+
+	eRes = FMOD_System_CreateSound(m_pSystem, "../bin/Resources/Sound/Voice/Orin/VO_SM1a1_003h_Orin_ImApproachingThe.ogg", FMOD_DEFAULT, 0, &pSound);
+	if (eRes == FMOD_OK) m_mapSound.emplace(L"ImApproachingThe", pSound); else return E_FAIL;
+	//2 Stage
+	eRes = FMOD_System_CreateSound(m_pSystem, "../bin/Resources/Sound/Voice/Orin/VO_SM1a2_006b_Orin_ForNow.ogg", FMOD_DEFAULT, 0, &pSound);
+	if (eRes == FMOD_OK) m_mapSound.emplace(L"ForNow", pSound); else return E_FAIL;
+
+	eRes = FMOD_System_CreateSound(m_pSystem, "../bin/Resources/Sound/Voice/Orin/VO_SM1a2_006d_Orin_iDidntCome.ogg", FMOD_DEFAULT, 0, &pSound);
+	if (eRes == FMOD_OK) m_mapSound.emplace(L"iDidntCome", pSound); else return E_FAIL;
+
+	eRes = FMOD_System_CreateSound(m_pSystem, "../bin/Resources/Sound/Voice/Orin/VO_SM1a2_006g_Orin_WeWillDiscuss.ogg", FMOD_DEFAULT, 0, &pSound);
+	if (eRes == FMOD_OK) m_mapSound.emplace(L"WeWillDiscuss", pSound); else return E_FAIL;
+
+	eRes = FMOD_System_CreateSound(m_pSystem, "../bin/Resources/Sound/Voice/Orin/VO_SM1a2_006k_Orin_IHaveA.ogg", FMOD_DEFAULT, 0, &pSound);
+	if (eRes == FMOD_OK) m_mapSound.emplace(L"IHaveA", pSound); else return E_FAIL;
+
+	eRes = FMOD_System_CreateSound(m_pSystem, "../bin/Resources/Sound/Voice/Orin/VO_SM1a2_006i_Orin_IllFindA.ogg", FMOD_DEFAULT, 0, &pSound);
+	if (eRes == FMOD_OK) m_mapSound.emplace(L"IllFindA", pSound); else return E_FAIL;
+
+	eRes = FMOD_System_CreateSound(m_pSystem, "../bin/Resources/Sound/Voice/Orin/VO_SM1a2_006m_Orin_HeBecomesA.ogg", FMOD_DEFAULT, 0, &pSound);
+	if (eRes == FMOD_OK) m_mapSound.emplace(L"HeBecomesA", pSound); else return E_FAIL;
+	//3 Stage
+	eRes = FMOD_System_CreateSound(m_pSystem, "../bin/Resources/Sound/Voice/Orin/VO_SM1a2_007b_Orin_WhatIsIt.ogg", FMOD_DEFAULT, 0, &pSound);
+	if (eRes == FMOD_OK) m_mapSound.emplace(L"WhatIsIt", pSound); else  return E_FAIL;
+
+	/*for. Voice Ravenna */
+	eRes = FMOD_System_CreateSound(m_pSystem, "../bin/Resources/Sound/Voice/Ravenna/VO_SM1a1_003a_Ravenna_IsYourArmor.ogg", FMOD_DEFAULT, 0, &pSound);
+	if (eRes == FMOD_OK) m_mapSound.emplace(L"IsYourArmor", pSound); else return E_FAIL;
+
+	eRes = FMOD_System_CreateSound(m_pSystem, "../bin/Resources/Sound/Voice/Ravenna/VO_SM1a1_003d_Ravenna_SirYoureStill.ogg", FMOD_DEFAULT, 0, &pSound);
+	if (eRes == FMOD_OK) m_mapSound.emplace(L"SirYoureStill", pSound); else return E_FAIL;
+
+	eRes = FMOD_System_CreateSound(m_pSystem, "../bin/Resources/Sound/Voice/Ravenna/VO_SM1a1_003i_Ravenna_GoodLuckOrin.ogg", FMOD_DEFAULT, 0, &pSound);
+	if (eRes == FMOD_OK) m_mapSound.emplace(L"GoodLuckOrin", pSound); else return E_FAIL;
+
+	/*for. Voice Soras */
+	eRes = FMOD_System_CreateSound(m_pSystem, "../bin/Resources/Sound/Voice/Soras/VO_SM1a1_003f_Soras_SheWontWant.ogg", FMOD_DEFAULT, 0, &pSound);
+	if (eRes == FMOD_OK) m_mapSound.emplace(L"SheWontWant", pSound); else return E_FAIL;
+
+	/* for. Sanctum */
+	eRes = FMOD_System_CreateSound(m_pSystem, "../bin/Resources/Sound/Voice/Sanctum/VO_SM1a2_006a_SeventhSanctum_TheMonolithIs.ogg", FMOD_DEFAULT, 0, &pSound);
+	if (eRes == FMOD_OK) m_mapSound.emplace(L"TheMonolithIs", pSound); else return E_FAIL;
+
+	eRes = FMOD_System_CreateSound(m_pSystem, "../bin/Resources/Sound/Voice/Sanctum/VO_SM1a2_006c_SeventhSanctum_HeNearlyHas.ogg", FMOD_DEFAULT, 0, &pSound);
+	if (eRes == FMOD_OK) m_mapSound.emplace(L"HeNearlyHas", pSound); else return E_FAIL;
+
+	eRes = FMOD_System_CreateSound(m_pSystem, "../bin/Resources/Sound/Voice/Sanctum/VO_SM1a2_006e_SeventhSanctum_TheOddsAre.ogg", FMOD_DEFAULT, 0, &pSound);
+	if (eRes == FMOD_OK) m_mapSound.emplace(L"TheOddsAre", pSound); else return E_FAIL;
+
+	eRes = FMOD_System_CreateSound(m_pSystem, "../bin/Resources/Sound/Voice/Sanctum/VO_SM1a2_006f_SeventhSanctum_AndIAm.ogg", FMOD_DEFAULT, 0, &pSound);
+	if (eRes == FMOD_OK) m_mapSound.emplace(L"AndIAm", pSound); else return E_FAIL;
+
+	eRes = FMOD_System_CreateSound(m_pSystem, "../bin/Resources/Sound/Voice/Sanctum/VO_SM1a2_006j_SeventhSanctum_HowDidYou.ogg", FMOD_DEFAULT, 0, &pSound);
+	if (eRes == FMOD_OK) m_mapSound.emplace(L"HowDidYou", pSound); else return E_FAIL;
+
+	eRes = FMOD_System_CreateSound(m_pSystem, "../bin/Resources/Sound/Voice/Sanctum/VO_SM1a2_006h_SeventhSanctum_HowCouldYou.ogg", FMOD_DEFAULT, 0, &pSound);
+	if (eRes == FMOD_OK) m_mapSound.emplace(L"HowCouldYou", pSound); else return E_FAIL;
+
+	eRes = FMOD_System_CreateSound(m_pSystem, "../bin/Resources/Sound/Voice/Sanctum/VO_SM1a2_006l_SeventhSanctum_WhatDoYou.ogg", FMOD_DEFAULT, 0, &pSound);
+	if (eRes == FMOD_OK) m_mapSound.emplace(L"WhatDoYou", pSound); else return E_FAIL;
+
+	eRes = FMOD_System_CreateSound(m_pSystem, "../bin/Resources/Sound/Voice/Sanctum/VO_SM1a2_006n_SeventhSanctum_IFearYou.ogg", FMOD_DEFAULT, 0, &pSound);
+	if (eRes == FMOD_OK) m_mapSound.emplace(L"IFearYou", pSound); else return E_FAIL;
+
+	eRes = FMOD_System_CreateSound(m_pSystem, "../bin/Resources/Sound/Voice/Sanctum/VO_SM1a2_007a_SeventhSanctum_YourOddsAre.ogg", FMOD_DEFAULT, 0, &pSound);
+	if (eRes == FMOD_OK) m_mapSound.emplace(L"YourOddsAre", pSound); else return E_FAIL;
+
+	eRes = FMOD_System_CreateSound(m_pSystem, "../bin/Resources/Sound/Voice/Sanctum/VO_SM1a2_007c_SeventhSanctum_YouWontLike.ogg", FMOD_DEFAULT, 0, &pSound);
+	if (eRes == FMOD_OK) m_mapSound.emplace(L"YouWontLike", pSound); else return E_FAIL;
 	FMOD_System_Update(m_pSystem);
 
 	return S_OK;

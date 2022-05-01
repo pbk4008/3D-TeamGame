@@ -14,6 +14,7 @@
 #include "DropManager.h"
 #include "GuideUIManager.h"
 #include "ScenematicManager.h"
+#include "VoiceManager.h"
 
 //Inventory UI Object
 #include "Inven_UIManager.h"
@@ -81,6 +82,9 @@
 #include "SingleImage.h"
 #include "UIHelper.h"
 
+//Subtitles
+#include "Subtitles.h"
+
 CClient_Observer*	g_pObserver = nullptr;
 CDebugSystem*		g_pDebugSystem = nullptr;
 CShakeManager*		g_pShakeManager = nullptr;
@@ -91,6 +95,7 @@ CWeaponGenerator*	g_pWeaponGenerator = nullptr;
 CDropManager*		g_pDropManager = nullptr;
 CQuestManager*		g_pQuestManager = nullptr;
 CGuideUIManager*	g_pGuideManager = nullptr;
+CVoiceManager*		g_pVoiceManager = nullptr;
 
 CMainApp::CMainApp()
 {
@@ -501,6 +506,12 @@ HRESULT CMainApp::Ready_GameObject_Prototype()
 	//Equip Weapon Slot_2
 	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_UI_EquipWeapon_Slot_2"), CUI_EquippedWeapon_Slot_2::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
+
+	/////////////////////////////
+	//Voice SubTitle
+	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_UI_Subtitle"), CSubtitles::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+
 	return S_OK;
 }
 
@@ -648,6 +659,7 @@ void CMainApp::Free()
 	CQuestManager::DestroyInstance();
 	CGuideUIManager::DestroyInstance();
 	CScenematicManager::DestroyInstance();
+	CVoiceManager::DestroyInstance();
 
 	Safe_Release(g_pObserver);
 	Safe_Release(m_pRenderer);

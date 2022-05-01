@@ -48,11 +48,11 @@ HRESULT CStage2::NativeConstruct()
 	if (FAILED(Ready_NaviMesh()))
 		return E_FAIL;
 
-	//if (FAILED(Ready_MapObject()))
-	//{
-	//	MSGBOX("MapObject");
-	//	return E_FAIL;
-	//}
+	if (FAILED(Ready_MapObject()))
+	{
+		MSGBOX("MapObject");
+		return E_FAIL;
+	}
 
 	if (FAILED(Ready_Player(L"Layer_Silvermane")))
 	{
@@ -86,8 +86,7 @@ HRESULT CStage2::NativeConstruct()
 	if (FAILED(Ready_Portal()))
 		return E_FAIL;
 
-	g_pDropManager = CDropManager::GetInstance();
-	if (FAILED(g_pDropManager->NativeConstruct((SCENEID::SCENE_STAGE2))))
+	if (FAILED(Ready_GameManager()))
 		return E_FAIL;
 
 	g_pGameInstance->StopSound(CSoundMgr::CHANNELID::BGM);
@@ -251,6 +250,9 @@ _int CStage2::Tick(_double TimeDelta)
 	if (g_pQuestManager)
 		g_pQuestManager->Tick(TimeDelta);
 
+	if (g_pVoiceManager && 4 == g_pGameInstance->getCurrentLevel())
+		g_pVoiceManager->Tick(TimeDelta);
+
 	return _int();
 }
 
@@ -258,6 +260,9 @@ _int CStage2::LateTick(_double TimeDelta)
 {
 	if (g_pQuestManager)
 		g_pQuestManager->Late_Tick(TimeDelta);
+
+	if (g_pVoiceManager)
+		g_pVoiceManager->Late_Tick(TimeDelta);
 
 	return _int();
 }
@@ -616,6 +621,19 @@ HRESULT CStage2::Ready_Data_Effect(const _tchar* pDataFilePath)
 		return E_FAIL;
 	}
 #pragma endregion
+
+	return S_OK;
+}
+
+HRESULT CStage2::Ready_GameManager(void)
+{
+	g_pDropManager = CDropManager::GetInstance();
+	if (FAILED(g_pDropManager->NativeConstruct((SCENEID::SCENE_STAGE2))))
+		return E_FAIL;
+
+	g_pVoiceManager = CVoiceManager::GetInstance();
+	if (FAILED(g_pVoiceManager->NativeConstruct(SCENEID::SCENE_STAGE2)))
+		return E_FAIL;
 
 	return S_OK;
 }
@@ -1719,6 +1737,9 @@ void CStage2::Free()
 
 	if (g_pDropManager)
 		CDropManager::DestroyInstance();
+
+	if (g_pVoiceManager)
+		CVoiceManager::DestroyInstance();
 
 	for (auto& iter : m_pDumyDropData)
 		Safe_Delete(iter);
