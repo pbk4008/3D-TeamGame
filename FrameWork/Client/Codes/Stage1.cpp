@@ -842,7 +842,7 @@ HRESULT CStage1::Ready_GameManager(void)
 	if (FAILED(g_pDropManager->NativeConstruct((SCENEID::SCENE_STAGE1))))
 		return E_FAIL;
 
-	//m_pIndicatorManager = GET_INSTANCE(CIndicator_Manager);
+	m_pIndicatorManager = GET_INSTANCE(CIndicator_Manager);
 	m_pScenemaManager = GET_INSTANCE(CScenematicManager);
 
 	g_pVoiceManager = CVoiceManager::GetInstance();

@@ -24,59 +24,10 @@ _int C1H_SwordSkill_2::Tick(const _double& _dDeltaTime)
 
 	_uint iCurKeyFrameIndex = m_pAnimationController->Get_CurKeyFrameIndex();
 
-	CActor* pTarget = m_pSilvermane->Get_TargetExecution();
-	if (pTarget)
-	{
-		CTransform* pTargetTransform = pTarget->Get_Transform();
-		_vector svTargetPos = XMVectorSetY(pTargetTransform->Get_State(CTransform::STATE_POSITION), 0.f);
-		_vector svPos = XMVectorSetY(m_pTransform->Get_State(CTransform::STATE_POSITION), 0.f);
-
-		_vector svLook = XMVector3Normalize(svTargetPos - svPos);
-		_vector svRight = XMVector3Normalize(XMVector3Cross(_vector{ 0.f, 1.f, 0.f, 0.f }, svLook));
-		_vector svUp = XMVector3Normalize(XMVector3Cross(svLook, svRight));
-
-		svLook *= m_pTransform->Get_Scale(CTransform::STATE_LOOK);
-		svRight *= m_pTransform->Get_Scale(CTransform::STATE_RIGHT);
-		svUp *= m_pTransform->Get_Scale(CTransform::STATE_UP);
-
-		m_pTransform->Set_State(CTransform::STATE_LOOK, svLook);
-		m_pTransform->Set_State(CTransform::STATE_RIGHT, svRight);
-		m_pTransform->Set_State(CTransform::STATE_UP, svUp);
-
-		//if (16 < iCurKeyFrameIndex && 18 > iCurKeyFrameIndex ||
-		//	26 < iCurKeyFrameIndex && 28 > iCurKeyFrameIndex ||
-		//	38 < iCurKeyFrameIndex && 40 > iCurKeyFrameIndex ||
-		//	52 < iCurKeyFrameIndex && 54 > iCurKeyFrameIndex)
-		//{
-		//	if (!m_isAttack)
-		//	{
-		//		ATTACKDESC tAttackDesc = m_pSilvermane->Get_AttackDesc();
-		//		tAttackDesc.fDamage += 50.f;
-		//		tAttackDesc.pHitObject = m_pSilvermane->Get_CurerntWeapon();
-		//		pTarget->Hit(tAttackDesc);
-		//		m_isAttack = true;
-
-		//		CCameraShake::SHAKEEVENT tShakeEvent;
-		//		tShakeEvent.fDuration = 0.4f;
-		//		tShakeEvent.fBlendOutTime = 0.3f;
-		//		tShakeEvent.tWaveX.fAmplitude = 0.06f;
-		//		tShakeEvent.tWaveX.fFrequency = 10.f;
-		//		tShakeEvent.tWaveY.fAmplitude = 0.06f;
-		//		tShakeEvent.tWaveY.fFrequency = 6.f;
-		//		tShakeEvent.tWaveZ.fAmplitude = 0.06f;
-		//		tShakeEvent.tWaveZ.fFrequency = 8.f;
-		//		_float3 vPos; XMStoreFloat3(&vPos, m_pTransform->Get_State(CTransform::STATE_POSITION));
-		//		g_pShakeManager->Shake(tShakeEvent, vPos);
-		//	}
-		//}
-		//else
-		//	m_isAttack = false;
-	}
-
 	if (28 > iCurKeyFrameIndex)
 	{
 		m_fMTAcc += g_fDeltaTime;
-		if (0.1f < m_fMTAcc)
+		if (0.1f < m_fMTAcc)	
 		{
 			m_pSilvermane->Create_MotionTrail(m_motiontrailidx);
 			++m_motiontrailidx;
