@@ -42,7 +42,11 @@ _int CCinemaWeapon::Tick(_double _dDeltaTime)
 
 _int CCinemaWeapon::LateTick(_double _dDeltaTime)
 {
+	if (m_pRenderer == nullptr)
+		return -1;
+
 	m_pRenderer->Add_RenderGroup(CRenderer::RENDER_NONALPHA, this);
+
 	return _int();
 }
 

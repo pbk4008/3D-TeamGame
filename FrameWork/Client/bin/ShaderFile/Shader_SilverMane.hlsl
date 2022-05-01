@@ -312,16 +312,7 @@ PS_OUT PS_MAIN_DOWN(PS_IN In)
 	
 	normal = Normalmapping(normal, tbn);
 	
-	if (g_FSDCheck == true)
-	{
-		half4 fsd = g_FSDTexture.Sample(DefaultSampler, In.vUvDepth.xy);
-		
-		Out.diffuse = diffuse + (fsd * float4(1.f, 0.f, 0.f, 1.f));
-	}
-	else
-	{
-		Out.diffuse = diffuse * g_MainColor;
-	}
+	Out.diffuse = diffuse * g_MainColor;
 	
 	Out.normal = half4(normal, 0.f);
 	Out.depth = half4(In.vUvDepth.z / In.vUvDepth.w, In.vUvDepth.w / 300.f, 0.f, 0.f);
@@ -453,7 +444,6 @@ PS_OUT_MOTIONTRAIL PS_MAIN_MOTIONTRAIL(PS_IN_MOTIONTRAIL In)
 	half3 color = g_GradientTex.Sample(DefaultSampler, half2(g_UVdvid,0)).rgb;	
 	half4 normal = half4(In.vNormal.xyz, 0.f);
 	Out.Motiontrail = MotionTrailRim(normal, g_camdir, g_rimintensity, color);
-	Out.Motiontrail.a *= g_Fade;
 	
 	return Out;
 }

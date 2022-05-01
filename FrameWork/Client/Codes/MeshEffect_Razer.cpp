@@ -119,15 +119,20 @@ _int CMeshEffect_Razer::LateTick(_double _dDeltaTime)
 		pEffect->Set_Reset(true);
 		pEffect->setActive(true);
 
+		pEffect = CEffectManager::GetInstance()->Get_Effect((_uint)EFFECT::BOSS_RAZER_SMOKE); //∑π¿Ã¿˙¿Ã∆Â∆Æ∑Œ πŸ≤„¡‡æﬂµ…µÌ 
+		pEffect->Get_Transform()->Set_State(CTransform::STATE_POSITION, m_pTransform->Get_State(CTransform::STATE_POSITION) + _vector{ 0.f, 0.f, 0.f, 0.f });
+		pEffect->Set_Reset(true);
+		pEffect->setActive(true);
+
 		//Ω¶¿Ã≈∑
 		CCameraShake::SHAKEEVENT tShakeEvent;
 		tShakeEvent.fDuration = 1.f;
 		tShakeEvent.fBlendInTime = 0.3f;
 		tShakeEvent.fBlendOutTime = 0.7f;
-		tShakeEvent.tWaveX.fAmplitude = -0.1f;
-		tShakeEvent.tWaveX.fFrequency = 20.f;
-		tShakeEvent.tWaveY.fAmplitude = 0.1f;
-		tShakeEvent.tWaveY.fFrequency = 10.f;
+		tShakeEvent.tWaveX.fAmplitude = -0.15f;
+		tShakeEvent.tWaveX.fFrequency = 30.f;
+		tShakeEvent.tWaveY.fAmplitude = 0.15f;
+		tShakeEvent.tWaveY.fFrequency = 20.f;
 		tShakeEvent.tWaveZ.fAdditionalOffset = 0.2f;
 		tShakeEvent.tWaveZ.fAdditionalOffset = -1.f;
 		tShakeEvent.fInnerRadius = 10.f;

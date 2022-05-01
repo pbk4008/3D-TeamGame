@@ -190,6 +190,65 @@ void CGameObject::Destroy(CGameObject* _obj)
 	Safe_Release(_obj);
 }
 
+void CGameObject::FadeInOut(CVIBuffer* pbuffer, CModel* pModel)
+{
+	if (m_fadeoutcheck == true)
+	{
+		if (m_fadeouttime > 0.f)
+			m_fadeouttime -= g_fDeltaTime * 0.5f;
+		else
+			m_fadeouttime = 0.f;
+
+		if (pbuffer)
+		{
+			pbuffer->SetUp_ValueOnShader("g_FadeOut", &m_fadeoutcheck, sizeof(_bool));
+			pbuffer->SetUp_ValueOnShader("g_Alpha", &m_fadeouttime, sizeof(_float));
+		}
+		else if (pModel)
+		{
+			pModel->SetUp_ValueOnShader("g_FadeOut", &m_fadeoutcheck, sizeof(_bool));
+			pModel->SetUp_ValueOnShader("g_Alpha", &m_fadeouttime, sizeof(_float));
+		}
+
+		if (m_fadeouttime <= 0.f)
+		{
+			m_fadeouttime = 1.f;
+			m_outnextcheck = true;
+			m_fadeoutcheck = false;
+
+			if (g_pGameInstance->getCurrentLevel() != 0 && g_pGameInstance->getCurrentLevel() != 1)
+				m_bActive = false;
+		}
+	}
+	else if (m_fadeincheck == true)
+	{
+		m_bActive = true;
+
+		if (m_fadeintime < 1.f)
+			m_fadeintime += g_fDeltaTime * 0.5f;
+		else
+			m_fadeintime = 1.f;
+
+		if (pbuffer)
+		{
+			pbuffer->SetUp_ValueOnShader("g_FadeOut", &m_fadeincheck, sizeof(_bool));
+			pbuffer->SetUp_ValueOnShader("g_Alpha", &m_fadeintime, sizeof(_float));
+		}
+		else if (pModel)
+		{
+			pModel->SetUp_ValueOnShader("g_FadeOut", &m_fadeincheck, sizeof(_bool));
+			pModel->SetUp_ValueOnShader("g_Alpha", &m_fadeintime, sizeof(_float));
+		}
+
+		if (m_fadeintime >= 1.f)
+		{
+			m_fadeintime = 0.f;
+			m_innextcheck = true;
+			m_fadeincheck = false;
+		}
+	}
+}
+
 HRESULT CGameObject::SetUp_Components(_uint iLevelIndex, const wstring& pPrototypeTag, const wstring&pComponentTag, CComponent** ppOut, void* pArg)
 {
 	auto	iter = find_if(m_Components.begin(), m_Components.end(), CTag_Finder(pComponentTag));

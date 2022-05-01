@@ -50,6 +50,9 @@ private:
 	_float m_fAlpha = 1.f; //레이닿았을때 사라지면서 줄어들 alpha
 	_float m_fDisappearTimeAcc = 0.f; //레이닿았을때 사라지는 시간체크 
 
+	_bool m_bAutoDis = false; //자동으로꺼질수있게
+	_float m_fAutoDisTimeAcc = 0.f; //자동으로꺼질시간
+
 	_bool m_bChange = false; //알파값이 줄어들기 시작해야하는 타이밍 체크해줌 
 	_float m_fRatioAlpha = 1.f; //피 깎였을때 보여야하는 알파값
 

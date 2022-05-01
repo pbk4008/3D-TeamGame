@@ -31,6 +31,9 @@ HRESULT CMeshEffect_Boss_Shield::NativeConstruct(_uint _iSceneID, void* _pArg)
 	if (FAILED(Ready_Components()))
 		return E_FAIL;
 
+	m_dissolveTex = g_pGameInstance->Clone_Component<CTexture>(0, L"Proto_Component_Texture");
+	if (FAILED(m_dissolveTex->Change_Texture(L"DissovleBase"))) MSGBOX("Failed to Change Texture DissovleTex");
+
 	m_fAlpha = 2.f;
 	m_fFlowSpeedAlpha = 1.f;
 
@@ -126,11 +129,28 @@ HRESULT CMeshEffect_Boss_Shield::Render()
 	_float Weight = 1.f;
 	m_pModel->SetUp_ValueOnShader("g_Weight", &Weight, sizeof(_float));
 
+	if (m_bdissolveOn == true)
+	{
+		if (FAILED(m_pModel->SetUp_ValueOnShader("g_bdissolve", &m_bdissolveOn, sizeof(_bool)))) MSGBOX("Failed to Apply dissolvetime");
+	}
+	else if (m_bdissolveOff == true)
+	{
+		if (FAILED(m_pModel->SetUp_ValueOnShader("g_bdissolve", &m_bdissolveOff, sizeof(_bool)))) MSGBOX("Failed to Apply dissolvetime");	
+	}
+
+	if (FAILED(m_pModel->SetUp_ValueOnShader("g_dissolvetime", &m_lifetime, sizeof(_float)))) MSGBOX("Failed to Apply dissolvetime");
+	if (FAILED(m_pModel->SetUp_TextureOnShader("g_DissolveTex", m_dissolveTex, 0))) MSGBOX("Failed to Apply dissolveTex");
+
 	for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
 	{
 		if (FAILED(m_pModel->Render(i, 6)))
 			return E_FAIL;
 	}
+
+	if (m_bdissolveOn == true)
+		DissolveOn(0.5f);
+	else if (m_bdissolveOff == true)
+		DissolveOff(0.5f);
 
 	return S_OK;
 }
@@ -153,6 +173,27 @@ HRESULT CMeshEffect_Boss_Shield::Ready_Components()
 		return E_FAIL;
 
 	return S_OK;
+}
+
+void CMeshEffect_Boss_Shield::DissolveOn(_float dissolvespeed)
+{
+	m_lifetime += (g_fDeltaTime * dissolvespeed);
+	if (m_lifetime >= 1.f)
+	{
+		m_lifetime = 1.f;
+		m_bdissolveOn = false;
+		m_bActive = false;
+	}
+}
+
+void CMeshEffect_Boss_Shield::DissolveOff(_float dissolvespeed)
+{
+	m_lifetime -= (g_fDeltaTime * dissolvespeed);
+	if (m_lifetime <= 0.f)
+	{
+		m_lifetime = 0.f;
+		m_bdissolveOff = false;
+	}
 }
 
 CMeshEffect_Boss_Shield* CMeshEffect_Boss_Shield::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext)
@@ -180,4 +221,6 @@ CGameObject* CMeshEffect_Boss_Shield::Clone(const _uint _iSceneID, void* _pArg)
 void CMeshEffect_Boss_Shield::Free()
 {
 	__super::Free();
+
+	Safe_Release(m_dissolveTex);
 }

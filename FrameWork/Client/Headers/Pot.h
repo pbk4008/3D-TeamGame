@@ -43,6 +43,7 @@ private:
 	CModel* m_pAnimModel;
 	CCapsuleCollider* m_pCollider;
 	_uint m_iPotType;
+	_float	m_ftimer = 0.f;
 private:
 	_bool m_bBroken;
 };

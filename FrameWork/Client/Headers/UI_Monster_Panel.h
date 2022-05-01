@@ -90,6 +90,7 @@ private:
 	class CUI_Monster_BackHpBar* m_pUIBackHpBar = nullptr;
 	class CUI_Monster_Name* m_pUIName = nullptr;
 	class CUI_Monster_GroggyBar* m_pUIGroggyBar = nullptr;
+	class CUI_Monster_LevelNum* m_pUILevelNum = nullptr;
 
 public:
 	static CUI_Monster_Panel* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);

@@ -22,6 +22,8 @@ public:
 
 public: void Change_RenderCamTag(const wstring& tag) { m_pRenderer->SetCameraTag(tag); }
 
+public: void Set_RenderBtn(CRenderer::RENDERBUTTON type, _bool check) { m_pRenderer->SetRenderButton(type, check); }
+
 private:
 	ID3D11Device*			m_pDevice = nullptr;
 	ID3D11DeviceContext*	m_pDeviceContext = nullptr;
@@ -44,6 +46,7 @@ private:
 	_bool				m_isFreeze = false;
 	_bool				m_isDeltaTimeZero = false;
 	_double				m_dFreezeTimeAcc = 0.0;
+
 private:
 	HRESULT SetUp_StartLevel(SCENEID eLevel);
 	HRESULT Ready_GameManager(void);

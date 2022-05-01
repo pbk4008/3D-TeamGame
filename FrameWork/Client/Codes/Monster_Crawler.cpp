@@ -79,7 +79,7 @@ HRESULT CMonster_Crawler::NativeConstruct(const _uint _iSceneID, void* _pArg)
 
 	m_iObectTag = (_uint)GAMEOBJECT::MONSTER_CRYSTAL;
 
-	m_fMaxHp = 10000.f;
+	m_fMaxHp = 40.f;
 	m_fCurrentHp = m_fMaxHp;
 
 	m_fMaxGroggyGauge = 3.f;
@@ -91,8 +91,11 @@ HRESULT CMonster_Crawler::NativeConstruct(const _uint _iSceneID, void* _pArg)
 	m_iObectTag = (_uint)GAMEOBJECT::MONSTER_CRYSTAL;
 
 	m_pCollider->Remove_ActorFromScene();
-	m_pPanel->setActive(false);
 	setActive(false);
+
+	m_pPanel->setActive(false);
+	m_bUIShow = false;
+
 	return S_OK;
 }
 
@@ -163,10 +166,20 @@ _int CMonster_Crawler::Tick(_double _dDeltaTime)
 	}
 
 	if (true == m_bUIShow)
+	{
+		m_pPanel->setActive(true);
 		m_pPanel->Set_Show(true);
 
-	if (false == m_bUIShow)
+		m_fUIShowTimeAcc += (_float)_dDeltaTime;
+	}
+	if(1.f <= m_fUIShowTimeAcc && m_bUIShow)
+	{
 		m_pPanel->Set_Show(false);
+		m_bUIShow = false;
+		m_fUIShowTimeAcc = 0.f;
+	}
+
+	cout << m_bUIShow << endl;
 
 	CActor::LightOnOff(m_pTransform->Get_State(CTransform::STATE_POSITION), XMVectorSet(0.0f, 1.0f, 0.f,1.f), 4.f);
 
@@ -247,7 +260,7 @@ void CMonster_Crawler::Hit(const ATTACKDESC& _tAttackDesc)
 	if (m_bDead || 0.f >= m_fCurrentHp)
 		return;
 
-	m_pPanel->Set_Show(true);
+	//m_pPanel->Set_Show(true);
 
 	if (false == m_bFirstHit)
 	{

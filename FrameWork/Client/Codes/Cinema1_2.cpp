@@ -132,7 +132,7 @@ _int CCinema1_2::Tick(_double dDeltaTime)
 	if (m_pCam->Get_CamFrame() > 900.f)
 	{
 		m_pSilvermane->AnimSpeed(1.08f);
-		m_pGrayeHwak->AnimSpeed(1.15);
+		m_pGrayeHwak->AnimSpeed(1.15f);
 		CTransform* pSilvermaneTr = m_pSilvermane->Get_Transform();
 		pSilvermaneTr->Set_State(CTransform::STATE_POSITION, XMVectorSet(4.0f, -1.f, 15.f, 1.f));
 		pSilvermaneTr->SetUp_Rotation(XMVectorSet(0.f, 1.f, 0.f, 0.f), XMConvertToRadians(270.f));
@@ -170,7 +170,7 @@ _int CCinema1_2::Tick(_double dDeltaTime)
 	
 
 	if (m_pCam->Get_CamFrame() > 1300.f)
-		m_pCam->Minus_Fov(10*dDeltaTime, XMConvertToRadians(20.f));
+		m_pCam->Minus_Fov((_float)(10 * dDeltaTime), XMConvertToRadians(20.f));
 
 	m_pGrayeHwak->Tick(dDeltaTime);
 	m_pSilvermane->Tick(dDeltaTime);
@@ -265,7 +265,7 @@ HRESULT CCinema1_2::Ready_Components()
 	tDesc.fAspect = (_float)g_iWinCx / g_iWinCy;
 
 	CCinemaCam::CINEMADESC tCinemaDesc;
-	ZeroMemory(&tCinemaDesc, sizeof(tCinemaDesc));
+	//ZeroMemory(&tCinemaDesc, sizeof(tCinemaDesc));
 
 	tCinemaDesc.tCameraDesc = tDesc;
 	tCinemaDesc.iShotTag = (_uint)CINEMA_INDEX::CINEMA1_2;

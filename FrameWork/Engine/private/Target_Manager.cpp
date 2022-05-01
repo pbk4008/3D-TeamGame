@@ -269,8 +269,6 @@ void CTarget_Manager::All_Clear(ID3D11DeviceContext* pDeviceContext)
 			pairs->Clear();
 		}
 	}
-
-	//pDeviceContext->ClearDepthStencilView(m_pDepthStencilView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.f, 0);
 }
 
 CRenderTarget* CTarget_Manager::Find_Target(const wstring& pTargetTag)

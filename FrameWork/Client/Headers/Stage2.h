@@ -15,6 +15,7 @@ private:
 public:
 	virtual HRESULT NativeConstruct();
 	virtual _int Tick(_double TimeDelta);
+	virtual _int LateTick(_double TimeDelta);
 	virtual HRESULT Render();
 private:
 	HRESULT	Ready_Light();

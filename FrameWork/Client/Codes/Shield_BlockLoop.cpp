@@ -73,9 +73,12 @@ _int CShield_BlockLoop::Input(const _double& _dDeltaTime)
 
 	if (g_pGameInstance->getMouseKeyDown(CInputDev::MOUSESTATE::MB_RBUTTON))
 	{
-		if (FAILED(m_pStateController->Change_State(L"Shield_Throw")))
-			return -1;
-		return STATE_CHANGE;
+		if (!m_pSilvermane->IsCoolTime_ShieldThrow())
+		{
+			if (FAILED(m_pStateController->Change_State(L"Shield_Throw")))
+				return -1;
+			return STATE_CHANGE;
+		}
 	}
 
 	return _int();

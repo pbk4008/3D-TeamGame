@@ -106,6 +106,7 @@ HRESULT C2H_HammerAttack::ExitState()
 
 	m_isShake2 = false;
 	m_isRangeAttack = false;
+	m_pSilvermane->Set_IsTrail(false);
 	return S_OK;
 }
 
@@ -167,6 +168,11 @@ _int C2H_HammerAttack::Input(const _double& _dDeltaTime)
 			}
 		}
 
+		if (g_pGameInstance->getkeyPress(DIK_E))
+		{
+			return ToSkill();
+		}
+
 		if (g_pGameInstance->getkeyPress(DIK_LSHIFT))
 		{
 			if (g_pGameInstance->getkeyPress(DIK_W) ||
@@ -188,7 +194,6 @@ _int C2H_HammerAttack::Input(const _double& _dDeltaTime)
 			}
 		}
 	}
-
 
 	return _int();
 }

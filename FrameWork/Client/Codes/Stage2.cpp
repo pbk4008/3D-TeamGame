@@ -13,8 +13,9 @@
 #include "UI_Player_HpBar_Red.h"
 #include "UI_Blank_CKey.h"
 #include "UI_Fill_CKey.h"
-#include "UI_Tuto_Base.h"
-#include "UI_Tuto_Font.h"
+#include "UI_HpHeal_Num.h"
+#include "UI_Shield_Meter.h"
+
 //Effect
 #include "Effect_Env_Fire.h"
 #include "Effect_Env_Floating.h"
@@ -74,6 +75,7 @@ HRESULT CStage2::NativeConstruct()
 		return E_FAIL;
 	}
 
+	/* 랜더타겟 지우지 못하는 버그있음요 */
 	if (FAILED(Ready_TriggerSystem(L"../bin/SaveData/Trigger/MonsterSpawnTrigger2.dat")))
 		return E_FAIL;
 
@@ -247,6 +249,16 @@ _int CStage2::Tick(_double TimeDelta)
 	if(g_pDropManager)
 		g_pDropManager->Tick();
 
+	if (g_pQuestManager)
+		g_pQuestManager->Tick(TimeDelta);
+
+	return _int();
+}
+
+_int CStage2::LateTick(_double TimeDelta)
+{
+	if (g_pQuestManager)
+		g_pQuestManager->Late_Tick(TimeDelta);
 
 	return _int();
 }
@@ -454,30 +466,30 @@ HRESULT CStage2::Ready_UI(const _tchar* LayerTag)
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE2, L"Layer_UI", L"Proto_GameObject_UI_Player_HpBar_Red", &Desc)))
 		return E_FAIL;
 
-	CUI_Tuto_Base::UIACTIVEDESC Desc1;
-	ZeroMemory(&Desc1, sizeof(CUI_Tuto_Base::UIACTIVEDESC));
-	_tcscpy_s(Desc1.UIDesc.TextureTag, L"Texture_Tuto_Base");
-	Desc1.UIDesc.bMinus = false;
-	Desc1.UIDesc.fAngle = 0.f;
-	Desc1.UIDesc.fPos = { 1150.f, 360.f, 0.2f };
-	Desc1.UIDesc.fSize = { 333.f , 105.f };
-	Desc1.UIDesc.IDTag = (_uint)GAMEOBJECT::UI_STATIC;
+	//Player HpHeal Num
+	CUI_HpHeal_Num::UIACTIVEDESC Desc0;
+	ZeroMemory(&Desc0, sizeof(CUI_HpHeal_Num::UIACTIVEDESC));
+	_tcscpy_s(Desc0.TextureTag, L"Texture_Monster_LevelNum");
+	Desc0.bMinus = false;
+	Desc0.fAngle = 0.f;
+	Desc0.fPos = { 175.f, 638.f, 0.08f };
+	Desc0.fSize = { 40.f , 40.f };
+	Desc0.IDTag = (_uint)GAMEOBJECT::UI_STATIC;
 
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE2, LayerTag, L"Proto_GameObject_UI_Tuto_Base", &Desc1)))
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE2, LayerTag, L"Proto_GameObject_UI_HpHeal_Num", &Desc0)))
 		return E_FAIL;
 
-	//Tuto Font
-	CUI_Tuto_Font::UIACTIVEDESC Desc2;
-	ZeroMemory(&Desc2, sizeof(CUI_Tuto_Font::UIACTIVEDESC));
-	_tcscpy_s(Desc2.UIDesc.TextureTag, L"Texture_Tuto_Font");
-	Desc2.UIDesc.bMinus = false;
-	Desc2.UIDesc.fAngle = 0.f;
-	Desc2.UIDesc.fPos = { 1130.f, 360.f, 0.1f };
-	Desc2.UIDesc.fSize = { 73.f , 73.f };
-	Desc2.UIDesc.IDTag = (_uint)GAMEOBJECT::UI_STATIC;
-	Desc2.iTextureNum = 0;
+	//Shield_Meter
+	CUI_Shield_Meter::UIACTIVEDESC Desc1;
+	ZeroMemory(&Desc1, sizeof(CUI_Shield_Meter::UIACTIVEDESC));
+	_tcscpy_s(Desc1.UIDesc.TextureTag, L"Texture_Shield_Meter");
+	Desc1.UIDesc.bMinus = false;
+	Desc1.UIDesc.fAngle = 0.f;
+	Desc1.UIDesc.fPos = { 100.f, 620.f, 0.06f };
+	Desc1.UIDesc.fSize = { 50.f, 50.f };
+	Desc1.UIDesc.IDTag = (_uint)GAMEOBJECT::UI_STATIC;
 
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE2, LayerTag, L"Proto_GameObject_UI_Tuto_Font", &Desc2)))
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE2, LayerTag, L"Proto_GameObject_UI_Shield_Meter", &Desc1)))
 		return E_FAIL;
 
 	//Blank_Ckey
@@ -678,7 +690,7 @@ HRESULT CStage2::Ready_TriggerFunctionSetting()
 
 void CStage2::Trgger_Function1()
 {
-	//CLEAR_QUEST(L"T_HUD_FirstStep");
+	CLEAR_ALLQUEST();
 
 	list<CGameObject*>* pLayer = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE2, L"Layer_Crawler");
 
@@ -782,7 +794,7 @@ void CStage2::Trgger_Function1()
 	}
 	m_iCountMonster = 9;
 	
-	//START_QUEST(EQuestHeaderType::Sunforge, L"T_HUD_GotoDungeon");
+	START_QUEST(EQuestHeaderType::Sunforge, L"T_HUD_GotoDungeon");
 }
 
 void CStage2::Trgger_Function2()

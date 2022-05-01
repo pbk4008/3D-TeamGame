@@ -85,7 +85,15 @@ enum class EFFECT
 	EXPLOSION_ROCK,
 	HAMMER_DUST,
 	ENERGY,
-	RAZER
+	RAZER,
+	BOSS_ATTACK_GROUND,
+	BOSS_ATTACK_GROUND2,
+	BOSS_HIT_GROUND_SMOKE,
+	BOSS_RAZER_SMOKE,
+	BOSS_HIT_GROUND,
+	BOSS_SIDE_ATTACK_SMOKE,
+	BOSS_SIDE_ATTACK,
+	BROKEN_POD
 };
 
 enum class ELayer
@@ -261,6 +269,7 @@ enum class EQuestTextType
 	AllKillMonster, /* 모든 몬스터 처치 */
 	FindDropBox,    /* 은닉품 조사 */
 	ChageNewWeapon, /* 새로운 무기로 교체 */
+	GoDeepDungeon,
 	QuestText_END
 };
 
@@ -269,7 +278,8 @@ const wstring g_arrQuestTextTex[(int)EQuestTextType::QuestText_END]
 	L"T_HUD_Find_Sunforge",
 	L"T_HUD_KillAllMonster",
 	L"T_HUD_Find_DropBox",
-	L"T_HUD_EquipNewWeapon"
+	L"T_HUD_EquipNewWeapon",
+	L"T_HUD_GotoDungeon"
 };
 
 enum class EQuestHeaderType
@@ -283,7 +293,7 @@ enum class EQuestHeaderType
 const wstring g_arrQuestHeaderTex[(int)EQuestHeaderType::QuestHeader_END]
 {
 	L"T_HUD_FirstStep",
-	L"T_HUD_GUARD",
+	L"T_HUD_Sunforge",
 	L"T_HUD_GUARD"
 };
 

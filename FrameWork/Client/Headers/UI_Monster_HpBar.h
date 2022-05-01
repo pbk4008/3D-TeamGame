@@ -48,6 +48,10 @@ private:
 	_float m_fAlpha = 1.f;
 	_float m_fDisappearTimeAcc = 0.f;
 
+
+	_bool m_bAutoDis = false; //자동으로꺼질수있게
+	_float m_fAutoDisTimeAcc = 0.f; //자동으로꺼질시간
+
 	_float m_fExHpRatio = 0.f; //이전 피 비율
 	_float m_fHpRatio = 0.f; //현재 피 비율
 	_float m_fCurAttackGauge = 0.f; //이전게이지 - 현재게이지

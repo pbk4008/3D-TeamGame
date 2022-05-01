@@ -94,6 +94,8 @@ HRESULT CBoss_Solaris::NativeConstruct(const _uint _iSceneID, void* pArg)
 	m_pWeapon->setActive(true);
 	setActive(true);
 
+	m_pCharacterController->setFootPosition(_float3(48.f, -5.f, 146.f));
+	m_pCharacterController->Update_OwnerTransform();
 
 	return S_OK;
 }
@@ -114,30 +116,7 @@ _int CBoss_Solaris::Tick(_double TimeDelta)
 	}
 
 	m_pCharacterController->setFootPosition(_float3(48.f, -5.f, 146.f));
-	_vector Pos = m_pTransform->Get_State(CTransform::STATE_POSITION);
-
 	//cout << m_fCurrentHp << endl;
-
-	if (g_pGameInstance->getkeyDown(DIK_NUMPAD2))
-	{
-		m_pStateController->Change_State(L"Attack_R1");
-	}
-	if (g_pGameInstance->getkeyDown(DIK_NUMPAD3))
-	{
-		m_pStateController->Change_State(L"Attack_R2");
-	}
-	if (g_pGameInstance->getkeyDown(DIK_NUMPAD4))
-	{
-		m_pStateController->Change_State(L"Attack_S2_Variant");
-	}
-	if (g_pGameInstance->getkeyDown(DIK_NUMPAD5))
-	{
-		m_pStateController->Change_State(L"Attack_Agg");
-	}
-	if (g_pGameInstance->getkeyDown(DIK_NUMPAD6))
-	{
-		m_pStateController->Change_State(L"Attack_S3");
-	}
 
 	if (0 >= m_fCurrentHp)
 	{
@@ -917,8 +896,6 @@ void CBoss_Solaris::Set_Random_AttackAnim()
 			m_iPreAnim = iRandom;
 		}
 	}
-
-	m_pStateController->Change_State(L"Attack_S5_Protocol");
 }
 
 void CBoss_Solaris::OnEff_MeshExplosion(_bool Active)

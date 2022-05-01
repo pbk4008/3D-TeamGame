@@ -25,6 +25,15 @@ _int C1H_Multishlash::Tick(const _double& _dDeltaTime)
 	CActor* pTarget = m_pSilvermane->Get_TargetExecution();
 	if (pTarget)
 	{
+		if (pTarget->Get_Dead())
+		{
+			pTarget = nullptr;
+			m_pSilvermane->Set_TargetExecution(nullptr);
+		}
+	}
+
+	if (pTarget)
+	{
 		CTransform* pTargetTransform = pTarget->Get_Transform();
 		_vector svTargetPos = XMVectorSetY(pTargetTransform->Get_State(CTransform::STATE_POSITION), 0.f);
 		_vector svPos = XMVectorSetY(m_pTransform->Get_State(CTransform::STATE_POSITION), 0.f);
@@ -53,8 +62,6 @@ _int C1H_Multishlash::Tick(const _double& _dDeltaTime)
 				tAttackDesc.pHitObject = m_pSilvermane->Get_CurerntWeapon();
 				pTarget->Hit(tAttackDesc);
 				m_isAttack = true;
-
-
 
 				CCameraShake::SHAKEEVENT tShakeEvent;
 				tShakeEvent.fDuration = 0.4f;
@@ -121,6 +128,17 @@ HRESULT C1H_Multishlash::EnterState()
 
 	m_pSilvermane->Set_IsTrasceCamera(false);
 	m_pSilvermane->Set_IsDash(true);
+	m_pSilvermane->Set_IsSkill(true);
+	m_pSilvermane->Add_SkillGuage(-50.f);
+
+	if (!m_pSilvermane->IsEquipWeapon())
+	{
+		m_pSilvermane->Set_EquipWeapon(true);
+		m_pSilvermane->Set_WeaponFixedBone("weapon_r");
+	}
+
+	m_iCutIndex = 70;
+
 	return S_OK;
 }
 
@@ -132,6 +150,9 @@ HRESULT C1H_Multishlash::ExitState()
 	m_pSilvermane->Set_IsTrasceCamera(true);
 	m_pSilvermane->Set_IsSkill(false);
 	m_pSilvermane->Set_IsDash(false);
+	m_pSilvermane->Set_IsSkill(false);
+
+	m_isAttack = false;
 	return S_OK;
 }
 
@@ -140,6 +161,109 @@ _int C1H_Multishlash::Input(const _double& _dDeltaTime)
 	_int iProgress = __super::Input(_dDeltaTime);
 	if (NO_EVENT != iProgress)
 		return iProgress;
+
+	_uint iCurKeyFrameIndex = m_pAnimationController->Get_CurKeyFrameIndex();
+	if (m_iCutIndex < iCurKeyFrameIndex)
+	{
+		if (g_pGameInstance->getkeyDown(DIK_SPACE))
+		{
+			if (g_pGameInstance->getkeyPress(DIK_W))
+			{
+				if (FAILED(m_pStateController->Change_State(L"1H_DodgeSpin")))
+					return -1;
+				return STATE_CHANGE;
+			}
+			else if (g_pGameInstance->getkeyPress(DIK_A))
+			{
+				if (FAILED(m_pStateController->Change_State(L"1H_SidestepLeft")))
+					return -1;
+				return STATE_CHANGE;
+			}
+			else if (g_pGameInstance->getkeyPress(DIK_D))
+			{
+				if (FAILED(m_pStateController->Change_State(L"1H_SidestepRight")))
+					return -1;
+				return STATE_CHANGE;
+			}
+			else
+			{
+				if (FAILED(m_pStateController->Change_State(L"1H_SidestepBwd")))
+					return -1;
+				return STATE_CHANGE;
+			}
+		}
+
+		if (g_pGameInstance->getkeyPress(DIK_Q))
+		{
+			if (m_pSilvermane->IsLootShield())
+			{
+				if (FAILED(m_pStateController->Change_State(L"Shield_BlockStart")))
+					return E_FAIL;
+				return STATE_CHANGE;
+			}
+		}
+
+		if (g_pGameInstance->getMouseKeyDown(CInputDev::MOUSESTATE::MB_LBUTTON))
+		{
+			if (FAILED(m_pStateController->Change_State(L"1H_SwordAttackNormalR1_01")))
+				return -1;
+			return STATE_CHANGE;
+		}
+		else if (g_pGameInstance->getMouseKeyDown(CInputDev::MOUSESTATE::MB_RBUTTON))
+		{
+			if (FAILED(m_pStateController->Change_State(L"1H_SwordAttackNormalR2_Start")))
+				return -1;
+			return STATE_CHANGE;
+		}
+
+		if (g_pGameInstance->getkeyPress(DIK_LSHIFT))
+		{
+			if (g_pGameInstance->getkeyPress(DIK_W) ||
+				g_pGameInstance->getkeyPress(DIK_S) ||
+				g_pGameInstance->getkeyPress(DIK_A) ||
+				g_pGameInstance->getkeyPress(DIK_D))
+			{
+				if (!m_pSilvermane->IsEquipWeapon())
+				{
+					if (FAILED(m_pStateController->Change_State(L"SprintFwdStart")))
+						return -1;
+				}
+				else
+				{
+					if (FAILED(m_pStateController->Change_State(L"1H_SwordEquipOff")))
+						return -1;
+				}
+				return STATE_CHANGE;
+			}
+		}
+		else
+		{
+			if (g_pGameInstance->getkeyPress(DIK_W))
+			{
+				if (FAILED(m_pStateController->Change_State(L"1H_SwordJogFwdStart")))
+					return -1;
+				return STATE_CHANGE;
+			}
+			if (g_pGameInstance->getkeyPress(DIK_S))
+			{
+				if (FAILED(m_pStateController->Change_State(L"1H_SwordJogBwdStart")))
+					return -1;
+				return STATE_CHANGE;
+			}
+			if (g_pGameInstance->getkeyPress(DIK_D))
+			{
+				if (FAILED(m_pStateController->Change_State(L"1H_SwordJogRightStart")))
+					return -1;
+				return STATE_CHANGE;
+			}
+			if (g_pGameInstance->getkeyPress(DIK_A))
+			{
+				if (FAILED(m_pStateController->Change_State(L"1H_SwordJogLeftStart")))
+					return -1;
+				return STATE_CHANGE;
+			}
+		}
+	}
 
 	return _int();
 }

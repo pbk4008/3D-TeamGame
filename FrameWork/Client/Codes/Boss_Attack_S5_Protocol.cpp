@@ -96,10 +96,30 @@ _int CBoss_Attack_S5_Protocol::Tick(const _double& TimeDelta)
 	//점프하기직전까지 플레이어거리판단
 	_uint iCurKeyFrameIndex = m_pAnimator->Get_AnimController()->Get_CurKeyFrameIndex();
 
+	cout << iCurKeyFrameIndex << endl;
 	if (40 <= iCurKeyFrameIndex && 44 >= iCurKeyFrameIndex && false == m_bFirstCheckDist)
 	{
+		//쉐이킹 & 이펙트
+		CCameraShake::SHAKEEVENT tShakeEvent;
+		tShakeEvent.fDuration = 0.4f;
+		tShakeEvent.fBlendInTime = 0.1f;
+		tShakeEvent.fBlendOutTime = 0.3f;
+		tShakeEvent.tWaveX.fAmplitude = -0.2f;
+		tShakeEvent.tWaveX.fFrequency = 5.f;
+		tShakeEvent.tWaveY.fAmplitude = 0.2f;
+		tShakeEvent.tWaveY.fFrequency = 1.f;
+		tShakeEvent.tWaveZ.fAdditionalOffset = 0.2f;
+		tShakeEvent.tWaveZ.fAdditionalOffset = -1.f;
+		tShakeEvent.fInnerRadius = 20.f;
+		tShakeEvent.fOuterRadius = 40.f;
+		tShakeEvent.fDistanceRate = 20.f;
+
+		g_pShakeManager->Shake(tShakeEvent, m_pTransform->Get_State(CTransform::STATE_POSITION));
+
 		m_pAnimator->Get_AnimController()->Set_MoveSpeed(fDistToPlayer * (1.f + (fDistToPlayer * 0.017f)));
 		m_bFirstCheckDist = true;
+
+		m_pMonster->Active_Effect((_uint)EFFECT::BOSS_HIT_GROUND_SMOKE, XMVectorSet(0.f, 0.f, 0.f, 0.f));
 	}
 
 
@@ -143,25 +163,26 @@ _int CBoss_Attack_S5_Protocol::Tick(const _double& TimeDelta)
 			{
 				//쉐이킹 & 이펙트
 				CCameraShake::SHAKEEVENT tShakeEvent;
-				tShakeEvent.fDuration = 0.4f;
+				tShakeEvent.fDuration = 0.5f;
 				tShakeEvent.fBlendInTime = 0.1f;
 				tShakeEvent.fBlendOutTime = 0.3f;
-				tShakeEvent.tWaveX.fAmplitude = -0.4f;
-				tShakeEvent.tWaveX.fFrequency = 12.f;
-				tShakeEvent.tWaveY.fAmplitude = 0.4f;
-				tShakeEvent.tWaveY.fFrequency = 4.f;
+				tShakeEvent.tWaveX.fAmplitude = -0.5f;
+				tShakeEvent.tWaveX.fFrequency = 22.f;
+				tShakeEvent.tWaveY.fAmplitude = 0.5f;
+				tShakeEvent.tWaveY.fFrequency = 10.f;
 				tShakeEvent.tWaveZ.fAdditionalOffset = 0.2f;
 				tShakeEvent.tWaveZ.fAdditionalOffset = -1.f;
 				tShakeEvent.fInnerRadius = 20.f;
 				tShakeEvent.fOuterRadius = 40.f;
-				tShakeEvent.fDistanceRate = 4.f;
+				tShakeEvent.fDistanceRate = 20.f;
 
 				g_pShakeManager->Shake(tShakeEvent, m_pTransform->Get_State(CTransform::STATE_POSITION));
 
-				m_pMonster->Active_Effect((_uint)EFFECT::HIT_GROUND, svLook * 5.5f + svRight * 2.1f);
-				m_pMonster->Active_Effect((_uint)EFFECT::HIT_GROUND_SMOKE, XMVectorSet(0.f, 0.f, 0.f, 0.f));
+				m_pMonster->Active_Effect((_uint)EFFECT::BOSS_HIT_GROUND, svLook * 5.5f + svRight * 2.1f);
+				m_pMonster->Active_Effect((_uint)EFFECT::BOSS_HIT_GROUND_SMOKE, XMVectorSet(0.f, 0.f, 0.f, 0.f));
 				m_pMonster->Active_Effect((_uint)EFFECT::EXPLOSION_ROCK_UP, svLook * 5.5f + svRight * 2.1f);
-				m_pMonster->Active_Effect((_uint)EFFECT::ATTACK_GROUND, XMVectorSet(0.f, 0.f, 0.f, 0.f));
+				m_pMonster->Active_Effect((_uint)EFFECT::BOSS_ATTACK_GROUND, XMVectorSet(0.f, 0.f, 0.f, 0.f));
+				m_pMonster->Active_Effect((_uint)EFFECT::BOSS_ATTACK_GROUND2, XMVectorSet(0.f, -1.f, 0.f, 0.f));
 
 				m_bShakeCheck = true;
 			}
@@ -193,8 +214,8 @@ _int CBoss_Attack_S5_Protocol::Tick(const _double& TimeDelta)
 
 			g_pShakeManager->Shake(tShakeEvent, m_pTransform->Get_State(CTransform::STATE_POSITION));
 
-			//m_pMonster->Active_Effect((_uint)EFFECT::HIT_GROUND, svLook * 5.5f + svRight * 2.1f);
-			m_pMonster->Active_Effect((_uint)EFFECT::HIT_GROUND_SMOKE, XMVectorSet(0.f, 0.f, 0.f, 0.f));
+			m_pMonster->Active_Effect((_uint)EFFECT::HIT_GROUND, svLook * 5.5f + svRight * 2.1f);
+			m_pMonster->Active_Effect((_uint)EFFECT::HIT_GROUND_SMOKE, XMVectorSet(0.f, 0.5f, 0.f, 0.f));
 			m_pMonster->Active_Effect((_uint)EFFECT::EXPLOSION_ROCK_UP, svLook * 5.5f + svRight * 2.1f);
 
 			m_bEffectCheck = true;
