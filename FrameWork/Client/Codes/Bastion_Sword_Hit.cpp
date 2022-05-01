@@ -34,9 +34,11 @@ _int CBastion_Sword_Hit::Tick(const _double& _dDeltaTime)
 		return -1;
 	m_pAnimator->Tick(_dDeltaTime);
 
-	if(m_pAnimator->Get_CurrentAnimation()->Is_Finished())
-		m_pStateController->Change_State(L"Idle");
-
+	if (m_pAnimator->Get_CurrentAnimation())
+	{
+		if (m_pAnimator->Get_CurrentAnimation()->Is_Finished())
+			m_pStateController->Change_State(L"Idle");
+	}
 
 	return _int();
 }

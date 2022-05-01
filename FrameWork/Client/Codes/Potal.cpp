@@ -224,7 +224,7 @@ _uint CPotal::Spawn_Monster(_double dDeltaTime)
 				if (pMon->getActive())
 					continue;
 				CActor* pActor = static_cast<CActor*>(pMon);
-				if (!pActor->Get_Dead()&& pMon->getTag() == m_iMonTag)
+				if (!pActor->Get_Dead() && pMon->getTag() == m_iMonTag)
 				{
 					if (m_iMonTag == (_uint)GAMEOBJECT::MONSTER_1H)
 					{

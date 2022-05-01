@@ -131,6 +131,7 @@ _int CMonster_Bastion_2HSword::Tick(_double _dDeltaTime)
 	}
 	else
 	{
+		Set_IsAttack(false);
 		if (L"Death" == m_pStateController->Get_CurStateTag())
 		{
 			if (m_pAnimator->Get_CurrentAnimation()->Is_Finished() && m_lifetime <= 0.f)
@@ -257,8 +258,8 @@ HRESULT CMonster_Bastion_2HSword::Render()
 	}
 
 	RimDesc.rimcol = _float3(0.f, 0.5f, 0.5f);
-	RimDesc.rimintensity = 30.f;
-	XMStoreFloat4(&RimDesc.camdir, XMVector3Normalize(m_pTransform->Get_State(CTransform::STATE_POSITION) - g_pGameInstance->Get_CamPosition(L"Camera_Silvermane")));
+	RimDesc.rimintensity = 5.f;
+	XMStoreFloat4(&RimDesc.camdir, XMVector3Normalize(g_pGameInstance->Get_CamPosition(L"Camera_Silvermane") - m_pTransform->Get_State(CTransform::STATE_POSITION)));
 
 	wstring wstrCamTag = g_pGameInstance->Get_BaseCameraTag();
 	for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
@@ -269,14 +270,14 @@ HRESULT CMonster_Bastion_2HSword::Render()
 		switch (i)
 		{
 		case 2:
-			CActor::BindConstantBuffer(wstrCamTag, &desc, &RimDesc);
+			CActor::BindConstantBuffer(wstrCamTag, &desc);
 			if (FAILED(m_pModel->Render(i, 1))) MSGBOX("Failed To Rendering Shooter");
 			break;
 		default:
 			desc.metalic = 0.4f;
-			desc.roughness = -0.1f;
-			desc.color = _float4(0.254f, 1.f, 0.f, 1.f);
-			desc.empower = 1.f;
+			desc.roughness = 0.f;
+			desc.color = _float4(0.254f, 0.5f, 0.f, 1.f);
+			desc.empower = 0.5f;
 
 			CActor::BindConstantBuffer(wstrCamTag, &desc, &RimDesc);
 			if (FAILED(m_pModel->Render(i, 0))) MSGBOX("Failed To Rendering Shooter");

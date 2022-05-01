@@ -61,7 +61,10 @@
 #include "UI_Ingame.h"
 #include "UI_Player_HpBar.h"
 #include "UI_Player_HpBar_Red.h"
+#include "UI_Boss_HpBar_Red.h"
+#include "UI_Boss_ShieldBar_Blue.h"
 #include "UI_HpHeal_Num.h"
+#include "UI_Bar_Mark.h"
 #include "UI_Monster_Panel.h"
 #include "UI_Monster_Back.h"
 #include "UI_Monster_Level.h"
@@ -184,6 +187,8 @@ HRESULT CLoader::LoadForScene()
 	if (FAILED(hr))
 		return E_FAIL;
 
+	g_pGameInstance->StopSound(CSoundMgr::CHANNELID::BGM);
+
 	return S_OK;
 }
 
@@ -236,8 +241,8 @@ HRESULT CLoader::SetUp_Stage1_Object()
 	//if (FAILED(Load_Stage1_Cinema_Object()))
 	//	return E_FAIL;
 
-	if (FAILED(Load_Pot()))
-		return E_FAIL;
+	//if (FAILED(Load_Pot()))
+	//	return E_FAIL;
 
 	return S_OK;
 }
@@ -1129,7 +1134,35 @@ HRESULT CLoader::Load_Stage3_Object()
 		L"../bin/ShaderFile/Shader_MeshEffect.hlsl", matPivot, CModel::TYPE_STATIC, true)))) MSGBOX(L"메쉬 이펙트용 메쉬 로드 실패");
 
 
+	//Boss_HpBar_Red
+	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_UI_Boss_HpBar_Red"), CUI_Boss_HpBar_Red::Create(m_pDevice, m_pDeviceContext))))
+	{
+		return E_FAIL;
+	}
+	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"Texture_Boss_HpBar_Red", L"../bin/Resources/Texture/UI/Dynamic/Active/T_HUD_BossHealth_Meter_Fill_Red.dds")))
+	{
+		return E_FAIL;
+	}
 
+	//Boss_ShieldBar_Blue
+	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_UI_Boss_ShieldBar_Blue"), CUI_Boss_ShieldBar_Blue::Create(m_pDevice, m_pDeviceContext))))
+	{
+		return E_FAIL;
+	}
+	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"Texture_Boss_ShieldBar_Blue", L"../bin/Resources/Texture/UI/Dynamic/Active/T_HUD_BossHealth_Meter_Fill_Blue.dds")))
+	{
+		return E_FAIL;
+	}
+
+	//Boss_Bar_Mark
+	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_UI_Bar_Mark"), CUI_Bar_Mark::Create(m_pDevice, m_pDeviceContext))))
+	{
+		return E_FAIL;
+	}
+	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"Texture_Bar_Mark", L"../bin/Resources/Texture/UI/Static/Active/T_HUD_BossHealth_Chevron.dds")))
+	{
+		return E_FAIL;
+	}
 
 	return S_OK;
 }
@@ -1464,8 +1497,8 @@ HRESULT CLoader::Load_Stage1BossLoad()
 		return E_FAIL;
 
 	//Boss Solaris
-	//if (FAILED(Load_Stage3_BossLoad()))
-	//	return E_FAIL;
+	if (FAILED(Load_Stage3_BossLoad()))
+		return E_FAIL;
 
 	return S_OK;
 }
@@ -1744,6 +1777,30 @@ HRESULT CLoader::Ready_Test_JS()
 	//{
 	//	return E_FAIL;
 	//}	
+
+
+	//Boss Bastion_Tier4
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Boss_Bastion_Tier4", CModel::Create(m_pDevice, m_pDeviceContext,
+		L"../bin/FBX/Monster/Bastion_Tier4.fbx", CModel::TYPE_ANIM, true))))
+		return E_FAIL;
+
+	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Boss_Bastion", CBoss_Bastion_Judicator::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+
+	//weapon
+	//ShieldBreaker_BossWeapon
+	matPivot = XMMatrixIdentity();
+
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Weapon_ShieldBreaker", CModel::Create(m_pDevice, m_pDeviceContext,
+		"../bin/Resources/Mesh/ShieldBreaker/", "ShieldBreaker.fbx",
+		L"../../Reference/ShaderFile/Shader_StaticMesh.hlsl", matPivot, CModel::TYPE_STATIC, true))))
+	{
+		return E_FAIL;
+	}
+
+	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Weapon_ShieldBreaker", CShieldBreaker::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+
 #pragma endregion
 
 #pragma region 컴포넌트
@@ -2239,6 +2296,10 @@ HRESULT CLoader::Load_MeshEffects()
 		"../bin/Resources/Mesh/Bullet/", "Sphere.fbx",
 		L"../../Reference/ShaderFile/Shader_StaticMesh.hlsl", matPivot, CModel::TYPE_STATIC, true))))
 		return E_FAIL;
+
+	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Cylinder_LowPoly_Idst_Razer", CModel::Create(m_pDevice, m_pDeviceContext,
+	//	"../bin/Resources/Mesh/Effect/FXVarietyPack/", "ky_cylinder_lowPoly_dist.fbx",
+	//	L"../bin/ShaderFile/Shader_MeshEffect.hlsl", matPivot, CModel::TYPE_STATIC, true)))) MSGBOX(L"메쉬 이펙트용 메쉬 로드 실패");
 
 	return S_OK;
 }
@@ -2763,7 +2824,7 @@ HRESULT CLoader::Load_StaticEffects()
 	vecHitParticle[0].ParticleColor = { 1.f , 0.6f, 0.3f ,1.f };
 	vecHitParticle[0].Power = 2.5f;
 
-	//마지막에 받을 Effect변수 넣기
+	// 마지막에 받을 Effect변수 넣기
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Razer", FullName, &vecHitParticle[0], (CGameObject**)&pEffect)))
 	{
 		MSGBOX("Failed to Creating Effect_Razer in CStage1::Ready_Effect()");

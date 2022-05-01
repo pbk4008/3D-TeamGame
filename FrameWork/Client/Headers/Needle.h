@@ -27,7 +27,7 @@ public:
 	virtual void OnTriggerEnter(CCollision& collision) override;
 	virtual void OnTriggerExit(CCollision& collision) override;
 
-	virtual void RangeAttack() override;
+	virtual void RangeAttack(const _float _fForce = 1.f) override;
 
 private:
 	HRESULT Ready_Components();

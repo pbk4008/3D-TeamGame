@@ -48,12 +48,14 @@ _int CGuideUIManager::Late_Tick(_double dTimeDelta)
 		m_pBg->LateTick(dTimeDelta);
 	}
 
+	/* 인벤토리 가이드 */
 	if (true == m_bInvenRender)
 	{
 		if (m_pInvenGuide->getActive())
 			m_pInvenGuide->LateTick(dTimeDelta);
 	}
 
+	/* 죽음의 데스의 화면 */
 	if (m_pDeath->getActive())
 	{
 		m_pDeath->LateTick(dTimeDelta);
@@ -236,8 +238,8 @@ void CGuideUIManager::ShowNext(void)
 					m_szTextureName = arrSecond[m_iTexIdx];
 					break;
 				case 2:
-					break;
 					m_szTextureName = arrThird[m_iTexIdx];
+					break;
 				case 3:
 					m_szTextureName = arrFourth[m_iTexIdx];
 					break;

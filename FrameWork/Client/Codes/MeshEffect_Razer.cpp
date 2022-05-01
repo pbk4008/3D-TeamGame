@@ -110,7 +110,7 @@ _int CMeshEffect_Razer::LateTick(_double _dDeltaTime)
 		pEffect->setActive(true);
 
 		pEffect = CEffectManager::GetInstance()->Get_Effect((_uint)EFFECT::ATTACK_GROUND);
-		pEffect->Get_Transform()->Set_State(CTransform::STATE_POSITION, m_pTransform->Get_State(CTransform::STATE_POSITION) + _vector{ 0.f, 0.f, 0.f, 0.f });
+		pEffect->Get_Transform()->Set_State(CTransform::STATE_POSITION, m_pTransform->Get_State(CTransform::STATE_POSITION) + _vector{ 0.f, 0.5f, 0.f, 0.f });
 		pEffect->Set_Reset(true);
 		pEffect->setActive(true);
 

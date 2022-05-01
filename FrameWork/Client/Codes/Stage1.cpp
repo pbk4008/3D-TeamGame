@@ -188,6 +188,7 @@ HRESULT CStage1::NativeConstruct()
 	//	MSGBOX("Meteor");
 	//	return E_FAIL;
 	//}
+
 	if (FAILED(Ready_Indicator()))
 	{
 		MSGBOX("Indicator");
@@ -206,10 +207,10 @@ HRESULT CStage1::NativeConstruct()
 		return E_FAIL;
 	}
 
-	if (FAILED(Ready_Pot()))
-		return E_FAIL;
+	//if (FAILED(Ready_Pot()))
+	//	return E_FAIL;
 
-	/// 시네마 릭 남으면 시네마 캠 레디 컴포넌트에 디스크립션 제로메모리 확인 
+	////// 시네마 릭 남으면 시네마 캠 레디 컴포넌트에 디스크립션 제로메모리 확인 
 	//if (FAILED(Ready_Cinema()))
 	//{
 	//	MSGBOX("Cinema");
@@ -217,6 +218,7 @@ HRESULT CStage1::NativeConstruct()
 	//}
 
 	g_pGameInstance->PlayBGM(L"Stage1_BGM");
+
 	//m_pScenemaManager->Active_Scenema((_uint)CINEMA_INDEX::CINEMA1_1);
 
 	if (FAILED(Ready_Obstacle()))
@@ -363,20 +365,20 @@ _int CStage1::Tick(_double TimeDelta)
 	//	pMidBoss->setActive(true);
 	//}
 	// monster
-	if (g_pGameInstance->getkeyDown(DIK_NUMPAD0))
-	{
-		CMonster_Crawler* pMonster = nullptr;
-		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Test", L"Proto_GameObject_Monster_Crawler", &fPos, (CGameObject**)&pMonster)))
-			return -1;
-		pMonster->setActive(true);
-	}
-	if (g_pGameInstance->getkeyDown(DIK_NUMPAD1))
-	{
-		CMonster_EarthAberrant* pMonster = nullptr;
-		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Test", L"Proto_GameObject_Monster_EarthAberrant", &fPos, (CGameObject**)&pMonster)))
-			return -1;
-		pMonster->setActive(true);
-	}
+	//if (g_pGameInstance->getkeyDown(DIK_NUMPAD0))
+	//{
+	//	CMonster_Crawler* pMonster = nullptr;
+	//	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Test", L"Proto_GameObject_Monster_Crawler", &fPos, (CGameObject**)&pMonster)))
+	//		return -1;
+	//	pMonster->setActive(true);
+	//}
+	//if (g_pGameInstance->getkeyDown(DIK_NUMPAD1))
+	//{
+	//	CMonster_EarthAberrant* pMonster = nullptr;
+	//	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Test", L"Proto_GameObject_Monster_EarthAberrant", &fPos, (CGameObject**)&pMonster)))
+	//		return -1;
+	//	pMonster->setActive(true);
+	//}
 	//if (g_pGameInstance->getkeyDown(DIK_NUMPAD2))
 	//{
 	//	CMonster_Bastion_Sword* pMonster = nullptr;
@@ -465,6 +467,9 @@ _int CStage1::Tick(_double TimeDelta)
 	if (g_pGuideManager)
 		g_pGuideManager->Tick(g_dImmutableTime);
 
+	if (g_pVoiceManager)
+		g_pVoiceManager->Tick(TimeDelta);
+
 	Open_Wall();
 
 
@@ -482,6 +487,9 @@ _int CStage1::LateTick(_double TimeDelta)
 
 	if (g_pGuideManager)
 		g_pGuideManager->Late_Tick(g_dImmutableTime);
+
+	if (g_pVoiceManager)
+		g_pVoiceManager->Late_Tick(TimeDelta);
 
 	return _int();
 }
@@ -526,8 +534,6 @@ HRESULT CStage1::Ready_MapObject()
 	_uint iTmpIndx = 0;
 	for (auto& pDesc : tEnvironmentDesc)
 	{
-		if (pDesc.wstrInstaneTag == L"")
-			continue;
 		if (pDesc.wstrInstaneTag == L"PavementDecor_01_Lod0.fbx")
 		{
 			for (auto pMatrix : pDesc.tInstanceDesc.vecMatrix)
@@ -574,13 +580,12 @@ HRESULT CStage1::Ready_MapObject()
 				}
 			}
 		}
-		else
-		{
-			if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Environment", L"Proto_GameObject_Environment", &pDesc)))
-			{
-				return E_FAIL;
-			}
-		}
+	
+		if (pDesc.wstrInstaneTag == L"")
+			break;
+
+		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Environment", L"Proto_GameObject_Environment", &pDesc)))
+			return E_FAIL;
 	}
 
 	//------------------------------------------- Tree --------------------------------------------------------------------//
@@ -839,6 +844,10 @@ HRESULT CStage1::Ready_GameManager(void)
 
 	m_pIndicatorManager = GET_INSTANCE(CIndicator_Manager);
 	m_pScenemaManager = GET_INSTANCE(CScenematicManager);
+
+	g_pVoiceManager = CVoiceManager::GetInstance();
+	if (FAILED(g_pVoiceManager->NativeConstruct(SCENEID::SCENE_STAGE1)))
+		return E_FAIL;
 
 	return S_OK;
 }
@@ -2435,5 +2444,5 @@ void CStage1::Free()
 	m_vecMeteor.clear();
 
 	CWeaponGenerator::DestroyInstance();
-
+	CVoiceManager::DestroyInstance();
 }

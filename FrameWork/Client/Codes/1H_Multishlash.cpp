@@ -31,7 +31,6 @@ _int C1H_Multishlash::Tick(const _double& _dDeltaTime)
 			m_pSilvermane->Set_TargetExecution(nullptr);
 		}
 	}
-
 	if (pTarget)
 	{
 		CTransform* pTargetTransform = pTarget->Get_Transform();
@@ -49,36 +48,38 @@ _int C1H_Multishlash::Tick(const _double& _dDeltaTime)
 		m_pTransform->Set_State(CTransform::STATE_LOOK, svLook);
 		m_pTransform->Set_State(CTransform::STATE_RIGHT, svRight);
 		m_pTransform->Set_State(CTransform::STATE_UP, svUp);
-
-		if (16 < iCurKeyFrameIndex && 18 > iCurKeyFrameIndex ||
-			26 < iCurKeyFrameIndex && 28 > iCurKeyFrameIndex ||
-			38 < iCurKeyFrameIndex && 40 > iCurKeyFrameIndex ||
-			52 < iCurKeyFrameIndex && 54 > iCurKeyFrameIndex)
-		{
-			if (!m_isAttack)
-			{
-				ATTACKDESC tAttackDesc = m_pSilvermane->Get_AttackDesc();
-				tAttackDesc.fDamage += 50.f;
-				tAttackDesc.pHitObject = m_pSilvermane->Get_CurerntWeapon();
-				pTarget->Hit(tAttackDesc);
-				m_isAttack = true;
-
-				CCameraShake::SHAKEEVENT tShakeEvent;
-				tShakeEvent.fDuration = 0.4f;
-				tShakeEvent.fBlendOutTime = 0.3f;
-				tShakeEvent.tWaveX.fAmplitude = 0.06f;
-				tShakeEvent.tWaveX.fFrequency = 10.f;
-				tShakeEvent.tWaveY.fAmplitude = 0.06f;
-				tShakeEvent.tWaveY.fFrequency = 6.f;
-				tShakeEvent.tWaveZ.fAmplitude = 0.06f;
-				tShakeEvent.tWaveZ.fFrequency = 8.f;
-				_float3 vPos; XMStoreFloat3(&vPos, m_pTransform->Get_State(CTransform::STATE_POSITION));
-				g_pShakeManager->Shake(tShakeEvent, vPos);
-			}
-		}
-		else
-			m_isAttack = false;
 	}
+
+	if (16 < iCurKeyFrameIndex && 18 > iCurKeyFrameIndex ||
+		26 < iCurKeyFrameIndex && 28 > iCurKeyFrameIndex ||
+		38 < iCurKeyFrameIndex && 40 > iCurKeyFrameIndex ||
+		52 < iCurKeyFrameIndex && 54 > iCurKeyFrameIndex)
+	{
+		if (!m_isAttack)
+		{
+			//ATTACKDESC tAttackDesc = m_pSilvermane->Get_AttackDesc();
+			//tAttackDesc.fDamage += 50.f;
+			//tAttackDesc.pHitObject = m_pSilvermane->Get_CurerntWeapon();
+			//pTarget->Hit(tAttackDesc);
+
+			m_pSilvermane->RangeAttack(2.f);
+			m_isAttack = true;
+
+			CCameraShake::SHAKEEVENT tShakeEvent;
+			tShakeEvent.fDuration = 0.4f;
+			tShakeEvent.fBlendOutTime = 0.3f;
+			tShakeEvent.tWaveX.fAmplitude = 0.06f;
+			tShakeEvent.tWaveX.fFrequency = 10.f;
+			tShakeEvent.tWaveY.fAmplitude = 0.06f;
+			tShakeEvent.tWaveY.fFrequency = 6.f;
+			tShakeEvent.tWaveZ.fAmplitude = 0.06f;
+			tShakeEvent.tWaveZ.fFrequency = 8.f;
+			_float3 vPos; XMStoreFloat3(&vPos, m_pTransform->Get_State(CTransform::STATE_POSITION));
+			g_pShakeManager->Shake(tShakeEvent, vPos);
+		}
+	}
+	else
+		m_isAttack = false;
 
 	if (10 < iCurKeyFrameIndex && 60 > iCurKeyFrameIndex)
 	{
@@ -125,6 +126,7 @@ HRESULT C1H_Multishlash::EnterState()
 	if (FAILED(m_pAnimationController->SetUp_NextAnimation("SK_Silvermane.ao|A_1H_Sword_Normal_JustFrame_Multishlash", false)))
 		return E_FAIL;
 	m_pAnimationController->Set_RootMotion(true, true);
+	m_pAnimationController->Mul_MoveSpeed(1.4f);
 
 	m_pSilvermane->Set_IsTrasceCamera(false);
 	m_pSilvermane->Set_IsDash(true);
@@ -146,6 +148,8 @@ HRESULT C1H_Multishlash::ExitState()
 {
 	if (FAILED(__super::ExitState()))
 		return E_FAIL;
+	
+	m_pAnimationController->Div_MoveSpeed(1.4f);
 
 	m_pSilvermane->Set_IsTrasceCamera(true);
 	m_pSilvermane->Set_IsSkill(false);
@@ -153,6 +157,7 @@ HRESULT C1H_Multishlash::ExitState()
 	m_pSilvermane->Set_IsSkill(false);
 
 	m_isAttack = false;
+
 	return S_OK;
 }
 

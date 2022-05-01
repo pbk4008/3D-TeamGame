@@ -166,7 +166,7 @@ void CFury::OnTriggerEnter(CCollision& collision)
 	}
 }
 
-void CFury::RangeAttack()
+void CFury::RangeAttack(const _float _fForce)
 {
 	OVERLAPDESC tOverlapDesc;
 	tOverlapDesc.geometry = PxSphereGeometry(6.f);

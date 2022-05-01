@@ -244,7 +244,7 @@ void CPlayer_Weapon::OnTriggerEnter(CCollision& collision)
 
 }
 
-void CPlayer_Weapon::RangeAttack()
+void CPlayer_Weapon::RangeAttack(const _float _fForce)
 {
 	OVERLAPDESC tOverlapDesc;
 	switch (m_eType)
@@ -282,7 +282,7 @@ void CPlayer_Weapon::RangeAttack()
 			case (_uint)GAMEOBJECT::BOSS:
 			{
 				ATTACKDESC tAttackDesc = m_pOwner->Get_AttackDesc();
-				tAttackDesc.fDamage += m_fDamage * 0.8f;
+				tAttackDesc.fDamage += m_fDamage * _fForce * 0.8f;
 				tAttackDesc.iLevel = 2;
 				tAttackDesc.pHitObject = this;
 				pActor->Hit(tAttackDesc);
@@ -395,14 +395,14 @@ HRESULT CPlayer_Weapon::Ready_TrailEffects(const Desc& _tDesc)
 
 	if (L"Needle" == _tDesc.weaponName)
 	{
-		CTrailEffect::DESC tTrailDesc;
-		tTrailDesc.pOwnerTransform = m_pTransform;
-		tTrailDesc.fLength = 0.4f;
-		XMStoreFloat4x4(&tTrailDesc.matPivot, XMMatrixTranslation(0.f, 0.f, 2.f));
-		tTrailDesc.wstrTextureTag = L"Fire_02";
-		if (FAILED(g_pGameInstance->Add_GameObjectToLayer(m_iSceneID, L"Layer_Effect", L"Proto_GameObject_TrailEffect_Normal", &tTrailDesc, (CGameObject**)&m_pTrailEffect_Normal)))
-			MSGBOX(L"노말 트레일 생성 실패. from Needle");
-		Safe_AddRef(m_pTrailEffect_Normal);
+		//CTrailEffect::DESC tTrailDesc;
+		//tTrailDesc.pOwnerTransform = m_pTransform;
+		//tTrailDesc.fLength = 0.4f;
+		//XMStoreFloat4x4(&tTrailDesc.matPivot, XMMatrixTranslation(0.f, 0.f, 2.f));
+		//tTrailDesc.wstrTextureTag = L"Fire_02";
+		//if (FAILED(g_pGameInstance->Add_GameObjectToLayer(m_iSceneID, L"Layer_Effect", L"Proto_GameObject_TrailEffect_Normal", &tTrailDesc, (CGameObject**)&m_pTrailEffect_Normal)))
+		//	MSGBOX(L"노말 트레일 생성 실패. from Needle");
+		//Safe_AddRef(m_pTrailEffect_Normal);
 	}
 	else if (L"Eclipse" == _tDesc.weaponName)
 	{

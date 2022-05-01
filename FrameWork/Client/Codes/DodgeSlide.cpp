@@ -40,6 +40,11 @@ _int CDodgeSlide::Tick(const _double& _dDeltaTime)
 		}
 	}
 
+	if (m_iCutIndex < iCurKeyFrameIndex)
+	{
+		m_pSilvermane->Set_IsDash(false);
+	}
+
 	switch (m_eDir)
 	{
 	case EDir::Forward:

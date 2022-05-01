@@ -58,7 +58,7 @@ _int CEffect_Hammer_Dust::Tick(_double TimeDelta)
 	if (m_Desc.fFrame >= iAllFrameCount)
 	{
 		m_Desc.fFrame = 0;
-		//setActive(false);
+		setActive(false);
 	}
 
 
@@ -76,11 +76,10 @@ _int CEffect_Hammer_Dust::Tick(_double TimeDelta)
 
 	_vector vScale = XMVectorZero();
 
-	vScale = { 1.f, 1.f,1.f,0.f };
+	vScale = { 3.f, 3.f,3.f,0.f };
 	m_pTransform->Scaling(vScale);
 
 
-	m_pTransform->Set_State(CTransform::STATE_POSITION, XMVectorSet(0.f, 2.f, 0.f, 1.f));
     return 0;
 
 }
