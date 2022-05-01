@@ -4,6 +4,8 @@
 
 #include "Boss_Weapon.h"
 
+#include "Light.h"
+
 #include "Boss_Idle.h"
 #include "Boss_Walk_Front.h"
 #include "Boss_Dash_Back.h"
@@ -82,10 +84,10 @@ HRESULT CBoss_Solaris::NativeConstruct(const _uint _iSceneID, void* pArg)
 		return E_FAIL;
 	
 	m_iObectTag = (_uint)GAMEOBJECT::BOSS;
-	m_fMaxHp = 500.f;
+	m_fMaxHp = 1000.f;
 	m_fCurrentHp = m_fMaxHp;
 
-	m_fMaxGroggyGauge = 500.f;
+	m_fMaxGroggyGauge = 1000.f;
 	m_fGroggyGauge = m_fMaxGroggyGauge;
 
 	m_tAttackDesc.iLevel = 3;
@@ -114,7 +116,10 @@ _int CBoss_Solaris::Tick(_double TimeDelta)
 		return -1;
 	}
 
-	m_pCharacterController->setFootPosition(_float3(48.f, -5.f, 146.f));
+	m_bLightCheck = true;
+	m_pActiveLight->Set_Active(true);
+
+	//m_pCharacterController->setFootPosition(_float3(48.f, -5.f, 146.f));
 	//cout << m_fCurrentHp << endl;
 
 	if (0 >= m_fCurrentHp)
@@ -144,7 +149,7 @@ _int CBoss_Solaris::Tick(_double TimeDelta)
 	_vector vDist = vMonsterPos - g_pObserver->Get_PlayerPos();
 	_float fDistToPlayer = XMVectorGetX(XMVector3Length(vDist));
 
-	if (0.f >= m_fGroggyGauge && 0.32f <= Get_HpRatio())
+	if (0.f >= m_fGroggyGauge && 0.3f <= Get_HpRatio())
 	{
 		//스턴상태일때 스턴state에서 현재 그로기 계속 0으로 고정시켜줌
 		m_bGroggy = true;
@@ -166,10 +171,13 @@ _int CBoss_Solaris::Tick(_double TimeDelta)
 		}
 	}
 
+	//m_bGroggy = false;
+	//m_fGroggyGauge = 500.f;
+	//m_fCurrentHp = 500.f;
+
+	Setting_Light();
+	
 	m_pCharacterController->Move(TimeDelta, m_pTransform->Get_Velocity());
-
-	//cout << fDistToPlayer << endl;
-
 	return 0;
 }
 
@@ -188,7 +196,7 @@ _int CBoss_Solaris::LateTick(_double TimeDelta)
 
 	m_pCharacterController->Update_OwnerTransform();;
 
-	//m_pRenderer->Add_RenderGroup(CRenderer::RENDER_NONALPHA, this);
+	m_pRenderer->Add_RenderGroup(CRenderer::RENDER_NONALPHA, this);
 
 	if (nullptr != m_pWeapon)
 	{
@@ -915,6 +923,22 @@ void CBoss_Solaris::Set_Random_AttackAnim()
 		}
 	}
 
+}
+
+void CBoss_Solaris::Active_Light()
+{
+	m_bLightCheck = true;
+	m_pActiveLight->Set_Active(true);
+}
+
+void CBoss_Solaris::Setting_Light()
+{
+	CActor::LightOnOff(m_pActiveLight->Get_LightDesc(), m_fDisTime);
+}
+
+void CBoss_Solaris::Set_LightDisTime(_float DisTime)
+{
+	m_fDisTime = DisTime;
 }
 
 void CBoss_Solaris::OnEff_MeshExplosion(_bool Active)
