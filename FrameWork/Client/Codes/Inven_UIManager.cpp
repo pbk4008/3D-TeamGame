@@ -106,6 +106,16 @@ void CInven_UIManager::ShowLevelUp(void)
 	m_pHud->ShowLevelUp_HUD();
 }
 
+void CInven_UIManager::ShowLevelUpHUD(_int iLevel)
+{
+	m_pHud->ShowLevelUp_HUD(iLevel);
+}
+
+void CInven_UIManager::ShowMapInfo(_bool OnOff, _int TexIdx/* = 0*/)
+{
+	m_pHud->ShowMapInfo_HUD(OnOff, TexIdx);
+}
+
 CHud* CInven_UIManager::GetHud(void)
 {
 	if(nullptr == m_pHud)

@@ -449,6 +449,7 @@ _int CStage1::Tick(_double TimeDelta)
 			{
 				pBoss->setActive(true);
 				m_pScenemaManager->ResetCinema();
+				SHOW_MAPINFO(TRUE, 1); /* 중간보스 HUD */
 			}
 		}
 	}
@@ -531,8 +532,6 @@ HRESULT CStage1::Ready_MapObject()
 	_uint iTmpIndx = 0;
 	for (auto& pDesc : tEnvironmentDesc)
 	{
-		if (pDesc.wstrInstaneTag == L"")
-			continue;
 		if (pDesc.wstrInstaneTag == L"PavementDecor_01_Lod0.fbx")
 		{
 			for (auto pMatrix : pDesc.tInstanceDesc.vecMatrix)
@@ -579,12 +578,12 @@ HRESULT CStage1::Ready_MapObject()
 				}
 			}
 		}
-		else
+
+		if (pDesc.wstrInstaneTag == L"")
+			break;
+		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Environment", L"Proto_GameObject_Environment", &pDesc)))
 		{
-			if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Environment", L"Proto_GameObject_Environment", &pDesc)))
-			{
-				return E_FAIL;
-			}
+			return E_FAIL;
 		}
 	}
 
@@ -1544,6 +1543,8 @@ void CStage1::Open_Wall()
 //땅강아지 3마리
 void CStage1::Trgger_Function1()
 {
+	SHOW_MAPINFO(TRUE, 0);
+
 	//TriggerSystem에서 저장된 몬스터 위치를 가져온다(MonsterType)
 	list<CGameObject*>* pLayer = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Layer_Crawler");
 	//몬스터 위치를 통해서 클론한다
@@ -1594,6 +1595,8 @@ void CStage1::Trgger_Function1()
 //대지 1마리
 void CStage1::Trgger_Function2()
 {
+	SHOW_MAPINFO(TRUE, 0);
+
 	list<CGameObject*>* pLayer = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Layer_EarthAberrant");
 	//몬스터 위치를 통해서 클론한다
 	if (!pLayer)

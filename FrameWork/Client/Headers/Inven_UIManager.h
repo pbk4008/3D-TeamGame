@@ -30,7 +30,14 @@ public: /* Open Modal */
 	void  OpenModal(void);
 	void  CloseModal(void);
 	_bool IsOpenModal(void);
+
+public: /* Level Up */
 	void ShowLevelUp(void);
+	void ShowLevelUpHUD(_int iLevel);
+
+public: /* Map Info */
+	void ShowMapInfo(_bool OnOff, _int TexIdx = 0);
+
 public: 
 	_bool Get_OpenCheck(void) { return m_bOpenModal; }
 	CHud* GetHud(void);
@@ -47,7 +54,7 @@ private: /* Inventory */
 private: /* Notify UI */
 	CHud*	m_pHud = nullptr;
 
-public: /* set Level tex */
+public: /* set Level Tex */
 	void	SetLevelBG(_int PlayerLevel);
 
 public:
@@ -60,6 +67,9 @@ private:
 private:
 	virtual void Free() override;
 };
+
+#define SHOW_MAPINFO(OnOff, texIDX) g_pInvenUIManager->ShowMapInfo(OnOff, texIDX);
+#define SHOW_LEVELUP_HUD(Level)		g_pInvenUIManager->ShowLevelUpHUD(Level);
 
 END
 #endif // Inven_UIManager_h__
