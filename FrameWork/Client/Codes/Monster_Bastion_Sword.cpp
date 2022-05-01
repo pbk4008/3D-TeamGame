@@ -146,9 +146,18 @@ _int CMonster_Bastion_Sword::Tick(_double _dDeltaTime)
 	Dead_Check();
 
 	if (true == m_bUIShow)
+	{
+		m_pPanel->setActive(true);
 		m_pPanel->Set_Show(true);
-	else if (false == m_bUIShow)
+
+		m_fUIShowTimeAcc += (_float)_dDeltaTime;
+	}
+	if (1.f <= m_fUIShowTimeAcc && m_bUIShow)
+	{
 		m_pPanel->Set_Show(false);
+		m_bUIShow = false;
+		m_fUIShowTimeAcc = 0.f;
+	}
 
 	m_pPanel->Set_TargetWorldMatrix(m_pTransform->Get_WorldMatrix());
 
@@ -220,6 +229,7 @@ HRESULT CMonster_Bastion_Sword::Render()
 			break;
 		default:
 			ZeroMemory(&desc, sizeof(SCB));
+			desc.metalic = 0.1f;
 			desc.color = _float4(1.f, 1.f, 0.f, 1.f);
 			desc.empower = 1.f;
 			CActor::BindConstantBuffer(wstrCamTag, &desc, &RimDesc);
@@ -342,8 +352,8 @@ void CMonster_Bastion_Sword::setActive(_bool bActive)
 		}
 		if (m_pWeapon)
 			m_pWeapon->setActive(true);
-		if (m_pPanel)
-			m_pPanel->setActive(true);
+		//if (m_pPanel)
+		//	m_pPanel->setActive(true);
 	}
 }
 

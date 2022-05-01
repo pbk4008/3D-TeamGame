@@ -40,8 +40,6 @@ private:
 private:
 	CAnimationController* m_pController;
 	_uint		m_iActorTag;
-
-	CTexture*	m_PhFSDTexture = nullptr;
 };
 END
 #endif

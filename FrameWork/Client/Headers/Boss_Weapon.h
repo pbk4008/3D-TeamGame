@@ -4,6 +4,8 @@
 
 BEGIN(Client)
 
+class CTrailEffect_Distortion;
+
 class CBoss_Weapon final : public CWeapon
 {
 private:
@@ -28,8 +30,10 @@ private:
 	_int Attach_Owner(const _double& Timedelta);
 
 private:
-	_float4x4 m_matPivot;
+	_float4x4 m_matPivot{};
 	CCapsuleCollider* m_pCollider = nullptr;
+
+	CTrailEffect_Distortion* m_pTrailEffect_Distortion = nullptr;
 
 public:
 	static CBoss_Weapon* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);

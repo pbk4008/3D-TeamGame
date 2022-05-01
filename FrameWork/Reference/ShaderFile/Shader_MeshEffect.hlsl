@@ -3,12 +3,15 @@
 #include "Shader_ShareFuntion.hlsli"
 
 // Textures
-texture2D	g_DiffuseTexture;
-texture2D	g_MaskTexture;
+Texture2D	g_DiffuseTexture;
+Texture2D	g_MaskTexture;
 
-texture2D	g_NormalTex;
-texture2D	g_MaskTex;
-texture2D	g_NoiseTex;
+Texture2D	g_NormalTex;
+Texture2D	g_MaskTex;
+Texture2D	g_NoiseTex;
+
+Texture2D	g_DissolveTex;
+Texture2D	g_DissolveGrTex;
 
 // Time
 float g_fLifeTime;
@@ -202,9 +205,18 @@ PS_OUT2 PS_MAIN_MASK(PS_IN In)
     }
 	//Out.vDiffuse.a *= g_fAlpha;
     Out.vDiffuse.a = vMask.b * g_fAlpha;
-
     Out.vNormal = g_Weight;
-    return Out;
+	
+	if (g_bdissolve == true)
+	{
+		half dissolve = g_DissolveTex.Sample(DefaultSampler, In.vTexUV.xy).r;
+		half amount = dissolve - g_dissolvetime;
+
+		if(amount <= 0.f)
+			discard;
+	}
+	
+	return Out;
 }
 
 struct PS_OUT_Alpha

@@ -44,6 +44,7 @@ protected:
 	const _int ToJogBwd();
 	const _int ToJogLeft();
 	const _int ToJogRight();
+	const _int ToSkill();
 
 protected:
 	virtual _int Input(const _double& _dDeltaTime);

@@ -104,6 +104,13 @@ PS_OUT PS_MAIN(PS_IN In)
 	Out.mra.b = Ao;
 	Out.mra.a = 1.f;
 	Out.emission = half4(0, 0, 0, 1);
+	
+	if (g_rimlightcheck == true)
+	{
+		half4 normal = half4(In.vNormal.xyz, 0.f);
+		float4 rim = RimLighting(normal, g_camdir, g_rimintensity, g_rimcolor, g_rimtimer);
+		Out.emission += rim;
+	}
 
 	return Out;
 }

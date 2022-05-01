@@ -27,6 +27,8 @@ class CEquipmentData;
 class CPlayerData;
 class CDropBox;
 #pragma endregion
+
+
 class CSilvermane final : public CActor
 {
 public:
@@ -121,6 +123,7 @@ public: /* For.Shield */
 	const _bool IsEquipShield() const;
 	const _bool IsShieldThrow() const;
 	const _bool IsShieldReturn() const;
+	const _bool IsCoolTime_ShieldThrow() const;
 	const _float Get_BlockTime() const;
 	void Set_EquipShield(const _bool _isEquipShield);
 	void Set_EquipShieldAnim(const _bool _isEquipShield);
@@ -128,6 +131,7 @@ public: /* For.Shield */
 	void Set_IsShieldAttack(const _bool _isAttack);
 	void Set_IsShieldThrow(const _bool _isShieldThrow);
 	void Set_IsShieldReturn(const _bool _isShieldReturn);
+	void Set_IsShieldCoolTime(const _bool _isCoolTime);
 	void Add_BlockTime(const _float _fValue);
 	HRESULT ThrowShield(const _fvector& _svTargetPos);
 	void Return_Shield();
@@ -149,12 +153,16 @@ public: /* For.DropBox */
 public: /* For.Execute */
 	void Set_Execution(const _bool _isExecution, CActor* _pTarget = nullptr);
 	CActor* Get_TargetExecution() const;
+	void	Set_TargetExecution(CActor* pTarget);
 	CHierarchyNode* Get_ExecutionTargetBone() const;
 	CUI_Blank_FKey* Get_Blank_FKey() const;
 
 public: /* For.Skill */
+	const _bool IsSkill() const;
+	const _float Get_SkillGuage() const;
 	void Set_IsSkill(const _bool _isSkill);
 	void Set_Skill(const _bool _isSkil);
+	void Add_SkillGuage(const _float _fValue);
 
 public: void	Set_HealActive(_bool check) { m_bhealcheck = check; }
 public: void	Set_LightColor(_fvector color) { m_lightcolor = color; }
@@ -198,6 +206,7 @@ private: /* For.Shield */
 	_bool m_isShieldThrow = false;
 	_bool m_isShieldReturn = false;
 	_bool m_isLootShield = false;
+	_bool m_isCoolTime_ShieldThrow = false;
 	_float m_fBlockTime = 0.f;
 
 private: /* For.JumpNode */
@@ -221,6 +230,7 @@ private: /* For.Execution */
 
 private: /* For.Skill */
 	_bool m_isSkill = false;
+	_float m_fSkillGuage = 0.f;
 
 private: /* For.Cheat */
 	_bool m_isHighSpeedMode = false;
@@ -237,7 +247,7 @@ private:
 	_vector		m_lightcolor = XMVectorZero();
 
 private:
-	CTexture*	m_pTexture = nullptr;
+	CTexture*		m_pTexture = nullptr;
 	vector<CGameObject*>	m_vecMotionTrail;
 	CModel*			m_pHealSphere = nullptr;
 	_bool			m_bhealcheck = false;

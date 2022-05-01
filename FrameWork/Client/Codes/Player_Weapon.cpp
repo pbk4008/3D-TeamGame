@@ -111,8 +111,16 @@ _int CPlayer_Weapon::Tick(_double _dDeltaTime)
 	if(nullptr != m_pCapsuleCollider)
 		m_pCapsuleCollider->Tick(_dDeltaTime);
 
-	LightOnOff(m_HitPosition, XMVectorSet(1.f, 1.f, 1.f, 1.f), 20.f);
 
+	if ((_uint)SCENEID::SCENE_STAGE3 != m_iSceneID)
+	{
+		LightOnOff(m_HitPosition, XMVectorSet(1.f, 1.f, 1.f, 1.f), 20.f);
+	}
+
+	else if ((_uint)SCENEID::SCENE_STAGE3 == m_iSceneID)
+	{
+		LightOnOff(m_HitPosition, XMVectorSet(1.f, 1.f, 1.f, 1.f), 1.f);
+	}
 	return _int();
 }
 
@@ -146,7 +154,7 @@ _int CPlayer_Weapon::LateTick(_double _dDeltaTime)
 		{
 			m_pTrailEffect_Distortion->Clear_Points();
 			m_pTrailEffect_Distortion->Set_IsRender(false);
-			m_pRenderer->SetRenderButton(CRenderer::DISTORTION, false);
+			//m_pRenderer->SetRenderButton(CRenderer::DISTORTION, false);
 		}
 	}
 

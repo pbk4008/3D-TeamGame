@@ -15,6 +15,7 @@ public:
 private:
 	HRESULT Ready_GameObejct();
 private:
+	CGameObject* m_pobj = nullptr;
 	CModel* m_pModel;
 public:
 	static CLevel_Logo* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);

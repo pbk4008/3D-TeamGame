@@ -88,11 +88,14 @@ _int CPot::LateTick(_double TimeDelta)
 	if (m_bBroken && m_pAnimModel->Get_IsAnimFinished())
 	{
 		vPos = m_pTransform->Get_State(CTransform::STATE_POSITION);
-		vPos += XMVectorSet(0.f, (_float)-TimeDelta,0.f,0.f);
+		vPos += XMVectorSet(0.f, (_float)-TimeDelta * 1.5f,0.f,0.f);
 		m_pTransform->Set_State(CTransform::STATE_POSITION, vPos);
+
+		m_ftimer += g_fDeltaTime;
 	}
 	_float fY = XMVectorGetY(vPos);
-	if (fY < -30.f)
+
+	if(m_ftimer >= 5.f)
 		m_bRemove = true;
 	return _int();
 }

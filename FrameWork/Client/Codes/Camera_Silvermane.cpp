@@ -436,11 +436,19 @@ void CCamera_Silvermane::OnOffMonsterUI()
 			if (nullptr != pHitObject)
 			{
 				m_pTargetMonster = pHitObject;
+				static_cast<CActor*>(m_pTargetMonster)->setActive(true);
 				static_cast<CActor*>(m_pTargetMonster)->Set_UIShow(true);
 			}
 			break;
 		}
 	}
+	/*else
+	{
+		if (m_pTargetMonster)
+		{
+			static_cast<CActor*>(m_pTargetMonster)->Set_UIShow(false);
+		}
+	}*/
 }
 
 const _fvector CCamera_Silvermane::Get_Look() const

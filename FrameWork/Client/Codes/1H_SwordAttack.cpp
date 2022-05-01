@@ -165,6 +165,11 @@ _int C1H_SwordAttack::Input(const _double& _dDeltaTime)
 			}
 		}
 
+		if (g_pGameInstance->getkeyPress(DIK_E))
+		{
+			return ToSkill();
+		}
+
 		if (g_pGameInstance->getkeyPress(DIK_LSHIFT))
 		{
 			if (g_pGameInstance->getkeyPress(DIK_W) ||

@@ -98,6 +98,8 @@ protected:
 	_bool m_IsAttack;//공격했는지 공격 안했는지
 	_bool m_bGroggy; //스턴상태인지 아닌지
 	_bool m_bUIShow = false; //몬스터머리위에 ui보이는상태인지아닌지
+	_float m_fUIShowTimeAcc = 0.f; //일정시간지나면 꺼줄려고
+
 	_bool m_isParry = false; // 패링상태 체크
 	_bool m_isExecution = false; // 처형당하는 중인지 체크
 	_bool m_isNoDamage = false;// 무적상태인지 안닌지 체크

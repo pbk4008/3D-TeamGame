@@ -92,6 +92,13 @@ void CCinema3_1::Set_Active(_bool bCheck)
 	m_pSilvermane->Actor_AnimReset();
 	m_pCam->Reset_Camera();
 	m_pMidBoss->AnimSpeed(1.25);
+
+	list<CGameObject*>* objList = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Layer_Floor");
+
+	auto iter = objList->begin();
+	advance(iter, 4);
+	(*iter)->setActive(true);
+
 	if (m_bActive)
 		m_pCam->Change_CurrentCam();
 }
@@ -110,7 +117,7 @@ HRESULT CCinema3_1::Ready_Components()
 	tDesc.fAspect = (_float)g_iWinCx / g_iWinCy;
 
 	CCinemaCam::CINEMADESC tCinemaDesc;
-	ZeroMemory(&tCinemaDesc, sizeof(tCinemaDesc));
+	//ZeroMemory(&tCinemaDesc, sizeof(tCinemaDesc));
 
 	tCinemaDesc.tCameraDesc = tDesc;
 	tCinemaDesc.iShotTag = (_uint)CINEMA_INDEX::CINEMA3_1;

@@ -79,11 +79,11 @@ _int CMeshEffect_EyeRazer::Tick(_double _dDeltaTime)
 
 	_matrix mat = m_pTransform->Get_WorldMatrix();
 
-	m_fAngle = fDistToPlayer * (-0.30f * fDistToPlayer);
+	m_fAngle = fDistToPlayer * (-0.4f * fDistToPlayer);
 
-	if (-49.f >= m_fAngle)
+	if (-47.f >= m_fAngle)
 	{
-		m_fAngle = -49.f;
+		m_fAngle = -47.f;
 	}
 
 	mat = XMMatrixRotationY(XMConvertToRadians(m_fAngle)) * mat;
@@ -132,39 +132,46 @@ _int CMeshEffect_EyeRazer::LateTick(_double _dDeltaTime)
 		g_pShakeManager->Shake(tShakeEvent, g_pObserver->Get_PlayerPos());
 	}
 
-	
-
 	m_pTransform->Scaling(_vector{ m_vScale.x, m_vScale.y, m_vScale.z, 0.f });
 
 
 	_vector svPos = m_pTransform->Get_State(CTransform::STATE_POSITION);
 	_vector svLook = XMVector3Normalize(m_pTransform->Get_State(CTransform::STATE_LOOK));
 	_vector svRight = XMVector3Normalize(m_pTransform->Get_State(CTransform::STATE_RIGHT));
+	
+	//Razer
 	CEffect* pEffect = CEffectManager::GetInstance()->Get_Effect((_uint)EFFECT::RAZER);
 	pEffect->Get_Transform()->Set_State(CTransform::STATE_POSITION,
 		m_pTransform->Get_State(CTransform::STATE_POSITION) + (m_pTransform->Get_Scale(CTransform::STATE_LOOK) * svLook * -0.3f));
 
-	if (false == m_isFlowY && 0.f <= m_fFlowSpeedAlpha)
+	//RazerSmoke
+	CEffect* pEffect2 = CEffectManager::GetInstance()->Get_Effect((_uint)EFFECT::BOSS_RAZER_SMOKE);
+	pEffect2->Get_Transform()->Set_State(CTransform::STATE_POSITION,
+		m_pTransform->Get_State(CTransform::STATE_POSITION) + (m_pTransform->Get_Scale(CTransform::STATE_LOOK) * svLook * -0.3f));
+
+
+	if (false == m_bEffectOn && 0.f <= m_fEffectAcc)
 	{
 		//이펙트온
 
 		pEffect->Set_Reset(true);
 		pEffect->setActive(true);
 
-		m_isFlowY = true;
-		cout << "초기화" << endl;
+		pEffect2->Set_Reset(true);
+		pEffect2->setActive(true);
+
+		m_bEffectOn = true;
 	}
 
-	if (m_isFlowY)
+	if (m_bEffectOn)
 	{
-		m_fFlowSpeedAlpha += (_float)_dDeltaTime;
+		m_fEffectAcc += (_float)_dDeltaTime;
 	}
 
-	if (0.05f <= m_fFlowSpeedAlpha)
+	if (0.05f <= m_fEffectAcc)
 	{
-		m_isFlowY = false;
-		m_fFlowSpeedAlpha = 0.f;
-		cout << "탔음" << endl;
+		m_bEffectOn = false;
+		m_fEffectAcc = 0.f;
 	}
 
 	//충돌

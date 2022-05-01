@@ -149,7 +149,6 @@ HRESULT CMainApp::NativeConstruct()
 	if (FAILED(Ready_GameManager()))
 		return E_FAIL;
 
-
 	return S_OK;
 }
 
@@ -506,7 +505,6 @@ HRESULT CMainApp::Ready_GameObject_Prototype()
 	//Equip Weapon Slot_2
 	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_UI_EquipWeapon_Slot_2"), CUI_EquippedWeapon_Slot_2::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
-
 	/////////////////////////////
 	//Voice SubTitle
 	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_UI_Subtitle"), CSubtitles::Create(m_pDevice, m_pDeviceContext))))

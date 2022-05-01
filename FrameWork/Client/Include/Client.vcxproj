@@ -220,6 +220,8 @@ call Update_Client.bat</Command>
     <ClInclude Include="..\Headers\1H_SwordJogRight.h" />
     <ClInclude Include="..\Headers\1H_SwordJogRightPivot180.h" />
     <ClInclude Include="..\Headers\1H_SwordJogRightStart.h" />
+    <ClInclude Include="..\Headers\1H_SwordSkill_2.h" />
+    <ClInclude Include="..\Headers\1H_SwordSkill_3.h" />
     <ClInclude Include="..\Headers\1H_SwordSupermanStab.h" />
     <ClInclude Include="..\Headers\1H_SwordDodgeSpinFwd_V3.h" />
     <ClInclude Include="..\Headers\1H_SwordEquipOff.h" />
@@ -259,6 +261,8 @@ call Update_Client.bat</Command>
     <ClInclude Include="..\Headers\2H_HammerJogRightPivot180.h" />
     <ClInclude Include="..\Headers\2H_HammerJogRightStart.h" />
     <ClInclude Include="..\Headers\2H_HammerRicochetReaction.h" />
+    <ClInclude Include="..\Headers\2H_HammerSkill_1.h" />
+    <ClInclude Include="..\Headers\2H_HammerSkill_2.h" />
     <ClInclude Include="..\Headers\Aberrant_Attack.h" />
     <ClInclude Include="..\Headers\Aberrant_Dash_Bwd.h" />
     <ClInclude Include="..\Headers\Aberrant_Death.h" />
@@ -357,6 +361,9 @@ call Update_Client.bat</Command>
     <ClInclude Include="..\Headers\Cinema4_4.h" />
     <ClInclude Include="..\Headers\Cinema4_5.h" />
     <ClInclude Include="..\Headers\Cinema4_6.h" />
+    <ClInclude Include="..\Headers\Cinema5_1.h" />
+    <ClInclude Include="..\Headers\Cinema5_2.h" />
+    <ClInclude Include="..\Headers\Cinema5_3.h" />
     <ClInclude Include="..\Headers\CinemaActor.h" />
     <ClInclude Include="..\Headers\CinemaCam.h" />
     <ClInclude Include="..\Headers\CinemaWeapon.h" />
@@ -436,6 +443,7 @@ call Update_Client.bat</Command>
     <ClInclude Include="..\Headers\UI_Fill_Space.h" />
     <ClInclude Include="..\Headers\UI_Guide_Background.h" />
     <ClInclude Include="..\Headers\UI_Guide_Texture.h" />
+    <ClInclude Include="..\Headers\UI_HpHeal_Num.h" />
     <ClInclude Include="..\Headers\UI_LevelUP_Background.h" />
     <ClInclude Include="..\Headers\UI_LevelUP_BG_Left.h" />
     <ClInclude Include="..\Headers\UI_LevelUP_BG_Right.h" />
@@ -615,6 +623,7 @@ call Update_Client.bat</Command>
     <ClInclude Include="..\Headers\UI_Monster_GroggyBar.h" />
     <ClInclude Include="..\Headers\UI_Monster_HpBar.h" />
     <ClInclude Include="..\Headers\UI_Monster_Level.h" />
+    <ClInclude Include="..\Headers\UI_Monster_LevelNum.h" />
     <ClInclude Include="..\Headers\UI_Monster_Name.h" />
     <ClInclude Include="..\Headers\UI_Monster_Panel.h" />
     <ClInclude Include="..\Headers\UI_PlayerStatusWindow.h" />
@@ -631,6 +640,7 @@ call Update_Client.bat</Command>
     <ClInclude Include="..\Headers\UI_QuestHeadText.h" />
     <ClInclude Include="..\Headers\UI_QuestText.h" />
     <ClInclude Include="..\Headers\UI_SelectEffect.h" />
+    <ClInclude Include="..\Headers\UI_Shield_Meter.h" />
     <ClInclude Include="..\Headers\UI_SlotBackground.h" />
     <ClInclude Include="..\Headers\UI_SlotGrade.h" />
     <ClInclude Include="..\Headers\UI_SlotItemEffect.h" />
@@ -682,6 +692,8 @@ call Update_Client.bat</Command>
     <ClCompile Include="..\Codes\1H_SwordJogRight.cpp" />
     <ClCompile Include="..\Codes\1H_SwordJogRightPivot180.cpp" />
     <ClCompile Include="..\Codes\1H_SwordJogRightStart.cpp" />
+    <ClCompile Include="..\Codes\1H_SwordSkill_2.cpp" />
+    <ClCompile Include="..\Codes\1H_SwordSkill_3.cpp" />
     <ClCompile Include="..\Codes\1H_SwordSupermanStab.cpp" />
     <ClCompile Include="..\Codes\1H_SwordDodgeSpinFwd_V3.cpp" />
     <ClCompile Include="..\Codes\1H_SwordEquipOff.cpp" />
@@ -721,6 +733,8 @@ call Update_Client.bat</Command>
     <ClCompile Include="..\Codes\2H_HammerEquipOff.cpp" />
     <ClCompile Include="..\Codes\2H_HammerEquipOn.cpp" />
     <ClCompile Include="..\Codes\2H_HammerRicochetReaction.cpp" />
+    <ClCompile Include="..\Codes\2H_HammerSkill_1.cpp" />
+    <ClCompile Include="..\Codes\2H_HammerSkill_2.cpp" />
     <ClCompile Include="..\Codes\Aberrant_Attack.cpp" />
     <ClCompile Include="..\Codes\Aberrant_Dash_Bwd.cpp" />
     <ClCompile Include="..\Codes\Aberrant_Death.cpp" />
@@ -817,6 +831,9 @@ call Update_Client.bat</Command>
     <ClCompile Include="..\Codes\Cinema4_4.cpp" />
     <ClCompile Include="..\Codes\Cinema4_5.cpp" />
     <ClCompile Include="..\Codes\Cinema4_6.cpp" />
+    <ClCompile Include="..\Codes\Cinema5_1.cpp" />
+    <ClCompile Include="..\Codes\Cinema5_2.cpp" />
+    <ClCompile Include="..\Codes\Cinema5_3.cpp" />
     <ClCompile Include="..\Codes\CinemaActor.cpp" />
     <ClCompile Include="..\Codes\CinemaCam.cpp" />
     <ClCompile Include="..\Codes\CinemaWeapon.cpp" />
@@ -893,6 +910,7 @@ call Update_Client.bat</Command>
     <ClCompile Include="..\Codes\UI_Fill_Space.cpp" />
     <ClCompile Include="..\Codes\UI_Guide_Background.cpp" />
     <ClCompile Include="..\Codes\UI_Guide_Texture.cpp" />
+    <ClCompile Include="..\Codes\UI_HpHeal_Num.cpp" />
     <ClCompile Include="..\Codes\UI_LevelUP_Background.cpp" />
     <ClCompile Include="..\Codes\UI_LevelUP_BG_Left.cpp" />
     <ClCompile Include="..\Codes\UI_LevelUP_BG_Right.cpp" />
@@ -1080,6 +1098,7 @@ call Update_Client.bat</Command>
     <ClCompile Include="..\Codes\UI_Monster_GroggyBar.cpp" />
     <ClCompile Include="..\Codes\UI_Monster_HpBar.cpp" />
     <ClCompile Include="..\Codes\UI_Monster_Level.cpp" />
+    <ClCompile Include="..\Codes\UI_Monster_LevelNum.cpp" />
     <ClCompile Include="..\Codes\UI_Monster_Name.cpp" />
     <ClCompile Include="..\Codes\UI_Monster_Panel.cpp" />
     <ClCompile Include="..\Codes\UI_PlayerStatusWindow.cpp" />
@@ -1096,6 +1115,7 @@ call Update_Client.bat</Command>
     <ClCompile Include="..\Codes\UI_QuestHeadText.cpp" />
     <ClCompile Include="..\Codes\UI_QuestText.cpp" />
     <ClCompile Include="..\Codes\UI_SelectEffect.cpp" />
+    <ClCompile Include="..\Codes\UI_Shield_Meter.cpp" />
     <ClCompile Include="..\Codes\UI_SlotBackground.cpp" />
     <ClCompile Include="..\Codes\UI_SlotGrade.cpp" />
     <ClCompile Include="..\Codes\UI_SlotItemEffect.cpp" />

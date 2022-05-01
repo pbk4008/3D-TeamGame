@@ -42,7 +42,7 @@ protected:
 protected:
 	UIDESC m_Desc;
 	_bool m_bFirstShow;
-	_bool m_bShow;
+	_bool m_bShow = false;
 };
 END
 

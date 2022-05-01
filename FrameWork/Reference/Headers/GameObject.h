@@ -8,6 +8,8 @@ BEGIN(Engine)
 class CTransform;
 class CRenderer;
 class CComponent;
+class CVIBuffer;
+class CModel;
 
 #define DESTROY CGameObject::Destroy
 
@@ -63,6 +65,17 @@ public:
 	virtual void Set_Remove(_bool bCheck) { m_bRemove = bCheck; };
 	static  void Destroy(CGameObject* _obj);
 
+public: void	Set_FadeOutCheck(_bool check) { m_fadeoutcheck = check; }
+public: void	Set_FadeInCheck(_bool check) { m_fadeincheck = check; }
+
+public:_bool	Get_FadeIn() { return m_fadeincheck; }
+public:_bool	Get_FadeOut() { return m_fadeoutcheck; }
+
+public: _bool	Get_InNextCheck() { return m_innextcheck; }
+public: _bool	Get_OutNextCheck() { return m_outnextcheck; }
+
+public: virtual  void	FadeInOut(CVIBuffer* pbuffer = nullptr, CModel* pModel = nullptr);
+
 protected:
 	ID3D11Device* m_pDevice;
 	ID3D11DeviceContext*	m_pDeviceContext;
@@ -76,6 +89,16 @@ protected:
 	_float m_fViewZ = 0.f;
 	_matrix m_PreWroldMat = XMMatrixIdentity();
 	_bool	m_bMotionTrailRemove = false;
+
+	// fade in out
+protected: 
+	_bool		m_fadeoutcheck = false;
+	_bool		m_fadeincheck = false;
+	_bool		m_outnextcheck = false;
+	_bool		m_innextcheck = false;
+
+	_float		m_fadeintime = 0.f;
+	_float		m_fadeouttime = 1.f;
 
 protected:
 	unordered_map<wstring, class CComponent*>		m_Components;

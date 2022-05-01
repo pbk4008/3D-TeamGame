@@ -59,6 +59,7 @@ _int CExplosion_Rock::Tick(_double _dDeltaTime)
 	{
 		matScale = XMMatrixScaling(0.0005f, 0.0005f, 0.0005f);
 	}
+
 	m_pAnimModel->Set_PivotMatrix(matScale);
 	
 	if (true == m_pAnimModel->Get_IsAnimFinished())
@@ -88,12 +89,26 @@ HRESULT CExplosion_Rock::Render()
 	smatView = XMMatrixTranspose(g_pGameInstance->Get_Transform(wstrCamTag, TRANSFORMSTATEMATRIX::D3DTS_VIEW));
 	smatProj = XMMatrixTranspose(g_pGameInstance->Get_Transform(wstrCamTag, TRANSFORMSTATEMATRIX::D3DTS_PROJECTION));
 
-	if (FAILED(m_pAnimModel->SetUp_ValueOnShader("g_WorldMatrix", &smatWorld, sizeof(_matrix))))
-		return E_FAIL;
-	if (FAILED(m_pAnimModel->SetUp_ValueOnShader("g_ViewMatrix", &smatView, sizeof(_matrix))))
-		return E_FAIL;
-	if (FAILED(m_pAnimModel->SetUp_ValueOnShader("g_ProjMatrix", &smatProj, sizeof(_matrix))))
-		return E_FAIL;
+	if (FAILED(m_pAnimModel->SetUp_ValueOnShader("g_WorldMatrix", &smatWorld, sizeof(_matrix))))	return E_FAIL;
+	if (FAILED(m_pAnimModel->SetUp_ValueOnShader("g_ViewMatrix", &smatView, sizeof(_matrix))))		return E_FAIL;
+	if (FAILED(m_pAnimModel->SetUp_ValueOnShader("g_ProjMatrix", &smatProj, sizeof(_matrix))))		return E_FAIL;
+
+	RIM rimdesc;
+	ZeroMemory(&rimdesc, sizeof(RIM));
+
+	rimdesc.rimcheck = true;
+	rimdesc.rimcol = _float3(0.2f,0.f,0.f);
+	rimdesc.rimintensity = 10.f; // intensity ³·À» ¼ö·Ï °úÇÏ°Ô ºû³²
+	XMStoreFloat4(&rimdesc.camdir, XMVector3Normalize(m_pTransform->Get_State(CTransform::STATE_POSITION)- g_pGameInstance->Get_CamPosition(L"Camera_Silvermane")));
+	_float rimtime = 1.f;
+
+	if (FAILED(m_pAnimModel->SetUp_ValueOnShader("g_rimlightcheck", &rimdesc.rimcheck, sizeof(_bool)))) MSGBOX("Failed To Apply Actor ConstantBuffer");
+	if (FAILED(m_pAnimModel->SetUp_ValueOnShader("g_rimintensity", &rimdesc.rimintensity, sizeof(_float)))) MSGBOX("Failed To Apply Actor ConstantBuffer");
+	if (FAILED(m_pAnimModel->SetUp_ValueOnShader("g_rimcolor", &rimdesc.rimcol, sizeof(_float3)))) MSGBOX("Failed To Apply Actor ConstantBuffer");
+	if (FAILED(m_pAnimModel->SetUp_ValueOnShader("g_camdir", &rimdesc.camdir, sizeof(_float4)))) MSGBOX("Failed To Apply Actor ConstantBuffer");
+	if (FAILED(m_pAnimModel->SetUp_ValueOnShader("g_rimtimer", &rimtime, sizeof(_float)))) MSGBOX("Failed to Apply RimTime Value");
+
+
 	for (_uint i = 0; i < m_pAnimModel->Get_NumMeshContainer(); ++i)
 		m_pAnimModel->Render(i, 0);
 	

@@ -19,8 +19,10 @@
 
 #include "UI.h"
 #include "UI_Blank_CKey.h"
-#include "UI_Tuto_Font.h"
-#include "UI_Tuto_Base.h"
+//#include "UI_Tuto_Font.h"
+//#include "UI_Tuto_Base.h"
+#include "UI_HpHeal_Num.h"
+#include "UI_Shield_Meter.h"
 #include "UI_Player_HpBar.h"
 #include "UI_Fill_CKey.h"
 #include "Effect_FloatingUp.h"
@@ -145,10 +147,10 @@ HRESULT CTestScene_JS::Ready_Gameobject()
 		return E_FAIL;
  	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_JS, L"Layer_Camera", L"Proto_GameObject_Camera_Silvermane")))
 		return E_FAIL;
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_JS, L"Layer_Boss", L"Proto_GameObject_Solaris")))
-		return E_FAIL;
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_JS, L"Layer_Effect_Mesh_Boss", L"Proto_GameObject_MeshEffect_Boss_Effect")))
-		MSGBOX(L"메쉬 이펙트 보스 생성 실패"); //테스트파일
+	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_JS, L"Layer_Boss", L"Proto_GameObject_Solaris")))
+	//	return E_FAIL;
+	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_JS, L"Layer_Effect_Mesh_Boss", L"Proto_GameObject_MeshEffect_Boss_Effect")))
+	//	MSGBOX(L"메쉬 이펙트 보스 생성 실패"); //테스트파일
 	
 	//// 점프 노드들
 	//CJumpNode::DESC tJumpNodeDesc;
@@ -241,31 +243,30 @@ HRESULT CTestScene_JS::Ready_UI(const _tchar* LayerTag)
 		return E_FAIL;
 
 
-	//Tuto Base
-	CUI_Tuto_Base::UIACTIVEDESC Desc1;
-	ZeroMemory(&Desc1, sizeof(CUI_Tuto_Base::UIACTIVEDESC));
-	_tcscpy_s(Desc1.UIDesc.TextureTag, L"Texture_Tuto_Base");
-	Desc1.UIDesc.bMinus = false;
-	Desc1.UIDesc.fAngle = 0.f;
-	Desc1.UIDesc.fPos = { 1150.f, 360.f, 0.2f };
-	Desc1.UIDesc.fSize = { 333.f , 105.f };
-	Desc1.UIDesc.IDTag = (_uint)GAMEOBJECT::UI_STATIC;
+	//Player HpHeal Num
+	CUI_HpHeal_Num::UIACTIVEDESC Desc0;
+	ZeroMemory(&Desc0, sizeof(CUI_HpHeal_Num::UIACTIVEDESC));
+	_tcscpy_s(Desc0.TextureTag, L"Texture_Monster_LevelNum");
+	Desc0.bMinus = false;
+	Desc0.fAngle = 0.f;
+	Desc0.fPos = { 175.f, 638.f, 0.08f };
+	Desc0.fSize = { 40.f , 40.f };
+	Desc0.IDTag = (_uint)GAMEOBJECT::UI_STATIC;
 
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_JS, LayerTag, L"Proto_GameObject_UI_Tuto_Base", &Desc1)))
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_JS, LayerTag, L"Proto_GameObject_UI_HpHeal_Num", &Desc0)))
 		return E_FAIL;
 
-	//Tuto Font
-	CUI_Tuto_Font::UIACTIVEDESC Desc2;
-	ZeroMemory(&Desc2, sizeof(CUI_Tuto_Font::UIACTIVEDESC));
-	_tcscpy_s(Desc2.UIDesc.TextureTag, L"Texture_Tuto_Font");
-	Desc2.UIDesc.bMinus = false;
-	Desc2.UIDesc.fAngle = 0.f;
-	Desc2.UIDesc.fPos = { 1130.f, 360.f, 0.1f };
-	Desc2.UIDesc.fSize = { 73.f , 73.f };
-	Desc2.UIDesc.IDTag = (_uint)GAMEOBJECT::UI_STATIC;
-	Desc2.iTextureNum = 0;
+	//Shield_Meter
+	CUI_Shield_Meter::UIACTIVEDESC Desc1;
+	ZeroMemory(&Desc1, sizeof(CUI_Shield_Meter::UIACTIVEDESC));
+	_tcscpy_s(Desc1.UIDesc.TextureTag, L"Texture_Shield_Meter");
+	Desc1.UIDesc.bMinus = false;
+	Desc1.UIDesc.fAngle = 0.f;
+	Desc1.UIDesc.fPos = { 100.f, 620.f, 0.06f};
+	Desc1.UIDesc.fSize = { 50.f, 50.f };
+	Desc1.UIDesc.IDTag = (_uint)GAMEOBJECT::UI_STATIC;
 
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_JS, LayerTag, L"Proto_GameObject_UI_Tuto_Font", &Desc2)))
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_JS, LayerTag, L"Proto_GameObject_UI_Shield_Meter", &Desc1)))
 		return E_FAIL;
 
 	//Blank_Ckey

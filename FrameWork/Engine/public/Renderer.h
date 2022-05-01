@@ -24,6 +24,7 @@ public: enum RENDERBUTTON
 		,DISTORTION,FOG
 		,VELOCITYBLUR
 		,MOTIONTRAIL
+		,FADEIN, FADEOUT
 		,RENDERBUTTON_END
 };
 
@@ -41,6 +42,7 @@ private: virtual ~CRenderer() = default;
 
 public: _bool	Get_RenderButton(RENDERBUTTON button) { return m_bRenderbtn[button]; }
 
+public: void	TargetClear();
 public: void	SetRenderButton(RENDERBUTTON ebutton, _bool check);
 public: void	SetCameraTag(const wstring& CameraTag) { lstrcpy(m_CameraTag,CameraTag.c_str());  }
 public: void	SetRadialCnt(_int RadialCnt) { m_RadialCnt = RadialCnt; }
@@ -72,7 +74,8 @@ private: CHDR*								m_pHDR			= nullptr;
 private: CPostProcess*						m_pPostProcess	= nullptr;
 private: CTonemapping*						m_pTonemapping	= nullptr;
 
-private: _float								m_fTimer = 0.f;
+private: _float								m_fadeintime = 1.f;
+private: _float								m_fadeouttime = 0.f;
 
 private: HRESULT Render_Priority();
 private: HRESULT Render_SkyBox();
@@ -90,6 +93,7 @@ private: HRESULT MotionTrailPass();
 private: HRESULT Render_Shadow();
 private: HRESULT ShadowPass();
 private: HRESULT Render_Final();
+private: HRESULT Render_FinalAlpha();
 
 private: /* For.PhysX */
 	_bool m_isPhysXRender = false;
@@ -99,7 +103,7 @@ private: /* For.PhysX */
 	HRESULT Render_PhysX();
 
 private: HRESULT	AlphaSorting(RENDER etype);
-
+private: void		CalcFadeTime();
 public: static CRenderer* Create(ID3D11Device * pDevice, ID3D11DeviceContext * pDeviceContext);
 public: virtual CComponent* Clone(void* pArg) override;
 public: virtual void Free() override;
