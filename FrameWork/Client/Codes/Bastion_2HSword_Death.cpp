@@ -71,7 +71,7 @@ HRESULT CBastion_2HSword_Death::EnterState()
 	//Safe_Delete(pDropboxdata);
 
 
-	g_pObserver->Set_Exp(10.f);
+	g_pObserver->Set_Exp(2.f);
 
 	return S_OK;
 }

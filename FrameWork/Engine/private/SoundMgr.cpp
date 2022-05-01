@@ -134,6 +134,12 @@ HRESULT CSoundMgr::LoadSoundFile()
 	eRes = FMOD_System_CreateSound(m_pSystem, "../bin/Resources/Sound/Bgm/A_Amb_SunforgeTemple_Bed.ogg", FMOD_DEFAULT, 0, &pSound);
 	if (eRes == FMOD_OK) m_mapSound.emplace(L"Stage2_BGM", pSound); else return E_FAIL;
 
+	eRes = FMOD_System_CreateSound(m_pSystem, "../bin/Resources/Sound/Boss/A_Solaris_Battle.ogg", FMOD_DEFAULT, 0, &pSound);
+	if (eRes == FMOD_OK) m_mapSound.emplace(L"Stage3_BGM", pSound); else return E_FAIL;
+
+	eRes = FMOD_System_CreateSound(m_pSystem, "../bin/Resources/Sound/Boss/A_Solaris_Opening.ogg", FMOD_LOOP_NORMAL, 0, &pSound);
+	if (eRes == FMOD_OK) m_mapSound.emplace(L"Stage3_Opening", pSound); else return E_FAIL;
+
 	eRes = FMOD_System_CreateSound(m_pSystem, "../bin/Resources/Sound/Bgm/BM_InterfaceThemeAmbient_112_66bars_v4.ogg", FMOD_LOOP_NORMAL, 0, &pSound);
 	if (eRes == FMOD_OK) m_mapSound.emplace(L"Logo_BGM", pSound); else return E_FAIL;
 
@@ -203,6 +209,9 @@ HRESULT CSoundMgr::LoadSoundFile()
 
 	eRes = FMOD_System_CreateSound(m_pSystem, "../bin/Resources/Sound/Item/GF_Anvil_Charged_Loop_v1.ogg", FMOD_DEFAULT, 0, &pSound);
 	if (eRes == FMOD_OK) m_mapSound.emplace(L"Opeing_DropBox", pSound); else return E_FAIL;
+
+	eRes = FMOD_System_CreateSound(m_pSystem, "../bin/Resources/Sound/Item/A_Breakable_Stone_Large_01.ogg", FMOD_DEFAULT, 0, &pSound);
+	if (eRes == FMOD_OK) m_mapSound.emplace(L"Pot_Broken", pSound); else return E_FAIL;
 
 	/* for. Player */
 	eRes = FMOD_System_CreateSound(m_pSystem, "../bin/Resources/Sound/Player/A_Heavy_Armour_Plate_Gak_Step_10.ogg", FMOD_DEFAULT, 0, &pSound);

@@ -1084,6 +1084,9 @@ void CStage2::Trgger_Function6()
 	if (!pLayer)
 		return;
 
+	PLAY_SOUND(L"Monster_Battle", CHANNEL::BATTLE);
+	VOLUME_CHANGE(CHANNEL::BGM, 0.5f);
+
 	if (m_bDebug)
 	{
 		auto iter = pLayer->begin();
@@ -1173,6 +1176,8 @@ void CStage2::Trgger_Function7()
 	if (!pLayer)
 		return;
 
+	VOLUME_CHANGE(CHANNEL::BGM, 1.f);
+
 	if (m_bDebug)
 	{
 		auto iter = pLayer->begin();
@@ -1239,6 +1244,9 @@ void CStage2::Trgger_Function9()
 	list<CGameObject*>* pLayer = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE2, L"Layer_Bastion_Sword");
 	if (!pLayer)
 		return;
+
+	PLAY_SOUND(L"Monster_Battle", CHANNEL::BATTLE);
+	VOLUME_CHANGE(CHANNEL::BGM, 0.5f);
 
 	if (m_bDebug)
 	{
@@ -1551,8 +1559,12 @@ void CStage2::Portal_Spot2()
 
 void CStage2::Portal_Spot3()
 {
+
 	if (m_iCountMonster <= 4 && m_iPortalCount == 7)
 	{
+		PLAY_SOUND(L"Monster_Battle", CHANNEL::BATTLE);
+		VOLUME_CHANGE(CHANNEL::BGM, 1.5f);
+
 		m_iPortalCount = 8;
 		Open_Potal(XMVectorSet(8.f, 10.f, 206.f, 1.f), (_uint)GAMEOBJECT::MONSTER_SPEAR);
 		Open_Potal(XMVectorSet(4.f, 10.f, 213.f, 1.f), (_uint)GAMEOBJECT::MONSTER_HEALER);
@@ -1591,6 +1603,9 @@ void CStage2::Portal_Spot4()
 {
 	if (m_iCountMonster <= 3 && m_iPortalCount == 11)
 	{
+		PLAY_SOUND(L"Monster_Battle_2", CHANNEL::BATTLE);
+		VOLUME_CHANGE(CHANNEL::BGM, 1.5f);
+
 		m_iPortalCount = 12;
 		Open_Potal(XMVectorSet(5.f, 17.f, 353.f, 1.f), (_uint)GAMEOBJECT::MONSTER_2H);
 		Open_Potal(XMVectorSet(16.f, 17.f, 332.f, 1.f), (_uint)GAMEOBJECT::MONSTER_HEALER);

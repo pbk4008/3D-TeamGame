@@ -147,6 +147,7 @@ void CPot::OnTriggerEnter(CCollision& collision)
 		if(pEffect != nullptr)
 			pEffect->setActive(true);
 
+		PLAY_SOUND(L"Pot_Broken", CHANNEL::MidBoss_Death);
 		RELEASE_INSTANCE(CEffectManager);
 	}
 }

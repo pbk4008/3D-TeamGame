@@ -61,7 +61,7 @@ HRESULT CBronzeAnimus_Death::EnterState()
 	m_pAnimator->Change_AnyEntryAnimation((_uint)CMonster_BronzeAnimus::ANIM_TYPE::A_DEATH);
 	g_pMainApp->FreezeTime();
 
-	g_pObserver->Set_Exp(10.f);
+	g_pObserver->Set_Exp(2.f);
 
 	return S_OK;
 }

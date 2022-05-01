@@ -48,6 +48,7 @@ _int CShield_Parry::LateTick(const _double& _dDeltaTime)
 	if (NO_EVENT != iProgress)
 		return iProgress;
 
+
 	return _int();
 }
 

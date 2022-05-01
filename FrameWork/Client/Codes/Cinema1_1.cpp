@@ -18,7 +18,6 @@ CCinema1_1::CCinema1_1()
 	,m_pScree2(nullptr)
 	,m_pScree3(nullptr)
 	,m_pScree4(nullptr)
-	, m_pCinemaPortal(nullptr)
 	, m_pGrayHwakSpear(nullptr)
 {
 }
@@ -34,7 +33,6 @@ CCinema1_1::CCinema1_1(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContex
 	, m_pScree2(nullptr)
 	, m_pScree3(nullptr)
 	, m_pScree4(nullptr)
-	, m_pCinemaPortal(nullptr)
 	, m_pGrayHwakSpear(nullptr)
 {
 }
@@ -87,13 +85,6 @@ HRESULT CCinema1_1::NativeContruct(_uint iSceneID)
 
 	pScreeTr = m_pScree4->Get_Transform();
 	pScreeTr->Set_State(CTransform::STATE_POSITION, XMVectorSet(4.f, -1.8f, 13.f, 1.f));
-
-
-	CTransform* pWallTr = m_pCinemaPortal->Get_Transform();
-	pWallTr->Scaling(XMVectorSet(11.5f, 15.f, 1.f, 0.f));
-	pWallTr->Set_State(CTransform::STATE_POSITION, XMVectorSet(2.f, 6.f, 10.f, 1.f));;
-
-	m_pCinemaPortal->Using_Cinema();
 	
 	return S_OK;
 }
@@ -116,9 +107,6 @@ _int CCinema1_1::Tick(_double dDeltaTime)
 	m_pCam->Tick(dDeltaTime);;
 
 	m_pGrayHwakSpear->Tick(dDeltaTime);
-
-
-	m_pCinemaPortal->Tick(dDeltaTime);
 
 	CTransform* pWeaponTr = m_pGrayHwakSpear->Get_Transform();
 
@@ -172,8 +160,6 @@ _int CCinema1_1::LateTick(_double dDeltaTime)
 	m_pScree4->LateTick(dDeltaTime);
 
 	m_pGrayHwakSpear->LateTick(dDeltaTime);
-
-	m_pCinemaPortal->LateTick(dDeltaTime);
 
 	return _int();
 }
@@ -257,17 +243,6 @@ HRESULT CCinema1_1::Ready_Components()
 	Safe_AddRef(m_pSubTitleGrayeHwak);
 	m_pSubTitleGrayeHwak->SetImage(L"Soras_1");
 
-
-	CWall::WALLDESC desc;
-	ZeroMemory(&desc, sizeof(desc));
-
-	desc.pos = _float4(0.f, 0.f, 0.f, 1.f);
-	desc.scale = _float2(6.f, 6.f);
-	desc.radian = 0.f;
-	desc.color = _float4(0.f, 0.f, 1.f, 1.f);
-
-	m_pCinemaPortal=g_pGameInstance->Clone_GameObject<CWall>((_uint)SCENEID::SCENE_STAGE1, L"Proto_GameObject_Wall", &desc);
-
 	return S_OK;
 }
 
@@ -296,7 +271,6 @@ void CCinema1_1::Free()
 	Safe_Release(m_pScree4);
 
 	Safe_Release(m_pGrayHwakSpear);
-	Safe_Release(m_pCinemaPortal);
 
 	Safe_Release(m_pSubTitleGrayeHwak);
 	Safe_Release(m_pSubTitlePhoenix);
